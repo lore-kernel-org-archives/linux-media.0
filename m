@@ -2,100 +2,95 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E952AC43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 17:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A07BC43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 18:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B5ACE20823
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 17:43:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553795019;
-	bh=DrioiL/NfOqrAhR6e80dQlLhHcizU97EXGw2xBpbXJM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=Jpqv35l+C5QhZ8xFAIdCj5aExK2+bLKqQIYm+pDB7ThRZfwXTZR4o3eSva4uNjr3/
-	 SjysWPBL+O0z+bBEzGU0LxDXLH6kWv+9666s8mZM1fNRPW02mMz9CVpVa7y6/gnh1k
-	 q1VK1AMeNuxo84wSmtvdMIYnANLHvk+i3SQdAGFU=
+	by mail.kernel.org (Postfix) with ESMTP id 274A420823
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 18:08:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726302AbfC1Rne (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 13:43:34 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:34191 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbfC1Rne (ORCPT
+        id S1727542AbfC1SIP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 14:08:15 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54160 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727417AbfC1SIO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 13:43:34 -0400
-Received: by mail-oi1-f193.google.com with SMTP id v10so12115951oib.1;
-        Thu, 28 Mar 2019 10:43:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=w4+jBZt7o1i+BXiFGlj5UO5y5/Jdo0fIZ4a8M49K9iU=;
-        b=BUxtKcZMw/KmUoELdx1IM5CpEN0B82Z/WwT+5l8PPhagX682h0Y1Ic/awZV481dyjq
-         DbyJLhh47g11qJJ3tpOP1CHqWJa9Bd5ilfrn+0qlSDUa3VZKtosjdjPoHZEQMLiPuwg4
-         vb5Ucw76xgY4CO+vVKMY2BcsIucBG40tI/5ROBf8r7Gg4NEqur+X2L1MZhiGxq2bvGJD
-         DhBrW8WegHlEdhfANAIhmAAh3xjTHRrcDpV416VYypmfbZohgGHmilhVQUUZ9ujNgS+W
-         o/fmf28HDBNHjzDMD+bJ2Ie6fMZzPgbqEhfz4dG4+6mBiscvkRZ475waOiRyzmzKmbO3
-         SuWg==
-X-Gm-Message-State: APjAAAVo0KGlq4b888XFbKBHjQDNYR89hZMIPmpcrsuSJsGnfnqvS6hO
-        XsZ81MEh+MbpiVfoHjPfjg==
-X-Google-Smtp-Source: APXvYqzIqPBrm/eLCUsulqZbE6h9iD2WITqW648w6PGNZdZVn2xj2xxu/wqf6vkBM6oREqCcsSWuWQ==
-X-Received: by 2002:aca:5757:: with SMTP id l84mr898126oib.155.1553795013342;
-        Thu, 28 Mar 2019 10:43:33 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id j14sm10841205oih.28.2019.03.28.10.43.32
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 28 Mar 2019 10:43:32 -0700 (PDT)
-Date:   Thu, 28 Mar 2019 12:43:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mickael Guene <mickael.guene@st.com>
-Cc:     linux-media@vger.kernel.org, hugues.fruchet@st.com,
-        Mickael Guene <mickael.guene@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: Document MIPID02 bindings
-Message-ID: <20190328174331.GA5863@bogus>
-References: <1552373045-134493-1-git-send-email-mickael.guene@st.com>
- <1553680545-73278-1-git-send-email-mickael.guene@st.com>
- <1553680545-73278-2-git-send-email-mickael.guene@st.com>
+        Thu, 28 Mar 2019 14:08:14 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id A21C6282279
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v3 1/2] rockchip/vpu: Rename pixel format helpers
+Date:   Thu, 28 Mar 2019 15:07:03 -0300
+Message-Id: <20190328180704.24761-2-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190328180704.24761-1-ezequiel@collabora.com>
+References: <20190328180704.24761-1-ezequiel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1553680545-73278-2-git-send-email-mickael.guene@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 27 Mar 2019 10:55:43 +0100, Mickael Guene wrote:
-> This adds documentation of device tree for MIPID02 CSI-2 to PARALLEL
-> bridge.
-> 
-> Signed-off-by: Mickael Guene <mickael.guene@st.com>
-> ---
-> 
-> Changes in v4:
-> - Fix and clarify endpoints properties documentation
-> 
-> Changes in v3: None
-> Changes in v2:
-> - Add precision about first CSI-2 port data rate
-> - Document endpoints supported properties
-> - Rename 'mipid02@14' into generic 'csi2rx@14' in example
-> 
->  .../bindings/media/i2c/st,st-mipid02.txt           | 82 ++++++++++++++++++++++
->  MAINTAINERS                                        |  7 ++
->  2 files changed, 89 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
-> 
+The rockchip VPU driver uses generic names for its pixel format
+helpers. We want to use the same names for generic versions
+of these helpers, so rename the rockchip ones.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+The driver will be switched to the generic helpers later.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ .../staging/media/rockchip/vpu/rockchip_vpu_enc.c    | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
+index ab0fb2053620..fb5e36aedd8c 100644
+--- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
++++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
+@@ -41,7 +41,7 @@
+  * @is_compressed: Is it a compressed format?
+  * @multiplanar: Is it a multiplanar variant format? (e.g. NV12M)
+  */
+-struct v4l2_format_info {
++struct rockchip_vpu_v4l2_format_info {
+ 	u32 format;
+ 	u32 header_size;
+ 	u8 num_planes;
+@@ -52,10 +52,10 @@ struct v4l2_format_info {
+ 	u8 multiplanar;
+ };
+ 
+-static const struct v4l2_format_info *
+-v4l2_format_info(u32 format)
++static const struct rockchip_vpu_v4l2_format_info *
++rockchip_vpu_v4l2_format_info(u32 format)
+ {
+-	static const struct v4l2_format_info formats[] = {
++	static const struct rockchip_vpu_v4l2_format_info formats[] = {
+ 		{ .format = V4L2_PIX_FMT_YUV420M,	.num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 2, .vsub = 2, .multiplanar = 1 },
+ 		{ .format = V4L2_PIX_FMT_NV12M,		.num_planes = 2, .cpp = { 1, 2, 0 }, .hsub = 2, .vsub = 2, .multiplanar = 1 },
+ 		{ .format = V4L2_PIX_FMT_YUYV,		.num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 2, .vsub = 1 },
+@@ -76,11 +76,11 @@ static void
+ fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
+ 	       int pixelformat, int width, int height)
+ {
+-	const struct v4l2_format_info *info;
++	const struct rockchip_vpu_v4l2_format_info *info;
+ 	struct v4l2_plane_pix_format *plane;
+ 	int i;
+ 
+-	info = v4l2_format_info(pixelformat);
++	info = rockchip_vpu_v4l2_format_info(pixelformat);
+ 	if (!info)
+ 		return;
+ 
+-- 
+2.20.1
+
