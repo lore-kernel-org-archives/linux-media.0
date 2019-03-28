@@ -2,765 +2,107 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80FEAC43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 19:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1758C43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 19:48:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E475206B7
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 19:23:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A85B4217F5
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 19:48:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="UWzcmLIa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbfC1TXc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 15:23:32 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:54418 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbfC1TXc (ORCPT
+        id S1726107AbfC1Tsh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 15:48:37 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:36163 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726076AbfC1Tsh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 15:23:32 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 5AC0A2822BE
-Message-ID: <3dc357b3be2ebe787b79817384c59bba25ff57ad.camel@collabora.com>
-Subject: Re: [PATCH v2 09/11] rockchip/vpu: Add decoder boilerplate
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>
-Date:   Thu, 28 Mar 2019 16:23:21 -0300
-In-Reply-To: <CAAFQd5AWJj5wY6jOf2hC4t8kU1XQ3y6H_YKGaZgRVCHrUvfPXQ@mail.gmail.com>
-References: <20190304192529.14200-1-ezequiel@collabora.com>
-         <20190304192529.14200-10-ezequiel@collabora.com>
-         <CAAFQd5AWJj5wY6jOf2hC4t8kU1XQ3y6H_YKGaZgRVCHrUvfPXQ@mail.gmail.com>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1 
+        Thu, 28 Mar 2019 15:48:37 -0400
+Received: by mail-wm1-f65.google.com with SMTP id h18so123559wml.1
+        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 12:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=k4fWnI+GSJr/5X4jqfSrHgAw86SndYZq8v0HTRnnX+Q=;
+        b=UWzcmLIaA/qeb2xU9jy6UnWroxkeDrvmTZxagMxqmYHhEUsF8J0HVz0YyNc6f/UiOt
+         4bV2KZM4Zgkj939SuIJRsrm78prGjaQU08Inw4tXoyW7i4brm5+0YDdd+43aQyT3O1B7
+         +QKWjoeg6fiAPbJ9k9idVclcwv93IXlxa/J3DEUII95kCHMixlco8hEyqwU9tXkqxmQi
+         pULjxdv1jWNj/2MPFLzY1i8PituJeHBRXXMycYkV1ENd+w8sveN4LTGZ44F9TIWAkGQ3
+         3J81xKLEuL3Xpv2A9JFioW3CKdnlilMGtYZnEh605ecsCaJfPwcdtU9iTZqzJ+oVyenW
+         J8fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=k4fWnI+GSJr/5X4jqfSrHgAw86SndYZq8v0HTRnnX+Q=;
+        b=peybTjCIUKs/8Q8nrlXpGDCVjtzGRyRSbJhbXZsMdyhaEk2b3rsq45PmAd7OQuB+UU
+         BQY/N6dxXkIZsKMTCSKOIEs9nchjN89KqJeuFfjul7UHi62ciJ20e/0Snm0F685rFNkZ
+         pDiWY3mGeQqHGcI4KRZnX3W5Mwiprk9xWhXYHL+JHfSvSudjA8ZBh6Z3BpkPuO5go8L0
+         CRnGKHcimR6ig/409NodJ0fkxi1j8pOFToLI0CoEjhWD6rw/IpNJbQ94x6L8Q9I5lGsp
+         nlRUiNrljcHdevaX9ct9Et0iXq3AcKXCWla+Wot3IpP8niV/7GckMtmRr2w+8aK4Rnx8
+         cymw==
+X-Gm-Message-State: APjAAAW0fJvFVvBqO1jHzXdtH48k3tcKNu8H8AX0lCvhZj5CpqF/9ZZg
+        zEdj6xAnLJi0VosT8S+zZU8MNTvu
+X-Google-Smtp-Source: APXvYqzJnRFTDAVG7TpUS/vI7EhyFsnng500hE06l9bNsYT72vXSg4d4R0Gni2JDmYBotzyRVQ3UrA==
+X-Received: by 2002:a1c:3543:: with SMTP id c64mr1149480wma.75.1553802515723;
+        Thu, 28 Mar 2019 12:48:35 -0700 (PDT)
+Received: from ?IPv6:2a02:810a:8340:5f04:e45e:bcec:ae29:52fd? ([2a02:810a:8340:5f04:e45e:bcec:ae29:52fd])
+        by smtp.gmail.com with ESMTPSA id x14sm87546wmj.3.2019.03.28.12.48.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 28 Mar 2019 12:48:35 -0700 (PDT)
+Subject: Re: [Bug report] dvbv5-zap crash dvb-tool ARMHF builds
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Samuel CHEMLA <chemla.samuel@gmail.com>
+Cc:     Sean Young <sean@mess.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@s-opensource.com>
+References: <20190315223425.hiq3qcjhjnirsizh@gofer.mess.org>
+ <20190317065242.137cb095@coco.lan> <20190319164507.7f95af89@coco.lan>
+ <a1f296ba-3c27-ed2c-3912-4edbeeb21eba@googlemail.com>
+ <20190321094127.ysurm4u26zugmnmv@gofer.mess.org>
+ <20190321083044.621f1922@coco.lan>
+ <35ba4e81-fc2a-87ed-8da7-43cc4543de51@googlemail.com>
+ <CANJnhGfRtEwAony5Z4rFMPcu58aF2k0G+9NSkMKsq_PhfmSNqw@mail.gmail.com>
+ <20190325140838.71f88eac@coco.lan>
+ <CANJnhGc_qx32nm7yZheC2ioHOij8QELbnwyJkZ83G9uYTxqwtA@mail.gmail.com>
+ <20190326132643.r3svehoa764xagje@gofer.mess.org>
+ <CANJnhGfgzrLZedeoCOq3L-MaEgjtHm1Bwn1cRPr54LvwZ=RBMQ@mail.gmail.com>
+ <20190326123115.5d83f450@coco.lan>
+ <CANJnhGe+nyq6a43BnPmGxb6_9JinFyy1EC=6Xo6K4RUpshm8Ow@mail.gmail.com>
+ <20190328161758.2da2bf4e@coco.lan>
+From:   Gregor Jasny <gjasny@googlemail.com>
+Message-ID: <62429f4e-eabb-8ee9-4137-47540e8131ef@googlemail.com>
+Date:   Thu, 28 Mar 2019 20:48:34 +0100
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:60.0)
+ Gecko/20100101 Thunderbird/60.5.3
 MIME-Version: 1.0
+In-Reply-To: <20190328161758.2da2bf4e@coco.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Tomasz,
+Hello,
 
-Thanks for taking the time to review this carefully!
-
-On Thu, 2019-03-28 at 18:57 +0900, Tomasz Figa wrote:
-> On Tue, Mar 5, 2019 at 4:27 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
-> [snip]
-> > +static const struct rockchip_vpu_fmt *
-> > +rockchip_vpu_find_format(struct rockchip_vpu_ctx *ctx, u32 fourcc)
-> > +{
-> > +       struct rockchip_vpu_dev *dev = ctx->dev;
-> > +       const struct rockchip_vpu_fmt *formats;
-> > +       unsigned int num_fmts, i;
-> > +
-> > +       formats = dev->variant->dec_fmts;
-> > +       num_fmts = dev->variant->num_dec_fmts;
-> > +       for (i = 0; i < num_fmts; i++)
-> > +               if (formats[i].fourcc == fourcc)
-> > +                       return &formats[i];
-> > +       return NULL;
-> > +}
-> > +
-> > +static const struct rockchip_vpu_fmt *
-> > +rockchip_vpu_get_default_fmt(struct rockchip_vpu_ctx *ctx, bool bitstream)
-> > +{
-> > +       struct rockchip_vpu_dev *dev = ctx->dev;
-> > +       const struct rockchip_vpu_fmt *formats;
-> > +       unsigned int num_fmts, i;
-> > +
-> > +       formats = dev->variant->dec_fmts;
-> > +       num_fmts = dev->variant->num_dec_fmts;
-> > +       for (i = 0; i < num_fmts; i++)
-> > +               if (bitstream == (formats[i].codec_mode != RK_VPU_MODE_NONE))
-> > +                       return &formats[i];
-> > +       return NULL;
-> > +}
-> > +
-> > +static int vidioc_querycap(struct file *file, void *priv,
-> > +                          struct v4l2_capability *cap)
-> > +{
-> > +       struct rockchip_vpu_dev *vpu = video_drvdata(file);
-> > +
-> > +       strlcpy(cap->driver, vpu->dev->driver->name, sizeof(cap->driver));
-> > +       strlcpy(cap->card, vpu->vfd_dec->name, sizeof(cap->card));
-> > +       snprintf(cap->bus_info, sizeof(cap->bus_info), "platform: %s",
-> > +                vpu->dev->driver->name);
-> > +       return 0;
-> > +}
-> > +
-> > +static int vidioc_enum_framesizes(struct file *file, void *priv,
-> > +                                 struct v4l2_frmsizeenum *fsize)
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
-> > +       const struct rockchip_vpu_fmt *fmt;
-> > +
-> > +       if (fsize->index != 0) {
-> > +               vpu_debug(0, "invalid frame size index (expected 0, got %d)\n",
-> > +                               fsize->index);
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       fmt = rockchip_vpu_find_format(ctx, fsize->pixel_format);
-> > +       if (!fmt) {
-> > +               vpu_debug(0, "unsupported bitstream format (%08x)\n",
-> > +                               fsize->pixel_format);
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       /* This only makes sense for codec formats */
+On 28.03.19 20:17, Mauro Carvalho Chehab wrote:
+> Em Thu, 28 Mar 2019 19:48:35 +0100
+> Samuel CHEMLA <chemla.samuel@gmail.com> escreveu:
+>> 1) I did reproduce the bug with a serial console, but the serial
+>> console was also frozen, and there was no message before freeze.
 > 
-> "coded formats"
-> 
+> The only way for a machine to freeze even on serial console is due to
+> a very serious Kernel or hardware bug, like a bad lock/semaphore.
 
-OK.
+Does anything speak against upgrading Debian to latest 1.16.5 release?
 
-> > +       if (fmt->codec_mode == RK_VPU_MODE_NONE)
-> > +               return -EINVAL;
-> > +
-> > +       fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
-> > +       fsize->stepwise = fmt->frmsize;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int vidioc_enum_fmt_vid_cap_mplane(struct file *file, void *priv,
-> > +                                         struct v4l2_fmtdesc *f)
-> > +{
-> > +       struct rockchip_vpu_dev *dev = video_drvdata(file);
-> > +       const struct rockchip_vpu_fmt *fmt;
-> > +       const struct rockchip_vpu_fmt *formats;
-> > +       int num_fmts, i, j = 0;
-> > +
-> > +       formats = dev->variant->dec_fmts;
-> > +       num_fmts = dev->variant->num_dec_fmts;
-> > +       for (i = 0; i < num_fmts; i++) {
-> > +               /* Skip compressed formats */
-> > +               if (formats[i].codec_mode != RK_VPU_MODE_NONE)
-> > +                       continue;
-> > +               if (j == f->index) {
-> > +                       fmt = &formats[i];
-> > +                       f->pixelformat = fmt->fourcc;
-> > +                       return 0;
-> > +               }
-> > +               ++j;
-> > +       }
-> > +       return -EINVAL;
-> > +}
-> > +
-> > +static int vidioc_enum_fmt_vid_out_mplane(struct file *file, void *priv,
-> > +                                         struct v4l2_fmtdesc *f)
-> > +{
-> > +       struct rockchip_vpu_dev *dev = video_drvdata(file);
-> > +       const struct rockchip_vpu_fmt *formats;
-> > +       const struct rockchip_vpu_fmt *fmt;
-> > +       int num_fmts, i, j = 0;
-> > +
-> > +       formats = dev->variant->dec_fmts;
-> > +       num_fmts = dev->variant->num_dec_fmts;
-> > +       for (i = 0; i < num_fmts; i++) {
-> > +               if (formats[i].codec_mode == RK_VPU_MODE_NONE)
-> > +                       continue;
-> > +               if (j == f->index) {
-> > +                       fmt = &formats[i];
-> > +                       f->pixelformat = fmt->fourcc;
-> > +                       return 0;
-> > +               }
-> > +               ++j;
-> > +       }
-> > +       return -EINVAL;
-> > +}
-> 
-> All the functions above can be trivially generalized to be used for
-> both encoder and decoder. Moreover,
-> vidioc_enum_fmt_vid_{cap,out}_mplane() can be trivially merged into
-> one function to cover both buffer types.
-> 
-
-Right.
-
-> > +
-> > +static int vidioc_g_fmt_out_mplane(struct file *file, void *priv,
-> > +                                  struct v4l2_format *f)
-> > +{
-> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
-> > +
-> > +       vpu_debug(4, "f->type = %d\n", f->type);
-> > +
-> > +       *pix_mp = ctx->src_fmt;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int vidioc_g_fmt_cap_mplane(struct file *file, void *priv,
-> > +                                  struct v4l2_format *f)
-> > +{
-> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
-> > +
-> > +       vpu_debug(4, "f->type = %d\n", f->type);
-> > +
-> > +       *pix_mp = ctx->dst_fmt;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int
-> > +vidioc_try_fmt_cap_mplane(struct file *file, void *priv, struct v4l2_format *f)
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
-> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-> > +       const struct rockchip_vpu_fmt *fmt;
-> > +       unsigned int width, height;
-> > +
-> > +       vpu_debug(4, "%c%c%c%c\n",
-> > +                 (pix_mp->pixelformat & 0x7f),
-> > +                 (pix_mp->pixelformat >> 8) & 0x7f,
-> > +                 (pix_mp->pixelformat >> 16) & 0x7f,
-> > +                 (pix_mp->pixelformat >> 24) & 0x7f);
-> > +
-> > +       fmt = rockchip_vpu_find_format(ctx, pix_mp->pixelformat);
-> > +       if (!fmt) {
-> > +               fmt = rockchip_vpu_get_default_fmt(ctx, false);
-> > +               f->fmt.pix.pixelformat = fmt->fourcc;
-> > +       }
-> > +
-> > +       pix_mp->field = V4L2_FIELD_NONE;
-> > +       width = clamp(pix_mp->width,
-> > +                     ctx->vpu_src_fmt->frmsize.min_width,
-> > +                     ctx->vpu_src_fmt->frmsize.max_width);
-> > +       height = clamp(pix_mp->height,
-> > +                      ctx->vpu_src_fmt->frmsize.min_height,
-> > +                      ctx->vpu_src_fmt->frmsize.max_height);
-> > +       /* Round up to macroblocks. */
-> > +       width = round_up(width, ctx->vpu_src_fmt->frmsize.step_width);
-> > +       height = round_up(height, ctx->vpu_src_fmt->frmsize.step_height);
-> > +
-> > +       /* Fill remaining fields */
-> > +       v4l2_fill_pixfmt_mp(pix_mp, fmt->fourcc, width, height);
-> > +       return 0;
-> > +}
-> > +
-> > +static int
-> > +vidioc_try_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
-> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-> > +       const struct rockchip_vpu_fmt *fmt;
-> > +
-> > +       fmt = rockchip_vpu_find_format(ctx, pix_mp->pixelformat);
-> > +       if (!fmt) {
-> > +               fmt = rockchip_vpu_get_default_fmt(ctx, true);
-> > +               f->fmt.pix.pixelformat = fmt->fourcc;
-> > +       }
-> > +
-> > +       pix_mp->num_planes = 1;
-> > +       pix_mp->field = V4L2_FIELD_NONE;
-> > +       pix_mp->width = clamp(pix_mp->width,
-> > +                               fmt->frmsize.min_width,
-> > +                               fmt->frmsize.max_width);
-> > +       pix_mp->height = clamp(pix_mp->height,
-> > +                               fmt->frmsize.min_height,
-> > +                               fmt->frmsize.max_height);
-> > +       /* Round up to macroblocks. */
-> > +       pix_mp->width = round_up(pix_mp->width, fmt->frmsize.step_width);
-> > +       pix_mp->height = round_up(pix_mp->height, fmt->frmsize.step_height);
-> > +
-> > +       /*
-> > +        * For compressed formats the application can specify
-> > +        * sizeimage. If the application passes a zero sizeimage,
-> > +        * let's default to the maximum frame size.
-> > +        */
-> > +       if (!pix_mp->plane_fmt[0].sizeimage)
-> > +               pix_mp->plane_fmt[0].sizeimage = fmt->header_size +
-> > +                       pix_mp->width * pix_mp->height * fmt->max_depth;
-> > +       return 0;
-> > +}
-> > +
-> > +void rockchip_vpu_dec_reset_dst_fmt(struct rockchip_vpu_dev *vpu,
-> > +                               struct rockchip_vpu_ctx *ctx)
-> > +{
-> > +       struct v4l2_pix_format_mplane *fmt = &ctx->dst_fmt;
-> > +       unsigned int width, height;
-> > +
-> > +       ctx->vpu_dst_fmt = rockchip_vpu_get_default_fmt(ctx, false);
-> > +
-> > +       memset(fmt, 0, sizeof(*fmt));
-> > +
-> > +       width = clamp(fmt->width, ctx->vpu_src_fmt->frmsize.min_width,
-> > +                     ctx->vpu_src_fmt->frmsize.max_width);
-> > +       height = clamp(fmt->height, ctx->vpu_src_fmt->frmsize.min_height,
-> > +                      ctx->vpu_src_fmt->frmsize.max_height);
-> > +       fmt->field = V4L2_FIELD_NONE;
-> > +       fmt->colorspace = V4L2_COLORSPACE_JPEG,
-> > +       fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-> > +       fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
-> > +       fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-> > +
-> > +       v4l2_fill_pixfmt_mp(fmt, ctx->vpu_dst_fmt->fourcc, width, height);
-> 
-> Rather than duplicating most of the work already done in
-> vidioc_try_fmt_*(), could we just call it here?
-> 
-
-Yeah, I can try, see how it goes.
-
-> > +}
-> > +
-> > +void rockchip_vpu_dec_reset_src_fmt(struct rockchip_vpu_dev *vpu,
-> > +                               struct rockchip_vpu_ctx *ctx)
-> > +{
-> > +       struct v4l2_pix_format_mplane *fmt = &ctx->src_fmt;
-> > +
-> > +       ctx->vpu_src_fmt = rockchip_vpu_get_default_fmt(ctx, true);
-> > +
-> > +       memset(fmt, 0, sizeof(*fmt));
-> > +
-> > +       fmt->num_planes = 1;
-> > +       fmt->width = clamp(fmt->width, ctx->vpu_src_fmt->frmsize.min_width,
-> > +                     ctx->vpu_src_fmt->frmsize.max_width);
-> > +       fmt->height = clamp(fmt->height, ctx->vpu_src_fmt->frmsize.min_height,
-> > +                      ctx->vpu_src_fmt->frmsize.max_height);
-> > +       fmt->pixelformat = ctx->vpu_src_fmt->fourcc;
-> > +       fmt->field = V4L2_FIELD_NONE;
-> > +       fmt->colorspace = V4L2_COLORSPACE_JPEG,
-> > +       fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-> > +       fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
-> > +       fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
-> > +
-> > +       fmt->plane_fmt[0].sizeimage = ctx->vpu_src_fmt->header_size +
-> > +               fmt->width * fmt->height * ctx->vpu_src_fmt->max_depth;
-> 
-> Ditto.
-> 
-> > +}
-> > +
-> > +static int
-> > +vidioc_s_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
-> > +{
-> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
-> > +       struct rockchip_vpu_dev *vpu = ctx->dev;
-> > +       struct vb2_queue *vq, *peer_vq;
-> > +       int ret;
-> > +
-> > +       /* Change not allowed if queue is streaming. */
-> > +       vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-> > +       if (vb2_is_streaming(vq))
-> > +               return -EBUSY;
-> > +
-> > +       /*
-> > +        * Since format change on the OUTPUT queue will reset
-> > +        * the CAPTURE queue, we can't allow doing so
-> > +        * when the CAPTURE queue has buffers allocated.
-> > +        */
-> > +       peer_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-> > +                                 V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-> > +       if (vb2_is_busy(peer_vq) &&
-> > +           (pix_mp->pixelformat != ctx->src_fmt.pixelformat ||
-> > +            pix_mp->height != ctx->src_fmt.height ||
-> > +            pix_mp->width != ctx->src_fmt.width))
-> > +               return -EBUSY;
-> 
-> I'd say that in general we don't want any S_FMT(OUT) to be allowed if
-> CAP has buffers allocated, so maybe just checking vb2_is_busy(peer_vq)
-> is enough?
-> 
-
-Hm, this has been confusing to no end for me. This check comes from s_fmt_cap
-in rockchip_vpu_enc.c, at the time we came to the conclusion that
-vb2_is_busy(peer_queue) wasn't enough.
-
-Taking a step back, the S_FMT order is first encoded format, then raw format.
-
-So for encoders the user is expected to do first S_FMT(CAP), second S_FMT(OUT).
-For decoders, first S_FMT(OUT), second S_FMT(CAP)... and that's why we are interested
-on a strict vb2_is_busy check.
-
-The question is how we came to a different conclusion on the encoder.
- 
-> > +
-> > +       ret = vidioc_try_fmt_out_mplane(file, priv, f);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       ctx->vpu_src_fmt = rockchip_vpu_find_format(ctx, pix_mp->pixelformat);
-> > +       ctx->src_fmt = *pix_mp;
-> > +
-> > +       vpu_debug(0, "OUTPUT codec mode: %d\n", ctx->vpu_src_fmt->codec_mode);
-> > +       vpu_debug(0, "fmt - w: %d, h: %d\n",
-> > +                 pix_mp->width, pix_mp->height);
-> > +
-> > +       rockchip_vpu_dec_reset_dst_fmt(vpu, ctx);
-> > +       return 0;
-> > +}
-> > +
-> > +static int
-> > +vidioc_s_fmt_cap_mplane(struct file *file, void *priv, struct v4l2_format *f)
-> > +{
-> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
-> > +       struct vb2_queue *vq;
-> > +       int ret;
-> > +
-> > +       /* Change not allowed if queue is streaming. */
-> > +       vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-> > +       if (vb2_is_streaming(vq))
-> > +               return -EBUSY;
-> > +
-> > +       ret = vidioc_try_fmt_cap_mplane(file, priv, f);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       ctx->vpu_dst_fmt = rockchip_vpu_find_format(ctx, pix_mp->pixelformat);
-> > +       ctx->dst_fmt = *pix_mp;
-> > +
-> > +       vpu_debug(0, "CAPTURE codec mode: %d\n", ctx->vpu_dst_fmt->codec_mode);
-> > +       vpu_debug(0, "fmt - w: %d, h: %d\n",
-> > +                 pix_mp->width, pix_mp->height);
-> > +       return 0;
-> > +}
-> > +
-> > +const struct v4l2_ioctl_ops rockchip_vpu_dec_ioctl_ops = {
-> > +       .vidioc_querycap = vidioc_querycap,
-> > +       .vidioc_enum_framesizes = vidioc_enum_framesizes,
-> > +
-> > +       .vidioc_try_fmt_vid_cap_mplane = vidioc_try_fmt_cap_mplane,
-> > +       .vidioc_try_fmt_vid_out_mplane = vidioc_try_fmt_out_mplane,
-> > +       .vidioc_s_fmt_vid_out_mplane = vidioc_s_fmt_out_mplane,
-> > +       .vidioc_s_fmt_vid_cap_mplane = vidioc_s_fmt_cap_mplane,
-> > +       .vidioc_g_fmt_vid_out_mplane = vidioc_g_fmt_out_mplane,
-> > +       .vidioc_g_fmt_vid_cap_mplane = vidioc_g_fmt_cap_mplane,
-> > +       .vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_out_mplane,
-> > +       .vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_cap_mplane,
-> > +
-> > +       .vidioc_reqbufs = v4l2_m2m_ioctl_reqbufs,
-> > +       .vidioc_querybuf = v4l2_m2m_ioctl_querybuf,
-> > +       .vidioc_qbuf = v4l2_m2m_ioctl_qbuf,
-> > +       .vidioc_dqbuf = v4l2_m2m_ioctl_dqbuf,
-> > +       .vidioc_prepare_buf = v4l2_m2m_ioctl_prepare_buf,
-> > +       .vidioc_create_bufs = v4l2_m2m_ioctl_create_bufs,
-> > +       .vidioc_expbuf = v4l2_m2m_ioctl_expbuf,
-> > +
-> > +       .vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
-> > +       .vidioc_unsubscribe_event = v4l2_event_unsubscribe,
-> > +
-> > +       .vidioc_streamon = v4l2_m2m_ioctl_streamon,
-> > +       .vidioc_streamoff = v4l2_m2m_ioctl_streamoff,
-> > +};
-> > +
-> > +static int rockchip_vpu_queue_setup(struct vb2_queue *vq,
-> > +                                 unsigned int *num_buffers,
-> > +                                 unsigned int *num_planes,
-> > +                                 unsigned int sizes[],
-> > +                                 struct device *alloc_devs[])
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vq);
-> > +       struct v4l2_pix_format_mplane *pixfmt;
-> > +       int i;
-> > +
-> > +       switch (vq->type) {
-> > +       case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
-> > +               pixfmt = &ctx->dst_fmt;
-> > +               break;
-> > +       case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
-> > +               pixfmt = &ctx->src_fmt;
-> > +               break;
-> > +       default:
-> > +               vpu_err("invalid queue type: %d\n", vq->type);
-> > +               return -EINVAL;
-> > +       }
-> 
-> Hmm, would it make sense to have separate vb2_queue_ops for each queue
-> and create helper functions, which take the necessary queue-specific
-> data as arguments, if appropriate?
-> 
-
-Yup, sounds good.
-
-> > +
-> > +       if (*num_planes) {
-> > +               if (*num_planes != pixfmt->num_planes)
-> > +                       return -EINVAL;
-> > +               for (i = 0; i < pixfmt->num_planes; ++i)
-> > +                       if (sizes[i] < pixfmt->plane_fmt[i].sizeimage)
-> > +                               return -EINVAL;
-> > +               return 0;
-> > +       }
-> > +
-> > +       *num_planes = pixfmt->num_planes;
-> > +       for (i = 0; i < pixfmt->num_planes; ++i)
-> > +               sizes[i] = pixfmt->plane_fmt[i].sizeimage;
-> > +       return 0;
-> > +}
-> > +
-> > +static int rockchip_vpu_buf_prepare(struct vb2_buffer *vb)
-> > +{
-> > +       struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> > +       struct vb2_queue *vq = vb->vb2_queue;
-> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vq);
-> > +       const struct rockchip_vpu_fmt *vpu_fmt;
-> > +       struct v4l2_pix_format_mplane *pixfmt;
-> > +       unsigned int sz;
-> > +       int ret = 0;
-> > +       int i;
-> > +
-> > +       switch (vq->type) {
-> > +       case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
-> > +               vpu_fmt = ctx->vpu_dst_fmt;
-> > +               pixfmt = &ctx->dst_fmt;
-> > +               break;
-> > +       case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
-> > +               vpu_fmt = ctx->vpu_src_fmt;
-> > +               pixfmt = &ctx->src_fmt;
-> > +
-> > +               if (vbuf->field == V4L2_FIELD_ANY)
-> > +                       vbuf->field = V4L2_FIELD_NONE;
-> > +               if (vbuf->field != V4L2_FIELD_NONE) {
-> > +                       vpu_debug(4, "field %d not supported\n",
-> > +                                 vbuf->field);
-> > +                       return -EINVAL;
-> > +               }
-> > +               break;
-> > +       default:
-> > +               vpu_err("invalid queue type: %d\n", vq->type);
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       for (i = 0; i < pixfmt->num_planes; ++i) {
-> > +               sz = pixfmt->plane_fmt[i].sizeimage;
-> > +               vpu_debug(4, "plane %d size: %ld, sizeimage: %u\n",
-> > +                         i, vb2_plane_size(vb, i), sz);
-> > +               if (vb2_plane_size(vb, i) < sz) {
-> > +                       vpu_err("plane %d is too small for output\n", i);
-> > +                       ret = -EINVAL;
-> > +                       break;
-> > +               }
-> > +       }
-> > +
-> > +       return ret;
-> > +}
-> > +
-> > +static void rockchip_vpu_buf_queue(struct vb2_buffer *vb)
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
-> > +       struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> > +
-> > +       v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
-> > +}
-> > +
-> > +static int rockchip_vpu_start_streaming(struct vb2_queue *q, unsigned int count)
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(q);
-> > +       enum rockchip_vpu_codec_mode codec_mode;
-> > +       int ret = 0;
-> > +
-> > +       if (V4L2_TYPE_IS_OUTPUT(q->type))
-> > +               ctx->sequence_out = 0;
-> > +       else
-> > +               ctx->sequence_cap = 0;
-> > +
-> > +       codec_mode = ctx->vpu_src_fmt->codec_mode;
-> > +
-> > +       vpu_debug(4, "Codec mode = %d\n", codec_mode);
-> > +       ctx->codec_ops = &ctx->dev->variant->codec_ops[codec_mode];
-> 
-> Codec mode should be a function of the OUT queue, so I think this
-> should be also under if (V4L2_TYPE_IS_OUTPUT()). This would make most
-> of the code in this function specific to the OUT queue and possibly a
-> good argument for the comment about having separate vb2 queue ops I
-> posted above.
-> 
-
-Yup.
-
-> > +
-> > +       if (V4L2_TYPE_IS_OUTPUT(q->type))
-> > +               if (ctx->codec_ops && ctx->codec_ops->start)
-> > +                       ret = ctx->codec_ops->start(ctx);
-> > +       return ret;
-> > +}
-> > +
-> > +static void rockchip_vpu_stop_streaming(struct vb2_queue *q)
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(q);
-> > +
-> > +       if (V4L2_TYPE_IS_OUTPUT(q->type))
-> > +               if (ctx->codec_ops && ctx->codec_ops->stop)
-> > +                       ctx->codec_ops->stop(ctx);
-> > +
-> > +       /* The mem2mem framework calls v4l2_m2m_cancel_job before
-> 
-> CodingStyle: Multiline comments should start with one empty line.
-> 
-
-Oops. Seems I have a tendency for this! 
-
-> > +        * .stop_streaming, so there isn't any job running and
-> > +        * it is safe to return all the buffers.
-> > +        */
-> > +       for (;;) {
-> > +               struct vb2_v4l2_buffer *vbuf;
-> > +
-> > +               if (V4L2_TYPE_IS_OUTPUT(q->type))
-> > +                       vbuf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
-> > +               else
-> > +                       vbuf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
-> > +               if (!vbuf)
-> > +                       break;
-> > +               v4l2_ctrl_request_complete(vbuf->vb2_buf.req_obj.req, &ctx->ctrl_handler);
-> > +               v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
-> > +       }
-> > +}
-> > +
-> > +static void rockchip_vpu_buf_request_complete(struct vb2_buffer *vb)
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
-> > +
-> > +       v4l2_ctrl_request_complete(vb->req_obj.req, &ctx->ctrl_handler);
-> > +}
-> > +
-> > +static int rockchip_vpu_buf_out_validate(struct vb2_buffer *vb)
-> > +{
-> > +       struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> > +
-> > +       vbuf->field = V4L2_FIELD_NONE;
-> 
-> Similar comment as in earlier patch. Is validate expected to correct
-> the values or just check?
-> 
-
-See Hans' reply.
-
-> > +       return 0;
-> > +}
-> > +
-> > +const struct vb2_ops rockchip_vpu_dec_queue_ops = {
-> > +       .queue_setup = rockchip_vpu_queue_setup,
-> > +       .buf_prepare = rockchip_vpu_buf_prepare,
-> > +       .buf_queue = rockchip_vpu_buf_queue,
-> > +       .buf_out_validate = rockchip_vpu_buf_out_validate,
-> > +       .buf_request_complete = rockchip_vpu_buf_request_complete,
-> > +       .start_streaming = rockchip_vpu_start_streaming,
-> > +       .stop_streaming = rockchip_vpu_stop_streaming,
-> > +       .wait_prepare = vb2_ops_wait_prepare,
-> > +       .wait_finish = vb2_ops_wait_finish,
-> > +};
-> > diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-> > index 937e9cfb4568..27a9da86f1d0 100644
-> > --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-> > +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-> > @@ -36,6 +36,11 @@ module_param_named(debug, rockchip_vpu_debug, int, 0644);
-> >  MODULE_PARM_DESC(debug,
-> >                  "Debug level - higher value produces more verbose messages");
-> > 
-> > +enum rockchip_vpu_type {
-> > +       RK_VPU_ENCODER,
-> > +       RK_VPU_DECODER,
-> > +};
-> 
-> Given that we already have ctx->is_enc, any reason not to have this
-> represented in the same way everywhere?
-> 
-
-The reason is that I'd rather have:
-
-rockchip_vpu_video_device_register(vpu, RK_VPU_ENCODER);
-
-Than:
-
-rockchip_vpu_video_device_register(vpu, true);
-
-We could have a vpu_type field instead of that is_enc boolean.
-I think the code would be even cleaner.
-
-> > +
-> >  void *rockchip_vpu_get_ctrl(struct rockchip_vpu_ctx *ctx, u32 id)
-> >  {
-> >         struct v4l2_ctrl *ctrl;
-> > @@ -81,7 +86,11 @@ static void rockchip_vpu_job_finish(struct rockchip_vpu_dev *vpu,
-> > 
-> >         avail_size = vb2_plane_size(&dst->vb2_buf, 0) -
-> >                      ctx->vpu_dst_fmt->header_size;
-> > -       if (bytesused <= avail_size) {
-> > +       /* For decoders set bytesused as per the output picture. */
-> > +       if (!ctx->is_enc) {
-> > +               dst->vb2_buf.planes[0].bytesused =
-> > +                       ctx->dst_fmt.plane_fmt[0].sizeimage;
-> > +       } else if (bytesused <= avail_size) {
-> >                 /*
-> >                  * This works while JPEG is the only encoder this driver
-> >                  * supports. We will have to abstract this step, or get
-> 
-> avail_size is specific for the encoder. How about clearly separating
-> decoder and encoder code with a separate if? It would introduce one
-> more level of nesting, but IMHO it would be more readable, due to
-> better separation of code paths. (Or going one step further, encoder
-> and decoder-specific code could be moved to separate functions.)
-> 
-
-Sounds good!
-
-> if (ctx->is_enc) {
->   size_t avail_size = ...;
->   // encoder code
->   if (bytesused <= avail_size) {
->     //
->   } else {
->     //
->   }
-> } else {
->   // decoder code
-> }
-> 
-> > @@ -159,6 +168,44 @@ static struct v4l2_m2m_ops vpu_m2m_ops = {
-> >         .device_run = device_run,
-> >  };
-> > 
-> > +static int
-> > +dec_queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
-> > +{
-> > +       struct rockchip_vpu_ctx *ctx = priv;
-> > +       int ret;
-> > +
-> > +       src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-> > +       src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
-> > +       src_vq->drv_priv = ctx;
-> > +       src_vq->ops = &rockchip_vpu_dec_queue_ops;
-> > +       src_vq->mem_ops = &vb2_dma_contig_memops;
-> > +       src_vq->dma_attrs = DMA_ATTR_ALLOC_SINGLE_PAGES |
-> > +                           DMA_ATTR_NO_KERNEL_MAPPING;
-> > +       src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-> > +       src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-> > +       src_vq->lock = &ctx->dev->vpu_mutex;
-> > +       src_vq->dev = ctx->dev->v4l2_dev.dev;
-> > +       src_vq->supports_requests = true;
-> > +
-> > +       ret = vb2_queue_init(src_vq);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-> > +       dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
-> > +       dst_vq->drv_priv = ctx;
-> > +       dst_vq->bidirectional = true;
-> > +       dst_vq->ops = &rockchip_vpu_dec_queue_ops;
-> > +       dst_vq->mem_ops = &vb2_dma_contig_memops;
-> > +       dst_vq->dma_attrs = DMA_ATTR_ALLOC_SINGLE_PAGES;
-> 
-> Any need for kernel mapping of decoder output?
-> 
-
-Nope, I just missed this.
-
-Thanks a lot for the detailed review!
-Eze
-
+Thanks,
+Gregor
