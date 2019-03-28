@@ -2,318 +2,765 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96F47C43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 19:18:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80FEAC43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 19:23:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 54A2C20811
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 19:18:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553800687;
-	bh=8hjdCT0gTdO7N8C95+lkYgTpVcDI7SxPFtKmeF7Fn3k=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=m3vQ3iprX4GPVpbPDqRb9KwMenpQOFGQIYjXxKaplLNLZIAKKQgkZzvVJQjU6qsbg
-	 NycYy65OKQQOTv43BEsCFifSEa3mU2z5lcOqI6U9/oDJ7MEmlc83Rhd9JDyGlT5Q+d
-	 YBkYg2XmqcTTGF0FNdyAZXc9N4Tzi5S64VYJuqrk=
+	by mail.kernel.org (Postfix) with ESMTP id 3E475206B7
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 19:23:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbfC1TSG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 15:18:06 -0400
-Received: from casper.infradead.org ([85.118.1.10]:56804 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbfC1TSG (ORCPT
+        id S1726453AbfC1TXc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 15:23:32 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54418 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbfC1TXc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 15:18:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=FTeKh+HslMZbsa12y6Pw6rObeNXdpOTBx7rvmmnMN1A=; b=EDHUklhnKUgIet4nhs5mvQgvLh
-        ZKma4BErPBTxgkY0SVPgMIydK/g8jChD4r3jcBMTHvliwG00V+TvTwYvss16pbLQNrcX21hoW3ihS
-        hfF6iNamzOVJZUDf1nlp00iAK2ahwlqZPlWrK1jbUR32FLAuvvX9o6ZYrZATxVRpfEBFVj6ajXpfK
-        5SmpK6tA5GIed21azZbEiB9PBlRfBu44X72JtNioS0vDl3y56qW3PxsikDuK5Jfi3iFHvVpdkj38f
-        9Q+qZLifJeqZaGazg3xAKrGsIwcjp9ZI4YZPbT1++ATGVSIxaBByz8oPOrF3re6phdlfhGOoB7K4Z
-        EaPDC/tQ==;
-Received: from [179.183.99.176] (helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1h9aXL-0003BS-9x; Thu, 28 Mar 2019 19:18:03 +0000
-Date:   Thu, 28 Mar 2019 16:17:58 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Samuel CHEMLA <chemla.samuel@gmail.com>
-Cc:     Sean Young <sean@mess.org>, Gregor Jasny <gjasny@googlemail.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@s-opensource.com>
-Subject: Re: [Bug report] dvbv5-zap crash dvb-tool ARMHF builds
-Message-ID: <20190328161758.2da2bf4e@coco.lan>
-In-Reply-To: <CANJnhGe+nyq6a43BnPmGxb6_9JinFyy1EC=6Xo6K4RUpshm8Ow@mail.gmail.com>
-References: <20190315223425.hiq3qcjhjnirsizh@gofer.mess.org>
-        <20190317065242.137cb095@coco.lan>
-        <20190319164507.7f95af89@coco.lan>
-        <a1f296ba-3c27-ed2c-3912-4edbeeb21eba@googlemail.com>
-        <20190321094127.ysurm4u26zugmnmv@gofer.mess.org>
-        <20190321083044.621f1922@coco.lan>
-        <35ba4e81-fc2a-87ed-8da7-43cc4543de51@googlemail.com>
-        <CANJnhGfRtEwAony5Z4rFMPcu58aF2k0G+9NSkMKsq_PhfmSNqw@mail.gmail.com>
-        <20190325140838.71f88eac@coco.lan>
-        <CANJnhGc_qx32nm7yZheC2ioHOij8QELbnwyJkZ83G9uYTxqwtA@mail.gmail.com>
-        <20190326132643.r3svehoa764xagje@gofer.mess.org>
-        <CANJnhGfgzrLZedeoCOq3L-MaEgjtHm1Bwn1cRPr54LvwZ=RBMQ@mail.gmail.com>
-        <20190326123115.5d83f450@coco.lan>
-        <CANJnhGe+nyq6a43BnPmGxb6_9JinFyy1EC=6Xo6K4RUpshm8Ow@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Thu, 28 Mar 2019 15:23:32 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 5AC0A2822BE
+Message-ID: <3dc357b3be2ebe787b79817384c59bba25ff57ad.camel@collabora.com>
+Subject: Re: [PATCH v2 09/11] rockchip/vpu: Add decoder boilerplate
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jonas Karlman <jonas@kwiboo.se>
+Date:   Thu, 28 Mar 2019 16:23:21 -0300
+In-Reply-To: <CAAFQd5AWJj5wY6jOf2hC4t8kU1XQ3y6H_YKGaZgRVCHrUvfPXQ@mail.gmail.com>
+References: <20190304192529.14200-1-ezequiel@collabora.com>
+         <20190304192529.14200-10-ezequiel@collabora.com>
+         <CAAFQd5AWJj5wY6jOf2hC4t8kU1XQ3y6H_YKGaZgRVCHrUvfPXQ@mail.gmail.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Thu, 28 Mar 2019 19:48:35 +0100
-Samuel CHEMLA <chemla.samuel@gmail.com> escreveu:
+Hey Tomasz,
 
-> Hi,
+Thanks for taking the time to review this carefully!
 
-Please, don't top post.
->=20
->=20
-> 1) I did reproduce the bug with a serial console, but the serial
-> console was also frozen, and there was no message before freeze.
+On Thu, 2019-03-28 at 18:57 +0900, Tomasz Figa wrote:
+> On Tue, Mar 5, 2019 at 4:27 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> [snip]
+> > +static const struct rockchip_vpu_fmt *
+> > +rockchip_vpu_find_format(struct rockchip_vpu_ctx *ctx, u32 fourcc)
+> > +{
+> > +       struct rockchip_vpu_dev *dev = ctx->dev;
+> > +       const struct rockchip_vpu_fmt *formats;
+> > +       unsigned int num_fmts, i;
+> > +
+> > +       formats = dev->variant->dec_fmts;
+> > +       num_fmts = dev->variant->num_dec_fmts;
+> > +       for (i = 0; i < num_fmts; i++)
+> > +               if (formats[i].fourcc == fourcc)
+> > +                       return &formats[i];
+> > +       return NULL;
+> > +}
+> > +
+> > +static const struct rockchip_vpu_fmt *
+> > +rockchip_vpu_get_default_fmt(struct rockchip_vpu_ctx *ctx, bool bitstream)
+> > +{
+> > +       struct rockchip_vpu_dev *dev = ctx->dev;
+> > +       const struct rockchip_vpu_fmt *formats;
+> > +       unsigned int num_fmts, i;
+> > +
+> > +       formats = dev->variant->dec_fmts;
+> > +       num_fmts = dev->variant->num_dec_fmts;
+> > +       for (i = 0; i < num_fmts; i++)
+> > +               if (bitstream == (formats[i].codec_mode != RK_VPU_MODE_NONE))
+> > +                       return &formats[i];
+> > +       return NULL;
+> > +}
+> > +
+> > +static int vidioc_querycap(struct file *file, void *priv,
+> > +                          struct v4l2_capability *cap)
+> > +{
+> > +       struct rockchip_vpu_dev *vpu = video_drvdata(file);
+> > +
+> > +       strlcpy(cap->driver, vpu->dev->driver->name, sizeof(cap->driver));
+> > +       strlcpy(cap->card, vpu->vfd_dec->name, sizeof(cap->card));
+> > +       snprintf(cap->bus_info, sizeof(cap->bus_info), "platform: %s",
+> > +                vpu->dev->driver->name);
+> > +       return 0;
+> > +}
+> > +
+> > +static int vidioc_enum_framesizes(struct file *file, void *priv,
+> > +                                 struct v4l2_frmsizeenum *fsize)
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
+> > +       const struct rockchip_vpu_fmt *fmt;
+> > +
+> > +       if (fsize->index != 0) {
+> > +               vpu_debug(0, "invalid frame size index (expected 0, got %d)\n",
+> > +                               fsize->index);
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       fmt = rockchip_vpu_find_format(ctx, fsize->pixel_format);
+> > +       if (!fmt) {
+> > +               vpu_debug(0, "unsupported bitstream format (%08x)\n",
+> > +                               fsize->pixel_format);
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       /* This only makes sense for codec formats */
+> 
+> "coded formats"
+> 
 
-The only way for a machine to freeze even on serial console is due to
-a very serious Kernel or hardware bug, like a bad lock/semaphore.
+OK.
 
-> 2) I also tried a powered USB HUB but it didn't change anything.
+> > +       if (fmt->codec_mode == RK_VPU_MODE_NONE)
+> > +               return -EINVAL;
+> > +
+> > +       fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
+> > +       fsize->stepwise = fmt->frmsize;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int vidioc_enum_fmt_vid_cap_mplane(struct file *file, void *priv,
+> > +                                         struct v4l2_fmtdesc *f)
+> > +{
+> > +       struct rockchip_vpu_dev *dev = video_drvdata(file);
+> > +       const struct rockchip_vpu_fmt *fmt;
+> > +       const struct rockchip_vpu_fmt *formats;
+> > +       int num_fmts, i, j = 0;
+> > +
+> > +       formats = dev->variant->dec_fmts;
+> > +       num_fmts = dev->variant->num_dec_fmts;
+> > +       for (i = 0; i < num_fmts; i++) {
+> > +               /* Skip compressed formats */
+> > +               if (formats[i].codec_mode != RK_VPU_MODE_NONE)
+> > +                       continue;
+> > +               if (j == f->index) {
+> > +                       fmt = &formats[i];
+> > +                       f->pixelformat = fmt->fourcc;
+> > +                       return 0;
+> > +               }
+> > +               ++j;
+> > +       }
+> > +       return -EINVAL;
+> > +}
+> > +
+> > +static int vidioc_enum_fmt_vid_out_mplane(struct file *file, void *priv,
+> > +                                         struct v4l2_fmtdesc *f)
+> > +{
+> > +       struct rockchip_vpu_dev *dev = video_drvdata(file);
+> > +       const struct rockchip_vpu_fmt *formats;
+> > +       const struct rockchip_vpu_fmt *fmt;
+> > +       int num_fmts, i, j = 0;
+> > +
+> > +       formats = dev->variant->dec_fmts;
+> > +       num_fmts = dev->variant->num_dec_fmts;
+> > +       for (i = 0; i < num_fmts; i++) {
+> > +               if (formats[i].codec_mode == RK_VPU_MODE_NONE)
+> > +                       continue;
+> > +               if (j == f->index) {
+> > +                       fmt = &formats[i];
+> > +                       f->pixelformat = fmt->fourcc;
+> > +                       return 0;
+> > +               }
+> > +               ++j;
+> > +       }
+> > +       return -EINVAL;
+> > +}
+> 
+> All the functions above can be trivially generalized to be used for
+> both encoder and decoder. Moreover,
+> vidioc_enum_fmt_vid_{cap,out}_mplane() can be trivially merged into
+> one function to cover both buffer types.
+> 
 
-Ok.
+Right.
 
-> 3) I tried DVBJet, from https://github.com/lightful/DVBdirect , it is
-> a tuner that directly does ioctl on linux kernel DVB device.
-> I couldn't reproduce the issue with DVBJet.
+> > +
+> > +static int vidioc_g_fmt_out_mplane(struct file *file, void *priv,
+> > +                                  struct v4l2_format *f)
+> > +{
+> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
+> > +
+> > +       vpu_debug(4, "f->type = %d\n", f->type);
+> > +
+> > +       *pix_mp = ctx->src_fmt;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int vidioc_g_fmt_cap_mplane(struct file *file, void *priv,
+> > +                                  struct v4l2_format *f)
+> > +{
+> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
+> > +
+> > +       vpu_debug(4, "f->type = %d\n", f->type);
+> > +
+> > +       *pix_mp = ctx->dst_fmt;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int
+> > +vidioc_try_fmt_cap_mplane(struct file *file, void *priv, struct v4l2_format *f)
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
+> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+> > +       const struct rockchip_vpu_fmt *fmt;
+> > +       unsigned int width, height;
+> > +
+> > +       vpu_debug(4, "%c%c%c%c\n",
+> > +                 (pix_mp->pixelformat & 0x7f),
+> > +                 (pix_mp->pixelformat >> 8) & 0x7f,
+> > +                 (pix_mp->pixelformat >> 16) & 0x7f,
+> > +                 (pix_mp->pixelformat >> 24) & 0x7f);
+> > +
+> > +       fmt = rockchip_vpu_find_format(ctx, pix_mp->pixelformat);
+> > +       if (!fmt) {
+> > +               fmt = rockchip_vpu_get_default_fmt(ctx, false);
+> > +               f->fmt.pix.pixelformat = fmt->fourcc;
+> > +       }
+> > +
+> > +       pix_mp->field = V4L2_FIELD_NONE;
+> > +       width = clamp(pix_mp->width,
+> > +                     ctx->vpu_src_fmt->frmsize.min_width,
+> > +                     ctx->vpu_src_fmt->frmsize.max_width);
+> > +       height = clamp(pix_mp->height,
+> > +                      ctx->vpu_src_fmt->frmsize.min_height,
+> > +                      ctx->vpu_src_fmt->frmsize.max_height);
+> > +       /* Round up to macroblocks. */
+> > +       width = round_up(width, ctx->vpu_src_fmt->frmsize.step_width);
+> > +       height = round_up(height, ctx->vpu_src_fmt->frmsize.step_height);
+> > +
+> > +       /* Fill remaining fields */
+> > +       v4l2_fill_pixfmt_mp(pix_mp, fmt->fourcc, width, height);
+> > +       return 0;
+> > +}
+> > +
+> > +static int
+> > +vidioc_try_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
+> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+> > +       const struct rockchip_vpu_fmt *fmt;
+> > +
+> > +       fmt = rockchip_vpu_find_format(ctx, pix_mp->pixelformat);
+> > +       if (!fmt) {
+> > +               fmt = rockchip_vpu_get_default_fmt(ctx, true);
+> > +               f->fmt.pix.pixelformat = fmt->fourcc;
+> > +       }
+> > +
+> > +       pix_mp->num_planes = 1;
+> > +       pix_mp->field = V4L2_FIELD_NONE;
+> > +       pix_mp->width = clamp(pix_mp->width,
+> > +                               fmt->frmsize.min_width,
+> > +                               fmt->frmsize.max_width);
+> > +       pix_mp->height = clamp(pix_mp->height,
+> > +                               fmt->frmsize.min_height,
+> > +                               fmt->frmsize.max_height);
+> > +       /* Round up to macroblocks. */
+> > +       pix_mp->width = round_up(pix_mp->width, fmt->frmsize.step_width);
+> > +       pix_mp->height = round_up(pix_mp->height, fmt->frmsize.step_height);
+> > +
+> > +       /*
+> > +        * For compressed formats the application can specify
+> > +        * sizeimage. If the application passes a zero sizeimage,
+> > +        * let's default to the maximum frame size.
+> > +        */
+> > +       if (!pix_mp->plane_fmt[0].sizeimage)
+> > +               pix_mp->plane_fmt[0].sizeimage = fmt->header_size +
+> > +                       pix_mp->width * pix_mp->height * fmt->max_depth;
+> > +       return 0;
+> > +}
+> > +
+> > +void rockchip_vpu_dec_reset_dst_fmt(struct rockchip_vpu_dev *vpu,
+> > +                               struct rockchip_vpu_ctx *ctx)
+> > +{
+> > +       struct v4l2_pix_format_mplane *fmt = &ctx->dst_fmt;
+> > +       unsigned int width, height;
+> > +
+> > +       ctx->vpu_dst_fmt = rockchip_vpu_get_default_fmt(ctx, false);
+> > +
+> > +       memset(fmt, 0, sizeof(*fmt));
+> > +
+> > +       width = clamp(fmt->width, ctx->vpu_src_fmt->frmsize.min_width,
+> > +                     ctx->vpu_src_fmt->frmsize.max_width);
+> > +       height = clamp(fmt->height, ctx->vpu_src_fmt->frmsize.min_height,
+> > +                      ctx->vpu_src_fmt->frmsize.max_height);
+> > +       fmt->field = V4L2_FIELD_NONE;
+> > +       fmt->colorspace = V4L2_COLORSPACE_JPEG,
+> > +       fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+> > +       fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
+> > +       fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
+> > +
+> > +       v4l2_fill_pixfmt_mp(fmt, ctx->vpu_dst_fmt->fourcc, width, height);
+> 
+> Rather than duplicating most of the work already done in
+> vidioc_try_fmt_*(), could we just call it here?
+> 
 
-I don't know DVBJet. If it uses the same Kernel drivers, maybe
-it could then be a race issue: send commands on a slower way to
-the Kernel would be solving the issue.
+Yeah, I can try, see how it goes.
 
-> It's been running for almost 48Hrs now, without a crash.
-> I collect all PIDs on the multiplex, just like dvbv5-zap, so the USB
-> port is solicited at it's maximum.
->=20
-> That makes me think it is not a hardware issue.
-> I'm pretty sure dvbv5-zap can still improve, and it already did when
-> you fixed: struct arguments args =3D {};
+> > +}
+> > +
+> > +void rockchip_vpu_dec_reset_src_fmt(struct rockchip_vpu_dev *vpu,
+> > +                               struct rockchip_vpu_ctx *ctx)
+> > +{
+> > +       struct v4l2_pix_format_mplane *fmt = &ctx->src_fmt;
+> > +
+> > +       ctx->vpu_src_fmt = rockchip_vpu_get_default_fmt(ctx, true);
+> > +
+> > +       memset(fmt, 0, sizeof(*fmt));
+> > +
+> > +       fmt->num_planes = 1;
+> > +       fmt->width = clamp(fmt->width, ctx->vpu_src_fmt->frmsize.min_width,
+> > +                     ctx->vpu_src_fmt->frmsize.max_width);
+> > +       fmt->height = clamp(fmt->height, ctx->vpu_src_fmt->frmsize.min_height,
+> > +                      ctx->vpu_src_fmt->frmsize.max_height);
+> > +       fmt->pixelformat = ctx->vpu_src_fmt->fourcc;
+> > +       fmt->field = V4L2_FIELD_NONE;
+> > +       fmt->colorspace = V4L2_COLORSPACE_JPEG,
+> > +       fmt->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+> > +       fmt->quantization = V4L2_QUANTIZATION_DEFAULT;
+> > +       fmt->xfer_func = V4L2_XFER_FUNC_DEFAULT;
+> > +
+> > +       fmt->plane_fmt[0].sizeimage = ctx->vpu_src_fmt->header_size +
+> > +               fmt->width * fmt->height * ctx->vpu_src_fmt->max_depth;
+> 
+> Ditto.
+> 
+> > +}
+> > +
+> > +static int
+> > +vidioc_s_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
+> > +{
+> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
+> > +       struct rockchip_vpu_dev *vpu = ctx->dev;
+> > +       struct vb2_queue *vq, *peer_vq;
+> > +       int ret;
+> > +
+> > +       /* Change not allowed if queue is streaming. */
+> > +       vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
+> > +       if (vb2_is_streaming(vq))
+> > +               return -EBUSY;
+> > +
+> > +       /*
+> > +        * Since format change on the OUTPUT queue will reset
+> > +        * the CAPTURE queue, we can't allow doing so
+> > +        * when the CAPTURE queue has buffers allocated.
+> > +        */
+> > +       peer_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
+> > +                                 V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
+> > +       if (vb2_is_busy(peer_vq) &&
+> > +           (pix_mp->pixelformat != ctx->src_fmt.pixelformat ||
+> > +            pix_mp->height != ctx->src_fmt.height ||
+> > +            pix_mp->width != ctx->src_fmt.width))
+> > +               return -EBUSY;
+> 
+> I'd say that in general we don't want any S_FMT(OUT) to be allowed if
+> CAP has buffers allocated, so maybe just checking vb2_is_busy(peer_vq)
+> is enough?
+> 
 
-Everything can be improved, but the thing is that we need first to
-discover the root cause :-)
+Hm, this has been confusing to no end for me. This check comes from s_fmt_cap
+in rockchip_vpu_enc.c, at the time we came to the conclusion that
+vb2_is_busy(peer_queue) wasn't enough.
 
-Can you post on pastebin (or equivalent) the dmesg with the
-DVBJet running? Maybe it could be printing some Kernel messages
-that might help to discover what's going wrong.
+Taking a step back, the S_FMT order is first encoded format, then raw format.
 
-Btw, could you also apply this patch:
-	https://patchwork.linuxtv.org/patch/55274/
+So for encoders the user is expected to do first S_FMT(CAP), second S_FMT(OUT).
+For decoders, first S_FMT(OUT), second S_FMT(CAP)... and that's why we are interested
+on a strict vb2_is_busy check.
 
-It is probably unrelated, but this is the kind of bug that could cause
-such issues.
+The question is how we came to a different conclusion on the encoder.
+ 
+> > +
+> > +       ret = vidioc_try_fmt_out_mplane(file, priv, f);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       ctx->vpu_src_fmt = rockchip_vpu_find_format(ctx, pix_mp->pixelformat);
+> > +       ctx->src_fmt = *pix_mp;
+> > +
+> > +       vpu_debug(0, "OUTPUT codec mode: %d\n", ctx->vpu_src_fmt->codec_mode);
+> > +       vpu_debug(0, "fmt - w: %d, h: %d\n",
+> > +                 pix_mp->width, pix_mp->height);
+> > +
+> > +       rockchip_vpu_dec_reset_dst_fmt(vpu, ctx);
+> > +       return 0;
+> > +}
+> > +
+> > +static int
+> > +vidioc_s_fmt_cap_mplane(struct file *file, void *priv, struct v4l2_format *f)
+> > +{
+> > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+> > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
+> > +       struct vb2_queue *vq;
+> > +       int ret;
+> > +
+> > +       /* Change not allowed if queue is streaming. */
+> > +       vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
+> > +       if (vb2_is_streaming(vq))
+> > +               return -EBUSY;
+> > +
+> > +       ret = vidioc_try_fmt_cap_mplane(file, priv, f);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       ctx->vpu_dst_fmt = rockchip_vpu_find_format(ctx, pix_mp->pixelformat);
+> > +       ctx->dst_fmt = *pix_mp;
+> > +
+> > +       vpu_debug(0, "CAPTURE codec mode: %d\n", ctx->vpu_dst_fmt->codec_mode);
+> > +       vpu_debug(0, "fmt - w: %d, h: %d\n",
+> > +                 pix_mp->width, pix_mp->height);
+> > +       return 0;
+> > +}
+> > +
+> > +const struct v4l2_ioctl_ops rockchip_vpu_dec_ioctl_ops = {
+> > +       .vidioc_querycap = vidioc_querycap,
+> > +       .vidioc_enum_framesizes = vidioc_enum_framesizes,
+> > +
+> > +       .vidioc_try_fmt_vid_cap_mplane = vidioc_try_fmt_cap_mplane,
+> > +       .vidioc_try_fmt_vid_out_mplane = vidioc_try_fmt_out_mplane,
+> > +       .vidioc_s_fmt_vid_out_mplane = vidioc_s_fmt_out_mplane,
+> > +       .vidioc_s_fmt_vid_cap_mplane = vidioc_s_fmt_cap_mplane,
+> > +       .vidioc_g_fmt_vid_out_mplane = vidioc_g_fmt_out_mplane,
+> > +       .vidioc_g_fmt_vid_cap_mplane = vidioc_g_fmt_cap_mplane,
+> > +       .vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_out_mplane,
+> > +       .vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_cap_mplane,
+> > +
+> > +       .vidioc_reqbufs = v4l2_m2m_ioctl_reqbufs,
+> > +       .vidioc_querybuf = v4l2_m2m_ioctl_querybuf,
+> > +       .vidioc_qbuf = v4l2_m2m_ioctl_qbuf,
+> > +       .vidioc_dqbuf = v4l2_m2m_ioctl_dqbuf,
+> > +       .vidioc_prepare_buf = v4l2_m2m_ioctl_prepare_buf,
+> > +       .vidioc_create_bufs = v4l2_m2m_ioctl_create_bufs,
+> > +       .vidioc_expbuf = v4l2_m2m_ioctl_expbuf,
+> > +
+> > +       .vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
+> > +       .vidioc_unsubscribe_event = v4l2_event_unsubscribe,
+> > +
+> > +       .vidioc_streamon = v4l2_m2m_ioctl_streamon,
+> > +       .vidioc_streamoff = v4l2_m2m_ioctl_streamoff,
+> > +};
+> > +
+> > +static int rockchip_vpu_queue_setup(struct vb2_queue *vq,
+> > +                                 unsigned int *num_buffers,
+> > +                                 unsigned int *num_planes,
+> > +                                 unsigned int sizes[],
+> > +                                 struct device *alloc_devs[])
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vq);
+> > +       struct v4l2_pix_format_mplane *pixfmt;
+> > +       int i;
+> > +
+> > +       switch (vq->type) {
+> > +       case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+> > +               pixfmt = &ctx->dst_fmt;
+> > +               break;
+> > +       case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+> > +               pixfmt = &ctx->src_fmt;
+> > +               break;
+> > +       default:
+> > +               vpu_err("invalid queue type: %d\n", vq->type);
+> > +               return -EINVAL;
+> > +       }
+> 
+> Hmm, would it make sense to have separate vb2_queue_ops for each queue
+> and create helper functions, which take the necessary queue-specific
+> data as arguments, if appropriate?
+> 
 
->=20
->=20
-> Regards
->=20
-> Le mar. 26 mars 2019 =C3=A0 16:31, Mauro Carvalho Chehab
-> <mchehab+samsung@kernel.org> a =C3=A9crit :
-> >
-> > Em Tue, 26 Mar 2019 16:10:33 +0100
-> > Samuel CHEMLA <chemla.samuel@gmail.com> escreveu:
-> > =20
-> > > Hi,
-> > >
-> > > =20
-> > > > Earlier you said "random hangs are back". When this happens, does t=
-he whole
-> > > > device become unresponsive or just dvbv5-zap? =20
-> > > The device completely freeze, you can't even switch numlock on/off. =
-=20
-> >
-> > dvbv5-tools can't hang the machine. this is very likely happening due to
-> > a Kernel crash.
-> > =20
-> > > I said "the issue is back", it is because I **thought** it was gone.
-> > > To be more precise:
-> > > - on raspberry zero W, the issue is gone since Mauro's patch
-> > > (https://git.linuxtv.org/v4l-utils.git/commit/?id=3D22b06353227e04695=
-b1b0a9622b896b948adba89)
-> > > - on raspberry 2, the issue, it is still there and the patch has no
-> > > effect (the issue was and is still there) =20
-> >
-> > RPi2 has a serious issue with their USB ports: on devices that require
-> > more than a few mW to work, it causes several device disconnection and
-> > re-connection, as it cannot sustain the required 5V.
-> >
-> > Depending on how fast this happens, it could be triggering some Kernel
-> > bug.
-> >
-> > That affects most V4L and DVB devices. You should either use a powered
-> > USB 2.0 hub (with may be problematic, as the USB host driver on RPi
-> > has issues - and may cause data loss on high sustained ISOC traffic,
-> > specially when used with hubs) or a device that has its own power
-> > supply, like DVBSky T680C or S960.
-> > =20
-> > > > Since this issue is "back",
-> > > > I wouldn't be surprised this is unrelated to the fixes in 1.12.7 an=
-d 1.16.4. =20
-> > > The issue doesn't appear anymore on raspberry zero W since Mauro's co=
-mmit.
-> > > So it did improve on that platform.
-> > > =20
-> > > > It would be useful to see the output from dmesg (best thing would b=
-e after
-> > > > the issue occurs). =20
-> > > You can't, device is frozen.
-> > > Logs are not flushed to disk, and journalctl -f freeze before showing=
- anything =20
-> >
-> > You can use a serial port in order to get the logs. On a serial console,
-> > use something like:
-> >
-> >         # dmesg -n 8
-> >
-> > In order to make sure it will display all Kernel messages at console.
-> > =20
-> > > =20
-> > > > Also what dvb hardware are you using? =20
-> > > I reproduced it with different two tuners: rtl2832U from RTL-SDR.COM
-> > > and a TerraTec Cinergy T Stick+ =20
-> >
-> > None of them supports an external power supply.
-> > =20
-> > > You can found all the details here:
-> > > https://bugs.launchpad.net/raspbian/+bug/1819650
-> > >
-> > >
-> > > Sam
-> > >
-> > >
-> > > Le mar. 26 mars 2019 =C3=A0 14:26, Sean Young <sean@mess.org> a =C3=
-=A9crit : =20
-> > > >
-> > > > Hi Sam,
-> > > >
-> > > > On Tue, Mar 26, 2019 at 08:35:44AM +0100, Samuel CHEMLA wrote: =20
-> > > > > Hi,
-> > > > >
-> > > > >
-> > > > > I am struggling with valgrind because it always complain with eit=
-her :
-> > > > >     ASan runtime does not come first in initial library list; you
-> > > > > should either link runtime to your application or manually preloa=
-d it
-> > > > > with LD_PRELOAD =20
-> > > > >     -> When I LD_PRELOAD, I'm getting a segfault, but I couldn't =
-find =20
-> > > > > any core dump
-> > > > >
-> > > > > or, if I link statically libasan with -static-libasan:
-> > > > >     Shadow memory range interleaves with an existing memory mappi=
-ng.
-> > > > > ASan cannot proceed correctly. ABORTING.
-> > > > >     ASan shadow was supposed to be located in the
-> > > > > [0x00007fff7000-0x10007fff7fff] range.
-> > > > >
-> > > > >
-> > > > > I retested again on my raspberry zero W, and I confirm i cannot
-> > > > > reproduce the hang.
-> > > > > Your fix did work on that device.
-> > > > > I am testing with same OS (raspbian with latest updates, same ker=
-nel),
-> > > > > same configure options, same USB dongle... :-(
-> > > > > The only differences are CPU architecture (armv6 vs armv7), memory
-> > > > > constraints, and I was not using the same channels.conf, I'll fix=
- that
-> > > > > today and re-check =20
-> > > >
-> > > > Earlier you said "random hangs are back". When this happens, does t=
-he whole
-> > > > device become unresponsive or just dvbv5-zap? Since this issue is "=
-back",
-> > > > I wouldn't be surprised this is unrelated to the fixes in 1.12.7 an=
-d 1.16.4.
-> > > >
-> > > > It would be useful to see the output from dmesg (best thing would b=
-e after
-> > > > the issue occurs).
-> > > >
-> > > > Also what dvb hardware are you using?
-> > > >
-> > > > Thanks,
-> > > >
-> > > > san
-> > > > =20
-> > > > >
-> > > > >
-> > > > > Sam
-> > > > >
-> > > > > On 25/03/2019 18:08, Mauro Carvalho Chehab wrote:
-> > > > >
-> > > > > Em Mon, 25 Mar 2019 17:33:30 +0100
-> > > > > Samuel CHEMLA <chemla.samuel@gmail.com> escreveu:
-> > > > >
-> > > > > Hi guys,
-> > > > >
-> > > > > I'm afraid I'm coming with sad news.
-> > > > > I just tried both stable-1.12 and stable-1.16 on a raspberry pi 2=
-, and
-> > > > > random hangs are back (see https://bugs.launchpad.net/raspbian/+b=
-ug/1819650
-> > > > > ).
-> > > > > I previously test both branches on a raspberry zero and issues we=
-re gone
-> > > > > (same raspbian version).
-> > > > > There may be more memory issues somewhere...
-> > > > >
-> > > > > Could you test it with valgrind?
-> > > > >
-> > > > > Sam
-> > > > >
-> > > > > Le jeu. 21 mars 2019 =C5=95 20:59, Gregor Jasny <gjasny@googlemai=
-l.com> a =C3=A9crit :
-> > > > >
-> > > > > Hello,
-> > > > >
-> > > > > On 21.03.19 12:30, Mauro Carvalho Chehab wrote:
-> > > > >
-> > > > > I went ahead and cherry-picked the relevant patches to -1.12, -1.=
-14 and
-> > > > > -1.16, and tested both dvbv5-zap and dvbv5-scan with all versions=
-. So,
-> > > > >
-> > > > > we can
-> > > > >
-> > > > > release a new minor version for all those stable branches.
-> > > > >
-> > > > > After the patches, on my tests, I didn't get any memory leaks or
-> > > > > double-free issues.
-> > > > >
-> > > > > I issues a new 1.12, 1.14, and 1.16 release.
-> > > > >
-> > > > > Thanks,
-> > > > > Gregor
-> > > > >
-> > > > >
-> > > > >
-> > > > > Thanks,
-> > > > > Mauro =20
-> >
-> >
-> >
-> > Thanks,
-> > Mauro =20
+Yup, sounds good.
 
+> > +
+> > +       if (*num_planes) {
+> > +               if (*num_planes != pixfmt->num_planes)
+> > +                       return -EINVAL;
+> > +               for (i = 0; i < pixfmt->num_planes; ++i)
+> > +                       if (sizes[i] < pixfmt->plane_fmt[i].sizeimage)
+> > +                               return -EINVAL;
+> > +               return 0;
+> > +       }
+> > +
+> > +       *num_planes = pixfmt->num_planes;
+> > +       for (i = 0; i < pixfmt->num_planes; ++i)
+> > +               sizes[i] = pixfmt->plane_fmt[i].sizeimage;
+> > +       return 0;
+> > +}
+> > +
+> > +static int rockchip_vpu_buf_prepare(struct vb2_buffer *vb)
+> > +{
+> > +       struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+> > +       struct vb2_queue *vq = vb->vb2_queue;
+> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vq);
+> > +       const struct rockchip_vpu_fmt *vpu_fmt;
+> > +       struct v4l2_pix_format_mplane *pixfmt;
+> > +       unsigned int sz;
+> > +       int ret = 0;
+> > +       int i;
+> > +
+> > +       switch (vq->type) {
+> > +       case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+> > +               vpu_fmt = ctx->vpu_dst_fmt;
+> > +               pixfmt = &ctx->dst_fmt;
+> > +               break;
+> > +       case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
+> > +               vpu_fmt = ctx->vpu_src_fmt;
+> > +               pixfmt = &ctx->src_fmt;
+> > +
+> > +               if (vbuf->field == V4L2_FIELD_ANY)
+> > +                       vbuf->field = V4L2_FIELD_NONE;
+> > +               if (vbuf->field != V4L2_FIELD_NONE) {
+> > +                       vpu_debug(4, "field %d not supported\n",
+> > +                                 vbuf->field);
+> > +                       return -EINVAL;
+> > +               }
+> > +               break;
+> > +       default:
+> > +               vpu_err("invalid queue type: %d\n", vq->type);
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       for (i = 0; i < pixfmt->num_planes; ++i) {
+> > +               sz = pixfmt->plane_fmt[i].sizeimage;
+> > +               vpu_debug(4, "plane %d size: %ld, sizeimage: %u\n",
+> > +                         i, vb2_plane_size(vb, i), sz);
+> > +               if (vb2_plane_size(vb, i) < sz) {
+> > +                       vpu_err("plane %d is too small for output\n", i);
+> > +                       ret = -EINVAL;
+> > +                       break;
+> > +               }
+> > +       }
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void rockchip_vpu_buf_queue(struct vb2_buffer *vb)
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+> > +       struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+> > +
+> > +       v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
+> > +}
+> > +
+> > +static int rockchip_vpu_start_streaming(struct vb2_queue *q, unsigned int count)
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(q);
+> > +       enum rockchip_vpu_codec_mode codec_mode;
+> > +       int ret = 0;
+> > +
+> > +       if (V4L2_TYPE_IS_OUTPUT(q->type))
+> > +               ctx->sequence_out = 0;
+> > +       else
+> > +               ctx->sequence_cap = 0;
+> > +
+> > +       codec_mode = ctx->vpu_src_fmt->codec_mode;
+> > +
+> > +       vpu_debug(4, "Codec mode = %d\n", codec_mode);
+> > +       ctx->codec_ops = &ctx->dev->variant->codec_ops[codec_mode];
+> 
+> Codec mode should be a function of the OUT queue, so I think this
+> should be also under if (V4L2_TYPE_IS_OUTPUT()). This would make most
+> of the code in this function specific to the OUT queue and possibly a
+> good argument for the comment about having separate vb2 queue ops I
+> posted above.
+> 
 
+Yup.
 
-Thanks,
-Mauro
+> > +
+> > +       if (V4L2_TYPE_IS_OUTPUT(q->type))
+> > +               if (ctx->codec_ops && ctx->codec_ops->start)
+> > +                       ret = ctx->codec_ops->start(ctx);
+> > +       return ret;
+> > +}
+> > +
+> > +static void rockchip_vpu_stop_streaming(struct vb2_queue *q)
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(q);
+> > +
+> > +       if (V4L2_TYPE_IS_OUTPUT(q->type))
+> > +               if (ctx->codec_ops && ctx->codec_ops->stop)
+> > +                       ctx->codec_ops->stop(ctx);
+> > +
+> > +       /* The mem2mem framework calls v4l2_m2m_cancel_job before
+> 
+> CodingStyle: Multiline comments should start with one empty line.
+> 
+
+Oops. Seems I have a tendency for this! 
+
+> > +        * .stop_streaming, so there isn't any job running and
+> > +        * it is safe to return all the buffers.
+> > +        */
+> > +       for (;;) {
+> > +               struct vb2_v4l2_buffer *vbuf;
+> > +
+> > +               if (V4L2_TYPE_IS_OUTPUT(q->type))
+> > +                       vbuf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+> > +               else
+> > +                       vbuf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+> > +               if (!vbuf)
+> > +                       break;
+> > +               v4l2_ctrl_request_complete(vbuf->vb2_buf.req_obj.req, &ctx->ctrl_handler);
+> > +               v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
+> > +       }
+> > +}
+> > +
+> > +static void rockchip_vpu_buf_request_complete(struct vb2_buffer *vb)
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+> > +
+> > +       v4l2_ctrl_request_complete(vb->req_obj.req, &ctx->ctrl_handler);
+> > +}
+> > +
+> > +static int rockchip_vpu_buf_out_validate(struct vb2_buffer *vb)
+> > +{
+> > +       struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+> > +
+> > +       vbuf->field = V4L2_FIELD_NONE;
+> 
+> Similar comment as in earlier patch. Is validate expected to correct
+> the values or just check?
+> 
+
+See Hans' reply.
+
+> > +       return 0;
+> > +}
+> > +
+> > +const struct vb2_ops rockchip_vpu_dec_queue_ops = {
+> > +       .queue_setup = rockchip_vpu_queue_setup,
+> > +       .buf_prepare = rockchip_vpu_buf_prepare,
+> > +       .buf_queue = rockchip_vpu_buf_queue,
+> > +       .buf_out_validate = rockchip_vpu_buf_out_validate,
+> > +       .buf_request_complete = rockchip_vpu_buf_request_complete,
+> > +       .start_streaming = rockchip_vpu_start_streaming,
+> > +       .stop_streaming = rockchip_vpu_stop_streaming,
+> > +       .wait_prepare = vb2_ops_wait_prepare,
+> > +       .wait_finish = vb2_ops_wait_finish,
+> > +};
+> > diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > index 937e9cfb4568..27a9da86f1d0 100644
+> > --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > @@ -36,6 +36,11 @@ module_param_named(debug, rockchip_vpu_debug, int, 0644);
+> >  MODULE_PARM_DESC(debug,
+> >                  "Debug level - higher value produces more verbose messages");
+> > 
+> > +enum rockchip_vpu_type {
+> > +       RK_VPU_ENCODER,
+> > +       RK_VPU_DECODER,
+> > +};
+> 
+> Given that we already have ctx->is_enc, any reason not to have this
+> represented in the same way everywhere?
+> 
+
+The reason is that I'd rather have:
+
+rockchip_vpu_video_device_register(vpu, RK_VPU_ENCODER);
+
+Than:
+
+rockchip_vpu_video_device_register(vpu, true);
+
+We could have a vpu_type field instead of that is_enc boolean.
+I think the code would be even cleaner.
+
+> > +
+> >  void *rockchip_vpu_get_ctrl(struct rockchip_vpu_ctx *ctx, u32 id)
+> >  {
+> >         struct v4l2_ctrl *ctrl;
+> > @@ -81,7 +86,11 @@ static void rockchip_vpu_job_finish(struct rockchip_vpu_dev *vpu,
+> > 
+> >         avail_size = vb2_plane_size(&dst->vb2_buf, 0) -
+> >                      ctx->vpu_dst_fmt->header_size;
+> > -       if (bytesused <= avail_size) {
+> > +       /* For decoders set bytesused as per the output picture. */
+> > +       if (!ctx->is_enc) {
+> > +               dst->vb2_buf.planes[0].bytesused =
+> > +                       ctx->dst_fmt.plane_fmt[0].sizeimage;
+> > +       } else if (bytesused <= avail_size) {
+> >                 /*
+> >                  * This works while JPEG is the only encoder this driver
+> >                  * supports. We will have to abstract this step, or get
+> 
+> avail_size is specific for the encoder. How about clearly separating
+> decoder and encoder code with a separate if? It would introduce one
+> more level of nesting, but IMHO it would be more readable, due to
+> better separation of code paths. (Or going one step further, encoder
+> and decoder-specific code could be moved to separate functions.)
+> 
+
+Sounds good!
+
+> if (ctx->is_enc) {
+>   size_t avail_size = ...;
+>   // encoder code
+>   if (bytesused <= avail_size) {
+>     //
+>   } else {
+>     //
+>   }
+> } else {
+>   // decoder code
+> }
+> 
+> > @@ -159,6 +168,44 @@ static struct v4l2_m2m_ops vpu_m2m_ops = {
+> >         .device_run = device_run,
+> >  };
+> > 
+> > +static int
+> > +dec_queue_init(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq)
+> > +{
+> > +       struct rockchip_vpu_ctx *ctx = priv;
+> > +       int ret;
+> > +
+> > +       src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+> > +       src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+> > +       src_vq->drv_priv = ctx;
+> > +       src_vq->ops = &rockchip_vpu_dec_queue_ops;
+> > +       src_vq->mem_ops = &vb2_dma_contig_memops;
+> > +       src_vq->dma_attrs = DMA_ATTR_ALLOC_SINGLE_PAGES |
+> > +                           DMA_ATTR_NO_KERNEL_MAPPING;
+> > +       src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+> > +       src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
+> > +       src_vq->lock = &ctx->dev->vpu_mutex;
+> > +       src_vq->dev = ctx->dev->v4l2_dev.dev;
+> > +       src_vq->supports_requests = true;
+> > +
+> > +       ret = vb2_queue_init(src_vq);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
+> > +       dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
+> > +       dst_vq->drv_priv = ctx;
+> > +       dst_vq->bidirectional = true;
+> > +       dst_vq->ops = &rockchip_vpu_dec_queue_ops;
+> > +       dst_vq->mem_ops = &vb2_dma_contig_memops;
+> > +       dst_vq->dma_attrs = DMA_ATTR_ALLOC_SINGLE_PAGES;
+> 
+> Any need for kernel mapping of decoder output?
+> 
+
+Nope, I just missed this.
+
+Thanks a lot for the detailed review!
+Eze
+
