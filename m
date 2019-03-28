@@ -2,143 +2,203 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91577C43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 14:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B071AC43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 15:00:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6B43D2075E
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 14:57:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72E6920811
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 15:00:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=umn.edu header.i=@umn.edu header.b="GtFyJA5/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbfC1O5Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 10:57:25 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:51642 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725816AbfC1O5Z (ORCPT
+        id S1726173AbfC1PAO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 11:00:14 -0400
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:60834 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbfC1PAO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 10:57:25 -0400
-Received: from [IPv6:2001:420:44c1:2579:7126:11db:5076:31b1] ([IPv6:2001:420:44c1:2579:7126:11db:5076:31b1])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 9WT0h78xJNG8z9WT3hpefR; Thu, 28 Mar 2019 15:57:22 +0100
-Subject: Re: [PATCH] media: v4l-ctrl: add control for variable frame rate
-To:     Fish Lin <linfish@google.com>,
+        Thu, 28 Mar 2019 11:00:14 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id D17D55B6
+        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 15:00:12 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wda1W4lzweGv for <linux-media@vger.kernel.org>;
+        Thu, 28 Mar 2019 10:00:12 -0500 (CDT)
+Received: from mail-it1-f198.google.com (mail-it1-f198.google.com [209.85.166.198])
+        (using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 97E72565
+        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 10:00:12 -0500 (CDT)
+Received: by mail-it1-f198.google.com with SMTP id 9so3410396ita.8
+        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 08:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=YWSrUGkwcGWWeGYaF/IJQXLuzLlHybIatRW4u4gHLH0=;
+        b=GtFyJA5/4VuNZdXRc7qaLnj0y9rlpL6gGRK2U5LzHtSZ+pC5LguoYSDWbHyrALy7G4
+         HxyVBIbep5VyEN92E03rMRZ0Rk+GP3CWGwqTN12+9NWGbaKzgDdWr+FMYLbO43mWShjb
+         k7UnfUwkLXUziRxi1t6WKmp3giTc92TfGVDB/RWHs9MfoveLa1wpCcRbo+fOPrpqlwQl
+         //jUG5TrG4Q6ICSMsw7aaKfNgjxCZCI+Mpz/lppRbi9go1m0hKVZU923xJB5BXnBMejO
+         sAAGW3eHROA23thRVdnrBAefrOwZXcJaziMH4ThyJzink7mYZAWcOeJhfVeErzb9/bbW
+         EUvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=YWSrUGkwcGWWeGYaF/IJQXLuzLlHybIatRW4u4gHLH0=;
+        b=FmAQw8/DtsVPf7vu7u7st2OeZx4KwRH8Umht+eUa+Hcu4NAXHgIb0KhRd6m1sVIJEQ
+         v6MClX9dVTOxEyySEUNAla33yBRDZqJpqji3Ajpfc3o8W5QeftMJvKlP4GK2AwjK9aXc
+         OefYq8in3Okx0VmPMbKCuGMJLGKT45LfQgLQEpI9EagAFL+8aT9+fBeNFFrJQ2fViqZN
+         CfPowjZT+wCA4h0VaH7j941r4+E31ZFL1x3zfzqNkLPLZx/QLRn13FYW8Jiri9JsG3oJ
+         wXlsHu4xUaw3l+6bhU0VNRtvBPId8o3y2l/A9xFcq+7mLuxPH7gVYP7Z1b/7yCMVZQiU
+         wUqQ==
+X-Gm-Message-State: APjAAAX82pjaQImFLIeTP9u1X56eSIo1GODZTFu0ov80LSrnCXgyoaZW
+        gTjsba7Dmg/fx9cmcgmba5m5+nqwQRV+wRU3pqWP1WOahtarnlqfOkQefjPj01sQyMLGQO7sWjs
+        jiQympW2Y/Xwlc/xw8r3xu6U3YY4=
+X-Received: by 2002:a5d:8717:: with SMTP id u23mr2515375iom.93.1553785212159;
+        Thu, 28 Mar 2019 08:00:12 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzUFYBel8E7c3BwKif8q7MHr72imYObu6pfx7YyMK9lYdqq/sih+bainr+EBYPVaMNDCTYdpQ==
+X-Received: by 2002:a5d:8717:: with SMTP id u23mr2515349iom.93.1553785211832;
+        Thu, 28 Mar 2019 08:00:11 -0700 (PDT)
+Received: from [128.101.106.63] (cs-bee-u.cs.umn.edu. [128.101.106.63])
+        by smtp.gmail.com with ESMTPSA id u8sm2184354ita.25.2019.03.28.08.00.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 28 Mar 2019 08:00:11 -0700 (PDT)
+Subject: Re: [PATCH v3] media: rga: fix NULL pointer dereferences,
+ use-after-free, memory leak
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     pakki001@umn.edu, Jacob chen <jacob2.chen@rock-chips.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Keiichi Watanabe <keiichiw@chromium.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Smitha T Murthy <smitha.t@samsung.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190320031022.174052-1-linfish@google.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <0aaba609-1551-e09d-a39f-111dbe99288e@xs4all.nl>
-Date:   Thu, 28 Mar 2019 15:57:18 +0100
+        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <ff11d704-489f-836e-6c9d-1b2fb5e963b6@arm.com>
+ <20190314050344.29790-1-kjlu@umn.edu>
+ <47c6d19c-96bd-49e1-7a3e-702fc50df670@xs4all.nl>
+From:   Kangjie Lu <kjlu@umn.edu>
+Message-ID: <c1751cd8-f93d-7045-d7ed-911c88ba9650@umn.edu>
+Date:   Thu, 28 Mar 2019 10:00:09 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.5.1
 MIME-Version: 1.0
-In-Reply-To: <20190320031022.174052-1-linfish@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <47c6d19c-96bd-49e1-7a3e-702fc50df670@xs4all.nl>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfN3T1JwF0DmMOjFvGykGubVOKkDNI9/gMP6lrUZNFpTCsbhaLlCZkm4cTqEYyS9o8GQg/x3jzOevMg/ekfYt9njhPqYTgbFJg11KrqF5DWcQo+Q1dgKx
- 11dffnzfiUaBJSvV2T10Rci6edHnyhPxmnqUTJ+huwdwdLEdhjcq8RQFm/dFk/G1NSyjqlWogCBF/7ydCay9P67Rarer2+aleVskxOpNuMfoFmNM2pONKDR2
- UvZsIFE47zNH/W76zA2NPmwEKE22ypS8IRW+WSb81yS0DscqYle6wzLIQIl8uxi0bC5SelUf+RsPfR+ZLWFefbJAtzcCN3S/m5MPWm1E5FwM1L1dXm22J8CL
- z1aRVAfhldfz9Ps5vfW9c4gh6+ZHgOjCmVSYqU/BRXqN0HGI/zo9F5j1F0w2RKLJrtsN9YnpRpISGsXW6Ft39BCuMouJwtvCgMUOZHzhzofdRNIpKkQVRY/O
- ePIQRtquAGma7Tor/qznW5pdVtNOye9JhxHBLWFFNrBFyze083SwxltLZmCJDblZ8lmIr4GtpejokR1aLOSjJDQchdaCtOyN8myGi8a9j62uds8HS3dpOYmk
- dOBxAgjFrMVjGtTCcn3dUw4xZlysj2he0P5bmhV6UUWMYH8VWrOGcAsnDQmk7NnYwh8=
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 3/20/19 4:10 AM, Fish Lin wrote:
-> These flag are added
-> * V4L2_CID_MPEG_VIDEO_VFR_ENABLE
-> * V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE
-> One is to set variable frame rate enable or not, another is to control
-> minimal frame rate that video encoder should keep per second.
-> 
-> Signed-off-by: Fish Lin <linfish@google.com>
-> ---
->  Documentation/media/uapi/v4l/ext-ctrls-codec.rst | 9 +++++++++
->  drivers/media/v4l2-core/v4l2-ctrls.c             | 3 +++
->  include/uapi/linux/v4l2-controls.h               | 3 +++
->  3 files changed, 15 insertions(+)
-> 
-> diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> index c97fb7923be5..4bc013d71b67 100644
-> --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> @@ -620,7 +620,16 @@ enum v4l2_mpeg_video_bitrate_mode -
->      * - Bit 24:31
->        - Must be zero.
->  
-> +.. _v4l2-mpeg-video-variable-framerate:
->  
-> +``V4L2_CID_MPEG_VIDEO_VFR_ENABLE (boolean)``
-> +    Set variable framerate enable or not. When enabled, video encoder is able
-> +    to drop frames based on some mechanism, like frame similarity or bitrate
-> +    control (default disable).
-> +
-> +``V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE (integer)``
-> +    Minimal kept frame per second when variable framerate is enabled (default
-> +    is input framerate).
 
-You don't really have a concept of frames per second when encoding. What you
-are probably trying to say is something like: "don't drop more than one frame for
-every X frames" or something like that.
+On 3/28/19 9:47 AM, Hans Verkuil wrote:
+> Hi Kangjie,
+>
+> Unfortunately there are more issues with the cleanup sequence in
+> this probe function:
+>
+> On 3/14/19 6:03 AM, Kangjie Lu wrote:
+>> 1. dma_alloc_attrs, __get_free_pages can fail and return NULL.
+>> Further uses of their return values lead to NULL pointer
+>> dereferences
+>>
+>> 2. In the error-handling path, video_unregister_device uses
+>> "rga->vfd" which has been freed by video_device_release
+>>
+>> 3. The error handling for v4l2_m2m_init and video_register_device
+>> has memory-leak issues
+>>
+>> The patch fixes the above issues.
+>>
+>> Signed-off-by: Kangjie Lu <kjlu@umn.edu>
+>> ---
+>>   drivers/media/platform/rockchip/rga/rga.c | 26 ++++++++++++++++++++---
+>>   1 file changed, 23 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+>> index 5c653287185f..468365ceb99d 100644
+>> --- a/drivers/media/platform/rockchip/rga/rga.c
+>> +++ b/drivers/media/platform/rockchip/rga/rga.c
+>> @@ -889,11 +889,24 @@ static int rga_probe(struct platform_device *pdev)
+>>   	rga->cmdbuf_virt = dma_alloc_attrs(rga->dev, RGA_CMDBUF_SIZE,
+>>   					   &rga->cmdbuf_phy, GFP_KERNEL,
+>>   					   DMA_ATTR_WRITE_COMBINE);
+>> +	if (!rga->cmdbuf_virt) {
+>> +		ret = -ENOMEM;
+>> +		goto unreg_video_dev;
+> Actually, the unreg_video_dev label makes no sense: if the video device
+> is successfully registered, then probe() returns 0. So you never need to
+> unregister the video device again. You *do* need to release it with
+> video_device_release().
+>
+> So this should be a goto rel_vdev.
+>
+> And the cleanup sequence at the end also fails to call v4l2_m2m_release().
+>
+> Can you make v4?
 
-Which codecs support this? A decoder needs to know that a frame is missing, right?
 
-What's the use-case for this?
+Thanks for the feedback. Will send a v4.
 
-Sorry, just trying to understand this better.
 
-Regards,
-
-	Hans
-
->  
->  .. _v4l2-mpeg-video-dec-pts:
->  
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-> index b79d3bbd8350..566c6552c9a0 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-> @@ -786,6 +786,8 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
->  	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:			return "Sequence Header Mode";
->  	case V4L2_CID_MPEG_VIDEO_MAX_REF_PIC:			return "Max Number of Reference Pics";
-> +	case V4L2_CID_MPEG_VIDEO_VFR_ENABLE:			return "Variable Frame Rate Enable";
-> +	case V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE:		return "VFR Minimal Frame Rate";
->  	case V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP:		return "H263 I-Frame QP Value";
->  	case V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP:		return "H263 P-Frame QP Value";
->  	case V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP:		return "H263 B-Frame QP Value";
-> @@ -1108,6 +1110,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->  	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:
->  	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
->  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
-> +	case V4L2_CID_MPEG_VIDEO_VFR_ENABLE:
->  	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
->  	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE:
->  	case V4L2_CID_MPEG_VIDEO_MPEG4_QPEL:
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index 06479f2fb3ae..f1bf52eb0152 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -404,6 +404,9 @@ enum v4l2_mpeg_video_multi_slice_mode {
->  #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_MPEG_BASE+228)
->  #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_MPEG_BASE+229)
->  
-> +#define V4L2_CID_MPEG_VIDEO_VFR_ENABLE (V4L2_CID_MPEG_BASE + 250)
-> +#define V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE (V4L2_CID_MPEG_BASE + 251)
-> +
->  #define V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP		(V4L2_CID_MPEG_BASE+300)
->  #define V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP		(V4L2_CID_MPEG_BASE+301)
->  #define V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP		(V4L2_CID_MPEG_BASE+302)
-> 
-
+>
+> Thanks!
+>
+> 	Hans
+>
+>> +	}
+>>   
+>>   	rga->src_mmu_pages =
+>>   		(unsigned int *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, 3);
+>> +	if (!rga->src_mmu_pages) {
+>> +		ret = -ENOMEM;
+>> +		goto free_dma_attrs;
+>> +	}
+>> +
+>>   	rga->dst_mmu_pages =
+>>   		(unsigned int *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, 3);
+>> +	if (!rga->dst_mmu_pages) {
+>> +		ret = -ENOMEM;
+>> +		goto free_dst_pages;
+>> +	}
+>>   
+>>   	def_frame.stride = (def_frame.width * def_frame.fmt->depth) >> 3;
+>>   	def_frame.size = def_frame.stride * def_frame.height;
+>> @@ -901,7 +914,7 @@ static int rga_probe(struct platform_device *pdev)
+>>   	ret = video_register_device(vfd, VFL_TYPE_GRABBER, -1);
+>>   	if (ret) {
+>>   		v4l2_err(&rga->v4l2_dev, "Failed to register video device\n");
+>> -		goto rel_vdev;
+>> +		goto free_pages;
+>>   	}
+>>   
+>>   	v4l2_info(&rga->v4l2_dev, "Registered %s as /dev/%s\n",
+>> @@ -909,10 +922,17 @@ static int rga_probe(struct platform_device *pdev)
+>>   
+>>   	return 0;
+>>   
+>> -rel_vdev:
+>> -	video_device_release(vfd);
+>> +free_pages:
+>> +	free_pages((unsigned long)rga->src_mmu_pages, 3);
+>> +free_dst_pages:
+>> +	free_pages((unsigned long)rga->dst_mmu_pages, 3);
+>> +free_dma_attrs:
+>> +	dma_free_attrs(rga->dev, RGA_CMDBUF_SIZE, rga->cmdbuf_virt,
+>> +		       rga->cmdbuf_phy,
+>> +		       DMA_ATTR_WRITE_COMBINE);
+>>   unreg_video_dev:
+>>   	video_unregister_device(rga->vfd);
+>> +	video_device_release(vfd);
+>>   unreg_v4l2_dev:
+>>   	v4l2_device_unregister(&rga->v4l2_dev);
+>>   err_put_clk:
+>>
