@@ -2,87 +2,100 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 802B8C43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 16:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E952AC43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 17:43:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 559A920693
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 16:31:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5ACE20823
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 17:43:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1553795019;
+	bh=DrioiL/NfOqrAhR6e80dQlLhHcizU97EXGw2xBpbXJM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=Jpqv35l+C5QhZ8xFAIdCj5aExK2+bLKqQIYm+pDB7ThRZfwXTZR4o3eSva4uNjr3/
+	 SjysWPBL+O0z+bBEzGU0LxDXLH6kWv+9666s8mZM1fNRPW02mMz9CVpVa7y6/gnh1k
+	 q1VK1AMeNuxo84wSmtvdMIYnANLHvk+i3SQdAGFU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726508AbfC1QbH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 12:31:07 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:32977 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726322AbfC1QbH (ORCPT
+        id S1726302AbfC1Rne (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 13:43:34 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:34191 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725849AbfC1Rne (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 12:31:07 -0400
-Received: from [192.168.2.10] ([212.251.195.8])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 9XvchJGCFUjKf9XvfhtWH8; Thu, 28 Mar 2019 17:31:04 +0100
-Subject: Re: [PATCH v3 1/2] media: atmel: atmel-isc: reworked driver and
- formats
-To:     Eugen.Hristev@microchip.com, linux-media@vger.kernel.org,
-        Nicolas.Ferre@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, mchehab@kernel.org
-Cc:     ksloat@aampglobal.com
-References: <1553786825-16942-1-git-send-email-eugen.hristev@microchip.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <da4dce14-b100-90a6-2d3e-86072a5119f0@xs4all.nl>
-Date:   Thu, 28 Mar 2019 17:30:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        Thu, 28 Mar 2019 13:43:34 -0400
+Received: by mail-oi1-f193.google.com with SMTP id v10so12115951oib.1;
+        Thu, 28 Mar 2019 10:43:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=w4+jBZt7o1i+BXiFGlj5UO5y5/Jdo0fIZ4a8M49K9iU=;
+        b=BUxtKcZMw/KmUoELdx1IM5CpEN0B82Z/WwT+5l8PPhagX682h0Y1Ic/awZV481dyjq
+         DbyJLhh47g11qJJ3tpOP1CHqWJa9Bd5ilfrn+0qlSDUa3VZKtosjdjPoHZEQMLiPuwg4
+         vb5Ucw76xgY4CO+vVKMY2BcsIucBG40tI/5ROBf8r7Gg4NEqur+X2L1MZhiGxq2bvGJD
+         DhBrW8WegHlEdhfANAIhmAAh3xjTHRrcDpV416VYypmfbZohgGHmilhVQUUZ9ujNgS+W
+         o/fmf28HDBNHjzDMD+bJ2Ie6fMZzPgbqEhfz4dG4+6mBiscvkRZ475waOiRyzmzKmbO3
+         SuWg==
+X-Gm-Message-State: APjAAAVo0KGlq4b888XFbKBHjQDNYR89hZMIPmpcrsuSJsGnfnqvS6hO
+        XsZ81MEh+MbpiVfoHjPfjg==
+X-Google-Smtp-Source: APXvYqzIqPBrm/eLCUsulqZbE6h9iD2WITqW648w6PGNZdZVn2xj2xxu/wqf6vkBM6oREqCcsSWuWQ==
+X-Received: by 2002:aca:5757:: with SMTP id l84mr898126oib.155.1553795013342;
+        Thu, 28 Mar 2019 10:43:33 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id j14sm10841205oih.28.2019.03.28.10.43.32
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 28 Mar 2019 10:43:32 -0700 (PDT)
+Date:   Thu, 28 Mar 2019 12:43:31 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Mickael Guene <mickael.guene@st.com>
+Cc:     linux-media@vger.kernel.org, hugues.fruchet@st.com,
+        Mickael Guene <mickael.guene@st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: Document MIPID02 bindings
+Message-ID: <20190328174331.GA5863@bogus>
+References: <1552373045-134493-1-git-send-email-mickael.guene@st.com>
+ <1553680545-73278-1-git-send-email-mickael.guene@st.com>
+ <1553680545-73278-2-git-send-email-mickael.guene@st.com>
 MIME-Version: 1.0
-In-Reply-To: <1553786825-16942-1-git-send-email-eugen.hristev@microchip.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfCBYL4dumaM0XN6AwgS1+hUWELhSCXx/+haLvJmh8HKtbxPFfj4OWSKspkF1wlu/Q0G9FBPCAU4ejfDKVG+YCG64vl9zTbXV88MaApV/xfoJlCTZGtlU
- WXBlx284/Bv7EghxJGUFAgrEZ7f7MwrczM3gCeYqfdWFlZfxaR27rtAkJb1tnWn+ysUzNoN2dDlXnqiKqpQTR6Rc1zTBT2SbAFDHGqK19eZYpMeTj3t0Ff6M
- hsrWLbNCuXGem2OGSfeTn6BtnvTf8HjtTC/LDh9giEeUNB+76CrVj86wN8dBTCNjZf6ov7GIn6epetVY+j7vfu66RarlwrO47AgILbaU7Z8iVWBkPpm8II7v
- NcPbti5pDQ2WzfLY6wWoPmx+RepRPJ/F/WIkTCof+K87LeKCrvOc7BT+h4GpUEjn0R8k0YWK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1553680545-73278-2-git-send-email-mickael.guene@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Eugen,
-
-On 3/28/19 4:32 PM, Eugen.Hristev@microchip.com wrote:
-> From: Eugen Hristev <eugen.hristev@microchip.com>
+On Wed, 27 Mar 2019 10:55:43 +0100, Mickael Guene wrote:
+> This adds documentation of device tree for MIPID02 CSI-2 to PARALLEL
+> bridge.
 > 
-> This change is a redesign in the formats and the way the ISC is
-> configured w.r.t. sensor format and the output format from the ISC.
-> I have changed the splitting between sensor output (which is also ISC input)
-> and ISC output.
-> The sensor format represents the way the sensor is configured, and what ISC
-> is receiving.
-> The format configuration represents the way ISC is interpreting the data and
-> formatting the output to the subsystem.
-> Now it's much easier to figure out what is the ISC configuration for input, and
-> what is the configuration for output.
-> The non-raw format can be obtained directly from sensor or it can be done
-> inside the ISC. The controller format list will include a configuration for
-> each format.
-> The old supported formats are still in place, if we want to dump the sensor
-> format directly to the output, the try format routine will detect and
-> configure the pipeline accordingly.
-> This also fixes the previous issues when the raw format was NULL which
-> resulted in many crashes for sensors which did not have the expected/tested
-> formats.
+> Signed-off-by: Mickael Guene <mickael.guene@st.com>
+> ---
 > 
-> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> Changes in v4:
+> - Fix and clarify endpoints properties documentation
+> 
+> Changes in v3: None
+> Changes in v2:
+> - Add precision about first CSI-2 port data rate
+> - Document endpoints supported properties
+> - Rename 'mipid02@14' into generic 'csi2rx@14' in example
+> 
+>  .../bindings/media/i2c/st,st-mipid02.txt           | 82 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  7 ++
+>  2 files changed, 89 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
+> 
 
-I'm getting a few smatch warnings/errors:
-
-drivers/media/platform/atmel/atmel-isc.c:1368 isc_try_fmt() error: we previously assumed 'sd_fmt' could be null (see line 1343)
-drivers/media/platform/atmel/atmel-isc.c:1078:35: warning: variable 'rgb' set but not used [-Wunused-but-set-variable]
-drivers/media/platform/atmel/atmel-isc.c:1078:22: warning: variable 'yuv' set but not used [-Wunused-but-set-variable]
-
-Can you take a look?
-
-Thanks!
-
-	Hans
+Reviewed-by: Rob Herring <robh@kernel.org>
