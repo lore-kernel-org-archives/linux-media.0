@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3204C4360F
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18F98C10F0A
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CFE6C20811
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E936A20811
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbfC1UGZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 16:06:25 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:41871 "EHLO
+        id S1727028AbfC1UG1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 16:06:27 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:33975 "EHLO
         relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726281AbfC1UGZ (ORCPT
+        with ESMTP id S1726281AbfC1UG1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 16:06:25 -0400
+        Thu, 28 Mar 2019 16:06:27 -0400
 X-Originating-IP: 2.224.242.101
 Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 8C072E001F;
-        Thu, 28 Mar 2019 20:06:21 +0000 (UTC)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 5FDDFE001C;
+        Thu, 28 Mar 2019 20:06:23 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
         niklas.soderlund+renesas@ragnatech.se
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, luca@lucaceresoli.net,
         ian.arkver.dev@gmail.com, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 25/31] adv748x: csi2: describe the multiplexed stream
-Date:   Thu, 28 Mar 2019 21:06:02 +0100
-Message-Id: <20190328200608.9463-26-jacopo+renesas@jmondi.org>
+Subject: [PATCH v4 26/31] adv748x: csi2: add internal routing configuration
+Date:   Thu, 28 Mar 2019 21:06:03 +0100
+Message-Id: <20190328200608.9463-27-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190328200608.9463-1-jacopo+renesas@jmondi.org>
 References: <20190328200608.9463-1-jacopo+renesas@jmondi.org>
@@ -46,49 +46,92 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-The adv748x CSI-2 transmitter can only transmit one stream over the
-CSI-2 link, however it can choose which virtual channel is used. This
-choice effects the CSI-2 receiver and needs to be captured in the frame
-descriptor information, solve this by implementing .get_frame_desc().
+Add support to get and set the internal routing between the adv748x
+CSI-2 transmitters sink pad and its multiplexed source pad. This routing
+includes which stream of the multiplexed pad to use, allowing the user
+to select which CSI-2 virtual channel to use when transmitting the
+stream.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/adv748x/adv748x-csi2.c | 31 +++++++++++++++++++++++-
- drivers/media/i2c/adv748x/adv748x.h      |  1 +
- 2 files changed, 31 insertions(+), 1 deletion(-)
+ drivers/media/i2c/adv748x/adv748x-csi2.c | 65 ++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
 diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
-index 1abe34183d7d..d8f7cbee86e7 100644
+index d8f7cbee86e7..13454af72c6e 100644
 --- a/drivers/media/i2c/adv748x/adv748x-csi2.c
 +++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
-@@ -226,9 +226,37 @@ static int adv748x_csi2_set_format(struct v4l2_subdev *sd,
- 	return ret;
+@@ -14,6 +14,8 @@
+ 
+ #include "adv748x.h"
+ 
++#define ADV748X_CSI2_ROUTES_MAX 4
++
+ struct adv748x_csi2_format {
+ 	unsigned int code;
+ 	unsigned int datatype;
+@@ -253,10 +255,73 @@ static int adv748x_csi2_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
+ 	return 0;
  }
  
-+static int adv748x_csi2_get_frame_desc(struct v4l2_subdev *sd, unsigned int pad,
-+				       struct v4l2_mbus_frame_desc *fd)
++static int adv748x_csi2_get_routing(struct v4l2_subdev *sd,
++				    struct v4l2_subdev_krouting *routing)
 +{
 +	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
-+	struct v4l2_mbus_framefmt *mbusformat;
++	struct v4l2_subdev_route *r = routing->routes;
++	unsigned int vc;
 +
-+	memset(fd, 0, sizeof(*fd));
++	if (routing->num_routes < ADV748X_CSI2_ROUTES_MAX) {
++		routing->num_routes = ADV748X_CSI2_ROUTES_MAX;
++		return -ENOSPC;
++	}
 +
-+	if (pad != ADV748X_CSI2_SOURCE)
-+		return -EINVAL;
++	routing->num_routes = ADV748X_CSI2_ROUTES_MAX;
 +
-+	mbusformat = adv748x_csi2_get_pad_format(sd, NULL, ADV748X_CSI2_SINK,
-+						 V4L2_SUBDEV_FORMAT_ACTIVE);
-+	if (!mbusformat)
-+		return -EINVAL;
++	for (vc = 0; vc < ADV748X_CSI2_ROUTES_MAX; vc++) {
++		r->sink_pad = ADV748X_CSI2_SINK;
++		r->sink_stream = 0;
++		r->source_pad = ADV748X_CSI2_SOURCE;
++		r->source_stream = vc;
++		r->flags = vc == tx->vc ? V4L2_SUBDEV_ROUTE_FL_ACTIVE : 0;
++		r++;
++	}
 +
-+	fd->entry->stream = tx->vc;
-+	fd->entry->bus.csi2.channel = tx->vc;
-+	fd->entry->bus.csi2.data_type =
-+		adv748x_csi2_code_to_datatype(mbusformat->code);
++	return 0;
++}
 +
-+	fd->type = V4L2_MBUS_FRAME_DESC_TYPE_CSI2;
-+	fd->num_entries = 1;
++static int adv748x_csi2_set_routing(struct v4l2_subdev *sd,
++				    struct v4l2_subdev_krouting *routing)
++{
++	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
++	struct v4l2_subdev_route *r = routing->routes;
++	unsigned int i;
++	int vc = -1;
++
++	if (routing->num_routes > ADV748X_CSI2_ROUTES_MAX)
++		return -ENOSPC;
++
++	for (i = 0; i < routing->num_routes; i++) {
++		if (r->sink_pad != ADV748X_CSI2_SINK ||
++		    r->sink_stream != 0 ||
++		    r->source_pad != ADV748X_CSI2_SOURCE ||
++		    r->source_stream >= ADV748X_CSI2_ROUTES_MAX)
++			return -EINVAL;
++
++		if (r->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE) {
++			if (vc != -1)
++				return -EMLINK;
++
++			vc = r->source_stream;
++		}
++		r++;
++	}
++
++	if (vc != -1)
++		tx->vc = vc;
++
++	adv748x_csi2_set_virtual_channel(tx, tx->vc);
 +
 +	return 0;
 +}
@@ -96,32 +139,12 @@ index 1abe34183d7d..d8f7cbee86e7 100644
  static const struct v4l2_subdev_pad_ops adv748x_csi2_pad_ops = {
  	.get_fmt = adv748x_csi2_get_format,
  	.set_fmt = adv748x_csi2_set_format,
-+	.get_frame_desc = adv748x_csi2_get_frame_desc,
+ 	.get_frame_desc = adv748x_csi2_get_frame_desc,
++	.get_routing = adv748x_csi2_get_routing,
++	.set_routing = adv748x_csi2_set_routing,
  };
  
  /* -----------------------------------------------------------------------------
-@@ -295,7 +323,8 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
- 		return 0;
- 
- 	/* Initialise the virtual channel */
--	adv748x_csi2_set_virtual_channel(tx, 0);
-+	tx->vc = 0;
-+	adv748x_csi2_set_virtual_channel(tx, tx->vc);
- 
- 	adv748x_subdev_init(&tx->sd, state, &adv748x_csi2_ops,
- 			    MEDIA_ENT_F_VID_IF_BRIDGE,
-diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
-index 5042f9e94aee..4a5a6445604f 100644
---- a/drivers/media/i2c/adv748x/adv748x.h
-+++ b/drivers/media/i2c/adv748x/adv748x.h
-@@ -75,6 +75,7 @@ enum adv748x_csi2_pads {
- 
- struct adv748x_csi2 {
- 	struct adv748x_state *state;
-+	unsigned int vc;
- 	struct v4l2_mbus_framefmt format;
- 	unsigned int page;
- 	unsigned int port;
 -- 
 2.21.0
 
