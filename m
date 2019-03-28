@@ -6,31 +6,31 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E229C43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 09:57:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA05C43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 09:57:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0E1B321773
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 09:57:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7421B21773
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 09:57:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726172AbfC1J53 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 05:57:29 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:4281 "EHLO
+        id S1726196AbfC1J5c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 05:57:32 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:48306 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726094AbfC1J53 (ORCPT
+        with ESMTP id S1725994AbfC1J5b (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 05:57:29 -0400
-X-UUID: 0d4f850cea63445a8df1a809c8d09c02-20190328
-X-UUID: 0d4f850cea63445a8df1a809c8d09c02-20190328
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        Thu, 28 Mar 2019 05:57:31 -0400
+X-UUID: e53100d510c74f0280246787e9292d9b-20190328
+X-UUID: e53100d510c74f0280246787e9292d9b-20190328
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
         (envelope-from <jungo.lin@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1676461634; Thu, 28 Mar 2019 17:57:21 +0800
+        with ESMTP id 1788843821; Thu, 28 Mar 2019 17:57:25 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 28 Mar 2019 17:57:13 +0800
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 28 Mar 2019 17:57:23 +0800
 Received: from mtkslt306.mediatek.inc (10.21.14.136) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 28 Mar 2019 17:57:13 +0800
+ Transport; Thu, 28 Mar 2019 17:57:23 +0800
 From:   Jungo Lin <jungo.lin@mediatek.com>
 To:     <tfiga@chromium.org>, <hans.verkuil@cisco.com>,
         <laurent.pinchart+renesas@ideasonboard.com>,
@@ -45,9 +45,9 @@ CC:     <linux-mediatek@lists.infradead.org>,
         <ryan.yu@mediatek.com>, <Rynn.Wu@mediatek.com>,
         <yuzhao@chromium.org>, <zwisler@chromium.org>,
         <srv_heupstream@mediatek.com>
-Subject: [RFC V1 01/12] dt-bindings: mt8183: Add binding for ISP Pass 1 reserved memory
-Date:   Thu, 28 Mar 2019 17:56:36 +0800
-Message-ID: <1553767007-11909-2-git-send-email-jungo.lin@mediatek.com>
+Subject: [RFC V1 05/12] dts: arm64: mt8183: Add ISP Pass 1 nodes
+Date:   Thu, 28 Mar 2019 17:56:40 +0800
+Message-ID: <1553767007-11909-6-git-send-email-jungo.lin@mediatek.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1553767007-11909-1-git-send-email-jungo.lin@mediatek.com>
 References: <jungo.lin@mediatek.com>
@@ -60,67 +60,68 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds the binding for describing the reserved shared memory
-used to exchange configuration and tuning data between the
-co-processor and Pass 1 (P1) unit of the camera ISP system on
-Mediatek SoCs.
+Add nodes for Pass 1 unit of Mediatek's camera ISP system.
+Pass 1 unit embedded in Mediatek SoCs, works with the
+co-processor to process image signal from the image sensor
+and output RAW data.
 
 Signed-off-by: Jungo Lin <jungo.lin@mediatek.com>
 ---
- .../mediatek,reserve-memory-cam_smem.txt           | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam_smem.txt
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 42 ++++++++++++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam_smem.txt b/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam_smem.txt
-new file mode 100644
-index 0000000..05c1bf1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam_smem.txt
-@@ -0,0 +1,44 @@
-+Mediatek ISP Pass 1 Shared Memory binding
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index c73f7ff..7df39bd 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -382,5 +382,47 @@
+ 			reg = <0 0x1a000000 0 0x1000>;
+ 			#clock-cells = <1>;
+ 		};
 +
-+This binding describes the shared memory, which serves the purpose of
-+describing the shared memory region used to exchange data between Pass 1
-+unit of Image Signal Processor (ISP) and the co-processor in Mediatek
-+SoCs.
-+
-+The co-processor doesn't have the iommu so we need to use the physical
-+address to access the shared buffer in the firmware.
-+
-+The Pass 1 unit of ISP can access memory through the iommu so it
-+uses the dma address to access the memory region.
-+(See iommu/mediatek,iommu.txt for the detailed description of Mediatek IOMMU)
-+
-+
-+Required properties:
-+
-+- compatible: must be "mediatek,reserve-memory-cam_smem"
-+
-+- reg: required for static allocation (see reserved-memory.txt for
-+  the detailed usage)
-+
-+- alloc-range: required for dynamic allocation. The range must
-+  between 0x00000400 and 0x100000000 due to the co-processer's
-+  addressing limitation
-+
-+- size: required for dynamic allocation. The unit is bytes.
-+
-+
-+Example:
-+
-+The following example shows the ISP Pass1 shared memory setup for MT8183.
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+		reserve-memory-cam_smem {
-+			compatible = "mediatek,reserve-memory-cam_smem";
-+			size = <0 0x1400000>;
-+			alignment = <0 0x1000>;
-+			alloc-ranges = <0 0x40000000 0 0x50000000>;
++		cam_smem: cam_smem {
++			compatible = "mediatek,mt8183-cam_smem";
++			mediatek,larb = <&larb3>,
++					<&larb6>;
++			iommus = <&iommu M4U_PORT_CAM_LSCI0>,
++				 <&iommu M4U_PORT_CAM_LSCI1>,
++				 <&iommu M4U_PORT_CAM_BPCI>;
 +		};
-+	};
++
++		camisp: camisp@1a000000 {
++			compatible = "mediatek,mt8183-camisp", "syscon";
++			reg = <0 0x1a000000 0 0x1000>,
++			      <0 0x1a003000 0 0x1000>,
++			      <0 0x1a004000 0 0x2000>,
++			      <0 0x1a006000 0 0x2000>;
++			reg-names = "camisp",
++				    "cam1",
++				    "cam2",
++				    "cam3";
++			interrupts = <GIC_SPI 253 IRQ_TYPE_LEVEL_LOW>,
++				     <GIC_SPI 254 IRQ_TYPE_LEVEL_LOW>,
++				     <GIC_SPI 255 IRQ_TYPE_LEVEL_LOW>;
++			interrupt-names = "cam1",
++					  "cam2",
++					  "cam3";
++			iommus = <&iommu M4U_PORT_CAM_LSCI0>,
++				 <&iommu M4U_PORT_CAM_LSCI1>,
++				 <&iommu M4U_PORT_CAM_BPCI>;
++			#clock-cells = <1>;
++			power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
++			/* Camera CCF */
++			clocks = <&camsys CLK_CAM_CAM>,
++				 <&camsys CLK_CAM_CAMTG>;
++			clock-names = "CAMSYS_CAM_CGPDN",
++				      "CAMSYS_CAMTG_CGPDN";
++			mediatek,larb = <&larb3>,
++					<&larb6>;
++			mediatek,scp = <&scp>;
++			smem_device = <&cam_smem>;
++		};
++
+ 	};
+ };
 -- 
 1.9.1
 
