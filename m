@@ -2,108 +2,337 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D6CCC10F06
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:04:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B711C43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:05:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E82D2173C
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:04:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553803477;
-	bh=rLNyC3bikETWFYgDZih39XlXJb2rdBk7aUBhoO1YTN8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=y08yidfZi3dtJRScm/YxLZ5qkGD1RdZTs+sK8nDtEvf1OVVZKmSgW7nmaIFoEZkEL
-	 44fNPc4LHwrM+x5kl1NamchKmwSkqlKMcA+/gEliebZz94dkyeZFKwnl/z24Tm9IsD
-	 L1UgcqK8xNzcAgqIdYRr1NEJDiRogrp5KQv+lN5A=
+	by mail.kernel.org (Postfix) with ESMTP id 6333520811
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:05:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbfC1UEg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 16:04:36 -0400
-Received: from casper.infradead.org ([85.118.1.10]:60696 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726136AbfC1UEf (ORCPT
+        id S1726257AbfC1UFW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 16:05:22 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54566 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbfC1UFW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 16:04:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2+elwt3uF+8XIr2FWOchhqe0TNM8KMg7cs9XRwNSTwE=; b=X00z0qmevLS4rUwF0A+ai2jXT3
-        XqLLeBB758r5ghlrhn+IAMX6Q7ezbvg1GS4JGtgFLq/wrXbOVwbYb7AkdCeUnbAovUWu5pcmAOgxi
-        DKsEjNM31FNRyl4khh/9MaXqIQ0vyMPDBkZjICq46NgX5skEK3gl/C2FkEkfs/yBT6IfwwksFvTap
-        gWVF4Yy64oI4tA6H1RLktTYMYnXw1sAwKOb2BcC3ZXbSkGKhsnZ5Sq9yINYKGmL0+OLRpYOr9eNwm
-        5mK2xS2dskNWrRjkxzY2YCWPNJCUO2rUNywPrccrBaiQoJmV9CKADy/mHiLfefRIegkjGFaIxUJ7X
-        l2QZFOIQ==;
-Received: from [179.183.99.176] (helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1h9bGL-0004mA-4P; Thu, 28 Mar 2019 20:04:33 +0000
-Date:   Thu, 28 Mar 2019 17:04:29 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Gregor Jasny <gjasny@googlemail.com>
-Cc:     Samuel CHEMLA <chemla.samuel@gmail.com>,
-        Sean Young <sean@mess.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@s-opensource.com>
-Subject: Re: [Bug report] dvbv5-zap crash dvb-tool ARMHF builds
-Message-ID: <20190328170429.2ad3a7f4@coco.lan>
-In-Reply-To: <62429f4e-eabb-8ee9-4137-47540e8131ef@googlemail.com>
-References: <20190315223425.hiq3qcjhjnirsizh@gofer.mess.org>
-        <20190317065242.137cb095@coco.lan>
-        <20190319164507.7f95af89@coco.lan>
-        <a1f296ba-3c27-ed2c-3912-4edbeeb21eba@googlemail.com>
-        <20190321094127.ysurm4u26zugmnmv@gofer.mess.org>
-        <20190321083044.621f1922@coco.lan>
-        <35ba4e81-fc2a-87ed-8da7-43cc4543de51@googlemail.com>
-        <CANJnhGfRtEwAony5Z4rFMPcu58aF2k0G+9NSkMKsq_PhfmSNqw@mail.gmail.com>
-        <20190325140838.71f88eac@coco.lan>
-        <CANJnhGc_qx32nm7yZheC2ioHOij8QELbnwyJkZ83G9uYTxqwtA@mail.gmail.com>
-        <20190326132643.r3svehoa764xagje@gofer.mess.org>
-        <CANJnhGfgzrLZedeoCOq3L-MaEgjtHm1Bwn1cRPr54LvwZ=RBMQ@mail.gmail.com>
-        <20190326123115.5d83f450@coco.lan>
-        <CANJnhGe+nyq6a43BnPmGxb6_9JinFyy1EC=6Xo6K4RUpshm8Ow@mail.gmail.com>
-        <20190328161758.2da2bf4e@coco.lan>
-        <62429f4e-eabb-8ee9-4137-47540e8131ef@googlemail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Thu, 28 Mar 2019 16:05:22 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id F0380280B76
+Message-ID: <81754d3621042384b272700d724336582ff1a94c.camel@collabora.com>
+Subject: Re: [PATCH v2 07/11] rockchip/vpu: Open-code media controller
+ register
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jonas Karlman <jonas@kwiboo.se>
+Date:   Thu, 28 Mar 2019 17:05:13 -0300
+In-Reply-To: <CAAFQd5AVgcj9vMsnE4yKm3uNnFPJ_1KpvX8t9bioVg4Cp2Wy=Q@mail.gmail.com>
+References: <20190304192529.14200-1-ezequiel@collabora.com>
+         <20190304192529.14200-8-ezequiel@collabora.com>
+         <CAAFQd5AVgcj9vMsnE4yKm3uNnFPJ_1KpvX8t9bioVg4Cp2Wy=Q@mail.gmail.com>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Thu, 28 Mar 2019 20:48:34 +0100
-Gregor Jasny <gjasny@googlemail.com> escreveu:
-
-> Hello,
-> 
-> On 28.03.19 20:17, Mauro Carvalho Chehab wrote:
-> > Em Thu, 28 Mar 2019 19:48:35 +0100
-> > Samuel CHEMLA <chemla.samuel@gmail.com> escreveu:  
-> >> 1) I did reproduce the bug with a serial console, but the serial
-> >> console was also frozen, and there was no message before freeze.  
+On Thu, 2019-03-28 at 16:11 +0900, Tomasz Figa wrote:
+> On Tue, Mar 5, 2019 at 4:27 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> > In preparation to support decoders, using a single memory-to-memory
+> > device, we need to roll our own media controller entities registration.
 > > 
-> > The only way for a machine to freeze even on serial console is due to
-> > a very serious Kernel or hardware bug, like a bad lock/semaphore.  
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > ---
+> >  .../staging/media/rockchip/vpu/rockchip_vpu.h |  35 ++++
+> >  .../media/rockchip/vpu/rockchip_vpu_drv.c     | 181 ++++++++++++++++--
+> >  2 files changed, 204 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> > index 76ee24abc141..084f58cadda1 100644
+> > --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> > +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> > @@ -71,6 +71,38 @@ enum rockchip_vpu_codec_mode {
+> >         RK_VPU_MODE_JPEG_ENC,
+> >  };
+> > 
+> > +/*
+> > + * struct rockchip_vpu_mc - media controller data
+> > + *
+> > + * @source:            &struct media_entity pointer with the source entity
+> > + *                     Used only when the M2M device is registered via
+> > + *                     v4l2_m2m_unregister_media_controller().
 > 
-> Does anything speak against upgrading Debian to latest 1.16.5 release?
+> _register? (and few other places below)
+> 
+> But I'm really confused, because this patch exactly removes the uses
+> of v4l2_m2m_(un)register_media_controller() in this driver.
+> 
 
-I don't think so. The changes we did were just at memory allocation/free
-with standard glibc malloc()/calloc()/free() functions.
+Those comments are bad copy paste, should be dropped.
 
-The kind of errors Samuel are experiencing are machine freezes. 
-dvbv5-utils can't cause such kind of errors, as it doesn't run in 
-privileged mode, nor do anything potentially harmful.
+> > + * @source_pad:                &struct media_pad with the source pad.
+> > + *                     Used only when the M2M device is registered via
+> > + *                     v4l2_m2m_unregister_media_controller().
+> > + * @sink:              &struct media_entity pointer with the sink entity
+> > + *                     Used only when the M2M device is registered via
+> > + *                     v4l2_m2m_unregister_media_controller().
+> > + * @sink_pad:          &struct media_pad with the sink pad.
+> > + *                     Used only when the M2M device is registered via
+> > + *                     v4l2_m2m_unregister_media_controller().
+> > + * @proc:              &struct media_entity pointer with the M2M device itself.
+> > + * @proc_pads:         &struct media_pad with the @proc pads.
+> > + *                     Used only when the M2M device is registered via
+> > + *                     v4l2_m2m_unregister_media_controller().
+> > + * @intf_devnode:      &struct media_intf devnode pointer with the interface
+> > + *                     with controls the M2M device.
+> > + */
+> > +struct rockchip_vpu_mc {
+> > +       struct media_entity     *source;
+> > +       struct media_pad        source_pad;
+> > +       struct media_entity     sink;
+> > +       struct media_pad        sink_pad;
+> > +       struct media_entity     proc;
+> > +       struct media_pad        proc_pads[2];
+> > +       struct media_intf_devnode *intf_devnode;
+> > +};
+> > +
+> >  /**
+> >   * struct rockchip_vpu_dev - driver data
+> >   * @v4l2_dev:          V4L2 device to register video devices for.
+> > @@ -78,6 +110,8 @@ enum rockchip_vpu_codec_mode {
+> >   * @mdev:              media device associated to this device.
+> >   * @vfd_enc:           Video device for encoder.
+> >   * @pdev:              Pointer to VPU platform device.
+> > + * @mc:                        Array of media controller topology structs
+> 
+> Is it just me or there is something wrong with indentation here?
+> 
 
-So, even the most serious issue there won't cause a machine crash.
+It seems to be fine here -- it's all tabs.
 
-For a machine to crash, it has to be triggering a Kernel bug
-or some memory corruption outside its memory space (e.g. triggering
-some glibc bug - with also seems very unlikely).
+> > + *                     for encoder and decoder.
+> >   * @dev:               Pointer to device for convenient logging using
+> >   *                     dev_ macros.
+> >   * @clocks:            Array of clock handles.
+> > @@ -95,6 +129,7 @@ struct rockchip_vpu_dev {
+> >         struct media_device mdev;
+> >         struct video_device *vfd_enc;
+> >         struct platform_device *pdev;
+> > +       struct rockchip_vpu_mc mc[2];
+> >         struct device *dev;
+> >         struct clk_bulk_data clocks[ROCKCHIP_VPU_MAX_CLOCKS];
+> >         void __iomem *base;
+> > diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > index 1a6dd36c71ab..af2481ca2228 100644
+> > --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > @@ -332,7 +332,7 @@ static int rockchip_vpu_video_device_register(struct rockchip_vpu_dev *vpu)
+> >  {
+> >         const struct of_device_id *match;
+> >         struct video_device *vfd;
+> > -       int function, ret;
+> > +       int ret;
+> > 
+> >         match = of_match_node(of_rockchip_vpu_match, vpu->dev->of_node);
+> >         vfd = video_device_alloc();
+> > @@ -359,21 +359,169 @@ static int rockchip_vpu_video_device_register(struct rockchip_vpu_dev *vpu)
+> >         }
+> >         v4l2_info(&vpu->v4l2_dev, "registered as /dev/video%d\n", vfd->num);
+> > 
+> > -       function = MEDIA_ENT_F_PROC_VIDEO_ENCODER;
+> > -       ret = v4l2_m2m_register_media_controller(vpu->m2m_dev, vfd, function);
+> > -       if (ret) {
+> > -               v4l2_err(&vpu->v4l2_dev, "Failed to init mem2mem media controller\n");
+> > -               goto err_unreg_video;
+> > -       }
+> >         return 0;
+> > -
+> > -err_unreg_video:
+> > -       video_unregister_device(vfd);
+> >  err_free_dev:
+> >         video_device_release(vfd);
+> >         return ret;
+> >  }
+> > 
+> > +static int rockchip_vpu_register_entity(struct media_device *mdev,
+> > +       struct media_entity *entity, const char *entity_name,
+> > +       struct media_pad *pads, int num_pads, int function,
+> > +       struct video_device *vdev)
+> > +{
+> > +       unsigned int len;
+> > +       char *name;
+> > +       int ret;
+> > +
+> > +       entity->obj_type = MEDIA_ENTITY_TYPE_BASE;
+> > +       if (function == MEDIA_ENT_F_IO_V4L) {
+> > +               entity->info.dev.major = VIDEO_MAJOR;
+> > +               entity->info.dev.minor = vdev->minor;
+> > +       }
+> > +       len = strlen(vdev->name) + 2 + strlen(entity_name);
+> > +       name = kmalloc(len, GFP_KERNEL);
+> > +       if (!name)
+> > +               return -ENOMEM;
+> > +       snprintf(name, len, "%s-%s", vdev->name, entity_name);
+> 
+> How about using kasprintf()?
+> 
+
+Indeed.
+
+> > +       entity->name = name;
+> > +       entity->function = function;
+> > +
+> > +       ret = media_entity_pads_init(entity, num_pads, pads);
+> > +       if (ret)
+> > +               return ret;
+> > +       ret = media_device_register_entity(mdev, entity);
+> > +       if (ret)
+> > +               return ret;
+> 
+> How about the memory allocated for entity->name?
+> 
+
+Oops.
+
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static int rockchip_register_mc(struct media_device *mdev,
+> > +                               struct rockchip_vpu_mc *mc,
+> > +                               struct video_device *vdev,
+> > +                               int function)
+> > +{
+> > +       struct media_link *link;
+> > +       int ret;
+> > +
+> > +       /* Create the three encoder entities with their pads */
+> > +       mc->source = &vdev->entity;
+> > +       mc->source_pad.flags = MEDIA_PAD_FL_SOURCE;
+> > +       ret = rockchip_vpu_register_entity(mdev, mc->source,
+> > +                       "source", &mc->source_pad, 1, MEDIA_ENT_F_IO_V4L, vdev);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       mc->proc_pads[0].flags = MEDIA_PAD_FL_SINK;
+> > +       mc->proc_pads[1].flags = MEDIA_PAD_FL_SOURCE;
+> > +       ret = rockchip_vpu_register_entity(mdev, &mc->proc,
+> > +                       "proc", mc->proc_pads, 2, function, vdev);
+> > +       if (ret)
+> > +               goto err_rel_entity0;
+> > +
+> > +       mc->sink_pad.flags = MEDIA_PAD_FL_SINK;
+> > +       ret = rockchip_vpu_register_entity(mdev, &mc->sink,
+> > +                       "sink", &mc->sink_pad, 1, MEDIA_ENT_F_IO_V4L, vdev);
+> > +       if (ret)
+> > +               goto err_rel_entity1;
+> > +
+> > +       /* Connect the three entities */
+> > +       ret = media_create_pad_link(mc->source, 0, &mc->proc, 1,
+> > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
+> > +       if (ret)
+> > +               goto err_rel_entity2;
+> > +
+> > +       ret = media_create_pad_link(&mc->proc, 0, &mc->sink, 0,
+> > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
+> > +       if (ret)
+> > +               goto err_rm_links0;
+> > +
+> > +       /* Create video interface */
+> > +       mc->intf_devnode = media_devnode_create(mdev,
+> > +                       MEDIA_INTF_T_V4L_VIDEO, 0,
+> > +                       VIDEO_MAJOR, vdev->minor);
+> > +       if (!mc->intf_devnode) {
+> > +               ret = -ENOMEM;
+> > +               goto err_rm_links1;
+> > +       }
+> > +
+> > +       /* Connect the two DMA engines to the interface */
+> > +       link = media_create_intf_link(mc->source,
+> > +                       &mc->intf_devnode->intf,
+> > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
+> > +       if (!link) {
+> > +               ret = -ENOMEM;
+> > +               goto err_rm_devnode;
+> > +       }
+> > +
+> > +       link = media_create_intf_link(&mc->sink,
+> > +                       &mc->intf_devnode->intf,
+> > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
+> > +       if (!link) {
+> > +               ret = -ENOMEM;
+> > +               goto err_rm_intf_link;
+> > +       }
+> > +       return 0;
+> > +
+> > +err_rm_intf_link:
+> > +       media_remove_intf_links(&mc->intf_devnode->intf);
+> 
+> Do we need to explicitly remove the links here? The entity removal
+> functions remove the links implicitly.
+> 
+
+You mean the media_devnode_remove, right? In that case, seems you are right.
+
+> > +err_rm_devnode:
+> > +       media_devnode_remove(mc->intf_devnode);
+> > +err_rm_links1:
+> > +       media_entity_remove_links(&mc->sink);
+> > +err_rm_links0:
+> > +       media_entity_remove_links(&mc->proc);
+> > +       media_entity_remove_links(mc->source);
+> > +err_rel_entity2:
+> > +       media_device_unregister_entity(&mc->proc);
+> > +       kfree(mc->proc.name);
+> > +err_rel_entity1:
+> > +       media_device_unregister_entity(&mc->sink);
+> > +       kfree(mc->sink.name);
+> > +err_rel_entity0:
+> > +       media_device_unregister_entity(mc->source);
+> > +       kfree(mc->source->name);
+> > +       return ret;
+> > +}
+> > +
+> > +static void rockchip_unregister_mc(struct rockchip_vpu_mc *mc)
+> > +{
+> > +       media_remove_intf_links(&mc->intf_devnode->intf);
+> > +       media_devnode_remove(mc->intf_devnode);
+> > +       media_entity_remove_links(mc->source);
+> > +       media_entity_remove_links(&mc->sink);
+> > +       media_entity_remove_links(&mc->proc);
+> > +       media_device_unregister_entity(mc->source);
+> > +       media_device_unregister_entity(&mc->sink);
+> > +       media_device_unregister_entity(&mc->proc);
+> > +       kfree(mc->source->name);
+> > +       kfree(mc->sink.name);
+> > +       kfree(mc->proc.name);
+> > +}
+> > +
+> > +static int rockchip_register_media_controller(struct rockchip_vpu_dev *vpu)
+> > +{
+> > +       int ret;
+> > +
+> > +       /* We have one memory-to-memory device, to hold a single queue
+> 
+> Coding style:
+> 
+> /*
+>  * We have one [...]
+
+Right.
 
 Thanks,
-Mauro
+Eze
+
