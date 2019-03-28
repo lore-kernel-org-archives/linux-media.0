@@ -2,153 +2,181 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D680C43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 04:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84754C43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 06:16:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3952720700
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 04:50:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 464CB2173C
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 06:16:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="KB9m8e+s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725794AbfC1EuO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 00:50:14 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:46136 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725765AbfC1EuO (ORCPT
+        id S1726170AbfC1GQE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 02:16:04 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46936 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725765AbfC1GQE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 00:50:14 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:cfb:b3bc:5e67:6c7f])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 9MzTh354uNG8z9MzUhlXMc; Thu, 28 Mar 2019 05:50:12 +0100
-Message-ID: <e61f4f2762f033cf21f7d5118d673ae0@smtp-cloud7.xs4all.net>
-Date:   Thu, 28 Mar 2019 05:50:11 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfAwdbAIvCeGp+01QY+iy5s1vFSLByf6SWYsTMnl01OkSP/MnmQEROsk6Obe2c8QEmTyIsYAjxytZqGMUWu3vIrfa2C+4HzKJE4SCjWGzLvh5ZG43noCU
- jA18/FQkJwzOkvuk2uWPMjqTwmKc70QLLMPlXxji1bAq5TVmr+WLKDZiE/RHK4prfuU9TriMXKWsJ/rip6I4Q42FyOok0HJe4wUl6zuJK0DdLlHeTSCaDotH
+        Thu, 28 Mar 2019 02:16:04 -0400
+Received: by mail-ot1-f68.google.com with SMTP id s24so7777925otk.13
+        for <linux-media@vger.kernel.org>; Wed, 27 Mar 2019 23:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zO1HkLsganeYgMN8G5PM1e9kz9PLMRRDPRt+Yrs5dwk=;
+        b=KB9m8e+sycWS4uk+OPZhwmwmskXg2T174b8JiSW4NIpoPOk/Ua5S4XGAKHUn2zxfrx
+         muPiAgMLbP9LaTWYDPXtlOfVKxf8rQ63q5aw+5zFO1XSdkW/ci/+4TjtuyfDBURG/Vna
+         XVZrXNXDNylQ/uTy+9k3J37E4zgzUqcb6PMJE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zO1HkLsganeYgMN8G5PM1e9kz9PLMRRDPRt+Yrs5dwk=;
+        b=bjJNvBFUawOp3apJL7TCnp/8oh9TDiRXH8o7m35BhP2ubs0US+gyYKH5Z29bPCMdzw
+         q+e4kxK54/e+Ibc8pQHFcX+h/7y+lkSf5J8pVfzB6baOFxgrCI8CkbJDKcJHK1+7gUPH
+         eFl3QrHubMbpGfothyh3KO05iP7ir/oLYRYXfxge0OJ0Pf01MKpeBlIkWm+8LjfHOyBJ
+         LB7Cn0QPVjO+wlD+DBjDCPeQVTJe6K2L5hXGAkkI4Z/yt8PKuVeNrITZ/01EoCy8+AHI
+         G6CvDMU1O9lRSfoHPJqE9q3Mk2sEAEEGdiK9+lhSc2UmLu+gJPcXVYZUEBdyXxUY3wfs
+         tPTQ==
+X-Gm-Message-State: APjAAAV2+XEFVocdE23saSfYu4NVF5qkhLvkeBeFLLmk67T6btIw8gcK
+        ftjSONF+ycATJVtk/HeaAWm+aCUUJ5I=
+X-Google-Smtp-Source: APXvYqyqeBIbR4b7FWH8PgXVr285vOBXDolrvQlsE97D2FeZ8HpRbt4M3UqHNIKGsfkZ727BTAwtOA==
+X-Received: by 2002:a05:6830:1345:: with SMTP id r5mr13529954otq.256.1553753762979;
+        Wed, 27 Mar 2019 23:16:02 -0700 (PDT)
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com. [209.85.167.180])
+        by smtp.gmail.com with ESMTPSA id e186sm9598964oia.44.2019.03.27.23.16.00
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 27 Mar 2019 23:16:00 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id x188so14872580oia.13
+        for <linux-media@vger.kernel.org>; Wed, 27 Mar 2019 23:16:00 -0700 (PDT)
+X-Received: by 2002:aca:edc7:: with SMTP id l190mr22495812oih.92.1553753759547;
+ Wed, 27 Mar 2019 23:15:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190304192529.14200-1-ezequiel@collabora.com> <20190304192529.14200-7-ezequiel@collabora.com>
+In-Reply-To: <20190304192529.14200-7-ezequiel@collabora.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Thu, 28 Mar 2019 15:15:48 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5DjVDhFMc=WpnvF61yBcPm=BUQhVtBWSyphkkM8QubFzA@mail.gmail.com>
+Message-ID: <CAAFQd5DjVDhFMc=WpnvF61yBcPm=BUQhVtBWSyphkkM8QubFzA@mail.gmail.com>
+Subject: Re: [PATCH v2 06/11] rockchip/vpu: Cleanup JPEG bounce buffer management
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jonas Karlman <jonas@kwiboo.se>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Hi Ezequiel,
 
-Results of the daily build of media_tree:
+On Tue, Mar 5, 2019 at 4:26 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+>
+> In order to make the code more generic, introduce a pair of start/stop
+> codec operations, and use them to allocate and release the JPEG bounce
+> buffer.
+>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+>  .../media/rockchip/vpu/rk3288_vpu_hw.c        |  2 ++
+>  .../rockchip/vpu/rk3288_vpu_hw_jpeg_enc.c     |  4 +--
+>  .../media/rockchip/vpu/rk3399_vpu_hw.c        |  2 ++
+>  .../rockchip/vpu/rk3399_vpu_hw_jpeg_enc.c     |  4 +--
+>  .../staging/media/rockchip/vpu/rockchip_vpu.h | 12 ++++----
+>  .../media/rockchip/vpu/rockchip_vpu_drv.c     | 10 +++++--
+>  .../media/rockchip/vpu/rockchip_vpu_enc.c     | 23 +++++----------
+>  .../media/rockchip/vpu/rockchip_vpu_hw.h      | 28 +++++++++++++++++++
+>  .../media/rockchip/vpu/rockchip_vpu_jpeg.c    | 25 +++++++++++++++++
+>  9 files changed, 81 insertions(+), 29 deletions(-)
+>
 
-date:			Thu Mar 28 05:00:11 CET 2019
-media-tree git hash:	149e31e90b505ae0cc909bd0d92b2ba4826574d6
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	2aff3ef768c42cfdbb31d143ee2286a6b46e9db0
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-2-amd64
+Thanks for the series! Really sorry for late reply...
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1981, Succeeded: 1981, Failed: 0, Warnings: 14
-sparse: OK
-smatch: ERRORS
+[snip]
 
-Detailed results are available here:
+> diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> index 1ec2be483e27..76ee24abc141 100644
+> --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> @@ -124,10 +124,7 @@ struct rockchip_vpu_dev {
+>   * @jpeg_quality:      User-specified JPEG compression quality.
+>   *
+>   * @codec_ops:         Set of operations related to codec mode.
+> - *
+> - * @bounce_dma_addr:   Bounce buffer bus address.
+> - * @bounce_buf:                Bounce buffer pointer.
+> - * @bounce_size:       Bounce buffer size.
+> + * @jpeg_enc_ctx:      JPEG-encoding context.
+>   */
+>  struct rockchip_vpu_ctx {
+>         struct rockchip_vpu_dev *dev;
+> @@ -146,9 +143,10 @@ struct rockchip_vpu_ctx {
+>
+>         const struct rockchip_vpu_codec_ops *codec_ops;
+>
+> -       dma_addr_t bounce_dma_addr;
+> -       void *bounce_buf;
+> -       size_t bounce_size;
+> +       /* Specific for particular codec modes. */
+> +       union {
+> +               struct rockchip_vpu_jpeg_enc_hw_ctx jpeg_enc_ctx;
+> +       };
 
-http://www.xs4all.nl/~hverkuil/logs/Thursday.log
+nit: Would it perhaps make it a bit cleaner to call the union "ctx"?
+Then we wouldn't need to repeat "_ctx" in every field.
 
-Detailed regression test results are available here:
+>  };
+>
+>  /**
+> diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> index 5647b0bdac20..1a6dd36c71ab 100644
+> --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> @@ -64,10 +64,16 @@ static void rockchip_vpu_job_finish(struct rockchip_vpu_dev *vpu,
+>         avail_size = vb2_plane_size(&dst->vb2_buf, 0) -
+>                      ctx->vpu_dst_fmt->header_size;
+>         if (bytesused <= avail_size) {
+> -               if (ctx->bounce_buf) {
+> +               /*
+> +                * This works while JPEG is the only encoder this driver
+> +                * supports. We will have to abstract this step, or get
+> +                * rid of the bounce buffer before we can support
+> +                * encoding other codecs.
 
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
+Hmm, why wouldn't it work for other encoders, which shouldn't require
+a bounce buffer?
 
-Full logs are available here:
+> +                */
+> +               if (ctx->jpeg_enc_ctx.bounce_buffer.cpu) {
+>                         memcpy(vb2_plane_vaddr(&dst->vb2_buf, 0) +
+>                                ctx->vpu_dst_fmt->header_size,
+> -                              ctx->bounce_buf, bytesused);
+> +                              ctx->jpeg_enc_ctx.bounce_buffer.cpu, bytesused);
+>                 }
+>                 dst->vb2_buf.planes[0].bytesused =
+>                         ctx->vpu_dst_fmt->header_size + bytesused;
 
-http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
+[snip]
 
-The Media Infrastructure API from this daily build is here:
+>  /**
+>   * struct rockchip_vpu_codec_ops - codec mode specific operations
+>   *
+> + * @start:     If needed, can be used for initialization.
+> + *             Optional and called from process context.
+> + * @stop:      If needed, can be used to undo the .start phase.
+> + *             Optional and called from process context.
 
-http://www.xs4all.nl/~hverkuil/spec/index.html
+nit: Perhaps .init and .exit could reflect better what these ops do?
+
+Best regards,
+Tomasz
