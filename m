@@ -6,144 +6,95 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1461C10F06
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FA86C4360F
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BA76920811
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B01520811
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727058AbfC1UG3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 16:06:29 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:45085 "EHLO
+        id S1727075AbfC1UGa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 16:06:30 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:33975 "EHLO
         relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727018AbfC1UG2 (ORCPT
+        with ESMTP id S1726257AbfC1UGa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 16:06:28 -0400
+        Thu, 28 Mar 2019 16:06:30 -0400
 X-Originating-IP: 2.224.242.101
 Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 237F9E0003;
-        Thu, 28 Mar 2019 20:06:24 +0000 (UTC)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 2110EE0015;
+        Thu, 28 Mar 2019 20:06:26 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
         niklas.soderlund+renesas@ragnatech.se
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, luca@lucaceresoli.net,
         ian.arkver.dev@gmail.com, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v4 27/31] adv748x: afe: add routing support
-Date:   Thu, 28 Mar 2019 21:06:04 +0100
-Message-Id: <20190328200608.9463-28-jacopo+renesas@jmondi.org>
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v4 28/31] adv748x: afe: Implement has_route()
+Date:   Thu, 28 Mar 2019 21:06:05 +0100
+Message-Id: <20190328200608.9463-29-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190328200608.9463-1-jacopo+renesas@jmondi.org>
 References: <20190328200608.9463-1-jacopo+renesas@jmondi.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Now that the adv748x subdevice supports internal routing, add an
+has_route() operation used during media graph traversal.
 
-The adv748x afe has eight analog sink pads, currently one of them is
-chosen to be the active route based on device tree configuration. With
-the new routing API it's possible to expose and change which of the
-eight sink pads are routed to the source pad.
-
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/adv748x/adv748x-afe.c | 65 +++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ drivers/media/i2c/adv748x/adv748x-afe.c | 26 +++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
 diff --git a/drivers/media/i2c/adv748x/adv748x-afe.c b/drivers/media/i2c/adv748x/adv748x-afe.c
-index dbbb1e4d6363..3f770f71413f 100644
+index 3f770f71413f..1ba78d45abd5 100644
 --- a/drivers/media/i2c/adv748x/adv748x-afe.c
 +++ b/drivers/media/i2c/adv748x/adv748x-afe.c
-@@ -39,6 +39,9 @@
- #define ADV748X_AFE_STD_PAL_SECAM			0xe
- #define ADV748X_AFE_STD_PAL_SECAM_PED			0xf
- 
-+#define ADV748X_AFE_ROUTES_MAX ((ADV748X_AFE_SINK_AIN7 - \
-+				ADV748X_AFE_SINK_AIN0) + 1)
-+
- static int adv748x_afe_read_ro_map(struct adv748x_state *state, u8 reg)
- {
- 	int ret;
-@@ -383,10 +386,72 @@ static int adv748x_afe_set_format(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+static int adv748x_afe_get_routing(struct v4l2_subdev *sd,
-+				   struct v4l2_subdev_krouting *routing)
-+{
-+	struct adv748x_afe *afe = adv748x_sd_to_afe(sd);
-+	struct v4l2_subdev_route *r = routing->routes;
-+	unsigned int i;
-+
-+	/* There is one possible route from each sink */
-+	if (routing->num_routes < ADV748X_AFE_ROUTES_MAX) {
-+		routing->num_routes = ADV748X_AFE_ROUTES_MAX;
-+		return -ENOSPC;
-+	}
-+
-+	routing->num_routes = ADV748X_AFE_ROUTES_MAX;
-+
-+	for (i = ADV748X_AFE_SINK_AIN0; i <= ADV748X_AFE_SINK_AIN7; i++) {
-+		r->sink_pad = i;
-+		r->sink_stream = 0;
-+		r->source_pad = ADV748X_AFE_SOURCE;
-+		r->source_stream = 0;
-+		r->flags = afe->input == i ? V4L2_SUBDEV_ROUTE_FL_ACTIVE : 0;
-+		r++;
-+	}
-+
-+	return 0;
-+}
-+
-+static int adv748x_afe_set_routing(struct v4l2_subdev *sd,
-+				   struct v4l2_subdev_krouting *routing)
-+{
-+	struct adv748x_afe *afe = adv748x_sd_to_afe(sd);
-+	struct v4l2_subdev_route *r = routing->routes;
-+	int input = -1;
-+	unsigned int i;
-+
-+	if (routing->num_routes > ADV748X_AFE_ROUTES_MAX)
-+		return -ENOSPC;
-+
-+	for (i = 0; i < routing->num_routes; i++) {
-+		if (r->sink_pad > ADV748X_AFE_SINK_AIN7 ||
-+		    r->sink_stream != 0 ||
-+		    r->source_pad != ADV748X_AFE_SOURCE ||
-+		    r->source_stream != 0)
-+			return -EINVAL;
-+
-+		if (r->flags & V4L2_SUBDEV_ROUTE_FL_ACTIVE) {
-+			if (input != -1)
-+				return -EMLINK;
-+
-+			input = r->sink_pad;
-+		}
-+		r++;
-+	}
-+
-+	if (input != -1)
-+		afe->input = input;
-+
-+	return 0;
-+}
-+
- static const struct v4l2_subdev_pad_ops adv748x_afe_pad_ops = {
- 	.enum_mbus_code = adv748x_afe_enum_mbus_code,
- 	.set_fmt = adv748x_afe_set_format,
- 	.get_fmt = adv748x_afe_get_format,
-+	.get_routing = adv748x_afe_get_routing,
-+	.set_routing = adv748x_afe_set_routing,
+@@ -463,6 +463,30 @@ static const struct v4l2_subdev_ops adv748x_afe_ops = {
+ 	.pad = &adv748x_afe_pad_ops,
  };
  
++/* -----------------------------------------------------------------------------
++ * media_entity_operations
++ */
++
++static bool adv748x_afe_has_route(struct media_entity *entity,
++				  unsigned int pad0, unsigned int pad1)
++{
++	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
++	struct adv748x_afe *afe = adv748x_sd_to_afe(sd);
++
++	/* Only consider direct sink->source routes. */
++	if (pad0 > ADV748X_AFE_SINK_AIN7 || pad1 != ADV748X_AFE_SOURCE)
++		return false;
++
++	if (pad0 != afe->input)
++		return false;
++
++	return true;
++}
++
++static const struct media_entity_operations adv748x_afe_entity_ops = {
++	.has_route = adv748x_afe_has_route,
++};
++
  /* -----------------------------------------------------------------------------
+  * Controls
+  */
+@@ -595,6 +619,8 @@ int adv748x_afe_init(struct adv748x_afe *afe)
+ 
+ 	afe->pads[ADV748X_AFE_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+ 
++	afe->sd.entity.ops = &adv748x_afe_entity_ops;
++
+ 	ret = media_entity_pads_init(&afe->sd.entity, ADV748X_AFE_NR_PADS,
+ 			afe->pads);
+ 	if (ret)
 -- 
 2.21.0
 
