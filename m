@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 088D2C10F06
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC17C10F06
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC4E520811
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDDB120811
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:06:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726949AbfC1UGV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 16:06:21 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:37471 "EHLO
+        id S1726956AbfC1UGX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 16:06:23 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:47017 "EHLO
         relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbfC1UGU (ORCPT
+        with ESMTP id S1726681AbfC1UGX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 16:06:20 -0400
+        Thu, 28 Mar 2019 16:06:23 -0400
 X-Originating-IP: 2.224.242.101
 Received: from uno.lan (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id D4636E0010;
-        Thu, 28 Mar 2019 20:06:17 +0000 (UTC)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9C54AE0011;
+        Thu, 28 Mar 2019 20:06:19 +0000 (UTC)
 From:   Jacopo Mondi <jacopo+renesas@jmondi.org>
 To:     sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
         niklas.soderlund+renesas@ragnatech.se
 Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>, luca@lucaceresoli.net,
         ian.arkver.dev@gmail.com, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 23/31] adv748x: csi2: add translation from pixelcode to CSI-2 datatype
-Date:   Thu, 28 Mar 2019 21:06:00 +0100
-Message-Id: <20190328200608.9463-24-jacopo+renesas@jmondi.org>
+Subject: [PATCH v4 24/31] adv748x: csi2: only allow formats on sink pads
+Date:   Thu, 28 Mar 2019 21:06:01 +0100
+Message-Id: <20190328200608.9463-25-jacopo+renesas@jmondi.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190328200608.9463-1-jacopo+renesas@jmondi.org>
 References: <20190328200608.9463-1-jacopo+renesas@jmondi.org>
@@ -46,49 +46,66 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-Prepare to implement frame descriptors to support multiplexed streams by
-adding a function to map pixelcode to CSI-2 datatype. This is needed to
-properly be able to fill out the struct v4l2_mbus_frame_desc.
+Once the CSI-2 subdevice of the ADV748X becomes aware of multiplexed
+streams the format of the source pad is of no value as it carries
+multiple streams. Prepare for this by explicitly denying setting a
+format on anything but the sink pad.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/i2c/adv748x/adv748x-csi2.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/media/i2c/adv748x/adv748x-csi2.c | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
-index 2091cda50935..25798d723174 100644
+index 25798d723174..1abe34183d7d 100644
 --- a/drivers/media/i2c/adv748x/adv748x-csi2.c
 +++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
-@@ -14,6 +14,28 @@
+@@ -183,6 +183,9 @@ static int adv748x_csi2_get_format(struct v4l2_subdev *sd,
+ 	struct adv748x_state *state = tx->state;
+ 	struct v4l2_mbus_framefmt *mbusformat;
  
- #include "adv748x.h"
++	if (sdformat->pad != ADV748X_CSI2_SINK)
++		return -EINVAL;
++
+ 	mbusformat = adv748x_csi2_get_pad_format(sd, cfg, sdformat->pad,
+ 						 sdformat->which);
+ 	if (!mbusformat)
+@@ -206,6 +209,9 @@ static int adv748x_csi2_set_format(struct v4l2_subdev *sd,
+ 	struct v4l2_mbus_framefmt *mbusformat;
+ 	int ret = 0;
  
-+struct adv748x_csi2_format {
-+	unsigned int code;
-+	unsigned int datatype;
-+};
++	if (sdformat->pad != ADV748X_CSI2_SINK)
++		return -EINVAL;
 +
-+static const struct adv748x_csi2_format adv748x_csi2_formats[] = {
-+	{ .code = MEDIA_BUS_FMT_RGB888_1X24,    .datatype = 0x24, },
-+	{ .code = MEDIA_BUS_FMT_UYVY8_1X16,     .datatype = 0x1e, },
-+	{ .code = MEDIA_BUS_FMT_UYVY8_2X8,      .datatype = 0x1e, },
-+	{ .code = MEDIA_BUS_FMT_YUYV10_2X10,    .datatype = 0x1e, },
-+};
-+
-+static unsigned int adv748x_csi2_code_to_datatype(unsigned int code)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(adv748x_csi2_formats); i++)
-+		if (adv748x_csi2_formats[i].code == code)
-+			return adv748x_csi2_formats[i].datatype;
-+	return 0;
-+}
-+
- static int adv748x_csi2_set_virtual_channel(struct adv748x_csi2 *tx,
- 					    unsigned int vc)
- {
+ 	mbusformat = adv748x_csi2_get_pad_format(sd, cfg, sdformat->pad,
+ 						 sdformat->which);
+ 	if (!mbusformat)
+@@ -213,24 +219,8 @@ static int adv748x_csi2_set_format(struct v4l2_subdev *sd,
+ 
+ 	mutex_lock(&state->mutex);
+ 
+-	if (sdformat->pad == ADV748X_CSI2_SOURCE) {
+-		const struct v4l2_mbus_framefmt *sink_fmt;
+-
+-		sink_fmt = adv748x_csi2_get_pad_format(sd, cfg,
+-						       ADV748X_CSI2_SINK,
+-						       sdformat->which);
+-
+-		if (!sink_fmt) {
+-			ret = -EINVAL;
+-			goto unlock;
+-		}
+-
+-		sdformat->format = *sink_fmt;
+-	}
+-
+ 	*mbusformat = sdformat->format;
+ 
+-unlock:
+ 	mutex_unlock(&state->mutex);
+ 
+ 	return ret;
 -- 
 2.21.0
 
