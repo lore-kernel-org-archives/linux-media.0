@@ -2,395 +2,108 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97C17C43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D6CCC10F06
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:04:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 55A8320811
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:04:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E82D2173C
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 20:04:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1553803477;
+	bh=rLNyC3bikETWFYgDZih39XlXJb2rdBk7aUBhoO1YTN8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=y08yidfZi3dtJRScm/YxLZ5qkGD1RdZTs+sK8nDtEvf1OVVZKmSgW7nmaIFoEZkEL
+	 44fNPc4LHwrM+x5kl1NamchKmwSkqlKMcA+/gEliebZz94dkyeZFKwnl/z24Tm9IsD
+	 L1UgcqK8xNzcAgqIdYRr1NEJDiRogrp5KQv+lN5A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726171AbfC1UEf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 16:04:35 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:55133 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbfC1UEf (ORCPT
+        id S1726180AbfC1UEg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 16:04:36 -0400
+Received: from casper.infradead.org ([85.118.1.10]:60696 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbfC1UEf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 28 Mar 2019 16:04:35 -0400
-X-Originating-IP: 2.224.242.101
-Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 563D3C000B;
-        Thu, 28 Mar 2019 20:04:31 +0000 (UTC)
-Date:   Thu, 28 Mar 2019 21:05:13 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>,
-        kernel@collabora.com
-Subject: Re: [PATCH v3 2/2] media: Introduce helpers to fill pixel format
- structs
-Message-ID: <20190328200513.y33clvcj7tpmwbqb@uno.localdomain>
-References: <20190328180704.24761-1-ezequiel@collabora.com>
- <20190328180704.24761-3-ezequiel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2+elwt3uF+8XIr2FWOchhqe0TNM8KMg7cs9XRwNSTwE=; b=X00z0qmevLS4rUwF0A+ai2jXT3
+        XqLLeBB758r5ghlrhn+IAMX6Q7ezbvg1GS4JGtgFLq/wrXbOVwbYb7AkdCeUnbAovUWu5pcmAOgxi
+        DKsEjNM31FNRyl4khh/9MaXqIQ0vyMPDBkZjICq46NgX5skEK3gl/C2FkEkfs/yBT6IfwwksFvTap
+        gWVF4Yy64oI4tA6H1RLktTYMYnXw1sAwKOb2BcC3ZXbSkGKhsnZ5Sq9yINYKGmL0+OLRpYOr9eNwm
+        5mK2xS2dskNWrRjkxzY2YCWPNJCUO2rUNywPrccrBaiQoJmV9CKADy/mHiLfefRIegkjGFaIxUJ7X
+        l2QZFOIQ==;
+Received: from [179.183.99.176] (helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1h9bGL-0004mA-4P; Thu, 28 Mar 2019 20:04:33 +0000
+Date:   Thu, 28 Mar 2019 17:04:29 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Gregor Jasny <gjasny@googlemail.com>
+Cc:     Samuel CHEMLA <chemla.samuel@gmail.com>,
+        Sean Young <sean@mess.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@s-opensource.com>
+Subject: Re: [Bug report] dvbv5-zap crash dvb-tool ARMHF builds
+Message-ID: <20190328170429.2ad3a7f4@coco.lan>
+In-Reply-To: <62429f4e-eabb-8ee9-4137-47540e8131ef@googlemail.com>
+References: <20190315223425.hiq3qcjhjnirsizh@gofer.mess.org>
+        <20190317065242.137cb095@coco.lan>
+        <20190319164507.7f95af89@coco.lan>
+        <a1f296ba-3c27-ed2c-3912-4edbeeb21eba@googlemail.com>
+        <20190321094127.ysurm4u26zugmnmv@gofer.mess.org>
+        <20190321083044.621f1922@coco.lan>
+        <35ba4e81-fc2a-87ed-8da7-43cc4543de51@googlemail.com>
+        <CANJnhGfRtEwAony5Z4rFMPcu58aF2k0G+9NSkMKsq_PhfmSNqw@mail.gmail.com>
+        <20190325140838.71f88eac@coco.lan>
+        <CANJnhGc_qx32nm7yZheC2ioHOij8QELbnwyJkZ83G9uYTxqwtA@mail.gmail.com>
+        <20190326132643.r3svehoa764xagje@gofer.mess.org>
+        <CANJnhGfgzrLZedeoCOq3L-MaEgjtHm1Bwn1cRPr54LvwZ=RBMQ@mail.gmail.com>
+        <20190326123115.5d83f450@coco.lan>
+        <CANJnhGe+nyq6a43BnPmGxb6_9JinFyy1EC=6Xo6K4RUpshm8Ow@mail.gmail.com>
+        <20190328161758.2da2bf4e@coco.lan>
+        <62429f4e-eabb-8ee9-4137-47540e8131ef@googlemail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="rhnojdehhnrbvglp"
-Content-Disposition: inline
-In-Reply-To: <20190328180704.24761-3-ezequiel@collabora.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Em Thu, 28 Mar 2019 20:48:34 +0100
+Gregor Jasny <gjasny@googlemail.com> escreveu:
 
---rhnojdehhnrbvglp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+> Hello,
+> 
+> On 28.03.19 20:17, Mauro Carvalho Chehab wrote:
+> > Em Thu, 28 Mar 2019 19:48:35 +0100
+> > Samuel CHEMLA <chemla.samuel@gmail.com> escreveu:  
+> >> 1) I did reproduce the bug with a serial console, but the serial
+> >> console was also frozen, and there was no message before freeze.  
+> > 
+> > The only way for a machine to freeze even on serial console is due to
+> > a very serious Kernel or hardware bug, like a bad lock/semaphore.  
+> 
+> Does anything speak against upgrading Debian to latest 1.16.5 release?
 
-Hi Ezequiel,
-   this is very nice, thank you!
+I don't think so. The changes we did were just at memory allocation/free
+with standard glibc malloc()/calloc()/free() functions.
 
-On Thu, Mar 28, 2019 at 03:07:04PM -0300, Ezequiel Garcia wrote:
-> Add two new API helpers, v4l2_fill_pixfmt and v4l2_fill_pixfmt_mp,
-> to be used by drivers to calculate plane sizes and bytes per lines.
->
-> Note that driver-specific padding and alignment are not
-> taken into account, and must be done by drivers using this API.
->
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> ---
->  drivers/media/v4l2-core/v4l2-common.c | 164 ++++++++++++++++++++++++++
->  include/media/v4l2-common.h           |  33 ++++++
->  2 files changed, 197 insertions(+)
->
-> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> index 663730f088cd..d869a2910435 100644
-> --- a/drivers/media/v4l2-core/v4l2-common.c
-> +++ b/drivers/media/v4l2-core/v4l2-common.c
-> @@ -445,3 +445,167 @@ int v4l2_s_parm_cap(struct video_device *vdev,
->  	return ret;
->  }
->  EXPORT_SYMBOL_GPL(v4l2_s_parm_cap);
-> +
-> +const struct v4l2_format_info *v4l2_format_info(u32 format)
-> +{
-> +	static const struct v4l2_format_info formats[] = {
-> +		/* RGB formats */
-> +		{ .format = V4L2_PIX_FMT_BGR24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+The kind of errors Samuel are experiencing are machine freezes. 
+dvbv5-utils can't cause such kind of errors, as it doesn't run in 
+privileged mode, nor do anything potentially harmful.
 
-How would you feel using macros here, this would help sticking to
-80-or-so columns, as otherwise this table is pretty wide.
+So, even the most serious issue there won't cause a machine crash.
 
-I've sketched out something quick:
+For a machine to crash, it has to be triggering a Kernel bug
+or some memory corruption outside its memory space (e.g. triggering
+some glibc bug - with also seems very unlikely).
 
-#define V4L2_FMT_INFO_BPP(p1_, p2_, p3_, p4_) { p1_, p2_, p3_, p4_ }
-#define V4L2_FMT_INFO(pf_, mpl_, cpl_, bpp_, hd_, vd_)			\
-		{ 							\
-		  .format       = V4L2_PIX_FMT_##pf_, 			\
-		  .mem_planes   = mpl_,					\
-		  .comp_planes  = cpl_,					\
-		  .bpp          = bpp_, 				\
-		  .hdiv         = hd_,					\
-		  .vdiv         = vd_ 					\
-		}
-
-const struct v4l2_format_info *v4l2_format_info(u32 format)
-{
-	static const struct v4l2_format_info formats[] = {
-		/* RGB formats */
-       		V4L2_FMT_INFO(BGR24, 1, 1, V4L2_FMT_INFO_BPP(3, 0, 0, 0), 1, 1),
-                ...
-}
-
-Not sure you might like it or not.
-
-> +		{ .format = V4L2_PIX_FMT_RGB24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_HSV24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_BGR32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_XBGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_RGB32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_XRGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_HSV32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_ARGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_ABGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_GREY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +
-> +		/* YUV packed formats */
-> +		{ .format = V4L2_PIX_FMT_YUYV,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_YVYU,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_UYVY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_VYUY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +
-> +		/* YUV planar formats */
-> +		{ .format = V4L2_PIX_FMT_NV12,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> +		{ .format = V4L2_PIX_FMT_NV21,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> +		{ .format = V4L2_PIX_FMT_NV16,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_NV61,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_NV24,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_NV42,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> +
-> +		{ .format = V4L2_PIX_FMT_YUV410,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-> +		{ .format = V4L2_PIX_FMT_YVU410,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-> +		{ .format = V4L2_PIX_FMT_YUV411P, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_YUV420,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-> +		{ .format = V4L2_PIX_FMT_YVU420,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-> +		{ .format = V4L2_PIX_FMT_YUV422P, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
-> +
-> +		/* YUV planar formats, non contiguous variant */
-> +		{ .format = V4L2_PIX_FMT_YUV420M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-> +		{ .format = V4L2_PIX_FMT_YVU420M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-> +		{ .format = V4L2_PIX_FMT_YUV422M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_YVU422M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_YUV444M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_YVU444M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
-> +
-> +		{ .format = V4L2_PIX_FMT_NV12M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> +		{ .format = V4L2_PIX_FMT_NV21M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> +		{ .format = V4L2_PIX_FMT_NV16M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +		{ .format = V4L2_PIX_FMT_NV61M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> +	};
-
-Can I ask why you define the array inside this function and not as a static
-array with file scope? Is this something trivial I am missing? It
-will be placed in the same data segment anyhow, is this to reduce the
-probability of an unlikely name clash within the file? Just curious..
-
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(formats); ++i)
-> +		if (formats[i].format == format)
-> +			return &formats[i];
-
-Nit: empty line maybe
-
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL(v4l2_format_info);
-> +
-> +static inline unsigned int v4l2_format_block_width(const struct v4l2_format_info *info, int plane)
-> +{
-> +	if (!info->block_w[plane])
-> +		return 1;
-
-Nit: empty line, or just
-        return info->block_w[plane] ? info->block_w[plane] : 1;
-
-> +	return info->block_w[plane];
-
-
-> +}
-> +
-> +static inline unsigned int v4l2_format_block_height(const struct v4l2_format_info *info, int plane)
-
-You don't like 80 columns that much, right :p ?
-
-> +{
-> +	if (!info->block_h[plane])
-> +		return 1;
-
-Same here
-
-> +	return info->block_h[plane];
-> +}
-> +
-> +int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
-> +			 int pixelformat, int width, int height)
-
-Bad alignment to open parenthesis
-
-> +{
-> +	const struct v4l2_format_info *info;
-> +	struct v4l2_plane_pix_format *plane;
-> +	int i;
-
-unsigned int i; ?
-
-> +
-> +	info = v4l2_format_info(pixelformat);
-> +	if (!info)
-> +		return -EINVAL;
-> +
-> +	pixfmt->width = width;
-> +	pixfmt->height = height;
-> +	pixfmt->pixelformat = pixelformat;
-> +	pixfmt->num_planes = info->mem_planes;
-> +
-> +	if (info->mem_planes == 1) {
-> +		plane = &pixfmt->plane_fmt[0];
-> +		plane->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
-
-80 cols :'(
-
-> +		plane->sizeimage = 0;
-> +
-> +		for (i = 0; i < info->comp_planes; i++) {
-> +			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-> +			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
-> +			unsigned int aligned_width;
-> +			unsigned int aligned_height;
-> +
-> +			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
-> +			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
-> +
-> +			plane->sizeimage += info->bpp[i] *
-> +				DIV_ROUND_UP(aligned_width, hdiv) *
-> +				DIV_ROUND_UP(aligned_height, vdiv);
-> +		}
-
-I was initially puzzled by some of your definitions, say NV12, where
-you mark the hdiv factor for the second plane to 2, while it is
-actually only vertically subsampled. But now I see what you've done for NV12
-and this works for all the other formats I have verified (NV12, NV16, YUYV
-packed, and YVV4xx). Nice :)
-
-Nit: you can save the below else branch indentation if you return
-here.
-
-> +	} else {
-> +		for (i = 0; i < info->comp_planes; i++) {
-> +			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-> +			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
-> +			unsigned int aligned_width;
-> +			unsigned int aligned_height;
-> +
-> +			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
-> +			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
-> +
-> +			plane = &pixfmt->plane_fmt[i];
-> +			plane->bytesperline =
-> +				info->bpp[i] * DIV_ROUND_UP(aligned_width, hdiv);
-> +			plane->sizeimage =
-> +				plane->bytesperline * DIV_ROUND_UP(aligned_height, vdiv);
-> +		}
-> +	}
-
-Empty line maybe?
-
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt_mp);
-> +
-> +int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, int pixelformat, int width, int height)
-> +{
-> +	const struct v4l2_format_info *info;
-> +	int i;
-> +
-> +	info = v4l2_format_info(pixelformat);
-> +	if (!info)
-> +		return -EINVAL;
-> +
-> +	/* Single planar API cannot be used for multi plane formats. */
-> +	if (info->mem_planes > 1)
-> +		return -EINVAL;
-> +
-> +	pixfmt->width = width;
-> +	pixfmt->height = height;
-> +	pixfmt->pixelformat = pixelformat;
-> +	pixfmt->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
-> +	pixfmt->sizeimage = 0;
-> +
-> +	for (i = 0; i < info->comp_planes; i++) {
-> +		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-> +		unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
-> +		unsigned int aligned_width;
-> +		unsigned int aligned_height;
-> +
-> +		aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
-> +		aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
-> +
-> +		pixfmt->sizeimage += info->bpp[i] *
-> +			DIV_ROUND_UP(aligned_width, hdiv) *
-> +			DIV_ROUND_UP(aligned_height, vdiv);
-> +	}
-> +	return 0;
-> +}
-
-Same comments as per the multi planar version.
-
-> +EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt);
-> diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-> index 2b93cb281fa5..0a41bbecf3d3 100644
-> --- a/include/media/v4l2-common.h
-> +++ b/include/media/v4l2-common.h
-> @@ -392,4 +392,37 @@ int v4l2_s_parm_cap(struct video_device *vdev,
->  	((u64)(a).numerator * (b).denominator OP	\
->  	(u64)(b).numerator * (a).denominator)
->
-> +/* ------------------------------------------------------------------------- */
-> +
-> +/* Pixel format and FourCC helpers */
-> +
-> +/**
-> + * struct v4l2_format_info - information about a V4L2 format
-> + * @format: 4CC format identifier (V4L2_PIX_FMT_*)
-> + * @mem_planes: Number of memory planes, which includes the alpha plane (1 to 4).
-> + * @comp_planes: Number of component planes, which includes the alpha plane (1 to 4).
-
-Is alpha channel present in other formats that are not packed RGB?
-Because if that's not the case, they are packed, and all the ones you
-have defined here have 1 memory and 1 component plane only.
-What formats would you expect to be multi planar and have an alpha channel?
-
-> + * @bpp: Array of per-plane bytes per pixel
-> + * @hdiv: Horizontal chroma subsampling factor
-> + * @vdiv: Vertical chroma subsampling factor
-> + * @block_w: Per-plane macroblock pixel width (optional)
-> + * @block_h: Per-plane macroblock pixel height (optional)
-> + */
-> +struct v4l2_format_info {
-> +	u32 format;
-> +	u8 mem_planes;
-> +	u8 comp_planes;
-> +	u8 bpp[4];
-> +	u8 hdiv;
-> +	u8 vdiv;
-> +	u8 block_w[4];
-> +	u8 block_h[4];
-
-I might have missed how a user of these fill functions is supposed to set
-block_w and block_h. If these are alignment requirements that might be
-platform dependent, shouldn't they come as parameters to v4l2_fill_pixfmt()
-and v4l2_fill_pixfmt_mp()? Or assume drivers already provide aligned sizes
-maybe...
-
-Thank you, sorry for the many questions.
-   j
-
-> +};
-> +
-> +const struct v4l2_format_info *v4l2_format_info(u32 format);
-> +
-> +int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, int pixelformat,
-> +		     int width, int height);
-> +int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt, int pixelformat,
-> +			int width, int height);
-> +
->  #endif /* V4L2_COMMON_H_ */
-> --
-> 2.20.1
->
-
---rhnojdehhnrbvglp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlydKPkACgkQcjQGjxah
-Vjwfqw//az4+vFqSphBcdn4ImJfzO+WeH8oeS9o24P6zcjq9RDj2d08WQUfYonn3
-qLgc52cn+W5hoRUqCrDzNz9rV2E50T1CL7qxxQ9lNkjB5T9a3vFYD1Ue38gZ7GUb
-DqXhUhNTirvKzeQPLznmJUzLwt9jObZV2F8acfFF7HsPqtiB/ITkCHnC674qlL4C
-id2C78qHMmIYn/G2I2m2PnHNJZ7JFn9973QL+SJTyNRmuXpBexYv0y/WW+AAF56m
-4E4qB9ELyaS+Y8GGY88Nqw93Rug9TcOxAqSQLqMS4LQfq9/nX4oWd4/akCt1vuy+
-bMP6nWF9DJttdVGw4HI4VSgugk52D4+zGpruBF98iaihnKufB4y5BaUmTKxAwm3p
-t1DokHOFvWBZlDbhMZvvUDhuxcvn7ij+LrgPtU8zZGDT6zkWH2V2IeFxY5wFlq97
-smznh5mt9Uoh7rxDvWW8OOuSyvVChGlfG/nqoJOZx1wLIhrafCNi8U+Xc0lVL5Gz
-Iuxvy+7gcltMDWVD8XxT6zDYasRTt9bYWJ28+2K2QMz9Qv20A/6I8jldlzyjzeow
-XVQP57f/EOtd4cr8h1fF1oTbiB+bgPAAUYrdiDbbzEPCa14/0HrEb1rsTe2AglIw
-y73xP3Y9LEw+bNiPPAsacrLEs6zhrYGuodwyY/Wb0JIQ2d80PpA=
-=cTv9
------END PGP SIGNATURE-----
-
---rhnojdehhnrbvglp--
+Thanks,
+Mauro
