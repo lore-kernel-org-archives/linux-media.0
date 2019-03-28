@@ -2,181 +2,143 @@ Return-Path: <SRS0=EBti=R7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CA6FC43381
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 14:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91577C43381
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 14:57:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2BCB62075E
-	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 14:54:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B43D2075E
+	for <linux-media@archiver.kernel.org>; Thu, 28 Mar 2019 14:57:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726108AbfC1Oyl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 10:54:41 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:59247 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726082AbfC1Oyl (ORCPT
+        id S1726173AbfC1O5Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 10:57:25 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:51642 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725816AbfC1O5Z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 10:54:41 -0400
-X-Originating-IP: 2.224.242.101
-Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 279B11BF204;
-        Thu, 28 Mar 2019 14:54:36 +0000 (UTC)
-Date:   Thu, 28 Mar 2019 15:55:19 +0100
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     vinodkumart@bel.co.in
-Cc:     linux-media@vger.kernel.org
-Subject: Re: TW9910 Video decoder
-Message-ID: <20190328145519.cwrkp232y6taeoei@uno.localdomain>
-References: <46caa7792a2305cc62841c1ee3d10638.squirrel@bemail.bel.co.in>
+        Thu, 28 Mar 2019 10:57:25 -0400
+Received: from [IPv6:2001:420:44c1:2579:7126:11db:5076:31b1] ([IPv6:2001:420:44c1:2579:7126:11db:5076:31b1])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 9WT0h78xJNG8z9WT3hpefR; Thu, 28 Mar 2019 15:57:22 +0100
+Subject: Re: [PATCH] media: v4l-ctrl: add control for variable frame rate
+To:     Fish Lin <linfish@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Keiichi Watanabe <keiichiw@chromium.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Smitha T Murthy <smitha.t@samsung.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190320031022.174052-1-linfish@google.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <0aaba609-1551-e09d-a39f-111dbe99288e@xs4all.nl>
+Date:   Thu, 28 Mar 2019 15:57:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="si22xgnw3q3bd52p"
-Content-Disposition: inline
-In-Reply-To: <46caa7792a2305cc62841c1ee3d10638.squirrel@bemail.bel.co.in>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190320031022.174052-1-linfish@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfN3T1JwF0DmMOjFvGykGubVOKkDNI9/gMP6lrUZNFpTCsbhaLlCZkm4cTqEYyS9o8GQg/x3jzOevMg/ekfYt9njhPqYTgbFJg11KrqF5DWcQo+Q1dgKx
+ 11dffnzfiUaBJSvV2T10Rci6edHnyhPxmnqUTJ+huwdwdLEdhjcq8RQFm/dFk/G1NSyjqlWogCBF/7ydCay9P67Rarer2+aleVskxOpNuMfoFmNM2pONKDR2
+ UvZsIFE47zNH/W76zA2NPmwEKE22ypS8IRW+WSb81yS0DscqYle6wzLIQIl8uxi0bC5SelUf+RsPfR+ZLWFefbJAtzcCN3S/m5MPWm1E5FwM1L1dXm22J8CL
+ z1aRVAfhldfz9Ps5vfW9c4gh6+ZHgOjCmVSYqU/BRXqN0HGI/zo9F5j1F0w2RKLJrtsN9YnpRpISGsXW6Ft39BCuMouJwtvCgMUOZHzhzofdRNIpKkQVRY/O
+ ePIQRtquAGma7Tor/qznW5pdVtNOye9JhxHBLWFFNrBFyze083SwxltLZmCJDblZ8lmIr4GtpejokR1aLOSjJDQchdaCtOyN8myGi8a9j62uds8HS3dpOYmk
+ dOBxAgjFrMVjGtTCcn3dUw4xZlysj2he0P5bmhV6UUWMYH8VWrOGcAsnDQmk7NnYwh8=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On 3/20/19 4:10 AM, Fish Lin wrote:
+> These flag are added
+> * V4L2_CID_MPEG_VIDEO_VFR_ENABLE
+> * V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE
+> One is to set variable frame rate enable or not, another is to control
+> minimal frame rate that video encoder should keep per second.
+> 
+> Signed-off-by: Fish Lin <linfish@google.com>
+> ---
+>  Documentation/media/uapi/v4l/ext-ctrls-codec.rst | 9 +++++++++
+>  drivers/media/v4l2-core/v4l2-ctrls.c             | 3 +++
+>  include/uapi/linux/v4l2-controls.h               | 3 +++
+>  3 files changed, 15 insertions(+)
+> 
+> diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> index c97fb7923be5..4bc013d71b67 100644
+> --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> @@ -620,7 +620,16 @@ enum v4l2_mpeg_video_bitrate_mode -
+>      * - Bit 24:31
+>        - Must be zero.
+>  
+> +.. _v4l2-mpeg-video-variable-framerate:
+>  
+> +``V4L2_CID_MPEG_VIDEO_VFR_ENABLE (boolean)``
+> +    Set variable framerate enable or not. When enabled, video encoder is able
+> +    to drop frames based on some mechanism, like frame similarity or bitrate
+> +    control (default disable).
+> +
+> +``V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE (integer)``
+> +    Minimal kept frame per second when variable framerate is enabled (default
+> +    is input framerate).
 
---si22xgnw3q3bd52p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+You don't really have a concept of frames per second when encoding. What you
+are probably trying to say is something like: "don't drop more than one frame for
+every X frames" or something like that.
 
-Hello Vinod,
+Which codecs support this? A decoder needs to know that a frame is missing, right?
 
-On Thu, Mar 28, 2019 at 09:39:35AM +0530, vinodkumart@bel.co.in wrote:
-> HI,
->
-> Are you still maintaining TW9910 Video decoder. We would like to use this
-> IC in our project.
+What's the use-case for this?
 
-I'm replying as I think I'm one of the last who touched that driver when
-the soc_camera based version was ported to be a standard V4L2 driver.
+Sorry, just trying to understand this better.
 
-Are you interested in the latest available version or on the
-soc_camera one? I guess it depends on what your BSP offers, right?
+Regards,
 
-The new version has been ported to be standard V4L2 driver during the
-last year, and I think it might benefit from more testing indeed.
+	Hans
 
-Thanks
-   j
+>  
+>  .. _v4l2-mpeg-video-dec-pts:
+>  
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+> index b79d3bbd8350..566c6552c9a0 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+> @@ -786,6 +786,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+>  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:			return "H264 MB Level Rate Control";
+>  	case V4L2_CID_MPEG_VIDEO_HEADER_MODE:			return "Sequence Header Mode";
+>  	case V4L2_CID_MPEG_VIDEO_MAX_REF_PIC:			return "Max Number of Reference Pics";
+> +	case V4L2_CID_MPEG_VIDEO_VFR_ENABLE:			return "Variable Frame Rate Enable";
+> +	case V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE:		return "VFR Minimal Frame Rate";
+>  	case V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP:		return "H263 I-Frame QP Value";
+>  	case V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP:		return "H263 P-Frame QP Value";
+>  	case V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP:		return "H263 B-Frame QP Value";
+> @@ -1108,6 +1110,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+>  	case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:
+>  	case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
+>  	case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
+> +	case V4L2_CID_MPEG_VIDEO_VFR_ENABLE:
+>  	case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
+>  	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE:
+>  	case V4L2_CID_MPEG_VIDEO_MPEG4_QPEL:
+> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> index 06479f2fb3ae..f1bf52eb0152 100644
+> --- a/include/uapi/linux/v4l2-controls.h
+> +++ b/include/uapi/linux/v4l2-controls.h
+> @@ -404,6 +404,9 @@ enum v4l2_mpeg_video_multi_slice_mode {
+>  #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_MPEG_BASE+228)
+>  #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_MPEG_BASE+229)
+>  
+> +#define V4L2_CID_MPEG_VIDEO_VFR_ENABLE (V4L2_CID_MPEG_BASE + 250)
+> +#define V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE (V4L2_CID_MPEG_BASE + 251)
+> +
+>  #define V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP		(V4L2_CID_MPEG_BASE+300)
+>  #define V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP		(V4L2_CID_MPEG_BASE+301)
+>  #define V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP		(V4L2_CID_MPEG_BASE+302)
+> 
 
-PS:
-In future please use scripts/get_maintainers.pl and Cc the people/list
-reported by the tool :)
-
->
->
-> Best Regards
-> T.Vinod Kumar
-> Senior Engineer
-> Bharat Electronics Limited
-> Ministry of Defence, Govt. of India
-> Machilipatnam
-> Andhra Pradesh- 521001
-> INDIA
-> Contact: 0866-2527363
->
->
-> =E0=A4=95=E0=A4=BE=E0=A4=97=E0=A4=9C=E0=A4=BC =E0=A4=95=E0=A5=87 3000 =E0=
-=A4=AA=E0=A4=A8=E0=A5=8D=E0=A4=A8=E0=A5=8B=E0=A4=82 =E0=A4=95=E0=A5=87 =E0=
-=A4=B2=E0=A4=BF=E0=A4=8F =E0=A4=8F=E0=A4=95 =E0=A4=AA=E0=A5=87=E0=A4=A1=E0=
-=A4=BC =E0=A4=95=E0=A5=8B =E0=A4=95=E0=A4=BE=E0=A4=9F=E0=A4=BE =E0=A4=9C=E0=
-=A4=BE=E0=A4=A4=E0=A4=BE =E0=A4=B9=E0=A5=88... =E0=A4=AA=E0=A5=87=E0=A4=A1=
-=E0=A4=BC =E0=A4=AC=E0=A4=9A=E0=A4=BE=E0=A4=8F=E0=A4=81... =E0=A4=AA=E0=A5=
-=87=E0=A4=A1=E0=A4=BC=E0=A5=8B=E0=A4=82 =E0=A4=95=E0=A4=BE =E0=A4=B8=E0=A4=
-=82=E0=A4=B0=E0=A4=95=E0=A5=8D=E0=A4=B7=E0=A4=A3 =E0=A4=95=E0=A4=B0=E0=A5=
-=87=E0=A4=82... =E0=A4=B9=E0=A4=B0=E0=A4=BF=E0=A4=AF=E0=A4=BE=E0=A4=B2=E0=
-=A5=80 =E0=A4=B2=E0=A4=BE=E0=A4=8F=E0=A4=81... =E0=A4=87=E0=A4=B8 =E0=A4=AE=
-=E0=A5=87=E0=A4=B2 =E0=A4=95=E0=A4=BE =E0=A4=AF=E0=A4=BE =E0=A4=87=E0=A4=B8=
-=E0=A4=95=E0=A5=80 =E0=A4=95=E0=A4=BF=E0=A4=B8=E0=A5=80 =E0=A4=AB=E0=A4=BE=
-=E0=A4=87=E0=A4=B2 =E0=A4=95=E0=A4=BE =E0=A4=AA=E0=A5=8D=E0=A4=B0=E0=A4=BF=
-=E0=A4=82=E0=A4=9F =E0=A4=A4=E0=A4=AC =E0=A4=A4=E0=A4=95 =E0=A4=A8 =E0=A4=
-=B2=E0=A5=87=E0=A4=82 =E0=A4=9C=E0=A4=AC =E0=A4=A4=E0=A4=95 =E0=A4=B8=E0=A4=
-=9A=E0=A4=AE=E0=A5=81=E0=A4=9A =E0=A4=9C=E0=A4=BC=E0=A4=B0=E0=A5=82=E0=A4=
-=B0=E0=A4=A4 =E0=A4=A8 =E0=A4=B9=E0=A5=8B !!!!
->
->
-> Every 3000 Sheets of paper costs us a tree.. Save trees... Conserve
-> Trees. Don't print this email or any Files unless you really need to!!!!
->
-> Confidentiality Notice/=E0=A4=97=E0=A5=8B=E0=A4=AA=E0=A4=A8=E0=A5=80=E0=
-=A4=AF =E0=A4=B8=E0=A5=82=E0=A4=9A=E0=A4=A8=E0=A4=BE
->
-> =E0=A4=87=E0=A4=B8 =E0=A4=87=E0=A4=B2=E0=A5=87=E0=A4=95=E0=A5=8D=E0=A4=9F=
-=E0=A5=8D=E0=A4=B0=E0=A5=89=E0=A4=A8=E0=A4=BF=E0=A4=95 =E0=A4=B8=E0=A4=82=
-=E0=A4=A6=E0=A5=87=E0=A4=B6 =E0=A4=AE=E0=A5=87=E0=A4=82 =E0=A4=B6=E0=A4=BE=
-=E0=A4=AE=E0=A4=BF=E0=A4=B2 =E0=A4=9C=E0=A4=BE=E0=A4=A8=E0=A4=95=E0=A4=BE=
-=E0=A4=B0=E0=A5=80 =E0=A4=94=E0=A4=B0 =E0=A4=87=E0=A4=B8 =E0=A4=B8=E0=A4=82=
-=E0=A4=A6=E0=A5=87=E0=A4=B6 =E0=A4=95=E0=A5=87 =E0=A4=B8=E0=A4=BE=E0=A4=A5 =
-=E0=A4=A6=E0=A4=BF=E0=A4=AF=E0=A4=BE =E0=A4=97=E0=A4=AF=E0=A4=BE =E0=A4=B8=
-=E0=A4=82=E0=A4=B2=E0=A4=97=E0=A5=8D=E0=A4=A8=E0=A4=95 =E0=A4=95=E0=A5=87=
-=E0=A4=B5=E0=A4=B2
-> =E0=A4=AA=E0=A5=8D=E0=A4=B0=E0=A5=87=E0=A4=B7=E0=A4=BF=E0=A4=A4=E0=A5=80 =
-=E0=A4=95=E0=A5=87 =E0=A4=85=E0=A4=A8=E0=A4=A8=E0=A5=8D=E0=A4=AF =E0=A4=87=
-=E0=A4=B8=E0=A5=8D=E0=A4=A4=E0=A5=87=E0=A4=AE=E0=A4=BE=E0=A4=B2 =E0=A4=95=
-=E0=A5=87 =E0=A4=B2=E0=A4=BF=E0=A4=8F =E0=A4=B9=E0=A5=88 =E0=A4=94=E0=A4=B0=
- =E0=A4=87=E0=A4=B8=E0=A4=AE=E0=A5=87=E0=A4=82 =E0=A4=97=E0=A5=8B=E0=A4=AA=
-=E0=A4=A8=E0=A5=80=E0=A4=AF =E0=A4=AF=E0=A4=BE =E0=A4=B5=E0=A4=BF=E0=A4=B6=
-=E0=A5=87=E0=A4=B7=E0=A4=BE=E0=A4=A7=E0=A4=BF=E0=A4=95=E0=A4=BE=E0=A4=B0 =
-=E0=A4=AA=E0=A5=8D=E0=A4=B0=E0=A4=BE=E0=A4=AA=E0=A5=8D=E0=A4=A4 =E0=A4=9C=
-=E0=A4=BE=E0=A4=A8=E0=A4=95=E0=A4=BE=E0=A4=B0=E0=A5=80
-> =E0=A4=B6=E0=A4=BE=E0=A4=AE=E0=A4=BF=E0=A4=B2 =E0=A4=B9=E0=A5=8B =E0=A4=
-=B8=E0=A4=95=E0=A4=A4=E0=A5=80 =E0=A4=B9=E0=A5=88 =E0=A5=A4 =E0=A4=AF=E0=A4=
-=A6=E0=A4=BF =E0=A4=86=E0=A4=AA =E0=A4=86=E0=A4=B6=E0=A4=AF=E0=A4=BF=E0=A4=
-=A4 =E0=A4=AA=E0=A5=8D=E0=A4=B0=E0=A4=BE=E0=A4=AA=E0=A5=8D=E0=A4=A4=E0=A4=
-=95=E0=A4=B0=E0=A5=8D=E0=A4=A4=E0=A4=BE =E0=A4=A8=E0=A4=B9=E0=A5=80=E0=A4=
-=82 =E0=A4=B9=E0=A5=88=E0=A4=82, =E0=A4=A4=E0=A5=8B =E0=A4=95=E0=A5=83=E0=
-=A4=AA=E0=A4=AF=E0=A4=BE =E0=A4=A4=E0=A5=81=E0=A4=B0=E0=A4=82=E0=A4=A4 =E0=
-=A4=AD=E0=A4=BE=E0=A4=B0=E0=A4=A4 =E0=A4=87=E0=A4=B2=E0=A5=87=E0=A4=95=E0=
-=A5=8D=E0=A4=9F=E0=A5=8D=E0=A4=B0=E0=A5=89=E0=A4=A8=E0=A4=BF=E0=A4=95=E0=A5=
-=8D=E0=A4=B8 =E0=A4=95=E0=A5=87 =E0=A4=AA=E0=A5=8D=E0=A4=B0=E0=A5=87=E0=A4=
-=B7=E0=A4=95 =E0=A4=95=E0=A5=8B =E0=A4=AC=E0=A4=A4=E0=A4=BE=E0=A4=8F=E0=A4=
-=81
-> =E0=A4=AF=E0=A4=BE support@bel.co.in =E0=A4=AA=E0=A4=B0 =E0=A4=AE=E0=A5=
-=87=E0=A4=B2 =E0=A4=A6=E0=A5=8D=E0=A4=B5=E0=A4=BE=E0=A4=B0=E0=A4=BE =E0=A4=
-=B8=E0=A5=82=E0=A4=9A=E0=A4=BF=E0=A4=A4 =E0=A4=95=E0=A4=B0=E0=A5=87=E0=A4=
-=82 =E0=A4=94=E0=A4=B0 =E0=A4=87=E0=A4=B8 =E0=A4=B8=E0=A4=82=E0=A4=A6=E0=A5=
-=87=E0=A4=B6 =E0=A4=95=E0=A5=80 =E0=A4=B8=E0=A4=AD=E0=A5=80 =E0=A4=AA=E0=A5=
-=8D=E0=A4=B0=E0=A4=A4=E0=A4=BF=E0=A4=AF=E0=A4=BE=E0=A4=81 =E0=A4=94=E0=A4=
-=B0 =E0=A4=89=E0=A4=B8=E0=A4=95=E0=A5=87 =E0=A4=B8=E0=A4=BE=E0=A4=A5 =E0=A4=
-=B2=E0=A4=97=E0=A5=87 =E0=A4=B8=E0=A4=82=E0=A4=B2=E0=A4=97=E0=A5=8D=E0=A4=
-=A8=E0=A4=95=E0=A5=8B=E0=A4=82 =E0=A4=95=E0=A5=8B =E0=A4=A8=E0=A4=B7=E0=A5=
-=8D=E0=A4=9F =E0=A4=95=E0=A4=B0 =E0=A4=A6=E0=A5=87=E0=A4=82 =E0=A5=A4
-> The information contained in this electronic message and any
-> attachments to this message are intended for the exclusive use of
-> the addressee(s) and may contain confidential or privileged
-> information. If you are not the intended recipient, please notify
-> the sender at Bharat Electronics  or support@bel.co.in immediately
-> and destroy all copies of this message and any attachments.
->
->
-
---si22xgnw3q3bd52p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlyc4FcACgkQcjQGjxah
-VjzetBAAvLFa/G4YuMaJ/maXCbw/zcj7q/ZV45pTCUaSyCSV+/17xOxb7V/21sGG
-rl5KV85hA26ajN2w41HaCrJPA24HknA1WYY9uPIEzArSpW6/CyTsAMGlxpDKRnV1
-4WFVrQT5nbA7aBPzgtQasRLfk+8xp0RzEQc4WbnobJ3LGn5/yQZ3YjpgXQ3b0Qbg
-4MhphQmw0iihwqk1Xsb9WrKQWRFPAV9TkW/4hlADu7by748VG7SFVv2AhcPkdQfj
-WnygkzHOJCKQprP32Tiqi6FChOHRMwCIjAqdZCgZe8Q3jjgtQPsI8NwgMsrtaHiT
-VWMS189rM0rGtLbEVLtqiJU+W1nsecE9P4LSGVzfiYWG3F0CiVM3Z6goWJl1lxAs
-c4a7dX/8tR6t5x8sNA33jNSpTmBVpaCU5Plbbk50ezxqpKSqzOPRTW9uTWBKbTn2
-rKCAxf8JTxKkgOFlr2cziiBCsMS1UtNYmJioTuTyGvGr/RS86V6rOkl2CYxBG253
-TKR6lBBP1FQ+pekjeTSlzHkxjvGzmJlN/EZFyIDyiK3Wh9MpKe9be3VMf67ODphA
-3+E4IMZ2le2/pO1+Ik1BbLIMt5qw71UMkHHA8NNK8CTwPe6GNNcAfw+EyiUjLMn0
-nL2PRZIfj4lsACVPQ+RhwMiR+vXZkCK7PPqYuX7cqoIUXOlZZ6w=
-=Bldm
------END PGP SIGNATURE-----
-
---si22xgnw3q3bd52p--
