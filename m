@@ -2,182 +2,210 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9454CC43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 03:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B879C43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 03:22:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5BA3F218A2
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 03:21:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BFB621850
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 03:22:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DLamwxiE"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RLkEszvR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728647AbfC2DUy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 23:20:54 -0400
-Received: from mail-vk1-f202.google.com ([209.85.221.202]:53937 "EHLO
-        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728006AbfC2DUy (ORCPT
+        id S1728639AbfC2DWB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 23:22:01 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:41181 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728551AbfC2DWB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 23:20:54 -0400
-Received: by mail-vk1-f202.google.com with SMTP id 5so290781vkg.20
-        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 20:20:53 -0700 (PDT)
+        Thu, 28 Mar 2019 23:22:01 -0400
+Received: by mail-ot1-f66.google.com with SMTP id 64so751551otb.8
+        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 20:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mqVVgS3VJCrOdTY9MaSG2UYIdfGVYo0XjzfpxE/xxGQ=;
-        b=DLamwxiEhHKmfKC0b92s74I31LjVzNKLUirgBAAVHvqFXxHqpsyJYObPoefb1artC2
-         V0YWogmyVi1dkeERjjz4UmFZsryy5pL1DAsFZ/LnJe0Fz5uFbiMLvPx33ocvxZYT0hEm
-         Kw3pkCA38wbe+jxOhJZ54cK7+TRsQi8v5EdSBAmBcmpG4D6uOgyK7wxdr806VQ0pYkeK
-         z13jgWtweN06JIwSQVgF27vwVYgLKxiET82RKu28XeajqQ5KY9kuJRDu9h6CDKUc1FrM
-         WC8AbMs5c5/JlYuLMBUBoy06+Tb+xwOB1ncq7827lA40ToGlPURQ2GcEflIC+MEG18/z
-         hMuQ==
+        bh=9qx85BhNBs4lgpq6jan8z+YOxpRrKxwpWVyXm5M3OW0=;
+        b=RLkEszvR5Ak/JXezN2fuPlBuXJ0pASf28/tHsyZnKGJdeo2IkzHYG34WXwui9eYeq6
+         qBg9GKuMT9FxvzABa8CfkfahKMltqfzd7Xp18NJcMcLcpuWD4KKaU4Ve2Vm7R8SnkOkP
+         IaBtC478fgYQN+R9jda2j87ymW/0SxwBw8gTs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=mqVVgS3VJCrOdTY9MaSG2UYIdfGVYo0XjzfpxE/xxGQ=;
-        b=GSDQs/cqPaY1vlUIlg+XI1D5hA40RKan6XVbQKdOaA/K88sBiXpoFAZ6mUrf3fRzZU
-         kchx2ruk74T06gluupZI83i8YNj4pWmsq6fH2DrmltNbm7mEsPrpb79xbgzZQ7rdq7k7
-         FNmuBwOuh/xkiFlEsOE1ZDzsdvOV+wUMUq4BlM8yUuG39eGYWDYl4jsvgXHvLnpkVsOa
-         iZw8t4AN5+jzWjrwKeXK+96PlA/7JiTs8Z+njjNkk2JrlH77ZwPloIxMMI1nSdvB2E7q
-         iG0fGOMq2/7d9SQgkLovhxgyevJn7A+eohM63fKSOU1cJQ3YkS/N2v5VXm8ss5ARgfg6
-         K2Jg==
-X-Gm-Message-State: APjAAAUbsaHK2k6PqEEIJWKOBxC1vn2sm2m4bGXTJ0OHnrBishlD/nmS
-        VXj7qP91HSFEYpnuIvDkkYjET6n+U968
-X-Google-Smtp-Source: APXvYqzX6wgUlg1ASklJyYMriFgDJnAdTfzFtVwT14yjWVjApwKGX74VSmLLgu+fgdsKuc1IbWCzS1cdembs
-X-Received: by 2002:a1f:8d0b:: with SMTP id p11mr3636101vkd.0.1553829653216;
- Thu, 28 Mar 2019 20:20:53 -0700 (PDT)
-Date:   Fri, 29 Mar 2019 11:20:46 +0800
-In-Reply-To: <20190128072948.45788-1-linfish@google.com>
-Message-Id: <20190329032046.58230-1-linfish@google.com>
-Mime-Version: 1.0
-References: <20190128072948.45788-1-linfish@google.com>
-X-Mailer: git-send-email 2.21.0.392.gf8f6787159e-goog
-Subject: [PATCH v8] [media] v4l: add I / P frame min max QP definitions
-From:   Fish Lin <linfish@google.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Keiichi Watanabe <keiichiw@chromium.org>,
-        Smitha T Murthy <smitha.t@samsung.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fish Lin <linfish@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9qx85BhNBs4lgpq6jan8z+YOxpRrKxwpWVyXm5M3OW0=;
+        b=kyuAM9VOhrv/aJyHskVUllA/0P7qo/E4Bd3cG2W/cjk5HcKLQpSSlz5lWwu9WooQs1
+         qOdLmHFaNw4V2R1Az9gzX72nZIHgTuvzU2MqTqhPff319nEYff2DUT8nMzLI4kunLEWX
+         9d6WintU4zEqtr6CnrblElERTwm3bZOw6nPY5rBJGXry3ANiHM4rWciZfPW77KhHtKYE
+         04zhls8a60WHK96S/1dfqEKIkkESYtHc5T0KNS9JpR/ei0l/wMPKe856xU7DoNtB4r0b
+         9IjKBsu0CpCctkh9JORjiUTxKPXQz6xM8I06irVektEBZ2a4QcoAjU1pJrMkoVGIPy0j
+         D1mA==
+X-Gm-Message-State: APjAAAWCuhDYn+kxuoZjeEv4vhEDCrpDjMAMQe8cUiycCsG0BWoWT1bB
+        +OdynNacWhsO1DdNHkbkieyzeh90+MHsFw==
+X-Google-Smtp-Source: APXvYqxS7drMW0MU3HaPrYammCIE270yyTrnfPILlQwlkAswxSCh3fq2hDlIEpS9xmT5UXe8xKbjhg==
+X-Received: by 2002:a9d:22a4:: with SMTP id y33mr29994543ota.218.1553829720141;
+        Thu, 28 Mar 2019 20:22:00 -0700 (PDT)
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com. [209.85.167.173])
+        by smtp.gmail.com with ESMTPSA id k25sm322038otj.72.2019.03.28.20.21.59
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 28 Mar 2019 20:21:59 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id j132so609710oib.2
+        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 20:21:59 -0700 (PDT)
+X-Received: by 2002:aca:4b03:: with SMTP id y3mr2214046oia.21.1553829718532;
+ Thu, 28 Mar 2019 20:21:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190304192529.14200-1-ezequiel@collabora.com>
+ <20190304192529.14200-7-ezequiel@collabora.com> <CAAFQd5DjVDhFMc=WpnvF61yBcPm=BUQhVtBWSyphkkM8QubFzA@mail.gmail.com>
+ <cb9d6645edaf8335f2cdd3094830e80b10ff051f.camel@collabora.com>
+In-Reply-To: <cb9d6645edaf8335f2cdd3094830e80b10ff051f.camel@collabora.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Fri, 29 Mar 2019 12:21:47 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Dd29Jmv7dgBrkX8DLN9+MJ5cbpNnK4rU9K+upxer7RfQ@mail.gmail.com>
+Message-ID: <CAAFQd5Dd29Jmv7dgBrkX8DLN9+MJ5cbpNnK4rU9K+upxer7RfQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/11] rockchip/vpu: Cleanup JPEG bounce buffer management
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jonas Karlman <jonas@kwiboo.se>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add following V4L2 QP parameters for H.264:
-* V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP
-* V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP
-* V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP
-* V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP
+On Fri, Mar 29, 2019 at 3:30 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+>
+> On Thu, 2019-03-28 at 15:15 +0900, Tomasz Figa wrote:
+> > Hi Ezequiel,
+> >
+> > On Tue, Mar 5, 2019 at 4:26 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> > > In order to make the code more generic, introduce a pair of start/stop
+> > > codec operations, and use them to allocate and release the JPEG bounce
+> > > buffer.
+> > >
+> > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > > ---
+> > >  .../media/rockchip/vpu/rk3288_vpu_hw.c        |  2 ++
+> > >  .../rockchip/vpu/rk3288_vpu_hw_jpeg_enc.c     |  4 +--
+> > >  .../media/rockchip/vpu/rk3399_vpu_hw.c        |  2 ++
+> > >  .../rockchip/vpu/rk3399_vpu_hw_jpeg_enc.c     |  4 +--
+> > >  .../staging/media/rockchip/vpu/rockchip_vpu.h | 12 ++++----
+> > >  .../media/rockchip/vpu/rockchip_vpu_drv.c     | 10 +++++--
+> > >  .../media/rockchip/vpu/rockchip_vpu_enc.c     | 23 +++++----------
+> > >  .../media/rockchip/vpu/rockchip_vpu_hw.h      | 28 +++++++++++++++++++
+> > >  .../media/rockchip/vpu/rockchip_vpu_jpeg.c    | 25 +++++++++++++++++
+> > >  9 files changed, 81 insertions(+), 29 deletions(-)
+> > >
+> >
+> > Thanks for the series! Really sorry for late reply...
+> >
+> > [snip]
+> >
+> > > diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> > > index 1ec2be483e27..76ee24abc141 100644
+> > > --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> > > +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+> > > @@ -124,10 +124,7 @@ struct rockchip_vpu_dev {
+> > >   * @jpeg_quality:      User-specified JPEG compression quality.
+> > >   *
+> > >   * @codec_ops:         Set of operations related to codec mode.
+> > > - *
+> > > - * @bounce_dma_addr:   Bounce buffer bus address.
+> > > - * @bounce_buf:                Bounce buffer pointer.
+> > > - * @bounce_size:       Bounce buffer size.
+> > > + * @jpeg_enc_ctx:      JPEG-encoding context.
+> > >   */
+> > >  struct rockchip_vpu_ctx {
+> > >         struct rockchip_vpu_dev *dev;
+> > > @@ -146,9 +143,10 @@ struct rockchip_vpu_ctx {
+> > >
+> > >         const struct rockchip_vpu_codec_ops *codec_ops;
+> > >
+> > > -       dma_addr_t bounce_dma_addr;
+> > > -       void *bounce_buf;
+> > > -       size_t bounce_size;
+> > > +       /* Specific for particular codec modes. */
+> > > +       union {
+> > > +               struct rockchip_vpu_jpeg_enc_hw_ctx jpeg_enc_ctx;
+> > > +       };
+> >
+> > nit: Would it perhaps make it a bit cleaner to call the union "ctx"?
+> > Then we wouldn't need to repeat "_ctx" in every field.
+> >
+>
+> Well, the struct is already rockchip_vpu_ctx, so access would look like:
+>
+>    ctx->ctx.jpeg_enc, ctx->ctx.mpeg2_dec
+>
+> Perhaps we can just drop the _ctx, and so:
+>
+>    ctx->jpeg_enc, ctx->mpeg2_dec
+>
 
-These controls will limit QP range for intra and inter frame,
-provide more manual control to improve video encode quality.
+Even better, thanks.
 
-Signed-off-by: Fish Lin <linfish@google.com>
----
-Changelog since v7:
-- Correct patch format.
+> > >  };
+> > >
+> > >  /**
+> > > diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > > index 5647b0bdac20..1a6dd36c71ab 100644
+> > > --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > > +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+> > > @@ -64,10 +64,16 @@ static void rockchip_vpu_job_finish(struct rockchip_vpu_dev *vpu,
+> > >         avail_size = vb2_plane_size(&dst->vb2_buf, 0) -
+> > >                      ctx->vpu_dst_fmt->header_size;
+> > >         if (bytesused <= avail_size) {
+> > > -               if (ctx->bounce_buf) {
+> > > +               /*
+> > > +                * This works while JPEG is the only encoder this driver
+> > > +                * supports. We will have to abstract this step, or get
+> > > +                * rid of the bounce buffer before we can support
+> > > +                * encoding other codecs.
+> >
+> > Hmm, why wouldn't it work for other encoders, which shouldn't require
+> > a bounce buffer?
+> >
+>
+> Well, I had a TODO item to remove the bounce buffer for JPEG.
+>
+> IIRC, the ChromeOS VPU driver doesn't have any bounce buffer,
+> so I was under the impression we wouldn't need one.
+>
+> However, we have yet to discuss the encoder implementation.
+> We might decide to produce the headers for some video coded format,
+> in which case we might need a bounce buffer.
 
-Changelog since v6:
-- Adjust ctrl id start from 385.
+We don't really need a bounce buffer to handle headers, we can do a
+memmove() instead, as we did for the VP8 encoder [1]. However, it was
+more like a loopback - the driver would just copy the header that the
+userspace set through a control, so we decided to drop it and move
+completely to the userspace [2] for H.264.
 
-Changelog since v5:
-- Adjust documentation wording.
+[1] https://chromium.googlesource.com/chromiumos/third_party/kernel/+/5bc4e95afddd1300368d0552b228824252bd789f/drivers/media/platform/rk3288-vpu/rk3288_vpu_hw_vp8e.c#52
+[2] https://chromium.googlesource.com/chromiumos/third_party/libv4lplugins/+/5e6034258146af6be973fb6a5bb6b9d6e7489437/libv4l-rockchip_v2/libvepu/h264e/h264e.c#591
 
-Changelog since v4:
-- Fix patch subject and send again.
+>
+> In any case, this is just a comment to reflect that this piece
+> of code is just temporary.
+>
 
-Changelog since v3:
-- Put document in ext-ctrls-codec.rst instead of extended-controls.rst
-  (which was previous version).
+My point is that the comment suggests that other encoders would be
+affected by this, which I don't believe is true, because the code
+explicitly checks if the bounce buffer pointer is non-NULL and for
+other encoders it would be NULL.
 
-Changelog since v2:
-- Add interaction with V4L2_CID_MPEG_VIDEO_H264_MIN/MAX_QP
-  description in the document.
+/*
+ * The bounce buffer is only for the JPEG encoder.
+ * TODO: Rework the JPEG encoder to eliminate the need
+ * for a bounce buffer.
+ */
 
-Changelog since v1:
-- Add description in document.
-
- .../media/uapi/v4l/ext-ctrls-codec.rst        | 24 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c          |  4 ++++
- include/uapi/linux/v4l2-controls.h            |  4 ++++
- 3 files changed, 32 insertions(+)
-
-diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-index c97fb7923be5..5b2db52d3b4e 100644
---- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-@@ -1048,6 +1048,30 @@ enum v4l2_mpeg_video_h264_entropy_mode -
-     Quantization parameter for an B frame for H264. Valid range: from 0
-     to 51.
- 
-+``V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP (integer)``
-+    Minimum quantization parameter for the H264 I frame to limit I frame
-+    quality to a range. Valid range: from 0 to 51. If
-+    V4L2_CID_MPEG_VIDEO_H264_MIN_QP is also set, the quantization parameter
-+    should be chosen to meet both requirements.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP (integer)``
-+    Maximum quantization parameter for the H264 I frame to limit I frame
-+    quality to a range. Valid range: from 0 to 51. If
-+    V4L2_CID_MPEG_VIDEO_H264_MAX_QP is also set, the quantization parameter
-+    should be chosen to meet both requirements.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP (integer)``
-+    Minimum quantization parameter for the H264 P frame to limit P frame
-+    quality to a range. Valid range: from 0 to 51. If
-+    V4L2_CID_MPEG_VIDEO_H264_MIN_QP is also set, the quantization parameter
-+    should be chosen to meet both requirements.
-+
-+``V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP (integer)``
-+    Maximum quantization parameter for the H264 P frame to limit P frame
-+    quality to a range. Valid range: from 0 to 51. If
-+    V4L2_CID_MPEG_VIDEO_H264_MAX_QP is also set, the quantization parameter
-+    should be chosen to meet both requirements.
-+
- ``V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP (integer)``
-     Quantization parameter for an I frame for MPEG4. Valid range: from 1
-     to 31.
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index b79d3bbd8350..115fb8debe23 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -828,6 +828,10 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION:
- 								return "H264 Constrained Intra Pred";
- 	case V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET:	return "H264 Chroma QP Index Offset";
-+	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP:		return "H264 I-Frame Minimum QP Value";
-+	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP:		return "H264 I-Frame Maximum QP Value";
-+	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP:		return "H264 P-Frame Minimum QP Value";
-+	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:		return "H264 P-Frame Maximum QP Value";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP:		return "MPEG4 I-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP:		return "MPEG4 P-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP:		return "MPEG4 B-Frame QP Value";
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 06479f2fb3ae..93feaf9c8a37 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -535,6 +535,10 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type {
- #define V4L2_CID_MPEG_VIDEO_H264_HIERARCHICAL_CODING_LAYER_QP	(V4L2_CID_MPEG_BASE+382)
- #define V4L2_CID_MPEG_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION	(V4L2_CID_MPEG_BASE+383)
- #define V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET		(V4L2_CID_MPEG_BASE+384)
-+#define V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MIN_QP	(V4L2_CID_MPEG_BASE+385)
-+#define V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP	(V4L2_CID_MPEG_BASE+386)
-+#define V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP	(V4L2_CID_MPEG_BASE+387)
-+#define V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP	(V4L2_CID_MPEG_BASE+388)
- #define V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP	(V4L2_CID_MPEG_BASE+400)
- #define V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP	(V4L2_CID_MPEG_BASE+401)
- #define V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP	(V4L2_CID_MPEG_BASE+402)
--- 
-2.21.0.392.gf8f6787159e-goog
-
+Best regards,
+Tomasz
