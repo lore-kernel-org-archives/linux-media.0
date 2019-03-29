@@ -2,211 +2,302 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D740C43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 07:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BAF5C4360F
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 08:11:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5213F2173C
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 07:43:19 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dglc0g0M"
+	by mail.kernel.org (Postfix) with ESMTP id 018E82054F
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 08:11:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728928AbfC2HnS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 03:43:18 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:41969 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728887AbfC2HnS (ORCPT
+        id S1729007AbfC2IL3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 04:11:29 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:45691 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728948AbfC2IL2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 03:43:18 -0400
-Received: by mail-oi1-f195.google.com with SMTP id v7so934127oie.8
-        for <linux-media@vger.kernel.org>; Fri, 29 Mar 2019 00:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T/YcA/AARmO9aIZkQrJM/Vn1xePsyTTpRbZh5J9tBDQ=;
-        b=dglc0g0M91AaE5lGwM2zq3/LzjlSQENw8GMOWbWaqBgdFj714q8ayMRdJO/QAEF718
-         fmiMx3p31ADTld88/LD2WlC8U0VSRMUKC69VpFCEQ6D9D9lZCzcJNXO/sdobhcBNL6xi
-         rPY6tHbweBctKXbLNhkFuWkUZLsXaLlj8F/24=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T/YcA/AARmO9aIZkQrJM/Vn1xePsyTTpRbZh5J9tBDQ=;
-        b=Ur0D0M7ZL5A5rh5lphqOtapngXlFaY87jB2RxtmDBef8YdZbONPeGuy1pGAtDTNeo5
-         ph/8LvsPDk/F65jDTDn6DlLrXZbYjuenxwdJtViSdlrw4A9QGjWb5Sf6bFg4o3CziAtG
-         +BiIrM8f/nr6UEDoaiC0HeblYoYYiHh9KUi2TWIjYqmKcPpv3LuZTGwbATd3lwZ02sm/
-         5zZR86VfwqQuYva7y4u8/uCV7pl12phJFAFHZb6GyKNZRQ6AS7cBmVFU9nwzY1mOgbZg
-         0Yi5KwnHeHQ/svuY/nQz25j01t9CtpGgIBsYRho9pO/Q/LiAuoYmdb6Mbkkd72VWFxUy
-         h3yg==
-X-Gm-Message-State: APjAAAWzQPtTLNKuO4TStNwlBh0vPR2wN9x/8coRrWV2tNgomDSxNDM7
-        wczIAnlrM3algCDHQlZTxZGXFllSSpCP3Q==
-X-Google-Smtp-Source: APXvYqyOqFMziRzBzgJJGy7xqCuU22WtO1LcGaZWWsN/XhZvO0lyItHU6++aXjcyUuUBPFpWbyrw1w==
-X-Received: by 2002:aca:5750:: with SMTP id l77mr2765142oib.54.1553845397356;
-        Fri, 29 Mar 2019 00:43:17 -0700 (PDT)
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com. [209.85.210.46])
-        by smtp.gmail.com with ESMTPSA id a34sm592493otc.46.2019.03.29.00.43.15
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 29 Mar 2019 00:43:15 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id k21so1300379otf.1
-        for <linux-media@vger.kernel.org>; Fri, 29 Mar 2019 00:43:15 -0700 (PDT)
-X-Received: by 2002:a9d:3f24:: with SMTP id m33mr32448712otc.147.1553845395165;
- Fri, 29 Mar 2019 00:43:15 -0700 (PDT)
+        Fri, 29 Mar 2019 04:11:28 -0400
+Received: from [192.168.2.10] ([212.251.195.8])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 9mbghMr91UjKf9mbkhup2y; Fri, 29 Mar 2019 09:11:25 +0100
+Subject: Re: [PATCH,v2] media: mtk-vcodec: enlarge struct vdec_pic_info fields
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <1553825051-16940-1-git-send-email-yunfei.dong@mediatek.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <10c912b5-56f2-f690-9dd3-3ddb10cc462a@xs4all.nl>
+Date:   Fri, 29 Mar 2019 09:11:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-References: <20190304192529.14200-1-ezequiel@collabora.com>
- <20190304192529.14200-8-ezequiel@collabora.com> <CAAFQd5AVgcj9vMsnE4yKm3uNnFPJ_1KpvX8t9bioVg4Cp2Wy=Q@mail.gmail.com>
- <81754d3621042384b272700d724336582ff1a94c.camel@collabora.com>
-In-Reply-To: <81754d3621042384b272700d724336582ff1a94c.camel@collabora.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 29 Mar 2019 16:43:04 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5CJbZ3EjhPBFdrHGuJeKdSr27we4Vy3U8J0dypcJkFPKg@mail.gmail.com>
-Message-ID: <CAAFQd5CJbZ3EjhPBFdrHGuJeKdSr27we4Vy3U8J0dypcJkFPKg@mail.gmail.com>
-Subject: Re: [PATCH v2 07/11] rockchip/vpu: Open-code media controller register
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1553825051-16940-1-git-send-email-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfFsFribNUef2zQ5UC1r1XLN2QltkCs09kQF0pWjvUE7Og+hn1z9DocFk5SACEEHrUih2EUfgEDSPXfRxup5HCg5Cg4DiZxCQenKmJ90gh5EZMZ0BEic0
+ G5fkyqwgnMffRFGOIaW86NpfOPK+IVbYXv+UWNWsmP+utCZwMSGxe2c7kg17mLbSv6lhqj7x3BIxcuVaXt5UqiLYQ+sof4FpYaKIEZkUE2at5ALkWbj1pFAx
+ qY6c8z9b4xQ1zGXQZgrV4XLtJR5Oc6lFGYa63UpiS4Dj/mQ0WiNegC4XxOWI1AiqkTJk+jpMxE5NvHo0BQ1qADq/EhgZBXyVXYvZYVTVxS624IhIeQ9/rD4U
+ r1b3gjU6DcvlDmp8Yep0ttDRmrosKENM0IUphieDgBLjkez3q0zAFzj0B6QlFb3T/BopGWBluxRQOVFZoJmaw1rEiUWqV3ZQANfhuU/GM3DPOmAL8mg+EcYV
+ /gNZBkSmCWtzN4HczuS0CzdC8jyuQostv0sXtw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Mar 29, 2019 at 5:05 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
->
-> On Thu, 2019-03-28 at 16:11 +0900, Tomasz Figa wrote:
-> > On Tue, Mar 5, 2019 at 4:27 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
-[snip]
-> > > + * @source_pad:                &struct media_pad with the source pad.
-> > > + *                     Used only when the M2M device is registered via
-> > > + *                     v4l2_m2m_unregister_media_controller().
-> > > + * @sink:              &struct media_entity pointer with the sink entity
-> > > + *                     Used only when the M2M device is registered via
-> > > + *                     v4l2_m2m_unregister_media_controller().
-> > > + * @sink_pad:          &struct media_pad with the sink pad.
-> > > + *                     Used only when the M2M device is registered via
-> > > + *                     v4l2_m2m_unregister_media_controller().
-> > > + * @proc:              &struct media_entity pointer with the M2M device itself.
-> > > + * @proc_pads:         &struct media_pad with the @proc pads.
-> > > + *                     Used only when the M2M device is registered via
-> > > + *                     v4l2_m2m_unregister_media_controller().
-> > > + * @intf_devnode:      &struct media_intf devnode pointer with the interface
-> > > + *                     with controls the M2M device.
-> > > + */
-> > > +struct rockchip_vpu_mc {
-> > > +       struct media_entity     *source;
-> > > +       struct media_pad        source_pad;
-> > > +       struct media_entity     sink;
-> > > +       struct media_pad        sink_pad;
-> > > +       struct media_entity     proc;
-> > > +       struct media_pad        proc_pads[2];
-> > > +       struct media_intf_devnode *intf_devnode;
-> > > +};
-> > > +
-> > >  /**
-> > >   * struct rockchip_vpu_dev - driver data
-> > >   * @v4l2_dev:          V4L2 device to register video devices for.
-> > > @@ -78,6 +110,8 @@ enum rockchip_vpu_codec_mode {
-> > >   * @mdev:              media device associated to this device.
-> > >   * @vfd_enc:           Video device for encoder.
-> > >   * @pdev:              Pointer to VPU platform device.
-> > > + * @mc:                        Array of media controller topology structs
-> >
-> > Is it just me or there is something wrong with indentation here?
-> >
->
-> It seems to be fine here -- it's all tabs.
+On 3/29/19 3:04 AM, Yunfei Dong wrote:
+> Enlarge the plane number to support more complex case
+> and add the support for fmt change case.
+> 
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+> change note:
+> fix "resolutin->resolution" and comment in struct vdec_pic_info
+> ---
+>  drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c |   62 +++++++++++++-------
+>  drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h |   15 ++---
+>  .../media/platform/mtk-vcodec/vdec/vdec_h264_if.c  |    4 +-
+>  .../media/platform/mtk-vcodec/vdec/vdec_vp8_if.c   |    4 +-
+>  .../media/platform/mtk-vcodec/vdec/vdec_vp9_if.c   |   11 ++--
+>  5 files changed, 56 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> index d022c65..43587c0 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> @@ -129,9 +129,9 @@ static struct vb2_buffer *get_display_buffer(struct mtk_vcodec_ctx *ctx)
+>  	mutex_lock(&ctx->lock);
+>  	if (dstbuf->used) {
+>  		vb2_set_plane_payload(&dstbuf->vb.vb2_buf, 0,
+> -					ctx->picinfo.y_bs_sz);
+> +					ctx->picinfo.fb_sz[0]);
+>  		vb2_set_plane_payload(&dstbuf->vb.vb2_buf, 1,
+> -					ctx->picinfo.c_bs_sz);
+> +					ctx->picinfo.fb_sz[1]);
+>  
+>  		dstbuf->ready_to_display = true;
+>  
+> @@ -278,6 +278,27 @@ static void mtk_vdec_flush_decoder(struct mtk_vcodec_ctx *ctx)
+>  	clean_free_buffer(ctx);
+>  }
+>  
+> +static void mtk_vdec_update_fmt(struct mtk_vcodec_ctx *ctx,
+> +				unsigned int pixelformat)
+> +{
+> +	struct mtk_video_fmt *fmt;
+> +	struct mtk_q_data *dst_q_data;
+> +	unsigned int k;
+> +
+> +	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
+> +	for (k = 0; k < NUM_FORMATS; k++) {
+> +		fmt = &mtk_video_formats[k];
+> +		if (fmt->fourcc == pixelformat) {
+> +			mtk_v4l2_debug(1, "Update cap fourcc(%d -> %d)",
+> +				dst_q_data->fmt.fourcc, pixelformat);
+> +			dst_q_data->fmt = fmt;
+> +			return;
+> +		}
+> +	}
+> +
+> +	mtk_v4l2_err("Cannot get fourcc(%d), using init value", pixelformat);
+> +}
+> +
+>  static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
+>  {
+>  	unsigned int dpbsize = 0;
+> @@ -299,6 +320,10 @@ static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
+>  		return -EINVAL;
+>  	}
+>  
+> +	if (ctx->last_decoded_picinfo.cap_fourcc != ctx->picinfo.cap_fourcc &&
+> +		ctx->picinfo.cap_fourcc != 0)
+> +		mtk_vdec_update_fmt(ctx, ctx->picinfo.cap_fourcc);
+> +
+>  	if ((ctx->last_decoded_picinfo.pic_w == ctx->picinfo.pic_w) ||
+>  	    (ctx->last_decoded_picinfo.pic_h == ctx->picinfo.pic_h))
+>  		return 0;
+> @@ -352,11 +377,11 @@ static void mtk_vdec_worker(struct work_struct *work)
+>  	pfb = &dst_buf_info->frame_buffer;
+>  	pfb->base_y.va = vb2_plane_vaddr(&dst_buf->vb2_buf, 0);
+>  	pfb->base_y.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
+> -	pfb->base_y.size = ctx->picinfo.y_bs_sz + ctx->picinfo.y_len_sz;
+> +	pfb->base_y.size = ctx->picinfo.fb_sz[0];
+>  
+>  	pfb->base_c.va = vb2_plane_vaddr(&dst_buf->vb2_buf, 1);
+>  	pfb->base_c.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 1);
+> -	pfb->base_c.size = ctx->picinfo.c_bs_sz + ctx->picinfo.c_len_sz;
+> +	pfb->base_c.size = ctx->picinfo.fb_sz[1];
+>  	pfb->status = 0;
+>  	mtk_v4l2_debug(3, "===>[%d] vdec_if_decode() ===>", ctx->id);
+>  
+> @@ -976,14 +1001,13 @@ static int vidioc_vdec_g_fmt(struct file *file, void *priv,
+>  		 * So we just return picinfo yet, and update picinfo in
+>  		 * stop_streaming hook function
+>  		 */
+> -		q_data->sizeimage[0] = ctx->picinfo.y_bs_sz +
+> -					ctx->picinfo.y_len_sz;
+> -		q_data->sizeimage[1] = ctx->picinfo.c_bs_sz +
+> -					ctx->picinfo.c_len_sz;
+> +		q_data->sizeimage[0] = ctx->picinfo.fb_sz[0];
+> +		q_data->sizeimage[1] = ctx->picinfo.fb_sz[1];
+>  		q_data->bytesperline[0] = ctx->last_decoded_picinfo.buf_w;
+>  		q_data->bytesperline[1] = ctx->last_decoded_picinfo.buf_w;
+>  		q_data->coded_width = ctx->picinfo.buf_w;
+>  		q_data->coded_height = ctx->picinfo.buf_h;
+> +		ctx->last_decoded_picinfo.cap_fourcc = q_data->fmt->fourcc;
+>  
+>  		/*
+>  		 * Width and height are set to the dimensions
+> @@ -1103,10 +1127,11 @@ static void vb2ops_vdec_buf_queue(struct vb2_buffer *vb)
+>  	struct mtk_vcodec_mem src_mem;
+>  	bool res_chg = false;
+>  	int ret = 0;
+> -	unsigned int dpbsize = 1;
+> +	unsigned int dpbsize = 1, i = 0;
+>  	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+>  	struct vb2_v4l2_buffer *vb2_v4l2 = NULL;
+>  	struct mtk_video_dec_buf *buf = NULL;
+> +	struct mtk_q_data *dst_q_data;
+>  
+>  	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p",
+>  			ctx->id, vb->vb2_queue->type,
+> @@ -1194,21 +1219,18 @@ static void vb2ops_vdec_buf_queue(struct vb2_buffer *vb)
+>  	}
+>  
+>  	ctx->last_decoded_picinfo = ctx->picinfo;
+> -	ctx->q_data[MTK_Q_DATA_DST].sizeimage[0] =
+> -						ctx->picinfo.y_bs_sz +
+> -						ctx->picinfo.y_len_sz;
+> -	ctx->q_data[MTK_Q_DATA_DST].bytesperline[0] =
+> -						ctx->picinfo.buf_w;
+> -	ctx->q_data[MTK_Q_DATA_DST].sizeimage[1] =
+> -						ctx->picinfo.c_bs_sz +
+> -						ctx->picinfo.c_len_sz;
+> -	ctx->q_data[MTK_Q_DATA_DST].bytesperline[1] = ctx->picinfo.buf_w;
+> +	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
+> +	for (i = 0; i < dst_q_data->fmt->num_planes; i++) {
+> +		dst_q_data->sizeimage[i] = ctx->picinfo.fb_sz[i];
+> +		dst_q_data->bytesperline[i] = ctx->picinfo.buf_w;
+> +	}
+> +
+>  	mtk_v4l2_debug(2, "[%d] vdec_if_init() OK wxh=%dx%d pic wxh=%dx%d sz[0]=0x%x sz[1]=0x%x",
+>  			ctx->id,
+>  			ctx->picinfo.buf_w, ctx->picinfo.buf_h,
+>  			ctx->picinfo.pic_w, ctx->picinfo.pic_h,
+> -			ctx->q_data[MTK_Q_DATA_DST].sizeimage[0],
+> -			ctx->q_data[MTK_Q_DATA_DST].sizeimage[1]);
+> +			dst_q_data->sizeimage[0],
+> +			dst_q_data->sizeimage[1]);
+>  
+>  	ret = vdec_if_get_param(ctx, GET_PARAM_DPB_SIZE, &dpbsize);
+>  	if (dpbsize == 0)
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> index e7e2a10..488be4fe 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> @@ -211,24 +211,19 @@ struct mtk_vcodec_pm {
+>   * @pic_h: picture height
+>   * @buf_w: picture buffer width (64 aligned up from pic_w)
+>   * @buf_h: picture buffer heiht (64 aligned up from pic_h)
+> - * @y_bs_sz: Y bitstream size
+> - * @c_bs_sz: CbCr bitstream size
+> - * @y_len_sz: additional size required to store decompress information for y
+> - *		plane
+> - * @c_len_sz: additional size required to store decompress information for cbcr
+> - *		plane
+> + * @fb_sz: bitstream size of each plane
+>   * E.g. suppose picture size is 176x144,
+>   *      buffer size will be aligned to 176x160.
+> + * @cap_fourcc: fourcc number(may changed when resolution change)
+>   */
+>  struct vdec_pic_info {
+>  	unsigned int pic_w;
+>  	unsigned int pic_h;
+>  	unsigned int buf_w;
+>  	unsigned int buf_h;
+> -	unsigned int y_bs_sz;
+> -	unsigned int c_bs_sz;
+> -	unsigned int y_len_sz;
+> -	unsigned int c_len_sz;
+> +	unsigned int fb_sz[VIDEO_MAX_PLANES];
+> +	unsigned int cap_fourcc;
+> +	unsigned int reserved;
 
-Hmm, never mind then.
+This is now undocumented?!
 
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static int rockchip_register_mc(struct media_device *mdev,
-> > > +                               struct rockchip_vpu_mc *mc,
-> > > +                               struct video_device *vdev,
-> > > +                               int function)
-> > > +{
-> > > +       struct media_link *link;
-> > > +       int ret;
-> > > +
-> > > +       /* Create the three encoder entities with their pads */
-> > > +       mc->source = &vdev->entity;
-> > > +       mc->source_pad.flags = MEDIA_PAD_FL_SOURCE;
-> > > +       ret = rockchip_vpu_register_entity(mdev, mc->source,
-> > > +                       "source", &mc->source_pad, 1, MEDIA_ENT_F_IO_V4L, vdev);
-> > > +       if (ret)
-> > > +               return ret;
-> > > +
-> > > +       mc->proc_pads[0].flags = MEDIA_PAD_FL_SINK;
-> > > +       mc->proc_pads[1].flags = MEDIA_PAD_FL_SOURCE;
-> > > +       ret = rockchip_vpu_register_entity(mdev, &mc->proc,
-> > > +                       "proc", mc->proc_pads, 2, function, vdev);
-> > > +       if (ret)
-> > > +               goto err_rel_entity0;
-> > > +
-> > > +       mc->sink_pad.flags = MEDIA_PAD_FL_SINK;
-> > > +       ret = rockchip_vpu_register_entity(mdev, &mc->sink,
-> > > +                       "sink", &mc->sink_pad, 1, MEDIA_ENT_F_IO_V4L, vdev);
-> > > +       if (ret)
-> > > +               goto err_rel_entity1;
-> > > +
-> > > +       /* Connect the three entities */
-> > > +       ret = media_create_pad_link(mc->source, 0, &mc->proc, 1,
-> > > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
-> > > +       if (ret)
-> > > +               goto err_rel_entity2;
-> > > +
-> > > +       ret = media_create_pad_link(&mc->proc, 0, &mc->sink, 0,
-> > > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
-> > > +       if (ret)
-> > > +               goto err_rm_links0;
-> > > +
-> > > +       /* Create video interface */
-> > > +       mc->intf_devnode = media_devnode_create(mdev,
-> > > +                       MEDIA_INTF_T_V4L_VIDEO, 0,
-> > > +                       VIDEO_MAJOR, vdev->minor);
-> > > +       if (!mc->intf_devnode) {
-> > > +               ret = -ENOMEM;
-> > > +               goto err_rm_links1;
-> > > +       }
-> > > +
-> > > +       /* Connect the two DMA engines to the interface */
-> > > +       link = media_create_intf_link(mc->source,
-> > > +                       &mc->intf_devnode->intf,
-> > > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
-> > > +       if (!link) {
-> > > +               ret = -ENOMEM;
-> > > +               goto err_rm_devnode;
-> > > +       }
-> > > +
-> > > +       link = media_create_intf_link(&mc->sink,
-> > > +                       &mc->intf_devnode->intf,
-> > > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
-> > > +       if (!link) {
-> > > +               ret = -ENOMEM;
-> > > +               goto err_rm_intf_link;
-> > > +       }
-> > > +       return 0;
-> > > +
-> > > +err_rm_intf_link:
-> > > +       media_remove_intf_links(&mc->intf_devnode->intf);
-> >
-> > Do we need to explicitly remove the links here? The entity removal
-> > functions remove the links implicitly.
-> >
->
-> You mean the media_devnode_remove, right? In that case, seems you are right.
+You really need to document this and explain why it is needed.
 
-Yep. And also media_device_unregister_entity().
+Regards,
 
-Best regards,
-Tomasz
+	Hans
+
+>  };
+>  
+>  /**
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
+> index 02c960c..cdbcd69 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
+> @@ -253,8 +253,8 @@ static void get_pic_info(struct vdec_h264_inst *inst,
+>  	*pic = inst->vsi->pic;
+>  	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
+>  			 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
+> -	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
+> -			 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
+> +	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
+> +			 pic->fb_sz[0], pic->fb_sz[1]);
+>  }
+>  
+>  static void get_crop_info(struct vdec_h264_inst *inst, struct v4l2_rect *cr)
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
+> index bac3723..ba79136 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
+> @@ -294,8 +294,8 @@ static void get_pic_info(struct vdec_vp8_inst *inst, struct vdec_pic_info *pic)
+>  
+>  	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
+>  			 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
+> -	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
+> -			 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
+> +	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
+> +			 pic->fb_sz[0], pic->fb_sz[1]);
+>  }
+>  
+>  static void vp8_dec_finish(struct vdec_vp8_inst *inst)
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> index bc8349b..6fe8320 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> @@ -702,10 +702,8 @@ static void init_all_fb_lists(struct vdec_vp9_inst *inst)
+>  
+>  static void get_pic_info(struct vdec_vp9_inst *inst, struct vdec_pic_info *pic)
+>  {
+> -	pic->y_bs_sz = inst->vsi->buf_sz_y_bs;
+> -	pic->c_bs_sz = inst->vsi->buf_sz_c_bs;
+> -	pic->y_len_sz = inst->vsi->buf_len_sz_y;
+> -	pic->c_len_sz = inst->vsi->buf_len_sz_c;
+> +	pic->fb_sz[0] = inst->vsi->buf_sz_y_bs + inst->vsi->buf_len_sz_y;
+> +	pic->fb_sz[1] = inst->vsi->buf_sz_c_bs + inst->vsi->buf_len_sz_c;
+>  
+>  	pic->pic_w = inst->vsi->pic_w;
+>  	pic->pic_h = inst->vsi->pic_h;
+> @@ -714,8 +712,9 @@ static void get_pic_info(struct vdec_vp9_inst *inst, struct vdec_pic_info *pic)
+>  
+>  	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
+>  		 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
+> -	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
+> -		 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
+> +	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
+> +		pic->fb_sz[0],
+> +		pic->fb_sz[1]);
+>  }
+>  
+>  static void get_disp_fb(struct vdec_vp9_inst *inst, struct vdec_fb **out_fb)
+> 
+
