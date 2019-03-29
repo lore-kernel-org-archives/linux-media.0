@@ -2,87 +2,107 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90DDBC43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 12:31:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22AEEC43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 12:40:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 59EF82183E
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 12:31:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFFD220700
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 12:40:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729479AbfC2MbZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 08:31:25 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:43170 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729411AbfC2MbZ (ORCPT
+        id S1729582AbfC2MkB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 08:40:01 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:52515 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729384AbfC2MkA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 08:31:25 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 56A2C634C7B
-        for <linux-media@vger.kernel.org>; Fri, 29 Mar 2019 14:31:06 +0200 (EET)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.89)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1h9qf5-0000pg-6M
-        for linux-media@vger.kernel.org; Fri, 29 Mar 2019 14:31:07 +0200
-Date:   Fri, 29 Mar 2019 14:31:07 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for 5.2] Sensor driver patch and SoC camera cleanups
-Message-ID: <20190329123107.m42l5ky6eorqo2jo@valkosipuli.retiisi.org.uk>
+        Fri, 29 Mar 2019 08:40:00 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2TCWjgM004410;
+        Fri, 29 Mar 2019 13:39:52 +0100
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2rddhc4xqc-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 29 Mar 2019 13:39:52 +0100
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9691B38;
+        Fri, 29 Mar 2019 12:39:51 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas24.st.com [10.75.90.94])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5B663DDC;
+        Fri, 29 Mar 2019 12:39:51 +0000 (GMT)
+Received: from SAFEX1HUBCAS23.st.com (10.75.90.47) by Safex1hubcas24.st.com
+ (10.75.90.94) with Microsoft SMTP Server (TLS) id 14.3.435.0; Fri, 29 Mar
+ 2019 13:39:51 +0100
+Received: from localhost (10.201.23.97) by webmail-ga.st.com (10.75.90.48)
+ with Microsoft SMTP Server (TLS) id 14.3.435.0; Fri, 29 Mar 2019 13:39:51
+ +0100
+From:   =?UTF-8?q?Yannick=20Fertr=C3=A9?= <yannick.fertre@st.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        <linux-media@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Yannick Fertre <yannick.fertre@st.com>,
+        Philippe Cornu <philippe.cornu@st.com>
+Subject: [PATCH] media: platform: stm32: wait end of transmission
+Date:   Fri, 29 Mar 2019 13:39:42 +0100
+Message-ID: <1553863182-6544-1-git-send-email-yannick.fertre@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.201.23.97]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-29_07:,,
+ signatures=0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+It is mandatory to write CEC_CFGR only when CECEN=0. To protect
+transmission, a check have been added to delayed logical address
+modification. This patch is necessary tp pass all tests of compliance.
 
-Here's a single sensor driver patch plus a few SoC camera cleanups.
+Signed-off-by: Yannick Fertré <yannick.fertre@st.com>
+---
+ drivers/media/platform/stm32/stm32-cec.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Please pull.
-
-
-The following changes since commit 122d0e8dd050cc5dc3fb9e9b5f2dee3c5276ce35:
-
-  media: dvbdev: remove double-unlock (2019-03-28 14:36:14 -0400)
-
-are available in the git repository at:
-
-  ssh://linuxtv.org/git/sailus/media_tree.git tags/for-5.2-2-signed
-
-for you to fetch changes up to 7b9bfd139ec256629fb104fc8f85e88f6c3f7ebb:
-
-  soc_camera: Remove leftover files, add TODO (2019-03-29 14:28:32 +0200)
-
-----------------------------------------------------------------
-sensor stuff for 5.2
-
-----------------------------------------------------------------
-Akinobu Mita (1):
-      media: ov7740: enable to get exposure control in autoexposure mode
-
-Sakari Ailus (2):
-      MAINTAINERS: Fix files for obsolete SoC camera framework
-      soc_camera: Remove leftover files, add TODO
-
- MAINTAINERS                            |  5 ++---
- drivers/media/i2c/ov7740.c             | 28 +++++++++++++++++++++++++---
- drivers/staging/media/mt9t031/Kconfig  |  5 -----
- drivers/staging/media/mt9t031/Makefile |  1 -
- drivers/staging/media/mt9t031/TODO     |  5 -----
- drivers/staging/media/soc_camera/TODO  |  4 ++++
- 6 files changed, 31 insertions(+), 17 deletions(-)
- delete mode 100644 drivers/staging/media/mt9t031/Kconfig
- delete mode 100644 drivers/staging/media/mt9t031/Makefile
- delete mode 100644 drivers/staging/media/mt9t031/TODO
- create mode 100644 drivers/staging/media/soc_camera/TODO
-
+diff --git a/drivers/media/platform/stm32/stm32-cec.c b/drivers/media/platform/stm32/stm32-cec.c
+index 7c496bc..8a86b2c 100644
+--- a/drivers/media/platform/stm32/stm32-cec.c
++++ b/drivers/media/platform/stm32/stm32-cec.c
+@@ -56,6 +56,13 @@
+ #define ALL_TX_IT	(TXEND | TXBR | TXACKE | TXERR | TXUDR | ARBLST)
+ #define ALL_RX_IT	(RXEND | RXBR | RXACKE | RXOVR)
+ 
++/*
++ * 400 ms is the time it takes for one 16 byte message to be
++ * transferred and 5 is the maximum number of retries. Add
++ * another 100 ms as a margin.
++ */
++#define CEC_XFER_TIMEOUT_MS (5 * 400 + 100)
++
+ struct stm32_cec {
+ 	struct cec_adapter	*adap;
+ 	struct device		*dev;
+@@ -188,7 +195,11 @@ static int stm32_cec_adap_log_addr(struct cec_adapter *adap, u8 logical_addr)
+ {
+ 	struct stm32_cec *cec = adap->priv;
+ 	u32 oar = (1 << logical_addr) << 16;
++	u32 val;
+ 
++	/* Poll every 100µs the register CEC_CR to wait end of transmission */
++	regmap_read_poll_timeout(cec->regmap, CEC_CR, val, !(val & TXSOM),
++				 100, CEC_XFER_TIMEOUT_MS * 1000);
+ 	regmap_update_bits(cec->regmap, CEC_CR, CECEN, 0);
+ 
+ 	if (logical_addr == CEC_LOG_ADDR_INVALID)
 -- 
-Sakari Ailus
+2.7.4
+
