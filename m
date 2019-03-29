@@ -3,87 +3,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D3BBC43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 16:14:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29FBEC43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 17:34:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A24E218AE
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 16:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553876072;
-	bh=3DODlHoajHpIwFif9Vn/jxNRV2H4QcBJD0o/Be4ncZs=;
-	h=From:Cc:Subject:Date:To:List-ID:From;
-	b=xPBO0hQKgEAHPXxmTIYwjLmQ71XBJEhMrPxvWkh7CZc+bMtTTEyLm0JAPgdyn9JKn
-	 dnyKh1alkIyGwxjhvANDlQFPqURpiSFnH+uODQ53KqhQWmRygR3nsVJTqT/oUkUj9f
-	 ssUleT0CSmqnKw7NnX3JyKg180mg3oVsozSeDUCc=
+	by mail.kernel.org (Postfix) with ESMTP id F097820811
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 17:34:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="O1D2CevQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729509AbfC2QOb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 12:14:31 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:34478 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728980AbfC2QOb (ORCPT
+        id S1729791AbfC2Re3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 13:34:29 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:33714 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729483AbfC2Re3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 12:14:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=oaaPtdbAR3IrwWeHMLo64Pe9d/cDFtxo8BEQRYVHBq8=; b=Lmso7a0T9OZtjQiwi4905y/7x
-        GEarJSGKpRv98duwEJ7ccp6FSDjAlbljOQ2HAFju0ZPHZp46oD/zEtm1piOJtMnkn/UNG4gKSuGmU
-        bJFx88ckd1MuHB/7TFj1VWzQo3Nat0FP9kknnUoqthX1BlK8LFa4nvxzx3ZBPfB1tU+gJsR/IL/HR
-        plZCT9c7Gb9j4HJVy0YSdKRZ5cVLH8HaGirX89g82+F99TBk8KCuDA55WiV3//kPp3Z/vD3nmQoFg
-        o3I4tcCSGQD5pJkqVb9tURLW9RknTHWJxBXdsTBg7eNrHt6AMhSnOFyz4WPDTR8hjBQKZS4YUZ8EN
-        WC6pSo//w==;
-Received: from [179.95.36.211] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1h9u9G-00071R-Ux; Fri, 29 Mar 2019 16:14:30 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1h9u9E-0004W5-Si; Fri, 29 Mar 2019 12:14:28 -0400
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Vivek Kasireddy <vivek.kasireddy@intel.com>
-Subject: [PATCH] media: pixfmt-packed-yuv.rst: better adjust cell sizes
-Date:   Fri, 29 Mar 2019 12:14:27 -0400
-Message-Id: <26ff80fffe21e81a189377373e0f738332420029.1553876065.git.mchehab+samsung@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        Fri, 29 Mar 2019 13:34:29 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x2THYRZ6032730;
+        Fri, 29 Mar 2019 12:34:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1553880867;
+        bh=QxQfcfn0O/wNidZNs+QiyQ7UbiBLTB0CeLj+vHNmjtQ=;
+        h=From:To:CC:Subject:Date;
+        b=O1D2CevQd2RlwEgJWNY31c3nYR7z7ZDE/RnsHVOw8Nlq4t2oeffFOvW6hfR+rbnx8
+         7N1I3vkgL0eAdxZ7gA6QgRSjlI1h+cjv9ECqHq06NoHmag+gS8SgYYODZ+aOin1d4r
+         Td9kgYtJgnOZnq+Zx+k3f4a+1iexcEfrs+WaJm6Y=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x2THYRW6093662
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 29 Mar 2019 12:34:27 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 29
+ Mar 2019 12:34:27 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 29 Mar 2019 12:34:27 -0500
+Received: from legion.dal.desgin.ti.com (legion.dal.design.ti.com [128.247.22.53])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x2THYRr0097091;
+        Fri, 29 Mar 2019 12:34:27 -0500
+Received: from localhost ([10.250.67.168])
+        by legion.dal.desgin.ti.com (8.11.7p1+Sun/8.11.7) with ESMTP id x2THYQU16108;
+        Fri, 29 Mar 2019 12:34:26 -0500 (CDT)
+From:   "Andrew F. Davis" <afd@ti.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Andrew F . Davis" <afd@ti.com>
+Subject: [PATCH] [media] videobuf-dma-contig: Use size of buffer in mmap not vma size
+Date:   Fri, 29 Mar 2019 12:34:27 -0500
+Message-ID: <20190329173427.18238-1-afd@ti.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Avoid cell overlapping by changing some sizes.
+The size of the vma can be larger than the size of the backing buffer.
+Use the buffer size over vma size to prevent exposing extra memory
+to userspace.
 
-Tested with Sphinx 1.7.8.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Andrew F. Davis <afd@ti.com>
 ---
- Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/v4l2-core/videobuf-dma-contig.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst b/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
-index 9d2b281f06a2..41b60fae703a 100644
---- a/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
-+++ b/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
-@@ -28,7 +28,7 @@ component of each pixel in one 16 or 32 bit word.
+diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
+index e1bf50df4c70..65e2655d22b7 100644
+--- a/drivers/media/v4l2-core/videobuf-dma-contig.c
++++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
+@@ -280,7 +280,6 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
+ 	struct videobuf_dma_contig_memory *mem;
+ 	struct videobuf_mapping *map;
+ 	int retval;
+-	unsigned long size;
  
- .. _packed-yuv-formats:
+ 	dev_dbg(q->dev, "%s\n", __func__);
  
--.. tabularcolumns:: |p{2.0cm}|p{0.67cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|
-+.. tabularcolumns:: |p{2.5cm}|p{0.69cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|
+@@ -303,7 +302,6 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
+ 		goto error;
  
- .. flat-table:: Packed YUV Image Formats
-     :header-rows:  2
+ 	/* Try to remap memory */
+-	size = vma->vm_end - vma->vm_start;
+ 	vma->vm_page_prot = pgprot_noncached(vma->vm_page_prot);
+ 
+ 	/* the "vm_pgoff" is just used in v4l2 to find the
+@@ -314,7 +312,7 @@ static int __videobuf_mmap_mapper(struct videobuf_queue *q,
+ 	 */
+ 	vma->vm_pgoff = 0;
+ 
+-	retval = vm_iomap_memory(vma, mem->dma_handle, size);
++	retval = vm_iomap_memory(vma, mem->dma_handle, mem->size);
+ 	if (retval) {
+ 		dev_err(q->dev, "mmap: remap failed with error %d. ",
+ 			retval);
 -- 
-2.20.1
+2.21.0
 
