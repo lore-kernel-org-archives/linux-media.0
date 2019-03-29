@@ -2,132 +2,144 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 180C6C43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 14:03:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E598C43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 14:10:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D96F62183F
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 14:03:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g3J+AA/o"
+	by mail.kernel.org (Postfix) with ESMTP id 7395D217F5
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 14:10:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728998AbfC2ODS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 10:03:18 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:40603 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728774AbfC2ODR (ORCPT
+        id S1729035AbfC2OKh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 10:10:37 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:43241 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728774AbfC2OKg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 10:03:17 -0400
-Received: by mail-qt1-f194.google.com with SMTP id x12so2639006qts.7
-        for <linux-media@vger.kernel.org>; Fri, 29 Mar 2019 07:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=AhLJk/MDv02Fs/iD/1MUcrsjReWxwZYHZH/Zgi7uZ+M=;
-        b=g3J+AA/ovBXpHAoMz9u1W2Qu6Qxe+WIq5+YHKJEpuPVkVNs1+gGp2TdotSdSrMpA5z
-         a2Z2FWH7kasQw05f03xbuTcAuZFxcZ0seTzIj5Va3EakF+U2oUr45xOqG67kQZMGZdo0
-         s787xL0VcTcnTrFNIv+gjrmvf/+LaLY8WmaYGtRezk869oTql+emSRRa2K5+z5qxCYIR
-         KY1rvc7HipxOu1EwxeNzYXIU529wSsr/36usVQBk9eEMuFAwBU1+04HoOSYZE2QIPObC
-         YsAFIQ4CTOKAVaODfZszfLG0CZEa7UcM7gy6BWnQ3CvtvnXAHGiaLln+AG9R+7zVl/sQ
-         fwZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=AhLJk/MDv02Fs/iD/1MUcrsjReWxwZYHZH/Zgi7uZ+M=;
-        b=MAPlgdAnla+ZNpDYPmsjRrbV0h5DNiKw+Sn4Ql/BC0LNFv4PpPBBbqdBr2HkM+YI0l
-         OI4xYC7lM2reHSods2MKrzJglfPbmg6wimdS+evLY74RecFnuyYP9WfAfXoIMRS/Q54f
-         b8hQ4jW0KoIynZ/iUm8XrK5/zG6fYH3WIZmUv7/eboEuQvOYpj8t6Wf97p9jllJx/Q5A
-         VDD9Q+Hj6E1b7y+3arlSagmIDkQsHH0CG+P+/rj+y2JLfCYSqTnjPN4LWLIpjNil+UCx
-         7DNkAVrA4llH0JfXOM3xACt9VZnECL3ALyrPwFiFfJeSYgkhj49QBxyzdVw4gpoB0MSI
-         aZ/A==
-X-Gm-Message-State: APjAAAW6u6qLlNS0I4I7jAZa3FHrXxnQBQVJvQRxs6+gTiK5eiJCj0aF
-        QQhmF3w5mG+O49UbRJyaiL7tqKqh2HZQYFFQVTTfNg==
-X-Google-Smtp-Source: APXvYqxn3ZnijDZmnNVutEh82spuR+1c/gC8G4rTTKRYAHemKBBYl1VNekP21xaEc0Igr8Pm+WhKE8W91MtJdldi7EQ=
-X-Received: by 2002:a0c:b92c:: with SMTP id u44mr39562381qvf.222.1553868196575;
- Fri, 29 Mar 2019 07:03:16 -0700 (PDT)
+        Fri, 29 Mar 2019 10:10:36 -0400
+Received: from [192.168.2.10] ([212.251.195.8])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 9sDHhOx1FUjKf9sDKhwF4t; Fri, 29 Mar 2019 15:10:34 +0100
+Subject: Re: [PATCH v2] media: replace strncpy() by strscpy()
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>
+References: <1ba964c82b9f3353945bab7da4cb7b713fe6e3a7.1553868148.git.mchehab+samsung@kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <5282d886-7cbd-4144-50b1-5b71e3db69d3@xs4all.nl>
+Date:   Fri, 29 Mar 2019 15:10:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-References: <1553863182-6544-1-git-send-email-yannick.fertre@st.com>
-In-Reply-To: <1553863182-6544-1-git-send-email-yannick.fertre@st.com>
-From:   Benjamin Gaignard <benjamin.gaignard@linaro.org>
-Date:   Fri, 29 Mar 2019 15:03:05 +0100
-Message-ID: <CA+M3ks52k=Gj=i662DPzc0OV593xUnRfMiLVH+Bjc63CSSE20Q@mail.gmail.com>
-Subject: Re: [PATCH] media: platform: stm32: wait end of transmission
-To:     =?UTF-8?Q?Yannick_Fertr=C3=A9?= <yannick.fertre@st.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Philippe Cornu <philippe.cornu@st.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1ba964c82b9f3353945bab7da4cb7b713fe6e3a7.1553868148.git.mchehab+samsung@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfKnHq2kLT7di2cacP4DDFAQcfS9k1Hi9vo7hw6y8+hyQASC+RBZeXGtHFtYFL2bWXkLUnQV15SwoqHtCgdkaSOlmt41oPyza5Okoe59i4B8X1el4+KAz
+ YIPm/0fF8nlz/8gWpol3QAGXLnNjRcvnTVmMG6GgSN0a5cyK9FUzU580I57PZyY5FlEF6uFLgZsmapmgwAi12pFjlQtXXhXEYGMO5/M2FbjgCOV7M94sKLr8
+ RWYz34snBbFFyvM8wVTZLg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le ven. 29 mars 2019 =C3=A0 13:40, Yannick Fertr=C3=A9 <yannick.fertre@st.c=
-om> a =C3=A9crit :
->
-> It is mandatory to write CEC_CFGR only when CECEN=3D0. To protect
-> transmission, a check have been added to delayed logical address
-> modification. This patch is necessary tp pass all tests of compliance.
-
-Reviewed-by: Benjamin Gaignard <benjamin.gaignard@linaro.org>
-
->
-> Signed-off-by: Yannick Fertr=C3=A9 <yannick.fertre@st.com>
+On 3/29/19 3:02 PM, Mauro Carvalho Chehab wrote:
+> The strncpy() function is being deprecated upstream. Replace
+> it by the safer strscpy().
+> 
+> While here, replace a few occurences of strlcpy() that were
+> recently added to also use strscpy().
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 > ---
->  drivers/media/platform/stm32/stm32-cec.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/drivers/media/platform/stm32/stm32-cec.c b/drivers/media/pla=
-tform/stm32/stm32-cec.c
-> index 7c496bc..8a86b2c 100644
-> --- a/drivers/media/platform/stm32/stm32-cec.c
-> +++ b/drivers/media/platform/stm32/stm32-cec.c
-> @@ -56,6 +56,13 @@
->  #define ALL_TX_IT      (TXEND | TXBR | TXACKE | TXERR | TXUDR | ARBLST)
->  #define ALL_RX_IT      (RXEND | RXBR | RXACKE | RXOVR)
->
-> +/*
-> + * 400 ms is the time it takes for one 16 byte message to be
-> + * transferred and 5 is the maximum number of retries. Add
-> + * another 100 ms as a margin.
-> + */
-> +#define CEC_XFER_TIMEOUT_MS (5 * 400 + 100)
-> +
->  struct stm32_cec {
->         struct cec_adapter      *adap;
->         struct device           *dev;
-> @@ -188,7 +195,11 @@ static int stm32_cec_adap_log_addr(struct cec_adapte=
-r *adap, u8 logical_addr)
->  {
->         struct stm32_cec *cec =3D adap->priv;
->         u32 oar =3D (1 << logical_addr) << 16;
-> +       u32 val;
->
-> +       /* Poll every 100=C2=B5s the register CEC_CR to wait end of trans=
-mission */
-> +       regmap_read_poll_timeout(cec->regmap, CEC_CR, val, !(val & TXSOM)=
-,
-> +                                100, CEC_XFER_TIMEOUT_MS * 1000);
->         regmap_update_bits(cec->regmap, CEC_CR, CECEN, 0);
->
->         if (logical_addr =3D=3D CEC_LOG_ADDR_INVALID)
-> --
-> 2.7.4
->
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>  drivers/media/dvb-frontends/as102_fe.c           |  2 +-
+>  drivers/media/dvb-frontends/dib7000p.c           |  3 ++-
+>  drivers/media/dvb-frontends/dib8000.c            |  4 ++--
+>  drivers/media/dvb-frontends/dib9000.c            |  6 ++++--
+>  drivers/media/dvb-frontends/dvb-pll.c            |  2 +-
+>  drivers/media/dvb-frontends/m88ds3103.c          |  2 +-
+>  drivers/media/pci/bt8xx/dst.c                    |  3 ++-
+>  drivers/media/pci/mantis/mantis_i2c.c            |  2 +-
+>  drivers/media/pci/saa7134/saa7134-go7007.c       |  2 +-
+>  drivers/media/platform/am437x/am437x-vpfe.c      |  2 +-
+>  drivers/media/platform/davinci/vpfe_capture.c    |  2 +-
+>  drivers/media/platform/davinci/vpif_capture.c    |  3 ++-
+>  drivers/media/platform/davinci/vpif_display.c    |  4 ++--
+>  drivers/media/platform/exynos4-is/fimc-capture.c |  2 +-
+>  drivers/media/platform/exynos4-is/fimc-m2m.c     |  2 +-
+>  drivers/media/platform/imx-pxp.c                 |  4 ++--
+>  drivers/media/platform/mtk-vpu/mtk_vpu.c         |  2 +-
+>  drivers/media/platform/mx2_emmaprp.c             |  4 ++--
+>  drivers/media/platform/s5p-g2d/g2d.c             |  6 +++---
+>  .../media/platform/sunxi/sun6i-csi/sun6i_video.c |  4 ++--
+>  drivers/media/platform/ti-vpe/vpe.c              |  6 +++---
+>  drivers/media/platform/vicodec/vicodec-core.c    |  4 ++--
+>  drivers/media/platform/vim2m.c                   |  4 ++--
+>  drivers/media/platform/vivid/vivid-core.c        |  2 +-
+>  drivers/media/radio/si4713/si4713.c              |  2 +-
+>  drivers/media/usb/go7007/go7007-usb.c            | 16 ++++++++--------
+>  drivers/media/usb/go7007/go7007-v4l2.c           |  2 +-
+>  drivers/media/usb/hdpvr/hdpvr-video.c            | 10 ++++------
+>  drivers/media/usb/pulse8-cec/pulse8-cec.c        |  4 ++--
+>  drivers/media/usb/pvrusb2/pvrusb2-hdw.c          |  4 ++--
+>  drivers/media/usb/pvrusb2/pvrusb2-v4l2.c         |  4 ++--
+>  drivers/staging/media/bcm2048/radio-bcm2048.c    |  4 ++--
+>  drivers/staging/media/imx/imx-ic-common.c        |  2 +-
+>  drivers/staging/media/imx/imx-media-vdic.c       |  2 +-
+>  drivers/staging/media/zoran/zoran_driver.c       | 10 +++++-----
+>  35 files changed, 70 insertions(+), 67 deletions(-)
+> 
+
+<snip>
+
+> diff --git a/drivers/media/pci/bt8xx/dst.c b/drivers/media/pci/bt8xx/dst.c
+> index c94318c71a0c..3315a6d67edf 100644
+> --- a/drivers/media/pci/bt8xx/dst.c
+> +++ b/drivers/media/pci/bt8xx/dst.c
+> @@ -1100,7 +1100,8 @@ static int dst_get_device_id(struct dst_state *state)
+>  			/*	Card capabilities	*/
+>  			state->dst_hw_cap = p_dst_type->dst_feature;
+>  			pr_err("Recognise [%s]\n", p_dst_type->device_id);
+> -			strncpy(&state->fw_name[0], p_dst_type->device_id, 6);
+> +			strscpy((char *)state->fw_name, p_dst_type->device_id,
+
+This cast is a bit ugly. Perhaps in a follow up patch the type of fw_name can
+be changed from u8 to char?
+
+> +				sizeof(state->fw_name));
+>  			/*	Multiple tuners		*/
+>  			if (p_dst_type->tuner_type & TUNER_TYPE_MULTI) {
+>  				switch (use_dst_type) {
+
+<snip>
+
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+> index 446a999dd2ce..bea28f589210 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+> @@ -2459,8 +2459,8 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+>  		if (!(qctrl.flags & V4L2_CTRL_FLAG_READ_ONLY)) {
+>  			ciptr->set_value = ctrl_cx2341x_set;
+>  		}
+> -		strncpy(hdw->mpeg_ctrl_info[idx].desc,qctrl.name,
+> -			PVR2_CTLD_INFO_DESC_SIZE);
+> +		strscpy(hdw->mpeg_ctrl_info[idx].desc, qctrl.name,
+> +			sizeof(hdw->mpeg_ctrl_info[idx].desc));
+>  		hdw->mpeg_ctrl_info[idx].desc[PVR2_CTLD_INFO_DESC_SIZE-1] = 0;
+
+This line can now be removed.
+
+>  		ciptr->default_value = qctrl.default_value;
+>  		switch (qctrl.type) {
+
+After removing that line in the pvrusb2 driver you can add my:
+
+Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+
+Nice work!
+
+Regards,
+
+	Hans
