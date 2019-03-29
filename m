@@ -2,122 +2,153 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B8D1C43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 03:23:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F0B5C43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 04:49:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ECD0B21850
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 03:23:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gFLu01Dw"
+	by mail.kernel.org (Postfix) with ESMTP id DEAD1217F5
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 04:49:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728657AbfC2DXe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 23:23:34 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:43875 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728650AbfC2DXe (ORCPT
+        id S1725843AbfC2Etc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 00:49:32 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:42427 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725808AbfC2Etc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 23:23:34 -0400
-Received: by mail-oi1-f194.google.com with SMTP id t81so575200oig.10
-        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 20:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AkNeV8QOGdaC9OTmx6HRZu6MrUNOIo+jV8BDpbVuLzk=;
-        b=gFLu01Dwq89Uwq4Jc2H+JlYEpG7Ulxw9jLf3wXTTbwLqVrWFiiozItzqSkxHc8iYbW
-         a/n91236xQRyuWLv9sFXYoGzgBaXWll8AtNfZJeU2tBCPkOXwFJpd5LhSXyICu/dLOsz
-         tuBzw7rK8M0ScCJY7CTiPHR49hAr8DI/aaZXw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AkNeV8QOGdaC9OTmx6HRZu6MrUNOIo+jV8BDpbVuLzk=;
-        b=nQr1xaN7smkgAnoedu8IHZbah1jRFzGxoUR9y2AZFCs6LuViNgpp+EZnd4G6fC60jh
-         q0/61bH6Wsi1xzKPvKDzSElQ60CM5q04jnT4FQYkD5Am/vr+UiI1wZZLx6hHcn5XsTJH
-         GFZIsFviooK22j+nDAGpfYrRgEXQiPURtrYgvhlykYpZAliOFLGiFdiArWICXWC3xZDy
-         XNrvTeCAqYk05dwX9n3FqvbDDCfFNhoqgo3dDH+fIwiD0lTJBv/yi4g1xECcrH8aHVKf
-         p7M8mdlB7xpwgIyyKehrId4uIM900T0DxKGlGQITZU1uQ29HVYag7Gu6p6vxJfM5+Cyl
-         pVwA==
-X-Gm-Message-State: APjAAAVyw8K7gyzcjRM0ZqbeqPgR3CGRIjq1/0n8Wyu0SPXyHc1wanY3
-        aN+06x9imUPJYI4XRQL+970QHNc1lnf1dw==
-X-Google-Smtp-Source: APXvYqw09GkTWBPL3kjZih6sZ6aSkOhz9RBIvniTK7NQQPIP6o0aeZboM69upOQkbT/jO24ZhGCLNA==
-X-Received: by 2002:aca:d8d5:: with SMTP id p204mr2377560oig.26.1553829812777;
-        Thu, 28 Mar 2019 20:23:32 -0700 (PDT)
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com. [209.85.167.171])
-        by smtp.gmail.com with ESMTPSA id p1sm327506otl.75.2019.03.28.20.23.31
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 28 Mar 2019 20:23:32 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id v7so585200oie.8
-        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 20:23:31 -0700 (PDT)
-X-Received: by 2002:aca:edc7:: with SMTP id l190mr2314381oih.92.1553829811381;
- Thu, 28 Mar 2019 20:23:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190304192529.14200-1-ezequiel@collabora.com>
- <20190304192529.14200-9-ezequiel@collabora.com> <CAAFQd5C5zo=03-mLh4OztKS+dCjVMUe1Za25ff+dWjxQDLFLng@mail.gmail.com>
- <0618322f-ac2b-fbcd-47f2-68173318f8d7@xs4all.nl>
-In-Reply-To: <0618322f-ac2b-fbcd-47f2-68173318f8d7@xs4all.nl>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 29 Mar 2019 12:23:20 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5Ct7ECe53DvAyELWsA=PCD8Bp28NzMHP5cSzDakmk3=HQ@mail.gmail.com>
-Message-ID: <CAAFQd5Ct7ECe53DvAyELWsA=PCD8Bp28NzMHP5cSzDakmk3=HQ@mail.gmail.com>
-Subject: Re: [PATCH v2 08/11] rockchip/vpu: Support the Request API
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 29 Mar 2019 00:49:32 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:eca3:2637:401a:277e])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id 9jSLhBae7NG8z9jSMhsybh; Fri, 29 Mar 2019 05:49:30 +0100
+Message-ID: <31c56a5b4bdd873e1663817151e7ce1e@smtp-cloud7.xs4all.net>
+Date:   Fri, 29 Mar 2019 05:49:24 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfD9wqMjXg/pgHqPAlt0GRYff9n5r4jjRgzm9Xe6ny6vjBI+GRvGOOWr+NxP6mh6Z/bRxCC2u9f2pDhPt28YWJAhLJyCFOEZcj2++8EUCkLhXK0fvV4AP
+ 9QWug/kBE8WqHlXPcqlBlVtrmkfj68kx0J15nDCQfvWdH2FZ50ofBHykcmIBhj9u9FF58H/hcgeeSzcR+1/4D0anJm+soCxWnvt0xk0R9aPXbwz9OrQIlS8m
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Mar 28, 2019 at 10:59 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->
-> On 3/28/19 8:20 AM, Tomasz Figa wrote:
->
-> <snip>
->
-> >> +static int rockchip_vpu_buf_out_validate(struct vb2_buffer *vb)
-> >> +{
-> >> +       struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> >> +
-> >> +       vbuf->field = V4L2_FIELD_NONE;
-> >
-> > Hmm, "validate" in the name of this callback would suggest that we
-> > should just check the contents, not change them. Hans, what was the
-> > intention when adding this callback? Are we missing the const
-> > specifier in the argument?
->
-> See the original commit log:
->
-> https://www.mail-archive.com/linux-media@vger.kernel.org/msg143163.html
->
-> It is allowed to either just validate and return an error if wrong,
-> or change it to something known to be valid. In particular, userspace
-> can set this to FIELD_ANY, and in that case the driver must replace
-> it with something valid.
->
-> Most drivers just support FIELD_NONE, and just set it.
->
-> That said, I think we should tighten the spec for this as this is
-> not well documented.
->
-> I propose that if vbuf->field == FIELD_ANY, then replace it with something
-> sane. Otherwise validate it and return an error if the field value
-> is not supported.
->
-> And FIELD_ALTERNATE is never allowed here, that's always wrong.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Thanks for clarifying. Makes sense.
+Results of the daily build of media_tree:
 
-Best regards,
-Tomasz
+date:			Fri Mar 29 05:00:11 CET 2019
+media-tree git hash:	122d0e8dd050cc5dc3fb9e9b5f2dee3c5276ce35
+media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
+v4l-utils git hash:	c03f66775d675450ce709ff972ac9f4960549a7c
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-2-amd64
+
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1981, Succeeded: 1981, Failed: 0, Warnings: 14
+sparse: OK
+smatch: OK
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
