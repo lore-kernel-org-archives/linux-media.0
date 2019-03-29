@@ -2,107 +2,139 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22AEEC43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 12:40:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE69FC43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 13:44:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EFFD220700
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 12:40:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A74802173C
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 13:44:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1553867075;
+	bh=+xjDhf37+qEIlTQiYPWiQoEOLfX4uQGZ7djFq2l54R4=;
+	h=From:Cc:Subject:Date:To:List-ID:From;
+	b=2PZYCw7PKhG8u2EX9K2xiEbz9z08zPTSTpHyopdaAJSU1YCH89ixcfRkCUZUvT98F
+	 zsIJN7hvJVuwYgru8lzKMOQ1OELbL3U7SI6hV1w/yyPRbxXal44cww/y4lIL7654ry
+	 EmwTi+UW2ldBQUOg0wjr9M2d0CkmzPHevljOGxlE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729582AbfC2MkB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 08:40:01 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:52515 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729384AbfC2MkA (ORCPT
+        id S1729636AbfC2Nof (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 09:44:35 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:49884 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729614AbfC2Noe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 08:40:00 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x2TCWjgM004410;
-        Fri, 29 Mar 2019 13:39:52 +0100
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2rddhc4xqc-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Fri, 29 Mar 2019 13:39:52 +0100
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9691B38;
-        Fri, 29 Mar 2019 12:39:51 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas24.st.com [10.75.90.94])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5B663DDC;
-        Fri, 29 Mar 2019 12:39:51 +0000 (GMT)
-Received: from SAFEX1HUBCAS23.st.com (10.75.90.47) by Safex1hubcas24.st.com
- (10.75.90.94) with Microsoft SMTP Server (TLS) id 14.3.435.0; Fri, 29 Mar
- 2019 13:39:51 +0100
-Received: from localhost (10.201.23.97) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.435.0; Fri, 29 Mar 2019 13:39:51
- +0100
-From:   =?UTF-8?q?Yannick=20Fertr=C3=A9?= <yannick.fertre@st.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        <linux-media@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        Philippe Cornu <philippe.cornu@st.com>
-Subject: [PATCH] media: platform: stm32: wait end of transmission
-Date:   Fri, 29 Mar 2019 13:39:42 +0100
-Message-ID: <1553863182-6544-1-git-send-email-yannick.fertre@st.com>
-X-Mailer: git-send-email 2.7.4
+        Fri, 29 Mar 2019 09:44:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=RUyTiAz3YMJQ99nj5cFSwGYgwd0v+ozFq6uU6U8XllU=; b=tKbbYQ+lIzzEomQzqtF3Ny+L1
+        MmUmcYgZKdNHx+o0VkUFM7GIMrPOi3NMBtkcSKrKl9QV+bmolDI//p+DBYlVRAVxS6R9rlnDy8KVu
+        0M2YVmYCXdWRqhWj/klBbV+mojx4L6P5XrH7k0UpmgrMIa912c0xhNwE99nTvkPzf1cVbzna/8gzO
+        X4YNAudGq0RzC2q8ypAyu6t494iFUK8WxDoGEQDKUPBZDvXqMbzq60kh04ELw/wftqEolZb3AoaC0
+        B+fI35yk1RBXaD+KJNe2nmV/Rnvie0K3485IhLB8FBDlgbizGUix+k3qiBZcm+r/CEZVdAkShRkhs
+        tuwudmsCQ==;
+Received: from [179.183.99.176] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1h9roA-0007xU-9z; Fri, 29 Mar 2019 13:44:34 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1h9ro7-0001GY-Lo; Fri, 29 Mar 2019 09:44:31 -0400
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH] media: vim2m: Fix RGB 565 BE/LE support
+Date:   Fri, 29 Mar 2019 09:44:30 -0400
+Message-Id: <a7cdf8b88dadb4c71dccb0afc22409cbd7ff4fe5.1553867066.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.23.97]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-03-29_07:,,
- signatures=0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It is mandatory to write CEC_CFGR only when CECEN=0. To protect
-transmission, a check have been added to delayed logical address
-modification. This patch is necessary tp pass all tests of compliance.
+The support for those two formats are archtecture-dependent.
+Use the endianness to CPU macros to do it right.
 
-Signed-off-by: Yannick Fertré <yannick.fertre@st.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- drivers/media/platform/stm32/stm32-cec.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/platform/vim2m.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/media/platform/stm32/stm32-cec.c b/drivers/media/platform/stm32/stm32-cec.c
-index 7c496bc..8a86b2c 100644
---- a/drivers/media/platform/stm32/stm32-cec.c
-+++ b/drivers/media/platform/stm32/stm32-cec.c
-@@ -56,6 +56,13 @@
- #define ALL_TX_IT	(TXEND | TXBR | TXACKE | TXERR | TXUDR | ARBLST)
- #define ALL_RX_IT	(RXEND | RXBR | RXACKE | RXOVR)
+diff --git a/drivers/media/platform/vim2m.c b/drivers/media/platform/vim2m.c
+index 3c3a6a03b948..243c82b5d537 100644
+--- a/drivers/media/platform/vim2m.c
++++ b/drivers/media/platform/vim2m.c
+@@ -302,7 +302,7 @@ static void copy_two_pixels(struct vim2m_q_data *q_data_in,
+ 	switch (in->fourcc) {
+ 	case V4L2_PIX_FMT_RGB565: /* rrrrrggg gggbbbbb */
+ 		for (i = 0; i < 2; i++) {
+-			u16 pix = *(u16 *)(src[i]);
++			u16 pix = le16_to_cpu(*(__le16 *)(src[i]));
  
-+/*
-+ * 400 ms is the time it takes for one 16 byte message to be
-+ * transferred and 5 is the maximum number of retries. Add
-+ * another 100 ms as a margin.
-+ */
-+#define CEC_XFER_TIMEOUT_MS (5 * 400 + 100)
+ 			*r++ = (u8)(((pix & 0xf800) >> 11) << 3) | 0x07;
+ 			*g++ = (u8)((((pix & 0x07e0) >> 5)) << 2) | 0x03;
+@@ -311,12 +311,11 @@ static void copy_two_pixels(struct vim2m_q_data *q_data_in,
+ 		break;
+ 	case V4L2_PIX_FMT_RGB565X: /* gggbbbbb rrrrrggg */
+ 		for (i = 0; i < 2; i++) {
+-			u16 pix = *(u16 *)(src[i]);
++			u16 pix = be16_to_cpu(*(__be16 *)(src[i]));
+ 
+-			*r++ = (u8)(((0x00f8 & pix) >> 3) << 3) | 0x07;
+-			*g++ = (u8)(((pix & 0x7) << 2) |
+-				    ((pix & 0xe000) >> 5)) | 0x03;
+-			*b++ = (u8)(((pix & 0x1f00) >> 8) << 3) | 0x07;
++			*r++ = (u8)(((pix & 0xf800) >> 11) << 3) | 0x07;
++			*g++ = (u8)((((pix & 0x07e0) >> 5)) << 2) | 0x03;
++			*b++ = (u8)((pix & 0x1f) << 3) | 0x07;
+ 		}
+ 		break;
+ 	default:
+@@ -345,21 +344,26 @@ static void copy_two_pixels(struct vim2m_q_data *q_data_in,
+ 	switch (out->fourcc) {
+ 	case V4L2_PIX_FMT_RGB565: /* rrrrrggg gggbbbbb */
+ 		for (i = 0; i < 2; i++) {
+-			u16 *pix = (u16 *)*dst;
++			u16 pix;
++			__le16 *dst_pix = (__le16 *)*dst;
+ 
+-			*pix = ((*r << 8) & 0xf800) | ((*g << 3) & 0x07e0) |
+-			       (*b >> 3);
++			pix = ((*r << 8) & 0xf800) | ((*g << 3) & 0x07e0) |
++			      (*b >> 3);
 +
- struct stm32_cec {
- 	struct cec_adapter	*adap;
- 	struct device		*dev;
-@@ -188,7 +195,11 @@ static int stm32_cec_adap_log_addr(struct cec_adapter *adap, u8 logical_addr)
- {
- 	struct stm32_cec *cec = adap->priv;
- 	u32 oar = (1 << logical_addr) << 16;
-+	u32 val;
++			*dst_pix = cpu_to_le16(pix);
  
-+	/* Poll every 100µs the register CEC_CR to wait end of transmission */
-+	regmap_read_poll_timeout(cec->regmap, CEC_CR, val, !(val & TXSOM),
-+				 100, CEC_XFER_TIMEOUT_MS * 1000);
- 	regmap_update_bits(cec->regmap, CEC_CR, CECEN, 0);
+ 			*dst += 2;
+ 		}
+ 		return;
+ 	case V4L2_PIX_FMT_RGB565X: /* gggbbbbb rrrrrggg */
+ 		for (i = 0; i < 2; i++) {
+-			u16 *pix = (u16 *)*dst;
+-			u8 green = *g++ >> 2;
++			u16 pix;
++			__be16 *dst_pix = (__be16 *)*dst;
  
- 	if (logical_addr == CEC_LOG_ADDR_INVALID)
+-			*pix = ((green << 8) & 0xe000) | (green & 0x07) |
+-			       ((*b++ << 5) & 0x1f00) | ((*r++ & 0xf8));
++			pix = ((*r << 8) & 0xf800) | ((*g << 3) & 0x07e0) |
++			      (*b >> 3);
++
++			*dst_pix = cpu_to_be16(pix);
+ 
+ 			*dst += 2;
+ 		}
 -- 
-2.7.4
+2.20.1
 
