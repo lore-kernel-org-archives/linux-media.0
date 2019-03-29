@@ -1,141 +1,224 @@
-Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=IMFm=SB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19819C43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 22:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E57F5C4360F
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 00:07:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E2504217F5
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 22:36:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADB4F218A6
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 00:07:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730358AbfC2Wf5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 18:35:57 -0400
-Received: from mga06.intel.com ([134.134.136.31]:51806 "EHLO mga06.intel.com"
+        id S1730065AbfC3AHj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 20:07:39 -0400
+Received: from vps-vb.mhejs.net ([37.28.154.113]:36770 "EHLO vps-vb.mhejs.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730137AbfC2Wf5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 18:35:57 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Mar 2019 15:35:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,286,1549958400"; 
-   d="scan'208";a="129890618"
-Received: from lparisol-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.252.46.120])
-  by orsmga008.jf.intel.com with ESMTP; 29 Mar 2019 15:35:54 -0700
-Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
-        id 7A1E821E50; Sat, 30 Mar 2019 00:35:50 +0200 (EET)
-Date:   Sat, 30 Mar 2019 00:35:50 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] media: ov6650: Register with asynchronous
- subdevice framework
-Message-ID: <20190329223549.7lbmcwqvubcmw4zs@kekkonen.localdomain>
-References: <20190325003501.14687-1-jmkrzyszt@gmail.com>
- <20190329202903.5622-1-jmkrzyszt@gmail.com>
- <20190329202903.5622-3-jmkrzyszt@gmail.com>
+        id S1730022AbfC3AHi (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 29 Mar 2019 20:07:38 -0400
+X-Greylist: delayed 962 seconds by postgrey-1.27 at vger.kernel.org; Fri, 29 Mar 2019 20:07:37 EDT
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1hA1HW-0003ma-0x; Sat, 30 Mar 2019 00:51:30 +0100
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Michael Krufky <mkrufky@linuxtv.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Andy Walls <awalls@md.metrocast.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH v9 0/4] [media] Add analog mode support for Medion MD95700
+Date:   Sat, 30 Mar 2019 00:51:20 +0100
+Message-Id: <cover.1553903063.git.mail@maciej.szmigiero.name>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190329202903.5622-3-jmkrzyszt@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Janusz,
+This series adds support for analog part of Medion 95700 in the cxusb
+driver.
 
-On Fri, Mar 29, 2019 at 09:29:03PM +0100, Janusz Krzysztofik wrote:
-> Register V4L2 subdevice implemented by the driver to the V4L2
-> asynchronous subdevice framework.
-> 
-> Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-> ---
->  drivers/media/i2c/ov6650.c | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-> index de7d9790f054..50e60da73036 100644
-> --- a/drivers/media/i2c/ov6650.c
-> +++ b/drivers/media/i2c/ov6650.c
-> @@ -804,8 +804,9 @@ static int ov6650_prog_dflt(struct i2c_client *client)
->  	return ret;
->  }
->  
-> -static int ov6650_video_probe(struct i2c_client *client)
-> +static int ov6650_video_probe(struct v4l2_subdev *sd)
->  {
-> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
->  	struct ov6650 *priv = to_ov6650(client);
->  	u8		pidh, pidl, midh, midl;
->  	int		ret;
-> @@ -817,7 +818,7 @@ static int ov6650_video_probe(struct i2c_client *client)
->  		return ret;
->  	}
->  
-> -	ret = ov6650_s_power(&priv->subdev, 1);
-> +	ret = ov6650_s_power(sd, 1);
->  	if (ret < 0)
->  		goto eclkput;
->  
-> @@ -855,7 +856,7 @@ static int ov6650_video_probe(struct i2c_client *client)
->  		ret = v4l2_ctrl_handler_setup(&priv->hdl);
->  
->  done:
-> -	ov6650_s_power(&priv->subdev, 0);
-> +	ov6650_s_power(sd, 0);
->  	if (!ret)
->  		return 0;
->  eclkput:
-> @@ -943,6 +944,10 @@ static const struct v4l2_subdev_ops ov6650_subdev_ops = {
->  	.pad	= &ov6650_pad_ops,
->  };
->  
-> +static const struct v4l2_subdev_internal_ops ov6650_internal_ops = {
-> +	.registered = ov6650_video_probe,
-> +};
-> +
->  /*
->   * i2c_driver function
->   */
-> @@ -1003,7 +1008,12 @@ static int ov6650_probe(struct i2c_client *client,
->  	priv->code	  = MEDIA_BUS_FMT_YUYV8_2X8;
->  	priv->colorspace  = V4L2_COLORSPACE_JPEG;
->  
-> -	ret = ov6650_video_probe(client);
-> +	priv->subdev.internal_ops = &ov6650_internal_ops;
-> +	priv->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> +	snprintf(priv->subdev.name, sizeof(priv->subdev.name), "%s %d-%04x",
-> +		 did->name, i2c_adapter_id(client->adapter), client->addr);
+What works:
+* Video capture at various sizes with sequential fields,
+* Input switching (TV Tuner, Composite, S-Video),
+* TV and radio tuning,
+* Video standard switching and auto detection,
+* Radio mode switching (stereo / mono),
+* Unplugging while capturing,
+* DVB / analog coexistence,
+* Raw BT.656 stream support.
 
-Could you use v4l2_i2c_subdev_set_name()?
+What does not work yet:
+* Audio,
+* VBI,
+* Picture controls.
 
-> +
-> +	ret = v4l2_async_register_subdev(&priv->subdev);
->  	if (ret)
->  		v4l2_ctrl_handler_free(&priv->hdl);
->  
-> @@ -1015,7 +1025,7 @@ static int ov6650_remove(struct i2c_client *client)
->  	struct ov6650 *priv = to_ov6650(client);
->  
->  	v4l2_clk_put(priv->clk);
-> -	v4l2_device_unregister_subdev(&priv->subdev);
-> +	v4l2_async_unregister_subdev(&priv->subdev);
->  	v4l2_ctrl_handler_free(&priv->hdl);
->  	return 0;
->  }
-> -- 
-> 2.19.2
-> 
+This series (as a one patch) was submitted for inclusion few years ago,
+then waited few months in a patch queue.
+Unfortunately, by the time it was supposed to be merged there
+were enough changes in media that it was no longer mergeable.
 
--- 
-Sakari Ailus
-sakari.ailus@linux.intel.com
+I thought at that time that I will be able to rebase and retest it soon
+but unfortunately up till now I was never able to find enough time to do
+so.
+Also, with the passing of time the implementation diverged more and
+more from the current kernel code, necessitating even more reworking.
+
+That last iteration can be found here:
+https://patchwork.linuxtv.org/patch/8048/
+
+Since that version there had been the following changes:
+* Adaptation to changes in V4L2 / DVB core,
+
+* Radio device was added, with a possibility to tune to a FM radio
+station and switch between stereo and mono modes (tested by taping
+audio signal directly at tuner output pin),
+
+* DVB / analog coexistence was improved - resolved a few cases where
+DVB core would switch off power or reset the tuner when the device
+was still being used but in the analog mode,
+
+* Fixed issues reported by v4l2-compliance,
+
+* Switching to raw BT.656 mode is now done by a custom streaming
+parameter set via VIDIOC_S_PARM ioctl instead of using a
+V4L2_BUF_TYPE_PRIVATE buffer (which was removed from V4L2),
+
+* General small code cleanups (like using BIT() or ARRAY_SIZE() macros
+instead of open coding them, code formatting improvements, etc.).
+
+Changes from v1:
+* Only support configuration of cx25840 pins that the cxusb driver is
+actually using so there is no need for an ugly CX25840_PIN() macro,
+
+* Split cxusb changes into two patches: first one implementing
+digital / analog coexistence in this driver, second one adding the
+actual implementation of the analog mode,
+
+* Fix a warning reported by kbuild test robot.
+
+Changes from v2:
+* Split out ivtv cx25840 platform data zero-initialization to a separate
+commit,
+
+* Add kernel-doc description of struct cx25840_state,
+
+* Make sure that all variables used in CX25840_VCONFIG_OPTION() and
+CX25840_VCONFIG_SET_BIT() macros are their explicit parameters,
+
+* Split out some code from cxusb_medion_copy_field() and
+cxusb_medion_v_complete_work() functions to separate ones to increase
+their readability,
+
+* Generate masks using GENMASK() and BIT() macros in cx25840.h and
+cxusb.h.
+
+Changes from v3:
+Add SPDX tag to a newly added "cxusb-analog.c" file.
+
+Changes from v4:
+* Make analog support conditional on a new DVB_USB_CXUSB_ANALOG Kconfig
+option,
+
+* Use '//' comments in the header of a newly added "cxusb-analog.c"
+file,
+
+* Don't print errors on memory allocation failures,
+
+* Get rid of the driver MODULE_VERSION(),
+
+* Small formating fix of a one line.
+
+Changes from v5:
+Rebase onto current media_tree/master.
+
+Changes from v6:
+Adapt to commit 4eb2f55728abbe changing V4L2_SUBDEV_IO_PIN_* from bit
+masks to bit numbers.
+Thanks to Dan Carpenter's kbuild bot for catching this.
+
+Changes from v7:
+* Simplify cx25840_function_to_pad() assuming that the values of
+individual members of I/O pad enum will always match the actual
+chip register values,
+
+* Add a comment that the above is now a requirement to the I/O pad enum,
+
+* Don't #undef macros in the cx25840 patch,
+
+* Change "generic_mode" variable type in struct cx25840_state to bool,
+
+* Prefix todo-style comments added by the cx25840 patch with "TODO:",
+
+* Add a core init op to the cx25840 driver and use it to turn the
+generic_mode on instead of doing it via the platform data,
+
+* Use the above core init op to also provide a vconfig configuration
+to the cx25840 driver so the cxusb driver does not have to pass this
+(constant) configuration there on every video input change,
+
+* Remove cxusb_auxbuf_advance(), cxusb_auxbuf_begin() and
+cxusb_auxbuf_isend(),
+
+* Add a missing frame sequence counter support,
+
+* Test the driver with v4l2-compliance with streaming tests enabled,
+
+* Set device_caps in struct video_device during probe instead of returning
+it manually in vidioc_querycap handler,
+
+* Don't set the format name in vidioc_enum_fmt_vid_cap handler,
+
+* Drop various memset() zeroing in ioctl handlers, as suggested during
+last review,
+
+* Enforce minimum buffer count via in_buffers_needed field of
+struct vb2_queue instead of doing it in queue_setup callback,
+
+* Rewrite stream starting / stopping / configuration mechanism using a
+'stop_streaming' flag, remove cxusb_medion_stream_busy(),
+
+* Set the lock field in struct vb2_queue so vb2_ops_wait_prepare() /
+vb2_ops_wait_finish() helpers can be utilized,
+
+* Split out raw (unprocessed) BT.656 stream capturing support to a
+separate patch, adapt it to a recent change introduced by
+commit 8a7c5594c020 ("v4l2-ioctl: clear fields in s_parm") that forced
+extendedmode set by VIDIOC_S_PARM to zero,
+
+* Add a comment that if we ever need to support analog mode in similar
+hardware then this code should be made generic,
+
+* Remove a requirement that URB length has to be less than full frame
+size,
+
+* Limit URB length to avoid very high order memory allocations,
+
+* Remove out-of-order incoming URB support: this can't really happen,
+
+* Small cleanups here and there.
+
+Changes from v8:
+Rebase onto current media_tree/master.
+
+ drivers/media/i2c/cx25840/cx25840-core.c |  376 ++++-
+ drivers/media/i2c/cx25840/cx25840-core.h |   12 +
+ drivers/media/i2c/cx25840/cx25840-vbi.c  |    3 +
+ drivers/media/usb/dvb-usb/Kconfig        |   16 +-
+ drivers/media/usb/dvb-usb/Makefile       |    3 +
+ drivers/media/usb/dvb-usb/cxusb-analog.c | 1910 ++++++++++++++++++++++
+ drivers/media/usb/dvb-usb/cxusb.c        |  452 ++++-
+ drivers/media/usb/dvb-usb/cxusb.h        |  157 ++
+ drivers/media/usb/dvb-usb/dvb-usb-dvb.c  |   20 +-
+ drivers/media/usb/dvb-usb/dvb-usb-init.c |   13 +
+ drivers/media/usb/dvb-usb/dvb-usb.h      |    8 +
+ drivers/media/v4l2-core/v4l2-ioctl.c     |    3 +-
+ include/media/drv-intf/cx25840.h         |   66 +-
+ 13 files changed, 2978 insertions(+), 61 deletions(-)
+ create mode 100644 drivers/media/usb/dvb-usb/cxusb-analog.c
