@@ -2,71 +2,70 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2266C43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 07:40:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D740C43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 07:43:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8C1472082F
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 07:40:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5213F2173C
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 07:43:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="L8TIG9A2"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dglc0g0M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728911AbfC2Hky (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 03:40:54 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:37246 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728890AbfC2Hkx (ORCPT
+        id S1728928AbfC2HnS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 03:43:18 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:41969 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728887AbfC2HnS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 03:40:53 -0400
-Received: by mail-ot1-f66.google.com with SMTP id c16so1275584otn.4
-        for <linux-media@vger.kernel.org>; Fri, 29 Mar 2019 00:40:52 -0700 (PDT)
+        Fri, 29 Mar 2019 03:43:18 -0400
+Received: by mail-oi1-f195.google.com with SMTP id v7so934127oie.8
+        for <linux-media@vger.kernel.org>; Fri, 29 Mar 2019 00:43:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lhYj/lrhxiroDpcd0asYbHp4LogSQ2VyTZCqXN+aYwg=;
-        b=L8TIG9A2IbfltOYsEPa5Bx9rxUNxZ1C3VPLXXte6T1fkFD0NcdYD27cUSXlto+NIDJ
-         lVF+auMgAxTlzDpRvqxoLcpwhhNEkp7xcX3zZvd8f2ianjsOx2Z420dJVOUz7O+Xeu9g
-         zltxJcZZ7UKMoasfq4tXIgTsdqUKi+e6z7IzQ=
+        bh=T/YcA/AARmO9aIZkQrJM/Vn1xePsyTTpRbZh5J9tBDQ=;
+        b=dglc0g0M91AaE5lGwM2zq3/LzjlSQENw8GMOWbWaqBgdFj714q8ayMRdJO/QAEF718
+         fmiMx3p31ADTld88/LD2WlC8U0VSRMUKC69VpFCEQ6D9D9lZCzcJNXO/sdobhcBNL6xi
+         rPY6tHbweBctKXbLNhkFuWkUZLsXaLlj8F/24=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lhYj/lrhxiroDpcd0asYbHp4LogSQ2VyTZCqXN+aYwg=;
-        b=BknVjOuxRqa5pkd0DXvpZhp4MjxOU6MqIMUNilooHhqPWfpLOp2vRR6N2hJ0f/R1t9
-         P03GwoQM44A9jcOMbSlNEjipOB2XYOeTg/Rem8jKi8wrhNU8trRirRexJJc7LYa3DAQj
-         5XdIhvhcyHfLVVx+3RvH25ZN6tN2LSJ02DZOfnpcRykXtR6An3LEttA6lpBRNHKWxK0N
-         pqp9F0aArWQxz/UULRiP2ftoDJF3Dwt7p8HsPJDKDP77/ybdIatx9RK06C7w3TxeYlaB
-         n9Lrp8bNSpFafp604AtFP2Tb3KGDIwQi1AGP6mBotZzZcg220IMo27VU8VEsnLlxYuY8
-         jbGw==
-X-Gm-Message-State: APjAAAVXB6sS8YsH4n9ZqzXNkFyFzi9FqABIBqc3xKc7G0J+gkyxfgGO
-        RvJq3UVZX0fuyloJTdj9f76htlXcrKBqSg==
-X-Google-Smtp-Source: APXvYqw7sVy/shnOMUGa0fy/YhSi5vsQlUdMN8/flq8qCTdowAsBqoQVITkQo4udYf0JNaooeE/uRA==
-X-Received: by 2002:a05:6830:1216:: with SMTP id r22mr8225949otp.198.1553845252287;
-        Fri, 29 Mar 2019 00:40:52 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id e67sm664636ote.13.2019.03.29.00.40.51
+        bh=T/YcA/AARmO9aIZkQrJM/Vn1xePsyTTpRbZh5J9tBDQ=;
+        b=Ur0D0M7ZL5A5rh5lphqOtapngXlFaY87jB2RxtmDBef8YdZbONPeGuy1pGAtDTNeo5
+         ph/8LvsPDk/F65jDTDn6DlLrXZbYjuenxwdJtViSdlrw4A9QGjWb5Sf6bFg4o3CziAtG
+         +BiIrM8f/nr6UEDoaiC0HeblYoYYiHh9KUi2TWIjYqmKcPpv3LuZTGwbATd3lwZ02sm/
+         5zZR86VfwqQuYva7y4u8/uCV7pl12phJFAFHZb6GyKNZRQ6AS7cBmVFU9nwzY1mOgbZg
+         0Yi5KwnHeHQ/svuY/nQz25j01t9CtpGgIBsYRho9pO/Q/LiAuoYmdb6Mbkkd72VWFxUy
+         h3yg==
+X-Gm-Message-State: APjAAAWzQPtTLNKuO4TStNwlBh0vPR2wN9x/8coRrWV2tNgomDSxNDM7
+        wczIAnlrM3algCDHQlZTxZGXFllSSpCP3Q==
+X-Google-Smtp-Source: APXvYqyOqFMziRzBzgJJGy7xqCuU22WtO1LcGaZWWsN/XhZvO0lyItHU6++aXjcyUuUBPFpWbyrw1w==
+X-Received: by 2002:aca:5750:: with SMTP id l77mr2765142oib.54.1553845397356;
+        Fri, 29 Mar 2019 00:43:17 -0700 (PDT)
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com. [209.85.210.46])
+        by smtp.gmail.com with ESMTPSA id a34sm592493otc.46.2019.03.29.00.43.15
         for <linux-media@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 29 Mar 2019 00:40:51 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id m10so1286466otp.2
-        for <linux-media@vger.kernel.org>; Fri, 29 Mar 2019 00:40:51 -0700 (PDT)
-X-Received: by 2002:a9d:3f24:: with SMTP id m33mr32444285otc.147.1553845250738;
- Fri, 29 Mar 2019 00:40:50 -0700 (PDT)
+        Fri, 29 Mar 2019 00:43:15 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id k21so1300379otf.1
+        for <linux-media@vger.kernel.org>; Fri, 29 Mar 2019 00:43:15 -0700 (PDT)
+X-Received: by 2002:a9d:3f24:: with SMTP id m33mr32448712otc.147.1553845395165;
+ Fri, 29 Mar 2019 00:43:15 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190304192529.14200-1-ezequiel@collabora.com>
- <20190304192529.14200-10-ezequiel@collabora.com> <CAAFQd5AWJj5wY6jOf2hC4t8kU1XQ3y6H_YKGaZgRVCHrUvfPXQ@mail.gmail.com>
- <3dc357b3be2ebe787b79817384c59bba25ff57ad.camel@collabora.com>
-In-Reply-To: <3dc357b3be2ebe787b79817384c59bba25ff57ad.camel@collabora.com>
+ <20190304192529.14200-8-ezequiel@collabora.com> <CAAFQd5AVgcj9vMsnE4yKm3uNnFPJ_1KpvX8t9bioVg4Cp2Wy=Q@mail.gmail.com>
+ <81754d3621042384b272700d724336582ff1a94c.camel@collabora.com>
+In-Reply-To: <81754d3621042384b272700d724336582ff1a94c.camel@collabora.com>
 From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Fri, 29 Mar 2019 16:40:39 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DEyu7TSc=Cv3T94aTdfZbgS4J8HN_nZA=BL8HkFW-Z-Q@mail.gmail.com>
-Message-ID: <CAAFQd5DEyu7TSc=Cv3T94aTdfZbgS4J8HN_nZA=BL8HkFW-Z-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 09/11] rockchip/vpu: Add decoder boilerplate
+Date:   Fri, 29 Mar 2019 16:43:04 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5CJbZ3EjhPBFdrHGuJeKdSr27we4Vy3U8J0dypcJkFPKg@mail.gmail.com>
+Message-ID: <CAAFQd5CJbZ3EjhPBFdrHGuJeKdSr27we4Vy3U8J0dypcJkFPKg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/11] rockchip/vpu: Open-code media controller register
 To:     Ezequiel Garcia <ezequiel@collabora.com>
 Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
@@ -80,178 +79,134 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Mar 29, 2019 at 4:23 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+On Fri, Mar 29, 2019 at 5:05 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
 >
-> Hey Tomasz,
->
-> Thanks for taking the time to review this carefully!
->
-> On Thu, 2019-03-28 at 18:57 +0900, Tomasz Figa wrote:
+> On Thu, 2019-03-28 at 16:11 +0900, Tomasz Figa wrote:
 > > On Tue, Mar 5, 2019 at 4:27 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
 [snip]
-> > > +}
+> > > + * @source_pad:                &struct media_pad with the source pad.
+> > > + *                     Used only when the M2M device is registered via
+> > > + *                     v4l2_m2m_unregister_media_controller().
+> > > + * @sink:              &struct media_entity pointer with the sink entity
+> > > + *                     Used only when the M2M device is registered via
+> > > + *                     v4l2_m2m_unregister_media_controller().
+> > > + * @sink_pad:          &struct media_pad with the sink pad.
+> > > + *                     Used only when the M2M device is registered via
+> > > + *                     v4l2_m2m_unregister_media_controller().
+> > > + * @proc:              &struct media_entity pointer with the M2M device itself.
+> > > + * @proc_pads:         &struct media_pad with the @proc pads.
+> > > + *                     Used only when the M2M device is registered via
+> > > + *                     v4l2_m2m_unregister_media_controller().
+> > > + * @intf_devnode:      &struct media_intf devnode pointer with the interface
+> > > + *                     with controls the M2M device.
+> > > + */
+> > > +struct rockchip_vpu_mc {
+> > > +       struct media_entity     *source;
+> > > +       struct media_pad        source_pad;
+> > > +       struct media_entity     sink;
+> > > +       struct media_pad        sink_pad;
+> > > +       struct media_entity     proc;
+> > > +       struct media_pad        proc_pads[2];
+> > > +       struct media_intf_devnode *intf_devnode;
+> > > +};
 > > > +
-> > > +static int
-> > > +vidioc_s_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
-> > > +{
-> > > +       struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
-> > > +       struct rockchip_vpu_ctx *ctx = fh_to_ctx(priv);
-> > > +       struct rockchip_vpu_dev *vpu = ctx->dev;
-> > > +       struct vb2_queue *vq, *peer_vq;
-> > > +       int ret;
-> > > +
-> > > +       /* Change not allowed if queue is streaming. */
-> > > +       vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-> > > +       if (vb2_is_streaming(vq))
-> > > +               return -EBUSY;
-> > > +
-> > > +       /*
-> > > +        * Since format change on the OUTPUT queue will reset
-> > > +        * the CAPTURE queue, we can't allow doing so
-> > > +        * when the CAPTURE queue has buffers allocated.
-> > > +        */
-> > > +       peer_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-> > > +                                 V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-> > > +       if (vb2_is_busy(peer_vq) &&
-> > > +           (pix_mp->pixelformat != ctx->src_fmt.pixelformat ||
-> > > +            pix_mp->height != ctx->src_fmt.height ||
-> > > +            pix_mp->width != ctx->src_fmt.width))
-> > > +               return -EBUSY;
+> > >  /**
+> > >   * struct rockchip_vpu_dev - driver data
+> > >   * @v4l2_dev:          V4L2 device to register video devices for.
+> > > @@ -78,6 +110,8 @@ enum rockchip_vpu_codec_mode {
+> > >   * @mdev:              media device associated to this device.
+> > >   * @vfd_enc:           Video device for encoder.
+> > >   * @pdev:              Pointer to VPU platform device.
+> > > + * @mc:                        Array of media controller topology structs
 > >
-> > I'd say that in general we don't want any S_FMT(OUT) to be allowed if
-> > CAP has buffers allocated, so maybe just checking vb2_is_busy(peer_vq)
-> > is enough?
-> >
->
-> Hm, this has been confusing to no end for me. This check comes from s_fmt_cap
-> in rockchip_vpu_enc.c, at the time we came to the conclusion that
-> vb2_is_busy(peer_queue) wasn't enough.
-
-Hmm, yeah, this is confusing indeed, especially considering that we
-shouldn't need width and height on the CAP queue of an encoder.
-
->
-> Taking a step back, the S_FMT order is first encoded format, then raw format.
->
-> So for encoders the user is expected to do first S_FMT(CAP), second S_FMT(OUT).
-> For decoders, first S_FMT(OUT), second S_FMT(CAP)... and that's why we are interested
-> on a strict vb2_is_busy check.
->
-> The question is how we came to a different conclusion on the encoder.
->
-
-I loosely recollect it having something to do with JPEG specifically, hmm...
-
-[snip]
-
-> > > +
-> > > +       if (V4L2_TYPE_IS_OUTPUT(q->type))
-> > > +               if (ctx->codec_ops && ctx->codec_ops->start)
-> > > +                       ret = ctx->codec_ops->start(ctx);
-> > > +       return ret;
-> > > +}
-> > > +
-> > > +static void rockchip_vpu_stop_streaming(struct vb2_queue *q)
-> > > +{
-> > > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(q);
-> > > +
-> > > +       if (V4L2_TYPE_IS_OUTPUT(q->type))
-> > > +               if (ctx->codec_ops && ctx->codec_ops->stop)
-> > > +                       ctx->codec_ops->stop(ctx);
-> > > +
-> > > +       /* The mem2mem framework calls v4l2_m2m_cancel_job before
-> >
-> > CodingStyle: Multiline comments should start with one empty line.
+> > Is it just me or there is something wrong with indentation here?
 > >
 >
-> Oops. Seems I have a tendency for this!
->
+> It seems to be fine here -- it's all tabs.
 
-Actually, some subsystems use that style, e.g. net/.
+Hmm, never mind then.
 
-> > > +        * .stop_streaming, so there isn't any job running and
-> > > +        * it is safe to return all the buffers.
-> > > +        */
-> > > +       for (;;) {
-> > > +               struct vb2_v4l2_buffer *vbuf;
 > > > +
-> > > +               if (V4L2_TYPE_IS_OUTPUT(q->type))
-> > > +                       vbuf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
-> > > +               else
-> > > +                       vbuf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
-> > > +               if (!vbuf)
-> > > +                       break;
-> > > +               v4l2_ctrl_request_complete(vbuf->vb2_buf.req_obj.req, &ctx->ctrl_handler);
-> > > +               v4l2_m2m_buf_done(vbuf, VB2_BUF_STATE_ERROR);
-> > > +       }
-> > > +}
-> > > +
-> > > +static void rockchip_vpu_buf_request_complete(struct vb2_buffer *vb)
-> > > +{
-> > > +       struct rockchip_vpu_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
-> > > +
-> > > +       v4l2_ctrl_request_complete(vb->req_obj.req, &ctx->ctrl_handler);
-> > > +}
-> > > +
-> > > +static int rockchip_vpu_buf_out_validate(struct vb2_buffer *vb)
-> > > +{
-> > > +       struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-> > > +
-> > > +       vbuf->field = V4L2_FIELD_NONE;
-> >
-> > Similar comment as in earlier patch. Is validate expected to correct
-> > the values or just check?
-> >
->
-> See Hans' reply.
-
-Ack.
-
->
 > > > +       return 0;
 > > > +}
 > > > +
-> > > +const struct vb2_ops rockchip_vpu_dec_queue_ops = {
-> > > +       .queue_setup = rockchip_vpu_queue_setup,
-> > > +       .buf_prepare = rockchip_vpu_buf_prepare,
-> > > +       .buf_queue = rockchip_vpu_buf_queue,
-> > > +       .buf_out_validate = rockchip_vpu_buf_out_validate,
-> > > +       .buf_request_complete = rockchip_vpu_buf_request_complete,
-> > > +       .start_streaming = rockchip_vpu_start_streaming,
-> > > +       .stop_streaming = rockchip_vpu_stop_streaming,
-> > > +       .wait_prepare = vb2_ops_wait_prepare,
-> > > +       .wait_finish = vb2_ops_wait_finish,
-> > > +};
-> > > diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-> > > index 937e9cfb4568..27a9da86f1d0 100644
-> > > --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-> > > +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-> > > @@ -36,6 +36,11 @@ module_param_named(debug, rockchip_vpu_debug, int, 0644);
-> > >  MODULE_PARM_DESC(debug,
-> > >                  "Debug level - higher value produces more verbose messages");
-> > >
-> > > +enum rockchip_vpu_type {
-> > > +       RK_VPU_ENCODER,
-> > > +       RK_VPU_DECODER,
-> > > +};
+> > > +static int rockchip_register_mc(struct media_device *mdev,
+> > > +                               struct rockchip_vpu_mc *mc,
+> > > +                               struct video_device *vdev,
+> > > +                               int function)
+> > > +{
+> > > +       struct media_link *link;
+> > > +       int ret;
+> > > +
+> > > +       /* Create the three encoder entities with their pads */
+> > > +       mc->source = &vdev->entity;
+> > > +       mc->source_pad.flags = MEDIA_PAD_FL_SOURCE;
+> > > +       ret = rockchip_vpu_register_entity(mdev, mc->source,
+> > > +                       "source", &mc->source_pad, 1, MEDIA_ENT_F_IO_V4L, vdev);
+> > > +       if (ret)
+> > > +               return ret;
+> > > +
+> > > +       mc->proc_pads[0].flags = MEDIA_PAD_FL_SINK;
+> > > +       mc->proc_pads[1].flags = MEDIA_PAD_FL_SOURCE;
+> > > +       ret = rockchip_vpu_register_entity(mdev, &mc->proc,
+> > > +                       "proc", mc->proc_pads, 2, function, vdev);
+> > > +       if (ret)
+> > > +               goto err_rel_entity0;
+> > > +
+> > > +       mc->sink_pad.flags = MEDIA_PAD_FL_SINK;
+> > > +       ret = rockchip_vpu_register_entity(mdev, &mc->sink,
+> > > +                       "sink", &mc->sink_pad, 1, MEDIA_ENT_F_IO_V4L, vdev);
+> > > +       if (ret)
+> > > +               goto err_rel_entity1;
+> > > +
+> > > +       /* Connect the three entities */
+> > > +       ret = media_create_pad_link(mc->source, 0, &mc->proc, 1,
+> > > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
+> > > +       if (ret)
+> > > +               goto err_rel_entity2;
+> > > +
+> > > +       ret = media_create_pad_link(&mc->proc, 0, &mc->sink, 0,
+> > > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
+> > > +       if (ret)
+> > > +               goto err_rm_links0;
+> > > +
+> > > +       /* Create video interface */
+> > > +       mc->intf_devnode = media_devnode_create(mdev,
+> > > +                       MEDIA_INTF_T_V4L_VIDEO, 0,
+> > > +                       VIDEO_MAJOR, vdev->minor);
+> > > +       if (!mc->intf_devnode) {
+> > > +               ret = -ENOMEM;
+> > > +               goto err_rm_links1;
+> > > +       }
+> > > +
+> > > +       /* Connect the two DMA engines to the interface */
+> > > +       link = media_create_intf_link(mc->source,
+> > > +                       &mc->intf_devnode->intf,
+> > > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
+> > > +       if (!link) {
+> > > +               ret = -ENOMEM;
+> > > +               goto err_rm_devnode;
+> > > +       }
+> > > +
+> > > +       link = media_create_intf_link(&mc->sink,
+> > > +                       &mc->intf_devnode->intf,
+> > > +                       MEDIA_LNK_FL_IMMUTABLE | MEDIA_LNK_FL_ENABLED);
+> > > +       if (!link) {
+> > > +               ret = -ENOMEM;
+> > > +               goto err_rm_intf_link;
+> > > +       }
+> > > +       return 0;
+> > > +
+> > > +err_rm_intf_link:
+> > > +       media_remove_intf_links(&mc->intf_devnode->intf);
 > >
-> > Given that we already have ctx->is_enc, any reason not to have this
-> > represented in the same way everywhere?
+> > Do we need to explicitly remove the links here? The entity removal
+> > functions remove the links implicitly.
 > >
 >
-> The reason is that I'd rather have:
->
-> rockchip_vpu_video_device_register(vpu, RK_VPU_ENCODER);
->
-> Than:
->
-> rockchip_vpu_video_device_register(vpu, true);
->
-> We could have a vpu_type field instead of that is_enc boolean.
-> I think the code would be even cleaner.
->
+> You mean the media_devnode_remove, right? In that case, seems you are right.
 
-Sounds good to me!
+Yep. And also media_device_unregister_entity().
 
 Best regards,
 Tomasz
