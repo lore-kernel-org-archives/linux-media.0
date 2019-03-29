@@ -2,140 +2,110 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD13CC43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 18:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9706AC43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 19:48:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AEB36218A6
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 18:39:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5ADE1218A6
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 19:48:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nD9QT3wJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730011AbfC2Sjb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 14:39:31 -0400
-Received: from mga18.intel.com ([134.134.136.126]:47730 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729992AbfC2Sjb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 14:39:31 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Mar 2019 11:39:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,285,1549958400"; 
-   d="scan'208";a="146409558"
-Received: from lparisol-mobl1.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.252.46.120])
-  by orsmga002.jf.intel.com with ESMTP; 29 Mar 2019 11:39:28 -0700
-Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
-        id 318F121E50; Fri, 29 Mar 2019 20:39:24 +0200 (EET)
-Date:   Fri, 29 Mar 2019 20:39:24 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
+        id S1729901AbfC2TsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 15:48:24 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45500 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729832AbfC2TsY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 29 Mar 2019 15:48:24 -0400
+Received: by mail-lj1-f193.google.com with SMTP id y6so2970932ljd.12;
+        Fri, 29 Mar 2019 12:48:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=N3pG+J+6pm8soWtrcGWPf9mBg2VNzd/Fy5QrHExC9ag=;
+        b=nD9QT3wJaG6eqfuGtHKibKV42cf0wKvbkMChc5xwTgU+d+KUBEr2aAyxZSVls0ffYR
+         tOuHnHIQUcqs3QxnPqgvYos/D6WJwn1CHpNETRtwOdp9p7fyhdPek64Pw2uccE7fxOs7
+         x0gz6wzGIKgLnhV7YlDm+qDxdyTgMCPMDdXdT80YxSWv5QlgL6ow/m8yS77Ck6nu7EX7
+         E7qXn3p/ckUu4kVhm81YL4MIqS7lLCGA/nGgtLWdQENpkWqW0aFrZOymslSAXzEqCChn
+         0UhhXQwFW1Ne19IDE8Ofrkm/vQrZJRoAB49/CsE+w6wpYdMsRF1KbkODs+lnTOnDB1zn
+         yOYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=N3pG+J+6pm8soWtrcGWPf9mBg2VNzd/Fy5QrHExC9ag=;
+        b=ImZMjqd3WkO/UZDwahEOw0CZ5rL53PqMI4J40jufH94Qs+653wbq4DV/wtPlGK42QD
+         S6PooA5zbWg7CMsa2OyFAwgT3AuR2u+EImvFyb0NrhJptVdcciQhJVxoB2H0teZjnHcL
+         xUQXlBBFnpO+ml9d/9I96NwZk0xiVVpMBTsY55gxrbFSo+8jxUVYSv8Fl3h+2+BveSKE
+         mvxcKzeHV8ymiff0ciqTaxI9Y+aSjmRbGk9Ygi1g4IUPKJKpXy88L4/stJZrunqfY6e8
+         rIAbYDkP1hsrHfZuwl9ur1XnSE46IE6H+hj4RUl1ZtTul4keIDE6fRipA+5yhWgkWJbj
+         r30w==
+X-Gm-Message-State: APjAAAVXeEsgP/mB3tPOKWHUmU4fbDN2WtN3Q9n9Ov5GORUBvORuXjlI
+        WcKQn1eVtrfbKNCl+esWQio=
+X-Google-Smtp-Source: APXvYqzF/2fOwI6KQOSTMY8fNrPkMIAmgjG2VRlj5lalIiB+rE3uCWTq5udPn2xbkHnS7O2UBscrAw==
+X-Received: by 2002:a2e:9117:: with SMTP id m23mr19604532ljg.197.1553888902200;
+        Fri, 29 Mar 2019 12:48:22 -0700 (PDT)
+Received: from z50.localnet (109241207190.gdansk.vectranet.pl. [109.241.207.190])
+        by smtp.gmail.com with ESMTPSA id f18sm517668lja.91.2019.03.29.12.48.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 29 Mar 2019 12:48:21 -0700 (PDT)
+From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] media: ov6650: Move v4l2_clk_get() to
- ov6650_video_probe() helper
-Message-ID: <20190329183923.t7sxzqf5qa4z3yfs@kekkonen.localdomain>
-References: <20190325003501.14687-1-jmkrzyszt@gmail.com>
- <20190325003501.14687-2-jmkrzyszt@gmail.com>
+Subject: Re: [PATCH 1/2] media: ov6650: Move v4l2_clk_get() to ov6650_video_probe() helper
+Date:   Fri, 29 Mar 2019 20:48:19 +0100
+Message-ID: <43180252.PEphI5Jep4@z50>
+In-Reply-To: <20190329183923.t7sxzqf5qa4z3yfs@kekkonen.localdomain>
+References: <20190325003501.14687-1-jmkrzyszt@gmail.com> <20190325003501.14687-2-jmkrzyszt@gmail.com> <20190329183923.t7sxzqf5qa4z3yfs@kekkonen.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190325003501.14687-2-jmkrzyszt@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Janus,
+Hi Sakari,
 
-Thanks for the patchset.
-
-On Mon, Mar 25, 2019 at 01:35:00AM +0100, Janusz Krzysztofik wrote:
-> In preparation for adding asynchronous subdevice support to the driver,
-> don't acquire v4l2_clk from the driver .probe() callback as that may
-> fail if the clock is provided by a bridge driver which may be not yet
-> initialized.  Move the v4l2_clk_get() to ov6650_video_probe() helper
-> which is going to be converted to v4l2_subdev_internal_ops.registered()
-> callback, executed only when the bridge driver is ready.
+On Friday, March 29, 2019 7:39:24 PM CET Sakari Ailus wrote:
+> Hi Janus,
 > 
-> Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-> ---
->  drivers/media/i2c/ov6650.c | 25 ++++++++++++++-----------
->  1 file changed, 14 insertions(+), 11 deletions(-)
+> Thanks for the patchset.
 > 
-> diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-> index c33fd584cb44..f10b8053ed73 100644
-> --- a/drivers/media/i2c/ov6650.c
-> +++ b/drivers/media/i2c/ov6650.c
-> @@ -810,9 +810,16 @@ static int ov6650_video_probe(struct i2c_client *client)
->  	u8		pidh, pidl, midh, midl;
->  	int		ret;
->  
-> +	priv->clk = v4l2_clk_get(&client->dev, NULL);
-> +	if (IS_ERR(priv->clk)) {
-> +		ret = PTR_ERR(priv->clk);
-> +		dev_err(&client->dev, "v4l2_clk request err: %d\n", ret);
-> +		return ret;
-> +	}
-> +
->  	ret = ov6650_s_power(&priv->subdev, 1);
->  	if (ret < 0)
-> -		return ret;
-> +		goto eclkput;
->  
->  	/*
->  	 * check and show product ID and manufacturer ID
-> @@ -847,6 +854,11 @@ static int ov6650_video_probe(struct i2c_client *client)
->  
->  done:
->  	ov6650_s_power(&priv->subdev, 0);
-> +	if (ret) {
-> +eclkput:
-> +		v4l2_clk_put(priv->clk);
+> On Mon, Mar 25, 2019 at 01:35:00AM +0100, Janusz Krzysztofik wrote:
+> > ...
+> >  
+> >  done:
+> >  	ov6650_s_power(&priv->subdev, 0);
+> > +	if (ret) {
+> > +eclkput:
+> > +		v4l2_clk_put(priv->clk);
+> 
+> Could you rework the error handling, please? Labels should be outside
+> conditionals. 
 
-Could you rework the error handling, please? Labels should be outside
-conditionals. See e.g. the smiapp driver
-(drivers/media/i2c/smiapp/smiapp-core.c). I've pushed my master branch
-here:
+OK.
 
-<URL:https://git.linuxtv.org/sailus/media_tree.git/log/>
+> See e.g. the smiapp driver
+> (drivers/media/i2c/smiapp/smiapp-core.c). I've pushed my master branch
+> here:
+> 
+> <URL:https://git.linuxtv.org/sailus/media_tree.git/log/>
 
-The patch also does not apply on top of the media tree master + your
-earlier patch cleanly.
+I'm currently syncing my linux-media remote tracking branches with 
+git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media.git
+Should I switch to a different repository, e.g. yours?
 
-> +	}
-> +
->  	return ret;
->  }
->  
-> @@ -989,18 +1001,9 @@ static int ov6650_probe(struct i2c_client *client,
->  	priv->code	  = MEDIA_BUS_FMT_YUYV8_2X8;
->  	priv->colorspace  = V4L2_COLORSPACE_JPEG;
->  
-> -	priv->clk = v4l2_clk_get(&client->dev, NULL);
-> -	if (IS_ERR(priv->clk)) {
-> -		ret = PTR_ERR(priv->clk);
-> -		goto eclkget;
-> -	}
-> -
->  	ret = ov6650_video_probe(client);
-> -	if (ret) {
-> -		v4l2_clk_put(priv->clk);
-> -eclkget:
-> +	if (ret)
->  		v4l2_ctrl_handler_free(&priv->hdl);
-> -	}
->  
->  	return ret;
->  }
+Thanks,
+Janusz
 
--- 
-Kind regards,
 
-Sakari Ailus
-sakari.ailus@linux.intel.com
+
