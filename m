@@ -2,295 +2,210 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0464C43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 02:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 259E7C43381
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 02:46:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 70C8D2173C
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 02:04:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD00A2183E
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 02:46:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="geAkRCfW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728038AbfC2CEb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 28 Mar 2019 22:04:31 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:60406 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727938AbfC2CEa (ORCPT
+        id S1728022AbfC2Cqs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 28 Mar 2019 22:46:48 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:46841 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727675AbfC2Cqr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 28 Mar 2019 22:04:30 -0400
-X-UUID: a63c4e5c37854356a43ea5d440e83bf5-20190329
-X-UUID: a63c4e5c37854356a43ea5d440e83bf5-20190329
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1039586582; Fri, 29 Mar 2019 10:04:14 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 29 Mar 2019 10:04:12 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 29 Mar 2019 10:04:12 +0800
-From:   Yunfei Dong <yunfei.dong@mediatek.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-CC:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH,v2] media: mtk-vcodec: enlarge struct vdec_pic_info fields
-Date:   Fri, 29 Mar 2019 10:04:10 +0800
-Message-ID: <1553825051-16940-1-git-send-email-yunfei.dong@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        Thu, 28 Mar 2019 22:46:47 -0400
+Received: by mail-ed1-f65.google.com with SMTP id d1so711611edd.13
+        for <linux-media@vger.kernel.org>; Thu, 28 Mar 2019 19:46:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0+42zuAaHk5LA8x0uspwvqR74XV3PXl4bVD5/fxSnsg=;
+        b=geAkRCfWASwmGRMkdorFKEYqMiJnC+vSQpVAWiqyRVw+wIGmKx9ugW+KFR6CR0YsRx
+         qYxWhqu/3ycw2s4x1FTQW7H3Yogcb7XElb+ILLdAg3VyskMkU8F9IA8yAHkIWF+iGQON
+         OdHTsp3mZrtjLiLde9OX/34WnHarcPOtGTQ8rLD+BYcEf01drJfk238Kws/+up5NjzHj
+         FBbgXMpHXQxeZuqazokkMIeXVfePGf6Yl3Mzik8sqqjaOI+hjOTOISx8JFBt1zA+H6/q
+         4dYPEj9ITk1yXfcqbKchZF/7P/g2S566DVYyzot/bR4bSjDvR8Da/2Lagl4nokHT+51f
+         fr9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0+42zuAaHk5LA8x0uspwvqR74XV3PXl4bVD5/fxSnsg=;
+        b=PR1QkUpaEcgB1mHj8+cWCiA2ulR/Gq9kH0qB2wz27nkUMAdgqsKqqxELL64yCh3hZ/
+         h6UVc7+6LrUfjlI5RAYKN8u1KjaoSicVBxWPD8U/lARcqiPGRKD1AYgsG2qKq3q+7nwx
+         hxPCRfEfXPp5y12YpQOymT2vr6dhq9MF/kdIis76AeDswXV2g3BBAMe8+FzoeoUSdepu
+         ZKrOmh0JulUmOgN4rAlIkOXewizwKWoTI/O2CTrN5YJLlKhh3lcFzxfMlHVGSMUJVBhx
+         P82KX+s+oZu37i3fhvsGHOtEG187ANF+tvm+6D+ZnrHjraU1bx1Wd/QNsP2Z63eXoCtx
+         A5jA==
+X-Gm-Message-State: APjAAAUhSNoEfVmuMOPHaxObQpWPituAw2R9AUDKTELbHW2p2aaZyS97
+        2IpLL0TTaO2FEDz+g1kPCgP7Uh81llqvw6lEX3E12w==
+X-Google-Smtp-Source: APXvYqxM4JLiUeG/zj2DZoLEUELB8AHL1vyChCO3qajjySaVoZIHGPBE/sIpD12MoPG3H4KTw0H2k4/O/Y1aMlNnRJs=
+X-Received: by 2002:a17:906:c3cd:: with SMTP id cj13mr695088ejb.247.1553827605579;
+ Thu, 28 Mar 2019 19:46:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20190320031022.174052-1-linfish@google.com> <0aaba609-1551-e09d-a39f-111dbe99288e@xs4all.nl>
+In-Reply-To: <0aaba609-1551-e09d-a39f-111dbe99288e@xs4all.nl>
+From:   Fish Lin <linfish@google.com>
+Date:   Fri, 29 Mar 2019 10:46:34 +0800
+Message-ID: <CAHpF3df+nJFyg=40NnK-4uRm3fQnrmXk-Ra3QPMHu3jpTZOuQg@mail.gmail.com>
+Subject: Re: [PATCH] media: v4l-ctrl: add control for variable frame rate
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Keiichi Watanabe <keiichiw@chromium.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Smitha T Murthy <smitha.t@samsung.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Enlarge the plane number to support more complex case
-and add the support for fmt change case.
+The idea for variable framerate is to reduce bitrate by encode less frames.
+Sometimes the motion is too much and encoder can encode in really low
+bitrate, will be able to dynamic drop some frames to archive
+requirement.
 
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
----
-change note:
-fix "resolutin->resolution" and comment in struct vdec_pic_info
----
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c |   62 +++++++++++++-------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h |   15 ++---
- .../media/platform/mtk-vcodec/vdec/vdec_h264_if.c  |    4 +-
- .../media/platform/mtk-vcodec/vdec/vdec_vp8_if.c   |    4 +-
- .../media/platform/mtk-vcodec/vdec/vdec_vp9_if.c   |   11 ++--
- 5 files changed, 56 insertions(+), 40 deletions(-)
+Codec like H.264 and HEVC can support VFR, and lots of containers also supp=
+ort.
+https://en.wikipedia.org/wiki/Comparison_of_video_container_formats
 
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index d022c65..43587c0 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -129,9 +129,9 @@ static struct vb2_buffer *get_display_buffer(struct mtk_vcodec_ctx *ctx)
- 	mutex_lock(&ctx->lock);
- 	if (dstbuf->used) {
- 		vb2_set_plane_payload(&dstbuf->vb.vb2_buf, 0,
--					ctx->picinfo.y_bs_sz);
-+					ctx->picinfo.fb_sz[0]);
- 		vb2_set_plane_payload(&dstbuf->vb.vb2_buf, 1,
--					ctx->picinfo.c_bs_sz);
-+					ctx->picinfo.fb_sz[1]);
- 
- 		dstbuf->ready_to_display = true;
- 
-@@ -278,6 +278,27 @@ static void mtk_vdec_flush_decoder(struct mtk_vcodec_ctx *ctx)
- 	clean_free_buffer(ctx);
- }
- 
-+static void mtk_vdec_update_fmt(struct mtk_vcodec_ctx *ctx,
-+				unsigned int pixelformat)
-+{
-+	struct mtk_video_fmt *fmt;
-+	struct mtk_q_data *dst_q_data;
-+	unsigned int k;
-+
-+	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
-+	for (k = 0; k < NUM_FORMATS; k++) {
-+		fmt = &mtk_video_formats[k];
-+		if (fmt->fourcc == pixelformat) {
-+			mtk_v4l2_debug(1, "Update cap fourcc(%d -> %d)",
-+				dst_q_data->fmt.fourcc, pixelformat);
-+			dst_q_data->fmt = fmt;
-+			return;
-+		}
-+	}
-+
-+	mtk_v4l2_err("Cannot get fourcc(%d), using init value", pixelformat);
-+}
-+
- static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
- {
- 	unsigned int dpbsize = 0;
-@@ -299,6 +320,10 @@ static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
- 		return -EINVAL;
- 	}
- 
-+	if (ctx->last_decoded_picinfo.cap_fourcc != ctx->picinfo.cap_fourcc &&
-+		ctx->picinfo.cap_fourcc != 0)
-+		mtk_vdec_update_fmt(ctx, ctx->picinfo.cap_fourcc);
-+
- 	if ((ctx->last_decoded_picinfo.pic_w == ctx->picinfo.pic_w) ||
- 	    (ctx->last_decoded_picinfo.pic_h == ctx->picinfo.pic_h))
- 		return 0;
-@@ -352,11 +377,11 @@ static void mtk_vdec_worker(struct work_struct *work)
- 	pfb = &dst_buf_info->frame_buffer;
- 	pfb->base_y.va = vb2_plane_vaddr(&dst_buf->vb2_buf, 0);
- 	pfb->base_y.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
--	pfb->base_y.size = ctx->picinfo.y_bs_sz + ctx->picinfo.y_len_sz;
-+	pfb->base_y.size = ctx->picinfo.fb_sz[0];
- 
- 	pfb->base_c.va = vb2_plane_vaddr(&dst_buf->vb2_buf, 1);
- 	pfb->base_c.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 1);
--	pfb->base_c.size = ctx->picinfo.c_bs_sz + ctx->picinfo.c_len_sz;
-+	pfb->base_c.size = ctx->picinfo.fb_sz[1];
- 	pfb->status = 0;
- 	mtk_v4l2_debug(3, "===>[%d] vdec_if_decode() ===>", ctx->id);
- 
-@@ -976,14 +1001,13 @@ static int vidioc_vdec_g_fmt(struct file *file, void *priv,
- 		 * So we just return picinfo yet, and update picinfo in
- 		 * stop_streaming hook function
- 		 */
--		q_data->sizeimage[0] = ctx->picinfo.y_bs_sz +
--					ctx->picinfo.y_len_sz;
--		q_data->sizeimage[1] = ctx->picinfo.c_bs_sz +
--					ctx->picinfo.c_len_sz;
-+		q_data->sizeimage[0] = ctx->picinfo.fb_sz[0];
-+		q_data->sizeimage[1] = ctx->picinfo.fb_sz[1];
- 		q_data->bytesperline[0] = ctx->last_decoded_picinfo.buf_w;
- 		q_data->bytesperline[1] = ctx->last_decoded_picinfo.buf_w;
- 		q_data->coded_width = ctx->picinfo.buf_w;
- 		q_data->coded_height = ctx->picinfo.buf_h;
-+		ctx->last_decoded_picinfo.cap_fourcc = q_data->fmt->fourcc;
- 
- 		/*
- 		 * Width and height are set to the dimensions
-@@ -1103,10 +1127,11 @@ static void vb2ops_vdec_buf_queue(struct vb2_buffer *vb)
- 	struct mtk_vcodec_mem src_mem;
- 	bool res_chg = false;
- 	int ret = 0;
--	unsigned int dpbsize = 1;
-+	unsigned int dpbsize = 1, i = 0;
- 	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
- 	struct vb2_v4l2_buffer *vb2_v4l2 = NULL;
- 	struct mtk_video_dec_buf *buf = NULL;
-+	struct mtk_q_data *dst_q_data;
- 
- 	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p",
- 			ctx->id, vb->vb2_queue->type,
-@@ -1194,21 +1219,18 @@ static void vb2ops_vdec_buf_queue(struct vb2_buffer *vb)
- 	}
- 
- 	ctx->last_decoded_picinfo = ctx->picinfo;
--	ctx->q_data[MTK_Q_DATA_DST].sizeimage[0] =
--						ctx->picinfo.y_bs_sz +
--						ctx->picinfo.y_len_sz;
--	ctx->q_data[MTK_Q_DATA_DST].bytesperline[0] =
--						ctx->picinfo.buf_w;
--	ctx->q_data[MTK_Q_DATA_DST].sizeimage[1] =
--						ctx->picinfo.c_bs_sz +
--						ctx->picinfo.c_len_sz;
--	ctx->q_data[MTK_Q_DATA_DST].bytesperline[1] = ctx->picinfo.buf_w;
-+	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
-+	for (i = 0; i < dst_q_data->fmt->num_planes; i++) {
-+		dst_q_data->sizeimage[i] = ctx->picinfo.fb_sz[i];
-+		dst_q_data->bytesperline[i] = ctx->picinfo.buf_w;
-+	}
-+
- 	mtk_v4l2_debug(2, "[%d] vdec_if_init() OK wxh=%dx%d pic wxh=%dx%d sz[0]=0x%x sz[1]=0x%x",
- 			ctx->id,
- 			ctx->picinfo.buf_w, ctx->picinfo.buf_h,
- 			ctx->picinfo.pic_w, ctx->picinfo.pic_h,
--			ctx->q_data[MTK_Q_DATA_DST].sizeimage[0],
--			ctx->q_data[MTK_Q_DATA_DST].sizeimage[1]);
-+			dst_q_data->sizeimage[0],
-+			dst_q_data->sizeimage[1]);
- 
- 	ret = vdec_if_get_param(ctx, GET_PARAM_DPB_SIZE, &dpbsize);
- 	if (dpbsize == 0)
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-index e7e2a10..488be4fe 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-@@ -211,24 +211,19 @@ struct mtk_vcodec_pm {
-  * @pic_h: picture height
-  * @buf_w: picture buffer width (64 aligned up from pic_w)
-  * @buf_h: picture buffer heiht (64 aligned up from pic_h)
-- * @y_bs_sz: Y bitstream size
-- * @c_bs_sz: CbCr bitstream size
-- * @y_len_sz: additional size required to store decompress information for y
-- *		plane
-- * @c_len_sz: additional size required to store decompress information for cbcr
-- *		plane
-+ * @fb_sz: bitstream size of each plane
-  * E.g. suppose picture size is 176x144,
-  *      buffer size will be aligned to 176x160.
-+ * @cap_fourcc: fourcc number(may changed when resolution change)
-  */
- struct vdec_pic_info {
- 	unsigned int pic_w;
- 	unsigned int pic_h;
- 	unsigned int buf_w;
- 	unsigned int buf_h;
--	unsigned int y_bs_sz;
--	unsigned int c_bs_sz;
--	unsigned int y_len_sz;
--	unsigned int c_len_sz;
-+	unsigned int fb_sz[VIDEO_MAX_PLANES];
-+	unsigned int cap_fourcc;
-+	unsigned int reserved;
- };
- 
- /**
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-index 02c960c..cdbcd69 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-@@ -253,8 +253,8 @@ static void get_pic_info(struct vdec_h264_inst *inst,
- 	*pic = inst->vsi->pic;
- 	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
- 			 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
--	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
--			 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
-+	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
-+			 pic->fb_sz[0], pic->fb_sz[1]);
- }
- 
- static void get_crop_info(struct vdec_h264_inst *inst, struct v4l2_rect *cr)
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-index bac3723..ba79136 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-@@ -294,8 +294,8 @@ static void get_pic_info(struct vdec_vp8_inst *inst, struct vdec_pic_info *pic)
- 
- 	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
- 			 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
--	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
--			 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
-+	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
-+			 pic->fb_sz[0], pic->fb_sz[1]);
- }
- 
- static void vp8_dec_finish(struct vdec_vp8_inst *inst)
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-index bc8349b..6fe8320 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-@@ -702,10 +702,8 @@ static void init_all_fb_lists(struct vdec_vp9_inst *inst)
- 
- static void get_pic_info(struct vdec_vp9_inst *inst, struct vdec_pic_info *pic)
- {
--	pic->y_bs_sz = inst->vsi->buf_sz_y_bs;
--	pic->c_bs_sz = inst->vsi->buf_sz_c_bs;
--	pic->y_len_sz = inst->vsi->buf_len_sz_y;
--	pic->c_len_sz = inst->vsi->buf_len_sz_c;
-+	pic->fb_sz[0] = inst->vsi->buf_sz_y_bs + inst->vsi->buf_len_sz_y;
-+	pic->fb_sz[1] = inst->vsi->buf_sz_c_bs + inst->vsi->buf_len_sz_c;
- 
- 	pic->pic_w = inst->vsi->pic_w;
- 	pic->pic_h = inst->vsi->pic_h;
-@@ -714,8 +712,9 @@ static void get_pic_info(struct vdec_vp9_inst *inst, struct vdec_pic_info *pic)
- 
- 	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
- 		 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
--	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
--		 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
-+	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
-+		pic->fb_sz[0],
-+		pic->fb_sz[1]);
- }
- 
- static void get_disp_fb(struct vdec_vp9_inst *inst, struct vdec_fb **out_fb)
--- 
-1.7.9.5
+Yes, the decoder need to know if video is CFR or VFR, not all decoder
+support VFR, especially for video editing.
+There are also some tools to convert VFR video to CFR video.
 
+Some reference:
+https://en.wikipedia.org/wiki/Variable_frame_rate
+https://www.bandicam.com/support/tips/vfr-cfr/
+https://pro-av.panasonic.net/manual/html/AJ-PX270P_PJ_PX_EN_AN(VQT5J83A-8(E=
+))/chapter04_08.htm
+
+Hans Verkuil <hverkuil-cisco@xs4all.nl> =E6=96=BC 2019=E5=B9=B43=E6=9C=8828=
+=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:57=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> On 3/20/19 4:10 AM, Fish Lin wrote:
+> > These flag are added
+> > * V4L2_CID_MPEG_VIDEO_VFR_ENABLE
+> > * V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE
+> > One is to set variable frame rate enable or not, another is to control
+> > minimal frame rate that video encoder should keep per second.
+> >
+> > Signed-off-by: Fish Lin <linfish@google.com>
+> > ---
+> >  Documentation/media/uapi/v4l/ext-ctrls-codec.rst | 9 +++++++++
+> >  drivers/media/v4l2-core/v4l2-ctrls.c             | 3 +++
+> >  include/uapi/linux/v4l2-controls.h               | 3 +++
+> >  3 files changed, 15 insertions(+)
+> >
+> > diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documen=
+tation/media/uapi/v4l/ext-ctrls-codec.rst
+> > index c97fb7923be5..4bc013d71b67 100644
+> > --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> > +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> > @@ -620,7 +620,16 @@ enum v4l2_mpeg_video_bitrate_mode -
+> >      * - Bit 24:31
+> >        - Must be zero.
+> >
+> > +.. _v4l2-mpeg-video-variable-framerate:
+> >
+> > +``V4L2_CID_MPEG_VIDEO_VFR_ENABLE (boolean)``
+> > +    Set variable framerate enable or not. When enabled, video encoder =
+is able
+> > +    to drop frames based on some mechanism, like frame similarity or b=
+itrate
+> > +    control (default disable).
+> > +
+> > +``V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE (integer)``
+> > +    Minimal kept frame per second when variable framerate is enabled (=
+default
+> > +    is input framerate).
+>
+> You don't really have a concept of frames per second when encoding. What =
+you
+> are probably trying to say is something like: "don't drop more than one f=
+rame for
+> every X frames" or something like that.
+>
+> Which codecs support this? A decoder needs to know that a frame is missin=
+g, right?
+>
+> What's the use-case for this?
+>
+> Sorry, just trying to understand this better.
+>
+> Regards,
+>
+>         Hans
+>
+> >
+> >  .. _v4l2-mpeg-video-dec-pts:
+> >
+> > diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-=
+core/v4l2-ctrls.c
+> > index b79d3bbd8350..566c6552c9a0 100644
+> > --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+> > +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+> > @@ -786,6 +786,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+> >       case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:                  return "H=
+264 MB Level Rate Control";
+> >       case V4L2_CID_MPEG_VIDEO_HEADER_MODE:                   return "S=
+equence Header Mode";
+> >       case V4L2_CID_MPEG_VIDEO_MAX_REF_PIC:                   return "M=
+ax Number of Reference Pics";
+> > +     case V4L2_CID_MPEG_VIDEO_VFR_ENABLE:                    return "V=
+ariable Frame Rate Enable";
+> > +     case V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE:             return "V=
+FR Minimal Frame Rate";
+> >       case V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP:               return "H=
+263 I-Frame QP Value";
+> >       case V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP:               return "H=
+263 P-Frame QP Value";
+> >       case V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP:               return "H=
+263 B-Frame QP Value";
+> > @@ -1108,6 +1110,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, en=
+um v4l2_ctrl_type *type,
+> >       case V4L2_CID_MPEG_VIDEO_DECODER_SLICE_INTERFACE:
+> >       case V4L2_CID_MPEG_VIDEO_FRAME_RC_ENABLE:
+> >       case V4L2_CID_MPEG_VIDEO_MB_RC_ENABLE:
+> > +     case V4L2_CID_MPEG_VIDEO_VFR_ENABLE:
+> >       case V4L2_CID_MPEG_VIDEO_H264_8X8_TRANSFORM:
+> >       case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_ENABLE:
+> >       case V4L2_CID_MPEG_VIDEO_MPEG4_QPEL:
+> > diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4=
+l2-controls.h
+> > index 06479f2fb3ae..f1bf52eb0152 100644
+> > --- a/include/uapi/linux/v4l2-controls.h
+> > +++ b/include/uapi/linux/v4l2-controls.h
+> > @@ -404,6 +404,9 @@ enum v4l2_mpeg_video_multi_slice_mode {
+> >  #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE                (V4L2_CID=
+_MPEG_BASE+228)
+> >  #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME          (V4L2_CID_MPEG_BA=
+SE+229)
+> >
+> > +#define V4L2_CID_MPEG_VIDEO_VFR_ENABLE (V4L2_CID_MPEG_BASE + 250)
+> > +#define V4L2_CID_MPEG_VIDEO_VFR_MIN_FRAMERATE (V4L2_CID_MPEG_BASE + 25=
+1)
+> > +
+> >  #define V4L2_CID_MPEG_VIDEO_H263_I_FRAME_QP          (V4L2_CID_MPEG_BA=
+SE+300)
+> >  #define V4L2_CID_MPEG_VIDEO_H263_P_FRAME_QP          (V4L2_CID_MPEG_BA=
+SE+301)
+> >  #define V4L2_CID_MPEG_VIDEO_H263_B_FRAME_QP          (V4L2_CID_MPEG_BA=
+SE+302)
+> >
+>
