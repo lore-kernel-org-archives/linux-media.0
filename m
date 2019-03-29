@@ -2,150 +2,119 @@ Return-Path: <SRS0=qz7C=SA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_NEOMUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25F4AC43381
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 08:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E530C10F05
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 08:32:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F2A9621773
-	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 08:28:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 069422173C
+	for <linux-media@archiver.kernel.org>; Fri, 29 Mar 2019 08:32:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729040AbfC2I2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 04:28:04 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:43742 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728972AbfC2I2E (ORCPT
+        id S1729038AbfC2IcN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 04:32:13 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:39917 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728992AbfC2IcN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 04:28:04 -0400
-Received: from [192.168.2.10] ([212.251.195.8])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id 9mrmhMxCzUjKf9mrqhusuX; Fri, 29 Mar 2019 09:28:02 +0100
-Subject: Re: [PATCH v13 2/6] media: change au0828 to use Media Device
- Allocator API
-To:     Shuah Khan <shuah@kernel.org>, mchehab@kernel.org, perex@perex.cz,
-        tiwai@suse.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-References: <cover.1553814518.git.shuah@kernel.org>
- <05ec250a56d9eaa868e7c8cf6376d6f8e29bb102.1553814518.git.shuah@kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <693a4487-b4dd-b3e0-953e-22c342708f1f@xs4all.nl>
-Date:   Fri, 29 Mar 2019 09:27:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        Fri, 29 Mar 2019 04:32:13 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 793EF60011;
+        Fri, 29 Mar 2019 08:32:09 +0000 (UTC)
+Date:   Fri, 29 Mar 2019 09:32:51 +0100
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        laurent.pinchart@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se, luca@lucaceresoli.net,
+        ian.arkver.dev@gmail.com, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v4 00/31] v4l: add support for multiplexed streams
+Message-ID: <20190329083251.3otgywm573dd4lir@uno.localdomain>
+References: <20190328200608.9463-1-jacopo+renesas@jmondi.org>
+ <20190329011707.2m2mgckmlxj3edby@kekkonen.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <05ec250a56d9eaa868e7c8cf6376d6f8e29bb102.1553814518.git.shuah@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfBB1tcUrLvtf/Wu+y4jrUfRwWLU7hrNXm31naaf9EM7dbx+fpNO2UBKB504L0bCt8N2ALCcq5IYDg2SPT++e8d1RW18bPnQW0jaKTMGNOa+hfDDnzBfm
- z7JxyrkDB7gdMa5yzItJtJYiir8RGSKAqWBiPcIUPaC/xX+ad/OkSKxhmPXjx1ZkEaURn9l6nqa5NuotHJt66QsPPCs81t5DWZRzmVB35QF00vupR0JeHNWw
- QXEC5se1r41CzPkO3wAd9PhfCQmx2WiWhsGz8YClgIK0O8UHNKcRBusEsFEXyEL4tUfC2+/usAfsgFibs5FVZh37IF0m8w3SS940dr8tJnSAijw3HE2vKHxU
- RRjpLnCRrj3yKVrJxf0Rie67qEbnHA==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="h2zfpth2sfa2szia"
+Content-Disposition: inline
+In-Reply-To: <20190329011707.2m2mgckmlxj3edby@kekkonen.localdomain>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 3/29/19 1:04 AM, Shuah Khan wrote:
-> Media Device Allocator API to allows multiple drivers share a media device.
-> This API solves a very common use-case for media devices where one physical
-> device (an USB stick) provides both audio and video. When such media device
-> exposes a standard USB Audio class, a proprietary Video class, two or more
-> independent drivers will share a single physical USB bridge. In such cases,
-> it is necessary to coordinate access to the shared resource.
-> 
-> Using this API, drivers can allocate a media device with the shared struct
-> device as the key. Once the media device is allocated by a driver, other
-> drivers can get a reference to it. The media device is released when all
-> the references are released.
-> 
-> Change au0828 to use Media Device Allocator API to allocate media device
-> with the parent usb struct device as the key, so it can be shared with the
-> snd_usb_audio driver.
-> 
-> Signed-off-by: Shuah Khan <shuah@kernel.org>
-> ---
->  drivers/media/usb/au0828/Kconfig       |  2 ++
->  drivers/media/usb/au0828/au0828-core.c | 13 +++++--------
->  drivers/media/usb/au0828/au0828.h      |  1 +
->  3 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/media/usb/au0828/Kconfig b/drivers/media/usb/au0828/Kconfig
-> index 65fc067eb864..98de6e24329e 100644
-> --- a/drivers/media/usb/au0828/Kconfig
-> +++ b/drivers/media/usb/au0828/Kconfig
-> @@ -2,6 +2,8 @@
->  config VIDEO_AU0828
->  	tristate "Auvitek AU0828 support"
->  	depends on I2C && INPUT && DVB_CORE && USB && VIDEO_V4L2
-> +	select MEDIA_CONTROLLER
-> +	select MEDIA_CONTROLLER_DVB
 
-Is it required to select MEDIA_CONTROLLER_DVB? Does something fail to work
-if this is unset?
+--h2zfpth2sfa2szia
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Regards,
+Hi Sakari,
 
-	Hans
+On Fri, Mar 29, 2019 at 03:17:11AM +0200, Sakari Ailus wrote:
+> Hi Jacopo,
+>
+> On Thu, Mar 28, 2019 at 09:05:37PM +0100, Jacopo Mondi wrote:
+> > Hello,
+> >    new iteration of multiplexed stream support patch series.
+> >
+> > V3 available at:
+> > https://patchwork.kernel.org/cover/10839889/
+> >
+> > V2 sent by Niklas is available at:
+> > https://patchwork.kernel.org/cover/10573817/
+> >
+> > Series available at:
+> > git://jmondi.org/linux v4l2-mux/media-master/v4
+> >
+> > Few changes compared to v3:
+> > - Rebased on latest media master
+> > - Include Sakari's and Luca's comments on documentation patch
+> > - Improve connected pad operator as suggested by Ian and Sakari
+> > - Fix a bogus -EINVAL return in 31/31 as suggested by Sakari
+> > - Improve adv748x afe has_route as suggested by Luca and Sakari
+> > - Closed some checkpatch warnings (there are still a few though)
+>
+> Thank you for working on this.
+>
+> I still need to read the documentation tomorrow, but this begins to look
+> like material for merging. Your SoB seems to be missing from the patches
+> you haven't written. Shouldn't it be there?
 
->  	select I2C_ALGOBIT
->  	select VIDEO_TVEEPROM
->  	select VIDEOBUF2_VMALLOC if VIDEO_V4L2
-> diff --git a/drivers/media/usb/au0828/au0828-core.c b/drivers/media/usb/au0828/au0828-core.c
-> index 3f8c92a70116..4f8ba6f64d3c 100644
-> --- a/drivers/media/usb/au0828/au0828-core.c
-> +++ b/drivers/media/usb/au0828/au0828-core.c
-> @@ -155,9 +155,7 @@ static void au0828_unregister_media_device(struct au0828_dev *dev)
->  	dev->media_dev->disable_source = NULL;
->  	mutex_unlock(&mdev->graph_mutex);
->  
-> -	media_device_unregister(dev->media_dev);
-> -	media_device_cleanup(dev->media_dev);
-> -	kfree(dev->media_dev);
-> +	media_device_delete(dev->media_dev, KBUILD_MODNAME, THIS_MODULE);
->  	dev->media_dev = NULL;
->  #endif
->  }
-> @@ -210,14 +208,10 @@ static int au0828_media_device_init(struct au0828_dev *dev,
->  #ifdef CONFIG_MEDIA_CONTROLLER
->  	struct media_device *mdev;
->  
-> -	mdev = kzalloc(sizeof(*mdev), GFP_KERNEL);
-> +	mdev = media_device_usb_allocate(udev, KBUILD_MODNAME, THIS_MODULE);
->  	if (!mdev)
->  		return -ENOMEM;
->  
-> -	/* check if media device is already initialized */
-> -	if (!mdev->dev)
-> -		media_device_usb_init(mdev, udev, udev->product);
-> -
->  	dev->media_dev = mdev;
->  #endif
->  	return 0;
-> @@ -480,6 +474,9 @@ static int au0828_media_device_register(struct au0828_dev *dev,
->  		/* register media device */
->  		ret = media_device_register(dev->media_dev);
->  		if (ret) {
-> +			media_device_delete(dev->media_dev, KBUILD_MODNAME,
-> +					    THIS_MODULE);
-> +			dev->media_dev = NULL;
->  			dev_err(&udev->dev,
->  				"Media Device Register Error: %d\n", ret);
->  			return ret;
-> diff --git a/drivers/media/usb/au0828/au0828.h b/drivers/media/usb/au0828/au0828.h
-> index 425c35d16057..57b00de8d3f2 100644
-> --- a/drivers/media/usb/au0828/au0828.h
-> +++ b/drivers/media/usb/au0828/au0828.h
-> @@ -31,6 +31,7 @@
->  #include <media/v4l2-ctrls.h>
->  #include <media/v4l2-fh.h>
->  #include <media/media-device.h>
-> +#include <media/media-dev-allocator.h>
->  
->  /* DVB */
->  #include <media/demux.h>
-> 
+Should it? As "someone in the patch deliery path" (quoting
+submitting-patches.rst) I probably should. I didn't as Niklas didn't
+do that in v2, but I can add it to v5.
 
+Thanks for pointing it out!
+
+>
+> --
+> Kind regards,
+>
+> Sakari Ailus
+> sakari.ailus@linux.intel.com
+
+--h2zfpth2sfa2szia
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlyd2DMACgkQcjQGjxah
+VjyjJxAAinXd+TSZaQldkklAXkixIvDdxVpQUE7nlWwPbD36tHE5I1e5b/ittdZH
+7Tf7nN96IxT/2/agFKFyGgxXtdm+1Na8ZqvRvNQQj8bHpzqPqjjCkM8XdiIZGfKA
+THfCGZ4b/n9VulbYh4dY1pQOnQD4j8NOTK4D6OLVtIbiGSj1g2OeFiW6AHSXheHU
+nR/70mwc/7bOE/rmRBFoM9oveoOT6BQ763pPvABF/w7ygLscZfkIplCh8ksEijXL
+geA7zoMot8J3IdrVa5I0gqW7pz74/YyUzC4m+FaQJGHBZinx3q5N5P/8/WoLDkv0
+zpjnYKxS49OgY2AYAo13YOO7cprzu6TEuAnvCKISIyx2LaRKp/vGeUawn2xW/pu4
+GkYbTBAiXzPdBgADIrjZAT74ltrEvvyXjWxGsT2XddfeWWchPkYH+U54RxFrIcst
+9ThFkQc/hIsyxM3oeW7Fzt6CK1a0YmVPhobNNEubG4/hnSAgpO47uab0T8eS4h/F
+6q1iwfZYe7elpTXClO5r9Jy+OVwMptDvGDkVlPCxlMSNulcMPL1hPkJq5Pc33vKy
+jtacKc71FfBscsfrcx344RMAAy2q0IQPVXE994FCQ9nMsqr/PUAIo857rptwfOhj
+oIGRlODPdrMbA1UU0r6B/fvAnyze55dVtX2F6oqFKBZIT4TZH80=
+=iV3f
+-----END PGP SIGNATURE-----
+
+--h2zfpth2sfa2szia--
