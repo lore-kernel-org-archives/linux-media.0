@@ -2,169 +2,153 @@ Return-Path: <SRS0=IMFm=SB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7952C43381
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 01:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46F81C43381
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 04:53:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A17DC218D8
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 01:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553910887;
-	bh=51a2xYAXezxKvLjnk83qejcEiKhdVNTwkrrJh/lZbS0=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=oIWL/XA5nRFLqCGLYBKVlnUS62ph41U8cy07wcu0TAqiUb4P8LkVJxyI5vkkTj4mz
-	 RPODQu6sMzANJu38PggASr+FarmGNuC7MufzCJ85Ed66F3T1okMAYENd7jLHN9dTLN
-	 0iPN+dZ+MVAMnNRKiNwI4t8U1sZ0/o4t8eXWvX8U=
+	by mail.kernel.org (Postfix) with ESMTP id 1EE2D2173C
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 04:53:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730122AbfC3ByG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 21:54:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52272 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730059AbfC3ByF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 21:54:05 -0400
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0067F2183F;
-        Sat, 30 Mar 2019 01:54:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553910844;
-        bh=51a2xYAXezxKvLjnk83qejcEiKhdVNTwkrrJh/lZbS0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WP/HPoNwKjrsKlfV9tKnQvXziTg8VJZfA23EHMFR3CoYrE/FMXQOazJRXyWqEQp+5
-         fnDIIN+TSQZI6FDj6jy0t4d2OQn+cd7hOb+Ss9/m+MJ9N5tG6JLEro9IY1EVDsyT06
-         MO8i+cHbtwMMJdyBZYXUkKkWK2fjuzujD8WbRJ3U=
-From:   Shuah Khan <shuah@kernel.org>
-To:     mchehab@kernel.org, perex@perex.cz, tiwai@suse.com,
-        hverkuil@xs4all.nl
-Cc:     Shuah Khan <shuah@kernel.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH v14 0/6] Media Device Allocator API
-Date:   Fri, 29 Mar 2019 19:53:55 -0600
-Message-Id: <cover.1553909892.git.shuah@kernel.org>
-X-Mailer: git-send-email 2.19.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1725961AbfC3ExO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Mar 2019 00:53:14 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:38692 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725872AbfC3ExO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 30 Mar 2019 00:53:14 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:5119:f492:3e7f:bde1])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id A5zThTyLhiLOmA5zUhVX5h; Sat, 30 Mar 2019 05:53:12 +0100
+Message-ID: <d7a5fe6e34e4cf2a9b75893920f77833@smtp-cloud9.xs4all.net>
+Date:   Sat, 30 Mar 2019 05:53:10 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfGHH50smLMCNMa2W/bxfJAvGy7x+ul9qipiWgmvBuExvNwRlsMIE+OrKwwv5DZrRAgMuhIDv9S20pknxwo5gklDvsQ6AxRdtCNzKsX0j0EaE+gE9ylLx
+ fNSZBsqdNdMIWQoAl6Sbh/ymdBxM97jVGJWfGhBg7foT9u1W599+05bMpWJuCxMnocg8KV6iX4UCRoa1h4dj97+O83ftUGoZXH4aQ+V1wSm8gTFXoZRPGRdi
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Media Device Allocator API to allows multiple drivers share a media device.
-This API solves a very common use-case for media devices where one physical
-device (an USB stick) provides both audio and video. When such media device
-exposes a standard USB Audio class, a proprietary Video class, two or more
-independent drivers will share a single physical USB bridge. In such cases,
-it is necessary to coordinate access to the shared resource.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Using this API, drivers can allocate a media device with the shared struct
-device as the key. Once the media device is allocated by a driver, other
-drivers can get a reference to it. The media device is released when all
-the references are released.
+Results of the daily build of media_tree:
 
-The primary focus for testing The patch series is making sure media
-device is released when both drivers release the media device with
-a series of unbind/binds on both drivers.
+date:			Sat Mar 30 05:00:12 CET 2019
+media-tree git hash:	94fa831e3b359f24c01b9936de33b84c38caacbb
+media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
+v4l-utils git hash:	7ee189ecae0193fc2f98a09ed087f9f2cf30def7
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-2-amd64
 
-- both au0828 and snd-usb-aduio as built-in
-- both au0828 and snd-usb-aduio as modules
-- au0828 as module and snd-usb-aduio as built-in
-- au0828 as built-in and snd-usb-aduio as module
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
 
-Test results can be found at:
+Detailed results are available here:
 
-https://docs.google.com/document/d/1RMF8Rwj7xHJEoOx6_K2f-REgZJ63BMeAVEf-CV-0HsM/edit?usp=sharing
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
 
-Changes since v13:
-- Minor changes to variable names and other minor changes to copyright
-  and typos suggested by Hans Verkuil.
+Detailed regression test results are available here:
 
-Changes since v12:
-- Patch 1: Fixed prototype warns from media_dev_allocator.c. Removed
-  dependency on find_module() by adding struct module to input args.
-  Still need module name to pass into media_device API.
-- Patch 2 & 4: Update media dev allocator api calls to pass in struct module
-  pointer.
-- No changes to Patches 3 & 5.
-- Added patch 6 with a test. It can go in separately.
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
 
-Changes since v11:
-- Patch 1: Add CONFIG_MODULES dependency in media_dev_allocator files.
-  to fix compile errors when CONFIG_MODULES is disabled.
-- Patch 2, 3: No changes.
-- Patch 4: Fix sparse error reported by Dan Carpenter.
-- Patch 5: Fix warns found by Hans Verkuil.
-- v11 was tested on 5.0-rc7 and addresses comments on v10 series from
-  Hans Verkuil. Fixed problems found in resource sharing logic in au0828
-  adding a patch 5 to this series. The test plan used for testing resource
-  sharing could serve as a regression test plan and the test results can be
-  found at:
-- v10 was tested on 5.0-rc3 and addresses comments on v9 series from
-  Hans Verkuil.
+Full logs are available here:
 
-Changes since v10:
-- Patch 1: Fixed SPDX tag and removed redundant IS_ENABLED(CONFIG_USB)
-           around media_device_usb_allocate() - Sakari Ailus's review
-           comment.
-- Patch 2 and 3: No changes
-- Patch 4: Fixed SPDX tag - Sakari Ailus's review comment.
-- Carried Reviewed-by tag from Takashi Iwai for the sound from v9.
-- Patch 5: This is a new patch added to fix resource sharing
-           inconsistencies and problem found during testing using Han's
-           tests.
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
 
-Changes since v9:
-- Patch 1: Fix mutex assert warning from find_module() calls. This
-  code was written before the change to find_module() that requires
-  callers to hold module_mutex. I missed this during my testing on
-  4.20-rc6. Hans Verkuil reported the problem.
-- Patch 4: sound/usb: Initializes all the entities it can before
-  registering the device based on comments from Hans Verkuil
-- Carried Reviewed-by tag from Takashi Iwai for the sound from v9.
-- No changes to Patches 2 and 3.
+The Media Infrastructure API from this daily build is here:
 
-References:
-https://lkml.org/lkml/2018/11/2/169
-https://www.mail-archive.com/linux-media@vger.kernel.org/msg105854.html
-
-Shuah Khan (6):
-  media: Media Device Allocator API
-  media: change au0828 to use Media Device Allocator API
-  media: media.h: Enable ALSA MEDIA_INTF_T* interface types
-  sound/usb: Use Media Controller API to share media resources
-  au0828: fix enable and disable source audio and video inconsistencies
-  selftests: media_dev_allocator api test
-
- Documentation/media/kapi/mc-core.rst          |  41 +++
- drivers/media/Makefile                        |   6 +
- drivers/media/media-dev-allocator.c           | 135 ++++++++
- drivers/media/usb/au0828/Kconfig              |   2 +
- drivers/media/usb/au0828/au0828-core.c        | 195 ++++++++---
- drivers/media/usb/au0828/au0828.h             |   6 +-
- include/media/media-dev-allocator.h           |  63 ++++
- include/uapi/linux/media.h                    |  25 +-
- sound/usb/Kconfig                             |   4 +
- sound/usb/Makefile                            |   2 +
- sound/usb/card.c                              |  14 +
- sound/usb/card.h                              |   3 +
- sound/usb/media.c                             | 327 ++++++++++++++++++
- sound/usb/media.h                             |  74 ++++
- sound/usb/mixer.h                             |   3 +
- sound/usb/pcm.c                               |  29 +-
- sound/usb/quirks-table.h                      |   1 +
- sound/usb/stream.c                            |   2 +
- sound/usb/usbaudio.h                          |   6 +
- .../media_tests/media_dev_allocator.sh        |  85 +++++
- 20 files changed, 962 insertions(+), 61 deletions(-)
- create mode 100644 drivers/media/media-dev-allocator.c
- create mode 100644 include/media/media-dev-allocator.h
- create mode 100644 sound/usb/media.c
- create mode 100644 sound/usb/media.h
- create mode 100755 tools/testing/selftests/media_tests/media_dev_allocator.sh
-
--- 
-2.17.1
-
+http://www.xs4all.nl/~hverkuil/spec/index.html
