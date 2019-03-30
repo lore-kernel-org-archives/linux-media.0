@@ -2,99 +2,127 @@ Return-Path: <SRS0=IMFm=SB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72C46C43381
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 14:01:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9CEFC10F00
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 15:25:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 42255218A3
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 14:01:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="knETNovw"
+	by mail.kernel.org (Postfix) with ESMTP id A32C12075E
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 15:25:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730880AbfC3OBw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Mar 2019 10:01:52 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42862 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730832AbfC3OBw (ORCPT
+        id S1730628AbfC3PZK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Mar 2019 11:25:10 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:54798 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730531AbfC3PZK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Mar 2019 10:01:52 -0400
-Received: by mail-pf1-f194.google.com with SMTP id r15so2363468pfn.9
-        for <linux-media@vger.kernel.org>; Sat, 30 Mar 2019 07:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=El37trIfcT5Xnqpbt+DDC26KxBeO0bYNlPsDAubf7LQ=;
-        b=knETNovwRV4bajrMP1UJTuFn6MPV5DABsc1edbIE6Rp7TJAZs+CrH2oZmBkZ2Ru4x6
-         PolN1vQvaP+s5jsnu9+AH3P20ewtFaZ8x9th6KM6TabZM3LnXhMr0+MicuiOkKn+nwxP
-         7n5ui/cPNhQD2UxHMmbY0a+6Pxggp+zdmG1hRYsCFBDRleHcA+DW/IImgEybJCMclOqJ
-         Vl0JQLnNx+9sPbFWhg04zJrXGu41gcFki3dFgs6JNaM02LBK8zPKfCiAz2riY9nYiakO
-         w0nXtUjWKeGrdlTXIVXCv4u/BWjNm9IcsJindtKy6IUbvFM/7ER5o/zTsnz8ZszaKkgA
-         XacA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=El37trIfcT5Xnqpbt+DDC26KxBeO0bYNlPsDAubf7LQ=;
-        b=c6FgM45y2bpNG2Z9MZwXeHkWzS/YFRtyc6I7HmbVJSvunwby6g4Le+giMJ2CzRQ4bO
-         uBTsespOxrfgbhyHv1KAZ4KggfzUxMpyjZoRIhSfXU6gLH9USAtU8ILNTnMeG4SP3OjJ
-         EWwpdb+55nPC+MoiBtP5/FdAI4EO8HLsfH0aLcinik+WFvOK0zjM+0xy0l/VSeJNrAwJ
-         ABiqn90j5N0nizqCUNphvdJWpdXN7eL0B9XzF2zQj/07SMPjdCBXfd9CnZVfaSp6tDH/
-         7eiAXQkDuwIAyh8WB7L8LHra5fLN/M3W6MHslYAK5xD+tF+PbmY6yCxTycesmIFYIGeW
-         zCxw==
-X-Gm-Message-State: APjAAAXGn5cKtbvK6tSPlEeIKoeThQG8KjalERanxubB2yxvJ2gl5+iz
-        SDA/IzinF+AdcUfbYmbaUl/jOUgE
-X-Google-Smtp-Source: APXvYqxI+hqBqyZ5y4z18P9O5mY0k5/PichIPbSNGRjQ7zVSVsxdl078jJ602HtRWq8W2DvDfi0aZw==
-X-Received: by 2002:a63:2ace:: with SMTP id q197mr7376773pgq.371.1553954511904;
-        Sat, 30 Mar 2019 07:01:51 -0700 (PDT)
-Received: from localhost.localdomain ([240f:34:212d:1:1b24:991b:df50:ea3f])
-        by smtp.gmail.com with ESMTPSA id b72sm18294289pga.86.2019.03.30.07.01.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sat, 30 Mar 2019 07:01:51 -0700 (PDT)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 2/2] media: ov2659: fix unbalanced mutex_lock/unlock
-Date:   Sat, 30 Mar 2019 23:01:32 +0900
-Message-Id: <1553954492-24982-3-git-send-email-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1553954492-24982-1-git-send-email-akinobu.mita@gmail.com>
-References: <1553954492-24982-1-git-send-email-akinobu.mita@gmail.com>
+        Sat, 30 Mar 2019 11:25:10 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <colin.king@canonical.com>)
+        id 1hAFqx-0003tT-FY; Sat, 30 Mar 2019 15:25:03 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Aditya Pakki <pakki001@umn.edu>, Sean Young <sean@mess.org>,
+        linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: dvb: clean up redundant break statements
+Date:   Sat, 30 Mar 2019 15:25:03 +0000
+Message-Id: <20190330152503.9923-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Avoid returning with mutex locked.
+From: Colin Ian King <colin.king@canonical.com>
 
-Fixes: fa8cb6444c32 ("[media] ov2659: Don't depend on subdev API")
-Cc: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+There are several places where a break statement occurs before
+a following break statement; these are unnecessary and can be
+removed to clean up the code a little.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/media/i2c/ov2659.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/dvb-frontends/drxd_hard.c | 30 +++++--------------------
+ 1 file changed, 5 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
-index a1e9a98..5ed2413 100644
---- a/drivers/media/i2c/ov2659.c
-+++ b/drivers/media/i2c/ov2659.c
-@@ -1132,7 +1132,7 @@ static int ov2659_set_fmt(struct v4l2_subdev *sd,
- 		mf = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
- 		*mf = fmt->format;
- #else
--		return -ENOTTY;
-+		ret = -ENOTTY;
- #endif
- 	} else {
- 		s64 val;
+diff --git a/drivers/media/dvb-frontends/drxd_hard.c b/drivers/media/dvb-frontends/drxd_hard.c
+index 0a5b15bee1d7..c597d6fc3046 100644
+--- a/drivers/media/dvb-frontends/drxd_hard.c
++++ b/drivers/media/dvb-frontends/drxd_hard.c
+@@ -2263,61 +2263,41 @@ static int DRX_Start(struct drxd_state *state, s32 off)
+ 		case DRX_CHANNEL_LOW:
+ 			transmissionParams |= SC_RA_RAM_OP_PARAM_PRIO_LO;
+ 			status = Write16(state, EC_SB_REG_PRIOR__A, EC_SB_REG_PRIOR_LO, 0x0000);
+-			if (status < 0)
+-				break;
+ 			break;
+ 		case DRX_CHANNEL_HIGH:
+ 			transmissionParams |= SC_RA_RAM_OP_PARAM_PRIO_HI;
+ 			status = Write16(state, EC_SB_REG_PRIOR__A, EC_SB_REG_PRIOR_HI, 0x0000);
+-			if (status < 0)
+-				break;
+ 			break;
+-
+ 		}
+ 
+ 		switch (p->code_rate_HP) {
+ 		case FEC_1_2:
+ 			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_1_2;
+-			if (state->type_A) {
++			if (state->type_A)
+ 				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C1_2, 0x0000);
+-				if (status < 0)
+-					break;
+-			}
+ 			break;
+ 		default:
+ 			operationMode |= SC_RA_RAM_OP_AUTO_RATE__M;
+ 			/* fall through */
+ 		case FEC_2_3:
+ 			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_2_3;
+-			if (state->type_A) {
++			if (state->type_A)
+ 				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C2_3, 0x0000);
+-				if (status < 0)
+-					break;
+-			}
+ 			break;
+ 		case FEC_3_4:
+ 			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_3_4;
+-			if (state->type_A) {
++			if (state->type_A)
+ 				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C3_4, 0x0000);
+-				if (status < 0)
+-					break;
+-			}
+ 			break;
+ 		case FEC_5_6:
+ 			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_5_6;
+-			if (state->type_A) {
++			if (state->type_A)
+ 				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C5_6, 0x0000);
+-				if (status < 0)
+-					break;
+-			}
+ 			break;
+ 		case FEC_7_8:
+ 			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_7_8;
+-			if (state->type_A) {
++			if (state->type_A)
+ 				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C7_8, 0x0000);
+-				if (status < 0)
+-					break;
+-			}
+ 			break;
+ 		}
+ 		if (status < 0)
 -- 
-2.7.4
+2.20.1
 
