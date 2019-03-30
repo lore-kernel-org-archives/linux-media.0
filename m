@@ -4,140 +4,174 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BABE5C43381
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 01:30:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 143EBC43381
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 01:54:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D3C221773
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 01:30:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4AF52184C
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 01:54:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1553909437;
-	bh=Jl0KP1gBPY46F7Qi5eYWw3hmLXbME6CJbG8G1cX4GG4=;
+	s=default; t=1553910859;
+	bh=40zwdr6bQSLWUP6pogszPsje1G4+poWN1hnfo28qJnY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Z+nJyVc/xgL30KlmUKfk7fLlPCoU8XgTzBxvu9pzOUIdH+jw+JyX2D5L2dvPBJDiu
-	 ErEkGbXCzv/UQWQQ5ckW/EldDnIVokzlGfJByI9OeTF/mk3woPMJv+61CDvHyvaShi
-	 IbX8ztTomnIWdmnvkHGd5VYREmR4XNdhx/tshkKM=
+	b=hzROmkHYiRGKitfOk4SOxzJmdPjfostkvBs4uyuswroV0Tk2+NWm2NFlaKkNKsbyp
+	 1gRT8TY29wgZKpHb+di8OiNBiwTnCEzwOxoEnxMAvHAwZmYuU/3eY+L5vIqf5cdtKD
+	 ropgReimURyZVPwdbuksOQKfMMBgQRBXheBB6k6g=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731708AbfC3Bag (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 21:30:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37878 "EHLO mail.kernel.org"
+        id S1730413AbfC3ByN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 21:54:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52470 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731703AbfC3Baf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 21:30:35 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        id S1730370AbfC3ByK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 29 Mar 2019 21:54:10 -0400
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58B68218A6;
-        Sat, 30 Mar 2019 01:30:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 215F121901;
+        Sat, 30 Mar 2019 01:54:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1553909434;
-        bh=Jl0KP1gBPY46F7Qi5eYWw3hmLXbME6CJbG8G1cX4GG4=;
+        s=default; t=1553910849;
+        bh=40zwdr6bQSLWUP6pogszPsje1G4+poWN1hnfo28qJnY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sftbXXcGlpP3jlOtJljwvgWZyTjNEbzMtcKUBH3qcfJQajRO/K+EER63OQ/+7Yl49
-         R/g3FSom3uNWUkVWSZnvt51W6HqIE1AV6xHpfJ+DEhHjcctIIAu/AW2lXtErWafYcn
-         UxxqNRN7xDjF9uBKYODj/o0dj0Ao8DmTKlKrBrrc=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Brad Love <brad@nextdimension.cc>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 09/37] media: au0828: cannot kfree dev before usb disconnect
-Date:   Fri, 29 Mar 2019 21:29:52 -0400
-Message-Id: <20190330013020.379-9-sashal@kernel.org>
+        b=X8FNg0FKDdRgQyK74M4ouDI4SKn/hFyAwZjXhO17Pv45/2c1IqRXwvP1oBlbrtRnF
+         awibPrt5g+MW1T9dZjuGXVUm6zitPVNWDkda1wH8+YPhXtlVky38TT27FfDxj00lE+
+         YyJyW727EBMZQi5/e+nBdqfkBq9fop4oZgaZEwaM=
+From:   Shuah Khan <shuah@kernel.org>
+To:     mchehab@kernel.org, perex@perex.cz, tiwai@suse.com,
+        hverkuil@xs4all.nl
+Cc:     Shuah Khan <shuah@kernel.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH v14 6/6] selftests: media_dev_allocator api test
+Date:   Fri, 29 Mar 2019 19:54:01 -0600
+Message-Id: <58769883bfbb8b959b12952d155de87fc01f6d99.1553909893.git.shuah@kernel.org>
 X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190330013020.379-1-sashal@kernel.org>
-References: <20190330013020.379-1-sashal@kernel.org>
+In-Reply-To: <cover.1553909892.git.shuah@kernel.org>
+References: <cover.1553909892.git.shuah@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Brad Love <brad@nextdimension.cc>
+Add a new test for Media Device Allocator API.
 
-[ Upstream commit 4add7104919f9e94e0db03e234caeadbfcc02ea9 ]
+Media Device Allocator API to allows multiple drivers share a media device.
+This API solves a very common use-case for media devices where one physical
+device (an USB stick) provides both audio and video. When such media device
+exposes a standard USB Audio class, a proprietary Video class, two or more
+independent drivers will share a single physical USB bridge. In such cases,
+it is necessary to coordinate access to the shared resource.
 
-If au0828_analog_register fails, the dev is kfree'd and then flow
-jumps to done, which can call au0828_usb_disconnect. Since all USB
-error codes are negative, au0828_usb_disconnect will be called. The
-problem is au0828_usb_disconnect uses dev, if dev is NULL then there
-is immediate oops encountered.
+Using this API, drivers can allocate a media device with the shared struct
+device as the key. Once the media device is allocated by a driver, other
+drivers can get a reference to it. The media device is released when all
+the references are released.
 
-[    7.454307] au0828: au0828_usb_probe() au0282_dev_register failed to register on V4L2
-[    7.454323] BUG: unable to handle kernel NULL pointer dereference at 0000000000000050
-[    7.454421] PGD 0 P4D 0
-[    7.454457] Oops: 0002 [#1] SMP PTI
-[    7.454500] CPU: 1 PID: 262 Comm: systemd-udevd Tainted: P           O      4.18.3 #1
-[    7.454584] Hardware name: Google Panther/Panther, BIOS MattDevo 04/27/2015
-[    7.454670] RIP: 0010:_raw_spin_lock_irqsave+0x2c/0x50
-[    7.454725] Code: 44 00 00 55 48 89 e5 41 54 53 48 89 fb 9c 58 0f 1f 44 00 00 49 89 c4 fa 66 0f 1f 44 00 00 e8 db 23 1b ff 31 c0 ba 01 00 00 00 <f0> 0f b1 13 85 c0 75 08 4c 89 e0 5b 41 5c 5d c3 89 c6 48 89 df e8
-[    7.455004] RSP: 0018:ffff9130f53ef988 EFLAGS: 00010046
-[    7.455063] RAX: 0000000000000000 RBX: 0000000000000050 RCX: 0000000000000000
-[    7.455139] RDX: 0000000000000001 RSI: 0000000000000003 RDI: 0000000000000050
-[    7.455216] RBP: ffff9130f53ef998 R08: 0000000000000018 R09: 0000000000000090
-[    7.455292] R10: ffffed4cc53cb000 R11: ffffed4cc53cb108 R12: 0000000000000082
-[    7.455369] R13: ffff9130cf2c6188 R14: 0000000000000000 R15: 0000000000000018
-[    7.455447] FS:  00007f2ff8514cc0(0000) GS:ffff9130fcb00000(0000) knlGS:0000000000000000
-[    7.455535] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    7.455597] CR2: 0000000000000050 CR3: 00000001753f0002 CR4: 00000000000606a0
-[    7.455675] Call Trace:
-[    7.455713]  __wake_up_common_lock+0x65/0xc0
-[    7.455764]  __wake_up+0x13/0x20
-[    7.455808]  ir_lirc_unregister+0x57/0xe0 [rc_core]
-[    7.455865]  rc_unregister_device+0xa0/0xc0 [rc_core]
-[    7.455935]  au0828_rc_unregister+0x25/0x40 [au0828]
-[    7.455999]  au0828_usb_disconnect+0x33/0x80 [au0828]
-[    7.456064]  au0828_usb_probe.cold.16+0x8d/0x2aa [au0828]
-[    7.456130]  usb_probe_interface+0xf1/0x300
-[    7.456184]  driver_probe_device+0x2e3/0x460
-[    7.456235]  __driver_attach+0xe4/0x110
-[    7.456282]  ? driver_probe_device+0x460/0x460
-[    7.456335]  bus_for_each_dev+0x74/0xb0
-[    7.456385]  ? kmem_cache_alloc_trace+0x15d/0x1d0
-[    7.456441]  driver_attach+0x1e/0x20
-[    7.456485]  bus_add_driver+0x159/0x230
-[    7.456532]  driver_register+0x70/0xc0
-[    7.456578]  usb_register_driver+0x7f/0x140
-[    7.456626]  ? 0xffffffffc0474000
-[    7.456674]  au0828_init+0xbc/0x1000 [au0828]
-[    7.456725]  do_one_initcall+0x4a/0x1c9
-[    7.456771]  ? _cond_resched+0x19/0x30
-[    7.456817]  ? kmem_cache_alloc_trace+0x15d/0x1d0
-[    7.456873]  do_init_module+0x60/0x210
-[    7.456918]  load_module+0x221b/0x2710
-[    7.456966]  ? vfs_read+0xf5/0x120
-[    7.457010]  __do_sys_finit_module+0xbd/0x120
-[    7.457061]  ? __do_sys_finit_module+0xbd/0x120
-[    7.457115]  __x64_sys_finit_module+0x1a/0x20
-[    7.457166]  do_syscall_64+0x5b/0x110
-[    7.457210]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+This test does a series of unbind/bind tests to make sure media device
+is released correctly when it is no longer is use and when the last
+driver releases the reference.
 
-Signed-off-by: Brad Love <brad@nextdimension.cc>
-Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Shuah Khan <shuah@kernel.org>
 ---
- drivers/media/usb/au0828/au0828-core.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../media_tests/media_dev_allocator.sh        | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100755 tools/testing/selftests/media_tests/media_dev_allocator.sh
 
-diff --git a/drivers/media/usb/au0828/au0828-core.c b/drivers/media/usb/au0828/au0828-core.c
-index cd363a2100d4..257ae0d8cfe2 100644
---- a/drivers/media/usb/au0828/au0828-core.c
-+++ b/drivers/media/usb/au0828/au0828-core.c
-@@ -629,7 +629,6 @@ static int au0828_usb_probe(struct usb_interface *interface,
- 		pr_err("%s() au0282_dev_register failed to register on V4L2\n",
- 			__func__);
- 		mutex_unlock(&dev->lock);
--		kfree(dev);
- 		goto done;
- 	}
- 
+diff --git a/tools/testing/selftests/media_tests/media_dev_allocator.sh b/tools/testing/selftests/media_tests/media_dev_allocator.sh
+new file mode 100755
+index 000000000000..ffe00c59a483
+--- /dev/null
++++ b/tools/testing/selftests/media_tests/media_dev_allocator.sh
+@@ -0,0 +1,85 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++# Media Device Allocator API test script
++# Copyright (c) 2019 Shuah Khan <shuah@kernel.org>
++
++echo "Media Device Allocator testing: unbind and bind"
++echo "media driver $1 audio driver $2"
++
++MDRIVER=/sys/bus/usb/drivers/$1
++cd $MDRIVER
++MDEV=$(ls -d *\-*)
++
++ADRIVER=/sys/bus/usb/drivers/$2
++cd $ADRIVER
++ADEV=$(ls -d *\-*.1)
++
++echo "=================================="
++echo "Test unbind both devices - start"
++echo "Running unbind of $MDEV from $MDRIVER"
++echo $MDEV > $MDRIVER/unbind;
++
++echo "Media device should still be present!"
++ls -l /dev/media*
++
++echo "sound driver is at: $ADRIVER"
++echo "Device is: $ADEV"
++
++echo "Running unbind of $ADEV from $ADRIVER"
++echo $ADEV > $ADRIVER/unbind;
++
++echo "Media device should have been deleted!"
++ls -l /dev/media*
++echo "Test unbind both devices - end"
++
++echo "=================================="
++
++echo "Test bind both devices - start"
++echo "Running bind of $MDEV from $MDRIVER"
++echo $MDEV > $MDRIVER/bind;
++
++echo "Media device should be present!"
++ls -l /dev/media*
++
++echo "Running bind of $ADEV from $ADRIVER"
++echo $ADEV > $ADRIVER/bind;
++
++echo "Media device should be there!"
++ls -l /dev/media*
++
++echo "Test bind both devices - end"
++
++echo "=================================="
++
++echo "Test unbind $MDEV - bind $MDEV - unbind $ADEV - bind $ADEV start"
++
++echo "Running unbind of $MDEV from $MDRIVER"
++echo $MDEV > $MDRIVER/unbind;
++
++echo "Media device should be there!"
++ls -l /dev/media*
++
++sleep 1
++
++echo "Running bind of $MDEV from $MDRIVER"
++echo $MDEV > $MDRIVER/bind;
++
++echo "Media device should be there!"
++ls -l /dev/media*
++
++echo "Running unbind of $ADEV from $ADRIVER"
++echo $ADEV > $ADRIVER/unbind;
++
++echo "Media device should be there!"
++ls -l /dev/media*
++
++sleep 1
++
++echo "Running bind of $ADEV from $ADRIVER"
++echo $ADEV > $ADRIVER/bind;
++
++echo "Media device should be there!"
++ls -l /dev/media*
++
++echo "Test unbind $MDEV - bind $MDEV - unbind $ADEV - bind $ADEV end"
++echo "=================================="
 -- 
-2.19.1
+2.17.1
 
