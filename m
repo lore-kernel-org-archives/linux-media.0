@@ -2,160 +2,101 @@ Return-Path: <SRS0=IMFm=SB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72AF5C10F00
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 18:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1261FC43381
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 20:45:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4A622218A3
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 18:15:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C71572146F
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 20:45:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="JIy3nOsV";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="mv6nZ78e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NyexrZZC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730941AbfC3SPD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Mar 2019 14:15:03 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:39614 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730769AbfC3SPD (ORCPT
+        id S1730606AbfC3Upp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Mar 2019 16:45:45 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:34734 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730582AbfC3Upo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Mar 2019 14:15:03 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id BD3AA608FC; Sat, 30 Mar 2019 18:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1553969701;
-        bh=Sl4mpVEtWUWi6PQhxgVnvMiUSuvf91C2qd5+jSeuHQ8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=JIy3nOsVlKKO/EOjMJ9J3FPuyF3vGWbhI5EhpCBSOzTVMprW+9L/nxherw0faNM+P
-         SO8tSXjggKyUEz9RNe4J6KWxObJg5Y0WPFgsO87X+Qnvw1nMH8SlwmuxieFUojLaUe
-         0gFJD4kWwBjTB15TzslTn5QwAGFeHmlnhDjBt1HA=
-Received: from [10.79.169.97] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mojha@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 116AC60712;
-        Sat, 30 Mar 2019 18:14:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1553969700;
-        bh=Sl4mpVEtWUWi6PQhxgVnvMiUSuvf91C2qd5+jSeuHQ8=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=mv6nZ78e7IdSi1GXXBtlZTNyEDZOZpfqJPcyeiZnQ3QqR7rs+0O5MQJViQ9ddHmiP
-         wpNOUbZRgVTTqK4i4+ckx2QQ1VvbOQU8T16kzYsZzASUWzzCUSlyeLnRatPuayySVW
-         XY098r2h8JIclHdk8YK79r7SkP8Y5uDA0JmlrXx4=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 116AC60712
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mojha@codeaurora.org
-Subject: Re: [PATCH] media: dvb: clean up redundant break statements
-To:     Colin King <colin.king@canonical.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Aditya Pakki <pakki001@umn.edu>, Sean Young <sean@mess.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190330152503.9923-1-colin.king@canonical.com>
-From:   Mukesh Ojha <mojha@codeaurora.org>
-Message-ID: <7392df5f-af02-18aa-beb8-36052f52a170@codeaurora.org>
-Date:   Sat, 30 Mar 2019 23:44:52 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190330152503.9923-1-colin.king@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        Sat, 30 Mar 2019 16:45:44 -0400
+Received: by mail-wm1-f65.google.com with SMTP id o10so12282484wmc.1
+        for <linux-media@vger.kernel.org>; Sat, 30 Mar 2019 13:45:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=7ulS7YQWCa4dNwzy2Y7Z9HEnbe9QnvEALJ/junLalCU=;
+        b=NyexrZZC62a/KVb4Oku8hXvPEGn/p+S5Wv4qc66Ks6vyf8hbirJLskThgdHpfkq0RK
+         TlMT2EfkViyPhtfRw6mg2jATY7koWxMYhq3eEdKKs8JkIak4L0M+L35ktmxutNMtXFHO
+         ra8CAUfAkcAcc9Gatjqle4+vy0FHzPXrCBSXavXSvDcJbM5jwY2qDBMq6v7I+I5MYL+F
+         bz0WcgvC2k2GTTQAgaG4Fm18KGbUtoEw7X+nih4Mz06k3HXQ6jrlSUbrV0kLg/U5jLzx
+         /Cb6o8uBPoAE1zsKa8oXkeunIwLcg5HKnmaIqgpWbZOTRzG9a2r+hsk9Dy9EhZxcmzQM
+         /3jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=7ulS7YQWCa4dNwzy2Y7Z9HEnbe9QnvEALJ/junLalCU=;
+        b=CazwJAdSyxDvh3fnKBYI75DvccR1JTVbOFxW2c3qtFXlUPPRgyOf6v79OgfWdJjz7M
+         LmysAgupBRA1xMz2GSMCw1Ps7FiX+qMpmdZE9A+KT2dRF6zHc+IpsyO5yEgpPJsHfL44
+         pnhZyoSsO3OIejlzD6ndnLrLKkkwwM8NFrmAA2NR4IcdPysuH+j/4B5gEDmx9cTjrV2O
+         xALNFtpSBCAWXhxIwG4d7uRZ8auJzG4eTWE560kd/XGuFvOIGbsCRbF9S6XRI1+Ndn8g
+         5nGCsuucZgb6d2vBrDY3DyYmbQWf7aNiv0lJG/5dhOjtrv4lXBn1DlR8v7NBRrZuFSju
+         Gq6w==
+X-Gm-Message-State: APjAAAVb2FVl0xyFuocRoI1Q6V6nu5QBoi6zVyIGMpoR74DN+c5ac3bO
+        i4DSW3LG8j/J+RDhkQBWb6hZxLq51kI=
+X-Google-Smtp-Source: APXvYqwtdbw0gbLCjIdQnukkVLY1OMqzPZKIQMM6cMtR+6qGVMrvLzdvHnqvTWxcOsNWqPzkFCzKGg==
+X-Received: by 2002:a7b:cc19:: with SMTP id f25mr7691560wmh.8.1553978742801;
+        Sat, 30 Mar 2019 13:45:42 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5ab07d.dynamic.kabel-deutschland.de. [95.90.176.125])
+        by smtp.gmail.com with ESMTPSA id a9sm5903671wmb.30.2019.03.30.13.45.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 30 Mar 2019 13:45:42 -0700 (PDT)
+From:   Dafna Hirschfeld <dafna3@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, helen.koike@collabora.com,
+        Dafna Hirschfeld <dafna3@gmail.com>
+Subject: [PATCH 00/14] add support for stateless encoder
+Date:   Sat, 30 Mar 2019 13:42:58 -0700
+Message-Id: <20190330204311.107417-1-dafna3@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+patches 9-13 are new,
 
-On 3/30/2019 8:55 PM, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
->
-> There are several places where a break statement occurs before
-> a following break statement; these are unnecessary and can be
-> removed to clean up the code a little.
->
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-Reviewed-by: Mukesh Ojha <mojha@codeaurora.org>
+Dafna Hirschfeld (6):
+  media: vicodec: don't test if info is NULL
+  media: vicodec: add field 'dev_inst' to vicodec_ctx
+  media: vicodec: Register another node for stateless encoder
+  media: vicodec: set pixelformat V4L2_PIX_FMT_FWHT_STATELESS for
+    stateless encoder
+  media: vicodec: Add support for stateless encoder
+  prints
 
-Cheers,
--Mukesh
+Hans Verkuil (8):
+  kernel/sysctl.c: bug fix
+  vicodec: always return a valid format.
+  vicodec: pass on enc output format to capture side
+  vicodec: add V4L2_CID_MIN_BUFFERS_FOR_OUTPUT
+  videobuf2-v4l2: set last_buffer_dequeued in dqbuf
+  vicodec: improve handling of ENC_CMD_STOP/START
+  vicodec: restrict decoder format list when src fmt is known
+  vicodec: fix vicodec_buf_queue()
 
+ .../media/common/videobuf2/videobuf2-v4l2.c   |  10 +-
+ drivers/media/media-request.c                 |   3 +
+ drivers/media/platform/vicodec/codec-fwht.c   |  25 +
+ drivers/media/platform/vicodec/codec-fwht.h   |   2 +
+ .../media/platform/vicodec/codec-v4l2-fwht.c  |  63 ++-
+ drivers/media/platform/vicodec/vicodec-core.c | 497 +++++++++++++-----
+ drivers/media/v4l2-core/v4l2-ctrls.c          |  57 +-
+ kernel/sysctl.c                               |   2 +-
+ 8 files changed, 507 insertions(+), 152 deletions(-)
 
-> ---
->   drivers/media/dvb-frontends/drxd_hard.c | 30 +++++--------------------
->   1 file changed, 5 insertions(+), 25 deletions(-)
->
-> diff --git a/drivers/media/dvb-frontends/drxd_hard.c b/drivers/media/dvb-frontends/drxd_hard.c
-> index 0a5b15bee1d7..c597d6fc3046 100644
-> --- a/drivers/media/dvb-frontends/drxd_hard.c
-> +++ b/drivers/media/dvb-frontends/drxd_hard.c
-> @@ -2263,61 +2263,41 @@ static int DRX_Start(struct drxd_state *state, s32 off)
->   		case DRX_CHANNEL_LOW:
->   			transmissionParams |= SC_RA_RAM_OP_PARAM_PRIO_LO;
->   			status = Write16(state, EC_SB_REG_PRIOR__A, EC_SB_REG_PRIOR_LO, 0x0000);
-> -			if (status < 0)
-> -				break;
->   			break;
->   		case DRX_CHANNEL_HIGH:
->   			transmissionParams |= SC_RA_RAM_OP_PARAM_PRIO_HI;
->   			status = Write16(state, EC_SB_REG_PRIOR__A, EC_SB_REG_PRIOR_HI, 0x0000);
-> -			if (status < 0)
-> -				break;
->   			break;
-> -
->   		}
->   
->   		switch (p->code_rate_HP) {
->   		case FEC_1_2:
->   			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_1_2;
-> -			if (state->type_A) {
-> +			if (state->type_A)
->   				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C1_2, 0x0000);
-> -				if (status < 0)
-> -					break;
-> -			}
->   			break;
->   		default:
->   			operationMode |= SC_RA_RAM_OP_AUTO_RATE__M;
->   			/* fall through */
->   		case FEC_2_3:
->   			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_2_3;
-> -			if (state->type_A) {
-> +			if (state->type_A)
->   				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C2_3, 0x0000);
-> -				if (status < 0)
-> -					break;
-> -			}
->   			break;
->   		case FEC_3_4:
->   			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_3_4;
-> -			if (state->type_A) {
-> +			if (state->type_A)
->   				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C3_4, 0x0000);
-> -				if (status < 0)
-> -					break;
-> -			}
->   			break;
->   		case FEC_5_6:
->   			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_5_6;
-> -			if (state->type_A) {
-> +			if (state->type_A)
->   				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C5_6, 0x0000);
-> -				if (status < 0)
-> -					break;
-> -			}
->   			break;
->   		case FEC_7_8:
->   			transmissionParams |= SC_RA_RAM_OP_PARAM_RATE_7_8;
-> -			if (state->type_A) {
-> +			if (state->type_A)
->   				status = Write16(state, EC_VD_REG_SET_CODERATE__A, EC_VD_REG_SET_CODERATE_C7_8, 0x0000);
-> -				if (status < 0)
-> -					break;
-> -			}
->   			break;
->   		}
->   		if (status < 0)
+-- 
+2.17.1
+
