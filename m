@@ -2,870 +2,1217 @@ Return-Path: <SRS0=IMFm=SB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E39E4C4360F
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 00:08:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A095C43381
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 00:39:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9BD61218A6
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 00:08:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A34520643
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 00:39:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1553906341;
+	bh=T4wL2Xm461B2MlwuTE5lvFaNHPi9WM1DthPIm4/QEqE=;
+	h=From:Cc:Subject:Date:To:List-ID:From;
+	b=n4RykBn91CunDERoAuKvMzX5708kxcuQA6F4oEqirQY1ybUHBTSe9soFaWd2Fs0Wz
+	 KZMS+TXlZshPT0l/QAVLsu8V2WngYoNNmhbZk9amYYFTFYWMn9o1piPXEgTDJm5efR
+	 lAau8lzrIxQuceYFxhRIz0C2bUHq60qc8ge+ON5M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730164AbfC3AHo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 29 Mar 2019 20:07:44 -0400
-Received: from vps-vb.mhejs.net ([37.28.154.113]:36784 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730022AbfC3AHo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 29 Mar 2019 20:07:44 -0400
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1hA1Hg-0003ms-Mx; Sat, 30 Mar 2019 00:51:40 +0100
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-To:     Michael Krufky <mkrufky@linuxtv.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Andy Walls <awalls@md.metrocast.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH v9 2/4] [media] cxusb: implement Medion MD95700 digital / analog coexistence
-Date:   Sat, 30 Mar 2019 00:51:22 +0100
-Message-Id: <07fc8594c942ab527275b29121869ffe77bc1d83.1553903063.git.mail@maciej.szmigiero.name>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1553903063.git.mail@maciej.szmigiero.name>
-References: <cover.1553903063.git.mail@maciej.szmigiero.name>
+        id S1730400AbfC3AjA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 29 Mar 2019 20:39:00 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:49054 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729982AbfC3AjA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 29 Mar 2019 20:39:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=brqcF72z6OkuLIUWs3GHtrCBcw2Gs/fnIpfZvM9ogL4=; b=aWIoSmfTpV4G5oQYFEs4veHI+
+        fFbyC8hsVBQ3fBtHWLzdnP6Tqnzpsv6c0undxsld67MHMfS0mB4FY9PJ9HWbrdZMFf677i5oa8HdH
+        +rckASzhlSHTdxDVCqWZ2Hkmfo0N+d4NTHbV7xlKmrVa/lihS7EiS7rfi5R+r47dScbXvw1KRgEA/
+        QvV8Gz76E7VnpZjikRKWda67FcruWiVlaZVEf29NJW/4ezvCsPfQLw2CqMnVBvHPwgklJsKtLDRDp
+        8rhuWlPwFw9X/zASG4VNqZNggw/OwQ8y1k88QRtykdfyuz0BhkgImpj0vWce2WTNBCtJhTuHvt8UI
+        iV9mjyy1g==;
+Received: from [179.95.36.211] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hA21O-0006j1-BR; Sat, 30 Mar 2019 00:38:54 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hA21K-00053a-D5; Fri, 29 Mar 2019 20:38:50 -0400
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Dafna Hirschfeld <dafna3@gmail.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Keiichi Watanabe <keiichiw@chromium.org>,
+        Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Vivek Kasireddy <vivek.kasireddy@intel.com>,
+        Todor Tomov <todor.tomov@linaro.org>
+Subject: [PATCH v2] media: pdf docs: adjust several tables for better display
+Date:   Fri, 29 Mar 2019 20:38:49 -0400
+Message-Id: <94fa831e3b359f24c01b9936de33b84c38caacbb.1553906274.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch prepares cxusb driver for supporting the analog part of
-Medion 95700 (previously only the digital - DVB - mode was supported).
+Avoid cell overlapping by changing some sizes, and changing the
+font sizes when needed.
 
-Specifically, it adds support for:
-* switching the device between analog and digital modes of operation,
-* enforcing that only one mode is active at the same time due to hardware
-limitations.
+Tested with Sphinx 1.7.8.
 
-Actual implementation of the analog mode will be provided by the next
-commit.
-
-Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- drivers/media/usb/dvb-usb/cxusb.c        | 450 ++++++++++++++++++++---
- drivers/media/usb/dvb-usb/cxusb.h        |  48 +++
- drivers/media/usb/dvb-usb/dvb-usb-dvb.c  |  20 +-
- drivers/media/usb/dvb-usb/dvb-usb-init.c |  13 +
- drivers/media/usb/dvb-usb/dvb-usb.h      |   8 +
- 5 files changed, 486 insertions(+), 53 deletions(-)
+ Documentation/media/uapi/v4l/buffer.rst       | 19 ++--
+ .../media/uapi/v4l/colorspaces-defs.rst       |  4 +-
+ Documentation/media/uapi/v4l/colorspaces.rst  |  4 +-
+ Documentation/media/uapi/v4l/dev-raw-vbi.rst  |  4 +-
+ Documentation/media/uapi/v4l/dev-rds.rst      |  2 +-
+ .../media/uapi/v4l/dev-sliced-vbi.rst         | 22 ++---
+ Documentation/media/uapi/v4l/dev-subdev.rst   | 82 ++++++++++++-----
+ .../media/uapi/v4l/ext-ctrls-camera.rst       | 17 +++-
+ .../media/uapi/v4l/ext-ctrls-codec.rst        | 91 ++++++++++++++++---
+ .../media/uapi/v4l/ext-ctrls-detect.rst       |  2 +-
+ Documentation/media/uapi/v4l/ext-ctrls-dv.rst |  2 +-
+ .../media/uapi/v4l/ext-ctrls-flash.rst        |  4 +-
+ .../media/uapi/v4l/ext-ctrls-jpeg.rst         |  2 +-
+ Documentation/media/uapi/v4l/field-order.rst  |  4 +-
+ .../media/uapi/v4l/pixfmt-meta-d4xx.rst       |  9 +-
+ .../media/uapi/v4l/pixfmt-meta-vsp1-hgt.rst   |  9 ++
+ .../media/uapi/v4l/pixfmt-packed-hsv.rst      |  2 +-
+ .../media/uapi/v4l/pixfmt-packed-rgb.rst      |  4 +-
+ .../media/uapi/v4l/pixfmt-packed-yuv.rst      |  2 +-
+ .../media/uapi/v4l/pixfmt-srggb10p.rst        |  2 +-
+ .../media/uapi/v4l/pixfmt-srggb12p.rst        |  3 +-
+ .../media/uapi/v4l/pixfmt-srggb14p.rst        | 24 ++++-
+ .../media/uapi/v4l/pixfmt-v4l2-mplane.rst     | 17 ++--
+ Documentation/media/uapi/v4l/pixfmt-y10p.rst  | 10 ++
+ .../media/uapi/v4l/subdev-formats.rst         |  6 +-
+ 25 files changed, 259 insertions(+), 88 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/cxusb.c b/drivers/media/usb/dvb-usb/cxusb.c
-index 9ddb2000249e..af70536b0605 100644
---- a/drivers/media/usb/dvb-usb/cxusb.c
-+++ b/drivers/media/usb/dvb-usb/cxusb.c
-@@ -16,6 +16,7 @@
-  * Copyright (C) 2005 Patrick Boettcher (patrick.boettcher@posteo.de)
-  * Copyright (C) 2006 Michael Krufky (mkrufky@linuxtv.org)
-  * Copyright (C) 2006, 2007 Chris Pascoe (c.pascoe@itee.uq.edu.au)
-+ * Copyright (C) 2011, 2017 Maciej S. Szmigiero (mail@maciej.szmigiero.name)
-  *
-  *   This program is free software; you can redistribute it and/or modify it
-  *   under the terms of the GNU General Public License as published by the Free
-@@ -24,9 +25,12 @@
-  * see Documentation/media/dvb-drivers/dvb-usb.rst for more information
-  */
- #include <media/tuner.h>
--#include <linux/vmalloc.h>
--#include <linux/slab.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
- #include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/vmalloc.h>
+diff --git a/Documentation/media/uapi/v4l/buffer.rst b/Documentation/media/uapi/v4l/buffer.rst
+index b9a2e9dc707c..1cbd9cde57f3 100644
+--- a/Documentation/media/uapi/v4l/buffer.rst
++++ b/Documentation/media/uapi/v4l/buffer.rst
+@@ -165,7 +165,7 @@ of appropriately sized buffers for each use case).
+ struct v4l2_buffer
+ ==================
  
- #include "cxusb.h"
+-.. tabularcolumns:: |p{2.8cm}|p{2.5cm}|p{1.3cm}|p{10.5cm}|
++.. tabularcolumns:: |p{2.8cm}|p{2.5cm}|p{1.6cm}|p{10.2cm}|
  
-@@ -47,17 +51,45 @@
- #include "si2157.h"
+ .. cssclass:: longtable
  
- /* debug */
--static int dvb_usb_cxusb_debug;
-+int dvb_usb_cxusb_debug;
- module_param_named(debug, dvb_usb_cxusb_debug, int, 0644);
--MODULE_PARM_DESC(debug, "set debugging level (1=rc (or-able))." DVB_USB_DEBUG_STATUS);
-+MODULE_PARM_DESC(debug, "set debugging level (see cxusb.h)."
-+		 DVB_USB_DEBUG_STATUS);
+@@ -420,7 +420,7 @@ enum v4l2_buf_type
  
- DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
+ .. cssclass:: longtable
  
--#define deb_info(args...)   dprintk(dvb_usb_cxusb_debug, 0x03, args)
--#define deb_i2c(args...)    dprintk(dvb_usb_cxusb_debug, 0x02, args)
-+#define deb_info(args...)   dprintk(dvb_usb_cxusb_debug, CXUSB_DBG_MISC, args)
-+#define deb_i2c(args...)    dprintk(dvb_usb_cxusb_debug, CXUSB_DBG_I2C, args)
-+
-+enum cxusb_table_index {
-+	MEDION_MD95700,
-+	DVICO_BLUEBIRD_LG064F_COLD,
-+	DVICO_BLUEBIRD_LG064F_WARM,
-+	DVICO_BLUEBIRD_DUAL_1_COLD,
-+	DVICO_BLUEBIRD_DUAL_1_WARM,
-+	DVICO_BLUEBIRD_LGZ201_COLD,
-+	DVICO_BLUEBIRD_LGZ201_WARM,
-+	DVICO_BLUEBIRD_TH7579_COLD,
-+	DVICO_BLUEBIRD_TH7579_WARM,
-+	DIGITALNOW_BLUEBIRD_DUAL_1_COLD,
-+	DIGITALNOW_BLUEBIRD_DUAL_1_WARM,
-+	DVICO_BLUEBIRD_DUAL_2_COLD,
-+	DVICO_BLUEBIRD_DUAL_2_WARM,
-+	DVICO_BLUEBIRD_DUAL_4,
-+	DVICO_BLUEBIRD_DVB_T_NANO_2,
-+	DVICO_BLUEBIRD_DVB_T_NANO_2_NFW_WARM,
-+	AVERMEDIA_VOLAR_A868R,
-+	DVICO_BLUEBIRD_DUAL_4_REV_2,
-+	CONEXANT_D680_DMB,
-+	MYGICA_D689,
-+	MYGICA_T230,
-+	NR__cxusb_table_index
-+};
-+
-+static struct usb_device_id cxusb_table[];
+-.. tabularcolumns:: |p{7.2cm}|p{0.6cm}|p{9.7cm}|
++.. tabularcolumns:: |p{7.8cm}|p{0.6cm}|p{9.1cm}|
  
--static int cxusb_ctrl_msg(struct dvb_usb_device *d,
--			  u8 cmd, const u8 *wbuf, int wlen, u8 *rbuf, int rlen)
-+int cxusb_ctrl_msg(struct dvb_usb_device *d,
-+		   u8 cmd, const u8 *wbuf, int wlen, u8 *rbuf, int rlen)
- {
- 	struct cxusb_state *st = d->priv;
- 	int ret;
-@@ -89,7 +121,8 @@ static void cxusb_gpio_tuner(struct dvb_usb_device *d, int onoff)
- 	struct cxusb_state *st = d->priv;
- 	u8 o[2], i;
+ .. flat-table::
+     :header-rows:  0
+@@ -482,7 +482,11 @@ enum v4l2_buf_type
+ Buffer Flags
+ ============
  
--	if (st->gpio_write_state[GPIO_TUNER] == onoff)
-+	if (st->gpio_write_state[GPIO_TUNER] == onoff &&
-+	    !st->gpio_write_refresh[GPIO_TUNER])
- 		return;
+-.. tabularcolumns:: |p{7.0cm}|p{2.2cm}|p{8.3cm}|
++.. raw:: latex
++
++    \small
++
++.. tabularcolumns:: |p{7.0cm}|p{2.1cm}|p{8.4cm}|
  
- 	o[0] = GPIO_TUNER;
-@@ -100,6 +133,7 @@ static void cxusb_gpio_tuner(struct dvb_usb_device *d, int onoff)
- 		deb_info("gpio_write failed.\n");
+ .. cssclass:: longtable
  
- 	st->gpio_write_state[GPIO_TUNER] = onoff;
-+	st->gpio_write_refresh[GPIO_TUNER] = false;
- }
+@@ -681,6 +685,9 @@ Buffer Flags
+ 	exposure of the frame has begun. This is only valid for the
+ 	``V4L2_BUF_TYPE_VIDEO_CAPTURE`` buffer type.
  
- static int cxusb_bluebird_gpio_rw(struct dvb_usb_device *d, u8 changemask,
-@@ -259,7 +293,7 @@ static int cxusb_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
++.. raw:: latex
++
++    \normalsize
  
- static u32 cxusb_i2c_func(struct i2c_adapter *adapter)
- {
--	return I2C_FUNC_I2C;
-+	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
- }
  
- static struct i2c_algorithm cxusb_i2c_algo = {
-@@ -267,15 +301,48 @@ static struct i2c_algorithm cxusb_i2c_algo = {
- 	.functionality = cxusb_i2c_func,
- };
+ .. c:type:: v4l2_memory
+@@ -688,7 +695,7 @@ Buffer Flags
+ enum v4l2_memory
+ ================
  
--static int cxusb_power_ctrl(struct dvb_usb_device *d, int onoff)
-+static int _cxusb_power_ctrl(struct dvb_usb_device *d, int onoff)
- {
- 	u8 b = 0;
-+
-+	deb_info("setting power %s\n", onoff ? "ON" : "OFF");
-+
- 	if (onoff)
- 		return cxusb_ctrl_msg(d, CMD_POWER_ON, &b, 1, NULL, 0);
- 	else
- 		return cxusb_ctrl_msg(d, CMD_POWER_OFF, &b, 1, NULL, 0);
- }
+-.. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
++.. tabularcolumns:: |p{5.0cm}|p{0.8cm}|p{11.7cm}|
  
-+static int cxusb_power_ctrl(struct dvb_usb_device *d, int onoff)
-+{
-+	bool is_medion = d->props.devices[0].warm_ids[0] ==
-+		&cxusb_table[MEDION_MD95700];
-+	int ret;
-+
-+	if (is_medion && !onoff) {
-+		struct cxusb_medion_dev *cxdev = d->priv;
-+
-+		mutex_lock(&cxdev->open_lock);
-+
-+		if (cxdev->open_type == CXUSB_OPEN_ANALOG) {
-+			deb_info("preventing DVB core from setting power OFF while we are in analog mode\n");
-+			ret = -EBUSY;
-+			goto ret_unlock;
-+		}
-+	}
-+
-+	ret = _cxusb_power_ctrl(d, onoff);
-+
-+ret_unlock:
-+	if (is_medion && !onoff) {
-+		struct cxusb_medion_dev *cxdev = d->priv;
-+
-+		mutex_unlock(&cxdev->open_lock);
-+	}
-+
-+	return ret;
-+}
-+
- static int cxusb_aver_power_ctrl(struct dvb_usb_device *d, int onoff)
- {
- 	int ret;
-@@ -353,11 +420,26 @@ static int cxusb_d680_dmb_power_ctrl(struct dvb_usb_device *d, int onoff)
+ .. flat-table::
+     :header-rows:  0
+@@ -724,7 +731,7 @@ The :c:type:`v4l2_buffer_timecode` structure is designed to hold a
+ struct v4l2_timecode
+ --------------------
  
- static int cxusb_streaming_ctrl(struct dvb_usb_adapter *adap, int onoff)
- {
-+	struct dvb_usb_device *dvbdev = adap->dev;
-+	bool is_medion = dvbdev->props.devices[0].warm_ids[0] ==
-+		&cxusb_table[MEDION_MD95700];
- 	u8 buf[2] = { 0x03, 0x00 };
-+
-+	if (is_medion && onoff) {
-+		int ret;
-+
-+		ret = cxusb_medion_get(dvbdev, CXUSB_OPEN_DIGITAL);
-+		if (ret != 0)
-+			return ret;
-+	}
-+
- 	if (onoff)
--		cxusb_ctrl_msg(adap->dev, CMD_STREAMING_ON, buf, 2, NULL, 0);
-+		cxusb_ctrl_msg(dvbdev, CMD_STREAMING_ON, buf, 2, NULL, 0);
- 	else
--		cxusb_ctrl_msg(adap->dev, CMD_STREAMING_OFF, NULL, 0, NULL, 0);
-+		cxusb_ctrl_msg(dvbdev, CMD_STREAMING_OFF, NULL, 0, NULL, 0);
-+
-+	if (is_medion && !onoff)
-+		cxusb_medion_put(dvbdev);
+-.. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
++.. tabularcolumns:: |p{1.4cm}|p{2.8cm}|p{12.3cm}|
  
- 	return 0;
- }
-@@ -630,9 +712,21 @@ static struct max2165_config mygica_d689_max2165_cfg = {
- /* Callbacks for DVB USB */
- static int cxusb_fmd1216me_tuner_attach(struct dvb_usb_adapter *adap)
- {
-+	struct dvb_usb_device *dvbdev = adap->dev;
-+	bool is_medion = dvbdev->props.devices[0].warm_ids[0] ==
-+		&cxusb_table[MEDION_MD95700];
-+
- 	dvb_attach(simple_tuner_attach, adap->fe_adap[0].fe,
--		   &adap->dev->i2c_adap, 0x61,
-+		   &dvbdev->i2c_adap, 0x61,
- 		   TUNER_PHILIPS_FMD1216ME_MK3);
-+
-+	if (is_medion && adap->fe_adap[0].fe != NULL)
-+		/*
-+		 * make sure that DVB core won't put to sleep (reset, really)
-+		 * tuner when we might be open in analog mode
-+		 */
-+		adap->fe_adap[0].fe->ops.tuner_ops.sleep = NULL;
-+
- 	return 0;
- }
+ .. flat-table::
+     :header-rows:  0
+@@ -761,7 +768,7 @@ struct v4l2_timecode
+ Timecode Types
+ --------------
  
-@@ -736,20 +830,105 @@ static int cxusb_mygica_d689_tuner_attach(struct dvb_usb_adapter *adap)
- 	return (fe == NULL) ? -EIO : 0;
- }
+-.. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
++.. tabularcolumns:: |p{5.6cm}|p{0.8cm}|p{11.1cm}|
  
--static int cxusb_cx22702_frontend_attach(struct dvb_usb_adapter *adap)
-+static int cxusb_medion_fe_ts_bus_ctrl(struct dvb_frontend *fe, int acquire)
- {
-+	struct dvb_usb_adapter *adap = fe->dvb->priv;
-+	struct dvb_usb_device *dvbdev = adap->dev;
-+
-+	if (acquire)
-+		return cxusb_medion_get(dvbdev, CXUSB_OPEN_DIGITAL);
-+
-+	cxusb_medion_put(dvbdev);
-+
-+	return 0;
-+}
-+
-+static int cxusb_medion_set_mode(struct dvb_usb_device *dvbdev, bool digital)
-+{
-+	struct cxusb_state *st = dvbdev->priv;
-+	int ret;
- 	u8 b;
--	if (usb_set_interface(adap->dev->udev, 0, 6) < 0)
--		err("set interface failed");
-+	unsigned int i;
-+
-+	/*
-+	 * switching mode while doing an I2C transaction often causes
-+	 * the device to crash
-+	 */
-+	mutex_lock(&dvbdev->i2c_mutex);
-+
-+	if (digital) {
-+		ret = usb_set_interface(dvbdev->udev, 0, 6);
-+		if (ret != 0) {
-+			dev_err(&dvbdev->udev->dev,
-+				"digital interface selection failed (%d)\n",
-+				ret);
-+			goto ret_unlock;
-+		}
-+	} else {
-+		ret = usb_set_interface(dvbdev->udev, 0, 1);
-+		if (ret != 0) {
-+			dev_err(&dvbdev->udev->dev,
-+				"analog interface selection failed (%d)\n",
-+				ret);
-+			goto ret_unlock;
-+		}
-+	}
-+
-+	/* pipes need to be cleared after setting interface */
-+	ret = usb_clear_halt(dvbdev->udev, usb_rcvbulkpipe(dvbdev->udev, 1));
-+	if (ret != 0)
-+		dev_warn(&dvbdev->udev->dev,
-+			 "clear halt on IN pipe failed (%d)\n",
-+			 ret);
-+
-+	ret = usb_clear_halt(dvbdev->udev, usb_sndbulkpipe(dvbdev->udev, 1));
-+	if (ret != 0)
-+		dev_warn(&dvbdev->udev->dev,
-+			 "clear halt on OUT pipe failed (%d)\n",
-+			 ret);
-+
-+	ret = cxusb_ctrl_msg(dvbdev, digital ? CMD_DIGITAL : CMD_ANALOG,
-+			     NULL, 0, &b, 1);
-+	if (ret != 0) {
-+		dev_err(&dvbdev->udev->dev, "mode switch failed (%d)\n",
-+			ret);
-+		goto ret_unlock;
-+	}
-+
-+	/* mode switch seems to reset GPIO states */
-+	for (i = 0; i < ARRAY_SIZE(st->gpio_write_refresh); i++)
-+		st->gpio_write_refresh[i] = true;
+ .. flat-table::
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/colorspaces-defs.rst b/Documentation/media/uapi/v4l/colorspaces-defs.rst
+index c4e8fc620379..e122bbe3d799 100644
+--- a/Documentation/media/uapi/v4l/colorspaces-defs.rst
++++ b/Documentation/media/uapi/v4l/colorspaces-defs.rst
+@@ -39,7 +39,7 @@ whole range, 0-255, dividing the angular value by 1.41. The enum
+    colorspaces except for BT.2020 which uses limited range R'G'B'
+    quantization.
  
--	cxusb_ctrl_msg(adap->dev, CMD_DIGITAL, NULL, 0, &b, 1);
-+ret_unlock:
-+	mutex_unlock(&dvbdev->i2c_mutex);
-+
-+	return ret;
-+}
-+
-+static int cxusb_cx22702_frontend_attach(struct dvb_usb_adapter *adap)
-+{
-+	struct dvb_usb_device *dvbdev = adap->dev;
-+	bool is_medion = dvbdev->props.devices[0].warm_ids[0] ==
-+		&cxusb_table[MEDION_MD95700];
-+
-+	if (is_medion) {
-+		int ret;
-+
-+		ret = cxusb_medion_set_mode(dvbdev, true);
-+		if (ret)
-+			return ret;
-+	}
+-.. tabularcolumns:: |p{6.0cm}|p{11.5cm}|
++.. tabularcolumns:: |p{6.7cm}|p{10.8cm}|
  
- 	adap->fe_adap[0].fe = dvb_attach(cx22702_attach, &cxusb_cx22702_config,
--					 &adap->dev->i2c_adap);
--	if ((adap->fe_adap[0].fe) != NULL)
--		return 0;
-+					 &dvbdev->i2c_adap);
-+	if (adap->fe_adap[0].fe == NULL)
-+		return -EIO;
+ .. c:type:: v4l2_colorspace
  
--	return -EIO;
-+	if (is_medion)
-+		adap->fe_adap[0].fe->ops.ts_bus_ctrl =
-+			cxusb_medion_fe_ts_bus_ctrl;
-+
-+	return 0;
- }
+@@ -112,7 +112,7 @@ whole range, 0-255, dividing the angular value by 1.41. The enum
  
- static int cxusb_lgdt3303_frontend_attach(struct dvb_usb_adapter *adap)
-@@ -1312,6 +1491,101 @@ static int bluebird_patch_dvico_firmware_download(struct usb_device *udev,
- 	return -EINVAL;
- }
+ .. c:type:: v4l2_ycbcr_encoding
  
-+int cxusb_medion_get(struct dvb_usb_device *dvbdev,
-+		     enum cxusb_open_type open_type)
-+{
-+	struct cxusb_medion_dev *cxdev = dvbdev->priv;
-+	int ret = 0;
-+
-+	mutex_lock(&cxdev->open_lock);
-+
-+	if (WARN_ON((cxdev->open_type == CXUSB_OPEN_INIT ||
-+		     cxdev->open_type == CXUSB_OPEN_NONE) &&
-+		    cxdev->open_ctr != 0)) {
-+		ret = -EINVAL;
-+		goto ret_unlock;
-+	}
-+
-+	if (cxdev->open_type == CXUSB_OPEN_INIT) {
-+		ret = -EAGAIN;
-+		goto ret_unlock;
-+	}
-+
-+	if (cxdev->open_ctr == 0) {
-+		if (cxdev->open_type != open_type) {
-+			deb_info("will acquire and switch to %s\n",
-+				 open_type == CXUSB_OPEN_ANALOG ?
-+				 "analog" : "digital");
-+
-+			if (open_type == CXUSB_OPEN_ANALOG) {
-+				ret = _cxusb_power_ctrl(dvbdev, 1);
-+				if (ret != 0)
-+					dev_warn(&dvbdev->udev->dev,
-+						 "powerup for analog switch failed (%d)\n",
-+						 ret);
-+
-+				ret = cxusb_medion_set_mode(dvbdev, false);
-+				if (ret != 0)
-+					goto ret_unlock;
-+
-+				ret = cxusb_medion_analog_init(dvbdev);
-+				if (ret != 0)
-+					goto ret_unlock;
-+			} else { /* digital */
-+				ret = _cxusb_power_ctrl(dvbdev, 1);
-+				if (ret != 0)
-+					dev_warn(&dvbdev->udev->dev,
-+						 "powerup for digital switch failed (%d)\n",
-+						 ret);
-+
-+				ret = cxusb_medion_set_mode(dvbdev, true);
-+				if (ret != 0)
-+					goto ret_unlock;
-+			}
-+
-+			cxdev->open_type = open_type;
-+		} else
-+			deb_info("reacquired idle %s\n",
-+				 open_type == CXUSB_OPEN_ANALOG ?
-+				 "analog" : "digital");
-+
-+		cxdev->open_ctr = 1;
-+	} else if (cxdev->open_type == open_type) {
-+		cxdev->open_ctr++;
-+		deb_info("acquired %s\n", open_type == CXUSB_OPEN_ANALOG ?
-+			 "analog" : "digital");
-+	} else
-+		ret = -EBUSY;
-+
-+ret_unlock:
-+	mutex_unlock(&cxdev->open_lock);
-+
-+	return ret;
-+}
-+
-+void cxusb_medion_put(struct dvb_usb_device *dvbdev)
-+{
-+	struct cxusb_medion_dev *cxdev = dvbdev->priv;
-+
-+	mutex_lock(&cxdev->open_lock);
-+
-+	if (cxdev->open_type == CXUSB_OPEN_INIT) {
-+		WARN_ON(cxdev->open_ctr != 0);
-+		cxdev->open_type = CXUSB_OPEN_NONE;
-+		goto unlock;
-+	}
-+
-+	if (!WARN_ON(cxdev->open_ctr < 1)) {
-+		cxdev->open_ctr--;
-+
-+		deb_info("release %s\n", cxdev->open_type ==
-+			 CXUSB_OPEN_ANALOG ? "analog" : "digital");
-+	}
-+
-+unlock:
-+	mutex_unlock(&cxdev->open_lock);
-+}
-+
- /* DVB USB Driver stuff */
- static struct dvb_usb_device_properties cxusb_medion_properties;
- static struct dvb_usb_device_properties cxusb_bluebird_lgh064f_properties;
-@@ -1327,12 +1601,101 @@ static struct dvb_usb_device_properties cxusb_d680_dmb_properties;
- static struct dvb_usb_device_properties cxusb_mygica_d689_properties;
- static struct dvb_usb_device_properties cxusb_mygica_t230_properties;
+-.. tabularcolumns:: |p{6.5cm}|p{11.0cm}|
++.. tabularcolumns:: |p{7.2cm}|p{10.3cm}|
  
-+static int cxusb_medion_priv_init(struct dvb_usb_device *dvbdev)
-+{
-+	struct cxusb_medion_dev *cxdev = dvbdev->priv;
-+
-+	cxdev->dvbdev = dvbdev;
-+	cxdev->open_type = CXUSB_OPEN_INIT;
-+	mutex_init(&cxdev->open_lock);
-+
-+	return 0;
-+}
-+
-+static void cxusb_medion_priv_destroy(struct dvb_usb_device *dvbdev)
-+{
-+	struct cxusb_medion_dev *cxdev = dvbdev->priv;
-+
-+	mutex_destroy(&cxdev->open_lock);
-+}
-+
-+static bool cxusb_medion_check_altsetting(struct usb_host_interface *as)
-+{
-+	unsigned int ctr;
-+
-+	for (ctr = 0; ctr < as->desc.bNumEndpoints; ctr++) {
-+		if ((as->endpoint[ctr].desc.bEndpointAddress &
-+		     USB_ENDPOINT_NUMBER_MASK) != 2)
-+			continue;
-+
-+		if (as->endpoint[ctr].desc.bEndpointAddress & USB_DIR_IN &&
-+		    ((as->endpoint[ctr].desc.bmAttributes &
-+		      USB_ENDPOINT_XFERTYPE_MASK) == USB_ENDPOINT_XFER_ISOC))
-+			return true;
-+
-+		break;
-+	}
-+
-+	return false;
-+}
-+
-+static bool cxusb_medion_check_intf(struct usb_interface *intf)
-+{
-+	unsigned int ctr;
-+
-+	if (intf->num_altsetting < 2) {
-+		dev_err(intf->usb_dev, "no alternate interface");
-+
-+		return false;
-+	}
-+
-+	for (ctr = 0; ctr < intf->num_altsetting; ctr++) {
-+		if (intf->altsetting[ctr].desc.bAlternateSetting != 1)
-+			continue;
-+
-+		if (cxusb_medion_check_altsetting(&intf->altsetting[ctr]))
-+			return true;
-+
-+		break;
-+	}
-+
-+	dev_err(intf->usb_dev, "no iso interface");
-+
-+	return false;
-+}
-+
- static int cxusb_probe(struct usb_interface *intf,
- 		       const struct usb_device_id *id)
- {
-+	struct dvb_usb_device *dvbdev;
-+	int ret;
-+
-+	/* Medion 95700 */
- 	if (0 == dvb_usb_device_init(intf, &cxusb_medion_properties,
--				     THIS_MODULE, NULL, adapter_nr) ||
--	    0 == dvb_usb_device_init(intf, &cxusb_bluebird_lgh064f_properties,
-+				     THIS_MODULE, &dvbdev, adapter_nr)) {
-+		if (!cxusb_medion_check_intf(intf)) {
-+			ret = -ENODEV;
-+			goto ret_uninit;
-+		}
-+
-+		_cxusb_power_ctrl(dvbdev, 1);
-+		ret = cxusb_medion_set_mode(dvbdev, false);
-+		if (ret)
-+			goto ret_uninit;
-+
-+		ret = cxusb_medion_register_analog(dvbdev);
-+
-+		cxusb_medion_set_mode(dvbdev, true);
-+		_cxusb_power_ctrl(dvbdev, 0);
-+
-+		if (ret != 0)
-+			goto ret_uninit;
-+
-+		/* release device from INIT mode to normal operation */
-+		cxusb_medion_put(dvbdev);
-+
-+		return 0;
-+	} else if (0 == dvb_usb_device_init(intf, &cxusb_bluebird_lgh064f_properties,
- 				     THIS_MODULE, NULL, adapter_nr) ||
- 	    0 == dvb_usb_device_init(intf, &cxusb_bluebird_dee1601_properties,
- 				     THIS_MODULE, NULL, adapter_nr) ||
-@@ -1362,6 +1725,11 @@ static int cxusb_probe(struct usb_interface *intf,
- 		return 0;
+ .. flat-table:: V4L2 Y'CbCr Encodings
+     :header-rows:  1
+diff --git a/Documentation/media/uapi/v4l/colorspaces.rst b/Documentation/media/uapi/v4l/colorspaces.rst
+index c5a560f0c13d..4f6c82fa057f 100644
+--- a/Documentation/media/uapi/v4l/colorspaces.rst
++++ b/Documentation/media/uapi/v4l/colorspaces.rst
+@@ -56,9 +56,9 @@ The Y value in the CIE XYZ colorspace corresponds to luminance. Often
+ the CIE XYZ colorspace is transformed to the normalized CIE xyY
+ colorspace:
  
- 	return -EINVAL;
-+
-+ret_uninit:
-+	dvb_usb_device_exit(intf);
-+
-+	return ret;
- }
+-x = X / (X + Y + Z)
++	x = X / (X + Y + Z)
  
- static void cxusb_disconnect(struct usb_interface *intf)
-@@ -1370,6 +1738,9 @@ static void cxusb_disconnect(struct usb_interface *intf)
- 	struct cxusb_state *st = d->priv;
- 	struct i2c_client *client;
+-y = Y / (X + Y + Z)
++	y = Y / (X + Y + Z)
  
-+	if (d->props.devices[0].warm_ids[0] == &cxusb_table[MEDION_MD95700])
-+		cxusb_medion_unregister_analog(d);
+ The x and y values are the chromaticity coordinates and can be used to
+ define a color without the luminance component Y. It is very confusing
+diff --git a/Documentation/media/uapi/v4l/dev-raw-vbi.rst b/Documentation/media/uapi/v4l/dev-raw-vbi.rst
+index d6a707f0b24f..e06b03ca2ab2 100644
+--- a/Documentation/media/uapi/v4l/dev-raw-vbi.rst
++++ b/Documentation/media/uapi/v4l/dev-raw-vbi.rst
+@@ -106,7 +106,7 @@ VBI devices must implement both the :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` and
+ and always returns default parameters as :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` does.
+ :ref:`VIDIOC_TRY_FMT <VIDIOC_G_FMT>` is optional.
+ 
+-.. tabularcolumns:: |p{2.4cm}|p{4.4cm}|p{10.7cm}|
++.. tabularcolumns:: |p{1.6cm}|p{4.2cm}|p{11.7cm}|
+ 
+ .. c:type:: v4l2_vbi_format
+ 
+@@ -190,7 +190,7 @@ and always returns default parameters as :ref:`VIDIOC_G_FMT <VIDIOC_G_FMT>` does
+ 	applications must set it to zero.
+ 
+ 
+-.. tabularcolumns:: |p{4.0cm}|p{1.5cm}|p{12.0cm}|
++.. tabularcolumns:: |p{4.4cm}|p{1.5cm}|p{11.6cm}|
+ 
+ .. _vbifmt-flags:
+ 
+diff --git a/Documentation/media/uapi/v4l/dev-rds.rst b/Documentation/media/uapi/v4l/dev-rds.rst
+index 624d6f95b842..64a724ef58f5 100644
+--- a/Documentation/media/uapi/v4l/dev-rds.rst
++++ b/Documentation/media/uapi/v4l/dev-rds.rst
+@@ -146,7 +146,7 @@ RDS datastructures
+ 
+ .. _v4l2-rds-block-codes:
+ 
+-.. tabularcolumns:: |p{5.6cm}|p{2.0cm}|p{1.5cm}|p{7.0cm}|
++.. tabularcolumns:: |p{6.4cm}|p{2.0cm}|p{1.2cm}|p{7.9cm}|
+ 
+ .. flat-table:: Block defines
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/dev-sliced-vbi.rst b/Documentation/media/uapi/v4l/dev-sliced-vbi.rst
+index 0aa6cb8a272b..e86346f66017 100644
+--- a/Documentation/media/uapi/v4l/dev-sliced-vbi.rst
++++ b/Documentation/media/uapi/v4l/dev-sliced-vbi.rst
+@@ -118,7 +118,7 @@ struct v4l2_sliced_vbi_format
+     \scriptsize
+     \setlength{\tabcolsep}{2pt}
+ 
+-.. tabularcolumns:: |p{.75cm}|p{3.3cm}|p{3.4cm}|p{3.4cm}|p{3.4cm}|
++.. tabularcolumns:: |p{.85cm}|p{3.3cm}|p{4.4cm}|p{4.4cm}|p{4.4cm}|
+ 
+ .. cssclass:: longtable
+ 
+@@ -223,7 +223,7 @@ Sliced VBI services
+ 
+ .. raw:: latex
+ 
+-    \footnotesize
++    \scriptsize
+ 
+ .. tabularcolumns:: |p{4.1cm}|p{1.1cm}|p{2.4cm}|p{2.0cm}|p{7.3cm}|
+ 
+@@ -541,7 +541,7 @@ Magic Constants for struct v4l2_mpeg_vbi_fmt_ivtv magic field
+ structs v4l2_mpeg_vbi_itv0 and v4l2_mpeg_vbi_ITV0
+ -------------------------------------------------
+ 
+-.. tabularcolumns:: |p{4.9cm}|p{2.4cm}|p{10.2cm}|
++.. tabularcolumns:: |p{5.2cm}|p{2.4cm}|p{9.9cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -561,12 +561,12 @@ structs v4l2_mpeg_vbi_itv0 and v4l2_mpeg_vbi_ITV0
+ 
+ 	::
+ 
+-	    linemask[0] b0:     line  6     first field
+-	    linemask[0] b17:    line 23     first field
+-	    linemask[0] b18:    line  6     second field
+-	    linemask[0] b31:    line 19     second field
+-	    linemask[1] b0:     line 20     second field
+-	    linemask[1] b3:     line 23     second field
++	    linemask[0] b0:     line  6  first field
++	    linemask[0] b17:    line 23  first field
++	    linemask[0] b18:    line  6  second field
++	    linemask[0] b31:    line 19  second field
++	    linemask[1] b0:     line 20  second field
++	    linemask[1] b3:     line 23  second field
+ 	    linemask[1] b4-b31: unused and set to 0
+     * - struct
+ 	:c:type:`v4l2_mpeg_vbi_itv0_line`
+@@ -590,7 +590,7 @@ structs v4l2_mpeg_vbi_itv0 and v4l2_mpeg_vbi_ITV0
+ struct v4l2_mpeg_vbi_ITV0
+ -------------------------
+ 
+-.. tabularcolumns:: |p{4.9cm}|p{4.4cm}|p{8.2cm}|
++.. tabularcolumns:: |p{5.2cm}|p{2.4cm}|p{9.9cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -635,7 +635,7 @@ struct v4l2_mpeg_vbi_itv0_line
+ Line Identifiers for struct v4l2_mpeg_vbi_itv0_line id field
+ ------------------------------------------------------------
+ 
+-.. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
++.. tabularcolumns:: |p{7.0cm}|p{1.8cm}|p{8.7cm}|
+ 
+ .. flat-table::
+     :header-rows:  1
+diff --git a/Documentation/media/uapi/v4l/dev-subdev.rst b/Documentation/media/uapi/v4l/dev-subdev.rst
+index 2c2768c7343b..029bb2d9928a 100644
+--- a/Documentation/media/uapi/v4l/dev-subdev.rst
++++ b/Documentation/media/uapi/v4l/dev-subdev.rst
+@@ -211,7 +211,7 @@ list entity names and pad numbers).
+ 
+ .. raw:: latex
+ 
+-    \tiny
++    \scriptsize
+ 
+ .. tabularcolumns:: |p{2.0cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|p{2.3cm}|
+ 
+@@ -223,40 +223,80 @@ list entity names and pad numbers).
+     :widths: 5 5 5 5 5 5 5
+ 
+     * -
+-      - Sensor/0 format
+-      - Frontend/0 format
+-      - Frontend/1 format
+-      - Scaler/0 format
+-      - Scaler/0 compose selection rectangle
+-      - Scaler/1 format
++      - Sensor/0
 +
- 	/* remove I2C client for tuner */
- 	client = st->i2c_client_tuner;
- 	if (client) {
-@@ -1387,31 +1758,6 @@ static void cxusb_disconnect(struct usb_interface *intf)
- 	dvb_usb_device_exit(intf);
- }
++        format
++      - Frontend/0
++
++        format
++      - Frontend/1
++
++        format
++      - Scaler/0
++
++        format
++      - Scaler/0
++
++        compose selection rectangle
++      - Scaler/1
++
++        format
+     * - Initial state
+-      - 2048x1536/SGRBG8_1X8
++      - 2048x1536
++
++        SGRBG8_1X8
+       - (default)
+       - (default)
+       - (default)
+       - (default)
+       - (default)
+     * - Configure frontend sink format
+-      - 2048x1536/SGRBG8_1X8
+-      - *2048x1536/SGRBG8_1X8*
+-      - *2046x1534/SGRBG8_1X8*
++      - 2048x1536
++
++        SGRBG8_1X8
++      - *2048x1536*
++
++        *SGRBG8_1X8*
++      - *2046x1534*
++
++        *SGRBG8_1X8*
+       - (default)
+       - (default)
+       - (default)
+     * - Configure scaler sink format
+-      - 2048x1536/SGRBG8_1X8
+-      - 2048x1536/SGRBG8_1X8
+-      - 2046x1534/SGRBG8_1X8
+-      - *2046x1534/SGRBG8_1X8*
++      - 2048x1536
++
++        SGRBG8_1X8
++      - 2048x1536
++
++        SGRBG8_1X8
++      - 2046x1534
++
++        SGRBG8_1X8
++      - *2046x1534*
++
++        *SGRBG8_1X8*
+       - *0,0/2046x1534*
+-      - *2046x1534/SGRBG8_1X8*
++      - *2046x1534*
++
++        *SGRBG8_1X8*
+     * - Configure scaler sink compose selection
+-      - 2048x1536/SGRBG8_1X8
+-      - 2048x1536/SGRBG8_1X8
+-      - 2046x1534/SGRBG8_1X8
+-      - 2046x1534/SGRBG8_1X8
++      - 2048x1536
++
++        SGRBG8_1X8
++      - 2048x1536
++
++        SGRBG8_1X8
++      - 2046x1534
++
++        SGRBG8_1X8
++      - 2046x1534
++
++        SGRBG8_1X8
+       - *0,0/1280x960*
+-      - *1280x960/SGRBG8_1X8*
++      - *1280x960*
++
++        *SGRBG8_1X8*
  
--enum cxusb_table_index {
--	MEDION_MD95700,
--	DVICO_BLUEBIRD_LG064F_COLD,
--	DVICO_BLUEBIRD_LG064F_WARM,
--	DVICO_BLUEBIRD_DUAL_1_COLD,
--	DVICO_BLUEBIRD_DUAL_1_WARM,
--	DVICO_BLUEBIRD_LGZ201_COLD,
--	DVICO_BLUEBIRD_LGZ201_WARM,
--	DVICO_BLUEBIRD_TH7579_COLD,
--	DVICO_BLUEBIRD_TH7579_WARM,
--	DIGITALNOW_BLUEBIRD_DUAL_1_COLD,
--	DIGITALNOW_BLUEBIRD_DUAL_1_WARM,
--	DVICO_BLUEBIRD_DUAL_2_COLD,
--	DVICO_BLUEBIRD_DUAL_2_WARM,
--	DVICO_BLUEBIRD_DUAL_4,
--	DVICO_BLUEBIRD_DVB_T_NANO_2,
--	DVICO_BLUEBIRD_DVB_T_NANO_2_NFW_WARM,
--	AVERMEDIA_VOLAR_A868R,
--	DVICO_BLUEBIRD_DUAL_4_REV_2,
--	CONEXANT_D680_DMB,
--	MYGICA_D689,
--	MYGICA_T230,
--	NR__cxusb_table_index
--};
+ .. raw:: latex
+ 
+diff --git a/Documentation/media/uapi/v4l/ext-ctrls-camera.rst b/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
+index d3a553cd86c9..51c1d5c9eb00 100644
+--- a/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
++++ b/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
+@@ -88,7 +88,7 @@ enum v4l2_exposure_metering -
+     Determines how the camera measures the amount of light available for
+     the frame exposure. Possible values are:
+ 
+-.. tabularcolumns:: |p{8.5cm}|p{9.0cm}|
++.. tabularcolumns:: |p{8.7cm}|p{8.8cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -180,7 +180,7 @@ enum v4l2_exposure_metering -
+     control may stop updates of the ``V4L2_CID_AUTO_FOCUS_STATUS``
+     control value.
+ 
+-.. tabularcolumns:: |p{6.5cm}|p{11.0cm}|
++.. tabularcolumns:: |p{6.7cm}|p{10.8cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -206,7 +206,7 @@ enum v4l2_exposure_metering -
+ enum v4l2_auto_focus_range -
+     Determines auto focus distance range for which lens may be adjusted.
+ 
+-.. tabularcolumns:: |p{6.5cm}|p{11.0cm}|
++.. tabularcolumns:: |p{6.8cm}|p{10.7cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -281,7 +281,7 @@ enum v4l2_auto_n_preset_white_balance -
+     representation. The following white balance presets are listed in
+     order of increasing color temperature.
+ 
+-.. tabularcolumns:: |p{7.0 cm}|p{10.5cm}|
++.. tabularcolumns:: |p{7.2 cm}|p{10.3cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -387,7 +387,11 @@ enum v4l2_scene_mode -
+     to ``V4L2_SCENE_MODE_NONE`` to make sure the other possibly related
+     controls are accessible. The following scene programs are defined:
+ 
+-.. tabularcolumns:: |p{6.0cm}|p{11.5cm}|
++.. raw:: latex
++
++    \small
++
++.. tabularcolumns:: |p{5.9cm}|p{11.5cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -459,6 +463,9 @@ enum v4l2_scene_mode -
+ 	may be switched to close-up mode and this setting may also involve
+ 	some lens-distortion correction.
+ 
++.. raw:: latex
++
++    \normalsize
+ 
+ 
+ ``V4L2_CID_3A_LOCK (bitmask)``
+diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+index 0aaee04f81dd..67a122339c0e 100644
+--- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
++++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+@@ -105,7 +105,7 @@ enum v4l2_mpeg_stream_vbi_fmt -
+ 
+ 
+ 
+-.. tabularcolumns:: |p{6 cm}|p{11.5cm}|
++.. tabularcolumns:: |p{6.6 cm}|p{10.9cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -477,7 +477,7 @@ enum v4l2_mpeg_audio_dec_playback -
+ 
+ 
+ 
+-.. tabularcolumns:: |p{9.0cm}|p{8.5cm}|
++.. tabularcolumns:: |p{9.8cm}|p{7.7cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -888,7 +888,7 @@ enum v4l2_mpeg_video_multi_slice_mode -
+ 
+ 
+ 
+-.. tabularcolumns:: |p{8.7cm}|p{8.8cm}|
++.. tabularcolumns:: |p{9.6cm}|p{7.9cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -923,9 +923,11 @@ enum v4l2_mpeg_video_multi_slice_mode -
+ enum v4l2_mpeg_video_h264_loop_filter_mode -
+     Loop filter mode for H264 encoder. Possible values are:
+ 
++.. raw:: latex
+ 
++    \small
+ 
+-.. tabularcolumns:: |p{14.0cm}|p{3.5cm}|
++.. tabularcolumns:: |p{13.6cm}|p{3.9cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -938,6 +940,9 @@ enum v4l2_mpeg_video_h264_loop_filter_mode -
+     * - ``V4L2_MPEG_VIDEO_H264_LOOP_FILTER_MODE_DISABLED_AT_SLICE_BOUNDARY``
+       - Loop filter is disabled at the slice boundary.
+ 
++.. raw:: latex
++
++    \normalsize
+ 
+ 
+ ``V4L2_CID_MPEG_VIDEO_H264_LOOP_FILTER_ALPHA (integer)``
+@@ -964,6 +969,8 @@ enum v4l2_mpeg_video_h264_entropy_mode -
+     encoder. Possible values are:
+ 
+ 
++.. tabularcolumns:: |p{9.0cm}|p{8.5cm}|
++
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -1129,7 +1136,9 @@ enum v4l2_mpeg_video_header_mode -
+     it returned together with the first frame. Applicable to encoders.
+     Possible values are:
+ 
++.. raw:: latex
+ 
++    \small
+ 
+ .. tabularcolumns:: |p{10.3cm}|p{7.2cm}|
+ 
+@@ -1143,6 +1152,9 @@ enum v4l2_mpeg_video_header_mode -
+       - The stream header is returned together with the first encoded
+ 	frame.
+ 
++.. raw:: latex
++
++    \normalsize
+ 
+ 
+ ``V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER (boolean)``
+@@ -1181,6 +1193,10 @@ enum v4l2_mpeg_video_h264_sei_fp_arrangement_type -
+     Frame packing arrangement type for H264 SEI. Applicable to the H264
+     encoder. Possible values are:
+ 
++.. raw:: latex
++
++    \small
++
+ .. tabularcolumns:: |p{12cm}|p{5.5cm}|
+ 
+ .. flat-table::
+@@ -1200,6 +1216,10 @@ enum v4l2_mpeg_video_h264_sei_fp_arrangement_type -
+     * - ``V4L2_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE_TEMPORAL``
+       - One view per frame.
+ 
++.. raw:: latex
++
++    \normalsize
++
+ 
+ 
+ ``V4L2_CID_MPEG_VIDEO_H264_FMO (boolean)``
+@@ -1217,6 +1237,10 @@ enum v4l2_mpeg_video_h264_fmo_map_type -
+     patterns of macroblocks. Applicable to the H264 encoder. Possible
+     values are:
+ 
++.. raw:: latex
++
++    \small
++
+ .. tabularcolumns:: |p{12.5cm}|p{5.0cm}|
+ 
+ .. flat-table::
+@@ -1240,6 +1264,10 @@ enum v4l2_mpeg_video_h264_fmo_map_type -
+     * - ``V4L2_MPEG_VIDEO_H264_FMO_MAP_TYPE_EXPLICIT``
+       - User defined map type.
+ 
++.. raw:: latex
++
++    \normalsize
++
+ 
+ 
+ ``V4L2_CID_MPEG_VIDEO_H264_FMO_SLICE_GROUP (integer)``
+@@ -1361,6 +1389,8 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+ 
+ .. cssclass:: longtable
+ 
++.. tabularcolumns:: |p{5.8cm}|p{4.8cm}|p{6.6cm}|
++
+ .. flat-table:: struct v4l2_ctrl_mpeg2_slice_params
+     :header-rows:  0
+     :stub-columns: 0
+@@ -1402,6 +1432,8 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+ 
+ .. cssclass:: longtable
+ 
++.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
++
+ .. flat-table:: struct v4l2_mpeg2_sequence
+     :header-rows:  0
+     :stub-columns: 0
+@@ -1433,6 +1465,8 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+ 
+ .. cssclass:: longtable
+ 
++.. tabularcolumns:: |p{1.5cm}|p{6.3cm}|p{9.4cm}|
++
+ .. flat-table:: struct v4l2_mpeg2_picture
+     :header-rows:  0
+     :stub-columns: 0
+@@ -1492,6 +1526,12 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+ 
+ .. cssclass:: longtable
+ 
++.. tabularcolumns:: |p{1.2cm}|p{8.0cm}|p{7.4cm}|
++
++.. raw:: latex
++
++    \small
++
+ .. flat-table:: struct v4l2_ctrl_mpeg2_quantization
+     :header-rows:  0
+     :stub-columns: 0
+@@ -1545,6 +1585,11 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     Quantization parameter for a P frame for FWHT. Valid range: from 1
+     to 31.
+ 
++.. raw:: latex
++
++    \normalsize
++
++
+ MFC 5.1 MPEG Controls
+ =====================
+ 
+@@ -1652,7 +1697,11 @@ enum v4l2_mpeg_mfc51_video_frame_skip_mode -
+     are:
+ 
+ 
+-.. tabularcolumns:: |p{9.0cm}|p{8.5cm}|
++.. tabularcolumns:: |p{9.2cm}|p{8.3cm}|
++
++.. raw:: latex
++
++    \small
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -1667,7 +1716,9 @@ enum v4l2_mpeg_mfc51_video_frame_skip_mode -
+       - Frame skip mode enabled and buffer limit is set by the VBV
+ 	(MPEG1/2/4) or CPB (H264) buffer size control.
+ 
++.. raw:: latex
+ 
++    \normalsize
+ 
+ ``V4L2_CID_MPEG_MFC51_VIDEO_RC_FIXED_TARGET_BIT (integer)``
+     Enable rate-control with fixed target bit. If this setting is
+@@ -1690,7 +1741,7 @@ enum v4l2_mpeg_mfc51_video_force_frame_type -
+     Force a frame type for the next queued buffer. Applicable to
+     encoders. Possible values are:
+ 
 -
- static struct usb_device_id cxusb_table[NR__cxusb_table_index + 1] = {
- 	[MEDION_MD95700] = {
- 		USB_DEVICE(USB_VID_MEDION, USB_PID_MEDION_MD95700)
-@@ -1485,13 +1831,16 @@ static struct dvb_usb_device_properties cxusb_medion_properties = {
++.. tabularcolumns:: |p{9.5cm}|p{8.0cm}|
  
- 	.usb_ctrl = CYPRESS_FX2,
+ .. flat-table::
+     :header-rows:  0
+@@ -1720,6 +1771,8 @@ enum v4l2_mpeg_mfc51_video_force_frame_type -
  
--	.size_of_priv     = sizeof(struct cxusb_state),
-+	.size_of_priv     = sizeof(struct cxusb_medion_dev),
-+	.priv_init        = cxusb_medion_priv_init,
-+	.priv_destroy     = cxusb_medion_priv_destroy,
+ .. cssclass:: longtable
  
- 	.num_adapters = 1,
- 	.adapter = {
- 		{
- 		.num_frontends = 1,
- 		.fe = {{
-+			.caps = DVB_USB_ADAP_STREAMING_CTRL_NO_URB,
- 			.streaming_ctrl   = cxusb_streaming_ctrl,
- 			.frontend_attach  = cxusb_cx22702_frontend_attach,
- 			.tuner_attach     = cxusb_fmd1216me_tuner_attach,
-@@ -2198,6 +2547,7 @@ module_usb_driver(cxusb_driver);
- MODULE_AUTHOR("Patrick Boettcher <patrick.boettcher@posteo.de>");
- MODULE_AUTHOR("Michael Krufky <mkrufky@linuxtv.org>");
- MODULE_AUTHOR("Chris Pascoe <c.pascoe@itee.uq.edu.au>");
-+MODULE_AUTHOR("Maciej S. Szmigiero <mail@maciej.szmigiero.name>");
- MODULE_DESCRIPTION("Driver for Conexant USB2.0 hybrid reference design");
- MODULE_VERSION("1.0-alpha");
- MODULE_LICENSE("GPL");
-diff --git a/drivers/media/usb/dvb-usb/cxusb.h b/drivers/media/usb/dvb-usb/cxusb.h
-index 88f9b9804b25..f586d61a7bf8 100644
---- a/drivers/media/usb/dvb-usb/cxusb.h
-+++ b/drivers/media/usb/dvb-usb/cxusb.h
-@@ -2,6 +2,9 @@
- #ifndef _DVB_USB_CXUSB_H_
- #define _DVB_USB_CXUSB_H_
- 
-+#include <linux/i2c.h>
-+#include <linux/mutex.h>
++.. tabularcolumns:: |p{1.4cm}|p{4.3cm}|p{11.8cm}|
 +
- #define DVB_USB_LOG_PREFIX "cxusb"
- #include "dvb-usb.h"
+ .. flat-table:: struct v4l2_ctrl_fwht_params
+     :header-rows:  0
+     :stub-columns: 0
+@@ -1763,10 +1816,11 @@ enum v4l2_mpeg_mfc51_video_force_frame_type -
  
-@@ -34,6 +37,7 @@
+ FWHT Flags
+ ============
+-.. tabularcolumns:: |p{7.0cm}|p{2.2cm}|p{8.3cm}|
  
- struct cxusb_state {
- 	u8 gpio_write_state[3];
-+	bool gpio_write_refresh[3];
- 	struct i2c_client *i2c_client_demod;
- 	struct i2c_client *i2c_client_tuner;
+ .. cssclass:: longtable
  
-@@ -45,4 +49,48 @@ struct cxusb_state {
- 		enum fe_status *status);
- };
++.. tabularcolumns:: |p{6.8cm}|p{2.4cm}|p{8.3cm}|
++
+ .. flat-table::
+     :header-rows:  0
+     :stub-columns: 0
+@@ -1869,10 +1923,12 @@ enum v4l2_mpeg_cx2341x_video_luma_spatial_filter_type -
+     Select the algorithm to use for the Luma Spatial Filter (default
+     ``1D_HOR``). Possible values:
  
-+enum cxusb_open_type {
-+	CXUSB_OPEN_INIT, CXUSB_OPEN_NONE,
-+	CXUSB_OPEN_ANALOG, CXUSB_OPEN_DIGITAL
-+};
-+
-+struct cxusb_medion_dev {
-+	/* has to be the first one */
-+	struct cxusb_state state;
-+
-+	struct dvb_usb_device *dvbdev;
-+
-+	enum cxusb_open_type open_type;
-+	unsigned int open_ctr;
-+	struct mutex open_lock;
-+};
-+
-+/* defines for "debug" module parameter */
-+#define CXUSB_DBG_RC BIT(0)
-+#define CXUSB_DBG_I2C BIT(1)
-+#define CXUSB_DBG_MISC BIT(2)
-+
-+extern int dvb_usb_cxusb_debug;
-+
-+int cxusb_ctrl_msg(struct dvb_usb_device *d,
-+		   u8 cmd, const u8 *wbuf, int wlen, u8 *rbuf, int rlen);
-+
-+static inline int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
-+{
-+	return -EINVAL;
-+}
-+
-+static inline int cxusb_medion_register_analog(struct dvb_usb_device *dvbdev)
-+{
-+	return 0;
-+}
-+
-+static inline void cxusb_medion_unregister_analog(struct dvb_usb_device *dvbdev)
-+{
-+}
-+
-+int cxusb_medion_get(struct dvb_usb_device *dvbdev,
-+		     enum cxusb_open_type open_type);
-+void cxusb_medion_put(struct dvb_usb_device *dvbdev);
-+
- #endif
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb-dvb.c b/drivers/media/usb/dvb-usb/dvb-usb-dvb.c
-index 8056053c9ab0..01987ec5e0c5 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb-dvb.c
-+++ b/drivers/media/usb/dvb-usb/dvb-usb-dvb.c
-@@ -15,6 +15,7 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
- {
- 	struct dvb_usb_adapter *adap = dvbdmxfeed->demux->priv;
- 	int newfeedcount, ret;
-+	bool streaming_ctrl_no_urb;
+-
+-
+ .. tabularcolumns:: |p{14.5cm}|p{3.0cm}|
  
- 	if (adap == NULL)
- 		return -ENODEV;
-@@ -24,12 +25,16 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
- 		return -EINVAL;
- 	}
- 
-+	streaming_ctrl_no_urb = adap->props.fe[adap->active_fe].caps &
-+		DVB_USB_ADAP_STREAMING_CTRL_NO_URB;
- 	newfeedcount = adap->feedcount + (onoff ? 1 : -1);
- 
- 	/* stop feed before setting a new pid if there will be no pid anymore */
- 	if (newfeedcount == 0) {
- 		deb_ts("stop feeding\n");
--		usb_urb_kill(&adap->fe_adap[adap->active_fe].stream);
++.. raw:: latex
 +
-+		if (streaming_ctrl_no_urb)
-+			usb_urb_kill(&adap->fe_adap[adap->active_fe].stream);
- 
- 		if (adap->props.fe[adap->active_fe].streaming_ctrl != NULL) {
- 			ret = adap->props.fe[adap->active_fe].streaming_ctrl(adap, 0);
-@@ -38,6 +43,9 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
- 				return ret;
- 			}
- 		}
++    \small
 +
-+		if (!streaming_ctrl_no_urb)
-+			usb_urb_kill(&adap->fe_adap[adap->active_fe].stream);
- 	}
+ .. flat-table::
+     :header-rows:  0
+     :stub-columns: 0
+@@ -1888,6 +1944,10 @@ enum v4l2_mpeg_cx2341x_video_luma_spatial_filter_type -
+     * - ``V4L2_MPEG_CX2341X_VIDEO_LUMA_SPATIAL_FILTER_TYPE_2D_SYM_NON_SEPARABLE``
+       - Two-dimensional symmetrical non-separable
  
- 	adap->feedcount = newfeedcount;
-@@ -56,8 +64,10 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
- 	 * for reception.
- 	 */
- 	if (adap->feedcount == onoff && adap->feedcount > 0) {
--		deb_ts("submitting all URBs\n");
--		usb_urb_submit(&adap->fe_adap[adap->active_fe].stream);
-+		if (!streaming_ctrl_no_urb) {
-+			deb_ts("submitting all URBs early\n");
-+			usb_urb_submit(&adap->fe_adap[adap->active_fe].stream);
-+		}
- 
- 		deb_ts("controlling pid parser\n");
- 		if (adap->props.fe[adap->active_fe].caps & DVB_USB_ADAP_HAS_PID_FILTER &&
-@@ -80,6 +90,10 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
- 			}
- 		}
- 
-+		if (streaming_ctrl_no_urb) {
-+			deb_ts("submitting all URBs late\n");
-+			usb_urb_submit(&adap->fe_adap[adap->active_fe].stream);
-+		}
- 	}
- 	return 0;
- }
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-index 99951e02a880..7241ec3663db 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-+++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-@@ -133,6 +133,10 @@ static int dvb_usb_exit(struct dvb_usb_device *d)
- 	dvb_usb_i2c_exit(d);
- 	deb_info("state should be zero now: %x\n", d->state);
- 	d->state = DVB_USB_STATE_INIT;
++.. raw:: latex
 +
-+	if (d->priv != NULL && d->props.priv_destroy != NULL)
-+		d->props.priv_destroy(d);
++    \normalsize
 +
- 	kfree(d->priv);
- 	kfree(d);
- 	return 0;
-@@ -154,6 +158,15 @@ static int dvb_usb_init(struct dvb_usb_device *d, short *adapter_nums)
- 			err("no memory for priv in 'struct dvb_usb_device'");
- 			return -ENOMEM;
- 		}
+ 
+ 
+ .. _chroma-spatial-filter-type:
+@@ -1900,6 +1960,7 @@ enum v4l2_mpeg_cx2341x_video_chroma_spatial_filter_type -
+     ``1D_HOR``). Possible values are:
+ 
+ 
++.. tabularcolumns:: |p{14.0cm}|p{3.5cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -2042,6 +2103,10 @@ enum v4l2_vp8_num_ref_frames -
+ 
+ .. tabularcolumns:: |p{7.9cm}|p{9.6cm}|
+ 
++.. raw:: latex
 +
-+		if (d->props.priv_init != NULL) {
-+			ret = d->props.priv_init(d);
-+			if (ret != 0) {
-+				kfree(d->priv);
-+				d->priv = NULL;
-+				return ret;
-+			}
-+		}
- 	}
++    \small
++
+ .. flat-table::
+     :header-rows:  0
+     :stub-columns: 0
+@@ -2056,6 +2121,10 @@ enum v4l2_vp8_num_ref_frames -
+       - The last encoded frame, the golden frame and the altref frame will
+ 	be searched.
  
- 	/* check the capabilities and set appropriate variables */
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb.h b/drivers/media/usb/dvb-usb/dvb-usb.h
-index 32829bdd5f22..75c771857df6 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb.h
-+++ b/drivers/media/usb/dvb-usb/dvb-usb.h
-@@ -143,6 +143,7 @@ struct dvb_usb_adapter_fe_properties {
- #define DVB_USB_ADAP_NEED_PID_FILTERING           0x04
- #define DVB_USB_ADAP_RECEIVES_204_BYTE_TS         0x08
- #define DVB_USB_ADAP_RECEIVES_RAW_PAYLOAD         0x10
-+#define DVB_USB_ADAP_STREAMING_CTRL_NO_URB        0x20
- 	int caps;
- 	int pid_filter_count;
++.. raw:: latex
++
++    \normalsize
++
  
-@@ -234,6 +235,11 @@ enum dvb_usb_mode {
-  *
-  * @size_of_priv: how many bytes shall be allocated for the private field
-  *  of struct dvb_usb_device.
-+ * @priv_init: optional callback to initialize the variable that private field
-+ * of struct dvb_usb_device has pointer to just after it had been allocated and
-+ * zeroed.
-+ * @priv_destroy: just like priv_init, only called before deallocating
-+ * the memory pointed by private field of struct dvb_usb_device.
-  *
-  * @power_ctrl: called to enable/disable power of the device.
-  * @read_mac_address: called to read the MAC address of the device.
-@@ -275,6 +281,8 @@ struct dvb_usb_device_properties {
- 	int        no_reconnect;
  
- 	int size_of_priv;
-+	int (*priv_init)(struct dvb_usb_device *);
-+	void (*priv_destroy)(struct dvb_usb_device *);
+ ``V4L2_CID_MPEG_VIDEO_VPX_FILTER_LEVEL (integer)``
+@@ -2085,7 +2154,7 @@ enum v4l2_vp8_golden_frame_sel -
  
- 	int num_adapters;
- 	struct dvb_usb_adapter_properties adapter[MAX_NO_OF_ADAPTER_PER_DEVICE];
+ .. raw:: latex
+ 
+-    \footnotesize
++    \scriptsize
+ 
+ .. tabularcolumns:: |p{9.0cm}|p{8.0cm}|
+ 
+@@ -2407,7 +2476,7 @@ enum v4l2_mpeg_video_hevc_loop_filter_mode -
+ 
+     \footnotesize
+ 
+-.. tabularcolumns:: |p{10.7cm}|p{6.3cm}|
++.. tabularcolumns:: |p{12.1cm}|p{5.4cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/ext-ctrls-detect.rst b/Documentation/media/uapi/v4l/ext-ctrls-detect.rst
+index 8a45ce642829..80981d0cff42 100644
+--- a/Documentation/media/uapi/v4l/ext-ctrls-detect.rst
++++ b/Documentation/media/uapi/v4l/ext-ctrls-detect.rst
+@@ -30,7 +30,7 @@ Detect Control IDs
+ ``V4L2_CID_DETECT_MD_MODE (menu)``
+     Sets the motion detection mode.
+ 
+-.. tabularcolumns:: |p{7.5cm}|p{10.0cm}|
++.. tabularcolumns:: |p{7.7cm}|p{9.8cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/ext-ctrls-dv.rst b/Documentation/media/uapi/v4l/ext-ctrls-dv.rst
+index 57edf211875c..5c70ac98f710 100644
+--- a/Documentation/media/uapi/v4l/ext-ctrls-dv.rst
++++ b/Documentation/media/uapi/v4l/ext-ctrls-dv.rst
+@@ -106,7 +106,7 @@ enum v4l2_dv_it_content_type -
+     or an analog source. The enum v4l2_dv_it_content_type defines
+     the possible content types:
+ 
+-.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
++.. tabularcolumns:: |p{7.3cm}|p{10.4cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/ext-ctrls-flash.rst b/Documentation/media/uapi/v4l/ext-ctrls-flash.rst
+index 5f30791c35b5..eff056b17167 100644
+--- a/Documentation/media/uapi/v4l/ext-ctrls-flash.rst
++++ b/Documentation/media/uapi/v4l/ext-ctrls-flash.rst
+@@ -87,7 +87,7 @@ Flash Control IDs
+ ``V4L2_CID_FLASH_STROBE_SOURCE (menu)``
+     Defines the source of the flash LED strobe.
+ 
+-.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
++.. tabularcolumns:: |p{7.5cm}|p{10.0cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+@@ -146,7 +146,7 @@ Flash Control IDs
+     an effect is chip dependent. Reading the faults resets the control
+     and returns the chip to a usable state if possible.
+ 
+-.. tabularcolumns:: |p{8.0cm}|p{9.5cm}|
++.. tabularcolumns:: |p{8.4cm}|p{9.1cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/ext-ctrls-jpeg.rst b/Documentation/media/uapi/v4l/ext-ctrls-jpeg.rst
+index cf9cd8a9f9b4..60ce3f949319 100644
+--- a/Documentation/media/uapi/v4l/ext-ctrls-jpeg.rst
++++ b/Documentation/media/uapi/v4l/ext-ctrls-jpeg.rst
+@@ -37,7 +37,7 @@ JPEG Control IDs
+     how Cb and Cr components are downsampled after converting an input
+     image from RGB to Y'CbCr color space.
+ 
+-.. tabularcolumns:: |p{7.0cm}|p{10.5cm}|
++.. tabularcolumns:: |p{7.5cm}|p{10.0cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/field-order.rst b/Documentation/media/uapi/v4l/field-order.rst
+index 8415268d439c..3fb473e3b8e2 100644
+--- a/Documentation/media/uapi/v4l/field-order.rst
++++ b/Documentation/media/uapi/v4l/field-order.rst
+@@ -64,7 +64,9 @@ enum v4l2_field
+ 
+ .. c:type:: v4l2_field
+ 
+-.. tabularcolumns:: |p{6.6cm}|p{2.2cm}|p{8.7cm}|
++.. tabularcolumns:: |p{5.8cm}|p{0.6cm}|p{11.1cm}|
++
++.. cssclass:: longtable
+ 
+ .. flat-table::
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/pixfmt-meta-d4xx.rst b/Documentation/media/uapi/v4l/pixfmt-meta-d4xx.rst
+index 862e1f327150..87e8fd7d5d02 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-meta-d4xx.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-meta-d4xx.rst
+@@ -36,13 +36,16 @@ per frame, therefore their headers cannot be larger than 255 bytes.
+ Below are proprietary Microsoft style metadata types, used by D4xx cameras,
+ where all fields are in little endian order:
+ 
++.. tabularcolumns:: |p{5.0cm}|p{12.5cm}|
++
++
+ .. flat-table:: D4xx metadata
+-    :widths: 1 4
++    :widths: 1 2
+     :header-rows:  1
+     :stub-columns: 0
+ 
+-    * - Field
+-      - Description
++    * - **Field**
++      - **Description**
+     * - :cspan:`1` *Depth Control*
+     * - __u32 ID
+       - 0x80000000
+diff --git a/Documentation/media/uapi/v4l/pixfmt-meta-vsp1-hgt.rst b/Documentation/media/uapi/v4l/pixfmt-meta-vsp1-hgt.rst
+index 2ebccdcca95d..d1a341af9c48 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-meta-vsp1-hgt.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-meta-vsp1-hgt.rst
+@@ -41,6 +41,10 @@ The Hue position **m** (0 - 5) of the bucket in the matrix depends on
+ how the HGT Hue areas are configured. There are 6 user configurable Hue
+ Areas which can be configured to cover overlapping Hue values:
+ 
++.. raw:: latex
++
++    \small
++
+ ::
+ 
+          Area 0       Area 1       Area 2       Area 3       Area 4       Area 5
+@@ -53,6 +57,11 @@ Areas which can be configured to cover overlapping Hue values:
+   5U   0L      0U   1L      1U   2L      2U   3L      3U   4L      4U   5L      5U   0L
+         <0..............................Hue Value............................255>
+ 
++
++.. raw:: latex
++
++    \normalsize
++
+ When two consecutive areas don't overlap (n+1L is equal to nU) the boundary
+ value is considered as part of the lower area.
+ 
+diff --git a/Documentation/media/uapi/v4l/pixfmt-packed-hsv.rst b/Documentation/media/uapi/v4l/pixfmt-packed-hsv.rst
+index 38b1895a509f..dfc4a8367b3d 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-packed-hsv.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-packed-hsv.rst
+@@ -31,7 +31,7 @@ The values are packed in 24 or 32 bit formats.
+     \tiny
+     \setlength{\tabcolsep}{2pt}
+ 
+-.. tabularcolumns:: |p{2.0cm}|p{0.54cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
++.. tabularcolumns:: |p{2.6cm}|p{0.8cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
+ 
+ .. _packed-hsv-formats:
+ 
+diff --git a/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst b/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
+index 6b3781c04dd5..4766a6f47222 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
+@@ -27,7 +27,7 @@ next to each other in memory.
+     \tiny
+     \setlength{\tabcolsep}{2pt}
+ 
+-.. tabularcolumns:: |p{2.3cm}|p{1.6cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
++.. tabularcolumns:: |p{2.8cm}|p{2.0cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
+ 
+ 
+ .. _rgb-formats:
+@@ -656,7 +656,7 @@ either the corresponding ARGB or XRGB format, depending on the driver.
+     \tiny
+     \setlength{\tabcolsep}{2pt}
+ 
+-.. tabularcolumns:: |p{2.2cm}|p{0.60cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
++.. tabularcolumns:: |p{2.6cm}|p{0.70cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
+ 
+ .. _rgb-formats-deprecated:
+ 
+diff --git a/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst b/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
+index 9d2b281f06a2..41b60fae703a 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
+@@ -28,7 +28,7 @@ component of each pixel in one 16 or 32 bit word.
+ 
+ .. _packed-yuv-formats:
+ 
+-.. tabularcolumns:: |p{2.0cm}|p{0.67cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|p{0.29cm}|
++.. tabularcolumns:: |p{2.5cm}|p{0.69cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|p{0.31cm}|
+ 
+ .. flat-table:: Packed YUV Image Formats
+     :header-rows:  2
+diff --git a/Documentation/media/uapi/v4l/pixfmt-srggb10p.rst b/Documentation/media/uapi/v4l/pixfmt-srggb10p.rst
+index cdb70ac26126..fd32660a3766 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-srggb10p.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-srggb10p.rst
+@@ -40,7 +40,7 @@ of a small V4L2_PIX_FMT_SBGGR10P image:
+ **Byte Order.**
+ Each cell is one byte.
+ 
+-.. tabularcolumns:: |p{2.0cm}|p{1.0cm}|p{1.0cm}|p{1.0cm}|p{1.0cm}|p{5.4cm}|
++.. tabularcolumns:: |p{2.4cm}|p{1.4cm}|p{1.2cm}|p{1.2cm}|p{1.2cm}|p{6.4cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+diff --git a/Documentation/media/uapi/v4l/pixfmt-srggb12p.rst b/Documentation/media/uapi/v4l/pixfmt-srggb12p.rst
+index 01413be12916..960851275f23 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-srggb12p.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-srggb12p.rst
+@@ -18,6 +18,7 @@ V4L2_PIX_FMT_SRGGB12P ('pRAA'), V4L2_PIX_FMT_SGRBG12P ('pgAA'), V4L2_PIX_FMT_SGB
+ 
+ 
+ 12-bit packed Bayer formats
++---------------------------
+ 
+ 
+ Description
+@@ -37,7 +38,7 @@ Below is an example of a small V4L2_PIX_FMT_SBGGR12P image:
+ **Byte Order.**
+ Each cell is one byte.
+ 
+-.. tabularcolumns:: |p{2.0cm}|p{1.0cm}|p{1.0cm}|p{2.7cm}|p{1.0cm}|p{1.0cm}|p{2.7cm}|
++.. tabularcolumns:: |p{2.2cm}|p{1.2cm}|p{1.2cm}|p{3.1cm}|p{1.2cm}|p{1.2cm}|p{3.1cm}|
+ 
+ 
+ .. flat-table::
+diff --git a/Documentation/media/uapi/v4l/pixfmt-srggb14p.rst b/Documentation/media/uapi/v4l/pixfmt-srggb14p.rst
+index b583531c2853..1a988d7e7ff8 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-srggb14p.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-srggb14p.rst
+@@ -41,17 +41,21 @@ of one of these formats:
+ **Byte Order.**
+ Each cell is one byte.
+ 
++.. raw:: latex
+ 
++    \footnotesize
++
++.. tabularcolumns:: |p{1.8cm}|p{1.0cm}|p{1.0cm}|p{1.0cm}|p{1.1cm}|p{3.3cm}|p{3.3cm}|p{3.3cm}|
+ 
+ .. flat-table::
+     :header-rows:  0
+     :stub-columns: 0
+-    :widths:       2 1 1 1 1 1 1 1
++    :widths:       2 1 1 1 1 3 3 3
+ 
+ 
+     -  .. row 1
+ 
+-       -  start + 0:
++       -  start + 0
+ 
+        -  B\ :sub:`00high`
+ 
+@@ -62,17 +66,20 @@ Each cell is one byte.
+        -  G\ :sub:`03high`
+ 
+        -  G\ :sub:`01low bits 1--0`\ (bits 7--6)
++
+ 	  B\ :sub:`00low bits 5--0`\ (bits 5--0)
+ 
+        -  R\ :sub:`02low bits 3--0`\ (bits 7--4)
++
+ 	  G\ :sub:`01low bits 5--2`\ (bits 3--0)
+ 
+        -  G\ :sub:`03low bits 5--0`\ (bits 7--2)
++
+ 	  R\ :sub:`02low bits 5--4`\ (bits 1--0)
+ 
+     -  .. row 2
+ 
+-       -  start + 7:
++       -  start + 7
+ 
+        -  G\ :sub:`00high`
+ 
+@@ -83,12 +90,15 @@ Each cell is one byte.
+        -  R\ :sub:`03high`
+ 
+        -  R\ :sub:`01low bits 1--0`\ (bits 7--6)
++
+ 	  G\ :sub:`00low bits 5--0`\ (bits 5--0)
+ 
+        -  G\ :sub:`02low bits 3--0`\ (bits 7--4)
++
+ 	  R\ :sub:`01low bits 5--2`\ (bits 3--0)
+ 
+        -  R\ :sub:`03low bits 5--0`\ (bits 7--2)
++
+ 	  G\ :sub:`02low bits 5--4`\ (bits 1--0)
+ 
+     -  .. row 3
+@@ -104,12 +114,15 @@ Each cell is one byte.
+        -  G\ :sub:`23high`
+ 
+        -  G\ :sub:`21low bits 1--0`\ (bits 7--6)
++
+ 	  B\ :sub:`20low bits 5--0`\ (bits 5--0)
+ 
+        -  R\ :sub:`22low bits 3--0`\ (bits 7--4)
++
+ 	  G\ :sub:`21low bits 5--2`\ (bits 3--0)
+ 
+        -  G\ :sub:`23low bits 5--0`\ (bits 7--2)
++
+ 	  R\ :sub:`22low bits 5--4`\ (bits 1--0)
+ 
+     -  .. row 4
+@@ -132,3 +145,8 @@ Each cell is one byte.
+ 
+        -  R\ :sub:`33low bits 5--0`\ (bits 7--2)
+ 	  G\ :sub:`32low bits 5--4`\ (bits 1--0)
++
++.. raw:: latex
++
++    \normalsize
++
+diff --git a/Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst b/Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst
+index 7f82dad9013a..5688c816e334 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst
+@@ -19,6 +19,7 @@ array of struct :c:type:`v4l2_plane_pix_format` structures,
+ describing all planes of that format.
+ 
+ 
++
+ .. tabularcolumns:: |p{4.4cm}|p{4.4cm}|p{8.7cm}|
+ 
+ .. c:type:: v4l2_plane_pix_format
+@@ -41,6 +42,10 @@ describing all planes of that format.
+ 	applications.
+ 
+ 
++.. raw:: latex
++
++    \small
++
+ .. tabularcolumns:: |p{4.4cm}|p{5.6cm}|p{7.5cm}|
+ 
+ .. c:type:: v4l2_pix_format_mplane
+@@ -82,9 +87,7 @@ describing all planes of that format.
+     * - __u8
+       - ``flags``
+       - Flags set by the application or driver, see :ref:`format-flags`.
+-    * - union {
+-      - (anonymous)
+-      -
++    * - :cspan:`2` union { (anonymous)
+     * - __u8
+       - ``ycbcr_enc``
+       - Y'CbCr encoding, from enum :c:type:`v4l2_ycbcr_encoding`.
+@@ -97,9 +100,7 @@ describing all planes of that format.
+         This information supplements the ``colorspace`` and must be set by
+ 	the driver for capture streams and by the application for output
+ 	streams, see :ref:`colorspaces`.
+-    * - }
+-      -
+-      -
++    * - :cspan:`2` }
+     * - __u8
+       - ``quantization``
+       - Quantization range, from enum :c:type:`v4l2_quantization`.
+@@ -116,3 +117,7 @@ describing all planes of that format.
+       - ``reserved[7]``
+       - Reserved for future extensions. Should be zeroed by drivers and
+ 	applications.
++
++.. raw:: latex
++
++    \normalsize
+diff --git a/Documentation/media/uapi/v4l/pixfmt-y10p.rst b/Documentation/media/uapi/v4l/pixfmt-y10p.rst
+index 7893642faee3..39cd789dcb59 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-y10p.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-y10p.rst
+@@ -27,6 +27,12 @@ in the same order.
+ 
+ **Bit-packed representation.**
+ 
++.. raw:: latex
++
++    \small
++
++.. tabularcolumns:: |p{1.2cm}||p{1.2cm}||p{1.2cm}||p{1.2cm}|p{3.2cm}|p{3.2cm}|
++
+ .. flat-table::
+     :header-rows:  0
+     :stub-columns: 0
+@@ -38,3 +44,7 @@ in the same order.
+       - Y'\ :sub:`03[9:2]`
+       - Y'\ :sub:`03[1:0]`\ (bits 7--6) Y'\ :sub:`02[1:0]`\ (bits 5--4)
+ 	Y'\ :sub:`01[1:0]`\ (bits 3--2) Y'\ :sub:`00[1:0]`\ (bits 1--0)
++
++.. raw:: latex
++
++    \normalsize
+diff --git a/Documentation/media/uapi/v4l/subdev-formats.rst b/Documentation/media/uapi/v4l/subdev-formats.rst
+index f5440d55d510..bf1dbb68eebc 100644
+--- a/Documentation/media/uapi/v4l/subdev-formats.rst
++++ b/Documentation/media/uapi/v4l/subdev-formats.rst
+@@ -7414,7 +7414,7 @@ The following table lists existing HSV/HSL formats.
+     \tiny
+     \setlength{\tabcolsep}{2pt}
+ 
+-.. tabularcolumns:: |p{3.0cm}|p{0.60cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
++.. tabularcolumns:: |p{3.9cm}|p{0.73cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|p{0.22cm}|
+ 
+ .. _v4l2-mbus-pixelcode-hsv:
+ 
+@@ -7524,7 +7524,7 @@ The following table lists existing JPEG compressed formats.
+ 
+ .. _v4l2-mbus-pixelcode-jpeg:
+ 
+-.. tabularcolumns:: |p{5.4cm}|p{1.4cm}|p{10.7cm}|
++.. tabularcolumns:: |p{6.0cm}|p{1.4cm}|p{10.1cm}|
+ 
+ .. flat-table:: JPEG Formats
+     :header-rows:  1
+@@ -7557,7 +7557,7 @@ formats.
+ 
+ .. _v4l2-mbus-pixelcode-vendor-specific:
+ 
+-.. tabularcolumns:: |p{6.8cm}|p{1.4cm}|p{9.3cm}|
++.. tabularcolumns:: |p{8.0cm}|p{1.4cm}|p{7.7cm}|
+ 
+ .. flat-table:: Vendor and device specific formats
+     :header-rows:  1
+-- 
+2.20.1
+
