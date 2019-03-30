@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F7A1C43381
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 20:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D043AC43381
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 20:45:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CA4662146F
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 20:45:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95395218D8
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 20:45:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UIEhecC2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fg53jHje"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730887AbfC3Up5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Mar 2019 16:45:57 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45941 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730692AbfC3Up4 (ORCPT
+        id S1730902AbfC3Up6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Mar 2019 16:45:58 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:36280 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730769AbfC3Up5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Mar 2019 16:45:56 -0400
-Received: by mail-wr1-f65.google.com with SMTP id s15so6821746wra.12
-        for <linux-media@vger.kernel.org>; Sat, 30 Mar 2019 13:45:54 -0700 (PDT)
+        Sat, 30 Mar 2019 16:45:57 -0400
+Received: by mail-wm1-f68.google.com with SMTP id h18so6731298wml.1
+        for <linux-media@vger.kernel.org>; Sat, 30 Mar 2019 13:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=aymg/ZymsAqHb3+yj5jowOK+nJ0BpAR2xNjEHjFq82E=;
-        b=UIEhecC2CiU5znBacto5rV9LFhAxOeYkEXTNzptSt77Fq4cNvIsG0vvZ5vthAaQzsu
-         rbYiiTIeAA0TZlChytUBZPHo5WczGEgyYxfnYhjsooNJMd6z8JStAsA0VVir7NCyEG4V
-         OeG5KAu6dl1yTQLkg15ukPp7zgYz8r67SJnbPnmBxmLGs4/zPanUHlAa4l0UF2dVI+oE
-         prlSLjKZVmQc6pMl9pZNUS50ihE9BMtgw2l8LHCasfn4NcrttfSaYWazWa0zq9EtLsRI
-         h0JJruMallKrqPFTwMZ33samMXblq00GYvZDfg24HTDHyO4fDwTCLxIuhT71aDjkHPNy
-         GybQ==
+        bh=SRlv6fJfa9LOuhNVcyUe0Pf1m/Kl+Xr6Y/BT1TLitbk=;
+        b=Fg53jHjex8BQykzb3QKrPMW2nab61C0Zf6dVBDNPA33kkjbZDXFbUCGAlRvsfBv94V
+         l0CLU9DLPIYL+rlCXnfaSGe4F0RNMPQfHjY+DEPXfKIfM9VP5cavbiI7zUqKwZm+NXPC
+         23mjNqHbKANDsQYPCGr2/l19DLTsFy1FgAxhcHz9lKH28RH0nB8onmSsmKLnq+06/lIS
+         nhg7n9xD3cpv5A7mLRiPEyg/yVdWph5T5ejTtUC6OQ6rEFCe5uq6GJW02oJlJxbZQ/aE
+         enIfo24+oBdD0mrazSg+Zw7wzGZA7ZDLYxMEhutA9aQctfo5PFslI2zshpgk8IOnng8T
+         7FIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=aymg/ZymsAqHb3+yj5jowOK+nJ0BpAR2xNjEHjFq82E=;
-        b=WZbzhIB7h5npdmOSqHGcsQuqoycd3/2T+Gf1v6ghIhH5+aHScMoGcCsPLLXz3CQZfD
-         HdYttJMU1MyjJU0JwaU76yiQylDyi6MmApan6OXiV35dVa/jfaBtlg6re8M57EMqq7Or
-         SbTAsCZEg1PLKwEet38T3YEfmCGYRsrO41c76NVN/0pyyyHxn3BjSXfd4KqGXJP519G/
-         cb7vsK6zhGZxHyyUJeFGKGVpjLwS9Qrl3yRhbudnHFAbZbLPhWLrUw//vpFQTJecS/uT
-         SSe5T8By7vUmTW+L3JL7Rf+pMaZ7HjPLH55VMsqtQgAykcwa6oNsAN3Qjg92lEanUozJ
-         W/Cg==
-X-Gm-Message-State: APjAAAV0yuoJy3PHXIp44nT30PngUnRaqTzhHdLuBvnvdEUXrvPmqS8B
-        H9kIFSVUbPqwJargOIu3GvH3rb+JkEE=
-X-Google-Smtp-Source: APXvYqzqhv3PcnnhG/2Nfpr95rMv/SrQkICQN8zrs3ihZtDOy1Yjz4urQGw3hL//jSoTVcSeWpcpqw==
-X-Received: by 2002:a5d:68cf:: with SMTP id p15mr32190120wrw.301.1553978753923;
-        Sat, 30 Mar 2019 13:45:53 -0700 (PDT)
+        bh=SRlv6fJfa9LOuhNVcyUe0Pf1m/Kl+Xr6Y/BT1TLitbk=;
+        b=dg2tqrKqFglIevaBikebxrUxf4h36qiX+bb1/c4Cc7XYkD9AHkgyTKlCL58WqqeXLc
+         U/nfNhK7sQ+gJHW+VJvJUZPOfpmId7akiDEufNFRUOpUudWHZ4GZ75EyGZxlnxKCkT4v
+         uL3BYuZ5bVQIp1CkX/TsILup/byAJaswg5vQHDzEGl9vgZ3hPbIGrGdnivyypsmZsA5x
+         IwrkavsM5e1SmFv/uSZB9j9QQAi9mgrEYLGJQJGJLCTDTKiNxED8IAV3zhg5I2bsdpz9
+         MRTe9WL5E+CQzYo+Ye2NEGMhZy0Ic5ky42Bv5UdON8JRoV7bNP1XGRDZRHfn8jLSICo4
+         Xt0w==
+X-Gm-Message-State: APjAAAX2bK4Ew/B8C37uoeHULhCVx71rW010ezbMIuOgfwe734vfwauP
+        WR6LC7O80lkh1CCzIvRCgb5gthFTxqM=
+X-Google-Smtp-Source: APXvYqxSAcJIMmrtrWOUH7ABHzSfdbasYogNEJsmIwYXEbmszBj+BsspkQQaB8Byb74O+RF+UGfcVg==
+X-Received: by 2002:a1c:c910:: with SMTP id f16mr7320855wmb.47.1553978754982;
+        Sat, 30 Mar 2019 13:45:54 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5ab07d.dynamic.kabel-deutschland.de. [95.90.176.125])
-        by smtp.gmail.com with ESMTPSA id a9sm5903671wmb.30.2019.03.30.13.45.53
+        by smtp.gmail.com with ESMTPSA id a9sm5903671wmb.30.2019.03.30.13.45.54
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 30 Mar 2019 13:45:53 -0700 (PDT)
+        Sat, 30 Mar 2019 13:45:54 -0700 (PDT)
 From:   Dafna Hirschfeld <dafna3@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, helen.koike@collabora.com,
         Dafna Hirschfeld <dafna3@gmail.com>
-Subject: [PATCH 10/14] media: vicodec: add field 'dev_inst' to vicodec_ctx
-Date:   Sat, 30 Mar 2019 13:43:08 -0700
-Message-Id: <20190330204311.107417-11-dafna3@gmail.com>
+Subject: [PATCH 11/14] media: vicodec: Register another node for stateless encoder
+Date:   Sat, 30 Mar 2019 13:43:09 -0700
+Message-Id: <20190330204311.107417-12-dafna3@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190330204311.107417-1-dafna3@gmail.com>
 References: <20190330204311.107417-1-dafna3@gmail.com>
@@ -69,104 +69,124 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the field 'dev_inst' to vicodec_ctx that points to
-the 'vicodec_dev_instance'. This saves many if-elses
+Add stateless encoder instance field to the dev struct and
+register another node for the stateless encoder.
+The stateless API for the node will be implemented in further
+patches.
 
 Signed-off-by: Dafna Hirschfeld <dafna3@gmail.com>
 ---
- drivers/media/platform/vicodec/vicodec-core.c | 42 ++++++-------------
- 1 file changed, 13 insertions(+), 29 deletions(-)
+ drivers/media/platform/vicodec/vicodec-core.c | 42 +++++++++++++++----
+ 1 file changed, 33 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
-index 6276a803cc4d..a701afd7cecb 100644
+index a701afd7cecb..6bfcd266ffc4 100644
 --- a/drivers/media/platform/vicodec/vicodec-core.c
 +++ b/drivers/media/platform/vicodec/vicodec-core.c
-@@ -121,6 +121,7 @@ struct vicodec_ctx {
- 	bool			has_stopped;
- 	spinlock_t		*lock;
- 
-+	struct vicodec_dev_instance *dev_inst;
- 	struct v4l2_ctrl_handler hdl;
- 
- 	struct vb2_v4l2_buffer *last_src_buf;
-@@ -404,7 +405,6 @@ static enum vb2_buffer_state get_next_header(struct vicodec_ctx *ctx,
- static void device_run(void *priv)
- {
- 	struct vicodec_ctx *ctx = priv;
--	struct vicodec_dev *dev = ctx->dev;
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
- 	struct vicodec_q_data *q_src, *q_dst;
- 	u32 state;
-@@ -454,13 +454,7 @@ static void device_run(void *priv)
- 	ctx->comp_has_frame = false;
- 	spin_unlock(ctx->lock);
- 
--	if (ctx->is_enc)
--		v4l2_m2m_job_finish(dev->stateful_enc.m2m_dev, ctx->fh.m2m_ctx);
--	else if (ctx->is_stateless)
--		v4l2_m2m_job_finish(dev->stateless_dec.m2m_dev,
--				    ctx->fh.m2m_ctx);
--	else
--		v4l2_m2m_job_finish(dev->stateful_dec.m2m_dev, ctx->fh.m2m_ctx);
-+	v4l2_m2m_job_finish(ctx->dev_inst->m2m_dev, ctx->fh.m2m_ctx);
- }
- 
- static void job_remove_src_buf(struct vicodec_ctx *ctx, u32 state)
-@@ -1771,12 +1765,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
- 	src_vq->ops = &vicodec_qops;
- 	src_vq->mem_ops = &vb2_vmalloc_memops;
- 	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
--	if (ctx->is_enc)
--		src_vq->lock = &ctx->dev->stateful_enc.mutex;
--	else if (ctx->is_stateless)
--		src_vq->lock = &ctx->dev->stateless_dec.mutex;
--	else
--		src_vq->lock = &ctx->dev->stateful_dec.mutex;
-+	src_vq->lock = &ctx->dev_inst->mutex;
- 	src_vq->supports_requests = ctx->is_stateless;
- 	src_vq->requires_requests = ctx->is_stateless;
- 	ret = vb2_queue_init(src_vq);
-@@ -1899,10 +1888,15 @@ static int vicodec_open(struct file *file)
+@@ -105,6 +105,7 @@ struct vicodec_dev {
+ 	struct vicodec_dev_instance stateful_enc;
+ 	struct vicodec_dev_instance stateful_dec;
+ 	struct vicodec_dev_instance stateless_dec;
++	struct vicodec_dev_instance stateless_enc;
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ 	struct media_device	mdev;
+ #endif
+@@ -1887,16 +1888,20 @@ static int vicodec_open(struct file *file)
+ 		rc = -ENOMEM;
  		goto open_unlock;
  	}
++	ctx->is_enc = (vfd == &dev->stateful_enc.vfd ||
++		       vfd == &dev->stateless_enc.vfd);
  
--	if (vfd == &dev->stateful_enc.vfd)
-+	if (vfd == &dev->stateful_enc.vfd) {
- 		ctx->is_enc = true;
--	else if (vfd == &dev->stateless_dec.vfd)
-+		ctx->dev_inst = &dev->stateful_enc;
-+	} else if (vfd == &dev->stateless_dec.vfd) {
- 		ctx->is_stateless = true;
+-	if (vfd == &dev->stateful_enc.vfd) {
+-		ctx->is_enc = true;
++	ctx->is_stateless = (vfd == &dev->stateless_dec.vfd ||
++			     vfd == &dev->stateless_enc.vfd);
++
++	if (vfd == &dev->stateful_enc.vfd)
+ 		ctx->dev_inst = &dev->stateful_enc;
+-	} else if (vfd == &dev->stateless_dec.vfd) {
+-		ctx->is_stateless = true;
+-		ctx->dev_inst = &dev->stateless_dec;
+-	} else {
++	else if (vfd == &dev->stateful_dec.vfd)
+ 		ctx->dev_inst = &dev->stateful_dec;
+-	}
++	else if (vfd == &dev->stateless_enc.vfd)
++		ctx->dev_inst = &dev->stateless_enc;
++	else
 +		ctx->dev_inst = &dev->stateless_dec;
-+	} else {
-+		ctx->dev_inst = &dev->stateful_dec;
-+	}
  
  	v4l2_fh_init(&ctx->fh, video_devdata(file));
  	file->private_data = &ctx->fh;
-@@ -1959,19 +1953,9 @@ static int vicodec_open(struct file *file)
+@@ -2150,6 +2155,9 @@ static int vicodec_probe(struct platform_device *pdev)
+ 			      "stateless-decoder", false))
+ 		goto unreg_sf_dec;
  
- 	ctx->state.colorspace = V4L2_COLORSPACE_REC709;
++	if (register_instance(dev, &dev->stateless_enc,
++			      "stateless-encoder", false))
++		goto unreg_sl_dec;
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ 	ret = v4l2_m2m_register_media_controller(dev->stateful_enc.m2m_dev,
+ 						 &dev->stateful_enc.vfd,
+@@ -2175,15 +2183,26 @@ static int vicodec_probe(struct platform_device *pdev)
+ 		goto unreg_m2m_sf_dec_mc;
+ 	}
  
--	if (ctx->is_enc) {
--		ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->stateful_enc.m2m_dev,
--						    ctx, &queue_init);
--		ctx->lock = &dev->stateful_enc.lock;
--	} else if (ctx->is_stateless) {
--		ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->stateless_dec.m2m_dev,
--						    ctx, &queue_init);
--		ctx->lock = &dev->stateless_dec.lock;
--	} else {
--		ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->stateful_dec.m2m_dev,
--						    ctx, &queue_init);
--		ctx->lock = &dev->stateful_dec.lock;
--	}
-+	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(ctx->dev_inst->m2m_dev,
-+					    ctx, &queue_init);
-+	ctx->lock = &ctx->dev_inst->lock;
++	ret = v4l2_m2m_register_media_controller(dev->stateless_enc.m2m_dev,
++						 &dev->stateless_enc.vfd,
++						 MEDIA_ENT_F_PROC_VIDEO_ENCODER);
++	if (ret) {
++		v4l2_err(&dev->v4l2_dev, "Failed to init mem2mem media controller for stateless enc\n");
++		goto unreg_m2m_sl_dec_mc;
++	}
++
++
+ 	ret = media_device_register(&dev->mdev);
+ 	if (ret) {
+ 		v4l2_err(&dev->v4l2_dev, "Failed to register mem2mem media device\n");
+-		goto unreg_m2m_sl_dec_mc;
++		goto unreg_m2m_sl_enc_mc;
+ 	}
+ #endif
+ 	return 0;
  
- 	if (IS_ERR(ctx->fh.m2m_ctx)) {
- 		rc = PTR_ERR(ctx->fh.m2m_ctx);
+ #ifdef CONFIG_MEDIA_CONTROLLER
++unreg_m2m_sl_enc_mc:
++	v4l2_m2m_unregister_media_controller(dev->stateless_enc.m2m_dev);
+ unreg_m2m_sl_dec_mc:
+ 	v4l2_m2m_unregister_media_controller(dev->stateless_dec.m2m_dev);
+ unreg_m2m_sf_dec_mc:
+@@ -2191,9 +2210,12 @@ static int vicodec_probe(struct platform_device *pdev)
+ unreg_m2m_sf_enc_mc:
+ 	v4l2_m2m_unregister_media_controller(dev->stateful_enc.m2m_dev);
+ unreg_m2m:
++	video_unregister_device(&dev->stateless_enc.vfd);
++	v4l2_m2m_release(dev->stateless_enc.m2m_dev);
++#endif
++unreg_sl_dec:
+ 	video_unregister_device(&dev->stateless_dec.vfd);
+ 	v4l2_m2m_release(dev->stateless_dec.m2m_dev);
+-#endif
+ unreg_sf_dec:
+ 	video_unregister_device(&dev->stateful_dec.vfd);
+ 	v4l2_m2m_release(dev->stateful_dec.m2m_dev);
+@@ -2217,6 +2239,7 @@ static int vicodec_remove(struct platform_device *pdev)
+ 	v4l2_m2m_unregister_media_controller(dev->stateful_enc.m2m_dev);
+ 	v4l2_m2m_unregister_media_controller(dev->stateful_dec.m2m_dev);
+ 	v4l2_m2m_unregister_media_controller(dev->stateless_dec.m2m_dev);
++	v4l2_m2m_unregister_media_controller(dev->stateless_enc.m2m_dev);
+ 	media_device_cleanup(&dev->mdev);
+ #endif
+ 
+@@ -2225,6 +2248,7 @@ static int vicodec_remove(struct platform_device *pdev)
+ 	video_unregister_device(&dev->stateful_enc.vfd);
+ 	video_unregister_device(&dev->stateful_dec.vfd);
+ 	video_unregister_device(&dev->stateless_dec.vfd);
++	video_unregister_device(&dev->stateless_enc.vfd);
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 
+ 	return 0;
 -- 
 2.17.1
 
