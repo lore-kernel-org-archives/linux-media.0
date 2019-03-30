@@ -7,63 +7,60 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0806C43381
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 21:36:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57032C43381
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 21:44:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7EB6B21773
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 21:36:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E8802082C
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 21:44:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pCK8jzR2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SFaYLXsu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730725AbfC3Vgf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Mar 2019 17:36:35 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]:32797 "EHLO
-        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730395AbfC3Vgf (ORCPT
+        id S1730969AbfC3VoL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Mar 2019 17:44:11 -0400
+Received: from mail-wr1-f54.google.com ([209.85.221.54]:33122 "EHLO
+        mail-wr1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730582AbfC3VoL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Mar 2019 17:36:35 -0400
-Received: by mail-wr1-f48.google.com with SMTP id q1so6949880wrp.0
-        for <linux-media@vger.kernel.org>; Sat, 30 Mar 2019 14:36:33 -0700 (PDT)
+        Sat, 30 Mar 2019 17:44:11 -0400
+Received: by mail-wr1-f54.google.com with SMTP id q1so6962998wrp.0
+        for <linux-media@vger.kernel.org>; Sat, 30 Mar 2019 14:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        h=from:to:cc:subject:date:message-id;
         bh=gg0RoNdHzgiz8shIEh3iitwCcykj9Z0AcA1mVIWiVfs=;
-        b=pCK8jzR2/N304y/hjmub6sXlMOUzJCLTffbywAXdYaVyymY5ZbZm7UPdmenE3r7FMl
-         GCFcOmtddkt8MPjDXcl86RgK3ScbE4uQQdAW8JkFKYpH75pAwYOC8lVoREHfVwSeL4fy
-         gsoz/NWala9bmk+5a3w3yaEUnI4woENnxGThzBWMZXpjKjn+5W6I1W8/dOwV8iyvAdXC
-         ogweyHdDWT2HsfwLMG+l4jnj+yxVoXmFuW/RRa93Vo5fCxDnji6bhDCW5QtrCxDl86Vv
-         QE2z1Hng5Es+5gOR+uVV2aZ0DBUNGC8ow2Cr5EoXYQQ2UYe2+Qu24uQka7iWOcNTi7dK
-         6QhQ==
+        b=SFaYLXsue6G96cgOmb60/8N0QCzdPsqPTA/js9wLwokRaJrYXodmlzgv/kNkmHjrQN
+         RN5kjrn1v5xQBuPqFbeqa5DHgIXacC4z1JG1aJjLa3wTyIox/zLjbH+A+hlNmqYsNPiX
+         Av2PiyGJbFEUJKGwZBnXKOzQb3Vzye1/rNii/6l8nd0dGkhU048EAK876nUzlBmdN3T7
+         WYISMlxNIzSlduoeHzkQo3mGJTMQ/UikWLUjV39Awcx9e44Ji7bQ9cLvJ39mJuYzktyf
+         zn6+h0yxOP213s40lsUrbqjw9kewu1wOCR5QHD7Gy2MccZxRUuyw2QZpP7sYADphtu/q
+         u8cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
         bh=gg0RoNdHzgiz8shIEh3iitwCcykj9Z0AcA1mVIWiVfs=;
-        b=KfKfpazdli8hqbNjUtWLW7HAEhuoHtgOddC6x80iemTbr4xTRQT3E63WxQNpDPwHJG
-         Hc4WPFM0NIwD+QLAkg983Y8EEexhjAlf8xxK7wPJ5V7VyxAdlyk51GnCamKUCup7WLE5
-         0yvgP9+G/IhLlw7sdROhazN2ZaAh0OoYl497Grj+sB0S+lskGaVLPg+M3WsFbf4goG/K
-         rRUJnKjVwxyTyggsJbE3HmTJFL48Y483DaVjBKSLqwELCTbW0iWQQI9q2gFhBI9f2Uwr
-         I1X6nzGHYUFvcqzdhoX5QAJjZM0WqL14hmJy9uVZIRXX6UPRRF3PZe2Bct9DtDANnKoT
-         IEQA==
-X-Gm-Message-State: APjAAAUle702bHpbSW9/ENfbqE57FT5iYynCOTD6GK3SrABKYQvgpfiX
-        N5ZAhkRhhTsUIOIFb+cL8TlhAv5Usa8=
-X-Google-Smtp-Source: APXvYqyibO2BbuPfjVGrALjzsG9qf2j/BI/bsvMHZc0Zo8QfeBqkiUE/SMXtYSOtcAnjL9it3vwekA==
-X-Received: by 2002:adf:c7c8:: with SMTP id y8mr38855589wrg.149.1553981792944;
-        Sat, 30 Mar 2019 14:36:32 -0700 (PDT)
+        b=GtoxmlvnSz30207TYvWaMvDotOVLcev0iPyOlhrMPdMJOBifZAgEEA/8x9TiWmxLk2
+         QeMw7+kqPSoChbeB0ebi7Gd9u5vLUamDTMs0SnUOUHNHZZvjk3Ec6GcqpnYTVinpbmfE
+         gn5Myz3pR3vGUBSTllJOqM96ITN8zSpsEPfQduCD5gLFfBFuCAofm27sTuNoeVR/jPvR
+         n1pQegSC0Bx9I/FL2+Bwb2BuXbb2frAlIFqJIzUG1AyoXHxQgD+7vOynArJys2rnpIC/
+         sS0YLQdHLkD1Jl3iXSh230j2MvRHq09brK3rRLIkkRJPoVyWktYr7oTM7kKZEmDp0SZa
+         NkgA==
+X-Gm-Message-State: APjAAAV1NDih26UKI9iGsCFHI0Sczt3K/w491eRopOmoedgf8RerE46D
+        IpdW7nos3ZsnK0sGwPUOyZL4Gr4r7gM=
+X-Google-Smtp-Source: APXvYqzJozfEXG4rvZP95ZVNGIlNMhSz3deVv2Db4xnw9KC12u6FLkYMP77yB22xH5zNTvJlzdc8aA==
+X-Received: by 2002:a5d:6a12:: with SMTP id m18mr17733975wru.325.1553982248606;
+        Sat, 30 Mar 2019 14:44:08 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5ab07d.dynamic.kabel-deutschland.de. [95.90.176.125])
-        by smtp.gmail.com with ESMTPSA id s10sm6066144wmh.0.2019.03.30.14.36.31
+        by smtp.gmail.com with ESMTPSA id o10sm8564254wru.54.2019.03.30.14.44.07
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 30 Mar 2019 14:36:32 -0700 (PDT)
+        Sat, 30 Mar 2019 14:44:07 -0700 (PDT)
 From:   Dafna Hirschfeld <dafna3@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, helen.koike@collabora.com,
         Dafna Hirschfeld <dafna3@gmail.com>
-Subject: [PATCH v4l-utils 3/3] v4l2-ctl: add support for fwht stateless decoder
-Date:   Sat, 30 Mar 2019 14:33:41 -0700
-Message-Id: <20190330213341.107939-3-dafna3@gmail.com>
+Subject: [PATCH v4l-utils v2] v4l2-ctl: add support for fwht stateless encoder
+Date:   Sat, 30 Mar 2019 14:41:58 -0700
+Message-Id: <20190330214158.108447-1-dafna3@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190330213341.107939-1-dafna3@gmail.com>
-References: <20190330213341.107939-1-dafna3@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
