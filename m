@@ -7,172 +7,105 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB03EC43381
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 20:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1D92C43381
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 21:36:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DDF8218D8
-	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 20:46:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1FDE21773
+	for <linux-media@archiver.kernel.org>; Sat, 30 Mar 2019 21:36:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L8/x54B/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qT/M5hh+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730918AbfC3UqA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Mar 2019 16:46:00 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:33771 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730571AbfC3Up7 (ORCPT
+        id S1730638AbfC3Vgd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 30 Mar 2019 17:36:33 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45069 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730395AbfC3Vgc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Mar 2019 16:45:59 -0400
-Received: by mail-wr1-f66.google.com with SMTP id q1so6864028wrp.0
-        for <linux-media@vger.kernel.org>; Sat, 30 Mar 2019 13:45:57 -0700 (PDT)
+        Sat, 30 Mar 2019 17:36:32 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s15so6908161wra.12
+        for <linux-media@vger.kernel.org>; Sat, 30 Mar 2019 14:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MwCbYlPB7RmKx965GxAhkkGCVi8TVyMw8A/MDOhQhs4=;
-        b=L8/x54B/D8yiHY9koLQKsvrR/4Ky36bfQWDAoWb+pz/jlgy39Sq1IDvgAAFYQT8J02
-         Dbue74cHuceHXrnlX41xKeKDlt/6wIkAYFy9wpIs2rXCKMagYuhrJCTMT/0xBwxY6Q9J
-         HwG1h7EMqstcOW9xz72tpHthznsNAFIkz9g4lSOnXgMtgEO9kE2d3DBksuylRWWHmUzQ
-         7oo4WaHxjPMNBVnHrr+jv4KPsAF52zFSVvWlpcFLrIPuU7lvtUxHTM8SB4SLVpCYhUy6
-         22Psn2nib0g5gwH/gvwSzVStWAclBx+nnhpuE+G5DUSbjCQTvgz9DmxHk19uKUJb3mlN
-         hZoQ==
+        h=from:to:cc:subject:date:message-id;
+        bh=QPC/0lED49+IBZ6vO8lGlkFuv2ulajJkH3L3H4F5Ytc=;
+        b=qT/M5hh+TThR1LzcFFnLS0hn8uwFClYfoMpFlg4NYWTzWW+LkTThvxo9yOJ6RjLJE8
+         fqy+9g+9yH34L+qDisRyrfwik21uS4AK92o9whYxhjcO8kHEXEIHYV9Q7QgaZmodKQDp
+         rIx5m1utYwA8wGdm4btFUoWxLcg1lNLPiRywmJQxONjoTOLu87kyWz1KxFmpjoUG42+h
+         TQuKeFlngSh6Bdga4Y20iPRrP94MY5LgjIajFcHrHctZR/Mel2tuHLYNdyHvkFLWU1pk
+         2ZScqTr+U9+iQKB7R4g2sfIVeVNfK3Uf3slHqfY8yNye639/3COLQaHNCWD4X3NFPi5V
+         fnvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=MwCbYlPB7RmKx965GxAhkkGCVi8TVyMw8A/MDOhQhs4=;
-        b=qOPsBtDwzU/XnKU0FZjVYmP5disp4772syN8Ecq0SJAeXvtjd0GpwEv4FjaGJxjySS
-         Ky6ceI68tYaTiYx75iNMexcWFz/x2KbR/jJVgDIYPAU7bs+xjHomhRnkjnwoEP0tvm+p
-         XmCGbp1QdycyaoCmHgSiKvSkKuMv1U0JkMBE7yzsFml5zcTMpdTZSX/E9b/R/2KiJtz0
-         fWVM6fOi5J842JFZ03YLEyd3KINZsWOzRIKO03apsj+IQcMcYLBYbp5fyaWvbzfx8pu4
-         Wov1RVGnKGQ/7Bcbx4p0X3+4OemM+sBKJ+7SNoi1YnYiznS164PJ7OyMCOm7BI3r+y8q
-         od9Q==
-X-Gm-Message-State: APjAAAVsEToUaTzN9RodkR/kA4ifSs4+VvvCIMDmJmOV62moVhxKBi7a
-        W4hFjJHF7rzl0x1xwGx5nBJVx3oPy4Q=
-X-Google-Smtp-Source: APXvYqxRJ2/F8gYn0sFIf069rNQJ/JIn+SdIMvOvcmKqN3k4SRBsi0Jwgxzzo5eZddONTm3sCi+Btw==
-X-Received: by 2002:adf:e407:: with SMTP id g7mr24709025wrm.47.1553978757026;
-        Sat, 30 Mar 2019 13:45:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=QPC/0lED49+IBZ6vO8lGlkFuv2ulajJkH3L3H4F5Ytc=;
+        b=pMBGF9phAm5dmYbuxhxlZg52/xEpLlq6yG/BUi0iYFmXcSF1ln2+Dtm+iUH6xotbt0
+         cprbSpALU/2aIKs8szg7GSgMFUGBc9y9fCrXYPx7tBoCRAU8FNE7SM1HC0gUdI0Dd7Yg
+         meA8OkDy4GZmnDDiHfnqVMZ8yQ4PmNrm5sr3smaPY2wDzlti/ip2TWy7zHb7+IXmUB/U
+         MSHeI0SDJ3UwsYAqozY+eXYFC/uC+j8U6nW4fZFoUtrrV391T/hyUvi+62JcTxRnov7G
+         BxVlQnHIkNTscbtmMc/qX/K/YzC+ijDKfClJBJb3A1DmzGUsK0H+IofZUcPm7tfPYMX3
+         r9kg==
+X-Gm-Message-State: APjAAAUrNihurTTQKY+mO5uObjgfJods0ZquzQpSGeCFasTPeQ8SM+Pg
+        Yz8xupw84QdGnP4K+U62FT2Cr7S31fw=
+X-Google-Smtp-Source: APXvYqzQtutaRGUGaW041w4IPvi7oP4vmjKw3GLhPWZdlPU7sJO8P5xERAAMBfsP97zM9SxWEheC8Q==
+X-Received: by 2002:a5d:6b43:: with SMTP id x3mr38503858wrw.76.1553981790843;
+        Sat, 30 Mar 2019 14:36:30 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5ab07d.dynamic.kabel-deutschland.de. [95.90.176.125])
-        by smtp.gmail.com with ESMTPSA id a9sm5903671wmb.30.2019.03.30.13.45.56
+        by smtp.gmail.com with ESMTPSA id s10sm6066144wmh.0.2019.03.30.14.36.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 30 Mar 2019 13:45:56 -0700 (PDT)
+        Sat, 30 Mar 2019 14:36:29 -0700 (PDT)
 From:   Dafna Hirschfeld <dafna3@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, helen.koike@collabora.com,
         Dafna Hirschfeld <dafna3@gmail.com>
-Subject: [PATCH 13/14] media: vicodec: Add support for stateless encoder
-Date:   Sat, 30 Mar 2019 13:43:11 -0700
-Message-Id: <20190330204311.107417-14-dafna3@gmail.com>
+Subject: [PATCH v4l-utils 1/3] v4l2-ctl: declare hdr variable as const
+Date:   Sat, 30 Mar 2019 14:33:39 -0700
+Message-Id: <20190330213341.107939-1-dafna3@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190330204311.107417-1-dafna3@gmail.com>
-References: <20190330204311.107417-1-dafna3@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adjust the stateless API code to support
-both encoder and decoder.
+declare the hdr param with 'const' in
+functions that use fwht header in order
+to set the fwht stateless params.
 
 Signed-off-by: Dafna Hirschfeld <dafna3@gmail.com>
 ---
- drivers/media/platform/vicodec/vicodec-core.c | 58 +++++++++++--------
- 1 file changed, 33 insertions(+), 25 deletions(-)
+ utils/v4l2-ctl/v4l2-ctl-streaming.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
-index f042c4b618ba..3808e72b2361 100644
---- a/drivers/media/platform/vicodec/vicodec-core.c
-+++ b/drivers/media/platform/vicodec/vicodec-core.c
-@@ -280,29 +280,31 @@ static int device_process(struct vicodec_ctx *ctx,
+diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+index 85f97722..28bc8c68 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+@@ -837,7 +837,7 @@ static int alloc_fwht_req(int media_fd, unsigned index)
+ 	return 0;
+ }
  
- 		ctx->state.header.size =
- 			htonl(vb2_get_plane_payload(&src_vb->vb2_buf, 0));
--		/*
--		 * set the reference buffer from the reference timestamp
--		 * only if this is a P-frame
--		 */
--		if (!(ntohl(ctx->state.header.flags) & FWHT_FL_I_FRAME)) {
--			struct vb2_buffer *ref_vb2_buf;
--			int ref_buf_idx;
--			struct vb2_queue *vq_cap =
-+		if (!ctx->is_enc) {
-+			/*
-+			 * set the reference buffer from the reference timestamp
-+			 * only if this is a P-frame
-+			*/
-+			if (!(ntohl(ctx->state.header.flags) & FWHT_FL_I_FRAME)) {
-+				struct vb2_buffer *ref_vb2_buf;
-+				int ref_buf_idx;
-+				struct vb2_queue *vq_cap =
- 				v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
--						V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+				V4L2_BUF_TYPE_VIDEO_CAPTURE);
+-static void set_fwht_req_by_idx(unsigned idx, struct fwht_cframe_hdr *hdr,
++static void set_fwht_req_by_idx(unsigned idx, const struct fwht_cframe_hdr *hdr,
+ 				__u64 last_bf_ts, __u64 ts)
+ {
+ 	struct v4l2_ctrl_fwht_params fwht_params;
+@@ -857,7 +857,7 @@ static int get_fwht_req_by_ts(__u64 ts)
+ 	return -1;
+ }
  
--			ref_buf_idx = vb2_find_timestamp(vq_cap,
--							 ctx->state.ref_frame_ts, 0);
--			if (ref_buf_idx < 0)
--				return -EINVAL;
-+				ref_buf_idx = vb2_find_timestamp(vq_cap,
-+				ctx->state.ref_frame_ts, 0);
-+				if (ref_buf_idx < 0)
-+					return -EINVAL;
+-static bool set_fwht_req_by_fd(struct fwht_cframe_hdr *hdr,
++static bool set_fwht_req_by_fd(const struct fwht_cframe_hdr *hdr,
+ 			       int req_fd, __u64 last_bf_ts, __u64 ts)
+ {
+ 	struct v4l2_ctrl_fwht_params fwht_params;
+@@ -874,7 +874,7 @@ static bool set_fwht_req_by_fd(struct fwht_cframe_hdr *hdr,
+ 	return false;
+ }
  
--			ref_vb2_buf = vq_cap->bufs[ref_buf_idx];
--			if (ref_vb2_buf->state == VB2_BUF_STATE_ERROR)
--				ret = -EINVAL;
--			ctx->state.ref_frame.buf =
-+				ref_vb2_buf = vq_cap->bufs[ref_buf_idx];
-+				if (ref_vb2_buf->state == VB2_BUF_STATE_ERROR)
-+					ret = -EINVAL;
-+				ctx->state.ref_frame.buf =
- 				vb2_plane_vaddr(ref_vb2_buf, 0);
--		} else {
--			ctx->state.ref_frame.buf = NULL;
-+			} else {
-+				ctx->state.ref_frame.buf = NULL;
-+			}
- 		}
- 	}
- 	p_dst = vb2_plane_vaddr(&dst_vb->vb2_buf, 0);
-@@ -1722,7 +1724,7 @@ static void vicodec_stop_streaming(struct vb2_queue *q)
- 
- 	if ((!V4L2_TYPE_IS_OUTPUT(q->type) && !ctx->is_enc) ||
- 	    (V4L2_TYPE_IS_OUTPUT(q->type) && ctx->is_enc)) {
--		if (!ctx->is_stateless)
-+		if (!ctx->is_stateless || ctx->is_enc)
- 			kvfree(ctx->state.ref_frame.buf);
- 		ctx->state.ref_frame.buf = NULL;
- 		ctx->state.ref_frame.luma = NULL;
-@@ -1800,20 +1802,26 @@ static int vicodec_try_ctrl(struct v4l2_ctrl *ctrl)
- 	struct vicodec_ctx *ctx = container_of(ctrl->handler,
- 			struct vicodec_ctx, hdl);
- 	const struct v4l2_ctrl_fwht_params *params;
--	struct vicodec_q_data *q_dst = get_q_data(ctx,
--			V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+	struct vicodec_q_data *q_data;
-+
-+	if (ctx->is_enc)
-+		q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT);
-+	else
-+		q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
- 
- 	switch (ctrl->id) {
- 	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:
- 		params = ctrl->p_new.p_fwht_params;
--		if (params->width > q_dst->coded_width ||
-+		if (params->width > q_data->coded_width ||
- 		    params->width < MIN_WIDTH ||
--		    params->height > q_dst->coded_height ||
-+		    params->height > q_data->coded_height ||
- 		    params->height < MIN_HEIGHT)
- 			return -EINVAL;
-+		if (ctx->is_enc)
-+			return 0;
- 		if (!validate_by_version(params->flags, params->version))
- 			return -EINVAL;
--		if (!validate_stateless_params_flags(params, q_dst->info))
-+		if (!validate_stateless_params_flags(params, q_data->info))
- 			return -EINVAL;
- 		return 0;
- 	default:
+-static int set_fwht_ext_ctrl(cv4l_fd &fd, struct fwht_cframe_hdr *hdr,
++static int set_fwht_ext_ctrl(cv4l_fd &fd, const struct fwht_cframe_hdr *hdr,
+ 			     __u64 last_bf_ts, int req_fd)
+ {
+ 	v4l2_ext_controls controls;
 -- 
 2.17.1
 
