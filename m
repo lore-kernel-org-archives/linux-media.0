@@ -2,154 +2,87 @@ Return-Path: <SRS0=D0s7=SC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFF0BC43381
-	for <linux-media@archiver.kernel.org>; Sun, 31 Mar 2019 03:48:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7FB7C43381
+	for <linux-media@archiver.kernel.org>; Sun, 31 Mar 2019 10:17:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7061220840
-	for <linux-media@archiver.kernel.org>; Sun, 31 Mar 2019 03:48:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C289620882
+	for <linux-media@archiver.kernel.org>; Sun, 31 Mar 2019 10:17:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731073AbfCaDsj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 30 Mar 2019 23:48:39 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:44513 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731058AbfCaDsj (ORCPT
+        id S1726756AbfCaKRw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 31 Mar 2019 06:17:52 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:34854 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726619AbfCaKRw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 30 Mar 2019 23:48:39 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:98c5:5295:1b74:e10a])
+        Sun, 31 Mar 2019 06:17:52 -0400
+Received: from [192.168.2.10] ([212.251.195.8])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id ARSWhe1IciLOmARSXhXvnv; Sun, 31 Mar 2019 05:48:37 +0200
-Message-ID: <acb76eca99fb097044dcb30ad50a50e4@smtp-cloud9.xs4all.net>
-Date:   Sun, 31 Mar 2019 05:48:36 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfNwX8z3LtRl14e6b8CjtZdGoljdWT18vHzlgYHeVUAYhEt7Hd9NWoh4/ZI8d1z3Mmv2SXpxpNU+sS8qJ0RFhgvE8DlhRQi16I5b2YIUWdAzhYQnC/nrM
- WLHRNwLdfo9KgN8cRNdvKQQJ2F5hDtkbdAj+3Eg/xG/3uBUICDh0B1eE9gsAgFZjUBYgFQxdrYmZAm/gJnrOXgbNBYtqBC8yHMoOdAHYdDVN6vLKVZo8SPp8
+        id AXX9hgpUWiLOmAXXChYVJR; Sun, 31 Mar 2019 12:17:51 +0200
+Subject: Re: [PATCH 00/14] add support for stateless encoder
+To:     Dafna Hirschfeld <dafna3@gmail.com>, linux-media@vger.kernel.org
+Cc:     helen.koike@collabora.com
+References: <20190330204311.107417-1-dafna3@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <6459cafe-dfd3-e50e-ac84-e896d1a88559@xs4all.nl>
+Date:   Sun, 31 Mar 2019 12:17:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
+MIME-Version: 1.0
+In-Reply-To: <20190330204311.107417-1-dafna3@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfN07UbZp/3vfQaT0P7teu5uIIh0oRUK6Hqcs6yYu9T3qN2qaWoE4UzlM6oLK7qEENBry2H+Yzxe4aYC+sPwBYRF6YEkqYD9Tj4X6hV/gaZYYFdZIup6D
+ A2MYLVPWgfmwz/QDyoV02Rc1ioY8ZKddRCBgo3dJRHicjdkqI4I/p/JSww/QacZYh6vZvY6KcpxWgOXjGpkhFgfU0FZHIG9oe4EbH6daY4q3T/p6XXsyffir
+ X87pUMtNJt3HX6iIs49DOA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On 3/30/19 9:42 PM, Dafna Hirschfeld wrote:
+> patches 9-13 are new,
+> 
+> Dafna Hirschfeld (6):
+>   media: vicodec: don't test if info is NULL
+>   media: vicodec: add field 'dev_inst' to vicodec_ctx
+>   media: vicodec: Register another node for stateless encoder
+>   media: vicodec: set pixelformat V4L2_PIX_FMT_FWHT_STATELESS for
+>     stateless encoder
+>   media: vicodec: Add support for stateless encoder
+>   prints
 
-Results of the daily build of media_tree:
+It looks like this series just prepares for stateless encoder support but
+no actually implements it yet. Is that right?
 
-date:			Sun Mar 31 05:00:12 CEST 2019
-media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	83c2d2470738b05a075ca2afc13d994343a83a3f
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-2-amd64
+I also see only 13 patches, not 14, so perhaps something is missing?
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 13
-sparse: OK
-smatch: OK
+Regards,
 
-Detailed results are available here:
+	Hans
 
-http://www.xs4all.nl/~hverkuil/logs/Sunday.log
+> 
+> Hans Verkuil (8):
+>   kernel/sysctl.c: bug fix
+>   vicodec: always return a valid format.
+>   vicodec: pass on enc output format to capture side
+>   vicodec: add V4L2_CID_MIN_BUFFERS_FOR_OUTPUT
+>   videobuf2-v4l2: set last_buffer_dequeued in dqbuf
+>   vicodec: improve handling of ENC_CMD_STOP/START
+>   vicodec: restrict decoder format list when src fmt is known
+>   vicodec: fix vicodec_buf_queue()
+> 
+>  .../media/common/videobuf2/videobuf2-v4l2.c   |  10 +-
+>  drivers/media/media-request.c                 |   3 +
+>  drivers/media/platform/vicodec/codec-fwht.c   |  25 +
+>  drivers/media/platform/vicodec/codec-fwht.h   |   2 +
+>  .../media/platform/vicodec/codec-v4l2-fwht.c  |  63 ++-
+>  drivers/media/platform/vicodec/vicodec-core.c | 497 +++++++++++++-----
+>  drivers/media/v4l2-core/v4l2-ctrls.c          |  57 +-
+>  kernel/sysctl.c                               |   2 +-
+>  8 files changed, 507 insertions(+), 152 deletions(-)
+> 
 
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
