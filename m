@@ -2,175 +2,109 @@ Return-Path: <SRS0=Gl4L=SD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DC47DC10F05
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 05:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 578B8C43381
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 06:35:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A8E8520896
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 05:26:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GSMfenxK"
+	by mail.kernel.org (Postfix) with ESMTP id 2C8F320850
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 06:35:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725992AbfDAF0R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 01:26:17 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:33076 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725771AbfDAF0R (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 01:26:17 -0400
-Received: by mail-lj1-f195.google.com with SMTP id f23so6888317ljc.0;
-        Sun, 31 Mar 2019 22:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bIVPtU/6p+7QNpj3MFhNlKtXKn4Iq452QD8npHz+GbM=;
-        b=GSMfenxKmemWULo792hWOfy/Tlep6WqOO9L/jJR2e5gnB7dWER5LBXqu5dxALEN2tm
-         inGtCLH8AGdUkulnrqLgYPflDKpirpF5+cHZAQ3XbB15xMH3nX22akA/pJVbyaAKZX85
-         xvv8tvFX+ASSgFa7HJDqm0nA/zF6CKx+YjZJOYw4CYVXVz6IXPrmsRrnCO/I4IuXa9Ls
-         vqGoW3074MgmcMmyS+MuUEhIbWdCqV8WxAafH2eVkIAnmnHDsOkbNTf28jHZj7mSs13i
-         Yh6dW2t3w6dwsYv6iQ5J9TiAx/ermCxDUS4HhW8hxE8MVqmYyKd6GYwrESF9RaJ25eb+
-         l02w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bIVPtU/6p+7QNpj3MFhNlKtXKn4Iq452QD8npHz+GbM=;
-        b=JiC6f2rsZ6sPHstWX5IIovHUXjtu9g6Ab5M35kSv3VsqH8YSR5hBD0Ko07rZOXT+64
-         dCpZ5lJPO32oB24UQpvbeLQI+sbLRYtVfdkXMXZWpDe56U9DqzXoVvZAVj4eQfi4OiQ0
-         Q1skwng24R50lRWcNwMDyI64OlapM2uoH3P3sX4WcQSXidZIOSYs0PID/XMTdnHLnLNX
-         Okz4hBulezcn5h2gwDoGBw2XJYQN+i8NA0dodE7SxMYgE5aDD7k7DVDhMSFFviH6NW5I
-         RoKLQbrIh0QR8RuqjdvHiaS2wy1fRS1xOlky8WUROluLCbMnTPAsPJIkZs9seRgylKTg
-         xAvQ==
-X-Gm-Message-State: APjAAAXHiTtDIQL9xMPbWgmJkV+GACUiuN9s52eKL8y2nf6Zyz/rENHW
-        Ce6qmwFkuuMecmZFfII1hzx1c60bzulhdehdKmU=
-X-Google-Smtp-Source: APXvYqzAIbEvWsJKCr8Si4qji6vpGtPpgJ9t/2hq0YVPrFKEma2+t934Gmkq9NVJTNcsivtQulGbZiMEOTK9cecCE6g=
-X-Received: by 2002:a2e:3e18:: with SMTP id l24mr23912301lja.68.1554096373899;
- Sun, 31 Mar 2019 22:26:13 -0700 (PDT)
+        id S1726708AbfDAGfV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 02:35:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59210 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726168AbfDAGfV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 1 Apr 2019 02:35:21 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 40444AD27;
+        Mon,  1 Apr 2019 06:35:19 +0000 (UTC)
+Subject: Re: [Xen-devel][PATCH v6 1/1] cameraif: add ABI for para-virtual
+ camera
+To:     Oleksandr Andrushchenko <andr2000@gmail.com>,
+        xen-devel@lists.xenproject.org, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, sakari.ailus@linux.intel.com,
+        koji.matsuoka.xm@renesas.com, hverkuil@xs4all.nl
+Cc:     Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
+References: <20190322073742.14639-1-andr2000@gmail.com>
+ <20190322073742.14639-2-andr2000@gmail.com>
+From:   Juergen Gross <jgross@suse.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=jgross@suse.com; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <aa30b072-2ed2-beb6-39a2-94c1220f5d43@suse.com>
+Date:   Mon, 1 Apr 2019 08:35:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-References: <cover.1552921225.git.jrdr.linux@gmail.com>
-In-Reply-To: <cover.1552921225.git.jrdr.linux@gmail.com>
-From:   Souptick Joarder <jrdr.linux@gmail.com>
-Date:   Mon, 1 Apr 2019 10:56:02 +0530
-Message-ID: <CAFqt6zaV5zcc495BBk1Wi7p+zOF8y=P5KRfKkvwY=stagUFKWQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH v4 0/9] mm: Use vm_map_pages() and
- vm_map_pages_zero() API
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        rppt@linux.vnet.ibm.com, Peter Zijlstra <peterz@infradead.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        robin.murphy@arm.com, iamjoonsoo.kim@lge.com, treding@nvidia.com,
-        Kees Cook <keescook@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        stefanr@s5r6.in-berlin.de, hjc@rock-chips.com,
-        Heiko Stuebner <heiko@sntech.de>, airlied@linux.ie,
-        oleksandr_andrushchenko@epam.com, joro@8bytes.org,
-        pawel@osciak.com, Kyungmin Park <kyungmin.park@samsung.com>,
-        mchehab@kernel.org, Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux1394-devel@lists.sourceforge.net,
-        dri-devel@lists.freedesktop.org,
-        linux-rockchip@lists.infradead.org, xen-devel@lists.xen.org,
-        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190322073742.14639-2-andr2000@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Andrew,
+On 22/03/2019 08:37, Oleksandr Andrushchenko wrote:
+> From: Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
+> 
+> This is the ABI for the two halves of a para-virtualized
+> camera driver which extends Xen's reach multimedia capabilities even
+> farther enabling it for video conferencing, In-Vehicle Infotainment,
+> high definition maps etc.
+> 
+> The initial goal is to support most needed functionality with the
+> final idea to make it possible to extend the protocol if need be:
+> 
+> 1. Provide means for base virtual device configuration:
+>  - pixel formats
+>  - resolutions
+>  - frame rates
+> 2. Support basic camera controls:
+>  - contrast
+>  - brightness
+>  - hue
+>  - saturation
+> 3. Support streaming control
+> 
+> Signed-off-by: Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
 
-On Tue, Mar 19, 2019 at 7:47 AM Souptick Joarder <jrdr.linux@gmail.com> wrote:
->
-> Previouly drivers have their own way of mapping range of
-> kernel pages/memory into user vma and this was done by
-> invoking vm_insert_page() within a loop.
->
-> As this pattern is common across different drivers, it can
-> be generalized by creating new functions and use it across
-> the drivers.
->
-> vm_map_pages() is the API which could be used to map
-> kernel memory/pages in drivers which has considered vm_pgoff.
->
-> vm_map_pages_zero() is the API which could be used to map
-> range of kernel memory/pages in drivers which has not considered
-> vm_pgoff. vm_pgoff is passed default as 0 for those drivers.
->
-> We _could_ then at a later "fix" these drivers which are using
-> vm_map_pages_zero() to behave according to the normal vm_pgoff
-> offsetting simply by removing the _zero suffix on the function
-> name and if that causes regressions, it gives us an easy way to revert.
->
-> Tested on Rockchip hardware and display is working fine, including talking
-> to Lima via prime.
->
-> v1 -> v2:
->         Few Reviewed-by.
->
->         Updated the change log in [8/9]
->
->         In [7/9], vm_pgoff is treated in V4L2 API as a 'cookie'
->         to select a buffer, not as a in-buffer offset by design
->         and it always want to mmap a whole buffer from its beginning.
->         Added additional changes after discussing with Marek and
->         vm_map_pages() could be used instead of vm_map_pages_zero().
->
-> v2 -> v3:
->         Corrected the documentation as per review comment.
->
->         As suggested in v2, renaming the interfaces to -
->         *vm_insert_range() -> vm_map_pages()* and
->         *vm_insert_range_buggy() -> vm_map_pages_zero()*.
->         As the interface is renamed, modified the code accordingly,
->         updated the change logs and modified the subject lines to use the
->         new interfaces. There is no other change apart from renaming and
->         using the new interface.
->
->         Patch[1/9] & [4/9], Tested on Rockchip hardware.
->
-> v3 -> v4:
->         Fixed build warnings on patch [8/9] reported by kbuild test robot.
->
-> Souptick Joarder (9):
->   mm: Introduce new vm_map_pages() and vm_map_pages_zero() API
->   arm: mm: dma-mapping: Convert to use vm_map_pages()
->   drivers/firewire/core-iso.c: Convert to use vm_map_pages_zero()
->   drm/rockchip/rockchip_drm_gem.c: Convert to use vm_map_pages()
->   drm/xen/xen_drm_front_gem.c: Convert to use vm_map_pages()
->   iommu/dma-iommu.c: Convert to use vm_map_pages()
->   videobuf2/videobuf2-dma-sg.c: Convert to use vm_map_pages()
->   xen/gntdev.c: Convert to use vm_map_pages()
->   xen/privcmd-buf.c: Convert to use vm_map_pages_zero()
+Reviewed-by: Juergen Gross <jgross@suse.com>
 
-Is it fine to take these patches into mm tree for regression ?
 
->
->  arch/arm/mm/dma-mapping.c                          | 22 ++----
->  drivers/firewire/core-iso.c                        | 15 +---
->  drivers/gpu/drm/rockchip/rockchip_drm_gem.c        | 17 +----
->  drivers/gpu/drm/xen/xen_drm_front_gem.c            | 18 ++---
->  drivers/iommu/dma-iommu.c                          | 12 +---
->  drivers/media/common/videobuf2/videobuf2-core.c    |  7 ++
->  .../media/common/videobuf2/videobuf2-dma-contig.c  |  6 --
->  drivers/media/common/videobuf2/videobuf2-dma-sg.c  | 22 ++----
->  drivers/xen/gntdev.c                               | 11 ++-
->  drivers/xen/privcmd-buf.c                          |  8 +--
->  include/linux/mm.h                                 |  4 ++
->  mm/memory.c                                        | 81 ++++++++++++++++++++++
->  mm/nommu.c                                         | 14 ++++
->  13 files changed, 134 insertions(+), 103 deletions(-)
->
-> --
-> 1.9.1
->
+Juergen
+
