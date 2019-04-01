@@ -2,120 +2,95 @@ Return-Path: <SRS0=Gl4L=SD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 550FAC43381
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:19:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80DBCC43381
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:20:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2DBA820830
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:19:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E18921841
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:20:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="xYIZPGmc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732160AbfDAITF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 04:19:05 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:21695 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731802AbfDAITD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 04:19:03 -0400
-X-UUID: e959a15f1d2a4210b80322792f393526-20190401
-X-UUID: e959a15f1d2a4210b80322792f393526-20190401
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
-        (envelope-from <maoguang.meng@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1607990482; Mon, 01 Apr 2019 16:18:47 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 1 Apr 2019 16:18:45 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 1 Apr 2019 16:18:43 +0800
-From:   <maoguang.meng@mediatek.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>
-CC:     Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        <gtk_ruiwang@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Maoguang Meng <maoguang.meng@mediatek.com>
-Subject: [PATCH,v1] media: mtk-vcodec: fix vp9 content playback error with show exist frame
-Date:   Mon, 1 Apr 2019 16:18:38 +0800
-Message-ID: <1554106718-23107-1-git-send-email-maoguang.meng@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1732213AbfDAIUJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 04:20:09 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:36330 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732240AbfDAIUI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 04:20:08 -0400
+Received: by mail-wr1-f67.google.com with SMTP id y13so10747162wrd.3
+        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 01:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RNAd7GNGVbL6BOuK6iIVW4N9neq3YiGA4nYoCz6Ftyo=;
+        b=xYIZPGmcOPsx7XltBlBvQqo4aj3zrDHZsgpYJMUWKPcVGo/kHCMfsDAJXpsoa57UQz
+         H8IlQlLh2XzwmXEkqTeur3CW+s6LEzySJ91njN24UFYfSJ+i6mOuHcGzxG/BQG/DmtMZ
+         dvpVUg34ai1IEcyIh1Q3ONJq3jz7szJSGA84px6hwK4yJ8i2FWAthA3DjN7l8noIufbr
+         bBMCsFxwOIthRq6WRyO9rPCEIn6qP0cGwV//CeBETxRpDfRkIilGb5OsroIFfAI0XoG2
+         ktrbQ8aaioxMishErHDn0fMLpp3+GsDa/WqaOIaL2Dt4e3QgGl2Mws2sHz1HKm8+Mw93
+         kFlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RNAd7GNGVbL6BOuK6iIVW4N9neq3YiGA4nYoCz6Ftyo=;
+        b=q5kNldzZLdG6pIfUWzBzljd0dXk7UnF6omC7sK3kP/W3sdrn1/+48n/wsthfS8kQc9
+         baCjvc4SbgRjFYhKRjIZFK0wrBi2GYI0VZtwqRc1tWIr73sY1eYHCdPlX68NHabAHLWW
+         Ubo25canJr1ffTYOJ/rOMkrLRNSJffRfX/bEXsk5bpkECtlxFv9y9EQ1gCfibsc53BDg
+         GXkv3ztV/3TQyzIAZfega7PgEc3gAnF8czOVv0YNTzn5e/z0b+0YfZxqgeJE/JzHhXGm
+         mLlaEEKN6+D0mxid/ccENzrA9FrVGMthiBXYp0HeS2O/spZN5ROB7juiPS4F0PcIwJvY
+         L/OA==
+X-Gm-Message-State: APjAAAU3Z5omfZ8YS0aWLZCLOfjQ4wNvvypQ4m0O1INHed471QNR/IL9
+        acM4sDzr4tedrERcVqeWACZtgQ==
+X-Google-Smtp-Source: APXvYqzIW+q2+FLKqh6tWh31Ax8luv8fcduyKnCHPA0UgJM2fP6G5fzjKZ5xrEvKhHgto5EzpQRN8A==
+X-Received: by 2002:adf:fa86:: with SMTP id h6mr32694410wrr.67.1554106806327;
+        Mon, 01 Apr 2019 01:20:06 -0700 (PDT)
+Received: from localhost.localdomain (176-150-251-154.abo.bbox.fr. [176.150.251.154])
+        by smtp.gmail.com with ESMTPSA id r196sm10053534wmf.22.2019.04.01.01.20.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 01 Apr 2019 01:20:05 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     hverkuil@xs4all.nl, mchehab@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/3] MAINTAINERS: Update AO CEC with ao-cec-g12a driver
+Date:   Mon,  1 Apr 2019 10:19:59 +0200
+Message-Id: <20190401081959.16474-4-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190401081959.16474-1-narmstrong@baylibre.com>
+References: <20190401081959.16474-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Maoguang Meng <maoguang.meng@mediatek.com>
+Update the MAINTAINERS entry with the new AO-CEC driver for G12A.
 
-Update referenced frame buffer's reference count when playing vp9
-content which has show_existing_frame flag, and copy enough buffer
-data to current shown frame.
-
-Signed-off-by: Maoguang Meng <maoguang.meng@mediatek.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
 ---
- .../media/platform/mtk-vcodec/vdec/vdec_vp9_if.c   |   16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-index bc8349b..d950837 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-@@ -481,15 +481,15 @@ static void vp9_swap_frm_bufs(struct vdec_vp9_inst *inst)
- 		 */
- 		if ((frm_to_show->fb != NULL) &&
- 			(inst->cur_fb->base_y.size >=
--			frm_to_show->fb->base_y.size)) {
-+			frm_to_show->fb->base_y.size) &&
-+			(inst->cur_fb->base_c.size >=
-+			frm_to_show->fb->base_c.size)) {
- 			memcpy((void *)inst->cur_fb->base_y.va,
- 				(void *)frm_to_show->fb->base_y.va,
--				vsi->buf_w *
--				vsi->buf_h);
-+				frm_to_show->fb->base_y.size);
- 			memcpy((void *)inst->cur_fb->base_c.va,
- 				(void *)frm_to_show->fb->base_c.va,
--				vsi->buf_w *
--				vsi->buf_h / 2);
-+				frm_to_show->fb->base_c.size);
- 		} else {
- 			/* After resolution change case, current CAPTURE buffer
- 			 * may have less buffer size than frm_to_show buffer
-@@ -895,7 +895,7 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e17ebf70b548..bbad8f3ee3e8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10046,6 +10046,7 @@ L:	linux-amlogic@lists.infradead.org
+ W:	http://linux-meson.com/
+ S:	Supported
+ F:	drivers/media/platform/meson/ao-cec.c
++F:	drivers/media/platform/meson/ao-cec-g12a.c
+ F:	Documentation/devicetree/bindings/media/meson-ao-cec.txt
+ T:	git git://linuxtv.org/media_tree.git
  
- 		if (vsi->resolution_changed) {
- 			if (!vp9_alloc_work_buf(inst)) {
--				ret = -EINVAL;
-+				ret = -EIO;
- 				goto DECODE_ERROR;
- 			}
- 		}
-@@ -924,14 +924,12 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
- 
- 		if (vsi->show_existing_frame && (vsi->frm_to_show_idx <
- 					VP9_MAX_FRM_BUF_NUM)) {
--			mtk_vcodec_err(inst,
-+			mtk_vcodec_debug(inst,
- 				"Skip Decode drv->new_fb_idx=%d, drv->frm_to_show_idx=%d",
- 				vsi->new_fb_idx, vsi->frm_to_show_idx);
- 
- 			vp9_ref_cnt_fb(inst, &vsi->new_fb_idx,
- 					vsi->frm_to_show_idx);
--			ret = -EINVAL;
--			goto DECODE_ERROR;
- 		}
- 
- 		/* VPU assign the buffer pointer in its address space,
 -- 
-1.7.9.5
+2.21.0
 
