@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B289C43381
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 13:39:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2185DC43381
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 13:39:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 29F6A206DD
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 13:39:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9708206DD
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 13:39:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="eIPaW3Ah"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Po33D9vx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728483AbfDANjD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 09:39:03 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:39593 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727842AbfDANjC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 09:39:02 -0400
-Received: by mail-wm1-f68.google.com with SMTP id n25so11492291wmk.4
-        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 06:39:00 -0700 (PDT)
+        id S1728563AbfDANjX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 09:39:23 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:35037 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726928AbfDANjD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 09:39:03 -0400
+Received: by mail-wr1-f66.google.com with SMTP id w1so12125103wrp.2
+        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 06:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3Z3XkroftFEOZ+oKRERn/ytHnCEs/zdgDA4cYGSY7DY=;
-        b=eIPaW3AhGstj48p5E8VufgaCSExLZ2GXmlZZvTXR9ULIGxQVvxPHxtgqmwGCrIeAq+
-         RV8QlRvJlm8EXyOWBCB+onpIV1i1xmODEckDYcEXHHtMLugPoITawuE5FBw3xyxjsIcg
-         6Swx4aOUBS0DSkdWbebbA0cS+YHx9bcNONAhVge5fh3U35mU9h93cJJQaIoc12rkAF+K
-         Bbouln78t4NI9220mnFwfJwGgoWuBukMcOImiK38TVP7cakOiLUkMH9mg1y6efmDQe7B
-         UAjgKW/PkDK9w281bm969lijO0M64K5Nk8YHr7YpKnfVbvOuJ+vRj8XEHssW4LFiDY6E
-         J7JQ==
+        bh=W4Q5AbKbln/Fu2EQxLepyTtJKMD+qTIvZtoNE1VnyUg=;
+        b=Po33D9vx6Hu6bDHxutnO535NGEcbzTijhog09s4FmNNp8B/ggr0OFm/szBbgu2eGGS
+         A7k2zD3bS6uLzH2eNpC/iXM/S1UBMp+WPnrn6cHCJZ8pOtw6H1kdgPm9Fz14cuto98VB
+         DTHzNo1BZd2MSZw/cv8/m3ZgrI/wcTy8UwkkGdBv26FDvhcA60Nbj6luDlXyPjH8XWmq
+         ychX7Ly7ZzWHvr3+TCW+lOa9JMHWNfOKWlJ+g0PjFQEIo3ukW9VwAmD0u/yBiwo2twz6
+         8euI5ZVVVrDLc5U2FXp/KQRcx71jv51k9guoNH/yomhTot+z+kNDskEmvSuSE+BEsyOR
+         Ysnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3Z3XkroftFEOZ+oKRERn/ytHnCEs/zdgDA4cYGSY7DY=;
-        b=j2Z7KV67MCACOoUcoP/BS7oItKQczjZShHCtecCQBSiYYWlvtn4gCWa7g+JUoB4oWC
-         /bXZOU5TxTSVOAnLkgaQiG+iF4mOuJchKYheXzDFDgiAIXTUXC4Ac9vMCTbdMeApm4EH
-         8yJvqnMXSvDi0d5qWVdzkDWu4CRBTV/CSWdKBXllknobXIFo7D5bmS0N78pB1j5+WVuu
-         Op8KEcRgCZzwYfFvnhLRUZ66wMORrgRKNXC12PuyjtyBYBYqP7oY0mpl5Hvf6b75oy4d
-         vC190Gbx0fbYd9UP0KPY1iC37q77Ss8SoCX54W21iKAdRyDApBS3yHGEF34OZoEJKEAW
-         kQVA==
-X-Gm-Message-State: APjAAAVw4VpZXqcGGRGjKW+I45KB6gucaCu+9iyyViy9k4doeF9eUZNG
-        Wv82DLTgsev+yRN4DVf1Kh4B6Q==
-X-Google-Smtp-Source: APXvYqyeHEv0rTN2wKOsMuZTuRwwa8N7lhGDMCngE1lzgn6On26UIBktvwJmkCLQjYS7ly3qUC04dA==
-X-Received: by 2002:a1c:f014:: with SMTP id a20mr12278697wmb.122.1554125940162;
-        Mon, 01 Apr 2019 06:39:00 -0700 (PDT)
+        bh=W4Q5AbKbln/Fu2EQxLepyTtJKMD+qTIvZtoNE1VnyUg=;
+        b=MvJ6fv7OB/JSDMJjH4Swmvd0YCg8sdu4UvgDVKABNRxs/rXT50fDos5D1OfSvhDaI1
+         0xLQrMKfhRvF7CRbLLDfcR/VzKoOIVWVE8bNfU33ENEQnVpL2Gzrc05t+1IlxHT0DNg3
+         HXvX63oqUBjbF9JqQ5elTrqyTx8me0w9QqWenwJ16hvE3Cdq3A2TghT9Q9RTd/IYTT7v
+         GgARquJ61ywnLspJMgBAcmYo6Kk7uidBilRP4habrlWdht6/+TEviLd+Jh5090Rz7wM0
+         27umxfXr6+C0g5nU7rnhp+YJC+TrQVo2JYY0iMiqi20JRZ/9K1sZlP2yu0yCDM5rPiIT
+         L/ew==
+X-Gm-Message-State: APjAAAVRYe3C5E4fI0n0SnVOTdmi/mxOl3FHmj7bKpbmNecGuVgjCDyC
+        2XRqUCtfyAdhw7ti+VYJU80zsw==
+X-Google-Smtp-Source: APXvYqxTUchDyD2CapUrfQKpMKZeoRgwiyWB4JZQOimUIVfTCxhqoNIap1rkPJM+AA06ajth/EHnPw==
+X-Received: by 2002:a5d:638d:: with SMTP id p13mr40116890wru.202.1554125941395;
+        Mon, 01 Apr 2019 06:39:01 -0700 (PDT)
 Received: from mjourdan-pc.numericable.fr (abo-99-183-68.mtp.modulonet.fr. [85.68.183.99])
-        by smtp.gmail.com with ESMTPSA id v184sm25205996wma.6.2019.04.01.06.38.59
+        by smtp.gmail.com with ESMTPSA id v184sm25205996wma.6.2019.04.01.06.39.00
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Apr 2019 06:38:59 -0700 (PDT)
+        Mon, 01 Apr 2019 06:39:00 -0700 (PDT)
 From:   Maxime Jourdan <mjourdan@baylibre.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
@@ -64,11 +64,10 @@ Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 1/4] dt-bindings: media: add Amlogic Video Decoder Bindings
-Date:   Mon,  1 Apr 2019 15:38:42 +0200
-Message-Id: <20190401133845.4171-2-mjourdan@baylibre.com>
+        linux-amlogic@lists.infradead.org
+Subject: [PATCH v5 2/4] media: videodev2: add V4L2_FMT_FLAG_FIXED_RESOLUTION
+Date:   Mon,  1 Apr 2019 15:38:43 +0200
+Message-Id: <20190401133845.4171-3-mjourdan@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190401133845.4171-1-mjourdan@baylibre.com>
 References: <20190401133845.4171-1-mjourdan@baylibre.com>
@@ -79,92 +78,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add documentation for the meson vdec dts node.
+When a v4l2 driver exposes V4L2_EVENT_SOURCE_CHANGE, some (usually
+OUTPUT) formats may not be able to trigger this event.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+For instance, MPEG2 on Amlogic hardware does not support resolution
+switching on the fly, and a decode session must operate at a set
+resolution defined before the decoding start.
+
+Add a enum_fmt format flag to tag those specific formats.
+
 Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
 ---
- .../bindings/media/amlogic,vdec.txt           | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/amlogic,vdec.txt
+ Documentation/media/uapi/v4l/vidioc-enum-fmt.rst | 6 ++++++
+ include/uapi/linux/videodev2.h                   | 5 +++--
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,vdec.txt b/Documentation/devicetree/bindings/media/amlogic,vdec.txt
-new file mode 100644
-index 000000000000..aabdd01bcf32
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/amlogic,vdec.txt
-@@ -0,0 +1,71 @@
-+Amlogic Video Decoder
-+================================
+diff --git a/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst b/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
+index 822d6730e7d2..b11448a1848b 100644
+--- a/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
++++ b/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
+@@ -127,6 +127,12 @@ one until ``EINVAL`` is returned.
+       - This format is not native to the device but emulated through
+ 	software (usually libv4l2), where possible try to use a native
+ 	format instead for better performance.
++    * - ``V4L2_FMT_FLAG_FIXED_RESOLUTION``
++      - 0x0004
++      - Dynamic resolution switching is not supported for this format,
++        even if the event ``V4L2_EVENT_SOURCE_CHANGE`` is supported by
++        the device.
 +
-+The video decoding IP lies within the DOS memory region,
-+except for the hardware bitstream parser that makes use of an undocumented
-+region.
-+
-+It makes use of the following blocks:
-+
-+- ESPARSER is a bitstream parser that outputs to a VIFIFO. Further VDEC blocks
-+then feed from this VIFIFO.
-+- VDEC_1 can decode MPEG-1, MPEG-2, MPEG-4 part 2, MJPEG, H.263, H.264, VC-1.
-+- VDEC_HEVC can decode HEVC and VP9.
-+
-+Both VDEC_1 and VDEC_HEVC share the "vdec" IRQ and as such cannot run
-+concurrently.
-+
-+Device Tree Bindings:
-+---------------------
-+
-+VDEC: Video Decoder
-+--------------------------
-+
-+Required properties:
-+- compatible: value should be different for each SoC family as :
-+	- GXBB (S905) : "amlogic,gxbb-vdec"
-+	- GXL (S905X, S905D) : "amlogic,gxl-vdec"
-+	- GXM (S912) : "amlogic,gxm-vdec"
-+- reg: base address and size of he following memory-mapped regions :
-+	- dos
-+	- esparser
-+- reg-names: should contain the names of the previous memory regions
-+- interrupts: should contain the following IRQs:
-+	- vdec
-+	- esparser
-+- interrupt-names: should contain the names of the previous interrupts
-+- amlogic,ao-sysctrl: should point to the AOBUS sysctrl node
-+- amlogic,canvas: should point to a canvas provider node
-+- clocks: should contain the following clocks :
-+	- dos_parser
-+	- dos
-+	- vdec_1
-+	- vdec_hevc
-+- clock-names: should contain the names of the previous clocks
-+- resets: should contain the parser reset
-+- reset-names: should be "esparser"
-+
-+Example:
-+
-+vdec: video-decoder@c8820000 {
-+	compatible = "amlogic,gxbb-vdec";
-+	reg = <0x0 0xc8820000 0x0 0x10000>,
-+	      <0x0 0xc110a580 0x0 0xe4>;
-+	reg-names = "dos", "esparser";
-+
-+	interrupts = <GIC_SPI 44 IRQ_TYPE_EDGE_RISING>,
-+		     <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
-+	interrupt-names = "vdec", "esparser";
-+
-+	amlogic,ao-sysctrl = <&sysctrl_AO>;
-+	amlogic,canvas = <&canvas>;
-+
-+	clocks = <&clkc CLKID_DOS_PARSER>,
-+		 <&clkc CLKID_DOS>,
-+		 <&clkc CLKID_VDEC_1>,
-+		 <&clkc CLKID_VDEC_HEVC>;
-+	clock-names = "dos_parser", "dos", "vdec_1", "vdec_hevc";
-+
-+	resets = <&reset RESET_PARSER>;
-+	reset-names = "esparser";
-+};
+ 
+ 
+ Return Value
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 1db220da3bcc..9c8a2d2e7bc6 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -751,8 +751,9 @@ struct v4l2_fmtdesc {
+ 	__u32		    reserved[4];
+ };
+ 
+-#define V4L2_FMT_FLAG_COMPRESSED 0x0001
+-#define V4L2_FMT_FLAG_EMULATED   0x0002
++#define V4L2_FMT_FLAG_COMPRESSED	0x0001
++#define V4L2_FMT_FLAG_EMULATED		0x0002
++#define V4L2_FMT_FLAG_FIXED_RESOLUTION	0x0004
+ 
+ 	/* Frame Size and frame rate enumeration */
+ /*
 -- 
 2.21.0
 
