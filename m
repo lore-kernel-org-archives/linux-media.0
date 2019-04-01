@@ -2,88 +2,120 @@ Return-Path: <SRS0=Gl4L=SD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0299C4360F
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:18:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 550FAC43381
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:19:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 912C7213A2
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:18:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lc4Y9DAf"
+	by mail.kernel.org (Postfix) with ESMTP id 2DBA820830
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:19:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731937AbfDAISq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 04:18:46 -0400
-Received: from mail-pg1-f178.google.com ([209.85.215.178]:42322 "EHLO
-        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731802AbfDAISp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 04:18:45 -0400
-Received: by mail-pg1-f178.google.com with SMTP id p6so4357754pgh.9
-        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 01:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id;
-        bh=jUxxzgsFPLgQONY+0oOKR7um9wenQQDgHoKuoj4IeRI=;
-        b=lc4Y9DAfZYlAHZZ6rRGuzC2LNykXIwBUDuvn6qDeoeXl0rDFjCAsRZGjU+U4VzDRgw
-         pWYrLpNuFD19k8kHy1BE9UH/G1ilXaTKfB4xurito/cnEt2YMwOA72w9NRFfl2G7WmAz
-         BxL9tdDX5p3+XRoSVKpjmIkhzugDyKnrxJeC3gUUsHHW8TYgdIF4ZuSYnEwL7piB3iSe
-         Wab2d7l9NATr/0Vfh7+xZdOeR8OqxS0+0NLicHcox9fAgjbr7aOGuvN/xX63E3ze6kGx
-         f2uvd9a2Zi3SBJAhrhm/tGOKnP6jRyBKcRTE1LVkJ1ClE4mJZNmSrUTeGomBlOKvgupG
-         FoDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=jUxxzgsFPLgQONY+0oOKR7um9wenQQDgHoKuoj4IeRI=;
-        b=XRSws88nmMT3OKw/PEfbpgnKA4yA+EyzEeN1P8Kbb5nDdcc70c3yoHBSWyESDjvFAO
-         sn3UegChIxVuQymtcvoTSLZ+EQwgWwI97K//BkfwDo11PA7HSrk6ZIKbc+BIjfrhhjMQ
-         fCA69QKcrhUr+rMaotWJTs3/HInDByJBlmjNOuXMbcE/Vc3KbDSz30YHoRzbmkvdjONi
-         eEp0pi6ELpVSBuTOR/q8jDSkvdcVeVFTiMPHqDz182RE20LGpWcHOP+7GwDzRwiEJgR7
-         4cqD5Ip/fblOJZaKRodDapn0D4I7ZqI+zEb9/LZVLOBFyyu3rbFahacRq4FI/zMWAfp+
-         t/ww==
-X-Gm-Message-State: APjAAAX4LM6utTTeaalfrFRF5G1D8oy+gRJSz2XZ/98s4PCLkamwR2IF
-        h8KgionMcvz1L1NqtlKkEyQWq0GtKG0=
-X-Google-Smtp-Source: APXvYqxbYUDGKM5n6yMphJLvPQgduQUSfWJCm0YQw0uUGLHXbmjpxc0fMVQ9rJ07CIazPNgofVyT/A==
-X-Received: by 2002:a63:c204:: with SMTP id b4mr59023440pgd.335.1554106724807;
-        Mon, 01 Apr 2019 01:18:44 -0700 (PDT)
-Received: from localhost.localdomain ([147.50.13.10])
-        by smtp.gmail.com with ESMTPSA id h187sm5719302pfc.52.2019.04.01.01.18.43
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Apr 2019 01:18:44 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for v5.2] Venus updates
-Date:   Mon,  1 Apr 2019 11:18:17 +0300
-Message-Id: <20190401081817.14386-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1732160AbfDAITF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 04:19:05 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:21695 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731802AbfDAITD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 04:19:03 -0400
+X-UUID: e959a15f1d2a4210b80322792f393526-20190401
+X-UUID: e959a15f1d2a4210b80322792f393526-20190401
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
+        (envelope-from <maoguang.meng@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1607990482; Mon, 01 Apr 2019 16:18:47 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 1 Apr 2019 16:18:45 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 1 Apr 2019 16:18:43 +0800
+From:   <maoguang.meng@mediatek.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>
+CC:     Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        <gtk_ruiwang@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Maoguang Meng <maoguang.meng@mediatek.com>
+Subject: [PATCH,v1] media: mtk-vcodec: fix vp9 content playback error with show exist frame
+Date:   Mon, 1 Apr 2019 16:18:38 +0800
+Message-ID: <1554106718-23107-1-git-send-email-maoguang.meng@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: Maoguang Meng <maoguang.meng@mediatek.com>
 
-Here are two patches, one fix and one which makes gstreamer happy with h265.
+Update referenced frame buffer's reference count when playing vp9
+content which has show_existing_frame flag, and copy enough buffer
+data to current shown frame.
 
-Please pull.
+Signed-off-by: Maoguang Meng <maoguang.meng@mediatek.com>
+---
+ .../media/platform/mtk-vcodec/vdec/vdec_vp9_if.c   |   16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+index bc8349b..d950837 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+@@ -481,15 +481,15 @@ static void vp9_swap_frm_bufs(struct vdec_vp9_inst *inst)
+ 		 */
+ 		if ((frm_to_show->fb != NULL) &&
+ 			(inst->cur_fb->base_y.size >=
+-			frm_to_show->fb->base_y.size)) {
++			frm_to_show->fb->base_y.size) &&
++			(inst->cur_fb->base_c.size >=
++			frm_to_show->fb->base_c.size)) {
+ 			memcpy((void *)inst->cur_fb->base_y.va,
+ 				(void *)frm_to_show->fb->base_y.va,
+-				vsi->buf_w *
+-				vsi->buf_h);
++				frm_to_show->fb->base_y.size);
+ 			memcpy((void *)inst->cur_fb->base_c.va,
+ 				(void *)frm_to_show->fb->base_c.va,
+-				vsi->buf_w *
+-				vsi->buf_h / 2);
++				frm_to_show->fb->base_c.size);
+ 		} else {
+ 			/* After resolution change case, current CAPTURE buffer
+ 			 * may have less buffer size than frm_to_show buffer
+@@ -895,7 +895,7 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
+ 
+ 		if (vsi->resolution_changed) {
+ 			if (!vp9_alloc_work_buf(inst)) {
+-				ret = -EINVAL;
++				ret = -EIO;
+ 				goto DECODE_ERROR;
+ 			}
+ 		}
+@@ -924,14 +924,12 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
+ 
+ 		if (vsi->show_existing_frame && (vsi->frm_to_show_idx <
+ 					VP9_MAX_FRM_BUF_NUM)) {
+-			mtk_vcodec_err(inst,
++			mtk_vcodec_debug(inst,
+ 				"Skip Decode drv->new_fb_idx=%d, drv->frm_to_show_idx=%d",
+ 				vsi->new_fb_idx, vsi->frm_to_show_idx);
+ 
+ 			vp9_ref_cnt_fb(inst, &vsi->new_fb_idx,
+ 					vsi->frm_to_show_idx);
+-			ret = -EINVAL;
+-			goto DECODE_ERROR;
+ 		}
+ 
+ 		/* VPU assign the buffer pointer in its address space,
+-- 
+1.7.9.5
 
-The following changes since commit 3e11851d16ea7eff1cfa66b1cb7b35967876dd1e:
-
-  media: venus: Add support for H265 controls required by gstreamer V4L2 H265 module. (2019-04-01 10:44:05 +0300)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-5.2
-
-for you to fetch changes up to 3e11851d16ea7eff1cfa66b1cb7b35967876dd1e:
-
-  media: venus: Add support for H265 controls required by gstreamer V4L2 H265 module. (2019-04-01 10:44:05 +0300)
-
-----------------------------------------------------------------
-venus for 5.2
-
-----------------------------------------------------------------
