@@ -2,130 +2,395 @@ Return-Path: <SRS0=Gl4L=SD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76146C43381
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 15:47:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3E07C43381
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 16:23:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 34A6620857
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 15:47:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pcDg6VVR"
+	by mail.kernel.org (Postfix) with ESMTP id C1E742133D
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 16:23:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbfDAPrj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 11:47:39 -0400
-Received: from mail-ed1-f42.google.com ([209.85.208.42]:41827 "EHLO
-        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726754AbfDAPrj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 11:47:39 -0400
-Received: by mail-ed1-f42.google.com with SMTP id a25so8664194edc.8
-        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 08:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=3kQZkYdzjTClaMLmu3fdRubacuK2FX6mttK0xjGPOII=;
-        b=pcDg6VVRkazyQVU8BbhDS1h03+4uH+vFu50ZOpN+/0kDewfLN58pAHsy+s+pWRhHn0
-         YCPMdXSEb9dGxQC6ncdsKpHPiXBuo9uAPu6bRj5ny5MVjYUvWYzEBxDBzHWoKz/NlFn3
-         WHankI7xcslbvLsesKM5uHVKc/X9DmBKwHWDcB8bcMgQBX+ryzdE3cUMoD9VwzMZVVVm
-         aysXL97VtVeKZ+VQficqWLNC7tk13y7zgbZOjHvHVjE8oUzY15gfCQpFUpRy73+qyBgi
-         tuD+AJzBUlpMXw1ZDAqs7a800ifl7KXWOg7PzxM4pvbAMjqlVfEft0GhOLMBNRuzr+6K
-         vyjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=3kQZkYdzjTClaMLmu3fdRubacuK2FX6mttK0xjGPOII=;
-        b=AFYpjO1mDHTR+hbg6w73bwinWn7d8HPt6P80OZOjR4YJJNZBpiC6C6Utk02fqt3Caw
-         ilM/YFBI0I/TFjZb1v+ADKiTMdi4KmwOjPHq9bmwDuQ1ixlMOV4NywcW6o870qXzeoMk
-         3O8g+PLe9045hUG6W7KQ1LxyItriVuob9hHVRATUHrMZfAMhtI6n8WQDlG7p7svTfSPe
-         kHQENIoT6rMPaXQ9aidWuNQJmUfUnolZYN+N7/3p9n3ZBTqFz6C5odDLv/sX/V5fraB6
-         5KUu30ogpRDBiwFc+k/KdDnW7eIRwWRRVFydLLjYxvKIxLtVwgmazuuZ8OXjJTQTfWe0
-         2Maw==
-X-Gm-Message-State: APjAAAU7dTg/MOAVCNoc1XVqWtJB7+CiUPlH4I0XwaPdUd6IrrVlcCBY
-        Gj8mJlT+g5nKHzv/y927WygDj5i9QaS0U6hfSu9IkwYG
-X-Google-Smtp-Source: APXvYqxB8YI/THOPhq7LhQvi/LJ4CijpUXw94BR0BR4pceVEc/Z/GRQLmLQ0mu0AssgmMECEzye/KL/dTSSzVvGhJM8=
-X-Received: by 2002:aa7:d406:: with SMTP id z6mr42487937edq.197.1554133657395;
- Mon, 01 Apr 2019 08:47:37 -0700 (PDT)
+        id S1728007AbfDAQXZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 12:23:25 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:41364 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726988AbfDAQXZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 12:23:25 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id A4DB6281FEE
+Message-ID: <daaf7ccf62096cdee025881a385548dc90a892c4.camel@collabora.com>
+Subject: Re: [PATCH v3 2/2] media: Introduce helpers to fill pixel format
+ structs
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>,
+        kernel@collabora.com
+Date:   Mon, 01 Apr 2019 13:23:10 -0300
+In-Reply-To: <20190328200513.y33clvcj7tpmwbqb@uno.localdomain>
+References: <20190328180704.24761-1-ezequiel@collabora.com>
+         <20190328180704.24761-3-ezequiel@collabora.com>
+         <20190328200513.y33clvcj7tpmwbqb@uno.localdomain>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1 
 MIME-Version: 1.0
-From:   =?UTF-8?Q?Salvador_Fern=C3=A1ndez?= <moltitronico@gmail.com>
-Date:   Mon, 1 Apr 2019 17:47:26 +0200
-Message-ID: <CAD4B5T8kxWOcEVZVop=u2k1G0wHFv0LSLwbe+MDQ3q-Be5hcOQ@mail.gmail.com>
-Subject: [PATCH 0/0] media: uvcdriver: add support for Chicony HP Full-HD
- Camera (04f2:b62f)
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org
-Content-Type: multipart/mixed; boundary="00000000000095408e058579f0e4"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
---00000000000095408e058579f0e4
-Content-Type: text/plain; charset="UTF-8"
+On Thu, 2019-03-28 at 21:05 +0100, Jacopo Mondi wrote:
+> Hi Ezequiel,
+>    this is very nice, thank you!
+> 
 
-Hi developers,
+Hi Jacopo,
 
-A very simple patch to add support for newer HP Full-HD Camera.
-Pgp key for signature is
-http://keys.gnupg.net/pks/lookup?op=get&search=0x93360317E5CECDDA
+> On Thu, Mar 28, 2019 at 03:07:04PM -0300, Ezequiel Garcia wrote:
+> > Add two new API helpers, v4l2_fill_pixfmt and v4l2_fill_pixfmt_mp,
+> > to be used by drivers to calculate plane sizes and bytes per lines.
+> > 
+> > Note that driver-specific padding and alignment are not
+> > taken into account, and must be done by drivers using this API.
+> > 
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > ---
+> >  drivers/media/v4l2-core/v4l2-common.c | 164 ++++++++++++++++++++++++++
+> >  include/media/v4l2-common.h           |  33 ++++++
+> >  2 files changed, 197 insertions(+)
+> > 
+> > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> > index 663730f088cd..d869a2910435 100644
+> > --- a/drivers/media/v4l2-core/v4l2-common.c
+> > +++ b/drivers/media/v4l2-core/v4l2-common.c
+> > @@ -445,3 +445,167 @@ int v4l2_s_parm_cap(struct video_device *vdev,
+> >  	return ret;
+> >  }
+> >  EXPORT_SYMBOL_GPL(v4l2_s_parm_cap);
+> > +
+> > +const struct v4l2_format_info *v4l2_format_info(u32 format)
+> > +{
+> > +	static const struct v4l2_format_info formats[] = {
+> > +		/* RGB formats */
+> > +		{ .format = V4L2_PIX_FMT_BGR24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> 
+> How would you feel using macros here, this would help sticking to
+> 80-or-so columns, as otherwise this table is pretty wide.
+> 
+> I've sketched out something quick:
+> 
+> #define V4L2_FMT_INFO_BPP(p1_, p2_, p3_, p4_) { p1_, p2_, p3_, p4_ }
+> #define V4L2_FMT_INFO(pf_, mpl_, cpl_, bpp_, hd_, vd_)			\
+> 		{ 							\
+> 		  .format       = V4L2_PIX_FMT_##pf_, 			\
+> 		  .mem_planes   = mpl_,					\
+> 		  .comp_planes  = cpl_,					\
+> 		  .bpp          = bpp_, 				\
+> 		  .hdiv         = hd_,					\
+> 		  .vdiv         = vd_ 					\
+> 		}
+> 
+> const struct v4l2_format_info *v4l2_format_info(u32 format)
+> {
+> 	static const struct v4l2_format_info formats[] = {
+> 		/* RGB formats */
+>        		V4L2_FMT_INFO(BGR24, 1, 1, V4L2_FMT_INFO_BPP(3, 0, 0, 0), 1, 1),
+>                 ...
+> }
+> 
+> Not sure you might like it or not.
+> 
 
-Thanks a lot for your work,
+I'm not entirely sure this improves readability. Hans has
+just sent a pull-request for this. But see below, my replies
+to some of your questions.
+
+> > +		{ .format = V4L2_PIX_FMT_RGB24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_HSV24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_BGR32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_XBGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_RGB32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_XRGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_HSV32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_ARGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_ABGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_GREY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +
+> > +		/* YUV packed formats */
+> > +		{ .format = V4L2_PIX_FMT_YUYV,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_YVYU,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_UYVY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_VYUY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +
+> > +		/* YUV planar formats */
+> > +		{ .format = V4L2_PIX_FMT_NV12,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+> > +		{ .format = V4L2_PIX_FMT_NV21,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+> > +		{ .format = V4L2_PIX_FMT_NV16,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_NV61,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_NV24,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_NV42,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +
+> > +		{ .format = V4L2_PIX_FMT_YUV410,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+> > +		{ .format = V4L2_PIX_FMT_YVU410,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+> > +		{ .format = V4L2_PIX_FMT_YUV411P, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_YUV420,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
+> > +		{ .format = V4L2_PIX_FMT_YVU420,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
+> > +		{ .format = V4L2_PIX_FMT_YUV422P, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +
+> > +		/* YUV planar formats, non contiguous variant */
+> > +		{ .format = V4L2_PIX_FMT_YUV420M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
+> > +		{ .format = V4L2_PIX_FMT_YVU420M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
+> > +		{ .format = V4L2_PIX_FMT_YUV422M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_YVU422M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_YUV444M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_YVU444M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
+> > +
+> > +		{ .format = V4L2_PIX_FMT_NV12M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+> > +		{ .format = V4L2_PIX_FMT_NV21M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+> > +		{ .format = V4L2_PIX_FMT_NV16M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +		{ .format = V4L2_PIX_FMT_NV61M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+> > +	};
+> 
+> Can I ask why you define the array inside this function and not as a static
+> array with file scope? Is this something trivial I am missing? It
+> will be placed in the same data segment anyhow, is this to reduce the
+> probability of an unlikely name clash within the file? Just curious..
+> 
+
+I followed drm-fourcc.c style. I like this pattern because it keeps the
+data and the function together, and because it forces all users to get
+the pixel format via v4l2_format_info().
+
+> > +	unsigned int i;
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(formats); ++i)
+> > +		if (formats[i].format == format)
+> > +			return &formats[i];
+> 
+> Nit: empty line maybe
+> 
+> > +	return NULL;
+> > +}
+> > +EXPORT_SYMBOL(v4l2_format_info);
+> > +
+> > +static inline unsigned int v4l2_format_block_width(const struct v4l2_format_info *info, int plane)
+> > +{
+> > +	if (!info->block_w[plane])
+> > +		return 1;
+> 
+> Nit: empty line, or just
+>         return info->block_w[plane] ? info->block_w[plane] : 1;
+> 
+> > +	return info->block_w[plane];
+> > +}
+> > +
+> > +static inline unsigned int v4l2_format_block_height(const struct v4l2_format_info *info, int plane)
+> 
+> You don't like 80 columns that much, right :p ?
+> 
+
+Guess I'm not a fan :-)
+
+> > +{
+> > +	if (!info->block_h[plane])
+> > +		return 1;
+> 
+> Same here
+> 
+> > +	return info->block_h[plane];
+> > +}
+> > +
+> > +int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
+> > +			 int pixelformat, int width, int height)
+> 
+> Bad alignment to open parenthesis
+> 
+> > +{
+> > +	const struct v4l2_format_info *info;
+> > +	struct v4l2_plane_pix_format *plane;
+> > +	int i;
+> 
+> unsigned int i; ?
+> 
+> > +
+> > +	info = v4l2_format_info(pixelformat);
+> > +	if (!info)
+> > +		return -EINVAL;
+> > +
+> > +	pixfmt->width = width;
+> > +	pixfmt->height = height;
+> > +	pixfmt->pixelformat = pixelformat;
+> > +	pixfmt->num_planes = info->mem_planes;
+> > +
+> > +	if (info->mem_planes == 1) {
+> > +		plane = &pixfmt->plane_fmt[0];
+> > +		plane->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
+> 
+> 80 cols :'(
+> 
+> > +		plane->sizeimage = 0;
+> > +
+> > +		for (i = 0; i < info->comp_planes; i++) {
+> > +			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
+> > +			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
+> > +			unsigned int aligned_width;
+> > +			unsigned int aligned_height;
+> > +
+> > +			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
+> > +			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
+> > +
+> > +			plane->sizeimage += info->bpp[i] *
+> > +				DIV_ROUND_UP(aligned_width, hdiv) *
+> > +				DIV_ROUND_UP(aligned_height, vdiv);
+> > +		}
+> 
+> I was initially puzzled by some of your definitions, say NV12, where
+> you mark the hdiv factor for the second plane to 2, while it is
+> actually only vertically subsampled. But now I see what you've done for NV12
+> and this works for all the other formats I have verified (NV12, NV16, YUYV
+> packed, and YVV4xx). Nice :)
+> 
+
+NV12 is 2x2 subsampled, that is why the format is:
+
+{ .format = V4L2_PIX_FMT_NV12,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+
+It has two planes: one luma plane and one plane with the
+two chroma components interleaved (hence bytes-per-pixel being 2).
+
+The chroma components are subsampled in 2x2, and that is why hdiv and vdiv is 2.
+
+> Nit: you can save the below else branch indentation if you return
+> here.
+> 
+> > +	} else {
+> > +		for (i = 0; i < info->comp_planes; i++) {
+> > +			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
+> > +			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
+> > +			unsigned int aligned_width;
+> > +			unsigned int aligned_height;
+> > +
+> > +			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
+> > +			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
+> > +
+> > +			plane = &pixfmt->plane_fmt[i];
+> > +			plane->bytesperline =
+> > +				info->bpp[i] * DIV_ROUND_UP(aligned_width, hdiv);
+> > +			plane->sizeimage =
+> > +				plane->bytesperline * DIV_ROUND_UP(aligned_height, vdiv);
+> > +		}
+> > +	}
+> 
+> Empty line maybe?
+> 
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt_mp);
+> > +
+> > +int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, int pixelformat, int width, int height)
+> > +{
+> > +	const struct v4l2_format_info *info;
+> > +	int i;
+> > +
+> > +	info = v4l2_format_info(pixelformat);
+> > +	if (!info)
+> > +		return -EINVAL;
+> > +
+> > +	/* Single planar API cannot be used for multi plane formats. */
+> > +	if (info->mem_planes > 1)
+> > +		return -EINVAL;
+> > +
+> > +	pixfmt->width = width;
+> > +	pixfmt->height = height;
+> > +	pixfmt->pixelformat = pixelformat;
+> > +	pixfmt->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
+> > +	pixfmt->sizeimage = 0;
+> > +
+> > +	for (i = 0; i < info->comp_planes; i++) {
+> > +		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
+> > +		unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
+> > +		unsigned int aligned_width;
+> > +		unsigned int aligned_height;
+> > +
+> > +		aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
+> > +		aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
+> > +
+> > +		pixfmt->sizeimage += info->bpp[i] *
+> > +			DIV_ROUND_UP(aligned_width, hdiv) *
+> > +			DIV_ROUND_UP(aligned_height, vdiv);
+> > +	}
+> > +	return 0;
+> > +}
+> 
+> Same comments as per the multi planar version.
+> 
+> > +EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt);
+> > diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
+> > index 2b93cb281fa5..0a41bbecf3d3 100644
+> > --- a/include/media/v4l2-common.h
+> > +++ b/include/media/v4l2-common.h
+> > @@ -392,4 +392,37 @@ int v4l2_s_parm_cap(struct video_device *vdev,
+> >  	((u64)(a).numerator * (b).denominator OP	\
+> >  	(u64)(b).numerator * (a).denominator)
+> > 
+> > +/* ------------------------------------------------------------------------- */
+> > +
+> > +/* Pixel format and FourCC helpers */
+> > +
+> > +/**
+> > + * struct v4l2_format_info - information about a V4L2 format
+> > + * @format: 4CC format identifier (V4L2_PIX_FMT_*)
+> > + * @mem_planes: Number of memory planes, which includes the alpha plane (1 to 4).
+> > + * @comp_planes: Number of component planes, which includes the alpha plane (1 to 4).
+> 
+> Is alpha channel present in other formats that are not packed RGB?
+> Because if that's not the case, they are packed, and all the ones you
+> have defined here have 1 memory and 1 component plane only.
+> What formats would you expect to be multi planar and have an alpha channel?
+> 
+
+There's a format called AYUV https://www.fourcc.org/pixel-format/yuv-ayuv/.
+
+It's not currently supported by the media subsystem, but our intention is to
+try to get this API as generic as possible.
+
+> > + * @bpp: Array of per-plane bytes per pixel
+> > + * @hdiv: Horizontal chroma subsampling factor
+> > + * @vdiv: Vertical chroma subsampling factor
+> > + * @block_w: Per-plane macroblock pixel width (optional)
+> > + * @block_h: Per-plane macroblock pixel height (optional)
+> > + */
+> > +struct v4l2_format_info {
+> > +	u32 format;
+> > +	u8 mem_planes;
+> > +	u8 comp_planes;
+> > +	u8 bpp[4];
+> > +	u8 hdiv;
+> > +	u8 vdiv;
+> > +	u8 block_w[4];
+> > +	u8 block_h[4];
+> 
+> I might have missed how a user of these fill functions is supposed to set
+> block_w and block_h. If these are alignment requirements that might be
+> platform dependent, shouldn't they come as parameters to v4l2_fill_pixfmt()
+> and v4l2_fill_pixfmt_mp()? Or assume drivers already provide aligned sizes
+> maybe...
+> 
+
+These will need a contributor to introduce a pixel format. They are meant
+for tiled pixel formats. I left the introduction of them to the developers
+of the respective drivers.
 
 
--- 
-Un saludo,
+> Thank you, sorry for the many questions.
+> 
 
-Salva
+No problem.
 
---00000000000095408e058579f0e4
-Content-Type: text/plain; charset="windows-1252"; name="signature.asc"
-Content-Disposition: attachment; filename="signature.asc"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jtyj0x5r1>
-X-Attachment-Id: f_jtyj0x5r1
+Thanks!
+Eze
 
-owGbwMvMwME42YxZ/Om5s7cY17JoJqnlpqZkJsaXliWXZaak5sdnFMSnlebkxGekxCcn5qYWJeoV
-JJYkZ8QsMqhLyUxLU9DVTc8sUUjUTynKLEstKtYHa9cvLU7SBxoBwvEQGb1khSQiFHFl5qWkVigY
-GiSnpVqkmhqaGZnp6aWmWiabG5maGCcbGgKlDMxMTLh0dXWJspVLW1ubOJsdHBR0jUwNDXTMFLTB
-tKGpAlCsuCSxJDNZITk/r7gEyCkqTS5RAOqPT0kty0xOjc9MUQCZkplSHB2rYKtQzaXAqaCgl+SZ
-V5JalJaYnBpcmuSck1hczGmrYKiDLhlQlF+Sn5yfA5Q0gEpCnBOfmZeWzwkUDg1zjvf0c/OPDwz1
-DPLWAHHBrPgg1+CQIE/nkHi3IEdf1/ggxxBXTYVaHS5tBSjQ11JwzsgEOrtSwSNAwQ0Yh7oeLgrO
-4DhU0DAwSTOySjIzStNU0NJHaKpW0MsFRW98Wk5ierECHAAdEuwU7+Ia5unsGu/pEu/rGOLsAeUj
-dOMCNVh1e/qFgL2mg2yAXmZKWGpeSn4RigHA4KkAuRhdKTD8UkDxgaYU5C9UpYggB0cGsqecfRyD
-g+PDPF1c/XHpgcUhWI8hLlWwyIQ4AlUVUqyiBCqpsavACYxWx5xkYPj4ZiYX5Ss4hhpbGBkoaLiV
-lpQWpSo45VcqBDiD/KUQnpoEzLDg6FXgRI1XcMLCHZ8KnEBAKM46GY1ZGBg5GGTFFFn+/dhtkD7x
-kPfdXCZmWGHCygQqIhi4OAVgIks6OBimcz6U9Z2o2/k5e2WMwBXNzZNzKudM6jvC71PZb1+nGn6x
-scNa+f8ert6vR1j22fFEFj/bl6N8r79DzkTsc+7rO/MeH7ONuFkr9vXkveVltbeEdOMnc85bderx
-QZmJvIdF+mOMLcPy/X8pFN7Jrt7M4jiHqa5OLTxv8ZH+Po+kCtaVszYfrmlkVpM43zP9qAsz10YN
-nh/FnG4LApc8uxSytW+aRZxH61NBPul/WmELBcJc7SStlsn8V8qpyF2sNC1wWXTURnWd0J2zD9wx
-CnD5fCd4YW/gy08qJxsErl7QPeou/nOCSdnqNQwPzPcs2/rv6cwtD8PllX42dbwWuiM/5c+pt8GX
-vv5MV5nQfhEA
---00000000000095408e058579f0e4
-Content-Type: text/x-patch; charset="US-ASCII"; name="media_uvcvideo_hp_full_hd_camera.patch"
-Content-Disposition: attachment; 
-	filename="media_uvcvideo_hp_full_hd_camera.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_jtyj0roh0>
-X-Attachment-Id: f_jtyj0roh0
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvdXNiL3V2Yy91dmNfZHJpdmVyLmMgYi9kcml2ZXJz
-L21lZGlhL3VzYi91dmMvdXZjX2RyaXZlci5jCmluZGV4IDEwY2ZlOGU1MTYyNi4uZWU5YzcyNTQz
-YzExIDEwMDY0NAotLS0gYS9kcml2ZXJzL21lZGlhL3VzYi91dmMvdXZjX2RyaXZlci5jCisrKyBi
-L2RyaXZlcnMvbWVkaWEvdXNiL3V2Yy91dmNfZHJpdmVyLmMKQEAgLTI1MTAsNiArMjUxMCwxNSBA
-QCBzdGF0aWMgY29uc3Qgc3RydWN0IHVzYl9kZXZpY2VfaWQgdXZjX2lkc1tdID0gewogCSAgLmJJ
-bnRlcmZhY2VTdWJDbGFzcwk9IDEsCiAJICAuYkludGVyZmFjZVByb3RvY29sCT0gMCwKIAkgIC5k
-cml2ZXJfaW5mbwkJPSBVVkNfSU5GT19RVUlSSyhVVkNfUVVJUktfUkVTVFJJQ1RfRlJBTUVfUkFU
-RSkgfSwKKyAgICAgICAgLyogQ2hpY29ueSBIUCBGdWxsLUhEIENhbWVyYSAoMDRmMjpiNjJmKSAq
-LworICAgICAgICB7IC5tYXRjaF9mbGFncyAgICAgICAgICA9IFVTQl9ERVZJQ0VfSURfTUFUQ0hf
-REVWSUNFCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgVVNCX0RFVklDRV9JRF9N
-QVRDSF9JTlRfSU5GTywKKyAgICAgICAgICAuaWRWZW5kb3IgICAgICAgICAgICAgPSAweDA0ZjIs
-CisgICAgICAgICAgLmlkUHJvZHVjdCAgICAgICAgICAgID0gMHhiNjJmLAorICAgICAgICAgIC5i
-SW50ZXJmYWNlQ2xhc3MgICAgICA9IFVTQl9DTEFTU19WSURFTywKKyAgICAgICAgICAuYkludGVy
-ZmFjZVN1YkNsYXNzICAgPSAxLAorICAgICAgICAgIC5iSW50ZXJmYWNlUHJvdG9jb2wgICA9IDAs
-CisgICAgICAgICAgLmRyaXZlcl9pbmZvICAgICAgICAgID0gVVZDX0lORk9fUVVJUksoVVZDX1FV
-SVJLX1JFU1RSSUNUX0ZSQU1FX1JBVEUpIH0sCiAJLyogQWxjb3IgTWljcm8gQVUzODIwIChGdXR1
-cmUgQm95IFBDIFVTQiBXZWJjYW0pICovCiAJeyAubWF0Y2hfZmxhZ3MJCT0gVVNCX0RFVklDRV9J
-RF9NQVRDSF9ERVZJQ0UKIAkJCQl8IFVTQl9ERVZJQ0VfSURfTUFUQ0hfSU5UX0lORk8sCg==
---00000000000095408e058579f0e4--
