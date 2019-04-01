@@ -2,100 +2,296 @@ Return-Path: <SRS0=Gl4L=SD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5411C43381
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:57:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D2256C43381
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 09:06:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7F4D2214C6
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 08:57:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9559C20850
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 09:06:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728415AbfDAI47 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 04:56:59 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:10110 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726592AbfDAI47 (ORCPT
+        id S1726008AbfDAJG0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 05:06:26 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:35416 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725839AbfDAJG0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 1 Apr 2019 04:56:59 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x318ueKm028593;
-        Mon, 1 Apr 2019 10:56:50 +0200
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2rhy3x9has-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 01 Apr 2019 10:56:50 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E90BA48;
-        Mon,  1 Apr 2019 08:56:49 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas22.st.com [10.75.90.92])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 62F1116BA;
-        Mon,  1 Apr 2019 08:56:18 +0000 (GMT)
-Received: from SAFEX1HUBCAS23.st.com (10.75.90.47) by Safex1hubcas22.st.com
- (10.75.90.92) with Microsoft SMTP Server (TLS) id 14.3.361.1; Mon, 1 Apr 2019
- 10:56:18 +0200
-Received: from localhost (10.201.23.19) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.435.0; Mon, 1 Apr 2019 10:56:17
- +0200
-From:   Hugues Fruchet <hugues.fruchet@st.com>
-To:     Alexandre Torgue <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>,
-        "Hugues Fruchet" <hugues.fruchet@st.com>
-Subject: [PATCH] media: stm32-dcmi: fix crash when subdev do not expose any formats
-Date:   Mon, 1 Apr 2019 10:56:09 +0200
-Message-ID: <1554108969-30771-1-git-send-email-hugues.fruchet@st.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 1 Apr 2019 05:06:26 -0400
+Received: from [192.168.2.10] ([212.251.195.8])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id AstThqsAIiLOmAstWhb68v; Mon, 01 Apr 2019 11:06:23 +0200
+Subject: Re: [PATCH] media: mtk-vcodec: enlarge struct vdec_pic_info fields
+To:     Yunfei Dong <yunfei.dong@mediatek.com>, linux-firmware@kernel.org
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        tiffany.lin@mediatek.com
+References: <1554106699-25469-1-git-send-email-yunfei.dong@mediatek.com>
+ <1554106699-25469-2-git-send-email-yunfei.dong@mediatek.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <fde8b68d-b38c-34ea-208c-bd1338b90412@xs4all.nl>
+Date:   Mon, 1 Apr 2019 11:06:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.19]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-01_04:,,
- signatures=0
+In-Reply-To: <1554106699-25469-2-git-send-email-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfDlnk93PmYp70nkOz2NcvS5GRQ4QHEhddUyzQWpqtuRAd60jva5mjXfL9i4jStkgBkVMd+HloD3+MjoHaobhvCMmeZ49+38XGRZHhqQkRNjy8Ilykj8F
+ NmkWbtspiz+vvQw5eeJ6YG+6XfqoV7sqwYV66/8ojQpbUlJInuWQDg1djulla9xRQUv+5cduntcqgayrMWdfZNIR8mMvYX2N0V4fl35sj7UNvlkolMergRJh
+ rpb4Y7MI6P2U/Nxy5JU8TeDvKSBO52THOhAfwfDpSjr5bYT7XQo3zG+c6jwXPGfxHOcTsgqKBaYp50R0ydyEteKXzvCyP2oh5AUV37XEFfSQN2b5CGmwNavU
+ xXwKkVLqqOv1pRpKAj1WzKLXJqys1awURcJHaVo7GkEHr/JW2nk=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Do not access sd_formats[] if num_of_sd_formats is zero, ie
-subdev sensor didn't expose any formats.
+On 4/1/19 10:18 AM, Yunfei Dong wrote:
+> Enlarge the plane number to support more complex case
+> and add the support for fmt change case.
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
----
- drivers/media/platform/stm32/stm32-dcmi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Is this v4 of this patch? What are the changes since v3?
 
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index b63d57c..906e71b 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -831,6 +831,9 @@ static int dcmi_try_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f,
- 
- 	sd_fmt = find_format_by_fourcc(dcmi, pix->pixelformat);
- 	if (!sd_fmt) {
-+		if (!dcmi->num_of_sd_formats)
-+			return -ENODATA;
-+
- 		sd_fmt = dcmi->sd_formats[dcmi->num_of_sd_formats - 1];
- 		pix->pixelformat = sd_fmt->fourcc;
- 	}
-@@ -1009,6 +1012,9 @@ static int dcmi_set_sensor_format(struct stm32_dcmi *dcmi,
- 
- 	sd_fmt = find_format_by_fourcc(dcmi, pix->pixelformat);
- 	if (!sd_fmt) {
-+		if (!dcmi->num_of_sd_formats)
-+			return -ENODATA;
-+
- 		sd_fmt = dcmi->sd_formats[dcmi->num_of_sd_formats - 1];
- 		pix->pixelformat = sd_fmt->fourcc;
- 	}
--- 
-2.7.4
+Regards,
+
+	Hans
+
+> 
+> Change-Id: If61f994b8853f370967fb81b92b407e2c2ae94b8
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>  drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c |   62 +++++++++++++-------
+>  drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h |   16 ++---
+>  .../media/platform/mtk-vcodec/vdec/vdec_h264_if.c  |    4 +-
+>  .../media/platform/mtk-vcodec/vdec/vdec_vp8_if.c   |    4 +-
+>  .../media/platform/mtk-vcodec/vdec/vdec_vp9_if.c   |   11 ++--
+>  5 files changed, 57 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> index d022c65..43587c0 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+> @@ -129,9 +129,9 @@ static struct vb2_buffer *get_display_buffer(struct mtk_vcodec_ctx *ctx)
+>  	mutex_lock(&ctx->lock);
+>  	if (dstbuf->used) {
+>  		vb2_set_plane_payload(&dstbuf->vb.vb2_buf, 0,
+> -					ctx->picinfo.y_bs_sz);
+> +					ctx->picinfo.fb_sz[0]);
+>  		vb2_set_plane_payload(&dstbuf->vb.vb2_buf, 1,
+> -					ctx->picinfo.c_bs_sz);
+> +					ctx->picinfo.fb_sz[1]);
+>  
+>  		dstbuf->ready_to_display = true;
+>  
+> @@ -278,6 +278,27 @@ static void mtk_vdec_flush_decoder(struct mtk_vcodec_ctx *ctx)
+>  	clean_free_buffer(ctx);
+>  }
+>  
+> +static void mtk_vdec_update_fmt(struct mtk_vcodec_ctx *ctx,
+> +				unsigned int pixelformat)
+> +{
+> +	struct mtk_video_fmt *fmt;
+> +	struct mtk_q_data *dst_q_data;
+> +	unsigned int k;
+> +
+> +	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
+> +	for (k = 0; k < NUM_FORMATS; k++) {
+> +		fmt = &mtk_video_formats[k];
+> +		if (fmt->fourcc == pixelformat) {
+> +			mtk_v4l2_debug(1, "Update cap fourcc(%d -> %d)",
+> +				dst_q_data->fmt.fourcc, pixelformat);
+> +			dst_q_data->fmt = fmt;
+> +			return;
+> +		}
+> +	}
+> +
+> +	mtk_v4l2_err("Cannot get fourcc(%d), using init value", pixelformat);
+> +}
+> +
+>  static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
+>  {
+>  	unsigned int dpbsize = 0;
+> @@ -299,6 +320,10 @@ static int mtk_vdec_pic_info_update(struct mtk_vcodec_ctx *ctx)
+>  		return -EINVAL;
+>  	}
+>  
+> +	if (ctx->last_decoded_picinfo.cap_fourcc != ctx->picinfo.cap_fourcc &&
+> +		ctx->picinfo.cap_fourcc != 0)
+> +		mtk_vdec_update_fmt(ctx, ctx->picinfo.cap_fourcc);
+> +
+>  	if ((ctx->last_decoded_picinfo.pic_w == ctx->picinfo.pic_w) ||
+>  	    (ctx->last_decoded_picinfo.pic_h == ctx->picinfo.pic_h))
+>  		return 0;
+> @@ -352,11 +377,11 @@ static void mtk_vdec_worker(struct work_struct *work)
+>  	pfb = &dst_buf_info->frame_buffer;
+>  	pfb->base_y.va = vb2_plane_vaddr(&dst_buf->vb2_buf, 0);
+>  	pfb->base_y.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
+> -	pfb->base_y.size = ctx->picinfo.y_bs_sz + ctx->picinfo.y_len_sz;
+> +	pfb->base_y.size = ctx->picinfo.fb_sz[0];
+>  
+>  	pfb->base_c.va = vb2_plane_vaddr(&dst_buf->vb2_buf, 1);
+>  	pfb->base_c.dma_addr = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 1);
+> -	pfb->base_c.size = ctx->picinfo.c_bs_sz + ctx->picinfo.c_len_sz;
+> +	pfb->base_c.size = ctx->picinfo.fb_sz[1];
+>  	pfb->status = 0;
+>  	mtk_v4l2_debug(3, "===>[%d] vdec_if_decode() ===>", ctx->id);
+>  
+> @@ -976,14 +1001,13 @@ static int vidioc_vdec_g_fmt(struct file *file, void *priv,
+>  		 * So we just return picinfo yet, and update picinfo in
+>  		 * stop_streaming hook function
+>  		 */
+> -		q_data->sizeimage[0] = ctx->picinfo.y_bs_sz +
+> -					ctx->picinfo.y_len_sz;
+> -		q_data->sizeimage[1] = ctx->picinfo.c_bs_sz +
+> -					ctx->picinfo.c_len_sz;
+> +		q_data->sizeimage[0] = ctx->picinfo.fb_sz[0];
+> +		q_data->sizeimage[1] = ctx->picinfo.fb_sz[1];
+>  		q_data->bytesperline[0] = ctx->last_decoded_picinfo.buf_w;
+>  		q_data->bytesperline[1] = ctx->last_decoded_picinfo.buf_w;
+>  		q_data->coded_width = ctx->picinfo.buf_w;
+>  		q_data->coded_height = ctx->picinfo.buf_h;
+> +		ctx->last_decoded_picinfo.cap_fourcc = q_data->fmt->fourcc;
+>  
+>  		/*
+>  		 * Width and height are set to the dimensions
+> @@ -1103,10 +1127,11 @@ static void vb2ops_vdec_buf_queue(struct vb2_buffer *vb)
+>  	struct mtk_vcodec_mem src_mem;
+>  	bool res_chg = false;
+>  	int ret = 0;
+> -	unsigned int dpbsize = 1;
+> +	unsigned int dpbsize = 1, i = 0;
+>  	struct mtk_vcodec_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+>  	struct vb2_v4l2_buffer *vb2_v4l2 = NULL;
+>  	struct mtk_video_dec_buf *buf = NULL;
+> +	struct mtk_q_data *dst_q_data;
+>  
+>  	mtk_v4l2_debug(3, "[%d] (%d) id=%d, vb=%p",
+>  			ctx->id, vb->vb2_queue->type,
+> @@ -1194,21 +1219,18 @@ static void vb2ops_vdec_buf_queue(struct vb2_buffer *vb)
+>  	}
+>  
+>  	ctx->last_decoded_picinfo = ctx->picinfo;
+> -	ctx->q_data[MTK_Q_DATA_DST].sizeimage[0] =
+> -						ctx->picinfo.y_bs_sz +
+> -						ctx->picinfo.y_len_sz;
+> -	ctx->q_data[MTK_Q_DATA_DST].bytesperline[0] =
+> -						ctx->picinfo.buf_w;
+> -	ctx->q_data[MTK_Q_DATA_DST].sizeimage[1] =
+> -						ctx->picinfo.c_bs_sz +
+> -						ctx->picinfo.c_len_sz;
+> -	ctx->q_data[MTK_Q_DATA_DST].bytesperline[1] = ctx->picinfo.buf_w;
+> +	dst_q_data = &ctx->q_data[MTK_Q_DATA_DST];
+> +	for (i = 0; i < dst_q_data->fmt->num_planes; i++) {
+> +		dst_q_data->sizeimage[i] = ctx->picinfo.fb_sz[i];
+> +		dst_q_data->bytesperline[i] = ctx->picinfo.buf_w;
+> +	}
+> +
+>  	mtk_v4l2_debug(2, "[%d] vdec_if_init() OK wxh=%dx%d pic wxh=%dx%d sz[0]=0x%x sz[1]=0x%x",
+>  			ctx->id,
+>  			ctx->picinfo.buf_w, ctx->picinfo.buf_h,
+>  			ctx->picinfo.pic_w, ctx->picinfo.pic_h,
+> -			ctx->q_data[MTK_Q_DATA_DST].sizeimage[0],
+> -			ctx->q_data[MTK_Q_DATA_DST].sizeimage[1]);
+> +			dst_q_data->sizeimage[0],
+> +			dst_q_data->sizeimage[1]);
+>  
+>  	ret = vdec_if_get_param(ctx, GET_PARAM_DPB_SIZE, &dpbsize);
+>  	if (dpbsize == 0)
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> index e7e2a10..662a84b 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> @@ -211,24 +211,20 @@ struct mtk_vcodec_pm {
+>   * @pic_h: picture height
+>   * @buf_w: picture buffer width (64 aligned up from pic_w)
+>   * @buf_h: picture buffer heiht (64 aligned up from pic_h)
+> - * @y_bs_sz: Y bitstream size
+> - * @c_bs_sz: CbCr bitstream size
+> - * @y_len_sz: additional size required to store decompress information for y
+> - *		plane
+> - * @c_len_sz: additional size required to store decompress information for cbcr
+> - *		plane
+> + * @fb_sz: bitstream size of each plane
+>   * E.g. suppose picture size is 176x144,
+>   *      buffer size will be aligned to 176x160.
+> + * @cap_fourcc: fourcc number(may changed when resolution change)
+> + * @reserved: align struct to 64-bit in order to adjust 32-bit and 64-bit os.
+>   */
+>  struct vdec_pic_info {
+>  	unsigned int pic_w;
+>  	unsigned int pic_h;
+>  	unsigned int buf_w;
+>  	unsigned int buf_h;
+> -	unsigned int y_bs_sz;
+> -	unsigned int c_bs_sz;
+> -	unsigned int y_len_sz;
+> -	unsigned int c_len_sz;
+> +	unsigned int fb_sz[VIDEO_MAX_PLANES];
+> +	unsigned int cap_fourcc;
+> +	unsigned int reserved;
+>  };
+>  
+>  /**
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
+> index 02c960c..cdbcd69 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
+> @@ -253,8 +253,8 @@ static void get_pic_info(struct vdec_h264_inst *inst,
+>  	*pic = inst->vsi->pic;
+>  	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
+>  			 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
+> -	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
+> -			 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
+> +	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
+> +			 pic->fb_sz[0], pic->fb_sz[1]);
+>  }
+>  
+>  static void get_crop_info(struct vdec_h264_inst *inst, struct v4l2_rect *cr)
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
+> index bac3723..ba79136 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
+> @@ -294,8 +294,8 @@ static void get_pic_info(struct vdec_vp8_inst *inst, struct vdec_pic_info *pic)
+>  
+>  	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
+>  			 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
+> -	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
+> -			 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
+> +	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
+> +			 pic->fb_sz[0], pic->fb_sz[1]);
+>  }
+>  
+>  static void vp8_dec_finish(struct vdec_vp8_inst *inst)
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> index bc8349b..6fe8320 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> @@ -702,10 +702,8 @@ static void init_all_fb_lists(struct vdec_vp9_inst *inst)
+>  
+>  static void get_pic_info(struct vdec_vp9_inst *inst, struct vdec_pic_info *pic)
+>  {
+> -	pic->y_bs_sz = inst->vsi->buf_sz_y_bs;
+> -	pic->c_bs_sz = inst->vsi->buf_sz_c_bs;
+> -	pic->y_len_sz = inst->vsi->buf_len_sz_y;
+> -	pic->c_len_sz = inst->vsi->buf_len_sz_c;
+> +	pic->fb_sz[0] = inst->vsi->buf_sz_y_bs + inst->vsi->buf_len_sz_y;
+> +	pic->fb_sz[1] = inst->vsi->buf_sz_c_bs + inst->vsi->buf_len_sz_c;
+>  
+>  	pic->pic_w = inst->vsi->pic_w;
+>  	pic->pic_h = inst->vsi->pic_h;
+> @@ -714,8 +712,9 @@ static void get_pic_info(struct vdec_vp9_inst *inst, struct vdec_pic_info *pic)
+>  
+>  	mtk_vcodec_debug(inst, "pic(%d, %d), buf(%d, %d)",
+>  		 pic->pic_w, pic->pic_h, pic->buf_w, pic->buf_h);
+> -	mtk_vcodec_debug(inst, "Y(%d, %d), C(%d, %d)", pic->y_bs_sz,
+> -		 pic->y_len_sz, pic->c_bs_sz, pic->c_len_sz);
+> +	mtk_vcodec_debug(inst, "fb size: Y(%d), C(%d)",
+> +		pic->fb_sz[0],
+> +		pic->fb_sz[1]);
+>  }
+>  
+>  static void get_disp_fb(struct vdec_vp9_inst *inst, struct vdec_fb **out_fb)
+> 
 
