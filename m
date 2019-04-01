@@ -2,89 +2,102 @@ Return-Path: <SRS0=Gl4L=SD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 945B3C43381
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 07:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE17AC43381
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 07:26:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F37B20896
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 07:25:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C05B20896
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 07:26:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="RbqeTNoj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NsKKW7UH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731900AbfDAHZh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 03:25:37 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39872 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbfDAHZh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 03:25:37 -0400
-Received: by mail-ot1-f65.google.com with SMTP id f10so49636otb.6
-        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 00:25:37 -0700 (PDT)
+        id S1731963AbfDAH0H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 03:26:07 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38037 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731862AbfDAH0H (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 03:26:07 -0400
+Received: by mail-ot1-f66.google.com with SMTP id e80so7622698ote.5;
+        Mon, 01 Apr 2019 00:26:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=BrZdN9cAYDctsf0SmRhjAgK1SGM4CUTaKrLHqJt/9yg=;
-        b=RbqeTNojv4+znZL2H5+TgG7USAZrB/II2b+HBWzd/deMxMBjoBf9Xyd0Kjk2UwWAMh
-         acvv24ET/EJ5ZZdkx60BjiLqpfkIYiFP5f5i8/XYIx59C60K9MxpZa7qpKGhNxi/EAOl
-         rNfNJoefVwfuQXUy3uMHs3mM/Fhkuwfwrajao=
+        bh=wxeoz0EGyi0xZFFWRWMstm0HweGrj5Qnaf8mdj4U0cg=;
+        b=NsKKW7UHYIsNWeW1oBjmWVaOirg7/Rt06fbx6lmBG11OXlrwYttZQfeFEr7mwc2eCr
+         EDItYpJR/AUVTWyKA76HI01ObtHJ6KvmRiaszxQvaW1fJy2J+ss7nkP5r+Cv/S6fTNvT
+         7C6uAyyKdA96ddjPCdzQ0mhXvv1+ZtQchZaEYy7MnDUvm3NzUwOWSLr4g8NWJYq60v3V
+         gmP+55IJYNtibgAWL1K2JOjqAsFF1EbzFmhEyU/0HbyFyY3h1HN9OXzCC3HtZVStiEB6
+         3ittg9H+EmbOYK1Lx8hqTMIwll2kRWqNRsbcr7eoZ9NiPbMFnbcWasXBeR3AHF90+VwF
+         Navg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BrZdN9cAYDctsf0SmRhjAgK1SGM4CUTaKrLHqJt/9yg=;
-        b=ChTiwm6ncppPl/S1RlJEomyRLJ9UAVXPSpCPKAeH0d4+KOWv2TAEsyI/3/kU18xg/w
-         TTJP/tD6yiuP+3zu2IFyO+3rMq3QYTwbTvDg9v9cO0GWd7ph51TqDzppuEVW/TXk/9zk
-         LdVhEviHYyAUM5pmg9QEDgvHaPKDSGVYSOS5qTDbTd6tRezWYv81qk9X/d1S6FnUXxd0
-         O7WOejAABhRiIfT9GnUl34/puEkwrAqIaXZTRb2wlI8ye9xh2njrOnnAHSm5W3Y9ZCDB
-         K8s9B/aZGbQjnzp69uB2ONPRudSUjqH1QpM0LfJjXAJg1oc9+bnkyj9MvJcWLqlIrQGH
-         Idlw==
-X-Gm-Message-State: APjAAAVCKVeMk1tpg8p3TIV7ZpNOwuyIwZzckM7coffdJ6NxBytbqceS
-        pW5aBo5G36eSG71g143GXcH4AnZj7MA=
-X-Google-Smtp-Source: APXvYqwlWNjCffk9PaoBOZeLgbLYilOOrgjdf3RRyervfNXn4/LmFmf42A/XmPTRbZqopPMiIVAV/Q==
-X-Received: by 2002:a9d:51d2:: with SMTP id d18mr16048736oth.61.1554103536579;
-        Mon, 01 Apr 2019 00:25:36 -0700 (PDT)
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com. [209.85.167.172])
-        by smtp.gmail.com with ESMTPSA id e81sm3665087oih.40.2019.04.01.00.25.35
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 01 Apr 2019 00:25:35 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id x188so6381972oia.13
-        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 00:25:35 -0700 (PDT)
-X-Received: by 2002:aca:31cb:: with SMTP id x194mr12069205oix.71.1554103535586;
- Mon, 01 Apr 2019 00:25:35 -0700 (PDT)
+        bh=wxeoz0EGyi0xZFFWRWMstm0HweGrj5Qnaf8mdj4U0cg=;
+        b=BgVexITwCUK62EOw/Q1kMpwTD4ONwlh2oC9cZ59LDlvZyuxyeR1k5v6xRqNPFWghw0
+         KPPFWYWukQBUeCu31eRW2hdcEUthyntf3gOrHSdzyshmxWgjWFQSLJbXN+Aa54IRo14L
+         3RxVa/l42TVWU5fYyl2g/3T2+cjAL1rbC4DcApwEgIv7jQRvq1UFNomRu0Pm0Jl09B45
+         5XUjiU/wF63HUNp9l3eNoEBanEQDB5x1CiWk1397C5e0qklPxv3iKrv0WQruayrIRBv4
+         RErbYqq5sRBvGhzNWSphpjF2Rz18h3S4OyTDq/TTyDlQzIbATqczJcL29/Ta8xrrCulA
+         8dLg==
+X-Gm-Message-State: APjAAAW55M8GAhGT6I1Rx4CEVGyDzsaUZBCE84ORcVjRqZv8Ko80wrf2
+        Ww9TGO9Ww21/fF4RZr6nCR+QyNC+gLJNVwx4drA=
+X-Google-Smtp-Source: APXvYqxp7IsC9EaAvMbXimaBOWgomI0Tke5rVvWQav+2o18i4EB3ZnuElQtObW1mgY932pbhoxFX16htppQM3MfAZTQ=
+X-Received: by 2002:a05:6830:2009:: with SMTP id e9mr19572016otp.142.1554103566496;
+ Mon, 01 Apr 2019 00:26:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190328180704.24761-1-ezequiel@collabora.com>
-In-Reply-To: <20190328180704.24761-1-ezequiel@collabora.com>
-From:   Alexandre Courbot <acourbot@chromium.org>
-Date:   Mon, 1 Apr 2019 16:25:23 +0900
-X-Gmail-Original-Message-ID: <CAPBb6MWPLurnLgD5VD42yWzPD2ZcuL339-OoSz=q1K4sFOfewg@mail.gmail.com>
-Message-ID: <CAPBb6MWPLurnLgD5VD42yWzPD2ZcuL339-OoSz=q1K4sFOfewg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] media: Introduce pixel format helpers
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com
+References: <1553602674-531-1-git-send-email-mojha@codeaurora.org>
+In-Reply-To: <1553602674-531-1-git-send-email-mojha@codeaurora.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 1 Apr 2019 08:25:40 +0100
+Message-ID: <CA+V-a8tXq2CjZ+LmOzyg_Jr9Mc0MevjYBFfQ+FJwsW+UDd60_g@mail.gmail.com>
+Subject: Re: [PATCH] media: vpss: fix the order of resource clean up
+To:     Mukesh Ojha <mojha@codeaurora.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Mar 29, 2019 at 3:08 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+On Tue, Mar 26, 2019 at 12:18 PM Mukesh Ojha <mojha@codeaurora.org> wrote:
 >
-> Following the "Add MPEG-2 decoding to Rockchip VPU"[1], and given we want to start
-> using the pixel format helpers rather soon, I've decided to submit them separatedly.
+> Clean up of resources should be in reverse order of vpss_init().
+> Fix this inside vpss_exit().
 >
-> Aside from documenting the block_w and block_h, as suggested by Emil Velikov, these
-> two patches are unmodified compared to v2 [1].
+> Signed-off-by: Mukesh Ojha <mojha@codeaurora.org>
+> ---
+>  drivers/media/platform/davinci/vpss.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> This series contains the minimum patches to introduce the pixel format
-> helpers, it currently will have no users, but we expect users to start
-> popping-up soon.
-> very shortly [2].
+Acked-by: Lad, Prabhakar <prabhakar.csengg@gmail.com>
 
-Is there anything that prevents you from moving the Rockchip drivers
-to using these right after patch 2/2? IIRC that's what your MPEG-2
-series did initially, and that would introduce a user immediately.
+Cheers,
+--Prabhakar Lad
+
+> diff --git a/drivers/media/platform/davinci/vpss.c b/drivers/media/platform/davinci/vpss.c
+> index 19cf685..e380fd3 100644
+> --- a/drivers/media/platform/davinci/vpss.c
+> +++ b/drivers/media/platform/davinci/vpss.c
+> @@ -507,9 +507,9 @@ static int vpss_resume(struct device *dev)
+>
+>  static void vpss_exit(void)
+>  {
+> +       platform_driver_unregister(&vpss_driver);
+>         iounmap(oper_cfg.vpss_regs_base2);
+>         release_mem_region(VPSS_CLK_CTRL, 4);
+> -       platform_driver_unregister(&vpss_driver);
+>  }
+>
+>  static int __init vpss_init(void)
+> --
+> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center,
+> Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+>
