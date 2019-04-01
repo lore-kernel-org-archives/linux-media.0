@@ -2,376 +2,327 @@ Return-Path: <SRS0=Gl4L=SD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 899F7C43381
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 13:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 226ADC43381
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 13:39:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4BD0A20870
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 13:30:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D175120883
+	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 13:39:01 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="2Rv+Q3CT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727029AbfDANaJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 09:30:09 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:50120 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726821AbfDANaI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 1 Apr 2019 09:30:08 -0400
-Received: from [192.168.2.10] ([212.251.195.8])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id Ax0jhtRcaiLOmAx0nhcKO4; Mon, 01 Apr 2019 15:30:06 +0200
-Subject: Re: [PATCH 0/2] DCMI bridge support
-To:     Hugues FRUCHET <hugues.fruchet@st.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Yannick FERTRE <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>,
-        Mickael GUENE <mickael.guene@st.com>
-References: <1554111076-31471-1-git-send-email-hugues.fruchet@st.com>
- <158aa8b9-e607-3630-0e13-ad10759d3468@xs4all.nl>
- <2ff6b4cb-dd57-e982-a839-00c50037d2a4@st.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <80572a34-a79c-862b-6040-668e8a79568b@xs4all.nl>
-Date:   Mon, 1 Apr 2019 15:30:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1728022AbfDANjB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 09:39:01 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:33083 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727583AbfDANjA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 09:39:00 -0400
+Received: by mail-wr1-f66.google.com with SMTP id q1so12110422wrp.0
+        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 06:38:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BCTHvOZsBvueuOicqszFQpte+OeSMDu4MKaTKizUSBg=;
+        b=2Rv+Q3CT36xOcvTXxRfi+5Cptac7SrD4P4b+wwIofVCydg6zeP7tcoXG6AE1lb8zJz
+         jOZvhVIAlgk/4NmL6xS9SKSZDY4i3X6vh2AXz0yzlwMaumpTEI8JzkAhEhqOwMivGC6m
+         1a+reENnJvaOoqQDebLDRWMGQA3pDf40jjGNNzb0FBMqVGWrzA4IEnZORjSS3AUoTEAM
+         4H2z2tf1NvKryV46GfYutaLnAhWaJTzaPNVIeCwasckVgQYxaUOFWSkFrQphE8NUK9xU
+         b94GhAcvLtSbavGTuQkbHyuT6mfgUomGbKhL5qIPeLXHPzJukBD9Q8RG/D6uTP4AmL58
+         Rouw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BCTHvOZsBvueuOicqszFQpte+OeSMDu4MKaTKizUSBg=;
+        b=bpGukAD4rIntjht8ngilsA9gTIph3GK6wjFXK3CeH0y4kOYbuvawx4ZtKVTbDwwj3T
+         w+fR+8MgnjPFDUY6f+QiYwlwG1tCEYr0kuHCxOOUOUZ3NeaSzAN6bHp8bP+VAHtX5Kyu
+         Crbf00D69oa86o34nsvH73zZDGOqjjC9STJkld4neoKaT1dlPZ6SWTYCLW4nwGYzne9d
+         aEWzaqUqJ3N1N1ycDhOw6y5fhaPHWmdPHuds6FEYCejmRYSeJhowkBqUY8e+jyzqVyRE
+         r/rip0rP6ZQ41fml/3sYXMkOq18iilHKecfTf7m7nlnw/p12gvP/Sbdb2ko8KnX5jtsk
+         pboQ==
+X-Gm-Message-State: APjAAAVz11QWaGcfZL9AWQ4XkPwqk2SfRrvvPO5W7uI0AcgPgO1uWYIx
+        hIsKqUYPAlIqSbSsr0HTgdga8g==
+X-Google-Smtp-Source: APXvYqxHYFaac/fg0ZshVMlYId1t+snycq+LRzxEax7WpA8hTGCAYWdRCU4Oj/ZzwKj4eMIZ6O06dQ==
+X-Received: by 2002:adf:ebc8:: with SMTP id v8mr40980317wrn.172.1554125938424;
+        Mon, 01 Apr 2019 06:38:58 -0700 (PDT)
+Received: from mjourdan-pc.numericable.fr (abo-99-183-68.mtp.modulonet.fr. [85.68.183.99])
+        by smtp.gmail.com with ESMTPSA id v184sm25205996wma.6.2019.04.01.06.38.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 01 Apr 2019 06:38:57 -0700 (PDT)
+From:   Maxime Jourdan <mjourdan@baylibre.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [PATCH v5 0/4] Add Amlogic video decoder driver
+Date:   Mon,  1 Apr 2019 15:38:41 +0200
+Message-Id: <20190401133845.4171-1-mjourdan@baylibre.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <2ff6b4cb-dd57-e982-a839-00c50037d2a4@st.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfDxE8dmK+vCBLLcKLSS8/Uk+sjdNtt/uv7QYz8Gtf4YBBiKCKpzbaou3h4T2KbEUsn2DM1G7KgurPzbPldSELal1f5QbzNnFFO5S3TbQmwld3U/0r30p
- p5uTUqQ6SE1lh1Md+DL8Y98TR6KLaS3bhWZcb0FhRqtF0fqSmjGVkCXRiugQF0qd9GFB+ioiFRtxz1cRweL9Qsi0YQMtlEveLc33IDsITVyUWrSNvJ68MJbo
- 7MjwmVTXS0NnEKMsNf/ogZLDRtoucGXDX9RPPXw04JeWRzcg+8xrk+yBV0hfCBO/9h8MkssxEV7ggtAug4u67c1iZWXT3p1UrPdl2Z6tTmdNDaGDMbJY7+g4
- 2eXJKmRNoileQtmQVgoYH9wi5zofwMDZmo0bGe/jIqTTu+t0rcdw2t1g6svWwYZCoe6OGC0osnGUiA1ZExt/xlIvHvf0dLj3RxylrrOabV4WZeQmjmUTDkMy
- /JVuzYewTxwN2USQaj7E/b7+mPlJObd6MbKwA+pD+UxJNzCle5FnjA2CQzbAM5SZrCCKTP4Z34fcLjyAe1gtULXIdJPDlRDtTAuXEQ==
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/1/19 3:08 PM, Hugues FRUCHET wrote:
-> Hi Hans,
-> 
-> Here it is.
-> 
-> SHA1 is aa371c995ec2ad70323db00c47b3132002b060b7:
-> 
-> Author: Hans Verkuil <hverkuil-cisco@xs4all.nl>  2019-02-08 16:21:23
-> Committer: Hans Verkuil <hverkuil-cisco@xs4all.nl>  2019-02-08 16:21:23
-> Parent: 98d5622551eb6b9a0397464fb52378949f33c364 (v4l2-compliance: 
-> support m2m devices with -f)
-> Child:  59f9840781aab464c1331dcdb82e63dd0544b5c6 (v4l2-compliance: 
-> remove duplicate MEDIA_IOC_DEVICE_INFO ioctl call)
-> Branches: master, master2, remotes/origin/master
-> Follows: v4l-utils-1.16.0
-> Precedes:
-> 
->      v4l2-compliance: -f bug fixes
-> 
-> 
-> Result is below:
-> 
-> root@stm32mp1:~# v4l2-compliance -m /dev/media0
-> v4l2-compliance SHA: eb8e3b07c9249ff56091ae4bc3ae9b76779db4cd, 32 bits
-> 
-> Compliance test for stm32-dcmi device /dev/media0:
-> 
-> Media Driver Info:
->          Driver name      : stm32-dcmi
->          Model            : stm32-dcmi
->          Serial           :
->          Bus info         : platform:stm32-dcmi
->          Media version    : 5.0.0
->          Hardware revision: 0x00000000 (0)
->          Driver version   : 5.0.0
-> 
-> Required ioctls:
->          test MEDIA_IOC_DEVICE_INFO: OK
-> 
-> Allow for multiple opens:
->          test second /dev/media0 open: OK
->          test MEDIA_IOC_DEVICE_INFO: OK
->          test for unlimited opens: OK
-> 
-> Media Controller ioctls:
->          test MEDIA_IOC_G_TOPOLOGY: OK
->          Entities: 3 Interfaces: 2 Pads: 4 Links: 4
->          test MEDIA_IOC_ENUM_ENTITIES/LINKS: OK
->          test MEDIA_IOC_SETUP_LINK: OK
-> 
-> Total for stm32-dcmi device /dev/media0: 7, Succeeded: 7, Failed: 0, 
-> Warnings: 0
-> --------------------------------------------------------------------------------
-> Compliance test for stm32-dcmi device /dev/video0:
-> 
-> Driver Info:
->          Driver name      : stm32-dcmi
->          Card type        : STM32 Camera Memory Interface
->          Bus info         : platform:dcmi
->          Driver version   : 5.0.0
->          Capabilities     : 0x85200001
->                  Video Capture
->                  Read/Write
->                  Streaming
->                  [ 2117.336477] stm32-dcmi 4c006000.dcmi: 
-> =================  START STATUS  =================
-> E[ 2117.344647] stm32-dcmi 4c006000.dcmi: White Balance, Automatic: true
-> [ 2117.350990] stm32-dcmi 4c006000.dcmi: Blue Balance: 0 inactive
-> x[ 2117.356853] stm32-dcmi 4c006000.dcmi: Red Balance: 0 inactive
-> [ 2117.362645] stm32-dcmi 4c006000.dcmi: Auto Exposure: Auto Mode
-> [ 2117.368438] stm32-dcmi 4c006000.dcmi: Exposure: 0 inactive volatile
-> t[ 2117.374729] stm32-dcmi 4c006000.dcmi: Gain, Automatic: true
-> [ 2117.380335] stm32-dcmi 4c006000.dcmi: Gain: 0 inactive volatile
-> e[ 2117.386305] stm32-dcmi 4c006000.dcmi: Saturation: 64
-> [ 2117.391275] stm32-dcmi 4c006000.dcmi: Hue: 0
-> n[ 2117.395572] stm32-dcmi 4c006000.dcmi: Contrast: 0
-> [ 2117.400305] stm32-dcmi 4c006000.dcmi: Test Pattern: Disabled
-> d[ 2117.405988] stm32-dcmi 4c006000.dcmi: Horizontal Flip: false
-> [ 2117.411721] stm32-dcmi 4c006000.dcmi: Vertical Flip: false
-> [ 2117.417148] stm32-dcmi 4c006000.dcmi: Power Line Frequency: 50 Hz
-> [ 2117.423265] stm32-dcmi 4c006000.dcmi: ==================  END STATUS 
-> ==================
-> ed Pix Format
->                  Device Capabilities
->          Device Caps      : 0x05200001
->                  Video Capture
->                  Read/Write
->                  Streaming
->                  Extended Pix Format
-> Media Driver Info:
->          Driver name      : stm32-dcmi
->          Model            : stm32-dcmi
->          Serial           :
->          Bus info         : platform:stm32-dcmi
->          Media version    : 5.0.0
->          Hardware revision: 0x00000000 (0)
->          Driver version   : 5.0.0
-> Interface Info:
->          ID               : 0x03000003
->          Type             : V4L Video
-> Entity Info:
->          ID               : 0x00000001 (1)
->          Name             : stm32_dcmi
->          Function         : V4L2 I/O
->          Flags         : default
->          Pad 0x01000002   : 0: Sink
->            Link 0x02000008: from remote pad 0x1000007 of entity 'mipid02 
-> 0-0014': Data, Enabled, Immutable
-> 
-> Required ioctls:
->          test MC information (see 'Media Driver Info' above): OK
->                  warn: 
-> ../../../../../../../../../sources/v4l-utils/utils/v4l2-compliance/v4l2-compliance.cpp(621): 
-> media bus_info 'platform:stm32-dcmi
-> ' differs from V4L2 bus_info 'platform:dcmi'
->          test VIDIOC_QUERYCAP: OK
-> 
-> Allow for multiple opens:
->          test second /dev/video0 open: OK
->                  warn: 
-> ../../../../../../../../../sources/v4l-utils/utils/v4l2-compliance/v4l2-compliance.cpp(621): 
-> media bus_info 'platform:stm32-dcmi
-> ' differs from V4L2 bus_info 'platform:dcmi'
->          test VIDIOC_QUERYCAP: OK
->          test VIDIOC_G/S_PRIORITY: OK
->          test for unlimited opens: OK
-> 
-> Debug ioctls:
->          test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
->          test VIDIOC_LOG_STATUS: OK
-> 
-> Input ioctls:
->          test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
->          test VIDIOC_G/S_FRE[ 2117.564770] mipid02 0-0014: 
-> =================  START STATUS  =================
-> Q[ 2117.572042] mipid02 0-0014: ==================  END STATUS 
-> ==================
-> UENCY: OK (Not Supported)
->          test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
->          test VIDIOC_ENUMAUDIO: OK (Not Supported)
->          test VIDIOC_G/S/ENUMINPUT: OK
->          test VIDIOC_G/S_AUDIO: OK (Not Supported)
->          Inputs: 1 Audio Inputs: 0 Tuners: 0
-> 
-> Output ioctls:
->          test VIDIOC_G/S_MODULATOR: OK (Not Supported)
->          test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
->          test VIDIOC_ENUMAUDOUT: OK (Not Supported)
->          test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
->          test VIDIOC_G/S_AUDOUT: OK (Not Supported)
->          Outputs: 0 Audio Outputs: 0 Modulators: 0
-> 
-> Input/Output configuration ioctls:
->          test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
->          test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
->          test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
->          test VIDIOC_G/S_EDID: OK (Not Supported)
-> 
-> Control ioctls (Input 0):
->          test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
->          test VIDIOC_QUERYCTRL: OK
->          test VIDIOC_G/S_CTRL: OK
->          test VIDIOC_G/S/TRY_EXT_CTRLS: OK
->          test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
->          test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
->          Standard Controls: 17 Private Controls: 0
-> 
-> Format ioctls (Input 0):
->          test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
->          test VIDIOC_G/S_PARM: OK
->          test VIDIOC_G_FBUF: OK (Not Supported)
->          test VIDIOC_G_FMT: OK
->          test VIDIOC_TRY_FMT: OK
->          test VIDIOC_S_FMT: OK
->          test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
->                  fail: 
-> ../../../../../../../../../sources/v4l-utils/utils/v4l2-compliance/v4l2-test-formats.cpp(1338): 
-> node->frmsizes_count[pixfmt] > 1
->          test Cropping: FAIL
->          test Composing: OK (Not Supported)
->          test Scaling: OK (Not Supported)
-> 
-> Codec ioctls (Input 0):
->          test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
->          test VIDIOC_G_ENC_INDEX: OK (Not Supported)
->          test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-> 
-> Buffer ioctls (Input 0):
->          test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
->          test VIDIOC_EXPBUF: OK
->          test Requests: OK (Not Supported)
-> 
-> Total for stm32-dcmi device /dev/video0: 45, Succeeded: 44, Failed: 1, 
-> Warnings: 2
-> --------------------------------------------------------------------------------
-> Compliance test for device /dev/v4l-subdev0:
-> 
-> 
-> Required ioctls:
-> 
-> Allow for multiple opens:
->          test second /dev/v4l-subdev0 open: OK
->          test for unlimited opens: OK
-> 
-> Debug ioctls:
->          test VIDIOC_LOG_STATUS: OK (Not Supported)
-> 
-> Input ioctls:
->          test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
->          test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
->          test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
->          test VIDIOC_ENUMAUDIO: OK (Not Supported)
->          test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
->          test VIDIOC_G/S_AUDIO: OK (Not Supported)
->          Inputs: 0 Audio Inputs: 0 Tuners: 0
-> 
-> Output ioctls:
->          test VIDIOC_G/S_MODULATOR: OK (Not Supported)
->          test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
->          test VIDIOC_ENUMAUDOUT: OK (Not Supported)
->          test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
->          test VIDIOC_G/S_AUDOUT: OK (Not Supported)
->          Outputs: 0 Audio Outputs: 0 Modulators: 0
-> 
-> Input/Output configuration ioctls:
->          test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
->          test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
->          test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
->          test VIDIOC_G/S_EDID: OK (Not Supported)
-> 
-> Control ioctls:
->          test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
->          test VIDIOC_QUERYCTRL: OK (Not Supported)
->          test VIDIOC_G/S_CTRL: OK (Not Supported)
->          test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
->          test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
->          test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
->          Standard Controls: 0 Private Controls: 0
-> 
-> Format ioctls:
->          test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK (Not Supported)
->          test VIDIOC_G/S_PARM: OK (Not Supported)
->          test VIDIOC_G_FBUF: OK (Not Supported)
->          test VIDIOC_G_FMT: OK (Not Supported)
->          test VIDIOC_TRY_FMT: OK (Not Supported)
->          test VIDIOC_S_FMT: OK (Not Supported)
->          test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
->          test Cropping: OK (Not Supported)
->          test Composing: OK (Not Supported)
->          test Scaling: OK (Not Supported)
-> 
-> Codec ioctls:
->          test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
->          test VIDIOC_G_ENC_INDEX: OK (Not Supported)
->          test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-> 
-> Buffer ioctls:
->          test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK (Not Supported)
->          test VIDIOC_EXPBUF: OK (Not Supported)
->          test Requests: OK (Not Supported)
-> 
-> Total for device /dev/v4l-subdev0: 40, Succeeded: 40, Failed: 0, Warnings: 0
-> 
-> Grand Total for stm32-dcmi device /dev/media0: 92, Succeeded: 91, 
-> Failed: 1, Warnings: 2
+Hi everyone,
 
-The warnings should be fixed (both warnings refer to the same problem).
+[V5] It's been a while since the last patch series regarding the Amlogic
+video decoder. Unfortunately, the firmware licensing situation is still
+on hold as we await communication from Amlogic. As such, we do not have
+the firmwares in linux-firmware yet.
+I decided to push the V5 anyway, as changes were starting to pile up.
 
-The fail was present before this patch series.
+This patch series adds support for the Amlogic video decoder,
+as well as the corresponding dt bindings for GXBB/GXL/GXM chips.
 
-The core problem there is that if there are multiple possible framesizes,
-then crop support is ambiguous: against which framesize do you crop?
+It features decoding for the following formats:
+- MPEG 1
+- MPEG 2
 
-I see that dcmi_try_fmt() has a heuristic for that. We really need to fix
-this in the API, but this situation rarely occurs.
+The following formats will be added in future patches:
+- MJPEG
+- MPEG 4 (incl. Xvid, H.263)
+- H.264
+- HEVC (incl. 10-bit)
+- VP9 (incl. 10-bit)
 
-So for now I don't think there is a need to fix the fail.
+The code was made in such a way to allow easy inclusion of those formats
+in the future.
 
-Regards,
+The decoder is single instance.
 
-	Hans
+Files:
+ - vdec.c handles the V4L2 M2M logic
+ - esparser.c manages the hardware bitstream parser
+ - vdec_helpers.c provides helpers to DONE the dst buffers as well as
+ various common code used by the codecs
+ - vdec_1.c manages the VDEC_1 block of the vdec IP
+ - vdec_ctrls.c handles the V4L2 controls exposed by the driver
+ - codec_mpeg12.c enables decoding for MPEG 1/2.
+ - vdec_platform.c links codec units with vdec units
+ (e.g vdec_1 with codec_mpeg12) and lists all the available
+ src/dst formats and requirements (max width/height, etc.),
+ per compatible chip.
 
-> 
-> 
-> BR,
-> Hugues.
-> 
-> On 4/1/19 1:10 PM, Hans Verkuil wrote:
->> Hi Hugues,
->>
->> On 4/1/19 11:31 AM, Hugues Fruchet wrote:
->>> This patch serie allows to connect non-parallel camera sensor to
->>> DCMI thanks to a bridge connected in between such as STMIPID02 [1].
->>>
->>> Media controller support is introduced first, then support of
->>> several sub-devices within pipeline with dynamic linking
->>> between them.
->>
->> Can you post the output of v4l2-compliance -m /dev/mediaX ?
->>
->> Thanks!
->>
->> 	Hans
->>
->>>
->>> [1] https://www.spinics.net/lists/devicetree/msg278002.html
->>>
->>> Hugues Fruchet (2):
->>>    media: stm32-dcmi: add media controller support
->>>    media: stm32-dcmi: add support of several sub-devices
->>>
->>>   drivers/media/platform/Kconfig            |   2 +-
->>>   drivers/media/platform/stm32/stm32-dcmi.c | 213 ++++++++++++++++++++++++------
->>>   2 files changed, 177 insertions(+), 38 deletions(-)
->>>
+Firmwares are necessary to run the vdec. They can currently be found at:
+https://github.com/Elyotna/meson-firmware
+There is an ongoing effort to bring those firmwares to linux-firmware
+but they're not in yet, currently blocked by licensing issues.
+
+It was tested primarily with ffmpeg's v4l2-m2m implementation. For instance:
+$ ffmpeg -c:v mpeg2_v4l2m2m -i sample_mpeg2.mkv -f rawvideo out.nv12
+
+The v4l2-compliance results are available below the patch diff.
+
+Changes since v4 [3]:
+ - Updated for 5.1: 
+  - cropcap -> g_pixelaspect
+  - dma_zalloc_coherent -> dma_alloc_coherent
+ - enum_framesizes: changed from STEPWISE to CONTINUOUS, as suggested by Hans
+ - Reintroduced support for CREATE_BUFS. It was a driver bug where I wasn't
+ accounting for the amount of buffers created this way (only buffers created
+ via REQBUFS were).
+ - Added the patch introducing V4L2_FMT_FLAG_FIXED_RESOLUTION to the V4L2
+ framework, needed as MPEG2 on Amlogic hardware only supports a fixed
+ resolution during a decode session.
+ - Added support for events and V4L2_EVENT_SOURCE_CHANGE, as it is now checked
+ by v4l2-compliance for stateful decoders. I was planning on introducing this
+ for codecs that actually use it (H264, HEVC..), but it doesn't hurt to have
+ this in the initial commit.
+ - Added support for controls, mainly V4L2_CID_MIN_BUFFERS_FOR_CAPTURE
+
+Changes since v3 [2]:
+ - strlcpy -> strscpy
+ - queue_setup: account for existing buffers when clamping *num_buffers
+ - removed support for CREATE_BUFS. This caused issues with gstreamer and allowed
+ userspace to alloc more buffers than the decoder can handle in its fixed list.
+ So for now we just disable it and only allow allocating via REQBUFS.
+ - rebased & tested with 4.20-rc1
+
+Changes since v2 [1]:
+ - Override capture queue's min_buffers_needed in queue_setup
+ The HW needs the full buffer list to be available when doing start_streaming
+ - Fix the draining sequence
+ The blob that we write to the ESPARSER to trigger drain is codec-dependent.
+ The one that was sent in v1 is specific to H.264 and isn't guaranteed to
+ trigger drain for MPEG2. For the latter, a simple MPEG2 EOS code
+ should be sent to the ESPARSER instead.
+ - Slight enhancements to the way we do vififo offset<=>timestamp matching
+
+Changes since v1 [0]:
+ - use named interrupts in the bindings
+ - rewrite description in the bindings doc
+ - don't include the dts changes in the patch series
+ - fill the vb2 queues locks
+ - fill the video_device lock
+ - use helpers for wait_prepare and wait_finish vb2_ops
+ - remove unnecessary usleep in between esparser writes.
+ Extensive testing of every codec on GXBB/GXL didn't reveal
+ any fails without it, so just remove it.
+ - compile v4l2_compliance inside the git repo
+ - Check for plane number/plane size to pass the latest v4l2-compliance test
+ - Moved the single instance check (returning -EBUSY) to start/stop streaming
+ The check was previously in queue_setup but there was no great location to
+ clear it except for .close().
+ - Slight rework of the way CAPTURE frames are timestamped for better accuracy
+ - Implement PAR reporting via VIDIOC_CROPCAP
+
+[3] https://patchwork.kernel.org/cover/10669875/
+[2] https://lore.kernel.org/patchwork/cover/993093/
+[1] https://patchwork.kernel.org/cover/10595803/
+[0] https://patchwork.kernel.org/cover/10583391/
+
+Maxime Jourdan (4):
+  dt-bindings: media: add Amlogic Video Decoder Bindings
+  media: videodev2: add V4L2_FMT_FLAG_FIXED_RESOLUTION
+  media: meson: add v4l2 m2m video decoder driver
+  MAINTAINERS: Add meson video decoder
+
+ .../bindings/media/amlogic,vdec.txt           |   71 ++
+ .../media/uapi/v4l/vidioc-enum-fmt.rst        |    6 +
+ MAINTAINERS                                   |    8 +
+ drivers/media/platform/Kconfig                |   10 +
+ drivers/media/platform/meson/Makefile         |    1 +
+ drivers/media/platform/meson/vdec/Makefile    |    8 +
+ .../media/platform/meson/vdec/codec_mpeg12.c  |  209 ++++
+ .../media/platform/meson/vdec/codec_mpeg12.h  |   14 +
+ drivers/media/platform/meson/vdec/dos_regs.h  |   98 ++
+ drivers/media/platform/meson/vdec/esparser.c  |  323 +++++
+ drivers/media/platform/meson/vdec/esparser.h  |   32 +
+ drivers/media/platform/meson/vdec/vdec.c      | 1071 +++++++++++++++++
+ drivers/media/platform/meson/vdec/vdec.h      |  265 ++++
+ drivers/media/platform/meson/vdec/vdec_1.c    |  229 ++++
+ drivers/media/platform/meson/vdec/vdec_1.h    |   14 +
+ .../media/platform/meson/vdec/vdec_ctrls.c    |   51 +
+ .../media/platform/meson/vdec/vdec_ctrls.h    |   14 +
+ .../media/platform/meson/vdec/vdec_helpers.c  |  441 +++++++
+ .../media/platform/meson/vdec/vdec_helpers.h  |   80 ++
+ .../media/platform/meson/vdec/vdec_platform.c |  107 ++
+ .../media/platform/meson/vdec/vdec_platform.h |   30 +
+ include/uapi/linux/videodev2.h                |    5 +-
+ 22 files changed, 3085 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/amlogic,vdec.txt
+ create mode 100644 drivers/media/platform/meson/vdec/Makefile
+ create mode 100644 drivers/media/platform/meson/vdec/codec_mpeg12.c
+ create mode 100644 drivers/media/platform/meson/vdec/codec_mpeg12.h
+ create mode 100644 drivers/media/platform/meson/vdec/dos_regs.h
+ create mode 100644 drivers/media/platform/meson/vdec/esparser.c
+ create mode 100644 drivers/media/platform/meson/vdec/esparser.h
+ create mode 100644 drivers/media/platform/meson/vdec/vdec.c
+ create mode 100644 drivers/media/platform/meson/vdec/vdec.h
+ create mode 100644 drivers/media/platform/meson/vdec/vdec_1.c
+ create mode 100644 drivers/media/platform/meson/vdec/vdec_1.h
+ create mode 100644 drivers/media/platform/meson/vdec/vdec_ctrls.c
+ create mode 100644 drivers/media/platform/meson/vdec/vdec_ctrls.h
+ create mode 100644 drivers/media/platform/meson/vdec/vdec_helpers.c
+ create mode 100644 drivers/media/platform/meson/vdec/vdec_helpers.h
+ create mode 100644 drivers/media/platform/meson/vdec/vdec_platform.c
+ create mode 100644 drivers/media/platform/meson/vdec/vdec_platform.h
+
+
+root@libretech-cc:~# v4l2-compliance -d /dev/video0 
+v4l2-compliance SHA: 40fd5611c5176137c80616f6ee93b36f0d88f2d5, 64 bits
+
+Compliance test for meson-vdec device /dev/video0:
+
+Driver Info:
+        Driver name      : meson-vdec
+        Card type        : Amlogic Video Decoder
+        Bus info         : platform:meson-vdec
+        Driver version   : 5.1.0
+        Capabilities     : 0x84204000
+                Video Memory-to-Memory Multiplanar
+                Streaming
+                Extended Pix Format
+                Device Capabilities
+        Device Caps      : 0x04204000
+                Video Memory-to-Memory Multiplanar
+                Streaming
+                Extended Pix Format
+        Detected Stateful Decoder
+
+Required ioctls:
+        test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+        test second /dev/video0 open: OK
+        test VIDIOC_QUERYCAP: OK
+        test VIDIOC_G/S_PRIORITY: OK
+        test for unlimited opens: OK
+
+Debug ioctls:
+        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+        test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+        test VIDIOC_ENUMAUDIO: OK (Not Supported)
+        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDIO: OK (Not Supported)
+        Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+        Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+        test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+        test VIDIOC_QUERYCTRL: OK
+        test VIDIOC_G/S_CTRL: OK
+        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+        Standard Controls: 2 Private Controls: 0
+
+Format ioctls:
+        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+        test VIDIOC_G/S_PARM: OK (Not Supported)
+        test VIDIOC_G_FBUF: OK (Not Supported)
+        test VIDIOC_G_FMT: OK
+        test VIDIOC_TRY_FMT: OK
+        test VIDIOC_S_FMT: OK
+        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+        test Cropping: OK (Not Supported)
+        test Composing: OK (Not Supported)
+        test Scaling: OK
+
+Codec ioctls:
+        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+        test VIDIOC_(TRY_)DECODER_CMD: OK
+
+Buffer ioctls:
+        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+        test VIDIOC_EXPBUF: OK
+        test Requests: OK (Not Supported)
+
+Total for meson-vdec device /dev/video0: 44, Succeeded: 44, Failed: 0, Warnings: 0
+
+
+-- 
+2.21.0
 
