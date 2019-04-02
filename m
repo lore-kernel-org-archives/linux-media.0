@@ -1,75 +1,51 @@
-Return-Path: <SRS0=Gl4L=SD=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=Nq74=SE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD0BCC43381
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 23:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00A41C43381
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 00:40:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 65C782086C
-	for <linux-media@archiver.kernel.org>; Mon,  1 Apr 2019 23:39:03 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="rbqk0BkB"
+	by mail.kernel.org (Postfix) with ESMTP id BC2592147A
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 00:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1554165628;
+	bh=gjrqwsSMSZ1G7i7IDzZO0G+MY6EbcAJJyU5e1ri2sGE=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=jCE/UzMhwYOY8SBtKVXduPEJ1qURSmDKH1MI7aYL10ZZnUBZz+HI8BtH80eyf+6eG
+	 U3xfYQ+/CigepmFNvo5BKwHmq6o7uAO99Vg0Fb8p6y3Yhb1HOK0J3xo4i8spiXmwGL
+	 Qk4cvxTi0INAE5wzA+hdTsK+f8/ngDU1mCT+Lp2I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726083AbfDAXjC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Apr 2019 19:39:02 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:33001 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbfDAXjC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Apr 2019 19:39:02 -0400
-Received: by mail-qk1-f195.google.com with SMTP id k189so6835652qkc.0
-        for <linux-media@vger.kernel.org>; Mon, 01 Apr 2019 16:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=v6zbJdq9hrbzyJodECIrnH5GKeIU8hld7O34fPcjsBY=;
-        b=rbqk0BkBVRIQf1XO4lCSM0iazDKulWPf6q47W3F4tQWat25T2AEvl4/JLaDCZsh2jD
-         dgnn88gXEPTG93jzWl/3C+ALhvL7LWrbGf+GmPFaETbkYp0vECRmTh66SodEzGwGKT9B
-         7y8KlfUed1UAlW+W6GvGNFgy4ovBXVm7fSNPX4p1Wc0bFRg3mTwpqjXZop0n1+pQ7MmS
-         9n7/WzUaGVE4eisljDvdzw+MUaxIjcNQJ6xODnZuqxMoziS65nUijvkym/ddSTdYej6Y
-         /+LLFsBOqtzeMd15G/lHmw4QdMl4wTFfripcxGdW2oUkIg2ZRrWIh9BTgcaK+y5Rl0++
-         PuJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=v6zbJdq9hrbzyJodECIrnH5GKeIU8hld7O34fPcjsBY=;
-        b=e9QEKG0ys6Gef1/D3XYwRdh9w2dGhuvUuJ4oAzzxoe8jN55LLU5caf0LglTKs0UDwB
-         BVKVsRWDFQm2CNj8GpQwPNlC18kkCDeJURTaxHPCKbNUldOkl4uoeRo7lOcdZFjKCF1x
-         W425l+YFlSprBi1wRwGwj1oKsCKz3T1a2OD/mrjkD5GVeq1U4wCHoSmYHoHMfERZ4ko1
-         E1A5ZhdelHZBc0R3NC1SZKhTuiuJGtQsb3KAURLX4lAX4W4IJfAW03zykcF79/kAA5Gm
-         uarZOdfbmXK5N52TZb0qP5hJcMqLdcKAOxxNKXQRqXVjgxQ6ZRvFFzsXekJNYctC28WY
-         ra2g==
-X-Gm-Message-State: APjAAAWCTUKjZ8nwBDjEjzbREY45HlJOR38tG8+e4mRJz9ENnfwkD2NV
-        +IjfDi18DDGoJkFrobpXIgrWjA==
-X-Google-Smtp-Source: APXvYqx0Haqi2YQcD5QgpqVy7ZMRhdJkjil8UtMnoZeP+FrOB0u7h15azsZCQyvPlA1gkQpPiWtepQ==
-X-Received: by 2002:a37:650c:: with SMTP id z12mr53277246qkb.115.1554161941009;
-        Mon, 01 Apr 2019 16:39:01 -0700 (PDT)
-Received: from skullcanyon ([192.222.193.21])
-        by smtp.gmail.com with ESMTPSA id t69sm5823548qke.38.2019.04.01.16.38.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 01 Apr 2019 16:38:59 -0700 (PDT)
-Message-ID: <618d9c90d9211da1be241b59814f59081895b91b.camel@ndufresne.ca>
-Subject: Re: [PATCH v3 2/2] media: Introduce helpers to fill pixel format
- structs
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Cc:     linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>,
-        kernel@collabora.com
-Date:   Mon, 01 Apr 2019 19:38:58 -0400
-In-Reply-To: <daaf7ccf62096cdee025881a385548dc90a892c4.camel@collabora.com>
-References: <20190328180704.24761-1-ezequiel@collabora.com>
-         <20190328180704.24761-3-ezequiel@collabora.com>
-         <20190328200513.y33clvcj7tpmwbqb@uno.localdomain>
-         <daaf7ccf62096cdee025881a385548dc90a892c4.camel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        id S1726635AbfDBAk2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Apr 2019 20:40:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33728 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725961AbfDBAk2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 1 Apr 2019 20:40:28 -0400
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3B23D20883;
+        Tue,  2 Apr 2019 00:40:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1554165626;
+        bh=gjrqwsSMSZ1G7i7IDzZO0G+MY6EbcAJJyU5e1ri2sGE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dBH3ei1JPthvsISyM9TV9S9vZAjPIz4VaFGzNaHXR1yqzlktGq/PWvJ7zVA3iOHSM
+         eqde/MBMrKIKChhYi8mpE7DaOFgK1C1tHLGNXVCxLmcMcJMea+wemos33IOCb8neIt
+         lPzbkaOq8Hzj488PLnQlMTUxNRU2PRM+bzxXIkHo=
+From:   Shuah Khan <shuah@kernel.org>
+To:     mchehab@kernel.org, perex@perex.cz, tiwai@suse.com,
+        hverkuil@xs4all.nl
+Cc:     Shuah Khan <shuah@kernel.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH v15 0/6] Media Device Allocator API
+Date:   Mon,  1 Apr 2019 18:40:18 -0600
+Message-Id: <cover.1554155701.git.shuah@kernel.org>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -77,368 +53,134 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le lundi 01 avril 2019 à 13:23 -0300, Ezequiel Garcia a écrit :
-> On Thu, 2019-03-28 at 21:05 +0100, Jacopo Mondi wrote:
-> > Hi Ezequiel,
-> >    this is very nice, thank you!
-> > 
-> 
-> Hi Jacopo,
-> 
-> > On Thu, Mar 28, 2019 at 03:07:04PM -0300, Ezequiel Garcia wrote:
-> > > Add two new API helpers, v4l2_fill_pixfmt and v4l2_fill_pixfmt_mp,
-> > > to be used by drivers to calculate plane sizes and bytes per lines.
-> > > 
-> > > Note that driver-specific padding and alignment are not
-> > > taken into account, and must be done by drivers using this API.
-> > > 
-> > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > > ---
-> > >  drivers/media/v4l2-core/v4l2-common.c | 164 ++++++++++++++++++++++++++
-> > >  include/media/v4l2-common.h           |  33 ++++++
-> > >  2 files changed, 197 insertions(+)
-> > > 
-> > > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-> > > index 663730f088cd..d869a2910435 100644
-> > > --- a/drivers/media/v4l2-core/v4l2-common.c
-> > > +++ b/drivers/media/v4l2-core/v4l2-common.c
-> > > @@ -445,3 +445,167 @@ int v4l2_s_parm_cap(struct video_device *vdev,
-> > >  	return ret;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(v4l2_s_parm_cap);
-> > > +
-> > > +const struct v4l2_format_info *v4l2_format_info(u32 format)
-> > > +{
-> > > +	static const struct v4l2_format_info formats[] = {
-> > > +		/* RGB formats */
-> > > +		{ .format = V4L2_PIX_FMT_BGR24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > 
-> > How would you feel using macros here, this would help sticking to
-> > 80-or-so columns, as otherwise this table is pretty wide.
-> > 
-> > I've sketched out something quick:
-> > 
-> > #define V4L2_FMT_INFO_BPP(p1_, p2_, p3_, p4_) { p1_, p2_, p3_, p4_ }
-> > #define V4L2_FMT_INFO(pf_, mpl_, cpl_, bpp_, hd_, vd_)			\
-> > 		{ 							\
-> > 		  .format       = V4L2_PIX_FMT_##pf_, 			\
-> > 		  .mem_planes   = mpl_,					\
-> > 		  .comp_planes  = cpl_,					\
-> > 		  .bpp          = bpp_, 				\
-> > 		  .hdiv         = hd_,					\
-> > 		  .vdiv         = vd_ 					\
-> > 		}
-> > 
-> > const struct v4l2_format_info *v4l2_format_info(u32 format)
-> > {
-> > 	static const struct v4l2_format_info formats[] = {
-> > 		/* RGB formats */
-> >        		V4L2_FMT_INFO(BGR24, 1, 1, V4L2_FMT_INFO_BPP(3, 0, 0, 0), 1, 1),
-> >                 ...
-> > }
-> > 
-> > Not sure you might like it or not.
-> > 
-> 
-> I'm not entirely sure this improves readability. Hans has
-> just sent a pull-request for this. But see below, my replies
-> to some of your questions.
-> 
-> > > +		{ .format = V4L2_PIX_FMT_RGB24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_HSV24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_BGR32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_XBGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_RGB32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_XRGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_HSV32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_ARGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_ABGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_GREY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +
-> > > +		/* YUV packed formats */
-> > > +		{ .format = V4L2_PIX_FMT_YUYV,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_YVYU,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_UYVY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_VYUY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +
-> > > +		/* YUV planar formats */
-> > > +		{ .format = V4L2_PIX_FMT_NV12,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_NV21,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_NV16,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_NV61,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_NV24,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_NV42,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +
-> > > +		{ .format = V4L2_PIX_FMT_YUV410,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-> > > +		{ .format = V4L2_PIX_FMT_YVU410,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
-> > > +		{ .format = V4L2_PIX_FMT_YUV411P, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_YUV420,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_YVU420,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_YUV422P, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +
-> > > +		/* YUV planar formats, non contiguous variant */
-> > > +		{ .format = V4L2_PIX_FMT_YUV420M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_YVU420M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_YUV422M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_YVU422M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_YUV444M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_YVU444M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
-> > > +
-> > > +		{ .format = V4L2_PIX_FMT_NV12M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_NV21M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> > > +		{ .format = V4L2_PIX_FMT_NV16M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +		{ .format = V4L2_PIX_FMT_NV61M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
-> > > +	};
-> > 
-> > Can I ask why you define the array inside this function and not as a static
-> > array with file scope? Is this something trivial I am missing? It
-> > will be placed in the same data segment anyhow, is this to reduce the
-> > probability of an unlikely name clash within the file? Just curious..
-> > 
-> 
-> I followed drm-fourcc.c style. I like this pattern because it keeps the
-> data and the function together, and because it forces all users to get
-> the pixel format via v4l2_format_info().
-> 
-> > > +	unsigned int i;
-> > > +
-> > > +	for (i = 0; i < ARRAY_SIZE(formats); ++i)
-> > > +		if (formats[i].format == format)
-> > > +			return &formats[i];
-> > 
-> > Nit: empty line maybe
-> > 
-> > > +	return NULL;
-> > > +}
-> > > +EXPORT_SYMBOL(v4l2_format_info);
-> > > +
-> > > +static inline unsigned int v4l2_format_block_width(const struct v4l2_format_info *info, int plane)
-> > > +{
-> > > +	if (!info->block_w[plane])
-> > > +		return 1;
-> > 
-> > Nit: empty line, or just
-> >         return info->block_w[plane] ? info->block_w[plane] : 1;
-> > 
-> > > +	return info->block_w[plane];
-> > > +}
-> > > +
-> > > +static inline unsigned int v4l2_format_block_height(const struct v4l2_format_info *info, int plane)
-> > 
-> > You don't like 80 columns that much, right :p ?
-> > 
-> 
-> Guess I'm not a fan :-)
-> 
-> > > +{
-> > > +	if (!info->block_h[plane])
-> > > +		return 1;
-> > 
-> > Same here
-> > 
-> > > +	return info->block_h[plane];
-> > > +}
-> > > +
-> > > +int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
-> > > +			 int pixelformat, int width, int height)
-> > 
-> > Bad alignment to open parenthesis
-> > 
-> > > +{
-> > > +	const struct v4l2_format_info *info;
-> > > +	struct v4l2_plane_pix_format *plane;
-> > > +	int i;
-> > 
-> > unsigned int i; ?
-> > 
-> > > +
-> > > +	info = v4l2_format_info(pixelformat);
-> > > +	if (!info)
-> > > +		return -EINVAL;
-> > > +
-> > > +	pixfmt->width = width;
-> > > +	pixfmt->height = height;
-> > > +	pixfmt->pixelformat = pixelformat;
-> > > +	pixfmt->num_planes = info->mem_planes;
-> > > +
-> > > +	if (info->mem_planes == 1) {
-> > > +		plane = &pixfmt->plane_fmt[0];
-> > > +		plane->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
-> > 
-> > 80 cols :'(
-> > 
-> > > +		plane->sizeimage = 0;
-> > > +
-> > > +		for (i = 0; i < info->comp_planes; i++) {
-> > > +			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-> > > +			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
-> > > +			unsigned int aligned_width;
-> > > +			unsigned int aligned_height;
-> > > +
-> > > +			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
-> > > +			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
-> > > +
-> > > +			plane->sizeimage += info->bpp[i] *
-> > > +				DIV_ROUND_UP(aligned_width, hdiv) *
-> > > +				DIV_ROUND_UP(aligned_height, vdiv);
-> > > +		}
-> > 
-> > I was initially puzzled by some of your definitions, say NV12, where
-> > you mark the hdiv factor for the second plane to 2, while it is
-> > actually only vertically subsampled. But now I see what you've done for NV12
-> > and this works for all the other formats I have verified (NV12, NV16, YUYV
-> > packed, and YVV4xx). Nice :)
-> > 
-> 
-> NV12 is 2x2 subsampled, that is why the format is:
-> 
-> { .format = V4L2_PIX_FMT_NV12,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
-> 
-> It has two planes: one luma plane and one plane with the
-> two chroma components interleaved (hence bytes-per-pixel being 2).
-> 
-> The chroma components are subsampled in 2x2, and that is why hdiv and vdiv is 2.
-> 
-> > Nit: you can save the below else branch indentation if you return
-> > here.
-> > 
-> > > +	} else {
-> > > +		for (i = 0; i < info->comp_planes; i++) {
-> > > +			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-> > > +			unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
-> > > +			unsigned int aligned_width;
-> > > +			unsigned int aligned_height;
-> > > +
-> > > +			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
-> > > +			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
-> > > +
-> > > +			plane = &pixfmt->plane_fmt[i];
-> > > +			plane->bytesperline =
-> > > +				info->bpp[i] * DIV_ROUND_UP(aligned_width, hdiv);
-> > > +			plane->sizeimage =
-> > > +				plane->bytesperline * DIV_ROUND_UP(aligned_height, vdiv);
-> > > +		}
-> > > +	}
-> > 
-> > Empty line maybe?
-> > 
-> > > +	return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt_mp);
-> > > +
-> > > +int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, int pixelformat, int width, int height)
-> > > +{
-> > > +	const struct v4l2_format_info *info;
-> > > +	int i;
-> > > +
-> > > +	info = v4l2_format_info(pixelformat);
-> > > +	if (!info)
-> > > +		return -EINVAL;
-> > > +
-> > > +	/* Single planar API cannot be used for multi plane formats. */
-> > > +	if (info->mem_planes > 1)
-> > > +		return -EINVAL;
-> > > +
-> > > +	pixfmt->width = width;
-> > > +	pixfmt->height = height;
-> > > +	pixfmt->pixelformat = pixelformat;
-> > > +	pixfmt->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
-> > > +	pixfmt->sizeimage = 0;
-> > > +
-> > > +	for (i = 0; i < info->comp_planes; i++) {
-> > > +		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-> > > +		unsigned int vdiv = (i == 0) ? 1 : info->vdiv;
-> > > +		unsigned int aligned_width;
-> > > +		unsigned int aligned_height;
-> > > +
-> > > +		aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
-> > > +		aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
-> > > +
-> > > +		pixfmt->sizeimage += info->bpp[i] *
-> > > +			DIV_ROUND_UP(aligned_width, hdiv) *
-> > > +			DIV_ROUND_UP(aligned_height, vdiv);
-> > > +	}
-> > > +	return 0;
-> > > +}
-> > 
-> > Same comments as per the multi planar version.
-> > 
-> > > +EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt);
-> > > diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-> > > index 2b93cb281fa5..0a41bbecf3d3 100644
-> > > --- a/include/media/v4l2-common.h
-> > > +++ b/include/media/v4l2-common.h
-> > > @@ -392,4 +392,37 @@ int v4l2_s_parm_cap(struct video_device *vdev,
-> > >  	((u64)(a).numerator * (b).denominator OP	\
-> > >  	(u64)(b).numerator * (a).denominator)
-> > > 
-> > > +/* ------------------------------------------------------------------------- */
-> > > +
-> > > +/* Pixel format and FourCC helpers */
-> > > +
-> > > +/**
-> > > + * struct v4l2_format_info - information about a V4L2 format
-> > > + * @format: 4CC format identifier (V4L2_PIX_FMT_*)
-> > > + * @mem_planes: Number of memory planes, which includes the alpha plane (1 to 4).
-> > > + * @comp_planes: Number of component planes, which includes the alpha plane (1 to 4).
-> > 
-> > Is alpha channel present in other formats that are not packed RGB?
-> > Because if that's not the case, they are packed, and all the ones you
-> > have defined here have 1 memory and 1 component plane only.
-> > What formats would you expect to be multi planar and have an alpha channel?
-> > 
-> 
-> There's a format called AYUV https://www.fourcc.org/pixel-format/yuv-ayuv/.
-> 
-> It's not currently supported by the media subsystem, but our intention is to
-> try to get this API as generic as possible.
-> 
-> > > + * @bpp: Array of per-plane bytes per pixel
-> > > + * @hdiv: Horizontal chroma subsampling factor
-> > > + * @vdiv: Vertical chroma subsampling factor
-> > > + * @block_w: Per-plane macroblock pixel width (optional)
-> > > + * @block_h: Per-plane macroblock pixel height (optional)
-> > > + */
-> > > +struct v4l2_format_info {
-> > > +	u32 format;
-> > > +	u8 mem_planes;
-> > > +	u8 comp_planes;
-> > > +	u8 bpp[4];
-> > > +	u8 hdiv;
-> > > +	u8 vdiv;
-> > > +	u8 block_w[4];
-> > > +	u8 block_h[4];
-> > 
-> > I might have missed how a user of these fill functions is supposed to set
-> > block_w and block_h. If these are alignment requirements that might be
-> > platform dependent, shouldn't they come as parameters to v4l2_fill_pixfmt()
-> > and v4l2_fill_pixfmt_mp()? Or assume drivers already provide aligned sizes
-> > maybe...
-> > 
-> 
-> These will need a contributor to introduce a pixel format. They are meant
-> for tiled pixel formats. I left the introduction of them to the developers
-> of the respective drivers.
+Media Device Allocator API to allows multiple drivers share a media device.
+This API solves a very common use-case for media devices where one physical
+device (an USB stick) provides both audio and video. When such media device
+exposes a standard USB Audio class, a proprietary Video class, two or more
+independent drivers will share a single physical USB bridge. In such cases,
+it is necessary to coordinate access to the shared resource.
 
-I suspect we already have a format, see:
+Using this API, drivers can allocate a media device with the shared struct
+device as the key. Once the media device is allocated by a driver, other
+drivers can get a reference to it. The media device is released when all
+the references are released.
 
-https://linuxtv.org/downloads/v4l-dvb-apis/uapi/v4l/pixfmt-nv12mt.html
-https://linuxtv.org/downloads/v4l-dvb-apis/uapi/v4l/pixfmt-nv12m.html
-(the 16x16 variant)
+The primary focus for testing The patch series is making sure media
+device is released when both drivers release the media device with
+a series of unbind/binds on both drivers.
 
-They were respectively added for Exynos 4 and Exynos 5 support. So for
-the second, I suspsect block_w/h is 16. But for NV12MT I'm not very
-clear if it would be block_w of 64 (the actual tile width) or 128 which
-is the required width alignment.
+- both au0828 and snd-usb-aduio as built-in
+- both au0828 and snd-usb-aduio as modules
+- au0828 as module and snd-usb-aduio as built-in
+- au0828 as built-in and snd-usb-aduio as module
 
-> 
-> 
-> > Thank you, sorry for the many questions.
-> > 
-> 
-> No problem.
-> 
-> Thanks!
-> Eze
-> 
+Test results can be found at:
+
+https://docs.google.com/document/d/1RMF8Rwj7xHJEoOx6_K2f-REgZJ63BMeAVEf-CV-0HsM/edit?usp=sharing
+
+Changes since v14:
+- Fixed typos and Copyright date.
+- Made VBI shareable with audio and video.
+- Tested with Hans's patch to to fix second VBi stream stepping
+  on active VBI stream. The patch didn't fix the problem.
+
+  1. Start qv4l2 -V /dev/vbi0
+    Start capture - Streaming active
+
+  2. Start qv4l2 -V /dev/vbi0
+   Start capture - Streaming active
+   Streaming won't start and the first stream stops.
+
+There is still a problem in au0828. I am sending the patch series with
+audio, video, and VBI shareable with this known issue.
+
+Changes since v13:
+- Minor changes to variable names and other minor changes to copyright
+  and typos suggested by Hans Verkuil.
+
+Changes since v12:
+- Patch 1: Fixed prototype warns from media_dev_allocator.c. Removed
+  dependency on find_module() by adding struct module to input args.
+  Still need module name to pass into media_device API.
+- Patch 2 & 4: Update media dev allocator api calls to pass in struct module
+  pointer.
+- No changes to Patches 3 & 5.
+- Added patch 6 with a test. It can go in separately.
+
+Changes since v11:
+- Patch 1: Add CONFIG_MODULES dependency in media_dev_allocator files.
+  to fix compile errors when CONFIG_MODULES is disabled.
+- Patch 2, 3: No changes.
+- Patch 4: Fix sparse error reported by Dan Carpenter.
+- Patch 5: Fix warns found by Hans Verkuil.
+- v11 was tested on 5.0-rc7 and addresses comments on v10 series from
+  Hans Verkuil. Fixed problems found in resource sharing logic in au0828
+  adding a patch 5 to this series. The test plan used for testing resource
+  sharing could serve as a regression test plan and the test results can be
+  found at:
+- v10 was tested on 5.0-rc3 and addresses comments on v9 series from
+  Hans Verkuil.
+
+Changes since v10:
+- Patch 1: Fixed SPDX tag and removed redundant IS_ENABLED(CONFIG_USB)
+           around media_device_usb_allocate() - Sakari Ailus's review
+           comment.
+- Patch 2 and 3: No changes
+- Patch 4: Fixed SPDX tag - Sakari Ailus's review comment.
+- Carried Reviewed-by tag from Takashi Iwai for the sound from v9.
+- Patch 5: This is a new patch added to fix resource sharing
+           inconsistencies and problem found during testing using Han's
+           tests.
+
+Changes since v9:
+- Patch 1: Fix mutex assert warning from find_module() calls. This
+  code was written before the change to find_module() that requires
+  callers to hold module_mutex. I missed this during my testing on
+  4.20-rc6. Hans Verkuil reported the problem.
+- Patch 4: sound/usb: Initializes all the entities it can before
+  registering the device based on comments from Hans Verkuil
+- Carried Reviewed-by tag from Takashi Iwai for the sound from v9.
+- No changes to Patches 2 and 3.
+
+References:
+https://lkml.org/lkml/2018/11/2/169
+https://www.mail-archive.com/linux-media@vger.kernel.org/msg105854.html
+
+Shuah Khan (6):
+  media: Media Device Allocator API
+  media: change au0828 to use Media Device Allocator API
+  media: media.h: Enable ALSA MEDIA_INTF_T* interface types
+  sound/usb: Use Media Controller API to share media resources
+  au0828: fix enable and disable source audio and video inconsistencies
+  selftests: media_dev_allocator api test
+
+ Documentation/media/kapi/mc-core.rst          |  41 +++
+ drivers/media/Makefile                        |   6 +
+ drivers/media/media-dev-allocator.c           | 135 ++++++++
+ drivers/media/usb/au0828/Kconfig              |   2 +
+ drivers/media/usb/au0828/au0828-core.c        | 196 ++++++++---
+ drivers/media/usb/au0828/au0828.h             |   6 +-
+ include/media/media-dev-allocator.h           |  63 ++++
+ include/uapi/linux/media.h                    |  25 +-
+ sound/usb/Kconfig                             |   4 +
+ sound/usb/Makefile                            |   2 +
+ sound/usb/card.c                              |  14 +
+ sound/usb/card.h                              |   3 +
+ sound/usb/media.c                             | 327 ++++++++++++++++++
+ sound/usb/media.h                             |  74 ++++
+ sound/usb/mixer.h                             |   3 +
+ sound/usb/pcm.c                               |  29 +-
+ sound/usb/quirks-table.h                      |   1 +
+ sound/usb/stream.c                            |   2 +
+ sound/usb/usbaudio.h                          |   6 +
+ .../media_tests/media_dev_allocator.sh        |  85 +++++
+ 20 files changed, 963 insertions(+), 61 deletions(-)
+ create mode 100644 drivers/media/media-dev-allocator.c
+ create mode 100644 include/media/media-dev-allocator.h
+ create mode 100644 sound/usb/media.c
+ create mode 100644 sound/usb/media.h
+ create mode 100755 tools/testing/selftests/media_tests/media_dev_allocator.sh
+
+-- 
+2.17.1
 
