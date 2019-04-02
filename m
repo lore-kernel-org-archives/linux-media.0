@@ -2,53 +2,55 @@ Return-Path: <SRS0=Nq74=SE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F697C4360F
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7121BC4360F
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:39:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4E83520882
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:36:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3975920645
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:39:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554215792;
-	bh=G/8NkaYBrVVeJ+mlS7dm9/P23F7xNFoAt0Dg2jV54GE=;
-	h=Subject:To:References:Cc:From:Date:In-Reply-To:List-ID:From;
-	b=tRRAOtgUFdQTAcc3FvIAJ8CLsUT25URWiv5sTOUFSMoMbZD5xUa48uTRWAj5k+fRH
-	 cODifEnudNjW7jNvgofslJoluvnSPlYHy1Tmqa8RS2OeWXdEHOZvsqYlyGbziOMiTN
-	 Wji5eUVmKB8kzNqE7bBO64/HlwYbiDgd8aG+RnjA=
+	s=default; t=1554215941;
+	bh=u38hid6hXpdJ0hs9XdoK59gdN1drfdwff6ScxKdFEfI=;
+	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
+	b=AIGNcrGR2d+sHDI9Wd4i2cSt8HOzyG2NjRH6SnKvgSTLu51lj5ql5SsCUCG3QOA4N
+	 z1y0ombNhezW0pED/wRH5mmkwM7Yig7atEYk1P4NC4GQoJB6+BkFn4MXolkJQ8VU1M
+	 u0ZOF5CQVMC+EFNw8yhwoPPVQdXhoug5DjhAWwhs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729549AbfDBOgb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Apr 2019 10:36:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43382 "EHLO mail.kernel.org"
+        id S1732064AbfDBOi7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Apr 2019 10:38:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44290 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730895AbfDBOgb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Apr 2019 10:36:31 -0400
+        id S1731973AbfDBOi6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 2 Apr 2019 10:38:58 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B0F4D20857;
-        Tue,  2 Apr 2019 14:36:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E18520857;
+        Tue,  2 Apr 2019 14:38:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1554215790;
-        bh=G/8NkaYBrVVeJ+mlS7dm9/P23F7xNFoAt0Dg2jV54GE=;
-        h=Subject:To:References:Cc:From:Date:In-Reply-To:From;
-        b=sKhavb/KzO7NB7Oxsy953AoWaE/5JI8PTBjeo1iYU+LwvOe5imEjxd6FDE2wrZYoC
-         DSTbs5HwXZ7EgUlDUbjge8dMOxXb+S0fUBY7yr3y13Toe1KGCFrJ/ipvnO4nqSAxhV
-         K8mZ3Ht4hwEj405hxkoj8AOtXEXGZOiyrGXE9me8=
-Subject: Re: [PATCH v2] au0828: stop video streaming only when last user stops
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <4f9f2e84-f053-b84d-b3c7-6abe22bddf5d@xs4all.nl>
-Cc:     shuah <shuah@kernel.org>
+        s=default; t=1554215937;
+        bh=u38hid6hXpdJ0hs9XdoK59gdN1drfdwff6ScxKdFEfI=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=IyGOHVUwiY83LrSlMMhXARMZQRJ+vMYMrCLaQ9N3aEUB/A7uKmB8SP+E8CYWR/NOW
+         UviZU8mJ99a4xvhqrcjcu2ur3pkvP4XTsxnTY8TdMvoFrh757306yNN2JGytMqXt9e
+         6D4KcpQhxCH5swVr1ujVxRoMUMaopOthdIngSqg8=
+Subject: Re: [PATCH v15 0/6] Media Device Allocator API
+To:     Hans Verkuil <hverkuil@xs4all.nl>, mchehab@kernel.org,
+        perex@perex.cz, tiwai@suse.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, shuah <shuah@kernel.org>
+References: <cover.1554155701.git.shuah@kernel.org>
+ <fb0b46d3-a8a5-c5b5-7f3e-08ddfd27235b@xs4all.nl>
 From:   shuah <shuah@kernel.org>
-Message-ID: <1770b1da-0290-7946-9fd1-5535ca8a10cb@kernel.org>
-Date:   Tue, 2 Apr 2019 08:36:16 -0600
+Message-ID: <829089d0-8cef-bce5-6717-9a39522f7be1@kernel.org>
+Date:   Tue, 2 Apr 2019 08:38:56 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.5.1
 MIME-Version: 1.0
-In-Reply-To: <4f9f2e84-f053-b84d-b3c7-6abe22bddf5d@xs4all.nl>
+In-Reply-To: <fb0b46d3-a8a5-c5b5-7f3e-08ddfd27235b@xs4all.nl>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,28 +59,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/2/19 1:24 AM, Hans Verkuil wrote:
-> If the application was streaming from both videoX and vbiX, and streaming
-> from videoX was stopped, then the vbi streaming also stopped.
+On 4/2/19 1:38 AM, Hans Verkuil wrote:
+> On 4/2/19 2:40 AM, Shuah Khan wrote:
+>> Media Device Allocator API to allows multiple drivers share a media device.
+>> This API solves a very common use-case for media devices where one physical
+>> device (an USB stick) provides both audio and video. When such media device
+>> exposes a standard USB Audio class, a proprietary Video class, two or more
+>> independent drivers will share a single physical USB bridge. In such cases,
+>> it is necessary to coordinate access to the shared resource.
+>>
+>> Using this API, drivers can allocate a media device with the shared struct
+>> device as the key. Once the media device is allocated by a driver, other
+>> drivers can get a reference to it. The media device is released when all
+>> the references are released.
+>>
+>> The primary focus for testing The patch series is making sure media
+>> device is released when both drivers release the media device with
+>> a series of unbind/binds on both drivers.
+>>
+>> - both au0828 and snd-usb-aduio as built-in
+>> - both au0828 and snd-usb-aduio as modules
+>> - au0828 as module and snd-usb-aduio as built-in
+>> - au0828 as built-in and snd-usb-aduio as module
+>>
+>> Test results can be found at:
+>>
+>> https://docs.google.com/document/d/1RMF8Rwj7xHJEoOx6_K2f-REgZJ63BMeAVEf-CV-0HsM/edit?usp=sharing
 > 
-> The cause being that stop_streaming for video stopped the subdevs as well,
-> instead of only doing that if dev->streaming_users reached 0.
+> Phew, after posting v2 of my patch "au0828: stop video streaming only when last
+> user stops" everything now works as it should, including the issue with two VBI
+> streams you found.
 > 
-> au0828_stop_vbi_streaming was also wrong since it didn't stop the subdevs
-> at all when dev->streaming_users reached 0.
-> 
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> ---
-> Change since v1: v4l2_device_call_all(&dev->v4l2_dev, 0, video, s_stream, 1)
-> was done for video only, not for vbi. This is obviously wrong when starting
-> vbi first, but also caused weird behavior since attempting to start a second
-> vbi capture would stop the first.
-> ---
 
-Looks good. Attempting to start the second VBI stream capture doesn't
-stop the active VBI stream.
+Awesome. Thanks for taking care of this. Looks good. I tested the
+patch and sent Tested-by for it.
 
-Tested-by: Shuah Khan <shuah@kernel.org>
+> Should I take the selftest patch or will you take that yourself?
+
+Please take this through your pull request. Bundling the test with the
+feature will help promote use of this test :)
+
+Please pick up the null pointer dereference fix in bind path when unbind
+happens while bind is in progress.
+
+> 
+> Let me know so I can make the pull request for this. It's been a long journey
+> since the first post on April 9th, 2014: "[RFC PATCH 0/2] managed token devres
+> interfaces".
+>
+
+Please send the pull request.
+
+> Almost exactly five years of work!
+> 
+Amazing. We ended up with a far better solution than the the first patch
+series ! Thanks to everybody that helped me with reviews and testing.
 
 thanks,
 -- Shuah
+
