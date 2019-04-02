@@ -2,131 +2,108 @@ Return-Path: <SRS0=Nq74=SE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D625EC4360F
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:51:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E84CC10F00
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 18:24:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B133220883
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:51:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E19EC20856
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 18:24:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732205AbfDBOvT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Apr 2019 10:51:19 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:59567 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726458AbfDBOvT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Apr 2019 10:51:19 -0400
-X-Originating-IP: 90.88.30.125
-Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 962731BF20C;
-        Tue,  2 Apr 2019 14:51:14 +0000 (UTC)
-Date:   Tue, 2 Apr 2019 16:51:14 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [RFC PATCH 01/20] drm: Remove users of drm_format_num_planes
-Message-ID: <20190402145114.bpt5atxxooufgzz5@flea>
-References: <cover.92acdec88ee4c280cb74e08ea22f0075e5fa055c.1553032382.git-series.maxime.ripard@bootlin.com>
- <fecde1c7b65caa0e876a2f01769289a883014712.1553032382.git-series.maxime.ripard@bootlin.com>
- <CACvgo51WMD5hsyLB5QTriGNwcPmeN4TDjscJV11M3PXFncPHeQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lgdfh3o7stmf4lnx"
-Content-Disposition: inline
-In-Reply-To: <CACvgo51WMD5hsyLB5QTriGNwcPmeN4TDjscJV11M3PXFncPHeQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+        id S1731316AbfDBSY5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Apr 2019 14:24:57 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58118 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731249AbfDBSYv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 2 Apr 2019 14:24:51 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x32IK2GD016696
+        for <linux-media@vger.kernel.org>; Tue, 2 Apr 2019 14:24:50 -0400
+Received: from e17.ny.us.ibm.com (e17.ny.us.ibm.com [129.33.205.207])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2rmbb0dkvs-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-media@vger.kernel.org>; Tue, 02 Apr 2019 14:24:49 -0400
+Received: from localhost
+        by e17.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-media@vger.kernel.org> from <eajames@linux.ibm.com>;
+        Tue, 2 Apr 2019 19:24:48 +0100
+Received: from b01cxnp23033.gho.pok.ibm.com (9.57.198.28)
+        by e17.ny.us.ibm.com (146.89.104.204) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 2 Apr 2019 19:24:44 +0100
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x32IOh3Z10944536
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 2 Apr 2019 18:24:44 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AC459112063;
+        Tue,  2 Apr 2019 18:24:43 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E1958112061;
+        Tue,  2 Apr 2019 18:24:42 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.3.116.186])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue,  2 Apr 2019 18:24:42 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        joel@jms.id.au, linux-clk@vger.kernel.org, sboyd@kernel.org,
+        mturquette@baylibre.com, devicetree@vger.kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org
+Subject: [PATCH 2/5] media: platform: Aspeed: Make reserved memory optional
+Date:   Tue,  2 Apr 2019 18:24:35 +0000
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1554229478-5621-1-git-send-email-eajames@linux.ibm.com>
+References: <1554229478-5621-1-git-send-email-eajames@linux.ibm.com>
+X-TM-AS-GCONF: 00
+x-cbid: 19040218-0040-0000-0000-000004DB8656
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00010862; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000284; SDB=6.01183363; UDB=6.00619524; IPR=6.00964111;
+ MB=3.00026264; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-02 18:24:48
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19040218-0041-0000-0000-000008E686E5
+Message-Id: <1554229478-5621-3-git-send-email-eajames@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-02_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=961 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1904020122
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Reserved memory doesn't need to be required; system memory would work
+fine.
 
---lgdfh3o7stmf4lnx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Eddie James <eajames@linux.ibm.com>
+---
+ drivers/media/platform/aspeed-video.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Hi Emil,
+diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
+index 55c55a6..8144fe3 100644
+--- a/drivers/media/platform/aspeed-video.c
++++ b/drivers/media/platform/aspeed-video.c
+@@ -1608,11 +1608,7 @@ static int aspeed_video_init(struct aspeed_video *video)
+ 		return PTR_ERR(video->vclk);
+ 	}
+ 
+-	rc = of_reserved_mem_device_init(dev);
+-	if (rc) {
+-		dev_err(dev, "Unable to reserve memory\n");
+-		return rc;
+-	}
++	of_reserved_mem_device_init(dev);
+ 
+ 	rc = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+ 	if (rc) {
+-- 
+1.8.3.1
 
-On Tue, Apr 02, 2019 at 10:43:31AM +0100, Emil Velikov wrote:
-> On Tue, 19 Mar 2019 at 21:57, Maxime Ripard <maxime.ripard@bootlin.com> wrote:
-> > drm_format_num_planes() is basically a lookup in the drm_format_info table
-> > plus an access to the num_planes field of the appropriate entry.
-> >
-> > Most drivers are using this function while having access to the entry
-> > already, which means that we will perform an unnecessary lookup. Removing
-> > the call to drm_format_num_planes is therefore more efficient.
-> >
-> > Some drivers will not have access to that entry in the function, but in
-> > this case the overhead is minimal (we just have to call drm_format_info()
-> > to perform the lookup) and we can even avoid multiple, inefficient lookups
-> > in some places that need multiple fields from the drm_format_info
-> > structure.
-> >
->
-> I'm not fan of the duplicated loop-ups either.
->
-> > -int drm_format_num_planes(uint32_t format)
-> > -{
-> > -       const struct drm_format_info *info;
-> > -
-> > -       info = drm_format_info(format);
-> > -       return info ? info->num_planes : 1;
-> > -}
-> > -EXPORT_SYMBOL(drm_format_num_planes);
-> > -
->
-> The existing users are not updated to cater for the num_planes != 0
-> case... Which seems non-existent scenario since all the current format
-> descriptions have 1+ planes.
-> Should we add a test (alike the ones in 6/20) to ensure, that no entry
-> has 0 planes? Is it even worth it or I'm a bit too paranoid?
->
-> The above comments apply to 2/20.
-
-I'm not entirely sure what you mean. num_planes is returned as is in
-the drm_format_num_planes function and it doesn't check for the
-num_planes value itself.
-
-That being said, we could definitely add some more tests to check that
-we haven't falling into the situation you describe, since most of the
-drivers indeed don't check for that value themselves. But that seems
-pretty othorgonal to me?
-
-> With the name suggestions by Paul, patches 1 to 5 (incl.) are:
-> Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
-
-Thanks!
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---lgdfh3o7stmf4lnx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXKN24gAKCRDj7w1vZxhR
-xdcIAPwMegTv/UcHRA+TAB4ezclPNbm+1U/NJzXvnXyZ2shdqAEA7A05cNikgqEW
-zGKsikrWNgK28tqwL+rYgk+cLDOVKAA=
-=PIGw
------END PGP SIGNATURE-----
-
---lgdfh3o7stmf4lnx--
