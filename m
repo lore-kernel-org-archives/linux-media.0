@@ -2,559 +2,110 @@ Return-Path: <SRS0=Nq74=SE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3629C4360F
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 10:33:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0688C4360F
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 11:31:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 777882084C
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 10:33:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554201224;
-	bh=4SlOSe7Sk2HN9C1Jwnf4NILWZ/RsNV01Kv0SmrNqBbU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=oC/UFZiQEmZH2eT24vqEAYna7Sq4ayXTG5B+4F1xu6dmKSNOBMZuL3RhwbdTvEa/7
-	 DMvHzWjIXDgj7dEv9/3i7ea6mW7TBQeWeQCym612ZnS06aW8t9VrEeZ9zW9B5RPmGC
-	 eVCgyYHgoQQm+zxqilBM6E1i5dsiGhVWirF+96D8=
+	by mail.kernel.org (Postfix) with ESMTP id A580220856
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 11:31:43 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bzA6k4K/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729940AbfDBKdi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Apr 2019 06:33:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35704 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730342AbfDBKca (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Apr 2019 06:32:30 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2FD232084C;
-        Tue,  2 Apr 2019 10:32:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1554201148;
-        bh=4SlOSe7Sk2HN9C1Jwnf4NILWZ/RsNV01Kv0SmrNqBbU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IFGoh8ChF9VrRATbA/R0TWXGpj0tRLll7lLRpnkIauRqpjD567uKjbaHZV2+BeJQe
-         5oxKZ+1iTFVOVIZ8yM7Qj1fkkXuoRbWawWj/mZhCGmX+e97iJ4cVq1O5D3DF/3OS6F
-         mx6dn7NtVEPuDDMwW55m7hieTfqVW5y9JOllQYXg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     devel@driverdev.osuosl.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net
-Subject: [PATCH 13/16] staging: media: zoran: add proper SPDX identifiers on files that did not have them.
-Date:   Tue,  2 Apr 2019 12:32:00 +0200
-Message-Id: <20190402103203.14959-14-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190402103203.14959-1-gregkh@linuxfoundation.org>
-References: <20190402103203.14959-1-gregkh@linuxfoundation.org>
+        id S1729893AbfDBLbn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Apr 2019 07:31:43 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:60032 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729821AbfDBLbm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Apr 2019 07:31:42 -0400
+Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 60A6F2F9;
+        Tue,  2 Apr 2019 13:31:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1554204700;
+        bh=3L/LtSaG/Els9QEGlu1MgdSpM69UYRLdGcRxhDekcUU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bzA6k4K/QmmlTSvCye460wuNKkU3bgJvW9ifP5JBmOR9TTZBxKXQXtc4ov1K3+2BD
+         VL4Ky1Dj99YZAM+zDkKZy6g72YtZ9vWs8cjKZOl7oD6aDEr3RALZMfUdWkDSidfKeg
+         yE+D1k0jj+Ccn5Zpcvb3j2TQ3HBWLOMsFAinHiks=
+Date:   Tue, 2 Apr 2019 14:31:29 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     dorodnic@gmail.com, linux-media@vger.kernel.org,
+        evgeni.raikhel@intel.com,
+        Sergey Dorodnicov <sergey.dorodnicov@intel.com>
+Subject: Re: [PATCH] media: Add missing "Auto" option to the power line
+ frequency control
+Message-ID: <20190402113129.GS4805@pendragon.ideasonboard.com>
+References: <1552842085-3439-1-git-send-email-sergey.dorodnicov@intel.com>
+ <1552842085-3439-2-git-send-email-sergey.dorodnicov@intel.com>
+ <20190402101316.4kli5vqxfkhru33r@valkosipuli.retiisi.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190402101316.4kli5vqxfkhru33r@valkosipuli.retiisi.org.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There were a few files for the zoran driver that did not have SPDX
-identifiers on them, so fix that up.  At the same time, remove the "free
-form" text that specified the license of the file, as that is impossible
-for any tool to properly parse.
+Hello,
 
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>
-Cc: linux-media@vger.kernel.org
-Cc: mjpeg-users@lists.sourceforge.net
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/staging/media/zoran/videocodec.h   | 17 +----------------
- drivers/staging/media/zoran/zoran.h        | 12 +-----------
- drivers/staging/media/zoran/zoran_card.c   | 12 +-----------
- drivers/staging/media/zoran/zoran_card.h   | 12 +-----------
- drivers/staging/media/zoran/zoran_device.c | 12 +-----------
- drivers/staging/media/zoran/zoran_device.h | 12 +-----------
- drivers/staging/media/zoran/zoran_driver.c | 13 +------------
- drivers/staging/media/zoran/zoran_procfs.c | 12 +-----------
- drivers/staging/media/zoran/zoran_procfs.h | 12 +-----------
- drivers/staging/media/zoran/zr36016.c      | 18 +-----------------
- drivers/staging/media/zoran/zr36016.h      | 18 +-----------------
- drivers/staging/media/zoran/zr36050.c      | 18 +-----------------
- drivers/staging/media/zoran/zr36050.h      | 18 +-----------------
- drivers/staging/media/zoran/zr36057.h      | 12 +-----------
- drivers/staging/media/zoran/zr36060.c      | 18 +-----------------
- drivers/staging/media/zoran/zr36060.h      | 18 +-----------------
- 16 files changed, 16 insertions(+), 218 deletions(-)
+On Tue, Apr 02, 2019 at 01:13:16PM +0300, Sakari Ailus wrote:
+> On Sun, Mar 17, 2019 at 01:01:25PM -0400, dorodnic@gmail.com wrote:
+> > From: Sergey Dorodnicov <sergey.dorodnicov@intel.com>
+> > 
+> > Section 4.2.2.3.6 of the USB Device Class Definition for Video Devices,
+> > specifies "Auto" as a valid value for the power line frequency control.
+> > This makes uvcvideo module consistent with control definition inside
+> > /drivers/media/v4l2-core/v4l2-ctrls.c:
+> > camera_power_line_frequency[] = {
+> > 	"Disabled",
+> > 	"50 Hz",
+> > 	"60 Hz",
+> > 	"Auto",
+> > 
+> > Signed-off-by: Sergey Dorodnicov <sergey.dorodnicov@intel.com>
+> > Signed-off-by: Evgeni Raikhel <evgeni.raikhel@intel.com>
+> > ---
+> >  drivers/media/usb/uvc/uvc_ctrl.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+> > index 14cff91..a85910a 100644
+> > --- a/drivers/media/usb/uvc/uvc_ctrl.c
+> > +++ b/drivers/media/usb/uvc/uvc_ctrl.c
+> > @@ -358,6 +358,7 @@ static const struct uvc_menu_info power_line_frequency_controls[] = {
+> >  	{ 0, "Disabled" },
+> >  	{ 1, "50 Hz" },
+> >  	{ 2, "60 Hz" },
+> > +	{ 3, "Auto" },
+> 
+> The auto option appears to have been added by UVC 1.5, so the menu entry
+> may only be available for such devices.
 
-diff --git a/drivers/staging/media/zoran/videocodec.h b/drivers/staging/media/zoran/videocodec.h
-index 8ed5a0f7ac01..4946791fce0d 100644
---- a/drivers/staging/media/zoran/videocodec.h
-+++ b/drivers/staging/media/zoran/videocodec.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * VIDEO MOTION CODECs internal API for video devices
-  *
-@@ -5,22 +6,6 @@
-  * bound to a master device.
-  *
-  * (c) 2002 Wolfgang Scherr <scherr@net4you.at>
-- *
-- * $Id: videocodec.h,v 1.1.2.4 2003/01/14 21:15:03 rbultje Exp $
-- *
-- * ------------------------------------------------------------------------
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * ------------------------------------------------------------------------
-  */
- 
- /* =================== */
-diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
-index e84fb604a689..1b2e1fb3555f 100644
---- a/drivers/staging/media/zoran/zoran.h
-+++ b/drivers/staging/media/zoran/zoran.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * zoran - Iomega Buz driver
-  *
-@@ -12,18 +13,7 @@
-  * bttv - Bt848 frame grabber driver
-  * Copyright (C) 1996,97,98 Ralph  Metzler (rjkm@thp.uni-koeln.de)
-  *                        & Marcus Metzler (mocm@thp.uni-koeln.de)
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #ifndef _BUZ_H_
- #define _BUZ_H_
- 
-diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
-index ea10523194e8..dad5d1412033 100644
---- a/drivers/staging/media/zoran/zoran_card.c
-+++ b/drivers/staging/media/zoran/zoran_card.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * Zoran zr36057/zr36067 PCI controller driver, for the
-  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-@@ -11,18 +12,7 @@
-  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
-  *   Laurent Pinchart <laurent.pinchart@skynet.be>
-  *   Mailinglist      <mjpeg-users@lists.sf.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #include <linux/delay.h>
- 
- #include <linux/types.h>
-diff --git a/drivers/staging/media/zoran/zoran_card.h b/drivers/staging/media/zoran/zoran_card.h
-index 0cdb7d34926d..600b9a3f320c 100644
---- a/drivers/staging/media/zoran/zoran_card.h
-+++ b/drivers/staging/media/zoran/zoran_card.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Zoran zr36057/zr36067 PCI controller driver, for the
-  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-@@ -11,18 +12,7 @@
-  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
-  *   Laurent Pinchart <laurent.pinchart@skynet.be>
-  *   Mailinglist      <mjpeg-users@lists.sf.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #ifndef __ZORAN_CARD_H__
- #define __ZORAN_CARD_H__
- 
-diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
-index b60c4823ce5e..2191fe69b0f9 100644
---- a/drivers/staging/media/zoran/zoran_device.c
-+++ b/drivers/staging/media/zoran/zoran_device.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * Zoran zr36057/zr36067 PCI controller driver, for the
-  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-@@ -11,18 +12,7 @@
-  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
-  *   Laurent Pinchart <laurent.pinchart@skynet.be>
-  *   Mailinglist      <mjpeg-users@lists.sf.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-diff --git a/drivers/staging/media/zoran/zoran_device.h b/drivers/staging/media/zoran/zoran_device.h
-index 20bf75dfbb76..b3b8a03f2004 100644
---- a/drivers/staging/media/zoran/zoran_device.h
-+++ b/drivers/staging/media/zoran/zoran_device.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Zoran zr36057/zr36067 PCI controller driver, for the
-  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-@@ -11,18 +12,7 @@
-  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
-  *   Laurent Pinchart <laurent.pinchart@skynet.be>
-  *   Mailinglist      <mjpeg-users@lists.sf.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #ifndef __ZORAN_DEVICE_H__
- #define __ZORAN_DEVICE_H__
- 
-diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
-index 4c281d9a0e60..438d2d1cd1fc 100644
---- a/drivers/staging/media/zoran/zoran_driver.c
-+++ b/drivers/staging/media/zoran/zoran_driver.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * Zoran zr36057/zr36067 PCI controller driver, for the
-  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-@@ -27,19 +28,7 @@
-  * bttv - Bt848 frame grabber driver
-  * Copyright (C) 1996,97,98 Ralph  Metzler (rjkm@thp.uni-koeln.de)
-  *                        & Marcus Metzler (mocm@thp.uni-koeln.de)
-- *
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #include <linux/init.h>
- #include <linux/module.h>
- #include <linux/delay.h>
-diff --git a/drivers/staging/media/zoran/zoran_procfs.c b/drivers/staging/media/zoran/zoran_procfs.c
-index 78ac8f853748..941f73fe323b 100644
---- a/drivers/staging/media/zoran/zoran_procfs.c
-+++ b/drivers/staging/media/zoran/zoran_procfs.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * Zoran zr36057/zr36067 PCI controller driver, for the
-  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-@@ -11,18 +12,7 @@
-  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
-  *   Laurent Pinchart <laurent.pinchart@skynet.be>
-  *   Mailinglist      <mjpeg-users@lists.sf.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #include <linux/types.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-diff --git a/drivers/staging/media/zoran/zoran_procfs.h b/drivers/staging/media/zoran/zoran_procfs.h
-index 0ac7cb0011f2..db9f642c851a 100644
---- a/drivers/staging/media/zoran/zoran_procfs.h
-+++ b/drivers/staging/media/zoran/zoran_procfs.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Zoran zr36057/zr36067 PCI controller driver, for the
-  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
-@@ -11,18 +12,7 @@
-  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
-  *   Laurent Pinchart <laurent.pinchart@skynet.be>
-  *   Mailinglist      <mjpeg-users@lists.sf.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #ifndef __ZORAN_PROCFS_H__
- #define __ZORAN_PROCFS_H__
- 
-diff --git a/drivers/staging/media/zoran/zr36016.c b/drivers/staging/media/zoran/zr36016.c
-index 8736b9d8d97e..b300a0abe95f 100644
---- a/drivers/staging/media/zoran/zr36016.c
-+++ b/drivers/staging/media/zoran/zr36016.c
-@@ -1,25 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * Zoran ZR36016 basic configuration functions
-  *
-  * Copyright (C) 2001 Wolfgang Scherr <scherr@net4you.at>
-- *
-- * $Id: zr36016.c,v 1.1.2.14 2003/08/20 19:46:55 rbultje Exp $
-- *
-- * ------------------------------------------------------------------------
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * ------------------------------------------------------------------------
-  */
--
- #define ZR016_VERSION "v0.7"
- 
- #include <linux/module.h>
-diff --git a/drivers/staging/media/zoran/zr36016.h b/drivers/staging/media/zoran/zr36016.h
-index 784bcf5727b8..6e66581c27b2 100644
---- a/drivers/staging/media/zoran/zr36016.h
-+++ b/drivers/staging/media/zoran/zr36016.h
-@@ -1,25 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Zoran ZR36016 basic configuration functions - header file
-  *
-  * Copyright (C) 2001 Wolfgang Scherr <scherr@net4you.at>
-- *
-- * $Id: zr36016.h,v 1.1.2.3 2003/01/14 21:18:07 rbultje Exp $
-- *
-- * ------------------------------------------------------------------------
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * ------------------------------------------------------------------------
-  */
--
- #ifndef ZR36016_H
- #define ZR36016_H
- 
-diff --git a/drivers/staging/media/zoran/zr36050.c b/drivers/staging/media/zoran/zr36050.c
-index 5ebfc16672f3..cd58307af378 100644
---- a/drivers/staging/media/zoran/zr36050.c
-+++ b/drivers/staging/media/zoran/zr36050.c
-@@ -1,25 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * Zoran ZR36050 basic configuration functions
-  *
-  * Copyright (C) 2001 Wolfgang Scherr <scherr@net4you.at>
-- *
-- * $Id: zr36050.c,v 1.1.2.11 2003/08/03 14:54:53 rbultje Exp $
-- *
-- * ------------------------------------------------------------------------
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * ------------------------------------------------------------------------
-  */
--
- #define ZR050_VERSION "v0.7.1"
- 
- #include <linux/module.h>
-diff --git a/drivers/staging/media/zoran/zr36050.h b/drivers/staging/media/zoran/zr36050.h
-index 9236486d3c2b..c485913dc820 100644
---- a/drivers/staging/media/zoran/zr36050.h
-+++ b/drivers/staging/media/zoran/zr36050.h
-@@ -1,25 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Zoran ZR36050 basic configuration functions - header file
-  *
-  * Copyright (C) 2001 Wolfgang Scherr <scherr@net4you.at>
-- *
-- * $Id: zr36050.h,v 1.1.2.2 2003/01/14 21:18:22 rbultje Exp $
-- *
-- * ------------------------------------------------------------------------
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * ------------------------------------------------------------------------
-  */
--
- #ifndef ZR36050_H
- #define ZR36050_H
- 
-diff --git a/drivers/staging/media/zoran/zr36057.h b/drivers/staging/media/zoran/zr36057.h
-index c8acb21dcb5c..c5138cef4ef5 100644
---- a/drivers/staging/media/zoran/zr36057.h
-+++ b/drivers/staging/media/zoran/zr36057.h
-@@ -1,19 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * zr36057.h - zr36057 register offsets
-  *
-  * Copyright (C) 1998 Dave Perks <dperks@ibm.net>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-  */
--
- #ifndef _ZR36057_H_
- #define _ZR36057_H_
- 
-diff --git a/drivers/staging/media/zoran/zr36060.c b/drivers/staging/media/zoran/zr36060.c
-index 7ee53ba4f7fc..a3c817fd5c07 100644
---- a/drivers/staging/media/zoran/zr36060.c
-+++ b/drivers/staging/media/zoran/zr36060.c
-@@ -1,25 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  * Zoran ZR36060 basic configuration functions
-  *
-  * Copyright (C) 2002 Laurent Pinchart <laurent.pinchart@skynet.be>
-- *
-- * $Id: zr36060.c,v 1.1.2.22 2003/05/06 09:35:36 rbultje Exp $
-- *
-- * ------------------------------------------------------------------------
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * ------------------------------------------------------------------------
-  */
--
- #define ZR060_VERSION "v0.7"
- 
- #include <linux/module.h>
-diff --git a/drivers/staging/media/zoran/zr36060.h b/drivers/staging/media/zoran/zr36060.h
-index 82911757ba78..9fa553dc475f 100644
---- a/drivers/staging/media/zoran/zr36060.h
-+++ b/drivers/staging/media/zoran/zr36060.h
-@@ -1,25 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * Zoran ZR36060 basic configuration functions - header file
-  *
-  * Copyright (C) 2002 Laurent Pinchart <laurent.pinchart@skynet.be>
-- *
-- * $Id: zr36060.h,v 1.1.1.1.2.3 2003/01/14 21:18:47 rbultje Exp $
-- *
-- * ------------------------------------------------------------------------
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * ------------------------------------------------------------------------
-  */
--
- #ifndef ZR36060_H
- #define ZR36060_H
- 
+That's correct. The power_line_frequency_controls array can always
+contain the auto entry, but its availability should be conditioned on
+the UVC protocol version. The PU_POWER_LINE_FREQUENCY_CONTROL control
+unfortunately doesn't support GET_MAX, so we can't get the information
+in a generic way by querying the control.
+
+One option to keep the code generic would be to add protocol version
+information to the uvc_control_mapping structure, to condition control
+information on the protocol version. It could take the form of a [min,
+max] version range for instance. Entries that don't set the min and max
+versions would be applicable to all versions.
+
+> 
+> >  };
+> >  
+> >  static const struct uvc_menu_info exposure_auto_controls[] = {
+
 -- 
-2.21.0
+Regards,
 
+Laurent Pinchart
