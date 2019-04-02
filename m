@@ -7,52 +7,47 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08E5EC4360F
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 10:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3629C4360F
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 10:33:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C25BB2084C
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 10:33:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 777882084C
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 10:33:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554201216;
-	bh=GSkMsgGU710I4XQ+DpwfsgjvR5ZyVDUuIC6WRIyK9kQ=;
+	s=default; t=1554201224;
+	bh=4SlOSe7Sk2HN9C1Jwnf4NILWZ/RsNV01Kv0SmrNqBbU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=n7/wCMDTCCvomFv/Ga6Pw6xjlPV/bbi6dzbe8ugiN5PzpklvtblXzXnu43bbtZxRX
-	 uzLbgsSFUTSdmui8BNGMJzYMEckEjhT++gEl7BWULQ2k0+1pLWGZVcarqa8HY274Yn
-	 McvEWLHfbrbqsjs5oIGJASW5pbeUUCkSY3ITTFSY=
+	b=oC/UFZiQEmZH2eT24vqEAYna7Sq4ayXTG5B+4F1xu6dmKSNOBMZuL3RhwbdTvEa/7
+	 DMvHzWjIXDgj7dEv9/3i7ea6mW7TBQeWeQCym612ZnS06aW8t9VrEeZ9zW9B5RPmGC
+	 eVCgyYHgoQQm+zxqilBM6E1i5dsiGhVWirF+96D8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730376AbfDBKcd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Apr 2019 06:32:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35792 "EHLO mail.kernel.org"
+        id S1729940AbfDBKdi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Apr 2019 06:33:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730370AbfDBKcc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Apr 2019 06:32:32 -0400
+        id S1730342AbfDBKca (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 2 Apr 2019 06:32:30 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C1BE0208E4;
-        Tue,  2 Apr 2019 10:32:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2FD232084C;
+        Tue,  2 Apr 2019 10:32:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1554201151;
-        bh=GSkMsgGU710I4XQ+DpwfsgjvR5ZyVDUuIC6WRIyK9kQ=;
+        s=default; t=1554201148;
+        bh=4SlOSe7Sk2HN9C1Jwnf4NILWZ/RsNV01Kv0SmrNqBbU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D7VMbSqatb+AiBCnFo3S30xGH8izlnMcfrjP1MnNN7AU1eCnZnZHcao0rGvuqLYHP
-         DPQntZi+NGof1iOHboZx4GBxI1awXbB98YZLKEVvCSz3KfETiE+9i47eEKYn0+Tzq2
-         q8X41DpreeJKwLAZmx2+2Tb+H8XfAx+pJhibMF4w=
+        b=IFGoh8ChF9VrRATbA/R0TWXGpj0tRLll7lLRpnkIauRqpjD567uKjbaHZV2+BeJQe
+         5oxKZ+1iTFVOVIZ8yM7Qj1fkkXuoRbWawWj/mZhCGmX+e97iJ4cVq1O5D3DF/3OS6F
+         mx6dn7NtVEPuDDMwW55m7hieTfqVW5y9JOllQYXg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     devel@driverdev.osuosl.org
 Cc:     linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org
-Subject: [PATCH 14/16] staging: media: soc_camera: add proper SPDX identifiers on files that did not have them.
-Date:   Tue,  2 Apr 2019 12:32:01 +0200
-Message-Id: <20190402103203.14959-15-gregkh@linuxfoundation.org>
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net
+Subject: [PATCH 13/16] staging: media: zoran: add proper SPDX identifiers on files that did not have them.
+Date:   Tue,  2 Apr 2019 12:32:00 +0200
+Message-Id: <20190402103203.14959-14-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190402103203.14959-1-gregkh@linuxfoundation.org>
 References: <20190402103203.14959-1-gregkh@linuxfoundation.org>
@@ -63,173 +58,503 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There were a few files for the soc_camera drivers that did not have SPDX
+There were a few files for the zoran driver that did not have SPDX
 identifiers on them, so fix that up.  At the same time, remove the "free
 form" text that specified the license of the file, as that is impossible
 for any tool to properly parse.
 
 Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
 Cc: linux-media@vger.kernel.org
+Cc: mjpeg-users@lists.sourceforge.net
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/media/soc_camera/imx074.c       | 6 +-----
- drivers/staging/media/soc_camera/mt9t031.c      | 6 +-----
- drivers/staging/media/soc_camera/soc_camera.c   | 6 +-----
- drivers/staging/media/soc_camera/soc_mediabus.c | 6 +-----
- drivers/staging/media/soc_camera/soc_mt9v022.c  | 6 +-----
- drivers/staging/media/soc_camera/soc_ov5642.c   | 6 +-----
- drivers/staging/media/soc_camera/soc_ov9740.c   | 6 +-----
- 7 files changed, 7 insertions(+), 35 deletions(-)
+ drivers/staging/media/zoran/videocodec.h   | 17 +----------------
+ drivers/staging/media/zoran/zoran.h        | 12 +-----------
+ drivers/staging/media/zoran/zoran_card.c   | 12 +-----------
+ drivers/staging/media/zoran/zoran_card.h   | 12 +-----------
+ drivers/staging/media/zoran/zoran_device.c | 12 +-----------
+ drivers/staging/media/zoran/zoran_device.h | 12 +-----------
+ drivers/staging/media/zoran/zoran_driver.c | 13 +------------
+ drivers/staging/media/zoran/zoran_procfs.c | 12 +-----------
+ drivers/staging/media/zoran/zoran_procfs.h | 12 +-----------
+ drivers/staging/media/zoran/zr36016.c      | 18 +-----------------
+ drivers/staging/media/zoran/zr36016.h      | 18 +-----------------
+ drivers/staging/media/zoran/zr36050.c      | 18 +-----------------
+ drivers/staging/media/zoran/zr36050.h      | 18 +-----------------
+ drivers/staging/media/zoran/zr36057.h      | 12 +-----------
+ drivers/staging/media/zoran/zr36060.c      | 18 +-----------------
+ drivers/staging/media/zoran/zr36060.h      | 18 +-----------------
+ 16 files changed, 16 insertions(+), 218 deletions(-)
 
-diff --git a/drivers/staging/media/soc_camera/imx074.c b/drivers/staging/media/soc_camera/imx074.c
-index 1676c166dc83..d907aa62f898 100644
---- a/drivers/staging/media/soc_camera/imx074.c
-+++ b/drivers/staging/media/soc_camera/imx074.c
-@@ -1,15 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0
+diff --git a/drivers/staging/media/zoran/videocodec.h b/drivers/staging/media/zoran/videocodec.h
+index 8ed5a0f7ac01..4946791fce0d 100644
+--- a/drivers/staging/media/zoran/videocodec.h
++++ b/drivers/staging/media/zoran/videocodec.h
+@@ -1,3 +1,4 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
  /*
-  * Driver for IMX074 CMOS Image Sensor from Sony
+  * VIDEO MOTION CODECs internal API for video devices
   *
-  * Copyright (C) 2010, Guennadi Liakhovetski <g.liakhovetski@gmx.de>
+@@ -5,22 +6,6 @@
+  * bound to a master device.
   *
-  * Partially inspired by the IMX074 driver from the Android / MSM tree
+  * (c) 2002 Wolfgang Scherr <scherr@net4you.at>
+- *
+- * $Id: videocodec.h,v 1.1.2.4 2003/01/14 21:15:03 rbultje Exp $
+- *
+- * ------------------------------------------------------------------------
 - *
 - * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * ------------------------------------------------------------------------
+  */
+ 
+ /* =================== */
+diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
+index e84fb604a689..1b2e1fb3555f 100644
+--- a/drivers/staging/media/zoran/zoran.h
++++ b/drivers/staging/media/zoran/zoran.h
+@@ -1,3 +1,4 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * zoran - Iomega Buz driver
+  *
+@@ -12,18 +13,7 @@
+  * bttv - Bt848 frame grabber driver
+  * Copyright (C) 1996,97,98 Ralph  Metzler (rjkm@thp.uni-koeln.de)
+  *                        & Marcus Metzler (mocm@thp.uni-koeln.de)
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+  */
+-
+ #ifndef _BUZ_H_
+ #define _BUZ_H_
+ 
+diff --git a/drivers/staging/media/zoran/zoran_card.c b/drivers/staging/media/zoran/zoran_card.c
+index ea10523194e8..dad5d1412033 100644
+--- a/drivers/staging/media/zoran/zoran_card.c
++++ b/drivers/staging/media/zoran/zoran_card.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Zoran zr36057/zr36067 PCI controller driver, for the
+  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
+@@ -11,18 +12,7 @@
+  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
+  *   Laurent Pinchart <laurent.pinchart@skynet.be>
+  *   Mailinglist      <mjpeg-users@lists.sf.net>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
   */
 -
  #include <linux/delay.h>
- #include <linux/i2c.h>
- #include <linux/v4l2-mediabus.h>
-diff --git a/drivers/staging/media/soc_camera/mt9t031.c b/drivers/staging/media/soc_camera/mt9t031.c
-index 4ff179302b4f..615ae9df2c57 100644
---- a/drivers/staging/media/soc_camera/mt9t031.c
-+++ b/drivers/staging/media/soc_camera/mt9t031.c
-@@ -1,13 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-  * Driver for MT9T031 CMOS Image Sensor from Micron
-  *
-  * Copyright (C) 2008, Guennadi Liakhovetski, DENX Software Engineering <lg@denx.de>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-  */
--
- #include <linux/device.h>
- #include <linux/i2c.h>
- #include <linux/log2.h>
-diff --git a/drivers/staging/media/soc_camera/soc_camera.c b/drivers/staging/media/soc_camera/soc_camera.c
-index 1ab86a7499b9..a6232dcd59bc 100644
---- a/drivers/staging/media/soc_camera/soc_camera.c
-+++ b/drivers/staging/media/soc_camera/soc_camera.c
+ 
+ #include <linux/types.h>
+diff --git a/drivers/staging/media/zoran/zoran_card.h b/drivers/staging/media/zoran/zoran_card.h
+index 0cdb7d34926d..600b9a3f320c 100644
+--- a/drivers/staging/media/zoran/zoran_card.h
++++ b/drivers/staging/media/zoran/zoran_card.h
 @@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0+ */
  /*
-  * camera image capture (abstract) bus driver
-  *
-@@ -10,12 +11,7 @@
-  * SoCs. Later it should also be used for i.MX31 SoCs from Freescale.
-  * It can handle multiple cameras and / or multiple buses, which can
-  * be used, e.g., in stereo-vision applications.
+  * Zoran zr36057/zr36067 PCI controller driver, for the
+  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
+@@ -11,18 +12,7 @@
+  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
+  *   Laurent Pinchart <laurent.pinchart@skynet.be>
+  *   Mailinglist      <mjpeg-users@lists.sf.net>
 - *
 - * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
   */
 -
- #include <linux/device.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
-diff --git a/drivers/staging/media/soc_camera/soc_mediabus.c b/drivers/staging/media/soc_camera/soc_mediabus.c
-index be74008ec0ca..2aa646c89c1f 100644
---- a/drivers/staging/media/soc_camera/soc_mediabus.c
-+++ b/drivers/staging/media/soc_camera/soc_mediabus.c
-@@ -1,13 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
+ #ifndef __ZORAN_CARD_H__
+ #define __ZORAN_CARD_H__
+ 
+diff --git a/drivers/staging/media/zoran/zoran_device.c b/drivers/staging/media/zoran/zoran_device.c
+index b60c4823ce5e..2191fe69b0f9 100644
+--- a/drivers/staging/media/zoran/zoran_device.c
++++ b/drivers/staging/media/zoran/zoran_device.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0+
  /*
-  * soc-camera media bus helper routines
-  *
-  * Copyright (C) 2009, Guennadi Liakhovetski <g.liakhovetski@gmx.de>
+  * Zoran zr36057/zr36067 PCI controller driver, for the
+  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
+@@ -11,18 +12,7 @@
+  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
+  *   Laurent Pinchart <laurent.pinchart@skynet.be>
+  *   Mailinglist      <mjpeg-users@lists.sf.net>
 - *
 - * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
   */
 -
+ #include <linux/types.h>
  #include <linux/kernel.h>
  #include <linux/module.h>
- 
-diff --git a/drivers/staging/media/soc_camera/soc_mt9v022.c b/drivers/staging/media/soc_camera/soc_mt9v022.c
-index 6d922b17ea94..e7e0d3d29499 100644
---- a/drivers/staging/media/soc_camera/soc_mt9v022.c
-+++ b/drivers/staging/media/soc_camera/soc_mt9v022.c
-@@ -1,13 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-  * Driver for MT9V022 CMOS Image Sensor from Micron
-  *
-  * Copyright (C) 2008, Guennadi Liakhovetski <kernel@pengutronix.de>
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
-  */
--
- #include <linux/videodev2.h>
- #include <linux/slab.h>
- #include <linux/i2c.h>
-diff --git a/drivers/staging/media/soc_camera/soc_ov5642.c b/drivers/staging/media/soc_camera/soc_ov5642.c
-index 0931898c79dd..94696d7baf83 100644
---- a/drivers/staging/media/soc_camera/soc_ov5642.c
-+++ b/drivers/staging/media/soc_camera/soc_ov5642.c
+diff --git a/drivers/staging/media/zoran/zoran_device.h b/drivers/staging/media/zoran/zoran_device.h
+index 20bf75dfbb76..b3b8a03f2004 100644
+--- a/drivers/staging/media/zoran/zoran_device.h
++++ b/drivers/staging/media/zoran/zoran_device.h
 @@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0+ */
  /*
-  * Driver for OV5642 CMOS Image Sensor from Omnivision
-  *
-@@ -8,12 +9,7 @@
-  *
-  * Based on Omnivision OV7670 Camera Driver
-  * Copyright (C) 2006-7 Jonathan Corbet <corbet@lwn.net>
+  * Zoran zr36057/zr36067 PCI controller driver, for the
+  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
+@@ -11,18 +12,7 @@
+  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
+  *   Laurent Pinchart <laurent.pinchart@skynet.be>
+  *   Mailinglist      <mjpeg-users@lists.sf.net>
 - *
 - * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
   */
 -
- #include <linux/bitops.h>
- #include <linux/delay.h>
- #include <linux/i2c.h>
-diff --git a/drivers/staging/media/soc_camera/soc_ov9740.c b/drivers/staging/media/soc_camera/soc_ov9740.c
-index a07d3145d1b4..7c765595d85f 100644
---- a/drivers/staging/media/soc_camera/soc_ov9740.c
-+++ b/drivers/staging/media/soc_camera/soc_ov9740.c
-@@ -1,15 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0
+ #ifndef __ZORAN_DEVICE_H__
+ #define __ZORAN_DEVICE_H__
+ 
+diff --git a/drivers/staging/media/zoran/zoran_driver.c b/drivers/staging/media/zoran/zoran_driver.c
+index 4c281d9a0e60..438d2d1cd1fc 100644
+--- a/drivers/staging/media/zoran/zoran_driver.c
++++ b/drivers/staging/media/zoran/zoran_driver.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0+
  /*
-  * OmniVision OV9740 Camera Driver
-  *
-  * Copyright (C) 2011 NVIDIA Corporation
-  *
-  * Based on ov9640 camera driver.
+  * Zoran zr36057/zr36067 PCI controller driver, for the
+  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
+@@ -27,19 +28,7 @@
+  * bttv - Bt848 frame grabber driver
+  * Copyright (C) 1996,97,98 Ralph  Metzler (rjkm@thp.uni-koeln.de)
+  *                        & Marcus Metzler (mocm@thp.uni-koeln.de)
+- *
 - *
 - * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 as
-- * published by the Free Software Foundation.
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
   */
 -
  #include <linux/init.h>
  #include <linux/module.h>
- #include <linux/i2c.h>
+ #include <linux/delay.h>
+diff --git a/drivers/staging/media/zoran/zoran_procfs.c b/drivers/staging/media/zoran/zoran_procfs.c
+index 78ac8f853748..941f73fe323b 100644
+--- a/drivers/staging/media/zoran/zoran_procfs.c
++++ b/drivers/staging/media/zoran/zoran_procfs.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Zoran zr36057/zr36067 PCI controller driver, for the
+  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
+@@ -11,18 +12,7 @@
+  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
+  *   Laurent Pinchart <laurent.pinchart@skynet.be>
+  *   Mailinglist      <mjpeg-users@lists.sf.net>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+  */
+-
+ #include <linux/types.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+diff --git a/drivers/staging/media/zoran/zoran_procfs.h b/drivers/staging/media/zoran/zoran_procfs.h
+index 0ac7cb0011f2..db9f642c851a 100644
+--- a/drivers/staging/media/zoran/zoran_procfs.h
++++ b/drivers/staging/media/zoran/zoran_procfs.h
+@@ -1,3 +1,4 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * Zoran zr36057/zr36067 PCI controller driver, for the
+  * Pinnacle/Miro DC10/DC10+/DC30/DC30+, Iomega Buz, Linux
+@@ -11,18 +12,7 @@
+  *   Ronald Bultje    <rbultje@ronald.bitfreak.net>
+  *   Laurent Pinchart <laurent.pinchart@skynet.be>
+  *   Mailinglist      <mjpeg-users@lists.sf.net>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+  */
+-
+ #ifndef __ZORAN_PROCFS_H__
+ #define __ZORAN_PROCFS_H__
+ 
+diff --git a/drivers/staging/media/zoran/zr36016.c b/drivers/staging/media/zoran/zr36016.c
+index 8736b9d8d97e..b300a0abe95f 100644
+--- a/drivers/staging/media/zoran/zr36016.c
++++ b/drivers/staging/media/zoran/zr36016.c
+@@ -1,25 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Zoran ZR36016 basic configuration functions
+  *
+  * Copyright (C) 2001 Wolfgang Scherr <scherr@net4you.at>
+- *
+- * $Id: zr36016.c,v 1.1.2.14 2003/08/20 19:46:55 rbultje Exp $
+- *
+- * ------------------------------------------------------------------------
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * ------------------------------------------------------------------------
+  */
+-
+ #define ZR016_VERSION "v0.7"
+ 
+ #include <linux/module.h>
+diff --git a/drivers/staging/media/zoran/zr36016.h b/drivers/staging/media/zoran/zr36016.h
+index 784bcf5727b8..6e66581c27b2 100644
+--- a/drivers/staging/media/zoran/zr36016.h
++++ b/drivers/staging/media/zoran/zr36016.h
+@@ -1,25 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * Zoran ZR36016 basic configuration functions - header file
+  *
+  * Copyright (C) 2001 Wolfgang Scherr <scherr@net4you.at>
+- *
+- * $Id: zr36016.h,v 1.1.2.3 2003/01/14 21:18:07 rbultje Exp $
+- *
+- * ------------------------------------------------------------------------
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * ------------------------------------------------------------------------
+  */
+-
+ #ifndef ZR36016_H
+ #define ZR36016_H
+ 
+diff --git a/drivers/staging/media/zoran/zr36050.c b/drivers/staging/media/zoran/zr36050.c
+index 5ebfc16672f3..cd58307af378 100644
+--- a/drivers/staging/media/zoran/zr36050.c
++++ b/drivers/staging/media/zoran/zr36050.c
+@@ -1,25 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Zoran ZR36050 basic configuration functions
+  *
+  * Copyright (C) 2001 Wolfgang Scherr <scherr@net4you.at>
+- *
+- * $Id: zr36050.c,v 1.1.2.11 2003/08/03 14:54:53 rbultje Exp $
+- *
+- * ------------------------------------------------------------------------
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * ------------------------------------------------------------------------
+  */
+-
+ #define ZR050_VERSION "v0.7.1"
+ 
+ #include <linux/module.h>
+diff --git a/drivers/staging/media/zoran/zr36050.h b/drivers/staging/media/zoran/zr36050.h
+index 9236486d3c2b..c485913dc820 100644
+--- a/drivers/staging/media/zoran/zr36050.h
++++ b/drivers/staging/media/zoran/zr36050.h
+@@ -1,25 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * Zoran ZR36050 basic configuration functions - header file
+  *
+  * Copyright (C) 2001 Wolfgang Scherr <scherr@net4you.at>
+- *
+- * $Id: zr36050.h,v 1.1.2.2 2003/01/14 21:18:22 rbultje Exp $
+- *
+- * ------------------------------------------------------------------------
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * ------------------------------------------------------------------------
+  */
+-
+ #ifndef ZR36050_H
+ #define ZR36050_H
+ 
+diff --git a/drivers/staging/media/zoran/zr36057.h b/drivers/staging/media/zoran/zr36057.h
+index c8acb21dcb5c..c5138cef4ef5 100644
+--- a/drivers/staging/media/zoran/zr36057.h
++++ b/drivers/staging/media/zoran/zr36057.h
+@@ -1,19 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * zr36057.h - zr36057 register offsets
+  *
+  * Copyright (C) 1998 Dave Perks <dperks@ibm.net>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+  */
+-
+ #ifndef _ZR36057_H_
+ #define _ZR36057_H_
+ 
+diff --git a/drivers/staging/media/zoran/zr36060.c b/drivers/staging/media/zoran/zr36060.c
+index 7ee53ba4f7fc..a3c817fd5c07 100644
+--- a/drivers/staging/media/zoran/zr36060.c
++++ b/drivers/staging/media/zoran/zr36060.c
+@@ -1,25 +1,9 @@
++// SPDX-License-Identifier: GPL-2.0+
+ /*
+  * Zoran ZR36060 basic configuration functions
+  *
+  * Copyright (C) 2002 Laurent Pinchart <laurent.pinchart@skynet.be>
+- *
+- * $Id: zr36060.c,v 1.1.2.22 2003/05/06 09:35:36 rbultje Exp $
+- *
+- * ------------------------------------------------------------------------
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * ------------------------------------------------------------------------
+  */
+-
+ #define ZR060_VERSION "v0.7"
+ 
+ #include <linux/module.h>
+diff --git a/drivers/staging/media/zoran/zr36060.h b/drivers/staging/media/zoran/zr36060.h
+index 82911757ba78..9fa553dc475f 100644
+--- a/drivers/staging/media/zoran/zr36060.h
++++ b/drivers/staging/media/zoran/zr36060.h
+@@ -1,25 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
+ /*
+  * Zoran ZR36060 basic configuration functions - header file
+  *
+  * Copyright (C) 2002 Laurent Pinchart <laurent.pinchart@skynet.be>
+- *
+- * $Id: zr36060.h,v 1.1.1.1.2.3 2003/01/14 21:18:47 rbultje Exp $
+- *
+- * ------------------------------------------------------------------------
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation; either version 2 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * ------------------------------------------------------------------------
+  */
+-
+ #ifndef ZR36060_H
+ #define ZR36060_H
+ 
 -- 
 2.21.0
 
