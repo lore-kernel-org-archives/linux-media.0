@@ -2,119 +2,131 @@ Return-Path: <SRS0=Nq74=SE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7121BC4360F
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D625EC4360F
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:51:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3975920645
-	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:39:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554215941;
-	bh=u38hid6hXpdJ0hs9XdoK59gdN1drfdwff6ScxKdFEfI=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=AIGNcrGR2d+sHDI9Wd4i2cSt8HOzyG2NjRH6SnKvgSTLu51lj5ql5SsCUCG3QOA4N
-	 z1y0ombNhezW0pED/wRH5mmkwM7Yig7atEYk1P4NC4GQoJB6+BkFn4MXolkJQ8VU1M
-	 u0ZOF5CQVMC+EFNw8yhwoPPVQdXhoug5DjhAWwhs=
+	by mail.kernel.org (Postfix) with ESMTP id B133220883
+	for <linux-media@archiver.kernel.org>; Tue,  2 Apr 2019 14:51:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732064AbfDBOi7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Apr 2019 10:38:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44290 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731973AbfDBOi6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Apr 2019 10:38:58 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E18520857;
-        Tue,  2 Apr 2019 14:38:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1554215937;
-        bh=u38hid6hXpdJ0hs9XdoK59gdN1drfdwff6ScxKdFEfI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=IyGOHVUwiY83LrSlMMhXARMZQRJ+vMYMrCLaQ9N3aEUB/A7uKmB8SP+E8CYWR/NOW
-         UviZU8mJ99a4xvhqrcjcu2ur3pkvP4XTsxnTY8TdMvoFrh757306yNN2JGytMqXt9e
-         6D4KcpQhxCH5swVr1ujVxRoMUMaopOthdIngSqg8=
-Subject: Re: [PATCH v15 0/6] Media Device Allocator API
-To:     Hans Verkuil <hverkuil@xs4all.nl>, mchehab@kernel.org,
-        perex@perex.cz, tiwai@suse.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, shuah <shuah@kernel.org>
-References: <cover.1554155701.git.shuah@kernel.org>
- <fb0b46d3-a8a5-c5b5-7f3e-08ddfd27235b@xs4all.nl>
-From:   shuah <shuah@kernel.org>
-Message-ID: <829089d0-8cef-bce5-6717-9a39522f7be1@kernel.org>
-Date:   Tue, 2 Apr 2019 08:38:56 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        id S1732205AbfDBOvT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Apr 2019 10:51:19 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:59567 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726458AbfDBOvT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Apr 2019 10:51:19 -0400
+X-Originating-IP: 90.88.30.125
+Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 962731BF20C;
+        Tue,  2 Apr 2019 14:51:14 +0000 (UTC)
+Date:   Tue, 2 Apr 2019 16:51:14 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [RFC PATCH 01/20] drm: Remove users of drm_format_num_planes
+Message-ID: <20190402145114.bpt5atxxooufgzz5@flea>
+References: <cover.92acdec88ee4c280cb74e08ea22f0075e5fa055c.1553032382.git-series.maxime.ripard@bootlin.com>
+ <fecde1c7b65caa0e876a2f01769289a883014712.1553032382.git-series.maxime.ripard@bootlin.com>
+ <CACvgo51WMD5hsyLB5QTriGNwcPmeN4TDjscJV11M3PXFncPHeQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <fb0b46d3-a8a5-c5b5-7f3e-08ddfd27235b@xs4all.nl>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lgdfh3o7stmf4lnx"
+Content-Disposition: inline
+In-Reply-To: <CACvgo51WMD5hsyLB5QTriGNwcPmeN4TDjscJV11M3PXFncPHeQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/2/19 1:38 AM, Hans Verkuil wrote:
-> On 4/2/19 2:40 AM, Shuah Khan wrote:
->> Media Device Allocator API to allows multiple drivers share a media device.
->> This API solves a very common use-case for media devices where one physical
->> device (an USB stick) provides both audio and video. When such media device
->> exposes a standard USB Audio class, a proprietary Video class, two or more
->> independent drivers will share a single physical USB bridge. In such cases,
->> it is necessary to coordinate access to the shared resource.
->>
->> Using this API, drivers can allocate a media device with the shared struct
->> device as the key. Once the media device is allocated by a driver, other
->> drivers can get a reference to it. The media device is released when all
->> the references are released.
->>
->> The primary focus for testing The patch series is making sure media
->> device is released when both drivers release the media device with
->> a series of unbind/binds on both drivers.
->>
->> - both au0828 and snd-usb-aduio as built-in
->> - both au0828 and snd-usb-aduio as modules
->> - au0828 as module and snd-usb-aduio as built-in
->> - au0828 as built-in and snd-usb-aduio as module
->>
->> Test results can be found at:
->>
->> https://docs.google.com/document/d/1RMF8Rwj7xHJEoOx6_K2f-REgZJ63BMeAVEf-CV-0HsM/edit?usp=sharing
-> 
-> Phew, after posting v2 of my patch "au0828: stop video streaming only when last
-> user stops" everything now works as it should, including the issue with two VBI
-> streams you found.
-> 
 
-Awesome. Thanks for taking care of this. Looks good. I tested the
-patch and sent Tested-by for it.
+--lgdfh3o7stmf4lnx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Should I take the selftest patch or will you take that yourself?
+Hi Emil,
 
-Please take this through your pull request. Bundling the test with the
-feature will help promote use of this test :)
-
-Please pick up the null pointer dereference fix in bind path when unbind
-happens while bind is in progress.
-
-> 
-> Let me know so I can make the pull request for this. It's been a long journey
-> since the first post on April 9th, 2014: "[RFC PATCH 0/2] managed token devres
-> interfaces".
+On Tue, Apr 02, 2019 at 10:43:31AM +0100, Emil Velikov wrote:
+> On Tue, 19 Mar 2019 at 21:57, Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+> > drm_format_num_planes() is basically a lookup in the drm_format_info table
+> > plus an access to the num_planes field of the appropriate entry.
+> >
+> > Most drivers are using this function while having access to the entry
+> > already, which means that we will perform an unnecessary lookup. Removing
+> > the call to drm_format_num_planes is therefore more efficient.
+> >
+> > Some drivers will not have access to that entry in the function, but in
+> > this case the overhead is minimal (we just have to call drm_format_info()
+> > to perform the lookup) and we can even avoid multiple, inefficient lookups
+> > in some places that need multiple fields from the drm_format_info
+> > structure.
+> >
 >
+> I'm not fan of the duplicated loop-ups either.
+>
+> > -int drm_format_num_planes(uint32_t format)
+> > -{
+> > -       const struct drm_format_info *info;
+> > -
+> > -       info = drm_format_info(format);
+> > -       return info ? info->num_planes : 1;
+> > -}
+> > -EXPORT_SYMBOL(drm_format_num_planes);
+> > -
+>
+> The existing users are not updated to cater for the num_planes != 0
+> case... Which seems non-existent scenario since all the current format
+> descriptions have 1+ planes.
+> Should we add a test (alike the ones in 6/20) to ensure, that no entry
+> has 0 planes? Is it even worth it or I'm a bit too paranoid?
+>
+> The above comments apply to 2/20.
 
-Please send the pull request.
+I'm not entirely sure what you mean. num_planes is returned as is in
+the drm_format_num_planes function and it doesn't check for the
+num_planes value itself.
 
-> Almost exactly five years of work!
-> 
-Amazing. We ended up with a far better solution than the the first patch
-series ! Thanks to everybody that helped me with reviews and testing.
+That being said, we could definitely add some more tests to check that
+we haven't falling into the situation you describe, since most of the
+drivers indeed don't check for that value themselves. But that seems
+pretty othorgonal to me?
 
-thanks,
--- Shuah
+> With the name suggestions by Paul, patches 1 to 5 (incl.) are:
+> Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
 
+Thanks!
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--lgdfh3o7stmf4lnx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXKN24gAKCRDj7w1vZxhR
+xdcIAPwMegTv/UcHRA+TAB4ezclPNbm+1U/NJzXvnXyZ2shdqAEA7A05cNikgqEW
+zGKsikrWNgK28tqwL+rYgk+cLDOVKAA=
+=PIGw
+-----END PGP SIGNATURE-----
+
+--lgdfh3o7stmf4lnx--
