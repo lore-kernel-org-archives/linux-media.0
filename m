@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC16AC10F06
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 22:18:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCFA2C4360F
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 22:18:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7935320882
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 22:18:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93B7A20882
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 22:18:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cIYFKvnO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pqz5WkD8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfDCWSM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Apr 2019 18:18:12 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:40376 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726199AbfDCWSM (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Apr 2019 18:18:12 -0400
-Received: by mail-wm1-f67.google.com with SMTP id z24so664208wmi.5
-        for <linux-media@vger.kernel.org>; Wed, 03 Apr 2019 15:18:10 -0700 (PDT)
+        id S1726494AbfDCWSO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Apr 2019 18:18:14 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:40986 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbfDCWSN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Apr 2019 18:18:13 -0400
+Received: by mail-wr1-f67.google.com with SMTP id r4so870410wrq.8
+        for <linux-media@vger.kernel.org>; Wed, 03 Apr 2019 15:18:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=/mdSvbwVZIpZIZzlf5bj5jBFsCqVjD3mBJ1uu40zFq0=;
-        b=cIYFKvnOf1XhWwc/iSILDJOb6JW0i748qGDvuMbdXwQnwXDZCNsB699ShbvNUy1Xzo
-         qyg5GNZWhLm0OqMLdpTfN7DT0hdAtCwSh7lxx0wWnYgnK/06EyJMDpn78Ip7gzrOkMwG
-         2FRj3p14F5E7EdHshK4qEXeesWtlpBvABIKNXZ7m5PQAU3QB0E2SmGwhKyCXUVgbgZ9N
-         KHSyNfQzhCUHLX2LNl4F9NUt+n5kHjwa2qIhW8KIZ7i71gN4z/KtaAxyUMRiF4fC1WDC
-         3X8U4vUy+XNQtI4ma9L/QgYac1E7IYTD5BwdAjzaFkxecEH+9oYzCytTjGCtEdmpTIG8
-         lPzQ==
+        bh=Fy2qFD74zdUbAe78wnfHfXfNlPMXRBU6r8h3CmVtLrU=;
+        b=pqz5WkD8g5g2FdE2jB5RERZkQu26xUyXOqEnvRxWNFNh93CPao2vhBykn6LQNAbzFo
+         LU+MHz3KuZmrVIwcKDsJLduaDwGWo1+bt7cmjpMqOuUTrXydf8Ny1nJOwEkq5shSZZQ6
+         NwkvBNC9LjBHIcL4m0+cerjgLpv44/2xIZqe6j1/FoGW85m6fqE+JD/IzzQabRsAUC67
+         85Wj5mmyx6eazuKPGSQOQ6Fgkhqfgu/dLXNn6W8r8/xu7vwigbBG98uCjTjDl5LFqkwO
+         raUvCxaRL5oj9MGlEGHiDb3Iylh+NIf+NjY+GfS1gqcA8nC6xF1AqDwWklCB13Dbqz8J
+         jUUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=/mdSvbwVZIpZIZzlf5bj5jBFsCqVjD3mBJ1uu40zFq0=;
-        b=QpFAeht9St3xzE/h9XA9XosCf3XLaIcDZx7i+pxBaar96gRZdxtGT5XKrWPBruK3vI
-         yrAomoTOv4dupHFDEjJqrLqPCb3l9J2UCtU6/rFv/tj4VFv8V2K7M/uJhZ+a/smp9bn1
-         gRSifFJgC1xOb5Xwp75O448pSSVGgHDquvWjwzb/WqoabRZrHQtK353lN1m94MGdkkdy
-         ax/yMhe6JVenLfawdfxpWHu2deMjxj97sDVWBFDOfP7Rs0Vua/aJIslxBCQtAQyMf2Sv
-         ix7Rc4/enjZBn4SzOteDjalPnwbAJnyV7MUl1BIrRJ8Vy2mPkRjRd8M90MSm4DEll3Fw
-         xtvA==
-X-Gm-Message-State: APjAAAVT24rvB9rqyvR5YEOp+6n+g1zZjyDRMQLefVjbbSAJDEWetYsz
-        +GmBKpM8eGhqg0NZu8TgxNY=
-X-Google-Smtp-Source: APXvYqwomsLMXoOnpLmC5lPXUGi52B7mLyYDSl3UntpZXrZeH5lXvKQLHwh6onMj38fLtu9Zdmaoxg==
-X-Received: by 2002:a1c:f10f:: with SMTP id p15mr1598400wmh.27.1554329890278;
-        Wed, 03 Apr 2019 15:18:10 -0700 (PDT)
+        bh=Fy2qFD74zdUbAe78wnfHfXfNlPMXRBU6r8h3CmVtLrU=;
+        b=Y+cGiOqFR1ThW3rrleYQ3TGRcVaTwWdQQuRakvX4H+99//3jYUDcKieL9oWCmeCekn
+         DYMjTcYJU3zSdiCMhmIqbeqZcR4Y++XmOfMrDIIMAZB4K+zl3KS5jQt/QCDWcUYwSn8O
+         0que6H6M9aQQ+6h6+kCxUKoTAif9BZ+TwnsCHAFI/dDeYvZK1TUT43yNxkUS7VK32pS/
+         KrZ/f6kJlDbUsqKGrQbhSqRNxVRw/XSEf/pG37SBHP0pggxXX2Qp8Bzh5txRrMiy1LkB
+         V6dZ8mhG7+41srk2Ekc+24hAA/P2QeoNcK3+BbzoucR3eqP1AtxfMMtbxp8j2Dx1vaHv
+         dtcw==
+X-Gm-Message-State: APjAAAWKMYugllWfSEimfppauMNJqbh1+C0grW3Q22XpHHO2w2l11Ohm
+        OtYDXB1stMij9vro60rYKRY=
+X-Google-Smtp-Source: APXvYqzVZjSRK5PDXpaiN0MmF76uXXpIrZD0AUxuutDYzm0Q//lni8jLjcFTXN+A4SxZO3fjJ5vCqQ==
+X-Received: by 2002:a5d:68cf:: with SMTP id p15mr1281609wrw.301.1554329891578;
+        Wed, 03 Apr 2019 15:18:11 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5ab07d.dynamic.kabel-deutschland.de. [95.90.176.125])
-        by smtp.gmail.com with ESMTPSA id d6sm26019552wrx.62.2019.04.03.15.18.09
+        by smtp.gmail.com with ESMTPSA id d6sm26019552wrx.62.2019.04.03.15.18.10
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Apr 2019 15:18:09 -0700 (PDT)
+        Wed, 03 Apr 2019 15:18:10 -0700 (PDT)
 From:   Dafna Hirschfeld <dafna3@gmail.com>
 To:     dafna3@gmail.com, linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, helen.koike@collabora.com,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH v2 02/16] vicodec: move v4l2_ctrl_request_complete after spin_unlock
-Date:   Wed,  3 Apr 2019 15:14:47 -0700
-Message-Id: <20190403221501.32814-3-dafna3@gmail.com>
+Subject: [PATCH v2 03/16] vicodec: always return a valid format.
+Date:   Wed,  3 Apr 2019 15:14:48 -0700
+Message-Id: <20190403221501.32814-4-dafna3@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190403221501.32814-1-dafna3@gmail.com>
 References: <20190403221501.32814-1-dafna3@gmail.com>
@@ -71,35 +71,76 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-v4l2_ctrl_request_complete can sleep, so can't be called while
-a spinlock is held.
+Rather than returning width/height values of 0, just default to
+a format. Formats in V4L2 are always supposed to be valid, there
+is no concept of an invalid format.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/platform/vicodec/vicodec-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/vicodec/vicodec-core.c | 26 ++++++++++---------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
-index bd01a9206aa6..92647f02fc49 100644
+index 92647f02fc49..aa3af796929b 100644
 --- a/drivers/media/platform/vicodec/vicodec-core.c
 +++ b/drivers/media/platform/vicodec/vicodec-core.c
-@@ -442,14 +442,14 @@ static void device_run(void *priv)
- 		ctx->comp_has_next_frame = false;
- 	}
- 	v4l2_m2m_buf_done(dst_buf, state);
--	if (ctx->is_stateless && src_req)
--		v4l2_ctrl_request_complete(src_req, &ctx->hdl);
+@@ -1771,11 +1771,13 @@ static const struct v4l2_ctrl_config vicodec_ctrl_stateless_state = {
+  */
+ static int vicodec_open(struct file *file)
+ {
++	const struct v4l2_fwht_pixfmt_info *info = v4l2_fwht_get_pixfmt(0);
+ 	struct video_device *vfd = video_devdata(file);
+ 	struct vicodec_dev *dev = video_drvdata(file);
+ 	struct vicodec_ctx *ctx = NULL;
+ 	struct v4l2_ctrl_handler *hdl;
+-	unsigned int size;
++	unsigned int raw_size;
++	unsigned int comp_size;
+ 	int rc = 0;
  
- 	ctx->comp_size = 0;
- 	ctx->header_size = 0;
- 	ctx->comp_magic_cnt = 0;
- 	ctx->comp_has_frame = false;
- 	spin_unlock(ctx->lock);
-+	if (ctx->is_stateless && src_req)
-+		v4l2_ctrl_request_complete(src_req, &ctx->hdl);
+ 	if (mutex_lock_interruptible(vfd->lock))
+@@ -1814,7 +1816,7 @@ static int vicodec_open(struct file *file)
+ 	v4l2_ctrl_handler_setup(hdl);
  
  	if (ctx->is_enc)
- 		v4l2_m2m_job_finish(dev->stateful_enc.m2m_dev, ctx->fh.m2m_ctx);
+-		ctx->q_data[V4L2_M2M_SRC].info = v4l2_fwht_get_pixfmt(0);
++		ctx->q_data[V4L2_M2M_SRC].info = info;
+ 	else if (ctx->is_stateless)
+ 		ctx->q_data[V4L2_M2M_SRC].info = &pixfmt_stateless_fwht;
+ 	else
+@@ -1823,22 +1825,22 @@ static int vicodec_open(struct file *file)
+ 	ctx->q_data[V4L2_M2M_SRC].coded_height = 720;
+ 	ctx->q_data[V4L2_M2M_SRC].visible_width = 1280;
+ 	ctx->q_data[V4L2_M2M_SRC].visible_height = 720;
+-	size = 1280 * 720 * ctx->q_data[V4L2_M2M_SRC].info->sizeimage_mult /
+-		ctx->q_data[V4L2_M2M_SRC].info->sizeimage_div;
++	raw_size = 1280 * 720 * info->sizeimage_mult / info->sizeimage_div;
++	comp_size = 1280 * 720 * pixfmt_fwht.sizeimage_mult /
++				 pixfmt_fwht.sizeimage_div;
+ 	if (ctx->is_enc || ctx->is_stateless)
+-		ctx->q_data[V4L2_M2M_SRC].sizeimage = size;
++		ctx->q_data[V4L2_M2M_SRC].sizeimage = raw_size;
+ 	else
+ 		ctx->q_data[V4L2_M2M_SRC].sizeimage =
+-			size + sizeof(struct fwht_cframe_hdr);
++			comp_size + sizeof(struct fwht_cframe_hdr);
++	ctx->q_data[V4L2_M2M_DST] = ctx->q_data[V4L2_M2M_SRC];
+ 	if (ctx->is_enc) {
+-		ctx->q_data[V4L2_M2M_DST] = ctx->q_data[V4L2_M2M_SRC];
+ 		ctx->q_data[V4L2_M2M_DST].info = &pixfmt_fwht;
+-		ctx->q_data[V4L2_M2M_DST].sizeimage = 1280 * 720 *
+-			ctx->q_data[V4L2_M2M_DST].info->sizeimage_mult /
+-			ctx->q_data[V4L2_M2M_DST].info->sizeimage_div +
+-			sizeof(struct fwht_cframe_hdr);
++		ctx->q_data[V4L2_M2M_DST].sizeimage =
++			comp_size + sizeof(struct fwht_cframe_hdr);
+ 	} else {
+-		ctx->q_data[V4L2_M2M_DST].info = NULL;
++		ctx->q_data[V4L2_M2M_DST].info = info;
++		ctx->q_data[V4L2_M2M_DST].sizeimage = raw_size;
+ 	}
+ 
+ 	ctx->state.colorspace = V4L2_COLORSPACE_REC709;
 -- 
 2.17.1
 
