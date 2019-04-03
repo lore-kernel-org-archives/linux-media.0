@@ -2,154 +2,140 @@ Return-Path: <SRS0=djxu=SF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17CF3C4360F
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 03:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27B05C10F0B
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 06:11:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E017A20882
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 03:48:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EAF022084B
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 06:11:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=aj.id.au header.i=@aj.id.au header.b="IssgnUNy";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fjtWI6uU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbfDCDsx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Apr 2019 23:48:53 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:39173 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726130AbfDCDsx (ORCPT
+        id S1725941AbfDCGLI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Apr 2019 02:11:08 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:60249 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725879AbfDCGLI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Apr 2019 23:48:53 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:900c:db35:bdd6:b8de])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id BWtNhoM1rNG8zBWtPhNEgN; Wed, 03 Apr 2019 05:48:51 +0200
-Message-ID: <9f8ae841c5f2d7113763c789459f0080@smtp-cloud7.xs4all.net>
-Date:   Wed, 03 Apr 2019 05:48:49 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfHK/Pf6ryiqlox6oEVHDnugdWMSqtNKhcKYR1x6k+QhaPL99iDQKw+kD8fuTRKxZe6stGvoitlOLi1lKONpWXnGFu0E6aMou2JQLlte+2PRZQxUml8ol
- wvs8NnpHDZACkGnPjZAxJmyMJOCi4e8Rs8fGSC/z3ToHc1QkDeqci8Van7hw+A+zsxJsSXTJNN43jnSZJK1I+UOxtwVKkYGckTuUSUgwJ9tlRG38LV0PDHZv
+        Wed, 3 Apr 2019 02:11:08 -0400
+X-Greylist: delayed 597 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Apr 2019 02:11:07 EDT
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5DD0520D8D;
+        Wed,  3 Apr 2019 02:01:10 -0400 (EDT)
+Received: from imap2 ([10.202.2.52])
+  by compute4.internal (MEProxy); Wed, 03 Apr 2019 02:01:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm2; bh=3kuereDgX3uXPv3easIr1d1LfpE5kaJ
+        mP5rSzNOWpp8=; b=IssgnUNygebNsmz7eoD82zi0nhXDuRTfy346XGDOua9x7XR
+        ZCADWU8cQnhvImCzPJXvuaL9omZgG5KidUQ7wqiVyuyieJOXwbAAJMpUDon8os7i
+        Vq85Ex28pTqdTh4NFsYq0yP9i3ofBdSzON0ug39l4onVt29EBXUlGamEKhPVNjDO
+        RfHOicwDC1iQlkRVEurXNeYyPfudaUpQ8nznHm+NS+mMM2/3WqcMBKdgLPBxRzcu
+        upR02T4CpCEVyf673K5JSwW0j6QQnmX8gsIgW+yGCRdNBry5rQuj9RMR1zw9sONr
+        8Wja//3v35HwBEGFOOJJks1H+NHMIpOvwZShRrQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=3kuere
+        DgX3uXPv3easIr1d1LfpE5kaJmP5rSzNOWpp8=; b=fjtWI6uUN+/5uCXP1TuX7b
+        FKdvjfJWFvF1ZKhGyNn9/GJBoPmWKilOiu06m6/h5ktObY3fMV0NEYPV1FO/HzgN
+        JHhcDQHUWbVUH4uD5sFmIsA/YeDn4XkfGRcVWMbbg3l+uvPnVuB9FqRSuZEFYxAF
+        host7tFI9+/k5NwoYtsjwE607sOMvC5Kt3S57pW1nTj/eHphL2eeKc7gYvc6tYuL
+        81QDKIzbXskfeeZ7Ke0bucJXs/7UKIlw2tgZNrIQFj+Lcjnbw3ufCjBZK1vsY1d5
+        QIIpaFgLOvMqKmSW/d6SbApssDSYZu7lig0vbJ8GL1Y85a+Cad+3JSoBValg45+g
+        ==
+X-ME-Sender: <xms:JEykXAIW4Q6ogfNU9QJ-1g2rEP6dAzzmaU8fVHwUTGLXEoyx3davNw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrtddugdelleculddtuddrgedutddrtddtmd
+    cutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefofgggkfgjfhffhffvufgtsehttdertderreej
+    necuhfhrohhmpedftehnughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrd
+    hiugdrrghuqeenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgu
+    rdgruhenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:JEykXHF6wLmMQ1MrfWNoBABhwjiJKSrXpEvtn9fttoTiHMFEqb7U9w>
+    <xmx:JEykXF3E6KRWv3BCTfLGKQ8FUhvU9P1KXR3BgxazJyOsmofzugvYOQ>
+    <xmx:JEykXBy4W7h8k8sL05IHHeI0-e2S1O2B85WVAO8Gk9euNz-pQdGx1A>
+    <xmx:JkykXE-vTu_TYtC08xQXEMHIIBnmGPAltvkBJD-XJZ4-zh0sOAhB3Q>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B05C67C1B9; Wed,  3 Apr 2019 02:01:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.1.6-329-gf4aae99-fmstable-20190329v1
+Mime-Version: 1.0
+X-Me-Personality: 52947553
+Message-Id: <7effb2de-cc91-47af-88a2-a0075262e9c4@www.fastmail.com>
+In-Reply-To: <1554229504-5661-3-git-send-email-eajames@linux.ibm.com>
+References: <1554229504-5661-1-git-send-email-eajames@linux.ibm.com>
+ <1554229504-5661-3-git-send-email-eajames@linux.ibm.com>
+Date:   Wed, 03 Apr 2019 02:01:08 -0400
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Eddie James" <eajames@linux.ibm.com>, linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        linux-clk@vger.kernel.org, "Stephen Boyd" <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        devicetree@vger.kernel.org, mark.rutland@arm.com,
+        "Rob Herring" <robh+dt@kernel.org>
+Subject: =?UTF-8?Q?Re:_[PATCH_2/5]_media:_platform:_Aspeed:_Make_reserved_memory_?=
+ =?UTF-8?Q?optional?=
+Content-Type: text/plain
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
 
-Results of the daily build of media_tree:
 
-date:			Wed Apr  3 05:00:10 CEST 2019
-media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	2be31095509aa5bad3c01248a69a8fc49b713dc1
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-2-amd64
+On Wed, 3 Apr 2019, at 04:55, Eddie James wrote:
+> Reserved memory doesn't need to be required; system memory would work
+> fine.
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
+I had to do a bit of legwork to understand what you were doing here. My
+understanding is that we allocate out of the default CMA region if the
+memory-region property isn't specified. Is that what you're expecting?
+Could be helpful to be a little less terse in the commit message.
 
-Detailed results are available here:
+> 
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+>  drivers/media/platform/aspeed-video.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/drivers/media/platform/aspeed-video.c 
+> b/drivers/media/platform/aspeed-video.c
+> index 55c55a6..8144fe3 100644
+> --- a/drivers/media/platform/aspeed-video.c
+> +++ b/drivers/media/platform/aspeed-video.c
+> @@ -1608,11 +1608,7 @@ static int aspeed_video_init(struct aspeed_video 
+> *video)
+>  		return PTR_ERR(video->vclk);
+>  	}
+>  
+> -	rc = of_reserved_mem_device_init(dev);
+> -	if (rc) {
+> -		dev_err(dev, "Unable to reserve memory\n");
+> -		return rc;
+> -	}
+> +	of_reserved_mem_device_init(dev);
 
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
+You're ignoring *all* errors here with the expectation that the cause is the
+missing memory-region property. However, other errors can propagate
+out of of_reserved_mem_device_init() - e.g. ENOMEM. Rather than remove
+error checking, I think you should explicitly test for ENODEV, which is what is
+returned if the memory-region property is absent.
 
-Detailed regression test results are available here:
+Cheers,
 
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
+Andrew
 
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+>  
+>  	rc = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+>  	if (rc) {
+> -- 
+> 1.8.3.1
+> 
+>
