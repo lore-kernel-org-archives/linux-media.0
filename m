@@ -2,98 +2,161 @@ Return-Path: <SRS0=djxu=SF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E375CC4360F
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:27:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E2FAC4360F
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:32:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9886206B7
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:27:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 183062082C
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:32:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726427AbfDCJ1D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Apr 2019 05:27:03 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:38081 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725940AbfDCJ1D (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Apr 2019 05:27:03 -0400
-X-Originating-IP: 90.88.30.125
-Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 9E59824001B;
-        Wed,  3 Apr 2019 09:26:55 +0000 (UTC)
-Date:   Wed, 3 Apr 2019 11:26:55 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        id S1725990AbfDCJcc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Apr 2019 05:32:32 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:45109 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725935AbfDCJcc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Apr 2019 05:32:32 -0400
+Received: from [IPv6:2001:420:44c1:2579:c83e:d0a5:cb24:b9a9] ([IPv6:2001:420:44c1:2579:c83e:d0a5:cb24:b9a9])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id BcFshxPEGUjKfBcFwhDvGg; Wed, 03 Apr 2019 11:32:29 +0200
+Subject: Re: [PATCH v6 1/2] media: uapi: Add H264 low-level decoder API
+ compound controls.
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     hans.verkuil@cisco.com, acourbot@chromium.org,
+        sakari.ailus@linux.intel.com,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v4 3/5] media: sunxi: Add A10 CSI driver
-Message-ID: <20190403092655.engthyfinpxvndh4@flea>
-References: <cover.2aba8cbd95630d87f927465cc2beb881936c83d9.1553010938.git-series.maxime.ripard@bootlin.com>
- <bf348ec10d4444dd80eab0caddc4e2d3ce3131d4.1553010938.git-series.maxime.ripard@bootlin.com>
- <20190403091221.qd5ivgcoviazccv7@paasikivi.fi.intel.com>
+        tfiga@chromium.org, posciak@chromium.org,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        nicolas.dufresne@collabora.com, jenskuske@gmail.com,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se, ezequiel@collabora.com,
+        linux-sunxi@googlegroups.com,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>
+References: <cover.3917a1471bfc8cbdfdde8026566b3857caff5762.1553009355.git-series.maxime.ripard@bootlin.com>
+ <9d9fe5c2dc58f9398cb6b1e9bb208640d25ae816.1553009355.git-series.maxime.ripard@bootlin.com>
+ <dbe5702e-f76d-9c92-cab6-bd88d243ae55@xs4all.nl>
+ <4c70e58d-ce7b-c15d-4b1c-063cf9b67007@xs4all.nl>
+ <20190403072948.ixugqb2t4z3dcyd4@flea>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <9e2c1764-a7c3-71d7-5058-cb40cce4d4d6@xs4all.nl>
+Date:   Wed, 3 Apr 2019 11:32:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zchbulmqh2lleyeb"
-Content-Disposition: inline
-In-Reply-To: <20190403091221.qd5ivgcoviazccv7@paasikivi.fi.intel.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190403072948.ixugqb2t4z3dcyd4@flea>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfGhmIka3vRcnzhkOjszXlXoq65engabdrAMmDlyXuLaBX3wlGrkUGi6e0A7epMclXei6iuO+07XLnfINE5s+Mqwp1B9767FC1dv0zDrvXYVUYb5KrA8G
+ zXOJTREy6gvifRA7IU6xVFEszq7/4Jog3pOlj7M4F+DDPsCcZ6jmEWIqojmfaeD5SUilPvaIihC04J2TjBaAxGEh/H0Qhn8cLOg964XTUQwg5okwLZ4COWU0
+ Xxi2XHoHLoQfeL9ABzr6vMyl11e6ZaxV7Bo8ccS7HWhlDzlOZhoHueY0G2YuAg4gLUo0fNePmnwHjJk4Pb+w7aibCtQ0VpT9Ia4gmKeOV5OdLwRgiUkx7dqn
+ 8zIjHGi+vGsheZ/lKdFgU3p7tuufocuREmnL3tFD1iMfxaVBw0Ai71YOdkG9KzVNHCqzHwtyG4Hu9wkeOwsJGKH0Zfd9+FBpQ+Nf/pOBGbhysRKP9slgoEXd
+ omva50RBFtw6Cz0C2zST2Ps17de60UskyX267MAicziMTf3AEWn1WmmzfkI/7+1YOpyKS7iNZF+cJmn5QsytM1KhNau76xZXMrqMjmYjHGGjreqVsnM0qC5i
+ tSsF1xa0j6zh5IaB32JIycMg6L3OUOtk2MUmnVYYfvC6+NboJzaouy43+RF9T/BHi36m5Tk/u4/vfOWNmvmJRvY3jY5l3Gm/gqV7CYsRJPZ/N0yt60T40Up9
+ mg7RYGk2pDBqkMjUAYV+V4JbZEXITCIxaqRYp1mOThXKUhHJ/d/SHu/oYH6S+Zbe2YJsVXSxIw4Cv/51Zw30MtXXa11bn768gBN8CDgEUIirYOEdbgyJLsxj
+ 6tQLfE3bjyI2aIUJ3Ol8pop6B82Goarhb5TuNO/CX/3zgpjb2I/oCAo/cAhJfof7kuHaQoaqmJrroHeSj1QSryhF9AmyaG3DFy26SYwtgPtOGraEpj0DKY10
+ q+sESinId+Wqn47eD5WKAafaaumo/y1Ut11HebBxgrLLwbk2
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On 4/3/19 9:29 AM, Maxime Ripard wrote:
+> Hi Hans,
+> 
+> On Tue, Apr 02, 2019 at 01:39:21PM +0200, Hans Verkuil wrote:
+>>>> +struct v4l2_h264_dpb_entry {
+>>>> +	__u64 timestamp;
+>>>
+>>> As mentioned above, I suggest to rename this to 'reference_ts'.
+>>>
+>>> But see also the discussion below.
+>>>
+>>>> +	__u16 frame_num;
+>>>> +	__u16 pic_num;
+>>>> +	/* Note that field is indicated by v4l2_buffer.field */
+>>>> +	__s32 top_field_order_cnt;
+>>>> +	__s32 bottom_field_order_cnt;
+>>>> +	__u32 flags; /* V4L2_H264_DPB_ENTRY_FLAG_* */
+>>>> +};
+>>>> +
+>>>> +#define V4L2_H264_DECODE_PARAM_FLAG_IDR_PIC	0x01
+>>>> +
+>>>> +struct v4l2_ctrl_h264_decode_param {
+>>>> +	__u32 num_slices;
+>>>> +	__u32 nal_ref_idc;
+>>>> +	__u8 ref_pic_list_p0[32];
+>>>> +	__u8 ref_pic_list_b0[32];
+>>>> +	__u8 ref_pic_list_b1[32];
+>>>> +	__s32 top_field_order_cnt;
+>>>> +	__s32 bottom_field_order_cnt;
+>>>> +	__u32 flags; /* V4L2_H264_DECODE_PARAM_FLAG_* */
+>>>> +	struct v4l2_h264_dpb_entry dpb[16];
+>>>
+>>> Should the reference timestamp be included in this control? Or be
+>>> separated into its own control?
+>>>
+>>> Reference frames do not apply to stateless encoders (the driver will
+>>> have to maintain the reference frames internally). Everything else
+>>> is equally valid for both stateless encoders and decoders, but only
+>>> stateless decoders need to provide the reference frames.
+>>>
+>>> So in this case we would need to create a new control:
+>>>
+>>> #define V4L2_CID_MPEG_VIDEO_H264_DECODE_REF_TS	(V4L2_CID_MPEG_BASE+1005)
+>>>
+>>> Which is a u64 array control (16 elements for H.264).
+>>>
+>>> You would need to do something similar for MPEG2.
+>>
+>> The question is if this is worth the extra effort. An alternative is
+>> to just specify that these reference timestamps are always to be zeroed
+>> by stateless encoders and are unused.
+>>
+>> I'm undecided on this.
+> 
+> I'll address your other comments, thanks!
+> 
+> For that part, I haven't really looked at the encoder parameters yet,
+> but I guess we should have other controls to be passed there as well
+> (like the target level of encoding). We can probably reuse the
+> existing controls for that though.
+> 
+> From the way it looks, our encoder needs to put some parameters (the
+> level and feature flags, mostly) and will output the entire
+> bitstream. I'm not really sure if it qualifies as a stateless encoder,
+> but that would require far less than what we have in those controls
+> already.
 
---zchbulmqh2lleyeb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This sounds like a stateful encoder. A stateless encoder would rely on
+userspace to mux the metadata and the compressed video into a valid
+bitstream, and it doesn't seem that that's the case here.
 
-Hi Sakari,
+> 
+> Either way, maybe the good way forward here would be to way for an
+> H264 / MPEG2 stateless encoder to come up, either ours or some other,
+> to see what should we do about this. How does that sound?
 
-On Wed, Apr 03, 2019 at 12:12:21PM +0300, Sakari Ailus wrote:
-> Thanks for the update and my apologies for the late review.
->
-> On Tue, Mar 19, 2019 at 04:55:46PM +0100, Maxime Ripard wrote:
-> > The older CSI drivers have camera capture interface different from the one
-> > in the newer ones.
-> >
-> > This IP is pretty simple. Some variants (one controller out of two
-> > instances on some SoCs) have an ISP embedded, but there's no code that make
-> > use of it, so we ignored that part for now.
-> >
-> > Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
->
-> Could you add a sub-device for the CSI-2 receiver, please?
->
-> See e.g. drivers/media/pci/intel/ipu3/ipu3-cio2.c for an example.
+I think so too.
 
-It's confusing, I know, but this isn't a MIPI-CSI receiver. The IP is
-called CSI, but it's only capable of handling parallel and BT656.
+I think splitting off the reference timestamps into a separate control
+is probably overkill.
 
-Maxime
+Regards,
 
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+	Hans
 
---zchbulmqh2lleyeb
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> Maxime
+> 
+> --
+> Maxime Ripard, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXKR8XwAKCRDj7w1vZxhR
-xWzTAQCO6onvJvAyxQ/6zEc/t+3ODQNIh2Kd0llgRcS0+j8TzgEA+9nsA6jNG3Rt
-7u3CgLYRL2TexYqGU4lz12/2fB7ndAA=
-=riar
------END PGP SIGNATURE-----
-
---zchbulmqh2lleyeb--
