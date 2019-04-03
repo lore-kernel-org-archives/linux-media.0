@@ -2,161 +2,152 @@ Return-Path: <SRS0=djxu=SF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EADC4360F
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 14:35:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE4DC4360F
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 16:33:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 147C42084C
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 14:35:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED94820700
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 16:33:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rLsayv8Y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726218AbfDCOfp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Apr 2019 10:35:45 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:41578 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726168AbfDCOfp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 3 Apr 2019 10:35:45 -0400
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x33EZJOX091358
-        for <linux-media@vger.kernel.org>; Wed, 3 Apr 2019 10:35:43 -0400
-Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2rmwq4kpvq-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-media@vger.kernel.org>; Wed, 03 Apr 2019 10:35:43 -0400
-Received: from localhost
-        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-media@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
-        Wed, 3 Apr 2019 15:35:42 +0100
-Received: from b03cxnp08027.gho.boulder.ibm.com (9.17.130.19)
-        by e33.co.us.ibm.com (192.168.1.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 3 Apr 2019 15:35:23 +0100
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x33EZMRr14811234
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 3 Apr 2019 14:35:22 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0BCA66A058;
-        Wed,  3 Apr 2019 14:35:22 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 338C06A04F;
-        Wed,  3 Apr 2019 14:35:21 +0000 (GMT)
-Received: from [9.41.179.222] (unknown [9.41.179.222])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed,  3 Apr 2019 14:35:21 +0000 (GMT)
-Subject: Re: [PATCH 2/5] media: platform: Aspeed: Make reserved memory
- optional
-To:     Andrew Jeffery <andrew@aj.id.au>,
-        Eddie James <eajames@linux.ibm.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        Joel Stanley <joel@jms.id.au>,
+        id S1726412AbfDCQdD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Apr 2019 12:33:03 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:37486 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725959AbfDCQdC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Apr 2019 12:33:02 -0400
+Received: by mail-wm1-f66.google.com with SMTP id v14so9088732wmf.2;
+        Wed, 03 Apr 2019 09:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ci5kdgs4zzNiCOU9xoCRy1kxCFGKN5w3XnpTfFuIRAw=;
+        b=rLsayv8YSyXVzG7sagbDHu3zNZNh9nRh1i+hAchCWUxcU8/5BkmJOnnVwUlY08GGLy
+         MCJSc1hvPCyF8VNXp0SuQfTgBea2V44WASUoszxpsZ3M16JeIsednWyulyer3zveqls4
+         tnJVSXDUdWQVGhwe1bNG7HfjClUgVq30vaxJpWOo0QIlpNySMiv2KlbOQi5R3A7oQ9ow
+         U9zlNoA7aOb4lyiej2zU4AiQ8MjPkbJmnIzITWiP1ZKGW7LW2FhvsP3D+smGkGMxGNOr
+         zkOMj0GdiDXNG6oWnl6CXukRPHDwJ2eIyc0J5bS4YEUn4Ao9ZrjGtyqJeKpdYCekOFbK
+         N16A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ci5kdgs4zzNiCOU9xoCRy1kxCFGKN5w3XnpTfFuIRAw=;
+        b=ipxFeiwVg9RNXBLWDuhu5vZT6/evp+MdalhK6KMVyLVPwf2R+sR4gcWJcD+nx1TpGu
+         HZXbevTA50JVF3e6kxJ9JtXOzo13wq6Rdoym0JCIuYV2VQM6Enn1b98cu9zLrspbKUKk
+         xfSrTTesTETPW7s29UYWHld3Df2E59/kkLn9/oRqwbg1z72Q/YSa+O893On2zsDr8Lfz
+         cqNvE5ZqNk/mmZPITKkZQsJ1GP9m5VKe2tKdMbIudroMnDNe1XreSrHo2DYo8Zt5JDFS
+         72B56MEULLTxDzXO7F8/8ILfEb6bDiLK2Dbyn5cEbJ2UHzOBXCyE/s31F/SAM0TM/Lw2
+         Ijhw==
+X-Gm-Message-State: APjAAAUvmKDkxckdkrSsF0sJhcHhNH8qAJ8tCowYCWUihf3VXe7WX507
+        Uc5TvvhHHOwk+Jm8+Ujec5Eg/VYo
+X-Google-Smtp-Source: APXvYqwfFdxdz2pXSWOnhqD2XpU6E0eYdTWF2hyZ+B0FkEyOoLDW3n7hAqXNDu0tIhcCiSmLXc5r1A==
+X-Received: by 2002:a1c:4cf:: with SMTP id 198mr587259wme.125.1554309180837;
+        Wed, 03 Apr 2019 09:33:00 -0700 (PDT)
+Received: from localhost (pD9E51B25.dip0.t-ipconnect.de. [217.229.27.37])
+        by smtp.gmail.com with ESMTPSA id u17sm4529028wmu.36.2019.04.03.09.32.59
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 03 Apr 2019 09:32:59 -0700 (PDT)
+Date:   Wed, 3 Apr 2019 18:32:59 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, mark.rutland@arm.com,
-        Rob Herring <robh+dt@kernel.org>
-References: <1554229504-5661-1-git-send-email-eajames@linux.ibm.com>
- <1554229504-5661-3-git-send-email-eajames@linux.ibm.com>
- <7effb2de-cc91-47af-88a2-a0075262e9c4@www.fastmail.com>
-From:   Eddie James <eajames@linux.vnet.ibm.com>
-Date:   Wed, 3 Apr 2019 09:35:20 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Hans Verkuil <hans.verkuil@cisco.com>, od@zcrc.me,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] media: uapi: Add RGB bus formats for the
+ GiantPlus GPM940B0 panel
+Message-ID: <20190403163259.GS5238@ulmo>
+References: <20190314122622.7597-1-paul@crapouillou.net>
+ <20190314122622.7597-3-paul@crapouillou.net>
 MIME-Version: 1.0
-In-Reply-To: <7effb2de-cc91-47af-88a2-a0075262e9c4@www.fastmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19040314-0036-0000-0000-00000AA3E857
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00010867; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000284; SDB=6.01183763; UDB=6.00619767; IPR=6.00964515;
- MB=3.00026278; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-03 14:35:40
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19040314-0037-0000-0000-00004B41BA58
-Message-Id: <dd017f44-5d1d-d657-b159-c9dbaadd795f@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-03_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904030099
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="D+M1YvVlDncl3vD5"
+Content-Disposition: inline
+In-Reply-To: <20190314122622.7597-3-paul@crapouillou.net>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
-On 4/3/19 1:01 AM, Andrew Jeffery wrote:
->
-> On Wed, 3 Apr 2019, at 04:55, Eddie James wrote:
->> Reserved memory doesn't need to be required; system memory would work
->> fine.
-> I had to do a bit of legwork to understand what you were doing here. My
-> understanding is that we allocate out of the default CMA region if the
-> memory-region property isn't specified. Is that what you're expecting?
-> Could be helpful to be a little less terse in the commit message.
+--D+M1YvVlDncl3vD5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Mar 14, 2019 at 01:26:20PM +0100, Paul Cercueil wrote:
+> The GiantPlus GPM940B0 is a 24-bit TFT panel where the RGB components
+> are transferred sequentially on a 8-bit bus.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>=20
+> Notes:
+>     v2: New patch
+>=20
+>  include/uapi/linux/media-bus-format.h | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Correct.
+Please make sure you Cc the media maintainers on this one when you send
+the next version. Adding them now.
 
+>=20
+> diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/m=
+edia-bus-format.h
+> index d6a5a3bfe6c4..f31724d6cd40 100644
+> --- a/include/uapi/linux/media-bus-format.h
+> +++ b/include/uapi/linux/media-bus-format.h
+> @@ -34,7 +34,7 @@
+> =20
+>  #define MEDIA_BUS_FMT_FIXED			0x0001
+> =20
+> -/* RGB - next is	0x101b */
+> +/* RGB - next is	0x101d */
+>  #define MEDIA_BUS_FMT_RGB444_1X12		0x1016
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
+> @@ -54,6 +54,8 @@
+>  #define MEDIA_BUS_FMT_RGB888_1X24		0x100a
+>  #define MEDIA_BUS_FMT_RGB888_2X12_BE		0x100b
+>  #define MEDIA_BUS_FMT_RGB888_2X12_LE		0x100c
+> +#define MEDIA_BUS_FMT_RGB888_3X8_BE		0x101b
+> +#define MEDIA_BUS_FMT_RGB888_3X8_LE		0x101c
 
->
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   drivers/media/platform/aspeed-video.c | 6 +-----
->>   1 file changed, 1 insertion(+), 5 deletions(-)
->>
->> diff --git a/drivers/media/platform/aspeed-video.c
->> b/drivers/media/platform/aspeed-video.c
->> index 55c55a6..8144fe3 100644
->> --- a/drivers/media/platform/aspeed-video.c
->> +++ b/drivers/media/platform/aspeed-video.c
->> @@ -1608,11 +1608,7 @@ static int aspeed_video_init(struct aspeed_video
->> *video)
->>   		return PTR_ERR(video->vclk);
->>   	}
->>   
->> -	rc = of_reserved_mem_device_init(dev);
->> -	if (rc) {
->> -		dev_err(dev, "Unable to reserve memory\n");
->> -		return rc;
->> -	}
->> +	of_reserved_mem_device_init(dev);
-> You're ignoring *all* errors here with the expectation that the cause is the
-> missing memory-region property. However, other errors can propagate
-> out of of_reserved_mem_device_init() - e.g. ENOMEM. Rather than remove
-> error checking, I think you should explicitly test for ENODEV, which is what is
-> returned if the memory-region property is absent.
+The list looks roughly sorted, but these are not. That said, there are
+others that don't seem like they are sorted either. All the more
+important to get feedback from the media maintainers.
 
+Thierry
 
-But it doesn't matter if it fails for any reason, any DMA allocation 
-should fall back to default CMA memory. In the case of ENOMEM or other 
-errors, then the later calls to allocate DMA may fail and we can deal 
-with it then.
+--D+M1YvVlDncl3vD5
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAlyk4DoACgkQ3SOs138+
+s6HScg/9GyEDoCdxMtlPqDRYKP5xRAlt0XNtZfHL5ibuM/8vU6LU6b5JqAZIpi4a
+vJSzJitF9SE7vm7nBcmjZlKvxrOL9AusPveEVlmxuXniokaG5l+H5Tj2so7ut3hc
+ogYvh5Ofi9IgaI/PDkkfkqHdKABo+khmgorlMALjAhEyUC+315D4LU/bcoxpycgz
+gZNjhlzSeTgG7VIbbnl8lyoMgVJvwktahzO2RDkV4gDmLeJXmQY7Tq8ADE6RWKls
+xejx/kyRwdvPl87nESKw5qbtHY0Z4cAwnH9j/MDsYPtvFKCei9fJj+7/5nByGtuV
+O9cdE7aKo26mzLOOEH7vc8+bMBYllIgBILmDyGC/KCbXN4ATWABX7Wg8g7oM+xaS
+n8vfaRG627LIOYRNq3XTRutW17mFyjze8D1e1RHNIVEUrX0OtDA4g2hIQn2lm7o2
+zb/FfV7AH24L7n4z9i/uy5GOrAZseztoThqUt2MnRhVr2BXY5mt4caV3LEHMDdBJ
+qR7BpJbn2gZ3b+IITh8468TdowwMhEDoGEALIv8FeaKXePyKdPmDF03fSueMOfj4
+4PFN4yHOADhz5XdP2tG+Lnl0vIOxImAf4bBOzYRXXpu19j1WfgAYNgLXI+RExKuJ
+sHnXe+Jm2Jtj417ICallpwjt/YVaBvM3ONvsTgi3uNmPYq1zOWk=
+=yjYj
+-----END PGP SIGNATURE-----
 
-Eddie
-
-
->
-> Cheers,
->
-> Andrew
->
->>   
->>   	rc = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
->>   	if (rc) {
->> -- 
->> 1.8.3.1
->>
->>
-
+--D+M1YvVlDncl3vD5--
