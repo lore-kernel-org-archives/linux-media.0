@@ -2,151 +2,111 @@ Return-Path: <SRS0=djxu=SF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A367C4360F
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 07:30:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20EF1C4360F
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 07:32:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7134A2084C
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 07:30:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE12F2084C
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 07:32:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726245AbfDCHaB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Apr 2019 03:30:01 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:47739 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725936AbfDCHaA (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Apr 2019 03:30:00 -0400
-Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 92621100006;
-        Wed,  3 Apr 2019 07:29:48 +0000 (UTC)
-Date:   Wed, 3 Apr 2019 09:29:48 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     hans.verkuil@cisco.com, acourbot@chromium.org,
-        sakari.ailus@linux.intel.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        tfiga@chromium.org, posciak@chromium.org,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        nicolas.dufresne@collabora.com, jenskuske@gmail.com,
-        jernej.skrabec@gmail.com, jonas@kwiboo.se, ezequiel@collabora.com,
-        linux-sunxi@googlegroups.com,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH v6 1/2] media: uapi: Add H264 low-level decoder API
- compound controls.
-Message-ID: <20190403072948.ixugqb2t4z3dcyd4@flea>
-References: <cover.3917a1471bfc8cbdfdde8026566b3857caff5762.1553009355.git-series.maxime.ripard@bootlin.com>
- <9d9fe5c2dc58f9398cb6b1e9bb208640d25ae816.1553009355.git-series.maxime.ripard@bootlin.com>
- <dbe5702e-f76d-9c92-cab6-bd88d243ae55@xs4all.nl>
- <4c70e58d-ce7b-c15d-4b1c-063cf9b67007@xs4all.nl>
+        id S1727027AbfDCHcW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Apr 2019 03:32:22 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:58998 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726330AbfDCHcW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Apr 2019 03:32:22 -0400
+Received: from [192.168.2.10] ([212.251.195.8])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id BaNbhpWXRNG8zBaNfhO6ii; Wed, 03 Apr 2019 09:32:19 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        Takashi Iwai <tiwai@suse.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.2] Media Device Allocator API
+Message-ID: <30de419f-5dac-71a1-9255-d334d6025a0d@xs4all.nl>
+Date:   Wed, 3 Apr 2019 09:32:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6mczpj43p5bcvl5e"
-Content-Disposition: inline
-In-Reply-To: <4c70e58d-ce7b-c15d-4b1c-063cf9b67007@xs4all.nl>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfOV4/Z9kEsFYYIEAC7nOZxHQP3tqzxaiPJ2n0iojSW+lAM4h8iGDoT68vJIoEipfE07h645D8ZCKEGc9ZMmuJJN1fRguwCbYDbBLKD8xGgYr+XGuu3D/
+ jORiNWQDJ+4FYFfPvz9r2ElMNTh3C3+i6z6uA6SVWMizOLABg4VSB/dJV03wrSGzE1cHVtywsL2kC0wFI4eoD4UF+mUMnj0spcB+l78Ngg+dXmIvd/PXO8ee
+ QATOJS/Fcs6mMGT+xM7zSMFE2ztCSTyeuNWQB6I/uhg=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Mauro,
 
---6mczpj43p5bcvl5e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+After five (!) years of work, this is finally ready to go in.
 
-Hi Hans,
+Thank you Shuah for your perseverance!
 
-On Tue, Apr 02, 2019 at 01:39:21PM +0200, Hans Verkuil wrote:
-> >> +struct v4l2_h264_dpb_entry {
-> >> +	__u64 timestamp;
-> >
-> > As mentioned above, I suggest to rename this to 'reference_ts'.
-> >
-> > But see also the discussion below.
-> >
-> >> +	__u16 frame_num;
-> >> +	__u16 pic_num;
-> >> +	/* Note that field is indicated by v4l2_buffer.field */
-> >> +	__s32 top_field_order_cnt;
-> >> +	__s32 bottom_field_order_cnt;
-> >> +	__u32 flags; /* V4L2_H264_DPB_ENTRY_FLAG_* */
-> >> +};
-> >> +
-> >> +#define V4L2_H264_DECODE_PARAM_FLAG_IDR_PIC	0x01
-> >> +
-> >> +struct v4l2_ctrl_h264_decode_param {
-> >> +	__u32 num_slices;
-> >> +	__u32 nal_ref_idc;
-> >> +	__u8 ref_pic_list_p0[32];
-> >> +	__u8 ref_pic_list_b0[32];
-> >> +	__u8 ref_pic_list_b1[32];
-> >> +	__s32 top_field_order_cnt;
-> >> +	__s32 bottom_field_order_cnt;
-> >> +	__u32 flags; /* V4L2_H264_DECODE_PARAM_FLAG_* */
-> >> +	struct v4l2_h264_dpb_entry dpb[16];
-> >
-> > Should the reference timestamp be included in this control? Or be
-> > separated into its own control?
-> >
-> > Reference frames do not apply to stateless encoders (the driver will
-> > have to maintain the reference frames internally). Everything else
-> > is equally valid for both stateless encoders and decoders, but only
-> > stateless decoders need to provide the reference frames.
-> >
-> > So in this case we would need to create a new control:
-> >
-> > #define V4L2_CID_MPEG_VIDEO_H264_DECODE_REF_TS	(V4L2_CID_MPEG_BASE+1005)
-> >
-> > Which is a u64 array control (16 elements for H.264).
-> >
-> > You would need to do something similar for MPEG2.
->
-> The question is if this is worth the extra effort. An alternative is
-> to just specify that these reference timestamps are always to be zeroed
-> by stateless encoders and are unused.
->
-> I'm undecided on this.
+Regards,
 
-I'll address your other comments, thanks!
+	Hans
 
-For that part, I haven't really looked at the encoder parameters yet,
-but I guess we should have other controls to be passed there as well
-(like the target level of encoding). We can probably reuse the
-existing controls for that though.
+The following changes since commit 1c3ec30bb23023d738b538e64ac3028902d53692:
 
-=46rom the way it looks, our encoder needs to put some parameters (the
-level and feature flags, mostly) and will output the entire
-bitstream. I'm not really sure if it qualifies as a stateless encoder,
-but that would require far less than what we have in those controls
-already.
+  media: index.rst: exclude Indexes section from latex/pdf output (2019-03-30 09:42:35 -0400)
 
-Either way, maybe the good way forward here would be to way for an
-H264 / MPEG2 stateless encoder to come up, either ours or some other,
-to see what should we do about this. How does that sound?
+are available in the Git repository at:
 
-Maxime
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.2c3
 
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+for you to fetch changes up to 5ea25de43fd59a319136cf5b2e547ca315cfb212:
 
---6mczpj43p5bcvl5e
-Content-Type: application/pgp-signature; name="signature.asc"
+  au0828: stop video streaming only when last user stops (2019-04-03 09:01:15 +0200)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+Tag branch
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXKRg7AAKCRDj7w1vZxhR
-xWkOAQDj950LGL8g5ChswLf8C7Ktgyu6QoYL2RuqohRF+mFhYwEA/a01+LbhBj+n
-C+ihsMxE3npCOR5y/vroVSe+hgDWkg8=
-=MqY4
------END PGP SIGNATURE-----
+----------------------------------------------------------------
+Hans Verkuil (1):
+      au0828: stop video streaming only when last user stops
 
---6mczpj43p5bcvl5e--
+Shuah Khan (8):
+      media: Media Device Allocator API
+      media: change au0828 to use Media Device Allocator API
+      media: media.h: Enable ALSA MEDIA_INTF_T* interface types
+      sound/usb: Use Media Controller API to share media resources
+      au0828: fix enable and disable source audio and video inconsistencies
+      selftests: media_dev_allocator api test
+      au0828: Fix NULL pointer dereference in au0828_analog_stream_enable()
+      media: Clear devnode->media_dev holding media_devnode_lock
+
+ Documentation/media/kapi/mc-core.rst                       |  41 ++++++
+ drivers/media/Makefile                                     |   6 +
+ drivers/media/media-dev-allocator.c                        | 135 +++++++++++++++++
+ drivers/media/media-devnode.c                              |   3 +-
+ drivers/media/usb/au0828/Kconfig                           |   2 +
+ drivers/media/usb/au0828/au0828-core.c                     | 196 ++++++++++++++++++------
+ drivers/media/usb/au0828/au0828-video.c                    |  16 +-
+ drivers/media/usb/au0828/au0828.h                          |   6 +-
+ include/media/media-dev-allocator.h                        |  63 ++++++++
+ include/uapi/linux/media.h                                 |  25 ++--
+ sound/usb/Kconfig                                          |   4 +
+ sound/usb/Makefile                                         |   2 +
+ sound/usb/card.c                                           |  14 ++
+ sound/usb/card.h                                           |   3 +
+ sound/usb/media.c                                          | 327 +++++++++++++++++++++++++++++++++++++++++
+ sound/usb/media.h                                          |  74 ++++++++++
+ sound/usb/mixer.h                                          |   3 +
+ sound/usb/pcm.c                                            |  29 +++-
+ sound/usb/quirks-table.h                                   |   1 +
+ sound/usb/stream.c                                         |   2 +
+ sound/usb/usbaudio.h                                       |   6 +
+ tools/testing/selftests/media_tests/media_dev_allocator.sh |  85 +++++++++++
+ 22 files changed, 976 insertions(+), 67 deletions(-)
+ create mode 100644 drivers/media/media-dev-allocator.c
+ create mode 100644 include/media/media-dev-allocator.h
+ create mode 100644 sound/usb/media.c
+ create mode 100644 sound/usb/media.h
+ create mode 100755 tools/testing/selftests/media_tests/media_dev_allocator.sh
