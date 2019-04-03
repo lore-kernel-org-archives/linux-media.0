@@ -2,79 +2,95 @@ Return-Path: <SRS0=djxu=SF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4BD1C4360F
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:12:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA4F8C4360F
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:22:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8DC4B21473
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:12:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B84A821473
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:22:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbfDCJM0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Apr 2019 05:12:26 -0400
-Received: from mga18.intel.com ([134.134.136.126]:21687 "EHLO mga18.intel.com"
+        id S1726263AbfDCJWD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Apr 2019 05:22:03 -0400
+Received: from gofer.mess.org ([88.97.38.141]:60989 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725935AbfDCJM0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 3 Apr 2019 05:12:26 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Apr 2019 02:12:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,304,1549958400"; 
-   d="scan'208";a="139735484"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga007.fm.intel.com with ESMTP; 03 Apr 2019 02:12:22 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id A76DE20892; Wed,  3 Apr 2019 12:12:21 +0300 (EEST)
-Date:   Wed, 3 Apr 2019 12:12:21 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH v4 3/5] media: sunxi: Add A10 CSI driver
-Message-ID: <20190403091221.qd5ivgcoviazccv7@paasikivi.fi.intel.com>
-References: <cover.2aba8cbd95630d87f927465cc2beb881936c83d9.1553010938.git-series.maxime.ripard@bootlin.com>
- <bf348ec10d4444dd80eab0caddc4e2d3ce3131d4.1553010938.git-series.maxime.ripard@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bf348ec10d4444dd80eab0caddc4e2d3ce3131d4.1553010938.git-series.maxime.ripard@bootlin.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+        id S1725956AbfDCJWD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Apr 2019 05:22:03 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 3A6E86020F; Wed,  3 Apr 2019 10:22:01 +0100 (BST)
+From:   Sean Young <sean@mess.org>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH v4l-utils] keytable: improve description of ir-keytable
+Date:   Wed,  3 Apr 2019 10:22:01 +0100
+Message-Id: <20190403092201.1709-1-sean@mess.org>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Maxime,
+Signed-off-by: Sean Young <sean@mess.org>
+---
+ utils/keytable/ir-keytable.1.in |  8 +++++---
+ utils/keytable/keytable.c       | 10 +++++++---
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
-Thanks for the update and my apologies for the late review.
-
-On Tue, Mar 19, 2019 at 04:55:46PM +0100, Maxime Ripard wrote:
-> The older CSI drivers have camera capture interface different from the one
-> in the newer ones.
-> 
-> This IP is pretty simple. Some variants (one controller out of two
-> instances on some SoCs) have an ISP embedded, but there's no code that make
-> use of it, so we ignored that part for now.
-> 
-> Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
-
-Could you add a sub-device for the CSI-2 receiver, please?
-
-See e.g. drivers/media/pci/intel/ipu3/ipu3-cio2.c for an example.
-
+diff --git a/utils/keytable/ir-keytable.1.in b/utils/keytable/ir-keytable.1.in
+index 3ea7ea51..5237f0be 100644
+--- a/utils/keytable/ir-keytable.1.in
++++ b/utils/keytable/ir-keytable.1.in
+@@ -5,9 +5,11 @@ ir\-keytable \- a swiss\-knife tool to handle Remote Controllers.
+ .B ir\-keytable
+ [\fIOPTION\fR]...
+ .SH DESCRIPTION
+-ir\-keytable is a tool that lists the Remote Controller devices, allows one to
+-get/set rc keycode/scancode tables, set protocol decoder, test events
+-generated by a rc device, and to adjust other Remote Controller options.
++ir\-keytable is a tool that lists Remote Controller devices, loads
++rc keymaps, tests events, and adjusts other Remote Controller options.
++.PP
++Rather than loading a rc keymap, it is also possible to set protocol decoders
++and set rc scancode to keycode mappings directly.
+ .PP
+ Note: You need to have read permissions on /dev/input for most of the
+ options to work.
+diff --git a/utils/keytable/keytable.c b/utils/keytable/keytable.c
+index 2ad36d87..9384532b 100644
+--- a/utils/keytable/keytable.c
++++ b/utils/keytable/keytable.c
+@@ -95,7 +95,7 @@ struct cfgfile {
+ 	struct cfgfile	*next;
+ };
+ 
+-struct sysfs_names  {
++struct sysfs_names {
+ 	char			*name;
+ 	struct sysfs_names	*next;
+ };
+@@ -227,7 +227,11 @@ const char *argp_program_version = "IR keytable control version " V4L_UTILS_VERS
+ const char *argp_program_bug_address = "Mauro Carvalho Chehab <mchehab@kernel.org>";
+ 
+ static const char doc[] = N_(
+-	"\nAllows get/set IR keycode/scancode tables\n"
++	"\nLists Remote Controller devices, loads rc keymaps, tests events, and adjusts\n"
++	"other Remote Controller options. Rather than loading a rc keymap, it is also\n"
++	"possible to set protocol decoders and set rc scancode to keycode mappings\n"
++	"directly.\n"
++
+ 	"You need to have read permissions on /dev/input for the program to work\n"
+ 	"\nOn the options below, the arguments are:\n"
+ 	"  SYSDEV    - the rc device as found at /sys/class/rc\n"
+@@ -1593,7 +1597,7 @@ static void print_scancodes(const struct lirc_scancode *scancodes, unsigned coun
+ {
+ 	unsigned i;
+ 
+-	for (i=0; i< count; i++)  {
++	for (i=0; i< count; i++) {
+ 		const char *p = protocol_name(scancodes[i].rc_proto);
+ 
+ 		printf(_("%llu.%06llu: "),
 -- 
-Regards,
+2.20.1
 
-Sakari Ailus
-sakari.ailus@linux.intel.com
