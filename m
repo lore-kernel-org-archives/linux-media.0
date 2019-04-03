@@ -2,146 +2,154 @@ Return-Path: <SRS0=djxu=SF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25E11C4360F
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 02:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17CF3C4360F
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 03:48:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E32BF21734
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 02:27:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E017A20882
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 03:48:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbfDCC1K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Apr 2019 22:27:10 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:61547 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726089AbfDCC1K (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Apr 2019 22:27:10 -0400
-X-UUID: 7bcf47805340472498a6c68c7b28a48a-20190403
-X-UUID: 7bcf47805340472498a6c68c7b28a48a-20190403
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
-        (envelope-from <jerry-ch.chen@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1331863561; Wed, 03 Apr 2019 10:26:56 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 3 Apr 2019 10:26:54 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 3 Apr 2019 10:26:54 +0800
-Message-ID: <1554258414.11458.27.camel@mtksdccf07>
-Subject: Re: [RFC PATCH V0 5/7] dts: arm64: mt8183: Add FD nodes
-From:   Jerry-ch Chen <Jerry-ch.Chen@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>,
-        "laurent.pinchart+renesas@ideasonboard.com" 
-        <laurent.pinchart+renesas@ideasonboard.com>,
-        "tfiga@chromium.org" <tfiga@chromium.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "yuzhao@chromium.org" <yuzhao@chromium.org>,
-        "zwisler@chromium.org" <zwisler@chromium.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Sean Cheng =?UTF-8?Q?=28=E9=84=AD=E6=98=87=E5=BC=98=29?= 
-        <Sean.Cheng@mediatek.com>,
-        "Sj Huang =?UTF-8?Q?=28=E9=BB=83=E4=BF=A1=E7=92=8B=29?=" 
-        <sj.huang@mediatek.com>,
-        Christie Yu =?UTF-8?Q?=28=E6=B8=B8=E9=9B=85=E6=83=A0=29?= 
-        <christie.yu@mediatek.com>,
-        Holmes Chiou =?UTF-8?Q?=28=E9=82=B1=E6=8C=BA=29?= 
-        <holmes.chiou@mediatek.com>,
-        Frederic Chen =?UTF-8?Q?=28=E9=99=B3=E4=BF=8A=E5=85=83=29?= 
-        <Frederic.Chen@mediatek.com>,
-        Jungo Lin =?UTF-8?Q?=28=E6=9E=97=E6=98=8E=E4=BF=8A=29?= 
-        <jungo.lin@mediatek.com>,
-        Rynn Wu =?UTF-8?Q?=28=E5=90=B3=E8=82=B2=E6=81=A9=29?= 
-        <Rynn.Wu@mediatek.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        <Jerry-ch.chen@mediatek.com>
-Date:   Wed, 3 Apr 2019 10:26:54 +0800
-In-Reply-To: <20190325215728.GA32712@bogus>
-References: <1550648893-42050-1-git-send-email-Jerry-Ch.chen@mediatek.com>
-         <1550648893-42050-6-git-send-email-Jerry-Ch.chen@mediatek.com>
-         <20190325215728.GA32712@bogus>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
-X-MTK:  N
+        id S1726534AbfDCDsx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Apr 2019 23:48:53 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:39173 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726130AbfDCDsx (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 2 Apr 2019 23:48:53 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:900c:db35:bdd6:b8de])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id BWtNhoM1rNG8zBWtPhNEgN; Wed, 03 Apr 2019 05:48:51 +0200
+Message-ID: <9f8ae841c5f2d7113763c789459f0080@smtp-cloud7.xs4all.net>
+Date:   Wed, 03 Apr 2019 05:48:49 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfHK/Pf6ryiqlox6oEVHDnugdWMSqtNKhcKYR1x6k+QhaPL99iDQKw+kD8fuTRKxZe6stGvoitlOLi1lKONpWXnGFu0E6aMou2JQLlte+2PRZQxUml8ol
+ wvs8NnpHDZACkGnPjZAxJmyMJOCi4e8Rs8fGSC/z3ToHc1QkDeqci8Van7hw+A+zsxJsSXTJNN43jnSZJK1I+UOxtwVKkYGckTuUSUgwJ9tlRG38LV0PDHZv
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 2019-03-26 at 05:57 +0800, Rob Herring wrote:
-> On Wed, Feb 20, 2019 at 03:48:11PM +0800, Jerry-ch Chen wrote:
-> > This patch adds nodes for Face Detection (FD) unit. FD is embedded
-> > in Mediatek SoCs and works with the co-processor to perform face
-> > detection on the input data and image and output detected face result.
-> > 
-> > Signed-off-by: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
-> > ---
-> >  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 20 ++++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index b3d8dfd..45c7e2f 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -440,6 +440,26 @@
-> >  			#clock-cells = <1>;
-> >  		};
-> >  
-> > +		fd_smem: fd_smem {
-> > +			compatible = "mediatek,fd_smem";
-> > +			mediatek,larb = <&larb5>;
-> > +			iommus = <&iommu M4U_PORT_CAM_IMGI>;
-> 
-> This doesn't look like an actual h/w device...
-> 
-Thank you for your comments.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-fd_smem is not an actual h/w device and it will not be used in the
-future. We are going to remove the fd smem driver and fd_smem node.
+Results of the daily build of media_tree:
 
-> > +		};
-> > +
-> > +		fd:fd@1502b000 {
-> 
-> space after the :  ^
-will be fixed.
+date:			Wed Apr  3 05:00:10 CEST 2019
+media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
+media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
+v4l-utils git hash:	2be31095509aa5bad3c01248a69a8fc49b713dc1
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-2-amd64
 
-> > +			compatible = "mediatek,fd";
-> 
-> Should be SoC specific.
-> 
-will be fixed as "mediatek, mt8183-fd".
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
 
-Thanks and Best Regards
-Jerry
-> > +			mediatek,larb = <&larb5>;
-> > +			mediatek,vpu = <&vpu>;
-> > +			iommus = <&iommu M4U_PORT_CAM_FDVT_RP>,
-> > +				 <&iommu M4U_PORT_CAM_FDVT_WR>,
-> > +				 <&iommu M4U_PORT_CAM_FDVT_RB>;
-> > +			reg = <0 0x1502b000 0 0x1000>;
-> > +			interrupts = <GIC_SPI 269 IRQ_TYPE_LEVEL_LOW>;
-> > +			clocks = <&imgsys CLK_IMG_FDVT>;
-> > +			clock-names = "FD_CLK_IMG_FD";
-> > +			smem_device = <&fd_smem>;
-> > +		};
-> > +
-> >  		vdecsys: syscon@16000000 {
-> >  			compatible = "mediatek,mt8183-vdecsys", "syscon";
-> >  			reg = <0 0x16000000 0 0x1000>;
-> > -- 
-> > 1.9.1
-> > 
+Detailed results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
 
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
