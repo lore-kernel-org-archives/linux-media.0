@@ -2,211 +2,153 @@ Return-Path: <SRS0=djxu=SF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FD18C4360F
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16595C4360F
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 13:40:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DD93A206DD
-	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 09:55:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8EE32075E
+	for <linux-media@archiver.kernel.org>; Wed,  3 Apr 2019 13:40:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PN+NhD1M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726084AbfDCJzM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Apr 2019 05:55:12 -0400
-Received: from gofer.mess.org ([88.97.38.141]:33959 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725954AbfDCJzM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 3 Apr 2019 05:55:12 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 5806D6020F; Wed,  3 Apr 2019 10:55:10 +0100 (BST)
-Date:   Wed, 3 Apr 2019 10:55:10 +0100
-From:   Sean Young <sean@mess.org>
-To:     Matthias Reichl <hias@horus.com>
-Cc:     Benjamin Valentin <benpicco@googlemail.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] media: rc: xbox_remote: add protocol and set timeout
-Message-ID: <20190403095509.y5yobx2dkqhimv6q@gofer.mess.org>
-References: <20190324094351.5584-1-hias@horus.com>
+        id S1726269AbfDCNkZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Apr 2019 09:40:25 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:35147 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725990AbfDCNkY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Apr 2019 09:40:24 -0400
+Received: by mail-ed1-f67.google.com with SMTP id s39so14976874edb.2
+        for <linux-media@vger.kernel.org>; Wed, 03 Apr 2019 06:40:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Kl55FoeBils/W/CEbGoW8mstIpzEN8voixzlOHR3PlY=;
+        b=PN+NhD1MWGya9OAEq+Im0xvNGTVkPoCKcXxpBBmkzBreAwinVjNVw/+F3y2VqSWdkG
+         d21+WmqYiU4su1Pd7HsaJ7mh7PUdeK2ZBZ7D0fEQduXKnHosLYqxMwXShY1/+pixy/6w
+         S4AxGIOhKGutX87h9e1jyzZpRpfkrorEtABU+ymx+aUBrFKjGqy5iVnAFnHWaRHHWYvb
+         Wv7rieX5u3/O7aCWmeLvcn5k+jj5cQml3Y/ES/LQgRzmBLk64u502YQgO2Xm3lsuoFLx
+         Uw9tBpWqN5uU5wDYP9KaXG5RqeCz/2qvNWGpkfyWYdDJ71bv1LqvxvVM9t/dAyPhlI4e
+         cn2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Kl55FoeBils/W/CEbGoW8mstIpzEN8voixzlOHR3PlY=;
+        b=IHQbIk8no3mt/vHvrsGVK2QzX1sA9FC/UWIsRoCIgrgWQbl6UGRlhumn66VxhAQrLt
+         VKQ6Yx6D9f6uPIdjUQ/V0PHw3ynszrOtl9br6rIJYAq0hSFGT+8w+ErwwOBI8aw28Q4a
+         3AZDsPa0UgVSvYJnpGvGxgME5QLTHWjGGaQ1j/2Vs0qL49rq+zJxVwv9G7ci8qIq070y
+         GfD46i9Nijh1PaWEskwmP0MMbgvCqatpcmECn4LihoXfZ30bBJzXgsdpKKcS0qsM8nVu
+         GD7dfJSTi4XqRrreXf6Q5ivE07iKvBIroFpnf+tXYwCcsfpqCGEFo0AW6xrup599WRYC
+         KOdA==
+X-Gm-Message-State: APjAAAXzpndEpZAr69dC4RivHWXt24bMt2p6znNvpi4KDRJVpnVmQ9Sf
+        WtwX4Mbu16129kYB1LJIT/IW8aeL8YVbCzweD6Iyf6zP
+X-Google-Smtp-Source: APXvYqzU68dneArw0apTq7VaXXO7smNFfXvMmO+FYznntw8+YAPg6DD09Yc3PC/EUPbLbRJ6mQXpw8p5/3eqKnLNL7A=
+X-Received: by 2002:a05:6402:608:: with SMTP id n8mr51053754edv.136.1554298823167;
+ Wed, 03 Apr 2019 06:40:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190324094351.5584-1-hias@horus.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <CAD4B5T8kxWOcEVZVop=u2k1G0wHFv0LSLwbe+MDQ3q-Be5hcOQ@mail.gmail.com>
+ <20190402114102.GU4805@pendragon.ideasonboard.com>
+In-Reply-To: <20190402114102.GU4805@pendragon.ideasonboard.com>
+From:   =?UTF-8?Q?Salvador_Fern=C3=A1ndez?= <moltitronico@gmail.com>
+Date:   Wed, 3 Apr 2019 15:40:11 +0200
+Message-ID: <CAD4B5T-O+V0De9mzRUGWzVoGwkFcTdAi7rDg=a9MH9tPP7za5g@mail.gmail.com>
+Subject: Re: [PATCH 0/0] media: uvcdriver: add support for Chicony HP Full-HD
+ Camera (04f2:b62f)
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sun, Mar 24, 2019 at 10:43:51AM +0100, Matthias Reichl wrote:
-> The timestamps in ir-keytable -t output showed that the Xbox DVD
-> IR dongle decodes scancodes every 64ms. The last scancode of a
-> longer button press is decodes 64ms after the last-but-one which
-> indicates the decoder doesn't use a timeout but decodes on the last
-> edge of the signal.
-> 
-> 267.042629: lirc protocol(unknown): scancode = 0xace
-> 267.042665: event type EV_MSC(0x04): scancode = 0xace
-> 267.042665: event type EV_KEY(0x01) key_down: KEY_1(0x0002)
-> 267.042665: event type EV_SYN(0x00).
-> 267.106625: lirc protocol(unknown): scancode = 0xace
-> 267.106643: event type EV_MSC(0x04): scancode = 0xace
-> 267.106643: event type EV_SYN(0x00).
-> 267.170623: lirc protocol(unknown): scancode = 0xace
-> 267.170638: event type EV_MSC(0x04): scancode = 0xace
-> 267.170638: event type EV_SYN(0x00).
-> 267.234621: lirc protocol(unknown): scancode = 0xace
-> 267.234636: event type EV_MSC(0x04): scancode = 0xace
-> 267.234636: event type EV_SYN(0x00).
-> 267.298623: lirc protocol(unknown): scancode = 0xace
-> 267.298638: event type EV_MSC(0x04): scancode = 0xace
-> 267.298638: event type EV_SYN(0x00).
-> 267.543345: event type EV_KEY(0x01) key_down: KEY_1(0x0002)
-> 267.543345: event type EV_SYN(0x00).
-> 267.570015: event type EV_KEY(0x01) key_up: KEY_1(0x0002)
-> 267.570015: event type EV_SYN(0x00).
-> 
-> Add a protocol with the repeat value and set the timeout in the
-> driver to 10ms (to have a bit of headroom for delays) so the Xbox
-> DVD remote performs more responsive.
-> 
-> Signed-off-by: Matthias Reichl <hias@horus.com>
-> ---
-> Bug report about sluggish response of the Xbox DVD remote and test
-> results can be found in this thread:
-> https://forum.libreelec.tv/thread/14861-the-adventures-of-libreelec-and-a-really-old-ir-remote/
-> 
-> We tried to capture some more protocol details with an mceusb receiver
-> but this didn't work well - could be that the Xbox DVD remote uses a
-> different carrier frequency and/or the IR receiver can't cope well with
-> it's burst lengths.
+Hi Laurent,
 
-Not sure what was happening there. When I try with my topseed mceusb device
-it works. The remote repeats the IR signal every 64ms exactly, so I think
-your patch is spot on.
+Sorry for the delay.
 
-Thanks
+El mar., 2 abr. 2019 a las 13:41, Laurent Pinchart
+(<laurent.pinchart@ideasonboard.com>) escribi=C3=B3:
+>
+> Hi Salvador,
+>
+> Thank you for the patch.
+>
+> On Mon, Apr 01, 2019 at 05:47:26PM +0200, Salvador Fern=C3=A1ndez wrote:
+> > Hi developers,
+> >
+> > A very simple patch to add support for newer HP Full-HD Camera.
+> > Pgp key for signature is
+> > http://keys.gnupg.net/pks/lookup?op=3Dget&search=3D0x93360317E5CECDDA
+>
+> Please see Documentation/process/submitting-patches.rst in the kernel
+> sources for an explanation on how to submit patches. Your patch needs to
+> include a Signed-off-by line. I advice using git-send-email to send it
+> out if you can, as that solves lots of issues with e-mail clients.
 
-Sean
+Next patch will follow your instructions.
 
-> 
-> 
->  Documentation/media/lirc.h.rst.exceptions | 1 +
->  drivers/media/rc/keymaps/rc-xbox-dvd.c    | 2 +-
->  drivers/media/rc/rc-main.c                | 2 ++
->  drivers/media/rc/xbox_remote.c            | 4 +++-
->  include/media/rc-map.h                    | 4 +++-
->  include/uapi/linux/lirc.h                 | 2 ++
->  6 files changed, 12 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/media/lirc.h.rst.exceptions b/Documentation/media/lirc.h.rst.exceptions
-> index 7a8b8ff4f076..ac768d769113 100644
-> --- a/Documentation/media/lirc.h.rst.exceptions
-> +++ b/Documentation/media/lirc.h.rst.exceptions
-> @@ -63,6 +63,7 @@ ignore symbol RC_PROTO_IMON
->  ignore symbol RC_PROTO_RCMM12
->  ignore symbol RC_PROTO_RCMM24
->  ignore symbol RC_PROTO_RCMM32
-> +ignore symbol RC_PROTO_XBOX_DVD
->  
->  # Undocumented macros
->  
-> diff --git a/drivers/media/rc/keymaps/rc-xbox-dvd.c b/drivers/media/rc/keymaps/rc-xbox-dvd.c
-> index af387244636b..42815ab57bff 100644
-> --- a/drivers/media/rc/keymaps/rc-xbox-dvd.c
-> +++ b/drivers/media/rc/keymaps/rc-xbox-dvd.c
-> @@ -42,7 +42,7 @@ static struct rc_map_list xbox_dvd_map = {
->  	.map = {
->  		.scan     = xbox_dvd,
->  		.size     = ARRAY_SIZE(xbox_dvd),
-> -		.rc_proto = RC_PROTO_UNKNOWN,
-> +		.rc_proto = RC_PROTO_XBOX_DVD,
->  		.name     = RC_MAP_XBOX_DVD,
->  	}
->  };
-> diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-> index e8fa28e20192..be5fd129d728 100644
-> --- a/drivers/media/rc/rc-main.c
-> +++ b/drivers/media/rc/rc-main.c
-> @@ -76,6 +76,7 @@ static const struct {
->  		.scancode_bits = 0x00ffffff, .repeat_period = 114 },
->  	[RC_PROTO_RCMM32] = { .name = "rc-mm-32",
->  		.scancode_bits = 0xffffffff, .repeat_period = 114 },
-> +	[RC_PROTO_XBOX_DVD] = { .name = "xbox-dvd", .repeat_period = 64 },
->  };
->  
->  /* Used to keep track of known keymaps */
-> @@ -1027,6 +1028,7 @@ static const struct {
->  	{ RC_PROTO_BIT_RCMM12 |
->  	  RC_PROTO_BIT_RCMM24 |
->  	  RC_PROTO_BIT_RCMM32,	"rc-mm",	"ir-rcmm-decoder"	},
-> +	{ RC_PROTO_BIT_XBOX_DVD, "xbox-dvd",	NULL			},
->  };
->  
->  /**
-> diff --git a/drivers/media/rc/xbox_remote.c b/drivers/media/rc/xbox_remote.c
-> index f959cbb94744..79470c09989e 100644
-> --- a/drivers/media/rc/xbox_remote.c
-> +++ b/drivers/media/rc/xbox_remote.c
-> @@ -148,7 +148,7 @@ static void xbox_remote_rc_init(struct xbox_remote *xbox_remote)
->  	struct rc_dev *rdev = xbox_remote->rdev;
->  
->  	rdev->priv = xbox_remote;
-> -	rdev->allowed_protocols = RC_PROTO_BIT_UNKNOWN;
-> +	rdev->allowed_protocols = RC_PROTO_BIT_XBOX_DVD;
->  	rdev->driver_name = "xbox_remote";
->  
->  	rdev->open = xbox_remote_rc_open;
-> @@ -157,6 +157,8 @@ static void xbox_remote_rc_init(struct xbox_remote *xbox_remote)
->  	rdev->device_name = xbox_remote->rc_name;
->  	rdev->input_phys = xbox_remote->rc_phys;
->  
-> +	rdev->timeout = MS_TO_NS(10);
-> +
->  	usb_to_input_id(xbox_remote->udev, &rdev->input_id);
->  	rdev->dev.parent = &xbox_remote->interface->dev;
->  }
-> diff --git a/include/media/rc-map.h b/include/media/rc-map.h
-> index 5e684bb0d64c..367d983188f7 100644
-> --- a/include/media/rc-map.h
-> +++ b/include/media/rc-map.h
-> @@ -40,6 +40,7 @@
->  #define RC_PROTO_BIT_RCMM12		BIT_ULL(RC_PROTO_RCMM12)
->  #define RC_PROTO_BIT_RCMM24		BIT_ULL(RC_PROTO_RCMM24)
->  #define RC_PROTO_BIT_RCMM32		BIT_ULL(RC_PROTO_RCMM32)
-> +#define RC_PROTO_BIT_XBOX_DVD		BIT_ULL(RC_PROTO_XBOX_DVD)
->  
->  #define RC_PROTO_BIT_ALL \
->  			(RC_PROTO_BIT_UNKNOWN | RC_PROTO_BIT_OTHER | \
-> @@ -55,7 +56,8 @@
->  			 RC_PROTO_BIT_RC6_MCE | RC_PROTO_BIT_SHARP | \
->  			 RC_PROTO_BIT_XMP | RC_PROTO_BIT_CEC | \
->  			 RC_PROTO_BIT_IMON | RC_PROTO_BIT_RCMM12 | \
-> -			 RC_PROTO_BIT_RCMM24 | RC_PROTO_BIT_RCMM32)
-> +			 RC_PROTO_BIT_RCMM24 | RC_PROTO_BIT_RCMM32 | \
-> +			 RC_PROTO_BIT_XBOX_DVD)
->  /* All rc protocols for which we have decoders */
->  #define RC_PROTO_BIT_ALL_IR_DECODER \
->  			(RC_PROTO_BIT_RC5 | RC_PROTO_BIT_RC5X_20 | \
-> diff --git a/include/uapi/linux/lirc.h b/include/uapi/linux/lirc.h
-> index 45fcbf99d72e..f99d9dcae667 100644
-> --- a/include/uapi/linux/lirc.h
-> +++ b/include/uapi/linux/lirc.h
-> @@ -195,6 +195,7 @@ struct lirc_scancode {
->   * @RC_PROTO_RCMM12: RC-MM protocol 12 bits
->   * @RC_PROTO_RCMM24: RC-MM protocol 24 bits
->   * @RC_PROTO_RCMM32: RC-MM protocol 32 bits
-> + * @RC_PROTO_XBOX_DVD: Xbox DVD Movie Playback Kit protocol
->   */
->  enum rc_proto {
->  	RC_PROTO_UNKNOWN	= 0,
-> @@ -224,6 +225,7 @@ enum rc_proto {
->  	RC_PROTO_RCMM12		= 24,
->  	RC_PROTO_RCMM24		= 25,
->  	RC_PROTO_RCMM32		= 26,
-> +	RC_PROTO_XBOX_DVD	= 27,
->  };
->  
->  #endif
-> -- 
-> 2.20.1
+Regarding your requests, I will recompile the kernel three times. One
+without the patch, another with it and the last one with the options
+that you indicate to me. I will send you the results / logs in each
+case.
+The only problem I see is that the kernel is 4.9.0-3, the debian stable one=
+.
+
+Time to recompile!
+
+>
+> Please see below for a few comments.
+>
+> > Thanks a lot for your work,
+>
+> You're welcome.
+>
+> > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc=
+/uvc_driver.c
+> > index 10cfe8e51626..ee9c72543c11 100644
+> > --- a/drivers/media/usb/uvc/uvc_driver.c
+> > +++ b/drivers/media/usb/uvc/uvc_driver.c
+> > @@ -2510,6 +2510,15 @@ static const struct usb_device_id uvc_ids[] =3D =
+{
+> >         .bInterfaceSubClass   =3D 1,
+> >         .bInterfaceProtocol   =3D 0,
+> >         .driver_info          =3D UVC_INFO_QUIRK(UVC_QUIRK_RESTRICT_FRA=
+ME_RATE) },
+> > +        /* Chicony HP Full-HD Camera (04f2:b62f) */
+> > +        { .match_flags          =3D USB_DEVICE_ID_MATCH_DEVICE
+> > +                                | USB_DEVICE_ID_MATCH_INT_INFO,
+> > +          .idVendor             =3D 0x04f2,
+> > +          .idProduct            =3D 0xb62f,
+> > +          .bInterfaceClass      =3D USB_CLASS_VIDEO,
+> > +          .bInterfaceSubClass   =3D 1,
+> > +          .bInterfaceProtocol   =3D 0,
+> > +          .driver_info          =3D UVC_INFO_QUIRK(UVC_QUIRK_RESTRICT_=
+FRAME_RATE) },
+>
+> Is this quirk needed ? What happens if you don't specify it ? What
+> happens if the whole device entry isn't added, does the uvcvideo driver
+> print error messages to the kernel log ?
+>
+> >       /* Alcor Micro AU3820 (Future Boy PC USB Webcam) */
+> >       { .match_flags          =3D USB_DEVICE_ID_MATCH_DEVICE
+> >                               | USB_DEVICE_ID_MATCH_INT_INFO,
+>
+>
+> --
+> Regards,
+>
+> Laurent Pinchart
+
+
+
+--=20
+Un saludo,
+
+Salva
