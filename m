@@ -2,331 +2,134 @@ Return-Path: <SRS0=KukI=SG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8278C10F0E
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 16:01:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80321C4360F
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 16:24:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A13992082E
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 16:01:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F4B920657
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 16:24:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hE7kSjzt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728861AbfDDQBY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Apr 2019 12:01:24 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:53473 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726888AbfDDQBX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Apr 2019 12:01:23 -0400
-X-Originating-IP: 2.224.242.101
-Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id E10771BF205;
-        Thu,  4 Apr 2019 16:01:19 +0000 (UTC)
-Date:   Thu, 4 Apr 2019 18:02:05 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: Re: [PATCH 1/9] v4l: Add definitions for missing 32-bit RGB formats
-Message-ID: <20190404160205.abekrybup23fo7ad@uno.localdomain>
-References: <20190328070723.26553-1-laurent.pinchart+renesas@ideasonboard.com>
- <20190328070723.26553-2-laurent.pinchart+renesas@ideasonboard.com>
- <20190328131543.zlito5lm3n7mjyls@uno.localdomain>
- <20190402121200.GX4805@pendragon.ideasonboard.com>
+        id S1729120AbfDDQYG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Apr 2019 12:24:06 -0400
+Received: from mail-vs1-f65.google.com ([209.85.217.65]:33262 "EHLO
+        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727051AbfDDQYG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Apr 2019 12:24:06 -0400
+Received: by mail-vs1-f65.google.com with SMTP id a190so1737756vsd.0;
+        Thu, 04 Apr 2019 09:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4AkQLLIUIPYpV/JS7s3jTAzAGf+1v6pVPd+k37Rstdw=;
+        b=hE7kSjztgwz0MC81/GIIudK1yRuB2MB5Y5TeYbNvTO6g/0pyPzGhuXpjmr56P9rklO
+         h7AHxEG8CysYexiruRj5kkSKQlJgQHUMaJ5rq8sKgfcfB4yTr4tNFUX/h3aD0amYg4qY
+         77Qst/drCl1J0cEvN6tSLpyBctCjsJORMSgLFfKal9vbUtrh9ixKN0cCafn2e6yUNaqB
+         ff5G3aYJDcnvumoMQ36+bBVl9lAtwul8/YTzB1TcF3UiKYGkQb+64xJ7L7K1JgCVS0hK
+         00TCdcBhhESk3NASVju+AWBV7q87tI77H+ssa6XcImMX434t9HgfWTCjmqEsm+0Hykbo
+         o1XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4AkQLLIUIPYpV/JS7s3jTAzAGf+1v6pVPd+k37Rstdw=;
+        b=DkZFb6RnL2Q2FdlTCbnrSKffuJokxLtW6pExL0o0UrvKSmesCLaEjzi5XVeZRaFxJc
+         A7lB3XNxbO6sFIDaIjy/1Ghivs1Dwe2bPwKOt6ixLGF12Uy8G8VXMIo83grwjIW2QW1Q
+         wPjJZGqWHfIBzB/D/0zL4DZyCm3ALiO2kpbqQ//BSs95jCrEnufWpXW1rlkeXUOs3JmE
+         duVYDeblIf26qq6Z+x38h+wUsgDfRO1SGVQxZmmE0FbzJDkYpKanMGGhdeK6EAIca/7N
+         OCPf0okHzJGLjQEfFh4kqFXfUb7aOpVbPV34pHDYFFXlG6nmhVqAkrgva8euTuoZAybg
+         iD5Q==
+X-Gm-Message-State: APjAAAXMZO6lwZCMeQ6yR9Hoti9PX/choLVOil/F3FY8F7Yv5dOa4nJr
+        BmzBsuCs1oWzMcCoFp+pAIMKzee25pKSnClvL7g=
+X-Google-Smtp-Source: APXvYqxFQT3+wPMm2/64FSrBlqdA60ZMPBDoaUVOx92JlpNwVBFxOtwTuGCYtnOr9rfOug/5fN3M++UH323rTDv0MKY=
+X-Received: by 2002:a67:e9cc:: with SMTP id q12mr4569249vso.208.1554395045066;
+ Thu, 04 Apr 2019 09:24:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kcph5s4d5x473cw2"
-Content-Disposition: inline
-In-Reply-To: <20190402121200.GX4805@pendragon.ideasonboard.com>
-User-Agent: NeoMutt/20180716
+References: <cover.92acdec88ee4c280cb74e08ea22f0075e5fa055c.1553032382.git-series.maxime.ripard@bootlin.com>
+ <fecde1c7b65caa0e876a2f01769289a883014712.1553032382.git-series.maxime.ripard@bootlin.com>
+ <CACvgo51WMD5hsyLB5QTriGNwcPmeN4TDjscJV11M3PXFncPHeQ@mail.gmail.com> <20190402145114.bpt5atxxooufgzz5@flea>
+In-Reply-To: <20190402145114.bpt5atxxooufgzz5@flea>
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Thu, 4 Apr 2019 17:24:03 +0100
+Message-ID: <CACvgo53mNnH88nB2XkzBLQyXD8osGwBGL7ba=QXTx-T+Bp_iKA@mail.gmail.com>
+Subject: Re: [RFC PATCH 01/20] drm: Remove users of drm_format_num_planes
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
---kcph5s4d5x473cw2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-Hi Laurent,
-   thanks for explaining.
-
-On Tue, Apr 02, 2019 at 03:12:00PM +0300, Laurent Pinchart wrote:
-> Hi Jacopo,
+On Tue, 2 Apr 2019 at 15:51, Maxime Ripard <maxime.ripard@bootlin.com> wrote:
 >
-> On Thu, Mar 28, 2019 at 02:15:43PM +0100, Jacopo Mondi wrote:
-> > On Thu, Mar 28, 2019 at 09:07:15AM +0200, Laurent Pinchart wrote:
-> > > The V4L2 API is missing the 32-bit RGB formats for the ABGR, XBGR, RGBA
-> > > and RGBX component orders. Add them, using the same 4CCs as DRM.
+> Hi Emil,
+>
+> On Tue, Apr 02, 2019 at 10:43:31AM +0100, Emil Velikov wrote:
+> > On Tue, 19 Mar 2019 at 21:57, Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+> > > drm_format_num_planes() is basically a lookup in the drm_format_info table
+> > > plus an access to the num_planes field of the appropriate entry.
 > > >
-> > > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> > > ---
-> > >  .../media/uapi/v4l/pixfmt-packed-rgb.rst      | 160 ++++++++++++++++++
-> > >  include/uapi/linux/videodev2.h                |   4 +
-> > >  2 files changed, 164 insertions(+)
+> > > Most drivers are using this function while having access to the entry
+> > > already, which means that we will perform an unnecessary lookup. Removing
+> > > the call to drm_format_num_planes is therefore more efficient.
 > > >
-> > > diff --git a/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst b/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
-> > > index 6b3781c04dd5..055f9c89e787 100644
-> > > --- a/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
-> > > +++ b/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
-> > > @@ -453,6 +453,166 @@ next to each other in memory.
-> > >        - r\ :sub:`1`
-> > >        - r\ :sub:`0`
+> > > Some drivers will not have access to that entry in the function, but in
+> > > this case the overhead is minimal (we just have to call drm_format_info()
+> > > to perform the lookup) and we can even avoid multiple, inefficient lookups
+> > > in some places that need multiple fields from the drm_format_info
+> > > structure.
 > > >
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +    * .. _V4L2-PIX-FMT-BGRA32:
-> > > +
-> > > +      - ``V4L2_PIX_FMT_BGRA32``
-> > > +      - 'RA24'
-> > > +
-> > > +      - a\ :sub:`7`
-> > > +      - a\ :sub:`6`
-> > > +      - a\ :sub:`5`
-> > > +      - a\ :sub:`4`
-> > > +      - a\ :sub:`3`
-> > > +      - a\ :sub:`2`
-> > > +      - a\ :sub:`1`
-> > > +      - a\ :sub:`0`
-> > > +
-> > > +      - b\ :sub:`7`
-> > > +      - b\ :sub:`6`
-> > > +      - b\ :sub:`5`
-> > > +      - b\ :sub:`4`
-> > > +      - b\ :sub:`3`
-> > > +      - b\ :sub:`2`
-> > > +      - b\ :sub:`1`
-> > > +      - b\ :sub:`0`
-> > > +
-> > > +      - g\ :sub:`7`
-> > > +      - g\ :sub:`6`
-> > > +      - g\ :sub:`5`
-> > > +      - g\ :sub:`4`
-> > > +      - g\ :sub:`3`
-> > > +      - g\ :sub:`2`
-> > > +      - g\ :sub:`1`
-> > > +      - g\ :sub:`0`
-> > > +
-> > > +      - r\ :sub:`7`
-> > > +      - r\ :sub:`6`
-> > > +      - r\ :sub:`5`
-> > > +      - r\ :sub:`4`
-> > > +      - r\ :sub:`3`
-> > > +      - r\ :sub:`2`
-> > > +      - r\ :sub:`1`
-> > > +      - r\ :sub:`0`
-> > > +    * .. _V4L2-PIX-FMT-BGRX32:
-> > > +
-> > > +      - ``V4L2_PIX_FMT_BGRX32``
-> > > +      - 'RX24'
-> > > +
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +      -
-> > > +
-> > > +      - b\ :sub:`7`
-> > > +      - b\ :sub:`6`
-> > > +      - b\ :sub:`5`
-> > > +      - b\ :sub:`4`
-> > > +      - b\ :sub:`3`
-> > > +      - b\ :sub:`2`
-> > > +      - b\ :sub:`1`
-> > > +      - b\ :sub:`0`
-> > > +
-> > > +      - g\ :sub:`7`
-> > > +      - g\ :sub:`6`
-> > > +      - g\ :sub:`5`
-> > > +      - g\ :sub:`4`
-> > > +      - g\ :sub:`3`
-> > > +      - g\ :sub:`2`
-> > > +      - g\ :sub:`1`
-> > > +      - g\ :sub:`0`
-> > > +
-> > > +      - r\ :sub:`7`
-> > > +      - r\ :sub:`6`
-> > > +      - r\ :sub:`5`
-> > > +      - r\ :sub:`4`
-> > > +      - r\ :sub:`3`
-> > > +      - r\ :sub:`2`
-> > > +      - r\ :sub:`1`
-> > > +      - r\ :sub:`0`
-> > > +    * .. _V4L2-PIX-FMT-RGBA32:
-> > > +
-> > > +      - ``V4L2_PIX_FMT_RGBA32``
-> > > +      - 'AB24'
-> > > +
-> > > +      - r\ :sub:`7`
-> > > +      - r\ :sub:`6`
-> > > +      - r\ :sub:`5`
-> > > +      - r\ :sub:`4`
-> > > +      - r\ :sub:`3`
-> > > +      - r\ :sub:`2`
-> > > +      - r\ :sub:`1`
-> > > +      - r\ :sub:`0`
-> > > +
-> > > +      - g\ :sub:`7`
-> > > +      - g\ :sub:`6`
-> > > +      - g\ :sub:`5`
-> > > +      - g\ :sub:`4`
-> > > +      - g\ :sub:`3`
-> > > +      - g\ :sub:`2`
-> > > +      - g\ :sub:`1`
-> > > +      - g\ :sub:`0`
-> > > +
-> > > +      - b\ :sub:`7`
-> > > +      - b\ :sub:`6`
-> > > +      - b\ :sub:`5`
-> > > +      - b\ :sub:`4`
-> > > +      - b\ :sub:`3`
-> > > +      - b\ :sub:`2`
-> > > +      - b\ :sub:`1`
-> > > +      - b\ :sub:`0`
-> > > +
-> > > +      - a\ :sub:`7`
-> > > +      - a\ :sub:`6`
-> > > +      - a\ :sub:`5`
-> > > +      - a\ :sub:`4`
-> > > +      - a\ :sub:`3`
-> > > +      - a\ :sub:`2`
-> > > +      - a\ :sub:`1`
-> > > +      - a\ :sub:`0`
-> > > +    * .. _V4L2-PIX-FMT-RGBX32:
-> > > +
-> > > +      - ``V4L2_PIX_FMT_RGBX32``
-> > > +      - 'XB24'
-> > > +
-> > > +      - r\ :sub:`7`
-> > > +      - r\ :sub:`6`
-> > > +      - r\ :sub:`5`
-> > > +      - r\ :sub:`4`
-> > > +      - r\ :sub:`3`
-> > > +      - r\ :sub:`2`
-> > > +      - r\ :sub:`1`
-> > > +      - r\ :sub:`0`
-> > > +
-> > > +      - g\ :sub:`7`
-> > > +      - g\ :sub:`6`
-> > > +      - g\ :sub:`5`
-> > > +      - g\ :sub:`4`
-> > > +      - g\ :sub:`3`
-> > > +      - g\ :sub:`2`
-> > > +      - g\ :sub:`1`
-> > > +      - g\ :sub:`0`
-> > > +
-> > > +      - b\ :sub:`7`
-> > > +      - b\ :sub:`6`
-> > > +      - b\ :sub:`5`
-> > > +      - b\ :sub:`4`
-> > > +      - b\ :sub:`3`
-> > > +      - b\ :sub:`2`
-> > > +      - b\ :sub:`1`
-> > > +      - b\ :sub:`0`
-> > > +
 > >
-> > I'm trying to compare these with the existing 32-bit RGB formats in
-> > pixfmt-packed-rgb.rst and I can't get how the orderig of components is
-> > defined.
->
-> Pixel formats are all a big mess :-)
->
-> > Ie your definitions here:
+> > I'm not fan of the duplicated loop-ups either.
 > >
-> >         bytes:  B0      B1      B2      B3
-> > BGRA32          A       B       G       R
-> > BGRX32          x       B       G       R
-> > RGBA32          R       G       B       A
-> > RGBX32          R       G       B       x
+> > > -int drm_format_num_planes(uint32_t format)
+> > > -{
+> > > -       const struct drm_format_info *info;
+> > > -
+> > > -       info = drm_format_info(format);
+> > > -       return info ? info->num_planes : 1;
+> > > -}
+> > > -EXPORT_SYMBOL(drm_format_num_planes);
+> > > -
 > >
-> > In the existing documentation:
-> > ABGR32          B       G       R       A
-> > XBGR32          B       G       R       x
-> > ARGB32          A       R       G       B
-> > XRGB32          x       R       G       B
->
-> > So you're adding two BGR/RGB variations with 'X' or 'A' moved from the
-> > first (for RGB) or last (for BGR) bytes to the last (for RGB) or first
-> > (for BGR) bytes.
+> > The existing users are not updated to cater for the num_planes != 0
+> > case... Which seems non-existent scenario since all the current format
+> > descriptions have 1+ planes.
+> > Should we add a test (alike the ones in 6/20) to ensure, that no entry
+> > has 0 planes? Is it even worth it or I'm a bit too paranoid?
 > >
-> > I cannot see a clear pattern (it seems RGB is ordered as you read the
-> > components, while BGR is inverted?) so I assume the definition of the
-> > component ordering scheme comes from a standard, does it? A reference
-> > would help checking for errors :)
+> > The above comments apply to 2/20.
 >
-> The existing formats are pretty inconsistent. I suppose ARGB and XRGB
-> were added first, with the format names corresponding to the pixel order
-> in memory. Then a need to support BGRA and BGRX arose, and the format
-> names were set to ABGR32 and XBGR32 instead of BGRA32 and BGRX32.
-> Unfortuantely we can't fix this as it's an ABI, so I had to follow the
-> same scheme for the new formats. RGBA and RGBX are fine as the RGBA31
-> and RGBX32 names were free, but for ABGR and XBGR I had to use the
-> BGRA32 and BGRX32 names.
+> I'm not entirely sure what you mean. num_planes is returned as is in
+> the drm_format_num_planes function and it doesn't check for the
+> num_planes value itself.
 >
-
-The generated documentation seems good to me.
-
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-
-Thanks
-  j
-
-> > >        -
-> > >        -
-> > >        -
-> > > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> > > index 1db220da3bcc..4e5222726719 100644
-> > > --- a/include/uapi/linux/videodev2.h
-> > > +++ b/include/uapi/linux/videodev2.h
-> > > @@ -528,7 +528,11 @@ struct v4l2_pix_format {
-> > >  #define V4L2_PIX_FMT_BGR32   v4l2_fourcc('B', 'G', 'R', '4') /* 32  BGR-8-8-8-8   */
-> > >  #define V4L2_PIX_FMT_ABGR32  v4l2_fourcc('A', 'R', '2', '4') /* 32  BGRA-8-8-8-8  */
-> > >  #define V4L2_PIX_FMT_XBGR32  v4l2_fourcc('X', 'R', '2', '4') /* 32  BGRX-8-8-8-8  */
-> > > +#define V4L2_PIX_FMT_BGRA32  v4l2_fourcc('R', 'A', '2', '4') /* 32  ABGR-8-8-8-8  */
-> > > +#define V4L2_PIX_FMT_BGRX32  v4l2_fourcc('R', 'X', '2', '4') /* 32  XBGR-8-8-8-8  */
-> > >  #define V4L2_PIX_FMT_RGB32   v4l2_fourcc('R', 'G', 'B', '4') /* 32  RGB-8-8-8-8   */
-> > > +#define V4L2_PIX_FMT_RGBA32  v4l2_fourcc('A', 'B', '2', '4') /* 32  RGBA-8-8-8-8  */
-> > > +#define V4L2_PIX_FMT_RGBX32  v4l2_fourcc('X', 'B', '2', '4') /* 32  RGBX-8-8-8-8  */
-> > >  #define V4L2_PIX_FMT_ARGB32  v4l2_fourcc('B', 'A', '2', '4') /* 32  ARGB-8-8-8-8  */
-> > >  #define V4L2_PIX_FMT_XRGB32  v4l2_fourcc('B', 'X', '2', '4') /* 32  XRGB-8-8-8-8  */
-> > >
+> That being said, we could definitely add some more tests to check that
+> we haven't falling into the situation you describe, since most of the
+> drivers indeed don't check for that value themselves. But that seems
+> pretty othorgonal to me?
 >
-> --
-> Regards,
->
-> Laurent Pinchart
+Hmm I misread the old function as "return info->num_planes ?
+info->num_planes : 1;"
 
---kcph5s4d5x473cw2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlymKn0ACgkQcjQGjxah
-VjwOmg//eTZVvHRpyn5I+zODzxs9T7YA5ypGoraIQwsmKqhhisldssm3TRuf1xpg
-aOE89YzbhvCrBKfYQdHHgHgPvcqUR34RLe380rYDnj/W/ar+hKCKEAy4QSyI/KJk
-hBP6V8Sou4jpoBWze84J4KlB5OqbCrcEt5uaEXhUoVWD5CyTTyV34/EsQBJgfr03
-ZBf1gO7+2yUI1rgkw9d4mR9ZSGVfyiBOXkefd23EcS7sGkepXyybqnB/yT+3FAOr
-ftg0TF3qV/+IE/+cpvmziVn3MK7BQPU1h0jCU5/e96RfGIiAEp5MweKeS1rbzh2j
-j8or3cfgFPx+aurmE7orBtZcff3G6UhsdYHb1IvYWRj8JGpVoXlfr8mhT/BvFZun
-4RCuuv+tDKEoln1HASVxT1vWB40xKBrmFGjc/5Pz2bHwCTkYVJejCEstTM9lsFeU
-+Oje73NY+Fwuj64cRFzBgDNJARQeeC0BRTx1l2Y/vlro3RcsDZr8PcBiJD9tW8Zw
-RyqNU86s6dRJOhboQv7bdO7Tl1dhbVySB2fiLtJEKCeziWW8tpr2uTX/vxx4eFM1
-aPfZlgA4Q3bZCH/spinbCujJacoFkAN0JGksPlLZMuauHIbLHM5PMW7m9McOJqzT
-QJ0fEfPfkPvNzJe2weCk5bzcmaPCTgtsCjPRHxXM6Bv+EiJQ2Uk=
-=k8Wb
------END PGP SIGNATURE-----
-
---kcph5s4d5x473cw2--
+Pardon for the noise.
+-Emil
