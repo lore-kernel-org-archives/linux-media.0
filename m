@@ -2,440 +2,208 @@ Return-Path: <SRS0=KukI=SG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D7B6C4360F
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 13:43:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB962C4360F
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 14:39:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0372F20882
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 13:43:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9403E2147C
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 14:39:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728818AbfDDNn6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Apr 2019 09:43:58 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:48352 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728841AbfDDNn6 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Apr 2019 09:43:58 -0400
-Received: from [IPv6:2001:420:44c1:2579:1ed:86b:7a55:d4f2] ([IPv6:2001:420:44c1:2579:1ed:86b:7a55:d4f2])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id C2elh75p5UjKfC2ephK62V; Thu, 04 Apr 2019 15:43:55 +0200
-Subject: Re: [RFC 4/8] omap3isp: Rework OF endpoint parsing
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     niklas.soderlund@ragnatech.se, laurent.pinchart@ideasonboard.com
-References: <20190318191653.7197-1-sakari.ailus@linux.intel.com>
- <20190318191653.7197-5-sakari.ailus@linux.intel.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <47cf12e5-25a1-b315-d834-e940d953aadf@xs4all.nl>
-Date:   Thu, 4 Apr 2019 15:43:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        id S1728211AbfDDOjI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Apr 2019 10:39:08 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:40903 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727310AbfDDOjH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Apr 2019 10:39:07 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id D3EBAFF973;
+        Thu,  4 Apr 2019 14:39:01 +0000 (UTC)
+Date:   Thu, 4 Apr 2019 16:39:47 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Marco Felsch <m.felsch@pengutronix.de>, mchehab@kernel.org,
+        rmfrfs@gmail.com, zhengsq@rock-chips.com,
+        prabhakar.csengg@gmail.com, corbet@lwn.net,
+        wenyou.yang@microchip.com, lkundrak@v3.sk,
+        hverkuil-cisco@xs4all.nl, jacopo+renesas@jmondi.org,
+        linux-media@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 1/6] media: v4l2-subdev: add stubs for
+ v4l2_subdev_get_try_*
+Message-ID: <20190404143947.do4lmvxrvnzubtl7@uno.localdomain>
+References: <20190404074002.18730-1-m.felsch@pengutronix.de>
+ <20190404074002.18730-2-m.felsch@pengutronix.de>
+ <20190404083933.33ejwyko4xoittux@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190318191653.7197-5-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfHmGManUAVpnyy5RRgKS6i58i+Gy1blIpsyz7F3Gk3bu6coV5y5qdmFxUVROWaCqSYHSUv5W0FTuh/gWNPjUw82BGoCTGYVDLXGgKmjHVb+lCQobK5Xs
- iISAx8qQhDmopUZDD2Za1TMAAnTbpWadFu+CsddOjEJbh6zIxRBzNZoMohG+CZKxomuNY7HqRZNonhltSp3Y/Pk1YuL2qr/WNoSK+O9VkZSkgn09RkOorOcV
- EbOLxlE4RTZws2kNszpGGuJuTWGuM9wAynvTfJ3OZpqUWkd70zfJi02HORuxmWxys7dugo1Uy6rOQnMx8aGvx0nbvJBA8/bJEx/rDlTWC7gr9ZA4m/NBaClU
- w34wH/fIpeNgkXwn+Bs7D3oid+m/dPWGwHzHDXqee89pvXK2wFNSZCKOVtwOr6UsbpCjvf4U
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="t7eyulkiye2oena4"
+Content-Disposition: inline
+In-Reply-To: <20190404083933.33ejwyko4xoittux@paasikivi.fi.intel.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 3/18/19 8:16 PM, Sakari Ailus wrote:
-> Rework OF endpoint parsing for the omap3isp driver. This does add some
-> lines of code. The benefits are still clear:
-> 
-> - the great complication related to callbacks in endpoint parsing is gone;
->   instead endpoints are obtained port by port and
-> 
-> - endpoints may now have a default bus configuration which was not
->   possible while using callbacks. This driver does not benefit from that
->   feature, but as the omap3isp is one of the exemplary drivers, this works
->   as an example for driver developers.
-> 
-> Depends-on: ("device property: Add fwnode_graph_get_endpoint_by_id")
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/media/platform/omap3isp/isp.c | 334 ++++++++++++++++++++--------------
->  1 file changed, 200 insertions(+), 134 deletions(-)
-> 
-> diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-> index bd57174d81a7..ac23948f6ade 100644
-> --- a/drivers/media/platform/omap3isp/isp.c
-> +++ b/drivers/media/platform/omap3isp/isp.c
-> @@ -2015,136 +2015,6 @@ enum isp_of_phy {
->  	ISP_OF_PHY_CSIPHY2,
->  };
->  
-> -static int isp_fwnode_parse(struct device *dev,
-> -			    struct v4l2_fwnode_endpoint *vep,
-> -			    struct v4l2_async_subdev *asd)
-> -{
-> -	struct isp_async_subdev *isd =
-> -		container_of(asd, struct isp_async_subdev, asd);
-> -	struct isp_bus_cfg *buscfg = &isd->bus;
-> -	bool csi1 = false;
-> -	unsigned int i;
-> -
-> -	dev_dbg(dev, "parsing endpoint %pOF, interface %u\n",
-> -		to_of_node(vep->base.local_fwnode), vep->base.port);
-> -
-> -	switch (vep->base.port) {
-> -	case ISP_OF_PHY_PARALLEL:
-> -		buscfg->interface = ISP_INTERFACE_PARALLEL;
-> -		buscfg->bus.parallel.data_lane_shift =
-> -			vep->bus.parallel.data_shift;
-> -		buscfg->bus.parallel.clk_pol =
-> -			!!(vep->bus.parallel.flags
-> -			   & V4L2_MBUS_PCLK_SAMPLE_FALLING);
-> -		buscfg->bus.parallel.hs_pol =
-> -			!!(vep->bus.parallel.flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
-> -		buscfg->bus.parallel.vs_pol =
-> -			!!(vep->bus.parallel.flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
-> -		buscfg->bus.parallel.fld_pol =
-> -			!!(vep->bus.parallel.flags & V4L2_MBUS_FIELD_EVEN_LOW);
-> -		buscfg->bus.parallel.data_pol =
-> -			!!(vep->bus.parallel.flags & V4L2_MBUS_DATA_ACTIVE_LOW);
-> -		buscfg->bus.parallel.bt656 = vep->bus_type == V4L2_MBUS_BT656;
-> -		break;
-> -
-> -	case ISP_OF_PHY_CSIPHY1:
-> -	case ISP_OF_PHY_CSIPHY2:
-> -		switch (vep->bus_type) {
-> -		case V4L2_MBUS_CCP2:
-> -		case V4L2_MBUS_CSI1:
-> -			dev_dbg(dev, "CSI-1/CCP-2 configuration\n");
-> -			csi1 = true;
-> -			break;
-> -		case V4L2_MBUS_CSI2_DPHY:
-> -			dev_dbg(dev, "CSI-2 configuration\n");
-> -			csi1 = false;
-> -			break;
-> -		default:
-> -			dev_err(dev, "unsupported bus type %u\n",
-> -				vep->bus_type);
-> -			return -EINVAL;
-> -		}
-> -
-> -		switch (vep->base.port) {
-> -		case ISP_OF_PHY_CSIPHY1:
-> -			if (csi1)
-> -				buscfg->interface = ISP_INTERFACE_CCP2B_PHY1;
-> -			else
-> -				buscfg->interface = ISP_INTERFACE_CSI2C_PHY1;
-> -			break;
-> -		case ISP_OF_PHY_CSIPHY2:
-> -			if (csi1)
-> -				buscfg->interface = ISP_INTERFACE_CCP2B_PHY2;
-> -			else
-> -				buscfg->interface = ISP_INTERFACE_CSI2A_PHY2;
-> -			break;
-> -		}
-> -		if (csi1) {
-> -			buscfg->bus.ccp2.lanecfg.clk.pos =
-> -				vep->bus.mipi_csi1.clock_lane;
-> -			buscfg->bus.ccp2.lanecfg.clk.pol =
-> -				vep->bus.mipi_csi1.lane_polarity[0];
-> -			dev_dbg(dev, "clock lane polarity %u, pos %u\n",
-> -				buscfg->bus.ccp2.lanecfg.clk.pol,
-> -				buscfg->bus.ccp2.lanecfg.clk.pos);
-> -
-> -			buscfg->bus.ccp2.lanecfg.data[0].pos =
-> -				vep->bus.mipi_csi1.data_lane;
-> -			buscfg->bus.ccp2.lanecfg.data[0].pol =
-> -				vep->bus.mipi_csi1.lane_polarity[1];
-> -
-> -			dev_dbg(dev, "data lane polarity %u, pos %u\n",
-> -				buscfg->bus.ccp2.lanecfg.data[0].pol,
-> -				buscfg->bus.ccp2.lanecfg.data[0].pos);
-> -
-> -			buscfg->bus.ccp2.strobe_clk_pol =
-> -				vep->bus.mipi_csi1.clock_inv;
-> -			buscfg->bus.ccp2.phy_layer = vep->bus.mipi_csi1.strobe;
-> -			buscfg->bus.ccp2.ccp2_mode =
-> -				vep->bus_type == V4L2_MBUS_CCP2;
-> -			buscfg->bus.ccp2.vp_clk_pol = 1;
-> -
-> -			buscfg->bus.ccp2.crc = 1;
-> -		} else {
-> -			buscfg->bus.csi2.lanecfg.clk.pos =
-> -				vep->bus.mipi_csi2.clock_lane;
-> -			buscfg->bus.csi2.lanecfg.clk.pol =
-> -				vep->bus.mipi_csi2.lane_polarities[0];
-> -			dev_dbg(dev, "clock lane polarity %u, pos %u\n",
-> -				buscfg->bus.csi2.lanecfg.clk.pol,
-> -				buscfg->bus.csi2.lanecfg.clk.pos);
-> -
-> -			buscfg->bus.csi2.num_data_lanes =
-> -				vep->bus.mipi_csi2.num_data_lanes;
-> -
-> -			for (i = 0; i < buscfg->bus.csi2.num_data_lanes; i++) {
-> -				buscfg->bus.csi2.lanecfg.data[i].pos =
-> -					vep->bus.mipi_csi2.data_lanes[i];
-> -				buscfg->bus.csi2.lanecfg.data[i].pol =
-> -					vep->bus.mipi_csi2.lane_polarities[i + 1];
-> -				dev_dbg(dev,
-> -					"data lane %u polarity %u, pos %u\n", i,
-> -					buscfg->bus.csi2.lanecfg.data[i].pol,
-> -					buscfg->bus.csi2.lanecfg.data[i].pos);
-> -			}
-> -			/*
-> -			 * FIXME: now we assume the CRC is always there.
-> -			 * Implement a way to obtain this information from the
-> -			 * sensor. Frame descriptors, perhaps?
-> -			 */
-> -			buscfg->bus.csi2.crc = 1;
-> -		}
-> -		break;
-> -
-> -	default:
-> -		dev_warn(dev, "%pOF: invalid interface %u\n",
-> -			 to_of_node(vep->base.local_fwnode), vep->base.port);
-> -		return -EINVAL;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
->  {
->  	struct isp_device *isp = container_of(async, struct isp_device,
-> @@ -2174,6 +2044,204 @@ static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
->  	return media_device_register(&isp->media_dev);
->  }
->  
-> +static void isp_parse_of_parallel_endpoint(struct device *dev,
-> +					   struct v4l2_fwnode_endpoint *vep,
-> +					   struct isp_bus_cfg *buscfg)
-> +{
-> +	buscfg->interface = ISP_INTERFACE_PARALLEL;
-> +	buscfg->bus.parallel.data_lane_shift = vep->bus.parallel.data_shift;
-> +	buscfg->bus.parallel.clk_pol =
-> +		!!(vep->bus.parallel.flags & V4L2_MBUS_PCLK_SAMPLE_FALLING);
-> +	buscfg->bus.parallel.hs_pol =
-> +		!!(vep->bus.parallel.flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
-> +	buscfg->bus.parallel.vs_pol =
-> +		!!(vep->bus.parallel.flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
-> +	buscfg->bus.parallel.fld_pol =
-> +		!!(vep->bus.parallel.flags & V4L2_MBUS_FIELD_EVEN_LOW);
-> +	buscfg->bus.parallel.data_pol =
-> +		!!(vep->bus.parallel.flags & V4L2_MBUS_DATA_ACTIVE_LOW);
-> +	buscfg->bus.parallel.bt656 = vep->bus_type == V4L2_MBUS_BT656;
-> +}
-> +
-> +static void isp_parse_of_csi2_endpoint(struct device *dev,
-> +				       struct v4l2_fwnode_endpoint *vep,
-> +				       struct isp_bus_cfg *buscfg)
-> +{
-> +	unsigned int i;
-> +
-> +	buscfg->bus.csi2.lanecfg.clk.pos = vep->bus.mipi_csi2.clock_lane;
-> +	buscfg->bus.csi2.lanecfg.clk.pol =
-> +		vep->bus.mipi_csi2.lane_polarities[0];
-> +	dev_dbg(dev, "clock lane polarity %u, pos %u\n",
-> +		buscfg->bus.csi2.lanecfg.clk.pol,
-> +		buscfg->bus.csi2.lanecfg.clk.pos);
-> +
-> +	buscfg->bus.csi2.num_data_lanes = vep->bus.mipi_csi2.num_data_lanes;
-> +
-> +	for (i = 0; i < buscfg->bus.csi2.num_data_lanes; i++) {
-> +		buscfg->bus.csi2.lanecfg.data[i].pos =
-> +			vep->bus.mipi_csi2.data_lanes[i];
-> +		buscfg->bus.csi2.lanecfg.data[i].pol =
-> +			vep->bus.mipi_csi2.lane_polarities[i + 1];
-> +		dev_dbg(dev,
-> +			"data lane %u polarity %u, pos %u\n", i,
-> +			buscfg->bus.csi2.lanecfg.data[i].pol,
-> +			buscfg->bus.csi2.lanecfg.data[i].pos);
-> +	}
-> +	/*
-> +	 * FIXME: now we assume the CRC is always there. Implement a way to
-> +	 * obtain this information from the sensor. Frame descriptors, perhaps?
-> +	 */
-> +	buscfg->bus.csi2.crc = 1;
-> +}
-> +
-> +static void isp_parse_of_csi1_endpoint(struct device *dev,
-> +				       struct v4l2_fwnode_endpoint *vep,
-> +				       struct isp_bus_cfg *buscfg)
-> +{
-> +	buscfg->bus.ccp2.lanecfg.clk.pos = vep->bus.mipi_csi1.clock_lane;
-> +	buscfg->bus.ccp2.lanecfg.clk.pol = vep->bus.mipi_csi1.lane_polarity[0];
-> +	dev_dbg(dev, "clock lane polarity %u, pos %u\n",
-> +		buscfg->bus.ccp2.lanecfg.clk.pol,
-> +	buscfg->bus.ccp2.lanecfg.clk.pos);
-> +
-> +	buscfg->bus.ccp2.lanecfg.data[0].pos = vep->bus.mipi_csi1.data_lane;
-> +	buscfg->bus.ccp2.lanecfg.data[0].pol =
-> +		vep->bus.mipi_csi1.lane_polarity[1];
-> +
-> +	dev_dbg(dev, "data lane polarity %u, pos %u\n",
-> +		buscfg->bus.ccp2.lanecfg.data[0].pol,
-> +		buscfg->bus.ccp2.lanecfg.data[0].pos);
-> +
-> +	buscfg->bus.ccp2.strobe_clk_pol = vep->bus.mipi_csi1.clock_inv;
-> +	buscfg->bus.ccp2.phy_layer = vep->bus.mipi_csi1.strobe;
-> +	buscfg->bus.ccp2.ccp2_mode = vep->bus_type == V4L2_MBUS_CCP2;
-> +	buscfg->bus.ccp2.vp_clk_pol = 1;
-> +
-> +	buscfg->bus.ccp2.crc = 1;
-> +}
-> +
-> +static int isp_alloc_isd(struct isp_async_subdev **isd,
-> +			 struct isp_bus_cfg **buscfg)
-> +{
-> +	struct isp_async_subdev *__isd;
-> +
-> +	__isd = kzalloc(sizeof(*isd), GFP_KERNEL);
-> +	if (!__isd)
-> +		return -ENOMEM;
-> +
-> +	*isd = __isd;
-> +	*buscfg = &__isd->bus;
-> +
-> +	return 0;
-> +}
-> +
-> +static struct {
-> +	u32 phy;
-> +	u32 csi2_if;
-> +	u32 csi1_if;
-> +} isp_bus_interfaces[2] = {
-> +	{ ISP_OF_PHY_CSIPHY1,
-> +	  ISP_INTERFACE_CSI2C_PHY1, ISP_INTERFACE_CCP2B_PHY1 },
-> +	{ ISP_OF_PHY_CSIPHY2,
-> +	  ISP_INTERFACE_CSI2A_PHY2, ISP_INTERFACE_CCP2B_PHY2 },
-> +};
-> +
-> +static int isp_parse_of_endpoints(struct isp_device *isp)
-> +{
-> +	struct fwnode_handle *ep;
-> +	struct isp_async_subdev *isd;
-> +	struct isp_bus_cfg *buscfg;
-> +	unsigned int i;
-> +
-> +	ep = fwnode_graph_get_endpoint_by_id(
-> +		dev_fwnode(isp->dev), ISP_OF_PHY_PARALLEL, 0,
-> +		FWNODE_GRAPH_ENDPOINT_NEXT);
-> +
-> +	if (ep) {
-> +		struct v4l2_fwnode_endpoint vep = {
-> +			.bus_type = V4L2_MBUS_PARALLEL
-> +		};
-> +		int ret;
-> +
-> +		dev_dbg(isp->dev, "parsing parallel interface\n");
-> +
-> +		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-> +		if (!ret)
-> +			ret = isp_alloc_isd(&isd, &buscfg);
-> +
-> +		if (!ret) {
-> +			isp_parse_of_parallel_endpoint(isp->dev, &vep, buscfg);
-> +			ret = v4l2_async_notifier_add_fwnode_remote_subdev(
-> +				&isp->notifier, ep, &isd->asd);
-> +		}
-> +
-> +		if (ret) {
-> +			kfree(isd);
-> +			fwnode_handle_put(ep);
-> +		}
 
-If ret == 0, then who calls 'fwnode_handle_put(ep);'?
+--t7eyulkiye2oena4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Am I missing something?
+Hi Marco, Sakari,
 
-Regards,
+On Thu, Apr 04, 2019 at 11:39:34AM +0300, Sakari Ailus wrote:
+> Hi Marco,
+>
+> On Thu, Apr 04, 2019 at 09:39:57AM +0200, Marco Felsch wrote:
+> > In case of missing CONFIG_VIDEO_V4L2_SUBDEV_API those helpers aren't
+> > available. So each driver have to add ifdefs around those helpers or
+> > add the CONFIG_VIDEO_V4L2_SUBDEV_API as dependcy.
+> >
+> > Make these helpers available in case of CONFIG_VIDEO_V4L2_SUBDEV_API
+> > isn't set to avoid ifdefs. This approach is less error prone too.
+> >
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> > The patch was previously part of series [1]. Since I want to get
+> > series [1] merged in 5.2 I split this possible stopper out of the
+> > serie and prepared a own series for it. I applied Jacopos comments and
+> > switched to Lubomir's approach [2]. During discussion on series [2]
+> > Sakari pointed out Hans approach [3] which didn't got into the kernel
+> > due to Mauro's concerns. So I think this would be the smalles common
+> > dennominator.
+> >
+> > [1] https://patchwork.kernel.org/cover/10786553/
+> > [2] https://patchwork.kernel.org/patch/10703029/
+> > [3] https://patchwork.linuxtv.org/patch/53370/
+> > ---
+> >  include/media/v4l2-subdev.h | 29 ++++++++++++++++++++++++++++-
+> >  1 file changed, 28 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> > index a7fa5b80915a..eea792757426 100644
+> > --- a/include/media/v4l2-subdev.h
+> > +++ b/include/media/v4l2-subdev.h
+> > @@ -984,7 +984,34 @@ static inline struct v4l2_rect
+> >  		pad = 0;
+> >  	return &cfg[pad].try_compose;
+> >  }
+> > -#endif
+> > +
+> > +#else /* !defined(CONFIG_VIDEO_V4L2_SUBDEV_API) */
+> > +
+> > +static inline struct v4l2_mbus_framefmt
+> > +*v4l2_subdev_get_try_format(struct v4l2_subdev *sd,
+> > +			    struct v4l2_subdev_pad_config *cfg,
+> > +			    unsigned int pad)
+> > +{
+> > +	return ERR_PTR(-ENOTTY);
+> > +}
+>
+> Almost all users of these functions directly use the struct pointer they
+> receive from the said functions, without checks for the pointer value.
+>
+> These drivers now depend on CONFIG_VIDEO_V4L2_SUBDEV_API, but for new
+> drivers it could be possible to miss that, leading to dereferencing
+> ERR_PTR(-ENOTTY) as a result if the sub-device API isn't enabled.
+>
+> I have to say I'm not a huge fan of such a change; it's one more such thing
+> to remember that results in a kernel crash if you get it wrong.
+>
 
-	Hans
+Unfortunately, I have to agree with Sakari here
 
-> +	}
-> +
-> +	for (i = 0; i < ARRAY_SIZE(isp_bus_interfaces); i++) {
-> +		ep = fwnode_graph_get_endpoint_by_id(
-> +			dev_fwnode(isp->dev), isp_bus_interfaces[i].phy, 0,
-> +			FWNODE_GRAPH_ENDPOINT_NEXT);
-> +
-> +		if (ep) {
-> +			struct v4l2_fwnode_endpoint vep = {
-> +				.bus_type = V4L2_MBUS_CSI2_DPHY
-> +			};
-> +			int ret;
-> +
-> +			dev_dbg(isp->dev,
-> +				"parsing serial interface %u, node %pOF\n", i,
-> +				to_of_node(ep));
-> +
-> +			ret = isp_alloc_isd(&isd, &buscfg);
-> +			if (ret)
-> +				return ret;
-> +
-> +			ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-> +			if (!ret) {
-> +				buscfg->interface =
-> +					isp_bus_interfaces[i].csi2_if;
-> +				isp_parse_of_csi2_endpoint(isp->dev, &vep,
-> +							   buscfg);
-> +			} else if (ret == -ENXIO) {
-> +				vep = (struct v4l2_fwnode_endpoint)
-> +					{ .bus_type = V4L2_MBUS_CSI1 };
-> +				ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-> +
-> +				if (ret == -ENXIO) {
-> +					vep = (struct v4l2_fwnode_endpoint)
-> +						{ .bus_type = V4L2_MBUS_CCP2 };
-> +					ret = v4l2_fwnode_endpoint_parse(ep,
-> +									 &vep);
-> +				}
-> +				if (!ret) {
-> +					buscfg->interface =
-> +						isp_bus_interfaces[i].csi1_if;
-> +					isp_parse_of_csi1_endpoint(isp->dev,
-> +								   &vep,
-> +								   buscfg);
-> +				}
-> +			}
-> +
-> +			if (!ret)
-> +				ret = v4l2_async_notifier_add_fwnode_remote_subdev(
-> +					&isp->notifier, ep, &isd->asd);
-> +
-> +			if (ret) {
-> +				kfree(isd);
-> +				fwnode_handle_put(ep);
-> +				return ret;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static const struct v4l2_async_notifier_operations isp_subdev_notifier_ops = {
->  	.complete = isp_subdev_notifier_complete,
->  };
-> @@ -2222,14 +2290,12 @@ static int isp_probe(struct platform_device *pdev)
->  	mutex_init(&isp->isp_mutex);
->  	spin_lock_init(&isp->stat_lock);
->  	v4l2_async_notifier_init(&isp->notifier);
-> +	isp->dev = &pdev->dev;
->  
-> -	ret = v4l2_async_notifier_parse_fwnode_endpoints(
-> -		&pdev->dev, &isp->notifier, sizeof(struct isp_async_subdev),
-> -		isp_fwnode_parse);
-> +	ret = isp_parse_of_endpoints(isp);
->  	if (ret < 0)
->  		goto error;
->  
-> -	isp->dev = &pdev->dev;
->  	isp->ref_count = 0;
->  
->  	ret = dma_coerce_mask_and_coherent(isp->dev, DMA_BIT_MASK(32));
-> 
+> I wonder if v4l2_subdev_call() could become a bit smarter about this;
+> checking whether the try format is attempted to be obtained without the
+> sub-device API being enabled, and returning an error in that case without
+> passing the IOCTL to the driver at all.
 
+I'm not much excited by the idea of specializing v4l2_subdev_call(), I
+had a try and I would be ashemed of sharing that code. If someone
+could come up with something nice we could consider this too.
+
+For the record, it is not enough to check for V4L2_SUBDEV_API and try
+format, as a few (1?) bridge drivers calls the subdev operation providing a
+'v4l2_subdev_pad_config' argument, that could be used by the sensor
+drivers in place of the one returned from v4l2_subdev_get_try_*, if
+V4L2_SUBDEV_API is not available
+
+Caller:
+https://elixir.bootlin.com/linux/latest/source/drivers/media/platform/renesas-ceu.c#L858
+Sensor:
+https://elixir.bootlin.com/linux/latest/source/drivers/media/i2c/mt9v111.c#L792
+
+As I wrote both, they could be very well be wrong, but if they're not,
+one other option would be to refuse NULL v4l2_subdev_pad_config arguments
+(changing most of the bridge drivers in mainline) and move the code
+linked above here from the mt9v111 driver to the v4l2_subdev_get_try_*
+functions.
+
+>
+> Just an idea. It doesn't have to be in the same patchset.
+>
+> I'd still prefer enabling subdev API always to decrease the number of
+> possible different kernel configurations.
+
+That would be best imho, but Hans' attempt didn't go very far because
+of the issue Marco reported in his cover letter.
+
+Thanks
+  j
+
+>
+> I wonder what others think.
+>
+> > +
+> > +static inline struct v4l2_rect
+> > +*v4l2_subdev_get_try_crop(struct v4l2_subdev *sd,
+> > +			  struct v4l2_subdev_pad_config *cfg,
+> > +			  unsigned int pad)
+> > +{
+> > +	return ERR_PTR(-ENOTTY);
+> > +}
+> > +
+> > +static inline struct v4l2_rect
+> > +*v4l2_subdev_get_try_compose(struct v4l2_subdev *sd,
+> > +			     struct v4l2_subdev_pad_config *cfg,
+> > +			     unsigned int pad)
+> > +{
+> > +	return ERR_PTR(-ENOTTY);
+> > +}
+> > +
+> > +#endif /* defined(CONFIG_VIDEO_V4L2_SUBDEV_API) */
+> >
+> >  extern const struct v4l2_file_operations v4l2_subdev_fops;
+> >
+>
+> --
+> Regards,
+>
+> Sakari Ailus
+> sakari.ailus@linux.intel.com
+
+--t7eyulkiye2oena4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlymFzMACgkQcjQGjxah
+Vjw8xBAAhUm6pUdVp4F0lw2ixGLMfUG49133bKXXFA+gsY0MkExGDpnQi6Djl+aN
+f2PZ+muZZP5Zi82iiuxu2yae+WKW4clivHEQWPfL6FvPp7ST+DrDnYw7oKRGs9uF
+iJ6lPKpi7vJXzOM7OakL/DByc/osYuXDzcfc9s91Yf8eBWnT0CIKqtGKnuAjgkSx
+jkUnpIjzZkSDPrbaxcKqNkFoHSnzQuwyQwDuvMoVVxMIt4zAXBOuG35E33T+d9hU
+U3Q/zTeGC5/5DXGEKIfUdHFmmsasfYeisUQwJDcH/RLHNXqXMLEciAY9aBeF3JRp
+8wOgu33lv4ajD/nIee6Gk3ndD5WzJdGDYJAW06Ckg2LDV7mTN+01kj3Y5rcANoXR
+DNhRSO1APCsyTZLG11KmXbSEYD0Q+dvIsBtQQVoKBs0qzmB3blHigoKdQ7s5xVbm
+jRe/fPI1aSj6mXFwLTuyIXqWYiLZ9joW8XAy8dhgJ6JydiMoElaNmtW86TQZXJMr
+1MMn27pqsdSNw1HuKlBi3hrdHLYNfOvcaKuopA1mfGaaE9GSLm/QgJB/EtFkNvno
+OjbZ3e8kjbFUzla7K8TaEv9g5maFJKzUzBq5n1ogwacAyUt96YmknZv695Iwh0h/
+6ZfpFq47WcNlS9WI/E9RuEKdlgWhZtUW7S3d7fEB9AQZMUGOUUs=
+=SKhm
+-----END PGP SIGNATURE-----
+
+--t7eyulkiye2oena4--
