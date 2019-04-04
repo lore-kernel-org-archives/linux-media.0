@@ -6,109 +6,66 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_NEOMUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64E39C4360F
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 19:47:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D8F0C4360F
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 20:09:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 437632082E
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 19:47:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3356220651
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 20:09:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730451AbfDDTrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Apr 2019 15:47:35 -0400
-Received: from gofer.mess.org ([88.97.38.141]:51055 "EHLO gofer.mess.org"
+        id S1729513AbfDDUJK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Apr 2019 16:09:10 -0400
+Received: from gofer.mess.org ([88.97.38.141]:44553 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729714AbfDDTrf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Apr 2019 15:47:35 -0400
+        id S1727108AbfDDUJK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Apr 2019 16:09:10 -0400
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 1AA0360366; Thu,  4 Apr 2019 20:47:33 +0100 (BST)
-Date:   Thu, 4 Apr 2019 20:47:33 +0100
+        id 564FE60169; Thu,  4 Apr 2019 21:09:08 +0100 (BST)
+Date:   Thu, 4 Apr 2019 21:09:08 +0100
 From:   Sean Young <sean@mess.org>
 To:     Kangjie Lu <kjlu@umn.edu>
-Cc:     pakki001@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
+Cc:     pakki001@umn.edu, Olli Salonen <olli.salonen@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: stv090x: add missed checks for STV090x_WRITE_DEMOD
-Message-ID: <20190404194733.pt7w5qyfs2blq6k3@gofer.mess.org>
-References: <20190323024614.14883-1-kjlu@umn.edu>
+Subject: Re: [PATCH] media: tuners: fix a missing check for regmap_write_bits
+Message-ID: <20190404200907.3fet563fmagpdh6w@gofer.mess.org>
+References: <20190324232110.2804-1-kjlu@umn.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190323024614.14883-1-kjlu@umn.edu>
+In-Reply-To: <20190324232110.2804-1-kjlu@umn.edu>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Mar 22, 2019 at 09:46:13PM -0500, Kangjie Lu wrote:
-> Conservatively check return value of STV090x_WRITE_DEMOD in case
-> it fails.
+On Sun, Mar 24, 2019 at 06:21:10PM -0500, Kangjie Lu wrote:
+> regmap_write_bits could fail and thus deserves a check.
+> 
+> The fix returns its error code upstream in case it fails.
 
-This can introduce regressions. It is very possible that the return value
-was not checked for a reason. So, this has to be tested on hardware.
-
+Has this been tested on real hardware?
 
 Sean
 
 > 
 > Signed-off-by: Kangjie Lu <kjlu@umn.edu>
 > ---
->  drivers/media/dvb-frontends/stv090x.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+>  drivers/media/tuners/tda18250.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/media/dvb-frontends/stv090x.c b/drivers/media/dvb-frontends/stv090x.c
-> index a0622bb71803..3e2af3969e16 100644
-> --- a/drivers/media/dvb-frontends/stv090x.c
-> +++ b/drivers/media/dvb-frontends/stv090x.c
-> @@ -1446,14 +1446,17 @@ static int stv090x_start_search(struct stv090x_state *state)
->  		/* >= Cut 3 */
->  		if (state->srate <= 5000000) {
->  			/* enlarge the timing bandwidth for Low SR */
-> -			STV090x_WRITE_DEMOD(state, RTCS2, 0x68);
-> +			if (STV090x_WRITE_DEMOD(state, RTCS2, 0x68) < 0)
-> +				goto err;
->  		} else {
->  			/* reduce timing bandwidth for high SR */
-> -			STV090x_WRITE_DEMOD(state, RTCS2, 0x44);
-> +			if (STV090x_WRITE_DEMOD(state, RTCS2, 0x44) < 0)
-> +				goto err;
->  		}
+> diff --git a/drivers/media/tuners/tda18250.c b/drivers/media/tuners/tda18250.c
+> index 20d10ef45ab6..36ede1b02d23 100644
+> --- a/drivers/media/tuners/tda18250.c
+> +++ b/drivers/media/tuners/tda18250.c
+> @@ -703,6 +703,8 @@ static int tda18250_set_params(struct dvb_frontend *fe)
 >  
->  		/* Set CFR min and max to manual mode */
-> -		STV090x_WRITE_DEMOD(state, CARCFG, 0x46);
-> +		if (STV090x_WRITE_DEMOD(state, CARCFG, 0x46) < 0)
-> +			goto err;
+>  	/* charge pump */
+>  	ret = regmap_write_bits(dev->regmap, R46_CPUMP, 0x07, buf[2]);
+> +	if (ret)
+> +		goto err;
 >  
->  		if (state->algo == STV090x_WARM_SEARCH) {
->  			/* WARM Start
-> @@ -2604,7 +2607,8 @@ static enum stv090x_signal_state stv090x_get_sig_params(struct stv090x_state *st
->  
->  	if (state->algo == STV090x_BLIND_SEARCH) {
->  		tmg = STV090x_READ_DEMOD(state, TMGREG2);
-> -		STV090x_WRITE_DEMOD(state, SFRSTEP, 0x5c);
-> +		if (STV090x_WRITE_DEMOD(state, SFRSTEP, 0x5c) < 0)
-> +			goto err;
->  		while ((i <= 50) && (tmg != 0) && (tmg != 0xff)) {
->  			tmg = STV090x_READ_DEMOD(state, TMGREG2);
->  			msleep(5);
-> @@ -2910,7 +2914,9 @@ static int stv090x_optimize_track(struct stv090x_state *state)
->  			pilots = STV090x_GETFIELD_Px(reg, DEMOD_TYPE_FIELD) & 0x01;
->  			aclc = stv090x_optimize_carloop(state, modcod, pilots);
->  			if (modcod <= STV090x_QPSK_910) {
-> -				STV090x_WRITE_DEMOD(state, ACLC2S2Q, aclc);
-> +				if (STV090x_WRITE_DEMOD(state, ACLC2S2Q, aclc)
-> +						< 0)
-> +					goto err;
->  			} else if (modcod <= STV090x_8PSK_910) {
->  				if (STV090x_WRITE_DEMOD(state, ACLC2S2Q, 0x2a) < 0)
->  					goto err;
-> @@ -2972,7 +2978,8 @@ static int stv090x_optimize_track(struct stv090x_state *state)
->  	reg = STV090x_READ_DEMOD(state, TMGOBS);
->  
->  	if (state->algo == STV090x_BLIND_SEARCH) {
-> -		STV090x_WRITE_DEMOD(state, SFRSTEP, 0x00);
-> +		if (STV090x_WRITE_DEMOD(state, SFRSTEP, 0x00) < 0)
-> +			goto err;
->  		reg = STV090x_READ_DEMOD(state, DMDCFGMD);
->  		STV090x_SETFIELD_Px(reg, SCAN_ENABLE_FIELD, 0x00);
->  		STV090x_SETFIELD_Px(reg, CFR_AUTOSCAN_FIELD, 0x00);
+>  	return 0;
+>  err:
 > -- 
 > 2.17.1
