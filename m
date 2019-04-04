@@ -2,241 +2,128 @@ Return-Path: <SRS0=KukI=SG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DDDDC4360F
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 14:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E4BAC4360F
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 14:47:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6C99621734
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 14:43:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D30BD206B7
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 14:47:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h8qEun+7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728710AbfDDOnI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Apr 2019 10:43:08 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:44501 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727212AbfDDOnI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Apr 2019 10:43:08 -0400
-Received: by mail-ed1-f66.google.com with SMTP id d11so2436185edp.11;
-        Thu, 04 Apr 2019 07:43:06 -0700 (PDT)
+        id S1729364AbfDDOrO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Apr 2019 10:47:14 -0400
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:45264 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728803AbfDDOrN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Apr 2019 10:47:13 -0400
+Received: by mail-vk1-f196.google.com with SMTP id h127so674103vkd.12
+        for <linux-media@vger.kernel.org>; Thu, 04 Apr 2019 07:47:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ta2RvN4wePGlNokewK6TDhJiHr5vI+uy2KtuMR77OUA=;
+        b=h8qEun+7IXgcs5rxuFQKR0vf6mXbu2eWiFZx1783Ow/nbqm7FglwnZxOehBfoUCOHb
+         SCUdy0Ac3nZl4jJbTHTZ1IpkOcXwHZnatFINHbRktOhCZb6SSZ6rbaoTKoqxvdqG7m+C
+         yVb+dNdd63khbqLcJOUs7OW+UgZQrQ0nIoxp9GOlrSMwkPk6tHu8tmblS6RZo7UL1TEi
+         tlzi6izkVc6fJMs7YHQ5FO2MjwPPToAPxnalnAyVTT9e+MpRrgYIQz6pHXWUh8C6TQiC
+         x2/IbeOXFyv4Xv/kOQxVIBPwqhJC0v/tw2ggEXnDdHknMA+3T/2c8RtiKK+jJLCk1cTc
+         QmEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nnmDJsRN//8GWWwn19teE/B0LTp6P8qcvFQeTuk4I9A=;
-        b=HdkduZ+TlF4sUuZNmBt8uge84YyRjPK+mjqQA7I+7l3PcNRe33M0STGvUppzGcAiZ/
-         KfYBifM3iU37kAvGztxcYiNX3yN4FIGFulG9ST58Dq4AnRVKwnttjFLwFt2n8zEexiFn
-         lREUdR6zkp0JA5q1/XiwFOAewqJ7y08QnpY1wtDBa/QdW0jL5Ks7ypqObdlG17hgdXqZ
-         lcIPLRmEr8g9B5yHgZ0JFsHs/9Hm4j0X8PPH4UGQyZ/b/1W9HgvaeIR40PzLE9WMIg7q
-         YulAxs3oZzfdL6FVq4kmE2EBTfCBQ14GUhdutlI3YYSc8lgM4NJyxETL8TWMFfR+2daA
-         cfRw==
-X-Gm-Message-State: APjAAAW96YVjfALhWHrKqjh2+JYGDdLuN6wDE3XyMriv8bbbXRaELBOv
-        RlFfirhU7c5uEILO19g4zZOA0EpMSHg=
-X-Google-Smtp-Source: APXvYqy3LItIStSlX7rCnwClT5ha9JtGSFw/ghaV4Q7B0iUGl1h1AcJBAvqF/8cIKu5OQ0Plyy1yOw==
-X-Received: by 2002:aa7:da51:: with SMTP id w17mr4075839eds.71.1554388985526;
-        Thu, 04 Apr 2019 07:43:05 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id bz3sm3637088ejb.52.2019.04.04.07.43.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Apr 2019 07:43:03 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id r4so4126333wrq.8;
-        Thu, 04 Apr 2019 07:43:03 -0700 (PDT)
-X-Received: by 2002:a5d:4750:: with SMTP id o16mr2009265wrs.206.1554388982858;
- Thu, 04 Apr 2019 07:43:02 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ta2RvN4wePGlNokewK6TDhJiHr5vI+uy2KtuMR77OUA=;
+        b=Idw7oYRIh0BPCGju8sdMN8KBpGX1QrPhQzKE6/CnHrZi41mvkhfuofv6w08GQ0nKva
+         u+xm1BW15sqQDuPHlDEfIQ8Lo2Diyi55yf7x3mVqzAMbMyvwHfrNQxwx9N3s83aLVBdA
+         55IgAsCLfA3HviY0msiiUIRYPRceEa9rkxl7QafZWyFMM7uP6a6c7nZcTYGhgcvxL/oj
+         kEnsdnNsQ4M/TNZjNer+c+HdurXo0YMMkO7W3w2mXIWiQpxfIUIyvJNhKlhY4csFu0PS
+         53Oyl6CtUAR5t2Ahx8Rk0os1KmAtO/739nIaZ3FvYZNnPN94nKvIG3J4QbBG+4PASU2c
+         wNoA==
+X-Gm-Message-State: APjAAAWNQHREdM8+x92IZb04Z6iXBf25WAl5rotbrM+qqgFHB863gp2T
+        +EBteI5IIm/F9oZCq1dN/c8FOlGtVoqF2/WCMvfJKvV0zWO5Lg==
+X-Google-Smtp-Source: APXvYqzdQgpoGiCnUbBQbr90bn/HC3BmR5wZgpRhzvE7Tqy2dqPBoKpglAu8RWyDqaBnCusRh85NHJg21dNsAUL9mNk=
+X-Received: by 2002:a1f:4c3:: with SMTP id 186mr4234902vke.26.1554389232463;
+ Thu, 04 Apr 2019 07:47:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.bfe197a82766125bea21dd26fd3de85893a921ac.1554380738.git-series.maxime.ripard@bootlin.com>
- <7cd913545cfc80fa9999839c62c4bf7b354a7904.1554380738.git-series.maxime.ripard@bootlin.com>
- <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
-In-Reply-To: <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Thu, 4 Apr 2019 22:42:50 +0800
-X-Gmail-Original-Message-ID: <CAGb2v642__AF3iHO+d9FKazJ4=uRAQSfxAN_uCUWagH6Jz2twQ@mail.gmail.com>
-Message-ID: <CAGb2v642__AF3iHO+d9FKazJ4=uRAQSfxAN_uCUWagH6Jz2twQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v7 1/2] media: uapi: Add H264 low-level decoder API
- compound controls.
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Jens Kuske <jenskuske@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>
+References: <0000000000001c2b95057ad0935b@google.com> <000000000000462a4105848c8e12@google.com>
+In-Reply-To: <000000000000462a4105848c8e12@google.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Thu, 4 Apr 2019 16:47:00 +0200
+Message-ID: <CAG_fn=VnXmDSc_QNqyEv7f7iwHXC6taBq1t55fHWZpLZ0EdiNw@mail.gmail.com>
+Subject: Re: kernel BUG at arch/x86/mm/physaddr.c:LINE! (2)
+To:     syzbot <syzbot+6c0effb5877f6b0344e2@syzkaller.appspotmail.com>
+Cc:     David Miller <davem@davemloft.net>, hverkuil@xs4all.nl,
+        linux-can@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        mchehab@s-opensource.com, mkl@pengutronix.de,
+        Networking <netdev@vger.kernel.org>, socketcan@hartkopp.net,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Apr 4, 2019 at 8:54 PM Tomasz Figa <tfiga@chromium.org> wrote:
+On Wed, Mar 20, 2019 at 9:35 PM syzbot
+<syzbot+6c0effb5877f6b0344e2@syzkaller.appspotmail.com> wrote:
 >
-> Hi,
+> syzbot has bisected this bug to:
 >
-> On Thu, Apr 4, 2019 at 9:26 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
-> >
-> > From: Pawel Osciak <posciak@chromium.org>
-> >
-> > Stateless video codecs will require both the H264 metadata and slices in
-> > order to be able to decode frames.
-> >
-> > This introduces the definitions for a new pixel format for H264 slices that
-> > have been parsed, as well as the structures used to pass the metadata from
-> > the userspace to the kernel.
-> >
-> > Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-> > Signed-off-by: Pawel Osciak <posciak@chromium.org>
-> > Signed-off-by: Guenter Roeck <groeck@chromium.org>
-> > Co-developed-by: Maxime Ripard <maxime.ripard@bootlin.com>
-> > Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
-> > ---
-> >  Documentation/media/uapi/v4l/biblio.rst            |   9 +-
-> >  Documentation/media/uapi/v4l/ext-ctrls-codec.rst   | 569 ++++++++++++++-
-> >  Documentation/media/uapi/v4l/pixfmt-compressed.rst |  19 +-
-> >  Documentation/media/uapi/v4l/vidioc-queryctrl.rst  |  30 +-
-> >  Documentation/media/videodev2.h.rst.exceptions     |   5 +-
-> >  drivers/media/v4l2-core/v4l2-ctrls.c               |  42 +-
-> >  drivers/media/v4l2-core/v4l2-ioctl.c               |   1 +-
-> >  include/media/h264-ctrls.h                         | 192 +++++-
-> >  include/media/v4l2-ctrls.h                         |  13 +-
-> >  include/uapi/linux/videodev2.h                     |   1 +-
-> >  10 files changed, 880 insertions(+), 1 deletion(-)
-> >  create mode 100644 include/media/h264-ctrls.h
-> >
-> > diff --git a/Documentation/media/uapi/v4l/biblio.rst b/Documentation/media/uapi/v4l/biblio.rst
-> > index ec33768c055e..8f4eb8823d82 100644
-> > --- a/Documentation/media/uapi/v4l/biblio.rst
-> > +++ b/Documentation/media/uapi/v4l/biblio.rst
-> > @@ -122,6 +122,15 @@ ITU BT.1119
-> >
-> >  :author:    International Telecommunication Union (http://www.itu.ch)
-> >
-> > +.. _h264:
-> > +
-> > +ITU-T Rec. H.264 Specification (04/2017 Edition)
-> > +================================================
-> > +
-> > +:title:     ITU-T Recommendation H.264 "Advanced Video Coding for Generic Audiovisual Services"
-> > +
-> > +:author:    International Telecommunication Union (http://www.itu.ch)
-> > +
-> >  .. _jfif:
-> >
-> >  JFIF
-> > diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> > index 67a122339c0e..1285bfec7d3d 100644
-> > --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> > +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> > @@ -1371,6 +1371,575 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-> >        - Layer number
-> >
-> >
-> > +.. _v4l2-mpeg-h264:
-> > +
-> > +``V4L2_CID_MPEG_VIDEO_H264_SPS (struct)``
-> > +    Specifies the sequence parameter set (as extracted from the
-> > +    bitstream) for the associated H264 slice data. This includes the
-> > +    necessary parameters for configuring a stateless hardware decoding
-> > +    pipeline for H264. The bitstream parameters are defined according
-> > +    to :ref:`h264`, section 7.4.2.1.1 "Sequence Parameter Set Data
-> > +    Semantics". For further documentation, refer to the above
-> > +    specification, unless there is an explicit comment stating
-> > +    otherwise.
-> > +
-> > +    .. note::
-> > +
-> > +       This compound control is not yet part of the public kernel API and
-> > +       it is expected to change.
-> > +
-> > +.. c:type:: v4l2_ctrl_h264_sps
-> > +
-> > +.. cssclass:: longtable
-> > +
-> > +.. flat-table:: struct v4l2_ctrl_h264_sps
-> > +    :header-rows:  0
-> > +    :stub-columns: 0
-> > +    :widths:       1 1 2
-> > +
-> > +    * - __u8
-> > +      - ``profile_idc``
-> > +      -
-> > +    * - __u8
-> > +      - ``constraint_set_flags``
-> > +      - See :ref:`Sequence Parameter Set Constraints Set Flags <h264_sps_constraints_set_flags>`
-> > +    * - __u8
-> > +      - ``level_idc``
-> > +      -
-> > +    * - __u8
-> > +      - ``seq_parameter_set_id``
-> > +      -
-> > +    * - __u8
-> > +      - ``chroma_format_idc``
-> > +      -
-> > +    * - __u8
-> > +      - ``bit_depth_luma_minus8``
-> > +      -
-> > +    * - __u8
-> > +      - ``bit_depth_chroma_minus8``
-> > +      -
-> > +    * - __u8
-> > +      - ``log2_max_frame_num_minus4``
-> > +      -
-> > +    * - __u8
-> > +      - ``pic_order_cnt_type``
-> > +      -
-> > +    * - __u8
-> > +      - ``log2_max_pic_order_cnt_lsb_minus4``
-> > +      -
-> > +    * - __u8
-> > +      - ``max_num_ref_frames``
-> > +      -
-> > +    * - __u8
-> > +      - ``num_ref_frames_in_pic_order_cnt_cycle``
-> > +      -
-> > +    * - __s32
-> > +      - ``offset_for_ref_frame[255]``
-> > +      -
-> > +    * - __s32
-> > +      - ``offset_for_non_ref_pic``
-> > +      -
-> > +    * - __s32
-> > +      - ``offset_for_top_to_bottom_field``
-> > +      -
-> > +    * - __u16
-> > +      - ``pic_width_in_mbs_minus1``
-> > +      -
-> > +    * - __u16
-> > +      - ``pic_height_in_map_units_minus1``
-> > +      -
+> commit 6d469a202ee73196d0df76025af80bd6a379e658
+> Author: Mauro Carvalho Chehab <mchehab@s-opensource.com>
+> Date:   Sun May 14 17:07:21 2017 +0000
 >
-> We recently had some reflection with Alex that this is redundant with
-> the width and height in the OUTPUT format. It may also apply to some
-> other fields in these structs. I feel like they should be removed and
-> passed via corresponding generic V4L2 properties - format, selection,
-> etc.
+>      Merge tag 'v4.12-rc1' into patchwork
 >
-> The same problem is also present in the MPEG2 controls. In fact, there
-> was a patch already which used some fields from the controls to
-> calculate the destination buffer strides, rather than bytesperline in
-> the format.
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D12639fd720=
+0000
+> start commit:   6d469a20 Merge tag 'v4.12-rc1' into patchwork
+> git tree:       upstream
+> final crash:    https://syzkaller.appspot.com/x/report.txt?x=3D15639fd720=
+0000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D11639fd720000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dd86f24333880b=
+605
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D6c0effb5877f6b0=
+344e2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1312062b400=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D131bd09340000=
+0
 >
-> Since we're in staging, it could be done with a follow-up patch, though.
+> Reported-by: syzbot+6c0effb5877f6b0344e2@syzkaller.appspotmail.com
+> Fixes: 6d469a20 ("Merge tag 'v4.12-rc1' into patchwork")
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/syzkaller-bugs/000000000000462a4105848c8e12%40google.com.
+> For more options, visit https://groups.google.com/d/optout.
 
-Just my two cents. I played with some codecs a while back. IIRC some
-specify a "codec" size in addition to the actual picture size, like
-when the encoder does padding to fit the requirements of the codec
-(spec). Is this needed anywhere?
+I believe this bug is caused by vivid_vid_cap_s_selection() calling
+kfree(dev->bitmap_cap).
+This makes little sense, as dev->bitmap_cap seems to be allocated
+using vzalloc().
 
-ChenYu
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
