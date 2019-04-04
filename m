@@ -2,90 +2,46 @@ Return-Path: <SRS0=KukI=SG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29786C4360F
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 12:54:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF470C4360F
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 12:59:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E2F2F206B7
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 12:54:47 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FPK+hTHm"
+	by mail.kernel.org (Postfix) with ESMTP id BB3AA2075E
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 12:59:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728656AbfDDMyr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Apr 2019 08:54:47 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40295 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728027AbfDDMyq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Apr 2019 08:54:46 -0400
-Received: by mail-ot1-f65.google.com with SMTP id t8so2201781otp.7
-        for <linux-media@vger.kernel.org>; Thu, 04 Apr 2019 05:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NnoQXOk98mUw/zU+LHAe8k8yy8pprlhhfEKmVQVVBjo=;
-        b=FPK+hTHmgyZYalgoT9WI9CBxCJQY5Ja9ggM8B/WRJVVqJBb8BdFZJxJLCLsZsFuxrU
-         D7gkiuLpVMaaA7fVjG2Z2WWQMITm+x4L93ICOFO5aukSiV5sUmxerlfOc4c7usbbSXDs
-         Ae3tGTf9qaaZsk2xRupqXuXb9pKcJIkQBey7Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NnoQXOk98mUw/zU+LHAe8k8yy8pprlhhfEKmVQVVBjo=;
-        b=rVe+Xlhl/OBCz5nLx9TvF31XPFAGz96pSTVKQo6fAm9vIt2xeCZOT/kWJPxBnZTnGp
-         +ZClc7nEAjRu1GHavf4A168N+TL5B+YBEzJwL8U++hqAJiy3P5owBaXicXR8+hzr7Bpf
-         KioBG0b/axQVN4CXW6g/6elQ5p5RjeK8N5hOhE5TZTZny/uprV8ZypRhFtYXhyi2mljC
-         0U5HEVVSAg79HyztS4dj0CNhE7VnET2zvQ4T719+KrMM6IvHIaykImV0ntiweWLKfCRZ
-         AY4zSmC0tNo6vFgnkU4sykZQfGoocI9toUHrKXoikSGPB93Uh+Rs0MMnHVS9YO/BJfEj
-         Pq5w==
-X-Gm-Message-State: APjAAAXJym4Xe++fS79ujOUM9eqfRgzN0g/aJkehzudE4v5J6LOCyPKl
-        EP2n3RymMN8T+Kll/Q1L45uhELZ4jFI=
-X-Google-Smtp-Source: APXvYqxgSnyc+GbH3fc2VQpCRtJfMUE1Hz/O9zDpgPDiAByKpD38OL+D0CsrXdj8uHROQg1K6nw1Vw==
-X-Received: by 2002:a9d:784a:: with SMTP id c10mr3654864otm.337.1554382485710;
-        Thu, 04 Apr 2019 05:54:45 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id b51sm9983604otc.8.2019.04.04.05.54.43
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 04 Apr 2019 05:54:44 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id o74so2217942ota.3
-        for <linux-media@vger.kernel.org>; Thu, 04 Apr 2019 05:54:43 -0700 (PDT)
-X-Received: by 2002:a9d:7749:: with SMTP id t9mr3886832otl.229.1554382482715;
- Thu, 04 Apr 2019 05:54:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.bfe197a82766125bea21dd26fd3de85893a921ac.1554380738.git-series.maxime.ripard@bootlin.com>
- <7cd913545cfc80fa9999839c62c4bf7b354a7904.1554380738.git-series.maxime.ripard@bootlin.com>
-In-Reply-To: <7cd913545cfc80fa9999839c62c4bf7b354a7904.1554380738.git-series.maxime.ripard@bootlin.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 4 Apr 2019 21:54:30 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
-Message-ID: <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v7 1/2] media: uapi: Add H264 low-level decoder API
- compound controls.
-To:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Alexandre Courbot <acourbot@chromium.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pawel Osciak <posciak@chromium.org>,
+        id S1728553AbfDDM7M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Apr 2019 08:59:12 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:57865 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727108AbfDDM7M (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Apr 2019 08:59:12 -0400
+X-Originating-IP: 90.88.30.125
+Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id EBBE860011;
+        Thu,  4 Apr 2019 12:59:04 +0000 (UTC)
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     hans.verkuil@cisco.com, acourbot@chromium.org,
+        sakari.ailus@linux.intel.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     tfiga@chromium.org, posciak@chromium.org,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        jenskuske@gmail.com, Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        nicolas.dufresne@collabora.com, jenskuske@gmail.com,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se, ezequiel@collabora.com,
         linux-sunxi@googlegroups.com,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Subject: [PATCH v8 0/2] media: cedrus: Add H264 decoding support
+Date:   Thu,  4 Apr 2019 14:59:01 +0200
+Message-Id: <cover.3ff28b49f2770e2a14ce39ef8201391f73cf7fc5.1554382670.git-series.maxime.ripard@bootlin.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -93,154 +49,139 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi,
 
-On Thu, Apr 4, 2019 at 9:26 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
->
-> From: Pawel Osciak <posciak@chromium.org>
->
-> Stateless video codecs will require both the H264 metadata and slices in
-> order to be able to decode frames.
->
-> This introduces the definitions for a new pixel format for H264 slices that
-> have been parsed, as well as the structures used to pass the metadata from
-> the userspace to the kernel.
->
-> Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-> Signed-off-by: Pawel Osciak <posciak@chromium.org>
-> Signed-off-by: Guenter Roeck <groeck@chromium.org>
-> Co-developed-by: Maxime Ripard <maxime.ripard@bootlin.com>
-> Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
-> ---
->  Documentation/media/uapi/v4l/biblio.rst            |   9 +-
->  Documentation/media/uapi/v4l/ext-ctrls-codec.rst   | 569 ++++++++++++++-
->  Documentation/media/uapi/v4l/pixfmt-compressed.rst |  19 +-
->  Documentation/media/uapi/v4l/vidioc-queryctrl.rst  |  30 +-
->  Documentation/media/videodev2.h.rst.exceptions     |   5 +-
->  drivers/media/v4l2-core/v4l2-ctrls.c               |  42 +-
->  drivers/media/v4l2-core/v4l2-ioctl.c               |   1 +-
->  include/media/h264-ctrls.h                         | 192 +++++-
->  include/media/v4l2-ctrls.h                         |  13 +-
->  include/uapi/linux/videodev2.h                     |   1 +-
->  10 files changed, 880 insertions(+), 1 deletion(-)
->  create mode 100644 include/media/h264-ctrls.h
->
-> diff --git a/Documentation/media/uapi/v4l/biblio.rst b/Documentation/media/uapi/v4l/biblio.rst
-> index ec33768c055e..8f4eb8823d82 100644
-> --- a/Documentation/media/uapi/v4l/biblio.rst
-> +++ b/Documentation/media/uapi/v4l/biblio.rst
-> @@ -122,6 +122,15 @@ ITU BT.1119
->
->  :author:    International Telecommunication Union (http://www.itu.ch)
->
-> +.. _h264:
-> +
-> +ITU-T Rec. H.264 Specification (04/2017 Edition)
-> +================================================
-> +
-> +:title:     ITU-T Recommendation H.264 "Advanced Video Coding for Generic Audiovisual Services"
-> +
-> +:author:    International Telecommunication Union (http://www.itu.ch)
-> +
->  .. _jfif:
->
->  JFIF
-> diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> index 67a122339c0e..1285bfec7d3d 100644
-> --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> @@ -1371,6 +1371,575 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
->        - Layer number
->
->
-> +.. _v4l2-mpeg-h264:
-> +
-> +``V4L2_CID_MPEG_VIDEO_H264_SPS (struct)``
-> +    Specifies the sequence parameter set (as extracted from the
-> +    bitstream) for the associated H264 slice data. This includes the
-> +    necessary parameters for configuring a stateless hardware decoding
-> +    pipeline for H264. The bitstream parameters are defined according
-> +    to :ref:`h264`, section 7.4.2.1.1 "Sequence Parameter Set Data
-> +    Semantics". For further documentation, refer to the above
-> +    specification, unless there is an explicit comment stating
-> +    otherwise.
-> +
-> +    .. note::
-> +
-> +       This compound control is not yet part of the public kernel API and
-> +       it is expected to change.
-> +
-> +.. c:type:: v4l2_ctrl_h264_sps
-> +
-> +.. cssclass:: longtable
-> +
-> +.. flat-table:: struct v4l2_ctrl_h264_sps
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +    :widths:       1 1 2
-> +
-> +    * - __u8
-> +      - ``profile_idc``
-> +      -
-> +    * - __u8
-> +      - ``constraint_set_flags``
-> +      - See :ref:`Sequence Parameter Set Constraints Set Flags <h264_sps_constraints_set_flags>`
-> +    * - __u8
-> +      - ``level_idc``
-> +      -
-> +    * - __u8
-> +      - ``seq_parameter_set_id``
-> +      -
-> +    * - __u8
-> +      - ``chroma_format_idc``
-> +      -
-> +    * - __u8
-> +      - ``bit_depth_luma_minus8``
-> +      -
-> +    * - __u8
-> +      - ``bit_depth_chroma_minus8``
-> +      -
-> +    * - __u8
-> +      - ``log2_max_frame_num_minus4``
-> +      -
-> +    * - __u8
-> +      - ``pic_order_cnt_type``
-> +      -
-> +    * - __u8
-> +      - ``log2_max_pic_order_cnt_lsb_minus4``
-> +      -
-> +    * - __u8
-> +      - ``max_num_ref_frames``
-> +      -
-> +    * - __u8
-> +      - ``num_ref_frames_in_pic_order_cnt_cycle``
-> +      -
-> +    * - __s32
-> +      - ``offset_for_ref_frame[255]``
-> +      -
-> +    * - __s32
-> +      - ``offset_for_non_ref_pic``
-> +      -
-> +    * - __s32
-> +      - ``offset_for_top_to_bottom_field``
-> +      -
-> +    * - __u16
-> +      - ``pic_width_in_mbs_minus1``
-> +      -
-> +    * - __u16
-> +      - ``pic_height_in_map_units_minus1``
-> +      -
+Here is a new version of the H264 decoding support in the cedrus
+driver.
 
-We recently had some reflection with Alex that this is redundant with
-the width and height in the OUTPUT format. It may also apply to some
-other fields in these structs. I feel like they should be removed and
-passed via corresponding generic V4L2 properties - format, selection,
-etc.
+As you might already know, the cedrus driver relies on the Request
+API, and is a reverse engineered driver for the video decoding engine
+found on the Allwinner SoCs.
 
-The same problem is also present in the MPEG2 controls. In fact, there
-was a patch already which used some fields from the controls to
-calculate the destination buffer strides, rather than bytesperline in
-the format.
+This work has been possible thanks to the work done by the people
+behind libvdpau-sunxi found here:
+https://github.com/linux-sunxi/libvdpau-sunxi/
 
-Since we're in staging, it could be done with a follow-up patch, though.
+I've tested the various ABI using this gdb script:
+http://code.bulix.org/jl4se4-505620?raw
 
-Best regards,
-Tomasz
+And this test script:
+http://code.bulix.org/8zle4s-505623?raw
+
+The application compiled is quite trivial:
+http://code.bulix.org/e34zp8-505624?raw
+
+The output is:
+arm64:	builds/arm64-test-v4l2-h264-structures
+	SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+x86:	builds/x86-test-v4l2-h264-structures
+	SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+arm:	builds/arm-test-v4l2-h264-structures
+	SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+x64:	builds/x64-test-v4l2-h264-structures
+	SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+
+Let me know if there's any flaw using that test setup, or if you have
+any comments on the patches.
+
+Maxime
+
+Changes from v7:
+  - Changed the _slice_param and _decode_param to _params
+
+Changes from v6:
+  - Rebased on next
+  - Renamed the timestamp DPB field to reference_ts
+  - Fixed the collision of control type values
+  - Removed unused fields
+  - Fixed the structure layout that was broken on x86 by reducing the
+    num_slices and nal_ref_idc to 16 bits instead of 32
+
+Changes from v5:
+  - Made the references to the H264 spec more explicit
+  - Added a flag for the IDR pic
+  - Fixed typos
+  - Rebased on v5.1-rc1
+
+Changes from v4:
+  - Changed the luma and chroma weight and offset from s8 to s16
+  - Adjusted chroma and luma denominators masks in the driver
+  - Casted the luma and chroma offset to prevent an overflow
+  - ALways write the interrupt status register
+  - Fix a bug in the sram write routine that would write something even if
+    the length was 0
+  - Make the scaling lists mandatory
+  - Made the reference list order explicit in the documentation
+  - Made the fact that the slice structure can be an array
+  - Renamed the slice format to V4L2_PIX_FMT_H264_SLICE_RAW
+  - Rebased on Hans' tag br-v5.1s
+
+Changes from v3:
+  - Reintroduced long term reference flag and documented it
+  - Reintroduced ref_pic_list_p0/b0/b1 and documented it
+  - Documented the DPB flags
+  - Treat the scaling matrix as optional in the driver, as documented
+  - Free the neighbor buffer
+  - Increase the control IDs by a large margin to be safe of collisions
+  - Reorder the fields documentation according to the structure layout
+  - Change the tag documentation by the timestamp
+  - Convert the sram array to size_t
+  - Simplify the buffer retrieval from timestamp
+  - Rebase
+
+Changes from v2:
+  - Simplified _cedrus_write_ref_list as suggested by Jernej
+  - Set whether the frame is used as reference using nal_ref_idc
+  - Respect chroma_format_idc
+  - Fixes for the scaling list and prediction tables
+  - Wrote the documentation for the flags
+  - Added a bunch of defines to the driver bit fields
+  - Reworded the controls and data format descriptions as suggested
+    by Hans
+  - Reworked the controls' structure field size to avoid padding
+  - Removed the long term reference flag
+  - Reintroduced the neighbor info buffer
+  - Removed the ref_pic_list_p0/b0/b1 arrays that are redundant with the
+    one in the DPB
+  - used the timestamps instead of tags
+  - Rebased on 5.0-rc1
+
+Changes from v1:
+  - Rebased on 4.20
+  - Did the documentation for the userspace API
+  - Used the tags instead of buffer IDs
+  - Added a comment to explain why we still needed the swdec trigger
+  - Reworked the MV col buffer in order to have one slot per frame
+  - Removed the unused neighbor info buffer
+  - Made sure to have the same structure offset and alignments across
+    32 bits and 64 bits architecture
+
+Maxime Ripard (1):
+  media: cedrus: Add H264 decoding support
+
+Pawel Osciak (1):
+  media: uapi: Add H264 low-level decoder API compound controls.
+
+ Documentation/media/uapi/v4l/biblio.rst            |   9 +-
+ Documentation/media/uapi/v4l/ext-ctrls-codec.rst   | 569 ++++++++++++++-
+ Documentation/media/uapi/v4l/pixfmt-compressed.rst |  19 +-
+ Documentation/media/uapi/v4l/vidioc-queryctrl.rst  |  30 +-
+ Documentation/media/videodev2.h.rst.exceptions     |   5 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c               |  42 +-
+ drivers/media/v4l2-core/v4l2-ioctl.c               |   1 +-
+ drivers/staging/media/sunxi/cedrus/Makefile        |   3 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c        |  31 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.h        |  38 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c    |  13 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c   | 574 ++++++++++++++-
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c     |   4 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_regs.h   |  91 ++-
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c  |   9 +-
+ include/media/h264-ctrls.h                         | 192 +++++-
+ include/media/v4l2-ctrls.h                         |  13 +-
+ include/uapi/linux/videodev2.h                     |   1 +-
+ 18 files changed, 1641 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+ create mode 100644 include/media/h264-ctrls.h
+
+base-commit: 61de49cb596710b918f7a80839f0b6de2017bc32
+-- 
+git-series 0.9.1
