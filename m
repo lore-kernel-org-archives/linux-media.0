@@ -2,146 +2,154 @@ Return-Path: <SRS0=KukI=SG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57CDFC4360F
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 02:16:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BAEFC4360F
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 03:48:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 22CEE2133D
-	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 02:16:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=aj.id.au header.i=@aj.id.au header.b="BrNRdPV4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="4qeP4U9D"
+	by mail.kernel.org (Postfix) with ESMTP id 14567214AF
+	for <linux-media@archiver.kernel.org>; Thu,  4 Apr 2019 03:48:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbfDDCQi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Apr 2019 22:16:38 -0400
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:60255 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726167AbfDDCQi (ORCPT
+        id S1727787AbfDDDst (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Apr 2019 23:48:49 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:33992 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727659AbfDDDst (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 3 Apr 2019 22:16:38 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5B7F521D23;
-        Wed,  3 Apr 2019 22:16:37 -0400 (EDT)
-Received: from imap2 ([10.202.2.52])
-  by compute4.internal (MEProxy); Wed, 03 Apr 2019 22:16:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=r0+ySxPxczosFjZW0tVjVY7YxeyyP96
-        YtlNToKjzLcs=; b=BrNRdPV4PqYv1yfmwSvq43n5VWDUbmWRfVy+ZSwP2h52Ycu
-        EqKrfovi388Ru4TyleBAZNEs5vjhcvpLDfuRUp7aguhaX8YGREtDVxWArVcuacJh
-        R8ajAjrtnoGWRWo8m9rg39dP0noBKfJlmvjRTFV7tHPPgn6UVrBRQEbSzfqdj2Dq
-        ScnSJ4CwXuuQGFtlT9MZMr45N7OA6yTLP33lGSzrNQkgo1ClTpeobSzeXlVd2RDQ
-        /fNwShwfAtpApSqUYTDlFzZIl3BQ6Hs9dwa+7lNl0JGtBLN6sOzA+grVj7YTfsws
-        0ypkPnVeL+qWmK0h61Elt9U0xODaKeWS87oPghA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=r0+ySx
-        PxczosFjZW0tVjVY7YxeyyP96YtlNToKjzLcs=; b=4qeP4U9DD5PE5Ce1iwM3mm
-        mdN/pTxpq/K1WnabHhpmVl2RcC2b7qUqt+F3oQHn6OMtXFbgp2filffevuD01ODH
-        Q6/ZUafRyZlGiw0eps57lCpVOJw6rA1Szgy1RGkPTVA3P3woGQbzHa2fwN7vxnDU
-        KCe550imW6CT77bcsYUXecy/ura6QdxcoleHY6LJGoyRdoGQsI61DODv9BId8jF1
-        CVCU9lOhRBYixsT22GFc777fvpPkljmvqzM8F+JKfybEiv4n3BzjAPH0VuJsb8oa
-        ih2oW7A9vZlsbTWCHrYq92VEjmTMhUQRI7q557jN3dd2WdGUvjyvgK6u0Q5lS2og
-        ==
-X-ME-Sender: <xms:A2mlXPxoKHZTzUoa4jrt2Dhea0wnbbFJCbhAZZGeb_v2WeBx4xMUZQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrtdeggdehgeculddtuddrgedutddrtddtmd
-    cutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefofgggkfgjfhffhffvufgtsehttdertderreej
-    necuhfhrohhmpedftehnughrvgifucflvghffhgvrhihfdcuoegrnhgurhgvfiesrghjrd
-    hiugdrrghuqeenucfrrghrrghmpehmrghilhhfrhhomheprghnughrvgifsegrjhdrihgu
-    rdgruhenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:A2mlXAUxSRPZIiuEaovUWxS7ZvBkPei1SWVUEh1nx5I1TCr4Q-clyA>
-    <xmx:A2mlXMRzcXGhPpkp6wa4d4UBSHYlMaCvib_tKVb6om8_8D9RVjYiQg>
-    <xmx:A2mlXGlyrk6KnM_fPHfHBmdfOpN8uctgZr6O1iGcK20h4o4XeHEEdg>
-    <xmx:BWmlXM_tgyUQ4B-lXdRGiviHoYFxsuBFMHkGmgmjyXRdLYbrixC4-g>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 672C77C1B9; Wed,  3 Apr 2019 22:16:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.1.6-329-gf4aae99-fmstable-20190329v1
-Mime-Version: 1.0
-X-Me-Personality: 52947553
-Message-Id: <e6bfc462-da83-4c2e-9f33-24727e5afd00@www.fastmail.com>
-In-Reply-To: <dd017f44-5d1d-d657-b159-c9dbaadd795f@linux.vnet.ibm.com>
-References: <1554229504-5661-1-git-send-email-eajames@linux.ibm.com>
- <1554229504-5661-3-git-send-email-eajames@linux.ibm.com>
- <7effb2de-cc91-47af-88a2-a0075262e9c4@www.fastmail.com>
- <dd017f44-5d1d-d657-b159-c9dbaadd795f@linux.vnet.ibm.com>
-Date:   Wed, 03 Apr 2019 22:16:34 -0400
-From:   "Andrew Jeffery" <andrew@aj.id.au>
-To:     "Eddie James" <eajames@linux.vnet.ibm.com>,
-        "Eddie James" <eajames@linux.ibm.com>, linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        "Joel Stanley" <joel@jms.id.au>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        linux-clk@vger.kernel.org, "Stephen Boyd" <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        devicetree@vger.kernel.org, mark.rutland@arm.com,
-        "Rob Herring" <robh+dt@kernel.org>
-Subject: =?UTF-8?Q?Re:_[PATCH_2/5]_media:_platform:_Aspeed:_Make_reserved_memory_?=
- =?UTF-8?Q?optional?=
-Content-Type: text/plain
+        Wed, 3 Apr 2019 23:48:49 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:34a1:94b8:5a57:5919])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id BtMshwaOhNG8zBtMthSd14; Thu, 04 Apr 2019 05:48:47 +0200
+Message-ID: <7dc782bd46cf6ba778d0e8ca086db66b@smtp-cloud7.xs4all.net>
+Date:   Thu, 04 Apr 2019 05:48:46 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfE0eJGyk5WGp8/n0YbGZZI8dEqbXd8VmVNbQ+Mr53Qu6FodM2CeO0Jjxd8Lybn03nTZ07Sa+CvlVLKwcj/aPpNPp1F1Ndm//r2gvoqawnVBJuazl3yjt
+ nDrEDfPM/hS7/BCF8cZgCKrOxImPtukKYflFfbtlaif6BbzLIATLU+HQaHXGA7k4T5LsXbsVUTcWnJoPp9ildpWk3v7Nt6TU3l67ZTeAOM3+ZBjvAOzigJ84
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
+Results of the daily build of media_tree:
 
-On Thu, 4 Apr 2019, at 01:05, Eddie James wrote:
-> 
-> On 4/3/19 1:01 AM, Andrew Jeffery wrote:
-> >
-> > On Wed, 3 Apr 2019, at 04:55, Eddie James wrote:
-> >> Reserved memory doesn't need to be required; system memory would work
-> >> fine.
-> > I had to do a bit of legwork to understand what you were doing here. My
-> > understanding is that we allocate out of the default CMA region if the
-> > memory-region property isn't specified. Is that what you're expecting?
-> > Could be helpful to be a little less terse in the commit message.
-> 
-> 
-> Correct.
-> 
-> 
-> >
-> >> Signed-off-by: Eddie James <eajames@linux.ibm.com>
-> >> ---
-> >>   drivers/media/platform/aspeed-video.c | 6 +-----
-> >>   1 file changed, 1 insertion(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/media/platform/aspeed-video.c
-> >> b/drivers/media/platform/aspeed-video.c
-> >> index 55c55a6..8144fe3 100644
-> >> --- a/drivers/media/platform/aspeed-video.c
-> >> +++ b/drivers/media/platform/aspeed-video.c
-> >> @@ -1608,11 +1608,7 @@ static int aspeed_video_init(struct aspeed_video
-> >> *video)
-> >>   		return PTR_ERR(video->vclk);
-> >>   	}
-> >>   
-> >> -	rc = of_reserved_mem_device_init(dev);
-> >> -	if (rc) {
-> >> -		dev_err(dev, "Unable to reserve memory\n");
-> >> -		return rc;
-> >> -	}
-> >> +	of_reserved_mem_device_init(dev);
-> > You're ignoring *all* errors here with the expectation that the cause is the
-> > missing memory-region property. However, other errors can propagate
-> > out of of_reserved_mem_device_init() - e.g. ENOMEM. Rather than remove
-> > error checking, I think you should explicitly test for ENODEV, which is what is
-> > returned if the memory-region property is absent.
-> 
-> 
-> But it doesn't matter if it fails for any reason, any DMA allocation 
-> should fall back to default CMA memory. In the case of ENOMEM or other 
-> errors, then the later calls to allocate DMA may fail and we can deal 
-> with it then.
+date:			Thu Apr  4 05:00:10 CEST 2019
+media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
+media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
+v4l-utils git hash:	95f39aae48c6e8e5cc81e6ae6293d999f70a909b
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-2-amd64
 
-Fair enough then. I think it deserves a comment, but up to you.
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
 
-Andrew
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Thursday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
