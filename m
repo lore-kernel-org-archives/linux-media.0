@@ -2,182 +2,92 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 838AEC4360F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 11:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AAD1C4360F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 11:24:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5181521850
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 11:21:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 487D5206B6
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 11:24:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730788AbfDELVU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 07:21:20 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:33760 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730642AbfDELVU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Apr 2019 07:21:20 -0400
-Received: from [192.168.2.10] ([212.251.195.8])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id CMuGhdnRIiLOmCMuKhrhT6; Fri, 05 Apr 2019 13:21:17 +0200
-Subject: Re: [PATCH v3 1/2] media: docs-rst: Document memory-to-memory video
- decoder interface
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        =?UTF-8?B?VGlmZmFueSBMaW4gKOael+aFp+ePiik=?= 
-        <tiffany.lin@mediatek.com>,
-        =?UTF-8?B?QW5kcmV3LUNUIENoZW4gKOmZs+aZuui/qik=?= 
-        <andrew-ct.chen@mediatek.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dave.stevenson@raspberrypi.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
-References: <20190124100419.26492-1-tfiga@chromium.org>
- <20190124100419.26492-2-tfiga@chromium.org>
- <1554461965.3060.5.camel@pengutronix.de>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <8f05866a-1244-5e85-9b37-409526970779@xs4all.nl>
-Date:   Fri, 5 Apr 2019 13:21:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        id S1730810AbfDELYC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 07:24:02 -0400
+Received: from gofer.mess.org ([88.97.38.141]:48483 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730642AbfDELYC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Apr 2019 07:24:02 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 4F1086023D; Fri,  5 Apr 2019 12:24:00 +0100 (BST)
+Date:   Fri, 5 Apr 2019 12:24:00 +0100
+From:   Sean Young <sean@mess.org>
+To:     Brad Love <brad@nextdimension.cc>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org
+Subject: Re: [PATCH 2/2] cx25840-core: Set media controller taint for pads
+Message-ID: <20190405112359.mqnsk2ffg56o6s32@gofer.mess.org>
+References: <1547515448-15258-1-git-send-email-brad@nextdimension.cc>
+ <1547515448-15258-3-git-send-email-brad@nextdimension.cc>
 MIME-Version: 1.0
-In-Reply-To: <1554461965.3060.5.camel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfAgHsef+F0DFXR/v8CDzi/DLT0POqaPx+JOL5PdP0bfe1Jt1lwSt7Tdd31zzhh0eK+rLk3jXxow9/1hkOzT0FWTtgvLSSzkGhotvdCSb6RM5W28akiyr
- WKfL4dRMgXU3scyJFy3OYSdlmgy/rZYZjuTDoVE1yh7vejct3ogajufyyl8wQUWMbgsFxsVLnlCSlkiIYf+LPu93Xu58X2V1uNS4niIDC6PasN/xnsKUfxWI
- mB3QMp0jqsvKhCouPURDSrj8yOoMxdiQhq9qs+fGlvDW+qei/k7K/r9CQ/j2BwBRRQkOmRJVxFvSOSfIAHMvgWPIX5Kz5oHZmjGPc3GuxVJlGer3LYwjLleH
- LXf/Pk1eTHjV9lqAcNp5JX4CSPH9xaEkCQyPUmYCCXGYobaByk5yftYNP/gXAsm+3Upf1EoO3+UcMlHE5YqsthAh4rNsmpdDL4pmsOFk31naE1M87jY/hX+z
- aCVqBaEtJio6qSIpTmd442lkfmA5n96+ngUN7YKrz1YJOE8k/1jEMG9lQjWHVL+VH03Ylz6wPcIptHY9POXVxdGal1vEh4Qvf6f5aM2LxIEwK+F5J48hN+LL
- lMtYLV+CRAAE5veG4rwED3TCTdZV/oXNcflF0AJ77wqzq7A5kyRmmCRChGd85OjJGcTci7D1A/KoSa2J5gIQyUlKFaGVP7y5bz3KeCJ49PrQMCHkQgI6m7DX
- w6sidIH+i+OLvi76k5tnAMtBPheI2cOe/Mlkw4MHeMzqVpX+bUEzhNgRy6da45albtaKTXk+VcwLd12MV2AibX/1GLRq+di+0zYeqmF2CF9w9Tlzcvm1D46v
- FiOo7yHpFCtj/hvmPltSefsTq2IOIdVadN2KEqkFM67oQXArmSOkErWvH3tK88qamMMBPji4tGXG0eOWKcc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1547515448-15258-3-git-send-email-brad@nextdimension.cc>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/5/19 12:59 PM, Philipp Zabel wrote:
-> On Thu, 2019-01-24 at 19:04 +0900, Tomasz Figa wrote:
->> Due to complexity of the video decoding process, the V4L2 drivers of
->> stateful decoder hardware require specific sequences of V4L2 API calls
->> to be followed. These include capability enumeration, initialization,
->> decoding, seek, pause, dynamic resolution change, drain and end of
->> stream.
->>
->> Specifics of the above have been discussed during Media Workshops at
->> LinuxCon Europe 2012 in Barcelona and then later Embedded Linux
->> Conference Europe 2014 in Düsseldorf. The de facto Codec API that
->> originated at those events was later implemented by the drivers we already
->> have merged in mainline, such as s5p-mfc or coda.
->>
->> The only thing missing was the real specification included as a part of
->> Linux Media documentation. Fix it now and document the decoder part of
->> the Codec API.
->>
->> Signed-off-by: Tomasz Figa <tfiga@chromium.org>
->> ---
->>  Documentation/media/uapi/v4l/dev-decoder.rst  | 1076 +++++++++++++++++
->>  Documentation/media/uapi/v4l/dev-mem2mem.rst  |    5 +
->>  Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |    5 +
->>  Documentation/media/uapi/v4l/v4l2.rst         |   10 +-
->>  .../media/uapi/v4l/vidioc-decoder-cmd.rst     |   40 +-
->>  Documentation/media/uapi/v4l/vidioc-g-fmt.rst |   14 +
->>  6 files changed, 1135 insertions(+), 15 deletions(-)
->>  create mode 100644 Documentation/media/uapi/v4l/dev-decoder.rst
->>
->> diff --git a/Documentation/media/uapi/v4l/dev-decoder.rst b/Documentation/media/uapi/v4l/dev-decoder.rst
->> new file mode 100644
->> index 000000000000..b7db2352ad41
->> --- /dev/null
->> +++ b/Documentation/media/uapi/v4l/dev-decoder.rst
->> @@ -0,0 +1,1076 @@
->> +.. -*- coding: utf-8; mode: rst -*-
->> +
->> +.. _decoder:
->> +
->> +*************************************************
->> +Memory-to-memory Stateful Video Decoder Interface
->> +*************************************************
->> +
-> [...]
->> +
->> +Drain
->> +=====
->> +
-> [...]
->> +
->> +3. Once all the ``OUTPUT`` buffers queued before the ``V4L2_DEC_CMD_STOP`` call
->> +   are dequeued and the last ``CAPTURE`` buffer is dequeued, the decoder is
->> +   stopped and it will accept, but not process, any newly queued ``OUTPUT``
->> +   buffers until the client issues any of the following operations:
->> +
-> [...]
->> +
->> +.. note::
->> +
->> +   Once the drain sequence is initiated, the client needs to drive it to
->> +   completion, as described by the steps above, unless it aborts the process by
->> +   issuing :c:func:`VIDIOC_STREAMOFF` on any of the ``OUTPUT`` or ``CAPTURE``
->> +   queues.  The client is not allowed to issue ``V4L2_DEC_CMD_START`` or
->> +   ``V4L2_DEC_CMD_STOP`` again while the drain sequence is in progress and they
->> +   will fail with -EBUSY error code if attempted.
+On Mon, Jan 14, 2019 at 07:24:08PM -0600, Brad Love wrote:
+> Fixes: 9d6d20e652 ("v4l2-mc: switch it to use the new approach to setup pipelines")
 > 
-> Should the V4L2_DEC_CMD_STOP documentation in
-> Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst:
+> Without "taint" set for signal type, devices
+> with analog capture fail during probe:
 > 
->   * - ``V4L2_DEC_CMD_STOP``
->     - 1
->     - Stop the decoder. When the decoder is already stopped, this
->       command does nothing.
+> [    5.821715] cx231xx 3-2:1.1: v4l2 driver version 0.0.3
+> [    5.955721] cx231xx 3-2:1.1: Registered video device video0 [v4l2]
+> [    5.955797] cx231xx 3-2:1.1: Registered VBI device vbi0
+> [    5.955802] cx231xx 3-2:1.1: video EndPoint Addr 0x84, Alternate settings: 5
+> [    5.955805] cx231xx 3-2:1.1: VBI EndPoint Addr 0x85, Alternate settings: 2
+> [    5.955807] cx231xx 3-2:1.1: sliced CC EndPoint Addr 0x86, Alternate settings: 2
+> [    5.955834] cx231xx 3-2:1.1: V4L2 device vbi0 deregistered
+> [    5.955889] cx231xx 3-2:1.1: V4L2 device video0 deregistered
+> [    5.959131] cx231xx: probe of 3-2:1.1 failed with error -22
+> [    5.959190] usbcore: registered new interface driver cx231xx
 > 
-> be updated to mention that for mem2mem decoders this not only does
-> nothing, but returns an -EBUSY error return value?
+> 
+> This sets the taint as follows:
+> - sink pads to PAD_SIGNAL_ANALOG
+> - source pads to PAD_SIGNAL_DV
 
-Yes. Basically in this case the STOP is still in progress, so returning
-EBUSY makes sense and should be documented.
+This patch no longer applies, looks like similar fix was done in
+commit 46c039d06b6ecabb94bd16c3a999b28dc83b79ce.
+
+Sean
 
 > 
-> Also, if V4L2_DEC_CMD_STOP_IMMEDIATELY is set, should the decoder drop
-> all pending buffers and signal EOS immediately? Should this be mentioned
-> here?
-
-Hmm, the decoder spec says that flags should be set to 0, and current codec
-drivers explicitly disallow a non-0 flags value.
-
-I'm not sure if there is a practical use-case for V4L2_DEC_CMD_STOP_IMMEDIATELY
-in the context of a decoder. If you want to stop immediately, then just call
-streamoff on the OUTPUT queue.
-
 > 
->> +   Although mandatory, the availability of decoder commands may be queried
->> +   using :c:func:`VIDIOC_TRY_DECODER_CMD`.
+> Signed-off-by: Brad Love <brad@nextdimension.cc>
+> ---
+>  drivers/media/i2c/cx25840/cx25840-core.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Do the TRY_DECODER_CMD also return -EBUSY during the draining phase?
-
-No.
-
-Regards,
-
-	Hans
-
-> 
-> regards
-> Philipp
-> 
-
+> diff --git a/drivers/media/i2c/cx25840/cx25840-core.c b/drivers/media/i2c/cx25840/cx25840-core.c
+> index b23d8e4..0c94be5 100644
+> --- a/drivers/media/i2c/cx25840/cx25840-core.c
+> +++ b/drivers/media/i2c/cx25840/cx25840-core.c
+> @@ -5225,8 +5225,12 @@ static int cx25840_probe(struct i2c_client *client,
+>  	 * those extra inputs. So, let's add it only when needed.
+>  	 */
+>  	state->pads[CX25840_PAD_INPUT].flags = MEDIA_PAD_FL_SINK;
+> +	state->pads[CX25840_PAD_INPUT].sig_type = PAD_SIGNAL_ANALOG;
+>  	state->pads[CX25840_PAD_VID_OUT].flags = MEDIA_PAD_FL_SOURCE;
+> +	state->pads[CX25840_PAD_VID_OUT].sig_type = PAD_SIGNAL_DV;
+>  	state->pads[CX25840_PAD_VBI_OUT].flags = MEDIA_PAD_FL_SOURCE;
+> +	state->pads[CX25840_PAD_VBI_OUT].sig_type = PAD_SIGNAL_DV;
+> +
+>  	sd->entity.function = MEDIA_ENT_F_ATV_DECODER;
+>  
+>  	ret = media_entity_pads_init(&sd->entity, ARRAY_SIZE(state->pads),
+> -- 
+> 2.7.4
