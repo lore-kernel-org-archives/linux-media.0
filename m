@@ -2,144 +2,156 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=FAKE_REPLY_C,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A42AAC10F24
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 16:16:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0213EC282DA
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 16:28:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7EC2721738
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 16:16:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CBF102146F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 16:28:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731521AbfDEQQy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 12:16:54 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:56488 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731153AbfDEQQy (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 12:16:54 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id A0FC43C00C5;
-        Fri,  5 Apr 2019 18:16:50 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id uHAvInRGDHxV; Fri,  5 Apr 2019 18:16:43 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 2D52F3C00C3;
-        Fri,  5 Apr 2019 18:16:43 +0200 (CEST)
-Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.439.0; Fri, 5 Apr 2019
- 18:16:42 +0200
-Date:   Fri, 5 Apr 2019 18:16:39 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Steve Longerbeam <steve_longerbeam@mentor.com>,
-        "George G. Davis" <george_davis@mentor.com>,
-        <linux-media@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Eugen Friedrich <efriedrich@de.adit-jv.com>,
-        <harsha.manjulamallikarjun@in.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-Subject: Re: [PATCH v3 3/9] media: rcar-vin: Create a group notifier
-Message-ID: <20190405161639.GA10433@vmlxhi-102.adit-jv.com>
+        id S1731507AbfDEQ14 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 12:27:56 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35730 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730554AbfDEQ14 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 12:27:56 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id 17FF128226F
+Message-ID: <05078223a4098c96f6260f77e9ef2a01b966daa6.camel@collabora.com>
+Subject: Re: [PATCH RESEND v7 1/2] media: uapi: Add H264 low-level decoder
+ API compound controls.
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Pawel Osciak <posciak@chromium.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg "
+         "Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Jens Kuske <jenskuske@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-sunxi <linux-sunxi@googlegroups.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>
+Date:   Fri, 05 Apr 2019 12:27:48 -0400
+In-Reply-To: <20190405151552.biesirbs35uivk7d@flea>
+References: <cover.bfe197a82766125bea21dd26fd3de85893a921ac.1554380738.git-series.maxime.ripard@bootlin.com>
+         <7cd913545cfc80fa9999839c62c4bf7b354a7904.1554380738.git-series.maxime.ripard@bootlin.com>
+         <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
+         <CAGb2v642__AF3iHO+d9FKazJ4=uRAQSfxAN_uCUWagH6Jz2twQ@mail.gmail.com>
+         <c3ed6d00bf5642b1524ef4973f2db7ba6759fb6d.camel@collabora.com>
+         <20190405151552.biesirbs35uivk7d@flea>
+Organization: Collabora Ltd.
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-105qp6mZm6hZVbLbDG+d"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20180524101452.GC31036@bigcity.dyn.berto.se>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.93.184]
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Niklas, Jacopo cc: Steve
 
-Apologize for reviving this old thread. Just one question below.
+--=-105qp6mZm6hZVbLbDG+d
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2018-05-24 10:14:52, Niklas Söderlund wrote:
+Le vendredi 05 avril 2019 =C3=A0 17:15 +0200, Maxime Ripard a =C3=A9crit :
+> Hi Nicolas,
+>=20
+> On Thu, Apr 04, 2019 at 11:41:13AM -0400, Nicolas Dufresne wrote:
+> > > > > +    * - __u16
+> > > > > +      - ``pic_width_in_mbs_minus1``
+> > > > > +      -
+> > > > > +    * - __u16
+> > > > > +      - ``pic_height_in_map_units_minus1``
+> > > > > +      -
+> > > >=20
+> > > > We recently had some reflection with Alex that this is redundant wi=
+th
+> > > > the width and height in the OUTPUT format. It may also apply to som=
+e
+> > > > other fields in these structs. I feel like they should be removed a=
+nd
+> > > > passed via corresponding generic V4L2 properties - format, selectio=
+n,
+> > > > etc.
+> > > >=20
+> > > > The same problem is also present in the MPEG2 controls. In fact, th=
+ere
+> > > > was a patch already which used some fields from the controls to
+> > > > calculate the destination buffer strides, rather than bytesperline =
+in
+> > > > the format.
+> > > >=20
+> > > > Since we're in staging, it could be done with a follow-up patch, th=
+ough.
+> > >=20
+> > > Just my two cents. I played with some codecs a while back. IIRC some
+> > > specify a "codec" size in addition to the actual picture size, like
+> > > when the encoder does padding to fit the requirements of the codec
+> > > (spec). Is this needed anywhere?
+> >=20
+> > With state-less encoders, the headers, which contains the crop
+> > information is created by userspace and for state less decoder, the
+> > headers that contains this information is parsed by userspace. So I
+> > believe that in theory, the accelerator does not strictly need to be
+> > aware of the cropped dimensions.
+> >=20
+> > Another thing, is that there is not guarantied matches between e.g.
+> > depth of the chrome/luma and the final image buffers. Some hardware may
+> > have bandwidth limitation or internal converter and could possibly
+> > decode 10bit data into 8bit buffers.
+> >=20
+> > A third reason why I would not try and encode this header information
+> > is that there can be multiple PPS/SPS at the same time, and I think
+> > it's confusing if the relevant information to differentiate them is
+> > removed.
+>=20
+> Sorry if that sounds a bit dumb, but it's not really clear to me if
+> you're arguing for the removal of the data as Tomasz suggests, or if
+> you want to keep them.
+>=20
+> The first paragrah seems to advocate for the former, but the two
+> others for the latter.
 
-> Hi Jacopo,
+I think the data should stay. As I said, there can be multiple SPS/PPS,
+while there is only one format. That being said, how does SPS/PPS
+activation works ? How do you tell the driver about all the SPS/PPS and
+which one is being activated ?
 
-> Thanks for your patch.
->
-> On 2018-05-18 16:40:39 +0200, Jacopo Mondi wrote:
->> As CSI-2 subdevices are shared between several VIN instances, a shared
->> notifier to collect the CSI-2 async subdevices is required. So far, the
->> rcar-vin driver used the notifier of the last VIN instance to probe but
->> with the forth-coming introduction of parallel input subdevices support
->> in mc-compliant code path, each VIN may register its own notifier if any
->> parallel subdevice is connected there.
->> 
->> To avoid registering a notifier twice (once for parallel subdev and one
->> for the CSI-2 subdevs) create a group notifier, shared by all the VIN
->> instances.
->> 
->> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
->> ---
->>  drivers/media/platform/rcar-vin/rcar-core.c | 39 +++++++++++------------------
->>  drivers/media/platform/rcar-vin/rcar-vin.h  |  7 +++---
->>  2 files changed, 18 insertions(+), 28 deletions(-)
+>=20
+> Thanks!
+> Maxime
+>=20
+> --
+> Maxime Ripard, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-[..]
+--=-105qp6mZm6hZVbLbDG+d
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
->> +
->>  #define vin_to_source(vin)		((vin)->parallel->subdev)
+-----BEGIN PGP SIGNATURE-----
 
-> This in particular I hate and at some point I hope to remove it or
-> move  it to rcar-v4l2.c. :-) But that is a task for later and not
-> related to  your patch-set.
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXKeCBQAKCRBxUwItrAao
+HPxYAKCLokQMygHQVcEBVlfoU/0wx7JIPQCgigkxrrILs+98mkAhfw91CijNlVI=
+=lZ4c
+-----END PGP SIGNATURE-----
 
-What about below patch excerpt (courtesy of Steve) which is currently
-under review in our tree? If we are on the same page here, we would
-happily contribute a patch to you based on below.
+--=-105qp6mZm6hZVbLbDG+d--
 
-Subject: [PATCH] media: rcar-vin: Generalize vin_to_source()
-
-Change the vin_to_source() macro to an inline function that will
-retrieve the source subdevice for both media-control and non
-media-control mode.
-
-Signed-off-by: Steve Longerbeam <steve_longerbeam@mentor.com>
----
-[..]
-
-diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
-index 0b13b34d03e3..29d8c4a80c35 100644
---- a/drivers/media/platform/rcar-vin/rcar-vin.h
-+++ b/drivers/media/platform/rcar-vin/rcar-vin.h
-@@ -217,7 +217,21 @@ struct rvin_dev {
- 	v4l2_std_id std;
- };
- 
--#define vin_to_source(vin)		((vin)->parallel->subdev)
-+static inline struct v4l2_subdev *
-+vin_to_source(struct rvin_dev *vin)
-+{
-+	if (vin->info->use_mc) {
-+		struct media_pad *pad;
-+
-+		pad = media_entity_remote_pad(&vin->pad);
-+		if (!pad)
-+			return NULL;
-+
-+		return media_entity_to_v4l2_subdev(pad->entity);
-+	}
-+
-+	return vin->parallel->subdev;
-+}
- 
- /* Debug */
- #define vin_dbg(d, fmt, arg...)		dev_dbg(d->dev, fmt, ##arg)
-
-Best regards,
-Eugeniu.
