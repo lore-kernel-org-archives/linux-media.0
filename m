@@ -6,26 +6,26 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ABB1C10F0F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6401C4360F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:03:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED7B221855
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:03:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9BAB2206DD
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:03:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729142AbfDEGDo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 02:03:44 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57941 "EHLO
+        id S1729151AbfDEGDq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 02:03:46 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:50151 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbfDEGDn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 02:03:43 -0400
+        with ESMTP id S1726594AbfDEGDp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 02:03:45 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hCHwm-00081j-QR; Fri, 05 Apr 2019 08:03:28 +0200
+        id 1hCHwl-00081a-U8; Fri, 05 Apr 2019 08:03:27 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hCHwh-0003MA-5v; Fri, 05 Apr 2019 08:03:23 +0200
+        id 1hCHwh-0003Lj-11; Fri, 05 Apr 2019 08:03:23 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
@@ -33,9 +33,9 @@ To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
 Cc:     p.zabel@pengutronix.de, javierm@redhat.co,
         laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH v5 11/13] media: dt-bindings: tvp5150: add optional tvnorms documentation
-Date:   Fri,  5 Apr 2019 08:03:15 +0200
-Message-Id: <20190405060317.11240-12-m.felsch@pengutronix.de>
+Subject: [PATCH v5 02/13] media: v4l2-fwnode: add v4l2_fwnode_connector
+Date:   Fri,  5 Apr 2019 08:03:06 +0200
+Message-Id: <20190405060317.11240-3-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190405060317.11240-1-m.felsch@pengutronix.de>
 References: <20190405060317.11240-1-m.felsch@pengutronix.de>
@@ -50,48 +50,117 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the optional binding to limit the possible tv-norms on the
-input connectors.
+Currently every driver needs to parse the connector endpoints by it self.
+This is the initial work to make this generic. The generic connector has
+some common fields and some connector specific parts. The generic one
+includes:
+  - type
+  - label
+  - remote_port (the port where the connector is connected to)
+  - remote_id   (the endpoint where the connector is connected to)
+
+The specific fields are within a union, since only one of them can be
+available at the time. Since this is the initial support the patch adds
+only the analog-connector specific ones.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- Documentation/devicetree/bindings/media/i2c/tvp5150.txt | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/media/v4l2-connector.h | 34 ++++++++++++++++++++++++++++++++++
+ include/media/v4l2-fwnode.h    | 33 +++++++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 include/media/v4l2-connector.h
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-index 82fff80fa63a..970be21fb191 100644
---- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-@@ -48,6 +48,13 @@ Required Endpoint Properties for parallel synchronization on output port:
- Note: Do not specify any of these properties if you want to use the embedded
-       BT.656 synchronization.
- 
-+Optional Connector Properties:
-+==============================
+diff --git a/include/media/v4l2-connector.h b/include/media/v4l2-connector.h
+new file mode 100644
+index 000000000000..967336e38215
+--- /dev/null
++++ b/include/media/v4l2-connector.h
+@@ -0,0 +1,34 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * v4l2-connector.h
++ *
++ * V4L2 connector types.
++ *
++ * Copyright 2019 Pengutronix, Marco Felsch <kernel@pengutronix.de>
++ */
 +
-+- tvnorms: Set the possible signals to which the hardware tries to lock instead
-+	   of using the autodetection mechnism. Please look at [1] for more
-+	   information.
++#ifndef V4L2_CONNECTOR_H
++#define V4L2_CONNECTOR_H
 +
- [1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
++#define V4L2_CONNECTOR_MAX_LABEL 41
++
++/**
++ * enum v4l2_connector_type - connector type
++ * @V4L2_CON_UNKNOWN:   unknown connector type, no V4L2 connetor configuration
++ * @V4L2_CON_COMPOSITE: analog composite connector
++ * @V4L2_CON_SVIDEO:    analog svideo connector
++ * @V4L2_CON_VGA:       analog vga connector
++ * @V4L2_CON_DVI:	analog or digital dvi connector
++ * @V4L2_CON_HDMI:      digital hdmi connetor
++ */
++enum v4l2_connector_type {
++	V4L2_CON_UNKNOWN,
++	V4L2_CON_COMPOSITE,
++	V4L2_CON_SVIDEO,
++	V4L2_CON_VGA,
++	V4L2_CON_DVI,
++	V4L2_CON_HDMI,
++};
++
++#endif /* V4L2_CONNECTOR_H */
++
+diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+index 6c07825e18b9..04344b71656f 100644
+--- a/include/media/v4l2-fwnode.h
++++ b/include/media/v4l2-fwnode.h
+@@ -22,6 +22,7 @@
+ #include <linux/list.h>
+ #include <linux/types.h>
  
- Example - three input sources:
-@@ -55,6 +62,7 @@ Example - three input sources:
- comp_connector_0 {
- 	compatible = "composite-video-connector";
- 	label = "Composite0";
-+	tvnorms = <TVNORM_PAL_M>; /* limit to pal-m signals */
++#include <media/v4l2-connector.h>
+ #include <media/v4l2-mediabus.h>
+ #include <media/v4l2-subdev.h>
  
- 	port {
- 		composite0_to_tvp5150: endpoint {
-@@ -66,6 +74,7 @@ comp_connector_0 {
- comp_connector_1 {
- 	compatible = "composite-video-connector";
- 	label = "Composite1";
-+	tvnorms = <TVNORM_NTSC_M>; /* limit to ntsc-m signals */
+@@ -126,6 +127,38 @@ struct v4l2_fwnode_link {
+ 	unsigned int remote_port;
+ };
  
- 	port {
- 		composite1_to_tvp5150: endpoint {
++/**
++ * struct v4l2_fwnode_connector_analog - analog connector data structure
++ * @supported_tvnorms: tv norms this connector supports, set to V4L2_STD_ALL
++ *                     if no restrictions are specified.
++ */
++struct v4l2_fwnode_connector_analog {
++	v4l2_std_id supported_tvnorms;
++};
++
++/** struct v4l2_fwnode_connector - the connector data structure
++ * @remote_port: identifier of the port the remote endpoint belongs to
++ * @remote_id: identifier of the id the remote endpoint belongs to
++ * @label: connetor label
++ * @type: connector type
++ * @connector: union with connector configuration data struct
++ * @connector.analog: embedded &struct v4l2_fwnode_connector_analog.
++ *                    Used if connector is of type analog.
++ */
++struct v4l2_fwnode_connector {
++	/* common fields for all v4l2_fwnode_connectors */
++	unsigned int remote_port;
++	unsigned int remote_id;
++	char label[V4L2_CONNECTOR_MAX_LABEL];
++	enum v4l2_connector_type type;
++
++	/* connector specific fields */
++	union {
++		struct v4l2_fwnode_connector_analog analog;
++		/* future connectors */
++	} connector;
++};
++
+ /**
+  * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
+  * @fwnode: pointer to the endpoint's fwnode handle
 -- 
 2.20.1
 
