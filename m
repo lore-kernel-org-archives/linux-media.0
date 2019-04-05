@@ -6,26 +6,26 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45868C4360F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:03:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ABB1C10F0F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:03:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1A93021850
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:03:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ED7B221855
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:03:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbfDEGDm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 02:03:42 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57033 "EHLO
+        id S1729142AbfDEGDo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 02:03:44 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:57941 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726356AbfDEGDm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 02:03:42 -0400
+        with ESMTP id S1726594AbfDEGDn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 02:03:43 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hCHwl-00081i-U0; Fri, 05 Apr 2019 08:03:27 +0200
+        id 1hCHwm-00081j-QR; Fri, 05 Apr 2019 08:03:28 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hCHwh-0003M7-5L; Fri, 05 Apr 2019 08:03:23 +0200
+        id 1hCHwh-0003MA-5v; Fri, 05 Apr 2019 08:03:23 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
@@ -33,9 +33,9 @@ To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
 Cc:     p.zabel@pengutronix.de, javierm@redhat.co,
         laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH v5 10/13] media: dt-bindings: tvp5150: cleanup bindings stlye
-Date:   Fri,  5 Apr 2019 08:03:14 +0200
-Message-Id: <20190405060317.11240-11-m.felsch@pengutronix.de>
+Subject: [PATCH v5 11/13] media: dt-bindings: tvp5150: add optional tvnorms documentation
+Date:   Fri,  5 Apr 2019 08:03:15 +0200
+Message-Id: <20190405060317.11240-12-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190405060317.11240-1-m.felsch@pengutronix.de>
 References: <20190405060317.11240-1-m.felsch@pengutronix.de>
@@ -50,75 +50,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use underlines to highlight optional and required properties. This is
-quite common for all bindings. Align descriptions and start sentence
-with uppercase letter. Also reword the usage of the required
-endpoint properties for the output port in case BT.656 should be used.
+Document the optional binding to limit the possible tv-norms on the
+input connectors.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- .../devicetree/bindings/media/i2c/tvp5150.txt | 30 +++++++++++--------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ Documentation/devicetree/bindings/media/i2c/tvp5150.txt | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-index bdd273d8b44d..82fff80fa63a 100644
+index 82fff80fa63a..970be21fb191 100644
 --- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
 +++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-@@ -5,12 +5,14 @@ The TVP5150 and TVP5151 are video decoders that convert baseband NTSC and PAL
- with discrete syncs or 8-bit ITU-R BT.656 with embedded syncs output formats.
+@@ -48,6 +48,13 @@ Required Endpoint Properties for parallel synchronization on output port:
+ Note: Do not specify any of these properties if you want to use the embedded
+       BT.656 synchronization.
  
- Required Properties:
--- compatible: value must be "ti,tvp5150"
--- reg: I2C slave address
-+====================
-+- compatible:	Value must be "ti,tvp5150".
-+- reg:		I2C slave address.
- 
- Optional Properties:
--- pdn-gpios: phandle for the GPIO connected to the PDN pin, if any.
--- reset-gpios: phandle for the GPIO connected to the RESETB pin, if any.
-+====================
-+- pdn-gpios:	Phandle for the GPIO connected to the PDN pin, if any.
-+- reset-gpios:	Phandle for the GPIO connected to the RESETB pin, if any.
- 
- The device node must contain one 'port' child node per device physical input
- and output port, in accordance with the video interface bindings defined in
-@@ -24,9 +26,8 @@ are numbered as follows
- 	  Y-OUT		src		2
- 
- The device node must contain at least one sink port and the src port. Each input
--port must be linked to an endpoint defined in
--Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt. The
--port/connector layout is as follows
-+port must be linked to an endpoint defined in [1]. The port/connector layout is
-+as follows
- 
- tvp-5150 port@0 (AIP1A)
- 	endpoint@0 -----------> Comp0-Con  port
-@@ -37,14 +38,17 @@ tvp-5150 port@2
- 	endpoint (video bitstream output at YOUT[0-7] parallel bus)
- 
- Required Endpoint Properties for parallel synchronization on output port:
-+=========================================================================
- 
--- hsync-active: active state of the HSYNC signal. Must be <1> (HIGH).
--- vsync-active: active state of the VSYNC signal. Must be <1> (HIGH).
--- field-even-active: field signal level during the even field data
--  transmission. Must be <0>.
-+- hsync-active:		Active state of the HSYNC signal. Must be <1> (HIGH).
-+- vsync-active:		Active state of the VSYNC signal. Must be <1> (HIGH).
-+- field-even-active:	Field signal level during the even field data
-+			transmission. Must be <0>.
- 
--If none of hsync-active, vsync-active and field-even-active is specified,
--the endpoint is assumed to use embedded BT.656 synchronization.
-+Note: Do not specify any of these properties if you want to use the embedded
-+      BT.656 synchronization.
++Optional Connector Properties:
++==============================
 +
-+[1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
++- tvnorms: Set the possible signals to which the hardware tries to lock instead
++	   of using the autodetection mechnism. Please look at [1] for more
++	   information.
++
+ [1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
  
  Example - three input sources:
+@@ -55,6 +62,7 @@ Example - three input sources:
+ comp_connector_0 {
+ 	compatible = "composite-video-connector";
+ 	label = "Composite0";
++	tvnorms = <TVNORM_PAL_M>; /* limit to pal-m signals */
  
+ 	port {
+ 		composite0_to_tvp5150: endpoint {
+@@ -66,6 +74,7 @@ comp_connector_0 {
+ comp_connector_1 {
+ 	compatible = "composite-video-connector";
+ 	label = "Composite1";
++	tvnorms = <TVNORM_NTSC_M>; /* limit to ntsc-m signals */
+ 
+ 	port {
+ 		composite1_to_tvp5150: endpoint {
 -- 
 2.20.1
 
