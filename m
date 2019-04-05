@@ -2,645 +2,177 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27EBBC4360F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:04:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C139C10F13
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 07:16:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D5DB3206DF
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 06:04:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20C4F21871
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 07:16:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730045AbfDEGES (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 02:04:18 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:36565 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729758AbfDEGES (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 02:04:18 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1hCHwl-00081d-U7; Fri, 05 Apr 2019 08:03:27 +0200
-Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1hCHwh-0003Ls-2r; Fri, 05 Apr 2019 08:03:23 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
-        robh+dt@kernel.org
-Cc:     p.zabel@pengutronix.de, javierm@redhat.co,
-        laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH v5 05/13] media: tvp5150: add input source selection of_graph support
-Date:   Fri,  5 Apr 2019 08:03:09 +0200
-Message-Id: <20190405060317.11240-6-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190405060317.11240-1-m.felsch@pengutronix.de>
-References: <20190405060317.11240-1-m.felsch@pengutronix.de>
+        id S1729941AbfDEHQn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 03:16:43 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:42998 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726694AbfDEHQn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Apr 2019 03:16:43 -0400
+Received: from [192.168.2.10] ([212.251.195.8])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id CIyNhbLEJiLOmCIyQhqQqZ; Fri, 05 Apr 2019 09:09:17 +0200
+Subject: Re: [PATCH v3 2/2] media: docs-rst: Document memory-to-memory video
+ encoder interface
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pawel Osciak <posciak@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Kamil Debski <kamil@wypas.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jeongtae Park <jtp.park@samsung.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        =?UTF-8?B?VGlmZmFueSBMaW4gKOael+aFp+ePiik=?= 
+        <tiffany.lin@mediatek.com>,
+        =?UTF-8?B?QW5kcmV3LUNUIENoZW4gKOmZs+aZuui/qik=?= 
+        <andrew-ct.chen@mediatek.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Todor Tomov <todor.tomov@linaro.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dave.stevenson@raspberrypi.org,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
+References: <20190124100419.26492-1-tfiga@chromium.org>
+ <20190124100419.26492-3-tfiga@chromium.org>
+ <4bbe4ce4-615a-b981-0855-cd78c7a002d9@xs4all.nl>
+ <CAAFQd5Dd9s-+XmA-KhokarCGUH6qCbdY3qcYq3oSfW7oRmMtMg@mail.gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <9c06c93d-a5f1-2998-a031-d483a6b51c13@xs4all.nl>
+Date:   Fri, 5 Apr 2019 09:09:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
+In-Reply-To: <CAAFQd5Dd9s-+XmA-KhokarCGUH6qCbdY3qcYq3oSfW7oRmMtMg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+X-CMAE-Envelope: MS4wfESrEGWV9ZjhhnfSt/p9JDPiffeWrm9zK50kvxO5gBON0yCHnfLYVBtGoDlwtfCikzbaxg0TmbKrpQhWd6OApdTDu4PzNmJE9mvo9JVIOHmzlAa1UVZ0
+ 7WR/GOiXuK/8dLnwwDh6DB5RJxoeG2Ym2zoC0WzImrh/k8kK+MJHsu/BAiCEpdCgkuyC4jZFhERPsRU1dlng1eR6YfpjqTuQ4arqpBPrnhBobYAzz9ixHnlR
+ wAPA4tE9QHloLuS0jm1OEJg8I+lTHsdIl5mU7poFjp9PaK+/xmnRsuDQld/UE1/oVV7x5kwlBnGQKSIgdYJ1i2c0s7mdWv9/tjnw0c6hjH+eGeL960b5fwBJ
+ /xmUrCkU7uzVnJVxqY1aoh3tSb2G0MXHuMAHyKVbSKhr7C0eqDHeMhxq4d1d8e3VHutCggbR0OxGZs7Vq8T4GZnBWnoS7mWLuszG1er1g0eUIqE/Hsa6gzuZ
+ mazYrWGZ5yBbf3Zkq9QJ4LjhCJZn9abKaphg9aD+awIrOvJAyxUbG5M/r6puBrY/DfU2fsgjhVvgSQWamztaPCVciZ73Wo56J5d1Kutb/6f2A7XoMxO+5TXG
+ 0RaQrqao1RH4pBIWChyGrZIxXusn9PK01aXuqZ+m/2/k83U46P4ytgDR74q0XCzTtwHxGM5B55dHT8+HNyzEtPP7rMdz3rzZbOCOonkrnKl705BiEhddY5g/
+ Vd5ETwoyzkhe6IPKVy5oXQIHoFpJFAhFZaFoaZmxgTOLgfpQDMgwzrLTjjmTMG+CefYyC1jyDbfug1/tdrIT3UTwN5vn0jpDKJyftWS6puSOObG7XDy5n6zd
+ 6p/4BlIv4bGBGjXpf6D0zWUPot7oBc8NoYgUX0ar/+WbnL9gkmLUOwU0JbRFhlw7mLGD/Kz+uukD/8cbi9s=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds the of_graph support to describe the tvp connections.
-Physical the TVP5150 has three ports: AIP1A, AIP1B and YOUT. As result
-of discussion [1],[2] the device-tree maps these ports 1:1. The svideo
-connector must be conneted to port@0/endpoint@1, look at the Documentation
-for more information. Since the TVP5150 is a converter the device-tree
-must contain at least 1-input and 1-output port. The mc-connectors and
-mc-links are only created if the device-tree contains the corresponding
-connector nodes. If more than one connector is available the
-media_entity_operations.link_setup() callback ensures that only one
-connector is active.
+On 4/5/19 7:53 AM, Tomasz Figa wrote:
+> On Tue, Jan 29, 2019 at 10:53 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>>
+>> Hi Tomasz,
+>>
+>> Some comments below. Nothing major, so I think a v4 should be ready to be
+>> merged.
+>>
+>> On 1/24/19 11:04 AM, Tomasz Figa wrote:
+>>> Due to complexity of the video encoding process, the V4L2 drivers of
+>>> stateful encoder hardware require specific sequences of V4L2 API calls
+>>> to be followed. These include capability enumeration, initialization,
+>>> encoding, encode parameters change, drain and reset.
+>>>
+>>> Specifics of the above have been discussed during Media Workshops at
+>>> LinuxCon Europe 2012 in Barcelona and then later Embedded Linux
+>>> Conference Europe 2014 in Düsseldorf. The de facto Codec API that
+>>> originated at those events was later implemented by the drivers we already
+>>> have merged in mainline, such as s5p-mfc or coda.
+>>>
+>>> The only thing missing was the real specification included as a part of
+>>> Linux Media documentation. Fix it now and document the encoder part of
+>>> the Codec API.
+>>>
+>>> Signed-off-by: Tomasz Figa <tfiga@chromium.org>
+>>> ---
+>>>  Documentation/media/uapi/v4l/dev-encoder.rst  | 586 ++++++++++++++++++
+>>>  Documentation/media/uapi/v4l/dev-mem2mem.rst  |   1 +
+>>>  Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |   5 +
+>>>  Documentation/media/uapi/v4l/v4l2.rst         |   2 +
+>>>  .../media/uapi/v4l/vidioc-encoder-cmd.rst     |  38 +-
+>>>  5 files changed, 617 insertions(+), 15 deletions(-)
+>>>  create mode 100644 Documentation/media/uapi/v4l/dev-encoder.rst
+>>>
+>>> diff --git a/Documentation/media/uapi/v4l/dev-encoder.rst b/Documentation/media/uapi/v4l/dev-encoder.rst
+>>> new file mode 100644
+>>> index 000000000000..fb8b05a132ee
+>>> --- /dev/null
+>>> +++ b/Documentation/media/uapi/v4l/dev-encoder.rst
+>>> @@ -0,0 +1,586 @@
 
-[1] https://www.spinics.net/lists/linux-media/msg138545.html
-[2] https://www.spinics.net/lists/linux-media/msg138546.html
+<snip>
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
-Changelog:
+>>> +Initialization
+>>> +==============
+>>> +
+>>> +1. Set the coded format on the ``CAPTURE`` queue via :c:func:`VIDIOC_S_FMT`
+>>> +
+>>> +   * **Required fields:**
+>>> +
+>>> +     ``type``
+>>> +         a ``V4L2_BUF_TYPE_*`` enum appropriate for ``CAPTURE``
+>>> +
+>>> +     ``pixelformat``
+>>> +         the coded format to be produced
+>>> +
+>>> +     ``sizeimage``
+>>> +         desired size of ``CAPTURE`` buffers; the encoder may adjust it to
+>>> +         match hardware requirements
+>>> +
+>>> +     ``width``, ``height``
+>>> +         ignored (always zero)
+>>> +
+>>> +     other fields
+>>> +         follow standard semantics
+>>> +
+>>> +   * **Return fields:**
+>>> +
+>>> +     ``sizeimage``
+>>> +         adjusted size of ``CAPTURE`` buffers
+>>> +
+>>> +   .. important::
+>>> +
+>>> +      Changing the ``CAPTURE`` format may change the currently set ``OUTPUT``
+>>> +      format. The encoder will derive a new ``OUTPUT`` format from the
+>>> +      ``CAPTURE`` format being set, including resolution, colorimetry
+>>> +      parameters, etc. If the client needs a specific ``OUTPUT`` format, it
+>>> +      must adjust it afterwards.
+>>
+>> Hmm, "including resolution": if width and height are set to 0, what should the
+>> OUTPUT resolution be? Up to the driver? I think this should be clarified since
+>> at a first reading of this paragraph it appears to be contradictory.
+>>
+> 
+> Indeed, it's hard to derive some sensible resolution from 0...
+> 
+> The intention here is to prevent the application from making any
+> assumptions about the OUTPUT format, if it changes the CAPTURE format.
+> Then, it shouldn't actually matter what's the new OUTPUT format, since
+> the application needs to set it anyway.
+> 
+> Maybe let's just remove the mention of deriving and say something
+> along these lines?
+> 
+> "How the new ``OUTPUT`` format is determined is unspecified and the client must
+>  ensure it matches its needs afterwards."
 
-[1] https://patchwork.kernel.org/cover/10794703/
-[2] https://patchwork.kernel.org/cover/10786553/
+I would replace "unspecified" with "driver specific" or possibly "up to the driver".
 
-v5:
-- Fixing build deps:
-  - tvp5150_mc_init: fix CONFIG_MEDIA_CONTROLLER deps
-  - struct tvp5150: drop CONFIG_MEDIA_CONTROLLER conditional property
-    includes. This leads into to complex deps for futher development.
-  - tvp5150_dt_cleanup: enable function only if CONFIG_OF is enabled
-  - tvp5150_parse_dt: enable function only if CONFIG_OF is enabled
-  - tvp5150_probe: call tvp5150_dt_cleanup only if CONFIG_OF is enabled
+Regards,
 
-- Simplify link_setup routine:
-  - use generic connector parsing since both series [1,2] are squashed into
-    one
-  - struct tvp5150: drop pads_state and modify_second_link property
-    due to link_setup() rework.
-  - tvp5150_link_setup: add more comments
-  - tvp5150_link_setup: simply the link setup routine a lot. Edit the 2nd
-    link directly within the driver instead of a recursive media-framework
-    call (__media_entity_setup_link). This improves the readability and
-    shrinks the driver code.
-  - tvp5150_link_setup: disable all active links in case user switches
-    connectors without disable it first.
-  - tvp5150_registered: simplify default link enable path due to link_setup()
-    rework.
-
-- General cleanups
-  - tvp5150_parse_dt: drop unecessary test
-  - tvp5150_parse_dt: add err message due to misconfiguration
-  - tvp5150_parse_dt: make use of V4L2_MBUS_UNKNOWN definition
-  - s/dev_dbg/dev_dbg_lvl
-
-v4:
- - rebase on top of media_tree/master, fix merge conflict due to commit
-   60359a28d592 ("media: v4l: fwnode: Initialise the V4L2 fwnode endpoints
-   to zero")
-
-v3:
-- probe(): s/err/err_free_v4l2_ctrls
-- drop MC dependency for tvp5150_pads
-
-v2:
-- adapt commit message
-- unify ifdef switches
-- rename tvp5150_valid_input -> tvp5150_of_valid_input, to be more precise
-- mc: use 2-input and 1-output pad
-- mc: link svideo connector to both input pads
-- mc: enable/disable svideo links in one go
-- mc: change link_setup() behaviour, switch the input src don't require a
-      explicite disable before.
-- mc: rename 'local' media_pad param to tvp5150_pad to avoid confusion
-- mc: enable link to the first available connector and set the
-      corresponding tvp5150 input src per default during registered()
-- mc/of: factor out oftree connector allocation
-- of: drop svideo dt port
-- of: move svideo connector to port@0/endpoint@1
-- of: require at least 1-in and 1-out endpoint
-
- drivers/media/i2c/tvp5150.c | 408 ++++++++++++++++++++++++++++++++----
- 1 file changed, 368 insertions(+), 40 deletions(-)
-
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index 89da921c8886..91504fddb551 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -44,16 +44,29 @@ MODULE_PARM_DESC(debug, "Debug level (0-2)");
- #define dprintk0(__dev, __arg...) dev_dbg_lvl(__dev, 0, 0, __arg)
- 
- enum tvp5150_pads {
--	TVP5150_PAD_IF_INPUT,
-+	TVP5150_PAD_AIP1A = TVP5150_COMPOSITE0,
-+	TVP5150_PAD_AIP1B,
- 	TVP5150_PAD_VID_OUT,
- 	TVP5150_NUM_PADS
- };
- 
-+struct tvp5150_connector {
-+	struct v4l2_fwnode_connector base;
-+	struct media_entity ent;
-+	struct media_pad pad;
-+};
-+
- struct tvp5150 {
- 	struct v4l2_subdev sd;
--#ifdef CONFIG_MEDIA_CONTROLLER
-+	/* additional additional endpoint for the svideo connector */
-+	struct device_node *endpoints[TVP5150_NUM_PADS + 1];
-+	unsigned int endpoints_num;
-+
-+	/* media-ctl properties */
- 	struct media_pad pads[TVP5150_NUM_PADS];
--#endif
-+	struct tvp5150_connector *connectors;
-+	int connectors_num;
-+
- 	struct v4l2_ctrl_handler hdl;
- 	struct v4l2_rect rect;
- 	struct regmap *regmap;
-@@ -1167,6 +1180,129 @@ static int tvp5150_enum_frame_size(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+/****************************************************************************
-+ *			Media entity ops
-+ ****************************************************************************/
-+#if defined(CONFIG_MEDIA_CONTROLLER)
-+static int tvp5150_set_link(struct media_pad *connector_pad,
-+			    struct media_pad *tvp5150_pad, u32 flags)
-+{
-+	struct media_link *link;
-+
-+	link = media_entity_find_link(connector_pad, tvp5150_pad);
-+	if (!link)
-+		return -EINVAL;
-+
-+	link->flags = flags;
-+	link->reverse->flags = link->flags;
-+
-+	return 0;
-+}
-+
-+static int tvp5150_disable_all_input_links(struct tvp5150 *decoder)
-+{
-+	struct media_pad *connector_pad;
-+	int i, err;
-+
-+	for (i = 0; i < TVP5150_NUM_PADS - 1; i++) {
-+		connector_pad = media_entity_remote_pad(&decoder->pads[i]);
-+		if (!connector_pad)
-+			continue;
-+
-+		err = tvp5150_set_link(connector_pad, &decoder->pads[i], 0);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static int tvp5150_s_routing(struct v4l2_subdev *sd, u32 input, u32 output,
-+			     u32 config);
-+
-+static int tvp5150_link_setup(struct media_entity *entity,
-+			      const struct media_pad *tvp5150_pad,
-+			      const struct media_pad *remote, u32 flags)
-+{
-+	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
-+	struct tvp5150 *decoder = to_tvp5150(sd);
-+	struct media_pad *other_tvp5150_pad =
-+		&decoder->pads[tvp5150_pad->index ^ 1];
-+	bool is_svideo = false;
-+	int i, err;
-+
-+	/*
-+	 * The TVP5150 state is determined by the enabled sink pad link(s).
-+	 * Enabling or disabling the source pad link has no effect.
-+	 */
-+	if (tvp5150_pad->flags & MEDIA_PAD_FL_SOURCE)
-+		return 0;
-+
-+	/* Check if the svideo connector should be enabled */
-+	for (i = 0; i < decoder->connectors_num; i++) {
-+		if (remote->entity == &decoder->connectors[i].ent) {
-+			is_svideo =
-+			   decoder->connectors[i].base.type == V4L2_CON_SVIDEO;
-+			break;
-+		}
-+	}
-+
-+	dev_dbg_lvl(sd->dev, 1, debug, "link setup '%s':%d->'%s':%d[%d]",
-+		    remote->entity->name, remote->index,
-+		    tvp5150_pad->entity->name, tvp5150_pad->index,
-+		    flags & MEDIA_LNK_FL_ENABLED);
-+	if (is_svideo)
-+		dev_dbg_lvl(sd->dev, 1, debug,
-+			    "link setup '%s':%d->'%s':%d[%d]",
-+			    remote->entity->name, remote->index,
-+			    other_tvp5150_pad->entity->name,
-+			    other_tvp5150_pad->index,
-+			    flags & MEDIA_LNK_FL_ENABLED);
-+
-+	/*
-+	 * The TVP5150 has a internal mux which allows the following setup:
-+	 *
-+	 * comp-connector1  --\
-+	 *		       |---> AIP1A
-+	 *		      /
-+	 * svideo-connector -|
-+	 *		      \
-+	 *		       |---> AIP1B
-+	 * comp-connector2  --/
-+	 *
-+	 * We can't rely on user space that the current connector gets disabled
-+	 * first before enabling the new connector. Disable all active
-+	 * connector links to be on the safe side.
-+	 */
-+	err = tvp5150_disable_all_input_links(decoder);
-+	if (err)
-+		return err;
-+
-+	tvp5150_s_routing(sd, is_svideo ? TVP5150_SVIDEO : tvp5150_pad->index,
-+			  flags & MEDIA_LNK_FL_ENABLED ? TVP5150_NORMAL :
-+			  TVP5150_BLACK_SCREEN, 0);
-+
-+	if (flags & MEDIA_LNK_FL_ENABLED) {
-+		/*
-+		 * S-Video connector is conneted to both ports AIP1A and AIP1B.
-+		 * Both links must be enabled in one-shot regardless which link
-+		 * the user requests.
-+		 */
-+		if (is_svideo) {
-+			err = tvp5150_set_link((struct media_pad *) remote,
-+					       other_tvp5150_pad, flags);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct media_entity_operations tvp5150_sd_media_ops = {
-+	.link_setup = tvp5150_link_setup,
-+};
-+#endif
- /****************************************************************************
- 			I2C Command
-  ****************************************************************************/
-@@ -1314,6 +1450,65 @@ static int tvp5150_g_tuner(struct v4l2_subdev *sd, struct v4l2_tuner *vt)
- 	return 0;
- }
- 
-+static int tvp5150_registered(struct v4l2_subdev *sd)
-+{
-+#if defined(CONFIG_MEDIA_CONTROLLER)
-+	struct tvp5150 *decoder = to_tvp5150(sd);
-+	unsigned int i;
-+	int ret;
-+
-+	/*
-+	 * Setup connector pads and links. Enable the link to the first
-+	 * available connector per default.
-+	 */
-+	for (i = 0; i < decoder->connectors_num; i++) {
-+		struct media_entity *con = &decoder->connectors[i].ent;
-+		struct media_pad *pad = &decoder->connectors[i].pad;
-+		unsigned int port = decoder->connectors[i].base.remote_port;
-+		bool is_svideo =
-+			decoder->connectors[i].base.type == V4L2_CON_SVIDEO;
-+		int flags = i ? 0 : MEDIA_LNK_FL_ENABLED;
-+
-+		pad->flags = MEDIA_PAD_FL_SOURCE;
-+		ret = media_entity_pads_init(con, 1, pad);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = media_device_register_entity(sd->v4l2_dev->mdev, con);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = media_create_pad_link(con, 0, &sd->entity, port, flags);
-+		if (ret < 0) {
-+			media_device_unregister_entity(con);
-+			return ret;
-+		}
-+
-+		if (is_svideo) {
-+			/* svideo links to both aip1a and aip1b */
-+			ret = media_create_pad_link(con, 0, &sd->entity,
-+						    port + 1, flags);
-+			if (ret < 0) {
-+				media_device_unregister_entity(con);
-+				return ret;
-+			}
-+		}
-+
-+		/* enable default input */
-+		if (flags == MEDIA_LNK_FL_ENABLED) {
-+			decoder->input =
-+				is_svideo ? TVP5150_SVIDEO :
-+				port == 0 ? TVP5150_COMPOSITE0 :
-+				TVP5150_COMPOSITE1;
-+
-+			tvp5150_selmux(sd);
-+		}
-+	}
-+#endif
-+	return 0;
-+}
-+
-+
- /* ----------------------------------------------------------------------- */
- 
- static const struct v4l2_ctrl_ops tvp5150_ctrl_ops = {
-@@ -1367,6 +1562,10 @@ static const struct v4l2_subdev_ops tvp5150_ops = {
- 	.pad = &tvp5150_pad_ops,
- };
- 
-+static const struct v4l2_subdev_internal_ops tvp5150_internal_ops = {
-+	.registered = tvp5150_registered,
-+};
-+
- /****************************************************************************
- 			I2C Client & Driver
-  ****************************************************************************/
-@@ -1515,38 +1714,171 @@ static int tvp5150_init(struct i2c_client *c)
- 	return 0;
- }
- 
--static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
-+#if defined(CONFIG_MEDIA_CONTROLLER)
-+static int tvp5150_add_of_connectors(struct tvp5150 *decoder)
- {
--	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
--	struct device_node *ep;
--	unsigned int flags;
--	int ret = 0;
-+	struct device *dev = decoder->sd.dev;
-+	struct tvp5150_connector *connectors;
-+	unsigned int connectors_num = decoder->connectors_num;
-+	int i, ret;
-+
-+	/* Allocate and initialize all available input connectors */
-+	connectors = devm_kcalloc(dev, connectors_num, sizeof(*connectors),
-+				  GFP_KERNEL);
-+	if (!connectors)
-+		return -ENOMEM;
- 
--	ep = of_graph_get_next_endpoint(np, NULL);
--	if (!ep)
--		return -EINVAL;
-+	for (i = 0; i < connectors_num; i++) {
-+		struct v4l2_fwnode_connector *c = &connectors[i].base;
- 
--	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &bus_cfg);
--	if (ret)
--		goto err;
-+		ret = v4l2_fwnode_parse_connector(
-+				   of_fwnode_handle(decoder->endpoints[i]), c);
-+
-+		connectors[i].ent.flags = MEDIA_ENT_FL_CONNECTOR;
-+		connectors[i].ent.function = c->type == V4L2_CON_SVIDEO ?
-+			MEDIA_ENT_F_CONN_SVIDEO : MEDIA_ENT_F_CONN_COMPOSITE;
-+		connectors[i].ent.name = c->label;
-+	}
-+
-+	decoder->connectors = connectors;
- 
--	flags = bus_cfg.bus.parallel.flags;
-+	return 0;
-+}
-+#endif
- 
--	if (bus_cfg.bus_type == V4L2_MBUS_PARALLEL &&
--	    !(flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH &&
--	      flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH &&
--	      flags & V4L2_MBUS_FIELD_EVEN_LOW)) {
-+static int tvp5150_mc_init(struct v4l2_subdev *sd)
-+{
-+#if defined(CONFIG_MEDIA_CONTROLLER)
-+	struct tvp5150 *decoder = to_tvp5150(sd);
-+	unsigned int i;
-+	int ret;
-+
-+	sd->entity.ops = &tvp5150_sd_media_ops;
-+	sd->entity.function = MEDIA_ENT_F_ATV_DECODER;
-+
-+	/* Initialize all TVP5150 pads */
-+	for (i = 0; i < TVP5150_NUM_PADS; i++) {
-+		if (i < TVP5150_NUM_PADS - 1) {
-+			decoder->pads[i].flags = MEDIA_PAD_FL_SINK;
-+			decoder->pads[i].sig_type = PAD_SIGNAL_ANALOG;
-+		} else {
-+			decoder->pads[i].flags = MEDIA_PAD_FL_SOURCE;
-+			decoder->pads[i].sig_type = PAD_SIGNAL_DV;
-+		}
-+	}
-+	ret = media_entity_pads_init(&sd->entity, TVP5150_NUM_PADS,
-+				     decoder->pads);
-+	if (ret < 0)
-+		goto out;
-+
-+	if (IS_ENABLED(CONFIG_OF))
-+		ret = tvp5150_add_of_connectors(decoder);
-+out:
-+	return ret;
-+#else
-+	return 0;
-+#endif
-+}
-+
-+#if defined(CONFIG_OF)
-+static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
-+{
-+	struct device *dev = decoder->sd.dev;
-+	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = V4L2_MBUS_UNKNOWN };
-+	struct v4l2_fwnode_connector c;
-+	struct device_node *ep_np;
-+	unsigned int flags;
-+	int ret, i = 0, in = 0;
-+	bool found = false;
-+
-+	/* at least 1 output and 1 input */
-+	decoder->endpoints_num = of_graph_get_endpoint_count(np);
-+	if (decoder->endpoints_num < 2 || decoder->endpoints_num > 4) {
-+		dev_err(dev, "At least 1 input and 1 output must be connected to the device.\n");
- 		ret = -EINVAL;
- 		goto err;
- 	}
- 
--	decoder->mbus_type = bus_cfg.bus_type;
-+	for_each_endpoint_of_node(np, ep_np) {
-+		struct of_endpoint ep;
-+
-+		of_graph_parse_endpoint(ep_np, &ep);
-+		switch (ep.port) {
-+			/* fall through */
-+		case TVP5150_PAD_AIP1A:
-+		case TVP5150_PAD_AIP1B:
-+			ret = v4l2_fwnode_parse_connector(
-+						   of_fwnode_handle(ep_np), &c);
-+			if (c.type != V4L2_CON_COMPOSITE &&
-+			    c.type != V4L2_CON_SVIDEO) {
-+				dev_err(dev,
-+					"Invalid endpoint %d on port %d\n",
-+					c.remote_id, c.remote_port);
-+				ret = -EINVAL;
-+				goto err;
-+			}
-+			in++;
-+			break;
-+		case TVP5150_PAD_VID_OUT:
-+			ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep_np),
-+							 &bus_cfg);
-+			if (ret)
-+				goto err;
-+
-+			flags = bus_cfg.bus.parallel.flags;
-+
-+			if (bus_cfg.bus_type == V4L2_MBUS_PARALLEL &&
-+			    !(flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH &&
-+			      flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH &&
-+			      flags & V4L2_MBUS_FIELD_EVEN_LOW)) {
-+				ret = -EINVAL;
-+				goto err;
-+			}
-+
-+			decoder->mbus_type = bus_cfg.bus_type;
-+			break;
-+		default:
-+			dev_err(dev, "Invalid port %d for endpoint %pOF\n",
-+				ep.port, ep.local_node);
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+
-+		of_node_get(ep_np);
-+		decoder->endpoints[i] = ep_np;
-+		i++;
- 
-+		found = true;
-+	}
-+
-+	decoder->connectors_num = in;
-+	return found ? 0 : -ENODEV;
- err:
--	of_node_put(ep);
- 	return ret;
- }
- 
-+static void tvp5150_dt_cleanup(struct tvp5150 *decoder)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < TVP5150_NUM_PADS; i++)
-+		of_node_put(decoder->endpoints[i]);
-+}
-+
-+#else /* !defined(CONFIG_OF) */
-+
-+static inline int
-+tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
-+{
-+	return 0;
-+}
-+
-+static inline void tvp5150_dt_cleanup(struct tvp5150 *decoder)
-+{
-+
-+}
-+#endif
-+
- static const char * const tvp5150_test_patterns[2] = {
- 	"Disabled",
- 	"Black screen"
-@@ -1585,7 +1917,7 @@ static int tvp5150_probe(struct i2c_client *c,
- 		res = tvp5150_parse_dt(core, np);
- 		if (res) {
- 			dev_err(sd->dev, "DT parsing error: %d\n", res);
--			return res;
-+			goto err_cleanup_dt;
- 		}
- 	} else {
- 		/* Default to BT.656 embedded sync */
-@@ -1593,25 +1925,16 @@ static int tvp5150_probe(struct i2c_client *c,
- 	}
- 
- 	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
-+	sd->internal_ops = &tvp5150_internal_ops;
- 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 
--#if defined(CONFIG_MEDIA_CONTROLLER)
--	core->pads[TVP5150_PAD_IF_INPUT].flags = MEDIA_PAD_FL_SINK;
--	core->pads[TVP5150_PAD_IF_INPUT].sig_type = PAD_SIGNAL_ANALOG;
--	core->pads[TVP5150_PAD_VID_OUT].flags = MEDIA_PAD_FL_SOURCE;
--	core->pads[TVP5150_PAD_VID_OUT].sig_type = PAD_SIGNAL_DV;
--
--	sd->entity.function = MEDIA_ENT_F_ATV_DECODER;
--
--	res = media_entity_pads_init(&sd->entity, TVP5150_NUM_PADS, core->pads);
--	if (res < 0)
--		return res;
--
--#endif
-+	res = tvp5150_mc_init(sd);
-+	if (res)
-+		goto err_cleanup_dt;
- 
- 	res = tvp5150_detect_version(core);
- 	if (res < 0)
--		return res;
-+		goto err_cleanup_dt;
- 
- 	core->norm = V4L2_STD_ALL;	/* Default is autodetect */
- 	core->detected_norm = V4L2_STD_UNKNOWN;
-@@ -1637,7 +1960,7 @@ static int tvp5150_probe(struct i2c_client *c,
- 	sd->ctrl_handler = &core->hdl;
- 	if (core->hdl.error) {
- 		res = core->hdl.error;
--		goto err;
-+		goto err_free_v4l2_ctrls;
- 	}
- 
- 	tvp5150_set_default(tvp5150_read_std(sd), &core->rect);
-@@ -1649,19 +1972,24 @@ static int tvp5150_probe(struct i2c_client *c,
- 						tvp5150_isr, IRQF_TRIGGER_HIGH |
- 						IRQF_ONESHOT, "tvp5150", core);
- 		if (res)
--			goto err;
-+			goto err_free_v4l2_ctrls;
- 	}
- 
- 	res = v4l2_async_register_subdev(sd);
- 	if (res < 0)
--		goto err;
-+		goto err_free_v4l2_ctrls;
- 
- 	if (debug > 1)
- 		tvp5150_log_status(sd);
-+
- 	return 0;
- 
--err:
-+err_free_v4l2_ctrls:
- 	v4l2_ctrl_handler_free(&core->hdl);
-+err_cleanup_dt:
-+	if (IS_ENABLED(CONFIG_OF) && np)
-+		tvp5150_dt_cleanup(core);
-+
- 	return res;
- }
- 
--- 
-2.20.1
-
+	Hans
