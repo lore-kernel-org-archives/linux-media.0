@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 911ECC4360F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D59D7C10F0F
 	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:41:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CEF521850
+	by mail.kernel.org (Postfix) with ESMTP id A71D021738
 	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:41:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730546AbfDEJl3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730551AbfDEJl3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 5 Apr 2019 05:41:29 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:40158 "EHLO
+Received: from retiisi.org.uk ([95.216.213.190]:40166 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730236AbfDEJl3 (ORCPT
+        by vger.kernel.org with ESMTP id S1730237AbfDEJl3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 5 Apr 2019 05:41:29 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1001])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id A48FA634C80;
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id D5F35634C83;
         Fri,  5 Apr 2019 12:40:44 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, niklas.soderlund@ragnatech.se,
         laurent.pinchart@ideasonboard.com
-Subject: [PATCH 1/9] davinci-vpif: Don't dereference endpoint after putting it, fix refcounting
-Date:   Fri,  5 Apr 2019 12:41:18 +0300
-Message-Id: <20190405094127.18975-2-sakari.ailus@linux.intel.com>
+Subject: [PATCH 1/9] davinci-vpif: Fix endpoint refcounting
+Date:   Fri,  5 Apr 2019 12:41:19 +0300
+Message-Id: <20190405094127.18975-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20190405094127.18975-1-sakari.ailus@linux.intel.com>
 References: <20190405094127.18975-1-sakari.ailus@linux.intel.com>
@@ -37,14 +37,12 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The davinci-vpif driver dereferences its local endpoints after releasing
-the reference to them.
+This patch addresses two problems with endpoint refcounting in parsing
+davinci-vpif endpoints:
 
-The driver also puts its endpoints explicitly while the
-of_graph_get_next_endpoint() does that, too, leading to obtaining a
-reference once and releasing it twice.
+- put endpoints on error and
 
-Both are fixed by this patch.
+- do not dereference endpoints after they have been put.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
