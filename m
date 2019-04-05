@@ -2,67 +2,222 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D4D8C4360F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 11:34:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 867FAC10F0F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 12:42:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 258B62186A
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 11:34:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5689B20700
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 12:42:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730788AbfDELe3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 07:34:29 -0400
-Received: from mga04.intel.com ([192.55.52.120]:41815 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730497AbfDELe3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Apr 2019 07:34:29 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Apr 2019 04:34:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,312,1549958400"; 
-   d="scan'208";a="161701771"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Apr 2019 04:34:27 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 859DB2080B; Fri,  5 Apr 2019 14:34:26 +0300 (EEST)
-Date:   Fri, 5 Apr 2019 14:34:26 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Ian Arkver <ian.arkver.dev@gmail.com>
-Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
-        niklas.soderlund@ragnatech.se, laurent.pinchart@ideasonboard.com
-Subject: Re: [PATCH 1/9] davinci-vpif: Fix endpoint refcounting
-Message-ID: <20190405113422.4fnrp23wdtubno6m@paasikivi.fi.intel.com>
-References: <20190405094127.18975-1-sakari.ailus@linux.intel.com>
- <20190405094127.18975-3-sakari.ailus@linux.intel.com>
- <d38e015e-0177-194b-4275-fcd7ac22ef23@gmail.com>
+        id S1726626AbfDEMmX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 08:42:23 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:58603 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726027AbfDEMmW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 08:42:22 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id B86B81BF219;
+        Fri,  5 Apr 2019 12:42:16 +0000 (UTC)
+Date:   Fri, 5 Apr 2019 14:43:03 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, p.zabel@pengutronix.de, javierm@redhat.co,
+        laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v5 02/13] media: v4l2-fwnode: add v4l2_fwnode_connector
+Message-ID: <20190405124303.lkfdd3pqnlxinke4@uno.localdomain>
+References: <20190405060317.11240-1-m.felsch@pengutronix.de>
+ <20190405060317.11240-3-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="j7imzh55zrwuwglw"
 Content-Disposition: inline
-In-Reply-To: <d38e015e-0177-194b-4275-fcd7ac22ef23@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190405060317.11240-3-m.felsch@pengutronix.de>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ian,
 
-On Fri, Apr 05, 2019 at 12:30:07PM +0100, Ian Arkver wrote:
-> Hi Sakari,
-> 
-> My mail client at least is showing two versions of patch [1/9] with
-> different commit messages but (I think) the same content.
+--j7imzh55zrwuwglw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Thanks for spotting this. I used the same output directory for git
-format-patch after changing the commit message. Oh well.
+Hi Marco,
 
-The other one is what I intended to send; please ignore this one.
+On Fri, Apr 05, 2019 at 08:03:06AM +0200, Marco Felsch wrote:
+> Currently every driver needs to parse the connector endpoints by it self.
+> This is the initial work to make this generic. The generic connector has
+> some common fields and some connector specific parts. The generic one
+> includes:
+>   - type
+>   - label
+>   - remote_port (the port where the connector is connected to)
+>   - remote_id   (the endpoint where the connector is connected to)
+>
+> The specific fields are within a union, since only one of them can be
+> available at the time. Since this is the initial support the patch adds
+> only the analog-connector specific ones.
+>
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> ---
+>  include/media/v4l2-connector.h | 34 ++++++++++++++++++++++++++++++++++
+>  include/media/v4l2-fwnode.h    | 33 +++++++++++++++++++++++++++++++++
+>  2 files changed, 67 insertions(+)
+>  create mode 100644 include/media/v4l2-connector.h
+>
+> diff --git a/include/media/v4l2-connector.h b/include/media/v4l2-connector.h
+> new file mode 100644
+> index 000000000000..967336e38215
+> --- /dev/null
+> +++ b/include/media/v4l2-connector.h
+> @@ -0,0 +1,34 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * v4l2-connector.h
+> + *
+> + * V4L2 connector types.
+> + *
+> + * Copyright 2019 Pengutronix, Marco Felsch <kernel@pengutronix.de>
+> + */
+> +
+> +#ifndef V4L2_CONNECTOR_H
+> +#define V4L2_CONNECTOR_H
+> +
+> +#define V4L2_CONNECTOR_MAX_LABEL 41
+> +
+> +/**
+> + * enum v4l2_connector_type - connector type
+> + * @V4L2_CON_UNKNOWN:   unknown connector type, no V4L2 connetor configuration
+> + * @V4L2_CON_COMPOSITE: analog composite connector
+> + * @V4L2_CON_SVIDEO:    analog svideo connector
+> + * @V4L2_CON_VGA:       analog vga connector
+> + * @V4L2_CON_DVI:	analog or digital dvi connector
+> + * @V4L2_CON_HDMI:      digital hdmi connetor
+> + */
+> +enum v4l2_connector_type {
+> +	V4L2_CON_UNKNOWN,
+> +	V4L2_CON_COMPOSITE,
+> +	V4L2_CON_SVIDEO,
+> +	V4L2_CON_VGA,
+> +	V4L2_CON_DVI,
+> +	V4L2_CON_HDMI,
+> +};
+> +
+> +#endif /* V4L2_CONNECTOR_H */
+> +
+> diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+> index 6c07825e18b9..04344b71656f 100644
+> --- a/include/media/v4l2-fwnode.h
+> +++ b/include/media/v4l2-fwnode.h
+> @@ -22,6 +22,7 @@
+>  #include <linux/list.h>
+>  #include <linux/types.h>
+>
+> +#include <media/v4l2-connector.h>
+>  #include <media/v4l2-mediabus.h>
+>  #include <media/v4l2-subdev.h>
+>
+> @@ -126,6 +127,38 @@ struct v4l2_fwnode_link {
+>  	unsigned int remote_port;
+>  };
+>
+> +/**
+> + * struct v4l2_fwnode_connector_analog - analog connector data structure
+> + * @supported_tvnorms: tv norms this connector supports, set to V4L2_STD_ALL
+> + *                     if no restrictions are specified.
+> + */
+> +struct v4l2_fwnode_connector_analog {
+> +	v4l2_std_id supported_tvnorms;
+> +};
+> +
+> +/** struct v4l2_fwnode_connector - the connector data structure
 
--- 
-Sakari Ailus
-sakari.ailus@linux.intel.com
+Break the line please
+
+> + * @remote_port: identifier of the port the remote endpoint belongs to
+
+I liked best the description in the commmit message:
+@remote_port: identifier of the remote endpoint port the connector connects to
+
+but I see the exact same sentence you used already in an existing
+comment, so feel free to chose the one you prefer.
+
+> + * @remote_id: identifier of the id the remote endpoint belongs to
+
+identifier of the remote endpoint the connector connect/belong to?
+
+> + * @label: connetor label
+> + * @type: connector type
+> + * @connector: union with connector configuration data struct
+
+just "connector configuration" ?
+
+> + * @connector.analog: embedded &struct v4l2_fwnode_connector_analog.
+> + *                    Used if connector is of type analog.
+
+just "analog connector configuration" ?
+
+> + */
+> +struct v4l2_fwnode_connector {
+> +	/* common fields for all v4l2_fwnode_connectors */
+
+I would drop this
+
+> +	unsigned int remote_port;
+> +	unsigned int remote_id;
+> +	char label[V4L2_CONNECTOR_MAX_LABEL];
+> +	enum v4l2_connector_type type;
+> +
+> +	/* connector specific fields */
+
+and this too :)
+
+All minor stuff, feel free to pick what you like from the comments.
+
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+
+Thanks
+  j
+> +	union {
+> +		struct v4l2_fwnode_connector_analog analog;
+> +		/* future connectors */
+> +	} connector;
+> +};
+> +
+>  /**
+>   * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
+>   * @fwnode: pointer to the endpoint's fwnode handle
+> --
+> 2.20.1
+>
+
+--j7imzh55zrwuwglw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlynTVcACgkQcjQGjxah
+VjxuAg/9Ga2GoHPyuocsU4IeQyyv0V2Z6WxW93Gp+BjRN9HK565vX3EquVdeshca
+DAislG7iCslQGur05E2AXg0IPNEUETZbW1V7TTaRHZjHdEbWsXCctTr+HSrJQ0cR
+bKddI7w9mVszqKpmobopZhDmyTH8ZaGX0MJidJ6/JBcN0HKLrd82GNNo7gXbTd6T
+RM7PDTYiGWtW8SJBsVyRGbjtI+16mwmgPuwoTirPo8zSEFv+mKYNIo2CBXGCH0Lx
+0prmHn0WNU9JLcSgaP17zNlpTwtyXvdGsrhxw4s3fS6EYJ2ehiFS8eCfLwuHxXgs
+gEGAxCYeFcE2AGn9cdJ2d4yXEoeboZ+1ISlIo4V5VKN3yNGA9I1aM6ws+zkJeq1M
+bByRkKhSF1tM8L6FySNTFBU6u6CGfCYL8WFEranmgWQOK8UIZFT1AJpXYKqbQtbZ
+cZ5BLAUZnIbbPdH1v25RlNc8u/qCMNQkt0NvU02sqcxHXTf4QhJ5Aup5Kp75CRiD
+ImyEBMijyiPpPL/9U9bMUaupYCLRbu1B2zpZwDrs4CpzIb1oYEZiq8Z544BGgWWf
+B87GAilzm7AFjEEpdtHYuS9ylawLW9LsqbCCYnXQFIXnf4JoUWMK9Za9+klcAtOD
+S0droCFtzDb3itpLG37sSP+FzkjePcwYNl9Gr5yqio2wWoqrgzQ=
+=8QIP
+-----END PGP SIGNATURE-----
+
+--j7imzh55zrwuwglw--
