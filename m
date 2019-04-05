@@ -2,244 +2,165 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD45C4360F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:34:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83F06C4360F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:38:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D9CA320693
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:34:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="fW8uzeGu"
+	by mail.kernel.org (Postfix) with ESMTP id 5E4FD218A6
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:38:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731171AbfDEOeL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 10:34:11 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37263 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbfDEOeL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 10:34:11 -0400
-Received: by mail-lj1-f193.google.com with SMTP id v13so5464137ljk.4
-        for <linux-media@vger.kernel.org>; Fri, 05 Apr 2019 07:34:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=yQtFs1FgvvFdr6Syeom2E3s4e5Pvt/zc0M7HgYbaotA=;
-        b=fW8uzeGuuljltCoUSWpLy+WrpwVGs8DTM+gpJ1X+kKoa2dhP/Xh6vaGHWSjXiuc0Y0
-         GpWIPO+pCGw5EF293XcKnM/AB9r1M58cWDnsxBYSErkxw0uNJEDBTJNLMNXyydweVn9R
-         t84hFAneKDZFOtxSRDFYKaWa0KAOEsxVlE60Ur7d1eWuzYegXGfzrRTOSNzCZi8bOtY3
-         QgWgqy/QQKmp5EB6JJz71TJIjMW4zbiZcWP6Q4DNAHUHl4MB3ctzKDvD99Q+GlMM3cv5
-         4NuTFdINlaiQG7PkN+UnjOnwWFAeeUFF5b3EoxRBXqrPFj/5kZhz7VJPhkn/2tuY+G1z
-         KhtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=yQtFs1FgvvFdr6Syeom2E3s4e5Pvt/zc0M7HgYbaotA=;
-        b=aIq8QEb+OdxJeGI1geRLMwn6Jg3mYLIwJvOSOEs7ZntUjB7hv+QIQsvEZH/Oz6g9IS
-         VgqRPQC0cAdEhQfzQ3E2/tsWe/Sjy5hzhYpo5CkRlwXaT6Y3Nr/IuCNGDFN/dy07fMig
-         Zgqm53n/i9x3GSJ6ViGZkNza1/AMFWmiV4QhJebnmSwYZB9cQA8WQXsr9eQFKXd3lyru
-         BP0A2y3v+3X9Y5R9FqzDqRvvDvUstZdgObH8idfdbiE6xL/P8nZAghcG2nJ6WzMAvckG
-         3Vr+zE0wWRuW+cLS8U5hJO3R1Qp2LGj0TE7+pxoiUpnfGdg1WlSYfzvrJaiz+stpTXpg
-         bzsw==
-X-Gm-Message-State: APjAAAVCgjBZ+rixxOt5lRm7GCjGWiA5Qrx/w4oa6nSZ3IjmvThY17+7
-        efnslpLdhXAY2b+JsDZ8PVepdw==
-X-Google-Smtp-Source: APXvYqzVmdGnkaS6Nb/DqDdbMsp87uXTW5ShfMTyF+cqs3A5Pw8Y3eCCUTWRwOy80l5o9trRqi0bLQ==
-X-Received: by 2002:a2e:89c8:: with SMTP id c8mr7286356ljk.73.1554474848703;
-        Fri, 05 Apr 2019 07:34:08 -0700 (PDT)
-Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
-        by smtp.gmail.com with ESMTPSA id d75sm4514682lfd.33.2019.04.05.07.34.07
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 05 Apr 2019 07:34:08 -0700 (PDT)
-From:   "Niklas =?iso-8859-1?Q?S=F6derlund?=" <niklas.soderlund@ragnatech.se>
-X-Google-Original-From: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
-Date:   Fri, 5 Apr 2019 16:34:07 +0200
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Steve Longerbeam <steve_longerbeam@mentor.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v14,29/33] rcar-vin: add link notify for Gen3
-Message-ID: <20190405143407.GF23466@bigcity.dyn.berto.se>
-References: <20180414115726.5075-30-niklas.soderlund+renesas@ragnatech.se>
- <20190405141718.GA19980@vmlxhi-102.adit-jv.com>
+        id S1731248AbfDEOih (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 10:38:37 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:37273 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726291AbfDEOih (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 10:38:37 -0400
+X-Originating-IP: 90.88.30.125
+Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id AAE64240011;
+        Fri,  5 Apr 2019 14:38:31 +0000 (UTC)
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Hans Verkuil <hans.verkuil@cisco.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 1/5] dt-bindings: media: Add Allwinner A10 CSI binding
+Date:   Fri,  5 Apr 2019 16:38:19 +0200
+Message-Id: <f90faf610f6a15331b8917aa3976a34f11c856b2.1554475081.git-series.maxime.ripard@bootlin.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.75d1c91ecddbc451d0e0e961f7ea7f045afd3a79.1554475081.git-series.maxime.ripard@bootlin.com>
+References: <cover.75d1c91ecddbc451d0e0e961f7ea7f045afd3a79.1554475081.git-series.maxime.ripard@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190405141718.GA19980@vmlxhi-102.adit-jv.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Eugeniu,
+The Allwinner A10 CMOS Sensor Interface is a camera capture interface also
+used in later (A10s, A13, A20, R8 and GR8) SoCs.
 
-Thanks for your report, the issue is known and fixed in [1] which is in 
-the media-tree [2] on it's way to mainline.
+On some SoCs, like the A10, there's multiple instances of that controller,
+with one instance supporting more channels and having an ISP.
 
-1. d950fd992ef89f39 ("media: rcar-vin: Fix lockdep warning at stream on")
-2. https://git.linuxtv.org/media_tree.git/
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+---
+ Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml | 94 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 94 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
 
-On 2019-04-05 16:17:18 +0200, Eugeniu Rosca wrote:
-> Hi Niklas,
-> 
-> jFYI/FWIW, checking the functionality of rcar-vin using the
-> procedure/commands described in https://elinux.org/R-Car/Tests:rcar-vin
-> on the recent Linux commit ea2cec24c8d429ee6f99040e4eb6c7ad627fe777, I
-> consistently reproduce below lockdep splat [2] (full log and .config at
-> https://gist.github.com/erosca/67a46451b3cb342fa59b558022278fff).
-> 
-> Since the locking primitives of rvin_group_link_notify (popping up in
-> the log) haven't suffered changes since v4.18-rc1 commit [1], I conclude
-> this thread [0] might be an appropriate place for reporting the issue.
-> 
-> Best regards,
-> Eugeniu.
-> 
-> [0] https://patchwork.kernel.org/patch/10341183/ [v14,29/33] rcar-vin: add link notify for Gen3
-> [1] c0cc5aef31704c ("media: rcar-vin: add link notify for Gen3")
-> [2] media-ctl -l "'rcar_csi2 feaa0000.csi2':1 -> 'VIN0 output':0 [1]"
-> 
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 5.1.0-rc3+ #27 Tainted: G        W        
-> ------------------------------------------------------
-> media-ctl/2407 is trying to acquire lock:
-> 00000000be992082 (&group->lock){+.+.}, at: rvin_group_link_notify+0xc4/0x4f4
-> 
-> but task is already holding lock:
-> 0000000064693a2a (&mdev->graph_mutex){+.+.}, at: media_device_ioctl+0x1f8/0x2b8
-> 
-> which lock already depends on the new lock.
-> 
-> the existing dependency chain (in reverse order) is:
-> 
-> -> #2 (&mdev->graph_mutex){+.+.}:
->        lock_acquire+0x144/0x39c
->        __mutex_lock+0xe8/0xb54
->        mutex_lock_nested+0x3c/0x4c
->        media_device_register_entity+0x15c/0x308
->        v4l2_device_register_subdev+0x1c8/0x288
->        v4l2_async_match_notify+0x3c/0x200
->        v4l2_async_notifier_try_all_subdevs+0xb8/0xc0
->        __v4l2_async_notifier_register+0xac/0x214
->        v4l2_async_notifier_register+0x68/0x80
->        rcar_vin_probe+0x8d8/0xa0c
->        platform_drv_probe+0x70/0xe4
->        really_probe+0x2d8/0x3d8
->        driver_probe_device+0x154/0x164
->        device_driver_attach+0x98/0xa0
->        __driver_attach+0xf0/0xf4
->        bus_for_each_dev+0x114/0x13c
->        driver_attach+0x38/0x44
->        bus_add_driver+0x234/0x288
->        driver_register+0x148/0x190
->        __platform_driver_register+0x84/0x90
->        rcar_vin_driver_init+0x20/0x28
->        do_one_initcall+0x124/0x68c
->        kernel_init_freeable+0xa5c/0xa60
->        kernel_init+0x18/0x134
->        ret_from_fork+0x10/0x18
-> 
-> -> #1 (list_lock){+.+.}:
->        lock_acquire+0x144/0x39c
->        __mutex_lock+0xe8/0xb54
->        mutex_lock_nested+0x3c/0x4c
->        v4l2_async_notifier_add_subdev+0x3c/0xdc
->        __v4l2_async_notifier_parse_fwnode_ep+0x240/0x2b8
->        v4l2_async_notifier_parse_fwnode_endpoints_by_port+0x4c/0x60
->        rcar_vin_probe+0x858/0xa0c
->        platform_drv_probe+0x70/0xe4
->        really_probe+0x2d8/0x3d8
->        driver_probe_device+0x154/0x164
->        device_driver_attach+0x98/0xa0
->        __driver_attach+0xf0/0xf4
->        bus_for_each_dev+0x114/0x13c
->        driver_attach+0x38/0x44
->        bus_add_driver+0x234/0x288
->        driver_register+0x148/0x190
->        __platform_driver_register+0x84/0x90
->        rcar_vin_driver_init+0x20/0x28
->        do_one_initcall+0x124/0x68c
->        kernel_init_freeable+0xa5c/0xa60
->        kernel_init+0x18/0x134
->        ret_from_fork+0x10/0x18
-> 
-> -> #0 (&group->lock){+.+.}:
->        __lock_acquire+0x1c7c/0x1dd0
->        lock_acquire+0x144/0x39c
->        __mutex_lock+0xe8/0xb54
->        mutex_lock_nested+0x3c/0x4c
->        rvin_group_link_notify+0xc4/0x4f4
->        __media_entity_setup_link+0x238/0x2f0
->        media_device_setup_link+0x114/0x11c
->        media_device_ioctl+0x21c/0x2b8
->        __media_ioctl+0x78/0x84
->        media_ioctl+0x58/0x68
->        vfs_ioctl+0x68/0x78
->        do_vfs_ioctl+0x134/0xbfc
->        ksys_ioctl+0x68/0x98
->        __arm64_sys_ioctl+0x4c/0x60
->        el0_svc_common+0xd0/0x16c
->        el0_svc_handler+0x94/0xa0
->        el0_svc+0x8/0xc
-> 
-> other info that might help us debug this:
-> 
-> Chain exists of:
->   &group->lock --> list_lock --> &mdev->graph_mutex
-> 
->  Possible unsafe locking scenario:
-> 
->        CPU0                    CPU1
->        ----                    ----
->   lock(&mdev->graph_mutex);
->                                lock(list_lock);
->                                lock(&mdev->graph_mutex);
->   lock(&group->lock);
-> 
->  *** DEADLOCK ***
-> 
-> 1 lock held by media-ctl/2407:
->  #0: 0000000064693a2a (&mdev->graph_mutex){+.+.}, at: media_device_ioctl+0x1f8/0x2b8
-> 
-> stack backtrace:
-> CPU: 0 PID: 2407 Comm: media-ctl Tainted: G        W         5.1.0-rc3+ #27
-> Hardware name: Renesas Salvator-X board based on r8a7795 ES2.0+ (DT)
-> Call trace:
->  dump_backtrace+0x0/0x1c0
->  show_stack+0x24/0x30
->  dump_stack+0xcc/0x128
->  print_circular_bug.isra.16+0x22c/0x364
->  check_prev_add.constprop.25+0x35c/0x1098
->  __lock_acquire+0x1c7c/0x1dd0
->  lock_acquire+0x144/0x39c
->  __mutex_lock+0xe8/0xb54
->  mutex_lock_nested+0x3c/0x4c
->  rvin_group_link_notify+0xc4/0x4f4
->  __media_entity_setup_link+0x238/0x2f0
->  media_device_setup_link+0x114/0x11c
->  media_device_ioctl+0x21c/0x2b8
->  __media_ioctl+0x78/0x84
->  media_ioctl+0x58/0x68
->  vfs_ioctl+0x68/0x78
->  do_vfs_ioctl+0x134/0xbfc
->  ksys_ioctl+0x68/0x98
->  __arm64_sys_ioctl+0x4c/0x60
->  el0_svc_common+0xd0/0x16c
->  el0_svc_handler+0x94/0xa0
->  el0_svc+0x8/0xc
-
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
+new file mode 100644
+index 000000000000..97c9fc3b5050
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
+@@ -0,0 +1,94 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/allwinner,sun4i-a10-csi.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A10 CMOS Sensor Interface (CSI) Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <maxime.ripard@bootlin.com>
++
++description: |-
++  The Allwinner A10 and later has a CMOS Sensor Interface to retrieve
++  frames from a parallel or BT656 sensor.
++
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - allwinner,sun7i-a20-csi0
++          - const: allwinner,sun4i-a10-csi0
++
++      - items:
++          - const: allwinner,sun4i-a10-csi0
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: The CSI interface clock
++      - description: The CSI module clock
++      - description: The CSI ISP clock
++      - description: The CSI DRAM clock
++
++  clock-names:
++    items:
++      - const: bus
++      - const: mod
++      - const: isp
++      - const: ram
++
++  resets:
++    description: The reset line driver this IP
++    maxItems: 1
++
++  pinctrl-0:
++    minItems: 1
++
++  pinctrl-names:
++    const: default
++
++  port:
++    type: object
++    additionalProperties: false
++
++    properties:
++      endpoint:
++        properties:
++          bus-width:
++            const: 8
++            description: Number of data lines actively used.
++
++          data-active: true
++          hsync-active: true
++          pclk-sample: true
++          remote-endpoint: true
++          vsync-active: true
++
++        required:
++          - bus-width
++          - data-active
++          - hsync-active
++          - pclk-sample
++          - remote-endpoint
++          - vsync-active
++
++    required:
++      - endpoint
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++additionalProperties: false
++...
 -- 
-Regards,
-Niklas Söderlund
+git-series 0.9.1
