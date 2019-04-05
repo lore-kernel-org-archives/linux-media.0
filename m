@@ -2,182 +2,152 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D88BC4360F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 10:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00BCCC4360F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 10:59:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 604AF21872
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 10:29:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFC3E21871
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 10:59:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730610AbfDEK3o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 06:29:44 -0400
-Received: from gofer.mess.org ([88.97.38.141]:49117 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730579AbfDEK3o (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Apr 2019 06:29:44 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 30EED60247; Fri,  5 Apr 2019 11:29:43 +0100 (BST)
-Date:   Fri, 5 Apr 2019 11:29:42 +0100
-From:   Sean Young <sean@mess.org>
-To:     Brad Love <brad@nextdimension.cc>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org
-Subject: Re: [PATCH 07/13] si2157: Briefly wait for tuning operation to
- complete
-Message-ID: <20190405102942.5igrs664bl46v2pg@gofer.mess.org>
-References: <1546105882-15693-1-git-send-email-brad@nextdimension.cc>
- <1546105882-15693-8-git-send-email-brad@nextdimension.cc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1546105882-15693-8-git-send-email-brad@nextdimension.cc>
-User-Agent: NeoMutt/20170113 (1.7.2)
+        id S1730650AbfDEK7c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 06:59:32 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:36495 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730283AbfDEK7c (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 06:59:32 -0400
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hCMZH-0006bS-94; Fri, 05 Apr 2019 12:59:31 +0200
+Message-ID: <1554461965.3060.5.camel@pengutronix.de>
+Subject: Re: [PATCH v3 1/2] media: docs-rst: Document memory-to-memory video
+ decoder interface
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Pawel Osciak <posciak@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Kamil Debski <kamil@wypas.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jeongtae Park <jtp.park@samsung.com>,
+        Tiffany Lin =?UTF-8?Q?=28=E6=9E=97=E6=85=A7=E7=8F=8A=29?= 
+        <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen =?UTF-8?Q?=28=E9=99=B3=E6=99=BA=E8=BF=AA=29?= 
+        <andrew-ct.chen@mediatek.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Todor Tomov <todor.tomov@linaro.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dave.stevenson@raspberrypi.org,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
+Date:   Fri, 05 Apr 2019 12:59:25 +0200
+In-Reply-To: <20190124100419.26492-2-tfiga@chromium.org>
+References: <20190124100419.26492-1-tfiga@chromium.org>
+         <20190124100419.26492-2-tfiga@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Dec 29, 2018 at 11:51:16AM -0600, Brad Love wrote:
-> Some software reports no signal found on a frequency due to immediately
-> checking for lock as soon as set_params returns. This waits up 40ms for
-> tuning operation, then from 30-150ms (dig/analog) for signal lock before
-> returning from set_params and set_analog_params.
+On Thu, 2019-01-24 at 19:04 +0900, Tomasz Figa wrote:
+> Due to complexity of the video decoding process, the V4L2 drivers of
+> stateful decoder hardware require specific sequences of V4L2 API calls
+> to be followed. These include capability enumeration, initialization,
+> decoding, seek, pause, dynamic resolution change, drain and end of
+> stream.
 > 
-> Tuning typically completes in 20-30ms. Digital tuning will additionally
-> wait depending on signal characteristics. Analog tuning will wait the
-> full timeout in case of no signal.
-
-This looks like a workaround for broken userspace. Very possibly this
-is software was tested on a different frontend which does wait for tuning
-to complete.
-
-This is a change in uapi and will have to be done for all frontends, and
-documented. However I doubt such a change is acceptable.
-
-What software are you refering to?
-
-
-Sean
-
+> Specifics of the above have been discussed during Media Workshops at
+> LinuxCon Europe 2012 in Barcelona and then later Embedded Linux
+> Conference Europe 2014 in Düsseldorf. The de facto Codec API that
+> originated at those events was later implemented by the drivers we already
+> have merged in mainline, such as s5p-mfc or coda.
 > 
-> Signed-off-by: Brad Love <brad@nextdimension.cc>
+> The only thing missing was the real specification included as a part of
+> Linux Media documentation. Fix it now and document the decoder part of
+> the Codec API.
+> 
+> Signed-off-by: Tomasz Figa <tfiga@chromium.org>
 > ---
->  drivers/media/tuners/si2157.c | 87 +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 87 insertions(+)
+>  Documentation/media/uapi/v4l/dev-decoder.rst  | 1076 +++++++++++++++++
+>  Documentation/media/uapi/v4l/dev-mem2mem.rst  |    5 +
+>  Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |    5 +
+>  Documentation/media/uapi/v4l/v4l2.rst         |   10 +-
+>  .../media/uapi/v4l/vidioc-decoder-cmd.rst     |   40 +-
+>  Documentation/media/uapi/v4l/vidioc-g-fmt.rst |   14 +
+>  6 files changed, 1135 insertions(+), 15 deletions(-)
+>  create mode 100644 Documentation/media/uapi/v4l/dev-decoder.rst
 > 
-> diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-> index ff462ba..1737007 100644
-> --- a/drivers/media/tuners/si2157.c
-> +++ b/drivers/media/tuners/si2157.c
-> @@ -318,6 +318,89 @@ static int si2157_sleep(struct dvb_frontend *fe)
->  	return ret;
->  }
->  
-> +static int si2157_tune_wait(struct i2c_client *client, u8 is_digital)
-> +{
-> +#define TUN_TIMEOUT 40
-> +#define DIG_TIMEOUT 30
-> +#define ANALOG_TIMEOUT 150
-> +	struct si2157_dev *dev = i2c_get_clientdata(client);
-> +	int ret;
-> +	unsigned long timeout;
-> +	unsigned long start_time;
-> +	u8 wait_status;
-> +	u8  tune_lock_mask;
+> diff --git a/Documentation/media/uapi/v4l/dev-decoder.rst b/Documentation/media/uapi/v4l/dev-decoder.rst
+> new file mode 100644
+> index 000000000000..b7db2352ad41
+> --- /dev/null
+> +++ b/Documentation/media/uapi/v4l/dev-decoder.rst
+> @@ -0,0 +1,1076 @@
+> +.. -*- coding: utf-8; mode: rst -*-
 > +
-> +	if (is_digital)
-> +		tune_lock_mask = 0x04;
-> +	else
-> +		tune_lock_mask = 0x02;
+> +.. _decoder:
 > +
-> +	mutex_lock(&dev->i2c_mutex);
+> +*************************************************
+> +Memory-to-memory Stateful Video Decoder Interface
+> +*************************************************
 > +
-> +	/* wait tuner command complete */
-> +	start_time = jiffies;
-> +	timeout = start_time + msecs_to_jiffies(TUN_TIMEOUT);
-> +	while (!time_after(jiffies, timeout)) {
-> +		ret = i2c_master_recv(client, &wait_status,
-> +					sizeof(wait_status));
-> +		if (ret < 0) {
-> +			goto err_mutex_unlock;
-> +		} else if (ret != sizeof(wait_status)) {
-> +			ret = -EREMOTEIO;
-> +			goto err_mutex_unlock;
-> +		}
+[...]
 > +
-> +		/* tuner done? */
-> +		if ((wait_status & 0x81) == 0x81)
-> +			break;
-> +		usleep_range(5000, 10000);
-> +	}
+> +Drain
+> +=====
 > +
-> +	dev_dbg(&client->dev, "tuning took %d ms, status=0x%x\n",
-> +		jiffies_to_msecs(jiffies) - jiffies_to_msecs(start_time),
-> +		wait_status);
+[...]
 > +
-> +	/* if we tuned ok, wait a bit for tuner lock */
-> +	if ((wait_status & 0x81) == 0x81) {
-> +		if (is_digital)
-> +			timeout = jiffies + msecs_to_jiffies(DIG_TIMEOUT);
-> +		else
-> +			timeout = jiffies + msecs_to_jiffies(ANALOG_TIMEOUT);
-> +		while (!time_after(jiffies, timeout)) {
-> +			ret = i2c_master_recv(client, &wait_status,
-> +						sizeof(wait_status));
-> +			if (ret < 0) {
-> +				goto err_mutex_unlock;
-> +			} else if (ret != sizeof(wait_status)) {
-> +				ret = -EREMOTEIO;
-> +				goto err_mutex_unlock;
-> +			}
+> +3. Once all the ``OUTPUT`` buffers queued before the ``V4L2_DEC_CMD_STOP`` call
+> +   are dequeued and the last ``CAPTURE`` buffer is dequeued, the decoder is
+> +   stopped and it will accept, but not process, any newly queued ``OUTPUT``
+> +   buffers until the client issues any of the following operations:
 > +
-> +			/* tuner locked? */
-> +			if (wait_status & tune_lock_mask)
-> +				break;
-> +			usleep_range(5000, 10000);
-> +		}
-> +	}
+[...]
 > +
-> +	dev_dbg(&client->dev, "tuning+lock took %d ms, status=0x%x\n",
-> +		jiffies_to_msecs(jiffies) - jiffies_to_msecs(start_time),
-> +		wait_status);
+> +.. note::
 > +
-> +	if ((wait_status & 0xc0) != 0x80) {
-> +		ret = -ETIMEDOUT;
-> +		goto err_mutex_unlock;
-> +	}
-> +
-> +	mutex_unlock(&dev->i2c_mutex);
-> +	return 0;
-> +
-> +err_mutex_unlock:
-> +	mutex_unlock(&dev->i2c_mutex);
-> +	dev_dbg(&client->dev, "failed=%d\n", ret);
-> +	return ret;
-> +}
-> +
->  static int si2157_set_params(struct dvb_frontend *fe)
->  {
->  	struct i2c_client *client = fe->tuner_priv;
-> @@ -417,6 +500,8 @@ static int si2157_set_params(struct dvb_frontend *fe)
->  	dev->bandwidth = bandwidth;
->  	dev->frequency = c->frequency;
->  
-> +	si2157_tune_wait(client, 1); /* wait to complete, ignore any errors */
-> +
->  	return 0;
->  err:
->  	dev->bandwidth = 0;
-> @@ -626,6 +711,8 @@ static int si2157_set_analog_params(struct dvb_frontend *fe,
->  #endif
->  	dev->bandwidth = bandwidth;
->  
-> +	si2157_tune_wait(client, 0); /* wait to complete, ignore any errors */
-> +
->  	return 0;
->  err:
->  	dev->bandwidth = 0;
-> -- 
-> 2.7.4
+> +   Once the drain sequence is initiated, the client needs to drive it to
+> +   completion, as described by the steps above, unless it aborts the process by
+> +   issuing :c:func:`VIDIOC_STREAMOFF` on any of the ``OUTPUT`` or ``CAPTURE``
+> +   queues.  The client is not allowed to issue ``V4L2_DEC_CMD_START`` or
+> +   ``V4L2_DEC_CMD_STOP`` again while the drain sequence is in progress and they
+> +   will fail with -EBUSY error code if attempted.
+
+Should the V4L2_DEC_CMD_STOP documentation in
+Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst:
+
+  * - ``V4L2_DEC_CMD_STOP``
+    - 1
+    - Stop the decoder. When the decoder is already stopped, this
+      command does nothing.
+
+be updated to mention that for mem2mem decoders this not only does
+nothing, but returns an -EBUSY error return value?
+
+Also, if V4L2_DEC_CMD_STOP_IMMEDIATELY is set, should the decoder drop
+all pending buffers and signal EOS immediately? Should this be mentioned
+here?
+
+> +   Although mandatory, the availability of decoder commands may be queried
+> +   using :c:func:`VIDIOC_TRY_DECODER_CMD`.
+
+Do the TRY_DECODER_CMD also return -EBUSY during the draining phase?
+
+regards
+Philipp
