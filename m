@@ -2,97 +2,123 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D59D7C10F0F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:41:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C8AC10F13
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:41:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A71D021738
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:41:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9344021738
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:41:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730551AbfDEJl3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 05:41:29 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:40166 "EHLO
+        id S1730579AbfDEJla (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 05:41:30 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:40146 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730237AbfDEJl3 (ORCPT
+        by vger.kernel.org with ESMTP id S1729833AbfDEJla (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Apr 2019 05:41:29 -0400
+        Fri, 5 Apr 2019 05:41:30 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1001])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id D5F35634C83;
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 55B69634C7F;
         Fri,  5 Apr 2019 12:40:44 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, niklas.soderlund@ragnatech.se,
         laurent.pinchart@ideasonboard.com
-Subject: [PATCH 1/9] davinci-vpif: Fix endpoint refcounting
-Date:   Fri,  5 Apr 2019 12:41:19 +0300
-Message-Id: <20190405094127.18975-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH 0/9] Rework V4L2 fwnode parsing; add defaults and avoid iteration
+Date:   Fri,  5 Apr 2019 12:41:17 +0300
+Message-Id: <20190405094127.18975-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190405094127.18975-1-sakari.ailus@linux.intel.com>
-References: <20190405094127.18975-1-sakari.ailus@linux.intel.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch addresses two problems with endpoint refcounting in parsing
-davinci-vpif endpoints:
+Hi folks,
 
-- put endpoints on error and
+This patchset reworks V4L2 fwnode endpoint parsing. It enables the use of
+endpoint configuration defaults that is available sensors and other
+drivers that only use a single endpoint. Well, the functionality was
+available already but no driver used it likely because of two reasons:
+lack of any examples in a non-trivial problem area as well as lack of a
+needed functionality to obtain through non-iterative means in the fwnode
+graph API. Also the fwnode framework did not provide the most convenient
+APIs to perform this for drivers.
 
-- do not dereference endpoints after they have been put.
+Conversion from the iterative API is done for the omap3isp and ipu3-cio2
+drivers. A downside here is that this adds code: what used to be done in
+the framework in a one-size-fits-all fashion is now the responsibility of
+the driver. The benefits (default settings and simplicity of the
+implementation from driver's point of view) are not really achievable
+without some of that.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/platform/davinci/vpif_capture.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Also baked in the set is matching devices with endpoints by endpoint node
+rather than the device's node. This allows finding out more information
+than just the device bound (i.e. the port --- or endpoint --- through
+which it was bound). Compatibility support is provided for existing
+drivers by setting the fwnode to be matched based on the available
+endpoints. Drivers that use the async non-notifier API and have multiple
+ports will likely need special care and this is right now missing from the
+set, hence this is RFC for now.
 
-diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
-index b5aacb0fb96b..72bdb3c10962 100644
---- a/drivers/media/platform/davinci/vpif_capture.c
-+++ b/drivers/media/platform/davinci/vpif_capture.c
-@@ -1555,7 +1555,6 @@ vpif_capture_get_pdata(struct platform_device *pdev)
- 		if (!rem) {
- 			dev_dbg(&pdev->dev, "Remote device at %pOF not found\n",
- 				endpoint);
--			of_node_put(endpoint);
- 			goto done;
- 		}
- 
-@@ -1567,7 +1566,6 @@ vpif_capture_get_pdata(struct platform_device *pdev)
- 					    GFP_KERNEL);
- 		if (!chan->inputs) {
- 			of_node_put(rem);
--			of_node_put(endpoint);
- 			goto err_cleanup;
- 		}
- 
-@@ -1578,7 +1576,6 @@ vpif_capture_get_pdata(struct platform_device *pdev)
- 
- 		err = v4l2_fwnode_endpoint_parse(of_fwnode_handle(endpoint),
- 						 &bus_cfg);
--		of_node_put(endpoint);
- 		if (err) {
- 			dev_err(&pdev->dev, "Could not parse the endpoint\n");
- 			of_node_put(rem);
-@@ -1609,6 +1606,7 @@ vpif_capture_get_pdata(struct platform_device *pdev)
- 	}
- 
- done:
-+	of_node_put(endpoint);
- 	pdata->asd_sizes[0] = i;
- 	pdata->subdev_count = i;
- 	pdata->card_name = "DA850/OMAP-L138 Video Capture";
-@@ -1616,6 +1614,7 @@ vpif_capture_get_pdata(struct platform_device *pdev)
- 	return pdata;
- 
- err_cleanup:
-+	of_node_put(endpoint);
- 	v4l2_async_notifier_cleanup(&vpif_obj.notifier);
- 
- 	return NULL;
+The set depends on a few other patches. They all can be found here:
+
+<URL:https://git.linuxtv.org/sailus/media_tree.git/log/?h=fwnode-linear>
+
+since RFC v1:
+
+- Add another patch to change fwnode refcounting for
+  v4l2_async_notifier_add_fwnode_subdev
+
+- Add a patch to fix OF node refcounting and use / put order for
+  davinci-vpif
+
+- Don't take endpoint reference in v4l2_async_register_subdev; that's not
+  intended
+
+- Fix kerneldoc documentation for
+  v4l2_async_notifier_add_fwnode_remote_subdev
+
+- Fix endpoint refcounting in the patch changing fwnode parsing for the
+  omap3isp driver
+
+- Fixed a compiler error in rcar_drif.c --- thanks, Niklas!
+
+Sakari Ailus (9):
+  davinci-vpif: Don't dereference endpoint after putting it, fix
+    refcounting
+  v4l2-async: Use endpoint node, not device node, for fwnode match
+  v4l2-async: Get fwnode reference when putting it to the notifier's
+    list
+  v4l2-async: Add v4l2_async_notifier_add_fwnode_remote_subdev
+  omap3isp: Rework OF endpoint parsing
+  v4l2-async: Safely clean up an uninitialised notifier
+  ipu3-cio2: Clean up notifier's subdev list if parsing endpoints fails
+  ipu3-cio2: Proceed with notifier init even if there are no subdevs
+  ipu3-cio2: Parse information from firmware without using callbacks
+
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c      |  96 ++++----
+ drivers/media/platform/am437x/am437x-vpfe.c   |   7 +-
+ drivers/media/platform/atmel/atmel-isc.c      |   2 +-
+ drivers/media/platform/atmel/atmel-isi.c      |   2 +-
+ drivers/media/platform/cadence/cdns-csi2rx.c  |   2 +-
+ drivers/media/platform/davinci/vpif_capture.c |  37 +--
+ drivers/media/platform/exynos4-is/media-dev.c |  14 +-
+ drivers/media/platform/omap3isp/isp.c         | 331 +++++++++++++++-----------
+ drivers/media/platform/pxa_camera.c           |   2 +-
+ drivers/media/platform/qcom/camss/camss.c     |  10 +-
+ drivers/media/platform/rcar_drif.c            |   2 +-
+ drivers/media/platform/renesas-ceu.c          |   2 +-
+ drivers/media/platform/stm32/stm32-dcmi.c     |   2 +-
+ drivers/media/platform/ti-vpe/cal.c           |   2 +-
+ drivers/media/platform/xilinx/xilinx-vipp.c   |  15 +-
+ drivers/media/v4l2-core/v4l2-async.c          |  37 ++-
+ drivers/media/v4l2-core/v4l2-fwnode.c         |  26 +-
+ drivers/staging/media/soc_camera/soc_camera.c |  14 +-
+ include/media/v4l2-async.h                    |  30 ++-
+ 19 files changed, 386 insertions(+), 247 deletions(-)
+
 -- 
 2.11.0
 
