@@ -6,57 +6,48 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C769C4360F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:51:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92265C4360F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 10:00:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D89EF21850
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:51:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5CC1C21855
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 10:00:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730283AbfDEJvf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 05:51:35 -0400
-Received: from gofer.mess.org ([88.97.38.141]:49221 "EHLO gofer.mess.org"
+        id S1730425AbfDEKAx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 06:00:53 -0400
+Received: from gofer.mess.org ([88.97.38.141]:56439 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730232AbfDEJve (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Apr 2019 05:51:34 -0400
+        id S1729820AbfDEKAw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Apr 2019 06:00:52 -0400
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 403A560247; Fri,  5 Apr 2019 10:51:33 +0100 (BST)
-Date:   Fri, 5 Apr 2019 10:51:33 +0100
+        id 6501060247; Fri,  5 Apr 2019 11:00:51 +0100 (BST)
+Date:   Fri, 5 Apr 2019 11:00:51 +0100
 From:   Sean Young <sean@mess.org>
 To:     Brad Love <brad@nextdimension.cc>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org, crope@iki.fi
-Subject: Re: [PATCH] si2168: Change from DVB-T to DVB-T/T2 autodetect
-Message-ID: <20190405095132.om2ltp57dm3q2na3@gofer.mess.org>
-References: <1546106418-18474-1-git-send-email-brad@nextdimension.cc>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] pvrusb2: Add multiple dvb frontend support
+Message-ID: <20190405100051.tfarb3rpy6cf7dvt@gofer.mess.org>
+References: <1545421223-3577-1-git-send-email-brad@nextdimension.cc>
+ <1551294966-12564-1-git-send-email-brad@nextdimension.cc>
+ <1551294966-12564-3-git-send-email-brad@nextdimension.cc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1546106418-18474-1-git-send-email-brad@nextdimension.cc>
+In-Reply-To: <1551294966-12564-3-git-send-email-brad@nextdimension.cc>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Brad,
+On Wed, Feb 27, 2019 at 01:16:04PM -0600, Brad Love wrote:
+> All changes are equivalent and backwards compatible.
+> All current devices have been changed to use fe[0]
+> Cleanup has been added to dvb init to support cleanup after failure.
 
-On Sat, Dec 29, 2018 at 12:00:18PM -0600, Brad Love wrote:
-> DVB-T2 support can be a bit lacking in user land, this provides a module
-> parameter to allow setting the PLP to auto detect DVB-T and DVB-T2
-> signals after tuning. If a DVB-T2 signal is found the signal is
-> processed as DVB-T2, otherwise it is left as DVB-T. The detected
-> signal type is taken into account when reading status.
-> 
-> The module parameter is default disabled, to be backwards compatible
-> with current behaviour.
-
-You're changing the uapi through a module parameter, for user space that
-hasn't been updated for DVB-T2. In addition, this uapi change is only for
-specific frontend.
-
-If there is something to be said for a DVB-T/T2 autodetect mode, this should
-be done through the existing uapi and not through module parameters. We
-would like the uapi to generic for all devices not lots of device-specific
-parameters.
+Just very minor note. Here you are adding suppport for 2 frontends, but
+you're not explaining why. I would add something like "This is to add support
+for Hauppauge HVR1955/1975 devices which will be done in a later commit",
+to the commit message. Alternatively you could merge the two commits.
 
 
 Sean
@@ -64,120 +55,243 @@ Sean
 > 
 > Signed-off-by: Brad Love <brad@nextdimension.cc>
 > ---
->  drivers/media/dvb-frontends/si2168.c | 59 ++++++++++++++++++++++++++++++++++--
->  1 file changed, 56 insertions(+), 3 deletions(-)
+> No changes
 > 
-> diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-frontends/si2168.c
-> index 324493e..4713ee5 100644
-> --- a/drivers/media/dvb-frontends/si2168.c
-> +++ b/drivers/media/dvb-frontends/si2168.c
-> @@ -18,6 +18,10 @@
+>  drivers/media/usb/pvrusb2/pvrusb2-devattr.c | 36 +++++++-------
+>  drivers/media/usb/pvrusb2/pvrusb2-dvb.c     | 77 ++++++++++++++++++++++-------
+>  drivers/media/usb/pvrusb2/pvrusb2-dvb.h     |  2 +-
+>  3 files changed, 77 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-devattr.c b/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
+> index 06de1c8..ef36b62 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
+> @@ -188,10 +188,10 @@ static struct lgdt330x_config pvr2_lgdt3303_config = {
 >  
->  #include "si2168_priv.h"
+>  static int pvr2_lgdt3303_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	adap->fe = dvb_attach(lgdt330x_attach, &pvr2_lgdt3303_config,
+> -			      0x0e,
+> -			      &adap->channel.hdw->i2c_adap);
+> -	if (adap->fe)
+> +	adap->fe[0] = dvb_attach(lgdt330x_attach, &pvr2_lgdt3303_config,
+> +				 0x0e,
+> +				 &adap->channel.hdw->i2c_adap);
+> +	if (adap->fe[0])
+>  		return 0;
 >  
-> +static int dvbt_auto_plp;
-> +module_param(dvbt_auto_plp, int, 0644);
-> +MODULE_PARM_DESC(dvbt_auto_plp, "if set, the PLP is set to auto detect DVB-T and DVB-T2 signals");
-> +
->  static const struct dvb_frontend_ops si2168_ops;
+>  	return -EIO;
+> @@ -199,7 +199,7 @@ static int pvr2_lgdt3303_attach(struct pvr2_dvb_adapter *adap)
 >  
->  /* execute firmware command */
-> @@ -111,7 +115,7 @@ static int si2168_read_status(struct dvb_frontend *fe, enum fe_status *status)
->  	struct i2c_client *client = fe->demodulator_priv;
->  	struct si2168_dev *dev = i2c_get_clientdata(client);
->  	struct dtv_frontend_properties *c = &fe->dtv_property_cache;
-> -	int ret, i;
-> +	int ret, i, sys;
->  	unsigned int utmp, utmp1, utmp2;
->  	struct si2168_cmd cmd;
+>  static int pvr2_lgh06xf_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	dvb_attach(simple_tuner_attach, adap->fe,
+> +	dvb_attach(simple_tuner_attach, adap->fe[0],
+>  		   &adap->channel.hdw->i2c_adap, 0x61,
+>  		   TUNER_LG_TDVS_H06XF);
 >  
-> @@ -122,7 +126,23 @@ static int si2168_read_status(struct dvb_frontend *fe, enum fe_status *status)
->  		goto err;
+> @@ -248,10 +248,10 @@ static struct lgdt330x_config pvr2_lgdt3302_config = {
+>  
+>  static int pvr2_lgdt3302_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	adap->fe = dvb_attach(lgdt330x_attach, &pvr2_lgdt3302_config,
+> +	adap->fe[0] = dvb_attach(lgdt330x_attach, &pvr2_lgdt3302_config,
+>  			      0x0e,
+>  			      &adap->channel.hdw->i2c_adap);
+> -	if (adap->fe)
+> +	if (adap->fe[0])
+>  		return 0;
+>  
+>  	return -EIO;
+> @@ -259,7 +259,7 @@ static int pvr2_lgdt3302_attach(struct pvr2_dvb_adapter *adap)
+>  
+>  static int pvr2_fcv1236d_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	dvb_attach(simple_tuner_attach, adap->fe,
+> +	dvb_attach(simple_tuner_attach, adap->fe[0],
+>  		   &adap->channel.hdw->i2c_adap, 0x61,
+>  		   TUNER_PHILIPS_FCV1236D);
+>  
+> @@ -335,9 +335,9 @@ static struct tda18271_config hauppauge_tda18271_dvb_config = {
+>  
+>  static int pvr2_tda10048_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	adap->fe = dvb_attach(tda10048_attach, &hauppauge_tda10048_config,
+> +	adap->fe[0] = dvb_attach(tda10048_attach, &hauppauge_tda10048_config,
+>  			      &adap->channel.hdw->i2c_adap);
+> -	if (adap->fe)
+> +	if (adap->fe[0])
+>  		return 0;
+>  
+>  	return -EIO;
+> @@ -345,10 +345,10 @@ static int pvr2_tda10048_attach(struct pvr2_dvb_adapter *adap)
+>  
+>  static int pvr2_73xxx_tda18271_8295_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	dvb_attach(tda829x_attach, adap->fe,
+> +	dvb_attach(tda829x_attach, adap->fe[0],
+>  		   &adap->channel.hdw->i2c_adap, 0x42,
+>  		   &tda829x_no_probe);
+> -	dvb_attach(tda18271_attach, adap->fe, 0x60,
+> +	dvb_attach(tda18271_attach, adap->fe[0], 0x60,
+>  		   &adap->channel.hdw->i2c_adap,
+>  		   &hauppauge_tda18271_dvb_config);
+>  
+> @@ -433,9 +433,9 @@ static struct tda18271_config hauppauge_tda18271_config = {
+>  
+>  static int pvr2_s5h1409_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	adap->fe = dvb_attach(s5h1409_attach, &pvr2_s5h1409_config,
+> +	adap->fe[0] = dvb_attach(s5h1409_attach, &pvr2_s5h1409_config,
+>  			      &adap->channel.hdw->i2c_adap);
+> -	if (adap->fe)
+> +	if (adap->fe[0])
+>  		return 0;
+>  
+>  	return -EIO;
+> @@ -443,9 +443,9 @@ static int pvr2_s5h1409_attach(struct pvr2_dvb_adapter *adap)
+>  
+>  static int pvr2_s5h1411_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	adap->fe = dvb_attach(s5h1411_attach, &pvr2_s5h1411_config,
+> +	adap->fe[0] = dvb_attach(s5h1411_attach, &pvr2_s5h1411_config,
+>  			      &adap->channel.hdw->i2c_adap);
+> -	if (adap->fe)
+> +	if (adap->fe[0])
+>  		return 0;
+>  
+>  	return -EIO;
+> @@ -453,10 +453,10 @@ static int pvr2_s5h1411_attach(struct pvr2_dvb_adapter *adap)
+>  
+>  static int pvr2_tda18271_8295_attach(struct pvr2_dvb_adapter *adap)
+>  {
+> -	dvb_attach(tda829x_attach, adap->fe,
+> +	dvb_attach(tda829x_attach, adap->fe[0],
+>  		   &adap->channel.hdw->i2c_adap, 0x42,
+>  		   &tda829x_no_probe);
+> -	dvb_attach(tda18271_attach, adap->fe, 0x60,
+> +	dvb_attach(tda18271_attach, adap->fe[0], 0x60,
+>  		   &adap->channel.hdw->i2c_adap,
+>  		   &hauppauge_tda18271_config);
+>  
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
+> index 4b32b21..cb5586b 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
+> @@ -343,26 +343,19 @@ static int pvr2_dvb_frontend_init(struct pvr2_dvb_adapter *adap)
+>  		goto done;
 >  	}
 >  
-> -	switch (c->delivery_system) {
-> +	sys = c->delivery_system;
-> +
-> +	/* check if we found DVB-T2 during DVB-T tuning */
-> +	if (dvbt_auto_plp && sys == SYS_DVBT) {
-> +		memcpy(cmd.args, "\x87\x01", 2);
-> +		cmd.wlen = 2;
-> +		cmd.rlen = 8;
-> +
-> +		ret = si2168_cmd_execute(client, &cmd);
-> +		if (ret)
-> +			goto err;
-> +
-> +		if ((cmd.args[3] & 0x0f) == 7)
-> +			sys = SYS_DVBT2;
+> -	if ((dvb_props->frontend_attach(adap) == 0) && (adap->fe)) {
+> -
+> -		if (dvb_register_frontend(&adap->dvb_adap, adap->fe)) {
+> +	if (dvb_props->frontend_attach(adap) == 0 && adap->fe[0]) {
+> +		if (dvb_register_frontend(&adap->dvb_adap, adap->fe[0])) {
+>  			pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+>  				   "frontend registration failed!");
+> -			dvb_frontend_detach(adap->fe);
+> -			adap->fe = NULL;
+>  			ret = -ENODEV;
+> -			goto done;
+> +			goto fail_frontend0;
+>  		}
+> +		if (adap->fe[0]->ops.analog_ops.standby)
+> +			adap->fe[0]->ops.analog_ops.standby(adap->fe[0]);
+>  
+> -		if (dvb_props->tuner_attach)
+> -			dvb_props->tuner_attach(adap);
+> -
+> -		if (adap->fe->ops.analog_ops.standby)
+> -			adap->fe->ops.analog_ops.standby(adap->fe);
+> -
+> -		/* Ensure all frontends negotiate bus access */
+> -		adap->fe->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
+> -
+> +		pvr2_trace(PVR2_TRACE_INFO, "transferring fe[%d] ts_bus_ctrl() to pvr2_dvb_bus_ctrl()",
+> +				adap->fe[0]->id);
+> +		adap->fe[0]->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
+>  	} else {
+>  		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+>  			   "no frontend was attached!");
+> @@ -370,16 +363,62 @@ static int pvr2_dvb_frontend_init(struct pvr2_dvb_adapter *adap)
+>  		return ret;
+>  	}
+>  
+> - done:
+> +	if (dvb_props->tuner_attach && dvb_props->tuner_attach(adap)) {
+> +		pvr2_trace(PVR2_TRACE_ERROR_LEGS, "tuner attach failed");
+> +		ret = -ENODEV;
+> +		goto fail_tuner;
 > +	}
 > +
-> +	switch (sys) {
->  	case SYS_DVBT:
->  		memcpy(cmd.args, "\xa0\x01", 2);
->  		cmd.wlen = 2;
-> @@ -144,6 +164,24 @@ static int si2168_read_status(struct dvb_frontend *fe, enum fe_status *status)
->  	}
->  
->  	ret = si2168_cmd_execute(client, &cmd);
-> +	if (dvbt_auto_plp && (ret == -EREMOTEIO)) {
-> +		/* In auto-PLP mode it is possible to read 0x8701 while
-> +		 * the frontend is in switchover transition. This causes
-> +		 * a status read failure, due to incorrect system. Check
-> +		 * the other sys if we hit this race condition.
-> +		 */
-> +		if (sys == SYS_DVBT) {
-> +			memcpy(cmd.args, "\x50\x01", 2); /* DVB-T2 */
-> +			cmd.wlen = 2;
-> +			cmd.rlen = 14;
-> +			ret = si2168_cmd_execute(client, &cmd);
-> +		} else if (sys == SYS_DVBT2) {
-> +			memcpy(cmd.args, "\xa0\x01", 2); /* DVB-T */
-> +			cmd.wlen = 2;
-> +			cmd.rlen = 13;
-> +			ret = si2168_cmd_execute(client, &cmd);
+> +	if (adap->fe[1]) {
+> +		adap->fe[1]->id = 1;
+> +		adap->fe[1]->tuner_priv = adap->fe[0]->tuner_priv;
+> +		memcpy(&adap->fe[1]->ops.tuner_ops,
+> +			&adap->fe[0]->ops.tuner_ops,
+> +			sizeof(struct dvb_tuner_ops));
+> +
+> +		if (dvb_register_frontend(&adap->dvb_adap, adap->fe[1])) {
+> +			pvr2_trace(PVR2_TRACE_ERROR_LEGS,
+> +				   "frontend registration failed!");
+> +			ret = -ENODEV;
+> +			goto fail_frontend1;
 > +		}
+> +		/* MFE lock */
+> +		adap->dvb_adap.mfe_shared = 1;
+> +
+> +		if (adap->fe[1]->ops.analog_ops.standby)
+> +			adap->fe[1]->ops.analog_ops.standby(adap->fe[1]);
+> +
+> +		pvr2_trace(PVR2_TRACE_INFO, "transferring fe[%d] ts_bus_ctrl() to pvr2_dvb_bus_ctrl()",
+> +				adap->fe[1]->id);
+> +		adap->fe[1]->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
 > +	}
->  	if (ret)
->  		goto err;
+> +done:
+>  	pvr2_channel_limit_inputs(&adap->channel, 0);
+>  	return ret;
+> +
+> +fail_frontend1:
+> +	dvb_frontend_detach(adap->fe[1]);
+> +	adap->fe[1] = NULL;
+> +fail_tuner:
+> +	dvb_unregister_frontend(adap->fe[0]);
+> +fail_frontend0:
+> +	dvb_frontend_detach(adap->fe[0]);
+> +	adap->fe[0] = NULL;
+> +
+> +	return ret;
+>  }
 >  
-> @@ -254,7 +292,10 @@ static int si2168_set_frontend(struct dvb_frontend *fe)
->  
->  	switch (c->delivery_system) {
->  	case SYS_DVBT:
-> -		delivery_system = 0x20;
-> +		if (dvbt_auto_plp)
-> +			delivery_system = 0xf0; /* T/T2 auto-detect */
-> +		else
-> +			delivery_system = 0x20;
->  		break;
->  	case SYS_DVBC_ANNEX_A:
->  		delivery_system = 0x30;
-> @@ -324,6 +365,16 @@ static int si2168_set_frontend(struct dvb_frontend *fe)
->  		ret = si2168_cmd_execute(client, &cmd);
->  		if (ret)
->  			goto err;
-> +	} else if (dvbt_auto_plp && (c->delivery_system == SYS_DVBT)) {
-> +		/* select Auto PLP */
-> +		cmd.args[0] = 0x52;
-> +		cmd.args[1] = 0;
-> +		cmd.args[2] = 0; /* Auto PLP */
-> +		cmd.wlen = 3;
-> +		cmd.rlen = 1;
-> +		ret = si2168_cmd_execute(client, &cmd);
-> +		if (ret)
-> +			goto err;
+>  static int pvr2_dvb_frontend_exit(struct pvr2_dvb_adapter *adap)
+>  {
+> -	if (adap->fe != NULL) {
+> -		dvb_unregister_frontend(adap->fe);
+> -		dvb_frontend_detach(adap->fe);
+> +	if (adap->fe[1]) {
+> +		dvb_unregister_frontend(adap->fe[1]);
+> +		dvb_frontend_detach(adap->fe[1]);
+> +		adap->fe[1] = NULL;
+> +	}
+> +	if (adap->fe[0]) {
+> +		dvb_unregister_frontend(adap->fe[0]);
+> +		dvb_frontend_detach(adap->fe[0]);
+> +		adap->fe[0] = NULL;
 >  	}
+>  	return 0;
+>  }
+> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.h b/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
+> index e7f71fb..91bff57 100644
+> --- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
+> +++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
+> @@ -18,7 +18,7 @@ struct pvr2_dvb_adapter {
+>  	struct dmxdev		dmxdev;
+>  	struct dvb_demux	demux;
+>  	struct dvb_net		dvb_net;
+> -	struct dvb_frontend	*fe;
+> +	struct dvb_frontend	*fe[2];
 >  
->  	memcpy(cmd.args, "\x51\x03", 2);
-> @@ -363,6 +414,8 @@ static int si2168_set_frontend(struct dvb_frontend *fe)
->  
->  	memcpy(cmd.args, "\x14\x00\x0a\x10\x00\x00", 6);
->  	cmd.args[4] = delivery_system | bandwidth;
-> +	if (delivery_system == 0xf0)
-> +		cmd.args[5] |= 2; /* Auto detect DVB-T/T2 */
->  	if (dev->spectral_inversion)
->  		cmd.args[5] |= 1;
->  	cmd.wlen = 6;
+>  	int			feedcount;
+>  	int			max_feed_count;
 > -- 
 > 2.7.4
