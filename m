@@ -3,25 +3,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84E2FC10F0F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28B6BC10F00
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:38:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C448218AE
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:38:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02CCC218AE
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:38:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731295AbfDEOio (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 10:38:44 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:59471 "EHLO
+        id S1731383AbfDEOiw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 10:38:52 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:50883 "EHLO
         relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbfDEOio (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 10:38:44 -0400
+        with ESMTP id S1731359AbfDEOiw (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 10:38:52 -0400
 Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 1EB5D100004;
-        Fri,  5 Apr 2019 14:38:34 +0000 (UTC)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id D0896100011;
+        Fri,  5 Apr 2019 14:38:47 +0000 (UTC)
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Hans Verkuil <hans.verkuil@cisco.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -34,9 +34,9 @@ Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: [PATCH v5 2/5] media: sunxi: Refactor the Makefile and Kconfig
-Date:   Fri,  5 Apr 2019 16:38:20 +0200
-Message-Id: <f5692d7e553c7242f0206b2f241e659097843c1d.1554475081.git-series.maxime.ripard@bootlin.com>
+Subject: [PATCH v5 5/5] DO NOT MERGE: ARM: dts: bananapi: Add Camera support
+Date:   Fri,  5 Apr 2019 16:38:23 +0200
+Message-Id: <761e2b6563e613d059bae6bda4fa9fd446c641df.1554475081.git-series.maxime.ripard@bootlin.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.75d1c91ecddbc451d0e0e961f7ea7f045afd3a79.1554475081.git-series.maxime.ripard@bootlin.com>
 References: <cover.75d1c91ecddbc451d0e0e961f7ea7f045afd3a79.1554475081.git-series.maxime.ripard@bootlin.com>
@@ -47,57 +47,140 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Makefile and Kconfig for the sun6i CSI driver are included in the main
-Makefile / KConfig file. Since we're going to add a new CSI driver for an
-older chip, and the Cedrus driver eventually, it makes more sense to put
-those in our directory.
-
 Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 ---
- drivers/media/platform/Kconfig        | 2 +-
- drivers/media/platform/Makefile       | 2 +-
- drivers/media/platform/sunxi/Kconfig  | 1 +
- drivers/media/platform/sunxi/Makefile | 1 +
- 4 files changed, 4 insertions(+), 2 deletions(-)
- create mode 100644 drivers/media/platform/sunxi/Kconfig
- create mode 100644 drivers/media/platform/sunxi/Makefile
+ arch/arm/boot/dts/sun7i-a20-bananapi.dts | 91 +++++++++++++++++++++++++-
+ 1 file changed, 91 insertions(+)
 
-diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
-index 4acbed189644..9533fcd33410 100644
---- a/drivers/media/platform/Kconfig
-+++ b/drivers/media/platform/Kconfig
-@@ -146,7 +146,7 @@ source "drivers/media/platform/am437x/Kconfig"
- source "drivers/media/platform/xilinx/Kconfig"
- source "drivers/media/platform/rcar-vin/Kconfig"
- source "drivers/media/platform/atmel/Kconfig"
--source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
-+source "drivers/media/platform/sunxi/Kconfig"
+diff --git a/arch/arm/boot/dts/sun7i-a20-bananapi.dts b/arch/arm/boot/dts/sun7i-a20-bananapi.dts
+index 81bc85d398c1..33f1b40ee3f2 100644
+--- a/arch/arm/boot/dts/sun7i-a20-bananapi.dts
++++ b/arch/arm/boot/dts/sun7i-a20-bananapi.dts
+@@ -54,6 +54,9 @@
+ 	compatible = "lemaker,bananapi", "allwinner,sun7i-a20";
  
- config VIDEO_TI_CAL
- 	tristate "TI CAL (Camera Adaptation Layer) driver"
-diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
-index 7cbbd925124c..6ee7eb0d36f4 100644
---- a/drivers/media/platform/Makefile
-+++ b/drivers/media/platform/Makefile
-@@ -100,4 +100,4 @@ obj-y					+= meson/
+ 	aliases {
++		i2c0 = &i2c0;
++		i2c1 = &i2c1;
++		i2c2 = &i2c2;
+ 		serial0 = &uart0;
+ 		serial1 = &uart3;
+ 		serial2 = &uart7;
+@@ -63,6 +66,41 @@
+ 		stdout-path = "serial0:115200n8";
+ 	};
  
- obj-y					+= cros-ec-cec/
++	reg_cam: cam {
++		compatible = "regulator-fixed";
++		regulator-name = "cam";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&reg_vcc5v0>;
++		gpio = <&pio 7 16 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++		regulator-always-on;
++	};
++
++        reg_cam_avdd: cam-avdd {
++                compatible = "regulator-fixed";
++                regulator-name = "cam500b-avdd";
++                regulator-min-microvolt = <2800000>;
++                regulator-max-microvolt = <2800000>;
++                vin-supply = <&reg_cam>;
++        };
++
++        reg_cam_dovdd: cam-dovdd {
++                compatible = "regulator-fixed";
++                regulator-name = "cam500b-dovdd";
++                regulator-min-microvolt = <1800000>;
++                regulator-max-microvolt = <1800000>;
++                vin-supply = <&reg_cam>;
++        };
++
++        reg_cam_dvdd: cam-dvdd {
++                compatible = "regulator-fixed";
++                regulator-name = "cam500b-dvdd";
++                regulator-min-microvolt = <1500000>;
++                regulator-max-microvolt = <1500000>;
++                vin-supply = <&reg_cam>;
++        };
++
+ 	hdmi-connector {
+ 		compatible = "hdmi-connector";
+ 		type = "a";
+@@ -116,6 +154,23 @@
+ 		>;
+ };
  
--obj-$(CONFIG_VIDEO_SUN6I_CSI)		+= sunxi/sun6i-csi/
-+obj-y					+= sunxi/
-diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
-new file mode 100644
-index 000000000000..1b6e89cb78b2
---- /dev/null
-+++ b/drivers/media/platform/sunxi/Kconfig
-@@ -0,0 +1 @@
-+source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
-diff --git a/drivers/media/platform/sunxi/Makefile b/drivers/media/platform/sunxi/Makefile
-new file mode 100644
-index 000000000000..8d06f98500ee
---- /dev/null
-+++ b/drivers/media/platform/sunxi/Makefile
-@@ -0,0 +1 @@
-+obj-y		+= sun6i-csi/
++&csi0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&csi0_pins_a>;
++	status = "okay";
++
++	port {
++		csi_from_ov5640: endpoint {
++                        remote-endpoint = <&ov5640_to_csi>;
++                        bus-width = <8>;
++                        hsync-active = <1>; /* Active high */
++                        vsync-active = <0>; /* Active low */
++                        data-active = <1>;  /* Active high */
++                        pclk-sample = <1>;  /* Rising */
++                };
++	};
++};
++
+ &de {
+ 	status = "okay";
+ };
+@@ -161,6 +216,36 @@
+ 	};
+ };
+ 
++&i2c1 {
++	status = "okay";
++
++	camera: camera@21 {
++		compatible = "ovti,ov5640";
++		reg = <0x21>;
++                clocks = <&ccu CLK_CSI0>;
++                clock-names = "xclk";
++		assigned-clocks = <&ccu CLK_CSI0>;
++		assigned-clock-rates = <24000000>;
++
++                reset-gpios = <&pio 7 14 GPIO_ACTIVE_LOW>;
++                powerdown-gpios = <&pio 7 19 GPIO_ACTIVE_HIGH>;
++                AVDD-supply = <&reg_cam_avdd>;
++                DOVDD-supply = <&reg_cam_dovdd>;
++                DVDD-supply = <&reg_cam_dvdd>;
++
++                port {
++                        ov5640_to_csi: endpoint {
++                                remote-endpoint = <&csi_from_ov5640>;
++                                bus-width = <8>;
++                                hsync-active = <1>; /* Active high */
++                                vsync-active = <0>; /* Active low */
++                                data-active = <1>;  /* Active high */
++                                pclk-sample = <1>;  /* Rising */
++                        };
++                };
++	};
++};
++
+ &i2c2 {
+ 	status = "okay";
+ };
+@@ -247,6 +332,12 @@
+ 		"IO-6", "IO-3", "IO-2", "IO-0", "", "", "", "",
+ 		"", "", "", "", "", "", "", "";
+ 
++	csi0_pins_a: csi_pins_a@0 {
++		pins = "PE0", "PE1", "PE2", "PE3", "PE4", "PE5",
++		       "PE6", "PE7", "PE8", "PE9", "PE10", "PE11";
++		function = "csi0";
++	};
++
+ 	usb0_id_detect_pin: usb0-id-detect-pin {
+ 		pins = "PH4";
+ 		function = "gpio_in";
 -- 
 git-series 0.9.1
