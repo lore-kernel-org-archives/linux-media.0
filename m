@@ -2,368 +2,207 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=FAKE_REPLY_C,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5064AC4360F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 13:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58052C10F0F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:17:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1EBCC20449
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 13:24:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31FF72186A
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:17:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726291AbfDENYJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 09:24:09 -0400
-Received: from gofer.mess.org ([88.97.38.141]:58079 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726027AbfDENYJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Apr 2019 09:24:09 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 4D8F060247; Fri,  5 Apr 2019 14:24:07 +0100 (BST)
-Date:   Fri, 5 Apr 2019 14:24:07 +0100
-From:   Sean Young <sean@mess.org>
-To:     Brad Love <brad@nextdimension.cc>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH v2 05/12] si2157: Add analog tuning related functions
-Message-ID: <20190405132406.gj2vzxdsvjv7yejy@gofer.mess.org>
-References: <1546105882-15693-1-git-send-email-brad@nextdimension.cc>
- <1551292066-29574-1-git-send-email-brad@nextdimension.cc>
- <1551292066-29574-6-git-send-email-brad@nextdimension.cc>
+        id S1731218AbfDEORc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 10:17:32 -0400
+Received: from smtp1.de.adit-jv.com ([93.241.18.167]:55828 "EHLO
+        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729833AbfDEORc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 10:17:32 -0400
+Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
+        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 6A5653C00C4;
+        Fri,  5 Apr 2019 16:17:29 +0200 (CEST)
+Received: from smtp1.de.adit-jv.com ([127.0.0.1])
+        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 4zLWnWOQXSGu; Fri,  5 Apr 2019 16:17:22 +0200 (CEST)
+Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id EFE753C00C3;
+        Fri,  5 Apr 2019 16:17:21 +0200 (CEST)
+Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
+ (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.439.0; Fri, 5 Apr 2019
+ 16:17:21 +0200
+Date:   Fri, 5 Apr 2019 16:17:18 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        <linux-media@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
+        Steve Longerbeam <steve_longerbeam@mentor.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v14,29/33] rcar-vin: add link notify for Gen3
+Message-ID: <20190405141718.GA19980@vmlxhi-102.adit-jv.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <1551292066-29574-6-git-send-email-brad@nextdimension.cc>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20180414115726.5075-30-niklas.soderlund+renesas@ragnatech.se>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.72.93.184]
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Feb 27, 2019 at 12:27:39PM -0600, Brad Love wrote:
-> Include set_analog_params, get_frequency, and get_bandwidth.
-> 
-> Tested with NTSC and PAL standards via ch3/4 generator. Other standards
-> are included, but are untested due to lack of generator.
+Hi Niklas,
 
-There are quite a few warnings from checkpatch on this patch. Please
-run patches through "./scripts/checkpatch.pl --strict" before submitting.
+jFYI/FWIW, checking the functionality of rcar-vin using the
+procedure/commands described in https://elinux.org/R-Car/Tests:rcar-vin
+on the recent Linux commit ea2cec24c8d429ee6f99040e4eb6c7ad627fe777, I
+consistently reproduce below lockdep splat [2] (full log and .config at
+https://gist.github.com/erosca/67a46451b3cb342fa59b558022278fff).
 
-Generally there should be no output from checkpatch if possible.
+Since the locking primitives of rvin_group_link_notify (popping up in
+the log) haven't suffered changes since v4.18-rc1 commit [1], I conclude
+this thread [0] might be an appropriate place for reporting the issue.
 
-Thanks
+Best regards,
+Eugeniu.
 
-Sean
+[0] https://patchwork.kernel.org/patch/10341183/ [v14,29/33] rcar-vin: add link notify for Gen3
+[1] c0cc5aef31704c ("media: rcar-vin: add link notify for Gen3")
+[2] media-ctl -l "'rcar_csi2 feaa0000.csi2':1 -> 'VIN0 output':0 [1]"
 
-> 
-> Signed-off-by: Brad Love <brad@nextdimension.cc>
-> ---
-> Changes since v1:
-> - remove __func__ from dev_dbg macros
-> 
->  drivers/media/tuners/si2157.c      | 245 ++++++++++++++++++++++++++++++++++++-
->  drivers/media/tuners/si2157_priv.h |   2 +
->  2 files changed, 244 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
-> index f3a60a1..1006172 100644
-> --- a/drivers/media/tuners/si2157.c
-> +++ b/drivers/media/tuners/si2157.c
-> @@ -371,7 +371,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
->  	if (ret)
->  		goto err;
->  
-> -	/* set if frequency if needed */
-> +	/* set digital if frequency if needed */
->  	if (if_frequency != dev->if_frequency) {
->  		memcpy(cmd.args, "\x14\x00\x06\x07", 4);
->  		cmd.args[4] = (if_frequency / 1000) & 0xff;
-> @@ -385,7 +385,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
->  		dev->if_frequency = if_frequency;
->  	}
->  
-> -	/* set frequency */
-> +	/* set digital frequency */
->  	memcpy(cmd.args, "\x41\x00\x00\x00\x00\x00\x00\x00", 8);
->  	cmd.args[4] = (c->frequency >>  0) & 0xff;
->  	cmd.args[5] = (c->frequency >>  8) & 0xff;
-> @@ -397,18 +397,254 @@ static int si2157_set_params(struct dvb_frontend *fe)
->  	if (ret)
->  		goto err;
->  
-> +	dev->bandwidth = bandwidth;
-> +	dev->frequency = c->frequency;
-> +
-> +	return 0;
-> +err:
-> +	dev->bandwidth = 0;
-> +	dev->frequency = 0;
-> +	dev->if_frequency = 0;
-> +	dev_dbg(&client->dev, "failed=%d\n", ret);
-> +	return ret;
-> +}
-> +
-> +static int si2157_set_analog_params(struct dvb_frontend *fe,
-> +				      struct analog_parameters *params)
-> +{
-> +	struct i2c_client *client = fe->tuner_priv;
-> +	struct si2157_dev *dev = i2c_get_clientdata(client);
-> +	char *std; /* for debugging */
-> +	int ret;
-> +	struct si2157_cmd cmd;
-> +	u32 bandwidth = 0;
-> +	u32 if_frequency = 0;
-> +	u32 freq = 0;
-> +	u64 tmp_lval = 0;
-> +	u8 system = 0;
-> +	u8 color = 0;    /* 0=NTSC/PAL, 0x10=SECAM */
-> +	u8 invert_analog = 1; /* analog tuner spectrum; 0=normal, 1=inverted */
-> +
-> +	if (dev->chiptype != SI2157_CHIPTYPE_SI2157) {
-> +		dev_info(&client->dev, "Analog tuning not supported for chiptype=%u\n",
-> +				dev->chiptype);
-> +		ret = -EINVAL;
-> +		goto err;
-> +	}
-> +
-> +	if (!dev->active)
-> +		si2157_init(fe);
-> +
-> +	if (!dev->active) {
-> +		ret = -EAGAIN;
-> +		goto err;
-> +	}
-> +	if (params->mode == V4L2_TUNER_RADIO) {
-> +	/*
-> +	 * std = "fm";
-> +	 * bandwidth = 1700000; //best can do for FM, AGC will be a mess though
-> +	 * if_frequency = 1250000;  //HVR-225x(saa7164), HVR-12xx(cx23885)
-> +	 * if_frequency = 6600000;  //HVR-9xx(cx231xx)
-> +	 * if_frequency = 5500000;  //HVR-19xx(pvrusb2)
-> +	 */
-> +		dev_err(&client->dev, "si2157 does not currently support FM radio\n");
-> +		ret = -EINVAL;
-> +		goto err;
-> +	}
-> +	tmp_lval = params->frequency * 625LL;
-> +	do_div(tmp_lval, 10); /* convert to HZ */
-> +	freq = (u32)tmp_lval;
-> +
-> +	if (freq < 1000000) /* is freq in KHz */
-> +		freq = freq * 1000;
-> +	dev->frequency = freq;
-> +
-> +	/* if_frequency values based on tda187271C2 */
-> +	if (params->std & (V4L2_STD_B|V4L2_STD_GH)) {
-> +		if (freq >= 470000000) {
-> +			std = "palGH";
-> +			bandwidth = 8000000;
-> +			if_frequency = 6000000;
-> +			system = 1;
-> +			if (params->std & (V4L2_STD_SECAM_G|V4L2_STD_SECAM_H)) {
-> +				std = "secamGH";
-> +				color = 0x10;
-> +			}
-> +		} else {
-> +			std = "palB";
-> +			bandwidth = 7000000;
-> +			if_frequency = 6000000;
-> +			system = 0;
-> +			if (params->std & V4L2_STD_SECAM_B) {
-> +				std = "secamB";
-> +				color = 0x10;
-> +			}
-> +		}
-> +	} else if (params->std & V4L2_STD_MN) {
-> +		std = "MN";
-> +		bandwidth = 6000000;
-> +		if_frequency = 5400000;
-> +		system = 2;
-> +	} else if (params->std & V4L2_STD_PAL_I) {
-> +		std = "palI";
-> +		bandwidth = 8000000;
-> +		if_frequency = 7250000; /* TODO: does not work yet */
-> +		system = 4;
-> +	} else if (params->std & V4L2_STD_DK) {
-> +		std = "palDK";
-> +		bandwidth = 8000000;
-> +		if_frequency = 6900000; /* TODO: does not work yet */
-> +		system = 5;
-> +		if (params->std & V4L2_STD_SECAM_DK) {
-> +			std = "secamDK";
-> +			color = 0x10;
-> +		}
-> +	} else if (params->std & V4L2_STD_SECAM_L) {
-> +		std = "secamL";
-> +		bandwidth = 8000000;
-> +		if_frequency = 6750000; /* TODO: untested */
-> +		system = 6;
-> +		color = 0x10;
-> +	} else if (params->std & V4L2_STD_SECAM_LC) {
-> +		std = "secamL'";
-> +		bandwidth = 7000000;
-> +		if_frequency = 1250000; /* TODO: untested */
-> +		system = 7;
-> +		color = 0x10;
-> +	} else {
-> +		std = "unknown";
-> +	}
-> +	/* calc channel center freq */
-> +	freq = freq - 1250000 + (bandwidth/2);
-> +
-> +	dev_dbg(&client->dev,
-> +			"mode=%d system=%u std='%s' params->frequency=%u center freq=%u if=%u bandwidth=%u\n",
-> +			params->mode, system, std, params->frequency,
-> +			freq, if_frequency, bandwidth);
-> +
-> +	/* set analog IF port */
-> +	memcpy(cmd.args, "\x14\x00\x03\x06\x08\x02", 6);
-> +	/* in using dev->if_port, we assume analog and digital IF's */
-> +	/*  are always on different ports */
-> +	/* assumes if_port definition is 0 or 1 for digital out */
-> +	cmd.args[4] = (dev->if_port == 1)?8:10;
-> +	cmd.args[5] = (dev->if_port == 1)?2:1; /* Analog AGC assumed external */
-> +	cmd.wlen = 6;
-> +	cmd.rlen = 4;
-> +	ret = si2157_cmd_execute(client, &cmd);
-> +	if (ret)
-> +		goto err;
-> +
-> +	/* set analog IF output config */
-> +	memcpy(cmd.args, "\x14\x00\x0d\x06\x94\x64", 6);
-> +	cmd.wlen = 6;
-> +	cmd.rlen = 4;
-> +	ret = si2157_cmd_execute(client, &cmd);
-> +	if (ret)
-> +		goto err;
-> +
-> +	/* make this distinct from a digital IF */
-> +	dev->if_frequency = if_frequency | 1;
-> +
-> +	/* calc and set tuner analog if center frequency */
-> +	if_frequency = if_frequency + 1250000 - (bandwidth/2);
-> +	dev_dbg(&client->dev, "IF Ctr freq=%d\n", if_frequency);
-> +
-> +	memcpy(cmd.args, "\x14\x00\x0C\x06", 4);
-> +	cmd.args[4] = (if_frequency / 1000) & 0xff;
-> +	cmd.args[5] = ((if_frequency / 1000) >> 8) & 0xff;
-> +	cmd.wlen = 6;
-> +	cmd.rlen = 4;
-> +	ret = si2157_cmd_execute(client, &cmd);
-> +	if (ret)
-> +		goto err;
-> +
-> +	/* set analog AGC config */
-> +	memcpy(cmd.args, "\x14\x00\x07\x06\x32\xc8", 6);
-> +	cmd.wlen = 6;
-> +	cmd.rlen = 4;
-> +	ret = si2157_cmd_execute(client, &cmd);
-> +	if (ret)
-> +		goto err;
-> +
-> +	/* set analog video mode */
-> +	memcpy(cmd.args, "\x14\x00\x04\x06\x00\x00", 6);
-> +	cmd.args[4] = system | color;
-> +#if 1 /* can use dev->inversion if assumed it applies to both digital/analog */
-> +	if (invert_analog)
-> +		cmd.args[5] |= 0x02;
-> +#else
-> +	if (dev->inversion)
-> +		cmd.args[5] |= 0x02;
-> +#endif
-> +	cmd.wlen = 6;
-> +	cmd.rlen = 1;
-> +	ret = si2157_cmd_execute(client, &cmd);
-> +	if (ret)
-> +		goto err;
-> +
-> +	/* set analog frequency */
-> +	memcpy(cmd.args, "\x41\x01\x00\x00\x00\x00\x00\x00", 8);
-> +	cmd.args[4] = (freq >>  0) & 0xff;
-> +	cmd.args[5] = (freq >>  8) & 0xff;
-> +	cmd.args[6] = (freq >> 16) & 0xff;
-> +	cmd.args[7] = (freq >> 24) & 0xff;
-> +	cmd.wlen = 8;
-> +	cmd.rlen = 1;
-> +	ret = si2157_cmd_execute(client, &cmd);
-> +	if (ret)
-> +		goto err;
-> +
-> +#if 0 /* testing */
-> +	/* get tuner status, RSSI values */
-> +	memcpy(cmd.args, "\x42\x01", 2);
-> +	cmd.wlen = 2;
-> +	cmd.rlen = 12;
-> +	ret = si2157_cmd_execute(client, &cmd);
-> +
-> +	dev_info(&client->dev, "tuner status: ret=%d rssi=%d mode=%x freq=%d\n",
-> +		ret, cmd.args[3], cmd.args[8],
-> +		(cmd.args[7]<<24 | cmd.args[6]<<16 |
-> +		cmd.args[5]<<8 | cmd.args[4]));
-> +#endif
-> +	dev->bandwidth = bandwidth;
-> +
->  	return 0;
->  err:
-> +	dev->bandwidth = 0;
-> +	dev->frequency = 0;
-> +	dev->if_frequency = 0;
->  	dev_dbg(&client->dev, "failed=%d\n", ret);
->  	return ret;
->  }
->  
-> +static int si2157_get_frequency(struct dvb_frontend *fe, u32 *frequency)
-> +{
-> +	struct i2c_client *client = fe->tuner_priv;
-> +	struct si2157_dev *dev = i2c_get_clientdata(client);
-> +
-> +	*frequency = dev->frequency;
-> +	dev_dbg(&client->dev, "freq=%u\n", dev->frequency);
-> +	return 0;
-> +}
-> +
-> +static int si2157_get_bandwidth(struct dvb_frontend *fe, u32 *bandwidth)
-> +{
-> +	struct i2c_client *client = fe->tuner_priv;
-> +	struct si2157_dev *dev = i2c_get_clientdata(client);
-> +
-> +	*bandwidth = dev->bandwidth;
-> +	dev_dbg(&client->dev, "bandwidth=%u\n", dev->bandwidth);
-> +	return 0;
-> +}
-> +
->  static int si2157_get_if_frequency(struct dvb_frontend *fe, u32 *frequency)
->  {
->  	struct i2c_client *client = fe->tuner_priv;
->  	struct si2157_dev *dev = i2c_get_clientdata(client);
->  
-> -	*frequency = dev->if_frequency;
-> +	*frequency = dev->if_frequency & ~1; /* strip analog IF indicator bit */
-> +	dev_dbg(&client->dev, "if_frequency=%u\n", *frequency);
->  	return 0;
->  }
->  
-> @@ -422,6 +658,9 @@ static const struct dvb_tuner_ops si2157_ops = {
->  	.init = si2157_init,
->  	.sleep = si2157_sleep,
->  	.set_params = si2157_set_params,
-> +	.set_analog_params = si2157_set_analog_params,
-> +	.get_frequency     = si2157_get_frequency,
-> +	.get_bandwidth     = si2157_get_bandwidth,
->  	.get_if_frequency = si2157_get_if_frequency,
->  };
->  
-> diff --git a/drivers/media/tuners/si2157_priv.h b/drivers/media/tuners/si2157_priv.h
-> index 50f8630..1e5ce5b 100644
-> --- a/drivers/media/tuners/si2157_priv.h
-> +++ b/drivers/media/tuners/si2157_priv.h
-> @@ -37,6 +37,8 @@ struct si2157_dev {
->  	u8 chiptype;
->  	u8 if_port;
->  	u32 if_frequency;
-> +	u32 bandwidth;
-> +	u32 frequency;
->  	struct delayed_work stat_work;
->  
->  #if defined(CONFIG_MEDIA_CONTROLLER)
-> -- 
-> 2.7.4
+======================================================
+WARNING: possible circular locking dependency detected
+5.1.0-rc3+ #27 Tainted: G        W        
+------------------------------------------------------
+media-ctl/2407 is trying to acquire lock:
+00000000be992082 (&group->lock){+.+.}, at: rvin_group_link_notify+0xc4/0x4f4
+
+but task is already holding lock:
+0000000064693a2a (&mdev->graph_mutex){+.+.}, at: media_device_ioctl+0x1f8/0x2b8
+
+which lock already depends on the new lock.
+
+the existing dependency chain (in reverse order) is:
+
+-> #2 (&mdev->graph_mutex){+.+.}:
+       lock_acquire+0x144/0x39c
+       __mutex_lock+0xe8/0xb54
+       mutex_lock_nested+0x3c/0x4c
+       media_device_register_entity+0x15c/0x308
+       v4l2_device_register_subdev+0x1c8/0x288
+       v4l2_async_match_notify+0x3c/0x200
+       v4l2_async_notifier_try_all_subdevs+0xb8/0xc0
+       __v4l2_async_notifier_register+0xac/0x214
+       v4l2_async_notifier_register+0x68/0x80
+       rcar_vin_probe+0x8d8/0xa0c
+       platform_drv_probe+0x70/0xe4
+       really_probe+0x2d8/0x3d8
+       driver_probe_device+0x154/0x164
+       device_driver_attach+0x98/0xa0
+       __driver_attach+0xf0/0xf4
+       bus_for_each_dev+0x114/0x13c
+       driver_attach+0x38/0x44
+       bus_add_driver+0x234/0x288
+       driver_register+0x148/0x190
+       __platform_driver_register+0x84/0x90
+       rcar_vin_driver_init+0x20/0x28
+       do_one_initcall+0x124/0x68c
+       kernel_init_freeable+0xa5c/0xa60
+       kernel_init+0x18/0x134
+       ret_from_fork+0x10/0x18
+
+-> #1 (list_lock){+.+.}:
+       lock_acquire+0x144/0x39c
+       __mutex_lock+0xe8/0xb54
+       mutex_lock_nested+0x3c/0x4c
+       v4l2_async_notifier_add_subdev+0x3c/0xdc
+       __v4l2_async_notifier_parse_fwnode_ep+0x240/0x2b8
+       v4l2_async_notifier_parse_fwnode_endpoints_by_port+0x4c/0x60
+       rcar_vin_probe+0x858/0xa0c
+       platform_drv_probe+0x70/0xe4
+       really_probe+0x2d8/0x3d8
+       driver_probe_device+0x154/0x164
+       device_driver_attach+0x98/0xa0
+       __driver_attach+0xf0/0xf4
+       bus_for_each_dev+0x114/0x13c
+       driver_attach+0x38/0x44
+       bus_add_driver+0x234/0x288
+       driver_register+0x148/0x190
+       __platform_driver_register+0x84/0x90
+       rcar_vin_driver_init+0x20/0x28
+       do_one_initcall+0x124/0x68c
+       kernel_init_freeable+0xa5c/0xa60
+       kernel_init+0x18/0x134
+       ret_from_fork+0x10/0x18
+
+-> #0 (&group->lock){+.+.}:
+       __lock_acquire+0x1c7c/0x1dd0
+       lock_acquire+0x144/0x39c
+       __mutex_lock+0xe8/0xb54
+       mutex_lock_nested+0x3c/0x4c
+       rvin_group_link_notify+0xc4/0x4f4
+       __media_entity_setup_link+0x238/0x2f0
+       media_device_setup_link+0x114/0x11c
+       media_device_ioctl+0x21c/0x2b8
+       __media_ioctl+0x78/0x84
+       media_ioctl+0x58/0x68
+       vfs_ioctl+0x68/0x78
+       do_vfs_ioctl+0x134/0xbfc
+       ksys_ioctl+0x68/0x98
+       __arm64_sys_ioctl+0x4c/0x60
+       el0_svc_common+0xd0/0x16c
+       el0_svc_handler+0x94/0xa0
+       el0_svc+0x8/0xc
+
+other info that might help us debug this:
+
+Chain exists of:
+  &group->lock --> list_lock --> &mdev->graph_mutex
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&mdev->graph_mutex);
+                               lock(list_lock);
+                               lock(&mdev->graph_mutex);
+  lock(&group->lock);
+
+ *** DEADLOCK ***
+
+1 lock held by media-ctl/2407:
+ #0: 0000000064693a2a (&mdev->graph_mutex){+.+.}, at: media_device_ioctl+0x1f8/0x2b8
+
+stack backtrace:
+CPU: 0 PID: 2407 Comm: media-ctl Tainted: G        W         5.1.0-rc3+ #27
+Hardware name: Renesas Salvator-X board based on r8a7795 ES2.0+ (DT)
+Call trace:
+ dump_backtrace+0x0/0x1c0
+ show_stack+0x24/0x30
+ dump_stack+0xcc/0x128
+ print_circular_bug.isra.16+0x22c/0x364
+ check_prev_add.constprop.25+0x35c/0x1098
+ __lock_acquire+0x1c7c/0x1dd0
+ lock_acquire+0x144/0x39c
+ __mutex_lock+0xe8/0xb54
+ mutex_lock_nested+0x3c/0x4c
+ rvin_group_link_notify+0xc4/0x4f4
+ __media_entity_setup_link+0x238/0x2f0
+ media_device_setup_link+0x114/0x11c
+ media_device_ioctl+0x21c/0x2b8
+ __media_ioctl+0x78/0x84
+ media_ioctl+0x58/0x68
+ vfs_ioctl+0x68/0x78
+ do_vfs_ioctl+0x134/0xbfc
+ ksys_ioctl+0x68/0x98
+ __arm64_sys_ioctl+0x4c/0x60
+ el0_svc_common+0xd0/0x16c
+ el0_svc_handler+0x94/0xa0
+ el0_svc+0x8/0xc
