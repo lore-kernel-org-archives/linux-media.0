@@ -2,1362 +2,767 @@ Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EBFC10F13
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:39:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 594B9C10F0F
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:45:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 873EA21872
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:39:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1102021726
+	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 14:45:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731333AbfDEOiu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 10:38:50 -0400
-Received: from relay11.mail.gandi.net ([217.70.178.231]:56895 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbfDEOit (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 10:38:49 -0400
-Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id C947A100016;
-        Fri,  5 Apr 2019 14:38:42 +0000 (UTC)
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: [PATCH v5 3/5] media: sunxi: Add A10 CSI driver
-Date:   Fri,  5 Apr 2019 16:38:21 +0200
-Message-Id: <0ab9f157f9236e29e5356b085c4e3cfe257c84cf.1554475081.git-series.maxime.ripard@bootlin.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.75d1c91ecddbc451d0e0e961f7ea7f045afd3a79.1554475081.git-series.maxime.ripard@bootlin.com>
-References: <cover.75d1c91ecddbc451d0e0e961f7ea7f045afd3a79.1554475081.git-series.maxime.ripard@bootlin.com>
+        id S1731127AbfDEOpC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 10:45:02 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:44353 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726291AbfDEOpB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 10:45:01 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id A4BBF1BF20D;
+        Fri,  5 Apr 2019 14:44:55 +0000 (UTC)
+Date:   Fri, 5 Apr 2019 16:45:42 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, p.zabel@pengutronix.de, javierm@redhat.co,
+        laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v5 05/13] media: tvp5150: add input source selection
+ of_graph support
+Message-ID: <20190405144542.rinp3jrczlxo3lwf@uno.localdomain>
+References: <20190405060317.11240-1-m.felsch@pengutronix.de>
+ <20190405060317.11240-6-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tucdy2bkrl2o4mp2"
+Content-Disposition: inline
+In-Reply-To: <20190405060317.11240-6-m.felsch@pengutronix.de>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The older CSI drivers have camera capture interface different from the one
-in the newer ones.
 
-This IP is pretty simple. Some variants (one controller out of two
-instances on some SoCs) have an ISP embedded, but there's no code that make
-use of it, so we ignored that part for now.
+--tucdy2bkrl2o4mp2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
----
- MAINTAINERS                                         |   8 +-
- drivers/media/platform/sunxi/Kconfig                |   1 +-
- drivers/media/platform/sunxi/Makefile               |   1 +-
- drivers/media/platform/sunxi/sun4i-csi/Kconfig      |  11 +-
- drivers/media/platform/sunxi/sun4i-csi/Makefile     |   5 +-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c  | 308 +++++++++-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h  | 154 +++++-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c  | 438 +++++++++++++-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c | 300 +++++++++-
- 9 files changed, 1226 insertions(+)
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/Kconfig
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/Makefile
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
+Hi Marco,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e17ebf70b548..4932cf5ca2a4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1334,6 +1334,14 @@ F:	drivers/pinctrl/sunxi/
- F:	drivers/soc/sunxi/
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git
- 
-+Allwinner A10 CSI driver
-+M:	Maxime Ripard <maxime.ripard@bootlin.com>
-+L:	linux-media@vger.kernel.org
-+T:	git git://linuxtv.org/media_tree.git
-+S:	Maintained
-+F:	drivers/media/platform/sunxi/sun4i-csi/
-+F:	Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
-+
- ARM/Amlogic Meson SoC CLOCK FRAMEWORK
- M:	Neil Armstrong <narmstrong@baylibre.com>
- M:	Jerome Brunet <jbrunet@baylibre.com>
-diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
-index 1b6e89cb78b2..71808e93ac2e 100644
---- a/drivers/media/platform/sunxi/Kconfig
-+++ b/drivers/media/platform/sunxi/Kconfig
-@@ -1 +1,2 @@
-+source "drivers/media/platform/sunxi/sun4i-csi/Kconfig"
- source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
-diff --git a/drivers/media/platform/sunxi/Makefile b/drivers/media/platform/sunxi/Makefile
-index 8d06f98500ee..a05127529006 100644
---- a/drivers/media/platform/sunxi/Makefile
-+++ b/drivers/media/platform/sunxi/Makefile
-@@ -1 +1,2 @@
-+obj-y		+= sun4i-csi/
- obj-y		+= sun6i-csi/
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/Kconfig b/drivers/media/platform/sunxi/sun4i-csi/Kconfig
-new file mode 100644
-index 000000000000..e86e29b6a603
---- /dev/null
-+++ b/drivers/media/platform/sunxi/sun4i-csi/Kconfig
-@@ -0,0 +1,11 @@
-+config VIDEO_SUN4I_CSI
-+	tristate "Allwinner A10 CMOS Sensor Interface Support"
-+	depends on VIDEO_V4L2 && COMMON_CLK && VIDEO_V4L2_SUBDEV_API && HAS_DMA
-+	depends on ARCH_SUNXI || COMPILE_TEST
-+	select VIDEOBUF2_DMA_CONTIG
-+	select V4L2_FWNODE
-+	help
-+	  This is a V4L2 driver for the Allwinner A10 CSI
-+
-+	  To compile this driver as a module, choose M here: the module
-+	  will be called sun4i_csi.
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/Makefile b/drivers/media/platform/sunxi/sun4i-csi/Makefile
-new file mode 100644
-index 000000000000..7c790a57f5ee
---- /dev/null
-+++ b/drivers/media/platform/sunxi/sun4i-csi/Makefile
-@@ -0,0 +1,5 @@
-+sun4i-csi-y += sun4i_csi.o
-+sun4i-csi-y += sun4i_dma.o
-+sun4i-csi-y += sun4i_v4l2.o
-+
-+obj-$(CONFIG_VIDEO_SUN4I_CSI)	+= sun4i-csi.o
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
-new file mode 100644
-index 000000000000..646838b7b6d9
---- /dev/null
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
-@@ -0,0 +1,308 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2016 NextThing Co
-+ * Copyright (C) 2016-2018 Bootlin
-+ *
-+ * Author: Maxime Ripard <maxime.ripard@bootlin.com>
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of.h>
-+#include <linux/of_graph.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <linux/videodev2.h>
-+
-+#include <media/v4l2-dev.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-fwnode.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-mediabus.h>
-+
-+#include <media/videobuf2-core.h>
-+#include <media/videobuf2-dma-contig.h>
-+
-+#include "sun4i_csi.h"
-+
-+static int csi_notify_bound(struct v4l2_async_notifier *notifier,
-+			    struct v4l2_subdev *subdev,
-+			    struct v4l2_async_subdev *asd)
-+{
-+	struct sun4i_csi *csi = container_of(notifier, struct sun4i_csi,
-+					     notifier);
-+
-+	csi->src_subdev = subdev;
-+	csi->src_pad = media_entity_get_fwnode_pad(&subdev->entity,
-+						   subdev->fwnode,
-+						   MEDIA_PAD_FL_SOURCE);
-+	if (csi->src_pad < 0) {
-+		dev_err(csi->dev, "Couldn't find output pad for subdev %s\n",
-+			subdev->name);
-+		return csi->src_pad;
-+	}
-+
-+	dev_dbg(csi->dev, "Bound %s pad: %d\n", subdev->name, csi->src_pad);
-+	return 0;
-+}
-+
-+static int csi_notify_complete(struct v4l2_async_notifier *notifier)
-+{
-+	struct sun4i_csi *csi = container_of(notifier, struct sun4i_csi,
-+					     notifier);
-+	struct v4l2_subdev *subdev = &csi->subdev;
-+	struct video_device *vdev = &csi->vdev;
-+	int ret;
-+
-+	ret = v4l2_device_register_subdev_nodes(&csi->v4l);
-+	if (ret < 0)
-+		return ret;
-+
-+	subdev->entity.function = MEDIA_ENT_F_VID_IF_BRIDGE;
-+	ret = v4l2_device_register_subdev(&csi->v4l, subdev);
-+	if (ret)
-+		return ret;
-+
-+	ret = sun4i_csi_v4l2_register(csi);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = media_device_register(&csi->mdev);
-+	if (ret)
-+		return ret;
-+
-+	/* Create link from subdev to main device */
-+	ret = media_create_pad_link(&subdev->entity, CSI_SUBDEV_SOURCE,
-+				    &vdev->entity, 0,
-+				    MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE);
-+	if (ret)
-+		goto err_clean_media;
-+
-+	ret = media_create_pad_link(&csi->src_subdev->entity, csi->src_pad,
-+				    &subdev->entity, CSI_SUBDEV_SINK,
-+				    MEDIA_LNK_FL_ENABLED | MEDIA_LNK_FL_IMMUTABLE);
-+	if (ret)
-+		goto err_clean_media;
-+
-+	return 0;
-+
-+err_clean_media:
-+	media_device_unregister(&csi->mdev);
-+
-+	return ret;
-+}
-+
-+static const struct v4l2_async_notifier_operations csi_notify_ops = {
-+	.bound		= csi_notify_bound,
-+	.complete	= csi_notify_complete,
-+};
-+
-+static int sun4i_csi_async_parse(struct device *dev,
-+				 struct v4l2_fwnode_endpoint *vep,
-+				 struct v4l2_async_subdev *asd)
-+{
-+	struct sun4i_csi *csi = dev_get_drvdata(dev);
-+
-+	if (vep->base.port || vep->base.id)
-+		return -EINVAL;
-+
-+	if (vep->bus_type != V4L2_MBUS_PARALLEL)
-+		return -EINVAL;
-+
-+	csi->bus = vep->bus.parallel;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Our device is dead simple, and we don't really have any controls
-+ * over the receiver.
-+ */
-+static const struct v4l2_subdev_ops sun4i_csi_subdev_ops = {};
-+
-+static int csi_probe(struct platform_device *pdev)
-+{
-+	struct v4l2_subdev *subdev;
-+	struct video_device *vdev;
-+	struct sun4i_csi *csi;
-+	struct resource *res;
-+	int ret;
-+	int irq;
-+
-+	csi = devm_kzalloc(&pdev->dev, sizeof(*csi), GFP_KERNEL);
-+	if (!csi)
-+		return -ENOMEM;
-+	platform_set_drvdata(pdev, csi);
-+	csi->dev = &pdev->dev;
-+	subdev = &csi->subdev;
-+	vdev = &csi->vdev;
-+
-+	csi->mdev.dev = csi->dev;
-+	strscpy(csi->mdev.model, "Allwinner Video Capture Device",
-+		sizeof(csi->mdev.model));
-+	csi->mdev.hw_revision = 0;
-+	media_device_init(&csi->mdev);
-+	v4l2_async_notifier_init(&csi->notifier);
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	csi->regs = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(csi->regs))
-+		return PTR_ERR(csi->regs);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	csi->bus_clk = devm_clk_get(&pdev->dev, "bus");
-+	if (IS_ERR(csi->bus_clk)) {
-+		dev_err(&pdev->dev, "Couldn't get our bus clock\n");
-+		return PTR_ERR(csi->bus_clk);
-+	}
-+
-+	csi->isp_clk = devm_clk_get(&pdev->dev, "isp");
-+	if (IS_ERR(csi->isp_clk)) {
-+		dev_err(&pdev->dev, "Couldn't get our ISP clock\n");
-+		return PTR_ERR(csi->isp_clk);
-+	}
-+
-+	csi->mod_clk = devm_clk_get(&pdev->dev, "mod");
-+	if (IS_ERR(csi->mod_clk)) {
-+		dev_err(&pdev->dev, "Couldn't get our mod clock\n");
-+		return PTR_ERR(csi->mod_clk);
-+	}
-+
-+	csi->ram_clk = devm_clk_get(&pdev->dev, "ram");
-+	if (IS_ERR(csi->ram_clk)) {
-+		dev_err(&pdev->dev, "Couldn't get our ram clock\n");
-+		return PTR_ERR(csi->ram_clk);
-+	}
-+
-+	csi->rst = devm_reset_control_get(&pdev->dev, NULL);
-+	if (IS_ERR(csi->rst)) {
-+		dev_err(&pdev->dev, "Couldn't get our reset line\n");
-+		return PTR_ERR(csi->rst);
-+	}
-+
-+	/* Initialize subdev */
-+	v4l2_subdev_init(subdev, &sun4i_csi_subdev_ops);
-+	subdev->owner = THIS_MODULE;
-+	snprintf(subdev->name, sizeof(subdev->name), "sun4i-csi-0");
-+	v4l2_set_subdevdata(subdev, csi);
-+
-+	csi->subdev_pads[CSI_SUBDEV_SINK].flags =
-+		MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_MUST_CONNECT;
-+	csi->subdev_pads[CSI_SUBDEV_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
-+	ret = media_entity_pads_init(&subdev->entity, CSI_SUBDEV_PADS,
-+				     csi->subdev_pads);
-+	if (ret < 0)
-+		return ret;
-+
-+	csi->vdev_pad.flags = MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_MUST_CONNECT;
-+	ret = media_entity_pads_init(&vdev->entity, 1, &csi->vdev_pad);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = sun4i_csi_dma_register(csi, irq);
-+	if (ret)
-+		goto err_clean_pad;
-+
-+	csi->v4l.mdev = &csi->mdev;
-+	ret = v4l2_async_notifier_parse_fwnode_endpoints(csi->dev,
-+							 &csi->notifier,
-+							 sizeof(struct v4l2_async_subdev),
-+							 sun4i_csi_async_parse);
-+	if (ret)
-+		goto err_unregister_media;
-+	csi->notifier.ops = &csi_notify_ops;
-+
-+	ret = v4l2_async_notifier_register(&csi->v4l, &csi->notifier);
-+	if (ret) {
-+		dev_err(csi->dev,
-+			"Couldn't register our v4l2-async notifier\n");
-+		goto err_free_notifier;
-+	}
-+
-+	pm_runtime_enable(&pdev->dev);
-+
-+	return 0;
-+
-+err_free_notifier:
-+	v4l2_async_notifier_cleanup(&csi->notifier);
-+
-+err_unregister_media:
-+	media_device_unregister(&csi->mdev);
-+	sun4i_csi_dma_unregister(csi);
-+
-+err_clean_pad:
-+	media_device_cleanup(&csi->mdev);
-+
-+	return ret;
-+}
-+
-+static int csi_remove(struct platform_device *pdev)
-+{
-+	struct sun4i_csi *csi = platform_get_drvdata(pdev);
-+
-+	v4l2_async_notifier_unregister(&csi->notifier);
-+	v4l2_async_notifier_cleanup(&csi->notifier);
-+	media_device_unregister(&csi->mdev);
-+	sun4i_csi_dma_unregister(csi);
-+	media_device_cleanup(&csi->mdev);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id csi_of_match[] = {
-+	{ .compatible = "allwinner,sun4i-a10-csi0" },
-+	{ /* Sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, csi_of_match);
-+
-+static int __maybe_unused csi_runtime_resume(struct device *dev)
-+{
-+	struct sun4i_csi *csi = dev_get_drvdata(dev);
-+
-+	reset_control_deassert(csi->rst);
-+	clk_prepare_enable(csi->bus_clk);
-+	clk_prepare_enable(csi->ram_clk);
-+	clk_set_rate(csi->isp_clk, 80000000);
-+	clk_prepare_enable(csi->isp_clk);
-+	clk_set_rate(csi->mod_clk, 24000000);
-+	clk_prepare_enable(csi->mod_clk);
-+
-+	writel(1, csi->regs + CSI_EN_REG);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused csi_runtime_suspend(struct device *dev)
-+{
-+	struct sun4i_csi *csi = dev_get_drvdata(dev);
-+
-+	clk_disable_unprepare(csi->mod_clk);
-+	clk_disable_unprepare(csi->isp_clk);
-+	clk_disable_unprepare(csi->ram_clk);
-+	clk_disable_unprepare(csi->bus_clk);
-+
-+	reset_control_assert(csi->rst);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops csi_pm_ops = {
-+	SET_RUNTIME_PM_OPS(csi_runtime_suspend, csi_runtime_resume, NULL)
-+};
-+
-+static struct platform_driver csi_driver = {
-+	.probe	= csi_probe,
-+	.remove	= csi_remove,
-+	.driver	= {
-+		.name		= "sun4i-csi",
-+		.of_match_table	= csi_of_match,
-+		.pm		= &csi_pm_ops,
-+	},
-+};
-+module_platform_driver(csi_driver);
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
-new file mode 100644
-index 000000000000..b6c15477ea79
---- /dev/null
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
-@@ -0,0 +1,154 @@
-+/* SPDX-License-Identifier: GPL-2.0+ */
-+/*
-+ * Copyright (C) 2016 NextThing Co
-+ * Copyright (C) 2016-2018 Bootlin
-+ *
-+ * Author: Maxime Ripard <maxime.ripard@bootlin.com>
-+ */
-+
-+#ifndef _SUN4I_CSI_H_
-+#define _SUN4I_CSI_H_
-+
-+#include <media/media-device.h>
-+#include <media/v4l2-async.h>
-+#include <media/v4l2-dev.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-fwnode.h>
-+#include <media/videobuf2-core.h>
-+
-+#define CSI_EN_REG			0x00
-+
-+#define CSI_CFG_REG			0x04
-+#define CSI_CFG_INPUT_FMT(fmt)			((fmt) << 20)
-+#define CSI_CFG_OUTPUT_FMT(fmt)			((fmt) << 16)
-+#define CSI_CFG_YUV_DATA_SEQ(seq)		((seq) << 8)
-+#define CSI_CFG_VSYNC_POL(pol)			((pol) << 2)
-+#define CSI_CFG_HSYNC_POL(pol)			((pol) << 1)
-+#define CSI_CFG_PCLK_POL(pol)			((pol) << 0)
-+
-+#define CSI_CPT_CTRL_REG		0x08
-+#define CSI_CPT_CTRL_VIDEO_START		BIT(1)
-+#define CSI_CPT_CTRL_IMAGE_START		BIT(0)
-+
-+#define CSI_BUF_ADDR_REG(fifo, buf)	(0x10 + (0x8 * (fifo)) + (0x4 * (buf)))
-+
-+#define CSI_BUF_CTRL_REG		0x28
-+#define CSI_BUF_CTRL_DBN			BIT(2)
-+#define CSI_BUF_CTRL_DBS			BIT(1)
-+#define CSI_BUF_CTRL_DBE			BIT(0)
-+
-+#define CSI_INT_EN_REG			0x30
-+#define CSI_INT_FRM_DONE			BIT(1)
-+#define CSI_INT_CPT_DONE			BIT(0)
-+
-+#define CSI_INT_STA_REG			0x34
-+
-+#define CSI_WIN_CTRL_W_REG		0x40
-+#define CSI_WIN_CTRL_W_ACTIVE(w)		((w) << 16)
-+
-+#define CSI_WIN_CTRL_H_REG		0x44
-+#define CSI_WIN_CTRL_H_ACTIVE(h)		((h) << 16)
-+
-+#define CSI_BUF_LEN_REG			0x48
-+
-+#define CSI_MAX_BUFFER	2
-+
-+enum csi_input {
-+	CSI_INPUT_RAW	= 0,
-+	CSI_INPUT_BT656	= 2,
-+	CSI_INPUT_YUV	= 3,
-+};
-+
-+enum csi_output_raw {
-+	CSI_OUTPUT_RAW_PASSTHROUGH = 0,
-+};
-+
-+enum csi_output_yuv {
-+	CSI_OUTPUT_YUV_422_PLANAR	= 0,
-+	CSI_OUTPUT_YUV_420_PLANAR	= 1,
-+	CSI_OUTPUT_YUV_422_UV		= 4,
-+	CSI_OUTPUT_YUV_420_UV		= 5,
-+	CSI_OUTPUT_YUV_422_MACRO	= 8,
-+	CSI_OUTPUT_YUV_420_MACRO	= 9,
-+};
-+
-+enum csi_yuv_data_seq {
-+	CSI_YUV_DATA_SEQ_YUYV	= 0,
-+	CSI_YUV_DATA_SEQ_YVYU	= 1,
-+	CSI_YUV_DATA_SEQ_UYVY	= 2,
-+	CSI_YUV_DATA_SEQ_VYUY	= 3,
-+};
-+
-+enum csi_subdev_pads {
-+	CSI_SUBDEV_SINK,
-+	CSI_SUBDEV_SOURCE,
-+
-+	CSI_SUBDEV_PADS,
-+};
-+
-+struct sun4i_csi_format {
-+	u32			mbus;
-+	u32			fourcc;
-+	enum csi_input		input;
-+	u32			output;
-+	unsigned int		num_planes;
-+	u8			bpp[3];
-+	unsigned int		hsub;
-+	unsigned int		vsub;
-+};
-+
-+struct sun4i_csi {
-+	/* Device resources */
-+	struct device			*dev;
-+
-+	void __iomem			*regs;
-+	struct clk			*bus_clk;
-+	struct clk			*isp_clk;
-+	struct clk			*mod_clk;
-+	struct clk			*ram_clk;
-+	struct reset_control		*rst;
-+
-+	const struct sun4i_csi_format	*p_fmt;
-+	struct v4l2_pix_format_mplane	v_fmt;
-+
-+	struct vb2_v4l2_buffer		*current_buf[CSI_MAX_BUFFER];
-+
-+	struct {
-+		size_t			size;
-+		void			*vaddr;
-+		dma_addr_t		paddr;
-+	} scratch;
-+
-+	struct v4l2_fwnode_bus_parallel	bus;
-+
-+	/* Main Device */
-+	struct v4l2_device		v4l;
-+	struct media_device		mdev;
-+	struct video_device		vdev;
-+	struct media_pad		vdev_pad;
-+
-+	/* Local subdev */
-+	struct v4l2_subdev		subdev;
-+	struct media_pad		subdev_pads[CSI_SUBDEV_PADS];
-+
-+	/* V4L2 Async variables */
-+	struct v4l2_async_notifier	notifier;
-+	struct v4l2_subdev		*src_subdev;
-+	int				src_pad;
-+
-+	/* V4L2 variables */
-+	struct mutex			lock;
-+
-+	/* Videobuf2 */
-+	struct vb2_queue		queue;
-+	struct list_head		buf_list;
-+	spinlock_t			qlock;
-+	unsigned int			sequence;
-+};
-+
-+int sun4i_csi_dma_register(struct sun4i_csi *csi, int irq);
-+void sun4i_csi_dma_unregister(struct sun4i_csi *csi);
-+
-+int sun4i_csi_v4l2_register(struct sun4i_csi *csi);
-+
-+#endif /* _SUN4I_CSI_H_ */
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-new file mode 100644
-index 000000000000..9665f27a7f52
---- /dev/null
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
-@@ -0,0 +1,438 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2016 NextThing Co
-+ * Copyright (C) 2016-2019 Bootlin
-+ *
-+ * Author: Maxime Ripard <maxime.ripard@bootlin.com>
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/list.h>
-+#include <linux/mutex.h>
-+#include <linux/spinlock.h>
-+#include <media/videobuf2-dma-contig.h>
-+#include <media/videobuf2-v4l2.h>
-+
-+#include "sun4i_csi.h"
-+
-+struct csi_buffer {
-+	struct vb2_v4l2_buffer	vb;
-+	struct list_head	list;
-+};
-+
-+static inline struct csi_buffer *vb2_v4l2_to_csi_buffer(const struct vb2_v4l2_buffer *p)
-+{
-+	return container_of(p, struct csi_buffer, vb);
-+}
-+
-+static inline struct csi_buffer *vb2_to_csi_buffer(const struct vb2_buffer *p)
-+{
-+	return vb2_v4l2_to_csi_buffer(to_vb2_v4l2_buffer(p));
-+}
-+
-+static void csi_capture_start(struct sun4i_csi *csi)
-+{
-+	writel(CSI_CPT_CTRL_VIDEO_START, csi->regs + CSI_CPT_CTRL_REG);
-+}
-+
-+static void csi_capture_stop(struct sun4i_csi *csi)
-+{
-+	writel(0, csi->regs + CSI_CPT_CTRL_REG);
-+}
-+
-+static int csi_queue_setup(struct vb2_queue *vq,
-+			   unsigned int *nbuffers,
-+			   unsigned int *nplanes,
-+			   unsigned int sizes[],
-+			   struct device *alloc_devs[])
-+
-+{
-+	struct sun4i_csi *csi = vb2_get_drv_priv(vq);
-+	unsigned int num_planes = csi->p_fmt->num_planes;
-+	unsigned int i;
-+
-+	if (*nplanes) {
-+                if (*nplanes != num_planes)
-+                        return -EINVAL;
-+
-+                for (i = 0; i < num_planes; i++)
-+                        if (sizes[i] < csi->v_fmt.plane_fmt[i].sizeimage)
-+                                return -EINVAL;
-+                return 0;
-+        }
-+
-+	*nplanes = num_planes;
-+	for (i = 0; i < num_planes; i++)
-+		sizes[i] = csi->v_fmt.plane_fmt[i].sizeimage;
-+
-+	return 0;
-+};
-+
-+static int csi_buffer_prepare(struct vb2_buffer *vb)
-+{
-+	struct sun4i_csi *csi = vb2_get_drv_priv(vb->vb2_queue);
-+	unsigned int i;
-+
-+	for (i = 0; i < csi->p_fmt->num_planes; i++) {
-+		unsigned long size = csi->v_fmt.plane_fmt[i].sizeimage;
-+
-+		if (vb2_plane_size(vb, i) < size) {
-+			dev_err(csi->dev, "buffer too small (%lu < %lu)\n",
-+				vb2_plane_size(vb, i), size);
-+			return -EINVAL;
-+		}
-+
-+		vb2_set_plane_payload(vb, i, size);
-+	}
-+
-+	return 0;
-+}
-+
-+static int csi_setup_scratch_buffer(struct sun4i_csi *csi, unsigned int slot)
-+{
-+	dma_addr_t addr = csi->scratch.paddr;
-+	unsigned int plane;
-+
-+	dev_dbg(csi->dev,
-+		"No more available buffer, using the scratch buffer\n");
-+
-+	for (plane = 0; plane < csi->p_fmt->num_planes; plane++) {
-+		writel(addr, csi->regs + CSI_BUF_ADDR_REG(plane, slot));
-+		addr += csi->v_fmt.plane_fmt[plane].sizeimage;
-+	}
-+
-+	csi->current_buf[slot] = NULL;
-+	return 0;
-+}
-+
-+static int csi_buffer_fill_slot(struct sun4i_csi *csi, unsigned int slot)
-+{
-+	struct csi_buffer *c_buf;
-+	struct vb2_v4l2_buffer *v_buf;
-+	unsigned int plane;
-+
-+	/*
-+	 * We should never end up in a situation where we overwrite an
-+	 * already filled slot.
-+	 */
-+	if (WARN_ON(csi->current_buf[slot]))
-+		return -EINVAL;
-+
-+	if (list_empty(&csi->buf_list))
-+		return csi_setup_scratch_buffer(csi, slot);
-+
-+	c_buf = list_first_entry(&csi->buf_list, struct csi_buffer, list);
-+	list_del_init(&c_buf->list);
-+
-+	v_buf = &c_buf->vb;
-+	csi->current_buf[slot] = v_buf;
-+
-+	for (plane = 0; plane < csi->p_fmt->num_planes; plane++) {
-+		dma_addr_t buf_addr;
-+
-+		buf_addr = vb2_dma_contig_plane_dma_addr(&v_buf->vb2_buf,
-+							 plane);
-+		writel(buf_addr, csi->regs + CSI_BUF_ADDR_REG(plane, slot));
-+	}
-+
-+	return 0;
-+}
-+
-+static int csi_buffer_fill_all(struct sun4i_csi *csi)
-+{
-+	unsigned int slot;
-+	int ret;
-+
-+	for (slot = 0; slot < CSI_MAX_BUFFER; slot++) {
-+		ret = csi_buffer_fill_slot(csi, slot);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void csi_buffer_mark_done(struct sun4i_csi *csi,
-+				 unsigned int slot,
-+				 unsigned int sequence)
-+{
-+	struct vb2_v4l2_buffer *v_buf;
-+
-+	if (!csi->current_buf[slot]) {
-+		dev_dbg(csi->dev, "Scratch buffer was used, ignoring..\n");
-+		return;
-+	}
-+
-+	v_buf = csi->current_buf[slot];
-+	v_buf->field = csi->v_fmt.field;
-+	v_buf->sequence = sequence;
-+	v_buf->vb2_buf.timestamp = ktime_get_ns();
-+	vb2_buffer_done(&v_buf->vb2_buf, VB2_BUF_STATE_DONE);
-+
-+	csi->current_buf[slot] = NULL;
-+}
-+
-+static int csi_buffer_flip(struct sun4i_csi *csi, unsigned int sequence)
-+{
-+	u32 reg = readl(csi->regs + CSI_BUF_CTRL_REG);
-+	unsigned int curr, next;
-+
-+	/* Our next buffer is not the current buffer */
-+	curr = !!(reg & CSI_BUF_CTRL_DBS);
-+	next = !curr;
-+
-+	/* Report the previous buffer as done */
-+	csi_buffer_mark_done(csi, next, sequence);
-+
-+	/* Put a new buffer in there */
-+	return csi_buffer_fill_slot(csi, next);
-+}
-+
-+static void csi_buffer_queue(struct vb2_buffer *vb)
-+{
-+	struct sun4i_csi *csi = vb2_get_drv_priv(vb->vb2_queue);
-+	struct csi_buffer *buf = vb2_to_csi_buffer(vb);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&csi->qlock, flags);
-+	list_add_tail(&buf->list, &csi->buf_list);
-+	spin_unlock_irqrestore(&csi->qlock, flags);
-+}
-+
-+static void return_all_buffers(struct sun4i_csi *csi,
-+			       enum vb2_buffer_state state)
-+{
-+	struct csi_buffer *buf, *node;
-+	unsigned int slot;
-+
-+	list_for_each_entry_safe(buf, node, &csi->buf_list, list) {
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+		list_del(&buf->list);
-+	}
-+
-+	for (slot = 0; slot < CSI_MAX_BUFFER; slot++) {
-+		struct vb2_v4l2_buffer *v_buf = csi->current_buf[slot];
-+
-+		if (!v_buf)
-+			continue;
-+
-+		vb2_buffer_done(&v_buf->vb2_buf, state);
-+		csi->current_buf[slot] = NULL;
-+	}
-+}
-+
-+static int csi_start_streaming(struct vb2_queue *vq, unsigned int count)
-+{
-+	struct sun4i_csi *csi = vb2_get_drv_priv(vq);
-+	struct v4l2_fwnode_bus_parallel *bus = &csi->bus;
-+	unsigned long hsync_pol, pclk_pol, vsync_pol;
-+	unsigned long flags;
-+	unsigned int i;
-+	int ret;
-+
-+	dev_dbg(csi->dev, "Starting capture\n");
-+
-+	csi->sequence = 0;
-+
-+	/*
-+	 * We need a scratch buffer in case where we'll not have any
-+	 * more buffer queued so that we don't error out. One of those
-+	 * cases is when you end up at the last frame to capture, you
-+	 * don't havea any buffer queued any more, and yet it doesn't
-+	 * really matter since you'll never reach the next buffer.
-+	 *
-+	 * Since we support the multi-planar API, we need to have a
-+	 * buffer for each plane. Allocating a single one large enough
-+	 * to hold all the buffers is simpler, so let's go for that.
-+	 */
-+	csi->scratch.size = 0;
-+	for (i = 0; i < csi->p_fmt->num_planes; i++)
-+		csi->scratch.size += csi->v_fmt.plane_fmt[i].sizeimage;
-+
-+	csi->scratch.vaddr = dma_alloc_coherent(csi->dev,
-+						csi->scratch.size,
-+						&csi->scratch.paddr,
-+						GFP_KERNEL);
-+	if (!csi->scratch.vaddr) {
-+		dev_err(csi->dev, "Failed to allocate scratch buffer\n");
-+		ret = -ENOMEM;
-+		goto err_clear_dma_queue;
-+	}
-+
-+	ret = media_pipeline_start(&csi->vdev.entity, &csi->vdev.pipe);
-+	if (ret < 0)
-+		goto err_free_scratch_buffer;
-+
-+	spin_lock_irqsave(&csi->qlock, flags);
-+
-+	/* Setup timings */
-+	writel(CSI_WIN_CTRL_W_ACTIVE(csi->v_fmt.width * 2),
-+	       csi->regs + CSI_WIN_CTRL_W_REG);
-+	writel(CSI_WIN_CTRL_H_ACTIVE(csi->v_fmt.height),
-+	       csi->regs + CSI_WIN_CTRL_H_REG);
-+
-+	hsync_pol = !!(bus->flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH);
-+	pclk_pol = !!(bus->flags & V4L2_MBUS_DATA_ACTIVE_HIGH);
-+	vsync_pol = !!(bus->flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH);
-+	writel(CSI_CFG_INPUT_FMT(csi->p_fmt->input) |
-+	       CSI_CFG_OUTPUT_FMT(csi->p_fmt->output) |
-+	       CSI_CFG_VSYNC_POL(vsync_pol) |
-+	       CSI_CFG_HSYNC_POL(hsync_pol) |
-+	       CSI_CFG_PCLK_POL(pclk_pol),
-+	       csi->regs + CSI_CFG_REG);
-+
-+	/* Setup buffer length */
-+	writel(csi->v_fmt.plane_fmt[0].bytesperline,
-+	       csi->regs + CSI_BUF_LEN_REG);
-+
-+	/* Prepare our buffers in hardware */
-+	ret = csi_buffer_fill_all(csi);
-+	if (ret) {
-+		spin_unlock_irqrestore(&csi->qlock, flags);
-+		goto err_disable_pipeline;
-+	}
-+
-+	/* Enable double buffering */
-+	writel(CSI_BUF_CTRL_DBE, csi->regs + CSI_BUF_CTRL_REG);
-+
-+	/* Clear the pending interrupts */
-+	writel(CSI_INT_FRM_DONE, csi->regs + 0x34);
-+
-+	/* Enable frame done interrupt */
-+	writel(CSI_INT_FRM_DONE, csi->regs + CSI_INT_EN_REG);
-+
-+	csi_capture_start(csi);
-+
-+	spin_unlock_irqrestore(&csi->qlock, flags);
-+
-+	ret = v4l2_subdev_call(csi->src_subdev, video, s_stream, 1);
-+	if (ret < 0 && ret != -ENOIOCTLCMD)
-+		goto err_disable_device;
-+
-+	return 0;
-+
-+err_disable_device:
-+	csi_capture_stop(csi);
-+
-+err_disable_pipeline:
-+	media_pipeline_stop(&csi->vdev.entity);
-+
-+err_free_scratch_buffer:
-+	dma_free_coherent(csi->dev, csi->scratch.size, csi->scratch.vaddr,
-+			  csi->scratch.paddr);
-+
-+err_clear_dma_queue:
-+	spin_lock_irqsave(&csi->qlock, flags);
-+	return_all_buffers(csi, VB2_BUF_STATE_QUEUED);
-+	spin_unlock_irqrestore(&csi->qlock, flags);
-+
-+	return ret;
-+}
-+
-+static void csi_stop_streaming(struct vb2_queue *vq)
-+{
-+	struct sun4i_csi *csi = vb2_get_drv_priv(vq);
-+	unsigned long flags;
-+
-+	dev_dbg(csi->dev, "Stopping capture\n");
-+
-+	v4l2_subdev_call(csi->src_subdev, video, s_stream, 0);
-+	csi_capture_stop(csi);
-+
-+	/* Release all active buffers */
-+	spin_lock_irqsave(&csi->qlock, flags);
-+	return_all_buffers(csi, VB2_BUF_STATE_ERROR);
-+	spin_unlock_irqrestore(&csi->qlock, flags);
-+
-+	media_pipeline_stop(&csi->vdev.entity);
-+
-+	dma_free_coherent(csi->dev, csi->scratch.size, csi->scratch.vaddr,
-+			  csi->scratch.paddr);
-+}
-+
-+static struct vb2_ops csi_qops = {
-+	.queue_setup		= csi_queue_setup,
-+	.buf_prepare		= csi_buffer_prepare,
-+	.buf_queue		= csi_buffer_queue,
-+	.start_streaming	= csi_start_streaming,
-+	.stop_streaming		= csi_stop_streaming,
-+	.wait_prepare		= vb2_ops_wait_prepare,
-+	.wait_finish		= vb2_ops_wait_finish,
-+};
-+
-+static irqreturn_t csi_irq(int irq, void *data)
-+{
-+	struct sun4i_csi *csi = data;
-+	u32 reg;
-+
-+	reg = readl(csi->regs + CSI_INT_STA_REG);
-+
-+	/* Acknowledge the interrupts */
-+	writel(reg, csi->regs + CSI_INT_STA_REG);
-+
-+	if (!(reg & CSI_INT_FRM_DONE))
-+		goto out;
-+
-+	spin_lock(&csi->qlock);
-+	if (csi_buffer_flip(csi, csi->sequence++)) {
-+		dev_warn(csi->dev, "%s: Flip failed\n", __func__);
-+		csi_capture_stop(csi);
-+	}
-+	spin_unlock(&csi->qlock);
-+
-+out:
-+	return IRQ_HANDLED;
-+}
-+
-+int sun4i_csi_dma_register(struct sun4i_csi *csi, int irq)
-+{
-+	struct vb2_queue *q = &csi->queue;
-+	int ret;
-+	int i;
-+
-+	ret = v4l2_device_register(csi->dev, &csi->v4l);
-+	if (ret) {
-+		dev_err(csi->dev, "Couldn't register the v4l2 device\n");
-+		return ret;
-+	}
-+
-+	spin_lock_init(&csi->qlock);
-+	mutex_init(&csi->lock);
-+
-+	INIT_LIST_HEAD(&csi->buf_list);
-+	for (i = 0; i < CSI_MAX_BUFFER; i++)
-+		csi->current_buf[i] = NULL;
-+
-+	q->min_buffers_needed = 3;
-+	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE;
-+	q->io_modes = VB2_MMAP;
-+	q->lock = &csi->lock;
-+	q->drv_priv = csi;
-+	q->buf_struct_size = sizeof(struct csi_buffer);
-+	q->ops = &csi_qops;
-+	q->mem_ops = &vb2_dma_contig_memops;
-+	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-+	q->dev = csi->dev;
-+
-+	ret = vb2_queue_init(q);
-+	if (ret < 0) {
-+		dev_err(csi->dev, "failed to initialize VB2 queue\n");
-+		return ret;
-+	}
-+
-+	ret = devm_request_irq(csi->dev, irq, csi_irq, 0,
-+			       dev_name(csi->dev), csi);
-+	if (ret) {
-+		dev_err(csi->dev, "Couldn't register our interrupt\n");
-+		vb2_queue_release(q);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+void sun4i_csi_dma_unregister(struct sun4i_csi *csi)
-+{
-+	v4l2_device_unregister(&csi->v4l);
-+}
-+
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-new file mode 100644
-index 000000000000..ffeaf9a1cd0e
---- /dev/null
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-@@ -0,0 +1,300 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Copyright (C) 2016 NextThing Co
-+ * Copyright (C) 2016-2019 Bootlin
-+ *
-+ * Author: Maxime Ripard <maxime.ripard@bootlin.com>
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/pm_runtime.h>
-+
-+#include <media/v4l2-ioctl.h>
-+#include <media/v4l2-mc.h>
-+#include <media/videobuf2-v4l2.h>
-+
-+#include "sun4i_csi.h"
-+
-+#define CSI_DEFAULT_FORMAT	V4L2_PIX_FMT_YUV420M
-+#define CSI_DEFAULT_WIDTH	640
-+#define CSI_DEFAULT_HEIGHT	480
-+
-+#define CSI_MAX_HEIGHT		8192U
-+#define CSI_MAX_WIDTH		8192U
-+
-+static const struct sun4i_csi_format csi_formats[] = {
-+	/* YUV422 inputs */
-+	{
-+		.mbus		= MEDIA_BUS_FMT_YUYV8_2X8,
-+		.fourcc		= V4L2_PIX_FMT_YUV420M,
-+		.input		= CSI_INPUT_YUV,
-+		.output		= CSI_OUTPUT_YUV_420_PLANAR,
-+		.num_planes	= 3,
-+		.bpp		= { 8, 8, 8 },
-+		.hsub		= 2,
-+		.vsub		= 2,
-+	},
-+};
-+
-+static const struct sun4i_csi_format *
-+csi_get_format_by_fourcc(struct sun4i_csi *csi, u32 fourcc)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(csi_formats); i++)
-+		if (csi_formats[i].fourcc == fourcc)
-+			return &csi_formats[i];
-+
-+	return NULL;
-+}
-+
-+static int csi_querycap(struct file *file, void *priv,
-+			struct v4l2_capability *cap)
-+{
-+	struct sun4i_csi *csi = video_drvdata(file);
-+
-+	strscpy(cap->driver, KBUILD_MODNAME, sizeof(cap->driver));
-+	strscpy(cap->card, "sun4i-csi", sizeof(cap->card));
-+	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s",
-+		 dev_name(csi->dev));
-+
-+	return 0;
-+}
-+
-+static int csi_enum_input(struct file *file, void *priv,
-+			  struct v4l2_input *inp)
-+{
-+	if (inp->index != 0)
-+		return -EINVAL;
-+
-+	inp->type = V4L2_INPUT_TYPE_CAMERA;
-+	strscpy(inp->name, "Camera", sizeof(inp->name));
-+
-+	return 0;
-+}
-+
-+static int csi_g_input(struct file *file, void *fh,
-+		       unsigned int *i)
-+{
-+	*i = 0;
-+
-+	return 0;
-+}
-+
-+static int csi_s_input(struct file *file, void *fh,
-+		       unsigned int i)
-+{
-+	if (i != 0)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static void _csi_try_fmt(struct sun4i_csi *csi,
-+			 struct v4l2_pix_format_mplane *pix,
-+			 const struct sun4i_csi_format **fmt)
-+{
-+	const struct sun4i_csi_format *_fmt;
-+	unsigned int width = pix->width;
-+	unsigned int height = pix->height;
-+	unsigned int i;
-+
-+	_fmt = csi_get_format_by_fourcc(csi, pix->pixelformat);
-+	if (!_fmt)
-+		_fmt = csi_get_format_by_fourcc(csi, csi_formats[0].fourcc);
-+
-+	pix->field = V4L2_FIELD_NONE;
-+	pix->colorspace = V4L2_COLORSPACE_SRGB;
-+	pix->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(pix->colorspace);
-+	pix->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(pix->colorspace);
-+	pix->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(true, pix->colorspace,
-+							  pix->ycbcr_enc);
-+
-+	pix->num_planes = _fmt->num_planes;
-+	pix->pixelformat = _fmt->fourcc;
-+
-+	memset(pix->reserved, 0, sizeof(pix->reserved));
-+
-+	/* Align the width and height on the subsampling */
-+	width = ALIGN(width, _fmt->hsub);
-+	height = ALIGN(height, _fmt->vsub);
-+
-+	/* Clamp the width and height to our capabilities */
-+	pix->width = clamp(width, _fmt->hsub, CSI_MAX_WIDTH);
-+	pix->height = clamp(height, _fmt->vsub, CSI_MAX_HEIGHT);
-+
-+	for (i = 0; i < _fmt->num_planes; i++) {
-+		unsigned int hsub = i > 0 ? _fmt->hsub : 1;
-+		unsigned int vsub = i > 0 ? _fmt->vsub : 1;
-+		unsigned int bpl;
-+
-+		bpl = pix->width / hsub * _fmt->bpp[i] / 8;
-+		pix->plane_fmt[i].bytesperline = bpl;
-+		pix->plane_fmt[i].sizeimage = bpl * pix->height / vsub;
-+		memset(pix->plane_fmt[i].reserved, 0,
-+		       sizeof(pix->plane_fmt[i].reserved));
-+	}
-+
-+	if (fmt)
-+		*fmt = _fmt;
-+}
-+
-+static int csi_try_fmt_vid_cap(struct file *file, void *priv,
-+			       struct v4l2_format *f)
-+{
-+	struct sun4i_csi *csi = video_drvdata(file);
-+
-+	_csi_try_fmt(csi, &f->fmt.pix_mp, NULL);
-+	return 0;
-+}
-+
-+static int csi_s_fmt_vid_cap(struct file *file, void *priv,
-+			     struct v4l2_format *f)
-+{
-+	const struct sun4i_csi_format *fmt;
-+	struct sun4i_csi *csi = video_drvdata(file);
-+
-+	_csi_try_fmt(csi, &f->fmt.pix_mp, &fmt);
-+	csi->v_fmt = f->fmt.pix_mp;
-+	csi->p_fmt = fmt;
-+
-+	return 0;
-+}
-+
-+static int csi_g_fmt_vid_cap(struct file *file, void *priv,
-+			     struct v4l2_format *f)
-+{
-+	struct sun4i_csi *csi = video_drvdata(file);
-+
-+	f->fmt.pix_mp = csi->v_fmt;
-+
-+	return 0;
-+}
-+
-+static int csi_enum_fmt_vid_cap(struct file *file, void *priv,
-+				struct v4l2_fmtdesc *f)
-+{
-+	if (f->index >= ARRAY_SIZE(csi_formats))
-+		return -EINVAL;
-+
-+	f->pixelformat = csi_formats[f->index].fourcc;
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ioctl_ops csi_ioctl_ops = {
-+	.vidioc_querycap	= csi_querycap,
-+
-+	.vidioc_enum_fmt_vid_cap_mplane	= csi_enum_fmt_vid_cap,
-+	.vidioc_g_fmt_vid_cap_mplane	= csi_g_fmt_vid_cap,
-+	.vidioc_s_fmt_vid_cap_mplane	= csi_s_fmt_vid_cap,
-+	.vidioc_try_fmt_vid_cap_mplane	= csi_try_fmt_vid_cap,
-+
-+	.vidioc_enum_input	= csi_enum_input,
-+	.vidioc_g_input		= csi_g_input,
-+	.vidioc_s_input		= csi_s_input,
-+
-+	.vidioc_reqbufs		= vb2_ioctl_reqbufs,
-+	.vidioc_create_bufs	= vb2_ioctl_create_bufs,
-+	.vidioc_querybuf	= vb2_ioctl_querybuf,
-+	.vidioc_qbuf		= vb2_ioctl_qbuf,
-+	.vidioc_dqbuf		= vb2_ioctl_dqbuf,
-+	.vidioc_expbuf		= vb2_ioctl_expbuf,
-+	.vidioc_prepare_buf	= vb2_ioctl_prepare_buf,
-+	.vidioc_streamon	= vb2_ioctl_streamon,
-+	.vidioc_streamoff	= vb2_ioctl_streamoff,
-+};
-+
-+static int csi_open(struct file *file)
-+{
-+	struct sun4i_csi *csi = video_drvdata(file);
-+	int ret;
-+
-+	ret = mutex_lock_interruptible(&csi->lock);
-+	if (ret)
-+		return ret;
-+
-+	ret = pm_runtime_get_sync(csi->dev);
-+	if (ret < 0)
-+		goto err_pm_put;
-+
-+	ret = v4l2_pipeline_pm_use(&csi->vdev.entity, 1);
-+	if (ret)
-+		goto err_pm_put;
-+
-+	ret = v4l2_fh_open(file);
-+	if (ret)
-+		goto err_pipeline_pm_put;
-+
-+	mutex_unlock(&csi->lock);
-+
-+	return 0;
-+
-+err_pipeline_pm_put:
-+	v4l2_pipeline_pm_use(&csi->vdev.entity, 0);
-+
-+err_pm_put:
-+	pm_runtime_put(csi->dev);
-+	mutex_unlock(&csi->lock);
-+
-+	return ret;
-+}
-+
-+static int csi_release(struct file *file)
-+{
-+	struct sun4i_csi *csi = video_drvdata(file);
-+
-+	mutex_lock(&csi->lock);
-+
-+	v4l2_fh_release(file);
-+	v4l2_pipeline_pm_use(&csi->vdev.entity, 0);
-+	pm_runtime_put(csi->dev);
-+
-+	mutex_unlock(&csi->lock);
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_file_operations csi_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= csi_open,
-+	.release	= csi_release,
-+	.unlocked_ioctl	= video_ioctl2,
-+	.read		= vb2_fop_read,
-+	.write		= vb2_fop_write,
-+	.poll		= vb2_fop_poll,
-+	.mmap		= vb2_fop_mmap,
-+};
-+
-+int sun4i_csi_v4l2_register(struct sun4i_csi *csi)
-+{
-+	struct video_device *vdev = &csi->vdev;
-+	int ret;
-+
-+	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE_MPLANE | V4L2_CAP_STREAMING;
-+	vdev->v4l2_dev = &csi->v4l;
-+	vdev->queue = &csi->queue;
-+	strscpy(vdev->name, KBUILD_MODNAME, sizeof(vdev->name));
-+	vdev->release = video_device_release_empty;
-+	vdev->lock = &csi->lock;
-+
-+	/* Set a default format */
-+	csi->v_fmt.pixelformat = CSI_DEFAULT_FORMAT;
-+	csi->v_fmt.width = CSI_DEFAULT_WIDTH;
-+	csi->v_fmt.height = CSI_DEFAULT_HEIGHT;
-+	_csi_try_fmt(csi, &csi->v_fmt, NULL);
-+
-+	vdev->fops = &csi_fops;
-+	vdev->ioctl_ops = &csi_ioctl_ops;
-+	video_set_drvdata(vdev, csi);
-+
-+	ret = video_register_device(&csi->vdev, VFL_TYPE_GRABBER, -1);
-+	if (ret)
-+		return ret;
-+
-+	dev_info(csi->dev, "Device registered as %s\n",
-+		 video_device_node_name(vdev));
-+
-+	return 0;
-+}
-+
--- 
-git-series 0.9.1
+On Fri, Apr 05, 2019 at 08:03:09AM +0200, Marco Felsch wrote:
+> This patch adds the of_graph support to describe the tvp connections.
+> Physical the TVP5150 has three ports: AIP1A, AIP1B and YOUT. As result
+> of discussion [1],[2] the device-tree maps these ports 1:1. The svideo
+> connector must be conneted to port@0/endpoint@1, look at the Documentation
+> for more information. Since the TVP5150 is a converter the device-tree
+> must contain at least 1-input and 1-output port. The mc-connectors and
+> mc-links are only created if the device-tree contains the corresponding
+> connector nodes. If more than one connector is available the
+> media_entity_operations.link_setup() callback ensures that only one
+> connector is active.
+>
+> [1] https://www.spinics.net/lists/linux-media/msg138545.html
+> [2] https://www.spinics.net/lists/linux-media/msg138546.html
+>
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> ---
+> Changelog:
+>
+> [1] https://patchwork.kernel.org/cover/10794703/
+> [2] https://patchwork.kernel.org/cover/10786553/
+>
+> v5:
+> - Fixing build deps:
+>   - tvp5150_mc_init: fix CONFIG_MEDIA_CONTROLLER deps
+>   - struct tvp5150: drop CONFIG_MEDIA_CONTROLLER conditional property
+>     includes. This leads into to complex deps for futher development.
+>   - tvp5150_dt_cleanup: enable function only if CONFIG_OF is enabled
+>   - tvp5150_parse_dt: enable function only if CONFIG_OF is enabled
+>   - tvp5150_probe: call tvp5150_dt_cleanup only if CONFIG_OF is enabled
+>
+> - Simplify link_setup routine:
+>   - use generic connector parsing since both series [1,2] are squashed into
+>     one
+>   - struct tvp5150: drop pads_state and modify_second_link property
+>     due to link_setup() rework.
+>   - tvp5150_link_setup: add more comments
+>   - tvp5150_link_setup: simply the link setup routine a lot. Edit the 2nd
+>     link directly within the driver instead of a recursive media-framework
+>     call (__media_entity_setup_link). This improves the readability and
+>     shrinks the driver code.
+>   - tvp5150_link_setup: disable all active links in case user switches
+>     connectors without disable it first.
+>   - tvp5150_registered: simplify default link enable path due to link_setup()
+>     rework.
+>
+> - General cleanups
+>   - tvp5150_parse_dt: drop unecessary test
+>   - tvp5150_parse_dt: add err message due to misconfiguration
+>   - tvp5150_parse_dt: make use of V4L2_MBUS_UNKNOWN definition
+>   - s/dev_dbg/dev_dbg_lvl
+>
+
+Great, this looks much nicer!
+
+> v4:
+>  - rebase on top of media_tree/master, fix merge conflict due to commit
+>    60359a28d592 ("media: v4l: fwnode: Initialise the V4L2 fwnode endpoints
+>    to zero")
+>
+> v3:
+> - probe(): s/err/err_free_v4l2_ctrls
+> - drop MC dependency for tvp5150_pads
+>
+> v2:
+> - adapt commit message
+> - unify ifdef switches
+> - rename tvp5150_valid_input -> tvp5150_of_valid_input, to be more precise
+> - mc: use 2-input and 1-output pad
+> - mc: link svideo connector to both input pads
+> - mc: enable/disable svideo links in one go
+> - mc: change link_setup() behaviour, switch the input src don't require a
+>       explicite disable before.
+> - mc: rename 'local' media_pad param to tvp5150_pad to avoid confusion
+> - mc: enable link to the first available connector and set the
+>       corresponding tvp5150 input src per default during registered()
+> - mc/of: factor out oftree connector allocation
+> - of: drop svideo dt port
+> - of: move svideo connector to port@0/endpoint@1
+> - of: require at least 1-in and 1-out endpoint
+>
+>  drivers/media/i2c/tvp5150.c | 408 ++++++++++++++++++++++++++++++++----
+>  1 file changed, 368 insertions(+), 40 deletions(-)
+>
+> diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+> index 89da921c8886..91504fddb551 100644
+> --- a/drivers/media/i2c/tvp5150.c
+> +++ b/drivers/media/i2c/tvp5150.c
+> @@ -44,16 +44,29 @@ MODULE_PARM_DESC(debug, "Debug level (0-2)");
+>  #define dprintk0(__dev, __arg...) dev_dbg_lvl(__dev, 0, 0, __arg)
+>
+>  enum tvp5150_pads {
+> -	TVP5150_PAD_IF_INPUT,
+> +	TVP5150_PAD_AIP1A = TVP5150_COMPOSITE0,
+> +	TVP5150_PAD_AIP1B,
+>  	TVP5150_PAD_VID_OUT,
+>  	TVP5150_NUM_PADS
+>  };
+>
+> +struct tvp5150_connector {
+> +	struct v4l2_fwnode_connector base;
+> +	struct media_entity ent;
+> +	struct media_pad pad;
+> +};
+> +
+>  struct tvp5150 {
+>  	struct v4l2_subdev sd;
+> -#ifdef CONFIG_MEDIA_CONTROLLER
+> +	/* additional additional endpoint for the svideo connector */
+
+s/additional additional/additional/
+
+> +	struct device_node *endpoints[TVP5150_NUM_PADS + 1];
+> +	unsigned int endpoints_num;
+> +
+> +	/* media-ctl properties */
+>  	struct media_pad pads[TVP5150_NUM_PADS];
+> -#endif
+> +	struct tvp5150_connector *connectors;
+> +	int connectors_num;
+> +
+>  	struct v4l2_ctrl_handler hdl;
+>  	struct v4l2_rect rect;
+>  	struct regmap *regmap;
+> @@ -1167,6 +1180,129 @@ static int tvp5150_enum_frame_size(struct v4l2_subdev *sd,
+>  	return 0;
+>  }
+>
+> +/****************************************************************************
+> + *			Media entity ops
+> + ****************************************************************************/
+> +#if defined(CONFIG_MEDIA_CONTROLLER)
+> +static int tvp5150_set_link(struct media_pad *connector_pad,
+> +			    struct media_pad *tvp5150_pad, u32 flags)
+> +{
+> +	struct media_link *link;
+> +
+> +	link = media_entity_find_link(connector_pad, tvp5150_pad);
+> +	if (!link)
+> +		return -EINVAL;
+> +
+> +	link->flags = flags;
+> +	link->reverse->flags = link->flags;
+> +
+> +	return 0;
+> +}
+> +
+> +static int tvp5150_disable_all_input_links(struct tvp5150 *decoder)
+> +{
+> +	struct media_pad *connector_pad;
+> +	int i, err;
+
+i can be unsigned here
+
+> +
+> +	for (i = 0; i < TVP5150_NUM_PADS - 1; i++) {
+> +		connector_pad = media_entity_remote_pad(&decoder->pads[i]);
+> +		if (!connector_pad)
+> +			continue;
+> +
+> +		err = tvp5150_set_link(connector_pad, &decoder->pads[i], 0);
+> +		if (err)
+> +			return err;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int tvp5150_s_routing(struct v4l2_subdev *sd, u32 input, u32 output,
+> +			     u32 config);
+> +
+> +static int tvp5150_link_setup(struct media_entity *entity,
+> +			      const struct media_pad *tvp5150_pad,
+> +			      const struct media_pad *remote, u32 flags)
+> +{
+> +	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
+> +	struct tvp5150 *decoder = to_tvp5150(sd);
+> +	struct media_pad *other_tvp5150_pad =
+> +		&decoder->pads[tvp5150_pad->index ^ 1];
+> +	bool is_svideo = false;
+> +	int i, err;
+
+i can be unsigned
+
+> +
+> +	/*
+> +	 * The TVP5150 state is determined by the enabled sink pad link(s).
+> +	 * Enabling or disabling the source pad link has no effect.
+> +	 */
+> +	if (tvp5150_pad->flags & MEDIA_PAD_FL_SOURCE)
+> +		return 0;
+> +
+> +	/* Check if the svideo connector should be enabled */
+> +	for (i = 0; i < decoder->connectors_num; i++) {
+> +		if (remote->entity == &decoder->connectors[i].ent) {
+> +			is_svideo =
+> +			   decoder->connectors[i].base.type == V4L2_CON_SVIDEO;
+> +			break;
+> +		}
+> +	}
+> +
+> +	dev_dbg_lvl(sd->dev, 1, debug, "link setup '%s':%d->'%s':%d[%d]",
+> +		    remote->entity->name, remote->index,
+> +		    tvp5150_pad->entity->name, tvp5150_pad->index,
+> +		    flags & MEDIA_LNK_FL_ENABLED);
+> +	if (is_svideo)
+> +		dev_dbg_lvl(sd->dev, 1, debug,
+> +			    "link setup '%s':%d->'%s':%d[%d]",
+> +			    remote->entity->name, remote->index,
+> +			    other_tvp5150_pad->entity->name,
+> +			    other_tvp5150_pad->index,
+> +			    flags & MEDIA_LNK_FL_ENABLED);
+> +
+> +	/*
+> +	 * The TVP5150 has a internal mux which allows the following setup:
+
+an internal
+
+> +	 *
+> +	 * comp-connector1  --\
+> +	 *		       |---> AIP1A
+> +	 *		      /
+> +	 * svideo-connector -|
+> +	 *		      \
+> +	 *		       |---> AIP1B
+> +	 * comp-connector2  --/
+> +	 *
+> +	 * We can't rely on user space that the current connector gets disabled
+> +	 * first before enabling the new connector. Disable all active
+> +	 * connector links to be on the safe side.
+> +	 */
+> +	err = tvp5150_disable_all_input_links(decoder);
+> +	if (err)
+> +		return err;
+
+Not sure here... I think you should refuse, say, to enable
+comp-connector2->AIP1B if S_VIDEO is enabled on AIP1A, or maybe that's not
+possible, as you have a single linke to AIP1B... Another example: you
+should refuse to enable comp-connector1->AIP1A if
+svideo-connector->AIP1A is enabled. These are two distinct links, so
+this should be possible. Am I wrong?
+
+> +
+> +	tvp5150_s_routing(sd, is_svideo ? TVP5150_SVIDEO : tvp5150_pad->index,
+> +			  flags & MEDIA_LNK_FL_ENABLED ? TVP5150_NORMAL :
+> +			  TVP5150_BLACK_SCREEN, 0);
+> +
+> +	if (flags & MEDIA_LNK_FL_ENABLED) {
+> +		/*
+> +		 * S-Video connector is conneted to both ports AIP1A and AIP1B.
+> +		 * Both links must be enabled in one-shot regardless which link
+> +		 * the user requests.
+> +		 */
+> +		if (is_svideo) {
+> +			err = tvp5150_set_link((struct media_pad *) remote,
+> +					       other_tvp5150_pad, flags);
+> +			if (err)
+> +				return err;
+> +		}
+> +	}
+
+This is much much nicer than v4! Great job!
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct media_entity_operations tvp5150_sd_media_ops = {
+> +	.link_setup = tvp5150_link_setup,
+> +};
+> +#endif
+>  /****************************************************************************
+>  			I2C Command
+>   ****************************************************************************/
+> @@ -1314,6 +1450,65 @@ static int tvp5150_g_tuner(struct v4l2_subdev *sd, struct v4l2_tuner *vt)
+>  	return 0;
+>  }
+>
+> +static int tvp5150_registered(struct v4l2_subdev *sd)
+> +{
+> +#if defined(CONFIG_MEDIA_CONTROLLER)
+
+I wonder if it wouldn't make more sense to select MEDIA_CONTROLLER...
+How do you configure the device without MC, since I haven't seen support for
+platform data?
+
+> +	struct tvp5150 *decoder = to_tvp5150(sd);
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	/*
+> +	 * Setup connector pads and links. Enable the link to the first
+> +	 * available connector per default.
+> +	 */
+> +	for (i = 0; i < decoder->connectors_num; i++) {
+> +		struct media_entity *con = &decoder->connectors[i].ent;
+> +		struct media_pad *pad = &decoder->connectors[i].pad;
+> +		unsigned int port = decoder->connectors[i].base.remote_port;
+> +		bool is_svideo =
+> +			decoder->connectors[i].base.type == V4L2_CON_SVIDEO;
+> +		int flags = i ? 0 : MEDIA_LNK_FL_ENABLED;
+> +
+> +		pad->flags = MEDIA_PAD_FL_SOURCE;
+> +		ret = media_entity_pads_init(con, 1, pad);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = media_device_register_entity(sd->v4l2_dev->mdev, con);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = media_create_pad_link(con, 0, &sd->entity, port, flags);
+> +		if (ret < 0) {
+> +			media_device_unregister_entity(con);
+> +			return ret;
+> +		}
+> +
+> +		if (is_svideo) {
+> +			/* svideo links to both aip1a and aip1b */
+> +			ret = media_create_pad_link(con, 0, &sd->entity,
+> +						    port + 1, flags);
+> +			if (ret < 0) {
+> +				media_device_unregister_entity(con);
+> +				return ret;
+> +			}
+> +		}
+> +
+> +		/* enable default input */
+> +		if (flags == MEDIA_LNK_FL_ENABLED) {
+> +			decoder->input =
+> +				is_svideo ? TVP5150_SVIDEO :
+> +				port == 0 ? TVP5150_COMPOSITE0 :
+> +				TVP5150_COMPOSITE1;
+> +
+> +			tvp5150_selmux(sd);
+> +		}
+> +	}
+> +#endif
+> +	return 0;
+> +}
+> +
+> +
+>  /* ----------------------------------------------------------------------- */
+>
+>  static const struct v4l2_ctrl_ops tvp5150_ctrl_ops = {
+> @@ -1367,6 +1562,10 @@ static const struct v4l2_subdev_ops tvp5150_ops = {
+>  	.pad = &tvp5150_pad_ops,
+>  };
+>
+> +static const struct v4l2_subdev_internal_ops tvp5150_internal_ops = {
+> +	.registered = tvp5150_registered,
+> +};
+> +
+>  /****************************************************************************
+>  			I2C Client & Driver
+>   ****************************************************************************/
+> @@ -1515,38 +1714,171 @@ static int tvp5150_init(struct i2c_client *c)
+>  	return 0;
+>  }
+>
+> -static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
+> +#if defined(CONFIG_MEDIA_CONTROLLER)
+> +static int tvp5150_add_of_connectors(struct tvp5150 *decoder)
+>  {
+> -	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
+> -	struct device_node *ep;
+> -	unsigned int flags;
+> -	int ret = 0;
+> +	struct device *dev = decoder->sd.dev;
+> +	struct tvp5150_connector *connectors;
+> +	unsigned int connectors_num = decoder->connectors_num;
+> +	int i, ret;
+> +
+> +	/* Allocate and initialize all available input connectors */
+> +	connectors = devm_kcalloc(dev, connectors_num, sizeof(*connectors),
+> +				  GFP_KERNEL);
+> +	if (!connectors)
+> +		return -ENOMEM;
+>
+> -	ep = of_graph_get_next_endpoint(np, NULL);
+> -	if (!ep)
+> -		return -EINVAL;
+> +	for (i = 0; i < connectors_num; i++) {
+> +		struct v4l2_fwnode_connector *c = &connectors[i].base;
+>
+> -	ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep), &bus_cfg);
+> -	if (ret)
+> -		goto err;
+> +		ret = v4l2_fwnode_parse_connector(
+> +				   of_fwnode_handle(decoder->endpoints[i]), c);
+> +
+> +		connectors[i].ent.flags = MEDIA_ENT_FL_CONNECTOR;
+> +		connectors[i].ent.function = c->type == V4L2_CON_SVIDEO ?
+> +			MEDIA_ENT_F_CONN_SVIDEO : MEDIA_ENT_F_CONN_COMPOSITE;
+> +		connectors[i].ent.name = c->label;
+
+This is a bit of a duplication of what you're doing at parse_dt time,
+where you parse_connector() already. I guess you do this in two steps
+because you need to count connectors first, as you allocate their
+descriptor structure dynamically.
+
+Have you considered allocating them statically (it's up to 4
+connectors, not a big waste) and populate them at parse_dt time? (you
+could re-alloc too, but let's not consider that for now).
+
+Bonus point, if you parse_dt() then CONFIG_OF is enabled, and you can
+save the
+        if (IS_ENABLED(CONFIG_OF))
+		ret = tvp5150_add_of_connectors(decoder);
+
+you now have in tvp5150_mc_init()
+
+
+> +	}
+> +
+> +	decoder->connectors = connectors;
+>
+> -	flags = bus_cfg.bus.parallel.flags;
+> +	return 0;
+> +}
+> +#endif
+>
+> -	if (bus_cfg.bus_type == V4L2_MBUS_PARALLEL &&
+> -	    !(flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH &&
+> -	      flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH &&
+> -	      flags & V4L2_MBUS_FIELD_EVEN_LOW)) {
+> +static int tvp5150_mc_init(struct v4l2_subdev *sd)
+> +{
+> +#if defined(CONFIG_MEDIA_CONTROLLER)
+> +	struct tvp5150 *decoder = to_tvp5150(sd);
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	sd->entity.ops = &tvp5150_sd_media_ops;
+> +	sd->entity.function = MEDIA_ENT_F_ATV_DECODER;
+> +
+> +	/* Initialize all TVP5150 pads */
+> +	for (i = 0; i < TVP5150_NUM_PADS; i++) {
+> +		if (i < TVP5150_NUM_PADS - 1) {
+> +			decoder->pads[i].flags = MEDIA_PAD_FL_SINK;
+> +			decoder->pads[i].sig_type = PAD_SIGNAL_ANALOG;
+> +		} else {
+> +			decoder->pads[i].flags = MEDIA_PAD_FL_SOURCE;
+> +			decoder->pads[i].sig_type = PAD_SIGNAL_DV;
+> +		}
+> +	}
+> +	ret = media_entity_pads_init(&sd->entity, TVP5150_NUM_PADS,
+> +				     decoder->pads);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	if (IS_ENABLED(CONFIG_OF))
+> +		ret = tvp5150_add_of_connectors(decoder);
+> +out:
+> +	return ret;
+> +#else
+> +	return 0;
+> +#endif
+
+This would really read better as:
+
+#if defined(CONFIG_MEDIA_CONTROLLER)
+static int tvp5150_mc_init(struct v4l2_subdev *sd)
+{
+        ...
+
+}
+static int tvp5150_mc_init(struct v4l2_subdev *sd)
+{
+        ....
+}
+#else /* defined(CONFIG_MEDIA_CONTROLLER) */
+static int tvp5150_mc_init(struct v4l2_subdev *sd)
+{
+        return 0;
+}
+static int tvp5150_mc_init(struct v4l2_subdev *sd)
+{
+        return 0;
+}
+#endif /* defined(CONFIG_MEDIA_CONTROLLER) */
+
+> +}
+> +
+> +#if defined(CONFIG_OF)
+
+Do you need this? I tried compiling with OF support disabled and this
+#if guard removed and all went fine. After all, all calls to parse_dt
+and dt_cleanup are already guarded by an IS_ENABLED(CONFIG_OF)
+
+> +static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
+> +{
+> +	struct device *dev = decoder->sd.dev;
+> +	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = V4L2_MBUS_UNKNOWN };
+> +	struct v4l2_fwnode_connector c;
+
+Could you declare this inside the for loop?
+
+> +	struct device_node *ep_np;
+> +	unsigned int flags;
+> +	int ret, i = 0, in = 0;
+
+i and in could be unsigned
+
+> +	bool found = false;
+> +
+> +	/* at least 1 output and 1 input */
+> +	decoder->endpoints_num = of_graph_get_endpoint_count(np);
+> +	if (decoder->endpoints_num < 2 || decoder->endpoints_num > 4) {
+> +		dev_err(dev, "At least 1 input and 1 output must be connected to the device.\n");
+>  		ret = -EINVAL;
+>  		goto err;
+>  	}
+>
+> -	decoder->mbus_type = bus_cfg.bus_type;
+> +	for_each_endpoint_of_node(np, ep_np) {
+> +		struct of_endpoint ep;
+> +
+> +		of_graph_parse_endpoint(ep_np, &ep);
+> +		switch (ep.port) {
+> +			/* fall through */
+
+Move this below the case please
+
+> +		case TVP5150_PAD_AIP1A:
+> +		case TVP5150_PAD_AIP1B:
+> +			ret = v4l2_fwnode_parse_connector(
+> +						   of_fwnode_handle(ep_np), &c);
+> +			if (c.type != V4L2_CON_COMPOSITE &&
+> +			    c.type != V4L2_CON_SVIDEO) {
+> +				dev_err(dev,
+> +					"Invalid endpoint %d on port %d\n",
+> +					c.remote_id, c.remote_port);
+> +				ret = -EINVAL;
+> +				goto err;
+> +			}
+> +			in++;
+> +			break;
+> +		case TVP5150_PAD_VID_OUT:
+> +			ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(ep_np),
+> +							 &bus_cfg);
+> +			if (ret)
+> +				goto err;
+> +
+> +			flags = bus_cfg.bus.parallel.flags;
+> +
+> +			if (bus_cfg.bus_type == V4L2_MBUS_PARALLEL &&
+> +			    !(flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH &&
+> +			      flags & V4L2_MBUS_VSYNC_ACTIVE_HIGH &&
+> +			      flags & V4L2_MBUS_FIELD_EVEN_LOW)) {
+> +				ret = -EINVAL;
+> +				goto err;
+> +			}
+> +
+> +			decoder->mbus_type = bus_cfg.bus_type;
+> +			break;
+> +		default:
+> +			dev_err(dev, "Invalid port %d for endpoint %pOF\n",
+> +				ep.port, ep.local_node);
+> +			ret = -EINVAL;
+> +			goto err;
+> +		}
+> +
+> +		of_node_get(ep_np);
+> +		decoder->endpoints[i] = ep_np;
+> +		i++;
+>
+> +		found = true;
+> +	}
+> +
+> +	decoder->connectors_num = in;
+> +	return found ? 0 : -ENODEV;
+>  err:
+> -	of_node_put(ep);
+>  	return ret;
+>  }
+>
+> +static void tvp5150_dt_cleanup(struct tvp5150 *decoder)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < TVP5150_NUM_PADS; i++)
+> +		of_node_put(decoder->endpoints[i]);
+> +}
+> +
+> +#else /* !defined(CONFIG_OF) */
+> +
+> +static inline int
+> +tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline void tvp5150_dt_cleanup(struct tvp5150 *decoder)
+> +{
+> +
+> +}
+> +#endif
+> +
+>  static const char * const tvp5150_test_patterns[2] = {
+>  	"Disabled",
+>  	"Black screen"
+> @@ -1585,7 +1917,7 @@ static int tvp5150_probe(struct i2c_client *c,
+>  		res = tvp5150_parse_dt(core, np);
+>  		if (res) {
+>  			dev_err(sd->dev, "DT parsing error: %d\n", res);
+> -			return res;
+> +			goto err_cleanup_dt;
+>  		}
+>  	} else {
+>  		/* Default to BT.656 embedded sync */
+> @@ -1593,25 +1925,16 @@ static int tvp5150_probe(struct i2c_client *c,
+>  	}
+>
+>  	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
+> +	sd->internal_ops = &tvp5150_internal_ops;
+>  	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+>
+> -#if defined(CONFIG_MEDIA_CONTROLLER)
+> -	core->pads[TVP5150_PAD_IF_INPUT].flags = MEDIA_PAD_FL_SINK;
+> -	core->pads[TVP5150_PAD_IF_INPUT].sig_type = PAD_SIGNAL_ANALOG;
+> -	core->pads[TVP5150_PAD_VID_OUT].flags = MEDIA_PAD_FL_SOURCE;
+> -	core->pads[TVP5150_PAD_VID_OUT].sig_type = PAD_SIGNAL_DV;
+> -
+> -	sd->entity.function = MEDIA_ENT_F_ATV_DECODER;
+> -
+> -	res = media_entity_pads_init(&sd->entity, TVP5150_NUM_PADS, core->pads);
+> -	if (res < 0)
+> -		return res;
+> -
+> -#endif
+> +	res = tvp5150_mc_init(sd);
+> +	if (res)
+> +		goto err_cleanup_dt;
+>
+>  	res = tvp5150_detect_version(core);
+>  	if (res < 0)
+> -		return res;
+> +		goto err_cleanup_dt;
+>
+>  	core->norm = V4L2_STD_ALL;	/* Default is autodetect */
+>  	core->detected_norm = V4L2_STD_UNKNOWN;
+> @@ -1637,7 +1960,7 @@ static int tvp5150_probe(struct i2c_client *c,
+>  	sd->ctrl_handler = &core->hdl;
+>  	if (core->hdl.error) {
+>  		res = core->hdl.error;
+> -		goto err;
+> +		goto err_free_v4l2_ctrls;
+>  	}
+>
+>  	tvp5150_set_default(tvp5150_read_std(sd), &core->rect);
+> @@ -1649,19 +1972,24 @@ static int tvp5150_probe(struct i2c_client *c,
+>  						tvp5150_isr, IRQF_TRIGGER_HIGH |
+>  						IRQF_ONESHOT, "tvp5150", core);
+>  		if (res)
+> -			goto err;
+> +			goto err_free_v4l2_ctrls;
+>  	}
+>
+>  	res = v4l2_async_register_subdev(sd);
+>  	if (res < 0)
+> -		goto err;
+> +		goto err_free_v4l2_ctrls;
+>
+>  	if (debug > 1)
+>  		tvp5150_log_status(sd);
+> +
+>  	return 0;
+>
+> -err:
+> +err_free_v4l2_ctrls:
+>  	v4l2_ctrl_handler_free(&core->hdl);
+> +err_cleanup_dt:
+> +	if (IS_ENABLED(CONFIG_OF) && np)
+
+is there any case where CONFIG_OF is enabled and dev->of_node might be
+NULL ? How did the driver probed in first place if that was the case.
+
+I made to the end of this big patch :p quite a nice one!
+Thanks
+  j
+
+> +		tvp5150_dt_cleanup(core);
+> +
+>  	return res;
+>  }
+>
+> --
+> 2.20.1
+>
+
+--tucdy2bkrl2o4mp2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlynahYACgkQcjQGjxah
+VjxPkA//Tl0gHVPEoGBVcpXOsPdu26F4py6Vzl1i0Fw9UGE8BpHGWu5T52uGeYUw
+7PgGeZMbOOhm2EPk1XGobIdeD8mcICJjUJn2T+23s9rcWlpgrXarJK0Qnz1oEyZK
+xym/75frlOKKYMDXM6qTGuj8xXPBakJoNsve7FC+xhuf0QiH4mlgZJAdgglaC/4K
+F1Y2GYVMnJt30Aap3nb2HyjJJCpZXd5TAPtBCK3xynse+b1e2J0yDPaQj8onNZ6h
+KfWYkT2Q/i7//alxEK+KZISRTKLLD8q82yy8Hgnrh5weiBAzxelTxkcJok7YXxQ/
+c5ktysAepbP3MFlGbUKzghdHln3lTg6Gqg0/zRjf3ttT6nqFQwr0bdojKj1BSKLh
+Hq0NJbiM5R9jQsRHllTKj/YzqmlC5J33Lf2hZSNg6NIb2ysz5FWzkkXo4/2YTfmK
+zlW5FWvlLsrbZmVNQusMJ+80P6NlZoyiuzhGd5nJGTTiyiPckuSKK14XV7aXIwAr
+3jmcECL2/YrJk/hwSfI3/l9oYhDWG+g3ObgQel8XOJNP65lIqhQFVXgJCMnunJYd
+SVZaVsaINoTSIz4u0pwECts2RqLU7Rbjy3yjNs0+O/zePn92A6UHcS+xOs65woky
+LzZEDpuQ96MjaTIBUg+anEtYFccJ1PcmDtfnAGPsCHBa/0bEPBM=
+=i6xM
+-----END PGP SIGNATURE-----
+
+--tucdy2bkrl2o4mp2--
