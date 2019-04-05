@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6593C4360F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF152C10F0F
 	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:41:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 83F4021738
+	by mail.kernel.org (Postfix) with ESMTP id A712021850
 	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 09:41:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730625AbfDEJle (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 05:41:34 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:40220 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730587AbfDEJlc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S1730609AbfDEJlc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 5 Apr 2019 05:41:32 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:40182 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730544AbfDEJlb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 5 Apr 2019 05:41:31 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1001])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id B8ABE634C8C;
-        Fri,  5 Apr 2019 12:40:46 +0300 (EEST)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 5F61F634C85;
+        Fri,  5 Apr 2019 12:40:45 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, niklas.soderlund@ragnatech.se,
         laurent.pinchart@ideasonboard.com
-Subject: [PATCH 9/9] ipu3-cio2: Parse information from firmware without using callbacks
-Date:   Fri,  5 Apr 2019 12:41:27 +0300
-Message-Id: <20190405094127.18975-11-sakari.ailus@linux.intel.com>
+Subject: [PATCH 3/9] v4l2-async: Get fwnode reference when putting it to the notifier's list
+Date:   Fri,  5 Apr 2019 12:41:21 +0300
+Message-Id: <20190405094127.18975-5-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20190405094127.18975-1-sakari.ailus@linux.intel.com>
 References: <20190405094127.18975-1-sakari.ailus@linux.intel.com>
@@ -37,169 +37,238 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of using the convenience function
-v4l2_async_notifier_parse_fwnode_endpoints(), parse the endpoints and set
-up the async sub-devices without using callbacks. While this adds a little
-bit of code, it makes parsing the endpoints quite a bit more simple and
-gives more control to the driver over the process. The parsing assumes
-D-PHY instead of letting the V4L2 fwnode framework guess it.
+The v4l2_async_notifier_add_fwnode_subdev() did not take a reference of
+the added fwnode, relying on the caller to handle that instead, in essence
+putting the fwnode to be added if there was an error.
+
+As the reference is eventually released during the notifier cleanup, this
+is not intuitive nor logical. Improve this by always getting a reference
+when the function succeeds, and the caller releasing the reference when it
+does not *itself* need it anymore.
+
+Luckily, perhaps, there were just a handful of callers using the function.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/pci/intel/ipu3/ipu3-cio2.c | 92 +++++++++++++++++---------------
- 1 file changed, 49 insertions(+), 43 deletions(-)
+ drivers/media/platform/am437x/am437x-vpfe.c   |  5 ++---
+ drivers/media/platform/davinci/vpif_capture.c | 16 ++++++++--------
+ drivers/media/platform/qcom/camss/camss.c     |  2 +-
+ drivers/media/platform/xilinx/xilinx-vipp.c   |  2 +-
+ drivers/media/v4l2-core/v4l2-async.c          |  3 ++-
+ drivers/media/v4l2-core/v4l2-fwnode.c         | 24 ++++++------------------
+ include/media/v4l2-async.h                    |  5 +++--
+ 7 files changed, 23 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index 6fa995687314..510b7769e5aa 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -1475,36 +1475,51 @@ static const struct v4l2_async_notifier_operations cio2_async_ops = {
- 	.complete = cio2_notifier_complete,
- };
- 
--static int cio2_fwnode_parse(struct device *dev,
--			     struct v4l2_fwnode_endpoint *vep,
--			     struct v4l2_async_subdev *asd)
-+static int cio2_parse_firmware(struct cio2_device *cio2)
- {
--	struct sensor_async_subdev *s_asd =
--			container_of(asd, struct sensor_async_subdev, asd);
-+	unsigned int i;
-+	int ret;
- 
--	if (vep->bus_type != V4L2_MBUS_CSI2_DPHY) {
--		dev_err(dev, "Only CSI2 bus type is currently supported\n");
--		return -EINVAL;
--	}
-+	for (i = 0; i < CIO2_NUM_PORTS; i++) {
-+		struct v4l2_fwnode_endpoint vep = {
-+			.bus_type = V4L2_MBUS_CSI2_DPHY
-+		};
-+		struct sensor_async_subdev *s_asd = NULL;
-+		struct fwnode_handle *ep;
- 
--	s_asd->csi2.port = vep->base.port;
--	s_asd->csi2.lanes = vep->bus.mipi_csi2.num_data_lanes;
-+		ep = fwnode_graph_get_endpoint_by_id(
-+			dev_fwnode(&cio2->pci_dev->dev), i, 0,
-+			FWNODE_GRAPH_ENDPOINT_NEXT);
- 
--	return 0;
--}
-+		if (!ep)
-+			continue;
- 
--static int cio2_notifier_init(struct cio2_device *cio2)
--{
--	int ret;
-+		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-+		if (ret)
-+			goto err_parse;
- 
--	v4l2_async_notifier_init(&cio2->notifier);
-+		s_asd = kzalloc(sizeof(*s_asd), GFP_KERNEL);
-+		if (!s_asd) {
-+			ret = -ENOMEM;
-+			goto err_parse;
-+		}
- 
--	ret = v4l2_async_notifier_parse_fwnode_endpoints(
--		&cio2->pci_dev->dev, &cio2->notifier,
--		sizeof(struct sensor_async_subdev),
--		cio2_fwnode_parse);
--	if (ret < 0)
--		goto out;
-+		s_asd->csi2.port = vep.base.port;
-+		s_asd->csi2.lanes = vep.bus.mipi_csi2.num_data_lanes;
-+
-+		ret = v4l2_async_notifier_add_fwnode_remote_subdev(
-+			&cio2->notifier, ep, &s_asd->asd);
-+		fwnode_handle_put(ep);
-+		if (ret)
-+			goto err_parse;
-+
-+		continue;
-+
-+err_parse:
-+		fwnode_handle_put(ep);
-+		kfree(s_asd);
-+		return ret;
-+	}
- 
- 	/*
- 	 * Proceed even without sensors connected to allow the device to
-@@ -1512,25 +1527,13 @@ static int cio2_notifier_init(struct cio2_device *cio2)
- 	 */
- 	cio2->notifier.ops = &cio2_async_ops;
- 	ret = v4l2_async_notifier_register(&cio2->v4l2_dev, &cio2->notifier);
--	if (ret) {
-+	if (ret)
- 		dev_err(&cio2->pci_dev->dev,
- 			"failed to register async notifier : %d\n", ret);
--		goto out;
--	}
--
--out:
--	if (ret)
--		v4l2_async_notifier_cleanup(&cio2->notifier);
- 
- 	return ret;
- }
- 
--static void cio2_notifier_exit(struct cio2_device *cio2)
--{
--	v4l2_async_notifier_unregister(&cio2->notifier);
--	v4l2_async_notifier_cleanup(&cio2->notifier);
--}
--
- /**************** Queue initialization ****************/
- static const struct media_entity_operations cio2_media_ops = {
- 	.link_validate = v4l2_subdev_link_validate,
-@@ -1814,16 +1817,18 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
- 	if (r)
- 		goto fail_v4l2_device_unregister;
- 
-+	v4l2_async_notifier_init(&cio2->notifier);
-+
- 	/* Register notifier for subdevices we care */
--	r = cio2_notifier_init(cio2);
-+	r = cio2_parse_firmware(cio2);
- 	if (r)
--		goto fail_cio2_queue_exit;
-+		goto fail_clean_notifier;
- 
- 	r = devm_request_irq(&pci_dev->dev, pci_dev->irq, cio2_irq,
- 			     IRQF_SHARED, CIO2_NAME, cio2);
- 	if (r) {
- 		dev_err(&pci_dev->dev, "failed to request IRQ (%d)\n", r);
--		goto fail;
-+		goto fail_clean_notifier;
+diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
+index db263c0ce48e..ccdbd9227955 100644
+--- a/drivers/media/platform/am437x/am437x-vpfe.c
++++ b/drivers/media/platform/am437x/am437x-vpfe.c
+@@ -2505,10 +2505,9 @@ vpfe_get_pdata(struct vpfe_device *vpfe)
+ 		pdata->asd[i] = v4l2_async_notifier_add_fwnode_subdev(
+ 			&vpfe->notifier, of_fwnode_handle(rem),
+ 			sizeof(struct v4l2_async_subdev));
+-		if (IS_ERR(pdata->asd[i])) {
+-			of_node_put(rem);
++		of_node_put(rem);
++		if (IS_ERR(pdata->asd[i]))
+ 			goto cleanup;
+-		}
  	}
  
- 	pm_runtime_put_noidle(&pci_dev->dev);
-@@ -1831,9 +1836,9 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
+ 	of_node_put(endpoint);
+diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
+index 8fdea45ae090..2a0c3f3fb443 100644
+--- a/drivers/media/platform/davinci/vpif_capture.c
++++ b/drivers/media/platform/davinci/vpif_capture.c
+@@ -1512,6 +1512,7 @@ static struct vpif_capture_config *
+ vpif_capture_get_pdata(struct platform_device *pdev)
+ {
+ 	struct device_node *endpoint = NULL;
++	struct device_node *rem = NULL, *rem_ep = NULL;
+ 	struct vpif_capture_config *pdata;
+ 	struct vpif_subdev_info *sdinfo;
+ 	struct vpif_capture_chan_config *chan;
+@@ -1542,7 +1543,6 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 
+ 	for (i = 0; i < VPIF_CAPTURE_NUM_CHANNELS; i++) {
+ 		struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
+-		struct device_node *rem, *rem_ep;
+ 		unsigned int flags;
+ 		int err;
+ 
+@@ -1565,7 +1565,6 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 			of_node_put(rem_ep);
+ 			goto done;
+ 		}
+-		of_node_put(rem_ep);
+ 
+ 		sdinfo = &pdata->subdev_info[i];
+ 		chan = &pdata->chan_config[i];
+@@ -1573,10 +1572,8 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 					    VPIF_CAPTURE_NUM_CHANNELS,
+ 					    sizeof(*chan->inputs),
+ 					    GFP_KERNEL);
+-		if (!chan->inputs) {
+-			of_node_put(rem);
++		if (!chan->inputs)
+ 			goto err_cleanup;
+-		}
+ 
+ 		chan->input_count++;
+ 		chan->inputs[i].input.type = V4L2_INPUT_TYPE_CAMERA;
+@@ -1588,6 +1585,7 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 		if (err) {
+ 			dev_err(&pdev->dev, "Could not parse the endpoint\n");
+ 			of_node_put(rem);
++			of_node_put(rem_ep);
+ 			goto done;
+ 		}
+ 
+@@ -1608,11 +1606,11 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 		pdata->asd[i] = v4l2_async_notifier_add_fwnode_subdev(
+ 			&vpif_obj.notifier, of_fwnode_handle(rem_ep),
+ 			sizeof(struct v4l2_async_subdev));
+-		if (IS_ERR(pdata->asd[i])) {
+-			of_node_put(rem);
++		if (IS_ERR(pdata->asd[i]))
+ 			goto err_cleanup;
+-		}
+ 
++		of_node_put(rem);
++		of_node_put(rem_ep);
+ 	}
+ 
+ done:
+@@ -1624,6 +1622,8 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 	return pdata;
+ 
+ err_cleanup:
++	of_node_put(rem);
++	of_node_put(rem_ep);
+ 	of_node_put(endpoint);
+ 	v4l2_async_notifier_cleanup(&vpif_obj.notifier);
+ 
+diff --git a/drivers/media/platform/qcom/camss/camss.c b/drivers/media/platform/qcom/camss/camss.c
+index a979f210f441..4ab4a47d34f3 100644
+--- a/drivers/media/platform/qcom/camss/camss.c
++++ b/drivers/media/platform/qcom/camss/camss.c
+@@ -486,9 +486,9 @@ static int camss_of_parse_ports(struct camss *camss)
+ 
+ 		asd = v4l2_async_notifier_add_fwnode_subdev(
+ 			&camss->notifier, remote, sizeof(*csd));
++		fwnode_handle_put(remote);
+ 		if (IS_ERR(asd)) {
+ 			ret = PTR_ERR(asd);
+-			fwnode_handle_put(remote);
+ 			goto err_cleanup;
+ 		}
+ 
+diff --git a/drivers/media/platform/xilinx/xilinx-vipp.c b/drivers/media/platform/xilinx/xilinx-vipp.c
+index 41df417153bd..d788f4870a23 100644
+--- a/drivers/media/platform/xilinx/xilinx-vipp.c
++++ b/drivers/media/platform/xilinx/xilinx-vipp.c
+@@ -392,9 +392,9 @@ static int xvip_graph_parse_one(struct xvip_composite_device *xdev,
+ 		asd = v4l2_async_notifier_add_fwnode_subdev(
+ 			&xdev->notifier, remote,
+ 			sizeof(struct xvip_graph_entity));
++		fwnode_handle_put(remote);
+ 		if (IS_ERR(asd)) {
+ 			ret = PTR_ERR(asd);
+-			fwnode_handle_put(remote);
+ 			goto err_notifier_cleanup;
+ 		}
+ 	}
+diff --git a/drivers/media/v4l2-core/v4l2-async.c b/drivers/media/v4l2-core/v4l2-async.c
+index 304969ff3191..dc4e83b4f6ba 100644
+--- a/drivers/media/v4l2-core/v4l2-async.c
++++ b/drivers/media/v4l2-core/v4l2-async.c
+@@ -596,10 +596,11 @@ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	asd->match_type = V4L2_ASYNC_MATCH_FWNODE;
+-	asd->match.fwnode = fwnode;
++	asd->match.fwnode = fwnode_handle_get(fwnode);
+ 
+ 	ret = v4l2_async_notifier_add_subdev(notifier, asd);
+ 	if (ret) {
++		fwnode_handle_put(fwnode);
+ 		kfree(asd);
+ 		return ERR_PTR(ret);
+ 	}
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 014b3f11e1ba..1bd6df477189 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -780,23 +780,17 @@ static int v4l2_fwnode_reference_parse(struct device *dev,
+ 		asd = v4l2_async_notifier_add_fwnode_subdev(notifier,
+ 							    args.fwnode,
+ 							    sizeof(*asd));
++		fwnode_handle_put(args.fwnode);
+ 		if (IS_ERR(asd)) {
+-			ret = PTR_ERR(asd);
+ 			/* not an error if asd already exists */
+-			if (ret == -EEXIST) {
+-				fwnode_handle_put(args.fwnode);
++			if (PTR_ERR(asd) == -EEXIST)
+ 				continue;
+-			}
+ 
+-			goto error;
++			return PTR_ERR(asd);
+ 		}
+ 	}
  
  	return 0;
+-
+-error:
+-	fwnode_handle_put(args.fwnode);
+-	return ret;
+ }
  
--fail:
--	cio2_notifier_exit(cio2);
--fail_cio2_queue_exit:
-+fail_clean_notifier:
-+	v4l2_async_notifier_unregister(&cio2->notifier);
-+	v4l2_async_notifier_cleanup(&cio2->notifier);
- 	cio2_queues_exit(cio2);
- fail_v4l2_device_unregister:
- 	v4l2_device_unregister(&cio2->v4l2_dev);
-@@ -1852,7 +1857,8 @@ static void cio2_pci_remove(struct pci_dev *pci_dev)
- 	struct cio2_device *cio2 = pci_get_drvdata(pci_dev);
+ /*
+@@ -1086,23 +1080,17 @@ v4l2_fwnode_reference_parse_int_props(struct device *dev,
  
- 	media_device_unregister(&cio2->media_dev);
--	cio2_notifier_exit(cio2);
-+	v4l2_async_notifier_unregister(&cio2->notifier);
-+	v4l2_async_notifier_cleanup(&cio2->notifier);
- 	cio2_queues_exit(cio2);
- 	cio2_fbpt_exit_dummy(cio2);
- 	v4l2_device_unregister(&cio2->v4l2_dev);
+ 		asd = v4l2_async_notifier_add_fwnode_subdev(notifier, fwnode,
+ 							    sizeof(*asd));
++		fwnode_handle_put(fwnode);
+ 		if (IS_ERR(asd)) {
+-			ret = PTR_ERR(asd);
+ 			/* not an error if asd already exists */
+-			if (ret == -EEXIST) {
+-				fwnode_handle_put(fwnode);
++			if (PTR_ERR(asd) == -EEXIST)
+ 				continue;
+-			}
+ 
+-			goto error;
++			return PTR_ERR(asd);
+ 		}
+ 	}
+ 
+ 	return PTR_ERR(fwnode) == -ENOENT ? 0 : PTR_ERR(fwnode);
+-
+-error:
+-	fwnode_handle_put(fwnode);
+-	return ret;
+ }
+ 
+ int v4l2_async_notifier_parse_fwnode_sensor_common(struct device *dev,
+diff --git a/include/media/v4l2-async.h b/include/media/v4l2-async.h
+index 1497bda66c3b..b9141ffa188a 100644
+--- a/include/media/v4l2-async.h
++++ b/include/media/v4l2-async.h
+@@ -175,8 +175,9 @@ int v4l2_async_notifier_add_subdev(struct v4l2_async_notifier *notifier,
+  *		     the driver's async sub-device struct, i.e. both
+  *		     begin at the same memory address.
+  *
+- * Allocate a fwnode-matched asd of size asd_struct_size, and add it
+- * to the notifiers @asd_list.
++ * Allocate a fwnode-matched asd of size asd_struct_size, and add it to the
++ * notifiers @asd_list. The function also gets a reference of the fwnode which
++ * is released later at notifier cleanup time.
+  */
+ struct v4l2_async_subdev *
+ v4l2_async_notifier_add_fwnode_subdev(struct v4l2_async_notifier *notifier,
 -- 
 2.11.0
 
