@@ -1,157 +1,195 @@
-Return-Path: <SRS0=Dnes=SH=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=AJrZ=SI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0213EC282DA
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 16:28:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F39EDC282DC
+	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 00:05:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBF102146F
-	for <linux-media@archiver.kernel.org>; Fri,  5 Apr 2019 16:28:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C312221871
+	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 00:05:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DLk1TMfk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731507AbfDEQ14 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 12:27:56 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35730 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730554AbfDEQ14 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 12:27:56 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 17FF128226F
-Message-ID: <05078223a4098c96f6260f77e9ef2a01b966daa6.camel@collabora.com>
-Subject: Re: [PATCH RESEND v7 1/2] media: uapi: Add H264 low-level decoder
- API compound controls.
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        id S1726223AbfDFAFA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Apr 2019 20:05:00 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:52809 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726167AbfDFAE7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Apr 2019 20:04:59 -0400
+Received: by mail-wm1-f65.google.com with SMTP id a184so8319430wma.2;
+        Fri, 05 Apr 2019 17:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=pLZ3CZZf+WBwXELqg6A+r9bdvOzaetAYnoCneUV6jes=;
+        b=DLk1TMfkNzACjhswAC6n6Hjo9H29cF9oxrOJ2RyoFttBnYprRvUrhUBN8fYxswCbhx
+         HTZgqoVfII6hM0jVJ1fw7SXgMz9ZT44XpalWDYO/QHbdoBZ9olUHXMa5qdVPPpqDtjDh
+         aKc/QI2ykYaVSkHXyu7zy4mqfrT32i3j1ICB+hVkXuTS97b2i/k17NP08DbX0PH4rU6f
+         5Vp9GNtsk1Zipt15LTmuE3sYtgCRhfnFaYHP+UN1pFTEJF/uJwMwM4FNgc5BNucTNLHL
+         l7V2QYBUvtBrLi7CIC38e6ygbXwmlMeF3YqugQ3i3oWBDgTgL/gS6Ead+xue06ugdyyU
+         cL6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=pLZ3CZZf+WBwXELqg6A+r9bdvOzaetAYnoCneUV6jes=;
+        b=nJaXz4tx+CBgUuXVYwgi41rci9EkHDnX37FqXR97RgNpSPFAn0NdBeP7euxK1WxZuW
+         pOBQCBE8w3rxPHFtPFxb6ilpJqwL3K0k9SodY+F0uEp4IHeCz8DJKFSUM1kqyVoAG9rX
+         Mk+7gGYnSvl+OHgGdXpvNpUnUpGeeRWvOFwS6Z93Mdr3cJnL1I/1fbYbTe7v/Iosplzr
+         dK+5lxj9jzHi/oYYshz38WkOgd1pGnbVCmSEkZLLDu6bZLv3AcpRXmOmgsK+w/9gpZvK
+         S4zbQh9s3eop4f7SPdxdW+i/QtpKUfTeNcLDluqs3iExZgveuqZxPFYRDGWg9n4e+f9B
+         d8uw==
+X-Gm-Message-State: APjAAAXpTjkFQSrGRRuFvvs8taqv6IsylIzpCfT6gdAvCaiVbvuApC1U
+        9FN7GyB2lcs1lSzZut9rLX4=
+X-Google-Smtp-Source: APXvYqyASPVJLByTvG1bOnMCMKOZj8PslN1BRAggByzUfNnKYh1vDUgIepF6XgLwY0FFTf+DfbgHPw==
+X-Received: by 2002:a1c:b646:: with SMTP id g67mr10139369wmf.125.1554509096836;
+        Fri, 05 Apr 2019 17:04:56 -0700 (PDT)
+Received: from [172.30.88.187] (sjewanfw1-nat.mentorg.com. [139.181.7.34])
+        by smtp.gmail.com with ESMTPSA id a17sm2471133wmg.40.2019.04.05.17.04.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Apr 2019 17:04:55 -0700 (PDT)
+Subject: Re: [PATCH v3 3/9] media: rcar-vin: Create a group notifier
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>
+Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg "
-         "Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Jens Kuske <jenskuske@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>
-Date:   Fri, 05 Apr 2019 12:27:48 -0400
-In-Reply-To: <20190405151552.biesirbs35uivk7d@flea>
-References: <cover.bfe197a82766125bea21dd26fd3de85893a921ac.1554380738.git-series.maxime.ripard@bootlin.com>
-         <7cd913545cfc80fa9999839c62c4bf7b354a7904.1554380738.git-series.maxime.ripard@bootlin.com>
-         <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
-         <CAGb2v642__AF3iHO+d9FKazJ4=uRAQSfxAN_uCUWagH6Jz2twQ@mail.gmail.com>
-         <c3ed6d00bf5642b1524ef4973f2db7ba6759fb6d.camel@collabora.com>
-         <20190405151552.biesirbs35uivk7d@flea>
-Organization: Collabora Ltd.
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-105qp6mZm6hZVbLbDG+d"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Steve Longerbeam <steve_longerbeam@mentor.com>,
+        "George G. Davis" <george_davis@mentor.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Michael Rodin <mrodin@de.adit-jv.com>,
+        Eugen Friedrich <efriedrich@de.adit-jv.com>,
+        harsha.manjulamallikarjun@in.bosch.com,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+References: <20190405161639.GA10433@vmlxhi-102.adit-jv.com>
+From:   Steve Longerbeam <slongerbeam@gmail.com>
+Message-ID: <25dc2668-d270-ebf8-b014-88bbb7a6f243@gmail.com>
+Date:   Fri, 5 Apr 2019 17:04:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <20190405161639.GA10433@vmlxhi-102.adit-jv.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Niklas, all,
 
---=-105qp6mZm6hZVbLbDG+d
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Le vendredi 05 avril 2019 =C3=A0 17:15 +0200, Maxime Ripard a =C3=A9crit :
-> Hi Nicolas,
->=20
-> On Thu, Apr 04, 2019 at 11:41:13AM -0400, Nicolas Dufresne wrote:
-> > > > > +    * - __u16
-> > > > > +      - ``pic_width_in_mbs_minus1``
-> > > > > +      -
-> > > > > +    * - __u16
-> > > > > +      - ``pic_height_in_map_units_minus1``
-> > > > > +      -
-> > > >=20
-> > > > We recently had some reflection with Alex that this is redundant wi=
-th
-> > > > the width and height in the OUTPUT format. It may also apply to som=
-e
-> > > > other fields in these structs. I feel like they should be removed a=
-nd
-> > > > passed via corresponding generic V4L2 properties - format, selectio=
-n,
-> > > > etc.
-> > > >=20
-> > > > The same problem is also present in the MPEG2 controls. In fact, th=
-ere
-> > > > was a patch already which used some fields from the controls to
-> > > > calculate the destination buffer strides, rather than bytesperline =
-in
-> > > > the format.
-> > > >=20
-> > > > Since we're in staging, it could be done with a follow-up patch, th=
-ough.
-> > >=20
-> > > Just my two cents. I played with some codecs a while back. IIRC some
-> > > specify a "codec" size in addition to the actual picture size, like
-> > > when the encoder does padding to fit the requirements of the codec
-> > > (spec). Is this needed anywhere?
-> >=20
-> > With state-less encoders, the headers, which contains the crop
-> > information is created by userspace and for state less decoder, the
-> > headers that contains this information is parsed by userspace. So I
-> > believe that in theory, the accelerator does not strictly need to be
-> > aware of the cropped dimensions.
-> >=20
-> > Another thing, is that there is not guarantied matches between e.g.
-> > depth of the chrome/luma and the final image buffers. Some hardware may
-> > have bandwidth limitation or internal converter and could possibly
-> > decode 10bit data into 8bit buffers.
-> >=20
-> > A third reason why I would not try and encode this header information
-> > is that there can be multiple PPS/SPS at the same time, and I think
-> > it's confusing if the relevant information to differentiate them is
-> > removed.
->=20
-> Sorry if that sounds a bit dumb, but it's not really clear to me if
-> you're arguing for the removal of the data as Tomasz suggests, or if
-> you want to keep them.
->=20
-> The first paragrah seems to advocate for the former, but the two
-> others for the latter.
+On 4/5/19 9:16 AM, Eugeniu Rosca wrote:
+> Hi Niklas, Jacopo cc: Steve
+>
+> Apologize for reviving this old thread. Just one question below.
+>
+> On 2018-05-24 10:14:52, Niklas Söderlund wrote:
+>
+> [..]
+>
+>>> +
+>>>   #define vin_to_source(vin)		((vin)->parallel->subdev)
+>> This in particular I hate and at some point I hope to remove it or
+>> move  it to rcar-v4l2.c. :-) But that is a task for later and not
+>> related to  your patch-set.
+> What about below patch excerpt (courtesy of Steve) which is currently
+> under review in our tree? If we are on the same page here, we would
+> happily contribute a patch to you based on below.
 
-I think the data should stay. As I said, there can be multiple SPS/PPS,
-while there is only one format. That being said, how does SPS/PPS
-activation works ? How do you tell the driver about all the SPS/PPS and
-which one is being activated ?
+I can submit this patch to media-tree ML for formal review.
 
->=20
-> Thanks!
-> Maxime
->=20
-> --
-> Maxime Ripard, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+But there are also other patches to rcar-vin applied to the tree 
+mentioned by Eugeniu, which can broadly be described as:
 
---=-105qp6mZm6hZVbLbDG+d
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+1. If the rcar-csi2 sub-device's source pad format is changed via 
+media-ctl, the connected VIN's crop bounds (vin->source rectangle) will 
+be stale, since vin->source must always be equal to the source pad 
+rectangle. So we have a patch that will catch the asynchronous 
+V4L2_EVENT_SOURCE_CHANGE event sent from the rcar-csi2 sub-device when 
+its source pad format is changed. In response, the VIN connected to that 
+rcar-csi2 sub-device will reset the crop bounds to the new source pad 
+format rectangle. In order to make this work however...
 
------BEGIN PGP SIGNATURE-----
+2. Sub-device events need to be forwarded to the VIN's that have enabled 
+media links to the reporting sub-device. Currently, sub-device events 
+are only forwarded to VIN7, because the notifier is registered only from 
+VIN7, and so the sub-devices are registered only to the v4l2_dev owned 
+by VIN7. So we have a set of patches that fix this: sub-device events 
+get forwarded to the VIN's that have connected media paths to that 
+sub-device. Besides allowing to reset the VIN crop bounds rectangle 
+asynchronously, this also seems to be logically the correct behavior. It 
+also makes the user interface a little more intuitive: userland knows 
+which VIN it is capturing on, and that is the same VIN that will be 
+receiving sub-device events in the active pipeline.
 
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXKeCBQAKCRBxUwItrAao
-HPxYAKCLokQMygHQVcEBVlfoU/0wx7JIPQCgigkxrrILs+98mkAhfw91CijNlVI=
-=lZ4c
------END PGP SIGNATURE-----
+3. We have some patches under review that allow alternate -> none field 
+mode. That is, source sub-device is sending alternate fields (top, 
+bottom, top, ...), and userland is configured to receive those fields 
+unmodified by setting field type to none. rcar-dma then detects and 
+reports the field type of the captured field (top or bottom) in (struct 
+v4l2_buffer)->field. Doing this allows for de-interlacing the captured 
+fields using the FDP1 mem2mem device.
 
---=-105qp6mZm6hZVbLbDG+d--
+There are some other miscellaneous patches that I can submit, but the 
+above describes the bulk of the changes.
+
+Before I start on porting these patches to the media-tree, do the above 
+changes make general sense, or are there fundamental problems with those 
+ideas?
+
+TIA,
+Steve
+
+
+>
+> Subject: [PATCH] media: rcar-vin: Generalize vin_to_source()
+>
+> Change the vin_to_source() macro to an inline function that will
+> retrieve the source subdevice for both media-control and non
+> media-control mode.
+>
+> Signed-off-by: Steve Longerbeam <steve_longerbeam@mentor.com>
+> ---
+> [..]
+>
+> diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
+> index 0b13b34d03e3..29d8c4a80c35 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-vin.h
+> +++ b/drivers/media/platform/rcar-vin/rcar-vin.h
+> @@ -217,7 +217,21 @@ struct rvin_dev {
+>   	v4l2_std_id std;
+>   };
+>   
+> -#define vin_to_source(vin)		((vin)->parallel->subdev)
+> +static inline struct v4l2_subdev *
+> +vin_to_source(struct rvin_dev *vin)
+> +{
+> +	if (vin->info->use_mc) {
+> +		struct media_pad *pad;
+> +
+> +		pad = media_entity_remote_pad(&vin->pad);
+> +		if (!pad)
+> +			return NULL;
+> +
+> +		return media_entity_to_v4l2_subdev(pad->entity);
+> +	}
+> +
+> +	return vin->parallel->subdev;
+> +}
+>   
+>   /* Debug */
+>   #define vin_dbg(d, fmt, arg...)		dev_dbg(d->dev, fmt, ##arg)
+>
+> Best regards,
+> Eugeniu.
 
