@@ -2,154 +2,84 @@ Return-Path: <SRS0=AJrZ=SI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 297E7C10F06
-	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 03:48:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9174BC282DC
+	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 06:06:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EA1CF2083E
-	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 03:48:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5EB7521855
+	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 06:06:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1554530774;
+	bh=Z3c50IVXRHPm/rq2ixXEld/V8zBo9KAOAgzHHHBLqdg=;
+	h=Date:From:Subject:References:In-Reply-To:Cc:Cc:To:List-ID:From;
+	b=Vyc5/JbNVal8jqjLISq8C69N+ROv42xRsmaDdmM+S0DRx3e1d8uUbIVKHP6WaVfGm
+	 VZZ3LCIur+uELHbk1CyNdyr1rUUNeFLCnhM4oTDPWooE6VmhJZGGj1ZCGmaIqxGlFE
+	 kvQwOa/DwPA8mlFE/rCgdCliBzY2P+m5gJEsj0Nk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbfDFDsI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Apr 2019 23:48:08 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:40380 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726271AbfDFDsI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Apr 2019 23:48:08 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:dd3f:782c:ba1a:4170])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id CcJJhlac5iLOmCcJKhtuqG; Sat, 06 Apr 2019 05:48:06 +0200
-Message-ID: <b8a54f45e4fb193ad3bb48b48ff7767d@smtp-cloud9.xs4all.net>
-Date:   Sat, 06 Apr 2019 05:48:05 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfMiZgj2sh71BDSg7KBxVCj2AuRwOFY7W1yzRYEDKIXbs4CWwpsp7myzokOCo0VdOlPuJ4Bjm+38leC2mxcygLSskLSvu/1Lo10XG2lSZrzTYQu5ECIQ8
- Es60vJvypIRacLmBUyVKPOVAtM0ZhH9idRtRqDtQ+PLidTFhOrBsT6ktDBuAFhrJr0cABUyTtdWE8yEjCws4rcn0I7dL60dQGz+BXzDgyL88rKiJ/p7aU4dR
+        id S1726632AbfDFGGJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Apr 2019 02:06:09 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46316 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726615AbfDFGGI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 6 Apr 2019 02:06:08 -0400
+Received: by mail-pg1-f195.google.com with SMTP id q1so4179430pgv.13;
+        Fri, 05 Apr 2019 23:06:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:subject:references
+         :in-reply-to:cc:cc:to;
+        bh=9w7EQ59djVMT/yra/zVaafD2a787JfvjnjqhLIF7aV4=;
+        b=WhStow4BtOvuE4Gt/n9+uWztmD7Ro1FQuCE7EICL/JBzdXBnqxSvN5onB/trlFpKlL
+         ZTQ1+i46fAIY/QH/sbNwq53PlyNASEFlfb9npJ15Ekz+/bqZlNX3UAJmfAWYn2uIsUCJ
+         kWNQvTLadlBSm/WsdKLjTwWeDvmP/9LWqGR8LBcraWp/SUvCPtnIsquCZC9u6OQRK30a
+         ppr7qfAmUX/ZPw2w15j239MSLt6dHbh3mPnoNq8/t8B9OZp0KOsLvsCJJMbSm5Fr9NaD
+         ZpeTxcYYBoh+qeaX9kIjSlNlWimXtBU56EkI1OGtfO2qKxUCTRqfmfd5Md+tyPe91y06
+         m2aw==
+X-Gm-Message-State: APjAAAXysXBvQEVky0y79P7Awp3Xn7ioksIi4b1hZ+I4SciF90y1foQe
+        +jTclLSa2OeaKjRRh3a1ag==
+X-Google-Smtp-Source: APXvYqx7bRQMsiuxKhAYYZopO8h/29m6921AqiMQE52ewGPkhRyb/xhTaS9itC1tktt9KbFu+PKsVQ==
+X-Received: by 2002:a63:f956:: with SMTP id q22mr5235243pgk.210.1554530767243;
+        Fri, 05 Apr 2019 23:06:07 -0700 (PDT)
+Received: from localhost ([210.160.217.71])
+        by smtp.gmail.com with ESMTPSA id f1sm29751400pgl.35.2019.04.05.23.06.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 05 Apr 2019 23:06:06 -0700 (PDT)
+Message-ID: <5ca841ce.1c69fb81.b2f88.e449@mx.google.com>
+Date:   Sat, 06 Apr 2019 01:06:04 -0500
+From:   Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v2 1/3] media: dt-bindings: media: meson-ao-cec: Add G12A  AO-CEC-B Compatible
+References: <20190401081959.16474-1-narmstrong@baylibre.com> <20190401081959.16474-2-narmstrong@baylibre.com>
+In-Reply-To: <20190401081959.16474-2-narmstrong@baylibre.com>
+Cc:     hverkuil@xs4all.nl, mchehab@kernel.org, devicetree@vger.kernel.org
+Cc:     linux-amlogic@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Neil Armstrong <narmstrong@baylibre.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On Mon,  1 Apr 2019 10:19:57 +0200, Neil Armstrong wrote:
+> The Amlogic G12A embeds a second CEC controller named AO-CEC-B, and
+> the other one is AO-CEC-A described by the current bindings.
+> 
+> The register interface is very close but the internal architecture
+> is totally different.
+> 
+> The other difference is the clock source, the AO-CEC-B takes the
+> "oscin", the Always-On Oscillator clock, as input and embeds a
+> dual-divider clock divider to provide the precise 32768Hz base
+> clock for CEC communication.
+> 
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> ---
+>  .../devicetree/bindings/media/meson-ao-cec.txt      | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
 
-Results of the daily build of media_tree:
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-date:			Sat Apr  6 05:00:11 CEST 2019
-media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	95f39aae48c6e8e5cc81e6ae6293d999f70a909b
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-2-amd64
-
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
