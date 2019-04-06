@@ -3,82 +3,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9174BC282DC
-	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 06:06:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E309FC282DC
+	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 06:06:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5EB7521855
-	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 06:06:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1BBE21855
+	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 06:06:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554530774;
-	bh=Z3c50IVXRHPm/rq2ixXEld/V8zBo9KAOAgzHHHBLqdg=;
+	s=default; t=1554530816;
+	bh=3HgEj3Ujv7ZcHHeyG0mqcpx3M5niOEcpcy28loowDtk=;
 	h=Date:From:Subject:References:In-Reply-To:Cc:Cc:To:List-ID:From;
-	b=Vyc5/JbNVal8jqjLISq8C69N+ROv42xRsmaDdmM+S0DRx3e1d8uUbIVKHP6WaVfGm
-	 VZZ3LCIur+uELHbk1CyNdyr1rUUNeFLCnhM4oTDPWooE6VmhJZGGj1ZCGmaIqxGlFE
-	 kvQwOa/DwPA8mlFE/rCgdCliBzY2P+m5gJEsj0Nk=
+	b=vUaRx1+/WHnj4H0tlvQsTkhRn7Hs03rakTbBHqvzu/V4YJr2ZgvMNZ1K/TBgWkFB7
+	 KW84eOgyoIKoMWWO3WaHrnq29SOcxt6xkB473CrzkkwmJm/aFzVz2YV/6L0+ptbu8S
+	 bov1/wRBc6bb63xBQ1Svx8cUx0wFmyJS/o2RMF58=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbfDFGGJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 6 Apr 2019 02:06:09 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:46316 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726615AbfDFGGI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 6 Apr 2019 02:06:08 -0400
-Received: by mail-pg1-f195.google.com with SMTP id q1so4179430pgv.13;
-        Fri, 05 Apr 2019 23:06:07 -0700 (PDT)
+        id S1726813AbfDFGGv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Apr 2019 02:06:51 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33559 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726791AbfDFGGu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 6 Apr 2019 02:06:50 -0400
+Received: by mail-pf1-f193.google.com with SMTP id i19so4467698pfd.0;
+        Fri, 05 Apr 2019 23:06:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:from:subject:references
          :in-reply-to:cc:cc:to;
-        bh=9w7EQ59djVMT/yra/zVaafD2a787JfvjnjqhLIF7aV4=;
-        b=WhStow4BtOvuE4Gt/n9+uWztmD7Ro1FQuCE7EICL/JBzdXBnqxSvN5onB/trlFpKlL
-         ZTQ1+i46fAIY/QH/sbNwq53PlyNASEFlfb9npJ15Ekz+/bqZlNX3UAJmfAWYn2uIsUCJ
-         kWNQvTLadlBSm/WsdKLjTwWeDvmP/9LWqGR8LBcraWp/SUvCPtnIsquCZC9u6OQRK30a
-         ppr7qfAmUX/ZPw2w15j239MSLt6dHbh3mPnoNq8/t8B9OZp0KOsLvsCJJMbSm5Fr9NaD
-         ZpeTxcYYBoh+qeaX9kIjSlNlWimXtBU56EkI1OGtfO2qKxUCTRqfmfd5Md+tyPe91y06
-         m2aw==
-X-Gm-Message-State: APjAAAXysXBvQEVky0y79P7Awp3Xn7ioksIi4b1hZ+I4SciF90y1foQe
-        +jTclLSa2OeaKjRRh3a1ag==
-X-Google-Smtp-Source: APXvYqx7bRQMsiuxKhAYYZopO8h/29m6921AqiMQE52ewGPkhRyb/xhTaS9itC1tktt9KbFu+PKsVQ==
-X-Received: by 2002:a63:f956:: with SMTP id q22mr5235243pgk.210.1554530767243;
-        Fri, 05 Apr 2019 23:06:07 -0700 (PDT)
+        bh=sA/AuC+EvgS8q1EmEqG5/iUfmidgbX/r7KPJNDbEing=;
+        b=CoIlRoeGSXAQsVgMzHVrPPKVSiRWnMDcVxQPfpUp4RtP7fj0DG14F+ltg2UxCXCqqT
+         imQOpQinXBrLG2nmjytdIywslU7oz/4m2p9JzNmENHBYWH1cY7Vb5eW0i+VjLddsrv6G
+         QRbrND/Hy5yfBTjHB+1Ynvs0nTk0YshkqQDCtK3aV0HHX4rq55b22VdN71t3B9WxVdG0
+         z3SGNTSkRRrYAt4sAgqNn2tnVtC2X8h4xAhGn0pHrxWTjkMZyqv7MDIwiVZHjo7A23d8
+         WLOO0/8YirEA1M3FK4YwzUt9wsIGUukBRGQTE0U9cJnGaMIxSr75OPQavvV96bnga7R/
+         rHRA==
+X-Gm-Message-State: APjAAAVAikOt2PLYuStTip8Y0TvNYItpGmxznM7Msd1kFPItEi/Y5rsA
+        0+rJZtA15Qj50x3sHjIz+G1e9+N0Dg==
+X-Google-Smtp-Source: APXvYqyWYaAMQp2FrgYSuzfThzpTe2wfAO5ZLYGHTyv8ZmnDhST80NjB2d8uLF7sijdtB3ZXbYJZJQ==
+X-Received: by 2002:a62:12c9:: with SMTP id 70mr17225504pfs.156.1554530809765;
+        Fri, 05 Apr 2019 23:06:49 -0700 (PDT)
 Received: from localhost ([210.160.217.71])
-        by smtp.gmail.com with ESMTPSA id f1sm29751400pgl.35.2019.04.05.23.06.06
+        by smtp.gmail.com with ESMTPSA id c189sm36545451pfg.24.2019.04.05.23.06.48
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 05 Apr 2019 23:06:06 -0700 (PDT)
-Message-ID: <5ca841ce.1c69fb81.b2f88.e449@mx.google.com>
-Date:   Sat, 06 Apr 2019 01:06:04 -0500
+        Fri, 05 Apr 2019 23:06:49 -0700 (PDT)
+Message-ID: <5ca841f9.1c69fb81.70acb.c159@mx.google.com>
+Date:   Sat, 06 Apr 2019 01:06:46 -0500
 From:   Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 1/3] media: dt-bindings: media: meson-ao-cec: Add G12A  AO-CEC-B Compatible
-References: <20190401081959.16474-1-narmstrong@baylibre.com> <20190401081959.16474-2-narmstrong@baylibre.com>
-In-Reply-To: <20190401081959.16474-2-narmstrong@baylibre.com>
-Cc:     hverkuil@xs4all.nl, mchehab@kernel.org, devicetree@vger.kernel.org
-Cc:     linux-amlogic@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-To:     Neil Armstrong <narmstrong@baylibre.com>
+Subject: Re: [PATCH 3/5] media: dt-bindings: aspeed-video: Add missing memory-region property
+References: <1554229504-5661-1-git-send-email-eajames@linux.ibm.com> <1554229504-5661-4-git-send-email-eajames@linux.ibm.com>
+In-Reply-To: <1554229504-5661-4-git-send-email-eajames@linux.ibm.com>
+Cc:     linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        joel@jms.id.au, andrew@aj.id.au, mchehab@kernel.org,
+        linux-clk@vger.kernel.org, sboyd@kernel.org,
+        mturquette@baylibre.com, devicetree@vger.kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org
+To:     Eddie James <eajames@linux.ibm.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon,  1 Apr 2019 10:19:57 +0200, Neil Armstrong wrote:
-> The Amlogic G12A embeds a second CEC controller named AO-CEC-B, and
-> the other one is AO-CEC-A described by the current bindings.
+On Tue,  2 Apr 2019 18:25:02 +0000, Eddie James wrote:
+> Missed documenting this property in the initial commit.
 > 
-> The register interface is very close but the internal architecture
-> is totally different.
-> 
-> The other difference is the clock source, the AO-CEC-B takes the
-> "oscin", the Always-On Oscillator clock, as input and embeds a
-> dual-divider clock divider to provide the precise 32768Hz base
-> clock for CEC communication.
-> 
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
 > ---
->  .../devicetree/bindings/media/meson-ao-cec.txt      | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
+>  Documentation/devicetree/bindings/media/aspeed-video.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
