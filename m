@@ -2,108 +2,112 @@ Return-Path: <SRS0=AJrZ=SI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E66C10F06
-	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 10:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C294C282DA
+	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 11:01:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F30C221855
-	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 10:39:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 45864213A2
+	for <linux-media@archiver.kernel.org>; Sat,  6 Apr 2019 11:01:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbfDFKjP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 6 Apr 2019 06:39:15 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:47464 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726419AbfDFKjP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 6 Apr 2019 06:39:15 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id AF7F9634C7B;
-        Sat,  6 Apr 2019 13:38:25 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.89)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1hCiiQ-0001u5-HB; Sat, 06 Apr 2019 13:38:26 +0300
-Date:   Sat, 6 Apr 2019 13:38:26 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Mickael Guene <mickael.guene@st.com>
-Cc:     linux-media@vger.kernel.org, hugues.fruchet@st.com,
+        id S1726431AbfDFLBo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Apr 2019 07:01:44 -0400
+Received: from mga05.intel.com ([192.55.52.43]:50076 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726387AbfDFLBo (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 6 Apr 2019 07:01:44 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Apr 2019 04:01:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,316,1549958400"; 
+   d="scan'208";a="140481503"
+Received: from muelleca-mobl7.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.249.47.132])
+  by orsmga003.jf.intel.com with ESMTP; 06 Apr 2019 04:01:38 -0700
+Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
+        id DB0DD21D09; Sat,  6 Apr 2019 14:01:35 +0300 (EEST)
+Date:   Sat, 6 Apr 2019 14:01:35 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Mickael GUENE <mickael.guene@st.com>
+Cc:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Hugues FRUCHET <hugues.fruchet@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Petr Cvek <petrcvekcz@gmail.com>,
+        Akinobu Mita <akinobu.mita@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
+        Ben Kao <ben.kao@intel.com>,
         Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Todor Tomov <todor.tomov@linaro.org>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: Document MIPID02 bindings
-Message-ID: <20190406103826.cniksvg7xuog3gti@valkosipuli.retiisi.org.uk>
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Ricardo Ribalda Delgado <ricardo@ribalda.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>
+Subject: Re: [PATCH v3 2/2] media:st-mipid02: MIPID02 CSI-2 to PARALLEL
+ bridge driver
+Message-ID: <20190406110135.7l2m6hkmvwr33d7s@kekkonen.localdomain>
 References: <1552373045-134493-1-git-send-email-mickael.guene@st.com>
- <1553680545-73278-1-git-send-email-mickael.guene@st.com>
- <1553680545-73278-2-git-send-email-mickael.guene@st.com>
- <20190406103525.amfsljsz4twi3xq2@valkosipuli.retiisi.org.uk>
+ <1553594620-88280-1-git-send-email-mickael.guene@st.com>
+ <1553594620-88280-3-git-send-email-mickael.guene@st.com>
+ <20190326113308.mp5hqdw3ktbpcawu@paasikivi.fi.intel.com>
+ <fb8bf371-6158-a9b8-0822-65bc5d6db536@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190406103525.amfsljsz4twi3xq2@valkosipuli.retiisi.org.uk>
+In-Reply-To: <fb8bf371-6158-a9b8-0822-65bc5d6db536@st.com>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Apr 06, 2019 at 01:35:25PM +0300, Sakari Ailus wrote:
-> Hi Mickael,
+On Tue, Mar 26, 2019 at 02:36:41PM +0000, Mickael GUENE wrote:
+> Sakari,
 > 
-> On Wed, Mar 27, 2019 at 10:55:43AM +0100, Mickael Guene wrote:
-> > This adds documentation of device tree for MIPID02 CSI-2 to PARALLEL
-> > bridge.
+> >> +static int bpp_from_code(__u32 code)
+> >> +{
+> >> +	switch (code) {
+> >> +	case MEDIA_BUS_FMT_SBGGR8_1X8:
+> >> +	case MEDIA_BUS_FMT_SGBRG8_1X8:
+> >> +	case MEDIA_BUS_FMT_SGRBG8_1X8:
+> >> +	case MEDIA_BUS_FMT_SRGGB8_1X8:
+> >> +		return 8;
+> >> +	case MEDIA_BUS_FMT_SBGGR10_1X10:
+> >> +	case MEDIA_BUS_FMT_SGBRG10_1X10:
+> >> +	case MEDIA_BUS_FMT_SGRBG10_1X10:
+> >> +	case MEDIA_BUS_FMT_SRGGB10_1X10:
+> >> +		return 10;
+> >> +	case MEDIA_BUS_FMT_SBGGR12_1X12:
+> >> +	case MEDIA_BUS_FMT_SGBRG12_1X12:
+> >> +	case MEDIA_BUS_FMT_SGRBG12_1X12:
+> >> +	case MEDIA_BUS_FMT_SRGGB12_1X12:
+> >> +		return 12;
+> >> +	case MEDIA_BUS_FMT_UYVY8_2X8:
 > > 
-> > Signed-off-by: Mickael Guene <mickael.guene@st.com>
-> > ---
+> > This is good for the parallel bus, but on CSI-2 side you should have
+> > MEDIA_BUS_FMT_UYVY8_1X16 instead. This isn't technically correct for a
+> > serial bus, but the custom is to use the one sample / pixel formats on the
+> > serial busses.
 > > 
-> > Changes in v4:
-> > - Fix and clarify endpoints properties documentation
-> > 
-> > Changes in v3: None
-> > Changes in v2:
-> > - Add precision about first CSI-2 port data rate
-> > - Document endpoints supported properties
-> > - Rename 'mipid02@14' into generic 'csi2rx@14' in example
-> > 
-> >  .../bindings/media/i2c/st,st-mipid02.txt           | 82 ++++++++++++++++++++++
-> >  MAINTAINERS                                        |  7 ++
-> >  2 files changed, 89 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt b/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
-> > new file mode 100644
-> > index 0000000..754a175
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/i2c/st,st-mipid02.txt
-> > @@ -0,0 +1,82 @@
-> > +STMicroelectronics MIPID02 CSI-2 to PARALLEL bridge
-> > +
-> > +MIPID02 has two CSI-2 input ports, only one of those ports can be active at a
-> > +time. Active port input stream will be de-serialized and its content outputted
-> > +through PARALLEL output port.
-> > +CSI-2 first input port is a dual lane 800Mbps per lane whereas CSI-2 second
-> > +input port is a single lane 800Mbps. Both ports support clock and data lane
-> > +polarity swap. First port also supports data lane swap.
-> > +PARALLEL output port has a maximum width of 12 bits.
-> > +Supported formats are RAW6, RAW7, RAW8, RAW10, RAW12, RGB565, RGB888, RGB444,
-> > +YUV420 8-bit, YUV422 8-bit and YUV420 10-bit.
-> > +
-> > +Required Properties:
-> > +- compatible: should be "st,st-mipid02"
-> 
-> s/should/shall/ overall; other values aren't really valid in any of the
-> cases.
+>  Should MEDIA_BUS_FMT_BGR888_1X24 be something like
+> MEDIA_BUS_FMT_BGR888_3X8 for parallel output bus ?
 
-As this is the only change and it's trivial, I can do that as well. Let me
-know if that works for you.
+Good point. Yes.
+
+Could you add that format to
+Documentation/media/uapi/v4l/subdev-formats.rst, please, in a separate
+patch?
 
 -- 
+Regards,
+
 Sakari Ailus
+sakari.ailus@linux.intel.com
