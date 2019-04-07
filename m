@@ -2,74 +2,154 @@ Return-Path: <SRS0=iaZ/=SJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AD1AC282DD
-	for <linux-media@archiver.kernel.org>; Sun,  7 Apr 2019 03:21:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51BE4C10F0E
+	for <linux-media@archiver.kernel.org>; Sun,  7 Apr 2019 03:48:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 64E4520B1F
-	for <linux-media@archiver.kernel.org>; Sun,  7 Apr 2019 03:21:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1588B2084F
+	for <linux-media@archiver.kernel.org>; Sun,  7 Apr 2019 03:48:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbfDGDVJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 6 Apr 2019 23:21:09 -0400
-Received: from www.osadl.org ([62.245.132.105]:39362 "EHLO www.osadl.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726468AbfDGDVJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 6 Apr 2019 23:21:09 -0400
-X-Greylist: delayed 3874 seconds by postgrey-1.27 at vger.kernel.org; Sat, 06 Apr 2019 23:21:06 EDT
-Received: from localhost.localdomain (178.115.242.59.static.drei.at [178.115.242.59])
-        by www.osadl.org (8.13.8/8.13.8/OSADL-2007092901) with ESMTP id x372GCs2021361;
-        Sun, 7 Apr 2019 04:16:22 +0200
-From:   Nicholas Mc Guire <hofrat@opentech.at>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicholas Mc Guire <hofrat@opentech.at>
-Subject: [PATCH 3/3] media: smiapp: quirk: add range to usleep_range
-Date:   Sun,  7 Apr 2019 04:16:04 +0200
-Message-Id: <1554603364-10500-3-git-send-email-hofrat@opentech.at>
-X-Mailer: git-send-email 2.1.4
-In-Reply-To: <1554603364-10500-1-git-send-email-hofrat@opentech.at>
-References: <1554603364-10500-1-git-send-email-hofrat@opentech.at>
+        id S1726265AbfDGDse (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Apr 2019 23:48:34 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:40453 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725951AbfDGDse (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 6 Apr 2019 23:48:34 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:5db0:1316:3277:dc7c])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id CynHhw5MUiLOmCynIhvqFR; Sun, 07 Apr 2019 05:48:32 +0200
+Message-ID: <912b44b51a00bf01134efe44e188a2a0@smtp-cloud9.xs4all.net>
+Date:   Sun, 07 Apr 2019 05:48:31 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfDH44P2/9GWlnzvCEbI/i11+vvwrY0ZtfoIjE8kOhARwnVlQ+MA3JDaCrjwKRRvvjXjGNxEtPJf+seTdzuRnfabmWgv3D1nQX0vASbdCHMAib8orD3g3
+ DWNQ9REe60hV3nDSqPCpLq3867OXgmSbuUtYVMaDYAGTgKhoDOx9wNncNK7tT9Brd5AVl2SpU5MS5eMWVoPd4YqvA0HZBomp8T6AN7Elh3FprNm8iGdPfCzG
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-No need for a high-accuracy delay here as long as it is more than 2
-milliseconds this should be ok - as it is non-atomic context it will
-be 2+ anyway and streamoff delays in the millisecond range should not
-hurt.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Signed-off-by: Nicholas Mc Guire <hofrat@opentech.at>
----
+Results of the daily build of media_tree:
 
-Problem located by an experimental coccinelle script
+date:			Sun Apr  7 05:00:10 CEST 2019
+media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
+media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
+v4l-utils git hash:	95f39aae48c6e8e5cc81e6ae6293d999f70a909b
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-2-amd64
 
-Patch was compile tested with: x86_64_defconfig + MEDIA_SUPPORT=m,
-MEDIA_CAMERA_SUPPORT=y, MEDIA_CONTROLLER=y, VIDEO_V4L2_SUBDEV_API=y,
-VIDEO_SMIAPP=m
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
 
-Patch is against 5.1-rc3 (localversion-next is next-20190405)
+Detailed results are available here:
 
- drivers/media/i2c/smiapp/smiapp-quirk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-quirk.c b/drivers/media/i2c/smiapp/smiapp-quirk.c
-index 95c0272..21b7fdc 100644
---- a/drivers/media/i2c/smiapp/smiapp-quirk.c
-+++ b/drivers/media/i2c/smiapp/smiapp-quirk.c
-@@ -202,7 +202,7 @@ static int jt8ev1_post_streamoff(struct smiapp_sensor *sensor)
- 		return rval;
- 
- 	/* Wait for 1 ms + one line => 2 ms is likely enough */
--	usleep_range(2000, 2000);
-+	usleep_range(2000, 4000);
- 
- 	/* Restore it */
- 	rval = smiapp_write_8(sensor, 0x3205, 0x00);
--- 
-2.1.4
+Detailed regression test results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
