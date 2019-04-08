@@ -2,744 +2,930 @@ Return-Path: <SRS0=swNA=SK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19A52C282CE
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 09:24:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A20BC282DE
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 09:24:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BBC4C2083E
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 09:24:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBCB120B1F
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 09:24:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nyEXvxgr"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="wPJJ8izB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbfDHJX5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 05:23:57 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:46281 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726005AbfDHJX4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 05:23:56 -0400
-Received: by mail-oi1-f195.google.com with SMTP id x188so9887843oia.13
-        for <linux-media@vger.kernel.org>; Mon, 08 Apr 2019 02:23:55 -0700 (PDT)
+        id S1726772AbfDHJYJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 05:24:09 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46661 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726752AbfDHJYI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 05:24:08 -0400
+Received: by mail-wr1-f65.google.com with SMTP id t17so15397390wrw.13
+        for <linux-media@vger.kernel.org>; Mon, 08 Apr 2019 02:24:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=WNoqinQd3BeX0WtX/sCdOPbiG9Apmei4/KJr3qQkFgY=;
-        b=nyEXvxgrw/hcC6QnWyBwgV/2dDYGojBkhbyHHd+t5ZP4K2WkBu42qmgDxVokctabTj
-         F9sqaKTvDMT2NfGtTE4974wmxSkYaHWX/GtHqmnil33Pqkx69B9kalELot3oTlykhE4t
-         RwcLfNBuYOP8lQk7p02ew6Sf14Z4TNrzKK8Zw=
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=aDiQ/74iC++UDbHVUTyNaqs8MfG2YvJcvis21eNB8CA=;
+        b=wPJJ8izB+txeajKgxu2bdJ0Xtdaw6W88G+b6Aqnxkgbe1b5fgrSaaRjahSUiEKKEub
+         0g3I+hLv2mYBKouw1dHQLS60IlH9FHuSqQSMjmC+1XUwWH+HfjZBDOLgxBvp4Z0dlWEV
+         GmfuHoQCZgEIdHEx40lL/94QwaQht0cpaB8ktFf0ZQDsIcIUeVkw77OUcIdytg0Vawt2
+         OROddH7LVkfWnZUjkwfBPSGU8o1fsoY0vSeLbSirhFkI7eg0E5/1Vfhrk4Un3kPLie01
+         svhd6YAnBxyf8q9a1/CCYqAAHpG4zSAnH7Ar5UwYGqX4ShEfBBEyidKO8jsbYe/YMRtX
+         jHeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=WNoqinQd3BeX0WtX/sCdOPbiG9Apmei4/KJr3qQkFgY=;
-        b=p3HHmLlAk8jhBA7sfToTcQCgOlb391LepJDmy7rURJepAEYG4EsWreDGoU8/iu89sX
-         Id/KOsg/YNlD+FV/ohir0rJ9eXZoNlVbzlq74gMkYg6uNll0UZvSRT5455H5C1XW2eTl
-         WPGCo6VCtm3G7SmdbF7Z+1XAMzlAmcrL2XzE6nXQCrjfUS0V5vuD1euZC9QqZ+IV9yIY
-         MpsnWlQWRlyIdCE6A7DIxU1Q8zbOKFOb8IOmky0gzNyoctBchHE8gvGQR3CGUn2iUReH
-         2d6PnGedsEkDMWe/vaEByvFQfpo63f+CL6OpMZDLX/qVwok8T1BhzeD01tv3f0O8oY9J
-         ZaKg==
-X-Gm-Message-State: APjAAAUX3aYogdg/ydaZCq8GXYyGDGLBg9SgvkzYYr7Y7i7qj1UP3OGP
-        KqcfuhZ+Mfq5XIrhrd2SNRx1ofp9sBE=
-X-Google-Smtp-Source: APXvYqz5uS0L1/dbNRtyW7CtpD27/OFBNi+wUccNVC0oknhKBcTIw78FVBkFEtYYXBP8ZxibN9pkpg==
-X-Received: by 2002:aca:b587:: with SMTP id e129mr14544427oif.143.1554715434265;
-        Mon, 08 Apr 2019 02:23:54 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id v123sm11842712oie.25.2019.04.08.02.23.52
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Apr 2019 02:23:53 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id u15so11317238otq.10
-        for <linux-media@vger.kernel.org>; Mon, 08 Apr 2019 02:23:52 -0700 (PDT)
-X-Received: by 2002:a9d:7749:: with SMTP id t9mr18871263otl.229.1554715432139;
- Mon, 08 Apr 2019 02:23:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=aDiQ/74iC++UDbHVUTyNaqs8MfG2YvJcvis21eNB8CA=;
+        b=Am9NL+Qy/xv8SRTwTUqoVlDc5EAse3b4T1I2yyXzH4lE77he0ypNBs4IIMDt8UAoTE
+         me498gb1IgaqsrVXFrvmuD0HqpK9FMcxAvjneLslWzjd5YnZV6vrWGCUgKvjKLLlPU+Q
+         pSwRoqt5n2anIgAaPVrnBvq1rGgrqUCrMTzR0E0b/NRPiK70DP7TherWinK3y0pO9deu
+         jTUwRtVKvJB4IHRE+I9jX4M5UZrsvKUJHBmeLRIfsbqPi9qgOb8J34vGaQ0yQcMyKZq8
+         9T/gTqtpPI5AA3cTizjYbg+Ea+mUkPOgl4wkZakJdq9HVg1S+B32mFyxn6Q75QYDIHEr
+         0buw==
+X-Gm-Message-State: APjAAAWst7Gj1zVduMGnOaKDkzjwFdagES7+H9Qfk9W7aoxQQ4ySeR+S
+        kkNdhq24FrfNg/2q1j7dDL4d4g==
+X-Google-Smtp-Source: APXvYqyWyMYfN+RE3ec6uoChCbYlNgN5gc94CG7rE+PbEoWQ5/vOLNB50Wxkpml1jAZKlAEcyUVIiw==
+X-Received: by 2002:adf:f30b:: with SMTP id i11mr1615072wro.297.1554715445353;
+        Mon, 08 Apr 2019 02:24:05 -0700 (PDT)
+Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id j3sm70528221wre.51.2019.04.08.02.24.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 08 Apr 2019 02:24:04 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     hverkuil@xs4all.nl, mchehab@kernel.org
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/3] media: platform: meson: Add Amlogic Meson G12A AO CEC Controller driver
+Date:   Mon,  8 Apr 2019 11:23:57 +0200
+Message-Id: <20190408092358.25894-3-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190408092358.25894-1-narmstrong@baylibre.com>
+References: <20190408092358.25894-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
-References: <20190124100419.26492-1-tfiga@chromium.org> <20190124100419.26492-3-tfiga@chromium.org>
- <4bbe4ce4-615a-b981-0855-cd78c7a002d9@xs4all.nl> <471720b7-e304-271b-256d-a3dd394773c9@xs4all.nl>
- <CAAFQd5Au_=08pVom1z3C1nHKdKak8Y4d5odR6fiNB4urDhfjKQ@mail.gmail.com> <787ddc1f-388d-82be-2702-0d7d256f636c@xs4all.nl>
-In-Reply-To: <787ddc1f-388d-82be-2702-0d7d256f636c@xs4all.nl>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 8 Apr 2019 18:23:40 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DozydYBpEceFTbJSutP+gwjxybpd1q6N1Vi+YragQT+w@mail.gmail.com>
-Message-ID: <CAAFQd5DozydYBpEceFTbJSutP+gwjxybpd1q6N1Vi+YragQT+w@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] media: docs-rst: Document memory-to-memory video
- encoder interface
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        =?UTF-8?B?VGlmZmFueSBMaW4gKOael+aFp+ePiik=?= 
-        <tiffany.lin@mediatek.com>,
-        =?UTF-8?B?QW5kcmV3LUNUIENoZW4gKOmZs+aZuui/qik=?= 
-        <andrew-ct.chen@mediatek.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dave.stevenson@raspberrypi.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Apr 5, 2019 at 7:03 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->
-> On 4/5/19 10:12 AM, Tomasz Figa wrote:
-> > On Thu, Mar 14, 2019 at 10:57 PM Hans Verkuil <hverkuil@xs4all.nl> wrot=
-e:
-> >>
-> >> Hi Tomasz,
-> >>
-> >> Some more comments...
-> >>
-> >> On 1/29/19 2:52 PM, Hans Verkuil wrote:
-> >>> Hi Tomasz,
-> >>>
-> >>> Some comments below. Nothing major, so I think a v4 should be ready t=
-o be
-> >>> merged.
-> >>>
-> >>> On 1/24/19 11:04 AM, Tomasz Figa wrote:
-> >>>> Due to complexity of the video encoding process, the V4L2 drivers of
-> >>>> stateful encoder hardware require specific sequences of V4L2 API cal=
-ls
-> >>>> to be followed. These include capability enumeration, initialization=
-,
-> >>>> encoding, encode parameters change, drain and reset.
-> >>>>
-> >>>> Specifics of the above have been discussed during Media Workshops at
-> >>>> LinuxCon Europe 2012 in Barcelona and then later Embedded Linux
-> >>>> Conference Europe 2014 in D=C3=BCsseldorf. The de facto Codec API th=
-at
-> >>>> originated at those events was later implemented by the drivers we a=
-lready
-> >>>> have merged in mainline, such as s5p-mfc or coda.
-> >>>>
-> >>>> The only thing missing was the real specification included as a part=
- of
-> >>>> Linux Media documentation. Fix it now and document the encoder part =
-of
-> >>>> the Codec API.
-> >>>>
-> >>>> Signed-off-by: Tomasz Figa <tfiga@chromium.org>
-> >>>> ---
-> >>>>  Documentation/media/uapi/v4l/dev-encoder.rst  | 586 +++++++++++++++=
-+++
-> >>>>  Documentation/media/uapi/v4l/dev-mem2mem.rst  |   1 +
-> >>>>  Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |   5 +
-> >>>>  Documentation/media/uapi/v4l/v4l2.rst         |   2 +
-> >>>>  .../media/uapi/v4l/vidioc-encoder-cmd.rst     |  38 +-
-> >>>>  5 files changed, 617 insertions(+), 15 deletions(-)
-> >>>>  create mode 100644 Documentation/media/uapi/v4l/dev-encoder.rst
-> >>>>
-> >>>> diff --git a/Documentation/media/uapi/v4l/dev-encoder.rst b/Document=
-ation/media/uapi/v4l/dev-encoder.rst
-> >>>> new file mode 100644
-> >>>> index 000000000000..fb8b05a132ee
-> >>>> --- /dev/null
-> >>>> +++ b/Documentation/media/uapi/v4l/dev-encoder.rst
-> >>>> @@ -0,0 +1,586 @@
-> >>>> +.. -*- coding: utf-8; mode: rst -*-
-> >>>> +
-> >>>> +.. _encoder:
-> >>>> +
-> >>>> +*************************************************
-> >>>> +Memory-to-memory Stateful Video Encoder Interface
-> >>>> +*************************************************
-> >>>> +
-> >>>> +A stateful video encoder takes raw video frames in display order an=
-d encodes
-> >>>> +them into a bitstream. It generates complete chunks of the bitstrea=
-m, including
-> >>>> +all metadata, headers, etc. The resulting bitstream does not requir=
-e any
-> >>>> +further post-processing by the client.
-> >>>> +
-> >>>> +Performing software stream processing, header generation etc. in th=
-e driver
-> >>>> +in order to support this interface is strongly discouraged. In case=
- such
-> >>>> +operations are needed, use of the Stateless Video Encoder Interface=
- (in
-> >>>> +development) is strongly advised.
-> >>>> +
-> >>>> +Conventions and notation used in this document
-> >>>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>> +
-> >>>> +1. The general V4L2 API rules apply if not specified in this docume=
-nt
-> >>>> +   otherwise.
-> >>>> +
-> >>>> +2. The meaning of words "must", "may", "should", etc. is as per `RF=
-C
-> >>>> +   2119 <https://tools.ietf.org/html/rfc2119>`_.
-> >>>> +
-> >>>> +3. All steps not marked "optional" are required.
-> >>>> +
-> >>>> +4. :c:func:`VIDIOC_G_EXT_CTRLS` and :c:func:`VIDIOC_S_EXT_CTRLS` ma=
-y be used
-> >>>> +   interchangeably with :c:func:`VIDIOC_G_CTRL` and :c:func:`VIDIOC=
-_S_CTRL`,
-> >>>> +   unless specified otherwise.
-> >>>> +
-> >>>> +5. Single-planar API (see :ref:`planar-apis`) and applicable struct=
-ures may be
-> >>>> +   used interchangeably with multi-planar API, unless specified oth=
-erwise,
-> >>>> +   depending on decoder capabilities and following the general V4L2=
- guidelines.
-> >>>> +
-> >>>> +6. i =3D [a..b]: sequence of integers from a to b, inclusive, i.e. =
-i =3D
-> >>>> +   [0..2]: i =3D 0, 1, 2.
-> >>>> +
-> >>>> +7. Given an ``OUTPUT`` buffer A, then A=E2=80=99 represents a buffe=
-r on the ``CAPTURE``
-> >>>> +   queue containing data that resulted from processing buffer A.
-> >>>> +
-> >>>> +Glossary
-> >>>> +=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>> +
-> >>>> +Refer to :ref:`decoder-glossary`.
-> >>>> +
-> >>>> +State machine
-> >>>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>> +
-> >>>> +.. kernel-render:: DOT
-> >>>> +   :alt: DOT digraph of encoder state machine
-> >>>> +   :caption: Encoder state machine
-> >>>> +
-> >>>> +   digraph encoder_state_machine {
-> >>>> +       node [shape =3D doublecircle, label=3D"Encoding"] Encoding;
-> >>>> +
-> >>>> +       node [shape =3D circle, label=3D"Initialization"] Initializa=
-tion;
-> >>>> +       node [shape =3D circle, label=3D"Stopped"] Stopped;
-> >>>> +       node [shape =3D circle, label=3D"Drain"] Drain;
-> >>>> +       node [shape =3D circle, label=3D"Reset"] Reset;
-> >>>> +
-> >>>> +       node [shape =3D point]; qi
-> >>>> +       qi -> Initialization [ label =3D "open()" ];
-> >>>> +
-> >>>> +       Initialization -> Encoding [ label =3D "Both queues streamin=
-g" ];
-> >>>> +
-> >>>> +       Encoding -> Drain [ label =3D "V4L2_DEC_CMD_STOP" ];
-> >>>> +       Encoding -> Reset [ label =3D "VIDIOC_STREAMOFF(CAPTURE)" ];
-> >>>> +       Encoding -> Stopped [ label =3D "VIDIOC_STREAMOFF(OUTPUT)" ]=
-;
-> >>>> +       Encoding -> Encoding;
-> >>>> +
-> >>>> +       Drain -> Stopped [ label =3D "All CAPTURE\nbuffers dequeued\=
-nor\nVIDIOC_STREAMOFF(CAPTURE)" ];
-> >>>> +       Drain -> Reset [ label =3D "VIDIOC_STREAMOFF(CAPTURE)" ];
-> >>>> +
-> >>>> +       Reset -> Encoding [ label =3D "VIDIOC_STREAMON(CAPTURE)" ];
-> >>>> +       Reset -> Initialization [ label =3D "VIDIOC_REQBUFS(OUTPUT, =
-0)" ];
-> >>>> +
-> >>>> +       Stopped -> Encoding [ label =3D "V4L2_DEC_CMD_START\nor\nVID=
-IOC_STREAMON(OUTPUT)" ];
-> >>>> +       Stopped -> Reset [ label =3D "VIDIOC_STREAMOFF(CAPTURE)" ];
-> >>>> +   }
-> >>>> +
-> >>>> +Querying capabilities
-> >>>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>> +
-> >>>> +1. To enumerate the set of coded formats supported by the encoder, =
-the
-> >>>> +   client may call :c:func:`VIDIOC_ENUM_FMT` on ``CAPTURE``.
-> >>>> +
-> >>>> +   * The full set of supported formats will be returned, regardless=
- of the
-> >>>> +     format set on ``OUTPUT``.
-> >>>> +
-> >>>> +2. To enumerate the set of supported raw formats, the client may ca=
-ll
-> >>>> +   :c:func:`VIDIOC_ENUM_FMT` on ``OUTPUT``.
-> >>>> +
-> >>>> +   * Only the formats supported for the format currently active on =
-``CAPTURE``
-> >>>> +     will be returned.
-> >>>> +
-> >>>> +   * In order to enumerate raw formats supported by a given coded f=
-ormat,
-> >>>> +     the client must first set that coded format on ``CAPTURE`` and=
- then
-> >>>> +     enumerate the formats on ``OUTPUT``.
-> >>>> +
-> >>>> +3. The client may use :c:func:`VIDIOC_ENUM_FRAMESIZES` to detect su=
-pported
-> >>>> +   resolutions for a given format, passing desired pixel format in
-> >>>> +   :c:type:`v4l2_frmsizeenum` ``pixel_format``.
-> >>>> +
-> >>>> +   * Values returned by :c:func:`VIDIOC_ENUM_FRAMESIZES` for a code=
-d pixel
-> >>>> +     format will include all possible coded resolutions supported b=
-y the
-> >>>> +     encoder for given coded pixel format.
-> >>>> +
-> >>>> +   * Values returned by :c:func:`VIDIOC_ENUM_FRAMESIZES` for a raw =
-pixel format
-> >>>> +     will include all possible frame buffer resolutions supported b=
-y the
-> >>>> +     encoder for given raw pixel format and coded format currently =
-set on
-> >>>> +     ``CAPTURE``.
-> >>>> +
-> >>>> +4. Supported profiles and levels for the coded format currently set=
- on
-> >>>> +   ``CAPTURE``, if applicable, may be queried using their respectiv=
-e controls
-> >>>> +   via :c:func:`VIDIOC_QUERYCTRL`.
-> >>>> +
-> >>>> +5. Any additional encoder capabilities may be discovered by queryin=
-g
-> >>>> +   their respective controls.
-> >>>> +
-> >>>> +Initialization
-> >>>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>> +
-> >>>> +1. Set the coded format on the ``CAPTURE`` queue via :c:func:`VIDIO=
-C_S_FMT`
-> >>>> +
-> >>>> +   * **Required fields:**
-> >>>> +
-> >>>> +     ``type``
-> >>>> +         a ``V4L2_BUF_TYPE_*`` enum appropriate for ``CAPTURE``
-> >>>> +
-> >>>> +     ``pixelformat``
-> >>>> +         the coded format to be produced
-> >>>> +
-> >>>> +     ``sizeimage``
-> >>>> +         desired size of ``CAPTURE`` buffers; the encoder may adjus=
-t it to
-> >>>> +         match hardware requirements
-> >>>> +
-> >>>> +     ``width``, ``height``
-> >>>> +         ignored (always zero)
-> >>>> +
-> >>>> +     other fields
-> >>>> +         follow standard semantics
-> >>>> +
-> >>>> +   * **Return fields:**
-> >>>> +
-> >>>> +     ``sizeimage``
-> >>>> +         adjusted size of ``CAPTURE`` buffers
-> >>>> +
-> >>>> +   .. important::
-> >>>> +
-> >>>> +      Changing the ``CAPTURE`` format may change the currently set =
-``OUTPUT``
-> >>>> +      format. The encoder will derive a new ``OUTPUT`` format from =
-the
-> >>>> +      ``CAPTURE`` format being set, including resolution, colorimet=
-ry
-> >>>> +      parameters, etc. If the client needs a specific ``OUTPUT`` fo=
-rmat, it
-> >>>> +      must adjust it afterwards.
-> >>>
-> >>> Hmm, "including resolution": if width and height are set to 0, what s=
-hould the
-> >>> OUTPUT resolution be? Up to the driver? I think this should be clarif=
-ied since
-> >>> at a first reading of this paragraph it appears to be contradictory.
-> >>
-> >> I think the driver should just return the width and height of the OUTP=
-UT
-> >> format. So the width and height that userspace specifies is just ignor=
-ed
-> >> and replaced by the width and height of the OUTPUT format. After all, =
-that's
-> >> what the bitstream will encode. Returning 0 for width and height would=
- make
-> >> this a strange exception in V4L2 and I want to avoid that.
-> >>
-> >
-> > Hmm, however, the width and height of the OUTPUT format is not what's
-> > actually encoded in the bitstream. The right selection rectangle
-> > determines that.
-> >
-> > In one of the previous versions I though we could put the codec
+The Amlogic G12A SoC embeds a second CEC controller with a totally
+different design.
 
-s/codec/coded/...
+The two controller can work in the same time since the CEC line can
+be set to two different pins on the two controllers.
 
-> > resolution as the width and height of the CAPTURE format, which would
-> > be the resolution of the encoded image rounded up to full macroblocks
-> > +/- some encoder-specific constraints. AFAIR there was some concern
-> > about OUTPUT format changes triggering CAPTURE format changes, but to
-> > be honest, I'm not sure if that's really a problem. I just decided to
-> > drop that for the simplicity.
->
-> I'm not sure what your point is.
->
-> The OUTPUT format has the coded resolution,
+This second CEC controller is documented as "AO-CEC-B", thus the
+registers will be named "CECB_" to differentiate with the other
+AO-CEC driver.
 
-That's not always true. The OUTPUT format is just the format of the
-source frame buffers. In special cases where the source resolution is
-nicely aligned, it would be the same as coded size, but the remaining
-cases are valid as well.
+Unlike the other AO-CEC controller, this one takes the Oscillator
+clock as input and embeds a dual-divider to provide a precise
+32768Hz clock for communication. This is handled by registering
+a clock in the driver.
 
-> so when you set the
-> CAPTURE format it can just copy the OUTPUT coded resolution unless the
-> chosen CAPTURE pixelformat can't handle that in which case both the
-> OUTPUT and CAPTURE coded resolutions are clamped to whatever is the maxim=
-um
-> or minimum the codec is capable of.
+Unlike the other AO-CEC controller, this controller supports setting
+up to 15 logical addresses and supports the signal_free_time settings
+in the transmit function.
 
-As per my comment above, generally speaking, the encoder will derive
-an appropriate coded format from the OUTPUT format, but also other
-factors, like the crop rectangles and possibly some internal
-constraints.
+Unfortunately, this controller does not support "monitor" mode.
 
->
-> That said, I am fine with just leaving it up to the driver as suggested
-> before. Just as long as both the CAPTURE and OUTPUT formats remain valid
-> (i.e. width and height may never be out of range).
->
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/media/platform/Kconfig             |  13 +
+ drivers/media/platform/meson/Makefile      |   1 +
+ drivers/media/platform/meson/ao-cec-g12a.c | 788 +++++++++++++++++++++
+ 3 files changed, 802 insertions(+)
+ create mode 100644 drivers/media/platform/meson/ao-cec-g12a.c
 
-Sounds good to me.
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 4acbed189644..92ea07ddc609 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -578,6 +578,19 @@ config VIDEO_MESON_AO_CEC
+ 	  generic CEC framework interface.
+ 	  CEC bus is present in the HDMI connector and enables communication
+ 
++config VIDEO_MESON_G12A_AO_CEC
++	tristate "Amlogic Meson G12A AO CEC driver"
++	depends on ARCH_MESON || COMPILE_TEST
++	select CEC_CORE
++	select CEC_NOTIFIER
++	---help---
++	  This is a driver for Amlogic Meson G12A SoCs AO CEC interface.
++	  This driver if for the new AO-CEC module found in G12A SoCs,
++	  usually named AO_CEC_B in documentation.
++	  It uses the generic CEC framework interface.
++	  CEC bus is present in the HDMI connector and enables communication
++	  between compatible devices.
++
+ config CEC_GPIO
+ 	tristate "Generic GPIO-based CEC driver"
+ 	depends on PREEMPT || COMPILE_TEST
+diff --git a/drivers/media/platform/meson/Makefile b/drivers/media/platform/meson/Makefile
+index 597beb8f34d1..f611c23c3718 100644
+--- a/drivers/media/platform/meson/Makefile
++++ b/drivers/media/platform/meson/Makefile
+@@ -1 +1,2 @@
+ obj-$(CONFIG_VIDEO_MESON_AO_CEC)	+= ao-cec.o
++obj-$(CONFIG_VIDEO_MESON_G12A_AO_CEC)	+= ao-cec-g12a.o
+diff --git a/drivers/media/platform/meson/ao-cec-g12a.c b/drivers/media/platform/meson/ao-cec-g12a.c
+new file mode 100644
+index 000000000000..9f5ab551dbbf
+--- /dev/null
++++ b/drivers/media/platform/meson/ao-cec-g12a.c
+@@ -0,0 +1,788 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Driver for Amlogic Meson AO CEC G12A Controller
++ *
++ * Copyright (C) 2017 Amlogic, Inc. All rights reserved
++ * Copyright (C) 2019 BayLibre, SAS
++ * Author: Neil Armstrong <narmstrong@baylibre.com>
++ */
++
++#include <linux/bitfield.h>
++#include <linux/clk.h>
++#include <linux/device.h>
++#include <linux/io.h>
++#include <linux/delay.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/types.h>
++#include <linux/interrupt.h>
++#include <linux/reset.h>
++#include <linux/slab.h>
++#include <linux/regmap.h>
++#include <media/cec.h>
++#include <media/cec-notifier.h>
++#include <linux/clk-provider.h>
++
++/* CEC Registers */
++
++#define CECB_CLK_CNTL_REG0		0x00
++
++#define CECB_CLK_CNTL_N1		GENMASK(11, 0)
++#define CECB_CLK_CNTL_N2		GENMASK(23, 12)
++#define CECB_CLK_CNTL_DUAL_EN		BIT(28)
++#define CECB_CLK_CNTL_OUTPUT_EN		BIT(30)
++#define CECB_CLK_CNTL_INPUT_EN		BIT(31)
++
++#define CECB_CLK_CNTL_REG1		0x04
++
++#define CECB_CLK_CNTL_M1		GENMASK(11, 0)
++#define CECB_CLK_CNTL_M2		GENMASK(23, 12)
++#define CECB_CLK_CNTL_BYPASS_EN		BIT(24)
++
++/*
++ * [14:12] Filter_del. For glitch-filtering CEC line, ignore signal
++ *       change pulse width < filter_del * T(filter_tick) * 3.
++ * [9:8] Filter_tick_sel: Select which periodical pulse for
++ *       glitch-filtering CEC line signal.
++ *  - 0=Use T(xtal)*3 = 125ns;
++ *  - 1=Use once-per-1us pulse;
++ *  - 2=Use once-per-10us pulse;
++ *  - 3=Use once-per-100us pulse.
++ * [3]   Sysclk_en. 0=Disable system clock; 1=Enable system clock.
++ * [2:1] cntl_clk
++ *  - 0 = Disable clk (Power-off mode)
++ *  - 1 = Enable gated clock (Normal mode)
++ *  - 2 = Enable free-run clk (Debug mode)
++ * [0] SW_RESET 1=Apply reset; 0=No reset.
++ */
++#define CECB_GEN_CNTL_REG		0x08
++
++#define CECB_GEN_CNTL_RESET		BIT(0)
++#define CECB_GEN_CNTL_CLK_DISABLE	0
++#define CECB_GEN_CNTL_CLK_ENABLE	1
++#define CECB_GEN_CNTL_CLK_ENABLE_DBG	2
++#define CECB_GEN_CNTL_CLK_CTRL_MASK	GENMASK(2, 1)
++#define CECB_GEN_CNTL_SYS_CLK_EN	BIT(3)
++#define CECB_GEN_CNTL_FILTER_TICK_125NS	0
++#define CECB_GEN_CNTL_FILTER_TICK_1US	1
++#define CECB_GEN_CNTL_FILTER_TICK_10US	2
++#define CECB_GEN_CNTL_FILTER_TICK_100US	3
++#define CECB_GEN_CNTL_FILTER_TICK_SEL	GENMASK(9, 8)
++#define CECB_GEN_CNTL_FILTER_DEL	GENMASK(14, 12)
++
++/*
++ * [7:0] cec_reg_addr
++ * [15:8] cec_reg_wrdata
++ * [16] cec_reg_wr
++ *  - 0 = Read
++ *  - 1 = Write
++ * [31:24] cec_reg_rddata
++ */
++#define CECB_RW_REG			0x0c
++
++#define CECB_RW_ADDR			GENMASK(7, 0)
++#define CECB_RW_WR_DATA			GENMASK(15, 8)
++#define CECB_RW_WRITE_EN		BIT(16)
++#define CECB_RW_BUS_BUSY		BIT(23)
++#define CECB_RW_RD_DATA			GENMASK(31, 24)
++
++/*
++ * [0] DONE Interrupt
++ * [1] End Of Message Interrupt
++ * [2] Not Acknowlegde Interrupt
++ * [3] Arbitration Loss Interrupt
++ * [4] Initiator Error Interrupt
++ * [5] Follower Error Interrupt
++ * [6] Wake-Up Interrupt
++ */
++#define CECB_INTR_MASKN_REG		0x10
++#define CECB_INTR_CLR_REG		0x14
++#define CECB_INTR_STAT_REG		0x18
++
++#define CECB_INTR_DONE			BIT(0)
++#define CECB_INTR_EOM			BIT(1)
++#define CECB_INTR_NACK			BIT(2)
++#define CECB_INTR_ARB_LOSS		BIT(3)
++#define CECB_INTR_INITIATOR_ERR		BIT(4)
++#define CECB_INTR_FOLLOWER_ERR		BIT(5)
++#define CECB_INTR_WAKE_UP		BIT(6)
++
++/* CEC Commands */
++
++#define CECB_CTRL		0x00
++
++#define CECB_CTRL_SEND		BIT(0)
++#define CECB_CTRL_TYPE		GENMASK(2, 1)
++#define CECB_CTRL_TYPE_RETRY	0
++#define CECB_CTRL_TYPE_NEW	1
++#define CECB_CTRL_TYPE_NEXT	2
++
++#define CECB_CTRL2		0x01
++#define CECB_INTR_MASK		0x02
++#define CECB_LADD_LOW		0x05
++#define CECB_LADD_HIGH		0x06
++#define CECB_TX_CNT		0x07
++#define CECB_RX_CNT		0x08
++#define CECB_STAT0		0x09
++#define CECB_TX_DATA00		0x10
++#define CECB_TX_DATA01		0x11
++#define CECB_TX_DATA02		0x12
++#define CECB_TX_DATA03		0x13
++#define CECB_TX_DATA04		0x14
++#define CECB_TX_DATA05		0x15
++#define CECB_TX_DATA06		0x16
++#define CECB_TX_DATA07		0x17
++#define CECB_TX_DATA08		0x18
++#define CECB_TX_DATA09		0x19
++#define CECB_TX_DATA10		0x1A
++#define CECB_TX_DATA11		0x1B
++#define CECB_TX_DATA12		0x1C
++#define CECB_TX_DATA13		0x1D
++#define CECB_TX_DATA14		0x1E
++#define CECB_TX_DATA15		0x1F
++#define CECB_RX_DATA00		0x20
++#define CECB_RX_DATA01		0x21
++#define CECB_RX_DATA02		0x22
++#define CECB_RX_DATA03		0x23
++#define CECB_RX_DATA04		0x24
++#define CECB_RX_DATA05		0x25
++#define CECB_RX_DATA06		0x26
++#define CECB_RX_DATA07		0x27
++#define CECB_RX_DATA08		0x28
++#define CECB_RX_DATA09		0x29
++#define CECB_RX_DATA10		0x2A
++#define CECB_RX_DATA11		0x2B
++#define CECB_RX_DATA12		0x2C
++#define CECB_RX_DATA13		0x2D
++#define CECB_RX_DATA14		0x2E
++#define CECB_RX_DATA15		0x2F
++#define CECB_LOCK_BUF		0x30
++
++#define CECB_LOCK_BUF_EN	BIT(0)
++
++#define CECB_WAKEUPCTRL		0x31
++
++struct meson_ao_cec_g12a_device {
++	struct platform_device		*pdev;
++	struct regmap			*regmap;
++	struct regmap			*regmap_cec;
++	spinlock_t			cec_reg_lock;
++	struct cec_notifier		*notify;
++	struct cec_adapter		*adap;
++	struct cec_msg			rx_msg;
++	struct clk			*oscin;
++	struct clk			*core;
++};
++
++static const struct regmap_config meson_ao_cec_g12a_regmap_conf = {
++	.reg_bits = 8,
++	.val_bits = 32,
++	.reg_stride = 4,
++	.max_register = CECB_INTR_STAT_REG,
++};
++
++/*
++ * The AO-CECB embeds a dual/divider to generate a more precise
++ * 32,768KHz clock for CEC core clock.
++ *                      ______   ______
++ *                     |      | |      |
++ *         ______      | Div1 |-| Cnt1 |       ______
++ *        |      |    /|______| |______|\     |      |
++ * Xtal-->| Gate |---|  ______   ______  X-X--| Gate |-->
++ *        |______| |  \|      | |      |/  |  |______|
++ *                 |   | Div2 |-| Cnt2 |   |
++ *                 |   |______| |______|   |
++ *                 |_______________________|
++ *
++ * The dividing can be switched to single or dual, with a counter
++ * for each divider to set when the switching is done.
++ * The entire dividing mechanism can be also bypassed.
++ */
++
++struct meson_ao_cec_g12a_dualdiv_clk {
++	struct clk_hw hw;
++	struct regmap *regmap;
++};
++
++#define hw_to_meson_ao_cec_g12a_dualdiv_clk(_hw)			\
++	container_of(_hw, struct meson_ao_cec_g12a_dualdiv_clk, hw)	\
++
++static unsigned long
++meson_ao_cec_g12a_dualdiv_clk_recalc_rate(struct clk_hw *hw,
++					  unsigned long parent_rate)
++{
++	struct meson_ao_cec_g12a_dualdiv_clk *dualdiv_clk =
++		hw_to_meson_ao_cec_g12a_dualdiv_clk(hw);
++	unsigned long n1;
++	u32 reg0, reg1;
++
++	regmap_read(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0, &reg0);
++	regmap_read(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0, &reg1);
++
++	if (reg1 & CECB_CLK_CNTL_BYPASS_EN)
++		return parent_rate;
++
++	if (reg0 & CECB_CLK_CNTL_DUAL_EN) {
++		unsigned long n2, m1, m2, f1, f2, p1, p2;
++
++		n1 = FIELD_GET(CECB_CLK_CNTL_N1, reg0) + 1;
++		n2 = FIELD_GET(CECB_CLK_CNTL_N2, reg0) + 1;
++
++		m1 = FIELD_GET(CECB_CLK_CNTL_M1, reg1) + 1;
++		m2 = FIELD_GET(CECB_CLK_CNTL_M1, reg1) + 1;
++
++		f1 = DIV_ROUND_CLOSEST(parent_rate, n1);
++		f2 = DIV_ROUND_CLOSEST(parent_rate, n2);
++
++		p1 = DIV_ROUND_CLOSEST(100000000 * m1, f1 * (m1 + m2));
++		p2 = DIV_ROUND_CLOSEST(100000000 * m2, f2 * (m1 + m2));
++
++		return DIV_ROUND_UP(100000000, p1 + p2);
++	}
++
++	n1 = FIELD_GET(CECB_CLK_CNTL_N1, reg0) + 1;
++
++	return DIV_ROUND_CLOSEST(parent_rate, n1);
++}
++
++static int meson_ao_cec_g12a_dualdiv_clk_enable(struct clk_hw *hw)
++{
++	struct meson_ao_cec_g12a_dualdiv_clk *dualdiv_clk =
++		hw_to_meson_ao_cec_g12a_dualdiv_clk(hw);
++
++
++	/* Disable Input & Output */
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0,
++			   CECB_CLK_CNTL_INPUT_EN | CECB_CLK_CNTL_OUTPUT_EN,
++			   0);
++
++	/* Set N1 & N2 */
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0,
++			   CECB_CLK_CNTL_N1,
++			   FIELD_PREP(CECB_CLK_CNTL_N1, 733 - 1));
++
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0,
++			   CECB_CLK_CNTL_N2,
++			   FIELD_PREP(CECB_CLK_CNTL_N2, 732 - 1));
++
++	/* Set M1 & M2 */
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG1,
++			   CECB_CLK_CNTL_M1,
++			   FIELD_PREP(CECB_CLK_CNTL_M1, 8 - 1));
++
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG1,
++			   CECB_CLK_CNTL_M2,
++			   FIELD_PREP(CECB_CLK_CNTL_M2, 11 - 1));
++
++	/* Enable Dual divisor */
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0,
++			   CECB_CLK_CNTL_DUAL_EN, CECB_CLK_CNTL_DUAL_EN);
++
++	/* Disable divisor bypass */
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG1,
++			   CECB_CLK_CNTL_BYPASS_EN, 0);
++
++	/* Enable Input & Output */
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0,
++			   CECB_CLK_CNTL_INPUT_EN | CECB_CLK_CNTL_OUTPUT_EN,
++			   CECB_CLK_CNTL_INPUT_EN | CECB_CLK_CNTL_OUTPUT_EN);
++
++	return 0;
++}
++
++static void meson_ao_cec_g12a_dualdiv_clk_disable(struct clk_hw *hw)
++{
++	struct meson_ao_cec_g12a_dualdiv_clk *dualdiv_clk =
++		hw_to_meson_ao_cec_g12a_dualdiv_clk(hw);
++
++	regmap_update_bits(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0,
++			   CECB_CLK_CNTL_INPUT_EN | CECB_CLK_CNTL_OUTPUT_EN,
++			   0);
++}
++
++static int meson_ao_cec_g12a_dualdiv_clk_is_enabled(struct clk_hw *hw)
++{
++	struct meson_ao_cec_g12a_dualdiv_clk *dualdiv_clk =
++		hw_to_meson_ao_cec_g12a_dualdiv_clk(hw);
++	int val;
++
++	regmap_read(dualdiv_clk->regmap, CECB_CLK_CNTL_REG0, &val);
++
++	return !!(val & (CECB_CLK_CNTL_INPUT_EN | CECB_CLK_CNTL_OUTPUT_EN));
++}
++
++static const struct clk_ops meson_ao_cec_g12a_dualdiv_clk_ops = {
++	.recalc_rate	= meson_ao_cec_g12a_dualdiv_clk_recalc_rate,
++	.is_enabled	= meson_ao_cec_g12a_dualdiv_clk_is_enabled,
++	.enable		= meson_ao_cec_g12a_dualdiv_clk_enable,
++	.disable	= meson_ao_cec_g12a_dualdiv_clk_disable,
++};
++
++static int meson_ao_cec_g12a_setup_clk(struct meson_ao_cec_g12a_device *ao_cec)
++{
++	struct meson_ao_cec_g12a_dualdiv_clk *dualdiv_clk;
++	struct device *dev = &ao_cec->pdev->dev;
++	struct clk_init_data init;
++	const char *parent_name;
++	struct clk *clk;
++	char *name;
++
++	dualdiv_clk = devm_kzalloc(dev, sizeof(*dualdiv_clk), GFP_KERNEL);
++	if (!dualdiv_clk)
++		return -ENOMEM;
++
++	name = kasprintf(GFP_KERNEL, "%s#dualdiv_clk", dev_name(dev));
++	if (!name)
++		return -ENOMEM;
++
++	parent_name = __clk_get_name(ao_cec->oscin);
++
++	init.name = name;
++	init.ops = &meson_ao_cec_g12a_dualdiv_clk_ops;
++	init.flags = 0;
++	init.parent_names = &parent_name;
++	init.num_parents = 1;
++	dualdiv_clk->regmap = ao_cec->regmap;
++	dualdiv_clk->hw.init = &init;
++
++	clk = devm_clk_register(dev, &dualdiv_clk->hw);
++	kfree(name);
++	if (IS_ERR(clk)) {
++		dev_err(dev, "failed to register clock\n");
++		return PTR_ERR(clk);
++	}
++
++	ao_cec->core = clk;
++
++	return 0;
++}
++
++static int meson_ao_cec_g12a_read(void *context, unsigned int addr,
++				  unsigned int *data)
++{
++	struct meson_ao_cec_g12a_device *ao_cec = context;
++	u32 reg = FIELD_PREP(CECB_RW_ADDR, addr);
++	unsigned long flags;
++	int ret = 0;
++
++	spin_lock_irqsave(&ao_cec->cec_reg_lock, flags);
++
++	ret = regmap_write(ao_cec->regmap, CECB_RW_REG, reg);
++	if (ret)
++		goto read_out;
++
++	ret = regmap_read_poll_timeout(ao_cec->regmap, CECB_RW_REG, reg,
++				       !(reg & CECB_RW_BUS_BUSY),
++				       5, 1000);
++	if (ret)
++		goto read_out;
++
++	ret = regmap_read(ao_cec->regmap, CECB_RW_REG, &reg);
++
++	*data = FIELD_GET(CECB_RW_RD_DATA, reg);
++
++read_out:
++	spin_unlock_irqrestore(&ao_cec->cec_reg_lock, flags);
++
++	return ret;
++}
++
++static int meson_ao_cec_g12a_write(void *context, unsigned int addr,
++				   unsigned int data)
++{
++	struct meson_ao_cec_g12a_device *ao_cec = context;
++	unsigned long flags;
++	u32 reg = FIELD_PREP(CECB_RW_ADDR, addr) |
++		  FIELD_PREP(CECB_RW_WR_DATA, data) |
++		  CECB_RW_WRITE_EN;
++	int ret = 0;
++
++	spin_lock_irqsave(&ao_cec->cec_reg_lock, flags);
++
++	ret = regmap_write(ao_cec->regmap, CECB_RW_REG, reg);
++
++	spin_unlock_irqrestore(&ao_cec->cec_reg_lock, flags);
++
++	return ret;
++}
++
++static const struct regmap_config meson_ao_cec_g12a_cec_regmap_conf = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.reg_read = meson_ao_cec_g12a_read,
++	.reg_write = meson_ao_cec_g12a_write,
++	.max_register = 0xffff,
++	.fast_io = true,
++};
++
++static inline void
++meson_ao_cec_g12a_irq_setup(struct meson_ao_cec_g12a_device *ao_cec,
++			    bool enable)
++{
++	u32 cfg = CECB_INTR_DONE | CECB_INTR_EOM | CECB_INTR_NACK |
++		  CECB_INTR_ARB_LOSS | CECB_INTR_INITIATOR_ERR |
++		  CECB_INTR_FOLLOWER_ERR;
++
++	regmap_write(ao_cec->regmap, CECB_INTR_MASKN_REG,
++		     enable ? cfg : 0);
++}
++
++static void meson_ao_cec_g12a_irq_rx(struct meson_ao_cec_g12a_device *ao_cec)
++{
++	int i, ret = 0;
++	u32 val;
++
++	ret = regmap_read(ao_cec->regmap_cec, CECB_RX_CNT, &val);
++
++	ao_cec->rx_msg.len = val;
++	if (ao_cec->rx_msg.len > CEC_MAX_MSG_SIZE)
++		ao_cec->rx_msg.len = CEC_MAX_MSG_SIZE;
++
++	for (i = 0; i < ao_cec->rx_msg.len; i++) {
++		ret |= regmap_read(ao_cec->regmap_cec,
++				   CECB_RX_DATA00 + i, &val);
++
++		ao_cec->rx_msg.msg[i] = val & 0xff;
++	}
++
++	ret |= regmap_write(ao_cec->regmap_cec, CECB_LOCK_BUF, 0);
++	if (ret)
++		return;
++
++	cec_received_msg(ao_cec->adap, &ao_cec->rx_msg);
++}
++
++static irqreturn_t meson_ao_cec_g12a_irq(int irq, void *data)
++{
++	struct meson_ao_cec_g12a_device *ao_cec = data;
++	u32 stat;
++
++	regmap_read(ao_cec->regmap, CECB_INTR_STAT_REG, &stat);
++	if (stat)
++		return IRQ_WAKE_THREAD;
++
++	return IRQ_NONE;
++}
++
++static irqreturn_t meson_ao_cec_g12a_irq_thread(int irq, void *data)
++{
++	struct meson_ao_cec_g12a_device *ao_cec = data;
++	u32 stat;
++
++	regmap_read(ao_cec->regmap, CECB_INTR_STAT_REG, &stat);
++	regmap_write(ao_cec->regmap, CECB_INTR_CLR_REG, stat);
++
++	if (stat & CECB_INTR_DONE)
++		cec_transmit_attempt_done(ao_cec->adap, CEC_TX_STATUS_OK);
++
++	if (stat & CECB_INTR_EOM)
++		meson_ao_cec_g12a_irq_rx(ao_cec);
++
++	if (stat & CECB_INTR_NACK)
++		cec_transmit_attempt_done(ao_cec->adap, CEC_TX_STATUS_NACK);
++
++	if (stat & CECB_INTR_ARB_LOSS) {
++		regmap_write(ao_cec->regmap_cec, CECB_TX_CNT, 0);
++		regmap_update_bits(ao_cec->regmap_cec, CECB_CTRL,
++				   CECB_CTRL_SEND | CECB_CTRL_TYPE, 0);
++		cec_transmit_attempt_done(ao_cec->adap, CEC_TX_STATUS_ARB_LOST);
++	}
++
++	/* Initiator reports an error on the CEC bus */
++	if (stat & CECB_INTR_INITIATOR_ERR)
++		cec_transmit_attempt_done(ao_cec->adap, CEC_TX_STATUS_ERROR);
++
++	/* Follower reports a receive error, just reset RX buffer */
++	if (stat & CECB_INTR_FOLLOWER_ERR)
++		regmap_write(ao_cec->regmap_cec, CECB_LOCK_BUF, 0);
++
++	return IRQ_HANDLED;
++}
++
++static int
++meson_ao_cec_g12a_set_log_addr(struct cec_adapter *adap, u8 logical_addr)
++{
++	struct meson_ao_cec_g12a_device *ao_cec = adap->priv;
++	int ret = 0;
++
++	if (logical_addr == CEC_LOG_ADDR_INVALID) {
++		/* Assume this will allways succeed */
++		regmap_write(ao_cec->regmap_cec, CECB_LADD_LOW, 0);
++		regmap_write(ao_cec->regmap_cec, CECB_LADD_HIGH, 0);
++
++		return 0;
++	} else if (logical_addr < 8) {
++		ret = regmap_update_bits(ao_cec->regmap_cec, CECB_LADD_LOW,
++					 BIT(logical_addr),
++					 BIT(logical_addr));
++	} else {
++		ret = regmap_update_bits(ao_cec->regmap_cec, CECB_LADD_HIGH,
++					 BIT(logical_addr - 8),
++					 BIT(logical_addr - 8));
++	}
++
++	/* Always set Broadcast/Unregistered 15 address */
++	ret |= regmap_update_bits(ao_cec->regmap_cec, CECB_LADD_HIGH,
++				  BIT(CEC_LOG_ADDR_UNREGISTERED - 8),
++				  BIT(CEC_LOG_ADDR_UNREGISTERED - 8));
++
++	return ret ? -EIO : 0;
++}
++
++static int meson_ao_cec_g12a_transmit(struct cec_adapter *adap, u8 attempts,
++				 u32 signal_free_time, struct cec_msg *msg)
++{
++	struct meson_ao_cec_g12a_device *ao_cec = adap->priv;
++	unsigned int type;
++	int ret = 0;
++	u32 val;
++	int i;
++
++	/* Check if RX is in progress */
++	ret = regmap_read(ao_cec->regmap_cec, CECB_LOCK_BUF, &val);
++	if (ret)
++		return ret;
++	if (val & CECB_LOCK_BUF_EN)
++		return -EBUSY;
++
++	/* Check if TX Busy */
++	ret = regmap_read(ao_cec->regmap_cec, CECB_CTRL, &val);
++	if (ret)
++		return ret;
++	if (val & CECB_CTRL_SEND)
++		return -EBUSY;
++
++	switch (signal_free_time) {
++	case CEC_SIGNAL_FREE_TIME_RETRY:
++		type = CECB_CTRL_TYPE_RETRY;
++		break;
++	case CEC_SIGNAL_FREE_TIME_NEXT_XFER:
++		type = CECB_CTRL_TYPE_NEXT;
++		break;
++	case CEC_SIGNAL_FREE_TIME_NEW_INITIATOR:
++	default:
++		type = CECB_CTRL_TYPE_NEW;
++		break;
++	}
++
++	for (i = 0; i < msg->len; i++)
++		ret |= regmap_write(ao_cec->regmap_cec, CECB_TX_DATA00 + i,
++				    msg->msg[i]);
++
++	ret |= regmap_write(ao_cec->regmap_cec, CECB_TX_CNT, msg->len);
++	if (ret)
++		return -EIO;
++
++	ret = regmap_update_bits(ao_cec->regmap_cec, CECB_CTRL,
++				 CECB_CTRL_SEND |
++				 CECB_CTRL_TYPE,
++				 CECB_CTRL_SEND |
++				 FIELD_PREP(CECB_CTRL_TYPE, type));
++
++	return ret;
++}
++
++static int meson_ao_cec_g12a_adap_enable(struct cec_adapter *adap, bool enable)
++{
++	struct meson_ao_cec_g12a_device *ao_cec = adap->priv;
++
++	meson_ao_cec_g12a_irq_setup(ao_cec, false);
++
++	regmap_update_bits(ao_cec->regmap, CECB_GEN_CNTL_REG,
++			   CECB_GEN_CNTL_RESET, CECB_GEN_CNTL_RESET);
++
++	if (!enable)
++		return 0;
++
++	/* Setup Filter */
++	regmap_update_bits(ao_cec->regmap, CECB_GEN_CNTL_REG,
++			   CECB_GEN_CNTL_FILTER_TICK_SEL |
++			   CECB_GEN_CNTL_FILTER_DEL,
++			   FIELD_PREP(CECB_GEN_CNTL_FILTER_TICK_SEL,
++				      CECB_GEN_CNTL_FILTER_TICK_1US) |
++			   FIELD_PREP(CECB_GEN_CNTL_FILTER_DEL, 7));
++
++	/* Enable System Clock */
++	regmap_update_bits(ao_cec->regmap, CECB_GEN_CNTL_REG,
++			   CECB_GEN_CNTL_SYS_CLK_EN,
++			   CECB_GEN_CNTL_SYS_CLK_EN);
++
++	/* Enable gated clock (Normal mode). */
++	regmap_update_bits(ao_cec->regmap, CECB_GEN_CNTL_REG,
++			   CECB_GEN_CNTL_CLK_CTRL_MASK,
++			    FIELD_PREP(CECB_GEN_CNTL_CLK_CTRL_MASK,
++				       CECB_GEN_CNTL_CLK_ENABLE));
++
++	/* Release Reset */
++	regmap_update_bits(ao_cec->regmap, CECB_GEN_CNTL_REG,
++			   CECB_GEN_CNTL_RESET, 0);
++
++	meson_ao_cec_g12a_irq_setup(ao_cec, true);
++
++	return 0;
++}
++
++static const struct cec_adap_ops meson_ao_cec_g12a_ops = {
++	.adap_enable = meson_ao_cec_g12a_adap_enable,
++	.adap_log_addr = meson_ao_cec_g12a_set_log_addr,
++	.adap_transmit = meson_ao_cec_g12a_transmit,
++};
++
++static int meson_ao_cec_g12a_probe(struct platform_device *pdev)
++{
++	struct meson_ao_cec_g12a_device *ao_cec;
++	struct platform_device *hdmi_dev;
++	struct device_node *np;
++	struct resource *res;
++	void __iomem *base;
++	int ret, irq;
++
++	np = of_parse_phandle(pdev->dev.of_node, "hdmi-phandle", 0);
++	if (!np) {
++		dev_err(&pdev->dev, "Failed to find hdmi node\n");
++		return -ENODEV;
++	}
++
++	hdmi_dev = of_find_device_by_node(np);
++	of_node_put(np);
++	if (hdmi_dev == NULL)
++		return -EPROBE_DEFER;
++
++	put_device(&hdmi_dev->dev);
++	ao_cec = devm_kzalloc(&pdev->dev, sizeof(*ao_cec), GFP_KERNEL);
++	if (!ao_cec)
++		return -ENOMEM;
++
++	spin_lock_init(&ao_cec->cec_reg_lock);
++	ao_cec->pdev = pdev;
++
++	ao_cec->notify = cec_notifier_get(&hdmi_dev->dev);
++	if (!ao_cec->notify)
++		return -ENOMEM;
++
++	ao_cec->adap = cec_allocate_adapter(&meson_ao_cec_g12a_ops, ao_cec,
++					    "meson_g12a_ao_cec",
++					    CEC_CAP_DEFAULTS,
++					    CEC_MAX_LOG_ADDRS);
++	if (IS_ERR(ao_cec->adap)) {
++		ret = PTR_ERR(ao_cec->adap);
++		goto out_probe_notify;
++	}
++
++	ao_cec->adap->owner = THIS_MODULE;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	base = devm_ioremap_resource(&pdev->dev, res);
++	if (IS_ERR(base)) {
++		ret = PTR_ERR(base);
++		goto out_probe_adapter;
++	}
++
++	ao_cec->regmap = devm_regmap_init_mmio(&pdev->dev, base,
++					       &meson_ao_cec_g12a_regmap_conf);
++	if (IS_ERR(ao_cec->regmap)) {
++		ret = PTR_ERR(ao_cec->regmap);
++		goto out_probe_adapter;
++	}
++
++	ao_cec->regmap_cec = devm_regmap_init(&pdev->dev, NULL, ao_cec,
++					   &meson_ao_cec_g12a_cec_regmap_conf);
++	if (IS_ERR(ao_cec->regmap_cec)) {
++		ret = PTR_ERR(ao_cec->regmap_cec);
++		goto out_probe_adapter;
++	}
++
++	irq = platform_get_irq(pdev, 0);
++	ret = devm_request_threaded_irq(&pdev->dev, irq,
++					meson_ao_cec_g12a_irq,
++					meson_ao_cec_g12a_irq_thread,
++					0, NULL, ao_cec);
++	if (ret) {
++		dev_err(&pdev->dev, "irq request failed\n");
++		goto out_probe_adapter;
++	}
++
++	ao_cec->oscin = devm_clk_get(&pdev->dev, "oscin");
++	if (IS_ERR(ao_cec->oscin)) {
++		dev_err(&pdev->dev, "oscin clock request failed\n");
++		ret = PTR_ERR(ao_cec->oscin);
++		goto out_probe_adapter;
++	}
++
++	ret = meson_ao_cec_g12a_setup_clk(ao_cec);
++	if (ret)
++		goto out_probe_adapter;
++
++	ret = clk_prepare_enable(ao_cec->core);
++	if (ret) {
++		dev_err(&pdev->dev, "core clock enable failed\n");
++		goto out_probe_adapter;
++	}
++
++	device_reset_optional(&pdev->dev);
++
++	platform_set_drvdata(pdev, ao_cec);
++
++	ret = cec_register_adapter(ao_cec->adap, &pdev->dev);
++	if (ret < 0) {
++		cec_notifier_put(ao_cec->notify);
++		goto out_probe_core_clk;
++	}
++
++	/* Setup Hardware */
++	regmap_write(ao_cec->regmap, CECB_GEN_CNTL_REG, CECB_GEN_CNTL_RESET);
++
++	cec_register_cec_notifier(ao_cec->adap, ao_cec->notify);
++
++	return 0;
++
++out_probe_core_clk:
++	clk_disable_unprepare(ao_cec->core);
++
++out_probe_adapter:
++	cec_delete_adapter(ao_cec->adap);
++
++out_probe_notify:
++	cec_notifier_put(ao_cec->notify);
++
++	dev_err(&pdev->dev, "CEC controller registration failed\n");
++
++	return ret;
++}
++
++static int meson_ao_cec_g12a_remove(struct platform_device *pdev)
++{
++	struct meson_ao_cec_g12a_device *ao_cec = platform_get_drvdata(pdev);
++
++	clk_disable_unprepare(ao_cec->core);
++
++	cec_unregister_adapter(ao_cec->adap);
++
++	cec_notifier_put(ao_cec->notify);
++
++	return 0;
++}
++
++static const struct of_device_id meson_ao_cec_g12a_of_match[] = {
++	{ .compatible = "amlogic,meson-g12a-ao-cec", },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, meson_ao_cec_g12a_of_match);
++
++static struct platform_driver meson_ao_cec_g12a_driver = {
++	.probe   = meson_ao_cec_g12a_probe,
++	.remove  = meson_ao_cec_g12a_remove,
++	.driver  = {
++		.name = "meson-ao-cec-g12a",
++		.of_match_table = of_match_ptr(meson_ao_cec_g12a_of_match),
++	},
++};
++
++module_platform_driver(meson_ao_cec_g12a_driver);
++
++MODULE_DESCRIPTION("Meson AO CEC G12A Controller driver");
++MODULE_AUTHOR("Neil Armstrong <narmstrong@baylibre.com>");
++MODULE_LICENSE("GPL");
+-- 
+2.21.0
 
-> >
-> >>>
-> >>>> +
-> >>>> +2. **Optional.** Enumerate supported ``OUTPUT`` formats (raw format=
-s for
-> >>>> +   source) for the selected coded format via :c:func:`VIDIOC_ENUM_F=
-MT`.
-> >>>> +
-> >>>> +   * **Required fields:**
-> >>>> +
-> >>>> +     ``type``
-> >>>> +         a ``V4L2_BUF_TYPE_*`` enum appropriate for ``OUTPUT``
-> >>>> +
-> >>>> +     other fields
-> >>>> +         follow standard semantics
-> >>>> +
-> >>>> +   * **Return fields:**
-> >>>> +
-> >>>> +     ``pixelformat``
-> >>>> +         raw format supported for the coded format currently select=
-ed on
-> >>>> +         the ``CAPTURE`` queue.
-> >>>> +
-> >>>> +     other fields
-> >>>> +         follow standard semantics
-> >>>> +
-> >>>> +3. Set the raw source format on the ``OUTPUT`` queue via
-> >>>> +   :c:func:`VIDIOC_S_FMT`.
-> >>>> +
-> >>>> +   * **Required fields:**
-> >>>> +
-> >>>> +     ``type``
-> >>>> +         a ``V4L2_BUF_TYPE_*`` enum appropriate for ``OUTPUT``
-> >>>> +
-> >>>> +     ``pixelformat``
-> >>>> +         raw format of the source
-> >>>> +
-> >>>> +     ``width``, ``height``
-> >>>> +         source resolution
-> >>>> +
-> >>>> +     other fields
-> >>>> +         follow standard semantics
-> >>>> +
-> >>>> +   * **Return fields:**
-> >>>> +
-> >>>> +     ``width``, ``height``
-> >>>> +         may be adjusted by encoder to match alignment requirements=
-, as
-> >>>> +         required by the currently selected formats
-> >>>
-> >>> What if the width x height is larger than the maximum supported by th=
-e
-> >>> selected coded format? This should probably mention that in that case=
- the
-> >>> width x height is reduced to the largest allowed value. Also mention =
-that
-> >>> this maximum is reported by VIDIOC_ENUM_FRAMESIZES.
-> >>>
-> >>>> +
-> >>>> +     other fields
-> >>>> +         follow standard semantics
-> >>>> +
-> >>>> +   * Setting the source resolution will reset the selection rectang=
-les to their
-> >>>> +     default values, based on the new resolution, as described in t=
-he step 5
-> >>>
-> >>> 5 -> 4
-> >>>
-> >>> Or just say: "as described in the next step."
-> >>>
-> >>>> +     below.
-> >>
-> >> It should also be made explicit that:
-> >>
-> >> 1) the crop rectangle will be set to the given width and height *befor=
-e*
-> >> it is being adjusted by S_FMT.
-> >>
-> >
-> > I don't think that's what we want here.
-> >
-> > Defining the default rectangle to be exactly the same as the OUTPUT
-> > resolution (after the adjustment) makes the semantics consistent - not
-> > setting the crop rectangle gives you exactly the behavior as if there
-> > was no cropping involved (or supported by the encoder).
->
-> I think you are right. This seems to be what the coda driver does as well=
-.
-> It is convenient to be able to just set a 1920x1080 format and have that
-> resolution be stored as the crop rectangle, since it avoids having to cal=
-l
-> s_selection afterwards, but it is not really consistent with the way V4L2
-> works.
->
-> >
-> >> Open question: should we support a compose rectangle for the CAPTURE t=
-hat
-> >> is the same as the OUTPUT crop rectangle? I.e. the CAPTURE format cont=
-ains
-> >> the adjusted width and height and the compose rectangle (read-only) co=
-ntains
-> >> the visible width and height. It's not strictly necessary, but it is
-> >> symmetrical.
-> >
-> > Wouldn't it rather be the CAPTURE crop rectangle that would be of the
-> > same resolution of the OUTPUT compose rectangle? Then you could
-> > actually have the CAPTURE compose rectangle for putting that into the
-> > desired rectangle of the encoded stream, if the encoder supports that.
-> > (I don't know any that does, so probably out of concern for now.)
->
-> Yes, you are right.
->
-> But should we support this?
->
-> I actually think not for this initial version. It can be added later, I g=
-uess.
->
-
-I think it boils down on whether adding it later wouldn't
-significantly complicate the application logic. It also relates to my
-other comment somewhere below.
-
-> >
-> >>
-> >> 2) the CAPTURE format will be updated as well with the new OUTPUT widt=
-h and
-> >> height. The CAPTURE sizeimage might change as well.
-> >>
-> >>>> +
-> >>>> +4. **Optional.** Set the visible resolution for the stream metadata=
- via
-> >>>> +   :c:func:`VIDIOC_S_SELECTION` on the ``OUTPUT`` queue.
-> >>
-> >> I think you should mention that this is only necessary if the crop rec=
-tangle
-> >> that is set when you set the format isn't what you want.
-> >>
-> >
-> > Ack.
-> >
-> >>>> +
-> >>>> +   * **Required fields:**
-> >>>> +
-> >>>> +     ``type``
-> >>>> +         a ``V4L2_BUF_TYPE_*`` enum appropriate for ``OUTPUT``
-> >>>> +
-> >>>> +     ``target``
-> >>>> +         set to ``V4L2_SEL_TGT_CROP``
-> >>>> +
-> >>>> +     ``r.left``, ``r.top``, ``r.width``, ``r.height``
-> >>>> +         visible rectangle; this must fit within the `V4L2_SEL_TGT_=
-CROP_BOUNDS`
-> >>>> +         rectangle and may be subject to adjustment to match codec =
-and
-> >>>> +         hardware constraints
-> >>>> +
-> >>>> +   * **Return fields:**
-> >>>> +
-> >>>> +     ``r.left``, ``r.top``, ``r.width``, ``r.height``
-> >>>> +         visible rectangle adjusted by the encoder
-> >>>> +
-> >>>> +   * The following selection targets are supported on ``OUTPUT``:
-> >>>> +
-> >>>> +     ``V4L2_SEL_TGT_CROP_BOUNDS``
-> >>>> +         equal to the full source frame, matching the active ``OUTP=
-UT``
-> >>>> +         format
-> >>>> +
-> >>>> +     ``V4L2_SEL_TGT_CROP_DEFAULT``
-> >>>> +         equal to ``V4L2_SEL_TGT_CROP_BOUNDS``
-> >>>> +
-> >>>> +     ``V4L2_SEL_TGT_CROP``
-> >>>> +         rectangle within the source buffer to be encoded into the
-> >>>> +         ``CAPTURE`` stream; defaults to ``V4L2_SEL_TGT_CROP_DEFAUL=
-T``
-> >>>> +
-> >>>> +         .. note::
-> >>>> +
-> >>>> +            A common use case for this selection target is encoding=
- a source
-> >>>> +            video with a resolution that is not a multiple of a mac=
-roblock,
-> >>>> +            e.g.  the common 1920x1080 resolution may require the s=
-ource
-> >>>> +            buffers to be aligned to 1920x1088 for codecs with 16x1=
-6 macroblock
-> >>>> +            size. To avoid encoding the padding, the client needs t=
-o explicitly
-> >>>> +            configure this selection target to 1920x1080.
-> >>
-> >> This last sentence contradicts the proposed behavior of S_FMT(OUTPUT).
-> >>
-> >
-> > Sorry, which part exactly and what part of the proposal exactly? :)
-> > (My comment above might be related, though.)
->
-> Ignore my comment. We go back to explicitly requiring userspace to set th=
-e OUTPUT
-> crop selection target, so this note remains valid.
->
-
-Ack.
-
-> >
-> >>>> +
-> >>>> +     ``V4L2_SEL_TGT_COMPOSE_BOUNDS``
-> >>>> +         maximum rectangle within the coded resolution, which the c=
-ropped
-> >>>> +         source frame can be composed into; if the hardware does no=
-t support
-> >>>> +         composition or scaling, then this is always equal to the r=
-ectangle of
-> >>>> +         width and height matching ``V4L2_SEL_TGT_CROP`` and locate=
-d at (0, 0)
-> >>>> +
-> >>>> +     ``V4L2_SEL_TGT_COMPOSE_DEFAULT``
-> >>>> +         equal to a rectangle of width and height matching
-> >>>> +         ``V4L2_SEL_TGT_CROP`` and located at (0, 0)
-> >>>> +
-> >>>> +     ``V4L2_SEL_TGT_COMPOSE``
-> >>>> +         rectangle within the coded frame, which the cropped source=
- frame
-> >>>> +         is to be composed into; defaults to
-> >>>> +         ``V4L2_SEL_TGT_COMPOSE_DEFAULT``; read-only on hardware wi=
-thout
-> >>>> +         additional compose/scaling capabilities; resulting stream =
-will
-> >>>> +         have this rectangle encoded as the visible rectangle in it=
-s
-> >>>> +         metadata
-> >>
-> >> I think the compose targets for OUTPUT are only needed if the hardware=
- can
-> >> actually do scaling and/or composition. Otherwise they can (must?) be
-> >> dropped.
-> >>
-> >
-> > Note that V4L2_SEL_TGT_COMPOSE is defined to be the way for the
-> > userspace to learn the target visible rectangle that's going to be
-> > encoded in the stream metadata. If we omit it, we wouldn't have a way
-> > that would be consistent between encoders that can do
-> > scaling/composition and those that can't.
->
-> I'm not convinced about this. The standard API behavior is not to expose
-> functionality that the hardware can't do. So if scaling isn't possible on
-> the OUTPUT side, then it shouldn't expose OUTPUT compose rectangles.
->
-> I also believe it very unlikely that we'll see encoders capable of scalin=
-g
-> as it doesn't make much sense.
-
-It does make a lot of sense - WebRTC requires 3 different sizes of the
-stream to be encoded at the same time. However, unfortunately, I
-haven't yet seen an encoder capable of doing so.
-
-> I would prefer to drop this to simplify the
-> spec, and when we get encoders that can scale, then we can add support fo=
-r
-> compose rectangles (and I'm sure we'll need to think about how that
-> influences the CAPTURE side as well).
->
-> For encoders without scaling it is the OUTPUT crop rectangle that defines
-> the visible rectangle.
->
-> >
-> > However, with your proposal of actually having selection rectangles
-> > for the CAPTURE queue, it could be solved indeed. The OUTPUT queue
-> > would expose a varying set of rectangles, depending on the hardware
-> > capability, while the CAPTURE queue would always expose its rectangle
-> > with that information.
->
-> I think we should keep it simple and only define selection rectangles
-> when really needed.
->
-> So encoders support CROP on the OUTPUT, and decoders support CAPTURE
-> COMPOSE (may be read-only). Nothing else.
->
-> Once support for scaling is needed (either on the encoder or decoder
-> side), then the spec should be enhanced. But I prefer to postpone that
-> until we actually have hardware that needs this.
->
-
-Okay, let's do it this way then. Actually, I don't even think there is
-much value in exposing information internal to the bitstream metadata
-like this, similarly to the coded size. My intention was to just
-ensure that we can easily add scaling/composing functionality later.
-
-I just removed the COMPOSE rectangles from my next draft.
-
-[snip]
-> >
-> >>
-> >> Changing the OUTPUT format will always fail if OUTPUT buffers are alre=
-ady allocated,
-> >> or if changing the OUTPUT format would change the CAPTURE format (size=
-image in
-> >> particular) and CAPTURE buffers were already allocated and are too sma=
-ll.
-> >
-> > The OUTPUT format must not change the CAPTURE format by definition.
-> > Otherwise we end up in a situation where we can't commit, because both
-> > queue formats can affect each other. Any change to the OUTPUT format
-> > that wouldn't work with the current CAPTURE format should be adjusted
-> > by the driver to match the current CAPTURE format.
->
-> But the CAPTURE format *does* depend on the OUTPUT format: if the output
-> resolution changes, then so does the CAPTURE resolution and esp. the
-> sizeimage value, since that is typically resolution dependent.
->
-> The coda driver does this as well: changing the output resolution
-> will update the capture resolution and sizeimage. The vicodec driver does=
- the
-> same.
->
-> Setting the CAPTURE format basically just selects the codec to use, after
-> that you can set the OUTPUT format and read the updated CAPTURE format to
-> get the new sizeimage value. In fact, setting the CAPTURE format shouldn'=
-t
-> change the OUTPUT format, unless the OUTPUT format is incompatible with t=
-he
-> newly selected codec.
-
-Let me think about it for a while.
-
-Best regards,
-Tomasz
