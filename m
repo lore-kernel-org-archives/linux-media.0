@@ -4,67 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D98FCC10F13
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 18:18:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BC3CC10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 18:21:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 991542084C
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 18:18:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A0412084C
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 18:21:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="OUMdRxST"
+	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="U6Kx76Lz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbfDHSSr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 14:18:47 -0400
-Received: from goldenrod.birch.relay.mailchannels.net ([23.83.209.74]:15128
+        id S1726544AbfDHSVW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 14:21:22 -0400
+Received: from goldenrod.birch.relay.mailchannels.net ([23.83.209.74]:44305
         "EHLO goldenrod.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726677AbfDHSSq (ORCPT
+        by vger.kernel.org with ESMTP id S1726228AbfDHSVW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Apr 2019 14:18:46 -0400
+        Mon, 8 Apr 2019 14:21:22 -0400
 X-Sender-Id: dreamhost|x-authsender|brad@b-rad.cc
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id D8C2D5E0527;
-        Mon,  8 Apr 2019 18:18:43 +0000 (UTC)
-Received: from pdx1-sub0-mail-a61.g.dreamhost.com (100-96-11-84.trex.outbound.svc.cluster.local [100.96.11.84])
+        by relay.mailchannels.net (Postfix) with ESMTP id 3AA8F2C27D5;
+        Mon,  8 Apr 2019 18:14:28 +0000 (UTC)
+Received: from pdx1-sub0-mail-a61.g.dreamhost.com (100-96-7-60.trex.outbound.svc.cluster.local [100.96.7.60])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 03F3A5E1E4A;
-        Mon,  8 Apr 2019 18:18:42 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 62FA82C265B;
+        Mon,  8 Apr 2019 18:14:17 +0000 (UTC)
 X-Sender-Id: dreamhost|x-authsender|brad@b-rad.cc
 Received: from pdx1-sub0-mail-a61.g.dreamhost.com ([TEMPUNAVAIL].
  [64.90.62.162])
         (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
         by 0.0.0.0:2500 (trex/5.17.2);
-        Mon, 08 Apr 2019 18:18:43 +0000
+        Mon, 08 Apr 2019 18:14:28 +0000
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|brad@b-rad.cc
 X-MailChannels-Auth-Id: dreamhost
-X-Battle-Decisive: 559be4a66dc1e5e6_1554747523730_2796680142
-X-MC-Loop-Signature: 1554747523730:2108943071
-X-MC-Ingress-Time: 1554747523729
+X-Little-Dime: 78d5ae5e6d870990_1554747268105_726607081
+X-MC-Loop-Signature: 1554747268105:2296164928
+X-MC-Ingress-Time: 1554747268104
 Received: from pdx1-sub0-mail-a61.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTP id 8708A8041F;
-        Mon,  8 Apr 2019 11:18:37 -0700 (PDT)
+        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTP id 629D18043C;
+        Mon,  8 Apr 2019 11:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=
         subject:to:cc:references:from:message-id:date:mime-version
         :in-reply-to:content-type:content-transfer-encoding; s=
-        nextdimension.cc; bh=zDkdZIRtgIyvemMI6QjwuSxwpqM=; b=OUMdRxSTzz3
-        O/T4xF0r5jOldKxS0YPKvWbQsgph1lzpNujcBh0XEvu0AXZA3Zyug5PRlVlfObPd
-        4dfDNsxMjQWoeRsGs1QQd1jcSM4xJhJOreUvXpNcOBCi8Ed62LZmOtd1+dB0TsbG
-        JiumBXVTXlkLArpL7SHpQnoGV/TPniOM=
+        nextdimension.cc; bh=OWb+U4pnJA++fvSZQgVdUx6GN+c=; b=U6Kx76Lzzmc
+        iXBYHDzNCFl4OkjjAcWyOq+fzqAQ6mIEobfSsDkxCs2QOABcdBgRirFkehjJs1V7
+        xg+Dd6glHC2riks3QmDRrnvbOZiApCv2XMRslq5xMLHqwp+jRRRDYZjr9nds6L9V
+        vztxlENN6YXu88AOnf0D8Qz62LMJxsw4=
 Received: from [192.168.0.21] (66-90-189-166.dyn.grandenetworks.net [66.90.189.166])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: brad@b-rad.cc)
-        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTPSA id 5DD0480431;
-        Mon,  8 Apr 2019 11:18:36 -0700 (PDT)
-Subject: Re: [PATCH v2 05/12] si2157: Add analog tuning related functions
+        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTPSA id 1D59A8041F;
+        Mon,  8 Apr 2019 11:14:09 -0700 (PDT)
+Subject: Re: [PATCH 07/13] si2157: Briefly wait for tuning operation to
+ complete
 To:     Sean Young <sean@mess.org>, Brad Love <brad@nextdimension.cc>
-Cc:     linux-media@vger.kernel.org
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org
 References: <1546105882-15693-1-git-send-email-brad@nextdimension.cc>
- <1551292066-29574-1-git-send-email-brad@nextdimension.cc>
- <1551292066-29574-6-git-send-email-brad@nextdimension.cc>
- <20190405132406.gj2vzxdsvjv7yejy@gofer.mess.org>
+ <1546105882-15693-8-git-send-email-brad@nextdimension.cc>
+ <20190405102942.5igrs664bl46v2pg@gofer.mess.org>
 X-DH-BACKEND: pdx1-sub0-mail-a61
 From:   Brad Love <brad@nextdimension.cc>
 Openpgp: preference=signencrypt
@@ -110,359 +109,223 @@ Autocrypt: addr=brad@nextdimension.cc; prefer-encrypt=mutual; keydata=
  Om93LaUGEs5Cqb/hUv9k6eqjjQre9mB0ImDsGXkuuP0X6eN6yrstcaPAYl82NW+PGJ1Zz2ai
  AHkvsjIskeau68XRcm301QJI3qAZghhD7uJUH/NWBlr+w+F9vLlCgKvJLpahrd3PGHwgJnfV
  1qqhouQNjsUrwpkXdQjTbSwtZaDPzCeSUSMArNjQMp21IYg/LhafLMzBqVODgaTsFDuVyRg=
-Message-ID: <e153da04-65c0-f582-70f1-243657401af2@nextdimension.cc>
-Date:   Mon, 8 Apr 2019 13:18:35 -0500
+Message-ID: <7620f3b6-296b-411c-d082-573f783e82ac@nextdimension.cc>
+Date:   Mon, 8 Apr 2019 13:14:08 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.5.1
 MIME-Version: 1.0
-In-Reply-To: <20190405132406.gj2vzxdsvjv7yejy@gofer.mess.org>
+In-Reply-To: <20190405102942.5igrs664bl46v2pg@gofer.mess.org>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Content-Language: en-GB
 X-VR-OUT-STATUS: OK
 X-VR-OUT-SCORE: -70
-X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduuddrudefgdduvdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuggftfghnshhusghstghrihgsvgdpffftgfetoffjqffuvfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegfrhhlucfvnfffucdlfedtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeeurhgrugcunfhovhgvuceosghrrggusehnvgigthguihhmvghnshhiohhnrdgttgeqnecukfhppeeiiedrledtrddukeelrdduieeinecurfgrrhgrmhepmhhouggvpehsmhhtphdphhgvlhhopegludelvddrudeikedrtddrvddungdpihhnvghtpeeiiedrledtrddukeelrdduieeipdhrvghtuhhrnhdqphgrthhhpeeurhgrugcunfhovhgvuceosghrrggusehnvgigthguihhmvghnshhiohhnrdgttgeqpdhmrghilhhfrhhomhepsghrrggusehnvgigthguihhmvghnshhiohhnrdgttgdpnhhrtghpthhtohepshgvrghnsehmvghsshdrohhrghenucevlhhushhtvghrufhiiigvpedt
+X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduuddrudefgdduvdegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuggftfghnshhusghstghrihgsvgdpffftgfetoffjqffuvfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegfrhhlucfvnfffucdlfedtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtqhertddtfeejnecuhfhrohhmpeeurhgrugcunfhovhgvuceosghrrggusehnvgigthguihhmvghnshhiohhnrdgttgeqnecukfhppeeiiedrledtrddukeelrdduieeinecurfgrrhgrmhepmhhouggvpehsmhhtphdphhgvlhhopegludelvddrudeikedrtddrvddungdpihhnvghtpeeiiedrledtrddukeelrdduieeipdhrvghtuhhrnhdqphgrthhhpeeurhgrugcunfhovhgvuceosghrrggusehnvgigthguihhmvghnshhiohhnrdgttgeqpdhmrghilhhfrhhomhepsghrrggusehnvgigthguihhmvghnshhiohhnrdgttgdpnhhrtghpthhtohepshgvrghnsehmvghsshdrohhrghenucevlhhushhtvghrufhiiigvpedt
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
-On 05/04/2019 08.24, Sean Young wrote:
-> On Wed, Feb 27, 2019 at 12:27:39PM -0600, Brad Love wrote:
->> Include set_analog_params, get_frequency, and get_bandwidth.
+On 05/04/2019 05.29, Sean Young wrote:
+> On Sat, Dec 29, 2018 at 11:51:16AM -0600, Brad Love wrote:
+>> Some software reports no signal found on a frequency due to immediatel=
+y
+>> checking for lock as soon as set_params returns. This waits up 40ms fo=
+r
+>> tuning operation, then from 30-150ms (dig/analog) for signal lock befo=
+re
+>> returning from set_params and set_analog_params.
 >>
->> Tested with NTSC and PAL standards via ch3/4 generator. Other standards
->> are included, but are untested due to lack of generator.
-> There are quite a few warnings from checkpatch on this patch. Please
-> run patches through "./scripts/checkpatch.pl --strict" before submitting.
+>> Tuning typically completes in 20-30ms. Digital tuning will additionall=
+y
+>> wait depending on signal characteristics. Analog tuning will wait the
+>> full timeout in case of no signal.
+> This looks like a workaround for broken userspace. Very possibly this
+> is software was tested on a different frontend which does wait for tuni=
+ng
+> to complete.
 >
-> Generally there should be no output from checkpatch if possible.
+> This is a change in uapi and will have to be done for all frontends, an=
+d
+> documented. However I doubt such a change is acceptable.
+>
+> What software are you refering to?
+
 
 Hi Sean,
 
-Kernel patch guidelines suggest ./scripts/checkpatch.pl without
---strict, so that is what I've always used. I have no problems switching
-to strict from now on.
+I would have to check with support to find out the various software that
+expect when a tune command returns for that tuning operation to have
+actually completed. In the current state when you tune si2157 it
+immediately returns, no care of the tuning operation completion, no care
+of the pll lock success. This is correct? Not so according to Silicon
+Labs documentation, which suggests a brief wait. I just took a look at
+other drivers, sampling only those with set_analog_params, all but two
+have similar code in place to actually allow the tune operation time to
+complete (both digital and analog) before returning to userland. The
+other drivers just insert arbitrary time delays to accommodate the
+operations completion time. At least with my patch I am monitoring the
+hardware to know when the operation actually completes.
+
+I see in tuners (not frontends):
+
+mt2063 - waits up to 100ms for lock status and return
+r820t - sleep 100ms for pll lock status and return
+tda827x - 170-500ms wait after tune before checking status and return
+tda8290 - sleep 100ms up to 3x while checking tune status and return
+tuner-xc2028 - sleep for 110ms awaiting lock status and return
+xc4000 - 10ms sleep after tune, unless debug, then 100ms and return
+xc5000 - 20ms sleep after tune,=C2=A0 if pll not locked, re-tune and slee=
+p
+again, repeat until success and return
+
+There's also other arbitrary sleeps peppered throughout the operations.
+
+Then you have si2157 that fires off the tuning commands and goes right
+back to userland immediately, when with instrumented testing, the
+operation takes time to complete and lock. The operation does not happen
+instantaneously. Software that expects clocks to be locked when the
+function returns determine this is an error. They query the tuner
+immediately when tune returns and they output tuning failed.
+
+Please explain why awaiting the hardware to say the "tuning operation
+you requested is done and clocks are locked" is not ok. If it's not ok,
+fine, but then a lot of other drivers are currently "not ok" as well.
 
 Regards,
 
 Brad
 
 
-> Thanks
+>
 >
 > Sean
 >
 >> Signed-off-by: Brad Love <brad@nextdimension.cc>
 >> ---
->> Changes since v1:
->> - remove __func__ from dev_dbg macros
+>>  drivers/media/tuners/si2157.c | 87 ++++++++++++++++++++++++++++++++++=
++++++++++
+>>  1 file changed, 87 insertions(+)
 >>
->>  drivers/media/tuners/si2157.c      | 245 ++++++++++++++++++++++++++++++++++++-
->>  drivers/media/tuners/si2157_priv.h |   2 +
->>  2 files changed, 244 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
->> index f3a60a1..1006172 100644
+>> diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si21=
+57.c
+>> index ff462ba..1737007 100644
 >> --- a/drivers/media/tuners/si2157.c
 >> +++ b/drivers/media/tuners/si2157.c
->> @@ -371,7 +371,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
->>  	if (ret)
->>  		goto err;
->>  
->> -	/* set if frequency if needed */
->> +	/* set digital if frequency if needed */
->>  	if (if_frequency != dev->if_frequency) {
->>  		memcpy(cmd.args, "\x14\x00\x06\x07", 4);
->>  		cmd.args[4] = (if_frequency / 1000) & 0xff;
->> @@ -385,7 +385,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
->>  		dev->if_frequency = if_frequency;
->>  	}
->>  
->> -	/* set frequency */
->> +	/* set digital frequency */
->>  	memcpy(cmd.args, "\x41\x00\x00\x00\x00\x00\x00\x00", 8);
->>  	cmd.args[4] = (c->frequency >>  0) & 0xff;
->>  	cmd.args[5] = (c->frequency >>  8) & 0xff;
->> @@ -397,18 +397,254 @@ static int si2157_set_params(struct dvb_frontend *fe)
->>  	if (ret)
->>  		goto err;
->>  
->> +	dev->bandwidth = bandwidth;
->> +	dev->frequency = c->frequency;
+>> @@ -318,6 +318,89 @@ static int si2157_sleep(struct dvb_frontend *fe)
+>>  	return ret;
+>>  }
+>> =20
+>> +static int si2157_tune_wait(struct i2c_client *client, u8 is_digital)=
+
+>> +{
+>> +#define TUN_TIMEOUT 40
+>> +#define DIG_TIMEOUT 30
+>> +#define ANALOG_TIMEOUT 150
+>> +	struct si2157_dev *dev =3D i2c_get_clientdata(client);
+>> +	int ret;
+>> +	unsigned long timeout;
+>> +	unsigned long start_time;
+>> +	u8 wait_status;
+>> +	u8  tune_lock_mask;
 >> +
+>> +	if (is_digital)
+>> +		tune_lock_mask =3D 0x04;
+>> +	else
+>> +		tune_lock_mask =3D 0x02;
+>> +
+>> +	mutex_lock(&dev->i2c_mutex);
+>> +
+>> +	/* wait tuner command complete */
+>> +	start_time =3D jiffies;
+>> +	timeout =3D start_time + msecs_to_jiffies(TUN_TIMEOUT);
+>> +	while (!time_after(jiffies, timeout)) {
+>> +		ret =3D i2c_master_recv(client, &wait_status,
+>> +					sizeof(wait_status));
+>> +		if (ret < 0) {
+>> +			goto err_mutex_unlock;
+>> +		} else if (ret !=3D sizeof(wait_status)) {
+>> +			ret =3D -EREMOTEIO;
+>> +			goto err_mutex_unlock;
+>> +		}
+>> +
+>> +		/* tuner done? */
+>> +		if ((wait_status & 0x81) =3D=3D 0x81)
+>> +			break;
+>> +		usleep_range(5000, 10000);
+>> +	}
+>> +
+>> +	dev_dbg(&client->dev, "tuning took %d ms, status=3D0x%x\n",
+>> +		jiffies_to_msecs(jiffies) - jiffies_to_msecs(start_time),
+>> +		wait_status);
+>> +
+>> +	/* if we tuned ok, wait a bit for tuner lock */
+>> +	if ((wait_status & 0x81) =3D=3D 0x81) {
+>> +		if (is_digital)
+>> +			timeout =3D jiffies + msecs_to_jiffies(DIG_TIMEOUT);
+>> +		else
+>> +			timeout =3D jiffies + msecs_to_jiffies(ANALOG_TIMEOUT);
+>> +		while (!time_after(jiffies, timeout)) {
+>> +			ret =3D i2c_master_recv(client, &wait_status,
+>> +						sizeof(wait_status));
+>> +			if (ret < 0) {
+>> +				goto err_mutex_unlock;
+>> +			} else if (ret !=3D sizeof(wait_status)) {
+>> +				ret =3D -EREMOTEIO;
+>> +				goto err_mutex_unlock;
+>> +			}
+>> +
+>> +			/* tuner locked? */
+>> +			if (wait_status & tune_lock_mask)
+>> +				break;
+>> +			usleep_range(5000, 10000);
+>> +		}
+>> +	}
+>> +
+>> +	dev_dbg(&client->dev, "tuning+lock took %d ms, status=3D0x%x\n",
+>> +		jiffies_to_msecs(jiffies) - jiffies_to_msecs(start_time),
+>> +		wait_status);
+>> +
+>> +	if ((wait_status & 0xc0) !=3D 0x80) {
+>> +		ret =3D -ETIMEDOUT;
+>> +		goto err_mutex_unlock;
+>> +	}
+>> +
+>> +	mutex_unlock(&dev->i2c_mutex);
 >> +	return 0;
->> +err:
->> +	dev->bandwidth = 0;
->> +	dev->frequency = 0;
->> +	dev->if_frequency = 0;
->> +	dev_dbg(&client->dev, "failed=%d\n", ret);
+>> +
+>> +err_mutex_unlock:
+>> +	mutex_unlock(&dev->i2c_mutex);
+>> +	dev_dbg(&client->dev, "failed=3D%d\n", ret);
 >> +	return ret;
 >> +}
 >> +
->> +static int si2157_set_analog_params(struct dvb_frontend *fe,
->> +				      struct analog_parameters *params)
->> +{
->> +	struct i2c_client *client = fe->tuner_priv;
->> +	struct si2157_dev *dev = i2c_get_clientdata(client);
->> +	char *std; /* for debugging */
->> +	int ret;
->> +	struct si2157_cmd cmd;
->> +	u32 bandwidth = 0;
->> +	u32 if_frequency = 0;
->> +	u32 freq = 0;
->> +	u64 tmp_lval = 0;
->> +	u8 system = 0;
->> +	u8 color = 0;    /* 0=NTSC/PAL, 0x10=SECAM */
->> +	u8 invert_analog = 1; /* analog tuner spectrum; 0=normal, 1=inverted */
->> +
->> +	if (dev->chiptype != SI2157_CHIPTYPE_SI2157) {
->> +		dev_info(&client->dev, "Analog tuning not supported for chiptype=%u\n",
->> +				dev->chiptype);
->> +		ret = -EINVAL;
->> +		goto err;
->> +	}
->> +
->> +	if (!dev->active)
->> +		si2157_init(fe);
->> +
->> +	if (!dev->active) {
->> +		ret = -EAGAIN;
->> +		goto err;
->> +	}
->> +	if (params->mode == V4L2_TUNER_RADIO) {
->> +	/*
->> +	 * std = "fm";
->> +	 * bandwidth = 1700000; //best can do for FM, AGC will be a mess though
->> +	 * if_frequency = 1250000;  //HVR-225x(saa7164), HVR-12xx(cx23885)
->> +	 * if_frequency = 6600000;  //HVR-9xx(cx231xx)
->> +	 * if_frequency = 5500000;  //HVR-19xx(pvrusb2)
->> +	 */
->> +		dev_err(&client->dev, "si2157 does not currently support FM radio\n");
->> +		ret = -EINVAL;
->> +		goto err;
->> +	}
->> +	tmp_lval = params->frequency * 625LL;
->> +	do_div(tmp_lval, 10); /* convert to HZ */
->> +	freq = (u32)tmp_lval;
->> +
->> +	if (freq < 1000000) /* is freq in KHz */
->> +		freq = freq * 1000;
->> +	dev->frequency = freq;
->> +
->> +	/* if_frequency values based on tda187271C2 */
->> +	if (params->std & (V4L2_STD_B|V4L2_STD_GH)) {
->> +		if (freq >= 470000000) {
->> +			std = "palGH";
->> +			bandwidth = 8000000;
->> +			if_frequency = 6000000;
->> +			system = 1;
->> +			if (params->std & (V4L2_STD_SECAM_G|V4L2_STD_SECAM_H)) {
->> +				std = "secamGH";
->> +				color = 0x10;
->> +			}
->> +		} else {
->> +			std = "palB";
->> +			bandwidth = 7000000;
->> +			if_frequency = 6000000;
->> +			system = 0;
->> +			if (params->std & V4L2_STD_SECAM_B) {
->> +				std = "secamB";
->> +				color = 0x10;
->> +			}
->> +		}
->> +	} else if (params->std & V4L2_STD_MN) {
->> +		std = "MN";
->> +		bandwidth = 6000000;
->> +		if_frequency = 5400000;
->> +		system = 2;
->> +	} else if (params->std & V4L2_STD_PAL_I) {
->> +		std = "palI";
->> +		bandwidth = 8000000;
->> +		if_frequency = 7250000; /* TODO: does not work yet */
->> +		system = 4;
->> +	} else if (params->std & V4L2_STD_DK) {
->> +		std = "palDK";
->> +		bandwidth = 8000000;
->> +		if_frequency = 6900000; /* TODO: does not work yet */
->> +		system = 5;
->> +		if (params->std & V4L2_STD_SECAM_DK) {
->> +			std = "secamDK";
->> +			color = 0x10;
->> +		}
->> +	} else if (params->std & V4L2_STD_SECAM_L) {
->> +		std = "secamL";
->> +		bandwidth = 8000000;
->> +		if_frequency = 6750000; /* TODO: untested */
->> +		system = 6;
->> +		color = 0x10;
->> +	} else if (params->std & V4L2_STD_SECAM_LC) {
->> +		std = "secamL'";
->> +		bandwidth = 7000000;
->> +		if_frequency = 1250000; /* TODO: untested */
->> +		system = 7;
->> +		color = 0x10;
->> +	} else {
->> +		std = "unknown";
->> +	}
->> +	/* calc channel center freq */
->> +	freq = freq - 1250000 + (bandwidth/2);
->> +
->> +	dev_dbg(&client->dev,
->> +			"mode=%d system=%u std='%s' params->frequency=%u center freq=%u if=%u bandwidth=%u\n",
->> +			params->mode, system, std, params->frequency,
->> +			freq, if_frequency, bandwidth);
->> +
->> +	/* set analog IF port */
->> +	memcpy(cmd.args, "\x14\x00\x03\x06\x08\x02", 6);
->> +	/* in using dev->if_port, we assume analog and digital IF's */
->> +	/*  are always on different ports */
->> +	/* assumes if_port definition is 0 or 1 for digital out */
->> +	cmd.args[4] = (dev->if_port == 1)?8:10;
->> +	cmd.args[5] = (dev->if_port == 1)?2:1; /* Analog AGC assumed external */
->> +	cmd.wlen = 6;
->> +	cmd.rlen = 4;
->> +	ret = si2157_cmd_execute(client, &cmd);
->> +	if (ret)
->> +		goto err;
->> +
->> +	/* set analog IF output config */
->> +	memcpy(cmd.args, "\x14\x00\x0d\x06\x94\x64", 6);
->> +	cmd.wlen = 6;
->> +	cmd.rlen = 4;
->> +	ret = si2157_cmd_execute(client, &cmd);
->> +	if (ret)
->> +		goto err;
->> +
->> +	/* make this distinct from a digital IF */
->> +	dev->if_frequency = if_frequency | 1;
->> +
->> +	/* calc and set tuner analog if center frequency */
->> +	if_frequency = if_frequency + 1250000 - (bandwidth/2);
->> +	dev_dbg(&client->dev, "IF Ctr freq=%d\n", if_frequency);
->> +
->> +	memcpy(cmd.args, "\x14\x00\x0C\x06", 4);
->> +	cmd.args[4] = (if_frequency / 1000) & 0xff;
->> +	cmd.args[5] = ((if_frequency / 1000) >> 8) & 0xff;
->> +	cmd.wlen = 6;
->> +	cmd.rlen = 4;
->> +	ret = si2157_cmd_execute(client, &cmd);
->> +	if (ret)
->> +		goto err;
->> +
->> +	/* set analog AGC config */
->> +	memcpy(cmd.args, "\x14\x00\x07\x06\x32\xc8", 6);
->> +	cmd.wlen = 6;
->> +	cmd.rlen = 4;
->> +	ret = si2157_cmd_execute(client, &cmd);
->> +	if (ret)
->> +		goto err;
->> +
->> +	/* set analog video mode */
->> +	memcpy(cmd.args, "\x14\x00\x04\x06\x00\x00", 6);
->> +	cmd.args[4] = system | color;
->> +#if 1 /* can use dev->inversion if assumed it applies to both digital/analog */
->> +	if (invert_analog)
->> +		cmd.args[5] |= 0x02;
->> +#else
->> +	if (dev->inversion)
->> +		cmd.args[5] |= 0x02;
->> +#endif
->> +	cmd.wlen = 6;
->> +	cmd.rlen = 1;
->> +	ret = si2157_cmd_execute(client, &cmd);
->> +	if (ret)
->> +		goto err;
->> +
->> +	/* set analog frequency */
->> +	memcpy(cmd.args, "\x41\x01\x00\x00\x00\x00\x00\x00", 8);
->> +	cmd.args[4] = (freq >>  0) & 0xff;
->> +	cmd.args[5] = (freq >>  8) & 0xff;
->> +	cmd.args[6] = (freq >> 16) & 0xff;
->> +	cmd.args[7] = (freq >> 24) & 0xff;
->> +	cmd.wlen = 8;
->> +	cmd.rlen = 1;
->> +	ret = si2157_cmd_execute(client, &cmd);
->> +	if (ret)
->> +		goto err;
->> +
->> +#if 0 /* testing */
->> +	/* get tuner status, RSSI values */
->> +	memcpy(cmd.args, "\x42\x01", 2);
->> +	cmd.wlen = 2;
->> +	cmd.rlen = 12;
->> +	ret = si2157_cmd_execute(client, &cmd);
->> +
->> +	dev_info(&client->dev, "tuner status: ret=%d rssi=%d mode=%x freq=%d\n",
->> +		ret, cmd.args[3], cmd.args[8],
->> +		(cmd.args[7]<<24 | cmd.args[6]<<16 |
->> +		cmd.args[5]<<8 | cmd.args[4]));
->> +#endif
->> +	dev->bandwidth = bandwidth;
+>>  static int si2157_set_params(struct dvb_frontend *fe)
+>>  {
+>>  	struct i2c_client *client =3D fe->tuner_priv;
+>> @@ -417,6 +500,8 @@ static int si2157_set_params(struct dvb_frontend *=
+fe)
+>>  	dev->bandwidth =3D bandwidth;
+>>  	dev->frequency =3D c->frequency;
+>> =20
+>> +	si2157_tune_wait(client, 1); /* wait to complete, ignore any errors =
+*/
 >> +
 >>  	return 0;
 >>  err:
->> +	dev->bandwidth = 0;
->> +	dev->frequency = 0;
->> +	dev->if_frequency = 0;
->>  	dev_dbg(&client->dev, "failed=%d\n", ret);
->>  	return ret;
->>  }
->>  
->> +static int si2157_get_frequency(struct dvb_frontend *fe, u32 *frequency)
->> +{
->> +	struct i2c_client *client = fe->tuner_priv;
->> +	struct si2157_dev *dev = i2c_get_clientdata(client);
+>>  	dev->bandwidth =3D 0;
+>> @@ -626,6 +711,8 @@ static int si2157_set_analog_params(struct dvb_fro=
+ntend *fe,
+>>  #endif
+>>  	dev->bandwidth =3D bandwidth;
+>> =20
+>> +	si2157_tune_wait(client, 0); /* wait to complete, ignore any errors =
+*/
 >> +
->> +	*frequency = dev->frequency;
->> +	dev_dbg(&client->dev, "freq=%u\n", dev->frequency);
->> +	return 0;
->> +}
->> +
->> +static int si2157_get_bandwidth(struct dvb_frontend *fe, u32 *bandwidth)
->> +{
->> +	struct i2c_client *client = fe->tuner_priv;
->> +	struct si2157_dev *dev = i2c_get_clientdata(client);
->> +
->> +	*bandwidth = dev->bandwidth;
->> +	dev_dbg(&client->dev, "bandwidth=%u\n", dev->bandwidth);
->> +	return 0;
->> +}
->> +
->>  static int si2157_get_if_frequency(struct dvb_frontend *fe, u32 *frequency)
->>  {
->>  	struct i2c_client *client = fe->tuner_priv;
->>  	struct si2157_dev *dev = i2c_get_clientdata(client);
->>  
->> -	*frequency = dev->if_frequency;
->> +	*frequency = dev->if_frequency & ~1; /* strip analog IF indicator bit */
->> +	dev_dbg(&client->dev, "if_frequency=%u\n", *frequency);
 >>  	return 0;
->>  }
->>  
->> @@ -422,6 +658,9 @@ static const struct dvb_tuner_ops si2157_ops = {
->>  	.init = si2157_init,
->>  	.sleep = si2157_sleep,
->>  	.set_params = si2157_set_params,
->> +	.set_analog_params = si2157_set_analog_params,
->> +	.get_frequency     = si2157_get_frequency,
->> +	.get_bandwidth     = si2157_get_bandwidth,
->>  	.get_if_frequency = si2157_get_if_frequency,
->>  };
->>  
->> diff --git a/drivers/media/tuners/si2157_priv.h b/drivers/media/tuners/si2157_priv.h
->> index 50f8630..1e5ce5b 100644
->> --- a/drivers/media/tuners/si2157_priv.h
->> +++ b/drivers/media/tuners/si2157_priv.h
->> @@ -37,6 +37,8 @@ struct si2157_dev {
->>  	u8 chiptype;
->>  	u8 if_port;
->>  	u32 if_frequency;
->> +	u32 bandwidth;
->> +	u32 frequency;
->>  	struct delayed_work stat_work;
->>  
->>  #if defined(CONFIG_MEDIA_CONTROLLER)
->> -- 
+>>  err:
+>>  	dev->bandwidth =3D 0;
+>> --=20
 >> 2.7.4
+
