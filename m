@@ -2,67 +2,66 @@ Return-Path: <SRS0=swNA=SK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+X-Spam-Status: No, score=-14.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A487BC10F14
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 12:18:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD337C10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 12:18:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 70CC82148D
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 12:18:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C0EC2087F
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 12:18:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="GsOUHEkg"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="VPT2JGmA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726691AbfDHMSN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 08:18:13 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:54630 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726436AbfDHMSK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 08:18:10 -0400
-Received: by mail-wm1-f67.google.com with SMTP id c1so14083900wml.4
-        for <linux-media@vger.kernel.org>; Mon, 08 Apr 2019 05:18:09 -0700 (PDT)
+        id S1726530AbfDHMSR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 08:18:17 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45069 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726646AbfDHMSN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 08:18:13 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s15so16064572wra.12
+        for <linux-media@vger.kernel.org>; Mon, 08 Apr 2019 05:18:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wPCsPseQBMIVb8GXk16egJLLB0THHe+Jag2FwI16saY=;
-        b=GsOUHEkgKUmpMV0FVrA2lW8sTwQgov5Qlw2IShucdpSrVtORe+Tdp0qCY8kNMrXiqM
-         UcxRR4+ljsvh7ubYmA9yTpm3oC7+Et9xO/Bd3kJV9VvbwiMsb1/DCerUbV0BAkAFLxHk
-         QTCzgv4vD4249gqUeadn4jCsWT+iA4fb3qiKAboSKqvseCSBHXpKsWwxHfmf2QF9eOOq
-         yaD94ct997yZpqHhsfG0enQuiY+i8cesScDZyYhDFlLlk3ZgRouRp7i8t44H14l5nEWv
-         NJPYsHeEexnOz4TrfnHVsvjxfWGuYqLDV9x9x0nyWrjADrgFqMCPh3+Yb+OqeSM8xcNQ
-         D2ag==
+        bh=RNAd7GNGVbL6BOuK6iIVW4N9neq3YiGA4nYoCz6Ftyo=;
+        b=VPT2JGmAYDF+yKPBVoIfnd/yg4NoU7YOxGEtNRNMEJFQm5vmwcxcD8snhRCJFbidRY
+         hNG1lDS1IuqXMGJjyeKTZx5+rI1ZszXaVAAcJOli39iy/jyx/CuUtITccCk8TxqgAoMm
+         FXL2RV9cQMl/IWPE1Ni/7ops6y4N3zzr6QnD6ruvvpyqRTDQ86BRIxqbvlxJQ3ETYTem
+         dHuLKzwmoHqmgp4lnsjHxvAFW+Y3HvWxQeGcc4oX39Pii/BT0xMCTkQgqT5SYP7EcrDa
+         QOdGSV61WYncnZmhDh9RMHfIDiiI5RY+Q8Sst4JevH/13wrDfG6EedmJmwv/BcnrDfYe
+         6l2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wPCsPseQBMIVb8GXk16egJLLB0THHe+Jag2FwI16saY=;
-        b=uiCJzin/qYCWbM6rs9vF0za8fHPiwMeJ5Uk6gNt9rtC8vwtQ3K47VpzsRVHq0LHKX1
-         Ln3YPVd8UGxayGqBgPR+KmCJywAUcN9q5vHARGUZB1RfzQ0pT//zCuqNyRnXhnqA5J6R
-         mChO6SjHHzjqt72bk8VsiZQI8zwKxQskZjr5RVi1MVflNYufgRToWgtSN+307GXyGtNA
-         pt+NehREDDEu9ayZwhxXOQScNJ6W1Z8HC8EZBM8nwUAM/8OEgNrQpIcSMm/oOGm5dQcE
-         FPHu0rNoFU1siasQTXTxaPcfW4tKPrXR0r8xbmAoTb+x3vsG6GWatZ0Xu0YvmfgNS10C
-         AxNQ==
-X-Gm-Message-State: APjAAAU7Ymazms0R/XyLtM2J9GsdaJGty23MBguPdBfQZf8fhfmE04hv
-        DxyVMhJwy1EXgTjr3vWJX9hx49aJXDJtvA==
-X-Google-Smtp-Source: APXvYqzlps4FBMCEKeNxdqwjhf8OR5kgIWSeFcLdE5eWPVGGik79f/RubJkbQKGxK2pm7A3cSfw01w==
-X-Received: by 2002:a1c:a711:: with SMTP id q17mr17951855wme.111.1554725888769;
-        Mon, 08 Apr 2019 05:18:08 -0700 (PDT)
+        bh=RNAd7GNGVbL6BOuK6iIVW4N9neq3YiGA4nYoCz6Ftyo=;
+        b=Y4YvTz4NJYL2MsvjRe6JDoyI0uXmv+JRPdrN3aXdjDNfZsw81SDP/d5wRT2SWY1EgF
+         xGmF70hHxM/KggipdR0T0b3JXQhIL2NpUkG5bRIgYj2xpdQp9TCSclR9wMrLTo6my28s
+         EiC0lVfFSGnyvv7iAL3k6B1PX0I6PP5qAlmZJ0/c1VdhtzrSZjDkQnlWNHQwrOLxTkTR
+         V+6RDx9nqOvzkHvZFzH78907d4V3QMUFsK3QsFQ64ad+ySQfpNJksnmE3FnYcx3L1cJn
+         W9v5HCFrTcTWPsbzQpgvOepN36P4czvvY1FV6r9QnedML+dQMZTmfi6yAMRTKZ785y3G
+         8ZSw==
+X-Gm-Message-State: APjAAAXsmNXEM6WSbAkKGSIKZ7JJapolDdRQsduSV9rIFtSWNutTPVDV
+        N7wsR37hOngH0DrZQNlkyPAPaQ==
+X-Google-Smtp-Source: APXvYqwyt7lc1mSGIiZXyDGsPcskW6ZeR7K7ew061RPI21s6se9xOTay+n2VdA9Vkz4v3sJgtq7RYw==
+X-Received: by 2002:adf:b458:: with SMTP id v24mr18407625wrd.46.1554725890968;
+        Mon, 08 Apr 2019 05:18:10 -0700 (PDT)
 Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id e1sm52865103wrw.66.2019.04.08.05.18.07
+        by smtp.gmail.com with ESMTPSA id e1sm52865103wrw.66.2019.04.08.05.18.10
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 08 Apr 2019 05:18:07 -0700 (PDT)
+        Mon, 08 Apr 2019 05:18:10 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     hverkuil@xs4all.nl, mchehab@kernel.org, devicetree@vger.kernel.org
+To:     hverkuil@xs4all.nl, mchehab@kernel.org
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         linux-amlogic@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 1/3] media: dt-bindings: media: meson-ao-cec: Add G12A AO-CEC-B Compatible
-Date:   Mon,  8 Apr 2019 14:18:03 +0200
-Message-Id: <20190408121805.2870-2-narmstrong@baylibre.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 3/3] MAINTAINERS: Update AO CEC with ao-cec-g12a driver
+Date:   Mon,  8 Apr 2019 14:18:05 +0200
+Message-Id: <20190408121805.2870-4-narmstrong@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190408121805.2870-1-narmstrong@baylibre.com>
 References: <20190408121805.2870-1-narmstrong@baylibre.com>
@@ -73,54 +72,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The Amlogic G12A embeds a second CEC controller named AO-CEC-B, and
-the other one is AO-CEC-A described by the current bindings.
-
-The register interface is very close but the internal architecture
-is totally different.
-
-The other difference is the clock source, the AO-CEC-B takes the
-"oscin", the Always-On Oscillator clock, as input and embeds a
-dual-divider clock divider to provide the precise 32768Hz base
-clock for CEC communication.
+Update the MAINTAINERS entry with the new AO-CEC driver for G12A.
 
 Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/media/meson-ao-cec.txt      | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/media/meson-ao-cec.txt b/Documentation/devicetree/bindings/media/meson-ao-cec.txt
-index 8671bdb08080..c67fc41d4aa2 100644
---- a/Documentation/devicetree/bindings/media/meson-ao-cec.txt
-+++ b/Documentation/devicetree/bindings/media/meson-ao-cec.txt
-@@ -4,16 +4,23 @@ The Amlogic Meson AO-CEC module is present is Amlogic SoCs and its purpose is
- to handle communication between HDMI connected devices over the CEC bus.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e17ebf70b548..bbad8f3ee3e8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10046,6 +10046,7 @@ L:	linux-amlogic@lists.infradead.org
+ W:	http://linux-meson.com/
+ S:	Supported
+ F:	drivers/media/platform/meson/ao-cec.c
++F:	drivers/media/platform/meson/ao-cec-g12a.c
+ F:	Documentation/devicetree/bindings/media/meson-ao-cec.txt
+ T:	git git://linuxtv.org/media_tree.git
  
- Required properties:
--  - compatible : value should be following
-+  - compatible : value should be following depending on the SoC :
-+	For GXBB, GXL, GXM and G12A (AO_CEC_A module) :
- 	"amlogic,meson-gx-ao-cec"
-+	For G12A (AO_CEC_B module) :
-+	"amlogic,meson-g12a-ao-cec"
- 
-   - reg : Physical base address of the IP registers and length of memory
- 	  mapped region.
- 
-   - interrupts : AO-CEC interrupt number to the CPU.
-   - clocks : from common clock binding: handle to AO-CEC clock.
--  - clock-names : from common clock binding: must contain "core",
--		  corresponding to entry in the clocks property.
-+  - clock-names : from common clock binding, must contain :
-+		For GXBB, GXL, GXM and G12A (AO_CEC_A module) :
-+		- "core"
-+		For G12A (AO_CEC_B module) :
-+		- "oscin"
-+		corresponding to entry in the clocks property.
-   - hdmi-phandle: phandle to the HDMI controller
- 
- Example:
 -- 
 2.21.0
 
