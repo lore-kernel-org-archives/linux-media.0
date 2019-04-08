@@ -2,281 +2,118 @@ Return-Path: <SRS0=swNA=SK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35F55C10F13
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A9E5C10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:43:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E227F20857
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:37:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA3A42148E
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:43:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="UDNfDJP4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rYZEMZFg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbfDHVh1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 17:37:27 -0400
-Received: from bonobo.maple.relay.mailchannels.net ([23.83.214.22]:18116 "EHLO
-        bonobo.maple.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726005AbfDHVh1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Apr 2019 17:37:27 -0400
-X-Sender-Id: dreamhost|x-authsender|brad@b-rad.cc
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 016CB6A25C0;
-        Mon,  8 Apr 2019 21:37:25 +0000 (UTC)
-Received: from pdx1-sub0-mail-a64.g.dreamhost.com (100-96-7-60.trex.outbound.svc.cluster.local [100.96.7.60])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B4A026A25CF;
-        Mon,  8 Apr 2019 21:37:20 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|brad@b-rad.cc
-Received: from pdx1-sub0-mail-a64.g.dreamhost.com ([TEMPUNAVAIL].
- [64.90.62.162])
-        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
-        by 0.0.0.0:2500 (trex/5.17.2);
-        Mon, 08 Apr 2019 21:37:24 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|brad@b-rad.cc
-X-MailChannels-Auth-Id: dreamhost
-X-Dime-Wipe: 11354f856ad7c1b5_1554759441290_4233241543
-X-MC-Loop-Signature: 1554759441290:180895562
-X-MC-Ingress-Time: 1554759441289
-Received: from pdx1-sub0-mail-a64.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a64.g.dreamhost.com (Postfix) with ESMTP id 752D280412;
-        Mon,  8 Apr 2019 14:37:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        nextdimension.cc; bh=DJOw5XoRj6gE84Shu7dRJEbLwSg=; b=UDNfDJP4/sy
-        FzhEX4+3QzTAUbmuqJr8+nge3Hyj0r5Gr96WRS3+2K+OYu2N/hzl1C54Fgw+5Wxw
-        As8g/xJoR94JuctdSJZHkuUVIIofKtAfrYrD1FW+4kdnNffxB+/bCWCVQvGDBvvS
-        W5pa1ExeHOpG31ul68DsK1+yvB+98biA=
-Received: from [192.168.0.21] (66-90-189-166.dyn.grandenetworks.net [66.90.189.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: brad@b-rad.cc)
-        by pdx1-sub0-mail-a64.g.dreamhost.com (Postfix) with ESMTPSA id 4D92D8040A;
-        Mon,  8 Apr 2019 14:37:11 -0700 (PDT)
-Subject: Re: [PATCH 07/13] si2157: Briefly wait for tuning operation to
- complete
-To:     Sean Young <sean@mess.org>, Brad Love <brad@nextdimension.cc>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org
-References: <1546105882-15693-1-git-send-email-brad@nextdimension.cc>
- <1546105882-15693-8-git-send-email-brad@nextdimension.cc>
- <20190405102942.5igrs664bl46v2pg@gofer.mess.org>
- <7620f3b6-296b-411c-d082-573f783e82ac@nextdimension.cc>
- <20190408205547.l2z5xeunwmqj5oph@gofer.mess.org>
-X-DH-BACKEND: pdx1-sub0-mail-a64
-From:   Brad Love <brad@nextdimension.cc>
-Openpgp: preference=signencrypt
-Autocrypt: addr=brad@nextdimension.cc; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <af0663f0-e0ba-a468-1b17-8ba73d8d779c@nextdimension.cc>
-Date:   Mon, 8 Apr 2019 16:37:10 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        id S1726799AbfDHVnR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 17:43:17 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:36315 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726188AbfDHVnP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 17:43:15 -0400
+Received: by mail-lj1-f193.google.com with SMTP id r24so888106ljg.3;
+        Mon, 08 Apr 2019 14:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ina1sug/tV7DpNodQARtmW1O98Az5HmyxzHtxFz5C9Q=;
+        b=rYZEMZFg+74Q9FodscmpozPnMJuIdLHxCJndLHe2yscN20QYNhLv/YdqkTQS+tG1i4
+         thcQYHx9arols07rgNbhTqeur93BE8OVhWgFYmn/pu6gF2U8Kr3ONa1kFw97n75JDlF/
+         k7wq0tJS5yHvzIzsAuojmP4zHKmKBVf5bxJA3AUMiRJcx79eJCyxo8uTT9U43cL9oRYA
+         8XqXQfwnGNBT9fzIGFErRQkzkDK3djby9+vo7euW3e3vwW7v1JkAHaPzBMq22biqcumC
+         n4FvK9aBgth/X3uaEMBdHE+xmwNPGAaLjKuIGN2bsoRiOnzknJE7KSn5sJdIENdwqxEB
+         xp1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ina1sug/tV7DpNodQARtmW1O98Az5HmyxzHtxFz5C9Q=;
+        b=W8OA242bo0aP+RRg/9/1y3C2aRlGJBupnffYCAFGhSEkLBTw0odxgOf5VOX8EevIEH
+         kjUE+wt5QMtSwNpZnyjGEi9YVmMGmNngBUL8ILBp2HE5ojPEuksalBtU0XnlQjq4KzKv
+         PnnjVkdcoYCiJXeA84ONsqZMBme6hUIC35Q1I30zGz3MCI3XQ5km365QrjycnoDeUfTc
+         CiLy8/kT0lI1Bok73kZo6oum031LzwEHjaUFnQtqtx8hYyFMnzFootD6VA7Iq3IMwLNW
+         NggZUoRTJwz9qzZ2VZFQoeK5k7Gshc7fTnYw5Nv7wD+D9dC2yyBUPC2PQfv5+1ogpnkE
+         biyg==
+X-Gm-Message-State: APjAAAXf4XgpuuvN4IsFshFkZCy1dw8nZzfU6xnPEz7Gjl4sEJSa+Pzv
+        ksjb9GqPVpeyGr838LU/yTE=
+X-Google-Smtp-Source: APXvYqxUKZ8HkAowwwJVw6qY9IRGO66+uJ1o+tPgFTPL4mO4y/5S4k1evlo5zb2J0WPbkIvVRf7FYw==
+X-Received: by 2002:a2e:9ec3:: with SMTP id h3mr1550336ljk.131.1554759793535;
+        Mon, 08 Apr 2019 14:43:13 -0700 (PDT)
+Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
+        by smtp.gmail.com with ESMTPSA id j6sm5286048ljc.0.2019.04.08.14.43.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Apr 2019 14:43:12 -0700 (PDT)
+From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Subject: [PATCH 06/14] media: ov6650: Fix unverified pad IDs accepted by .get/set_selectioon()
+Date:   Mon,  8 Apr 2019 23:42:34 +0200
+Message-Id: <20190408214242.9603-7-jmkrzyszt@gmail.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190408214242.9603-1-jmkrzyszt@gmail.com>
+References: <20190408214242.9603-1-jmkrzyszt@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190408205547.l2z5xeunwmqj5oph@gofer.mess.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-GB
-X-VR-OUT-STATUS: OK
-X-VR-OUT-SCORE: -85
-X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduuddrudefgdduieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuggftfghnshhusghstghrihgsvgdpffftgfetoffjqffuvfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegfrhhlucfvnfffucdludehmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtqhertddtfeejnecuhfhrohhmpeeurhgrugcunfhovhgvuceosghrrggusehnvgigthguihhmvghnshhiohhnrdgttgeqnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhinhhugihtvhdrohhrghenucfkphepieeirdeltddrudekledrudeiieenucfrrghrrghmpehmohguvgepshhmthhppdhhvghloheplgduledvrdduieekrddtrddvudgnpdhinhgvthepieeirdeltddrudekledrudeiiedprhgvthhurhhnqdhprghthhepuehrrgguucfnohhvvgcuoegsrhgrugesnhgvgihtughimhgvnhhsihhonhdrtggtqedpmhgrihhlfhhrohhmpegsrhgrugesnhgvgihtughimhgvnhhsihhonhdrtggtpdhnrhgtphhtthhopehsvggrnhesmhgvshhsrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sean,
+Commit 10d5509c8d50 ("[media] v4l2: remove g/s_crop from video ops")
+converted former ov6650_g/s_crop() video operation callbacks to
+ov6650_get/set_selection() pad operation callbacks.  However, the new
+functions don't verify correctness of pad IDs passed in user arguments.
+Fix it.
 
+Even if pad ID arguments are not actually used in those functions,
+assumed to be 0, always return -EINVAL if an operation on an invalid
+(non-zero) pad is requested by a user.
 
-On 08/04/2019 15.55, Sean Young wrote:
-> On Mon, Apr 08, 2019 at 01:14:08PM -0500, Brad Love wrote:
->> On 05/04/2019 05.29, Sean Young wrote:
->>> On Sat, Dec 29, 2018 at 11:51:16AM -0600, Brad Love wrote:
->>>> Some software reports no signal found on a frequency due to immediat=
-ely
->>>> checking for lock as soon as set_params returns. This waits up 40ms =
-for
->>>> tuning operation, then from 30-150ms (dig/analog) for signal lock be=
-fore
->>>> returning from set_params and set_analog_params.
->>>>
->>>> Tuning typically completes in 20-30ms. Digital tuning will additiona=
-lly
->>>> wait depending on signal characteristics. Analog tuning will wait th=
-e
->>>> full timeout in case of no signal.
->>> This looks like a workaround for broken userspace. Very possibly this=
+Fixes: 10d5509c8d50 ("[media] v4l2: remove g/s_crop from video ops")
+Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/media/i2c/ov6650.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
->>> is software was tested on a different frontend which does wait for tu=
-ning
->>> to complete.
->>>
->>> This is a change in uapi and will have to be done for all frontends, =
-and
->>> documented. However I doubt such a change is acceptable.
->>>
->>> What software are you refering to?
->>
->> Hi Sean,
->>
->> I would have to check with support to find out the various software th=
-at
->> expect when a tune command returns for that tuning operation to have
->> actually completed. In the current state when you tune si2157 it
->> immediately returns, no care of the tuning operation completion, no ca=
-re
->> of the pll lock success. This is correct? Not so according to Silicon
->> Labs documentation, which suggests a brief wait. I just took a look at=
-
->> other drivers, sampling only those with set_analog_params, all but two=
-
->> have similar code in place to actually allow the tune operation time t=
-o
->> complete (both digital and analog) before returning to userland. The
->> other drivers just insert arbitrary time delays to accommodate the
->> operations completion time. At least with my patch I am monitoring the=
-
->> hardware to know when the operation actually completes.
->>
->> I see in tuners (not frontends):
->>
->> mt2063 - waits up to 100ms for lock status and return
->> r820t - sleep 100ms for pll lock status and return
->> tda827x - 170-500ms wait after tune before checking status and return
->> tda8290 - sleep 100ms up to 3x while checking tune status and return
->> tuner-xc2028 - sleep for 110ms awaiting lock status and return
->> xc4000 - 10ms sleep after tune, unless debug, then 100ms and return
->> xc5000 - 20ms sleep after tune,=C2=A0 if pll not locked, re-tune and s=
-leep
->> again, repeat until success and return
->>
->> There's also other arbitrary sleeps peppered throughout the operations=
-=2E
->>
->> Then you have si2157 that fires off the tuning commands and goes right=
-
->> back to userland immediately, when with instrumented testing, the
->> operation takes time to complete and lock. The operation does not happ=
-en
->> instantaneously. Software that expects clocks to be locked when the
->> function returns determine this is an error. They query the tuner
->> immediately when tune returns and they output tuning failed.
->>
->> Please explain why awaiting the hardware to say the "tuning operation
->> you requested is done and clocks are locked" is not ok. If it's not ok=
-,
->> fine, but then a lot of other drivers are currently "not ok" as well.
-> If you read the dvb userspace api, there is nothing in the DTV_TUNE
-> property that says it will block until a lock has been made.
->
-> https://www.kernel.org/doc/html/latest/media/uapi/dvb/fe_property_param=
-eters.html#dtv-tune
->
-> The locking status can be queried using read status.
->
-> https://www.kernel.org/doc/html/latest/media/uapi/dvb/fe-read-status.ht=
-ml#fe-read-status
->
-> Using this mechanism, there is a minimum of sleeping in the kernel whic=
-h helps
-> interactivity. (uninterruptable) sleeping in drivers something that rea=
-lly
-> should be avoided if at all possible. Userspace can't do anything durin=
-g that
-> time.
-
-
-This is not dealing with signal lock. As far as I understand the
-documentation I have, this is hardware tuning completion, aka the pll's
-and whatever else are properly configured and the tuning operation
-itself is finished successfully. The byte read is looking for
-TUNINT/ATVINT/DTVINT bits set, meaning the operation is complete. Right
-now I ignore errors, which probably should be returned to userland, as
-if a tune fails the userland has no way to determine this fact. This
-process comes directly from a flowchart in the SL guide.
-
-Signal lock is determined later, using the methods you describe. No
-property registers are being queried here, the success of the previous
-(tuning) operation is.
-
-
-
-> So if you look at how dvbv5-zap finds a lock, you can see that it sets
-> DTV_TUNE (amongst others) and then uses the frontend read_status() to q=
-uery
-> for locking until either timeout or a lock is found (not sure why it po=
-lls
-> one per second though, seems a bit overly conservative).
->
-> https://git.linuxtv.org/v4l-utils.git/tree/utils/dvb/dvbv5-zap.c#n494
->
-> Now, if other drivers have a sleep to wait for tuning lock in them and =
-whether
-> they should be removed, is another question. Looking at the tda8290 dri=
-ver
-> it needs to try various things in order to make a lock, so there is (cu=
-rrently)
-> no way to avoid this. It would be nice if it could be changed to interr=
-uptable
-> sleeps though, so that dvb userspace does not "hang" until a lock is ma=
-de
-> or failed.
-
-
-I indeed noticed none of the other drivers use usleep_range, which is
-interruptible, correct?
-
-Regards,
-
-Brad
-
-
->
->
-> Thanks,
->
-> Sean
+diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
+index d72fcf56930a..5df81dec06ae 100644
+--- a/drivers/media/i2c/ov6650.c
++++ b/drivers/media/i2c/ov6650.c
+@@ -444,6 +444,9 @@ static int ov6650_get_selection(struct v4l2_subdev *sd,
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	struct ov6650 *priv = to_ov6650(client);
+ 
++	if (sel->pad)
++		return -EINVAL;
++
+ 	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
+ 		return -EINVAL;
+ 
+@@ -471,6 +474,9 @@ static int ov6650_set_selection(struct v4l2_subdev *sd,
+ 	struct v4l2_rect rect = sel->r;
+ 	int ret;
+ 
++	if (sel->pad)
++		return -EINVAL;
++
+ 	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE ||
+ 	    sel->target != V4L2_SEL_TGT_CROP)
+ 		return -EINVAL;
+-- 
+2.21.0
 
