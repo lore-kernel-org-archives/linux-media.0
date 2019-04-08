@@ -7,64 +7,64 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51B1AC10F13
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 18:17:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D98FCC10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 18:18:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0FE922084C
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 18:17:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 991542084C
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 18:18:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="AmegVkbM"
+	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="OUMdRxST"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbfDHSRI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 14:17:08 -0400
-Received: from bonobo.maple.relay.mailchannels.net ([23.83.214.22]:2277 "EHLO
-        bonobo.maple.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726369AbfDHSRI (ORCPT
+        id S1726693AbfDHSSr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 14:18:47 -0400
+Received: from goldenrod.birch.relay.mailchannels.net ([23.83.209.74]:15128
+        "EHLO goldenrod.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726677AbfDHSSq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Apr 2019 14:17:08 -0400
+        Mon, 8 Apr 2019 14:18:46 -0400
 X-Sender-Id: dreamhost|x-authsender|brad@b-rad.cc
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 640E9141C75;
-        Mon,  8 Apr 2019 18:17:05 +0000 (UTC)
-Received: from pdx1-sub0-mail-a61.g.dreamhost.com (100-96-4-125.trex.outbound.svc.cluster.local [100.96.4.125])
+        by relay.mailchannels.net (Postfix) with ESMTP id D8C2D5E0527;
+        Mon,  8 Apr 2019 18:18:43 +0000 (UTC)
+Received: from pdx1-sub0-mail-a61.g.dreamhost.com (100-96-11-84.trex.outbound.svc.cluster.local [100.96.11.84])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B991E1424C4;
-        Mon,  8 Apr 2019 18:17:04 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 03F3A5E1E4A;
+        Mon,  8 Apr 2019 18:18:42 +0000 (UTC)
 X-Sender-Id: dreamhost|x-authsender|brad@b-rad.cc
 Received: from pdx1-sub0-mail-a61.g.dreamhost.com ([TEMPUNAVAIL].
  [64.90.62.162])
         (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
         by 0.0.0.0:2500 (trex/5.17.2);
-        Mon, 08 Apr 2019 18:17:05 +0000
+        Mon, 08 Apr 2019 18:18:43 +0000
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|brad@b-rad.cc
 X-MailChannels-Auth-Id: dreamhost
-X-Rock-Tangy: 4c9f368f63f42787_1554747425132_704406845
-X-MC-Loop-Signature: 1554747425132:1579745078
-X-MC-Ingress-Time: 1554747425132
+X-Battle-Decisive: 559be4a66dc1e5e6_1554747523730_2796680142
+X-MC-Loop-Signature: 1554747523730:2108943071
+X-MC-Ingress-Time: 1554747523729
 Received: from pdx1-sub0-mail-a61.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTP id 1DA8D80437;
-        Mon,  8 Apr 2019 11:17:02 -0700 (PDT)
+        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTP id 8708A8041F;
+        Mon,  8 Apr 2019 11:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=
         subject:to:cc:references:from:message-id:date:mime-version
         :in-reply-to:content-type:content-transfer-encoding; s=
-        nextdimension.cc; bh=F1PkWGF4uQIN4bn2TT5q99mR26M=; b=AmegVkbMPc2
-        cdWJW1IR5bUcrHloDLx26jKiVTG9QfKecI1BY3EuxPZb64k45dg20m/ni5q+K9nb
-        Im1iLdL/Qqt2y1cnqXt3vdjfzgQeY9uPBBrEftESC8immit9l1S0PyPb0LPPaspu
-        n7AL7JYjSF8jXUjZkZwQrwd/eUFiudP0=
+        nextdimension.cc; bh=zDkdZIRtgIyvemMI6QjwuSxwpqM=; b=OUMdRxSTzz3
+        O/T4xF0r5jOldKxS0YPKvWbQsgph1lzpNujcBh0XEvu0AXZA3Zyug5PRlVlfObPd
+        4dfDNsxMjQWoeRsGs1QQd1jcSM4xJhJOreUvXpNcOBCi8Ed62LZmOtd1+dB0TsbG
+        JiumBXVTXlkLArpL7SHpQnoGV/TPniOM=
 Received: from [192.168.0.21] (66-90-189-166.dyn.grandenetworks.net [66.90.189.166])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: brad@b-rad.cc)
-        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTPSA id 710CC80438;
-        Mon,  8 Apr 2019 11:17:00 -0700 (PDT)
-Subject: Re: [PATCH v4 2/4] pvrusb2: Add multiple dvb frontend support
+        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTPSA id 5DD0480431;
+        Mon,  8 Apr 2019 11:18:36 -0700 (PDT)
+Subject: Re: [PATCH v2 05/12] si2157: Add analog tuning related functions
 To:     Sean Young <sean@mess.org>, Brad Love <brad@nextdimension.cc>
 Cc:     linux-media@vger.kernel.org
-References: <1545421223-3577-1-git-send-email-brad@nextdimension.cc>
- <1551294966-12564-1-git-send-email-brad@nextdimension.cc>
- <1551294966-12564-3-git-send-email-brad@nextdimension.cc>
- <20190405100051.tfarb3rpy6cf7dvt@gofer.mess.org>
+References: <1546105882-15693-1-git-send-email-brad@nextdimension.cc>
+ <1551292066-29574-1-git-send-email-brad@nextdimension.cc>
+ <1551292066-29574-6-git-send-email-brad@nextdimension.cc>
+ <20190405132406.gj2vzxdsvjv7yejy@gofer.mess.org>
 X-DH-BACKEND: pdx1-sub0-mail-a61
 From:   Brad Love <brad@nextdimension.cc>
 Openpgp: preference=signencrypt
@@ -110,12 +110,12 @@ Autocrypt: addr=brad@nextdimension.cc; prefer-encrypt=mutual; keydata=
  Om93LaUGEs5Cqb/hUv9k6eqjjQre9mB0ImDsGXkuuP0X6eN6yrstcaPAYl82NW+PGJ1Zz2ai
  AHkvsjIskeau68XRcm301QJI3qAZghhD7uJUH/NWBlr+w+F9vLlCgKvJLpahrd3PGHwgJnfV
  1qqhouQNjsUrwpkXdQjTbSwtZaDPzCeSUSMArNjQMp21IYg/LhafLMzBqVODgaTsFDuVyRg=
-Message-ID: <8ed77b40-2776-2f57-4e8e-1f56d01a82cf@nextdimension.cc>
-Date:   Mon, 8 Apr 2019 13:16:59 -0500
+Message-ID: <e153da04-65c0-f582-70f1-243657401af2@nextdimension.cc>
+Date:   Mon, 8 Apr 2019 13:18:35 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.5.1
 MIME-Version: 1.0
-In-Reply-To: <20190405100051.tfarb3rpy6cf7dvt@gofer.mess.org>
+In-Reply-To: <20190405132406.gj2vzxdsvjv7yejy@gofer.mess.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-GB
@@ -128,269 +128,341 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
-On 05/04/2019 05.00, Sean Young wrote:
-> On Wed, Feb 27, 2019 at 01:16:04PM -0600, Brad Love wrote:
->> All changes are equivalent and backwards compatible.
->> All current devices have been changed to use fe[0]
->> Cleanup has been added to dvb init to support cleanup after failure.
-> Just very minor note. Here you are adding suppport for 2 frontends, but
-> you're not explaining why. I would add something like "This is to add support
-> for Hauppauge HVR1955/1975 devices which will be done in a later commit",
-> to the commit message. Alternatively you could merge the two commits.
+On 05/04/2019 08.24, Sean Young wrote:
+> On Wed, Feb 27, 2019 at 12:27:39PM -0600, Brad Love wrote:
+>> Include set_analog_params, get_frequency, and get_bandwidth.
+>>
+>> Tested with NTSC and PAL standards via ch3/4 generator. Other standards
+>> are included, but are untested due to lack of generator.
+> There are quite a few warnings from checkpatch on this patch. Please
+> run patches through "./scripts/checkpatch.pl --strict" before submitting.
+>
+> Generally there should be no output from checkpatch if possible.
 
 Hi Sean,
 
-I'll add a note to the commit message. Combining the commits seems
-bizarre and contrary to "one issue in a commit."
+Kernel patch guidelines suggest ./scripts/checkpatch.pl without
+--strict, so that is what I've always used. I have no problems switching
+to strict from now on.
 
 Regards,
 
 Brad
 
 
-
+> Thanks
 >
 > Sean
 >
 >> Signed-off-by: Brad Love <brad@nextdimension.cc>
 >> ---
->> No changes
+>> Changes since v1:
+>> - remove __func__ from dev_dbg macros
 >>
->>  drivers/media/usb/pvrusb2/pvrusb2-devattr.c | 36 +++++++-------
->>  drivers/media/usb/pvrusb2/pvrusb2-dvb.c     | 77 ++++++++++++++++++++++-------
->>  drivers/media/usb/pvrusb2/pvrusb2-dvb.h     |  2 +-
->>  3 files changed, 77 insertions(+), 38 deletions(-)
+>>  drivers/media/tuners/si2157.c      | 245 ++++++++++++++++++++++++++++++++++++-
+>>  drivers/media/tuners/si2157_priv.h |   2 +
+>>  2 files changed, 244 insertions(+), 3 deletions(-)
 >>
->> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-devattr.c b/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
->> index 06de1c8..ef36b62 100644
->> --- a/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
->> +++ b/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
->> @@ -188,10 +188,10 @@ static struct lgdt330x_config pvr2_lgdt3303_config = {
+>> diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
+>> index f3a60a1..1006172 100644
+>> --- a/drivers/media/tuners/si2157.c
+>> +++ b/drivers/media/tuners/si2157.c
+>> @@ -371,7 +371,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
+>>  	if (ret)
+>>  		goto err;
 >>  
->>  static int pvr2_lgdt3303_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	adap->fe = dvb_attach(lgdt330x_attach, &pvr2_lgdt3303_config,
->> -			      0x0e,
->> -			      &adap->channel.hdw->i2c_adap);
->> -	if (adap->fe)
->> +	adap->fe[0] = dvb_attach(lgdt330x_attach, &pvr2_lgdt3303_config,
->> +				 0x0e,
->> +				 &adap->channel.hdw->i2c_adap);
->> +	if (adap->fe[0])
->>  		return 0;
->>  
->>  	return -EIO;
->> @@ -199,7 +199,7 @@ static int pvr2_lgdt3303_attach(struct pvr2_dvb_adapter *adap)
->>  
->>  static int pvr2_lgh06xf_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	dvb_attach(simple_tuner_attach, adap->fe,
->> +	dvb_attach(simple_tuner_attach, adap->fe[0],
->>  		   &adap->channel.hdw->i2c_adap, 0x61,
->>  		   TUNER_LG_TDVS_H06XF);
->>  
->> @@ -248,10 +248,10 @@ static struct lgdt330x_config pvr2_lgdt3302_config = {
->>  
->>  static int pvr2_lgdt3302_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	adap->fe = dvb_attach(lgdt330x_attach, &pvr2_lgdt3302_config,
->> +	adap->fe[0] = dvb_attach(lgdt330x_attach, &pvr2_lgdt3302_config,
->>  			      0x0e,
->>  			      &adap->channel.hdw->i2c_adap);
->> -	if (adap->fe)
->> +	if (adap->fe[0])
->>  		return 0;
->>  
->>  	return -EIO;
->> @@ -259,7 +259,7 @@ static int pvr2_lgdt3302_attach(struct pvr2_dvb_adapter *adap)
->>  
->>  static int pvr2_fcv1236d_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	dvb_attach(simple_tuner_attach, adap->fe,
->> +	dvb_attach(simple_tuner_attach, adap->fe[0],
->>  		   &adap->channel.hdw->i2c_adap, 0x61,
->>  		   TUNER_PHILIPS_FCV1236D);
->>  
->> @@ -335,9 +335,9 @@ static struct tda18271_config hauppauge_tda18271_dvb_config = {
->>  
->>  static int pvr2_tda10048_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	adap->fe = dvb_attach(tda10048_attach, &hauppauge_tda10048_config,
->> +	adap->fe[0] = dvb_attach(tda10048_attach, &hauppauge_tda10048_config,
->>  			      &adap->channel.hdw->i2c_adap);
->> -	if (adap->fe)
->> +	if (adap->fe[0])
->>  		return 0;
->>  
->>  	return -EIO;
->> @@ -345,10 +345,10 @@ static int pvr2_tda10048_attach(struct pvr2_dvb_adapter *adap)
->>  
->>  static int pvr2_73xxx_tda18271_8295_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	dvb_attach(tda829x_attach, adap->fe,
->> +	dvb_attach(tda829x_attach, adap->fe[0],
->>  		   &adap->channel.hdw->i2c_adap, 0x42,
->>  		   &tda829x_no_probe);
->> -	dvb_attach(tda18271_attach, adap->fe, 0x60,
->> +	dvb_attach(tda18271_attach, adap->fe[0], 0x60,
->>  		   &adap->channel.hdw->i2c_adap,
->>  		   &hauppauge_tda18271_dvb_config);
->>  
->> @@ -433,9 +433,9 @@ static struct tda18271_config hauppauge_tda18271_config = {
->>  
->>  static int pvr2_s5h1409_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	adap->fe = dvb_attach(s5h1409_attach, &pvr2_s5h1409_config,
->> +	adap->fe[0] = dvb_attach(s5h1409_attach, &pvr2_s5h1409_config,
->>  			      &adap->channel.hdw->i2c_adap);
->> -	if (adap->fe)
->> +	if (adap->fe[0])
->>  		return 0;
->>  
->>  	return -EIO;
->> @@ -443,9 +443,9 @@ static int pvr2_s5h1409_attach(struct pvr2_dvb_adapter *adap)
->>  
->>  static int pvr2_s5h1411_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	adap->fe = dvb_attach(s5h1411_attach, &pvr2_s5h1411_config,
->> +	adap->fe[0] = dvb_attach(s5h1411_attach, &pvr2_s5h1411_config,
->>  			      &adap->channel.hdw->i2c_adap);
->> -	if (adap->fe)
->> +	if (adap->fe[0])
->>  		return 0;
->>  
->>  	return -EIO;
->> @@ -453,10 +453,10 @@ static int pvr2_s5h1411_attach(struct pvr2_dvb_adapter *adap)
->>  
->>  static int pvr2_tda18271_8295_attach(struct pvr2_dvb_adapter *adap)
->>  {
->> -	dvb_attach(tda829x_attach, adap->fe,
->> +	dvb_attach(tda829x_attach, adap->fe[0],
->>  		   &adap->channel.hdw->i2c_adap, 0x42,
->>  		   &tda829x_no_probe);
->> -	dvb_attach(tda18271_attach, adap->fe, 0x60,
->> +	dvb_attach(tda18271_attach, adap->fe[0], 0x60,
->>  		   &adap->channel.hdw->i2c_adap,
->>  		   &hauppauge_tda18271_config);
->>  
->> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
->> index 4b32b21..cb5586b 100644
->> --- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
->> +++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
->> @@ -343,26 +343,19 @@ static int pvr2_dvb_frontend_init(struct pvr2_dvb_adapter *adap)
->>  		goto done;
+>> -	/* set if frequency if needed */
+>> +	/* set digital if frequency if needed */
+>>  	if (if_frequency != dev->if_frequency) {
+>>  		memcpy(cmd.args, "\x14\x00\x06\x07", 4);
+>>  		cmd.args[4] = (if_frequency / 1000) & 0xff;
+>> @@ -385,7 +385,7 @@ static int si2157_set_params(struct dvb_frontend *fe)
+>>  		dev->if_frequency = if_frequency;
 >>  	}
 >>  
->> -	if ((dvb_props->frontend_attach(adap) == 0) && (adap->fe)) {
->> -
->> -		if (dvb_register_frontend(&adap->dvb_adap, adap->fe)) {
->> +	if (dvb_props->frontend_attach(adap) == 0 && adap->fe[0]) {
->> +		if (dvb_register_frontend(&adap->dvb_adap, adap->fe[0])) {
->>  			pvr2_trace(PVR2_TRACE_ERROR_LEGS,
->>  				   "frontend registration failed!");
->> -			dvb_frontend_detach(adap->fe);
->> -			adap->fe = NULL;
->>  			ret = -ENODEV;
->> -			goto done;
->> +			goto fail_frontend0;
->>  		}
->> +		if (adap->fe[0]->ops.analog_ops.standby)
->> +			adap->fe[0]->ops.analog_ops.standby(adap->fe[0]);
+>> -	/* set frequency */
+>> +	/* set digital frequency */
+>>  	memcpy(cmd.args, "\x41\x00\x00\x00\x00\x00\x00\x00", 8);
+>>  	cmd.args[4] = (c->frequency >>  0) & 0xff;
+>>  	cmd.args[5] = (c->frequency >>  8) & 0xff;
+>> @@ -397,18 +397,254 @@ static int si2157_set_params(struct dvb_frontend *fe)
+>>  	if (ret)
+>>  		goto err;
 >>  
->> -		if (dvb_props->tuner_attach)
->> -			dvb_props->tuner_attach(adap);
->> -
->> -		if (adap->fe->ops.analog_ops.standby)
->> -			adap->fe->ops.analog_ops.standby(adap->fe);
->> -
->> -		/* Ensure all frontends negotiate bus access */
->> -		adap->fe->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
->> -
->> +		pvr2_trace(PVR2_TRACE_INFO, "transferring fe[%d] ts_bus_ctrl() to pvr2_dvb_bus_ctrl()",
->> +				adap->fe[0]->id);
->> +		adap->fe[0]->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
->>  	} else {
->>  		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
->>  			   "no frontend was attached!");
->> @@ -370,16 +363,62 @@ static int pvr2_dvb_frontend_init(struct pvr2_dvb_adapter *adap)
->>  		return ret;
->>  	}
->>  
->> - done:
->> +	if (dvb_props->tuner_attach && dvb_props->tuner_attach(adap)) {
->> +		pvr2_trace(PVR2_TRACE_ERROR_LEGS, "tuner attach failed");
->> +		ret = -ENODEV;
->> +		goto fail_tuner;
->> +	}
+>> +	dev->bandwidth = bandwidth;
+>> +	dev->frequency = c->frequency;
 >> +
->> +	if (adap->fe[1]) {
->> +		adap->fe[1]->id = 1;
->> +		adap->fe[1]->tuner_priv = adap->fe[0]->tuner_priv;
->> +		memcpy(&adap->fe[1]->ops.tuner_ops,
->> +			&adap->fe[0]->ops.tuner_ops,
->> +			sizeof(struct dvb_tuner_ops));
->> +
->> +		if (dvb_register_frontend(&adap->dvb_adap, adap->fe[1])) {
->> +			pvr2_trace(PVR2_TRACE_ERROR_LEGS,
->> +				   "frontend registration failed!");
->> +			ret = -ENODEV;
->> +			goto fail_frontend1;
->> +		}
->> +		/* MFE lock */
->> +		adap->dvb_adap.mfe_shared = 1;
->> +
->> +		if (adap->fe[1]->ops.analog_ops.standby)
->> +			adap->fe[1]->ops.analog_ops.standby(adap->fe[1]);
->> +
->> +		pvr2_trace(PVR2_TRACE_INFO, "transferring fe[%d] ts_bus_ctrl() to pvr2_dvb_bus_ctrl()",
->> +				adap->fe[1]->id);
->> +		adap->fe[1]->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
->> +	}
->> +done:
->>  	pvr2_channel_limit_inputs(&adap->channel, 0);
->>  	return ret;
->> +
->> +fail_frontend1:
->> +	dvb_frontend_detach(adap->fe[1]);
->> +	adap->fe[1] = NULL;
->> +fail_tuner:
->> +	dvb_unregister_frontend(adap->fe[0]);
->> +fail_frontend0:
->> +	dvb_frontend_detach(adap->fe[0]);
->> +	adap->fe[0] = NULL;
->> +
+>> +	return 0;
+>> +err:
+>> +	dev->bandwidth = 0;
+>> +	dev->frequency = 0;
+>> +	dev->if_frequency = 0;
+>> +	dev_dbg(&client->dev, "failed=%d\n", ret);
 >> +	return ret;
+>> +}
+>> +
+>> +static int si2157_set_analog_params(struct dvb_frontend *fe,
+>> +				      struct analog_parameters *params)
+>> +{
+>> +	struct i2c_client *client = fe->tuner_priv;
+>> +	struct si2157_dev *dev = i2c_get_clientdata(client);
+>> +	char *std; /* for debugging */
+>> +	int ret;
+>> +	struct si2157_cmd cmd;
+>> +	u32 bandwidth = 0;
+>> +	u32 if_frequency = 0;
+>> +	u32 freq = 0;
+>> +	u64 tmp_lval = 0;
+>> +	u8 system = 0;
+>> +	u8 color = 0;    /* 0=NTSC/PAL, 0x10=SECAM */
+>> +	u8 invert_analog = 1; /* analog tuner spectrum; 0=normal, 1=inverted */
+>> +
+>> +	if (dev->chiptype != SI2157_CHIPTYPE_SI2157) {
+>> +		dev_info(&client->dev, "Analog tuning not supported for chiptype=%u\n",
+>> +				dev->chiptype);
+>> +		ret = -EINVAL;
+>> +		goto err;
+>> +	}
+>> +
+>> +	if (!dev->active)
+>> +		si2157_init(fe);
+>> +
+>> +	if (!dev->active) {
+>> +		ret = -EAGAIN;
+>> +		goto err;
+>> +	}
+>> +	if (params->mode == V4L2_TUNER_RADIO) {
+>> +	/*
+>> +	 * std = "fm";
+>> +	 * bandwidth = 1700000; //best can do for FM, AGC will be a mess though
+>> +	 * if_frequency = 1250000;  //HVR-225x(saa7164), HVR-12xx(cx23885)
+>> +	 * if_frequency = 6600000;  //HVR-9xx(cx231xx)
+>> +	 * if_frequency = 5500000;  //HVR-19xx(pvrusb2)
+>> +	 */
+>> +		dev_err(&client->dev, "si2157 does not currently support FM radio\n");
+>> +		ret = -EINVAL;
+>> +		goto err;
+>> +	}
+>> +	tmp_lval = params->frequency * 625LL;
+>> +	do_div(tmp_lval, 10); /* convert to HZ */
+>> +	freq = (u32)tmp_lval;
+>> +
+>> +	if (freq < 1000000) /* is freq in KHz */
+>> +		freq = freq * 1000;
+>> +	dev->frequency = freq;
+>> +
+>> +	/* if_frequency values based on tda187271C2 */
+>> +	if (params->std & (V4L2_STD_B|V4L2_STD_GH)) {
+>> +		if (freq >= 470000000) {
+>> +			std = "palGH";
+>> +			bandwidth = 8000000;
+>> +			if_frequency = 6000000;
+>> +			system = 1;
+>> +			if (params->std & (V4L2_STD_SECAM_G|V4L2_STD_SECAM_H)) {
+>> +				std = "secamGH";
+>> +				color = 0x10;
+>> +			}
+>> +		} else {
+>> +			std = "palB";
+>> +			bandwidth = 7000000;
+>> +			if_frequency = 6000000;
+>> +			system = 0;
+>> +			if (params->std & V4L2_STD_SECAM_B) {
+>> +				std = "secamB";
+>> +				color = 0x10;
+>> +			}
+>> +		}
+>> +	} else if (params->std & V4L2_STD_MN) {
+>> +		std = "MN";
+>> +		bandwidth = 6000000;
+>> +		if_frequency = 5400000;
+>> +		system = 2;
+>> +	} else if (params->std & V4L2_STD_PAL_I) {
+>> +		std = "palI";
+>> +		bandwidth = 8000000;
+>> +		if_frequency = 7250000; /* TODO: does not work yet */
+>> +		system = 4;
+>> +	} else if (params->std & V4L2_STD_DK) {
+>> +		std = "palDK";
+>> +		bandwidth = 8000000;
+>> +		if_frequency = 6900000; /* TODO: does not work yet */
+>> +		system = 5;
+>> +		if (params->std & V4L2_STD_SECAM_DK) {
+>> +			std = "secamDK";
+>> +			color = 0x10;
+>> +		}
+>> +	} else if (params->std & V4L2_STD_SECAM_L) {
+>> +		std = "secamL";
+>> +		bandwidth = 8000000;
+>> +		if_frequency = 6750000; /* TODO: untested */
+>> +		system = 6;
+>> +		color = 0x10;
+>> +	} else if (params->std & V4L2_STD_SECAM_LC) {
+>> +		std = "secamL'";
+>> +		bandwidth = 7000000;
+>> +		if_frequency = 1250000; /* TODO: untested */
+>> +		system = 7;
+>> +		color = 0x10;
+>> +	} else {
+>> +		std = "unknown";
+>> +	}
+>> +	/* calc channel center freq */
+>> +	freq = freq - 1250000 + (bandwidth/2);
+>> +
+>> +	dev_dbg(&client->dev,
+>> +			"mode=%d system=%u std='%s' params->frequency=%u center freq=%u if=%u bandwidth=%u\n",
+>> +			params->mode, system, std, params->frequency,
+>> +			freq, if_frequency, bandwidth);
+>> +
+>> +	/* set analog IF port */
+>> +	memcpy(cmd.args, "\x14\x00\x03\x06\x08\x02", 6);
+>> +	/* in using dev->if_port, we assume analog and digital IF's */
+>> +	/*  are always on different ports */
+>> +	/* assumes if_port definition is 0 or 1 for digital out */
+>> +	cmd.args[4] = (dev->if_port == 1)?8:10;
+>> +	cmd.args[5] = (dev->if_port == 1)?2:1; /* Analog AGC assumed external */
+>> +	cmd.wlen = 6;
+>> +	cmd.rlen = 4;
+>> +	ret = si2157_cmd_execute(client, &cmd);
+>> +	if (ret)
+>> +		goto err;
+>> +
+>> +	/* set analog IF output config */
+>> +	memcpy(cmd.args, "\x14\x00\x0d\x06\x94\x64", 6);
+>> +	cmd.wlen = 6;
+>> +	cmd.rlen = 4;
+>> +	ret = si2157_cmd_execute(client, &cmd);
+>> +	if (ret)
+>> +		goto err;
+>> +
+>> +	/* make this distinct from a digital IF */
+>> +	dev->if_frequency = if_frequency | 1;
+>> +
+>> +	/* calc and set tuner analog if center frequency */
+>> +	if_frequency = if_frequency + 1250000 - (bandwidth/2);
+>> +	dev_dbg(&client->dev, "IF Ctr freq=%d\n", if_frequency);
+>> +
+>> +	memcpy(cmd.args, "\x14\x00\x0C\x06", 4);
+>> +	cmd.args[4] = (if_frequency / 1000) & 0xff;
+>> +	cmd.args[5] = ((if_frequency / 1000) >> 8) & 0xff;
+>> +	cmd.wlen = 6;
+>> +	cmd.rlen = 4;
+>> +	ret = si2157_cmd_execute(client, &cmd);
+>> +	if (ret)
+>> +		goto err;
+>> +
+>> +	/* set analog AGC config */
+>> +	memcpy(cmd.args, "\x14\x00\x07\x06\x32\xc8", 6);
+>> +	cmd.wlen = 6;
+>> +	cmd.rlen = 4;
+>> +	ret = si2157_cmd_execute(client, &cmd);
+>> +	if (ret)
+>> +		goto err;
+>> +
+>> +	/* set analog video mode */
+>> +	memcpy(cmd.args, "\x14\x00\x04\x06\x00\x00", 6);
+>> +	cmd.args[4] = system | color;
+>> +#if 1 /* can use dev->inversion if assumed it applies to both digital/analog */
+>> +	if (invert_analog)
+>> +		cmd.args[5] |= 0x02;
+>> +#else
+>> +	if (dev->inversion)
+>> +		cmd.args[5] |= 0x02;
+>> +#endif
+>> +	cmd.wlen = 6;
+>> +	cmd.rlen = 1;
+>> +	ret = si2157_cmd_execute(client, &cmd);
+>> +	if (ret)
+>> +		goto err;
+>> +
+>> +	/* set analog frequency */
+>> +	memcpy(cmd.args, "\x41\x01\x00\x00\x00\x00\x00\x00", 8);
+>> +	cmd.args[4] = (freq >>  0) & 0xff;
+>> +	cmd.args[5] = (freq >>  8) & 0xff;
+>> +	cmd.args[6] = (freq >> 16) & 0xff;
+>> +	cmd.args[7] = (freq >> 24) & 0xff;
+>> +	cmd.wlen = 8;
+>> +	cmd.rlen = 1;
+>> +	ret = si2157_cmd_execute(client, &cmd);
+>> +	if (ret)
+>> +		goto err;
+>> +
+>> +#if 0 /* testing */
+>> +	/* get tuner status, RSSI values */
+>> +	memcpy(cmd.args, "\x42\x01", 2);
+>> +	cmd.wlen = 2;
+>> +	cmd.rlen = 12;
+>> +	ret = si2157_cmd_execute(client, &cmd);
+>> +
+>> +	dev_info(&client->dev, "tuner status: ret=%d rssi=%d mode=%x freq=%d\n",
+>> +		ret, cmd.args[3], cmd.args[8],
+>> +		(cmd.args[7]<<24 | cmd.args[6]<<16 |
+>> +		cmd.args[5]<<8 | cmd.args[4]));
+>> +#endif
+>> +	dev->bandwidth = bandwidth;
+>> +
+>>  	return 0;
+>>  err:
+>> +	dev->bandwidth = 0;
+>> +	dev->frequency = 0;
+>> +	dev->if_frequency = 0;
+>>  	dev_dbg(&client->dev, "failed=%d\n", ret);
+>>  	return ret;
 >>  }
 >>  
->>  static int pvr2_dvb_frontend_exit(struct pvr2_dvb_adapter *adap)
+>> +static int si2157_get_frequency(struct dvb_frontend *fe, u32 *frequency)
+>> +{
+>> +	struct i2c_client *client = fe->tuner_priv;
+>> +	struct si2157_dev *dev = i2c_get_clientdata(client);
+>> +
+>> +	*frequency = dev->frequency;
+>> +	dev_dbg(&client->dev, "freq=%u\n", dev->frequency);
+>> +	return 0;
+>> +}
+>> +
+>> +static int si2157_get_bandwidth(struct dvb_frontend *fe, u32 *bandwidth)
+>> +{
+>> +	struct i2c_client *client = fe->tuner_priv;
+>> +	struct si2157_dev *dev = i2c_get_clientdata(client);
+>> +
+>> +	*bandwidth = dev->bandwidth;
+>> +	dev_dbg(&client->dev, "bandwidth=%u\n", dev->bandwidth);
+>> +	return 0;
+>> +}
+>> +
+>>  static int si2157_get_if_frequency(struct dvb_frontend *fe, u32 *frequency)
 >>  {
->> -	if (adap->fe != NULL) {
->> -		dvb_unregister_frontend(adap->fe);
->> -		dvb_frontend_detach(adap->fe);
->> +	if (adap->fe[1]) {
->> +		dvb_unregister_frontend(adap->fe[1]);
->> +		dvb_frontend_detach(adap->fe[1]);
->> +		adap->fe[1] = NULL;
->> +	}
->> +	if (adap->fe[0]) {
->> +		dvb_unregister_frontend(adap->fe[0]);
->> +		dvb_frontend_detach(adap->fe[0]);
->> +		adap->fe[0] = NULL;
->>  	}
+>>  	struct i2c_client *client = fe->tuner_priv;
+>>  	struct si2157_dev *dev = i2c_get_clientdata(client);
+>>  
+>> -	*frequency = dev->if_frequency;
+>> +	*frequency = dev->if_frequency & ~1; /* strip analog IF indicator bit */
+>> +	dev_dbg(&client->dev, "if_frequency=%u\n", *frequency);
 >>  	return 0;
 >>  }
->> diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.h b/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
->> index e7f71fb..91bff57 100644
->> --- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
->> +++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
->> @@ -18,7 +18,7 @@ struct pvr2_dvb_adapter {
->>  	struct dmxdev		dmxdev;
->>  	struct dvb_demux	demux;
->>  	struct dvb_net		dvb_net;
->> -	struct dvb_frontend	*fe;
->> +	struct dvb_frontend	*fe[2];
 >>  
->>  	int			feedcount;
->>  	int			max_feed_count;
+>> @@ -422,6 +658,9 @@ static const struct dvb_tuner_ops si2157_ops = {
+>>  	.init = si2157_init,
+>>  	.sleep = si2157_sleep,
+>>  	.set_params = si2157_set_params,
+>> +	.set_analog_params = si2157_set_analog_params,
+>> +	.get_frequency     = si2157_get_frequency,
+>> +	.get_bandwidth     = si2157_get_bandwidth,
+>>  	.get_if_frequency = si2157_get_if_frequency,
+>>  };
+>>  
+>> diff --git a/drivers/media/tuners/si2157_priv.h b/drivers/media/tuners/si2157_priv.h
+>> index 50f8630..1e5ce5b 100644
+>> --- a/drivers/media/tuners/si2157_priv.h
+>> +++ b/drivers/media/tuners/si2157_priv.h
+>> @@ -37,6 +37,8 @@ struct si2157_dev {
+>>  	u8 chiptype;
+>>  	u8 if_port;
+>>  	u32 if_frequency;
+>> +	u32 bandwidth;
+>> +	u32 frequency;
+>>  	struct delayed_work stat_work;
+>>  
+>>  #if defined(CONFIG_MEDIA_CONTROLLER)
 >> -- 
 >> 2.7.4
