@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E7BC10F13
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FEB0C10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:56:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F53C2063F
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:56:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 021162063F
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:56:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726666AbfDHLze (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 07:55:34 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:40790 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726189AbfDHLzc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 07:55:32 -0400
-X-UUID: 1c4d780bf5f04db88ee61b68e56e650b-20190408
-X-UUID: 1c4d780bf5f04db88ee61b68e56e650b-20190408
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        id S1726582AbfDHL4f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 07:56:35 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:39326 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726536AbfDHLze (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 07:55:34 -0400
+X-UUID: 282d5287239b4718a3e1c09dac08486f-20190408
+X-UUID: 282d5287239b4718a3e1c09dac08486f-20190408
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
         (envelope-from <stu.hsieh@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1732746787; Mon, 08 Apr 2019 19:55:25 +0800
+        with ESMTP id 1230906536; Mon, 08 Apr 2019 19:55:31 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 8 Apr 2019 19:55:24 +0800
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 8 Apr 2019 19:55:23 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 8 Apr 2019 19:55:24 +0800
+ Transport; Mon, 8 Apr 2019 19:55:23 +0800
 From:   Stu Hsieh <stu.hsieh@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>
@@ -38,133 +38,71 @@ CC:     Stu Hsieh <stu.hsieh@mediatek.com>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
-Subject: [PATCH 05/14] [media] mtk-mipicsi: add function to support SerDes for link number
-Date:   Mon, 8 Apr 2019 19:54:56 +0800
-Message-ID: <1554724505-19882-6-git-send-email-stu.hsieh@mediatek.com>
+Subject: [PATCH 03/14] [media] mtk-mipicsi: add color format support for mt2712
+Date:   Mon, 8 Apr 2019 19:54:54 +0800
+Message-ID: <1554724505-19882-4-git-send-email-stu.hsieh@mediatek.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1554724505-19882-1-git-send-email-stu.hsieh@mediatek.com>
 References: <1554724505-19882-1-git-send-email-stu.hsieh@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-TM-SNTS-SMTP: 18EDCA312253150C541D4119A181E5C8EA8AC171CBF65635722FC11C2DBE24A52000:8
 X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch add function to support SerDes for link number.
-
-Mt2712 can server at most four camera link for each mipicsi port.
-Therefore, driver need to know how many camera link in SerDes and
-set the mipicsi HW to serve.
+This patch add color format support for mt2712
 
 Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
 ---
- .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
 diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-index f9deff1e5a9f..899cf17df480 100644
+index a5ed720df900..ccf2d18a3e74 100644
 --- a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
 +++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-@@ -57,12 +57,16 @@
- #define MIPICSI_COMMON_CLK 2
- #define MTK_CAMDMA_MAX_NUM 4U
- #define MIPICSI_CLK (MIPICSI_COMMON_CLK + MTK_CAMDMA_MAX_NUM)
-+#define MAX_DES_LINK 4U
-+#define SUBDEV_LINK_REG 0x49
- #define MTK_DATAWIDTH_8					(0x01U << 7U)
- #define MAX_SUPPORT_WIDTH             4096U
- #define MAX_SUPPORT_HEIGHT            4096U
- #define MAX_BUFFER_NUM			32U
- #define VID_LIMIT_BYTES			(100U * 1024U * 1024U)
+@@ -139,6 +139,25 @@ static void mtk_mipicsi_remove_device(struct soc_camera_device *icd)
+ 	(void)pm_runtime_put_sync(icd->parent);
+ }
  
-+#define SerDes_support 1
-+
- /* buffer for one video frame */
- struct mtk_mipicsi_buf {
- 	struct list_head queue;
-@@ -93,6 +97,7 @@ struct mtk_mipicsi_dev {
- 	bool streamon;
- 	unsigned long frame_cnt[MTK_CAMDMA_MAX_NUM];
- 	unsigned int link;
-+	u8 link_reg_val;
- 	unsigned long enqueue_cnt;
- 	unsigned long dequeue_cnt;
- 	struct v4l2_ctrl_handler ctrl_hdl;
-@@ -114,6 +119,64 @@ struct mtk_mipicsi_dev {
- 		V4L2_MBUS_PCLK_SAMPLE_FALLING |	\
- 		V4L2_MBUS_DATA_ACTIVE_HIGH)
- 
-+static int get_subdev_register(const struct soc_camera_device *icd,
-+	struct v4l2_dbg_register *reg)
++static bool is_supported(struct soc_camera_device *icd, const u32 pixformat)
 +{
-+	struct v4l2_subdev *sd = soc_camera_to_subdev(icd);
-+	int ret = 0;
++	bool ret = false;
 +
-+	reg->match.type = V4L2_CHIP_MATCH_SUBDEV;
-+	reg->match.addr = 0;
-+	ret = v4l2_subdev_call(sd, core, g_register, reg);
-+	if (ret != 2) {
-+		dev_err(icd->parent, "mipicsi get des register 0x%llx fail, ret=%d\n",
-+			reg->reg, ret);
-+		return -EIO;
++	switch (pixformat) {
++	/* YUV422 */
++	case V4L2_PIX_FMT_YUYV:
++	case V4L2_PIX_FMT_UYVY:
++	case V4L2_PIX_FMT_YVYU:
++	case V4L2_PIX_FMT_VYUY:
++		ret = true;
++		break;
++	default:
++		break;
 +	}
 +
-+	dev_info(icd->parent, "read DES [reg/val/ret] is [0x%llx/0x%llx/%d]\n",
-+		reg->reg, reg->val, ret);
 +	return ret;
 +}
 +
-+static int get_subdev_link(const struct soc_camera_device *icd,
-+	unsigned int *link, u8 *link_reg_val)
-+{
-+	struct v4l2_dbg_register reg;
-+	int ret = 0;
-+	unsigned int index = 0U;
-+	*link_reg_val = 0x0U;
-+
-+	if (SerDes_support == 0) {
-+		*link = 1;
-+		*link_reg_val = 0x1;
-+		dev_info(icd->parent, "subdev not support SerDes\n");
-+		return 0;
-+	}
-+
-+	if (link == NULL)
-+		return -EINVAL;
-+
-+	memset(&reg, 0, sizeof(reg));
-+	/*get camera link number*/
-+	reg.reg = SUBDEV_LINK_REG;
-+	ret = get_subdev_register(icd, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	*link = 0U;
-+	for (index = 0U; index < MAX_DES_LINK; ++index) {
-+		if ((reg.val & 0x01U) == 0x01U) {
-+			*link += 1U;
-+			*link_reg_val |= (0x01U << index);
-+		}
-+		reg.val >>= 1U;
-+	}
-+
-+	dev_info(icd->parent, "%u camera linked to sub device\n", *link);
-+	return 0;
-+}
-+
- static u32 get_bytesperline(const u32 fmt, const u32 width)
+ static int mtk_mipicsi_set_fmt(struct soc_camera_device *icd,
+ 				struct v4l2_format *f)
  {
- 	u32 bytesperline = 0;
-@@ -145,6 +208,7 @@ static int mtk_mipicsi_add_device(struct soc_camera_device *icd)
- 	u32 height;
- 	u32 fmt;
+@@ -154,6 +173,12 @@ static int mtk_mipicsi_set_fmt(struct soc_camera_device *icd,
+ 	struct v4l2_mbus_framefmt *mf = &format.format;
+ 	int ret = 0;
  
-+	(void)get_subdev_link(icd, &mipicsi->link, &mipicsi->link_reg_val);
- 	/* Get width/height info from subdev. Then use them to set register */
- 	ret = v4l2_subdev_call(sd, pad, get_fmt, NULL, &format);
- 	if (ret < 0) {
++	if (!is_supported(icd, pix->pixelformat)) {
++		dev_err(dev, "Format %x not support. set V4L2_PIX_FMT_YUYV as default\n",
++			pix->pixelformat);
++		pix->pixelformat = V4L2_PIX_FMT_YUYV;
++	}
++
+ 	xlate = soc_camera_xlate_by_fourcc(icd, pix->pixelformat);
+ 	if (xlate == NULL) {
+ 		dev_err(dev, "Format 0x%x not found\n", pix->pixelformat);
 -- 
 2.18.0
 
