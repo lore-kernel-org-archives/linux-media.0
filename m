@@ -2,91 +2,82 @@ Return-Path: <SRS0=swNA=SK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E03AEC10F13
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 19:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5649C10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 20:17:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ADE612148E
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 19:55:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bpTQcaG5"
+	by mail.kernel.org (Postfix) with ESMTP id A447C21841
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 20:17:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbfDHTzi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 15:55:38 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:41080 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbfDHTzh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 15:55:37 -0400
-Received: by mail-qk1-f194.google.com with SMTP id o129so8783046qke.8;
-        Mon, 08 Apr 2019 12:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id;
-        bh=81SpTuGU7Y/G7KomHE5ruoxz9+agrItlkUAxeDaXk4c=;
-        b=bpTQcaG5QS+DU7wAwIN5dmr7zyIAPAxXCEkOovsOu8HccuVHecdbpnchMFBRUNDSE9
-         q+Ch1PO43sUgwBuuDPzsE15NJq7Li3maPvsVarJGB1Sf9RLS6CWQlnBaqslirCeW6qfl
-         60WHG9Uk66tFwKvO2LlR7KnMQPFcBS0bOWNUklQLhVK8dT+fbkXV4+kAaqMJdvoVNqux
-         AITn8ouSOyR5AnnkP9cb1sRy17HxtpSork9kzbDE7CNT9dAfPrE4yIoNpp6nUs3SNu8H
-         8oS3nOLz0cewnseh9+at4aOWtlmsMsF5vPBv4wQKzOsF1Hl+SzH7cEKDyaAsAWpoERzw
-         g2lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=81SpTuGU7Y/G7KomHE5ruoxz9+agrItlkUAxeDaXk4c=;
-        b=dbvaV+NL4EcN/+mMVnvrvcsg2vYJltmA7V73UnGRPO4ixNrMzCMjrD+IhhrZk42/7Q
-         AvjnZtVZwXQCYEAgWjR6o4Iz0ko5HEczmA4fJzMmHcBuhYeogkAMAJ8/tF4qW8tv81TZ
-         kwTt5/jU0PP/gQwzNB5AXtO+a/Vb2D/glkmmvMjJFCynrwLj4PAAbnHxu4YBvHZNlSSa
-         9yWl2p/SdHhlMP/YFiQXX2ekyHzT+UVrwB1bRMDtHmhBrN8kRhrqreY9z+cfULkaA7T0
-         YbswKH73dSZNcFATqJlSVtjxtEIUN2tWdM+mEsKXUunefHqG0vhNQGCQ+u4Ik65uuvyO
-         dZ0w==
-X-Gm-Message-State: APjAAAWt7LLN9pFQss6U9ObbnkHIH4bZVPCMbrhSKIaHr+QK5LdnsPWw
-        8qzDLVJ8TlfiFnBHXYBTRZU=
-X-Google-Smtp-Source: APXvYqxv6hajrPSCDTgGy/Lonmpd0lArxmz8v+rS0CM/LqXV2ZbZ72CC5MaQbLAIGsrgGmTscWWoSw==
-X-Received: by 2002:a37:68cc:: with SMTP id d195mr23253729qkc.131.1554753336690;
-        Mon, 08 Apr 2019 12:55:36 -0700 (PDT)
-Received: from urano.lrc.ic.unicamp.br (lrc-gw.ic.unicamp.br. [143.106.7.163])
-        by smtp.gmail.com with ESMTPSA id r20sm21982733qtc.48.2019.04.08.12.55.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 08 Apr 2019 12:55:36 -0700 (PDT)
-From:   Felipe Estrada-Solano <festradasolano@gmail.com>
-To:     mchehab@kernel.org, gregkh@linuxfoundation.org,
-        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        lkcamp@lists.libreplanetbr.org
-Subject: [PATCH] staging: zoran: "foo * bar" should be "foo *bar"
-Date:   Mon,  8 Apr 2019 16:55:26 -0300
-Message-Id: <1554753326-1811-1-git-send-email-festradasolano@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726882AbfDHURW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 16:17:22 -0400
+Received: from gofer.mess.org ([88.97.38.141]:46301 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726220AbfDHURW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Apr 2019 16:17:22 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id A579A6023D; Mon,  8 Apr 2019 21:17:20 +0100 (BST)
+Date:   Mon, 8 Apr 2019 21:17:20 +0100
+From:   Sean Young <sean@mess.org>
+To:     Brad Love <brad@nextdimension.cc>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] pvrusb2: Add Hauppauge HVR1955/1975 devices
+Message-ID: <20190408201720.jmz5ctq6v4xqpdo7@gofer.mess.org>
+References: <1545421223-3577-1-git-send-email-brad@nextdimension.cc>
+ <1551294966-12564-1-git-send-email-brad@nextdimension.cc>
+ <1551294966-12564-5-git-send-email-brad@nextdimension.cc>
+ <20190405152423.76fsvdrpzz4kwxsg@gofer.mess.org>
+ <20190405152933.s2wswweflnhvdyij@gofer.mess.org>
+ <bd92d480-1298-a7a7-7744-39609132307f@nextdimension.cc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd92d480-1298-a7a7-7744-39609132307f@nextdimension.cc>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch fixes the checkpatch.pl error:
-ERROR: "foo * bar" should be "foo *bar"
+Hi Brad,
 
-Signed-off-by: Felipe Estrada-Solano <festradasolano@gmail.com>
----
- drivers/staging/media/zoran/zoran.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Apr 08, 2019 at 01:01:43PM -0500, Brad Love wrote:
+> 
+> On 05/04/2019 10.29, Sean Young wrote:
+> > On Fri, Apr 05, 2019 at 04:24:24PM +0100, Sean Young wrote:
+> >> On Wed, Feb 27, 2019 at 01:16:06PM -0600, Brad Love wrote:
+> >  > +		pr_info("%s(): resetting 160xxx demod\n", __func__);
+> >>> +		/* TODO: not sure this is proper place to reset once only */
+> >>> +		pvr2_issue_simple_cmd(hdw,
+> >>> +				     FX2CMD_HCW_DEMOD_RESET_PIN |
+> >>> +				     (1 << 8) |
+> >>> +				     ((0) << 16));
+> >>> +		msleep(10);
+> >> usleep_range() is preferred (for delays <= 10), I think. Maybe 10ms is too
+> >> long anyway and msleep(1) is enough.
+> > Sorry that was wrong. usleep_range() is preferred 1ms - 20ms, see:
+> >
+> > https://www.kernel.org/doc/Documentation/timers/timers-howto.txt
+> >
+> 
+> Hi Shawn,
+> 
+> Thanks for reviewing things. Please explain what your rationale is for
+> arbitrarily reducing the delay to 1ms? I'm a Hauppauge engineer, this is
+> a Hauppauge device, I'm going off Hauppauge documentation and reference
+> code...and it says 10ms. I'll change to the proper sleep function,
+> apologies for missing this instance, but the delay will stay at 10ms as
+> that is what my documentation says.
 
-diff --git a/drivers/staging/media/zoran/zoran.h b/drivers/staging/media/zoran/zoran.h
-index e84fb60..dc91e51 100644
---- a/drivers/staging/media/zoran/zoran.h
-+++ b/drivers/staging/media/zoran/zoran.h
-@@ -262,7 +262,7 @@ struct card_info {
- 	/* avs6eyes mux setting */
- 	u8 input_mux;
- 
--	void (*init) (struct zoran * zr);
-+	void (*init)(struct zoran *zr);
- };
- 
- struct zoran {
--- 
-2.7.4
+I had not seen a device before that needed reset to be asserted for so long.
+Clearly I was completely wrong there.
 
+All I was trying to point out that either the msleep() should be reduced
+if possible else usleep_range() should be used. I probably could have
+expressed that more clearly.
+
+
+Sean
