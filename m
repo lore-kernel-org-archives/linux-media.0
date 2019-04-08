@@ -2,158 +2,110 @@ Return-Path: <SRS0=swNA=SK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A566C10F13
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 16:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00346C10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 16:50:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 624982147A
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 16:21:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C50C920880
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 16:50:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1554742246;
+	bh=Vh3RF2vAh8XltLAmFofHScRjMXZJ78p2PRFHxIPi+s4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=amT/BKb28XZDKwZGuntDSVAT8X2RHGYNJYGIAXeEJVxvB0YucIHOjxls5cU1V5Id8
+	 4hHrjTCDmh30Yhg96RkK5VsoGd13oTzrJMtquC7WInWnlwb8sr9ICRUN3GGnIh1del
+	 +Uf3f8D9OKqQq0nITBW38oCiLNlA81iA9A9EojEk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728523AbfDHQVX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 12:21:23 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:55708 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726742AbfDHQVW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Apr 2019 12:21:22 -0400
-Received: from [IPv6:2001:983:e9a7:1:1170:5c87:411e:5806] ([IPv6:2001:983:e9a7:1:1170:5c87:411e:5806])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id DX1MhVVKgNG8zDX1NhncYJ; Mon, 08 Apr 2019 18:21:21 +0200
-Subject: Re: [PATCH v4l-utils 0/2] v4l2-compliance colors
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+        id S1728682AbfDHQuq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 12:50:46 -0400
+Received: from casper.infradead.org ([85.118.1.10]:37998 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726253AbfDHQuq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 12:50:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4AgoShBlhExy9l5Do3JMV9tKenU+6LXUqdXOzd20ye0=; b=PoT2umfQmyyC+LhobBCF6tlB16
+        vK9miyu7NvLw4hhujLr1k2q/WYPLo7GIYZuUOaoLCYMz8YqSszC6Nm/uryopbdVvdQkjqZqdgfS1K
+        TaoW55j1EHSAM+KBaMS/i9CLq0XCSjLo/WBpKo+1CwAdryx3NMdW9OZeQOWcKljCdgY3ZBfKHVqvq
+        fTmrDnEN2F4Zk6WGpsLnURpgNXV9P2Nk/gGw8uZDQGjuPCelabkM5vHSv04v38t2tIeYv57bA+Fnl
+        JCCsUNLAuhjRgrSrfUJ+ptzuPka25brann/D/HVX/zwWAekIcOB+YjEJqqg0bljHKtGMsQqNLNROv
+        /sZm99XQ==;
+Received: from [179.95.33.162] (helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hDXTm-0007Sq-Av; Mon, 08 Apr 2019 16:50:42 +0000
+Date:   Mon, 8 Apr 2019 13:50:38 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
 Cc:     Philipp Zabel <p.zabel@pengutronix.de>, linux-media@vger.kernel.org
+Subject: Re: [PATCH v4l-utils 0/2] v4l2-compliance colors
+Message-ID: <20190408135038.6387d595@coco.lan>
+In-Reply-To: <e2a6772f-61a4-8ff8-d815-c71dfd7120e2@xs4all.nl>
 References: <20190408084558.2979-1-p.zabel@pengutronix.de>
- <3aaaa269-191f-678c-df60-69500042c875@xs4all.nl>
- <20190408072854.13077345@coco.lan>
- <c832377b-b074-9840-d531-51a3143a167e@xs4all.nl>
- <20190408131055.22eb3a46@coco.lan>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <cf4fedd4-5fb1-b919-7ea8-8cb84d7e634e@xs4all.nl>
-Date:   Mon, 8 Apr 2019 18:21:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        <3aaaa269-191f-678c-df60-69500042c875@xs4all.nl>
+        <20190408072854.13077345@coco.lan>
+        <c832377b-b074-9840-d531-51a3143a167e@xs4all.nl>
+        <1554734486.6439.6.camel@pengutronix.de>
+        <e2a6772f-61a4-8ff8-d815-c71dfd7120e2@xs4all.nl>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20190408131055.22eb3a46@coco.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKxyFxj2rhXbfyDE2akD/ahzWabJTd2irx7b/NcwEyEdbUp4VDQ67jJGw/+FYgGJJafXh0b61+0OSay6pc8UOg4r0bE2eMpti9zZ9GzoDYxskuxJdbli
- iyEHdEkRZ++zyNQZ0JJRcLYb7KMe3sGT2iIqiQbeVT+VjYxN+NunG1sLhW7a5P+H/bofyeGiHcy/Wq33Q9fk8hMIspypWGlDaryF/Fv3otAwexWzSV9cc3DH
- olOSrZ8nWBeidry/aR/3exQmHtC8bbpPvj3EgCrj/tXf9R/58BOLqXVYZrBoK/JPW1WuM97bt589EETBuu5g2Ss/x3ZxKRWnDJihUjLqv65GFTZrzJifMyDp
- avModr1F
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/8/19 6:10 PM, Mauro Carvalho Chehab wrote:
-> Em Mon, 8 Apr 2019 12:44:18 +0200
-> Hans Verkuil <hverkuil@xs4all.nl> escreveu:
-> 
->> On 4/8/19 12:28 PM, Mauro Carvalho Chehab wrote:
->>> Em Mon, 8 Apr 2019 11:05:20 +0200
->>> Hans Verkuil <hverkuil@xs4all.nl> escreveu:
->>>   
->>>> Hi Philipp,
->>>>
->>>> On 4/8/19 10:45 AM, Philipp Zabel wrote:  
->>>>> Hi,
->>>>>
->>>>> not sure if anybody finds this as useful as I do to spot compliance
->>>>> failures and warnings in a sea of OKs more easily, but this patch adds
->>>>> some color escape codes to the output of v4l2-compliance. It marks "OK"
->>>>> green, "warn" bold, and "fail" / "FAIL" bright red if the output is a
->>>>> terminal. I would have preferred to mark warnings yellow, but that
->>>>> doesn't work well on black-on-white terminals.    
->>>>
->>>> Hmm, I hate colors myself :-)
->>>>
->>>> So I would prefer if an option is added to explicitly enable colors. And the
->>>> check for stdout can be replaced by a check for this new option.
->>>>
->>>> Also, the same option and behavior should be added to cec-compliance as well.
->>>>
->>>> I propose the option -C, --show-colors.  
->>>
->>> Just my two cents here: I guess most people love colors for warnings
->>> (I do), and this has becoming more popular on gcc - and it is already
->>> a default for dvb tools, with is part of v4l2-utils.
->>>
->>> So, IMHO, it would make more sense to have colors enabled by default,
->>> and provide, instead, either an option to disable or to have an env
->>> var that would control it.  
->>
->> If we do that then it needs to be the same for all utils. I could live
->> with a env variable.
-> 
-> Fully agreed on that. We should handle it the same way on all apps.
-> 
->> I just tried to run dvb-fe-tool (no arguments), and I get a warning
->> in a brown/orange color, but after that my cursor turns the same color.
->> Does it properly go back to black?
+Em Mon, 8 Apr 2019 16:46:02 +0200
+Hans Verkuil <hverkuil@xs4all.nl> escreveu:
 
-Ah, it appears to be a side-effect of not-quite-right PS1 prompt sequence
-that I had in my .bashrc. So dvb-fe-tool seems to do the right thing after
-all.
+> On 4/8/19 4:41 PM, Philipp Zabel wrote:
+> > On Mon, 2019-04-08 at 12:44 +0200, Hans Verkuil wrote (paraphrased): =20
+> >> On 4/8/19 12:28 PM, Mauro Carvalho Chehab wrote (paraphrased): =20
+> > [...] =20
+> >>>> [I hate colors] =20
+> >>> [I love colors] =20
+> >> I could live with [compromise] =20
+> >=20
+> > Sorry for opening that can of worms :-)
+> >=20
+> > How about doing something similar to 'ls':
+> >=20
+> > - an environment variable V4L_COLORS which, if not set, defaults to
+> >   V4L_COLORS=3D"ok=3D32:warn=3D1:fail=3D1;31"
+> > - an option --color=3Dalways|never|auto, which if not set, defaults to
+> >   auto (check isatty())
+> > - to disable colors by default, set V4L_COLORS to "ok=3D0:warn=3D0:fail=
+=3D0"
+> >=20
+> > This would allow to pipe colors into non-terminal stdout like less -R if
+> > desired,=C2=A0or quickly disable colors with --color=3Dnever.
+> > The pattern could be extended to include dvbv5 log levels or fe tool
+> > quality levels.
+> >=20
+> > Or alternatively, V4L_COLOR=3Dalways|never|auto for easier configuratio=
+n,
+> > but with a fixed color scheme? =20
+>=20
+> I think that is easiest. As long as the color scheme works for both black=
+-on-white
+> and white-on-black it should be fine.
 
-Regards,
+Instead of V4L2_COLOR, perhaps MEDIA_APPS_COLLOR would be a better name,
+as the same env var could be used also for DVB tools.
 
-	Hans
+>=20
+> Regards,
+>=20
+> 	Hans
 
-> 
-> Hmm... good point. It should, but this is something that I usually don't
-> really test here, as my prompt is colored:
-> 
-> 	PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\] \w \$\[\033[00m\] '
-> 
-> so if it doesn't reset the terminal, I wouldn't notice.
-> 
-> Just did a quick test here. Colors are being reset with Mate terminal:
-> 
-> <colored prompt> $ PS1="\w \$ "
-> ~ $ dvb-fe-tool 
-> Device Montage Technology M88DS3103 (/dev/dvb/adapter0/frontend0) capabilities:
->      CAN_2G_MODULATION
->      CAN_FEC_1_2
->      CAN_FEC_2_3
->      CAN_FEC_3_4
->      CAN_FEC_4_5
->      CAN_FEC_5_6
->      CAN_FEC_6_7
->      CAN_FEC_7_8
->      CAN_FEC_8_9
->      CAN_FEC_AUTO
->      CAN_INVERSION_AUTO
->      CAN_QPSK
->      CAN_RECOVER
-> DVB API Version 5.11, Current v5 delivery system: DVBS
-> Supported delivery systems: 
->     [DVBS]
->      DVBS2
-> Frequency range for the current standard: 
-> From:             950 MHz
-> To:              2.15 GHz
-> Tolerance:       5.00 MHz
-> Symbol rate ranges for the current standard: 
-> From:            1.00 MBauds
-> To:              45.0 MBauds
-> SEC: set voltage to OFF
-> ERROR    FE_SET_VOLTAGE: Operation not permitted	# printed in RED
-> 
-> ~ $ dvb-fe-tool -a 2
-> WARNING  device dvb2.frontend0 not found		# printed in YELLOW
-> ~ $ 
-> 
-> With both the above cases, the prompt return to black and white.
-> 
-> Perhaps the terminal you're using are not properly handling the
-> color reset command. I saw in the past some broken terminal emulations
-> where resetting the colors only work if it also prints something after
-> the color reset command with a "\n" at the end.
-> 
-> Thanks,
-> Mauro
-> 
 
+
+Thanks,
+Mauro
