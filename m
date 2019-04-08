@@ -7,27 +7,27 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D719C282CE
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 16:57:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1E3CC282DE
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 16:57:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 03B1721874
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 16:57:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7424B21841
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 16:57:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1554742671;
-	bh=aLDWI6a42D7Kyns5Sux+zcY9NLKh04IUALnRk9wzjqo=;
+	s=default; t=1554742674;
+	bh=EKkrJcdB8gSqNADUAUC7YSn6Wk8u5VjT6etIXLA7DDs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=eAXh8v28L0LskcYTyN4h7qgYrnP5wKpV8NBPXb/S1MPyWmi+lEoUgjU9SwkWQuauJ
-	 WTc0pp8m/fpVNq4WQC02cdC4Rpc1prZOdcWTCqK5gkUQGA/Sn5IqNLigzv2tWlMtEJ
-	 FcejzN/rO8hs9itmOBzIGFKPNKo1SnIUW5wyZ4Yk=
+	b=JUWM9OdrMj1NZs/mMi27KyuOrdlpJU0snhqKX0k83rixzWtgvP+ds87rzAO+4/QND
+	 GMQv1/vHXBAi7tsHnDKA030agg+FiTj4Mmr03loxfxCy5+zaZFHAiwcMJqV985xsur
+	 DmUnHJJu5fga/4eQXCETo4PZkuHAk7r4WPQVBddM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729038AbfDHQ5t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 12:57:49 -0400
-Received: from mirror2.csie.ntu.edu.tw ([140.112.30.76]:43706 "EHLO
+        id S1729104AbfDHQ5x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 12:57:53 -0400
+Received: from mirror2.csie.ntu.edu.tw ([140.112.30.76]:43768 "EHLO
         wens.csie.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727289AbfDHQ5t (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Apr 2019 12:57:49 -0400
+        id S1726726AbfDHQ5u (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Apr 2019 12:57:50 -0400
 Received: by wens.csie.org (Postfix, from userid 1000)
-        id ABD5E5FD0F; Tue,  9 Apr 2019 00:57:46 +0800 (CST)
+        id CEDA75FD8D; Tue,  9 Apr 2019 00:57:46 +0800 (CST)
 From:   Chen-Yu Tsai <wens@kernel.org>
 To:     Maxime Ripard <maxime.ripard@bootlin.com>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -40,9 +40,9 @@ Cc:     Chen-Yu Tsai <wens@csie.org>, linux-arm-kernel@lists.infradead.org,
         linux-clk@vger.kernel.org, linux-media@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: [PATCH 3/6] media: sun6i: Support A83T variant
-Date:   Tue,  9 Apr 2019 00:57:41 +0800
-Message-Id: <20190408165744.11672-4-wens@kernel.org>
+Subject: [PATCH 5/6] ARM: dts: sun8i: a83t: Add I2C2 pinmux setting for PE pins
+Date:   Tue,  9 Apr 2019 00:57:43 +0800
+Message-Id: <20190408165744.11672-6-wens@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190408165744.11672-1-wens@kernel.org>
 References: <20190408165744.11672-1-wens@kernel.org>
@@ -55,30 +55,36 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Chen-Yu Tsai <wens@csie.org>
 
-The A83T SoC has a camera sensor interface (known as CSI in Allwinner
-lingo), which is similar to the one found on the A64 and H3. The only
-difference seems to be that support of MIPI CSI through a connected
-MIPI CSI-2 bridge.
+I2C2 is available on the PE pingroup, on the same pins as the camera
+sensor interface (CSI) controller's camera control interface pins.
+This provides an option to use I2C2 instead of that control interface
+to configure camera sensors.
 
-Add support for this variant.
+Add a pinctrl node for it. The property /omit-if-no-ref/ is added to
+keep the device tree blob size down if it is unused.
 
 Signed-off-by: Chen-Yu Tsai <wens@csie.org>
 ---
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/sun8i-a83t.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 4c79eb64a7a7..6e0e894154f4 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -924,6 +924,7 @@ static int sun6i_csi_remove(struct platform_device *pdev)
+diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+index 0c52f945fd5f..350ea40ea560 100644
+--- a/arch/arm/boot/dts/sun8i-a83t.dtsi
++++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+@@ -723,6 +723,12 @@
+ 				function = "i2c1";
+ 			};
  
- static const struct of_device_id sun6i_csi_of_match[] = {
- 	{ .compatible = "allwinner,sun6i-a31-csi", },
-+	{ .compatible = "allwinner,sun8i-a83t-csi", },
- 	{ .compatible = "allwinner,sun8i-h3-csi", },
- 	{ .compatible = "allwinner,sun8i-v3s-csi", },
- 	{ .compatible = "allwinner,sun50i-a64-csi", },
++			/omit-if-no-ref/
++			i2c2_pe_pins: i2c2-pe-pins {
++				pins = "PE14", "PE15";
++				function = "i2c2";
++			};
++
+ 			i2c2_ph_pins: i2c2-ph-pins {
+ 				pins = "PH4", "PH5";
+ 				function = "i2c2";
 -- 
 2.20.1
 
