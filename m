@@ -7,62 +7,62 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D624DC10F14
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:44:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1953CC10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:44:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A2A402084F
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:44:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D96DA2148E
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:44:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQwhqBuQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kEd6eRqE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726585AbfDHVnK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 17:43:10 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40129 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726188AbfDHVnJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 17:43:09 -0400
-Received: by mail-lj1-f193.google.com with SMTP id q66so12636477ljq.7;
-        Mon, 08 Apr 2019 14:43:07 -0700 (PDT)
+        id S1727160AbfDHVol (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 17:44:41 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44647 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726050AbfDHVnK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 17:43:10 -0400
+Received: by mail-lj1-f194.google.com with SMTP id h16so12592310ljg.11;
+        Mon, 08 Apr 2019 14:43:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JZGMHVwL/wB6dikUoQRPrzvmQgfUVtWFgGUr1uNGhMY=;
-        b=mQwhqBuQTIXPblU4ESPPmFjwApe521h4TYIx6DoWH7QyZqIBlB2+W+QKl60WqEWq2Z
-         mTleF0qCmpJHjj0TSo3iQPzPhWMCP65/yIC4r17NjLG36rL33dE6n/vm6AvpwYikCvex
-         aBzDhZOfyy8s/tBAzgEGJxbDLB92RFXEGXQI2vtyjXnkqHWohzqtEY5ydkooECTXhFZX
-         /S4eEZ7RFVetDDqNFcGiO1tZSM6rmlDYbChvrX9Yv6A5Xp0m1/Sb36721kdO1fycnZ0H
-         pdeghNy5pFMvvQ7rI48Kkj0BOH9mhgH4IzbpddxXLMr+C4uMrgg9Dzh5TFM7H1TjVlgV
-         /tDA==
+        bh=Vxf6jf0I3TNkNsrZiapyq8fbjujSIosIG2y16ynybBA=;
+        b=kEd6eRqE0z2WuDnDs75PDb7FoCwTYeelkZLzX0z2TqwCfxh+waChPeEgq6aCK9OpoY
+         h1kHL8aToAd026GdN3VUqTlMVxIU4z3oKOYKy8CVU3VpIKibmaGb6bnXhJGDbyefryx+
+         2bz4M5FxHg8R+qOzBo94YmUIvXUd/owjrvC62SC78g5apa+I5rwqKHpv8gQmYhbGENB/
+         PFzqcMEM8HNnTVvkrCphbfcnbzi4AKxs+L5otKtXHkzpbZGECc6N2enxLPja9RHftexX
+         cMPbqaYNs9y51xZMsxMiakKFSDB75KlV2M99BDdL6peg2sqkedDm0BZUTcKb80UeFUea
+         0nig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JZGMHVwL/wB6dikUoQRPrzvmQgfUVtWFgGUr1uNGhMY=;
-        b=pP/4HlwDnnDAbZ7i+3/Md69r93rELVkpngd320F+vG1Waj3Et22AHRnLP+XgvMGY3U
-         sKabdoHv9WHaKJIUAhHOOTYmDH66nn8wSWaSzN2TVB8GNQU33nXXzU2WqNDYQUDOJX9A
-         G4DE93yrAFRVau0A9IwJujksqn6U82CSGhAf9x505Ro9opzQN4bPdtviGGb4a5ouGv5l
-         ZXtQqrCHy+s/CYuUeRzP2Pz+vSZAwWCWrQqGYUmV783oFvZ4j69QUi0JHgQLjGh7L9Zc
-         JtI+I4X61A6fIB42739cFdVd5tqqD+xkKuilOnVsypNQvAbFtBdfwa8R1iSfJDoBk8NA
-         9y0w==
-X-Gm-Message-State: APjAAAUflV2Ros2J1hjaTkiz1FIvyoMT9Pvi+37v0dulMYWcr2yIwRZO
-        u5J8jd7Pgr9ILSwO/nuLGkI=
-X-Google-Smtp-Source: APXvYqzg8anJQbJWblybucPJ3c5h0r4nX2dbwzEuxrYYctHEH9GkwKi4ygVEotZfoL2e7nyEmgKVAA==
-X-Received: by 2002:a2e:3e18:: with SMTP id l24mr18377256lja.68.1554759787065;
-        Mon, 08 Apr 2019 14:43:07 -0700 (PDT)
+        bh=Vxf6jf0I3TNkNsrZiapyq8fbjujSIosIG2y16ynybBA=;
+        b=uQxbzsBMqth+EFVwXxNl8BFoEV7DIMUW2OPr+Ze/zWSHBQMWN9ZxFTJNQfIAbbc0Mp
+         94a0tDc61Cd9mu6NwOKxHFJHCJO+0PYWeZNs0iTyv+U/HOzg9NE0WZb2jrtbzKA3Cach
+         lnF5Eqa9hd3FRHrWDuPuQ2J3PGKbazsI94GSCQNhM+87L0w8Alhm58qaNXkLh3af1us7
+         j3m6NVQSEf5xJf4x57fPxjhX3FHUSWQhmcYjrdb9+5c9v0NWPr5nm1ZCR43YENh7ZLsn
+         1FZUr/C0gmjcPFne8jSZHB1H/ynIMBM+4Lsp2PhKZ7EfQkFyXD5Nj7CssQtzbkuOZkD+
+         9BTQ==
+X-Gm-Message-State: APjAAAWcNgA/qqrAOiwSxSwDjEmTDESgCBSZ0eI0CeEOOE0B558LPsFx
+        d0ssCW6EDJZxRT6lZzjqWRU=
+X-Google-Smtp-Source: APXvYqzF+x9ytABIqa1o88uB0Zp0yJSvBJXKEgO47uCtT1EVk1NKFlUbXcwp1Q/VV6hlVh6c+HPwTA==
+X-Received: by 2002:a2e:380c:: with SMTP id f12mr18327410lja.116.1554759788393;
+        Mon, 08 Apr 2019 14:43:08 -0700 (PDT)
 Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
-        by smtp.gmail.com with ESMTPSA id j6sm5286048ljc.0.2019.04.08.14.43.05
+        by smtp.gmail.com with ESMTPSA id j6sm5286048ljc.0.2019.04.08.14.43.07
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Apr 2019 14:43:06 -0700 (PDT)
+        Mon, 08 Apr 2019 14:43:07 -0700 (PDT)
 From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org, Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: [PATCH 01/14] media: ov6650: Fix MODDULE_DESCRIPTION
-Date:   Mon,  8 Apr 2019 23:42:29 +0200
-Message-Id: <20190408214242.9603-2-jmkrzyszt@gmail.com>
+Subject: [PATCH 02/14] media: ov6650: Fix control handler not freed on init error
+Date:   Mon,  8 Apr 2019 23:42:30 +0200
+Message-Id: <20190408214242.9603-3-jmkrzyszt@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190408214242.9603-1-jmkrzyszt@gmail.com>
 References: <20190408214242.9603-1-jmkrzyszt@gmail.com>
@@ -73,33 +73,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit 23a52386fabe ("media: ov6650: convert to standalone v4l2
-subdevice") converted the driver from a soc_camera sensor to a
-standalone V4L subdevice driver.  Unfortunately, module description was
-not updated to reflect the change.  Fix it.
+Since commit afd9690c72c3 ("[media] ov6650: convert to the control
+framework"), if an error occurs during initialization of a control
+handler, resources possibly allocated to the handler are not freed
+before device initialiaton is aborted.  Fix it.
 
-While being at it, update email address of the module author.
-
-Fixes: 23a52386fabe ("media: ov6650: convert to standalone v4l2 subdevice")
+Fixes: afd9690c72c3 ("[media] ov6650: convert to the control framework")
 Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-cc: stable@vger.kernel.org
+Cc: stable@vger.kernel.org
 ---
- drivers/media/i2c/ov6650.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov6650.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 1b972e591b48..a3d00afcb0c8 100644
+index a3d00afcb0c8..007f0ca24913 100644
 --- a/drivers/media/i2c/ov6650.c
 +++ b/drivers/media/i2c/ov6650.c
-@@ -1045,6 +1045,6 @@ static struct i2c_driver ov6650_i2c_driver = {
+@@ -992,8 +992,10 @@ static int ov6650_probe(struct i2c_client *client,
+ 			V4L2_CID_GAMMA, 0, 0xff, 1, 0x12);
  
- module_i2c_driver(ov6650_i2c_driver);
+ 	priv->subdev.ctrl_handler = &priv->hdl;
+-	if (priv->hdl.error)
+-		return priv->hdl.error;
++	if (priv->hdl.error) {
++		ret = priv->hdl.error;
++		goto ectlhdlfree;
++	}
  
--MODULE_DESCRIPTION("SoC Camera driver for OmniVision OV6650");
--MODULE_AUTHOR("Janusz Krzysztofik <jkrzyszt@tis.icnet.pl>");
-+MODULE_DESCRIPTION("V4L2 subdevice driver for OmniVision OV6650 camera sensor");
-+MODULE_AUTHOR("Janusz Krzysztofik <jmkrzyszt@gmail.com");
- MODULE_LICENSE("GPL v2");
+ 	v4l2_ctrl_auto_cluster(2, &priv->autogain, 0, true);
+ 	v4l2_ctrl_auto_cluster(3, &priv->autowb, 0, true);
+@@ -1012,8 +1014,10 @@ static int ov6650_probe(struct i2c_client *client,
+ 	priv->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 
+ 	ret = v4l2_async_register_subdev(&priv->subdev);
+-	if (ret)
+-		v4l2_ctrl_handler_free(&priv->hdl);
++	if (!ret)
++		return 0;
++ectlhdlfree:
++	v4l2_ctrl_handler_free(&priv->hdl);
+ 
+ 	return ret;
+ }
 -- 
 2.21.0
 
