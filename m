@@ -7,62 +7,62 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECD09C282CE
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DE0EC10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:44:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B85562084F
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:44:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A4EC2084F
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 21:44:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jwI1amul"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FL1aVqaz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbfDHVnR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 17:43:17 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:39047 "EHLO
+        id S1728762AbfDHVoe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 17:44:34 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:37436 "EHLO
         mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726564AbfDHVnN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 17:43:13 -0400
-Received: by mail-lj1-f194.google.com with SMTP id l7so12625838ljg.6;
-        Mon, 08 Apr 2019 14:43:11 -0700 (PDT)
+        with ESMTP id S1726630AbfDHVnM (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 17:43:12 -0400
+Received: by mail-lj1-f194.google.com with SMTP id v13so12621426ljk.4;
+        Mon, 08 Apr 2019 14:43:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=xnC2Q7NaDaS6u2MiZtA1HALfljD2ysiOfTyMydRHW5s=;
-        b=jwI1amulwo1LNJ7let0l3PYX2sHWrU0Wk/Aa+C+fZ9at8nr+emkX5+/J+ENdx4uMnW
-         XDzn106OibE71EMGOgwlbOdgM4hz9PnzZUwEJz8IP1VDIHhWIXvuKVrwR7zOyp7nhq9t
-         ilbOIVFzMf7/jYUfSb5kCd7DxGZ+qN+hSBJYjIRHKYaloZobk/Yo9TD9HG7uImliYS9K
-         NJ+HbW7O8aahkrFBRDm1uYAlfdS1NWECBkJPV9nWUog+J069Z+AcsqOBuvfvNxYQizO+
-         bLD0fgKWnDbQTQN5aWpinFKKZCl2Ak8dEf49cI4p7D0tgxUTbxwEMJAqU+IKIh3EvnXp
-         Cvog==
+        bh=wVGmZYRQa/9aCw2opSqt9la4dXQ+gNuOGKIGTuXbWis=;
+        b=FL1aVqazYKyeiRdnsIA7ddxCVe0Za9WN2WqRdAKtqzjisAhJH8ey3NCk58rCjxY6mv
+         fF7EqAcyglUEgTqJURsbvfgy5oY0gn5c9XuNjxr/xRZdXCERpKpJq/oTbQpD98d3A97F
+         rcf9w9K931fdlpf8y5dfwPaIl6LxeuOKyxpW9xOk8w3jeTXOWScmnEiiUBsN1162dYbM
+         xlLtkOC1eRAUP4/qbCai8bRkhZmjJr5sC0YzY8+9CCdn9XKr3LBeWOSMpeb2UTspgbx6
+         fLemcikKvnyD0Zc4D//MzbzWnZFjNu2vR0+yFQkkruz4JF+PbhtmDD3a++OEhxEaenLL
+         vkMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=xnC2Q7NaDaS6u2MiZtA1HALfljD2ysiOfTyMydRHW5s=;
-        b=H4+1H8WvPiyvIIhz6G604hJCJMgRrYUQrphcYZApOv5HlSwQX9Ul8i+4vAveSDdCYf
-         O8C1X8rNxZjHlKuKCHtV6VWBFol4TPeEa4G3TKLDFdm2mdLq0gls+rjWXWIhCmRDtIkI
-         8i2Km0AhB91SKBcMVZ9KR5TD6BsNOD/EfRDwItVKk9TocBp+Q3u2R3LaPp4Zab2fCF82
-         xg0L2KXddqXbzVirpWSUI/0G/eHKDUVQAahnLhUN7P+JYXWRN+h1S3eK/naOp1Xmj29j
-         8JEBAtCR4VpnUgOxmT2qLO7Xf4L6qerIEJ/kMYI3iv1mGnaYD076+kAEUWgQkb86YdYB
-         iaMA==
-X-Gm-Message-State: APjAAAVlbGZuQOvfGt2Ob4dji6RxBdJ8DDFYMlQS/GQ1ihDvXwvOELtT
-        0NTgrWNYNoKlP118NmFQwPo=
-X-Google-Smtp-Source: APXvYqxauJIfcTHs7hvjNNsT7DBEM4bIBQ3n+vkcEWHA4MvX9iX4iOn5984BYUfeQv30NsrUVEPm+Q==
-X-Received: by 2002:a2e:7c02:: with SMTP id x2mr14248044ljc.176.1554759790982;
-        Mon, 08 Apr 2019 14:43:10 -0700 (PDT)
+        bh=wVGmZYRQa/9aCw2opSqt9la4dXQ+gNuOGKIGTuXbWis=;
+        b=S8AA4Y92dCkLga5Dh8e++UGoLm67LOHiT805KLUyoVPWUSQvUf9zRegNFpxCyeR436
+         PNYCmnmIShW8Ywr5e51yZFQjDoynbLXM0KrrwxI7HgsNgjBKut3Mftbz1TUCcpW0QfXn
+         SAOTXUA7VFKwDJHy3gBMUn12N9bDQLc0+KfxSOvlNK/EeZ7A+rOokLbm1Sz1XMm0q/lM
+         +tOlrI1hFPaNwHHjxJ8PoHKB0sBbXM52VfEdRSSJBzq/6+P0uWMDe5MdsmmZx3OCEQ1R
+         YknsaVNnpCxrOVdpCjqKWdaPMRQL1SsZTebL5voIShMGRv1NBnpqQE393TRVCZv4rGMu
+         tVpw==
+X-Gm-Message-State: APjAAAVX6RPWd9J0ZUdIrdSY2m8iTi7oqw8Tk27LcVYlc6l1hUwmPyvI
+        V02rxeK4W52X9uWiVsNMhLo=
+X-Google-Smtp-Source: APXvYqzKeN1U1hF7Hdb+KN0Fz/pjr4bIGcje3CKRAxpZRdNWlFHPKkBSkgWqmEWNw2NfkC3tIol2wA==
+X-Received: by 2002:a2e:9e4d:: with SMTP id g13mr14908111ljk.12.1554759789708;
+        Mon, 08 Apr 2019 14:43:09 -0700 (PDT)
 Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
-        by smtp.gmail.com with ESMTPSA id j6sm5286048ljc.0.2019.04.08.14.43.09
+        by smtp.gmail.com with ESMTPSA id j6sm5286048ljc.0.2019.04.08.14.43.08
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 08 Apr 2019 14:43:10 -0700 (PDT)
+        Mon, 08 Apr 2019 14:43:09 -0700 (PDT)
 From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org, Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: [PATCH 04/14] media: ov6650: Fix unverified arguments accepted by .get_fmt()
-Date:   Mon,  8 Apr 2019 23:42:32 +0200
-Message-Id: <20190408214242.9603-5-jmkrzyszt@gmail.com>
+Subject: [PATCH 03/14] media: ov6650: Fix unverified arguments used in .set_fmt()
+Date:   Mon,  8 Apr 2019 23:42:31 +0200
+Message-Id: <20190408214242.9603-4-jmkrzyszt@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190408214242.9603-1-jmkrzyszt@gmail.com>
 References: <20190408214242.9603-1-jmkrzyszt@gmail.com>
@@ -73,16 +73,13 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit da298c6d98d5 ("[media] v4l2: replace video op g_mbus_fmt by pad
-op get_fmt") converted a former ov6650_g_fmt() video operation callback
-to an ov6650_get_fmt() pad operation callback.  However, the function
-does not verify correctness of user provided format->which flag and pad
-config pointer arguments.  Fix it.
+Commit 717fd5b4907ad ("[media] v4l2: replace try_mbus_fmt by set_fmt")
+converted a former ov6650_try_fmt() video operation callback to an
+ov6650_set_fmt() pad operation callback.  However, the function does not
+verify correctness of user provided format->which flag and pad config
+pointer arguments.  Fix it.
 
-Even if the function never dereferences the pad config pointer argument,
-return -EINVAL if it is NULL on V4L2_SUBDEV_FORMAT_TRY.
-
-Fixes: da298c6d98d5 ("[media] v4l2: replace video op g_mbus_fmt by pad op get_fmt")
+Fixes: 717fd5b4907ad ("[media] v4l2: replace try_mbus_fmt by set_fmt")
 Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 Cc: stable@vger.kernel.org
 ---
@@ -90,10 +87,10 @@ Cc: stable@vger.kernel.org
  1 file changed, 11 insertions(+)
 
 diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 3062c9a6c57b..5c1738c5a847 100644
+index 007f0ca24913..3062c9a6c57b 100644
 --- a/drivers/media/i2c/ov6650.c
 +++ b/drivers/media/i2c/ov6650.c
-@@ -515,6 +515,17 @@ static int ov6650_get_fmt(struct v4l2_subdev *sd,
+@@ -679,6 +679,17 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
  	if (format->pad)
  		return -EINVAL;
  
@@ -108,9 +105,9 @@ index 3062c9a6c57b..5c1738c5a847 100644
 +		return -EINVAL;
 +	}
 +
- 	mf->width	= priv->rect.width >> priv->half_scale;
- 	mf->height	= priv->rect.height >> priv->half_scale;
- 	mf->code	= priv->code;
+ 	if (is_unscaled_ok(mf->width, mf->height, &priv->rect))
+ 		v4l_bound_align_image(&mf->width, 2, W_CIF, 1,
+ 				&mf->height, 2, H_CIF, 1, 0);
 -- 
 2.21.0
 
