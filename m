@@ -2,135 +2,223 @@ Return-Path: <SRS0=swNA=SK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3777C282DD
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 04:56:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCE0EC282CE
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 06:04:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B024A208E3
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 04:56:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jj+mrDId"
+	by mail.kernel.org (Postfix) with ESMTP id 9A11E20870
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 06:04:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725995AbfDHE4F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 00:56:05 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:33724 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbfDHE4F (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 00:56:05 -0400
-Received: by mail-qt1-f196.google.com with SMTP id k14so13992757qtb.0;
-        Sun, 07 Apr 2019 21:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Eeg/iQque3UHAGJsuOtYqDAVu2/w5DEjM9/Mu6Sz2Fg=;
-        b=jj+mrDIdADkTz9e+GtFEh7twr0vMYJJdtfyF9Fqj5GCLD63IEPDGQJawJf2CUKvHM3
-         WyBCDBHbWCJ500jzMtbC7jE3k4tw12qOLpAzZmAKzVUZ31edgabSlELBybw6vxU8jT4I
-         aASs14RMrpDwa4ff36P6OsMswwq8wtnf3251hp2SMfDPohPZuSBCmtzlh8KJmDhlZppp
-         SZZhPFG1siOgDKH96ClEpGmk5rnai3xyD2+4TeETD+0AyumVDL5mfbqh32mzDEEUPxNX
-         PhI/DV6OPu/ybd2H/qIV2hSjCN15uNuHJ+zFbK/pMwGsepe8MUrncKe+EMvQR/bvObtb
-         mRdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Eeg/iQque3UHAGJsuOtYqDAVu2/w5DEjM9/Mu6Sz2Fg=;
-        b=JvOJGvH9nB1AbjkeOD37qXqLbsDBlvlC53RLZdWEe5WPnCvc4lCLzNaniFtIzTuQao
-         bTUnjGb8xbweV/62giTOorZAf0OFS889vYzxL2qTOSVh23HXql+oIbEGofZKdMJ2M43r
-         ohsRz87oMc2AQFCFtjahGmOkW0Cu4CVgLmukETamhSH7/91zW7QUu8JRYs1+2iQLz+gD
-         9WC4wE+dubWmnkk6yilHfeeFfU66Egs0xWIxzS90XLld2J+VmdJB45q9vWDJf0QoobdN
-         BcSuffCl0kC2Agf+HJSmLAoeDNtLKBP2TOWtMxv/deWEYfRCxJszB2OX692a4lg3xI2a
-         WNkA==
-X-Gm-Message-State: APjAAAWiU9DnXDt9LcS7r3RWcjvUWxyLShQx6sQPFmga0ryXyA7TUTZS
-        IdvCh95QnhQWt2RnPF4mCSa/HkV8xHI=
-X-Google-Smtp-Source: APXvYqzTSV0+VX0lnrWKVJprcM1BwTHop0SI1h+GPbf+kON0XPWbeadKSbFyBbdWT4uebExO6Xt6lw==
-X-Received: by 2002:a0c:88e3:: with SMTP id 32mr21561335qvo.31.1554699364458;
-        Sun, 07 Apr 2019 21:56:04 -0700 (PDT)
-Received: from localhost.localdomain ([187.56.54.93])
-        by smtp.gmail.com with ESMTPSA id t35sm19129808qtc.10.2019.04.07.21.56.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 07 Apr 2019 21:56:03 -0700 (PDT)
-From:   Arthur Moraes do Lago <arthurmoraeslago@gmail.com>
-To:     mchehab@kernel.org, gregkh@linuxfoundation.org,
-        mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        lkcamp@lists.libreplanetbr.org
-Subject: [PATCH] staging: media: zoran: fix trailing whitespaces
-Date:   Mon,  8 Apr 2019 01:55:54 -0300
-Message-Id: <20190408045554.18905-1-arthurmoraeslago@gmail.com>
-X-Mailer: git-send-email 2.21.0
+        id S1726343AbfDHGEx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 02:04:53 -0400
+Received: from mga04.intel.com ([192.55.52.120]:15551 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726068AbfDHGEx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Apr 2019 02:04:53 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Apr 2019 23:04:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,324,1549958400"; 
+   d="scan'208";a="159638663"
+Received: from ipu5-build.bj.intel.com (HELO [10.238.232.171]) ([10.238.232.171])
+  by fmsmga004.fm.intel.com with ESMTP; 07 Apr 2019 23:04:49 -0700
+Subject: Re: [PATCH] media:staging/intel-ipu3: parameter buffer refactoring
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Cao Bing Bu <bingbu.cao@intel.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Yeh, Andy" <andy.yeh@intel.com>,
+        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
+References: <1550221729-29240-1-git-send-email-bingbu.cao@intel.com>
+ <CAAFQd5BOJmE51nrbK+3KGeQWN88iOt--xervThtxrRx3AohFPw@mail.gmail.com>
+ <bc3117f8-fd74-2b61-07c0-926fba898d5d@linux.intel.com>
+ <CAAFQd5DQwBZFOzH6oztHhPR1MLQaAWS0MXDOWt8p5E3vibLFBg@mail.gmail.com>
+ <2b90b4b3-a844-b3fb-5158-6818cf84f43d@linux.intel.com>
+ <CAAFQd5AOrYukx=+5Hk9Qw8yWZ=PgjESYNcBv3iR_vUcQn74_zg@mail.gmail.com>
+ <1b666a30-689e-d46c-f564-ae0848f92d54@linux.intel.com>
+ <CAAFQd5DgYmikHkxkGQhz=oV=h=CPuo03iJ80LZ5LXThiJFbR8A@mail.gmail.com>
+ <2f342699-f7e3-ef94-e458-1f7634b7a69b@linux.intel.com>
+ <CAAFQd5D9Twv7yyQX=kO=+kJNW7TvgRx=WrwO9-_QBpZHuwuHJA@mail.gmail.com>
+ <6da9c6c3-5e69-744a-242a-58c866abac96@linux.intel.com>
+ <CAAFQd5AbgP_-POHz88YQfmWCrS8NNV3oEDALSVM18XvMB-6HSA@mail.gmail.com>
+From:   Bingbu Cao <bingbu.cao@linux.intel.com>
+Message-ID: <06974bd2-2b82-1271-c7ea-732347b69882@linux.intel.com>
+Date:   Mon, 8 Apr 2019 14:11:50 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAFQd5AbgP_-POHz88YQfmWCrS8NNV3oEDALSVM18XvMB-6HSA@mail.gmail.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There were several form feeds(^L) in the file, this patch removes them
-to conform with the coding style.
 
-Signed-off-by: Arthur Moraes do Lago <arthurmoraeslago@gmail.com>
----
-Made a mistake while typing recipients on the last e-mail and it was not
-sent to the kernel list. Re-sending now with correct address, sorry for
-the hassle.
 
- drivers/staging/media/zoran/videocodec.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+On 3/26/19 12:03 PM, Tomasz Figa wrote:
+> On Mon, Mar 25, 2019 at 6:52 PM Bingbu Cao <bingbu.cao@linux.intel.com> wrote:
+>>
+>>
+>>
+>> On 3/25/19 12:20 PM, Tomasz Figa wrote:
+>>> On Mon, Mar 25, 2019 at 1:12 PM Bingbu Cao <bingbu.cao@linux.intel.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 3/25/19 11:16 AM, Tomasz Figa wrote:
+>>>>> Hi Bingbu,
+>>>>>
+>>>>> On Wed, Mar 13, 2019 at 1:25 PM Bingbu Cao <bingbu.cao@linux.intel.com> wrote:
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> On 03/12/2019 04:54 PM, Tomasz Figa wrote:
+>>>>>>> On Tue, Mar 12, 2019 at 5:48 PM Bingbu Cao <bingbu.cao@linux.intel.com> wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 03/12/2019 03:43 PM, Tomasz Figa wrote:
+>>>>>>>>> On Tue, Mar 12, 2019 at 3:48 PM Bingbu Cao <bingbu.cao@linux.intel.com> wrote:
+>>>>>>>>>>
+>>>>>>>>>> On 03/12/2019 01:33 PM, Tomasz Figa wrote:
+>>>>>>>>>>> Hi Bingbu,
+>>>>>>>>>>>
+>>>>>>>>>>> On Fri, Feb 15, 2019 at 6:02 PM <bingbu.cao@intel.com> wrote:
+>>>>>>>>>>>> From: Bingbu Cao <bingbu.cao@intel.com>
+>>>>>>>>>>>>
+>>>>>>>>>>>> Current ImgU driver processes and releases the parameter buffer
+>>>>>>>>>>>> immediately after queued from user. This does not align with other
+>>>>>>>>>>>> image buffers which are grouped in sets and used for the same frame.
+>>>>>>>>>>>> If user queues multiple parameter buffers continuously, only the last
+>>>>>>>>>>>> one will take effect.
+>>>>>>>>>>>> To make consistent buffers usage, this patch changes the parameter
+>>>>>>>>>>>> buffer handling and group parameter buffer with other image buffers
+>>>>>>>>>>>> for each frame.
+>>>>>>>>>>> Thanks for the patch. Please see my comments inline.
+>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: Tianshu Qiu <tian.shu.qiu@intel.com>
+>>>>>>>>>>>> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>     drivers/staging/media/ipu3/ipu3-css.c  |  5 -----
+>>>>>>>>>>>>     drivers/staging/media/ipu3/ipu3-v4l2.c | 41 ++++++++--------------------------
+>>>>>>>>>>>>     drivers/staging/media/ipu3/ipu3.c      | 24 ++++++++++++++++++++
+>>>>>>>>>>>>     3 files changed, 33 insertions(+), 37 deletions(-)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git a/drivers/staging/media/ipu3/ipu3-css.c b/drivers/staging/media/ipu3/ipu3-css.c
+>>>>>>>>>>>> index b9354d2bb692..bcb1d436bc98 100644
+>>>>>>>>>>>> --- a/drivers/staging/media/ipu3/ipu3-css.c
+>>>>>>>>>>>> +++ b/drivers/staging/media/ipu3/ipu3-css.c
+>>>>>>>>>>>> @@ -2160,11 +2160,6 @@ int ipu3_css_set_parameters(struct ipu3_css *css, unsigned int pipe,
+>>>>>>>>>>>>            obgrid_size = ipu3_css_fw_obgrid_size(bi);
+>>>>>>>>>>>>            stripes = bi->info.isp.sp.iterator.num_stripes ? : 1;
+>>>>>>>>>>>>
+>>>>>>>>>>>> -       /*
+>>>>>>>>>>>> -        * TODO(b/118782861): If userspace queues more than 4 buffers, the
+>>>>>>>>>>>> -        * parameters from previous buffers will be overwritten. Fix the driver
+>>>>>>>>>>>> -        * not to allow this.
+>>>>>>>>>>>> -        */
+>>>>>>>>>>> Wouldn't this still happen even with current patch?
+>>>>>>>>>>> imgu_queue_buffers() supposedly queues "as many buffers to CSS as
+>>>>>>>>>>> possible". This means that if the userspace queues more than 4
+>>>>>>>>>>> complete frames, we still end up overwriting the parameter buffers in
+>>>>>>>>>>> the pool. Please correct me if I'm wrong.
+>>>>>>>>>> The parameter buffers are queued to CSS sequentially and queue one
+>>>>>>>>>> parameter along with one input buffer once ready, all the data and
+>>>>>>>>>> parameter buffers are tied together to queue to the CSS. If userspace
+>>>>>>>>>> queue more parameter buffers then input buffer, they are pending on the
+>>>>>>>>>> buffer list.
+>>>>>>>>> It doesn't seem to be what the code does. I'm talking about the
+>>>>>>>>> following example:
+>>>>>>>>>
+>>>>>>>>> Queue OUT buffer 1
+>>>>>>>>> Queue PARAM buffer 1
+>>>>>>>>> Queue IN buffer 1
+>>>>>>>>> Queue OUT buffer 2
+>>>>>>>>> Queue PARAM buffer 2
+>>>>>>>>> Queue IN buffer 2
+>>>>>>>>> Queue OUT buffer 3
+>>>>>>>>> Queue PARAM buffer 3
+>>>>>>>>> Queue IN buffer 3
+>>>>>>>>> Queue OUT buffer 4
+>>>>>>>>> Queue PARAM buffer 4
+>>>>>>>>> Queue IN buffer 4
+>>>>>>>>> Queue OUT buffer 5
+>>>>>>>>> Queue PARAM buffer 5
+>>>>>>>>> Queue IN buffer 5
+>>>>>>>>>
+>>>>>>>>> All the operations happening exactly one after each other. How would
+>>>>>>>>> the code prevent the 5th PARAM buffer to be queued to the IMGU, after
+>>>>>>>>> the 5th IN buffer is queued? As I said, imgu_queue_buffers() just
+>>>>>>>>> queues as many buffers of each type as there are IN buffers available.
+>>>>>>>> So the parameter pool now is only used as record last valid parameter not
+>>>>>>>> used as a list or cached, all the parameters will be queued to CSS as soon as
+>>>>>>>> possible(if queue for CSS is not full).
+>>>>>>>> As the size of pool now is a bit confusing, I think we can shrink the its value
+>>>>>>>> for each pipe to 2.
+>>>>>>> I don't follow. Don't we take one buffer from the pool, fill in the
+>>>>>>> parameters in hardware format there and then queue that buffer from
+>>>>>>> the pool to the ISP? The ISP wouldn't read those parameters from the
+>>>>>>> buffer until the previous frame is processed, would it?
+>>>>>> Hi, Tomasz,
+>>>>>>
+>>>>>> Currently, driver did not take the buffer from pool to queue to ISP,
+>>>>>> it just queue the parameter buffer along with input frame buffer depends
+>>>>>> on each user queue request.
+>>>>>>
+>>>>>> You are right, if user queue massive buffers one time, it will cause
+>>>>>> the firmware queue full. Driver should keep the buffer in its list
+>>>>>> instead of returning back to user irresponsibly.
+>>>>>>
+>>>>>> We are thinking about queue one group of buffers(input, output and params)
+>>>>>> to ISP one time and wait the pipeline finished and then queue next group
+>>>>>> of buffers. All the buffers are pending on the buffer list.
+>>>>>> What do you think about this behavior?
+>>>>>
+>>>>> Sorry, I was sure I replied to your email, but apparently I didn't.
+>>>>>
+>>>>> Yes, that would certainly work, but wouldn't it introduce pipeline
+>>>>> bubbles, potentially affecting the performance?
+>>>> Hi, Tomasz,
+>>>>
+>>>> Thanks for your reply.
+>>>>
+>>>> The driver will queue the buffers to CSS immediately after previous
+>>>> pipeline finished which is invoked in imgu_isr_threaded.
+>>>>
+>>>> The bubbles compared from before should be very small since current
+>>>> camera HAL implementation in production will queue new buffers IFF all
+>>>> the buffers dequeued from driver, as I know.
+>>>
+>>> If the firmware has a queue depth of 4, I think it would still be much
+>>> better to use it. Would it really make the code much more complicated?
+>>> I think you could just maintain a counter of queued buffers and keep
+>>> refilling the queue whenever it's less than 4 and there are any
+>>> buffers to queue.
+>> Actually, firmware will use latest parameter queued and apply to frame,
+>> they are not consumed frame by frame.
+>> The parameter buffers are not used same way as frame buffers, so the
+>> pool in driver is just used for storing previous parameter and refilling
+>> fields within new coming parameter from user and combine with previous
+>> ones into a whole parameter.
+> 
+> Hmm, that's a rather strange design.
+> 
+> Well, in that case we can't queue more than 1 frame indeed, as
+> otherwise we wouldn't be able to synchronize the parameters with the
+> right frames.
+Hi, Tomasz
 
-diff --git a/drivers/staging/media/zoran/videocodec.h b/drivers/staging/media/zoran/videocodec.h
-index 4946791fce0d..c37c0e4fb624 100644
---- a/drivers/staging/media/zoran/videocodec.h
-+++ b/drivers/staging/media/zoran/videocodec.h
-@@ -49,7 +49,7 @@
-    device dependent and vary between MJPEG/MPEG/WAVELET/... devices. (!!!!)
-    ----------------------------------------------------------------------------
- */
--
-+
- 
- /* ========================================== */
- /* description of the videocodec_io structure */
-@@ -96,7 +96,7 @@
- 		the calls include frame numbers and flags (even/odd/...)
- 		if needed and a flag which allows blocking until its ready
- */
--
-+
- /* ============== */
- /* user interface */
- /* ============== */
-@@ -116,7 +116,7 @@ M                       zr36055[0] 0001 0000c001 00000000 (zr36050[0])
- M                       zr36055[1] 0001 0000c001 00000000 (zr36050[1])
- 
- */
--
-+
- 
- /* =============================================== */
- /* special defines for the videocodec_io structure */
-@@ -195,7 +195,7 @@ M                       zr36055[1] 0001 0000c001 00000000 (zr36050[1])
- /*  -> used in get_image, put_image                                        */
- #define CODEC_TRANSFER_KERNEL 0	/* use "memcopy" */
- #define CODEC_TRANSFER_USER   1	/* use "to/from_user" */
--
-+
- 
- /* ========================= */
- /* the structures itself ... */
-@@ -309,7 +309,7 @@ struct videocodec_master {
- 			  __u16 reg,
- 			  __u32 value);
- };
--
-+
- 
- /* ================================================= */
- /* function prototypes of the master/slave interface */
--- 
-2.21.0
-
+Yes, the parameter queue handling is a little different from other
+queues. Group the buffers together is one way to bind the parameter to
+frame. Do you have any other ideas?
+> 
+> Best regards,
+> Tomasz
+> 
