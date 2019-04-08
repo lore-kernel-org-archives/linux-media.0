@@ -3,25 +3,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B13FC282CE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67AA1C10F14
 	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:04:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 098E320857
+	by mail.kernel.org (Postfix) with ESMTP id 37037208E3
 	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:04:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726511AbfDHLEH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 07:04:07 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:44566 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726489AbfDHLEG (ORCPT
+        id S1726523AbfDHLEI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 07:04:08 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:41679 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725984AbfDHLEF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 8 Apr 2019 07:04:06 -0400
+        Mon, 8 Apr 2019 07:04:05 -0400
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:1170:5c87:411e:5806])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id DS4HhTHSRNG8zDS4KhlZPP; Mon, 08 Apr 2019 13:04:04 +0200
+        id DS4HhTHSRNG8zDS4KhlZOa; Mon, 08 Apr 2019 13:04:04 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
@@ -31,9 +31,9 @@ Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         Ettore Chimenti <ek5.chimenti@gmail.com>,
         Wen Yang <wen.yang99@zte.com.cn>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 7/7] cros-ec-cec: decrement HDMI device refcount
-Date:   Mon,  8 Apr 2019 13:04:01 +0200
-Message-Id: <20190408110401.3345-8-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 3/7] s5p_cec: use new cec_notifier_find_hdmi_dev helper
+Date:   Mon,  8 Apr 2019 13:03:57 +0200
+Message-Id: <20190408110401.3345-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190408110401.3345-1-hverkuil-cisco@xs4all.nl>
 References: <20190408110401.3345-1-hverkuil-cisco@xs4all.nl>
@@ -49,28 +49,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The CrosEC CEC driver never decremented the HDMI device refcount.
-CEC drivers only need the HDMI device pointer as a key in the
-notifier list, it never accesses the device, so there is no
-need to keep a reference.
+The S5P CEC driver increased the HDMI device refcount when
+it shouldn't. Use the new helper function to ensure that that
+doesn't happen and to simplify the driver code.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/s5p-cec/s5p_cec.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-index 7bc4d8a9af28..068df9888dbf 100644
---- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-+++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-@@ -236,6 +236,7 @@ static int cros_ec_cec_get_notifier(struct device *dev,
- 				return -EPROBE_DEFER;
+diff --git a/drivers/media/platform/s5p-cec/s5p_cec.c b/drivers/media/platform/s5p-cec/s5p_cec.c
+index 8837e2678bde..7e2c94816c55 100644
+--- a/drivers/media/platform/s5p-cec/s5p_cec.c
++++ b/drivers/media/platform/s5p-cec/s5p_cec.c
+@@ -178,22 +178,16 @@ static const struct cec_adap_ops s5p_cec_adap_ops = {
+ static int s5p_cec_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct device_node *np;
+-	struct platform_device *hdmi_dev;
++	struct device *hdmi_dev;
+ 	struct resource *res;
+ 	struct s5p_cec_dev *cec;
+ 	bool needs_hpd = of_property_read_bool(pdev->dev.of_node, "needs-hpd");
+ 	int ret;
  
- 			*notify = cec_notifier_get_conn(d, m->conn);
-+			put_device(d);
- 			return 0;
- 		}
- 	}
+-	np = of_parse_phandle(pdev->dev.of_node, "hdmi-phandle", 0);
++	hdmi_dev = cec_notifier_find_hdmi_dev(dev);
+ 
+-	if (!np) {
+-		dev_err(&pdev->dev, "Failed to find hdmi node in device tree\n");
+-		return -ENODEV;
+-	}
+-	hdmi_dev = of_find_device_by_node(np);
+-	if (hdmi_dev == NULL)
+-		return -EPROBE_DEFER;
++	if (IS_ERR(hdmi_dev))
++		return PTR_ERR(hdmi_dev);
+ 
+ 	cec = devm_kzalloc(&pdev->dev, sizeof(*cec), GFP_KERNEL);
+ 	if (!cec)
+@@ -224,7 +218,7 @@ static int s5p_cec_probe(struct platform_device *pdev)
+ 	if (IS_ERR(cec->reg))
+ 		return PTR_ERR(cec->reg);
+ 
+-	cec->notifier = cec_notifier_get(&hdmi_dev->dev);
++	cec->notifier = cec_notifier_get(hdmi_dev);
+ 	if (cec->notifier == NULL)
+ 		return -ENOMEM;
+ 
 -- 
 2.20.1
 
