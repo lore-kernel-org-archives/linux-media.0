@@ -4,33 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC317C10F14
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:55:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76CEEC10F13
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:56:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BEB042087F
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:55:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 439022063F
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:56:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbfDHLzt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 07:55:49 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:19802 "EHLO
+        id S1726842AbfDHL4D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 07:56:03 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:20405 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726784AbfDHLzo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 07:55:44 -0400
-X-UUID: 8f81f9d405414ca7a1a78a2b13a2cb2f-20190408
-X-UUID: 8f81f9d405414ca7a1a78a2b13a2cb2f-20190408
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        with ESMTP id S1726708AbfDHLzh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 07:55:37 -0400
+X-UUID: 0584eef3127847eea5fb13e0e6a3ee58-20190408
+X-UUID: 0584eef3127847eea5fb13e0e6a3ee58-20190408
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
         (envelope-from <stu.hsieh@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1152854071; Mon, 08 Apr 2019 19:55:39 +0800
+        with ESMTP id 1042091161; Mon, 08 Apr 2019 19:55:32 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
  15.0.1395.4; Mon, 8 Apr 2019 19:55:30 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 8 Apr 2019 19:55:30 +0800
+ Transport; Mon, 8 Apr 2019 19:55:31 +0800
 From:   Stu Hsieh <stu.hsieh@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>
@@ -38,82 +37,177 @@ CC:     Stu Hsieh <stu.hsieh@mediatek.com>, <linux-kernel@vger.kernel.org>,
         <linux-media@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
-Subject: [PATCH 12/14] [media] mtk-mipicsi: add the function for Get/Set PARM for application
-Date:   Mon, 8 Apr 2019 19:55:03 +0800
-Message-ID: <1554724505-19882-13-git-send-email-stu.hsieh@mediatek.com>
+Subject: [PATCH 13/14] [media] mtk-mipicsi: add debug message for mipicsi driver
+Date:   Mon, 8 Apr 2019 19:55:04 +0800
+Message-ID: <1554724505-19882-14-git-send-email-stu.hsieh@mediatek.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1554724505-19882-1-git-send-email-stu.hsieh@mediatek.com>
 References: <1554724505-19882-1-git-send-email-stu.hsieh@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 25D1DC7844124F8F09A5AECF193AC9E8E793571B9851CC0D816D8B62C8BC80B12000:8
 X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch add the function for Get/Set PARM for application.
-
-Application can get the information about number of link.
+This patch add debug message for mipicsi driver.
 
 Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
 ---
- .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 54 ++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-index 9361cc4c77ac..faf9a94d5157 100644
+index faf9a94d5157..95d25db5e606 100644
 --- a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
 +++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-@@ -347,6 +347,38 @@ static int get_subdev_link(const struct soc_camera_device *icd,
- 	return 0;
+@@ -28,6 +28,7 @@
+ #include <linux/kernel.h>
+ #include <linux/mm.h>
+ #include <linux/moduleparam.h>
++#include <linux/time64.h>
+ #include <linux/device.h>
+ #include <linux/platform_device.h>
+ #include <linux/clk.h>
+@@ -118,6 +119,15 @@
+ 
+ #define SerDes_support 1
+ 
++static int mtk_mipicsi_dbg_level;
++#define mtk_mipicsi_dbg(level, fmt, args...)				 \
++	do {								 \
++		if (mtk_mipicsi_dbg_level >= level)			\
++			pr_info("[MTK_MIPICSI%d] L%d %s %d: " fmt "\n", \
++				mipicsi->id, level,  __func__, __LINE__, \
++				##args);	\
++	} while (0)
++
+ /* buffer for one video frame */
+ struct mtk_mipicsi_buf {
+ 	struct list_head queue;
+@@ -155,6 +165,8 @@ struct mtk_mipicsi_dev {
+ 	unsigned long enqueue_cnt;
+ 	unsigned long dequeue_cnt;
+ 	struct v4l2_ctrl_handler ctrl_hdl;
++	struct timespec64 fps_time_cur;
++	struct timespec64 fps_time_pre;
+ 	char drv_name[16];
+ 	u32 id;
+ 	int clk_num;
+@@ -430,6 +442,8 @@ static int mtk_mipicsi_add_device(struct soc_camera_device *icd)
+ 
+ 	mipicsi->width = width;
+ 	mipicsi->height = height;
++	mtk_mipicsi_dbg(1, "sub device width/height/bytesperline %d/%d/%d",
++		width, height, mipicsi->bytesperline);
+ 
+ 	/*
+ 	 * If power domain was closed before, it will be open.
+@@ -571,6 +585,9 @@ static int mtk_mipicsi_set_fmt(struct soc_camera_device *icd,
+ 	if (pix->pixelformat == V4L2_PIX_FMT_YUYV)
+ 		pix->sizeimage = pix->width * pix->height * 2U;
+ 
++	mtk_mipicsi_dbg(0, "width/height/sizeimage %u/%u/%u",
++		pix->width, pix->height, pix->sizeimage);
++
+ 	if (mf->code != xlate->code)
+ 		return -EINVAL;
+ 
+@@ -696,6 +713,9 @@ static int mtk_mipicsi_vb2_prepare(struct vb2_buffer *vb)
+ 			vb2_dma_contig_plane_dma_addr(vb, 0);
+ #endif
+ 		va = vb2_plane_vaddr(vb, 0);
++		mtk_mipicsi_dbg(1, "va=%p vb_dma_addr_phy=%lx size=%d",
++			va, (unsigned long)buf->vb_dma_addr_phy,
++			vb->planes[0].bytesused);
+ 		buf->vb = vb;
+ 	}
+ 
+@@ -741,6 +761,8 @@ static void mtk_mipicsi_vb2_queue(struct vb2_buffer *vb)
+ 		}
+ 
+ 	++(mipicsi->enqueue_cnt);
++	mtk_mipicsi_dbg(2, "enqueue NO.%d buffer(%p). Total %lu buffer",
++		vb->index, vb, mipicsi->enqueue_cnt);
  }
  
-+static int mtk_mipicsi_get_parm(struct soc_camera_device *icd,
-+	struct v4l2_streamparm *a)
-+{
-+	unsigned int link = 0U;
-+	u8 link_reg_val = 0x0U;
-+	int ret = 0;
+ static int mtk_mipicsi_vb2_start_streaming(struct vb2_queue *vq,
+@@ -1125,8 +1147,10 @@ static int mtk_mipicsi_pm_resume(struct device *dev)
+ 
+ 	if (mipicsi->larb_pdev != NULL) {
+ 		ret = mtk_smi_larb_get(mipicsi->larb_pdev);
+-		if (ret != 0)
++		if (ret != 0) {
++			mtk_mipicsi_dbg(0, "failed to get larb, err %d", ret);
+ 			return ret;
++		}
+ 	}
+ 
+ 	mtk_mipicsi_ana_clk_enable(mipicsi->ana, true);
+@@ -1176,6 +1200,7 @@ static void mtk_mipicsi_irq_buf_process(struct mtk_mipicsi_dev *mipicsi)
+ 	unsigned int next = 0U;
+ 	u64 offset = 0ULL;
+ 	u8 link_index = 0U;
++	long time_interval;
+ 	void __iomem *base = NULL;
+ 	dma_addr_t pa;
+ 
+@@ -1185,8 +1210,10 @@ static void mtk_mipicsi_irq_buf_process(struct mtk_mipicsi_dev *mipicsi)
+ 	i = 0;
+ 
+ 	/* only one buffer left */
+-	if ((&(mipicsi->fb_list))->next->next == &(mipicsi->fb_list))
++	if ((&(mipicsi->fb_list))->next->next == &(mipicsi->fb_list)) {
++		mtk_mipicsi_dbg(1, "only 1 buffer left, drop frame");
+ 		return;
++	}
+ 
+ 	/*for each fb_lst 2 times to get the top 2 buffer.*/
+ 	list_for_each_entry_safe(new_cam_buf, tmp,
+@@ -1219,6 +1246,27 @@ static void mtk_mipicsi_irq_buf_process(struct mtk_mipicsi_dev *mipicsi)
+ 	++(mipicsi->dequeue_cnt);
+ 
+ 	list_del_init(&(mipicsi->cam_buf[index].queue));
 +
-+	/*get camera link number*/
-+	ret = get_subdev_link(icd, &link, &link_reg_val);
-+	if (ret < 0)
-+		return ret;
-+
-+	a->parm.capture.timeperframe.numerator = 1;
-+	a->parm.capture.timeperframe.denominator = 30;
-+	a->parm.capture.reserved[0] = link_reg_val;
-+	a->parm.capture.reserved[1] = (u32)(icd->use_count);
-+	dev_info(icd->parent, "use count %d\n", icd->use_count);
-+
-+	return 0;
-+}
-+
-+static int mtk_mipicsi_set_param(struct soc_camera_device *icd,
-+	struct v4l2_streamparm *a)
-+{
-+	struct soc_camera_host *ici = to_soc_camera_host(icd->parent);
-+
-+	if (ici->ops->get_parm == NULL)
-+		return ici->ops->get_parm(icd, a);
-+
-+	return 0;
-+}
-+
- static u32 get_bytesperline(const u32 fmt, const u32 width)
- {
- 	u32 bytesperline = 0;
-@@ -890,6 +922,8 @@ static struct soc_camera_host_ops mtk_soc_camera_host_ops = {
- 	.poll			= vb2_fop_poll,
- 	.querycap		= mtk_mipicsi_querycap,
- 	.set_bus_param		= mtk_mipicsi_set_bus_param,
-+	.get_parm		= mtk_mipicsi_get_parm,
-+	.set_parm		= mtk_mipicsi_set_param,
++	if (mtk_mipicsi_dbg_level >= 2) {
++		ktime_get_real_ts64(&(mipicsi->fps_time_cur));
++		if (mipicsi->dequeue_cnt == 1) {
++			mipicsi->fps_time_pre.tv_sec =
++				mipicsi->fps_time_cur.tv_sec;
++			mipicsi->fps_time_pre.tv_nsec =
++				mipicsi->fps_time_cur.tv_nsec;
++		} else {
++			time_interval = (mipicsi->fps_time_cur.tv_sec
++				- mipicsi->fps_time_pre.tv_sec) * 1000000000
++				+ (mipicsi->fps_time_cur.tv_nsec
++				- mipicsi->fps_time_pre.tv_nsec);
++			mtk_mipicsi_dbg(0, "time interval is %ld\n",
++				time_interval);
++			mipicsi->fps_time_pre.tv_sec =
++				mipicsi->fps_time_cur.tv_sec;
++			mipicsi->fps_time_pre.tv_nsec =
++				mipicsi->fps_time_cur.tv_nsec;
++		}
++	}
+ }
+ 
+ static irqreturn_t mtk_mipicsi_isr(int irq, void *data)
+@@ -1233,6 +1281,7 @@ static irqreturn_t mtk_mipicsi_isr(int irq, void *data)
+ 
+ 	isr_ch = get_irq_channel(mipicsi);
+ 	if (isr_ch < 0) {
++		mtk_mipicsi_dbg(0, "no interrupt occur");
+ 		spin_unlock_irqrestore(&mipicsi->lock, flags);
+ 		return IRQ_HANDLED;
+ 	}
+@@ -1573,5 +1622,6 @@ static struct platform_driver mtk_mipicsi_driver = {
  };
  
- static void mtk_mipicsi_ana_init(void __iomem *base)
+ module_platform_driver(mtk_mipicsi_driver);
++module_param(mtk_mipicsi_dbg_level, int, 0644);
+ MODULE_DESCRIPTION("MediaTek SoC Camera Host driver");
+ MODULE_LICENSE("GPL v2");
 -- 
 2.18.0
 
