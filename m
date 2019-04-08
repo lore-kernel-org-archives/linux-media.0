@@ -5,63 +5,63 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03759C282CE
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 04:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3777C282DD
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 04:56:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C625320880
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 04:35:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B024A208E3
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 04:56:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p8Juy+W9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jj+mrDId"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725993AbfDHEfl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Apr 2019 00:35:41 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:45199 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbfDHEfk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 00:35:40 -0400
-Received: by mail-qt1-f194.google.com with SMTP id v20so13862038qtv.12
-        for <linux-media@vger.kernel.org>; Sun, 07 Apr 2019 21:35:40 -0700 (PDT)
+        id S1725995AbfDHE4F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Apr 2019 00:56:05 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:33724 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725877AbfDHE4F (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Apr 2019 00:56:05 -0400
+Received: by mail-qt1-f196.google.com with SMTP id k14so13992757qtb.0;
+        Sun, 07 Apr 2019 21:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JY/pmMTl9QIIoeg9ozlbygaf+ANzc0sq3fWOz2KluZo=;
-        b=p8Juy+W9Roh/y1d9AL464VWE+x0VXBlSbh/QZYSsj5Z5GQ+i1GIMRgu+KmUuSdHOll
-         lbXDa2mi/Mhs/NnN++6DNNzEY/VsrT4E5Z5SAxMkONAMIxsdaoSXDg/AVcUO0RTMlROx
-         H+c0RoxntX1t2tPWiyV5E3qCBJdpmDpzBzDKJLyzcrcHum3I+eGZuWVliKrob62x6Hu1
-         ofTGEgaO95tocWIs46tfdu8jUbib0vkwlfHccQyZfhXNyKVbNkUXflXSgUGacc9CedWk
-         6NMzPblk2zX4U5Y5U7z0PzLQ30dqeXN4VEIpvt7u+L5QoZF4PgmQYTheRQ9PxkQPQmlw
-         yDmg==
+        bh=Eeg/iQque3UHAGJsuOtYqDAVu2/w5DEjM9/Mu6Sz2Fg=;
+        b=jj+mrDIdADkTz9e+GtFEh7twr0vMYJJdtfyF9Fqj5GCLD63IEPDGQJawJf2CUKvHM3
+         WyBCDBHbWCJ500jzMtbC7jE3k4tw12qOLpAzZmAKzVUZ31edgabSlELBybw6vxU8jT4I
+         aASs14RMrpDwa4ff36P6OsMswwq8wtnf3251hp2SMfDPohPZuSBCmtzlh8KJmDhlZppp
+         SZZhPFG1siOgDKH96ClEpGmk5rnai3xyD2+4TeETD+0AyumVDL5mfbqh32mzDEEUPxNX
+         PhI/DV6OPu/ybd2H/qIV2hSjCN15uNuHJ+zFbK/pMwGsepe8MUrncKe+EMvQR/bvObtb
+         mRdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JY/pmMTl9QIIoeg9ozlbygaf+ANzc0sq3fWOz2KluZo=;
-        b=n5kh+E94X024Cc45MhuR453Cj7OHdbtcGijeCama6nkPnufmTpj68+nQf2yrRgmBZz
-         RJvGkLEF7/VQHUzPRnBvUkD1QvgA8jCeyvxmfGKIBue0InK1x9QMPyWLnMwUJXoc1BOB
-         uWBKCFmYYAe425PTuhFTJPbpUp7iR317ppBylEIZ3peLvCu9Go8ZkaEg5h7s450OF/1i
-         sq0O0TBAcMmPwkZdDc5ir7cmmaJkZAqSARXpZjJU7DN7hSb5X7akI8pcG5bVNpRixdI8
-         NdU6ooh8TEYwWUG1y+OCxOTzY/oXS2FBkzFypWOLoMqss6mk8mUd4UX8jzHw1WSFq91d
-         PIfA==
-X-Gm-Message-State: APjAAAX197Emv3gwp9sV4096Isb3h7Wcty4m2ppiOGDxpdZl2PENqCOS
-        E/pReiDBfWuzVDDrZcaxfFs=
-X-Google-Smtp-Source: APXvYqw/kKWhIk/KdLv+OUuNf5U9uv5/U8O4S+9PEF+Gd8t0McquoXv8xLpHDGfK0vkF2taJDPUgsA==
-X-Received: by 2002:a0c:9973:: with SMTP id i48mr22380316qvd.9.1554698139836;
-        Sun, 07 Apr 2019 21:35:39 -0700 (PDT)
+        bh=Eeg/iQque3UHAGJsuOtYqDAVu2/w5DEjM9/Mu6Sz2Fg=;
+        b=JvOJGvH9nB1AbjkeOD37qXqLbsDBlvlC53RLZdWEe5WPnCvc4lCLzNaniFtIzTuQao
+         bTUnjGb8xbweV/62giTOorZAf0OFS889vYzxL2qTOSVh23HXql+oIbEGofZKdMJ2M43r
+         ohsRz87oMc2AQFCFtjahGmOkW0Cu4CVgLmukETamhSH7/91zW7QUu8JRYs1+2iQLz+gD
+         9WC4wE+dubWmnkk6yilHfeeFfU66Egs0xWIxzS90XLld2J+VmdJB45q9vWDJf0QoobdN
+         BcSuffCl0kC2Agf+HJSmLAoeDNtLKBP2TOWtMxv/deWEYfRCxJszB2OX692a4lg3xI2a
+         WNkA==
+X-Gm-Message-State: APjAAAWiU9DnXDt9LcS7r3RWcjvUWxyLShQx6sQPFmga0ryXyA7TUTZS
+        IdvCh95QnhQWt2RnPF4mCSa/HkV8xHI=
+X-Google-Smtp-Source: APXvYqzTSV0+VX0lnrWKVJprcM1BwTHop0SI1h+GPbf+kON0XPWbeadKSbFyBbdWT4uebExO6Xt6lw==
+X-Received: by 2002:a0c:88e3:: with SMTP id 32mr21561335qvo.31.1554699364458;
+        Sun, 07 Apr 2019 21:56:04 -0700 (PDT)
 Received: from localhost.localdomain ([187.56.54.93])
-        by smtp.gmail.com with ESMTPSA id m41sm18218955qtb.58.2019.04.07.21.35.37
+        by smtp.gmail.com with ESMTPSA id t35sm19129808qtc.10.2019.04.07.21.56.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 07 Apr 2019 21:35:39 -0700 (PDT)
+        Sun, 07 Apr 2019 21:56:03 -0700 (PDT)
 From:   Arthur Moraes do Lago <arthurmoraeslago@gmail.com>
 To:     mchehab@kernel.org, gregkh@linuxfoundation.org,
         mjpeg-users@lists.sourceforge.net, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.or,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
         lkcamp@lists.libreplanetbr.org
 Subject: [PATCH] staging: media: zoran: fix trailing whitespaces
-Date:   Mon,  8 Apr 2019 01:35:30 -0300
-Message-Id: <20190408043530.21594-1-arthurmoraeslago@gmail.com>
+Date:   Mon,  8 Apr 2019 01:55:54 -0300
+Message-Id: <20190408045554.18905-1-arthurmoraeslago@gmail.com>
 X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -75,6 +75,10 @@ to conform with the coding style.
 
 Signed-off-by: Arthur Moraes do Lago <arthurmoraeslago@gmail.com>
 ---
+Made a mistake while typing recipients on the last e-mail and it was not
+sent to the kernel list. Re-sending now with correct address, sorry for
+the hassle.
+
  drivers/staging/media/zoran/videocodec.h | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
