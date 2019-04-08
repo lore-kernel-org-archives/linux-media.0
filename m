@@ -6,22 +6,22 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7CF8C282CE
-	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:04:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01A77C282DE
+	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:04:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E310208E3
+	by mail.kernel.org (Postfix) with ESMTP id BF565208E3
 	for <linux-media@archiver.kernel.org>; Mon,  8 Apr 2019 11:04:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726507AbfDHLEG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726509AbfDHLEG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 8 Apr 2019 07:04:06 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:46103 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726456AbfDHLEG (ORCPT
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:50583 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726464AbfDHLEG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 8 Apr 2019 07:04:06 -0400
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:1170:5c87:411e:5806])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id DS4HhTHSRNG8zDS4KhlZOP; Mon, 08 Apr 2019 13:04:04 +0200
+        id DS4HhTHSRNG8zDS4KhlZP2; Mon, 08 Apr 2019 13:04:04 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Neil Armstrong <narmstrong@baylibre.com>,
@@ -31,9 +31,9 @@ Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         Ettore Chimenti <ek5.chimenti@gmail.com>,
         Wen Yang <wen.yang99@zte.com.cn>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 2/7] meson: ao-cec: use new cec_notifier_find_hdmi_dev helper
-Date:   Mon,  8 Apr 2019 13:03:56 +0200
-Message-Id: <20190408110401.3345-3-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 5/7] tegra_cec: use new cec_notifier_find_hdmi_dev helper
+Date:   Mon,  8 Apr 2019 13:03:59 +0200
+Message-Id: <20190408110401.3345-6-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190408110401.3345-1-hverkuil-cisco@xs4all.nl>
 References: <20190408110401.3345-1-hverkuil-cisco@xs4all.nl>
@@ -49,53 +49,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The meson CEC driver increased the HDMI device refcount when
+The Tegra CEC driver increased the HDMI device refcount when
 it shouldn't. Use the new helper function to ensure that that
 doesn't happen and to simplify the driver code.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/platform/meson/ao-cec.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/media/platform/tegra-cec/tegra_cec.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/platform/meson/ao-cec.c b/drivers/media/platform/meson/ao-cec.c
-index cd4be38ab5ac..c8b374741a7c 100644
---- a/drivers/media/platform/meson/ao-cec.c
-+++ b/drivers/media/platform/meson/ao-cec.c
-@@ -601,20 +601,14 @@ static const struct cec_adap_ops meson_ao_cec_ops = {
- static int meson_ao_cec_probe(struct platform_device *pdev)
+diff --git a/drivers/media/platform/tegra-cec/tegra_cec.c b/drivers/media/platform/tegra-cec/tegra_cec.c
+index aba488cd0e64..074d647f2908 100644
+--- a/drivers/media/platform/tegra-cec/tegra_cec.c
++++ b/drivers/media/platform/tegra-cec/tegra_cec.c
+@@ -327,21 +327,15 @@ static const struct cec_adap_ops tegra_cec_ops = {
+ 
+ static int tegra_cec_probe(struct platform_device *pdev)
  {
- 	struct meson_ao_cec_device *ao_cec;
 -	struct platform_device *hdmi_dev;
 -	struct device_node *np;
 +	struct device *hdmi_dev;
+ 	struct tegra_cec *cec;
  	struct resource *res;
- 	int ret, irq;
+ 	int ret = 0;
  
 -	np = of_parse_phandle(pdev->dev.of_node, "hdmi-phandle", 0);
--	if (!np) {
--		dev_err(&pdev->dev, "Failed to find hdmi node\n");
--		return -ENODEV;
--	}
 +	hdmi_dev = cec_notifier_find_hdmi_dev(&pdev->dev);
  
+-	if (!np) {
+-		dev_err(&pdev->dev, "Failed to find hdmi node in device tree\n");
++	if (!hdmi_dev)
+ 		return -ENODEV;
+-	}
 -	hdmi_dev = of_find_device_by_node(np);
 -	if (hdmi_dev == NULL)
 -		return -EPROBE_DEFER;
-+	if (IS_ERR(hdmi_dev))
-+		return PTR_ERR(hdmi_dev);
  
- 	ao_cec = devm_kzalloc(&pdev->dev, sizeof(*ao_cec), GFP_KERNEL);
- 	if (!ao_cec)
-@@ -622,7 +616,7 @@ static int meson_ao_cec_probe(struct platform_device *pdev)
+ 	cec = devm_kzalloc(&pdev->dev, sizeof(struct tegra_cec), GFP_KERNEL);
  
- 	spin_lock_init(&ao_cec->cec_reg_lock);
+@@ -400,7 +394,7 @@ static int tegra_cec_probe(struct platform_device *pdev)
+ 		goto clk_error;
+ 	}
  
--	ao_cec->notify = cec_notifier_get(&hdmi_dev->dev);
-+	ao_cec->notify = cec_notifier_get(hdmi_dev);
- 	if (!ao_cec->notify)
- 		return -ENOMEM;
- 
+-	cec->notifier = cec_notifier_get(&hdmi_dev->dev);
++	cec->notifier = cec_notifier_get(hdmi_dev);
+ 	if (!cec->notifier) {
+ 		ret = -ENOMEM;
+ 		goto clk_error;
 -- 
 2.20.1
 
