@@ -2,240 +2,101 @@ Return-Path: <SRS0=ytLV=SL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F16DC10F0E
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 05:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5889FC10F0E
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 06:12:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D1172083E
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 05:35:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31E802083E
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 06:12:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbfDIFfJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 01:35:09 -0400
-Received: from mga06.intel.com ([134.134.136.31]:26614 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727035AbfDIFfI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 9 Apr 2019 01:35:08 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Apr 2019 22:33:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,328,1549958400"; 
-   d="scan'208";a="159974917"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.171]) ([10.238.232.171])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2019 22:33:04 -0700
-Subject: Re: [PATCH resend v2] media:staging/intel-ipu3: parameter buffer
- refactoring
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>, bingbu.cao@intel.com
-Cc:     linux-media@vger.kernel.org, tfiga@chromium.org,
-        tian.shu.qiu@intel.com
-References: <1553253285-16023-1-git-send-email-bingbu.cao@intel.com>
- <20190408122636.jhdywjmwfrabzu4o@kekkonen.localdomain>
-From:   Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <abac33ea-a3ec-e57d-c434-334ad4609e9d@linux.intel.com>
-Date:   Tue, 9 Apr 2019 13:40:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        id S1726205AbfDIGMv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 02:12:51 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:18018 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725781AbfDIGMv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 02:12:51 -0400
+X-UUID: 708af587616e4ecbb67f047c76954581-20190409
+X-UUID: 708af587616e4ecbb67f047c76954581-20190409
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1412010561; Tue, 09 Apr 2019 14:12:45 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs03n2.mediatek.inc (172.21.101.182) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 9 Apr 2019 14:12:43 +0800
+Received: from [172.21.77.4] (172.21.77.4) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 9 Apr 2019 14:12:43 +0800
+Message-ID: <1554790363.10331.1.camel@mtksdaap41>
+Subject: Re: [PATCH 01/14] [media] mtk-mipicsi: add mediatek mipicsi driver
+ for mt2712
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Stu Hsieh <stu.hsieh@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <srv_heupstream@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>
+Date:   Tue, 9 Apr 2019 14:12:43 +0800
+In-Reply-To: <1554724505-19882-2-git-send-email-stu.hsieh@mediatek.com>
+References: <1554724505-19882-1-git-send-email-stu.hsieh@mediatek.com>
+         <1554724505-19882-2-git-send-email-stu.hsieh@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <20190408122636.jhdywjmwfrabzu4o@kekkonen.localdomain>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: CF19FFDC3CE20E6C10B2D4979EFABE8034C444B504E33512BB9CFFC39EED8FBD2000:8
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi, Stu:
+
+On Mon, 2019-04-08 at 19:54 +0800, Stu Hsieh wrote:
+> This patch add mediatek mipicsi driver for mt2712,
+> including probe function to get the value from device tree,
+> and register to v4l2 the host device.
+> 
+> Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
+> ---
+>  drivers/media/platform/mtk-mipicsi/Makefile   |   4 +
+>  .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 768 ++++++++++++++++++
+>  2 files changed, 772 insertions(+)
+>  create mode 100644 drivers/media/platform/mtk-mipicsi/Makefile
+>  create mode 100644 drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
+> 
+
+[snip]
+
+> +
+> +static const struct of_device_id mtk_mipicsi_of_match[] = {
+> +	{ .compatible = "mediatek,mt2712-mipicsi", },
+
+Where is the binding document of "mediatek,mt2712-mipicsi"?
+
+Regards,
+CK
+
+> +	{},
+> +};
+> +
+> +static struct platform_driver mtk_mipicsi_driver = {
+> +	.driver		= {
+> +		.name	= MTK_MIPICSI_DRV_NAME,
+> +		.of_match_table = of_match_ptr(mtk_mipicsi_of_match),
+> +	},
+> +	.probe		= mtk_mipicsi_probe,
+> +	.remove		= mtk_mipicsi_remove,
+> +};
+> +
+> +module_platform_driver(mtk_mipicsi_driver);
+> +MODULE_DESCRIPTION("MediaTek SoC Camera Host driver");
+> +MODULE_LICENSE("GPL v2");
 
 
-On 4/8/19 8:26 PM, Sakari Ailus wrote:
-> Hi Bingbu,
-> 
-> Thanks for the patch.
-> 
-> On Fri, Mar 22, 2019 at 07:14:45PM +0800, bingbu.cao@intel.com wrote:
->> From: Bingbu Cao <bingbu.cao@intel.com>
->>
->> Current ImgU driver processes and releases the parameter buffer
->> immediately after queued from user. This does not align with other
->> image buffers which are grouped in sets and used for the same frame.
->> If user queues multiple parameter buffers continuously, only the last
->> one will take effect.
->> To make consistent buffers usage, this patch changes the parameter
->> buffer handling and group parameter buffer with other image buffers
->> for each frame.
->> Each time driver will queue one more group of buffers when previous
->> frame processed and buffers consumed by css.
->>
->> Signed-off-by: Tianshu Qiu <tian.shu.qiu@intel.com>
->> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
->> ---
->> changes since v1:
->> - add payload check for parameter buffer
->> - queue buffer only when previous buffer consumed
->> ---
->>  drivers/staging/media/ipu3/ipu3-css.c  |  5 ----
->>  drivers/staging/media/ipu3/ipu3-v4l2.c | 46 ++++++++++++----------------------
->>  drivers/staging/media/ipu3/ipu3.c      | 30 ++++++++++++++++++++++
->>  3 files changed, 46 insertions(+), 35 deletions(-)
->>
->> diff --git a/drivers/staging/media/ipu3/ipu3-css.c b/drivers/staging/media/ipu3/ipu3-css.c
->> index 15ab77e4b766..018f5a266c42 100644
->> --- a/drivers/staging/media/ipu3/ipu3-css.c
->> +++ b/drivers/staging/media/ipu3/ipu3-css.c
->> @@ -2160,11 +2160,6 @@ int imgu_css_set_parameters(struct imgu_css *css, unsigned int pipe,
->>  	obgrid_size = imgu_css_fw_obgrid_size(bi);
->>  	stripes = bi->info.isp.sp.iterator.num_stripes ? : 1;
->>  
->> -	/*
->> -	 * TODO(b/118782861): If userspace queues more than 4 buffers, the
->> -	 * parameters from previous buffers will be overwritten. Fix the driver
->> -	 * not to allow this.
->> -	 */
->>  	imgu_css_pool_get(&css_pipe->pool.parameter_set_info);
->>  	param_set = imgu_css_pool_last(&css_pipe->pool.parameter_set_info,
->>  				       0)->vaddr;
->> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
->> index 9c0352b193a7..87a7919c12f0 100644
->> --- a/drivers/staging/media/ipu3/ipu3-v4l2.cguess it'd take
-significant changes to the code handling them, and there are more important
-things to do. Just a note.
->> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
->> @@ -341,8 +341,10 @@ static void imgu_vb2_buf_queue(struct vb2_buffer *vb)
->>  	struct imgu_video_device *node =
->>  		container_of(vb->vb2_queue, struct imgu_video_device, vbq);
->>  	unsigned int queue = imgu_node_to_queue(node->id);
->> +	struct imgu_buffer *buf = container_of(vb, struct imgu_buffer,
->> +					       vid_buf.vbb.vb2_buf);
->>  	unsigned long need_bytes;
->> -	unsigned int pipe = node->pipe;
->> +	unsigned long payload = vb2_get_plane_payload(vb, 0);
->>  
->>  	if (vb->vb2_queue->type == V4L2_BUF_TYPE_META_CAPTURE ||
->>  	    vb->vb2_queue->type == V4L2_BUF_TYPE_META_OUTPUT)
->> @@ -350,42 +352,26 @@ static void imgu_vb2_buf_queue(struct vb2_buffer *vb)
->>  	else
->>  		need_bytes = node->vdev_fmt.fmt.pix_mp.plane_fmt[0].sizeimage;
->>  
->> -	if (queue == IPU3_CSS_QUEUE_PARAMS) {guess it'd take
-significant changes to the code handling them, and there are more important
-things to do. Just a note.
->> -		unsigned long payload = vb2_get_plane_payload(vb, 0);
->> -		struct vb2_v4l2_buffer *buf =
->> -			container_of(vb, struct vb2_v4l2_buffer, vb2_buf);
->> -		int r = -EINVAL;
->> -
->> -		if (payload == 0) {
->> -			payload = need_bytes;
->> -			vb2_set_plane_payload(vb, 0, payload);
->> -		}
->> -		if (payload >= need_bytes)
->> -			r = imgu_css_set_parameters(&imgu->css, pipe,
->> -						    vb2_plane_vaddr(vb, 0));
->> -		buf->flags = V4L2_BUF_FLAG_DONE;
->> -		vb2_buffer_done(vb, r == 0 ? VB2_BUF_STATE_DONE
->> -					   : VB2_BUF_STATE_ERROR);
->> -
->> -	} else {
->> -		struct imgu_buffer *buf = container_of(vb, struct imgu_buffer,
->> -						       vid_buf.vbb.vb2_buf);
->> +	if (queue == IPU3_CSS_QUEUE_PARAMS && payload && payload < need_bytes) {
->> +		dev_err(&imgu->pci_dev->dev, "invalid data size for params.");
->> +		vb2_buffer_done(vb, VB2_BUF_STATE_ERROR);
-> 
-> This would better be done in buf_prepare callback --- you can return an
-> error right away then. But it could well be another patch.
-OK, thanks, I will add this into my TODO list.
-> 
->> +		return;
->> +	}
->>  
->> -		mutex_lock(&imgu->lock);
->> +	mutex_lock(&imgu->lock);
->> +	if (queue != IPU3_CSS_QUEUE_PARAMS)
->>  		imgu_css_buf_init(&buf->css_buf, queue, buf->map.daddr);
->> -		list_add_tail(&buf->vid_buf.list,
->> -			      &node->buffers);
->> -		mutex_unlock(&imgu->lock);
->>  
->> -		vb2_set_plane_payload(&buf->vid_buf.vbb.vb2_buf, 0, need_bytes);
->> +	list_add_tail(&buf->vid_buf.list, &node->buffers);
->> +	mutex_unlock(&imgu->lock);
->>  
->> -		if (imgu->streaming)
->> -			imgu_queue_buffers(imgu, false, pipe);
->> -	}
->> +	vb2_set_plane_payload(vb, 0, need_bytes);
->> +
->> +	if (imgu->streaming)
->> +		imgu_queue_buffers(imgu, false, node->pipe);
->>  
->>  	dev_dbg(&imgu->pci_dev->dev, "%s for pipe %d node %d", __func__,
->>  		node->pipe, node->id);
->> -
->>  }
->>  
->>  static int imgu_vb2_queue_setup(struct vb2_queue *vq,
->> diff --git a/drivers/staging/media/ipu3/ipu3.c b/drivers/staging/media/ipu3/ipu3.c
->> index d575ac78c8f0..f1045072d535 100644
->> --- a/drivers/staging/media/ipu3/ipu3.c
->> +++ b/drivers/staging/media/ipu3/ipu3.c
->> @@ -236,6 +236,11 @@ int imgu_queue_buffers(struct imgu_device *imgu, bool initial, unsigned int pipe
->>  	dev_dbg(&imgu->pci_dev->dev, "Queue buffers to pipe %d", pipe);
->>  	mutex_lock(&imgu->lock);
->>  
->> +	if (!imgu_css_pipe_queue_empty(&imgu->css, pipe)) {
->> +		mutex_unlock(&imgu->lock);
->> +		return 0;
->> +	}
->> +
->>  	/* Buffer set is queued to FW only when input buffer is ready */
->>  	for (node = IMGU_NODE_NUM - 1;
->>  	     imgu_queue_getbuf(imgu, IMGU_NODE_IN, pipe);
->> @@ -246,6 +251,31 @@ int imgu_queue_buffers(struct imgu_device *imgu, bool initial, unsigned int pipe
->>  			dev_warn(&imgu->pci_dev->dev,
->>  				 "Vf not enabled, ignore queue");
->>  			continue;
->> +		} else if (node == IMGU_NODE_PARAMS &&
->> +			   imgu_pipe->nodes[node].enabled) {
->> +			struct vb2_buffer *vb;
->> +			struct imgu_vb2_buffer *ivb;
->> +
->> +			/* No parameters for this frame */
->> +			if (list_empty(&imgu_pipe->nodes[node].buffers))
->> +				continue;
->> +
->> +			ivb = list_first_entry(&imgu_pipe->nodes[node].buffers,
->> +					       struct imgu_vb2_buffer, list);
->> +			vb = &ivb->vbb.vb2_buf;
->> +			r = imgu_css_set_parameters(&imgu->css, pipe,
->> +						    vb2_plane_vaddr(vb, 0));
->> +			if (r) {
-> 
-> Ideally the parameters should be validated earlier but I guess it'd take
-> significant changes to the code handling them, and there are more important
-> things to do. Just a note.
-> 
->> +				vb2_buffer_done(vb, VB2_BUF_STATE_ERROR);
->> +				dev_warn(&imgu->pci_dev->dev,
->> +					 "set parameters failed.");
->> +				continue;
->> +			}
->> +
->> +			vb2_buffer_done(vb, VB2_BUF_STATE_DONE);
->> +			dev_dbg(&imgu->pci_dev->dev,
->> +				"queue user parameters %d to css.", vb->index);
-> 
-> %d -> %u.
-> 
-> I can fix that while applying the patch.
-Thanks.
-> 
->> +			list_del(&ivb->list);
->>  		} else if (imgu_pipe->queue_enabled[node]) {
->>  			struct imgu_css_buffer *buf =
->>  				imgu_queue_getbuf(imgu, node, pipe);
-> 
