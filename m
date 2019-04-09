@@ -2,336 +2,129 @@ Return-Path: <SRS0=ytLV=SL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9661FC282CE
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 09:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 306EEC282CE
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 09:47:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4F1A121473
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 09:43:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="B7PBfKlB"
+	by mail.kernel.org (Postfix) with ESMTP id 094CB20830
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 09:47:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbfDIJns (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 05:43:48 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:44635 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726220AbfDIJns (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 05:43:48 -0400
-Received: by mail-oi1-f193.google.com with SMTP id i21so12963879oib.11
-        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 02:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M9Zaom9V3GQHDePgi8JkUzY5eENAYE9Vl1F7+gTeKI0=;
-        b=B7PBfKlBhb4xl/IwLozAO2uBOsEMQhK44U7wUjbBXCpHgKyWoNayK5CpUrYPF/Dh38
-         LaFx13pwVfODHIvfeZjoZKiba2Nt8OtK7+C2spANp7pONymOY5/zNmLmmgoaNGtSmg7+
-         hFzcBfTDa+CF+UKagY6Fq2yWJYfxOryFOh8kM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M9Zaom9V3GQHDePgi8JkUzY5eENAYE9Vl1F7+gTeKI0=;
-        b=Uua6g9aXEtotGSEUOnK6PC2k5wXGSV5UUnE3oBo38IBWGAiweEsINEeHDKi8rOpnpV
-         BycL7bKun48Li99PpaKl3V1f9r9WtSKUFGLVrnJF37F/cCE3F8qWTNQrpnbdP9y0OxAZ
-         VIHYlEUePyoNxhepc2DAkGfvwOCEh0xItBVymL+JA+98yXwxQqlicRLlC5IOJTUoQIlE
-         JenftrJmgxA2rZ2rScMfCH7oaQY7J3Im1CfJlRQsb9Z62UZbR7/yUOjsIx/bokYH0gUq
-         1Hbw8OiaZLaHxnwcJPsXdLEOabstbY0EW4WjhnD6FSUqyMFLm9KC84CwEnX+9EeVhBtl
-         ufMQ==
-X-Gm-Message-State: APjAAAW2Ym4X4YsQLpODp/Qw+0gcvWcVDY0tVEgbQRnVKMduVxpOsUj2
-        cjbzJ3q1YP5SVbLTnoVkOZGb2Ada1PU=
-X-Google-Smtp-Source: APXvYqwM+oM7aVJrHKAM6G8SZypAi9LhTTDOK/+sMTKRjQCVluq1Nlg7xu4jX2/1JPy8/PvS1fYQIA==
-X-Received: by 2002:aca:3905:: with SMTP id g5mr19723666oia.49.1554803026661;
-        Tue, 09 Apr 2019 02:43:46 -0700 (PDT)
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com. [209.85.167.176])
-        by smtp.gmail.com with ESMTPSA id 6sm13079751ota.79.2019.04.09.02.43.45
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Apr 2019 02:43:45 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id v10so13015116oib.1
-        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 02:43:45 -0700 (PDT)
-X-Received: by 2002:aca:a894:: with SMTP id r142mr19214647oie.112.1554803024849;
- Tue, 09 Apr 2019 02:43:44 -0700 (PDT)
+        id S1726509AbfDIJqz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 05:46:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43998 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726001AbfDIJqz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 9 Apr 2019 05:46:55 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 59DA2AD03;
+        Tue,  9 Apr 2019 09:46:53 +0000 (UTC)
+Subject: Re: [Xen-devel][PATCH] xen/cameraif: add ABI for para-virtual camera
+To:     Oleksandr Andrushchenko <andr2000@gmail.com>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, konrad.wilk@oracle.com,
+        hverkuil@xs4all.nl, boris.ostrovsky@oracle.com
+Cc:     Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
+References: <20190409091546.9606-1-andr2000@gmail.com>
+ <9b9ba6b9-f045-80e2-fe8a-595728fb1ec0@suse.com>
+ <5bb8c828-b0ae-86c3-dacf-88bf6032dd6f@gmail.com>
+From:   Juergen Gross <jgross@suse.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=jgross@suse.com; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <303b7d57-1785-62b3-fac0-a3e947e691c4@suse.com>
+Date:   Tue, 9 Apr 2019 11:46:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-References: <20190124100419.26492-1-tfiga@chromium.org> <20190124100419.26492-3-tfiga@chromium.org>
- <cb3c73e0-9481-54d1-8730-69e51655d7d8@xs4all.nl> <CAAFQd5AqRzGehW6fN4P=_oVdPdH+bJQqKhxgP6zsu80p-74bXA@mail.gmail.com>
- <fded491f-8a25-3283-76c4-dee3dd56045e@xs4all.nl> <CAAFQd5CYT=eA_eFyHLTePBQatOBVwsoDjAfMoybJeWrO7V-raA@mail.gmail.com>
- <2376896b-0087-5eee-a4b9-6ad03b0fef9c@xs4all.nl>
-In-Reply-To: <2376896b-0087-5eee-a4b9-6ad03b0fef9c@xs4all.nl>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 9 Apr 2019 18:43:33 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5BWXhTBWM0DtakC6KgrBdXbP_3rw5V4RhV53kFzh0awvw@mail.gmail.com>
-Message-ID: <CAAFQd5BWXhTBWM0DtakC6KgrBdXbP_3rw5V4RhV53kFzh0awvw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] media: docs-rst: Document memory-to-memory video
- encoder interface
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        =?UTF-8?B?VGlmZmFueSBMaW4gKOael+aFp+ePiik=?= 
-        <tiffany.lin@mediatek.com>,
-        =?UTF-8?B?QW5kcmV3LUNUIENoZW4gKOmZs+aZuui/qik=?= 
-        <andrew-ct.chen@mediatek.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dave.stevenson@raspberrypi.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <5bb8c828-b0ae-86c3-dacf-88bf6032dd6f@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: de-DE
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 9, 2019 at 6:37 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->
-> On 4/9/19 9:11 AM, Tomasz Figa wrote:
-> > On Mon, Apr 8, 2019 at 5:43 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> >>
-> >> On 4/8/19 10:36 AM, Tomasz Figa wrote:
-> >>> On Mon, Mar 25, 2019 at 10:12 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> >>>>
-> >>>> Another comment found while creating compliance tests:
-> >>>>
-> >>>> On 1/24/19 11:04 AM, Tomasz Figa wrote:
-> >>>>> +Drain
-> >>>>> +=====
-> >>>>> +
-> >>>>> +To ensure that all the queued ``OUTPUT`` buffers have been processed and the
-> >>>>> +related ``CAPTURE`` buffers are given to the client, the client must follow the
-> >>>>> +drain sequence described below. After the drain sequence ends, the client has
-> >>>>> +received all encoded frames for all ``OUTPUT`` buffers queued before the
-> >>>>> +sequence was started.
-> >>>>> +
-> >>>>> +1. Begin the drain sequence by issuing :c:func:`VIDIOC_ENCODER_CMD`.
-> >>>>> +
-> >>>>> +   * **Required fields:**
-> >>>>> +
-> >>>>> +     ``cmd``
-> >>>>> +         set to ``V4L2_ENC_CMD_STOP``
-> >>>>> +
-> >>>>> +     ``flags``
-> >>>>> +         set to 0
-> >>>>> +
-> >>>>> +     ``pts``
-> >>>>> +         set to 0
-> >>>>> +
-> >>>>> +   .. warning::
-> >>>>> +
-> >>>>> +      The sequence can be only initiated if both ``OUTPUT`` and ``CAPTURE``
-> >>>>> +      queues are streaming. For compatibility reasons, the call to
-> >>>>> +      :c:func:`VIDIOC_ENCODER_CMD` will not fail even if any of the queues is
-> >>>>> +      not streaming, but at the same time it will not initiate the `Drain`
-> >>>>> +      sequence and so the steps described below would not be applicable.
-> >>>>> +
-> >>>>> +2. Any ``OUTPUT`` buffers queued by the client before the
-> >>>>> +   :c:func:`VIDIOC_ENCODER_CMD` was issued will be processed and encoded as
-> >>>>> +   normal. The client must continue to handle both queues independently,
-> >>>>> +   similarly to normal encode operation. This includes:
-> >>>>> +
-> >>>>> +   * queuing and dequeuing ``CAPTURE`` buffers, until a buffer marked with the
-> >>>>> +     ``V4L2_BUF_FLAG_LAST`` flag is dequeued,
-> >>>>> +
-> >>>>> +     .. warning::
-> >>>>> +
-> >>>>> +        The last buffer may be empty (with :c:type:`v4l2_buffer`
-> >>>>> +        ``bytesused`` = 0) and in that case it must be ignored by the client,
-> >>>>> +        as it does not contain an encoded frame.
-> >>>>> +
-> >>>>> +     .. note::
-> >>>>> +
-> >>>>> +        Any attempt to dequeue more buffers beyond the buffer marked with
-> >>>>> +        ``V4L2_BUF_FLAG_LAST`` will result in a -EPIPE error from
-> >>>>> +        :c:func:`VIDIOC_DQBUF`.
-> >>>>> +
-> >>>>> +   * dequeuing processed ``OUTPUT`` buffers, until all the buffers queued
-> >>>>> +     before the ``V4L2_ENC_CMD_STOP`` command are dequeued,
-> >>>>> +
-> >>>>> +   * dequeuing the ``V4L2_EVENT_EOS`` event, if the client subscribes to it.
-> >>>>> +
-> >>>>> +   .. note::
-> >>>>> +
-> >>>>> +      For backwards compatibility, the encoder will signal a ``V4L2_EVENT_EOS``
-> >>>>> +      event when the last frame has been decoded and all frames are ready to be
-> >>>>> +      dequeued. It is deprecated behavior and the client must not rely on it.
-> >>>>> +      The ``V4L2_BUF_FLAG_LAST`` buffer flag should be used instead.
-> >>>>> +
-> >>>>> +3. Once all ``OUTPUT`` buffers queued before the ``V4L2_ENC_CMD_STOP`` call are
-> >>>>> +   dequeued and the last ``CAPTURE`` buffer is dequeued, the encoder is stopped
-> >>>>> +   and it will accept, but not process any newly queued ``OUTPUT`` buffers
-> >>>>> +   until the client issues any of the following operations:
-> >>>>> +
-> >>>>> +   * ``V4L2_ENC_CMD_START`` - the encoder will not be reset and will resume
-> >>>>> +     operation normally, with all the state from before the drain,
-> >>>>
-> >>>> I assume that calling CMD_START when *not* draining will succeed but does nothing.
-> >>>>
-> >>>> In other words: while draining is in progress START will return EBUSY. When draining
-> >>>> was finished, then START will resume the encoder. In all other cases it just returns
-> >>>> 0 since the encoder is really already started.
-> >>>>
-> >>>
-> >>> Yes, that was the intention and seems to be the closest to the
-> >>> behavior described in the existing documentation.
-> >>>
-> >>>>> +
-> >>>>> +   * a pair of :c:func:`VIDIOC_STREAMOFF` and :c:func:`VIDIOC_STREAMON` on the
-> >>>>> +     ``CAPTURE`` queue - the encoder will be reset (see the `Reset` sequence)
-> >>>>> +     and then resume encoding,
-> >>>>> +
-> >>>>> +   * a pair of :c:func:`VIDIOC_STREAMOFF` and :c:func:`VIDIOC_STREAMON` on the
-> >>>>> +     ``OUTPUT`` queue - the encoder will resume operation normally, however any
-> >>>>> +     source frames queued to the ``OUTPUT`` queue between ``V4L2_ENC_CMD_STOP``
-> >>>>> +     and :c:func:`VIDIOC_STREAMOFF` will be discarded.
-> >>>>> +
-> >>>>> +.. note::
-> >>>>> +
-> >>>>> +   Once the drain sequence is initiated, the client needs to drive it to
-> >>>>> +   completion, as described by the steps above, unless it aborts the process by
-> >>>>> +   issuing :c:func:`VIDIOC_STREAMOFF` on any of the ``OUTPUT`` or ``CAPTURE``
-> >>>>> +   queues.  The client is not allowed to issue ``V4L2_ENC_CMD_START`` or
-> >>>>> +   ``V4L2_ENC_CMD_STOP`` again while the drain sequence is in progress and they
-> >>>>> +   will fail with -EBUSY error code if attempted.
-> >>>>
-> >>>> I assume calling STOP again once the drain sequence completed just returns 0 and
-> >>>> doesn't do anything else (since we're already stopped).
-> >>>>
-> >>>
-> >>> Right.
-> >>>
-> >>>>> +
-> >>>>> +   Although mandatory, the availability of encoder commands may be queried
-> >>>>> +   using :c:func:`VIDIOC_TRY_ENCODER_CMD`.
-> >>>>
-> >>>> Some corner cases:
-> >>>>
-> >>>> 1) No buffers are queued on either vb2_queue, but STREAMON is called for both queues.
-> >>>>    Now ENC_CMD_STOP is issued. What should happen?
-> >>>>
-> >>>>    Proposal: the next time the applications queues a CAPTURE buffer it is returned
-> >>>>    at once as an empty buffer with FLAG_LAST set.
-> >>>>
-> >>>
-> >>> SGTM. It's actually similar to a relatively common case where all
-> >>> CAPTURE buffers have been dequeued and the application has to refill
-> >>> the CAPTURE queue, but in the meantime a drain request needs to be
-> >>> issued.
-> >>>
-> >>>> 2) Both queues are streaming and buffers have been encoded, but currently no buffers
-> >>>>    are queued on either vb2_queue. Now ENC_CMD_STOP is issued. What should happen?
-> >>>>
-> >>>>    Proposal: the next time the applications queues a CAPTURE buffer it is returned
-> >>>>    at once as an empty buffer with FLAG_LAST set. This is consistent with the
-> >>>>    previous corner case.
-> >>>
-> >>> Agreed.
-> >>>
-> >>>>
-> >>>> 3) The CAPTURE queue contains buffers, the OUTPUT queue does not. Now ENC_CMD_STOP
-> >>>>    is issued. What should happen?
-> >>>>
-> >>>>    Proposal: the oldest CAPTURE buffer in the ready queue is returned as an empty
-> >>>>    buffer with FLAG_LAST set.
-> >>>
-> >>> Generally agreed, but not sure if there is a reason to specifically
-> >>> refer to the oldest buffer. (I'm personally for keeping the queues
-> >>> ordered, though...)
-> >>
-> >> Feel free to rephrase. Perhaps: "an empty CAPTURE buffer with FLAG_LAST set should be
-> >> queued up for userspace to signal that the encoder has stopped." Or something along
-> >> those lines.
-> >
-> > I've added a note:
-> >
-> >    For reference, handling of various corner cases is described below:
-> >
-> >    * In case of no buffer in the ``OUTPUT`` queue at the time the
-> >      ``V4L2_ENC_CMD_STOP`` command was issued, the drain sequence completes
-> >      immediately and the encoder returns an empty ``CAPTURE`` buffer with the
-> >      ``V4L2_BUF_FLAG_LAST`` flag set.
-> >
-> >    * In case of no buffer in the ``CAPTURE`` queue at the time the drain
-> >      sequence completes, the next time the client queues a ``CAPTURE`` buffer
-> >      it is returned at once as an empty buffer with the ``V4L2_BUF_FLAG_LAST``
-> >      flag set.
-> >
-> >    * If :c:func:`VIDIOC_STREAMOFF` is called on the ``CAPTURE`` queue in the
-> >      middle of the drain sequence, the drain sequence is cancelled and all
->
-> cancelled -> canceled
->
-> >      ``CAPTURE`` buffers are implicitly returned to the userpace.
->
-> userpace -> userspace
->
+On 09/04/2019 11:33, Oleksandr Andrushchenko wrote:
+> On 4/9/19 12:28 PM, Juergen Gross wrote:
+>> On 09/04/2019 11:15, Oleksandr Andrushchenko wrote:
+>>> From: Oleksandr Andrushchenko <oleksandr_andrushchenko@epam.com>
+>>>
+>>> This is the ABI for the two halves of a para-virtualized
+>>> camera driver which extends Xen's reach multimedia capabilities even
+>>> further enabling it for video conferencing, In-Vehicle Infotainment,
+>>> high definition maps etc.
+>>>
+>>> The initial goal is to support most needed functionality with the
+>>> final idea to make it possible to extend the protocol if need be:
+>>>
+>>> 1. Provide means for base virtual device configuration:
+>>>   - pixel formats
+>>>   - resolutions
+>>>   - frame rates
+>>> 2. Support basic camera controls:
+>>>   - contrast
+>>>   - brightness
+>>>   - hue
+>>>   - saturation
+>>> 3. Support streaming control
+>>>
+>>> Signed-off-by: Oleksandr Andrushchenko
+>>> <oleksandr_andrushchenko@epam.com>
+>>> Cc: Juergen Gross <jgross@suse.com>
+>>> Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+>>> Cc: Hans Verkuil <hverkuil@xs4all.nl>
+>> I'm in principle fine with this patch, but it should be sent as part of
+>> a series using that header. In case the related driver isn't accepted
+>> we'd end up with a stale header file.
+> Hm, I am doing this as I did for the rest of protocols before:
+> 1. Get the protocol in Xen
+> 2. Get the copy in Linux
+> 3. Upstream driver (use header)
 
-Actually changed it to "client".
+Sorry for not having done the review properly in the past. ;-)
 
-> >
-> >    * If :c:func:`VIDIOC_STREAMOFF` is called on the ``OUTPUT`` queue in the
-> >      middle of the drain sequence, the drain sequence completes immediately and
-> >      next ``CAPTURE`` buffer will be returned empty with the
-> >      ``V4L2_BUF_FLAG_LAST`` flag set.
-> >
-> > Slightly changed the split into cases to cover behaviors rather than
-> > conditions. WDYT?
->
-> Looks good (with those two typos fixed).
->
+> Even if the driver is not accepted (hope this won't happen)
+> then this patch makes Xen and Linux properly aligned anyway.
+> Which is IMO good
 
-Thanks.
+Having an unused header file is not good.
 
->         Hans
->
-> >
-> > Best regards,
-> > Tomasz
-> >
-> >>
-> >> Regards,
-> >>
-> >>         Hans
-> >>
-> >>>
-> >>>>
-> >>>> 4) Both queues have queued buffers. ENC_CMD_STOP is issued to start the drain process.
-> >>>>    Before the drain process completes STREAMOFF is called for either CAPTURE or
-> >>>>    OUTPUT queue. What should happen?
-> >>>>
-> >>>>    Proposal for STREAMOFF(CAPTURE): aborts the drain process and all CAPTURE buffers are
-> >>>>    returned to userspace. If encoding is restarted, then any remaining OUTPUT buffers
-> >>>>    will be used as input to the encoder.
-> >>>>
-> >>>
-> >>> Agreed.
-> >>>
-> >>>>    Proposal for STREAMOFF(OUTPUT): the next capture buffer will be empty and have
-> >>>>    FLAG_LAST set.
-> >>>
-> >>> Agreed.
-> >>>
-> >>>>
-> >>>> Some of this might have to be documented, but these corner cases should certainly be
-> >>>> tested by v4l2-compliance. Before I write those tests I'd like to know if you agree
-> >>>> with this.
-> >>>
-> >>> Agreed with just one minor comment. Thanks for checking with me!
-> >>>
-> >>> Best regards,
-> >>> Tomasz
-> >>>
-> >>
->
+Be assured I'm going to give you the needed Reviewed-by: tag for
+the patch adding the header in a series using it.
+
+
+Juergen
