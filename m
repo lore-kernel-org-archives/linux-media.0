@@ -2,92 +2,155 @@ Return-Path: <SRS0=ytLV=SL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B511C10F0E
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 07:58:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 918B0C10F0E
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 08:07:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4B21220651
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 07:58:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62E0A20663
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 08:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1554797276;
+	bh=UJ4X7lgOTNSkZrOVJLKkRidwDuCo+nBBWjmpvCzj8MM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=APubLUkY5kwPkMkfEfu6bsv2u7Uwt+r4kDq+jPKGKjjm8bTomyTyZ3nE5PuXFHZqF
+	 pJ0uClBqPajxNK/hVZnq4vs/VUnmZUBx+oELbtdDoJP8fB3k8aGb/tAFGW7wC/n5vo
+	 u4vqtYeT4Z5EMdBAojvvzrMhszETMN7xbrAKhkwA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbfDIH6i (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 03:58:38 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:41365 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbfDIH6i (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 03:58:38 -0400
-X-Originating-IP: 90.88.30.125
-Received: from localhost (aaubervilliers-681-1-89-125.w90-88.abo.wanadoo.fr [90.88.30.125])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 8B2CD20007;
-        Tue,  9 Apr 2019 07:58:34 +0000 (UTC)
-Date:   Tue, 9 Apr 2019 09:58:34 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
+        id S1726705AbfDIIHv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 04:07:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53268 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726588AbfDIIHu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 9 Apr 2019 04:07:50 -0400
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5AF6021841;
+        Tue,  9 Apr 2019 08:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1554797268;
+        bh=UJ4X7lgOTNSkZrOVJLKkRidwDuCo+nBBWjmpvCzj8MM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oCyXuM2zdqzfdx+5tJ2efSEkU2o9QLdNg+viQF0YeWWRtiDxDVIpuwrdAEC4Cw2kt
+         LYXkvvYd+YZh2mG3e0LT3v0J2JXyr+Y5RybH9uV81rm0Mk/ycDmAxaL9BQnNjxF3aH
+         3rkH0mxFI+NltjnlIpXn1h/IalnXVrP0DMUdWm3c=
+Received: by mail-wr1-f47.google.com with SMTP id t17so19539651wrw.13;
+        Tue, 09 Apr 2019 01:07:48 -0700 (PDT)
+X-Gm-Message-State: APjAAAWyKn2uTA1XFU/wWOe6ZcFpfswY5E3dyaSsgwcG+VVAauTs5sPG
+        QTDsFeCD9BrlCK6soLwU94x6AMBWgcU4CtccwHs=
+X-Google-Smtp-Source: APXvYqxOPmDFD+uZ9qPXdHILQjrN7+Z/UXUOh3u73bUm3AGqk3qjaH+A2LCe+3FdStEnstvXFH0ZhS4fRj7bP9+1izA=
+X-Received: by 2002:a5d:6646:: with SMTP id f6mr20925017wrw.68.1554797266945;
+ Tue, 09 Apr 2019 01:07:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190408165744.11672-1-wens@kernel.org> <20190408165744.11672-5-wens@kernel.org>
+ <20190409075804.4zrwjil7ie2gjigu@flea>
+In-Reply-To: <20190409075804.4zrwjil7ie2gjigu@flea>
+From:   Chen-Yu Tsai <wens@kernel.org>
+Date:   Tue, 9 Apr 2019 16:07:34 +0800
+X-Gmail-Original-Message-ID: <CAGb2v64CYV68Q0a7x5p-XabS74vaQWP3paPopodmqQPTOrq2gQ@mail.gmail.com>
+Message-ID: <CAGb2v64CYV68Q0a7x5p-XabS74vaQWP3paPopodmqQPTOrq2gQ@mail.gmail.com>
+Subject: Re: [PATCH 4/6] ARM: dts: sun8i: a83t: Add device node for CSI
+ (Camera Sensor Interface)
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Chen-Yu Tsai <wens@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Yong Deng <yong.deng@magewell.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: Re: [PATCH 5/6] ARM: dts: sun8i: a83t: Add I2C2 pinmux setting for
- PE pins
-Message-ID: <20190409075834.khfdfs2ybictc5ed@flea>
-References: <20190408165744.11672-1-wens@kernel.org>
- <20190408165744.11672-6-wens@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lg36cmib6nhpsyhd"
-Content-Disposition: inline
-In-Reply-To: <20190408165744.11672-6-wens@kernel.org>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
---lg36cmib6nhpsyhd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Apr 09, 2019 at 12:57:43AM +0800, Chen-Yu Tsai wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
+On Tue, Apr 9, 2019 at 3:58 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
 >
-> I2C2 is available on the PE pingroup, on the same pins as the camera
-> sensor interface (CSI) controller's camera control interface pins.
-> This provides an option to use I2C2 instead of that control interface
-> to configure camera sensors.
+> Hi,
 >
-> Add a pinctrl node for it. The property /omit-if-no-ref/ is added to
-> keep the device tree blob size down if it is unused.
+> On Tue, Apr 09, 2019 at 12:57:42AM +0800, Chen-Yu Tsai wrote:
+> > From: Chen-Yu Tsai <wens@csie.org>
+> >
+> > The A83T SoC has a camera sensor interface (known as CSI in Allwinner
+> > lingo), which is similar to the one found on the A64 and H3. The only
+> > difference seems to be that support of MIPI CSI through a connected
+> > MIPI CSI-2 bridge.
+> >
+> > Add a device node for it, and pinctrl nodes for the commonly used MCLK
+> > and 8-bit parallel interface. The property /omit-if-no-ref/ is added to
+> > the pinctrl nodes to keep the device tree blob size down if they are
+> > unused.
+> >
+> > Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> > ---
+> >  arch/arm/boot/dts/sun8i-a83t.dtsi | 31 +++++++++++++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> >
+> > diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > index f739b88efb53..0c52f945fd5f 100644
+> > --- a/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > +++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > @@ -682,6 +682,20 @@
+> >                       #interrupt-cells = <3>;
+> >                       #gpio-cells = <3>;
+> >
+> > +                     /omit-if-no-ref/
+> > +                     csi_8bit_parallel_pins: csi-8bit-parallel-pins {
+> > +                             pins = "PE0", "PE2", "PE3", "PE6", "PE7",
+> > +                                    "PE8", "PE9", "PE10", "PE11",
+> > +                                    "PE12", "PE13";
+> > +                             function = "csi";
+> > +                     };
+> > +
+> > +                     /omit-if-no-ref/
+> > +                     csi_mclk_pin: csi-mclk-pin {
+> > +                             pins = "PE1";
+> > +                             function = "csi";
+> > +                     };
+> > +
+> >                       emac_rgmii_pins: emac-rgmii-pins {
+> >                               pins = "PD2", "PD3", "PD4", "PD5", "PD6", "PD7",
+> >                                      "PD11", "PD12", "PD13", "PD14", "PD18",
+> > @@ -994,6 +1008,23 @@
+> >                       interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
+> >               };
+> >
+> > +             csi: camera@1cb0000 {
+> > +                     compatible = "allwinner,sun8i-a83t-csi";
+> > +                     reg = <0x01cb0000 0x1000>;
+> > +                     interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     clocks = <&ccu CLK_BUS_CSI>,
+> > +                              <&ccu CLK_CSI_SCLK>,
+> > +                              <&ccu CLK_DRAM_CSI>;
+> > +                     clock-names = "bus", "mod", "ram";
+> > +                     resets = <&ccu RST_BUS_CSI>;
+> > +                     status = "disabled";
+> > +
+> > +                     csi_in: port {
+> > +                             #address-cells = <1>;
+> > +                             #size-cells = <0>;
 >
-> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> If we expect a single enpoint, then we don't need the address-cells
+> and size-cells properties.
 
-Applied, thanks!
-Maxime
+I wouldn't bet on anything. The way the Q8 tablets did front/back cameras
+is kind of genius if not very hacky. They have two "identical" sensors
+on the same I2C bus and CSI bus, with shared reset line but separate
+shutdown lines. Since they are identical, they also have the same I2C
+address. I haven't figured out how to model this in the device tree.
 
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The point is, it's perfectly possible to have two or more sensors use
+the same controller, provided only one be active at a time.
 
---lg36cmib6nhpsyhd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXKxQqgAKCRDj7w1vZxhR
-xfMAAQCt8TQrrJcRawbPWK0ujCwuxLKIxfQzAwC4ySBAN67KiwEA7eUIdlt8ZEj/
-RgKgOU1X5oXUHKfnuJmA+HRbL0khIQw=
-=hrDA
------END PGP SIGNATURE-----
-
---lg36cmib6nhpsyhd--
+ChenYu
