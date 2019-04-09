@@ -2,242 +2,123 @@ Return-Path: <SRS0=ytLV=SL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D105BC282DA
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 11:02:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DD05C10F0E
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 11:07:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E8732084F
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 11:02:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3486920883
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 11:07:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="UJydvyLz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbfDILCJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 07:02:09 -0400
-Received: from mga01.intel.com ([192.55.52.88]:33111 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726035AbfDILCI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 9 Apr 2019 07:02:08 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Apr 2019 04:02:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,329,1549958400"; 
-   d="scan'208";a="160045077"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.171]) ([10.238.232.171])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Apr 2019 04:02:07 -0700
-Subject: Re: [PATCH 1/1] ipu3-imgu: Use %u for formatting unsigned values (not
- %d)
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org
-Cc:     bingbu.cao@intel.com
-References: <20190409101810.17002-1-sakari.ailus@linux.intel.com>
-From:   Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <c1660ddd-2ecb-eed1-9d95-514e30ff5465@linux.intel.com>
-Date:   Tue, 9 Apr 2019 19:09:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
-MIME-Version: 1.0
-In-Reply-To: <20190409101810.17002-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252
+        id S1726463AbfDILH3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 07:07:29 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:34760 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbfDILH3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 07:07:29 -0400
+X-IronPort-AV: E=Sophos;i="5.60,329,1549954800"; 
+   d="scan'208";a="27942122"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 09 Apr 2019 04:07:29 -0700
+Received: from NAM05-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.76.38) with Microsoft SMTP Server (TLS) id
+ 14.3.352.0; Tue, 9 Apr 2019 04:07:28 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector1-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CDbyTSULTVGuEVk3Qay3yEmSQg12kfumbfzu7o6OPdc=;
+ b=UJydvyLzpNRnCoYygernwSRqcPvqQgpLDv5sJrPX5VFhzkt9OqjSeVHe8JJOReMT7kRvVpaTvySBtAew4626vvsUlV3fHPGq66u5/dPEZG10AD8qlZTbQH5ZQaM4u122VqWSkdAafbmLxdGLysEmCgD2PyXFHT5ogbNkFkwSiI8=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB0011.namprd11.prod.outlook.com (10.164.155.29) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1771.19; Tue, 9 Apr 2019 11:07:19 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::e0e3:1d51:9e3e:6dc]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::e0e3:1d51:9e3e:6dc%3]) with mapi id 15.20.1771.021; Tue, 9 Apr 2019
+ 11:07:19 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <hverkuil@xs4all.nl>,
+        <Nicolas.Ferre@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <mchehab@kernel.org>
+CC:     <ksloat@aampglobal.com>, <Eugen.Hristev@microchip.com>
+Subject: [PATCH 0/7] media: atmel: atmel-isc: new features
+Thread-Topic: [PATCH 0/7] media: atmel: atmel-isc: new features
+Thread-Index: AQHU7sRlZzbs8eRI40urL/liPTuqoQ==
+Date:   Tue, 9 Apr 2019 11:07:19 +0000
+Message-ID: <1554807715-2353-1-git-send-email-eugen.hristev@microchip.com>
+Accept-Language: ro-RO, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: VI1PR09CA0054.eurprd09.prod.outlook.com
+ (2603:10a6:802:28::22) To DM5PR11MB1242.namprd11.prod.outlook.com
+ (2603:10b6:3:14::8)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Eugen.Hristev@microchip.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.7.4
+x-originating-ip: [94.177.32.154]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: be63b732-11ac-4c70-e0e1-08d6bcdb8820
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600139)(711020)(4605104)(2017052603328)(7193020);SRVR:DM5PR11MB0011;
+x-ms-traffictypediagnostic: DM5PR11MB0011:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <DM5PR11MB0011D9527964C403BF8169FEE82D0@DM5PR11MB0011.namprd11.prod.outlook.com>
+x-forefront-prvs: 000227DA0C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(136003)(376002)(366004)(396003)(39850400004)(199004)(189003)(256004)(81166006)(66066001)(486006)(8676002)(36756003)(476003)(5660300002)(81156014)(50226002)(8936002)(71200400001)(71190400001)(14444005)(2616005)(6512007)(106356001)(105586002)(6306002)(7736002)(305945005)(478600001)(4326008)(2201001)(186003)(99286004)(6486002)(107886003)(68736007)(97736004)(72206003)(110136005)(14454004)(316002)(53936002)(52116002)(26005)(54906003)(6436002)(6506007)(6116002)(2501003)(2906002)(3846002)(386003)(25786009)(102836004)(966005)(86362001);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB0011;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 2uDXgAjxvmp3F6pLQ8kKMjRc5mhpTvkFKjtBZqCxhO8qnacvt6ynEjpwwwn/jmGwu0IH4NUyZQYLxh0YBS/sNuRRu1O9ndjGdGlU7hOrtf9YrbZO/EYaaHO9/PxsRnmGqhVwIvjMRxkx++6yKwq0B0eYe/Dyf6GvPJfW3vkQyxSiIBhof7FGMzpINb5JFyWtvI3hA2kN6pxnFkhpgobLm8XB2IXQcAk4InQTFA1Bm5AoFvmUBcDCNcF7QyQr3doEbvuJnf4YlG+4U4heWgYAMTCIU3QtvguttWPTtjfJl0aE3CKrMXVizTW/4M3ZMnulxEJiX2iCOZfefQbQoQ95U1hfjBPUVikHKcpZmg9iSI7AGAXVsLM7KcQXNlIviwlEXHDSQ90grWVDpVzzKlEI7339I0q0EttUuExY0HBGrSw=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: be63b732-11ac-4c70-e0e1-08d6bcdb8820
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Apr 2019 11:07:19.1413
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB0011
+X-OriginatorOrg: microchip.com
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
-On 4/9/19 6:18 PM, Sakari Ailus wrote:
-> The driver used %d for formatting unsigned values. Use %u instead.
-> 
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/staging/media/ipu3/ipu3-v4l2.c | 40 +++++++++++++++++-----------------
->  1 file changed, 20 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> index be818c29620f..3bb08af83dfe 100644
-> --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-> +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> @@ -66,7 +66,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
->  	struct imgu_css_pipe *css_pipe = &imgu->css.pipes[pipe];
->  	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[pipe];
->  
-> -	dev_dbg(dev, "%s %d for pipe %d", __func__, enable, pipe);
-> +	dev_dbg(dev, "%s %d for pipe %u", __func__, enable, pipe);
->  	/* grab ctrl after streamon and return after off */
->  	v4l2_ctrl_grab(imgu_sd->ctrl, enable);
->  
-> @@ -101,7 +101,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
->  	else
->  		css_pipe->pipe_id = IPU3_CSS_PIPE_ID_CAPTURE;
->  
-> -	dev_dbg(dev, "IPU3 pipe %d pipe_id %d", pipe, css_pipe->pipe_id);
-> +	dev_dbg(dev, "IPU3 pipe %u pipe_id %u", pipe, css_pipe->pipe_id);
->  
->  	rects[IPU3_CSS_RECT_EFFECTIVE] = &imgu_sd->rect.eff;
->  	rects[IPU3_CSS_RECT_BDS] = &imgu_sd->rect.bds;
-> @@ -109,7 +109,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
->  
->  	r = imgu_css_fmt_set(&imgu->css, fmts, rects, pipe);
->  	if (r) {
-> -		dev_err(dev, "failed to set initial formats pipe %d with (%d)",
-> +		dev_err(dev, "failed to set initial formats pipe %u with (%d)",
->  			pipe, r);
->  		return r;
->  	}
-> @@ -157,7 +157,7 @@ static int imgu_subdev_set_fmt(struct v4l2_subdev *sd,
->  	u32 pad = fmt->pad;
->  	unsigned int pipe = imgu_sd->pipe;
->  
-> -	dev_dbg(&imgu->pci_dev->dev, "set subdev %d pad %d fmt to [%dx%d]",
-> +	dev_dbg(&imgu->pci_dev->dev, "set subdev %u pad %u fmt to [%ux%u]",
->  		pipe, pad, fmt->format.width, fmt->format.height);
->  
->  	imgu_pipe = &imgu->imgu_pipe[pipe];
-> @@ -233,7 +233,7 @@ static int imgu_subdev_set_selection(struct v4l2_subdev *sd,
->  	struct v4l2_rect *rect, *try_sel;
->  
->  	dev_dbg(&imgu->pci_dev->dev,
-> -		 "set subdev %d sel which %d target 0x%4x rect [%dx%d]",
-> +		 "set subdev %u sel which %u target 0x%4x rect [%ux%u]",
->  		 imgu_sd->pipe, sel->which, sel->target,
->  		 sel->r.width, sel->r.height);
->  
-> @@ -279,7 +279,7 @@ static int imgu_link_setup(struct media_entity *entity,
->  
->  	WARN_ON(pad >= IMGU_NODE_NUM);
->  
-> -	dev_dbg(&imgu->pci_dev->dev, "pipe %d pad %d is %s", pipe, pad,
-> +	dev_dbg(&imgu->pci_dev->dev, "pipe %u pad %u is %s", pipe, pad,
->  		 flags & MEDIA_LNK_FL_ENABLED ? "enabled" : "disabled");
->  
->  	imgu_pipe = &imgu->imgu_pipe[pipe];
-> @@ -294,7 +294,7 @@ static int imgu_link_setup(struct media_entity *entity,
->  	else
->  		__clear_bit(pipe, imgu->css.enabled_pipes);
->  
-> -	dev_dbg(&imgu->pci_dev->dev, "pipe %d is %s", pipe,
-> +	dev_dbg(&imgu->pci_dev->dev, "pipe %u is %s", pipe,
->  		 flags & MEDIA_LNK_FL_ENABLED ? "enabled" : "disabled");
->  
->  	return 0;
-> @@ -370,7 +370,7 @@ static void imgu_vb2_buf_queue(struct vb2_buffer *vb)
->  	if (imgu->streaming)
->  		imgu_queue_buffers(imgu, false, node->pipe);
->  
-> -	dev_dbg(&imgu->pci_dev->dev, "%s for pipe %d node %d", __func__,
-> +	dev_dbg(&imgu->pci_dev->dev, "%s for pipe %u node %u", __func__,
->  		node->pipe, node->id);
->  }
->  
-> @@ -421,7 +421,7 @@ static bool imgu_all_nodes_streaming(struct imgu_device *imgu,
->  	pipe = except->pipe;
->  	if (!test_bit(pipe, imgu->css.enabled_pipes)) {
->  		dev_warn(&imgu->pci_dev->dev,
-> -			 "pipe %d link is not ready yet", pipe);
-> +			 "pipe %ulink is not ready yet", pipe);
-Hi, Sakari,
-
-A missing space here, other looks good for me.
-Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
->  		return false;
->  	}
->  
-> @@ -465,7 +465,7 @@ static int imgu_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
->  	int r;
->  	unsigned int pipe;
->  
-> -	dev_dbg(dev, "%s node name %s pipe %d id %u", __func__,
-> +	dev_dbg(dev, "%s node name %s pipe %u id %u", __func__,
->  		node->name, node->pipe, node->id);
->  
->  	if (imgu->streaming) {
-> @@ -525,7 +525,7 @@ static void imgu_vb2_stop_streaming(struct vb2_queue *vq)
->  	WARN_ON(!node->enabled);
->  
->  	pipe = node->pipe;
-> -	dev_dbg(dev, "Try to stream off node [%d][%d]", pipe, node->id);
-> +	dev_dbg(dev, "Try to stream off node [%u][%u]", pipe, node->id);
->  	imgu_pipe = &imgu->imgu_pipe[pipe];
->  	r = v4l2_subdev_call(&imgu_pipe->imgu_sd.subdev, video, s_stream, 0);
->  	if (r)
-> @@ -659,10 +659,10 @@ static int imgu_fmt(struct imgu_device *imgu, unsigned int pipe, int node,
->  	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[pipe];
->  	struct imgu_v4l2_subdev *imgu_sd = &imgu_pipe->imgu_sd;
->  
-> -	dev_dbg(dev, "set fmt node [%u][%u](try = %d)", pipe, node, try);
-> +	dev_dbg(dev, "set fmt node [%u][%u](try = %u)", pipe, node, try);
->  
->  	for (i = 0; i < IMGU_NODE_NUM; i++)
-> -		dev_dbg(dev, "IMGU pipe %d node %d enabled = %d",
-> +		dev_dbg(dev, "IMGU pipe %u node %u enabled = %u",
->  			pipe, i, imgu_pipe->nodes[i].enabled);
->  
->  	if (imgu_pipe->nodes[IMGU_NODE_VF].enabled)
-> @@ -673,7 +673,7 @@ static int imgu_fmt(struct imgu_device *imgu, unsigned int pipe, int node,
->  	else
->  		css_pipe->pipe_id = IPU3_CSS_PIPE_ID_CAPTURE;
->  
-> -	dev_dbg(dev, "IPU3 pipe %d pipe_id = %d", pipe, css_pipe->pipe_id);
-> +	dev_dbg(dev, "IPU3 pipe %u pipe_id = %u", pipe, css_pipe->pipe_id);
->  
->  	for (i = 0; i < IPU3_CSS_QUEUES; i++) {
->  		unsigned int inode = imgu_map_node(imgu, i);
-> @@ -777,7 +777,7 @@ static int imgu_vidioc_try_fmt(struct file *file, void *fh,
->  	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
->  	int r;
->  
-> -	dev_dbg(dev, "%s [%ux%u] for node %d\n", __func__,
-> +	dev_dbg(dev, "%s [%ux%u] for node %u\n", __func__,
->  		pix_mp->width, pix_mp->height, node->id);
->  
->  	r = imgu_try_fmt(file, fh, f);
-> @@ -795,7 +795,7 @@ static int imgu_vidioc_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
->  	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
->  	int r;
->  
-> -	dev_dbg(dev, "%s [%ux%u] for node %d\n", __func__,
-> +	dev_dbg(dev, "%s [%ux%u] for node %u\n", __func__,
->  		pix_mp->width, pix_mp->height, node->id);
->  
->  	r = imgu_try_fmt(file, fh, f);
-> @@ -1018,7 +1018,7 @@ static int imgu_sd_s_ctrl(struct v4l2_ctrl *ctrl)
->  	struct imgu_device *imgu = v4l2_get_subdevdata(&imgu_sd->subdev);
->  	struct device *dev = &imgu->pci_dev->dev;
->  
-> -	dev_dbg(dev, "set val %d to ctrl 0x%8x for subdev %d",
-> +	dev_dbg(dev, "set val %d to ctrl 0x%8x for subdev %u",
->  		ctrl->val, ctrl->id, imgu_sd->pipe);
->  
->  	switch (ctrl->id) {
-> @@ -1118,7 +1118,7 @@ static int imgu_v4l2_subdev_register(struct imgu_device *imgu,
->  	imgu_sd->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE |
->  				V4L2_SUBDEV_FL_HAS_EVENTS;
->  	snprintf(imgu_sd->subdev.name, sizeof(imgu_sd->subdev.name),
-> -		 "%s %d", IMGU_NAME, pipe);
-> +		 "%s %u", IMGU_NAME, pipe);
->  	v4l2_set_subdevdata(&imgu_sd->subdev, imgu);
->  	atomic_set(&imgu_sd->running_mode, IPU3_RUNNING_MODE_VIDEO);
->  	v4l2_ctrl_handler_init(hdl, 1);
-> @@ -1236,7 +1236,7 @@ static int imgu_v4l2_node_setup(struct imgu_device *imgu, unsigned int pipe,
->  	}
->  
->  	/* Initialize vdev */
-> -	snprintf(vdev->name, sizeof(vdev->name), "%s %d %s",
-> +	snprintf(vdev->name, sizeof(vdev->name), "%s %u %s",
->  		 IMGU_NAME, pipe, node->name);
->  	vdev->release = video_device_release_empty;
->  	vdev->fops = &imgu_v4l2_fops;
-> @@ -1331,7 +1331,7 @@ static int imgu_v4l2_register_pipes(struct imgu_device *imgu)
->  		r = imgu_v4l2_subdev_register(imgu, &imgu_pipe->imgu_sd, i);
->  		if (r) {
->  			dev_err(&imgu->pci_dev->dev,
-> -				"failed to register subdev%d ret (%d)\n", i, r);
-> +				"failed to register subdev%u ret (%d)\n", i, r);
->  			goto pipes_cleanup;
->  		}
->  		r = imgu_v4l2_nodes_setup_pipe(imgu, i);
-> 
+RnJvbTogRXVnZW4gSHJpc3RldiA8ZXVnZW4uaHJpc3RldkBtaWNyb2NoaXAuY29tPg0KDQpUaGlz
+IHNlcmllcyBpbmNsdWRlcyBmZWF0dXJlIHJld29yaywgZmVhdHVyZSBhZGRpdGlvbnMgYW5kIGJ1
+ZyBmaXhlcyBmb3IgdGhlDQphdG1lbC1pc2MgZHJpdmVyLg0KSXQgYXBwbGllcyBvbmx5IG9uIHRv
+cCBvZiBteSBwcmV2aW91cyBwYXRjaHNldDoNCm1lZGlhOiBhdG1lbDogYXRtZWwtaXNjOiByZW1v
+dmVkIEFSR0IzMiBhZGRlZCBBQkdSMzIgYW5kIFhCR1IzMg0KbWVkaWE6IGF0bWVsOiBhdG1lbC1p
+c2M6IHJld29ya2VkIGRyaXZlciBhbmQgZm9ybWF0cw0KYXZhaWxhYmxlIGF0Og0KaHR0cHM6Ly9n
+aXQubGludXh0di5vcmcvaHZlcmt1aWwvbWVkaWFfdHJlZS5naXQvY29tbWl0Lz9oPWZvci12NS4y
+YiZpZD0wM2VmMWI1NmNiYTZhZDE3ZjZlYWQxM2M4NWE4MWUwZTgwZmJjOWQxDQoNCk9uZSBvcGVu
+IHF1ZXN0aW9uIGlzIHJlZ2FyZGluZyB0aGUgV0hJVEVfQkFMQU5DRSBlcnJvciByZXR1cm5zOiBp
+dCB3b3VsZCBzZWVtDQpsb2dpY2FsIHRvIHJldHVybiBFQUdBSU4gb3IgRUJVU1ksIGJ1dCB0aGlz
+IGlzIG5vdCBjb21wbGlhbnQgd2l0aA0KdjRsMi1jb21wbGlhbmNlLg0KRG9lcyBpdCBtYWtlIHNl
+bnNlIHRvIHJldHVybiBzdWNjZXNzIG9uIGV2ZXJ5IG9jY2FzaW9uPyBldmVuIGlmIHRoZQ0KRE9f
+V0hJVEVfQkFMQU5DRSBkb2VzIG5vdGhpbmc/DQpJbiB0aGlzIHNlcmllcyBJIHVzZWQgdGhlIHJl
+dHVybiBFQUdBSU4gb3IgRUJVU1kgZnJvbSB0aGUgdjRsMi1jdHJscywgYnV0IEkNCmNhbiBjaGFu
+Z2UgaWYgYWx3YXlzIHN1Y2Nlc3MgaXMgYSBiZXR0ZXIgd2F5IG9mIHJldHVybmluZyAoZXZlbiBp
+ZiBub3JtYWxseQ0KYSByZXR1cm4gdmFsdWUgc2VydmVzIHRoaXMgZXhhY3QgcHVycG9zZSAtIHJl
+dHVybiBzb21lIGNvZGUgKQ0KDQpFdWdlbiBIcmlzdGV2ICg3KToNCiAgbWVkaWE6IGF0bWVsOiBh
+dG1lbC1pc2M6IGFkZCBzYWZlIGNoZWNrcyBhbmQgZml4ZWQgd3JvbmcgSVNDIHN0YXRlIGluDQog
+ICAgZXJyb3IgY2FzZQ0KICBtZWRpYTogYXRtZWw6IGF0bWVsLWlzYzogcmV3b3JrZWQgd2hpdGUg
+YmFsYW5jZSBmZWF0dXJlDQogIG1lZGlhOiB2NGwyLWN0cmw6IGZpeCBmbGFncyBmb3IgRE9fV0hJ
+VEVfQkFMQU5DRQ0KICBtZWRpYTogYXRtZWw6IGF0bWVsLWlzYzogYWRkIHN1cHBvcnQgZm9yIERP
+X1dISVRFX0JBTEFOQ0UNCiAgbWVkaWE6IGF0bWVsOiBhdG1lbC1pc2M6IGxpbWl0IGluY29taW5n
+IHBpeGVscyBwZXIgZnJhbWUNCiAgbWVkaWE6IGF0bWVsOiBhdG1lbC1pc2M6IGZpeCBJTklUX1dP
+UksgbWlzcGxhY2VtZW50DQogIG1lZGlhOiBhdG1lbDogYXRtZWwtaXNjOiBmaXggYXNkIG1lbW9y
+eSBhbGxvY2F0aW9uDQoNCiBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy1y
+ZWdzLmggfCAgMjUgKy0NCiBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5j
+ICAgICAgfCAzNDYgKysrKysrKysrKysrKysrKysrKysrKystLS0NCiBkcml2ZXJzL21lZGlhL3Y0
+bDItY29yZS92NGwyLWN0cmxzLmMgICAgICAgICAgfCAgIDEgKw0KIDMgZmlsZXMgY2hhbmdlZCwg
+MzM2IGluc2VydGlvbnMoKyksIDM2IGRlbGV0aW9ucygtKQ0KDQotLSANCjIuNy40DQoNCg==
