@@ -2,155 +2,93 @@ Return-Path: <SRS0=ytLV=SL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61385C10F0E
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 12:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 582F0C10F0E
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 12:39:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3BD6E20833
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 12:01:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A8CB2084F
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 12:39:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PViJHg/o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726387AbfDIMBQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 08:01:16 -0400
-Received: from mga02.intel.com ([134.134.136.20]:7973 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726001AbfDIMBQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 9 Apr 2019 08:01:16 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Apr 2019 05:01:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,329,1549958400"; 
-   d="scan'208";a="132735658"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga008.jf.intel.com with ESMTP; 09 Apr 2019 05:01:14 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 5DA03208C6; Tue,  9 Apr 2019 15:01:13 +0300 (EEST)
-Date:   Tue, 9 Apr 2019 15:01:13 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Bingbu Cao <bingbu.cao@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, bingbu.cao@intel.com
-Subject: Re: [PATCH 1/1] ipu3-imgu: Use %u for formatting unsigned values
- (not %d)
-Message-ID: <20190409120112.hyc54mi6oq2g75eb@paasikivi.fi.intel.com>
-References: <20190409101810.17002-1-sakari.ailus@linux.intel.com>
- <c1660ddd-2ecb-eed1-9d95-514e30ff5465@linux.intel.com>
+        id S1726464AbfDIMi7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 08:38:59 -0400
+Received: from mail-lj1-f173.google.com ([209.85.208.173]:43755 "EHLO
+        mail-lj1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726001AbfDIMi7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 08:38:59 -0400
+Received: by mail-lj1-f173.google.com with SMTP id f18so14285498lja.10
+        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 05:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aMEFfBWwckdGay6XicwPC8o+hIt/04fBkog1xB0Gvz8=;
+        b=PViJHg/ocrAfJ4Iw5+1NKmmV4Yx4CODZw4J+gdlvFREFuQiV8OctKFrGT8gIo9UVla
+         Xml7f7/Eg9MXZnxWOYtnfWQCvbHmEexlgxsEZSm/KYpcNYHA73WX/JbAGESQZf5nnjNA
+         iQMLJ5xq6AWwPJWN5zFFdZBXEijC6u7Qn3QcaVmAcU3z1WOlhhCMp3cvuPG66CYTsgiX
+         KbKNUyxKbNogbeOlPLNf3uxxWJmQ+TYJj/1dxgal7rNsoDtqefhgVV01a1EFy9Yo5NHB
+         4bn2kRCOivbaDq0pV6HJurWmfNXNZ5ZIcMZpfBuTyO59M/RhkuMjZIJVIVXEsf4AbxJp
+         /puA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=aMEFfBWwckdGay6XicwPC8o+hIt/04fBkog1xB0Gvz8=;
+        b=X5a3jA6mdV++u3FER6XbFq0uhApLWxQRgkbDpiYqG+8Ua1C/kkkmFwgjClmy5eIdQ9
+         iydTFi+oEgsyTp+mvYu72zogBN12lCKTChMNRAN3gjbxtcG+nzhZc/t7ItgRGRIZI9G4
+         dqut0wRKkR9XpL/bwsGUG/s/md+PI5jL1uggcWG96v5MUdYi3JjQ0uuhLn/3GHu+GBv1
+         SpGH8K7egLHg4q84NvNXl6m+NmV0VdaaH4iryqPBvZqRa2aZTrHfXddhQAaujvg78Dmh
+         sLHUokfATzOxl6MJ5OGeOtlUHRUq9TtEhqHCmbeBN6KPmL1FMuvXc982Q8+ACtMCXviq
+         zG1g==
+X-Gm-Message-State: APjAAAVPp2Hr9jO1b2693vq+VvdM2dC7t01Aim4a/wTGrgT6zmZAm10z
+        Bpombf77TAlHjKHJ7zQ0E1doZTzh
+X-Google-Smtp-Source: APXvYqyHhJWhpehTqp/fOUSoL+kXcNGJkQnAqUMgzpI/jZPnJTU5FnLwSXhnQY4nAhtV54XWdkI5dg==
+X-Received: by 2002:a2e:7806:: with SMTP id t6mr19174735ljc.143.1554813536709;
+        Tue, 09 Apr 2019 05:38:56 -0700 (PDT)
+Received: from localhost.localdomain (broadband-95-84-200-6.ip.moscow.rt.ru. [95.84.200.6])
+        by smtp.gmail.com with ESMTPSA id t23sm6749976ljc.13.2019.04.09.05.38.55
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Apr 2019 05:38:55 -0700 (PDT)
+From:   =?UTF-8?q?=D0=A0=D1=83=D1=81=D0=BB=D0=B0=D0=BD=20=D0=98=D0=B6=D0=B1=D1=83=D0=BB=D0=B0=D1=82=D0=BE=D0=B2?= 
+        <lrn1986@gmail.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 0/8] [PATCH for ZBar] MinGW compatibility patches
+Date:   Tue,  9 Apr 2019 12:38:34 +0000
+Message-Id: <20190409123842.19600-1-lrn1986@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1660ddd-2ecb-eed1-9d95-514e30ff5465@linux.intel.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Bingbu,
+Here's a few patches that might be useful.
 
-On Tue, Apr 09, 2019 at 07:09:09PM +0800, Bingbu Cao wrote:
-> 
-> On 4/9/19 6:18 PM, Sakari Ailus wrote:
-> > The driver used %d for formatting unsigned values. Use %u instead.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  drivers/staging/media/ipu3/ipu3-v4l2.c | 40 +++++++++++++++++-----------------
-> >  1 file changed, 20 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> > index be818c29620f..3bb08af83dfe 100644
-> > --- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-> > +++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-> > @@ -66,7 +66,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
-> >  	struct imgu_css_pipe *css_pipe = &imgu->css.pipes[pipe];
-> >  	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[pipe];
-> >  
-> > -	dev_dbg(dev, "%s %d for pipe %d", __func__, enable, pipe);
-> > +	dev_dbg(dev, "%s %d for pipe %u", __func__, enable, pipe);
-> >  	/* grab ctrl after streamon and return after off */
-> >  	v4l2_ctrl_grab(imgu_sd->ctrl, enable);
-> >  
-> > @@ -101,7 +101,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
-> >  	else
-> >  		css_pipe->pipe_id = IPU3_CSS_PIPE_ID_CAPTURE;
-> >  
-> > -	dev_dbg(dev, "IPU3 pipe %d pipe_id %d", pipe, css_pipe->pipe_id);
-> > +	dev_dbg(dev, "IPU3 pipe %u pipe_id %u", pipe, css_pipe->pipe_id);
-> >  
-> >  	rects[IPU3_CSS_RECT_EFFECTIVE] = &imgu_sd->rect.eff;
-> >  	rects[IPU3_CSS_RECT_BDS] = &imgu_sd->rect.bds;
-> > @@ -109,7 +109,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
-> >  
-> >  	r = imgu_css_fmt_set(&imgu->css, fmts, rects, pipe);
-> >  	if (r) {
-> > -		dev_err(dev, "failed to set initial formats pipe %d with (%d)",
-> > +		dev_err(dev, "failed to set initial formats pipe %u with (%d)",
-> >  			pipe, r);
-> >  		return r;
-> >  	}
-> > @@ -157,7 +157,7 @@ static int imgu_subdev_set_fmt(struct v4l2_subdev *sd,
-> >  	u32 pad = fmt->pad;
-> >  	unsigned int pipe = imgu_sd->pipe;
-> >  
-> > -	dev_dbg(&imgu->pci_dev->dev, "set subdev %d pad %d fmt to [%dx%d]",
-> > +	dev_dbg(&imgu->pci_dev->dev, "set subdev %u pad %u fmt to [%ux%u]",
-> >  		pipe, pad, fmt->format.width, fmt->format.height);
-> >  
-> >  	imgu_pipe = &imgu->imgu_pipe[pipe];
-> > @@ -233,7 +233,7 @@ static int imgu_subdev_set_selection(struct v4l2_subdev *sd,
-> >  	struct v4l2_rect *rect, *try_sel;
-> >  
-> >  	dev_dbg(&imgu->pci_dev->dev,
-> > -		 "set subdev %d sel which %d target 0x%4x rect [%dx%d]",
-> > +		 "set subdev %u sel which %u target 0x%4x rect [%ux%u]",
-> >  		 imgu_sd->pipe, sel->which, sel->target,
-> >  		 sel->r.width, sel->r.height);
-> >  
-> > @@ -279,7 +279,7 @@ static int imgu_link_setup(struct media_entity *entity,
-> >  
-> >  	WARN_ON(pad >= IMGU_NODE_NUM);
-> >  
-> > -	dev_dbg(&imgu->pci_dev->dev, "pipe %d pad %d is %s", pipe, pad,
-> > +	dev_dbg(&imgu->pci_dev->dev, "pipe %u pad %u is %s", pipe, pad,
-> >  		 flags & MEDIA_LNK_FL_ENABLED ? "enabled" : "disabled");
-> >  
-> >  	imgu_pipe = &imgu->imgu_pipe[pipe];
-> > @@ -294,7 +294,7 @@ static int imgu_link_setup(struct media_entity *entity,
-> >  	else
-> >  		__clear_bit(pipe, imgu->css.enabled_pipes);
-> >  
-> > -	dev_dbg(&imgu->pci_dev->dev, "pipe %d is %s", pipe,
-> > +	dev_dbg(&imgu->pci_dev->dev, "pipe %u is %s", pipe,
-> >  		 flags & MEDIA_LNK_FL_ENABLED ? "enabled" : "disabled");
-> >  
-> >  	return 0;
-> > @@ -370,7 +370,7 @@ static void imgu_vb2_buf_queue(struct vb2_buffer *vb)
-> >  	if (imgu->streaming)
-> >  		imgu_queue_buffers(imgu, false, node->pipe);
-> >  
-> > -	dev_dbg(&imgu->pci_dev->dev, "%s for pipe %d node %d", __func__,
-> > +	dev_dbg(&imgu->pci_dev->dev, "%s for pipe %u node %u", __func__,
-> >  		node->pipe, node->id);
-> >  }
-> >  
-> > @@ -421,7 +421,7 @@ static bool imgu_all_nodes_streaming(struct imgu_device *imgu,
-> >  	pipe = except->pipe;
-> >  	if (!test_bit(pipe, imgu->css.enabled_pipes)) {
-> >  		dev_warn(&imgu->pci_dev->dev,
-> > -			 "pipe %d link is not ready yet", pipe);
-> > +			 "pipe %ulink is not ready yet", pipe);
-> Hi, Sakari,
-> 
-> A missing space here, other looks good for me.
-> Reviewed-by: Bingbu Cao <bingbu.cao@intel.com>
+Руслан Ижбулатов (8):
+  Include windows.h for vfw
+  Specify correct path to barcode.png
+  Check for clock_gettime on pthread library as well
+  Disable zbarcam-gtk on Windows
+  Use -no-undefined for libzbargtk
+  Make zbargtk build on Windows
+  Make use of glib thread names
+  Correctly generate version.xml and reldate.xml
 
-I added the space when applying the patch. Thanks for the review!
+ Makefile.am             |  2 +-
+ configure.ac            |  8 ++++----
+ gtk/Makefile.am.inc     |  2 +-
+ gtk/zbargtk.c           | 12 +++++++++++-
+ zbarcam/Makefile.am.inc |  2 ++
+ 5 files changed, 19 insertions(+), 7 deletions(-)
 
 -- 
-Regards,
+2.4.0
 
-Sakari Ailus
-sakari.ailus@linux.intel.com
