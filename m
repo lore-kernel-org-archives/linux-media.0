@@ -4,95 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2A0C282CE
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 09:47:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCFB0C282CE
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 10:00:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AC19121473
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 09:47:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 974E820883
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 10:00:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TbobGleR"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Z01F5ih9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726856AbfDIJrr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 05:47:47 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:32807 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726001AbfDIJrq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 05:47:46 -0400
-Received: by mail-ot1-f66.google.com with SMTP id j10so14995594otq.0
-        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 02:47:45 -0700 (PDT)
+        id S1726772AbfDIKAD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 06:00:03 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:38527 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726035AbfDIKAC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 06:00:02 -0400
+Received: by mail-oi1-f194.google.com with SMTP id a6so13036072oie.5
+        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 03:00:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=ONojt7DSJuXLOIn+w7xwUHVbI9Qr9/WFumFlFOuNW+A=;
-        b=TbobGleRXLfIriPfQ79rXtq4pabgN2t01OdGZBWutzdoIuq7XEsf0LS2ctUKtey730
-         h/Z2CBH/6K/9bDtmkgqMHrCH3djuPVD7uLgl3jwxczZfjrYTkueGDxpqJ4xu/V6L1gDi
-         TqKEUw5Oa7L8Izof6YXTW+pQHJ9d3wZdm/E0g=
+        bh=Cme9y15RBVs+D6PIJELCcpr6/0n0fysoUeBaEk7YhAo=;
+        b=Z01F5ih9F3zCQqah06ebIyJYLJroGIVizBsB8YdOw8FPgiIDCRqV/jE5q0uak0Ibe/
+         77i375Z+SHnQ99fZ3XRPvYiemWXOc2MtqCIkRWXmzMvYXt5laPlpoLnAWaiM1agQhHOC
+         ABRXScu5TTjDJo/tDf7I0VKCNVyTjTfLQ3BCA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ONojt7DSJuXLOIn+w7xwUHVbI9Qr9/WFumFlFOuNW+A=;
-        b=leSxHE4/eH1eYfqFW0YOA0qZKZkz5tjm/bYxQ/hoL9Yyts1LG1XqN4hNuRtzkHW+4U
-         /erEPwYF5E+5CO5nnObU86KMaO8dvS1o/lpId9jf4CuzWQDlen5e7T84AOFauUJ6kFw1
-         F+vxsxQiFjp2FMnDNVh5PzVsP4aDucC3sRqQOLXe9xF0zG4zSHoBCz20qen6DHWA8In5
-         4/CWvqgnlU2tLlIBHHsLfDMvbWtckn5zxJf96gcLs+MbLeAb9N9260b2rdfD7HYy3LFp
-         M5GOnL/4SyUpGQ0yx6bLSZk79PR6H5sQC0ABlYMUqH3+PZmdOtt22jN8myL8MtFzvaGQ
-         dF4g==
-X-Gm-Message-State: APjAAAViVAYv2+eqExU9JBr8BoF4GGDfk7wr01jv25mmKRlg/KNPYL30
-        Rk61zLGDgvotC6d/8lbE22V7m6rLErA=
-X-Google-Smtp-Source: APXvYqynKBuJDsTn+YxM5Bjis66o4cz/OetsOeok9aJyiQRA3s4g7OU6+O3x3RYDIXqc9tBuQrj8Jg==
-X-Received: by 2002:a9d:6303:: with SMTP id q3mr22717522otk.143.1554803263932;
-        Tue, 09 Apr 2019 02:47:43 -0700 (PDT)
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com. [209.85.167.181])
-        by smtp.gmail.com with ESMTPSA id v123sm12977130oie.25.2019.04.09.02.47.41
+        bh=Cme9y15RBVs+D6PIJELCcpr6/0n0fysoUeBaEk7YhAo=;
+        b=luJvYgBeHSg9DhwKqn4ll7y3f2ukOUBRMJiT7mxQSKNsOlgD96TIQg16f1nvL/dUwd
+         PzeJsq97XAoi0Dheo3Gb9+0GvFoa9juWd7maweDZZFBBPMNZgvzTTONIeIGXIUviCSU8
+         BrfEA7d1mlAIwY5CZz5timvu5DzmZXaTFjFlLXhk2NHjx/l1wbQLb++gjhCX2aSBa6yr
+         tX+dTkA6aLqIZ2jnNlIr4SsA5AjZG1SdzwmR2oio7HyYre4yGkemNrqFdWvHGTM0w53s
+         aUgC8TQhoHPOT2CJpXZejBhavFoLKeRibX3lp/LrRIICEeX80e50PCx+2Xw2CUPNq0pj
+         nNBA==
+X-Gm-Message-State: APjAAAXh93oTof6jIFRKDz+I0W+SP2x4rHw2hhB+a0y+cv3i13ey5Akm
+        MXQQnaHYNVMDEuU930x160LLm/utsjc=
+X-Google-Smtp-Source: APXvYqxjg4LzxJJ8O+8FF6rA8l75+hvCDH5upJsmS/fEcISridIrP4r/uSRyAU1UzIlyZ1+kc1t2EA==
+X-Received: by 2002:aca:da07:: with SMTP id r7mr20297348oig.5.1554804001387;
+        Tue, 09 Apr 2019 03:00:01 -0700 (PDT)
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com. [209.85.210.48])
+        by smtp.gmail.com with ESMTPSA id a16sm12439819otl.4.2019.04.09.03.00.00
         for <linux-media@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Apr 2019 02:47:42 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id l203so13011958oia.3
-        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 02:47:41 -0700 (PDT)
-X-Received: by 2002:aca:4b03:: with SMTP id y3mr18864793oia.21.1554803261513;
- Tue, 09 Apr 2019 02:47:41 -0700 (PDT)
+        Tue, 09 Apr 2019 03:00:00 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id j10so15021382otq.0
+        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 03:00:00 -0700 (PDT)
+X-Received: by 2002:a9d:6206:: with SMTP id g6mr22995965otj.7.1554803999930;
+ Tue, 09 Apr 2019 02:59:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20181022144901.113852-1-tfiga@chromium.org> <20181022144901.113852-2-tfiga@chromium.org>
- <cf0fc2fc-72c6-dbca-68f7-a349879a3a14@xs4all.nl> <CAAFQd5AORjMjHdavdr3zM13BnyFnKnEb-0aKNjvwbB_xJEnxgQ@mail.gmail.com>
- <9b7c1385-d482-6e92-2222-2daa835dbc91@xs4all.nl> <CAAFQd5DwjLt8UeDohzrMausaLGnOStvrmp5p7frYbG1hbGjx3Q@mail.gmail.com>
- <CAAFQd5BPJv3cbJOWrziEjz_yE32DhfZv9vb-pG1Ltx-KS2=PQg@mail.gmail.com>
- <3ea3bf5bf9904ce877142c41f595207752172d27.camel@ndufresne.ca>
- <CAAFQd5C_OD=bvAxG0B_G+T6bnWddPHuiVZApj_8_+4xpMjH9+g@mail.gmail.com>
- <c145fbf21301d03bdfdd8bf6613f0f68576e66be.camel@ndufresne.ca> <CAAFQd5D4AP+xj_EkcsB84UqxCLBBEGComqGaMCm2zHSMnpqOKw@mail.gmail.com>
-In-Reply-To: <CAAFQd5D4AP+xj_EkcsB84UqxCLBBEGComqGaMCm2zHSMnpqOKw@mail.gmail.com>
+References: <20190117162008.25217-1-stanimir.varbanov@linaro.org>
+ <20190117162008.25217-11-stanimir.varbanov@linaro.org> <CAAFQd5Cm1zyPzJnixwNmWzxn2zh=63YrA+ZzH-arW-VZ_x-Awg@mail.gmail.com>
+ <28069a44-b188-6b89-2687-542fa762c00e@linaro.org> <CAAFQd5BevOV2r1tqmGPnVtdwirGMWU=ZJU85HjfnH-qMyQiyEg@mail.gmail.com>
+ <affce842d4f015e13912b2c3941c9bf02e84d194.camel@ndufresne.ca>
+ <CAAFQd5Ahg4Di+SBd+-kKo4PLVyvqLwcuG6MphU5Rz1PFXVuamQ@mail.gmail.com>
+ <e8a90694c306fde24928a569b7bcb231b86ec73b.camel@ndufresne.ca>
+ <CAAFQd5DFfQRd1VoN7itVXnWGKW_WBKU-sm6vo5CdgjkzjEEkFg@mail.gmail.com>
+ <57419418d377f32d0e6978f4e4171c0da7357cbb.camel@ndufresne.ca>
+ <1548938556.4585.1.camel@pengutronix.de> <CAAFQd5Aih7cWu-cfwBvNdwhHHYEaMF0SFebrYfdNXD9qKu8fxw@mail.gmail.com>
+ <1f8485785a21c0b0e071a3a766ed2cbc727e47f6.camel@ndufresne.ca>
+ <CAAFQd5CPKm1ES8c9Lab63Lr8ZfWRckHmJ99SVRYi6Hpe7hzy+g@mail.gmail.com>
+ <f1e9dc99-4fcb-dee1-4279-ac0cf1d1fd6e@xs4all.nl> <CAAFQd5B+bt3SV_WRw1=2agZk=Q+Enbkv=nXCrbXX=+MNpeSpCg@mail.gmail.com>
+ <cb8cda5d-e714-6019-4a76-3853ea49c4a6@xs4all.nl> <CAAFQd5BZhhX6Cjj7GhbaY_G7ERksyKne6hxKFCuTJoOnamoQ=A@mail.gmail.com>
+In-Reply-To: <CAAFQd5BZhhX6Cjj7GhbaY_G7ERksyKne6hxKFCuTJoOnamoQ=A@mail.gmail.com>
 From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 9 Apr 2019 18:47:30 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5AfmoUNbd5qwNmj+X80T-B49M-kUCLzGSOirg3o5WPPzA@mail.gmail.com>
-Message-ID: <CAAFQd5AfmoUNbd5qwNmj+X80T-B49M-kUCLzGSOirg3o5WPPzA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] media: docs-rst: Document memory-to-memory video
- decoder interface
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jeongtae Park <jtp.park@samsung.com>,
+Date:   Tue, 9 Apr 2019 18:59:47 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Ar9c91G66oFMYGj59n+_NScB_QyZB2yF_y+=Y_64pWqA@mail.gmail.com>
+Message-ID: <CAAFQd5Ar9c91G66oFMYGj59n+_NScB_QyZB2yF_y+=Y_64pWqA@mail.gmail.com>
+Subject: Re: [PATCH 10/10] venus: dec: make decoder compliant with stateful
+ codec API
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        =?UTF-8?B?VGlmZmFueSBMaW4gKOael+aFp+ePiik=?= 
-        <tiffany.lin@mediatek.com>,
-        =?UTF-8?B?QW5kcmV3LUNUIENoZW4gKOmZs+aZuui/qik=?= 
-        <andrew-ct.chen@mediatek.com>,
         Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dave.stevenson@raspberrypi.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Vikash Garodia <vgarodia@codeaurora.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Malathi Gottam <mgottam@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
@@ -100,137 +94,204 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Feb 6, 2019 at 2:35 PM Tomasz Figa <tfiga@chromium.org> wrote:
+On Thu, Feb 7, 2019 at 4:33 PM Tomasz Figa <tfiga@chromium.org> wrote:
 >
-> On Wed, Jan 30, 2019 at 1:02 PM Nicolas Dufresne <nicolas@ndufresne.ca> w=
-rote:
+> On Tue, Feb 5, 2019 at 7:35 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
 > >
-> > Le vendredi 25 janvier 2019 =C3=A0 12:27 +0900, Tomasz Figa a =C3=A9cri=
-t :
-> > > On Fri, Jan 25, 2019 at 4:55 AM Nicolas Dufresne <nicolas@ndufresne.c=
-a> wrote:
-> > > > Le jeudi 24 janvier 2019 =C3=A0 18:06 +0900, Tomasz Figa a =C3=A9cr=
-it :
-> > > > > > Actually I just realized the last point might not even be achie=
-vable
-> > > > > > for some of the decoders (s5p-mfc, mtk-vcodec), as they don't r=
-eport
-> > > > > > which frame originates from which bitstream buffer and the driv=
-er just
-> > > > > > picks the most recently consumed OUTPUT buffer to copy the time=
-stamp
-> > > > > > from. (s5p-mfc actually "forgets" to set the timestamp in some =
-cases
-> > > > > > too...)
-> > > > > >
-> > > > > > I need to think a bit more about this.
-> > > > >
-> > > > > Actually I misread the code. Both s5p-mfc and mtk-vcodec seem to
-> > > > > correctly match the buffers.
-> > > >
-> > > > Ok good, since otherwise it would have been a regression in MFC dri=
-ver.
-> > > > This timestamp passing thing could in theory be made optional thoug=
-h,
-> > > > it lives under some COPY_TIMESTAMP kind of flag. What that means th=
-ough
-> > > > is that a driver without such a capability would need to signal dro=
-pped
-> > > > frames using some other mean.
-> > > >
-> > > > In userspace, the main use is to match the produced frame against a
-> > > > userspace specific list of frames. At least this seems to be the ca=
-se
-> > > > in Gst and Chromium, since the userspace list contains a superset o=
-f
-> > > > the metadata found in the v4l2_buffer.
-> > > >
-> > > > Now, using the produced timestamp, userspace can deduce frame that =
+> > On 2/5/19 10:31 AM, Tomasz Figa wrote:
+> > > On Tue, Feb 5, 2019 at 6:00 PM Hans Verkuil <hverkuil@xs4all.nl> wrot=
+e:
+> > >>
+> > >> On 2/5/19 7:26 AM, Tomasz Figa wrote:
+> > >>> On Fri, Feb 1, 2019 at 12:18 AM Nicolas Dufresne <nicolas@ndufresne=
+.ca> wrote:
+> > >>>>
+> > >>>> Le jeudi 31 janvier 2019 =C3=A0 22:34 +0900, Tomasz Figa a =C3=A9c=
+rit :
+> > >>>>> On Thu, Jan 31, 2019 at 9:42 PM Philipp Zabel <p.zabel@pengutroni=
+x.de> wrote:
+> > >>>>>> Hi Nicolas,
+> > >>>>>>
+> > >>>>>> On Wed, 2019-01-30 at 10:32 -0500, Nicolas Dufresne wrote:
+> > >>>>>>> Le mercredi 30 janvier 2019 =C3=A0 15:17 +0900, Tomasz Figa a =
+=C3=A9crit :
+> > >>>>>>>>> I don't remember saying that, maybe I meant to say there migh=
+t be a
+> > >>>>>>>>> workaround ?
+> > >>>>>>>>>
+> > >>>>>>>>> For the fact, here we queue the headers (or first frame):
+> > >>>>>>>>>
+> > >>>>>>>>> https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blo=
+b/master/sys/v4l2/gstv4l2videodec.c#L624
+> > >>>>>>>>>
+> > >>>>>>>>> Then few line below this helper does G_FMT internally:
+> > >>>>>>>>>
+> > >>>>>>>>> https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blo=
+b/master/sys/v4l2/gstv4l2videodec.c#L634
+> > >>>>>>>>> https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blo=
+b/master/sys/v4l2/gstv4l2object.c#L3907
+> > >>>>>>>>>
+> > >>>>>>>>> And just plainly fails if G_FMT returns an error of any type.=
+ This was
+> > >>>>>>>>> how Kamil designed it initially for MFC driver. There was no =
+other
+> > >>>>>>>>> alternative back then (no EAGAIN yet either).
+> > >>>>>>>>
+> > >>>>>>>> Hmm, was that ffmpeg then?
+> > >>>>>>>>
+> > >>>>>>>> So would it just set the OUTPUT width and height to 0? Does it=
+ mean
+> > >>>>>>>> that gstreamer doesn't work with coda and mtk-vcodec, which do=
+n't have
+> > >>>>>>>> such wait in their g_fmt implementations?
+> > >>>>>>>
+> > >>>>>>> I don't know for MTK, I don't have the hardware and didn't inte=
+grate
+> > >>>>>>> their vendor pixel format. For the CODA, I know it works, if th=
+ere is
+> > >>>>>>> no wait in the G_FMT, then I suppose we are being really lucky =
+with the
+> > >>>>>>> timing (it would be that the drivers process the SPS/PPS synchr=
+onously,
+> > >>>>>>> and a simple lock in the G_FMT call is enough to wait). Adding =
+Philipp
+> > >>>>>>> in CC, he could explain how this works, I know they use GStream=
+er in
+> > >>>>>>> production, and he would have fixed GStreamer already if that w=
+as
+> > >>>>>>> causing important issue.
+> > >>>>>>
+> > >>>>>> CODA predates the width/height=3D0 rule on the coded/OUTPUT queu=
+e.
+> > >>>>>> It currently behaves more like a traditional mem2mem device.
+> > >>>>>
+> > >>>>> The rule in the latest spec is that if width/height is 0 then CAP=
+TURE
+> > >>>>> format is determined only after the stream is parsed. Otherwise i=
+t's
+> > >>>>> instantly deduced from the OUTPUT resolution.
+> > >>>>>
+> > >>>>>> When width/height is set via S_FMT(OUT) or output crop selection=
+, the
+> > >>>>>> driver will believe it and set the same (rounded up to macrobloc=
+k
+> > >>>>>> alignment) on the capture queue without ever having seen the SPS=
+.
+> > >>>>>
+> > >>>>> That's why I asked whether gstreamer sets width and height of OUT=
+PUT
+> > >>>>> to non-zero values. If so, there is no regression, as the specs m=
+imic
+> > >>>>> the coda behavior.
+> > >>>>
+> > >>>> I see, with Philipp's answer it explains why it works. Note that
+> > >>>> GStreamer sets the display size on the OUTPUT format (in fact we p=
+ass
+> > >>>> as much information as we have, because a) it's generic code and b=
+) it
+> > >>>> will be needed someday when we enable pre-allocation (REQBUFS befo=
+re
+> > >>>> SPS/PPS is passed, to avoid the setup delay introduce by allocatio=
+n,
+> > >>>> mostly seen with CMA base decoder). In any case, the driver report=
+ed
+> > >>>> display size should always be ignored in GStreamer, the only
+> > >>>> information we look at is the G_SELECTION for the case the x/y or =
 the
-> > > > driver should have produced but didn't (could be a deadline case co=
-dec,
-> > > > or simply the frames where corrupted). It's quite normal for a code=
-c to
-> > > > just keep parsing until it finally find something it can decode.
-> > > >
-> > > > That's at least one way to do it, but there is other possible
-> > > > mechanism. The sequence number could be used, or even producing buf=
-fers
-> > > > with the ERROR flag set. What matters is just to give userspace a w=
-ay
-> > > > to clear these frames, which would simply grow userspace memory usa=
-ge
-> > > > over time.
+> > >>>> cropping rectangle is non-zero.
+> > >>>>
+> > >>>> Note this can only work if the capture queue is not affected by th=
+e
+> > >>>> coded size, or if the round-up made by the driver is bigger or equ=
+al to
+> > >>>> that coded size. I believe CODA falls into the first category, sin=
+ce
+> > >>>> the decoding happens in a separate set of buffers and are then de-=
+tiled
+> > >>>> into the capture buffers (if understood correctly).
+> > >>>
+> > >>> Sounds like it would work only if coded size is equal to the visibl=
+e
+> > >>> size (that GStreamer sets) rounded up to full macroblocks. Non-zero=
+ x
+> > >>> or y in the crop could be problematic too.
+> > >>>
+> > >>> Hans, what's your view on this? Should we require G_FMT(CAPTURE) to
+> > >>> wait until a format becomes available or the OUTPUT queue runs out =
+of
+> > >>
+> > >> You mean CAPTURE queue? If not, then I don't understand that part.
 > > >
-> > > Is it just me or we were missing some consistent error handling then?
+> > > No, I exactly meant the OUTPUT queue. The behavior of s5p-mfc in case
+> > > of the format not being detected yet is to waits for any pending
+> > > bitstream buffers to be processed by the decoder before returning an
+> > > error.
 > > >
-> > > I feel like the drivers should definitely return the bitstream buffer=
-s
-> > > with the ERROR flag, if there is a decode failure of data in the
-> > > buffer. Still, that could become more complicated if there is more
-> > > than 1 frame in that piece of bitstream, but only 1 frame is corrupte=
-d
-> > > (or whatever).
+> > > See https://elixir.bootlin.com/linux/v5.0-rc5/source/drivers/media/pl=
+atform/s5p-mfc/s5p_mfc_dec.c#L329
 > >
-> > I agree, but it might be more difficult then it looks (even FFMPEG does
-> > not do that). I believe the code that is processing the bitstream in
-> > stateful codecs is mostly unrelated from the code actually doing the
-> > decoding. So what might happen is that the decoding part will never
-> > actually allocate a buffer for the skipped / corrupted part of the
-> > bitstream. Also, the notion of a skipped frame is not always evident in
-> > when parsing H264 or HEVC NALs. There is still a full page of text just
-> > to explain how to detect that start of a new frame.
->
-> Right. I don't think we can guarantee that we can always correlate the
-> errors with exact buffers and so I phrased the paragraph about errors
-> in v3 in a bit more conservative way:
->
-> See the snapshot hosted by Hans (thanks!):
-> https://hverkuil.home.xs4all.nl/codec-api/uapi/v4l/dev-decoder.html#decod=
-ing
->
-> >
-> > Yet, it would be interesting to study the firmwares we have and see
-> > what they provide that would help making decode errors more explicit.
+> > It blocks?! That shouldn't happen. Totally against the spec.
 > >
 >
-> Agreed.
+> Yeah and that's what this patch tries to implement in venus as well
+> and is seemingly required for compatibility with gstreamer...
 >
+> > > .
 > > >
-> > > Another case is when the bitstream, even if corrupted, is still enoug=
-h
-> > > to produce some output. My intuition tells me that such CAPTURE buffe=
-r
-> > > should be then returned with the ERROR flag. That wouldn't still be
-> > > enough for any more sophisticated userspace error concealment, but
-> > > could still let the userspace know to perhaps drop the frame.
+> > >>
+> > >>> buffers?
+> > >>
+> > >> First see my comment here regarding G_FMT returning an error:
+> > >>
+> > >> https://www.spinics.net/lists/linux-media/msg146505.html
+> > >>
+> > >> In my view that is a bad idea.
+> > >
+> > > I don't like it either, but it seemed to be the most consistent and
+> > > compatible behavior, but I'm not sure anymore.
+> > >
+> > >>
+> > >> What G_FMT should return between the time a resolution change was
+> > >> detected and the CAPTURE queue being drained (i.e. the old or the ne=
+w
+> > >> resolution?) is something I am not sure about.
+> > >
+> > > Note that we're talking here about the initial stream information
+> > > detection, when the driver doesn't have any information needed to
+> > > determine the CAPTURE format yet.
 > >
-> > You mean if a frame was concealed (typically the frame was decoded from
-> > a closed by reference instead of the expected reference). That is
-> > something signalled by FFPEG. We should document this possibility. I
-> > actually have something implemented in GStreamer. Basically if we have
-> > the ERROR flag with a payload size smaller then expected, I drop the
-> > frame and produce a drop event message, while if I have a frame with
-> > ERROR flag but of the right payload size, I assume it is corrupted, and
-> > simply flag it as corrupted, leaving to the application the decision to
-> > display it or not. This is a case that used to happen with some UVC
-> > cameras (though some have been fixed, and the UVC camera should drop
-> > smaller payload size buffers now).
+> > IMHO the driver should just start off with some default format, it
+> > really doesn't matter what that is.
+> >
 >
-> I think it's a behavior that makes the most sense indeed.
+> I guess that's fine indeed.
 >
-> Technically one could also consider the case of 0 < bytesused <
-> sizeimage, which could mean that only a part of the frame is in the
-> buffer. An application could try to blend it with previous frame using
-> some concealing algorithms. I haven't seen an app that could do such
-> thing, though.
+> > This initial situation is really just a Seek operation: you have a form=
+at,
+> > you seek to a new position and when you find the resolution of the
+> > first frame in the bitstream it triggers a SOURCE_CHANGE event. Actuall=
+y,
+> > to be really consistent with the Seek: you only need to trigger this ev=
+ent
+> > if 1) the new resolution is different from the current format, or 2) th=
+e
+> > capture queue is empty. 2) will never happen during a normal Seek, so
+> > that's a little bit special to this initial situation.
+>
+> Having the error returned allowed the applications to handle the
+> initial parsing without the event, though. It could have waited for
+> all the OUTPUT buffers to be dequeued and then call G_FMT to check if
+> that was enough data to obtain the format.
+>
 
-Actually some interesting thought on this. I don't think the existing
-drivers would return any CAPTURE buffers on errors right now, but just
-return the OUTPUT buffer that failed to be decoded. Should we change
-this so that always one CAPTURE buffer with the ERROR flag is
-returned, to signal the application that a frame was potentially
-dropped?
+Actually, I'm not sure whether triggering the event only if the
+resolution changed is a good idea. It makes the application have no
+idea when it can actually start preparing the CAPTURE queue. Any
+thoughts?
+
+Should it just try to allocate instantly and then reallocate? That
+would be a waste of time, though, especially since allocations are not
+cheap.
 
 Best regards,
 Tomasz
