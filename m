@@ -2,296 +2,224 @@ Return-Path: <SRS0=ytLV=SL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCFB0C282CE
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 10:00:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE0DFC10F0E
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 10:18:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 974E820883
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 10:00:03 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Z01F5ih9"
+	by mail.kernel.org (Postfix) with ESMTP id 7EFBE2084F
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 10:18:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726772AbfDIKAD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 06:00:03 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:38527 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726035AbfDIKAC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 06:00:02 -0400
-Received: by mail-oi1-f194.google.com with SMTP id a6so13036072oie.5
-        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 03:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Cme9y15RBVs+D6PIJELCcpr6/0n0fysoUeBaEk7YhAo=;
-        b=Z01F5ih9F3zCQqah06ebIyJYLJroGIVizBsB8YdOw8FPgiIDCRqV/jE5q0uak0Ibe/
-         77i375Z+SHnQ99fZ3XRPvYiemWXOc2MtqCIkRWXmzMvYXt5laPlpoLnAWaiM1agQhHOC
-         ABRXScu5TTjDJo/tDf7I0VKCNVyTjTfLQ3BCA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Cme9y15RBVs+D6PIJELCcpr6/0n0fysoUeBaEk7YhAo=;
-        b=luJvYgBeHSg9DhwKqn4ll7y3f2ukOUBRMJiT7mxQSKNsOlgD96TIQg16f1nvL/dUwd
-         PzeJsq97XAoi0Dheo3Gb9+0GvFoa9juWd7maweDZZFBBPMNZgvzTTONIeIGXIUviCSU8
-         BrfEA7d1mlAIwY5CZz5timvu5DzmZXaTFjFlLXhk2NHjx/l1wbQLb++gjhCX2aSBa6yr
-         tX+dTkA6aLqIZ2jnNlIr4SsA5AjZG1SdzwmR2oio7HyYre4yGkemNrqFdWvHGTM0w53s
-         aUgC8TQhoHPOT2CJpXZejBhavFoLKeRibX3lp/LrRIICEeX80e50PCx+2Xw2CUPNq0pj
-         nNBA==
-X-Gm-Message-State: APjAAAXh93oTof6jIFRKDz+I0W+SP2x4rHw2hhB+a0y+cv3i13ey5Akm
-        MXQQnaHYNVMDEuU930x160LLm/utsjc=
-X-Google-Smtp-Source: APXvYqxjg4LzxJJ8O+8FF6rA8l75+hvCDH5upJsmS/fEcISridIrP4r/uSRyAU1UzIlyZ1+kc1t2EA==
-X-Received: by 2002:aca:da07:: with SMTP id r7mr20297348oig.5.1554804001387;
-        Tue, 09 Apr 2019 03:00:01 -0700 (PDT)
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com. [209.85.210.48])
-        by smtp.gmail.com with ESMTPSA id a16sm12439819otl.4.2019.04.09.03.00.00
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Apr 2019 03:00:00 -0700 (PDT)
-Received: by mail-ot1-f48.google.com with SMTP id j10so15021382otq.0
-        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 03:00:00 -0700 (PDT)
-X-Received: by 2002:a9d:6206:: with SMTP id g6mr22995965otj.7.1554803999930;
- Tue, 09 Apr 2019 02:59:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190117162008.25217-1-stanimir.varbanov@linaro.org>
- <20190117162008.25217-11-stanimir.varbanov@linaro.org> <CAAFQd5Cm1zyPzJnixwNmWzxn2zh=63YrA+ZzH-arW-VZ_x-Awg@mail.gmail.com>
- <28069a44-b188-6b89-2687-542fa762c00e@linaro.org> <CAAFQd5BevOV2r1tqmGPnVtdwirGMWU=ZJU85HjfnH-qMyQiyEg@mail.gmail.com>
- <affce842d4f015e13912b2c3941c9bf02e84d194.camel@ndufresne.ca>
- <CAAFQd5Ahg4Di+SBd+-kKo4PLVyvqLwcuG6MphU5Rz1PFXVuamQ@mail.gmail.com>
- <e8a90694c306fde24928a569b7bcb231b86ec73b.camel@ndufresne.ca>
- <CAAFQd5DFfQRd1VoN7itVXnWGKW_WBKU-sm6vo5CdgjkzjEEkFg@mail.gmail.com>
- <57419418d377f32d0e6978f4e4171c0da7357cbb.camel@ndufresne.ca>
- <1548938556.4585.1.camel@pengutronix.de> <CAAFQd5Aih7cWu-cfwBvNdwhHHYEaMF0SFebrYfdNXD9qKu8fxw@mail.gmail.com>
- <1f8485785a21c0b0e071a3a766ed2cbc727e47f6.camel@ndufresne.ca>
- <CAAFQd5CPKm1ES8c9Lab63Lr8ZfWRckHmJ99SVRYi6Hpe7hzy+g@mail.gmail.com>
- <f1e9dc99-4fcb-dee1-4279-ac0cf1d1fd6e@xs4all.nl> <CAAFQd5B+bt3SV_WRw1=2agZk=Q+Enbkv=nXCrbXX=+MNpeSpCg@mail.gmail.com>
- <cb8cda5d-e714-6019-4a76-3853ea49c4a6@xs4all.nl> <CAAFQd5BZhhX6Cjj7GhbaY_G7ERksyKne6hxKFCuTJoOnamoQ=A@mail.gmail.com>
-In-Reply-To: <CAAFQd5BZhhX6Cjj7GhbaY_G7ERksyKne6hxKFCuTJoOnamoQ=A@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 9 Apr 2019 18:59:47 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5Ar9c91G66oFMYGj59n+_NScB_QyZB2yF_y+=Y_64pWqA@mail.gmail.com>
-Message-ID: <CAAFQd5Ar9c91G66oFMYGj59n+_NScB_QyZB2yF_y+=Y_64pWqA@mail.gmail.com>
-Subject: Re: [PATCH 10/10] venus: dec: make decoder compliant with stateful
- codec API
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Vikash Garodia <vgarodia@codeaurora.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Malathi Gottam <mgottam@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726464AbfDIKSO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 06:18:14 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:37234 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726001AbfDIKSO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 9 Apr 2019 06:18:14 -0400
+Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1001])
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id DB5C6634C7B;
+        Tue,  9 Apr 2019 13:17:11 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     bingbu.cao@intel.com
+Subject: [PATCH 1/1] ipu3-imgu: Use %u for formatting unsigned values (not %d)
+Date:   Tue,  9 Apr 2019 13:18:10 +0300
+Message-Id: <20190409101810.17002-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Feb 7, 2019 at 4:33 PM Tomasz Figa <tfiga@chromium.org> wrote:
->
-> On Tue, Feb 5, 2019 at 7:35 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> >
-> > On 2/5/19 10:31 AM, Tomasz Figa wrote:
-> > > On Tue, Feb 5, 2019 at 6:00 PM Hans Verkuil <hverkuil@xs4all.nl> wrot=
-e:
-> > >>
-> > >> On 2/5/19 7:26 AM, Tomasz Figa wrote:
-> > >>> On Fri, Feb 1, 2019 at 12:18 AM Nicolas Dufresne <nicolas@ndufresne=
-.ca> wrote:
-> > >>>>
-> > >>>> Le jeudi 31 janvier 2019 =C3=A0 22:34 +0900, Tomasz Figa a =C3=A9c=
-rit :
-> > >>>>> On Thu, Jan 31, 2019 at 9:42 PM Philipp Zabel <p.zabel@pengutroni=
-x.de> wrote:
-> > >>>>>> Hi Nicolas,
-> > >>>>>>
-> > >>>>>> On Wed, 2019-01-30 at 10:32 -0500, Nicolas Dufresne wrote:
-> > >>>>>>> Le mercredi 30 janvier 2019 =C3=A0 15:17 +0900, Tomasz Figa a =
-=C3=A9crit :
-> > >>>>>>>>> I don't remember saying that, maybe I meant to say there migh=
-t be a
-> > >>>>>>>>> workaround ?
-> > >>>>>>>>>
-> > >>>>>>>>> For the fact, here we queue the headers (or first frame):
-> > >>>>>>>>>
-> > >>>>>>>>> https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blo=
-b/master/sys/v4l2/gstv4l2videodec.c#L624
-> > >>>>>>>>>
-> > >>>>>>>>> Then few line below this helper does G_FMT internally:
-> > >>>>>>>>>
-> > >>>>>>>>> https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blo=
-b/master/sys/v4l2/gstv4l2videodec.c#L634
-> > >>>>>>>>> https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blo=
-b/master/sys/v4l2/gstv4l2object.c#L3907
-> > >>>>>>>>>
-> > >>>>>>>>> And just plainly fails if G_FMT returns an error of any type.=
- This was
-> > >>>>>>>>> how Kamil designed it initially for MFC driver. There was no =
-other
-> > >>>>>>>>> alternative back then (no EAGAIN yet either).
-> > >>>>>>>>
-> > >>>>>>>> Hmm, was that ffmpeg then?
-> > >>>>>>>>
-> > >>>>>>>> So would it just set the OUTPUT width and height to 0? Does it=
- mean
-> > >>>>>>>> that gstreamer doesn't work with coda and mtk-vcodec, which do=
-n't have
-> > >>>>>>>> such wait in their g_fmt implementations?
-> > >>>>>>>
-> > >>>>>>> I don't know for MTK, I don't have the hardware and didn't inte=
-grate
-> > >>>>>>> their vendor pixel format. For the CODA, I know it works, if th=
-ere is
-> > >>>>>>> no wait in the G_FMT, then I suppose we are being really lucky =
-with the
-> > >>>>>>> timing (it would be that the drivers process the SPS/PPS synchr=
-onously,
-> > >>>>>>> and a simple lock in the G_FMT call is enough to wait). Adding =
-Philipp
-> > >>>>>>> in CC, he could explain how this works, I know they use GStream=
-er in
-> > >>>>>>> production, and he would have fixed GStreamer already if that w=
-as
-> > >>>>>>> causing important issue.
-> > >>>>>>
-> > >>>>>> CODA predates the width/height=3D0 rule on the coded/OUTPUT queu=
-e.
-> > >>>>>> It currently behaves more like a traditional mem2mem device.
-> > >>>>>
-> > >>>>> The rule in the latest spec is that if width/height is 0 then CAP=
-TURE
-> > >>>>> format is determined only after the stream is parsed. Otherwise i=
-t's
-> > >>>>> instantly deduced from the OUTPUT resolution.
-> > >>>>>
-> > >>>>>> When width/height is set via S_FMT(OUT) or output crop selection=
-, the
-> > >>>>>> driver will believe it and set the same (rounded up to macrobloc=
-k
-> > >>>>>> alignment) on the capture queue without ever having seen the SPS=
-.
-> > >>>>>
-> > >>>>> That's why I asked whether gstreamer sets width and height of OUT=
-PUT
-> > >>>>> to non-zero values. If so, there is no regression, as the specs m=
-imic
-> > >>>>> the coda behavior.
-> > >>>>
-> > >>>> I see, with Philipp's answer it explains why it works. Note that
-> > >>>> GStreamer sets the display size on the OUTPUT format (in fact we p=
-ass
-> > >>>> as much information as we have, because a) it's generic code and b=
-) it
-> > >>>> will be needed someday when we enable pre-allocation (REQBUFS befo=
-re
-> > >>>> SPS/PPS is passed, to avoid the setup delay introduce by allocatio=
-n,
-> > >>>> mostly seen with CMA base decoder). In any case, the driver report=
-ed
-> > >>>> display size should always be ignored in GStreamer, the only
-> > >>>> information we look at is the G_SELECTION for the case the x/y or =
-the
-> > >>>> cropping rectangle is non-zero.
-> > >>>>
-> > >>>> Note this can only work if the capture queue is not affected by th=
-e
-> > >>>> coded size, or if the round-up made by the driver is bigger or equ=
-al to
-> > >>>> that coded size. I believe CODA falls into the first category, sin=
-ce
-> > >>>> the decoding happens in a separate set of buffers and are then de-=
-tiled
-> > >>>> into the capture buffers (if understood correctly).
-> > >>>
-> > >>> Sounds like it would work only if coded size is equal to the visibl=
-e
-> > >>> size (that GStreamer sets) rounded up to full macroblocks. Non-zero=
- x
-> > >>> or y in the crop could be problematic too.
-> > >>>
-> > >>> Hans, what's your view on this? Should we require G_FMT(CAPTURE) to
-> > >>> wait until a format becomes available or the OUTPUT queue runs out =
-of
-> > >>
-> > >> You mean CAPTURE queue? If not, then I don't understand that part.
-> > >
-> > > No, I exactly meant the OUTPUT queue. The behavior of s5p-mfc in case
-> > > of the format not being detected yet is to waits for any pending
-> > > bitstream buffers to be processed by the decoder before returning an
-> > > error.
-> > >
-> > > See https://elixir.bootlin.com/linux/v5.0-rc5/source/drivers/media/pl=
-atform/s5p-mfc/s5p_mfc_dec.c#L329
-> >
-> > It blocks?! That shouldn't happen. Totally against the spec.
-> >
->
-> Yeah and that's what this patch tries to implement in venus as well
-> and is seemingly required for compatibility with gstreamer...
->
-> > > .
-> > >
-> > >>
-> > >>> buffers?
-> > >>
-> > >> First see my comment here regarding G_FMT returning an error:
-> > >>
-> > >> https://www.spinics.net/lists/linux-media/msg146505.html
-> > >>
-> > >> In my view that is a bad idea.
-> > >
-> > > I don't like it either, but it seemed to be the most consistent and
-> > > compatible behavior, but I'm not sure anymore.
-> > >
-> > >>
-> > >> What G_FMT should return between the time a resolution change was
-> > >> detected and the CAPTURE queue being drained (i.e. the old or the ne=
-w
-> > >> resolution?) is something I am not sure about.
-> > >
-> > > Note that we're talking here about the initial stream information
-> > > detection, when the driver doesn't have any information needed to
-> > > determine the CAPTURE format yet.
-> >
-> > IMHO the driver should just start off with some default format, it
-> > really doesn't matter what that is.
-> >
->
-> I guess that's fine indeed.
->
-> > This initial situation is really just a Seek operation: you have a form=
-at,
-> > you seek to a new position and when you find the resolution of the
-> > first frame in the bitstream it triggers a SOURCE_CHANGE event. Actuall=
-y,
-> > to be really consistent with the Seek: you only need to trigger this ev=
-ent
-> > if 1) the new resolution is different from the current format, or 2) th=
-e
-> > capture queue is empty. 2) will never happen during a normal Seek, so
-> > that's a little bit special to this initial situation.
->
-> Having the error returned allowed the applications to handle the
-> initial parsing without the event, though. It could have waited for
-> all the OUTPUT buffers to be dequeued and then call G_FMT to check if
-> that was enough data to obtain the format.
->
+The driver used %d for formatting unsigned values. Use %u instead.
 
-Actually, I'm not sure whether triggering the event only if the
-resolution changed is a good idea. It makes the application have no
-idea when it can actually start preparing the CAPTURE queue. Any
-thoughts?
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/staging/media/ipu3/ipu3-v4l2.c | 40 +++++++++++++++++-----------------
+ 1 file changed, 20 insertions(+), 20 deletions(-)
 
-Should it just try to allocate instantly and then reallocate? That
-would be a waste of time, though, especially since allocations are not
-cheap.
+diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+index be818c29620f..3bb08af83dfe 100644
+--- a/drivers/staging/media/ipu3/ipu3-v4l2.c
++++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+@@ -66,7 +66,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
+ 	struct imgu_css_pipe *css_pipe = &imgu->css.pipes[pipe];
+ 	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[pipe];
+ 
+-	dev_dbg(dev, "%s %d for pipe %d", __func__, enable, pipe);
++	dev_dbg(dev, "%s %d for pipe %u", __func__, enable, pipe);
+ 	/* grab ctrl after streamon and return after off */
+ 	v4l2_ctrl_grab(imgu_sd->ctrl, enable);
+ 
+@@ -101,7 +101,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
+ 	else
+ 		css_pipe->pipe_id = IPU3_CSS_PIPE_ID_CAPTURE;
+ 
+-	dev_dbg(dev, "IPU3 pipe %d pipe_id %d", pipe, css_pipe->pipe_id);
++	dev_dbg(dev, "IPU3 pipe %u pipe_id %u", pipe, css_pipe->pipe_id);
+ 
+ 	rects[IPU3_CSS_RECT_EFFECTIVE] = &imgu_sd->rect.eff;
+ 	rects[IPU3_CSS_RECT_BDS] = &imgu_sd->rect.bds;
+@@ -109,7 +109,7 @@ static int imgu_subdev_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ 	r = imgu_css_fmt_set(&imgu->css, fmts, rects, pipe);
+ 	if (r) {
+-		dev_err(dev, "failed to set initial formats pipe %d with (%d)",
++		dev_err(dev, "failed to set initial formats pipe %u with (%d)",
+ 			pipe, r);
+ 		return r;
+ 	}
+@@ -157,7 +157,7 @@ static int imgu_subdev_set_fmt(struct v4l2_subdev *sd,
+ 	u32 pad = fmt->pad;
+ 	unsigned int pipe = imgu_sd->pipe;
+ 
+-	dev_dbg(&imgu->pci_dev->dev, "set subdev %d pad %d fmt to [%dx%d]",
++	dev_dbg(&imgu->pci_dev->dev, "set subdev %u pad %u fmt to [%ux%u]",
+ 		pipe, pad, fmt->format.width, fmt->format.height);
+ 
+ 	imgu_pipe = &imgu->imgu_pipe[pipe];
+@@ -233,7 +233,7 @@ static int imgu_subdev_set_selection(struct v4l2_subdev *sd,
+ 	struct v4l2_rect *rect, *try_sel;
+ 
+ 	dev_dbg(&imgu->pci_dev->dev,
+-		 "set subdev %d sel which %d target 0x%4x rect [%dx%d]",
++		 "set subdev %u sel which %u target 0x%4x rect [%ux%u]",
+ 		 imgu_sd->pipe, sel->which, sel->target,
+ 		 sel->r.width, sel->r.height);
+ 
+@@ -279,7 +279,7 @@ static int imgu_link_setup(struct media_entity *entity,
+ 
+ 	WARN_ON(pad >= IMGU_NODE_NUM);
+ 
+-	dev_dbg(&imgu->pci_dev->dev, "pipe %d pad %d is %s", pipe, pad,
++	dev_dbg(&imgu->pci_dev->dev, "pipe %u pad %u is %s", pipe, pad,
+ 		 flags & MEDIA_LNK_FL_ENABLED ? "enabled" : "disabled");
+ 
+ 	imgu_pipe = &imgu->imgu_pipe[pipe];
+@@ -294,7 +294,7 @@ static int imgu_link_setup(struct media_entity *entity,
+ 	else
+ 		__clear_bit(pipe, imgu->css.enabled_pipes);
+ 
+-	dev_dbg(&imgu->pci_dev->dev, "pipe %d is %s", pipe,
++	dev_dbg(&imgu->pci_dev->dev, "pipe %u is %s", pipe,
+ 		 flags & MEDIA_LNK_FL_ENABLED ? "enabled" : "disabled");
+ 
+ 	return 0;
+@@ -370,7 +370,7 @@ static void imgu_vb2_buf_queue(struct vb2_buffer *vb)
+ 	if (imgu->streaming)
+ 		imgu_queue_buffers(imgu, false, node->pipe);
+ 
+-	dev_dbg(&imgu->pci_dev->dev, "%s for pipe %d node %d", __func__,
++	dev_dbg(&imgu->pci_dev->dev, "%s for pipe %u node %u", __func__,
+ 		node->pipe, node->id);
+ }
+ 
+@@ -421,7 +421,7 @@ static bool imgu_all_nodes_streaming(struct imgu_device *imgu,
+ 	pipe = except->pipe;
+ 	if (!test_bit(pipe, imgu->css.enabled_pipes)) {
+ 		dev_warn(&imgu->pci_dev->dev,
+-			 "pipe %d link is not ready yet", pipe);
++			 "pipe %ulink is not ready yet", pipe);
+ 		return false;
+ 	}
+ 
+@@ -465,7 +465,7 @@ static int imgu_vb2_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	int r;
+ 	unsigned int pipe;
+ 
+-	dev_dbg(dev, "%s node name %s pipe %d id %u", __func__,
++	dev_dbg(dev, "%s node name %s pipe %u id %u", __func__,
+ 		node->name, node->pipe, node->id);
+ 
+ 	if (imgu->streaming) {
+@@ -525,7 +525,7 @@ static void imgu_vb2_stop_streaming(struct vb2_queue *vq)
+ 	WARN_ON(!node->enabled);
+ 
+ 	pipe = node->pipe;
+-	dev_dbg(dev, "Try to stream off node [%d][%d]", pipe, node->id);
++	dev_dbg(dev, "Try to stream off node [%u][%u]", pipe, node->id);
+ 	imgu_pipe = &imgu->imgu_pipe[pipe];
+ 	r = v4l2_subdev_call(&imgu_pipe->imgu_sd.subdev, video, s_stream, 0);
+ 	if (r)
+@@ -659,10 +659,10 @@ static int imgu_fmt(struct imgu_device *imgu, unsigned int pipe, int node,
+ 	struct imgu_media_pipe *imgu_pipe = &imgu->imgu_pipe[pipe];
+ 	struct imgu_v4l2_subdev *imgu_sd = &imgu_pipe->imgu_sd;
+ 
+-	dev_dbg(dev, "set fmt node [%u][%u](try = %d)", pipe, node, try);
++	dev_dbg(dev, "set fmt node [%u][%u](try = %u)", pipe, node, try);
+ 
+ 	for (i = 0; i < IMGU_NODE_NUM; i++)
+-		dev_dbg(dev, "IMGU pipe %d node %d enabled = %d",
++		dev_dbg(dev, "IMGU pipe %u node %u enabled = %u",
+ 			pipe, i, imgu_pipe->nodes[i].enabled);
+ 
+ 	if (imgu_pipe->nodes[IMGU_NODE_VF].enabled)
+@@ -673,7 +673,7 @@ static int imgu_fmt(struct imgu_device *imgu, unsigned int pipe, int node,
+ 	else
+ 		css_pipe->pipe_id = IPU3_CSS_PIPE_ID_CAPTURE;
+ 
+-	dev_dbg(dev, "IPU3 pipe %d pipe_id = %d", pipe, css_pipe->pipe_id);
++	dev_dbg(dev, "IPU3 pipe %u pipe_id = %u", pipe, css_pipe->pipe_id);
+ 
+ 	for (i = 0; i < IPU3_CSS_QUEUES; i++) {
+ 		unsigned int inode = imgu_map_node(imgu, i);
+@@ -777,7 +777,7 @@ static int imgu_vidioc_try_fmt(struct file *file, void *fh,
+ 	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+ 	int r;
+ 
+-	dev_dbg(dev, "%s [%ux%u] for node %d\n", __func__,
++	dev_dbg(dev, "%s [%ux%u] for node %u\n", __func__,
+ 		pix_mp->width, pix_mp->height, node->id);
+ 
+ 	r = imgu_try_fmt(file, fh, f);
+@@ -795,7 +795,7 @@ static int imgu_vidioc_s_fmt(struct file *file, void *fh, struct v4l2_format *f)
+ 	struct v4l2_pix_format_mplane *pix_mp = &f->fmt.pix_mp;
+ 	int r;
+ 
+-	dev_dbg(dev, "%s [%ux%u] for node %d\n", __func__,
++	dev_dbg(dev, "%s [%ux%u] for node %u\n", __func__,
+ 		pix_mp->width, pix_mp->height, node->id);
+ 
+ 	r = imgu_try_fmt(file, fh, f);
+@@ -1018,7 +1018,7 @@ static int imgu_sd_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	struct imgu_device *imgu = v4l2_get_subdevdata(&imgu_sd->subdev);
+ 	struct device *dev = &imgu->pci_dev->dev;
+ 
+-	dev_dbg(dev, "set val %d to ctrl 0x%8x for subdev %d",
++	dev_dbg(dev, "set val %d to ctrl 0x%8x for subdev %u",
+ 		ctrl->val, ctrl->id, imgu_sd->pipe);
+ 
+ 	switch (ctrl->id) {
+@@ -1118,7 +1118,7 @@ static int imgu_v4l2_subdev_register(struct imgu_device *imgu,
+ 	imgu_sd->subdev.flags = V4L2_SUBDEV_FL_HAS_DEVNODE |
+ 				V4L2_SUBDEV_FL_HAS_EVENTS;
+ 	snprintf(imgu_sd->subdev.name, sizeof(imgu_sd->subdev.name),
+-		 "%s %d", IMGU_NAME, pipe);
++		 "%s %u", IMGU_NAME, pipe);
+ 	v4l2_set_subdevdata(&imgu_sd->subdev, imgu);
+ 	atomic_set(&imgu_sd->running_mode, IPU3_RUNNING_MODE_VIDEO);
+ 	v4l2_ctrl_handler_init(hdl, 1);
+@@ -1236,7 +1236,7 @@ static int imgu_v4l2_node_setup(struct imgu_device *imgu, unsigned int pipe,
+ 	}
+ 
+ 	/* Initialize vdev */
+-	snprintf(vdev->name, sizeof(vdev->name), "%s %d %s",
++	snprintf(vdev->name, sizeof(vdev->name), "%s %u %s",
+ 		 IMGU_NAME, pipe, node->name);
+ 	vdev->release = video_device_release_empty;
+ 	vdev->fops = &imgu_v4l2_fops;
+@@ -1331,7 +1331,7 @@ static int imgu_v4l2_register_pipes(struct imgu_device *imgu)
+ 		r = imgu_v4l2_subdev_register(imgu, &imgu_pipe->imgu_sd, i);
+ 		if (r) {
+ 			dev_err(&imgu->pci_dev->dev,
+-				"failed to register subdev%d ret (%d)\n", i, r);
++				"failed to register subdev%u ret (%d)\n", i, r);
+ 			goto pipes_cleanup;
+ 		}
+ 		r = imgu_v4l2_nodes_setup_pipe(imgu, i);
+-- 
+2.11.0
 
-Best regards,
-Tomasz
