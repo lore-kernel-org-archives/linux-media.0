@@ -2,80 +2,183 @@ Return-Path: <SRS0=ytLV=SL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04C52C10F0E
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 21:18:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBD88C282DA
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 22:10:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C8C7320833
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 21:18:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84FFA2084F
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 22:10:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=megous.com header.i=@megous.com header.b="jmd7zXS4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbfDIVSB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 17:18:01 -0400
-Received: from mail-it1-f199.google.com ([209.85.166.199]:41143 "EHLO
-        mail-it1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726444AbfDIVSB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 17:18:01 -0400
-Received: by mail-it1-f199.google.com with SMTP id m128so279618itm.6
-        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 14:18:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=GcWNpwOMRmzRIHtUaNeEDmKc6+Sx6+2uSa1vrLVLg2Y=;
-        b=m2vmDpyYIgv3Q6A+Dyry2VeDSRKUTygbaz3anUjaKBDneASWTYAW75s+15H6SO0Xnk
-         s3dQlJtgIxjLJmQQSzXIbpsHNBGpOPi6Gcrf4LcLDpruPTkwwsMHOmkOCAXR1iSe+JYp
-         g+YJUfMh1CdZhWJXxTWrKS9Iy3e2WrqjcT1hRC9vM23CTj2WWWnVuxa2nEgtDKestud8
-         LOPBvJoPV5WrdSs4aHcnZKez+P6k+PMr91GGfsDxPX+if0aZ22Ky9rOwcM0eOfSZiCTO
-         kU+djAlAWQXv/xQHX8U24k7jdo4kDa2Sf6i7RYtBC8xscGFQSMPXtm811DLP0ZwrrVQR
-         Jf0A==
-X-Gm-Message-State: APjAAAVP13tw3zr4gBd7CohH5XJs4M5uR/rS17Y4Gr+oxs8K0pD655A1
-        1LnqEaVR403I1mkE2gyy45T3UPk1ZiZWpgtjWbBQzsxUCv4J
-X-Google-Smtp-Source: APXvYqzfUzNHgw11JRqNeHgonddxf/iovSkX6tWyo8AkaBFHSEOK0ur30I95250S7CJno4/AU9i5jyCxP04t/bmR5FVx4F56T9xL
+        id S1726640AbfDIWKY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 18:10:24 -0400
+Received: from vps.xff.cz ([195.181.215.36]:47936 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726591AbfDIWKY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 9 Apr 2019 18:10:24 -0400
+X-Greylist: delayed 580 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Apr 2019 18:10:22 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1554847240; bh=qcNC0APQkwtDIo5GDKLxptbVItoD4PQj7iG6Im1qrow=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jmd7zXS4FWc5lI0dCbmS4VlBYIFxdlaHfMwXmxwQY5vMMvqkQkxJY5dkAMlGp2hSB
+         BazKByhSOfnjFlIoGHqTYwdoShSML3JHNmbvW7d84GqKundQuvnZQe/n7MC9zAhCMK
+         euNUfdev97vxhVgF6yKpG0yvPBLCYlNgwNcOxfDY=
+Date:   Wed, 10 Apr 2019 00:00:40 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Chen-Yu Tsai <wens@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Subject: Re: [PATCH 4/6] ARM: dts: sun8i: a83t: Add device node for CSI
+ (Camera Sensor Interface)
+Message-ID: <20190409220040.3sx456gefmjq3t3g@core.my.home>
+Mail-Followup-To: Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+References: <20190408165744.11672-1-wens@kernel.org>
+ <20190408165744.11672-5-wens@kernel.org>
+ <20190409075804.4zrwjil7ie2gjigu@flea>
+ <CAGb2v64CYV68Q0a7x5p-XabS74vaQWP3paPopodmqQPTOrq2gQ@mail.gmail.com>
+ <20190409082818.z33mq2qrxethldzf@flea>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e30e:: with SMTP id u14mr2859524ioc.13.1554844680361;
- Tue, 09 Apr 2019 14:18:00 -0700 (PDT)
-Date:   Tue, 09 Apr 2019 14:18:00 -0700
-In-Reply-To: <00000000000091818d05795d0f2f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000da9f1505861f7cfb@google.com>
-Subject: Re: KASAN: use-after-free Read in __vb2_perform_fileio
-From:   syzbot <syzbot+4180ff9ca6810b06c1e9@syzkaller.appspotmail.com>
-To:     hans.verkuil@cisco.com, helen.koike@collabora.com,
-        hverkuil@xs4all.nl, kyungmin.park@samsung.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        m.szyprowski@samsung.com, mchehab@kernel.org,
-        mchehab@s-opensource.com, mhjungk@gmail.com, pawel@osciak.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190409082818.z33mq2qrxethldzf@flea>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-syzbot has bisected this bug to:
+On Tue, Apr 09, 2019 at 10:28:18AM +0200, Maxime Ripard wrote:
+> On Tue, Apr 09, 2019 at 04:07:34PM +0800, Chen-Yu Tsai wrote:
+> > On Tue, Apr 9, 2019 at 3:58 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+> > > On Tue, Apr 09, 2019 at 12:57:42AM +0800, Chen-Yu Tsai wrote:
+> > > > From: Chen-Yu Tsai <wens@csie.org>
+> > > >
+> > > > The A83T SoC has a camera sensor interface (known as CSI in Allwinner
+> > > > lingo), which is similar to the one found on the A64 and H3. The only
+> > > > difference seems to be that support of MIPI CSI through a connected
+> > > > MIPI CSI-2 bridge.
+> > > >
+> > > > Add a device node for it, and pinctrl nodes for the commonly used MCLK
+> > > > and 8-bit parallel interface. The property /omit-if-no-ref/ is added to
+> > > > the pinctrl nodes to keep the device tree blob size down if they are
+> > > > unused.
+> > > >
+> > > > Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> > > > ---
+> > > >  arch/arm/boot/dts/sun8i-a83t.dtsi | 31 +++++++++++++++++++++++++++++++
+> > > >  1 file changed, 31 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > > index f739b88efb53..0c52f945fd5f 100644
+> > > > --- a/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > > +++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > > @@ -682,6 +682,20 @@
+> > > >                       #interrupt-cells = <3>;
+> > > >                       #gpio-cells = <3>;
+> > > >
+> > > > +                     /omit-if-no-ref/
+> > > > +                     csi_8bit_parallel_pins: csi-8bit-parallel-pins {
+> > > > +                             pins = "PE0", "PE2", "PE3", "PE6", "PE7",
+> > > > +                                    "PE8", "PE9", "PE10", "PE11",
+> > > > +                                    "PE12", "PE13";
+> > > > +                             function = "csi";
+> > > > +                     };
+> > > > +
+> > > > +                     /omit-if-no-ref/
+> > > > +                     csi_mclk_pin: csi-mclk-pin {
+> > > > +                             pins = "PE1";
+> > > > +                             function = "csi";
+> > > > +                     };
+> > > > +
+> > > >                       emac_rgmii_pins: emac-rgmii-pins {
+> > > >                               pins = "PD2", "PD3", "PD4", "PD5", "PD6", "PD7",
+> > > >                                      "PD11", "PD12", "PD13", "PD14", "PD18",
+> > > > @@ -994,6 +1008,23 @@
+> > > >                       interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
+> > > >               };
+> > > >
+> > > > +             csi: camera@1cb0000 {
+> > > > +                     compatible = "allwinner,sun8i-a83t-csi";
+> > > > +                     reg = <0x01cb0000 0x1000>;
+> > > > +                     interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
+> > > > +                     clocks = <&ccu CLK_BUS_CSI>,
+> > > > +                              <&ccu CLK_CSI_SCLK>,
+> > > > +                              <&ccu CLK_DRAM_CSI>;
+> > > > +                     clock-names = "bus", "mod", "ram";
+> > > > +                     resets = <&ccu RST_BUS_CSI>;
+> > > > +                     status = "disabled";
+> > > > +
+> > > > +                     csi_in: port {
+> > > > +                             #address-cells = <1>;
+> > > > +                             #size-cells = <0>;
+> > >
+> > > If we expect a single enpoint, then we don't need the address-cells
+> > > and size-cells properties.
+> >
+> > I wouldn't bet on anything. The way the Q8 tablets did front/back cameras
+> > is kind of genius if not very hacky. They have two "identical" sensors
+> > on the same I2C bus and CSI bus, with shared reset line but separate
+> > shutdown lines. Since they are identical, they also have the same I2C
+> > address. I haven't figured out how to model this in the device tree.
+> >
+> > The point is, it's perfectly possible to have two or more sensors use
+> > the same controller, provided only one be active at a time.
+> 
+> Right, but I guess the common case would be to have a single sensor,
+> where that wouldn't be needed.
+> 
+> In odd cases, we can always specify it in the DTS, and if it becomes
+> common enough, we can move it to the DTSI.
 
-commit f2fe89061d79706eca5c47e4efdc09bbc171e74a
-Author: Helen Koike <helen.koike@collabora.com>
-Date:   Fri Apr 7 17:55:19 2017 +0000
+I'm planning on having two sensors there, in a less arcane setup,
+though - no shared resets, and different I2C addresses.
 
-     [media] vimc: Virtual Media Controller core, capture and sensor
+Anyway, I can confirm that CSI driver works fine on A83T with just
+a DTSI patch, even without the clock patch in this series. I've been
+running it for quite a while that way without any issues (different
+camera chip than the ones being used by wens).
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15fbb7a7200000
-start commit:   38e7571c Merge tag 'io_uring-2019-03-06' of git://git.kern..
-git tree:       upstream
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=17fbb7a7200000
-console output: https://syzkaller.appspot.com/x/log.txt?x=13fbb7a7200000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1c9125b2c20e6dd4
-dashboard link: https://syzkaller.appspot.com/bug?extid=4180ff9ca6810b06c1e9
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101eda5f200000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10c465db200000
+regards,
+	o.
 
-Reported-by: syzbot+4180ff9ca6810b06c1e9@syzkaller.appspotmail.com
-Fixes: f2fe89061d79 ("[media] vimc: Virtual Media Controller core, capture  
-and sensor")
+> Maxime
+> 
+> --
+> Maxime Ripard, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
