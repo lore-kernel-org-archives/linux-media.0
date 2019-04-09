@@ -2,266 +2,176 @@ Return-Path: <SRS0=ytLV=SL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DBA0C282CE
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 16:31:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5900C10F0E
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 16:57:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E69CA2133D
-	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 16:31:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="k81wGRg0"
+	by mail.kernel.org (Postfix) with ESMTP id 9C25420850
+	for <linux-media@archiver.kernel.org>; Tue,  9 Apr 2019 16:57:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726562AbfDIQbK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 12:31:10 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:35599 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbfDIQbC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 12:31:02 -0400
-Received: by mail-qt1-f196.google.com with SMTP id h39so2399079qte.2
-        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 09:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=bSh6wUujSEQsjrtxyLCFN+SuhP+hPl0Z3xHWJLaIQtc=;
-        b=k81wGRg0LDs6Vi8sH27yt4Ex2JdZ3do1PedYwBfN0BIK1t5H+pJDFLJ0jUgyna4Xxw
-         oo7J6muyPwgs5h5o3pJnwWS2N9mwQNnzNn47XqjQ6UFa68ehAoOrPJbYRgmWAWao1QWb
-         WAp9J8Se2rvqKYs6FZ0pixIhme9/ItfqFWPQEex4hjcjs+USIELzAjbRCmNZLMgG+mYc
-         rznin/9km8zS1JVuJzUAPU2d/Fm3npR24WfvSsekcCm3xX8PRar6SlS+P1sr4+c7k29i
-         uo1M2VGvbUQGGVeNiqaFvQ8/bxsAz1Gpv14sxslmK5BiK6Q1paPA5nXUkMAx56q3xEdn
-         aERQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=bSh6wUujSEQsjrtxyLCFN+SuhP+hPl0Z3xHWJLaIQtc=;
-        b=CZ8H/B81SRFe4wM5yk3bm3mRcsoGE1+krBS8CTq7vUSSg1nU6gS1c5oWSFOaFhlOQM
-         kio3nAe805HgYHe37DKD+yC10ZsTT81g04UKquk9loLFgt1ilUd/cb7fNaxc5vB7t6mg
-         oWElzj/8flF839nXeV/K15jXb0E/KmvfvekFz+tSnX60yjVaQs53+JRvqBYGiRGXUQqQ
-         D/JWoZUg4yRf/9W7zlrCrAbd3Jt+le4R8PN6B0tBfxeo3AUqGGBCWLU4uWu6oVB0s4vn
-         qF8vK9MPfygIou5Xt+Uhqixpx3KyMVZ/YnJ8cXXahTtBdzwaoaZxH+t+AAiinTyyzN8n
-         fbkQ==
-X-Gm-Message-State: APjAAAWNlssnrBrx5/v7FEOccxo82WRp+yAfDTDTdv43MJz9Gg8sDVI+
-        4J0BFNMczTB4kTymwNKGY3p2VA==
-X-Google-Smtp-Source: APXvYqw5AKCc89AMdZgrRw4kkKxh7tx3D4gbh8VUSlzsFWiCneCp4MDaK/0Cz87KRDoYArWPRtknRw==
-X-Received: by 2002:ac8:4544:: with SMTP id z4mr30892581qtn.298.1554827461665;
-        Tue, 09 Apr 2019 09:31:01 -0700 (PDT)
-Received: from skullcanyon ([2002:c0de:c115:0:481e:e17e:2f68:43f8])
-        by smtp.gmail.com with ESMTPSA id x2sm16850899qkj.59.2019.04.09.09.30.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 09 Apr 2019 09:31:00 -0700 (PDT)
-Message-ID: <7773688904e78fb1a467d4afa5988e2f0648b54f.camel@ndufresne.ca>
-Subject: Re: [PATCH 10/10] venus: dec: make decoder compliant with stateful
- codec API
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Tomasz Figa <tfiga@chromium.org>, Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        id S1726493AbfDIQ5X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 9 Apr 2019 12:57:23 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:41955 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726372AbfDIQ5W (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 9 Apr 2019 12:57:22 -0400
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hDu3k-0002Zi-Tu; Tue, 09 Apr 2019 18:57:20 +0200
+Message-ID: <1554829036.5799.6.camel@pengutronix.de>
+Subject: Re: [PATCH v3 1/2] media: docs-rst: Document memory-to-memory video
+ decoder interface
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Vikash Garodia <vgarodia@codeaurora.org>,
+        Pawel Osciak <posciak@chromium.org>,
         Alexandre Courbot <acourbot@chromium.org>,
-        Malathi Gottam <mgottam@codeaurora.org>
-Date:   Tue, 09 Apr 2019 12:30:58 -0400
-In-Reply-To: <CAAFQd5Ar9c91G66oFMYGj59n+_NScB_QyZB2yF_y+=Y_64pWqA@mail.gmail.com>
-References: <20190117162008.25217-1-stanimir.varbanov@linaro.org>
-         <20190117162008.25217-11-stanimir.varbanov@linaro.org>
-         <CAAFQd5Cm1zyPzJnixwNmWzxn2zh=63YrA+ZzH-arW-VZ_x-Awg@mail.gmail.com>
-         <28069a44-b188-6b89-2687-542fa762c00e@linaro.org>
-         <CAAFQd5BevOV2r1tqmGPnVtdwirGMWU=ZJU85HjfnH-qMyQiyEg@mail.gmail.com>
-         <affce842d4f015e13912b2c3941c9bf02e84d194.camel@ndufresne.ca>
-         <CAAFQd5Ahg4Di+SBd+-kKo4PLVyvqLwcuG6MphU5Rz1PFXVuamQ@mail.gmail.com>
-         <e8a90694c306fde24928a569b7bcb231b86ec73b.camel@ndufresne.ca>
-         <CAAFQd5DFfQRd1VoN7itVXnWGKW_WBKU-sm6vo5CdgjkzjEEkFg@mail.gmail.com>
-         <57419418d377f32d0e6978f4e4171c0da7357cbb.camel@ndufresne.ca>
-         <1548938556.4585.1.camel@pengutronix.de>
-         <CAAFQd5Aih7cWu-cfwBvNdwhHHYEaMF0SFebrYfdNXD9qKu8fxw@mail.gmail.com>
-         <1f8485785a21c0b0e071a3a766ed2cbc727e47f6.camel@ndufresne.ca>
-         <CAAFQd5CPKm1ES8c9Lab63Lr8ZfWRckHmJ99SVRYi6Hpe7hzy+g@mail.gmail.com>
-         <f1e9dc99-4fcb-dee1-4279-ac0cf1d1fd6e@xs4all.nl>
-         <CAAFQd5B+bt3SV_WRw1=2agZk=Q+Enbkv=nXCrbXX=+MNpeSpCg@mail.gmail.com>
-         <cb8cda5d-e714-6019-4a76-3853ea49c4a6@xs4all.nl>
-         <CAAFQd5BZhhX6Cjj7GhbaY_G7ERksyKne6hxKFCuTJoOnamoQ=A@mail.gmail.com>
-         <CAAFQd5Ar9c91G66oFMYGj59n+_NScB_QyZB2yF_y+=Y_64pWqA@mail.gmail.com>
+        Kamil Debski <kamil@wypas.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Jeongtae Park <jtp.park@samsung.com>,
+        Tiffany Lin =?UTF-8?Q?=28=E6=9E=97=E6=85=A7=E7=8F=8A=29?= 
+        <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen =?UTF-8?Q?=28=E9=99=B3=E6=99=BA=E8=BF=AA=29?= 
+        <andrew-ct.chen@mediatek.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Todor Tomov <todor.tomov@linaro.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dave.stevenson@raspberrypi.org,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
+Date:   Tue, 09 Apr 2019 18:57:16 +0200
+In-Reply-To: <8f05866a-1244-5e85-9b37-409526970779@xs4all.nl>
+References: <20190124100419.26492-1-tfiga@chromium.org>
+         <20190124100419.26492-2-tfiga@chromium.org>
+         <1554461965.3060.5.camel@pengutronix.de>
+         <8f05866a-1244-5e85-9b37-409526970779@xs4all.nl>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 (3.32.0-1.fc30) 
-MIME-Version: 1.0
+X-Mailer: Evolution 3.22.6-1+deb9u1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le mardi 09 avril 2019 à 18:59 +0900, Tomasz Figa a écrit :
-> On Thu, Feb 7, 2019 at 4:33 PM Tomasz Figa <tfiga@chromium.org> wrote:
-> > On Tue, Feb 5, 2019 at 7:35 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> > > On 2/5/19 10:31 AM, Tomasz Figa wrote:
-> > > > On Tue, Feb 5, 2019 at 6:00 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> > > > > On 2/5/19 7:26 AM, Tomasz Figa wrote:
-> > > > > > On Fri, Feb 1, 2019 at 12:18 AM Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
-> > > > > > > Le jeudi 31 janvier 2019 à 22:34 +0900, Tomasz Figa a écrit :
-> > > > > > > > On Thu, Jan 31, 2019 at 9:42 PM Philipp Zabel <p.zabel@pengutronix.de> wrote:
-> > > > > > > > > Hi Nicolas,
-> > > > > > > > > 
-> > > > > > > > > On Wed, 2019-01-30 at 10:32 -0500, Nicolas Dufresne wrote:
-> > > > > > > > > > Le mercredi 30 janvier 2019 à 15:17 +0900, Tomasz Figa a écrit :
-> > > > > > > > > > > > I don't remember saying that, maybe I meant to say there might be a
-> > > > > > > > > > > > workaround ?
-> > > > > > > > > > > > 
-> > > > > > > > > > > > For the fact, here we queue the headers (or first frame):
-> > > > > > > > > > > > 
-> > > > > > > > > > > > https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blob/master/sys/v4l2/gstv4l2videodec.c#L624
-> > > > > > > > > > > > 
-> > > > > > > > > > > > Then few line below this helper does G_FMT internally:
-> > > > > > > > > > > > 
-> > > > > > > > > > > > https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blob/master/sys/v4l2/gstv4l2videodec.c#L634
-> > > > > > > > > > > > https://gitlab.freedesktop.org/gstreamer/gst-plugins-good/blob/master/sys/v4l2/gstv4l2object.c#L3907
-> > > > > > > > > > > > 
-> > > > > > > > > > > > And just plainly fails if G_FMT returns an error of any type. This was
-> > > > > > > > > > > > how Kamil designed it initially for MFC driver. There was no other
-> > > > > > > > > > > > alternative back then (no EAGAIN yet either).
-> > > > > > > > > > > 
-> > > > > > > > > > > Hmm, was that ffmpeg then?
-> > > > > > > > > > > 
-> > > > > > > > > > > So would it just set the OUTPUT width and height to 0? Does it mean
-> > > > > > > > > > > that gstreamer doesn't work with coda and mtk-vcodec, which don't have
-> > > > > > > > > > > such wait in their g_fmt implementations?
-> > > > > > > > > > 
-> > > > > > > > > > I don't know for MTK, I don't have the hardware and didn't integrate
-> > > > > > > > > > their vendor pixel format. For the CODA, I know it works, if there is
-> > > > > > > > > > no wait in the G_FMT, then I suppose we are being really lucky with the
-> > > > > > > > > > timing (it would be that the drivers process the SPS/PPS synchronously,
-> > > > > > > > > > and a simple lock in the G_FMT call is enough to wait). Adding Philipp
-> > > > > > > > > > in CC, he could explain how this works, I know they use GStreamer in
-> > > > > > > > > > production, and he would have fixed GStreamer already if that was
-> > > > > > > > > > causing important issue.
-> > > > > > > > > 
-> > > > > > > > > CODA predates the width/height=0 rule on the coded/OUTPUT queue.
-> > > > > > > > > It currently behaves more like a traditional mem2mem device.
-> > > > > > > > 
-> > > > > > > > The rule in the latest spec is that if width/height is 0 then CAPTURE
-> > > > > > > > format is determined only after the stream is parsed. Otherwise it's
-> > > > > > > > instantly deduced from the OUTPUT resolution.
-> > > > > > > > 
-> > > > > > > > > When width/height is set via S_FMT(OUT) or output crop selection, the
-> > > > > > > > > driver will believe it and set the same (rounded up to macroblock
-> > > > > > > > > alignment) on the capture queue without ever having seen the SPS.
-> > > > > > > > 
-> > > > > > > > That's why I asked whether gstreamer sets width and height of OUTPUT
-> > > > > > > > to non-zero values. If so, there is no regression, as the specs mimic
-> > > > > > > > the coda behavior.
-> > > > > > > 
-> > > > > > > I see, with Philipp's answer it explains why it works. Note that
-> > > > > > > GStreamer sets the display size on the OUTPUT format (in fact we pass
-> > > > > > > as much information as we have, because a) it's generic code and b) it
-> > > > > > > will be needed someday when we enable pre-allocation (REQBUFS before
-> > > > > > > SPS/PPS is passed, to avoid the setup delay introduce by allocation,
-> > > > > > > mostly seen with CMA base decoder). In any case, the driver reported
-> > > > > > > display size should always be ignored in GStreamer, the only
-> > > > > > > information we look at is the G_SELECTION for the case the x/y or the
-> > > > > > > cropping rectangle is non-zero.
-> > > > > > > 
-> > > > > > > Note this can only work if the capture queue is not affected by the
-> > > > > > > coded size, or if the round-up made by the driver is bigger or equal to
-> > > > > > > that coded size. I believe CODA falls into the first category, since
-> > > > > > > the decoding happens in a separate set of buffers and are then de-tiled
-> > > > > > > into the capture buffers (if understood correctly).
-> > > > > > 
-> > > > > > Sounds like it would work only if coded size is equal to the visible
-> > > > > > size (that GStreamer sets) rounded up to full macroblocks. Non-zero x
-> > > > > > or y in the crop could be problematic too.
-> > > > > > 
-> > > > > > Hans, what's your view on this? Should we require G_FMT(CAPTURE) to
-> > > > > > wait until a format becomes available or the OUTPUT queue runs out of
-> > > > > 
-> > > > > You mean CAPTURE queue? If not, then I don't understand that part.
-> > > > 
-> > > > No, I exactly meant the OUTPUT queue. The behavior of s5p-mfc in case
-> > > > of the format not being detected yet is to waits for any pending
-> > > > bitstream buffers to be processed by the decoder before returning an
-> > > > error.
-> > > > 
-> > > > See https://elixir.bootlin.com/linux/v5.0-rc5/source/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c#L329
+On Fri, 2019-04-05 at 13:21 +0200, Hans Verkuil wrote:
+> On 4/5/19 12:59 PM, Philipp Zabel wrote:
+> > On Thu, 2019-01-24 at 19:04 +0900, Tomasz Figa wrote:
+> > > Due to complexity of the video decoding process, the V4L2 drivers of
+> > > stateful decoder hardware require specific sequences of V4L2 API calls
+> > > to be followed. These include capability enumeration, initialization,
+> > > decoding, seek, pause, dynamic resolution change, drain and end of
+> > > stream.
 > > > 
-> > > It blocks?! That shouldn't happen. Totally against the spec.
+> > > Specifics of the above have been discussed during Media Workshops at
+> > > LinuxCon Europe 2012 in Barcelona and then later Embedded Linux
+> > > Conference Europe 2014 in Düsseldorf. The de facto Codec API that
+> > > originated at those events was later implemented by the drivers we already
+> > > have merged in mainline, such as s5p-mfc or coda.
 > > > 
-> > 
-> > Yeah and that's what this patch tries to implement in venus as well
-> > and is seemingly required for compatibility with gstreamer...
-> > 
-> > > > .
-> > > > 
-> > > > > > buffers?
-> > > > > 
-> > > > > First see my comment here regarding G_FMT returning an error:
-> > > > > 
-> > > > > https://www.spinics.net/lists/linux-media/msg146505.html
-> > > > > 
-> > > > > In my view that is a bad idea.
-> > > > 
-> > > > I don't like it either, but it seemed to be the most consistent and
-> > > > compatible behavior, but I'm not sure anymore.
-> > > > 
-> > > > > What G_FMT should return between the time a resolution change was
-> > > > > detected and the CAPTURE queue being drained (i.e. the old or the new
-> > > > > resolution?) is something I am not sure about.
-> > > > 
-> > > > Note that we're talking here about the initial stream information
-> > > > detection, when the driver doesn't have any information needed to
-> > > > determine the CAPTURE format yet.
+> > > The only thing missing was the real specification included as a part of
+> > > Linux Media documentation. Fix it now and document the decoder part of
+> > > the Codec API.
 > > > 
-> > > IMHO the driver should just start off with some default format, it
-> > > really doesn't matter what that is.
+> > > Signed-off-by: Tomasz Figa <tfiga@chromium.org>
+> > > ---
+> > >  Documentation/media/uapi/v4l/dev-decoder.rst  | 1076 +++++++++++++++++
+> > >  Documentation/media/uapi/v4l/dev-mem2mem.rst  |    5 +
+> > >  Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |    5 +
+> > >  Documentation/media/uapi/v4l/v4l2.rst         |   10 +-
+> > >  .../media/uapi/v4l/vidioc-decoder-cmd.rst     |   40 +-
+> > >  Documentation/media/uapi/v4l/vidioc-g-fmt.rst |   14 +
+> > >  6 files changed, 1135 insertions(+), 15 deletions(-)
+> > >  create mode 100644 Documentation/media/uapi/v4l/dev-decoder.rst
 > > > 
+> > > diff --git a/Documentation/media/uapi/v4l/dev-decoder.rst b/Documentation/media/uapi/v4l/dev-decoder.rst
+> > > new file mode 100644
+> > > index 000000000000..b7db2352ad41
+> > > --- /dev/null
+> > > +++ b/Documentation/media/uapi/v4l/dev-decoder.rst
+> > > @@ -0,0 +1,1076 @@
+> > > +.. -*- coding: utf-8; mode: rst -*-
+> > > +
+> > > +.. _decoder:
+> > > +
+> > > +*************************************************
+> > > +Memory-to-memory Stateful Video Decoder Interface
+> > > +*************************************************
+> > > +
 > > 
-> > I guess that's fine indeed.
+> > [...]
+> > > +
+> > > +Drain
+> > > +=====
+> > > +
 > > 
-> > > This initial situation is really just a Seek operation: you have a format,
-> > > you seek to a new position and when you find the resolution of the
-> > > first frame in the bitstream it triggers a SOURCE_CHANGE event. Actually,
-> > > to be really consistent with the Seek: you only need to trigger this event
-> > > if 1) the new resolution is different from the current format, or 2) the
-> > > capture queue is empty. 2) will never happen during a normal Seek, so
-> > > that's a little bit special to this initial situation.
+> > [...]
+> > > +
+> > > +3. Once all the ``OUTPUT`` buffers queued before the ``V4L2_DEC_CMD_STOP`` call
+> > > +   are dequeued and the last ``CAPTURE`` buffer is dequeued, the decoder is
+> > > +   stopped and it will accept, but not process, any newly queued ``OUTPUT``
+> > > +   buffers until the client issues any of the following operations:
+> > > +
 > > 
-> > Having the error returned allowed the applications to handle the
-> > initial parsing without the event, though. It could have waited for
-> > all the OUTPUT buffers to be dequeued and then call G_FMT to check if
-> > that was enough data to obtain the format.
+> > [...]
+> > > +
+> > > +.. note::
+> > > +
+> > > +   Once the drain sequence is initiated, the client needs to drive it to
+> > > +   completion, as described by the steps above, unless it aborts the process by
+> > > +   issuing :c:func:`VIDIOC_STREAMOFF` on any of the ``OUTPUT`` or ``CAPTURE``
+> > > +   queues.  The client is not allowed to issue ``V4L2_DEC_CMD_START`` or
+> > > +   ``V4L2_DEC_CMD_STOP`` again while the drain sequence is in progress and they
+> > > +   will fail with -EBUSY error code if attempted.
 > > 
+> > Should the V4L2_DEC_CMD_STOP documentation in
+> > Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst:
+> > 
+> >   * - ``V4L2_DEC_CMD_STOP``
+> >     - 1
+> >     - Stop the decoder. When the decoder is already stopped, this
+> >       command does nothing.
+> > 
+> > be updated to mention that for mem2mem decoders this not only does
+> > nothing, but returns an -EBUSY error return value?
 > 
-> Actually, I'm not sure whether triggering the event only if the
-> resolution changed is a good idea. It makes the application have no
-> idea when it can actually start preparing the CAPTURE queue. Any
-> thoughts?
-
-Oh, I was assuming with the new event we'd get the event the first time
-the decoder have a sync (e.g. for H.264 a set of PPS/SPS is activated)
-and later on, each time the capture format need to change.
-
-I don't expect the current method implemented in GStreamer to work with
-random initial frames. Right now it only works if you have a parser to
-handle the sync and hide it from the decoder. But simpler userspace
-should be able to just frame the data and let the decoder find the sync
-(it's stateful after all).
-
+> Yes. Basically in this case the STOP is still in progress, so returning
+> EBUSY makes sense and should be documented.
 > 
-> Should it just try to allocate instantly and then reallocate? That
-> would be a waste of time, though, especially since allocations are not
-> cheap.
-
-For compatibility with GStreamer, and simply to allow pre-allocation
-for application that knows) it would be nice to let userspace do that.
-That being to just allocate base on whatever information was set on
-OUTPUT queue (like CODA does). But newer userspace should not have to
-do that. They should be able to wait for a sync.
-
+> > 
+> > Also, if V4L2_DEC_CMD_STOP_IMMEDIATELY is set, should the decoder drop
+> > all pending buffers and signal EOS immediately? Should this be mentioned
+> > here?
 > 
-> Best regards,
-> Tomasz
+> Hmm, the decoder spec says that flags should be set to 0, and current codec
+> drivers explicitly disallow a non-0 flags value.
+> 
+> I'm not sure if there is a practical use-case for V4L2_DEC_CMD_STOP_IMMEDIATELY
+> in the context of a decoder. If you want to stop immediately, then just call
+> streamoff on the OUTPUT queue.
 
+v4l2-compliance currently complains if V4L2_DEC_CMD_STOP_IMMEDIATELY is
+not supported:
+
+                fail: v4l2-test-codecs.cpp(104): ret != 0
+        test VIDIOC_(TRY_)DECODER_CMD: FAIL
+
+Should testDecoder be changed to set the V4L2_DEC_CMD_STOP_IMMEDIATELY
+flag only if node->codec_mask does not have the STATEFUL_DECODER bit
+set?
+
+regards
+Philipp
