@@ -2,160 +2,244 @@ Return-Path: <SRS0=bmC7=SM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 249C9C10F11
-	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 09:30:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13D6EC10F11
+	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 09:51:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 81B93217D6
-	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 09:30:36 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="FuNhnGSB"
+	by mail.kernel.org (Postfix) with ESMTP id D880C20820
+	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 09:51:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729378AbfDJJag (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Apr 2019 05:30:36 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:44224 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726924AbfDJJaf (ORCPT
+        id S1729014AbfDJJvp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Apr 2019 05:51:45 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:52461 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727212AbfDJJvp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Apr 2019 05:30:35 -0400
-Received: by mail-wr1-f65.google.com with SMTP id y7so2027438wrn.11
-        for <linux-media@vger.kernel.org>; Wed, 10 Apr 2019 02:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:openpgp:autocrypt:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=7J51wOFVXXm0n4uWOqDjJZYuW92qOteh/2pThhF0Bw0=;
-        b=FuNhnGSBtvSyb7VWiRzWlAoqUjAbLhFZjc9UjI3vSS1tDqZ3UXrPyPsHxe9dYy3bO6
-         wYLjCihzgrsReLNuP3KQXuFbgzikAPWKIRqkGBiG/uiYa3yqrlDA7g1LDLEkEJ7zD5wM
-         /FrJMY4rwSD7EVll4pFE5wx6j7nuy42+6CQsH75eF5zL9s0fCyqUZNA4vS0w6CWk565m
-         6iTeA9vxk+Qz0rupTE66hevGQdK7ph33JWIHvSFqxTcUjvIrer6+7bNablm5OwVxhLhP
-         yiXYlJGn7CuQeknHkUpIt2iEQrkJG1JHy6yPs2SHNU3c2lEPPF5iUD2z3WL5aYI5CW6s
-         cXQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=7J51wOFVXXm0n4uWOqDjJZYuW92qOteh/2pThhF0Bw0=;
-        b=LM4mckT1oLrlAefHMI1MAC2FWAH56qCZ+bYPVgwA+R8zcQguhX6YlCu683YXLFPaad
-         oeD6szIQonBvkUo7baYOc6ZjYHUt+JxHC6ToMIGFWP9cYbkANZxOi3eXSnuI1pC4hDql
-         aQUWZw4BjOxua+KdooJQ7PaiAUZOk4C2VsF3oWK8e7iYZ7YuZKGMGD8anNvU2ka6GSh4
-         BOmmkMB2UuXKEDEIFHqKfHEpdsZpi7gtUf1TWHVX0m32TK2KXCs15lsFOjr7s9AXWNcD
-         6E1c2Rz841xP5RtFvvpIKq3BdyJ59lO7OqjGGhlfUFdic/cApK5rpfbAK5vQAjqbb9ul
-         MsvA==
-X-Gm-Message-State: APjAAAWYM2TEEFm0Od7EJXktbjKFQ3QEqNUUTil1JPGCQxdPyrH62p3w
-        Uf7gIWR3p59CnPzbr9kAcOqLQQ==
-X-Google-Smtp-Source: APXvYqzBv5vKiccDCI0sm/O7RgLCdv5SqQslnEtO1VNYEPfbF9BdRq0gqihbyXTGr8WbtnTvp/CjdA==
-X-Received: by 2002:a5d:6406:: with SMTP id z6mr2924864wru.266.1554888633119;
-        Wed, 10 Apr 2019 02:30:33 -0700 (PDT)
-Received: from [10.1.2.12] (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id a22sm1765017wmj.44.2019.04.10.02.30.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Apr 2019 02:30:32 -0700 (PDT)
-Subject: Re: [PATCHv2 7/7] cros-ec-cec: decrement HDMI device refcount
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org
-Cc:     Sylwester Nawrocki <snawrocki@kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Ettore Chimenti <ek5.chimenti@gmail.com>,
-        Wen Yang <wen.yang99@zte.com.cn>
-References: <20190410091334.8654-1-hverkuil-cisco@xs4all.nl>
- <20190410091334.8654-8-hverkuil-cisco@xs4all.nl>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- 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
- ZaTUOEkgIor5losDrePdPgE=
-Organization: Baylibre
-Message-ID: <00c56dcf-8aad-55b4-975d-f4b2880ad237@baylibre.com>
-Date:   Wed, 10 Apr 2019 11:30:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Wed, 10 Apr 2019 05:51:45 -0400
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1hE9tG-0007Iu-LK; Wed, 10 Apr 2019 11:51:34 +0200
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1hE9tD-000580-OX; Wed, 10 Apr 2019 11:51:31 +0200
+Date:   Wed, 10 Apr 2019 11:51:31 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, p.zabel@pengutronix.de, javierm@redhat.co,
+        laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v5 02/13] media: v4l2-fwnode: add v4l2_fwnode_connector
+Message-ID: <20190410095131.hadur65xxawvihnm@pengutronix.de>
+References: <20190405060317.11240-1-m.felsch@pengutronix.de>
+ <20190405060317.11240-3-m.felsch@pengutronix.de>
+ <20190405124303.lkfdd3pqnlxinke4@uno.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <20190410091334.8654-8-hverkuil-cisco@xs4all.nl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190405124303.lkfdd3pqnlxinke4@uno.localdomain>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 11:24:09 up 81 days, 14:06, 71 users,  load average: 0.18, 0.13,
+ 0.10
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/04/2019 11:13, Hans Verkuil wrote:
-> The CrosEC CEC driver never decremented the HDMI device refcount.
-> CEC drivers only need the HDMI device pointer as a key in the
-> notifier list, it never accesses the device, so there is no
-> need to keep a reference.
+Hi Jacopo,
+
+On 19-04-05 14:43, Jacopo Mondi wrote:
+> Hi Marco,
 > 
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> ---
->  drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 1 +
->  1 file changed, 1 insertion(+)
+> On Fri, Apr 05, 2019 at 08:03:06AM +0200, Marco Felsch wrote:
+> > Currently every driver needs to parse the connector endpoints by it self.
+> > This is the initial work to make this generic. The generic connector has
+> > some common fields and some connector specific parts. The generic one
+> > includes:
+> >   - type
+> >   - label
+> >   - remote_port (the port where the connector is connected to)
+> >   - remote_id   (the endpoint where the connector is connected to)
+> >
+> > The specific fields are within a union, since only one of them can be
+> > available at the time. Since this is the initial support the patch adds
+> > only the analog-connector specific ones.
+> >
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  include/media/v4l2-connector.h | 34 ++++++++++++++++++++++++++++++++++
+> >  include/media/v4l2-fwnode.h    | 33 +++++++++++++++++++++++++++++++++
+> >  2 files changed, 67 insertions(+)
+> >  create mode 100644 include/media/v4l2-connector.h
+> >
+> > diff --git a/include/media/v4l2-connector.h b/include/media/v4l2-connector.h
+> > new file mode 100644
+> > index 000000000000..967336e38215
+> > --- /dev/null
+> > +++ b/include/media/v4l2-connector.h
+> > @@ -0,0 +1,34 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * v4l2-connector.h
+> > + *
+> > + * V4L2 connector types.
+> > + *
+> > + * Copyright 2019 Pengutronix, Marco Felsch <kernel@pengutronix.de>
+> > + */
+> > +
+> > +#ifndef V4L2_CONNECTOR_H
+> > +#define V4L2_CONNECTOR_H
+> > +
+> > +#define V4L2_CONNECTOR_MAX_LABEL 41
+> > +
+> > +/**
+> > + * enum v4l2_connector_type - connector type
+> > + * @V4L2_CON_UNKNOWN:   unknown connector type, no V4L2 connetor configuration
+> > + * @V4L2_CON_COMPOSITE: analog composite connector
+> > + * @V4L2_CON_SVIDEO:    analog svideo connector
+> > + * @V4L2_CON_VGA:       analog vga connector
+> > + * @V4L2_CON_DVI:	analog or digital dvi connector
+> > + * @V4L2_CON_HDMI:      digital hdmi connetor
+> > + */
+> > +enum v4l2_connector_type {
+> > +	V4L2_CON_UNKNOWN,
+> > +	V4L2_CON_COMPOSITE,
+> > +	V4L2_CON_SVIDEO,
+> > +	V4L2_CON_VGA,
+> > +	V4L2_CON_DVI,
+> > +	V4L2_CON_HDMI,
+> > +};
+> > +
+> > +#endif /* V4L2_CONNECTOR_H */
+> > +
+> > diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+> > index 6c07825e18b9..04344b71656f 100644
+> > --- a/include/media/v4l2-fwnode.h
+> > +++ b/include/media/v4l2-fwnode.h
+> > @@ -22,6 +22,7 @@
+> >  #include <linux/list.h>
+> >  #include <linux/types.h>
+> >
+> > +#include <media/v4l2-connector.h>
+> >  #include <media/v4l2-mediabus.h>
+> >  #include <media/v4l2-subdev.h>
+> >
+> > @@ -126,6 +127,38 @@ struct v4l2_fwnode_link {
+> >  	unsigned int remote_port;
+> >  };
+> >
+> > +/**
+> > + * struct v4l2_fwnode_connector_analog - analog connector data structure
+> > + * @supported_tvnorms: tv norms this connector supports, set to V4L2_STD_ALL
+> > + *                     if no restrictions are specified.
+> > + */
+> > +struct v4l2_fwnode_connector_analog {
+> > +	v4l2_std_id supported_tvnorms;
+> > +};
+> > +
+> > +/** struct v4l2_fwnode_connector - the connector data structure
 > 
-> diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-> index 7bc4d8a9af28..068df9888dbf 100644
-> --- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-> +++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
-> @@ -236,6 +236,7 @@ static int cros_ec_cec_get_notifier(struct device *dev,
->  				return -EPROBE_DEFER;
->  
->  			*notify = cec_notifier_get_conn(d, m->conn);
-> +			put_device(d);
->  			return 0;
->  		}
->  	}
+> Break the line please
+
+Yes, missed that.
+
+> > + * @remote_port: identifier of the port the remote endpoint belongs to
+> 
+> I liked best the description in the commmit message:
+> @remote_port: identifier of the remote endpoint port the connector connects to
+> 
+> but I see the exact same sentence you used already in an existing
+> comment, so feel free to chose the one you prefer.
+
+Let me change this. I was inspired by the v4l2_fwnode_link description.
+I think the commit description is a bit intuitiver.
+
+> > + * @remote_id: identifier of the id the remote endpoint belongs to
+> 
+> identifier of the remote endpoint the connector connect/belong to?
+
+Here too.
+
+> > + * @label: connetor label
+> > + * @type: connector type
+> > + * @connector: union with connector configuration data struct
+> 
+> just "connector configuration" ?
+
+Yes that sounds better.
+
+> > + * @connector.analog: embedded &struct v4l2_fwnode_connector_analog.
+> > + *                    Used if connector is of type analog.
+> 
+> just "analog connector configuration" ?
 > 
 
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+The connector and connetor.analog description is inspired by the
+v4l2_fwnode_endpoint description. Your sounds a bit more natural so I
+will pick them.
+
+> > + */
+> > +struct v4l2_fwnode_connector {
+> > +	/* common fields for all v4l2_fwnode_connectors */
+> 
+> I would drop this
+
+Okay, I will drop both commit messages.
+
+> > +	unsigned int remote_port;
+> > +	unsigned int remote_id;
+> > +	char label[V4L2_CONNECTOR_MAX_LABEL];
+> > +	enum v4l2_connector_type type;
+> > +
+> > +	/* connector specific fields */
+> 
+> and this too :)
+> 
+> All minor stuff, feel free to pick what you like from the comments.
+
+Thanks a lot for the review =) I will add your Reviewed-by tag in the
+next verion.
+
+> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+> 
+> Thanks
+>   j
+
+Regards,
+  Marco
+
+> > +	union {
+> > +		struct v4l2_fwnode_connector_analog analog;
+> > +		/* future connectors */
+> > +	} connector;
+> > +};
+> > +
+> >  /**
+> >   * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
+> >   * @fwnode: pointer to the endpoint's fwnode handle
+> > --
+> > 2.20.1
+> >
+
+
+
+-- 
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
