@@ -2,114 +2,148 @@ Return-Path: <SRS0=bmC7=SM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10663C10F11
-	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 12:33:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38148C10F11
+	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 12:42:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D67012082E
-	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 12:33:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1069020818
+	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 12:42:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729915AbfDJMde (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Apr 2019 08:33:34 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:50920 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728821AbfDJMdd (ORCPT
+        id S1732025AbfDJMmm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Apr 2019 08:42:42 -0400
+Received: from kozue.soulik.info ([108.61.200.231]:43896 "EHLO
+        kozue.soulik.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730084AbfDJMmm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Apr 2019 08:33:33 -0400
-Received: from [IPv6:2001:983:e9a7:1:5c18:3544:e4bb:f52f] ([IPv6:2001:983:e9a7:1:5c18:3544:e4bb:f52f])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id ECPyhkd55NG8zECPzh0rHW; Wed, 10 Apr 2019 14:33:31 +0200
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.2] Remove deprecated zoran driver
-Message-ID: <2370199f-c709-b138-602f-3f192d3f5f70@xs4all.nl>
-Date:   Wed, 10 Apr 2019 14:33:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        Wed, 10 Apr 2019 08:42:42 -0400
+Received: from misaki.sumomo.pri (unknown [IPv6:2001:470:b30d:2:c604:15ff:0:401])
+        by kozue.soulik.info (Postfix) with ESMTPA id 6AE57100D71;
+        Wed, 10 Apr 2019 21:43:24 +0900 (JST)
+From:   ayaka <ayaka@soulik.info>
+To:     linux-media@vger.kernel.org
+Cc:     Randy 'ayaka' Li <ayaka@soulik.info>, randy.li@rock-chips.com,
+        hverkuil@xs4all.nl, maxime.ripard@bootlin.com, joro@8bytes.org,
+        nicolas@ndufresne.ca, jernej.skrabec@gmail.com,
+        paul.kocialkowski@bootlin.com, thomas.petazzoni@bootlin.com,
+        mchehab@kernel.org, ezequiel@collabora.com, posciak@chromium.org,
+        groeck@chromium.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH v3 0/9] [WIP]: rockchip mpp for v4l2 video deocder
+Date:   Wed, 10 Apr 2019 20:42:17 +0800
+Message-Id: <20190410124226.8612-1-ayaka@soulik.info>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfAqHF3x9m4CYcxRj9z+aSdkjscXyD5JJyrR9+m3gVp2Qlg7ECoNmmHWeEgVMcuJcMfoYYGKTm6SLJQqcgdLNvzGA0fgx7+lIz+8k0aVNx7SV/izLNz5+
- dcLbbE97uE8bkVaTs425UGMj8ujZS1g0Oq4lGtDoUds8UWsjIaOUQlhY2VzRRs7YQO5e4oRp3Mix7cDnJYs6t4izM76qQ0jIAQwCBlGdx6BkzNWR2uius60s
- 9fQOGZ5wGWkdAWal1YDJr7hFnI9mBvfdl2QyIUTCPoc=
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Remove the deprecated zoran driver.
+From: Randy 'ayaka' Li <ayaka@soulik.info>
 
-Regards,
+Although I really hate the bitstream construction in kernel and I think
+many people realise its problems, I still take the advise from ndufresne to
+release this version. This should be released in a early week but
+I was sick that time.
 
-	Hans
+After reviewed the documents from Rockchip and I have confirmed that with
+some rockchip staff, those documents are not update to date. So you may
+find some part is different comparing to official document.
 
-The following changes since commit 1c3ec30bb23023d738b538e64ac3028902d53692:
+The v4l2-request-test from bootlin won't work. Its slice data doesn't
+have a start code which making it not a complete nal unit. And I found
+its slice header information may not be correct. Even comparing to the
+Big buck bunny's origin files, neither the slice data nor sequence
+information matches.
 
-  media: index.rst: exclude Indexes section from latex/pdf output (2019-03-30 09:42:35 -0400)
+I extracted a slice data from Rockchip mpp to verify my driver, it work
+fine, you can find it on my github. I only verified the I slice now,
+I have not verified P or B slice. Hopefully it would work.
 
-are available in the Git repository at:
+I have the same problem with v4l2-request-test on HEVC as well so even
+this version shipped with HEVC bitstream construction, I didn't know
+whether it would work.
 
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-zoran
+I need some time to prepare the userspace tool or it is really hard for
+HEVC to write slice info manually.
 
-for you to fetch changes up to 54af579ead7b55c803b28f122bce0f08ec525810:
+Changlog
+v3: add AVC support for rkvdec
+v2: add MPEG-2 support for vdpu2
+v1: inital version
 
-  zoran: remove deprecated driver (2019-04-10 13:02:49 +0200)
+Randy Li (7):
+  staging: video: rockchip: add v4l2 decoder
+  rockchip: mpp: rkvdec: rbsp
+  [WIP]: rockchip: mpp: HEVC decoder ctrl data
+  [TEST]: rockchip: mpp: support qtable
+  [TEST]: rockchip: mpp: vdpu2: move qtable to input buffer
+  arm64: dts: rockchip: boost clocks for rk3328
+  arm64: dts: rockchip: add video codec for rk3328
 
-----------------------------------------------------------------
-Tag branch
+ayaka (2):
+  [WIP]: rockchip: mpp: H.264 decoder ctrl data
+  [TEST]: rkvdec: spspps address alignment
 
-----------------------------------------------------------------
-Hans Verkuil (1):
-      zoran: remove deprecated driver
+ arch/arm64/boot/dts/rockchip/rk3328-evb.dts   |   32 +
+ .../arm64/boot/dts/rockchip/rk3328-rock64.dts |   32 +
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi      |  112 +-
+ drivers/staging/Kconfig                       |    2 +
+ drivers/staging/Makefile                      |    1 +
+ drivers/staging/rockchip-mpp/Kconfig          |   33 +
+ drivers/staging/rockchip-mpp/Makefile         |   12 +
+ drivers/staging/rockchip-mpp/mpp_debug.h      |   87 +
+ drivers/staging/rockchip-mpp/mpp_dev_common.c | 1390 +++++++
+ drivers/staging/rockchip-mpp/mpp_dev_common.h |  215 +
+ drivers/staging/rockchip-mpp/mpp_dev_rkvdec.c |  924 +++++
+ drivers/staging/rockchip-mpp/mpp_dev_vdpu2.c  |  607 +++
+ drivers/staging/rockchip-mpp/mpp_service.c    |  197 +
+ drivers/staging/rockchip-mpp/mpp_service.h    |   38 +
+ .../staging/rockchip-mpp/rkvdec/avc-data.c    |  239 ++
+ .../staging/rockchip-mpp/rkvdec/avc-data.h    |   40 +
+ drivers/staging/rockchip-mpp/rkvdec/avc.c     |  259 ++
+ drivers/staging/rockchip-mpp/rkvdec/cabac.h   | 3614 +++++++++++++++++
+ drivers/staging/rockchip-mpp/rkvdec/hal.h     |   70 +
+ .../staging/rockchip-mpp/rkvdec/hevc-data.c   |  208 +
+ .../staging/rockchip-mpp/rkvdec/hevc-data.h   |   27 +
+ drivers/staging/rockchip-mpp/rkvdec/hevc.c    |  169 +
+ drivers/staging/rockchip-mpp/rkvdec/rbsp.c    |   96 +
+ drivers/staging/rockchip-mpp/rkvdec/rbsp.h    |   30 +
+ drivers/staging/rockchip-mpp/rkvdec/regs.h    |  377 ++
+ drivers/staging/rockchip-mpp/vdpu2/avc.c      |  165 +
+ drivers/staging/rockchip-mpp/vdpu2/hal.h      |   52 +
+ drivers/staging/rockchip-mpp/vdpu2/mpeg2.c    |  277 ++
+ drivers/staging/rockchip-mpp/vdpu2/regs.h     |  670 +++
+ include/uapi/video/rk_vpu_service.h           |  101 +
+ 30 files changed, 10072 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/staging/rockchip-mpp/Kconfig
+ create mode 100644 drivers/staging/rockchip-mpp/Makefile
+ create mode 100644 drivers/staging/rockchip-mpp/mpp_debug.h
+ create mode 100644 drivers/staging/rockchip-mpp/mpp_dev_common.c
+ create mode 100644 drivers/staging/rockchip-mpp/mpp_dev_common.h
+ create mode 100644 drivers/staging/rockchip-mpp/mpp_dev_rkvdec.c
+ create mode 100644 drivers/staging/rockchip-mpp/mpp_dev_vdpu2.c
+ create mode 100644 drivers/staging/rockchip-mpp/mpp_service.c
+ create mode 100644 drivers/staging/rockchip-mpp/mpp_service.h
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/avc-data.c
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/avc-data.h
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/avc.c
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/cabac.h
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/hal.h
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/hevc-data.c
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/hevc-data.h
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/hevc.c
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/rbsp.c
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/rbsp.h
+ create mode 100644 drivers/staging/rockchip-mpp/rkvdec/regs.h
+ create mode 100644 drivers/staging/rockchip-mpp/vdpu2/avc.c
+ create mode 100644 drivers/staging/rockchip-mpp/vdpu2/hal.h
+ create mode 100644 drivers/staging/rockchip-mpp/vdpu2/mpeg2.c
+ create mode 100644 drivers/staging/rockchip-mpp/vdpu2/regs.h
+ create mode 100644 include/uapi/video/rk_vpu_service.h
 
- Documentation/media/v4l-drivers/index.rst  |    1 -
- Documentation/media/v4l-drivers/zoran.rst  |  583 ------------
- drivers/staging/media/Kconfig              |    2 -
- drivers/staging/media/Makefile             |    1 -
- drivers/staging/media/zoran/Kconfig        |   75 --
- drivers/staging/media/zoran/Makefile       |    7 -
- drivers/staging/media/zoran/TODO           |    4 -
- drivers/staging/media/zoran/videocodec.c   |  391 --------
- drivers/staging/media/zoran/videocodec.h   |  349 --------
- drivers/staging/media/zoran/zoran.h        |  402 ---------
- drivers/staging/media/zoran/zoran_card.c   | 1524 --------------------------------
- drivers/staging/media/zoran/zoran_card.h   |   50 --
- drivers/staging/media/zoran/zoran_device.c | 1619 ---------------------------------
- drivers/staging/media/zoran/zoran_device.h |   91 --
- drivers/staging/media/zoran/zoran_driver.c | 2850 -----------------------------------------------------------
- drivers/staging/media/zoran/zoran_procfs.c |  221 -----
- drivers/staging/media/zoran/zoran_procfs.h |   32 -
- drivers/staging/media/zoran/zr36016.c      |  516 -----------
- drivers/staging/media/zoran/zr36016.h      |  107 ---
- drivers/staging/media/zoran/zr36050.c      |  896 -------------------
- drivers/staging/media/zoran/zr36050.h      |  179 ----
- drivers/staging/media/zoran/zr36057.h      |  164 ----
- drivers/staging/media/zoran/zr36060.c      | 1006 ---------------------
- drivers/staging/media/zoran/zr36060.h      |  216 -----
- 24 files changed, 11286 deletions(-)
- delete mode 100644 Documentation/media/v4l-drivers/zoran.rst
- delete mode 100644 drivers/staging/media/zoran/Kconfig
- delete mode 100644 drivers/staging/media/zoran/Makefile
- delete mode 100644 drivers/staging/media/zoran/TODO
- delete mode 100644 drivers/staging/media/zoran/videocodec.c
- delete mode 100644 drivers/staging/media/zoran/videocodec.h
- delete mode 100644 drivers/staging/media/zoran/zoran.h
- delete mode 100644 drivers/staging/media/zoran/zoran_card.c
- delete mode 100644 drivers/staging/media/zoran/zoran_card.h
- delete mode 100644 drivers/staging/media/zoran/zoran_device.c
- delete mode 100644 drivers/staging/media/zoran/zoran_device.h
- delete mode 100644 drivers/staging/media/zoran/zoran_driver.c
- delete mode 100644 drivers/staging/media/zoran/zoran_procfs.c
- delete mode 100644 drivers/staging/media/zoran/zoran_procfs.h
- delete mode 100644 drivers/staging/media/zoran/zr36016.c
- delete mode 100644 drivers/staging/media/zoran/zr36016.h
- delete mode 100644 drivers/staging/media/zoran/zr36050.c
- delete mode 100644 drivers/staging/media/zoran/zr36050.h
- delete mode 100644 drivers/staging/media/zoran/zr36057.h
- delete mode 100644 drivers/staging/media/zoran/zr36060.c
- delete mode 100644 drivers/staging/media/zoran/zr36060.h
+-- 
+2.20.1
+
