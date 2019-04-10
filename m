@@ -2,154 +2,80 @@ Return-Path: <SRS0=bmC7=SM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91AD3C10F14
-	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 03:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2101FC10F11
+	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 04:44:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CEF42133D
-	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 03:50:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB87B217D6
+	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 04:44:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbfDJDuP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 9 Apr 2019 23:50:15 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:47317 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726732AbfDJDuP (ORCPT
+        id S1727169AbfDJEoB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Apr 2019 00:44:01 -0400
+Received: from mail-it1-f197.google.com ([209.85.166.197]:54376 "EHLO
+        mail-it1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726823AbfDJEoB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 9 Apr 2019 23:50:15 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:5c18:3544:e4bb:f52f])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id E4FYhUH5DiLOmE4FZh5Va9; Wed, 10 Apr 2019 05:50:13 +0200
-Message-ID: <784ae8eb2f2f8cc8a5038d969c1b591c@smtp-cloud9.xs4all.net>
-Date:   Wed, 10 Apr 2019 05:50:12 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfKVKqnYaeTjcpPJBx66bkA4Ko5Or5YiKcClw0M0GQRv8pTYEa6M4tVnC5ceizc4KOM7DFhnGwhYStO2NokKlg0XTJSRaFGnOepAKKr817EzZCg9wx4uV
- gmJF1YGEiZPI56aay3OtL7uXIUE93wWMGvlxDYIeBKvbKkZPc5jMAAEdyR1qXR+iznsJKCitD3imsESW0iJxPq23RPHXFcFsmrR0B3eQuH88PC5DROHVkUmE
+        Wed, 10 Apr 2019 00:44:01 -0400
+Received: by mail-it1-f197.google.com with SMTP id i188so1189346iti.4
+        for <linux-media@vger.kernel.org>; Tue, 09 Apr 2019 21:44:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=D9uY9wfjPgxafxN96VuhVPMk10AftLSB40jLhWMlsHI=;
+        b=nEb5BPfIiedZHzQxsdhyViz7sg/CCJOhHoWJJ/dylh1BfwGlu8ESbK8tDs7or4IX9Q
+         /wbcufCJAIQxFBsg+EjSRkey7V6dCbTpmCokNX+JGsg4XeRXz+hwbxpdA8RJmO/Nl3mY
+         qXouAP3WVp4Hhr+nsvxj4zYfTCuz3Dhzmojc9KcTyKfi1PD9AXOV/WeBvDd6+R+NWzx9
+         pBTCYr9dmFE0s0SsnOXLA7Qm1hIAeU5UdgxUlEr4izhAvHVl36RsffxSl8OWGBcz07JW
+         t9epLDk7mPmWRKexqTgBi9s7Xh4whWScgerTSOl0RXAmoozgryDq4meMlajOffz/kmcI
+         6JXw==
+X-Gm-Message-State: APjAAAXcz0KxzCe4UY+A9GIeiCLqv65LNCBw5psaP18SbSky0r5kJ83x
+        SGTNyrYgycy4R1SBh8PqUbhKREsvzgva0c7OY2V+g4OX8NSK
+X-Google-Smtp-Source: APXvYqyRga4bPij5qUcrQx4xWsEU9LjTYsqP7NCaiTpwsE98in8ZkuCKcwGGAqI6XtY//X0d/xl51snDvrGW0RclSd38s4pqcpE7
+MIME-Version: 1.0
+X-Received: by 2002:a05:660c:34a:: with SMTP id b10mr369669itl.13.1554871440701;
+ Tue, 09 Apr 2019 21:44:00 -0700 (PDT)
+Date:   Tue, 09 Apr 2019 21:44:00 -0700
+In-Reply-To: <0000000000005b7c64057ba003fb@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e50a29058625b741@google.com>
+Subject: Re: BUG: unable to handle kernel paging request in tpg_fill_plane_buffer
+From:   syzbot <syzbot+aa8212f63ea8ffaf3bfa@syzkaller.appspotmail.com>
+To:     bwinther@cisco.com, hans.verkuil@cisco.com,
+        helen.koike@collabora.com, hverkuil-cisco@xs4all.nl,
+        hverkuil@xs4all.nl, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mchehab@kernel.org, mchehab@s-opensource.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+syzbot has bisected this bug to:
 
-Results of the daily build of media_tree:
+commit f2fe89061d79706eca5c47e4efdc09bbc171e74a
+Author: Helen Koike <helen.koike@collabora.com>
+Date:   Fri Apr 7 17:55:19 2017 +0000
 
-date:			Wed Apr 10 05:00:12 CEST 2019
-media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	95f39aae48c6e8e5cc81e6ae6293d999f70a909b
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-2-amd64
+     [media] vimc: Virtual Media Controller core, capture and sensor
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14b9542d200000
+start commit:   6a1d2932 Add linux-next specific files for 20181224
+git tree:       linux-next
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=16b9542d200000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b9542d200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f9369d117d073843
+dashboard link: https://syzkaller.appspot.com/bug?extid=aa8212f63ea8ffaf3bfa
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11d0363b400000
 
-Detailed results are available here:
+Reported-by: syzbot+aa8212f63ea8ffaf3bfa@syzkaller.appspotmail.com
+Fixes: f2fe89061d79 ("[media] vimc: Virtual Media Controller core, capture  
+and sensor")
 
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
