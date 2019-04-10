@@ -2,122 +2,97 @@ Return-Path: <SRS0=bmC7=SM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72B20C10F14
-	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 14:28:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7873C10F14
+	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 14:31:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 41EA320854
-	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 14:28:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="V3Jh78HT"
+	by mail.kernel.org (Postfix) with ESMTP id C212920850
+	for <linux-media@archiver.kernel.org>; Wed, 10 Apr 2019 14:31:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732741AbfDJO2j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Apr 2019 10:28:39 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:18993 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732090AbfDJO2j (ORCPT
+        id S1732788AbfDJObj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Apr 2019 10:31:39 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:60620 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732287AbfDJObj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Apr 2019 10:28:39 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cadfd870000>; Wed, 10 Apr 2019 07:28:23 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 10 Apr 2019 07:28:38 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 10 Apr 2019 07:28:38 -0700
-Received: from HQMAIL103.nvidia.com (172.20.187.11) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 10 Apr
- 2019 14:28:38 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL103.nvidia.com
- (172.20.187.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 10 Apr 2019 14:28:38 +0000
-Received: from sumitg-l4t.nvidia.com (Not Verified[10.24.42.162]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cadfd930001>; Wed, 10 Apr 2019 07:28:37 -0700
-From:   Sumit Gupta <sumitg@nvidia.com>
-To:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <sakari.ailus@linux.intel.com>, <paul.kocialkowski@bootlin.com>,
-        <tfiga@chromium.org>, <keiichiw@chromium.org>, <sumitg@nvidia.com>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] [media] v4l2-core: fix use-after-free error
-Date:   Wed, 10 Apr 2019 19:58:28 +0530
-Message-ID: <1554906508-17192-1-git-send-email-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Wed, 10 Apr 2019 10:31:39 -0400
+Received: from [IPv6:2001:983:e9a7:1:5c18:3544:e4bb:f52f] ([IPv6:2001:983:e9a7:1:5c18:3544:e4bb:f52f])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id EEGGhlRpONG8zEEGHh1bQt; Wed, 10 Apr 2019 16:31:37 +0200
+Subject: Re: [PATCH 0/7] media: atmel: atmel-isc: new features
+To:     Eugen.Hristev@microchip.com, linux-media@vger.kernel.org,
+        Nicolas.Ferre@microchip.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org
+Cc:     ksloat@aampglobal.com
+References: <1554807715-2353-1-git-send-email-eugen.hristev@microchip.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <588f729b-0234-0019-ec40-54aa8a89da6b@xs4all.nl>
+Date:   Wed, 10 Apr 2019 16:31:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1554906503; bh=+vYP8mBHqgdcUcxnaIdUwSHPv0Nf2tTiLmWUBPgwwX0=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=V3Jh78HT57lZyZ30HnfCYfGPLCNsMsRAdhPcyR8MWJhsBbUQTT49ShectSSJIyGv7
-         6NiZ1vPccotyHzbW2vupZykxrM3cPFSJNlpPG1bkj508inCE/an1szFxf2NIny/L5k
-         D4uGVSBiEZ0CjTKWNQh/BGL14AuZharmXDE5tujY0m1/KZnMCQj6zDW0J5uEMag2+8
-         pGxDDPcsM0Ada34si6Yxd4A0ikiGgimq+yqZxseAsiG68u1q++hxq1xLsJzzNpUROE
-         RphQh2wxUIaSbYnSmRbzRo5cWopNyyG9jMP1jCXbVeGdQU67rlACiVGgphh7Z1kEdY
-         xgQ0As6jdBUzA==
+In-Reply-To: <1554807715-2353-1-git-send-email-eugen.hristev@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfM0Njr35yidXKzq3/GsxEx02j11xyiksh7QgG3EN5+/0SgKH0jXvCwXf+c3WaFvYfmKf+qK1kvQ8ShZy2B84RNN6aS4dS7ZFfq+rETQ/ZDXe2lVmyh4L
+ eaq1YLKL4YfHrOKTW93u/d6c53vWPWr5qgyc8N+THzTSwu+6M2pGIOKt9ggxL85V5aMQyJXK6dIkl75tS6lWEqmWE2yiCMd8lnTJX3EywMVWWrYJulETcRyq
+ a7FoZEACK0fN1noeG+m12DeC4FznlUzAGiQ7UV0/Ri6QnHaM42Y5jyVV6ZJdt9T5NWM+re2s20qrK0zAsrdVyAo7H9RxaXwEfUZmScSx+2q3a1C9EzbWnn1G
+ PUAen2KQBEpdfKtdvXn6EyoqY5hnF4o/YIk9CJBw65NwrVbXCiPfr7yRMD329+Etd0HeIyBSFWr+HU8EP0opC6ZyzLGKv++eLWiAU3VV/YUinv9tc0xJkRN/
+ Tb9tafF2VeiGfzjJDnicewjZFLqQCkD2noEvZEx1zbXGxCedQIpwjOPDEGs=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: sumitg <sumitg@nvidia.com>
+On 4/9/19 1:07 PM, Eugen.Hristev@microchip.com wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
+> 
+> This series includes feature rework, feature additions and bug fixes for the
+> atmel-isc driver.
+> It applies only on top of my previous patchset:
+> media: atmel: atmel-isc: removed ARGB32 added ABGR32 and XBGR32
+> media: atmel: atmel-isc: reworked driver and formats
+> available at:
+> https://git.linuxtv.org/hverkuil/media_tree.git/commit/?h=for-v5.2b&id=03ef1b56cba6ad17f6ead13c85a81e0e80fbc9d1
+> 
+> One open question is regarding the WHITE_BALANCE error returns: it would seem
+> logical to return EAGAIN or EBUSY, but this is not compliant with
+> v4l2-compliance.
+> Does it make sense to return success on every occasion? even if the
+> DO_WHITE_BALANCE does nothing?
+> In this series I used the return EAGAIN or EBUSY from the v4l2-ctrls, but I
+> can change if always success is a better way of returning (even if normally
+> a return value serves this exact purpose - return some code )
 
-Fixing use-after-free within __v4l2_ctrl_handler_setup().
-Memory is being freed with kfree(new_ref) for duplicate
-control reference entry but cluster is still referring
-to the duplicate entry. Change done to point cluster to
-original reference instead of duplicate which is freed.
+See my comments. Use v4l2_ctrl_activate() instead to mark controls active
+or inactive and the control framework will do the rest.
 
- ==================================================================
- BUG: KASAN: use-after-free in __v4l2_ctrl_handler_setup+0x388/0x428
- Read of size 8 at addr ffffffc324e78618 by task systemd-udevd/312
+I think it would speed up matters if you split up your series: one series
+containing just fixes (I can merged those quickly) and one for the new
+functionality.
 
- Allocated by task 312:
+Regards,
 
- Freed by task 312:
+	Hans
 
- The buggy address belongs to the object at ffffffc324e78600
-  which belongs to the cache kmalloc-64 of size 64
- The buggy address is located 24 bytes inside of
-  64-byte region [ffffffc324e78600, ffffffc324e78640)
- The buggy address belongs to the page:
- page:ffffffbf0c939e00 count:1 mapcount:0 mapping:
-					(null) index:0xffffffc324e78f80
- flags: 0x4000000000000100(slab)
- raw: 4000000000000100 0000000000000000 ffffffc324e78f80 000000018020001a
- raw: 0000000000000000 0000000100000001 ffffffc37040fb80 0000000000000000
- page dumped because: kasan: bad access detected
-
- Memory state around the buggy address:
-  ffffffc324e78500: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-  ffffffc324e78580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- >ffffffc324e78600: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-                             ^
-  ffffffc324e78680: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
-  ffffffc324e78700: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
- ==================================================================
-
-Signed-off-by: sumitg <sumitg@nvidia.com>
----
- drivers/media/v4l2-core/v4l2-ctrls.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 5e3806f..e971bab 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -2182,6 +2182,7 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 			continue;
- 		/* Don't add duplicates */
- 		if (ref->ctrl->id == id) {
-+			ctrl->cluster = &ref->ctrl;
- 			kfree(new_ref);
- 			goto unlock;
- 		}
--- 
-2.7.4
+> 
+> Eugen Hristev (7):
+>   media: atmel: atmel-isc: add safe checks and fixed wrong ISC state in
+>     error case
+>   media: atmel: atmel-isc: reworked white balance feature
+>   media: v4l2-ctrl: fix flags for DO_WHITE_BALANCE
+>   media: atmel: atmel-isc: add support for DO_WHITE_BALANCE
+>   media: atmel: atmel-isc: limit incoming pixels per frame
+>   media: atmel: atmel-isc: fix INIT_WORK misplacement
+>   media: atmel: atmel-isc: fix asd memory allocation
+> 
+>  drivers/media/platform/atmel/atmel-isc-regs.h |  25 +-
+>  drivers/media/platform/atmel/atmel-isc.c      | 346 +++++++++++++++++++++++---
+>  drivers/media/v4l2-core/v4l2-ctrls.c          |   1 +
+>  3 files changed, 336 insertions(+), 36 deletions(-)
+> 
 
