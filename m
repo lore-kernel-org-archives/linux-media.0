@@ -2,135 +2,171 @@ Return-Path: <SRS0=hW3k=SN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ED80C10F13
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 12:00:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0633EC10F13
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 12:48:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 475E3217F4
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 12:00:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C693621871
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 12:48:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbfDKMAp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 08:00:45 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:43237 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726264AbfDKMAp (ORCPT
+        id S1727113AbfDKMsE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 08:48:04 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:48189 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726832AbfDKMsD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 08:00:45 -0400
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1hEYNn-00069u-5O; Thu, 11 Apr 2019 14:00:43 +0200
-Message-ID: <1554984042.6389.5.camel@pengutronix.de>
-Subject: Re: [PATCH 07/10] media: coda: limit frame interval enumeration to
- supported frame sizes
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 11 Apr 2019 14:00:42 +0200
-In-Reply-To: <36f792a8-7680-100f-09a4-b9315177c791@xs4all.nl>
-References: <20190408123256.22868-1-p.zabel@pengutronix.de>
-         <20190408123256.22868-7-p.zabel@pengutronix.de>
-         <ebbc3d03-e59e-32d5-c943-f9e426414848@xs4all.nl>
-         <1554906176.3765.9.camel@pengutronix.de>
-         <863e842a16db5ee6b10a2fd149119ae41ce26de6.camel@ndufresne.ca>
-         <5feecd0e-5c7b-27fe-84a0-0bffb04128df@xs4all.nl>
-         <1554970925.6389.1.camel@pengutronix.de>
-         <36f792a8-7680-100f-09a4-b9315177c791@xs4all.nl>
+        Thu, 11 Apr 2019 08:48:03 -0400
+X-Originating-IP: 90.88.18.121
+Received: from aptenodytes (aaubervilliers-681-1-63-121.w90-88.abo.wanadoo.fr [90.88.18.121])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 81D9120018;
+        Thu, 11 Apr 2019 12:47:53 +0000 (UTC)
+Message-ID: <4c9aa6a850d76533ff693a44ef95b68241836751.camel@bootlin.com>
+Subject: Re: [PATCH 4/6] ARM: dts: sun8i: a83t: Add device node for CSI
+ (Camera Sensor Interface)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     =?UTF-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Chen-Yu Tsai <wens@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh+dt@kernel.org>,
+        Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Date:   Thu, 11 Apr 2019 14:47:52 +0200
+In-Reply-To: <20190409220040.3sx456gefmjq3t3g@core.my.home>
+References: <20190408165744.11672-1-wens@kernel.org>
+         <20190408165744.11672-5-wens@kernel.org>
+         <20190409075804.4zrwjil7ie2gjigu@flea>
+         <CAGb2v64CYV68Q0a7x5p-XabS74vaQWP3paPopodmqQPTOrq2gQ@mail.gmail.com>
+         <20190409082818.z33mq2qrxethldzf@flea>
+         <20190409220040.3sx456gefmjq3t3g@core.my.home>
+Organization: Bootlin
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u1 
-Mime-Version: 1.0
+User-Agent: Evolution 3.32.0 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 2019-04-11 at 12:18 +0200, Hans Verkuil wrote:
-> On 4/11/19 10:22 AM, Philipp Zabel wrote:
-> > On Wed, 2019-04-10 at 18:24 +0200, Hans Verkuil wrote:
-> > > On 4/10/19 6:11 PM, Nicolas Dufresne wrote:
-> > > > Le mercredi 10 avril 2019 à 16:22 +0200, Philipp Zabel a écrit :
-> > > > > On Wed, 2019-04-10 at 15:43 +0200, Hans Verkuil wrote:
-> > > > > [...]
-> > > > > > > @@ -1126,12 +1127,32 @@ static int coda_enum_frameintervals(struct file *file, void *fh,
+Hi,
+
+Le mercredi 10 avril 2019 à 00:00 +0200, Ondřej Jirman a écrit :
+> On Tue, Apr 09, 2019 at 10:28:18AM +0200, Maxime Ripard wrote:
+> > On Tue, Apr 09, 2019 at 04:07:34PM +0800, Chen-Yu Tsai wrote:
+> > > On Tue, Apr 9, 2019 at 3:58 PM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+> > > > On Tue, Apr 09, 2019 at 12:57:42AM +0800, Chen-Yu Tsai wrote:
+> > > > > From: Chen-Yu Tsai <wens@csie.org>
 > > > > > 
-> > > > > [...]
-> > > > > > Why support VIDIOC_ENUM_FRAMEINTERVALS at all? It makes no sense for a codec.
-> > > > > > I'd remove it altogether.
+> > > > > The A83T SoC has a camera sensor interface (known as CSI in Allwinner
+> > > > > lingo), which is similar to the one found on the A64 and H3. The only
+> > > > > difference seems to be that support of MIPI CSI through a connected
+> > > > > MIPI CSI-2 bridge.
+> > > > > 
+> > > > > Add a device node for it, and pinctrl nodes for the commonly used MCLK
+> > > > > and 8-bit parallel interface. The property /omit-if-no-ref/ is added to
+> > > > > the pinctrl nodes to keep the device tree blob size down if they are
+> > > > > unused.
+> > > > > 
+> > > > > Signed-off-by: Chen-Yu Tsai <wens@csie.org>
+> > > > > ---
+> > > > >  arch/arm/boot/dts/sun8i-a83t.dtsi | 31 +++++++++++++++++++++++++++++++
+> > > > >  1 file changed, 31 insertions(+)
+> > > > > 
+> > > > > diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > > > index f739b88efb53..0c52f945fd5f 100644
+> > > > > --- a/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > > > +++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > > > @@ -682,6 +682,20 @@
+> > > > >                       #interrupt-cells = <3>;
+> > > > >                       #gpio-cells = <3>;
+> > > > > 
+> > > > > +                     /omit-if-no-ref/
+> > > > > +                     csi_8bit_parallel_pins: csi-8bit-parallel-pins {
+> > > > > +                             pins = "PE0", "PE2", "PE3", "PE6", "PE7",
+> > > > > +                                    "PE8", "PE9", "PE10", "PE11",
+> > > > > +                                    "PE12", "PE13";
+> > > > > +                             function = "csi";
+> > > > > +                     };
+> > > > > +
+> > > > > +                     /omit-if-no-ref/
+> > > > > +                     csi_mclk_pin: csi-mclk-pin {
+> > > > > +                             pins = "PE1";
+> > > > > +                             function = "csi";
+> > > > > +                     };
+> > > > > +
+> > > > >                       emac_rgmii_pins: emac-rgmii-pins {
+> > > > >                               pins = "PD2", "PD3", "PD4", "PD5", "PD6", "PD7",
+> > > > >                                      "PD11", "PD12", "PD13", "PD14", "PD18",
+> > > > > @@ -994,6 +1008,23 @@
+> > > > >                       interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_HIGH)>;
+> > > > >               };
+> > > > > 
+> > > > > +             csi: camera@1cb0000 {
+> > > > > +                     compatible = "allwinner,sun8i-a83t-csi";
+> > > > > +                     reg = <0x01cb0000 0x1000>;
+> > > > > +                     interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
+> > > > > +                     clocks = <&ccu CLK_BUS_CSI>,
+> > > > > +                              <&ccu CLK_CSI_SCLK>,
+> > > > > +                              <&ccu CLK_DRAM_CSI>;
+> > > > > +                     clock-names = "bus", "mod", "ram";
+> > > > > +                     resets = <&ccu RST_BUS_CSI>;
+> > > > > +                     status = "disabled";
+> > > > > +
+> > > > > +                     csi_in: port {
+> > > > > +                             #address-cells = <1>;
+> > > > > +                             #size-cells = <0>;
 > > > > 
-> > > > It does make sense, since framerate is the only information that can be
-> > > > used to produce a specific bitrate. If you don't enumerate the rates,
-> > > > then you may endup with a miss-match of what userspace wants, which
-> > > > will result in a different rate then what the user-space anticipated.
-> > > > That being said, I expect these intervals to be really wide. Venus HW
-> > > > uses a Q16 internally, which is precise enough that we could just
-> > > > ignore the interval.
+> > > > If we expect a single enpoint, then we don't need the address-cells
+> > > > and size-cells properties.
 > > > 
-> > > So the problem is that for an encoder where you desires a specific
-> > > constant bitrate, the encoder also needs to know the framerate.
+> > > I wouldn't bet on anything. The way the Q8 tablets did front/back cameras
+> > > is kind of genius if not very hacky. They have two "identical" sensors
+> > > on the same I2C bus and CSI bus, with shared reset line but separate
+> > > shutdown lines. Since they are identical, they also have the same I2C
+> > > address. I haven't figured out how to model this in the device tree.
 > > > 
-> > > And the driver then would have to support ENUM_FRAMEINTERVALS and the
-> > > S_PARM ioctl so userspace can set the framerate.
+> > > The point is, it's perfectly possible to have two or more sensors use
+> > > the same controller, provided only one be active at a time.
 > > 
-> > Ah right, that was it. Encoding works fine without ENUM_FRAMEINTERVALS,
-> > as coda has no meaningful frame rate limitations. I had implemented
-> > S_PARM since it is required for CBR encoding, and v4l2-compliance then
-> > complained about ENUM_FRAMEINTERVALS missing:
+> > Right, but I guess the common case would be to have a single sensor,
+> > where that wouldn't be needed.
 > > 
-> >   cde29ef313de ("[media] coda: Use S_PARM to set nominal framerate for h.264 encoder")
-> >   07b6080d4e6d ("media: coda: implement ENUM_FRAMEINTERVALS")
+> > In odd cases, we can always specify it in the DTS, and if it becomes
+> > common enough, we can move it to the DTSI.
 > 
-> And I think that's right. If you advertise framerate support, then
-> userspace needs to know about the capabilities.
+> I'm planning on having two sensors there, in a less arcane setup,
+> though - no shared resets, and different I2C addresses.
 > 
-> I do think ENUM_FRAMEINTERVALS should return some sane values. Right now
-> coda advertises 1/65535 fps to 65535 fps (or thereabout).
+> Anyway, I can confirm that CSI driver works fine on A83T with just
+> a DTSI patch, even without the clock patch in this series. I've been
+> running it for quite a while that way without any issues (different
+> camera chip than the ones being used by wens).
 
-Those are the limits imposed by the frame rate registers.
+That's quite nice to hear! I would be interested in getting some
+insight on which sensors are known to work and which are broken or have
+limitations.
 
-> I would probably return 1 fps to 200 fps (200 Hz is the highest framerate
-> defined by CTA-861-G).
+Would you happen to have a list of the sensors that you tested and
+whether you encountered such issues with them?
 
-Why? We can certainly encode more than 200 fps in real time if only the
-frame size is small enough, and for offline transcoding the nominal
-frame rate can be anything the coded format supports.
-Smaller than 1 fps might be useful for time lapse videos as well.
+Cheers,
 
-> This can also eventually be a helper function in v4l2-mem2mem.c since I expect
-> this to be the same for all (?) encoders.
+Paul
 
-For example h.264 has an optional 32-bit numerator and denominator
-(num_units_in_tick and time_scale in the Video Usability Information).
-I don't see any reason to limit this artificially in the driver.
+-- 
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
-> > Hmm, not necesarily. I hadn't thought about that before, but if the
-> > decoder supports frame skipping this could be used to advertise
-> > available reductions in frame rate.
-> 
-> That assumes that you want to use S_PARM for that as well. And does the decoder
-> provide the framerate encoded in the bitstream to the driver?
-
-That is a difficult question. Yes, depending on CODA hardware variant,
-codec, and actual bitstream (where this information is optional), the
-firmware may or may not report the frame rate. Maybe it is fundamentally
-not a good idea to try to control frame skipping via the nominal frame
-rate instead of directly.
-
-> Using S_PARM for this only works if the driver can know the encoded framerate.
-> 
-> Anyway, this is probably something to discuss once a driver supports frame
-> skipping for the decoder.
-
-Right. Since the coda driver does not support frame skipping yet, I'll
-return -ENOTTY for decoder ENUM_FRAMEINTERVALS.
-
-regards
-Philipp
