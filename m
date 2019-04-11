@@ -2,167 +2,203 @@ Return-Path: <SRS0=hW3k=SN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93B68C10F14
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4F33C10F14
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 16:01:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F4D82133D
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:58:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 810962133D
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 16:01:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WmwA2o/A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726732AbfDKP5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 11:57:55 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:55109 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726646AbfDKP5z (ORCPT
+        id S1726585AbfDKQB1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 12:01:27 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:3098 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726145AbfDKQB1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 11:57:55 -0400
-X-Originating-IP: 90.88.18.121
-Received: from localhost (aaubervilliers-681-1-63-121.w90-88.abo.wanadoo.fr [90.88.18.121])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 0A81E20012;
-        Thu, 11 Apr 2019 15:57:49 +0000 (UTC)
-Date:   Thu, 11 Apr 2019 17:57:49 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg 
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Jens Kuske <jenskuske@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: Re: [PATCH RESEND v7 1/2] media: uapi: Add H264 low-level decoder
- API compound controls.
-Message-ID: <20190411155749.crdpidehjxa6edya@flea>
-References: <cover.bfe197a82766125bea21dd26fd3de85893a921ac.1554380738.git-series.maxime.ripard@bootlin.com>
- <7cd913545cfc80fa9999839c62c4bf7b354a7904.1554380738.git-series.maxime.ripard@bootlin.com>
- <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
- <CAGb2v642__AF3iHO+d9FKazJ4=uRAQSfxAN_uCUWagH6Jz2twQ@mail.gmail.com>
- <c3ed6d00bf5642b1524ef4973f2db7ba6759fb6d.camel@collabora.com>
- <20190405151552.biesirbs35uivk7d@flea>
- <05078223a4098c96f6260f77e9ef2a01b966daa6.camel@collabora.com>
+        Thu, 11 Apr 2019 12:01:27 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5caf64d30000>; Thu, 11 Apr 2019 09:01:23 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 11 Apr 2019 09:01:25 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 11 Apr 2019 09:01:25 -0700
+Received: from HQMAIL112.nvidia.com (172.18.146.18) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 11 Apr
+ 2019 16:01:25 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL112.nvidia.com
+ (172.18.146.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 11 Apr
+ 2019 16:01:24 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 11 Apr 2019 16:01:24 +0000
+Received: from sumitg-l4t.nvidia.com (Not Verified[10.24.42.162]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5caf64d10007>; Thu, 11 Apr 2019 09:01:24 -0700
+From:   Sumit Gupta <sumitg@nvidia.com>
+To:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
+        <sakari.ailus@linux.intel.com>, <paul.kocialkowski@bootlin.com>,
+        <tfiga@chromium.org>, <keiichiw@chromium.org>, <sumitg@nvidia.com>,
+        <bbasu@nvidia.com>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [Patch V2] v4l2-core: fix use-after-free error
+Date:   Thu, 11 Apr 2019 21:31:18 +0530
+Message-ID: <1554998478-30349-1-git-send-email-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gy5eppcjekdsrhyc"
-Content-Disposition: inline
-In-Reply-To: <05078223a4098c96f6260f77e9ef2a01b966daa6.camel@collabora.com>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1554998483; bh=sEufludimsSbbAIyEALaQypOEDwA1U3AV6D8y6MVhVY=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=WmwA2o/AN6c9kcgQungtMS4ra+riwT8ikqlOJuL89+teccY92E/O23hXB2v6Ym9UN
+         dSIxZt/hA9LIQCPMM2MPqvl/ffsO2k7qpdYou4V2VrfHZb5pVdJkOfFvSOqWmTnwoY
+         AUftPzaQgC+okfWrmTUN3FVbv57+FnVug8V4ubwU9nOBatH2cKd66gLSKxlUQHGAis
+         LRFu65ShRthvGK3Dqd1Vm7hYyKjH9LHdX8dCvDkGRUa/LKTGqs0/6V1CI48AfHP62u
+         ueOpMan9UbVJOm5qU026trP2ky1TsQcjsN5LyV5c/Q2Cx5WJ7Lpjwi8d9dG4oVORSV
+         dqXNq+88XlAKA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: sumitg <sumitg@nvidia.com>
 
---gy5eppcjekdsrhyc
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixing use-after-free within __v4l2_ctrl_handler_setup().
+Memory is being freed with kfree(new_ref) for duplicate
+control reference entry but cluster is still referring
+to the duplicate entry. Change done to update ctrl->cluster
+only when new control reference is added. Also, checking if
+ctrl->ncontrols is non-zero before accessing controls from
+cluster pointer to avoid illegal access when cluster has
+zero controls.
 
-Hi,
+ ==================================================================
+ BUG: KASAN: use-after-free in __v4l2_ctrl_handler_setup+0x388/0x428
+ Read of size 8 at addr ffffffc324e78618 by task systemd-udevd/312
 
-On Fri, Apr 05, 2019 at 12:27:48PM -0400, Nicolas Dufresne wrote:
-> Le vendredi 05 avril 2019 =E0 17:15 +0200, Maxime Ripard a =E9crit :
-> > Hi Nicolas,
-> >
-> > On Thu, Apr 04, 2019 at 11:41:13AM -0400, Nicolas Dufresne wrote:
-> > > > > > +    * - __u16
-> > > > > > +      - ``pic_width_in_mbs_minus1``
-> > > > > > +      -
-> > > > > > +    * - __u16
-> > > > > > +      - ``pic_height_in_map_units_minus1``
-> > > > > > +      -
-> > > > >
-> > > > > We recently had some reflection with Alex that this is redundant =
-with
-> > > > > the width and height in the OUTPUT format. It may also apply to s=
-ome
-> > > > > other fields in these structs. I feel like they should be removed=
- and
-> > > > > passed via corresponding generic V4L2 properties - format, select=
-ion,
-> > > > > etc.
-> > > > >
-> > > > > The same problem is also present in the MPEG2 controls. In fact, =
-there
-> > > > > was a patch already which used some fields from the controls to
-> > > > > calculate the destination buffer strides, rather than bytesperlin=
-e in
-> > > > > the format.
-> > > > >
-> > > > > Since we're in staging, it could be done with a follow-up patch, =
-though.
-> > > >
-> > > > Just my two cents. I played with some codecs a while back. IIRC some
-> > > > specify a "codec" size in addition to the actual picture size, like
-> > > > when the encoder does padding to fit the requirements of the codec
-> > > > (spec). Is this needed anywhere?
-> > >
-> > > With state-less encoders, the headers, which contains the crop
-> > > information is created by userspace and for state less decoder, the
-> > > headers that contains this information is parsed by userspace. So I
-> > > believe that in theory, the accelerator does not strictly need to be
-> > > aware of the cropped dimensions.
-> > >
-> > > Another thing, is that there is not guarantied matches between e.g.
-> > > depth of the chrome/luma and the final image buffers. Some hardware m=
-ay
-> > > have bandwidth limitation or internal converter and could possibly
-> > > decode 10bit data into 8bit buffers.
-> > >
-> > > A third reason why I would not try and encode this header information
-> > > is that there can be multiple PPS/SPS at the same time, and I think
-> > > it's confusing if the relevant information to differentiate them is
-> > > removed.
-> >
-> > Sorry if that sounds a bit dumb, but it's not really clear to me if
-> > you're arguing for the removal of the data as Tomasz suggests, or if
-> > you want to keep them.
-> >
-> > The first paragrah seems to advocate for the former, but the two
-> > others for the latter.
->
-> I think the data should stay. As I said, there can be multiple SPS/PPS,
-> while there is only one format. That being said, how does SPS/PPS
-> activation works ? How do you tell the driver about all the SPS/PPS and
-> which one is being activated ?
+ Allocated by task 312:
 
-The current way of dealing with this is that the _SLICE_PARAMS control
-actually takes an array of SPS's. And same thing for PPS.
+ Freed by task 312:
 
-There's no difference between activated and deactivated ones
-though. What is the use case for this?
+ The buggy address belongs to the object at ffffffc324e78600
+  which belongs to the cache kmalloc-64 of size 64
+ The buggy address is located 24 bytes inside of
+  64-byte region [ffffffc324e78600, ffffffc324e78640)
+ The buggy address belongs to the page:
+ page:ffffffbf0c939e00 count:1 mapcount:0 mapping:
+					(null) index:0xffffffc324e78f80
+ flags: 0x4000000000000100(slab)
+ raw: 4000000000000100 0000000000000000 ffffffc324e78f80 000000018020001a
+ raw: 0000000000000000 0000000100000001 ffffffc37040fb80 0000000000000000
+ page dumped because: kasan: bad access detected
 
-Thanks!
-Maxime
+ Memory state around the buggy address:
+  ffffffc324e78500: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+  ffffffc324e78580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ >ffffffc324e78600: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+                             ^
+  ffffffc324e78680: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+  ffffffc324e78700: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+ ==================================================================
 
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+---
+v2:
+* update ctrl->cluster only when new control reference is added.
+* check ctrl->ncontrols to avoid illegal access when cluster has zero controls.
 
---gy5eppcjekdsrhyc
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/media/v4l2-core/v4l2-ctrls.c | 53 +++++++++++++++++++-----------------
+ 1 file changed, 28 insertions(+), 25 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 5e3806f..3d0a952 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -2154,15 +2154,6 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
+ 	if (size_extra_req)
+ 		new_ref->p_req.p = &new_ref[1];
+ 
+-	if (ctrl->handler == hdl) {
+-		/* By default each control starts in a cluster of its own.
+-		   new_ref->ctrl is basically a cluster array with one
+-		   element, so that's perfect to use as the cluster pointer.
+-		   But only do this for the handler that owns the control. */
+-		ctrl->cluster = &new_ref->ctrl;
+-		ctrl->ncontrols = 1;
+-	}
+-
+ 	INIT_LIST_HEAD(&new_ref->node);
+ 
+ 	mutex_lock(hdl->lock);
+@@ -2195,6 +2186,15 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
+ 	hdl->buckets[bucket] = new_ref;
+ 	if (ctrl_ref)
+ 		*ctrl_ref = new_ref;
++	if (ctrl->handler == hdl) {
++		/* By default each control starts in a cluster of its own.
++		 * new_ref->ctrl is basically a cluster array with one
++		 * element, so that's perfect to use as the cluster pointer.
++		 * But only do this for the handler that owns the control.
++		 */
++		ctrl->cluster = &new_ref->ctrl;
++		ctrl->ncontrols = 1;
++	}
+ 
+ unlock:
+ 	mutex_unlock(hdl->lock);
+@@ -2725,25 +2725,28 @@ int __v4l2_ctrl_handler_setup(struct v4l2_ctrl_handler *hdl)
+ 		ctrl->done = false;
+ 
+ 	list_for_each_entry(ctrl, &hdl->ctrls, node) {
+-		struct v4l2_ctrl *master = ctrl->cluster[0];
+-		int i;
+-
+-		/* Skip if this control was already handled by a cluster. */
+-		/* Skip button controls and read-only controls. */
+-		if (ctrl->done || ctrl->type == V4L2_CTRL_TYPE_BUTTON ||
+-		    (ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY))
+-			continue;
++		if (ctrl->ncontrols) {
++			struct v4l2_ctrl *master = ctrl->cluster[0];
++			int i;
++
++			/* Skip if this control was already handled by a */
++			/* cluster. Skip button controls and read-only */
++			/* controls. */
++			if (ctrl->done || ctrl->type == V4L2_CTRL_TYPE_BUTTON ||
++				(ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY))
++				continue;
+ 
+-		for (i = 0; i < master->ncontrols; i++) {
+-			if (master->cluster[i]) {
+-				cur_to_new(master->cluster[i]);
+-				master->cluster[i]->is_new = 1;
+-				master->cluster[i]->done = true;
++			for (i = 0; i < master->ncontrols; i++) {
++				if (master->cluster[i]) {
++					cur_to_new(master->cluster[i]);
++					master->cluster[i]->is_new = 1;
++					master->cluster[i]->done = true;
++				}
+ 			}
++			ret = call_op(master, s_ctrl);
++			if (ret)
++				break;
+ 		}
+-		ret = call_op(master, s_ctrl);
+-		if (ret)
+-			break;
+ 	}
+ 
+ 	return ret;
+-- 
+2.7.4
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXK9j/QAKCRDj7w1vZxhR
-xaYGAQCsc7VzPLi6Wez6KKZYGFulznMkEwVKTW7odXkXkgtCIwEAmJwWZjLVEXE4
-EQyZH/dg/cuLi5H6A+QpU9SjLypRswE=
-=TYHB
------END PGP SIGNATURE-----
-
---gy5eppcjekdsrhyc--
