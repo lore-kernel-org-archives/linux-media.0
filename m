@@ -2,141 +2,199 @@ Return-Path: <SRS0=hW3k=SN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_MUTT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 845FFC10F13
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 09:02:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DDE6C10F14
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 09:37:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5384C2084D
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 09:02:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="i7sFXOQh"
+	by mail.kernel.org (Postfix) with ESMTP id E005820693
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 09:37:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbfDKJCQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 05:02:16 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:52152 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726607AbfDKJCP (ORCPT
+        id S1726595AbfDKJhL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 05:37:11 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:38573 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726564AbfDKJhK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 05:02:15 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3B8xOO8191212;
-        Thu, 11 Apr 2019 09:02:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2018-07-02; bh=P5ztoqxcCV+cEdhGV5O62yAOgv2NzTmSYZIHLDIy9uU=;
- b=i7sFXOQhgAnFvFI/H6tSh1g2rTdoLtX2qy5q29ToAI7QwAdbpLZQVMCMfRSRZXQnuj9x
- lhFvl0qWhdBt0drdNMiUKwkKnDso55P4ExWvCJcLIsntkEzY2wEI2LZ0C+kZUEDriEvu
- 82PgWTkmXI9Ub1pbWLsMF+OxZa84t0d6JVEGAEC7KiEM72ouKYoV2b5CsXt7E8fx+FoA
- X6lNzHNxrBTzVeHQeTg0fTScKukRAkTdlsDmYoMDSalwubxV8AVgCvkAP/poE90W3A2p
- w0JUPBJ0frtTrtkCSte6nKU6WmLBxd5mR+e4ZMLcwCS0Vo9EgeJqBRCQEZAR8U0MbnRg 9g== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 2rphmeqy1d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Apr 2019 09:02:10 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3B91hO8183612;
-        Thu, 11 Apr 2019 09:02:10 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2rpj5bm4yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Apr 2019 09:02:10 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x3B929bN031818;
-        Thu, 11 Apr 2019 09:02:09 GMT
-Received: from kadam (/41.202.241.15)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 11 Apr 2019 02:02:08 -0700
-Date:   Thu, 11 Apr 2019 12:01:57 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH v2] media: omap_vout: potential buffer overflow in
- vidioc_dqbuf()
-Message-ID: <20190411090157.GA27624@kadam>
+        Thu, 11 Apr 2019 05:37:10 -0400
+X-Originating-IP: 90.88.18.121
+Received: from localhost (aaubervilliers-681-1-63-121.w90-88.abo.wanadoo.fr [90.88.18.121])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 7C4711BF204;
+        Thu, 11 Apr 2019 09:37:05 +0000 (UTC)
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     hans.verkuil@cisco.com, acourbot@chromium.org,
+        sakari.ailus@linux.intel.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     tfiga@chromium.org, posciak@chromium.org,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        nicolas.dufresne@collabora.com, jenskuske@gmail.com,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se, ezequiel@collabora.com,
+        linux-sunxi@googlegroups.com,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Subject: [PATCH v9 0/4] media: cedrus: Add H264 decoding support
+Date:   Thu, 11 Apr 2019 11:36:59 +0200
+Message-Id: <cover.dec5630d6b289e0a50e1880be436050471a05269.1554975396.git-series.maxime.ripard@bootlin.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb4fe291-85b5-540b-c210-5e9fb051f2cc@xs4all.nl>
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9223 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1904110063
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9223 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1904110064
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The "b->index" is a u32 the comes from the user in the ioctl.  It hasn't
-been checked.  We aren't supposed to use it but we're instead supposed
-to use the value that gets written to it when we call videobuf_dqbuf().
+Hi,
 
-The videobuf_dqbuf() first memsets it to zero and then re-initializes it
-inside the videobuf_status() function.  It's this final value which we
-want.
+Here is a new version of the H264 decoding support in the cedrus
+driver.
 
-Hans Verkuil pointed out that we need to check the return from
-videobuf_dqbuf().  I ended up doing a little cleanup related to that as
-well.
+As you might already know, the cedrus driver relies on the Request
+API, and is a reverse engineered driver for the video decoding engine
+found on the Allwinner SoCs.
 
-Fixes: 72915e851da9 ("[media] V4L2: OMAP: VOUT: dma map and unmap v4l2 buffers in qbuf and dqbuf")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
-v2: check videobuf_dqbuf() return
+This work has been possible thanks to the work done by the people
+behind libvdpau-sunxi found here:
+https://github.com/linux-sunxi/libvdpau-sunxi/
 
- drivers/media/platform/omap/omap_vout.c | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+I've tested the various ABI using this gdb script:
+http://code.bulix.org/jl4se4-505620?raw
 
-diff --git a/drivers/media/platform/omap/omap_vout.c b/drivers/media/platform/omap/omap_vout.c
-index 37f0d7146dfa..cb6a9e3946b6 100644
---- a/drivers/media/platform/omap/omap_vout.c
-+++ b/drivers/media/platform/omap/omap_vout.c
-@@ -1527,23 +1527,20 @@ static int vidioc_dqbuf(struct file *file, void *fh, struct v4l2_buffer *b)
- 	unsigned long size;
- 	struct videobuf_buffer *vb;
- 
--	vb = q->bufs[b->index];
--
- 	if (!vout->streaming)
- 		return -EINVAL;
- 
--	if (file->f_flags & O_NONBLOCK)
--		/* Call videobuf_dqbuf for non blocking mode */
--		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 1);
--	else
--		/* Call videobuf_dqbuf for  blocking mode */
--		ret = videobuf_dqbuf(q, (struct v4l2_buffer *)b, 0);
-+	ret = videobuf_dqbuf(q, b, !!(file->f_flags & O_NONBLOCK));
-+	if (ret)
-+		return ret;
-+
-+	vb = q->bufs[b->index];
- 
- 	addr = (unsigned long) vout->buf_phy_addr[vb->i];
- 	size = (unsigned long) vb->size;
- 	dma_unmap_single(vout->vid_dev->v4l2_dev.dev,  addr,
- 				size, DMA_TO_DEVICE);
--	return ret;
-+	return 0;
- }
- 
- static int vidioc_streamon(struct file *file, void *fh, enum v4l2_buf_type i)
+And this test script:
+http://code.bulix.org/8zle4s-505623?raw
+
+The application compiled is quite trivial:
+http://code.bulix.org/e34zp8-505624?raw
+
+The output is:
+arm64:	builds/arm64-test-v4l2-h264-structures
+	SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+x86:	builds/x86-test-v4l2-h264-structures
+	SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+arm:	builds/arm-test-v4l2-h264-structures
+	SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+x64:	builds/x64-test-v4l2-h264-structures
+	SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+
+Let me know if there's any flaw using that test setup, or if you have
+any comments on the patches.
+
+Maxime
+
+Changes from v8:
+  - Moved the format into a private header and split the controls, format
+    and format doc into three commits
+  - Changed the name of the variables in v4l2_ctrl_ptr
+  - Added a note in the format documentation to mention that the format is
+    not stable yet
+  - Fixed the label of the format documentation
+  - Fixed a reference in the format documentation
+  - Added tags
+  - Rebase on current next
+
+Changes from v7:
+  - Changed the _slice_param and _decode_param to _params
+
+Changes from v6:
+  - Rebased on next
+  - Renamed the timestamp DPB field to reference_ts
+  - Fixed the collision of control type values
+  - Removed unused fields
+  - Fixed the structure layout that was broken on x86 by reducing the
+    num_slices and nal_ref_idc to 16 bits instead of 32
+
+Changes from v5:
+  - Made the references to the H264 spec more explicit
+  - Added a flag for the IDR pic
+  - Fixed typos
+  - Rebased on v5.1-rc1
+
+Changes from v4:
+  - Changed the luma and chroma weight and offset from s8 to s16
+  - Adjusted chroma and luma denominators masks in the driver
+  - Casted the luma and chroma offset to prevent an overflow
+  - ALways write the interrupt status register
+  - Fix a bug in the sram write routine that would write something even if
+    the length was 0
+  - Make the scaling lists mandatory
+  - Made the reference list order explicit in the documentation
+  - Made the fact that the slice structure can be an array
+  - Renamed the slice format to V4L2_PIX_FMT_H264_SLICE_RAW
+  - Rebased on Hans' tag br-v5.1s
+
+Changes from v3:
+  - Reintroduced long term reference flag and documented it
+  - Reintroduced ref_pic_list_p0/b0/b1 and documented it
+  - Documented the DPB flags
+  - Treat the scaling matrix as optional in the driver, as documented
+  - Free the neighbor buffer
+  - Increase the control IDs by a large margin to be safe of collisions
+  - Reorder the fields documentation according to the structure layout
+  - Change the tag documentation by the timestamp
+  - Convert the sram array to size_t
+  - Simplify the buffer retrieval from timestamp
+  - Rebase
+
+Changes from v2:
+  - Simplified _cedrus_write_ref_list as suggested by Jernej
+  - Set whether the frame is used as reference using nal_ref_idc
+  - Respect chroma_format_idc
+  - Fixes for the scaling list and prediction tables
+  - Wrote the documentation for the flags
+  - Added a bunch of defines to the driver bit fields
+  - Reworded the controls and data format descriptions as suggested
+    by Hans
+  - Reworked the controls' structure field size to avoid padding
+  - Removed the long term reference flag
+  - Reintroduced the neighbor info buffer
+  - Removed the ref_pic_list_p0/b0/b1 arrays that are redundant with the
+    one in the DPB
+  - used the timestamps instead of tags
+  - Rebased on 5.0-rc1
+
+Changes from v1:
+  - Rebased on 4.20
+  - Did the documentation for the userspace API
+  - Used the tags instead of buffer IDs
+  - Added a comment to explain why we still needed the swdec trigger
+  - Reworked the MV col buffer in order to have one slot per frame
+  - Removed the unused neighbor info buffer
+  - Made sure to have the same structure offset and alignments across
+    32 bits and 64 bits architecture
+
+Maxime Ripard (3):
+  media: pixfmt: Add H264 Slice format
+  media: pixfmt: Add H264_SLICE_RAW format documentation
+  media: cedrus: Add H264 decoding support
+
+Pawel Osciak (1):
+  media: uapi: Add H264 low-level decoder API compound controls.
+
+ Documentation/media/uapi/v4l/biblio.rst            |   9 +-
+ Documentation/media/uapi/v4l/ext-ctrls-codec.rst   | 569 ++++++++++++++-
+ Documentation/media/uapi/v4l/pixfmt-compressed.rst |  25 +-
+ Documentation/media/uapi/v4l/vidioc-queryctrl.rst  |  30 +-
+ Documentation/media/videodev2.h.rst.exceptions     |   5 +-
+ drivers/media/v4l2-core/v4l2-ctrls.c               |  42 +-
+ drivers/media/v4l2-core/v4l2-ioctl.c               |   1 +-
+ drivers/staging/media/sunxi/cedrus/Makefile        |   3 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c        |  31 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.h        |  38 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c    |  13 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c   | 574 ++++++++++++++-
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c     |   4 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_regs.h   |  91 ++-
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c  |   9 +-
+ include/media/h264-ctrls.h                         | 197 +++++-
+ include/media/v4l2-ctrls.h                         |  13 +-
+ 17 files changed, 1651 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+ create mode 100644 include/media/h264-ctrls.h
+
+base-commit: 2f4c4d833153517c7791318f8608cf5c212cef68
 -- 
-2.17.1
-
+git-series 0.9.1
