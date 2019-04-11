@@ -2,217 +2,141 @@ Return-Path: <SRS0=hW3k=SN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 242A5C10F13
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:53:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDDEEC10F14
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:55:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D8BAC2082E
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:53:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="T5JhLM+8"
+	by mail.kernel.org (Postfix) with ESMTP id A78962082E
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:55:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726702AbfDKPxR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 11:53:17 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:38327 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726538AbfDKPxR (ORCPT
+        id S1726860AbfDKPzq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 11:55:46 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:60793 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726264AbfDKPzp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 11:53:17 -0400
-Received: by mail-qt1-f194.google.com with SMTP id d13so7677954qth.5
-        for <linux-media@vger.kernel.org>; Thu, 11 Apr 2019 08:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version;
-        bh=k+Y1OcOWgwRgpISI5zqrPx/54l+wLcwRuCAo0t57fHk=;
-        b=T5JhLM+8bYHE7gTwzmopnJiqNbRSXirYfVFFnInbFsNaw+mvR6ZfkpvyDGZOg9iVod
-         HtofrTzkSQhZEJLyxYjWUWSZYOEjeJqOs3ZCaVf0v5EVmDWavNt/VH7VVZnp9nBU+yQe
-         hI5I7oFLYVpbLMeIrXpu10jC9wOPJcos2xAlQdHqMSe7IAQOWHiUS+AAeA0tXSh7a947
-         GM/ojaw0iPfO/0k+46Cg+HIFlymT3nU1k39EYam57zRISN8xkD4Pu9Rs8aFoGEl6R207
-         NITzoL7WhzBR+6GWjfiuLJ9A+qaNSSVeIgiS1Xme/hFS7IuPU+DIPkL94iU5VOPlrpYk
-         wbBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=k+Y1OcOWgwRgpISI5zqrPx/54l+wLcwRuCAo0t57fHk=;
-        b=AaH+4isqnyDPeGFdCxlb9c+ack08Ddu4qNSsv+fuCFLb6pecMgHU8/5uOeZ41iTrMG
-         rCpTU10LUcWXW+FyDoa9pX975SDYZq0mLC4T1unfVYvt9wckotnipQiCrP6NhLxYGBiX
-         tmAcrf15UrMRlGEQi3Pr/GjMQmvXnBX5pdtA/2ll11CesefctZsIBscscvUomETwo+g+
-         wEPkq9bITZKK37xTS9e2UEXM8PYVdrXaRApRZkD2xpL/OdOHT8zCrz/a6teXdecemo72
-         CHhquEwmcuklCwjxip9oSKDdJFY+U0tVvC1lVWfFyvGPRzoounsLtvAXQmS8/x04cOA4
-         7gPA==
-X-Gm-Message-State: APjAAAXLm+zyFwHNWBjQz4PXHE4Yz4eWhGm3ne54BuFqHWD0qnREhLy0
-        tpZgfjrZfl1/hT3OBl/1zsRTfg==
-X-Google-Smtp-Source: APXvYqxx75ieYiDoCKTepKxCEXdwQgSPNjczazqHuqWB7zYbpwRrWeAxPkxgMdAmE26QvARv+pPLbQ==
-X-Received: by 2002:a0c:9223:: with SMTP id a32mr41843641qva.138.1554997995787;
-        Thu, 11 Apr 2019 08:53:15 -0700 (PDT)
-Received: from tpx230-nicolas.collaboramtl (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
-        by smtp.gmail.com with ESMTPSA id r201sm21762353qke.37.2019.04.11.08.53.14
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Apr 2019 08:53:14 -0700 (PDT)
-Message-ID: <1502ac1f39973ad1bf1a4ee9a951c09d88941651.camel@ndufresne.ca>
-Subject: Re: [PATCH 07/10] media: coda: limit frame interval enumeration to
- supported frame sizes
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 11 Apr 2019 11:53:13 -0400
-In-Reply-To: <1554984042.6389.5.camel@pengutronix.de>
-References: <20190408123256.22868-1-p.zabel@pengutronix.de>
-         <20190408123256.22868-7-p.zabel@pengutronix.de>
-         <ebbc3d03-e59e-32d5-c943-f9e426414848@xs4all.nl>
-         <1554906176.3765.9.camel@pengutronix.de>
-         <863e842a16db5ee6b10a2fd149119ae41ce26de6.camel@ndufresne.ca>
-         <5feecd0e-5c7b-27fe-84a0-0bffb04128df@xs4all.nl>
-         <1554970925.6389.1.camel@pengutronix.de>
-         <36f792a8-7680-100f-09a4-b9315177c791@xs4all.nl>
-         <1554984042.6389.5.camel@pengutronix.de>
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-c35zPUGVZImky5AChZp7"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Thu, 11 Apr 2019 11:55:45 -0400
+X-Originating-IP: 90.88.18.121
+Received: from localhost (aaubervilliers-681-1-63-121.w90-88.abo.wanadoo.fr [90.88.18.121])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 0BFC31C000C;
+        Thu, 11 Apr 2019 15:55:40 +0000 (UTC)
+Date:   Thu, 11 Apr 2019 17:55:40 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [RFC PATCH 18/20] lib: image-formats: Add v4l2 formats support
+Message-ID: <20190411155540.poquzzx2apa5ahgb@flea>
+References: <cover.92acdec88ee4c280cb74e08ea22f0075e5fa055c.1553032382.git-series.maxime.ripard@bootlin.com>
+ <c97024b97d3261dcf41aad3c8bc1c5d9906f33c9.1553032382.git-series.maxime.ripard@bootlin.com>
+ <3f5748a6422d2f7eb11601bad297df870ff5952b.camel@ndufresne.ca>
+ <5385672c-cfee-7bc4-9c2e-e4d8d964b748@xs4all.nl>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="4zlq2z5366q2vxuf"
+Content-Disposition: inline
+In-Reply-To: <5385672c-cfee-7bc4-9c2e-e4d8d964b748@xs4all.nl>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---=-c35zPUGVZImky5AChZp7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--4zlq2z5366q2vxuf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Le jeudi 11 avril 2019 =C3=A0 14:00 +0200, Philipp Zabel a =C3=A9crit :
-> On Thu, 2019-04-11 at 12:18 +0200, Hans Verkuil wrote:
-> > On 4/11/19 10:22 AM, Philipp Zabel wrote:
-> > > On Wed, 2019-04-10 at 18:24 +0200, Hans Verkuil wrote:
-> > > > On 4/10/19 6:11 PM, Nicolas Dufresne wrote:
-> > > > > Le mercredi 10 avril 2019 =C3=A0 16:22 +0200, Philipp Zabel a =C3=
-=A9crit :
-> > > > > > On Wed, 2019-04-10 at 15:43 +0200, Hans Verkuil wrote:
-> > > > > > [...]
-> > > > > > > > @@ -1126,12 +1127,32 @@ static int coda_enum_frameintervals=
-(struct file *file, void *fh,
-> > > > > >=20
-> > > > > > [...]
-> > > > > > > Why support VIDIOC_ENUM_FRAMEINTERVALS at all? It makes no se=
-nse for a codec.
-> > > > > > > I'd remove it altogether.
-> > > > >=20
-> > > > > It does make sense, since framerate is the only information that =
-can be
-> > > > > used to produce a specific bitrate. If you don't enumerate the ra=
-tes,
-> > > > > then you may endup with a miss-match of what userspace wants, whi=
-ch
-> > > > > will result in a different rate then what the user-space anticipa=
-ted.
-> > > > > That being said, I expect these intervals to be really wide. Venu=
-s HW
-> > > > > uses a Q16 internally, which is precise enough that we could just
-> > > > > ignore the interval.
-> > > >=20
-> > > > So the problem is that for an encoder where you desires a specific
-> > > > constant bitrate, the encoder also needs to know the framerate.
-> > > >=20
-> > > > And the driver then would have to support ENUM_FRAMEINTERVALS and t=
-he
-> > > > S_PARM ioctl so userspace can set the framerate.
-> > >=20
-> > > Ah right, that was it. Encoding works fine without ENUM_FRAMEINTERVAL=
-S,
-> > > as coda has no meaningful frame rate limitations. I had implemented
-> > > S_PARM since it is required for CBR encoding, and v4l2-compliance the=
-n
-> > > complained about ENUM_FRAMEINTERVALS missing:
-> > >=20
-> > >   cde29ef313de ("[media] coda: Use S_PARM to set nominal framerate fo=
-r h.264 encoder")
-> > >   07b6080d4e6d ("media: coda: implement ENUM_FRAMEINTERVALS")
-> >=20
-> > And I think that's right. If you advertise framerate support, then
-> > userspace needs to know about the capabilities.
-> >=20
-> > I do think ENUM_FRAMEINTERVALS should return some sane values. Right no=
-w
-> > coda advertises 1/65535 fps to 65535 fps (or thereabout).
->=20
-> Those are the limits imposed by the frame rate registers.
->=20
-> > I would probably return 1 fps to 200 fps (200 Hz is the highest framera=
-te
-> > defined by CTA-861-G).
->=20
-> Why? We can certainly encode more than 200 fps in real time if only the
-> frame size is small enough, and for offline transcoding the nominal
-> frame rate can be anything the coded format supports.
-> Smaller than 1 fps might be useful for time lapse videos as well.
->=20
-> > This can also eventually be a helper function in v4l2-mem2mem.c since I=
- expect
-> > this to be the same for all (?) encoders.
->=20
-> For example h.264 has an optional 32-bit numerator and denominator
-> (num_units_in_tick and time_scale in the Video Usability Information).
-> I don't see any reason to limit this artificially in the driver.
->=20
-> > > Hmm, not necesarily. I hadn't thought about that before, but if the
-> > > decoder supports frame skipping this could be used to advertise
-> > > available reductions in frame rate.
-> >=20
-> > That assumes that you want to use S_PARM for that as well. And does the=
- decoder
-> > provide the framerate encoded in the bitstream to the driver?
->=20
-> That is a difficult question. Yes, depending on CODA hardware variant,
-> codec, and actual bitstream (where this information is optional), the
-> firmware may or may not report the frame rate. Maybe it is fundamentally
-> not a good idea to try to control frame skipping via the nominal frame
-> rate instead of directly.
+Hi,
 
-The Xilinx VCU decoder will allocate a different amount of cores per
-session depending on the framerate we give it. This is how they manage
-to handle more stream for lower rate/resolution etc. And it makes the
-S_PARM call mandatory, since faking one will always lead to some
-streams not to work properly, or less streams being handled in
-parallel.
+On Thu, Apr 11, 2019 at 09:38:06AM +0200, Hans Verkuil wrote:
+> >> @@ -149,6 +155,7 @@ static const struct image_format_info formats[] = {
+> >>  		.has_alpha = true,
+> >>  	}, {
+> >>  		.drm_fmt = DRM_FORMAT_RGB565,
+> >> +		.v4l2_fmt = V4L2_PIX_FMT_RGB565,
+> >
+> > -> V4L2_PIX_FMT_RGB565X
+> >
+> > Was added later, as what you expect is not compatible.
+>
+> All these 16-bit V4L2 pixelformats are ancient, but they are (to my knowledge)
+> correct w.r.t. the documented layout of the bits in memory. I.e., that's what
+> the hardware will give you.
+>
+> I think if there is no equivalence between the drm and v4l2 fourcc's, then
+> you need two entries in this table, one for drm (v4l2_fmt == 0), one for v4l2
+> (drm_fmt == 0).
 
-I personally don't see why we should in anyway be restrictive to the
-information we are allowed to pass to a driver. Specially that is does
-not matter if the driver uses it or not. And because there is no way we
-will be able to think about every possible use cases popping in the
-future, and it does not make backward compatibility to be a little more
-open here.
+Yeah, that was my plan. I'd definitely expect some formats in V4L2
+while not supported by DRM, or the other way around.
 
->=20
-> > Using S_PARM for this only works if the driver can know the encoded fra=
-merate.
-> >=20
-> > Anyway, this is probably something to discuss once a driver supports fr=
-ame
-> > skipping for the decoder.
->=20
-> Right. Since the coda driver does not support frame skipping yet, I'll
-> return -ENOTTY for decoder ENUM_FRAMEINTERVALS.
->=20
-> regards
-> Philipp
+> >> @@ -473,6 +496,7 @@ static const struct image_format_info formats[] = {
+> >>  		.is_yuv = true,
+> >>  	}, {
+> >>  		.drm_fmt = DRM_FORMAT_NV24,
+> >> +		.v4l2_fmt = V4L2_PIX_FMT_NV24,
+> >
+> > For extra fun, the M variant has not been added yet.
+>
+> Note that it has been the practice in V4L2 to avoid adding pixelformats unless
+> they are in use by a V4L2 driver. So that's why some combinations do not exist.
+>
+> If we are creating a common library then I think we should change that rule
+> to: "unless they are in use by a DRM or V4L2 driver". And when new formats are
+> added, and they exists already for DRM or V4L2, then we should use the same
+> fourcc for the other subsystem.
+>
+> I.e. if pixelformat V4L2_PIX_FMT_FOO was already defined, then add a:
+>
+> #define DRM_FORMAT_FOO V4L2_PIX_FMT_FOO
+>
+> rather than creating a new fourcc.
 
---=-c35zPUGVZImky5AChZp7
+That makes sense
+
+> We could even start looking at redoing the whole scheme in a unified way, but
+> that's something for the (far) future.
+
+Yeah, my secret plan is to have eventually a single fourcc (or even
+#define) for both DRM and v4l2 for any new format. But don't tell
+anyone :)
+
+> This is already a big step forward.
+
+Great, I'll respin this then.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--4zlq2z5366q2vxuf
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXK9i6QAKCRBxUwItrAao
-HEriAJ99cuDV8Zw24ZaQ3ACfbWiYw+CqMACgjxxRZ+AWN/1YtO7HMtXPQb3BI2E=
-=EDUu
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXK9jfAAKCRDj7w1vZxhR
+xdJlAQCX/ejxdQlqYsc7uKU3WqAQ58yIuyHgkeKWJ9DIA/fmVAEAx4t6BCOAD9PO
+8n2ksoAJZYjJniOKhV/5HHr9/khBhQ4=
+=66eR
 -----END PGP SIGNATURE-----
 
---=-c35zPUGVZImky5AChZp7--
-
+--4zlq2z5366q2vxuf--
