@@ -6,25 +6,25 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC938C282CE
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 20:31:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 153B5C10F14
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 20:34:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDFD92073F
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 20:31:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DFEA92075B
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 20:34:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbfDKUbk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 16:31:40 -0400
-Received: from vsp-unauthed02.binero.net ([195.74.38.227]:62834 "EHLO
+        id S1726752AbfDKUev (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 16:34:51 -0400
+Received: from vsp-unauthed02.binero.net ([195.74.38.227]:26429 "EHLO
         vsp-unauthed02.binero.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726615AbfDKUbk (ORCPT
+        with ESMTP id S1726577AbfDKUeu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 16:31:40 -0400
-X-Halon-ID: c9342544-5c98-11e9-8fa2-005056917a89
+        Thu, 11 Apr 2019 16:34:50 -0400
+X-Halon-ID: 3e82f13e-5c99-11e9-81fd-0050569116f7
 Authorized-sender: niklas@soderlund.pp.se
 Received: from bismarck.berto.se (unknown [89.233.230.99])
-        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id c9342544-5c98-11e9-8fa2-005056917a89;
-        Thu, 11 Apr 2019 22:31:33 +0200 (CEST)
+        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
+        id 3e82f13e-5c99-11e9-81fd-0050569116f7;
+        Thu, 11 Apr 2019 22:34:49 +0200 (CEST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -32,9 +32,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v2] rcar-csi2: restart CSI-2 link if error is detected
-Date:   Thu, 11 Apr 2019 22:30:58 +0200
-Message-Id: <20190411203058.22488-1-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v4] rcar-csi2: Propagate the FLD signal for NTSC and PAL
+Date:   Thu, 11 Apr 2019 22:34:44 +0200
+Message-Id: <20190411203444.23515-1-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -44,112 +44,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Restart the CSI-2 link if the CSI-2 receiver detects an error during
-reception. The driver did nothing when a link error happened and the
-data flow simply stopped without the user knowing why.
+Depending on which video standard is used the driver needs to setup the
+hardware to correctly handle fields. If stream is identified as NTSC
+or PAL setup field detection and propagate the field detection signal.
 
-Change the driver to try and recover from errors by restarting the link
-and informing the user that something is not right. For obvious reasons
-it's not possible to recover from all errors (video source disconnected
-for example) but in such cases the user is at least informed of the
-error and the same behavior of the stopped data flow is retained.
+Later versions of the datasheet have been updated to make it clear
+that FLD register should be set to 0 when dealing with non-interlaced
+field formats.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 52 ++++++++++++++++++++-
- 1 file changed, 51 insertions(+), 1 deletion(-)
+ drivers/media/platform/rcar-vin/rcar-csi2.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index c1b38ebd061dbc35..8f097e514900307f 100644
+index 799e526fd3df5554..c1b38ebd061dbc35 100644
 --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
 +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -85,6 +85,9 @@ struct rcar_csi2;
- 
- /* Interrupt Enable */
- #define INTEN_REG			0x30
-+#define INTEN_INT_AFIFO_OF		BIT(27)
-+#define INTEN_INT_ERRSOTHS		BIT(4)
-+#define INTEN_INT_ERRSOTSYNCHS		BIT(3)
- 
- /* Interrupt Source Mask */
- #define INTCLOSE_REG			0x34
-@@ -525,6 +528,10 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
- 	if (mbps < 0)
- 		return mbps;
- 
-+	/* Enable interrupts. */
-+	rcsi2_write(priv, INTEN_REG, INTEN_INT_AFIFO_OF | INTEN_INT_ERRSOTHS
-+		    | INTEN_INT_ERRSOTSYNCHS);
-+
- 	/* Init */
- 	rcsi2_write(priv, TREF_REG, TREF_TREF);
- 	rcsi2_write(priv, PHTC_REG, 0);
-@@ -685,6 +692,43 @@ static const struct v4l2_subdev_ops rcar_csi2_subdev_ops = {
- 	.pad	= &rcar_csi2_pad_ops,
- };
- 
-+static irqreturn_t rcsi2_irq(int irq, void *data)
-+{
-+	struct rcar_csi2 *priv = data;
-+	u32 status, err_status;
-+
-+	status = rcsi2_read(priv, INTSTATE_REG);
-+	err_status = rcsi2_read(priv, INTERRSTATE_REG);
-+
-+	if (!status)
-+		return IRQ_HANDLED;
-+
-+	rcsi2_write(priv, INTSTATE_REG, status);
-+
-+	if (!err_status)
-+		return IRQ_HANDLED;
-+
-+	rcsi2_write(priv, INTERRSTATE_REG, err_status);
-+
-+	dev_info(priv->dev, "Transfer error, restarting CSI-2 receiver\n");
-+
-+	return IRQ_WAKE_THREAD;
-+}
-+
-+static irqreturn_t rcsi2_irq_thread(int irq, void *data)
-+{
-+	struct rcar_csi2 *priv = data;
-+
-+	mutex_lock(&priv->lock);
-+	rcsi2_stop(priv);
-+	usleep_range(1000, 2000);
-+	if (rcsi2_start(priv))
-+		dev_warn(priv->dev, "Failed to restart CSI-2 receiver\n");
-+	mutex_unlock(&priv->lock);
-+
-+	return IRQ_HANDLED;
-+}
-+
- /* -----------------------------------------------------------------------------
-  * Async handling and registration of subdevices and links.
-  */
-@@ -957,7 +1001,7 @@ static int rcsi2_probe_resources(struct rcar_csi2 *priv,
- 				 struct platform_device *pdev)
+@@ -68,6 +68,7 @@ struct rcar_csi2;
+ /* Field Detection Control */
+ #define FLD_REG				0x1c
+ #define FLD_FLD_NUM(n)			(((n) & 0xff) << 16)
++#define FLD_DET_SEL(n)			(((n) & 0x3) << 4)
+ #define FLD_FLD_EN4			BIT(3)
+ #define FLD_FLD_EN3			BIT(2)
+ #define FLD_FLD_EN2			BIT(1)
+@@ -475,7 +476,7 @@ static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp)
+ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
  {
- 	struct resource *res;
--	int irq;
-+	int irq, ret;
+ 	const struct rcar_csi2_format *format;
+-	u32 phycnt, vcdt = 0, vcdt2 = 0;
++	u32 phycnt, vcdt = 0, vcdt2 = 0, fld = 0;
+ 	unsigned int i;
+ 	int mbps, ret;
  
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	priv->base = devm_ioremap_resource(&pdev->dev, res);
-@@ -968,6 +1012,12 @@ static int rcsi2_probe_resources(struct rcar_csi2 *priv,
- 	if (irq < 0)
- 		return irq;
+@@ -507,6 +508,16 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
+ 			vcdt2 |= vcdt_part << ((i % 2) * 16);
+ 	}
  
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, rcsi2_irq,
-+					rcsi2_irq_thread, IRQF_SHARED,
-+					KBUILD_MODNAME, priv);
-+	if (ret)
-+		return ret;
++	if (priv->mf.field == V4L2_FIELD_ALTERNATE) {
++		fld = FLD_DET_SEL(1) | FLD_FLD_EN4 | FLD_FLD_EN3 | FLD_FLD_EN2
++			| FLD_FLD_EN;
 +
- 	priv->rstc = devm_reset_control_get(&pdev->dev, NULL);
- 	if (IS_ERR(priv->rstc))
- 		return PTR_ERR(priv->rstc);
++		if (priv->mf.height == 240)
++			fld |= FLD_FLD_NUM(0);
++		else
++			fld |= FLD_FLD_NUM(1);
++	}
++
+ 	phycnt = PHYCNT_ENABLECLK;
+ 	phycnt |= (1 << priv->lanes) - 1;
+ 
+@@ -549,8 +560,7 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
+ 	rcsi2_write(priv, PHYCNT_REG, phycnt);
+ 	rcsi2_write(priv, LINKCNT_REG, LINKCNT_MONITOR_EN |
+ 		    LINKCNT_REG_MONI_PACT_EN | LINKCNT_ICLK_NONSTOP);
+-	rcsi2_write(priv, FLD_REG, FLD_FLD_NUM(2) | FLD_FLD_EN4 |
+-		    FLD_FLD_EN3 | FLD_FLD_EN2 | FLD_FLD_EN);
++	rcsi2_write(priv, FLD_REG, fld);
+ 	rcsi2_write(priv, PHYCNT_REG, phycnt | PHYCNT_SHUTDOWNZ);
+ 	rcsi2_write(priv, PHYCNT_REG, phycnt | PHYCNT_SHUTDOWNZ | PHYCNT_RSTZ);
+ 
 -- 
 2.21.0
 
