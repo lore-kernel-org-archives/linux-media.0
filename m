@@ -2,124 +2,131 @@ Return-Path: <SRS0=hW3k=SN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60100C282CE
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 20:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2761FC10F13
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 23:13:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2C9C02184B
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 20:42:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="A9IbX8fj"
+	by mail.kernel.org (Postfix) with ESMTP id E528620850
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 23:13:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726805AbfDKUml (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 16:42:41 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:45550 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726812AbfDKUml (ORCPT
+        id S1726780AbfDKXNn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 19:13:43 -0400
+Received: from kozue.soulik.info ([108.61.200.231]:56152 "EHLO
+        kozue.soulik.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726777AbfDKXNn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 16:42:41 -0400
-Received: by mail-lf1-f66.google.com with SMTP id t11so1242903lfl.12
-        for <linux-media@vger.kernel.org>; Thu, 11 Apr 2019 13:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=yRnD7ZMiFJsrzd4GivbJ0K2/JPe1+PbzfqYUrN7fypg=;
-        b=A9IbX8fjxQgyz21TSPAINrEmB5Zuf2Zo4AWSfAdnn9tdTuHeA0QSgFTDyDpo9ksykQ
-         9EgPVD5hzHMEU2A+1I8vtxlK9c2SQJKtZMyTmRL4FddKsJGe2ehf4MUvkJ9XHUHQR47v
-         zBv+3pkAKK2ynigx6oJynUmiIHt1JmEiH7KRF2cqbWMmVVN0ez1gs3iTLCwPKxRszORv
-         agJHb4uzNAsiUO0MT8XLk7KxXjP+J+8/n+XyKTGsCobS3XU2xWEefoZr6GlcrD+E5Ycl
-         1lkPiS0NPt7rhvcX9W2KkmadDDzCqVW9ojhhyG3SKeZlBsmLG1Pa0tbCIGx5PoUWImCe
-         Dn2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=yRnD7ZMiFJsrzd4GivbJ0K2/JPe1+PbzfqYUrN7fypg=;
-        b=rQw2xuQgOvTs+uGaPg+95mptI2JPhsfXPzUkGdP8DQCojl6WhdLAXbq53zFhO2GAsG
-         LyISjK269k/rXT/y7J7jvQqyynYnFe+nXY4sKVqd50H06SM0Hy6r73Rvjhg25Wy+IiBd
-         9JJbkxxsihq6upVz3mwFf9A5uFFLPOLTxsweIFW3hpWxGVnG85RhhfwoPbkrw7gbqWae
-         Af/efrowBqBm3mra1zfr8dVfM/OcqDeXW8Y4jWKZuJBp0LsIDj0l5SJuwYqlL8FbYfPl
-         k3ej2pYwXAn2PNoV4Bdx39vXNQOuKz2smfd2wmpuGNgXGx2lftPRW4irTL1msfyqbOWQ
-         dMog==
-X-Gm-Message-State: APjAAAXEaYIhtrdOUxRg/EJZvXPTIp0O2Qwt8oBX4Q6sxKBn6CkJqx6m
-        6N1Z7HLAYbcNShY4LJwXOTMbdA==
-X-Google-Smtp-Source: APXvYqwaPTUHdkxO+m8hzoJHblqH5Zkgv1DUCkRSEp8A3w+f0QNcmKCrELjZnil5/7SmO/EtIag+YQ==
-X-Received: by 2002:ac2:5686:: with SMTP id 6mr12086164lfr.34.1555015359260;
-        Thu, 11 Apr 2019 13:42:39 -0700 (PDT)
-Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
-        by smtp.gmail.com with ESMTPSA id b19sm7646293lfi.96.2019.04.11.13.42.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Apr 2019 13:42:38 -0700 (PDT)
-Date:   Thu, 11 Apr 2019 22:42:37 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Steve Longerbeam <steve_longerbeam@mentor.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        "George G. Davis" <george_davis@mentor.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Eugen Friedrich <efriedrich@de.adit-jv.com>,
-        harsha.manjulamallikarjun@in.bosch.com,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>
-Subject: Re: [PATCH v3 3/9] media: rcar-vin: Create a group notifier
-Message-ID: <20190411204237.GH30887@bigcity.dyn.berto.se>
-References: <20190405161639.GA10433@vmlxhi-102.adit-jv.com>
- <25dc2668-d270-ebf8-b014-88bbb7a6f243@gmail.com>
- <20190408111241.GF15350@bigcity.dyn.berto.se>
- <df6fa3bf-bf21-50b0-2cad-a613e2a43ce0@gmail.com>
- <20190409205745.GB9750@pendragon.ideasonboard.com>
- <3c2c2d04-8028-3511-aba0-0ea6dd5bdc50@mentor.com>
- <20190409225948.GD9750@pendragon.ideasonboard.com>
- <69091709-a63f-6a11-4b4b-13fcf8d3e40a@gmail.com>
- <20190411202819.GA8006@vmlxhi-102.adit-jv.com>
+        Thu, 11 Apr 2019 19:13:43 -0400
+Received: from [IPv6:2001:470:b30d:2:c604:15ff:0:401] (unknown [IPv6:2001:470:b30d:2:c604:15ff:0:401])
+        by kozue.soulik.info (Postfix) with ESMTPSA id 7B5381001DF;
+        Fri, 12 Apr 2019 08:13:38 +0900 (JST)
+Subject: Re: [PATCH v3 1/9] staging: video: rockchip: add v4l2 decoder
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Randy Li <randy.li@rock-chips.com>
+Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
+        maxime.ripard@bootlin.com, joro@8bytes.org,
+        jernej.skrabec@gmail.com, paul.kocialkowski@bootlin.com,
+        thomas.petazzoni@bootlin.com, mchehab@kernel.org,
+        ezequiel@collabora.com, posciak@chromium.org, groeck@chromium.org,
+        linux-rockchip@lists.infradead.org
+References: <20190410124226.8612-1-ayaka@soulik.info>
+ <20190410124226.8612-2-ayaka@soulik.info>
+ <2b225e07b03359311c21ab2b3c41096a97beb338.camel@ndufresne.ca>
+ <cc5816d8-43cb-aedc-e496-f92baf37e6b3@rock-chips.com>
+ <88dc2edc5e6146d4dc0a8367b5bbe9aaa6241d0b.camel@ndufresne.ca>
+From:   ayaka <ayaka@soulik.info>
+Message-ID: <8efb73e4-5d6c-aec2-4255-64b6603d23d8@soulik.info>
+Date:   Fri, 12 Apr 2019 07:13:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <88dc2edc5e6146d4dc0a8367b5bbe9aaa6241d0b.camel@ndufresne.ca>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190411202819.GA8006@vmlxhi-102.adit-jv.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Eugenie,
 
-On 2019-04-11 22:28:19 +0200, Eugeniu Rosca wrote:
-> Hi Niklas,
-> 
-> Two simple questions:
->  - I can only clone git://git.ragnatech.se/linux, but can't access it on
->    the web, does it have some web interface?
+On 4/12/19 12:12 AM, Nicolas Dufresne wrote:
+> Le jeudi 11 avril 2019 à 09:29 +0800, Randy Li a écrit :
+>>> We agreed with Maxime and Ezequiel that there will be two distinct
+>>> format, V4L2_PIX_FMT_H264_SLICE_RAW and V4L2_PIX_FMT_H264_SLICE_ANNEXB.
+>>> And user-pace will take care of providing the right information.
+>> I have no idea on what does the SLICE_RAW mean here.
+> If you skip the NAL headers, SLICE_RAW is what is left. This is exactly
+> what is passed in VAAPI, and what makes Rockchip HW difficult to
+> support through this abstraction apparently. The rationale is that all
+> the information that was in the rest of the bitstream is already passed
+> in C structures. If this isn't the case, let me know, since it would be
+> a bad name indeed.
 
-There should be a gitweb instance running at https://git.ragnatech.se/ 
-if not let me know since then something is wrong ;-)
+Yes, it is called as AVC1 as usual. SLICE_RAW doesn't indicate anything, 
+it can be AVCCC or something else.
 
->  - Browsing through your v4l2/next/csi2/upport branch, it looks to be
->    targeted for upstream. Could we rely on those commits already or
->    they are still in development/testing?
+You must follow a standard as there is.
 
-The patches in that branch are target for upstreaming but sometime 
-changes due to review comments. Best check the media-tree of what have 
-accepted and the patchwork instance if you want day fresh statuses. I 
-also rebase the branch from time to time on-top of the media-tree so you 
-should not depend on it much I'm afraid.
+>
+> Paul asked us why not always required ANNEX-B with start code as a
+> super set. This is not very efficient, since it means that whenever you
+> have a stream from an ISOMP4 media, you endup having to convert the AVC
+> headers into ANNEX-B start code, and you loose the optimization the AVC
+> header provides (AVC format is basically just a NAL type and it's size,
+> so you can navigate through the stream with very little reads). The
 
-If you plan to do some work on the rcar-csi2 driver you can always reach 
-out and check what the status is if you are unsure.
+But if a frame is consisted with more than 1 slice, it won't work, 
+although it is not supported by current V4L2 framework. Anyway the start 
+code is necessary in Annex B of the H.264 SPEC or hardware can't handle 
+more than 1 nal unit for any purpose.
 
--- 
-Regards,
-Niklas S�derlund
+Adding a 24bits or 32bits header won't cost much CPU time, much less 
+than bitstream reconstruction.
+
+Anyway you won't not only meet this problem with H.264 but also H.265.
+
+> other thing is the memory alignment the require needs. I suspect that
+I am sure bitstream doesn't required any memory alignment.
+> if the HW require SLICE_RAW, you cannot just pass a random pointer
+> offset. So you'd need another buffer the userspace data to. Hidden
+I think you can, hardware usually has a register to let it skip a few 
+bits of the input stream.
+> copies in drivers are quite bad, it's better to leave it to userspace
+> when we can in my opinion.
+>
+> Now that I'm saying that out-loud, I wonder how the "one v4l2 buffer
+> per frame" restriction can be respected for SLICE_RAW. The receiver
+> would have no way to know where each slices are. Isn't there a big flaw
+> in this restriction ? Or did I miss-understood the format, and
+> SLICE_RAW is a bad name ?
+>
+>> Annex B describe a byte stream format but it doesn't mean it should
+>> ship slice data with SPS or PPS
+> SLICE means it won't pass SPS or PPS in-band. Only slice NALs and per
+> slice auxiliary data if there is any. Do Rockchip needs the original
+> SPS/PPS bitstream ? If so, all of them ? or just the activated one ?
+> And when ?
+
+Yes, I though you know that, I talked with you before. I though that is 
+why ezequiel want this.
+
+But that SPS/PPS is not 100% compatible with ITU document.
+
+>
+>> The problem of bootlin demo is it follows Annex B but withou a start
+>> code !!!!
+> We'll fix that if we decide to use this for testing. It was all early
+> and unspecified. SLICE_ANNEXB will have a start code of course, as I
+Besides I found its SPS/PPS doesn't match the original file, I didn't 
+make this clearly in the previous email.
+> don't see how you can call this ANNEXB otherwise. And I'm pretty sure
+> the reason Rockchip need it is to be able to split the slices (we need
+> to keep in mind that multiple slices per frame is commonly used in
+> video conference streaming). The format documentation should be really
+> clear about what it is, and if another HW with another format comes
+> that does not match, it should define and document a new format.
+>
+> cheers,
+> Nicolas
