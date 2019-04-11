@@ -2,183 +2,185 @@ Return-Path: <SRS0=hW3k=SN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49465C10F13
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 10:38:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99E40C10F14
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 11:52:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B7D22084D
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 10:38:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62A822184B
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 11:52:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dkJC2Sl/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbfDKKiK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 06:38:10 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:52782 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726026AbfDKKiK (ORCPT
+        id S1726808AbfDKLw5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 07:52:57 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:47060 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726628AbfDKLw5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 06:38:10 -0400
-Received: from [IPv6:2001:983:e9a7:1:4cd3:53c0:7e2b:d8bc] ([IPv6:2001:983:e9a7:1:4cd3:53c0:7e2b:d8bc])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id EX5qhjconiLOmEX5rhAYha; Thu, 11 Apr 2019 12:38:08 +0200
-Subject: Re: [RFC PATCH v2 1/7] media: v4l2: Get rid of
- ->vidioc_enum_fmt_vid_{cap,out}_mplane
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     Mauro Carvalho Chehab <m.chehab@samsung.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-media@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
-        Hirokazu Honda <hiroh@chromium.org>,
+        Thu, 11 Apr 2019 07:52:57 -0400
+Received: by mail-wr1-f68.google.com with SMTP id t17so6905253wrw.13
+        for <linux-media@vger.kernel.org>; Thu, 11 Apr 2019 04:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ru0cSaqimKC+/zOpg6nW/FjnBy/AP6CFKrOSGBhR3+A=;
+        b=dkJC2Sl/zy30Xhb4DiXa8lN9Rvl/UABpBnojBLXKEBqqjbq4SXNEAL9bjB9rxe4teD
+         qkUAJrSVGBedgCH3Jt4MRfa8QjnCzPdui7NmhimfuvFWhhIB8gYuzM8Q6fMxoPvwv81b
+         y8P7m2J534Y//8H0mnHm/dxAqDMWKhw3MJT6req/H9/Ln8jpGY43FEv1rf1512qUK29+
+         Kae3XbVoQkBJsaLvQeTBIpP2mpT2AHvTUCjb55n/krE+fwZ+XCq+lphWC9aHGRiA8Mf2
+         2BhBTMKs/64xKCJUC4FpiAjtrCfLw0iVmgnI8wwY0J2bT6rx+/xBHKBIuHnK3BHoL97h
+         qRKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ru0cSaqimKC+/zOpg6nW/FjnBy/AP6CFKrOSGBhR3+A=;
+        b=n0t7u/TJF2vz00sfzMOZZqhOdXa3v/P3EkY1utiBJlXaqFv/FtyEcmqimVpzEtUJQZ
+         RQhJ3s6AUbHQDUba+x570YJ3TjCNrQRTxUBFcuthnKmAoF3vmZvbZxjbWUgW7Lei4W0/
+         FlJ1DtWdCSZPhkbftOXQPqizG3L4mB50KtNxrIP2UjmC+PdHEPzxB43f78x0ItUOwJKs
+         PTnlo07dximaaMhXdLAgpveDaRpBlENiohyNjvkSJ/+iVL1b6xtanOvtGnbAhWlr2vRk
+         iYmTr5YjyH52GwpQaM8QDJTVOpRCgTwzOpP/OJlTkT89fajNBBGB/Goal6HhG6RMnwZd
+         lT7w==
+X-Gm-Message-State: APjAAAWvZF1AVL3PtoaHwxAtS2xBIaAxN+P5G0XVrmybmJlx4lijJECj
+        ZXcHkCCTcCdFjMX9HbjUNJ0=
+X-Google-Smtp-Source: APXvYqwhvHY+r6VUCjN7t6jcQh9iZWCYTvGJJI1gDc/BVfKn8r6TbOyeQjyx7LLt5zITpUlO6mxkXA==
+X-Received: by 2002:a5d:4a8d:: with SMTP id o13mr19152074wrq.209.1554983574922;
+        Thu, 11 Apr 2019 04:52:54 -0700 (PDT)
+Received: from ?IPv6:2a00:23c5:f786:ec00:1128:f7da:df35:f704? ([2a00:23c5:f786:ec00:1128:f7da:df35:f704])
+        by smtp.googlemail.com with ESMTPSA id 84sm9120634wme.43.2019.04.11.04.52.54
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Apr 2019 04:52:54 -0700 (PDT)
+Subject: Re: [PATCH 07/10] media: coda: limit frame interval enumeration to
+ supported frame sizes
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Brian Starkey <Brian.Starkey@arm.com>, kernel@collabora.com
-References: <20190404081700.30006-1-boris.brezillon@collabora.com>
- <20190404081700.30006-2-boris.brezillon@collabora.com>
- <c13c2c30-f78e-1cf2-26d3-1554e22947c3@xs4all.nl>
- <20190411123636.07990b79@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <6f8ec61c-1f36-accb-cc00-984d1041aa28@xs4all.nl>
-Date:   Thu, 11 Apr 2019 12:38:06 +0200
+        linux-media@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>
+References: <20190408123256.22868-1-p.zabel@pengutronix.de>
+ <20190408123256.22868-7-p.zabel@pengutronix.de>
+ <ebbc3d03-e59e-32d5-c943-f9e426414848@xs4all.nl>
+ <1554906176.3765.9.camel@pengutronix.de>
+ <863e842a16db5ee6b10a2fd149119ae41ce26de6.camel@ndufresne.ca>
+ <5feecd0e-5c7b-27fe-84a0-0bffb04128df@xs4all.nl>
+ <1554970925.6389.1.camel@pengutronix.de>
+ <36f792a8-7680-100f-09a4-b9315177c791@xs4all.nl>
+From:   Ian Arkver <ian.arkver.dev@gmail.com>
+Message-ID: <92d1b31b-7849-9e36-3222-f846cc3f65df@gmail.com>
+Date:   Thu, 11 Apr 2019 12:52:53 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190411123636.07990b79@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfMhlbPn6+R41K93GOVP/fh3ZVosvfQsh95OU1egqtd5luXLNaxZRSBfACPEINU0SsjVDqRXKR6qTma60rp9251w3YieXUd6nc2R9y3l+pPmJcDLYenvQ
- jLOzWWjsMe1yW5GrbUTfX2gcjcCuvCMStQ0okpL1dImV5CfDPnBwhQ0pJsoy1UPbFnQdZ9r7i+gOMyb3hZOZJZ92skJTRzz31KTU8Dao+Z7kmT9KGJ/qsi5o
- 4InuVqCIZlekbGorb1NClu9p33rOAiIwwDOaAuc7sUoBNQOL1J7zEf0C4gDFypsQMnMH3tq1yfTC0FHIbwWbUFgMuomp2C4P84KGxxkTzdXel39JsEIM7PaK
- Mq9QAJEqDdk79ilHENxqGZmTClJBn89vV6QfeYQ2tQp4UxvKjwOKj0YLe4uMcn1XNZ5qBFtI3enahkHm9tyDtM8wu1EP/lmjTuplO2cgyt+R3vxpB/p/IG6h
- KHMIpeLDoOYMa6gPnOHmtQ+vrjsv5nvXsxhgLC6lQI4tLFEj9ST2C2QGVQL/Mak0hxJSDACcqgIaW+HrUwZf324tz9HUIx01uKN9g3cCcVInhB2ZAPrP3s+d
- VZhT1PlCQHmpRA5JzEl6v/ZTq/QPBlC0lnDKnhonPP0X5g==
+In-Reply-To: <36f792a8-7680-100f-09a4-b9315177c791@xs4all.nl>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/11/19 12:36 PM, Boris Brezillon wrote:
-> On Thu, 11 Apr 2019 09:59:19 +0200
-> Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> 
->> On 4/4/19 10:16 AM, Boris Brezillon wrote:
->>> Support for multiplanar and singleplanar formats is mutually exclusive,
->>> at least in practice. In our attempt to unify support for support for
->>> mplane and !mplane in v4l, let's get rid of the  
->>> ->vidioc_enum_fmt_{vid,out}_cap_mplane() hooks and call
->>> ->vidioc_enum_fmt_{vid,out}_cap() instead.  
->>
->> This is a good idea. This can be done separately from the other patches in
->> this series and merged.
-> 
-> Sure, I'll send this patch separately.
-> 
->>
->> One comment...
->>
+Hi,
+
+On 11/04/2019 11:18, Hans Verkuil wrote:
+> On 4/11/19 10:22 AM, Philipp Zabel wrote:
+>> On Wed, 2019-04-10 at 18:24 +0200, Hans Verkuil wrote:
+>>> On 4/10/19 6:11 PM, Nicolas Dufresne wrote:
+>>>> Le mercredi 10 avril 2019 à 16:22 +0200, Philipp Zabel a écrit :
+>>>>> On Wed, 2019-04-10 at 15:43 +0200, Hans Verkuil wrote:
+>>>>> [...]
+>>>>>>> @@ -1126,12 +1127,32 @@ static int coda_enum_frameintervals(struct file *file, void *fh,
+>>>>>
+>>>>> [...]
+>>>>>> Why support VIDIOC_ENUM_FRAMEINTERVALS at all? It makes no sense for a codec.
+>>>>>> I'd remove it altogether.
+>>>>
+>>>> It does make sense, since framerate is the only information that can be
+>>>> used to produce a specific bitrate. If you don't enumerate the rates,
+>>>> then you may endup with a miss-match of what userspace wants, which
+>>>> will result in a different rate then what the user-space anticipated.
+>>>> That being said, I expect these intervals to be really wide. Venus HW
+>>>> uses a Q16 internally, which is precise enough that we could just
+>>>> ignore the interval.
 >>>
->>> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
->>> ---
->>> Changes in v2:
->>> - None
->>> ---
->>>  drivers/media/pci/intel/ipu3/ipu3-cio2.c      |  2 +-
->>>  drivers/media/platform/exynos-gsc/gsc-m2m.c   |  4 ++--
->>>  .../media/platform/exynos4-is/fimc-capture.c  |  2 +-
->>>  .../platform/exynos4-is/fimc-isp-video.c      |  2 +-
->>>  drivers/media/platform/exynos4-is/fimc-lite.c |  2 +-
->>>  drivers/media/platform/exynos4-is/fimc-m2m.c  |  4 ++--
->>>  .../media/platform/mtk-jpeg/mtk_jpeg_core.c   |  4 ++--
->>>  drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c  |  4 ++--
->>>  .../platform/mtk-vcodec/mtk_vcodec_dec.c      |  4 ++--
->>>  .../platform/mtk-vcodec/mtk_vcodec_enc.c      |  4 ++--
->>>  .../media/platform/qcom/camss/camss-video.c   |  2 +-
->>>  drivers/media/platform/qcom/venus/vdec.c      |  4 ++--
->>>  drivers/media/platform/qcom/venus/venc.c      |  4 ++--
->>>  drivers/media/platform/rcar_fdp1.c            |  4 ++--
->>>  drivers/media/platform/rcar_jpu.c             |  4 ++--
->>>  drivers/media/platform/renesas-ceu.c          |  2 +-
->>>  drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  |  4 ++--
->>>  drivers/media/platform/s5p-mfc/s5p_mfc_enc.c  |  4 ++--
->>>  drivers/media/platform/ti-vpe/vpe.c           |  4 ++--
->>>  drivers/media/platform/vicodec/vicodec-core.c |  2 --
->>>  drivers/media/platform/vivid/vivid-core.c     |  6 ++----
->>>  .../media/platform/vivid/vivid-vid-common.c   | 20 ------------------
->>>  .../media/platform/vivid/vivid-vid-common.h   |  2 --
->>>  drivers/media/v4l2-core/v4l2-dev.c            |  2 --
->>>  drivers/media/v4l2-core/v4l2-ioctl.c          | 21 ++++++++++---------
->>>  drivers/staging/media/ipu3/ipu3-v4l2.c        |  4 ++--
->>>  .../media/rockchip/vpu/rockchip_vpu_enc.c     |  4 ++--
->>>  include/media/v4l2-ioctl.h                    | 14 ++-----------
->>>  28 files changed, 51 insertions(+), 88 deletions(-)
+>>> So the problem is that for an encoder where you desires a specific
+>>> constant bitrate, the encoder also needs to know the framerate.
 >>>
->>> diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
->>> index f8020ebe9f05..c3b3af3c3b2f 100644
->>> --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
->>> +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
->>> @@ -1174,7 +1174,7 @@ static const struct v4l2_file_operations cio2_v4l2_fops = {
->>>  
->>>  static const struct v4l2_ioctl_ops cio2_v4l2_ioctl_ops = {
->>>  	.vidioc_querycap = cio2_v4l2_querycap,
->>> -	.vidioc_enum_fmt_vid_cap_mplane = cio2_v4l2_enum_fmt,
->>> +	.vidioc_enum_fmt_vid_cap = cio2_v4l2_enum_fmt,
->>>  	.vidioc_g_fmt_vid_cap_mplane = cio2_v4l2_g_fmt,
->>>  	.vidioc_s_fmt_vid_cap_mplane = cio2_v4l2_s_fmt,
->>>  	.vidioc_try_fmt_vid_cap_mplane = cio2_v4l2_try_fmt,
->>> diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/exynos-gsc/gsc-m2m.c
->>> index c757f5d98bcc..9e2914d3d8f9 100644
->>> --- a/drivers/media/platform/exynos-gsc/gsc-m2m.c
->>> +++ b/drivers/media/platform/exynos-gsc/gsc-m2m.c
->>> @@ -562,8 +562,8 @@ static int gsc_m2m_s_selection(struct file *file, void *fh,
->>>  
->>>  static const struct v4l2_ioctl_ops gsc_m2m_ioctl_ops = {
->>>  	.vidioc_querycap		= gsc_m2m_querycap,
->>> -	.vidioc_enum_fmt_vid_cap_mplane	= gsc_m2m_enum_fmt_mplane,
->>> -	.vidioc_enum_fmt_vid_out_mplane	= gsc_m2m_enum_fmt_mplane,
->>> +	.vidioc_enum_fmt_vid_cap	= gsc_m2m_enum_fmt_mplane,
->>> +	.vidioc_enum_fmt_vid_out	= gsc_m2m_enum_fmt_mplane,  
+>>> And the driver then would have to support ENUM_FRAMEINTERVALS and the
+>>> S_PARM ioctl so userspace can set the framerate.
 >>
->> Please rename the functions as well, dropping the _mplane suffix. Here and in
->> the other drivers.
+>> Ah right, that was it. Encoding works fine without ENUM_FRAMEINTERVALS,
+>> as coda has no meaningful frame rate limitations. I had implemented
+>> S_PARM since it is required for CBR encoding, and v4l2-compliance then
+>> complained about ENUM_FRAMEINTERVALS missing:
 >>
+>>    cde29ef313de ("[media] coda: Use S_PARM to set nominal framerate for h.264 encoder")
+>>    07b6080d4e6d ("media: coda: implement ENUM_FRAMEINTERVALS")
 > 
-> Okay, I'm remove those _mplane suffix.
+> And I think that's right. If you advertise framerate support, then
+> userspace needs to know about the capabilities.
 > 
->>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->>> index f6d663934648..97ba365218fb 100644
->>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
->>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->>> @@ -1380,6 +1380,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->>>  static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
->>>  				struct file *file, void *fh, void *arg)
->>>  {
->>> +	struct video_device *vdev = video_devdata(file);
->>>  	struct v4l2_fmtdesc *p = arg;
->>>  	int ret = check_fmt(file, p->type);
->>>  
->>> @@ -1389,30 +1390,30 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
->>>  
->>>  	switch (p->type) {
->>>  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
->>> +	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
->>> +		if (!!(vdev->device_caps & V4L2_CAP_VIDEO_CAPTURE_MPLANE) !=  
->>
->> Hmm. I am not sure if all drivers that set V4L2_CAP_VIDEO_CAPTURE_MPLANE also
->> fill in vdev->device_caps. While filling in vdev->device_caps is required for
->> new drivers, older drivers often don't do this.
->>
->> You would have to check all drivers that set V4L2_CAP_VIDEO_CAPTURE/OUTPUT_MPLANE
->> to verify that they also set vdev->device_caps. I'm fairly certain the Samsung
->> drivers don't fill this in.
+> I do think ENUM_FRAMEINTERVALS should return some sane values. Right now
+> coda advertises 1/65535 fps to 65535 fps (or thereabout).
 > 
-> I'll check that and fix those that don't set the flag. Or do you have
-> another solution to handle that case?
+> I would probably return 1 fps to 200 fps (200 Hz is the highest framerate
+> defined by CTA-861-G).
+> 
+> This can also eventually be a helper function in v4l2-mem2mem.c since I expect
+> this to be the same for all (?) encoders.
 > 
 
-There might be other solutions as well, but regardless of that it would be a very
-good idea for other reasons as well if all MPLANE drivers would fill in vdev->device_caps.
+While an i.MX wouldn't be my 1st choice for encoding a high framerate 
+video, it could probably be done. This is a value for the bitrate 
+control algo, afaics, not a statement of real time performance.
+
+If an arbitrary limit is imposed then userspace would just need to work 
+around it by adjusting the target bitrate for corner cases like this.
 
 Regards,
+Ian
 
-	Hans
+>>
+>>> For decoders this would not make any sense AFAIKS, so this is encoder
+>>> specific.
+>>
+>> Hmm, not necesarily. I hadn't thought about that before, but if the
+>> decoder supports frame skipping this could be used to advertise
+>> available reductions in frame rate.
+> 
+> That assumes that you want to use S_PARM for that as well. And does the decoder
+> provide the framerate encoded in the bitstream to the driver? Using S_PARM for
+> this only works if the driver can know the encoded framerate.
+> 
+> Anyway, this is probably something to discuss once a driver supports frame
+> skipping for the decoder.
+> 
+>>
+>>> Do I understand this correctly?
+>>>
+>>> What should the default framerate be? 24 or 29.97 fps?
+>>
+>> Driver specific? Max nominal real time capable frame rate? 30 fps?
+>>
+>>> This should be documented in the stateful encoder spec. I never realized
+>>> that this would be needed...
+>>>
+>>> Philipp, based on this information I would say that ENUM_FRAMEINTERVALS
+>>> can stay in the coda drivers, but for encoders only.
+>>
+>> Ok.
+>>
+>> regards
+>> Philipp
+>>
+> 
+> Regards,
+> 
+> 	Hans
+> 
