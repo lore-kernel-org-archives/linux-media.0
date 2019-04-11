@@ -2,154 +2,121 @@ Return-Path: <SRS0=hW3k=SN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60468C10F11
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 03:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC8D5C10F13
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 04:53:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 38C95217D4
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 03:48:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC0ED2133D
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 04:53:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="muYigyzb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbfDKDss (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Apr 2019 23:48:48 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:34184 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726551AbfDKDss (ORCPT
+        id S1726145AbfDKExN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 00:53:13 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40015 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfDKExN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Apr 2019 23:48:48 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:4cd3:53c0:7e2b:d8bc])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id EQhfhpP0tNG8zEQhgh5SFp; Thu, 11 Apr 2019 05:48:45 +0200
-Message-ID: <ef2dfab5048309f1e491de47ef3ce306@smtp-cloud7.xs4all.net>
-Date:   Thu, 11 Apr 2019 05:48:43 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfBsru0SsXJc1ep4LbQG7CbTP3kVe/SjcvSC+MZqvspDgVqoPoJKDnZ0aROW1RdaoZZObxe32n7T23QYYRqRwOM4PRIBE0jqwP44L0KTH8fpYKgy2bLJ8
- PsceCVrL+j4Ly9AQ063UfQopctOLQKF0SJ7cUWwDNkYwzEVbJLDV308JhsLQqY6OqtBHX65lgy+/ZrL1vJ5db0Pt0fut4ToGqz837yo8aP+k5P6xQ5G0ghqs
+        Thu, 11 Apr 2019 00:53:13 -0400
+Received: by mail-pg1-f194.google.com with SMTP id d31so2880938pgl.7;
+        Wed, 10 Apr 2019 21:53:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=H9nY8iNaZVs1gJ4a8s1vdIeA0z1Cjhl83ySRigIl/zY=;
+        b=muYigyzbLhAtC4O6/zUYRpb0j+skor1QhAWT4b9r1/FsQheJMx3o/OWCBTkrJJw5CF
+         ahkGe+3DMqBwj5Z9rl4n9XoeA9kc4KIX0Oe2BFZhrCdhs4OMpW3SunBYQEf26GG/EuyK
+         MdMeeizGU7cQPdBFDa1roE5B03ocj/9Ck9w5d3z2NAvgAgPQRDdp8BdgUBw97i0AD4uL
+         HJLc7PtBnggJEFUeg4bh3QoXkgUj9/Thteew8vE4hWw98bSaf6t22WSaCt4AAWytJz6p
+         zRY7R/KdIgjRtXxBrLW0R/hxkAmjXPv5VBfbfgFJ2vpcuVoTpdBxZdK7LDfAaE8G9nGU
+         MmOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=H9nY8iNaZVs1gJ4a8s1vdIeA0z1Cjhl83ySRigIl/zY=;
+        b=sha5Tt9YaTEFGUWCXUom/Nr9WM/6F+cVw3ShH1NjrSuszJg9Xb6vZl8zRuuYgV0kQB
+         S7dXN1vQqbGoMPODBmcPlIwpxuKrsaRV3UUyYr0tGF9I5d6fT8pniyn15U7qxueKcPty
+         tTkUNyM2j9WEy5kpQ2ffeSZd4928Nj4OK//Ubg0XKsgUEvEi2oHxaNZ56E7k1LQ8U61x
+         Y7h7xTt0AjekTl5D1FrG5AImiKo/stz4oSqlnCQxDL8zK2/kUyn0CEvdFQ8yGSjvFDwF
+         b+ex6ZbnPGxBMbhbVH64mUctZqKPD2aLjyUy1S/1nOVRvM72bL28bvVePs/u3XtAgGEE
+         qNVw==
+X-Gm-Message-State: APjAAAVUuvMFg0fv1tAidb/GYjhJDYJUMUk4NznRtdBoZ7PDmY2UscD1
+        XNNUrxjjWmLMERqgUOpGaQPCcKDD2+EYTA==
+X-Google-Smtp-Source: APXvYqx37fQ3MuLvZ6Oa9BIG+ZcRGILC6u/rUvVls9NOpYP5ssm9rbeTuKWMVHC3o3NWU0jSToSd1w==
+X-Received: by 2002:aa7:8282:: with SMTP id s2mr47948072pfm.7.1554958392497;
+        Wed, 10 Apr 2019 21:53:12 -0700 (PDT)
+Received: from xy-data.openstacklocal (ecs-159-138-22-150.compute.hwclouds-dns.com. [159.138.22.150])
+        by smtp.gmail.com with ESMTPSA id b72sm77974736pga.86.2019.04.10.21.53.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 10 Apr 2019 21:53:12 -0700 (PDT)
+From:   Young Xiao <92siuyang@gmail.com>
+To:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, greg@kroah.com
+Cc:     mchehab@kernel.org, keescook@chromium.org, hans.verkuil@cisco.com,
+        Young Xiao <YangX92@hotmail.com>
+Subject: [PATCH] USB: s2255 & stkwebcam: fix oops with malicious USB descriptors
+Date:   Thu, 11 Apr 2019 12:54:12 +0800
+Message-Id: <1554958452-29794-1-git-send-email-92siuyang@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+From: Young Xiao <YangX92@hotmail.com>
 
-Results of the daily build of media_tree:
+The driver expects at least one valid endpoint. If given
+malicious descriptors that specify 0 for the number of endpoints,
+it will crash in the probe function.  Ensure there is at least
+one endpoint on the interface before using it.
 
-date:			Thu Apr 11 05:00:11 CEST 2019
-media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	95f39aae48c6e8e5cc81e6ae6293d999f70a909b
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-2-amd64
+This vulnerability is same as CVE-2016-2188.
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
+Signed-off-by: Young Xiao <YangX92@hotmail.com>
+---
+ drivers/media/usb/s2255/s2255drv.c       | 7 +++++++
+ drivers/media/usb/stkwebcam/stk-webcam.c | 6 ++++++
+ 2 files changed, 13 insertions(+)
 
-Detailed results are available here:
+diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
+index 5b3e54b..7fdf159 100644
+--- a/drivers/media/usb/s2255/s2255drv.c
++++ b/drivers/media/usb/s2255/s2255drv.c
+@@ -2263,6 +2263,13 @@ static int s2255_probe(struct usb_interface *interface,
+ 	iface_desc = interface->cur_altsetting;
+ 	dev_dbg(&interface->dev, "num EP: %d\n",
+ 		iface_desc->desc.bNumEndpoints);
++
++	if (iface_desc->desc.bNumEndpoints < 1) {
++		dev_err(&interface->dev, "Invalid number of endpoints\n");
++		retval = -EINVAL;
++		goto error;
++	}
++
+ 	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
+ 		endpoint = &iface_desc->endpoint[i].desc;
+ 		if (!dev->read_endpoint && usb_endpoint_is_bulk_in(endpoint)) {
+diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
+index 8f54586..d2a4785 100644
+--- a/drivers/media/usb/stkwebcam/stk-webcam.c
++++ b/drivers/media/usb/stkwebcam/stk-webcam.c
+@@ -1350,6 +1350,12 @@ static int stk_camera_probe(struct usb_interface *interface,
+ 	 * for the current alternate setting */
+ 	iface_desc = interface->cur_altsetting;
+ 
++	if (iface_desc->desc.bNumEndpoints < 1) {
++		dev_err(&interface->dev, "Invalid number of endpoints\n");
++		retval = -EINVAL;
++		goto error;
++	}
++
+ 	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
+ 		endpoint = &iface_desc->endpoint[i].desc;
+ 
+-- 
+1.9.1
 
-http://www.xs4all.nl/~hverkuil/logs/Thursday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
