@@ -6,51 +6,60 @@ X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDDEEC10F14
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:55:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93B68C10F14
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:58:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A78962082E
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:55:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F4D82133D
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 15:58:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbfDKPzq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 11:55:46 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:60793 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726264AbfDKPzp (ORCPT
+        id S1726732AbfDKP5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 11:57:55 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:55109 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726646AbfDKP5z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 11:55:45 -0400
+        Thu, 11 Apr 2019 11:57:55 -0400
 X-Originating-IP: 90.88.18.121
 Received: from localhost (aaubervilliers-681-1-63-121.w90-88.abo.wanadoo.fr [90.88.18.121])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 0BFC31C000C;
-        Thu, 11 Apr 2019 15:55:40 +0000 (UTC)
-Date:   Thu, 11 Apr 2019 17:55:40 +0200
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 0A81E20012;
+        Thu, 11 Apr 2019 15:57:49 +0000 (UTC)
+Date:   Thu, 11 Apr 2019 17:57:49 +0200
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>, Tomasz Figa <tfiga@chromium.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Pawel Osciak <posciak@chromium.org>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [RFC PATCH 18/20] lib: image-formats: Add v4l2 formats support
-Message-ID: <20190411155540.poquzzx2apa5ahgb@flea>
-References: <cover.92acdec88ee4c280cb74e08ea22f0075e5fa055c.1553032382.git-series.maxime.ripard@bootlin.com>
- <c97024b97d3261dcf41aad3c8bc1c5d9906f33c9.1553032382.git-series.maxime.ripard@bootlin.com>
- <3f5748a6422d2f7eb11601bad297df870ff5952b.camel@ndufresne.ca>
- <5385672c-cfee-7bc4-9c2e-e4d8d964b748@xs4all.nl>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg 
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Jens Kuske <jenskuske@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        linux-sunxi <linux-sunxi@googlegroups.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH RESEND v7 1/2] media: uapi: Add H264 low-level decoder
+ API compound controls.
+Message-ID: <20190411155749.crdpidehjxa6edya@flea>
+References: <cover.bfe197a82766125bea21dd26fd3de85893a921ac.1554380738.git-series.maxime.ripard@bootlin.com>
+ <7cd913545cfc80fa9999839c62c4bf7b354a7904.1554380738.git-series.maxime.ripard@bootlin.com>
+ <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
+ <CAGb2v642__AF3iHO+d9FKazJ4=uRAQSfxAN_uCUWagH6Jz2twQ@mail.gmail.com>
+ <c3ed6d00bf5642b1524ef4973f2db7ba6759fb6d.camel@collabora.com>
+ <20190405151552.biesirbs35uivk7d@flea>
+ <05078223a4098c96f6260f77e9ef2a01b966daa6.camel@collabora.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4zlq2z5366q2vxuf"
+        protocol="application/pgp-signature"; boundary="gy5eppcjekdsrhyc"
 Content-Disposition: inline
-In-Reply-To: <5385672c-cfee-7bc4-9c2e-e4d8d964b748@xs4all.nl>
+In-Reply-To: <05078223a4098c96f6260f77e9ef2a01b966daa6.camel@collabora.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -58,69 +67,86 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---4zlq2z5366q2vxuf
-Content-Type: text/plain; charset=us-ascii
+--gy5eppcjekdsrhyc
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Apr 11, 2019 at 09:38:06AM +0200, Hans Verkuil wrote:
-> >> @@ -149,6 +155,7 @@ static const struct image_format_info formats[] = {
-> >>  		.has_alpha = true,
-> >>  	}, {
-> >>  		.drm_fmt = DRM_FORMAT_RGB565,
-> >> +		.v4l2_fmt = V4L2_PIX_FMT_RGB565,
+On Fri, Apr 05, 2019 at 12:27:48PM -0400, Nicolas Dufresne wrote:
+> Le vendredi 05 avril 2019 =E0 17:15 +0200, Maxime Ripard a =E9crit :
+> > Hi Nicolas,
 > >
-> > -> V4L2_PIX_FMT_RGB565X
+> > On Thu, Apr 04, 2019 at 11:41:13AM -0400, Nicolas Dufresne wrote:
+> > > > > > +    * - __u16
+> > > > > > +      - ``pic_width_in_mbs_minus1``
+> > > > > > +      -
+> > > > > > +    * - __u16
+> > > > > > +      - ``pic_height_in_map_units_minus1``
+> > > > > > +      -
+> > > > >
+> > > > > We recently had some reflection with Alex that this is redundant =
+with
+> > > > > the width and height in the OUTPUT format. It may also apply to s=
+ome
+> > > > > other fields in these structs. I feel like they should be removed=
+ and
+> > > > > passed via corresponding generic V4L2 properties - format, select=
+ion,
+> > > > > etc.
+> > > > >
+> > > > > The same problem is also present in the MPEG2 controls. In fact, =
+there
+> > > > > was a patch already which used some fields from the controls to
+> > > > > calculate the destination buffer strides, rather than bytesperlin=
+e in
+> > > > > the format.
+> > > > >
+> > > > > Since we're in staging, it could be done with a follow-up patch, =
+though.
+> > > >
+> > > > Just my two cents. I played with some codecs a while back. IIRC some
+> > > > specify a "codec" size in addition to the actual picture size, like
+> > > > when the encoder does padding to fit the requirements of the codec
+> > > > (spec). Is this needed anywhere?
+> > >
+> > > With state-less encoders, the headers, which contains the crop
+> > > information is created by userspace and for state less decoder, the
+> > > headers that contains this information is parsed by userspace. So I
+> > > believe that in theory, the accelerator does not strictly need to be
+> > > aware of the cropped dimensions.
+> > >
+> > > Another thing, is that there is not guarantied matches between e.g.
+> > > depth of the chrome/luma and the final image buffers. Some hardware m=
+ay
+> > > have bandwidth limitation or internal converter and could possibly
+> > > decode 10bit data into 8bit buffers.
+> > >
+> > > A third reason why I would not try and encode this header information
+> > > is that there can be multiple PPS/SPS at the same time, and I think
+> > > it's confusing if the relevant information to differentiate them is
+> > > removed.
 > >
-> > Was added later, as what you expect is not compatible.
->
-> All these 16-bit V4L2 pixelformats are ancient, but they are (to my knowledge)
-> correct w.r.t. the documented layout of the bits in memory. I.e., that's what
-> the hardware will give you.
->
-> I think if there is no equivalence between the drm and v4l2 fourcc's, then
-> you need two entries in this table, one for drm (v4l2_fmt == 0), one for v4l2
-> (drm_fmt == 0).
-
-Yeah, that was my plan. I'd definitely expect some formats in V4L2
-while not supported by DRM, or the other way around.
-
-> >> @@ -473,6 +496,7 @@ static const struct image_format_info formats[] = {
-> >>  		.is_yuv = true,
-> >>  	}, {
-> >>  		.drm_fmt = DRM_FORMAT_NV24,
-> >> +		.v4l2_fmt = V4L2_PIX_FMT_NV24,
+> > Sorry if that sounds a bit dumb, but it's not really clear to me if
+> > you're arguing for the removal of the data as Tomasz suggests, or if
+> > you want to keep them.
 > >
-> > For extra fun, the M variant has not been added yet.
+> > The first paragrah seems to advocate for the former, but the two
+> > others for the latter.
 >
-> Note that it has been the practice in V4L2 to avoid adding pixelformats unless
-> they are in use by a V4L2 driver. So that's why some combinations do not exist.
->
-> If we are creating a common library then I think we should change that rule
-> to: "unless they are in use by a DRM or V4L2 driver". And when new formats are
-> added, and they exists already for DRM or V4L2, then we should use the same
-> fourcc for the other subsystem.
->
-> I.e. if pixelformat V4L2_PIX_FMT_FOO was already defined, then add a:
->
-> #define DRM_FORMAT_FOO V4L2_PIX_FMT_FOO
->
-> rather than creating a new fourcc.
+> I think the data should stay. As I said, there can be multiple SPS/PPS,
+> while there is only one format. That being said, how does SPS/PPS
+> activation works ? How do you tell the driver about all the SPS/PPS and
+> which one is being activated ?
 
-That makes sense
+The current way of dealing with this is that the _SLICE_PARAMS control
+actually takes an array of SPS's. And same thing for PPS.
 
-> We could even start looking at redoing the whole scheme in a unified way, but
-> that's something for the (far) future.
+There's no difference between activated and deactivated ones
+though. What is the use case for this?
 
-Yeah, my secret plan is to have eventually a single fourcc (or even
-#define) for both DRM and v4l2 for any new format. But don't tell
-anyone :)
-
-> This is already a big step forward.
-
-Great, I'll respin this then.
-
+Thanks!
 Maxime
 
 --
@@ -128,15 +154,15 @@ Maxime Ripard, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
 
---4zlq2z5366q2vxuf
+--gy5eppcjekdsrhyc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXK9jfAAKCRDj7w1vZxhR
-xdJlAQCX/ejxdQlqYsc7uKU3WqAQ58yIuyHgkeKWJ9DIA/fmVAEAx4t6BCOAD9PO
-8n2ksoAJZYjJniOKhV/5HHr9/khBhQ4=
-=66eR
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXK9j/QAKCRDj7w1vZxhR
+xaYGAQCsc7VzPLi6Wez6KKZYGFulznMkEwVKTW7odXkXkgtCIwEAmJwWZjLVEXE4
+EQyZH/dg/cuLi5H6A+QpU9SjLypRswE=
+=TYHB
 -----END PGP SIGNATURE-----
 
---4zlq2z5366q2vxuf--
+--gy5eppcjekdsrhyc--
