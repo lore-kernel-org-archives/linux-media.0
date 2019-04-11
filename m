@@ -2,203 +2,156 @@ Return-Path: <SRS0=hW3k=SN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4F33C10F14
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 16:01:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BCE8C10F13
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 16:12:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 810962133D
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 16:01:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 080752083E
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 16:12:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="WmwA2o/A"
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="uI2VI5q/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726585AbfDKQB1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 12:01:27 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:3098 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726145AbfDKQB1 (ORCPT
+        id S1726684AbfDKQMx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 12:12:53 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:38577 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbfDKQMx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 12:01:27 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5caf64d30000>; Thu, 11 Apr 2019 09:01:23 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 11 Apr 2019 09:01:25 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 11 Apr 2019 09:01:25 -0700
-Received: from HQMAIL112.nvidia.com (172.18.146.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 11 Apr
- 2019 16:01:25 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL112.nvidia.com
- (172.18.146.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 11 Apr
- 2019 16:01:24 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 11 Apr 2019 16:01:24 +0000
-Received: from sumitg-l4t.nvidia.com (Not Verified[10.24.42.162]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5caf64d10007>; Thu, 11 Apr 2019 09:01:24 -0700
-From:   Sumit Gupta <sumitg@nvidia.com>
-To:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <sakari.ailus@linux.intel.com>, <paul.kocialkowski@bootlin.com>,
-        <tfiga@chromium.org>, <keiichiw@chromium.org>, <sumitg@nvidia.com>,
-        <bbasu@nvidia.com>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [Patch V2] v4l2-core: fix use-after-free error
-Date:   Thu, 11 Apr 2019 21:31:18 +0530
-Message-ID: <1554998478-30349-1-git-send-email-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Thu, 11 Apr 2019 12:12:53 -0400
+Received: by mail-qk1-f196.google.com with SMTP id g1so3803902qki.5
+        for <linux-media@vger.kernel.org>; Thu, 11 Apr 2019 09:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=5SMFrTVgpnIlB+L9xq27Splnw33hXQG0wx1qYx9kDrA=;
+        b=uI2VI5q/wEqyifypSgLu0EPIek6VDAz7bjsOB2sB7PPMLDLrQ5LdOOYhG7axETHWIr
+         2l4geZbnHpsR2O07IKGqs+iQNCM1JpkffbOp4CdeAoniEflnU1CXW3Jm5nOr0zLB+3cu
+         Pyv4yhpyghNbHh1aM68WiwfB6QeUVDy7NIZqU8V86zJn9D97XJoaKV9MUztrqVBnrKuq
+         2xkBv6ZTgEuzI6tt1OL7Hp/b6zJmpGZJEwLjJcqy/vG9pUIXjZuN1JDbS3DRndDirNC/
+         dBY/HIOnpP4YdHnm+DZk8psqdfjOjJrL0JccMdomgxNJ5tiRTXjfSpuNCAutVa/LoOJp
+         JoHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=5SMFrTVgpnIlB+L9xq27Splnw33hXQG0wx1qYx9kDrA=;
+        b=RnT4+2FCAg0pra0ybra5flTBqLlIGs7rUPzY73FXsyiOL3+Ri1SDAZAu2DEBbC+eII
+         snoDocF0J4ke1tbqQw9v3tlFGv654514ogknNs3sRxLk6gGK4WpGrexCQzDqhxSbRECU
+         MPveDktcIN4XArfn09MRC69U9+LBrX8uQQBkh/LLLeaD6aoZaiJwADpK4IaURToa3zwp
+         tMLdO6Q/aI5S1YTkinuZ/lB9MP2Ui7X860cg5cLxnKjx3WzUnFjkBrVytJfRioVtMG07
+         bWOMqwJi6dk+cVJySm97Z8g4ysURUCJr9O9Z3y6tUgyu4z/Vj33Q/bu+ajolSQw7U6ep
+         xsRg==
+X-Gm-Message-State: APjAAAVNQT2vGphFAQh+KprROKZMiWQD9BRJckCEVa/3elvKJCXrzmUi
+        eSbQc5bp7hk+NL8d8CZ9JyzFyQ==
+X-Google-Smtp-Source: APXvYqw+kkF6PBG78Q7kn26FAP7K3sZKQ2AYsFasa0BfATD+HtkHzIpJbSUYUD6AG9dqtuhSbnE/dg==
+X-Received: by 2002:a37:a296:: with SMTP id l144mr36472988qke.20.1554999172265;
+        Thu, 11 Apr 2019 09:12:52 -0700 (PDT)
+Received: from tpx230-nicolas.collaboramtl (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
+        by smtp.gmail.com with ESMTPSA id g189sm6601996qkd.60.2019.04.11.09.12.49
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 11 Apr 2019 09:12:50 -0700 (PDT)
+Message-ID: <88dc2edc5e6146d4dc0a8367b5bbe9aaa6241d0b.camel@ndufresne.ca>
+Subject: Re: [PATCH v3 1/9] staging: video: rockchip: add v4l2 decoder
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Randy Li <randy.li@rock-chips.com>
+Cc:     ayaka <ayaka@soulik.info>, linux-media@vger.kernel.org,
+        hverkuil@xs4all.nl, maxime.ripard@bootlin.com, joro@8bytes.org,
+        jernej.skrabec@gmail.com, paul.kocialkowski@bootlin.com,
+        thomas.petazzoni@bootlin.com, mchehab@kernel.org,
+        ezequiel@collabora.com, posciak@chromium.org, groeck@chromium.org,
+        linux-rockchip@lists.infradead.org
+Date:   Thu, 11 Apr 2019 12:12:49 -0400
+In-Reply-To: <cc5816d8-43cb-aedc-e496-f92baf37e6b3@rock-chips.com>
+References: <20190410124226.8612-1-ayaka@soulik.info>
+         <20190410124226.8612-2-ayaka@soulik.info>
+         <2b225e07b03359311c21ab2b3c41096a97beb338.camel@ndufresne.ca>
+         <cc5816d8-43cb-aedc-e496-f92baf37e6b3@rock-chips.com>
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-zjlg6Ecl6t7mB6EBykWt"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1554998483; bh=sEufludimsSbbAIyEALaQypOEDwA1U3AV6D8y6MVhVY=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=WmwA2o/AN6c9kcgQungtMS4ra+riwT8ikqlOJuL89+teccY92E/O23hXB2v6Ym9UN
-         dSIxZt/hA9LIQCPMM2MPqvl/ffsO2k7qpdYou4V2VrfHZb5pVdJkOfFvSOqWmTnwoY
-         AUftPzaQgC+okfWrmTUN3FVbv57+FnVug8V4ubwU9nOBatH2cKd66gLSKxlUQHGAis
-         LRFu65ShRthvGK3Dqd1Vm7hYyKjH9LHdX8dCvDkGRUa/LKTGqs0/6V1CI48AfHP62u
-         ueOpMan9UbVJOm5qU026trP2ky1TsQcjsN5LyV5c/Q2Cx5WJ7Lpjwi8d9dG4oVORSV
-         dqXNq+88XlAKA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: sumitg <sumitg@nvidia.com>
 
-Fixing use-after-free within __v4l2_ctrl_handler_setup().
-Memory is being freed with kfree(new_ref) for duplicate
-control reference entry but cluster is still referring
-to the duplicate entry. Change done to update ctrl->cluster
-only when new control reference is added. Also, checking if
-ctrl->ncontrols is non-zero before accessing controls from
-cluster pointer to avoid illegal access when cluster has
-zero controls.
+--=-zjlg6Ecl6t7mB6EBykWt
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
- ==================================================================
- BUG: KASAN: use-after-free in __v4l2_ctrl_handler_setup+0x388/0x428
- Read of size 8 at addr ffffffc324e78618 by task systemd-udevd/312
+Le jeudi 11 avril 2019 =C3=A0 09:29 +0800, Randy Li a =C3=A9crit :
+> > We agreed with Maxime and Ezequiel that there will be two distinct
+> > format, V4L2_PIX_FMT_H264_SLICE_RAW and V4L2_PIX_FMT_H264_SLICE_ANNEXB.
+> > And user-pace will take care of providing the right information.
+>=20
+> I have no idea on what does the SLICE_RAW mean here.
 
- Allocated by task 312:
+If you skip the NAL headers, SLICE_RAW is what is left. This is exactly
+what is passed in VAAPI, and what makes Rockchip HW difficult to
+support through this abstraction apparently. The rationale is that all
+the information that was in the rest of the bitstream is already passed
+in C structures. If this isn't the case, let me know, since it would be
+a bad name indeed.
 
- Freed by task 312:
+Paul asked us why not always required ANNEX-B with start code as a
+super set. This is not very efficient, since it means that whenever you
+have a stream from an ISOMP4 media, you endup having to convert the AVC
+headers into ANNEX-B start code, and you loose the optimization the AVC
+header provides (AVC format is basically just a NAL type and it's size,
+so you can navigate through the stream with very little reads). The
+other thing is the memory alignment the require needs. I suspect that
+if the HW require SLICE_RAW, you cannot just pass a random pointer
+offset. So you'd need another buffer the userspace data to. Hidden
+copies in drivers are quite bad, it's better to leave it to userspace
+when we can in my opinion.
 
- The buggy address belongs to the object at ffffffc324e78600
-  which belongs to the cache kmalloc-64 of size 64
- The buggy address is located 24 bytes inside of
-  64-byte region [ffffffc324e78600, ffffffc324e78640)
- The buggy address belongs to the page:
- page:ffffffbf0c939e00 count:1 mapcount:0 mapping:
-					(null) index:0xffffffc324e78f80
- flags: 0x4000000000000100(slab)
- raw: 4000000000000100 0000000000000000 ffffffc324e78f80 000000018020001a
- raw: 0000000000000000 0000000100000001 ffffffc37040fb80 0000000000000000
- page dumped because: kasan: bad access detected
+Now that I'm saying that out-loud, I wonder how the "one v4l2 buffer
+per frame" restriction can be respected for SLICE_RAW. The receiver
+would have no way to know where each slices are. Isn't there a big flaw
+in this restriction ? Or did I miss-understood the format, and
+SLICE_RAW is a bad name ?
 
- Memory state around the buggy address:
-  ffffffc324e78500: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-  ffffffc324e78580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- >ffffffc324e78600: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-                             ^
-  ffffffc324e78680: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
-  ffffffc324e78700: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
- ==================================================================
+>=20
+> Annex B describe a byte stream format but it doesn't mean it should =20
+> ship slice data with SPS or PPS
 
-Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
----
-v2:
-* update ctrl->cluster only when new control reference is added.
-* check ctrl->ncontrols to avoid illegal access when cluster has zero controls.
+SLICE means it won't pass SPS or PPS in-band. Only slice NALs and per
+slice auxiliary data if there is any. Do Rockchip needs the original
+SPS/PPS bitstream ? If so, all of them ? or just the activated one ?
+And when ?
 
- drivers/media/v4l2-core/v4l2-ctrls.c | 53 +++++++++++++++++++-----------------
- 1 file changed, 28 insertions(+), 25 deletions(-)
+>=20
+> The problem of bootlin demo is it follows Annex B but withou a start=20
+> code !!!!
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 5e3806f..3d0a952 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -2154,15 +2154,6 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 	if (size_extra_req)
- 		new_ref->p_req.p = &new_ref[1];
- 
--	if (ctrl->handler == hdl) {
--		/* By default each control starts in a cluster of its own.
--		   new_ref->ctrl is basically a cluster array with one
--		   element, so that's perfect to use as the cluster pointer.
--		   But only do this for the handler that owns the control. */
--		ctrl->cluster = &new_ref->ctrl;
--		ctrl->ncontrols = 1;
--	}
--
- 	INIT_LIST_HEAD(&new_ref->node);
- 
- 	mutex_lock(hdl->lock);
-@@ -2195,6 +2186,15 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 	hdl->buckets[bucket] = new_ref;
- 	if (ctrl_ref)
- 		*ctrl_ref = new_ref;
-+	if (ctrl->handler == hdl) {
-+		/* By default each control starts in a cluster of its own.
-+		 * new_ref->ctrl is basically a cluster array with one
-+		 * element, so that's perfect to use as the cluster pointer.
-+		 * But only do this for the handler that owns the control.
-+		 */
-+		ctrl->cluster = &new_ref->ctrl;
-+		ctrl->ncontrols = 1;
-+	}
- 
- unlock:
- 	mutex_unlock(hdl->lock);
-@@ -2725,25 +2725,28 @@ int __v4l2_ctrl_handler_setup(struct v4l2_ctrl_handler *hdl)
- 		ctrl->done = false;
- 
- 	list_for_each_entry(ctrl, &hdl->ctrls, node) {
--		struct v4l2_ctrl *master = ctrl->cluster[0];
--		int i;
--
--		/* Skip if this control was already handled by a cluster. */
--		/* Skip button controls and read-only controls. */
--		if (ctrl->done || ctrl->type == V4L2_CTRL_TYPE_BUTTON ||
--		    (ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY))
--			continue;
-+		if (ctrl->ncontrols) {
-+			struct v4l2_ctrl *master = ctrl->cluster[0];
-+			int i;
-+
-+			/* Skip if this control was already handled by a */
-+			/* cluster. Skip button controls and read-only */
-+			/* controls. */
-+			if (ctrl->done || ctrl->type == V4L2_CTRL_TYPE_BUTTON ||
-+				(ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY))
-+				continue;
- 
--		for (i = 0; i < master->ncontrols; i++) {
--			if (master->cluster[i]) {
--				cur_to_new(master->cluster[i]);
--				master->cluster[i]->is_new = 1;
--				master->cluster[i]->done = true;
-+			for (i = 0; i < master->ncontrols; i++) {
-+				if (master->cluster[i]) {
-+					cur_to_new(master->cluster[i]);
-+					master->cluster[i]->is_new = 1;
-+					master->cluster[i]->done = true;
-+				}
- 			}
-+			ret = call_op(master, s_ctrl);
-+			if (ret)
-+				break;
- 		}
--		ret = call_op(master, s_ctrl);
--		if (ret)
--			break;
- 	}
- 
- 	return ret;
--- 
-2.7.4
+We'll fix that if we decide to use this for testing. It was all early
+and unspecified. SLICE_ANNEXB will have a start code of course, as I
+don't see how you can call this ANNEXB otherwise. And I'm pretty sure
+the reason Rockchip need it is to be able to split the slices (we need
+to keep in mind that multiple slices per frame is commonly used in
+video conference streaming). The format documentation should be really
+clear about what it is, and if another HW with another format comes
+that does not match, it should define and document a new format.
+
+cheers,
+Nicolas
+
+--=-zjlg6Ecl6t7mB6EBykWt
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXK9ngQAKCRBxUwItrAao
+HLcFAJ4xsAhrKMIo3LOrqn1XOJOwkTWUwgCcDDyTmU6DTwrOUowmM78Ob4VxrP8=
+=tBIX
+-----END PGP SIGNATURE-----
+
+--=-zjlg6Ecl6t7mB6EBykWt--
 
