@@ -3,25 +3,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D635CC10F11
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 01:30:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED42FC10F11
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 01:33:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9D39F20674
-	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 01:30:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B657920674
+	for <linux-media@archiver.kernel.org>; Thu, 11 Apr 2019 01:33:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726023AbfDKBaI convert rfc822-to-8bit (ORCPT
+        id S1726181AbfDKBdK convert rfc822-to-8bit (ORCPT
         <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Apr 2019 21:30:08 -0400
-Received: from kozue.soulik.info ([108.61.200.231]:52742 "EHLO
+        Wed, 10 Apr 2019 21:33:10 -0400
+Received: from kozue.soulik.info ([108.61.200.231]:52770 "EHLO
         kozue.soulik.info" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbfDKBaI (ORCPT
+        with ESMTP id S1725981AbfDKBdK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Apr 2019 21:30:08 -0400
+        Wed, 10 Apr 2019 21:33:10 -0400
 Received: from [192.168.10.232] (unknown [103.29.142.67])
-        by kozue.soulik.info (Postfix) with ESMTPSA id 97C68100CD7;
-        Thu, 11 Apr 2019 10:30:04 +0900 (JST)
+        by kozue.soulik.info (Postfix) with ESMTPSA id 83179100CD7;
+        Thu, 11 Apr 2019 10:33:07 +0900 (JST)
 Content-Type: text/plain;
         charset=utf-8
 Mime-Version: 1.0 (1.0)
@@ -29,7 +30,7 @@ Subject: Re: [PATCH v3 0/9] [WIP]: rockchip mpp for v4l2 video deocder
 From:   Ayaka <ayaka@soulik.info>
 X-Mailer: iPad Mail (16A404)
 In-Reply-To: <7fec1a2101ec1304d35d5c757cc98f916eda20c6.camel@ndufresne.ca>
-Date:   Thu, 11 Apr 2019 09:30:02 +0800
+Date:   Thu, 11 Apr 2019 09:33:06 +0800
 Cc:     linux-media@vger.kernel.org, randy.li@rock-chips.com,
         hverkuil@xs4all.nl, maxime.ripard@bootlin.com, joro@8bytes.org,
         jernej.skrabec@gmail.com, paul.kocialkowski@bootlin.com,
@@ -37,7 +38,7 @@ Cc:     linux-media@vger.kernel.org, randy.li@rock-chips.com,
         ezequiel@collabora.com, posciak@chromium.org, groeck@chromium.org,
         linux-rockchip@lists.infradead.org
 Content-Transfer-Encoding: 8BIT
-Message-Id: <18CD717A-1AB2-4043-AD7C-8F190618C1BD@soulik.info>
+Message-Id: <54F8FAAC-2EFB-408D-963F-B7EB329646FF@soulik.info>
 References: <20190410124226.8612-1-ayaka@soulik.info> <7fec1a2101ec1304d35d5c757cc98f916eda20c6.camel@ndufresne.ca>
 To:     Nicolas Dufresne <nicolas@ndufresne.ca>
 Sender: linux-media-owner@vger.kernel.org
@@ -75,6 +76,8 @@ Sent from my iPad
 > list effectively what we think it is, and will try and get some fixes
 > in at least one selected userspace. Otherwise it's not possible to test
 > easily.
+I have no idea on what the un-ordered means, hardware would only care about the POC of a reference frame which would match its list0(P or B) and list1(B slice).
+I would suggest to remove decode_param of AVC later, as its slice_param has contains enough information to decode a slice and its reference.
 > 
 >> 
 >> I extracted a slice data from Rockchip mpp to verify my driver, it work
