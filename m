@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D2A2C282DE
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 686EEC10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:51:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 62A2520693
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:51:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 46D6520693
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:51:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726992AbfDLPvo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 11:51:44 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58837 "EHLO
+        id S1727011AbfDLPvs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 11:51:48 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:50219 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726874AbfDLPvn (ORCPT
+        with ESMTP id S1726898AbfDLPvn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 12 Apr 2019 11:51:43 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.89)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hEySr-0000EY-HJ; Fri, 12 Apr 2019 17:51:41 +0200
+        id 1hEySr-0000EY-Hh; Fri, 12 Apr 2019 17:51:41 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@pengutronix.de
-Subject: [PATCH 09/13] media: v4l2-ctrl: add MPEG-2 profile and level controls
-Date:   Fri, 12 Apr 2019 17:51:31 +0200
-Message-Id: <20190412155135.13907-9-p.zabel@pengutronix.de>
+Subject: [PATCH 10/13] media: coda: add decoder MPEG-2 profile and level controls
+Date:   Fri, 12 Apr 2019 17:51:32 +0200
+Message-Id: <20190412155135.13907-10-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190412155135.13907-1-p.zabel@pengutronix.de>
 References: <20190412155135.13907-1-p.zabel@pengutronix.de>
@@ -43,172 +43,161 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MPEG-2 CID definitions for profiles and levels defined in ITU-T Rec.
-H.262.
+The MPEG-2 decoder firmware reports profile and level indication that
+can be used to set V4L2 MPEG-2 profile and level controls
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- .../media/uapi/v4l/ext-ctrls-codec.rst        | 56 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c          | 23 ++++++++
- include/uapi/linux/v4l2-controls.h            | 16 ++++++
- 3 files changed, 95 insertions(+)
+ drivers/media/platform/coda/Makefile      |  2 +-
+ drivers/media/platform/coda/coda-common.c | 25 +++++++++++++
+ drivers/media/platform/coda/coda-mpeg2.c  | 44 +++++++++++++++++++++++
+ drivers/media/platform/coda/coda.h        |  6 ++++
+ 4 files changed, 76 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/media/platform/coda/coda-mpeg2.c
 
-diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-index 67a122339c0e..b4e6a7c94b42 100644
---- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-@@ -759,6 +759,32 @@ enum v4l2_mpeg_video_h264_level -
+diff --git a/drivers/media/platform/coda/Makefile b/drivers/media/platform/coda/Makefile
+index 3a068206cea8..5ac734d083cf 100644
+--- a/drivers/media/platform/coda/Makefile
++++ b/drivers/media/platform/coda/Makefile
+@@ -1,6 +1,6 @@
+ ccflags-y += -I$(src)
  
+-coda-objs := coda-common.o coda-bit.o coda-gdi.o coda-h264.o coda-mpeg4.o coda-jpeg.o
++coda-objs := coda-common.o coda-bit.o coda-gdi.o coda-h264.o coda-mpeg2.o coda-mpeg4.o coda-jpeg.o
  
- 
-+.. _v4l2-mpeg-video-mpeg2-level:
-+
-+``V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL``
-+    (enum)
-+
-+enum v4l2_mpeg_video_mpeg2_level -
-+    The level information for the MPEG2 elementary stream. Applicable to
-+    MPEG2 codecs. Possible values are:
-+
-+
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW``
-+      - Low Level (LL)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN``
-+      - Main Level (ML)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440``
-+      - High-1440 Level (H-14)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH``
-+      - High Level (HL)
-+
-+
-+
- .. _v4l2-mpeg-video-mpeg4-level:
- 
- ``V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL``
-@@ -845,6 +871,36 @@ enum v4l2_mpeg_video_h264_profile -
- 
- 
- 
-+.. _v4l2-mpeg-video-mpeg2-profile:
-+
-+``V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE``
-+    (enum)
-+
-+enum v4l2_mpeg_video_mpeg2_profile -
-+    The profile information for MPEG2. Applicable to MPEG2 codecs.
-+    Possible values are:
-+
-+
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE``
-+      - Simple profile (SP)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN``
-+      - Main profile (MP)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE``
-+      - SNR Scalable profile (SNR)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE``
-+      - Spatially Scalable profile (Spt)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH``
-+      - High profile (HP)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_MULTIVIEW``
-+      - Multi-view profile (MVP)
-+
-+
-+
- .. _v4l2-mpeg-video-mpeg4-profile:
- 
- ``V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE``
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index b1ae2e555c68..a7e80e389003 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -406,6 +406,21 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		"Explicit",
- 		NULL,
- 	};
-+	static const char * const mpeg_mpeg2_level[] = {
-+		"Low",
-+		"Main",
-+		"High 1440",
-+		"High",
-+		NULL,
-+	};
-+	static const char * const mpeg2_profile[] = {
-+		"Simple",
-+		"Main",
-+		"SNR Scalable",
-+		"Spatially Scalable",
-+		"High",
-+		NULL,
-+	};
- 	static const char * const mpeg_mpeg4_level[] = {
- 		"0",
- 		"0b",
-@@ -622,6 +637,10 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		return h264_fp_arrangement_type;
- 	case V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE:
- 		return h264_fmo_map_type;
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
-+		return mpeg_mpeg2_level;
+ obj-$(CONFIG_VIDEO_CODA) += coda.o
+ obj-$(CONFIG_VIDEO_IMX_VDOA) += imx-vdoa.o
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 9d25899a9af6..1cd0fb5b1c5b 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -1580,6 +1580,15 @@ void coda_update_profile_level_ctrls(struct coda_ctx *ctx, u8 profile_idc,
+ 		profile = coda_h264_profile(profile_idc);
+ 		level = coda_h264_level(level_idc);
+ 		break;
++	case V4L2_PIX_FMT_MPEG2:
++		codec_name = "MPEG-2";
++		profile_cid = V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE;
++		level_cid = V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL;
++		profile_ctrl = ctx->mpeg2_profile_ctrl;
++		level_ctrl = ctx->mpeg2_level_ctrl;
++		profile = coda_mpeg2_profile(profile_idc);
++		level = coda_mpeg2_level(level_idc);
++		break;
+ 	case V4L2_PIX_FMT_MPEG4:
+ 		codec_name = "MPEG-4";
+ 		profile_cid = V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE;
+@@ -1939,6 +1948,8 @@ static int coda_s_ctrl(struct v4l2_ctrl *ctrl)
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP:
+ 		ctx->params.mpeg4_inter_qp = ctrl->val;
+ 		break;
 +	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
-+		return mpeg2_profile;
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
- 		return mpeg_mpeg4_level;
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
-@@ -828,6 +847,8 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_H264_CONSTRAINED_INTRA_PREDICTION:
- 								return "H264 Constrained Intra Pred";
- 	case V4L2_CID_MPEG_VIDEO_H264_CHROMA_QP_INDEX_OFFSET:	return "H264 Chroma QP Index Offset";
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:			return "MPEG2 Level";
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:			return "MPEG2 Profile";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP:		return "MPEG4 I-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP:		return "MPEG4 P-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP:		return "MPEG4 B-Frame QP Value";
-@@ -1192,6 +1213,8 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC:
- 	case V4L2_CID_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE:
- 	case V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE:
 +	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
  	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
- 	case V4L2_CID_JPEG_CHROMA_SUBSAMPLING:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 78816ec88751..ec2832f88f4f 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -704,6 +704,22 @@ enum v4l2_cid_mpeg_video_hevc_size_of_length_field {
- #define V4L2_CID_MPEG_VIDEO_HEVC_HIER_CODING_L6_BR	(V4L2_CID_MPEG_BASE + 642)
- #define V4L2_CID_MPEG_VIDEO_REF_NUMBER_FOR_PFRAMES	(V4L2_CID_MPEG_BASE + 643)
- #define V4L2_CID_MPEG_VIDEO_PREPEND_SPSPPS_TO_IDR	(V4L2_CID_MPEG_BASE + 644)
-+#define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_MPEG_BASE + 645)
-+enum v4l2_mpeg_video_mpeg2_level {
-+	V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW		= 0,
-+	V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN	= 1,
-+	V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440	= 2,
-+	V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH	= 3,
-+};
-+#define V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE		(V4L2_CID_MPEG_BASE + 646)
-+enum v4l2_mpeg_video_mpeg2_profile {
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE				= 0,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN				= 1,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE			= 2,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE		= 3,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH				= 4,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_MULTIVIEW				= 5,
-+};
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
+ 		/* nothing to do, these are fixed */
+@@ -2119,6 +2130,20 @@ static void coda_decode_ctrls(struct coda_ctx *ctx)
+ 	if (ctx->h264_level_ctrl)
+ 		ctx->h264_level_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
  
- /*  MPEG-class control IDs specific to the CX2341x driver as defined by V4L2 */
- #define V4L2_CID_MPEG_CX2341X_BASE				(V4L2_CTRL_CLASS_MPEG | 0x1000)
++	ctx->mpeg2_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
++		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE,
++		V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH, 0,
++		V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH);
++	if (ctx->mpeg2_profile_ctrl)
++		ctx->mpeg2_profile_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++
++	ctx->mpeg2_level_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
++		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL,
++		V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH, 0,
++		V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH);
++	if (ctx->mpeg2_level_ctrl)
++		ctx->mpeg2_level_ctrl->flags |= V4L2_CTRL_FLAG_READ_ONLY;
++
+ 	ctx->mpeg4_profile_ctrl = v4l2_ctrl_new_std_menu(&ctx->ctrls,
+ 		&coda_ctrl_ops, V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE,
+ 		V4L2_MPEG_VIDEO_MPEG4_PROFILE_ADVANCED_CODING_EFFICIENCY, 0,
+diff --git a/drivers/media/platform/coda/coda-mpeg2.c b/drivers/media/platform/coda/coda-mpeg2.c
+new file mode 100644
+index 000000000000..9caf840a3466
+--- /dev/null
++++ b/drivers/media/platform/coda/coda-mpeg2.c
+@@ -0,0 +1,44 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Coda multi-standard codec IP - MPEG-2 helper functions
++ *
++ * Copyright (C) 2019 Pengutronix, Philipp Zabel
++ */
++
++#include <linux/kernel.h>
++#include <linux/videodev2.h>
++#include <coda.h>
++
++int coda_mpeg2_profile(int profile_idc)
++{
++	switch (profile_idc) {
++	case 5:
++		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE;
++	case 4:
++		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN;
++	case 3:
++		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE;
++	case 2:
++		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE;
++	case 1:
++		return V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH;
++	default:
++		return -EINVAL;
++	}
++}
++
++int coda_mpeg2_level(int level_idc)
++{
++	switch (level_idc) {
++	case 10:
++		return V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW;
++	case 8:
++		return V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN;
++	case 6:
++		return V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440;
++	case 4:
++		return V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH;
++	default:
++		return -EINVAL;
++	}
++}
+diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/coda/coda.h
+index d8c8b3777db8..5c1a105ffdd2 100644
+--- a/drivers/media/platform/coda/coda.h
++++ b/drivers/media/platform/coda/coda.h
+@@ -122,6 +122,8 @@ struct coda_params {
+ 	s8			h264_chroma_qp_index_offset;
+ 	u8			h264_profile_idc;
+ 	u8			h264_level_idc;
++	u8			mpeg2_profile_idc;
++	u8			mpeg2_level_idc;
+ 	u8			mpeg4_intra_qp;
+ 	u8			mpeg4_inter_qp;
+ 	u8			gop_size;
+@@ -217,6 +219,8 @@ struct coda_ctx {
+ 	struct v4l2_ctrl_handler	ctrls;
+ 	struct v4l2_ctrl		*h264_profile_ctrl;
+ 	struct v4l2_ctrl		*h264_level_ctrl;
++	struct v4l2_ctrl		*mpeg2_profile_ctrl;
++	struct v4l2_ctrl		*mpeg2_level_ctrl;
+ 	struct v4l2_ctrl		*mpeg4_profile_ctrl;
+ 	struct v4l2_ctrl		*mpeg4_level_ctrl;
+ 	struct v4l2_fh			fh;
+@@ -330,6 +334,8 @@ int coda_sps_parse_profile(struct coda_ctx *ctx, struct vb2_buffer *vb);
+ int coda_h264_sps_fixup(struct coda_ctx *ctx, int width, int height, char *buf,
+ 			int *size, int max_size);
+ 
++int coda_mpeg2_profile(int profile_idc);
++int coda_mpeg2_level(int level_idc);
+ int coda_mpeg4_profile(int profile_idc);
+ int coda_mpeg4_level(int level_idc);
+ 
 -- 
 2.20.1
 
