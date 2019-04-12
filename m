@@ -2,282 +2,133 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32227C10F0E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 10:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A69BC10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 10:16:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DC7E621872
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 10:13:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5127C2083E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 10:16:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="KqvPelDz"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="FFIhwWLc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726772AbfDLKNJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 06:13:09 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:46872 "EHLO
+        id S1726874AbfDLKQr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 06:16:47 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:48046 "EHLO
         mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726713AbfDLKNI (ORCPT
+        with ESMTP id S1726736AbfDLKQr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 06:13:08 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190412101306euoutp02fcb879633c4c252bd47e9888326dcf19~UsnTf_9bm1249712497euoutp02O
-        for <linux-media@vger.kernel.org>; Fri, 12 Apr 2019 10:13:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190412101306euoutp02fcb879633c4c252bd47e9888326dcf19~UsnTf_9bm1249712497euoutp02O
+        Fri, 12 Apr 2019 06:16:47 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20190412101646euoutp026880b8c72ce20eaf67eaed2381a1e48e~UsqgCXnHb1437214372euoutp02X
+        for <linux-media@vger.kernel.org>; Fri, 12 Apr 2019 10:16:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20190412101646euoutp026880b8c72ce20eaf67eaed2381a1e48e~UsqgCXnHb1437214372euoutp02X
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1555063986;
-        bh=s2Tp9OXuTYVy3RNH7SHukzXrletl2Lhz48o0gPjr2aQ=;
-        h=To:Cc:From:Subject:Date:References:From;
-        b=KqvPelDzhgBdLleOu/pq4SV7QwQk9HDUmrOqfEArwV7+p2SyOYnaTyvt4t9QwuwPz
-         IKhA2s7DuCXawZtW3H/vLIx9HImuZmz2qIHLVitgIbNGf+QDquDa5M+y3pFwWIit1N
-         3eJggmTgH7uSSitlaiGs39zwmD28KlW9bRc6kwx8=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190412101305eucas1p1cb1ad870251eddf135cfa71415f6473a~UsnStGRws1516515165eucas1p14;
-        Fri, 12 Apr 2019 10:13:05 +0000 (GMT)
+        s=mail20170921; t=1555064206;
+        bh=gbutTIYBORDiEXJNIbhFjoxYZwUugoxMuuXriUHK8xA=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=FFIhwWLc+5/xTGxrlIL708SsbOdbhuZulaZC5F3v7HflJc6wa+vJ+E8b7SuK+RKpH
+         2kuZ+nG/7LTa4GgFzhBEvXU/Qkwgj8WIWNqAoO4MIRUAhKCwAfBMc80MMMBu8A2CCz
+         FRDkfejrjF8BYWS7iT7b8hJtfT7oKCis2SnCFHwU=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20190412101645eucas1p2fa65b576d9c0ec3589379c54d2625a0c~UsqfXsjbV1943819438eucas1p2d;
+        Fri, 12 Apr 2019 10:16:45 +0000 (GMT)
 Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 77.6A.04325.1B460BC5; Fri, 12
-        Apr 2019 11:13:05 +0100 (BST)
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 87.0D.04377.C8560BC5; Fri, 12
+        Apr 2019 11:16:45 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190412101304eucas1p1178d633eb7aa83c46a9386384ba0c300~UsnSCAw6Y1516515165eucas1p13;
-        Fri, 12 Apr 2019 10:13:04 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20190412101644eucas1p21fac257f4680791f14d38f3e48b3b7f6~Usqeo_XyH0368703687eucas1p2l;
+        Fri, 12 Apr 2019 10:16:44 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190412101304eusmtrp1d446b4d40869e74fba2aab271e6c75f2~UsnRzwKm-2510125101eusmtrp1C;
-        Fri, 12 Apr 2019 10:13:04 +0000 (GMT)
-X-AuditID: cbfec7f5-b75ff700000010e5-ae-5cb064b14141
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 29.05.04146.0B460BC5; Fri, 12
-        Apr 2019 11:13:04 +0100 (BST)
-Received: from [106.120.51.71] (unknown [106.120.51.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190412101303eusmtip256de0937f44a7ee080ae5e48caca75c0~UsnRQfHLg1838318383eusmtip26;
-        Fri, 12 Apr 2019 10:13:03 +0000 (GMT)
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     =?UTF-8?Q?Arve_Hj=c3=b8nnev=c3=a5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <christian@brauner.io>,
+        20190412101644eusmtrp1f3de4641b3668986495a54769886b463~Usqea6Am_2681626816eusmtrp1P;
+        Fri, 12 Apr 2019 10:16:44 +0000 (GMT)
+X-AuditID: cbfec7f4-113ff70000001119-05-5cb0658ca081
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id BD.63.04140.C8560BC5; Fri, 12
+        Apr 2019 11:16:44 +0100 (BST)
+Received: from [106.120.51.75] (unknown [106.120.51.75]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190412101643eusmtip1e47b5595ce6b613a097408cc9534c2bb~Usqd8tnJM2413724137eusmtip1J;
+        Fri, 12 Apr 2019 10:16:43 +0000 (GMT)
+Subject: Re: [PATCH v3 1/2] media: exynos4-is: Properly report _MPLANE caps
+To:     Boris Brezillon <boris.brezillon@collabora.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Adham Abozaeid <adham.abozaeid@microchip.com>,
-        Ajay Singh <ajay.kathat@microchip.com>,
-        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-wireless@vger.kernel.org
-From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH] staging: remove redundant 'default n' from Kconfig
-Message-ID: <76b9b4d9-ade2-8284-0223-a6ecafd0ad14@samsung.com>
-Date:   Fri, 12 Apr 2019 12:13:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101
-        Thunderbird/45.3.0
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
+Cc:     kernel@collabora.com, Tomasz Figa <tfiga@chromium.org>,
+        Hirokazu Honda <hiroh@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <c1faa661-6631-00ae-836b-4f24b1ee408e@samsung.com>
+Date:   Fri, 12 Apr 2019 12:16:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <20190412092027.20410-1-boris.brezillon@collabora.com>
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUhTURjGO7t3d9fh7DgN3zQqFloZZZF/XNLCUuRSQd9h3930otJctusq
-        +xArKJNotaAPU3QTPxqWU2zZLI1pLd1cRJhFoX2YSLUiUyrRytud1H+/9z3Pc97nPRyaUD+S
-        h9OZuhxer+O0GkpJ2h/+9M6vS7NtX3jj42TGc+UcwVj6k5gvY70Uc/zzLOauZ0TBnCyvpZjK
-        /EjmqaOYYs7absmZT9WvFIy9Jl/OVNaPypiyZyOKBBVrb7LL2bGSrwTb09xKsubBYTlbbz1D
-        sS0lNQr21Y8KxH6rn76W3qqMT+O1mQd4fcyy3cqMrlIXmX0t9lBLq0uWj8qjC1EADTgWPja8
-        oAqRklbjagQP37SQUjGE4MHvakIqviGoM1qICcv5S91+VRWC6pf9fr8PQfk9t1xUheLFYOws
-        UohM4GcEtNWtEJnCS+DCaSsSOQQnwn2riRJZhZeBzz06zjRN4kgYGFwh4hScAkbPbEkRDO1X
-        +0jpxhlw21f8NxzgDgWUWttIKVwSXDF7FBKHwAdXg5+ngfviWVIy3EQwVjDgd99GUHXxFyWp
-        4qDV9UQuTibwXKh1xEjt5dDrdiCxDTgInvuCpRBBYLJfJqS2CgpOqSV1FNgqbdTE2MI71/3v
-        xoLD9E4mshrvgKdVRnQezSz6b7Wi/1Yr+pehDBFWFMYbhKx0Xlis4w8uELgswaBLX5C6L6se
-        jf8v9y/XcCNqHt3jRJhGmkCVLbF2u1rOHRBys5wIaEITqtpIjrdUaVzuYV6/b5feoOUFJ4qg
-        SU2Y6sik19vUOJ3L4ffyfDavnziV0QHh+SjZc6G8dPOWZPtjMl7W3Wjh3GFjGyrpVXntTSX7
-        bamNHd0m85Ap730yLA28M+fE1J6GTeY1CfMmd2GvozPKlHP5e1hJn/fY+oij9uyd/PWIPmdK
-        1+rmdUkBhpt7ppJNz+nOldMPKePYHff6vd+X3ndbTgVpG99urlDXnLANPTmn1ZBCBrcomtAL
-        3B8pqsVwWwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKIsWRmVeSWpSXmKPExsVy+t/xe7obUjbEGOxqlLc4M6OP2WLRMxeL
-        93/vs1k0vlO22HPmF7tF8+L1bBbLGlQtLu+aw2bRs2Erq8WbFXfYLbataWC1WLbpD5PFgmu/
-        2B14Pbbt3sbq8XfuR2aPe/sOs3gs/PSV1WPTqk42j/1z17B73PmxlNHj8ya5AI4oPZui/NKS
-        VIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYyr84+zFMw2qdh/
-        +DhTA+NirS5GTg4JAROJCdOus3QxcnEICSxllHi8/gp7FyMHUEJG4vj6MogaYYk/17rYQGwh
-        gdeMEusb+UFsEQFjif6zs9hBepkFbjFLPFl4BqyITcBKYmL7KkYQW1jAWeLAqklgcV4BO4m3
-        p/+wgcxnEVCVePHJCSQsKhAhcethBwtEiaDEyZlPwGxmAXWJP/MuMUPY8hLb385hnsDIPwtJ
-        2SwkZbOQlC1gZF7FKJJaWpybnltsqFecmFtcmpeul5yfu4kRGGXbjv3cvIPx0sbgQ4wCHIxK
-        PLwBVutjhFgTy4orcw8xSnAwK4nwhrAAhXhTEiurUovy44tKc1KLDzGaAt09kVlKNDkfmADy
-        SuINTQ3NLSwNzY3Njc0slMR5zxtURgkJpCeWpGanphakFsH0MXFwSjUwxv6STuxyiQ2uTAgt
-        V9l89Iqd36oNf+9E3ApX0Aq2lveQ6eRyW9jI3Kb/vzHtygHFvFublO5M8NgkUHqswau11l+x
-        nM/30uZ3wW6cMeynhGTvywcsv36C4/cSMwGTfR4H1mv4NNwK6isWzZmrvXza+58tOd9022LE
-        7813O3PlUfr/B+/CIkKVWIozEg21mIuKEwF5jMgCyAIAAA==
-X-CMS-MailID: 20190412101304eucas1p1178d633eb7aa83c46a9386384ba0c300
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRju2zlnO45mn2vhy7KCUXRDV9KPA6kohZyoKKhArKhlBxW3KTt5
+        6+bSNF3LdCnqjJhiF9ePbLOlRgaKrqYZlaRkpYSVXSTRJYiX6niM/Pc87/NenufjowllB6Wm
+        k42nOJNRp9dI5aSnc6on9ArXcGSLHzNd3T4JUzfVImHGHAmMu8dKMUWldTLG2vCAYm65ZiTM
+        uK+ZYLqf1EuZifw5abScrTa/JNmy6fsU2/S+DrHVhVUU2/6rhmRdziIp6x65TLATrtX76Xh5
+        xElOn5zBmbRRx+VJPz35krQCKquw+jNhRjbSgmga8DZoKYq2IDmtxHcQlEy6pSLxI5jOLyBF
+        MoHAmVsvs6CA+Ym3nX1SASvxbQTFeaFi0yiC14/fUIKwHO8Gj71VIggqnCeBd+NWSiAEtiCY
+        fHV9flyKt8KVjmIkGFHgKJi9uFeAJF4HPfYooWMFjoPBzob5nQocBM+qhkkBB+AdYHnWN18n
+        cDDk+usX8Bp4OHqdEE4B/iADc/knqeh6J3TOlFMiXg7fvI0LaUKg65qVFAfyEFgfDchEUoJg
+        0OtAYtd2aPe+pAR3BN4I91q04uPFQP+NQyIMhP7RINFDINg8FYRYVkBhgVLcsRamnRUSEavh
+        8vBvsgRp7IuS2RelsS9KY/9/1oFIJwrm0nlDIseHG7nMMF5n4NONiWEJqQYX+vu5uua8/ibU
+        MnOiDWEaaZYq4mLuHVFSugw+29CGgCY0KsVB8m9JcVKXfZozpR4zpes5vg2tpElNsOLMkqHD
+        SpyoO8WlcFwaZ/qnSugAtRnltO5pbF7p0ySXpr0om0o5WztmG+nu3bXe7PpYFimv8p33apNm
+        1baOTda7rW5j9M0D6g2Dmyst5/bF1RSqlsVra4/2xsYezdJ9l11qvqDSDzwPH/niaxqyXY0N
+        udb/9WmO6kdNh+/sqj3hIf7ihHhIj3FEZlbyEQ6/6fC2gRO1XRqST9Jt3USYeN0f2/6+zFgD
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFIsWRmVeSWpSXmKPExsVy+t/xu7o9qRtiDDqfcVucPnOKyWLJz11M
+        Fh8WJFtsPtfDatE5cQm7Rc+GrawWyzb9YbL4dGons8WZ/SvZLD63/mNz4PKY3XCRxWPK742s
+        HjvuLmH0mN0xk9Xj8NeFLB6bVnWyeWx+0c3s8XmTXABHlJ5NUX5pSapCRn5xia1StKGFkZ6h
+        pYWekYmlnqGxeayVkamSvp1NSmpOZllqkb5dgl7G+22tTAVtrBUds58xNzBOYuli5OSQEDCR
+        uHXsOlsXIxeHkMBSRolTa7cxdzFyACWkJOa3KEHUCEv8udYFVfOaUeLQrQnMIAlhAW+JbbP2
+        MYEkRARamSRWXZoL5jALdDFK/D7YyQjRMo1RounEUkaQFjYBQ4neo32MICt4Bewk/rb4gpgs
+        AqoS52bZgVSICkRInHm/Auw6XgFBiZMzn4DZnALOEl0nr7OC2MwC6hJ/5l1ihrDFJZq+rISK
+        y0tsfzuHeQKj0Cwk7bOQtMxC0jILScsCRpZVjCKppcW56bnFRnrFibnFpXnpesn5uZsYgfG6
+        7djPLTsYu94FH2IU4GBU4uENsFofI8SaWFZcmXuIUYKDWUmEN4QFKMSbklhZlVqUH19UmpNa
+        fIjRFOi3icxSosn5wFSSVxJvaGpobmFpaG5sbmxmoSTOe96gMkpIID2xJDU7NbUgtQimj4mD
+        U6qBsT5KmduY6fD7bMb4ZJOTNfML+92Xp3U7mU5hSz1klmfALC9yWV17aci8j/lnz1+UNf0c
+        bvQ79YXBnj2LWANum9vZMyU8iVf88ag47Yko18rMI7umT91varEwpIXrzO8tXcu/Nq/dELNh
+        wpLZ71hMDwZtUee6xak4MWellcuFiVxpe0qnrDE4p8RSnJFoqMVcVJwIALzC/UjtAgAA
+X-CMS-MailID: 20190412101644eucas1p21fac257f4680791f14d38f3e48b3b7f6
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190412101304eucas1p1178d633eb7aa83c46a9386384ba0c300
+X-RootMTR: 20190412092035epcas1p43412936a0fba75b1c548904e785fe23d
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20190412101304eucas1p1178d633eb7aa83c46a9386384ba0c300
-References: <CGME20190412101304eucas1p1178d633eb7aa83c46a9386384ba0c300@eucas1p1.samsung.com>
+X-CMS-RootMailID: 20190412092035epcas1p43412936a0fba75b1c548904e785fe23d
+References: <CGME20190412092035epcas1p43412936a0fba75b1c548904e785fe23d@epcas1p4.samsung.com>
+        <20190412092027.20410-1-boris.brezillon@collabora.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-'default n' is the default value for any bool or tristate Kconfig
-setting so there is no need to write it explicitly.
+Hi,
 
-Also since commit f467c5640c29 ("kconfig: only write '# CONFIG_FOO
-is not set' for visible symbols") the Kconfig behavior is the same
-regardless of 'default n' being present or not:
+On 4/12/19 11:20, Boris Brezillon wrote:
+> The fimc-isp-video.c and fimc-lite.c were missing the
+> V4L2_CAP_VIDEO_CAPTURE_MPLANE flag when reporting device caps.
 
-    ...
-    One side effect of (and the main motivation for) this change is making
-    the following two definitions behave exactly the same:
-    
-        config FOO
-                bool
-    
-        config FOO
-                bool
-                default n
-    
-    With this change, neither of these will generate a
-    '# CONFIG_FOO is not set' line (assuming FOO isn't selected/implied).
-    That might make it clearer to people that a bare 'default n' is
-    redundant.
-    ...
+Th omission was intentional, as these video nodes cannot be used
+by "standard" V4L2 capture applications. Some sub-devices need to 
+be configured first in order to use these video nodes. It was 
+agreed to not set these capabilities in the driver, instead user
+space library, e.g. libv4l2 with driver-specific plugin handling
+the media controller and v4l2 subdev calls would set the capability
+for the applications. Has something changed?
 
-Signed-off-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
----
- drivers/staging/Kconfig                    |    1 -
- drivers/staging/android/Kconfig            |    2 --
- drivers/staging/axis-fifo/Kconfig          |    1 -
- drivers/staging/gs_fpgaboot/Kconfig        |    1 -
- drivers/staging/media/Kconfig              |    1 -
- drivers/staging/media/rockchip/vpu/Kconfig |    1 -
- drivers/staging/most/Kconfig               |    1 -
- drivers/staging/rtl8192e/Kconfig           |    1 -
- drivers/staging/wilc1000/Kconfig           |    1 -
- drivers/staging/wlan-ng/Kconfig            |    1 -
- 10 files changed, 11 deletions(-)
-
-Index: b/drivers/staging/Kconfig
-===================================================================
---- a/drivers/staging/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/Kconfig	2019-04-12 12:04:20.786128367 +0200
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- menuconfig STAGING
- 	bool "Staging drivers"
--	default n
- 	---help---
- 	  This option allows you to select a number of drivers that are
- 	  not of the "normal" Linux kernel quality level.  These drivers
-Index: b/drivers/staging/android/Kconfig
-===================================================================
---- a/drivers/staging/android/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/android/Kconfig	2019-04-12 12:04:20.786128367 +0200
-@@ -5,7 +5,6 @@ if ANDROID
- 
- config ASHMEM
- 	bool "Enable the Anonymous Shared Memory Subsystem"
--	default n
- 	depends on SHMEM
- 	help
- 	  The ashmem subsystem is a new shared memory allocator, similar to
-@@ -17,7 +16,6 @@ config ASHMEM
- 
- config ANDROID_VSOC
- 	tristate "Android Virtual SoC support"
--	default n
- 	depends on PCI_MSI
- 	help
- 	  This option adds support for the Virtual SoC driver needed to boot
-Index: b/drivers/staging/axis-fifo/Kconfig
-===================================================================
---- a/drivers/staging/axis-fifo/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/axis-fifo/Kconfig	2019-04-12 12:04:59.734129348 +0200
-@@ -5,7 +5,6 @@
- config XIL_AXIS_FIFO
- 	tristate "Xilinx AXI-Stream FIFO IP core driver"
- 	depends on OF
--	default n
- 	help
- 	  This adds support for the Xilinx AXI-Stream
- 	  FIFO IP core driver.
-Index: b/drivers/staging/gs_fpgaboot/Kconfig
-===================================================================
---- a/drivers/staging/gs_fpgaboot/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/gs_fpgaboot/Kconfig	2019-04-12 12:04:20.790128367 +0200
-@@ -4,6 +4,5 @@
- #
- config GS_FPGABOOT
- 	tristate "Xilinx FPGA firmware download module"
--	default n
- 	help
- 	  Xilinx FPGA firmware download module
-Index: b/drivers/staging/media/Kconfig
-===================================================================
---- a/drivers/staging/media/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/media/Kconfig	2019-04-12 12:05:05.470129493 +0200
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- menuconfig STAGING_MEDIA
- 	bool "Media staging drivers"
--	default n
- 	help
- 	  This option allows you to select a number of media drivers that
- 	  don't have the "normal" Linux kernel quality level.
-Index: b/drivers/staging/media/rockchip/vpu/Kconfig
-===================================================================
---- a/drivers/staging/media/rockchip/vpu/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/media/rockchip/vpu/Kconfig	2019-04-12 12:04:20.794128367 +0200
-@@ -6,7 +6,6 @@ config VIDEO_ROCKCHIP_VPU
- 	select VIDEOBUF2_DMA_CONTIG
- 	select VIDEOBUF2_VMALLOC
- 	select V4L2_MEM2MEM_DEV
--	default n
- 	help
- 	  Support for the Video Processing Unit present on Rockchip SoC,
- 	  which accelerates video and image encoding and decoding.
-Index: b/drivers/staging/most/Kconfig
-===================================================================
---- a/drivers/staging/most/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/most/Kconfig	2019-04-12 12:04:20.794128367 +0200
-@@ -2,7 +2,6 @@
- menuconfig MOST
-         tristate "MOST support"
- 	depends on HAS_DMA
--        default n
-         ---help---
- 	  Say Y here if you want to enable MOST support.
- 	  This driver needs at least one additional component to enable the
-Index: b/drivers/staging/rtl8192e/Kconfig
-===================================================================
---- a/drivers/staging/rtl8192e/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/rtl8192e/Kconfig	2019-04-12 12:04:20.794128367 +0200
-@@ -2,7 +2,6 @@
- config RTLLIB
- 	tristate "Support for rtllib wireless devices"
- 	depends on WLAN && m
--	default n
- 	select LIB80211
- 	help
- 	  If you have a wireless card that uses rtllib, say
-Index: b/drivers/staging/wilc1000/Kconfig
-===================================================================
---- a/drivers/staging/wilc1000/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/wilc1000/Kconfig	2019-04-12 12:04:20.794128367 +0200
-@@ -34,7 +34,6 @@ config WILC1000_SPI
- config WILC1000_HW_OOB_INTR
- 	bool "WILC1000 out of band interrupt"
- 	depends on WILC1000_SDIO
--	default n
- 	help
- 	  This option enables out-of-band interrupt support for the WILC1000
- 	  chipset. This OOB interrupt is intended to provide a faster interrupt
-Index: b/drivers/staging/wlan-ng/Kconfig
-===================================================================
---- a/drivers/staging/wlan-ng/Kconfig	2019-04-12 12:04:20.794128367 +0200
-+++ b/drivers/staging/wlan-ng/Kconfig	2019-04-12 12:04:20.794128367 +0200
-@@ -4,7 +4,6 @@ config PRISM2_USB
- 	depends on WLAN && USB && CFG80211
- 	select WIRELESS_EXT
- 	select WEXT_PRIV
--	default n
- 	help
- 	  This is the wlan-ng prism 2.5/3 USB driver for a wide range of
- 	  old USB wireless devices.
+-- 
+Thanks,
+Sylwester
