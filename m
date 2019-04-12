@@ -6,33 +6,34 @@ X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8682C10F0E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 22:48:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D406C10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 22:49:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BAD2120818
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 22:48:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D298020818
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 22:49:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbfDLWsb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 18:48:31 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36506 "EHLO
+        id S1727224AbfDLWs4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 18:48:56 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36538 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726953AbfDLWsa (ORCPT
+        with ESMTP id S1726788AbfDLWs4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 18:48:30 -0400
+        Fri, 12 Apr 2019 18:48:56 -0400
 Received: from [IPv6:2804:431:9718:a5e8:c168:522a:50d5:d06d] (unknown [IPv6:2804:431:9718:a5e8:c168:522a:50d5:d06d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id E0B1A2818D1;
-        Fri, 12 Apr 2019 23:48:22 +0100 (BST)
-Subject: Re: [PATCH v2 02/15] media: vimc: Remove unnecessary stream checks
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9332B281631;
+        Fri, 12 Apr 2019 23:48:50 +0100 (BST)
+Subject: Re: [PATCH v2 05/15] media: vimc: cap: Add handler for singleplanar
+ fmt ioctls
 To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
         linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, lucmaga@gmail.com,
         linux-kernel@vger.kernel.org, kernel@collabora.com,
         lkcamp@lists.libreplanetbr.org
 References: <20190327151743.18528-1-andrealmeid@collabora.com>
- <20190327151743.18528-3-andrealmeid@collabora.com>
+ <20190327151743.18528-6-andrealmeid@collabora.com>
 From:   Helen Koike <helen.koike@collabora.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=helen.koike@collabora.com; keydata=
@@ -109,12 +110,12 @@ Autocrypt: addr=helen.koike@collabora.com; keydata=
  iR1nXfMxENVYnM5ag7mBZyD/kru5W1Uj34L6AFaDMXFPwedSCpzzqUiHb0f+nYkfOodf5xy0
  46+3THy/NUS/ZZp/rI4F7Y77+MQPVg7vARfHHX1AxYUKfRVW5j88QUB70txn8Vgi1tDrOr4J
  eD+xr0CvIGa5lKqgQacQtGkpOpJ8zY4ObSvpNubey/qYUE3DCXD0n2Xxk4muTvqlkFpOYA==
-Message-ID: <f5848a9b-a2d8-ed95-637c-3b3e29ef090a@collabora.com>
-Date:   Fri, 12 Apr 2019 19:48:16 -0300
+Message-ID: <52dc9ba2-2d18-b4c1-b9c6-382141593cee@collabora.com>
+Date:   Fri, 12 Apr 2019 19:48:46 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.5.1
 MIME-Version: 1.0
-In-Reply-To: <20190327151743.18528-3-andrealmeid@collabora.com>
+In-Reply-To: <20190327151743.18528-6-andrealmeid@collabora.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -123,104 +124,174 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-
+Hi Andre,
 
 On 3/27/19 12:17 PM, André Almeida wrote:
-> Change the way subdevices check if the stream is running. Verify the stream
-> pointer instead of src_frame. This makes easier to get rid of the void* and
-> u8* in the subdevices structs. Also, remove redundant checks for stream.
+> Since multiplanar is a superset of single planar formats, instead of
+> having different implementations for them, treat all formats as
+> multiplanar. If we need to work with single planar formats, convert them to
+> multiplanar (with num_planes = 1), re-use the multiplanar code, and
+> transform them back to single planar. This is implemented with
+> v4l2_fmt_sp2mp_func().
+
+I would rename the commit title as you are not really adding handlers,
+the handlers are already there, you are refactoring to make it easier to
+add multiplanar handlers in the next commit.
+
+Maybe:
+media: vimc: cap: refactor singleplanar as a subset of multiplanar
+
 > 
 > Signed-off-by: André Almeida <andrealmeid@collabora.com>
-
-Acked-by: Helen Koike <helen.koike@collabora.com>
-
 > ---
 > Changes in v2:
-> - Squashed commits that remove unnecessary checks together
-> - Reworded commit message
+> - Make more clear that the generic function _vimc_cap_try_fmt_vid_cap_mp
+> expects a multiplanar format as input 
 > 
->  drivers/media/platform/vimc/vimc-debayer.c | 5 +----
->  drivers/media/platform/vimc/vimc-scaler.c  | 7 ++-----
->  drivers/media/platform/vimc/vimc-sensor.c  | 6 +-----
->  3 files changed, 4 insertions(+), 14 deletions(-)
+>  drivers/media/platform/vimc/vimc-capture.c | 75 +++++++++++++++++-----
+>  1 file changed, 58 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/media/platform/vimc/vimc-debayer.c b/drivers/media/platform/vimc/vimc-debayer.c
-> index 419ad57a4f5c..613b7abbe06e 100644
-> --- a/drivers/media/platform/vimc/vimc-debayer.c
-> +++ b/drivers/media/platform/vimc/vimc-debayer.c
-> @@ -270,7 +270,7 @@ static int vimc_deb_set_fmt(struct v4l2_subdev *sd,
+> diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
+> index add6df565fa9..24d70c2c9db7 100644
+> --- a/drivers/media/platform/vimc/vimc-capture.c
+> +++ b/drivers/media/platform/vimc/vimc-capture.c
+> @@ -128,10 +128,10 @@ static int vimc_cap_g_fmt_vid_cap(struct file *file, void *priv,
+>  	return 0;
+>  }
 >  
->  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
->  		/* Do not change the format while stream is on */
-> -		if (vdeb->src_frame)
-> +		if (vdeb->ved.stream)
->  			return -EBUSY;
+> -static int vimc_cap_try_fmt_vid_cap(struct file *file, void *priv,
+> +static int _vimc_cap_try_fmt_vid_cap_mp(struct file *file, void *priv,
+>  				    struct v4l2_format *f)
+
+Please align the argument.
+
+>  {
+> -	struct v4l2_pix_format *format = &f->fmt.pix;
+> +	struct v4l2_pix_format_mplane *format = &f->fmt.pix_mp;
 >  
->  		sink_fmt = &vdeb->sink_fmt;
-> @@ -337,9 +337,6 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
->  		const struct v4l2_format_info *pix_info;
->  		unsigned int frame_size;
+>  	format->width = clamp_t(u32, format->width, VIMC_FRAME_MIN_WIDTH,
+>  				VIMC_FRAME_MAX_WIDTH) & ~1;
+> @@ -149,20 +149,60 @@ static int vimc_cap_try_fmt_vid_cap(struct file *file, void *priv,
+>  	if (!v4l2_format_info(format->pixelformat))
+>  		format->pixelformat = fmt_default.fmt.pix.pixelformat;
 >  
-> -		if (vdeb->src_frame)
-> -			return 0;
-> -
->  		/* We only support translating bayer to RGB24 */
->  		if (src_pixelformat != V4L2_PIX_FMT_RGB24) {
->  			dev_err(vdeb->dev,
-> diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
-> index f15542920bdc..8544c745c6e6 100644
-> --- a/drivers/media/platform/vimc/vimc-scaler.c
-> +++ b/drivers/media/platform/vimc/vimc-scaler.c
-> @@ -158,7 +158,7 @@ static int vimc_sca_set_fmt(struct v4l2_subdev *sd,
+> -	return v4l2_fill_pixfmt(format, format->pixelformat,
+> -				format->width, format->height);
+> +	return v4l2_fill_pixfmt_mp(format, format->pixelformat,
+> +				   format->width, format->height);
+>  }
 >  
->  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
->  		/* Do not change the format while stream is on */
-> -		if (vsca->src_frame)
-> +		if (vsca->ved.stream)
->  			return -EBUSY;
+> -static int vimc_cap_s_fmt_vid_cap(struct file *file, void *priv,
+> -				  struct v4l2_format *f)
+> +static int vimc_cap_enum_fmt_vid_cap(struct file *file, void *priv,
+> +				     struct v4l2_fmtdesc *f)
+> +{
+> +	if (f->index >= ARRAY_SIZE(vimc_cap_supported_pixfmt))
+> +		return -EINVAL;
+> +
+> +	f->pixelformat = vimc_cap_supported_pixfmt[f->index];
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * VIDIOC FMT handlers for single-planar
+> + */
+> +
+> +static int vimc_cap_g_fmt_vid_cap_sp(struct file *file, void *priv,
+> +				     struct v4l2_format *f)
+> +{
+> +	struct vimc_cap_device *vcap = video_drvdata(file);
+> +
+> +	if (IS_MULTIPLANAR(vcap))
+> +		return -EINVAL;
+
+I think you can get rid of these checks, you just need to make sure only
+sp callbacks are registered in vimc_cap_fops if you are in sp mode; And
+only mp callbacks are registered in vimc_cap_fops if you are in mp mode
+(as we don't support both at the same time atm.
+
+You could check the planar mode in the bind function, then you can alter
+fops before calling video_register_device(), .
+
+This would clean your code a bit, and you won't need these two functions
+in your next patch:
+_vimc_cap_try_fmt_vid_cap_mp
+vimc_cap_try_fmt_vid_cap_mp
+as the first just performs this check and then calls the second, you can
+eliminate the check and remove _vimc_cap_try_fmt_vid_cap_mp.
+
+Helen
+
+
+> +
+> +	return vimc_cap_g_fmt_vid_cap(file, priv, f);
+> +}
+> +
+> +static int vimc_cap_try_fmt_vid_cap_sp(struct file *file, void *priv,
+> +				       struct v4l2_format *f)
+>  {
+>  	struct vimc_cap_device *vcap = video_drvdata(file);
 >  
->  		sink_fmt = &vsca->sink_fmt;
-> @@ -213,9 +213,6 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
->  		const struct v4l2_format_info *pix_info;
->  		unsigned int frame_size;
+> +	if (IS_MULTIPLANAR(vcap))
+> +		return -EINVAL;
+> +
+> +	return v4l2_fmt_sp2mp_func(file, priv, f, _vimc_cap_try_fmt_vid_cap_mp);
+> +}
+> +
+> +static int vimc_cap_s_fmt_vid_cap_sp(struct file *file, void *priv,
+> +				     struct v4l2_format *f)
+> +{
+> +	struct vimc_cap_device *vcap = video_drvdata(file);
+> +
+> +	if (IS_MULTIPLANAR(vcap))
+> +		return -EINVAL;
+> +
+>  	/* Do not change the format while stream is on */
+>  	if (vb2_is_busy(&vcap->queue))
+>  		return -EBUSY;
 >  
-> -		if (vsca->src_frame)
-> -			return 0;
-> -
->  		if (!vimc_sca_is_pixfmt_supported(pixelformat)) {
->  			dev_err(vsca->dev, "pixfmt (%s) is not supported\n",
->  				v4l2_get_fourcc_name(pixelformat));
-> @@ -337,7 +334,7 @@ static void *vimc_sca_process_frame(struct vimc_ent_device *ved,
->  						    ved);
+> -	vimc_cap_try_fmt_vid_cap(file, priv, f);
+> +	v4l2_fmt_sp2mp_func(file, priv, f, _vimc_cap_try_fmt_vid_cap_mp);
 >  
->  	/* If the stream in this node is not active, just return */
-> -	if (!vsca->src_frame)
-> +	if (!ved->stream)
->  		return ERR_PTR(-EINVAL);
+>  	dev_dbg(vcap->dev, "%s: format update: "
+>  		"old:%dx%d (0x%x, %d, %d, %d, %d) "
+> @@ -185,15 +225,15 @@ static int vimc_cap_s_fmt_vid_cap(struct file *file, void *priv,
+>  	return 0;
+>  }
 >  
->  	vimc_sca_fill_src_frame(vsca, sink_frame);
-> diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
-> index 081e54204c9f..1b2b75b27952 100644
-> --- a/drivers/media/platform/vimc/vimc-sensor.c
-> +++ b/drivers/media/platform/vimc/vimc-sensor.c
-> @@ -141,7 +141,7 @@ static int vimc_sen_set_fmt(struct v4l2_subdev *sd,
+> -static int vimc_cap_enum_fmt_vid_cap(struct file *file, void *priv,
+> -				     struct v4l2_fmtdesc *f)
+> +static int vimc_cap_enum_fmt_vid_cap_sp(struct file *file, void *priv,
+> +					struct v4l2_fmtdesc *f)
+>  {
+> -	if (f->index >= ARRAY_SIZE(vimc_cap_supported_pixfmt))
+> -		return -EINVAL;
+> +	struct vimc_cap_device *vcap = video_drvdata(file);
 >  
->  	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
->  		/* Do not change the format while stream is on */
-> -		if (vsen->frame)
-> +		if (vsen->ved.stream)
->  			return -EBUSY;
+> -	f->pixelformat = vimc_cap_supported_pixfmt[f->index];
+> +	if (IS_MULTIPLANAR(vcap))
+> +		return -EINVAL;
 >  
->  		mf = &vsen->mbus_format;
-> @@ -197,10 +197,6 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
->  		const struct v4l2_format_info *pix_info;
->  		unsigned int frame_size;
+> -	return 0;
+> +	return vimc_cap_enum_fmt_vid_cap(file, priv, f);
+>  }
 >  
-> -		if (vsen->kthread_sen)
-> -			/* tpg is already executing */
-> -			return 0;
-> -
->  		/* Calculate the frame size */
->  		pix_info = v4l2_format_info(pixelformat);
->  		frame_size = vsen->mbus_format.width * pix_info->bpp[0] *
+>  static bool vimc_cap_is_pixfmt_supported(u32 pixelformat)
+> @@ -239,10 +279,11 @@ static const struct v4l2_file_operations vimc_cap_fops = {
+>  static const struct v4l2_ioctl_ops vimc_cap_ioctl_ops = {
+>  	.vidioc_querycap = vimc_cap_querycap,
+>  
+> -	.vidioc_g_fmt_vid_cap = vimc_cap_g_fmt_vid_cap,
+> -	.vidioc_s_fmt_vid_cap = vimc_cap_s_fmt_vid_cap,
+> -	.vidioc_try_fmt_vid_cap = vimc_cap_try_fmt_vid_cap,
+> -	.vidioc_enum_fmt_vid_cap = vimc_cap_enum_fmt_vid_cap,
+> +	.vidioc_g_fmt_vid_cap = vimc_cap_g_fmt_vid_cap_sp,
+> +	.vidioc_s_fmt_vid_cap = vimc_cap_s_fmt_vid_cap_sp,
+> +	.vidioc_try_fmt_vid_cap = vimc_cap_try_fmt_vid_cap_sp,
+> +	.vidioc_enum_fmt_vid_cap = vimc_cap_enum_fmt_vid_cap_sp,
+> +
+>  	.vidioc_enum_framesizes = vimc_cap_enum_framesizes,
+>  
+>  	.vidioc_reqbufs = vb2_ioctl_reqbufs,
 > 
