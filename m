@@ -5,119 +5,91 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54E79C10F14
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 02:38:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2B7DC10F13
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 02:46:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 26C902083E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 02:38:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3B0521721
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 02:46:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XAfIt2AT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UfSc9nzn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726706AbfDLCio (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 22:38:44 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34017 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726678AbfDLCio (ORCPT
+        id S1726694AbfDLCqF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Apr 2019 22:46:05 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:44105 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726678AbfDLCqF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 22:38:44 -0400
-Received: by mail-pf1-f193.google.com with SMTP id b3so4386345pfd.1;
-        Thu, 11 Apr 2019 19:38:44 -0700 (PDT)
+        Thu, 11 Apr 2019 22:46:05 -0400
+Received: by mail-qt1-f196.google.com with SMTP id w5so9568448qtb.11;
+        Thu, 11 Apr 2019 19:46:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=CQGnbsTa28+WGFD7YKQq2M+/zSOCMfXAFFRYUWY4qaQ=;
-        b=XAfIt2ATg2jjY/NK78ehja6q449PeKIJ6sWoNoC9PBCJcrRWE1xjDNYoz/K+B3YK6T
-         5Psb6pfoxL3SIL/PClV4uyXHohYYpwbPEnIm72iEQOjGhXhkn+ds+8nit6PRHtx/aIld
-         MAJTv4G05VxTi9GfrZoVM6hQGgEtnPmvO/5qSEvMcEqjHhJcjMBx3S+WV3N/8dL0X8EE
-         rS2FkMt5l62t9C5bxxoTN92Y4nPsL6f7Q//aG4qTCwRd5y8rg3luaS9vHYBlICnl5R6U
-         GzDUZj9aSwIOOqCGbAEmNWnhBBuTx9OpxAv9DkmhdhgS83qkRP5AuO/jQgGn4B1zvl6R
-         z6tw==
+        bh=4ouqN4hB8wNOcj2j7hCZ0vfUSkJoDTUdIas5URzavms=;
+        b=UfSc9nznKQpx9/N+LNXB5bT0p7s3bNSsCYoH2lPZ1r8yy/FfW1gu7f+mV1P+pDP1L5
+         txkNxS/ez4QxfsDMBvqDX2YYc4Kq+Qm+T0sW+H5KEUpP2KnPW8a59gVitu4B8DJaVUHN
+         Id1ptPaM7O8zc7zHAGrgnpxFcoEZyM0qZ7j8tiFUq2FC1tD/ApjYPOFFE0jtJB0bjbyB
+         YOEj6dSfKOM30/xd48sjMrowWGM9sIfmF7xmg3ZzeFPb4J6FYiQGjduribVA4tuF5c1K
+         2gBduMZVGQtnrZ0DzSb+7XEAxtb35bFovbJqRJbzqBmCnZqLr8/0JqbamH4Ymu7wJyiW
+         m+UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=CQGnbsTa28+WGFD7YKQq2M+/zSOCMfXAFFRYUWY4qaQ=;
-        b=HIF2Dk3S3keiuuvXYYsf4Hnhyjn5rs26Af0lQcv/sI6j7n10zcp9lGtogoqnptU/G2
-         oysomkN8C7c1Woecs491CI5LegcJGkMJ7eiIuqzLoZu3EHLI+Hj8a5+HEirBpQJe/sa6
-         +rNl0jQqacNXm4pIgKdUT3u9ETQaGhBrY2fBjxrGev/CuOM72ek87eyKq7j7joUPCJ+5
-         opTfd3nJyxt7OZdQ1AH3Wflc65ZF25ZtAtaPMyH1gvbuLvAMTy5RrXxASu3CQHmkrKZp
-         t08qrcbI9GFyMXjABVrEnUmM+3Rrp99U2ncNAtmJP0RiYR3YEWPOwOMUtO1LlFn7rLyN
-         PaSg==
-X-Gm-Message-State: APjAAAWrWsWI5CKyj1W1FgNWmMLst2EJRh5kbrUHREFHGHu8/I8Lkljq
-        eQeGlQgY6iIH3xowVKpfmgxZYCVCt4akDw==
-X-Google-Smtp-Source: APXvYqy+K+s05IAdvfu/GHxX4ml+HpffNaoSDZX3XR5KQljN8J5i+FdNqGMJD9AbyMbDQpj+eDYXKQ==
-X-Received: by 2002:a63:494f:: with SMTP id y15mr51222380pgk.56.1555036723907;
-        Thu, 11 Apr 2019 19:38:43 -0700 (PDT)
-Received: from xy-data.openstacklocal (ecs-159-138-22-150.compute.hwclouds-dns.com. [159.138.22.150])
-        by smtp.gmail.com with ESMTPSA id g4sm68627075pfm.115.2019.04.11.19.38.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 11 Apr 2019 19:38:43 -0700 (PDT)
-From:   Young Xiao <92siuyang@gmail.com>
-To:     kbuild-all@01.org, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        greg@kroah.com, mchehab@kernel.org
-Cc:     keescook@chromium.org, hans.verkuil@cisco.com,
-        Young Xiao <YangX92@hotmail.com>
-Subject: [PATCH] USB: s2255 & stkwebcam: fix oops with malicious USB descriptors
-Date:   Fri, 12 Apr 2019 10:39:27 +0800
-Message-Id: <1555036767-31170-1-git-send-email-92siuyang@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        bh=4ouqN4hB8wNOcj2j7hCZ0vfUSkJoDTUdIas5URzavms=;
+        b=nwVDzOYp9QIuO+jRevILNR7CNjkIFErgAyhVQraSCaKwIAeZr/CyUc088WfvfBcIOh
+         GwcRxpZaF2OyO9kCOsUpMPhVqpl9BguWHlA0VmBs0Mu/gCzS3QENK0RoH63uZHtCoTJc
+         68U75OppCI4EUgN1zEtyo7SsQe60fo7Fv+ZzbvxlhC85fJEErJfHHku5QBfkLfjAerFI
+         Thj1VP+WiXG0kpcEzFpTMDEDXSc5/Kgqy9Ek2pmSCFtntZE3yWZv333SfH6pqHgVy1ku
+         aBeV944SfdSve+wVaNNU3i2AfUrus54gdp9TF9m+AS+XBLcwazQZWa/JQ3Y+lzL2MAKE
+         xRvg==
+X-Gm-Message-State: APjAAAUtpqIBaJAgRaQaxzVt7IUBlncYf7BBUbJiL0v1oOlHgb9BGqEx
+        5PFzqVc1z+QKruIZMvSD228=
+X-Google-Smtp-Source: APXvYqzQZaZ1CXBS/6jARv78I2G2rfOqWUIIJZ5LKkMRZob8UEcHtYx5sbqs0OTiVceIFUJruMarHw==
+X-Received: by 2002:ac8:2843:: with SMTP id 3mr46620526qtr.327.1555037164388;
+        Thu, 11 Apr 2019 19:46:04 -0700 (PDT)
+Received: from localhost.localdomain ([177.62.178.213])
+        by smtp.gmail.com with ESMTPSA id s66sm18484919qkd.90.2019.04.11.19.46.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Apr 2019 19:46:03 -0700 (PDT)
+From:   Tiago Macedo <tiagohenrique.macedo@gmail.com>
+X-Google-Original-From: Tiago Macedo <tiagohenrique.macedo@gmai.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org, lkcamp@lists.libreplanetbr.org,
+        Tiago Macedo <tiagohenrique.macedo@gmai.com>
+Subject: [PATCH] Fixed coding style: do not initialise statics to NULL
+Date:   Thu, 11 Apr 2019 23:45:20 -0300
+Message-Id: <20190412024520.26835-1-tiagohenrique.macedo@gmai.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Young Xiao <YangX92@hotmail.com>
+The standard guarantees that a pointer with static storage duration
+and no other initializer will be initialized to be a null pointer.
 
-The driver expects at least one valid endpoint. If given
-malicious descriptors that specify 0 for the number of endpoints,
-it will crash in the probe function.  Ensure there is at least
-one endpoint on the interface before using it.
-
-This vulnerability is same as CVE-2016-2188.
-
-Signed-off-by: Young Xiao <YangX92@hotmail.com>
+Signed-off-by: Tiago Macedo <tiagohenrique.macedo@gmai.com>
 ---
- drivers/media/usb/s2255/s2255drv.c       | 7 +++++++
- drivers/media/usb/stkwebcam/stk-webcam.c | 6 ++++++
- 2 files changed, 13 insertions(+)
+ drivers/staging/media/zoran/videocodec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
-index 5b3e54b..82dd661 100644
---- a/drivers/media/usb/s2255/s2255drv.c
-+++ b/drivers/media/usb/s2255/s2255drv.c
-@@ -2263,6 +2263,13 @@ static int s2255_probe(struct usb_interface *interface,
- 	iface_desc = interface->cur_altsetting;
- 	dev_dbg(&interface->dev, "num EP: %d\n",
- 		iface_desc->desc.bNumEndpoints);
-+
-+	if (iface_desc->desc.bNumEndpoints < 1) {
-+		dev_err(&interface->dev, "Invalid number of endpoints\n");
-+		retval = -EINVAL;
-+		goto errorEP;
-+	}
-+
- 	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
- 		endpoint = &iface_desc->endpoint[i].desc;
- 		if (!dev->read_endpoint && usb_endpoint_is_bulk_in(endpoint)) {
-diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
-index 8f54586..e427c3d 100644
---- a/drivers/media/usb/stkwebcam/stk-webcam.c
-+++ b/drivers/media/usb/stkwebcam/stk-webcam.c
-@@ -1350,6 +1350,12 @@ static int stk_camera_probe(struct usb_interface *interface,
- 	 * for the current alternate setting */
- 	iface_desc = interface->cur_altsetting;
+diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
+index c1ee5cb7e66b..cc6e0f1cd7b4 100644
+--- a/drivers/staging/media/zoran/videocodec.c
++++ b/drivers/staging/media/zoran/videocodec.c
+@@ -51,7 +51,7 @@ struct codec_list {
+ 	struct codec_list *next;
+ };
  
-+	if (iface_desc->desc.bNumEndpoints < 1) {
-+		dev_err(&interface->dev, "Invalid number of endpoints\n");
-+		err = -EINVAL;
-+		goto error;
-+	}
-+
- 	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
- 		endpoint = &iface_desc->endpoint[i].desc;
+-static struct codec_list *codeclist_top = NULL;
++static struct codec_list *codeclist_top;
  
+ /* ================================================= */
+ /* function prototypes of the master/slave interface */
 -- 
-1.9.1
+2.17.1
 
