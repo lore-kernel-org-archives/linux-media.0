@@ -2,234 +2,370 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D024EC10F0E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 12:18:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E736C10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 12:36:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 859892186A
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 12:18:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B96D62082E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 12:36:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="eJa0HKq3"
+	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="BdmS5V51"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbfDLMSf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 08:18:35 -0400
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:45056 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726773AbfDLMSe (ORCPT
+        id S1727514AbfDLMg2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 08:36:28 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40583 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727497AbfDLMg2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 08:18:34 -0400
+        Fri, 12 Apr 2019 08:36:28 -0400
+Received: by mail-lj1-f196.google.com with SMTP id q66so8712384ljq.7
+        for <linux-media@vger.kernel.org>; Fri, 12 Apr 2019 05:36:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1555071513; x=1586607513;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Y5d6/Oyd4XrqH1o2gUS8ZGmuKdCWrZicV4KgZbuvG48=;
-  b=eJa0HKq3SqhjW8Z3ACpdmLu42Mm/yLsETs1LqOayvzDN7HBlw9Q5ku3e
-   iAh6UQqErGBvq6YN1gHauP7ADqs7DkMetIhF5J1y/tgzzPQAVSUGRvdi/
-   wvlsS0J+Q4oDqGtz4VxKtWSSPZ82qFH/wZaErSf0/AaQKIqPCVXKgiz34
-   I=;
-X-IronPort-AV: E=Sophos;i="5.60,341,1549929600"; 
-   d="scan'208";a="390781667"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-69849ee2.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 12 Apr 2019 12:17:06 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2a-69849ee2.us-west-2.amazon.com (8.14.7/8.14.7) with ESMTP id x3CCH3DV117667
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
-        Fri, 12 Apr 2019 12:17:04 GMT
-Received: from EX13D21UWB001.ant.amazon.com (10.43.161.108) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 12 Apr 2019 12:17:03 +0000
-Received: from EX13D21UWB003.ant.amazon.com (10.43.161.212) by
- EX13D21UWB001.ant.amazon.com (10.43.161.108) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 12 Apr 2019 12:17:03 +0000
-Received: from EX13D21UWB003.ant.amazon.com ([10.43.161.212]) by
- EX13D21UWB003.ant.amazon.com ([10.43.161.212]) with mapi id 15.00.1367.000;
- Fri, 12 Apr 2019 12:17:03 +0000
-From:   "Herrenschmidt, Benjamin" <benh@amazon.com>
-To:     "joel@jms.id.au" <joel@jms.id.au>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
-        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>
-CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
-Subject: Re: [PATCH v2] media: platform: fix a kernel warning on clk control
-Thread-Topic: [PATCH v2] media: platform: fix a kernel warning on clk control
-Thread-Index: AQHU8Smjuz3kweTcSESAcEA15z/klA==
-Date:   Fri, 12 Apr 2019 12:17:03 +0000
-Message-ID: <9aa895a5184ddd30eb5750e4ec223fd5a5df4a54.camel@amazon.com>
-References: <20190329212710.5378-1-jae.hyun.yoo@linux.intel.com>
-         <09113211-ef61-2168-cf78-37c76f21edba@xs4all.nl>
-In-Reply-To: <09113211-ef61-2168-cf78-37c76f21edba@xs4all.nl>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.161.23]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2D22B281C241E84682C5D77A41D21CD7@amazon.com>
-Content-Transfer-Encoding: base64
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=C4DA7E9aKv3XIjAwonJPt1/YDNfsudHCvFtFtSvptFE=;
+        b=BdmS5V51KL6V2WHAVQz9TUAuVwKBAB3rJShwnt4nIOw0HOdaTXhKDmojFVFWQfMzbE
+         Yj05vvyZd+45wSbPI1JnWZS/3G6y9J+0n2fU/1XQ4o7iihEbEmfa7oRwJgcss44x1WOE
+         rIzBwVmdnrSE49EMRtGukKFxgWQrjKVcPoLku795lYeWimL4UPdSjr11BTF8J/MlJOaA
+         sr/o3CqCYH744cLd5yM2ZQzXtOlf364DKP20gQI+jmsTOeHZ+0xfH3JRwyjeJF7gl4pc
+         UW5e0wh1hLrOHpUMY9UMTeL0wmeESI7ytS+hWcTqajRuVsdTz0ED6YXJgZByS2ayHis6
+         qDzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=C4DA7E9aKv3XIjAwonJPt1/YDNfsudHCvFtFtSvptFE=;
+        b=JvuDYcgbR/Espj8hvfwyPmTcguWx3Cj2hQtBylTx7DfoAhyRXPa0M62/Kbn+UN1DuG
+         UgOQ47xqPbGKVTuY0REjHtPZReNyQ3hSJ9okgKMvBNKLUc9qJpMlzlwh5jwUjRiFKZos
+         2EwEKrplk87UIiYlgwlzGmgp2rc5GKVpRKExksrVytN1qVpcej2/ujclObe2JYfi2ohS
+         4PRTKlGb9PN1U6gForCksUnRbBTp8UnkWtg/ciQmtxmRLx3Z73UPgw32t+EAIa7wzCBP
+         xAVd8Asaqs504sdqbZ0ll2BSHhHYosSE4nZH2icIVmusImywU+MqaPsoFPQh988RbH66
+         v9HQ==
+X-Gm-Message-State: APjAAAVM0TmWAiS4FE8YrHyros0rEP1gVN9tSGHSP8nFFHL2BiwZmxzG
+        mqMRnWqB3S7p5kuSOGKPL1m9LA==
+X-Google-Smtp-Source: APXvYqxVfsI/rcm4/sadRLXDy34QAQB7sCsas3nmtS5zyd3WNKmKbAmdTiY8jIt02no3iRKJYF3Fug==
+X-Received: by 2002:a2e:88c1:: with SMTP id a1mr4714696ljk.78.1555072585644;
+        Fri, 12 Apr 2019 05:36:25 -0700 (PDT)
+Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
+        by smtp.gmail.com with ESMTPSA id n12sm1050419lfk.60.2019.04.12.05.36.24
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 12 Apr 2019 05:36:24 -0700 (PDT)
+Date:   Fri, 12 Apr 2019 14:36:24 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        laurent.pinchart@ideasonboard.com, horms@verge.net.au,
+        sergei.shtylyov@cogentembedded.com, geert+renesas@glider.be,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 1/2] media: rcar-vin: Make the number of VIN SoC-dependent
+Message-ID: <20190412123624.GC1980@bigcity.dyn.berto.se>
+References: <20190412113832.30075-1-jacopo+renesas@jmondi.org>
+ <20190412113832.30075-2-jacopo+renesas@jmondi.org>
+ <20190412115836.GA1980@bigcity.dyn.berto.se>
+ <20190412121352.6hozzx4lm3ql2j2j@uno.localdomain>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190412121352.6hozzx4lm3ql2j2j@uno.localdomain>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-T24gRnJpLCAyMDE5LTA0LTEyIGF0IDEzOjAwICswMjAwLCBIYW5zIFZlcmt1aWwgd3JvdGU6DQo+
-IEVkZGllLCBjYW4geW91IHJldmlldyB0aGlzPw0KPiANCj4gSmFlIEh5dW4gWW9vLCBmb3IgZnV0
-dXJlIHJlZmVyZW5jZTogcGxlYXNlIGFkZCB0aGUgZHJpdmVyIG5hbWUgaW4gdGhlDQo+IHN1Ympl
-Y3QuDQo+IEkuZS4gc29tZXRoaW5nIGxpa2UgdGhpczogW1BBVENIIHYyXSBtZWRpYTogYXNwZWVk
-OiBmaXggYSBrZXJuZWwNCj4gd2FybmluZyBvbiBjbGsgY29udHJvbA0KPiANCj4gVGhhdCBoZWxw
-cyBtYWludGFpbmVycyBmaWd1cmluZyBvdXQgd2hvIHNob3VsZCBsb29rIGF0IHdoaWNoIHBhdGNo
-Lg0KDQp0ZXN0X2JpdC9jbGVhcl9iaXQvc2V0X2JpdCBhcmUgYXRvbWljLiBUaGUgd2F5IHRoZXkg
-YXJlIHVzZWQgaGVyZSBpcw0KZWl0aGVyIGEgd2FzdGUgb2YgY3ljbGVzICh0aGVyZSdzIGFscmVh
-ZHkgYSBsb2NrKSBvciByYWN5LiBOb3QgdG9vIHN1cmUNCjopDQoNCkNoZWVycywNCkJlbi4NCg0K
-PiBSZWdhcmRzLA0KPiANCj4gCUhhbnMNCj4gDQo+IE9uIDMvMjkvMTkgMTA6MjcgUE0sIEphZSBI
-eXVuIFlvbyB3cm90ZToNCj4gPiB2aWRlb19vbiBhbmQgdmlkZW9fb2ZmIGZ1bmN0aW9ucyBpbiB0
-aGUgQXNwZWVkIHZpZGVvIGVuZ2luZSBkcml2ZXINCj4gPiBhcmUNCj4gPiBiZWluZyBjYWxsZWQg
-ZnJvbSBtdWx0aXBsZSBjb250ZXh0cyB3aXRob3V0IGFueSBwcm90ZWN0aW9uIHNvIHZpZGVvDQo+
-ID4gY2xvY2tzDQo+ID4gY2FuIGJlIGRpc2FibGVkIHR3aWNlIGFuZCBldmVudHVhbGx5IGl0IGNh
-dXNlcyBhIGtlcm5lbCB3YXJuaW5nDQo+ID4gd2l0aCBzdGFjaw0KPiA+IGR1bXAgcHJpbnRpbmcg
-b3V0IGxpa2UgYmVsb3c6DQo+ID4gDQo+ID4gWyAgMTIwLjAzNDcyOV0gV0FSTklORzogQ1BVOiAw
-IFBJRDogMTMzNCBhdCBkcml2ZXJzL2Nsay9jbGsuYzo2ODQNCj4gPiBjbGtfY29yZV91bnByZXBh
-cmUrMHgxM2MvMHgxNzANCj4gPiBbICAxMjAuMDQzMjUyXSBlY2xrLWdhdGUgYWxyZWFkeSB1bnBy
-ZXBhcmVkDQo+ID4gWyAgMTIwLjA0NzI4M10gQ1BVOiAwIFBJRDogMTMzNCBDb21tOiBvYm1jLWlr
-dm0gVGFpbnRlZDoNCj4gPiBHICAgICAgICBXICAgICAgICAgNS4wLjMtYjk0Yjc0ZThiNTJkYjkx
-ZmU0ZTk5ZTBiYjQ4MWVjOGJmMmI1YjQ3Yw0KPiA+ICMxDQo+ID4gWyAgMTIwLjA1ODQxN10gSGFy
-ZHdhcmUgbmFtZTogR2VuZXJpYyBEVCBiYXNlZCBzeXN0ZW0NCj4gPiBbICAxMjAuMDYzMjE5XSBC
-YWNrdHJhY2U6DQo+ID4gWyAgMTIwLjA2NTc4N10gWzw4MDEwN2NkYz5dIChkdW1wX2JhY2t0cmFj
-ZSkgZnJvbSBbPDgwMTA3ZjEwPl0NCj4gPiAoc2hvd19zdGFjaysweDIwLzB4MjQpDQo+ID4gWyAg
-MTIwLjA3MzM3MV0gIHI3OjgwM2E0ZmYwIHI2OjAwMDAwMDA5IHI1OjAwMDAwMDAwIHI0Ojk2MTk3
-ZTFjDQo+ID4gWyAgMTIwLjA3OTE1Ml0gWzw4MDEwN2VmMD5dIChzaG93X3N0YWNrKSBmcm9tIFs8
-ODA2OGY3ZDg+XQ0KPiA+IChkdW1wX3N0YWNrKzB4MjAvMHgyOCkNCj4gPiBbICAxMjAuMDg2NDc5
-XSBbPDgwNjhmN2I4Pl0gKGR1bXBfc3RhY2spIGZyb20gWzw4MDExNjA0Yz5dDQo+ID4gKF9fd2Fy
-bi5wYXJ0LjMrMHhiNC8weGRjKQ0KPiA+IFsgIDEyMC4wOTQwNjhdIFs8ODAxMTVmOTg+XSAoX193
-YXJuLnBhcnQuMykgZnJvbSBbPDgwMTE2MGUwPl0NCj4gPiAod2Fybl9zbG93cGF0aF9mbXQrMHg2
-Yy8weDkwKQ0KPiA+IFsgIDEyMC4xMDIxNjRdICByNjowMDAwMDJhYyByNTo4MDgwYzBiOCByNDo4
-MGEwNzAwOA0KPiA+IFsgIDEyMC4xMDY4OTNdIFs8ODAxMTYwNzg+XSAod2Fybl9zbG93cGF0aF9m
-bXQpIGZyb20gWzw4MDNhNGZmMD5dDQo+ID4gKGNsa19jb3JlX3VucHJlcGFyZSsweDEzYy8weDE3
-MCkNCj4gPiBbICAxMjAuMTE1Njg2XSAgcjM6ODA4MGNmOGMgcjI6ODA4MGMxN2MNCj4gPiBbICAx
-MjAuMTE5Mjc2XSAgcjc6OTdkNjhlNTggcjY6OWRmMjMyMDAgcjU6OTY2OGMyNjAgcjQ6OTY0NTky
-NjANCj4gPiBbICAxMjAuMTI1MDQ2XSBbPDgwM2E0ZWI0Pl0gKGNsa19jb3JlX3VucHJlcGFyZSkg
-ZnJvbSBbPDgwM2E3MDdjPl0NCj4gPiAoY2xrX3VucHJlcGFyZSsweDM0LzB4M2MpDQo+ID4gWyAg
-MTIwLjEzMzIyNl0gIHI1Ojk2NjhjMjYwIHI0Ojk2NDU5MjYwDQo+ID4gWyAgMTIwLjEzNjkzMl0g
-Wzw4MDNhNzA0OD5dIChjbGtfdW5wcmVwYXJlKSBmcm9tIFs8ODA0ZjM0YmM+XQ0KPiA+IChhc3Bl
-ZWRfdmlkZW9fb2ZmKzB4NDQvMHg0OCkNCj4gPiBbICAxMjAuMTQ1MDMxXSAgcjU6OTY2OGMyNjAg
-cjQ6OTY2OGNiYzANCj4gPiBbICAxMjAuMTQ4NjQ3XSBbPDgwNGYzNDc4Pl0gKGFzcGVlZF92aWRl
-b19vZmYpIGZyb20gWzw4MDRmM2ZkMD5dDQo+ID4gKGFzcGVlZF92aWRlb19yZWxlYXNlKzB4OTQv
-MHgxMTgpDQo+ID4gWyAgMTIwLjE1NzQzNV0gIHI1Ojk2NmEwY2I4IHI0Ojk2NmEwODAwDQo+ID4g
-WyAgMTIwLjE2MTA0OV0gWzw4MDRmM2YzYz5dIChhc3BlZWRfdmlkZW9fcmVsZWFzZSkgZnJvbQ0K
-PiA+IFs8ODA0ZDJjNTg+XSAodjRsMl9yZWxlYXNlKzB4ZDQvMHhlOCkNCj4gPiBbICAxMjAuMTY5
-NDA0XSAgcjc6OTdkNjhlNTggcjY6OWQwODc4MTAgcjU6OWRmMjMyMDAgcjQ6OTY2YTBiMjANCj4g
-PiBbICAxMjAuMTc1MTY4XSBbPDgwNGQyYjg0Pl0gKHY0bDJfcmVsZWFzZSkgZnJvbSBbPDgwMjM2
-MjI0Pl0NCj4gPiAoX19mcHV0KzB4OTgvMHgxYzQpDQo+ID4gWyAgMTIwLjE4MjMxNl0gIHI1Ojk2
-Njk4ZTc4IHI0OjlkZjIzMjAwDQo+ID4gWyAgMTIwLjE4NTk5NF0gWzw4MDIzNjE4Yz5dIChfX2Zw
-dXQpIGZyb20gWzw4MDIzNjNiOD5dDQo+ID4gKF9fX19mcHV0KzB4MTgvMHgxYykNCj4gPiBbICAx
-MjAuMTkyNzEyXSAgcjk6ODBhMDcwMGMgcjg6ODAxMDExZTQgcjc6MDAwMDAwMDAgcjY6ODBhNjRi
-YmMNCj4gPiByNTo5NjFkZDU2MCByNDo5NjFkZDg5Yw0KPiA+IFsgIDEyMC4yMDA1NjJdIFs8ODAy
-MzYzYTA+XSAoX19fX2ZwdXQpIGZyb20gWzw4MDEzMWMwOD5dDQo+ID4gKHRhc2tfd29ya19ydW4r
-MHg3Yy8weGE0KQ0KPiA+IFsgIDEyMC4yMDc5OTRdIFs8ODAxMzFiOGM+XSAodGFza193b3JrX3J1
-bikgZnJvbSBbPDgwMTA2ODg0Pl0NCj4gPiAoZG9fd29ya19wZW5kaW5nKzB4NGE4LzB4NTc4KQ0K
-PiA+IFsgIDEyMC4yMTYxNjNdICByNzo4MDEwMTFlNCByNjo4MGEwNzAwOCByNTo5NjE5N2ZiMCBy
-NDpmZmZmZTAwMA0KPiA+IFsgIDEyMC4yMjE4NTZdIFs8ODAxMDYzZGM+XSAoZG9fd29ya19wZW5k
-aW5nKSBmcm9tIFs8ODAxMDEwNmM+XQ0KPiA+IChzbG93X3dvcmtfcGVuZGluZysweGMvMHgyMCkN
-Cj4gPiBbICAxMjAuMjMwMTE2XSBFeGNlcHRpb24gc3RhY2soMHg5NjE5N2ZiMCB0byAweDk2MTk3
-ZmY4KQ0KPiA+IFsgIDEyMC4yMzUyNTRdIDdmYTA6ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIDAwMDAwMDAwDQo+ID4gNzZjY2YwOTQgMDAwMDAwMDAgMDAwMDAwMDANCj4gPiBb
-ICAxMjAuMjQzNDM4XSA3ZmMwOiAwMDAwMDAwOCAwMGExMTk3OCA3ZWFiM2MzMCAwMDAwMDAwNiAw
-MDAwMDAwMA0KPiA+IDAwMDAwMDAwIDQ3NWIwZmE0IDAwMDAwMDAwDQo+ID4gWyAgMTIwLjI1MTY5
-Ml0gN2ZlMDogMDAwMDAwMDIgN2VhYjNhNDAgMDAwMDAwMDAgNDc3MjBlMzggODAwMDAwMTANCj4g
-PiAwMDAwMDAwOA0KPiA+IFsgIDEyMC4yNTgzOTZdICByMTA6MDAwMDAwMDAgcjk6OTYxOTYwMDAg
-cjg6ODAxMDExZTQgcjc6MDAwMDAwMDYNCj4gPiByNjo3ZWFiM2MzMCByNTowMGExMTk3OA0KPiA+
-IFsgIDEyMC4yNjYyOTFdICByNDowMDAwMDAwOA0KPiA+IA0KPiA+IFRvIHByZXZlbnQgdGhpcyBp
-c3N1ZSwgdGhpcyBjb21taXQgYWRkcyBzcGlubG9jayBwcm90ZWN0aW9uIGFuZA0KPiA+IGNsb2Nr
-DQo+ID4gc3RhdHVzIGNoZWNraW5nIGxvZ2ljIGludG8gdGhlIEFzcGVlZCB2aWRlbyBlbmdpbmUg
-ZHJpdmVyLg0KPiA+IA0KPiA+IEZpeGVzOiBkMmI0Mzg3ZjNiZGYgKCJtZWRpYTogcGxhdGZvcm06
-IEFkZCBBc3BlZWQgVmlkZW8gRW5naW5lDQo+ID4gZHJpdmVyIikNCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBKYWUgSHl1biBZb28gPGphZS5oeXVuLnlvb0BsaW51eC5pbnRlbC5jb20+DQo+ID4gQ2M6IEVk
-ZGllIEphbWVzIDxlYWphbWVzQGxpbnV4LmlibS5jb20+DQo+ID4gQ2M6IE1hdXJvIENhcnZhbGhv
-IENoZWhhYiA8bWNoZWhhYkBrZXJuZWwub3JnPg0KPiA+IENjOiBKb2VsIFN0YW5sZXkgPGpvZWxA
-am1zLmlkLmF1Pg0KPiA+IENjOiBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3QGFqLmlkLmF1Pg0KPiA+
-IC0tLQ0KPiA+ICBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2FzcGVlZC12aWRlby5jIHwgMzINCj4g
-PiArKysrKysrKysrKysrKysrKysrKysrKystLS0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDI5IGlu
-c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvbWVkaWEvcGxhdGZvcm0vYXNwZWVkLXZpZGVvLmMNCj4gPiBiL2RyaXZlcnMvbWVkaWEvcGxh
-dGZvcm0vYXNwZWVkLXZpZGVvLmMNCj4gPiBpbmRleCA2OTJlMDhlZjM4YzAuLjc0NGQyMmVjYzYy
-MCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2FzcGVlZC12aWRlby5j
-DQo+ID4gKysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hc3BlZWQtdmlkZW8uYw0KPiA+IEBA
-IC0xODgsNiArMTg4LDcgQEAgZW51bSB7DQo+ID4gIAlWSURFT19TVFJFQU1JTkcsDQo+ID4gIAlW
-SURFT19GUkFNRV9JTlBSRywNCj4gPiAgCVZJREVPX1NUT1BQRUQsDQo+ID4gKwlWSURFT19DTE9D
-S1NfT04sDQo+ID4gIH07DQo+ID4gIA0KPiA+ICBzdHJ1Y3QgYXNwZWVkX3ZpZGVvX2FkZHIgew0K
-PiA+IEBAIC00OTUsMjAgKzQ5NiwzMCBAQCBzdGF0aWMgdm9pZCBhc3BlZWRfdmlkZW9fcmVzZXQo
-c3RydWN0DQo+ID4gYXNwZWVkX3ZpZGVvICp2aWRlbykNCj4gPiAgDQo+ID4gIHN0YXRpYyB2b2lk
-IGFzcGVlZF92aWRlb19vZmYoc3RydWN0IGFzcGVlZF92aWRlbyAqdmlkZW8pDQo+ID4gIHsNCj4g
-PiArCWlmICghdGVzdF9iaXQoVklERU9fQ0xPQ0tTX09OLCAmdmlkZW8tPmZsYWdzKSkNCj4gPiAr
-CQlyZXR1cm47DQo+ID4gKw0KPiA+ICAJYXNwZWVkX3ZpZGVvX3Jlc2V0KHZpZGVvKTsNCj4gPiAg
-DQo+ID4gIAkvKiBUdXJuIG9mZiB0aGUgcmVsZXZhbnQgY2xvY2tzICovDQo+ID4gIAljbGtfZGlz
-YWJsZV91bnByZXBhcmUodmlkZW8tPnZjbGspOw0KPiA+ICAJY2xrX2Rpc2FibGVfdW5wcmVwYXJl
-KHZpZGVvLT5lY2xrKTsNCj4gPiArDQo+ID4gKwljbGVhcl9iaXQoVklERU9fQ0xPQ0tTX09OLCAm
-dmlkZW8tPmZsYWdzKTsNCj4gPiAgfQ0KPiA+ICANCj4gPiAgc3RhdGljIHZvaWQgYXNwZWVkX3Zp
-ZGVvX29uKHN0cnVjdCBhc3BlZWRfdmlkZW8gKnZpZGVvKQ0KPiA+ICB7DQo+ID4gKwlpZiAodGVz
-dF9iaXQoVklERU9fQ0xPQ0tTX09OLCAmdmlkZW8tPmZsYWdzKSkNCj4gPiArCQlyZXR1cm47DQo+
-ID4gKw0KPiA+ICAJLyogVHVybiBvbiB0aGUgcmVsZXZhbnQgY2xvY2tzICovDQo+ID4gIAljbGtf
-cHJlcGFyZV9lbmFibGUodmlkZW8tPmVjbGspOw0KPiA+ICAJY2xrX3ByZXBhcmVfZW5hYmxlKHZp
-ZGVvLT52Y2xrKTsNCj4gPiAgDQo+ID4gIAlhc3BlZWRfdmlkZW9fcmVzZXQodmlkZW8pOw0KPiA+
-ICsNCj4gPiArCXNldF9iaXQoVklERU9fQ0xPQ0tTX09OLCAmdmlkZW8tPmZsYWdzKTsNCj4gPiAg
-fQ0KPiA+ICANCj4gPiAgc3RhdGljIHZvaWQgYXNwZWVkX3ZpZGVvX2J1ZnNfZG9uZShzdHJ1Y3Qg
-YXNwZWVkX3ZpZGVvICp2aWRlbywNCj4gPiBAQCAtNTI2LDEyICs1MzcsMTQgQEAgc3RhdGljIHZv
-aWQgYXNwZWVkX3ZpZGVvX2J1ZnNfZG9uZShzdHJ1Y3QNCj4gPiBhc3BlZWRfdmlkZW8gKnZpZGVv
-LA0KPiA+ICANCj4gPiAgc3RhdGljIHZvaWQgYXNwZWVkX3ZpZGVvX2lycV9yZXNfY2hhbmdlKHN0
-cnVjdCBhc3BlZWRfdmlkZW8NCj4gPiAqdmlkZW8pDQo+ID4gIHsNCj4gPiArCXNwaW5fbG9jaygm
-dmlkZW8tPmxvY2spOw0KPiA+ICAJZGV2X2RiZyh2aWRlby0+ZGV2LCAiUmVzb2x1dGlvbiBjaGFu
-Z2VkOyByZXNldHRpbmdcbiIpOw0KPiA+ICANCj4gPiAgCXNldF9iaXQoVklERU9fUkVTX0NIQU5H
-RSwgJnZpZGVvLT5mbGFncyk7DQo+ID4gIAljbGVhcl9iaXQoVklERU9fRlJBTUVfSU5QUkcsICZ2
-aWRlby0+ZmxhZ3MpOw0KPiA+ICANCj4gPiAgCWFzcGVlZF92aWRlb19vZmYodmlkZW8pOw0KPiA+
-ICsJc3Bpbl91bmxvY2soJnZpZGVvLT5sb2NrKTsNCj4gPiAgCWFzcGVlZF92aWRlb19idWZzX2Rv
-bmUodmlkZW8sIFZCMl9CVUZfU1RBVEVfRVJST1IpOw0KPiA+ICANCj4gPiAgCXNjaGVkdWxlX2Rl
-bGF5ZWRfd29yaygmdmlkZW8tPnJlc193b3JrLA0KPiA+IFJFU09MVVRJT05fQ0hBTkdFX0RFTEFZ
-KTsNCj4gPiBAQCAtOTUxLDkgKzk2NCwxMyBAQCBzdGF0aWMgdm9pZCBhc3BlZWRfdmlkZW9faW5p
-dF9yZWdzKHN0cnVjdA0KPiA+IGFzcGVlZF92aWRlbyAqdmlkZW8pDQo+ID4gIA0KPiA+ICBzdGF0
-aWMgdm9pZCBhc3BlZWRfdmlkZW9fc3RhcnQoc3RydWN0IGFzcGVlZF92aWRlbyAqdmlkZW8pDQo+
-ID4gIHsNCj4gPiArCXVuc2lnbmVkIGxvbmcgZmxhZ3M7DQo+ID4gKw0KPiA+ICsJc3Bpbl9sb2Nr
-X2lycXNhdmUoJnZpZGVvLT5sb2NrLCBmbGFncyk7DQo+ID4gIAlhc3BlZWRfdmlkZW9fb24odmlk
-ZW8pOw0KPiA+ICANCj4gPiAgCWFzcGVlZF92aWRlb19pbml0X3JlZ3ModmlkZW8pOw0KPiA+ICsJ
-c3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmdmlkZW8tPmxvY2ssIGZsYWdzKTsNCj4gPiAgDQo+ID4g
-IAkvKiBSZXNvbHV0aW9uIHNldCB0byA2NDB4NDgwIGlmIG5vIHNpZ25hbCBmb3VuZCAqLw0KPiA+
-ICAJYXNwZWVkX3ZpZGVvX2dldF9yZXNvbHV0aW9uKHZpZGVvKTsNCj4gPiBAQCAtOTY5LDYgKzk4
-Niw5IEBAIHN0YXRpYyB2b2lkIGFzcGVlZF92aWRlb19zdGFydChzdHJ1Y3QNCj4gPiBhc3BlZWRf
-dmlkZW8gKnZpZGVvKQ0KPiA+ICANCj4gPiAgc3RhdGljIHZvaWQgYXNwZWVkX3ZpZGVvX3N0b3Ao
-c3RydWN0IGFzcGVlZF92aWRlbyAqdmlkZW8pDQo+ID4gIHsNCj4gPiArCXVuc2lnbmVkIGxvbmcg
-ZmxhZ3M7DQo+ID4gKw0KPiA+ICsJc3Bpbl9sb2NrX2lycXNhdmUoJnZpZGVvLT5sb2NrLCBmbGFn
-cyk7DQo+ID4gIAlzZXRfYml0KFZJREVPX1NUT1BQRUQsICZ2aWRlby0+ZmxhZ3MpOw0KPiA+ICAJ
-Y2FuY2VsX2RlbGF5ZWRfd29ya19zeW5jKCZ2aWRlby0+cmVzX3dvcmspOw0KPiA+ICANCj4gPiBA
-QCAtOTgyLDYgKzEwMDIsNyBAQCBzdGF0aWMgdm9pZCBhc3BlZWRfdmlkZW9fc3RvcChzdHJ1Y3QN
-Cj4gPiBhc3BlZWRfdmlkZW8gKnZpZGVvKQ0KPiA+ICANCj4gPiAgCXZpZGVvLT52NGwyX2lucHV0
-X3N0YXR1cyA9IFY0TDJfSU5fU1RfTk9fU0lHTkFMOw0KPiA+ICAJdmlkZW8tPmZsYWdzID0gMDsN
-Cj4gPiArCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnZpZGVvLT5sb2NrLCBmbGFncyk7DQo+ID4g
-IH0NCj4gPiAgDQo+ID4gIHN0YXRpYyBpbnQgYXNwZWVkX3ZpZGVvX3F1ZXJ5Y2FwKHN0cnVjdCBm
-aWxlICpmaWxlLCB2b2lkICpmaCwNCj4gPiBAQCAtMTMxOSwxNiArMTM0MCwyMSBAQCBzdGF0aWMg
-dm9pZA0KPiA+IGFzcGVlZF92aWRlb19yZXNvbHV0aW9uX3dvcmsoc3RydWN0IHdvcmtfc3RydWN0
-ICp3b3JrKQ0KPiA+ICAJc3RydWN0IGRlbGF5ZWRfd29yayAqZHdvcmsgPSB0b19kZWxheWVkX3dv
-cmsod29yayk7DQo+ID4gIAlzdHJ1Y3QgYXNwZWVkX3ZpZGVvICp2aWRlbyA9IGNvbnRhaW5lcl9v
-Zihkd29yaywgc3RydWN0DQo+ID4gYXNwZWVkX3ZpZGVvLA0KPiA+ICAJCQkJCQkgIHJlc193b3Jr
-KTsNCj4gPiAtCXUzMiBpbnB1dF9zdGF0dXMgPSB2aWRlby0+djRsMl9pbnB1dF9zdGF0dXM7DQo+
-ID4gKwl1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiA+ICsJdTMyIGlucHV0X3N0YXR1czsNCj4gPiAg
-DQo+ID4gKwlzcGluX2xvY2tfaXJxc2F2ZSgmdmlkZW8tPmxvY2ssIGZsYWdzKTsNCj4gPiArCWlu
-cHV0X3N0YXR1cyA9IHZpZGVvLT52NGwyX2lucHV0X3N0YXR1czsNCj4gPiAgCWFzcGVlZF92aWRl
-b19vbih2aWRlbyk7DQo+ID4gIA0KPiA+ICAJLyogRXhpdCBlYXJseSBpbiBjYXNlIG5vIGNsaWVu
-dHMgcmVtYWluICovDQo+ID4gLQlpZiAodGVzdF9iaXQoVklERU9fU1RPUFBFRCwgJnZpZGVvLT5m
-bGFncykpDQo+ID4gKwlpZiAodGVzdF9iaXQoVklERU9fU1RPUFBFRCwgJnZpZGVvLT5mbGFncykp
-IHsNCj4gPiArCQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZ2aWRlby0+bG9jaywgZmxhZ3MpOw0K
-PiA+ICAJCWdvdG8gZG9uZTsNCj4gPiArCX0NCj4gPiAgDQo+ID4gIAlhc3BlZWRfdmlkZW9faW5p
-dF9yZWdzKHZpZGVvKTsNCj4gPiAtDQo+ID4gKwlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZ2aWRl
-by0+bG9jaywgZmxhZ3MpOw0KPiA+ICAJYXNwZWVkX3ZpZGVvX2dldF9yZXNvbHV0aW9uKHZpZGVv
-KTsNCj4gPiAgDQo+ID4gIAlpZiAodmlkZW8tPmRldGVjdGVkX3RpbWluZ3Mud2lkdGggIT0gdmlk
-ZW8tDQo+ID4gPmFjdGl2ZV90aW1pbmdzLndpZHRoIHx8DQo+ID4gDQo=
+Hi Jacopo,
+
+On 2019-04-12 14:13:52 +0200, Jacopo Mondi wrote:
+> Hi Niklas,
+> 
+> On Fri, Apr 12, 2019 at 01:58:36PM +0200, Niklas Söderlund wrote:
+> > Hi Jacopo,
+> >
+> > Thanks for your work.
+> >
+> > On 2019-04-12 13:38:31 +0200, Jacopo Mondi wrote:
+> > > In preparation to add ids to VIN's device tree nodes for the V3H SoC
+> > > which features up to 16 VIN instances, remove the hardcoded number of
+> > > VINs and make it a per-SoC property.
+> > >
+> > > Enlarge the existing RCAR_VIN_NUM definition, which is used to
+> > > statically allocate the number of vin devices to 16, to accommodate
+> > > SoCs with that many instances as V3H.
+> > >
+> > > Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> >
+> > Nacked-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> >
+> > This is wrong for two reasons, as explained on irc.
+> >
+> > - The RCAR_VIN_NUM checks are bounds check for the array and not to
+> >   validate that the renesas,id property in the DT is correct. Making it
+> >   dynamic only serves to complicate the driver for no gain.
+> 
+> Regardless of V3H support, validating that the renesas,id property is
+> valid for the current SoC is worth the "complication" imho.
+> Why is bound checking different now? (we could discuss if allocating 8
+> vin devices more for all SoC is worth, that I agree)
+> Not to mention having that value fixed it means we alway cycle on all
+> 8 vin devices instances, even if the SoC supports less than that.
+
+I don't think the driver should validate the renesas,id property. We 
+must assume that DT is correct. Only reason we do it now is that we have 
+an array of RCAR_VIN_NUM size and it's more nasty to crash then then to 
+check it if the DT happens to be incorrect. If we where to validate it 
+with SoC knowledge we could drop the property completely and derive the 
+information for the base address of the VIN.
+
+I hope to one day remove most of the group hack and for that reason I 
+wish to keep this as simple as possible. Iterating 4 more times V3M, 7 
+more times on D3 and 6 more times on E3 in the small loops in the probe 
+path is acceptable for me to keep it simple.
+
+> >
+> > - It's true that the V3H have 16 VINs, but VIN8-15 are only connected to
+> >   the ISP for which there exists no upstream driver and no support in
+> >   the rcar-vin parsing code to handle it. With this change the rcar-vin
+> >   would probe for such VINs but the result would be use-less as it can
+> >   not get hold of the ISP, even if a driver would exist for it.
+> >
+> 
+> Let's remove them from DT then?
+
+DT should describe hardware, this is a driver limitation I think all 
+VINs should be kept in DT.
+
+> 
+> >   I might be convinced to accept a patch which would allow DT to
+> >   describe all 16 VIN's of the V3H but where the rcar-vin would still
+> >   fail to probe if the renesas,id is above 7 but with a different
+> >   dev_err() informing the user why it failed.
+> 
+> I cannot test on V3H but I think all VINs (included 0-7, which are
+> connected to a CSI-2 receiver) fail to probe without a "renesas,id"
+> property, and this should be fixed. I like less the idea of having a special
+> failure path for the VIN[8-15] instances than removing them completely
+> tbh.
+
+My preferred option would be to:
+
+- Add the renesas,id to all 16 VIN in the V3H DT.
+- Keep all VIN in status = "disabled" as they are in r8a77980.dtsi.
+- None of the users of r8a77980.dtsi (r8a77980-condor.dts, 
+  r8a77980-v3hsk.dts) enables any of the VINs so there is no regression 
+  upstream. If a new board is added it should only enable VIN0-7 as it's 
+  the only ones they can use with rcar-vin.
+- Keep the error message and logic as it is today in rcar-vin as a id 
+  larger then 7 is invalid for the driver.
+
+This would allow the DT to be correct and the driver to correctly report 
+what it supports. If/When we add ISP support we can revisit this topic.
+
+> 
+> >
+> >   I would of course also be happy about a driver for the ISP and added
+> >   support for it in rcar-vin ;-)
+> >
+> > > ---
+> > >  drivers/media/platform/rcar-vin/rcar-core.c | 23 +++++++++++++++------
+> > >  drivers/media/platform/rcar-vin/rcar-vin.h  |  5 ++++-
+> > >  2 files changed, 21 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+> > > index 64519b3097f7..6e9c6c8471e9 100644
+> > > --- a/drivers/media/platform/rcar-vin/rcar-core.c
+> > > +++ b/drivers/media/platform/rcar-vin/rcar-core.c
+> > > @@ -188,7 +188,7 @@ static int rvin_group_link_notify(struct media_link *link, u32 flags,
+> > >  		 * we can return here.
+> > >  		 */
+> > >  		sd = media_entity_to_v4l2_subdev(link->source->entity);
+> > > -		for (i = 0; i < RCAR_VIN_NUM; i++) {
+> > > +		for (i = 0; i <= vin->info->vin_max_id ; i++) {
+> > >  			if (group->vin[i] && group->vin[i]->parallel &&
+> > >  			    group->vin[i]->parallel->subdev == sd) {
+> > >  				group->vin[i]->is_csi = false;
+> > > @@ -319,7 +319,7 @@ static int rvin_group_get(struct rvin_dev *vin)
+> > >  		return -EINVAL;
+> > >  	}
+> > >
+> > > -	if (id >= RCAR_VIN_NUM) {
+> > > +	if (id > vin->info->vin_max_id) {
+> > >  		vin_err(vin, "%pOF: Invalid renesas,id '%u'\n",
+> > >  			vin->dev->of_node, id);
+> > >  		return -EINVAL;
+> > > @@ -662,7 +662,7 @@ static int rvin_group_notify_complete(struct v4l2_async_notifier *notifier)
+> > >  	}
+> > >
+> > >  	/* Register all video nodes for the group. */
+> > > -	for (i = 0; i < RCAR_VIN_NUM; i++) {
+> > > +	for (i = 0; i <= vin->info->vin_max_id; i++) {
+> > >  		if (vin->group->vin[i] &&
+> > >  		    !video_is_registered(&vin->group->vin[i]->vdev)) {
+> > >  			ret = rvin_v4l2_register(vin->group->vin[i]);
+> > > @@ -720,7 +720,7 @@ static void rvin_group_notify_unbind(struct v4l2_async_notifier *notifier,
+> > >  	struct rvin_dev *vin = v4l2_dev_to_vin(notifier->v4l2_dev);
+> > >  	unsigned int i;
+> > >
+> > > -	for (i = 0; i < RCAR_VIN_NUM; i++)
+> > > +	for (i = 0; i <= vin->info->vin_max_id; i++)
+> > >  		if (vin->group->vin[i])
+> > >  			rvin_v4l2_unregister(vin->group->vin[i]);
+> > >
+> > > @@ -809,7 +809,7 @@ static int rvin_mc_parse_of_graph(struct rvin_dev *vin)
+> > >  	mutex_lock(&vin->group->lock);
+> > >
+> > >  	/* If not all VIN's are registered don't register the notifier. */
+> > > -	for (i = 0; i < RCAR_VIN_NUM; i++) {
+> > > +	for (i = 0; i <= vin->info->vin_max_id; i++) {
+> > >  		if (vin->group->vin[i]) {
+> > >  			count++;
+> > >  			vin_mask |= BIT(i);
+> > > @@ -830,7 +830,7 @@ static int rvin_mc_parse_of_graph(struct rvin_dev *vin)
+> > >  	 * overlap but the parser function can handle it, so each subdevice
+> > >  	 * will only be registered once with the group notifier.
+> > >  	 */
+> > > -	for (i = 0; i < RCAR_VIN_NUM; i++) {
+> > > +	for (i = 0; i <= vin->info->vin_max_id ; i++) {
+> > >  		if (!(vin_mask & BIT(i)))
+> > >  			continue;
+> > >
+> > > @@ -884,6 +884,7 @@ static int rvin_mc_init(struct rvin_dev *vin)
+> > >  static const struct rvin_info rcar_info_h1 = {
+> > >  	.model = RCAR_H1,
+> > >  	.use_mc = false,
+> > > +	.vin_max_id = 3,
+> > >  	.max_width = 2048,
+> > >  	.max_height = 2048,
+> > >  };
+> > > @@ -891,6 +892,7 @@ static const struct rvin_info rcar_info_h1 = {
+> > >  static const struct rvin_info rcar_info_m1 = {
+> > >  	.model = RCAR_M1,
+> > >  	.use_mc = false,
+> > > +	.vin_max_id = 1,
+> > >  	.max_width = 2048,
+> > >  	.max_height = 2048,
+> > >  };
+> > > @@ -898,6 +900,7 @@ static const struct rvin_info rcar_info_m1 = {
+> > >  static const struct rvin_info rcar_info_gen2 = {
+> > >  	.model = RCAR_GEN2,
+> > >  	.use_mc = false,
+> > > +	.vin_max_id = 5,
+> > >  	.max_width = 2048,
+> > >  	.max_height = 2048,
+> > >  };
+> > > @@ -941,6 +944,7 @@ static const struct rvin_group_route rcar_info_r8a7795_routes[] = {
+> > >  static const struct rvin_info rcar_info_r8a7795 = {
+> > >  	.model = RCAR_GEN3,
+> > >  	.use_mc = true,
+> > > +	.vin_max_id = 7,
+> > >  	.max_width = 4096,
+> > >  	.max_height = 4096,
+> > >  	.routes = rcar_info_r8a7795_routes,
+> > > @@ -995,6 +999,7 @@ static const struct rvin_group_route rcar_info_r8a7795es1_routes[] = {
+> > >  static const struct rvin_info rcar_info_r8a7795es1 = {
+> > >  	.model = RCAR_GEN3,
+> > >  	.use_mc = true,
+> > > +	.vin_max_id = 7,
+> > >  	.max_width = 4096,
+> > >  	.max_height = 4096,
+> > >  	.routes = rcar_info_r8a7795es1_routes,
+> > > @@ -1035,6 +1040,7 @@ static const struct rvin_group_route rcar_info_r8a7796_routes[] = {
+> > >  static const struct rvin_info rcar_info_r8a7796 = {
+> > >  	.model = RCAR_GEN3,
+> > >  	.use_mc = true,
+> > > +	.vin_max_id = 7,
+> > >  	.max_width = 4096,
+> > >  	.max_height = 4096,
+> > >  	.routes = rcar_info_r8a7796_routes,
+> > > @@ -1079,6 +1085,7 @@ static const struct rvin_group_route rcar_info_r8a77965_routes[] = {
+> > >  static const struct rvin_info rcar_info_r8a77965 = {
+> > >  	.model = RCAR_GEN3,
+> > >  	.use_mc = true,
+> > > +	.vin_max_id = 7,
+> > >  	.max_width = 4096,
+> > >  	.max_height = 4096,
+> > >  	.routes = rcar_info_r8a77965_routes,
+> > > @@ -1098,6 +1105,7 @@ static const struct rvin_group_route rcar_info_r8a77970_routes[] = {
+> > >  static const struct rvin_info rcar_info_r8a77970 = {
+> > >  	.model = RCAR_GEN3,
+> > >  	.use_mc = true,
+> > > +	.vin_max_id = 3,
+> > >  	.max_width = 4096,
+> > >  	.max_height = 4096,
+> > >  	.routes = rcar_info_r8a77970_routes,
+> > > @@ -1126,6 +1134,7 @@ static const struct rvin_group_route rcar_info_r8a77980_routes[] = {
+> > >  static const struct rvin_info rcar_info_r8a77980 = {
+> > >  	.model = RCAR_GEN3,
+> > >  	.use_mc = true,
+> > > +	.vin_max_id = 15,
+> > >  	.max_width = 4096,
+> > >  	.max_height = 4096,
+> > >  	.routes = rcar_info_r8a77980_routes,
+> > > @@ -1142,6 +1151,7 @@ static const struct rvin_group_route rcar_info_r8a77990_routes[] = {
+> > >  static const struct rvin_info rcar_info_r8a77990 = {
+> > >  	.model = RCAR_GEN3,
+> > >  	.use_mc = true,
+> > > +	.vin_max_id = 5,
+> > >  	.max_width = 4096,
+> > >  	.max_height = 4096,
+> > >  	.routes = rcar_info_r8a77990_routes,
+> > > @@ -1154,6 +1164,7 @@ static const struct rvin_group_route rcar_info_r8a77995_routes[] = {
+> > >  static const struct rvin_info rcar_info_r8a77995 = {
+> > >  	.model = RCAR_GEN3,
+> > >  	.use_mc = true,
+> > > +	.vin_max_id = 4,
+> > >  	.max_width = 4096,
+> > >  	.max_height = 4096,
+> > >  	.routes = rcar_info_r8a77995_routes,
+> > > diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
+> > > index 0b13b34d03e3..2726c56935e4 100644
+> > > --- a/drivers/media/platform/rcar-vin/rcar-vin.h
+> > > +++ b/drivers/media/platform/rcar-vin/rcar-vin.h
+> > > @@ -28,7 +28,8 @@
+> > >  #define HW_BUFFER_MASK 0x7f
+> > >
+> > >  /* Max number on VIN instances that can be in a system */
+> > > -#define RCAR_VIN_NUM 8
+> > > +#define RCAR_VIN_NUM 16
+> > > +
+> > >
+> > >  struct rvin_group;
+> > >
+> > > @@ -126,6 +127,7 @@ struct rvin_group_route {
+> > >   * struct rvin_info - Information about the particular VIN implementation
+> > >   * @model:		VIN model
+> > >   * @use_mc:		use media controller instead of controlling subdevice
+> > > + * @vin_max_id:		id of the last VIN instance
+> > >   * @max_width:		max input width the VIN supports
+> > >   * @max_height:		max input height the VIN supports
+> > >   * @routes:		list of possible routes from the CSI-2 recivers to
+> > > @@ -135,6 +137,7 @@ struct rvin_info {
+> > >  	enum model_id model;
+> > >  	bool use_mc;
+> > >
+> > > +	unsigned int vin_max_id;
+> > >  	unsigned int max_width;
+> > >  	unsigned int max_height;
+> > >  	const struct rvin_group_route *routes;
+> > > --
+> > > 2.21.0
+> > >
+> >
+> > --
+> > Regards,
+> > Niklas Söderlund
+
+
+
+-- 
+Regards,
+Niklas Söderlund
