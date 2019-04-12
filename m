@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22305C10F14
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:51:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76A82C10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:51:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8CEB20693
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:51:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A96120693
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:51:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727022AbfDLPvv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 11:51:51 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:32923 "EHLO
+        id S1726918AbfDLPvw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 11:51:52 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:35845 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726858AbfDLPvn (ORCPT
+        with ESMTP id S1726926AbfDLPvn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 12 Apr 2019 11:51:43 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.89)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hEySr-0000EY-D4; Fri, 12 Apr 2019 17:51:41 +0200
+        id 1hEySr-0000EY-LF; Fri, 12 Apr 2019 17:51:41 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@pengutronix.de
-Subject: [PATCH 06/13] media: coda: add menu strings to s_ctrl debug output
-Date:   Fri, 12 Apr 2019 17:51:28 +0200
-Message-Id: <20190412155135.13907-6-p.zabel@pengutronix.de>
+Subject: [PATCH 12/13] media: coda: use v4l2_m2m_buf_copy_metadata
+Date:   Fri, 12 Apr 2019 17:51:34 +0200
+Message-Id: <20190412155135.13907-12-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190412155135.13907-1-p.zabel@pengutronix.de>
 References: <20190412155135.13907-1-p.zabel@pengutronix.de>
@@ -43,37 +43,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When a menu control is updated via s_ctrl, print the corresponding menu
-entry string in addition to the numerical value it is set to.
+Use v4l2_m2m2_buf_copy_metadata to let BIT encoder contexts copy buffer
+field, timestamp, timestamp flags, and optionally timecode.
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/coda/coda-common.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/platform/coda/coda-bit.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index a8c705f4269c..af13e9b3d851 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -1847,11 +1847,16 @@ static const struct vb2_ops coda_qops = {
+diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
+index 2b73e023b191..d10b113610eb 100644
+--- a/drivers/media/platform/coda/coda-bit.c
++++ b/drivers/media/platform/coda/coda-bit.c
+@@ -1506,12 +1506,7 @@ static void coda_finish_encode(struct coda_ctx *ctx)
+ 		dst_buf->flags &= ~V4L2_BUF_FLAG_KEYFRAME;
+ 	}
  
- static int coda_s_ctrl(struct v4l2_ctrl *ctrl)
- {
-+	const char * const *val_names = v4l2_ctrl_get_menu(ctrl->id);
- 	struct coda_ctx *ctx =
- 			container_of(ctrl->handler, struct coda_ctx, ctrls);
+-	dst_buf->vb2_buf.timestamp = src_buf->vb2_buf.timestamp;
+-	dst_buf->field = src_buf->field;
+-	dst_buf->flags &= ~V4L2_BUF_FLAG_TSTAMP_SRC_MASK;
+-	dst_buf->flags |=
+-		src_buf->flags & V4L2_BUF_FLAG_TSTAMP_SRC_MASK;
+-	dst_buf->timecode = src_buf->timecode;
++	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, false);
  
--	coda_dbg(2, ctx, "s_ctrl: id = 0x%x, name = \"%s\", val = %d\n",
--		 ctrl->id, ctrl->name, ctrl->val);
-+	if (val_names)
-+		coda_dbg(2, ctx, "s_ctrl: id = 0x%x, name = \"%s\", val = %d (\"%s\")\n",
-+			 ctrl->id, ctrl->name, ctrl->val, val_names[ctrl->val]);
-+	else
-+		coda_dbg(2, ctx, "s_ctrl: id = 0x%x, name = \"%s\", val = %d\n",
-+			 ctrl->id, ctrl->name, ctrl->val);
+ 	v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_DONE);
  
- 	switch (ctrl->id) {
- 	case V4L2_CID_HFLIP:
 -- 
 2.20.1
 
