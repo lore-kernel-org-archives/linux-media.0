@@ -2,154 +2,119 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A293C10F0E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 03:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 983CFC10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 07:02:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 516FA2084D
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 03:49:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7039F20850
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 07:02:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726709AbfDLDtG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Apr 2019 23:49:06 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:43959 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726699AbfDLDtG (ORCPT
+        id S1726864AbfDLHCw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 03:02:52 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:42435 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726678AbfDLHCw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Apr 2019 23:49:06 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id EnBXhs3LGiLOmEnBYhDIqy; Fri, 12 Apr 2019 05:49:04 +0200
-Message-ID: <7ad4398d3b5e9baea2071f07958f9e8a@smtp-cloud9.xs4all.net>
-Date:   Fri, 12 Apr 2019 05:49:03 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfO92w4y2guafyltkAixI6ZwQRTuXpF3CtRlh14tRk+i+xTRgNkNU/yVdce7ZlZPXoF5Xwn2RjLzmgNf8cefpXlfjA6s3wM+qwVbFFnJGYb+ywzc44oPu
- ojdZaFPuYWTgY1IniSFV4iI9iEaITAvFqyzvnSNXiq7s0jtfF1ZSiddK6JlhN0AUPs6X+ry8/vDXoNFsI8KKx885EenUtL5Q3SZA4gOJot2JulNKwQfR3QMJ
+        Fri, 12 Apr 2019 03:02:52 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id BE9FDC0013;
+        Fri, 12 Apr 2019 07:02:48 +0000 (UTC)
+Date:   Fri, 12 Apr 2019 09:03:38 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: rcar-csi2: List resets as a
+ mandatory property
+Message-ID: <20190412070338.5n6cs55pkecwglnu@uno.localdomain>
+References: <20190312234930.23193-1-niklas.soderlund+renesas@ragnatech.se>
+ <20190312234930.23193-2-niklas.soderlund+renesas@ragnatech.se>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kohb6q32x453fa7o"
+Content-Disposition: inline
+In-Reply-To: <20190312234930.23193-2-niklas.soderlund+renesas@ragnatech.se>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
 
-Results of the daily build of media_tree:
+--kohb6q32x453fa7o
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-date:			Fri Apr 12 05:00:12 CEST 2019
-media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	95f39aae48c6e8e5cc81e6ae6293d999f70a909b
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
+Hi Niklas,
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
+On Wed, Mar 13, 2019 at 12:49:29AM +0100, Niklas S=C3=B6derlund wrote:
+> The resets property will become mandatory to operate the device, list it
+> as such. All device tree source files have always included the reset
+> property so making it mandatory will not introduce any regressions.
+>
+> While at it improve the description for the clocks property.
+>
+> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
+se>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  Documentation/devicetree/bindings/media/renesas,rcar-csi2.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/media/renesas,rcar-csi2.tx=
+t b/Documentation/devicetree/bindings/media/renesas,rcar-csi2.txt
+> index d63275e17afdd180..9a0d0531c67df48c 100644
+> --- a/Documentation/devicetree/bindings/media/renesas,rcar-csi2.txt
+> +++ b/Documentation/devicetree/bindings/media/renesas,rcar-csi2.txt
+> @@ -18,7 +18,8 @@ Mandatory properties
+>
+>   - reg: the register base and size for the device registers
+>   - interrupts: the interrupt for the device
+> - - clocks: reference to the parent clock
+> + - clocks: A phandle + clock specifier for the module clock
+> + - resets: A phandle + reset specifier for the module reset
+>
 
-Detailed results are available here:
+Verified that all users in mainline of this bindings already contains
+a 'reset' property:
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 
-http://www.xs4all.nl/~hverkuil/logs/Friday.log
+Thanks
+   j
 
-Detailed regression test results are available here:
+>  The device node shall contain two 'port' child nodes according to the
+>  bindings defined in Documentation/devicetree/bindings/media/
+> --
+> 2.21.0
+>
 
-http://www.xs4all.nl/~hverkuil/logs/Friday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-dmesg.log
+--kohb6q32x453fa7o
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Full logs are available here:
+-----BEGIN PGP SIGNATURE-----
 
-http://www.xs4all.nl/~hverkuil/logs/Friday.tar.bz2
+iQIyBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlywOEoACgkQcjQGjxah
+VjzdcQ/49g4XgS0i3j0gVBBy3zo9Ux91vgIiPiUsibF/TxDTvkwJutzlRvxDpb9I
+9jX7Vu/73CIwerHlcMHF/JrR9xFMsJCQ1bv3dBvA2HOx3vqCudns04C6hAam5izS
+OI+in6KOENSeKeXPu58CdVSrgDbmspB9irg6pkKU96MswvjX3G9Vt78ztJ4uVbPU
+i0RtsWe6uofYQGZ3toV7/stiZFoUOkFUUEzPc2MOGl3LjLkOaaoM8iOnVXPlPhxx
+++10/HyMWhC3TkLCWmI0HPm8E1vkULjJ8EqowUZ3LhUFd0CVZEvG+sBnbGESQRXA
+xzQYxIivddnC7iDEjLpN3WFwKAQ653vPiqzUv3lVOpd5vIfdyLPTc1GiJ5cm7ziQ
+Cz+H38Oz6uyuMs2PmPLQBsmqdBp4WVhunzECe0xX4ycL3/6zNL6rM6IaqVi8eVCk
+PoXJwOAXhveLrhskIteaOupkjAwL5G5QCk+9W4Gd3efiFnUU0OVRfJni9tUVmEom
+uHE24H7vMZNyamFeUHAijC2K7mKs9JWtN0KW/uyJZej+D05XGxoFcT3wuAWiS3Co
+ByW/leUl0sC66enqgRWG9gEMBvTUz+mvJvHk2epfYwHiK+SyL5p5yYPm0GNm/Ens
+KFEVxDM0jPmh7Fo4hT2+qwAdiRs58BHr7RYDIbZRILOIKPB1hA==
+=dLsB
+-----END PGP SIGNATURE-----
 
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+--kohb6q32x453fa7o--
