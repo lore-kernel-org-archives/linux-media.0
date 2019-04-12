@@ -2,821 +2,2143 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9832DC10F14
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0520CC10F14
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:23:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 373F5206B7
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:20:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7F91206B7
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:23:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbfDLJUe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 05:20:34 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:33698 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727272AbfDLJUe (ORCPT
+        id S1727138AbfDLJXC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 05:23:02 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:55298 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726851AbfDLJXB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 05:20:34 -0400
-Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9C2B4282269;
-        Fri, 12 Apr 2019 10:20:31 +0100 (BST)
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Cc:     kernel@collabora.com, Tomasz Figa <tfiga@chromium.org>,
-        Hirokazu Honda <hiroh@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [PATCH v3 2/2] media: v4l2: Get rid of ->vidioc_enum_fmt_vid_{cap,out}_mplane
-Date:   Fri, 12 Apr 2019 11:20:27 +0200
-Message-Id: <20190412092027.20410-2-boris.brezillon@collabora.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190412092027.20410-1-boris.brezillon@collabora.com>
-References: <20190412092027.20410-1-boris.brezillon@collabora.com>
+        Fri, 12 Apr 2019 05:23:01 -0400
+Received: from [IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68] ([IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id EsObhza70NG8zEsOchC1gf; Fri, 12 Apr 2019 11:22:54 +0200
+Subject: Re: [PATCH v9 3/4] [media] cxusb: add analog mode support for Medion
+ MD95700
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Michael Krufky <mkrufky@linuxtv.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Andy Walls <awalls@md.metrocast.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org
+References: <cover.1553903063.git.mail@maciej.szmigiero.name>
+ <0c30210a0d946cac6b17755e7d255541ff535023.1553903063.git.mail@maciej.szmigiero.name>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <b33ebf2a-9507-9940-4474-6f37af4d8010@xs4all.nl>
+Date:   Fri, 12 Apr 2019 11:22:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <0c30210a0d946cac6b17755e7d255541ff535023.1553903063.git.mail@maciej.szmigiero.name>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfPNNs8bjUBNSjL5/rv6UgBdXPKz0n1DfCbxBBEMPZ5pmmQaDvQufyiaqjtKRz7SR2mh+j/DF+hGlQkhz9dFA2bqeRVaSY0B6AAb1CUyLozqmKrffPnt/
+ Djw9HXEgXp14G3C7ljtmfTTFCWutvhO71AIAADlXdeKMSqKDznQcFoETfEv1L0wI85MpnQ9SVHch2xhEPczH5XyBio7YDhsxlaJ/A2KbsUSoh1V0FwqIH2tf
+ 53ktzcGJSDo9SuX6bfXl7xMdLA2BE5ZWqqYYZB1fwrPOsWpUzaZsylxSx5l4wStSFjF/QJYYsjEA5Dm8Y4bcQQp1LjQJTrFRVJbZoO9VggnLuXfHAZ13XH59
+ rHA2oBY8uy7IH7rM1IiymBSDgmo33R0xWXSK5rINW+367rpMSKlec6hkrRHJAgwlTFCfGOBXgpqsLdgKnSgbfeiyA3RkTAVOZBU6y2sd3kr3p0PlSno=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Support for multiplanar and singleplanar formats is mutually exclusive,
-at least in practice. In our attempt to unify support for support for
-mplane and !mplane in v4l, let's get rid of the
-->vidioc_enum_fmt_{vid,out}_cap_mplane() hooks and call
-->vidioc_enum_fmt_{vid,out}_cap() instead.
+On 3/30/19 12:51 AM, Maciej S. Szmigiero wrote:
+> This patch adds support for analog part of Medion 95700 in the cxusb
+> driver.
+> 
+> What works:
+> * Video capture at various sizes with sequential fields,
+> * Input switching (TV Tuner, Composite, S-Video),
+> * TV and radio tuning,
+> * Video standard switching and auto detection,
+> * Radio mode switching (stereo / mono),
+> * Unplugging while capturing,
+> * DVB / analog coexistence.
+> 
+> What does not work yet:
+> * Audio,
+> * VBI,
+> * Picture controls.
+> 
+> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+> ---
+>  drivers/media/usb/dvb-usb/Kconfig        |   16 +-
+>  drivers/media/usb/dvb-usb/Makefile       |    3 +
+>  drivers/media/usb/dvb-usb/cxusb-analog.c | 1784 ++++++++++++++++++++++
+>  drivers/media/usb/dvb-usb/cxusb.c        |    2 -
+>  drivers/media/usb/dvb-usb/cxusb.h        |  105 ++
+>  5 files changed, 1906 insertions(+), 4 deletions(-)
+>  create mode 100644 drivers/media/usb/dvb-usb/cxusb-analog.c
+> 
+> diff --git a/drivers/media/usb/dvb-usb/Kconfig b/drivers/media/usb/dvb-usb/Kconfig
+> index 513df955eaa3..8af8b920d7e4 100644
+> --- a/drivers/media/usb/dvb-usb/Kconfig
+> +++ b/drivers/media/usb/dvb-usb/Kconfig
+> @@ -138,12 +138,24 @@ config DVB_USB_CXUSB
+>  	select MEDIA_TUNER_SI2157 if MEDIA_SUBDRV_AUTOSELECT
+>  	help
+>  	  Say Y here to support the Conexant USB2.0 hybrid reference design.
+> -	  Currently, only DVB and ATSC modes are supported, analog mode
+> -	  shall be added in the future. Devices that require this module:
+> +	  DVB and ATSC modes are supported, for a basic analog mode support
+> +	  see the next option ("Analog support for the Conexant USB2.0 hybrid
+> +	  reference design").
+> +	  Devices that require this module:
+>  
+>  	  Medion MD95700 hybrid USB2.0 device.
+>  	  DViCO FusionHDTV (Bluebird) USB2.0 devices
+>  
+> +config DVB_USB_CXUSB_ANALOG
+> +	bool "Analog support for the Conexant USB2.0 hybrid reference design"
+> +	depends on DVB_USB_CXUSB && VIDEO_V4L2
+> +	select VIDEO_CX25840
+> +	select VIDEOBUF2_VMALLOC
+> +	help
+> +	  Say Y here to enable basic analog mode support for the Conexant
+> +	  USB2.0 hybrid reference design.
+> +	  Currently this mode is supported only on a Medion MD95700 device.
+> +
+>  config DVB_USB_M920X
+>  	tristate "Uli m920x DVB-T USB2.0 support"
+>  	depends on DVB_USB
+> diff --git a/drivers/media/usb/dvb-usb/Makefile b/drivers/media/usb/dvb-usb/Makefile
+> index 407d90ca8be0..28e4806a87cd 100644
+> --- a/drivers/media/usb/dvb-usb/Makefile
+> +++ b/drivers/media/usb/dvb-usb/Makefile
+> @@ -42,6 +42,9 @@ dvb-usb-digitv-objs := digitv.o
+>  obj-$(CONFIG_DVB_USB_DIGITV) += dvb-usb-digitv.o
+>  
+>  dvb-usb-cxusb-objs := cxusb.o
+> +ifeq ($(CONFIG_DVB_USB_CXUSB_ANALOG),y)
+> +dvb-usb-cxusb-objs += cxusb-analog.o
+> +endif
+>  obj-$(CONFIG_DVB_USB_CXUSB) += dvb-usb-cxusb.o
+>  
+>  dvb-usb-ttusb2-objs := ttusb2.o
+> diff --git a/drivers/media/usb/dvb-usb/cxusb-analog.c b/drivers/media/usb/dvb-usb/cxusb-analog.c
+> new file mode 100644
+> index 000000000000..c726e578b5da
+> --- /dev/null
+> +++ b/drivers/media/usb/dvb-usb/cxusb-analog.c
+> @@ -0,0 +1,1784 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +//
+> +// DVB USB compliant linux driver for Conexant USB reference design -
+> +// (analog part).
+> +//
+> +// Copyright (C) 2011, 2017, 2018
+> +//	Maciej S. Szmigiero (mail@maciej.szmigiero.name)
+> +//
+> +// In case there are new analog / DVB-T hybrid devices released in the market
+> +// using the same general design as Medion MD95700: a CX25840 video decoder
+> +// outputting a BT.656 stream to a USB bridge chip which then forwards it to
+> +// the host in isochronous USB packets this code should be made generic, with
+> +// board specific bits implemented via separate card structures.
+> +//
+> +// This is, however, unlikely as the Medion model was released
+> +// years ago (in 2005).
+> +//
+> +// TODO:
+> +//  * audio support,
+> +//  * finish radio support (requires audio of course),
+> +//  * VBI support,
+> +//  * controls support
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/device.h>
+> +#include <linux/slab.h>
+> +#include <linux/string.h>
+> +#include <linux/timekeeping.h>
+> +#include <linux/vmalloc.h>
+> +#include <media/drv-intf/cx25840.h>
+> +#include <media/tuner.h>
+> +#include <media/v4l2-fh.h>
+> +#include <media/v4l2-ioctl.h>
+> +#include <media/v4l2-subdev.h>
+> +#include <media/videobuf2-vmalloc.h>
+> +
+> +#include "cxusb.h"
+> +
+> +static int cxusb_medion_v_queue_setup(struct vb2_queue *q,
+> +				      unsigned int *num_buffers,
+> +				      unsigned int *num_planes,
+> +				      unsigned int sizes[],
+> +				      struct device *alloc_devs[])
+> +{
+> +	struct dvb_usb_device *dvbdev = vb2_get_drv_priv(q);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	unsigned int size = cxdev->width * cxdev->height * 2;
+> +
+> +	if (*num_planes > 0) {
+> +		if (*num_planes != 1)
+> +			return -EINVAL;
+> +
+> +		if (sizes[0] < size)
+> +			return -EINVAL;
+> +	} else {
+> +		*num_planes = 1;
+> +		sizes[0] = size;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_v_buf_init(struct vb2_buffer *vb)
+> +{
+> +	struct dvb_usb_device *dvbdev = vb2_get_drv_priv(vb->vb2_queue);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "buffer init\n");
+> +
+> +	if (vb2_plane_size(vb, 0) < cxdev->width * cxdev->height * 2)
+> +		return -ENOMEM;
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "buffer OK\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static void cxusb_auxbuf_init(struct dvb_usb_device *dvbdev,
+> +			      struct cxusb_medion_auxbuf *auxbuf,
+> +			      u8 *buf, unsigned int len)
+> +{
+> +	cxusb_vprintk(dvbdev, AUXB, "initializing auxbuf of len %u\n", len);
+> +
+> +	auxbuf->buf = buf;
+> +	auxbuf->len = len;
+> +	auxbuf->paylen = 0;
+> +}
+> +
+> +static void cxusb_auxbuf_head_trim(struct dvb_usb_device *dvbdev,
+> +				   struct cxusb_medion_auxbuf *auxbuf,
+> +				   unsigned int pos)
+> +{
+> +	if (pos == 0)
+> +		return;
+> +
+> +	if (WARN_ON(pos > auxbuf->paylen))
+> +		return;
+> +
+> +	cxusb_vprintk(dvbdev, AUXB,
+> +		      "trimming auxbuf len by %u to %u\n",
+> +		      pos, auxbuf->paylen - pos);
+> +
+> +	memmove(auxbuf->buf, auxbuf->buf + pos, auxbuf->paylen - pos);
+> +	auxbuf->paylen -= pos;
+> +}
+> +
+> +static unsigned int cxusb_auxbuf_paylen(struct cxusb_medion_auxbuf *auxbuf)
+> +{
+> +	return auxbuf->paylen;
+> +}
+> +
+> +static bool cxusb_auxbuf_make_space(struct dvb_usb_device *dvbdev,
+> +				    struct cxusb_medion_auxbuf *auxbuf,
+> +				    unsigned int howmuch)
+> +{
+> +	unsigned int freespace;
+> +
+> +	if (WARN_ON(howmuch >= auxbuf->len))
+> +		howmuch = auxbuf->len - 1;
+> +
+> +	freespace = auxbuf->len - cxusb_auxbuf_paylen(auxbuf);
+> +
+> +	cxusb_vprintk(dvbdev, AUXB, "freespace is %u\n", freespace);
+> +
+> +	if (likely(freespace >= howmuch))
 
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
----
-Changes in v3:
-- Send this patch separately (was previously part of the EXT_BUF/FMT
-  rework)
+Please drop the likely and unlikely 'functions': that might make sense in
+tight loops, but not for things like this. Readability is more important
+here.
 
-Changes in v2:
-- None
----
- drivers/media/pci/intel/ipu3/ipu3-cio2.c      |  2 +-
- drivers/media/platform/exynos-gsc/gsc-core.c  |  2 +-
- drivers/media/platform/exynos-gsc/gsc-core.h  |  2 +-
- drivers/media/platform/exynos-gsc/gsc-m2m.c   | 10 ++++-----
- .../media/platform/exynos4-is/fimc-capture.c  |  6 +++---
- .../platform/exynos4-is/fimc-isp-video.c      |  6 +++---
- drivers/media/platform/exynos4-is/fimc-lite.c |  6 +++---
- drivers/media/platform/exynos4-is/fimc-m2m.c  |  8 +++----
- .../media/platform/mtk-jpeg/mtk_jpeg_core.c   |  4 ++--
- drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c  | 18 ++++++++--------
- .../platform/mtk-vcodec/mtk_vcodec_dec.c      | 12 +++++------
- .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 12 +++++------
- .../media/platform/qcom/camss/camss-video.c   |  2 +-
- drivers/media/platform/qcom/venus/vdec.c      |  4 ++--
- drivers/media/platform/qcom/venus/venc.c      |  4 ++--
- drivers/media/platform/rcar_fdp1.c            |  4 ++--
- drivers/media/platform/rcar_jpu.c             |  4 ++--
- drivers/media/platform/renesas-ceu.c          |  2 +-
- drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  | 12 +++++------
- drivers/media/platform/s5p-mfc/s5p_mfc_enc.c  | 12 +++++------
- drivers/media/platform/ti-vpe/vpe.c           |  4 ++--
- drivers/media/platform/vicodec/vicodec-core.c |  2 --
- drivers/media/platform/vivid/vivid-core.c     |  6 ++----
- .../media/platform/vivid/vivid-vid-common.c   | 20 ------------------
- .../media/platform/vivid/vivid-vid-common.h   |  2 --
- drivers/media/v4l2-core/v4l2-dev.c            |  2 --
- drivers/media/v4l2-core/v4l2-ioctl.c          | 21 ++++++++++---------
- drivers/staging/media/ipu3/ipu3-v4l2.c        |  4 ++--
- .../media/rockchip/vpu/rockchip_vpu_enc.c     | 12 +++++------
- include/media/v4l2-ioctl.h                    | 14 ++-----------
- 30 files changed, 91 insertions(+), 128 deletions(-)
+> +		return true;
+> +
+> +	howmuch -= freespace;
+> +
+> +	cxusb_vprintk(dvbdev, AUXB, "will overwrite %u bytes of buffer\n",
+> +		      howmuch);
+> +
+> +	cxusb_auxbuf_head_trim(dvbdev, auxbuf, howmuch);
+> +
+> +	return false;
+> +}
+> +
+> +/* returns false if some data was overwritten */
+> +static bool cxusb_auxbuf_append_urb(struct dvb_usb_device *dvbdev,
+> +				    struct cxusb_medion_auxbuf *auxbuf,
+> +				    struct urb *urb)
+> +{
+> +	unsigned long len;
+> +	int i;
+> +	bool ret;
+> +
+> +	for (i = 0, len = 0; i < urb->number_of_packets; i++)
+> +		len += urb->iso_frame_desc[i].actual_length;
+> +
+> +	ret = cxusb_auxbuf_make_space(dvbdev, auxbuf, len);
+> +
+> +	for (i = 0; i < urb->number_of_packets; i++) {
+> +		unsigned int to_copy;
+> +
+> +		to_copy = urb->iso_frame_desc[i].actual_length;
+> +
+> +		memcpy(auxbuf->buf + auxbuf->paylen, urb->transfer_buffer +
+> +		       urb->iso_frame_desc[i].offset, to_copy);
+> +
+> +		auxbuf->paylen += to_copy;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static bool cxusb_auxbuf_copy(struct cxusb_medion_auxbuf *auxbuf,
+> +			      unsigned int pos, unsigned char *dest,
+> +			      unsigned int len)
+> +{
+> +	if (unlikely(pos + len > auxbuf->paylen))
+> +		return false;
+> +
+> +	memcpy(dest, auxbuf->buf + pos, len);
+> +
+> +	return true;
+> +}
+> +
+> +static bool cxusb_medion_cf_refc_fld_chg(struct dvb_usb_device *dvbdev,
+> +					 struct cxusb_bt656_params *bt656,
+> +					 bool firstfield,
+> +					 unsigned int maxlines,
+> +					 unsigned int maxlinesamples,
+> +					 unsigned char buf[4])
+> +{
+> +	bool firstfield_code = (buf[3] & CXUSB_BT656_FIELD_MASK) ==
+> +		CXUSB_BT656_FIELD_1;
+> +	unsigned int remlines;
+> +
+> +	if (bt656->line == 0 || firstfield == firstfield_code)
+> +		return false;
+> +
+> +	if (bt656->fmode == LINE_SAMPLES) {
+> +		unsigned int remsamples = maxlinesamples -
+> +			bt656->linesamples;
+> +
+> +		cxusb_vprintk(dvbdev, BT656,
+> +			      "field %c after line %u field change\n",
+> +			      firstfield ? '1' : '2', bt656->line);
+> +
+> +		if (unlikely(bt656->buf != NULL && remsamples > 0)) {
+> +			memset(bt656->buf, 0, remsamples);
+> +			bt656->buf += remsamples;
+> +
+> +			cxusb_vprintk(dvbdev, BT656,
+> +				      "field %c line %u %u samples still remaining (of %u)\n",
+> +				      firstfield ? '1' : '2',
+> +				      bt656->line, remsamples,
+> +				      maxlinesamples);
+> +		}
+> +
+> +		bt656->line++;
+> +	}
+> +
+> +	remlines = maxlines - bt656->line;
+> +	if (unlikely(bt656->buf != NULL && remlines > 0)) {
+> +		memset(bt656->buf, 0, remlines * maxlinesamples);
+> +		bt656->buf += remlines * maxlinesamples;
+> +
+> +		cxusb_vprintk(dvbdev, BT656,
+> +			      "field %c %u lines still remaining (of %u)\n",
+> +			      firstfield ? '1' : '2', remlines,
+> +			      maxlines);
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static void cxusb_medion_cf_refc_start_sch(struct dvb_usb_device *dvbdev,
+> +					   struct cxusb_bt656_params *bt656,
+> +					   bool firstfield,
+> +					   unsigned char buf[4])
+> +{
+> +	bool firstfield_code = (buf[3] & CXUSB_BT656_FIELD_MASK) ==
+> +		CXUSB_BT656_FIELD_1;
+> +	bool sav_code = (buf[3] & CXUSB_BT656_SEAV_MASK) ==
+> +		CXUSB_BT656_SEAV_SAV;
+> +	bool vbi_code = (buf[3] & CXUSB_BT656_VBI_MASK) ==
+> +		CXUSB_BT656_VBI_ON;
+> +
+> +	if (!sav_code || firstfield != firstfield_code)
+> +		return;
+> +
+> +	if (!vbi_code) {
+> +		cxusb_vprintk(dvbdev, BT656, "line start @ pos %u\n",
+> +			      bt656->pos);
+> +
+> +		bt656->linesamples = 0;
+> +		bt656->fmode = LINE_SAMPLES;
+> +	} else {
+> +		cxusb_vprintk(dvbdev, BT656, "VBI start @ pos %u\n",
+> +			      bt656->pos);
+> +
+> +		bt656->fmode = VBI_SAMPLES;
+> +	}
+> +}
+> +
+> +static void cxusb_medion_cf_refc_line_smpl(struct dvb_usb_device *dvbdev,
+> +					   struct cxusb_bt656_params *bt656,
+> +					   bool firstfield,
+> +					   unsigned int maxlinesamples,
+> +					   unsigned char buf[4])
+> +{
+> +	bool sav_code = (buf[3] & CXUSB_BT656_SEAV_MASK) ==
+> +		CXUSB_BT656_SEAV_SAV;
+> +	unsigned int remsamples;
+> +
+> +	if (sav_code)
+> +		cxusb_vprintk(dvbdev, BT656,
+> +			      "SAV in line samples @ line %u, pos %u\n",
+> +			      bt656->line, bt656->pos);
+> +
+> +	remsamples = maxlinesamples - bt656->linesamples;
+> +	if (unlikely(bt656->buf != NULL && remsamples > 0)) {
+> +		memset(bt656->buf, 0, remsamples);
+> +		bt656->buf += remsamples;
+> +
+> +		cxusb_vprintk(dvbdev, BT656,
+> +			      "field %c line %u %u samples still remaining (of %u)\n",
+> +			      firstfield ? '1' : '2', bt656->line, remsamples,
+> +			      maxlinesamples);
+> +	}
+> +
+> +	bt656->fmode = START_SEARCH;
+> +	bt656->line++;
+> +}
+> +
+> +static void cxusb_medion_cf_refc_vbi_smpl(struct dvb_usb_device *dvbdev,
+> +					  struct cxusb_bt656_params *bt656,
+> +					  unsigned char buf[4])
+> +{
+> +	bool sav_code = (buf[3] & CXUSB_BT656_SEAV_MASK) ==
+> +		CXUSB_BT656_SEAV_SAV;
+> +
+> +	if (sav_code)
+> +		cxusb_vprintk(dvbdev, BT656, "SAV in VBI samples @ pos %u\n",
+> +			      bt656->pos);
+> +
+> +	bt656->fmode = START_SEARCH;
+> +}
+> +
+> +/* returns whether the whole 4-byte code should be skipped in the buffer */
+> +static bool cxusb_medion_cf_ref_code(struct dvb_usb_device *dvbdev,
+> +				     struct cxusb_bt656_params *bt656,
+> +				     bool firstfield,
+> +				     unsigned int maxlines,
+> +				     unsigned int maxlinesamples,
+> +				     unsigned char buf[4])
+> +{
+> +	if (bt656->fmode == START_SEARCH)
+> +		cxusb_medion_cf_refc_start_sch(dvbdev, bt656, firstfield, buf);
+> +	else if (bt656->fmode == LINE_SAMPLES) {
+> +		cxusb_medion_cf_refc_line_smpl(dvbdev, bt656, firstfield,
+> +					       maxlinesamples, buf);
+> +		return false;
+> +	} else if (bt656->fmode == VBI_SAMPLES) {
+> +		cxusb_medion_cf_refc_vbi_smpl(dvbdev, bt656, buf);
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static bool cxusb_medion_cs_start_sch(struct dvb_usb_device *dvbdev,
+> +				      struct cxusb_medion_auxbuf *auxbuf,
+> +				      struct cxusb_bt656_params *bt656,
+> +				      unsigned int maxlinesamples)
+> +{
+> +	unsigned char buf[64];
+> +	unsigned int idx;
+> +	unsigned int tocheck = clamp_t(size_t, maxlinesamples / 4, 3,
+> +				       sizeof(buf));
+> +
+> +	if (!cxusb_auxbuf_copy(auxbuf, bt656->pos + 1, buf, tocheck))
+> +		return false;
+> +
+> +	for (idx = 0; idx <= tocheck - 3; idx++)
+> +		if (memcmp(buf + idx, CXUSB_BT656_PREAMBLE, 3) == 0) {
+> +			bt656->pos += (1 + idx);
+> +			return true;
+> +		}
+> +
+> +	cxusb_vprintk(dvbdev, BT656, "line %u early start, pos %u\n",
+> +		      bt656->line, bt656->pos);
+> +
+> +	bt656->linesamples = 0;
+> +	bt656->fmode = LINE_SAMPLES;
+> +
+> +	return true;
+> +}
+> +
+> +static void cxusb_medion_cs_line_smpl(struct cxusb_bt656_params *bt656,
+> +				      unsigned int maxlinesamples,
+> +				      unsigned char val)
+> +{
+> +	if (bt656->buf != NULL)
+> +		*(bt656->buf++) = val;
+> +
+> +	bt656->linesamples++;
+> +	bt656->pos++;
+> +
+> +	if (bt656->linesamples >= maxlinesamples) {
+> +		bt656->fmode = START_SEARCH;
+> +		bt656->line++;
+> +	}
+> +}
+> +
+> +static bool cxusb_medion_copy_samples(struct dvb_usb_device *dvbdev,
+> +				      struct cxusb_medion_auxbuf *auxbuf,
+> +				      struct cxusb_bt656_params *bt656,
+> +				      unsigned int maxlinesamples,
+> +				      unsigned char val)
+> +{
+> +	if (bt656->fmode == START_SEARCH && bt656->line > 0)
+> +		return cxusb_medion_cs_start_sch(dvbdev, auxbuf, bt656,
+> +						 maxlinesamples);
+> +	else if (bt656->fmode == LINE_SAMPLES)
+> +		cxusb_medion_cs_line_smpl(bt656, maxlinesamples, val);
+> +	else /* TODO: copy VBI samples */
+> +		bt656->pos++;
+> +
+> +	return true;
+> +}
+> +
+> +static bool cxusb_medion_copy_field(struct dvb_usb_device *dvbdev,
+> +				    struct cxusb_medion_auxbuf *auxbuf,
+> +				    struct cxusb_bt656_params *bt656,
+> +				    bool firstfield,
+> +				    unsigned int maxlines,
+> +				    unsigned int maxlinesmpls)
+> +{
+> +	while (bt656->line < maxlines) {
+> +		unsigned char val;
+> +
+> +		if (!cxusb_auxbuf_copy(auxbuf, bt656->pos, &val, 1))
+> +			break;
+> +
+> +		if (val == CXUSB_BT656_PREAMBLE[0]) {
+> +			unsigned char buf[4];
+> +
+> +			buf[0] = val;
+> +			if (!cxusb_auxbuf_copy(auxbuf, bt656->pos + 1,
+> +					       buf + 1, 3))
+> +				break;
+> +
+> +			if (buf[1] == CXUSB_BT656_PREAMBLE[1] &&
+> +			    buf[2] == CXUSB_BT656_PREAMBLE[2]) {
+> +				/*
+> +				 * is this a field change?
+> +				 * if so, terminate copying the current field
+> +				 */
+> +				if (cxusb_medion_cf_refc_fld_chg(dvbdev,
+> +								 bt656,
+> +								 firstfield,
+> +								 maxlines,
+> +								 maxlinesmpls,
+> +								 buf))
+> +					return true;
+> +
+> +				if (cxusb_medion_cf_ref_code(dvbdev, bt656,
+> +							     firstfield,
+> +							     maxlines,
+> +							     maxlinesmpls,
+> +							     buf))
+> +					bt656->pos += 4;
+> +
+> +				continue;
+> +			}
+> +		}
+> +
+> +		if (!cxusb_medion_copy_samples(dvbdev, auxbuf, bt656,
+> +					       maxlinesmpls, val))
+> +			break;
+> +	}
+> +
+> +	if (bt656->line < maxlines) {
+> +		cxusb_vprintk(dvbdev, BT656,
+> +			      "end of buffer pos = %u, line = %u\n",
+> +			      bt656->pos, bt656->line);
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static bool cxusb_medion_v_process_auxbuf(struct cxusb_medion_dev *cxdev,
+> +					  bool reset)
+> +{
+> +	struct dvb_usb_device *dvbdev = cxdev->dvbdev;
+> +	struct cxusb_bt656_params *bt656 = &cxdev->bt656;
+> +
+> +	/*
+> +	 * if this is a new frame
+> +	 * fetch a buffer from list
+> +	 */
+> +	if (bt656->mode == NEW_FRAME) {
+> +		if (!list_empty(&cxdev->buflist)) {
+> +			cxdev->vbuf =
+> +				list_first_entry(&cxdev->buflist,
+> +						 struct cxusb_medion_vbuffer,
+> +						 list);
+> +			list_del(&cxdev->vbuf->list);
+> +		} else
+> +			dev_warn(&dvbdev->udev->dev, "no free buffers\n");
+> +	}
+> +
+> +	if (bt656->mode == NEW_FRAME || reset) {
+> +		cxusb_vprintk(dvbdev, URB, "will copy field 1\n");
+> +		bt656->pos = 0;
+> +		bt656->mode = FIRST_FIELD;
+> +		bt656->fmode = START_SEARCH;
+> +		bt656->line = 0;
+> +
+> +		if (cxdev->vbuf != NULL) {
+> +			cxdev->vbuf->vb2.vb2_buf.timestamp = ktime_get_ns();
+> +			bt656->buf = vb2_plane_vaddr(&cxdev->vbuf->vb2.vb2_buf,
+> +						     0);
+> +		}
+> +	}
+> +
+> +	/* cxusb_vprintk(dvbdev, URB, "auxbuf payload len %u",
+> +		      cxusb_auxbuf_paylen(&cxdev->auxbuf)); */
+> +
+> +	if (bt656->mode == FIRST_FIELD) {
+> +		if (!cxusb_medion_copy_field(dvbdev, &cxdev->auxbuf, bt656,
+> +					     true, cxdev->height / 2,
+> +					     cxdev->width * 2))
+> +			return false;
+> +
+> +		/*
+> +		 * do not trim buffer there in case
+> +		 * we need to reset the search later
+> +		 */
+> +
+> +		cxusb_vprintk(dvbdev, URB, "will copy field 2\n");
+> +		bt656->mode = SECOND_FIELD;
+> +		bt656->fmode = START_SEARCH;
+> +		bt656->line = 0;
+> +	}
+> +
+> +	if (bt656->mode == SECOND_FIELD) {
+> +		if (!cxusb_medion_copy_field(dvbdev, &cxdev->auxbuf, bt656,
+> +					     false, cxdev->height / 2,
+> +					     cxdev->width * 2))
+> +			return false;
+> +
+> +		cxusb_auxbuf_head_trim(dvbdev, &cxdev->auxbuf, bt656->pos);
+> +
+> +		bt656->mode = NEW_FRAME;
+> +
+> +		if (cxdev->vbuf != NULL) {
+> +			vb2_set_plane_payload(&cxdev->vbuf->vb2.vb2_buf, 0,
+> +					      cxdev->width * cxdev->height * 2);
+> +
+> +			cxdev->vbuf->vb2.field = V4L2_FIELD_SEQ_TB;
+> +			cxdev->vbuf->vb2.sequence = cxdev->vbuf_sequence++;
+> +
+> +			vb2_buffer_done(&cxdev->vbuf->vb2.vb2_buf,
+> +					VB2_BUF_STATE_DONE);
+> +
+> +			cxdev->vbuf = NULL;
+> +			cxdev->bt656.buf = NULL;
+> +
+> +			cxusb_vprintk(dvbdev, URB, "frame done\n");
+> +		} else {
+> +			cxusb_vprintk(dvbdev, URB, "frame skipped\n");
+> +			cxdev->vbuf_sequence++;
+> +		}
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static bool cxusb_medion_v_complete_handle_urb(struct cxusb_medion_dev *cxdev,
+> +					       bool *auxbuf_reset)
+> +{
+> +	struct dvb_usb_device *dvbdev = cxdev->dvbdev;
+> +	unsigned int urbn;
+> +	struct urb *urb;
+> +	int ret;
+> +
+> +	*auxbuf_reset = false;
+> +
+> +	urbn = cxdev->nexturb;
+> +	if (!test_bit(urbn, &cxdev->urbcomplete))
+> +		return false;
+> +
+> +	clear_bit(urbn, &cxdev->urbcomplete);
+> +
+> +	do {
+> +		cxdev->nexturb++;
+> +		cxdev->nexturb %= CXUSB_VIDEO_URBS;
+> +		urb = cxdev->streamurbs[cxdev->nexturb];
+> +	} while (urb == NULL);
+> +
+> +	urb = cxdev->streamurbs[urbn];
+> +	cxusb_vprintk(dvbdev, URB, "URB %u status = %d\n", urbn, urb->status);
+> +
+> +	if (urb->status == 0 || urb->status == -EXDEV) {
+> +		int i;
+> +		unsigned long len;
+> +
+> +		for (i = 0, len = 0; i < urb->number_of_packets; i++)
+> +			len += urb->iso_frame_desc[i].actual_length;
+> +
+> +		cxusb_vprintk(dvbdev, URB, "URB %u data len = %lu\n", urbn,
+> +			      len);
+> +
+> +		if (len > 0) {
+> +			cxusb_vprintk(dvbdev, URB, "appending URB\n");
+> +
+> +			/*
+> +			 * append new data to auxbuf while
+> +			 * overwriting old data if necessary
+> +			 *
+> +			 * if any overwrite happens then we can no
+> +			 * longer rely on consistency of the whole
+> +			 * data so let's start again the current
+> +			 * auxbuf frame assembling process from
+> +			 * the beginning
+> +			 */
+> +			*auxbuf_reset =
+> +				!cxusb_auxbuf_append_urb(dvbdev,
+> +							 &cxdev->auxbuf,
+> +							 urb);
+> +		}
+> +	}
+> +
+> +	cxusb_vprintk(dvbdev, URB, "URB %u resubmit\n", urbn);
+> +
+> +	ret = usb_submit_urb(urb, GFP_KERNEL);
+> +	if (ret != 0)
+> +		dev_err(&dvbdev->udev->dev,
+> +			"unable to resubmit URB %u (%d), you'll have to restart streaming\n",
+> +			urbn, ret);
+> +
+> +	/* next URB is complete already? reschedule us then to handle it */
+> +	return test_bit(cxdev->nexturb, &cxdev->urbcomplete);
+> +}
+> +
+> +static void cxusb_medion_v_complete_work(struct work_struct *work)
+> +{
+> +	struct cxusb_medion_dev *cxdev = container_of(work,
+> +						      struct cxusb_medion_dev,
+> +						      urbwork);
+> +	struct dvb_usb_device *dvbdev = cxdev->dvbdev;
+> +	bool auxbuf_reset;
+> +	bool reschedule;
+> +
+> +	mutex_lock(cxdev->videodev->lock);
+> +
+> +	cxusb_vprintk(dvbdev, URB, "worker called, stop_streaming = %d\n",
+> +		      (int)cxdev->stop_streaming);
+> +
+> +	if (cxdev->stop_streaming)
+> +		goto unlock;
+> +
+> +	reschedule = cxusb_medion_v_complete_handle_urb(cxdev, &auxbuf_reset);
+> +
+> +	if (cxusb_medion_v_process_auxbuf(cxdev, auxbuf_reset))
+> +		/* reschedule us until auxbuf no longer can produce any frame */
+> +		reschedule = true;
+> +
+> +	if (reschedule) {
+> +		cxusb_vprintk(dvbdev, URB, "rescheduling worker\n");
+> +		schedule_work(&cxdev->urbwork);
+> +	}
+> +
+> +unlock:
+> +	mutex_unlock(cxdev->videodev->lock);
+> +}
+> +
+> +static void cxusb_medion_v_complete(struct urb *u)
+> +{
+> +	struct dvb_usb_device *dvbdev = u->context;
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < CXUSB_VIDEO_URBS; i++)
+> +		if (cxdev->streamurbs[i] == u)
+> +			break;
+> +
+> +	if (i >= CXUSB_VIDEO_URBS) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"complete on unknown URB\n");
+> +		return;
+> +	}
+> +
+> +	cxusb_vprintk(dvbdev, URB, "URB %u complete\n", i);
+> +
+> +	set_bit(i, &cxdev->urbcomplete);
+> +	schedule_work(&cxdev->urbwork);
+> +}
+> +
+> +static void cxusb_medion_urbs_free(struct cxusb_medion_dev *cxdev)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < CXUSB_VIDEO_URBS; i++)
+> +		if (cxdev->streamurbs[i] != NULL) {
+> +			kfree(cxdev->streamurbs[i]->transfer_buffer);
+> +			usb_free_urb(cxdev->streamurbs[i]);
+> +			cxdev->streamurbs[i] = NULL;
+> +		}
+> +}
+> +
+> +static void cxusb_medion_return_buffers(struct cxusb_medion_dev *cxdev,
+> +					bool requeue)
+> +{
+> +	struct cxusb_medion_vbuffer *vbuf, *vbuf_tmp;
+> +
+> +	list_for_each_entry_safe(vbuf, vbuf_tmp, &cxdev->buflist,
+> +				 list) {
+> +		list_del(&vbuf->list);
+> +		vb2_buffer_done(&vbuf->vb2.vb2_buf,
+> +				requeue ? VB2_BUF_STATE_QUEUED :
+> +				VB2_BUF_STATE_ERROR);
+> +	}
+> +
+> +	if (cxdev->vbuf != NULL) {
+> +		vb2_buffer_done(&cxdev->vbuf->vb2.vb2_buf,
+> +				requeue ? VB2_BUF_STATE_QUEUED :
+> +				VB2_BUF_STATE_ERROR);
+> +
+> +		cxdev->vbuf = NULL;
+> +		cxdev->bt656.buf = NULL;
+> +	}
+> +}
+> +
+> +static int cxusb_medion_v_ss_auxbuf_alloc(struct cxusb_medion_dev *cxdev,
+> +					  int *npackets)
+> +{
+> +	struct dvb_usb_device *dvbdev = cxdev->dvbdev;
+> +	u8 *buf;
+> +	unsigned int framelen, urblen, auxbuflen;
+> +
+> +	framelen = (cxdev->width * 2 + 4 + 4) *
+> +		(cxdev->height + 50 /* VBI lines */);
+> +
+> +	/*
+> +	 * try to fit a whole frame into each URB, as long as doing so
+> +	 * does not require very high order memory allocations
+> +	 */
+> +	BUILD_BUG_ON(CXUSB_VIDEO_URB_MAX_SIZE / CXUSB_VIDEO_PKT_SIZE >
+> +		     CXUSB_VIDEO_MAX_FRAME_PKTS);
+> +	*npackets = min_t(int, (framelen + CXUSB_VIDEO_PKT_SIZE - 1) /
+> +			  CXUSB_VIDEO_PKT_SIZE,
+> +			  CXUSB_VIDEO_URB_MAX_SIZE / CXUSB_VIDEO_PKT_SIZE);
+> +	urblen = *npackets * CXUSB_VIDEO_PKT_SIZE;
+> +
+> +	cxusb_vprintk(dvbdev, URB,
+> +		      "each URB will have %d packets for total of %u bytes (%u x %u @ %u)\n",
+> +		      *npackets, urblen, (unsigned int)cxdev->width,
+> +		      (unsigned int)cxdev->height, framelen);
+> +
+> +	auxbuflen = framelen + urblen;
+> +
+> +	buf = vmalloc(auxbuflen);
+> +	if (buf == NULL)
+> +		return -ENOMEM;
+> +
+> +	cxusb_auxbuf_init(dvbdev, &cxdev->auxbuf, buf, auxbuflen);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_v_start_streaming(struct vb2_queue *q,
+> +					  unsigned int count)
+> +{
+> +	struct dvb_usb_device *dvbdev = vb2_get_drv_priv(q);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	u8 streamon_params[2] = { 0x03, 0x00 };
+> +	int npackets, i;
+> +	int ret;
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "should start streaming\n");
+> +
+> +	if (cxdev->stop_streaming) {
+> +		/* stream is being stopped */
+> +		ret = -EBUSY;
+> +		goto ret_retbufs;
+> +	}
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, video, s_stream, 1);
+> +	if (ret != 0) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"unable to start stream (%d)\n", ret);
+> +		goto ret_retbufs;
+> +	}
+> +
+> +	ret = cxusb_ctrl_msg(dvbdev, CMD_STREAMING_ON, streamon_params, 2,
+> +			     NULL, 0);
+> +	if (ret != 0) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"unable to start streaming (%d)\n", ret);
+> +		goto ret_unstream_cx;
+> +	}
+> +
+> +	ret = cxusb_medion_v_ss_auxbuf_alloc(cxdev, &npackets);
+> +	if (ret != 0)
+> +		goto ret_unstream_md;
+> +
+> +	for (i = 0; i < CXUSB_VIDEO_URBS; i++) {
+> +		int framen;
+> +		u8 *streambuf;
+> +		struct urb *surb;
+> +
+> +		/*
+> +		 * TODO: change this to an array of single pages to avoid
+> +		 * doing a large continuous allocation when (if)
+> +		 * s-g isochronous USB transfers are supported
+> +		 */
+> +		streambuf = kmalloc(npackets * CXUSB_VIDEO_PKT_SIZE,
+> +				    GFP_KERNEL);
+> +		if (streambuf == NULL) {
+> +			if (i < 2) {
+> +				ret = -ENOMEM;
+> +				goto ret_freeab;
+> +			} else
+> +				break;
+> +		}
+> +
+> +		surb = usb_alloc_urb(npackets, GFP_KERNEL);
+> +		if (surb == NULL) {
+> +			kfree(streambuf);
+> +			ret = -ENOMEM;
+> +			goto ret_freeu;
+> +		}
+> +
+> +		cxdev->streamurbs[i] = surb;
+> +		surb->dev = dvbdev->udev;
+> +		surb->context = dvbdev;
+> +		surb->pipe = usb_rcvisocpipe(dvbdev->udev, 2);
+> +
+> +		surb->interval = 1;
+> +		surb->transfer_flags = URB_ISO_ASAP;
+> +
+> +		surb->transfer_buffer = streambuf;
+> +
+> +		surb->complete = cxusb_medion_v_complete;
+> +		surb->number_of_packets = npackets;
+> +		surb->transfer_buffer_length = npackets * CXUSB_VIDEO_PKT_SIZE;
+> +
+> +		for (framen = 0; framen < npackets; framen++) {
+> +			surb->iso_frame_desc[framen].offset =
+> +				CXUSB_VIDEO_PKT_SIZE * framen;
+> +
+> +			surb->iso_frame_desc[framen].length =
+> +				CXUSB_VIDEO_PKT_SIZE;
+> +		}
+> +	}
+> +
+> +	cxdev->urbcomplete = 0;
+> +	cxdev->nexturb = 0;
+> +	cxdev->vbuf_sequence = 0;
+> +
+> +	cxdev->vbuf = NULL;
+> +	cxdev->bt656.mode = NEW_FRAME;
+> +	cxdev->bt656.buf = NULL;
+> +
+> +	for (i = 0; i < CXUSB_VIDEO_URBS; i++)
+> +		if (cxdev->streamurbs[i] != NULL) {
+> +			ret = usb_submit_urb(cxdev->streamurbs[i],
+> +					GFP_KERNEL);
+> +			if (ret != 0)
+> +				dev_err(&dvbdev->udev->dev,
+> +					"URB %d submission failed (%d)\n", i,
+> +					ret);
+> +		}
+> +
+> +	return 0;
+> +
+> +ret_freeu:
+> +	cxusb_medion_urbs_free(cxdev);
+> +
+> +ret_freeab:
+> +	vfree(cxdev->auxbuf.buf);
+> +
+> +ret_unstream_md:
+> +	cxusb_ctrl_msg(dvbdev, CMD_STREAMING_OFF, NULL, 0, NULL, 0);
+> +
+> +ret_unstream_cx:
+> +	v4l2_subdev_call(cxdev->cx25840, video, s_stream, 0);
+> +
+> +ret_retbufs:
+> +	cxusb_medion_return_buffers(cxdev, true);
+> +
+> +	return ret;
+> +}
+> +
+> +static void cxusb_medion_v_stop_streaming(struct vb2_queue *q)
+> +{
+> +	struct dvb_usb_device *dvbdev = vb2_get_drv_priv(q);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	int ret;
+> +	unsigned int i;
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "should stop streaming\n");
+> +
+> +	if (WARN_ON(cxdev->stop_streaming))
+> +		return;
+> +
+> +	cxdev->stop_streaming = true;
+> +
+> +	cxusb_ctrl_msg(dvbdev, CMD_STREAMING_OFF, NULL, 0, NULL, 0);
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, video, s_stream, 0);
+> +	if (ret != 0)
+> +		dev_err(&dvbdev->udev->dev, "unable to stop stream (%d)\n",
+> +			ret);
+> +
+> +	/* let URB completion run */
+> +	mutex_unlock(cxdev->videodev->lock);
+> +
+> +	for (i = 0; i < CXUSB_VIDEO_URBS; i++)
+> +		if (cxdev->streamurbs[i] != NULL)
+> +			usb_kill_urb(cxdev->streamurbs[i]);
+> +
+> +	flush_work(&cxdev->urbwork);
+> +
+> +	mutex_lock(cxdev->videodev->lock);
+> +
+> +	/* free transfer buffer and URB */
+> +	vfree(cxdev->auxbuf.buf);
+> +
+> +	cxusb_medion_urbs_free(cxdev);
+> +
+> +	cxusb_medion_return_buffers(cxdev, false);
+> +
+> +	cxdev->stop_streaming = false;
+> +}
+> +
+> +static void cxusub_medion_v_buf_queue(struct vb2_buffer *vb)
+> +{
+> +	struct vb2_v4l2_buffer *v4l2buf = to_vb2_v4l2_buffer(vb);
+> +	struct cxusb_medion_vbuffer *vbuf =
+> +		container_of(v4l2buf, struct cxusb_medion_vbuffer, vb2);
+> +	struct dvb_usb_device *dvbdev = vb2_get_drv_priv(vb->vb2_queue);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +
+> +	/* cxusb_vprintk(dvbdev, OPS, "mmmm.. a fresh buffer...\n"); */
+> +
+> +	list_add_tail(&vbuf->list, &cxdev->buflist);
+> +}
+> +
+> +static const struct vb2_ops cxdev_video_qops = {
+> +	.queue_setup = cxusb_medion_v_queue_setup,
+> +	.buf_init = cxusb_medion_v_buf_init,
+> +	.start_streaming = cxusb_medion_v_start_streaming,
+> +	.stop_streaming = cxusb_medion_v_stop_streaming,
+> +	.buf_queue = cxusub_medion_v_buf_queue,
+> +	.wait_prepare = vb2_ops_wait_prepare,
+> +	.wait_finish = vb2_ops_wait_finish
+> +};
+> +
+> +static const __u32 videocaps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_TUNER |
+> +	V4L2_CAP_READWRITE | V4L2_CAP_STREAMING;
+> +static const __u32 radiocaps = V4L2_CAP_TUNER | V4L2_CAP_RADIO;
+> +
+> +static int cxusb_medion_v_querycap(struct file *file, void *fh,
+> +				   struct v4l2_capability *cap)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +
+> +	strncpy(cap->driver, dvbdev->udev->dev.driver->name,
+> +		sizeof(cap->driver) - 1);
+> +	strcpy(cap->card, "Medion 95700");
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index f8020ebe9f05..c3b3af3c3b2f 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -1174,7 +1174,7 @@ static const struct v4l2_file_operations cio2_v4l2_fops = {
- 
- static const struct v4l2_ioctl_ops cio2_v4l2_ioctl_ops = {
- 	.vidioc_querycap = cio2_v4l2_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane = cio2_v4l2_enum_fmt,
-+	.vidioc_enum_fmt_vid_cap = cio2_v4l2_enum_fmt,
- 	.vidioc_g_fmt_vid_cap_mplane = cio2_v4l2_g_fmt,
- 	.vidioc_s_fmt_vid_cap_mplane = cio2_v4l2_s_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane = cio2_v4l2_try_fmt,
-diff --git a/drivers/media/platform/exynos-gsc/gsc-core.c b/drivers/media/platform/exynos-gsc/gsc-core.c
-index 0fa3ec04ab7b..f1d555f47ce3 100644
---- a/drivers/media/platform/exynos-gsc/gsc-core.c
-+++ b/drivers/media/platform/exynos-gsc/gsc-core.c
-@@ -331,7 +331,7 @@ void gsc_check_src_scale_info(struct gsc_variant *var,
- 	}
- }
- 
--int gsc_enum_fmt_mplane(struct v4l2_fmtdesc *f)
-+int gsc_enum_fmt(struct v4l2_fmtdesc *f)
- {
- 	const struct gsc_fmt *fmt;
- 
-diff --git a/drivers/media/platform/exynos-gsc/gsc-core.h b/drivers/media/platform/exynos-gsc/gsc-core.h
-index c81f0a17d286..8ea49ca004fd 100644
---- a/drivers/media/platform/exynos-gsc/gsc-core.h
-+++ b/drivers/media/platform/exynos-gsc/gsc-core.h
-@@ -387,7 +387,7 @@ void gsc_m2m_job_finish(struct gsc_ctx *ctx, int vb_state);
- u32 get_plane_size(struct gsc_frame *fr, unsigned int plane);
- const struct gsc_fmt *get_format(int index);
- const struct gsc_fmt *find_fmt(u32 *pixelformat, u32 *mbus_code, u32 index);
--int gsc_enum_fmt_mplane(struct v4l2_fmtdesc *f);
-+int gsc_enum_fmt(struct v4l2_fmtdesc *f);
- int gsc_try_fmt_mplane(struct gsc_ctx *ctx, struct v4l2_format *f);
- void gsc_set_frame_size(struct gsc_frame *frame, int width, int height);
- int gsc_g_fmt_mplane(struct gsc_ctx *ctx, struct v4l2_format *f);
-diff --git a/drivers/media/platform/exynos-gsc/gsc-m2m.c b/drivers/media/platform/exynos-gsc/gsc-m2m.c
-index c757f5d98bcc..b3efca8d1d12 100644
---- a/drivers/media/platform/exynos-gsc/gsc-m2m.c
-+++ b/drivers/media/platform/exynos-gsc/gsc-m2m.c
-@@ -303,10 +303,10 @@ static int gsc_m2m_querycap(struct file *file, void *fh,
- 	return 0;
- }
- 
--static int gsc_m2m_enum_fmt_mplane(struct file *file, void *priv,
--				struct v4l2_fmtdesc *f)
-+static int gsc_m2m_enum_fmt(struct file *file, void *priv,
-+			    struct v4l2_fmtdesc *f)
- {
--	return gsc_enum_fmt_mplane(f);
-+	return gsc_enum_fmt(f);
- }
- 
- static int gsc_m2m_g_fmt_mplane(struct file *file, void *fh,
-@@ -562,8 +562,8 @@ static int gsc_m2m_s_selection(struct file *file, void *fh,
- 
- static const struct v4l2_ioctl_ops gsc_m2m_ioctl_ops = {
- 	.vidioc_querycap		= gsc_m2m_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane	= gsc_m2m_enum_fmt_mplane,
--	.vidioc_enum_fmt_vid_out_mplane	= gsc_m2m_enum_fmt_mplane,
-+	.vidioc_enum_fmt_vid_cap	= gsc_m2m_enum_fmt,
-+	.vidioc_enum_fmt_vid_out	= gsc_m2m_enum_fmt,
- 	.vidioc_g_fmt_vid_cap_mplane	= gsc_m2m_g_fmt_mplane,
- 	.vidioc_g_fmt_vid_out_mplane	= gsc_m2m_g_fmt_mplane,
- 	.vidioc_try_fmt_vid_cap_mplane	= gsc_m2m_try_fmt_mplane,
-diff --git a/drivers/media/platform/exynos4-is/fimc-capture.c b/drivers/media/platform/exynos4-is/fimc-capture.c
-index 3e9fcf4f8a13..7ee1ba788193 100644
---- a/drivers/media/platform/exynos4-is/fimc-capture.c
-+++ b/drivers/media/platform/exynos4-is/fimc-capture.c
-@@ -733,8 +733,8 @@ static int fimc_cap_querycap(struct file *file, void *priv,
- 	return 0;
- }
- 
--static int fimc_cap_enum_fmt_mplane(struct file *file, void *priv,
--				    struct v4l2_fmtdesc *f)
-+static int fimc_cap_enum_fmt(struct file *file, void *priv,
-+			     struct v4l2_fmtdesc *f)
- {
- 	struct fimc_fmt *fmt;
- 
-@@ -1361,7 +1361,7 @@ static int fimc_cap_s_selection(struct file *file, void *fh,
- static const struct v4l2_ioctl_ops fimc_capture_ioctl_ops = {
- 	.vidioc_querycap		= fimc_cap_querycap,
- 
--	.vidioc_enum_fmt_vid_cap_mplane	= fimc_cap_enum_fmt_mplane,
-+	.vidioc_enum_fmt_vid_cap	= fimc_cap_enum_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane	= fimc_cap_try_fmt_mplane,
- 	.vidioc_s_fmt_vid_cap_mplane	= fimc_cap_s_fmt_mplane,
- 	.vidioc_g_fmt_vid_cap_mplane	= fimc_cap_g_fmt_mplane,
-diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.c b/drivers/media/platform/exynos4-is/fimc-isp-video.c
-index 8cd7b1c6565c..fc47251feaef 100644
---- a/drivers/media/platform/exynos4-is/fimc-isp-video.c
-+++ b/drivers/media/platform/exynos4-is/fimc-isp-video.c
-@@ -355,8 +355,8 @@ static int isp_video_querycap(struct file *file, void *priv,
- 	return 0;
- }
- 
--static int isp_video_enum_fmt_mplane(struct file *file, void *priv,
--					struct v4l2_fmtdesc *f)
-+static int isp_video_enum_fmt(struct file *file, void *priv,
-+			      struct v4l2_fmtdesc *f)
- {
- 	const struct fimc_fmt *fmt;
- 
-@@ -553,7 +553,7 @@ static int isp_video_reqbufs(struct file *file, void *priv,
- 
- static const struct v4l2_ioctl_ops isp_video_ioctl_ops = {
- 	.vidioc_querycap		= isp_video_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane	= isp_video_enum_fmt_mplane,
-+	.vidioc_enum_fmt_vid_cap	= isp_video_enum_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane	= isp_video_try_fmt_mplane,
- 	.vidioc_s_fmt_vid_cap_mplane	= isp_video_s_fmt_mplane,
- 	.vidioc_g_fmt_vid_cap_mplane	= isp_video_g_fmt_mplane,
-diff --git a/drivers/media/platform/exynos4-is/fimc-lite.c b/drivers/media/platform/exynos4-is/fimc-lite.c
-index 13dfa5e39139..124e789ba9be 100644
---- a/drivers/media/platform/exynos4-is/fimc-lite.c
-+++ b/drivers/media/platform/exynos4-is/fimc-lite.c
-@@ -664,8 +664,8 @@ static int fimc_lite_querycap(struct file *file, void *priv,
- 	return 0;
- }
- 
--static int fimc_lite_enum_fmt_mplane(struct file *file, void *priv,
--				     struct v4l2_fmtdesc *f)
-+static int fimc_lite_enum_fmt(struct file *file, void *priv,
-+			      struct v4l2_fmtdesc *f)
- {
- 	const struct fimc_fmt *fmt;
- 
-@@ -954,7 +954,7 @@ static int fimc_lite_s_selection(struct file *file, void *fh,
- 
- static const struct v4l2_ioctl_ops fimc_lite_ioctl_ops = {
- 	.vidioc_querycap		= fimc_lite_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane	= fimc_lite_enum_fmt_mplane,
-+	.vidioc_enum_fmt_vid_cap	= fimc_lite_enum_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane	= fimc_lite_try_fmt_mplane,
- 	.vidioc_s_fmt_vid_cap_mplane	= fimc_lite_s_fmt_mplane,
- 	.vidioc_g_fmt_vid_cap_mplane	= fimc_lite_g_fmt_mplane,
-diff --git a/drivers/media/platform/exynos4-is/fimc-m2m.c b/drivers/media/platform/exynos4-is/fimc-m2m.c
-index 61c8177409cf..47304d5328f9 100644
---- a/drivers/media/platform/exynos4-is/fimc-m2m.c
-+++ b/drivers/media/platform/exynos4-is/fimc-m2m.c
-@@ -242,8 +242,8 @@ static int fimc_m2m_querycap(struct file *file, void *fh,
- 	return 0;
- }
- 
--static int fimc_m2m_enum_fmt_mplane(struct file *file, void *priv,
--				    struct v4l2_fmtdesc *f)
-+static int fimc_m2m_enum_fmt(struct file *file, void *priv,
-+			     struct v4l2_fmtdesc *f)
- {
- 	struct fimc_fmt *fmt;
- 
-@@ -533,8 +533,8 @@ static int fimc_m2m_s_selection(struct file *file, void *fh,
- 
- static const struct v4l2_ioctl_ops fimc_m2m_ioctl_ops = {
- 	.vidioc_querycap		= fimc_m2m_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane	= fimc_m2m_enum_fmt_mplane,
--	.vidioc_enum_fmt_vid_out_mplane	= fimc_m2m_enum_fmt_mplane,
-+	.vidioc_enum_fmt_vid_cap	= fimc_m2m_enum_fmt,
-+	.vidioc_enum_fmt_vid_out	= fimc_m2m_enum_fmt,
- 	.vidioc_g_fmt_vid_cap_mplane	= fimc_m2m_g_fmt_mplane,
- 	.vidioc_g_fmt_vid_out_mplane	= fimc_m2m_g_fmt_mplane,
- 	.vidioc_try_fmt_vid_cap_mplane	= fimc_m2m_try_fmt_mplane,
-diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-index f761e4d8bf2a..3b199662cb34 100644
---- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
-@@ -536,8 +536,8 @@ static int mtk_jpeg_qbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
- 
- static const struct v4l2_ioctl_ops mtk_jpeg_ioctl_ops = {
- 	.vidioc_querycap                = mtk_jpeg_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane = mtk_jpeg_enum_fmt_vid_cap,
--	.vidioc_enum_fmt_vid_out_mplane = mtk_jpeg_enum_fmt_vid_out,
-+	.vidioc_enum_fmt_vid_cap	= mtk_jpeg_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_out	= mtk_jpeg_enum_fmt_vid_out,
- 	.vidioc_try_fmt_vid_cap_mplane	= mtk_jpeg_try_fmt_vid_cap_mplane,
- 	.vidioc_try_fmt_vid_out_mplane	= mtk_jpeg_try_fmt_vid_out_mplane,
- 	.vidioc_g_fmt_vid_cap_mplane    = mtk_jpeg_g_fmt_vid_mplane,
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-index 7d15c06e9db9..365d3f92fd9e 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_m2m.c
-@@ -620,7 +620,7 @@ static int mtk_mdp_m2m_querycap(struct file *file, void *fh,
- 	return 0;
- }
- 
--static int mtk_mdp_enum_fmt_mplane(struct v4l2_fmtdesc *f, u32 type)
-+static int mtk_mdp_enum_fmt(struct v4l2_fmtdesc *f, u32 type)
- {
- 	const struct mtk_mdp_fmt *fmt;
- 
-@@ -633,16 +633,16 @@ static int mtk_mdp_enum_fmt_mplane(struct v4l2_fmtdesc *f, u32 type)
- 	return 0;
- }
- 
--static int mtk_mdp_m2m_enum_fmt_mplane_vid_cap(struct file *file, void *priv,
--				       struct v4l2_fmtdesc *f)
-+static int mtk_mdp_m2m_enum_fmt_vid_cap(struct file *file, void *priv,
-+					struct v4l2_fmtdesc *f)
- {
--	return mtk_mdp_enum_fmt_mplane(f, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
-+	return mtk_mdp_enum_fmt(f, V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE);
- }
- 
--static int mtk_mdp_m2m_enum_fmt_mplane_vid_out(struct file *file, void *priv,
--				       struct v4l2_fmtdesc *f)
-+static int mtk_mdp_m2m_enum_fmt_vid_out(struct file *file, void *priv,
-+					struct v4l2_fmtdesc *f)
- {
--	return mtk_mdp_enum_fmt_mplane(f, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
-+	return mtk_mdp_enum_fmt(f, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
- }
- 
- static int mtk_mdp_m2m_g_fmt_mplane(struct file *file, void *fh,
-@@ -935,8 +935,8 @@ static int mtk_mdp_m2m_s_selection(struct file *file, void *fh,
- 
- static const struct v4l2_ioctl_ops mtk_mdp_m2m_ioctl_ops = {
- 	.vidioc_querycap		= mtk_mdp_m2m_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane	= mtk_mdp_m2m_enum_fmt_mplane_vid_cap,
--	.vidioc_enum_fmt_vid_out_mplane	= mtk_mdp_m2m_enum_fmt_mplane_vid_out,
-+	.vidioc_enum_fmt_vid_cap	= mtk_mdp_m2m_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_out	= mtk_mdp_m2m_enum_fmt_vid_out,
- 	.vidioc_g_fmt_vid_cap_mplane	= mtk_mdp_m2m_g_fmt_mplane,
- 	.vidioc_g_fmt_vid_out_mplane	= mtk_mdp_m2m_g_fmt_mplane,
- 	.vidioc_try_fmt_vid_cap_mplane	= mtk_mdp_m2m_try_fmt_mplane,
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index d022c65bb34c..870580a29e0b 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -934,14 +934,14 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f, bool output_queue)
- 	return 0;
- }
- 
--static int vidioc_vdec_enum_fmt_vid_cap_mplane(struct file *file, void *pirv,
--					       struct v4l2_fmtdesc *f)
-+static int vidioc_vdec_enum_fmt_vid_cap(struct file *file, void *pirv,
-+					struct v4l2_fmtdesc *f)
- {
- 	return vidioc_enum_fmt(f, false);
- }
- 
--static int vidioc_vdec_enum_fmt_vid_out_mplane(struct file *file, void *priv,
--					       struct v4l2_fmtdesc *f)
-+static int vidioc_vdec_enum_fmt_vid_out(struct file *file, void *priv,
-+					struct v4l2_fmtdesc *f)
- {
- 	return vidioc_enum_fmt(f, true);
- }
-@@ -1444,8 +1444,8 @@ const struct v4l2_ioctl_ops mtk_vdec_ioctl_ops = {
- 
- 	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
- 
--	.vidioc_enum_fmt_vid_cap_mplane	= vidioc_vdec_enum_fmt_vid_cap_mplane,
--	.vidioc_enum_fmt_vid_out_mplane	= vidioc_vdec_enum_fmt_vid_out_mplane,
-+	.vidioc_enum_fmt_vid_cap	= vidioc_vdec_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_out	= vidioc_vdec_enum_fmt_vid_out,
- 	.vidioc_enum_framesizes	= vidioc_enum_framesizes,
- 
- 	.vidioc_querycap		= vidioc_vdec_querycap,
-diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-index c6b48b5925fb..87b14a2ec38a 100644
---- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-+++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
-@@ -207,14 +207,14 @@ static int vidioc_enum_framesizes(struct file *file, void *fh,
- 	return -EINVAL;
- }
- 
--static int vidioc_enum_fmt_vid_cap_mplane(struct file *file, void *pirv,
--					  struct v4l2_fmtdesc *f)
-+static int vidioc_enum_fmt_vid_cap(struct file *file, void *pirv,
-+				   struct v4l2_fmtdesc *f)
- {
- 	return vidioc_enum_fmt(f, false);
- }
- 
--static int vidioc_enum_fmt_vid_out_mplane(struct file *file, void *prov,
--					  struct v4l2_fmtdesc *f)
-+static int vidioc_enum_fmt_vid_out(struct file *file, void *prov,
-+				   struct v4l2_fmtdesc *f)
- {
- 	return vidioc_enum_fmt(f, true);
- }
-@@ -725,8 +725,8 @@ const struct v4l2_ioctl_ops mtk_venc_ioctl_ops = {
- 	.vidioc_dqbuf			= vidioc_venc_dqbuf,
- 
- 	.vidioc_querycap		= vidioc_venc_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_cap_mplane,
--	.vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_out_mplane,
-+	.vidioc_enum_fmt_vid_cap	= vidioc_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_out	= vidioc_enum_fmt_vid_out,
- 	.vidioc_enum_framesizes		= vidioc_enum_framesizes,
- 
- 	.vidioc_try_fmt_vid_cap_mplane	= vidioc_try_fmt_vid_cap_mplane,
-diff --git a/drivers/media/platform/qcom/camss/camss-video.c b/drivers/media/platform/qcom/camss/camss-video.c
-index 58aebe7114cd..1d50dfbbb762 100644
---- a/drivers/media/platform/qcom/camss/camss-video.c
-+++ b/drivers/media/platform/qcom/camss/camss-video.c
-@@ -703,7 +703,7 @@ static int video_s_input(struct file *file, void *fh, unsigned int input)
- 
- static const struct v4l2_ioctl_ops msm_vid_ioctl_ops = {
- 	.vidioc_querycap		= video_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane	= video_enum_fmt,
-+	.vidioc_enum_fmt_vid_cap	= video_enum_fmt,
- 	.vidioc_g_fmt_vid_cap_mplane	= video_g_fmt,
- 	.vidioc_s_fmt_vid_cap_mplane	= video_s_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane	= video_try_fmt,
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 282de21cf2e1..2a47b9b8c5bc 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -491,8 +491,8 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
- 
- static const struct v4l2_ioctl_ops vdec_ioctl_ops = {
- 	.vidioc_querycap = vdec_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane = vdec_enum_fmt,
--	.vidioc_enum_fmt_vid_out_mplane = vdec_enum_fmt,
-+	.vidioc_enum_fmt_vid_cap = vdec_enum_fmt,
-+	.vidioc_enum_fmt_vid_out = vdec_enum_fmt,
- 	.vidioc_s_fmt_vid_cap_mplane = vdec_s_fmt,
- 	.vidioc_s_fmt_vid_out_mplane = vdec_s_fmt,
- 	.vidioc_g_fmt_vid_cap_mplane = vdec_g_fmt,
-diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
-index 32cff294582f..406a47923996 100644
---- a/drivers/media/platform/qcom/venus/venc.c
-+++ b/drivers/media/platform/qcom/venus/venc.c
-@@ -616,8 +616,8 @@ static int venc_enum_frameintervals(struct file *file, void *fh,
- 
- static const struct v4l2_ioctl_ops venc_ioctl_ops = {
- 	.vidioc_querycap = venc_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane = venc_enum_fmt,
--	.vidioc_enum_fmt_vid_out_mplane = venc_enum_fmt,
-+	.vidioc_enum_fmt_vid_cap = venc_enum_fmt,
-+	.vidioc_enum_fmt_vid_out = venc_enum_fmt,
- 	.vidioc_s_fmt_vid_cap_mplane = venc_s_fmt,
- 	.vidioc_s_fmt_vid_out_mplane = venc_s_fmt,
- 	.vidioc_g_fmt_vid_cap_mplane = venc_g_fmt,
-diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
-index 6bda1eee9170..6e6471c37984 100644
---- a/drivers/media/platform/rcar_fdp1.c
-+++ b/drivers/media/platform/rcar_fdp1.c
-@@ -1730,8 +1730,8 @@ static const char * const fdp1_ctrl_deint_menu[] = {
- static const struct v4l2_ioctl_ops fdp1_ioctl_ops = {
- 	.vidioc_querycap	= fdp1_vidioc_querycap,
- 
--	.vidioc_enum_fmt_vid_cap_mplane = fdp1_enum_fmt_vid_cap,
--	.vidioc_enum_fmt_vid_out_mplane = fdp1_enum_fmt_vid_out,
-+	.vidioc_enum_fmt_vid_cap	= fdp1_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_out	= fdp1_enum_fmt_vid_out,
- 	.vidioc_g_fmt_vid_cap_mplane	= fdp1_g_fmt,
- 	.vidioc_g_fmt_vid_out_mplane	= fdp1_g_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane	= fdp1_try_fmt,
-diff --git a/drivers/media/platform/rcar_jpu.c b/drivers/media/platform/rcar_jpu.c
-index 1dfd2eb65920..a34f4e6b2f98 100644
---- a/drivers/media/platform/rcar_jpu.c
-+++ b/drivers/media/platform/rcar_jpu.c
-@@ -948,8 +948,8 @@ static int jpu_streamon(struct file *file, void *priv, enum v4l2_buf_type type)
- static const struct v4l2_ioctl_ops jpu_ioctl_ops = {
- 	.vidioc_querycap		= jpu_querycap,
- 
--	.vidioc_enum_fmt_vid_cap_mplane = jpu_enum_fmt_cap,
--	.vidioc_enum_fmt_vid_out_mplane = jpu_enum_fmt_out,
-+	.vidioc_enum_fmt_vid_cap	= jpu_enum_fmt_cap,
-+	.vidioc_enum_fmt_vid_out	= jpu_enum_fmt_out,
- 	.vidioc_g_fmt_vid_cap_mplane	= jpu_g_fmt,
- 	.vidioc_g_fmt_vid_out_mplane	= jpu_g_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane	= jpu_try_fmt,
-diff --git a/drivers/media/platform/renesas-ceu.c b/drivers/media/platform/renesas-ceu.c
-index 150196f7cf96..57d0c0f9fa4b 100644
---- a/drivers/media/platform/renesas-ceu.c
-+++ b/drivers/media/platform/renesas-ceu.c
-@@ -1339,7 +1339,7 @@ static int ceu_enum_frameintervals(struct file *file, void *fh,
- static const struct v4l2_ioctl_ops ceu_ioctl_ops = {
- 	.vidioc_querycap		= ceu_querycap,
- 
--	.vidioc_enum_fmt_vid_cap_mplane	= ceu_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_cap	= ceu_enum_fmt_vid_cap,
- 	.vidioc_try_fmt_vid_cap_mplane	= ceu_try_fmt_vid_cap,
- 	.vidioc_s_fmt_vid_cap_mplane	= ceu_s_fmt_vid_cap,
- 	.vidioc_g_fmt_vid_cap_mplane	= ceu_g_fmt_vid_cap,
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c b/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-index e111f9c47179..70ca829a31c2 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-@@ -313,14 +313,14 @@ static int vidioc_enum_fmt(struct file *file, struct v4l2_fmtdesc *f,
- 	return 0;
- }
- 
--static int vidioc_enum_fmt_vid_cap_mplane(struct file *file, void *pirv,
--							struct v4l2_fmtdesc *f)
-+static int vidioc_enum_fmt_vid_cap(struct file *file, void *pirv,
-+				   struct v4l2_fmtdesc *f)
- {
- 	return vidioc_enum_fmt(file, f, false);
- }
- 
--static int vidioc_enum_fmt_vid_out_mplane(struct file *file, void *priv,
--							struct v4l2_fmtdesc *f)
-+static int vidioc_enum_fmt_vid_out(struct file *file, void *priv,
-+				   struct v4l2_fmtdesc *f)
- {
- 	return vidioc_enum_fmt(file, f, true);
- }
-@@ -887,8 +887,8 @@ static int vidioc_subscribe_event(struct v4l2_fh *fh,
- /* v4l2_ioctl_ops */
- static const struct v4l2_ioctl_ops s5p_mfc_dec_ioctl_ops = {
- 	.vidioc_querycap = vidioc_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_cap_mplane,
--	.vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_out_mplane,
-+	.vidioc_enum_fmt_vid_cap = vidioc_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_out = vidioc_enum_fmt_vid_out,
- 	.vidioc_g_fmt_vid_cap_mplane = vidioc_g_fmt,
- 	.vidioc_g_fmt_vid_out_mplane = vidioc_g_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane = vidioc_try_fmt,
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-index 8fcf627dedfb..5eaf5d9533e2 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-@@ -1354,14 +1354,14 @@ static int vidioc_enum_fmt(struct file *file, struct v4l2_fmtdesc *f,
- 	return -EINVAL;
- }
- 
--static int vidioc_enum_fmt_vid_cap_mplane(struct file *file, void *pirv,
--					  struct v4l2_fmtdesc *f)
-+static int vidioc_enum_fmt_vid_cap(struct file *file, void *pirv,
-+				   struct v4l2_fmtdesc *f)
- {
- 	return vidioc_enum_fmt(file, f, false);
- }
- 
--static int vidioc_enum_fmt_vid_out_mplane(struct file *file, void *prov,
--					  struct v4l2_fmtdesc *f)
-+static int vidioc_enum_fmt_vid_out(struct file *file, void *prov,
-+				   struct v4l2_fmtdesc *f)
- {
- 	return vidioc_enum_fmt(file, f, true);
- }
-@@ -2343,8 +2343,8 @@ static int vidioc_subscribe_event(struct v4l2_fh *fh,
- 
- static const struct v4l2_ioctl_ops s5p_mfc_enc_ioctl_ops = {
- 	.vidioc_querycap = vidioc_querycap,
--	.vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_cap_mplane,
--	.vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_out_mplane,
-+	.vidioc_enum_fmt_vid_cap = vidioc_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_out = vidioc_enum_fmt_vid_out,
- 	.vidioc_g_fmt_vid_cap_mplane = vidioc_g_fmt,
- 	.vidioc_g_fmt_vid_out_mplane = vidioc_g_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane = vidioc_try_fmt,
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 207e7e76c048..ddfae9f4fbfa 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1973,12 +1973,12 @@ static const struct v4l2_ctrl_ops vpe_ctrl_ops = {
- static const struct v4l2_ioctl_ops vpe_ioctl_ops = {
- 	.vidioc_querycap		= vpe_querycap,
- 
--	.vidioc_enum_fmt_vid_cap_mplane	= vpe_enum_fmt,
-+	.vidioc_enum_fmt_vid_cap	= vpe_enum_fmt,
- 	.vidioc_g_fmt_vid_cap_mplane	= vpe_g_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane	= vpe_try_fmt,
- 	.vidioc_s_fmt_vid_cap_mplane	= vpe_s_fmt,
- 
--	.vidioc_enum_fmt_vid_out_mplane	= vpe_enum_fmt,
-+	.vidioc_enum_fmt_vid_out	= vpe_enum_fmt,
- 	.vidioc_g_fmt_vid_out_mplane	= vpe_g_fmt,
- 	.vidioc_try_fmt_vid_out_mplane	= vpe_try_fmt,
- 	.vidioc_s_fmt_vid_out_mplane	= vpe_s_fmt,
-diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
-index d7636fe9e174..fda726e43d60 100644
---- a/drivers/media/platform/vicodec/vicodec-core.c
-+++ b/drivers/media/platform/vicodec/vicodec-core.c
-@@ -1140,7 +1140,6 @@ static const struct v4l2_ioctl_ops vicodec_ioctl_ops = {
- 	.vidioc_try_fmt_vid_cap	= vidioc_try_fmt_vid_cap,
- 	.vidioc_s_fmt_vid_cap	= vidioc_s_fmt_vid_cap,
- 
--	.vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_cap,
- 	.vidioc_g_fmt_vid_cap_mplane	= vidioc_g_fmt_vid_cap,
- 	.vidioc_try_fmt_vid_cap_mplane	= vidioc_try_fmt_vid_cap,
- 	.vidioc_s_fmt_vid_cap_mplane	= vidioc_s_fmt_vid_cap,
-@@ -1150,7 +1149,6 @@ static const struct v4l2_ioctl_ops vicodec_ioctl_ops = {
- 	.vidioc_try_fmt_vid_out	= vidioc_try_fmt_vid_out,
- 	.vidioc_s_fmt_vid_out	= vidioc_s_fmt_vid_out,
- 
--	.vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_out,
- 	.vidioc_g_fmt_vid_out_mplane	= vidioc_g_fmt_vid_out,
- 	.vidioc_try_fmt_vid_out_mplane	= vidioc_try_fmt_vid_out,
- 	.vidioc_s_fmt_vid_out_mplane	= vidioc_s_fmt_vid_out,
-diff --git a/drivers/media/platform/vivid/vivid-core.c b/drivers/media/platform/vivid/vivid-core.c
-index 342e0e6c103b..345adde47789 100644
---- a/drivers/media/platform/vivid/vivid-core.c
-+++ b/drivers/media/platform/vivid/vivid-core.c
-@@ -500,20 +500,18 @@ static const struct v4l2_file_operations vivid_radio_fops = {
- static const struct v4l2_ioctl_ops vivid_ioctl_ops = {
- 	.vidioc_querycap		= vidioc_querycap,
- 
--	.vidioc_enum_fmt_vid_cap	= vidioc_enum_fmt_vid,
-+	.vidioc_enum_fmt_vid_cap	= vivid_enum_fmt_vid,
- 	.vidioc_g_fmt_vid_cap		= vidioc_g_fmt_vid_cap,
- 	.vidioc_try_fmt_vid_cap		= vidioc_try_fmt_vid_cap,
- 	.vidioc_s_fmt_vid_cap		= vidioc_s_fmt_vid_cap,
--	.vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_mplane,
- 	.vidioc_g_fmt_vid_cap_mplane	= vidioc_g_fmt_vid_cap_mplane,
- 	.vidioc_try_fmt_vid_cap_mplane	= vidioc_try_fmt_vid_cap_mplane,
- 	.vidioc_s_fmt_vid_cap_mplane	= vidioc_s_fmt_vid_cap_mplane,
- 
--	.vidioc_enum_fmt_vid_out	= vidioc_enum_fmt_vid,
-+	.vidioc_enum_fmt_vid_out	= vivid_enum_fmt_vid,
- 	.vidioc_g_fmt_vid_out		= vidioc_g_fmt_vid_out,
- 	.vidioc_try_fmt_vid_out		= vidioc_try_fmt_vid_out,
- 	.vidioc_s_fmt_vid_out		= vidioc_s_fmt_vid_out,
--	.vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_mplane,
- 	.vidioc_g_fmt_vid_out_mplane	= vidioc_g_fmt_vid_out_mplane,
- 	.vidioc_try_fmt_vid_out_mplane	= vidioc_try_fmt_vid_out_mplane,
- 	.vidioc_s_fmt_vid_out_mplane	= vidioc_s_fmt_vid_out_mplane,
-diff --git a/drivers/media/platform/vivid/vivid-vid-common.c b/drivers/media/platform/vivid/vivid-vid-common.c
-index 74b83bcc6119..9307ce1cdd16 100644
---- a/drivers/media/platform/vivid/vivid-vid-common.c
-+++ b/drivers/media/platform/vivid/vivid-vid-common.c
-@@ -797,26 +797,6 @@ int vivid_enum_fmt_vid(struct file *file, void  *priv,
- 	return 0;
- }
- 
--int vidioc_enum_fmt_vid_mplane(struct file *file, void  *priv,
--					struct v4l2_fmtdesc *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (!dev->multiplanar)
--		return -ENOTTY;
--	return vivid_enum_fmt_vid(file, priv, f);
--}
--
--int vidioc_enum_fmt_vid(struct file *file, void  *priv,
--					struct v4l2_fmtdesc *f)
--{
--	struct vivid_dev *dev = video_drvdata(file);
--
--	if (dev->multiplanar)
--		return -ENOTTY;
--	return vivid_enum_fmt_vid(file, priv, f);
--}
--
- int vidioc_g_std(struct file *file, void *priv, v4l2_std_id *id)
- {
- 	struct vivid_dev *dev = video_drvdata(file);
-diff --git a/drivers/media/platform/vivid/vivid-vid-common.h b/drivers/media/platform/vivid/vivid-vid-common.h
-index 29b6c0b40a1b..d908d9725283 100644
---- a/drivers/media/platform/vivid/vivid-vid-common.h
-+++ b/drivers/media/platform/vivid/vivid-vid-common.h
-@@ -28,8 +28,6 @@ void vivid_send_source_change(struct vivid_dev *dev, unsigned type);
- int vivid_vid_adjust_sel(unsigned flags, struct v4l2_rect *r);
- 
- int vivid_enum_fmt_vid(struct file *file, void  *priv, struct v4l2_fmtdesc *f);
--int vidioc_enum_fmt_vid_mplane(struct file *file, void  *priv, struct v4l2_fmtdesc *f);
--int vidioc_enum_fmt_vid(struct file *file, void  *priv, struct v4l2_fmtdesc *f);
- int vidioc_g_std(struct file *file, void *priv, v4l2_std_id *id);
- int vidioc_g_dv_timings(struct file *file, void *_fh, struct v4l2_dv_timings *timings);
- int vidioc_enum_dv_timings(struct file *file, void *_fh, struct v4l2_enum_dv_timings *timings);
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index d7528f82a66a..29946a2b2752 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -593,11 +593,9 @@ static void determine_valid_ioctls(struct video_device *vdev)
- 	if (is_vid || is_tch) {
- 		/* video and metadata specific ioctls */
- 		if ((is_rx && (ops->vidioc_enum_fmt_vid_cap ||
--			       ops->vidioc_enum_fmt_vid_cap_mplane ||
- 			       ops->vidioc_enum_fmt_vid_overlay ||
- 			       ops->vidioc_enum_fmt_meta_cap)) ||
- 		    (is_tx && (ops->vidioc_enum_fmt_vid_out ||
--			       ops->vidioc_enum_fmt_vid_out_mplane ||
- 			       ops->vidioc_enum_fmt_meta_out)))
- 			set_bit(_IOC_NR(VIDIOC_ENUM_FMT), valid_ioctls);
- 		if ((is_rx && (ops->vidioc_g_fmt_vid_cap ||
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index f6d663934648..97ba365218fb 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -1380,6 +1380,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
- static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
- 				struct file *file, void *fh, void *arg)
- {
-+	struct video_device *vdev = video_devdata(file);
- 	struct v4l2_fmtdesc *p = arg;
- 	int ret = check_fmt(file, p->type);
- 
-@@ -1389,30 +1390,30 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
- 
- 	switch (p->type) {
- 	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
-+	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
-+		if (!!(vdev->device_caps & V4L2_CAP_VIDEO_CAPTURE_MPLANE) !=
-+		    (p->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE))
-+			break;
-+
- 		if (unlikely(!ops->vidioc_enum_fmt_vid_cap))
- 			break;
- 		ret = ops->vidioc_enum_fmt_vid_cap(file, fh, arg);
- 		break;
--	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
--		if (unlikely(!ops->vidioc_enum_fmt_vid_cap_mplane))
--			break;
--		ret = ops->vidioc_enum_fmt_vid_cap_mplane(file, fh, arg);
--		break;
- 	case V4L2_BUF_TYPE_VIDEO_OVERLAY:
- 		if (unlikely(!ops->vidioc_enum_fmt_vid_overlay))
- 			break;
- 		ret = ops->vidioc_enum_fmt_vid_overlay(file, fh, arg);
- 		break;
- 	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
-+	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
-+		if (!!(vdev->device_caps & V4L2_CAP_VIDEO_OUTPUT_MPLANE) !=
-+		    (p->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE))
-+			break;
-+
- 		if (unlikely(!ops->vidioc_enum_fmt_vid_out))
- 			break;
- 		ret = ops->vidioc_enum_fmt_vid_out(file, fh, arg);
- 		break;
--	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
--		if (unlikely(!ops->vidioc_enum_fmt_vid_out_mplane))
--			break;
--		ret = ops->vidioc_enum_fmt_vid_out_mplane(file, fh, arg);
--		break;
- 	case V4L2_BUF_TYPE_SDR_CAPTURE:
- 		if (unlikely(!ops->vidioc_enum_fmt_sdr_cap))
- 			break;
-diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
-index 9c0352b193a7..92240baddca4 100644
---- a/drivers/staging/media/ipu3/ipu3-v4l2.c
-+++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
-@@ -959,12 +959,12 @@ static const struct v4l2_file_operations imgu_v4l2_fops = {
- static const struct v4l2_ioctl_ops imgu_v4l2_ioctl_ops = {
- 	.vidioc_querycap = imgu_vidioc_querycap,
- 
--	.vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_cap,
-+	.vidioc_enum_fmt_vid_cap = vidioc_enum_fmt_vid_cap,
- 	.vidioc_g_fmt_vid_cap_mplane = imgu_vidioc_g_fmt,
- 	.vidioc_s_fmt_vid_cap_mplane = imgu_vidioc_s_fmt,
- 	.vidioc_try_fmt_vid_cap_mplane = imgu_vidioc_try_fmt,
- 
--	.vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_out,
-+	.vidioc_enum_fmt_vid_out = vidioc_enum_fmt_vid_out,
- 	.vidioc_g_fmt_vid_out_mplane = imgu_vidioc_g_fmt,
- 	.vidioc_s_fmt_vid_out_mplane = imgu_vidioc_s_fmt,
- 	.vidioc_try_fmt_vid_out_mplane = imgu_vidioc_try_fmt,
-diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
-index ab0fb2053620..49582b9d2513 100644
---- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
-+++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
-@@ -189,8 +189,8 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
- 	return 0;
- }
- 
--static int vidioc_enum_fmt_vid_cap_mplane(struct file *file, void *priv,
--					  struct v4l2_fmtdesc *f)
-+static int vidioc_enum_fmt_vid_cap(struct file *file, void *priv,
-+				   struct v4l2_fmtdesc *f)
- {
- 	struct rockchip_vpu_dev *dev = video_drvdata(file);
- 	const struct rockchip_vpu_fmt *fmt;
-@@ -213,8 +213,8 @@ static int vidioc_enum_fmt_vid_cap_mplane(struct file *file, void *priv,
- 	return -EINVAL;
- }
- 
--static int vidioc_enum_fmt_vid_out_mplane(struct file *file, void *priv,
--					  struct v4l2_fmtdesc *f)
-+static int vidioc_enum_fmt_vid_out(struct file *file, void *priv,
-+				   struct v4l2_fmtdesc *f)
- {
- 	struct rockchip_vpu_dev *dev = video_drvdata(file);
- 	const struct rockchip_vpu_fmt *formats;
-@@ -493,8 +493,8 @@ const struct v4l2_ioctl_ops rockchip_vpu_enc_ioctl_ops = {
- 	.vidioc_s_fmt_vid_cap_mplane = vidioc_s_fmt_cap_mplane,
- 	.vidioc_g_fmt_vid_out_mplane = vidioc_g_fmt_out_mplane,
- 	.vidioc_g_fmt_vid_cap_mplane = vidioc_g_fmt_cap_mplane,
--	.vidioc_enum_fmt_vid_out_mplane = vidioc_enum_fmt_vid_out_mplane,
--	.vidioc_enum_fmt_vid_cap_mplane = vidioc_enum_fmt_vid_cap_mplane,
-+	.vidioc_enum_fmt_vid_out = vidioc_enum_fmt_vid_out,
-+	.vidioc_enum_fmt_vid_cap = vidioc_enum_fmt_vid_cap,
- 
- 	.vidioc_reqbufs = v4l2_m2m_ioctl_reqbufs,
- 	.vidioc_querybuf = v4l2_m2m_ioctl_querybuf,
-diff --git a/include/media/v4l2-ioctl.h b/include/media/v4l2-ioctl.h
-index 8533ece5026e..400f2e46c108 100644
---- a/include/media/v4l2-ioctl.h
-+++ b/include/media/v4l2-ioctl.h
-@@ -26,19 +26,13 @@ struct v4l2_fh;
-  *	:ref:`VIDIOC_QUERYCAP <vidioc_querycap>` ioctl
-  * @vidioc_enum_fmt_vid_cap: pointer to the function that implements
-  *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-- *	for video capture in single plane mode
-+ *	for video capture in single and multi plane mode
-  * @vidioc_enum_fmt_vid_overlay: pointer to the function that implements
-  *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-  *	for video overlay
-  * @vidioc_enum_fmt_vid_out: pointer to the function that implements
-  *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-- *	for video output in single plane mode
-- * @vidioc_enum_fmt_vid_cap_mplane: pointer to the function that implements
-- *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-- *	for video capture in multiplane mode
-- * @vidioc_enum_fmt_vid_out_mplane: pointer to the function that implements
-- *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-- *	for video output in multiplane mode
-+ *	for video output in single and multi plane mode
-  * @vidioc_enum_fmt_sdr_cap: pointer to the function that implements
-  *	:ref:`VIDIOC_ENUM_FMT <vidioc_enum_fmt>` ioctl logic
-  *	for Software Defined Radio capture
-@@ -313,10 +307,6 @@ struct v4l2_ioctl_ops {
- 					   struct v4l2_fmtdesc *f);
- 	int (*vidioc_enum_fmt_vid_out)(struct file *file, void *fh,
- 				       struct v4l2_fmtdesc *f);
--	int (*vidioc_enum_fmt_vid_cap_mplane)(struct file *file, void *fh,
--					      struct v4l2_fmtdesc *f);
--	int (*vidioc_enum_fmt_vid_out_mplane)(struct file *file, void *fh,
--					      struct v4l2_fmtdesc *f);
- 	int (*vidioc_enum_fmt_sdr_cap)(struct file *file, void *fh,
- 				       struct v4l2_fmtdesc *f);
- 	int (*vidioc_enum_fmt_sdr_out)(struct file *file, void *fh,
--- 
-2.20.1
+Don't use strncpy, strcpy or strlcpy. Only use strscpy. This should make the code
+safer when copying strings.
 
+Please check this patch and replace with strscpy where needed.
+
+> +	usb_make_path(dvbdev->udev, cap->bus_info, sizeof(cap->bus_info));
+> +
+> +	cap->capabilities = videocaps | radiocaps | V4L2_CAP_DEVICE_CAPS;
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_v_enum_fmt_vid_cap(struct file *file, void *fh,
+> +					   struct v4l2_fmtdesc *f)
+> +{
+> +	if (f->index != 0)
+> +		return -EINVAL;
+> +
+> +	f->pixelformat = V4L2_PIX_FMT_UYVY;
+> +	f->flags = 0;
+
+This last line can be dropped (it's already zeroed for you).
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_g_fmt_vid_cap(struct file *file, void *fh,
+> +				      struct v4l2_format *f)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +
+> +	f->fmt.pix.width = cxdev->width;
+> +	f->fmt.pix.height = cxdev->height;
+> +	f->fmt.pix.pixelformat = V4L2_PIX_FMT_UYVY;
+> +	f->fmt.pix.field = V4L2_FIELD_SEQ_TB;
+> +	f->fmt.pix.bytesperline = cxdev->width * 2;
+> +	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
+> +	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
+> +	f->fmt.pix.priv = 0;
+
+This last line can be dropped.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_try_s_fmt_vid_cap(struct file *file,
+> +					  struct v4l2_format *f,
+> +					  bool isset)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	struct v4l2_subdev_format subfmt;
+> +	int ret;
+> +
+> +	if (isset && (vb2_start_streaming_called(&cxdev->videoqueue) ||
+> +		      cxdev->stop_streaming))
+
+This should be:
+
+	if (isset && vb2_is_busy(&cxdev->videoqueue))
+
+As long as buffers are allocated you can no longer change the format.
+
+> +		return -EBUSY;
+> +
+> +	memset(&subfmt, 0, sizeof(subfmt));
+> +	subfmt.which = isset ? V4L2_SUBDEV_FORMAT_ACTIVE :
+> +		V4L2_SUBDEV_FORMAT_TRY;
+> +	subfmt.format.width = f->fmt.pix.width & ~1;
+> +	subfmt.format.height = f->fmt.pix.height & ~1;
+> +	subfmt.format.code = MEDIA_BUS_FMT_FIXED;
+> +	subfmt.format.field = V4L2_FIELD_SEQ_TB;
+
+Why FIELD_SEQ_TB? If memory serves the cx25840 always uses FIELD_INTERLACED.
+
+> +	subfmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL, &subfmt);
+> +	if (ret != 0) {
+> +		if (ret != -ERANGE)
+> +			return ret;
+> +
+> +		/* try some common formats */
+> +		subfmt.format.width = 720;
+> +		subfmt.format.height = 576;
+> +		ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL,
+> +				       &subfmt);
+> +		if (ret != 0) {
+> +			if (ret != -ERANGE)
+> +				return ret;
+> +
+> +			subfmt.format.width = 640;
+> +			subfmt.format.height = 480;
+> +			ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt,
+> +					       NULL, &subfmt);
+> +			if (ret != 0)
+> +				return ret;
+> +		}
+
+Why these fallbacks? Is this really needed?
+
+> +	}
+> +
+> +	f->fmt.pix.width = subfmt.format.width;
+> +	f->fmt.pix.height = subfmt.format.height;
+> +	f->fmt.pix.pixelformat = V4L2_PIX_FMT_UYVY;
+> +	f->fmt.pix.field = V4L2_FIELD_SEQ_TB;
+> +	f->fmt.pix.bytesperline = f->fmt.pix.width * 2;
+> +	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline * f->fmt.pix.height;
+> +	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
+> +	f->fmt.pix.priv = 0;
+
+This last line can be dropped.
+
+> +
+> +	if (isset) {
+> +		cxdev->width = f->fmt.pix.width;
+> +		cxdev->height = f->fmt.pix.height;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_try_fmt_vid_cap(struct file *file, void *fh,
+> +					struct v4l2_format *f)
+> +{
+> +	return cxusb_medion_try_s_fmt_vid_cap(file, f, false);
+> +}
+> +
+> +static int cxusb_medion_s_fmt_vid_cap(struct file *file, void *fh,
+> +				      struct v4l2_format *f)
+> +{
+> +	return cxusb_medion_try_s_fmt_vid_cap(file, f, true);
+> +}
+> +
+> +static const struct {
+> +	struct v4l2_input input;
+> +	u32 inputcfg;
+> +} cxusb_medion_inputs[] = {
+> +	{ .input = { .name = "TV tuner", .type = V4L2_INPUT_TYPE_TUNER,
+> +		     .tuner = 0, .std = V4L2_STD_PAL },
+> +	  .inputcfg = CX25840_COMPOSITE2, },
+> +
+> +	{  .input = { .name = "Composite", .type = V4L2_INPUT_TYPE_CAMERA,
+> +		     .std = V4L2_STD_ALL },
+> +	   .inputcfg = CX25840_COMPOSITE1, },
+> +
+> +	{  .input = { .name = "S-Video", .type = V4L2_INPUT_TYPE_CAMERA,
+> +		      .std = V4L2_STD_ALL },
+> +	   .inputcfg = CX25840_SVIDEO_LUMA3 | CX25840_SVIDEO_CHROMA4 }
+> +};
+> +
+> +#define CXUSB_INPUT_CNT ARRAY_SIZE(cxusb_medion_inputs)
+> +
+> +static int cxusb_medion_enum_input(struct file *file, void *fh,
+> +				   struct v4l2_input *inp)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	u32 index = inp->index;
+> +
+> +	if (index >= CXUSB_INPUT_CNT)
+> +		return -EINVAL;
+> +
+> +	*inp = cxusb_medion_inputs[index].input;
+> +	inp->index = index;
+> +	inp->capabilities |= V4L2_IN_CAP_STD;
+> +
+> +	if (index == cxdev->input) {
+> +		int ret;
+> +		u32 status = 0;
+> +
+> +		ret = v4l2_subdev_call(cxdev->cx25840, video, g_input_status,
+> +				       &status);
+> +		if (ret != 0)
+> +			dev_warn(&dvbdev->udev->dev,
+> +				 "cx25840 input status query failed (%d)\n",
+> +				 ret);
+> +		else
+> +			inp->status = status;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_g_input(struct file *file, void *fh,
+> +				unsigned int *i)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +
+> +	*i = cxdev->input;
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_s_input(struct file *file, void *fh,
+> +				unsigned int i)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	int ret;
+> +
+> +	if (i >= CXUSB_INPUT_CNT)
+> +		return -EINVAL;
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, video, s_routing,
+> +			       cxusb_medion_inputs[i].inputcfg, 0, 0);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	cxdev->input = i;
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_g_tuner(struct file *file, void *fh,
+> +				struct v4l2_tuner *tuner)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	struct video_device *vdev = video_devdata(file);
+> +	int ret;
+> +
+> +	if (tuner->index != 0)
+> +		return -EINVAL;
+> +
+> +	if (vdev->vfl_type == VFL_TYPE_GRABBER)
+> +		tuner->type = V4L2_TUNER_ANALOG_TV;
+> +	else
+> +		tuner->type = V4L2_TUNER_RADIO;
+> +
+> +	tuner->capability = 0;
+> +	tuner->afc = 0;
+> +
+> +	/*
+> +	 * fills:
+> +	 * always: capability (static), rangelow (static), rangehigh (static)
+> +	 * radio mode: afc (may fail silently), rxsubchans (static), audmode
+> +	 */
+> +	ret = v4l2_subdev_call(cxdev->tda9887, tuner, g_tuner, tuner);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * fills:
+> +	 * always: capability (static), rangelow (static), rangehigh (static)
+> +	 * radio mode: rxsubchans (always stereo), audmode,
+> +	 * signal (might be wrong)
+> +	 */
+> +	ret = v4l2_subdev_call(cxdev->tuner, tuner, g_tuner, tuner);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	tuner->signal = 0;
+> +
+> +	/*
+> +	 * fills: TV mode: capability, rxsubchans, audmode, signal
+> +	 */
+> +	ret = v4l2_subdev_call(cxdev->cx25840, tuner, g_tuner, tuner);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	if (vdev->vfl_type == VFL_TYPE_GRABBER)
+> +		strcpy(tuner->name, "TV tuner");
+> +	else
+> +		strcpy(tuner->name, "Radio tuner");
+> +
+> +	memset(tuner->reserved, 0, sizeof(tuner->reserved));
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_s_tuner(struct file *file, void *fh,
+> +				const struct v4l2_tuner *tuner)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	struct video_device *vdev = video_devdata(file);
+> +	int ret;
+> +
+> +	if (tuner->index != 0)
+> +		return -EINVAL;
+> +
+> +	ret = v4l2_subdev_call(cxdev->tda9887, tuner, s_tuner, tuner);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	ret = v4l2_subdev_call(cxdev->tuner, tuner, s_tuner, tuner);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * make sure that cx25840 is in a correct TV / radio mode,
+> +	 * since calls above may have changed it for tuner / IF demod
+> +	 */
+> +	if (vdev->vfl_type == VFL_TYPE_GRABBER)
+> +		v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
+> +	else
+> +		v4l2_subdev_call(cxdev->cx25840, tuner, s_radio);
+> +
+> +	return v4l2_subdev_call(cxdev->cx25840, tuner, s_tuner, tuner);
+> +}
+> +
+> +static int cxusb_medion_g_frequency(struct file *file, void *fh,
+> +				    struct v4l2_frequency *freq)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +
+> +	if (freq->tuner != 0)
+> +		return -EINVAL;
+> +
+> +	return v4l2_subdev_call(cxdev->tuner, tuner, g_frequency, freq);
+> +}
+> +
+> +static int cxusb_medion_s_frequency(struct file *file, void *fh,
+> +				    const struct v4l2_frequency *freq)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	struct video_device *vdev = video_devdata(file);
+> +	int ret;
+> +
+> +	if (freq->tuner != 0)
+> +		return -EINVAL;
+> +
+> +	ret = v4l2_subdev_call(cxdev->tda9887, tuner, s_frequency, freq);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	ret = v4l2_subdev_call(cxdev->tuner, tuner, s_frequency, freq);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	/*
+> +	 * make sure that cx25840 is in a correct TV / radio mode,
+> +	 * since calls above may have changed it for tuner / IF demod
+> +	 */
+> +	if (vdev->vfl_type == VFL_TYPE_GRABBER)
+> +		v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
+> +	else
+> +		v4l2_subdev_call(cxdev->cx25840, tuner, s_radio);
+> +
+> +	return v4l2_subdev_call(cxdev->cx25840, tuner, s_frequency, freq);
+> +}
+> +
+> +static int cxusb_medion_g_std(struct file *file, void *fh,
+> +			      v4l2_std_id *norm)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	int ret;
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, video, g_std, norm);
+> +	if (ret != 0) {
+> +		cxusb_vprintk(dvbdev, OPS, "cannot get standard for input %u\n",
+> +			      (unsigned int)cxdev->input);
+> +
+> +		return ret;
+> +	}
+> +
+> +	cxusb_vprintk(dvbdev, OPS,
+> +		      "current standard for input %u is %lx\n",
+> +		      (unsigned int)cxdev->input,
+> +		      (unsigned long)*norm);
+> +
+> +	if (cxdev->input == 0)
+> +		/*
+> +		 * make sure we don't have improper std bits set
+> +		 * for TV tuner (could happen when no signal was
+> +		 * present yet after reset)
+> +		 */
+> +		*norm &= V4L2_STD_PAL;
+> +
+> +	if (*norm == V4L2_STD_UNKNOWN)
+> +		return -ENODATA;
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_s_std(struct file *file, void *fh,
+> +			      v4l2_std_id norm)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	int ret;
+> +
+> +	cxusb_vprintk(dvbdev, OPS,
+> +		      "trying to set standard for input %u to %lx\n",
+> +		      (unsigned int)cxdev->input,
+> +		      (unsigned long)norm);
+> +
+> +	/* on composite or S-Video any std is acceptable */
+> +	if (cxdev->input != 0) {
+> +		ret = v4l2_subdev_call(cxdev->cx25840, video, s_std, norm);
+> +		if (ret)
+> +			return ret;
+> +
+> +		goto ret_savenorm;
+> +	}
+> +
+> +	/* TV tuner is only able to demodulate PAL */
+> +	if ((norm & ~V4L2_STD_PAL) != 0)
+> +		return -EINVAL;
+> +
+> +	/* no autodetection support */
+> +	if (norm == 0)
+> +		return -EINVAL;
+> +
+> +	ret = v4l2_subdev_call(cxdev->tda9887, video, s_std, norm);
+> +	if (ret != 0) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"tda9887 norm setup failed (%d)\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = v4l2_subdev_call(cxdev->tuner, video, s_std, norm);
+> +	if (ret != 0) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"tuner norm setup failed (%d)\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, video, s_std, norm);
+> +	if (ret != 0) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"cx25840 norm setup failed (%d)\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +ret_savenorm:
+> +	cxdev->norm = norm;
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_log_status(struct file *file, void *fh)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +
+> +	v4l2_device_call_all(&cxdev->v4l2dev, 0, core, log_status);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_ioctl_ops cxusb_video_ioctl = {
+> +	.vidioc_querycap = cxusb_medion_v_querycap,
+> +	.vidioc_enum_fmt_vid_cap = cxusb_medion_v_enum_fmt_vid_cap,
+> +	.vidioc_g_fmt_vid_cap = cxusb_medion_g_fmt_vid_cap,
+> +	.vidioc_s_fmt_vid_cap = cxusb_medion_s_fmt_vid_cap,
+> +	.vidioc_try_fmt_vid_cap = cxusb_medion_try_fmt_vid_cap,
+> +	.vidioc_enum_input = cxusb_medion_enum_input,
+> +	.vidioc_g_input = cxusb_medion_g_input,
+> +	.vidioc_s_input = cxusb_medion_s_input,
+> +	.vidioc_g_tuner = cxusb_medion_g_tuner,
+> +	.vidioc_s_tuner = cxusb_medion_s_tuner,
+> +	.vidioc_g_frequency = cxusb_medion_g_frequency,
+> +	.vidioc_s_frequency = cxusb_medion_s_frequency,
+> +	.vidioc_g_std = cxusb_medion_g_std,
+> +	.vidioc_s_std = cxusb_medion_s_std,
+> +	.vidioc_log_status = cxusb_medion_log_status,
+> +	.vidioc_reqbufs = vb2_ioctl_reqbufs,
+> +	.vidioc_querybuf = vb2_ioctl_querybuf,
+> +	.vidioc_qbuf = vb2_ioctl_qbuf,
+> +	.vidioc_dqbuf = vb2_ioctl_dqbuf,
+> +	.vidioc_create_bufs = vb2_ioctl_create_bufs,
+> +	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
+> +	.vidioc_streamon = vb2_ioctl_streamon,
+> +	.vidioc_streamoff = vb2_ioctl_streamoff
+> +};
+> +
+> +static const struct v4l2_ioctl_ops cxusb_radio_ioctl = {
+> +	.vidioc_querycap = cxusb_medion_v_querycap,
+> +	.vidioc_g_tuner = cxusb_medion_g_tuner,
+> +	.vidioc_s_tuner = cxusb_medion_s_tuner,
+> +	.vidioc_g_frequency = cxusb_medion_g_frequency,
+> +	.vidioc_s_frequency = cxusb_medion_s_frequency,
+> +	.vidioc_log_status = cxusb_medion_log_status
+> +};
+> +
+> +/*
+> + * in principle, this should be const, but s_io_pin_config is declared
+> + * to take non-const, and gcc complains
+> + */
+> +static struct v4l2_subdev_io_pin_config cxusub_medion_pin_config[] = {
+> +	{ .pin = CX25840_PIN_DVALID_PRGM0, .function = CX25840_PAD_DEFAULT,
+> +	  .strength = CX25840_PIN_DRIVE_MEDIUM },
+> +	{ .pin = CX25840_PIN_PLL_CLK_PRGM7, .function = CX25840_PAD_AUX_PLL },
+> +	{ .pin = CX25840_PIN_HRESET_PRGM2, .function = CX25840_PAD_ACTIVE,
+> +	  .strength = CX25840_PIN_DRIVE_MEDIUM }
+> +};
+> +
+> +int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
+> +{
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	u8 tuner_analog_msg_data[] = { 0x9c, 0x60, 0x85, 0x54 };
+> +	struct i2c_msg tuner_analog_msg = { .addr = 0x61, .flags = 0,
+> +					    .buf = tuner_analog_msg_data,
+> +					    .len =
+> +					    sizeof(tuner_analog_msg_data) };
+> +	struct v4l2_subdev_format subfmt;
+> +	int ret;
+> +
+> +	/* switch tuner to analog mode so IF demod will become accessible */
+> +	ret = i2c_transfer(&dvbdev->i2c_adap, &tuner_analog_msg, 1);
+> +	if (ret != 1)
+> +		dev_warn(&dvbdev->udev->dev,
+> +			 "tuner analog switch failed (%d)\n", ret);
+> +
+> +	/*
+> +	 * cx25840 might have lost power during mode switching so we need
+> +	 * to set it again
+> +	 */
+> +	ret = v4l2_subdev_call(cxdev->cx25840, core, reset, 0);
+> +	if (ret != 0)
+> +		dev_warn(&dvbdev->udev->dev,
+> +			 "cx25840 reset failed (%d)\n", ret);
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, video, s_routing,
+> +			       CX25840_COMPOSITE1, 0, 0);
+> +	if (ret != 0)
+> +		dev_warn(&dvbdev->udev->dev,
+> +			 "cx25840 initial input setting failed (%d)\n", ret);
+> +
+> +	/* composite */
+> +	cxdev->input = 1;
+> +	cxdev->norm = 0;
+> +
+> +	/* TODO: setup audio samples insertion */
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, core, s_io_pin_config,
+> +			       sizeof(cxusub_medion_pin_config) /
+> +			       sizeof(cxusub_medion_pin_config[0]),
+> +			       cxusub_medion_pin_config);
+> +	if (ret != 0)
+> +		dev_warn(&dvbdev->udev->dev,
+> +			"cx25840 pin config failed (%d)\n", ret);
+> +
+> +	/* make sure that we aren't in radio mode */
+> +	v4l2_subdev_call(cxdev->tda9887, video, s_std, V4L2_STD_PAL);
+> +	v4l2_subdev_call(cxdev->tuner, video, s_std, V4L2_STD_PAL);
+> +	v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
+> +
+> +	memset(&subfmt, 0, sizeof(subfmt));
+> +	subfmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+> +	subfmt.format.width = cxdev->width;
+> +	subfmt.format.height = cxdev->height;
+> +	subfmt.format.code = MEDIA_BUS_FMT_FIXED;
+> +	subfmt.format.field = V4L2_FIELD_SEQ_TB;
+> +	subfmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
+> +
+> +	ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL, &subfmt);
+> +	if (ret != 0) {
+> +		subfmt.format.width = 640;
+> +		subfmt.format.height = 480;
+
+Why the fallback to 640x480?
+
+> +		ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL,
+> +				       &subfmt);
+> +		if (ret != 0)
+> +			dev_warn(&dvbdev->udev->dev,
+> +				 "cx25840 format set failed (%d)\n", ret);
+> +	}
+> +
+> +	if (ret == 0) {
+> +		cxdev->width = subfmt.format.width;
+> +		cxdev->height = subfmt.format.height;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_videoradio_open(struct file *f)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_drvdata(f);
+> +	int ret;
+> +
+> +	/*
+> +	 * no locking needed since this call only modifies analog
+> +	 * state if there are no other analog handles currenly
+> +	 * opened so ops done via them cannot create a conflict
+> +	 */
+> +	ret = cxusb_medion_get(dvbdev, CXUSB_OPEN_ANALOG);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	ret = v4l2_fh_open(f);
+> +	if (ret != 0)
+> +		goto ret_release;
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "got open\n");
+> +
+> +	return 0;
+> +
+> +ret_release:
+> +	cxusb_medion_put(dvbdev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int cxusb_videoradio_release(struct file *f)
+> +{
+> +	struct video_device *vdev = video_devdata(f);
+> +	struct dvb_usb_device *dvbdev = video_drvdata(f);
+> +	int ret;
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "got release\n");
+> +
+> +	if (vdev->vfl_type == VFL_TYPE_GRABBER)
+> +		ret = vb2_fop_release(f);
+> +	else
+> +		ret = v4l2_fh_release(f);
+> +
+> +	cxusb_medion_put(dvbdev);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct v4l2_file_operations cxusb_video_fops = {
+> +	.owner = THIS_MODULE,
+> +	.read = vb2_fop_read,
+> +	.poll = vb2_fop_poll,
+> +	.unlocked_ioctl = video_ioctl2,
+> +	.mmap = vb2_fop_mmap,
+> +	.open = cxusb_videoradio_open,
+> +	.release = cxusb_videoradio_release
+> +};
+> +
+> +static const struct v4l2_file_operations cxusb_radio_fops = {
+> +	.owner = THIS_MODULE,
+> +	.unlocked_ioctl = video_ioctl2,
+> +	.open = cxusb_videoradio_open,
+> +	.release = cxusb_videoradio_release
+> +};
+> +
+> +static void cxusb_medion_v4l2_release(struct v4l2_device *v4l2_dev)
+> +{
+> +	struct cxusb_medion_dev *cxdev =
+> +		container_of(v4l2_dev, struct cxusb_medion_dev, v4l2dev);
+> +	struct dvb_usb_device *dvbdev = cxdev->dvbdev;
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "v4l2 device release\n");
+> +
+> +	v4l2_device_unregister(&cxdev->v4l2dev);
+> +
+> +	mutex_destroy(&cxdev->dev_lock);
+> +
+> +	while (completion_done(&cxdev->v4l2_release))
+> +		schedule();
+> +
+> +	complete(&cxdev->v4l2_release);
+> +}
+> +
+> +static void cxusb_medion_videodev_release(struct video_device *vdev)
+> +{
+> +	struct dvb_usb_device *dvbdev = video_get_drvdata(vdev);
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "video device release\n");
+> +
+> +	vb2_queue_release(vdev->queue);
+> +
+> +	video_device_release(vdev);
+> +}
+> +
+> +static int cxusb_medion_register_analog_video(struct dvb_usb_device *dvbdev)
+> +{
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	int ret;
+> +
+> +	cxdev->videoqueue.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+> +	cxdev->videoqueue.io_modes = VB2_MMAP | VB2_USERPTR | VB2_READ;
+
+Please add VB2_DMABUF as well.
+
+> +	cxdev->videoqueue.ops = &cxdev_video_qops;
+> +	cxdev->videoqueue.mem_ops = &vb2_vmalloc_memops;
+> +	cxdev->videoqueue.drv_priv = dvbdev;
+> +	cxdev->videoqueue.buf_struct_size =
+> +		sizeof(struct cxusb_medion_vbuffer);
+> +	cxdev->videoqueue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+> +	cxdev->videoqueue.min_buffers_needed = 6;
+> +	cxdev->videoqueue.lock = &cxdev->dev_lock;
+> +
+> +	ret = vb2_queue_init(&cxdev->videoqueue);
+> +	if (ret) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"video queue init failed, ret = %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	cxdev->videodev = video_device_alloc();
+> +	if (cxdev->videodev == NULL) {
+> +		dev_err(&dvbdev->udev->dev, "video device alloc failed\n");
+> +		ret = -ENOMEM;
+> +		goto ret_qrelease;
+> +	}
+> +
+> +	cxdev->videodev->device_caps = videocaps;
+> +	cxdev->videodev->fops = &cxusb_video_fops;
+> +	cxdev->videodev->v4l2_dev = &cxdev->v4l2dev;
+> +	cxdev->videodev->queue = &cxdev->videoqueue;
+> +	strcpy(cxdev->videodev->name, "cxusb");
+> +	cxdev->videodev->vfl_dir = VFL_DIR_RX;
+> +	cxdev->videodev->ioctl_ops = &cxusb_video_ioctl;
+> +	cxdev->videodev->tvnorms = V4L2_STD_ALL;
+> +	cxdev->videodev->release = cxusb_medion_videodev_release;
+> +	cxdev->videodev->lock = &cxdev->dev_lock;
+> +	video_set_drvdata(cxdev->videodev, dvbdev);
+> +
+> +	ret = video_register_device(cxdev->videodev, VFL_TYPE_GRABBER, -1);
+> +	if (ret) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"video device register failed, ret = %d\n", ret);
+> +		goto ret_vrelease;
+> +	}
+> +
+> +	return 0;
+> +
+> +ret_vrelease:
+> +	video_device_release(cxdev->videodev);
+> +
+> +ret_qrelease:
+> +	vb2_queue_release(&cxdev->videoqueue);
+> +
+> +	return ret;
+> +}
+> +
+> +static int cxusb_medion_register_analog_radio(struct dvb_usb_device *dvbdev)
+> +{
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	int ret;
+> +
+> +	cxdev->radiodev = video_device_alloc();
+> +	if (cxdev->radiodev == NULL) {
+> +		dev_err(&dvbdev->udev->dev, "radio device alloc failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	cxdev->radiodev->device_caps = radiocaps;
+> +	cxdev->radiodev->fops = &cxusb_radio_fops;
+> +	cxdev->radiodev->v4l2_dev = &cxdev->v4l2dev;
+> +	strcpy(cxdev->radiodev->name, "cxusb");
+> +	cxdev->radiodev->vfl_dir = VFL_DIR_RX;
+> +	cxdev->radiodev->ioctl_ops = &cxusb_radio_ioctl;
+> +	cxdev->radiodev->release = video_device_release;
+> +	cxdev->radiodev->lock = &cxdev->dev_lock;
+> +	video_set_drvdata(cxdev->radiodev, dvbdev);
+> +
+> +	ret = video_register_device(cxdev->radiodev, VFL_TYPE_RADIO, -1);
+> +	if (ret) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"radio device register failed, ret = %d\n", ret);
+> +		video_device_release(cxdev->radiodev);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int cxusb_medion_register_analog_subdevs(struct dvb_usb_device *dvbdev)
+> +{
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	int ret;
+> +	struct tuner_setup tun_setup;
+> +
+> +	/* attach capture chip */
+> +	cxdev->cx25840 = v4l2_i2c_new_subdev(&cxdev->v4l2dev,
+> +					     &dvbdev->i2c_adap,
+> +					     "cx25840", 0x44, NULL);
+> +	if (cxdev->cx25840 == NULL) {
+> +		dev_err(&dvbdev->udev->dev, "cx25840 not found\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	/* configure it in the generic mode */
+
+I'd rephrase this a bit, emphasizing that it is the call to the init op
+that switches the cx25840 into generic mode.
+
+> +	ret = v4l2_subdev_call(cxdev->cx25840, core, init,
+> +			       CX25840_VCONFIG_FMT_BT656 |
+> +			       CX25840_VCONFIG_RES_8BIT |
+> +			       CX25840_VCONFIG_VBIRAW_DISABLED |
+> +			       CX25840_VCONFIG_ANCDATA_DISABLED |
+> +			       CX25840_VCONFIG_ACTIVE_COMPOSITE |
+> +			       CX25840_VCONFIG_VALID_ANDACTIVE |
+> +			       CX25840_VCONFIG_HRESETW_NORMAL |
+> +			       CX25840_VCONFIG_CLKGATE_NONE |
+> +			       CX25840_VCONFIG_DCMODE_DWORDS);
+> +	if (ret != 0) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			 "cx25840 init failed (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* attach analog tuner */
+> +	cxdev->tuner = v4l2_i2c_new_subdev(&cxdev->v4l2dev,
+> +					   &dvbdev->i2c_adap,
+> +					   "tuner", 0x61, NULL);
+> +	if (cxdev->tuner == NULL) {
+> +		dev_err(&dvbdev->udev->dev, "tuner not found\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	/* configure it */
+> +	memset(&tun_setup, 0, sizeof(tun_setup));
+> +	tun_setup.addr = 0x61;
+> +	tun_setup.type = TUNER_PHILIPS_FMD1216ME_MK3;
+> +	tun_setup.mode_mask = T_RADIO | T_ANALOG_TV;
+> +	v4l2_subdev_call(cxdev->tuner, tuner, s_type_addr, &tun_setup);
+> +
+> +	/* attach IF demod */
+> +	cxdev->tda9887 = v4l2_i2c_new_subdev(&cxdev->v4l2dev,
+> +					     &dvbdev->i2c_adap,
+> +					     "tuner", 0x43, NULL);
+> +	if (cxdev->tda9887 == NULL) {
+> +		dev_err(&dvbdev->udev->dev, "tda9887 not found\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +int cxusb_medion_register_analog(struct dvb_usb_device *dvbdev)
+> +{
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +	int ret;
+> +
+> +	mutex_init(&cxdev->dev_lock);
+> +
+> +	init_completion(&cxdev->v4l2_release);
+> +
+> +	cxdev->v4l2dev.release = cxusb_medion_v4l2_release;
+> +
+> +	ret = v4l2_device_register(&dvbdev->udev->dev, &cxdev->v4l2dev);
+> +	if (ret != 0) {
+> +		dev_err(&dvbdev->udev->dev,
+> +			"V4L2 device registration failed, ret = %d\n", ret);
+> +		mutex_destroy(&cxdev->dev_lock);
+> +		return ret;
+> +	}
+> +
+> +	ret = cxusb_medion_register_analog_subdevs(dvbdev);
+> +	if (ret)
+> +		goto ret_unregister;
+> +
+> +	INIT_WORK(&cxdev->urbwork, cxusb_medion_v_complete_work);
+> +	INIT_LIST_HEAD(&cxdev->buflist);
+> +
+> +	cxdev->width = 320;
+> +	cxdev->height = 240;
+> +
+> +	ret = cxusb_medion_register_analog_video(dvbdev);
+> +	if (ret)
+> +		goto ret_unregister;
+> +
+> +	ret = cxusb_medion_register_analog_radio(dvbdev);
+> +	if (ret)
+> +		goto ret_vunreg;
+> +
+> +	return 0;
+> +
+> +ret_vunreg:
+> +	video_unregister_device(cxdev->videodev);
+> +
+> +ret_unregister:
+> +	v4l2_device_put(&cxdev->v4l2dev);
+> +	wait_for_completion(&cxdev->v4l2_release);
+> +
+> +	return ret;
+> +}
+> +
+> +void cxusb_medion_unregister_analog(struct dvb_usb_device *dvbdev)
+> +{
+> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "unregistering analog\n");
+> +
+> +	video_unregister_device(cxdev->radiodev);
+> +	video_unregister_device(cxdev->videodev);
+> +
+> +	v4l2_device_put(&cxdev->v4l2dev);
+> +	wait_for_completion(&cxdev->v4l2_release);
+> +
+> +	cxusb_vprintk(dvbdev, OPS, "analog unregistered\n");
+> +}
+> diff --git a/drivers/media/usb/dvb-usb/cxusb.c b/drivers/media/usb/dvb-usb/cxusb.c
+> index af70536b0605..61d48678bdb8 100644
+> --- a/drivers/media/usb/dvb-usb/cxusb.c
+> +++ b/drivers/media/usb/dvb-usb/cxusb.c
+> @@ -11,7 +11,6 @@
+>   * design, so it can be reused for the "analogue-only" device (if it will
+>   * appear at all).
+>   *
+> - * TODO: Use the cx25840-driver for the analogue part
+>   *
+>   * Copyright (C) 2005 Patrick Boettcher (patrick.boettcher@posteo.de)
+>   * Copyright (C) 2006 Michael Krufky (mkrufky@linuxtv.org)
+> @@ -2549,5 +2548,4 @@ MODULE_AUTHOR("Michael Krufky <mkrufky@linuxtv.org>");
+>  MODULE_AUTHOR("Chris Pascoe <c.pascoe@itee.uq.edu.au>");
+>  MODULE_AUTHOR("Maciej S. Szmigiero <mail@maciej.szmigiero.name>");
+>  MODULE_DESCRIPTION("Driver for Conexant USB2.0 hybrid reference design");
+> -MODULE_VERSION("1.0-alpha");
+>  MODULE_LICENSE("GPL");
+> diff --git a/drivers/media/usb/dvb-usb/cxusb.h b/drivers/media/usb/dvb-usb/cxusb.h
+> index f586d61a7bf8..edd7e873e619 100644
+> --- a/drivers/media/usb/dvb-usb/cxusb.h
+> +++ b/drivers/media/usb/dvb-usb/cxusb.h
+> @@ -2,12 +2,29 @@
+>  #ifndef _DVB_USB_CXUSB_H_
+>  #define _DVB_USB_CXUSB_H_
+>  
+> +#include <linux/completion.h>
+>  #include <linux/i2c.h>
+> +#include <linux/list.h>
+>  #include <linux/mutex.h>
+> +#include <linux/usb.h>
+> +#include <linux/workqueue.h>
+> +#include <media/v4l2-common.h>
+> +#include <media/v4l2-dev.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/videobuf2-core.h>
+> +#include <media/videobuf2-v4l2.h>
+>  
+>  #define DVB_USB_LOG_PREFIX "cxusb"
+>  #include "dvb-usb.h"
+>  
+> +#define CXUSB_VIDEO_URBS (5)
+> +#define CXUSB_VIDEO_URB_MAX_SIZE (512 * 1024)
+> +
+> +#define CXUSB_VIDEO_PKT_SIZE 3030
+> +#define CXUSB_VIDEO_MAX_FRAME_PKTS 346
+> +#define CXUSB_VIDEO_MAX_FRAME_SIZE (CXUSB_VIDEO_MAX_FRAME_PKTS * \
+> +					CXUSB_VIDEO_PKT_SIZE)
+> +
+>  /* usb commands - some of it are guesses, don't have a reference yet */
+>  #define CMD_BLUEBIRD_GPIO_RW 0x05
+>  
+> @@ -32,6 +49,20 @@
+>  #define CMD_ANALOG        0x50
+>  #define CMD_DIGITAL       0x51
+>  
+> +#define CXUSB_BT656_PREAMBLE ((const u8 *)"\xff\x00\x00")
+> +
+> +#define CXUSB_BT656_FIELD_MASK BIT(6)
+> +#define CXUSB_BT656_FIELD_1 0
+> +#define CXUSB_BT656_FIELD_2 BIT(6)
+> +
+> +#define CXUSB_BT656_VBI_MASK BIT(5)
+> +#define CXUSB_BT656_VBI_ON BIT(5)
+> +#define CXUSB_BT656_VBI_OFF 0
+> +
+> +#define CXUSB_BT656_SEAV_MASK BIT(4)
+> +#define CXUSB_BT656_SEAV_EAV BIT(4)
+> +#define CXUSB_BT656_SEAV_SAV 0
+> +
+>  /* Max transfer size done by I2C transfer functions */
+>  #define MAX_XFER_SIZE  80
+>  
+> @@ -54,6 +85,29 @@ enum cxusb_open_type {
+>  	CXUSB_OPEN_ANALOG, CXUSB_OPEN_DIGITAL
+>  };
+>  
+> +struct cxusb_medion_auxbuf {
+> +	u8 *buf;
+> +	unsigned int len;
+> +	unsigned int paylen;
+> +};
+> +
+> +enum cxusb_bt656_mode {
+> +	NEW_FRAME, FIRST_FIELD, SECOND_FIELD
+> +};
+> +
+> +enum cxusb_bt656_fmode {
+> +	START_SEARCH, LINE_SAMPLES, VBI_SAMPLES
+> +};
+> +
+> +struct cxusb_bt656_params {
+> +	enum cxusb_bt656_mode mode;
+> +	enum cxusb_bt656_fmode fmode;
+> +	unsigned int pos;
+> +	unsigned int line;
+> +	unsigned int linesamples;
+> +	u8 *buf;
+> +};
+> +
+>  struct cxusb_medion_dev {
+>  	/* has to be the first one */
+>  	struct cxusb_state state;
+> @@ -63,18 +117,68 @@ struct cxusb_medion_dev {
+>  	enum cxusb_open_type open_type;
+>  	unsigned int open_ctr;
+>  	struct mutex open_lock;
+> +
+> +#ifdef CONFIG_DVB_USB_CXUSB_ANALOG
+> +	struct v4l2_device v4l2dev;
+> +	struct v4l2_subdev *cx25840;
+> +	struct v4l2_subdev *tuner;
+> +	struct v4l2_subdev *tda9887;
+> +	struct video_device *videodev, *radiodev;
+> +	struct mutex dev_lock;
+> +
+> +	struct vb2_queue videoqueue;
+> +	u32 input;
+> +	bool stop_streaming;
+> +	u32 width, height;
+> +	struct cxusb_medion_auxbuf auxbuf;
+> +	v4l2_std_id norm;
+> +
+> +	struct urb *streamurbs[CXUSB_VIDEO_URBS];
+> +	unsigned long urbcomplete;
+> +	struct work_struct urbwork;
+> +	unsigned int nexturb;
+> +
+> +	struct cxusb_bt656_params bt656;
+> +	struct cxusb_medion_vbuffer *vbuf;
+> +	__u32 vbuf_sequence;
+> +
+> +	struct list_head buflist;
+> +
+> +	struct completion v4l2_release;
+> +#endif
+> +};
+> +
+> +struct cxusb_medion_vbuffer {
+> +	struct vb2_v4l2_buffer vb2;
+> +	struct list_head list;
+>  };
+>  
+>  /* defines for "debug" module parameter */
+>  #define CXUSB_DBG_RC BIT(0)
+>  #define CXUSB_DBG_I2C BIT(1)
+>  #define CXUSB_DBG_MISC BIT(2)
+> +#define CXUSB_DBG_BT656 BIT(3)
+> +#define CXUSB_DBG_URB BIT(4)
+> +#define CXUSB_DBG_OPS BIT(5)
+> +#define CXUSB_DBG_AUXB BIT(6)
+>  
+>  extern int dvb_usb_cxusb_debug;
+>  
+> +#define cxusb_vprintk(dvbdev, lvl, ...) do {				\
+> +		struct cxusb_medion_dev *_cxdev = (dvbdev)->priv;	\
+> +		if (dvb_usb_cxusb_debug & CXUSB_DBG_##lvl)		\
+> +			v4l2_printk(KERN_DEBUG,			\
+> +				    &_cxdev->v4l2dev, __VA_ARGS__);	\
+> +	} while (0)
+> +
+>  int cxusb_ctrl_msg(struct dvb_usb_device *d,
+>  		   u8 cmd, const u8 *wbuf, int wlen, u8 *rbuf, int rlen);
+>  
+> +#ifdef CONFIG_DVB_USB_CXUSB_ANALOG
+> +int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev);
+> +int cxusb_medion_register_analog(struct dvb_usb_device *dvbdev);
+> +void cxusb_medion_unregister_analog(struct dvb_usb_device *dvbdev);
+> +#else
+>  static inline int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
+>  {
+>  	return -EINVAL;
+> @@ -88,6 +192,7 @@ static inline int cxusb_medion_register_analog(struct dvb_usb_device *dvbdev)
+>  static inline void cxusb_medion_unregister_analog(struct dvb_usb_device *dvbdev)
+>  {
+>  }
+> +#endif
+>  
+>  int cxusb_medion_get(struct dvb_usb_device *dvbdev,
+>  		     enum cxusb_open_type open_type);
+> 
+
+Regards,
+
+	Hans
