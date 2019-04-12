@@ -2,111 +2,111 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 064BDC10F0E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD150C10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:37:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF396205F4
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:31:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1251205F4
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:37:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbfDLJbq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 05:31:46 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:45983 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726694AbfDLJbp (ORCPT
+        id S1726785AbfDLJhA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 05:37:00 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:38155 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726709AbfDLJhA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 05:31:45 -0400
+        Fri, 12 Apr 2019 05:37:00 -0400
 Received: from [IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68] ([IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id EsX7hzeJVNG8zEsX8hC4G2; Fri, 12 Apr 2019 11:31:43 +0200
-Subject: Re: [PATCH v3 1/2] media: exynos4-is: Properly report _MPLANE caps
-To:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id EscBhzhXPNG8zEscChC5oR; Fri, 12 Apr 2019 11:36:57 +0200
+Subject: Re: [RFC PATCH v2 1/7] media: v4l2: Get rid of
+ ->vidioc_enum_fmt_vid_{cap,out}_mplane
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Mauro Carvalho Chehab <m.chehab@samsung.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Cc:     kernel@collabora.com, Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-media@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
         Hirokazu Honda <hiroh@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-References: <20190412092027.20410-1-boris.brezillon@collabora.com>
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Brian Starkey <Brian.Starkey@arm.com>, kernel@collabora.com
+References: <20190404081700.30006-1-boris.brezillon@collabora.com>
+ <20190404081700.30006-2-boris.brezillon@collabora.com>
+ <c13c2c30-f78e-1cf2-26d3-1554e22947c3@xs4all.nl>
+ <20190411123636.07990b79@collabora.com>
+ <6f8ec61c-1f36-accb-cc00-984d1041aa28@xs4all.nl>
+ <20190412102526.53de44ee@collabora.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <62460a3c-b627-7c7f-5c0d-8f2d242ce83e@xs4all.nl>
-Date:   Fri, 12 Apr 2019 11:31:41 +0200
+Message-ID: <eb58b8a9-d609-7a12-ede9-87dab1e91e55@xs4all.nl>
+Date:   Fri, 12 Apr 2019 11:36:55 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190412092027.20410-1-boris.brezillon@collabora.com>
+In-Reply-To: <20190412102526.53de44ee@collabora.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfNeLQJ4eki4FSXUIAbxbYUloI2iP8EeaONH3R8fbKYjdsObdfgH5SPyYrqDaxLsswiuqQ7M3dq8nWucdMjZM86ypeTQoxss9cQlWgt/yupI0fCQQjg9F
- w9jPfpY/UUDBgDFXohHwIZ+xKWr1I7CrvUYPJ30MwQtlIAJev3+QWPl3FxjQwyw9DQjVwCZZ0TCFlaMjY3HZVkAFTIJuB9lNhUcQVuF1Aqs35+3+8YY3WZJr
- a+Mfy2cvc6fClniRxjtr11HG3QLoGbq3xPH4UjFaQROFsxIkPOTic6QrdXTya1KoewsXKgtGNLGymL77HHyZET5cVCtuGpPFHYu8B3/MqOe5HHJurlSC98y6
- 2mHzVdnTjnl/SbxIaKhztHoWUH/CjXTKM+C275pyozPw4VnvTLTptKLmfNcACzf0S907EGLhNKEIQCErXhN6pfkvAKFN6eWukox1jT7YUds55eLRIKD/SuC5
- 722FTQ8E5BVXBBPB2jZ6q84fUCu1s/iDfDok8p3eHZlQ2l7zjuqxqhKvoXk+GydQgWFile0UCDV96cWvCxMIW6KR7ezUS2G7pPo5484RrUUcw97RCv7Y0wIn
- deg=
+X-CMAE-Envelope: MS4wfEYRuUN/jYOj1nd28k36SWnm0zeSJe+/OyX7zOsya3utOedSd0ey4iW6thnEbw04BYs4btq3G1KxzxwGOASewgdsZDz64wftvpWuyBvdxQo3OuIKeLII
+ 97k4yNhfjUuSPI8kj0OD0xzfiV6yH4OW7XEdxstbyiqVnMKUafrIdBA4P13xk1M6CsjuFxmIXuBy440t58OHFqQ5c4FS+tXFsvMsrzVbMAcJ3KmvkQ6uA+Qe
+ PpCW/YE9xJ9bK/5//n9ngKS8zzLCMU7VKslMx7fEBHlHPjFCkxHF5CgTuDhPQ5ngOAgHjSfu+6yMo6IedYdzjTAJnJidIWl6j8xKAuMOKKu2Ago14oCLHz63
+ gaqI2CKVO5uN3EkENezxbj3jyX79sdBDJhIVfo2zq7s36m0NHll+Mezf3+AjF7AEc4ZtSsAmguNcbax7KBlK2nz4UgW2PdmlkTn66eWw1t1m55ZpOaZ/aaBY
+ 4DyGMh2VFucxnz0Bm7nhQUcrnCCr3TxyWmNOiNt2qmFa94ptuC+S7YlpIS4JA8+9QyEqs0C+zkdP9wI0on04CinMKbFChhX9l4x3OHczCLFIizNRPO6aLV0N
+ 9huI9lbCgwfEvvW3NLOb8xsdXPlIFsMwGofkDwrLs14VQg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/12/19 11:20 AM, Boris Brezillon wrote:
-> The fimc-isp-video.c and fimc-lite.c were missing the
-> V4L2_CAP_VIDEO_CAPTURE_MPLANE flag when reporting device caps.
+On 4/12/19 10:25 AM, Boris Brezillon wrote:
+> On Thu, 11 Apr 2019 12:38:06 +0200
+> Hans Verkuil <hverkuil@xs4all.nl> wrote:
 > 
-> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-> ---
-> Changes in v3:
-> - New patch
-> ---
->  drivers/media/platform/exynos4-is/fimc-isp-video.c | 4 +++-
->  drivers/media/platform/exynos4-is/fimc-lite.c      | 2 +-
->  2 files changed, 4 insertions(+), 2 deletions(-)
+>>>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> index f6d663934648..97ba365218fb 100644
+>>>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+>>>>> @@ -1380,6 +1380,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+>>>>>  static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
+>>>>>  				struct file *file, void *fh, void *arg)
+>>>>>  {
+>>>>> +	struct video_device *vdev = video_devdata(file);
+>>>>>  	struct v4l2_fmtdesc *p = arg;
+>>>>>  	int ret = check_fmt(file, p->type);
+>>>>>  
+>>>>> @@ -1389,30 +1390,30 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
+>>>>>  
+>>>>>  	switch (p->type) {
+>>>>>  	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
+>>>>> +	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
+>>>>> +		if (!!(vdev->device_caps & V4L2_CAP_VIDEO_CAPTURE_MPLANE) !=    
+>>>>
+>>>> Hmm. I am not sure if all drivers that set V4L2_CAP_VIDEO_CAPTURE_MPLANE also
+>>>> fill in vdev->device_caps. While filling in vdev->device_caps is required for
+>>>> new drivers, older drivers often don't do this.
+>>>>
+>>>> You would have to check all drivers that set V4L2_CAP_VIDEO_CAPTURE/OUTPUT_MPLANE
+>>>> to verify that they also set vdev->device_caps. I'm fairly certain the Samsung
+>>>> drivers don't fill this in.  
+>>>
+>>> I'll check that and fix those that don't set the flag. Or do you have
+>>> another solution to handle that case?
+>>>   
+>>
+>> There might be other solutions as well, but regardless of that it would be a very
+>> good idea for other reasons as well if all MPLANE drivers would fill in vdev->device_caps.
 > 
-> diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.c b/drivers/media/platform/exynos4-is/fimc-isp-video.c
-> index bb35a2017f21..8cd7b1c6565c 100644
-> --- a/drivers/media/platform/exynos4-is/fimc-isp-video.c
-> +++ b/drivers/media/platform/exynos4-is/fimc-isp-video.c
-> @@ -349,7 +349,9 @@ static int isp_video_querycap(struct file *file, void *priv,
->  {
->  	struct fimc_isp *isp = video_drvdata(file);
->  
-> -	__fimc_vidioc_querycap(&isp->pdev->dev, cap, V4L2_CAP_STREAMING);
-> +	__fimc_vidioc_querycap(&isp->pdev->dev, cap,
-> +			       V4L2_CAP_STREAMING |
-> +			       V4L2_CAP_VIDEO_CAPTURE_MPLANE);
->  	return 0;
->  }
->  
-> diff --git a/drivers/media/platform/exynos4-is/fimc-lite.c b/drivers/media/platform/exynos4-is/fimc-lite.c
-> index 96f0a8a0dcae..13dfa5e39139 100644
-> --- a/drivers/media/platform/exynos4-is/fimc-lite.c
-> +++ b/drivers/media/platform/exynos4-is/fimc-lite.c
-> @@ -659,7 +659,7 @@ static int fimc_lite_querycap(struct file *file, void *priv,
->  	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s",
->  					dev_name(&fimc->pdev->dev));
->  
-> -	cap->device_caps = V4L2_CAP_STREAMING;
-> +	cap->device_caps = V4L2_CAP_VIDEO_CAPTURE_MPLANE | V4L2_CAP_STREAMING;
->  	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+> Looks like all drivers except fimc-isp-video.c have the _MPLANE caps
+> properly set/reported.
+> 
 
-That's not what should happen. The driver should set device_caps in the struct
-video_device, and then it can drop setting cap->device_caps and cap->capabilities
-from the querycap implementation (it will be set by the v4l2 core based on the
-vdev->device_caps value).
-
-It definitely is a (surprising!) bug that V4L2_CAP_VIDEO_CAPTURE_MPLANE wasn't
-set here, but the real thing that you should check MPLANE capable drivers for is
-that they set vdev->device_caps.
+That's not enough, they need to fill in vdev->device_caps as well. I.e., they shouldn't
+fill in device_caps and capabilities in their querycap implementation, instead they
+should just set device_caps in the struct video_device. That way the V4L2 core will
+know the video device capabilities since it is now stored in an internal structure.
 
 Regards,
 
 	Hans
-
->  	return 0;
->  }
-> 
-
