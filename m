@@ -2,85 +2,182 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45413C10F14
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:07:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26EC1C282CE
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:13:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 02CDB2186A
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:07:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9F9221872
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 09:13:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mork.no header.i=@mork.no header.b="biGPr/kP"
+	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="PETiCoHY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbfDLJHg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 05:07:36 -0400
-Received: from canardo.mork.no ([148.122.252.1]:57779 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726731AbfDLJHf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 05:07:35 -0400
-Received: from miraculix.mork.no ([IPv6:2a02:2121:34e:7a0c:4cff:dff:fef6:bcb])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x3C97BBh029095
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 12 Apr 2019 11:07:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1555060032; bh=Aqt+Zy+54vGpk9JTzs/ndlybH3eDHAaKTptJ5oZ/5BU=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=biGPr/kPGcVOYLvMB/lRS7JdcAdkhf6qVCMgfABSuDc8eh95KlDlzC4knzVmPUsAM
-         kPT//yYcduxu9pbIhb/ljW50NMKf6bzJ9mNqmQEL20cTygUrPjBDG7gh43DQSX3qp3
-         9sk2Nyum2qixyPtkboqRUOUFfrO6AkC/qJlgBWsE=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.89)
-        (envelope-from <bjorn@mork.no>)
-        id 1hEs9J-0005FO-Rb; Fri, 12 Apr 2019 11:07:05 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Yang Xiao <92siuyang@gmail.com>
-Cc:     kbuild-all@01.org, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        greg@kroah.com, mchehab@kernel.org,
-        Kees Cook <keescook@chromium.org>, hans.verkuil@cisco.com,
-        Young Xiao <YangX92@hotmail.com>
-Subject: Re: [PATCH] USB: s2255 & stkwebcam: fix oops with malicious USB descriptors
-Organization: m
-References: <1555036767-31170-1-git-send-email-92siuyang@gmail.com>
-        <878swf645i.fsf@miraculix.mork.no>
-        <CAKgHYH05R2CQ1XmS-KCTtL0J49D2kpnkBgyYxdPc47SNpaf8vA@mail.gmail.com>
-Date:   Fri, 12 Apr 2019 11:07:05 +0200
-In-Reply-To: <CAKgHYH05R2CQ1XmS-KCTtL0J49D2kpnkBgyYxdPc47SNpaf8vA@mail.gmail.com>
-        (Yang Xiao's message of "Fri, 12 Apr 2019 16:45:52 +0800")
-Message-ID: <87mukv4mo6.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1726987AbfDLJN0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 05:13:26 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:34336 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726850AbfDLJNZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 12 Apr 2019 05:13:25 -0400
+Received: by mail-lf1-f65.google.com with SMTP id h5so4015330lfm.1
+        for <linux-media@vger.kernel.org>; Fri, 12 Apr 2019 02:13:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=RJioxNL/tDdtn+PGeAnBQhQy4cwLWf7IyFa/W6kjIkM=;
+        b=PETiCoHYOKV1f8XfP3Twk8cjflndJiOR/oeu4LysuPGfkgGiVCV5n7+D482jl70OCm
+         wn+zzYPqJGTJj8AsIsr5oaRYOWrfO8xRc6ZD1/lZO/xt+tlrBEppzziQCnhuOfKo/jFI
+         SeAXlXLKh6k6ZVmv2nqyYUBawGfmlsPcdmiiiCzdzYRGS+rjxmLHfWBDUIn4j1JZk9W6
+         wo0BG80057x4e/iFLwY6HeAd5l1sy37HAy9TifJttJKBBShj/Sjze30dcgb0tF95KTn0
+         IbPRnNbD/uAE7WfFUZoTtKv76xrqvJ0pkd+d7bw6B1QeOpRavMoEmA3TXQ7U3Yx8nv2K
+         Asgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=RJioxNL/tDdtn+PGeAnBQhQy4cwLWf7IyFa/W6kjIkM=;
+        b=Sx1UOW7oWZR+j+wC2OCS+fqEAhag9FfBqV4/xqlLp1/Azv/SOC8Xq3k/2dgy1zZZrh
+         SYWlzkpIWi3TqremaRyBcwxMcilBFMc9K3/igc+yZL9kb+oYzmz+PqiPQ2MBIRjDVlXV
+         PR+JB7KYZgvfVTIG1yW/+gsinXw5A+w+QH3KeGRpouYQeSOVKxAUuYlHiYOBeA8OZMm1
+         pBPOLNAtKciUP7I/jsmRuQxOswU/X5VMhkmmPDQlvZIDQRqL2xC8AAjwd0xnTBttPUr6
+         JQo1cmIQWSmaSeB2tTQIfuS6IEsRUHZGGTDg9t1AfaD/5qd17kqq4V4ZrCegPG/KbriK
+         VIhA==
+X-Gm-Message-State: APjAAAWvrpBvU+AWGZ+p2fnhphOjZ2zADkrYI9L5JkNVP0VsKGUOEy1e
+        NlgeRMYjGIGhrHuwXRyk0rsX6Q==
+X-Google-Smtp-Source: APXvYqwwacLmv8c5cQSI1+tQfZQfevsHEOzFGjOlG44OncaRpFkmypKBAcjfpIed/EmJWuQYkO8bhg==
+X-Received: by 2002:ac2:4357:: with SMTP id o23mr7976441lfl.146.1555060403026;
+        Fri, 12 Apr 2019 02:13:23 -0700 (PDT)
+Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
+        by smtp.gmail.com with ESMTPSA id x30sm8102986ljd.38.2019.04.12.02.13.21
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 12 Apr 2019 02:13:22 -0700 (PDT)
+From:   "Niklas =?iso-8859-1?Q?S=F6derlund?=" <niklas.soderlund@ragnatech.se>
+X-Google-Original-From: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Date:   Fri, 12 Apr 2019 11:13:21 +0200
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v4] rcar-csi2: Propagate the FLD signal for NTSC and PAL
+Message-ID: <20190412091321.GI30887@bigcity.dyn.berto.se>
+References: <20190411203444.23515-1-niklas.soderlund+renesas@ragnatech.se>
+ <20190412084346.6lreffkpuuj7slqb@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.100.3 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190412084346.6lreffkpuuj7slqb@uno.localdomain>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Yang Xiao <92siuyang@gmail.com> writes:
+Hi Jacopo,
 
-> If given malicious descritors that spcify 0 for the number of endpoints,
-> then there is a null pointer deference when calling function
-> usb_endpoint_is_bulk_in.
->
->        for (i =3D 0; i < iface_desc->desc.bNumEndpoints; ++i) {
+Thanks for your feedback.
 
-Try this:
+On 2019-04-12 10:43:46 +0200, Jacopo Mondi wrote:
+> Hi Niklas,
+>    I'm rebasing v4l2-mux series on top of your new VIN patches and
+> on this on I'm not sure how to proceed. Please see below.
+> 
+> Please also note this comment is not strictly on this patch, and should not
+> block its acceptance...
+> 
+> On Thu, Apr 11, 2019 at 10:34:44PM +0200, Niklas Söderlund wrote:
+> > Depending on which video standard is used the driver needs to setup the
+> > hardware to correctly handle fields. If stream is identified as NTSC
+> > or PAL setup field detection and propagate the field detection signal.
+> >
+> > Later versions of the datasheet have been updated to make it clear
+> > that FLD register should be set to 0 when dealing with non-interlaced
+> > field formats.
+> >
+> > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> > ---
+> >  drivers/media/platform/rcar-vin/rcar-csi2.c | 16 +++++++++++++---
+> >  1 file changed, 13 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > index 799e526fd3df5554..c1b38ebd061dbc35 100644
+> > --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
+> > @@ -68,6 +68,7 @@ struct rcar_csi2;
+> >  /* Field Detection Control */
+> >  #define FLD_REG				0x1c
+> >  #define FLD_FLD_NUM(n)			(((n) & 0xff) << 16)
+> > +#define FLD_DET_SEL(n)			(((n) & 0x3) << 4)
+> >  #define FLD_FLD_EN4			BIT(3)
+> >  #define FLD_FLD_EN3			BIT(2)
+> >  #define FLD_FLD_EN2			BIT(1)
+> > @@ -475,7 +476,7 @@ static int rcsi2_calc_mbps(struct rcar_csi2 *priv, unsigned int bpp)
+> >  static int rcsi2_start_receiver(struct rcar_csi2 *priv)
+> >  {
+> >  	const struct rcar_csi2_format *format;
+> > -	u32 phycnt, vcdt = 0, vcdt2 = 0;
+> > +	u32 phycnt, vcdt = 0, vcdt2 = 0, fld = 0;
+> >  	unsigned int i;
+> >  	int mbps, ret;
+> >
+> > @@ -507,6 +508,16 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
+> >  			vcdt2 |= vcdt_part << ((i % 2) * 16);
+> >  	}
+> >
+> > +	if (priv->mf.field == V4L2_FIELD_ALTERNATE) {
+> 
+> How would you handle this once priv->mf is expanded to become an array
+> of 'struct v4l2_mbus_framefmt' entries [1] ? Which of them is relevant for
+> field detection?
+> 
+> 
+> > +		fld = FLD_DET_SEL(1) | FLD_FLD_EN4 | FLD_FLD_EN3 | FLD_FLD_EN2
+> > +			| FLD_FLD_EN;
+> > +
+> > +		if (priv->mf.height == 240)
+> 
+> Same question here, even if I assume we could cycle on the entries and
+> collect the maximum size.
 
-#include <stdio.h>
-int main()
-{
-        int i;
-        for (i=3D0; i<0; ++i)
-                printf("%d\n");
-        return 0;
-}
+Well as the hardware do not support field detection of PAL and NTSC at 
+the same time one would need to either disallow that and fail stream on 
+or pick one and move on. Not sure which one would be best.
 
-How many lines did it print?
+> 
+> Thanks
+>   j
+> 
+> [1] Introduced by:
+> "rcar-csi2: use frame description information to configure CSI-2 bus"
+> > +			fld |= FLD_FLD_NUM(0);
+> > +		else
+> > +			fld |= FLD_FLD_NUM(1);
+> > +	}
+> > +
+> >  	phycnt = PHYCNT_ENABLECLK;
+> >  	phycnt |= (1 << priv->lanes) - 1;
+> >
+> > @@ -549,8 +560,7 @@ static int rcsi2_start_receiver(struct rcar_csi2 *priv)
+> >  	rcsi2_write(priv, PHYCNT_REG, phycnt);
+> >  	rcsi2_write(priv, LINKCNT_REG, LINKCNT_MONITOR_EN |
+> >  		    LINKCNT_REG_MONI_PACT_EN | LINKCNT_ICLK_NONSTOP);
+> > -	rcsi2_write(priv, FLD_REG, FLD_FLD_NUM(2) | FLD_FLD_EN4 |
+> > -		    FLD_FLD_EN3 | FLD_FLD_EN2 | FLD_FLD_EN);
+> > +	rcsi2_write(priv, FLD_REG, fld);
+> >  	rcsi2_write(priv, PHYCNT_REG, phycnt | PHYCNT_SHUTDOWNZ);
+> >  	rcsi2_write(priv, PHYCNT_REG, phycnt | PHYCNT_SHUTDOWNZ | PHYCNT_RSTZ);
+> >
+> > --
+> > 2.21.0
+> >
 
 
-Bj=C3=B8rn
+
+-- 
+Regards,
+Niklas Söderlund
