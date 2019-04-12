@@ -2,90 +2,97 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C5A0C10F0E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 10:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71BCAC10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 10:35:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 453A920850
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 10:32:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D51920675
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 10:35:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727253AbfDLKcI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 06:32:08 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:57251 "EHLO
+        id S1726694AbfDLKfY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 06:35:24 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:54497 "EHLO
         lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726327AbfDLKcI (ORCPT
+        by vger.kernel.org with ESMTP id S1726244AbfDLKfY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 06:32:08 -0400
+        Fri, 12 Apr 2019 06:35:24 -0400
 Received: from [IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68] ([IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id EtTZh09k6NG8zEtTahCLpx; Fri, 12 Apr 2019 12:32:06 +0200
-Subject: Re: [PATCH v3 1/2] media: exynos4-is: Properly report _MPLANE caps
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Cc:     kernel@collabora.com, Tomasz Figa <tfiga@chromium.org>,
-        Hirokazu Honda <hiroh@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-References: <CGME20190412092035epcas1p43412936a0fba75b1c548904e785fe23d@epcas1p4.samsung.com>
- <20190412092027.20410-1-boris.brezillon@collabora.com>
- <c1faa661-6631-00ae-836b-4f24b1ee408e@samsung.com>
+        id EtWjh0BJqNG8zEtWkhCMfn; Fri, 12 Apr 2019 12:35:22 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <1c4fc9c3-4c9e-475a-262a-1479f77e267b@xs4all.nl>
-Date:   Fri, 12 Apr 2019 12:32:05 +0200
+Subject: [GIT PULL FOR v5.2] cec fixes, new Meson G12A AO CEC driver
+Message-ID: <cb09f54d-e03d-e09b-cdea-ad419e0b5514@xs4all.nl>
+Date:   Fri, 12 Apr 2019 12:35:21 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <c1faa661-6631-00ae-836b-4f24b1ee408e@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKYqeRbbQWsWjbiNks5T27aTZG8SlVNWcrGgnIa+3GJSxzLYw47r867dpIH3M1fU1o/sE8U7UaK3uvz/qWwYgLvI/Yz11rLE2sLcCuF6r9asB28RL3vZ
- SJTPdQr0Rgvt+lDZWpFTE6Y65NfxzaNkHLAEY9z3tMZLIoTXUVfZRLJoGXvi/i/cZPskXDzhnCGx6PXzrP5M9qi/Zwg+erkGk+q0rKhxxWQEZSRMjnV8otO1
- Me97hdsCksDLL4k2uRp8VbGGiiwTSYs38VnujBHHmxnKciWTHQNAkRRJxOczkAsR9qgfZrZzy1Bb1bnYwOpzInFzV43efIvnYI3gAeUskctD0OfzdB1ob9Ph
- 9Y4g+3jnR9RSFcFvSUy53BQ0JPF2gdNVPzesidwrgEciOV95SvpCiYswMl6SbPFahT27LjmqfLKYO57kqY+tbFJbke/GbHq7c0K3FihKBTLiR7YeH4/U2VU8
- g3pbn3JdUSLiUyZHyAC29c3Yitxv2pxQk3FxEqk+ims19lXfk4/4O3tjsRZmOi2QnLaax7xkMFjA4ibJeR0iAML+xW2Wa8OoRWbShU+OegKjKpuWifKJvQd4
- ZF0PwGS16uKrkS+BJCFhV4LgnmceprAwRuwD/ctf06puEQ==
+X-CMAE-Envelope: MS4wfKuQJqoiZgAthklEBw4jEMvTObj1R39ODwuPibUnU7KgTrTn89rgnloWGyknvGWX/tG9uybWc3Q9EXMc2Q4nbbhoTjSa8+B3EG9yqLxVQDsjVZYzYnKN
+ G7JZlyC4UA2GL7jVsJzFh3/1BS5rmviODWr1BXPFLWdPmYjgXC4GAdZyz6fT4+r+3rFOdDb2Hs/WqhKW6muuRTZSU/2f3G2f8+HO7dZYXzHY4kdVbSvoQqZM
+ Rpti2dT8XCVTuY4YOocPhurOb1iPpWnmiGDn8a9egkHUJ2xP74I8qD1kcGQddWhFoNL+mSh0OqKnQYP6wSYNZQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/12/19 12:16 PM, Sylwester Nawrocki wrote:
-> Hi,
-> 
-> On 4/12/19 11:20, Boris Brezillon wrote:
->> The fimc-isp-video.c and fimc-lite.c were missing the
->> V4L2_CAP_VIDEO_CAPTURE_MPLANE flag when reporting device caps.
-> 
-> Th omission was intentional, as these video nodes cannot be used
-> by "standard" V4L2 capture applications. Some sub-devices need to 
-> be configured first in order to use these video nodes. It was 
-> agreed to not set these capabilities in the driver, instead user
-> space library, e.g. libv4l2 with driver-specific plugin handling
-> the media controller and v4l2 subdev calls would set the capability
-> for the applications. Has something changed?
-> 
-
-I remember that this was discussed, but nobody actually followed that
-guideline. Just do:
-
-git grep -l V4L2_CAP_VIDEO_CAPTURE drivers/media/platform
-
-It really doesn't make sense to leave it out since userspace has to know if
-it is single or multiplanar, and if you don't set this capability, then how
-can it tell?
-
-I always thought we need a separate CAP or some other way of signaling this,
-but the few times I proposed something it was always shot down.
-
-So to be consistent with the other MC drivers you should set this MPLANE cap
-as well in the fimc driver.
+Fixes to prevent incrementing but never decrementing the hdmi device
+refcount, and the series for the new Meson CEC driver is sitting on top
+of those.
 
 Regards,
 
 	Hans
+
+The following changes since commit 1c3ec30bb23023d738b538e64ac3028902d53692:
+
+  media: index.rst: exclude Indexes section from latex/pdf output (2019-03-30 09:42:35 -0400)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.2f
+
+for you to fetch changes up to 8ce1eb87ae608c4b0b51be9fd322b3bfa50659b0:
+
+  MAINTAINERS: Update AO CEC with ao-cec-g12a driver (2019-04-12 11:45:19 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Hans Verkuil (7):
+      cec-notifier: add cec_notifier_parse_hdmi_phandle helper
+      meson: ao-cec: use new cec_notifier_parse_hdmi_phandle helper
+      s5p_cec: use new cec_notifier_parse_hdmi_phandle helper
+      stih_cec: use new cec_notifier_parse_hdmi_phandle helper
+      tegra_cec: use new cec_notifier_parse_hdmi_phandle helper
+      seco-cec: decrement HDMI device refcount
+      cros-ec-cec: decrement HDMI device refcount
+
+Neil Armstrong (3):
+      media: dt-bindings: media: meson-ao-cec: Add G12A AO-CEC-B Compatible
+      media: platform: meson: Add Amlogic Meson G12A AO CEC Controller driver
+      MAINTAINERS: Update AO CEC with ao-cec-g12a driver
+
+ Documentation/devicetree/bindings/media/meson-ao-cec.txt |  13 +-
+ MAINTAINERS                                              |   1 +
+ drivers/media/cec/cec-notifier.c                         |  30 ++
+ drivers/media/platform/Kconfig                           |  16 +
+ drivers/media/platform/cros-ec-cec/cros-ec-cec.c         |   1 +
+ drivers/media/platform/meson/Makefile                    |   1 +
+ drivers/media/platform/meson/ao-cec-g12a.c               | 779 ++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/media/platform/meson/ao-cec.c                    |  16 +-
+ drivers/media/platform/s5p-cec/s5p_cec.c                 |  16 +-
+ drivers/media/platform/seco-cec/seco-cec.c               |   1 +
+ drivers/media/platform/sti/cec/stih-cec.c                |  21 +-
+ drivers/media/platform/tegra-cec/tegra_cec.c             |  14 +-
+ include/media/cec-notifier.h                             |  19 +-
+ 13 files changed, 878 insertions(+), 50 deletions(-)
+ create mode 100644 drivers/media/platform/meson/ao-cec-g12a.c
