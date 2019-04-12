@@ -2,154 +2,195 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAF32C282CE
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 11:16:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F51EC10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 11:23:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A1A0A218A3
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 11:16:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6BCFA20674
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 11:23:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbfDLLQM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 07:16:12 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:39581 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726708AbfDLLQL (ORCPT
+        id S1726757AbfDLLXl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 07:23:41 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:49745 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726244AbfDLLXl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 07:16:11 -0400
-Received: by mail-io1-f72.google.com with SMTP id c17so7491281iot.6
-        for <linux-media@vger.kernel.org>; Fri, 12 Apr 2019 04:16:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=sKZJUBZRB9qTKwgDkvpmWjiCEui4WVdCtbcfIn8VM0A=;
-        b=YKWVjPgYHy0WAlJKlbV7cRmxdJoAh3k/0H+JedGWQStnJEidhMwVcBHf8deK6z+rdv
-         +9SDppByLy6hXwJ4wVYLoYiF2dMCeZPWoaBklYMLnSo1OmLVQZafXuRDTxddtLLMsc8F
-         GBj0nEvV5C7Gu2VcFrlR2dJIGJqB5Ek8AY+KienypP371T46dn17dkIF8M5K3rEr6VQc
-         rhGdMW388eL2Ft5SBJGxcxD03nIxp5uTVEz2nnE1QIE23esOqaMuDTpPwGXm3g74li12
-         8SyTTQW7W9iLOvdahEU5zJjYUoBO7HPqOaRITFVkHgE7Gi/yOJU0PBhWnzlezXAWa2hg
-         Kvug==
-X-Gm-Message-State: APjAAAW9QNgvYx9Jmn4BU3gF/nNusOa0+QOj/EWwpdqtbvbmLwb2uo+a
-        rQzHmaWLksLhcDa73GPp42B7iSl8bHK/1Bm79BJQyV7zreal
-X-Google-Smtp-Source: APXvYqxZjzxQOwDuHp7o3KZW3YsiJOmEnjXjMcWjx3VKMprIfhtW1jTXF33pnc7ap2owfg532SOnOXAWD7AvZ9maH8d78nTLzrN3
+        Fri, 12 Apr 2019 07:23:41 -0400
+Received: from [IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68] ([IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id EuHRh0XXTNG8zEuHThCYnQ; Fri, 12 Apr 2019 13:23:39 +0200
+Subject: Re: [Patch V2] v4l2-core: fix use-after-free error
+To:     Sumit Gupta <sumitg@nvidia.com>, mchehab@kernel.org,
+        sakari.ailus@linux.intel.com, paul.kocialkowski@bootlin.com,
+        tfiga@chromium.org, keiichiw@chromium.org, bbasu@nvidia.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1554998478-30349-1-git-send-email-sumitg@nvidia.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <b4519134-3053-f80a-ac03-3301abd9e63a@xs4all.nl>
+Date:   Fri, 12 Apr 2019 13:23:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-Received: by 2002:a24:8091:: with SMTP id g139mr3880400itd.3.1555067770565;
- Fri, 12 Apr 2019 04:16:10 -0700 (PDT)
-Date:   Fri, 12 Apr 2019 04:16:10 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000010fe260586536e86@google.com>
-Subject: general protection fault in flexcop_usb_probe
-From:   syzbot <syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <1554998478-30349-1-git-send-email-sumitg@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfII2VVHid3m/UF9Hs/v0ria3EGVL/ZnTC7QL7Gv6FxM+UyUmiZPD9/0utA7eMI0Wpv5dkMDwUrsHx3WVZcn7ibvJ3yqZsiLM1WHPJSdRICC9ZpKHWnCB
+ 6PtUzOkhbe6gWz7GAhO0V2MNbDovt5HcHWRnA1VvEmakZBitPXNyB9D9O/UgZCYFwEBHcFKVEVRQOIEa5kyEjhKrW6T1GNshUEZcI78tko/8XcpgZ7bKswnB
+ TaA1mwm3m8yOsIgvh/HnJ6lxE3x/dJ4B7mOa5BcWGdaOfOc2oVGe45ZS3zeZ1XNWCmAGFYQEWDtXlXHIMHa+SuH63ZgCZE+NfYn5I8jS5eDkJAM0dGMK1Slz
+ H6F6nvdp6D5jnQNupZ49ed+18cUoCWlmDqyeBcM6quGRSHB5SsCYv2LJyM0kJO+uqE4D4my/ffocm4jwj28PVS5ENgBX0rx7nCUkWXPw+wIVkg4F6ZAOrR1S
+ oTKY/JN8bUoJRqEXXZca0KukB4qjl2TcVtM8bHVscMIkXFTJMVz1SATDEOPjmS49eGrZsFMczyXKnCrGlTR30By89nQp5Ii/J1roYg==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+On 4/11/19 6:01 PM, Sumit Gupta wrote:
+> From: sumitg <sumitg@nvidia.com>
+> 
+> Fixing use-after-free within __v4l2_ctrl_handler_setup().
+> Memory is being freed with kfree(new_ref) for duplicate
+> control reference entry but cluster is still referring
+> to the duplicate entry. Change done to update ctrl->cluster
+> only when new control reference is added. Also, checking if
+> ctrl->ncontrols is non-zero before accessing controls from
+> cluster pointer to avoid illegal access when cluster has
+> zero controls.
+> 
+>  ==================================================================
+>  BUG: KASAN: use-after-free in __v4l2_ctrl_handler_setup+0x388/0x428
+>  Read of size 8 at addr ffffffc324e78618 by task systemd-udevd/312
+> 
+>  Allocated by task 312:
+> 
+>  Freed by task 312:
+> 
+>  The buggy address belongs to the object at ffffffc324e78600
+>   which belongs to the cache kmalloc-64 of size 64
+>  The buggy address is located 24 bytes inside of
+>   64-byte region [ffffffc324e78600, ffffffc324e78640)
+>  The buggy address belongs to the page:
+>  page:ffffffbf0c939e00 count:1 mapcount:0 mapping:
+> 					(null) index:0xffffffc324e78f80
+>  flags: 0x4000000000000100(slab)
+>  raw: 4000000000000100 0000000000000000 ffffffc324e78f80 000000018020001a
+>  raw: 0000000000000000 0000000100000001 ffffffc37040fb80 0000000000000000
+>  page dumped because: kasan: bad access detected
+> 
+>  Memory state around the buggy address:
+>   ffffffc324e78500: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+>   ffffffc324e78580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+>  >ffffffc324e78600: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+>                              ^
+>   ffffffc324e78680: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+>   ffffffc324e78700: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+>  ==================================================================
+> 
+> Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+> v2:
+> * update ctrl->cluster only when new control reference is added.
+> * check ctrl->ncontrols to avoid illegal access when cluster has zero controls.
+> 
+>  drivers/media/v4l2-core/v4l2-ctrls.c | 53 +++++++++++++++++++-----------------
+>  1 file changed, 28 insertions(+), 25 deletions(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+> index 5e3806f..3d0a952 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+> @@ -2154,15 +2154,6 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
+>  	if (size_extra_req)
+>  		new_ref->p_req.p = &new_ref[1];
+>  
+> -	if (ctrl->handler == hdl) {
+> -		/* By default each control starts in a cluster of its own.
+> -		   new_ref->ctrl is basically a cluster array with one
+> -		   element, so that's perfect to use as the cluster pointer.
+> -		   But only do this for the handler that owns the control. */
+> -		ctrl->cluster = &new_ref->ctrl;
+> -		ctrl->ncontrols = 1;
+> -	}
+> -
+>  	INIT_LIST_HEAD(&new_ref->node);
+>  
+>  	mutex_lock(hdl->lock);
+> @@ -2195,6 +2186,15 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
+>  	hdl->buckets[bucket] = new_ref;
+>  	if (ctrl_ref)
+>  		*ctrl_ref = new_ref;
+> +	if (ctrl->handler == hdl) {
+> +		/* By default each control starts in a cluster of its own.
+> +		 * new_ref->ctrl is basically a cluster array with one
+> +		 * element, so that's perfect to use as the cluster pointer.
+> +		 * But only do this for the handler that owns the control.
+> +		 */
+> +		ctrl->cluster = &new_ref->ctrl;
+> +		ctrl->ncontrols = 1;
+> +	}
+>  
+>  unlock:
+>  	mutex_unlock(hdl->lock);
 
-syzbot found the following crash on:
+This looks good.
 
-HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=15adefa7200000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-dashboard link: https://syzkaller.appspot.com/bug?extid=d93dff37e6a89431c158
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=175c0cd3200000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1186469f200000
+> @@ -2725,25 +2725,28 @@ int __v4l2_ctrl_handler_setup(struct v4l2_ctrl_handler *hdl)
+>  		ctrl->done = false;
+>  
+>  	list_for_each_entry(ctrl, &hdl->ctrls, node) {
+> -		struct v4l2_ctrl *master = ctrl->cluster[0];
+> -		int i;
+> -
+> -		/* Skip if this control was already handled by a cluster. */
+> -		/* Skip button controls and read-only controls. */
+> -		if (ctrl->done || ctrl->type == V4L2_CTRL_TYPE_BUTTON ||
+> -		    (ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY))
+> -			continue;
+> +		if (ctrl->ncontrols) {
+> +			struct v4l2_ctrl *master = ctrl->cluster[0];
+> +			int i;
+> +
+> +			/* Skip if this control was already handled by a */
+> +			/* cluster. Skip button controls and read-only */
+> +			/* controls. */
+> +			if (ctrl->done || ctrl->type == V4L2_CTRL_TYPE_BUTTON ||
+> +				(ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY))
+> +				continue;
+>  
+> -		for (i = 0; i < master->ncontrols; i++) {
+> -			if (master->cluster[i]) {
+> -				cur_to_new(master->cluster[i]);
+> -				master->cluster[i]->is_new = 1;
+> -				master->cluster[i]->done = true;
+> +			for (i = 0; i < master->ncontrols; i++) {
+> +				if (master->cluster[i]) {
+> +					cur_to_new(master->cluster[i]);
+> +					master->cluster[i]->is_new = 1;
+> +					master->cluster[i]->done = true;
+> +				}
+>  			}
+> +			ret = call_op(master, s_ctrl);
+> +			if (ret)
+> +				break;
+>  		}
+> -		ret = call_op(master, s_ctrl);
+> -		if (ret)
+> -			break;
+>  	}
+>  
+>  	return ret;
+> 
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
+These changes shouldn't be needed: when you get here all controls are
+guaranteed to have a non-0 ncontrols value.
 
-b2c2-flexcop: found 'LG Electronics LGDT3303 VSB/QAM Frontend' .
-usb 1-1: DVB: registering adapter 0 frontend 0 (LG Electronics LGDT3303  
-VSB/QAM Frontend)...
-b2c2-flexcop: initialization of 'Air2PC/AirStar 2 ATSC 3rd generation  
-(HD5000)' at the 'USB' bus controlled by a 'FlexCopIII' complete
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] SMP KASAN PTI
-CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.1.0-rc4-319354-g9a33b36 #3
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:flexcop_usb_transfer_init  
-drivers/media/usb/b2c2/flexcop-usb.c:429 [inline]
-RIP: 0010:flexcop_usb_probe.cold+0x1cb/0x7bd  
-drivers/media/usb/b2c2/flexcop-usb.c:574
-Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 74 05 e8 dc d2 65 f7 48 8b 5b 18 b8  
-ff ff 37 00 48 c1 e0 2a 48 8d 7b 04 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48  
-89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 c1
-RSP: 0018:ffff8880a862f2e0 EFLAGS: 00010247
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff8a430240
-RDX: 0000000000000000 RSI: ffffffff8a430300 RDI: 0000000000000004
-RBP: ffff88809d3b9108 R08: ffff8880a84d4980 R09: ffffed1015a24fc9
-R10: ffffed1015a24fc8 R11: ffff8880ad127e47 R12: ffff88809d3b9148
-R13: 0000000000000000 R14: ffff88809d3b9100 R15: ffff88809575c000
-FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd361552000 CR3: 0000000095f74000 CR4: 00000000001406e0
-Call Trace:
-  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2021
-  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
-  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-Modules linked in:
----[ end trace 8800fc602d77e417 ]---
-RIP: 0010:flexcop_usb_transfer_init  
-drivers/media/usb/b2c2/flexcop-usb.c:429 [inline]
-RIP: 0010:flexcop_usb_probe.cold+0x1cb/0x7bd  
-drivers/media/usb/b2c2/flexcop-usb.c:574
-Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 74 05 e8 dc d2 65 f7 48 8b 5b 18 b8  
-ff ff 37 00 48 c1 e0 2a 48 8d 7b 04 48 89 fa 48 c1 ea 03 <0f> b6 14 02 48  
-89 f8 83 e0 07 83 c0 01 38 d0 7c 08 84 d2 0f 85 c1
-RSP: 0018:ffff8880a862f2e0 EFLAGS: 00010247
-RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffffff8a430240
-RDX: 0000000000000000 RSI: ffffffff8a430300 RDI: 0000000000000004
-RBP: ffff88809d3b9108 R08: ffff8880a84d4980 R09: ffffed1015a24fc9
-R10: ffffed1015a24fc8 R11: ffff8880ad127e47 R12: ffff88809d3b9148
-R13: 0000000000000000 R14: ffff88809d3b9100 R15: ffff88809575c000
-FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd361552000 CR3: 0000000095f74000 CR4: 00000000001406e0
+If it is possible to encounter a control where ncontrols == 0, then
+that's a bug elsewhere. But as far as I can tell that isn't the case.
 
+Regards,
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+	Hans
