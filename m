@@ -2,202 +2,207 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90803C282CE
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 14:45:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35A44C282CE
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:11:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 568282171F
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 14:45:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 045ED2171F
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 15:11:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="btqWVD5D"
+	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="mWqYcy3J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726886AbfDLOpz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 10:45:55 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:41586 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726768AbfDLOpz (ORCPT
+        id S1726829AbfDLPLA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 11:11:00 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:37171 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726755AbfDLPLA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 10:45:55 -0400
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 19617549;
-        Fri, 12 Apr 2019 16:45:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1555080352;
-        bh=N9bUwBtKSC2YYi53tCPZlSQqmxTWP+pxQ5P1k+gbeCA=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=btqWVD5DoVG5zOB8s58r+X0xRXzgvk1+wiCnmkE+7/fiwTFrMK/SRLpnDJ8LfrNRo
-         xj7HZCZvGHwwSOJUJpVVvUFk+0pQrDY3UCM+YvubUk8gg65VPHki4AnBBy8zfysQy0
-         QmWSiyEPa7oo7++FVCN0cNbINj6YWMFXzuqrLgak=
-Reply-To: kieran.bingham@ideasonboard.com
-Subject: Re: [RFC 3/5] media: adv748x: Make lanes number depend on routing
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
-        niklas.soderlund+renesas@ragnatech.se
-Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        dave.stevenson@raspberrypi.org
-References: <20190316154801.20460-1-jacopo+renesas@jmondi.org>
- <20190316154801.20460-4-jacopo+renesas@jmondi.org>
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=kieran.bingham@ideasonboard.com; keydata=
- mQINBFYE/WYBEACs1PwjMD9rgCu1hlIiUA1AXR4rv2v+BCLUq//vrX5S5bjzxKAryRf0uHat
- V/zwz6hiDrZuHUACDB7X8OaQcwhLaVlq6byfoBr25+hbZG7G3+5EUl9cQ7dQEdvNj6V6y/SC
- rRanWfelwQThCHckbobWiQJfK9n7rYNcPMq9B8e9F020LFH7Kj6YmO95ewJGgLm+idg1Kb3C
- potzWkXc1xmPzcQ1fvQMOfMwdS+4SNw4rY9f07Xb2K99rjMwZVDgESKIzhsDB5GY465sCsiQ
- cSAZRxqE49RTBq2+EQsbrQpIc8XiffAB8qexh5/QPzCmR4kJgCGeHIXBtgRj+nIkCJPZvZtf
- Kr2EAbc6tgg6DkAEHJb+1okosV09+0+TXywYvtEop/WUOWQ+zo+Y/OBd+8Ptgt1pDRyOBzL8
- RXa8ZqRf0Mwg75D+dKntZeJHzPRJyrlfQokngAAs4PaFt6UfS+ypMAF37T6CeDArQC41V3ko
- lPn1yMsVD0p+6i3DPvA/GPIksDC4owjnzVX9kM8Zc5Cx+XoAN0w5Eqo4t6qEVbuettxx55gq
- 8K8FieAjgjMSxngo/HST8TpFeqI5nVeq0/lqtBRQKumuIqDg+Bkr4L1V/PSB6XgQcOdhtd36
- Oe9X9dXB8YSNt7VjOcO7BTmFn/Z8r92mSAfHXpb07YJWJosQOQARAQABtDBLaWVyYW4gQmlu
- Z2hhbSA8a2llcmFuLmJpbmdoYW1AaWRlYXNvbmJvYXJkLmNvbT6JAkAEEwEKACoCGwMFCwkI
- BwIGFQgJCgsCBBYCAwECHgECF4ACGQEFAlnDk/gFCQeA/YsACgkQoR5GchCkYf3X5w/9EaZ7
- cnUcT6dxjxrcmmMnfFPoQA1iQXr/MXQJBjFWfxRUWYzjvUJb2D/FpA8FY7y+vksoJP7pWDL7
- QTbksdwzagUEk7CU45iLWL/CZ/knYhj1I/+5LSLFmvZ/5Gf5xn2ZCsmg7C0MdW/GbJ8IjWA8
- /LKJSEYH8tefoiG6+9xSNp1p0Gesu3vhje/GdGX4wDsfAxx1rIYDYVoX4bDM+uBUQh7sQox/
- R1bS0AaVJzPNcjeC14MS226mQRUaUPc9250aj44WmDfcg44/kMsoLFEmQo2II9aOlxUDJ+x1
- xohGbh9mgBoVawMO3RMBihcEjo/8ytW6v7xSF+xP4Oc+HOn7qebAkxhSWcRxQVaQYw3S9iZz
- 2iA09AXAkbvPKuMSXi4uau5daXStfBnmOfalG0j+9Y6hOFjz5j0XzaoF6Pln0jisDtWltYhP
- X9LjFVhhLkTzPZB/xOeWGmsG4gv2V2ExbU3uAmb7t1VSD9+IO3Km4FtnYOKBWlxwEd8qOFpS
- jEqMXURKOiJvnw3OXe9MqG19XdeENA1KyhK5rqjpwdvPGfSn2V+SlsdJA0DFsobUScD9qXQw
- OvhapHe3XboK2+Rd7L+g/9Ud7ZKLQHAsMBXOVJbufA1AT+IaOt0ugMcFkAR5UbBg5+dZUYJj
- 1QbPQcGmM3wfvuaWV5+SlJ+WeKIb8ta5Ag0EVgT9ZgEQAM4o5G/kmruIQJ3K9SYzmPishRHV
- DcUcvoakyXSX2mIoccmo9BHtD9MxIt+QmxOpYFNFM7YofX4lG0ld8H7FqoNVLd/+a0yru5Cx
- adeZBe3qr1eLns10Q90LuMo7/6zJhCW2w+HE7xgmCHejAwuNe3+7yt4QmwlSGUqdxl8cgtS1
- PlEK93xXDsgsJj/bw1EfSVdAUqhx8UQ3aVFxNug5OpoX9FdWJLKROUrfNeBE16RLrNrq2ROc
- iSFETpVjyC/oZtzRFnwD9Or7EFMi76/xrWzk+/b15RJ9WrpXGMrttHUUcYZEOoiC2lEXMSAF
- SSSj4vHbKDJ0vKQdEFtdgB1roqzxdIOg4rlHz5qwOTynueiBpaZI3PHDudZSMR5Fk6QjFooE
- XTw3sSl/km/lvUFiv9CYyHOLdygWohvDuMkV/Jpdkfq8XwFSjOle+vT/4VqERnYFDIGBxaRx
- koBLfNDiiuR3lD8tnJ4A1F88K6ojOUs+jndKsOaQpDZV6iNFv8IaNIklTPvPkZsmNDhJMRHH
- Iu60S7BpzNeQeT4yyY4dX9lC2JL/LOEpw8DGf5BNOP1KgjCvyp1/KcFxDAo89IeqljaRsCdP
- 7WCIECWYem6pLwaw6IAL7oX+tEqIMPph/G/jwZcdS6Hkyt/esHPuHNwX4guqTbVEuRqbDzDI
- 2DJO5FbxABEBAAGJAiUEGAEKAA8CGwwFAlnDlGsFCQeA/gIACgkQoR5GchCkYf1yYRAAq+Yo
- nbf9DGdK1kTAm2RTFg+w9oOp2Xjqfhds2PAhFFvrHQg1XfQR/UF/SjeUmaOmLSczM0s6XMeO
- VcE77UFtJ/+hLo4PRFKm5X1Pcar6g5m4xGqa+Xfzi9tRkwC29KMCoQOag1BhHChgqYaUH3yo
- UzaPwT/fY75iVI+yD0ih/e6j8qYvP8pvGwMQfrmN9YB0zB39YzCSdaUaNrWGD3iCBxg6lwSO
- LKeRhxxfiXCIYEf3vwOsP3YMx2JkD5doseXmWBGW1U0T/oJF+DVfKB6mv5UfsTzpVhJRgee7
- 4jkjqFq4qsUGxcvF2xtRkfHFpZDbRgRlVmiWkqDkT4qMA+4q1y/dWwshSKi/uwVZNycuLsz+
- +OD8xPNCsMTqeUkAKfbD8xW4LCay3r/dD2ckoxRxtMD9eOAyu5wYzo/ydIPTh1QEj9SYyvp8
- O0g6CpxEwyHUQtF5oh15O018z3ZLztFJKR3RD42VKVsrnNDKnoY0f4U0z7eJv2NeF8xHMuiU
- RCIzqxX1GVYaNkKTnb/Qja8hnYnkUzY1Lc+OtwiGmXTwYsPZjjAaDX35J/RSKAoy5wGo/YFA
- JxB1gWThL4kOTbsqqXj9GLcyOImkW0lJGGR3o/fV91Zh63S5TKnf2YGGGzxki+ADdxVQAm+Q
- sbsRB8KNNvVXBOVNwko86rQqF9drZuw=
-Organization: Ideas on Board
-Message-ID: <e48d6fc3-5f08-0ebd-7337-42f1a86eedf6@ideasonboard.com>
-Date:   Fri, 12 Apr 2019 15:45:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Fri, 12 Apr 2019 11:11:00 -0400
+Received: by mail-lj1-f193.google.com with SMTP id v13so9201920ljk.4
+        for <linux-media@vger.kernel.org>; Fri, 12 Apr 2019 08:10:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=6tPhpVm+zVP7MzgwZTlE3YX7FYOBAJAcqIh0hncQ+Mg=;
+        b=mWqYcy3JEkcMDfmzr41EEUiswkzGiA0Eh/NMVYQcUt2vEx+Kw71n40g/embrDpOW1F
+         tMdhkZ+NYcC5ogJ0pc9JiukObiVAoW2Yrhp0Ui9+Udu1O0UutK4lOySI0oHXdiZHEStS
+         mFtEN+1UoQIE0OTFkLHiFuosW1OCrbUk0imB8V5Ns5pLPFPxFRWASNr05ZWkvoTcI+Ab
+         R2cyrZC0kZcNVBVkserIodbPui9XjovqDoXPIug63jcL+K6ude5VF2mpuDtEeqW8yrPs
+         Y77wnNxsrWTRIjqdkMkim+aYkl11ft7wx0tCT0Yye3ZhIVWJOAL/+V2smrPr+dV6cYeI
+         tXOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=6tPhpVm+zVP7MzgwZTlE3YX7FYOBAJAcqIh0hncQ+Mg=;
+        b=ZXitRQYT5XQSI0FwNAv6vLgNhjjKEW8NhiPuVyG7BGV029QhpbmmwE93P7kchFVd7r
+         h+uA9AqYqhgW3ncsAPvssxcNJUzmQqUonEJNsShvSzTK8wSRc5pdNFzIiSuCidl8Gy13
+         WewUsq2qeO4mLkVhN3FxM3uiy3k0Q1/Zm0uwtnUVjKL8cvofTvMyYg/WBC13WvQzD+RG
+         H9cJN3uP4u/05YyWIYlW9MYrwF4VAG0PnuJxr1Em03khbYxiu+JwohCW/Os2CPdou6X2
+         IoVBEprPVNYAu4BpSDbXwEkhjtXWTo3V0wwbG4Ww3qCGAN8bFPvleRPJAAROK7v8qwJj
+         DxPg==
+X-Gm-Message-State: APjAAAW+/HaKVTomIrYkI7oA4ohnbYREpvmyg6cSG5R5usr4wAkZvRef
+        LSBO5x8ZutA4GkSZxVdvxeiekw==
+X-Google-Smtp-Source: APXvYqy97cUzl7uqBRg3PiaCLFBMGdwvHOvGO/YhPwUU+UxMAvaxw5TXii1R8MF8Fc1x8Od4PJNO1Q==
+X-Received: by 2002:a2e:9a0f:: with SMTP id o15mr30688054lji.130.1555081857652;
+        Fri, 12 Apr 2019 08:10:57 -0700 (PDT)
+Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
+        by smtp.gmail.com with ESMTPSA id z15sm8152416ljz.55.2019.04.12.08.10.56
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 12 Apr 2019 08:10:56 -0700 (PDT)
+Date:   Fri, 12 Apr 2019 17:10:56 +0200
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Steve Longerbeam <steve_longerbeam@mentor.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        "George G. Davis" <george_davis@mentor.com>,
+        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Michael Rodin <mrodin@de.adit-jv.com>,
+        Eugen Friedrich <efriedrich@de.adit-jv.com>,
+        harsha.manjulamallikarjun@in.bosch.com,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v3 3/9] media: rcar-vin: Create a group notifier
+Message-ID: <20190412151056.GD1980@bigcity.dyn.berto.se>
+References: <25dc2668-d270-ebf8-b014-88bbb7a6f243@gmail.com>
+ <20190408111241.GF15350@bigcity.dyn.berto.se>
+ <df6fa3bf-bf21-50b0-2cad-a613e2a43ce0@gmail.com>
+ <20190409205745.GB9750@pendragon.ideasonboard.com>
+ <3c2c2d04-8028-3511-aba0-0ea6dd5bdc50@mentor.com>
+ <20190409225948.GD9750@pendragon.ideasonboard.com>
+ <69091709-a63f-6a11-4b4b-13fcf8d3e40a@gmail.com>
+ <20190411202819.GA8006@vmlxhi-102.adit-jv.com>
+ <20190411204237.GH30887@bigcity.dyn.berto.se>
+ <20190412141205.GA17075@vmlxhi-102.adit-jv.com>
 MIME-Version: 1.0
-In-Reply-To: <20190316154801.20460-4-jacopo+renesas@jmondi.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190412141205.GA17075@vmlxhi-102.adit-jv.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Eugeniu,
 
-On 16/03/2019 15:47, Jacopo Mondi wrote:
-> Use the TXA routing information to configure the number of active CSI-2
-> data lanes. When routing AFE through TXA limit the number of data lanes
-> to 1, while in the canonical HDMI->TXA routing use all the physically
-> available ones.
+On 2019-04-12 16:12:05 +0200, Eugeniu Rosca wrote:
+> Hi Niklas,
 > 
-> The number of lanes collected from the 'data-lanes' DT property is now
-> used as a the number of physically available data lanes, while the
-> 'num_lanes' variable contains the number of active ones.
+> On Thu, Apr 11, 2019 at 10:42:37PM +0200, Niklas Söderlund wrote:
+> > Hi Eugenie,
+> > 
+> > On 2019-04-11 22:28:19 +0200, Eugeniu Rosca wrote:
+> > > Hi Niklas,
+> > > 
+> > > Two simple questions:
+> > >  - I can only clone git://git.ragnatech.se/linux, but can't access it on
+> > >    the web, does it have some web interface?
+> > 
+> > There should be a gitweb instance running at https://git.ragnatech.se/ 
+> > if not let me know since then something is wrong ;-)
+> 
+> Yes, I am able to access the gitweb instance too :)
+> 
+> > 
+> > >  - Browsing through your v4l2/next/csi2/upport branch, it looks to be
+> > >    targeted for upstream. Could we rely on those commits already or
+> > >    they are still in development/testing?
+> > 
+> > The patches in that branch are target for upstreaming but sometime 
+> > changes due to review comments. Best check the media-tree of what have 
+> > accepted and the patchwork instance if you want day fresh statuses. I 
+> > also rebase the branch from time to time on-top of the media-tree so you 
+> > should not depend on it much I'm afraid.
+> > 
+> > If you plan to do some work on the rcar-csi2 driver you can always reach 
+> > out and check what the status is if you are unsure.
+> 
+> Understood. Thanks. Since I've gone off-topic quite a bit already, may I
+> have your feedback on below questions sitting in the back of my mind for
+> some time:
 
-Could the variable perhaps be called active_lanes rather than num_lanes
-if it represents how many are active rather than how many there are?
-
+Off topic is good ;-)
 
 > 
-> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> ---
->  drivers/media/i2c/adv748x/adv748x-core.c | 19 ++++++++++++++++++-
->  drivers/media/i2c/adv748x/adv748x.h      |  1 +
->  2 files changed, 19 insertions(+), 1 deletion(-)
+>  - There seem to be quite a number of non-mainlined rcar-vin patches
+>    sitting on top of v4.14.75-ltsi and part of rcar-3.9.x release. With
+>    some false positives, around 35-40 such commits can be identified as
+>    shown in [1]. Based on my checks, only a small subset of them are
+>    (actively) discussed in linux-media/linux-renesas-soc ML and for most
+>    of them I can't find any trace. I am just curious if there is any
+>    background force driving the upstreaming of those patches or the
+>    submissions/discussions happen rather by accident?
+
+Yes I'm driving the upstreaming of most of those out of tree patches.  
+Currently a lot of them are blocked on the organic growth of the 
+addition of Gen3 and my lack of understanding of v4l2 at the time. Now I 
+know better and I'm in the process of cleaning up the driver to prepare 
+upstreaming most of them. I will send out the first cleanup patch later 
+today.
+
+I have in the past tried to upstream all patches and then cleanup the 
+feature complete driver but it's gotten to a point where that is more 
+painful then doing the right thing (tm).
+
+If there is any particular patch that would be helpful for you to have 
+upstream earlier then others let me know and I can try to put it first 
+in the queue.
+
 > 
-> diff --git a/drivers/media/i2c/adv748x/adv748x-core.c b/drivers/media/i2c/adv748x/adv748x-core.c
-> index 02135741b1a6..f91c7b83f1bf 100644
-> --- a/drivers/media/i2c/adv748x/adv748x-core.c
-> +++ b/drivers/media/i2c/adv748x/adv748x-core.c
-> @@ -350,6 +350,8 @@ static int adv748x_link_setup(struct media_entity *entity,
->  	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
->  	bool enable = flags & MEDIA_LNK_FL_ENABLED;
->  	u8 csi4_in_sel = 0;
-> +	u8 num_lanes;
-> +	int ret;
->  
->  	/* Refuse to enable multiple links to the same TX at the same time. */
->  	if (enable && tx->src)
-> @@ -373,10 +375,23 @@ static int adv748x_link_setup(struct media_entity *entity,
->  			csi4_in_sel |= ADV748X_IO_10_CSI4_IN_SEL_AFE;
->  		else
->  			csi4_in_sel |= ADV748X_IO_10_CSI1_EN;
-> +
-> +		num_lanes = 1;
->  	}
->  
-> -	if (state->hdmi.tx)
-> +	if (state->hdmi.tx) {
->  		csi4_in_sel |= ADV748X_IO_10_CSI4_EN;
-> +		num_lanes = tx->available_lanes;
-> +	}
-> +
-> +	/* Update the number of active lanes if it has changed. */
-> +	if (num_lanes != tx->num_lanes) {
-> +		tx->num_lanes = num_lanes;
-> +		ret = adv748x_write(state, tx->page, 0x00,
-> +				    0x80 | tx->num_lanes);
-> +		if (ret)
-> +			return ret;
-> +	}
->  
->  	state->csi4_in_sel = csi4_in_sel;
->  
-> @@ -608,6 +623,7 @@ static int adv748x_parse_csi2_lanes(struct adv748x_state *state,
->  		}
->  
->  		state->txa.num_lanes = num_lanes;
-> +		state->txa.available_lanes = num_lanes;
->  		adv_dbg(state, "TXA: using %u lanes\n", state->txa.num_lanes);
->  	}
->  
-> @@ -619,6 +635,7 @@ static int adv748x_parse_csi2_lanes(struct adv748x_state *state,
->  		}
->  
->  		state->txb.num_lanes = num_lanes;
-> +		state->txb.available_lanes = num_lanes;
->  		adv_dbg(state, "TXB: using %u lanes\n", state->txb.num_lanes);
->  	}
->  
-> diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
-> index 27c116d09284..6e5c2cb421fe 100644
-> --- a/drivers/media/i2c/adv748x/adv748x.h
-> +++ b/drivers/media/i2c/adv748x/adv748x.h
-> @@ -80,6 +80,7 @@ struct adv748x_csi2 {
->  	unsigned int page;
->  	unsigned int port;
->  	unsigned int num_lanes;
+>  - I am seeing two sets of rcar-vin tests [2-3] and I think there is a
+>    parent/fork relationship between them, but now they appear to be
+>    diverged. Which one would you recommend? What's the test coverage
+>    provided by these suites? Do you see room/chance for something like
+>    drivers/gpu/drm/selftests in rcar-vin in future (maybe using
+>    the upcoming kunit [4] approach?). BTW, we've been using the
+>    vsp-tests for quite some time and they've been extremely useful in
+>    pointing out regressions in our own patches. So, many thanks for
+>    sharing those too.
 
-Aha, except num_lanes looks like its' from an earlier patch...
+The vin-tests at ragnatech.se is the parent one. It's not as nice as the 
+vsp-tests and I would like to add more tests and rewrite it in python3.  
+If you have additional tests pleas send me patches and I will be happy 
+to include them.
 
-I wonder if it's worth renaming...
+One idea I would really like to do is a HDMI loopback test. Connecting 
+the DU and VIN and running tests on that to allow automatic testing of 
+multiple resolutions and in the future scaling. As it is now all 
+vin-tests depends on external video sources. An alternate idea to this 
+is to create a remote "video server" on a RPi as it can deliver both 
+HDMI and CVBS video...
 
-> +	unsigned int available_lanes;
->  
->  	struct media_pad pads[ADV748X_CSI2_NR_PADS];
->  	struct v4l2_ctrl_handler ctrl_hdl;
+I see no issue with using a kernel test framework but I have little 
+experience in that area and it's not something I'm planing on worknig on 
+at the moment.
+
 > 
+> > 
+> > -- 
+> > Regards,
+> > Niklas Söderlund
+> 
+> [1] git log --oneline --cherry-pick --right-only \
+>     torvalds/master...rcar-3.9.4 -- drivers/media/platform/rcar-vin/
+> [2] https://git.ragnatech.se/vin-tests/
+> [3] http://jmondi.org/git/vin-tests/
+> [4] https://patchwork.kernel.org/cover/10704157/
+> 
+> Best regards,
+> Eugeniu.
 
 -- 
-Regards
---
-Kieran
+Regards,
+Niklas Söderlund
