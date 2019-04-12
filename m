@@ -2,179 +2,234 @@ Return-Path: <SRS0=qnBx=SO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 842DDC10F0E
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 12:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D024EC10F0E
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 12:18:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5BC3C2077C
-	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 12:17:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 859892186A
+	for <linux-media@archiver.kernel.org>; Fri, 12 Apr 2019 12:18:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="eJa0HKq3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726730AbfDLMRr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 12 Apr 2019 08:17:47 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:50420 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726327AbfDLMRr (ORCPT
+        id S1726843AbfDLMSf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 12 Apr 2019 08:18:35 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:45056 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726773AbfDLMSe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 12 Apr 2019 08:17:47 -0400
-Received: from [IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68] ([IPv6:2001:983:e9a7:1:f507:24ec:6ad2:dc68])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id Ev7nh0u4gNG8zEv7ohCnHK; Fri, 12 Apr 2019 14:17:44 +0200
-Subject: Re: [PATCH v5 02/13] media: v4l2-fwnode: add v4l2_fwnode_connector
-To:     Marco Felsch <m.felsch@pengutronix.de>, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, hans.verkuil@cisco.com,
-        jacopo+renesas@jmondi.org, robh+dt@kernel.org
-Cc:     p.zabel@pengutronix.de, javierm@redhat.co,
-        laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-References: <20190405060317.11240-1-m.felsch@pengutronix.de>
- <20190405060317.11240-3-m.felsch@pengutronix.de>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <abb9a8d6-bfdb-499c-7278-e6015f2c66d7@xs4all.nl>
-Date:   Fri, 12 Apr 2019 14:17:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190405060317.11240-3-m.felsch@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
+        Fri, 12 Apr 2019 08:18:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1555071513; x=1586607513;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Y5d6/Oyd4XrqH1o2gUS8ZGmuKdCWrZicV4KgZbuvG48=;
+  b=eJa0HKq3SqhjW8Z3ACpdmLu42Mm/yLsETs1LqOayvzDN7HBlw9Q5ku3e
+   iAh6UQqErGBvq6YN1gHauP7ADqs7DkMetIhF5J1y/tgzzPQAVSUGRvdi/
+   wvlsS0J+Q4oDqGtz4VxKtWSSPZ82qFH/wZaErSf0/AaQKIqPCVXKgiz34
+   I=;
+X-IronPort-AV: E=Sophos;i="5.60,341,1549929600"; 
+   d="scan'208";a="390781667"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-69849ee2.us-west-2.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 12 Apr 2019 12:17:06 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-2a-69849ee2.us-west-2.amazon.com (8.14.7/8.14.7) with ESMTP id x3CCH3DV117667
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=FAIL);
+        Fri, 12 Apr 2019 12:17:04 GMT
+Received: from EX13D21UWB001.ant.amazon.com (10.43.161.108) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 12 Apr 2019 12:17:03 +0000
+Received: from EX13D21UWB003.ant.amazon.com (10.43.161.212) by
+ EX13D21UWB001.ant.amazon.com (10.43.161.108) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Fri, 12 Apr 2019 12:17:03 +0000
+Received: from EX13D21UWB003.ant.amazon.com ([10.43.161.212]) by
+ EX13D21UWB003.ant.amazon.com ([10.43.161.212]) with mapi id 15.00.1367.000;
+ Fri, 12 Apr 2019 12:17:03 +0000
+From:   "Herrenschmidt, Benjamin" <benh@amazon.com>
+To:     "joel@jms.id.au" <joel@jms.id.au>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "eajames@linux.ibm.com" <eajames@linux.ibm.com>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "jae.hyun.yoo@linux.intel.com" <jae.hyun.yoo@linux.intel.com>
+CC:     "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
+Subject: Re: [PATCH v2] media: platform: fix a kernel warning on clk control
+Thread-Topic: [PATCH v2] media: platform: fix a kernel warning on clk control
+Thread-Index: AQHU8Smjuz3kweTcSESAcEA15z/klA==
+Date:   Fri, 12 Apr 2019 12:17:03 +0000
+Message-ID: <9aa895a5184ddd30eb5750e4ec223fd5a5df4a54.camel@amazon.com>
+References: <20190329212710.5378-1-jae.hyun.yoo@linux.intel.com>
+         <09113211-ef61-2168-cf78-37c76f21edba@xs4all.nl>
+In-Reply-To: <09113211-ef61-2168-cf78-37c76f21edba@xs4all.nl>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfJFe76xnYyHWMdMOtPZH9X5/5XzTTTFiWcrzB5/WMA7ltxyvjdY/xyyGaFUdxxDdZQ1BVrX8wiMxsv9E9pzi2B7UQHwRcPRu4GcOfkN+37QihIbHGp1c
- 6iqWj9pLAc213Z3jaGCLqJQLic5oVJHeKthY215eRE2P6yqTZbjS0bh/GuQVgJg7STZEGCia6jDY/Wotnz6ELbXgLhw3zMoQW4L32ah5x8omsxQ9baywO+GO
- 7Bq9wjAg+DaTUzTYJWsmGVp/VAi5Z5KMk2bqRsOr2mVKxXIPWqiLNm6ZbTGNG1Lh6FlWB+qcIw+lUDMTvcR/JN9Z2uGvqu/+0GF1VzfGQRqkN1C5QQPnlxy4
- nx+hBS3uI8Z8vu8dbH73ni6kO5mA7C2AQyiCevD/pq/mUIyOhPmDQav4qm2GxspwRP7Cozr/lfyIOQmKh7J831+flW8ggh5BCAcqMPBY7QGnU6TUvg9ScWCS
- F7TjK0YPyOU7YerMwiiIl43UpIRZCXLiiYC8BQTvJI1PHLadEgLyqhwa+esFzR7GB9IAEFHkoNU84XDwvdw+XgXwKUaWwp6ukCrIt7ATNsqvfhOtL21yjnOt
- SJhtcxGAJzw+5jgLB54aAkpF1crsBlTBckBICUqcg9cN5z1Q3jkL7CRQyg7jrz1qfznfXDeBqy4VjgKrZJVoPVhd
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.161.23]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2D22B281C241E84682C5D77A41D21CD7@amazon.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/5/19 8:03 AM, Marco Felsch wrote:
-> Currently every driver needs to parse the connector endpoints by it self.
-> This is the initial work to make this generic. The generic connector has
-> some common fields and some connector specific parts. The generic one
-> includes:
->   - type
->   - label
->   - remote_port (the port where the connector is connected to)
->   - remote_id   (the endpoint where the connector is connected to)
-> 
-> The specific fields are within a union, since only one of them can be
-> available at the time. Since this is the initial support the patch adds
-> only the analog-connector specific ones.
-> 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> ---
->  include/media/v4l2-connector.h | 34 ++++++++++++++++++++++++++++++++++
->  include/media/v4l2-fwnode.h    | 33 +++++++++++++++++++++++++++++++++
->  2 files changed, 67 insertions(+)
->  create mode 100644 include/media/v4l2-connector.h
-> 
-> diff --git a/include/media/v4l2-connector.h b/include/media/v4l2-connector.h
-> new file mode 100644
-> index 000000000000..967336e38215
-> --- /dev/null
-> +++ b/include/media/v4l2-connector.h
-> @@ -0,0 +1,34 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * v4l2-connector.h
-> + *
-> + * V4L2 connector types.
-> + *
-> + * Copyright 2019 Pengutronix, Marco Felsch <kernel@pengutronix.de>
-> + */
-> +
-> +#ifndef V4L2_CONNECTOR_H
-> +#define V4L2_CONNECTOR_H
-> +
-> +#define V4L2_CONNECTOR_MAX_LABEL 41
-> +
-> +/**
-> + * enum v4l2_connector_type - connector type
-> + * @V4L2_CON_UNKNOWN:   unknown connector type, no V4L2 connetor configuration
-> + * @V4L2_CON_COMPOSITE: analog composite connector
-> + * @V4L2_CON_SVIDEO:    analog svideo connector
-> + * @V4L2_CON_VGA:       analog vga connector
-> + * @V4L2_CON_DVI:	analog or digital dvi connector
-
-I would drop VGA and DVI for now. Only add them if they are needed. These
-connectors are rarely seen these days.
-
-> + * @V4L2_CON_HDMI:      digital hdmi connetor
-
-connetor -> connector
-
-
-Regards,
-
-	Hans
-
-> + */
-> +enum v4l2_connector_type {
-> +	V4L2_CON_UNKNOWN,
-> +	V4L2_CON_COMPOSITE,
-> +	V4L2_CON_SVIDEO,
-> +	V4L2_CON_VGA,
-> +	V4L2_CON_DVI,
-> +	V4L2_CON_HDMI,
-> +};
-> +
-> +#endif /* V4L2_CONNECTOR_H */
-> +
-> diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-> index 6c07825e18b9..04344b71656f 100644
-> --- a/include/media/v4l2-fwnode.h
-> +++ b/include/media/v4l2-fwnode.h
-> @@ -22,6 +22,7 @@
->  #include <linux/list.h>
->  #include <linux/types.h>
->  
-> +#include <media/v4l2-connector.h>
->  #include <media/v4l2-mediabus.h>
->  #include <media/v4l2-subdev.h>
->  
-> @@ -126,6 +127,38 @@ struct v4l2_fwnode_link {
->  	unsigned int remote_port;
->  };
->  
-> +/**
-> + * struct v4l2_fwnode_connector_analog - analog connector data structure
-> + * @supported_tvnorms: tv norms this connector supports, set to V4L2_STD_ALL
-> + *                     if no restrictions are specified.
-> + */
-> +struct v4l2_fwnode_connector_analog {
-> +	v4l2_std_id supported_tvnorms;
-> +};
-> +
-> +/** struct v4l2_fwnode_connector - the connector data structure
-> + * @remote_port: identifier of the port the remote endpoint belongs to
-> + * @remote_id: identifier of the id the remote endpoint belongs to
-> + * @label: connetor label
-> + * @type: connector type
-> + * @connector: union with connector configuration data struct
-> + * @connector.analog: embedded &struct v4l2_fwnode_connector_analog.
-> + *                    Used if connector is of type analog.
-> + */
-> +struct v4l2_fwnode_connector {
-> +	/* common fields for all v4l2_fwnode_connectors */
-> +	unsigned int remote_port;
-> +	unsigned int remote_id;
-> +	char label[V4L2_CONNECTOR_MAX_LABEL];
-> +	enum v4l2_connector_type type;
-> +
-> +	/* connector specific fields */
-> +	union {
-> +		struct v4l2_fwnode_connector_analog analog;
-> +		/* future connectors */
-> +	} connector;
-> +};
-> +
->  /**
->   * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
->   * @fwnode: pointer to the endpoint's fwnode handle
-> 
-
+T24gRnJpLCAyMDE5LTA0LTEyIGF0IDEzOjAwICswMjAwLCBIYW5zIFZlcmt1aWwgd3JvdGU6DQo+
+IEVkZGllLCBjYW4geW91IHJldmlldyB0aGlzPw0KPiANCj4gSmFlIEh5dW4gWW9vLCBmb3IgZnV0
+dXJlIHJlZmVyZW5jZTogcGxlYXNlIGFkZCB0aGUgZHJpdmVyIG5hbWUgaW4gdGhlDQo+IHN1Ympl
+Y3QuDQo+IEkuZS4gc29tZXRoaW5nIGxpa2UgdGhpczogW1BBVENIIHYyXSBtZWRpYTogYXNwZWVk
+OiBmaXggYSBrZXJuZWwNCj4gd2FybmluZyBvbiBjbGsgY29udHJvbA0KPiANCj4gVGhhdCBoZWxw
+cyBtYWludGFpbmVycyBmaWd1cmluZyBvdXQgd2hvIHNob3VsZCBsb29rIGF0IHdoaWNoIHBhdGNo
+Lg0KDQp0ZXN0X2JpdC9jbGVhcl9iaXQvc2V0X2JpdCBhcmUgYXRvbWljLiBUaGUgd2F5IHRoZXkg
+YXJlIHVzZWQgaGVyZSBpcw0KZWl0aGVyIGEgd2FzdGUgb2YgY3ljbGVzICh0aGVyZSdzIGFscmVh
+ZHkgYSBsb2NrKSBvciByYWN5LiBOb3QgdG9vIHN1cmUNCjopDQoNCkNoZWVycywNCkJlbi4NCg0K
+PiBSZWdhcmRzLA0KPiANCj4gCUhhbnMNCj4gDQo+IE9uIDMvMjkvMTkgMTA6MjcgUE0sIEphZSBI
+eXVuIFlvbyB3cm90ZToNCj4gPiB2aWRlb19vbiBhbmQgdmlkZW9fb2ZmIGZ1bmN0aW9ucyBpbiB0
+aGUgQXNwZWVkIHZpZGVvIGVuZ2luZSBkcml2ZXINCj4gPiBhcmUNCj4gPiBiZWluZyBjYWxsZWQg
+ZnJvbSBtdWx0aXBsZSBjb250ZXh0cyB3aXRob3V0IGFueSBwcm90ZWN0aW9uIHNvIHZpZGVvDQo+
+ID4gY2xvY2tzDQo+ID4gY2FuIGJlIGRpc2FibGVkIHR3aWNlIGFuZCBldmVudHVhbGx5IGl0IGNh
+dXNlcyBhIGtlcm5lbCB3YXJuaW5nDQo+ID4gd2l0aCBzdGFjaw0KPiA+IGR1bXAgcHJpbnRpbmcg
+b3V0IGxpa2UgYmVsb3c6DQo+ID4gDQo+ID4gWyAgMTIwLjAzNDcyOV0gV0FSTklORzogQ1BVOiAw
+IFBJRDogMTMzNCBhdCBkcml2ZXJzL2Nsay9jbGsuYzo2ODQNCj4gPiBjbGtfY29yZV91bnByZXBh
+cmUrMHgxM2MvMHgxNzANCj4gPiBbICAxMjAuMDQzMjUyXSBlY2xrLWdhdGUgYWxyZWFkeSB1bnBy
+ZXBhcmVkDQo+ID4gWyAgMTIwLjA0NzI4M10gQ1BVOiAwIFBJRDogMTMzNCBDb21tOiBvYm1jLWlr
+dm0gVGFpbnRlZDoNCj4gPiBHICAgICAgICBXICAgICAgICAgNS4wLjMtYjk0Yjc0ZThiNTJkYjkx
+ZmU0ZTk5ZTBiYjQ4MWVjOGJmMmI1YjQ3Yw0KPiA+ICMxDQo+ID4gWyAgMTIwLjA1ODQxN10gSGFy
+ZHdhcmUgbmFtZTogR2VuZXJpYyBEVCBiYXNlZCBzeXN0ZW0NCj4gPiBbICAxMjAuMDYzMjE5XSBC
+YWNrdHJhY2U6DQo+ID4gWyAgMTIwLjA2NTc4N10gWzw4MDEwN2NkYz5dIChkdW1wX2JhY2t0cmFj
+ZSkgZnJvbSBbPDgwMTA3ZjEwPl0NCj4gPiAoc2hvd19zdGFjaysweDIwLzB4MjQpDQo+ID4gWyAg
+MTIwLjA3MzM3MV0gIHI3OjgwM2E0ZmYwIHI2OjAwMDAwMDA5IHI1OjAwMDAwMDAwIHI0Ojk2MTk3
+ZTFjDQo+ID4gWyAgMTIwLjA3OTE1Ml0gWzw4MDEwN2VmMD5dIChzaG93X3N0YWNrKSBmcm9tIFs8
+ODA2OGY3ZDg+XQ0KPiA+IChkdW1wX3N0YWNrKzB4MjAvMHgyOCkNCj4gPiBbICAxMjAuMDg2NDc5
+XSBbPDgwNjhmN2I4Pl0gKGR1bXBfc3RhY2spIGZyb20gWzw4MDExNjA0Yz5dDQo+ID4gKF9fd2Fy
+bi5wYXJ0LjMrMHhiNC8weGRjKQ0KPiA+IFsgIDEyMC4wOTQwNjhdIFs8ODAxMTVmOTg+XSAoX193
+YXJuLnBhcnQuMykgZnJvbSBbPDgwMTE2MGUwPl0NCj4gPiAod2Fybl9zbG93cGF0aF9mbXQrMHg2
+Yy8weDkwKQ0KPiA+IFsgIDEyMC4xMDIxNjRdICByNjowMDAwMDJhYyByNTo4MDgwYzBiOCByNDo4
+MGEwNzAwOA0KPiA+IFsgIDEyMC4xMDY4OTNdIFs8ODAxMTYwNzg+XSAod2Fybl9zbG93cGF0aF9m
+bXQpIGZyb20gWzw4MDNhNGZmMD5dDQo+ID4gKGNsa19jb3JlX3VucHJlcGFyZSsweDEzYy8weDE3
+MCkNCj4gPiBbICAxMjAuMTE1Njg2XSAgcjM6ODA4MGNmOGMgcjI6ODA4MGMxN2MNCj4gPiBbICAx
+MjAuMTE5Mjc2XSAgcjc6OTdkNjhlNTggcjY6OWRmMjMyMDAgcjU6OTY2OGMyNjAgcjQ6OTY0NTky
+NjANCj4gPiBbICAxMjAuMTI1MDQ2XSBbPDgwM2E0ZWI0Pl0gKGNsa19jb3JlX3VucHJlcGFyZSkg
+ZnJvbSBbPDgwM2E3MDdjPl0NCj4gPiAoY2xrX3VucHJlcGFyZSsweDM0LzB4M2MpDQo+ID4gWyAg
+MTIwLjEzMzIyNl0gIHI1Ojk2NjhjMjYwIHI0Ojk2NDU5MjYwDQo+ID4gWyAgMTIwLjEzNjkzMl0g
+Wzw4MDNhNzA0OD5dIChjbGtfdW5wcmVwYXJlKSBmcm9tIFs8ODA0ZjM0YmM+XQ0KPiA+IChhc3Bl
+ZWRfdmlkZW9fb2ZmKzB4NDQvMHg0OCkNCj4gPiBbICAxMjAuMTQ1MDMxXSAgcjU6OTY2OGMyNjAg
+cjQ6OTY2OGNiYzANCj4gPiBbICAxMjAuMTQ4NjQ3XSBbPDgwNGYzNDc4Pl0gKGFzcGVlZF92aWRl
+b19vZmYpIGZyb20gWzw4MDRmM2ZkMD5dDQo+ID4gKGFzcGVlZF92aWRlb19yZWxlYXNlKzB4OTQv
+MHgxMTgpDQo+ID4gWyAgMTIwLjE1NzQzNV0gIHI1Ojk2NmEwY2I4IHI0Ojk2NmEwODAwDQo+ID4g
+WyAgMTIwLjE2MTA0OV0gWzw4MDRmM2YzYz5dIChhc3BlZWRfdmlkZW9fcmVsZWFzZSkgZnJvbQ0K
+PiA+IFs8ODA0ZDJjNTg+XSAodjRsMl9yZWxlYXNlKzB4ZDQvMHhlOCkNCj4gPiBbICAxMjAuMTY5
+NDA0XSAgcjc6OTdkNjhlNTggcjY6OWQwODc4MTAgcjU6OWRmMjMyMDAgcjQ6OTY2YTBiMjANCj4g
+PiBbICAxMjAuMTc1MTY4XSBbPDgwNGQyYjg0Pl0gKHY0bDJfcmVsZWFzZSkgZnJvbSBbPDgwMjM2
+MjI0Pl0NCj4gPiAoX19mcHV0KzB4OTgvMHgxYzQpDQo+ID4gWyAgMTIwLjE4MjMxNl0gIHI1Ojk2
+Njk4ZTc4IHI0OjlkZjIzMjAwDQo+ID4gWyAgMTIwLjE4NTk5NF0gWzw4MDIzNjE4Yz5dIChfX2Zw
+dXQpIGZyb20gWzw4MDIzNjNiOD5dDQo+ID4gKF9fX19mcHV0KzB4MTgvMHgxYykNCj4gPiBbICAx
+MjAuMTkyNzEyXSAgcjk6ODBhMDcwMGMgcjg6ODAxMDExZTQgcjc6MDAwMDAwMDAgcjY6ODBhNjRi
+YmMNCj4gPiByNTo5NjFkZDU2MCByNDo5NjFkZDg5Yw0KPiA+IFsgIDEyMC4yMDA1NjJdIFs8ODAy
+MzYzYTA+XSAoX19fX2ZwdXQpIGZyb20gWzw4MDEzMWMwOD5dDQo+ID4gKHRhc2tfd29ya19ydW4r
+MHg3Yy8weGE0KQ0KPiA+IFsgIDEyMC4yMDc5OTRdIFs8ODAxMzFiOGM+XSAodGFza193b3JrX3J1
+bikgZnJvbSBbPDgwMTA2ODg0Pl0NCj4gPiAoZG9fd29ya19wZW5kaW5nKzB4NGE4LzB4NTc4KQ0K
+PiA+IFsgIDEyMC4yMTYxNjNdICByNzo4MDEwMTFlNCByNjo4MGEwNzAwOCByNTo5NjE5N2ZiMCBy
+NDpmZmZmZTAwMA0KPiA+IFsgIDEyMC4yMjE4NTZdIFs8ODAxMDYzZGM+XSAoZG9fd29ya19wZW5k
+aW5nKSBmcm9tIFs8ODAxMDEwNmM+XQ0KPiA+IChzbG93X3dvcmtfcGVuZGluZysweGMvMHgyMCkN
+Cj4gPiBbICAxMjAuMjMwMTE2XSBFeGNlcHRpb24gc3RhY2soMHg5NjE5N2ZiMCB0byAweDk2MTk3
+ZmY4KQ0KPiA+IFsgIDEyMC4yMzUyNTRdIDdmYTA6ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIDAwMDAwMDAwDQo+ID4gNzZjY2YwOTQgMDAwMDAwMDAgMDAwMDAwMDANCj4gPiBb
+ICAxMjAuMjQzNDM4XSA3ZmMwOiAwMDAwMDAwOCAwMGExMTk3OCA3ZWFiM2MzMCAwMDAwMDAwNiAw
+MDAwMDAwMA0KPiA+IDAwMDAwMDAwIDQ3NWIwZmE0IDAwMDAwMDAwDQo+ID4gWyAgMTIwLjI1MTY5
+Ml0gN2ZlMDogMDAwMDAwMDIgN2VhYjNhNDAgMDAwMDAwMDAgNDc3MjBlMzggODAwMDAwMTANCj4g
+PiAwMDAwMDAwOA0KPiA+IFsgIDEyMC4yNTgzOTZdICByMTA6MDAwMDAwMDAgcjk6OTYxOTYwMDAg
+cjg6ODAxMDExZTQgcjc6MDAwMDAwMDYNCj4gPiByNjo3ZWFiM2MzMCByNTowMGExMTk3OA0KPiA+
+IFsgIDEyMC4yNjYyOTFdICByNDowMDAwMDAwOA0KPiA+IA0KPiA+IFRvIHByZXZlbnQgdGhpcyBp
+c3N1ZSwgdGhpcyBjb21taXQgYWRkcyBzcGlubG9jayBwcm90ZWN0aW9uIGFuZA0KPiA+IGNsb2Nr
+DQo+ID4gc3RhdHVzIGNoZWNraW5nIGxvZ2ljIGludG8gdGhlIEFzcGVlZCB2aWRlbyBlbmdpbmUg
+ZHJpdmVyLg0KPiA+IA0KPiA+IEZpeGVzOiBkMmI0Mzg3ZjNiZGYgKCJtZWRpYTogcGxhdGZvcm06
+IEFkZCBBc3BlZWQgVmlkZW8gRW5naW5lDQo+ID4gZHJpdmVyIikNCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBKYWUgSHl1biBZb28gPGphZS5oeXVuLnlvb0BsaW51eC5pbnRlbC5jb20+DQo+ID4gQ2M6IEVk
+ZGllIEphbWVzIDxlYWphbWVzQGxpbnV4LmlibS5jb20+DQo+ID4gQ2M6IE1hdXJvIENhcnZhbGhv
+IENoZWhhYiA8bWNoZWhhYkBrZXJuZWwub3JnPg0KPiA+IENjOiBKb2VsIFN0YW5sZXkgPGpvZWxA
+am1zLmlkLmF1Pg0KPiA+IENjOiBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3QGFqLmlkLmF1Pg0KPiA+
+IC0tLQ0KPiA+ICBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2FzcGVlZC12aWRlby5jIHwgMzINCj4g
+PiArKysrKysrKysrKysrKysrKysrKysrKystLS0NCj4gPiAgMSBmaWxlIGNoYW5nZWQsIDI5IGlu
+c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvbWVkaWEvcGxhdGZvcm0vYXNwZWVkLXZpZGVvLmMNCj4gPiBiL2RyaXZlcnMvbWVkaWEvcGxh
+dGZvcm0vYXNwZWVkLXZpZGVvLmMNCj4gPiBpbmRleCA2OTJlMDhlZjM4YzAuLjc0NGQyMmVjYzYy
+MCAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2FzcGVlZC12aWRlby5j
+DQo+ID4gKysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hc3BlZWQtdmlkZW8uYw0KPiA+IEBA
+IC0xODgsNiArMTg4LDcgQEAgZW51bSB7DQo+ID4gIAlWSURFT19TVFJFQU1JTkcsDQo+ID4gIAlW
+SURFT19GUkFNRV9JTlBSRywNCj4gPiAgCVZJREVPX1NUT1BQRUQsDQo+ID4gKwlWSURFT19DTE9D
+S1NfT04sDQo+ID4gIH07DQo+ID4gIA0KPiA+ICBzdHJ1Y3QgYXNwZWVkX3ZpZGVvX2FkZHIgew0K
+PiA+IEBAIC00OTUsMjAgKzQ5NiwzMCBAQCBzdGF0aWMgdm9pZCBhc3BlZWRfdmlkZW9fcmVzZXQo
+c3RydWN0DQo+ID4gYXNwZWVkX3ZpZGVvICp2aWRlbykNCj4gPiAgDQo+ID4gIHN0YXRpYyB2b2lk
+IGFzcGVlZF92aWRlb19vZmYoc3RydWN0IGFzcGVlZF92aWRlbyAqdmlkZW8pDQo+ID4gIHsNCj4g
+PiArCWlmICghdGVzdF9iaXQoVklERU9fQ0xPQ0tTX09OLCAmdmlkZW8tPmZsYWdzKSkNCj4gPiAr
+CQlyZXR1cm47DQo+ID4gKw0KPiA+ICAJYXNwZWVkX3ZpZGVvX3Jlc2V0KHZpZGVvKTsNCj4gPiAg
+DQo+ID4gIAkvKiBUdXJuIG9mZiB0aGUgcmVsZXZhbnQgY2xvY2tzICovDQo+ID4gIAljbGtfZGlz
+YWJsZV91bnByZXBhcmUodmlkZW8tPnZjbGspOw0KPiA+ICAJY2xrX2Rpc2FibGVfdW5wcmVwYXJl
+KHZpZGVvLT5lY2xrKTsNCj4gPiArDQo+ID4gKwljbGVhcl9iaXQoVklERU9fQ0xPQ0tTX09OLCAm
+dmlkZW8tPmZsYWdzKTsNCj4gPiAgfQ0KPiA+ICANCj4gPiAgc3RhdGljIHZvaWQgYXNwZWVkX3Zp
+ZGVvX29uKHN0cnVjdCBhc3BlZWRfdmlkZW8gKnZpZGVvKQ0KPiA+ICB7DQo+ID4gKwlpZiAodGVz
+dF9iaXQoVklERU9fQ0xPQ0tTX09OLCAmdmlkZW8tPmZsYWdzKSkNCj4gPiArCQlyZXR1cm47DQo+
+ID4gKw0KPiA+ICAJLyogVHVybiBvbiB0aGUgcmVsZXZhbnQgY2xvY2tzICovDQo+ID4gIAljbGtf
+cHJlcGFyZV9lbmFibGUodmlkZW8tPmVjbGspOw0KPiA+ICAJY2xrX3ByZXBhcmVfZW5hYmxlKHZp
+ZGVvLT52Y2xrKTsNCj4gPiAgDQo+ID4gIAlhc3BlZWRfdmlkZW9fcmVzZXQodmlkZW8pOw0KPiA+
+ICsNCj4gPiArCXNldF9iaXQoVklERU9fQ0xPQ0tTX09OLCAmdmlkZW8tPmZsYWdzKTsNCj4gPiAg
+fQ0KPiA+ICANCj4gPiAgc3RhdGljIHZvaWQgYXNwZWVkX3ZpZGVvX2J1ZnNfZG9uZShzdHJ1Y3Qg
+YXNwZWVkX3ZpZGVvICp2aWRlbywNCj4gPiBAQCAtNTI2LDEyICs1MzcsMTQgQEAgc3RhdGljIHZv
+aWQgYXNwZWVkX3ZpZGVvX2J1ZnNfZG9uZShzdHJ1Y3QNCj4gPiBhc3BlZWRfdmlkZW8gKnZpZGVv
+LA0KPiA+ICANCj4gPiAgc3RhdGljIHZvaWQgYXNwZWVkX3ZpZGVvX2lycV9yZXNfY2hhbmdlKHN0
+cnVjdCBhc3BlZWRfdmlkZW8NCj4gPiAqdmlkZW8pDQo+ID4gIHsNCj4gPiArCXNwaW5fbG9jaygm
+dmlkZW8tPmxvY2spOw0KPiA+ICAJZGV2X2RiZyh2aWRlby0+ZGV2LCAiUmVzb2x1dGlvbiBjaGFu
+Z2VkOyByZXNldHRpbmdcbiIpOw0KPiA+ICANCj4gPiAgCXNldF9iaXQoVklERU9fUkVTX0NIQU5H
+RSwgJnZpZGVvLT5mbGFncyk7DQo+ID4gIAljbGVhcl9iaXQoVklERU9fRlJBTUVfSU5QUkcsICZ2
+aWRlby0+ZmxhZ3MpOw0KPiA+ICANCj4gPiAgCWFzcGVlZF92aWRlb19vZmYodmlkZW8pOw0KPiA+
+ICsJc3Bpbl91bmxvY2soJnZpZGVvLT5sb2NrKTsNCj4gPiAgCWFzcGVlZF92aWRlb19idWZzX2Rv
+bmUodmlkZW8sIFZCMl9CVUZfU1RBVEVfRVJST1IpOw0KPiA+ICANCj4gPiAgCXNjaGVkdWxlX2Rl
+bGF5ZWRfd29yaygmdmlkZW8tPnJlc193b3JrLA0KPiA+IFJFU09MVVRJT05fQ0hBTkdFX0RFTEFZ
+KTsNCj4gPiBAQCAtOTUxLDkgKzk2NCwxMyBAQCBzdGF0aWMgdm9pZCBhc3BlZWRfdmlkZW9faW5p
+dF9yZWdzKHN0cnVjdA0KPiA+IGFzcGVlZF92aWRlbyAqdmlkZW8pDQo+ID4gIA0KPiA+ICBzdGF0
+aWMgdm9pZCBhc3BlZWRfdmlkZW9fc3RhcnQoc3RydWN0IGFzcGVlZF92aWRlbyAqdmlkZW8pDQo+
+ID4gIHsNCj4gPiArCXVuc2lnbmVkIGxvbmcgZmxhZ3M7DQo+ID4gKw0KPiA+ICsJc3Bpbl9sb2Nr
+X2lycXNhdmUoJnZpZGVvLT5sb2NrLCBmbGFncyk7DQo+ID4gIAlhc3BlZWRfdmlkZW9fb24odmlk
+ZW8pOw0KPiA+ICANCj4gPiAgCWFzcGVlZF92aWRlb19pbml0X3JlZ3ModmlkZW8pOw0KPiA+ICsJ
+c3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmdmlkZW8tPmxvY2ssIGZsYWdzKTsNCj4gPiAgDQo+ID4g
+IAkvKiBSZXNvbHV0aW9uIHNldCB0byA2NDB4NDgwIGlmIG5vIHNpZ25hbCBmb3VuZCAqLw0KPiA+
+ICAJYXNwZWVkX3ZpZGVvX2dldF9yZXNvbHV0aW9uKHZpZGVvKTsNCj4gPiBAQCAtOTY5LDYgKzk4
+Niw5IEBAIHN0YXRpYyB2b2lkIGFzcGVlZF92aWRlb19zdGFydChzdHJ1Y3QNCj4gPiBhc3BlZWRf
+dmlkZW8gKnZpZGVvKQ0KPiA+ICANCj4gPiAgc3RhdGljIHZvaWQgYXNwZWVkX3ZpZGVvX3N0b3Ao
+c3RydWN0IGFzcGVlZF92aWRlbyAqdmlkZW8pDQo+ID4gIHsNCj4gPiArCXVuc2lnbmVkIGxvbmcg
+ZmxhZ3M7DQo+ID4gKw0KPiA+ICsJc3Bpbl9sb2NrX2lycXNhdmUoJnZpZGVvLT5sb2NrLCBmbGFn
+cyk7DQo+ID4gIAlzZXRfYml0KFZJREVPX1NUT1BQRUQsICZ2aWRlby0+ZmxhZ3MpOw0KPiA+ICAJ
+Y2FuY2VsX2RlbGF5ZWRfd29ya19zeW5jKCZ2aWRlby0+cmVzX3dvcmspOw0KPiA+ICANCj4gPiBA
+QCAtOTgyLDYgKzEwMDIsNyBAQCBzdGF0aWMgdm9pZCBhc3BlZWRfdmlkZW9fc3RvcChzdHJ1Y3QN
+Cj4gPiBhc3BlZWRfdmlkZW8gKnZpZGVvKQ0KPiA+ICANCj4gPiAgCXZpZGVvLT52NGwyX2lucHV0
+X3N0YXR1cyA9IFY0TDJfSU5fU1RfTk9fU0lHTkFMOw0KPiA+ICAJdmlkZW8tPmZsYWdzID0gMDsN
+Cj4gPiArCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJnZpZGVvLT5sb2NrLCBmbGFncyk7DQo+ID4g
+IH0NCj4gPiAgDQo+ID4gIHN0YXRpYyBpbnQgYXNwZWVkX3ZpZGVvX3F1ZXJ5Y2FwKHN0cnVjdCBm
+aWxlICpmaWxlLCB2b2lkICpmaCwNCj4gPiBAQCAtMTMxOSwxNiArMTM0MCwyMSBAQCBzdGF0aWMg
+dm9pZA0KPiA+IGFzcGVlZF92aWRlb19yZXNvbHV0aW9uX3dvcmsoc3RydWN0IHdvcmtfc3RydWN0
+ICp3b3JrKQ0KPiA+ICAJc3RydWN0IGRlbGF5ZWRfd29yayAqZHdvcmsgPSB0b19kZWxheWVkX3dv
+cmsod29yayk7DQo+ID4gIAlzdHJ1Y3QgYXNwZWVkX3ZpZGVvICp2aWRlbyA9IGNvbnRhaW5lcl9v
+Zihkd29yaywgc3RydWN0DQo+ID4gYXNwZWVkX3ZpZGVvLA0KPiA+ICAJCQkJCQkgIHJlc193b3Jr
+KTsNCj4gPiAtCXUzMiBpbnB1dF9zdGF0dXMgPSB2aWRlby0+djRsMl9pbnB1dF9zdGF0dXM7DQo+
+ID4gKwl1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiA+ICsJdTMyIGlucHV0X3N0YXR1czsNCj4gPiAg
+DQo+ID4gKwlzcGluX2xvY2tfaXJxc2F2ZSgmdmlkZW8tPmxvY2ssIGZsYWdzKTsNCj4gPiArCWlu
+cHV0X3N0YXR1cyA9IHZpZGVvLT52NGwyX2lucHV0X3N0YXR1czsNCj4gPiAgCWFzcGVlZF92aWRl
+b19vbih2aWRlbyk7DQo+ID4gIA0KPiA+ICAJLyogRXhpdCBlYXJseSBpbiBjYXNlIG5vIGNsaWVu
+dHMgcmVtYWluICovDQo+ID4gLQlpZiAodGVzdF9iaXQoVklERU9fU1RPUFBFRCwgJnZpZGVvLT5m
+bGFncykpDQo+ID4gKwlpZiAodGVzdF9iaXQoVklERU9fU1RPUFBFRCwgJnZpZGVvLT5mbGFncykp
+IHsNCj4gPiArCQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZ2aWRlby0+bG9jaywgZmxhZ3MpOw0K
+PiA+ICAJCWdvdG8gZG9uZTsNCj4gPiArCX0NCj4gPiAgDQo+ID4gIAlhc3BlZWRfdmlkZW9faW5p
+dF9yZWdzKHZpZGVvKTsNCj4gPiAtDQo+ID4gKwlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZ2aWRl
+by0+bG9jaywgZmxhZ3MpOw0KPiA+ICAJYXNwZWVkX3ZpZGVvX2dldF9yZXNvbHV0aW9uKHZpZGVv
+KTsNCj4gPiAgDQo+ID4gIAlpZiAodmlkZW8tPmRldGVjdGVkX3RpbWluZ3Mud2lkdGggIT0gdmlk
+ZW8tDQo+ID4gPmFjdGl2ZV90aW1pbmdzLndpZHRoIHx8DQo+ID4gDQo=
