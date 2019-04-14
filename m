@@ -1,112 +1,155 @@
-Return-Path: <SRS0=a2si=SP=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=V0pp=SQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C286CC282CE
-	for <linux-media@archiver.kernel.org>; Sat, 13 Apr 2019 18:25:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8DBEC10F13
+	for <linux-media@archiver.kernel.org>; Sun, 14 Apr 2019 03:48:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 93F3C2084E
-	for <linux-media@archiver.kernel.org>; Sat, 13 Apr 2019 18:25:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=cogentembedded-com.20150623.gappssmtp.com header.i=@cogentembedded-com.20150623.gappssmtp.com header.b="GvvkzFa1"
+	by mail.kernel.org (Postfix) with ESMTP id 76F6320896
+	for <linux-media@archiver.kernel.org>; Sun, 14 Apr 2019 03:48:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbfDMSZM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Apr 2019 14:25:12 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:35319 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbfDMSZM (ORCPT
+        id S1727156AbfDNDsY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Apr 2019 23:48:24 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:45074 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726964AbfDNDsY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Apr 2019 14:25:12 -0400
-Received: by mail-lj1-f193.google.com with SMTP id t4so3285449ljc.2
-        for <linux-media@vger.kernel.org>; Sat, 13 Apr 2019 11:25:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=from:subject:to:cc:references:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bjIZTwZg8SXO39vuwb21QIdVckr/1sLw4gqIIi2Nzxw=;
-        b=GvvkzFa1QYGysxd5ruKdiYP0dJ8WzsyjTRI+96xCFH300hoU3KQr/q3zutrwcEcRR2
-         qBzZPQRB+Y2b+h8mlEUVpqoAzfRdcTyF41epkOe2x4YSb7nvvaAO1+sSWNLFMFMDeNQs
-         2U/pvjlqJaOR0ZAGoT/++b2kuXgiHZGNsV6G8jCpp2kBaL0gVFWWM7URMcI4tMLvy5FO
-         q+ZhlChUOaql73KHfctCytgzMLbSUjC5b5v8aV5sXDroTtplu4sB2CZonieK5cPpzoOO
-         /seDdKesQP17wiFCrVifUd9/sRhYjCOH76vm1o7gJWw1uED15nZs697bk9asbR6KS/ik
-         HQ0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=bjIZTwZg8SXO39vuwb21QIdVckr/1sLw4gqIIi2Nzxw=;
-        b=tPz064aiCfcKD7dellNk/OQ4LINVsH0U7HfdoXut9ELItG8o4j/3Rf/LeuQqFXW/Zk
-         MzRIiF/c/DOdZSqj0Xw78tCfyfSfSxVECufvgn+mhS0hMVTVTSUwrAaQXz6Xm8D1DrZi
-         gR088XpEHLJwBzASiIzecYHqG6OjFlw3ABuZ468PRxnqO4vtsxTwTcSbCbjslgk5wORn
-         4j5a3pXE8nHz6FtK5ByTDk8SyFXmJ6l0whcy3kjkQkr9mcHh1cOLkR8NhZmJUsSJB9ob
-         KnETcM0gU6CR9xfFKC3vvruaXNW76s4Z/VnChTxQS8+/kiLM/yIDqUaNi1xkyy5UMZbX
-         iyTw==
-X-Gm-Message-State: APjAAAU5Hej9N5daVNDikzTdSPlw/you8w7rDfqZaQ2+k+HKRI0+f9HG
-        U6a1aIw+5dsfdANxvu/QuL3eY1ubTR8=
-X-Google-Smtp-Source: APXvYqz+LKWYHcbco0HSwSjUYFCZRL7mpH9Bbfr0NnH+CTxcMCT1HddlIhManCY5PmIMnUCmHpih7w==
-X-Received: by 2002:a2e:8347:: with SMTP id l7mr33871847ljh.17.1555179909978;
-        Sat, 13 Apr 2019 11:25:09 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([31.173.85.44])
-        by smtp.gmail.com with ESMTPSA id q29sm8985499ljc.8.2019.04.13.11.25.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 13 Apr 2019 11:25:09 -0700 (PDT)
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Subject: Re: [PATCH 2/2] arm64: dts: renesas: r8a77980: Add "renesas,id" to
- VIN
-To:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        niklas.soderlund@ragnatech.se, laurent.pinchart@ideasonboard.com,
-        horms@verge.net.au, geert+renesas@glider.be
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org
-References: <20190412113832.30075-1-jacopo+renesas@jmondi.org>
- <20190412113832.30075-3-jacopo+renesas@jmondi.org>
-Organization: Cogent Embedded
-Message-ID: <9797b2c6-58b0-954c-0d8d-f60c95ebc8e1@cogentembedded.com>
-Date:   Sat, 13 Apr 2019 21:25:08 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
-MIME-Version: 1.0
-In-Reply-To: <20190412113832.30075-3-jacopo+renesas@jmondi.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+        Sat, 13 Apr 2019 23:48:24 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:b1e5:e718:8c14:3160])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id FW7xhCuozNG8zFW7yhIcMH; Sun, 14 Apr 2019 05:48:22 +0200
+Message-ID: <b26af702883839557393e393e75d4dbf@smtp-cloud7.xs4all.net>
+Date:   Sun, 14 Apr 2019 05:48:21 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfLPEqAiq12auowp/yE3Za3OKogfNzHM5l//dpWwq7OaQLy9JWj6USxs6JYTmaKaCWBj8HKBfvrGjoHhBqvSuEwBdyuQix0fQI1gFp8Z2fF6ZOJXENzWw
+ fHj9FavtnuIfvx34F9JStTjVFBXavrcrIZ1j+QbUvpVCWBkfIodEFATJlqU4IsLGdZlW3rMnBAR8lAi+5NZ9uBNYL1nwDeJ75xYAYZJNHkmht2EtbO8NmtUd
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 04/12/2019 02:38 PM, Jacopo Mondi wrote:
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-> Add the "renesas,id" property to VIN nodes in the R-Car V3H R8A77980
-> device tree.
-> 
-> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> ---
-> 
-> I do not have a V3H board to test on, but I suspect VIN failed to probe
-> on V3H before these 2 patches.
+Results of the daily build of media_tree:
 
-   Yes, probably. The upstream patch wasn't ever runtime tested, so this
-went unnoticed. The BSPs use the old soc_camera driver.
+date:			Sun Apr 14 05:00:18 CEST 2019
+media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
+media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
+v4l-utils git hash:	95f39aae48c6e8e5cc81e6ae6293d999f70a909b
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
-> If that's the case, these patches would merit
-> Fixes: 3182aa4e0bf4 ("arm64: dts: renesas: r8a77980: add CSI2/VIN support")
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: ERRORS: Final Summary: 1963, Succeeded: 1961, Failed: 2, Warnings: 12
+sparse: OK
+smatch: OK
 
-   I'm OK with that.
+Detailed results are available here:
 
-> Sergei, do you still have a V3H board around? Could I have your Tested-by
-> tag if things are fine now?
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
 
-   I have V3H Stater Kit on my desk but I don't think it has VINs wired to
-anything...
+Detailed regression test results are available here:
 
-> Thanks
->   j
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
 
-MBR, Sergei
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
