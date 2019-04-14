@@ -2,398 +2,149 @@ Return-Path: <SRS0=V0pp=SQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB2C4C10F14
-	for <linux-media@archiver.kernel.org>; Sun, 14 Apr 2019 16:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA61DC10F13
+	for <linux-media@archiver.kernel.org>; Sun, 14 Apr 2019 19:56:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7A5BB20693
-	for <linux-media@archiver.kernel.org>; Sun, 14 Apr 2019 16:41:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7613120848
+	for <linux-media@archiver.kernel.org>; Sun, 14 Apr 2019 19:56:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbfDNQlM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 14 Apr 2019 12:41:12 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:56327 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbfDNQlM (ORCPT
+        id S1726576AbfDNT4G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 14 Apr 2019 15:56:06 -0400
+Received: from mail-it1-f197.google.com ([209.85.166.197]:37107 "EHLO
+        mail-it1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbfDNT4G (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 14 Apr 2019 12:41:12 -0400
-X-Originating-IP: 93.29.109.196
-Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id D5C4FE0007;
-        Sun, 14 Apr 2019 16:41:07 +0000 (UTC)
-Message-ID: <da5aa9ab957923a72e30b169a3c242c4fe6260f1.camel@bootlin.com>
-Subject: Re: [PATCH v4] media: docs-rst: Document m2m stateless video
- decoder interface
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Dafna Hirschfeld <dafna3@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Date:   Sun, 14 Apr 2019 18:41:07 +0200
-In-Reply-To: <371df0e4ec9e38d83d11171cbd98f19954cbf787.camel@ndufresne.ca>
-References: <20190306080019.159676-1-acourbot@chromium.org>
-         <371df0e4ec9e38d83d11171cbd98f19954cbf787.camel@ndufresne.ca>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 
+        Sun, 14 Apr 2019 15:56:06 -0400
+Received: by mail-it1-f197.google.com with SMTP id q203so14114165itb.2
+        for <linux-media@vger.kernel.org>; Sun, 14 Apr 2019 12:56:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=JJk1ISI5HmD3aTUiZDHKLZINh41Fl9C7dn4cVG2mDmU=;
+        b=G8wVfXRkswL+HklbP8xdw9oa5hPvnkpw1IwBXFfD+osQOsP9JqAYYEt4q1WygelJse
+         cNCLIbnrkXa3qyTPPtbLls96q+E23CtRiT0EWcRWI3OsTzQlt2V7MyYegB3h5+eAzWJb
+         x8bel5hmcynZzNazuLhjTB1GTl2pTSwd41oz1hgYeqccEXNFZ/4zJ+lZ+M1I7w+zHA9J
+         MHbb9jsP6ns+PV6ROEhi1Tye2ghsygZ9zzRv1UinXnYIfTumSXOLpB4GpyTQkgwg4Eaf
+         +3RpZ16PdqwpTZ+b3/DFCrJPG5HXPPFY2sIXdBa8iqyKhGprknLgKHLNZw9R+qbL4voV
+         WlTw==
+X-Gm-Message-State: APjAAAW2pFsMJcq2hcI68QFbNTDV8YPUCMMGqM7SY466KrnxQHNSbSce
+        9EOL+OG0KdMZ9DNZU/0fZeWO26xEaZYewf9QYRHgr3YlLuj1
+X-Google-Smtp-Source: APXvYqyiZGgShE1dNbinHI9S0ECWytlREVmnQcPY+2LzFXnBoa/ffIkRcsHuH+kuvyj6rVvzRXFVsVeU7R+TwVQKfzTdSK40725y
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a6b:ea14:: with SMTP id m20mr3297993ioc.33.1555271765630;
+ Sun, 14 Apr 2019 12:56:05 -0700 (PDT)
+Date:   Sun, 14 Apr 2019 12:56:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001ea4d5058682ed7c@google.com>
+Subject: WARNING in __flush_work (3)
+From:   syzbot <syzbot+2e1ef9188251d9cc7944@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hello,
 
-Le vendredi 12 avril 2019 à 16:47 -0400, Nicolas Dufresne a écrit :
-> Le mercredi 06 mars 2019 à 17:00 +0900, Alexandre Courbot a écrit :
-> > Documents the protocol that user-space should follow when
-> > communicating with stateless video decoders.
-> > 
-> > The stateless video decoding API makes use of the new request and tags
-> > APIs. While it has been implemented with the Cedrus driver so far, it
-> > should probably still be considered staging for a short while.
+syzbot found the following crash on:
 
-[...]
+HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=17f389af200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+dashboard link: https://syzkaller.appspot.com/bug?extid=2e1ef9188251d9cc7944
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10dd0fc3200000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16e77a5b200000
 
-> From an IRC discussion with Paul and some more digging, I have found a
-> design problem in the decoding process.
-> 
-> In H264 and HEVC you can have multiple decoding unit per frames
-> (slices). This type of encoding is increasingly popular, specially for
-> low latency streaming use cases. The wording of this spec does allow
-> for the notion of decoding unit, and in practice it has been proven to
-> work through some RFC FFMPEG patches and the Cedrus driver. But
-> something important to know is that the FFMPEG RFC implements decoding
-> in lock steps. Which means:
-> 
->   1. It queues a single free capture buffer
->   2. It queues an output buffer, set controls, queue the request
->   3. It waits for a capture buffer to reach state done
->   4. It dequeues that capture buffer, and queue it back again
->   5. And then it runs step 2,4,3 again with following slices, until we 
->      have a complete frame. After what, it restart at step 1
-> 
-> So the implementation makes no use of the queues. There is no batch
-> processing, so we might not be able to reach the maximum hardware
-> throughput.
-> 
-> So the optimal method would look like the following, but there comes
-> the design issue.
-> 
->   1. Queue a single free capture buffer
->   2. Queue output buffer for slice 1, set controls, queue the request
->   3. Queue output buffer for slice 2, set controls, queue the request
->   4. Wait for completion
-> 
-> The problem is in step 4. Completion means that the capture buffer done
-> decoding a single unit. So assuming the driver supports matching the
-> timestamp against the queued buffer, instead of waiting for a new
-> buffer, the driver would have to mark twice the same buffer to done
-> state, which is just not working to inform userspace that all slices
-> are decoded into the one capture buffer they share.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+2e1ef9188251d9cc7944@syzkaller.appspotmail.com
 
-Interestingly, I'm experiencing the exact same problem dealing with a
-2D graphics blitter that has limited ouput scaling abilities which
-imply handlnig a large scaling operation as multiple clipped smaller
-scaling operations. The issue is basically that multiple jobs have to
-be submitted to complete a single frame and relying on an indication
-from the destination buffer (such as a fence) doesn't work to indicate
-that all the operations were completed, since we get the indication at
-each step instead of at the end of the batch.
+usb 1-1: config 0 has an invalid interface number: 246 but max is 0
+usb 1-1: config 0 has no interface number 0
+usb 1-1: New USB device found, idVendor=06f8, idProduct=300c,  
+bcdDevice=68.91
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+WARNING: CPU: 0 PID: 12 at kernel/workqueue.c:3030 __flush_work+0x728/0x820  
+kernel/workqueue.c:3030
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.1.0-rc4-319354-g9a33b36 #3
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xe8/0x16e lib/dump_stack.c:113
+  panic+0x29d/0x5f2 kernel/panic.c:214
+  __warn.cold+0x20/0x48 kernel/panic.c:571
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x130/0x1f0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x37/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:973
+RIP: 0010:__flush_work+0x728/0x820 kernel/workqueue.c:3030
+Code: ff e8 3c 37 27 00 0f 0b 45 31 e4 e9 7e fd ff ff e8 2d 37 27 00 4c 89  
+ef 45 31 e4 e8 f2 a6 bb 0c e9 69 fd ff ff e8 18 37 27 00 <0f> 0b 45 31 e4  
+e9 5a fd ff ff e8 b9 47 5e 00 e9 78 fc ff ff e8 cf
+RSP: 0018:ffff8880a84b6e48 EFLAGS: 00010293
+RAX: ffff8880a84a3100 RBX: ffff888091a6fcb0 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: ffffffff814a8e58 RDI: 0000000000000001
+RBP: ffff8880a84b6fb0 R08: ffff8880a84a3100 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: 0000000000000001 R14: 0000000000000200 R15: ffff888091a6fcc8
+  __cancel_work_timer+0x326/0x450 kernel/workqueue.c:3126
+  uvc_ctrl_cleanup_device+0x27/0x488 drivers/media/usb/uvc/uvc_ctrl.c:2353
+  uvc_delete+0x2e/0x2f0 drivers/media/usb/uvc/uvc_driver.c:1871
+  kref_put include/linux/kref.h:67 [inline]
+  uvc_probe+0xfa5/0x6588 drivers/media/usb/uvc/uvc_driver.c:2228
+  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2021
+  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
+  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-One idea I see to solve this is to have a notion of batch in the driver
-(for our situation, that would be in v4l2) and provide means to get a
-done indication for that entity.
 
-I think we could extend the request API to allow this. We already
-represent requests as individual file descriptors, we could totally
-group requests in batches and get a sync fd for the batch to poll on
-when we need to return the frames. It would be good if we could expose
-this in a way that makes it work with DRM as an in fence for display.
-Then we can pretty much schedule our flip + decoding together (which is
-quite nice to have when we're running late on the decoding side).
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-What do you think?
-
-It feels to me like the request API was designed to open up the way for
-these kinds of improvements, so I'm sure we can find an agreeable
-solution that extends the API.
-
-> To me, multi slice encoded stream are just too common, and they will
-> also exist for AV1. So we really need a solution to this that does not
-> require operating in lock steps. Specially that some HW can decode
-> multiple slices in parallel (multi core), we would not want to prevent
-> that HW from being used efficiently. On top of this, we need a solution
-> so that we can also keep queuing slice of the following frames if they
-> arrive before decoding is done.
-
-Agreed.
-
-> I don't have a solution yet myself, but it would be nice to come up
-> with something before we freeze this API.
-
-I think it's rather independent from the codec used and this is
-something that should be handled at the request API level. 
-
-I'm not sure we can always expect the hardware to be able to operate on
-a per-slice basis. I think it would be useful to reflect this in the
-pixel format, so that we also have a possibility for a gathered slice
-buffer (as the spec currently mentions for mpeg-2) for legacy decoder
-hardware that will need to decode one frame in one go from a contiguous
-buffer with all the slice data appended.
-
-This updates my pixel format proposition from IRC to the following:
-- V4L2_PIXFMT_H264_SLICE_APPENDED: single buffer for all the slices
-(appended buffer), slice params as v4l2 control (legacy);
-
-- V4L2_PIXFMT_H264_SLICE: one buffer/slice, slice params as control;
-
-- V4L2_PIXFMT_H264_SLICE_ANNEX_B: one buffer/slice in annex-b format, 
-slice params encoded in the buffer;
-
-- V4L2_PIXFMT_H264_SLICE_MIXED: one buffer/slice in annex-b format,
-slice params encoded in the buffer and in slice params control;
-
-Also, we need to make sure to have a per-slice bit offset to the
-encoded data in the slice params control so that the same slice buffer
-can be used with any of the _SLICE formats (e.g. ffmpeg would only have
-an annex-b slice and use any of the formats with it).
-
-For the legacy format, we need to specify that the appended slices
-don't repeat the annex-b start code and NAL header.
-
-What do you think?
-
->  By the way, if we could queue
-> twice the same buffer, that would in principal work, but internally
-> there is only one state per buffer. If you do external allocation, then
-> in theory you could workaround that, but then it's ugly, because you'll
-> have two buffers with the same timestamp.
-
-One advantage of the request API is that buffers are actually queued
-when the request is processed, so this might not be too problematic.
-
-I think what we need boils down to:
-- Being able to queue the same output buffer to multiple requests,
-which the request API should already allow;
-- Being able to grab the right capture buffer based on the output
-timestamp so that the different requests for the slices are rendered to
-the same destination buffer.
-
-For the second point, I don't really have a clear idea of whether we
-can already expect v4l2 to allow picking a buffer that was marked done
-but was not de-queued by userspace yet. It might already be allowed and
-we could just implement something to lookup the buffer to grab by
-timestamp.
-
-> An argument that was made early was that we don't need to support this
-> right away because userspace can combine all the slices into one
-> buffer. But for H264_SLICE_RAW format it's inconvenient, you'd need an
-> extra control to tell the driver the offset to each slices, because the
-> raw H264 does not have enough information to be parsed. RAW slice are
-> also I believe de-emulated, which means the code use to prevent having
-> pattern looking like a start code has been removed, so you cannot just
-> prepend start codes. De-emulation seems better placed in userspace if
-> the HW does not take care.
-
-Mhh I'd like to avoid having having to specify the offset to each slice
-for the legacy case. Just appending the encoded data (excluding slice
-header and start code) works for cedrus and I think it makes sense more
-generally. The idea is to only expose a single slice params and act as
-if it was just one big slice buffer.
-
-Come to think of it, maybe we need annex-b and mixed fashions of that
-legacy pixfmt too...
-
-> I also very dislike the idea that we would enforce merging all slice
-> into the same buffer. The entire purpose of slices and the reason they
-> are used in practice is that you can start decoding slices before you
-> have all slices of a frame. This reduce drastically the latency for
-> streaming use cases, like video conferencing. So forcing the merging of
-> slices is basically like pretending slices have no benefits.
-
-Of course, we don't want things to stay like this and this rework is
-definitely needed to get serious performance and latency going.
-
-One thing you should also be aware of: we're currently using a
-workqueue between the job done irq and scheduling the next frame (in
-v4l2 m2m).
-
-Maybe we could manage to fit that into an atomic path to schedule the
-next request in the previous job done irq context.
-
-> I have just exposed the problem I see for now, to see what comes up.
-> But I hope we be able to propose solution too in the short term (in no
-> one beats me at it).
-
-Seems that we have good grounds for a discussion!
-
-Cheers,
-
-Paul
-
-> > +
-> > +A typical frame would thus be decoded using the following sequence:
-> > +
-> > +1. Queue an ``OUTPUT`` buffer containing one unit of encoded bitstream data for
-> > +   the decoding request, using :c:func:`VIDIOC_QBUF`.
-> > +
-> > +    * **Required fields:**
-> > +
-> > +      ``index``
-> > +          index of the buffer being queued.
-> > +
-> > +      ``type``
-> > +          type of the buffer.
-> > +
-> > +      ``bytesused``
-> > +          number of bytes taken by the encoded data frame in the buffer.
-> > +
-> > +      ``flags``
-> > +          the ``V4L2_BUF_FLAG_REQUEST_FD`` flag must be set.
-> > +
-> > +      ``request_fd``
-> > +          must be set to the file descriptor of the decoding request.
-> > +
-> > +      ``timestamp``
-> > +          must be set to a unique value per frame. This value will be propagated
-> > +          into the decoded frame's buffer and can also be used to use this frame
-> > +          as the reference of another.
-> > +
-> > +2. Set the codec-specific controls for the decoding request, using
-> > +   :c:func:`VIDIOC_S_EXT_CTRLS`.
-> > +
-> > +    * **Required fields:**
-> > +
-> > +      ``which``
-> > +          must be ``V4L2_CTRL_WHICH_REQUEST_VAL``.
-> > +
-> > +      ``request_fd``
-> > +          must be set to the file descriptor of the decoding request.
-> > +
-> > +      other fields
-> > +          other fields are set as usual when setting controls. The ``controls``
-> > +          array must contain all the codec-specific controls required to decode
-> > +          a frame.
-> > +
-> > +   .. note::
-> > +
-> > +      It is possible to specify the controls in different invocations of
-> > +      :c:func:`VIDIOC_S_EXT_CTRLS`, or to overwrite a previously set control, as
-> > +      long as ``request_fd`` and ``which`` are properly set. The controls state
-> > +      at the moment of request submission is the one that will be considered.
-> > +
-> > +   .. note::
-> > +
-> > +      The order in which steps 1 and 2 take place is interchangeable.
-> > +
-> > +3. Submit the request by invoking :c:func:`MEDIA_REQUEST_IOC_QUEUE` on the
-> > +   request FD.
-> > +
-> > +    If the request is submitted without an ``OUTPUT`` buffer, or if some of the
-> > +    required controls are missing from the request, then
-> > +    :c:func:`MEDIA_REQUEST_IOC_QUEUE` will return ``-ENOENT``. If more than one
-> > +    ``OUTPUT`` buffer is queued, then it will return ``-EINVAL``.
-> > +    :c:func:`MEDIA_REQUEST_IOC_QUEUE` returning non-zero means that no
-> > +    ``CAPTURE`` buffer will be produced for this request.
-> > +
-> > +``CAPTURE`` buffers must not be part of the request, and are queued
-> > +independently. They are returned in decode order (i.e. the same order as coded
-> > +frames were submitted to the ``OUTPUT`` queue).
-> > +
-> > +Runtime decoding errors are signaled by the dequeued ``CAPTURE`` buffers
-> > +carrying the ``V4L2_BUF_FLAG_ERROR`` flag. If a decoded reference frame has an
-> > +error, then all following decoded frames that refer to it also have the
-> > +``V4L2_BUF_FLAG_ERROR`` flag set, although the decoder will still try to
-> > +produce a (likely corrupted) frame.
-> > +
-> > +Buffer management while decoding
-> > +================================
-> > +Contrary to stateful decoders, a stateless decoder does not perform any kind of
-> > +buffer management: it only guarantees that dequeued ``CAPTURE`` buffers can be
-> > +used by the client for as long as they are not queued again. "Used" here
-> > +encompasses using the buffer for compositing or display.
-> > +
-> > +A dequeued capture buffer can also be used as the reference frame of another
-> > +buffer.
-> > +
-> > +A frame is specified as reference by converting its timestamp into nanoseconds,
-> > +and storing it into the relevant member of a codec-dependent control structure.
-> > +The :c:func:`v4l2_timeval_to_ns` function must be used to perform that
-> > +conversion. The timestamp of a frame can be used to reference it as soon as all
-> > +its units of encoded data are successfully submitted to the ``OUTPUT`` queue.
-> > +
-> > +A decoded buffer containing a reference frame must not be reused as a decoding
-> > +target until all the frames referencing it have been decoded. The safest way to
-> > +achieve this is to refrain from queueing a reference buffer until all the
-> > +decoded frames referencing it have been dequeued. However, if the driver can
-> > +guarantee that buffer queued to the ``CAPTURE`` queue will be used in queued
-> > +order, then user-space can take advantage of this guarantee and queue a
-> > +reference buffer when the following conditions are met:
-> > +
-> > +1. All the requests for frames affected by the reference frame have been
-> > +   queued, and
-> > +
-> > +2. A sufficient number of ``CAPTURE`` buffers to cover all the decoded
-> > +   referencing frames have been queued.
-> > +
-> > +When queuing a decoding request, the driver will increase the reference count of
-> > +all the resources associated with reference frames. This means that the client
-> > +can e.g. close the DMABUF file descriptors of reference frame buffers if it
-> > +won't need them afterwards.
-> > +
-> > +Seeking
-> > +=======
-> > +In order to seek, the client just needs to submit requests using input buffers
-> > +corresponding to the new stream position. It must however be aware that
-> > +resolution may have changed and follow the dynamic resolution change sequence in
-> > +that case. Also depending on the codec used, picture parameters (e.g. SPS/PPS
-> > +for H.264) may have changed and the client is responsible for making sure that a
-> > +valid state is sent to the decoder.
-> > +
-> > +The client is then free to ignore any returned ``CAPTURE`` buffer that comes
-> > +from the pre-seek position.
-> > +
-> > +Pause
-> > +=====
-> > +
-> > +In order to pause, the client can just cease queuing buffers onto the ``OUTPUT``
-> > +queue. Without source bitstream data, there is no data to process and the codec
-> > +will remain idle.
-> > +
-> > +Dynamic resolution change
-> > +=========================
-> > +
-> > +If the client detects a resolution change in the stream, it will need to perform
-> > +the initialization sequence again with the new resolution:
-> > +
-> > +1. Wait until all submitted requests have completed and dequeue the
-> > +   corresponding output buffers.
-> > +
-> > +2. Call :c:func:`VIDIOC_STREAMOFF` on both the ``OUTPUT`` and ``CAPTURE``
-> > +   queues.
-> > +
-> > +3. Free all ``CAPTURE`` buffers by calling :c:func:`VIDIOC_REQBUFS` on the
-> > +   ``CAPTURE`` queue with a buffer count of zero.
-> > +
-> > +4. Perform the initialization sequence again (minus the allocation of
-> > +   ``OUTPUT`` buffers), with the new resolution set on the ``OUTPUT`` queue.
-> > +   Note that due to resolution constraints, a different format may need to be
-> > +   picked on the ``CAPTURE`` queue.
-> > +
-> > +Drain
-> > +=====
-> > +
-> > +In order to drain the stream on a stateless decoder, the client just needs to
-> > +wait until all the submitted requests are completed. There is no need to send a
-> > +``V4L2_DEC_CMD_STOP`` command since requests are processed sequentially by the
-> > +decoder.
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
