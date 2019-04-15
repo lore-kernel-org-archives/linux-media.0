@@ -2,113 +2,124 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18FF0C10F0E
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 11:12:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7607C282DA
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 11:21:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E620F20848
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 11:12:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B634520880
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 11:21:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fpond.eu header.i=@fpond.eu header.b="UUgLpf0u"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727309AbfDOLMk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 07:12:40 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42172 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726298AbfDOLMj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 07:12:39 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 00DD0B05E;
-        Mon, 15 Apr 2019 11:12:37 +0000 (UTC)
-Message-ID: <1555326745.13626.10.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in dvb_usb_device_exit
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, syzkaller-bugs@googlegroups.com,
-        mchehab@kernel.org, corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Mon, 15 Apr 2019 13:12:25 +0200
-In-Reply-To: <000000000000789d3d058653d9bb@google.com>
-References: <000000000000789d3d058653d9bb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726556AbfDOLVK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 07:21:10 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:33165 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726042AbfDOLVK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Apr 2019 07:21:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1555327268;
+        s=strato-dkim-0002; d=fpond.eu;
+        h=Subject:References:In-Reply-To:Message-ID:Cc:To:From:Date:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=93qKTu7ggsYhVjnephg4zOU7OG0v5f+BILksu4mPXN0=;
+        b=UUgLpf0u3NHUon3bV29O00fPafYIVfYr02S6gGDssvlwa+hmH/NqlwKiqEYyzd3+yf
+        qD9rk7ilL4HVc2ornOcEaSq0vIdG48uGQtY/TlGTwBjnbCvHdG0V+/4V1u5oi+mYVQUh
+        KfpEaod/K2ema1n55t9D8pqzWeUfqDKuO4dG48d5ZEYDxt9061f7uvGs5/dquDgX7eO6
+        pny0xdtbmOH8cuIAAn3YdoyLsOcv09U4p8RBZbewQhL/wGNkg7kHZbEIARho9gZFDhKi
+        CkOMVXOdGdo+4Y6b21Ucch310STh4rs/swFRZWuh8abhlzE3ZSMhjpIPONeNbeUAo8GB
+        vTKA==
+X-RZG-AUTH: ":OWANVUa4dPFUgKR/3dpvnYP0Np73amq+g13rqGzmt2bYDnKIKaws6YXTsc4="
+X-RZG-CLASS-ID: mo00
+Received: from oxapp05-03.back.ox.d0m.de
+        by smtp-ox.front (RZmta 44.18 AUTH)
+        with ESMTPSA id y08c83v3FBL8KCD
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+        Mon, 15 Apr 2019 13:21:08 +0200 (CEST)
+Date:   Mon, 15 Apr 2019 13:21:07 +0200 (CEST)
+From:   Ulrich Hecht <uli@fpond.eu>
+To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org
+Message-ID: <1317791671.465071.1555327267988@webmail.strato.com>
+In-Reply-To: <20190412234359.5079-2-niklas.soderlund+renesas@ragnatech.se>
+References: <20190412234359.5079-1-niklas.soderlund+renesas@ragnatech.se>
+ <20190412234359.5079-2-niklas.soderlund+renesas@ragnatech.se>
+Subject: Re: [PATCH 1/8] rcar-vin: Do not call pm_runtime_{resume,suspend}()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Priority: 3
+Importance: Medium
+X-Mailer: Open-Xchange Mailer v7.8.4-Rev55
+X-Originating-IP: 85.212.102.112
+X-Originating-Client: open-xchange-appsuite
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fr, 2019-04-12 at 04:46 -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1643974b200000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> dashboard link: https://syzkaller.appspot.com/bug?extid=26ec41e9f788b3eba396
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12f5efa7200000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1395a0f3200000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
-> 
-> dvb-usb: schedule remote query interval to 150 msecs.
-> dw2102: su3000_power_ctrl: 0, initialized 1
-> dvb-usb: TeVii S421 PCI successfully initialized and connected.
-> usb 1-1: USB disconnect, device number 2
 
-Hi,
+> On April 13, 2019 at 1:43 AM Niklas S=C3=B6derlund <niklas.soderlund+rene=
+sas@ragnatech.se> wrote:
+>=20
+>=20
+> The driver do not implement runtime resume and suspend function so there
 
-proposed fix. If nobody objects, I will submit it.
+"driver does", I presume.
 
-	Regards
-		Oliver
+> is little point in trying to call them. This is a leftover from the
+> drivers soc_camera beginnings.
+>=20
+> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.=
+se>
+> ---
+>  drivers/media/platform/rcar-vin/rcar-v4l2.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/=
+platform/rcar-vin/rcar-v4l2.c
+> index 7cbdcbf9b090c638..b821ea01786eb1ff 100644
+> --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+> @@ -798,9 +798,6 @@ static int rvin_initialize_device(struct file *file)
+>  =09=09return ret;
+> =20
+>  =09pm_runtime_enable(&vin->vdev.dev);
+> -=09ret =3D pm_runtime_resume(&vin->vdev.dev);
+> -=09if (ret < 0 && ret !=3D -ENOSYS)
+> -=09=09goto eresume;
+> =20
+>  =09/*
+>  =09 * Try to configure with default parameters. Notice: this is the
+> @@ -817,7 +814,6 @@ static int rvin_initialize_device(struct file *file)
+>  =09return 0;
+>  esfmt:
+>  =09pm_runtime_disable(&vin->vdev.dev);
+> -eresume:
+>  =09rvin_power_off(vin);
+> =20
+>  =09return ret;
+> @@ -868,7 +864,6 @@ static int rvin_release(struct file *file)
+>  =09 * Then de-initialize hw module.
+>  =09 */
+>  =09if (fh_singular) {
+> -=09=09pm_runtime_suspend(&vin->vdev.dev);
+>  =09=09pm_runtime_disable(&vin->vdev.dev);
+>  =09=09rvin_power_off(vin);
+>  =09}
+> --=20
+> 2.21.0
+>
 
-From d6097d205ac61745334b79639d3b8b910ae66c71 Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Mon, 15 Apr 2019 13:06:01 +0200
-Subject: [PATCH] dvb: usb: fix use after free in dvb_usb_device_exit
+With typo fixed,
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 
-dvb_usb_device_exit() frees and uses teh device name in that order
-Fix by storing the name in a buffer before freeing it
-
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
----
- drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-index 99951e02a880..2e1670cc3903 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-+++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-@@ -288,13 +288,18 @@ void dvb_usb_device_exit(struct usb_interface *intf)
- {
- 	struct dvb_usb_device *d = usb_get_intfdata(intf);
- 	const char *name = "generic DVB-USB module";
-+	char identifier[40];
- 
- 	usb_set_intfdata(intf, NULL);
- 	if (d != NULL && d->desc != NULL) {
- 		name = d->desc->name;
-+		memcpy(identifier, name, 39);
-+		identifier[39] = NULL;
- 		dvb_usb_exit(d);
-+	} else {
-+		memcpy(identifier, name, 39);
- 	}
--	info("%s successfully deinitialized and disconnected.", name);
-+	info("%s successfully deinitialized and disconnected.", identifier);
- 
- }
- EXPORT_SYMBOL(dvb_usb_device_exit);
--- 
-2.16.4
-
+CU
+Uli
