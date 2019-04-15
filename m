@@ -2,127 +2,98 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3035CC10F0E
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:30:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E36DC10F0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC53320825
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:30:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="c7x5yCf5"
+	by mail.kernel.org (Postfix) with ESMTP id 0451420880
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727177AbfDOMaI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 08:30:08 -0400
-Received: from mail-qt1-f174.google.com ([209.85.160.174]:39400 "EHLO
-        mail-qt1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbfDOMaH (ORCPT
+        id S1727493AbfDOMod (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 08:44:33 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53753 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727366AbfDOMod (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 08:30:07 -0400
-Received: by mail-qt1-f174.google.com with SMTP id t28so18800450qte.6
-        for <linux-media@vger.kernel.org>; Mon, 15 Apr 2019 05:30:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=WaGY23/aKBXv/22Nfcg3k8t9q+qYeT1eKiuNyGDw0p0=;
-        b=c7x5yCf5Ow30egwi6LE0VHDAmhbfJBKZ/55Q56a/r71xLVCnrWY+v96CYQfPK+JPsM
-         svTQ3xX2dmW9vccadijIttuvAcECISJ2JoA9712nXO/1GTgO8I+Sd6xk4vPkmukC0WdA
-         gxwtaGl+8Bs1g9e2mxQi3lJf2hgwJsMXTg6UbTmSPKfpT/JEKG8ANachszSIKcduMi+2
-         wCytpDwM/LQgrqNoXI7EMWTuevrXg2blq97NRiC6y/oMmJGkUXZL28YDfIcxSJhnQ4Mj
-         PdVEninSbBJS0YzB5+uqTvgIXPdnhsguwMECYNQRMxa5vmVmiTsO+sRoPmXLpZZMYM0z
-         Ierw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=WaGY23/aKBXv/22Nfcg3k8t9q+qYeT1eKiuNyGDw0p0=;
-        b=lbaLi9Za4mLN4wMeSWFoW98Aqt5hnqbR2gKl2eUr1HW8BznjaUBTR3XZC24+4EtVTJ
-         P1V6sbpkEjaDoz5i/OAecup5DgbBTvK6Bfn4ifxYiuFithLnY6k8S2Ui4xGKqVfXXyHQ
-         D9Pts0oaYmUGzAKt/bSKThpezd6kQy/BYpljCLyX2BQ5WwcijgPgqOXe28Z8DedIWVou
-         4gUmz2d2FwJkwHehQrAcjeT0lNfNG3b6cMpo5Y1oLN57fcG30iCzPN2VFbHOmZUHjUeX
-         cKPxi+18ocnwBHMFEzmyj0FhSez8oTQGD8f98x9BnedFfFXhLvDh+uGnBCuaRnfQEk4A
-         P/Ag==
-X-Gm-Message-State: APjAAAUM3Ez1hnIAVw29/zzjfIhohCsTbx4I2CxyppcYDgJRC8PMyjU4
-        +EgpyCVcJ7KkFccqGQk6iaSBkw==
-X-Google-Smtp-Source: APXvYqxTrVm5X9yB19z5r/GOa5SixpFmNyeNbkIDHxI5PoVDjIk2Qy8wg8mh8acBwtoHNGMrt/Z7eQ==
-X-Received: by 2002:a0c:c110:: with SMTP id f16mr61436082qvh.190.1555331407032;
-        Mon, 15 Apr 2019 05:30:07 -0700 (PDT)
-Received: from skullcanyon ([2002:c0de:c115:0:481e:e17e:2f68:43f8])
-        by smtp.gmail.com with ESMTPSA id w68sm25878408qka.18.2019.04.15.05.30.04
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 15 Apr 2019 05:30:05 -0700 (PDT)
-Message-ID: <6ae8b9daa0cf406ab604e802bbb6d46736266bd5.camel@ndufresne.ca>
-Subject: Re: [PATCH v3 2/2] media: docs-rst: Document memory-to-memory video
- encoder interface
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Tiffany Lin =?UTF-8?Q?=28=E6=9E=97=E6=85=A7=E7=8F=8A=29?= 
-        <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen =?UTF-8?Q?=28=E9=99=B3=E6=99=BA=E8=BF=AA=29?= 
-        <andrew-ct.chen@mediatek.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dave.stevenson@raspberrypi.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
-Date:   Mon, 15 Apr 2019 08:30:03 -0400
-In-Reply-To: <CAAFQd5BmDvou6qdaw6uSAWTyLBXeTH8RvnBi7dCGCRdedvHPMg@mail.gmail.com>
-References: <20190124100419.26492-1-tfiga@chromium.org>
-         <20190124100419.26492-3-tfiga@chromium.org>
-         <4bbe4ce4-615a-b981-0855-cd78c7a002d9@xs4all.nl>
-         <471720b7-e304-271b-256d-a3dd394773c9@xs4all.nl>
-         <CAAFQd5Au_=08pVom1z3C1nHKdKak8Y4d5odR6fiNB4urDhfjKQ@mail.gmail.com>
-         <787ddc1f-388d-82be-2702-0d7d256f636c@xs4all.nl>
-         <CAAFQd5DozydYBpEceFTbJSutP+gwjxybpd1q6N1Vi+YragQT+w@mail.gmail.com>
-         <6cb0caf1-61a6-0719-1ade-1dcf8ed8a020@xs4all.nl>
-         <CAAFQd5DdDv+Nu0Dry1XRpYAnz0DrSE5kEf7GxY64tg6aJebzMQ@mail.gmail.com>
-         <1ec36515-b6ec-b355-47fb-2fe5ad4b3241@xs4all.nl>
-         <03751bb884a443ec1cea7b5c023c9d520ffcc3a0.camel@ndufresne.ca>
-         <CAAFQd5BmDvou6qdaw6uSAWTyLBXeTH8RvnBi7dCGCRdedvHPMg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 (3.32.0-1.fc30) 
+        Mon, 15 Apr 2019 08:44:33 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1hG0yJ-0000RV-84; Mon, 15 Apr 2019 14:44:27 +0200
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1hG0yH-00025h-3N; Mon, 15 Apr 2019 14:44:25 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org
+Cc:     laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@pengutronix.de,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 11/13] media: dt-bindings: tvp5150: add optional tvnorms documentation
+Date:   Mon, 15 Apr 2019 14:44:11 +0200
+Message-Id: <20190415124413.18456-12-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190415124413.18456-1-m.felsch@pengutronix.de>
+References: <20190415124413.18456-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le lundi 15 avril 2019 à 17:56 +0900, Tomasz Figa a écrit :
-> > Sounds like we need something similar to the SOURCE_CHANGE event
-> > mechanism if we want to allow dynamic bitrate control which would
-> > require re-allocation of the capture buffer queue. (Or any other
-> > runtime control on our encoders, which is really expected to be
-> > supported these days).
-> 
-> Sounds like it. Or we could just assume that one needs to stop both
-> queues to do a resolution change, since most codes would anyway reset
-> the stream (e.g. send PPS/SPS, etc. for H.264) to change the
-> resolution. Not sure if that assumption always holds, though.
+Document the optional binding to limit the possible tv-norms on the
+input connectors.
 
-I think for resolution/profile/level changes you have a good point, as
-you said, we need to start a new stream (new header, new IDR). Maybe
-then we should simply require the driver to allocate enough buffer to
-support the highest bitrate for the selected resoltion/profile/level?
-Though, this could create situation where we waste a lot of memory. On
-the other side, if you need to reallocate your buffers on bitrate
-change, it might create a visible freeze.
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/media/i2c/tvp5150.txt | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Nicolas
+diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+index 82fff80fa63a..970be21fb191 100644
+--- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
++++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+@@ -48,6 +48,13 @@ Required Endpoint Properties for parallel synchronization on output port:
+ Note: Do not specify any of these properties if you want to use the embedded
+       BT.656 synchronization.
+ 
++Optional Connector Properties:
++==============================
++
++- tvnorms: Set the possible signals to which the hardware tries to lock instead
++	   of using the autodetection mechnism. Please look at [1] for more
++	   information.
++
+ [1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
+ 
+ Example - three input sources:
+@@ -55,6 +62,7 @@ Example - three input sources:
+ comp_connector_0 {
+ 	compatible = "composite-video-connector";
+ 	label = "Composite0";
++	tvnorms = <TVNORM_PAL_M>; /* limit to pal-m signals */
+ 
+ 	port {
+ 		composite0_to_tvp5150: endpoint {
+@@ -66,6 +74,7 @@ comp_connector_0 {
+ comp_connector_1 {
+ 	compatible = "composite-video-connector";
+ 	label = "Composite1";
++	tvnorms = <TVNORM_NTSC_M>; /* limit to ntsc-m signals */
+ 
+ 	port {
+ 		composite1_to_tvp5150: endpoint {
+-- 
+2.20.1
 
