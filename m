@@ -2,127 +2,915 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33A15C10F12
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 15:27:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFAF0C10F0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 15:30:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 02E412075B
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 15:27:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DED72075B
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 15:30:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uPREm/Ix"
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="0xxntrhW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727682AbfDOP1p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 11:27:45 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:44208 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727252AbfDOP1l (ORCPT
+        id S1727633AbfDOPaT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 11:30:19 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:44096 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726147AbfDOPaS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 11:27:41 -0400
-Received: by mail-wr1-f67.google.com with SMTP id y7so22484825wrn.11
-        for <linux-media@vger.kernel.org>; Mon, 15 Apr 2019 08:27:39 -0700 (PDT)
+        Mon, 15 Apr 2019 11:30:18 -0400
+Received: by mail-qk1-f196.google.com with SMTP id y5so10075843qkc.11
+        for <linux-media@vger.kernel.org>; Mon, 15 Apr 2019 08:30:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=rdjAJXPyrM7EYkVn/ceLH5U36WNFw9E4wp8blYV0QHo=;
-        b=uPREm/IxJb+c7rMXJxDJMh982pm80bSgcoyt+4c2rUBFlpqabZFtJjD6BD9+UA1KYt
-         5vx/eEY4H6WNCnZ7syHqiO/HD1lxfL6T2qPgACJJ2+3ukcVipDTNlRFdLF9A0MfT9RQd
-         VK+vFaIWWjn4UZGgsm57pPhnBY+jOvuOMWXK6rBQdeBoRQFgChIkdPiHdAC7R7zSxSJO
-         DuluM82P013xbllH6mjENEdWMT2jvkxI7+CLSpT3M5DXIqKhB/auctdGdjsjYdYhmHb7
-         9E2WNMOiOEFCZ+wvuK6sdApFgDEX5ZbhMpzKK63x7K7MuNNVMlL0E+mFwA2exa7/T8Yb
-         YWWQ==
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=V/cZJrXkbA6+2KDEUiqxuDb7gWITCFWXzCewLM/c51w=;
+        b=0xxntrhWb+mdLfVK9pvnOqTHvFFvS7aG9z3TjkEWQrBfNZ5aYZYyCWaRikJXkSlC3D
+         13N6V55f4orbR7/XjhpaWwgcS0+bgFhjY0prtRLDq2hkhS1UoeGTpQU0NGtujpJqmtU3
+         eyKH3tzN84gnO0v++IqrtpjoPdRm80w+NaevKPEjHGv5IzFG2jhKVSKPCywTvMZsKYhE
+         GYL7ljQbKPzzaYUf7IMhHjdNP2wgh3oDe+JT+OKrPVwWxOJsJrsFh6fiwPGx2z2+4aPA
+         JMFrBLux2PfcfvZxwuDb/Me4AmyvpkYi6/HyxlDHyVsg8E2Rt1Z31+UaqCT4+ZEzX3Is
+         PrGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=rdjAJXPyrM7EYkVn/ceLH5U36WNFw9E4wp8blYV0QHo=;
-        b=f+HIVxXvz8tm0qAS6EmuSSZLL/LSUKa7wOC1cSbv57MmV/WCmnB9lhn7ZuQpmEOazV
-         MjiwKh97+iJ59uUci6eYeO120llXSPbMehcm2uy43RCfUhgE4xL1C8gc6WU9Z9fupEUC
-         YHR97Uqs3eWgfllKjsYqGkjgnVunFFi6cfmyYoqIfZEcP9Hgr3ZIvrP40w+/M3s1BVzk
-         4zR0Gfkk8cpWDjOgjHH1JHVrEg/WHLleGc4Eg+CH4p94uk52zkfUB/UZ9ECkZQyKi6M9
-         7bSxoc7lr0iA0uSguwnF14qnxgiUxDNZtla2DYqJnApsSOiK6IBIVO2P2+J+XdCdL4fV
-         jDwQ==
-X-Gm-Message-State: APjAAAX4t+qef7UYwnLKx8m6WnsbRWBveP8P2YvJl3SWFKZUSDKnFbVI
-        glK6IP89IDAj58fQDqxDZ1ixMnroWV0=
-X-Google-Smtp-Source: APXvYqzq2oXCRYl5tmmkNntvSrG3Vz2aLWwIA5L9wCn7RJswjP0FpZAI5Q66CmQ6uDdMWUxgqgx0oQ==
-X-Received: by 2002:adf:ea0b:: with SMTP id q11mr29187233wrm.233.1555342058968;
-        Mon, 15 Apr 2019 08:27:38 -0700 (PDT)
-Received: from localhost.localdomain ([37.157.136.206])
-        by smtp.gmail.com with ESMTPSA id t74sm288818wmt.3.2019.04.15.08.27.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Apr 2019 08:27:38 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=V/cZJrXkbA6+2KDEUiqxuDb7gWITCFWXzCewLM/c51w=;
+        b=kyIWeKPAYQUQtcrN5a5UZv45LOL1vgz9lo0+f5WEGBDS8jdM9s6E2gUAFu8PKXFr6x
+         Xect3ouJdhIxpIAUGcVguddLWibtp62F0+CPLVL3nawixFsHm5Sdu/JlAnob9gFdunPG
+         dkwk1yVPu5DuJ+QWBEzz/21euaJxc+HqzWE4fkoU2tyEhVHkZpeKkptxiS7uyslxRHlf
+         jfwZ5duDHhiexB7aHB/7PoGfN8LOyV5NfXxH67CBpOE+ujtf5yzHuMK9lH+1WWLIzpLq
+         D2kVCmRScP+V439i6TCa28TJdGCeH16vff6cbInF1Phuu/gppcFWUOTPVuWsD/0ZnBVK
+         OIFA==
+X-Gm-Message-State: APjAAAVRcSE45UaDd5gbgu7RANWpwevP6V3U8ekNEGvGURhRYRjAGvv2
+        tBtIfdv/4/N35IUaDntAYznkzw==
+X-Google-Smtp-Source: APXvYqxv7KaVQnaEuh9Kll8lynWqHrkt9mumg4sBYzwJavoKdWEH7GDDHBAzCMPX8gu8NVdNTpl4lg==
+X-Received: by 2002:a37:4b03:: with SMTP id y3mr56719229qka.260.1555342216822;
+        Mon, 15 Apr 2019 08:30:16 -0700 (PDT)
+Received: from tpx230-nicolas.collaboramtl (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
+        by smtp.gmail.com with ESMTPSA id q51sm33610770qtc.38.2019.04.15.08.30.14
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 15 Apr 2019 08:30:15 -0700 (PDT)
+Message-ID: <0b495143bb260cf9f8927ee541e7f001842ac5c3.camel@ndufresne.ca>
+Subject: Re: [PATCH v4] media: docs-rst: Document m2m stateless video
+ decoder interface
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
         Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH] v4l: Add source event change for bit-depth
-Date:   Mon, 15 Apr 2019 18:27:23 +0300
-Message-Id: <20190415152723.2481-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Dafna Hirschfeld <dafna3@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Date:   Mon, 15 Apr 2019 11:30:12 -0400
+In-Reply-To: <59e23c5ca5bfbadf9441ea06da2e9b9b5898c6d7.camel@bootlin.com>
+References: <20190306080019.159676-1-acourbot@chromium.org>
+         <371df0e4ec9e38d83d11171cbd98f19954cbf787.camel@ndufresne.ca>
+         <da5aa9ab957923a72e30b169a3c242c4fe6260f1.camel@bootlin.com>
+         <c07703459c7e48904bd7fd83be1e675c70eee83c.camel@ndufresne.ca>
+         <d81d0112b99feba0a1899f3722077a4aeec9860c.camel@bootlin.com>
+         <439b7f57aa3ba2b2ed5b043f961ef87cb83912af.camel@ndufresne.ca>
+         <59e23c5ca5bfbadf9441ea06da2e9b9b5898c6d7.camel@bootlin.com>
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-fZ7Bfmt3NJh944AkDEVS"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+MIME-Version: 1.0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This event indicate that the source bit-depth is changed during
-run-time. The client must get the new format and re-allocate buffers
-for it. This can usually happens with video decoder (encoders) when
-the bit-stream depth is changed from 8 to 10bits or vice versa.
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
- Documentation/media/uapi/v4l/vidioc-dqevent.rst | 7 +++++++
- Documentation/media/videodev2.h.rst.exceptions  | 1 +
- include/uapi/linux/videodev2.h                  | 1 +
- 3 files changed, 9 insertions(+)
+--=-fZ7Bfmt3NJh944AkDEVS
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/media/uapi/v4l/vidioc-dqevent.rst b/Documentation/media/uapi/v4l/vidioc-dqevent.rst
-index dea9c0cc00ab..92573d7c3e05 100644
---- a/Documentation/media/uapi/v4l/vidioc-dqevent.rst
-+++ b/Documentation/media/uapi/v4l/vidioc-dqevent.rst
-@@ -397,6 +397,13 @@ call.
- 	that many devices are not able to recover from a temporary loss of
- 	signal and so restarting streaming I/O is required in order for the
- 	hardware to synchronize to the video signal.
-+    * - ``V4L2_EVENT_SRC_CH_BITDEPTH``
-+      - 0x0002
-+      - This event gets triggered when bit-depth change is detected from a
-+	video decoder. Applications will have to query the new pixel format
-+	and re-negotiate the queue. In most cases the streaming must be stopped
-+	and restarted (:ref:`VIDIOC_STREAMOFF <VIDIOC_STREAMON>` followed by
-+	:ref:`VIDIOC_STREAMON <VIDIOC_STREAMON>`).
- 
- 
- Return Value
-diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentation/media/videodev2.h.rst.exceptions
-index 64d348e67df9..b4c35b347983 100644
---- a/Documentation/media/videodev2.h.rst.exceptions
-+++ b/Documentation/media/videodev2.h.rst.exceptions
-@@ -478,6 +478,7 @@ replace define V4L2_EVENT_CTRL_CH_FLAGS ctrl-changes-flags
- replace define V4L2_EVENT_CTRL_CH_RANGE ctrl-changes-flags
- 
- replace define V4L2_EVENT_SRC_CH_RESOLUTION src-changes-flags
-+replace define V4L2_EVENT_SRC_CH_BITDEPTH src-changes-flags
- 
- replace define V4L2_EVENT_MD_FL_HAVE_FRAME_SEQ :c:type:`v4l2_event_motion_det`
- 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 496e6453450c..7398f42eac7d 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -2271,6 +2271,7 @@ struct v4l2_event_frame_sync {
- };
- 
- #define V4L2_EVENT_SRC_CH_RESOLUTION		(1 << 0)
-+#define V4L2_EVENT_SRC_CH_BITDEPTH		(1 << 1)
- 
- struct v4l2_event_src_change {
- 	__u32 changes;
--- 
-2.17.1
+Le lundi 15 avril 2019 =C3=A0 15:26 +0200, Paul Kocialkowski a =C3=A9crit :
+> Hi,
+>=20
+> On Mon, 2019-04-15 at 08:24 -0400, Nicolas Dufresne wrote:
+> > Le lundi 15 avril 2019 =C3=A0 09:58 +0200, Paul Kocialkowski a =C3=A9cr=
+it :
+> > > Hi,
+> > >=20
+> > > On Sun, 2019-04-14 at 18:38 -0400, Nicolas Dufresne wrote:
+> > > > Le dimanche 14 avril 2019 =C3=A0 18:41 +0200, Paul Kocialkowski a =
+=C3=A9crit :
+> > > > > Hi,
+> > > > >=20
+> > > > > Le vendredi 12 avril 2019 =C3=A0 16:47 -0400, Nicolas Dufresne a =
+=C3=A9crit :
+> > > > > > Le mercredi 06 mars 2019 =C3=A0 17:00 +0900, Alexandre Courbot =
+a =C3=A9crit :
+> > > > > > > Documents the protocol that user-space should follow when
+> > > > > > > communicating with stateless video decoders.
+> > > > > > >=20
+> > > > > > > The stateless video decoding API makes use of the new request=
+ and tags
+> > > > > > > APIs. While it has been implemented with the Cedrus driver so=
+ far, it
+> > > > > > > should probably still be considered staging for a short while=
+.
+> > > > >=20
+> > > > > [...]
+> > > > >=20
+> > > > > > From an IRC discussion with Paul and some more digging, I have =
+found a
+> > > > > > design problem in the decoding process.
+> > > > > >=20
+> > > > > > In H264 and HEVC you can have multiple decoding unit per frames
+> > > > > > (slices). This type of encoding is increasingly popular, specia=
+lly for
+> > > > > > low latency streaming use cases. The wording of this spec does =
+allow
+> > > > > > for the notion of decoding unit, and in practice it has been pr=
+oven to
+> > > > > > work through some RFC FFMPEG patches and the Cedrus driver. But
+> > > > > > something important to know is that the FFMPEG RFC implements d=
+ecoding
+> > > > > > in lock steps. Which means:
+> > > > > >=20
+> > > > > >   1. It queues a single free capture buffer
+> > > > > >   2. It queues an output buffer, set controls, queue the reques=
+t
+> > > > > >   3. It waits for a capture buffer to reach state done
+> > > > > >   4. It dequeues that capture buffer, and queue it back again
+> > > > > >   5. And then it runs step 2,4,3 again with following slices, u=
+ntil we=20
+> > > > > >      have a complete frame. After what, it restart at step 1
+> > > > > >=20
+> > > > > > So the implementation makes no use of the queues. There is no b=
+atch
+> > > > > > processing, so we might not be able to reach the maximum hardwa=
+re
+> > > > > > throughput.
+> > > > > >=20
+> > > > > > So the optimal method would look like the following, but there =
+comes
+> > > > > > the design issue.
+> > > > > >=20
+> > > > > >   1. Queue a single free capture buffer
+> > > > > >   2. Queue output buffer for slice 1, set controls, queue the r=
+equest
+> > > > > >   3. Queue output buffer for slice 2, set controls, queue the r=
+equest
+> > > > > >   4. Wait for completion
+> > > > > >=20
+> > > > > > The problem is in step 4. Completion means that the capture buf=
+fer done
+> > > > > > decoding a single unit. So assuming the driver supports matchin=
+g the
+> > > > > > timestamp against the queued buffer, instead of waiting for a n=
+ew
+> > > > > > buffer, the driver would have to mark twice the same buffer to =
+done
+> > > > > > state, which is just not working to inform userspace that all s=
+lices
+> > > > > > are decoded into the one capture buffer they share.
+> > > > >=20
+> > > > > Interestingly, I'm experiencing the exact same problem dealing wi=
+th a
+> > > > > 2D graphics blitter that has limited ouput scaling abilities whic=
+h
+> > > > > imply handlnig a large scaling operation as multiple clipped smal=
+ler
+> > > > > scaling operations. The issue is basically that multiple jobs hav=
+e to
+> > > > > be submitted to complete a single frame and relying on an indicat=
+ion
+> > > > > from the destination buffer (such as a fence) doesn't work to ind=
+icate
+> > > > > that all the operations were completed, since we get the indicati=
+on at
+> > > > > each step instead of at the end of the batch.
+> > > > >=20
+> > > > > One idea I see to solve this is to have a notion of batch in the =
+driver
+> > > > > (for our situation, that would be in v4l2) and provide means to g=
+et a
+> > > > > done indication for that entity.
+> > > > >=20
+> > > > > I think we could extend the request API to allow this. We already
+> > > > > represent requests as individual file descriptors, we could total=
+ly
+> > > > > group requests in batches and get a sync fd for the batch to poll=
+ on
+> > > > > when we need to return the frames. It would be good if we could e=
+xpose
+> > > > > this in a way that makes it work with DRM as an in fence for disp=
+lay.
+> > > > > Then we can pretty much schedule our flip + decoding together (wh=
+ich is
+> > > > > quite nice to have when we're running late on the decoding side).
+> > > > >=20
+> > > > > What do you think?
+> > > > >=20
+> > > > > It feels to me like the request API was designed to open up the w=
+ay for
+> > > > > these kinds of improvements, so I'm sure we can find an agreeable
+> > > > > solution that extends the API.
+> > > > >=20
+> > > > > > To me, multi slice encoded stream are just too common, and they=
+ will
+> > > > > > also exist for AV1. So we really need a solution to this that d=
+oes not
+> > > > > > require operating in lock steps. Specially that some HW can dec=
+ode
+> > > > > > multiple slices in parallel (multi core), we would not want to =
+prevent
+> > > > > > that HW from being used efficiently. On top of this, we need a =
+solution
+> > > > > > so that we can also keep queuing slice of the following frames =
+if they
+> > > > > > arrive before decoding is done.
+> > > > >=20
+> > > > > Agreed.
+> > > > >=20
+> > > > > > I don't have a solution yet myself, but it would be nice to com=
+e up
+> > > > > > with something before we freeze this API.
+> > > > >=20
+> > > > > I think it's rather independent from the codec used and this is
+> > > > > something that should be handled at the request API level.=20
+> > > > >=20
+> > > > > I'm not sure we can always expect the hardware to be able to oper=
+ate on
+> > > > > a per-slice basis. I think it would be useful to reflect this in =
+the
+> > > > > pixel format, so that we also have a possibility for a gathered s=
+lice
+> > > > > buffer (as the spec currently mentions for mpeg-2) for legacy dec=
+oder
+> > > > > hardware that will need to decode one frame in one go from a cont=
+iguous
+> > > > > buffer with all the slice data appended.
+> > > > >=20
+> > > > > This updates my pixel format proposition from IRC to the followin=
+g:
+> > > > > - V4L2_PIXFMT_H264_SLICE_APPENDED: single buffer for all the slic=
+es
+> > > > > (appended buffer), slice params as v4l2 control (legacy);
+> > > >=20
+> > > > SLICE_RAW_APPENDED ? Or FRAMED_SLICES_RAW ? You would need a new
+> > > > control for the NAL index, as there is no way to figure-out otherwi=
+se.
+> > > > I would not add this format unless a specific HW need it.
+> > >=20
+> > > I don't really like using "raw" as a distinguisher: I don't think it'=
+s
+> > > explicit enough. The idea here is to reflect that there is only one
+> > > slice exposed, which is the appended result of all the frame slices
+> > > with a single v4l2 control.
+> >=20
+> > RAW in this context was suggested to reflect the fact there is no
+> > header, no slice header and that emulation prevention bytes has been
+> > removed and replaces by the real values.
+>=20
+> That could also be understood as "slice params coded raw", which is the
+> opposite of what it describes, hence my reluctance.
+>=20
+> > Just SLICE alone was much worst.
+>=20
+> Keep in mind that we already have a MPEG2_SLICE format in the public
+> API. We should probably decide what it should become based on the
+> outcome of this discussion.
+>=20
+> >  There is to many properties to this type of H264 buffer to
+> > encode everything into the name, so what will really matter in the end
+> > if the documentation. Feel free to propose a better name.
+>=20
+> Agreed, it's a side point. I always find it hard to find naming good,
+> as well as finding good naming (my suggestions aren't really top-notch
+> either).
+>=20
+> Here is another proposition:
+> - SLICE_PARSED
+> - SLICE_ANNEX_B
+> - SLICE_PARSED_ANNEX_B
+
+Ok, we'll keep working on that then, naming is hard. I guess by PARSED
+you meant that the slice headers are passed as controls, and that
+indeed make sense. But I really thought all stateless decoder would
+required that. A hard bet obviously.
+
+>=20
+> > > > > - V4L2_PIXFMT_H264_SLICE: one buffer/slice, slice params as contr=
+ol;
+> > > > >=20
+> > > > > - V4L2_PIXFMT_H264_SLICE_ANNEX_B: one buffer/slice in annex-b for=
+mat,=20
+> > > > > slice params encoded in the buffer;
+> > > >=20
+> > > > We are still working on this one, this format will be used by Rockc=
+hip
+> > > > driver for sure, but this needs clarification and maybe a rename if
+> > > > it's not just one slice per buffer.
+> > >=20
+> > > I thought the decoder also needed the parse slice data? At least IIRC
+> > > for Tegra, we need Annex-B format and a parsed slice header (so the
+> > > next one).
+> >=20
+> > Yes, in every cases, the HW will parse the slice data.
+>=20
+> Ah sorry, I meant "need the parsed slice data" (missed the d), as in,
+> some decoders will need annex-b format but won't parse the slice header
+> on their own, so they also need the parsed slice header control.
+> Don't ask why...
+>=20
+> In my proposition from above, that would be: SLICE_PARSED_ANNEX_B.
+>=20
+> >  It's possible
+> > that Tegra have a matching format as Rockchip, someone would need to do
+> > a proper integration to verify. But the driver does not need the
+> > following one, that is specific to ANNEX-B parsing.
+> >=20
+> > > > > - V4L2_PIXFMT_H264_SLICE_MIXED: one buffer/slice in annex-b forma=
+t,
+> > > > > slice params encoded in the buffer and in slice params control;
+> > > > >=20
+> > > > > Also, we need to make sure to have a per-slice bit offset to the
+> > > > > encoded data in the slice params control so that the same slice b=
+uffer
+> > > > > can be used with any of the _SLICE formats (e.g. ffmpeg would onl=
+y have
+> > > > > an annex-b slice and use any of the formats with it).
+> > > >=20
+> > > > Ah, I we are saying the same.
+> > > >=20
+> > > > > For the legacy format, we need to specify that the appended slice=
+s
+> > > > > don't repeat the annex-b start code and NAL header.
+> > > >=20
+> > > > I'm not sure this one make sense. the NAL header for each slices of=
+ one
+> > > > frames are not always identical.
+> > >=20
+> > > Yes but that's pretty much the point of the legacy format: to only
+> > > expose a single slice buffer and slice header (even in cases where th=
+e
+> > > bitstream codes them in multiple distinct ones).
+> > >=20
+> > > We can't expect this to work in every case, that's why it's a legacy
+> > > format. It seems to work pretty well for cedrus so far.
+> >=20
+> > I'm not sure I follow you, what Cedrus does should be changed to
+> > whatever we decide as a final API, we should not maintain two formats.
+>=20
+> That point has me hesitating. It depends on whether we can expect to
+> see hardware implementations with no support whatsoever for multi-slice=
+=20
+> per frame and just expect an aggregated buffer of slice compressed
+> data. This is one operation mode that the Allwinner VPU supports.
+>=20
+> The point is not to use it in Cedrus since our VPU can operate per-
+> slice, but to allow supporting hardware decoders that can't do that in
+> the future.
+>=20
+> I'm not sure it's healthy to make it a hard requirement for H.264
+> decoding to operate per-slice. Does that seem too far-fetched from your
+> perspective? I seem to recall from a discussion that some legacy
+> hardware only handles single-slices frames, but I may be wrong.
+>=20
+> > Also, what works for Cedrus is that a each buffers must have a single
+> > slice regardless how many slices per frame. And this is what I expect
+> > from most stateless HW.
+>=20
+> Currently, we append all the slices into one buffer and decode it in
+> one go with a slightly hacked slice params to reflect that. But of
+> course, we should be operating per-slice.
+>=20
+> >  This is how it works in VAAPI and VDPAU as an
+> > example. Just for the reference, the API in VAAPI is (pseudo code, I
+> > can't remember the exact name):
+> >=20
+> >    - beginPicture()
+> >    - decodeSlice() *
+> >    - endPicture()
+> >=20
+> > So the accelerator is told explicitly when a frame start/end, but also
+> > it's told explicitly in which buffer to decode the frame to.
+>=20
+> Yes definitely. We're also given all the parsed bitstream elements in
+> the right order so that we could already start queuing requests when
+> each slice is passed, and just wait for completion at endPicture.
+>=20
+> > > We could also decide to ditch the legacy idea altogether and only
+> > > specify formats that operate on a per-slice basis, but I'm afraid we'=
+ll
+> > > find decoders that can only take a single slice per buffer.
+> >=20
+> > It's impossible for a compliant decoder to only support 1 slice per
+> > frame, so I don't follow you on this one. Also, I don't understand what
+> > difference you see between per-slice basis and single slice per buffer.
+>=20
+> Okay that's exactly what I wanted to know: whether it makes any sense
+> to build a decoder that only operates per-frame and not per-slice.
+> If you are confident we won't see that in the wild, we can make it an
+> API requirement to operate per-slice.
+
+There is probably a small distinction to make between supporting
+multiple slices per frame and operating per slice. It's nice to know
+that Cedrus support both. As we discussed today on IRC, if we introduce
+a flag that tells the driver when the last slice of a frame is passed,
+it would be relatively simple for the driver to do decide what to do.
+Of course if the HW have a limitation of one allocation, it might not
+be fully optimal as it would have to copy.
+
+But as this is stateless decoder, I'm more inclined in introducing a
+format that means just that, leaving it to userspace to do that right
+packing.
+
+>=20
+> > > When decoding a multi-slice frame in that setup, I think we'll be
+> > > better off with an appended buffer containing all the slices for the
+> > > frame instead of passing only a the first slice.
+> >=20
+> > Appended slices requires extra controls, but also introduce a lot more
+> > decoding latency. As soon as we add the missing frame boundary
+> > signalling, it should be really trivial for a driver to wait until it
+> > received all slices before starting the decoding if that is a HW
+> > requirement.
+>=20
+> Well, I don't really like the idea of the driver being aware of any of
+> that (IMO the logic should be in the media core, not the driver).
+>=20
+> If a driver can't do multiple slices, it shouldn't be up to the driver
+> to gather them together. But anyway, if you think we won't ever see
+> this kind of hardware, we can just drop the whole idea.
+
+A compliant HW will support multiple slices per frame, that's not
+really optional. But it may require all slices to be packed in a single
+allocation, in which case it could copy, or we can just have a
+dedicated format for this behaviour.
+
+>=20
+> > > > > What do you think?
+> > > > >=20
+> > > > > >  By the way, if we could queue
+> > > > > > twice the same buffer, that would in principal work, but intern=
+ally
+> > > > > > there is only one state per buffer. If you do external allocati=
+on, then
+> > > > > > in theory you could workaround that, but then it's ugly, becaus=
+e you'll
+> > > > > > have two buffers with the same timestamp.
+> > > > >=20
+> > > > > One advantage of the request API is that buffers are actually que=
+ued
+> > > > > when the request is processed, so this might not be too problemat=
+ic.
+> > > > >=20
+> > > > > I think what we need boils down to:
+> > > > > - Being able to queue the same output buffer to multiple requests=
+,
+> > > > > which the request API should already allow;
+> > > > > - Being able to grab the right capture buffer based on the output
+> > > > > timestamp so that the different requests for the slices are rende=
+red to
+> > > > > the same destination buffer.
+> > > > >=20
+> > > > > For the second point, I don't really have a clear idea of whether=
+ we
+> > > > > can already expect v4l2 to allow picking a buffer that was marked=
+ done
+> > > > > but was not de-queued by userspace yet. It might already be allow=
+ed and
+> > > > > we could just implement something to lookup the buffer to grab by
+> > > > > timestamp.
+> > > >=20
+> > > > An entirely difference solution that came to my mind in the last fe=
+w
+> > > > days would be to add a new buffer flag that would mean END_OF_FRAME=
+ (or
+> > > > reused the generic LAST flag). This flag would be passed on the las=
+t
+> > > > slice (if it is known that we are handling the last one) or in an e=
+mpty
+> > > > buffer if it is found through parsing the next following NAL. This =
+is
+> > > > inspired by the optional OMX END_OF_FRAME flag and RTP marker bit.
+> > > > Though, if we make this flag mandatory, the driver could avoid mark=
+ing
+> > > > the frame done until all slices has been decoded. The cons is that
+> > > > userpace is not informed when a specific slice is done decoding. Th=
+is
+> > > > is quite niche, but you can use this information along with the lis=
+t of
+> > > > macroblocks from the slice header so signal which portion of the im=
+age
+> > > > is now ready for an hypothetical video processing. The pros is that
+> > > > this solution can be per format, so this would not be needed for VP=
+8 as
+> > > > an example.
+> > >=20
+> > > Mhh, I don't really like the idea of setting an explicit order when
+> > > there is really none. I guess the slices for a given frame can be
+> > > decoded in whatever order, so I would like it better if we could just
+> > > submit the batch of requests and be told when the batch is done,
+> > > instead of specifying an explicit order and waiting for the last buff=
+er
+> > > to be marked done.
+> > >=20
+> > > And I think this batch idea could apply to other things than video
+> > > decoding, so it feels good to have it as the highest level we can in
+> > > media/v4l2.
+> >=20
+> > I haven't said anything about order. I believe you can decode slice
+> > out-of-order in H264 but it is likely not true for all formats. You are
+> > again missing the point of decoding latency.
+>=20
+> Well, having an END_OF_FRAME flag on one of the slices pretty much
+> implicitly defines an order (at least regarding this slice vs the
+> others).
+
+No, the flag simply means that any following request will be on another
+frame. It's more like "closing" the decoded frame. I believe you have a
+good understanding of this proposal now after our IRC discussion.
+
+>=20
+> > In live stream, the slices are transmitted over some serial link. If
+> > you wait until you have all slice before you start decoding, you delay
+> > further the moment the frame will be ready.
+>=20
+> So that means we need some ability to add requests to a batch while the
+> batch is being handled. Seems a bit exotic but definitely legit, and it
+> can probably be done. Userspace would know when it has submitted all
+> the slices and move on to displaying the frame.
+>=20
+> >  A lot of vendors make use
+> > of this to reduce latency, and libWebRTC also makes use of this. So
+> > being able to pass slices as part of a specific frame is rather
+> > important. Otherwise vendor will keep doing their own stuff as the
+> > Linux kernel API won't allow reaching their customers expectation.
+>=20
+> I fully agree we need to prepare for all these low-latency
+> improvements. My goal is definitely to have something that can beat
+> vendor-specific implementations in upstream, not just a proof of
+> concept for half-baked decoding.
+
+Great.
+
+>=20
+> > The batching capabilities should be used for the case the multiple
+> > slices of a frame (or multiple slices of many frame is supported by the
+> > HW) have been queued before the previous batch had completed.
+> >=20
+> > > > A third approach could be to use the encoded buffer state to track =
+the
+> > > > progress decoding that slice. Many driver will mark the buffer done=
+ as
+> > > > soon as it is transferred to the accelerator, it does not always ma=
+tch
+> > > > the moment that slice has been decoded. But has use said, we would =
+need
+> > > > to study if it make sense to let a driver pick by timestamp a buffe=
+r
+> > > > that might already have reached done state. Other cons, is that pol=
+ling
+> > > > for buffer states on the capture queue won't mean anything anymore.=
+ But
+> > > > combined with the FLAG, it would fix the cons of the FLAG solution.
+> > >=20
+> > > Well, I think we should keep the done operation as-is, only give it a
+> > > different interpretation depending on whether the request is handled
+> > > individually or as part of a batch. I really think we shouldn't rely =
+on
+> > > any buffer-level indication for completion when handling a batch, but
+> > > rather have something about the batch entity itself.
+> >=20
+> > But then there is no way to know when the frame is decoded anymore,
+> > because as soon as the first slice is decoded, the capture is done and
+> > stay done. So what's your idea here, how to do you know your decoding
+> > is complete if you haven't dequeue/queue the frame in between slices ?
+>=20
+> Yes, I was thinking of exposing a sync object as a fd that can be
+> polled on, which would be associated with the request batch and
+> signalled when completed. That's pretty much a standalone fence that's
+> not backed by a buffer.
+>=20
+> I would like that to be importable as a DRM input fence (if possible at
+> all), so we can schedule decoding and schedule a page flip for the
+> capture buffer at the same time. Then the capture buffer can be
+> displayed as soon as the decoding batch is done.
+
+We'll have to bring that one is a specific topic. Right now there is
+many peaces missing on DRM side as you already know. Also, fences would
+be delivered out-of-order (decoding order), we'd need strong doc to
+help user-space figure-out how to use this.
+
+>=20
+> Cheers,
+>=20
+> Paul
+>=20
+> > > > > > An argument that was made early was that we don't need to suppo=
+rt this
+> > > > > > right away because userspace can combine all the slices into on=
+e
+> > > > > > buffer. But for H264_SLICE_RAW format it's inconvenient, you'd =
+need an
+> > > > > > extra control to tell the driver the offset to each slices, bec=
+ause the
+> > > > > > raw H264 does not have enough information to be parsed. RAW sli=
+ce are
+> > > > > > also I believe de-emulated, which means the code use to prevent=
+ having
+> > > > > > pattern looking like a start code has been removed, so you cann=
+ot just
+> > > > > > prepend start codes. De-emulation seems better placed in usersp=
+ace if
+> > > > > > the HW does not take care.
+> > > > >=20
+> > > > > Mhh I'd like to avoid having having to specify the offset to each=
+ slice
+> > > > > for the legacy case. Just appending the encoded data (excluding s=
+lice
+> > > > > header and start code) works for cedrus and I think it makes sens=
+e more
+> > > > > generally. The idea is to only expose a single slice params and a=
+ct as
+> > > > > if it was just one big slice buffer.
+> > > > >=20
+> > > > > Come to think of it, maybe we need annex-b and mixed fashions of =
+that
+> > > > > legacy pixfmt too...
+> > > > >=20
+> > > > > > I also very dislike the idea that we would enforce merging all =
+slice
+> > > > > > into the same buffer. The entire purpose of slices and the reas=
+on they
+> > > > > > are used in practice is that you can start decoding slices befo=
+re you
+> > > > > > have all slices of a frame. This reduce drastically the latency=
+ for
+> > > > > > streaming use cases, like video conferencing. So forcing the me=
+rging of
+> > > > > > slices is basically like pretending slices have no benefits.
+> > > > >=20
+> > > > > Of course, we don't want things to stay like this and this rework=
+ is
+> > > > > definitely needed to get serious performance and latency going.
+> > > > >=20
+> > > > > One thing you should also be aware of: we're currently using a
+> > > > > workqueue between the job done irq and scheduling the next frame =
+(in
+> > > > > v4l2 m2m).
+> > > > >=20
+> > > > > Maybe we could manage to fit that into an atomic path to schedule=
+ the
+> > > > > next request in the previous job done irq context.
+> > > > >=20
+> > > > > > I have just exposed the problem I see for now, to see what come=
+s up.
+> > > > > > But I hope we be able to propose solution too in the short term=
+ (in no
+> > > > > > one beats me at it).
+> > > > >=20
+> > > > > Seems that we have good grounds for a discussion!
+> > > > >=20
+> > > > > Cheers,
+> > > > >=20
+> > > > > Paul
+> > > > >=20
+> > > > > > > +
+> > > > > > > +A typical frame would thus be decoded using the following se=
+quence:
+> > > > > > > +
+> > > > > > > +1. Queue an ``OUTPUT`` buffer containing one unit of encoded=
+ bitstream data for
+> > > > > > > +   the decoding request, using :c:func:`VIDIOC_QBUF`.
+> > > > > > > +
+> > > > > > > +    * **Required fields:**
+> > > > > > > +
+> > > > > > > +      ``index``
+> > > > > > > +          index of the buffer being queued.
+> > > > > > > +
+> > > > > > > +      ``type``
+> > > > > > > +          type of the buffer.
+> > > > > > > +
+> > > > > > > +      ``bytesused``
+> > > > > > > +          number of bytes taken by the encoded data frame in=
+ the buffer.
+> > > > > > > +
+> > > > > > > +      ``flags``
+> > > > > > > +          the ``V4L2_BUF_FLAG_REQUEST_FD`` flag must be set.
+> > > > > > > +
+> > > > > > > +      ``request_fd``
+> > > > > > > +          must be set to the file descriptor of the decoding=
+ request.
+> > > > > > > +
+> > > > > > > +      ``timestamp``
+> > > > > > > +          must be set to a unique value per frame. This valu=
+e will be propagated
+> > > > > > > +          into the decoded frame's buffer and can also be us=
+ed to use this frame
+> > > > > > > +          as the reference of another.
+> > > > > > > +
+> > > > > > > +2. Set the codec-specific controls for the decoding request,=
+ using
+> > > > > > > +   :c:func:`VIDIOC_S_EXT_CTRLS`.
+> > > > > > > +
+> > > > > > > +    * **Required fields:**
+> > > > > > > +
+> > > > > > > +      ``which``
+> > > > > > > +          must be ``V4L2_CTRL_WHICH_REQUEST_VAL``.
+> > > > > > > +
+> > > > > > > +      ``request_fd``
+> > > > > > > +          must be set to the file descriptor of the decoding=
+ request.
+> > > > > > > +
+> > > > > > > +      other fields
+> > > > > > > +          other fields are set as usual when setting control=
+s. The ``controls``
+> > > > > > > +          array must contain all the codec-specific controls=
+ required to decode
+> > > > > > > +          a frame.
+> > > > > > > +
+> > > > > > > +   .. note::
+> > > > > > > +
+> > > > > > > +      It is possible to specify the controls in different in=
+vocations of
+> > > > > > > +      :c:func:`VIDIOC_S_EXT_CTRLS`, or to overwrite a previo=
+usly set control, as
+> > > > > > > +      long as ``request_fd`` and ``which`` are properly set.=
+ The controls state
+> > > > > > > +      at the moment of request submission is the one that wi=
+ll be considered.
+> > > > > > > +
+> > > > > > > +   .. note::
+> > > > > > > +
+> > > > > > > +      The order in which steps 1 and 2 take place is interch=
+angeable.
+> > > > > > > +
+> > > > > > > +3. Submit the request by invoking :c:func:`MEDIA_REQUEST_IOC=
+_QUEUE` on the
+> > > > > > > +   request FD.
+> > > > > > > +
+> > > > > > > +    If the request is submitted without an ``OUTPUT`` buffer=
+, or if some of the
+> > > > > > > +    required controls are missing from the request, then
+> > > > > > > +    :c:func:`MEDIA_REQUEST_IOC_QUEUE` will return ``-ENOENT`=
+`. If more than one
+> > > > > > > +    ``OUTPUT`` buffer is queued, then it will return ``-EINV=
+AL``.
+> > > > > > > +    :c:func:`MEDIA_REQUEST_IOC_QUEUE` returning non-zero mea=
+ns that no
+> > > > > > > +    ``CAPTURE`` buffer will be produced for this request.
+> > > > > > > +
+> > > > > > > +``CAPTURE`` buffers must not be part of the request, and are=
+ queued
+> > > > > > > +independently. They are returned in decode order (i.e. the s=
+ame order as coded
+> > > > > > > +frames were submitted to the ``OUTPUT`` queue).
+> > > > > > > +
+> > > > > > > +Runtime decoding errors are signaled by the dequeued ``CAPTU=
+RE`` buffers
+> > > > > > > +carrying the ``V4L2_BUF_FLAG_ERROR`` flag. If a decoded refe=
+rence frame has an
+> > > > > > > +error, then all following decoded frames that refer to it al=
+so have the
+> > > > > > > +``V4L2_BUF_FLAG_ERROR`` flag set, although the decoder will =
+still try to
+> > > > > > > +produce a (likely corrupted) frame.
+> > > > > > > +
+> > > > > > > +Buffer management while decoding
+> > > > > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > > > > > +Contrary to stateful decoders, a stateless decoder does not =
+perform any kind of
+> > > > > > > +buffer management: it only guarantees that dequeued ``CAPTUR=
+E`` buffers can be
+> > > > > > > +used by the client for as long as they are not queued again.=
+ "Used" here
+> > > > > > > +encompasses using the buffer for compositing or display.
+> > > > > > > +
+> > > > > > > +A dequeued capture buffer can also be used as the reference =
+frame of another
+> > > > > > > +buffer.
+> > > > > > > +
+> > > > > > > +A frame is specified as reference by converting its timestam=
+p into nanoseconds,
+> > > > > > > +and storing it into the relevant member of a codec-dependent=
+ control structure.
+> > > > > > > +The :c:func:`v4l2_timeval_to_ns` function must be used to pe=
+rform that
+> > > > > > > +conversion. The timestamp of a frame can be used to referenc=
+e it as soon as all
+> > > > > > > +its units of encoded data are successfully submitted to the =
+``OUTPUT`` queue.
+> > > > > > > +
+> > > > > > > +A decoded buffer containing a reference frame must not be re=
+used as a decoding
+> > > > > > > +target until all the frames referencing it have been decoded=
+. The safest way to
+> > > > > > > +achieve this is to refrain from queueing a reference buffer =
+until all the
+> > > > > > > +decoded frames referencing it have been dequeued. However, i=
+f the driver can
+> > > > > > > +guarantee that buffer queued to the ``CAPTURE`` queue will b=
+e used in queued
+> > > > > > > +order, then user-space can take advantage of this guarantee =
+and queue a
+> > > > > > > +reference buffer when the following conditions are met:
+> > > > > > > +
+> > > > > > > +1. All the requests for frames affected by the reference fra=
+me have been
+> > > > > > > +   queued, and
+> > > > > > > +
+> > > > > > > +2. A sufficient number of ``CAPTURE`` buffers to cover all t=
+he decoded
+> > > > > > > +   referencing frames have been queued.
+> > > > > > > +
+> > > > > > > +When queuing a decoding request, the driver will increase th=
+e reference count of
+> > > > > > > +all the resources associated with reference frames. This mea=
+ns that the client
+> > > > > > > +can e.g. close the DMABUF file descriptors of reference fram=
+e buffers if it
+> > > > > > > +won't need them afterwards.
+> > > > > > > +
+> > > > > > > +Seeking
+> > > > > > > +=3D=3D=3D=3D=3D=3D=3D
+> > > > > > > +In order to seek, the client just needs to submit requests u=
+sing input buffers
+> > > > > > > +corresponding to the new stream position. It must however be=
+ aware that
+> > > > > > > +resolution may have changed and follow the dynamic resolutio=
+n change sequence in
+> > > > > > > +that case. Also depending on the codec used, picture paramet=
+ers (e.g. SPS/PPS
+> > > > > > > +for H.264) may have changed and the client is responsible fo=
+r making sure that a
+> > > > > > > +valid state is sent to the decoder.
+> > > > > > > +
+> > > > > > > +The client is then free to ignore any returned ``CAPTURE`` b=
+uffer that comes
+> > > > > > > +from the pre-seek position.
+> > > > > > > +
+> > > > > > > +Pause
+> > > > > > > +=3D=3D=3D=3D=3D
+> > > > > > > +
+> > > > > > > +In order to pause, the client can just cease queuing buffers=
+ onto the ``OUTPUT``
+> > > > > > > +queue. Without source bitstream data, there is no data to pr=
+ocess and the codec
+> > > > > > > +will remain idle.
+> > > > > > > +
+> > > > > > > +Dynamic resolution change
+> > > > > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> > > > > > > +
+> > > > > > > +If the client detects a resolution change in the stream, it =
+will need to perform
+> > > > > > > +the initialization sequence again with the new resolution:
+> > > > > > > +
+> > > > > > > +1. Wait until all submitted requests have completed and dequ=
+eue the
+> > > > > > > +   corresponding output buffers.
+> > > > > > > +
+> > > > > > > +2. Call :c:func:`VIDIOC_STREAMOFF` on both the ``OUTPUT`` an=
+d ``CAPTURE``
+> > > > > > > +   queues.
+> > > > > > > +
+> > > > > > > +3. Free all ``CAPTURE`` buffers by calling :c:func:`VIDIOC_R=
+EQBUFS` on the
+> > > > > > > +   ``CAPTURE`` queue with a buffer count of zero.
+> > > > > > > +
+> > > > > > > +4. Perform the initialization sequence again (minus the allo=
+cation of
+> > > > > > > +   ``OUTPUT`` buffers), with the new resolution set on the `=
+`OUTPUT`` queue.
+> > > > > > > +   Note that due to resolution constraints, a different form=
+at may need to be
+> > > > > > > +   picked on the ``CAPTURE`` queue.
+> > > > > > > +
+> > > > > > > +Drain
+> > > > > > > +=3D=3D=3D=3D=3D
+> > > > > > > +
+> > > > > > > +In order to drain the stream on a stateless decoder, the cli=
+ent just needs to
+> > > > > > > +wait until all the submitted requests are completed. There i=
+s no need to send a
+> > > > > > > +``V4L2_DEC_CMD_STOP`` command since requests are processed s=
+equentially by the
+> > > > > > > +decoder.
+
+--=-fZ7Bfmt3NJh944AkDEVS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXLSjhAAKCRBxUwItrAao
+HL3HAKDb7rhYRhpMiciYqhahIYe9QyWSWACgqzhziLaew39/gjMjsNe1kg424y8=
+=KItz
+-----END PGP SIGNATURE-----
+
+--=-fZ7Bfmt3NJh944AkDEVS--
 
