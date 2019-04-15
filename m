@@ -2,182 +2,202 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B1AEC10F0E
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 04:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E6D4C10F0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 05:32:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D1E620825
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 04:07:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5543520833
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 05:32:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GWuAxtwv"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Be8HIu9J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725840AbfDOEHs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 00:07:48 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:33667 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbfDOEHs (ORCPT
+        id S1725798AbfDOFc1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 01:32:27 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:40981 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfDOFc1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 00:07:48 -0400
-Received: by mail-oi1-f194.google.com with SMTP id e5so12627543oii.0
-        for <linux-media@vger.kernel.org>; Sun, 14 Apr 2019 21:07:47 -0700 (PDT)
+        Mon, 15 Apr 2019 01:32:27 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 64so13347941otb.8
+        for <linux-media@vger.kernel.org>; Sun, 14 Apr 2019 22:32:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yzgi4/F9tNAGhDN4xQRXqDMALgWnD45WlDLQ8mfxxvg=;
-        b=GWuAxtwvvX+OBASJDcXUJc9tUicNeHTURlSJIEg1fvDPHuA8WBPKQX2WrxAV0xICIw
-         dR/psu64WEjhY7JOwCbzZsh2FM+G1u0oG/iWyvuqraXbshAl2ZYV3EYlBoUpTtxpxBZF
-         fuHtfaAFD5kgXL6jXN++LoWHPMjW3LfYZqsdU=
+         :cc:content-transfer-encoding;
+        bh=3r9tuCSDIx/NLeidbG+C3OPk5P7bSaWRg4fFKktj/BI=;
+        b=Be8HIu9JN4Uc7fDJW3KhQ1XR9VT9cF+S5ueDDgqzZ1fbq+5r1AEkLkEwLve5WNAAgs
+         0U/KrcNYgByQOBWcUUgoW2LXu3eB6y2EIj5r9MnIzNW+KJkSl8G1hG+aQfssgdCkwNJl
+         mh9/NtkTgHpkWam2eo7QLyHPEIIHnJXrZVves=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yzgi4/F9tNAGhDN4xQRXqDMALgWnD45WlDLQ8mfxxvg=;
-        b=cruaDjDnQQtpSDBnwuEY6/KsEr3emMaXCZCiqEAGkS41wAY2azUVK2+4VIzWJ8vPV+
-         47PYn6qM5ciI52g4iNEI5IWXOmx6efWGPiCU4ccqguSEcM87hmmLqxZaQpgxwsmnx2Tl
-         ubLhBXYdq2Za0vctX7qkbGGA36sSctv4LXNBsOSQNDUmtYg9N0RL1vtXtjpkhfVYSx2H
-         ItKOZYcvAc2lzqDcAGoqYK/4TeP0lXX5kkGzUwElfjhS4WRdQgIMu82mz4vRpqXHUYav
-         HXz/+5tCgkjhK6+1s7OafhOpN6CedT6eWRS1YnRYrWVD60KSN19tIEKBykBxFT+ZcQ8G
-         oMlQ==
-X-Gm-Message-State: APjAAAV0QekImTi3WwOE2zh8RF1pVaaBcuenq2BgRJ/5/RTrVLMWtyuK
-        xSETPZ1mb/kRmjlVrCoKKd7M6qqoUZM=
-X-Google-Smtp-Source: APXvYqytd8sJG6N23kGBS+fUr4Ikz/OyJw+c4Q0lkMxP4tL6Kp2kPduE+SxUl7KbAWE/CeWFuaBdsg==
-X-Received: by 2002:aca:3504:: with SMTP id c4mr17763617oia.74.1555301267190;
-        Sun, 14 Apr 2019 21:07:47 -0700 (PDT)
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com. [209.85.167.180])
-        by smtp.gmail.com with ESMTPSA id h8sm18722323oti.64.2019.04.14.21.07.45
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3r9tuCSDIx/NLeidbG+C3OPk5P7bSaWRg4fFKktj/BI=;
+        b=qgrLkDQNn+5tuKIYCvWZgVvHDIZxJZ8dNVW8CI+TlS+3BV+G/iOMi7Vd/wiF6qhY3S
+         KVFMGa3DnJGfQq+AY1FzsRi8HysbbQOH7f7hgcKqHx3HIdonINK2nWMUjBnhH+pei9P0
+         +bU+9CZs9A4Ebx1vlGBiBBxn9dJqNcBCb3gTaHk47wFUqzJSaXizHQu29vwgg9ekuAXg
+         oI2uOPS9Fjy6CRm+e33QrckzDmK4XxeS7R3z0c93lJoAuGFSLOwJ3/Fa5Jlxg42weYRQ
+         NI5ifQtpZfJnHzSPrQ7YxYdR3G9Fty+EDu2/9DstfkDYdyYmGTVjZ8mlpJPgDW+A7o5P
+         jZPw==
+X-Gm-Message-State: APjAAAXs8aKqH8BkxlcS/KM2O38+OCZP9Z9xmLdOA3qx6blrJERh+Ci0
+        mGfL4pa9supOR7FvotBgV/zUxMs8NLdkMA==
+X-Google-Smtp-Source: APXvYqxGv/y39OWRI5QQ/FApctbGKG2LXY1WkJAwX7jz9YCE5GadqWqPMCqMbrAB6hINI69UgR5cUw==
+X-Received: by 2002:a9d:5d0b:: with SMTP id b11mr13836654oti.80.1555306346006;
+        Sun, 14 Apr 2019 22:32:26 -0700 (PDT)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com. [209.85.210.50])
+        by smtp.gmail.com with ESMTPSA id v201sm16314872oia.39.2019.04.14.22.32.24
         for <linux-media@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 14 Apr 2019 21:07:46 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id e5so12627491oii.0
-        for <linux-media@vger.kernel.org>; Sun, 14 Apr 2019 21:07:45 -0700 (PDT)
-X-Received: by 2002:aca:d8d5:: with SMTP id p204mr18693766oig.26.1555301265270;
- Sun, 14 Apr 2019 21:07:45 -0700 (PDT)
+        Sun, 14 Apr 2019 22:32:24 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id 103so13351184otd.9
+        for <linux-media@vger.kernel.org>; Sun, 14 Apr 2019 22:32:24 -0700 (PDT)
+X-Received: by 2002:a9d:6206:: with SMTP id g6mr45426918otj.7.1555306344060;
+ Sun, 14 Apr 2019 22:32:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190304192529.14200-1-ezequiel@collabora.com>
- <20190304192529.14200-11-ezequiel@collabora.com> <CAAFQd5ApNfr-t-HfWP-6JKJUgMwkr6oXWFgOhUqzj46JO2AS8Q@mail.gmail.com>
- <a4e3c32c7b6357803122a304fe70ac8a3f829c58.camel@collabora.com>
-In-Reply-To: <a4e3c32c7b6357803122a304fe70ac8a3f829c58.camel@collabora.com>
+References: <20190408123256.22868-1-p.zabel@pengutronix.de>
+ <20190408123256.22868-7-p.zabel@pengutronix.de> <ebbc3d03-e59e-32d5-c943-f9e426414848@xs4all.nl>
+ <1554906176.3765.9.camel@pengutronix.de> <863e842a16db5ee6b10a2fd149119ae41ce26de6.camel@ndufresne.ca>
+ <5feecd0e-5c7b-27fe-84a0-0bffb04128df@xs4all.nl> <1554970925.6389.1.camel@pengutronix.de>
+ <36f792a8-7680-100f-09a4-b9315177c791@xs4all.nl> <1554984042.6389.5.camel@pengutronix.de>
+ <1502ac1f39973ad1bf1a4ee9a951c09d88941651.camel@ndufresne.ca>
+In-Reply-To: <1502ac1f39973ad1bf1a4ee9a951c09d88941651.camel@ndufresne.ca>
 From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 15 Apr 2019 13:07:34 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5CcJ=hAwLn7WxBO86MyLG7UM_2wqTs6qtNB2cgrsa9Guw@mail.gmail.com>
-Message-ID: <CAAFQd5CcJ=hAwLn7WxBO86MyLG7UM_2wqTs6qtNB2cgrsa9Guw@mail.gmail.com>
-Subject: Re: [PATCH v2 10/11] rockchip/vpu: Add support for non-standard controls
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>
+Date:   Mon, 15 Apr 2019 14:32:12 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Bs3tdF+4rK5Uj8W60eBKzBCR-TovDEtAn+vHTsjCFLNA@mail.gmail.com>
+Message-ID: <CAAFQd5Bs3tdF+4rK5Uj8W60eBKzBCR-TovDEtAn+vHTsjCFLNA@mail.gmail.com>
+Subject: Re: [PATCH 07/10] media: coda: limit frame interval enumeration to
+ supported frame sizes
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Apr 13, 2019 at 4:25 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
+On Fri, Apr 12, 2019 at 12:53 AM Nicolas Dufresne <nicolas@ndufresne.ca> wr=
+ote:
 >
-> On Mon, 2019-04-01 at 12:14 +0900, Tomasz Figa wrote:
-> > On Tue, Mar 5, 2019 at 4:27 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
-> > > Rework the way controls are registered by the driver,
-> > > so it can support non-standard controls, such as those
-> > > used by stateless codecs.
+> Le jeudi 11 avril 2019 =C3=A0 14:00 +0200, Philipp Zabel a =C3=A9crit :
+> > On Thu, 2019-04-11 at 12:18 +0200, Hans Verkuil wrote:
+> > > On 4/11/19 10:22 AM, Philipp Zabel wrote:
+> > > > On Wed, 2019-04-10 at 18:24 +0200, Hans Verkuil wrote:
+> > > > > On 4/10/19 6:11 PM, Nicolas Dufresne wrote:
+> > > > > > Le mercredi 10 avril 2019 =C3=A0 16:22 +0200, Philipp Zabel a =
+=C3=A9crit :
+> > > > > > > On Wed, 2019-04-10 at 15:43 +0200, Hans Verkuil wrote:
+> > > > > > > [...]
+> > > > > > > > > @@ -1126,12 +1127,32 @@ static int coda_enum_frameinterva=
+ls(struct file *file, void *fh,
+> > > > > > >
+> > > > > > > [...]
+> > > > > > > > Why support VIDIOC_ENUM_FRAMEINTERVALS at all? It makes no =
+sense for a codec.
+> > > > > > > > I'd remove it altogether.
+> > > > > >
+> > > > > > It does make sense, since framerate is the only information tha=
+t can be
+> > > > > > used to produce a specific bitrate. If you don't enumerate the =
+rates,
+> > > > > > then you may endup with a miss-match of what userspace wants, w=
+hich
+> > > > > > will result in a different rate then what the user-space antici=
+pated.
+> > > > > > That being said, I expect these intervals to be really wide. Ve=
+nus HW
+> > > > > > uses a Q16 internally, which is precise enough that we could ju=
+st
+> > > > > > ignore the interval.
+> > > > >
+> > > > > So the problem is that for an encoder where you desires a specifi=
+c
+> > > > > constant bitrate, the encoder also needs to know the framerate.
+> > > > >
+> > > > > And the driver then would have to support ENUM_FRAMEINTERVALS and=
+ the
+> > > > > S_PARM ioctl so userspace can set the framerate.
+> > > >
+> > > > Ah right, that was it. Encoding works fine without ENUM_FRAMEINTERV=
+ALS,
+> > > > as coda has no meaningful frame rate limitations. I had implemented
+> > > > S_PARM since it is required for CBR encoding, and v4l2-compliance t=
+hen
+> > > > complained about ENUM_FRAMEINTERVALS missing:
+> > > >
+> > > >   cde29ef313de ("[media] coda: Use S_PARM to set nominal framerate =
+for h.264 encoder")
+> > > >   07b6080d4e6d ("media: coda: implement ENUM_FRAMEINTERVALS")
 > > >
-> > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > > ---
-> > >  .../media/rockchip/vpu/rk3288_vpu_hw.c        |  2 +-
-> > >  .../media/rockchip/vpu/rk3399_vpu_hw.c        |  2 +-
-> > >  .../staging/media/rockchip/vpu/rockchip_vpu.h | 24 ++++++-
-> > >  .../media/rockchip/vpu/rockchip_vpu_common.h  |  1 +
-> > >  .../media/rockchip/vpu/rockchip_vpu_drv.c     | 65 +++++++++++++++++--
-> > >  5 files changed, 84 insertions(+), 10 deletions(-)
+> > > And I think that's right. If you advertise framerate support, then
+> > > userspace needs to know about the capabilities.
 > > >
-> > > diff --git a/drivers/staging/media/rockchip/vpu/rk3288_vpu_hw.c b/drivers/staging/media/rockchip/vpu/rk3288_vpu_hw.c
-> > > index 056ee017c798..630eded99c68 100644
-> > > --- a/drivers/staging/media/rockchip/vpu/rk3288_vpu_hw.c
-> > > +++ b/drivers/staging/media/rockchip/vpu/rk3288_vpu_hw.c
-> > > @@ -112,7 +112,7 @@ const struct rockchip_vpu_variant rk3288_vpu_variant = {
-> > >         .enc_fmts = rk3288_vpu_enc_fmts,
-> > >         .num_enc_fmts = ARRAY_SIZE(rk3288_vpu_enc_fmts),
-> > >         .codec_ops = rk3288_vpu_codec_ops,
-> > > -       .codec = RK_VPU_CODEC_JPEG,
-> > > +       .codec = RK_VPU_JPEG_ENCODER,
-> > >         .vepu_irq = rk3288_vepu_irq,
-> > >         .init = rk3288_vpu_hw_init,
-> > >         .clk_names = {"aclk", "hclk"},
-> > > diff --git a/drivers/staging/media/rockchip/vpu/rk3399_vpu_hw.c b/drivers/staging/media/rockchip/vpu/rk3399_vpu_hw.c
-> > > index 0263584e616d..9eae1e6f1393 100644
-> > > --- a/drivers/staging/media/rockchip/vpu/rk3399_vpu_hw.c
-> > > +++ b/drivers/staging/media/rockchip/vpu/rk3399_vpu_hw.c
-> > > @@ -129,7 +129,7 @@ const struct rockchip_vpu_variant rk3399_vpu_variant = {
-> > >         .enc_offset = 0x0,
-> > >         .enc_fmts = rk3399_vpu_enc_fmts,
-> > >         .num_enc_fmts = ARRAY_SIZE(rk3399_vpu_enc_fmts),
-> > > -       .codec = RK_VPU_CODEC_JPEG,
-> > > +       .codec = RK_VPU_JPEG_ENCODER,
-> > >         .codec_ops = rk3399_vpu_codec_ops,
-> > >         .vepu_irq = rk3399_vepu_irq,
-> > >         .vdpu_irq = rk3399_vdpu_irq,
-> > > diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
-> > > index b383c89ecc17..a90fc2dfae99 100644
-> > > --- a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
-> > > +++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
-> > > @@ -25,6 +25,7 @@
-> > >
-> > >  #include "rockchip_vpu_hw.h"
-> > >
-> > > +#define ROCKCHIP_VPU_MAX_CTRLS          32
-> > >  #define ROCKCHIP_VPU_MAX_CLOCKS                4
-> > >
-> > >  #define JPEG_MB_DIM                    16
-> > > @@ -34,7 +35,10 @@
-> > >  struct rockchip_vpu_ctx;
-> > >  struct rockchip_vpu_codec_ops;
-> > >
-> > > -#define RK_VPU_CODEC_JPEG BIT(0)
-> > > +#define RK_VPU_JPEG_ENCODER    BIT(0)
-> > > +#define RK_VPU_ENCODERS                0x0000ffff
-> > > +
-> > > +#define RK_VPU_DECODERS                0xffff0000
-> > >
-> > >  /**
-> > >   * struct rockchip_vpu_variant - information about VPU hardware variant
-> > > @@ -79,6 +83,20 @@ enum rockchip_vpu_codec_mode {
-> > >         RK_VPU_MODE_JPEG_ENC,
-> > >  };
-> > >
-> > > +/*
-> > > + * struct rockchip_vpu_ctrl - helper type to declare supported controls
-> > > + * @id:                V4L2 control ID (V4L2_CID_xxx)
-> > > + * @is_std:    boolean to distinguish standard from customs control.
-> > > + * @codec:     codec id this control belong to (RK_VPU_JPEG_ENCODER, etc.)
-> > > + * @cfg:       control configuration
-> > > + */
-> > > +struct rockchip_vpu_ctrl {
-> > > +       unsigned int id;
-> > > +       unsigned int is_std;
+> > > I do think ENUM_FRAMEINTERVALS should return some sane values. Right =
+now
+> > > coda advertises 1/65535 fps to 65535 fps (or thereabout).
 > >
-> > Perhaps is_custom would make more sense? I'd expect most, if not all,
-> > of the controls to be standard. (Actually I wonder why the MPEG2
-> > controls are not standard.)
+> > Those are the limits imposed by the frame rate registers.
 > >
+> > > I would probably return 1 fps to 200 fps (200 Hz is the highest frame=
+rate
+> > > defined by CTA-861-G).
+> >
+> > Why? We can certainly encode more than 200 fps in real time if only the
+> > frame size is small enough, and for offline transcoding the nominal
+> > frame rate can be anything the coded format supports.
+> > Smaller than 1 fps might be useful for time lapse videos as well.
+> >
+> > > This can also eventually be a helper function in v4l2-mem2mem.c since=
+ I expect
+> > > this to be the same for all (?) encoders.
+> >
+> > For example h.264 has an optional 32-bit numerator and denominator
+> > (num_units_in_tick and time_scale in the Video Usability Information).
+> > I don't see any reason to limit this artificially in the driver.
+> >
+> > > > Hmm, not necesarily. I hadn't thought about that before, but if the
+> > > > decoder supports frame skipping this could be used to advertise
+> > > > available reductions in frame rate.
+> > >
+> > > That assumes that you want to use S_PARM for that as well. And does t=
+he decoder
+> > > provide the framerate encoded in the bitstream to the driver?
+> >
+> > That is a difficult question. Yes, depending on CODA hardware variant,
+> > codec, and actual bitstream (where this information is optional), the
+> > firmware may or may not report the frame rate. Maybe it is fundamentall=
+y
+> > not a good idea to try to control frame skipping via the nominal frame
+> > rate instead of directly.
 >
-> Maybe is_std is misleading. The idea was just to distinguish
-> controls that can be registered with v4l2_ctrl_new_std,
-> from those that need v4l2_ctrl_new_custom, not because the control
-> is non-standard, but because it takes a custom v4l2_ctrl_config.
+> The Xilinx VCU decoder will allocate a different amount of cores per
+> session depending on the framerate we give it. This is how they manage
+> to handle more stream for lower rate/resolution etc. And it makes the
+> S_PARM call mandatory, since faking one will always lead to some
+> streams not to work properly, or less streams being handled in
+> parallel.
 >
-> Maybe the is_std flag can be completely removed, and instead
-> use cfg.elem_size to distinguish the two type of controls.
->
+> I personally don't see why we should in anyway be restrictive to the
+> information we are allowed to pass to a driver. Specially that is does
+> not matter if the driver uses it or not. And because there is no way we
+> will be able to think about every possible use cases popping in the
+> future, and it does not make backward compatibility to be a little more
+> open here.
 
-I see. Then I guess the flag makes sense, but perhaps it could be
-inverted and renamed to "has_custom_cfg"?
+I think it just boils down to defining the meaning properly,
+especially thinking about what ENUM_FRAME_INTERVALS would return.
+
+In particular, I don't think there is any sensible way to guarantee
+any performance aspects related to the frame rate conveyed via this
+channel, so even if the application sees 200 fps here, it should just
+mean that the bit-rate control algorithm can handle 200 fps streams,
+but it can actually encode 60 fps (and so not real-time), due to the
+hardware performance.
 
 Best regards,
 Tomasz
