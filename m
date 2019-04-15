@@ -3,40 +3,39 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26201C10F12
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A226EC10F0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F0DC32146E
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A6A620818
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727567AbfDOMok (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 08:44:40 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:56853 "EHLO
+        id S1727507AbfDOMon (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 08:44:43 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:51869 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727487AbfDOMog (ORCPT
+        with ESMTP id S1727563AbfDOMog (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 15 Apr 2019 08:44:36 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hG0yJ-0000RQ-85; Mon, 15 Apr 2019 14:44:27 +0200
+        id 1hG0yM-0000RX-L4; Mon, 15 Apr 2019 14:44:30 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hG0yH-00025S-15; Mon, 15 Apr 2019 14:44:25 +0200
+        id 1hG0yH-00025n-4Y; Mon, 15 Apr 2019 14:44:25 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 06/13] media: dt-bindings: tvp5150: Add input port connectors DT bindings
-Date:   Mon, 15 Apr 2019 14:44:06 +0200
-Message-Id: <20190415124413.18456-7-m.felsch@pengutronix.de>
+        devicetree@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH v6 13/13] media: tvp5150: make debug output more readable
+Date:   Mon, 15 Apr 2019 14:44:13 +0200
+Message-Id: <20190415124413.18456-14-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190415124413.18456-1-m.felsch@pengutronix.de>
 References: <20190415124413.18456-1-m.felsch@pengutronix.de>
@@ -51,154 +50,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The TVP5150/1 decoders support different video input sources to their
-AIP1A/B pins.
+The debug output for tvp5150_selmux() isn't really intuitive. Register
+values are printed decimal formatted and the input/output driver states
+are printed as enum. Even more the "normal" output enum mapps to zero so
+a active output will printing output=0 and a inactive output=1.
 
-Possible configurations are as follows:
-  - Analog Composite signal connected to AIP1A.
-  - Analog Composite signal connected to AIP1B.
-  - Analog S-Video Y (luminance) and C (chrominance)
-    signals connected to AIP1A and AIP1B respectively.
-
-This patch extends the device tree bindings documentation to describe
-how the input connectors for these devices should be defined in a DT.
+Change this by brinting the register values hex formatted and the states
+as more readable string.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
-Changelog:
+ drivers/media/i2c/tvp5150.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-v3:
-- remove examples for one and two inputs
-- replace space by tabs
-
-v2:
-- adapt port layout in accordance with
-  https://www.spinics.net/lists/linux-media/msg138546.html with the
-  svideo-connector deviation (use only one endpoint)
-
- .../devicetree/bindings/media/i2c/tvp5150.txt | 92 +++++++++++++++++--
- 1 file changed, 85 insertions(+), 7 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-index 8c0fc1a26bf0..bdd273d8b44d 100644
---- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-@@ -12,11 +12,31 @@ Optional Properties:
- - pdn-gpios: phandle for the GPIO connected to the PDN pin, if any.
- - reset-gpios: phandle for the GPIO connected to the RESETB pin, if any.
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index c0ee08546643..13ee6d781efb 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -302,9 +302,12 @@ static void tvp5150_selmux(struct v4l2_subdev *sd)
+ 		break;
+ 	}
  
--The device node must contain one 'port' child node for its digital output
--video port, in accordance with the video interface bindings defined in
--Documentation/devicetree/bindings/media/video-interfaces.txt.
-+The device node must contain one 'port' child node per device physical input
-+and output port, in accordance with the video interface bindings defined in
-+Documentation/devicetree/bindings/media/video-interfaces.txt. The port nodes
-+are numbered as follows
+-	dev_dbg_lvl(sd->dev, 1, debug, "Selecting video route: route input=%i, output=%i => tvp5150 input=%i, opmode=%i\n",
+-			decoder->input, decoder->output,
+-			input, opmode);
++	dev_dbg_lvl(sd->dev, 1, debug,
++		    "Selecting video route: route input=%s, output=%s => tvp5150 input=0x%02x, opmode=0x%02x\n",
++		    decoder->input == 0 ? "aip1a" :
++		    decoder->input == 2 ? "aip1b" : "svideo",
++		    decoder->output == 0 ? "normal" : "black-frame-gen",
++		    input, opmode);
  
--Required Endpoint Properties for parallel synchronization:
-+	  Name		Type		Port
-+	--------------------------------------
-+	  AIP1A		sink		0
-+	  AIP1B		sink		1
-+	  Y-OUT		src		2
-+
-+The device node must contain at least one sink port and the src port. Each input
-+port must be linked to an endpoint defined in
-+Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt. The
-+port/connector layout is as follows
-+
-+tvp-5150 port@0 (AIP1A)
-+	endpoint@0 -----------> Comp0-Con  port
-+	endpoint@1 -----------> Svideo-Con port
-+tvp-5150 port@1 (AIP1B)
-+	endpoint   -----------> Comp1-Con  port
-+tvp-5150 port@2
-+	endpoint (video bitstream output at YOUT[0-7] parallel bus)
-+
-+Required Endpoint Properties for parallel synchronization on output port:
- 
- - hsync-active: active state of the HSYNC signal. Must be <1> (HIGH).
- - vsync-active: active state of the VSYNC signal. Must be <1> (HIGH).
-@@ -26,17 +46,75 @@ Required Endpoint Properties for parallel synchronization:
- If none of hsync-active, vsync-active and field-even-active is specified,
- the endpoint is assumed to use embedded BT.656 synchronization.
- 
--Example:
-+Example - three input sources:
-+
-+comp_connector_0 {
-+	compatible = "composite-video-connector";
-+	label = "Composite0";
-+
-+	port {
-+		composite0_to_tvp5150: endpoint {
-+			remote-endpoint = <&tvp5150_to_composite0>;
-+		};
-+	};
-+};
-+
-+comp_connector_1 {
-+	compatible = "composite-video-connector";
-+	label = "Composite1";
-+
-+	port {
-+		composite1_to_tvp5150: endpoint {
-+			remote-endpoint = <&tvp5150_to_composite1>;
-+		};
-+	};
-+};
-+
-+svid_connector {
-+	compatible = "svideo-connector";
-+	label = "S-Video";
-+
-+	port {
-+		svideo_to_tvp5150: endpoint {
-+			remote-endpoint = <&tvp5150_to_svideo>;
-+		};
-+	};
-+};
- 
- &i2c2 {
--	...
- 	tvp5150@5c {
- 		compatible = "ti,tvp5150";
- 		reg = <0x5c>;
- 		pdn-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>;
- 		reset-gpios = <&gpio6 7 GPIO_ACTIVE_LOW>;
- 
--		port {
-+		port@0 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0>;
-+
-+			tvp5150_to_composite0: endpoint@0 {
-+				reg = <0>;
-+				remote-endpoint = <&composite0_to_tvp5150>;
-+			};
-+
-+			tvp5150_to_svideo: endpoint@1 {
-+				reg = <1>;
-+				remote-endpoint = <&svideo_to_tvp5150>;
-+			};
-+		};
-+
-+		port@1 {
-+			reg = <1>;
-+
-+			tvp5150_to_composite1: endpoint {
-+                                remote-endpoint = <&composite1_to_tvp5150>;
-+			};
-+		};
-+
-+		port@2 {
-+			reg = <2>;
-+
- 			tvp5150_1: endpoint {
- 				remote-endpoint = <&ccdc_ep>;
- 			};
+ 	regmap_write(decoder->regmap, TVP5150_OP_MODE_CTL, opmode);
+ 	regmap_write(decoder->regmap, TVP5150_VD_IN_SRC_SEL_1, input);
 -- 
 2.20.1
 
