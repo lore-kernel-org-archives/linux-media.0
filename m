@@ -2,174 +2,132 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E2CC10F0E
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 15:36:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03CBDC10F0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 16:22:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 180502183F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 15:36:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C98972075B
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 16:22:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="XsJuTkH5"
+	dkim=pass (2048-bit key) header.d=cogentembedded-com.20150623.gappssmtp.com header.i=@cogentembedded-com.20150623.gappssmtp.com header.b="fDhLY4Eg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727568AbfDOPgW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 11:36:22 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:15092 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726522AbfDOPgV (ORCPT
+        id S1727412AbfDOQWh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 12:22:37 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43730 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726034AbfDOQWd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 11:36:21 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5cb4a4f90000>; Mon, 15 Apr 2019 08:36:25 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 15 Apr 2019 08:36:20 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 15 Apr 2019 08:36:20 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL104.nvidia.com
- (172.18.146.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 15 Apr
- 2019 15:36:20 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 15 Apr 2019 15:36:20 +0000
-Received: from sumitg-l4t.nvidia.com (Not Verified[10.24.42.162]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5cb4a4f10001>; Mon, 15 Apr 2019 08:36:19 -0700
-From:   Sumit Gupta <sumitg@nvidia.com>
-To:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <sakari.ailus@linux.intel.com>, <paul.kocialkowski@bootlin.com>,
-        <tfiga@chromium.org>, <keiichiw@chromium.org>, <sumitg@nvidia.com>,
-        <bbasu@nvidia.com>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [Patch V3] v4l2-core: fix use-after-free error
-Date:   Mon, 15 Apr 2019 21:06:14 +0530
-Message-ID: <1555342574-15940-1-git-send-email-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        Mon, 15 Apr 2019 12:22:33 -0400
+Received: by mail-lj1-f193.google.com with SMTP id f18so16239510lja.10
+        for <linux-media@vger.kernel.org>; Mon, 15 Apr 2019 09:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:references:from:organization:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=w+tDuZqaqdzYfTQNvruROpEVJ+Nl3iAAOw59oxXlT98=;
+        b=fDhLY4EgNp0rEvmmWYIDwvSTz86PV622/ZbPx8Nydj/91f5ap9awAqU44vHpR/qsml
+         +3fZbv8B9sGerxHheki0s0DY3o9I6mpMwznGOaATX+/Iw0G6FOdjJc5IEEDit8Q0TXVQ
+         bbJqOLg1y8LaULIiClN43T9p4KcJC0GJOtwF0uWprg+fwrU2udXX4nY+EuhK18qIMvje
+         Nt9HxfOXgyMFxeSmKXon+RmXKBvrN7WBCj8oSdJ8dgK5Sw4fLYwnGpOUkkmAdfvCK8qW
+         wNLs497JhyVZhG8CdmclxLWuOz05lgn5YZg+T3SEqGpfCN6Sw8G4/5qKJ822yqiy0Pbd
+         29xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=w+tDuZqaqdzYfTQNvruROpEVJ+Nl3iAAOw59oxXlT98=;
+        b=AkWZvZjgZ58fmkIhLYcbze528Vq1rjwyZtv427OS5BYPjh7HXf5uc8Is2Lzod8npJO
+         r2OWrkLMsEC7nb3R3PyLanJIWvwUKYPmjajQNlMiZIrsMGxmeQ43pNBO/FaJUX7nRiTP
+         R8L8FJsMRultnOXkMlDNN4w+HclAUrXU7BgluIiigMGqfEEJJZxZYuc8zJe5s7XeQQBJ
+         SceWCcE6rUSu15SFfD2DQ+F1dbWKd6BoPYha/9pMpq2ojsWO9cjurgdkhuVsgH4YSyMM
+         P+49zFUwG27/9NYCN14//DudRyI8a3PDXMGg39ZLLBHeRLvqGky//FbZupOndCCDmLPM
+         J1Sw==
+X-Gm-Message-State: APjAAAUT+hanSY3Rv0jtbFzkjqZkaXShW1N7kk/JXQkbkmScOvqS5ipA
+        FVxHE7mLMpcs3APMK39Avlvuyw==
+X-Google-Smtp-Source: APXvYqw47gKudrEWEzYdf9hRdvuBBSXHXF2Nhii39dT9CsXBYIOV46XriMlCbOVjdnpxCrDf45A+Kg==
+X-Received: by 2002:a2e:8156:: with SMTP id t22mr19961789ljg.77.1555345351659;
+        Mon, 15 Apr 2019 09:22:31 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([31.173.85.61])
+        by smtp.gmail.com with ESMTPSA id b78sm2132187lfg.38.2019.04.15.09.22.30
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Apr 2019 09:22:30 -0700 (PDT)
+Subject: Re: KASAN: use-after-free Read in dvb_usb_device_exit
+To:     Oliver Neukum <oneukum@suse.com>,
+        syzbot <syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, syzkaller-bugs@googlegroups.com,
+        mchehab@kernel.org, corbet@lwn.net, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org
+References: <000000000000789d3d058653d9bb@google.com>
+ <1555326745.13626.10.camel@suse.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <1e782001-7f5c-623e-f4c6-6e1e0fc90598@cogentembedded.com>
+Date:   Mon, 15 Apr 2019 19:22:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1555342585; bh=CoJlo7u72gt6x5TjSc1ianvMzwS3wHRHZ4CWcBMBguo=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=XsJuTkH5JAbi/NBtPRaJqgRBdLBo2g5jp+JrxPi8xRkW3i+bxMkpOcA//yhHO6TkC
-         uIkyodEbLTcbyo/BhfF1EpiGMIjy847UShb7Mrz28L3wmxFmNOJBAVPm1erTfRDPz2
-         /wbrzu0xaYLNc7ziWA/Q67ezVSuU8JzeQexEbQVF0Mq0rEpbBjFdVuK/btQ7IXIvE6
-         OxtlPMMFe3WACbdtEz00EQv/I+Io8vLK3TPRQLymZ2yO9apJYEnYNI2tNF4vkDilaX
-         V+0upmLvsgpV7qV4iu0DFX69LRVIOZSb38Py80Fo8GLzxHOYutwZoqUZTTSGqT8vQq
-         oqVgOOmMC4VZg==
+In-Reply-To: <1555326745.13626.10.camel@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: sumitg <sumitg@nvidia.com>
+Hello!
 
-Fixing use-after-free within __v4l2_ctrl_handler_setup().
-Memory is being freed with kfree(new_ref) for duplicate
-control reference entry but ctrl->cluster pointer is still
-referring to freed duplicate entry resulting in error on
-access. Change done to update cluster pointer only when new
-control reference is added. Also, added check to add new
-ctrl to handler only if the cluster points to an entry.
+On 04/15/2019 02:12 PM, Oliver Neukum wrote:
 
- ==================================================================
- BUG: KASAN: use-after-free in __v4l2_ctrl_handler_setup+0x388/0x428
- Read of size 8 at addr ffffffc324e78618 by task systemd-udevd/312
+[...]
+> From d6097d205ac61745334b79639d3b8b910ae66c71 Mon Sep 17 00:00:00 2001
+> From: Oliver Neukum <oneukum@suse.com>
+> Date: Mon, 15 Apr 2019 13:06:01 +0200
+> Subject: [PATCH] dvb: usb: fix use after free in dvb_usb_device_exit
+> 
+> dvb_usb_device_exit() frees and uses teh device name in that order
 
- Allocated by task 312:
+   s/teh/the/.
 
- Freed by task 312:
+> Fix by storing the name in a buffer before freeing it
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
+> ---
+>  drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+> index 99951e02a880..2e1670cc3903 100644
+> --- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
+> +++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+> @@ -288,13 +288,18 @@ void dvb_usb_device_exit(struct usb_interface *intf)
+>  {
+>  	struct dvb_usb_device *d = usb_get_intfdata(intf);
+>  	const char *name = "generic DVB-USB module";
+> +	char identifier[40];
+>  
+>  	usb_set_intfdata(intf, NULL);
+>  	if (d != NULL && d->desc != NULL) {
+>  		name = d->desc->name;
+> +		memcpy(identifier, name, 39);
+> +		identifier[39] = NULL;
 
- The buggy address belongs to the object at ffffffc324e78600
-  which belongs to the cache kmalloc-64 of size 64
- The buggy address is located 24 bytes inside of
-  64-byte region [ffffffc324e78600, ffffffc324e78640)
- The buggy address belongs to the page:
- page:ffffffbf0c939e00 count:1 mapcount:0 mapping:
-					(null) index:0xffffffc324e78f80
- flags: 0x4000000000000100(slab)
- raw: 4000000000000100 0000000000000000 ffffffc324e78f80 000000018020001a
- raw: 0000000000000000 0000000100000001 ffffffc37040fb80 0000000000000000
- page dumped because: kasan: bad access detected
+   NULL is for pointers, no?
 
- Memory state around the buggy address:
-  ffffffc324e78500: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-  ffffffc324e78580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- >ffffffc324e78600: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-                             ^
-  ffffffc324e78680: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
-  ffffffc324e78700: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
- ==================================================================
+>  		dvb_usb_exit(d);
+> +	} else {
+> +		memcpy(identifier, name, 39);
+>  	}
+> -	info("%s successfully deinitialized and disconnected.", name);
+> +	info("%s successfully deinitialized and disconnected.", identifier);
+>  
+>  }
+>  EXPORT_SYMBOL(dvb_usb_device_exit);
 
-Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
----
-
-v3:
-* update ctrl->cluster only when new control reference is added.
-* add new ctrl to handler only if the cluster points to an entry.
-
-v2:
-* update ctrl->cluster only when new control reference is added.
-* check ctrl->ncontrols to avoid illegal access when cluster has zero controls.
-
- drivers/media/v4l2-core/v4l2-ctrls.c | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 5e3806f..877c2ab 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -2154,15 +2154,6 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 	if (size_extra_req)
- 		new_ref->p_req.p = &new_ref[1];
- 
--	if (ctrl->handler == hdl) {
--		/* By default each control starts in a cluster of its own.
--		   new_ref->ctrl is basically a cluster array with one
--		   element, so that's perfect to use as the cluster pointer.
--		   But only do this for the handler that owns the control. */
--		ctrl->cluster = &new_ref->ctrl;
--		ctrl->ncontrols = 1;
--	}
--
- 	INIT_LIST_HEAD(&new_ref->node);
- 
- 	mutex_lock(hdl->lock);
-@@ -2195,6 +2186,15 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 	hdl->buckets[bucket] = new_ref;
- 	if (ctrl_ref)
- 		*ctrl_ref = new_ref;
-+	if (ctrl->handler == hdl) {
-+		/* By default each control starts in a cluster of its own.
-+		 * new_ref->ctrl is basically a cluster array with one
-+		 * element, so that's perfect to use as the cluster pointer.
-+		 * But only do this for the handler that owns the control.
-+		 */
-+		ctrl->cluster = &new_ref->ctrl;
-+		ctrl->ncontrols = 1;
-+	}
- 
- unlock:
- 	mutex_unlock(hdl->lock);
-@@ -2346,9 +2346,11 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 		kvfree(ctrl);
- 		return NULL;
- 	}
--	mutex_lock(hdl->lock);
--	list_add_tail(&ctrl->node, &hdl->ctrls);
--	mutex_unlock(hdl->lock);
-+	if (ctrl->cluster) {
-+		mutex_lock(hdl->lock);
-+		list_add_tail(&ctrl->node, &hdl->ctrls);
-+		mutex_unlock(hdl->lock);
-+	}
- 	return ctrl;
- }
- 
--- 
-2.7.4
-
+MBR, Sergei
