@@ -2,200 +2,127 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35E98C10F12
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 14:36:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33A15C10F12
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 15:27:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 048682075B
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 14:36:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02E412075B
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 15:27:46 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uPREm/Ix"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727598AbfDOOgH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 10:36:07 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:45748 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727164AbfDOOgG (ORCPT
+        id S1727682AbfDOP1p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 11:27:45 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44208 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727252AbfDOP1l (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 10:36:06 -0400
-Received: by mail-io1-f71.google.com with SMTP id r21so14096971iod.12
-        for <linux-media@vger.kernel.org>; Mon, 15 Apr 2019 07:36:05 -0700 (PDT)
+        Mon, 15 Apr 2019 11:27:41 -0400
+Received: by mail-wr1-f67.google.com with SMTP id y7so22484825wrn.11
+        for <linux-media@vger.kernel.org>; Mon, 15 Apr 2019 08:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=rdjAJXPyrM7EYkVn/ceLH5U36WNFw9E4wp8blYV0QHo=;
+        b=uPREm/IxJb+c7rMXJxDJMh982pm80bSgcoyt+4c2rUBFlpqabZFtJjD6BD9+UA1KYt
+         5vx/eEY4H6WNCnZ7syHqiO/HD1lxfL6T2qPgACJJ2+3ukcVipDTNlRFdLF9A0MfT9RQd
+         VK+vFaIWWjn4UZGgsm57pPhnBY+jOvuOMWXK6rBQdeBoRQFgChIkdPiHdAC7R7zSxSJO
+         DuluM82P013xbllH6mjENEdWMT2jvkxI7+CLSpT3M5DXIqKhB/auctdGdjsjYdYhmHb7
+         9E2WNMOiOEFCZ+wvuK6sdApFgDEX5ZbhMpzKK63x7K7MuNNVMlL0E+mFwA2exa7/T8Yb
+         YWWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=maroSdYVUcko5p9go8boJX6HfFuqP/DlI4KskCe4Yk4=;
-        b=ranzZ7PJ7WllQNzbJgKWBSyTzgxJb3oFSCUwe+DEx2A217FtV9DzmY0iJ8axc8GytQ
-         tEWSrhSiraverZIsfuK5E6uXXUDUQ7mGibpV6H+za7ksLkwOFx+O0KX633WOKRwIbDsr
-         knCj3NtOkPfN9WPow2BjlKjkxuiyAhn2J0KaYRnvZxGiABYsh2lAq1vrz7kIK4G/Dvi/
-         9oK9GZ38X6bKTCPewT7rRE0fYzCrlVft72lm0Mg8X/Nt4Ty+lwA/r77JlV5B7fJRW0oY
-         BYcFTZIadfvGmHg98aUSPjZMspl2EEBfX7z0MLVCPBA46jVmbQy714/hprgscTGNaAMx
-         JdCA==
-X-Gm-Message-State: APjAAAV1He7odMho/ewkgHusXbhXr/QVLUVL8A5PnGKzQKWSO1pe/qee
-        pghwtw5T2QyqdMWW/epmyvgIgcMJXNg0cC7GliCl7RatAq/1
-X-Google-Smtp-Source: APXvYqznctK1xYlXchcuvJaWDX+fCGu3z9Zj+TFrwWRO14cCLDWIa8kI+GFaFoM60q2LUjyiC1pGCbV6DBVZcagPmwMVlFo0XFrk
-MIME-Version: 1.0
-X-Received: by 2002:a24:408e:: with SMTP id n136mr6613893ita.16.1555338965216;
- Mon, 15 Apr 2019 07:36:05 -0700 (PDT)
-Date:   Mon, 15 Apr 2019 07:36:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000086f7f20586929239@google.com>
-Subject: KASAN: use-after-free Read in v4l2_release
-From:   syzbot <syzbot+a4387f5b6b799f6becbf@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, brian.warner@samsung.com,
-        ezequiel@collabora.com, hans.verkuil@cisco.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        niklas.soderlund+renesas@ragnatech.se,
-        sakari.ailus@linux.intel.com, sque@chromium.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=rdjAJXPyrM7EYkVn/ceLH5U36WNFw9E4wp8blYV0QHo=;
+        b=f+HIVxXvz8tm0qAS6EmuSSZLL/LSUKa7wOC1cSbv57MmV/WCmnB9lhn7ZuQpmEOazV
+         MjiwKh97+iJ59uUci6eYeO120llXSPbMehcm2uy43RCfUhgE4xL1C8gc6WU9Z9fupEUC
+         YHR97Uqs3eWgfllKjsYqGkjgnVunFFi6cfmyYoqIfZEcP9Hgr3ZIvrP40w+/M3s1BVzk
+         4zR0Gfkk8cpWDjOgjHH1JHVrEg/WHLleGc4Eg+CH4p94uk52zkfUB/UZ9ECkZQyKi6M9
+         7bSxoc7lr0iA0uSguwnF14qnxgiUxDNZtla2DYqJnApsSOiK6IBIVO2P2+J+XdCdL4fV
+         jDwQ==
+X-Gm-Message-State: APjAAAX4t+qef7UYwnLKx8m6WnsbRWBveP8P2YvJl3SWFKZUSDKnFbVI
+        glK6IP89IDAj58fQDqxDZ1ixMnroWV0=
+X-Google-Smtp-Source: APXvYqzq2oXCRYl5tmmkNntvSrG3Vz2aLWwIA5L9wCn7RJswjP0FpZAI5Q66CmQ6uDdMWUxgqgx0oQ==
+X-Received: by 2002:adf:ea0b:: with SMTP id q11mr29187233wrm.233.1555342058968;
+        Mon, 15 Apr 2019 08:27:38 -0700 (PDT)
+Received: from localhost.localdomain ([37.157.136.206])
+        by smtp.gmail.com with ESMTPSA id t74sm288818wmt.3.2019.04.15.08.27.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Apr 2019 08:27:38 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH] v4l: Add source event change for bit-depth
+Date:   Mon, 15 Apr 2019 18:27:23 +0300
+Message-Id: <20190415152723.2481-1-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+This event indicate that the source bit-depth is changed during
+run-time. The client must get the new format and re-allocate buffers
+for it. This can usually happens with video decoder (encoders) when
+the bit-stream depth is changed from 8 to 10bits or vice versa.
 
-syzbot found the following crash on:
-
-HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=14ab47ed200000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-dashboard link: https://syzkaller.appspot.com/bug?extid=a4387f5b6b799f6becbf
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+a4387f5b6b799f6becbf@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: use-after-free in v4l2_release+0x322/0x390  
-drivers/media/v4l2-core/v4l2-dev.c:453
-Read of size 8 at addr ffff88809ccf23e0 by task v4l_id/8258
-
-CPU: 1 PID: 8258 Comm: v4l_id Not tainted 5.1.0-rc4-319354-g9a33b36 #3
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-usb-fuzzer-gadget dummy_udc.0: failed to start USB fuzzer: -22
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  print_address_description+0x6c/0x236 mm/kasan/report.c:187
-  kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
-  v4l2_release+0x322/0x390 drivers/media/v4l2-core/v4l2-dev.c:453
-  __fput+0x2df/0x8c0 fs/file_table.c:278
-  task_work_run+0x149/0x1c0 kernel/task_work.c:113
-  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-  exit_to_usermode_loop+0x243/0x270 arch/x86/entry/common.c:166
-  prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
-  do_syscall_64+0x40c/0x4f0 arch/x86/entry/common.c:293
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7fd2e34df2b0
-Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
-07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-RSP: 002b:00007ffcfd4e8d68 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007fd2e34df2b0
-RDX: 00007fd2e3795df0 RSI: 0000000000000001 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007fd2e3795df0 R09: 000000000000000a
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-R13: 00007ffcfd4e8ec0 R14: 0000000000000000 R15: 0000000000000000
-
-Allocated by task 5665:
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_kmalloc mm/kasan/common.c:497 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
-  slab_post_alloc_hook mm/slab.h:437 [inline]
-  slab_alloc_node mm/slub.c:2756 [inline]
-  __kmalloc_node_track_caller+0xf3/0x320 mm/slub.c:4372
-  alloc_dr drivers/base/devres.c:103 [inline]
-  devm_kmalloc+0x8c/0x190 drivers/base/devres.c:793
-  devm_kzalloc include/linux/device.h:679 [inline]
-  usb_raremono_probe+0x34/0x235 drivers/media/radio/radio-raremono.c:298
-  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2021
-  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
-  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-
-Freed by task 5665:
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
-  slab_free_hook mm/slub.c:1429 [inline]
-  slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
-  slab_free mm/slub.c:3003 [inline]
-  kfree+0xce/0x290 mm/slub.c:3958
-  release_nodes+0x4ac/0x920 drivers/base/devres.c:508
-  devres_release_all+0x79/0xc8 drivers/base/devres.c:529
-  __device_release_driver drivers/base/dd.c:1086 [inline]
-  device_release_driver_internal+0x23a/0x4f0 drivers/base/dd.c:1113
-  bus_remove_device+0x302/0x5c0 drivers/base/bus.c:556
-  device_del+0x467/0xb90 drivers/base/core.c:2269
-  usb_disable_device+0x242/0x790 drivers/usb/core/message.c:1235
-  usb_disconnect+0x298/0x870 drivers/usb/core/hub.c:2197
-  hub_port_connect drivers/usb/core/hub.c:4940 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0xcd2/0x3b00 drivers/usb/core/hub.c:5432
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff88809ccf2200
-  which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 480 bytes inside of
-  4096-byte region [ffff88809ccf2200, ffff88809ccf3200)
-The buggy address belongs to the page:
-page:ffffea0002733c00 count:1 mapcount:0 mapping:ffff88812c3f4600 index:0x0  
-compound_mapcount: 0
-flags: 0xfff00000010200(slab|head)
-raw: 00fff00000010200 dead000000000100 dead000000000200 ffff88812c3f4600
-raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff88809ccf2280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff88809ccf2300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff88809ccf2380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                        ^
-  ffff88809ccf2400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff88809ccf2480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ Documentation/media/uapi/v4l/vidioc-dqevent.rst | 7 +++++++
+ Documentation/media/videodev2.h.rst.exceptions  | 1 +
+ include/uapi/linux/videodev2.h                  | 1 +
+ 3 files changed, 9 insertions(+)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/Documentation/media/uapi/v4l/vidioc-dqevent.rst b/Documentation/media/uapi/v4l/vidioc-dqevent.rst
+index dea9c0cc00ab..92573d7c3e05 100644
+--- a/Documentation/media/uapi/v4l/vidioc-dqevent.rst
++++ b/Documentation/media/uapi/v4l/vidioc-dqevent.rst
+@@ -397,6 +397,13 @@ call.
+ 	that many devices are not able to recover from a temporary loss of
+ 	signal and so restarting streaming I/O is required in order for the
+ 	hardware to synchronize to the video signal.
++    * - ``V4L2_EVENT_SRC_CH_BITDEPTH``
++      - 0x0002
++      - This event gets triggered when bit-depth change is detected from a
++	video decoder. Applications will have to query the new pixel format
++	and re-negotiate the queue. In most cases the streaming must be stopped
++	and restarted (:ref:`VIDIOC_STREAMOFF <VIDIOC_STREAMON>` followed by
++	:ref:`VIDIOC_STREAMON <VIDIOC_STREAMON>`).
+ 
+ 
+ Return Value
+diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentation/media/videodev2.h.rst.exceptions
+index 64d348e67df9..b4c35b347983 100644
+--- a/Documentation/media/videodev2.h.rst.exceptions
++++ b/Documentation/media/videodev2.h.rst.exceptions
+@@ -478,6 +478,7 @@ replace define V4L2_EVENT_CTRL_CH_FLAGS ctrl-changes-flags
+ replace define V4L2_EVENT_CTRL_CH_RANGE ctrl-changes-flags
+ 
+ replace define V4L2_EVENT_SRC_CH_RESOLUTION src-changes-flags
++replace define V4L2_EVENT_SRC_CH_BITDEPTH src-changes-flags
+ 
+ replace define V4L2_EVENT_MD_FL_HAVE_FRAME_SEQ :c:type:`v4l2_event_motion_det`
+ 
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 496e6453450c..7398f42eac7d 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -2271,6 +2271,7 @@ struct v4l2_event_frame_sync {
+ };
+ 
+ #define V4L2_EVENT_SRC_CH_RESOLUTION		(1 << 0)
++#define V4L2_EVENT_SRC_CH_BITDEPTH		(1 << 1)
+ 
+ struct v4l2_event_src_change {
+ 	__u32 changes;
+-- 
+2.17.1
+
