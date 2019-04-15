@@ -2,646 +2,331 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 850A0C282DA
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 13:26:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3486EC10F0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 14:13:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4055E206BA
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 13:26:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8D1D20825
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 14:13:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="d/GEz8Dz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727218AbfDON03 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 09:26:29 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:51093 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbfDON03 (ORCPT
+        id S1727319AbfDOONz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 10:13:55 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:29254 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726094AbfDOONx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 09:26:29 -0400
-X-Originating-IP: 90.88.18.121
-Received: from aptenodytes (aaubervilliers-681-1-63-121.w90-88.abo.wanadoo.fr [90.88.18.121])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id E58751C000D;
-        Mon, 15 Apr 2019 13:26:23 +0000 (UTC)
-Message-ID: <59e23c5ca5bfbadf9441ea06da2e9b9b5898c6d7.camel@bootlin.com>
-Subject: Re: [PATCH v4] media: docs-rst: Document m2m stateless video
- decoder interface
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Dafna Hirschfeld <dafna3@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Date:   Mon, 15 Apr 2019 15:26:23 +0200
-In-Reply-To: <439b7f57aa3ba2b2ed5b043f961ef87cb83912af.camel@ndufresne.ca>
-References: <20190306080019.159676-1-acourbot@chromium.org>
-         <371df0e4ec9e38d83d11171cbd98f19954cbf787.camel@ndufresne.ca>
-         <da5aa9ab957923a72e30b169a3c242c4fe6260f1.camel@bootlin.com>
-         <c07703459c7e48904bd7fd83be1e675c70eee83c.camel@ndufresne.ca>
-         <d81d0112b99feba0a1899f3722077a4aeec9860c.camel@bootlin.com>
-         <439b7f57aa3ba2b2ed5b043f961ef87cb83912af.camel@ndufresne.ca>
-Organization: Bootlin
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 
+        Mon, 15 Apr 2019 10:13:53 -0400
+X-IronPort-AV: E=Sophos;i="5.60,353,1549954800"; 
+   d="scan'208";a="27435661"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 15 Apr 2019 07:13:52 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.76.107) with Microsoft SMTP Server (TLS) id
+ 14.3.352.0; Mon, 15 Apr 2019 07:13:52 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector1-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mQ7PeG/9bL/4x57/z640JuBi3bFqqngK2eIremliOB0=;
+ b=d/GEz8DzRJIDy/F5HaLMnmmhEBYsCIJN4jTnI/dWIEry/gHRjagG1EiX++Is8T7F6rGDAFJUqt9PMvGGAzrECs0/i6j86IYAIKckzAS6TZP/awWgHWEwdpGbHmm/Xwpl8EEiIlK6uhJk1s/YY4BwDOuWCMTo1lAJAORGWrTClPI=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB1770.namprd11.prod.outlook.com (10.175.88.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1792.15; Mon, 15 Apr 2019 14:13:49 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::e0e3:1d51:9e3e:6dc]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::e0e3:1d51:9e3e:6dc%3]) with mapi id 15.20.1792.018; Mon, 15 Apr 2019
+ 14:13:49 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <hverkuil@xs4all.nl>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <Nicolas.Ferre@microchip.com>, <mchehab@kernel.org>,
+        <ksloat@aampglobal.com>, <Eugen.Hristev@microchip.com>
+Subject: [PATCH v2 1/4] media: atmel: atmel-isc: reworked white balance
+ feature
+Thread-Topic: [PATCH v2 1/4] media: atmel: atmel-isc: reworked white balance
+ feature
+Thread-Index: AQHU85VyQvu937gcc0qO9ckWRlk2ew==
+Date:   Mon, 15 Apr 2019 14:13:49 +0000
+Message-ID: <1555337305-13767-2-git-send-email-eugen.hristev@microchip.com>
+References: <1555337305-13767-1-git-send-email-eugen.hristev@microchip.com>
+In-Reply-To: <1555337305-13767-1-git-send-email-eugen.hristev@microchip.com>
+Accept-Language: ro-RO, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: VE1PR08CA0005.eurprd08.prod.outlook.com
+ (2603:10a6:803:104::18) To DM5PR11MB1242.namprd11.prod.outlook.com
+ (2603:10b6:3:14::8)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Eugen.Hristev@microchip.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.7.4
+x-originating-ip: [94.177.32.154]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 09a70a11-94ce-4273-3eb8-08d6c1ac9478
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600140)(711020)(4605104)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:DM5PR11MB1770;
+x-ms-traffictypediagnostic: DM5PR11MB1770:
+x-microsoft-antispam-prvs: <DM5PR11MB1770B6F85F3D98E92A2F018AE82B0@DM5PR11MB1770.namprd11.prod.outlook.com>
+x-forefront-prvs: 000800954F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(136003)(39860400002)(346002)(376002)(366004)(199004)(189003)(50226002)(107886003)(68736007)(8676002)(256004)(14444005)(6512007)(446003)(2616005)(72206003)(2906002)(6436002)(2201001)(486006)(86362001)(8936002)(81156014)(81166006)(97736004)(11346002)(478600001)(14454004)(476003)(110136005)(52116002)(76176011)(25786009)(3846002)(102836004)(30864003)(186003)(6506007)(386003)(66066001)(5660300002)(105586002)(106356001)(4326008)(54906003)(6486002)(305945005)(71190400001)(7736002)(99286004)(53936002)(6116002)(36756003)(71200400001)(316002)(26005)(2501003);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1770;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: WOCziKXVo+j7e+bYKXQKn8QJpQJ7LPZFptoZGe/2eYB1HqZcyJeKe2GEufKTSEh/1SmvIvXR+WdLcFBqZ5JGSrKwn/hdCGGMvD6XWtbLD6/uwK0y/3jXu4f2ukbof+OTxX4csAh6ikFnWBBJ/cwsrDMBDclJVie2gAlfRdF3rfqGGgVfv+tcnJD8DmZ21PDwLMASr3uBiz7dhn9+JShERTpgTXd5nGsvYSIVBZBk/HJzXK7oEsGXvaioqkc9/jqNyn0GFouOZ0EKBaZEmoXTZ9QULebXiMlU/br1p7L/s+GVNhle39b84R9LAk+r+bMS9W93mPILDo6gV92ION4EsfRpNzmqafoU+kBe61MgK9ACIsCQPTFqZ5QQKE/t/Xjx4FnfNncDNcwrMcRyGr5uV8hXP5T30GlUjrOhXzw39a8=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09a70a11-94ce-4273-3eb8-08d6c1ac9478
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2019 14:13:49.4272
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1770
+X-OriginatorOrg: microchip.com
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
-
-On Mon, 2019-04-15 at 08:24 -0400, Nicolas Dufresne wrote:
-> Le lundi 15 avril 2019 à 09:58 +0200, Paul Kocialkowski a écrit :
-> > Hi,
-> > 
-> > On Sun, 2019-04-14 at 18:38 -0400, Nicolas Dufresne wrote:
-> > > Le dimanche 14 avril 2019 à 18:41 +0200, Paul Kocialkowski a écrit :
-> > > > Hi,
-> > > > 
-> > > > Le vendredi 12 avril 2019 à 16:47 -0400, Nicolas Dufresne a écrit :
-> > > > > Le mercredi 06 mars 2019 à 17:00 +0900, Alexandre Courbot a écrit :
-> > > > > > Documents the protocol that user-space should follow when
-> > > > > > communicating with stateless video decoders.
-> > > > > > 
-> > > > > > The stateless video decoding API makes use of the new request and tags
-> > > > > > APIs. While it has been implemented with the Cedrus driver so far, it
-> > > > > > should probably still be considered staging for a short while.
-> > > > 
-> > > > [...]
-> > > > 
-> > > > > From an IRC discussion with Paul and some more digging, I have found a
-> > > > > design problem in the decoding process.
-> > > > > 
-> > > > > In H264 and HEVC you can have multiple decoding unit per frames
-> > > > > (slices). This type of encoding is increasingly popular, specially for
-> > > > > low latency streaming use cases. The wording of this spec does allow
-> > > > > for the notion of decoding unit, and in practice it has been proven to
-> > > > > work through some RFC FFMPEG patches and the Cedrus driver. But
-> > > > > something important to know is that the FFMPEG RFC implements decoding
-> > > > > in lock steps. Which means:
-> > > > > 
-> > > > >   1. It queues a single free capture buffer
-> > > > >   2. It queues an output buffer, set controls, queue the request
-> > > > >   3. It waits for a capture buffer to reach state done
-> > > > >   4. It dequeues that capture buffer, and queue it back again
-> > > > >   5. And then it runs step 2,4,3 again with following slices, until we 
-> > > > >      have a complete frame. After what, it restart at step 1
-> > > > > 
-> > > > > So the implementation makes no use of the queues. There is no batch
-> > > > > processing, so we might not be able to reach the maximum hardware
-> > > > > throughput.
-> > > > > 
-> > > > > So the optimal method would look like the following, but there comes
-> > > > > the design issue.
-> > > > > 
-> > > > >   1. Queue a single free capture buffer
-> > > > >   2. Queue output buffer for slice 1, set controls, queue the request
-> > > > >   3. Queue output buffer for slice 2, set controls, queue the request
-> > > > >   4. Wait for completion
-> > > > > 
-> > > > > The problem is in step 4. Completion means that the capture buffer done
-> > > > > decoding a single unit. So assuming the driver supports matching the
-> > > > > timestamp against the queued buffer, instead of waiting for a new
-> > > > > buffer, the driver would have to mark twice the same buffer to done
-> > > > > state, which is just not working to inform userspace that all slices
-> > > > > are decoded into the one capture buffer they share.
-> > > > 
-> > > > Interestingly, I'm experiencing the exact same problem dealing with a
-> > > > 2D graphics blitter that has limited ouput scaling abilities which
-> > > > imply handlnig a large scaling operation as multiple clipped smaller
-> > > > scaling operations. The issue is basically that multiple jobs have to
-> > > > be submitted to complete a single frame and relying on an indication
-> > > > from the destination buffer (such as a fence) doesn't work to indicate
-> > > > that all the operations were completed, since we get the indication at
-> > > > each step instead of at the end of the batch.
-> > > > 
-> > > > One idea I see to solve this is to have a notion of batch in the driver
-> > > > (for our situation, that would be in v4l2) and provide means to get a
-> > > > done indication for that entity.
-> > > > 
-> > > > I think we could extend the request API to allow this. We already
-> > > > represent requests as individual file descriptors, we could totally
-> > > > group requests in batches and get a sync fd for the batch to poll on
-> > > > when we need to return the frames. It would be good if we could expose
-> > > > this in a way that makes it work with DRM as an in fence for display.
-> > > > Then we can pretty much schedule our flip + decoding together (which is
-> > > > quite nice to have when we're running late on the decoding side).
-> > > > 
-> > > > What do you think?
-> > > > 
-> > > > It feels to me like the request API was designed to open up the way for
-> > > > these kinds of improvements, so I'm sure we can find an agreeable
-> > > > solution that extends the API.
-> > > > 
-> > > > > To me, multi slice encoded stream are just too common, and they will
-> > > > > also exist for AV1. So we really need a solution to this that does not
-> > > > > require operating in lock steps. Specially that some HW can decode
-> > > > > multiple slices in parallel (multi core), we would not want to prevent
-> > > > > that HW from being used efficiently. On top of this, we need a solution
-> > > > > so that we can also keep queuing slice of the following frames if they
-> > > > > arrive before decoding is done.
-> > > > 
-> > > > Agreed.
-> > > > 
-> > > > > I don't have a solution yet myself, but it would be nice to come up
-> > > > > with something before we freeze this API.
-> > > > 
-> > > > I think it's rather independent from the codec used and this is
-> > > > something that should be handled at the request API level. 
-> > > > 
-> > > > I'm not sure we can always expect the hardware to be able to operate on
-> > > > a per-slice basis. I think it would be useful to reflect this in the
-> > > > pixel format, so that we also have a possibility for a gathered slice
-> > > > buffer (as the spec currently mentions for mpeg-2) for legacy decoder
-> > > > hardware that will need to decode one frame in one go from a contiguous
-> > > > buffer with all the slice data appended.
-> > > > 
-> > > > This updates my pixel format proposition from IRC to the following:
-> > > > - V4L2_PIXFMT_H264_SLICE_APPENDED: single buffer for all the slices
-> > > > (appended buffer), slice params as v4l2 control (legacy);
-> > > 
-> > > SLICE_RAW_APPENDED ? Or FRAMED_SLICES_RAW ? You would need a new
-> > > control for the NAL index, as there is no way to figure-out otherwise.
-> > > I would not add this format unless a specific HW need it.
-> > 
-> > I don't really like using "raw" as a distinguisher: I don't think it's
-> > explicit enough. The idea here is to reflect that there is only one
-> > slice exposed, which is the appended result of all the frame slices
-> > with a single v4l2 control.
-> 
-> RAW in this context was suggested to reflect the fact there is no
-> header, no slice header and that emulation prevention bytes has been
-> removed and replaces by the real values.
-
-That could also be understood as "slice params coded raw", which is the
-opposite of what it describes, hence my reluctance.
-
-> Just SLICE alone was much worst.
-
-Keep in mind that we already have a MPEG2_SLICE format in the public
-API. We should probably decide what it should become based on the
-outcome of this discussion.
-
->  There is to many properties to this type of H264 buffer to
-> encode everything into the name, so what will really matter in the end
-> if the documentation. Feel free to propose a better name.
-
-Agreed, it's a side point. I always find it hard to find naming good,
-as well as finding good naming (my suggestions aren't really top-notch
-either).
-
-Here is another proposition:
-- SLICE_PARSED
-- SLICE_ANNEX_B
-- SLICE_PARSED_ANNEX_B
-
-> > > > - V4L2_PIXFMT_H264_SLICE: one buffer/slice, slice params as control;
-> > > > 
-> > > > - V4L2_PIXFMT_H264_SLICE_ANNEX_B: one buffer/slice in annex-b format, 
-> > > > slice params encoded in the buffer;
-> > > 
-> > > We are still working on this one, this format will be used by Rockchip
-> > > driver for sure, but this needs clarification and maybe a rename if
-> > > it's not just one slice per buffer.
-> > 
-> > I thought the decoder also needed the parse slice data? At least IIRC
-> > for Tegra, we need Annex-B format and a parsed slice header (so the
-> > next one).
-> 
-> Yes, in every cases, the HW will parse the slice data.
-
-Ah sorry, I meant "need the parsed slice data" (missed the d), as in,
-some decoders will need annex-b format but won't parse the slice header
-on their own, so they also need the parsed slice header control.
-Don't ask why...
-
-In my proposition from above, that would be: SLICE_PARSED_ANNEX_B.
-
->  It's possible
-> that Tegra have a matching format as Rockchip, someone would need to do
-> a proper integration to verify. But the driver does not need the
-> following one, that is specific to ANNEX-B parsing.
-> 
-> > > > - V4L2_PIXFMT_H264_SLICE_MIXED: one buffer/slice in annex-b format,
-> > > > slice params encoded in the buffer and in slice params control;
-> > > > 
-> > > > Also, we need to make sure to have a per-slice bit offset to the
-> > > > encoded data in the slice params control so that the same slice buffer
-> > > > can be used with any of the _SLICE formats (e.g. ffmpeg would only have
-> > > > an annex-b slice and use any of the formats with it).
-> > > 
-> > > Ah, I we are saying the same.
-> > > 
-> > > > For the legacy format, we need to specify that the appended slices
-> > > > don't repeat the annex-b start code and NAL header.
-> > > 
-> > > I'm not sure this one make sense. the NAL header for each slices of one
-> > > frames are not always identical.
-> > 
-> > Yes but that's pretty much the point of the legacy format: to only
-> > expose a single slice buffer and slice header (even in cases where the
-> > bitstream codes them in multiple distinct ones).
-> > 
-> > We can't expect this to work in every case, that's why it's a legacy
-> > format. It seems to work pretty well for cedrus so far.
-> 
-> I'm not sure I follow you, what Cedrus does should be changed to
-> whatever we decide as a final API, we should not maintain two formats.
-
-That point has me hesitating. It depends on whether we can expect to
-see hardware implementations with no support whatsoever for multi-slice 
-per frame and just expect an aggregated buffer of slice compressed
-data. This is one operation mode that the Allwinner VPU supports.
-
-The point is not to use it in Cedrus since our VPU can operate per-
-slice, but to allow supporting hardware decoders that can't do that in
-the future.
-
-I'm not sure it's healthy to make it a hard requirement for H.264
-decoding to operate per-slice. Does that seem too far-fetched from your
-perspective? I seem to recall from a discussion that some legacy
-hardware only handles single-slices frames, but I may be wrong.
-
-> Also, what works for Cedrus is that a each buffers must have a single
-> slice regardless how many slices per frame. And this is what I expect
-> from most stateless HW.
-
-Currently, we append all the slices into one buffer and decode it in
-one go with a slightly hacked slice params to reflect that. But of
-course, we should be operating per-slice.
-
->  This is how it works in VAAPI and VDPAU as an
-> example. Just for the reference, the API in VAAPI is (pseudo code, I
-> can't remember the exact name):
-> 
->    - beginPicture()
->    - decodeSlice() *
->    - endPicture()
-> 
-> So the accelerator is told explicitly when a frame start/end, but also
-> it's told explicitly in which buffer to decode the frame to.
-
-Yes definitely. We're also given all the parsed bitstream elements in
-the right order so that we could already start queuing requests when
-each slice is passed, and just wait for completion at endPicture.
-
-> > We could also decide to ditch the legacy idea altogether and only
-> > specify formats that operate on a per-slice basis, but I'm afraid we'll
-> > find decoders that can only take a single slice per buffer.
-> 
-> It's impossible for a compliant decoder to only support 1 slice per
-> frame, so I don't follow you on this one. Also, I don't understand what
-> difference you see between per-slice basis and single slice per buffer.
-
-Okay that's exactly what I wanted to know: whether it makes any sense
-to build a decoder that only operates per-frame and not per-slice.
-If you are confident we won't see that in the wild, we can make it an
-API requirement to operate per-slice.
-
-> > When decoding a multi-slice frame in that setup, I think we'll be
-> > better off with an appended buffer containing all the slices for the
-> > frame instead of passing only a the first slice.
-> 
-> Appended slices requires extra controls, but also introduce a lot more
-> decoding latency. As soon as we add the missing frame boundary
-> signalling, it should be really trivial for a driver to wait until it
-> received all slices before starting the decoding if that is a HW
-> requirement.
-
-Well, I don't really like the idea of the driver being aware of any of
-that (IMO the logic should be in the media core, not the driver).
-
-If a driver can't do multiple slices, it shouldn't be up to the driver
-to gather them together. But anyway, if you think we won't ever see
-this kind of hardware, we can just drop the whole idea.
-
-> > > > What do you think?
-> > > > 
-> > > > >  By the way, if we could queue
-> > > > > twice the same buffer, that would in principal work, but internally
-> > > > > there is only one state per buffer. If you do external allocation, then
-> > > > > in theory you could workaround that, but then it's ugly, because you'll
-> > > > > have two buffers with the same timestamp.
-> > > > 
-> > > > One advantage of the request API is that buffers are actually queued
-> > > > when the request is processed, so this might not be too problematic.
-> > > > 
-> > > > I think what we need boils down to:
-> > > > - Being able to queue the same output buffer to multiple requests,
-> > > > which the request API should already allow;
-> > > > - Being able to grab the right capture buffer based on the output
-> > > > timestamp so that the different requests for the slices are rendered to
-> > > > the same destination buffer.
-> > > > 
-> > > > For the second point, I don't really have a clear idea of whether we
-> > > > can already expect v4l2 to allow picking a buffer that was marked done
-> > > > but was not de-queued by userspace yet. It might already be allowed and
-> > > > we could just implement something to lookup the buffer to grab by
-> > > > timestamp.
-> > > 
-> > > An entirely difference solution that came to my mind in the last few
-> > > days would be to add a new buffer flag that would mean END_OF_FRAME (or
-> > > reused the generic LAST flag). This flag would be passed on the last
-> > > slice (if it is known that we are handling the last one) or in an empty
-> > > buffer if it is found through parsing the next following NAL. This is
-> > > inspired by the optional OMX END_OF_FRAME flag and RTP marker bit.
-> > > Though, if we make this flag mandatory, the driver could avoid marking
-> > > the frame done until all slices has been decoded. The cons is that
-> > > userpace is not informed when a specific slice is done decoding. This
-> > > is quite niche, but you can use this information along with the list of
-> > > macroblocks from the slice header so signal which portion of the image
-> > > is now ready for an hypothetical video processing. The pros is that
-> > > this solution can be per format, so this would not be needed for VP8 as
-> > > an example.
-> > 
-> > Mhh, I don't really like the idea of setting an explicit order when
-> > there is really none. I guess the slices for a given frame can be
-> > decoded in whatever order, so I would like it better if we could just
-> > submit the batch of requests and be told when the batch is done,
-> > instead of specifying an explicit order and waiting for the last buffer
-> > to be marked done.
-> > 
-> > And I think this batch idea could apply to other things than video
-> > decoding, so it feels good to have it as the highest level we can in
-> > media/v4l2.
-> 
-> I haven't said anything about order. I believe you can decode slice
-> out-of-order in H264 but it is likely not true for all formats. You are
-> again missing the point of decoding latency.
-
-Well, having an END_OF_FRAME flag on one of the slices pretty much
-implicitly defines an order (at least regarding this slice vs the
-others).
-
-> In live stream, the slices are transmitted over some serial link. If
-> you wait until you have all slice before you start decoding, you delay
-> further the moment the frame will be ready.
-
-So that means we need some ability to add requests to a batch while the
-batch is being handled. Seems a bit exotic but definitely legit, and it
-can probably be done. Userspace would know when it has submitted all
-the slices and move on to displaying the frame.
-
->  A lot of vendors make use
-> of this to reduce latency, and libWebRTC also makes use of this. So
-> being able to pass slices as part of a specific frame is rather
-> important. Otherwise vendor will keep doing their own stuff as the
-> Linux kernel API won't allow reaching their customers expectation.
-
-I fully agree we need to prepare for all these low-latency
-improvements. My goal is definitely to have something that can beat
-vendor-specific implementations in upstream, not just a proof of
-concept for half-baked decoding.
-
-> The batching capabilities should be used for the case the multiple
-> slices of a frame (or multiple slices of many frame is supported by the
-> HW) have been queued before the previous batch had completed.
-> 
-> > > A third approach could be to use the encoded buffer state to track the
-> > > progress decoding that slice. Many driver will mark the buffer done as
-> > > soon as it is transferred to the accelerator, it does not always match
-> > > the moment that slice has been decoded. But has use said, we would need
-> > > to study if it make sense to let a driver pick by timestamp a buffer
-> > > that might already have reached done state. Other cons, is that polling
-> > > for buffer states on the capture queue won't mean anything anymore. But
-> > > combined with the FLAG, it would fix the cons of the FLAG solution.
-> > 
-> > Well, I think we should keep the done operation as-is, only give it a
-> > different interpretation depending on whether the request is handled
-> > individually or as part of a batch. I really think we shouldn't rely on
-> > any buffer-level indication for completion when handling a batch, but
-> > rather have something about the batch entity itself.
-> 
-> But then there is no way to know when the frame is decoded anymore,
-> because as soon as the first slice is decoded, the capture is done and
-> stay done. So what's your idea here, how to do you know your decoding
-> is complete if you haven't dequeue/queue the frame in between slices ?
-
-Yes, I was thinking of exposing a sync object as a fd that can be
-polled on, which would be associated with the request batch and
-signalled when completed. That's pretty much a standalone fence that's
-not backed by a buffer.
-
-I would like that to be importable as a DRM input fence (if possible at
-all), so we can schedule decoding and schedule a page flip for the
-capture buffer at the same time. Then the capture buffer can be
-displayed as soon as the decoding batch is done.
-
-Cheers,
-
-Paul
-
-> > > > > An argument that was made early was that we don't need to support this
-> > > > > right away because userspace can combine all the slices into one
-> > > > > buffer. But for H264_SLICE_RAW format it's inconvenient, you'd need an
-> > > > > extra control to tell the driver the offset to each slices, because the
-> > > > > raw H264 does not have enough information to be parsed. RAW slice are
-> > > > > also I believe de-emulated, which means the code use to prevent having
-> > > > > pattern looking like a start code has been removed, so you cannot just
-> > > > > prepend start codes. De-emulation seems better placed in userspace if
-> > > > > the HW does not take care.
-> > > > 
-> > > > Mhh I'd like to avoid having having to specify the offset to each slice
-> > > > for the legacy case. Just appending the encoded data (excluding slice
-> > > > header and start code) works for cedrus and I think it makes sense more
-> > > > generally. The idea is to only expose a single slice params and act as
-> > > > if it was just one big slice buffer.
-> > > > 
-> > > > Come to think of it, maybe we need annex-b and mixed fashions of that
-> > > > legacy pixfmt too...
-> > > > 
-> > > > > I also very dislike the idea that we would enforce merging all slice
-> > > > > into the same buffer. The entire purpose of slices and the reason they
-> > > > > are used in practice is that you can start decoding slices before you
-> > > > > have all slices of a frame. This reduce drastically the latency for
-> > > > > streaming use cases, like video conferencing. So forcing the merging of
-> > > > > slices is basically like pretending slices have no benefits.
-> > > > 
-> > > > Of course, we don't want things to stay like this and this rework is
-> > > > definitely needed to get serious performance and latency going.
-> > > > 
-> > > > One thing you should also be aware of: we're currently using a
-> > > > workqueue between the job done irq and scheduling the next frame (in
-> > > > v4l2 m2m).
-> > > > 
-> > > > Maybe we could manage to fit that into an atomic path to schedule the
-> > > > next request in the previous job done irq context.
-> > > > 
-> > > > > I have just exposed the problem I see for now, to see what comes up.
-> > > > > But I hope we be able to propose solution too in the short term (in no
-> > > > > one beats me at it).
-> > > > 
-> > > > Seems that we have good grounds for a discussion!
-> > > > 
-> > > > Cheers,
-> > > > 
-> > > > Paul
-> > > > 
-> > > > > > +
-> > > > > > +A typical frame would thus be decoded using the following sequence:
-> > > > > > +
-> > > > > > +1. Queue an ``OUTPUT`` buffer containing one unit of encoded bitstream data for
-> > > > > > +   the decoding request, using :c:func:`VIDIOC_QBUF`.
-> > > > > > +
-> > > > > > +    * **Required fields:**
-> > > > > > +
-> > > > > > +      ``index``
-> > > > > > +          index of the buffer being queued.
-> > > > > > +
-> > > > > > +      ``type``
-> > > > > > +          type of the buffer.
-> > > > > > +
-> > > > > > +      ``bytesused``
-> > > > > > +          number of bytes taken by the encoded data frame in the buffer.
-> > > > > > +
-> > > > > > +      ``flags``
-> > > > > > +          the ``V4L2_BUF_FLAG_REQUEST_FD`` flag must be set.
-> > > > > > +
-> > > > > > +      ``request_fd``
-> > > > > > +          must be set to the file descriptor of the decoding request.
-> > > > > > +
-> > > > > > +      ``timestamp``
-> > > > > > +          must be set to a unique value per frame. This value will be propagated
-> > > > > > +          into the decoded frame's buffer and can also be used to use this frame
-> > > > > > +          as the reference of another.
-> > > > > > +
-> > > > > > +2. Set the codec-specific controls for the decoding request, using
-> > > > > > +   :c:func:`VIDIOC_S_EXT_CTRLS`.
-> > > > > > +
-> > > > > > +    * **Required fields:**
-> > > > > > +
-> > > > > > +      ``which``
-> > > > > > +          must be ``V4L2_CTRL_WHICH_REQUEST_VAL``.
-> > > > > > +
-> > > > > > +      ``request_fd``
-> > > > > > +          must be set to the file descriptor of the decoding request.
-> > > > > > +
-> > > > > > +      other fields
-> > > > > > +          other fields are set as usual when setting controls. The ``controls``
-> > > > > > +          array must contain all the codec-specific controls required to decode
-> > > > > > +          a frame.
-> > > > > > +
-> > > > > > +   .. note::
-> > > > > > +
-> > > > > > +      It is possible to specify the controls in different invocations of
-> > > > > > +      :c:func:`VIDIOC_S_EXT_CTRLS`, or to overwrite a previously set control, as
-> > > > > > +      long as ``request_fd`` and ``which`` are properly set. The controls state
-> > > > > > +      at the moment of request submission is the one that will be considered.
-> > > > > > +
-> > > > > > +   .. note::
-> > > > > > +
-> > > > > > +      The order in which steps 1 and 2 take place is interchangeable.
-> > > > > > +
-> > > > > > +3. Submit the request by invoking :c:func:`MEDIA_REQUEST_IOC_QUEUE` on the
-> > > > > > +   request FD.
-> > > > > > +
-> > > > > > +    If the request is submitted without an ``OUTPUT`` buffer, or if some of the
-> > > > > > +    required controls are missing from the request, then
-> > > > > > +    :c:func:`MEDIA_REQUEST_IOC_QUEUE` will return ``-ENOENT``. If more than one
-> > > > > > +    ``OUTPUT`` buffer is queued, then it will return ``-EINVAL``.
-> > > > > > +    :c:func:`MEDIA_REQUEST_IOC_QUEUE` returning non-zero means that no
-> > > > > > +    ``CAPTURE`` buffer will be produced for this request.
-> > > > > > +
-> > > > > > +``CAPTURE`` buffers must not be part of the request, and are queued
-> > > > > > +independently. They are returned in decode order (i.e. the same order as coded
-> > > > > > +frames were submitted to the ``OUTPUT`` queue).
-> > > > > > +
-> > > > > > +Runtime decoding errors are signaled by the dequeued ``CAPTURE`` buffers
-> > > > > > +carrying the ``V4L2_BUF_FLAG_ERROR`` flag. If a decoded reference frame has an
-> > > > > > +error, then all following decoded frames that refer to it also have the
-> > > > > > +``V4L2_BUF_FLAG_ERROR`` flag set, although the decoder will still try to
-> > > > > > +produce a (likely corrupted) frame.
-> > > > > > +
-> > > > > > +Buffer management while decoding
-> > > > > > +================================
-> > > > > > +Contrary to stateful decoders, a stateless decoder does not perform any kind of
-> > > > > > +buffer management: it only guarantees that dequeued ``CAPTURE`` buffers can be
-> > > > > > +used by the client for as long as they are not queued again. "Used" here
-> > > > > > +encompasses using the buffer for compositing or display.
-> > > > > > +
-> > > > > > +A dequeued capture buffer can also be used as the reference frame of another
-> > > > > > +buffer.
-> > > > > > +
-> > > > > > +A frame is specified as reference by converting its timestamp into nanoseconds,
-> > > > > > +and storing it into the relevant member of a codec-dependent control structure.
-> > > > > > +The :c:func:`v4l2_timeval_to_ns` function must be used to perform that
-> > > > > > +conversion. The timestamp of a frame can be used to reference it as soon as all
-> > > > > > +its units of encoded data are successfully submitted to the ``OUTPUT`` queue.
-> > > > > > +
-> > > > > > +A decoded buffer containing a reference frame must not be reused as a decoding
-> > > > > > +target until all the frames referencing it have been decoded. The safest way to
-> > > > > > +achieve this is to refrain from queueing a reference buffer until all the
-> > > > > > +decoded frames referencing it have been dequeued. However, if the driver can
-> > > > > > +guarantee that buffer queued to the ``CAPTURE`` queue will be used in queued
-> > > > > > +order, then user-space can take advantage of this guarantee and queue a
-> > > > > > +reference buffer when the following conditions are met:
-> > > > > > +
-> > > > > > +1. All the requests for frames affected by the reference frame have been
-> > > > > > +   queued, and
-> > > > > > +
-> > > > > > +2. A sufficient number of ``CAPTURE`` buffers to cover all the decoded
-> > > > > > +   referencing frames have been queued.
-> > > > > > +
-> > > > > > +When queuing a decoding request, the driver will increase the reference count of
-> > > > > > +all the resources associated with reference frames. This means that the client
-> > > > > > +can e.g. close the DMABUF file descriptors of reference frame buffers if it
-> > > > > > +won't need them afterwards.
-> > > > > > +
-> > > > > > +Seeking
-> > > > > > +=======
-> > > > > > +In order to seek, the client just needs to submit requests using input buffers
-> > > > > > +corresponding to the new stream position. It must however be aware that
-> > > > > > +resolution may have changed and follow the dynamic resolution change sequence in
-> > > > > > +that case. Also depending on the codec used, picture parameters (e.g. SPS/PPS
-> > > > > > +for H.264) may have changed and the client is responsible for making sure that a
-> > > > > > +valid state is sent to the decoder.
-> > > > > > +
-> > > > > > +The client is then free to ignore any returned ``CAPTURE`` buffer that comes
-> > > > > > +from the pre-seek position.
-> > > > > > +
-> > > > > > +Pause
-> > > > > > +=====
-> > > > > > +
-> > > > > > +In order to pause, the client can just cease queuing buffers onto the ``OUTPUT``
-> > > > > > +queue. Without source bitstream data, there is no data to process and the codec
-> > > > > > +will remain idle.
-> > > > > > +
-> > > > > > +Dynamic resolution change
-> > > > > > +=========================
-> > > > > > +
-> > > > > > +If the client detects a resolution change in the stream, it will need to perform
-> > > > > > +the initialization sequence again with the new resolution:
-> > > > > > +
-> > > > > > +1. Wait until all submitted requests have completed and dequeue the
-> > > > > > +   corresponding output buffers.
-> > > > > > +
-> > > > > > +2. Call :c:func:`VIDIOC_STREAMOFF` on both the ``OUTPUT`` and ``CAPTURE``
-> > > > > > +   queues.
-> > > > > > +
-> > > > > > +3. Free all ``CAPTURE`` buffers by calling :c:func:`VIDIOC_REQBUFS` on the
-> > > > > > +   ``CAPTURE`` queue with a buffer count of zero.
-> > > > > > +
-> > > > > > +4. Perform the initialization sequence again (minus the allocation of
-> > > > > > +   ``OUTPUT`` buffers), with the new resolution set on the ``OUTPUT`` queue.
-> > > > > > +   Note that due to resolution constraints, a different format may need to be
-> > > > > > +   picked on the ``CAPTURE`` queue.
-> > > > > > +
-> > > > > > +Drain
-> > > > > > +=====
-> > > > > > +
-> > > > > > +In order to drain the stream on a stateless decoder, the client just needs to
-> > > > > > +wait until all the submitted requests are completed. There is no need to send a
-> > > > > > +``V4L2_DEC_CMD_STOP`` command since requests are processed sequentially by the
-> > > > > > +decoder.
--- 
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
+RnJvbTogRXVnZW4gSHJpc3RldiA8ZXVnZW4uaHJpc3RldkBtaWNyb2NoaXAuY29tPg0KDQpSZXdv
+cmtlZCBhdXRvIHdoaXRlIGJhbGFuY2UgZmVhdHVyZSAoYXdiKSB0byBjb3BlIHdpdGggYWxsIGZv
+dXIgY2hhbm5lbHMuDQpJbXBsZW1lbnRlZCBzdHJldGNoaW5nIGFuZCBncmV5IHdvcmxkIGFsZ29y
+aXRobXMuDQpVc2luZyB0aGUgaGlzdG9ncmFtLCB0aGUgSVNDIHdpbGwgYXV0byBhZGp1c3QgdGhl
+IHdoaXRlIGJhbGFuY2UgZHVyaW5nDQpmcmFtZSBjYXB0dXJlcy4NCkJlY2F1c2UgZWFjaCBoaXN0
+b2dyYW0gbmVlZHMgYSBmcmFtZSwgaXQgd2lsbCB0YWtlIDQgZnJhbWVzIGZvciBvbmUgYWRqdXN0
+bWVudC4NCldoZW4gdGhlIGdhaW5zIHdlcmUgdXBkYXRlZCBieSBwcmV2aW91cyBjb2RlLCB0aGUg
+cmVnaXN0ZXJzIGZvciB0aGUgZ2FpbnMNCndlcmUgdXBkYXRlZCBvbmx5IG9uIG5ldyBzdHJlYW1p
+bmcgc3RhcnQuIE5vdywgYWZ0ZXIgZWFjaCBmdWxsIGhpc3RvZ3JhbSB0aGUNCnJlZ2lzdGVycyBh
+cmUgdXBkYXRlZCB3aXRoIG5ldyBnYWlucy4NCkFsc28sIG9uIHByZXZpb3VzIGNvZGUsIGlmIHRo
+ZSBzdHJlYW1pbmcgc3RvcHBlZCBidXQgbm90IGFsbCAzIGhpc3RvZ3JhbXMNCmZpbmlzaGVkLCBh
+IG5ldyBoaXN0b2dyYW0gd2FzIHN0YXJ0ZWQgZWl0aGVyIHdheS4gVGhpcyB1c2VkIHRvIGxlYWQg
+dG8gYW4NCmVycm9yICJ0aW1lb3V0IHRvIHVwZGF0ZSBwcm9maWxlIiB3aGVuIHN0cmVhbWluZyB3
+YXMgc3RvcHBlZC4NCkFjY29yZGluZyB0byB0aGUgaGFyZHdhcmUsIGhpc3RvZ3JhbSBjYW4gb25s
+eSB3b3JrIHRvZ2V0aGVyIHdpdGggdGhlIGNhcHR1cmUsDQpub3QgaW5kZXBlbmRlbnRseS4NCg0K
+U2lnbmVkLW9mZi1ieTogRXVnZW4gSHJpc3RldiA8ZXVnZW4uaHJpc3RldkBtaWNyb2NoaXAuY29t
+Pg0KLS0tDQogZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1pc2MtcmVncy5oIHwg
+ICA2ICstDQogZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1pc2MuYyAgICAgIHwg
+MjAwICsrKysrKysrKysrKysrKysrKysrKysrLS0tDQogMiBmaWxlcyBjaGFuZ2VkLCAxODEgaW5z
+ZXJ0aW9ucygrKSwgMjUgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlh
+L3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy1yZWdzLmggYi9kcml2ZXJzL21lZGlhL3BsYXRmb3Jt
+L2F0bWVsL2F0bWVsLWlzYy1yZWdzLmgNCmluZGV4IDhmN2Y4ZWYuLmMxMjgzZmIgMTAwNjQ0DQot
+LS0gYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy1yZWdzLmgNCisrKyBi
+L2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwvYXRtZWwtaXNjLXJlZ3MuaA0KQEAgLTEwMCwx
+MyArMTAwLDE1IEBADQogI2RlZmluZSBJU0NfV0JfT19SR1IJMHgwMDAwMDA2MA0KIA0KIC8qIElT
+QyBXaGl0ZSBCYWxhbmNlIE9mZnNldCBmb3IgQiwgR0IgUmVnaXN0ZXIgKi8NCi0jZGVmaW5lIElT
+Q19XQl9PX0JHUgkweDAwMDAwMDY0DQorI2RlZmluZSBJU0NfV0JfT19CR0IJMHgwMDAwMDA2NA0K
+IA0KIC8qIElTQyBXaGl0ZSBCYWxhbmNlIEdhaW4gZm9yIFIsIEdSIFJlZ2lzdGVyICovDQogI2Rl
+ZmluZSBJU0NfV0JfR19SR1IJMHgwMDAwMDA2OA0KIA0KIC8qIElTQyBXaGl0ZSBCYWxhbmNlIEdh
+aW4gZm9yIEIsIEdCIFJlZ2lzdGVyICovDQotI2RlZmluZSBJU0NfV0JfR19CR1IJMHgwMDAwMDA2
+Yw0KKyNkZWZpbmUgSVNDX1dCX0dfQkdCCTB4MDAwMDAwNmMNCisNCisjZGVmaW5lIElTQ19XQl9P
+X1pFUk9fVkFMCSgxIDw8IDEzKQ0KIA0KIC8qIElTQyBDb2xvciBGaWx0ZXIgQXJyYXkgQ29udHJv
+bCBSZWdpc3RlciAqLw0KICNkZWZpbmUgSVNDX0NGQV9DVFJMICAgIDB4MDAwMDAwNzANCmRpZmYg
+LS1naXQgYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5jIGIvZHJpdmVy
+cy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1pc2MuYw0KaW5kZXggOTRjYjMwOS4uMGFjNTk1
+MyAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwvYXRtZWwtaXNjLmMN
+CisrKyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwvYXRtZWwtaXNjLmMNCkBAIC0xNjks
+MTMgKzE2OSwxNyBAQCBzdHJ1Y3QgaXNjX2N0cmxzIHsNCiAJdTggZ2FtbWFfaW5kZXg7DQogCXU4
+IGF3YjsNCiANCi0JdTMyIHJfZ2FpbjsNCi0JdTMyIGJfZ2FpbjsNCisJLyogb25lIGZvciBlYWNo
+IGNvbXBvbmVudCA6IEdSLCBSLCBHQiwgQiAqLw0KKwl1MzIgZ2FpbltISVNUX0JBWUVSXTsNCisJ
+dTMyIG9mZnNldFtISVNUX0JBWUVSXTsNCiANCiAJdTMyIGhpc3RfZW50cnlbSElTVF9FTlRSSUVT
+XTsNCiAJdTMyIGhpc3RfY291bnRbSElTVF9CQVlFUl07DQogCXU4IGhpc3RfaWQ7DQogCXU4IGhp
+c3Rfc3RhdDsNCisjZGVmaW5lIEhJU1RfTUlOX0lOREVYCQkwDQorI2RlZmluZSBISVNUX01BWF9J
+TkRFWAkJMQ0KKwl1MzIgaGlzdF9taW5tYXhbSElTVF9CQVlFUl1bMl07DQogfTsNCiANCiAjZGVm
+aW5lIElTQ19QSVBFX0xJTkVfTk9ERV9OVU0JMTENCkBAIC0yMDksNiArMjEzLDcgQEAgc3RydWN0
+IGlzY19kZXZpY2Ugew0KIAlzdHJ1Y3Qgd29ya19zdHJ1Y3QJYXdiX3dvcms7DQogDQogCXN0cnVj
+dCBtdXRleAkJbG9jazsNCisJc3BpbmxvY2tfdAkJYXdiX2xvY2s7DQogDQogCXN0cnVjdCByZWdt
+YXBfZmllbGQJKnBpcGVsaW5lW0lTQ19QSVBFX0xJTkVfTk9ERV9OVU1dOw0KIA0KQEAgLTM5NSw2
+ICs0MDAsNDAgQEAgbW9kdWxlX3BhcmFtKHNlbnNvcl9wcmVmZXJyZWQsIHVpbnQsIDA2NDQpOw0K
+IE1PRFVMRV9QQVJNX0RFU0Moc2Vuc29yX3ByZWZlcnJlZCwNCiAJCSAiU2Vuc29yIGlzIHByZWZl
+cnJlZCB0byBvdXRwdXQgdGhlIHNwZWNpZmllZCBmb3JtYXQgKDEtb24gMC1vZmYpLCBkZWZhdWx0
+IDEiKTsNCiANCitzdGF0aWMgaW5saW5lIHZvaWQgaXNjX3VwZGF0ZV9hd2JfY3RybHMoc3RydWN0
+IGlzY19kZXZpY2UgKmlzYykNCit7DQorCXN0cnVjdCBpc2NfY3RybHMgKmN0cmxzID0gJmlzYy0+
+Y3RybHM7DQorDQorCXJlZ21hcF93cml0ZShpc2MtPnJlZ21hcCwgSVNDX1dCX09fUkdSLA0KKwkJ
+ICAgICAoSVNDX1dCX09fWkVST19WQUwgLSAoY3RybHMtPm9mZnNldFtJU0NfSElTX0NGR19NT0RF
+X1JdKSkgfA0KKwkJICAgICAoKElTQ19XQl9PX1pFUk9fVkFMIC0gY3RybHMtPm9mZnNldFtJU0Nf
+SElTX0NGR19NT0RFX0dSXSkgPDwgMTYpKTsNCisJcmVnbWFwX3dyaXRlKGlzYy0+cmVnbWFwLCBJ
+U0NfV0JfT19CR0IsDQorCQkgICAgIChJU0NfV0JfT19aRVJPX1ZBTCAtIChjdHJscy0+b2Zmc2V0
+W0lTQ19ISVNfQ0ZHX01PREVfQl0pKSB8DQorCQkgICAgICgoSVNDX1dCX09fWkVST19WQUwgLSBj
+dHJscy0+b2Zmc2V0W0lTQ19ISVNfQ0ZHX01PREVfR0JdKSA8PCAxNikpOw0KKwlyZWdtYXBfd3Jp
+dGUoaXNjLT5yZWdtYXAsIElTQ19XQl9HX1JHUiwNCisJCSAgICAgY3RybHMtPmdhaW5bSVNDX0hJ
+U19DRkdfTU9ERV9SXSB8DQorCQkgICAgIChjdHJscy0+Z2FpbltJU0NfSElTX0NGR19NT0RFX0dS
+XSA8PCAxNikpOw0KKwlyZWdtYXBfd3JpdGUoaXNjLT5yZWdtYXAsIElTQ19XQl9HX0JHQiwNCisJ
+CSAgICAgY3RybHMtPmdhaW5bSVNDX0hJU19DRkdfTU9ERV9CXSB8DQorCQkgICAgIChjdHJscy0+
+Z2FpbltJU0NfSElTX0NGR19NT0RFX0dCXSA8PCAxNikpOw0KK30NCisNCitzdGF0aWMgaW5saW5l
+IHZvaWQgaXNjX3Jlc2V0X2F3Yl9jdHJscyhzdHJ1Y3QgaXNjX2RldmljZSAqaXNjKQ0KK3sNCisJ
+aW50IGM7DQorDQorCWZvciAoYyA9IElTQ19ISVNfQ0ZHX01PREVfR1I7IGMgPD0gSVNDX0hJU19D
+RkdfTU9ERV9COyBjKyspIHsNCisJCS8qIGdhaW5zIGhhdmUgYSBmaXhlZCBwb2ludCBhdCA5IGRl
+Y2ltYWxzICovDQorCQlpc2MtPmN0cmxzLmdhaW5bY10gPSAxIDw8IDk7DQorCQkvKiBvZmZzZXRz
+IGFyZSBpbiAyJ3MgY29tcGxlbWVudHMsIHRoZSB2YWx1ZQ0KKwkJICogd2lsbCBiZSBzdWJzdHJh
+Y3RlZCBmcm9tIElTQ19XQl9PX1pFUk9fVkFMIHRvIG9idGFpbg0KKwkJICogMidzIGNvbXBsZW1l
+bnQgb2YgYSB2YWx1ZSBiZXR3ZWVuIDAgYW5kDQorCQkgKiBJU0NfV0JfT19aRVJPX1ZBTCA+PiAx
+DQorCQkgKi8NCisJCWlzYy0+Y3RybHMub2Zmc2V0W2NdID0gSVNDX1dCX09fWkVST19WQUw7DQor
+CX0NCit9DQorDQogc3RhdGljIGludCBpc2Nfd2FpdF9jbGtfc3RhYmxlKHN0cnVjdCBjbGtfaHcg
+Kmh3KQ0KIHsNCiAJc3RydWN0IGlzY19jbGsgKmlzY19jbGsgPSB0b19pc2NfY2xrKGh3KTsNCkBA
+IC03NzUsNyArODE0LDkgQEAgc3RhdGljIHZvaWQgaXNjX3N0YXJ0X2RtYShzdHJ1Y3QgaXNjX2Rl
+dmljZSAqaXNjKQ0KIAlkY3RybF9kdmlldyA9IGlzYy0+Y29uZmlnLmRjdHJsX2R2aWV3Ow0KIA0K
+IAlyZWdtYXBfd3JpdGUocmVnbWFwLCBJU0NfRENUUkwsIGRjdHJsX2R2aWV3IHwgSVNDX0RDVFJM
+X0lFX0lTKTsNCisJc3Bpbl9sb2NrKCZpc2MtPmF3Yl9sb2NrKTsNCiAJcmVnbWFwX3dyaXRlKHJl
+Z21hcCwgSVNDX0NUUkxFTiwgSVNDX0NUUkxfQ0FQVFVSRSk7DQorCXNwaW5fdW5sb2NrKCZpc2Mt
+PmF3Yl9sb2NrKTsNCiB9DQogDQogc3RhdGljIHZvaWQgaXNjX3NldF9waXBlbGluZShzdHJ1Y3Qg
+aXNjX2RldmljZSAqaXNjLCB1MzIgcGlwZWxpbmUpDQpAQCAtNzk3LDExICs4MzgsMTEgQEAgc3Rh
+dGljIHZvaWQgaXNjX3NldF9waXBlbGluZShzdHJ1Y3QgaXNjX2RldmljZSAqaXNjLCB1MzIgcGlw
+ZWxpbmUpDQogDQogCWJheV9jZmcgPSBpc2MtPmNvbmZpZy5zZF9mb3JtYXQtPmNmYV9iYXljZmc7
+DQogDQorCWlmICghY3RybHMtPmF3YikNCisJCWlzY19yZXNldF9hd2JfY3RybHMoaXNjKTsNCisN
+CiAJcmVnbWFwX3dyaXRlKHJlZ21hcCwgSVNDX1dCX0NGRywgYmF5X2NmZyk7DQotCXJlZ21hcF93
+cml0ZShyZWdtYXAsIElTQ19XQl9PX1JHUiwgMHgwKTsNCi0JcmVnbWFwX3dyaXRlKHJlZ21hcCwg
+SVNDX1dCX09fQkdSLCAweDApOw0KLQlyZWdtYXBfd3JpdGUocmVnbWFwLCBJU0NfV0JfR19SR1Is
+IGN0cmxzLT5yX2dhaW4gfCAoMHgxIDw8IDI1KSk7DQotCXJlZ21hcF93cml0ZShyZWdtYXAsIElT
+Q19XQl9HX0JHUiwgY3RybHMtPmJfZ2FpbiB8ICgweDEgPDwgMjUpKTsNCisJaXNjX3VwZGF0ZV9h
+d2JfY3RybHMoaXNjKTsNCiANCiAJcmVnbWFwX3dyaXRlKHJlZ21hcCwgSVNDX0NGQV9DRkcsIGJh
+eV9jZmcgfCBJU0NfQ0ZBX0NGR19FSVRQT0wpOw0KIA0KQEAgLTg1MSwxMyArODkyLDEzIEBAIHN0
+YXRpYyB2b2lkIGlzY19zZXRfaGlzdG9ncmFtKHN0cnVjdCBpc2NfZGV2aWNlICppc2MsIGJvb2wg
+ZW5hYmxlKQ0KIA0KIAlpZiAoZW5hYmxlKSB7DQogCQlyZWdtYXBfd3JpdGUocmVnbWFwLCBJU0Nf
+SElTX0NGRywNCi0JCQkgICAgIElTQ19ISVNfQ0ZHX01PREVfUiB8DQorCQkJICAgICBJU0NfSElT
+X0NGR19NT0RFX0dSIHwNCiAJCQkgICAgIChpc2MtPmNvbmZpZy5zZF9mb3JtYXQtPmNmYV9iYXlj
+ZmcNCiAJCQkJCTw8IElTQ19ISVNfQ0ZHX0JBWVNFTF9TSElGVCkgfA0KIAkJCQkJSVNDX0hJU19D
+RkdfUkFSKTsNCiAJCXJlZ21hcF93cml0ZShyZWdtYXAsIElTQ19ISVNfQ1RSTCwgSVNDX0hJU19D
+VFJMX0VOKTsNCiAJCXJlZ21hcF93cml0ZShyZWdtYXAsIElTQ19JTlRFTiwgSVNDX0lOVF9ISVNE
+T05FKTsNCi0JCWN0cmxzLT5oaXN0X2lkID0gSVNDX0hJU19DRkdfTU9ERV9SOw0KKwkJY3RybHMt
+Pmhpc3RfaWQgPSBJU0NfSElTX0NGR19NT0RFX0dSOw0KIAkJaXNjX3VwZGF0ZV9wcm9maWxlKGlz
+Yyk7DQogCQlyZWdtYXBfd3JpdGUocmVnbWFwLCBJU0NfQ1RSTEVOLCBJU0NfQ1RSTF9ISVNSRVEp
+Ow0KIA0KQEAgLTkwMCw3ICs5NDEsNyBAQCBzdGF0aWMgaW50IGlzY19jb25maWd1cmUoc3RydWN0
+IGlzY19kZXZpY2UgKmlzYykNCiAJaXNjX3NldF9waXBlbGluZShpc2MsIHBpcGVsaW5lKTsNCiAN
+CiAJLyoNCi0JICogVGhlIGN1cnJlbnQgaW1wbGVtZW50ZWQgaGlzdG9ncmFtIGlzIGF2YWlsYWJs
+ZSBmb3IgUkFXIFIsIEIsIEdCDQorCSAqIFRoZSBjdXJyZW50IGltcGxlbWVudGVkIGhpc3RvZ3Jh
+bSBpcyBhdmFpbGFibGUgZm9yIFJBVyBSLCBCLCBHQiwgR1INCiAJICogY2hhbm5lbHMuIFdlIG5l
+ZWQgdG8gY2hlY2sgaWYgc2Vuc29yIGlzIG91dHB1dHRpbmcgUkFXIEJBWUVSDQogCSAqLw0KIAlp
+ZiAoaXNjLT5jdHJscy5hd2IgJiYNCkBAIC0xNDc1LDYgKzE1MTYsMTIgQEAgc3RhdGljIGludCBp
+c2Nfc2V0X2ZtdChzdHJ1Y3QgaXNjX2RldmljZSAqaXNjLCBzdHJ1Y3QgdjRsMl9mb3JtYXQgKmYp
+DQogCQlyZXR1cm4gcmV0Ow0KIA0KIAlpc2MtPmZtdCA9ICpmOw0KKw0KKwlpZiAoaXNjLT50cnlf
+Y29uZmlnLnNkX2Zvcm1hdCAmJiBpc2MtPmNvbmZpZy5zZF9mb3JtYXQgJiYNCisJICAgIGlzYy0+
+dHJ5X2NvbmZpZy5zZF9mb3JtYXQgIT0gaXNjLT5jb25maWcuc2RfZm9ybWF0KSB7DQorCQlpc2Mt
+PmN0cmxzLmhpc3Rfc3RhdCA9IEhJU1RfSU5JVDsNCisJCWlzY19yZXNldF9hd2JfY3RybHMoaXNj
+KTsNCisJfQ0KIAkvKiBtYWtlIHRoZSB0cnkgY29uZmlndXJhdGlvbiBhY3RpdmUgKi8NCiAJaXNj
+LT5jb25maWcgPSBpc2MtPnRyeV9jb25maWc7DQogDQpAQCAtMTc1OCw3ICsxODA1LDcgQEAgc3Rh
+dGljIGlycXJldHVybl90IGlzY19pbnRlcnJ1cHQoaW50IGlycSwgdm9pZCAqZGV2X2lkKQ0KIAly
+ZXR1cm4gcmV0Ow0KIH0NCiANCi1zdGF0aWMgdm9pZCBpc2NfaGlzdF9jb3VudChzdHJ1Y3QgaXNj
+X2RldmljZSAqaXNjKQ0KK3N0YXRpYyB2b2lkIGlzY19oaXN0X2NvdW50KHN0cnVjdCBpc2NfZGV2
+aWNlICppc2MsIHUzMiAqbWluLCB1MzIgKm1heCkNCiB7DQogCXN0cnVjdCByZWdtYXAgKnJlZ21h
+cCA9IGlzYy0+cmVnbWFwOw0KIAlzdHJ1Y3QgaXNjX2N0cmxzICpjdHJscyA9ICZpc2MtPmN0cmxz
+Ow0KQEAgLTE3NjYsMjUgKzE4MTMsOTkgQEAgc3RhdGljIHZvaWQgaXNjX2hpc3RfY291bnQoc3Ry
+dWN0IGlzY19kZXZpY2UgKmlzYykNCiAJdTMyICpoaXN0X2VudHJ5ID0gJmN0cmxzLT5oaXN0X2Vu
+dHJ5WzBdOw0KIAl1MzIgaTsNCiANCisJKm1pbiA9IDA7DQorCSptYXggPSBISVNUX0VOVFJJRVM7
+DQorDQogCXJlZ21hcF9idWxrX3JlYWQocmVnbWFwLCBJU0NfSElTX0VOVFJZLCBoaXN0X2VudHJ5
+LCBISVNUX0VOVFJJRVMpOw0KIA0KIAkqaGlzdF9jb3VudCA9IDA7DQotCWZvciAoaSA9IDA7IGkg
+PCBISVNUX0VOVFJJRVM7IGkrKykNCisJLyoNCisJICogd2UgZGVsaWJlcmF0ZWx5IGlnbm9yZSB0
+aGUgZW5kIG9mIHRoZSBoaXN0b2dyYW0sDQorCSAqIHRoZSBtb3N0IHdoaXRlIHBpeGVscw0KKwkg
+Ki8NCisJZm9yIChpID0gMTsgaSA8IEhJU1RfRU5UUklFUzsgaSsrKSB7DQorCQlpZiAoKmhpc3Rf
+ZW50cnkgJiYgISptaW4pDQorCQkJKm1pbiA9IGk7DQorCQlpZiAoKmhpc3RfZW50cnkpDQorCQkJ
+Km1heCA9IGk7DQogCQkqaGlzdF9jb3VudCArPSBpICogKCpoaXN0X2VudHJ5KyspOw0KKwl9DQor
+DQorCWlmICghKm1pbikNCisJCSptaW4gPSAxOw0KIH0NCiANCiBzdGF0aWMgdm9pZCBpc2Nfd2Jf
+dXBkYXRlKHN0cnVjdCBpc2NfY3RybHMgKmN0cmxzKQ0KIHsNCiAJdTMyICpoaXN0X2NvdW50ID0g
+JmN0cmxzLT5oaXN0X2NvdW50WzBdOw0KLQl1NjQgZ19jb3VudCA9ICh1NjQpaGlzdF9jb3VudFtJ
+U0NfSElTX0NGR19NT0RFX0dCXSA8PCA5Ow0KLQl1MzIgaGlzdF9yID0gaGlzdF9jb3VudFtJU0Nf
+SElTX0NGR19NT0RFX1JdOw0KLQl1MzIgaGlzdF9iID0gaGlzdF9jb3VudFtJU0NfSElTX0NGR19N
+T0RFX0JdOw0KKwl1MzIgYywgb2Zmc2V0WzRdOw0KKwl1NjQgYXZnID0gMDsNCisJLyogV2UgY29t
+cHV0ZSB0d28gZ2FpbnMsIHN0cmV0Y2ggZ2FpbiBhbmQgZ3JleSB3b3JsZCBnYWluICovDQorCXUz
+MiBzX2dhaW5bNF0sIGd3X2dhaW5bNF07DQogDQotCWlmIChoaXN0X3IpDQotCQljdHJscy0+cl9n
+YWluID0gZGl2X3U2NChnX2NvdW50LCBoaXN0X3IpOw0KKwkvKg0KKwkgKiBBY2NvcmRpbmcgdG8g
+R3JleSBXb3JsZCwgd2UgbmVlZCB0byBzZXQgZ2FpbnMgZm9yIFIvQiB0byBub3JtYWxpemUNCisJ
+ICogdGhlbSB0b3dhcmRzIHRoZSBncmVlbiBjaGFubmVsLg0KKwkgKiBUaHVzIHdlIHdhbnQgdG8g
+a2VlcCBHcmVlbiBhcyBmaXhlZCBhbmQgYWRqdXN0IG9ubHkgUmVkL0JsdWUNCisJICogQ29tcHV0
+ZSB0aGUgYXZlcmFnZSBvZiB0aGUgYm90aCBncmVlbiBjaGFubmVscyBmaXJzdA0KKwkgKi8NCisJ
+YXZnID0gKHU2NCloaXN0X2NvdW50W0lTQ19ISVNfQ0ZHX01PREVfR1JdICsNCisJCSh1NjQpaGlz
+dF9jb3VudFtJU0NfSElTX0NGR19NT0RFX0dCXTsNCisJYXZnID4+PSAxOw0KKw0KKwkvKiBHcmVl
+biBoaXN0b2dyYW0gaXMgbnVsbCwgbm90aGluZyB0byBkbyAqLw0KKwlpZiAoIWF2ZykNCisJCXJl
+dHVybjsNCiANCi0JaWYgKGhpc3RfYikNCi0JCWN0cmxzLT5iX2dhaW4gPSBkaXZfdTY0KGdfY291
+bnQsIGhpc3RfYik7DQorCWZvciAoYyA9IElTQ19ISVNfQ0ZHX01PREVfR1I7IGMgPD0gSVNDX0hJ
+U19DRkdfTU9ERV9COyBjKyspIHsNCisJCS8qDQorCQkgKiB0aGUgY29sb3Igb2Zmc2V0IGlzIHRo
+ZSBtaW5pbXVtIHZhbHVlIG9mIHRoZSBoaXN0b2dyYW0uDQorCQkgKiB3ZSBzdHJldGNoIHRoaXMg
+Y29sb3IgdG8gdGhlIGZ1bGwgcmFuZ2UgYnkgc3Vic3RyYWN0aW5nDQorCQkgKiB0aGlzIHZhbHVl
+IGZyb20gdGhlIGNvbG9yIGNvbXBvbmVudC4NCisJCSAqLw0KKwkJb2Zmc2V0W2NdID0gY3RybHMt
+Pmhpc3RfbWlubWF4W2NdW0hJU1RfTUlOX0lOREVYXTsNCisJCS8qDQorCQkgKiBUaGUgb2Zmc2V0
+IGlzIGFsd2F5cyBhdCBsZWFzdCAxLiBJZiB0aGUgb2Zmc2V0IGlzIDEsIHdlIGRvDQorCQkgKiBu
+b3QgbmVlZCB0byBhZGp1c3QgaXQsIHNvIG91ciByZXN1bHQgbXVzdCBiZSB6ZXJvLg0KKwkJICog
+dGhlIG9mZnNldCBpcyBjb21wdXRlZCBpbiBhIGhpc3RvZ3JhbSBvbiA5IGJpdHMgKDAuLjUxMikN
+CisJCSAqIGJ1dCB0aGUgb2Zmc2V0IGluIHJlZ2lzdGVyIGlzIGJhc2VkIG9uDQorCQkgKiAxMiBi
+aXRzIHBpcGVsaW5lICgwLi40MDk2KS4NCisJCSAqIHdlIG5lZWQgdG8gc2hpZnQgd2l0aCB0aGUg
+MyBiaXRzIHRoYXQgdGhlIGhpc3RvZ3JhbSBpcw0KKwkJICogaWdub3JpbmcNCisJCSAqLw0KKwkJ
+Y3RybHMtPm9mZnNldFtjXSA9IChvZmZzZXRbY10gLSAxKSA8PCAzOw0KKw0KKwkJLyogdGhlIG9m
+ZnNldCBpcyB0aGVuIHRha2VuIGFuZCBjb252ZXJ0ZWQgdG8gMidzIGNvbXBsZW1lbnRzICovDQor
+CQlpZiAoIWN0cmxzLT5vZmZzZXRbY10pDQorCQkJY3RybHMtPm9mZnNldFtjXSA9IElTQ19XQl9P
+X1pFUk9fVkFMOw0KKw0KKwkJLyoNCisJCSAqIHRoZSBzdHJldGNoIGdhaW4gaXMgdGhlIHRvdGFs
+IG51bWJlciBvZiBoaXN0b2dyYW0gYmlucw0KKwkJICogZGl2aWRlZCBieSB0aGUgYWN0dWFsIHJh
+bmdlIG9mIGNvbG9yIGNvbXBvbmVudCAoTWF4IC0gTWluKQ0KKwkJICogSWYgd2UgY29tcHV0ZSBn
+YWluIGxpa2UgdGhpcywgdGhlIGFjdHVhbCBjb2xvciBjb21wb25lbnQNCisJCSAqIHdpbGwgYmUg
+c3RyZXRjaGVkIHRvIHRoZSBmdWxsIGhpc3RvZ3JhbS4NCisJCSAqIFdlIG5lZWQgdG8gc2hpZnQg
+OSBiaXRzIGZvciBwcmVjaXNpb24sIHdlIGhhdmUgOSBiaXRzIGZvcg0KKwkJICogZGVjaW1hbHMN
+CisJCSAqLw0KKwkJc19nYWluW2NdID0gKEhJU1RfRU5UUklFUyA8PCA5KSAvDQorCQkJKGN0cmxz
+LT5oaXN0X21pbm1heFtjXVtISVNUX01BWF9JTkRFWF0gLQ0KKwkJCWN0cmxzLT5oaXN0X21pbm1h
+eFtjXVtISVNUX01JTl9JTkRFWF0gKyAxKTsNCisNCisJCS8qDQorCQkgKiBOb3cgd2UgaGF2ZSB0
+byBjb21wdXRlIHRoZSBnYWluIHcuci50LiB0aGUgYXZlcmFnZS4NCisJCSAqIEFkZC9sb3NlIGdh
+aW4gdG8gdGhlIGNvbXBvbmVudCB0b3dhcmRzIHRoZSBhdmVyYWdlLg0KKwkJICogSWYgaXQgaGFw
+cGVucyB0aGF0IHRoZSBjb21wb25lbnQgaXMgemVybywgdXNlIHRoZQ0KKwkJICogZml4ZWQgcG9p
+bnQgdmFsdWUgOiAxLjAgZ2Fpbi4NCisJCSAqLw0KKwkJaWYgKGhpc3RfY291bnRbY10pDQorCQkJ
+Z3dfZ2FpbltjXSA9IGRpdl91NjQoYXZnIDw8IDksIGhpc3RfY291bnRbY10pOw0KKwkJZWxzZQ0K
+KwkJCWd3X2dhaW5bY10gPSAxIDw8IDk7DQorDQorCQkvKiBtdWx0aXBseSBib3RoIGdhaW5zIGFu
+ZCBhZGp1c3QgZm9yIGRlY2ltYWxzICovDQorCQljdHJscy0+Z2FpbltjXSA9IHNfZ2FpbltjXSAq
+IGd3X2dhaW5bY107DQorCQljdHJscy0+Z2FpbltjXSA+Pj0gOTsNCisJfQ0KIH0NCiANCiBzdGF0
+aWMgdm9pZCBpc2NfYXdiX3dvcmsoc3RydWN0IHdvcmtfc3RydWN0ICp3KQ0KQEAgLTE3OTUsMjcg
+KzE5MTYsNTYgQEAgc3RhdGljIHZvaWQgaXNjX2F3Yl93b3JrKHN0cnVjdCB3b3JrX3N0cnVjdCAq
+dykNCiAJc3RydWN0IGlzY19jdHJscyAqY3RybHMgPSAmaXNjLT5jdHJsczsNCiAJdTMyIGhpc3Rf
+aWQgPSBjdHJscy0+aGlzdF9pZDsNCiAJdTMyIGJheXNlbDsNCisJdW5zaWduZWQgbG9uZyBmbGFn
+czsNCisJdTMyIG1pbiwgbWF4Ow0KKw0KKwkvKiBzdHJlYW1pbmcgaXMgbm90IGFjdGl2ZSBhbnlt
+b3JlICovDQorCWlmIChpc2MtPnN0b3ApDQorCQlyZXR1cm47DQogDQogCWlmIChjdHJscy0+aGlz
+dF9zdGF0ICE9IEhJU1RfRU5BQkxFRCkNCiAJCXJldHVybjsNCiANCi0JaXNjX2hpc3RfY291bnQo
+aXNjKTsNCisJaXNjX2hpc3RfY291bnQoaXNjLCAmbWluLCAmbWF4KTsNCisJY3RybHMtPmhpc3Rf
+bWlubWF4W2hpc3RfaWRdW0hJU1RfTUlOX0lOREVYXSA9IG1pbjsNCisJY3RybHMtPmhpc3RfbWlu
+bWF4W2hpc3RfaWRdW0hJU1RfTUFYX0lOREVYXSA9IG1heDsNCiANCiAJaWYgKGhpc3RfaWQgIT0g
+SVNDX0hJU19DRkdfTU9ERV9CKSB7DQogCQloaXN0X2lkKys7DQogCX0gZWxzZSB7DQogCQlpc2Nf
+d2JfdXBkYXRlKGN0cmxzKTsNCi0JCWhpc3RfaWQgPSBJU0NfSElTX0NGR19NT0RFX1I7DQorCQlo
+aXN0X2lkID0gSVNDX0hJU19DRkdfTU9ERV9HUjsNCiAJfQ0KIA0KIAljdHJscy0+aGlzdF9pZCA9
+IGhpc3RfaWQ7DQogCWJheXNlbCA9IGlzYy0+Y29uZmlnLnNkX2Zvcm1hdC0+Y2ZhX2JheWNmZyA8
+PCBJU0NfSElTX0NGR19CQVlTRUxfU0hJRlQ7DQogDQorCS8qIGlmIG5vIG1vcmUgYXV0byB3aGl0
+ZSBiYWxhbmNlLCByZXNldCBjb250cm9scy4gKi8NCisJaWYgKCFjdHJscy0+YXdiKQ0KKwkJaXNj
+X3Jlc2V0X2F3Yl9jdHJscyhpc2MpOw0KKw0KIAlwbV9ydW50aW1lX2dldF9zeW5jKGlzYy0+ZGV2
+KTsNCiANCisJLyoNCisJICogb25seSB1cGRhdGUgaWYgd2UgaGF2ZSBhbGwgdGhlIHJlcXVpcmVk
+IGhpc3RvZ3JhbXMgYW5kIGNvbnRyb2xzDQorCSAqIGlmIGF3YiBoYXMgYmVlbiBkaXNhYmxlZCwg
+d2UgbmVlZCB0byByZXNldCByZWdpc3RlcnMgYXMgd2VsbC4NCisJICovDQorCWlmIChoaXN0X2lk
+ID09IElTQ19ISVNfQ0ZHX01PREVfR1IgfHwgIWN0cmxzLT5hd2IpIHsNCisJCS8qDQorCQkgKiBJ
+dCBtYXkgaGFwcGVuIHRoYXQgRE1BIERvbmUgSVJRIHdpbGwgdHJpZ2dlciB3aGlsZSB3ZSBhcmUN
+CisJCSAqIHVwZGF0aW5nIHdoaXRlIGJhbGFuY2UgcmVnaXN0ZXJzIGhlcmUuDQorCQkgKiBJbiB0
+aGF0IGNhc2UsIG9ubHkgcGFydHMgb2YgdGhlIGNvbnRyb2xzIGhhdmUgYmVlbiB1cGRhdGVkLg0K
+KwkJICogV2UgY2FuIGF2b2lkIHRoYXQgYnkgbG9ja2luZyB0aGUgc2VjdGlvbi4NCisJCSAqLw0K
+KwkJc3Bpbl9sb2NrX2lycXNhdmUoJmlzYy0+YXdiX2xvY2ssIGZsYWdzKTsNCisJCWlzY191cGRh
+dGVfYXdiX2N0cmxzKGlzYyk7DQorCQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZpc2MtPmF3Yl9s
+b2NrLCBmbGFncyk7DQorCX0NCiAJcmVnbWFwX3dyaXRlKHJlZ21hcCwgSVNDX0hJU19DRkcsIGhp
+c3RfaWQgfCBiYXlzZWwgfCBJU0NfSElTX0NGR19SQVIpOw0KIAlpc2NfdXBkYXRlX3Byb2ZpbGUo
+aXNjKTsNCi0JcmVnbWFwX3dyaXRlKHJlZ21hcCwgSVNDX0NUUkxFTiwgSVNDX0NUUkxfSElTUkVR
+KTsNCisJLyogaWYgYXdiIGhhcyBiZWVuIGRpc2FibGVkLCB3ZSBkb24ndCBuZWVkIHRvIHN0YXJ0
+IGFub3RoZXIgaGlzdG9ncmFtICovDQorCWlmIChjdHJscy0+YXdiKQ0KKwkJcmVnbWFwX3dyaXRl
+KHJlZ21hcCwgSVNDX0NUUkxFTiwgSVNDX0NUUkxfSElTUkVRKTsNCiANCiAJcG1fcnVudGltZV9w
+dXRfc3luYyhpc2MtPmRldik7DQogfQ0KQEAgLTE4MzksOCArMTk4OSw3IEBAIHN0YXRpYyBpbnQg
+aXNjX3NfY3RybChzdHJ1Y3QgdjRsMl9jdHJsICpjdHJsKQ0KIAljYXNlIFY0TDJfQ0lEX0FVVE9f
+V0hJVEVfQkFMQU5DRToNCiAJCWN0cmxzLT5hd2IgPSBjdHJsLT52YWw7DQogCQlpZiAoY3RybHMt
+Pmhpc3Rfc3RhdCAhPSBISVNUX0VOQUJMRUQpIHsNCi0JCQljdHJscy0+cl9nYWluID0gMHgxIDw8
+IDk7DQotCQkJY3RybHMtPmJfZ2FpbiA9IDB4MSA8PCA5Ow0KKwkJCWlzY19yZXNldF9hd2JfY3Ry
+bHMoaXNjKTsNCiAJCX0NCiAJCWJyZWFrOw0KIAlkZWZhdWx0Og0KQEAgLTE4NjIsMTEgKzIwMTEs
+MTUgQEAgc3RhdGljIGludCBpc2NfY3RybF9pbml0KHN0cnVjdCBpc2NfZGV2aWNlICppc2MpDQog
+CWludCByZXQ7DQogDQogCWN0cmxzLT5oaXN0X3N0YXQgPSBISVNUX0lOSVQ7DQorCWlzY19yZXNl
+dF9hd2JfY3RybHMoaXNjKTsNCiANCiAJcmV0ID0gdjRsMl9jdHJsX2hhbmRsZXJfaW5pdChoZGws
+IDQpOw0KIAlpZiAocmV0IDwgMCkNCiAJCXJldHVybiByZXQ7DQogDQorCWN0cmxzLT5icmlnaHRu
+ZXNzID0gMDsNCisJY3RybHMtPmNvbnRyYXN0ID0gMjU2Ow0KKw0KIAl2NGwyX2N0cmxfbmV3X3N0
+ZChoZGwsIG9wcywgVjRMMl9DSURfQlJJR0hUTkVTUywgLTEwMjQsIDEwMjMsIDEsIDApOw0KIAl2
+NGwyX2N0cmxfbmV3X3N0ZChoZGwsIG9wcywgVjRMMl9DSURfQ09OVFJBU1QsIC0yMDQ4LCAyMDQ3
+LCAxLCAyNTYpOw0KIAl2NGwyX2N0cmxfbmV3X3N0ZChoZGwsIG9wcywgVjRMMl9DSURfR0FNTUEs
+IDAsIEdBTU1BX01BWCwgMSwgMik7DQpAQCAtMjAzNCw2ICsyMTg3LDcgQEAgc3RhdGljIGludCBp
+c2NfYXN5bmNfY29tcGxldGUoc3RydWN0IHY0bDJfYXN5bmNfbm90aWZpZXIgKm5vdGlmaWVyKQ0K
+IAkvKiBJbml0IHZpZGVvIGRtYSBxdWV1ZXMgKi8NCiAJSU5JVF9MSVNUX0hFQUQoJmlzYy0+ZG1h
+X3F1ZXVlKTsNCiAJc3Bpbl9sb2NrX2luaXQoJmlzYy0+ZG1hX3F1ZXVlX2xvY2spOw0KKwlzcGlu
+X2xvY2tfaW5pdCgmaXNjLT5hd2JfbG9jayk7DQogDQogCXJldCA9IGlzY19mb3JtYXRzX2luaXQo
+aXNjKTsNCiAJaWYgKHJldCA8IDApIHsNCi0tIA0KMi43LjQNCg0K
