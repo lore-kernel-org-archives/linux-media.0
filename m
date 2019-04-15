@@ -6,36 +6,37 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25292C282DA
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76D1EC10F0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8E992077C
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53DB52077C
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 12:44:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727578AbfDOMor (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 08:44:47 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58265 "EHLO
+        id S1727542AbfDOMod (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 08:44:33 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39727 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727549AbfDOMof (ORCPT
+        with ESMTP id S1727411AbfDOMod (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 08:44:35 -0400
+        Mon, 15 Apr 2019 08:44:33 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hG0yJ-0000RR-83; Mon, 15 Apr 2019 14:44:27 +0200
+        id 1hG0yJ-0000RL-85; Mon, 15 Apr 2019 14:44:27 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hG0yH-00025V-1b; Mon, 15 Apr 2019 14:44:25 +0200
+        id 1hG0yG-00025D-UM; Mon, 15 Apr 2019 14:44:24 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org
 Cc:     laurent.pinchart@ideasonboard.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH v6 07/13] media: tvp5150: add FORMAT_TRY support for get/set selection handlers
-Date:   Mon, 15 Apr 2019 14:44:07 +0200
-Message-Id: <20190415124413.18456-8-m.felsch@pengutronix.de>
+        devicetree@vger.kernel.org, kernel@pengutronix.de,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 01/13] dt-bindings: connector: analog: add tv norms property
+Date:   Mon, 15 Apr 2019 14:44:01 +0200
+Message-Id: <20190415124413.18456-2-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190415124413.18456-1-m.felsch@pengutronix.de>
 References: <20190415124413.18456-1-m.felsch@pengutronix.de>
@@ -50,236 +51,119 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since commit 10d5509c8d50 ("[media] v4l2: remove g/s_crop from video ops")
-the 'which' field for set/get_selection must be FORMAT_ACTIVE. There is
-no way to try different selections. The patch adds a helper function to
-select the correct selection memory space (sub-device file handle or
-driver state) which will be set/returned.
+Some connectors no matter if in- or output supports only a limited
+range of tv norms. It doesn't matter if the hardware behind that
+connector supports more than the listed formats since the users are
+restriced by a label e.g. to plug only a camera into this connector
+which uses the PAL format.
 
-The TVP5150 AVID will be updated if the 'which' field is FORMAT_ACTIVE
-and the requested selection rectangle differs from the already set one.
+This patch adds the capability to describe such limitation within the
+firmware. There are no format restrictions if the property isn't
+present, so it's completely backward compatible.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
-Changelog:
+[1] https://patchwork.kernel.org/cover/10794703/
 
-v5:
- - handle stub for v4l2_subdev_get_try_crop() internal since commit
-   ("media: v4l2-subdev: add stubs for v4l2_subdev_get_try_*")
-   isn't anymore part of this series.
- - add error handling of __tvp5150_get_pad_crop()
-v4:
- - fix merge conflict due to rebase on top of media-tree/master
- - __tvp5150_get_pad_crop(): cosmetic alignment fixes
+v6:
+- tvnorms.h: use tabs instead of spaces
+- tvnorms.h: add TVNORM_PAL and TVNORM_SECAM
+- tvnorms.h: drop rarely used TVNORM_ATSC_* norms
 
- drivers/media/i2c/tvp5150.c | 130 ++++++++++++++++++++++++++----------
- 1 file changed, 96 insertions(+), 34 deletions(-)
+v2-v4:
+- nothing since the patch was squashed from series [1] into this
+  series.
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index 4e3228b2ccbc..9331609425bf 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -19,6 +19,7 @@
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-fwnode.h>
- #include <media/v4l2-mc.h>
-+#include <media/v4l2-rect.h>
+ .../display/connector/analog-tv-connector.txt |  4 ++
+ include/dt-bindings/media/tvnorms.h           | 56 +++++++++++++++++++
+ 2 files changed, 60 insertions(+)
+ create mode 100644 include/dt-bindings/media/tvnorms.h
+
+diff --git a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
+index 0c0970c210ab..346f8937a0b7 100644
+--- a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
++++ b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
+@@ -6,6 +6,9 @@ Required properties:
  
- #include "tvp5150_reg.h"
+ Optional properties:
+ - label: a symbolic name for the connector
++- tvnorms: limit the supported tv norms on a connector to the given ones else
++           all tv norms are allowed. Possible video standards are defined in
++           include/dt-bindings/media/tvnorms.h.
  
-@@ -997,20 +998,48 @@ static void tvp5150_set_default(v4l2_std_id std, struct v4l2_rect *crop)
- 		crop->height = TVP5150_V_MAX_OTHERS;
- }
+ Required nodes:
+ - Video port for TV input
+@@ -16,6 +19,7 @@ Example
+ tv: connector {
+ 	compatible = "composite-video-connector";
+ 	label = "tv";
++	tvnorms = <(TVNORM_PAL_M | TVNORM_NTSC_M)>;
  
-+static struct v4l2_rect *
-+__tvp5150_get_pad_crop(struct tvp5150 *decoder,
-+		       struct v4l2_subdev_pad_config *cfg, unsigned int pad,
-+		       enum v4l2_subdev_format_whence which)
-+{
-+	switch (which) {
-+	case V4L2_SUBDEV_FORMAT_TRY:
-+#if defined(CONFIG_VIDEO_V4L2_SUBDEV_API)
-+		return v4l2_subdev_get_try_crop(&decoder->sd, cfg, pad);
-+#else
-+		return ERR_PTR(-ENOTTY);
-+#endif
-+	case V4L2_SUBDEV_FORMAT_ACTIVE:
-+		return &decoder->rect;
-+	default:
-+		return NULL;
-+	}
-+}
+ 	port {
+ 		tv_connector_in: endpoint {
+diff --git a/include/dt-bindings/media/tvnorms.h b/include/dt-bindings/media/tvnorms.h
+new file mode 100644
+index 000000000000..058ab8414145
+--- /dev/null
++++ b/include/dt-bindings/media/tvnorms.h
+@@ -0,0 +1,56 @@
++/* SPDX-License-Identifier: GPL-2.0-only or X11 */
++/*
++ * Copyright 2019 Pengutronix, Marco Felsch <kernel@pengutronix.de>
++ */
 +
- static int tvp5150_fill_fmt(struct v4l2_subdev *sd,
- 			    struct v4l2_subdev_pad_config *cfg,
- 			    struct v4l2_subdev_format *format)
- {
- 	struct v4l2_mbus_framefmt *f;
-+	struct v4l2_rect *__crop;
- 	struct tvp5150 *decoder = to_tvp5150(sd);
- 
- 	if (!format || (format->pad != TVP5150_PAD_VID_OUT))
- 		return -EINVAL;
- 
- 	f = &format->format;
-+	__crop = __tvp5150_get_pad_crop(decoder, cfg, format->pad,
-+					format->which);
-+	if (IS_ERR_OR_NULL(__crop)) {
-+		if (!__crop)
-+			return -EINVAL;
-+		else
-+			return PTR_ERR(__crop);
-+	}
- 
--	f->width = decoder->rect.width;
--	f->height = decoder->rect.height / 2;
-+	f->width = __crop->width;
-+	f->height = __crop->height / 2;
- 
- 	f->code = TVP5150_MBUS_FMT;
- 	f->field = TVP5150_FIELD;
-@@ -1021,17 +1050,51 @@ static int tvp5150_fill_fmt(struct v4l2_subdev *sd,
- 	return 0;
- }
- 
-+unsigned int tvp5150_get_hmax(struct v4l2_subdev *sd)
-+{
-+	struct tvp5150 *decoder = to_tvp5150(sd);
-+	v4l2_std_id std;
++#ifndef _DT_BINDINGS_MEDIA_TVNORMS_H
++#define _DT_BINDINGS_MEDIA_TVNORMS_H
 +
-+	/* Calculate height based on current standard */
-+	if (decoder->norm == V4L2_STD_ALL)
-+		std = tvp5150_read_std(sd);
-+	else
-+		std = decoder->norm;
++/* one bit for each */
++#define TVNORM_PAL_B		0x00000001
++#define TVNORM_PAL_B1		0x00000002
++#define TVNORM_PAL_G		0x00000004
++#define TVNORM_PAL_H		0x00000008
++#define TVNORM_PAL_I		0x00000010
++#define TVNORM_PAL_D		0x00000020
++#define TVNORM_PAL_D1		0x00000040
++#define TVNORM_PAL_K		0x00000080
 +
-+	return (std & V4L2_STD_525_60) ?
-+		TVP5150_V_MAX_525_60 : TVP5150_V_MAX_OTHERS;
-+}
++#define TVNORM_PAL		(TVNORM_PAL_B  | \
++				 TVNORM_PAL_B1 | \
++				 TVNORM_PAL_G  | \
++				 TVNORM_PAL_H  | \
++				 TVNORM_PAL_I  | \
++				 TVNORM_PAL_D  | \
++				 TVNORM_PAL_D1 | \
++				 TVNORM_PAL_K)
 +
-+static inline void
-+__tvp5150_set_selection(struct v4l2_subdev *sd, struct v4l2_rect rect)
-+{
-+	struct tvp5150 *decoder = to_tvp5150(sd);
-+	unsigned int hmax = tvp5150_get_hmax(sd);
++#define TVNORM_PAL_M		0x00000100
++#define TVNORM_PAL_N		0x00000200
++#define TVNORM_PAL_Nc		0x00000400
++#define TVNORM_PAL_60		0x00000800
 +
-+	regmap_write(decoder->regmap, TVP5150_VERT_BLANKING_START, rect.top);
-+	regmap_write(decoder->regmap, TVP5150_VERT_BLANKING_STOP,
-+		     rect.top + rect.height - hmax);
-+	regmap_write(decoder->regmap, TVP5150_ACT_VD_CROP_ST_MSB,
-+		     rect.left >> TVP5150_CROP_SHIFT);
-+	regmap_write(decoder->regmap, TVP5150_ACT_VD_CROP_ST_LSB,
-+		     rect.left | (1 << TVP5150_CROP_SHIFT));
-+	regmap_write(decoder->regmap, TVP5150_ACT_VD_CROP_STP_MSB,
-+		     (rect.left + rect.width - TVP5150_MAX_CROP_LEFT) >>
-+		     TVP5150_CROP_SHIFT);
-+	regmap_write(decoder->regmap, TVP5150_ACT_VD_CROP_STP_LSB,
-+		     rect.left + rect.width - TVP5150_MAX_CROP_LEFT);
-+}
++#define TVNORM_NTSC_M		0x00001000	/* BTSC */
++#define TVNORM_NTSC_M_JP	0x00002000	/* EIA-J */
++#define TVNORM_NTSC_443		0x00004000
++#define TVNORM_NTSC_M_KR	0x00008000	/* FM A2 */
 +
- static int tvp5150_set_selection(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_pad_config *cfg,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct tvp5150 *decoder = to_tvp5150(sd);
- 	struct v4l2_rect rect = sel->r;
--	v4l2_std_id std;
--	int hmax;
-+	struct v4l2_rect *__crop;
-+	unsigned int hmax;
- 
--	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE ||
--	    sel->target != V4L2_SEL_TGT_CROP)
-+	if (sel->target != V4L2_SEL_TGT_CROP)
- 		return -EINVAL;
- 
- 	dev_dbg_lvl(sd->dev, 1, debug, "%s left=%d, top=%d, width=%d, height=%d\n",
-@@ -1040,17 +1103,7 @@ static int tvp5150_set_selection(struct v4l2_subdev *sd,
- 	/* tvp5150 has some special limits */
- 	rect.left = clamp(rect.left, 0, TVP5150_MAX_CROP_LEFT);
- 	rect.top = clamp(rect.top, 0, TVP5150_MAX_CROP_TOP);
--
--	/* Calculate height based on current standard */
--	if (decoder->norm == V4L2_STD_ALL)
--		std = tvp5150_read_std(sd);
--	else
--		std = decoder->norm;
--
--	if (std & V4L2_STD_525_60)
--		hmax = TVP5150_V_MAX_525_60;
--	else
--		hmax = TVP5150_V_MAX_OTHERS;
-+	hmax = tvp5150_get_hmax(sd);
- 
- 	/*
- 	 * alignments:
-@@ -1063,20 +1116,23 @@ static int tvp5150_set_selection(struct v4l2_subdev *sd,
- 			      hmax - TVP5150_MAX_CROP_TOP - rect.top,
- 			      hmax - rect.top, 0, 0);
- 
--	regmap_write(decoder->regmap, TVP5150_VERT_BLANKING_START, rect.top);
--	regmap_write(decoder->regmap, TVP5150_VERT_BLANKING_STOP,
--		     rect.top + rect.height - hmax);
--	regmap_write(decoder->regmap, TVP5150_ACT_VD_CROP_ST_MSB,
--		     rect.left >> TVP5150_CROP_SHIFT);
--	regmap_write(decoder->regmap, TVP5150_ACT_VD_CROP_ST_LSB,
--		     rect.left | (1 << TVP5150_CROP_SHIFT));
--	regmap_write(decoder->regmap, TVP5150_ACT_VD_CROP_STP_MSB,
--		     (rect.left + rect.width - TVP5150_MAX_CROP_LEFT) >>
--		     TVP5150_CROP_SHIFT);
--	regmap_write(decoder->regmap, TVP5150_ACT_VD_CROP_STP_LSB,
--		     rect.left + rect.width - TVP5150_MAX_CROP_LEFT);
-+	__crop = __tvp5150_get_pad_crop(decoder, cfg, sel->pad, sel->which);
-+	if (IS_ERR_OR_NULL(__crop)) {
-+		if (!__crop)
-+			return -EINVAL;
-+		else
-+			return PTR_ERR(__crop);
-+	}
++#define TVNORM_SECAM_B		0x00010000
++#define TVNORM_SECAM_D		0x00020000
++#define TVNORM_SECAM_G		0x00040000
++#define TVNORM_SECAM_H		0x00080000
++#define TVNORM_SECAM_K		0x00100000
++#define TVNORM_SECAM_K1		0x00200000
++#define TVNORM_SECAM_L		0x00400000
++#define TVNORM_SECAM_LC		0x00800000
 +
-+	/*
-+	 * Update output image size if the selection (crop) rectangle size or
-+	 * position has been modified.
-+	 */
-+	if (!v4l2_rect_equal(&rect, __crop))
-+		if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE)
-+			__tvp5150_set_selection(sd, rect);
- 
--	decoder->rect = rect;
-+	*__crop = rect;
- 
- 	return 0;
- }
-@@ -1086,11 +1142,9 @@ static int tvp5150_get_selection(struct v4l2_subdev *sd,
- 				 struct v4l2_subdev_selection *sel)
- {
- 	struct tvp5150 *decoder = container_of(sd, struct tvp5150, sd);
-+	struct v4l2_rect *__crop;
- 	v4l2_std_id std;
- 
--	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE)
--		return -EINVAL;
--
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP_BOUNDS:
- 		sel->r.left = 0;
-@@ -1108,7 +1162,15 @@ static int tvp5150_get_selection(struct v4l2_subdev *sd,
- 			sel->r.height = TVP5150_V_MAX_OTHERS;
- 		return 0;
- 	case V4L2_SEL_TGT_CROP:
--		sel->r = decoder->rect;
-+		__crop = __tvp5150_get_pad_crop(decoder, cfg, sel->pad,
-+						sel->which);
-+		if (IS_ERR_OR_NULL(__crop)) {
-+			if (!__crop)
-+				return -EINVAL;
-+			else
-+				return PTR_ERR(__crop);
-+		}
-+		sel->r = *__crop;
- 		return 0;
- 	default:
- 		return -EINVAL;
++#define TVNORM_SECAM		(TVNORM_SECAM_B  | \
++				 TVNORM_SECAM_D  | \
++				 TVNORM_SECAM_G  | \
++				 TVNORM_SECAM_H  | \
++				 TVNORM_SECAM_K  | \
++				 TVNORM_SECAM_K1 | \
++				 TVNORM_SECAM_L  | \
++				 TVNORM_SECAM_LC)
++
++#endif /* _DT_BINDINGS_MEDIA_TVNORMS_H */
 -- 
 2.20.1
 
