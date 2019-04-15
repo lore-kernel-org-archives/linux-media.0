@@ -2,250 +2,428 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFAEBC10F0E
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 06:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59FC5C282CE
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 06:59:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A5BA020833
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 06:44:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="ZRj8cUeK"
+	by mail.kernel.org (Postfix) with ESMTP id 308A720833
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 06:59:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725796AbfDOGoL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 02:44:11 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:40680 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725777AbfDOGoK (ORCPT
+        id S1726029AbfDOG7s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 02:59:48 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:35707 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725794AbfDOG7s (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 02:44:10 -0400
-X-IronPort-AV: E=Sophos;i="5.60,352,1549954800"; 
-   d="scan'208";a="29919670"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES128-SHA; 14 Apr 2019 23:44:10 -0700
-Received: from NAM01-BY2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.76.37) with Microsoft SMTP Server (TLS) id
- 14.3.352.0; Sun, 14 Apr 2019 23:44:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector1-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NYmhYn5TZBHbx07yvCmBNgbCbBwzU26i4QeER6eENgg=;
- b=ZRj8cUeKjcmI/y/m+0EdcPlbbUW2JTJgasmsfkI8fylYCcjYOJ5PLIhBHCXLO0WNB6MIJunsRr5vKMPJ3f66MAODdvYM3PLmhw8i29r8B7fd2ylS4YQOBnOmQ1T1e43EVtzLD6GB3864iNNAUkc1rs+tf1PV/dZjBcah4NX37N4=
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
- DM5PR11MB1386.namprd11.prod.outlook.com (10.168.106.146) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1792.14; Mon, 15 Apr 2019 06:43:51 +0000
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::e0e3:1d51:9e3e:6dc]) by DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::e0e3:1d51:9e3e:6dc%3]) with mapi id 15.20.1792.018; Mon, 15 Apr 2019
- 06:43:51 +0000
-From:   <Eugen.Hristev@microchip.com>
-To:     <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <Nicolas.Ferre@microchip.com>, <mchehab@kernel.org>,
-        <ksloat@aampglobal.com>
-Subject: Re: [PATCH 4/7] media: atmel: atmel-isc: add support for
- DO_WHITE_BALANCE
-Thread-Topic: [PATCH 4/7] media: atmel: atmel-isc: add support for
- DO_WHITE_BALANCE
-Thread-Index: AQHU7sRrNLP5XTfBXUK9XK97Esze7qY1dWCAgAdZAAA=
-Date:   Mon, 15 Apr 2019 06:43:51 +0000
-Message-ID: <5fcb8f59-6979-c355-574b-40bb13610252@microchip.com>
-References: <1554807715-2353-1-git-send-email-eugen.hristev@microchip.com>
- <1554807715-2353-5-git-send-email-eugen.hristev@microchip.com>
- <08d1bf29-326b-7a8c-51c4-088d0effc4b6@xs4all.nl>
-In-Reply-To: <08d1bf29-326b-7a8c-51c4-088d0effc4b6@xs4all.nl>
-Accept-Language: ro-RO, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: VI1PR0601CA0021.eurprd06.prod.outlook.com
- (2603:10a6:800:1e::31) To DM5PR11MB1242.namprd11.prod.outlook.com
- (2603:10b6:3:14::8)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Eugen.Hristev@microchip.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tagtoolbar-keys: D20190415093920257
-x-originating-ip: [94.177.32.154]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c109793f-40a2-4090-7d30-08d6c16db8ae
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600140)(711020)(4605104)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:DM5PR11MB1386;
-x-ms-traffictypediagnostic: DM5PR11MB1386:
-x-microsoft-antispam-prvs: <DM5PR11MB1386E69A6D00461553010E16E82B0@DM5PR11MB1386.namprd11.prod.outlook.com>
-x-forefront-prvs: 000800954F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(39860400002)(346002)(376002)(366004)(396003)(199004)(189003)(11346002)(3846002)(6116002)(2906002)(31696002)(31686004)(6246003)(102836004)(6512007)(86362001)(53546011)(4326008)(97736004)(386003)(6506007)(106356001)(256004)(14444005)(486006)(26005)(53936002)(6436002)(105586002)(186003)(6486002)(229853002)(7736002)(305945005)(72206003)(81166006)(81156014)(52116002)(8676002)(99286004)(316002)(68736007)(66066001)(2616005)(478600001)(14454004)(25786009)(2501003)(446003)(2201001)(476003)(5660300002)(36756003)(71200400001)(71190400001)(54906003)(8936002)(110136005)(76176011);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1386;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: iqYW7KWAfw3p0ixAJAiPuhomgUwcQea42nHTysI3dnhtkfYpziQlqvie8oz5uIopZK74G5IVufIEneJAN9oyvLoxksAI1Ne+wMXy8rIlW2mohCG5rVeJMt/MnyfkQ2ob0cXcFEfv2YJ0kLb7N56NCFHPxbpRXNlis9Lt3BpW+Wxzt+gGYahyYnQKiE6WGMz0Ijly7KuEUG2WsbLHIHKUb4LYd5yh43bZ3UNKY7zTl6bPTiYb9vZTEZSIsh8GM5Kzco941cSpODwRu4IGMC2SHhMwjConyB/k/3uDlmO0QSZ3R6OzjkoGpM9WTHqBAPgDztzHl37aClV/eWGHLIg17L2eu/LNbNZ4E4aXkm66zsnDhrWHI9is8EYzVHwBJs+8Rb5KXLfgYTHGW9NtRgZwdZUwl2UPJ7Oehi4rWrNIav8=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AE959D65F0016F4DA6FBD9D1597E77DB@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 15 Apr 2019 02:59:48 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 4025EE0008;
+        Mon, 15 Apr 2019 06:59:43 +0000 (UTC)
+Date:   Mon, 15 Apr 2019 09:00:26 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        sakari.ailus@linux.intel.com, laurent.pinchart@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, dave.stevenson@raspberrypi.org
+Subject: Re: [RFC 2/5] media: adv748x: Post-pone IO10 write to power up
+Message-ID: <20190415070026.3yq5tbufajptkijf@uno.localdomain>
+References: <20190316154801.20460-1-jacopo+renesas@jmondi.org>
+ <20190316154801.20460-3-jacopo+renesas@jmondi.org>
+ <e72d1698-baed-6d80-3453-51d77cbf9d07@ideasonboard.com>
+ <20190412144551.wivieg3ue2inj5j3@uno.localdomain>
+ <5c53a56c-ea52-001b-0ea3-ce2f20483702@ideasonboard.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: c109793f-40a2-4090-7d30-08d6c16db8ae
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2019 06:43:51.7546
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1386
-X-OriginatorOrg: microchip.com
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vhxj74uterkuh4u6"
+Content-Disposition: inline
+In-Reply-To: <5c53a56c-ea52-001b-0ea3-ce2f20483702@ideasonboard.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-DQoNCk9uIDEwLjA0LjIwMTkgMTc6MjYsIEhhbnMgVmVya3VpbCB3cm90ZToNCg0KPiANCj4gT24g
-NC85LzE5IDE6MDcgUE0sIEV1Z2VuLkhyaXN0ZXZAbWljcm9jaGlwLmNvbSB3cm90ZToNCj4+IEZy
-b206IEV1Z2VuIEhyaXN0ZXYgPGV1Z2VuLmhyaXN0ZXZAbWljcm9jaGlwLmNvbT4NCj4+DQo+PiBU
-aGlzIGFkZHMgc3VwcG9ydCBmb3IgdGhlICdidXR0b24nIGNvbnRyb2wgRE9fV0hJVEVfQkFMQU5D
-RQ0KPj4gVGhpcyBmZWF0dXJlIHdpbGwgZW5hYmxlIHRoZSBJU0MgdG8gY29tcHV0ZSB0aGUgd2hp
-dGUgYmFsYW5jZSBjb2VmZmljaWVudHMNCj4+IGluIGEgb25lIHRpbWUgc2hvdCwgYXQgdGhlIHVz
-ZXIgZGlzY3JldGlvbi4NCj4+IFRoaXMgY2FuIGJlIHVzZWQgaWYgYSBjb2xvciBjaGFydC9ncmV5
-IGNoYXJ0IGlzIHByZXNlbnQgaW4gZnJvbnQgb2YgdGhlIGNhbWVyYS4NCj4+IFRoZSBJU0Mgd2ls
-bCBhZGp1c3QgdGhlIGNvZWZmaWNpZW50cyBhbmQgaGF2ZSB0aGVtIGZpeGVkIHVudGlsIG5leHQg
-YmFsYW5jZQ0KPj4gb3IgdW50aWwgc2Vuc29yIG1vZGUgaXMgY2hhbmdlZC4NCj4+IFRoaXMgaXMg
-cGFydGljdWxhcmx5IHVzZWZ1bCBmb3Igd2hpdGUgYmFsYW5jZSBhZGp1c3RtZW50IGluIGRpZmZl
-cmVudA0KPj4gbGlnaHRpbmcgc2NlbmFyaW9zLCBhbmQgdGhlbiB0YWtpbmcgcGhvdG9zIHRvIHNp
-bWlsYXIgc2NlbmVyeS4NCj4+IFRoZSBvbGQgYXV0byB3aGl0ZSBiYWxhbmNlIHN0YXlzIGluIHBs
-YWNlLCB3aGVyZSB0aGUgSVNDIHdpbGwgYWRqdXN0IGV2ZXJ5DQo+PiA0IGZyYW1lcyB0byB0aGUg
-Y3VycmVudCBzY2VuZXJ5IGxpZ2h0aW5nLCBpZiB0aGUgc2NlbmVyeSBpcyBhcHByb3hpbWF0ZWx5
-DQo+PiBncmV5IGluIGF2ZXJhZ2UsIG90aGVyd2lzZSBncmV5IHdvcmxkIGFsZ29yaXRobSBmYWls
-cy4NCj4+IE9uZSB0aW1lIHdoaXRlIGJhbGFuY2UgYWRqdXN0bWVudHMgbmVlZHMgc3RyZWFtaW5n
-IHRvIGJlIGVuYWJsZWQsIHN1Y2ggdGhhdA0KPj4gY2FwdHVyZSBpcyBlbmFibGVkIGFuZCB0aGUg
-aGlzdG9ncmFtIGhhcyBkYXRhIHRvIHdvcmsgd2l0aC4NCj4+IEhpc3RvZ3JhbSB3aXRob3V0IGNh
-cHR1cmUgZG9lcyBub3Qgd29yayBpbiB0aGlzIGhhcmR3YXJlIG1vZHVsZS4NCj4+DQo+PiBUbyBk
-aXNhYmxlIGF1dG8gd2hpdGUgYmFsYW5jZSBmZWF0dXJlIChmaXJzdCBzdGVwKQ0KPj4gdjRsMi1j
-dGwgLS1zZXQtY3RybD13aGl0ZV9iYWxhbmNlX2F1dG9tYXRpYz0wDQo+Pg0KPj4gVG8gc3RhcnQg
-dGhlIG9uZSB0aW1lIHdoaXRlIGJhbGFuY2UgcHJvY2VkdXJlOg0KPj4gdjRsMi1jdGwgLS1zZXQt
-Y3RybD1kb193aGl0ZV9iYWxhbmNlPTENCj4+DQo+PiBVc2VyIGNvbnRyb2xzIG5vdyBpbmNsdWRl
-IHRoZSBkb193aGl0ZV9iYWxhbmNlIGN0cmw6DQo+PiBVc2VyIENvbnRyb2xzDQo+Pg0KPj4gICAg
-ICAgICAgICAgICAgICAgICAgIGJyaWdodG5lc3MgMHgwMDk4MDkwMCAoaW50KSAgICA6IG1pbj0t
-MTAyNCBtYXg9MTAyMyBzdGVwPTEgZGVmYXVsdD0wIHZhbHVlPTAgZmxhZ3M9c2xpZGVyDQo+PiAg
-ICAgICAgICAgICAgICAgICAgICAgICBjb250cmFzdCAweDAwOTgwOTAxIChpbnQpICAgIDogbWlu
-PS0yMDQ4IG1heD0yMDQ3IHN0ZXA9MSBkZWZhdWx0PTI1NiB2YWx1ZT0yNTYgZmxhZ3M9c2xpZGVy
-DQo+PiAgICAgICAgICB3aGl0ZV9iYWxhbmNlX2F1dG9tYXRpYyAweDAwOTgwOTBjIChib29sKSAg
-IDogZGVmYXVsdD0xIHZhbHVlPTENCj4+ICAgICAgICAgICAgICAgICBkb193aGl0ZV9iYWxhbmNl
-IDB4MDA5ODA5MGQgKGJ1dHRvbikgOiBmbGFncz13cml0ZS1vbmx5LCBleGVjdXRlLW9uLXdyaXRl
-DQo+PiAgICAgICAgICAgICAgICAgICAgICAgICAgICBnYW1tYSAweDAwOTgwOTEwIChpbnQpICAg
-IDogbWluPTAgbWF4PTIgc3RlcD0xIGRlZmF1bHQ9MiB2YWx1ZT0yIGZsYWdzPXNsaWRlcg0KPj4N
-Cj4+IFNpZ25lZC1vZmYtYnk6IEV1Z2VuIEhyaXN0ZXYgPGV1Z2VuLmhyaXN0ZXZAbWljcm9jaGlw
-LmNvbT4NCj4+IC0tLQ0KPj4gICBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlz
-Yy5jIHwgNzQgKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0NCj4+ICAgMSBmaWxlIGNo
-YW5nZWQsIDY5IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pDQo+Pg0KPj4gZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwvYXRtZWwtaXNjLmMgYi9kcml2ZXJzL21l
-ZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5jDQo+PiBpbmRleCBmNmI4YjAwZS4uZTUxNjgw
-NSAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwvYXRtZWwtaXNj
-LmMNCj4+ICsrKyBiL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwvYXRtZWwtaXNjLmMNCj4+
-IEBAIC0xNjcsNiArMTY3LDkgQEAgc3RydWN0IGlzY19jdHJscyB7DQo+PiAgIAl1MzIgYnJpZ2h0
-bmVzczsNCj4+ICAgCXUzMiBjb250cmFzdDsNCj4+ICAgCXU4IGdhbW1hX2luZGV4Ow0KPj4gKyNk
-ZWZpbmUgSVNDX1dCX05PTkUJMA0KPj4gKyNkZWZpbmUgSVNDX1dCX0FVVE8JMQ0KPj4gKyNkZWZp
-bmUgSVNDX1dCX09ORVRJTUUJMg0KPj4gICAJdTggYXdiOw0KPj4gICANCj4+ICAgCS8qIG9uZSBm
-b3IgZWFjaCBjb21wb25lbnQgOiBHUiwgUiwgR0IsIEIgKi8NCj4+IEBAIC0yMTAsNiArMjEzLDcg
-QEAgc3RydWN0IGlzY19kZXZpY2Ugew0KPj4gICAJc3RydWN0IGZtdF9jb25maWcJdHJ5X2NvbmZp
-ZzsNCj4+ICAgDQo+PiAgIAlzdHJ1Y3QgaXNjX2N0cmxzCWN0cmxzOw0KPj4gKwlzdHJ1Y3QgdjRs
-Ml9jdHJsCSpkb193Yl9jdHJsOw0KPj4gICAJc3RydWN0IHdvcmtfc3RydWN0CWF3Yl93b3JrOw0K
-Pj4gICANCj4+ICAgCXN0cnVjdCBtdXRleAkJbG9jazsNCj4+IEBAIC04MDksNyArODEzLDcgQEAg
-c3RhdGljIHZvaWQgaXNjX3NldF9waXBlbGluZShzdHJ1Y3QgaXNjX2RldmljZSAqaXNjLCB1MzIg
-cGlwZWxpbmUpDQo+PiAgIA0KPj4gICAJYmF5X2NmZyA9IGlzYy0+Y29uZmlnLnNkX2Zvcm1hdC0+
-Y2ZhX2JheWNmZzsNCj4+ICAgDQo+PiAtCWlmICghY3RybHMtPmF3YikNCj4+ICsJaWYgKGN0cmxz
-LT5hd2IgPT0gSVNDX1dCX05PTkUpDQo+PiAgIAkJaXNjX3Jlc2V0X2F3Yl9jdHJscyhpc2MpOw0K
-Pj4gICANCj4+ICAgCXJlZ21hcF93cml0ZShyZWdtYXAsIElTQ19XQl9DRkcsIGJheV9jZmcpOw0K
-Pj4gQEAgLTE5MjgsNyArMTkzMiw3IEBAIHN0YXRpYyB2b2lkIGlzY19hd2Jfd29yayhzdHJ1Y3Qg
-d29ya19zdHJ1Y3QgKncpDQo+PiAgIAliYXlzZWwgPSBpc2MtPmNvbmZpZy5zZF9mb3JtYXQtPmNm
-YV9iYXljZmcgPDwgSVNDX0hJU19DRkdfQkFZU0VMX1NISUZUOw0KPj4gICANCj4+ICAgCS8qIGlm
-IG5vIG1vcmUgYXV0byB3aGl0ZSBiYWxhbmNlLCByZXNldCBjb250cm9scy4gKi8NCj4+IC0JaWYg
-KCFjdHJscy0+YXdiKQ0KPj4gKwlpZiAoY3RybHMtPmF3YiA9PSBJU0NfV0JfTk9ORSkNCj4+ICAg
-CQlpc2NfcmVzZXRfYXdiX2N0cmxzKGlzYyk7DQo+PiAgIA0KPj4gICAJcG1fcnVudGltZV9nZXRf
-c3luYyhpc2MtPmRldik7DQo+PiBAQCAtMTkzNyw3ICsxOTQxLDcgQEAgc3RhdGljIHZvaWQgaXNj
-X2F3Yl93b3JrKHN0cnVjdCB3b3JrX3N0cnVjdCAqdykNCj4+ICAgCSAqIG9ubHkgdXBkYXRlIGlm
-IHdlIGhhdmUgYWxsIHRoZSByZXF1aXJlZCBoaXN0b2dyYW1zIGFuZCBjb250cm9scw0KPj4gICAJ
-ICogaWYgYXdiIGhhcyBiZWVuIGRpc2FibGVkLCB3ZSBuZWVkIHRvIHJlc2V0IHJlZ2lzdGVycyBh
-cyB3ZWxsLg0KPj4gICAJICovDQo+PiAtCWlmIChoaXN0X2lkID09IElTQ19ISVNfQ0ZHX01PREVf
-R1IgfHwgIWN0cmxzLT5hd2IpIHsNCj4+ICsJaWYgKGhpc3RfaWQgPT0gSVNDX0hJU19DRkdfTU9E
-RV9HUiB8fCBjdHJscy0+YXdiID09IElTQ19XQl9OT05FKSB7DQo+PiAgIAkJLyoNCj4+ICAgCQkg
-KiBJdCBtYXkgaGFwcGVuIHRoYXQgRE1BIERvbmUgSVJRIHdpbGwgdHJpZ2dlciB3aGlsZSB3ZSBh
-cmUNCj4+ICAgCQkgKiB1cGRhdGluZyB3aGl0ZSBiYWxhbmNlIHJlZ2lzdGVycyBoZXJlLg0KPj4g
-QEAgLTE5NDcsNiArMTk1MSwxNiBAQCBzdGF0aWMgdm9pZCBpc2NfYXdiX3dvcmsoc3RydWN0IHdv
-cmtfc3RydWN0ICp3KQ0KPj4gICAJCXNwaW5fbG9ja19pcnFzYXZlKCZpc2MtPmF3Yl9sb2NrLCBm
-bGFncyk7DQo+PiAgIAkJaXNjX3VwZGF0ZV9hd2JfY3RybHMoaXNjKTsNCj4+ICAgCQlzcGluX3Vu
-bG9ja19pcnFyZXN0b3JlKCZpc2MtPmF3Yl9sb2NrLCBmbGFncyk7DQo+PiArDQo+PiArCQkvKg0K
-Pj4gKwkJICogaWYgd2UgYXJlIGRvaW5nIGp1c3QgdGhlIG9uZSB0aW1lIHdoaXRlIGJhbGFuY2Ug
-YWRqdXN0bWVudCwNCj4+ICsJCSAqIHdlIGFyZSBiYXNpY2FsbHkgZG9uZS4NCj4+ICsJCSAqLw0K
-Pj4gKwkJaWYgKGN0cmxzLT5hd2IgPT0gSVNDX1dCX09ORVRJTUUpIHsNCj4+ICsJCQl2NGwyX2lu
-Zm8oJmlzYy0+djRsMl9kZXYsDQo+PiArCQkJCSAgIkNvbXBsZXRlZCBvbmUgdGltZSB3aGl0ZS1i
-YWxhbmNlIGFkanVzdG1lbnQuXG4iKTsNCj4+ICsJCQljdHJscy0+YXdiID0gSVNDX1dCX05PTkU7
-DQo+PiArCQl9DQo+PiAgIAl9DQo+PiAgIAlyZWdtYXBfd3JpdGUocmVnbWFwLCBJU0NfSElTX0NG
-RywgaGlzdF9pZCB8IGJheXNlbCB8IElTQ19ISVNfQ0ZHX1JBUik7DQo+PiAgIAlpc2NfdXBkYXRl
-X3Byb2ZpbGUoaXNjKTsNCj4+IEBAIC0xOTc0LDEwICsxOTg4LDU2IEBAIHN0YXRpYyBpbnQgaXNj
-X3NfY3RybChzdHJ1Y3QgdjRsMl9jdHJsICpjdHJsKQ0KPj4gICAJCWN0cmxzLT5nYW1tYV9pbmRl
-eCA9IGN0cmwtPnZhbDsNCj4+ICAgCQlicmVhazsNCj4+ICAgCWNhc2UgVjRMMl9DSURfQVVUT19X
-SElURV9CQUxBTkNFOg0KPj4gLQkJY3RybHMtPmF3YiA9IGN0cmwtPnZhbDsNCj4+ICsJCWlmIChj
-dHJsLT52YWwgPT0gMSkgew0KPj4gKwkJCWN0cmxzLT5hd2IgPSBJU0NfV0JfQVVUTzsNCj4+ICsJ
-CQl2NGwyX2N0cmxfYWN0aXZhdGUoaXNjLT5kb193Yl9jdHJsLCBmYWxzZSk7DQo+PiArCQl9IGVs
-c2Ugew0KPj4gKwkJCWN0cmxzLT5hd2IgPSBJU0NfV0JfTk9ORTsNCj4+ICsJCQl2NGwyX2N0cmxf
-YWN0aXZhdGUoaXNjLT5kb193Yl9jdHJsLCB0cnVlKTsNCj4+ICsJCX0NCj4+ICsJCS8qIHdlIGRp
-ZCBub3QgY29uZmlndXJlIElTQyB5ZXQgKi8NCj4+ICsJCWlmICghaXNjLT5jb25maWcuc2RfZm9y
-bWF0KQ0KPj4gKwkJCWJyZWFrOw0KPj4gKw0KPj4gKwkJaWYgKCFJU0NfSVNfRk9STUFUX1JBVyhp
-c2MtPmNvbmZpZy5zZF9mb3JtYXQtPm1idXNfY29kZSkpIHsNCj4+ICsJCQl2NGwyX2VycigmaXNj
-LT52NGwyX2RldiwNCj4+ICsJCQkJICJXaGl0ZSBiYWxhbmNlIGFkanVzdG1lbnRzIGF2YWlsYWJs
-ZSBvbmx5IGlmIHNlbnNvciBpcyBpbiBSQVcgbW9kZS5cbiIpOw0KPiANCj4gVGhpcyBpc24ndCBh
-biBlcnJvciwgaW5zdGVhZCBpZiB0aGUgZm9ybWF0IGlzbid0IHJhdywgdGhlbiBkZWFjdGl2YXRl
-DQo+IHRoZSBjb250cm9sIChzZWUgdjRsMl9jdHJsX2FjdGl2YXRlKCkpLiBUaGF0IHdheSB0aGUg
-Y29udHJvbCBmcmFtZXdvcmsNCj4gd2lsbCBoYW5kbGUgdGhpcy4NCj4gDQo+PiArCQkJcmV0dXJu
-IDA7DQo+PiArCQl9DQo+PiArDQo+PiAgIAkJaWYgKGN0cmxzLT5oaXN0X3N0YXQgIT0gSElTVF9F
-TkFCTEVEKSB7DQo+PiAgIAkJCWlzY19yZXNldF9hd2JfY3RybHMoaXNjKTsNCj4+ICAgCQl9DQo+
-PiArDQo+PiArCQlpZiAoaXNjLT5jdHJscy5hd2IgJiYgdmIyX2lzX3N0cmVhbWluZygmaXNjLT52
-YjJfdmlkcSkgJiYNCj4+ICsJCSAgICBJU0NfSVNfRk9STUFUX1JBVyhpc2MtPmNvbmZpZy5zZF9m
-b3JtYXQtPm1idXNfY29kZSkpDQo+PiArCQkJaXNjX3NldF9oaXN0b2dyYW0oaXNjLCB0cnVlKTsN
-Cj4+ICsNCj4+ICsJCWJyZWFrOw0KPj4gKwljYXNlIFY0TDJfQ0lEX0RPX1dISVRFX0JBTEFOQ0U6
-DQo+PiArCQkvKiB3ZSBkaWQgbm90IGNvbmZpZ3VyZSBJU0MgeWV0ICovDQo+PiArCQlpZiAoIWlz
-Yy0+Y29uZmlnLnNkX2Zvcm1hdCkNCj4+ICsJCQlicmVhazsNCj4+ICsNCj4+ICsJCWlmIChjdHJs
-cy0+YXdiID09IElTQ19XQl9BVVRPKSB7DQo+PiArCQkJdjRsMl9lcnIoJmlzYy0+djRsMl9kZXYs
-DQo+PiArCQkJCSAiVG8gdXNlIG9uZSB0aW1lIHdoaXRlLWJhbGFuY2UgYWRqdXN0bWVudCwgZGlz
-YWJsZSBhdXRvIHdoaXRlIGJhbGFuY2UgZmlyc3QuXG4iKTsNCj4gDQo+IEknZCBkbyB0aGlzIGRp
-ZmZlcmVudGx5OiBpZiBhdXRvIHdoaXRlYmFsYW5jZSBpcyBhbHJlYWR5IG9uLCB0aGVuIGp1c3Qg
-ZG8NCj4gbm90aGluZyBmb3IgVjRMMl9DSURfRE9fV0hJVEVfQkFMQU5DRS4NCj4gDQo+PiArCQkJ
-cmV0dXJuIC1FQUdBSU47DQo+PiArCQl9DQo+PiArCQlpZiAoIXZiMl9pc19zdHJlYW1pbmcoJmlz
-Yy0+dmIyX3ZpZHEpKSB7DQo+PiArCQkJdjRsMl9lcnIoJmlzYy0+djRsMl9kZXYsDQo+PiArCQkJ
-CSAiT25lIHRpbWUgd2hpdGUtYmFsYW5jZSBhZGp1c3RtZW50IHJlcXVpcmVzIHN0cmVhbWluZyB0
-byBiZSBlbmFibGVkLlxuIik7DQo+IA0KPiBUaGlzIHRvbyBzaG91bGQgdXNlIHY0bDJfY3RybF9h
-Y3RpdmF0ZSgpOiBhY3RpdmF0ZSB0aGUgY29udHJvbCBpbiBzdGFydF9zdHJlYW1pbmcsDQo+IGRl
-YWN0aXZhdGUgaW4gc3RvcF9zdHJlYW1pbmcgKGFuZCB3aGVuIHRoZSBjb250cm9sIGlzIGNyZWF0
-ZWQpLg0KPiANCj4+ICsJCQlyZXR1cm4gLUVBR0FJTjsNCj4+ICsJCX0NCj4+ICsNCj4+ICsJCWlm
-ICghSVNDX0lTX0ZPUk1BVF9SQVcoaXNjLT5jb25maWcuc2RfZm9ybWF0LT5tYnVzX2NvZGUpKSB7
-DQo+PiArCQkJdjRsMl9lcnIoJmlzYy0+djRsMl9kZXYsDQo+PiArCQkJCSAiV2hpdGUgYmFsYW5j
-ZSBhZGp1c3RtZW50cyBhdmFpbGFibGUgb25seSBpZiBzZW5zb3IgaXMgaW4gUkFXIG1vZGUuXG4i
-KTsNCj4gDQo+IFNhbWUgbm90ZSBhcyBhYm92ZTogdXNlIHY0bDJfY3RybF9hY3RpdmF0ZSgpIGZv
-ciB0aGlzLg0KDQpIZWxsbyBIYW5zLA0KDQpJIHVzZWQgdjRsMl9jdHJsX2FjdGl2YXRlIHdpdGgg
-ZmFsc2UgcGFyYW1ldGVyLCBhbmQgdGhlIHY0bDItY3RsIC1sIA0KbG9va3MgbGlrZSB0aGlzOg0K
-DQoNCiAgICAgICAgICAgIGRvX3doaXRlX2JhbGFuY2UgKGJ1dHRvbikgOiBmbGFncz1pbmFjdGl2
-ZSwgd3JpdGUtb25seSwgDQpleGVjdXRlLW9uLXdyaXRlDQoNCkJ1dCB0aGUgaW5hY3RpdmUgZmxh
-ZyBsb29rcyB0byBiZSBvbmx5IGZvciBkaXNwbGF5IHB1cnBvc2VzLCBhcyBpc3N1aW5nIDoNCg0K
-djRsMi1jdGwgLS1zZXQtY3RybD1kb193aGl0ZV9iYWxhbmNlPTENCg0Kd2lsbCBjb250aW51ZSB0
-byBjYWxsIG15IGN0cmwgY2FsbGJhY2sgYXMgaWYgdGhlIGNvbnRyb2wgaXMgc3RpbGwgYWN0aXZl
-Lg0KDQpBbSBJIG1pc3Npbmcgc29tZXRoaW5nIGhlcmUgPyB2NGwyX3NfY3RybCBkb2VzIG5vdCBj
-aGVjayBmb3IgSU5BQ1RJVkUgDQpzdGF0dXMuDQoNClRoYW5rcw0KDQo+IA0KPj4gKwkJCXJldHVy
-biAtRUFHQUlOOw0KPj4gKwkJfQ0KPj4gKwkJY3RybHMtPmF3YiA9IElTQ19XQl9PTkVUSU1FOw0K
-Pj4gKwkJaXNjX3NldF9oaXN0b2dyYW0oaXNjLCB0cnVlKTsNCj4+ICsJCXY0bDJfaW5mbygmaXNj
-LT52NGwyX2RldiwgIk9uZSB0aW1lIHdoaXRlLWJhbGFuY2Ugc3RhcnRlZC5cbiIpOw0KPiANCj4g
-TWFrZSB0aGlzIHY0bDJfZGJnLg0KPiANCj4+ICAgCQlicmVhazsNCj4+ICAgCWRlZmF1bHQ6DQo+
-PiAgIAkJcmV0dXJuIC1FSU5WQUw7DQo+PiBAQCAtMjAwMCw3ICsyMDYwLDcgQEAgc3RhdGljIGlu
-dCBpc2NfY3RybF9pbml0KHN0cnVjdCBpc2NfZGV2aWNlICppc2MpDQo+PiAgIAljdHJscy0+aGlz
-dF9zdGF0ID0gSElTVF9JTklUOw0KPj4gICAJaXNjX3Jlc2V0X2F3Yl9jdHJscyhpc2MpOw0KPj4g
-ICANCj4+IC0JcmV0ID0gdjRsMl9jdHJsX2hhbmRsZXJfaW5pdChoZGwsIDQpOw0KPj4gKwlyZXQg
-PSB2NGwyX2N0cmxfaGFuZGxlcl9pbml0KGhkbCwgNSk7DQo+PiAgIAlpZiAocmV0IDwgMCkNCj4+
-ICAgCQlyZXR1cm4gcmV0Ow0KPj4gICANCj4+IEBAIC0yMDEyLDYgKzIwNzIsMTAgQEAgc3RhdGlj
-IGludCBpc2NfY3RybF9pbml0KHN0cnVjdCBpc2NfZGV2aWNlICppc2MpDQo+PiAgIAl2NGwyX2N0
-cmxfbmV3X3N0ZChoZGwsIG9wcywgVjRMMl9DSURfR0FNTUEsIDAsIEdBTU1BX01BWCwgMSwgMik7
-DQo+PiAgIAl2NGwyX2N0cmxfbmV3X3N0ZChoZGwsIG9wcywgVjRMMl9DSURfQVVUT19XSElURV9C
-QUxBTkNFLCAwLCAxLCAxLCAxKTsNCj4+ICAgDQo+PiArCS8qIGRvX3doaXRlX2JhbGFuY2UgaXMg
-YSBidXR0b24sIHNvIG1pbixtYXgsc3RlcCxkZWZhdWx0IGFyZSBpZ25vcmVkICovDQo+PiArCWlz
-Yy0+ZG9fd2JfY3RybCA9IHY0bDJfY3RybF9uZXdfc3RkKGhkbCwgb3BzLCBWNEwyX0NJRF9ET19X
-SElURV9CQUxBTkNFLA0KPj4gKwkJCQkJICAgIDAsIDAsIDAsIDApOw0KPj4gKw0KPj4gICAJdjRs
-Ml9jdHJsX2hhbmRsZXJfc2V0dXAoaGRsKTsNCj4+ICAgDQo+PiAgIAlyZXR1cm4gMDsNCj4+DQo+
-IA0KPiBSZWdhcmRzLA0KPiANCj4gCUhhbnMNCj4gDQo=
+
+--vhxj74uterkuh4u6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+Hi Kieran,
+
+On Fri, Apr 12, 2019 at 04:57:45PM +0100, Kieran Bingham wrote:
+> Hi Jacopo,
+>
+> On 12/04/2019 15:45, Jacopo Mondi wrote:
+> > Hi Kieran,
+> >
+> > On Fri, Apr 12, 2019 at 03:15:46PM +0100, Kieran Bingham wrote:
+> >> Hi Jacopo,
+> >>
+> >> On 16/03/2019 15:47, Jacopo Mondi wrote:
+> >>> Post-pone the write of the ADV748X_IO_10 register that controls the active
+> >>> routing between the CP and AFE cores to the 4-lanes CSI-2 TXA at TX
+> >>> power-up time.
+> >>
+> >> "by caching its configuration in the driver state."
+> >>
+> >>>
+> >>> While at there, use the 'csi4_in_sel' name, which matches the register
+> >>
+> >> 'While at it, use the...'
+> >>
+> >> Except I'm not sure csi4_in_sel is the right name for the cached values
+> >> as below...
+> >>
+> >>
+> >>> field description in the manual, in place of 'io_10' which is the full
+> >>> register name.
+> >>>
+> >>
+> >> This has a fixes tag, but doesn't state what the actual problem is?
+> >>
+> >
+> > As reported in the cover letter, please see:
+> > "[PATCH] media: adv748x: Don't disable CSI-2 on link_setup"
+>
+> Ah I see, I had missed that.
+>
+> The patch itself should still describe the problem if it's fixing
+> something. The cover letter will not be available in the git-log.
+>
+
+You're right, I'll expand the commit message.
+
+> Ok, so this patch supersedes "[PATCH] media: adv748x: Don't disable
+> CSI-2 on link_setup" ?
+>
+
+Yes
+
+> >> Can I assume that the problem is that the configuration here is being
+> >> written to the hardware before it is powered up or such?
+> >>
+> >> Or perhaps reading through the patch again, is it that the call to
+> >> link_setup can affect running streams?
+> >
+> > The issue I was trying to solve, even with the first patch is that
+> > going through a link disable (eg. at media graph reset time) wrote to
+> > the csi4_in_sel register a 0 value, when both TXA and TXB routing
+> > where disabled and this causes issues on some HDMI transmiters, for
+> > reason Ian and Hans tried to expand but about which I'm not yet sure
+> > about.
+>
+> Ok, I found that patch and read their comments. So disabling the CSI2
+> might trigger a hot-plug event to the transmitter which makes them think
+> they have been (physically) disconnected in some way, or triggers them
+> to re-read the EDID which will fail. But we don't really know what the
+> fault is yet.
+>
+
+Correct. Please note that I've seen this happening with one HDMI
+transmitter (a chromecast device), while if HDMI source is a laptop
+everything's fine...
+
+>
+> > The idea here is to cache the routing settings at link_setup time
+> > (upon activation or deactivation of a link) and apply them to hardware
+> > at tx power up time, which happens at s_stream(1).
+> >
+> > In this way, if streaming is started, we know at least one link is
+> > enabled and we can write to csi4_in_sel.
+>
+> Overall this seems reasonable, only making a change to io10 when either
+> of the stream states are changed.
+>
+
+Thanks, I'll re-send (maybe even out of this series if it gets stale).
+Could I have your tag on the next iteration?
+
+Thanks
+  j
+
+>
+> >>> Fixes: 9423ca350df7 ("media: adv748x: Implement TX link_setup callback")
+> >>> Signed-off-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+> >>> ---
+> >>>  drivers/media/i2c/adv748x/adv748x-core.c | 53 ++++++++++++++----------
+> >>>  drivers/media/i2c/adv748x/adv748x.h      |  2 +
+> >>>  2 files changed, 33 insertions(+), 22 deletions(-)
+> >>>
+> >>> diff --git a/drivers/media/i2c/adv748x/adv748x-core.c b/drivers/media/i2c/adv748x/adv748x-core.c
+> >>> index 0e5a75eb6d75..02135741b1a6 100644
+> >>> --- a/drivers/media/i2c/adv748x/adv748x-core.c
+> >>> +++ b/drivers/media/i2c/adv748x/adv748x-core.c
+> >>> @@ -305,23 +305,35 @@ static int adv748x_power_down_tx(struct adv748x_csi2 *tx)
+> >>>
+> >>>  int adv748x_tx_power(struct adv748x_csi2 *tx, bool on)
+> >>>  {
+> >>> -	int val;
+> >>> +	u8 io10_mask = ADV748X_IO_10_CSI1_EN | ADV748X_IO_10_CSI4_EN |
+> >>> +		       ADV748X_IO_10_CSI4_IN_SEL_AFE;
+> >>> +	struct adv748x_state *state = tx->state;
+> >>> +	int ret;
+> >>>
+> >>>  	if (!is_tx_enabled(tx))
+> >>>  		return 0;
+> >>>
+> >>> -	val = tx_read(tx, ADV748X_CSI_FS_AS_LS);
+> >>> -	if (val < 0)
+> >>> -		return val;
+> >>> +	ret = tx_read(tx, ADV748X_CSI_FS_AS_LS);
+> >>> +	if (ret < 0)
+> >>> +		return ret;
+> >>>
+> >>>  	/*
+> >>>  	 * This test against BIT(6) is not documented by the datasheet, but was
+> >>>  	 * specified in the downstream driver.
+> >>>  	 * Track with a WARN_ONCE to determine if it is ever set by HW.
+> >>>  	 */
+> >>> -	WARN_ONCE((on && val & ADV748X_CSI_FS_AS_LS_UNKNOWN),
+> >>> +	WARN_ONCE((on && ret & ADV748X_CSI_FS_AS_LS_UNKNOWN),
+> >>>  			"Enabling with unknown bit set");
+> >>>
+> >>> +	/* Configure TXA routing. */
+> >>
+> >> Should TXA routing be configured even on TXB power up? This function
+> >> handles both TX code paths. (Edit: possibly yes)
+> >>
+> >
+> > The comment is wrong, thanks for noticing.
+> >
+> >> Can the logic that determines state->csi4_in_sel value simply be moved
+> >> here (or to an independent adv748x_configure_routing() function)?
+> >>
+> >
+> > It has to be changed at link_setup time in rensponse to a media link
+> > activation or deactivation.
+> >
+> >> I think this patch means that changes to routing will now only take
+> >> effect when starting or stopping a stream, is that right? (If so - could
+> >> that go into the commit message please?)
+> >>
+> >
+> > Well...
+> >
+> >  Post-pone the write of the ADV748X_IO_10 register that controls the active
+> >  routing between the CP and AFE cores to the 4-lanes CSI-2 TXA at TX
+> >  power-up time.
+> >
+> > Doesn't it say that? Or what confused you is that s_stream->s_power(1)
+> > and I should mention streaming instead of power up?
+>
+> I think of "Power up" meaning at device probe time (or possibly some
+> runtime-pm event time). But yes, I think the distinction that it now
+> happens at stream_on/stream_off is important.
+>
+>
+>
+> >
+> >>
+> >>
+> >>
+> >>> +	if (on) {
+> >>> +		ret = io_clrset(state, ADV748X_IO_10, io10_mask,
+> >>> +				state->csi4_in_sel);
+> >>> +		if (ret)
+> >>> +			return ret;
+> >>> +	}
+> >>> +
+> >>> +
+> >>>  	return on ? adv748x_power_up_tx(tx) : adv748x_power_down_tx(tx);
+> >>>  }
+> >>>
+> >>> @@ -337,10 +349,7 @@ static int adv748x_link_setup(struct media_entity *entity,
+> >>>  	struct adv748x_state *state = v4l2_get_subdevdata(sd);
+> >>>  	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
+> >>>  	bool enable = flags & MEDIA_LNK_FL_ENABLED;
+> >>> -	u8 io10_mask = ADV748X_IO_10_CSI1_EN |
+> >>> -		       ADV748X_IO_10_CSI4_EN |
+> >>> -		       ADV748X_IO_10_CSI4_IN_SEL_AFE;
+> >>> -	u8 io10 = 0;
+> >>> +	u8 csi4_in_sel = 0;
+> >>>
+> >>>  	/* Refuse to enable multiple links to the same TX at the same time. */
+> >>>  	if (enable && tx->src)
+> >>> @@ -359,17 +368,19 @@ static int adv748x_link_setup(struct media_entity *entity,
+> >>>
+> >>>  	if (state->afe.tx) {
+> >>>  		/* AFE Requires TXA enabled, even when output to TXB */
+> >>> -		io10 |= ADV748X_IO_10_CSI4_EN;
+> >>> +		csi4_in_sel |= ADV748X_IO_10_CSI4_EN;
+> >>>  		if (is_txa(tx))
+> >>> -			io10 |= ADV748X_IO_10_CSI4_IN_SEL_AFE;
+> >>> +			csi4_in_sel |= ADV748X_IO_10_CSI4_IN_SEL_AFE;
+> >>
+> >> Hrm ... this is the one part that I think can't be determined without
+> >> caching some sort of value to state the routing.
+> >>
+> >
+> > Yes
+>
+> But the actual hardware shouldn't be updated if the stream is running
+> right? (I wonder if the media-controller would prevent that anyway).
+>
+>
+>
+> >
+> >>>  		else
+> >>> -			io10 |= ADV748X_IO_10_CSI1_EN;
+> >>> +			csi4_in_sel |= ADV748X_IO_10_CSI1_EN;
+> >>>  	}
+> >>>
+> >>>  	if (state->hdmi.tx)
+> >>> -		io10 |= ADV748X_IO_10_CSI4_EN;
+> >>> +		csi4_in_sel |= ADV748X_IO_10_CSI4_EN;
+> >>>
+> >>> -	return io_clrset(state, ADV748X_IO_10, io10_mask, io10);
+> >>> +	state->csi4_in_sel = csi4_in_sel;
+> >>> +
+> >>> +	return 0;
+> >>>  }
+> >>>
+> >>>  static const struct media_entity_operations adv748x_tx_media_ops = {
+> >>> @@ -485,7 +496,6 @@ static int adv748x_sw_reset(struct adv748x_state *state)
+> >>>  static int adv748x_reset(struct adv748x_state *state)
+> >>>  {
+> >>>  	int ret;
+> >>> -	u8 regval = 0;
+> >>>
+> >>>  	ret = adv748x_sw_reset(state);
+> >>>  	if (ret < 0)
+> >>> @@ -504,6 +514,12 @@ static int adv748x_reset(struct adv748x_state *state)
+> >>>  	if (ret)
+> >>>  		return ret;
+> >>>
+> >>
+> >> Should adv748x_reset() reset the state->csi4_in_sel cached value to 0
+> >> before setting it?
+> >
+> > I should better check when reset happens, and if it happens only when
+> > links have been disabled or not.
+> > If links are disabled, the variable gets zeroed by the link_setup
+> > callback. If reset happens with links active, we should not zero it
+> > otherwise we lose the configuration
+>
+>
+> Ah yes, I missed that the local variable is initialised to zero, and
+> this state variable is set to the result at the end of the call...
+>
+> It does mean that the function ordering will be important here.
+>
+> It becomes irrelevant if these conditionals move to the same point
+> anyway though.
+>
+>
+>
+> >
+> >>
+> >>
+> >>> +	/* Conditionally enable TXa and TXb. */
+> >>> +	if (is_tx_enabled(&state->txa))
+> >>> +		state->csi4_in_sel |= ADV748X_IO_10_CSI4_EN;
+> >>> +	if (is_tx_enabled(&state->txb))
+> >>> +		state->csi4_in_sel |= ADV748X_IO_10_CSI1_EN;
+> >>
+> >> This makes it looks like the naming "csi4_in_sel" is less appropriate,
+> >> as it covers both CSI4 and CSI1...
+> >>
+> >
+> > Blame the hw designers :)
+>
+> Always. ... of course they keep blaming us back :D
+>
+> >
+> >> Also, this is confusing two terms, between the 'enable' and the 'select'
+> >>
+> >> The _EN bits looks like they control the activation of the CSI
+> >> transmitter, where as the 'select' bits control the routing.
+> >>
+> >
+> > You are righ. csi4_in_sel should only control the 3 bits used for
+> > routing, while enabling and disabling of the TXes is controlled by
+> > other bits of the io_10 register.
+> > I'll look into changing the name back
+> >
+> >> As the is_tx_enabled($TX) state is constant, perhaps that bit could be
+> >> inferred later when the register is written, and doesn't need to be
+> >> cached here?
+> >
+> > I'll consider that, thanks
+>
+> I think it's only the routing choice that needs to be stored in the
+> state. That would minimise being stored 'globally', and the values could
+> be determined at the time of programming the register.
+>
+> >
+> > Thanks
+> >   j
+> >
+> >>
+> >>
+> >>> +
+> >>>  	/* Reset TXA and TXB */
+> >>>  	adv748x_tx_power(&state->txa, 1);
+> >>>  	adv748x_tx_power(&state->txa, 0);
+> >>> @@ -513,13 +529,6 @@ static int adv748x_reset(struct adv748x_state *state)
+> >>>  	/* Disable chip powerdown & Enable HDMI Rx block */
+> >>>  	io_write(state, ADV748X_IO_PD, ADV748X_IO_PD_RX_EN);
+> >>>
+> >>> -	/* Conditionally enable TXa and TXb. */
+> >>> -	if (is_tx_enabled(&state->txa))
+> >>> -		regval |= ADV748X_IO_10_CSI4_EN;
+> >>> -	if (is_tx_enabled(&state->txb))
+> >>> -		regval |= ADV748X_IO_10_CSI1_EN;
+> >>> -	io_write(state, ADV748X_IO_10, regval);
+> >>> -
+> >>>  	/* Use vid_std and v_freq as freerun resolution for CP */
+> >>>  	cp_clrset(state, ADV748X_CP_CLMP_POS, ADV748X_CP_CLMP_POS_DIS_AUTO,
+> >>>  					      ADV748X_CP_CLMP_POS_DIS_AUTO);
+> >>> diff --git a/drivers/media/i2c/adv748x/adv748x.h b/drivers/media/i2c/adv748x/adv748x.h
+> >>> index 4a5a6445604f..27c116d09284 100644
+> >>> --- a/drivers/media/i2c/adv748x/adv748x.h
+> >>> +++ b/drivers/media/i2c/adv748x/adv748x.h
+> >>> @@ -196,6 +196,8 @@ struct adv748x_state {
+> >>>  	struct adv748x_afe afe;
+> >>>  	struct adv748x_csi2 txa;
+> >>>  	struct adv748x_csi2 txb;
+> >>> +
+> >>> +	unsigned int csi4_in_sel;
+> >>>  };
+> >>>
+> >>>  #define adv748x_hdmi_to_state(h) container_of(h, struct adv748x_state, hdmi)
+> >>> --
+> >>> 2.21.0
+> >>>
+>
+> --
+> Regards
+> --
+> Kieran
+
+--vhxj74uterkuh4u6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAly0LAoACgkQcjQGjxah
+VjxyyQ/9EaGguO4To0cv5qbIMxC+EABjTzFQkmHk41ADbP4YhqvhSlvwTPYLkDg+
+vGq9l1ryEqI8M7+sYSnpKMUMMDh5q/yMf3GKTRrC0PreeSarrAaMoHvkCMMF93bD
+iKRdli4uABsYBFJTvqGJhTi8petjQmoNtp+a5pOUzVumXtFrJ1BZziRjg9S6y7eh
+pHTYHypn4Oo2erls1aieXiIouTqJ9bnqYZ3XRhvqALvy+7dOR7D0ZSg34z7Cv8wW
+76HKGJmDyPo3eDi46p4X8sgRp+bdUGprSNtwFWiHs3pQra6nCUtn6P15pFbCZnBZ
+QUn5mf8QnsfmT5iIJ/fDuGk/6ccRTPFfnEMUEoNRaHyjiC7UOIjUgHP4S0wv6Y6k
+DBm+V6tXjKj7RFhVNR1QSHO8eQnxQTSqN+j9PQmbUMBfI2LQ2HNheuHUybzoOyHI
+dG18U9JEedWnswu3DtgWIrZc27sxjZVpkAyI0+MYWdLFuC/3FeOxF0WvZrn5OIcA
+g2TkRcQkScxx6HnsGnjXdKf5kQmLlI0lOyGcWhO4ePCIW9Nde9AUZi0/XNXe0bjs
+oBP9Nskv4Jw8PKlVsUb60sTiRaAUeVWndXmp7SxBkD8QpJKS56PjT3KAy8XoP1K7
+UeaItGh0nmgFBKVoJ8fuV71nUXHxRHgVYvA9EIZiZJN/yvctYkk=
+=bQVH
+-----END PGP SIGNATURE-----
+
+--vhxj74uterkuh4u6--
