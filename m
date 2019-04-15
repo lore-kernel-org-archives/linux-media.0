@@ -2,104 +2,113 @@ Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD576C10F0E
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 09:42:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18FF0C10F0E
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 11:12:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B73572077C
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 09:42:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E620F20848
+	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 11:12:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726298AbfDOJmd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 05:42:33 -0400
-Received: from mga17.intel.com ([192.55.52.151]:45584 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725798AbfDOJmc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 05:42:32 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Apr 2019 02:42:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,353,1549958400"; 
-   d="scan'208";a="161649025"
-Received: from ipu5-build.bj.intel.com (HELO [10.238.232.181]) ([10.238.232.181])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Apr 2019 02:42:31 -0700
-Subject: Re: [PATCH v2] media:staging/intel-ipu3: parameter buffer refactoring
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Cao Bing Bu <bingbu.cao@intel.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>
-References: <1553252826-15830-1-git-send-email-bingbu.cao@intel.com>
- <CAAFQd5BJXBYZDc58M=-OMQs5=m2QpiYJ3dnpoNW_-hEz1J5_7g@mail.gmail.com>
-From:   Bingbu Cao <bingbu.cao@linux.intel.com>
-Message-ID: <cc5ebfff-4999-78a4-8bd7-8475dfa15ed6@linux.intel.com>
-Date:   Mon, 15 Apr 2019 17:49:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
-MIME-Version: 1.0
-In-Reply-To: <CAAFQd5BJXBYZDc58M=-OMQs5=m2QpiYJ3dnpoNW_-hEz1J5_7g@mail.gmail.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+        id S1727309AbfDOLMk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 07:12:40 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42172 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726298AbfDOLMj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Apr 2019 07:12:39 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 00DD0B05E;
+        Mon, 15 Apr 2019 11:12:37 +0000 (UTC)
+Message-ID: <1555326745.13626.10.camel@suse.com>
+Subject: Re: KASAN: use-after-free Read in dvb_usb_device_exit
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, syzkaller-bugs@googlegroups.com,
+        mchehab@kernel.org, corbet@lwn.net, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Mon, 15 Apr 2019 13:12:25 +0200
+In-Reply-To: <000000000000789d3d058653d9bb@google.com>
+References: <000000000000789d3d058653d9bb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Fr, 2019-04-12 at 04:46 -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1643974b200000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+> dashboard link: https://syzkaller.appspot.com/bug?extid=26ec41e9f788b3eba396
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12f5efa7200000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1395a0f3200000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
+> 
+> dvb-usb: schedule remote query interval to 150 msecs.
+> dw2102: su3000_power_ctrl: 0, initialized 1
+> dvb-usb: TeVii S421 PCI successfully initialized and connected.
+> usb 1-1: USB disconnect, device number 2
 
+Hi,
 
-On 4/15/19 5:28 PM, Tomasz Figa wrote:
-> Hi Bingbu,
-> 
-> On Fri, Mar 22, 2019 at 8:00 PM <bingbu.cao@intel.com> wrote:
->>
->> From: Bingbu Cao <bingbu.cao@intel.com>
->>
->> Current ImgU driver processes and releases the parameter buffer
->> immediately after queued from user. This does not align with other
->> image buffers which are grouped in sets and used for the same frame.
->> If user queues multiple parameter buffers continuously, only the last
->> one will take effect.
->> To make consistent buffers usage, this patch changes the parameter
->> buffer handling and group parameter buffer with other image buffers
->> for each frame.
->> Each time driver will queue one more group of buffers when previous
->> frame processed and buffers consumed by css.
->>
->> Signed-off-by: Tianshu Qiu <tian.shu.qiu@intel.com>
->> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
->> ---
->>  drivers/staging/media/ipu3/ipu3-css.c  |  5 ----
->>  drivers/staging/media/ipu3/ipu3-v4l2.c | 46 ++++++++++++----------------------
->>  drivers/staging/media/ipu3/ipu3.c      | 30 ++++++++++++++++++++++
->>  3 files changed, 46 insertions(+), 35 deletions(-)
->>
->> ---
->> changes since v1:
->> - add payload check for parameter buffer
->> - queue buffer only when previous buffer consumed
->> ---
-> 
-> Thanks for the patch. With the issues pointed by Sakari fixed (+/-
-> those for follow up patches):
-> 
-> Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-> 
-> By the way, has this been tested on an applicable platform with
-> applicable platform (e.g. Pixel Slate with Chrome OS) and found no
-> performance or functional regressions?
-Hi, Tomasz
+proposed fix. If nobody objects, I will submit it.
 
-Yes, same change was verified in our own integration process with full
-test, validation team did not find functional regressions.
-However, if you have some extra tests which can check the performance, I
-will add them into the test cases list.
+	Regards
+		Oliver
 
-> 
-> Best regards,
-> Tomasz
-> 
+From d6097d205ac61745334b79639d3b8b910ae66c71 Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Mon, 15 Apr 2019 13:06:01 +0200
+Subject: [PATCH] dvb: usb: fix use after free in dvb_usb_device_exit
+
+dvb_usb_device_exit() frees and uses teh device name in that order
+Fix by storing the name in a buffer before freeing it
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
+---
+ drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+index 99951e02a880..2e1670cc3903 100644
+--- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
++++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+@@ -288,13 +288,18 @@ void dvb_usb_device_exit(struct usb_interface *intf)
+ {
+ 	struct dvb_usb_device *d = usb_get_intfdata(intf);
+ 	const char *name = "generic DVB-USB module";
++	char identifier[40];
+ 
+ 	usb_set_intfdata(intf, NULL);
+ 	if (d != NULL && d->desc != NULL) {
+ 		name = d->desc->name;
++		memcpy(identifier, name, 39);
++		identifier[39] = NULL;
+ 		dvb_usb_exit(d);
++	} else {
++		memcpy(identifier, name, 39);
+ 	}
+-	info("%s successfully deinitialized and disconnected.", name);
++	info("%s successfully deinitialized and disconnected.", identifier);
+ 
+ }
+ EXPORT_SYMBOL(dvb_usb_device_exit);
+-- 
+2.16.4
+
