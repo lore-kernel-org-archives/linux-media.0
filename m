@@ -2,268 +2,111 @@ Return-Path: <SRS0=ut6f=SS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4502C10F13
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 16:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A059C10F13
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 18:38:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 81529206B6
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 16:00:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F0F7F20449
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 18:38:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r+P0FnuO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbfDPQAV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 12:00:21 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:33903 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfDPQAU (ORCPT
+        id S1730416AbfDPSi5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 14:38:57 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46951 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730367AbfDPSiy (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 12:00:20 -0400
-Received: by mail-ed1-f66.google.com with SMTP id a6so7117100edv.1
-        for <linux-media@vger.kernel.org>; Tue, 16 Apr 2019 09:00:19 -0700 (PDT)
+        Tue, 16 Apr 2019 14:38:54 -0400
+Received: by mail-wr1-f66.google.com with SMTP id t17so28433130wrw.13;
+        Tue, 16 Apr 2019 11:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=s5cszzwLAP8znv7Qr2CcXYQjPwLeD7Vj8g8GMf0w+tc=;
+        b=r+P0FnuOchgesYi7zaQs3nOnZnbqR7pxehruBlwqOV2kB3sdf1Zo1eZlkOgywXzH0p
+         P3Rcmu/Ei6MiT2wXbds9kZHdJILm2ebNk02u/+aRPB8SsAow0/ecI/0k8JNn1txzMULQ
+         c3DAdrdLy+gYFM8SrLaEgxp10ULtZBY4hzIZLO9/7V9Zfh68aQu7KHl62+Q7WNKMJcn4
+         SFeltzGeACTEpO0JDflyZS57CfVWvcjeOGSFIS6l3cS0gwa4QW4OqJIk6ZNTxtJ+rBTK
+         seAFM+ChOFs8jLOlPUUAT2wtCK+iYpMu+ACHTVtVwf1Ne3GrGBWvms1Vvtlt9F8Jl0fu
+         ipGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HlkeO+ulaIRwf2fAyd1A9+ODfG4jvFZCrIr/urQTKFM=;
-        b=t3qoBG8E6XheiMNGhy0UaJdReqc7jQg4NzxFj7DWzi48lwEPP2FbsT9L7uN4ibVSl3
-         77lotWQHD8VQwNRE2hNylyu2wGCb3RxLmFpZn3mlFtjxWNe95YLgKwYVDeCDUd61MFBB
-         oWWlOQquFrOQJ8g+PtHcjTOAjA1WczeU5is+SvXg877jyUno85ZjpgbiBKcKHflWkLzb
-         b8qaNRk78FRdiyq0/nIdOWiGhhvJLsn8wSRhm0KTpvdbHuzuwOnonAByMTHvM8xcuIv0
-         pgl7BHmyfMqJ4hQ/CaNyf6uVHR1KpFTmWAtUDJM+rneAWgTHfa0OP954HIDOT8MvGVVP
-         7Tog==
-X-Gm-Message-State: APjAAAUFPVqPJu/kZcnTNENilUS3Byo4P2L7mTnMfnSCQFJ/Pk4sRoKJ
-        D6Ql97nPm6xPIjxmPUg8Z0ChuA==
-X-Google-Smtp-Source: APXvYqwofFeny34ABsPV1GBt6Ai+mMbJ8appgVqNAnw2j03WVYpLO/ST2QrZCQdIvZs/IhHlMUh8+Q==
-X-Received: by 2002:a17:906:a4b:: with SMTP id x11mr44892604ejf.200.1555430418995;
-        Tue, 16 Apr 2019 09:00:18 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id k51sm3996615ede.40.2019.04.16.09.00.17
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Apr 2019 09:00:18 -0700 (PDT)
-Subject: Re: [PATCH] libv4lconvert: Add support for V4L2_PIX_FMT_NV12
-To:     Ricardo Ribalda Delgado <ricardo@ribalda.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Gregor Jasny <gjasny@googlemail.com>,
-        linux-media@vger.kernel.org, daniel@qtec.com
-References: <20190416120203.24028-1-ricardo@ribalda.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <60e2fc3b-d31f-fd3e-0e1e-2467236dd4e8@redhat.com>
-Date:   Tue, 16 Apr 2019 18:00:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=s5cszzwLAP8znv7Qr2CcXYQjPwLeD7Vj8g8GMf0w+tc=;
+        b=ST1oTMYcXt6JBoJMgtTIa5aUg/L+JxeFLnCdvXWigjF97aWDKxuQlCan1fwIZLGMmk
+         QQrEO6meixEilwIONWPI5WHnb9dOUFANU9pMF/fwDiRV0xytgcaGT+G3k+UQ7oFvP2Km
+         bljscGJspFWaLbfOI3By3Q5SezSGv0+hm1L3Z9CMGZQyJwenaJFHe4i6Is3oBGps4VpU
+         2K8g2yKLW9hgc8Q9GOO2fqu9bQYxe5DH3S0Ys2vsAVNeMLQ1/4sRMQX5Hfj8/DJQUXwT
+         AX+tlxFvAdRftvvUPXUIj9LyI9lWhf9vD+/aGZ8oZA72Ub+rfUE+sr4+cUMe5dTZlTs5
+         iiPg==
+X-Gm-Message-State: APjAAAWInEqddzq60irDKsXxrnM2Nd8GpSOJ26A6IEkGTZllWDW2rP4f
+        G3JJOtiyYrJb0WrAE8N54h3s+ndr
+X-Google-Smtp-Source: APXvYqxoqsjmjbgSWUA5N0LWJJAdKBY1AInFWDzqfl5eHaZt6YxgAMrEKzSNU4vTXFEq6ElNQBx62A==
+X-Received: by 2002:adf:ee0e:: with SMTP id y14mr47332073wrn.21.1555439932999;
+        Tue, 16 Apr 2019 11:38:52 -0700 (PDT)
+Received: from abel.fritz.box ([2a02:908:1252:fb60:fcfa:e34f:82c0:3f66])
+        by smtp.gmail.com with ESMTPSA id m13sm128823wmg.42.2019.04.16.11.38.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Apr 2019 11:38:52 -0700 (PDT)
+From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
+        <ckoenig.leichtzumerken@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+To:     sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
+Subject: [PATCH 07/12] drm/ttm: remove the backing store if no placement is given
+Date:   Tue, 16 Apr 2019 20:38:36 +0200
+Message-Id: <20190416183841.1577-8-christian.koenig@amd.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190416183841.1577-1-christian.koenig@amd.com>
+References: <20190416183841.1577-1-christian.koenig@amd.com>
 MIME-Version: 1.0
-In-Reply-To: <20190416120203.24028-1-ricardo@ribalda.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ricardo,
+Pipeline removal of the BOs backing store when no placement is given
+during validation.
 
-On 16-04-19 14:02, Ricardo Ribalda Delgado wrote:
-> NV12 is a two-plane version YUV 4:2:0, where the U and V components
-> are subsampled 2x2.
-> 
-> Signed-off-by: Ricardo Ribalda Delgado <ricardo@ribalda.com>
+Signed-off-by: Christian König <christian.koenig@amd.com>
+---
+ drivers/gpu/drm/ttm/ttm_bo.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-Your patch looks good to me, but it pushed the array-size of
-the supported_src_pixfmts array over 64 entries (right now it is
-exactly 64 entries big).
+diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+index 41d07faa2eae..8e7e7caee9d5 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo.c
++++ b/drivers/gpu/drm/ttm/ttm_bo.c
+@@ -1161,6 +1161,18 @@ int ttm_bo_validate(struct ttm_buffer_object *bo,
+ 	uint32_t new_flags;
+ 
+ 	reservation_object_assert_held(bo->resv);
++
++	/*
++	 * Remove the backing store if no placement is given.
++	 */
++	if (!placement->num_placement && !placement->num_busy_placement) {
++		ret = ttm_bo_pipeline_gutting(bo);
++		if (ret)
++			return ret;
++
++		return ttm_tt_create(bo, false);
++	}
++
+ 	/*
+ 	 * Check whether we need to move buffer.
+ 	 */
+-- 
+2.17.1
 
-Which breaks supported_src_formats as that is only 64 bits big:
-
-struct v4lconvert_data {
-         int fd;
-	...
-         int64_t supported_src_formats; /* bitfield */
-
-
-See e.g. :
-
-                 for (j = 0; j < ARRAY_SIZE(supported_src_pixfmts); j++)
-                         if (fmt.pixelformat == supported_src_pixfmts[j].fmt)
-                                 break;
-
-                 if (j < ARRAY_SIZE(supported_src_pixfmts)) {
-                         data->supported_src_formats |= 1ULL << j;
-
-I believe this is best fixed by a preparation patch which introduces the
-bit-ops from the kernel for this:
-
-include/asm-generic/bitops/non-atomic.h:
-
-static inline void __set_bit(int nr, volatile unsigned long *addr)
-{
-         unsigned long mask = BIT_MASK(nr);
-         unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-
-         *p  |= mask;
-}
-
-static inline void __clear_bit(int nr, volatile unsigned long *addr)
-{
-         unsigned long mask = BIT_MASK(nr);
-         unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-
-         *p &= ~mask;
-}
-
-static inline int test_bit(int nr, const volatile unsigned long *addr)
-{
-         return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-}
-
-So you will have to change your patch into a 2 patch patch-set with
-the first patch introducing  set_bit / clear_bit / test_bit helpers
-modelled after the kernel and changing the declaration of
-supported_src_formats to:
-
-	unsigned long supported_src_formats[128 / BITS_PER_LONG];
-
-Thanks & Regards,
-
-Hans
-
-
-
-
-
-
-
-
-
-> ---
-> The code has ben tested with qv4l2 and vivid.
-> v4lconvert_nv12_to_yuv420 has not been tested!!, any suggestions for
-> how to do it?
-> 
-> Thanks!
->   lib/libv4lconvert/libv4lconvert-priv.h |  6 +++
->   lib/libv4lconvert/libv4lconvert.c      | 19 +++++++++
->   lib/libv4lconvert/rgbyuv.c             | 56 ++++++++++++++++++++++++++
->   3 files changed, 81 insertions(+)
-> 
-> diff --git a/lib/libv4lconvert/libv4lconvert-priv.h b/lib/libv4lconvert/libv4lconvert-priv.h
-> index a8046ce2..c45b086e 100644
-> --- a/lib/libv4lconvert/libv4lconvert-priv.h
-> +++ b/lib/libv4lconvert/libv4lconvert-priv.h
-> @@ -285,6 +285,12 @@ void v4lconvert_hm12_to_yuv420(const unsigned char *src,
->   void v4lconvert_hsv_to_rgb24(const unsigned char *src, unsigned char *dest,
->   		int width, int height, int bgr, int Xin, unsigned char hsv_enc);
->   
-> +void v4lconvert_nv12_to_rgb24(const unsigned char *src, unsigned char *dest,
-> +		int width, int height, int bgr);
-> +
-> +void v4lconvert_nv12_to_yuv420(const unsigned char *src, unsigned char *dest,
-> +		int width, int height, int yvu);
-> +
->   void v4lconvert_rotate90(unsigned char *src, unsigned char *dest,
->   		struct v4l2_format *fmt);
->   
-> diff --git a/lib/libv4lconvert/libv4lconvert.c b/lib/libv4lconvert/libv4lconvert.c
-> index 78fb3432..2111d19f 100644
-> --- a/lib/libv4lconvert/libv4lconvert.c
-> +++ b/lib/libv4lconvert/libv4lconvert.c
-> @@ -116,6 +116,7 @@ static const struct v4lconvert_pixfmt supported_src_pixfmts[] = {
->   	{ V4L2_PIX_FMT_SN9C20X_I420,	12,	 6,	 3,	1 },
->   	{ V4L2_PIX_FMT_M420,		12,	 6,	 3,	1 },
->   	{ V4L2_PIX_FMT_HM12,		12,	 6,	 3,	1 },
-> +	{ V4L2_PIX_FMT_NV12,		12,	 6,	 3,	1 },
->   	{ V4L2_PIX_FMT_CPIA1,		 0,	 6,	 3,	1 },
->   	/* JPEG and variants */
->   	{ V4L2_PIX_FMT_MJPEG,		 0,	 7,	 7,	0 },
-> @@ -902,6 +903,24 @@ static int v4lconvert_convert_pixfmt(struct v4lconvert_data *data,
->   		}
->   		break;
->   
-> +		/* NV12 formats */
-> +	case V4L2_PIX_FMT_NV12:
-> +		switch (dest_pix_fmt) {
-> +		case V4L2_PIX_FMT_RGB24:
-> +			v4lconvert_nv12_to_rgb24(src, dest, width, height, 0);
-> +			break;
-> +		case V4L2_PIX_FMT_BGR24:
-> +			v4lconvert_nv12_to_rgb24(src, dest, width, height, 1);
-> +			break;
-> +		case V4L2_PIX_FMT_YUV420:
-> +			v4lconvert_nv12_to_yuv420(src, dest, width, height, 0);
-> +			break;
-> +		case V4L2_PIX_FMT_YVU420:
-> +			v4lconvert_nv12_to_yuv420(src, dest, width, height, 1);
-> +			break;
-> +		}
-> +		break;
-> +
->   		/* compressed bayer formats */
->   	case V4L2_PIX_FMT_SPCA561:
->   	case V4L2_PIX_FMT_SN9C10X:
-> diff --git a/lib/libv4lconvert/rgbyuv.c b/lib/libv4lconvert/rgbyuv.c
-> index 02c8cb5b..bfe3b15f 100644
-> --- a/lib/libv4lconvert/rgbyuv.c
-> +++ b/lib/libv4lconvert/rgbyuv.c
-> @@ -845,3 +845,59 @@ void v4lconvert_hsv_to_rgb24(const unsigned char *src, unsigned char *dest,
->   			src += bppIN;
->   		}
->   }
-> +
-> +void v4lconvert_nv12_to_rgb24(const unsigned char *src, unsigned char *dest,
-> +		int width, int height, int bgr)
-> +{
-> +	int i, j;
-> +	const unsigned char *ysrc = src;
-> +	const unsigned char *uvsrc = src + width * height;
-> +
-> +	for (i = 0; i < height; i++) {
-> +		for (j = 0; j < width; j ++) {
-> +			if (bgr) {
-> +				*dest++ = YUV2B(*ysrc, *uvsrc, *(uvsrc + 1));
-> +				*dest++ = YUV2G(*ysrc, *uvsrc, *(uvsrc + 1));
-> +				*dest++ = YUV2R(*ysrc, *uvsrc, *(uvsrc + 1));
-> +			} else {
-> +				*dest++ = YUV2R(*ysrc, *uvsrc, *(uvsrc + 1));
-> +				*dest++ = YUV2G(*ysrc, *uvsrc, *(uvsrc + 1));
-> +				*dest++ = YUV2B(*ysrc, *uvsrc, *(uvsrc + 1));
-> +			}
-> +			ysrc++;
-> +			if (j&1)
-> +				uvsrc += 2;
-> +		}
-> +
-> +		/* Rewind u and v for next line */
-> +		if (!(i&1))
-> +			uvsrc -= width;
-> +	}
-> +}
-> +
-> +void v4lconvert_nv12_to_yuv420(const unsigned char *src, unsigned char *dest,
-> +		int width, int height, int yvu)
-> +{
-> +	int i, j;
-> +	const unsigned char *ysrc = src;
-> +	const unsigned char *uvsrc = src + width * height;
-> +	unsigned char *ydst = dest;
-> +	unsigned char *udst, *vdst;
-> +
-> +	if (yvu) {
-> +		vdst = ydst + width * height;
-> +		udst = vdst + ((width / 2) * (height / 2));
-> +	} else {
-> +		udst = ydst + width * height;
-> +		vdst = udst + ((width / 2) * (height / 2));
-> +	}
-> +
-> +	for (i = 0; i < height; i++)
-> +		for (j = 0; i < width; j++) {
-> +			*ydst++ = *ysrc++;
-> +			if (((i % 2) == 0) && ((j % 2) == 0)) {
-> +				*udst++ = *uvsrc++;
-> +				*vdst++ = *uvsrc++;
-> +			}
-> +		}
-> +}
-> 
