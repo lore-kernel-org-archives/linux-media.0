@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D51E1C282DA
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:48:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 879D6C10F13
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:48:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A3DFB20821
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:48:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58E9520821
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:48:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RlNJmhvP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QU7zypPw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729467AbfDPLsD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 07:48:03 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36919 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728326AbfDPLsC (ORCPT
+        id S1729385AbfDPLrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 07:47:35 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39405 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729359AbfDPLre (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 07:48:02 -0400
-Received: by mail-pg1-f194.google.com with SMTP id e6so10228457pgc.4;
-        Tue, 16 Apr 2019 04:48:02 -0700 (PDT)
+        Tue, 16 Apr 2019 07:47:34 -0400
+Received: by mail-pf1-f196.google.com with SMTP id i17so10290240pfo.6;
+        Tue, 16 Apr 2019 04:47:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=F9hIq6OqtC1SVS2O3U7ZkPoLnNclA70DsapCWy7Q+lE=;
-        b=RlNJmhvPVJ3UxKO1l98lIMDXQUnrSkDMLarOhFladUUf3Fd2LaDOG6+U01Z2z+YiG6
-         sNYefT86LOIxnqlnmYbZyAcDruQYSCoLZfKjsI5qTBm4ikzvhilXTlPgz8vD0vD1p4zp
-         nUgSswnCr91BRUTNAb6b5zyVdAQ+av7Sc02gJFy++x4EdGU7Ba+eVKI/tSv7RiqlDMKy
-         SLqyqJH65OUoe0UtHrsN3h68RjIqxVfa3ycMpFEZs+Uo8eJrS3RcKM40edoCs9WmwoYn
-         teADUMkiqANnatUpNqvAlG9eQwygGnntxE0k2iDAigCWgYcsyUHjVSZh8cAxSeXbIBT7
-         1ERg==
+        bh=XQSNSZywn2J5tIibcMqEyCRYg0DoENdsUd09NDa1qxo=;
+        b=QU7zypPw1WcpMxPNCjSaR++TBxlQknuhjLVn/zaIQwjmOn12W8kM5SRWXeRSniSIiQ
+         nvWs4u3O61QXyzVFht2ICP1gsPHIZUm3ad2VsCN/SyjHCTFWoSHyQfjmYp9DdtyUBaTQ
+         BJawsaXLI03EMX2IZPCe6XRNLtbXberYyZ3mJqTPPZ5MQ3FMuPF6guMSfqSb+RWysVuC
+         8lRcAAUhKgdn9Aeu7inwA3G4VSt0hChEPqIvDaTLmxEMhuLSrCEonk3ftiCQIyMRXs6b
+         uGyLPtBauzLGcvw+vV+Kix8kWY2mAa4ADOTTyJKgDjXtcsidFwBHAyNWYPc19m8AkhM7
+         YFTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=F9hIq6OqtC1SVS2O3U7ZkPoLnNclA70DsapCWy7Q+lE=;
-        b=U/azVyU03cCV7FyH23v4DcY7Alkt01yfwKwrvEBfcewV95PIouBlqS5omAEtenRFMV
-         7CXrnuycyGSkxAre7oKB3cWxOg+/hxjbtPSMu1tejUILrDWFAFbXy4swQOK/pnsHMicm
-         pKqNq2+gHj5cClFBXUPps7GSUwAIRDySfPkIjTvnzeWcCPaw2Y5aziQYNdz5JcR9RplM
-         uHU7chpE6XsEYZ8epRQAax1hwlJbyJm1yOQRn13A1NW8jRQykeUgeSxQMfEmyMkV7gRk
-         xIL/h+kDZqwi40iwjyg9yy5B/fccO8FkIb3YqeRUF0vg5NVUJeioEUXMj2nLmeJiw3xU
-         I01Q==
-X-Gm-Message-State: APjAAAUiPQjyQvhhRI4SXtPB0VWsjT5st4OAsxlI4yKykMAVbA4Yz+eI
-        JSmwSo0rQEM0B85iazgrvS4=
-X-Google-Smtp-Source: APXvYqx2gh4QQGIyXcsK611dByHpjpx+tKjskfqa9rV5hBQis2QAQtHs+h2xQ6nYUrNHQ3rVd4NVTA==
-X-Received: by 2002:a63:f115:: with SMTP id f21mr70665089pgi.65.1555415282264;
-        Tue, 16 Apr 2019 04:48:02 -0700 (PDT)
+        bh=XQSNSZywn2J5tIibcMqEyCRYg0DoENdsUd09NDa1qxo=;
+        b=pIFjtiitxH835UJwvgwfLnfayZ1eJ3LYn52EWKgbB79fvjIuSS4WveA+4bHvou9flE
+         abokaCZM/VA05En1j3gFAb/P2l53Dwg5ZdJDnKG1mGPmjAjypaouraX+t88YwwRWE8Px
+         r4FuCM2sle9k/T9x6unKD1/1ic5sMImf0QBwXQq5c9m/QuoLU2E91tVfcJ2w4zSx1wZM
+         v9D1K0RzivHt412OpnS/l9sCaOd24aVPo95j5OUfnLDlVibpIy+g4sQzNaZ7WqwZ9uvj
+         BnYdrCdzXGsg15JHHVcb5JAtbWYb8oNaJcOiVzkOsd8xXBs7nbjY+M7lkjwDzWPVHUC/
+         bLHA==
+X-Gm-Message-State: APjAAAWDqaU0NkBRAH54sU2kOagb7YjuUnGUN/iqM4Ww+rgx3sWkfWT4
+        2OMYO/81juKib0ZIkr8kVK8=
+X-Google-Smtp-Source: APXvYqyMCj+Ghsusn8bhw1pE9GkbUM8F5CYPfXi5LJf73fYESAfpDuXDqO4AOj4QsBAxm3YNHO4Aug==
+X-Received: by 2002:a62:6086:: with SMTP id u128mr82559935pfb.148.1555415253653;
+        Tue, 16 Apr 2019 04:47:33 -0700 (PDT)
 Received: from jordon-HP-15-Notebook-PC.domain.name ([49.207.50.11])
-        by smtp.gmail.com with ESMTPSA id p6sm55942835pfd.122.2019.04.16.04.47.53
+        by smtp.gmail.com with ESMTPSA id p6sm55942835pfd.122.2019.04.16.04.47.24
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 16 Apr 2019 04:48:01 -0700 (PDT)
+        Tue, 16 Apr 2019 04:47:32 -0700 (PDT)
 From:   Souptick Joarder <jrdr.linux@gmail.com>
 To:     akpm@linux-foundation.org, willy@infradead.org, mhocko@suse.com,
         kirill.shutemov@linux.intel.com, vbabka@suse.cz, riel@surriel.com,
@@ -73,9 +73,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-rockchip@lists.infradead.org, xen-devel@lists.xen.org,
         iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
         Souptick Joarder <jrdr.linux@gmail.com>
-Subject: [REBASE PATCH v5 9/9] xen/privcmd-buf.c: Convert to use vm_map_pages_zero()
-Date:   Tue, 16 Apr 2019 17:19:50 +0530
-Message-Id: <acf678e81d554d01a9b590716ac0ccbdcdf71c25.1552921225.git.jrdr.linux@gmail.com>
+Subject: [REBASE PATCH v5 6/9] iommu/dma-iommu.c: Convert to use vm_map_pages()
+Date:   Tue, 16 Apr 2019 17:19:47 +0530
+Message-Id: <80c3d220fc6ada73a88ce43ca049afb55a889258.1552921225.git.jrdr.linux@gmail.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <cover.1552921225.git.jrdr.linux@gmail.com>
 References: <cover.1552921225.git.jrdr.linux@gmail.com>
@@ -86,39 +86,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Convert to use vm_map_pages_zero() to map range of kernel
+Convert to use vm_map_pages() to map range of kernel
 memory to user vma.
 
-This driver has ignored vm_pgoff. We could later "fix" these drivers
-to behave according to the normal vm_pgoff offsetting simply by
-removing the _zero suffix on the function name and if that causes
-regressions, it gives us an easy way to revert.
-
 Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 ---
- drivers/xen/privcmd-buf.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ drivers/iommu/dma-iommu.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/drivers/xen/privcmd-buf.c b/drivers/xen/privcmd-buf.c
-index de01a6d..d02dc43 100644
---- a/drivers/xen/privcmd-buf.c
-+++ b/drivers/xen/privcmd-buf.c
-@@ -166,12 +166,8 @@ static int privcmd_buf_mmap(struct file *file, struct vm_area_struct *vma)
- 	if (vma_priv->n_pages != count)
- 		ret = -ENOMEM;
- 	else
--		for (i = 0; i < vma_priv->n_pages; i++) {
--			ret = vm_insert_page(vma, vma->vm_start + i * PAGE_SIZE,
--					     vma_priv->pages[i]);
--			if (ret)
--				break;
--		}
-+		ret = vm_map_pages_zero(vma, vma_priv->pages,
-+						vma_priv->n_pages);
+diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+index d19f3d6..bacebff 100644
+--- a/drivers/iommu/dma-iommu.c
++++ b/drivers/iommu/dma-iommu.c
+@@ -620,17 +620,7 @@ struct page **iommu_dma_alloc(struct device *dev, size_t size, gfp_t gfp,
  
- 	if (ret)
- 		privcmd_buf_vmapriv_free(vma_priv);
+ int iommu_dma_mmap(struct page **pages, size_t size, struct vm_area_struct *vma)
+ {
+-	unsigned long uaddr = vma->vm_start;
+-	unsigned int i, count = PAGE_ALIGN(size) >> PAGE_SHIFT;
+-	int ret = -ENXIO;
+-
+-	for (i = vma->vm_pgoff; i < count && uaddr < vma->vm_end; i++) {
+-		ret = vm_insert_page(vma, uaddr, pages[i]);
+-		if (ret)
+-			break;
+-		uaddr += PAGE_SIZE;
+-	}
+-	return ret;
++	return vm_map_pages(vma, pages, PAGE_ALIGN(size) >> PAGE_SHIFT);
+ }
+ 
+ static dma_addr_t __iommu_dma_map(struct device *dev, phys_addr_t phys,
 -- 
 1.9.1
 
