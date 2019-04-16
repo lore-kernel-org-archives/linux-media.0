@@ -2,250 +2,97 @@ Return-Path: <SRS0=ut6f=SS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8A16C10F14
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 09:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08FBEC10F14
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 10:39:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B71BC2086A
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 09:32:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD43D2075B
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 10:39:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="S2+V0OQs";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="F4iiQH24"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729038AbfDPJaX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 05:30:23 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:48419 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728989AbfDPJaX (ORCPT
+        id S1728912AbfDPKiq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 06:38:46 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:44335 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726682AbfDPKiq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 05:30:23 -0400
-X-UUID: 35f746d3db8d467c9234b74a98a7a00f-20190416
-X-UUID: 35f746d3db8d467c9234b74a98a7a00f-20190416
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
-        (envelope-from <stu.hsieh@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 906640221; Tue, 16 Apr 2019 17:30:20 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 16 Apr 2019 17:30:19 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 16 Apr 2019 17:30:18 +0800
-From:   Stu Hsieh <stu.hsieh@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, CK Hu <ck.hu@mediatek.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stu Hsieh <stu.hsieh@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
-Subject: [PATCH v2 12/15] [media] mtk-mipicsi: add function to get the format
-Date:   Tue, 16 Apr 2019 17:30:12 +0800
-Message-ID: <1555407015-18130-13-git-send-email-stu.hsieh@mediatek.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1555407015-18130-1-git-send-email-stu.hsieh@mediatek.com>
-References: <1555407015-18130-1-git-send-email-stu.hsieh@mediatek.com>
+        Tue, 16 Apr 2019 06:38:46 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id BBA2C21C28;
+        Tue, 16 Apr 2019 06:38:44 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 16 Apr 2019 06:38:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=zN/ZIYi/aq5qbuo+6eh0bUkCq5/
+        s9b24BluyNPa+8YM=; b=S2+V0OQsJ4x6RUe1kv8M22NZjYQ3NAiBYop/5IXuLKF
+        5Sbdl1/QoreF/PJ0/Yi60Omooauu++Mbm1FnbAsopu6nvpFnbS5/aOj/MojvpNoA
+        zX9FB076o2KgXr/eyWmrGe2LHMz2SJ9Q1d3kmTlrPnFQ3hQyemU8fmD8A3vDF4dC
+        +DR+dX1LRatOkRi832RO1rqUq67bcc7M3Ojb13V0uh7zKY0SmNvSzYf+RZ8FYZ+v
+        fWeVAUy251vokdbcggUIF3hOKcMG2Xc0e4BbUZqICfliVNlzlLXTDFFfxUln0du8
+        60coOFy0SU0PZ6toSvgHEsJ/h+wtZ0lQehZIlLO/lww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=zN/ZIY
+        i/aq5qbuo+6eh0bUkCq5/s9b24BluyNPa+8YM=; b=F4iiQH24dOyz5yXPf/IlLT
+        6LHhRhgcULDLXVXIe9Imid1T1tufuFfCGTV3LoZyrT5FZXdwH8eqIsUWSCCHV0K5
+        rajV61BVWY/FtlAaqqTLQjqq352OVzPCBMgnu8H2sacK1IxEBOB60D1RJgeMVfbB
+        Bf5xhoZLE4BxHL6dq3Ei5iddsVkT1kxQPAfmDRlY5yg26HHqvhU/A+3eBw+11A1U
+        6zYfAa1Yio3S9nQRQ99cdXO/hmNRM8Niq0qZhdhps0vyXIwYieCVCIe+4E08NYC3
+        S/BLGNROxSvOrAMU+18XNmKxviDZELUVbxl5vyw7Sp5aPaRl7rfR5XI0nyLqjMJA
+        ==
+X-ME-Sender: <xms:s7C1XGxoscY4NefXiOLtCS5OjLJiHZ0JTaUtO2uOR6KoZ1plNTb-Mg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddrfedugdeftdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
+    ejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucev
+    lhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:s7C1XL9gd8Z75kmCEwBZ60mPnOF5qufR5M-Gz3_C0K0WmXgZ7MeQ0Q>
+    <xmx:s7C1XHoMNZP7XO3XDBLSW41u8997ilrS0nF4Jc9vztQrwEp-Z_4ZeA>
+    <xmx:s7C1XEkKRbOwZHarjZDbLonzf18u2HxvfO72cqF6ASLfJIlXR7FpIg>
+    <xmx:tLC1XN8x0T-bg5Satsr4Lvv2ZMCKRLEMKwVWntX0YDskFwjgM3Ir2A>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 144CFE4AD3;
+        Tue, 16 Apr 2019 06:38:42 -0400 (EDT)
+Date:   Tue, 16 Apr 2019 12:06:56 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Yang Xiao <92siuyang@gmail.com>
+Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@01.org,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org,
+        Kees Cook <keescook@chromium.org>, hans.verkuil@cisco.com,
+        Young Xiao <YangX92@hotmail.com>
+Subject: Re: [PATCH] USB: s2255 & stkwebcam: fix oops with malicious USB
+ descriptors
+Message-ID: <20190416100656.GG896@kroah.com>
+References: <1554958452-29794-1-git-send-email-92siuyang@gmail.com>
+ <201904112252.HfZVFACR%lkp@intel.com>
+ <CAKgHYH27TtpbUKJin+WyTRUvqgpTSBRWBTp6YhsUCpVTnKfNPA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKgHYH27TtpbUKJin+WyTRUvqgpTSBRWBTp6YhsUCpVTnKfNPA@mail.gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch add function to get the format
+On Fri, Apr 12, 2019 at 10:14:50AM +0800, Yang Xiao wrote:
+> Sorry for my mistake.
+> 
+> I have fixed the mistake. And the attachment is the changed patch.
 
-This function can get the subdev format and host format.
-Calculate the number of format which intersection of subdev and host.
+I can not apply attachments, please fix up and resend as documented.
 
-Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
----
- .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 148 ++++++++++++++++++
- 1 file changed, 148 insertions(+)
+thanks,
 
-diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-index 4027ed9c94f3..5e4028d0d5e1 100644
---- a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-+++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-@@ -163,6 +163,50 @@ struct mtk_mipicsi_dev {
- 	u32 bytesperline;
- };
- 
-+static const struct soc_mbus_lookup mtk_mipicsi_formats[] = {
-+{
-+	.code = MEDIA_BUS_FMT_YUYV8_2X8,
-+	.fmt = {
-+		.fourcc			= V4L2_PIX_FMT_YUYV,
-+		.name			= "YUYV",
-+		.bits_per_sample	= 8,
-+		.packing		= SOC_MBUS_PACKING_2X8_PADHI,
-+		.order			= SOC_MBUS_ORDER_LE,
-+		.layout			= SOC_MBUS_LAYOUT_PACKED,
-+	},
-+}, {
-+	.code = MEDIA_BUS_FMT_YVYU8_2X8,
-+	.fmt = {
-+		.fourcc			= V4L2_PIX_FMT_YVYU,
-+		.name			= "YVYU",
-+		.bits_per_sample	= 8,
-+		.packing		= SOC_MBUS_PACKING_2X8_PADHI,
-+		.order			= SOC_MBUS_ORDER_LE,
-+		.layout			= SOC_MBUS_LAYOUT_PACKED,
-+	},
-+}, {
-+	.code = MEDIA_BUS_FMT_UYVY8_2X8,
-+	.fmt = {
-+		.fourcc			= V4L2_PIX_FMT_UYVY,
-+		.name			= "UYVY",
-+		.bits_per_sample	= 8,
-+		.packing		= SOC_MBUS_PACKING_2X8_PADHI,
-+		.order			= SOC_MBUS_ORDER_LE,
-+		.layout			= SOC_MBUS_LAYOUT_PACKED,
-+	},
-+}, {
-+	.code = MEDIA_BUS_FMT_VYUY8_2X8,
-+	.fmt = {
-+		.fourcc			= V4L2_PIX_FMT_VYUY,
-+		.name			= "VYUY",
-+		.bits_per_sample	= 8,
-+		.packing		= SOC_MBUS_PACKING_2X8_PADHI,
-+		.order			= SOC_MBUS_ORDER_LE,
-+		.layout			= SOC_MBUS_LAYOUT_PACKED,
-+	},
-+},
-+};
-+
- #define MTK_MIPICSI_BUS_PARAM (V4L2_MBUS_MASTER |	\
- 		V4L2_MBUS_HSYNC_ACTIVE_HIGH |	\
- 		V4L2_MBUS_HSYNC_ACTIVE_LOW |	\
-@@ -207,6 +251,43 @@ static void mtk_mipicsi_ana_clk_enable(void __iomem *base, bool enable)
- 	}
- }
- 
-+static int mtk_mipicsi_try_bus_param(struct soc_camera_device *icd,
-+					    unsigned char buswidth)
-+{
-+	struct v4l2_subdev *sd = soc_camera_to_subdev(icd);
-+	struct soc_camera_host *ici = to_soc_camera_host(icd->parent);
-+	struct mtk_mipicsi_dev *mipicsi = ici->priv;
-+	struct v4l2_mbus_config cfg = {.type = V4L2_MBUS_CSI2_DPHY,};
-+	unsigned long common_flags = 0;
-+	int ret = 0;
-+
-+	ret = v4l2_subdev_call(sd, video, g_mbus_config, &cfg);
-+	if (ret == 0) {
-+		common_flags = soc_mbus_config_compatible(&cfg,
-+				MTK_MIPICSI_BUS_PARAM);
-+		if (common_flags == 0U) {
-+			dev_warn(icd->parent, "Flags incompatible: camera 0x%x\n",
-+				cfg.flags);
-+			return -EINVAL;
-+		}
-+	} else {
-+		if (ret != -ENOIOCTLCMD)
-+			return ret;
-+	}
-+
-+	if ((((u16)1U << (buswidth - 1U)) & mipicsi->width_flags) != 0U)
-+		return 0;
-+
-+	return -EINVAL;
-+}
-+
-+static bool mtk_mipicsi_packing_supported(const struct soc_mbus_pixelfmt *fmt)
-+{
-+	return	fmt->packing == SOC_MBUS_PACKING_NONE ||
-+		(fmt->bits_per_sample == 8U &&
-+		 fmt->packing == SOC_MBUS_PACKING_2X8_PADHI);
-+}
-+
- static int get_subdev_register(const struct soc_camera_device *icd,
- 	struct v4l2_dbg_register *reg)
- {
-@@ -330,6 +411,72 @@ static void mtk_mipicsi_remove_device(struct soc_camera_device *icd)
- 	(void)pm_runtime_put_sync(icd->parent);
- }
- 
-+static int mtk_mipicsi_get_formats(struct soc_camera_device *icd,
-+		unsigned int idx, struct soc_camera_format_xlate *xlate)
-+{
-+	struct v4l2_subdev *sd = soc_camera_to_subdev(icd);
-+	int formats = 0, ret, i;
-+	int n = ARRAY_SIZE(mtk_mipicsi_formats);
-+
-+	struct v4l2_subdev_mbus_code_enum mbus_code = {
-+		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
-+		.index = idx,
-+	};
-+	/* subdev format */
-+	const struct soc_mbus_pixelfmt *fmt;
-+
-+	ret = v4l2_subdev_call(sd, pad, enum_mbus_code, NULL, &mbus_code);
-+	if (ret < 0)
-+		/* No more formats */
-+		return 0;
-+
-+	/* get subdev support format */
-+	fmt = soc_mbus_get_fmtdesc(mbus_code.code);
-+	if (fmt == NULL) {
-+		dev_err(icd->parent, "Invalid format code #%u: %d",
-+			idx, mbus_code.code);
-+		return 0;
-+	}
-+
-+	/* This also checks support for the requested bits-per-sample */
-+	ret = mtk_mipicsi_try_bus_param(icd, fmt->bits_per_sample);
-+	if (ret < 0) {
-+		dev_err(icd->parent, "Fail to try the bus parameters.\n");
-+		return 0;
-+	}
-+
-+	switch (mbus_code.code) {
-+	case MEDIA_BUS_FMT_UYVY8_2X8:
-+	case MEDIA_BUS_FMT_VYUY8_2X8:
-+	case MEDIA_BUS_FMT_YUYV8_2X8:
-+	case MEDIA_BUS_FMT_YVYU8_2X8:
-+			dev_dbg(icd->parent, "Providing format %s using code %d\n",
-+				fmt->name, mbus_code.code);
-+		break;
-+	default:
-+		if (!mtk_mipicsi_packing_supported(fmt))
-+			return 0;
-+		if (xlate != NULL)
-+			dev_dbg(icd->parent,
-+				"Providing format %s in pass-through mode\n",
-+				fmt->name);
-+		break;
-+	}
-+
-+	/* get camera host and subdev format intersection */
-+	for (i = 0; i < n; ++i)
-+		if (mtk_mipicsi_formats[i].fmt.fourcc == fmt->fourcc) {
-+			++formats;
-+			if (xlate != NULL) {
-+				xlate->host_fmt = &mtk_mipicsi_formats[i].fmt;
-+				xlate->code = mbus_code.code;
-+				xlate++;
-+			}
-+		}
-+
-+	return formats;
-+}
-+
- static bool is_supported(const u32 pixformat)
- {
- 	switch (pixformat) {
-@@ -730,6 +877,7 @@ static struct soc_camera_host_ops mtk_soc_camera_host_ops = {
- 	.owner			= THIS_MODULE,
- 	.add			= mtk_mipicsi_add_device,
- 	.remove			= mtk_mipicsi_remove_device,
-+	.get_formats            = mtk_mipicsi_get_formats,
- 	.set_fmt		= mtk_mipicsi_set_fmt,
- 	.try_fmt		= mtk_mipicsi_try_fmt,
- 	.init_videobuf2	= mtk_mipicsi_init_videobuf2,
--- 
-2.18.0
-
+greg k-h
