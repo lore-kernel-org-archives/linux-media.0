@@ -2,133 +2,216 @@ Return-Path: <SRS0=ut6f=SS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA9DC10F13
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 08:54:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D5BC10F13
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 09:27:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75F7E20645
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 08:54:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58BC320651
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 09:27:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728218AbfDPIyF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 04:54:05 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:40426 "EHLO
+        id S1728897AbfDPJ15 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 05:27:57 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:11985 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726895AbfDPIyF (ORCPT
+        with ESMTP id S1728336AbfDPJ14 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 04:54:05 -0400
-X-UUID: 6c35619a52e24ebea9d26f45e15a1781-20190416
-X-UUID: 6c35619a52e24ebea9d26f45e15a1781-20190416
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <gtk_ruiwang@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1735331684; Tue, 16 Apr 2019 16:53:58 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31DR.mediatek.inc
- (172.27.6.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 16 Apr
- 2019 16:53:54 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 16 Apr 2019 16:53:54 +0800
-Message-ID: <1555404834.22504.9.camel@mhfsdcap03>
-Subject: Re: [PATCH,v1] media: mtk-vcodec: fix vp9 content playback error
- with show exist frame
-From:   gtk_ruiwang <gtk_ruiwang@mediatek.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        <maoguang.meng@mediatek.com>
-CC:     Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tue, 16 Apr 2019 05:27:56 -0400
+X-UUID: 14fbbf7b9d8341f09d122bf3c4fb67bf-20190416
+X-UUID: 14fbbf7b9d8341f09d122bf3c4fb67bf-20190416
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <stu.hsieh@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1866789934; Tue, 16 Apr 2019 17:27:48 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 16 Apr 2019 17:27:46 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 16 Apr 2019 17:27:46 +0800
+From:   Stu Hsieh <stu.hsieh@mediatek.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, CK Hu <ck.hu@mediatek.com>
+CC:     Mark Rutland <mark.rutland@arm.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
+        Stu Hsieh <stu.hsieh@mediatek.com>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <gtk_ruiwang@mediatek.com>
-Date:   Tue, 16 Apr 2019 16:53:54 +0800
-In-Reply-To: <1554106718-23107-1-git-send-email-maoguang.meng@mediatek.com>
-References: <1554106718-23107-1-git-send-email-maoguang.meng@mediatek.com>
-Content-Type: text/plain; charset="UTF-7"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>
+Subject: [PATCH v2 01/15] dt-bindings: media: Add binding for MT2712 MIPI-CSI2
+Date:   Tue, 16 Apr 2019 17:27:29 +0800
+Message-ID: <1555406863-18069-2-git-send-email-stu.hsieh@mediatek.com>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1555406863-18069-1-git-send-email-stu.hsieh@mediatek.com>
+References: <1555406863-18069-1-git-send-email-stu.hsieh@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain
 X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dear Hans, all,
+Add MIPI-CSI2 dt-binding for Mediatek MT2712 SoC
 
-Could you please help to review this patch?
+Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
+---
+ .../bindings/media/mediatek-mipicsi-camsv.txt | 53 ++++++++++++++++++
+ .../media/mediatek-mipicsi-common.txt         | 19 +++++++
+ .../bindings/media/mediatek-mipicsi.txt       | 54 +++++++++++++++++++
+ 3 files changed, 126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek-mipicsi-common.txt
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek-mipicsi.txt
 
-This is a fix about vp9 show+AF8-existing+AF8-frames.
-
-Sincerely thanks,
-BR
-
-On Mon, 2019-04-01 at 16:18 +-0800, maoguang.meng+AEA-mediatek.com wrote:
-+AD4 From: Maoguang Meng +ADw-maoguang.meng+AEA-mediatek.com+AD4
-+AD4 
-+AD4 Update referenced frame buffer's reference count when playing vp9
-+AD4 content which has show+AF8-existing+AF8-frame flag, and copy enough buffer
-+AD4 data to current shown frame.
-+AD4 
-+AD4 Signed-off-by: Maoguang Meng +ADw-maoguang.meng+AEA-mediatek.com+AD4
-+AD4 ---
-+AD4  .../media/platform/mtk-vcodec/vdec/vdec+AF8-vp9+AF8-if.c   +AHw   16 +-+-+-+-+-+-+----------
-+AD4  1 file changed, 7 insertions(+-), 9 deletions(-)
-+AD4 
-+AD4 diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec+AF8-vp9+AF8-if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec+AF8-vp9+AF8-if.c
-+AD4 index bc8349b..d950837 100644
-+AD4 --- a/drivers/media/platform/mtk-vcodec/vdec/vdec+AF8-vp9+AF8-if.c
-+AD4 +-+-+- b/drivers/media/platform/mtk-vcodec/vdec/vdec+AF8-vp9+AF8-if.c
-+AD4 +AEAAQA -481,15 +-481,15 +AEAAQA static void vp9+AF8-swap+AF8-frm+AF8-bufs(struct vdec+AF8-vp9+AF8-inst +ACo-inst)
-+AD4  		 +ACo-/
-+AD4  		if ((frm+AF8-to+AF8-show-+AD4-fb +ACEAPQ NULL) +ACYAJg
-+AD4  			(inst-+AD4-cur+AF8-fb-+AD4-base+AF8-y.size +AD4APQ
-+AD4 -			frm+AF8-to+AF8-show-+AD4-fb-+AD4-base+AF8-y.size)) +AHs
-+AD4 +-			frm+AF8-to+AF8-show-+AD4-fb-+AD4-base+AF8-y.size) +ACYAJg
-+AD4 +-			(inst-+AD4-cur+AF8-fb-+AD4-base+AF8-c.size +AD4APQ
-+AD4 +-			frm+AF8-to+AF8-show-+AD4-fb-+AD4-base+AF8-c.size)) +AHs
-+AD4  			memcpy((void +ACo)inst-+AD4-cur+AF8-fb-+AD4-base+AF8-y.va,
-+AD4  				(void +ACo)frm+AF8-to+AF8-show-+AD4-fb-+AD4-base+AF8-y.va,
-+AD4 -				vsi-+AD4-buf+AF8-w +ACo
-+AD4 -				vsi-+AD4-buf+AF8-h)+ADs
-+AD4 +-				frm+AF8-to+AF8-show-+AD4-fb-+AD4-base+AF8-y.size)+ADs
-+AD4  			memcpy((void +ACo)inst-+AD4-cur+AF8-fb-+AD4-base+AF8-c.va,
-+AD4  				(void +ACo)frm+AF8-to+AF8-show-+AD4-fb-+AD4-base+AF8-c.va,
-+AD4 -				vsi-+AD4-buf+AF8-w +ACo
-+AD4 -				vsi-+AD4-buf+AF8-h / 2)+ADs
-+AD4 +-				frm+AF8-to+AF8-show-+AD4-fb-+AD4-base+AF8-c.size)+ADs
-+AD4  		+AH0 else +AHs
-+AD4  			/+ACo After resolution change case, current CAPTURE buffer
-+AD4  			 +ACo may have less buffer size than frm+AF8-to+AF8-show buffer
-+AD4 +AEAAQA -895,7 +-895,7 +AEAAQA static int vdec+AF8-vp9+AF8-decode(unsigned long h+AF8-vdec, struct mtk+AF8-vcodec+AF8-mem +ACo-bs,
-+AD4  
-+AD4  		if (vsi-+AD4-resolution+AF8-changed) +AHs
-+AD4  			if (+ACE-vp9+AF8-alloc+AF8-work+AF8-buf(inst)) +AHs
-+AD4 -				ret +AD0 -EINVAL+ADs
-+AD4 +-				ret +AD0 -EIO+ADs
-+AD4  				goto DECODE+AF8-ERROR+ADs
-+AD4  			+AH0
-+AD4  		+AH0
-+AD4 +AEAAQA -924,14 +-924,12 +AEAAQA static int vdec+AF8-vp9+AF8-decode(unsigned long h+AF8-vdec, struct mtk+AF8-vcodec+AF8-mem +ACo-bs,
-+AD4  
-+AD4  		if (vsi-+AD4-show+AF8-existing+AF8-frame +ACYAJg (vsi-+AD4-frm+AF8-to+AF8-show+AF8-idx +ADw
-+AD4  					VP9+AF8-MAX+AF8-FRM+AF8-BUF+AF8-NUM)) +AHs
-+AD4 -			mtk+AF8-vcodec+AF8-err(inst,
-+AD4 +-			mtk+AF8-vcodec+AF8-debug(inst,
-+AD4  				+ACI-Skip Decode drv-+AD4-new+AF8-fb+AF8-idx+AD0AJQ-d, drv-+AD4-frm+AF8-to+AF8-show+AF8-idx+AD0AJQ-d+ACI,
-+AD4  				vsi-+AD4-new+AF8-fb+AF8-idx, vsi-+AD4-frm+AF8-to+AF8-show+AF8-idx)+ADs
-+AD4  
-+AD4  			vp9+AF8-ref+AF8-cnt+AF8-fb(inst, +ACY-vsi-+AD4-new+AF8-fb+AF8-idx,
-+AD4  					vsi-+AD4-frm+AF8-to+AF8-show+AF8-idx)+ADs
-+AD4 -			ret +AD0 -EINVAL+ADs
-+AD4 -			goto DECODE+AF8-ERROR+ADs
-+AD4  		+AH0
-+AD4  
-+AD4  		/+ACo VPU assign the buffer pointer in its address space,
-
+diff --git a/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt b/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
+new file mode 100644
+index 000000000000..5f34974f12ac
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
+@@ -0,0 +1,53 @@
++* Mediatek MIPI-CSI2 receiver camsv
++
++Mediatek MIPI-CSI2 receiver camsv transfer data to DRAM in Mediatek SoCs
++
++Required properties:
++- reg : physical base address of the mipicsi receiver registers and length of
++  memory mapped region.
++- clocks: device clocks, see
++  Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
++- interrupts : interrupt number to the interrupt controller.
++
++Example:
++	seninf1_mux_camsv0: seninf_mux_camsv@15002100 {
++		reg = <0 0x15002120 0 0x40>,
++		      <0 0x15004000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV_EN>;
++		interrupts = <GIC_SPI 222 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf2_mux_camsv1: seninf_mux_camsv@15002500 {
++		reg = <0 0x15002520 0 0x40>,
++		      <0 0x15005000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV_EN>;
++		interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf3_mux_camsv2: seninf_mux_camsv@15002900 {
++		reg = <0 0x15002920 0 0x40>,
++		      <0 0x15006000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV1_EN>;
++		interrupts = <GIC_SPI 268 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf4_mux_camsv3: seninf_mux_camsv@15002D00 {
++		reg = <0 0x15002D20 0 0x40>,
++		      <0 0x15007000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV1_EN>;
++		interrupts = <GIC_SPI 269 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf5_mux_camsv4: seninf_mux_camsv@15003100 {
++		reg = <0 0x15003120 0 0x40>,
++		      <0 0x15008000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV2_EN>;
++		interrupts = <GIC_SPI 270 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf6_mux_camsv5: seninf_mux_camsv@15003500 {
++		reg = <0 0x15003520 0 0x40>,
++		      <0 0x15009000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV2_EN>;
++		interrupts = <GIC_SPI 271 IRQ_TYPE_LEVEL_LOW>;
++	};
+diff --git a/Documentation/devicetree/bindings/media/mediatek-mipicsi-common.txt b/Documentation/devicetree/bindings/media/mediatek-mipicsi-common.txt
+new file mode 100644
+index 000000000000..a67c744b75f0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek-mipicsi-common.txt
+@@ -0,0 +1,19 @@
++* Mediatek MIPI-CSI2 receiver common
++
++Mediatek MIPI-CSI2 receiver is the MIPI Signal capture hardware present in Mediatek SoCs
++
++Required properties:
++- compatible: should be "mediatek,mt2712-mipicsi-common"
++- reg : physical base address of the mipicsi receiver registers and length of
++  memory mapped region.
++- clocks: device clocks, see
++  Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
++
++
++Example:
++	mipicsi: mipicsi@15002000 {
++		compatible = "mediatek,mt2712-mipicsi-common", "syscon";
++		reg = <0 0x15002000 0 0x10>;
++		clocks = <&imgsys CLK_IMG_SENINF_CAM_EN>,
++			 <&imgsys CLK_IMG_SENINF_SCAM_EN>;
++	};
+diff --git a/Documentation/devicetree/bindings/media/mediatek-mipicsi.txt b/Documentation/devicetree/bindings/media/mediatek-mipicsi.txt
+new file mode 100644
+index 000000000000..24741ed62b25
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek-mipicsi.txt
+@@ -0,0 +1,54 @@
++* Mediatek MIPI-CSI2 receiver
++
++Mediatek MIPI-CSI2 receiver is the MIPI Signal capture hardware present in Mediatek SoCs
++
++Required properties:
++- compatible: should be "mediatek,mt2712-mipicsi"
++- reg : physical base address of the mipicsi receiver registers and length of
++  memory mapped region.
++- power-domains: a phandle to the power domain, see
++  Documentation/devicetree/bindings/power/power_domain.txt for details.
++- mediatek,larb: must contain the local arbiters in the current Socs, see
++  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
++  for details.
++- iommus: should point to the respective IOMMU block with master port as
++  argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
++  for details.
++- mediatek,seninf_mux_camsv: seninf_mux_camsv the data go through of the mipicsi port
++- mediatek,mipicsiid: the id of the mipicsi port
++- mediatek,mipicsi: the common component of the two mipicsi port
++
++Example:
++	mipicsi0: mipicsi@10217000 {
++		compatible = "mediatek,mt2712-mipicsi";
++		mediatek,mipicsi = <&mipicsi>;
++		iommus = <&iommu0 M4U_PORT_CAM_DMA0>,
++			 <&iommu0 M4U_PORT_CAM_DMA1>;
++		mediatek,larb = <&larb2>;
++		power-domains = <&scpsys MT2712_POWER_DOMAIN_ISP>;
++
++		mediatek,seninf_mux_camsv = <&seninf1_mux_camsv0
++					     &seninf2_mux_camsv1
++					     &seninf3_mux_camsv2
++					     &seninf4_mux_camsv3>;
++		reg = <0 0x10217000 0 0x60>,
++		      <0 0x15002100 0 0x4>,
++		      <0 0x15002300 0 0x100>;
++		mediatek,mipicsiid = <0>;
++		status="disabled";
++	};
++
++	mipicsi1: mipicsi@10218000 {
++		compatible = "mediatek,mt2712-mipicsi";
++		mediatek,mipicsi = <&mipicsi>;
++		iommus = <&iommu0 M4U_PORT_CAM_DMA2>;
++		mediatek,larb = <&larb2>;
++		power-domains = <&scpsys MT2712_POWER_DOMAIN_ISP>;
++		mediatek,seninf_mux_camsv = <&seninf5_mux_camsv4
++					     &seninf6_mux_camsv5>;
++		reg = <0 0x10218000 0 0x60>,
++		      <0 0x15002500 0 0x4>,
++		      <0 0x15002700 0 0x100>;
++		mediatek,mipicsiid = <1>;
++		status="disabled";
++	};
+\ No newline at end of file
+-- 
+2.18.0
 
