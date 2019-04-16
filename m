@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18370C282DA
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 062DCC282DA
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:47:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D685820870
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:47:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C880F20880
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:47:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXwEOG+W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+5l6dnj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729433AbfDPLrp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 07:47:45 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44661 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729359AbfDPLro (ORCPT
+        id S1729474AbfDPLry (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 07:47:54 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:43278 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729467AbfDPLrx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 07:47:44 -0400
-Received: by mail-pf1-f193.google.com with SMTP id y13so10270909pfm.11;
-        Tue, 16 Apr 2019 04:47:43 -0700 (PDT)
+        Tue, 16 Apr 2019 07:47:53 -0400
+Received: by mail-pl1-f194.google.com with SMTP id n8so10208133plp.10;
+        Tue, 16 Apr 2019 04:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :in-reply-to:references;
-        bh=36ygGGspzW8ypHYiojY4a19UR4qM+LFcK/AqwiiUnW8=;
-        b=LXwEOG+W0ZQnOV2lka03GCK9IgBNrr2lBHro8hNifiyxcZ1ikGgvj2ATkkyJCssND8
-         uIPVeiMq3yAZqI2LRlD5+9ATQBkpSshzqQSOoBXRtlcWTYQLKVuuH4kaV4JTlXNkR+jC
-         wC5P4kfnmC7ntOMn64m/bYNLTdyS4iMoIxEyoe9RYklbyAWpXNsUv/czOEu/u4O+CNOJ
-         r+CoNYaio4w+bxXWIV46A5NDf57dX4MiBRpyE+Fjkp3V8JI4WHUYiIE1A4jZPA3tEpme
-         8QQmC2+oUNqGbHI4n/hFz912t+1dDesjfB9zqyhAjR4tOEGZue5u9dsipu1pezIzmEMU
-         KkhA==
+        bh=n/NDS47nz9uuNytg4LeJJ+li959uQqsTwzm1mhrxiWA=;
+        b=G+5l6dnjc7/uWHI49g5xNQ2VmQniZgrpDhtRlmcY+E3Z7ocVubcskS2MrTMRU9ZU1N
+         L0ULzCh7L5KPDeVBbv3aI560DkAoMSHXT8dUm7C87hk2rUJYuZjB2G4yctoncZH8pt8T
+         pH8fBdXKGlqeyQtXK33z7+r6JJdj8JD8M2WURaPvOg1JOtMj1vqV37D3kv/8KcRwNk9w
+         o1d45pjV17t0tKE7c3wu7swo2BTkJ5qq3mPBKXgANsJyDy8TaZkptEOEnjJW3sUylrgB
+         WWAIvs6OK4hoNr5DfAjomWAvTR66t3MVa9o0AY56ghuFufEyHnfQLWCwrELKiWG9EtlG
+         4vhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:in-reply-to:references;
-        bh=36ygGGspzW8ypHYiojY4a19UR4qM+LFcK/AqwiiUnW8=;
-        b=XnVkxYu6sgl5mS3aYFc4OqEo/Mpq8Zd1n1dv9hn+0jAMsMaNK2vXX8AnlXwz7SgGvn
-         MzipsdkjRUhESWWVoHnUrY5ggmtlyuY+jSTyesthdA5hBnMMqnBcOimD7qkqBNcjz4wj
-         MGKOqy77fxU1jwJEMC1DBOiL1HFbiFG3ugBsNAqddmx+0A5sJ8/l5GHMD4HveDahp92e
-         0u7mDYbuUTm5PnzZQ6ntmhXZW39gilJh/j5VGWW/WxnD6DKWRoUVD6tdWQkdGWIZGknl
-         PFZ5MIb5kiWhBdlkg3Y8iPJvIvCUvXLeXggm4PJl+uzm0g0MveM4Dp2i8NBUMavNG+ab
-         iGeg==
-X-Gm-Message-State: APjAAAUI8Cp6ul8s2eTF6Wr8ktxr4jlx5CkEoNot5WthhzqM/VbfFbNO
-        LdQwBAiU+xFxzPmVisU/IGs=
-X-Google-Smtp-Source: APXvYqye06grMbHjmTb1XwCWWLzi7D/Hr7gyojBySrV/ZCmbi+kTA1CovWh+pYieLteg38xYkWediQ==
-X-Received: by 2002:a65:5089:: with SMTP id r9mr75893740pgp.14.1555415263156;
-        Tue, 16 Apr 2019 04:47:43 -0700 (PDT)
+        bh=n/NDS47nz9uuNytg4LeJJ+li959uQqsTwzm1mhrxiWA=;
+        b=TA4xj7+/W1UxoCJ0/1QQfAL4ghAF/cQe63RNZwG+3hCEkxUsL8BJTR95R5N0LsVQNx
+         LOSqBeCy74ygeangok9PLNZEDs6bT7Sv1sVnnUHH68EJH+aWb38SmvpqgDKIxgojxcN6
+         BH7NvepfQw/aLjukhdWPEq8sw/Z+v/qhi9EY8dQVeHfwx7uUXgirumkYFlBdREyh0WGt
+         wgBoIQn5IzwzCotWJbnl7Gwr4SdEgX1BRBMoSK1BB/LtaMBCLqQip3wjw8MjYJcZmAPk
+         7nRpuGjPekIQ+KA12gY03R06/sjpmsENGNWPM9l3snABqv/vIoWRDSQ1AC3uxvKzDTAR
+         tQ0Q==
+X-Gm-Message-State: APjAAAVyfeni0m36Oavj+4hB16Q1UftCUqmaily1eZQ45UrW4EkXpCj7
+        yunz3b7A79MeKjvcXyIlOxo=
+X-Google-Smtp-Source: APXvYqz4waYiopA3l3q+r1qCFeqwSh3ZXJMr5uwqp8r036DYgcWkcY5QNT6ibdt+RI1A+3hXGE7RDg==
+X-Received: by 2002:a17:902:b210:: with SMTP id t16mr76931088plr.84.1555415272752;
+        Tue, 16 Apr 2019 04:47:52 -0700 (PDT)
 Received: from jordon-HP-15-Notebook-PC.domain.name ([49.207.50.11])
-        by smtp.gmail.com with ESMTPSA id p6sm55942835pfd.122.2019.04.16.04.47.33
+        by smtp.gmail.com with ESMTPSA id p6sm55942835pfd.122.2019.04.16.04.47.43
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 16 Apr 2019 04:47:42 -0700 (PDT)
+        Tue, 16 Apr 2019 04:47:51 -0700 (PDT)
 From:   Souptick Joarder <jrdr.linux@gmail.com>
 To:     akpm@linux-foundation.org, willy@infradead.org, mhocko@suse.com,
         kirill.shutemov@linux.intel.com, vbabka@suse.cz, riel@surriel.com,
@@ -73,10 +73,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         linux-rockchip@lists.infradead.org, xen-devel@lists.xen.org,
         iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
         Souptick Joarder <jrdr.linux@gmail.com>
-Subject: [REBASE PATCH v5 7/9] videobuf2/videobuf2-dma-sg.c: Convert to use vm_map_pages()
-Date:   Tue, 16 Apr 2019 17:19:48 +0530
-Message-Id:
- <a953fe6b3056de1cc6eab654effdd4a22f125375.1552921225.git.jrdr.linux@gmail.com>
+Subject: [REBASE PATCH v5 8/9] xen/gntdev.c: Convert to use vm_map_pages()
+Date:   Tue, 16 Apr 2019 17:19:49 +0530
+Message-Id: <88e56e82d2db98705c2d842e9c9806c00b366d67.1552921225.git.jrdr.linux@gmail.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <cover.1552921225.git.jrdr.linux@gmail.com>
 References: <cover.1552921225.git.jrdr.linux@gmail.com>
@@ -86,99 +85,49 @@ Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Message-ID: <20190416114948.tZwgCvxO0ZoYgFzjyXKzSXZM5TE2YGID6_FN2CFzFUI@z>
 
-Convert to use vm_map_pages() to map range of kernel memory
-to user vma.
+Convert to use vm_map_pages() to map range of kernel
+memory to user vma.
 
-vm_pgoff is treated in V4L2 API as a 'cookie' to select a buffer,
-not as a in-buffer offset by design and it always want to mmap a
-whole buffer from its beginning.
+map->count is passed to vm_map_pages() and internal API
+verify map->count against count ( count = vma_pages(vma))
+for page array boundary overrun condition.
 
 Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
-Suggested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Reviewed-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 ---
- drivers/media/common/videobuf2/videobuf2-core.c    |  7 +++++++
- .../media/common/videobuf2/videobuf2-dma-contig.c  |  6 ------
- drivers/media/common/videobuf2/videobuf2-dma-sg.c  | 22 ++++++----------------
- 3 files changed, 13 insertions(+), 22 deletions(-)
+ drivers/xen/gntdev.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 70e8c33..ca4577a 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -2175,6 +2175,13 @@ int vb2_mmap(struct vb2_queue *q, struct vm_area_struct *vma)
- 		goto unlock;
- 	}
+diff --git a/drivers/xen/gntdev.c b/drivers/xen/gntdev.c
+index 5efc5ee..5d64262 100644
+--- a/drivers/xen/gntdev.c
++++ b/drivers/xen/gntdev.c
+@@ -1084,7 +1084,7 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
+ 	int index = vma->vm_pgoff;
+ 	int count = vma_pages(vma);
+ 	struct gntdev_grant_map *map;
+-	int i, err = -EINVAL;
++	int err = -EINVAL;
  
-+	/*
-+	 * vm_pgoff is treated in V4L2 API as a 'cookie' to select a buffer,
-+	 * not as a in-buffer offset. We always want to mmap a whole buffer
-+	 * from its beginning.
-+	 */
-+	vma->vm_pgoff = 0;
-+
- 	ret = call_memop(vb, mmap, vb->planes[plane].mem_priv, vma);
- 
- unlock:
-diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-index aff0ab7..46245c5 100644
---- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-+++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-@@ -186,12 +186,6 @@ static int vb2_dc_mmap(void *buf_priv, struct vm_area_struct *vma)
+ 	if ((vma->vm_flags & VM_WRITE) && !(vma->vm_flags & VM_SHARED))
  		return -EINVAL;
- 	}
+@@ -1145,12 +1145,9 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
+ 		goto out_put_map;
  
--	/*
--	 * dma_mmap_* uses vm_pgoff as in-buffer offset, but we want to
--	 * map whole buffer
--	 */
--	vma->vm_pgoff = 0;
--
- 	ret = dma_mmap_attrs(buf->dev, vma, buf->cookie,
- 		buf->dma_addr, buf->size, buf->attrs);
- 
-diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-index 015e737..d6b8eca 100644
---- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-+++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-@@ -328,28 +328,18 @@ static unsigned int vb2_dma_sg_num_users(void *buf_priv)
- static int vb2_dma_sg_mmap(void *buf_priv, struct vm_area_struct *vma)
- {
- 	struct vb2_dma_sg_buf *buf = buf_priv;
--	unsigned long uaddr = vma->vm_start;
--	unsigned long usize = vma->vm_end - vma->vm_start;
--	int i = 0;
-+	int err;
- 
- 	if (!buf) {
- 		printk(KERN_ERR "No memory to map\n");
- 		return -EINVAL;
- 	}
- 
--	do {
--		int ret;
--
--		ret = vm_insert_page(vma, uaddr, buf->pages[i++]);
--		if (ret) {
--			printk(KERN_ERR "Remapping memory, error: %d\n", ret);
--			return ret;
+ 	if (!use_ptemod) {
+-		for (i = 0; i < count; i++) {
+-			err = vm_insert_page(vma, vma->vm_start + i*PAGE_SIZE,
+-				map->pages[i]);
+-			if (err)
+-				goto out_put_map;
 -		}
--
--		uaddr += PAGE_SIZE;
--		usize -= PAGE_SIZE;
--	} while (usize > 0);
--
-+	err = vm_map_pages(vma, buf->pages, buf->num_pages);
-+	if (err) {
-+		printk(KERN_ERR "Remapping memory, error: %d\n", err);
-+		return err;
-+	}
- 
- 	/*
- 	 * Use common vm_area operations to track buffer refcount.
++		err = vm_map_pages(vma, map->pages, map->count);
++		if (err)
++			goto out_put_map;
+ 	} else {
+ #ifdef CONFIG_X86
+ 		/*
 -- 
 1.9.1
 
