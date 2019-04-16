@@ -5,66 +5,65 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F11F1C10F14
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 18:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C194C10F13
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 18:39:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C521F206BA
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 18:39:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34BB220880
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 18:39:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ukEXoOwE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h3e1Nm3R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730398AbfDPSi4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 14:38:56 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39927 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730374AbfDPSiz (ORCPT
+        id S1730361AbfDPSji (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 14:39:38 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:37966 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730348AbfDPSix (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 14:38:55 -0400
-Received: by mail-wr1-f67.google.com with SMTP id j9so28469313wrn.6;
-        Tue, 16 Apr 2019 11:38:54 -0700 (PDT)
+        Tue, 16 Apr 2019 14:38:53 -0400
+Received: by mail-wm1-f68.google.com with SMTP id w15so290951wmc.3;
+        Tue, 16 Apr 2019 11:38:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=/Q+iJ6rJZ2HsKCGJQjBe3G9bfJhGCGmYeQPjdB6XZUQ=;
-        b=ukEXoOwEBqy3IRbtG1NbdOrME1rTGkJvvZv02W7F2Sc3QiNSgsezF8Cnnx3Th4sRoM
-         rh4kX/FFL1bOeKq6VjVrZ+BIoHggOKFKYP6d5GhoIiPuc4TIEcQUZ2SUXArAWnoQELTN
-         ue+BI22xwaXvu6KJ7W0rXZE8VapXmSkUAZtdhnKqd6gtAuMZVe8Rn7xHUPiyN+6KdH4M
-         VaT70kxsacb8/zJbxNVgQaVkYlQBdBG2CMWYgnH8T9/XPoSiYhAljEjwE5/jnIMKuZdo
-         P4Ej9iSQIf0MsVJh61NJkgGwYrxiaapRn7AVUtKqfrPGNMkdTv2i0HKO0cmxnA+WmsSi
-         7mpQ==
+        bh=TLleK0VtrURc8NakouQBGkqZbPDHg07f9BvqliSxF70=;
+        b=h3e1Nm3R3xsbD+PYUqSpNvsqvv25b71V1k+JePPL/XPpDetWnd7J/zs42/KuJEfJGF
+         S9MVNlIxKBIr/pxNEFOa7GVi+5nYrR3xQQgIRMCBdti8z6/C2FkP5W1ZhONqzIGoXd/p
+         joJoIrnNevNZVJuInDW7FJNIlEtpaHygBfUS/dFzlUCrAHNTdQlVprBu+rtP8RR6/yUr
+         ByNbE8HMarmtuTKhwQhx9TG1Ukycwhdhgb76FVzBL9wRYQhWF3ZLB7wapcE1sIXCfUpM
+         hXkRscYpsz9Zbl4yBd2ABW0K5gbKn3MNDCTGJ+E39/cU69vsf09kV5AxUfsOEFCPWRZV
+         UO7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/Q+iJ6rJZ2HsKCGJQjBe3G9bfJhGCGmYeQPjdB6XZUQ=;
-        b=aJsQ0DWwdnh01gd20bNZiRkBlA8QicHIQP1y5EvfgIxsuY3H43utWg5SDStAhXlrWe
-         7r8gUWbtiqd5b92efIBO5st3a/U7NszK9Hdaut1rj4vaQf7jbT7szXv7jdBmEVbZqprS
-         JMc4mJhLNAurSVLaD3f0phZUuX32dXYxm0F48+BIBa2JCsalr4ODsswW3XnQZKndWLTe
-         T7G6CjnFqHaKC53GtaHk3MU/1d2kiPnLLO8/YAg9EZVBpdMg1+8gKiLplfU+kvjR8nQL
-         LXfmp2l0VMafnsxFM21hnCoGmjyHkStHOJlXFRYCJdepV8SwmSNR84KIUviDzOxhhhk1
-         XmSg==
-X-Gm-Message-State: APjAAAUJoYDZNlrvify1fN45aVCTPs4AyrKZBKIbwiaRzWC2+LQDYd8P
-        /outYtPXfq8drBylPucXjFU=
-X-Google-Smtp-Source: APXvYqzagQP4Gn4DI1EX20qWMjFP8Qx2G4jr0CoOD2Mfs94vmMDvMtnm27LgxVW4l+EzQYIbQe1qtg==
-X-Received: by 2002:adf:e288:: with SMTP id v8mr46638599wri.7.1555439933776;
-        Tue, 16 Apr 2019 11:38:53 -0700 (PDT)
+        bh=TLleK0VtrURc8NakouQBGkqZbPDHg07f9BvqliSxF70=;
+        b=TFMEIalIJRUTUAj7XZFZDWvWdfVQmgnbvi0kb0xmCmHp5oRFA2/GmXBICgeBYChwXO
+         Q44TxoQEFf5/aqDBsWvLl97BzmPegW08KkZ8LprFlI08cMVgfh2z59un2zjzeykzlNAv
+         J7poMM/oB9PdlQ5mP+wmNZgC/PfKoHhPnuTOwss3QNa/X4N3I2fn7W3j7Bi9NxcNVeqg
+         v2EIQmNEMApzyO8Si6kBnXwpuaiwf8S8hjV4jqq3pWH3IjsNPWvUpgKYYkwjZvHicHQF
+         a1fkaHejipVStYMONBebrLaL3ppKUh0SYyfjYgx/VWQ/dlYaiV+AXfVTfwMwLpLY2nVW
+         iQnw==
+X-Gm-Message-State: APjAAAUGPHFzim33sz87Stx/lteDFnzmVh1DQ2zrTm90apTu0zIY/Pu1
+        RTdhUHZFjBKr5RaeGbGXtn61a0ZZ
+X-Google-Smtp-Source: APXvYqz07VW+fNme+N9AqBbL6HOJCdOJCyAxD2ZszHK1Hf1dhl/j/yKTr8NoWJMd6oM74U0ThWkt2w==
+X-Received: by 2002:a1c:eb07:: with SMTP id j7mr26684391wmh.138.1555439931201;
+        Tue, 16 Apr 2019 11:38:51 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:fcfa:e34f:82c0:3f66])
-        by smtp.gmail.com with ESMTPSA id m13sm128823wmg.42.2019.04.16.11.38.53
+        by smtp.gmail.com with ESMTPSA id m13sm128823wmg.42.2019.04.16.11.38.50
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Apr 2019 11:38:53 -0700 (PDT)
+        Tue, 16 Apr 2019 11:38:50 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     sumit.semwal@linaro.org, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
-Subject: [PATCH 08/12] drm/ttm: use the parent resv for ghost objects
-Date:   Tue, 16 Apr 2019 20:38:37 +0200
-Message-Id: <20190416183841.1577-9-christian.koenig@amd.com>
+Subject: [PATCH 05/12] dma-buf: add explicit buffer pinning
+Date:   Tue, 16 Apr 2019 20:38:34 +0200
+Message-Id: <20190416183841.1577-6-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190416183841.1577-1-christian.koenig@amd.com>
 References: <20190416183841.1577-1-christian.koenig@amd.com>
@@ -76,88 +75,146 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This way we can even pipeline imported BO evictions.
+Add optional explicit pinning callbacks instead of implicitly assume the
+exporter pins the buffer when a mapping is created.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/gpu/drm/ttm/ttm_bo_util.c | 18 +-----------------
- 1 file changed, 1 insertion(+), 17 deletions(-)
+ drivers/dma-buf/dma-buf.c | 39 +++++++++++++++++++++++++++++++++++++++
+ include/linux/dma-buf.h   | 37 +++++++++++++++++++++++++++++++------
+ 2 files changed, 70 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/ttm/ttm_bo_util.c b/drivers/gpu/drm/ttm/ttm_bo_util.c
-index 895d77d799e4..97f35c4bda35 100644
---- a/drivers/gpu/drm/ttm/ttm_bo_util.c
-+++ b/drivers/gpu/drm/ttm/ttm_bo_util.c
-@@ -486,7 +486,6 @@ static int ttm_buffer_object_transfer(struct ttm_buffer_object *bo,
- 				      struct ttm_buffer_object **new_obj)
- {
- 	struct ttm_transfer_obj *fbo;
--	int ret;
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index a3738fab3927..f23ff8355505 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -630,6 +630,41 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
+ }
+ EXPORT_SYMBOL_GPL(dma_buf_detach);
  
- 	fbo = kmalloc(sizeof(*fbo), GFP_KERNEL);
- 	if (!fbo)
-@@ -517,10 +516,7 @@ static int ttm_buffer_object_transfer(struct ttm_buffer_object *bo,
- 	kref_init(&fbo->base.kref);
- 	fbo->base.destroy = &ttm_transfered_destroy;
- 	fbo->base.acc_size = 0;
--	fbo->base.resv = &fbo->base.ttm_resv;
--	reservation_object_init(fbo->base.resv);
--	ret = reservation_object_trylock(fbo->base.resv);
--	WARN_ON(!ret);
-+	reservation_object_init(&fbo->base.ttm_resv);
++/**
++ * dma_buf_pin - Lock down the DMA-buf
++ *
++ * @dmabuf:	[in]	DMA-buf to lock down.
++ *
++ * Returns:
++ * 0 on success, negative error code on failure.
++ */
++int dma_buf_pin(struct dma_buf *dmabuf)
++{
++	int ret = 0;
++
++	reservation_object_assert_held(dmabuf->resv);
++
++	if (dmabuf->ops->pin)
++		ret = dmabuf->ops->pin(dmabuf);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(dma_buf_pin);
++
++/**
++ * dma_buf_unpin - Remove lock from DMA-buf
++ *
++ * @dmabuf:	[in]	DMA-buf to unlock.
++ */
++void dma_buf_unpin(struct dma_buf *dmabuf)
++{
++	reservation_object_assert_held(dmabuf->resv);
++
++	if (dmabuf->ops->unpin)
++		dmabuf->ops->unpin(dmabuf);
++}
++EXPORT_SYMBOL_GPL(dma_buf_unpin);
++
+ /**
+  * dma_buf_map_attachment_locked - Maps the buffer into _device_ address space
+  * with the reservation lock held. Is a wrapper for map_dma_buf() of the
+@@ -666,6 +701,8 @@ dma_buf_map_attachment_locked(struct dma_buf_attachment *attach,
+ 	 */
+ 	if (attach->invalidate)
+ 		list_del(&attach->node);
++	else
++		dma_buf_pin(attach->dmabuf);
+ 	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
+ 	if (attach->invalidate)
+ 		list_add(&attach->node, &attach->dmabuf->attachments);
+@@ -735,6 +772,8 @@ void dma_buf_unmap_attachment_locked(struct dma_buf_attachment *attach,
  
- 	*new_obj = &fbo->base;
- 	return 0;
-@@ -716,8 +712,6 @@ int ttm_bo_move_accel_cleanup(struct ttm_buffer_object *bo,
- 		if (ret)
- 			return ret;
+ 	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
+ 						direction);
++	if (!attach->invalidate)
++		dma_buf_unpin(attach->dmabuf);
+ }
+ EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment_locked);
  
--		reservation_object_add_excl_fence(ghost_obj->resv, fence);
--
- 		/**
- 		 * If we're not moving to fixed memory, the TTM object
- 		 * needs to stay alive. Otherwhise hang it on the ghost
-@@ -729,7 +723,6 @@ int ttm_bo_move_accel_cleanup(struct ttm_buffer_object *bo,
- 		else
- 			bo->ttm = NULL;
+diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+index ece4638359a8..a615b74e5894 100644
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@ -100,14 +100,40 @@ struct dma_buf_ops {
+ 	 */
+ 	void (*detach)(struct dma_buf *, struct dma_buf_attachment *);
  
--		ttm_bo_unreserve(ghost_obj);
- 		ttm_bo_put(ghost_obj);
- 	}
++	/**
++	 * @pin_dma_buf:
++	 *
++	 * This is called by dma_buf_pin and lets the exporter know that an
++	 * importer assumes that the DMA-buf can't be invalidated any more.
++	 *
++	 * This is called with the dmabuf->resv object locked.
++	 *
++	 * This callback is optional.
++	 *
++	 * Returns:
++	 *
++	 * 0 on success, negative error code on failure.
++	 */
++	int (*pin)(struct dma_buf *);
++
++	/**
++	 * @unpin_dma_buf:
++	 *
++	 * This is called by dma_buf_unpin and lets the exporter know that an
++	 * importer doesn't need to the DMA-buf to stay were it is any more.
++	 *
++	 * This is called with the dmabuf->resv object locked.
++	 *
++	 * This callback is optional.
++	 */
++	void (*unpin)(struct dma_buf *);
++
+ 	/**
+ 	 * @map_dma_buf:
+ 	 *
+ 	 * This is called by dma_buf_map_attachment() and is used to map a
+ 	 * shared &dma_buf into device address space, and it is mandatory. It
+-	 * can only be called if @attach has been called successfully. This
+-	 * essentially pins the DMA buffer into place, and it cannot be moved
+-	 * any more
++	 * can only be called if @attach has been called successfully.
+ 	 *
+ 	 * This call may sleep, e.g. when the backing storage first needs to be
+ 	 * allocated, or moved to a location suitable for all currently attached
+@@ -148,9 +174,6 @@ struct dma_buf_ops {
+ 	 *
+ 	 * This is called by dma_buf_unmap_attachment() and should unmap and
+ 	 * release the &sg_table allocated in @map_dma_buf, and it is mandatory.
+-	 * It should also unpin the backing storage if this is the last mapping
+-	 * of the DMA buffer, it the exporter supports backing storage
+-	 * migration.
+ 	 *
+ 	 * This is always called with the dmabuf->resv object locked when
+ 	 * no_sgt_cache is true.
+@@ -442,6 +465,8 @@ int dma_buf_fd(struct dma_buf *dmabuf, int flags);
+ struct dma_buf *dma_buf_get(int fd);
+ void dma_buf_put(struct dma_buf *dmabuf);
  
-@@ -772,8 +765,6 @@ int ttm_bo_pipeline_move(struct ttm_buffer_object *bo,
- 		if (ret)
- 			return ret;
- 
--		reservation_object_add_excl_fence(ghost_obj->resv, fence);
--
- 		/**
- 		 * If we're not moving to fixed memory, the TTM object
- 		 * needs to stay alive. Otherwhise hang it on the ghost
-@@ -785,7 +776,6 @@ int ttm_bo_pipeline_move(struct ttm_buffer_object *bo,
- 		else
- 			bo->ttm = NULL;
- 
--		ttm_bo_unreserve(ghost_obj);
- 		ttm_bo_put(ghost_obj);
- 
- 	} else if (from->flags & TTM_MEMTYPE_FLAG_FIXED) {
-@@ -841,16 +831,10 @@ int ttm_bo_pipeline_gutting(struct ttm_buffer_object *bo)
- 	if (ret)
- 		return ret;
- 
--	ret = reservation_object_copy_fences(ghost->resv, bo->resv);
--	/* Last resort, wait for the BO to be idle when we are OOM */
--	if (ret)
--		ttm_bo_wait(bo, false, false);
--
- 	memset(&bo->mem, 0, sizeof(bo->mem));
- 	bo->mem.mem_type = TTM_PL_SYSTEM;
- 	bo->ttm = NULL;
- 
--	ttm_bo_unreserve(ghost);
- 	ttm_bo_put(ghost);
- 
- 	return 0;
++int dma_buf_pin(struct dma_buf *dmabuf);
++void dma_buf_unpin(struct dma_buf *dmabuf);
+ struct sg_table *dma_buf_map_attachment_locked(struct dma_buf_attachment *,
+ 					       enum dma_data_direction);
+ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *,
 -- 
 2.17.1
 
