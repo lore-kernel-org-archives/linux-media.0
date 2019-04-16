@@ -1,142 +1,197 @@
-Return-Path: <SRS0=JUE0=SR=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=ut6f=SS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7F7AC10F0E
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 23:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 325D0C10F0E
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 03:40:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B3EB820830
-	for <linux-media@archiver.kernel.org>; Mon, 15 Apr 2019 23:41:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 00CA42064B
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 03:40:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727202AbfDOXlc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Apr 2019 19:41:32 -0400
-Received: from vps-vb.mhejs.net ([37.28.154.113]:49466 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727201AbfDOXlc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Apr 2019 19:41:32 -0400
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1hGBE9-0006tS-97; Tue, 16 Apr 2019 01:41:29 +0200
-Subject: Re: [PATCH v9 4/4] [media] cxusb: add raw mode support for Medion
- MD95700
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Michael Krufky <mkrufky@linuxtv.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Walls <awalls@md.metrocast.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org
-References: <cover.1553903063.git.mail@maciej.szmigiero.name>
- <9ee1804b53cdeccde17826a58c17092400795b67.1553903063.git.mail@maciej.szmigiero.name>
- <9f526004-c431-3b1e-71bf-9cb1a795ae81@xs4all.nl>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mail@maciej.szmigiero.name; prefer-encrypt=mutual; keydata=
- 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 PA==
-Message-ID: <a0c45079-3c27-7649-62f0-63c137903512@maciej.szmigiero.name>
-Date:   Tue, 16 Apr 2019 01:41:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726697AbfDPDkH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Apr 2019 23:40:07 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:52488 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726299AbfDPDkG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Apr 2019 23:40:06 -0400
+Received: by mail-io1-f69.google.com with SMTP id p143so15839040iod.19
+        for <linux-media@vger.kernel.org>; Mon, 15 Apr 2019 20:40:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Q9wv88OS+DdvAHoIILxuX/ZsQl07XyJ/O7uWHnelOqY=;
+        b=Hw2lhlThLy6Y0jYam7tRXYdIcgJQREvbta2cqSnGTdMaolY9n9zTY95jGR9rULCBwW
+         2F+zJ28J2QkZ9BhsN0mLRA2RmzYJGfyQMmBwB7ND/Kz/SNPxxwDLUTvUKkVQfc/x/Jyy
+         xTedwPwsrQ6ZFBbUpZPJj2ePHq86kT/aHtOTTF6ts1cqZXiJvuyD9F2+7s6bmC0pMXPl
+         8Fl47Z6SiOekZZJht9Ai6bwLIVM4VdVOT9y8YQcf2l7vjzDvLAYYWLbKv+78b2+JYPXf
+         ZV59a30tyFyjLVXBguujW/EHx1VhVrBO8z1xM1Z0Omm++j8cEtPEd935IXVxLwk/aHBm
+         XqcA==
+X-Gm-Message-State: APjAAAU/rR0XzhZf9JflDhsySmRZxBwupLSg2CO+ncbOogRyrE6PV7Q2
+        sCvrC/W8VomUhyGAgms8cVWgll/SlHFJR9cghW3TjX6Bn4We
+X-Google-Smtp-Source: APXvYqwr6xsk2Bui892A7XAvPKqz0KJJ4sTfpUvYOg46fPJuIn116/w8PN2o10a9cXiYis1rQU/ntWNNlkMtMQTLYTBkM01ONKRH
 MIME-Version: 1.0
-In-Reply-To: <9f526004-c431-3b1e-71bf-9cb1a795ae81@xs4all.nl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a5d:8345:: with SMTP id q5mr841830ior.12.1555386005672;
+ Mon, 15 Apr 2019 20:40:05 -0700 (PDT)
+Date:   Mon, 15 Apr 2019 20:40:05 -0700
+In-Reply-To: <00000000000086f7f20586929239@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005b588f05869d86d1@google.com>
+Subject: Re: KASAN: use-after-free Read in v4l2_release
+From:   syzbot <syzbot+a4387f5b6b799f6becbf@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, brian.warner@samsung.com,
+        ezequiel@collabora.com, hans.verkuil@cisco.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        niklas.soderlund+renesas@ragnatech.se,
+        niklas.soderlund@ragnatech.se, sakari.ailus@linux.intel.com,
+        sque@chromium.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 12.04.2019 11:27, Hans Verkuil wrote:
-> On 3/30/19 12:51 AM, Maciej S. Szmigiero wrote:
->> This adds raw (unprocessed) BT.656 stream capturing support for the analog
->> part of Medion 95700.
->> It can be enabled by setting CXUSB_EXTENDEDMODE_CAPTURE_RAW flag in
->> parm.capture.extendedmode passed to VIDIOC_S_PARM.
-> 
-> What is the point of this feature? I think this should just be dropped.
+syzbot has found a reproducer for the following crash on:
 
-It simply provides an ability to capture a raw BT.656 stream as received
-by the driver from the device.
-This functionality is very useful for both debugging and for developing
-the driver features.
+HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1364598f200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+dashboard link: https://syzkaller.appspot.com/bug?extid=a4387f5b6b799f6becbf
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1165b9b7200000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13b224cb200000
 
-Since I have to prepare this part anyway to make sure it's not broken by
-some newly introduced change I am posting this, too.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+a4387f5b6b799f6becbf@syzkaller.appspotmail.com
 
-> Regards,
-> 
-> 	Hans
-> 
+radio-raremono 3-1:0.210: Thanko's Raremono disconnected
+radio-raremono 6-1:0.210: Thanko's Raremono disconnected
+radio-raremono 2-1:0.210: Thanko's Raremono disconnected
+usb 5-1: new high-speed USB device number 92 using dummy_hcd
+==================================================================
+BUG: KASAN: use-after-free in v4l2_release+0x322/0x390  
+drivers/media/v4l2-core/v4l2-dev.c:453
+Read of size 8 at addr ffff888098dca3e0 by task v4l_id/7099
 
-Thanks and best regards,
-Maciej
+CPU: 0 PID: 7099 Comm: v4l_id Not tainted 5.1.0-rc4-319354-g9a33b36 #3
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xe8/0x16e lib/dump_stack.c:113
+  print_address_description+0x6c/0x236 mm/kasan/report.c:187
+  kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
+  v4l2_release+0x322/0x390 drivers/media/v4l2-core/v4l2-dev.c:453
+  __fput+0x2df/0x8c0 fs/file_table.c:278
+  task_work_run+0x149/0x1c0 kernel/task_work.c:113
+  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+  exit_to_usermode_loop+0x243/0x270 arch/x86/entry/common.c:166
+  prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
+  syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
+  do_syscall_64+0x40c/0x4f0 arch/x86/entry/common.c:293
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x7fa9f8fc12b0
+Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
+07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
+ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
+RSP: 002b:00007ffd121e3378 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007fa9f8fc12b0
+RDX: 00007fa9f9277df0 RSI: 0000000000000001 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007fa9f9277df0 R09: 000000000000000a
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
+R13: 00007ffd121e34d0 R14: 0000000000000000 R15: 0000000000000000
+
+Allocated by task 5386:
+  set_track mm/kasan/common.c:87 [inline]
+  __kasan_kmalloc mm/kasan/common.c:497 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
+  slab_post_alloc_hook mm/slab.h:437 [inline]
+  slab_alloc_node mm/slub.c:2756 [inline]
+  __kmalloc_node_track_caller+0xf3/0x320 mm/slub.c:4372
+  alloc_dr drivers/base/devres.c:103 [inline]
+  devm_kmalloc+0x8c/0x190 drivers/base/devres.c:793
+  devm_kzalloc include/linux/device.h:679 [inline]
+  usb_raremono_probe+0x34/0x235 drivers/media/radio/radio-raremono.c:298
+  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2021
+  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
+  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+
+Freed by task 5386:
+  set_track mm/kasan/common.c:87 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
+  slab_free_hook mm/slub.c:1429 [inline]
+  slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
+  slab_free mm/slub.c:3003 [inline]
+  kfree+0xce/0x290 mm/slub.c:3958
+  release_nodes+0x4ac/0x920 drivers/base/devres.c:508
+  devres_release_all+0x79/0xc8 drivers/base/devres.c:529
+  __device_release_driver drivers/base/dd.c:1086 [inline]
+  device_release_driver_internal+0x23a/0x4f0 drivers/base/dd.c:1113
+  bus_remove_device+0x302/0x5c0 drivers/base/bus.c:556
+  device_del+0x467/0xb90 drivers/base/core.c:2269
+  usb_disable_device+0x242/0x790 drivers/usb/core/message.c:1235
+  usb_disconnect+0x298/0x870 drivers/usb/core/hub.c:2197
+  hub_port_connect drivers/usb/core/hub.c:4940 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0xcd2/0x3b00 drivers/usb/core/hub.c:5432
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff888098dca200
+  which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 480 bytes inside of
+  4096-byte region [ffff888098dca200, ffff888098dcb200)
+The buggy address belongs to the page:
+page:ffffea0002637200 count:1 mapcount:0 mapping:ffff88812c3f4600  
+index:0xffff888098dcb300 compound_mapcount: 0
+flags: 0xfff00000010200(slab|head)
+raw: 00fff00000010200 ffffea0002638008 ffffea0002477808 ffff88812c3f4600
+raw: ffff888098dcb300 0000000000070006 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff888098dca280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff888098dca300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff888098dca380: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                        ^
+  ffff888098dca400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff888098dca480: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
