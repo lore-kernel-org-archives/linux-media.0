@@ -2,180 +2,202 @@ Return-Path: <SRS0=ut6f=SS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03386C10F13
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 10:46:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E4F2C10F14
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:16:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CDDB62075B
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 10:46:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E291A2075B
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:16:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbfDPKqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 06:46:01 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57237 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726347AbfDPKqB (ORCPT
+        id S1729002AbfDPLQH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 07:16:07 -0400
+Received: from mail-it1-f199.google.com ([209.85.166.199]:51680 "EHLO
+        mail-it1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726857AbfDPLQH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 06:46:01 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1hGLb7-0000Bc-F5; Tue, 16 Apr 2019 12:45:53 +0200
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1hGLb4-0001FY-RV; Tue, 16 Apr 2019 12:45:50 +0200
-Date:   Tue, 16 Apr 2019 12:45:50 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     mark.rutland@arm.com, devicetree@vger.kernel.org,
-        Ian Arkver <ian.arkver.dev@gmail.com>, robh+dt@kernel.org,
-        hans.verkuil@cisco.com,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        mchehab@kernel.org, graphics@pengutronix.de,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/3] media: dt-bindings: add bindings for Toshiba TC358746
-Message-ID: <20190416104550.htexnpzgypuuubo4@pengutronix.de>
-References: <20181218141240.3056-2-m.felsch@pengutronix.de>
- <20190218100333.qvptfllrd4pyhsyb@paasikivi.fi.intel.com>
- <20190301105235.a23jwiwmxejuv2yf@pengutronix.de>
- <a51ecc47-df19-a48b-3d82-01b21d03972c@gmail.com>
- <20190301130118.jy57g5wcsn7mqclk@pengutronix.de>
- <20190304123621.l3ocvdiya5z5wzal@paasikivi.fi.intel.com>
- <20190304165528.n4sqxjhfsplmt5km@pengutronix.de>
- <20190304181747.ax7nvbvhdul4vtna@kekkonen.localdomain>
- <20190305084902.vzaqr53q77oy2o7r@uno.localdomain>
- <20190305181419.kqdaqnjte3v7663f@pengutronix.de>
+        Tue, 16 Apr 2019 07:16:07 -0400
+Received: by mail-it1-f199.google.com with SMTP id y127so19071591itb.1
+        for <linux-media@vger.kernel.org>; Tue, 16 Apr 2019 04:16:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=8nuO6ldXJk2LHqGy3vCiV7UMltsyhJ7zqhsq6tdPLPM=;
+        b=reQ8VirkCVpILmajXYWLIv2hayOaN82clgP+EniJ6dvLUcCpuVw2j/7v2wF4KSVfsc
+         iGy3ufkqllPti1Nyxb7vnlRFNNjYTbFRYwGf70Hp0lLiSVjeBiuDLc853uJhqdzu5NBd
+         6VINiFSXeiNncyOsGo/Itjbn9Y0fJonlwwBHphwA4Z5FaD4cIU4y3TBbZYbgVz7hFVnx
+         ZYsTs3yWTtsRsR5DTC5bPKOxuYXog9Vrt/3p6FblqljFXLSXY6VTXWxusURI+sfWvdRZ
+         oU03Mb4U1G6tdI7MbChtrF7zz9iVXvU7O436ZGu76pVjTlI1Zwgph4B5l5sjfO1zyw+q
+         9FHQ==
+X-Gm-Message-State: APjAAAVkZNhPpAaFdwCBrLmzpC0JxYgMQAmrRNocacaC7mFSxjXAMwgf
+        9/Dup5rjLZG3biP4xPZ466Dl6Hq/kw5nA/W1t9AgN8wLzXwl
+X-Google-Smtp-Source: APXvYqwDWdlk/AxkIdwYO2kbqZWF8p5WnPZhwwskesZzbpejC2AjdaYt7zT3CZ+/cQB7mARZ28bjHqqRUqoaMw9lYXsbNiYrkhfb
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190305181419.kqdaqnjte3v7663f@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 12:45:14 up 87 days, 15:27, 73 users,  load average: 0.27, 0.14,
- 0.07
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+X-Received: by 2002:a24:9986:: with SMTP id a128mr6487193ite.21.1555413366340;
+ Tue, 16 Apr 2019 04:16:06 -0700 (PDT)
+Date:   Tue, 16 Apr 2019 04:16:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002e03f40586a3e512@google.com>
+Subject: KASAN: use-after-free Read in cpia2_usb_disconnect
+From:   syzbot <syzbot+0c90fc937c84f97d0aa6@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, hverkuil-cisco@xs4all.nl,
+        keescook@chromium.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Rob,
+Hello,
 
-gentle ping.
+syzbot found the following crash on:
 
-Regards,
-  Marco
+HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1463a267200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+dashboard link: https://syzkaller.appspot.com/bug?extid=0c90fc937c84f97d0aa6
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13af9c23200000
 
-On 19-03-05 19:14, Marco Felsch wrote:
-> Hi Rob,
-> 
-> I think you didn't followed the discussion in detail so I will ask you
-> personal. In short the tc358746 can act as parallel-in -> csi-out or as
-> csi->in -> parallel-out device. The phyiscal pins are always the same
-> only the internal timings are different. So we have two ports with two
-> endpoints.
-> 
-> Now the question is how we determine the mode. We have two approaches:
-> 1)
->   port@0 -> input port
->   port@1 -> output port
-> 
->   pro:
->   + no extra vendor specific binding is needed to determine the mode
-> 
->   con:
->   - input/output endpoint can be parallel or mipi-csi2.
-> 
-> 2)
->   port@0 -> parallel port
->   port@1 -> mipi-csi2 port
-> 
->   pro:
->   + input/output endpoint are fixed to parallel or mipi
-> 
->   con:
->   - vendor specific binding is needed to determine the mode
-> 
-> Thanks for your comments :)
-> 
-> Regards,
-> Marco
-> 
-> On 19-03-05 09:49, Jacopo Mondi wrote:
-> > Hi Sakari, Marco,
-> > 
-> > On Mon, Mar 04, 2019 at 08:17:48PM +0200, Sakari Ailus wrote:
-> > > Hi Marco,
-> > >
-> > > On Mon, Mar 04, 2019 at 05:55:28PM +0100, Marco Felsch wrote:
-> > > > > > (more device specific)
-> > > > > > tc358746,default-mode = <CSI-Tx> /* Parallel-in -> CSI-out */
-> > > > > > tc358746,default-mode = <CSI-Rx> /* CSI-in -> Parallel-out */
-> > > > > >
-> > > > > > or
-> > > > > >
-> > > > > > (more generic)
-> > > > > > tc358746,default-dir = <PARALLEL_TO_CSI2>
-> > > > > > tc358746,default-dir = <CSI2_TO_PARALLEL>
-> > > > >
-> > > > > The prefix for Toshiba is "toshiba". What would you think of
-> > > > > "toshiba,csi2-direction" with values of either "rx" or "tx"? Or
-> > > > > "toshiba,csi2-mode" with either "master" or "slave", which would be a
-> > > > > little bit more generic, but could be slightly more probable to get wrong
-> > > > > as well.
-> > > >
-> > > > You're right mixed the prefix with the device.. If we need to introduce
-> > > > a property I would prefer the "toshiba,csi2-direction" one. I said if
-> > > > because as Jacopo mentioned we can avoid the property by define port@0
-> > > > as input and port@1 as output. I tink that's the best solution, since we
-> > > > can avoid device specific bindings and it's common to use the last port
-> > > > as output (e.g. video-mux).
-> > >
-> > > The ports represent hardware and I think I would avoid reordering them. I
-> > > wonder what would the DT folks prefer.
-> > >
-> > 
-> > I might have missed why you mention re-ordering? :)
-> > 
-> > > The device specific property is to the point at least: it describes an
-> > > orthogonal part of the device configuration. That's why I'd pick that if I
-> > > were to choose. But I'll let Rob to comment on this.
-> > 
-> > That's true indeed. Let's wait for inputs from DT people, I'm fine
-> > with both approaches.
-> > 
-> > Thanks
-> >    j
-> > 
-> > >
-> > > --
-> > > Regards,
-> > >
-> > > Sakari Ailus
-> > > sakari.ailus@linux.intel.com
-> 
-> 
-> 
-> -- 
-> Pengutronix e.K.                           |                             |
-> Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-> Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-> 
-> 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+0c90fc937c84f97d0aa6@syzkaller.appspotmail.com
 
--- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+cpia2: Control message failed, err val = -19
+cpia2: Message: request = 0x1, start = 0xA9
+cpia2: Message: count = 1, register[0] = 0x0
+cpia2: Unexpected error: -19
+==================================================================
+BUG: KASAN: use-after-free in cpia2_usb_disconnect+0x1a9/0x1c0  
+drivers/media/usb/cpia2/cpia2_usb.c:907
+Read of size 8 at addr ffff8880a09f0a58 by task kworker/0:1/12
+
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.1.0-rc4-319354-g9a33b36 #3
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xe8/0x16e lib/dump_stack.c:113
+  print_address_description+0x6c/0x236 mm/kasan/report.c:187
+  kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
+  cpia2_usb_disconnect+0x1a9/0x1c0 drivers/media/usb/cpia2/cpia2_usb.c:907
+  usb_unbind_interface+0x1c9/0x980 drivers/usb/core/driver.c:423
+  __device_release_driver drivers/base/dd.c:1082 [inline]
+  device_release_driver_internal+0x436/0x4f0 drivers/base/dd.c:1113
+  bus_remove_device+0x302/0x5c0 drivers/base/bus.c:556
+  device_del+0x467/0xb90 drivers/base/core.c:2269
+  usb_disable_device+0x242/0x790 drivers/usb/core/message.c:1235
+  usb_disconnect+0x298/0x870 drivers/usb/core/hub.c:2197
+  hub_port_connect drivers/usb/core/hub.c:4940 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0xcd2/0x3b00 drivers/usb/core/hub.c:5432
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+
+Allocated by task 12:
+  set_track mm/kasan/common.c:87 [inline]
+  __kasan_kmalloc mm/kasan/common.c:497 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
+  kmalloc include/linux/slab.h:547 [inline]
+  kzalloc include/linux/slab.h:742 [inline]
+  cpia2_init_camera_struct+0x45/0x110  
+drivers/media/usb/cpia2/cpia2_core.c:2185
+  cpia2_usb_probe.cold+0x37/0x45a drivers/media/usb/cpia2/cpia2_usb.c:842
+  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2021
+  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
+  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+
+Freed by task 12:
+  set_track mm/kasan/common.c:87 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
+  slab_free_hook mm/slub.c:1429 [inline]
+  slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
+  slab_free mm/slub.c:3003 [inline]
+  kfree+0xce/0x290 mm/slub.c:3958
+  v4l2_device_release drivers/media/v4l2-core/v4l2-device.c:67 [inline]
+  kref_put include/linux/kref.h:67 [inline]
+  v4l2_device_put+0x7e/0xa0 drivers/media/v4l2-core/v4l2-device.c:72
+  cpia2_usb_disconnect+0x7e/0x1c0 drivers/media/usb/cpia2/cpia2_usb.c:905
+  usb_unbind_interface+0x1c9/0x980 drivers/usb/core/driver.c:423
+  __device_release_driver drivers/base/dd.c:1082 [inline]
+  device_release_driver_internal+0x436/0x4f0 drivers/base/dd.c:1113
+  bus_remove_device+0x302/0x5c0 drivers/base/bus.c:556
+  device_del+0x467/0xb90 drivers/base/core.c:2269
+  usb_disable_device+0x242/0x790 drivers/usb/core/message.c:1235
+  usb_disconnect+0x298/0x870 drivers/usb/core/hub.c:2197
+  hub_port_connect drivers/usb/core/hub.c:4940 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0xcd2/0x3b00 drivers/usb/core/hub.c:5432
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff8880a09f0000
+  which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 2648 bytes inside of
+  4096-byte region [ffff8880a09f0000, ffff8880a09f1000)
+The buggy address belongs to the page:
+page:ffffea0002827c00 count:1 mapcount:0 mapping:ffff88812c3f4600 index:0x0  
+compound_mapcount: 0
+flags: 0xfff00000010200(slab|head)
+raw: 00fff00000010200 dead000000000100 dead000000000200 ffff88812c3f4600
+raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8880a09f0900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8880a09f0980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff8880a09f0a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                     ^
+  ffff8880a09f0a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8880a09f0b00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
