@@ -4,27 +4,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C954BC10F13
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 09:29:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53836C10F13
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 09:29:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9E6B520857
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 09:29:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CC7520857
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 09:29:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729012AbfDPJ3o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 05:29:44 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:11257 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728362AbfDPJ1z (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S1728815AbfDPJ1z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 16 Apr 2019 05:27:55 -0400
-X-UUID: 9b538cc21477489ea83a74def1045696-20190416
-X-UUID: 9b538cc21477489ea83a74def1045696-20190416
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+Received: from mailgw02.mediatek.com ([210.61.82.184]:5951 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727037AbfDPJ1y (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 16 Apr 2019 05:27:54 -0400
+X-UUID: c3b05c6c9835452683c34ab9e03557c6-20190416
+X-UUID: c3b05c6c9835452683c34ab9e03557c6-20190416
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
         (envelope-from <stu.hsieh@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 2040289529; Tue, 16 Apr 2019 17:27:49 +0800
+        with ESMTP id 406228047; Tue, 16 Apr 2019 17:27:48 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
  mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
  15.0.1395.4; Tue, 16 Apr 2019 17:27:47 +0800
@@ -41,9 +42,9 @@ CC:     Mark Rutland <mark.rutland@arm.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <wsd_upstream@mediatek.com>
-Subject: [PATCH v2 08/15] [media] mtk-mipicsi: enable/disable ana clk
-Date:   Tue, 16 Apr 2019 17:27:36 +0800
-Message-ID: <1555406863-18069-9-git-send-email-stu.hsieh@mediatek.com>
+Subject: [PATCH v2 05/15] [media] mtk-mipicsi: get the w/h/bytepwerline for mtk_mipicsi
+Date:   Tue, 16 Apr 2019 17:27:33 +0800
+Message-ID: <1555406863-18069-6-git-send-email-stu.hsieh@mediatek.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1555406863-18069-1-git-send-email-stu.hsieh@mediatek.com>
 References: <1555406863-18069-1-git-send-email-stu.hsieh@mediatek.com>
@@ -55,7 +56,7 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch enable/disable ana clk when power on/off
+This patch get the w/h/bytepwerline to save in mtk_mipicsi.
 
 Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
 ---
@@ -63,69 +64,76 @@ Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
  1 file changed, 39 insertions(+)
 
 diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-index c92ffe6684ef..8a4079f0ed9b 100644
+index 16f6bc480f4e..10782fccca79 100644
 --- a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
 +++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-@@ -163,6 +163,41 @@ struct mtk_mipicsi_dev {
+@@ -99,6 +99,9 @@ struct mtk_mipicsi_dev {
+ 	u32 id;
+ 	int clk_num;
+ 	struct clk		*clk[MIPICSI_CLK];
++	u32 width;
++	u32 height;
++	u32 bytesperline;
+ };
+ 
+ #define MTK_MIPICSI_BUS_PARAM (V4L2_MBUS_MASTER |	\
+@@ -110,13 +113,36 @@ struct mtk_mipicsi_dev {
  		V4L2_MBUS_PCLK_SAMPLE_FALLING |	\
  		V4L2_MBUS_DATA_ACTIVE_HIGH)
  
-+static void mtk_mipicsi_ana_clk_enable(void __iomem *base, bool enable)
++static u32 get_bytesperline(const u32 fmt, const u32 width)
 +{
-+	if (enable) {
-+		writel(1UL | readl(base + MIPI_RX_ANA00_CSI),
-+			base + MIPI_RX_ANA00_CSI);
-+		writel(1UL | readl(base + MIPI_RX_ANA04_CSI),
-+			base + MIPI_RX_ANA04_CSI);
-+		writel(1UL | readl(base + MIPI_RX_ANA08_CSI),
-+			base + MIPI_RX_ANA08_CSI);
-+		writel(1UL | readl(base + MIPI_RX_ANA0C_CSI),
-+			base + MIPI_RX_ANA0C_CSI);
-+		writel(1UL | readl(base + MIPI_RX_ANA10_CSI),
-+			base + MIPI_RX_ANA10_CSI);
-+		writel(1UL | readl(base + MIPI_RX_ANA20_CSI),
-+			base + MIPI_RX_ANA20_CSI);
-+		writel(1UL | readl(base + MIPI_RX_ANA24_CSI),
-+			base + MIPI_RX_ANA24_CSI);
-+	} else {
-+		writel(~1UL & readl(base + MIPI_RX_ANA00_CSI),
-+			base + MIPI_RX_ANA00_CSI);
-+		writel(~1UL & readl(base + MIPI_RX_ANA04_CSI),
-+			base + MIPI_RX_ANA04_CSI);
-+		writel(~1UL & readl(base + MIPI_RX_ANA08_CSI),
-+			base + MIPI_RX_ANA08_CSI);
-+		writel(~1UL & readl(base + MIPI_RX_ANA0C_CSI),
-+			base + MIPI_RX_ANA0C_CSI);
-+		writel(~1UL & readl(base + MIPI_RX_ANA10_CSI),
-+			base + MIPI_RX_ANA10_CSI);
-+		writel(~1UL & readl(base + MIPI_RX_ANA20_CSI),
-+			base + MIPI_RX_ANA20_CSI);
-+		writel(~1UL & readl(base + MIPI_RX_ANA24_CSI),
-+			base + MIPI_RX_ANA24_CSI);
++	u32 bytesperline = 0;
++
++	switch (fmt) {
++	case MEDIA_BUS_FMT_UYVY8_2X8:
++	case MEDIA_BUS_FMT_VYUY8_2X8:
++	case MEDIA_BUS_FMT_YUYV8_2X8:
++	case MEDIA_BUS_FMT_YVYU8_2X8:
++		bytesperline = width * 2U;
++		break;
++	default:
++		break;
 +	}
++
++	return bytesperline;
 +}
 +
- static int get_subdev_register(const struct soc_camera_device *icd,
- 	struct v4l2_dbg_register *reg)
+ static int mtk_mipicsi_add_device(struct soc_camera_device *icd)
  {
-@@ -796,6 +831,8 @@ static int mtk_mipicsi_pm_suspend(struct device *dev)
- 	for (i = 0; i < mipicsi->clk_num; ++i)
- 		clk_disable_unprepare(mipicsi->clk[i]);
++	struct soc_camera_host *ici = to_soc_camera_host(icd->parent);
++	struct mtk_mipicsi_dev *mipicsi = ici->priv;
+ 	struct v4l2_subdev *sd = soc_camera_to_subdev(icd);
+ 	struct v4l2_subdev_format format = {
+ 		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+ 	};
+ 	int ret;
++	u32 width;
++	u32 height;
++	u32 fmt;
  
-+	mtk_mipicsi_ana_clk_enable(mipicsi->ana, false);
-+
- 	if (mipicsi->larb_pdev != NULL)
- 		mtk_smi_larb_put(mipicsi->larb_pdev);
- 
-@@ -833,6 +870,8 @@ static int mtk_mipicsi_pm_resume(struct device *dev)
- 			return ret;
+ 	/* Get width/height info from subdev. Then use them to set register */
+ 	ret = v4l2_subdev_call(sd, pad, get_fmt, NULL, &format);
+@@ -125,6 +151,19 @@ static int mtk_mipicsi_add_device(struct soc_camera_device *icd)
+ 		return ret;
  	}
  
-+	mtk_mipicsi_ana_clk_enable(mipicsi->ana, true);
++	width = format.format.width;
++	height = format.format.height;
++	fmt = format.format.code;
++	mipicsi->bytesperline = get_bytesperline(fmt, width);
++	if ((width == 0U) || (height == 0U) || (mipicsi->bytesperline == 0U)) {
++		dev_err(icd->parent, "invalid sub device width/height/bytesperline %d/%d/%d\n",
++			width, height, mipicsi->bytesperline);
++		return -EINVAL;
++	}
 +
- 	/* enable digtal clock */
- 	for (i = 0; i < mipicsi->clk_num; ++i)
- 		(void)clk_prepare_enable(mipicsi->clk[i]);
++	mipicsi->width = width;
++	mipicsi->height = height;
++
+ 	/*
+ 	 * If power domain was closed before, it will be open.
+ 	 * Then clock will be open and register will be set
 -- 
 2.18.0
 
