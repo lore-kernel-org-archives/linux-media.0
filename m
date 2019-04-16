@@ -2,204 +2,209 @@ Return-Path: <SRS0=ut6f=SS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CCA8C10F13
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:54:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E294C10F14
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 12:02:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 66BB520675
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:54:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C76C20821
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 12:02:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="THe/AvEE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729118AbfDPLyN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 07:54:13 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:50028 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727030AbfDPLyN (ORCPT
+        id S1727052AbfDPMCM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 08:02:12 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:43111 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725787AbfDPMCM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 07:54:13 -0400
-Received: from skullcanyon (unknown [IPv6:2002:c0de:c115:0:481e:e17e:2f68:43f8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 0499A281D52;
-        Tue, 16 Apr 2019 12:54:07 +0100 (BST)
-Message-ID: <d38e20350cb0ec73b7f295bf08cc22807804ad9c.camel@collabora.com>
-Subject: Re: [PATCH RESEND v7 1/2] media: uapi: Add H264 low-level decoder
- API compound controls.
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Tomasz Figa <tfiga@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg "
-         "Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Jens Kuske <jenskuske@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-sunxi <linux-sunxi@googlegroups.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Guenter Roeck <groeck@chromium.org>
-Date:   Tue, 16 Apr 2019 07:54:03 -0400
-In-Reply-To: <CAAFQd5Cz-N-7YdwVbtF9yX3LgDtG0yqD0sw6w9r47_m086=b-A@mail.gmail.com>
-References: <cover.bfe197a82766125bea21dd26fd3de85893a921ac.1554380738.git-series.maxime.ripard@bootlin.com>
-         <7cd913545cfc80fa9999839c62c4bf7b354a7904.1554380738.git-series.maxime.ripard@bootlin.com>
-         <CAAFQd5ASMJL2_ovNeFOhCh2JoD86KMtV5XO+7OgM37ckxrxmfA@mail.gmail.com>
-         <CAGb2v642__AF3iHO+d9FKazJ4=uRAQSfxAN_uCUWagH6Jz2twQ@mail.gmail.com>
-         <c3ed6d00bf5642b1524ef4973f2db7ba6759fb6d.camel@collabora.com>
-         <20190405151552.biesirbs35uivk7d@flea>
-         <05078223a4098c96f6260f77e9ef2a01b966daa6.camel@collabora.com>
-         <20190411155749.crdpidehjxa6edya@flea>
-         <CAAFQd5Cz-N-7YdwVbtF9yX3LgDtG0yqD0sw6w9r47_m086=b-A@mail.gmail.com>
-Organization: Collabora
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-H6h/eLDKF45bATKuH42m"
-User-Agent: Evolution 3.32.0 (3.32.0-1.fc30) 
+        Tue, 16 Apr 2019 08:02:12 -0400
+Received: by mail-ed1-f66.google.com with SMTP id j20so7435974edq.10
+        for <linux-media@vger.kernel.org>; Tue, 16 Apr 2019 05:02:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=llzl80DiIp82SCBlcIGLvNGZnzcIImMsnESshKV4KbY=;
+        b=THe/AvEE5PCCgIQSdaMkK7fNtMoTy4zdOYIjgrpbAAfMV1ZwZ4ex+Yq5kMrEx+67St
+         PzPJkp8janKqoDaU2PGFaYx6W1gy4OHFoFXKLjZWX50Ztamxj8Jy2rheVpNu5s+PMYUL
+         Ikl7LTK2se34tW29xFBpf8Hmyoh5Zoae+0T2sVWJPwg9xWmr037n6rpamhEYPzkx1KrO
+         x6abB9IH42RrmE5nspLZSZUy4xzMXCsqLUGTRmjILyuRVeP3CJtNoS4LaoRDhkB7cJsR
+         +pxtXtYBtF/rwnS0K5xd+Q1Uo40n0+jh/IyfNBGVssBaUTKdruf7ZKNjG2ljsFzuVrRB
+         RHSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=llzl80DiIp82SCBlcIGLvNGZnzcIImMsnESshKV4KbY=;
+        b=hOKmuAvJP0ttykM7mk8F9TW3fJBGs+Lx/T9DKMJtggyzgmxPwbZOWed2pX8Bm4tkof
+         ppfpekhh1Qev8JYk31kNMNPdPIsKkSH0+gDP/y1AMXd1IaScuausA4Iy1PUspvOACdJQ
+         fANWqLCpxCXuy65wCtCxEkSI+vzUOVBL0wXCwQ7K0lPVM4w8gGjwJpDRFvGlkeIZ4MHF
+         tP6dQ+iKbFNecXZkQO92+ZuLCah4nSg4RuAIEfMVXjpt7fklQXNMg4flsfMB+Uw2hDNz
+         9dOpcickRE5mQrisc3r+b4Lh3A402Z57edoZQukknixGAXz8P67u45WKsE+/O0+HnVZD
+         o/Og==
+X-Gm-Message-State: APjAAAUMP6QuZ8yfJMchQynGqH5SZ4GLVBI3BukeckI3A33ZfcXZymfQ
+        Ta0pz3JaBf8vNOVkIwKTKdE=
+X-Google-Smtp-Source: APXvYqzlskozCrer3jEUOgNrQCo+LEcqKZ56oVdrC/oXH2J7X3XZ8OTJon+2jAg19+vWqCQvMVt2VQ==
+X-Received: by 2002:aa7:c5c4:: with SMTP id h4mr50253161eds.19.1555416129838;
+        Tue, 16 Apr 2019 05:02:09 -0700 (PDT)
+Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
+        by smtp.gmail.com with ESMTPSA id q20sm9616450ejb.65.2019.04.16.05.02.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Apr 2019 05:02:05 -0700 (PDT)
+From:   Ricardo Ribalda Delgado <ricardo@ribalda.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Gregor Jasny <gjasny@googlemail.com>,
+        linux-media@vger.kernel.org, daniel@qtec.com
+Cc:     Ricardo Ribalda Delgado <ricardo@ribalda.com>
+Subject: [PATCH] libv4lconvert: Add support for V4L2_PIX_FMT_NV12
+Date:   Tue, 16 Apr 2019 14:02:03 +0200
+Message-Id: <20190416120203.24028-1-ricardo@ribalda.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+NV12 is a two-plane version YUV 4:2:0, where the U and V components
+are subsampled 2x2.
 
---=-H6h/eLDKF45bATKuH42m
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Ricardo Ribalda Delgado <ricardo@ribalda.com>
+---
+The code has ben tested with qv4l2 and vivid.
+v4lconvert_nv12_to_yuv420 has not been tested!!, any suggestions for
+how to do it?
 
-Le mardi 16 avril 2019 =C3=A0 16:16 +0900, Tomasz Figa a =C3=A9crit :
-> On Fri, Apr 12, 2019 at 12:57 AM Maxime Ripard
-> <maxime.ripard@bootlin.com> wrote:
-> > Hi,
-> >=20
-> > On Fri, Apr 05, 2019 at 12:27:48PM -0400, Nicolas Dufresne wrote:
-> > > Le vendredi 05 avril 2019 =C3=A0 17:15 +0200, Maxime Ripard a =C3=A9c=
-rit :
-> > > > Hi Nicolas,
-> > > >=20
-> > > > On Thu, Apr 04, 2019 at 11:41:13AM -0400, Nicolas Dufresne wrote:
-> > > > > > > > +    * - __u16
-> > > > > > > > +      - ``pic_width_in_mbs_minus1``
-> > > > > > > > +      -
-> > > > > > > > +    * - __u16
-> > > > > > > > +      - ``pic_height_in_map_units_minus1``
-> > > > > > > > +      -
-> > > > > > >=20
-> > > > > > > We recently had some reflection with Alex that this is redund=
-ant with
-> > > > > > > the width and height in the OUTPUT format. It may also apply =
-to some
-> > > > > > > other fields in these structs. I feel like they should be rem=
-oved and
-> > > > > > > passed via corresponding generic V4L2 properties - format, se=
-lection,
-> > > > > > > etc.
-> > > > > > >=20
-> > > > > > > The same problem is also present in the MPEG2 controls. In fa=
-ct, there
-> > > > > > > was a patch already which used some fields from the controls =
-to
-> > > > > > > calculate the destination buffer strides, rather than bytespe=
-rline in
-> > > > > > > the format.
-> > > > > > >=20
-> > > > > > > Since we're in staging, it could be done with a follow-up pat=
-ch, though.
-> > > > > >=20
-> > > > > > Just my two cents. I played with some codecs a while back. IIRC=
- some
-> > > > > > specify a "codec" size in addition to the actual picture size, =
-like
-> > > > > > when the encoder does padding to fit the requirements of the co=
-dec
-> > > > > > (spec). Is this needed anywhere?
-> > > > >=20
-> > > > > With state-less encoders, the headers, which contains the crop
-> > > > > information is created by userspace and for state less decoder, t=
-he
-> > > > > headers that contains this information is parsed by userspace. So=
- I
-> > > > > believe that in theory, the accelerator does not strictly need to=
- be
-> > > > > aware of the cropped dimensions.
-> > > > >=20
-> > > > > Another thing, is that there is not guarantied matches between e.=
-g.
-> > > > > depth of the chrome/luma and the final image buffers. Some hardwa=
-re may
-> > > > > have bandwidth limitation or internal converter and could possibl=
-y
-> > > > > decode 10bit data into 8bit buffers.
-> > > > >=20
-> > > > > A third reason why I would not try and encode this header informa=
-tion
-> > > > > is that there can be multiple PPS/SPS at the same time, and I thi=
-nk
-> > > > > it's confusing if the relevant information to differentiate them =
-is
-> > > > > removed.
-> > > >=20
-> > > > Sorry if that sounds a bit dumb, but it's not really clear to me if
-> > > > you're arguing for the removal of the data as Tomasz suggests, or i=
-f
-> > > > you want to keep them.
-> > > >=20
-> > > > The first paragrah seems to advocate for the former, but the two
-> > > > others for the latter.
-> > >=20
-> > > I think the data should stay. As I said, there can be multiple SPS/PP=
-S,
-> > > while there is only one format. That being said, how does SPS/PPS
-> > > activation works ? How do you tell the driver about all the SPS/PPS a=
-nd
-> > > which one is being activated ?
-> >=20
-> > The current way of dealing with this is that the _SLICE_PARAMS control
-> > actually takes an array of SPS's. And same thing for PPS.
-> >=20
-> > There's no difference between activated and deactivated ones
-> > though. What is the use case for this?
->=20
-> Uhm, there is only one format, but so there is only one active
-> SPS/PPS, isn't it?
+Thanks!
+ lib/libv4lconvert/libv4lconvert-priv.h |  6 +++
+ lib/libv4lconvert/libv4lconvert.c      | 19 +++++++++
+ lib/libv4lconvert/rgbyuv.c             | 56 ++++++++++++++++++++++++++
+ 3 files changed, 81 insertions(+)
 
-Yes, and the active one can only change on frame boundary.
-
-> An alternative would be to just make the OUTPUT format a function of
-> the currently set controls, so that it would always match the active
-> PPS/SPS, without the ability for the application to change it.
->=20
-> I just want to avoid the case when the OUTPUT format can be set
-> randomly to something different than in the stream and also drivers
-> reading randomly the format-related information sometimes from the
-> controls and sometimes from the format state.
-
-Understood.
-
->=20
-> Best regards,
-> Tomasz
-
---=-H6h/eLDKF45bATKuH42m
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXLXCWwAKCRBxUwItrAao
-HEwGAKC9vzS05UNWnMStFON4Z1xXPRm6oACeJm2bqgyFqXpZCkdiFXN29ux7DW8=
-=ac8L
------END PGP SIGNATURE-----
-
---=-H6h/eLDKF45bATKuH42m--
+diff --git a/lib/libv4lconvert/libv4lconvert-priv.h b/lib/libv4lconvert/libv4lconvert-priv.h
+index a8046ce2..c45b086e 100644
+--- a/lib/libv4lconvert/libv4lconvert-priv.h
++++ b/lib/libv4lconvert/libv4lconvert-priv.h
+@@ -285,6 +285,12 @@ void v4lconvert_hm12_to_yuv420(const unsigned char *src,
+ void v4lconvert_hsv_to_rgb24(const unsigned char *src, unsigned char *dest,
+ 		int width, int height, int bgr, int Xin, unsigned char hsv_enc);
+ 
++void v4lconvert_nv12_to_rgb24(const unsigned char *src, unsigned char *dest,
++		int width, int height, int bgr);
++
++void v4lconvert_nv12_to_yuv420(const unsigned char *src, unsigned char *dest,
++		int width, int height, int yvu);
++
+ void v4lconvert_rotate90(unsigned char *src, unsigned char *dest,
+ 		struct v4l2_format *fmt);
+ 
+diff --git a/lib/libv4lconvert/libv4lconvert.c b/lib/libv4lconvert/libv4lconvert.c
+index 78fb3432..2111d19f 100644
+--- a/lib/libv4lconvert/libv4lconvert.c
++++ b/lib/libv4lconvert/libv4lconvert.c
+@@ -116,6 +116,7 @@ static const struct v4lconvert_pixfmt supported_src_pixfmts[] = {
+ 	{ V4L2_PIX_FMT_SN9C20X_I420,	12,	 6,	 3,	1 },
+ 	{ V4L2_PIX_FMT_M420,		12,	 6,	 3,	1 },
+ 	{ V4L2_PIX_FMT_HM12,		12,	 6,	 3,	1 },
++	{ V4L2_PIX_FMT_NV12,		12,	 6,	 3,	1 },
+ 	{ V4L2_PIX_FMT_CPIA1,		 0,	 6,	 3,	1 },
+ 	/* JPEG and variants */
+ 	{ V4L2_PIX_FMT_MJPEG,		 0,	 7,	 7,	0 },
+@@ -902,6 +903,24 @@ static int v4lconvert_convert_pixfmt(struct v4lconvert_data *data,
+ 		}
+ 		break;
+ 
++		/* NV12 formats */
++	case V4L2_PIX_FMT_NV12:
++		switch (dest_pix_fmt) {
++		case V4L2_PIX_FMT_RGB24:
++			v4lconvert_nv12_to_rgb24(src, dest, width, height, 0);
++			break;
++		case V4L2_PIX_FMT_BGR24:
++			v4lconvert_nv12_to_rgb24(src, dest, width, height, 1);
++			break;
++		case V4L2_PIX_FMT_YUV420:
++			v4lconvert_nv12_to_yuv420(src, dest, width, height, 0);
++			break;
++		case V4L2_PIX_FMT_YVU420:
++			v4lconvert_nv12_to_yuv420(src, dest, width, height, 1);
++			break;
++		}
++		break;
++
+ 		/* compressed bayer formats */
+ 	case V4L2_PIX_FMT_SPCA561:
+ 	case V4L2_PIX_FMT_SN9C10X:
+diff --git a/lib/libv4lconvert/rgbyuv.c b/lib/libv4lconvert/rgbyuv.c
+index 02c8cb5b..bfe3b15f 100644
+--- a/lib/libv4lconvert/rgbyuv.c
++++ b/lib/libv4lconvert/rgbyuv.c
+@@ -845,3 +845,59 @@ void v4lconvert_hsv_to_rgb24(const unsigned char *src, unsigned char *dest,
+ 			src += bppIN;
+ 		}
+ }
++
++void v4lconvert_nv12_to_rgb24(const unsigned char *src, unsigned char *dest,
++		int width, int height, int bgr)
++{
++	int i, j;
++	const unsigned char *ysrc = src;
++	const unsigned char *uvsrc = src + width * height;
++
++	for (i = 0; i < height; i++) {
++		for (j = 0; j < width; j ++) {
++			if (bgr) {
++				*dest++ = YUV2B(*ysrc, *uvsrc, *(uvsrc + 1));
++				*dest++ = YUV2G(*ysrc, *uvsrc, *(uvsrc + 1));
++				*dest++ = YUV2R(*ysrc, *uvsrc, *(uvsrc + 1));
++			} else {
++				*dest++ = YUV2R(*ysrc, *uvsrc, *(uvsrc + 1));
++				*dest++ = YUV2G(*ysrc, *uvsrc, *(uvsrc + 1));
++				*dest++ = YUV2B(*ysrc, *uvsrc, *(uvsrc + 1));
++			}
++			ysrc++;
++			if (j&1)
++				uvsrc += 2;
++		}
++
++		/* Rewind u and v for next line */
++		if (!(i&1))
++			uvsrc -= width;
++	}
++}
++
++void v4lconvert_nv12_to_yuv420(const unsigned char *src, unsigned char *dest,
++		int width, int height, int yvu)
++{
++	int i, j;
++	const unsigned char *ysrc = src;
++	const unsigned char *uvsrc = src + width * height;
++	unsigned char *ydst = dest;
++	unsigned char *udst, *vdst;
++
++	if (yvu) {
++		vdst = ydst + width * height;
++		udst = vdst + ((width / 2) * (height / 2));
++	} else {
++		udst = ydst + width * height;
++		vdst = udst + ((width / 2) * (height / 2));
++	}
++
++	for (i = 0; i < height; i++)
++		for (j = 0; i < width; j++) {
++			*ydst++ = *ysrc++;
++			if (((i % 2) == 0) && ((j % 2) == 0)) {
++				*udst++ = *uvsrc++;
++				*vdst++ = *uvsrc++;
++			}
++		}
++}
+-- 
+2.20.1
 
