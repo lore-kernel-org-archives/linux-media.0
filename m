@@ -7,52 +7,53 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4560FC10F14
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65CA2C10F13
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:33:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 160862075B
-	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:26:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 383ED2077C
+	for <linux-media@archiver.kernel.org>; Tue, 16 Apr 2019 11:33:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555414009;
-	bh=gkDHdtUZw4LIZmkCFR8CKDA+uD3WfNPB8qcrYtx5X3U=;
+	s=default; t=1555414427;
+	bh=MlxSTPGFW2Tay5rjzFaS6Q9MzzskYlaWLTny8l5AxMg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=w4fvgxNT+T41TcLXFqY59C5gquK7An3i4lDuUiVMuROpawLk/XX+TKdvPwBxiVQEn
-	 DTQ3CHkSml7Cdz+19ETwkHl8tesSMdJmTln4/wrNBssbPMJZ1brywPu1EpHnjW4iFN
-	 oqmdGavTD9k4ae596JBTh9amGVf9dNkV+Asrz6ZU=
+	b=z8ChqqANE1VekRo//bKOLUsryMPjiAydPrsNemrMITny3QjRLaIFdGpl2VHBe27XM
+	 UIfEM5nw63HefuLs/obzPkDNqrR8MRRjvYZc3JI8GYPDb2Aejxljvu8NnA4xddXpkM
+	 rQDIs1hwu6YNbq7s6ouOaVHmJRsUjJGVcm8lmzJM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728108AbfDPL0n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Apr 2019 07:26:43 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:35578 "EHLO
+        id S1729079AbfDPLdl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 16 Apr 2019 07:33:41 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:45050 "EHLO
         mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726313AbfDPL0n (ORCPT
+        with ESMTP id S1726241AbfDPLdl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Apr 2019 07:26:43 -0400
-Received: by mail-lf1-f65.google.com with SMTP id j20so2845011lfh.2;
-        Tue, 16 Apr 2019 04:26:41 -0700 (PDT)
+        Tue, 16 Apr 2019 07:33:41 -0400
+Received: by mail-lf1-f65.google.com with SMTP id h18so15705301lfj.11;
+        Tue, 16 Apr 2019 04:33:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vJKHZpxwRQsFB5n0MhL4GKkRlf428UhyO+u00MshSV8=;
-        b=FKO9u9scV+8ZfRDLnQYBixpDm1B1e3qWapPfLlJ734ZzsxdbwbgTVkrDV4MiUJsLR4
-         OtcgIpcEzOTk6M3XHHOYvoDmpdO1LfaKVLExf1wUaPJ5X001zIlVzHK5YnEwY9nmM2f7
-         cniE6k4183DovGp7nHXM3Gn7Ek86yWcnocCGOU2rqzE6JM9aTSkUlQ/quUQW7zGn+N9V
-         9axVXK8ct//70EC+wrC62GFA0FjxT4A7CVQNRCy0wB2+34EjilmavNgxMsV4x1uzAEQu
-         ZyIYbi66MwqrGCzl79LHRsonHzYrdmkpPh+e/sOYsL1Fin+HIGch5UqCMDUq/v1e6G5/
-         b9Lg==
-X-Gm-Message-State: APjAAAX8GurwGt+gSPywRl/tpCva3uJ36LUuEW+uB1A5zrprFXULYbuU
-        JaHreMHGbv1SnGWaHp52pSY=
-X-Google-Smtp-Source: APXvYqxWZCARybrme3NTxtAyTyCXhPJuPWGzMuQBfgX3z7SL0RhOgmInP2brmoCwIk/0nm3rv+5h2Q==
-X-Received: by 2002:ac2:482e:: with SMTP id 14mr24096972lft.1.1555414000929;
-        Tue, 16 Apr 2019 04:26:40 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=CS4NO5XoAVBszCZuPPtAOq5Inz9Vw8UIugRH0CNHl4U=;
+        b=HZ0Nrt0xLDPlRsgOCTljC+9yQG+yxnmA8T7Ne8326nVzMGYRwar1HgtBzR8jY5gA66
+         xuGlv2WCtDfn0j3MixA1SFPAT7szUF6NLNM8Ifm9CTnqEohvx6lGmmMs94CWkZBSVRI9
+         olf65RPO7Nd723Xc/rf6bG7inkwZh37vErCXJa/Num1bcw2OOTWWuW7Vx9vd03M9Hv0r
+         BEyMx2MTGqbAsTON7am4EvW/NKNQeRyVlFT/cCBYT1yjtVICHM4bgsBP7LaoT8Bu3lEd
+         ztyXapMrOEDWWq2zrz0j0beuvaBeRxnBRzYMyYVnz+L/+sYrmCx+cD7+XGtZD27LW8Vo
+         Z2Qg==
+X-Gm-Message-State: APjAAAXXcvWMRC0WBygHn1Y4Sw/teKgHz0BhJKPyiqW9pxKS6KDQhYGt
+        L29n+Ip3lqhP1aBHVQJiUCs=
+X-Google-Smtp-Source: APXvYqzMgAu7ahq6a5UL4Ej/0GSD4KNsUnU7Oh6tPqpMpoRSWSp8qhp5QPpgx1xfCnPV9l69APKFqQ==
+X-Received: by 2002:ac2:5088:: with SMTP id f8mr19541978lfm.107.1555414419069;
+        Tue, 16 Apr 2019 04:33:39 -0700 (PDT)
 Received: from xi.terra (c-74bee655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.190.116])
-        by smtp.gmail.com with ESMTPSA id i24sm10305641ljb.31.2019.04.16.04.26.39
+        by smtp.gmail.com with ESMTPSA id z16sm820265lfi.9.2019.04.16.04.33.37
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Apr 2019 04:26:39 -0700 (PDT)
+        Tue, 16 Apr 2019 04:33:38 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.91)
         (envelope-from <johan@kernel.org>)
-        id 1hGMEf-0006wi-M2; Tue, 16 Apr 2019 13:26:45 +0200
-Date:   Tue, 16 Apr 2019 13:26:45 +0200
+        id 1hGMLP-0006z4-Oe; Tue, 16 Apr 2019 13:33:43 +0200
+Date:   Tue, 16 Apr 2019 13:33:43 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Young Xiao <92siuyang@gmail.com>
 Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
@@ -61,84 +62,70 @@ Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
         Young Xiao <YangX92@hotmail.com>
 Subject: Re: [PATCH] USB: s2255 & stkwebcam: fix oops with malicious USB
  descriptors
-Message-ID: <20190416112645.GI775@localhost>
+Message-ID: <20190416113343.GJ775@localhost>
 References: <1554958452-29794-1-git-send-email-92siuyang@gmail.com>
+ <20190416112645.GI775@localhost>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1554958452-29794-1-git-send-email-92siuyang@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190416112645.GI775@localhost>
 User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Apr 11, 2019 at 12:54:12PM +0800, Young Xiao wrote:
-> From: Young Xiao <YangX92@hotmail.com>
+On Tue, Apr 16, 2019 at 01:26:45PM +0200, Johan Hovold wrote:
+> On Thu, Apr 11, 2019 at 12:54:12PM +0800, Young Xiao wrote:
+> > From: Young Xiao <YangX92@hotmail.com>
+> > 
+> > The driver expects at least one valid endpoint. If given
+> > malicious descriptors that specify 0 for the number of endpoints,
+> > it will crash in the probe function.  Ensure there is at least
+> > one endpoint on the interface before using it.
 > 
-> The driver expects at least one valid endpoint. If given
-> malicious descriptors that specify 0 for the number of endpoints,
-> it will crash in the probe function.  Ensure there is at least
-> one endpoint on the interface before using it.
+> Why do claim it will crash?
 
-Why do claim it will crash?
+Ok, I see now that Björn already pointed this out to you in your
+updated version of this patch.
 
-> This vulnerability is same as CVE-2016-2188.
-
-Note that the "fix" for this CVE that you're now copying was incomplete.
-Here's the proper fix:
-
-	b7321e81fc36 ("USB: iowarrior: fix NULL-deref at probe")
-
-> Signed-off-by: Young Xiao <YangX92@hotmail.com>
-> ---
->  drivers/media/usb/s2255/s2255drv.c       | 7 +++++++
->  drivers/media/usb/stkwebcam/stk-webcam.c | 6 ++++++
->  2 files changed, 13 insertions(+)
+> > This vulnerability is same as CVE-2016-2188.
 > 
-> diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
-> index 5b3e54b..7fdf159 100644
-> --- a/drivers/media/usb/s2255/s2255drv.c
-> +++ b/drivers/media/usb/s2255/s2255drv.c
-> @@ -2263,6 +2263,13 @@ static int s2255_probe(struct usb_interface *interface,
->  	iface_desc = interface->cur_altsetting;
->  	dev_dbg(&interface->dev, "num EP: %d\n",
->  		iface_desc->desc.bNumEndpoints);
-> +
-> +	if (iface_desc->desc.bNumEndpoints < 1) {
-> +		dev_err(&interface->dev, "Invalid number of endpoints\n");
-> +		retval = -EINVAL;
-> +		goto error;
-> +	}
-> +
->  	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
+> Note that the "fix" for this CVE that you're now copying was incomplete.
+> Here's the proper fix:
+> 
+> 	b7321e81fc36 ("USB: iowarrior: fix NULL-deref at probe")
+> 
+> > Signed-off-by: Young Xiao <YangX92@hotmail.com>
+> > ---
+> >  drivers/media/usb/s2255/s2255drv.c       | 7 +++++++
+> >  drivers/media/usb/stkwebcam/stk-webcam.c | 6 ++++++
+> >  2 files changed, 13 insertions(+)
+> > 
+> > diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
+> > index 5b3e54b..7fdf159 100644
+> > --- a/drivers/media/usb/s2255/s2255drv.c
+> > +++ b/drivers/media/usb/s2255/s2255drv.c
+> > @@ -2263,6 +2263,13 @@ static int s2255_probe(struct usb_interface *interface,
+> >  	iface_desc = interface->cur_altsetting;
+> >  	dev_dbg(&interface->dev, "num EP: %d\n",
+> >  		iface_desc->desc.bNumEndpoints);
+> > +
+> > +	if (iface_desc->desc.bNumEndpoints < 1) {
+> > +		dev_err(&interface->dev, "Invalid number of endpoints\n");
+> > +		retval = -EINVAL;
+> > +		goto error;
+> > +	}
+> > +
+> >  	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
+> 
+> Besides that you didn't even bother compile-testing this, there is no
+> bug here to fix to begin with.
+> 
+> If bNumEndpoints is zero this loop will execute and the driver bails out
+> just after since dev->read_endpoint is NULL.
 
-Besides that you didn't even bother compile-testing this, there is no
-bug here to fix to begin with.
-
-If bNumEndpoints is zero this loop will execute and the driver bails out
-just after since dev->read_endpoint is NULL.
-
->  		endpoint = &iface_desc->endpoint[i].desc;
->  		if (!dev->read_endpoint && usb_endpoint_is_bulk_in(endpoint)) {
-> diff --git a/drivers/media/usb/stkwebcam/stk-webcam.c b/drivers/media/usb/stkwebcam/stk-webcam.c
-> index 8f54586..d2a4785 100644
-> --- a/drivers/media/usb/stkwebcam/stk-webcam.c
-> +++ b/drivers/media/usb/stkwebcam/stk-webcam.c
-> @@ -1350,6 +1350,12 @@ static int stk_camera_probe(struct usb_interface *interface,
->  	 * for the current alternate setting */
->  	iface_desc = interface->cur_altsetting;
->  
-> +	if (iface_desc->desc.bNumEndpoints < 1) {
-> +		dev_err(&interface->dev, "Invalid number of endpoints\n");
-> +		retval = -EINVAL;
-> +		goto error;
-> +	}
-> +
->  	for (i = 0; i < iface_desc->desc.bNumEndpoints; ++i) {
-
-Same here.
-
->  		endpoint = &iface_desc->endpoint[i].desc;
+That was meant to read "will never execute".
 
 Johan
