@@ -2,59 +2,65 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23774C282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 12:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4234DC282DA
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 12:41:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EEE6720835
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 12:39:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1822021773
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 12:41:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732104AbfDQMjk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 08:39:40 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:55957 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732049AbfDQMjk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 08:39:40 -0400
-Received: from aptenodytes (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 1DA81240010;
-        Wed, 17 Apr 2019 12:39:36 +0000 (UTC)
-Message-ID: <9747977af63d2cb66a51e18ce5e545ed99803718.camel@bootlin.com>
-Subject: Re: [PATCH 19/20] lib: image-formats: Add more functions
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
+        id S1731932AbfDQMli (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 08:41:38 -0400
+Received: from mga12.intel.com ([192.55.52.136]:49137 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729898AbfDQMli (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Apr 2019 08:41:38 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Apr 2019 05:41:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,361,1549958400"; 
+   d="scan'208";a="132141962"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga007.jf.intel.com with ESMTP; 17 Apr 2019 05:41:33 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 62E01204DA; Wed, 17 Apr 2019 15:41:32 +0300 (EEST)
+Date:   Wed, 17 Apr 2019 15:41:32 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
         David Airlie <airlied@linux.ie>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Date:   Wed, 17 Apr 2019 14:39:36 +0200
-In-Reply-To: <382f72c5938f538c8489cb2032050f4be252ad59.1555487650.git-series.maxime.ripard@bootlin.com>
+Subject: Re: [PATCH 19/20] lib: image-formats: Add more functions
+Message-ID: <20190417124131.febnqtpp6oetbafs@paasikivi.fi.intel.com>
 References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
-         <382f72c5938f538c8489cb2032050f4be252ad59.1555487650.git-series.maxime.ripard@bootlin.com>
-Organization: Bootlin
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1 
+ <382f72c5938f538c8489cb2032050f4be252ad59.1555487650.git-series.maxime.ripard@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <382f72c5938f538c8489cb2032050f4be252ad59.1555487650.git-series.maxime.ripard@bootlin.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hi Maxime,
 
-On Wed, 2019-04-17 at 09:54 +0200, Maxime Ripard wrote:
+On Wed, Apr 17, 2019 at 09:54:45AM +0200, Maxime Ripard wrote:
 > V4L2 drivers typically need a few more helpers compared to DRM drivers, so
 > let's add them.
 > 
@@ -80,11 +86,13 @@ On Wed, 2019-04-17 at 09:54 +0200, Maxime Ripard wrote:
 > + * Returns:
 > + * The bytes per pixel value for the specified plane.
 
-Looks like this needs to be updated to "bytes per line" ;)
+In V4L2 the bytesperline (stride) value is user configurable and is also
+subject to hardware capabilities. So effectively this makes what the
+function returns a minimum value for a given format. I think you could add
+this to the documentation. This is also not the number of bytes per pixel,
+as suggested above. So, e.g.
 
-Cheers,
-
-Paul
+	Returns the minimum number of bytes between two consecutive lines.
 
 > + */
 > +static inline
@@ -107,6 +115,15 @@ Paul
 > + *
 > + * Returns:
 > + * The size of the plane buffer.
+
+Similarly:
+
+	Returns the minimum size of the plane buffer.
+
+With these,
+
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
 > + */
 > +static inline
 > +unsigned int image_format_info_plane_size(const struct image_format_info *format,
@@ -123,8 +140,7 @@ Paul
 >  const struct image_format_info *__image_format_drm_lookup(u32 drm);
 >  const struct image_format_info *__image_format_v4l2_lookup(u32 v4l2);
 >  const struct image_format_info *image_format_drm_lookup(u32 drm);
--- 
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
 
+-- 
+Sakari Ailus
+sakari.ailus@linux.intel.com
