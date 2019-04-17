@@ -4,78 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8BCDC282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED635C282DC
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:31:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7427A21773
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:26:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A75FA21773
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:31:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="DwxmMsU0"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="jz7yfzJe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732401AbfDQO0h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 10:26:37 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:43130 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729356AbfDQO0h (ORCPT
+        id S1732369AbfDQOa4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 10:30:56 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:43717 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729453AbfDQOa4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 10:26:37 -0400
-Received: by mail-ed1-f65.google.com with SMTP id j20so10949517edq.10
-        for <linux-media@vger.kernel.org>; Wed, 17 Apr 2019 07:26:35 -0700 (PDT)
+        Wed, 17 Apr 2019 10:30:56 -0400
+Received: by mail-ed1-f66.google.com with SMTP id j20so10963342edq.10
+        for <linux-media@vger.kernel.org>; Wed, 17 Apr 2019 07:30:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
-        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=SfnoMrLiozTDsuobQ+BHEbZOSf/41WBWWV1hkJ5nCIk=;
-        b=DwxmMsU0WmTVWWPOl6gwMyw+iCMfQGcKW6Wx1yh5x66YVp/vImIZEzHEY00W8ESNxU
-         4xYEk78F+c2mArIEkx5rKTZNuu4M/BrzY69xE1ENFXPo2XqrKG8OnCFOFGtxa2BI7+H2
-         ACVJchCD5VdTb3azKS8zAu3qsTE7im3W3LeSk=
+        h=sender:date:from:to:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=UtwXfgHiW9uxr4io2NrLhIlt9faL/SpYVdNzzRRZdyE=;
+        b=jz7yfzJePU9xVKg98q0j9gYBrMPepskYacPVPUSRTBKqyYiX04AHNuRcrz7uRDO/8f
+         ys4BD+WkVNbAA/cRFZ8tWp1Ts0mtTJL8ejOnPFUOZAeOFVIjMMQgmSap1cXh75O5pb1h
+         NxFTEug9hca9QghD86YEpDGy3ntZbtdmKrHVA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+        h=x-gm-message-state:sender:date:from:to:subject:message-id
          :mail-followup-to:references:mime-version:content-disposition
          :content-transfer-encoding:in-reply-to:user-agent;
-        bh=SfnoMrLiozTDsuobQ+BHEbZOSf/41WBWWV1hkJ5nCIk=;
-        b=Cfht9Z/3EfxzC+bBzIAPW70UMTvFTKU2Yl7OAJxTGKOg+kxOfDh/MjOX6A00ykO9la
-         V+dfRqPY2tJNL9JVmWZHJyLoRjHmFq8YEkE3BbCMJR50HpV1ENaM1RrscYsNRt08Fv3E
-         OF+f6a8ruDhYdOsyJUHBDXT6cmiThkr/VC3axBrjqzu+9T1vaLiHEsXLPgyNWOYSB811
-         J4cj1tTDnzzymzVokcVyLhiiM33k5rWzNaXPkchNlTSi6p7/fJ9EOSFZLrcERzADkJQ7
-         JNm7dqSdjDh1ykhyTr9RRjFN3XVATQUn2wLZiWWOy34ru3SfmhvgGKuSehY3lrxgKHKT
-         bndw==
-X-Gm-Message-State: APjAAAXtRXXyMNHBnoXyEzAAjCR9wUvNTbVy0be4Vg/8il0bPTjltntb
-        L9NdN56VKZKMZg1YfFT20tL21g==
-X-Google-Smtp-Source: APXvYqwu0QgVKfBpH9MV0EpYAfYEeED6y1FDUVnIHk1gj/BpjE28v/H5UhTKRdAHVMyXyo/Ak+SkGg==
-X-Received: by 2002:aa7:dc4d:: with SMTP id g13mr13268281edu.216.1555511194957;
-        Wed, 17 Apr 2019 07:26:34 -0700 (PDT)
+        bh=UtwXfgHiW9uxr4io2NrLhIlt9faL/SpYVdNzzRRZdyE=;
+        b=NfTn2otP/yVCwlifDz19jVx4Yu6mTC57CIQ3uQnNzSrN1jhGnWzTQK4b2z9jFFCcMQ
+         LWLyTQc+M6329bsEMNu5rCTS6Ol7QoF6dAc7tybhvISadVEm5iX9/X7d4QHRQ1Xk3QCs
+         j4KjSUwVcMP5biVCFr426mVK6EOWNeQKlXcxIOALyv0V1MMwvSHovEYsNMKddwUMns38
+         zMkIcQeHFzhqu8PUXsRYq9ifXiVIJn/YEmzjt7bbtcZc2dquY1rwFdi/t289269xEQgn
+         lbSJx7mBz2N9uWrBR/h0hptQkpgmbvcge972xrpFxBZoe6TKBcdNAKfyj7Zkavx6Oybo
+         4W2Q==
+X-Gm-Message-State: APjAAAVsR4+9RCJxtf+Bdj2HPlF1Y2ORG3JHfaSgHNf0cXhJknvLQ4Di
+        NqVuxqMyAzCbMHUrKES2nBr/4drLHSY=
+X-Google-Smtp-Source: APXvYqxy1+5aJUdsuQrBfB1YwfPwwMbZ3cdbG1XS9RQBH621Drh22ZrDRGjDIz7yVQp0NbCbwbGmMw==
+X-Received: by 2002:a17:906:a291:: with SMTP id i17mr7689751ejz.180.1555511453952;
+        Wed, 17 Apr 2019 07:30:53 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
-        by smtp.gmail.com with ESMTPSA id q56sm4492848edd.80.2019.04.17.07.26.33
+        by smtp.gmail.com with ESMTPSA id j8sm4891124edq.39.2019.04.17.07.30.52
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 17 Apr 2019 07:26:34 -0700 (PDT)
-Date:   Wed, 17 Apr 2019 16:26:32 +0200
+        Wed, 17 Apr 2019 07:30:53 -0700 (PDT)
+Date:   Wed, 17 Apr 2019 16:30:51 +0200
 From:   Daniel Vetter <daniel@ffwll.ch>
-To:     christian.koenig@amd.com
-Cc:     sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
-Subject: Re: [PATCH 03/12] dma-buf: lock the reservation object during
- (un)map_dma_buf v3
-Message-ID: <20190417142632.GF13337@phenom.ffwll.local>
-Mail-Followup-To: christian.koenig@amd.com, sumit.semwal@linaro.org,
+To:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>, sumit.semwal@linaro.org,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
         amd-gfx@lists.freedesktop.org
+Subject: Re: [PATCH 05/12] dma-buf: add explicit buffer pinning
+Message-ID: <20190417143051.GG13337@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
 References: <20190416183841.1577-1-christian.koenig@amd.com>
- <20190416183841.1577-4-christian.koenig@amd.com>
- <20190417140804.GD13337@phenom.ffwll.local>
- <e22d3797-30e4-f4fd-be9c-42aedf213c5e@gmail.com>
+ <20190416183841.1577-6-christian.koenig@amd.com>
+ <20190417142002.GE13337@phenom.ffwll.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e22d3797-30e4-f4fd-be9c-42aedf213c5e@gmail.com>
+In-Reply-To: <20190417142002.GE13337@phenom.ffwll.local>
 X-Operating-System: Linux phenom 4.19.0-1-amd64 
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
@@ -83,373 +82,211 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Apr 17, 2019 at 04:14:32PM +0200, Christian König wrote:
-> Am 17.04.19 um 16:08 schrieb Daniel Vetter:
-> > On Tue, Apr 16, 2019 at 08:38:32PM +0200, Christian König wrote:
-> > > Make it mandatory for dynamic dma-buf callbacks to be called with the
-> > > reservation lock held.
-> > > 
-> > > For static dma-buf exporters we still have the fallback of using cached sgt.
-> > > 
-> > > v2: reordered
-> > > v3: rebased on sgt caching
-> > > v4: use the cached sgt when possible
-> > > 
-> > > Signed-off-by: Christian König <christian.koenig@amd.com>
-> > I think there's a bit a rebase chaos going on:
-> > - some comments left behind with no_sgt_cache, which I can't find anymore
-> > - the function signature rework of dma_buf_attach should imo be split out
+On Wed, Apr 17, 2019 at 04:20:02PM +0200, Daniel Vetter wrote:
+> On Tue, Apr 16, 2019 at 08:38:34PM +0200, Christian König wrote:
+> > Add optional explicit pinning callbacks instead of implicitly assume the
+> > exporter pins the buffer when a mapping is created.
+> > 
+> > Signed-off-by: Christian König <christian.koenig@amd.com>
 > 
-> Ah, crap thought I've got all of those. Going to fix that.
+> Don't we need this together with the invalidate callback and the dynamic
+> stuff? Also I'm assuming that pin/unpin is pretty much required for
+> dynamic bo, so could we look at these callbacks instead of the dynamic
+> flag you add in patch 1.
 > 
-> > Next issue is that the reservation object locking is still in the path of
-> > dma_buf_map, so probably still going to result in tons of lockdep splats.
-> > Except the i915+amdgpu path should now work due to the fastpath.
+> I'm assuming following rules hold:
+> no pin/upin from exporter:
 > 
-> I actually found a solution for that :)
+> dma-buf is not dynamic, and pinned for the duration of map/unmap. I'm
+> not 100% sure whether really everyone wants the mapping to be cached for
+> the entire attachment, only drm_prime does that. And that's not the only
+> dma-buf importer.
 > 
-> The idea is now that we always cache the sgt in the attachment unless the
-> dynamic flag (previously no_sgt_cache flag) is set. And this cached sgt is
-> created without holding the lock.
+> pin/unpin calls are noops.
+> 
+> pin/unpin exist in the exporter, but importer has not provided an
+> invalidate callback:
+> 
+> We map at attach time, and we also have to pin, since the importer can't
+> handle the buffer disappearing, at attach time. We unmap/unpin at detach.
 
-Yeah I think that idea works.
+For this case we should have a WARN in pin/unpin, to make sure importers
+don't do something stupid. One more thought below on pin/unpin.
 
-> We either need to document that really well or maybe split the mapping
-> callbacks into map/unmap and map_lock/unmap_locked. Opinions?
+> pin/unpin from exporter, invalidate from importer:
+> 
+> Full dynamic mapping. We assume the importer will do caching, attach
+> fences as needed, and pin the underlying bo when it needs it it
+> permanently, without attaching fences (i.e. the scanout case).
+> 
+> Assuming I'm not terribly off with my understanding, then I think it'd be
+> best to introduce the entire new dma-buf api in the first patch, and flesh
+> it out later. Instead of spread over a few patches. Plus the above (maybe
+> prettier) as a nice kerneldoc overview comment for how dynamic dma-buf is
+> supposed to work really.
+> -Daniel
+> 
+> > ---
+> >  drivers/dma-buf/dma-buf.c | 39 +++++++++++++++++++++++++++++++++++++++
+> >  include/linux/dma-buf.h   | 37 +++++++++++++++++++++++++++++++------
+> >  2 files changed, 70 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > index a3738fab3927..f23ff8355505 100644
+> > --- a/drivers/dma-buf/dma-buf.c
+> > +++ b/drivers/dma-buf/dma-buf.c
+> > @@ -630,6 +630,41 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
+> >  }
+> >  EXPORT_SYMBOL_GPL(dma_buf_detach);
+> >  
+> > +/**
+> > + * dma_buf_pin - Lock down the DMA-buf
+> > + *
+> > + * @dmabuf:	[in]	DMA-buf to lock down.
+> > + *
+> > + * Returns:
+> > + * 0 on success, negative error code on failure.
+> > + */
+> > +int dma_buf_pin(struct dma_buf *dmabuf)
 
-I think the implementation doesn't. Exporter can't decide on its own
-whether dynamic/static is what's needed, we need to decide that for each
-attachment, taking both exporter and importer capabilities into account.
+Hm, I think it'd be better to pin the attachment, not the underlying
+buffer. Attachment is the thin the importer will have to pin, and it's at
+attach/detach time where dma-buf needs to pin for importers who don't
+understand dynamic buffer sharing.
 
-I think if we do that, then it should work out. I replied on the pin/unpin
-interface patch with some more concrete thoughts. Maybe best to continue
-that discussion there, with more context.
+Plus when we put that onto attachments, we can do a
+
+	WARN_ON(!attach->invalidate);
+
+sanity check. I think that would be good to have.
 -Daniel
 
-> > Not sure that's a solution that really works, just hides that
-> > fundamentally we still have that issue of incompatible locking chains
-> > between different drivers.
-> 
-> We can now make a slow transition between static and dynamic DMA-buf
-> handling, so only driver who can do the locking will be affected.
-> 
-> Christian.
-> 
-> > -Daniel
+> > +{
+> > +	int ret = 0;
+> > +
+> > +	reservation_object_assert_held(dmabuf->resv);
+> > +
+> > +	if (dmabuf->ops->pin)
+> > +		ret = dmabuf->ops->pin(dmabuf);
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(dma_buf_pin);
+> > +
+> > +/**
+> > + * dma_buf_unpin - Remove lock from DMA-buf
+> > + *
+> > + * @dmabuf:	[in]	DMA-buf to unlock.
+> > + */
+> > +void dma_buf_unpin(struct dma_buf *dmabuf)
+> > +{
+> > +	reservation_object_assert_held(dmabuf->resv);
+> > +
+> > +	if (dmabuf->ops->unpin)
+> > +		dmabuf->ops->unpin(dmabuf);
+> > +}
+> > +EXPORT_SYMBOL_GPL(dma_buf_unpin);
+> > +
+> >  /**
+> >   * dma_buf_map_attachment_locked - Maps the buffer into _device_ address space
+> >   * with the reservation lock held. Is a wrapper for map_dma_buf() of the
+> > @@ -666,6 +701,8 @@ dma_buf_map_attachment_locked(struct dma_buf_attachment *attach,
+> >  	 */
+> >  	if (attach->invalidate)
+> >  		list_del(&attach->node);
+> > +	else
+> > +		dma_buf_pin(attach->dmabuf);
+> >  	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
+> >  	if (attach->invalidate)
+> >  		list_add(&attach->node, &attach->dmabuf->attachments);
+> > @@ -735,6 +772,8 @@ void dma_buf_unmap_attachment_locked(struct dma_buf_attachment *attach,
+> >  
+> >  	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
+> >  						direction);
+> > +	if (!attach->invalidate)
+> > +		dma_buf_unpin(attach->dmabuf);
+> >  }
+> >  EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment_locked);
+> >  
+> > diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
+> > index ece4638359a8..a615b74e5894 100644
+> > --- a/include/linux/dma-buf.h
+> > +++ b/include/linux/dma-buf.h
+> > @@ -100,14 +100,40 @@ struct dma_buf_ops {
+> >  	 */
+> >  	void (*detach)(struct dma_buf *, struct dma_buf_attachment *);
+> >  
+> > +	/**
+> > +	 * @pin_dma_buf:
+> > +	 *
+> > +	 * This is called by dma_buf_pin and lets the exporter know that an
+> > +	 * importer assumes that the DMA-buf can't be invalidated any more.
+> > +	 *
+> > +	 * This is called with the dmabuf->resv object locked.
+> > +	 *
+> > +	 * This callback is optional.
+> > +	 *
+> > +	 * Returns:
+> > +	 *
+> > +	 * 0 on success, negative error code on failure.
+> > +	 */
+> > +	int (*pin)(struct dma_buf *);
+> > +
+> > +	/**
+> > +	 * @unpin_dma_buf:
+> > +	 *
+> > +	 * This is called by dma_buf_unpin and lets the exporter know that an
+> > +	 * importer doesn't need to the DMA-buf to stay were it is any more.
+> > +	 *
+> > +	 * This is called with the dmabuf->resv object locked.
+> > +	 *
+> > +	 * This callback is optional.
+> > +	 */
+> > +	void (*unpin)(struct dma_buf *);
+> > +
+> >  	/**
+> >  	 * @map_dma_buf:
+> >  	 *
+> >  	 * This is called by dma_buf_map_attachment() and is used to map a
+> >  	 * shared &dma_buf into device address space, and it is mandatory. It
+> > -	 * can only be called if @attach has been called successfully. This
+> > -	 * essentially pins the DMA buffer into place, and it cannot be moved
+> > -	 * any more
+> > +	 * can only be called if @attach has been called successfully.
+> >  	 *
+> >  	 * This call may sleep, e.g. when the backing storage first needs to be
+> >  	 * allocated, or moved to a location suitable for all currently attached
+> > @@ -148,9 +174,6 @@ struct dma_buf_ops {
+> >  	 *
+> >  	 * This is called by dma_buf_unmap_attachment() and should unmap and
+> >  	 * release the &sg_table allocated in @map_dma_buf, and it is mandatory.
+> > -	 * It should also unpin the backing storage if this is the last mapping
+> > -	 * of the DMA buffer, it the exporter supports backing storage
+> > -	 * migration.
+> >  	 *
+> >  	 * This is always called with the dmabuf->resv object locked when
+> >  	 * no_sgt_cache is true.
+> > @@ -442,6 +465,8 @@ int dma_buf_fd(struct dma_buf *dmabuf, int flags);
+> >  struct dma_buf *dma_buf_get(int fd);
+> >  void dma_buf_put(struct dma_buf *dmabuf);
+> >  
+> > +int dma_buf_pin(struct dma_buf *dmabuf);
+> > +void dma_buf_unpin(struct dma_buf *dmabuf);
+> >  struct sg_table *dma_buf_map_attachment_locked(struct dma_buf_attachment *,
+> >  					       enum dma_data_direction);
+> >  struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *,
+> > -- 
+> > 2.17.1
 > > 
-> > > ---
-> > >   drivers/dma-buf/dma-buf.c                     | 24 ++++++++++---------
-> > >   drivers/gpu/drm/armada/armada_gem.c           |  6 ++++-
-> > >   drivers/gpu/drm/drm_prime.c                   |  6 ++++-
-> > >   drivers/gpu/drm/i915/i915_gem_dmabuf.c        |  6 ++++-
-> > >   drivers/gpu/drm/tegra/gem.c                   |  6 ++++-
-> > >   drivers/gpu/drm/udl/udl_dmabuf.c              |  6 ++++-
-> > >   .../common/videobuf2/videobuf2-dma-contig.c   |  6 ++++-
-> > >   .../media/common/videobuf2/videobuf2-dma-sg.c |  6 ++++-
-> > >   drivers/staging/media/tegra-vde/tegra-vde.c   |  6 ++++-
-> > >   include/linux/dma-buf.h                       | 23 ++++++++++++++++--
-> > >   10 files changed, 74 insertions(+), 21 deletions(-)
-> > > 
-> > > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> > > index ef480e5fb239..83c92bfd964c 100644
-> > > --- a/drivers/dma-buf/dma-buf.c
-> > > +++ b/drivers/dma-buf/dma-buf.c
-> > > @@ -532,8 +532,9 @@ EXPORT_SYMBOL_GPL(dma_buf_put);
-> > >   /**
-> > >    * dma_buf_attach - Add the device to dma_buf's attachments list; optionally,
-> > >    * calls attach() of dma_buf_ops to allow device-specific attach functionality
-> > > - * @dmabuf:	[in]	buffer to attach device to.
-> > > - * @dev:	[in]	device to be attached.
-> > > + * @info:	[in]	holds all the attach related information provided
-> > > + *			by the importer. see &struct dma_buf_attach_info
-> > > + *			for further details.
-> > >    *
-> > >    * Returns struct dma_buf_attachment pointer for this attachment. Attachments
-> > >    * must be cleaned up by calling dma_buf_detach().
-> > > @@ -547,20 +548,20 @@ EXPORT_SYMBOL_GPL(dma_buf_put);
-> > >    * accessible to @dev, and cannot be moved to a more suitable place. This is
-> > >    * indicated with the error code -EBUSY.
-> > >    */
-> > > -struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
-> > > -					  struct device *dev)
-> > > +struct dma_buf_attachment *dma_buf_attach(const struct dma_buf_attach_info *info)
-> > >   {
-> > > +	struct dma_buf *dmabuf = info->dmabuf;
-> > >   	struct dma_buf_attachment *attach;
-> > >   	int ret;
-> > > -	if (WARN_ON(!dmabuf || !dev))
-> > > +	if (WARN_ON(!dmabuf || !info->dev))
-> > >   		return ERR_PTR(-EINVAL);
-> > >   	attach = kzalloc(sizeof(*attach), GFP_KERNEL);
-> > >   	if (!attach)
-> > >   		return ERR_PTR(-ENOMEM);
-> > > -	attach->dev = dev;
-> > > +	attach->dev = info->dev;
-> > >   	attach->dmabuf = dmabuf;
-> > >   	mutex_lock(&dmabuf->lock);
-> > > @@ -688,9 +689,9 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
-> > >   	if (attach->sgt)
-> > >   		return attach->sgt;
-> > > -	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
-> > > -	if (!sg_table)
-> > > -		sg_table = ERR_PTR(-ENOMEM);
-> > > +	reservation_object_lock(attach->dmabuf->resv, NULL);
-> > > +	sg_table = dma_buf_map_attachment_locked(attach, direction);
-> > > +	reservation_object_unlock(attach->dmabuf->resv);
-> > >   	return sg_table;
-> > >   }
-> > > @@ -744,8 +745,9 @@ void dma_buf_unmap_attachment(struct dma_buf_attachment *attach,
-> > >   	if (attach->sgt == sg_table)
-> > >   		return;
-> > > -	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
-> > > -						direction);
-> > > +	reservation_object_lock(attach->dmabuf->resv, NULL);
-> > > +	dma_buf_unmap_attachment_locked(attach, sg_table, direction);
-> > > +	reservation_object_unlock(attach->dmabuf->resv);
-> > >   }
-> > >   EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment);
-> > > diff --git a/drivers/gpu/drm/armada/armada_gem.c b/drivers/gpu/drm/armada/armada_gem.c
-> > > index 642d0e70d0f8..19c47821032f 100644
-> > > --- a/drivers/gpu/drm/armada/armada_gem.c
-> > > +++ b/drivers/gpu/drm/armada/armada_gem.c
-> > > @@ -501,6 +501,10 @@ armada_gem_prime_export(struct drm_device *dev, struct drm_gem_object *obj,
-> > >   struct drm_gem_object *
-> > >   armada_gem_prime_import(struct drm_device *dev, struct dma_buf *buf)
-> > >   {
-> > > +	struct dma_buf_attach_info attach_info = {
-> > > +		.dev = dev->dev,
-> > > +		.dmabuf = buf
-> > > +	};
-> > >   	struct dma_buf_attachment *attach;
-> > >   	struct armada_gem_object *dobj;
-> > > @@ -516,7 +520,7 @@ armada_gem_prime_import(struct drm_device *dev, struct dma_buf *buf)
-> > >   		}
-> > >   	}
-> > > -	attach = dma_buf_attach(buf, dev->dev);
-> > > +	attach = dma_buf_attach(&attach_info);
-> > >   	if (IS_ERR(attach))
-> > >   		return ERR_CAST(attach);
-> > > diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-> > > index 231e3f6d5f41..1fadf5d5ed33 100644
-> > > --- a/drivers/gpu/drm/drm_prime.c
-> > > +++ b/drivers/gpu/drm/drm_prime.c
-> > > @@ -709,6 +709,10 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
-> > >   					    struct dma_buf *dma_buf,
-> > >   					    struct device *attach_dev)
-> > >   {
-> > > +	struct dma_buf_attach_info attach_info = {
-> > > +		.dev = attach_dev,
-> > > +		.dmabuf = dma_buf
-> > > +	};
-> > >   	struct dma_buf_attachment *attach;
-> > >   	struct sg_table *sgt;
-> > >   	struct drm_gem_object *obj;
-> > > @@ -729,7 +733,7 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
-> > >   	if (!dev->driver->gem_prime_import_sg_table)
-> > >   		return ERR_PTR(-EINVAL);
-> > > -	attach = dma_buf_attach(dma_buf, attach_dev);
-> > > +	attach = dma_buf_attach(&attach_info);
-> > >   	if (IS_ERR(attach))
-> > >   		return ERR_CAST(attach);
-> > > diff --git a/drivers/gpu/drm/i915/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/i915_gem_dmabuf.c
-> > > index 82e2ca17a441..aa7f685bd6ca 100644
-> > > --- a/drivers/gpu/drm/i915/i915_gem_dmabuf.c
-> > > +++ b/drivers/gpu/drm/i915/i915_gem_dmabuf.c
-> > > @@ -277,6 +277,10 @@ static const struct drm_i915_gem_object_ops i915_gem_object_dmabuf_ops = {
-> > >   struct drm_gem_object *i915_gem_prime_import(struct drm_device *dev,
-> > >   					     struct dma_buf *dma_buf)
-> > >   {
-> > > +	struct dma_buf_attach_info attach_info = {
-> > > +		.dev = dev->dev,
-> > > +		.dmabuf = dma_buf
-> > > +	};
-> > >   	struct dma_buf_attachment *attach;
-> > >   	struct drm_i915_gem_object *obj;
-> > >   	int ret;
-> > > @@ -295,7 +299,7 @@ struct drm_gem_object *i915_gem_prime_import(struct drm_device *dev,
-> > >   	}
-> > >   	/* need to attach */
-> > > -	attach = dma_buf_attach(dma_buf, dev->dev);
-> > > +	attach = dma_buf_attach(&attach_info);
-> > >   	if (IS_ERR(attach))
-> > >   		return ERR_CAST(attach);
-> > > diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
-> > > index 4f80100ff5f3..8e6b6c879add 100644
-> > > --- a/drivers/gpu/drm/tegra/gem.c
-> > > +++ b/drivers/gpu/drm/tegra/gem.c
-> > > @@ -332,6 +332,10 @@ struct tegra_bo *tegra_bo_create_with_handle(struct drm_file *file,
-> > >   static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
-> > >   					struct dma_buf *buf)
-> > >   {
-> > > +	struct dma_buf_attach_info attach_info = {
-> > > +		.dev = drm->dev,
-> > > +		.dmabuf = buf
-> > > +	};
-> > >   	struct tegra_drm *tegra = drm->dev_private;
-> > >   	struct dma_buf_attachment *attach;
-> > >   	struct tegra_bo *bo;
-> > > @@ -341,7 +345,7 @@ static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
-> > >   	if (IS_ERR(bo))
-> > >   		return bo;
-> > > -	attach = dma_buf_attach(buf, drm->dev);
-> > > +	attach = dma_buf_attach(&attach_info);
-> > >   	if (IS_ERR(attach)) {
-> > >   		err = PTR_ERR(attach);
-> > >   		goto free;
-> > > diff --git a/drivers/gpu/drm/udl/udl_dmabuf.c b/drivers/gpu/drm/udl/udl_dmabuf.c
-> > > index 556f62662aa9..86b928f9742f 100644
-> > > --- a/drivers/gpu/drm/udl/udl_dmabuf.c
-> > > +++ b/drivers/gpu/drm/udl/udl_dmabuf.c
-> > > @@ -226,6 +226,10 @@ static int udl_prime_create(struct drm_device *dev,
-> > >   struct drm_gem_object *udl_gem_prime_import(struct drm_device *dev,
-> > >   				struct dma_buf *dma_buf)
-> > >   {
-> > > +	struct dma_buf_attach_info attach_info = {
-> > > +		.dev = dev->dev,
-> > > +		.dmabuf = dma_buf
-> > > +	};
-> > >   	struct dma_buf_attachment *attach;
-> > >   	struct sg_table *sg;
-> > >   	struct udl_gem_object *uobj;
-> > > @@ -233,7 +237,7 @@ struct drm_gem_object *udl_gem_prime_import(struct drm_device *dev,
-> > >   	/* need to attach */
-> > >   	get_device(dev->dev);
-> > > -	attach = dma_buf_attach(dma_buf, dev->dev);
-> > > +	attach = dma_buf_attach(&attach_info);
-> > >   	if (IS_ERR(attach)) {
-> > >   		put_device(dev->dev);
-> > >   		return ERR_CAST(attach);
-> > > diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> > > index aff0ab7bf83d..1f2687b5eb0e 100644
-> > > --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> > > +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> > > @@ -676,6 +676,10 @@ static void vb2_dc_detach_dmabuf(void *mem_priv)
-> > >   static void *vb2_dc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
-> > >   	unsigned long size, enum dma_data_direction dma_dir)
-> > >   {
-> > > +	struct dma_buf_attach_info attach_info = {
-> > > +		.dev = dev,
-> > > +		.dmabuf = dbuf
-> > > +	};
-> > >   	struct vb2_dc_buf *buf;
-> > >   	struct dma_buf_attachment *dba;
-> > > @@ -691,7 +695,7 @@ static void *vb2_dc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
-> > >   	buf->dev = dev;
-> > >   	/* create attachment for the dmabuf with the user device */
-> > > -	dba = dma_buf_attach(dbuf, buf->dev);
-> > > +	dba = dma_buf_attach(&attach_info);
-> > >   	if (IS_ERR(dba)) {
-> > >   		pr_err("failed to attach dmabuf\n");
-> > >   		kfree(buf);
-> > > diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> > > index 015e737095cd..cbd626d2393a 100644
-> > > --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> > > +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> > > @@ -608,6 +608,10 @@ static void vb2_dma_sg_detach_dmabuf(void *mem_priv)
-> > >   static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
-> > >   	unsigned long size, enum dma_data_direction dma_dir)
-> > >   {
-> > > +	struct dma_buf_attach_info attach_info = {
-> > > +		.dev = dev,
-> > > +		.dmabuf = dbuf
-> > > +	};
-> > >   	struct vb2_dma_sg_buf *buf;
-> > >   	struct dma_buf_attachment *dba;
-> > > @@ -623,7 +627,7 @@ static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
-> > >   	buf->dev = dev;
-> > >   	/* create attachment for the dmabuf with the user device */
-> > > -	dba = dma_buf_attach(dbuf, buf->dev);
-> > > +	dba = dma_buf_attach(&attach_info);
-> > >   	if (IS_ERR(dba)) {
-> > >   		pr_err("failed to attach dmabuf\n");
-> > >   		kfree(buf);
-> > > diff --git a/drivers/staging/media/tegra-vde/tegra-vde.c b/drivers/staging/media/tegra-vde/tegra-vde.c
-> > > index aa6c6bba961e..5a10c1facc27 100644
-> > > --- a/drivers/staging/media/tegra-vde/tegra-vde.c
-> > > +++ b/drivers/staging/media/tegra-vde/tegra-vde.c
-> > > @@ -568,6 +568,10 @@ static int tegra_vde_attach_dmabuf(struct device *dev,
-> > >   				   size_t *size,
-> > >   				   enum dma_data_direction dma_dir)
-> > >   {
-> > > +	struct dma_buf_attach_info attach_info = {
-> > > +		.dev = dev,
-> > > +		.dmabuf = dmabuf
-> > > +	};
-> > >   	struct dma_buf_attachment *attachment;
-> > >   	struct dma_buf *dmabuf;
-> > >   	struct sg_table *sgt;
-> > > @@ -591,7 +595,7 @@ static int tegra_vde_attach_dmabuf(struct device *dev,
-> > >   		return -EINVAL;
-> > >   	}
-> > > -	attachment = dma_buf_attach(dmabuf, dev);
-> > > +	attachment = dma_buf_attach(&attach_info);
-> > >   	if (IS_ERR(attachment)) {
-> > >   		dev_err(dev, "Failed to attach dmabuf\n");
-> > >   		err = PTR_ERR(attachment);
-> > > diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> > > index 18a78be53541..7e23758db3a4 100644
-> > > --- a/include/linux/dma-buf.h
-> > > +++ b/include/linux/dma-buf.h
-> > > @@ -128,6 +128,9 @@ struct dma_buf_ops {
-> > >   	 * any other kind of sharing that the exporter might wish to make
-> > >   	 * available to buffer-users.
-> > >   	 *
-> > > +	 * This is always called with the dmabuf->resv object locked when
-> > > +	 * no_sgt_cache is true.
-> > > +	 *
-> > >   	 * Returns:
-> > >   	 *
-> > >   	 * A &sg_table scatter list of or the backing storage of the DMA buffer,
-> > > @@ -148,6 +151,9 @@ struct dma_buf_ops {
-> > >   	 * It should also unpin the backing storage if this is the last mapping
-> > >   	 * of the DMA buffer, it the exporter supports backing storage
-> > >   	 * migration.
-> > > +	 *
-> > > +	 * This is always called with the dmabuf->resv object locked when
-> > > +	 * no_sgt_cache is true.
-> > >   	 */
-> > >   	void (*unmap_dma_buf)(struct dma_buf_attachment *,
-> > >   			      struct sg_table *,
-> > > @@ -370,6 +376,19 @@ struct dma_buf_export_info {
-> > >   	struct dma_buf_export_info name = { .exp_name = KBUILD_MODNAME, \
-> > >   					 .owner = THIS_MODULE }
-> > > +/**
-> > > + * struct dma_buf_attach_info - holds information needed to attach to a dma_buf
-> > > + * @dmabuf:	the exported dma_buf
-> > > + * @dev:	the device which wants to import the attachment
-> > > + *
-> > > + * This structure holds the information required to attach to a buffer. Used
-> > > + * with dma_buf_attach() only.
-> > > + */
-> > > +struct dma_buf_attach_info {
-> > > +	struct dma_buf *dmabuf;
-> > > +	struct device *dev;
-> > > +};
-> > > +
-> > >   /**
-> > >    * get_dma_buf - convenience wrapper for get_file.
-> > >    * @dmabuf:	[in]	pointer to dma_buf
-> > > @@ -384,8 +403,8 @@ static inline void get_dma_buf(struct dma_buf *dmabuf)
-> > >   	get_file(dmabuf->file);
-> > >   }
-> > > -struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
-> > > -							struct device *dev);
-> > > +struct dma_buf_attachment *
-> > > +dma_buf_attach(const struct dma_buf_attach_info *info);
-> > >   void dma_buf_detach(struct dma_buf *dmabuf,
-> > >   				struct dma_buf_attachment *dmabuf_attach);
-> > > -- 
-> > > 2.17.1
-> > > 
-> > > _______________________________________________
-> > > dri-devel mailing list
-> > > dri-devel@lists.freedesktop.org
-> > > https://lists.freedesktop.org/mailman/listinfo/dri-devel
+> > _______________________________________________
+> > dri-devel mailing list
+> > dri-devel@lists.freedesktop.org
+> > https://lists.freedesktop.org/mailman/listinfo/dri-devel
 > 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
 -- 
 Daniel Vetter
