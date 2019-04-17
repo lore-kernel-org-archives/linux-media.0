@@ -3,27 +3,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3FDCC282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81D3DC10F12
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:56:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE47C20872
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 580DD20835
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:56:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731403AbfDQHzi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 03:55:38 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:35165 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731392AbfDQHzf (ORCPT
+        id S1731436AbfDQHzs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 03:55:48 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:35851 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731392AbfDQHzr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 03:55:35 -0400
+        Wed, 17 Apr 2019 03:55:47 -0400
 X-Originating-IP: 90.88.160.238
 Received: from localhost (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id 1B9BCC0017;
-        Wed, 17 Apr 2019 07:55:31 +0000 (UTC)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id BDF3D240005;
+        Wed, 17 Apr 2019 07:55:42 +0000 (UTC)
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Daniel Vetter <daniel.vetter@intel.com>,
         David Airlie <airlied@linux.ie>,
@@ -38,9 +38,9 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 12/20] drm/ipuv3: Convert to generic image format library
-Date:   Wed, 17 Apr 2019 09:54:38 +0200
-Message-Id: <dc697850732d4dcf27b7cb3ecb9a4d419c941cb9.1555487650.git-series.maxime.ripard@bootlin.com>
+Subject: [PATCH 14/20] drm/omap: Convert to generic image format library
+Date:   Wed, 17 Apr 2019 09:54:40 +0200
+Message-Id: <c85394324f6002cd56dcea27557d7a5c84dd1217.1555487650.git-series.maxime.ripard@bootlin.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
 References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
@@ -56,51 +56,84 @@ use it so that we can deprecate the old DRM one.
 
 Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 ---
- drivers/gpu/ipu-v3/ipu-pre.c | 3 ++-
- drivers/gpu/ipu-v3/ipu-prg.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/omapdrm/dss/dispc.c |  9 +++++----
+ drivers/gpu/drm/omapdrm/omap_fb.c   |  7 ++++---
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/ipu-v3/ipu-pre.c b/drivers/gpu/ipu-v3/ipu-pre.c
-index 6cacfd61d984..83bfcaefe1d3 100644
---- a/drivers/gpu/ipu-v3/ipu-pre.c
-+++ b/drivers/gpu/ipu-v3/ipu-pre.c
+diff --git a/drivers/gpu/drm/omapdrm/dss/dispc.c b/drivers/gpu/drm/omapdrm/dss/dispc.c
+index ba82d916719c..bf60d49ad6ca 100644
+--- a/drivers/gpu/drm/omapdrm/dss/dispc.c
++++ b/drivers/gpu/drm/omapdrm/dss/dispc.c
+@@ -25,6 +25,7 @@
+ #include <linux/vmalloc.h>
+ #include <linux/export.h>
+ #include <linux/clk.h>
++#include <linux/image-formats.h>
+ #include <linux/io.h>
+ #include <linux/jiffies.h>
+ #include <linux/seq_file.h>
+@@ -1898,9 +1899,9 @@ static void dispc_ovl_set_scaling_uv(struct dispc_device *dispc,
+ 	int scale_x = out_width != orig_width;
+ 	int scale_y = out_height != orig_height;
+ 	bool chroma_upscale = plane != OMAP_DSS_WB;
+-	const struct drm_format_info *info;
++	const struct image_format_info *info;
+ 
+-	info = drm_format_info(fourcc);
++	info = image_format_drm_lookup(fourcc);
+ 
+ 	if (!dispc_has_feature(dispc, FEAT_HANDLE_UV_SEPARATE))
+ 		return;
+@@ -2623,9 +2624,9 @@ static int dispc_ovl_setup_common(struct dispc_device *dispc,
+ 	bool ilace = !!(vm->flags & DISPLAY_FLAGS_INTERLACED);
+ 	unsigned long pclk = dispc_plane_pclk_rate(dispc, plane);
+ 	unsigned long lclk = dispc_plane_lclk_rate(dispc, plane);
+-	const struct drm_format_info *info;
++	const struct image_format_info *info;
+ 
+-	info = drm_format_info(fourcc);
++	info = image_format_drm_lookup(fourcc);
+ 
+ 	/* when setting up WB, dispc_plane_pclk_rate() returns 0 */
+ 	if (plane == OMAP_DSS_WB)
+diff --git a/drivers/gpu/drm/omapdrm/omap_fb.c b/drivers/gpu/drm/omapdrm/omap_fb.c
+index 1d4143adf829..8caecfc8d1db 100644
+--- a/drivers/gpu/drm/omapdrm/omap_fb.c
++++ b/drivers/gpu/drm/omapdrm/omap_fb.c
 @@ -15,6 +15,7 @@
- #include <linux/clk.h>
- #include <linux/err.h>
- #include <linux/genalloc.h>
-+#include <linux/image-formats.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-@@ -174,7 +175,7 @@ void ipu_pre_configure(struct ipu_pre *pre, unsigned int width,
- 		       unsigned int height, unsigned int stride, u32 format,
- 		       uint64_t modifier, unsigned int bufaddr)
- {
--	const struct drm_format_info *info = drm_format_info(format);
-+	const struct image_format_info *info = image_format_drm_lookup(format);
- 	u32 active_bpp = info->cpp[0] >> 1;
- 	u32 val;
+  * this program.  If not, see <http://www.gnu.org/licenses/>.
+  */
  
-diff --git a/drivers/gpu/ipu-v3/ipu-prg.c b/drivers/gpu/ipu-v3/ipu-prg.c
-index 94b76badf677..042c141ad07e 100644
---- a/drivers/gpu/ipu-v3/ipu-prg.c
-+++ b/drivers/gpu/ipu-v3/ipu-prg.c
-@@ -14,6 +14,7 @@
- #include <drm/drm_fourcc.h>
- #include <linux/clk.h>
- #include <linux/err.h>
 +#include <linux/image-formats.h>
- #include <linux/iopoll.h>
- #include <linux/mfd/syscon.h>
- #include <linux/mfd/syscon/imx6q-iomuxc-gpr.h>
-@@ -132,7 +133,7 @@ EXPORT_SYMBOL_GPL(ipu_prg_present);
- bool ipu_prg_format_supported(struct ipu_soc *ipu, uint32_t format,
- 			      uint64_t modifier)
- {
--	const struct drm_format_info *info = drm_format_info(format);
-+	const struct image_format_info *info = image_format_drm_lookup(format);
+ #include <linux/seq_file.h>
  
- 	if (info->num_planes != 1)
- 		return false;
+ #include <drm/drm_crtc.h>
+@@ -60,7 +61,7 @@ struct plane {
+ struct omap_framebuffer {
+ 	struct drm_framebuffer base;
+ 	int pin_count;
+-	const struct drm_format_info *format;
++	const struct image_format_info *format;
+ 	struct plane planes[2];
+ 	/* lock for pinning (pin_count and planes.dma_addr) */
+ 	struct mutex lock;
+@@ -72,7 +73,7 @@ static const struct drm_framebuffer_funcs omap_framebuffer_funcs = {
+ };
+ 
+ static u32 get_linear_addr(struct drm_framebuffer *fb,
+-		const struct drm_format_info *format, int n, int x, int y)
++		const struct image_format_info *format, int n, int x, int y)
+ {
+ 	struct omap_framebuffer *omap_fb = to_omap_framebuffer(fb);
+ 	struct plane *plane = &omap_fb->planes[n];
+@@ -126,7 +127,7 @@ void omap_framebuffer_update_scanout(struct drm_framebuffer *fb,
+ 		struct drm_plane_state *state, struct omap_overlay_info *info)
+ {
+ 	struct omap_framebuffer *omap_fb = to_omap_framebuffer(fb);
+-	const struct drm_format_info *format = omap_fb->format;
++	const struct image_format_info *format = omap_fb->format;
+ 	struct plane *plane = &omap_fb->planes[0];
+ 	u32 x, y, orient = 0;
+ 
 -- 
 git-series 0.9.1
