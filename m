@@ -4,26 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDE42C282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16D57C282DD
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDA4C20835
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3B5E20835
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731241AbfDQHzK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 03:55:10 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:49945 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731226AbfDQHzJ (ORCPT
+        id S1731389AbfDQHze (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 03:55:34 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:41683 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731380AbfDQHza (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 03:55:09 -0400
-X-Originating-IP: 90.88.160.238
+        Wed, 17 Apr 2019 03:55:30 -0400
 Received: from localhost (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 16202E0011;
-        Wed, 17 Apr 2019 07:55:04 +0000 (UTC)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 66EE3240014;
+        Wed, 17 Apr 2019 07:55:27 +0000 (UTC)
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Daniel Vetter <daniel.vetter@intel.com>,
         David Airlie <airlied@linux.ie>,
@@ -37,11 +36,10 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Emil Velikov <emil.velikov@collabora.com>
-Subject: [PATCH 05/20] drm: Replace instances of drm_format_info by drm_get_format_info
-Date:   Wed, 17 Apr 2019 09:54:31 +0200
-Message-Id: <45137b09c198d55c2561648f9a14f1db9f6ba728.1555487650.git-series.maxime.ripard@bootlin.com>
+        linux-media@vger.kernel.org
+Subject: [PATCH 10/20] drm/exynos: Convert to generic image format library
+Date:   Wed, 17 Apr 2019 09:54:36 +0200
+Message-Id: <77b68a688cf9970f14b97a87b19be0b309788e30.1555487650.git-series.maxime.ripard@bootlin.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
 References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
@@ -52,67 +50,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-drm_get_format_info directly calls into drm_format_info, but takes directly
-a struct drm_mode_fb_cmd2 pointer, instead of the fourcc directly. It's
-shorter to not dereference it, and we can customise the behaviour at the
-driver level if we want to, so let's switch to it where it makes sense.
+Now that we have a generic image format libary, let's convert drivers to
+use it so that we can deprecate the old DRM one.
 
-Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c | 4 ++--
- drivers/gpu/drm/gma500/framebuffer.c   | 2 +-
- drivers/gpu/drm/omapdrm/omap_fb.c      | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/exynos/exynos_drm_ipp.c    | 2 +-
+ drivers/gpu/drm/exynos/exynos_drm_ipp.h    | 4 +++-
+ drivers/gpu/drm/exynos/exynos_drm_scaler.c | 3 ++-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c
-index 06e73a343724..6edae6458be8 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c
-@@ -121,8 +121,7 @@ static int amdgpufb_create_pinned_object(struct amdgpu_fbdev *rfbdev,
- 					 struct drm_mode_fb_cmd2 *mode_cmd,
- 					 struct drm_gem_object **gobj_p)
- {
--	const struct drm_format_info *info = drm_get_format_info(dev,
--								 mode_cmd);
-+	const struct drm_format_info *info;
- 	struct amdgpu_device *adev = rfbdev->adev;
- 	struct drm_gem_object *gobj = NULL;
- 	struct amdgpu_bo *abo = NULL;
-@@ -133,6 +132,7 @@ static int amdgpufb_create_pinned_object(struct amdgpu_fbdev *rfbdev,
- 	int height = mode_cmd->height;
- 	u32 cpp;
- 
-+	info = drm_get_format_info(adev->ddev, mode_cmd);
- 	cpp = drm_format_info_plane_cpp(info, 0);
- 
- 	/* need to align pitch with crtc limits */
-diff --git a/drivers/gpu/drm/gma500/framebuffer.c b/drivers/gpu/drm/gma500/framebuffer.c
-index a9d3a4a30ab8..1794ab90b2cc 100644
---- a/drivers/gpu/drm/gma500/framebuffer.c
-+++ b/drivers/gpu/drm/gma500/framebuffer.c
-@@ -232,7 +232,7 @@ static int psb_framebuffer_init(struct drm_device *dev,
- 	 * Reject unknown formats, YUV formats, and formats with more than
- 	 * 4 bytes per pixel.
- 	 */
--	info = drm_format_info(mode_cmd->pixel_format);
-+	info = drm_get_format_info(dev, mode_cmd);
- 	if (!info || !info->depth || info->cpp[0] > 4)
+diff --git a/drivers/gpu/drm/exynos/exynos_drm_ipp.c b/drivers/gpu/drm/exynos/exynos_drm_ipp.c
+index 23226a0212e8..ba012840fe07 100644
+--- a/drivers/gpu/drm/exynos/exynos_drm_ipp.c
++++ b/drivers/gpu/drm/exynos/exynos_drm_ipp.c
+@@ -562,7 +562,7 @@ static int exynos_drm_ipp_check_format(struct exynos_drm_ipp_task *task,
+ 	if (buf->buf.width == 0 || buf->buf.height == 0)
  		return -EINVAL;
  
-diff --git a/drivers/gpu/drm/omapdrm/omap_fb.c b/drivers/gpu/drm/omapdrm/omap_fb.c
-index cfb641363a32..6557b2d6e16e 100644
---- a/drivers/gpu/drm/omapdrm/omap_fb.c
-+++ b/drivers/gpu/drm/omapdrm/omap_fb.c
-@@ -339,7 +339,7 @@ struct drm_framebuffer *omap_framebuffer_init(struct drm_device *dev,
- 			dev, mode_cmd, mode_cmd->width, mode_cmd->height,
- 			(char *)&mode_cmd->pixel_format);
+-	buf->format = drm_format_info(buf->buf.fourcc);
++	buf->format = image_format_drm_lookup(buf->buf.fourcc);
+ 	for (i = 0; i < buf->format->num_planes; i++) {
+ 		unsigned int width = (i == 0) ? buf->buf.width :
+ 			     DIV_ROUND_UP(buf->buf.width, buf->format->hsub);
+diff --git a/drivers/gpu/drm/exynos/exynos_drm_ipp.h b/drivers/gpu/drm/exynos/exynos_drm_ipp.h
+index 0b27d4a9bf94..c6cd21f185e6 100644
+--- a/drivers/gpu/drm/exynos/exynos_drm_ipp.h
++++ b/drivers/gpu/drm/exynos/exynos_drm_ipp.h
+@@ -71,12 +71,14 @@ struct exynos_drm_ipp {
+ 	wait_queue_head_t done_wq;
+ };
  
--	format = drm_format_info(mode_cmd->pixel_format);
-+	format = drm_get_format_info(dev, mode_cmd);
++struct image_format_info;
++
+ struct exynos_drm_ipp_buffer {
+ 	struct drm_exynos_ipp_task_buffer buf;
+ 	struct drm_exynos_ipp_task_rect rect;
  
- 	for (i = 0; i < ARRAY_SIZE(formats); i++) {
- 		if (formats[i] == mode_cmd->pixel_format)
+ 	struct exynos_drm_gem *exynos_gem[MAX_FB_BUFFER];
+-	const struct drm_format_info *format;
++	const struct image_format_info *format;
+ 	dma_addr_t dma_addr[MAX_FB_BUFFER];
+ };
+ 
+diff --git a/drivers/gpu/drm/exynos/exynos_drm_scaler.c b/drivers/gpu/drm/exynos/exynos_drm_scaler.c
+index ed1dd1aec902..c9791a2013cf 100644
+--- a/drivers/gpu/drm/exynos/exynos_drm_scaler.c
++++ b/drivers/gpu/drm/exynos/exynos_drm_scaler.c
+@@ -11,6 +11,7 @@
+ #include <linux/kernel.h>
+ #include <linux/component.h>
+ #include <linux/err.h>
++#include <linux/image-formats.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/platform_device.h>
+@@ -301,7 +302,7 @@ static inline void scaler_set_rotation(struct scaler_context *scaler,
+ }
+ 
+ static inline void scaler_set_csc(struct scaler_context *scaler,
+-	const struct drm_format_info *fmt)
++	const struct image_format_info *fmt)
+ {
+ 	static const u32 csc_mtx[2][3][3] = {
+ 		{ /* YCbCr to RGB */
 -- 
 git-series 0.9.1
