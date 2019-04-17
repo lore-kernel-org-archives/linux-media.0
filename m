@@ -2,471 +2,231 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BF73C282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 17:10:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29A12C282DC
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 17:18:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1AF8420675
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 17:10:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KXrQbgNy"
+	by mail.kernel.org (Postfix) with ESMTP id E17FC206BA
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 17:18:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732749AbfDQRKs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 13:10:48 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40280 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729395AbfDQRKs (ORCPT
+        id S1732996AbfDQRSp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 13:18:45 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:49149 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729395AbfDQRSp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 13:10:48 -0400
-Received: by mail-wr1-f66.google.com with SMTP id h4so32947940wre.7;
-        Wed, 17 Apr 2019 10:10:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=reply-to:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=9CP27iTYtmXmc5G/CNCdvzzhtigy7vNfiFxnXbukxQ8=;
-        b=KXrQbgNyW1JvUAnTsPR5rIZAFFQjOiQa2muqRgY+nG57oqR9cckRWwE3vP6YidjFQX
-         RU4hbMNXYISYuleZUq0iXiDcJTHxJhXzoYrw4EBlS4D3v5TrLhgMhUwzpP9n/IbX+CIJ
-         wvoPmXaO7n/xLOfGpViioLSvn62qqaT9FNd8A0LC97TNLZj3ucMVgAJbVWEyW/FRCMhG
-         npSi7Tx9Kru0A39FaDf/tAY0sgmG6NtvJPVLLile0tfLisX+gB+Ffvtr9EHWJSyU7ewS
-         R6tnhvOgtu9WDOP84o6IRPUpo9wjdPZ/uFtESyzSKBEDAfSp4mf9hU3SF6crNDA+J/i9
-         zKQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:reply-to:subject:to:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=9CP27iTYtmXmc5G/CNCdvzzhtigy7vNfiFxnXbukxQ8=;
-        b=t74pzgBPVuTeAFv4q7tjjlBIntkm4SoRjAxtP/tffjS8MFXZbLSY38utudtH7PpSM9
-         f6tJvazoNzKrOgFGuzogkMQkejXR9kUnXi3BbXAOFZZUfKHou/z1/iWl6L8rUVk38HnI
-         UJHMA0dQTs7wdmAvaBJiIBK3bT7+nvnpjtXt2xvEP508+IJxdiOQbHAWyi2z0i9218DX
-         Nq/qtS7C4qUdZxNVWZMmqN5NHlcyPfR4AQAjWcELEIk1uaz8NESwMR+SVtuagdJ4MjdK
-         JS1turK6Rfc/WHOgWswG5vQ1uRX1gYa6nnsRZYyHX0HJy73nw4MvVsMXQYxh+WGcEgN0
-         8ULQ==
-X-Gm-Message-State: APjAAAUXsGsCTWRewpyxy/JkvpFgGByYxl+p6FcmTzZ1Fj/jt9YxfWCf
-        LV6uvTZRA6t0uUOrFwnSrHM=
-X-Google-Smtp-Source: APXvYqzalf7zd58XIsl63rUXoD8nT5N1aTNHkuOWDB58M9nhPzA/IF+G8/MNjWVVvz+Xu32FIDwZ+A==
-X-Received: by 2002:adf:ec0a:: with SMTP id x10mr57526334wrn.193.1555521044433;
-        Wed, 17 Apr 2019 10:10:44 -0700 (PDT)
-Received: from ?IPv6:2a02:908:1252:fb60:be8a:bd56:1f94:86e7? ([2a02:908:1252:fb60:be8a:bd56:1f94:86e7])
-        by smtp.gmail.com with ESMTPSA id s1sm45717105wrt.43.2019.04.17.10.10.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Apr 2019 10:10:43 -0700 (PDT)
-Reply-To: christian.koenig@amd.com
-Subject: Re: [PATCH 03/12] dma-buf: lock the reservation object during
- (un)map_dma_buf v3
-To:     christian.koenig@amd.com, sumit.semwal@linaro.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org
-References: <20190416183841.1577-1-christian.koenig@amd.com>
- <20190416183841.1577-4-christian.koenig@amd.com>
- <20190417140804.GD13337@phenom.ffwll.local>
- <e22d3797-30e4-f4fd-be9c-42aedf213c5e@gmail.com>
- <20190417142632.GF13337@phenom.ffwll.local>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-Message-ID: <adc8c3ca-0837-0b7a-6421-4ecb5cc272ca@gmail.com>
-Date:   Wed, 17 Apr 2019 19:10:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Wed, 17 Apr 2019 13:18:45 -0400
+Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 07BFE24000F;
+        Wed, 17 Apr 2019 17:18:40 +0000 (UTC)
+Message-ID: <ef64503f58feaee1dacaaecb3f0d9140faa70f1b.camel@bootlin.com>
+Subject: Re: [PATCH v4] media: docs-rst: Document m2m stateless video
+ decoder interface
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Alexandre Courbot <acourbot@chromium.org>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Dafna Hirschfeld <dafna3@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Wed, 17 Apr 2019 19:18:40 +0200
+In-Reply-To: <88b90a267f40d71b00e29d5d063fc26407104093.camel@ndufresne.ca>
+References: <20190306080019.159676-1-acourbot@chromium.org>
+         <371df0e4ec9e38d83d11171cbd98f19954cbf787.camel@ndufresne.ca>
+         <da5aa9ab957923a72e30b169a3c242c4fe6260f1.camel@bootlin.com>
+         <c07703459c7e48904bd7fd83be1e675c70eee83c.camel@ndufresne.ca>
+         <d81d0112b99feba0a1899f3722077a4aeec9860c.camel@bootlin.com>
+         <439b7f57aa3ba2b2ed5b043f961ef87cb83912af.camel@ndufresne.ca>
+         <59e23c5ca5bfbadf9441ea06da2e9b9b5898c6d7.camel@bootlin.com>
+         <0b495143bb260cf9f8927ee541e7f001842ac5c3.camel@ndufresne.ca>
+         <CAPBb6MVG+3jQcw3AuhYDYCZ0YJ0aX=TmEuM5izh12GLw9V6B8Q@mail.gmail.com>
+         <88b90a267f40d71b00e29d5d063fc26407104093.camel@ndufresne.ca>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.0 
 MIME-Version: 1.0
-In-Reply-To: <20190417142632.GF13337@phenom.ffwll.local>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Am 17.04.19 um 16:26 schrieb Daniel Vetter:
-> On Wed, Apr 17, 2019 at 04:14:32PM +0200, Christian König wrote:
->> Am 17.04.19 um 16:08 schrieb Daniel Vetter:
->>> On Tue, Apr 16, 2019 at 08:38:32PM +0200, Christian König wrote:
->>>> Make it mandatory for dynamic dma-buf callbacks to be called with the
->>>> reservation lock held.
->>>>
->>>> For static dma-buf exporters we still have the fallback of using cached sgt.
->>>>
->>>> v2: reordered
->>>> v3: rebased on sgt caching
->>>> v4: use the cached sgt when possible
->>>>
->>>> Signed-off-by: Christian König <christian.koenig@amd.com>
->>> I think there's a bit a rebase chaos going on:
->>> - some comments left behind with no_sgt_cache, which I can't find anymore
->>> - the function signature rework of dma_buf_attach should imo be split out
->> Ah, crap thought I've got all of those. Going to fix that.
->>
->>> Next issue is that the reservation object locking is still in the path of
->>> dma_buf_map, so probably still going to result in tons of lockdep splats.
->>> Except the i915+amdgpu path should now work due to the fastpath.
->> I actually found a solution for that :)
->>
->> The idea is now that we always cache the sgt in the attachment unless the
->> dynamic flag (previously no_sgt_cache flag) is set. And this cached sgt is
->> created without holding the lock.
-> Yeah I think that idea works.
->
->> We either need to document that really well or maybe split the mapping
->> callbacks into map/unmap and map_lock/unmap_locked. Opinions?
-> I think the implementation doesn't. Exporter can't decide on its own
-> whether dynamic/static is what's needed, we need to decide that for each
-> attachment, taking both exporter and importer capabilities into account.
+Hi,
 
-Well that's what the pin/unpin callbacks are good for :)
+Le mercredi 17 avril 2019 à 12:06 -0400, Nicolas Dufresne a écrit :
+> Le mardi 16 avril 2019 à 16:22 +0900, Alexandre Courbot a écrit :
+> > On Tue, Apr 16, 2019 at 12:30 AM Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
+> > > Le lundi 15 avril 2019 à 15:26 +0200, Paul Kocialkowski a écrit :
 
-Essentially we have to handle the following cases:
-a) dynamic exporter and dynamic importer
-         Nothing special here and we don't need the sgt caching nor pinning.
+[...]
 
-b) dynamic exporter and static importer
-         The pin/unpin callbacks are used to inform the exporter that it 
-needs to keep the buffer in the current place.
+> > Thanks for this great discussion. Let me try to summarize the status
+> > of this thread + the IRC discussion and add my own thoughts:
+> > 
+> > Proper support for multiple decoding units (e.g. H.264 slices) per
+> > frame should not be an afterthought ; compliance to encoded formats
+> > depend on it, and the benefit of lower latency is a significant
+> > consideration for vendors.
+> > 
+> > m2m, which we use for all stateless codecs, has a strong assumption
+> > that one OUTPUT buffer consumed results in one CAPTURE buffer being
+> > produced. This assumption can however be overruled: at least the venus
+> > driver does it to implement the stateful specification.
+> 
+> The m2m framework code, which is quite minimal, has this limitation,
+> but it has nothing to do with the userspace M2M interface. In
+> userspace, M2M are just two asynchronous queues. New input data is
+> queued on the OUTPUT queue, and results is taken from the CAPTURE
+> queue. There is nothing in the API or the spec that limits how many
+> input data (OUTPUT queue) will be used to produce a number of results
+> (CAPTURE queue).
+> 
+> > So we need a way to specify frame boundaries when submitting encoded
+> > content to the driver. One request should contain a single OUTPUT
+> > buffer, containing a single decoding unit, but we need a way to
+> > specify whether the driver should directly produce a CAPTURE buffer
+> > from this request, or keep using the same CAPTURE buffer with
+> > subsequent requests.
+> 
+> Yes, that's a good recap, we need a way. Just a clarification, we need
+> a way for formats similar to H264/H265 for which the frame boundary is
+> often only discovered by parsing the following NAL or signalled through
+> a container.
+> 
+> > I can think of 2 ways this can be expressed:
+> > 1) We keep the current m2m behavior as the default (a CAPTURE buffer
+> > is produced), and add a flag to ask the driver to change that behavior
+> > and hold on the CAPTURE buffer and reuse it with the next request(s) ;
+> > 2) We specify that no CAPTURE buffer is produced by default, unless a
+> > flag asking so is specified.
+> 
+> I don't think 1) is really a valid option. A buffer has one state. In
+> current implementation of Cedrus, when 1 unit is decoded (1 slice) the
+> capture buffer is marked as DONE. That signals any userspace polling
+> for capture buffer being ready to DQ. Now, if you drive the OUTPUT and
+> CAPTURE queue from separate thread, you end up with a race where
+> userspace thinks the buffer is ready but a new slice comes in, so the
+> state has been cleared between the poll returning and the call to DQ
+> buf. User-space will unexpectedly endup doing a blocking DQBuf which is
+> likely unwanted. Then if we leave is in DONE state, it's much worst,
+> since there is no way to signal that the buffer is ready (the decoding
+> the unit has completed).
+> 
+> As this API does not exist yet, introducing 2) is possible and is much
+> saner to handle from userspace. The benefit  is that you have no
+> special case. The driver just hold on marking the buffer DONE until it
+> has processed all unit up to one that had a frame completion flag on
+> it.
 
-c) static exporter and dynamic importer
-         We use the sgt caching to avoid calling the exporter with the 
-common lock held.
+Mhh, without explicitly marking the requests as part of the same group,
+we would basically lose the ability to function stateless with this
+idea. By that, I mean that you can no longer schedule a request that's
+not part of the current batch of slices, since the kernel-side would
+refrain from marking the capture buffer done for that request or mark
+the capture buffer for the slices along with the completion of that
+request.
 
-d) static exporter and static importer
-         We use the sgt caching, but that is actually only optional.
+One way or another, I think we need to explicitly mark the requests for
+the each slice of the frame as being part of the same group. And while
+at it, we might want to make that possible for any use case that might
+require it, not just video decoding.
 
-> I think if we do that, then it should work out. I replied on the pin/unpin
-> interface patch with some more concrete thoughts. Maybe best to continue
-> that discussion there, with more context.
+The request API is quite complex on its own and I guess we're dealing
+with complex topics that involve significantly changing the behavior of
+v4l2. Not to say that we shouldn't try to keep things simple, we
+definitely should, but it might be one of the cases where the long-term 
+solution is not going to be that easy to carry out.
 
-Yeah, that is probably a good idea.
+The way I see it, the media userspace interface was enriched with the
+request API to deal with a specific case (associating source data and
+associated meta-data) and managed to bring a generic and flexible
+solution that also covers other use cases. So I feel like solving this
+issue would be best done at the media level and in a way that's not too
+centered on our specific use case.
 
-Regards,
-Christian.
+> > The flag could be specified in one of two ways:
+> > a) As a new v4l2_buffer.flag for the OUTPUT buffer ;
+> > b) As a dedicated control, either format-specific or more common to all codecs.
+> > 
+> > I tend to favor 2) and b) for this, for the reason that with H.264 at
+> > least, user-space does not know whether a slice is the last slice of a
+> > frame until it starts parsing the next one, and we don't know when we
+> > will receive it. If we use a control to ask that a CAPTURE buffer be
+> > produced, we can always submit another request with only that control
+> > set once it is clear that the frame is complete (and not delay
+> > decoding meanwhile). In practice I am not that familiar with
+> > latency-sensitive streaming ; maybe a smart streamer would just append
+> > an AUD NAL unit at the end of every frame and we can thus submit the
+> > flag it with the last slice without further delay?
+> 
+> AUD NAL, when present, are the first NAL of a frame, so latency wise it
+> is useless. So what we do is that we rely on the encoder to tell us. So
+> encoders will set a flag to signal the last slice of a frame. If you
+> are doing RTP, this flags is converted into a marker bit (RTP
+> specific). This marker bit is then received on the other side and
+> passed to the decoder. The decoder will process the slice and when this
+> is done will immediately deliver the resulting frame (if reordering
+> allow). If it's not present, it will wait for the next slice in order
+> to determine if the decoded frame can be delivered or not. So without
+> the marker, we effectively have 1 extra frame latency in the worst
+> case.
+> 
+> What I like of the b) proposal is that we can invert the logic and
+> effectively abstract this completely for formats that don't have slices
+> (or equivalent) while having this implemented generically.
+> 
+> What I had in mind was a) because I was thinking that we could reuse
+> the flag for stateful encoder/decoder in order to support the RTP
+> marker bit usecase and slice level streaming. Right now, we only do
+> full frame streaming, but it's limiting. the ZyncMP firmware that
+> Micheal is integrating does support low latency with slice processing,
+> so to match the vendor driver capacity we'll need that flag anyway.
+> 
+> But in stateless, it's easier, because not setting it at all simply
+> introduce more latency, while for accelerators we would like to make
+> the closing of a frame mandatory. So I'm totally fine with a different
+> mechanism. Again, this is handled in VAAPI and other similar API by
+> having begin/end function for frames, and then a number of
+> decode_slice() calls in the middle. So there is an extra context for
+> frames on top of slices in these API.
+> 
+> > An extra constraint to enforce would be that each decoding unit
+> > belonging to the same frame must be submitted with the same timestamp,
+> > otherwise the request submission would fail. We really need a
+> > framework to enforce all this at a higher level than individual
+> > drivers, once we reach an agreement I will start working on this.
+> 
+> I agree with that. And adding checks for this would be really welcome
+> to catch errors.
 
+Agreed, this feels like a sane thing to do.
 
-> -Daniel
->
->>> Not sure that's a solution that really works, just hides that
->>> fundamentally we still have that issue of incompatible locking chains
->>> between different drivers.
->> We can now make a slow transition between static and dynamic DMA-buf
->> handling, so only driver who can do the locking will be affected.
->>
->> Christian.
->>
->>> -Daniel
->>>
->>>> ---
->>>>    drivers/dma-buf/dma-buf.c                     | 24 ++++++++++---------
->>>>    drivers/gpu/drm/armada/armada_gem.c           |  6 ++++-
->>>>    drivers/gpu/drm/drm_prime.c                   |  6 ++++-
->>>>    drivers/gpu/drm/i915/i915_gem_dmabuf.c        |  6 ++++-
->>>>    drivers/gpu/drm/tegra/gem.c                   |  6 ++++-
->>>>    drivers/gpu/drm/udl/udl_dmabuf.c              |  6 ++++-
->>>>    .../common/videobuf2/videobuf2-dma-contig.c   |  6 ++++-
->>>>    .../media/common/videobuf2/videobuf2-dma-sg.c |  6 ++++-
->>>>    drivers/staging/media/tegra-vde/tegra-vde.c   |  6 ++++-
->>>>    include/linux/dma-buf.h                       | 23 ++++++++++++++++--
->>>>    10 files changed, 74 insertions(+), 21 deletions(-)
->>>>
->>>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
->>>> index ef480e5fb239..83c92bfd964c 100644
->>>> --- a/drivers/dma-buf/dma-buf.c
->>>> +++ b/drivers/dma-buf/dma-buf.c
->>>> @@ -532,8 +532,9 @@ EXPORT_SYMBOL_GPL(dma_buf_put);
->>>>    /**
->>>>     * dma_buf_attach - Add the device to dma_buf's attachments list; optionally,
->>>>     * calls attach() of dma_buf_ops to allow device-specific attach functionality
->>>> - * @dmabuf:	[in]	buffer to attach device to.
->>>> - * @dev:	[in]	device to be attached.
->>>> + * @info:	[in]	holds all the attach related information provided
->>>> + *			by the importer. see &struct dma_buf_attach_info
->>>> + *			for further details.
->>>>     *
->>>>     * Returns struct dma_buf_attachment pointer for this attachment. Attachments
->>>>     * must be cleaned up by calling dma_buf_detach().
->>>> @@ -547,20 +548,20 @@ EXPORT_SYMBOL_GPL(dma_buf_put);
->>>>     * accessible to @dev, and cannot be moved to a more suitable place. This is
->>>>     * indicated with the error code -EBUSY.
->>>>     */
->>>> -struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
->>>> -					  struct device *dev)
->>>> +struct dma_buf_attachment *dma_buf_attach(const struct dma_buf_attach_info *info)
->>>>    {
->>>> +	struct dma_buf *dmabuf = info->dmabuf;
->>>>    	struct dma_buf_attachment *attach;
->>>>    	int ret;
->>>> -	if (WARN_ON(!dmabuf || !dev))
->>>> +	if (WARN_ON(!dmabuf || !info->dev))
->>>>    		return ERR_PTR(-EINVAL);
->>>>    	attach = kzalloc(sizeof(*attach), GFP_KERNEL);
->>>>    	if (!attach)
->>>>    		return ERR_PTR(-ENOMEM);
->>>> -	attach->dev = dev;
->>>> +	attach->dev = info->dev;
->>>>    	attach->dmabuf = dmabuf;
->>>>    	mutex_lock(&dmabuf->lock);
->>>> @@ -688,9 +689,9 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
->>>>    	if (attach->sgt)
->>>>    		return attach->sgt;
->>>> -	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
->>>> -	if (!sg_table)
->>>> -		sg_table = ERR_PTR(-ENOMEM);
->>>> +	reservation_object_lock(attach->dmabuf->resv, NULL);
->>>> +	sg_table = dma_buf_map_attachment_locked(attach, direction);
->>>> +	reservation_object_unlock(attach->dmabuf->resv);
->>>>    	return sg_table;
->>>>    }
->>>> @@ -744,8 +745,9 @@ void dma_buf_unmap_attachment(struct dma_buf_attachment *attach,
->>>>    	if (attach->sgt == sg_table)
->>>>    		return;
->>>> -	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
->>>> -						direction);
->>>> +	reservation_object_lock(attach->dmabuf->resv, NULL);
->>>> +	dma_buf_unmap_attachment_locked(attach, sg_table, direction);
->>>> +	reservation_object_unlock(attach->dmabuf->resv);
->>>>    }
->>>>    EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment);
->>>> diff --git a/drivers/gpu/drm/armada/armada_gem.c b/drivers/gpu/drm/armada/armada_gem.c
->>>> index 642d0e70d0f8..19c47821032f 100644
->>>> --- a/drivers/gpu/drm/armada/armada_gem.c
->>>> +++ b/drivers/gpu/drm/armada/armada_gem.c
->>>> @@ -501,6 +501,10 @@ armada_gem_prime_export(struct drm_device *dev, struct drm_gem_object *obj,
->>>>    struct drm_gem_object *
->>>>    armada_gem_prime_import(struct drm_device *dev, struct dma_buf *buf)
->>>>    {
->>>> +	struct dma_buf_attach_info attach_info = {
->>>> +		.dev = dev->dev,
->>>> +		.dmabuf = buf
->>>> +	};
->>>>    	struct dma_buf_attachment *attach;
->>>>    	struct armada_gem_object *dobj;
->>>> @@ -516,7 +520,7 @@ armada_gem_prime_import(struct drm_device *dev, struct dma_buf *buf)
->>>>    		}
->>>>    	}
->>>> -	attach = dma_buf_attach(buf, dev->dev);
->>>> +	attach = dma_buf_attach(&attach_info);
->>>>    	if (IS_ERR(attach))
->>>>    		return ERR_CAST(attach);
->>>> diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
->>>> index 231e3f6d5f41..1fadf5d5ed33 100644
->>>> --- a/drivers/gpu/drm/drm_prime.c
->>>> +++ b/drivers/gpu/drm/drm_prime.c
->>>> @@ -709,6 +709,10 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
->>>>    					    struct dma_buf *dma_buf,
->>>>    					    struct device *attach_dev)
->>>>    {
->>>> +	struct dma_buf_attach_info attach_info = {
->>>> +		.dev = attach_dev,
->>>> +		.dmabuf = dma_buf
->>>> +	};
->>>>    	struct dma_buf_attachment *attach;
->>>>    	struct sg_table *sgt;
->>>>    	struct drm_gem_object *obj;
->>>> @@ -729,7 +733,7 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
->>>>    	if (!dev->driver->gem_prime_import_sg_table)
->>>>    		return ERR_PTR(-EINVAL);
->>>> -	attach = dma_buf_attach(dma_buf, attach_dev);
->>>> +	attach = dma_buf_attach(&attach_info);
->>>>    	if (IS_ERR(attach))
->>>>    		return ERR_CAST(attach);
->>>> diff --git a/drivers/gpu/drm/i915/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/i915_gem_dmabuf.c
->>>> index 82e2ca17a441..aa7f685bd6ca 100644
->>>> --- a/drivers/gpu/drm/i915/i915_gem_dmabuf.c
->>>> +++ b/drivers/gpu/drm/i915/i915_gem_dmabuf.c
->>>> @@ -277,6 +277,10 @@ static const struct drm_i915_gem_object_ops i915_gem_object_dmabuf_ops = {
->>>>    struct drm_gem_object *i915_gem_prime_import(struct drm_device *dev,
->>>>    					     struct dma_buf *dma_buf)
->>>>    {
->>>> +	struct dma_buf_attach_info attach_info = {
->>>> +		.dev = dev->dev,
->>>> +		.dmabuf = dma_buf
->>>> +	};
->>>>    	struct dma_buf_attachment *attach;
->>>>    	struct drm_i915_gem_object *obj;
->>>>    	int ret;
->>>> @@ -295,7 +299,7 @@ struct drm_gem_object *i915_gem_prime_import(struct drm_device *dev,
->>>>    	}
->>>>    	/* need to attach */
->>>> -	attach = dma_buf_attach(dma_buf, dev->dev);
->>>> +	attach = dma_buf_attach(&attach_info);
->>>>    	if (IS_ERR(attach))
->>>>    		return ERR_CAST(attach);
->>>> diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
->>>> index 4f80100ff5f3..8e6b6c879add 100644
->>>> --- a/drivers/gpu/drm/tegra/gem.c
->>>> +++ b/drivers/gpu/drm/tegra/gem.c
->>>> @@ -332,6 +332,10 @@ struct tegra_bo *tegra_bo_create_with_handle(struct drm_file *file,
->>>>    static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
->>>>    					struct dma_buf *buf)
->>>>    {
->>>> +	struct dma_buf_attach_info attach_info = {
->>>> +		.dev = drm->dev,
->>>> +		.dmabuf = buf
->>>> +	};
->>>>    	struct tegra_drm *tegra = drm->dev_private;
->>>>    	struct dma_buf_attachment *attach;
->>>>    	struct tegra_bo *bo;
->>>> @@ -341,7 +345,7 @@ static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
->>>>    	if (IS_ERR(bo))
->>>>    		return bo;
->>>> -	attach = dma_buf_attach(buf, drm->dev);
->>>> +	attach = dma_buf_attach(&attach_info);
->>>>    	if (IS_ERR(attach)) {
->>>>    		err = PTR_ERR(attach);
->>>>    		goto free;
->>>> diff --git a/drivers/gpu/drm/udl/udl_dmabuf.c b/drivers/gpu/drm/udl/udl_dmabuf.c
->>>> index 556f62662aa9..86b928f9742f 100644
->>>> --- a/drivers/gpu/drm/udl/udl_dmabuf.c
->>>> +++ b/drivers/gpu/drm/udl/udl_dmabuf.c
->>>> @@ -226,6 +226,10 @@ static int udl_prime_create(struct drm_device *dev,
->>>>    struct drm_gem_object *udl_gem_prime_import(struct drm_device *dev,
->>>>    				struct dma_buf *dma_buf)
->>>>    {
->>>> +	struct dma_buf_attach_info attach_info = {
->>>> +		.dev = dev->dev,
->>>> +		.dmabuf = dma_buf
->>>> +	};
->>>>    	struct dma_buf_attachment *attach;
->>>>    	struct sg_table *sg;
->>>>    	struct udl_gem_object *uobj;
->>>> @@ -233,7 +237,7 @@ struct drm_gem_object *udl_gem_prime_import(struct drm_device *dev,
->>>>    	/* need to attach */
->>>>    	get_device(dev->dev);
->>>> -	attach = dma_buf_attach(dma_buf, dev->dev);
->>>> +	attach = dma_buf_attach(&attach_info);
->>>>    	if (IS_ERR(attach)) {
->>>>    		put_device(dev->dev);
->>>>    		return ERR_CAST(attach);
->>>> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
->>>> index aff0ab7bf83d..1f2687b5eb0e 100644
->>>> --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
->>>> +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
->>>> @@ -676,6 +676,10 @@ static void vb2_dc_detach_dmabuf(void *mem_priv)
->>>>    static void *vb2_dc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
->>>>    	unsigned long size, enum dma_data_direction dma_dir)
->>>>    {
->>>> +	struct dma_buf_attach_info attach_info = {
->>>> +		.dev = dev,
->>>> +		.dmabuf = dbuf
->>>> +	};
->>>>    	struct vb2_dc_buf *buf;
->>>>    	struct dma_buf_attachment *dba;
->>>> @@ -691,7 +695,7 @@ static void *vb2_dc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
->>>>    	buf->dev = dev;
->>>>    	/* create attachment for the dmabuf with the user device */
->>>> -	dba = dma_buf_attach(dbuf, buf->dev);
->>>> +	dba = dma_buf_attach(&attach_info);
->>>>    	if (IS_ERR(dba)) {
->>>>    		pr_err("failed to attach dmabuf\n");
->>>>    		kfree(buf);
->>>> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
->>>> index 015e737095cd..cbd626d2393a 100644
->>>> --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
->>>> +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
->>>> @@ -608,6 +608,10 @@ static void vb2_dma_sg_detach_dmabuf(void *mem_priv)
->>>>    static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
->>>>    	unsigned long size, enum dma_data_direction dma_dir)
->>>>    {
->>>> +	struct dma_buf_attach_info attach_info = {
->>>> +		.dev = dev,
->>>> +		.dmabuf = dbuf
->>>> +	};
->>>>    	struct vb2_dma_sg_buf *buf;
->>>>    	struct dma_buf_attachment *dba;
->>>> @@ -623,7 +627,7 @@ static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
->>>>    	buf->dev = dev;
->>>>    	/* create attachment for the dmabuf with the user device */
->>>> -	dba = dma_buf_attach(dbuf, buf->dev);
->>>> +	dba = dma_buf_attach(&attach_info);
->>>>    	if (IS_ERR(dba)) {
->>>>    		pr_err("failed to attach dmabuf\n");
->>>>    		kfree(buf);
->>>> diff --git a/drivers/staging/media/tegra-vde/tegra-vde.c b/drivers/staging/media/tegra-vde/tegra-vde.c
->>>> index aa6c6bba961e..5a10c1facc27 100644
->>>> --- a/drivers/staging/media/tegra-vde/tegra-vde.c
->>>> +++ b/drivers/staging/media/tegra-vde/tegra-vde.c
->>>> @@ -568,6 +568,10 @@ static int tegra_vde_attach_dmabuf(struct device *dev,
->>>>    				   size_t *size,
->>>>    				   enum dma_data_direction dma_dir)
->>>>    {
->>>> +	struct dma_buf_attach_info attach_info = {
->>>> +		.dev = dev,
->>>> +		.dmabuf = dmabuf
->>>> +	};
->>>>    	struct dma_buf_attachment *attachment;
->>>>    	struct dma_buf *dmabuf;
->>>>    	struct sg_table *sgt;
->>>> @@ -591,7 +595,7 @@ static int tegra_vde_attach_dmabuf(struct device *dev,
->>>>    		return -EINVAL;
->>>>    	}
->>>> -	attachment = dma_buf_attach(dmabuf, dev);
->>>> +	attachment = dma_buf_attach(&attach_info);
->>>>    	if (IS_ERR(attachment)) {
->>>>    		dev_err(dev, "Failed to attach dmabuf\n");
->>>>    		err = PTR_ERR(attachment);
->>>> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
->>>> index 18a78be53541..7e23758db3a4 100644
->>>> --- a/include/linux/dma-buf.h
->>>> +++ b/include/linux/dma-buf.h
->>>> @@ -128,6 +128,9 @@ struct dma_buf_ops {
->>>>    	 * any other kind of sharing that the exporter might wish to make
->>>>    	 * available to buffer-users.
->>>>    	 *
->>>> +	 * This is always called with the dmabuf->resv object locked when
->>>> +	 * no_sgt_cache is true.
->>>> +	 *
->>>>    	 * Returns:
->>>>    	 *
->>>>    	 * A &sg_table scatter list of or the backing storage of the DMA buffer,
->>>> @@ -148,6 +151,9 @@ struct dma_buf_ops {
->>>>    	 * It should also unpin the backing storage if this is the last mapping
->>>>    	 * of the DMA buffer, it the exporter supports backing storage
->>>>    	 * migration.
->>>> +	 *
->>>> +	 * This is always called with the dmabuf->resv object locked when
->>>> +	 * no_sgt_cache is true.
->>>>    	 */
->>>>    	void (*unmap_dma_buf)(struct dma_buf_attachment *,
->>>>    			      struct sg_table *,
->>>> @@ -370,6 +376,19 @@ struct dma_buf_export_info {
->>>>    	struct dma_buf_export_info name = { .exp_name = KBUILD_MODNAME, \
->>>>    					 .owner = THIS_MODULE }
->>>> +/**
->>>> + * struct dma_buf_attach_info - holds information needed to attach to a dma_buf
->>>> + * @dmabuf:	the exported dma_buf
->>>> + * @dev:	the device which wants to import the attachment
->>>> + *
->>>> + * This structure holds the information required to attach to a buffer. Used
->>>> + * with dma_buf_attach() only.
->>>> + */
->>>> +struct dma_buf_attach_info {
->>>> +	struct dma_buf *dmabuf;
->>>> +	struct device *dev;
->>>> +};
->>>> +
->>>>    /**
->>>>     * get_dma_buf - convenience wrapper for get_file.
->>>>     * @dmabuf:	[in]	pointer to dma_buf
->>>> @@ -384,8 +403,8 @@ static inline void get_dma_buf(struct dma_buf *dmabuf)
->>>>    	get_file(dmabuf->file);
->>>>    }
->>>> -struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
->>>> -							struct device *dev);
->>>> +struct dma_buf_attachment *
->>>> +dma_buf_attach(const struct dma_buf_attach_info *info);
->>>>    void dma_buf_detach(struct dma_buf *dmabuf,
->>>>    				struct dma_buf_attachment *dmabuf_attach);
->>>> -- 
->>>> 2.17.1
->>>>
->>>> _______________________________________________
->>>> dri-devel mailing list
->>>> dri-devel@lists.freedesktop.org
->>>> https://lists.freedesktop.org/mailman/listinfo/dri-devel
->> _______________________________________________
->> dri-devel mailing list
->> dri-devel@lists.freedesktop.org
->> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+> > Formats that do not support multiple decoding units per frame would
+> > reject any request that does not carry the end-of-frame information.
+> 
+> Again, we *could* also reverse the logic, so that by default all OUTPUT
+> buffer would be considered complete frames. So far I only know 3
+> formats that have this feature, H264, H265 and AV1. I'm not sure for
+> VP9, I would need to look. But clearly JPEG, VP8, H263, raw format and
+> more don't seem to have this. We could also have a generic control/flag
+> and make it mandatory for specific formats if that is simpler.
+
+Well, now I am pretty much convinced that what's in the OUTPUT buffer
+should be one entity of the decoding unit, which could be a slice or
+coded data for one frame depending on the format. I think adding a
+control or a flag for that would bring-in too much boilerplate and
+different cases to handle in the driver, which does not feel that good.
+
+I'm still open to introducing specific formats for submitting enough
+slice data for a whole frame, but not sure it is worth the effort.
+
+Cheers,
+
+Paul
 
