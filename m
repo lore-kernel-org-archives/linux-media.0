@@ -2,273 +2,101 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 028CAC10F12
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 10:04:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BFD5C10F12
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 10:41:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C5300206BA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 10:04:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40B132173C
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 10:41:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729794AbfDQKEY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 06:04:24 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40794 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726237AbfDQKEX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 06:04:23 -0400
-Received: by mail-lj1-f194.google.com with SMTP id q66so448163ljq.7
-        for <linux-media@vger.kernel.org>; Wed, 17 Apr 2019 03:04:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ak+jmpp1HmYyAKt+dFTAzg8Ce6xo9KUHB/jOnf1cq/I=;
-        b=lcmP3AEm9/ZZI3rXWl688gKnX5Pcgxb4AerqH5ATW8i0CG1xux3Vl+KCpDLzNGrrlx
-         8RFp20o2FT7typEjgrFIqkSyUbflE6uyNiGrdQmkMpm+yz71C4BpVM3MaTKWjEGPbhLP
-         CynUV8Q7kRetr/pLfVAH09kRxsmS3ylkjIm/Sz1ON/eWsGl7Pa5slTrlAZsulk5u3WHi
-         TSsphUj6Ea6EDcdwuJmLPIN0bLa7kRDs9LPP75Hct/rl8d8GlELZWKzebFSg5YgTHCom
-         O8fkAUQ1dYqUZvkUmpIkuPDYNQhKqTI+7mEUZEMFqE23r1DnrVejiZrnXopWRBT6Wsc1
-         GF0g==
-X-Gm-Message-State: APjAAAXu4eVmoQzkVp8OZvmLA7Jxi+k5JesNxx4WNXbV9YKuRu3++Emf
-        ueH9s+/5uaOxQFfVd6oz2XPKlt3hvMd4px/xXDs=
-X-Google-Smtp-Source: APXvYqw/48/eZ+PQ2999m/Ftbk8p//GNrFx70Uvhou+LlLZYfrGO5q+CL9G7Q9S+MVb2OWqtBVYFl1T2yvRZcZ+Lh9Q=
-X-Received: by 2002:a2e:7c02:: with SMTP id x2mr7725639ljc.176.1555495460910;
- Wed, 17 Apr 2019 03:04:20 -0700 (PDT)
+        id S1731759AbfDQKlw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 06:41:52 -0400
+Received: from mga17.intel.com ([192.55.52.151]:9722 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731566AbfDQKlv (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Apr 2019 06:41:51 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Apr 2019 03:41:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,361,1549958400"; 
+   d="scan'208";a="132120109"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by orsmga007.jf.intel.com with ESMTP; 17 Apr 2019 03:41:49 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 96729204DA; Wed, 17 Apr 2019 13:41:48 +0300 (EEST)
+Date:   Wed, 17 Apr 2019 13:41:48 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
+Subject: Route lifetime in SUBDEV_[GS]_ROUTING
+Message-ID: <20190417104147.zlmbw32dr46vmtrq@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-References: <20190416120203.24028-1-ricardo@ribalda.com> <60e2fc3b-d31f-fd3e-0e1e-2467236dd4e8@redhat.com>
-In-Reply-To: <60e2fc3b-d31f-fd3e-0e1e-2467236dd4e8@redhat.com>
-From:   Ricardo Ribalda Delgado <ricardo@ribalda.com>
-Date:   Wed, 17 Apr 2019 12:04:04 +0200
-Message-ID: <CAPybu_3Fe8ABY5B=iu7rxa+==oCzPiefrHat7drd7iPMvw1UqA@mail.gmail.com>
-Subject: Re: [PATCH] libv4lconvert: Add support for V4L2_PIX_FMT_NV12
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Gregor Jasny <gjasny@googlemail.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Daniel Gomez <daniel@qtec.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans
+Hi Jacopo,
 
-On Tue, Apr 16, 2019 at 6:00 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi Ricardo,
->
-> On 16-04-19 14:02, Ricardo Ribalda Delgado wrote:
-> > NV12 is a two-plane version YUV 4:2:0, where the U and V components
-> > are subsampled 2x2.
-> >
-> > Signed-off-by: Ricardo Ribalda Delgado <ricardo@ribalda.com>
->
-> Your patch looks good to me, but it pushed the array-size of
-> the supported_src_pixfmts array over 64 entries (right now it is
-> exactly 64 entries big).
->
-> Which breaks supported_src_formats as that is only 64 bits big:
+I promised to write a bit about the routing problem I attempted to write on
+#v4l. It's a bit late, but here it is. Let me know if you share my
+understanding (and especially do so if you don't :)).
 
-Good catch. Thanks for detailed description. Will redo and send back
+A route is identified by the source and sink pads as well as the stream ID
+on the source and the sink pads. Its flags allow enabling or disabling a
+route.
 
+Most devices that function as transmitters (such as sensors) have a fixed
+number of routes they can support. These's no need to change them; enabling
+and disabling them will be enough for the user.
 
->
-> struct v4lconvert_data {
->          int fd;
->         ...
->          int64_t supported_src_formats; /* bitfield */
->
->
-> See e.g. :
->
->                  for (j = 0; j < ARRAY_SIZE(supported_src_pixfmts); j++)
->                          if (fmt.pixelformat == supported_src_pixfmts[j].fmt)
->                                  break;
->
->                  if (j < ARRAY_SIZE(supported_src_pixfmts)) {
->                          data->supported_src_formats |= 1ULL << j;
->
-> I believe this is best fixed by a preparation patch which introduces the
-> bit-ops from the kernel for this:
->
-> include/asm-generic/bitops/non-atomic.h:
->
-> static inline void __set_bit(int nr, volatile unsigned long *addr)
-> {
->          unsigned long mask = BIT_MASK(nr);
->          unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
->
->          *p  |= mask;
-> }
->
-> static inline void __clear_bit(int nr, volatile unsigned long *addr)
-> {
->          unsigned long mask = BIT_MASK(nr);
->          unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
->
->          *p &= ~mask;
-> }
->
-> static inline int test_bit(int nr, const volatile unsigned long *addr)
-> {
->          return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> }
->
-> So you will have to change your patch into a 2 patch patch-set with
-> the first patch introducing  set_bit / clear_bit / test_bit helpers
-> modelled after the kernel and changing the declaration of
-> supported_src_formats to:
->
->         unsigned long supported_src_formats[128 / BITS_PER_LONG];
->
-> Thanks & Regards,
->
-> Hans
->
->
->
->
->
->
->
->
->
-> > ---
-> > The code has ben tested with qv4l2 and vivid.
-> > v4lconvert_nv12_to_yuv420 has not been tested!!, any suggestions for
-> > how to do it?
-> >
-> > Thanks!
-> >   lib/libv4lconvert/libv4lconvert-priv.h |  6 +++
-> >   lib/libv4lconvert/libv4lconvert.c      | 19 +++++++++
-> >   lib/libv4lconvert/rgbyuv.c             | 56 ++++++++++++++++++++++++++
-> >   3 files changed, 81 insertions(+)
-> >
-> > diff --git a/lib/libv4lconvert/libv4lconvert-priv.h b/lib/libv4lconvert/libv4lconvert-priv.h
-> > index a8046ce2..c45b086e 100644
-> > --- a/lib/libv4lconvert/libv4lconvert-priv.h
-> > +++ b/lib/libv4lconvert/libv4lconvert-priv.h
-> > @@ -285,6 +285,12 @@ void v4lconvert_hm12_to_yuv420(const unsigned char *src,
-> >   void v4lconvert_hsv_to_rgb24(const unsigned char *src, unsigned char *dest,
-> >               int width, int height, int bgr, int Xin, unsigned char hsv_enc);
-> >
-> > +void v4lconvert_nv12_to_rgb24(const unsigned char *src, unsigned char *dest,
-> > +             int width, int height, int bgr);
-> > +
-> > +void v4lconvert_nv12_to_yuv420(const unsigned char *src, unsigned char *dest,
-> > +             int width, int height, int yvu);
-> > +
-> >   void v4lconvert_rotate90(unsigned char *src, unsigned char *dest,
-> >               struct v4l2_format *fmt);
-> >
-> > diff --git a/lib/libv4lconvert/libv4lconvert.c b/lib/libv4lconvert/libv4lconvert.c
-> > index 78fb3432..2111d19f 100644
-> > --- a/lib/libv4lconvert/libv4lconvert.c
-> > +++ b/lib/libv4lconvert/libv4lconvert.c
-> > @@ -116,6 +116,7 @@ static const struct v4lconvert_pixfmt supported_src_pixfmts[] = {
-> >       { V4L2_PIX_FMT_SN9C20X_I420,    12,      6,      3,     1 },
-> >       { V4L2_PIX_FMT_M420,            12,      6,      3,     1 },
-> >       { V4L2_PIX_FMT_HM12,            12,      6,      3,     1 },
-> > +     { V4L2_PIX_FMT_NV12,            12,      6,      3,     1 },
-> >       { V4L2_PIX_FMT_CPIA1,            0,      6,      3,     1 },
-> >       /* JPEG and variants */
-> >       { V4L2_PIX_FMT_MJPEG,            0,      7,      7,     0 },
-> > @@ -902,6 +903,24 @@ static int v4lconvert_convert_pixfmt(struct v4lconvert_data *data,
-> >               }
-> >               break;
-> >
-> > +             /* NV12 formats */
-> > +     case V4L2_PIX_FMT_NV12:
-> > +             switch (dest_pix_fmt) {
-> > +             case V4L2_PIX_FMT_RGB24:
-> > +                     v4lconvert_nv12_to_rgb24(src, dest, width, height, 0);
-> > +                     break;
-> > +             case V4L2_PIX_FMT_BGR24:
-> > +                     v4lconvert_nv12_to_rgb24(src, dest, width, height, 1);
-> > +                     break;
-> > +             case V4L2_PIX_FMT_YUV420:
-> > +                     v4lconvert_nv12_to_yuv420(src, dest, width, height, 0);
-> > +                     break;
-> > +             case V4L2_PIX_FMT_YVU420:
-> > +                     v4lconvert_nv12_to_yuv420(src, dest, width, height, 1);
-> > +                     break;
-> > +             }
-> > +             break;
-> > +
-> >               /* compressed bayer formats */
-> >       case V4L2_PIX_FMT_SPCA561:
-> >       case V4L2_PIX_FMT_SN9C10X:
-> > diff --git a/lib/libv4lconvert/rgbyuv.c b/lib/libv4lconvert/rgbyuv.c
-> > index 02c8cb5b..bfe3b15f 100644
-> > --- a/lib/libv4lconvert/rgbyuv.c
-> > +++ b/lib/libv4lconvert/rgbyuv.c
-> > @@ -845,3 +845,59 @@ void v4lconvert_hsv_to_rgb24(const unsigned char *src, unsigned char *dest,
-> >                       src += bppIN;
-> >               }
-> >   }
-> > +
-> > +void v4lconvert_nv12_to_rgb24(const unsigned char *src, unsigned char *dest,
-> > +             int width, int height, int bgr)
-> > +{
-> > +     int i, j;
-> > +     const unsigned char *ysrc = src;
-> > +     const unsigned char *uvsrc = src + width * height;
-> > +
-> > +     for (i = 0; i < height; i++) {
-> > +             for (j = 0; j < width; j ++) {
-> > +                     if (bgr) {
-> > +                             *dest++ = YUV2B(*ysrc, *uvsrc, *(uvsrc + 1));
-> > +                             *dest++ = YUV2G(*ysrc, *uvsrc, *(uvsrc + 1));
-> > +                             *dest++ = YUV2R(*ysrc, *uvsrc, *(uvsrc + 1));
-> > +                     } else {
-> > +                             *dest++ = YUV2R(*ysrc, *uvsrc, *(uvsrc + 1));
-> > +                             *dest++ = YUV2G(*ysrc, *uvsrc, *(uvsrc + 1));
-> > +                             *dest++ = YUV2B(*ysrc, *uvsrc, *(uvsrc + 1));
-> > +                     }
-> > +                     ysrc++;
-> > +                     if (j&1)
-> > +                             uvsrc += 2;
-> > +             }
-> > +
-> > +             /* Rewind u and v for next line */
-> > +             if (!(i&1))
-> > +                     uvsrc -= width;
-> > +     }
-> > +}
-> > +
-> > +void v4lconvert_nv12_to_yuv420(const unsigned char *src, unsigned char *dest,
-> > +             int width, int height, int yvu)
-> > +{
-> > +     int i, j;
-> > +     const unsigned char *ysrc = src;
-> > +     const unsigned char *uvsrc = src + width * height;
-> > +     unsigned char *ydst = dest;
-> > +     unsigned char *udst, *vdst;
-> > +
-> > +     if (yvu) {
-> > +             vdst = ydst + width * height;
-> > +             udst = vdst + ((width / 2) * (height / 2));
-> > +     } else {
-> > +             udst = ydst + width * height;
-> > +             vdst = udst + ((width / 2) * (height / 2));
-> > +     }
-> > +
-> > +     for (i = 0; i < height; i++)
-> > +             for (j = 0; i < width; j++) {
-> > +                     *ydst++ = *ysrc++;
-> > +                     if (((i % 2) == 0) && ((j % 2) == 0)) {
-> > +                             *udst++ = *uvsrc++;
-> > +                             *vdst++ = *uvsrc++;
-> > +                     }
-> > +             }
-> > +}
-> >
+For receivers this is different. What needs to be supported on the receiver
+side is directing any incoming stream (a 32-bit unsigned integer) to any
+source pad.
 
+This is because pads are not alike --- one may be connected to a block that
+further processes the image whereas the others may be connected to a DMA
+engine, just writing the data to memory.
 
+The receivers also may not make assumptions beyond the sub-device API: the
+stream is a 32-bit unsigned integer, there is currently no API requirement
+to have the stream IDs on a particular low integer range. In principle we
+could define that range, but I'd rather try to find better solutions than
+that: it's hard to come up with a number as it depends on the hardware.
+Some kind of an upper limit could be the number of CSI-2 channels
+multiplied by CSI-2 data types. That would be enough for CSI-2. 16 or 32
+virtual channels and up to 64 data types would mean up to 2048 routes
+between a demultiplexer's sink pad and *each* of its source pads. And this
+comes with an assumption that the source pads only support a single
+stream...
 
---
-Ricardo Ribalda
+CSI-2 receivers support a number of simultaneous streams, and as the stream
+is demultiplexed there, this means there will be as many source pads as
+there are supported simultaneous streams. This heavily depends on the
+hardware, but the number could be e.g. 1, 4 or 8. Much smaller than 2048 in
+any case.
+
+Another option could be creating no routes at all at device init time, and
+letting the user create them. We could add a new flag for routes telling
+that a route is dynamic: disabling a dynamic route would simply delete it.
+Likewise, a SUBDEV_G_ROUTING returning no routes (but no error either)
+would also tell the user only dynamic routes are supported.
+
+We should document this and change the driver implementation accordingly.
+No API changes are needed (apart from adding the dynamic flag --- or rather
+call it "volatile", to avoid confusing with routes that can be enabled or
+disabled while streaming).
+
+-- 
+Best regards,
+
+Sakari Ailus
+sakari.ailus@linux.intel.com
