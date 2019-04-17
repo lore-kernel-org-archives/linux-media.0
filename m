@@ -2,28 +2,28 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91DE7C282DC
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 226FFC282DC
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D64020835
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E757E2173C
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:55:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731157AbfDQHzA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 03:55:00 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:33927 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726895AbfDQHy7 (ORCPT
+        id S1731215AbfDQHzH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 03:55:07 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:54417 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731143AbfDQHzG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 03:54:59 -0400
+        Wed, 17 Apr 2019 03:55:06 -0400
 X-Originating-IP: 90.88.160.238
 Received: from localhost (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id D6484E000F;
-        Wed, 17 Apr 2019 07:54:54 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 9F5D14000E;
+        Wed, 17 Apr 2019 07:55:02 +0000 (UTC)
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Daniel Vetter <daniel.vetter@intel.com>,
         David Airlie <airlied@linux.ie>,
@@ -37,11 +37,14 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 00/20] drm: Split out the formats API and move it to a common place
-Date:   Wed, 17 Apr 2019 09:54:26 +0200
-Message-Id: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
+        linux-media@vger.kernel.org,
+        Emil Velikov <emil.velikov@collabora.com>
+Subject: [PATCH 04/20] drm/fourcc: Pass the format_info pointer to drm_format_plane_width/height
+Date:   Wed, 17 Apr 2019 09:54:30 +0200
+Message-Id: <194fd02a37172de6f2a799fee5c98ced5e7e9d76.1555487650.git-series.maxime.ripard@bootlin.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
+References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -49,137 +52,191 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+So far, the drm_format_plane_height/width functions were operating on the
+format's fourcc and was doing a lookup to retrieve the drm_format_info
+structure and return the cpp.
 
-DRM comes with an extensive format support to retrieve the various
-parameters associated with a given format (such as the subsampling, or the
-bits per pixel), as well as some helpers and utilities to ease the driver
-development.
+However, this is inefficient since in most cases, we will have the
+drm_format_info pointer already available so we shouldn't have to perform a
+new lookup. Some drm_fourcc functions also already operate on the
+drm_format_info pointer for that reason, so the API is quite inconsistent
+there.
 
-v4l2, on the other side, doesn't provide such facilities, leaving each
-driver reimplement a subset of the formats parameters for the one supported
-by that particular driver. This leads to a lot of duplication and
-boilerplate code in the v4l2 drivers.
+Let's follow the latter pattern and remove the extra lookup while being a
+bit more consistent.
 
-This series tries to address this by moving the DRM format API into lib and
-turning it into a more generic API. In order to do this, we've needed to do
-some preliminary changes on the DRM drivers, then moved the API and finally
-converted a v4l2 driver to give an example of how such library could be
-used.
+In order to be extra consistent, also rename that function to
+drm_format_info_plane_cpp and to a static function in the header to match
+the current policy. The parameters order have also be changed to match the
+other functions prototype.
 
-Let me know what you think,
-Maxime
+Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
+Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+---
+ drivers/gpu/drm/drm_fourcc.c          | 48 +----------------------------
+ drivers/gpu/drm/meson/meson_overlay.c | 12 +++----
+ include/drm/drm_fourcc.h              | 46 +++++++++++++++++++++++++--
+ 3 files changed, 50 insertions(+), 56 deletions(-)
 
-Changes from RFC:
-  - Rebased on next
-  - Fixed the various formats mapping
-  - Added tags
-  - Did most of the formats functions as inline functions
-  - Used a consistent prefix for all the utilities functions
-  - Fixed the compilation breakages, and did a run of allmodconfig for arm,
-    arm64 and x86_64
-  - Fixed out of array bounds warnings in the image_format_info_block_*
-    functions
-  - Added License and copyright headers on missing files
-
-Maxime Ripard (20):
-  drm: Remove users of drm_format_num_planes
-  drm: Remove users of drm_format_(horz|vert)_chroma_subsampling
-  drm/fourcc: Pass the format_info pointer to drm_format_plane_cpp
-  drm/fourcc: Pass the format_info pointer to drm_format_plane_width/height
-  drm: Replace instances of drm_format_info by drm_get_format_info
-  lib: Add video format information library
-  drm/fb: Move from drm_format_info to image_format_info
-  drm/malidp: Convert to generic image format library
-  drm/client: Convert to generic image format library
-  drm/exynos: Convert to generic image format library
-  drm/i915: Convert to generic image format library
-  drm/ipuv3: Convert to generic image format library
-  drm/msm: Convert to generic image format library
-  drm/omap: Convert to generic image format library
-  drm/rockchip: Convert to generic image format library
-  drm/tegra: Convert to generic image format library
-  drm/fourcc: Remove old DRM format API
-  lib: image-formats: Add v4l2 formats support
-  lib: image-formats: Add more functions
-  media: sun6i: Convert to the image format API
-
- drivers/gpu/drm/Kconfig                                |   2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c                 |   4 +-
- drivers/gpu/drm/arm/malidp_drv.c                       |   3 +-
- drivers/gpu/drm/arm/malidp_hw.c                        |   3 +-
- drivers/gpu/drm/arm/malidp_mw.c                        |   2 +-
- drivers/gpu/drm/arm/malidp_planes.c                    |  20 +-
- drivers/gpu/drm/armada/armada_fb.c                     |   3 +-
- drivers/gpu/drm/armada/armada_overlay.c                |   2 +-
- drivers/gpu/drm/armada/armada_plane.c                  |   2 +-
- drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c        |  11 +-
- drivers/gpu/drm/bochs/bochs.h                          |   4 +-
- drivers/gpu/drm/bochs/bochs_hw.c                       |   2 +-
- drivers/gpu/drm/drm_client.c                           |   7 +-
- drivers/gpu/drm/drm_fb_cma_helper.c                    |   4 +-
- drivers/gpu/drm/drm_fb_helper.c                        |  14 +-
- drivers/gpu/drm/drm_format_helper.c                    |   4 +-
- drivers/gpu/drm/drm_fourcc.c                           | 345 +-----
- drivers/gpu/drm/drm_framebuffer.c                      |  10 +-
- drivers/gpu/drm/drm_gem_framebuffer_helper.c           |   4 +-
- drivers/gpu/drm/exynos/exynos_drm_fb.c                 |   2 +-
- drivers/gpu/drm/exynos/exynos_drm_ipp.c                |   2 +-
- drivers/gpu/drm/exynos/exynos_drm_ipp.h                |   4 +-
- drivers/gpu/drm/exynos/exynos_drm_scaler.c             |   3 +-
- drivers/gpu/drm/gma500/framebuffer.c                   |   4 +-
- drivers/gpu/drm/i915/i915_drv.h                        |   6 +-
- drivers/gpu/drm/i915/intel_display.c                   |  14 +-
- drivers/gpu/drm/i915/intel_pm.c                        |   6 +-
- drivers/gpu/drm/i915/intel_sprite.c                    |   3 +-
- drivers/gpu/drm/imx/ipuv3-plane.c                      |  19 +-
- drivers/gpu/drm/mediatek/mtk_drm_fb.c                  |   8 +-
- drivers/gpu/drm/meson/meson_overlay.c                  |  14 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_formats.c            |  11 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c              |  10 +-
- drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c              |   4 +-
- drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c             |  25 +-
- drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c               |   8 +-
- drivers/gpu/drm/msm/msm_fb.c                           |  18 +-
- drivers/gpu/drm/omapdrm/dss/dispc.c                    |   9 +-
- drivers/gpu/drm/omapdrm/omap_fb.c                      |  15 +-
- drivers/gpu/drm/radeon/radeon_fb.c                     |   4 +-
- drivers/gpu/drm/rockchip/rockchip_drm_fb.c             |  17 +-
- drivers/gpu/drm/rockchip/rockchip_drm_vop.c            |  14 +-
- drivers/gpu/drm/selftests/Makefile                     |   3 +-
- drivers/gpu/drm/selftests/drm_modeset_selftests.h      |   3 +-
- drivers/gpu/drm/selftests/test-drm_format.c            | 280 +----
- drivers/gpu/drm/selftests/test-drm_modeset_common.h    |   3 +-
- drivers/gpu/drm/stm/ltdc.c                             |   2 +-
- drivers/gpu/drm/sun4i/sun4i_backend.c                  |   6 +-
- drivers/gpu/drm/sun4i/sun4i_frontend.c                 |  18 +-
- drivers/gpu/drm/sun4i/sun8i_vi_layer.c                 |   4 +-
- drivers/gpu/drm/sun4i/sun8i_vi_scaler.c                |   6 +-
- drivers/gpu/drm/sun4i/sun8i_vi_scaler.h                |   5 +-
- drivers/gpu/drm/tegra/fb.c                             |  14 +-
- drivers/gpu/drm/tegra/plane.c                          |   4 +-
- drivers/gpu/drm/vc4/vc4_plane.c                        |  15 +-
- drivers/gpu/drm/zte/zx_plane.c                         |   6 +-
- drivers/gpu/ipu-v3/ipu-pre.c                           |   3 +-
- drivers/gpu/ipu-v3/ipu-prg.c                           |   3 +-
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c     |  89 +-
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.h     |  49 +-
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_reg.h |   6 +-
- drivers/media/platform/sunxi/sun6i-csi/sun6i_video.c   |  11 +-
- include/drm/drm_fourcc.h                               | 219 +---
- include/drm/drm_framebuffer.h                          |   4 +-
- include/drm/drm_mode_config.h                          |   5 +-
- include/linux/image-formats.h                          | 438 ++++++-
- lib/Kconfig                                            |   7 +-
- lib/Makefile                                           |   3 +-
- lib/image-formats-selftests.c                          | 325 +++++-
- lib/image-formats.c                                    | 717 ++++++++++-
- 70 files changed, 1740 insertions(+), 1174 deletions(-)
- delete mode 100644 drivers/gpu/drm/selftests/test-drm_format.c
- create mode 100644 include/linux/image-formats.h
- create mode 100644 lib/image-formats-selftests.c
- create mode 100644 lib/image-formats.c
-
-base-commit: de3c659c83ce88d495f2a36397071fdd0a337345
+diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
+index 5f63fc74e265..35b459d186c5 100644
+--- a/drivers/gpu/drm/drm_fourcc.c
++++ b/drivers/gpu/drm/drm_fourcc.c
+@@ -333,54 +333,6 @@ drm_get_format_info(struct drm_device *dev,
+ EXPORT_SYMBOL(drm_get_format_info);
+ 
+ /**
+- * drm_format_plane_width - width of the plane given the first plane
+- * @width: width of the first plane
+- * @format: pixel format
+- * @plane: plane index
+- *
+- * Returns:
+- * The width of @plane, given that the width of the first plane is @width.
+- */
+-int drm_format_plane_width(int width, uint32_t format, int plane)
+-{
+-	const struct drm_format_info *info;
+-
+-	info = drm_format_info(format);
+-	if (!info || plane >= info->num_planes)
+-		return 0;
+-
+-	if (plane == 0)
+-		return width;
+-
+-	return width / info->hsub;
+-}
+-EXPORT_SYMBOL(drm_format_plane_width);
+-
+-/**
+- * drm_format_plane_height - height of the plane given the first plane
+- * @height: height of the first plane
+- * @format: pixel format
+- * @plane: plane index
+- *
+- * Returns:
+- * The height of @plane, given that the height of the first plane is @height.
+- */
+-int drm_format_plane_height(int height, uint32_t format, int plane)
+-{
+-	const struct drm_format_info *info;
+-
+-	info = drm_format_info(format);
+-	if (!info || plane >= info->num_planes)
+-		return 0;
+-
+-	if (plane == 0)
+-		return height;
+-
+-	return height / info->vsub;
+-}
+-EXPORT_SYMBOL(drm_format_plane_height);
+-
+-/**
+  * drm_format_info_block_width - width in pixels of block.
+  * @info: pixel format info
+  * @plane: plane index
+diff --git a/drivers/gpu/drm/meson/meson_overlay.c b/drivers/gpu/drm/meson/meson_overlay.c
+index fb8515b2860c..55b3f2f2e608 100644
+--- a/drivers/gpu/drm/meson/meson_overlay.c
++++ b/drivers/gpu/drm/meson/meson_overlay.c
+@@ -466,8 +466,8 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
+ 		priv->viu.vd1_addr2 = gem->paddr + fb->offsets[2];
+ 		priv->viu.vd1_stride2 = fb->pitches[2];
+ 		priv->viu.vd1_height2 =
+-			drm_format_plane_height(fb->height,
+-						fb->format->format, 2);
++			drm_format_info_plane_height(fb->format,
++						fb->height, 2);
+ 		DRM_DEBUG("plane 2 addr 0x%x stride %d height %d\n",
+ 			 priv->viu.vd1_addr2,
+ 			 priv->viu.vd1_stride2,
+@@ -478,8 +478,8 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
+ 		priv->viu.vd1_addr1 = gem->paddr + fb->offsets[1];
+ 		priv->viu.vd1_stride1 = fb->pitches[1];
+ 		priv->viu.vd1_height1 =
+-			drm_format_plane_height(fb->height,
+-						fb->format->format, 1);
++			drm_format_info_plane_height(fb->format,
++						fb->height, 1);
+ 		DRM_DEBUG("plane 1 addr 0x%x stride %d height %d\n",
+ 			 priv->viu.vd1_addr1,
+ 			 priv->viu.vd1_stride1,
+@@ -490,8 +490,8 @@ static void meson_overlay_atomic_update(struct drm_plane *plane,
+ 		priv->viu.vd1_addr0 = gem->paddr + fb->offsets[0];
+ 		priv->viu.vd1_stride0 = fb->pitches[0];
+ 		priv->viu.vd1_height0 =
+-			drm_format_plane_height(fb->height,
+-						fb->format->format, 0);
++			drm_format_info_plane_height(fb->format,
++						fb->height, 0);
+ 		DRM_DEBUG("plane 0 addr 0x%x stride %d height %d\n",
+ 			 priv->viu.vd1_addr0,
+ 			 priv->viu.vd1_stride0,
+diff --git a/include/drm/drm_fourcc.h b/include/drm/drm_fourcc.h
+index 6b5a82b31bc4..4ef8ccb5d236 100644
+--- a/include/drm/drm_fourcc.h
++++ b/include/drm/drm_fourcc.h
+@@ -277,6 +277,50 @@ int drm_format_info_plane_cpp(const struct drm_format_info *info, int plane)
+ 	return info->cpp[plane];
+ }
+ 
++/**
++ * drm_format_info_plane_width - width of the plane given the first plane
++ * @format: pixel format info
++ * @width: width of the first plane
++ * @plane: plane index
++ *
++ * Returns:
++ * The width of @plane, given that the width of the first plane is @width.
++ */
++static inline
++int drm_format_info_plane_width(const struct drm_format_info *info, int width,
++				int plane)
++{
++	if (!info || plane >= info->num_planes)
++		return 0;
++
++	if (plane == 0)
++		return width;
++
++	return width / info->hsub;
++}
++
++/**
++ * drm_format_info_plane_height - height of the plane given the first plane
++ * @format: pixel format info
++ * @height: height of the first plane
++ * @plane: plane index
++ *
++ * Returns:
++ * The height of @plane, given that the height of the first plane is @height.
++ */
++static inline
++int drm_format_info_plane_height(const struct drm_format_info *info, int height,
++				 int plane)
++{
++	if (!info || plane >= info->num_planes)
++		return 0;
++
++	if (plane == 0)
++		return height;
++
++	return height / info->vsub;
++}
++
+ const struct drm_format_info *__drm_format_info(u32 format);
+ const struct drm_format_info *drm_format_info(u32 format);
+ const struct drm_format_info *
+@@ -285,8 +329,6 @@ drm_get_format_info(struct drm_device *dev,
+ uint32_t drm_mode_legacy_fb_format(uint32_t bpp, uint32_t depth);
+ uint32_t drm_driver_legacy_fb_format(struct drm_device *dev,
+ 				     uint32_t bpp, uint32_t depth);
+-int drm_format_plane_width(int width, uint32_t format, int plane);
+-int drm_format_plane_height(int height, uint32_t format, int plane);
+ unsigned int drm_format_info_block_width(const struct drm_format_info *info,
+ 					 int plane);
+ unsigned int drm_format_info_block_height(const struct drm_format_info *info,
 -- 
 git-series 0.9.1
