@@ -6,23 +6,24 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C5C6C282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AB53C282DA
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:57:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 440F620872
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:56:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 014F220872
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 07:57:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731273AbfDQHzQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 03:55:16 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:44705 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731261AbfDQHzP (ORCPT
+        id S1731194AbfDQHzE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 03:55:04 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:45829 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731143AbfDQHzD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 03:55:15 -0400
+        Wed, 17 Apr 2019 03:55:03 -0400
+X-Originating-IP: 90.88.160.238
 Received: from localhost (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
         (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id D3A84200006;
-        Wed, 17 Apr 2019 07:55:09 +0000 (UTC)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id B000440003;
+        Wed, 17 Apr 2019 07:54:57 +0000 (UTC)
 From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Daniel Vetter <daniel.vetter@intel.com>,
         David Airlie <airlied@linux.ie>,
@@ -36,10 +37,11 @@ Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 17/20] drm/fourcc: Remove old DRM format API
-Date:   Wed, 17 Apr 2019 09:54:43 +0200
-Message-Id: <d0e4b14f8a8c00a038d301eec4a5a36c2a5db386.1555487650.git-series.maxime.ripard@bootlin.com>
+        linux-media@vger.kernel.org,
+        Emil Velikov <emil.velikov@collabora.com>
+Subject: [PATCH 02/20] drm: Remove users of drm_format_(horz|vert)_chroma_subsampling
+Date:   Wed, 17 Apr 2019 09:54:28 +0200
+Message-Id: <749889cdf957406c86c1791c5bc2a00c3cb1be53.1555487650.git-series.maxime.ripard@bootlin.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
 References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
@@ -50,887 +52,507 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Now that all the clients of the old drm_format* API have been converted to
-the generic one, let's remove it.
+drm_format_horz_chroma_subsampling and drm_format_vert_chroma_subsampling
+are basically a lookup in the drm_format_info table plus an access to the
+hsub and vsub fields of the appropriate entry.
 
+Most drivers are using this function while having access to the entry
+already, which means that we will perform an unnecessary lookup. Removing
+the call to these functions is therefore more efficient.
+
+Some drivers will not have access to that entry in the function, but in
+this case the overhead is minimal (we just have to call drm_format_info()
+to perform the lookup) and we can even avoid multiple, inefficient lookups
+in some places that need multiple fields from the drm_format_info
+structure.
+
+This is amplified by the fact that most of the time the callers will have
+to retrieve both the vsub and hsub fields, meaning that they would perform
+twice the lookup.
+
+Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 ---
- drivers/gpu/drm/Kconfig                             |   1 +-
- drivers/gpu/drm/drm_fourcc.c                        | 219 +----------
- drivers/gpu/drm/selftests/Makefile                  |   3 +-
- drivers/gpu/drm/selftests/drm_modeset_selftests.h   |   3 +-
- drivers/gpu/drm/selftests/test-drm_format.c         | 280 +-------------
- drivers/gpu/drm/selftests/test-drm_modeset_common.h |   3 +-
- include/drm/drm_fourcc.h                            | 272 +-------------
- 7 files changed, 2 insertions(+), 779 deletions(-)
- delete mode 100644 drivers/gpu/drm/selftests/test-drm_format.c
+ drivers/gpu/drm/arm/malidp_planes.c             |  6 +--
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c |  9 +----
+ drivers/gpu/drm/drm_fourcc.c                    | 34 +------------------
+ drivers/gpu/drm/imx/ipuv3-plane.c               | 15 +++-----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c       |  9 +----
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c      | 24 +++++--------
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c        |  2 +-
+ drivers/gpu/drm/msm/msm_fb.c                    |  8 +---
+ drivers/gpu/drm/rockchip/rockchip_drm_fb.c      |  9 +----
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c     | 13 ++-----
+ drivers/gpu/drm/tegra/fb.c                      |  9 +----
+ drivers/gpu/drm/vc4/vc4_plane.c                 | 13 ++-----
+ include/drm/drm_fourcc.h                        |  2 +-
+ 13 files changed, 39 insertions(+), 114 deletions(-)
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index a5bef1c83e7f..d7e215e50d9f 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -54,6 +54,7 @@ config DRM_DEBUG_SELFTEST
- 	tristate "kselftests for DRM"
- 	depends on DRM
- 	depends on DEBUG_KERNEL
-+	select IMAGE_FORMATS_SELFTESTS
- 	select PRIME_NUMBERS
- 	select DRM_LIB_RANDOM
- 	select DRM_KMS_HELPER
+diff --git a/drivers/gpu/drm/arm/malidp_planes.c b/drivers/gpu/drm/arm/malidp_planes.c
+index d42e0ea9a303..8f89813d08c1 100644
+--- a/drivers/gpu/drm/arm/malidp_planes.c
++++ b/drivers/gpu/drm/arm/malidp_planes.c
+@@ -233,8 +233,7 @@ bool malidp_format_mod_supported(struct drm_device *drm,
+ 			}
+ 		}
+ 
+-		if ((drm_format_horz_chroma_subsampling(format) != 1) ||
+-		    (drm_format_vert_chroma_subsampling(format) != 1)) {
++		if ((info->hsub != 1) || (info->vsub != 1)) {
+ 			if (!(format == DRM_FORMAT_YUV420_10BIT &&
+ 			      (map->features & MALIDP_DEVICE_AFBC_YUV_420_10_SUPPORT_SPLIT))) {
+ 				DRM_DEBUG_KMS("Formats which are sub-sampled should never be split\n");
+@@ -244,8 +243,7 @@ bool malidp_format_mod_supported(struct drm_device *drm,
+ 	}
+ 
+ 	if (modifier & AFBC_CBR) {
+-		if ((drm_format_horz_chroma_subsampling(format) == 1) ||
+-		    (drm_format_vert_chroma_subsampling(format) == 1)) {
++		if ((info->hsub == 1) || (info->vsub == 1)) {
+ 			DRM_DEBUG_KMS("Formats which are not sub-sampled should not have CBR set\n");
+ 			return false;
+ 		}
+diff --git a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
+index e836e2de35ce..fdd607ad27fe 100644
+--- a/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
++++ b/drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c
+@@ -603,8 +603,6 @@ static int atmel_hlcdc_plane_atomic_check(struct drm_plane *p,
+ 	const struct drm_display_mode *mode;
+ 	struct drm_crtc_state *crtc_state;
+ 	unsigned int tmp;
+-	int hsub = 1;
+-	int vsub = 1;
+ 	int ret;
+ 	int i;
+ 
+@@ -642,13 +640,10 @@ static int atmel_hlcdc_plane_atomic_check(struct drm_plane *p,
+ 	if (state->nplanes > ATMEL_HLCDC_LAYER_MAX_PLANES)
+ 		return -EINVAL;
+ 
+-	hsub = drm_format_horz_chroma_subsampling(fb->format->format);
+-	vsub = drm_format_vert_chroma_subsampling(fb->format->format);
+-
+ 	for (i = 0; i < state->nplanes; i++) {
+ 		unsigned int offset = 0;
+-		int xdiv = i ? hsub : 1;
+-		int ydiv = i ? vsub : 1;
++		int xdiv = i ? fb->format->hsub : 1;
++		int ydiv = i ? fb->format->vsub : 1;
+ 
+ 		state->bpp[i] = fb->format->cpp[i];
+ 		if (!state->bpp[i])
 diff --git a/drivers/gpu/drm/drm_fourcc.c b/drivers/gpu/drm/drm_fourcc.c
-index 6537f4906c50..4f262e1a202a 100644
+index 873c0001d8c8..e4a2c8372c8b 100644
 --- a/drivers/gpu/drm/drm_fourcc.c
 +++ b/drivers/gpu/drm/drm_fourcc.c
-@@ -150,163 +150,6 @@ const char *drm_get_format_name(uint32_t format, struct drm_format_name_buf *buf
- }
- EXPORT_SYMBOL(drm_get_format_name);
+@@ -353,40 +353,6 @@ int drm_format_plane_cpp(uint32_t format, int plane)
+ EXPORT_SYMBOL(drm_format_plane_cpp);
  
--/*
-- * Internal function to query information for a given format. See
-- * drm_format_info() for the public API.
-- */
--const struct drm_format_info *__drm_format_info(u32 format)
--{
--	static const struct drm_format_info formats[] = {
--		{ .format = DRM_FORMAT_C8,		.depth = 8,  .num_planes = 1, .cpp = { 1, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_RGB332,		.depth = 8,  .num_planes = 1, .cpp = { 1, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_BGR233,		.depth = 8,  .num_planes = 1, .cpp = { 1, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_XRGB4444,	.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_XBGR4444,	.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_RGBX4444,	.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_BGRX4444,	.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_ARGB4444,	.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_ABGR4444,	.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_RGBA4444,	.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_BGRA4444,	.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_XRGB1555,	.depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_XBGR1555,	.depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_RGBX5551,	.depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_BGRX5551,	.depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_ARGB1555,	.depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_ABGR1555,	.depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_RGBA5551,	.depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_BGRA5551,	.depth = 15, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_RGB565,		.depth = 16, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_BGR565,		.depth = 16, .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_RGB888,		.depth = 24, .num_planes = 1, .cpp = { 3, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_BGR888,		.depth = 24, .num_planes = 1, .cpp = { 3, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_XRGB8888,	.depth = 24, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_XBGR8888,	.depth = 24, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_RGBX8888,	.depth = 24, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_BGRX8888,	.depth = 24, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_RGB565_A8,	.depth = 24, .num_planes = 2, .cpp = { 2, 1, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_BGR565_A8,	.depth = 24, .num_planes = 2, .cpp = { 2, 1, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_XRGB2101010,	.depth = 30, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_XBGR2101010,	.depth = 30, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_RGBX1010102,	.depth = 30, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_BGRX1010102,	.depth = 30, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_ARGB2101010,	.depth = 30, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_ABGR2101010,	.depth = 30, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_RGBA1010102,	.depth = 30, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_BGRA1010102,	.depth = 30, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_ARGB8888,	.depth = 32, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_ABGR8888,	.depth = 32, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_RGBA8888,	.depth = 32, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_BGRA8888,	.depth = 32, .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_XRGB16161616F,	.depth = 0,  .num_planes = 1, .cpp = { 8, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_XBGR16161616F,	.depth = 0,  .num_planes = 1, .cpp = { 8, 0, 0 }, .hsub = 1, .vsub = 1 },
--		{ .format = DRM_FORMAT_ARGB16161616F,	.depth = 0,  .num_planes = 1, .cpp = { 8, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_ABGR16161616F,	.depth = 0,  .num_planes = 1, .cpp = { 8, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_RGB888_A8,	.depth = 32, .num_planes = 2, .cpp = { 3, 1, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_BGR888_A8,	.depth = 32, .num_planes = 2, .cpp = { 3, 1, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_XRGB8888_A8,	.depth = 32, .num_planes = 2, .cpp = { 4, 1, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_XBGR8888_A8,	.depth = 32, .num_planes = 2, .cpp = { 4, 1, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_RGBX8888_A8,	.depth = 32, .num_planes = 2, .cpp = { 4, 1, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_BGRX8888_A8,	.depth = 32, .num_planes = 2, .cpp = { 4, 1, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true },
--		{ .format = DRM_FORMAT_YUV410,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 4, .vsub = 4, .is_yuv = true },
--		{ .format = DRM_FORMAT_YVU410,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 4, .vsub = 4, .is_yuv = true },
--		{ .format = DRM_FORMAT_YUV411,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 4, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_YVU411,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 4, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_YUV420,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 2, .vsub = 2, .is_yuv = true },
--		{ .format = DRM_FORMAT_YVU420,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 2, .vsub = 2, .is_yuv = true },
--		{ .format = DRM_FORMAT_YUV422,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_YVU422,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_YUV444,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_YVU444,		.depth = 0,  .num_planes = 3, .cpp = { 1, 1, 1 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_NV12,		.depth = 0,  .num_planes = 2, .cpp = { 1, 2, 0 }, .hsub = 2, .vsub = 2, .is_yuv = true },
--		{ .format = DRM_FORMAT_NV21,		.depth = 0,  .num_planes = 2, .cpp = { 1, 2, 0 }, .hsub = 2, .vsub = 2, .is_yuv = true },
--		{ .format = DRM_FORMAT_NV16,		.depth = 0,  .num_planes = 2, .cpp = { 1, 2, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_NV61,		.depth = 0,  .num_planes = 2, .cpp = { 1, 2, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_NV24,		.depth = 0,  .num_planes = 2, .cpp = { 1, 2, 0 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_NV42,		.depth = 0,  .num_planes = 2, .cpp = { 1, 2, 0 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_YUYV,		.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_YVYU,		.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_UYVY,		.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_VYUY,		.depth = 0,  .num_planes = 1, .cpp = { 2, 0, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_XYUV8888,	.depth = 0,  .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_VUY888,          .depth = 0,  .num_planes = 1, .cpp = { 3, 0, 0 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_AYUV,		.depth = 0,  .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true, .is_yuv = true },
--		{ .format = DRM_FORMAT_Y210,            .depth = 0,  .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_Y212,            .depth = 0,  .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_Y216,            .depth = 0,  .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 2, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_Y410,            .depth = 0,  .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true, .is_yuv = true },
--		{ .format = DRM_FORMAT_Y412,            .depth = 0,  .num_planes = 1, .cpp = { 8, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true, .is_yuv = true },
--		{ .format = DRM_FORMAT_Y416,            .depth = 0,  .num_planes = 1, .cpp = { 8, 0, 0 }, .hsub = 1, .vsub = 1, .has_alpha = true, .is_yuv = true },
--		{ .format = DRM_FORMAT_XVYU2101010,	.depth = 0,  .num_planes = 1, .cpp = { 4, 0, 0 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_XVYU12_16161616,	.depth = 0,  .num_planes = 1, .cpp = { 8, 0, 0 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_XVYU16161616,	.depth = 0,  .num_planes = 1, .cpp = { 8, 0, 0 }, .hsub = 1, .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_Y0L0,		.depth = 0,  .num_planes = 1,
--		  .char_per_block = { 8, 0, 0 }, .block_w = { 2, 0, 0 }, .block_h = { 2, 0, 0 },
--		  .hsub = 2, .vsub = 2, .has_alpha = true, .is_yuv = true },
--		{ .format = DRM_FORMAT_X0L0,		.depth = 0,  .num_planes = 1,
--		  .char_per_block = { 8, 0, 0 }, .block_w = { 2, 0, 0 }, .block_h = { 2, 0, 0 },
--		  .hsub = 2, .vsub = 2, .is_yuv = true },
--		{ .format = DRM_FORMAT_Y0L2,		.depth = 0,  .num_planes = 1,
--		  .char_per_block = { 8, 0, 0 }, .block_w = { 2, 0, 0 }, .block_h = { 2, 0, 0 },
--		  .hsub = 2, .vsub = 2, .has_alpha = true, .is_yuv = true },
--		{ .format = DRM_FORMAT_X0L2,		.depth = 0,  .num_planes = 1,
--		  .char_per_block = { 8, 0, 0 }, .block_w = { 2, 0, 0 }, .block_h = { 2, 0, 0 },
--		  .hsub = 2, .vsub = 2, .is_yuv = true },
--		{ .format = DRM_FORMAT_P010,            .depth = 0,  .num_planes = 2,
--		  .char_per_block = { 2, 4, 0 }, .block_w = { 1, 0, 0 }, .block_h = { 1, 0, 0 },
--		  .hsub = 2, .vsub = 2, .is_yuv = true},
--		{ .format = DRM_FORMAT_P012,		.depth = 0,  .num_planes = 2,
--		  .char_per_block = { 2, 4, 0 }, .block_w = { 1, 0, 0 }, .block_h = { 1, 0, 0 },
--		   .hsub = 2, .vsub = 2, .is_yuv = true},
--		{ .format = DRM_FORMAT_P016,		.depth = 0,  .num_planes = 2,
--		  .char_per_block = { 2, 4, 0 }, .block_w = { 1, 0, 0 }, .block_h = { 1, 0, 0 },
--		  .hsub = 2, .vsub = 2, .is_yuv = true},
--		{ .format = DRM_FORMAT_P210,		.depth = 0,
--		  .num_planes = 2, .char_per_block = { 2, 4, 0 },
--		  .block_w = { 1, 0, 0 }, .block_h = { 1, 0, 0 }, .hsub = 2,
--		  .vsub = 1, .is_yuv = true },
--		{ .format = DRM_FORMAT_VUY101010,	.depth = 0,
--		  .num_planes = 1, .cpp = { 0, 0, 0 }, .hsub = 1, .vsub = 1,
--		  .is_yuv = true },
--		{ .format = DRM_FORMAT_YUV420_8BIT,     .depth = 0,
--		  .num_planes = 1, .cpp = { 0, 0, 0 }, .hsub = 2, .vsub = 2,
--		  .is_yuv = true },
--		{ .format = DRM_FORMAT_YUV420_10BIT,    .depth = 0,
--		  .num_planes = 1, .cpp = { 0, 0, 0 }, .hsub = 2, .vsub = 2,
--		  .is_yuv = true },
--	};
--
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(formats); ++i) {
--		if (formats[i].format == format)
--			return &formats[i];
--	}
--
--	return NULL;
--}
--
--/**
-- * drm_format_info - query information for a given format
+ /**
+- * drm_format_horz_chroma_subsampling - get the horizontal chroma subsampling factor
 - * @format: pixel format (DRM_FORMAT_*)
 - *
-- * The caller should only pass a supported pixel format to this function.
-- * Unsupported pixel formats will generate a warning in the kernel log.
-- *
 - * Returns:
-- * The instance of struct drm_format_info that describes the pixel format, or
-- * NULL if the format is unsupported.
+- * The horizontal chroma subsampling factor for the
+- * specified pixel format.
 - */
--const struct drm_format_info *drm_format_info(u32 format)
+-int drm_format_horz_chroma_subsampling(uint32_t format)
 -{
 -	const struct drm_format_info *info;
 -
--	info = __drm_format_info(format);
--	WARN_ON(!info);
--	return info;
+-	info = drm_format_info(format);
+-	return info ? info->hsub : 1;
 -}
--EXPORT_SYMBOL(drm_format_info);
+-EXPORT_SYMBOL(drm_format_horz_chroma_subsampling);
 -
- /**
-  * drm_get_format_info - query information for a given framebuffer configuration
-  * @dev: DRM device
-@@ -331,65 +174,3 @@ drm_get_format_info(struct drm_device *dev,
- 	return info;
+-/**
+- * drm_format_vert_chroma_subsampling - get the vertical chroma subsampling factor
+- * @format: pixel format (DRM_FORMAT_*)
+- *
+- * Returns:
+- * The vertical chroma subsampling factor for the
+- * specified pixel format.
+- */
+-int drm_format_vert_chroma_subsampling(uint32_t format)
+-{
+-	const struct drm_format_info *info;
+-
+-	info = drm_format_info(format);
+-	return info ? info->vsub : 1;
+-}
+-EXPORT_SYMBOL(drm_format_vert_chroma_subsampling);
+-
+-/**
+  * drm_format_plane_width - width of the plane given the first plane
+  * @width: width of the first plane
+  * @format: pixel format
+diff --git a/drivers/gpu/drm/imx/ipuv3-plane.c b/drivers/gpu/drm/imx/ipuv3-plane.c
+index d81b3102b488..4a54a5c192d2 100644
+--- a/drivers/gpu/drm/imx/ipuv3-plane.c
++++ b/drivers/gpu/drm/imx/ipuv3-plane.c
+@@ -115,8 +115,8 @@ drm_plane_state_to_ubo(struct drm_plane_state *state)
+ 	cma_obj = drm_fb_cma_get_gem_obj(fb, 1);
+ 	BUG_ON(!cma_obj);
+ 
+-	x /= drm_format_horz_chroma_subsampling(fb->format->format);
+-	y /= drm_format_vert_chroma_subsampling(fb->format->format);
++	x /= fb->format->hsub;
++	y /= fb->format->vsub;
+ 
+ 	return cma_obj->paddr + fb->offsets[1] + fb->pitches[1] * y +
+ 	       fb->format->cpp[1] * x - eba;
+@@ -134,8 +134,8 @@ drm_plane_state_to_vbo(struct drm_plane_state *state)
+ 	cma_obj = drm_fb_cma_get_gem_obj(fb, 2);
+ 	BUG_ON(!cma_obj);
+ 
+-	x /= drm_format_horz_chroma_subsampling(fb->format->format);
+-	y /= drm_format_vert_chroma_subsampling(fb->format->format);
++	x /= fb->format->hsub;
++	y /= fb->format->vsub;
+ 
+ 	return cma_obj->paddr + fb->offsets[2] + fb->pitches[2] * y +
+ 	       fb->format->cpp[2] * x - eba;
+@@ -352,7 +352,6 @@ static int ipu_plane_atomic_check(struct drm_plane *plane,
+ 	struct drm_framebuffer *old_fb = old_state->fb;
+ 	unsigned long eba, ubo, vbo, old_ubo, old_vbo, alpha_eba;
+ 	bool can_position = (plane->type == DRM_PLANE_TYPE_OVERLAY);
+-	int hsub, vsub;
+ 	int ret;
+ 
+ 	/* Ok to disable */
+@@ -471,10 +470,8 @@ static int ipu_plane_atomic_check(struct drm_plane *plane,
+ 		 * The x/y offsets must be even in case of horizontal/vertical
+ 		 * chroma subsampling.
+ 		 */
+-		hsub = drm_format_horz_chroma_subsampling(fb->format->format);
+-		vsub = drm_format_vert_chroma_subsampling(fb->format->format);
+-		if (((state->src.x1 >> 16) & (hsub - 1)) ||
+-		    ((state->src.y1 >> 16) & (vsub - 1)))
++		if (((state->src.x1 >> 16) & (fb->format->hsub - 1)) ||
++		    ((state->src.y1 >> 16) & (fb->format->vsub - 1)))
+ 			return -EINVAL;
+ 		break;
+ 	case DRM_FORMAT_RGB565_A8:
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+index da1f727d7495..7994de952353 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+@@ -557,14 +557,9 @@ static void _dpu_plane_setup_scaler(struct dpu_plane *pdpu,
+ 		struct dpu_plane_state *pstate,
+ 		const struct dpu_format *fmt, bool color_fill)
+ {
+-	uint32_t chroma_subsmpl_h, chroma_subsmpl_v;
++	const struct drm_format_info *info = drm_format_info(fmt->base.pixel_format);
+ 
+ 	/* don't chroma subsample if decimating */
+-	chroma_subsmpl_h =
+-		drm_format_horz_chroma_subsampling(fmt->base.pixel_format);
+-	chroma_subsmpl_v =
+-		drm_format_vert_chroma_subsampling(fmt->base.pixel_format);
+-
+ 	/* update scaler. calculate default config for QSEED3 */
+ 	_dpu_plane_setup_scaler3(pdpu, pstate,
+ 			drm_rect_width(&pdpu->pipe_cfg.src_rect),
+@@ -572,7 +567,7 @@ static void _dpu_plane_setup_scaler(struct dpu_plane *pdpu,
+ 			drm_rect_width(&pdpu->pipe_cfg.dst_rect),
+ 			drm_rect_height(&pdpu->pipe_cfg.dst_rect),
+ 			&pstate->scaler3_cfg, fmt,
+-			chroma_subsmpl_h, chroma_subsmpl_v);
++			info->hsub, info->vsub);
  }
- EXPORT_SYMBOL(drm_get_format_info);
--
--/**
-- * drm_format_info_block_width - width in pixels of block.
-- * @info: pixel format info
-- * @plane: plane index
-- *
-- * Returns:
-- * The width in pixels of a block, depending on the plane index.
-- */
--unsigned int drm_format_info_block_width(const struct drm_format_info *info,
--					 int plane)
--{
--	if (!info || plane < 0 || plane >= info->num_planes)
--		return 0;
--
--	if (!info->block_w[plane])
--		return 1;
--	return info->block_w[plane];
--}
--EXPORT_SYMBOL(drm_format_info_block_width);
--
--/**
-- * drm_format_info_block_height - height in pixels of a block
-- * @info: pixel format info
-- * @plane: plane index
-- *
-- * Returns:
-- * The height in pixels of a block, depending on the plane index.
-- */
--unsigned int drm_format_info_block_height(const struct drm_format_info *info,
--					  int plane)
--{
--	if (!info || plane < 0 || plane >= info->num_planes)
--		return 0;
--
--	if (!info->block_h[plane])
--		return 1;
--	return info->block_h[plane];
--}
--EXPORT_SYMBOL(drm_format_info_block_height);
--
--/**
-- * drm_format_info_min_pitch - computes the minimum required pitch in bytes
-- * @info: pixel format info
-- * @plane: plane index
-- * @buffer_width: buffer width in pixels
-- *
-- * Returns:
-- * The minimum required pitch in bytes for a buffer by taking into consideration
-- * the pixel format information and the buffer width.
-- */
--uint64_t drm_format_info_min_pitch(const struct drm_format_info *info,
--				   int plane, unsigned int buffer_width)
--{
--	if (!info || plane < 0 || plane >= info->num_planes)
--		return 0;
--
--	return DIV_ROUND_UP_ULL((u64)buffer_width * info->char_per_block[plane],
--			    drm_format_info_block_width(info, plane) *
--			    drm_format_info_block_height(info, plane));
--}
--EXPORT_SYMBOL(drm_format_info_min_pitch);
-diff --git a/drivers/gpu/drm/selftests/Makefile b/drivers/gpu/drm/selftests/Makefile
-index 1bb73dc4c88c..e32921691662 100644
---- a/drivers/gpu/drm/selftests/Makefile
-+++ b/drivers/gpu/drm/selftests/Makefile
-@@ -1,5 +1,4 @@
- test-drm_modeset-y := test-drm_modeset_common.o test-drm_plane_helper.o \
--                      test-drm_format.o test-drm_framebuffer.o \
--		      test-drm_damage_helper.o
-+                      test-drm_framebuffer.o test-drm_damage_helper.o
  
- obj-$(CONFIG_DRM_DEBUG_SELFTEST) += test-drm_mm.o test-drm_modeset.o
-diff --git a/drivers/gpu/drm/selftests/drm_modeset_selftests.h b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-index 464753746013..4a2ef84c2762 100644
---- a/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-+++ b/drivers/gpu/drm/selftests/drm_modeset_selftests.h
-@@ -7,9 +7,6 @@
-  * Tests are executed in order by igt/drm_selftests_helper
-  */
- selftest(check_plane_state, igt_check_plane_state)
--selftest(check_drm_format_block_width, igt_check_drm_format_block_width)
--selftest(check_drm_format_block_height, igt_check_drm_format_block_height)
--selftest(check_drm_format_min_pitch, igt_check_drm_format_min_pitch)
- selftest(check_drm_framebuffer_create, igt_check_drm_framebuffer_create)
- selftest(damage_iter_no_damage, igt_damage_iter_no_damage)
- selftest(damage_iter_no_damage_fractional_src, igt_damage_iter_no_damage_fractional_src)
-diff --git a/drivers/gpu/drm/selftests/test-drm_format.c b/drivers/gpu/drm/selftests/test-drm_format.c
-deleted file mode 100644
-index c5e212afa27a..000000000000
---- a/drivers/gpu/drm/selftests/test-drm_format.c
-+++ /dev/null
-@@ -1,280 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/*
-- * Test cases for the drm_format functions
-- */
--
--#define pr_fmt(fmt) "drm_format: " fmt
--
--#include <linux/errno.h>
--#include <linux/kernel.h>
--
--#include <drm/drm_fourcc.h>
--
--#include "test-drm_modeset_common.h"
--
--int igt_check_drm_format_block_width(void *ignored)
--{
--	const struct drm_format_info *info = NULL;
--
--	/* Test invalid arguments */
--	FAIL_ON(drm_format_info_block_width(info, 0) != 0);
--	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
--	FAIL_ON(drm_format_info_block_width(info, 1) != 0);
--
--	/* Test 1 plane format */
--	info = drm_format_info(DRM_FORMAT_XRGB4444);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_block_width(info, 0) != 1);
--	FAIL_ON(drm_format_info_block_width(info, 1) != 0);
--	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
--
--	/* Test 2 planes format */
--	info = drm_format_info(DRM_FORMAT_NV12);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_block_width(info, 0) != 1);
--	FAIL_ON(drm_format_info_block_width(info, 1) != 1);
--	FAIL_ON(drm_format_info_block_width(info, 2) != 0);
--	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
--
--	/* Test 3 planes format */
--	info = drm_format_info(DRM_FORMAT_YUV422);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_block_width(info, 0) != 1);
--	FAIL_ON(drm_format_info_block_width(info, 1) != 1);
--	FAIL_ON(drm_format_info_block_width(info, 2) != 1);
--	FAIL_ON(drm_format_info_block_width(info, 3) != 0);
--	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
--
--	/* Test a tiled format */
--	info = drm_format_info(DRM_FORMAT_X0L0);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_block_width(info, 0) != 2);
--	FAIL_ON(drm_format_info_block_width(info, 1) != 0);
--	FAIL_ON(drm_format_info_block_width(info, -1) != 0);
--
--	return 0;
--}
--
--int igt_check_drm_format_block_height(void *ignored)
--{
--	const struct drm_format_info *info = NULL;
--
--	/* Test invalid arguments */
--	FAIL_ON(drm_format_info_block_height(info, 0) != 0);
--	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
--	FAIL_ON(drm_format_info_block_height(info, 1) != 0);
--
--	/* Test 1 plane format */
--	info = drm_format_info(DRM_FORMAT_XRGB4444);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_block_height(info, 0) != 1);
--	FAIL_ON(drm_format_info_block_height(info, 1) != 0);
--	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
--
--	/* Test 2 planes format */
--	info = drm_format_info(DRM_FORMAT_NV12);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_block_height(info, 0) != 1);
--	FAIL_ON(drm_format_info_block_height(info, 1) != 1);
--	FAIL_ON(drm_format_info_block_height(info, 2) != 0);
--	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
--
--	/* Test 3 planes format */
--	info = drm_format_info(DRM_FORMAT_YUV422);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_block_height(info, 0) != 1);
--	FAIL_ON(drm_format_info_block_height(info, 1) != 1);
--	FAIL_ON(drm_format_info_block_height(info, 2) != 1);
--	FAIL_ON(drm_format_info_block_height(info, 3) != 0);
--	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
--
--	/* Test a tiled format */
--	info = drm_format_info(DRM_FORMAT_X0L0);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_block_height(info, 0) != 2);
--	FAIL_ON(drm_format_info_block_height(info, 1) != 0);
--	FAIL_ON(drm_format_info_block_height(info, -1) != 0);
--
--	return 0;
--}
--
--int igt_check_drm_format_min_pitch(void *ignored)
--{
--	const struct drm_format_info *info = NULL;
--
--	/* Test invalid arguments */
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
--
--	/* Test 1 plane 8 bits per pixel format */
--	info = drm_format_info(DRM_FORMAT_RGB332);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
--
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 1);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 640);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 1024);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 1920);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 4096);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 671);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
--			(uint64_t)UINT_MAX);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
--			(uint64_t)(UINT_MAX - 1));
--
--	/* Test 1 plane 16 bits per pixel format */
--	info = drm_format_info(DRM_FORMAT_XRGB4444);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
--
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 4);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 1280);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 2048);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 3840);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 8192);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 1342);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
--			(uint64_t)UINT_MAX * 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
--			(uint64_t)(UINT_MAX - 1) * 2);
--
--	/* Test 1 plane 24 bits per pixel format */
--	info = drm_format_info(DRM_FORMAT_RGB888);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
--
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 3);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 6);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 1920);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 3072);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 5760);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 12288);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 2013);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
--			(uint64_t)UINT_MAX * 3);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
--			(uint64_t)(UINT_MAX - 1) * 3);
--
--	/* Test 1 plane 32 bits per pixel format */
--	info = drm_format_info(DRM_FORMAT_ABGR8888);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
--
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 4);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 8);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 2560);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 4096);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 7680);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 16384);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 2684);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
--			(uint64_t)UINT_MAX * 4);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
--			(uint64_t)(UINT_MAX - 1) * 4);
--
--	/* Test 2 planes format */
--	info = drm_format_info(DRM_FORMAT_NV12);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 0) != 0);
--
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 1);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 1) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 1) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 640);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 320) != 640);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 1024);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 512) != 1024);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 1920);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 960) != 1920);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 4096);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 2048) != 4096);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 671);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 336) != 672);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
--			(uint64_t)UINT_MAX);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1) !=
--			(uint64_t)UINT_MAX + 1);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
--			(uint64_t)(UINT_MAX - 1));
--	FAIL_ON(drm_format_info_min_pitch(info, 1, (UINT_MAX - 1) /  2) !=
--			(uint64_t)(UINT_MAX - 1));
--
--	/* Test 3 planes 8 bits per pixel format */
--	info = drm_format_info(DRM_FORMAT_YUV422);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 3, 0) != 0);
--
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 1);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 1) != 1);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 1) != 1);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 2) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 2) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 640);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 320) != 320);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 320) != 320);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 1024);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 512) != 512);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 512) != 512);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 1920);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 960) != 960);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 960) != 960);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 4096);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 2048) != 2048);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 2048) != 2048);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 671);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 336) != 336);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, 336) != 336);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
--			(uint64_t)UINT_MAX);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1) !=
--			(uint64_t)UINT_MAX / 2 + 1);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, UINT_MAX / 2 + 1) !=
--			(uint64_t)UINT_MAX / 2 + 1);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, (UINT_MAX - 1) / 2) !=
--			(uint64_t)(UINT_MAX - 1) / 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, (UINT_MAX - 1) / 2) !=
--			(uint64_t)(UINT_MAX - 1) / 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2) !=
--			(uint64_t)(UINT_MAX - 1) / 2);
--
--	/* Test tiled format */
--	info = drm_format_info(DRM_FORMAT_X0L2);
--	FAIL_ON(!info);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, -1, 0) != 0);
--	FAIL_ON(drm_format_info_min_pitch(info, 1, 0) != 0);
--
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1) != 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 2) != 4);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 640) != 1280);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1024) != 2048);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 1920) != 3840);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 4096) != 8192);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, 671) != 1342);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX) !=
--			(uint64_t)UINT_MAX * 2);
--	FAIL_ON(drm_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
--			(uint64_t)(UINT_MAX - 1) * 2);
--
--	return 0;
--}
-diff --git a/drivers/gpu/drm/selftests/test-drm_modeset_common.h b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-index 8c76f09c12d1..fb2b8fbd7566 100644
---- a/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-+++ b/drivers/gpu/drm/selftests/test-drm_modeset_common.h
-@@ -14,9 +14,6 @@
- #define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
+ /**
+diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
+index be13140967b4..9d9fb6c5fd68 100644
+--- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
++++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
+@@ -650,10 +650,10 @@ static int calc_scalex_steps(struct drm_plane *plane,
+ 		uint32_t pixel_format, uint32_t src, uint32_t dest,
+ 		uint32_t phasex_steps[COMP_MAX])
+ {
++	const struct drm_format_info *info = drm_format_info(pixel_format);
+ 	struct mdp5_kms *mdp5_kms = get_kms(plane);
+ 	struct device *dev = mdp5_kms->dev->dev;
+ 	uint32_t phasex_step;
+-	unsigned int hsub;
+ 	int ret;
  
- int igt_check_plane_state(void *ignored);
--int igt_check_drm_format_block_width(void *ignored);
--int igt_check_drm_format_block_height(void *ignored);
--int igt_check_drm_format_min_pitch(void *ignored);
- int igt_check_drm_framebuffer_create(void *ignored);
- int igt_damage_iter_no_damage(void *ignored);
- int igt_damage_iter_no_damage_fractional_src(void *ignored);
+ 	ret = calc_phase_step(src, dest, &phasex_step);
+@@ -662,11 +662,9 @@ static int calc_scalex_steps(struct drm_plane *plane,
+ 		return ret;
+ 	}
+ 
+-	hsub = drm_format_horz_chroma_subsampling(pixel_format);
+-
+ 	phasex_steps[COMP_0]   = phasex_step;
+ 	phasex_steps[COMP_3]   = phasex_step;
+-	phasex_steps[COMP_1_2] = phasex_step / hsub;
++	phasex_steps[COMP_1_2] = phasex_step / info->hsub;
+ 
+ 	return 0;
+ }
+@@ -675,10 +673,10 @@ static int calc_scaley_steps(struct drm_plane *plane,
+ 		uint32_t pixel_format, uint32_t src, uint32_t dest,
+ 		uint32_t phasey_steps[COMP_MAX])
+ {
++	const struct drm_format_info *info = drm_format_info(pixel_format);
+ 	struct mdp5_kms *mdp5_kms = get_kms(plane);
+ 	struct device *dev = mdp5_kms->dev->dev;
+ 	uint32_t phasey_step;
+-	unsigned int vsub;
+ 	int ret;
+ 
+ 	ret = calc_phase_step(src, dest, &phasey_step);
+@@ -687,11 +685,9 @@ static int calc_scaley_steps(struct drm_plane *plane,
+ 		return ret;
+ 	}
+ 
+-	vsub = drm_format_vert_chroma_subsampling(pixel_format);
+-
+ 	phasey_steps[COMP_0]   = phasey_step;
+ 	phasey_steps[COMP_3]   = phasey_step;
+-	phasey_steps[COMP_1_2] = phasey_step / vsub;
++	phasey_steps[COMP_1_2] = phasey_step / info->vsub;
+ 
+ 	return 0;
+ }
+@@ -699,8 +695,9 @@ static int calc_scaley_steps(struct drm_plane *plane,
+ static uint32_t get_scale_config(const struct mdp_format *format,
+ 		uint32_t src, uint32_t dst, bool horz)
+ {
++	const struct drm_format_info *info = drm_format_info(format->base.pixel_format);
+ 	bool scaling = format->is_yuv ? true : (src != dst);
+-	uint32_t sub, pix_fmt = format->base.pixel_format;
++	uint32_t sub;
+ 	uint32_t ya_filter, uv_filter;
+ 	bool yuv = format->is_yuv;
+ 
+@@ -708,8 +705,7 @@ static uint32_t get_scale_config(const struct mdp_format *format,
+ 		return 0;
+ 
+ 	if (yuv) {
+-		sub = horz ? drm_format_horz_chroma_subsampling(pix_fmt) :
+-			     drm_format_vert_chroma_subsampling(pix_fmt);
++		sub = horz ? info->hsub : info->vsub;
+ 		uv_filter = ((src / sub) <= dst) ?
+ 				   SCALE_FILTER_BIL : SCALE_FILTER_PCMN;
+ 	}
+@@ -754,7 +750,7 @@ static void mdp5_write_pixel_ext(struct mdp5_kms *mdp5_kms, enum mdp5_pipe pipe,
+ 	uint32_t src_w, int pe_left[COMP_MAX], int pe_right[COMP_MAX],
+ 	uint32_t src_h, int pe_top[COMP_MAX], int pe_bottom[COMP_MAX])
+ {
+-	uint32_t pix_fmt = format->base.pixel_format;
++	const struct drm_format_info *info = drm_format_info(format->base.pixel_format);
+ 	uint32_t lr, tb, req;
+ 	int i;
+ 
+@@ -763,8 +759,8 @@ static void mdp5_write_pixel_ext(struct mdp5_kms *mdp5_kms, enum mdp5_pipe pipe,
+ 		uint32_t roi_h = src_h;
+ 
+ 		if (format->is_yuv && i == COMP_1_2) {
+-			roi_w /= drm_format_horz_chroma_subsampling(pix_fmt);
+-			roi_h /= drm_format_vert_chroma_subsampling(pix_fmt);
++			roi_w /= info->hsub;
++			roi_h /= info->vsub;
+ 		}
+ 
+ 		lr  = (pe_left[i] >= 0) ?
+diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c
+index 72ab8d89efa4..b30b2f4efc60 100644
+--- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c
++++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_smp.c
+@@ -135,7 +135,7 @@ uint32_t mdp5_smp_calculate(struct mdp5_smp *smp,
+ 	uint32_t blkcfg = 0;
+ 
+ 	nplanes = info->num_planes;
+-	hsub = drm_format_horz_chroma_subsampling(fmt);
++	hsub = info->hsub;
+ 
+ 	/* different if BWC (compressed framebuffer?) enabled: */
+ 	nlines = 2;
+diff --git a/drivers/gpu/drm/msm/msm_fb.c b/drivers/gpu/drm/msm/msm_fb.c
+index 432beddafb9e..f69c0afd6ec6 100644
+--- a/drivers/gpu/drm/msm/msm_fb.c
++++ b/drivers/gpu/drm/msm/msm_fb.c
+@@ -145,16 +145,12 @@ static struct drm_framebuffer *msm_framebuffer_init(struct drm_device *dev,
+ 	struct drm_framebuffer *fb;
+ 	const struct msm_format *format;
+ 	int ret, i, n;
+-	unsigned int hsub, vsub;
+ 
+ 	DBG("create framebuffer: dev=%p, mode_cmd=%p (%dx%d@%4.4s)",
+ 			dev, mode_cmd, mode_cmd->width, mode_cmd->height,
+ 			(char *)&mode_cmd->pixel_format);
+ 
+ 	n = info->num_planes;
+-	hsub = drm_format_horz_chroma_subsampling(mode_cmd->pixel_format);
+-	vsub = drm_format_vert_chroma_subsampling(mode_cmd->pixel_format);
+-
+ 	format = kms->funcs->get_format(kms, mode_cmd->pixel_format,
+ 			mode_cmd->modifier[0]);
+ 	if (!format) {
+@@ -180,8 +176,8 @@ static struct drm_framebuffer *msm_framebuffer_init(struct drm_device *dev,
+ 	}
+ 
+ 	for (i = 0; i < n; i++) {
+-		unsigned int width = mode_cmd->width / (i ? hsub : 1);
+-		unsigned int height = mode_cmd->height / (i ? vsub : 1);
++		unsigned int width = mode_cmd->width / (i ? info->hsub : 1);
++		unsigned int height = mode_cmd->height / (i ? info->vsub : 1);
+ 		unsigned int min_size;
+ 
+ 		min_size = (height - 1) * mode_cmd->pitches[i]
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
+index 606d176d5d96..c318fae28581 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_fb.c
+@@ -79,18 +79,13 @@ rockchip_user_fb_create(struct drm_device *dev, struct drm_file *file_priv,
+ 	struct drm_framebuffer *fb;
+ 	struct drm_gem_object *objs[ROCKCHIP_MAX_FB_BUFFER];
+ 	struct drm_gem_object *obj;
+-	unsigned int hsub;
+-	unsigned int vsub;
+ 	int num_planes = min_t(int, info->num_planes, ROCKCHIP_MAX_FB_BUFFER);
+ 	int ret;
+ 	int i;
+ 
+-	hsub = drm_format_horz_chroma_subsampling(mode_cmd->pixel_format);
+-	vsub = drm_format_vert_chroma_subsampling(mode_cmd->pixel_format);
+-
+ 	for (i = 0; i < num_planes; i++) {
+-		unsigned int width = mode_cmd->width / (i ? hsub : 1);
+-		unsigned int height = mode_cmd->height / (i ? vsub : 1);
++		unsigned int width = mode_cmd->width / (i ? info->hsub : 1);
++		unsigned int height = mode_cmd->height / (i ? info->vsub : 1);
+ 		unsigned int min_size;
+ 
+ 		obj = drm_gem_object_lookup(file_priv, mode_cmd->handles[i]);
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index 20a9c296d027..345d5cb5e956 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -317,21 +317,18 @@ static void scl_vop_cal_scl_fac(struct vop *vop, const struct vop_win_data *win,
+ 			     uint32_t src_w, uint32_t src_h, uint32_t dst_w,
+ 			     uint32_t dst_h, uint32_t pixel_format)
+ {
++	const struct drm_format_info *info = drm_format_info(pixel_format);
+ 	uint16_t yrgb_hor_scl_mode, yrgb_ver_scl_mode;
+ 	uint16_t cbcr_hor_scl_mode = SCALE_NONE;
+ 	uint16_t cbcr_ver_scl_mode = SCALE_NONE;
+-	int hsub = drm_format_horz_chroma_subsampling(pixel_format);
+-	int vsub = drm_format_vert_chroma_subsampling(pixel_format);
+-	const struct drm_format_info *info;
+ 	bool is_yuv = false;
+-	uint16_t cbcr_src_w = src_w / hsub;
+-	uint16_t cbcr_src_h = src_h / vsub;
++	uint16_t cbcr_src_w = src_w / info->hsub;
++	uint16_t cbcr_src_h = src_h / info->vsub;
+ 	uint16_t vsu_mode;
+ 	uint16_t lb_mode;
+ 	uint32_t val;
+ 	int vskiplines;
+ 
+-	info = drm_format_info(pixel_format);
+ 
+ 	if (info->is_yuv)
+ 		is_yuv = true;
+@@ -831,8 +828,8 @@ static void vop_plane_atomic_update(struct drm_plane *plane,
+ 		    (state->rotation & DRM_MODE_REFLECT_X) ? 1 : 0);
+ 
+ 	if (is_yuv) {
+-		int hsub = drm_format_horz_chroma_subsampling(fb->format->format);
+-		int vsub = drm_format_vert_chroma_subsampling(fb->format->format);
++		int hsub = fb->format->hsub;
++		int vsub = fb->format->vsub;
+ 		int bpp = fb->format->cpp[1];
+ 
+ 		uv_obj = fb->obj[1];
+diff --git a/drivers/gpu/drm/tegra/fb.c b/drivers/gpu/drm/tegra/fb.c
+index da0747e317b7..94fb75089d87 100644
+--- a/drivers/gpu/drm/tegra/fb.c
++++ b/drivers/gpu/drm/tegra/fb.c
+@@ -132,18 +132,15 @@ struct drm_framebuffer *tegra_fb_create(struct drm_device *drm,
+ 					const struct drm_mode_fb_cmd2 *cmd)
+ {
+ 	const struct drm_format_info *info = drm_get_format_info(drm, cmd);
+-	unsigned int hsub, vsub, i;
+ 	struct tegra_bo *planes[4];
+ 	struct drm_gem_object *gem;
+ 	struct drm_framebuffer *fb;
++	unsigned int i;
+ 	int err;
+ 
+-	hsub = drm_format_horz_chroma_subsampling(cmd->pixel_format);
+-	vsub = drm_format_vert_chroma_subsampling(cmd->pixel_format);
+-
+ 	for (i = 0; i < info->num_planes; i++) {
+-		unsigned int width = cmd->width / (i ? hsub : 1);
+-		unsigned int height = cmd->height / (i ? vsub : 1);
++		unsigned int width = cmd->width / (i ? info->hsub : 1);
++		unsigned int height = cmd->height / (i ? info->vsub : 1);
+ 		unsigned int size, bpp;
+ 
+ 		gem = drm_gem_object_lookup(file, cmd->handles[i]);
+diff --git a/drivers/gpu/drm/vc4/vc4_plane.c b/drivers/gpu/drm/vc4/vc4_plane.c
+index e3c0a350cb77..be2274924b34 100644
+--- a/drivers/gpu/drm/vc4/vc4_plane.c
++++ b/drivers/gpu/drm/vc4/vc4_plane.c
+@@ -310,10 +310,10 @@ static int vc4_plane_setup_clipping_and_scaling(struct drm_plane_state *state)
+ 	struct drm_framebuffer *fb = state->fb;
+ 	struct drm_gem_cma_object *bo = drm_fb_cma_get_gem_obj(fb, 0);
+ 	u32 subpixel_src_mask = (1 << 16) - 1;
+-	u32 format = fb->format->format;
+ 	int num_planes = fb->format->num_planes;
+ 	struct drm_crtc_state *crtc_state;
+-	u32 h_subsample, v_subsample;
++	u32 h_subsample = fb->format->hsub;
++	u32 v_subsample = fb->format->vsub;
+ 	int i, ret;
+ 
+ 	crtc_state = drm_atomic_get_existing_crtc_state(state->state,
+@@ -328,9 +328,6 @@ static int vc4_plane_setup_clipping_and_scaling(struct drm_plane_state *state)
+ 	if (ret)
+ 		return ret;
+ 
+-	h_subsample = drm_format_horz_chroma_subsampling(format);
+-	v_subsample = drm_format_vert_chroma_subsampling(format);
+-
+ 	for (i = 0; i < num_planes; i++)
+ 		vc4_state->offsets[i] = bo->paddr + fb->offsets[i];
+ 
+@@ -593,7 +590,8 @@ static int vc4_plane_mode_set(struct drm_plane *plane,
+ 	const struct hvs_format *format = vc4_get_hvs_format(fb->format->format);
+ 	u64 base_format_mod = fourcc_mod_broadcom_mod(fb->modifier);
+ 	int num_planes = fb->format->num_planes;
+-	u32 h_subsample, v_subsample;
++	u32 h_subsample = fb->format->hsub;
++	u32 v_subsample = fb->format->vsub;
+ 	bool mix_plane_alpha;
+ 	bool covers_screen;
+ 	u32 scl0, scl1, pitch0;
+@@ -623,9 +621,6 @@ static int vc4_plane_mode_set(struct drm_plane *plane,
+ 		scl1 = vc4_get_scl_field(state, 0);
+ 	}
+ 
+-	h_subsample = drm_format_horz_chroma_subsampling(format->drm);
+-	v_subsample = drm_format_vert_chroma_subsampling(format->drm);
+-
+ 	rotation = drm_rotation_simplify(state->rotation,
+ 					 DRM_MODE_ROTATE_0 |
+ 					 DRM_MODE_REFLECT_X |
 diff --git a/include/drm/drm_fourcc.h b/include/drm/drm_fourcc.h
-index 38f152b5da08..8ca45b2be9ca 100644
+index 41779b327d91..eeec449d6c6a 100644
 --- a/include/drm/drm_fourcc.h
 +++ b/include/drm/drm_fourcc.h
-@@ -52,91 +52,6 @@ struct drm_mode_fb_cmd2;
- struct image_format_info;
- 
- /**
-- * struct drm_format_info - information about a DRM format
-- */
--struct drm_format_info {
--	/** @format: 4CC format identifier (DRM_FORMAT_*) */
--	u32 format;
--
--	/**
--	 * @depth:
--	 *
--	 * Color depth (number of bits per pixel excluding padding bits),
--	 * valid for a subset of RGB formats only. This is a legacy field, do
--	 * not use in new code and set to 0 for new formats.
--	 */
--	u8 depth;
--
--	/** @num_planes: Number of color planes (1 to 3) */
--	u8 num_planes;
--
--	union {
--		/**
--		 * @cpp:
--		 *
--		 * Number of bytes per pixel (per plane), this is aliased with
--		 * @char_per_block. It is deprecated in favour of using the
--		 * triplet @char_per_block, @block_w, @block_h for better
--		 * describing the pixel format.
--		 */
--		u8 cpp[3];
--
--		/**
--		 * @char_per_block:
--		 *
--		 * Number of bytes per block (per plane), where blocks are
--		 * defined as a rectangle of pixels which are stored next to
--		 * each other in a byte aligned memory region. Together with
--		 * @block_w and @block_h this is used to properly describe tiles
--		 * in tiled formats or to describe groups of pixels in packed
--		 * formats for which the memory needed for a single pixel is not
--		 * byte aligned.
--		 *
--		 * @cpp has been kept for historical reasons because there are
--		 * a lot of places in drivers where it's used. In drm core for
--		 * generic code paths the preferred way is to use
--		 * @char_per_block, drm_format_info_block_width() and
--		 * drm_format_info_block_height() which allows handling both
--		 * block and non-block formats in the same way.
--		 *
--		 * For formats that are intended to be used only with non-linear
--		 * modifiers both @cpp and @char_per_block must be 0 in the
--		 * generic format table. Drivers could supply accurate
--		 * information from their drm_mode_config.get_format_info hook
--		 * if they want the core to be validating the pitch.
--		 */
--		u8 char_per_block[3];
--	};
--
--	/**
--	 * @block_w:
--	 *
--	 * Block width in pixels, this is intended to be accessed through
--	 * drm_format_info_block_width()
--	 */
--	u8 block_w[3];
--
--	/**
--	 * @block_h:
--	 *
--	 * Block height in pixels, this is intended to be accessed through
--	 * drm_format_info_block_height()
--	 */
--	u8 block_h[3];
--
--	/** @hsub: Horizontal chroma subsampling factor */
--	u8 hsub;
--	/** @vsub: Vertical chroma subsampling factor */
--	u8 vsub;
--
--	/** @has_alpha: Does the format embeds an alpha component? */
--	bool has_alpha;
--
--	/** @is_yuv: Is it a YUV format? */
--	bool is_yuv;
--};
--
--/**
-  * struct drm_format_name_buf - name of a DRM format
-  * @str: string buffer containing the format name
-  */
-@@ -144,199 +59,12 @@ struct drm_format_name_buf {
- 	char str[32];
- };
- 
--/**
-- * drm_format_info_is_yuv_packed - check that the format info matches a YUV
-- * format with data laid in a single plane
-- * @info: format info
-- *
-- * Returns:
-- * A boolean indicating whether the format info matches a packed YUV format.
-- */
--static inline bool
--drm_format_info_is_yuv_packed(const struct drm_format_info *info)
--{
--	return info->is_yuv && info->num_planes == 1;
--}
--
--/**
-- * drm_format_info_is_yuv_semiplanar - check that the format info matches a YUV
-- * format with data laid in two planes (luminance and chrominance)
-- * @info: format info
-- *
-- * Returns:
-- * A boolean indicating whether the format info matches a semiplanar YUV format.
-- */
--static inline bool
--drm_format_info_is_yuv_semiplanar(const struct drm_format_info *info)
--{
--	return info->is_yuv && info->num_planes == 2;
--}
--
--/**
-- * drm_format_info_is_yuv_planar - check that the format info matches a YUV
-- * format with data laid in three planes (one for each YUV component)
-- * @info: format info
-- *
-- * Returns:
-- * A boolean indicating whether the format info matches a planar YUV format.
-- */
--static inline bool
--drm_format_info_is_yuv_planar(const struct drm_format_info *info)
--{
--	return info->is_yuv && info->num_planes == 3;
--}
--
--/**
-- * drm_format_info_is_yuv_sampling_410 - check that the format info matches a
-- * YUV format with 4:1:0 sub-sampling
-- * @info: format info
-- *
-- * Returns:
-- * A boolean indicating whether the format info matches a YUV format with 4:1:0
-- * sub-sampling.
-- */
--static inline bool
--drm_format_info_is_yuv_sampling_410(const struct drm_format_info *info)
--{
--	return info->is_yuv && info->hsub == 4 && info->vsub == 4;
--}
--
--/**
-- * drm_format_info_is_yuv_sampling_411 - check that the format info matches a
-- * YUV format with 4:1:1 sub-sampling
-- * @info: format info
-- *
-- * Returns:
-- * A boolean indicating whether the format info matches a YUV format with 4:1:1
-- * sub-sampling.
-- */
--static inline bool
--drm_format_info_is_yuv_sampling_411(const struct drm_format_info *info)
--{
--	return info->is_yuv && info->hsub == 4 && info->vsub == 1;
--}
--
--/**
-- * drm_format_info_is_yuv_sampling_420 - check that the format info matches a
-- * YUV format with 4:2:0 sub-sampling
-- * @info: format info
-- *
-- * Returns:
-- * A boolean indicating whether the format info matches a YUV format with 4:2:0
-- * sub-sampling.
-- */
--static inline bool
--drm_format_info_is_yuv_sampling_420(const struct drm_format_info *info)
--{
--	return info->is_yuv && info->hsub == 2 && info->vsub == 2;
--}
--
--/**
-- * drm_format_info_is_yuv_sampling_422 - check that the format info matches a
-- * YUV format with 4:2:2 sub-sampling
-- * @info: format info
-- *
-- * Returns:
-- * A boolean indicating whether the format info matches a YUV format with 4:2:2
-- * sub-sampling.
-- */
--static inline bool
--drm_format_info_is_yuv_sampling_422(const struct drm_format_info *info)
--{
--	return info->is_yuv && info->hsub == 2 && info->vsub == 1;
--}
--
--/**
-- * drm_format_info_is_yuv_sampling_444 - check that the format info matches a
-- * YUV format with 4:4:4 sub-sampling
-- * @info: format info
-- *
-- * Returns:
-- * A boolean indicating whether the format info matches a YUV format with 4:4:4
-- * sub-sampling.
-- */
--static inline bool
--drm_format_info_is_yuv_sampling_444(const struct drm_format_info *info)
--{
--	return info->is_yuv && info->hsub == 1 && info->vsub == 1;
--}
--
--/**
-- * drm_format_info_plane_cpp - determine the bytes per pixel value
-- * @format: pixel format info
-- * @plane: plane index
-- *
-- * Returns:
-- * The bytes per pixel value for the specified plane.
-- */
--static inline
--int drm_format_info_plane_cpp(const struct drm_format_info *info, int plane)
--{
--	if (!info || plane >= info->num_planes)
--		return 0;
--
--	return info->cpp[plane];
--}
--
--/**
-- * drm_format_info_plane_width - width of the plane given the first plane
-- * @format: pixel format info
-- * @width: width of the first plane
-- * @plane: plane index
-- *
-- * Returns:
-- * The width of @plane, given that the width of the first plane is @width.
-- */
--static inline
--int drm_format_info_plane_width(const struct drm_format_info *info, int width,
--				int plane)
--{
--	if (!info || plane >= info->num_planes)
--		return 0;
--
--	if (plane == 0)
--		return width;
--
--	return width / info->hsub;
--}
--
--/**
-- * drm_format_info_plane_height - height of the plane given the first plane
-- * @format: pixel format info
-- * @height: height of the first plane
-- * @plane: plane index
-- *
-- * Returns:
-- * The height of @plane, given that the height of the first plane is @height.
-- */
--static inline
--int drm_format_info_plane_height(const struct drm_format_info *info, int height,
--				 int plane)
--{
--	if (!info || plane >= info->num_planes)
--		return 0;
--
--	if (plane == 0)
--		return height;
--
--	return height / info->vsub;
--}
--
--const struct drm_format_info *__drm_format_info(u32 format);
--const struct drm_format_info *drm_format_info(u32 format);
--
- const struct image_format_info *
- drm_get_format_info(struct drm_device *dev,
- 		    const struct drm_mode_fb_cmd2 *mode_cmd);
- uint32_t drm_mode_legacy_fb_format(uint32_t bpp, uint32_t depth);
+@@ -269,8 +269,6 @@ uint32_t drm_mode_legacy_fb_format(uint32_t bpp, uint32_t depth);
  uint32_t drm_driver_legacy_fb_format(struct drm_device *dev,
  				     uint32_t bpp, uint32_t depth);
--unsigned int drm_format_info_block_width(const struct drm_format_info *info,
--					 int plane);
--unsigned int drm_format_info_block_height(const struct drm_format_info *info,
--					  int plane);
--uint64_t drm_format_info_min_pitch(const struct drm_format_info *info,
--				   int plane, unsigned int buffer_width);
- const char *drm_get_format_name(uint32_t format, struct drm_format_name_buf *buf);
- 
- #endif /* __DRM_FOURCC_H__ */
+ int drm_format_plane_cpp(uint32_t format, int plane);
+-int drm_format_horz_chroma_subsampling(uint32_t format);
+-int drm_format_vert_chroma_subsampling(uint32_t format);
+ int drm_format_plane_width(int width, uint32_t format, int plane);
+ int drm_format_plane_height(int height, uint32_t format, int plane);
+ unsigned int drm_format_info_block_width(const struct drm_format_info *info,
 -- 
 git-series 0.9.1
