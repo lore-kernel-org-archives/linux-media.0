@@ -2,284 +2,168 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D939C282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 17:57:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD89C282DC
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 18:10:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE80920663
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 17:57:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pq7BSa81"
+	by mail.kernel.org (Postfix) with ESMTP id D2114206BA
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 18:10:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730799AbfDQR5E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 13:57:04 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:43003 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726751AbfDQR5E (ORCPT
+        id S1729251AbfDQSKU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 14:10:20 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:52337 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbfDQSKU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 13:57:04 -0400
-Received: by mail-pl1-f196.google.com with SMTP id cv12so12394915plb.9;
-        Wed, 17 Apr 2019 10:57:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=0CtGU8zQhiQtxt3QrJ2DIuVGTDEdu1VfunwORelKgDY=;
-        b=Pq7BSa81zm8dZZnRadqzOrrprRuAzWeTkje8YEr9wZoEiOnDl5rZaJ5U6LgdX0dUXF
-         YACnYNz59wbLisP2hwQGR3so7pogNlOkBm9ciC43mHHzZqv9fBkgNp6mmtdCJs0Gl7ht
-         bNGGbUPFNfyzg/w9xT5Xz2ZAC/1FuLqOZfO2h4WuhX5TDDPeyRcb1ryEN1ZIsTV4+tNo
-         tuXlhQRhyXy+YEvGhL9s3UvF9x+erhqah2h7IsnqbTL+IUFxgsqrZoTyTeJaQB17Qnea
-         BXWXMC6vZuoGTF3sPjCuuhwHJlKvGCUetOk/7S3aFJ2f+A7xNhb7nZRU8UD/vXKwkymV
-         /c0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=0CtGU8zQhiQtxt3QrJ2DIuVGTDEdu1VfunwORelKgDY=;
-        b=LTtoh4RB+0zxm6LRS3AyeB7dp7tE3Qq6T9LX3c27mPb4R6Vvvno0Yms47x2nqJJcKp
-         h5wZL8dXaXdsUUsiFewdb7zNDe9kvgVWh0iyWOH3LEipL6sl7/r4N5HtYw8ie9wngZp4
-         hChZQlxp/9T7nzi7D5YSN61jEqguICn5wocrfEXTu8Fba2ye1ypX0QdRKGDWhnCakyep
-         nFT/SfoFU/9TPUcUl/jMUuOvqGMRZEheyPbdaS/KrawqfuAXQmR2ZIKR9DaKwRCcJhfS
-         LJMFOmQyImki+Rd87X6k4qfsZa3vKjBFI7pXkP4bZ1RjylWoKPIffdmcUJgQ9OAb1ZJB
-         oxBg==
-X-Gm-Message-State: APjAAAVVEquG0UhNoUD5+6XXY0iiVAuAQsj/xIT/QJoBDWNvvXXl0zwc
-        aWGT0qwkMnVHL9RsLuq8Fbq5C/kJ
-X-Google-Smtp-Source: APXvYqzopQVKD3atg66smp7wm6XDZgXHs362lUzmZ7YVfZBvl3x5L/n3qqyGjEOalCZYBQR98wB46w==
-X-Received: by 2002:a17:902:8a4:: with SMTP id 33mr91594901pll.7.1555523822353;
-        Wed, 17 Apr 2019 10:57:02 -0700 (PDT)
-Received: from [172.30.89.126] (sjewanfw1-nat.mentorg.com. [139.181.7.34])
-        by smtp.gmail.com with ESMTPSA id l74sm101003524pfi.174.2019.04.17.10.56.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 17 Apr 2019 10:57:01 -0700 (PDT)
-Subject: Re: [RFC PATCH] media: rcar-csi2: Fix field detection
-From:   Steve Longerbeam <slongerbeam@gmail.com>
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     linux-media@vger.kernel.org, Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Eugen Friedrich <efriedrich@de.adit-jv.com>,
+        Wed, 17 Apr 2019 14:10:20 -0400
+Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id D874220000C;
+        Wed, 17 Apr 2019 18:10:15 +0000 (UTC)
+Message-ID: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
+Subject: Support for 2D engines/blitters in V4L2 and DRM
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:MEDIA DRIVERS FOR RENESAS - VIN" 
-        <linux-renesas-soc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20190416233807.20213-1-slongerbeam@gmail.com>
- <20190416235018.GJ28515@bigcity.dyn.berto.se>
- <de946538-c958-1694-9e28-e2ab5d6fd997@gmail.com>
-Message-ID: <9d1cb43e-ee9e-b68a-c700-e3ed70f16287@gmail.com>
-Date:   Wed, 17 Apr 2019 10:56:55 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Date:   Wed, 17 Apr 2019 20:10:15 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.0 
 MIME-Version: 1.0
-In-Reply-To: <de946538-c958-1694-9e28-e2ab5d6fd997@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Nklas,
+Hi Nicolas,
 
-On 4/16/19 4:59 PM, Steve Longerbeam wrote:
-> Hi Niklas,
->
-> On 4/16/19 4:50 PM, Niklas Söderlund wrote:
->> Hi Steve,
->>
->> Thanks for your work.
->>
->> I upported most rcar-csi2 patches but a few of them are still pending,
->> an alternating version based on this BSP patch is already on its way.
->>
->> https://patchwork.linuxtv.org/patch/55623/
->
-> Great, that patch confirms that FLD_NUM should be set to 0 or 1 when 
-> setting FLD_DET_SEL = 0x01.
->
-> But your patch has it inverted. NTSC should be FLD_NUM=1, PAL should 
-> be FLD_NUM=0. Can you please confirm that after reading the commit 
-> description of my RFC patch.
+I'm detaching this thread from our V4L2 stateless decoding spec since
+it has drifted off and would certainly be interesting to DRM folks as
+well!
 
-Can you please confirm that your patch at 
-https://patchwork.linuxtv.org/patch/55623 has the FLD_NUM bits inverted? 
-It's the most important question regarding this. Please review my 
-reasoning in the RFC patch. NTSC should be FLD_NUM=1, PAL should be 
-FLD_NUM=0.
+For context: I was initially talking about writing up support for the
+Allwinner 2D engine as a DRM render driver, where I'd like to be able
+to batch jobs that affect the same destination buffer to only signal
+the out fence once when the batch is done. We have a similar issue in
+v4l2 where we'd like the destination buffer for a set of requests (each
+covering one H264 slice) to be marked as done once the set was decoded.
 
-Also, slightly off-topic, but another question:
+Le mercredi 17 avril 2019 à 12:22 -0400, Nicolas Dufresne a écrit :
+> > > > Interestingly, I'm experiencing the exact same problem dealing with a
+> > > > 2D graphics blitter that has limited ouput scaling abilities which
+> > > > imply handlnig a large scaling operation as multiple clipped smaller
+> > > > scaling operations. The issue is basically that multiple jobs have to
+> > > > be submitted to complete a single frame and relying on an indication
+> > > > from the destination buffer (such as a fence) doesn't work to indicate
+> > > > that all the operations were completed, since we get the indication at
+> > > > each step instead of at the end of the batch.
+> > > 
+> > > That looks similar to the IMX.6 IPU m2m driver. It splits the image in
+> > > tiles of 1024x1024 and process each tile separately. This driver has
+> > > been around for a long time, so I guess they have a solution to that.
+> > > They don't need requests, because there is nothing to be bundled with
+> > > the input image. I know that Renesas folks have started working on a
+> > > de-interlacer. Again, this kind of driver may process and reuse input
+> > > buffers for motion compensation, but I don't think they need special
+> > > userspace API for that.
+> > 
+> > Thanks for the reference! I hope it's not a blitter that was
+> > contributed as a V4L2 driver instead of DRM, as it probably would be
+> > more useful in DRM (but that's way beside the point).
+> 
+> DRM does not offer a generic and discoverable interface for these
+> accelerators. Note that these drivers have most of the time started as
+> DRM driver and their DRM side where dropped. That was the case for
+> Exynos drivers at least.
 
-Do you know if it is possible to capture from a source that is sending 
-SEQ-BT/TB and transfer to userspace as unmodified SEQ-BT/TB without 
-requiring the capture of each field individually and concatenating them?
+Heh, sadly I'm aware of how things turn out most of the time. The thing
+is that DRM expects drivers to implement their own interface. That's
+fine for passing BOs with GPU bitstream and textures, but not so much
+for dealing with framebuffer-based operations where the streaming and
+buffer interface that v4l2 has is a good fit.
 
-In other words, treat the frame from the source the same as progressive, 
-i.e. as if the source were sending V4L2_FIELD_NONE. That is, program 
-VnMC.IM bits as VNMC_IM_ODD_EVEN and use continuous frame capture mode.
+There's also the fact that the 2D pipeline is fixed-function and highly
+hardware-specific, so we need driver-specific job descriptions to
+really make the most of it. That's where v4l2 is not much of a good fit
+for complex 2D pipelines either. Most 2D engines can take multiple
+inputs and blit them together in various ways, which is too far from
+what v4l2 deals with. So we can have fixed single-buffer pipelines with
+at best CSC and scaling, but not much more with v4l2 really.
 
-TIA,
-Steve
+I don't think it would be too much work to bring an interface to DRM in
+order to describe render framebuffers (we only have display
+framebuffers so far), with a simple queuing interface for scheduling
+driver-specific jobs, which could be grouped together to only signal
+the out fences when every buffer of the batch was done being rendered.
+This last point would allow handling cases where userapce need to
+perform multiple operations to carry out the single operation that it
+needs to do. In the case of my 2D blitter, that would be scaling above
+a 1024x1024 destination, which could be required to scaling a video
+buffer up to a 1920x1080 display. With that, we can e.g. page flip the
+2D engine destination buffer and be certain that scaling will be fully
+done when the fence is signaled.
 
+There's also the userspace problem: DRM render has mesa to back it in
+userspace and provide a generic API for other programes. For 2D
+engines, we don't have much to hold on to. Cairo has a DRM render
+interface that supports a few DRM render drivers where there is either
+a 2D pipeline or where pre-built shaders are used to implement a 2D
+pipeline, and that's about it as far as I know.
 
->
->
->
->>
->> On 2019-04-16 16:38:07 -0700, Steve Longerbeam wrote:
->>> The RCAR Gen3 hardware manual doesn't mention that the "Word Count" 
->>> field
->>> in the MIPI CSI-2 Frame Start packet is really the frame number. FS 
->>> packets
->>> are short packets, and short packets do not have a WC but rather a 
->>> 16-bit
->>> data field, and for Frame synchronization packets (FS/FE) the 16-bit 
->>> data
->>> field contains a frame number.
->>>
->>> Here is a reprinting from the MIPI CSI-2 specification, version 2
->>> (section 9.1.2 Low Level Protocol Short Packet Format):
->>>
->>> "Figure 42 and Figure 43 show the Low Level Protocol Short Packet
->>> structures for the D-PHY and C-PHY physical layer options, 
->>> respectively.
->>> For each option, the Short Packet structure matches the Packet 
->>> Header of
->>> the corresponding Low Level Protocol Long Packet structure with the
->>> exception that the Packet Header Word Count (WC) field shall be 
->>> replaced
->>> by the Short Packet Data Field...For Frame Synchronization Data Types
->>> the Short Packet Data Field shall be the frame number..."
->>>
->>> Also in section 9.8.1 Frame Synchronization Packets, the CSI-2 spec 
->>> reads:
->>>
->>> "The behavior of the 16-bit frame number shall be as one of the 
->>> following
->>> - Frame number is always zero – frame number is inoperative.
->>> - Frame number increments by 1 for every FS packet with the same 
->>> Virtual
->>>    Channel and is periodically reset to one e.g. 1, 2, 1, 2, 1, 2, 
->>> 1, 2 or
->>>    1, 2, 3, 4, 1, 2, 3, 4"
->>>
->>> So from the above, FLD_NUM in the FLD register matches against the
->>> frame number transmitted by the CSI-2 source in the Frame Start Packet,
->>> and goes as "1,2,1,2,1,2" or "1,2,3,4,...,1,2,3,4". If there is a 
->>> match,
->>> the RCAR CSI-2 receiver declares the field as the even, e.g. the 
->>> BOTTOM,
->>> field.
->>>
->>> NTSC transmits bottom/even field first, and PAL and HD transmit top/odd
->>> field first. So fields with a frame number 1 in the CSI-2 Frame Start
->>> Packet are bottom/even fields for NTSC, and frame number 2 are 
->>> bottom/even
->>> fields for PAL/HD.
->>>
->>> But the above assumes the transmitting CSI-2 sensor is sending frame
->>> numbers in the sequence "1,2,1,2,...". But according to the CSI-2 spec,
->>> sensors are also allowed to send frame numbers that simply increment as
->>> in "1,2,3,4,...". To generalize to catch those cases, set FLD_DET_SEL
->>> to 0x01, which according to the RCAR Gen3 hardware manual means "the
->>> field is detected as the EVEN field when FLD_NUM[0] matches WC[0]".
->>> Then, the even/bottom fields have odd frame numbers for NTSC, and even
->>> frame numbers for PAL (this patch assumes HDMI sources will not
->>> implement .g_std(), so std will be 0 in that case).
->>>
->>> Finally, set the FLD register to non-zero value only if trnsmitter is
->>> sending ALTERNATE fields.
->>>
->>> Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
->>> ---
->>>   drivers/media/platform/rcar-vin/rcar-csi2.c | 37 
->>> ++++++++++++++++++---
->>>   1 file changed, 32 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c 
->>> b/drivers/media/platform/rcar-vin/rcar-csi2.c
->>> index a438ec2c218f..c5bee20d7907 100644
->>> --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
->>> +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
->>> @@ -67,6 +67,7 @@ struct rcar_csi2;
->>>   /* Field Detection Control */
->>>   #define FLD_REG                0x1c
->>>   #define FLD_FLD_NUM(n)            (((n) & 0xff) << 16)
->>> +#define FLD_FLD_DET_SEL(n)        (((n) & 0x3) << 4)
->>>   #define FLD_FLD_EN4            BIT(3)
->>>   #define FLD_FLD_EN3            BIT(2)
->>>   #define FLD_FLD_EN2            BIT(1)
->>> @@ -462,10 +463,11 @@ static int rcsi2_calc_mbps(struct rcar_csi2 
->>> *priv, unsigned int bpp)
->>>       return mbps;
->>>   }
->>>   -static int rcsi2_start(struct rcar_csi2 *priv)
->>> +static int rcsi2_start(struct rcar_csi2 *priv, struct v4l2_subdev 
->>> *nextsd)
->>>   {
->>>       const struct rcar_csi2_format *format;
->>> -    u32 phycnt, vcdt = 0, vcdt2 = 0;
->>> +    u32 phycnt, vcdt = 0, vcdt2 = 0, fld = 0;
->>> +    v4l2_std_id std = 0;
->>>       unsigned int i;
->>>       int mbps, ret;
->>>   @@ -476,6 +478,10 @@ static int rcsi2_start(struct rcar_csi2 *priv)
->>>       /* Code is validated in set_fmt. */
->>>       format = rcsi2_code_to_fmt(priv->mf.code);
->>>   +    ret = v4l2_subdev_call(nextsd, video, g_std, &std);
->>> +    if (ret < 0 && ret != -ENOIOCTLCMD && ret != -ENODEV)
->>> +        return ret;
->>> +
->>>       /*
->>>        * Enable all supported CSI-2 channels with virtual channel and
->>>        * data type matching.
->>> @@ -509,9 +515,30 @@ static int rcsi2_start(struct rcar_csi2 *priv)
->>>       rcsi2_reset(priv);
->>>       rcsi2_write(priv, PHTC_REG, 0);
->>>   +    /*
->>> +     * NTSC standard transmits even/bottom field first, then odd/top.
->>> +     * PAL standard and interlaced HD transmit odd/top field first,
->>> +     * then even/bottom.
->>> +     *
->>> +     * For CSI-2 sensors that transmit frame numbers (in the CSI-2
->>> +     * Frame Start packet) as "1,2,1,2,..." or "1,2,3,4,5,...", then:
->>> +     *
->>> +     * - for NTSC, the even/bottom fields have odd frame numbers.
->>> +     * - for PAL and HD, the even/bottom fields have even frame 
->>> numbers.
->>> +     */
->>> +    if (priv->mf.field == V4L2_FIELD_ALTERNATE) {
->>> +        fld = FLD_FLD_DET_SEL(1) | FLD_FLD_EN4 | FLD_FLD_EN3 |
->>> +            FLD_FLD_EN2 | FLD_FLD_EN;
->>> +
->>> +        if (std & V4L2_STD_525_60)
->>> +            fld |= FLD_FLD_NUM(1); /* NTSC */
->>> +        else
->>> +            fld |= FLD_FLD_NUM(0); /* PAL or HD */
->>> +    }
->>> +
->>>       /* Configure */
->>> -    rcsi2_write(priv, FLD_REG, FLD_FLD_NUM(2) | FLD_FLD_EN4 |
->>> -            FLD_FLD_EN3 | FLD_FLD_EN2 | FLD_FLD_EN);
->>> +    rcsi2_write(priv, FLD_REG, fld);
->>> +
->>>       rcsi2_write(priv, VCDT_REG, vcdt);
->>>       if (vcdt2)
->>>           rcsi2_write(priv, VCDT2_REG, vcdt2);
->>> @@ -591,7 +618,7 @@ static int rcsi2_s_stream(struct v4l2_subdev 
->>> *sd, int enable)
->>>       if (enable && priv->stream_count == 0) {
->>>           pm_runtime_get_sync(priv->dev);
->>>   -        ret = rcsi2_start(priv);
->>> +        ret = rcsi2_start(priv, nextsd);
->>>           if (ret) {
->>>               pm_runtime_put(priv->dev);
->>>               goto out;
->>> -- 
->>> 2.17.1
->>>
->
+There's also the possibility of writing up a drm-render DDX to handle
+these 2D blitters that can make things a lot faster when running a
+desktop environment. As for wayland, well, I don't really know what to
+think. I was under the impression that it relies on GL for 2D
+operations, but am really not sure how true that actually is.
+
+> The thing is that DRM is great if you do immediate display stuff, while
+> V4L2 is nice if you do streaming, where you expect filling queued, and
+> popping buffers from queues.
+> 
+> In the end, this is just an interface, nothing prevents you from making
+> an internal driver (like the Meson Canvas) and simply letting multiple
+> sub-system expose it. Specially that some of these IP will often
+> support both signal and memory processing, so they equally fit into a
+> media controller ISP, a v4l2 m2m or a DRM driver.
+
+Having base drivers that can hook to both v4l2 m2m and DRM would
+definitely be awesome. Maybe we could have some common internal
+synchronization logic to make writing these drivers easier.
+
+It would be cool if both could be used concurrently and not just return
+-EBUSY when the device is used with the other subsystem.
+
+Anyway, that's my 2 cents about the situation and what we can do to
+improve it. I'm definitely interested in tackling these items, but it
+may take some time before we get there. Not to mention we need to
+rework media/v4l2 for per-slice decoding support ;)
+
+> Another driver you might want to look is Rockchip RGA driver (which is
+> a multi function IP, including blitting).
+
+Yep, I've aware of it as well. There's also vivante which exposes 2D
+cores but I'm really not sure whether any function is actually
+implemented. 
+
+OMAP4 and OMAP5 have a 2D engine that seems to be vivante as well from
+what I could find out, but it seems to only have blobs for bltsville
+and no significant docs.
+
+Cheers,
+
+Paul
 
