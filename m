@@ -2,35 +2,38 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A96E7C282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 13:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08294C282DC
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 13:32:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 818E221773
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 13:13:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEDC52173C
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 13:32:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732211AbfDQNND (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 09:13:03 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:57265 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731958AbfDQNNC (ORCPT
+        id S1732253AbfDQNcg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 09:32:36 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54123 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732267AbfDQNcf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 09:13:02 -0400
-Received: from localhost (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 799ED200019;
-        Wed, 17 Apr 2019 13:12:57 +0000 (UTC)
-Date:   Wed, 17 Apr 2019 15:12:56 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        Wed, 17 Apr 2019 09:32:35 -0400
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hGkfm-0003SU-5Y; Wed, 17 Apr 2019 15:32:22 +0200
+Message-ID: <1555507937.6446.10.camel@pengutronix.de>
+Subject: Re: [PATCH 02/20] drm: Remove users of
+ drm_format_(horz|vert)_chroma_subsampling
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
         David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
@@ -38,125 +41,65 @@ Cc:     Daniel Vetter <daniel.vetter@intel.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org,
         Emil Velikov <emil.velikov@collabora.com>
-Subject: Re: [PATCH 04/20] drm/fourcc: Pass the format_info pointer to
- drm_format_plane_width/height
-Message-ID: <20190417131256.s7dwk6cda5ezgedd@flea>
+Date:   Wed, 17 Apr 2019 15:32:17 +0200
+In-Reply-To: <749889cdf957406c86c1791c5bc2a00c3cb1be53.1555487650.git-series.maxime.ripard@bootlin.com>
 References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
- <194fd02a37172de6f2a799fee5c98ced5e7e9d76.1555487650.git-series.maxime.ripard@bootlin.com>
- <776131c6-b8be-4302-ea9a-f7d84203f28c@linux.intel.com>
- <20190417110119.ygp6h7kpzzo5a27l@flea>
- <8d909dcf-16de-7462-1cc6-2713778ed8b1@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="kvnadm2bo6fe5gqf"
-Content-Disposition: inline
-In-Reply-To: <8d909dcf-16de-7462-1cc6-2713778ed8b1@linux.intel.com>
-User-Agent: NeoMutt/20180716
+         <749889cdf957406c86c1791c5bc2a00c3cb1be53.1555487650.git-series.maxime.ripard@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Wed, 2019-04-17 at 09:54 +0200, Maxime Ripard wrote:
+> drm_format_horz_chroma_subsampling and drm_format_vert_chroma_subsampling
+> are basically a lookup in the drm_format_info table plus an access to the
+> hsub and vsub fields of the appropriate entry.
+> 
+> Most drivers are using this function while having access to the entry
+> already, which means that we will perform an unnecessary lookup. Removing
+> the call to these functions is therefore more efficient.
+> 
+> Some drivers will not have access to that entry in the function, but in
+> this case the overhead is minimal (we just have to call drm_format_info()
+> to perform the lookup) and we can even avoid multiple, inefficient lookups
+> in some places that need multiple fields from the drm_format_info
+> structure.
+> 
+> This is amplified by the fact that most of the time the callers will have
+> to retrieve both the vsub and hsub fields, meaning that they would perform
+> twice the lookup.
+> 
+> Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
+> Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
 
---kvnadm2bo6fe5gqf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-On Wed, Apr 17, 2019 at 01:10:33PM +0200, Maarten Lankhorst wrote:
-> Op 17-04-2019 om 13:01 schreef Maxime Ripard:
-> > On Wed, Apr 17, 2019 at 12:47:48PM +0200, Maarten Lankhorst wrote:
-> >>> +/**
-> >>> + * drm_format_info_plane_width - width of the plane given the first plane
-> >>> + * @format: pixel format info
-> >>> + * @width: width of the first plane
-> >>> + * @plane: plane index
-> >>> + *
-> >>> + * Returns:
-> >>> + * The width of @plane, given that the width of the first plane is @width.
-> >>> + */
-> >>> +static inline
-> >>> +int drm_format_info_plane_width(const struct drm_format_info *info, int width,
-> >>> +				int plane)
-> >>> +{
-> >>> +	if (!info || plane >= info->num_planes)
-> >>> +		return 0;
-> >>> +
-> >>> +	if (plane == 0)
-> >>> +		return width;
-> >>> +
-> >>> +	return width / info->hsub;
-> >>> +}
-> >>> +
-> >>> +/**
-> >>> + * drm_format_info_plane_height - height of the plane given the first plane
-> >>> + * @format: pixel format info
-> >>> + * @height: height of the first plane
-> >>> + * @plane: plane index
-> >>> + *
-> >>> + * Returns:
-> >>> + * The height of @plane, given that the height of the first plane is @height.
-> >>> + */
-> >>> +static inline
-> >>> +int drm_format_info_plane_height(const struct drm_format_info *info, int height,
-> >>> +				 int plane)
-> >>> +{
-> >>> +	if (!info || plane >= info->num_planes)
-> >>> +		return 0;
-> >>> +
-> >>> +	if (plane == 0)
-> >>> +		return height;
-> >>> +
-> >>> +	return height / info->vsub;
-> >>> +}
-> >> Why the null checks? None of the other inlines for drm_format_info
-> >> perform them.
-> > Unless I'm mistaken, the subsampling only applies to the planes with
-> > the chrominance, which are always >= 1. Therefore the plane 0 is
-> > always the luminance, to which the subsampling doesn't apply.
-> >
-> > Or are you talking about something else?
->
->
-> The info == NULL check. :)
+Just one small suggestion:
 
-Aaah, sorry :)
+[...]
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> index 20a9c296d027..345d5cb5e956 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> @@ -317,21 +317,18 @@ static void scl_vop_cal_scl_fac(struct vop *vop, const struct vop_win_data *win,
+>  			     uint32_t src_w, uint32_t src_h, uint32_t dst_w,
+>  			     uint32_t dst_h, uint32_t pixel_format)
+>  {
+> +	const struct drm_format_info *info = drm_format_info(pixel_format);
 
-That's true, and that's actually the first four patches that change
-that behaviour a bit. Previously, drm_format_plane_cpp, _width, and
-_height will do the lookup themselves using drm_format_info, and test
-whether the pointer returned is null or not.
+The only call site in vop_plane_atomic_update passes fb->format->format
+as pixel_format parameter, so this could be simplified even further by
+replacing the uint32_t pixelformat argument with a const struct
+drm_format_info *info, and passing fb->format directly instead.
 
-Patches 3 and 4 removed that lookup but kept the null pointer check.
-
-We could remove it, but there's two downsides for that:
-
-  * since the lookup is now effectively pushed to the caller (or the
-    caller's caller), we would have to check there that the pointer isn't
-    NULL. That's a lot of boilerplate to add.
-
-  * And since this is a generic function, I wouldn't trust the caller
-    to give a pointer that can be dereferenced right away. This might
-    be more subjective though.
-
-So I guess we should make sure that we are consistent, but I'd be in
-favor of putting that check in all the functions.
-
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---kvnadm2bo6fe5gqf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXLcmWAAKCRDj7w1vZxhR
-xaPNAP92L9ciIW3gEMnYB1PtGzfhqgemZhqKiIES5NyhTkygcwEA9u6+JtowTsyQ
-wYGHeFVWHijR1wqA+oxf1HcSl9D1FgQ=
-=uZbL
------END PGP SIGNATURE-----
-
---kvnadm2bo6fe5gqf--
+regards
+Philipp
