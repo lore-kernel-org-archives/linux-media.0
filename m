@@ -2,131 +2,88 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09E71C282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DBD5C282DA
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:06:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D3512206BA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:03:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22FF9206BA
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:06:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQ8RBtlp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732398AbfDQODN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 10:03:13 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:51849 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731743AbfDQODN (ORCPT
+        id S1732271AbfDQOGz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 10:06:55 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46286 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729395AbfDQOGz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 10:03:13 -0400
-X-Originating-IP: 90.88.160.238
-Received: from aptenodytes (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id BCEC5FF814;
-        Wed, 17 Apr 2019 14:03:08 +0000 (UTC)
-Message-ID: <6b4d5c3bd1a6f58ce21bc79518e72ec00a1eed97.camel@bootlin.com>
-Subject: Re: [PATCH 06/20] lib: Add video format information library
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wed, 17 Apr 2019 10:06:55 -0400
+Received: by mail-pg1-f193.google.com with SMTP id q1so12044173pgv.13
+        for <linux-media@vger.kernel.org>; Wed, 17 Apr 2019 07:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=KCBzxtRf/YWlnx6I+Hs8R7BCJsYH7aySN2f5lrG+4Zs=;
+        b=mQ8RBtlp1H0znA+hiDsceB3d58cyp7S/JIqq+yqge7/uQxTlF76HskRVyZxfC+eC7K
+         Ogm2MVuCqwilbyLMS8CtjNfogDBZk6/1KEjVJcTtz+7p1IHuYR+x+ym/yo60fKALHRTm
+         0b0uTqwOu9oJCLLp5bU7oNd99Kdeo2xMbS9B9nyXEojIA1XKD3+J+RRy04pwTWMKJ3aW
+         ZiX1rK4mFBaTM1rQ/e3PkU3t8oMKBdgojAedtySqQE0qos3EIxHXR3OA105HvBcy8IEn
+         r9zB9GTzQeOrd4KW22YrFdIkV7P80VjMd4a/QqiQfg4M8coTo321KQuw/z5n1knO9PqB
+         mT1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=KCBzxtRf/YWlnx6I+Hs8R7BCJsYH7aySN2f5lrG+4Zs=;
+        b=M/I5bAIoN7c4nURJjeqK3ZfS+XXdku+XdgAaJXk2TRgoG3OHeN7E/8CBcRuE52mS5h
+         HD2VpW9jWgv9SAbyMDKZZ4fPAMWFVIVxNKQL7hWsiU71ztNl2OgEQl4iipsZb+EA2Yh8
+         i5ciZKgpLlhfgUoWhPKs5phJy1sOBvCeUvwsdP+otovLTyM2G0VfdqPGujAsXH2ffR7Y
+         jTch8+U4r1IhouJ6r5hMWTGbZfCMfAr7ur5GfP0W7QyAbGO9tMhHHptOpKRr0ef5pS3Q
+         YRX9D7m6FKYl2K9XuvYgSZishBtbueLfwyzTAB1s1PoMntdqj5vrpUa1t8mQsPueDdHw
+         Altg==
+X-Gm-Message-State: APjAAAV+60hZTX/xDwC9iZLMT3IIspkgqC9hEQeAyUOCAArG+0vb7x1o
+        r8DU5kjl7jR5w6qO/HMYg/+JyOYe
+X-Google-Smtp-Source: APXvYqzHh+tAsJec4ltXWR5LNmbyMOMsxjtvFe3//ZS1uWLT2IZZOFU4BvAUUz9ZTpBzvgklD3IFOQ==
+X-Received: by 2002:a63:e20b:: with SMTP id q11mr84621433pgh.263.1555510014632;
+        Wed, 17 Apr 2019 07:06:54 -0700 (PDT)
+Received: from localhost.localdomain ([240f:34:212d:1:1b24:991b:df50:ea3f])
+        by smtp.gmail.com with ESMTPSA id t82sm144498222pfa.153.2019.04.17.07.06.51
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 17 Apr 2019 07:06:53 -0700 (PDT)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Date:   Wed, 17 Apr 2019 16:03:08 +0200
-In-Reply-To: <20190417124833.psdri6laune5y2ti@flea>
-References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
-         <c17a896150f0b793cfa8581d18969cd7b3e93bf2.1555487650.git-series.maxime.ripard@bootlin.com>
-         <7dbdcb1b54a442e2d77a34bd449b52bbaf903157.camel@bootlin.com>
-         <20190417124833.psdri6laune5y2ti@flea>
-Organization: Bootlin
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 0/4] media: ov7740: several bug fixes and cleanup
+Date:   Wed, 17 Apr 2019 23:06:37 +0900
+Message-Id: <1555510001-23922-1-git-send-email-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+This patchset includes three bug fixes and a cleanup for ov7740 driver.
 
-On Wed, 2019-04-17 at 14:48 +0200, Maxime Ripard wrote:
-> Hi,
-> 
-> On Wed, Apr 17, 2019 at 02:34:54PM +0200, Paul Kocialkowski wrote:
-> > > +struct image_format_info {
-> > > +	union {
-> > > +		/**
-> > > +		 * @drm_fmt:
-> > > +		 *
-> > > +		 * DRM 4CC format identifier (DRM_FORMAT_*)
-> > > +		 */
-> > > +		u32 drm_fmt;
-> > 
-> > Could we call this one format_drm for consistency with the one below?
-> 
-> The deprecated "format" field will go away at some point, so I'm not
-> sure the consistency is an argument there.
+Akinobu Mita (4):
+  media: ov7740: fix unbalanced pm_runtime_get/put
+  media: ov7740: avoid invalid framesize setting
+  media: ov7740: fix vertical flip control
+  media: ov7740: remove redundant V4L2_CTRL_FLAG_VOLATILE set
 
-Fair enough then. My point was mostly about format vs fmt, so one
-option could be to use "compat_fmt" or such, but do whatever you feel
-is right, I don't care too much about it.
+ drivers/media/i2c/ov7740.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
-> > > +/**
-> > > + * image_format_info_min_pitch - computes the minimum required pitch in bytes
-> > > + * @info: pixel format info
-> > > + * @plane: plane index
-> > > + * @buffer_width: buffer width in pixels
-> > > + *
-> > > + * Returns:
-> > > + * The minimum required pitch in bytes for a buffer by taking into consideration
-> > > + * the pixel format information and the buffer width.
-> > > + */
-> > > +static inline
-> > > +uint64_t image_format_info_min_pitch(const struct image_format_info *info,
-> > > +				     int plane, unsigned int buffer_width)
-> > > +{
-> > > +	if (!info || plane < 0 || plane >= info->num_planes)
-> > > +		return 0;
-> > > +
-> > > +	return DIV_ROUND_UP_ULL((u64)buffer_width * info->char_per_block[plane],
-> > > +			    image_format_info_block_width(info, plane) *
-> > > +			    image_format_info_block_height(info, plane));
-> > 
-> > I'm not sure I understand how this works: char_per_block is 0 for
-> > almost all formats and this doesn't take in account the cpp. Am I
-> > missing something here?
-> 
-> I guess it doesn't. That's the DRM function here, without any
-> modification, but from a quick look at the current users of that
-> function, there's nobody that uses the value directly.
-> 
-> So you might be right there.
->
-> > Also, this might be a good occasion to discuss what meaning we want to
-> > give "stride" and "pitch": should one be in bytes and the other in bit,
-> > etc? I keep forgetting what each API expects.
-> 
-> pitch is documented as bytes, and the function computing the stride I
-> added did too. I'll remove the stride one.
-
-Okay, it seems that I was just confused for no particular reason and
-stride, pitch, bytesperline and linesize are all just synonyms. So feel
-free to pick whichever you see fit :) 
-
-Cheers,
-
-Paul
-
+Cc: Wenyou Yang <wenyou.yang@microchip.com>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
 -- 
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+2.7.4
 
