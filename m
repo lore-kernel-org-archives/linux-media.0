@@ -2,101 +2,124 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BFD5C10F12
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 10:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27766C10F12
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 10:45:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 40B132173C
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 10:41:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F03C221773
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 10:45:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731759AbfDQKlw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 06:41:52 -0400
-Received: from mga17.intel.com ([192.55.52.151]:9722 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731566AbfDQKlv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 06:41:51 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Apr 2019 03:41:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,361,1549958400"; 
-   d="scan'208";a="132120109"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga007.jf.intel.com with ESMTP; 17 Apr 2019 03:41:49 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 96729204DA; Wed, 17 Apr 2019 13:41:48 +0300 (EEST)
-Date:   Wed, 17 Apr 2019 13:41:48 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org
-Subject: Route lifetime in SUBDEV_[GS]_ROUTING
-Message-ID: <20190417104147.zlmbw32dr46vmtrq@paasikivi.fi.intel.com>
+        id S1731728AbfDQKpf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 06:45:35 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:55200 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725792AbfDQKpe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Apr 2019 06:45:34 -0400
+X-UUID: bddb3e8c15c34974a05937210f6c565e-20190417
+X-UUID: bddb3e8c15c34974a05937210f6c565e-20190417
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <frederic.chen@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1343567304; Wed, 17 Apr 2019 18:45:29 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 17 Apr 2019 18:45:28 +0800
+Received: from mtkslt306.mediatek.inc (10.21.14.136) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 17 Apr 2019 18:45:27 +0800
+From:   Frederic Chen <frederic.chen@mediatek.com>
+To:     <hans.verkuil@cisco.com>,
+        <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
+        <matthias.bgg@gmail.com>, <mchehab@kernel.org>
+CC:     <yuzhao@chromium.org>, <zwisler@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <Sean.Cheng@mediatek.com>,
+        <sj.huang@mediatek.com>, <christie.yu@mediatek.com>,
+        <holmes.chiou@mediatek.com>, <frederic.chen@mediatek.com>,
+        <Jerry-ch.Chen@mediatek.com>, <jungo.lin@mediatek.com>,
+        <Rynn.Wu@mediatek.com>, <linux-media@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <shik@chromium.org>, <suleiman@chromium.org>
+Subject: [RFC PATCH V1 1/6] dt-bindings: mt8183: Add binding for DIP shared memory
+Date:   Wed, 17 Apr 2019 18:45:06 +0800
+Message-ID: <20190417104511.21514-2-frederic.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20190417104511.21514-1-frederic.chen@mediatek.com>
+References: <20190417104511.21514-1-frederic.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+This patch adds the binding for describing the shared memory
+used to exchange configuration and tuning data between the
+co-processor and Digital Image Processing (DIP) unit of the
+camera ISP system on Mediatek SoCs.
 
-I promised to write a bit about the routing problem I attempted to write on
-#v4l. It's a bit late, but here it is. Let me know if you share my
-understanding (and especially do so if you don't :)).
+Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
+---
+ .../mediatek,reserve-memory-dip_smem.txt      | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-dip_smem.txt
 
-A route is identified by the source and sink pads as well as the stream ID
-on the source and the sink pads. Its flags allow enabling or disabling a
-route.
-
-Most devices that function as transmitters (such as sensors) have a fixed
-number of routes they can support. These's no need to change them; enabling
-and disabling them will be enough for the user.
-
-For receivers this is different. What needs to be supported on the receiver
-side is directing any incoming stream (a 32-bit unsigned integer) to any
-source pad.
-
-This is because pads are not alike --- one may be connected to a block that
-further processes the image whereas the others may be connected to a DMA
-engine, just writing the data to memory.
-
-The receivers also may not make assumptions beyond the sub-device API: the
-stream is a 32-bit unsigned integer, there is currently no API requirement
-to have the stream IDs on a particular low integer range. In principle we
-could define that range, but I'd rather try to find better solutions than
-that: it's hard to come up with a number as it depends on the hardware.
-Some kind of an upper limit could be the number of CSI-2 channels
-multiplied by CSI-2 data types. That would be enough for CSI-2. 16 or 32
-virtual channels and up to 64 data types would mean up to 2048 routes
-between a demultiplexer's sink pad and *each* of its source pads. And this
-comes with an assumption that the source pads only support a single
-stream...
-
-CSI-2 receivers support a number of simultaneous streams, and as the stream
-is demultiplexed there, this means there will be as many source pads as
-there are supported simultaneous streams. This heavily depends on the
-hardware, but the number could be e.g. 1, 4 or 8. Much smaller than 2048 in
-any case.
-
-Another option could be creating no routes at all at device init time, and
-letting the user create them. We could add a new flag for routes telling
-that a route is dynamic: disabling a dynamic route would simply delete it.
-Likewise, a SUBDEV_G_ROUTING returning no routes (but no error either)
-would also tell the user only dynamic routes are supported.
-
-We should document this and change the driver implementation accordingly.
-No API changes are needed (apart from adding the dynamic flag --- or rather
-call it "volatile", to avoid confusing with routes that can be enabled or
-disabled while streaming).
-
+diff --git a/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-dip_smem.txt b/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-dip_smem.txt
+new file mode 100644
+index 000000000000..64c001b476b9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-dip_smem.txt
+@@ -0,0 +1,45 @@
++Mediatek DIP Shared Memory binding
++
++This binding describes the shared memory, which serves the purpose of
++describing the shared memory region used to exchange data between Digital
++Image Processing (DIP) and co-processor in Mediatek SoCs.
++
++The co-processor doesn't have the iommu so we need to use the physical
++address to access the shared buffer in the firmware.
++
++The Digital Image Processing (DIP) can access memory through mt8183 IOMMU so
++it can use dma address to access the memory region.
++(See iommu/mediatek,iommu.txt for the detailed description of Mediatek IOMMU)
++
++
++Required properties:
++
++- compatible: must be "mediatek,reserve-memory-dip_smem"
++
++- reg: required for static allocation (see reserved-memory.txt for
++  the detailed usage)
++
++- alloc-range: required for dynamic allocation. The range must
++  between 0x00000400 and 0x100000000 due to the co-processer's
++  addressing limitation
++
++- size: required for dynamic allocation. The unit is bytes.
++  If you want to enable the full feature of Digital Processing Unit,
++  you need 20 MB at least.
++
++
++Example:
++
++The following example shows the DIP shared memory setup for MT8183.
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++		reserve-memory-dip_smem {
++			compatible = "mediatek,reserve-memory-dip_smem";
++			size = <0 0x1400000>;
++			alignment = <0 0x1000>;
++			alloc-ranges = <0 0x40000000 0 0x50000000>;
++		};
++	};
 -- 
-Best regards,
+2.18.0
 
-Sakari Ailus
-sakari.ailus@linux.intel.com
