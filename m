@@ -2,168 +2,187 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD89C282DC
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 18:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17165C282DC
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 19:05:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D2114206BA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 18:10:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D0EE6206BA
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 19:05:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="foIBsiTN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729251AbfDQSKU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 14:10:20 -0400
-Received: from relay12.mail.gandi.net ([217.70.178.232]:52337 "EHLO
-        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbfDQSKU (ORCPT
+        id S1733217AbfDQTFv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 15:05:51 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:44365 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729291AbfDQTFv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 14:10:20 -0400
-Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id D874220000C;
-        Wed, 17 Apr 2019 18:10:15 +0000 (UTC)
-Message-ID: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
-Subject: Support for 2D engines/blitters in V4L2 and DRM
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wed, 17 Apr 2019 15:05:51 -0400
+Received: by mail-ed1-f68.google.com with SMTP id i13so11221042edf.11
+        for <linux-media@vger.kernel.org>; Wed, 17 Apr 2019 12:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=sender:date:from:to:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=0YYVUyTp7bZJjOudIsM1eZKTNWjxCMbZjahz2HqT2DU=;
+        b=foIBsiTN8kK5vCTsgGQlhPm2uC2Zk778sHRbMm8AFpJegEJuL8zg4DOPHPovE3pk5X
+         8saCFgJRp6DYuebV5c2EvkhJlzWieZoVLbOIspm6gg/LfBKI26lZfDMWtcYoaXKzPBhG
+         zg5FATJdpg2VpOk7CgyFVYLMPws/t82nrpU4o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=0YYVUyTp7bZJjOudIsM1eZKTNWjxCMbZjahz2HqT2DU=;
+        b=X6fn3Quk2ZDy0E0GlmWxg4aNLitXCh3v2UbKXQD9ZtJVaklVpoPYqyMwFlpbkfXN+i
+         whNtB+ETtdY7cmNCOwTfEd5VTC8TiecS4Gnxo+f8t/YQoXZH4WXhCVNbpaBkyh73yj84
+         g99zFwEeJBK/IMQGngR37w9qbPEeU623sn/9q3iVTnCG0ft/71bKEtFe8oN6M7JoOAME
+         lHcxYgxBQ/lZwhEplMKJ1rIbCmFzSCqP3kxHNP5QWKTYUYFH08UJRhSbXcvoA+cPnpS/
+         k7iMpJ0EzhI0qkHo0vr9SaAGGaXgKobWNIhzw4LjvOYDLCwWrq6c5pVHuvGVNcq1j8BY
+         CFPw==
+X-Gm-Message-State: APjAAAUSlu7VTnsY6yjOFwD1VgjsnvwXIdhNDVGhCs7v9zOxAfHNUgxK
+        ekGdJFtsfj12ipkW+Z8JKct/bw==
+X-Google-Smtp-Source: APXvYqzPSB3W5793s9LfSNedfU+GFog62qzl23SjtskIFvtYVAqFS7oeH8LKfLtPQmuosj/qbeicpw==
+X-Received: by 2002:a50:ac02:: with SMTP id v2mr30309461edc.86.1555527949052;
+        Wed, 17 Apr 2019 12:05:49 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
+        by smtp.gmail.com with ESMTPSA id e9sm10245062ejl.14.2019.04.17.12.05.47
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 17 Apr 2019 12:05:48 -0700 (PDT)
+Date:   Wed, 17 Apr 2019 21:05:46 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>, sumit.semwal@linaro.org,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Date:   Wed, 17 Apr 2019 20:10:15 +0200
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org
+Subject: Re: [PATCH 05/12] dma-buf: add explicit buffer pinning
+Message-ID: <20190417190546.GK13337@phenom.ffwll.local>
+Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
+References: <20190416183841.1577-1-christian.koenig@amd.com>
+ <20190416183841.1577-6-christian.koenig@amd.com>
+ <20190417142002.GE13337@phenom.ffwll.local>
+ <20190417143051.GG13337@phenom.ffwll.local>
+ <20190417144011.GI13337@phenom.ffwll.local>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190417144011.GI13337@phenom.ffwll.local>
+X-Operating-System: Linux phenom 4.19.0-1-amd64 
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Nicolas,
-
-I'm detaching this thread from our V4L2 stateless decoding spec since
-it has drifted off and would certainly be interesting to DRM folks as
-well!
-
-For context: I was initially talking about writing up support for the
-Allwinner 2D engine as a DRM render driver, where I'd like to be able
-to batch jobs that affect the same destination buffer to only signal
-the out fence once when the batch is done. We have a similar issue in
-v4l2 where we'd like the destination buffer for a set of requests (each
-covering one H264 slice) to be marked as done once the set was decoded.
-
-Le mercredi 17 avril 2019 Ã  12:22 -0400, Nicolas Dufresne a Ã©crit :
-> > > > Interestingly, I'm experiencing the exact same problem dealing with a
-> > > > 2D graphics blitter that has limited ouput scaling abilities which
-> > > > imply handlnig a large scaling operation as multiple clipped smaller
-> > > > scaling operations. The issue is basically that multiple jobs have to
-> > > > be submitted to complete a single frame and relying on an indication
-> > > > from the destination buffer (such as a fence) doesn't work to indicate
-> > > > that all the operations were completed, since we get the indication at
-> > > > each step instead of at the end of the batch.
+On Wed, Apr 17, 2019 at 04:40:11PM +0200, Daniel Vetter wrote:
+> On Wed, Apr 17, 2019 at 04:30:51PM +0200, Daniel Vetter wrote:
+> > On Wed, Apr 17, 2019 at 04:20:02PM +0200, Daniel Vetter wrote:
+> > > On Tue, Apr 16, 2019 at 08:38:34PM +0200, Christian König wrote:
+> > > > Add optional explicit pinning callbacks instead of implicitly assume the
+> > > > exporter pins the buffer when a mapping is created.
+> > > > 
+> > > > Signed-off-by: Christian König <christian.koenig@amd.com>
 > > > 
-> > > That looks similar to the IMX.6 IPU m2m driver. It splits the image in
-> > > tiles of 1024x1024 and process each tile separately. This driver has
-> > > been around for a long time, so I guess they have a solution to that.
-> > > They don't need requests, because there is nothing to be bundled with
-> > > the input image. I know that Renesas folks have started working on a
-> > > de-interlacer. Again, this kind of driver may process and reuse input
-> > > buffers for motion compensation, but I don't think they need special
-> > > userspace API for that.
+> > > Don't we need this together with the invalidate callback and the dynamic
+> > > stuff? Also I'm assuming that pin/unpin is pretty much required for
+> > > dynamic bo, so could we look at these callbacks instead of the dynamic
+> > > flag you add in patch 1.
+> > > 
+> > > I'm assuming following rules hold:
+> > > no pin/upin from exporter:
+> > > 
+> > > dma-buf is not dynamic, and pinned for the duration of map/unmap. I'm
+> > > not 100% sure whether really everyone wants the mapping to be cached for
+> > > the entire attachment, only drm_prime does that. And that's not the only
+> > > dma-buf importer.
+> > > 
+> > > pin/unpin calls are noops.
+> > > 
+> > > pin/unpin exist in the exporter, but importer has not provided an
+> > > invalidate callback:
+> > > 
+> > > We map at attach time, and we also have to pin, since the importer can't
+> > > handle the buffer disappearing, at attach time. We unmap/unpin at detach.
 > > 
-> > Thanks for the reference! I hope it's not a blitter that was
-> > contributed as a V4L2 driver instead of DRM, as it probably would be
-> > more useful in DRM (but that's way beside the point).
+> > For this case we should have a WARN in pin/unpin, to make sure importers
+> > don't do something stupid. One more thought below on pin/unpin.
+
+btw just realized that you already have the pin/unpin here. I think even
+more reasons to squash the invalidate/pin bits together, since they
+don't really work separately.
+-Daniel
+
+> > 
+> > > pin/unpin from exporter, invalidate from importer:
+> > > 
+> > > Full dynamic mapping. We assume the importer will do caching, attach
+> > > fences as needed, and pin the underlying bo when it needs it it
+> > > permanently, without attaching fences (i.e. the scanout case).
+> > > 
+> > > Assuming I'm not terribly off with my understanding, then I think it'd be
+> > > best to introduce the entire new dma-buf api in the first patch, and flesh
+> > > it out later. Instead of spread over a few patches. Plus the above (maybe
+> > > prettier) as a nice kerneldoc overview comment for how dynamic dma-buf is
+> > > supposed to work really.
+> > > -Daniel
+> > > 
+> > > > ---
+> > > >  drivers/dma-buf/dma-buf.c | 39 +++++++++++++++++++++++++++++++++++++++
+> > > >  include/linux/dma-buf.h   | 37 +++++++++++++++++++++++++++++++------
+> > > >  2 files changed, 70 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > > > index a3738fab3927..f23ff8355505 100644
+> > > > --- a/drivers/dma-buf/dma-buf.c
+> > > > +++ b/drivers/dma-buf/dma-buf.c
+> > > > @@ -630,6 +630,41 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(dma_buf_detach);
+> > > >  
+> > > > +/**
+> > > > + * dma_buf_pin - Lock down the DMA-buf
+> > > > + *
+> > > > + * @dmabuf:	[in]	DMA-buf to lock down.
+> > > > + *
+> > > > + * Returns:
+> > > > + * 0 on success, negative error code on failure.
+> > > > + */
+> > > > +int dma_buf_pin(struct dma_buf *dmabuf)
+> > 
+> > Hm, I think it'd be better to pin the attachment, not the underlying
+> > buffer. Attachment is the thin the importer will have to pin, and it's at
+> > attach/detach time where dma-buf needs to pin for importers who don't
+> > understand dynamic buffer sharing.
+> > 
+> > Plus when we put that onto attachments, we can do a
+> > 
+> > 	WARN_ON(!attach->invalidate);
+> > 
+> > sanity check. I think that would be good to have.
 > 
-> DRM does not offer a generic and discoverable interface for these
-> accelerators. Note that these drivers have most of the time started as
-> DRM driver and their DRM side where dropped. That was the case for
-> Exynos drivers at least.
-
-Heh, sadly I'm aware of how things turn out most of the time. The thing
-is that DRM expects drivers to implement their own interface. That's
-fine for passing BOs with GPU bitstream and textures, but not so much
-for dealing with framebuffer-based operations where the streaming and
-buffer interface that v4l2 has is a good fit.
-
-There's also the fact that the 2D pipeline is fixed-function and highly
-hardware-specific, so we need driver-specific job descriptions to
-really make the most of it. That's where v4l2 is not much of a good fit
-for complex 2D pipelines either. Most 2D engines can take multiple
-inputs and blit them together in various ways, which is too far from
-what v4l2 deals with. So we can have fixed single-buffer pipelines with
-at best CSC and scaling, but not much more with v4l2 really.
-
-I don't think it would be too much work to bring an interface to DRM in
-order to describe render framebuffers (we only have display
-framebuffers so far), with a simple queuing interface for scheduling
-driver-specific jobs, which could be grouped together to only signal
-the out fences when every buffer of the batch was done being rendered.
-This last point would allow handling cases where userapce need to
-perform multiple operations to carry out the single operation that it
-needs to do. In the case of my 2D blitter, that would be scaling above
-a 1024x1024 destination, which could be required to scaling a video
-buffer up to a 1920x1080 display. With that, we can e.g. page flip the
-2D engine destination buffer and be certain that scaling will be fully
-done when the fence is signaled.
-
-There's also the userspace problem: DRM render has mesa to back it in
-userspace and provide a generic API for other programes. For 2D
-engines, we don't have much to hold on to. Cairo has a DRM render
-interface that supports a few DRM render drivers where there is either
-a 2D pipeline or where pre-built shaders are used to implement a 2D
-pipeline, and that's about it as far as I know.
-
-There's also the possibility of writing up a drm-render DDX to handle
-these 2D blitters that can make things a lot faster when running a
-desktop environment. As for wayland, well, I don't really know what to
-think. I was under the impression that it relies on GL for 2D
-operations, but am really not sure how true that actually is.
-
-> The thing is that DRM is great if you do immediate display stuff, while
-> V4L2 is nice if you do streaming, where you expect filling queued, and
-> popping buffers from queues.
+> Another validation idea: dma-buf.c could track the pin_count on the struct
+> dma_buf, and if an exporter tries to invalidate while pinned WARN and bail
+> out. Because that's clearly a driver bug.
 > 
-> In the end, this is just an interface, nothing prevents you from making
-> an internal driver (like the Meson Canvas) and simply letting multiple
-> sub-system expose it. Specially that some of these IP will often
-> support both signal and memory processing, so they equally fit into a
-> media controller ISP, a v4l2 m2m or a DRM driver.
+> All in the interest in making the contract between importers and exporters
+> as clear as possible.
+> -Daniel
+> -- 
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
 
-Having base drivers that can hook to both v4l2 m2m and DRM would
-definitely be awesome. Maybe we could have some common internal
-synchronization logic to make writing these drivers easier.
-
-It would be cool if both could be used concurrently and not just return
--EBUSY when the device is used with the other subsystem.
-
-Anyway, that's my 2 cents about the situation and what we can do to
-improve it. I'm definitely interested in tackling these items, but it
-may take some time before we get there. Not to mention we need to
-rework media/v4l2 for per-slice decoding support ;)
-
-> Another driver you might want to look is Rockchip RGA driver (which is
-> a multi function IP, including blitting).
-
-Yep, I've aware of it as well. There's also vivante which exposes 2D
-cores but I'm really not sure whether any function is actually
-implemented. 
-
-OMAP4 and OMAP5 have a 2D engine that seems to be vivante as well from
-what I could find out, but it seems to only have blobs for bltsville
-and no significant docs.
-
-Cheers,
-
-Paul
-
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
