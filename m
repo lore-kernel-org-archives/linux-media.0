@@ -2,446 +2,121 @@ Return-Path: <SRS0=ylfx=ST=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEE25C282DA
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:08:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92F16C282DA
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:14:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 60AC021773
-	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:08:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58FD420872
+	for <linux-media@archiver.kernel.org>; Wed, 17 Apr 2019 14:14:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="HY6D0TWo"
+	dkim=pass (1024-bit key) header.d=amdcloud.onmicrosoft.com header.i=@amdcloud.onmicrosoft.com header.b="B8zYhRJS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731960AbfDQOIO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 10:08:14 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:33085 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730449AbfDQOIK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 10:08:10 -0400
-Received: by mail-ed1-f66.google.com with SMTP id d55so20317292ede.0
-        for <linux-media@vger.kernel.org>; Wed, 17 Apr 2019 07:08:08 -0700 (PDT)
+        id S1732336AbfDQOOY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 10:14:24 -0400
+Received: from mail-eopbgr810080.outbound.protection.outlook.com ([40.107.81.80]:45536
+        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731743AbfDQOOY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 17 Apr 2019 10:14:24 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=qALB6qDF5/jkdQMyHB+ezoiwJpE1Uxo49WvJqeWCTeM=;
-        b=HY6D0TWoOBSWrmN952pYb3VDOxBMK6gWoHvA+LWOyv0QRfN7AFIREl6nOBG2GTqKtA
-         AaS1ykK9L6hAqpNktrST49eS8ikp9jAp+RuKCVmjx6oivtOdLmdtOMbi45ENowLyCMMr
-         61ref21sneXt6gYgq7H9L+VHJboCRpzBL6Foc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=qALB6qDF5/jkdQMyHB+ezoiwJpE1Uxo49WvJqeWCTeM=;
-        b=DLG3Rh2njrwEkY3rGyF4DXPhc7HqKHZbyRJUhjRmHAgGWldSzhZD8mxUjdKCHHJSzo
-         x+acXmr9doJws5crRyv+Q4CPy1dDQ1QWEKC3kL4yeeMydHVXbXn2wZ5A3ES9YFwpwRnf
-         qyiAaD4tJDQcHkLPrMXZK3BgFYnzUwP6t2ubKcfXJ6Xw04EqThX7+uH1gHWixukLuJ1Z
-         5dEH7OHY5a1zT1czznfGQEFntzRDBHw8jbr6OmIYwfkvcrojzCQM6XjrkRBRF8ubaodt
-         rxDYa2bNv6uil89CD3SwHEoS3vnf98Q5JFOs6cKhOsy/e/pDfXA9lxyb1eZkqxQxAHPm
-         0E9w==
-X-Gm-Message-State: APjAAAV/KF6or0XkRWgBJDSp0+a/PZ/MAeeERlmMLYkQjkdc3f7OGU2Y
-        kB9Am7khPmhk+BkCq1k88NtHQQ==
-X-Google-Smtp-Source: APXvYqy82ZapXuGiMlnUcwyznZ8UKxh2woiZc+zs6JkmMh2vPlbaP75ylNT9Z2d2mruGHv3wBdfjrg==
-X-Received: by 2002:a50:9707:: with SMTP id c7mr24882554edb.222.1555510087640;
-        Wed, 17 Apr 2019 07:08:07 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
-        by smtp.gmail.com with ESMTPSA id h57sm3823269eda.90.2019.04.17.07.08.06
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 17 Apr 2019 07:08:06 -0700 (PDT)
-Date:   Wed, 17 Apr 2019 16:08:04 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>
-Cc:     sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
-Subject: Re: [PATCH 03/12] dma-buf: lock the reservation object during
- (un)map_dma_buf v3
-Message-ID: <20190417140804.GD13337@phenom.ffwll.local>
-Mail-Followup-To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
+ d=amdcloud.onmicrosoft.com; s=selector1-amd-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Fa+Xx0Ur9rKStclOcCm/vnEU8ha/TlRnNRgxJTGEPiM=;
+ b=B8zYhRJS1UhbkgW3c5s6vyr0xbTj1XT/3ndwOhhR1vFu6NATp7ag5xq4mFP+/XW/TZYrpGGEZuA49XwrUiKcuz2hcEnrGhA3uHzXIdJRXct1VHzSap8JHrtaLDy1y/yAYOw+cErdsn7odq/CFgXxXLgCBvj3sbIVjgmmuxxpdl0=
+Received: from MN2PR12MB2910.namprd12.prod.outlook.com (20.179.81.219) by
+ MN2PR12MB2925.namprd12.prod.outlook.com (20.179.81.75) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1792.19; Wed, 17 Apr 2019 14:14:20 +0000
+Received: from MN2PR12MB2910.namprd12.prod.outlook.com
+ ([fe80::71f5:c696:c706:9b7c]) by MN2PR12MB2910.namprd12.prod.outlook.com
+ ([fe80::71f5:c696:c706:9b7c%2]) with mapi id 15.20.1792.018; Wed, 17 Apr 2019
+ 14:14:20 +0000
+From:   Chunming Zhou <zhoucm1@amd.com>
+To:     "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+Subject: Re: dynamic DMA-buf sharing between devices
+Thread-Topic: dynamic DMA-buf sharing between devices
+Thread-Index: AQHU9IOjpDvhBG68rU+RgcYdVAcWSKZAYFyAgAACQ4CAAAPzgA==
+Date:   Wed, 17 Apr 2019 14:14:20 +0000
+Message-ID: <5457e417-f710-5e81-fc9b-c78378af49e6@amd.com>
 References: <20190416183841.1577-1-christian.koenig@amd.com>
- <20190416183841.1577-4-christian.koenig@amd.com>
+ <b19612a3-0143-f8b5-7758-7e80c46d33d4@amd.com>
+ <04558379-9788-bbcc-5c64-7fa9ad92f60d@gmail.com>
+In-Reply-To: <04558379-9788-bbcc-5c64-7fa9ad92f60d@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: HK2PR02CA0171.apcprd02.prod.outlook.com
+ (2603:1096:201:1f::31) To MN2PR12MB2910.namprd12.prod.outlook.com
+ (2603:10b6:208:af::27)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=David1.Zhou@amd.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [101.86.234.22]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8b5775a2-4893-4e98-ebdc-08d6c33efbc4
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600140)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:MN2PR12MB2925;
+x-ms-traffictypediagnostic: MN2PR12MB2925:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <MN2PR12MB292580148A33388AD7C951C0B4250@MN2PR12MB2925.namprd12.prod.outlook.com>
+x-forefront-prvs: 0010D93EFE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(39860400002)(136003)(376002)(366004)(396003)(199004)(189003)(53754006)(72206003)(110136005)(478600001)(186003)(6246003)(66066001)(316002)(11346002)(446003)(102836004)(229853002)(36756003)(53936002)(26005)(6306002)(6512007)(2501003)(31696002)(2906002)(5660300002)(97736004)(3846002)(6116002)(66574012)(106356001)(6506007)(68736007)(105586002)(386003)(71190400001)(71200400001)(52116002)(5024004)(14444005)(2201001)(76176011)(256004)(6436002)(81166006)(81156014)(8676002)(8936002)(486006)(2616005)(6486002)(31686004)(305945005)(14454004)(25786009)(7736002)(476003)(966005)(99286004);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR12MB2925;H:MN2PR12MB2910.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: zF88F9G9e3CIOx0bsn5SWkeJHFX1y3pxkA7WkfvhKfHtdQY7WB7aEpV9rAeG1iXOpDq/WUkxfcClY6/AP1dsvbsXQZEMu1DTfsLiNjHNqTteQKNTO/2ZlJ7PT2klCo7dgJ0QigCsADOTWpHtipKdnWQ12tNKEhz0+DOjdgUDOLVzS6aW5+J24YwiVApjt3ilmoLCWugtXMhmvjqMSfUHGRQy/jbekAoEfXcmHGqFsns/kB9mlOCLA/KNNTY2CgPkpBfmEsP5+eFIblCCKm75aPXRKVwT2aQAY+FoLw6WIZwITbhbVX381EzFJ0kFlutYn8pqhT7nVAo3MfxU1KuDzMdqalDB8VZgzO1I4HfnOOW+PjEC2Jr2e9x+xqR6gD6CPH83rEQW4u/Uyri7/CbFEjNOicE9+ZvPqShvHxpJzTk=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3C2091E5407278418416B28BA280320C@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190416183841.1577-4-christian.koenig@amd.com>
-X-Operating-System: Linux phenom 4.19.0-1-amd64 
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b5775a2-4893-4e98-ebdc-08d6c33efbc4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Apr 2019 14:14:20.4243
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2925
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 16, 2019 at 08:38:32PM +0200, Christian König wrote:
-> Make it mandatory for dynamic dma-buf callbacks to be called with the
-> reservation lock held.
-> 
-> For static dma-buf exporters we still have the fallback of using cached sgt.
-> 
-> v2: reordered
-> v3: rebased on sgt caching
-> v4: use the cached sgt when possible
-> 
-> Signed-off-by: Christian König <christian.koenig@amd.com>
-
-I think there's a bit a rebase chaos going on:
-- some comments left behind with no_sgt_cache, which I can't find anymore
-- the function signature rework of dma_buf_attach should imo be split out
-
-Next issue is that the reservation object locking is still in the path of
-dma_buf_map, so probably still going to result in tons of lockdep splats.
-Except the i915+amdgpu path should now work due to the fastpath.
-
-Not sure that's a solution that really works, just hides that
-fundamentally we still have that issue of incompatible locking chains
-between different drivers.
--Daniel
-
-> ---
->  drivers/dma-buf/dma-buf.c                     | 24 ++++++++++---------
->  drivers/gpu/drm/armada/armada_gem.c           |  6 ++++-
->  drivers/gpu/drm/drm_prime.c                   |  6 ++++-
->  drivers/gpu/drm/i915/i915_gem_dmabuf.c        |  6 ++++-
->  drivers/gpu/drm/tegra/gem.c                   |  6 ++++-
->  drivers/gpu/drm/udl/udl_dmabuf.c              |  6 ++++-
->  .../common/videobuf2/videobuf2-dma-contig.c   |  6 ++++-
->  .../media/common/videobuf2/videobuf2-dma-sg.c |  6 ++++-
->  drivers/staging/media/tegra-vde/tegra-vde.c   |  6 ++++-
->  include/linux/dma-buf.h                       | 23 ++++++++++++++++--
->  10 files changed, 74 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index ef480e5fb239..83c92bfd964c 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -532,8 +532,9 @@ EXPORT_SYMBOL_GPL(dma_buf_put);
->  /**
->   * dma_buf_attach - Add the device to dma_buf's attachments list; optionally,
->   * calls attach() of dma_buf_ops to allow device-specific attach functionality
-> - * @dmabuf:	[in]	buffer to attach device to.
-> - * @dev:	[in]	device to be attached.
-> + * @info:	[in]	holds all the attach related information provided
-> + *			by the importer. see &struct dma_buf_attach_info
-> + *			for further details.
->   *
->   * Returns struct dma_buf_attachment pointer for this attachment. Attachments
->   * must be cleaned up by calling dma_buf_detach().
-> @@ -547,20 +548,20 @@ EXPORT_SYMBOL_GPL(dma_buf_put);
->   * accessible to @dev, and cannot be moved to a more suitable place. This is
->   * indicated with the error code -EBUSY.
->   */
-> -struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
-> -					  struct device *dev)
-> +struct dma_buf_attachment *dma_buf_attach(const struct dma_buf_attach_info *info)
->  {
-> +	struct dma_buf *dmabuf = info->dmabuf;
->  	struct dma_buf_attachment *attach;
->  	int ret;
->  
-> -	if (WARN_ON(!dmabuf || !dev))
-> +	if (WARN_ON(!dmabuf || !info->dev))
->  		return ERR_PTR(-EINVAL);
->  
->  	attach = kzalloc(sizeof(*attach), GFP_KERNEL);
->  	if (!attach)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	attach->dev = dev;
-> +	attach->dev = info->dev;
->  	attach->dmabuf = dmabuf;
->  
->  	mutex_lock(&dmabuf->lock);
-> @@ -688,9 +689,9 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
->  	if (attach->sgt)
->  		return attach->sgt;
->  
-> -	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
-> -	if (!sg_table)
-> -		sg_table = ERR_PTR(-ENOMEM);
-> +	reservation_object_lock(attach->dmabuf->resv, NULL);
-> +	sg_table = dma_buf_map_attachment_locked(attach, direction);
-> +	reservation_object_unlock(attach->dmabuf->resv);
->  
->  	return sg_table;
->  }
-> @@ -744,8 +745,9 @@ void dma_buf_unmap_attachment(struct dma_buf_attachment *attach,
->  	if (attach->sgt == sg_table)
->  		return;
->  
-> -	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
-> -						direction);
-> +	reservation_object_lock(attach->dmabuf->resv, NULL);
-> +	dma_buf_unmap_attachment_locked(attach, sg_table, direction);
-> +	reservation_object_unlock(attach->dmabuf->resv);
->  }
->  EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment);
->  
-> diff --git a/drivers/gpu/drm/armada/armada_gem.c b/drivers/gpu/drm/armada/armada_gem.c
-> index 642d0e70d0f8..19c47821032f 100644
-> --- a/drivers/gpu/drm/armada/armada_gem.c
-> +++ b/drivers/gpu/drm/armada/armada_gem.c
-> @@ -501,6 +501,10 @@ armada_gem_prime_export(struct drm_device *dev, struct drm_gem_object *obj,
->  struct drm_gem_object *
->  armada_gem_prime_import(struct drm_device *dev, struct dma_buf *buf)
->  {
-> +	struct dma_buf_attach_info attach_info = {
-> +		.dev = dev->dev,
-> +		.dmabuf = buf
-> +	};
->  	struct dma_buf_attachment *attach;
->  	struct armada_gem_object *dobj;
->  
-> @@ -516,7 +520,7 @@ armada_gem_prime_import(struct drm_device *dev, struct dma_buf *buf)
->  		}
->  	}
->  
-> -	attach = dma_buf_attach(buf, dev->dev);
-> +	attach = dma_buf_attach(&attach_info);
->  	if (IS_ERR(attach))
->  		return ERR_CAST(attach);
->  
-> diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
-> index 231e3f6d5f41..1fadf5d5ed33 100644
-> --- a/drivers/gpu/drm/drm_prime.c
-> +++ b/drivers/gpu/drm/drm_prime.c
-> @@ -709,6 +709,10 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
->  					    struct dma_buf *dma_buf,
->  					    struct device *attach_dev)
->  {
-> +	struct dma_buf_attach_info attach_info = {
-> +		.dev = attach_dev,
-> +		.dmabuf = dma_buf
-> +	};
->  	struct dma_buf_attachment *attach;
->  	struct sg_table *sgt;
->  	struct drm_gem_object *obj;
-> @@ -729,7 +733,7 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
->  	if (!dev->driver->gem_prime_import_sg_table)
->  		return ERR_PTR(-EINVAL);
->  
-> -	attach = dma_buf_attach(dma_buf, attach_dev);
-> +	attach = dma_buf_attach(&attach_info);
->  	if (IS_ERR(attach))
->  		return ERR_CAST(attach);
->  
-> diff --git a/drivers/gpu/drm/i915/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/i915_gem_dmabuf.c
-> index 82e2ca17a441..aa7f685bd6ca 100644
-> --- a/drivers/gpu/drm/i915/i915_gem_dmabuf.c
-> +++ b/drivers/gpu/drm/i915/i915_gem_dmabuf.c
-> @@ -277,6 +277,10 @@ static const struct drm_i915_gem_object_ops i915_gem_object_dmabuf_ops = {
->  struct drm_gem_object *i915_gem_prime_import(struct drm_device *dev,
->  					     struct dma_buf *dma_buf)
->  {
-> +	struct dma_buf_attach_info attach_info = {
-> +		.dev = dev->dev,
-> +		.dmabuf = dma_buf
-> +	};
->  	struct dma_buf_attachment *attach;
->  	struct drm_i915_gem_object *obj;
->  	int ret;
-> @@ -295,7 +299,7 @@ struct drm_gem_object *i915_gem_prime_import(struct drm_device *dev,
->  	}
->  
->  	/* need to attach */
-> -	attach = dma_buf_attach(dma_buf, dev->dev);
-> +	attach = dma_buf_attach(&attach_info);
->  	if (IS_ERR(attach))
->  		return ERR_CAST(attach);
->  
-> diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
-> index 4f80100ff5f3..8e6b6c879add 100644
-> --- a/drivers/gpu/drm/tegra/gem.c
-> +++ b/drivers/gpu/drm/tegra/gem.c
-> @@ -332,6 +332,10 @@ struct tegra_bo *tegra_bo_create_with_handle(struct drm_file *file,
->  static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
->  					struct dma_buf *buf)
->  {
-> +	struct dma_buf_attach_info attach_info = {
-> +		.dev = drm->dev,
-> +		.dmabuf = buf
-> +	};
->  	struct tegra_drm *tegra = drm->dev_private;
->  	struct dma_buf_attachment *attach;
->  	struct tegra_bo *bo;
-> @@ -341,7 +345,7 @@ static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
->  	if (IS_ERR(bo))
->  		return bo;
->  
-> -	attach = dma_buf_attach(buf, drm->dev);
-> +	attach = dma_buf_attach(&attach_info);
->  	if (IS_ERR(attach)) {
->  		err = PTR_ERR(attach);
->  		goto free;
-> diff --git a/drivers/gpu/drm/udl/udl_dmabuf.c b/drivers/gpu/drm/udl/udl_dmabuf.c
-> index 556f62662aa9..86b928f9742f 100644
-> --- a/drivers/gpu/drm/udl/udl_dmabuf.c
-> +++ b/drivers/gpu/drm/udl/udl_dmabuf.c
-> @@ -226,6 +226,10 @@ static int udl_prime_create(struct drm_device *dev,
->  struct drm_gem_object *udl_gem_prime_import(struct drm_device *dev,
->  				struct dma_buf *dma_buf)
->  {
-> +	struct dma_buf_attach_info attach_info = {
-> +		.dev = dev->dev,
-> +		.dmabuf = dma_buf
-> +	};
->  	struct dma_buf_attachment *attach;
->  	struct sg_table *sg;
->  	struct udl_gem_object *uobj;
-> @@ -233,7 +237,7 @@ struct drm_gem_object *udl_gem_prime_import(struct drm_device *dev,
->  
->  	/* need to attach */
->  	get_device(dev->dev);
-> -	attach = dma_buf_attach(dma_buf, dev->dev);
-> +	attach = dma_buf_attach(&attach_info);
->  	if (IS_ERR(attach)) {
->  		put_device(dev->dev);
->  		return ERR_CAST(attach);
-> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-contig.c b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> index aff0ab7bf83d..1f2687b5eb0e 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-dma-contig.c
-> @@ -676,6 +676,10 @@ static void vb2_dc_detach_dmabuf(void *mem_priv)
->  static void *vb2_dc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
->  	unsigned long size, enum dma_data_direction dma_dir)
->  {
-> +	struct dma_buf_attach_info attach_info = {
-> +		.dev = dev,
-> +		.dmabuf = dbuf
-> +	};
->  	struct vb2_dc_buf *buf;
->  	struct dma_buf_attachment *dba;
->  
-> @@ -691,7 +695,7 @@ static void *vb2_dc_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
->  
->  	buf->dev = dev;
->  	/* create attachment for the dmabuf with the user device */
-> -	dba = dma_buf_attach(dbuf, buf->dev);
-> +	dba = dma_buf_attach(&attach_info);
->  	if (IS_ERR(dba)) {
->  		pr_err("failed to attach dmabuf\n");
->  		kfree(buf);
-> diff --git a/drivers/media/common/videobuf2/videobuf2-dma-sg.c b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> index 015e737095cd..cbd626d2393a 100644
-> --- a/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> +++ b/drivers/media/common/videobuf2/videobuf2-dma-sg.c
-> @@ -608,6 +608,10 @@ static void vb2_dma_sg_detach_dmabuf(void *mem_priv)
->  static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
->  	unsigned long size, enum dma_data_direction dma_dir)
->  {
-> +	struct dma_buf_attach_info attach_info = {
-> +		.dev = dev,
-> +		.dmabuf = dbuf
-> +	};
->  	struct vb2_dma_sg_buf *buf;
->  	struct dma_buf_attachment *dba;
->  
-> @@ -623,7 +627,7 @@ static void *vb2_dma_sg_attach_dmabuf(struct device *dev, struct dma_buf *dbuf,
->  
->  	buf->dev = dev;
->  	/* create attachment for the dmabuf with the user device */
-> -	dba = dma_buf_attach(dbuf, buf->dev);
-> +	dba = dma_buf_attach(&attach_info);
->  	if (IS_ERR(dba)) {
->  		pr_err("failed to attach dmabuf\n");
->  		kfree(buf);
-> diff --git a/drivers/staging/media/tegra-vde/tegra-vde.c b/drivers/staging/media/tegra-vde/tegra-vde.c
-> index aa6c6bba961e..5a10c1facc27 100644
-> --- a/drivers/staging/media/tegra-vde/tegra-vde.c
-> +++ b/drivers/staging/media/tegra-vde/tegra-vde.c
-> @@ -568,6 +568,10 @@ static int tegra_vde_attach_dmabuf(struct device *dev,
->  				   size_t *size,
->  				   enum dma_data_direction dma_dir)
->  {
-> +	struct dma_buf_attach_info attach_info = {
-> +		.dev = dev,
-> +		.dmabuf = dmabuf
-> +	};
->  	struct dma_buf_attachment *attachment;
->  	struct dma_buf *dmabuf;
->  	struct sg_table *sgt;
-> @@ -591,7 +595,7 @@ static int tegra_vde_attach_dmabuf(struct device *dev,
->  		return -EINVAL;
->  	}
->  
-> -	attachment = dma_buf_attach(dmabuf, dev);
-> +	attachment = dma_buf_attach(&attach_info);
->  	if (IS_ERR(attachment)) {
->  		dev_err(dev, "Failed to attach dmabuf\n");
->  		err = PTR_ERR(attachment);
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index 18a78be53541..7e23758db3a4 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -128,6 +128,9 @@ struct dma_buf_ops {
->  	 * any other kind of sharing that the exporter might wish to make
->  	 * available to buffer-users.
->  	 *
-> +	 * This is always called with the dmabuf->resv object locked when
-> +	 * no_sgt_cache is true.
-> +	 *
->  	 * Returns:
->  	 *
->  	 * A &sg_table scatter list of or the backing storage of the DMA buffer,
-> @@ -148,6 +151,9 @@ struct dma_buf_ops {
->  	 * It should also unpin the backing storage if this is the last mapping
->  	 * of the DMA buffer, it the exporter supports backing storage
->  	 * migration.
-> +	 *
-> +	 * This is always called with the dmabuf->resv object locked when
-> +	 * no_sgt_cache is true.
->  	 */
->  	void (*unmap_dma_buf)(struct dma_buf_attachment *,
->  			      struct sg_table *,
-> @@ -370,6 +376,19 @@ struct dma_buf_export_info {
->  	struct dma_buf_export_info name = { .exp_name = KBUILD_MODNAME, \
->  					 .owner = THIS_MODULE }
->  
-> +/**
-> + * struct dma_buf_attach_info - holds information needed to attach to a dma_buf
-> + * @dmabuf:	the exported dma_buf
-> + * @dev:	the device which wants to import the attachment
-> + *
-> + * This structure holds the information required to attach to a buffer. Used
-> + * with dma_buf_attach() only.
-> + */
-> +struct dma_buf_attach_info {
-> +	struct dma_buf *dmabuf;
-> +	struct device *dev;
-> +};
-> +
->  /**
->   * get_dma_buf - convenience wrapper for get_file.
->   * @dmabuf:	[in]	pointer to dma_buf
-> @@ -384,8 +403,8 @@ static inline void get_dma_buf(struct dma_buf *dmabuf)
->  	get_file(dmabuf->file);
->  }
->  
-> -struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
-> -							struct device *dev);
-> +struct dma_buf_attachment *
-> +dma_buf_attach(const struct dma_buf_attach_info *info);
->  void dma_buf_detach(struct dma_buf *dmabuf,
->  				struct dma_buf_attachment *dmabuf_attach);
->  
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
-
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+SSBsaWtlIHlvdSBkbyBzb21ldGhpbmdzIHN0ZXAgYnkgc3RlcCwgeW91IGNhbiBwaW5nIG1lIHdo
+ZW4gdGhleSBhcmUgcmVhZHkuDQoNCi1EYXZpZA0KDQrlnKggMjAxOS80LzE3IDIxOjU5LCBDaHJp
+c3RpYW4gS8O2bmlnIOWGmemBkzoNCj4gT24gdG9wIG9mIHRob3NlIEkgaGF2ZSA2IG1vcmUgcGF0
+Y2hlcyBpbiB0aGUgcGlwZWxpbmUgdG8gZW5hYmxlIFZSQU0gDQo+IFAyUCB3aXRoIERNQS1idWYu
+DQo+DQo+IFNvIHRoYXQgaXMgbm90IHRoZSBlbmQgb2YgdGhlIHBhdGNoIHNldCA6KQ0KPg0KPiBD
+aHJpc3RpYW4uDQo+DQo+IEFtIDE3LjA0LjE5IHVtIDE1OjUyIHNjaHJpZWIgQ2h1bm1pbmcgWmhv
+dToNCj4+IFRoYW5rcyBDaHJpc3RpYW4sIGdyZWF0IGpvYi4gSSB3aWxsIHZlcmlmeSBpdCB0aGlz
+IHdlZWsgd2hlbiBJIGZpbmlzaCBteQ0KPj4gY3VycmVudCB3b3JrIG9uIGhhbmQuDQo+Pg0KPj4g
+LURhdmlkDQo+Pg0KPj4g5ZyoIDIwMTkvNC8xNyAyOjM4LCBDaHJpc3RpYW4gS8O2bmlnIHdyb3Rl
+Og0KPj4+IEhpIGV2ZXJ5Ym9keSwNCj4+Pg0KPj4+IGNvcmUgaWRlYSBpbiB0aGlzIHBhdGNoIHNl
+dCBpcyB0aGF0IERNQS1idWYgaW1wb3J0ZXJzIGNhbiBub3cgDQo+Pj4gcHJvdmlkZSBhbiBvcHRp
+b25hbCBpbnZhbGlkYXRlIGNhbGxiYWNrLiBVc2luZyB0aGlzIGNhbGxiYWNrIGFuZCB0aGUgDQo+
+Pj4gcmVzZXJ2YXRpb24gb2JqZWN0IGV4cG9ydGVycyBjYW4gbm93IGF2b2lkIHBpbm5pbmcgRE1B
+LWJ1ZiBtZW1vcnkgDQo+Pj4gZm9yIGEgbG9uZyB0aW1lIHdoaWxlIHNoYXJpbmcgaXQgYmV0d2Vl
+biBkZXZpY2VzLg0KPj4+DQo+Pj4gSSd2ZSBhbHJlYWR5IHNlbmQgb3V0IGFuIG9sZGVyIHZlcnNp
+b24gcm91Z2hseSBhIHllYXIgYWdvLCBidXQgDQo+Pj4gZGlkbid0IGhhZCB0aW1lIHRvIGZ1cnRo
+ZXIgbG9vayBpbnRvIGNsZWFuaW5nIHRoaXMgdXAuDQo+Pj4NCj4+PiBUaGUgbGFzdCB0aW1lIGEg
+bWFqb3IgcHJvYmxlbSB3YXMgdGhhdCB3ZSB3b3VsZCBoYWQgdG8gZml4IHVwIGFsbCANCj4+PiBk
+cml2ZXJzIGltcGxlbWVudGluZyBETUEtYnVmIGF0IG9uY2UuDQo+Pj4NCj4+PiBOb3cgSSBhdm9p
+ZCB0aGlzIGJ5IGFsbG93aW5nIG1hcHBpbmdzIHRvIGJlIGNhY2hlZCBpbiB0aGUgRE1BLWJ1ZiAN
+Cj4+PiBhdHRhY2htZW50IGFuZCBzbyBkcml2ZXIgY2FuIG9wdGlvbmFsbHkgbW92ZSBvdmVyIHRv
+IHRoZSBuZXcgDQo+Pj4gaW50ZXJmYWNlIG9uZSBieSBvbmUuDQo+Pj4NCj4+PiBUaGlzIGlzIGFs
+c28gYSBwcmVyZXF1aXNpdGUgdG8gbXkgcGF0Y2hzZXQgZW5hYmxpbmcgc2hhcmluZyBvZiANCj4+
+PiBkZXZpY2UgbWVtb3J5IHdpdGggRE1BLWJ1Zi4NCj4+Pg0KPj4+IFBsZWFzZSByZXZpZXcgYW5k
+L29yIGNvbW1lbnQsDQo+Pj4gQ2hyaXN0aWFuLg0KPj4+DQo+Pj4NCj4+PiBfX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KPj4+IGRyaS1kZXZlbCBtYWlsaW5n
+IGxpc3QNCj4+PiBkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnDQo+Pj4gaHR0cHM6Ly9s
+aXN0cy5mcmVlZGVza3RvcC5vcmcvbWFpbG1hbi9saXN0aW5mby9kcmktZGV2ZWwNCj4NCg==
