@@ -2,236 +2,302 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,URIBL_RHS_DOB autolearn=ham
+X-Spam-Status: No, score=-2.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_RHS_DOB,USER_AGENT_NEOMUTT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09147C10F0E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 08:55:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D225DC10F0E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 09:02:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C87302183F
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 08:55:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9409E2183E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 09:02:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388244AbfDRIzB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 04:55:01 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:37563 "EHLO
+        id S2388097AbfDRJC0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 05:02:26 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:48489 "EHLO
         relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726873AbfDRIzA (ORCPT
+        with ESMTP id S2388036AbfDRJC0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 04:55:00 -0400
+        Thu, 18 Apr 2019 05:02:26 -0400
 X-Originating-IP: 90.88.160.238
-Received: from aptenodytes (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 1BC5240007;
-        Thu, 18 Apr 2019 08:54:54 +0000 (UTC)
-Message-ID: <522d6a7734a29df47fe11f5f6311b49e14dabae0.camel@bootlin.com>
-Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Received: from localhost (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 2FE5A4002A;
+        Thu, 18 Apr 2019 09:02:22 +0000 (UTC)
+Date:   Thu, 18 Apr 2019 11:02:21 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
 To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Date:   Thu, 18 Apr 2019 10:54:54 +0200
-In-Reply-To: <20190418081816.GO13337@phenom.ffwll.local>
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
-         <20190418081816.GO13337@phenom.ffwll.local>
-Organization: Bootlin
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1 
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
+ common place
+Message-ID: <20190418090221.e57dogn4yx5nwdni@flea>
+References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
+ <20190417154121.GJ13337@phenom.ffwll.local>
+ <20190418062229.eyog4i62eg4pr6uf@flea>
+ <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ku5lnx6rytxcw6t4"
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Daniel,
 
-On Thu, 2019-04-18 at 10:18 +0200, Daniel Vetter wrote:
-> On Wed, Apr 17, 2019 at 08:10:15PM +0200, Paul Kocialkowski wrote:
-> > Hi Nicolas,
-> > 
-> > I'm detaching this thread from our V4L2 stateless decoding spec since
-> > it has drifted off and would certainly be interesting to DRM folks as
-> > well!
-> > 
-> > For context: I was initially talking about writing up support for the
-> > Allwinner 2D engine as a DRM render driver, where I'd like to be able
-> > to batch jobs that affect the same destination buffer to only signal
-> > the out fence once when the batch is done. We have a similar issue in
-> > v4l2 where we'd like the destination buffer for a set of requests (each
-> > covering one H264 slice) to be marked as done once the set was decoded.
-> > 
-> > Le mercredi 17 avril 2019 à 12:22 -0400, Nicolas Dufresne a écrit :
-> > > > > > Interestingly, I'm experiencing the exact same problem dealing with a
-> > > > > > 2D graphics blitter that has limited ouput scaling abilities which
-> > > > > > imply handlnig a large scaling operation as multiple clipped smaller
-> > > > > > scaling operations. The issue is basically that multiple jobs have to
-> > > > > > be submitted to complete a single frame and relying on an indication
-> > > > > > from the destination buffer (such as a fence) doesn't work to indicate
-> > > > > > that all the operations were completed, since we get the indication at
-> > > > > > each step instead of at the end of the batch.
-> > > > > 
-> > > > > That looks similar to the IMX.6 IPU m2m driver. It splits the image in
-> > > > > tiles of 1024x1024 and process each tile separately. This driver has
-> > > > > been around for a long time, so I guess they have a solution to that.
-> > > > > They don't need requests, because there is nothing to be bundled with
-> > > > > the input image. I know that Renesas folks have started working on a
-> > > > > de-interlacer. Again, this kind of driver may process and reuse input
-> > > > > buffers for motion compensation, but I don't think they need special
-> > > > > userspace API for that.
-> > > > 
-> > > > Thanks for the reference! I hope it's not a blitter that was
-> > > > contributed as a V4L2 driver instead of DRM, as it probably would be
-> > > > more useful in DRM (but that's way beside the point).
-> > > 
-> > > DRM does not offer a generic and discoverable interface for these
-> > > accelerators. Note that these drivers have most of the time started as
-> > > DRM driver and their DRM side where dropped. That was the case for
-> > > Exynos drivers at least.
-> > 
-> > Heh, sadly I'm aware of how things turn out most of the time. The thing
-> > is that DRM expects drivers to implement their own interface. That's
-> > fine for passing BOs with GPU bitstream and textures, but not so much
-> > for dealing with framebuffer-based operations where the streaming and
-> > buffer interface that v4l2 has is a good fit.
-> > 
-> > There's also the fact that the 2D pipeline is fixed-function and highly
-> > hardware-specific, so we need driver-specific job descriptions to
-> > really make the most of it. That's where v4l2 is not much of a good fit
-> > for complex 2D pipelines either. Most 2D engines can take multiple
-> > inputs and blit them together in various ways, which is too far from
-> > what v4l2 deals with. So we can have fixed single-buffer pipelines with
-> > at best CSC and scaling, but not much more with v4l2 really.
-> > 
-> > I don't think it would be too much work to bring an interface to DRM in
-> > order to describe render framebuffers (we only have display
-> > framebuffers so far), with a simple queuing interface for scheduling
-> > driver-specific jobs, which could be grouped together to only signal
-> > the out fences when every buffer of the batch was done being rendered.
-> > This last point would allow handling cases where userapce need to
-> > perform multiple operations to carry out the single operation that it
-> > needs to do. In the case of my 2D blitter, that would be scaling above
-> > a 1024x1024 destination, which could be required to scaling a video
-> > buffer up to a 1920x1080 display. With that, we can e.g. page flip the
-> > 2D engine destination buffer and be certain that scaling will be fully
-> > done when the fence is signaled.
-> > 
-> > There's also the userspace problem: DRM render has mesa to back it in
-> > userspace and provide a generic API for other programes. For 2D
-> > engines, we don't have much to hold on to. Cairo has a DRM render
-> > interface that supports a few DRM render drivers where there is either
-> > a 2D pipeline or where pre-built shaders are used to implement a 2D
-> > pipeline, and that's about it as far as I know.
-> > 
-> > There's also the possibility of writing up a drm-render DDX to handle
-> > these 2D blitters that can make things a lot faster when running a
-> > desktop environment. As for wayland, well, I don't really know what to
-> > think. I was under the impression that it relies on GL for 2D
-> > operations, but am really not sure how true that actually is.
-> 
-> Just fyi in case you folks aren't aware, I typed up a blog a while ago
-> about why drm doesn't have a 2d submit api:
-> 
-> https://blog.ffwll.ch/2018/08/no-2d-in-drm.html
+--ku5lnx6rytxcw6t4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I definitely share the observation that each 2D engine has its own kind
-of pipeline, which is close to impossible to describe in a generic way
-while exposing all the possible features of the pipeline.
+On Thu, Apr 18, 2019 at 09:52:10AM +0200, Daniel Vetter wrote:
+> On Thu, Apr 18, 2019 at 8:22 AM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
+> > On Wed, Apr 17, 2019 at 05:41:21PM +0200, Daniel Vetter wrote:
+> > > On Wed, Apr 17, 2019 at 09:54:26AM +0200, Maxime Ripard wrote:
+> > > > Hi,
+> > > >
+> > > > DRM comes with an extensive format support to retrieve the various
+> > > > parameters associated with a given format (such as the subsampling, or the
+> > > > bits per pixel), as well as some helpers and utilities to ease the driver
+> > > > development.
+> > > >
+> > > > v4l2, on the other side, doesn't provide such facilities, leaving each
+> > > > driver reimplement a subset of the formats parameters for the one supported
+> > > > by that particular driver. This leads to a lot of duplication and
+> > > > boilerplate code in the v4l2 drivers.
+> > > >
+> > > > This series tries to address this by moving the DRM format API into lib and
+> > > > turning it into a more generic API. In order to do this, we've needed to do
+> > > > some preliminary changes on the DRM drivers, then moved the API and finally
+> > > > converted a v4l2 driver to give an example of how such library could be
+> > > > used.
+> > > >
+> > > > Let me know what you think,
+> > > > Maxime
+> > > >
+> > > > Changes from RFC:
+> > > >   - Rebased on next
+> > > >   - Fixed the various formats mapping
+> > > >   - Added tags
+> > > >   - Did most of the formats functions as inline functions
+> > > >   - Used a consistent prefix for all the utilities functions
+> > > >   - Fixed the compilation breakages, and did a run of allmodconfig for arm,
+> > > >     arm64 and x86_64
+> > > >   - Fixed out of array bounds warnings in the image_format_info_block_*
+> > > >     functions
+> > > >   - Added License and copyright headers on missing files
+> > > >
+> > > > Maxime Ripard (20):
+> > > >   drm: Remove users of drm_format_num_planes
+> > > >   drm: Remove users of drm_format_(horz|vert)_chroma_subsampling
+> > > >   drm/fourcc: Pass the format_info pointer to drm_format_plane_cpp
+> > > >   drm/fourcc: Pass the format_info pointer to drm_format_plane_width/height
+> > > >   drm: Replace instances of drm_format_info by drm_get_format_info
+> > > >   lib: Add video format information library
+> > > >   drm/fb: Move from drm_format_info to image_format_info
+> > > >   drm/malidp: Convert to generic image format library
+> > > >   drm/client: Convert to generic image format library
+> > > >   drm/exynos: Convert to generic image format library
+> > > >   drm/i915: Convert to generic image format library
+> > > >   drm/ipuv3: Convert to generic image format library
+> > > >   drm/msm: Convert to generic image format library
+> > > >   drm/omap: Convert to generic image format library
+> > > >   drm/rockchip: Convert to generic image format library
+> > > >   drm/tegra: Convert to generic image format library
+> > > >   drm/fourcc: Remove old DRM format API
+> > > >   lib: image-formats: Add v4l2 formats support
+> > > >   lib: image-formats: Add more functions
+> > > >   media: sun6i: Convert to the image format API
+> > >
+> > > In the interest of making myself unpopular: Why move this out of drm?
+> > >
+> > > We do have a bunch of other such shared helpers already (mostly in
+> > > drivers/video) for dt videomode and hdmi infoframes, and I'm not super
+> > > sure that's going better than keeping it maintained in drm.
+> > >
+> > > Plus the uapi is already that you include drm_fourcc.h to get at these,
+> > > dropping the drm prefix isn't going to help I think.
+> > >
+> > > Of course we'd need to make it a separate drm_formats.ko (so that v4l can
+> > > use it without dragging in all of drm), and we need to add some fields for
+> > > converting to v4l fourcc codes (which are different). But that should be
+> > > all possible. And I don't think the drm_ prefix in v4l code is a problem,
+> > > it's actually a feature: It makes it really clear that these are the drm
+> > > fourcc codes, as allocated in drm_fourcc.h, plus their modifiers, and all
+> > > that. That allocation authority is also already baked into various khr/ext
+> > > standards, too.
+> >
+> > The way I see it, there's a fundamental difference between the UAPI
+> > and the kernel. I don't suggest we change anything about the UAPI: the
+> > drm formats should keep their prefix, drm_fourcc.h can remain that
+> > authority, it's all fine.
+> >
+> > Internally however, the long term goal is to share the fourcc's
+> > between DRM and V4L2 for the same formats. It basically means that of
+> > course v4l2 should be using the DRM fourcc when a format exists in DRM
+> > and not v4l2, but also that DRM should use v4l2 fourcc when the format
+> > exists in v4l2 but not DRM, and that is far more likely, given the
+> > already extensive v4l2 formats support.
+>
+> Uh no. We did look at v4l fourcc extensively when deciding upon a drm
+> format identifier space.
 
-I thought about this some more yesterday and I see a few areas that
-could however be made generic:
-* GEM allocation for framebuffers (with a unified ioctl);
-* framebuffer management, (that's only in KMS for now and we need
-pretty much the same thing here);
-* some queuing mechanism, either for standalone submissions or groups
-of them.
+No to what exactly?
 
-So I started thinking about writing up a "DRM GFX" API which would
-provide this, instead of implementing it in my 2D blitter driver.
-There's a chance I'll submit a proposal of that along with my driver.
+> And a lot of people pushed for the "fourcc is a standard", when
+> really it's totally not.
 
-I am convinced the job submit ioctl needs to remain driver-specific to
-properly describe the pipeline though.
+Even if it's not a standard, having consistency would be a good thing.
 
-> > > The thing is that DRM is great if you do immediate display stuff, while
-> > > V4L2 is nice if you do streaming, where you expect filling queued, and
-> > > popping buffers from queues.
-> > > 
-> > > In the end, this is just an interface, nothing prevents you from making
-> > > an internal driver (like the Meson Canvas) and simply letting multiple
-> > > sub-system expose it. Specially that some of these IP will often
-> > > support both signal and memory processing, so they equally fit into a
-> > > media controller ISP, a v4l2 m2m or a DRM driver.
-> > 
-> > Having base drivers that can hook to both v4l2 m2m and DRM would
-> > definitely be awesome. Maybe we could have some common internal
-> > synchronization logic to make writing these drivers easier.
-> 
-> We have, it's called dma_fence. Ties into dma_bufs using
-> reservation_objecsts.
+And you said yourself that DRM fourcc is now pretty much an authority
+for the fourcc, so it definitely looks like a standard to me.
 
-That's not what I meant: I'm talking about exposing the 2D engine
-capabilities through both DRM and V4L2 M2M, where the V4L2 M2M driver
-would be an internal client to DRM. So it's about using the same
-hardware with both APIs concurrently.
+> v4l tends to conflate pixel format with stuff that we tend to encode
+> in modifiers a lot more.
 
-And while at it, we could allow detaching display pipeline elements
-that have intermediary writeback and exposing them as 2D engines
-through the same API (which would return busy when the block is used
-for the video pipeline).
+Boris is working on adding the modifiers concept to v4l2, so we're
+converging here, and we can totally have a layer in v4l2 to convert
+between old v4l2 "format+modifiers" formats, and DRM style formats.
 
-> > It would be cool if both could be used concurrently and not just return
-> > -EBUSY when the device is used with the other subsystem.
-> 
-> We live in this world already :-) I think there's even patches (or merged
-> already) to add fences to v4l, for Android.
-> 
-> > Anyway, that's my 2 cents about the situation and what we can do to
-> > improve it. I'm definitely interested in tackling these items, but it
-> > may take some time before we get there. Not to mention we need to
-> > rework media/v4l2 for per-slice decoding support ;)
-> > 
-> > > Another driver you might want to look is Rockchip RGA driver (which is
-> > > a multi function IP, including blitting).
-> > 
-> > Yep, I've aware of it as well. There's also vivante which exposes 2D
-> > cores but I'm really not sure whether any function is actually
-> > implemented. 
-> > 
-> > OMAP4 and OMAP5 have a 2D engine that seems to be vivante as well from
-> > what I could find out, but it seems to only have blobs for bltsville
-> > and no significant docs.
-> 
-> Yeah that's the usual approach for drm 2d drivers: You have a bespoke
-> driver in userspace. Usually that means an X driver, but there's been talk
-> to pimp the hwc interface to make that _the_ 2d accel interface. There's
-> also fbdev ... *shudder*.
-> 
-> All of these options are geared towards ultimately displaying stuff on
-> screens, not pure m2m 2d accel.
+> There's a bunch of reasons we can't just use v4l, and they're as
+> valid as ever:
+>
+> - We overlap badly in some areas, so even if fourcc codes match, we
+>   can't use them and need a duplicated DRM_FOURCC code.
 
-I think it would be good to have a specific library to translate
-between "standard" 2d ops (porter-duff blending and such) to driver-
-specific setup submit ioctls. Could be called "libdrm-gfx" and used by
-an associated DDX (as well as any other program that needs 2D ops
-acceleration).
+Do yo have an example of one of those areas?
 
-Cheers,
+> - v4l encodes some metadata into the fourcc that we encode elsewhere,
+>   e.g. offset for planar yuv formats, or tiling mode
 
-Paul
+As I was saying, this changes on the v4l2 side, and converging to
+what DRM is doing.
 
--- 
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
+> - drm fourcc code doesn't actually define the drm_format_info
+>   uniquely, drivers can override that (that's an explicit design
+>   intent of modifiers, to allow drivers to add another plane for
+>   e.g. compression information). You'd need to pull that driver
+>   knowledge into your format library.
+
+I'm not sure how my patches are changing anything here. This is
+litterally the same code, with the functions renamed.
+
+If drivers want to override that, then yeah, fine, we can let them do
+that. Just like any helper this just provides a default that covers
+most of the cases.
+
+> Iow there's no way we can easily adopt v4l fourcc, except if we do
+> something like a new addfb flag.
+
+For the formats that would be described as a modifier, sure. For all
+the others (that are not yet supported by DRM), then I don't really
+see why not.
+
+> > And given how the current state is a mess in this regard, I'm not too
+> > optimistic about keeping the formats in their relevant frameworks.
+> >
+> > Having a shared library, governed by both, will make this far easier,
+> > since it will be easy to discover the formats that are already
+> > supported by the other subsystem.
+>
+> I think a compat library that (tries to, best effort) convert between
+> v4l and drm fourcc would make sense. Somewhere in drivers/video, next
+> to the conversion functions for videomode <-> drm_display_mode
+> perhaps. That should be useful for drivers.
+
+That's not really what this series is about though. That series is
+about sharing the (image|pixels) formats database across everyone so
+that everyone can benefit from it.
+
+> Unifying the formats themselves, and all the associated metadata is
+> imo a no-go, and was a pretty conscious decision when we implemented
+> drm_fourcc a few years back.
+>
+> > If we want to keep the current library in DRM, we have two options
+> > then:
+> >
+> >   - Support all the v4l2 formats in the DRM library, which is
+> >     essentially what I'm doing in the last patches. However, that
+> >     would require to have the v4l2 developpers also reviewing stuff
+> >     there. And given how busy they are, I cannot really see how that
+> >     would work.
+>
+> Well, if we end up with a common library then yes we need cross
+> review. There's no way around that. Doesn't matter where exactly that
+> library is in the filesystem tree, and adding a special MAINTAINERS
+> entry for anything related to fourcc (both drm and v4l) to make sure
+> they get cross-posted is easy. No file renaming needed.
+
+That would create some governing issues as well. For example, if you
+ever have a patch from one fourcc addition (that might or might not be
+covered by v4l2), will you wait for any v4l2 developper to review it?
+
+If it's shared code, then it should be shared, and every client
+framework put on an equal footing.
+
+> >   - Develop the same library from within v4l2. That is really a poor
+> >     solution, since the information would be greatly duplicated
+> >     between the two, and in terms of maintainance, code, and binary
+> >     size that would be duplicated too.
+>
+> It's essentially what we decided to do for drm years back.
+
+And it was probably the right solution back then, but I'm really not
+convinced it's still the right thing to do today.
+
+> > Having it shared allows to easily share, and discover formats from the
+> > other subsystem, and to have a single, unique place where this is
+> > centralized.
+>
+> What I think could work as middle ground:
+> - Put drm_format stuff into a separate .ko
+> - Add a MAINTAINERS entry to make sure all things fourcc are cross
+> posted to both drm and v4l lists. Easy on the drm side, since it's all
+> separate files. Not sure it's so convenient for v4l uapi.
+> - Add a conversion library that tries to best-effort map between drm
+> and v4l formats. On the drm side that most likely means you need
+> offsets for planes, and modifiers too (since those are implied in some
+> v4l fourcc). Emphasis on "best effort" i.e. only support as much as
+> the drivers that use this library need.
+> - Add drm_fourcc as-needed by these drivers that want to use a unified
+> format space.
+>
+> Forcing this unification on everyone otoh is imo way too much.
+
+v4l2 is starting to converge with DRM, and we're using the DRM API
+pretty much untouched for that library, so I'm not really sure how
+anyone is hurt by that unification.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 
+--ku5lnx6rytxcw6t4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXLg9HQAKCRDj7w1vZxhR
+xXrZAQCjuV6O3ycJjy50aJ8yIJ4Cwi43TE8JopBxsc3crmtshwEAmBT1lc+Cr1z0
+6qm5zgN8iKw0cXvRWAQP8LqZU91gkwA=
+=00aT
+-----END PGP SIGNATURE-----
+
+--ku5lnx6rytxcw6t4--
