@@ -2,154 +2,266 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,URIBL_RHS_DOB,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25794C10F0E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 03:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95EA6C10F14
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 05:57:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F310B2184B
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 03:50:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C0482183F
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 05:57:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KXyd6qxd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387926AbfDRDua (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 23:50:30 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:56973 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731985AbfDRDua (ORCPT
+        id S1729446AbfDRF5O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 01:57:14 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:57718 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725836AbfDRF5O (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 23:50:30 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:2ceb:5731:d64e:76a])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id Gy4AhISA7b8gSGy4BhEIBm; Thu, 18 Apr 2019 05:50:28 +0200
-Message-ID: <67f34ab2b3ee0235d9dd62b337645551@smtp-cloud8.xs4all.net>
-Date:   Thu, 18 Apr 2019 05:50:26 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfC3YGiNSdGI3i5mawdVMHC8p/S1Bovop4eanFEJzaLcAhJKdu6kIwo+0lE0lrWDIUfFIfiothbURBYIGi6cVkQwiCWmrQ1+MkbDe9N2AD+sEeWihbiMn
- RjkWaHxw6shMTU82UrjheOyFqFBESPq/IOQ469X0L1GqvrGer9RyhOOBoOKu7C9U1a65J9SYj75d0MeSfJfSi9WriyX+xymwuUSbB/q9VqtMW8B4BfIyNBgQ
+        Thu, 18 Apr 2019 01:57:14 -0400
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 46544306;
+        Thu, 18 Apr 2019 07:57:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1555567032;
+        bh=Va9PsJ1rB6k6HgP17pCmkM4sulD3RoFEl0Le7P2+q70=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KXyd6qxdBrwYEH2QsI1G3GnPaV87byaNIfDCl1wE7BHFwB2imSE1efYaiF4ejWtfw
+         /ak8Vwo5Qsbm1Kj62pMYdPBh8MXTZpU+P/0SCyS/wO4SmluRBPzXOKY3HPsvq77vlX
+         nnDIJH8FeArtdGuNzjVGfqW0HpsSuYJM4aCxQOmY=
+Date:   Thu, 18 Apr 2019 08:57:04 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Subject: Re: [PATCH 2/9] v4l: Add definitions for missing 16-bit RGB4444
+ formats
+Message-ID: <20190418055704.GB4806@pendragon.ideasonboard.com>
+References: <20190328070723.26553-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20190328070723.26553-3-laurent.pinchart+renesas@ideasonboard.com>
+ <20190404160049.cref72fegfwqiffy@uno.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190404160049.cref72fegfwqiffy@uno.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Hi Jacopo,
 
-Results of the daily build of media_tree:
+On Thu, Apr 04, 2019 at 06:00:49PM +0200, Jacopo Mondi wrote:
+> On Thu, Mar 28, 2019 at 09:07:16AM +0200, Laurent Pinchart wrote:
+> > The V4L2 API is missing the 16-bit RGB4444 formats for the RGBA, RGBX,
+> > ABGR, XBGR, BGRA and BGRX component orders. Add them, using the same
+> > 4CCs as DRM.
+> >
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> 
+> I checked the documentation and it seems right, I cannot relate the
+> name to the ordering but I guess this is intended.
 
-date:			Thu Apr 18 05:00:12 CEST 2019
-media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	95f39aae48c6e8e5cc81e6ae6293d999f70a909b
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
+The 16-bit RGB V4L2 4CCs are named based on a little endian byte
+ordering. If you look at V4L2_PIX_FMT_RGBA444 for instance, we have, in
+memory
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
+	bbbbaaaa rrrrgggg
 
-Detailed results are available here:
+If you read that as a 16-bit integer in little endian order, you get
 
-http://www.xs4all.nl/~hverkuil/logs/Thursday.log
+	rrrrggggbbbbaaaa
 
-Detailed regression test results are available here:
+hence the name RGBA444.
 
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Thursday-test-media-dmesg.log
+> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+> 
+> > ---
+> >  .../media/uapi/v4l/pixfmt-packed-rgb.rst      | 138 ++++++++++++++++++
+> >  include/uapi/linux/videodev2.h                |   6 +
+> >  2 files changed, 144 insertions(+)
+> >
+> > diff --git a/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst b/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
+> > index 055f9c89e787..b475cbba492f 100644
+> > --- a/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
+> > +++ b/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
+> > @@ -139,6 +139,144 @@ next to each other in memory.
+> >        - r\ :sub:`1`
+> >        - r\ :sub:`0`
+> >        -
+> > +    * .. _V4L2-PIX-FMT-RGBA444:
+> > +
+> > +      - ``V4L2_PIX_FMT_RGBA444``
+> > +      - 'RA12'
+> > +
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      - a\ :sub:`3`
+> > +      - a\ :sub:`2`
+> > +      - a\ :sub:`1`
+> > +      - a\ :sub:`0`
+> > +
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +      - g\ :sub:`3`
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-RGBX444:
+> > +
+> > +      - ``V4L2_PIX_FMT_RGBX444``
+> > +      - 'RX12'
+> > +
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      -
+> > +      -
+> > +      -
+> > +      -
+> > +
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +      - g\ :sub:`3`
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-ABGR444:
+> > +
+> > +      - ``V4L2_PIX_FMT_ABGR444``
+> > +      - 'AB12'
+> > +
+> > +      - g\ :sub:`3`
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +
+> > +      - a\ :sub:`3`
+> > +      - a\ :sub:`2`
+> > +      - a\ :sub:`1`
+> > +      - a\ :sub:`0`
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-XBGR444:
+> > +
+> > +      - ``V4L2_PIX_FMT_XBGR444``
+> > +      - 'XB12'
+> > +
+> > +      - g\ :sub:`3`
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +
+> > +      -
+> > +      -
+> > +      -
+> > +      -
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-BGRA444:
+> > +
+> > +      - ``V4L2_PIX_FMT_BGRA444``
+> > +      - 'BA12'
+> > +
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +      - a\ :sub:`3`
+> > +      - a\ :sub:`2`
+> > +      - a\ :sub:`1`
+> > +      - a\ :sub:`0`
+> > +
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      - g\ :sub:`3`
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-BGRX444:
+> > +
+> > +      - ``V4L2_PIX_FMT_BGRX444``
+> > +      - 'BX12'
+> > +
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +      -
+> > +      -
+> > +      -
+> > +      -
+> > +
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      - g\ :sub:`3`
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      -
+> >      * .. _V4L2-PIX-FMT-ARGB555:
+> >
+> >        - ``V4L2_PIX_FMT_ARGB555``
+> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> > index 4e5222726719..df9fa78a6ab7 100644
+> > --- a/include/uapi/linux/videodev2.h
+> > +++ b/include/uapi/linux/videodev2.h
+> > @@ -514,6 +514,12 @@ struct v4l2_pix_format {
+> >  #define V4L2_PIX_FMT_RGB444  v4l2_fourcc('R', '4', '4', '4') /* 16  xxxxrrrr ggggbbbb */
+> >  #define V4L2_PIX_FMT_ARGB444 v4l2_fourcc('A', 'R', '1', '2') /* 16  aaaarrrr ggggbbbb */
+> >  #define V4L2_PIX_FMT_XRGB444 v4l2_fourcc('X', 'R', '1', '2') /* 16  xxxxrrrr ggggbbbb */
+> > +#define V4L2_PIX_FMT_RGBA444 v4l2_fourcc('R', 'A', '1', '2') /* 16  rrrrgggg bbbbaaaa */
+> > +#define V4L2_PIX_FMT_RGBX444 v4l2_fourcc('R', 'X', '1', '2') /* 16  rrrrgggg bbbbxxxx */
+> > +#define V4L2_PIX_FMT_ABGR444 v4l2_fourcc('A', 'B', '1', '2') /* 16  aaaabbbb ggggrrrr */
+> > +#define V4L2_PIX_FMT_XBGR444 v4l2_fourcc('X', 'B', '1', '2') /* 16  xxxxbbbb ggggrrrr */
+> > +#define V4L2_PIX_FMT_BGRA444 v4l2_fourcc('B', 'A', '1', '2') /* 16  bbbbgggg rrrraaaa */
+> > +#define V4L2_PIX_FMT_BGRX444 v4l2_fourcc('B', 'X', '1', '2') /* 16  bbbbgggg rrrrxxxx */
+> >  #define V4L2_PIX_FMT_RGB555  v4l2_fourcc('R', 'G', 'B', 'O') /* 16  RGB-5-5-5     */
+> >  #define V4L2_PIX_FMT_ARGB555 v4l2_fourcc('A', 'R', '1', '5') /* 16  ARGB-1-5-5-5  */
+> >  #define V4L2_PIX_FMT_XRGB555 v4l2_fourcc('X', 'R', '1', '5') /* 16  XRGB-1-5-5-5  */
+> > --
+> > Regards,
+> >
+> > Laurent Pinchart
+> >
 
-Full logs are available here:
 
-http://www.xs4all.nl/~hverkuil/logs/Thursday.tar.bz2
 
-The Media Infrastructure API from this daily build is here:
+-- 
+Regards,
 
-http://www.xs4all.nl/~hverkuil/spec/index.html
+Laurent Pinchart
