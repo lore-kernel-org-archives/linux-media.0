@@ -2,123 +2,174 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_RHS_DOB,USER_AGENT_NEOMUTT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9905AC10F0B
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 06:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBDDEC10F0E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 06:22:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AD242184B
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 06:21:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="Y1//RZ2O"
+	by mail.kernel.org (Postfix) with ESMTP id A3E6C2186A
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 06:22:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388057AbfDRGVY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 02:21:24 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:29668 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725888AbfDRGVX (ORCPT
+        id S2388044AbfDRGWg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 02:22:36 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:40699 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730308AbfDRGWf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 02:21:23 -0400
-X-IronPort-AV: E=Sophos;i="5.60,364,1549954800"; 
-   d="scan'208";a="30368322"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 17 Apr 2019 23:21:22 -0700
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.76.108) with Microsoft SMTP Server (TLS) id
- 14.3.352.0; Wed, 17 Apr 2019 23:21:22 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector1-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZcSX3OggfMM7YnTJty2/9uqI9aoAGnqfjtxL+rdtdbg=;
- b=Y1//RZ2O/jLs84Nx/oO3UTaNjw6r6neEIVCv0VQRl1KWTc7yFHdpbw+FMKd3C6eZaXksYU/isxBYODHEq5aVVTUFXwDEjXzVH9LoG0SlNMqYtsvT1ynxH8lLpILitMmUgZbxfp8GoRG6NQ75b/nF2ZbgQVEeSPk9CbS13jfzSFA=
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
- DM5PR11MB0027.namprd11.prod.outlook.com (10.164.155.33) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1813.12; Thu, 18 Apr 2019 06:21:19 +0000
-Received: from DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::e0e3:1d51:9e3e:6dc]) by DM5PR11MB1242.namprd11.prod.outlook.com
- ([fe80::e0e3:1d51:9e3e:6dc%3]) with mapi id 15.20.1813.011; Thu, 18 Apr 2019
- 06:21:19 +0000
-From:   <Eugen.Hristev@microchip.com>
-To:     <colin.king@canonical.com>, <mchehab@kernel.org>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <Ludovic.Desroches@microchip.com>, <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hverkuil@xs4all.nl>
-Subject: Re: [PATCH] media: atmel-isc: fix spelling mistake "profie" ->
- "profile"
-Thread-Topic: [PATCH] media: atmel-isc: fix spelling mistake "profie" ->
- "profile"
-Thread-Index: AQHU9TuzmexTaj5QpEm+t0u0YyYrxaZBciWA
-Date:   Thu, 18 Apr 2019 06:21:19 +0000
-Message-ID: <ecaa2038-3df6-8fbe-ad7e-b8472c4fb32a@microchip.com>
-References: <20190417163425.12826-1-colin.king@canonical.com>
-In-Reply-To: <20190417163425.12826-1-colin.king@canonical.com>
-Accept-Language: ro-RO, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: VI1PR08CA0182.eurprd08.prod.outlook.com
- (2603:10a6:800:d2::12) To DM5PR11MB1242.namprd11.prod.outlook.com
- (2603:10b6:3:14::8)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Eugen.Hristev@microchip.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tagtoolbar-keys: D20190418091649182
-x-originating-ip: [94.177.32.154]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 08f19c76-2cfa-4ca9-6597-08d6c3c61209
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600141)(711020)(4605104)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:DM5PR11MB0027;
-x-ms-traffictypediagnostic: DM5PR11MB0027:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <DM5PR11MB0027367442E958D50E4009BFE8260@DM5PR11MB0027.namprd11.prod.outlook.com>
-x-forefront-prvs: 0011612A55
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(376002)(346002)(396003)(366004)(39860400002)(199004)(189003)(2616005)(81166006)(8936002)(81156014)(6436002)(2501003)(26005)(305945005)(52116002)(186003)(6512007)(76176011)(2906002)(6306002)(7736002)(102836004)(3846002)(68736007)(5660300002)(229853002)(6246003)(72206003)(66066001)(6506007)(53546011)(6116002)(36756003)(25786009)(53936002)(110136005)(4326008)(386003)(54906003)(6486002)(2201001)(966005)(316002)(31696002)(71200400001)(256004)(14444005)(86362001)(11346002)(31686004)(71190400001)(478600001)(99286004)(97736004)(446003)(486006)(14454004)(8676002)(476003);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB0027;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: sJ3Bfcmnjw87zgnRO/FPSvgZrCXkGL5xMgR0I5hqPpG685ByxO11IV3FMqXwoCsdGiBF6rNBY0OP7XvjOhNnf7A5KtFqB4ZfAwLsm3MEsRt38kXx3DDn9q1iKs87qY1v2gNAsH/aQ+WdP3/jOG2dJlcYtD1V+vaDa3F3760mSUS0HINkOyPzlkO4zfwxKDsbbWhGMRgY1PX022i9k1FleQ5ZhBeODC2+bz2nS0SLdQd5Fv4/r/1GX4jEIsU7DeqaOfs52xa0/X/BKxxOzns8Y5da8T1fVWbgkyHSZ+NOVamlHwZ4Yqz0Oin+iXiykWXwtR/Zb/3SRkOm+p5SJouYUBRGmCoMMdni2AxUld1NM3NgyLV/VYNq57Tvx8hDAjn90nkUfIXVybWyt1p/jieTCWtm1+nocj41Hphm6z17Fec=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E6808ECBF251B040B4FB04D2DA3C2BA6@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 18 Apr 2019 02:22:35 -0400
+X-Originating-IP: 90.89.68.76
+Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 13757E0004;
+        Thu, 18 Apr 2019 06:22:29 +0000 (UTC)
+Date:   Thu, 18 Apr 2019 08:22:29 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
+ common place
+Message-ID: <20190418062229.eyog4i62eg4pr6uf@flea>
+References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
+ <20190417154121.GJ13337@phenom.ffwll.local>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08f19c76-2cfa-4ca9-6597-08d6c3c61209
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2019 06:21:19.8284
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB0027
-X-OriginatorOrg: microchip.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190417154121.GJ13337@phenom.ffwll.local>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-SGkgQ29saW4sDQoNClRoYW5rcyBmb3IgeW91ciBwYXRjaCBidXQgSSB0aGluayB0aGlzIGNvbmZs
-aWN0cyB3aXRoIG15IHByZXZpb3VzIHBhdGNoIA0Kd2hpY2ggYWxyZWFkeSBjaGFuZ2VzIHRoaXMg
-dHlwbzoNCg0KaHR0cHM6Ly9naXQubGludXh0di5vcmcvaHZlcmt1aWwvbWVkaWFfdHJlZS5naXQv
-Y29tbWl0Lz9oPWZvci12NS4yYiZpZD1mNDliMzk3NDY0Mjk5MWZmZTNmNzI4YzUzMWI4ODgxNDE5
-ZGY2M2EwDQoNCnBhdGNod29yazoNCmh0dHBzOi8vcGF0Y2h3b3JrLmxpbnV4dHYub3JnL3BhdGNo
-LzU1MzE4Lw0KDQpOb3QgeWV0IG1lcmdlZCBpbnRvIG1lZGlhX3RyZWUgYnV0IG9uIGl0J3Mgd2F5
-IEkgYmVsaWV2ZS4uLg0KDQpFdWdlbg0KDQpPbiAxNy4wNC4yMDE5IDE5OjM0LCBDb2xpbiBLaW5n
-IHdyb3RlOg0KPiBGcm9tOiBDb2xpbiBJYW4gS2luZyA8Y29saW4ua2luZ0BjYW5vbmljYWwuY29t
-Pg0KPiANCj4gVGhlcmUgaXMgYSBzcGVsbGluZyBtaXN0YWtlIGluIGEgdjRsMl93YXJuIHdhcm5p
-bmcgbWVzc2FnZS4gRml4IGl0Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQ29saW4gSWFuIEtpbmcg
-PGNvbGluLmtpbmdAY2Fub25pY2FsLmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy9tZWRpYS9wbGF0
-Zm9ybS9hdG1lbC9hdG1lbC1pc2MuYyB8IDIgKy0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlh
-L3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5jIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hdG1l
-bC9hdG1lbC1pc2MuYw0KPiBpbmRleCA5YTM5OWFhN2NhOTIuLmUzY2ZjZTA1ZDZiNiAxMDA2NDQN
-Cj4gLS0tIGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1pc2MuYw0KPiArKysg
-Yi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5jDQo+IEBAIC0xMDExLDcg
-KzEwMTEsNyBAQCBzdGF0aWMgaW50IGlzY191cGRhdGVfcHJvZmlsZShzdHJ1Y3QgaXNjX2Rldmlj
-ZSAqaXNjKQ0KPiAgIAl9DQo+ICAgDQo+ICAgCWlmIChjb3VudGVyIDwgMCkgew0KPiAtCQl2NGwy
-X3dhcm4oJmlzYy0+djRsMl9kZXYsICJUaW1lIG91dCB0byB1cGRhdGUgcHJvZmllXG4iKTsNCj4g
-KwkJdjRsMl93YXJuKCZpc2MtPnY0bDJfZGV2LCAiVGltZSBvdXQgdG8gdXBkYXRlIHByb2ZpbGVc
-biIpOw0KPiAgIAkJcmV0dXJuIC1FVElNRURPVVQ7DQo+ICAgCX0NCj4gICANCj4gDQo=
+Hi Daniel,
+
+On Wed, Apr 17, 2019 at 05:41:21PM +0200, Daniel Vetter wrote:
+> On Wed, Apr 17, 2019 at 09:54:26AM +0200, Maxime Ripard wrote:
+> > Hi,
+> >
+> > DRM comes with an extensive format support to retrieve the various
+> > parameters associated with a given format (such as the subsampling, or the
+> > bits per pixel), as well as some helpers and utilities to ease the driver
+> > development.
+> >
+> > v4l2, on the other side, doesn't provide such facilities, leaving each
+> > driver reimplement a subset of the formats parameters for the one supported
+> > by that particular driver. This leads to a lot of duplication and
+> > boilerplate code in the v4l2 drivers.
+> >
+> > This series tries to address this by moving the DRM format API into lib and
+> > turning it into a more generic API. In order to do this, we've needed to do
+> > some preliminary changes on the DRM drivers, then moved the API and finally
+> > converted a v4l2 driver to give an example of how such library could be
+> > used.
+> >
+> > Let me know what you think,
+> > Maxime
+> >
+> > Changes from RFC:
+> >   - Rebased on next
+> >   - Fixed the various formats mapping
+> >   - Added tags
+> >   - Did most of the formats functions as inline functions
+> >   - Used a consistent prefix for all the utilities functions
+> >   - Fixed the compilation breakages, and did a run of allmodconfig for arm,
+> >     arm64 and x86_64
+> >   - Fixed out of array bounds warnings in the image_format_info_block_*
+> >     functions
+> >   - Added License and copyright headers on missing files
+> >
+> > Maxime Ripard (20):
+> >   drm: Remove users of drm_format_num_planes
+> >   drm: Remove users of drm_format_(horz|vert)_chroma_subsampling
+> >   drm/fourcc: Pass the format_info pointer to drm_format_plane_cpp
+> >   drm/fourcc: Pass the format_info pointer to drm_format_plane_width/height
+> >   drm: Replace instances of drm_format_info by drm_get_format_info
+> >   lib: Add video format information library
+> >   drm/fb: Move from drm_format_info to image_format_info
+> >   drm/malidp: Convert to generic image format library
+> >   drm/client: Convert to generic image format library
+> >   drm/exynos: Convert to generic image format library
+> >   drm/i915: Convert to generic image format library
+> >   drm/ipuv3: Convert to generic image format library
+> >   drm/msm: Convert to generic image format library
+> >   drm/omap: Convert to generic image format library
+> >   drm/rockchip: Convert to generic image format library
+> >   drm/tegra: Convert to generic image format library
+> >   drm/fourcc: Remove old DRM format API
+> >   lib: image-formats: Add v4l2 formats support
+> >   lib: image-formats: Add more functions
+> >   media: sun6i: Convert to the image format API
+>
+> In the interest of making myself unpopular: Why move this out of drm?
+>
+> We do have a bunch of other such shared helpers already (mostly in
+> drivers/video) for dt videomode and hdmi infoframes, and I'm not super
+> sure that's going better than keeping it maintained in drm.
+>
+> Plus the uapi is already that you include drm_fourcc.h to get at these,
+> dropping the drm prefix isn't going to help I think.
+>
+> Of course we'd need to make it a separate drm_formats.ko (so that v4l can
+> use it without dragging in all of drm), and we need to add some fields for
+> converting to v4l fourcc codes (which are different). But that should be
+> all possible. And I don't think the drm_ prefix in v4l code is a problem,
+> it's actually a feature: It makes it really clear that these are the drm
+> fourcc codes, as allocated in drm_fourcc.h, plus their modifiers, and all
+> that. That allocation authority is also already baked into various khr/ext
+> standards, too.
+
+The way I see it, there's a fundamental difference between the UAPI
+and the kernel. I don't suggest we change anything about the UAPI: the
+drm formats should keep their prefix, drm_fourcc.h can remain that
+authority, it's all fine.
+
+Internally however, the long term goal is to share the fourcc's
+between DRM and V4L2 for the same formats. It basically means that of
+course v4l2 should be using the DRM fourcc when a format exists in DRM
+and not v4l2, but also that DRM should use v4l2 fourcc when the format
+exists in v4l2 but not DRM, and that is far more likely, given the
+already extensive v4l2 formats support.
+
+And given how the current state is a mess in this regard, I'm not too
+optimistic about keeping the formats in their relevant frameworks.
+
+Having a shared library, governed by both, will make this far easier,
+since it will be easy to discover the formats that are already
+supported by the other subsystem.
+
+If we want to keep the current library in DRM, we have two options
+then:
+
+  - Support all the v4l2 formats in the DRM library, which is
+    essentially what I'm doing in the last patches. However, that
+    would require to have the v4l2 developpers also reviewing stuff
+    there. And given how busy they are, I cannot really see how that
+    would work.
+
+  - Develop the same library from within v4l2. That is really a poor
+    solution, since the information would be greatly duplicated
+    between the two, and in terms of maintainance, code, and binary
+    size that would be duplicated too.
+
+Having it shared allows to easily share, and discover formats from the
+other subsystem, and to have a single, unique place where this is
+centralized.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
