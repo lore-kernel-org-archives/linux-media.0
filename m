@@ -2,386 +2,158 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_RHS_DOB autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08A00C10F14
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 12:32:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 385D5C10F0E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 12:36:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B6A2D21479
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 12:32:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="gvSsVvnt"
+	by mail.kernel.org (Postfix) with ESMTP id 02DBB21479
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 12:36:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388725AbfDRMc2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 08:32:28 -0400
-Received: from mail-it1-f193.google.com ([209.85.166.193]:36011 "EHLO
-        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388430AbfDRMc2 (ORCPT
+        id S2388685AbfDRMgG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 08:36:06 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:42891 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387519AbfDRMgG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 08:32:28 -0400
-Received: by mail-it1-f193.google.com with SMTP id y10so3044846itc.1
-        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 05:32:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zshW0dUbKjJ2zIxfJKOkO/9InjE9tXwJ9YRIbJrCh3Y=;
-        b=gvSsVvnt1PKF/tgwP52MnSQqp8Ug3E+bZv/HZUAmBivGtMdczuRfCjnoO0D0l/kh2K
-         yLOCHNbCt5a0ivW1gfpSvcVov8/ChGxPQlLcKLcHv51BTK7MexZIpdJipQTTMQbZB2cZ
-         PwxjTfDUKSvLusKzwAQf7buCelYLKFe3uopcI=
+        Thu, 18 Apr 2019 08:36:06 -0400
+Received: by mail-io1-f71.google.com with SMTP id i1so1848346ioq.9
+        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 05:36:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zshW0dUbKjJ2zIxfJKOkO/9InjE9tXwJ9YRIbJrCh3Y=;
-        b=NPSq6Gij5+LhbqThJ6u/s3EgVrNCo0h4sSVJy5ARBQDgrglgdDRZmZqOTYIUN83m5E
-         4qD//UO4iLUlV375cPnRGve9OMwy83bZFwIDDp6Op50KpmZU4sZ4appHAe6nsfSxaIlQ
-         yPmuMKvB7mWIVBcy6uZ5htMcxEqDqhhrdO6rJ2PSMtmOEaDKNNTEintgL75qCKh9edLt
-         BDnv3Jq1TmUzDOAU6kSpxmwuw/rg4OYTLvC8NxST3L/YT5bHBCgP5rPI0yc4m90UFn4U
-         ulndUpQ85DgWm7Q6o1BIHYZk/mXOlxxoSGdCIcPIuhqqX+1tmLV7/AsXdtQ1eYPkhS8S
-         l88Q==
-X-Gm-Message-State: APjAAAXI5e3txnQH0/YhzxQ36dpeSC7q1jX4NsRgcTtlRlh8w412FYyF
-        1MEIXeHWTKy+F2bDXhyMZo1BMBvYdM3fFCouh/8L1w==
-X-Google-Smtp-Source: APXvYqwQG0e72GfT8UTy/R5z87txhehsIwFGIy8AWQUiSDJ6p95RQiG2/GEqk9MXvBAm6LSEnIwy/fvLLgBIOhuCicg=
-X-Received: by 2002:a02:c4cf:: with SMTP id h15mr1807374jaj.96.1555590746951;
- Thu, 18 Apr 2019 05:32:26 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=i+tomZsCMzsnHr3874poPaxJCpmgaqjJEfGN6uwmJv0=;
+        b=fiGjGck87QSCLjz5E5k4U/hI/Jvdt5Fn1NBqCzjtgkqkJlivUOU4b/MqNtel1T0TeD
+         MhKU+9r0/xRbI9AVc2SCh7tF+SVa4rEq0lR4f5HmzdIP4XxpE+gt/BD6SeLElKXGFU9f
+         fQH2EHX8iW5RCDNgsZAt4E02qapftIGgW4Un1B7Ls8Ljek6SlPZNeyRkr4SdZ/P5ScG+
+         W545sYfqp+vkq2u4dUy/fquK+0f/iPBPsGzMWtY6YQTRx0QWz318LSsmCQ8kkEbmKYMB
+         VhzzNMYGD6x+3eBeuglHYWxDjs6IM9K/VHZdMhPtdveFQBOoBpnpT4jPX6WObVu9msER
+         7MDw==
+X-Gm-Message-State: APjAAAUfynMxvi7c1rpUHFPRUFEjElhcnqgb4IdxQV86B5K89L4kVTU/
+        /e/kQm6DVgxHkAJeXbFAT1TQX7/ygvnW9gQEF4C2WQRACwt5
+X-Google-Smtp-Source: APXvYqxNc5aU67epG4FuCxsatGM/4m1OETB/YtPcWPEF5e6Rzc4NdVhbYtgiItDICqxkcrTJ3kkGle02EMYEDf7nNg9b3juDh6xn
 MIME-Version: 1.0
-References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
- <20190417154121.GJ13337@phenom.ffwll.local> <20190418062229.eyog4i62eg4pr6uf@flea>
- <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
- <20190418090221.e57dogn4yx5nwdni@flea> <CAKMK7uHN6QfYyzx4DjRT+7VLRi6N9DorQtw2GoDiNGTgie=DXA@mail.gmail.com>
- <20190418120143.4x7bvhgkh23mgsup@flea>
-In-Reply-To: <20190418120143.4x7bvhgkh23mgsup@flea>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Thu, 18 Apr 2019 14:32:14 +0200
-Message-ID: <CAKMK7uFRptrYGScX-Ogxhanw6=6Q9Mf22axpafwceMybfYjBKQ@mail.gmail.com>
-Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
- common place
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a6b:7108:: with SMTP id q8mr3957038iog.85.1555590965482;
+ Thu, 18 Apr 2019 05:36:05 -0700 (PDT)
+Date:   Thu, 18 Apr 2019 05:36:05 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e9e1990586cd3e40@google.com>
+Subject: BUG: unable to handle kernel paging request in osq_lock
+From:   syzbot <syzbot+e5c9afc3e1eed1dfc2b0@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, brad@nextdimension.cc,
+        hans.verkuil@cisco.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Apr 18, 2019 at 2:01 PM Maxime Ripard <maxime.ripard@bootlin.com> w=
-rote:
-> On Thu, Apr 18, 2019 at 12:07:44PM +0200, Daniel Vetter wrote:
-> > On Thu, Apr 18, 2019 at 11:02 AM Maxime Ripard
-> > <maxime.ripard@bootlin.com> wrote:
-> > >
-> > > On Thu, Apr 18, 2019 at 09:52:10AM +0200, Daniel Vetter wrote:
-> > > > On Thu, Apr 18, 2019 at 8:22 AM Maxime Ripard <maxime.ripard@bootli=
-n.com> wrote:
-> > > > > On Wed, Apr 17, 2019 at 05:41:21PM +0200, Daniel Vetter wrote:
-> > > > > > On Wed, Apr 17, 2019 at 09:54:26AM +0200, Maxime Ripard wrote:
-> > > > > > > Hi,
-> > > > > > >
-> > > > > > > DRM comes with an extensive format support to retrieve the va=
-rious
-> > > > > > > parameters associated with a given format (such as the subsam=
-pling, or the
-> > > > > > > bits per pixel), as well as some helpers and utilities to eas=
-e the driver
-> > > > > > > development.
-> > > > > > >
-> > > > > > > v4l2, on the other side, doesn't provide such facilities, lea=
-ving each
-> > > > > > > driver reimplement a subset of the formats parameters for the=
- one supported
-> > > > > > > by that particular driver. This leads to a lot of duplication=
- and
-> > > > > > > boilerplate code in the v4l2 drivers.
-> > > > > > >
-> > > > > > > This series tries to address this by moving the DRM format AP=
-I into lib and
-> > > > > > > turning it into a more generic API. In order to do this, we'v=
-e needed to do
-> > > > > > > some preliminary changes on the DRM drivers, then moved the A=
-PI and finally
-> > > > > > > converted a v4l2 driver to give an example of how such librar=
-y could be
-> > > > > > > used.
-> > > > > > >
-> > > > > > > Let me know what you think,
-> > > > > > > Maxime
-> > > > > > >
-> > > > > > > Changes from RFC:
-> > > > > > >   - Rebased on next
-> > > > > > >   - Fixed the various formats mapping
-> > > > > > >   - Added tags
-> > > > > > >   - Did most of the formats functions as inline functions
-> > > > > > >   - Used a consistent prefix for all the utilities functions
-> > > > > > >   - Fixed the compilation breakages, and did a run of allmodc=
-onfig for arm,
-> > > > > > >     arm64 and x86_64
-> > > > > > >   - Fixed out of array bounds warnings in the image_format_in=
-fo_block_*
-> > > > > > >     functions
-> > > > > > >   - Added License and copyright headers on missing files
-> > > > > > >
-> > > > > > > Maxime Ripard (20):
-> > > > > > >   drm: Remove users of drm_format_num_planes
-> > > > > > >   drm: Remove users of drm_format_(horz|vert)_chroma_subsampl=
-ing
-> > > > > > >   drm/fourcc: Pass the format_info pointer to drm_format_plan=
-e_cpp
-> > > > > > >   drm/fourcc: Pass the format_info pointer to drm_format_plan=
-e_width/height
-> > > > > > >   drm: Replace instances of drm_format_info by drm_get_format=
-_info
-> > > > > > >   lib: Add video format information library
-> > > > > > >   drm/fb: Move from drm_format_info to image_format_info
-> > > > > > >   drm/malidp: Convert to generic image format library
-> > > > > > >   drm/client: Convert to generic image format library
-> > > > > > >   drm/exynos: Convert to generic image format library
-> > > > > > >   drm/i915: Convert to generic image format library
-> > > > > > >   drm/ipuv3: Convert to generic image format library
-> > > > > > >   drm/msm: Convert to generic image format library
-> > > > > > >   drm/omap: Convert to generic image format library
-> > > > > > >   drm/rockchip: Convert to generic image format library
-> > > > > > >   drm/tegra: Convert to generic image format library
-> > > > > > >   drm/fourcc: Remove old DRM format API
-> > > > > > >   lib: image-formats: Add v4l2 formats support
-> > > > > > >   lib: image-formats: Add more functions
-> > > > > > >   media: sun6i: Convert to the image format API
-> > > > > >
-> > > > > > In the interest of making myself unpopular: Why move this out o=
-f drm?
-> > > > > >
-> > > > > > We do have a bunch of other such shared helpers already (mostly=
- in
-> > > > > > drivers/video) for dt videomode and hdmi infoframes, and I'm no=
-t super
-> > > > > > sure that's going better than keeping it maintained in drm.
-> > > > > >
-> > > > > > Plus the uapi is already that you include drm_fourcc.h to get a=
-t these,
-> > > > > > dropping the drm prefix isn't going to help I think.
-> > > > > >
-> > > > > > Of course we'd need to make it a separate drm_formats.ko (so th=
-at v4l can
-> > > > > > use it without dragging in all of drm), and we need to add some=
- fields for
-> > > > > > converting to v4l fourcc codes (which are different). But that =
-should be
-> > > > > > all possible. And I don't think the drm_ prefix in v4l code is =
-a problem,
-> > > > > > it's actually a feature: It makes it really clear that these ar=
-e the drm
-> > > > > > fourcc codes, as allocated in drm_fourcc.h, plus their modifier=
-s, and all
-> > > > > > that. That allocation authority is also already baked into vari=
-ous khr/ext
-> > > > > > standards, too.
-> > > > >
-> > > > > The way I see it, there's a fundamental difference between the UA=
-PI
-> > > > > and the kernel. I don't suggest we change anything about the UAPI=
-: the
-> > > > > drm formats should keep their prefix, drm_fourcc.h can remain tha=
-t
-> > > > > authority, it's all fine.
-> > > > >
-> > > > > Internally however, the long term goal is to share the fourcc's
-> > > > > between DRM and V4L2 for the same formats. It basically means tha=
-t of
-> > > > > course v4l2 should be using the DRM fourcc when a format exists i=
-n DRM
-> > > > > and not v4l2, but also that DRM should use v4l2 fourcc when the f=
-ormat
-> > > > > exists in v4l2 but not DRM, and that is far more likely, given th=
-e
-> > > > > already extensive v4l2 formats support.
-> > > >
-> > > > Uh no. We did look at v4l fourcc extensively when deciding upon a d=
-rm
-> > > > format identifier space.
-> > >
-> > > No to what exactly?
-> > >
-> > > > And a lot of people pushed for the "fourcc is a standard", when
-> > > > really it's totally not.
-> > >
-> > > Even if it's not a standard, having consistency would be a good thing=
-.
-> > >
-> > > And you said yourself that DRM fourcc is now pretty much an authority
-> > > for the fourcc, so it definitely looks like a standard to me.
-> >
-> > drm fourcc is the authority for drm fourcc codes. Not for any of the
-> > others (and there's lots of them). Now it's used in a bunch of other
-> > places (khr standards, dri protocols in wayland/X11), but they're
-> > still only drm fourcc. There is no overall fourcc standard.
->
-> Sounds like a de-facto standard to me =C2=AF\_(=E3=83=84)_/=C2=AF
->
-> But even then, whether we decide to converge the fourcc or not, that's
-> still the long term goal. Short term, that series doesn't do any of
-> it, it just makes it easier if we ever want to go down that road.
->
-> > > > v4l tends to conflate pixel format with stuff that we tend to encod=
-e
-> > > > in modifiers a lot more.
-> > >
-> > > Boris is working on adding the modifiers concept to v4l2, so we're
-> > > converging here, and we can totally have a layer in v4l2 to convert
-> > > between old v4l2 "format+modifiers" formats, and DRM style formats.
-> > >
-> > > > There's a bunch of reasons we can't just use v4l, and they're as
-> > > > valid as ever:
-> > > >
-> > > > - We overlap badly in some areas, so even if fourcc codes match, we
-> > > >   can't use them and need a duplicated DRM_FOURCC code.
-> > >
-> > > Do yo have an example of one of those areas?
-> >
-> > I think the rgb stuff was one of the big reasons to not reuse any
-> > existing fourcc standard (whether v4l, or another one from e.g. video
-> > container formats). We had initial patches to reuse the fourcc that
-> > existed, but the end result was really inconsistent, so we ditch that
-> > and rolled out a new set of entirely drm specific fourcc codes for
-> > rgba.
->
-> Ok, so let's ditch that plan and focus on the rest
->
-> > > > > And given how the current state is a mess in this regard, I'm not=
- too
-> > > > > optimistic about keeping the formats in their relevant frameworks=
-.
-> > > > >
-> > > > > Having a shared library, governed by both, will make this far eas=
-ier,
-> > > > > since it will be easy to discover the formats that are already
-> > > > > supported by the other subsystem.
-> > > >
-> > > > I think a compat library that (tries to, best effort) convert betwe=
-en
-> > > > v4l and drm fourcc would make sense. Somewhere in drivers/video, ne=
-xt
-> > > > to the conversion functions for videomode <-> drm_display_mode
-> > > > perhaps. That should be useful for drivers.
-> > >
-> > > That's not really what this series is about though. That series is
-> > > about sharing the (image|pixels) formats database across everyone so
-> > > that everyone can benefit from it.
-> >
-> > Yeah I know. I still think leaving the drm fourcc with the drm prefix
-> > would be good, since there's really no standard here.
-> >
-> > > > Unifying the formats themselves, and all the associated metadata is
-> > > > imo a no-go, and was a pretty conscious decision when we implemente=
-d
-> > > > drm_fourcc a few years back.
-> > > >
-> > > > > If we want to keep the current library in DRM, we have two option=
-s
-> > > > > then:
-> > > > >
-> > > > >   - Support all the v4l2 formats in the DRM library, which is
-> > > > >     essentially what I'm doing in the last patches. However, that
-> > > > >     would require to have the v4l2 developpers also reviewing stu=
-ff
-> > > > >     there. And given how busy they are, I cannot really see how t=
-hat
-> > > > >     would work.
-> > > >
-> > > > Well, if we end up with a common library then yes we need cross
-> > > > review. There's no way around that. Doesn't matter where exactly th=
-at
-> > > > library is in the filesystem tree, and adding a special MAINTAINERS
-> > > > entry for anything related to fourcc (both drm and v4l) to make sur=
-e
-> > > > they get cross-posted is easy. No file renaming needed.
-> > >
-> > > That would create some governing issues as well. For example, if you
-> > > ever have a patch from one fourcc addition (that might or might not b=
-e
-> > > covered by v4l2), will you wait for any v4l2 developper to review it?
-> >
-> > None of this is fixed by code renaming or locations. Either way we
-> > need to figure that out.
-> >
-> > And yes part of the reasons for not moving this out of drm is that I'm
-> > not a fan of boutique trees for small stuff. If sharing means we need
-> > to split the drm_fourcc code and library out of drm trees, I'm not
-> > sure that's a good idea. We're already super liberal with merging
-> > anything through driver trees with acks, and integrating them quickly
-> > into drm-next. This would still be workable if v4l sends regular pull
-> > requests to drm-next (every 1-2 weeks, like the other big gpu trees
-> > do). If we can only sync up once per merge window with a shared
-> > boutique tree for formats only, life is going to be painful.
->
-> I don't get why we want to turn DRM into some kind of a black hole
-> that would pull everything. We don't have to, really. And at the same
-> time it carries the message that v4l2 is less important than DRM for
-> some reason, which I'm really not comfortable with.
+Hello,
 
-Make another tree somewhere that pulls in trees more often than every
-merge window, and I'm happy. It's the coordination effort of lots of
-trees that creates the black hole, not the other way round. Yes topic
-trees work, but if topic trees are persistent something with the
-organization of trees is wrong and needs to change. This very much
-looks like we'll end up with a perpetual topic branch for format stuff
-between drm and v4l.
+syzbot found the following crash on:
 
-The other shared stuff (like hdmi infoframes) seems to change a lot
-less often, so the occasional patch hasn't been a pain. But drm_fourcc
-related stuff sees a lot of work, both in adding new formats and in
-refactoring the library to keep up with all the new use-cases.
+HEAD commit:    d34f9519 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1338d3e3200000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c73d1bb5aeaeae20
+dashboard link: https://syzkaller.appspot.com/bug?extid=e5c9afc3e1eed1dfc2b0
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-And yes I think an overall gfx-like-stuff.git tree for drm and v4l and
-the few other bits really makes tons of sense. Not as a tree where
-people commit, but as the 2nd-level integration tree (like drm.git
-right now for gpu stuff).
+Unfortunately, I don't have any reproducer for this crash yet.
 
-> And I don't really get why you're against this in the first
-> place. When you have some code in a single driver that would benefit
-> more driver, you create a helper and move it into the core.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+e5c9afc3e1eed1dfc2b0@syzkaller.appspotmail.com
 
-It's a feature that drm doesn't share that much code with other parts
-of the kernel, it makes backporting the gfx stack to lts kernels a lot
-easier. Until someone fixes the upstream kernel release model to no
-longer need large scale gpu driver backports, we need to keep that.
+au0828: recv_control_msg() Failed receiving control message, error -71.
+au8522_writereg: writereg error (reg == 0x106, val == 0x0001, ret == -5)
+usb 1-1: selecting invalid altsetting 5
+au0828: Failure setting usb interface0 to as5
+au0828: au0828_usb_probe() au0828_analog_register failed to register on V4L2
+BUG: unable to handle kernel paging request at fffffffc45040758
+#PF error: [normal kernel read fault]
+PGD 1167e067 P4D 1167e067 PUD 0
+Oops: 0000 [#1] SMP KASAN PTI
+CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.1.0-rc5-319617-gd34f951 #4
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:decode_cpu kernel/locking/osq_lock.c:34 [inline]
+RIP: 0010:osq_lock+0xfd/0x5a0 kernel/locking/osq_lock.c:111
+Code: 48 63 e8 48 b8 00 00 00 00 00 fc ff df 48 8d 3c ed 60 c0 39 91 48 89  
+f9 48 c1 e9 03 80 3c 01 00 0f 85 2c 04 00 00 48 8d 53 08 <4c> 03 2c ed 60  
+c0 39 91 48 b8 00 00 00 00 00 fc ff df 48 89 d6 48
+RSP: 0018:ffff8880a846f0e8 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff8880ad02dfc0 RCX: 1fffffff88a080eb
+RDX: ffff8880ad02dfc8 RSI: 0000000000000004 RDI: fffffffc45040758
+RBP: ffffffff967948df R08: 0000000000000000 R09: ffffed1012299b1e
+R10: ffffed1012299b1d R11: ffff8880914cd8eb R12: ffff8880ad02dfd0
+R13: 000000000002dfc0 R14: ffff8880a8443100 R15: ffff8880914cd8e8
+FS:  0000000000000000(0000) GS:ffff8880ad000000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffffffc45040758 CR3: 000000009f4ac000 CR4: 00000000001406f0
+Call Trace:
+  mutex_optimistic_spin kernel/locking/mutex.c:630 [inline]
+  __mutex_lock_common kernel/locking/mutex.c:928 [inline]
+  __mutex_lock+0x27d/0x12b0 kernel/locking/mutex.c:1072
+  au0828_usb_disconnect+0xa3/0x130 drivers/media/usb/au0828/au0828-core.c:194
+  au0828_usb_probe.cold+0x121/0x7d8  
+drivers/media/usb/au0828/au0828-core.c:661
+  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2021
+  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
+  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x1398/0x3b00 drivers/usb/core/hub.c:5432
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+Modules linked in:
+CR2: fffffffc45040758
+---[ end trace 41843cb8c360ab9e ]---
+RIP: 0010:decode_cpu kernel/locking/osq_lock.c:34 [inline]
+RIP: 0010:osq_lock+0xfd/0x5a0 kernel/locking/osq_lock.c:111
+Code: 48 63 e8 48 b8 00 00 00 00 00 fc ff df 48 8d 3c ed 60 c0 39 91 48 89  
+f9 48 c1 e9 03 80 3c 01 00 0f 85 2c 04 00 00 48 8d 53 08 <4c> 03 2c ed 60  
+c0 39 91 48 b8 00 00 00 00 00 fc ff df 48 89 d6 48
+RSP: 0018:ffff8880a846f0e8 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff8880ad02dfc0 RCX: 1fffffff88a080eb
+RDX: ffff8880ad02dfc8 RSI: 0000000000000004 RDI: fffffffc45040758
+RBP: ffffffff967948df R08: 0000000000000000 R09: ffffed1012299b1e
+R10: ffffed1012299b1d R11: ffff8880914cd8eb R12: ffff8880ad02dfd0
+R13: 000000000002dfc0 R14: ffff8880a8443100 R15: ffff8880914cd8e8
+FS:  0000000000000000(0000) GS:ffff8880ad000000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffffffc45040758 CR3: 000000009f4ac000 CR4: 00000000001406f0
 
-> In this case, we have some code used by a framework that more
-> framework could use, and we move it to a core-er place. How is that
-> different?
 
-Imo core sharing for code sharing's sake is overrated. If we already
-have drm and v4l tightly integrated as a community, then code sharing
-becomes a lot easier, and a lot more reasonable to do. Plus we can
-then just stuff code int drivers/gpu or drivers/video (or merge these
-two because really it's all the same). But my understanding is that
-integrating more tightly with the drm folks is a very contreversial
-topic in v4l, and until that's resolved I don't see a huge need or
-benefit in sharing tons of code. And the format stuff is a lot more
-central to kms than e.g. the infoframe helpers.
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Au contraire, I think forcing this has a lot of potential for needless
-fights between drm and v4l. Hence my suggestion to try a minimal
-format conversion library between the drm format world and the v4l
-format wolrd, and see how that goes. That contains a lot less risk
-than going all in right from the start.
--Daniel
---=20
-Daniel Vetter
-Software Engineer, Intel Corporation
-+41 (0) 79 365 57 48 - http://blog.ffwll.ch
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
