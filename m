@@ -2,251 +2,162 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_BLOCKED,URIBL_RHS_DOB autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E01F1C10F0B
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 07:52:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C24AC10F0E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 08:08:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9C8622183E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 07:52:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E35D20693
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 08:08:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="gUz718ut"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="EBKdCto7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388070AbfDRHwX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 03:52:23 -0400
-Received: from mail-it1-f193.google.com ([209.85.166.193]:38061 "EHLO
-        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728074AbfDRHwW (ORCPT
+        id S2388195AbfDRIIc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 04:08:32 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:36157 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728074AbfDRIIc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 03:52:22 -0400
-Received: by mail-it1-f193.google.com with SMTP id f22so1987675ita.3
-        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 00:52:22 -0700 (PDT)
+        Thu, 18 Apr 2019 04:08:32 -0400
+Received: by mail-ed1-f68.google.com with SMTP id u57so1053922edm.3
+        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 01:08:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qwu4HeCQSB8JleAv55+xJRCJu+HYcfDN+TH2f4Q2wNc=;
-        b=gUz718utUD1uNzOwdTW/ukir9qXj4+rzfmGZ+/+RjExprzzActiYQYbqTH/8g552KZ
-         4Hxk/MzDMHoO3+YhSL5+boX3dKJBfCrmARsu2Caqit/4z1EmArDlLwfZONutA/IHb4v3
-         1ZxlRcqoyDM4A1AhAlT4WBCPp9BHkK+a7IN0Y=
+        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=wxG+RZta+9XvMhokOt8uuMHvhmxktY7iLWZC4ljhQm8=;
+        b=EBKdCto7iKhp3e+PjZUSFGHh7Dp1zvcNMX5g39WvYnsCHKmsv8zfaADwSoV7VL27J+
+         EXWdOfKfM0QJI0d4qBfW2m+hRaDnC6SYtr3FsHQW0ovB+LktztwoZMPXRUmsKDdSh1BK
+         /CQqcAvf5h/koz+G1IVLsOJJWO/1ofmKh/9As=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qwu4HeCQSB8JleAv55+xJRCJu+HYcfDN+TH2f4Q2wNc=;
-        b=WnM/nqWMtGikc6HSLlyBwKG0NfXrMjc0Bt50KfSa4xHnSfZ7lXq8WkGcA7B4AJpdqq
-         Ld3BHAnlEthV26scmUGLnAHyESmwUSex7uiDao2Ba6oD1jvyVydTOQEj9sKx6ui+4fH6
-         7eX0sNoBZdWGiUdyJWJsndQMMOnUDzTa6vj/tB7TGoSu1goc7x0mHF62+/VpSJ2GFk81
-         cr42uVqhOm4L1IAuIA4qaElK7eMVIC0Wl88oygg5z5FW2vMekRxuLKg/8nGeeANThpzv
-         qvY2nP1MSRVv+nNkFdS55KM5nEHciIrbHqvnCIpqY6RwBSctfbqFHKliOURmfQ+LcX76
-         mwNg==
-X-Gm-Message-State: APjAAAVfkOXQxjL8oJzuBX/f5qxInUggZEwGLKuXGW9ggf/kP+aTf0b1
-        j38RkUJxxOZYLa+XQN3A+XfhkPhKLERJTp0tY8w/sg==
-X-Google-Smtp-Source: APXvYqynVxjaZCdDYwwPar94Jp25neGs+3RgqdkvwMzmfojhKDWbwMqDtcfwR29D4AiUXWlvTOwThcs2cstbnb9lRm4=
-X-Received: by 2002:a24:9197:: with SMTP id i145mr2221615ite.117.1555573941764;
- Thu, 18 Apr 2019 00:52:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
- <20190417154121.GJ13337@phenom.ffwll.local> <20190418062229.eyog4i62eg4pr6uf@flea>
-In-Reply-To: <20190418062229.eyog4i62eg4pr6uf@flea>
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=wxG+RZta+9XvMhokOt8uuMHvhmxktY7iLWZC4ljhQm8=;
+        b=LgQv+ZShznY3qfebIqmT/NTo5IjQm36NGNxnN8D3tU66/EK+QL63WxxfVxU9QvmCcj
+         nELJPd3M8VIJLKp+VBBvPVjg3OFNGl6WfJJ3VxEBA/YBQOtHju0d2kd5nM9Wnxtj8jjk
+         gHWSmcd78PqM3Y0B+aI+CoaEFILMguXnimjgtbfZpn/viemz6mF45TKwlet92gIpBhgW
+         hC12V5VUzDx52XhHnQq+i3VN+dI4Grw9cnqA5GdCmwLS/DKSoshF/c+QntkdnONfOpdt
+         Ny1dcMVDVLzA88s+eUPa7iIxs4Il4vgGOaRxW5D3ZKZjpbzd3jo0gC7aGWAbEI+jHrjF
+         v9sw==
+X-Gm-Message-State: APjAAAVqXJS0Ry/I7/0e+jiowolGMJ53KVVNXJxsDtGo7mWt9HlKVqgk
+        I/RQIVyvasKNxdOl59062XFGrg==
+X-Google-Smtp-Source: APXvYqzx15cDDQZDb6elKOpUDSkixppXCvtSq7N3REdXGSLuLRG1GEYir82c5a5RZu+/tO6gmMXJUA==
+X-Received: by 2002:a17:906:4f19:: with SMTP id t25mr22109407eju.165.1555574909878;
+        Thu, 18 Apr 2019 01:08:29 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
+        by smtp.gmail.com with ESMTPSA id s11sm253826ejq.59.2019.04.18.01.08.28
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 18 Apr 2019 01:08:28 -0700 (PDT)
+Date:   Thu, 18 Apr 2019 10:08:26 +0200
 From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Thu, 18 Apr 2019 09:52:10 +0200
-Message-ID: <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
-Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
- common place
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     christian.koenig@amd.com
+Cc:     sumit.semwal@linaro.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
+Subject: Re: [PATCH 04/12] dma-buf: add optional invalidate_mappings callback
+ v5
+Message-ID: <20190418080826.GN13337@phenom.ffwll.local>
+Mail-Followup-To: christian.koenig@amd.com, sumit.semwal@linaro.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org
+References: <20190416183841.1577-1-christian.koenig@amd.com>
+ <20190416183841.1577-5-christian.koenig@amd.com>
+ <20190417190719.GL13337@phenom.ffwll.local>
+ <03a04d1d-9bc0-8f20-0436-b0f0017f0506@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <03a04d1d-9bc0-8f20-0436-b0f0017f0506@gmail.com>
+X-Operating-System: Linux phenom 4.19.0-1-amd64 
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Apr 18, 2019 at 8:22 AM Maxime Ripard <maxime.ripard@bootlin.com> wrote:
->
-> Hi Daniel,
->
-> On Wed, Apr 17, 2019 at 05:41:21PM +0200, Daniel Vetter wrote:
-> > On Wed, Apr 17, 2019 at 09:54:26AM +0200, Maxime Ripard wrote:
-> > > Hi,
-> > >
-> > > DRM comes with an extensive format support to retrieve the various
-> > > parameters associated with a given format (such as the subsampling, or the
-> > > bits per pixel), as well as some helpers and utilities to ease the driver
-> > > development.
-> > >
-> > > v4l2, on the other side, doesn't provide such facilities, leaving each
-> > > driver reimplement a subset of the formats parameters for the one supported
-> > > by that particular driver. This leads to a lot of duplication and
-> > > boilerplate code in the v4l2 drivers.
-> > >
-> > > This series tries to address this by moving the DRM format API into lib and
-> > > turning it into a more generic API. In order to do this, we've needed to do
-> > > some preliminary changes on the DRM drivers, then moved the API and finally
-> > > converted a v4l2 driver to give an example of how such library could be
-> > > used.
-> > >
-> > > Let me know what you think,
-> > > Maxime
-> > >
-> > > Changes from RFC:
-> > >   - Rebased on next
-> > >   - Fixed the various formats mapping
-> > >   - Added tags
-> > >   - Did most of the formats functions as inline functions
-> > >   - Used a consistent prefix for all the utilities functions
-> > >   - Fixed the compilation breakages, and did a run of allmodconfig for arm,
-> > >     arm64 and x86_64
-> > >   - Fixed out of array bounds warnings in the image_format_info_block_*
-> > >     functions
-> > >   - Added License and copyright headers on missing files
-> > >
-> > > Maxime Ripard (20):
-> > >   drm: Remove users of drm_format_num_planes
-> > >   drm: Remove users of drm_format_(horz|vert)_chroma_subsampling
-> > >   drm/fourcc: Pass the format_info pointer to drm_format_plane_cpp
-> > >   drm/fourcc: Pass the format_info pointer to drm_format_plane_width/height
-> > >   drm: Replace instances of drm_format_info by drm_get_format_info
-> > >   lib: Add video format information library
-> > >   drm/fb: Move from drm_format_info to image_format_info
-> > >   drm/malidp: Convert to generic image format library
-> > >   drm/client: Convert to generic image format library
-> > >   drm/exynos: Convert to generic image format library
-> > >   drm/i915: Convert to generic image format library
-> > >   drm/ipuv3: Convert to generic image format library
-> > >   drm/msm: Convert to generic image format library
-> > >   drm/omap: Convert to generic image format library
-> > >   drm/rockchip: Convert to generic image format library
-> > >   drm/tegra: Convert to generic image format library
-> > >   drm/fourcc: Remove old DRM format API
-> > >   lib: image-formats: Add v4l2 formats support
-> > >   lib: image-formats: Add more functions
-> > >   media: sun6i: Convert to the image format API
-> >
-> > In the interest of making myself unpopular: Why move this out of drm?
-> >
-> > We do have a bunch of other such shared helpers already (mostly in
-> > drivers/video) for dt videomode and hdmi infoframes, and I'm not super
-> > sure that's going better than keeping it maintained in drm.
-> >
-> > Plus the uapi is already that you include drm_fourcc.h to get at these,
-> > dropping the drm prefix isn't going to help I think.
-> >
-> > Of course we'd need to make it a separate drm_formats.ko (so that v4l can
-> > use it without dragging in all of drm), and we need to add some fields for
-> > converting to v4l fourcc codes (which are different). But that should be
-> > all possible. And I don't think the drm_ prefix in v4l code is a problem,
-> > it's actually a feature: It makes it really clear that these are the drm
-> > fourcc codes, as allocated in drm_fourcc.h, plus their modifiers, and all
-> > that. That allocation authority is also already baked into various khr/ext
-> > standards, too.
->
-> The way I see it, there's a fundamental difference between the UAPI
-> and the kernel. I don't suggest we change anything about the UAPI: the
-> drm formats should keep their prefix, drm_fourcc.h can remain that
-> authority, it's all fine.
->
-> Internally however, the long term goal is to share the fourcc's
-> between DRM and V4L2 for the same formats. It basically means that of
-> course v4l2 should be using the DRM fourcc when a format exists in DRM
-> and not v4l2, but also that DRM should use v4l2 fourcc when the format
-> exists in v4l2 but not DRM, and that is far more likely, given the
-> already extensive v4l2 formats support.
+On Wed, Apr 17, 2019 at 09:13:22PM +0200, Christian König wrote:
+> Am 17.04.19 um 21:07 schrieb Daniel Vetter:
+> > On Tue, Apr 16, 2019 at 08:38:33PM +0200, Christian König wrote:
+> > > Each importer can now provide an invalidate_mappings callback.
+> > > 
+> > > This allows the exporter to provide the mappings without the need to pin
+> > > the backing store.
+> > > 
+> > > v2: don't try to invalidate mappings when the callback is NULL,
+> > >      lock the reservation obj while using the attachments,
+> > >      add helper to set the callback
+> > > v3: move flag for invalidation support into the DMA-buf,
+> > >      use new attach_info structure to set the callback
+> > > v4: use importer_priv field instead of mangling exporter priv.
+> > > v5: drop invalidation_supported flag
+> > > 
+> > > Signed-off-by: Christian König <christian.koenig@amd.com>
+> > > ---
+> > >   drivers/dma-buf/dma-buf.c | 37 +++++++++++++++++++++++++++++++++++++
+> > >   include/linux/dma-buf.h   | 33 +++++++++++++++++++++++++++++++--
+> > >   2 files changed, 68 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> > > index 83c92bfd964c..a3738fab3927 100644
+> > > --- a/drivers/dma-buf/dma-buf.c
+> > > +++ b/drivers/dma-buf/dma-buf.c
+> > > @@ -563,6 +563,8 @@ struct dma_buf_attachment *dma_buf_attach(const struct dma_buf_attach_info *info
+> > >   	attach->dev = info->dev;
+> > >   	attach->dmabuf = dmabuf;
+> > > +	attach->importer_priv = info->importer_priv;
+> > > +	attach->invalidate = info->invalidate;
+> > >   	mutex_lock(&dmabuf->lock);
+> > > @@ -571,7 +573,9 @@ struct dma_buf_attachment *dma_buf_attach(const struct dma_buf_attach_info *info
+> > >   		if (ret)
+> > >   			goto err_attach;
+> > >   	}
+> > > +	reservation_object_lock(dmabuf->resv, NULL);
+> > >   	list_add(&attach->node, &dmabuf->attachments);
+> > > +	reservation_object_unlock(dmabuf->resv);
+> > >   	mutex_unlock(&dmabuf->lock);
+> > > @@ -615,7 +619,9 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
+> > >   					   DMA_BIDIRECTIONAL);
+> > >   	mutex_lock(&dmabuf->lock);
+> > > +	reservation_object_lock(dmabuf->resv, NULL);
+> > >   	list_del(&attach->node);
+> > > +	reservation_object_unlock(dmabuf->resv);
+> > >   	if (dmabuf->ops->detach)
+> > >   		dmabuf->ops->detach(dmabuf, attach);
+> > > @@ -653,7 +659,16 @@ dma_buf_map_attachment_locked(struct dma_buf_attachment *attach,
+> > >   	if (attach->sgt)
+> > >   		return attach->sgt;
+> > > +	/*
+> > > +	 * Mapping a DMA-buf can trigger its invalidation, prevent sending this
+> > > +	 * event to the caller by temporary removing this attachment from the
+> > > +	 * list.
+> > > +	 */
+> > > +	if (attach->invalidate)
+> > > +		list_del(&attach->node);
+> > Just noticed this: Why do we need this? invalidate needs the reservation
+> > lock, as does map_attachment. It should be impssoble to have someone else
+> > sneak in here.
+> 
+> I was having problems with self triggered invalidations.
+> 
+> E.g. client A tries to map an attachment, that in turn causes the buffer to
+> move to a new place and client A is informed about that movement with an
+> invalidation.
 
-Uh no. We did look at v4l fourcc extensively when deciding upon a drm
-format identifier space. And a lot of people pushed for the "fourcc is
-a standard", when really it's totally not. v4l tends to conflate pixel
-format with stuff that we tend to encode in modifiers a lot more.
-There's a bunch of reasons we can't just use v4l, and they're as valid
-as ever:
+Uh, that sounds like a bug in ttm or somewhere else in the exporter. If
+you evict the bo that you're trying to map, that's bad.
 
-- We overlap badly in some areas, so even if fourcc codes match, we
-can't use them and need a duplicated DRM_FOURCC code.
-- v4l encodes some metadata into the fourcc that we encode elsewhere,
-e.g. offset for planar yuv formats, or tiling mode
-- drm fourcc code doesn't actually define the drm_format_info
-uniquely, drivers can override that (that's an explicit design intent
-of modifiers, to allow drivers to add another plane for e.g.
-compression information). You'd need to pull that driver knowledge
-into your format library.
-
-Iow there's no way we can easily adopt v4l fourcc, except if we do
-something like a new addfb flag.
-
-> And given how the current state is a mess in this regard, I'm not too
-> optimistic about keeping the formats in their relevant frameworks.
->
-> Having a shared library, governed by both, will make this far easier,
-> since it will be easy to discover the formats that are already
-> supported by the other subsystem.
-
-I think a compat library that (tries to, best effort) convert between
-v4l and drm fourcc would make sense. Somewhere in drivers/video, next
-to the conversion functions for videomode <-> drm_display_mode
-perhaps. That should be useful for drivers.
-
-Unifying the formats themselves, and all the associated metadata is
-imo a no-go, and was a pretty conscious decision when we implemented
-drm_fourcc a few years back.
-
-> If we want to keep the current library in DRM, we have two options
-> then:
->
->   - Support all the v4l2 formats in the DRM library, which is
->     essentially what I'm doing in the last patches. However, that
->     would require to have the v4l2 developpers also reviewing stuff
->     there. And given how busy they are, I cannot really see how that
->     would work.
-
-Well, if we end up with a common library then yes we need cross
-review. There's no way around that. Doesn't matter where exactly that
-library is in the filesystem tree, and adding a special MAINTAINERS
-entry for anything related to fourcc (both drm and v4l) to make sure
-they get cross-posted is easy. No file renaming needed.
-
->   - Develop the same library from within v4l2. That is really a poor
->     solution, since the information would be greatly duplicated
->     between the two, and in terms of maintainance, code, and binary
->     size that would be duplicated too.
-
-It's essentially what we decided to do for drm years back.
-
-> Having it shared allows to easily share, and discover formats from the
-> other subsystem, and to have a single, unique place where this is
-> centralized.
-
-What I think could work as middle ground:
-- Put drm_format stuff into a separate .ko
-- Add a MAINTAINERS entry to make sure all things fourcc are cross
-posted to both drm and v4l lists. Easy on the drm side, since it's all
-separate files. Not sure it's so convenient for v4l uapi.
-- Add a conversion library that tries to best-effort map between drm
-and v4l formats. On the drm side that most likely means you need
-offsets for planes, and modifiers too (since those are implied in some
-v4l fourcc). Emphasis on "best effort" i.e. only support as much as
-the drivers that use this library need.
-- Add drm_fourcc as-needed by these drivers that want to use a unified
-format space.
-
-Forcing this unification on everyone otoh is imo way too much.
+Or maybe it's a framework bug, and we need to track whether an attachment
+has a map or not. That would make more sense ...
 -Daniel
---
+-- 
 Daniel Vetter
 Software Engineer, Intel Corporation
-+41 (0) 79 365 57 48 - http://blog.ffwll.ch
+http://blog.ffwll.ch
