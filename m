@@ -2,424 +2,204 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29F5BC282DA
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 00:18:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5FD4C282DD
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 01:34:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D780A2183E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 00:18:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech-se.20150623.gappssmtp.com header.i=@ragnatech-se.20150623.gappssmtp.com header.b="XlIXaGNb"
+	by mail.kernel.org (Postfix) with ESMTP id 9D44121850
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 01:34:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733282AbfDRASp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Apr 2019 20:18:45 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:46779 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729500AbfDRASp (ORCPT
+        id S1732251AbfDRBek (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Apr 2019 21:34:40 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:5258 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728268AbfDRBek (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Apr 2019 20:18:45 -0400
-Received: by mail-lf1-f66.google.com with SMTP id k18so153028lfj.13
-        for <linux-media@vger.kernel.org>; Wed, 17 Apr 2019 17:18:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=2e25G9fggK+LfHco227+5LsqtgX2Bbc/jFNGKswC5Ec=;
-        b=XlIXaGNbaMbEkx7sbbb9JClCndXuhgdt6FTpnmLPP7kLXtUXskDZGZLUjEUjugBrdZ
-         iucEMU7dGgb4o58IwEbDtySwgvhkI9f8NXHWIwMRuCS5Tlf4aaEGKw1OoQaxan8sa7EN
-         55zZhNaHNt4FAdUZehYHXtlGxONof2Mgzpyb3QdUAm/IDKN7oMrO9YMREBcbeMm9tEMW
-         sl9e8ce6RewWXe81/IdLytRPmw/kYq+ONWTInT0X9fQkY8HqCGlL9cyGpqBWyrBjIkok
-         5Bz3IHSFpMem32MDTbbRiv8IIEq4OYN0Avi1v29uqnVo3pwk9pm1hQPtjCf9CEELpSrE
-         rB5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=2e25G9fggK+LfHco227+5LsqtgX2Bbc/jFNGKswC5Ec=;
-        b=IAgtnmX7Z1i7xngHUfRKcR56gwu2Cl1XcyNgt9kHaKPqRpq/hkm9tGdnUTxVx7HCod
-         YXeaULEbIByZ43BoXSd3wQV3Ru86G/tGBIFtu47B3G5gdA/973jvuSAmESLra6uik+Ks
-         etNg+DuPT88DuRw6YLyzrqEXGAVwVsmHDU7Z8c7nxZc8m8oMhGsp5YthP/0IQ0Yo76I1
-         pcqLj+6tblO7IinDN8AcSuKyvtLxLr7SvwY9KeqJxkG5P79TGp9N8I/8DGscjzHpoocf
-         p7p+UMv1jij/XJRmg/GjUDK+pV2S3Q4Mm1EDzOweXC317PFEVYWy9W8FO/vQQrqpO97v
-         swiQ==
-X-Gm-Message-State: APjAAAVAW4Qqzsw4czgRQ+5n9Fp8CmySukJ3EEhc2mmU4+VObl4TbsRI
-        sR+Aut8UhAMpwqloJ+W+PnZjqA==
-X-Google-Smtp-Source: APXvYqxQH6gZmh9ejoBMchk9mIxPdF/8OKBqTb81hLUYtQxbu5bT9o0niDPw9Edx2U8vnMSH6B+6kw==
-X-Received: by 2002:a19:751a:: with SMTP id y26mr8159379lfe.47.1555546722037;
-        Wed, 17 Apr 2019 17:18:42 -0700 (PDT)
-Received: from localhost (89-233-230-99.cust.bredband2.com. [89.233.230.99])
-        by smtp.gmail.com with ESMTPSA id d22sm86694lfm.57.2019.04.17.17.18.40
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 17 Apr 2019 17:18:40 -0700 (PDT)
-Date:   Thu, 18 Apr 2019 02:18:39 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Steve Longerbeam <slongerbeam@gmail.com>
-Cc:     linux-media@vger.kernel.org, Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Michael Rodin <mrodin@de.adit-jv.com>,
-        Eugen Friedrich <efriedrich@de.adit-jv.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:MEDIA DRIVERS FOR RENESAS - VIN" 
-        <linux-renesas-soc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] media: rcar-csi2: Fix field detection
-Message-ID: <20190418001839.GQ28515@bigcity.dyn.berto.se>
-References: <20190416233807.20213-1-slongerbeam@gmail.com>
- <20190416235018.GJ28515@bigcity.dyn.berto.se>
- <de946538-c958-1694-9e28-e2ab5d6fd997@gmail.com>
- <9d1cb43e-ee9e-b68a-c700-e3ed70f16287@gmail.com>
- <20190417192654.GP28515@bigcity.dyn.berto.se>
- <6f45e6a7-8449-2ce2-11d6-c318ae51a160@gmail.com>
+        Wed, 17 Apr 2019 21:34:40 -0400
+X-UUID: 99a3936551dd4d639097015f5e8d0bee-20190418
+X-UUID: 99a3936551dd4d639097015f5e8d0bee-20190418
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1957517224; Thu, 18 Apr 2019 09:34:30 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs03n1.mediatek.inc (172.21.101.181) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 18 Apr 2019 09:34:29 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 18 Apr 2019 09:34:29 +0800
+Message-ID: <1555551269.2407.9.camel@mtksdaap41>
+Subject: Re: [PATCH v2 02/15] [media] mtk-mipicsi: add mediatek mipicsi
+ driver for mt2712
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Stu Hsieh <stu.hsieh@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
+Date:   Thu, 18 Apr 2019 09:34:29 +0800
+In-Reply-To: <1555407015-18130-3-git-send-email-stu.hsieh@mediatek.com>
+References: <1555407015-18130-1-git-send-email-stu.hsieh@mediatek.com>
+         <1555407015-18130-3-git-send-email-stu.hsieh@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6f45e6a7-8449-2ce2-11d6-c318ae51a160@gmail.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Steve,
+Hi, Stu:
 
-On 2019-04-17 16:30:53 -0700, Steve Longerbeam wrote:
+On Tue, 2019-04-16 at 17:30 +0800, Stu Hsieh wrote:
+> This patch add mediatek mipicsi driver for mt2712,
+> including probe function to get the value from device tree,
+> and register to v4l2 the host device.
 > 
+> Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
+> ---
+>  drivers/media/platform/mtk-mipicsi/Makefile   |   4 +
+>  .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 767 ++++++++++++++++++
+>  2 files changed, 771 insertions(+)
+>  create mode 100644 drivers/media/platform/mtk-mipicsi/Makefile
+>  create mode 100644 drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
 > 
-> On 4/17/19 12:26 PM, Niklas Söderlund wrote:
-> > Hi Steve,
-> > 
-> > On 2019-04-17 10:56:55 -0700, Steve Longerbeam wrote:
-> > > Hi Nklas,
-> > > 
-> > > On 4/16/19 4:59 PM, Steve Longerbeam wrote:
-> > > > Hi Niklas,
-> > > > 
-> > > > On 4/16/19 4:50 PM, Niklas Söderlund wrote:
-> > > > > Hi Steve,
-> > > > > 
-> > > > > Thanks for your work.
-> > > > > 
-> > > > > I upported most rcar-csi2 patches but a few of them are still pending,
-> > > > > an alternating version based on this BSP patch is already on its way.
-> > > > > 
-> > > > > https://patchwork.linuxtv.org/patch/55623/
-> > > > Great, that patch confirms that FLD_NUM should be set to 0 or 1 when
-> > > > setting FLD_DET_SEL = 0x01.
-> > > > 
-> > > > But your patch has it inverted. NTSC should be FLD_NUM=1, PAL should be
-> > > > FLD_NUM=0. Can you please confirm that after reading the commit
-> > > > description of my RFC patch.
-> > > Can you please confirm that your patch at
-> > > https://patchwork.linuxtv.org/patch/55623 has the FLD_NUM bits inverted?
-> > > It's the most important question regarding this. Please review my reasoning
-> > > in the RFC patch. NTSC should be FLD_NUM=1, PAL should be FLD_NUM=0.
-> > I think the patch is correct, in experiments the WC counter starts at 0
-> > not 1.
-> 
-> Well that's weird. According to the CSI-2 spec that violates the spec. The
-> WC counter from the Frame Start Packet (frame number) should start at 1.
-> 
-> Unfortunately my Salvator-X no longer boots (Renesas says probably because
-> the SoC socket needs re-seating, I'm not surprised given that the socket is
-> loose and there is no way to tighten it!). So I am not able to reproduce
-> your results below. But I wonder, maybe there is a setting in ADV748x to
-> send frame numbers in the correct order according to the CSI-2 spec
-> (1,2,1,2, or 1,2,3,4,...).
+> diff --git a/drivers/media/platform/mtk-mipicsi/Makefile b/drivers/media/platform/mtk-mipicsi/Makefile
+> new file mode 100644
+> index 000000000000..326a5e3808fa
+> --- /dev/null
+> +++ b/drivers/media/platform/mtk-mipicsi/Makefile
+> @@ -0,0 +1,4 @@
+> +mtk-mipicsi-y += mtk_mipicsi.o
+> +
+> +obj-$(CONFIG_VIDEO_MEDIATEK_MIPICSI) += mtk-mipicsi.o
+> +
+> diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
+> new file mode 100644
+> index 000000000000..e26bebe17fe5
+> --- /dev/null
+> +++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
+> @@ -0,0 +1,767 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2017 MediaTek Inc.
+> + * Author: Ricky Zhang <ricky.zhang@mediatek.com>
+> + *         Baoyin Zhang <baoyin.zhang@mediatek.com>
+> + *         Alan Yue <alan.yue@mediatek.com>
+> + *
+> + * This program is free software; you can redistribute it and/or modify
+> + * it under the terms of the GNU General Public License version 2 as
+> + * published by the Free Software Foundation.
+> + *
+> + * This program is distributed in the hope that it will be useful,
+> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+> + * http://www.gnu.org/licenses/gpl-2.0.html for more details.
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/io.h>
+> +#include <linux/delay.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/err.h>
+> +#include <linux/errno.h>
+> +#include <linux/fs.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mm.h>
+> +#include <linux/moduleparam.h>
+> +#include <linux/device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/clk.h>
+> +#include <linux/sched.h>
+> +#include <linux/slab.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/iommu.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <media/v4l2-common.h>
+> +#include <media/v4l2-dev.h>
+> +#include <media/videobuf2-dma-contig.h>
+> +#include <media/soc_camera.h>
+> +#include <media/drv-intf/soc_mediabus.h>
+> +#include <media/videobuf2-core.h>
+> +#include <linux/videodev2.h>
+> +#include <soc/mediatek/smi.h>
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+> +
+> +#ifdef CONFIG_VB2_MEDIATEK_DMA_SG
+> +#include "mtkbuf-dma-cache-sg.h"
+> +#endif
+> +
+> +#define MTK_MIPICSI_DRV_NAME "mtk-mipicsi"
+> +#define MTK_PLATFORM_STR "platform:mt2712"
+> +#define MIPICSI_COMMON_CLK 2
+> +#define MTK_CAMDMA_MAX_NUM 4U
+> +#define MIPICSI_CLK (MIPICSI_COMMON_CLK + MTK_CAMDMA_MAX_NUM)
+> +#define MTK_DATAWIDTH_8					(0x01U << 7U)
+> +#define MAX_SUPPORT_WIDTH             4096U
+> +#define MAX_SUPPORT_HEIGHT            4096U
+> +#define MAX_BUFFER_NUM			32U
+> +#define VID_LIMIT_BYTES			(100U * 1024U * 1024U)
+> +
+> +/* buffer for one video frame */
+> +struct mtk_mipicsi_buf {
+> +	struct list_head queue;
+> +	struct vb2_buffer *vb;
+> +	dma_addr_t vb_dma_addr_phy;
+> +	int prepare_flag;
+> +};
+> +
+> +struct mtk_mipicsi_dev {
+> +	struct soc_camera_host	soc_host;
+> +	struct platform_device *pdev;
+> +	unsigned int camsv_num;
+> +	struct v4l2_device	v4l2_dev;
+> +	struct device *larb_pdev;
+> +	void __iomem		*ana;
+> +	void __iomem		*seninf_ctrl;
 
-Maybe, I will add this to the list of things I need to look into. And as 
-I said in my last email, my method for verifying this might be wrong.
+Separating register control to another patch looks strange to me.
+Register control is the bottom part and this patch is the top part. You
+send a top part first then the bottom part. 'seninf_ctrl' is useless in
+this patch, you may move this to the patch that use this variable or
+merge that patch into this patch.
 
-> 
-> 
-> >   I tested this by INTEN.INT_FSFE = 1 and then when the interrupt
-> > fires reading PH0M0 which contains WC in bits [23,8], DT in bits [7,6]
-> > and DT in bits [5,0].
-> > 
-> > PAL:
-> > [   30.114552] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.134481] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 0 (0) [-] interlaced 0 829440 B 30.135507 30.135898 12.000 fps ts mono/EoF
-> > [   30.154548] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.174477] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 1 (1) [-] interlaced 1 829440 B 30.175490 30.175571 25.011 fps ts mono/EoF
-> > [   30.194542] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.214472] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 2 (2) [-] interlaced 2 829440 B 30.215483 30.215569 25.004 fps ts mono/EoF
-> > [   30.234535] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.254466] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 3 (3) [-] interlaced 3 829440 B 30.255482 30.255569 25.001 fps ts mono/EoF
-> > [   30.274531] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.294459] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 4 (0) [-] interlaced 4 829440 B 30.295472 30.295544 25.006 fps ts mono/EoF
-> > [   30.314525] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.334454] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 5 (1) [-] interlaced 5 829440 B 30.335466 30.335545 25.004 fps ts mono/EoF
-> > [   30.354519] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.374450] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 6 (2) [-] interlaced 6 829440 B 30.375464 30.375540 25.001 fps ts mono/EoF
-> > [   30.394515] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.414443] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 7 (3) [-] interlaced 7 829440 B 30.415455 30.415535 25.006 fps ts mono/EoF
-> > [   30.434508] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.454438] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 8 (0) [-] interlaced 8 829440 B 30.455452 30.455528 25.002 fps ts mono/EoF
-> > [   30.474503] rcar-csi2 fea80000.csi2: REG: 0x00012003
-> > [   30.494433] rcar-csi2 fea80000.csi2: REG: 0x00011f03
-> > 9 (1) [-] interlaced 9 829440 B 30.495446 30.495519 25.004 fps ts mono/EoF
-> > 
-> > NTSC:
-> > [   32.023281] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.039991] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 1 (1) [-] interlaced 1 691200 B 32.040883 32.040930 28.261 fps ts mono/EoF
-> > [   32.056647] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.073358] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 2 (2) [-] interlaced 2 691200 B 32.074268 32.074336 29.954 fps ts mono/EoF
-> > [   32.090015] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.106724] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 3 (3) [-] interlaced 3 691200 B 32.107634 32.107696 29.971 fps ts mono/EoF
-> > [   32.123381] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.140092] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 4 (0) [-] interlaced 4 691200 B 32.140982 32.141024 29.987 fps ts mono/EoF
-> > [   32.156747] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.173460] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 5 (1) [-] interlaced 5 691200 B 32.174354 32.174396 29.965 fps ts mono/EoF
-> > [   32.190116] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.206827] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 6 (2) [-] interlaced 6 691200 B 32.207719 32.207759 29.972 fps ts mono/EoF
-> > [   32.223485] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.240195] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 7 (3) [-] interlaced 7 691200 B 32.241101 32.241166 29.956 fps ts mono/EoF
-> > [   32.256851] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.273563] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 8 (0) [-] interlaced 8 691200 B 32.274456 32.274497 29.981 fps ts mono/EoF
-> > [   32.290218] rcar-csi2 fea80000.csi2: REG: 0x0001e503
-> > [   32.306930] rcar-csi2 fea80000.csi2: REG: 0x0001e403
-> > 9 (1) [-] interlaced 9 691200 B 32.307823 32.307864 29.970 fps ts mono/EoF
-> > 
-> > I based my decision from this. If you have a other method to verify the
-> > behavior, contradicting results or think I interpreted the my data wrong
-> > I would be happy reconsider.
-> > 
-> > > Also, slightly off-topic, but another question:
-> > > 
-> > > Do you know if it is possible to capture from a source that is sending
-> > > SEQ-BT/TB and transfer to userspace as unmodified SEQ-BT/TB without
-> > > requiring the capture of each field individually and concatenating them?
-> > > 
-> > > In other words, treat the frame from the source the same as progressive,
-> > > i.e. as if the source were sending V4L2_FIELD_NONE. That is, program VnMC.IM
-> > > bits as VNMC_IM_ODD_EVEN and use continuous frame capture mode.
-> > I have very old patches [1] for this which I'm in the process of
-> > refreshing.
-> 
-> Yes I see this same/similar patch in the rcar-3.9.0 release:
-> 
-> 56c6292e91a7 ("media: rcar-vin: add support for V4L2_FIELD_SEQ_{TB,BT}")
-> 
-> 
-> But it implements SEQ_BT/TB support using single frame capture mode, toggles
-> frame order detection between TOP and BOTTOM after capturing each field, and
-> combines each field in the output user buffer.
-> 
-> But my question is, can the whole frame be captured at once in continuous
-> mode, as if it were progressive.
-
-Yes, that is because the SEQ patches are old :-) The reason I stopped 
-working on them was I hit the wall where rcar-vin needed to evolve in 
-other areas before more features could be added. The current upstream 
-driver no longer uses the single frame capture mode but instead uses an 
-internal scratch buffer which would allow for what you are asking here.
-
-> 
-> 
-> 
-> >   This is one of the series which I hope to unblock by my
-> > upcoming cleanup of format handling inside rcar-vin.
-> > 
-> > If you plan to work on rcar-vin I would first like to get cleanup series
-> > in as I think it will be quiet intrusive. After that I plan to refresh
-> > all my VIN pending patches on top of that.
-> > 
-> > - V4L2_FIELD_SEQ_{TB,BT}
-> > - Add support for UDS (Up Down Scaler)
-> > - rcar-vin: add support for suspend and resume
-> > - Reset register control
-> > - Additional checks when starting (upported from BSP)
-> 
-> OK, I can wait :)
-> 
-> Steve
-> 
-> > 
-> > 1. https://patchwork.linuxtv.org/patch/41742/
-> > 
-> > > TIA,
-> > > Steve
-> > > 
-> > > 
-> > > > 
-> > > > 
-> > > > > On 2019-04-16 16:38:07 -0700, Steve Longerbeam wrote:
-> > > > > > The RCAR Gen3 hardware manual doesn't mention that the "Word
-> > > > > > Count" field
-> > > > > > in the MIPI CSI-2 Frame Start packet is really the frame number.
-> > > > > > FS packets
-> > > > > > are short packets, and short packets do not have a WC but rather
-> > > > > > a 16-bit
-> > > > > > data field, and for Frame synchronization packets (FS/FE) the
-> > > > > > 16-bit data
-> > > > > > field contains a frame number.
-> > > > > > 
-> > > > > > Here is a reprinting from the MIPI CSI-2 specification, version 2
-> > > > > > (section 9.1.2 Low Level Protocol Short Packet Format):
-> > > > > > 
-> > > > > > "Figure 42 and Figure 43 show the Low Level Protocol Short Packet
-> > > > > > structures for the D-PHY and C-PHY physical layer options,
-> > > > > > respectively.
-> > > > > > For each option, the Short Packet structure matches the Packet
-> > > > > > Header of
-> > > > > > the corresponding Low Level Protocol Long Packet structure with the
-> > > > > > exception that the Packet Header Word Count (WC) field shall be
-> > > > > > replaced
-> > > > > > by the Short Packet Data Field...For Frame Synchronization Data Types
-> > > > > > the Short Packet Data Field shall be the frame number..."
-> > > > > > 
-> > > > > > Also in section 9.8.1 Frame Synchronization Packets, the CSI-2
-> > > > > > spec reads:
-> > > > > > 
-> > > > > > "The behavior of the 16-bit frame number shall be as one of the
-> > > > > > following
-> > > > > > - Frame number is always zero – frame number is inoperative.
-> > > > > > - Frame number increments by 1 for every FS packet with the same
-> > > > > > Virtual
-> > > > > >     Channel and is periodically reset to one e.g. 1, 2, 1, 2, 1,
-> > > > > > 2, 1, 2 or
-> > > > > >     1, 2, 3, 4, 1, 2, 3, 4"
-> > > > > > 
-> > > > > > So from the above, FLD_NUM in the FLD register matches against the
-> > > > > > frame number transmitted by the CSI-2 source in the Frame Start Packet,
-> > > > > > and goes as "1,2,1,2,1,2" or "1,2,3,4,...,1,2,3,4". If there is
-> > > > > > a match,
-> > > > > > the RCAR CSI-2 receiver declares the field as the even, e.g. the
-> > > > > > BOTTOM,
-> > > > > > field.
-> > > > > > 
-> > > > > > NTSC transmits bottom/even field first, and PAL and HD transmit top/odd
-> > > > > > field first. So fields with a frame number 1 in the CSI-2 Frame Start
-> > > > > > Packet are bottom/even fields for NTSC, and frame number 2 are
-> > > > > > bottom/even
-> > > > > > fields for PAL/HD.
-> > > > > > 
-> > > > > > But the above assumes the transmitting CSI-2 sensor is sending frame
-> > > > > > numbers in the sequence "1,2,1,2,...". But according to the CSI-2 spec,
-> > > > > > sensors are also allowed to send frame numbers that simply increment as
-> > > > > > in "1,2,3,4,...". To generalize to catch those cases, set FLD_DET_SEL
-> > > > > > to 0x01, which according to the RCAR Gen3 hardware manual means "the
-> > > > > > field is detected as the EVEN field when FLD_NUM[0] matches WC[0]".
-> > > > > > Then, the even/bottom fields have odd frame numbers for NTSC, and even
-> > > > > > frame numbers for PAL (this patch assumes HDMI sources will not
-> > > > > > implement .g_std(), so std will be 0 in that case).
-> > > > > > 
-> > > > > > Finally, set the FLD register to non-zero value only if trnsmitter is
-> > > > > > sending ALTERNATE fields.
-> > > > > > 
-> > > > > > Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
-> > > > > > ---
-> > > > > >    drivers/media/platform/rcar-vin/rcar-csi2.c | 37
-> > > > > > ++++++++++++++++++---
-> > > > > >    1 file changed, 32 insertions(+), 5 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c
-> > > > > > b/drivers/media/platform/rcar-vin/rcar-csi2.c
-> > > > > > index a438ec2c218f..c5bee20d7907 100644
-> > > > > > --- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-> > > > > > +++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-> > > > > > @@ -67,6 +67,7 @@ struct rcar_csi2;
-> > > > > >    /* Field Detection Control */
-> > > > > >    #define FLD_REG                0x1c
-> > > > > >    #define FLD_FLD_NUM(n)            (((n) & 0xff) << 16)
-> > > > > > +#define FLD_FLD_DET_SEL(n)        (((n) & 0x3) << 4)
-> > > > > >    #define FLD_FLD_EN4            BIT(3)
-> > > > > >    #define FLD_FLD_EN3            BIT(2)
-> > > > > >    #define FLD_FLD_EN2            BIT(1)
-> > > > > > @@ -462,10 +463,11 @@ static int rcsi2_calc_mbps(struct
-> > > > > > rcar_csi2 *priv, unsigned int bpp)
-> > > > > >        return mbps;
-> > > > > >    }
-> > > > > >    -static int rcsi2_start(struct rcar_csi2 *priv)
-> > > > > > +static int rcsi2_start(struct rcar_csi2 *priv, struct
-> > > > > > v4l2_subdev *nextsd)
-> > > > > >    {
-> > > > > >        const struct rcar_csi2_format *format;
-> > > > > > -    u32 phycnt, vcdt = 0, vcdt2 = 0;
-> > > > > > +    u32 phycnt, vcdt = 0, vcdt2 = 0, fld = 0;
-> > > > > > +    v4l2_std_id std = 0;
-> > > > > >        unsigned int i;
-> > > > > >        int mbps, ret;
-> > > > > >    @@ -476,6 +478,10 @@ static int rcsi2_start(struct rcar_csi2 *priv)
-> > > > > >        /* Code is validated in set_fmt. */
-> > > > > >        format = rcsi2_code_to_fmt(priv->mf.code);
-> > > > > >    +    ret = v4l2_subdev_call(nextsd, video, g_std, &std);
-> > > > > > +    if (ret < 0 && ret != -ENOIOCTLCMD && ret != -ENODEV)
-> > > > > > +        return ret;
-> > > > > > +
-> > > > > >        /*
-> > > > > >         * Enable all supported CSI-2 channels with virtual channel and
-> > > > > >         * data type matching.
-> > > > > > @@ -509,9 +515,30 @@ static int rcsi2_start(struct rcar_csi2 *priv)
-> > > > > >        rcsi2_reset(priv);
-> > > > > >        rcsi2_write(priv, PHTC_REG, 0);
-> > > > > >    +    /*
-> > > > > > +     * NTSC standard transmits even/bottom field first, then odd/top.
-> > > > > > +     * PAL standard and interlaced HD transmit odd/top field first,
-> > > > > > +     * then even/bottom.
-> > > > > > +     *
-> > > > > > +     * For CSI-2 sensors that transmit frame numbers (in the CSI-2
-> > > > > > +     * Frame Start packet) as "1,2,1,2,..." or "1,2,3,4,5,...", then:
-> > > > > > +     *
-> > > > > > +     * - for NTSC, the even/bottom fields have odd frame numbers.
-> > > > > > +     * - for PAL and HD, the even/bottom fields have even frame
-> > > > > > numbers.
-> > > > > > +     */
-> > > > > > +    if (priv->mf.field == V4L2_FIELD_ALTERNATE) {
-> > > > > > +        fld = FLD_FLD_DET_SEL(1) | FLD_FLD_EN4 | FLD_FLD_EN3 |
-> > > > > > +            FLD_FLD_EN2 | FLD_FLD_EN;
-> > > > > > +
-> > > > > > +        if (std & V4L2_STD_525_60)
-> > > > > > +            fld |= FLD_FLD_NUM(1); /* NTSC */
-> > > > > > +        else
-> > > > > > +            fld |= FLD_FLD_NUM(0); /* PAL or HD */
-> > > > > > +    }
-> > > > > > +
-> > > > > >        /* Configure */
-> > > > > > -    rcsi2_write(priv, FLD_REG, FLD_FLD_NUM(2) | FLD_FLD_EN4 |
-> > > > > > -            FLD_FLD_EN3 | FLD_FLD_EN2 | FLD_FLD_EN);
-> > > > > > +    rcsi2_write(priv, FLD_REG, fld);
-> > > > > > +
-> > > > > >        rcsi2_write(priv, VCDT_REG, vcdt);
-> > > > > >        if (vcdt2)
-> > > > > >            rcsi2_write(priv, VCDT2_REG, vcdt2);
-> > > > > > @@ -591,7 +618,7 @@ static int rcsi2_s_stream(struct v4l2_subdev
-> > > > > > *sd, int enable)
-> > > > > >        if (enable && priv->stream_count == 0) {
-> > > > > >            pm_runtime_get_sync(priv->dev);
-> > > > > >    -        ret = rcsi2_start(priv);
-> > > > > > +        ret = rcsi2_start(priv, nextsd);
-> > > > > >            if (ret) {
-> > > > > >                pm_runtime_put(priv->dev);
-> > > > > >                goto out;
-> > > > > > -- 
-> > > > > > 2.17.1
-> > > > > > 
-> 
-
--- 
 Regards,
-Niklas Söderlund
+CK
+
+> +	void __iomem		*seninf;
+> +	struct regmap		*seninf_top;
+> +	void __iomem		*seninf_mux[MTK_CAMDMA_MAX_NUM];
+> +	void __iomem		*camsv[MTK_CAMDMA_MAX_NUM];
+> +	const struct soc_camera_format_xlate *current_fmt;
+> +	u16				width_flags;	/* max 12 bits */
+> +	struct list_head	capture_list[MTK_CAMDMA_MAX_NUM];
+> +	struct list_head	fb_list;
+> +	spinlock_t		lock;
+> +	spinlock_t		queue_lock;
+> +	struct mtk_mipicsi_buf	cam_buf[MAX_BUFFER_NUM];
+> +	bool streamon;
+> +	unsigned long frame_cnt[MTK_CAMDMA_MAX_NUM];
+> +	unsigned int link;
+> +	unsigned long enqueue_cnt;
+> +	unsigned long dequeue_cnt;
+> +	struct v4l2_ctrl_handler ctrl_hdl;
+> +	char drv_name[16];
+> +	u32 id;
+> +	int clk_num;
+> +	struct clk		*clk[MIPICSI_CLK];
+> +};
+> +
+
