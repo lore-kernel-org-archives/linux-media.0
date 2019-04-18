@@ -2,32 +2,71 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,URIBL_RHS_DOB autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_PASS,URIBL_BLOCKED,URIBL_RHS_DOB autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0666EC10F0E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 09:14:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DECFAC10F0E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 09:17:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D51AE2183E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 09:14:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF0592183E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 09:17:30 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nJ2/WBaM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388388AbfDRJOE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 05:14:04 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:43915 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388346AbfDRJOE (ORCPT
+        id S2387519AbfDRJRa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 05:17:30 -0400
+Received: from mail-oi1-f172.google.com ([209.85.167.172]:35536 "EHLO
+        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728093AbfDRJR3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 05:14:04 -0400
-X-Originating-IP: 90.88.160.238
-Received: from aptenodytes (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 2ADDEFF813;
-        Thu, 18 Apr 2019 09:13:58 +0000 (UTC)
-Message-ID: <03187f79f37fdb45f3a774e200e21a29167776a8.camel@bootlin.com>
+        Thu, 18 Apr 2019 05:17:29 -0400
+Received: by mail-oi1-f172.google.com with SMTP id j132so1089130oib.2
+        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 02:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AjyEUT+ab80WGVik8eC4hnVor/wcNPvxm5+K1GbKPVU=;
+        b=nJ2/WBaMZxihi8ZoJKr+xJATIygjafUtMqTcFAWJJ1xJonmnn02k1UPZOCxEsP8Eii
+         y8le723HAb0OvyCHTmTa8yNWoqdrgbljEw/bUx31ETSTGb5UJ6dpb9cPdmxN3Tm4Q9W9
+         imdWIOx2YR/YvjzV0vQL97h2LzpR46YrQ69hw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AjyEUT+ab80WGVik8eC4hnVor/wcNPvxm5+K1GbKPVU=;
+        b=aojoyt4obbOuuGhz5ZuZRWH7HPLF6MjcKLn37aisVnRIRNFgdY0u2iBT83uiV/0+kQ
+         XU46MgupHDfX8jtWD66zpsgsC67mSlQCBLB1ThIvo4E0H6BAjCAiOBdge6Kxn9b2+pmv
+         kAKbeGdodch3IVslSM7kJpGzPumGirgkGBdzolgCDAFNAxrxMf6sN1VmT+b+hvDD1Uh4
+         Dx/Xk9KQiASSEJpLbpSkbBgJw2teyfpP/eXRZyOIpkIGrsjPRi7korxCUssK0bEXQUEW
+         N0Pkpf0PNupj8VWJDi56UeugnrpiDqsy2Ew/nj/VqtpO2USe5mWg9KoOAiTw2gwPllng
+         MUaw==
+X-Gm-Message-State: APjAAAXrLKQ5z+ip90eBXxEfizetvC1DLjxRsNR4suUIUn8caL7CU6tB
+        QJhyD5hiycmpdY4jNmxhoe2ired199Y=
+X-Google-Smtp-Source: APXvYqyyKzBlp+VQhNiwsMLBvBS+1RIotZ1slfuhElFBpDymUYwfwL3Ls8BmrE4QK4t3SsO6mLVvmQ==
+X-Received: by 2002:aca:ad8e:: with SMTP id w136mr1227824oie.109.1555579048635;
+        Thu, 18 Apr 2019 02:17:28 -0700 (PDT)
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com. [209.85.210.46])
+        by smtp.gmail.com with ESMTPSA id o18sm565363otp.65.2019.04.18.02.17.28
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Apr 2019 02:17:28 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id e5so1104957otk.12
+        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 02:17:28 -0700 (PDT)
+X-Received: by 2002:a9d:ef4:: with SMTP id 107mr59375180otj.152.1555578557366;
+ Thu, 18 Apr 2019 02:09:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
+ <20190418081816.GO13337@phenom.ffwll.local> <522d6a7734a29df47fe11f5f6311b49e14dabae0.camel@bootlin.com>
+In-Reply-To: <522d6a7734a29df47fe11f5f6311b49e14dabae0.camel@bootlin.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Thu, 18 Apr 2019 18:09:06 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Bou1abM4QMPFHqEcJnqGW7F1rZdAoLGmjZnVQTPh4WSw@mail.gmail.com>
+Message-ID: <CAAFQd5Bou1abM4QMPFHqEcJnqGW7F1rZdAoLGmjZnVQTPh4WSw@mail.gmail.com>
 Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Tomasz Figa <tfiga@chromium.org>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Cc:     Daniel Vetter <daniel@ffwll.ch>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -41,62 +80,34 @@ Cc:     Daniel Vetter <daniel@ffwll.ch>,
         Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
         Dave Airlie <airlied@redhat.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Date:   Thu, 18 Apr 2019 11:13:57 +0200
-In-Reply-To: <CAAFQd5Bou1abM4QMPFHqEcJnqGW7F1rZdAoLGmjZnVQTPh4WSw@mail.gmail.com>
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
-         <20190418081816.GO13337@phenom.ffwll.local>
-         <522d6a7734a29df47fe11f5f6311b49e14dabae0.camel@bootlin.com>
-         <CAAFQd5Bou1abM4QMPFHqEcJnqGW7F1rZdAoLGmjZnVQTPh4WSw@mail.gmail.com>
-Organization: Bootlin
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On Thu, Apr 18, 2019 at 5:55 PM Paul Kocialkowski
+<paul.kocialkowski@bootlin.com> wrote:
+>
+> Hi Daniel,
+>
+> On Thu, 2019-04-18 at 10:18 +0200, Daniel Vetter wrote:
+> > On Wed, Apr 17, 2019 at 08:10:15PM +0200, Paul Kocialkowski wrote:
+> > > Hi Nicolas,
+> > >
+> > > I'm detaching this thread from our V4L2 stateless decoding spec since
+> > > it has drifted off and would certainly be interesting to DRM folks as
+> > > well!
+> > >
+> > > For context: I was initially talking about writing up support for the
+> > > Allwinner 2D engine as a DRM render driver, where I'd like to be able
+> > > to batch jobs that affect the same destination buffer to only signal
+> > > the out fence once when the batch is done. We have a similar issue in
+> > > v4l2 where we'd like the destination buffer for a set of requests (each
+> > > covering one H264 slice) to be marked as done once the set was decoded.
+> > >
 
-On Thu, 2019-04-18 at 18:09 +0900, Tomasz Figa wrote:
-> On Thu, Apr 18, 2019 at 5:55 PM Paul Kocialkowski
-> <paul.kocialkowski@bootlin.com> wrote:
-> > Hi Daniel,
-> > 
-> > On Thu, 2019-04-18 at 10:18 +0200, Daniel Vetter wrote:
-> > > On Wed, Apr 17, 2019 at 08:10:15PM +0200, Paul Kocialkowski wrote:
-> > > > Hi Nicolas,
-> > > > 
-> > > > I'm detaching this thread from our V4L2 stateless decoding spec since
-> > > > it has drifted off and would certainly be interesting to DRM folks as
-> > > > well!
-> > > > 
-> > > > For context: I was initially talking about writing up support for the
-> > > > Allwinner 2D engine as a DRM render driver, where I'd like to be able
-> > > > to batch jobs that affect the same destination buffer to only signal
-> > > > the out fence once when the batch is done. We have a similar issue in
-> > > > v4l2 where we'd like the destination buffer for a set of requests (each
-> > > > covering one H264 slice) to be marked as done once the set was decoded.
-> > > > 
-> 
-> Out of curiosity, what area did you find a 2D blitter useful for?
+Out of curiosity, what area did you find a 2D blitter useful for?
 
-The initial motivation is to bring up a DDX with that for platforms
-that have 2D engines but no free software GPU drivers yet.
-
-I also have a personal project in the works where I'd like to implement
-accelerated UI rendering in 2D. The idea is to avoid using GL entirely.
-
-That last point is in part because I have a GPU-less device that I want
-to get going with mainline: http://linux-sunxi.org/F60_Action_Camera
-
-Cheers,
-
-Paul
-
--- 
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
+Best regards,
+Tomasz
