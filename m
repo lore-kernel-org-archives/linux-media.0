@@ -2,1113 +2,220 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DBB1C10F0E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 16:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C4CFC10F0E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 20:56:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B921121479
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 16:44:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C2AD217F9
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 20:56:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389016AbfDRQo0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 12:44:26 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37081 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388388AbfDRQo0 (ORCPT
+        id S2388902AbfDRU4h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 16:56:37 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:55421 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388710AbfDRU4h (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 12:44:26 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1hHA99-0002CJ-N5; Thu, 18 Apr 2019 18:44:23 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Thu, 18 Apr 2019 16:56:37 -0400
+X-Originating-IP: 90.89.68.76
+Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 9CA80FF808;
+        Thu, 18 Apr 2019 20:56:31 +0000 (UTC)
+Date:   Thu, 18 Apr 2019 22:56:30 +0200
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
-        Tim Harvey <tharvey@gateworks.com>, kernel@pengutronix.de
-Subject: [PATCH v8] media: imx: add mem2mem device
-Date:   Thu, 18 Apr 2019 18:44:14 +0200
-Message-Id: <20190418164414.29373-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
+ common place
+Message-ID: <20190418205630.6i7cvfmtoyq5uhvl@flea>
+References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
+ <20190417154121.GJ13337@phenom.ffwll.local>
+ <20190418062229.eyog4i62eg4pr6uf@flea>
+ <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
+ <20190418090221.e57dogn4yx5nwdni@flea>
+ <CAKMK7uHN6QfYyzx4DjRT+7VLRi6N9DorQtw2GoDiNGTgie=DXA@mail.gmail.com>
+ <20190418120143.4x7bvhgkh23mgsup@flea>
+ <CAKMK7uFRptrYGScX-Ogxhanw6=6Q9Mf22axpafwceMybfYjBKQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uFRptrYGScX-Ogxhanw6=6Q9Mf22axpafwceMybfYjBKQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a single imx-media mem2mem video device that uses the IPU IC PP
-(image converter post processing) task for scaling and colorspace
-conversion.
-On i.MX6Q/DL SoCs with two IPUs currently only the first IPU is used.
+On Thu, Apr 18, 2019 at 02:32:14PM +0200, Daniel Vetter wrote:
+> > > > > Unifying the formats themselves, and all the associated metadata is
+> > > > > imo a no-go, and was a pretty conscious decision when we implemented
+> > > > > drm_fourcc a few years back.
+> > > > >
+> > > > > > If we want to keep the current library in DRM, we have two options
+> > > > > > then:
+> > > > > >
+> > > > > >   - Support all the v4l2 formats in the DRM library, which is
+> > > > > >     essentially what I'm doing in the last patches. However, that
+> > > > > >     would require to have the v4l2 developpers also reviewing stuff
+> > > > > >     there. And given how busy they are, I cannot really see how that
+> > > > > >     would work.
+> > > > >
+> > > > > Well, if we end up with a common library then yes we need cross
+> > > > > review. There's no way around that. Doesn't matter where exactly that
+> > > > > library is in the filesystem tree, and adding a special MAINTAINERS
+> > > > > entry for anything related to fourcc (both drm and v4l) to make sure
+> > > > > they get cross-posted is easy. No file renaming needed.
+> > > >
+> > > > That would create some governing issues as well. For example, if you
+> > > > ever have a patch from one fourcc addition (that might or might not be
+> > > > covered by v4l2), will you wait for any v4l2 developper to review it?
+> > >
+> > > None of this is fixed by code renaming or locations. Either way we
+> > > need to figure that out.
+> > >
+> > > And yes part of the reasons for not moving this out of drm is that I'm
+> > > not a fan of boutique trees for small stuff. If sharing means we need
+> > > to split the drm_fourcc code and library out of drm trees, I'm not
+> > > sure that's a good idea. We're already super liberal with merging
+> > > anything through driver trees with acks, and integrating them quickly
+> > > into drm-next. This would still be workable if v4l sends regular pull
+> > > requests to drm-next (every 1-2 weeks, like the other big gpu trees
+> > > do). If we can only sync up once per merge window with a shared
+> > > boutique tree for formats only, life is going to be painful.
+> >
+> > I don't get why we want to turn DRM into some kind of a black hole
+> > that would pull everything. We don't have to, really. And at the same
+> > time it carries the message that v4l2 is less important than DRM for
+> > some reason, which I'm really not comfortable with.
+>
+> Make another tree somewhere that pulls in trees more often than every
+> merge window, and I'm happy. It's the coordination effort of lots of
+> trees that creates the black hole, not the other way round. Yes topic
+> trees work, but if topic trees are persistent something with the
+> organization of trees is wrong and needs to change. This very much
+> looks like we'll end up with a perpetual topic branch for format stuff
+> between drm and v4l.
 
-The hardware only supports writing to destination buffers up to
-1024x1024 pixels in a single pass, arbitrary sizes can be achieved
-by rendering multiple tiles per frame.
+Well, if v4l2 sends a PR to DRM every 1 or 2 weeks, that definitely
+looks like a topic branch to me. And on a far more frequent basis than
+when we will merge a format description.
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-[slongerbeam@gmail.com: use ipu_image_convert_adjust(), fix
- device_run() error handling, add missing media-device header,
- unregister and remove the mem2mem device in error paths in
- imx_media_probe_complete() and in imx_media_remove()]
-Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
----
-Changes since v7 [1]:
- - Change capture format to keep aspect ration when changing rotation.
- - Adjust output and update formats to alignment requirements, if
-   necessary when changing rotation or flip modes.
- - Disallow changing rotation or flip modes if a format change is
-   required on a busy queue.
- - Add sequence counting.
- - Use v4l2_m2m_buf_copy_metadata.
- - Disallow interlaced field modes.
- - Rename video device to "ipu_ic_pp csc/scaler".
+> The other shared stuff (like hdmi infoframes) seems to change a lot
+> less often, so the occasional patch hasn't been a pain. But drm_fourcc
+> related stuff sees a lot of work, both in adding new formats and in
+> refactoring the library to keep up with all the new use-cases.
 
-[1] https://patchwork.linuxtv.org/patch/53968/
----
- drivers/staging/media/imx/Kconfig             |   1 +
- drivers/staging/media/imx/Makefile            |   1 +
- .../staging/media/imx/imx-media-csc-scaler.c  | 917 ++++++++++++++++++
- drivers/staging/media/imx/imx-media-dev.c     |  34 +-
- drivers/staging/media/imx/imx-media.h         |  10 +
- 5 files changed, 959 insertions(+), 4 deletions(-)
- create mode 100644 drivers/staging/media/imx/imx-media-csc-scaler.c
+When was the last time a refactoring that changed the API happened?
 
-diff --git a/drivers/staging/media/imx/Kconfig b/drivers/staging/media/imx/Kconfig
-index f6d220b649fb..9bf14eb2154b 100644
---- a/drivers/staging/media/imx/Kconfig
-+++ b/drivers/staging/media/imx/Kconfig
-@@ -6,6 +6,7 @@ config VIDEO_IMX_MEDIA
- 	depends on HAS_DMA
- 	select VIDEOBUF2_DMA_CONTIG
- 	select V4L2_FWNODE
-+	select V4L2_MEM2MEM_DEV
- 	help
- 	  Say yes here to enable support for video4linux media controller
- 	  driver for the i.MX5/6 SOC.
-diff --git a/drivers/staging/media/imx/Makefile b/drivers/staging/media/imx/Makefile
-index d2d909a36239..0c86723f1763 100644
---- a/drivers/staging/media/imx/Makefile
-+++ b/drivers/staging/media/imx/Makefile
-@@ -7,6 +7,7 @@ imx-media-ic-objs := imx-ic-common.o imx-ic-prp.o imx-ic-prpencvf.o
- obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx-media.o
- obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx-media-common.o
- obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx-media-capture.o
-+obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx-media-csc-scaler.o
- obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx-media-vdic.o
- obj-$(CONFIG_VIDEO_IMX_MEDIA) += imx-media-ic.o
- 
-diff --git a/drivers/staging/media/imx/imx-media-csc-scaler.c b/drivers/staging/media/imx/imx-media-csc-scaler.c
-new file mode 100644
-index 000000000000..4a0ecdfe38e6
---- /dev/null
-+++ b/drivers/staging/media/imx/imx-media-csc-scaler.c
-@@ -0,0 +1,917 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * i.MX IPUv3 IC PP mem2mem CSC/Scaler driver
-+ *
-+ * Copyright (C) 2011 Pengutronix, Sascha Hauer
-+ * Copyright (C) 2018 Pengutronix, Philipp Zabel
-+ */
-+#include <linux/module.h>
-+#include <linux/delay.h>
-+#include <linux/fs.h>
-+#include <linux/version.h>
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+#include <video/imx-ipu-v3.h>
-+#include <video/imx-ipu-image-convert.h>
-+
-+#include <media/media-device.h>
-+#include <media/v4l2-ctrls.h>
-+#include <media/v4l2-event.h>
-+#include <media/v4l2-mem2mem.h>
-+#include <media/v4l2-device.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/videobuf2-dma-contig.h>
-+
-+#include "imx-media.h"
-+
-+#define fh_to_ctx(__fh)	container_of(__fh, struct ipu_csc_scaler_ctx, fh)
-+
-+enum {
-+	V4L2_M2M_SRC = 0,
-+	V4L2_M2M_DST = 1,
-+};
-+
-+struct ipu_csc_scaler_priv {
-+	struct imx_media_video_dev	vdev;
-+
-+	struct v4l2_m2m_dev		*m2m_dev;
-+	struct device			*dev;
-+
-+	struct imx_media_dev		*md;
-+
-+	struct mutex			mutex;	/* mem2mem device mutex */
-+};
-+
-+#define vdev_to_priv(v) container_of(v, struct ipu_csc_scaler_priv, vdev)
-+
-+/* Per-queue, driver-specific private data */
-+struct ipu_csc_scaler_q_data {
-+	struct v4l2_pix_format		cur_fmt;
-+	struct v4l2_rect		rect;
-+};
-+
-+struct ipu_csc_scaler_ctx {
-+	struct ipu_csc_scaler_priv	*priv;
-+
-+	struct v4l2_fh			fh;
-+	struct ipu_csc_scaler_q_data	q_data[2];
-+	struct ipu_image_convert_ctx	*icc;
-+
-+	struct v4l2_ctrl_handler	ctrl_hdlr;
-+	int				rotate;
-+	bool				hflip;
-+	bool				vflip;
-+	enum ipu_rotate_mode		rot_mode;
-+	unsigned int			sequence;
-+};
-+
-+static struct ipu_csc_scaler_q_data *get_q_data(struct ipu_csc_scaler_ctx *ctx,
-+						enum v4l2_buf_type type)
-+{
-+	if (V4L2_TYPE_IS_OUTPUT(type))
-+		return &ctx->q_data[V4L2_M2M_SRC];
-+	else
-+		return &ctx->q_data[V4L2_M2M_DST];
-+}
-+
-+/*
-+ * mem2mem callbacks
-+ */
-+
-+static void job_abort(void *_ctx)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = _ctx;
-+
-+	if (ctx->icc)
-+		ipu_image_convert_abort(ctx->icc);
-+}
-+
-+static void ipu_ic_pp_complete(struct ipu_image_convert_run *run, void *_ctx)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = _ctx;
-+	struct ipu_csc_scaler_priv *priv = ctx->priv;
-+	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-+
-+	src_buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
-+	dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
-+
-+	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
-+
-+	src_buf->sequence = dst_buf->sequence = ctx->sequence++;
-+
-+	v4l2_m2m_buf_done(src_buf, run->status ? VB2_BUF_STATE_ERROR :
-+						 VB2_BUF_STATE_DONE);
-+	v4l2_m2m_buf_done(dst_buf, run->status ? VB2_BUF_STATE_ERROR :
-+						 VB2_BUF_STATE_DONE);
-+
-+	v4l2_m2m_job_finish(priv->m2m_dev, ctx->fh.m2m_ctx);
-+	kfree(run);
-+}
-+
-+static void device_run(void *_ctx)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = _ctx;
-+	struct ipu_csc_scaler_priv *priv = ctx->priv;
-+	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-+	struct ipu_image_convert_run *run;
-+	int ret;
-+
-+	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
-+	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
-+
-+	run = kzalloc(sizeof(*run), GFP_KERNEL);
-+	if (!run)
-+		goto err;
-+
-+	run->ctx = ctx->icc;
-+	run->in_phys = vb2_dma_contig_plane_dma_addr(&src_buf->vb2_buf, 0);
-+	run->out_phys = vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0);
-+
-+	ret = ipu_image_convert_queue(run);
-+	if (ret < 0) {
-+		v4l2_err(ctx->priv->vdev.vfd->v4l2_dev,
-+			 "%s: failed to queue: %d\n", __func__, ret);
-+		goto err;
-+	}
-+
-+	return;
-+
-+err:
-+	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
-+	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
-+	v4l2_m2m_buf_done(src_buf, VB2_BUF_STATE_ERROR);
-+	v4l2_m2m_buf_done(dst_buf, VB2_BUF_STATE_ERROR);
-+	v4l2_m2m_job_finish(priv->m2m_dev, ctx->fh.m2m_ctx);
-+}
-+
-+/*
-+ * Video ioctls
-+ */
-+static int ipu_csc_scaler_querycap(struct file *file, void *priv,
-+				   struct v4l2_capability *cap)
-+{
-+	strscpy(cap->driver, "imx-media-csc-scaler", sizeof(cap->driver));
-+	strscpy(cap->card, "imx-media-csc-scaler", sizeof(cap->card));
-+	strscpy(cap->bus_info, "platform:imx-media-csc-scaler",
-+		sizeof(cap->bus_info));
-+
-+	return 0;
-+}
-+
-+static int ipu_csc_scaler_enum_fmt(struct file *file, void *fh,
-+				   struct v4l2_fmtdesc *f)
-+{
-+	u32 fourcc;
-+	int ret;
-+
-+	ret = imx_media_enum_format(&fourcc, f->index, CS_SEL_ANY);
-+	if (ret)
-+		return ret;
-+
-+	f->pixelformat = fourcc;
-+
-+	return 0;
-+}
-+
-+static int ipu_csc_scaler_g_fmt(struct file *file, void *priv,
-+				struct v4l2_format *f)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = fh_to_ctx(priv);
-+	struct ipu_csc_scaler_q_data *q_data;
-+
-+	q_data = get_q_data(ctx, f->type);
-+
-+	f->fmt.pix = q_data->cur_fmt;
-+
-+	return 0;
-+}
-+
-+static int ipu_csc_scaler_try_fmt(struct file *file, void *priv,
-+				  struct v4l2_format *f)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = fh_to_ctx(priv);
-+	struct ipu_csc_scaler_q_data *q_data = get_q_data(ctx, f->type);
-+	struct ipu_image test_in, test_out;
-+	enum v4l2_field field;
-+
-+	field = f->fmt.pix.field;
-+	if (field == V4L2_FIELD_ANY)
-+		field = V4L2_FIELD_NONE;
-+	else if (field != V4L2_FIELD_NONE)
-+		return -EINVAL;
-+
-+	if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
-+		struct ipu_csc_scaler_q_data *q_data_in =
-+			get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT);
-+
-+		test_out.pix = f->fmt.pix;
-+		test_in.pix = q_data_in->cur_fmt;
-+	} else {
-+		struct ipu_csc_scaler_q_data *q_data_out =
-+			get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+
-+		test_in.pix = f->fmt.pix;
-+		test_out.pix = q_data_out->cur_fmt;
-+	}
-+
-+	ipu_image_convert_adjust(&test_in, &test_out, ctx->rot_mode);
-+
-+	f->fmt.pix = (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) ?
-+		test_out.pix : test_in.pix;
-+
-+	if (f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) {
-+		f->fmt.pix.colorspace = q_data->cur_fmt.colorspace;
-+		f->fmt.pix.ycbcr_enc = q_data->cur_fmt.ycbcr_enc;
-+		f->fmt.pix.xfer_func = q_data->cur_fmt.xfer_func;
-+		f->fmt.pix.quantization = q_data->cur_fmt.quantization;
-+	} else if (f->fmt.pix.colorspace == V4L2_COLORSPACE_DEFAULT) {
-+		f->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
-+		f->fmt.pix.ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
-+		f->fmt.pix.xfer_func = V4L2_XFER_FUNC_DEFAULT;
-+		f->fmt.pix.quantization = V4L2_QUANTIZATION_DEFAULT;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ipu_csc_scaler_s_fmt(struct file *file, void *priv,
-+				struct v4l2_format *f)
-+{
-+	struct ipu_csc_scaler_q_data *q_data;
-+	struct ipu_csc_scaler_ctx *ctx = fh_to_ctx(priv);
-+	struct vb2_queue *vq;
-+	int ret;
-+
-+	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
-+	if (vb2_is_busy(vq)) {
-+		v4l2_err(ctx->priv->vdev.vfd->v4l2_dev, "%s: queue busy\n",
-+			 __func__);
-+		return -EBUSY;
-+	}
-+
-+	q_data = get_q_data(ctx, f->type);
-+
-+	ret = ipu_csc_scaler_try_fmt(file, priv, f);
-+	if (ret < 0)
-+		return ret;
-+
-+	q_data->cur_fmt.width = f->fmt.pix.width;
-+	q_data->cur_fmt.height = f->fmt.pix.height;
-+	q_data->cur_fmt.pixelformat = f->fmt.pix.pixelformat;
-+	q_data->cur_fmt.field = f->fmt.pix.field;
-+	q_data->cur_fmt.bytesperline = f->fmt.pix.bytesperline;
-+	q_data->cur_fmt.sizeimage = f->fmt.pix.sizeimage;
-+
-+	/* Reset cropping/composing rectangle */
-+	q_data->rect.left = 0;
-+	q_data->rect.top = 0;
-+	q_data->rect.width = q_data->cur_fmt.width;
-+	q_data->rect.height = q_data->cur_fmt.height;
-+
-+	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT) {
-+		/* Set colorimetry on the output queue */
-+		q_data->cur_fmt.colorspace = f->fmt.pix.colorspace;
-+		q_data->cur_fmt.ycbcr_enc = f->fmt.pix.ycbcr_enc;
-+		q_data->cur_fmt.xfer_func = f->fmt.pix.xfer_func;
-+		q_data->cur_fmt.quantization = f->fmt.pix.quantization;
-+		/* Propagate colorimetry to the capture queue */
-+		q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+		q_data->cur_fmt.colorspace = f->fmt.pix.colorspace;
-+		q_data->cur_fmt.ycbcr_enc = f->fmt.pix.ycbcr_enc;
-+		q_data->cur_fmt.xfer_func = f->fmt.pix.xfer_func;
-+		q_data->cur_fmt.quantization = f->fmt.pix.quantization;
-+	}
-+
-+	/*
-+	 * TODO: Setting colorimetry on the capture queue is currently not
-+	 * supported by the V4L2 API
-+	 */
-+
-+	return 0;
-+}
-+
-+static int ipu_csc_scaler_g_selection(struct file *file, void *priv,
-+				      struct v4l2_selection *s)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = fh_to_ctx(priv);
-+	struct ipu_csc_scaler_q_data *q_data;
-+
-+	switch (s->target) {
-+	case V4L2_SEL_TGT_CROP:
-+	case V4L2_SEL_TGT_CROP_DEFAULT:
-+	case V4L2_SEL_TGT_CROP_BOUNDS:
-+		if (s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-+			return -EINVAL;
-+		q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT);
-+		break;
-+	case V4L2_SEL_TGT_COMPOSE:
-+	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
-+	case V4L2_SEL_TGT_COMPOSE_BOUNDS:
-+		if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+			return -EINVAL;
-+		q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (s->target == V4L2_SEL_TGT_CROP ||
-+	    s->target == V4L2_SEL_TGT_COMPOSE) {
-+		s->r = q_data->rect;
-+	} else {
-+		s->r.left = 0;
-+		s->r.top = 0;
-+		s->r.width = q_data->cur_fmt.width;
-+		s->r.height = q_data->cur_fmt.height;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ipu_csc_scaler_s_selection(struct file *file, void *priv,
-+				      struct v4l2_selection *s)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = fh_to_ctx(priv);
-+	struct ipu_csc_scaler_q_data *q_data;
-+
-+	switch (s->target) {
-+	case V4L2_SEL_TGT_CROP:
-+		if (s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-+			return -EINVAL;
-+		break;
-+	case V4L2_SEL_TGT_COMPOSE:
-+		if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+			return -EINVAL;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE &&
-+	    s->type != V4L2_BUF_TYPE_VIDEO_OUTPUT)
-+		return -EINVAL;
-+
-+	q_data = get_q_data(ctx, s->type);
-+
-+	/* The input's frame width to the IC must be a multiple of 8 pixels
-+	 * When performing resizing the frame width must be multiple of burst
-+	 * size - 8 or 16 pixels as defined by CB#_BURST_16 parameter.
-+	 */
-+	if (s->flags & V4L2_SEL_FLAG_GE)
-+		s->r.width = round_up(s->r.width, 8);
-+	if (s->flags & V4L2_SEL_FLAG_LE)
-+		s->r.width = round_down(s->r.width, 8);
-+	s->r.width = clamp_t(unsigned int, s->r.width, 8,
-+			     round_down(q_data->cur_fmt.width, 8));
-+	s->r.height = clamp_t(unsigned int, s->r.height, 1,
-+			      q_data->cur_fmt.height);
-+	s->r.left = clamp_t(unsigned int, s->r.left, 0,
-+			    q_data->cur_fmt.width - s->r.width);
-+	s->r.top = clamp_t(unsigned int, s->r.top, 0,
-+			   q_data->cur_fmt.height - s->r.height);
-+
-+	/* V4L2_SEL_FLAG_KEEP_CONFIG is only valid for subdevices */
-+	q_data->rect = s->r;
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ioctl_ops ipu_csc_scaler_ioctl_ops = {
-+	.vidioc_querycap		= ipu_csc_scaler_querycap,
-+
-+	.vidioc_enum_fmt_vid_cap	= ipu_csc_scaler_enum_fmt,
-+	.vidioc_g_fmt_vid_cap		= ipu_csc_scaler_g_fmt,
-+	.vidioc_try_fmt_vid_cap		= ipu_csc_scaler_try_fmt,
-+	.vidioc_s_fmt_vid_cap		= ipu_csc_scaler_s_fmt,
-+
-+	.vidioc_enum_fmt_vid_out	= ipu_csc_scaler_enum_fmt,
-+	.vidioc_g_fmt_vid_out		= ipu_csc_scaler_g_fmt,
-+	.vidioc_try_fmt_vid_out		= ipu_csc_scaler_try_fmt,
-+	.vidioc_s_fmt_vid_out		= ipu_csc_scaler_s_fmt,
-+
-+	.vidioc_g_selection		= ipu_csc_scaler_g_selection,
-+	.vidioc_s_selection		= ipu_csc_scaler_s_selection,
-+
-+	.vidioc_reqbufs			= v4l2_m2m_ioctl_reqbufs,
-+	.vidioc_querybuf		= v4l2_m2m_ioctl_querybuf,
-+
-+	.vidioc_qbuf			= v4l2_m2m_ioctl_qbuf,
-+	.vidioc_expbuf			= v4l2_m2m_ioctl_expbuf,
-+	.vidioc_dqbuf			= v4l2_m2m_ioctl_dqbuf,
-+	.vidioc_create_bufs		= v4l2_m2m_ioctl_create_bufs,
-+	.vidioc_prepare_buf		= v4l2_m2m_ioctl_prepare_buf,
-+
-+	.vidioc_streamon		= v4l2_m2m_ioctl_streamon,
-+	.vidioc_streamoff		= v4l2_m2m_ioctl_streamoff,
-+
-+	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
-+	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
-+};
-+
-+/*
-+ * Queue operations
-+ */
-+
-+static int ipu_csc_scaler_queue_setup(struct vb2_queue *vq,
-+				      unsigned int *nbuffers,
-+				      unsigned int *nplanes,
-+				      unsigned int sizes[],
-+				      struct device *alloc_devs[])
-+{
-+	struct ipu_csc_scaler_ctx *ctx = vb2_get_drv_priv(vq);
-+	struct ipu_csc_scaler_q_data *q_data;
-+	unsigned int size, count = *nbuffers;
-+
-+	q_data = get_q_data(ctx, vq->type);
-+
-+	size = q_data->cur_fmt.sizeimage;
-+
-+	*nbuffers = count;
-+
-+	if (*nplanes)
-+		return sizes[0] < size ? -EINVAL : 0;
-+
-+	*nplanes = 1;
-+	sizes[0] = size;
-+
-+	dev_dbg(ctx->priv->dev, "get %d buffer(s) of size %d each.\n",
-+		count, size);
-+
-+	return 0;
-+}
-+
-+static int ipu_csc_scaler_buf_prepare(struct vb2_buffer *vb)
-+{
-+	struct vb2_queue *vq = vb->vb2_queue;
-+	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	struct ipu_csc_scaler_ctx *ctx = vb2_get_drv_priv(vq);
-+	struct ipu_csc_scaler_q_data *q_data;
-+	unsigned long size;
-+
-+	dev_dbg(ctx->priv->dev, "type: %d\n", vq->type);
-+
-+	if (V4L2_TYPE_IS_OUTPUT(vq->type)) {
-+		if (vbuf->field == V4L2_FIELD_ANY)
-+			vbuf->field = V4L2_FIELD_NONE;
-+		if (vbuf->field != V4L2_FIELD_NONE) {
-+			dev_dbg(ctx->priv->dev, "%s: field isn't supported\n",
-+				__func__);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	q_data = get_q_data(ctx, vq->type);
-+	size = q_data->cur_fmt.sizeimage;
-+
-+	if (vb2_plane_size(vb, 0) < size) {
-+		dev_dbg(ctx->priv->dev,
-+			"%s: data will not fit into plane (%lu < %lu)\n",
-+			__func__, vb2_plane_size(vb, 0), size);
-+		return -EINVAL;
-+	}
-+
-+	vb2_set_plane_payload(vb, 0, size);
-+
-+	return 0;
-+}
-+
-+static void ipu_csc_scaler_buf_queue(struct vb2_buffer *vb)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
-+
-+	v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, to_vb2_v4l2_buffer(vb));
-+}
-+
-+static void ipu_image_from_q_data(struct ipu_image *im,
-+				  struct ipu_csc_scaler_q_data *q_data)
-+{
-+	im->pix.width = q_data->cur_fmt.width;
-+	im->pix.height = q_data->cur_fmt.height;
-+	im->pix.bytesperline = q_data->cur_fmt.bytesperline;
-+	im->pix.pixelformat = q_data->cur_fmt.pixelformat;
-+	im->rect = q_data->rect;
-+}
-+
-+static int ipu_csc_scaler_start_streaming(struct vb2_queue *q,
-+					  unsigned int count)
-+{
-+	const enum ipu_ic_task ic_task = IC_TASK_POST_PROCESSOR;
-+	struct ipu_csc_scaler_ctx *ctx = vb2_get_drv_priv(q);
-+	struct ipu_csc_scaler_priv *priv = ctx->priv;
-+	struct ipu_soc *ipu = priv->md->ipu[0];
-+	struct ipu_csc_scaler_q_data *q_data;
-+	struct vb2_queue *other_q;
-+	struct ipu_image in, out;
-+
-+	other_q = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-+				  (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE) ?
-+				  V4L2_BUF_TYPE_VIDEO_OUTPUT :
-+				  V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+	if (!vb2_is_streaming(other_q))
-+		return 0;
-+
-+	if (ctx->icc) {
-+		v4l2_warn(ctx->priv->vdev.vfd->v4l2_dev, "removing old ICC\n");
-+		ipu_image_convert_unprepare(ctx->icc);
-+	}
-+
-+	q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT);
-+	ipu_image_from_q_data(&in, q_data);
-+
-+	q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+	ipu_image_from_q_data(&out, q_data);
-+
-+	ctx->icc = ipu_image_convert_prepare(ipu, ic_task, &in, &out,
-+					     ctx->rot_mode,
-+					     ipu_ic_pp_complete, ctx);
-+	if (IS_ERR(ctx->icc)) {
-+		struct vb2_v4l2_buffer *buf;
-+		int ret = PTR_ERR(ctx->icc);
-+
-+		ctx->icc = NULL;
-+		v4l2_err(ctx->priv->vdev.vfd->v4l2_dev, "%s: error %d\n",
-+			 __func__, ret);
-+		while ((buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx)))
-+			v4l2_m2m_buf_done(buf, VB2_BUF_STATE_QUEUED);
-+		while ((buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx)))
-+			v4l2_m2m_buf_done(buf, VB2_BUF_STATE_QUEUED);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void ipu_csc_scaler_stop_streaming(struct vb2_queue *q)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = vb2_get_drv_priv(q);
-+	struct vb2_v4l2_buffer *buf;
-+
-+	if (ctx->icc) {
-+		ipu_image_convert_unprepare(ctx->icc);
-+		ctx->icc = NULL;
-+	}
-+
-+	ctx->sequence = 0;
-+
-+	if (q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT) {
-+		while ((buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx)))
-+			v4l2_m2m_buf_done(buf, VB2_BUF_STATE_ERROR);
-+	} else {
-+		while ((buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx)))
-+			v4l2_m2m_buf_done(buf, VB2_BUF_STATE_ERROR);
-+	}
-+}
-+
-+static const struct vb2_ops ipu_csc_scaler_qops = {
-+	.queue_setup		= ipu_csc_scaler_queue_setup,
-+	.buf_prepare		= ipu_csc_scaler_buf_prepare,
-+	.buf_queue		= ipu_csc_scaler_buf_queue,
-+	.wait_prepare		= vb2_ops_wait_prepare,
-+	.wait_finish		= vb2_ops_wait_finish,
-+	.start_streaming	= ipu_csc_scaler_start_streaming,
-+	.stop_streaming		= ipu_csc_scaler_stop_streaming,
-+};
-+
-+static int ipu_csc_scaler_queue_init(void *priv, struct vb2_queue *src_vq,
-+				     struct vb2_queue *dst_vq)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = priv;
-+	int ret;
-+
-+	memset(src_vq, 0, sizeof(*src_vq));
-+	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
-+	src_vq->io_modes = VB2_MMAP | VB2_DMABUF;
-+	src_vq->drv_priv = ctx;
-+	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-+	src_vq->ops = &ipu_csc_scaler_qops;
-+	src_vq->mem_ops = &vb2_dma_contig_memops;
-+	src_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-+	src_vq->lock = &ctx->priv->mutex;
-+	src_vq->dev = ctx->priv->dev;
-+
-+	ret = vb2_queue_init(src_vq);
-+	if (ret)
-+		return ret;
-+
-+	memset(dst_vq, 0, sizeof(*dst_vq));
-+	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	dst_vq->io_modes = VB2_MMAP | VB2_DMABUF;
-+	dst_vq->drv_priv = ctx;
-+	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
-+	dst_vq->ops = &ipu_csc_scaler_qops;
-+	dst_vq->mem_ops = &vb2_dma_contig_memops;
-+	dst_vq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_COPY;
-+	dst_vq->lock = &ctx->priv->mutex;
-+	dst_vq->dev = ctx->priv->dev;
-+
-+	return vb2_queue_init(dst_vq);
-+}
-+
-+static int ipu_csc_scaler_s_ctrl(struct v4l2_ctrl *ctrl)
-+{
-+	struct ipu_csc_scaler_ctx *ctx = container_of(ctrl->handler,
-+						      struct ipu_csc_scaler_ctx,
-+						      ctrl_hdlr);
-+	enum ipu_rotate_mode rot_mode;
-+	int rotate;
-+	bool hflip, vflip;
-+	int ret = 0;
-+
-+	rotate = ctx->rotate;
-+	hflip = ctx->hflip;
-+	vflip = ctx->vflip;
-+
-+	switch (ctrl->id) {
-+	case V4L2_CID_HFLIP:
-+		hflip = ctrl->val;
-+		break;
-+	case V4L2_CID_VFLIP:
-+		vflip = ctrl->val;
-+		break;
-+	case V4L2_CID_ROTATE:
-+		rotate = ctrl->val;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	ret = ipu_degrees_to_rot_mode(&rot_mode, rotate, hflip, vflip);
-+	if (ret)
-+		return ret;
-+
-+	if (rot_mode != ctx->rot_mode) {
-+		struct v4l2_pix_format *in_fmt, *out_fmt;
-+		struct ipu_image test_in, test_out;
-+
-+		in_fmt = &ctx->q_data[V4L2_M2M_SRC].cur_fmt;
-+		out_fmt = &ctx->q_data[V4L2_M2M_DST].cur_fmt;
-+
-+		test_in.pix = *in_fmt;
-+		test_out.pix = *out_fmt;
-+
-+		if (ipu_rot_mode_is_irt(rot_mode) !=
-+		    ipu_rot_mode_is_irt(ctx->rot_mode)) {
-+			/* Switch width and height to keep aspect ratio intact */
-+			test_out.pix.width = out_fmt->height;
-+			test_out.pix.height = out_fmt->width;
-+		}
-+
-+		ipu_image_convert_adjust(&test_in, &test_out, ctx->rot_mode);
-+
-+		/* Check if output format needs to be changed */
-+		if (test_in.pix.width != in_fmt->width ||
-+		    test_in.pix.height != in_fmt->height ||
-+		    test_in.pix.bytesperline != in_fmt->bytesperline ||
-+		    test_in.pix.sizeimage != in_fmt->sizeimage) {
-+			struct vb2_queue *out_q;
-+
-+			out_q = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-+						V4L2_BUF_TYPE_VIDEO_OUTPUT);
-+			if (vb2_is_busy(out_q))
-+				return -EBUSY;
-+		}
-+
-+		/* Check if capture format needs to be changed */
-+		if (test_out.pix.width != out_fmt->width ||
-+		    test_out.pix.height != out_fmt->height ||
-+		    test_out.pix.bytesperline != out_fmt->bytesperline ||
-+		    test_out.pix.sizeimage != out_fmt->sizeimage) {
-+			struct vb2_queue *cap_q;
-+
-+			cap_q = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
-+						V4L2_BUF_TYPE_VIDEO_CAPTURE);
-+			if (vb2_is_busy(cap_q))
-+				return -EBUSY;
-+		}
-+
-+		*in_fmt = test_in.pix;
-+		*out_fmt = test_out.pix;
-+
-+		ctx->rot_mode = rot_mode;
-+		ctx->rotate = rotate;
-+		ctx->hflip = hflip;
-+		ctx->vflip = vflip;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_ctrl_ops ipu_csc_scaler_ctrl_ops = {
-+	.s_ctrl = ipu_csc_scaler_s_ctrl,
-+};
-+
-+static int ipu_csc_scaler_init_controls(struct ipu_csc_scaler_ctx *ctx)
-+{
-+	struct v4l2_ctrl_handler *hdlr = &ctx->ctrl_hdlr;
-+
-+	v4l2_ctrl_handler_init(hdlr, 3);
-+
-+	v4l2_ctrl_new_std(hdlr, &ipu_csc_scaler_ctrl_ops, V4L2_CID_HFLIP,
-+			  0, 1, 1, 0);
-+	v4l2_ctrl_new_std(hdlr, &ipu_csc_scaler_ctrl_ops, V4L2_CID_VFLIP,
-+			  0, 1, 1, 0);
-+	v4l2_ctrl_new_std(hdlr, &ipu_csc_scaler_ctrl_ops, V4L2_CID_ROTATE,
-+			  0, 270, 90, 0);
-+
-+	if (hdlr->error) {
-+		v4l2_ctrl_handler_free(hdlr);
-+		return hdlr->error;
-+	}
-+
-+	v4l2_ctrl_handler_setup(hdlr);
-+	return 0;
-+}
-+
-+#define DEFAULT_WIDTH	720
-+#define DEFAULT_HEIGHT	576
-+static const struct ipu_csc_scaler_q_data ipu_csc_scaler_q_data_default = {
-+	.cur_fmt = {
-+		.width = DEFAULT_WIDTH,
-+		.height = DEFAULT_HEIGHT,
-+		.pixelformat = V4L2_PIX_FMT_YUV420,
-+		.field = V4L2_FIELD_NONE,
-+		.bytesperline = DEFAULT_WIDTH,
-+		.sizeimage = DEFAULT_WIDTH * DEFAULT_HEIGHT * 3 / 2,
-+		.colorspace = V4L2_COLORSPACE_SRGB,
-+	},
-+	.rect = {
-+		.width = DEFAULT_WIDTH,
-+		.height = DEFAULT_HEIGHT,
-+	},
-+};
-+
-+/*
-+ * File operations
-+ */
-+static int ipu_csc_scaler_open(struct file *file)
-+{
-+	struct ipu_csc_scaler_priv *priv = video_drvdata(file);
-+	struct ipu_csc_scaler_ctx *ctx = NULL;
-+	int ret;
-+
-+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	ctx->rot_mode = IPU_ROTATE_NONE;
-+
-+	v4l2_fh_init(&ctx->fh, video_devdata(file));
-+	file->private_data = &ctx->fh;
-+	v4l2_fh_add(&ctx->fh);
-+	ctx->priv = priv;
-+
-+	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(priv->m2m_dev, ctx,
-+					    &ipu_csc_scaler_queue_init);
-+	if (IS_ERR(ctx->fh.m2m_ctx)) {
-+		ret = PTR_ERR(ctx->fh.m2m_ctx);
-+		goto err_ctx;
-+	}
-+
-+	ret = ipu_csc_scaler_init_controls(ctx);
-+	if (ret)
-+		goto err_ctrls;
-+
-+	ctx->fh.ctrl_handler = &ctx->ctrl_hdlr;
-+
-+	ctx->q_data[V4L2_M2M_SRC] = ipu_csc_scaler_q_data_default;
-+	ctx->q_data[V4L2_M2M_DST] = ipu_csc_scaler_q_data_default;
-+
-+	dev_dbg(priv->dev, "Created instance %p, m2m_ctx: %p\n", ctx,
-+		ctx->fh.m2m_ctx);
-+
-+	return 0;
-+
-+err_ctrls:
-+	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-+err_ctx:
-+	v4l2_fh_del(&ctx->fh);
-+	v4l2_fh_exit(&ctx->fh);
-+	kfree(ctx);
-+	return ret;
-+}
-+
-+static int ipu_csc_scaler_release(struct file *file)
-+{
-+	struct ipu_csc_scaler_priv *priv = video_drvdata(file);
-+	struct ipu_csc_scaler_ctx *ctx = fh_to_ctx(file->private_data);
-+
-+	dev_dbg(priv->dev, "Releasing instance %p\n", ctx);
-+
-+	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-+	v4l2_fh_del(&ctx->fh);
-+	v4l2_fh_exit(&ctx->fh);
-+	kfree(ctx);
-+
-+	return 0;
-+}
-+
-+static const struct v4l2_file_operations ipu_csc_scaler_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= ipu_csc_scaler_open,
-+	.release	= ipu_csc_scaler_release,
-+	.poll		= v4l2_m2m_fop_poll,
-+	.unlocked_ioctl	= video_ioctl2,
-+	.mmap		= v4l2_m2m_fop_mmap,
-+};
-+
-+static struct v4l2_m2m_ops m2m_ops = {
-+	.device_run	= device_run,
-+	.job_abort	= job_abort,
-+};
-+
-+static const struct video_device ipu_csc_scaler_videodev_template = {
-+	.name		= "ipu_ic_pp csc/scaler",
-+	.fops		= &ipu_csc_scaler_fops,
-+	.ioctl_ops	= &ipu_csc_scaler_ioctl_ops,
-+	.minor		= -1,
-+	.release	= video_device_release,
-+	.vfl_dir	= VFL_DIR_M2M,
-+	.device_caps	= V4L2_CAP_VIDEO_M2M | V4L2_CAP_STREAMING,
-+};
-+
-+int imx_media_csc_scaler_device_register(struct imx_media_video_dev *vdev)
-+{
-+	struct ipu_csc_scaler_priv *priv = vdev_to_priv(vdev);
-+	struct video_device *vfd = vdev->vfd;
-+	int ret;
-+
-+	vfd->v4l2_dev = &priv->md->v4l2_dev;
-+
-+	ret = video_register_device(vfd, VFL_TYPE_GRABBER, -1);
-+	if (ret) {
-+		v4l2_err(vfd->v4l2_dev, "Failed to register video device\n");
-+		return ret;
-+	}
-+
-+	v4l2_info(vfd->v4l2_dev, "Registered %s as /dev/%s\n", vfd->name,
-+		  video_device_node_name(vfd));
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(imx_media_csc_scaler_device_register);
-+
-+void imx_media_csc_scaler_device_unregister(struct imx_media_video_dev *vdev)
-+{
-+	struct ipu_csc_scaler_priv *priv = vdev_to_priv(vdev);
-+	struct video_device *vfd = priv->vdev.vfd;
-+
-+	mutex_lock(&priv->mutex);
-+
-+	if (video_is_registered(vfd))
-+		video_unregister_device(vfd);
-+
-+	mutex_unlock(&priv->mutex);
-+}
-+EXPORT_SYMBOL_GPL(imx_media_csc_scaler_device_unregister);
-+
-+struct imx_media_video_dev *
-+imx_media_csc_scaler_device_init(struct imx_media_dev *md)
-+{
-+	struct ipu_csc_scaler_priv *priv;
-+	struct video_device *vfd;
-+	int ret;
-+
-+	priv = devm_kzalloc(md->md.dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return ERR_PTR(-ENOMEM);
-+
-+	priv->md = md;
-+	priv->dev = md->md.dev;
-+
-+	mutex_init(&priv->mutex);
-+
-+	vfd = video_device_alloc();
-+	if (!vfd)
-+		return ERR_PTR(-ENOMEM);
-+
-+	*vfd = ipu_csc_scaler_videodev_template;
-+	vfd->lock = &priv->mutex;
-+	priv->vdev.vfd = vfd;
-+
-+	INIT_LIST_HEAD(&priv->vdev.list);
-+
-+	video_set_drvdata(vfd, priv);
-+
-+	priv->m2m_dev = v4l2_m2m_init(&m2m_ops);
-+	if (IS_ERR(priv->m2m_dev)) {
-+		ret = PTR_ERR(priv->m2m_dev);
-+		v4l2_err(&md->v4l2_dev, "Failed to init mem2mem device: %d\n",
-+			 ret);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return &priv->vdev;
-+}
-+EXPORT_SYMBOL_GPL(imx_media_csc_scaler_device_init);
-+
-+void imx_media_csc_scaler_device_remove(struct imx_media_video_dev *vdev)
-+{
-+	struct ipu_csc_scaler_priv *priv = vdev_to_priv(vdev);
-+
-+	v4l2_m2m_release(priv->m2m_dev);
-+}
-+EXPORT_SYMBOL_GPL(imx_media_csc_scaler_device_remove);
-+
-+MODULE_DESCRIPTION("i.MX IPUv3 mem2mem scaler/CSC driver");
-+MODULE_AUTHOR("Sascha Hauer <s.hauer@pengutronix.de>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/staging/media/imx/imx-media-dev.c b/drivers/staging/media/imx/imx-media-dev.c
-index 0a7d1d183141..4d2078d18a48 100644
---- a/drivers/staging/media/imx/imx-media-dev.c
-+++ b/drivers/staging/media/imx/imx-media-dev.c
-@@ -323,12 +323,36 @@ int imx_media_probe_complete(struct v4l2_async_notifier *notifier)
- 		goto unlock;
- 
- 	ret = v4l2_device_register_subdev_nodes(&imxmd->v4l2_dev);
--unlock:
--	mutex_unlock(&imxmd->mutex);
- 	if (ret)
--		return ret;
-+		goto unlock;
-+
-+	imxmd->m2m_vdev = imx_media_csc_scaler_device_init(imxmd);
-+	if (IS_ERR(imxmd->m2m_vdev)) {
-+		ret = PTR_ERR(imxmd->m2m_vdev);
-+		goto unlock;
-+	}
- 
--	return media_device_register(&imxmd->md);
-+	ret = imx_media_csc_scaler_device_register(imxmd->m2m_vdev);
-+	if (ret)
-+		goto m2m_remove;
-+
-+	mutex_unlock(&imxmd->mutex);
-+
-+	ret = media_device_register(&imxmd->md);
-+	if (ret) {
-+		mutex_lock(&imxmd->mutex);
-+		goto m2m_unreg;
-+	}
-+
-+	return 0;
-+
-+m2m_unreg:
-+	imx_media_csc_scaler_device_unregister(imxmd->m2m_vdev);
-+m2m_remove:
-+	imx_media_csc_scaler_device_remove(imxmd->m2m_vdev);
-+unlock:
-+	mutex_unlock(&imxmd->mutex);
-+	return ret;
- }
- 
- /*
-@@ -504,6 +528,8 @@ static int imx_media_remove(struct platform_device *pdev)
- 	v4l2_async_notifier_unregister(&imxmd->notifier);
- 	imx_media_remove_ipu_internal_subdevs(imxmd);
- 	v4l2_async_notifier_cleanup(&imxmd->notifier);
-+	imx_media_csc_scaler_device_unregister(imxmd->m2m_vdev);
-+	imx_media_csc_scaler_device_remove(imxmd->m2m_vdev);
- 	media_device_unregister(&imxmd->md);
- 	v4l2_device_unregister(&imxmd->v4l2_dev);
- 	media_device_cleanup(&imxmd->md);
-diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-index dd603a6b3a70..1894553b4497 100644
---- a/drivers/staging/media/imx/imx-media.h
-+++ b/drivers/staging/media/imx/imx-media.h
-@@ -151,6 +151,9 @@ struct imx_media_dev {
- 
- 	/* for async subdev registration */
- 	struct v4l2_async_notifier notifier;
-+
-+	/* IC scaler/CSC mem2mem video device */
-+	struct imx_media_video_dev *m2m_vdev;
- };
- 
- enum codespace_sel {
-@@ -281,6 +284,13 @@ void imx_media_capture_device_set_format(struct imx_media_video_dev *vdev,
- 					 const struct v4l2_rect *compose);
- void imx_media_capture_device_error(struct imx_media_video_dev *vdev);
- 
-+/* imx-media-mem2mem.c */
-+struct imx_media_video_dev *
-+imx_media_csc_scaler_device_init(struct imx_media_dev *dev);
-+void imx_media_csc_scaler_device_remove(struct imx_media_video_dev *vdev);
-+int imx_media_csc_scaler_device_register(struct imx_media_video_dev *vdev);
-+void imx_media_csc_scaler_device_unregister(struct imx_media_video_dev *vdev);
-+
- /* subdev group ids */
- #define IMX_MEDIA_GRP_ID_CSI2          BIT(8)
- #define IMX_MEDIA_GRP_ID_CSI           BIT(9)
--- 
-2.20.1
+Most of the changes will be new format descriptions, and I guess that
+would only concern a single tree.
 
+And really, we're doing this all the time, so I'm not sure what the
+big deal is here.
+
+I feel like there's something that you don't really like about this,
+but you're not saying this out loud.
+
+Sure, the exact process needs to be figured out, and everyone needs to
+agree upon that process. But that's pretty much it, and it's nothing
+out of the ordinary.
+
+> And yes I think an overall gfx-like-stuff.git tree for drm and v4l and
+> the few other bits really makes tons of sense. Not as a tree where
+> people commit, but as the 2nd-level integration tree (like drm.git
+> right now for gpu stuff).
+>
+> > And I don't really get why you're against this in the first
+> > place. When you have some code in a single driver that would benefit
+> > more driver, you create a helper and move it into the core.
+>
+> It's a feature that drm doesn't share that much code with other parts
+> of the kernel, it makes backporting the gfx stack to lts kernels a lot
+> easier. Until someone fixes the upstream kernel release model to no
+> longer need large scale gpu driver backports, we need to keep that.
+>
+> > In this case, we have some code used by a framework that more
+> > framework could use, and we move it to a core-er place. How is that
+> > different?
+>
+> Imo core sharing for code sharing's sake is overrated. If we already
+> have drm and v4l tightly integrated as a community, then code sharing
+> becomes a lot easier, and a lot more reasonable to do.
+
+At least Laurent, Boris, Ezequiel, Gustavo and I have been working on
+v4l2, so I'm not sure how not integrated we are.
+
+> Plus we can then just stuff code int drivers/gpu or drivers/video
+> (or merge these two because really it's all the same). But my
+> understanding is that integrating more tightly with the drm folks is
+> a very contreversial topic in v4l
+
+So, I sent the RFC expecting that kind of feedback.
+
+Hans replied mainly to that patch https://patchwork.freedesktop.org/patch/293043/
+
+"
+If we are creating a common library then I think we should change that rule
+to: "unless they are in use by a DRM or V4L2 driver". And when new formats are
+added, and they exists already for DRM or V4L2, then we should use the same
+fourcc for the other subsystem.
+
+I.e. if pixelformat V4L2_PIX_FMT_FOO was already defined, then add a:
+
+#define DRM_FORMAT_FOO V4L2_PIX_FMT_FOO
+
+rather than creating a new fourcc.
+
+We could even start looking at redoing the whole scheme in a unified way, but
+that's something for the (far) future.
+
+This is already a big step forward.
+"
+
+So, not controversial at all.
+
+> and until that's resolved I don't see a huge need or benefit in
+> sharing tons of code.
+
+That's mostly tons of data though. The code is pretty small and
+trivial.
+
+> And the format stuff is a lot more central to kms than e.g. the
+> infoframe helpers.
+>
+> Au contraire, I think forcing this has a lot of potential for
+> needless fights between drm and v4l.
+
+We're all reasonable, so I'm not sure why we would need to fight here.
+
+> Hence my suggestion to try a minimal format conversion library
+> between the drm format world and the v4l format wolrd, and see how
+> that goes. That contains a lot less risk than going all in right
+> from the start.
+
+And it's really not about getting access to the DRM fourcc. It's about
+getting access to DRM's format description, so I'm not really sure
+what there is to convert, we just want a lookup.
+
+Maxime
+
+--
+Maxime Ripard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
