@@ -2,174 +2,276 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_RHS_DOB,USER_AGENT_NEOMUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBDDEC10F0E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 06:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 709DFC10F14
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 06:25:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A3E6C2186A
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 06:22:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40441217D7
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 06:25:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="SbE1mRNw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388044AbfDRGWg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 02:22:36 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:40699 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730308AbfDRGWf (ORCPT
+        id S2388069AbfDRGZQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 02:25:16 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:57836 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725864AbfDRGZQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 02:22:35 -0400
-X-Originating-IP: 90.89.68.76
-Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (Authenticated sender: maxime.ripard@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 13757E0004;
-        Thu, 18 Apr 2019 06:22:29 +0000 (UTC)
-Date:   Thu, 18 Apr 2019 08:22:29 +0200
-From:   Maxime Ripard <maxime.ripard@bootlin.com>
-To:     Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
- common place
-Message-ID: <20190418062229.eyog4i62eg4pr6uf@flea>
-References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
- <20190417154121.GJ13337@phenom.ffwll.local>
+        Thu, 18 Apr 2019 02:25:16 -0400
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 67DFA306;
+        Thu, 18 Apr 2019 08:25:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1555568713;
+        bh=6L+lXE2vKB5SQF0A/4pEae2+Y/4jxxyT3BJ10IcFyCc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SbE1mRNwYUCXlGLK5wpBrW/oJKE45smwgTMB1fzRdOfuc1LrtuWRyuXpmPtbNtL0y
+         0yM1bY5Xd88wqlMr7j3zlAYsszT1n4p0VD/7wq6aAJahLfPncdmjIk6qgw+wmMwT4u
+         HNvTa/sATY5Go4DBqP2VV0dfWoKgzdbISl7IXpgY=
+Date:   Thu, 18 Apr 2019 09:25:05 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Subject: Re: [PATCH 3/9] v4l: Add definitions for missing 16-bit RGB555
+ formats
+Message-ID: <20190418062505.GD4806@pendragon.ideasonboard.com>
+References: <20190328070723.26553-1-laurent.pinchart+renesas@ideasonboard.com>
+ <20190328070723.26553-4-laurent.pinchart+renesas@ideasonboard.com>
+ <20190404155739.byhj4hqid2o6aqb4@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190417154121.GJ13337@phenom.ffwll.local>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190404155739.byhj4hqid2o6aqb4@uno.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Daniel,
+Hi Jacopo,
 
-On Wed, Apr 17, 2019 at 05:41:21PM +0200, Daniel Vetter wrote:
-> On Wed, Apr 17, 2019 at 09:54:26AM +0200, Maxime Ripard wrote:
-> > Hi,
+On Thu, Apr 04, 2019 at 05:57:39PM +0200, Jacopo Mondi wrote:
+> On Thu, Mar 28, 2019 at 09:07:17AM +0200, Laurent Pinchart wrote:
+> > The V4L2 API is missing the 16-bit RGB555 formats for the RGBA, RGBX,
+> > ABGR, XBGR, BGRA and BGRX component orders. Add them, using the same
+> > 4CCs as DRM.
 > >
-> > DRM comes with an extensive format support to retrieve the various
-> > parameters associated with a given format (such as the subsampling, or the
-> > bits per pixel), as well as some helpers and utilities to ease the driver
-> > development.
+> > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> > ---
+> >  .../media/uapi/v4l/pixfmt-packed-rgb.rst      | 138 ++++++++++++++++++
+> >  include/uapi/linux/videodev2.h                |   6 +
+> >  2 files changed, 144 insertions(+)
 > >
-> > v4l2, on the other side, doesn't provide such facilities, leaving each
-> > driver reimplement a subset of the formats parameters for the one supported
-> > by that particular driver. This leads to a lot of duplication and
-> > boilerplate code in the v4l2 drivers.
+> > diff --git a/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst b/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
+> > index b475cbba492f..9a9c1993b0fd 100644
+> > --- a/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
+> > +++ b/Documentation/media/uapi/v4l/pixfmt-packed-rgb.rst
+> > @@ -323,6 +323,144 @@ next to each other in memory.
+> >        - g\ :sub:`4`
+> >        - g\ :sub:`3`
+> >        -
+> > +    * .. _V4L2-PIX-FMT-RGBA555:
+> > +
+> > +      - ``V4L2_PIX_FMT_RGBA555``
+> > +      - 'RA15'
+> > +
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      - b\ :sub:`4`
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      - a
+> > +
+> > +      - r\ :sub:`4`
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +      - g\ :sub:`4`
+> > +      - g\ :sub:`3`
+> > +      - g\ :sub:`2`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-RGBX555:
+> > +
+> > +      - ``V4L2_PIX_FMT_RGBX555``
+> > +      - 'RX15'
+> > +
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      - b\ :sub:`4`
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      -
+> > +
+> > +      - r\ :sub:`4`
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +      - g\ :sub:`4`
+> > +      - g\ :sub:`3`
+> > +      - g\ :sub:`2`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-ABGR555:
+> > +
+> > +      - ``V4L2_PIX_FMT_ABGR555``
+> > +      - 'AB15'
+> > +
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      - r\ :sub:`4`
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +
+> > +      - a
+> > +      - b\ :sub:`4`
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      - g\ :sub:`4`
+> > +      - g\ :sub:`3`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-XBGR555:
+> > +
+> > +      - ``V4L2_PIX_FMT_XBGR555``
+> > +      - 'XB15'
+> > +
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      - r\ :sub:`4`
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +
+> > +      -
+> > +      - b\ :sub:`4`
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      - g\ :sub:`4`
+> > +      - g\ :sub:`3`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-BGRA555:
+> > +
+> > +      - ``V4L2_PIX_FMT_BGRA555``
+> > +      - 'BA15'
+> > +
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      - r\ :sub:`4`
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +      - a
+> > +
+> > +      - b\ :sub:`4`
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      - g\ :sub:`4`
+> > +      - g\ :sub:`3`
+> > +      -
+> > +    * .. _V4L2-PIX-FMT-BGRX555:
+> > +
+> > +      - ``V4L2_PIX_FMT_BGRX555``
+> > +      - 'BX15'
+> > +
+> > +      - g\ :sub:`2`
+> > +      - g\ :sub:`1`
+> > +      - g\ :sub:`0`
+> > +      - r\ :sub:`4`
+> > +      - r\ :sub:`3`
+> > +      - r\ :sub:`2`
+> > +      - r\ :sub:`1`
+> > +      - r\ :sub:`0`
+> > +      -
+> > +
+> > +      - b\ :sub:`4`
+> > +      - b\ :sub:`3`
+> > +      - b\ :sub:`2`
+> > +      - b\ :sub:`1`
+> > +      - b\ :sub:`0`
+> > +      - g\ :sub:`4`
+> > +      - g\ :sub:`3`
+> > +      -
+> 
+> I see the last 4 formats are identical in their components
+> disposition. Is this intended?
+> 
+>                    B1                          B0
+>           b7                   b0   b7                  b0
+> ABGR555 | g2 g1 g0 b4 b3 b2 b1 b0 | a r4 r3 r2 r1 r0 g4 g3 |
+> XBGR555 | g2 g1 g0 b4 b3 b2 b1 b0 | x r4 r3 r2 r1 r0 g4 g3 |
+
+Unless I'm mistaken, these two are defined in the patch as
+
+  ABGR555 | g2 g1 g0 r4 r3 r2 r1 r0 | a  b4 b3 b2 b1 b0 g4 g3 |
+  XBGR555 | g2 g1 g0 r4 r3 r2 r1 r0 | x  b4 b3 b2 b1 b0 g4 g3 |
+
+> BGRA555 | g2 g1 g0 b4 b3 b2 b1 b0 | a r4 r3 r2 r1 r0 g4 g3 |
+> BGRX555 | g2 g1 g0 b4 b3 b2 b1 b0 | x r4 r3 r2 r1 r0 g4 g3 |
+
+These two formats are defined as
+
+  BGRA555 | g2 g1 g0 r4 r3 r2 r1 r0 | a  b4 b3 b2 b1 b0 g4 g3 |
+  BGRX555 | g2 g1 g0 r4 r3 r2 r1 r0 | x  b4 b3 b2 b1 b0 g4 g3 |
+
+as well, while they should be defined as
+
+  BGRA555 | g1 g0 r4 r3 r2 r1 r0 a  | b4 b3 b2 b1 b0 g4 g3 g2 |
+  BGRX555 | g1 g0 r4 r3 r2 r1 r0 x  | b4 b3 b2 b1 b0 g4 g3 g2 |
+
+I will fix this.
+
+> If there is any correlation with the naming scheme (but I think
+> there's not, at least not a strict one) 'a' and 'x' of BGR* formats
+> should be in the most significant bit of Byte 1.
+
+Did you mean the least significant bit ?
+
+> >      * .. _V4L2-PIX-FMT-RGB565:
 > >
-> > This series tries to address this by moving the DRM format API into lib and
-> > turning it into a more generic API. In order to do this, we've needed to do
-> > some preliminary changes on the DRM drivers, then moved the API and finally
-> > converted a v4l2 driver to give an example of how such library could be
-> > used.
-> >
-> > Let me know what you think,
-> > Maxime
-> >
-> > Changes from RFC:
-> >   - Rebased on next
-> >   - Fixed the various formats mapping
-> >   - Added tags
-> >   - Did most of the formats functions as inline functions
-> >   - Used a consistent prefix for all the utilities functions
-> >   - Fixed the compilation breakages, and did a run of allmodconfig for arm,
-> >     arm64 and x86_64
-> >   - Fixed out of array bounds warnings in the image_format_info_block_*
-> >     functions
-> >   - Added License and copyright headers on missing files
-> >
-> > Maxime Ripard (20):
-> >   drm: Remove users of drm_format_num_planes
-> >   drm: Remove users of drm_format_(horz|vert)_chroma_subsampling
-> >   drm/fourcc: Pass the format_info pointer to drm_format_plane_cpp
-> >   drm/fourcc: Pass the format_info pointer to drm_format_plane_width/height
-> >   drm: Replace instances of drm_format_info by drm_get_format_info
-> >   lib: Add video format information library
-> >   drm/fb: Move from drm_format_info to image_format_info
-> >   drm/malidp: Convert to generic image format library
-> >   drm/client: Convert to generic image format library
-> >   drm/exynos: Convert to generic image format library
-> >   drm/i915: Convert to generic image format library
-> >   drm/ipuv3: Convert to generic image format library
-> >   drm/msm: Convert to generic image format library
-> >   drm/omap: Convert to generic image format library
-> >   drm/rockchip: Convert to generic image format library
-> >   drm/tegra: Convert to generic image format library
-> >   drm/fourcc: Remove old DRM format API
-> >   lib: image-formats: Add v4l2 formats support
-> >   lib: image-formats: Add more functions
-> >   media: sun6i: Convert to the image format API
->
-> In the interest of making myself unpopular: Why move this out of drm?
->
-> We do have a bunch of other such shared helpers already (mostly in
-> drivers/video) for dt videomode and hdmi infoframes, and I'm not super
-> sure that's going better than keeping it maintained in drm.
->
-> Plus the uapi is already that you include drm_fourcc.h to get at these,
-> dropping the drm prefix isn't going to help I think.
->
-> Of course we'd need to make it a separate drm_formats.ko (so that v4l can
-> use it without dragging in all of drm), and we need to add some fields for
-> converting to v4l fourcc codes (which are different). But that should be
-> all possible. And I don't think the drm_ prefix in v4l code is a problem,
-> it's actually a feature: It makes it really clear that these are the drm
-> fourcc codes, as allocated in drm_fourcc.h, plus their modifiers, and all
-> that. That allocation authority is also already baked into various khr/ext
-> standards, too.
+> >        - ``V4L2_PIX_FMT_RGB565``
+> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> > index df9fa78a6ab7..fb6f01a7c91c 100644
+> > --- a/include/uapi/linux/videodev2.h
+> > +++ b/include/uapi/linux/videodev2.h
+> > @@ -523,6 +523,12 @@ struct v4l2_pix_format {
+> >  #define V4L2_PIX_FMT_RGB555  v4l2_fourcc('R', 'G', 'B', 'O') /* 16  RGB-5-5-5     */
+> >  #define V4L2_PIX_FMT_ARGB555 v4l2_fourcc('A', 'R', '1', '5') /* 16  ARGB-1-5-5-5  */
+> >  #define V4L2_PIX_FMT_XRGB555 v4l2_fourcc('X', 'R', '1', '5') /* 16  XRGB-1-5-5-5  */
+> > +#define V4L2_PIX_FMT_RGBA555 v4l2_fourcc('R', 'A', '1', '5') /* 16  RGBA-5-5-5-1  */
+> > +#define V4L2_PIX_FMT_RGBX555 v4l2_fourcc('R', 'X', '1', '5') /* 16  RGBX-5-5-5-1  */
+> > +#define V4L2_PIX_FMT_ABGR555 v4l2_fourcc('A', 'B', '1', '5') /* 16  ABGR-1-5-5-5  */
+> > +#define V4L2_PIX_FMT_XBGR555 v4l2_fourcc('X', 'B', '1', '5') /* 16  XBGR-1-5-5-5  */
+> > +#define V4L2_PIX_FMT_BGRA555 v4l2_fourcc('B', 'A', '1', '5') /* 16  BGRA-5-5-5-1  */
+> > +#define V4L2_PIX_FMT_BGRX555 v4l2_fourcc('B', 'X', '1', '5') /* 16  BGRX-5-5-5-1  */
+> >  #define V4L2_PIX_FMT_RGB565  v4l2_fourcc('R', 'G', 'B', 'P') /* 16  RGB-5-6-5     */
+> >  #define V4L2_PIX_FMT_RGB555X v4l2_fourcc('R', 'G', 'B', 'Q') /* 16  RGB-5-5-5 BE  */
+> >  #define V4L2_PIX_FMT_ARGB555X v4l2_fourcc_be('A', 'R', '1', '5') /* 16  ARGB-5-5-5 BE */
 
-The way I see it, there's a fundamental difference between the UAPI
-and the kernel. I don't suggest we change anything about the UAPI: the
-drm formats should keep their prefix, drm_fourcc.h can remain that
-authority, it's all fine.
+-- 
+Regards,
 
-Internally however, the long term goal is to share the fourcc's
-between DRM and V4L2 for the same formats. It basically means that of
-course v4l2 should be using the DRM fourcc when a format exists in DRM
-and not v4l2, but also that DRM should use v4l2 fourcc when the format
-exists in v4l2 but not DRM, and that is far more likely, given the
-already extensive v4l2 formats support.
-
-And given how the current state is a mess in this regard, I'm not too
-optimistic about keeping the formats in their relevant frameworks.
-
-Having a shared library, governed by both, will make this far easier,
-since it will be easy to discover the formats that are already
-supported by the other subsystem.
-
-If we want to keep the current library in DRM, we have two options
-then:
-
-  - Support all the v4l2 formats in the DRM library, which is
-    essentially what I'm doing in the last patches. However, that
-    would require to have the v4l2 developpers also reviewing stuff
-    there. And given how busy they are, I cannot really see how that
-    would work.
-
-  - Develop the same library from within v4l2. That is really a poor
-    solution, since the information would be greatly duplicated
-    between the two, and in terms of maintainance, code, and binary
-    size that would be duplicated too.
-
-Having it shared allows to easily share, and discover formats from the
-other subsystem, and to have a single, unique place where this is
-centralized.
-
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Laurent Pinchart
