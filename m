@@ -2,80 +2,94 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C24AC10F0E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 08:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C951BC10F0B
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 08:18:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5E35D20693
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 08:08:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8ED612183E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 08:18:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="EBKdCto7"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="h+2loIfc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388195AbfDRIIc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 04:08:32 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:36157 "EHLO
+        id S2388372AbfDRISd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 04:18:33 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:46911 "EHLO
         mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728074AbfDRIIc (ORCPT
+        with ESMTP id S2388160AbfDRISX (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 04:08:32 -0400
-Received: by mail-ed1-f68.google.com with SMTP id u57so1053922edm.3
-        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 01:08:30 -0700 (PDT)
+        Thu, 18 Apr 2019 04:18:23 -0400
+Received: by mail-ed1-f68.google.com with SMTP id d1so1029856edd.13
+        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 01:18:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
         h=sender:date:from:to:cc:subject:message-id:mail-followup-to
          :references:mime-version:content-disposition
          :content-transfer-encoding:in-reply-to:user-agent;
-        bh=wxG+RZta+9XvMhokOt8uuMHvhmxktY7iLWZC4ljhQm8=;
-        b=EBKdCto7iKhp3e+PjZUSFGHh7Dp1zvcNMX5g39WvYnsCHKmsv8zfaADwSoV7VL27J+
-         EXWdOfKfM0QJI0d4qBfW2m+hRaDnC6SYtr3FsHQW0ovB+LktztwoZMPXRUmsKDdSh1BK
-         /CQqcAvf5h/koz+G1IVLsOJJWO/1ofmKh/9As=
+        bh=M3sejZMVhFeID8zPTGkXxP8kTwM980vNh9pTofxi32Y=;
+        b=h+2loIfcWivaOrahN6jPBGhdzuUS3OFS5ILiy1vVuF29+HLuchI+uPXL/zbsz18YV8
+         FE/LlGq6s2H17drGsuDBgDvxWkvgsDLrI7UgYImP45PpVlZoGPe3aNjKPYXqkWRDKz/9
+         n7qRRXINg8eibxPkWSXf/vfcK4nPRIvwNOJZM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :mail-followup-to:references:mime-version:content-disposition
          :content-transfer-encoding:in-reply-to:user-agent;
-        bh=wxG+RZta+9XvMhokOt8uuMHvhmxktY7iLWZC4ljhQm8=;
-        b=LgQv+ZShznY3qfebIqmT/NTo5IjQm36NGNxnN8D3tU66/EK+QL63WxxfVxU9QvmCcj
-         nELJPd3M8VIJLKp+VBBvPVjg3OFNGl6WfJJ3VxEBA/YBQOtHju0d2kd5nM9Wnxtj8jjk
-         gHWSmcd78PqM3Y0B+aI+CoaEFILMguXnimjgtbfZpn/viemz6mF45TKwlet92gIpBhgW
-         hC12V5VUzDx52XhHnQq+i3VN+dI4Grw9cnqA5GdCmwLS/DKSoshF/c+QntkdnONfOpdt
-         Ny1dcMVDVLzA88s+eUPa7iIxs4Il4vgGOaRxW5D3ZKZjpbzd3jo0gC7aGWAbEI+jHrjF
-         v9sw==
-X-Gm-Message-State: APjAAAVqXJS0Ry/I7/0e+jiowolGMJ53KVVNXJxsDtGo7mWt9HlKVqgk
-        I/RQIVyvasKNxdOl59062XFGrg==
-X-Google-Smtp-Source: APXvYqzx15cDDQZDb6elKOpUDSkixppXCvtSq7N3REdXGSLuLRG1GEYir82c5a5RZu+/tO6gmMXJUA==
-X-Received: by 2002:a17:906:4f19:: with SMTP id t25mr22109407eju.165.1555574909878;
-        Thu, 18 Apr 2019 01:08:29 -0700 (PDT)
+        bh=M3sejZMVhFeID8zPTGkXxP8kTwM980vNh9pTofxi32Y=;
+        b=MgGOldFE57k7YNmE7niNV2RlfGUzIWZ1Oxiv8/NpTnJYvDR2NaSQBolbyXLRhB968L
+         aP58EeIkB4+KAcVUc4WmCrzSn8IsO54SZ8mArXDI3jzW8MTLffn1l7mhTjCLcCg/wwiP
+         6Y3LxT6yI+nJV6jySzG9kc/Zw8ki8OOVkmiV2Mv6FuLLefFeZ7kJn1PPGI80iQj2M0wf
+         Oxv9CBOPsThIKtcvwkxAxTKtPsD7fYyD2Rnd/dFGUHr3DkDw1S1Oc9FR7IJSO2zDNeUw
+         P26Tv5yOCzrYRa4fDMDU0blbIF35QtSF+yLGICcHOkvNRZ2344ZXcyeUbvmatldn3VgW
+         +BpA==
+X-Gm-Message-State: APjAAAV8M+GM6RBHnjoHy4odBlumovK3SLMSGBlUi7dUDiN4RhndBXEG
+        EQBKz9bUxZdoiSGAZlwbpACYfA==
+X-Google-Smtp-Source: APXvYqykW9taDI97gC/Ks2cImjrS2og1u4qHwH/26iG0SYwuzadMcseeNNHkhV+l/dpVR0iC9y+1rg==
+X-Received: by 2002:a50:be42:: with SMTP id b2mr4188121edi.192.1555575500088;
+        Thu, 18 Apr 2019 01:18:20 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
-        by smtp.gmail.com with ESMTPSA id s11sm253826ejq.59.2019.04.18.01.08.28
+        by smtp.gmail.com with ESMTPSA id x55sm335963edx.66.2019.04.18.01.18.18
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 18 Apr 2019 01:08:28 -0700 (PDT)
-Date:   Thu, 18 Apr 2019 10:08:26 +0200
+        Thu, 18 Apr 2019 01:18:19 -0700 (PDT)
+Date:   Thu, 18 Apr 2019 10:18:16 +0200
 From:   Daniel Vetter <daniel@ffwll.ch>
-To:     christian.koenig@amd.com
-Cc:     sumit.semwal@linaro.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org
-Subject: Re: [PATCH 04/12] dma-buf: add optional invalidate_mappings callback
- v5
-Message-ID: <20190418080826.GN13337@phenom.ffwll.local>
-Mail-Followup-To: christian.koenig@amd.com, sumit.semwal@linaro.org,
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org
-References: <20190416183841.1577-1-christian.koenig@amd.com>
- <20190416183841.1577-5-christian.koenig@amd.com>
- <20190417190719.GL13337@phenom.ffwll.local>
- <03a04d1d-9bc0-8f20-0436-b0f0017f0506@gmail.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
+Message-ID: <20190418081816.GO13337@phenom.ffwll.local>
+Mail-Followup-To: Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <03a04d1d-9bc0-8f20-0436-b0f0017f0506@gmail.com>
+In-Reply-To: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
 X-Operating-System: Linux phenom 4.19.0-1-amd64 
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
@@ -83,79 +97,139 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Apr 17, 2019 at 09:13:22PM +0200, Christian König wrote:
-> Am 17.04.19 um 21:07 schrieb Daniel Vetter:
-> > On Tue, Apr 16, 2019 at 08:38:33PM +0200, Christian König wrote:
-> > > Each importer can now provide an invalidate_mappings callback.
-> > > 
-> > > This allows the exporter to provide the mappings without the need to pin
-> > > the backing store.
-> > > 
-> > > v2: don't try to invalidate mappings when the callback is NULL,
-> > >      lock the reservation obj while using the attachments,
-> > >      add helper to set the callback
-> > > v3: move flag for invalidation support into the DMA-buf,
-> > >      use new attach_info structure to set the callback
-> > > v4: use importer_priv field instead of mangling exporter priv.
-> > > v5: drop invalidation_supported flag
-> > > 
-> > > Signed-off-by: Christian König <christian.koenig@amd.com>
-> > > ---
-> > >   drivers/dma-buf/dma-buf.c | 37 +++++++++++++++++++++++++++++++++++++
-> > >   include/linux/dma-buf.h   | 33 +++++++++++++++++++++++++++++++--
-> > >   2 files changed, 68 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> > > index 83c92bfd964c..a3738fab3927 100644
-> > > --- a/drivers/dma-buf/dma-buf.c
-> > > +++ b/drivers/dma-buf/dma-buf.c
-> > > @@ -563,6 +563,8 @@ struct dma_buf_attachment *dma_buf_attach(const struct dma_buf_attach_info *info
-> > >   	attach->dev = info->dev;
-> > >   	attach->dmabuf = dmabuf;
-> > > +	attach->importer_priv = info->importer_priv;
-> > > +	attach->invalidate = info->invalidate;
-> > >   	mutex_lock(&dmabuf->lock);
-> > > @@ -571,7 +573,9 @@ struct dma_buf_attachment *dma_buf_attach(const struct dma_buf_attach_info *info
-> > >   		if (ret)
-> > >   			goto err_attach;
-> > >   	}
-> > > +	reservation_object_lock(dmabuf->resv, NULL);
-> > >   	list_add(&attach->node, &dmabuf->attachments);
-> > > +	reservation_object_unlock(dmabuf->resv);
-> > >   	mutex_unlock(&dmabuf->lock);
-> > > @@ -615,7 +619,9 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
-> > >   					   DMA_BIDIRECTIONAL);
-> > >   	mutex_lock(&dmabuf->lock);
-> > > +	reservation_object_lock(dmabuf->resv, NULL);
-> > >   	list_del(&attach->node);
-> > > +	reservation_object_unlock(dmabuf->resv);
-> > >   	if (dmabuf->ops->detach)
-> > >   		dmabuf->ops->detach(dmabuf, attach);
-> > > @@ -653,7 +659,16 @@ dma_buf_map_attachment_locked(struct dma_buf_attachment *attach,
-> > >   	if (attach->sgt)
-> > >   		return attach->sgt;
-> > > +	/*
-> > > +	 * Mapping a DMA-buf can trigger its invalidation, prevent sending this
-> > > +	 * event to the caller by temporary removing this attachment from the
-> > > +	 * list.
-> > > +	 */
-> > > +	if (attach->invalidate)
-> > > +		list_del(&attach->node);
-> > Just noticed this: Why do we need this? invalidate needs the reservation
-> > lock, as does map_attachment. It should be impssoble to have someone else
-> > sneak in here.
+On Wed, Apr 17, 2019 at 08:10:15PM +0200, Paul Kocialkowski wrote:
+> Hi Nicolas,
 > 
-> I was having problems with self triggered invalidations.
+> I'm detaching this thread from our V4L2 stateless decoding spec since
+> it has drifted off and would certainly be interesting to DRM folks as
+> well!
 > 
-> E.g. client A tries to map an attachment, that in turn causes the buffer to
-> move to a new place and client A is informed about that movement with an
-> invalidation.
+> For context: I was initially talking about writing up support for the
+> Allwinner 2D engine as a DRM render driver, where I'd like to be able
+> to batch jobs that affect the same destination buffer to only signal
+> the out fence once when the batch is done. We have a similar issue in
+> v4l2 where we'd like the destination buffer for a set of requests (each
+> covering one H264 slice) to be marked as done once the set was decoded.
+> 
+> Le mercredi 17 avril 2019 à 12:22 -0400, Nicolas Dufresne a écrit :
+> > > > > Interestingly, I'm experiencing the exact same problem dealing with a
+> > > > > 2D graphics blitter that has limited ouput scaling abilities which
+> > > > > imply handlnig a large scaling operation as multiple clipped smaller
+> > > > > scaling operations. The issue is basically that multiple jobs have to
+> > > > > be submitted to complete a single frame and relying on an indication
+> > > > > from the destination buffer (such as a fence) doesn't work to indicate
+> > > > > that all the operations were completed, since we get the indication at
+> > > > > each step instead of at the end of the batch.
+> > > > 
+> > > > That looks similar to the IMX.6 IPU m2m driver. It splits the image in
+> > > > tiles of 1024x1024 and process each tile separately. This driver has
+> > > > been around for a long time, so I guess they have a solution to that.
+> > > > They don't need requests, because there is nothing to be bundled with
+> > > > the input image. I know that Renesas folks have started working on a
+> > > > de-interlacer. Again, this kind of driver may process and reuse input
+> > > > buffers for motion compensation, but I don't think they need special
+> > > > userspace API for that.
+> > > 
+> > > Thanks for the reference! I hope it's not a blitter that was
+> > > contributed as a V4L2 driver instead of DRM, as it probably would be
+> > > more useful in DRM (but that's way beside the point).
+> > 
+> > DRM does not offer a generic and discoverable interface for these
+> > accelerators. Note that these drivers have most of the time started as
+> > DRM driver and their DRM side where dropped. That was the case for
+> > Exynos drivers at least.
+> 
+> Heh, sadly I'm aware of how things turn out most of the time. The thing
+> is that DRM expects drivers to implement their own interface. That's
+> fine for passing BOs with GPU bitstream and textures, but not so much
+> for dealing with framebuffer-based operations where the streaming and
+> buffer interface that v4l2 has is a good fit.
+> 
+> There's also the fact that the 2D pipeline is fixed-function and highly
+> hardware-specific, so we need driver-specific job descriptions to
+> really make the most of it. That's where v4l2 is not much of a good fit
+> for complex 2D pipelines either. Most 2D engines can take multiple
+> inputs and blit them together in various ways, which is too far from
+> what v4l2 deals with. So we can have fixed single-buffer pipelines with
+> at best CSC and scaling, but not much more with v4l2 really.
+> 
+> I don't think it would be too much work to bring an interface to DRM in
+> order to describe render framebuffers (we only have display
+> framebuffers so far), with a simple queuing interface for scheduling
+> driver-specific jobs, which could be grouped together to only signal
+> the out fences when every buffer of the batch was done being rendered.
+> This last point would allow handling cases where userapce need to
+> perform multiple operations to carry out the single operation that it
+> needs to do. In the case of my 2D blitter, that would be scaling above
+> a 1024x1024 destination, which could be required to scaling a video
+> buffer up to a 1920x1080 display. With that, we can e.g. page flip the
+> 2D engine destination buffer and be certain that scaling will be fully
+> done when the fence is signaled.
+> 
+> There's also the userspace problem: DRM render has mesa to back it in
+> userspace and provide a generic API for other programes. For 2D
+> engines, we don't have much to hold on to. Cairo has a DRM render
+> interface that supports a few DRM render drivers where there is either
+> a 2D pipeline or where pre-built shaders are used to implement a 2D
+> pipeline, and that's about it as far as I know.
+> 
+> There's also the possibility of writing up a drm-render DDX to handle
+> these 2D blitters that can make things a lot faster when running a
+> desktop environment. As for wayland, well, I don't really know what to
+> think. I was under the impression that it relies on GL for 2D
+> operations, but am really not sure how true that actually is.
 
-Uh, that sounds like a bug in ttm or somewhere else in the exporter. If
-you evict the bo that you're trying to map, that's bad.
+Just fyi in case you folks aren't aware, I typed up a blog a while ago
+about why drm doesn't have a 2d submit api:
 
-Or maybe it's a framework bug, and we need to track whether an attachment
-has a map or not. That would make more sense ...
+https://blog.ffwll.ch/2018/08/no-2d-in-drm.html
+
+> > The thing is that DRM is great if you do immediate display stuff, while
+> > V4L2 is nice if you do streaming, where you expect filling queued, and
+> > popping buffers from queues.
+> > 
+> > In the end, this is just an interface, nothing prevents you from making
+> > an internal driver (like the Meson Canvas) and simply letting multiple
+> > sub-system expose it. Specially that some of these IP will often
+> > support both signal and memory processing, so they equally fit into a
+> > media controller ISP, a v4l2 m2m or a DRM driver.
+> 
+> Having base drivers that can hook to both v4l2 m2m and DRM would
+> definitely be awesome. Maybe we could have some common internal
+> synchronization logic to make writing these drivers easier.
+
+We have, it's called dma_fence. Ties into dma_bufs using
+reservation_objecsts.
+
+> It would be cool if both could be used concurrently and not just return
+> -EBUSY when the device is used with the other subsystem.
+
+We live in this world already :-) I think there's even patches (or merged
+already) to add fences to v4l, for Android.
+
+> Anyway, that's my 2 cents about the situation and what we can do to
+> improve it. I'm definitely interested in tackling these items, but it
+> may take some time before we get there. Not to mention we need to
+> rework media/v4l2 for per-slice decoding support ;)
+> 
+> > Another driver you might want to look is Rockchip RGA driver (which is
+> > a multi function IP, including blitting).
+> 
+> Yep, I've aware of it as well. There's also vivante which exposes 2D
+> cores but I'm really not sure whether any function is actually
+> implemented. 
+> 
+> OMAP4 and OMAP5 have a 2D engine that seems to be vivante as well from
+> what I could find out, but it seems to only have blobs for bltsville
+> and no significant docs.
+
+Yeah that's the usual approach for drm 2d drivers: You have a bespoke
+driver in userspace. Usually that means an X driver, but there's been talk
+to pimp the hwc interface to make that _the_ 2d accel interface. There's
+also fbdev ... *shudder*.
+
+All of these options are geared towards ultimately displaying stuff on
+screens, not pure m2m 2d accel.
 -Daniel
 -- 
 Daniel Vetter
