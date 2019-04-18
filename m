@@ -2,63 +2,59 @@ Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,URIBL_RHS_DOB autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34008C10F0E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 11:21:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08AB8C10F0E
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 11:50:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0EA4A214DA
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 11:21:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC5772183F
+	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 11:50:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388749AbfDRLVf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 07:21:35 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:42042 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727807AbfDRLVf (ORCPT
+        id S2388833AbfDRLt7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 07:49:59 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:55035 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727807AbfDRLt7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 07:21:35 -0400
-Received: by mail-wr1-f68.google.com with SMTP id g3so2499168wrx.9
-        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 04:21:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qpavdf0LKKlgfhSeCm9yOUc8wExflWyg9Bv9+jWrQuI=;
-        b=dAvvewipuCYY32mTdewFkC4DxnyhMnTvIm6RseL62qY01yRLfKsrc2POTsswLPi9Qi
-         puJ94Bd0uLhD9TCOY13u+9+icOdWJWFpWeRXRCe6IQ/4UyCDmIp7p1p7yuOIYeWo7yqi
-         izI9FiGiZ/2JDPtW0knPh30Fbi7SBrj3C1tBxU6OTy8pHy2S49anSvkoZjmMvaWKNw3D
-         5VgXGu4kQOMf8BGCixyFusGCSh1OmxI4vGpX0Omcf8Y+rx7AXI8V/9FauyIJ0bJbnmzq
-         AiYHTPjz3O9hWVdoRux+JdfSl0XZveIlpSVjmqls3rJMQf56a+CyW3sba99f8RXgq/kU
-         qR/w==
-X-Gm-Message-State: APjAAAVWKGCXS5mg78z12nAc+WULRughgRdFojNN5kBB6vS5Y/NCEnKm
-        uYjiDfV2T3V+nprN/0pJ7BPXSQ==
-X-Google-Smtp-Source: APXvYqy4xCMDxcuQApAzdV2Z4JYwDqoNE+vTjbJ6fTZzVDRS0/n5F1nOVBNIS29eDPDVWZC6V8oTmA==
-X-Received: by 2002:a5d:4750:: with SMTP id o16mr7936288wrs.206.1555586491920;
-        Thu, 18 Apr 2019 04:21:31 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id h10sm2133127wrs.27.2019.04.18.04.21.30
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Apr 2019 04:21:30 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] libv4lconvert: Port supported_src_formats to
- bit-ops
-To:     Ricardo Ribalda Delgado <ricardo@ribalda.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Gregor Jasny <gjasny@googlemail.com>,
-        linux-media@vger.kernel.org, daniel@qtec.com
-References: <20190416120203.24028-1-ricardo@ribalda.com>
- <20190417114135.5987-1-ricardo@ribalda.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <8168fd98-6deb-dc63-8d00-38987482a414@redhat.com>
-Date:   Thu, 18 Apr 2019 13:21:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Thu, 18 Apr 2019 07:49:59 -0400
+X-Originating-IP: 90.88.160.238
+Received: from aptenodytes (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9D056E0006;
+        Thu, 18 Apr 2019 11:49:54 +0000 (UTC)
+Message-ID: <6578c22ddf5420d4dead69d29f451bc6a91f6c4a.camel@bootlin.com>
+Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
+ common place
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Maxime Ripard <maxime.ripard@bootlin.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Date:   Thu, 18 Apr 2019 13:49:54 +0200
+In-Reply-To: <20190418090221.e57dogn4yx5nwdni@flea>
+References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
+         <20190417154121.GJ13337@phenom.ffwll.local>
+         <20190418062229.eyog4i62eg4pr6uf@flea>
+         <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
+         <20190418090221.e57dogn4yx5nwdni@flea>
+Organization: Bootlin
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.1 
 MIME-Version: 1.0
-In-Reply-To: <20190417114135.5987-1-ricardo@ribalda.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -67,129 +63,165 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi,
 
-On 17-04-19 13:41, Ricardo Ribalda Delgado wrote:
-> We have passed the barrier of 64 supported formats, therefore a int64_t
-> is not enough for holding the bitfield.
+On Thu, 2019-04-18 at 11:02 +0200, Maxime Ripard wrote:
+> On Thu, Apr 18, 2019 at 09:52:10AM +0200, Daniel Vetter wrote:
+> > And a lot of people pushed for the "fourcc is a standard", when
+> > really it's totally not.
 > 
-> Instead use bit-ops ala kernel.
+> Even if it's not a standard, having consistency would be a good thing.
 > 
-> Signed-off-by: Ricardo Ribalda Delgado <ricardo@ribalda.com>
-> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> And you said yourself that DRM fourcc is now pretty much an authority
+> for the fourcc, so it definitely looks like a standard to me.
 
-Thank you.
+I think trying to make the V4L2 and DRM fourccs converge is a lost
+cause, as it has already significantly diverged. Even if we coordinate
+an effort to introduce new formats with the same fourcc on both sides,
+I don't see what good that would be since the formats we have now are
+still plagued by the inconsistency.
 
-I've dropped the unnecessary __prefix from the bitop functions and
-I've pushed both patches to the upstream master branch now.
+I think we always need an explicit translation step from either v4l2 or
+drm to the internal representation and back, without ever assuming that
+formats might be compatible because they share the same fourcc.
 
-Regards,
+It looks like so far, V4L2 pixel formats describe a DRM pixel format +
+modifier. I think Boris (CCed) is working to change that by allowing to
+pass a DRM modifier through V4L2. With that, we'd be in a situation
+where some formats are described by the v4l2 pixfmt alone and some
+formats are also described a modifier (but I looked at it from a
+distance so might have misunderstod). That feels better since it avoids
+the combinatory explosion from describing each format + modifier
+individually.
 
-Hans
+What do you think?
 
+Cheers,
 
+Paul
 
-> ---
->   lib/libv4lconvert/libv4lconvert-priv.h |  3 +-
->   lib/libv4lconvert/libv4lconvert.c      | 40 ++++++++++++++++++++++----
->   2 files changed, 37 insertions(+), 6 deletions(-)
+> > v4l tends to conflate pixel format with stuff that we tend to encode
+> > in modifiers a lot more.
 > 
-> diff --git a/lib/libv4lconvert/libv4lconvert-priv.h b/lib/libv4lconvert/libv4lconvert-priv.h
-> index a8046ce2..5286a9b1 100644
-> --- a/lib/libv4lconvert/libv4lconvert-priv.h
-> +++ b/lib/libv4lconvert/libv4lconvert-priv.h
-> @@ -38,6 +38,7 @@
->   #include "tinyjpeg.h"
->   
->   #define ARRAY_SIZE(x) ((int)sizeof(x)/(int)sizeof((x)[0]))
-> +#define BITS_PER_LONG (8 * sizeof(long))
->   
->   #define V4LCONVERT_ERROR_MSG_SIZE 256
->   #define V4LCONVERT_MAX_FRAMESIZES 256
-> @@ -55,7 +56,7 @@ struct v4lconvert_data {
->   	int flags; /* bitfield */
->   	int control_flags; /* bitfield */
->   	unsigned int no_formats;
-> -	int64_t supported_src_formats; /* bitfield */
-> +	unsigned long supported_src_formats[128 / BITS_PER_LONG];
->   	char error_msg[V4LCONVERT_ERROR_MSG_SIZE];
->   	struct jdec_private *tinyjpeg;
->   #ifdef HAVE_JPEG
-> diff --git a/lib/libv4lconvert/libv4lconvert.c b/lib/libv4lconvert/libv4lconvert.c
-> index 78fb3432..0607cc8b 100644
-> --- a/lib/libv4lconvert/libv4lconvert.c
-> +++ b/lib/libv4lconvert/libv4lconvert.c
-> @@ -32,6 +32,29 @@
->   #include "libv4lsyscall-priv.h"
->   
->   #define MIN(a, b) (((a) < (b)) ? (a) : (b))
-> +#define BIT_MASK(nr) (1UL << ((nr) % BITS_PER_LONG))
-> +#define BIT_WORD(nr) ((nr) / BITS_PER_LONG)
-> +
-> +static inline void __set_bit(int nr, volatile unsigned long *addr)
-> +{
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> +
-> +	*p  |= mask;
-> +}
-> +
-> +static inline void __clear_bit(int nr, volatile unsigned long *addr)
-> +{
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long *p = ((unsigned long *)addr) + BIT_WORD(nr);
-> +
-> +	*p &= ~mask;
-> +}
-> +
-> +static inline int __test_bit(int nr, const volatile unsigned long *addr)
-> +{
-> +	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> +}
->   
->   static void *dev_init(int fd)
->   {
-> @@ -231,7 +254,7 @@ struct v4lconvert_data *v4lconvert_create_with_dev_ops(int fd, void *dev_ops_pri
->   				break;
->   
->   		if (j < ARRAY_SIZE(supported_src_pixfmts)) {
-> -			data->supported_src_formats |= 1ULL << j;
-> +			__set_bit(j, data->supported_src_formats);
->   			v4lconvert_get_framesizes(data, fmt.pixelformat, j);
->   			if (!supported_src_pixfmts[j].needs_conversion)
->   				always_needs_conversion = 0;
-> @@ -316,8 +339,15 @@ int v4lconvert_supported_dst_format(unsigned int pixelformat)
->   
->   int v4lconvert_supported_dst_fmt_only(struct v4lconvert_data *data)
->   {
-> -	return v4lcontrol_needs_conversion(data->control) &&
-> -		data->supported_src_formats;
-> +	int i;
-> +
-> +	for (i = 0 ; i < ARRAY_SIZE(data->supported_src_formats); i++)
-> +		if (data->supported_src_formats[i])
-> +			break;
-> +	if (i == ARRAY_SIZE(data->supported_src_formats))
-> +		return 0;
-> +
-> +	return v4lcontrol_needs_conversion(data->control);
->   }
->   
->   /* See libv4lconvert.h for description of in / out parameters */
-> @@ -334,7 +364,7 @@ int v4lconvert_enum_fmt(struct v4lconvert_data *data, struct v4l2_fmtdesc *fmt)
->   
->   	for (i = 0; i < ARRAY_SIZE(supported_dst_pixfmts); i++)
->   		if (v4lconvert_supported_dst_fmt_only(data) ||
-> -				!(data->supported_src_formats & (1ULL << i))) {
-> +		    !__test_bit(i, data->supported_src_formats)) {
->   			faked_fmts[no_faked_fmts] = supported_dst_pixfmts[i].fmt;
->   			no_faked_fmts++;
->   		}
-> @@ -490,7 +520,7 @@ static int v4lconvert_do_try_format(struct v4lconvert_data *data,
->   
->   	for (i = 0; i < ARRAY_SIZE(supported_src_pixfmts); i++) {
->   		/* is this format supported? */
-> -		if (!(data->supported_src_formats & (1ULL << i)))
-> +		if (!__test_bit(i, data->supported_src_formats))
->   			continue;
->   
->   		try_fmt = *dest_fmt;
+> Boris is working on adding the modifiers concept to v4l2, so we're
+> converging here, and we can totally have a layer in v4l2 to convert
+> between old v4l2 "format+modifiers" formats, and DRM style formats.
 > 
+> > There's a bunch of reasons we can't just use v4l, and they're as
+> > valid as ever:
+> > 
+> > - We overlap badly in some areas, so even if fourcc codes match, we
+> >   can't use them and need a duplicated DRM_FOURCC code.
+> 
+> Do yo have an example of one of those areas?
+> 
+> > - v4l encodes some metadata into the fourcc that we encode elsewhere,
+> >   e.g. offset for planar yuv formats, or tiling mode
+> 
+> As I was saying, this changes on the v4l2 side, and converging to
+> what DRM is doing.
+> 
+> > - drm fourcc code doesn't actually define the drm_format_info
+> >   uniquely, drivers can override that (that's an explicit design
+> >   intent of modifiers, to allow drivers to add another plane for
+> >   e.g. compression information). You'd need to pull that driver
+> >   knowledge into your format library.
+> 
+> I'm not sure how my patches are changing anything here. This is
+> litterally the same code, with the functions renamed.
+> 
+> If drivers want to override that, then yeah, fine, we can let them do
+> that. Just like any helper this just provides a default that covers
+> most of the cases.
+> 
+> > Iow there's no way we can easily adopt v4l fourcc, except if we do
+> > something like a new addfb flag.
+> 
+> For the formats that would be described as a modifier, sure. For all
+> the others (that are not yet supported by DRM), then I don't really
+> see why not.
+> 
+> > > And given how the current state is a mess in this regard, I'm not too
+> > > optimistic about keeping the formats in their relevant frameworks.
+> > > 
+> > > Having a shared library, governed by both, will make this far easier,
+> > > since it will be easy to discover the formats that are already
+> > > supported by the other subsystem.
+> > 
+> > I think a compat library that (tries to, best effort) convert between
+> > v4l and drm fourcc would make sense. Somewhere in drivers/video, next
+> > to the conversion functions for videomode <-> drm_display_mode
+> > perhaps. That should be useful for drivers.
+> 
+> That's not really what this series is about though. That series is
+> about sharing the (image|pixels) formats database across everyone so
+> that everyone can benefit from it.
+> 
+> > Unifying the formats themselves, and all the associated metadata is
+> > imo a no-go, and was a pretty conscious decision when we implemented
+> > drm_fourcc a few years back.
+> > 
+> > > If we want to keep the current library in DRM, we have two options
+> > > then:
+> > > 
+> > >   - Support all the v4l2 formats in the DRM library, which is
+> > >     essentially what I'm doing in the last patches. However, that
+> > >     would require to have the v4l2 developpers also reviewing stuff
+> > >     there. And given how busy they are, I cannot really see how that
+> > >     would work.
+> > 
+> > Well, if we end up with a common library then yes we need cross
+> > review. There's no way around that. Doesn't matter where exactly that
+> > library is in the filesystem tree, and adding a special MAINTAINERS
+> > entry for anything related to fourcc (both drm and v4l) to make sure
+> > they get cross-posted is easy. No file renaming needed.
+> 
+> That would create some governing issues as well. For example, if you
+> ever have a patch from one fourcc addition (that might or might not be
+> covered by v4l2), will you wait for any v4l2 developper to review it?
+> 
+> If it's shared code, then it should be shared, and every client
+> framework put on an equal footing.
+> 
+> > >   - Develop the same library from within v4l2. That is really a poor
+> > >     solution, since the information would be greatly duplicated
+> > >     between the two, and in terms of maintainance, code, and binary
+> > >     size that would be duplicated too.
+> > 
+> > It's essentially what we decided to do for drm years back.
+> 
+> And it was probably the right solution back then, but I'm really not
+> convinced it's still the right thing to do today.
+> 
+> > > Having it shared allows to easily share, and discover formats from the
+> > > other subsystem, and to have a single, unique place where this is
+> > > centralized.
+> > 
+> > What I think could work as middle ground:
+> > - Put drm_format stuff into a separate .ko
+> > - Add a MAINTAINERS entry to make sure all things fourcc are cross
+> > posted to both drm and v4l lists. Easy on the drm side, since it's all
+> > separate files. Not sure it's so convenient for v4l uapi.
+> > - Add a conversion library that tries to best-effort map between drm
+> > and v4l formats. On the drm side that most likely means you need
+> > offsets for planes, and modifiers too (since those are implied in some
+> > v4l fourcc). Emphasis on "best effort" i.e. only support as much as
+> > the drivers that use this library need.
+> > - Add drm_fourcc as-needed by these drivers that want to use a unified
+> > format space.
+> > 
+> > Forcing this unification on everyone otoh is imo way too much.
+> 
+> v4l2 is starting to converge with DRM, and we're using the DRM API
+> pretty much untouched for that library, so I'm not really sure how
+> anyone is hurt by that unification.
+> 
+> Maxime
+> 
+> --
+> Maxime Ripard, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+-- 
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
