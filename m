@@ -2,129 +2,154 @@ Return-Path: <SRS0=xuIN=SV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E249C282DD
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 00:30:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37FBEC282DA
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 03:51:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 68AAA2183F
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 00:30:51 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="eJU0cEGz"
+	by mail.kernel.org (Postfix) with ESMTP id 052CA21736
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 03:51:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726318AbfDSAaq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 20:30:46 -0400
-Received: from mail-qk1-f170.google.com ([209.85.222.170]:35776 "EHLO
-        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725948AbfDSAaq (ORCPT
+        id S1727192AbfDSDu7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 23:50:59 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:50116 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727159AbfDSDu7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 20:30:46 -0400
-Received: by mail-qk1-f170.google.com with SMTP id a71so2213651qkg.2
-        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 17:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=XiYxJUvYztTXlO3krAojjt8++G0UvGCETISRSwzsE+s=;
-        b=eJU0cEGzzWURhbN0YgUg5FqLZ6mMIFUjXntpBgTDvdT0tRGxP1UKmiaeFEHGsajq35
-         Wfnz6/Klprgfp996o0qJlQ4TZBuCprpyqyTYa51kJxgpc03S20pzFKZMJC/VIuVOmjZS
-         p1ZItnYfegIDo9PZTiofXKSUvIbGwLqW8ASa24WzsTW0C+Za6iOP1EWMF0bVC0wcpqzJ
-         2CQJdWqoTBjULbw1DaSU78mvoX/f88H8wkaJWtdEOmyz1/tuDEIibddFR8YWpsaA/U/7
-         EBpBuCLXQhYD05kvceongEE0sBQTFmRLB7wHbTidN8iAIhptlcwXwyFaZfOg2lYb3Veo
-         ePew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=XiYxJUvYztTXlO3krAojjt8++G0UvGCETISRSwzsE+s=;
-        b=DM6ceT3gbJ+RjnsK50AFMsdCk1nzX5uHDTRvyV+AuvrRbDfg5FdC13pD9AtL1duw8a
-         q+7TjWHa+DbYsTATgk3FjlPCVfJK89v7jTTQExGSfSWv0UTmYbf5Yp5HWkgEo3arYHLZ
-         JGBvSJhxrkT1VdWpsb20hz55ivTEg4kigiYaMBiDvvfRQalC4uKZzVoxBDXQmTa9tX0E
-         xwO7y8hRFHy1HQQW+lKwV4TpdXmPGg2yCOGfNeZraf3+lNtlPdLG+Z2yIge65Jgts7Wt
-         MFZg9nopsXk7g/aqvWe6NSHADoJLMnbxj9PKfi9HGWAyk2lWlzf2qK1vgw3wPqeRiPpl
-         TjTg==
-X-Gm-Message-State: APjAAAVM8x2WNrk8yJrievrsEOioG5GtZEAmN/DyV7NwtB5rYqfM4aF8
-        5O/xwIlR94TpyA4JHfL6vMFoCw==
-X-Google-Smtp-Source: APXvYqztkYCmj7ITzQ3FCIAHkBldAyLkSgBcUgMNxnlgqa/t45PcRHpuvb/zf7AJTav1SAdCToImwg==
-X-Received: by 2002:a37:59c5:: with SMTP id n188mr910201qkb.208.1555633844991;
-        Thu, 18 Apr 2019 17:30:44 -0700 (PDT)
-Received: from skullcanyon ([2002:c0de:c115:0:481e:e17e:2f68:43f8])
-        by smtp.gmail.com with ESMTPSA id u15sm2242131qth.54.2019.04.18.17.30.42
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 18 Apr 2019 17:30:43 -0700 (PDT)
-Message-ID: <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
-Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Date:   Thu, 18 Apr 2019 20:30:41 -0400
-In-Reply-To: <20190418081816.GO13337@phenom.ffwll.local>
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
-         <20190418081816.GO13337@phenom.ffwll.local>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 (3.32.0-1.fc30) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 18 Apr 2019 23:50:59 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:cd84:c200:40c:19b0])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id HKYAh0g2soEWZHKYBhFhYN; Fri, 19 Apr 2019 05:50:57 +0200
+Message-ID: <0b94137a76b5175d10927f2943e57fa5@smtp-cloud9.xs4all.net>
+Date:   Fri, 19 Apr 2019 05:50:54 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfLq/2YZwgO6SGHPUuCLIRUa4aHWdVxxqRWlWPR2d4sY3TnXow3427EAGSj+Vol/uxGmjyZacm/4nj80K0MxQkGi4ATC4XWeNxGsYFlA5whfq3YsPrVO6
+ tcbJra8lF5Oj5oVrJyuSeQAROM/AI3uMSXFALAePntBPq2RJu+CuVwrJ8RRvIa9Qtdu0iHHdFxJ8vauW/S1yeHHzVCLvRsxCXD9rM6Ld8zua3walpAgaAk//
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le jeudi 18 avril 2019 à 10:18 +0200, Daniel Vetter a écrit :
-> > It would be cool if both could be used concurrently and not just return
-> > -EBUSY when the device is used with the other subsystem.
-> 
-> We live in this world already :-) I think there's even patches (or merged
-> already) to add fences to v4l, for Android.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-This work is currently suspended. It will require some feature on DRM
-display to really make this useful, but there is also a lot of
-challanges in V4L2. In GFX space, most of the use case are about
-rendering as soon as possible. Though, in multimedia we have two
-problems, we need to synchronize the frame rendering with the audio,
-and output buffers may comes out of order due to how video CODECs are
-made.
+Results of the daily build of media_tree:
 
-In the first, we'd need a mechanism where we can schedule a render at a
-specific time or vblank. We can of course already implement this in
-software, but with fences, the scheduling would need to be done in the
-driver. Then if the fence is signalled earlier, the driver should hold
-on until the delay is met. If the fence got signalled late, we also
-need to think of a workflow. As we can't schedule more then one render
-in DRM at one time, I don't really see yet how to make that work.
+date:			Fri Apr 19 05:00:11 CEST 2019
+media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
+media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
+v4l-utils git hash:	e30639edd74f12f8f58d8e9cf10d85a1f071a6c3
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
-For the second, it's complicated on V4L2 side. Currently we signal
-buffers when they are ready in the display order. With fences, we
-receive early pairs buffer and fence (in decoding order). There exist
-cases where reordering is done by the driver (stateful CODEC). We
-cannot schedule these immediately we would need a new mechanism to know
-which one come next. If we just reuse current mechnism, it would void
-the fence usage since the fence will always be signalled by the time it
-reaches DRM or other v4l2 component.
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
 
-There also other issues, for video capture pipeline, if you are not
-rendering ASAP, you need the HW timestamp in order to schedule. Again,
-we'd get the fence early, but the actual timestamp will be signalled at
-the very last minutes, so we also risk of turning the fence into pure
-overhead. Note that as we speak, I have colleagues who are
-experimenting with frame timestamp prediction that slaves to the
-effective timestamp (catching up over time). But we still have issues
-when the capture driver skipped a frame (missed a capture window).
+Detailed results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Friday.log
 
-I hope this is useful reflection data,
-Nicolas
+Detailed regression test results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
