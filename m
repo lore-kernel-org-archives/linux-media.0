@@ -2,182 +2,160 @@ Return-Path: <SRS0=xuIN=SV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.6 required=3.0 tests=DATE_IN_PAST_03_06,
-	FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B29EC282DA
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 18:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CED56C282DA
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 18:57:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 580F8204EC
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 18:36:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B329205ED
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 18:57:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="Or5gTy1s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728329AbfDSSgo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Apr 2019 14:36:44 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:37955 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728302AbfDSSgo (ORCPT
+        id S1727534AbfDSS52 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Apr 2019 14:57:28 -0400
+Received: from mail-qk1-f176.google.com ([209.85.222.176]:45821 "EHLO
+        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726172AbfDSS52 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Apr 2019 14:36:44 -0400
-Received: by mail-io1-f70.google.com with SMTP id b16so5242336iot.5
-        for <linux-media@vger.kernel.org>; Fri, 19 Apr 2019 11:36:43 -0700 (PDT)
+        Fri, 19 Apr 2019 14:57:28 -0400
+Received: by mail-qk1-f176.google.com with SMTP id d5so1088941qko.12
+        for <linux-media@vger.kernel.org>; Fri, 19 Apr 2019 11:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=PpIUSk15nxWJsA3TYf0KsoPEdQ/S0Pil7IwighIbZlM=;
+        b=Or5gTy1s8mZ8jH+2nJs7p+7aDshTv6eloiqek1aWHwG9X6NDicKcFd0R35m4MzXkkA
+         +5EAvl/8OO+HWZoH1iMritgp1cknJ4c9ynffCiJodc8DqOZBeXIAVM1esCTecczPBENs
+         yq53rEt85CvzQoif1JoWkzADPYtKfGuvCkjkyJsw48yRlipCNZW/eqDr/hsbYeAHW7oD
+         VFjVl44AoiX3eb2yAI1pWc+cVyxU3+PU9RoalTFqdADnBdzsJXA7GGFQGPdmkCJTIuOy
+         xjy292/UK7eL84CGlMAf/GSjWEvstKNDY0jnB2cUFA8GadiGBlBv+t3rOKoBgPl8SmFc
+         s7zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=tFKuCP5sWc3Lw1+DiSI04bLvA52hIWgjARkMR8y4QLc=;
-        b=sR/85DPQJoMykKXdaXyYpb3fyeYSYUphy56mo2DzwiX8MyYuxl3pUBBholTXEkk/P0
-         8eeJU2+G7HjjjFK3dCVfJXYoso0wjMgwgP5vwxUoEm2vUd2tvb3wUAvtlq0wWRiDbW5n
-         mTHB0Vwm628tJkHAjM128E2JvNB2vxwMy25OP/Qlpy18CNA2mqvDxZkskVTyKDCqr8r6
-         qGcD2mAJ4fJYZokkqA2s4sPWvhdWIzWebDcTJN4z8izdfrh9HJxQc4Ih7VEVGr1JLPSL
-         ARP9rtoXhGB3U0lwfi7GTUCUTpsQgRNJmgSompD1uQ3McgcYnzFukSMkY1nKKs6I0quC
-         iEwQ==
-X-Gm-Message-State: APjAAAXWyUpa0oOAr/X4SmDZcI9Hhu12xLhlLJUAAYFQzBkJxVNIi7Mx
-        EZHjHgkCTEDYqAsgMORVgpvQFCaV9UbJPQEEFf4DDsKkYJ7u
-X-Google-Smtp-Source: APXvYqw603Z0rIRcAIvSGSxVl7pXCqLPjmimWzd9Gz02pUh89kkfG2GJpdpETTeFWdAhVSxYQaomna+K1vN7v3vJAc5nOs1wWfIZ
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=PpIUSk15nxWJsA3TYf0KsoPEdQ/S0Pil7IwighIbZlM=;
+        b=b2m+YDAwaCa7iCiVgYnO34OMEdzEc0Q2rZT9XybI+iQKCwVil2ervlzP17oUT0Py6K
+         Il5V0G5GvkucU6EhxJZvUh290iXHE3gO1OtWMKJknXqG2R7lKe+GSNTiKoCeK18X1QZO
+         d7qSPGA5N3Uh97onnOFmKp612eXN8N3/f5zdcSvLOsHy6Jd/SEvaXpws8KSvKwFeLu6m
+         OR617gptX/Lj1pI3y+buWff+cD5FeCyrFD56XhQ5P+mTR9X/8W5Z1TbpYb5E/gt+hPcY
+         R5IgqhG6btqhhxTcLjPqI17DS+vUdGHQRADqFHQL85StFOVE89C6uysUH+h9e5NraeCd
+         ByLQ==
+X-Gm-Message-State: APjAAAVuCf7PXk16y1WODz62auSLhJ3EbeUK4w8ovC7JVikYZcKusiTV
+        phspCVEkXoY8x7qL6PbDoB1GKNLIIxhqe/aN
+X-Google-Smtp-Source: APXvYqzelYVPsR93oFeLNbjJJp+IkeVpjtH/JE2L/XGVFalF7K7+3MPphDsIcsu9cy4rNc5b3QQoVA==
+X-Received: by 2002:a05:620a:1372:: with SMTP id d18mr3396902qkl.310.1555687869833;
+        Fri, 19 Apr 2019 08:31:09 -0700 (PDT)
+Received: from skullcanyon ([2002:c0de:c115:0:481e:e17e:2f68:43f8])
+        by smtp.gmail.com with ESMTPSA id z85sm1161988qka.18.2019.04.19.08.31.07
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 19 Apr 2019 08:31:08 -0700 (PDT)
+Message-ID: <52e092f7009d57087c10b5e21ea597bcad506bfd.camel@ndufresne.ca>
+Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Tomasz Figa <tfiga@chromium.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Date:   Fri, 19 Apr 2019 11:31:06 -0400
+In-Reply-To: <CAAFQd5CojNuiJ09gXEjnOorfDnRP1Bk436yaffHFKmmsfoUiQQ@mail.gmail.com>
+References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
+         <20190418081816.GO13337@phenom.ffwll.local>
+         <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
+         <CAAFQd5CojNuiJ09gXEjnOorfDnRP1Bk436yaffHFKmmsfoUiQQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.0 (3.32.0-1.fc30) 
 MIME-Version: 1.0
-X-Received: by 2002:a24:70d5:: with SMTP id f204mr3014431itc.32.1555684565732;
- Fri, 19 Apr 2019 07:36:05 -0700 (PDT)
-Date:   Fri, 19 Apr 2019 07:36:05 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ec53de0586e309fc@google.com>
-Subject: KASAN: use-after-free Read in v4l2_fh_init
-From:   syzbot <syzbot+c025d34b8eaa54c571b8@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, hans.verkuil@cisco.com,
-        laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Le vendredi 19 avril 2019 à 13:27 +0900, Tomasz Figa a écrit :
+> On Fri, Apr 19, 2019 at 9:30 AM Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
+> > Le jeudi 18 avril 2019 à 10:18 +0200, Daniel Vetter a écrit :
+> > > > It would be cool if both could be used concurrently and not just return
+> > > > -EBUSY when the device is used with the other subsystem.
+> > > 
+> > > We live in this world already :-) I think there's even patches (or merged
+> > > already) to add fences to v4l, for Android.
+> > 
+> > This work is currently suspended. It will require some feature on DRM
+> > display to really make this useful, but there is also a lot of
+> > challanges in V4L2. In GFX space, most of the use case are about
+> > rendering as soon as possible. Though, in multimedia we have two
+> > problems, we need to synchronize the frame rendering with the audio,
+> > and output buffers may comes out of order due to how video CODECs are
+> > made.
+> > 
+> > In the first, we'd need a mechanism where we can schedule a render at a
+> > specific time or vblank. We can of course already implement this in
+> > software, but with fences, the scheduling would need to be done in the
+> > driver. Then if the fence is signalled earlier, the driver should hold
+> > on until the delay is met. If the fence got signalled late, we also
+> > need to think of a workflow. As we can't schedule more then one render
+> > in DRM at one time, I don't really see yet how to make that work.
+> > 
+> > For the second, it's complicated on V4L2 side. Currently we signal
+> > buffers when they are ready in the display order. With fences, we
+> > receive early pairs buffer and fence (in decoding order). There exist
+> > cases where reordering is done by the driver (stateful CODEC). We
+> > cannot schedule these immediately we would need a new mechanism to know
+> > which one come next. If we just reuse current mechnism, it would void
+> > the fence usage since the fence will always be signalled by the time it
+> > reaches DRM or other v4l2 component.
+> > 
+> > There also other issues, for video capture pipeline, if you are not
+> > rendering ASAP, you need the HW timestamp in order to schedule. Again,
+> > we'd get the fence early, but the actual timestamp will be signalled at
+> > the very last minutes, so we also risk of turning the fence into pure
+> > overhead. Note that as we speak, I have colleagues who are
+> > experimenting with frame timestamp prediction that slaves to the
+> > effective timestamp (catching up over time). But we still have issues
+> > when the capture driver skipped a frame (missed a capture window).
+> 
+> Note that a fence has a timestamp internally and it can be queried for
+> it from the user space if exposed as a sync file:
+> https://elixir.bootlin.com/linux/v5.1-rc5/source/drivers/dma-buf/sync_file.c#L386
 
-syzbot found the following crash on:
+Don't we need something the other way around ? This seems to be the
+timestamp of when it was triggered (I'm not familiar with this though).
 
-HEAD commit:    d34f9519 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=125bbb5b200000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c73d1bb5aeaeae20
-dashboard link: https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1513ac1d200000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13555c1d200000
+> 
+> Fences in V4L2 would be also useful for stateless decoders and any
+> mem-to-mem processors that operate in order, like the blitters
+> mentioned here or actually camera ISPs, which can be often chained
+> into relatively sophisticated pipelines.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+c025d34b8eaa54c571b8@syzkaller.appspotmail.com
+I agree fence can be used to optimize specific corner cases. They are
+not as critical in V4L2 since we have async queues. I think the use
+case for fences in V4L2 is mostly to lower the latency. Not all use
+cases requires such a low latency. There was argument around fences
+that is simplify the the code, I haven't seen a compelling argument
+demonstrating that this would be the case for V4L2 programming. The
+only case is when doing V4L2 to DRM exchanges, and only in the context
+where time synchronization does not matter. In fact, so far it is more
+work since information starts flowing through separate events
+(buffer/fence first, later timestamps and possibly critical metadata.
+This might be induced by the design, but clearly there is a slight API
+clash.
 
-em28xx 1-1:5.176: failed to create media graph
-em28xx 1-1:5.176: V4L2 device video32 deregistered
-em28xx 1-1:5.176: Binding DVB extension
-==================================================================
-em28xx 1-1:5.176: no endpoint for DVB mode and transfer type 0
-BUG: KASAN: use-after-free in v4l2_fh_init+0x24c/0x290  
-drivers/media/v4l2-core/v4l2-fh.c:33
-Read of size 8 at addr ffff8880a4f149d0 by task v4l_id/5313
+> 
+> Best regards,
+> Tomasz
 
-CPU: 1 PID: 5313 Comm: v4l_id Not tainted 5.1.0-rc5-319617-gd34f951 #4
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-em28xx 1-1:5.176: failed to pre-allocate USB transfer buffers for DVB.
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  print_address_description+0x6c/0x236 mm/kasan/report.c:187
-em28xx 1-1:5.176: Registering input extension
-  kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
-  v4l2_fh_init+0x24c/0x290 drivers/media/v4l2-core/v4l2-fh.c:33
-  v4l2_fh_open+0x8d/0xd0 drivers/media/v4l2-core/v4l2-fh.c:71
-  em28xx_v4l2_open+0x11f/0x470 drivers/media/usb/em28xx/em28xx-video.c:2184
-  v4l2_open+0x1b6/0x360 drivers/media/v4l2-core/v4l2-dev.c:427
-  chrdev_open+0x220/0x5d0 fs/char_dev.c:417
-  do_dentry_open+0x49c/0x1130 fs/open.c:777
-  do_last fs/namei.c:3416 [inline]
-  path_openat+0x147d/0x40b0 fs/namei.c:3533
-  do_filp_open+0x1a6/0x280 fs/namei.c:3563
-  do_sys_open+0x3c5/0x590 fs/open.c:1069
-  do_syscall_64+0xcf/0x4f0 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7fdb23b8d120
-Code: 48 8b 15 1b 4d 2b 00 f7 d8 64 89 02 83 c8 ff c3 90 90 90 90 90 90 90  
-90 90 90 83 3d d5 a4 2b 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 73 31 c3 48 83 ec 08 e8 5e 8c 01 00 48 89 04 24
-RSP: 002b:00007ffc1aebde18 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007ffc1aebdf78 RCX: 00007fdb23b8d120
-RDX: 00007fdb23e42138 RSI: 0000000000000000 RDI: 00007ffc1aebef17
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-R13: 00007ffc1aebdf70 R14: 0000000000000000 R15: 0000000000000000
-
-Allocated by task 12:
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_kmalloc mm/kasan/common.c:497 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
-  kmalloc include/linux/slab.h:547 [inline]
-  kzalloc include/linux/slab.h:742 [inline]
-  em28xx_v4l2_init drivers/media/usb/em28xx/em28xx-video.c:2563 [inline]
-  em28xx_v4l2_init.cold+0x93/0x3112  
-drivers/media/usb/em28xx/em28xx-video.c:2541
-  em28xx_init_extension+0x13a/0x200  
-drivers/media/usb/em28xx/em28xx-core.c:1128
-  request_module_async+0x62/0x70 drivers/media/usb/em28xx/em28xx-cards.c:3300
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-
-Freed by task 12:
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
-  slab_free_hook mm/slub.c:1429 [inline]
-  slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
-  slab_free mm/slub.c:3003 [inline]
-  kfree+0xce/0x280 mm/slub.c:3958
-  em28xx_free_v4l2 drivers/media/usb/em28xx/em28xx-video.c:2149 [inline]
-  kref_put include/linux/kref.h:67 [inline]
-  em28xx_v4l2_init drivers/media/usb/em28xx/em28xx-video.c:2920 [inline]
-  em28xx_v4l2_init.cold+0x2cf/0x3112  
-drivers/media/usb/em28xx/em28xx-video.c:2541
-  em28xx_init_extension+0x13a/0x200  
-drivers/media/usb/em28xx/em28xx-core.c:1128
-  request_module_async+0x62/0x70 drivers/media/usb/em28xx/em28xx-cards.c:3300
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8880a4f14200
-  which belongs to the cache kmalloc-8k of size 8192
-The buggy address is located 2000 bytes inside of
-  8192-byte region [ffff8880a4f14200, ffff8880a4f16200)
-The buggy address belongs to the page:
-page:ffffea000293c400 count:1 mapcount:0 mapping:ffff88812c3f4400 index:0x0  
-compound_mapcount: 0
-flags: 0xfff00000010200(slab|head)
-raw: 00fff00000010200 dead000000000100 dead000000000200 ffff88812c3f4400
-raw: 0000000000000000 0000000080030003 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8880a4f14880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8880a4f14900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff8880a4f14980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                  ^
-  ffff8880a4f14a00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8880a4f14a80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
