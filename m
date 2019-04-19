@@ -2,145 +2,106 @@ Return-Path: <SRS0=xuIN=SV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E043C282E1
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 20:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28630C282DF
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 20:29:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF76120663
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 20:13:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFC41217F9
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 20:29:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbfDSUNK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Apr 2019 16:13:10 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:33632 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726597AbfDSUNK (ORCPT
+        id S1726689AbfDSU3d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Apr 2019 16:29:33 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:32970 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725859AbfDSU3d (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Apr 2019 16:13:10 -0400
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 202DC3AC719;
-        Fri, 19 Apr 2019 10:06:19 +0000 (UTC)
-X-Originating-IP: 90.88.160.238
-Received: from aptenodytes (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id E254024000C;
-        Fri, 19 Apr 2019 10:06:15 +0000 (UTC)
-Message-ID: <aaf7a86350afda78fdaaacbd26b497b4af7d894c.camel@bootlin.com>
-Subject: Re: [PATCH] media: cedrus: Fix initialization order
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Jernej Skrabec <jernej.skrabec@siol.net>, maxime.ripard@bootlin.com
-Cc:     =?ISO-8859-1?Q?andr=E9s_ram=EDrez?= <rrandresf@gmail.com>,
-        mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>
-Date:   Fri, 19 Apr 2019 12:06:15 +0200
-In-Reply-To: <82e793b898657d65cda55c98b9ffcec475193b5b.camel@bootlin.com>
-References: <20190407184728.16620-1-jernej.skrabec@siol.net>
-         <82e793b898657d65cda55c98b9ffcec475193b5b.camel@bootlin.com>
-Organization: Bootlin
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1 
+        Fri, 19 Apr 2019 16:29:33 -0400
+Received: (qmail 8731 invoked by uid 2102); 19 Apr 2019 16:29:32 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 19 Apr 2019 16:29:32 -0400
+Date:   Fri, 19 Apr 2019 16:29:32 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+cc:     andreyknvl@google.com,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>, <wen.yang99@zte.com.cn>
+Subject: Re: general protection fault in smsusb_init_device
+In-Reply-To: <0000000000008d89900586ccd37b@google.com>
+Message-ID: <Pine.LNX.4.44L0.1904191624050.1406-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On Thu, 18 Apr 2019, syzbot wrote:
 
-On Mon, 2019-04-08 at 10:18 +0200, Paul Kocialkowski wrote:
-> Hi,
+> Hello,
 > 
-> Le dimanche 07 avril 2019 à 20:47 +0200, Jernej Skrabec a écrit :
-> > Currently, MEDIA_IOC_G_TOPOLOGY ioctl on cedrus fails due to incorrect
-> > initialization order. Fix that by moving video_register_device() before
-> > v4l2_m2m_register_media_controller() and while at it, fix error path.
-> > 
-> > Reported-by: Jonas Karlman <jonas@kwiboo.se>
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+> syzbot found the following crash on:
 > 
-> Thanks for the fix, good catch!
+> HEAD commit:    d34f9519 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=128ec3fd200000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c73d1bb5aeaeae20
+> dashboard link: https://syzkaller.appspot.com/bug?extid=53f029db71c19a47325a
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16138e67200000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=128dddbf200000
 > 
-> Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
+> 
+> usb 1-1: config 0 descriptor??
+> usb 1-1: string descriptor 0 read error: -71
+> smsusb:smsusb_probe: board id=18, interface number 0
+> kasan: CONFIG_KASAN_INLINE enabled
+> kasan: GPF could be caused by NULL-ptr deref or user memory access
+> general protection fault: 0000 [#1] SMP KASAN PTI
+> CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.1.0-rc5-319617-gd34f951 #4
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:smsusb_init_device+0x366/0x937  
+> drivers/media/usb/siano/smsusb.c:429
+> Code: 48 c1 ea 03 80 3c 02 00 74 05 e8 24 1e 66 f7 4d 8b b6 f0 04 00 00 b8  
+> ff ff 37 00 48 c1 e0 2a 49 8d 7e 04 48 89 fa 48 c1 ea 03 <8a> 14 02 48 89  
+> f8 83 e0 07 ff c0 38 d0 7c 09 84 d2 74 05 e8 b1 1d
+> RSP: 0018:ffff8880a86570d0 EFLAGS: 00010247
+> RAX: dffffc0000000000 RBX: ffff88809a81b300 RCX: ffffffff8a42b5b3
+> RDX: 0000000000000000 RSI: ffffffff8a42b6a3 RDI: 0000000000000004
+> RBP: ffff88808ca70000 R08: ffff8880a8503100 R09: ffff8880a8657130
+> R10: ffffed10150cae34 R11: ffff8880a86571a7 R12: ffff88809a81be54
+> R13: ffff88809a81be5c R14: 0000000000000000 R15: ffff88808ca70000
+> FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f1ad259d000 CR3: 000000009a3aa000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   smsusb_probe+0xd64/0xe08 drivers/media/usb/siano/smsusb.c:570
 
-Looks like this patch wasn't picked-up yet. Could we take it in?
-I think it would also deserve a:
+The reason for this bug is clear.  The code in smsusb_probe() at line
+429 does this:
 
-Fixes: 50e761516f2b ("media: platform: Add Cedrus VPU decoder driver")
+		dev->response_alignment =
+		    le16_to_cpu(dev->udev->ep_in[1]->desc.wMaxPacketSize) -
+		    sizeof(struct sms_msg_hdr);
 
-Cheers,
+which assumes there really is an ep1-IN endpoint.  If there isn't, the 
+code crashes.
 
-Paul
+Testing that the endpoint exists is easy enough, but I'm not sure how 
+this test should be integrated with the rest of the function.  Someone 
+who knows the code better ought to be able to do it with no trouble.
 
-> > ---
-> >  drivers/staging/media/sunxi/cedrus/cedrus.c | 24 ++++++++++-----------
-> >  1 file changed, 12 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-> > index b98add3cdedd..d0429c0e6b6b 100644
-> > --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-> > @@ -300,7 +300,7 @@ static int cedrus_probe(struct platform_device *pdev)
-> >  			 "Failed to initialize V4L2 M2M device\n");
-> >  		ret = PTR_ERR(dev->m2m_dev);
-> >  
-> > -		goto err_video;
-> > +		goto err_v4l2;
-> >  	}
-> >  
-> >  	dev->mdev.dev = &pdev->dev;
-> > @@ -310,23 +310,23 @@ static int cedrus_probe(struct platform_device *pdev)
-> >  	dev->mdev.ops = &cedrus_m2m_media_ops;
-> >  	dev->v4l2_dev.mdev = &dev->mdev;
-> >  
-> > -	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
-> > -						 MEDIA_ENT_F_PROC_VIDEO_DECODER);
-> > -	if (ret) {
-> > -		v4l2_err(&dev->v4l2_dev,
-> > -			 "Failed to initialize V4L2 M2M media controller\n");
-> > -		goto err_m2m;
-> > -	}
-> > -
-> >  	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
-> >  	if (ret) {
-> >  		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
-> > -		goto err_v4l2;
-> > +		goto err_m2m;
-> >  	}
-> >  
-> >  	v4l2_info(&dev->v4l2_dev,
-> >  		  "Device registered as /dev/video%d\n", vfd->num);
-> >  
-> > +	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
-> > +						 MEDIA_ENT_F_PROC_VIDEO_DECODER);
-> > +	if (ret) {
-> > +		v4l2_err(&dev->v4l2_dev,
-> > +			 "Failed to initialize V4L2 M2M media controller\n");
-> > +		goto err_video;
-> > +	}
-> > +
-> >  	ret = media_device_register(&dev->mdev);
-> >  	if (ret) {
-> >  		v4l2_err(&dev->v4l2_dev, "Failed to register media device\n");
-> > @@ -339,10 +339,10 @@ static int cedrus_probe(struct platform_device *pdev)
-> >  
-> >  err_m2m_mc:
-> >  	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
-> > -err_m2m:
-> > -	v4l2_m2m_release(dev->m2m_dev);
-> >  err_video:
-> >  	video_unregister_device(&dev->vfd);
-> > +err_m2m:
-> > +	v4l2_m2m_release(dev->m2m_dev);
-> >  err_v4l2:
-> >  	v4l2_device_unregister(&dev->v4l2_dev);
-> >  
--- 
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+Alan Stern
 
