@@ -1,111 +1,130 @@
-Return-Path: <SRS0=rYAI=SU=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=xuIN=SV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E59C10F0E
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 22:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E249C282DD
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 00:30:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C932321479
-	for <linux-media@archiver.kernel.org>; Thu, 18 Apr 2019 22:35:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68AAA2183F
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 00:30:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="mh5N2WMK"
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="eJU0cEGz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725874AbfDRWf3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 18:35:29 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:46650 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725824AbfDRWf3 (ORCPT
+        id S1726318AbfDSAaq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 20:30:46 -0400
+Received: from mail-qk1-f170.google.com ([209.85.222.170]:35776 "EHLO
+        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725948AbfDSAaq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 18:35:29 -0400
-Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BA2B8333;
-        Fri, 19 Apr 2019 00:35:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1555626926;
-        bh=I24opBjybx4xXIZm7kWMtOvlyW8PM93XLEpTLtqKDR0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mh5N2WMKkjW4CYwrhOLPi8sJQpmM7zFnhZ1dBgUHjCzwE13qYUsGU7CEj4DM1h+Cl
-         yrKmrBoiHuSgVbWljcJ+rAnkn51eQCpsK8mv85OKqI95hl85CrBsVpnB1Onxcsiy9s
-         wqUEM+X5uHDVKkCGvR/TQ5QoO1uqjSfH8hDe1zeU=
-Date:   Fri, 19 Apr 2019 01:35:18 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-media@vger.kernel.org, kernel@collabora.com,
+        Thu, 18 Apr 2019 20:30:46 -0400
+Received: by mail-qk1-f170.google.com with SMTP id a71so2213651qkg.2
+        for <linux-media@vger.kernel.org>; Thu, 18 Apr 2019 17:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=XiYxJUvYztTXlO3krAojjt8++G0UvGCETISRSwzsE+s=;
+        b=eJU0cEGzzWURhbN0YgUg5FqLZ6mMIFUjXntpBgTDvdT0tRGxP1UKmiaeFEHGsajq35
+         Wfnz6/Klprgfp996o0qJlQ4TZBuCprpyqyTYa51kJxgpc03S20pzFKZMJC/VIuVOmjZS
+         p1ZItnYfegIDo9PZTiofXKSUvIbGwLqW8ASa24WzsTW0C+Za6iOP1EWMF0bVC0wcpqzJ
+         2CQJdWqoTBjULbw1DaSU78mvoX/f88H8wkaJWtdEOmyz1/tuDEIibddFR8YWpsaA/U/7
+         EBpBuCLXQhYD05kvceongEE0sBQTFmRLB7wHbTidN8iAIhptlcwXwyFaZfOg2lYb3Veo
+         ePew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=XiYxJUvYztTXlO3krAojjt8++G0UvGCETISRSwzsE+s=;
+        b=DM6ceT3gbJ+RjnsK50AFMsdCk1nzX5uHDTRvyV+AuvrRbDfg5FdC13pD9AtL1duw8a
+         q+7TjWHa+DbYsTATgk3FjlPCVfJK89v7jTTQExGSfSWv0UTmYbf5Yp5HWkgEo3arYHLZ
+         JGBvSJhxrkT1VdWpsb20hz55ivTEg4kigiYaMBiDvvfRQalC4uKZzVoxBDXQmTa9tX0E
+         xwO7y8hRFHy1HQQW+lKwV4TpdXmPGg2yCOGfNeZraf3+lNtlPdLG+Z2yIge65Jgts7Wt
+         MFZg9nopsXk7g/aqvWe6NSHADoJLMnbxj9PKfi9HGWAyk2lWlzf2qK1vgw3wPqeRiPpl
+         TjTg==
+X-Gm-Message-State: APjAAAVM8x2WNrk8yJrievrsEOioG5GtZEAmN/DyV7NwtB5rYqfM4aF8
+        5O/xwIlR94TpyA4JHfL6vMFoCw==
+X-Google-Smtp-Source: APXvYqztkYCmj7ITzQ3FCIAHkBldAyLkSgBcUgMNxnlgqa/t45PcRHpuvb/zf7AJTav1SAdCToImwg==
+X-Received: by 2002:a37:59c5:: with SMTP id n188mr910201qkb.208.1555633844991;
+        Thu, 18 Apr 2019 17:30:44 -0700 (PDT)
+Received: from skullcanyon ([2002:c0de:c115:0:481e:e17e:2f68:43f8])
+        by smtp.gmail.com with ESMTPSA id u15sm2242131qth.54.2019.04.18.17.30.42
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 18 Apr 2019 17:30:43 -0700 (PDT)
+Message-ID: <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
+Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Daniel Vetter <daniel@ffwll.ch>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>,
         Tomasz Figa <tfiga@chromium.org>,
-        Hirokazu Honda <hiroh@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-Subject: Re: [PATCH v3 1/2] media: exynos4-is: Properly report _MPLANE caps
-Message-ID: <20190418223518.GI4794@pendragon.ideasonboard.com>
-References: <CGME20190412092035epcas1p43412936a0fba75b1c548904e785fe23d@epcas1p4.samsung.com>
- <20190412092027.20410-1-boris.brezillon@collabora.com>
- <c1faa661-6631-00ae-836b-4f24b1ee408e@samsung.com>
- <1c4fc9c3-4c9e-475a-262a-1479f77e267b@xs4all.nl>
- <512d5fd1-e4d3-c074-1b13-886747e8db97@samsung.com>
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Date:   Thu, 18 Apr 2019 20:30:41 -0400
+In-Reply-To: <20190418081816.GO13337@phenom.ffwll.local>
+References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
+         <20190418081816.GO13337@phenom.ffwll.local>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.0 (3.32.0-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <512d5fd1-e4d3-c074-1b13-886747e8db97@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sylwester,
-
-On Fri, Apr 12, 2019 at 01:14:38PM +0200, Sylwester Nawrocki wrote:
-> On 4/12/19 12:32, Hans Verkuil wrote:
-> > On 4/12/19 12:16 PM, Sylwester Nawrocki wrote:
-> >> On 4/12/19 11:20, Boris Brezillon wrote:
-> >>> The fimc-isp-video.c and fimc-lite.c were missing the
-> >>> V4L2_CAP_VIDEO_CAPTURE_MPLANE flag when reporting device caps.
-> >>
-> >> Th omission was intentional, as these video nodes cannot be used
-> >> by "standard" V4L2 capture applications. Some sub-devices need to 
-> >> be configured first in order to use these video nodes. It was 
-> >> agreed to not set these capabilities in the driver, instead user
-> >> space library, e.g. libv4l2 with driver-specific plugin handling
-> >> the media controller and v4l2 subdev calls would set the capability
-> >> for the applications. Has something changed?
-> > 
-> > I remember that this was discussed, but nobody actually followed that
-> > guideline. Just do:
-> >
-> > git grep -l V4L2_CAP_VIDEO_CAPTURE drivers/media/platform
-> > 
-> > It really doesn't make sense to leave it out since userspace has to know if
-> > it is single or multiplanar, and if you don't set this capability, then how
-> > can it tell?
+Le jeudi 18 avril 2019 à 10:18 +0200, Daniel Vetter a écrit :
+> > It would be cool if both could be used concurrently and not just return
+> > -EBUSY when the device is used with the other subsystem.
 > 
-> Presumably you can't by only querying the video device, this would require 
-> MC and driver-specific user space. 
-> 
-> > I always thought we need a separate CAP or some other way of signaling this,
-> > but the few times I proposed something it was always shot down.
-> > 
-> > So to be consistent with the other MC drivers you should set this MPLANE cap
-> > as well in the fimc driver.
-> 
-> I'm not against the $subject patch, rather the opposite. Especially if 
-> it is a part of reasonable API updates. But removing the capabilities was 
-> actually a requirement to get the driver merged, not a guideline.
-> And was rather painful then, now the driver is probably not in use any more
-> so I don't really mind.
+> We live in this world already :-) I think there's even patches (or merged
+> already) to add fences to v4l, for Android.
 
-As this driver is quite old I assume there's little interest in
-investing in it, but is there any chance Samsung would be interested in
-contributing to libcamera for newer generations ? :-)
+This work is currently suspended. It will require some feature on DRM
+display to really make this useful, but there is also a lot of
+challanges in V4L2. In GFX space, most of the use case are about
+rendering as soon as possible. Though, in multimedia we have two
+problems, we need to synchronize the frame rendering with the audio,
+and output buffers may comes out of order due to how video CODECs are
+made.
 
--- 
-Regards,
+In the first, we'd need a mechanism where we can schedule a render at a
+specific time or vblank. We can of course already implement this in
+software, but with fences, the scheduling would need to be done in the
+driver. Then if the fence is signalled earlier, the driver should hold
+on until the delay is met. If the fence got signalled late, we also
+need to think of a workflow. As we can't schedule more then one render
+in DRM at one time, I don't really see yet how to make that work.
 
-Laurent Pinchart
+For the second, it's complicated on V4L2 side. Currently we signal
+buffers when they are ready in the display order. With fences, we
+receive early pairs buffer and fence (in decoding order). There exist
+cases where reordering is done by the driver (stateful CODEC). We
+cannot schedule these immediately we would need a new mechanism to know
+which one come next. If we just reuse current mechnism, it would void
+the fence usage since the fence will always be signalled by the time it
+reaches DRM or other v4l2 component.
+
+There also other issues, for video capture pipeline, if you are not
+rendering ASAP, you need the HW timestamp in order to schedule. Again,
+we'd get the fence early, but the actual timestamp will be signalled at
+the very last minutes, so we also risk of turning the fence into pure
+overhead. Note that as we speak, I have colleagues who are
+experimenting with frame timestamp prediction that slaves to the
+effective timestamp (catching up over time). But we still have issues
+when the capture driver skipped a frame (missed a capture window).
+
+
+I hope this is useful reflection data,
+Nicolas
+
