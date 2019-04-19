@@ -2,154 +2,156 @@ Return-Path: <SRS0=xuIN=SV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37FBEC282DA
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 03:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EE4CC282DC
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 03:52:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 052CA21736
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 03:51:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2205121736
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 03:52:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbfDSDu7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 18 Apr 2019 23:50:59 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:50116 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727159AbfDSDu7 (ORCPT
+        id S1727216AbfDSDwP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 18 Apr 2019 23:52:15 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:3374 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727159AbfDSDwP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 18 Apr 2019 23:50:59 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:cd84:c200:40c:19b0])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id HKYAh0g2soEWZHKYBhFhYN; Fri, 19 Apr 2019 05:50:57 +0200
-Message-ID: <0b94137a76b5175d10927f2943e57fa5@smtp-cloud9.xs4all.net>
-Date:   Fri, 19 Apr 2019 05:50:54 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfLq/2YZwgO6SGHPUuCLIRUa4aHWdVxxqRWlWPR2d4sY3TnXow3427EAGSj+Vol/uxGmjyZacm/4nj80K0MxQkGi4ATC4XWeNxGsYFlA5whfq3YsPrVO6
- tcbJra8lF5Oj5oVrJyuSeQAROM/AI3uMSXFALAePntBPq2RJu+CuVwrJ8RRvIa9Qtdu0iHHdFxJ8vauW/S1yeHHzVCLvRsxCXD9rM6Ld8zua3walpAgaAk//
+        Thu, 18 Apr 2019 23:52:15 -0400
+X-UUID: bd26d3df69664dd386ea419e77e24e48-20190419
+X-UUID: bd26d3df69664dd386ea419e77e24e48-20190419
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1011604904; Fri, 19 Apr 2019 11:52:08 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 19 Apr 2019 11:52:07 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 19 Apr 2019 11:52:07 +0800
+Message-ID: <1555645927.24433.4.camel@mtksdaap41>
+Subject: Re: [PATCH v2 05/15] [media] mtk-mipicsi: get the w/h/bytepwerline
+ for mtk_mipicsi
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Stu Hsieh <stu.hsieh@mediatek.com>
+CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
+Date:   Fri, 19 Apr 2019 11:52:07 +0800
+In-Reply-To: <1555407015-18130-6-git-send-email-stu.hsieh@mediatek.com>
+References: <1555407015-18130-1-git-send-email-stu.hsieh@mediatek.com>
+         <1555407015-18130-6-git-send-email-stu.hsieh@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+Hi, Stu:
 
-Results of the daily build of media_tree:
+On Tue, 2019-04-16 at 17:30 +0800, Stu Hsieh wrote:
+> This patch get the w/h/bytepwerline to save in mtk_mipicsi.
+> 
+> Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
+> ---
+>  .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+> 
+> diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
+> index 16f6bc480f4e..10782fccca79 100644
+> --- a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
+> +++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
+> @@ -99,6 +99,9 @@ struct mtk_mipicsi_dev {
+>  	u32 id;
+>  	int clk_num;
+>  	struct clk		*clk[MIPICSI_CLK];
+> +	u32 width;
+> +	u32 height;
+> +	u32 bytesperline;
+>  };
+>  
+>  #define MTK_MIPICSI_BUS_PARAM (V4L2_MBUS_MASTER |	\
+> @@ -110,13 +113,36 @@ struct mtk_mipicsi_dev {
+>  		V4L2_MBUS_PCLK_SAMPLE_FALLING |	\
+>  		V4L2_MBUS_DATA_ACTIVE_HIGH)
+>  
+> +static u32 get_bytesperline(const u32 fmt, const u32 width)
+> +{
+> +	u32 bytesperline = 0;
+> +
+> +	switch (fmt) {
+> +	case MEDIA_BUS_FMT_UYVY8_2X8:
+> +	case MEDIA_BUS_FMT_VYUY8_2X8:
+> +	case MEDIA_BUS_FMT_YUYV8_2X8:
+> +	case MEDIA_BUS_FMT_YVYU8_2X8:
+> +		bytesperline = width * 2U;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return bytesperline;
+> +}
+> +
+>  static int mtk_mipicsi_add_device(struct soc_camera_device *icd)
+>  {
+> +	struct soc_camera_host *ici = to_soc_camera_host(icd->parent);
+> +	struct mtk_mipicsi_dev *mipicsi = ici->priv;
+>  	struct v4l2_subdev *sd = soc_camera_to_subdev(icd);
+>  	struct v4l2_subdev_format format = {
+>  		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+>  	};
+>  	int ret;
+> +	u32 width;
+> +	u32 height;
+> +	u32 fmt;
+>  
+>  	/* Get width/height info from subdev. Then use them to set register */
+>  	ret = v4l2_subdev_call(sd, pad, get_fmt, NULL, &format);
+> @@ -125,6 +151,19 @@ static int mtk_mipicsi_add_device(struct soc_camera_device *icd)
+>  		return ret;
+>  	}
+>  
+> +	width = format.format.width;
+> +	height = format.format.height;
+> +	fmt = format.format.code;
+> +	mipicsi->bytesperline = get_bytesperline(fmt, width);
+> +	if ((width == 0U) || (height == 0U) || (mipicsi->bytesperline == 0U)) {
 
-date:			Fri Apr 19 05:00:11 CEST 2019
-media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	e30639edd74f12f8f58d8e9cf10d85a1f071a6c3
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
+You could check more completely, for example, if the valid range of width is 1 ~ 4095, you could check as:
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
+#define WIDTH_MIN 1
+#define WIDTH_MAX 4095
 
-Detailed results are available here:
+if ((width < WIDTH_MIN) || (width > WIDTH_MAX)) {
+	/* invalid value */
+}
 
-http://www.xs4all.nl/~hverkuil/logs/Friday.log
+Regards,
+CK
 
-Detailed regression test results are available here:
+> +		dev_err(icd->parent, "invalid sub device width/height/bytesperline %d/%d/%d\n",
+> +			width, height, mipicsi->bytesperline);
+> +		return -EINVAL;
+> +	}
+> +
+> +	mipicsi->width = width;
+> +	mipicsi->height = height;
+> +
+>  	/*
+>  	 * If power domain was closed before, it will be open.
+>  	 * Then clock will be open and register will be set
 
-http://www.xs4all.nl/~hverkuil/logs/Friday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-dmesg.log
 
-Full logs are available here:
 
-http://www.xs4all.nl/~hverkuil/logs/Friday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
