@@ -2,247 +2,145 @@ Return-Path: <SRS0=xuIN=SV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABFA1C282DA
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 19:05:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E043C282E1
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 20:13:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 698E120645
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 19:05:30 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BeYzNFZS"
+	by mail.kernel.org (Postfix) with ESMTP id CF76120663
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 20:13:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728904AbfDSTFZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Apr 2019 15:05:25 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:34334 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728666AbfDSTFX (ORCPT
+        id S1727038AbfDSUNK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Apr 2019 16:13:10 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:33632 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726597AbfDSUNK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Apr 2019 15:05:23 -0400
-Received: by mail-wm1-f67.google.com with SMTP id r186so9508029wmf.1;
-        Fri, 19 Apr 2019 12:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=BJohAaoXGzpnYmzQ88UijR4q+bxIpnP/97TK8bfiKzU=;
-        b=BeYzNFZSsrydipZ3BnVjjUqffgNCdp/n1wwBiSCO+5UGWEaSaFMTwSZQwpHUmD0K/C
-         ByTJe+2HMrE3nQqY6UkwYCYT0pNhVJZOUwAlsacZh9QV7gf0u62vHPbYBqkPVQjZb5+T
-         fBzTQTH57jWAuWkh3SM6xSm1UJucJr0ZKJtwl/rUQ01MXK1eNT8zNgVazjP20/yeofAi
-         BgPzRb1Hn+lYHW5OUoKHdjFUQL62vRo3+fz4TRmFZFkQrW0eGZ4L9OHIJf72zN5P0+hA
-         LFVMioQaHx3B/JBZsYVyCEIvEHKWbkzCOgehItNCoZ9LInPshaj/6IkXqgNZB9TPBUBR
-         Q+gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BJohAaoXGzpnYmzQ88UijR4q+bxIpnP/97TK8bfiKzU=;
-        b=c4GtJeT+1lD2MPZmiea4sMPf6kqR2DT1a+g2CZ2rI+HbBzp8eiOkvxkF3yTUsdoXAN
-         Hl2fPQjcRNm87Liv2aPtxHxHke/T2mZOKRWxuecG/ZoTpx8AzvR6e8ww+KrUlB1qL3dG
-         gea0zuK4G73LuZ9Hc0mkJxzy6CD1N1/5ReAowae+FQuc7iEV/If3dRG6vg3eiGSd/VE7
-         JNJG/fYyzK/zhweRZsZFrYd9FepIgTesepDL+42pbEr5vWSlL2y74bSiJYijgah7seLR
-         4dGj8ghb64DWC0kjd116/bleJLuxMtHOJ/KI5uIIjGGjxWGAz9QbJq15QeryGgaPd7yr
-         Wa0w==
-X-Gm-Message-State: APjAAAWkcWJPsCaYKbVNHt14LVN2P+zG7kvx/2YC6cJug/xX+dQAf2pI
-        m1OZtjDZsgTM5HPhmttHkN51lLcAluW9ElCn0OXl8ZX9gOhgMg==
-X-Google-Smtp-Source: APXvYqxcpYIPRcZx/Pq8V/EsXrjbqoNb8F9nY5gnNvNtRECGr6P3gXfXgGGEexb3Qrd/fB9mLgwCI4hLWBiMzBEUw20=
-X-Received: by 2002:a1c:804c:: with SMTP id b73mr3473003wmd.116.1555700721530;
- Fri, 19 Apr 2019 12:05:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190416183841.1577-1-christian.koenig@amd.com> <20190416183841.1577-6-christian.koenig@amd.com>
-In-Reply-To: <20190416183841.1577-6-christian.koenig@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 19 Apr 2019 15:05:09 -0400
-Message-ID: <CADnq5_OFh0UDvMkt+yTKBLjysuTmB==Lug-=d04E_eUHPn1ENQ@mail.gmail.com>
-Subject: Re: [PATCH 05/12] dma-buf: add explicit buffer pinning
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
+        Fri, 19 Apr 2019 16:13:10 -0400
+Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 202DC3AC719;
+        Fri, 19 Apr 2019 10:06:19 +0000 (UTC)
+X-Originating-IP: 90.88.160.238
+Received: from aptenodytes (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id E254024000C;
+        Fri, 19 Apr 2019 10:06:15 +0000 (UTC)
+Message-ID: <aaf7a86350afda78fdaaacbd26b497b4af7d894c.camel@bootlin.com>
+Subject: Re: [PATCH] media: cedrus: Fix initialization order
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Jernej Skrabec <jernej.skrabec@siol.net>, maxime.ripard@bootlin.com
+Cc:     =?ISO-8859-1?Q?andr=E9s_ram=EDrez?= <rrandresf@gmail.com>,
+        mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        hverkuil-cisco@xs4all.nl, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>
+Date:   Fri, 19 Apr 2019 12:06:15 +0200
+In-Reply-To: <82e793b898657d65cda55c98b9ffcec475193b5b.camel@bootlin.com>
+References: <20190407184728.16620-1-jernej.skrabec@siol.net>
+         <82e793b898657d65cda55c98b9ffcec475193b5b.camel@bootlin.com>
+Organization: Bootlin
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.32.1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 16, 2019 at 2:39 PM Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> Add optional explicit pinning callbacks instead of implicitly assume the
-> exporter pins the buffer when a mapping is created.
->
-> Signed-off-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> ---
->  drivers/dma-buf/dma-buf.c | 39 +++++++++++++++++++++++++++++++++++++++
->  include/linux/dma-buf.h   | 37 +++++++++++++++++++++++++++++++------
->  2 files changed, 70 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index a3738fab3927..f23ff8355505 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -630,6 +630,41 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct d=
-ma_buf_attachment *attach)
->  }
->  EXPORT_SYMBOL_GPL(dma_buf_detach);
->
-> +/**
-> + * dma_buf_pin - Lock down the DMA-buf
-> + *
-> + * @dmabuf:    [in]    DMA-buf to lock down.
-> + *
-> + * Returns:
-> + * 0 on success, negative error code on failure.
-> + */
-> +int dma_buf_pin(struct dma_buf *dmabuf)
-> +{
-> +       int ret =3D 0;
-> +
-> +       reservation_object_assert_held(dmabuf->resv);
-> +
-> +       if (dmabuf->ops->pin)
-> +               ret =3D dmabuf->ops->pin(dmabuf);
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(dma_buf_pin);
-> +
-> +/**
-> + * dma_buf_unpin - Remove lock from DMA-buf
-> + *
-> + * @dmabuf:    [in]    DMA-buf to unlock.
-> + */
-> +void dma_buf_unpin(struct dma_buf *dmabuf)
-> +{
-> +       reservation_object_assert_held(dmabuf->resv);
-> +
-> +       if (dmabuf->ops->unpin)
-> +               dmabuf->ops->unpin(dmabuf);
-> +}
-> +EXPORT_SYMBOL_GPL(dma_buf_unpin);
-> +
->  /**
->   * dma_buf_map_attachment_locked - Maps the buffer into _device_ address=
- space
->   * with the reservation lock held. Is a wrapper for map_dma_buf() of the
-> @@ -666,6 +701,8 @@ dma_buf_map_attachment_locked(struct dma_buf_attachme=
-nt *attach,
->          */
->         if (attach->invalidate)
->                 list_del(&attach->node);
-> +       else
-> +               dma_buf_pin(attach->dmabuf);
->         sg_table =3D attach->dmabuf->ops->map_dma_buf(attach, direction);
->         if (attach->invalidate)
->                 list_add(&attach->node, &attach->dmabuf->attachments);
-> @@ -735,6 +772,8 @@ void dma_buf_unmap_attachment_locked(struct dma_buf_a=
-ttachment *attach,
->
->         attach->dmabuf->ops->unmap_dma_buf(attach, sg_table,
->                                                 direction);
-> +       if (!attach->invalidate)
-> +               dma_buf_unpin(attach->dmabuf);
->  }
->  EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment_locked);
->
-> diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-> index ece4638359a8..a615b74e5894 100644
-> --- a/include/linux/dma-buf.h
-> +++ b/include/linux/dma-buf.h
-> @@ -100,14 +100,40 @@ struct dma_buf_ops {
->          */
->         void (*detach)(struct dma_buf *, struct dma_buf_attachment *);
->
-> +       /**
-> +        * @pin_dma_buf:
-> +        *
-> +        * This is called by dma_buf_pin and lets the exporter know that =
-an
-> +        * importer assumes that the DMA-buf can't be invalidated any mor=
-e.
-> +        *
-> +        * This is called with the dmabuf->resv object locked.
-> +        *
-> +        * This callback is optional.
-> +        *
-> +        * Returns:
-> +        *
-> +        * 0 on success, negative error code on failure.
-> +        */
-> +       int (*pin)(struct dma_buf *);
-> +
-> +       /**
-> +        * @unpin_dma_buf:
-> +        *
-> +        * This is called by dma_buf_unpin and lets the exporter know tha=
-t an
-> +       * importer doesn't need to the DMA-buf to stay were it is any mor=
-e.
+Hi,
 
-This should read:
-* importer doesn't need the DMA-buf to stay were it is anymore.
+On Mon, 2019-04-08 at 10:18 +0200, Paul Kocialkowski wrote:
+> Hi,
+> 
+> Le dimanche 07 avril 2019 à 20:47 +0200, Jernej Skrabec a écrit :
+> > Currently, MEDIA_IOC_G_TOPOLOGY ioctl on cedrus fails due to incorrect
+> > initialization order. Fix that by moving video_register_device() before
+> > v4l2_m2m_register_media_controller() and while at it, fix error path.
+> > 
+> > Reported-by: Jonas Karlman <jonas@kwiboo.se>
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+> 
+> Thanks for the fix, good catch!
+> 
+> Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-> +        *
-> +        * This is called with the dmabuf->resv object locked.
-> +        *
-> +        * This callback is optional.
-> +        */
-> +       void (*unpin)(struct dma_buf *);
-> +
->         /**
->          * @map_dma_buf:
->          *
->          * This is called by dma_buf_map_attachment() and is used to map =
-a
->          * shared &dma_buf into device address space, and it is mandatory=
-. It
-> -        * can only be called if @attach has been called successfully. Th=
-is
-> -        * essentially pins the DMA buffer into place, and it cannot be m=
-oved
-> -        * any more
-> +        * can only be called if @attach has been called successfully.
->          *
->          * This call may sleep, e.g. when the backing storage first needs=
- to be
->          * allocated, or moved to a location suitable for all currently a=
-ttached
-> @@ -148,9 +174,6 @@ struct dma_buf_ops {
->          *
->          * This is called by dma_buf_unmap_attachment() and should unmap =
-and
->          * release the &sg_table allocated in @map_dma_buf, and it is man=
-datory.
-> -        * It should also unpin the backing storage if this is the last m=
-apping
-> -        * of the DMA buffer, it the exporter supports backing storage
-> -        * migration.
->          *
->          * This is always called with the dmabuf->resv object locked when
->          * no_sgt_cache is true.
-> @@ -442,6 +465,8 @@ int dma_buf_fd(struct dma_buf *dmabuf, int flags);
->  struct dma_buf *dma_buf_get(int fd);
->  void dma_buf_put(struct dma_buf *dmabuf);
->
-> +int dma_buf_pin(struct dma_buf *dmabuf);
-> +void dma_buf_unpin(struct dma_buf *dmabuf);
->  struct sg_table *dma_buf_map_attachment_locked(struct dma_buf_attachment=
- *,
->                                                enum dma_data_direction);
->  struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *,
-> --
-> 2.17.1
->
-> _______________________________________________
-> amd-gfx mailing list
-> amd-gfx@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/amd-gfx
+Looks like this patch wasn't picked-up yet. Could we take it in?
+I think it would also deserve a:
+
+Fixes: 50e761516f2b ("media: platform: Add Cedrus VPU decoder driver")
+
+Cheers,
+
+Paul
+
+> > ---
+> >  drivers/staging/media/sunxi/cedrus/cedrus.c | 24 ++++++++++-----------
+> >  1 file changed, 12 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > index b98add3cdedd..d0429c0e6b6b 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> > @@ -300,7 +300,7 @@ static int cedrus_probe(struct platform_device *pdev)
+> >  			 "Failed to initialize V4L2 M2M device\n");
+> >  		ret = PTR_ERR(dev->m2m_dev);
+> >  
+> > -		goto err_video;
+> > +		goto err_v4l2;
+> >  	}
+> >  
+> >  	dev->mdev.dev = &pdev->dev;
+> > @@ -310,23 +310,23 @@ static int cedrus_probe(struct platform_device *pdev)
+> >  	dev->mdev.ops = &cedrus_m2m_media_ops;
+> >  	dev->v4l2_dev.mdev = &dev->mdev;
+> >  
+> > -	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
+> > -						 MEDIA_ENT_F_PROC_VIDEO_DECODER);
+> > -	if (ret) {
+> > -		v4l2_err(&dev->v4l2_dev,
+> > -			 "Failed to initialize V4L2 M2M media controller\n");
+> > -		goto err_m2m;
+> > -	}
+> > -
+> >  	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
+> >  	if (ret) {
+> >  		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
+> > -		goto err_v4l2;
+> > +		goto err_m2m;
+> >  	}
+> >  
+> >  	v4l2_info(&dev->v4l2_dev,
+> >  		  "Device registered as /dev/video%d\n", vfd->num);
+> >  
+> > +	ret = v4l2_m2m_register_media_controller(dev->m2m_dev, vfd,
+> > +						 MEDIA_ENT_F_PROC_VIDEO_DECODER);
+> > +	if (ret) {
+> > +		v4l2_err(&dev->v4l2_dev,
+> > +			 "Failed to initialize V4L2 M2M media controller\n");
+> > +		goto err_video;
+> > +	}
+> > +
+> >  	ret = media_device_register(&dev->mdev);
+> >  	if (ret) {
+> >  		v4l2_err(&dev->v4l2_dev, "Failed to register media device\n");
+> > @@ -339,10 +339,10 @@ static int cedrus_probe(struct platform_device *pdev)
+> >  
+> >  err_m2m_mc:
+> >  	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
+> > -err_m2m:
+> > -	v4l2_m2m_release(dev->m2m_dev);
+> >  err_video:
+> >  	video_unregister_device(&dev->vfd);
+> > +err_m2m:
+> > +	v4l2_m2m_release(dev->m2m_dev);
+> >  err_v4l2:
+> >  	v4l2_device_unregister(&dev->v4l2_dev);
+> >  
+-- 
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
