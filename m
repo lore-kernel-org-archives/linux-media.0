@@ -2,160 +2,134 @@ Return-Path: <SRS0=xuIN=SV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CED56C282DA
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 18:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22F8BC282DA
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 18:59:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8B329205ED
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 18:57:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="Or5gTy1s"
+	by mail.kernel.org (Postfix) with ESMTP id E961320643
+	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 18:59:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbfDSS52 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Apr 2019 14:57:28 -0400
-Received: from mail-qk1-f176.google.com ([209.85.222.176]:45821 "EHLO
-        mail-qk1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726172AbfDSS52 (ORCPT
+        id S1727636AbfDSS74 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Apr 2019 14:59:56 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:37286 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727100AbfDSS74 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Apr 2019 14:57:28 -0400
-Received: by mail-qk1-f176.google.com with SMTP id d5so1088941qko.12
-        for <linux-media@vger.kernel.org>; Fri, 19 Apr 2019 11:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=PpIUSk15nxWJsA3TYf0KsoPEdQ/S0Pil7IwighIbZlM=;
-        b=Or5gTy1s8mZ8jH+2nJs7p+7aDshTv6eloiqek1aWHwG9X6NDicKcFd0R35m4MzXkkA
-         +5EAvl/8OO+HWZoH1iMritgp1cknJ4c9ynffCiJodc8DqOZBeXIAVM1esCTecczPBENs
-         yq53rEt85CvzQoif1JoWkzADPYtKfGuvCkjkyJsw48yRlipCNZW/eqDr/hsbYeAHW7oD
-         VFjVl44AoiX3eb2yAI1pWc+cVyxU3+PU9RoalTFqdADnBdzsJXA7GGFQGPdmkCJTIuOy
-         xjy292/UK7eL84CGlMAf/GSjWEvstKNDY0jnB2cUFA8GadiGBlBv+t3rOKoBgPl8SmFc
-         s7zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=PpIUSk15nxWJsA3TYf0KsoPEdQ/S0Pil7IwighIbZlM=;
-        b=b2m+YDAwaCa7iCiVgYnO34OMEdzEc0Q2rZT9XybI+iQKCwVil2ervlzP17oUT0Py6K
-         Il5V0G5GvkucU6EhxJZvUh290iXHE3gO1OtWMKJknXqG2R7lKe+GSNTiKoCeK18X1QZO
-         d7qSPGA5N3Uh97onnOFmKp612eXN8N3/f5zdcSvLOsHy6Jd/SEvaXpws8KSvKwFeLu6m
-         OR617gptX/Lj1pI3y+buWff+cD5FeCyrFD56XhQ5P+mTR9X/8W5Z1TbpYb5E/gt+hPcY
-         R5IgqhG6btqhhxTcLjPqI17DS+vUdGHQRADqFHQL85StFOVE89C6uysUH+h9e5NraeCd
-         ByLQ==
-X-Gm-Message-State: APjAAAVuCf7PXk16y1WODz62auSLhJ3EbeUK4w8ovC7JVikYZcKusiTV
-        phspCVEkXoY8x7qL6PbDoB1GKNLIIxhqe/aN
-X-Google-Smtp-Source: APXvYqzelYVPsR93oFeLNbjJJp+IkeVpjtH/JE2L/XGVFalF7K7+3MPphDsIcsu9cy4rNc5b3QQoVA==
-X-Received: by 2002:a05:620a:1372:: with SMTP id d18mr3396902qkl.310.1555687869833;
-        Fri, 19 Apr 2019 08:31:09 -0700 (PDT)
-Received: from skullcanyon ([2002:c0de:c115:0:481e:e17e:2f68:43f8])
-        by smtp.gmail.com with ESMTPSA id z85sm1161988qka.18.2019.04.19.08.31.07
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 19 Apr 2019 08:31:08 -0700 (PDT)
-Message-ID: <52e092f7009d57087c10b5e21ea597bcad506bfd.camel@ndufresne.ca>
-Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Tomasz Figa <tfiga@chromium.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
+        Fri, 19 Apr 2019 14:59:56 -0400
+X-Greylist: delayed 345 seconds by postgrey-1.27 at vger.kernel.org; Fri, 19 Apr 2019 14:59:55 EDT
+Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id 957B53A9298;
+        Fri, 19 Apr 2019 07:22:57 +0000 (UTC)
+Received: from aptenodytes (aaubervilliers-681-1-42-238.w90-88.abo.wanadoo.fr [90.88.160.238])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id C128624000A;
+        Fri, 19 Apr 2019 07:22:52 +0000 (UTC)
+Message-ID: <011ad65faa3517b2dd51be4a03ad52bf72c93557.camel@bootlin.com>
+Subject: Re: [PATCH v3 1/2] media: v4l: Add definitions for the HEVC slice
+ format and controls
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Date:   Fri, 19 Apr 2019 11:31:06 -0400
-In-Reply-To: <CAAFQd5CojNuiJ09gXEjnOorfDnRP1Bk436yaffHFKmmsfoUiQQ@mail.gmail.com>
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
-         <20190418081816.GO13337@phenom.ffwll.local>
-         <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
-         <CAAFQd5CojNuiJ09gXEjnOorfDnRP1Bk436yaffHFKmmsfoUiQQ@mail.gmail.com>
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Randy Li <ayaka@soulik.info>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>
+Date:   Fri, 19 Apr 2019 09:22:51 +0200
+In-Reply-To: <32979080-a86f-01a4-a9e3-bcb970a85135@xs4all.nl>
+References: <20190214095309.19594-1-paul.kocialkowski@bootlin.com>
+         <20190214095309.19594-2-paul.kocialkowski@bootlin.com>
+         <32979080-a86f-01a4-a9e3-bcb970a85135@xs4all.nl>
+Organization: Bootlin
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 (3.32.0-1.fc30) 
+User-Agent: Evolution 3.32.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Le vendredi 19 avril 2019 à 13:27 +0900, Tomasz Figa a écrit :
-> On Fri, Apr 19, 2019 at 9:30 AM Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
-> > Le jeudi 18 avril 2019 à 10:18 +0200, Daniel Vetter a écrit :
-> > > > It would be cool if both could be used concurrently and not just return
-> > > > -EBUSY when the device is used with the other subsystem.
-> > > 
-> > > We live in this world already :-) I think there's even patches (or merged
-> > > already) to add fences to v4l, for Android.
-> > 
-> > This work is currently suspended. It will require some feature on DRM
-> > display to really make this useful, but there is also a lot of
-> > challanges in V4L2. In GFX space, most of the use case are about
-> > rendering as soon as possible. Though, in multimedia we have two
-> > problems, we need to synchronize the frame rendering with the audio,
-> > and output buffers may comes out of order due to how video CODECs are
-> > made.
-> > 
-> > In the first, we'd need a mechanism where we can schedule a render at a
-> > specific time or vblank. We can of course already implement this in
-> > software, but with fences, the scheduling would need to be done in the
-> > driver. Then if the fence is signalled earlier, the driver should hold
-> > on until the delay is met. If the fence got signalled late, we also
-> > need to think of a workflow. As we can't schedule more then one render
-> > in DRM at one time, I don't really see yet how to make that work.
-> > 
-> > For the second, it's complicated on V4L2 side. Currently we signal
-> > buffers when they are ready in the display order. With fences, we
-> > receive early pairs buffer and fence (in decoding order). There exist
-> > cases where reordering is done by the driver (stateful CODEC). We
-> > cannot schedule these immediately we would need a new mechanism to know
-> > which one come next. If we just reuse current mechnism, it would void
-> > the fence usage since the fence will always be signalled by the time it
-> > reaches DRM or other v4l2 component.
-> > 
-> > There also other issues, for video capture pipeline, if you are not
-> > rendering ASAP, you need the HW timestamp in order to schedule. Again,
-> > we'd get the fence early, but the actual timestamp will be signalled at
-> > the very last minutes, so we also risk of turning the fence into pure
-> > overhead. Note that as we speak, I have colleagues who are
-> > experimenting with frame timestamp prediction that slaves to the
-> > effective timestamp (catching up over time). But we still have issues
-> > when the capture driver skipped a frame (missed a capture window).
+Hi,
+
+On Tue, 2019-04-02 at 13:51 +0200, Hans Verkuil wrote:
+> On 2/14/19 10:53 AM, Paul Kocialkowski wrote:
+
+[...]
+
+> > +.. c:type:: v4l2_hevc_dpb_entry
+> > +
+> > +.. cssclass:: longtable
+> > +
+> > +.. flat-table:: struct v4l2_hevc_dpb_entry
+> > +    :header-rows:  0
+> > +    :stub-columns: 0
+> > +    :widths:       1 1 2
+> > +
+> > +    * - __u32
+> > +      - ``buffer_tag``
+> > +      - The V4L2 buffer tag that matches the associated reference picture.
 > 
-> Note that a fence has a timestamp internally and it can be queried for
-> it from the user space if exposed as a sync file:
-> https://elixir.bootlin.com/linux/v5.1-rc5/source/drivers/dma-buf/sync_file.c#L386
+> This struct documentation is out of date with the actual struct!
 
-Don't we need something the other way around ? This seems to be the
-timestamp of when it was triggered (I'm not familiar with this though).
+Woops, sorry about that. I'll make another pass on the structures vs
+docs before submitting the next version.
 
+> > +#define V4L2_HEVC_DPB_ENTRY_RPS_ST_CURR_BEFORE	0x01
+> > +#define V4L2_HEVC_DPB_ENTRY_RPS_ST_CURR_AFTER	0x02
+> > +#define V4L2_HEVC_DPB_ENTRY_RPS_LT_CURR		0x03
+> > +
+> > +#define V4L2_HEVC_DPB_ENTRIES_NUM_MAX		16
+> > +
+> > +struct v4l2_hevc_dpb_entry {
+> > +	__u64	timestamp;
 > 
-> Fences in V4L2 would be also useful for stateless decoders and any
-> mem-to-mem processors that operate in order, like the blitters
-> mentioned here or actually camera ISPs, which can be often chained
-> into relatively sophisticated pipelines.
+> I would call this 'reference_ts' rather than plain 'timestamp'.
+> Or at least some other name that reflects what the timestamp
+> refers to.
 
-I agree fence can be used to optimize specific corner cases. They are
-not as critical in V4L2 since we have async queues. I think the use
-case for fences in V4L2 is mostly to lower the latency. Not all use
-cases requires such a low latency. There was argument around fences
-that is simplify the the code, I haven't seen a compelling argument
-demonstrating that this would be the case for V4L2 programming. The
-only case is when doing V4L2 to DRM exchanges, and only in the context
-where time synchronization does not matter. In fact, so far it is more
-work since information starts flowing through separate events
-(buffer/fence first, later timestamps and possibly critical metadata.
-This might be induced by the design, but clearly there is a slight API
-clash.
+Well, I think using "ts" instead of "timestamp" is much less explicit
+(I'm really not a big fan of abbreviations...).
 
+Also, this field is in the dpb entry structure and since a dpb entry
+describes a reference, I find it quite straightforward already without
+any added prefix. The prefix feels redundant with the name of the
+structure that holds the element.
+
+I think the same should apply for mpeg-2 and h.264.
+
+> > +	__u8	rps;
+> > +	__u8	field_pic;
+> > +	__u16	pic_order_cnt[2];
+> > +	__u8	padding[2];
 > 
-> Best regards,
-> Tomasz
+> padding fields here or elsewhere are not documented. Do you really
+> need them? What if you changed rps and field_pic to __u16 instead?
+> 
+> Padding fields are painful to maintain in my experience.
+
+I think we'll need to rework the controls to include flags and such in
+the not-too-distant future. So there will be an occasion to change it
+then (the same work also needs to be done for MPEG-2).
+
+If you prefer that we make the change now and later update it along
+with the controls, I can definitely do that too.
+
+Cheers,
+
+Paul
+
+-- 
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
