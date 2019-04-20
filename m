@@ -1,107 +1,155 @@
-Return-Path: <SRS0=xuIN=SV=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=iC2Y=SW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28630C282DF
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 20:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58E61C282DD
+	for <linux-media@archiver.kernel.org>; Sat, 20 Apr 2019 03:50:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EFC41217F9
-	for <linux-media@archiver.kernel.org>; Fri, 19 Apr 2019 20:29:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31215208C0
+	for <linux-media@archiver.kernel.org>; Sat, 20 Apr 2019 03:50:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726689AbfDSU3d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 19 Apr 2019 16:29:33 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:32970 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725859AbfDSU3d (ORCPT
+        id S1726138AbfDTDuY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 19 Apr 2019 23:50:24 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:52629 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725911AbfDTDuY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 19 Apr 2019 16:29:33 -0400
-Received: (qmail 8731 invoked by uid 2102); 19 Apr 2019 16:29:32 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 19 Apr 2019 16:29:32 -0400
-Date:   Fri, 19 Apr 2019 16:29:32 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-cc:     andreyknvl@google.com,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <wen.yang99@zte.com.cn>
-Subject: Re: general protection fault in smsusb_init_device
-In-Reply-To: <0000000000008d89900586ccd37b@google.com>
-Message-ID: <Pine.LNX.4.44L0.1904191624050.1406-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        Fri, 19 Apr 2019 23:50:24 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:3440:e806:f157:7b50])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id Hh1BhUdMLb8gSHh1ChKXfg; Sat, 20 Apr 2019 05:50:22 +0200
+Message-ID: <cb728bf0471ac7eec803122f391b1640@smtp-cloud8.xs4all.net>
+Date:   Sat, 20 Apr 2019 05:50:21 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfD2RhfppdhxB8O2bwlaHXchiNGF/vbwgE7XWOMbEMi0IrcqHJnIg+bPBabMKUP+PJYIJMJk/HW/KP9G52/e45zvEPI+0FUOEgaROgbjJ/NvTW/BsV0ZE
+ KKunLSKUPldBsIL7G7DtwsLV+vZVcOQM6Lzapk15bE7s2gvBcaRU42QCbb8Qh5kCa5Dzj4pZFViENswYwRf4yeGV2hF90YQaHEX3pOqB4lHsD1RyqaLCiEkq
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 18 Apr 2019, syzbot wrote:
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    d34f9519 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=128ec3fd200000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c73d1bb5aeaeae20
-> dashboard link: https://syzkaller.appspot.com/bug?extid=53f029db71c19a47325a
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16138e67200000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=128dddbf200000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
-> 
-> usb 1-1: config 0 descriptor??
-> usb 1-1: string descriptor 0 read error: -71
-> smsusb:smsusb_probe: board id=18, interface number 0
-> kasan: CONFIG_KASAN_INLINE enabled
-> kasan: GPF could be caused by NULL-ptr deref or user memory access
-> general protection fault: 0000 [#1] SMP KASAN PTI
-> CPU: 1 PID: 22 Comm: kworker/1:1 Not tainted 5.1.0-rc5-319617-gd34f951 #4
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:smsusb_init_device+0x366/0x937  
-> drivers/media/usb/siano/smsusb.c:429
-> Code: 48 c1 ea 03 80 3c 02 00 74 05 e8 24 1e 66 f7 4d 8b b6 f0 04 00 00 b8  
-> ff ff 37 00 48 c1 e0 2a 49 8d 7e 04 48 89 fa 48 c1 ea 03 <8a> 14 02 48 89  
-> f8 83 e0 07 ff c0 38 d0 7c 09 84 d2 74 05 e8 b1 1d
-> RSP: 0018:ffff8880a86570d0 EFLAGS: 00010247
-> RAX: dffffc0000000000 RBX: ffff88809a81b300 RCX: ffffffff8a42b5b3
-> RDX: 0000000000000000 RSI: ffffffff8a42b6a3 RDI: 0000000000000004
-> RBP: ffff88808ca70000 R08: ffff8880a8503100 R09: ffff8880a8657130
-> R10: ffffed10150cae34 R11: ffff8880a86571a7 R12: ffff88809a81be54
-> R13: ffff88809a81be5c R14: 0000000000000000 R15: ffff88808ca70000
-> FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f1ad259d000 CR3: 000000009a3aa000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   smsusb_probe+0xd64/0xe08 drivers/media/usb/siano/smsusb.c:570
+Results of the daily build of media_tree:
 
-The reason for this bug is clear.  The code in smsusb_probe() at line
-429 does this:
+date:			Sat Apr 20 05:00:12 CEST 2019
+media-tree git hash:	1c3ec30bb23023d738b538e64ac3028902d53692
+media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
+v4l-utils git hash:	e30639edd74f12f8f58d8e9cf10d85a1f071a6c3
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
-		dev->response_alignment =
-		    le16_to_cpu(dev->udev->ep_in[1]->desc.wMaxPacketSize) -
-		    sizeof(struct sms_msg_hdr);
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
 
-which assumes there really is an ep1-IN endpoint.  If there isn't, the 
-code crashes.
+Detailed results are available here:
 
-Testing that the endpoint exists is easy enough, but I'm not sure how 
-this test should be integrated with the rest of the function.  Someone 
-who knows the code better ought to be able to do it with no trouble.
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
 
-Alan Stern
+Detailed regression test results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
