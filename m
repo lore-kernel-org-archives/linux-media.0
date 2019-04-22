@@ -7,51 +7,49 @@ X-Spam-Status: No, score=-11.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D79C10F11
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 17:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF635C10F11
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 17:36:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8AEB9214AF
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 17:33:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EBD8214AE
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 17:36:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555954438;
-	bh=p91EbMtfuRn07xHlvnnEAJjEFLUen/WK38oMPVsYmIk=;
+	s=default; t=1555954563;
+	bh=fhSkKC+KAjKNe94Jy7RHG5BaywaMOuDKYh7b1WqAQ90=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=OQs7dCxb5OO9M1xAwArhw+jIy002JjPoHvek20uHVztDQzVOsiAriDEm87g7/mymU
-	 Q9P/pZaflIV/l9wcQ09jwIOi4aHRQ4G5ZUHHC1mrRrsiDy1b6vFXn+soa5Huivn+Fd
-	 34/ElHoFGw8CJWcW7Wguy3rpTTq0JmaRSX2XX2cI=
+	b=LluWV/Cqv4524dB4Sq9J6Yn/wIlRbU4+b3Xqe+S0wZKE+BB+SemmHfvg/rllv9erk
+	 81UHzZ7kCOe5idFCN701OmJUxyc4aOaJx+7BS/FKbaLZ5Bi+Sezvpqr36lTU/vahRC
+	 jUQqpjDE8/OAUxdqPVBDgLBZrbZiLK4gGT7qzeVI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727478AbfDVRd5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 13:33:57 -0400
-Received: from casper.infradead.org ([85.118.1.10]:41526 "EHLO
+        id S1727953AbfDVRgD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Apr 2019 13:36:03 -0400
+Received: from casper.infradead.org ([85.118.1.10]:41694 "EHLO
         casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726260AbfDVRd4 (ORCPT
+        with ESMTP id S1726587AbfDVRgC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Apr 2019 13:33:56 -0400
+        Mon, 22 Apr 2019 13:36:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
         MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
         :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/KaNyzfV6LTyLVoAMzqFv4nQhsueYT0lEy/VknSVvYg=; b=VsD4qWYrrrgTG7Q1o0k6SCdzrZ
-        nwZuhFu7KSWRZl4QiAR1EHhEjPT7G14A43IkR5lvkcWL2D4ElYvZiVvMvcnSqxsI4W07BVmWsbnFl
-        FbTj5My40SYdH83FRIHzSBoMz2iSLLhfDHeRA6w/9Hu7bFRyf3RPPUtxfHe2dgNJIrffeGQaMT/0u
-        G/g9COTQJox9cqKdvJfgA0jwb7C4NY6ZDZ+1tNeBBVCmLzJs8hlu2RJHwChcmmlAAUM2EhAwhh3t6
-        yMlwojfz0Ou0dskw7786dzXBwGMoxJHpZKg5QqU2/UUAc1qavi59yGlkoUCP+2Fpup+38yxyONnOS
-        fRsgrLsQ==;
+        bh=ixrkklA9r5NdzUfCbwZ4K96ZOE60p2Z9zUOACvXrMeY=; b=foamT6Mzq+DZ7JV5Z4SjC19vTf
+        pbZSr/usJX1bdAoB3lnMS9VGzQ0O61kAl+EwLUEw4bd4QUNEcVQj1gVx3rRJrgub16qgmfvRloVM2
+        ar2fxzAQqHufotw3Zn1Ma+HEo3+Nv904kdYGhMHugLLtb9sdAT7lU7qJnGvY8tSyZCsq6DuKG53Mq
+        MHb0OF6wkbHuBUkKRmrrCOx/R+5nBOl6TqjATtSG2nCW6lpdesxhLU37B/tgRjNMoOTJ3ByKTTCrg
+        MS7jiN67tEDKDpAdJ36mk/djRNYJbBW3m2+uz+DTRgTTiS0Z3LI0vedpZMRcE7sZnQB+c+y/fjxwa
+        k9asZfXA==;
 Received: from 179.176.125.229.dynamic.adsl.gvt.net.br ([179.176.125.229] helo=coco.lan)
         by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hIcpF-000297-T9; Mon, 22 Apr 2019 17:33:54 +0000
-Date:   Mon, 22 Apr 2019 14:33:49 -0300
+        id 1hIcrI-0002DR-5T; Mon, 22 Apr 2019 17:36:00 +0000
+Date:   Mon, 22 Apr 2019 14:35:56 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Subject: Re: [GIT PULL FOR v5.2] cedrus: add H.264 support
-Message-ID: <20190422143349.53e8da3f@coco.lan>
-In-Reply-To: <5356eed6-6bf0-49ab-32e1-7e632c3e4328@xs4all.nl>
-References: <5356eed6-6bf0-49ab-32e1-7e632c3e4328@xs4all.nl>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [GIT PULL for v5.2] Venus updates
+Message-ID: <20190422143551.6d29231e@coco.lan>
+In-Reply-To: <20190401081817.14386-1-stanimir.varbanov@linaro.org>
+References: <20190401081817.14386-1-stanimir.varbanov@linaro.org>
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -61,31 +59,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+Hi Stanimir,
 
-Em Fri, 12 Apr 2019 14:07:45 +0200
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
 
-> The following changes since commit 1c3ec30bb23023d738b538e64ac3028902d53692:
+Em Mon,  1 Apr 2019 11:18:17 +0300
+Stanimir Varbanov <stanimir.varbanov@linaro.org> escreveu:
+
+> Hi Mauro,
 > 
->   media: index.rst: exclude Indexes section from latex/pdf output (2019-03-30 09:42:35 -0400)
+> Here are two patches, one fix and one which makes gstreamer happy with h265.
+> 
+> Please pull.
+> 
+> 
+> The following changes since commit 3e11851d16ea7eff1cfa66b1cb7b35967876dd1e:
+> 
+>   media: venus: Add support for H265 controls required by gstreamer V4L2 H265 module. (2019-04-01 10:44:05 +0300)
 > 
 > are available in the Git repository at:
 > 
->   git://linuxtv.org/hverkuil/media_tree.git tags/br-cedrus-h264
+>   git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-5.2
 > 
-> for you to fetch changes up to 496ab402ea2cb3b0ebba3d0e699e0454b611c820:
+> for you to fetch changes up to 3e11851d16ea7eff1cfa66b1cb7b35967876dd1e:
 > 
->   media: cedrus: Add H264 decoding support (2019-04-12 13:32:21 +0200)
+>   media: venus: Add support for H265 controls required by gstreamer V4L2 H265 module. (2019-04-01 10:44:05 +0300)
+> 
+> ----------------------------------------------------------------
+> venus for 5.2
+> 
+> ----------------------------------------------------------------
 
-Could you please rebase this one on the top of the media tree?
+Not sure why, but I'm not able to pull from it. It complains about some
+issues with your gpg key, and the diffstat is not there...
 
-It came with some conflicts. Perhaps some of the patches here were
-(partially?) applied already, as when I tried to fix the conflict,
-it complained that some switch would have a duplicated case.
-
-Regards,
-Mauro
+I suspect that the e-mail was only partially sent.
 
 Thanks,
 Mauro
