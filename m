@@ -4,32 +4,31 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 657CEC282E1
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 09:38:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A844CC282E1
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 09:38:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 377C820857
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 09:38:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B4B9206A3
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 09:38:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="k0h0G2Te"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="wBQl5kJd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727262AbfDVJiC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 05:38:02 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:36190 "EHLO
+        id S1727294AbfDVJiH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Apr 2019 05:38:07 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:36112 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727185AbfDVJiC (ORCPT
+        with ESMTP id S1726164AbfDVJiC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 22 Apr 2019 05:38:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1555925880; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1555925877; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SSHuRpEPChVNkw5VL/LwuRqDA8mgCfxQAZUZ16LP9Fk=;
-        b=k0h0G2TeRjCZW8ZxVh6aj3SICLlCrw6SpW4qpjOUp5FVzfdwfOXKT4gurngTRtzOCgXeYw
-        lEmaw/lJ2D54DiBhvTydQ2Xp0Q1gXRfCW/6PgpqANPqSx4ZduHGHYi8+t0FpWU3MivZuz2
-        u2mjzWl4c/5zI/M2w0R/YbJqvlCAx40=
+         in-reply-to:references; bh=dsYdwrfjR8Xa/HInZFEBIwpWVxZnM8GKttL3gx6ZIpg=;
+        b=wBQl5kJdAng8w6aoUq3LXOycW0PEEwkgJxIh55xS846IUVBpH2wk58Ydk493Ks/TFWtnQ+
+        Dhm/as5jO9n00nhRVigFNGEZnuCnk3a1TqKTSpX4+CJkDN1uSJ45iCozWhAKyAoa48t0se
+        RxLhkW/lOp+srtvHVRfwEIPd/77eRPU=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -38,12 +37,10 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     od@zcrc.me, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: [PATCH v3 3/3] drm/panel: simple: Add GiantPlus GPM940B0 panel support
-Date:   Mon, 22 Apr 2019 11:37:22 +0200
-Message-Id: <20190422093722.4344-3-paul@crapouillou.net>
-In-Reply-To: <20190422093722.4344-1-paul@crapouillou.net>
-References: <20190422093722.4344-1-paul@crapouillou.net>
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/3] dt-bindings: display: Add GiantPlus GPM940B0 panel documentation
+Date:   Mon, 22 Apr 2019 11:37:20 +0200
+Message-Id: <20190422093722.4344-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -51,66 +48,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The GiantPlus GPM940B0 is a simple 3.0" 320x240 24-bit TFT panel.
+The GPM940B0 is a 3.0" 320x240 24-bit TFT LCD panel.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Tested-by: Artur Rojek <contact@artur-rojek.eu>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 
 Notes:
-    v2: Change bus format to MEDIA_BUS_FMT_RGB888_3X8_BE
+    v2: New patch
     
-    v3: No change
+    v3: Add Rob's ack
 
- drivers/gpu/drm/panel/panel-simple.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ .../bindings/display/panel/giantplus,gpm940b0.txt    | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/giantplus,gpm940b0.txt
 
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 569be4efd8d1..a81b35269a78 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -1208,6 +1208,31 @@ static const struct panel_desc giantplus_gpg482739qs5 = {
- 	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
- };
- 
-+static const struct display_timing giantplus_gpm940b0_timing = {
-+	.pixelclock = { 13500000, 27000000, 27500000 },
-+	.hactive = { 320, 320, 320 },
-+	.hfront_porch = { 14, 686, 718 },
-+	.hback_porch = { 50, 70, 255 },
-+	.hsync_len = { 1, 1, 1 },
-+	.vactive = { 240, 240, 240 },
-+	.vfront_porch = { 1, 1, 179 },
-+	.vback_porch = { 1, 21, 31 },
-+	.vsync_len = { 1, 1, 6 },
-+	.flags = DISPLAY_FLAGS_HSYNC_LOW | DISPLAY_FLAGS_VSYNC_LOW,
-+};
+diff --git a/Documentation/devicetree/bindings/display/panel/giantplus,gpm940b0.txt b/Documentation/devicetree/bindings/display/panel/giantplus,gpm940b0.txt
+new file mode 100644
+index 000000000000..3dab52f92c26
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/panel/giantplus,gpm940b0.txt
+@@ -0,0 +1,12 @@
++GiantPlus 3.0" (320x240 pixels) 24-bit TFT LCD panel
 +
-+static const struct panel_desc giantplus_gpm940b0 = {
-+	.timings = &giantplus_gpm940b0_timing,
-+	.num_timings = 1,
-+	.bpc = 8,
-+	.size = {
-+		.width = 60,
-+		.height = 45,
-+	},
-+	.bus_format = MEDIA_BUS_FMT_RGB888_3X8_BE,
-+	.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_NEGEDGE,
-+};
++Required properties:
++- compatible: should be "giantplus,gpm940b0"
++- power-supply: as specified in the base binding
 +
- static const struct display_timing hannstar_hsd070pww1_timing = {
- 	.pixelclock = { 64300000, 71100000, 82000000 },
- 	.hactive = { 1280, 1280, 1280 },
-@@ -2666,6 +2691,9 @@ static const struct of_device_id platform_of_match[] = {
- 	}, {
- 		.compatible = "giantplus,gpg482739qs5",
- 		.data = &giantplus_gpg482739qs5
-+	}, {
-+		.compatible = "giantplus,gpm940b0",
-+		.data = &giantplus_gpm940b0,
- 	}, {
- 		.compatible = "hannstar,hsd070pww1",
- 		.data = &hannstar_hsd070pww1,
++Optional properties:
++- backlight: as specified in the base binding
++- enable-gpios: as specified in the base binding
++
++This binding is compatible with the simple-panel binding, which is specified
++in simple-panel.txt in this directory.
 -- 
 2.21.0.593.g511ec345e18
 
