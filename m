@@ -3,28 +3,28 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04924C282E1
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 08:08:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2530EC282E1
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 08:08:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CEF83218C3
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 08:08:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB478218AC
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 08:08:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbfDVIIZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 04:08:25 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:46468 "EHLO
+        id S1726871AbfDVII2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Apr 2019 04:08:28 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46488 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726583AbfDVIIZ (ORCPT
+        with ESMTP id S1726801AbfDVII1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Apr 2019 04:08:25 -0400
+        Mon, 22 Apr 2019 04:08:27 -0400
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 60A36281ACA;
-        Mon, 22 Apr 2019 09:08:23 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 591842829E4;
+        Mon, 22 Apr 2019 09:08:26 +0100 (BST)
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
@@ -38,9 +38,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [PATCH v3 03/15] rockchip/vpu: Cleanup macroblock alignment
-Date:   Mon, 22 Apr 2019 10:08:06 +0200
-Message-Id: <20190422080818.29130-4-boris.brezillon@collabora.com>
+Subject: [PATCH v3 08/15] rockchip/vpu: Remove a useless test
+Date:   Mon, 22 Apr 2019 10:08:11 +0200
+Message-Id: <20190422080818.29130-9-boris.brezillon@collabora.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190422080818.29130-1-boris.brezillon@collabora.com>
 References: <20190422080818.29130-1-boris.brezillon@collabora.com>
@@ -51,72 +51,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ezequiel Garcia <ezequiel@collabora.com>
+vdev is guaranteed to be equal to vpu->vfd_enc thanks a test done a few
+lines above. Remove this useless test.
 
-We need to make the macrobock alignment generic, in order
-to support multiple codecs.
-
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
 ---
 Changes from v2:
-- None
+* New patch
 ---
- .../media/rockchip/vpu/rockchip_vpu_enc.c     | 20 ++++++++-----------
- 1 file changed, 8 insertions(+), 12 deletions(-)
+ drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
-index 4451bb2dc3d7..ae1ff3d9b9d2 100644
---- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
-+++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
-@@ -203,8 +203,8 @@ vidioc_try_fmt_cap_mplane(struct file *file, void *priv, struct v4l2_format *f)
- 			       fmt->frmsize.min_height,
- 			       fmt->frmsize.max_height);
- 	/* Round up to macroblocks. */
--	pix_mp->width = round_up(pix_mp->width, JPEG_MB_DIM);
--	pix_mp->height = round_up(pix_mp->height, JPEG_MB_DIM);
-+	pix_mp->width = round_up(pix_mp->width, fmt->frmsize.step_width);
-+	pix_mp->height = round_up(pix_mp->height, fmt->frmsize.step_height);
+diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+index a0d25bbbfa49..041116855bab 100644
+--- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
++++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+@@ -272,10 +272,8 @@ static int rockchip_vpu_open(struct file *filp)
+ 	filp->private_data = &ctx->fh;
+ 	v4l2_fh_add(&ctx->fh);
  
- 	/*
- 	 * For compressed formats the application can specify
-@@ -248,8 +248,8 @@ vidioc_try_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
- 		       ctx->vpu_dst_fmt->frmsize.min_height,
- 		       ctx->vpu_dst_fmt->frmsize.max_height);
- 	/* Round up to macroblocks. */
--	width = round_up(width, JPEG_MB_DIM);
--	height = round_up(height, JPEG_MB_DIM);
-+	width = round_up(width, ctx->vpu_dst_fmt->frmsize.step_width);
-+	height = round_up(height, ctx->vpu_dst_fmt->frmsize.step_height);
+-	if (vdev == vpu->vfd_enc) {
+-		rockchip_vpu_enc_reset_dst_fmt(vpu, ctx);
+-		rockchip_vpu_enc_reset_src_fmt(vpu, ctx);
+-	}
++	rockchip_vpu_enc_reset_dst_fmt(vpu, ctx);
++	rockchip_vpu_enc_reset_src_fmt(vpu, ctx);
  
- 	/* Fill remaining fields */
- 	v4l2_fill_pixfmt_mp(pix_mp, fmt->fourcc, width, height);
-@@ -338,10 +338,8 @@ vidioc_s_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
- 	ctx->dst_fmt.height = pix_mp->height;
- 
- 	vpu_debug(0, "OUTPUT codec mode: %d\n", ctx->vpu_src_fmt->codec_mode);
--	vpu_debug(0, "fmt - w: %d, h: %d, mb - w: %d, h: %d\n",
--		  pix_mp->width, pix_mp->height,
--		  JPEG_MB_WIDTH(pix_mp->width),
--		  JPEG_MB_HEIGHT(pix_mp->height));
-+	vpu_debug(0, "fmt - w: %d, h: %d\n",
-+		  pix_mp->width, pix_mp->height);
- 	return 0;
- }
- 
-@@ -380,10 +378,8 @@ vidioc_s_fmt_cap_mplane(struct file *file, void *priv, struct v4l2_format *f)
- 	ctx->dst_fmt = *pix_mp;
- 
- 	vpu_debug(0, "CAPTURE codec mode: %d\n", ctx->vpu_dst_fmt->codec_mode);
--	vpu_debug(0, "fmt - w: %d, h: %d, mb - w: %d, h: %d\n",
--		  pix_mp->width, pix_mp->height,
--		  JPEG_MB_WIDTH(pix_mp->width),
--		  JPEG_MB_HEIGHT(pix_mp->height));
-+	vpu_debug(0, "fmt - w: %d, h: %d\n",
-+		  pix_mp->width, pix_mp->height);
- 
- 	/*
- 	 * Current raw format might have become invalid with newly
+ 	ret = rockchip_vpu_ctrls_setup(vpu, ctx);
+ 	if (ret) {
 -- 
 2.20.1
 
