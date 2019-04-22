@@ -2,99 +2,168 @@ Return-Path: <SRS0=+FiN=SY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0157BC282E1
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 07:34:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ACE9C282E1
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 08:08:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B91C220811
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 07:34:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17F54213A2
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 08:08:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbfDVHeR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 03:34:17 -0400
-Received: from mga05.intel.com ([192.55.52.43]:36279 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726440AbfDVHeQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Apr 2019 03:34:16 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Apr 2019 00:34:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,381,1549958400"; 
-   d="scan'208";a="144758503"
-Received: from shawn-bm6650-pc.itwn.intel.com ([10.5.230.127])
-  by fmsmga007.fm.intel.com with ESMTP; 22 Apr 2019 00:29:14 -0700
-From:   Shawnx Tu <shawnx.tu@intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     sakari.ailus@linux.intel.com, andy.yeh@intel.com,
-        tfiga@chromium.org, Shawnx Tu <shawnx.tu@intel.com>
-Subject: [PATCH v1] media: ov8856: modify register to fix test pattern
-Date:   Mon, 22 Apr 2019 15:29:18 +0800
-Message-Id: <1555918158-17422-1-git-send-email-shawnx.tu@intel.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726587AbfDVIIY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Apr 2019 04:08:24 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46396 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725914AbfDVIIY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Apr 2019 04:08:24 -0400
+Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id AE16626070C;
+        Mon, 22 Apr 2019 09:08:21 +0100 (BST)
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>, kernel@collabora.com,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Subject: [PATCH v3 00/15] Add MPEG-2 decoding to Rockchip VPU
+Date:   Mon, 22 Apr 2019 10:08:03 +0200
+Message-Id: <20190422080818.29130-1-boris.brezillon@collabora.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-modify registers to fix bayer order in test pattern mode
----
- drivers/media/i2c/ov8856.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+This series introduces the decoding infrastructure that will be
+used to add support for other codecs such as VP8, VP9 and H.264.
 
-diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
-index dbf1095..cd347d6 100644
---- a/drivers/media/i2c/ov8856.c
-+++ b/drivers/media/i2c/ov8856.c
-@@ -195,11 +195,11 @@ static const struct ov8856_reg mode_3280x2464_regs[] = {
- 	{0x3800, 0x00},
- 	{0x3801, 0x00},
- 	{0x3802, 0x00},
--	{0x3803, 0x07},
-+	{0x3803, 0x06},
- 	{0x3804, 0x0c},
- 	{0x3805, 0xdf},
- 	{0x3806, 0x09},
--	{0x3807, 0xa6},
-+	{0x3807, 0xa7},
- 	{0x3808, 0x0c},
- 	{0x3809, 0xd0},
- 	{0x380a, 0x09},
-@@ -211,7 +211,7 @@ static const struct ov8856_reg mode_3280x2464_regs[] = {
- 	{0x3810, 0x00},
- 	{0x3811, 0x00},
- 	{0x3812, 0x00},
--	{0x3813, 0x00},
-+	{0x3813, 0x01},
- 	{0x3814, 0x01},
- 	{0x3815, 0x01},
- 	{0x3816, 0x00},
-@@ -385,11 +385,11 @@ static const struct ov8856_reg mode_1640x1232_regs[] = {
- 	{0x3800, 0x00},
- 	{0x3801, 0x00},
- 	{0x3802, 0x00},
--	{0x3803, 0x07},
-+	{0x3803, 0x06},
- 	{0x3804, 0x0c},
- 	{0x3805, 0xdf},
- 	{0x3806, 0x09},
--	{0x3807, 0xa6},
-+	{0x3807, 0xa7},
- 	{0x3808, 0x06},
- 	{0x3809, 0x68},
- 	{0x380a, 0x04},
-@@ -401,7 +401,7 @@ static const struct ov8856_reg mode_1640x1232_regs[] = {
- 	{0x3810, 0x00},
- 	{0x3811, 0x00},
- 	{0x3812, 0x00},
--	{0x3813, 0x00},
-+	{0x3813, 0x01},
- 	{0x3814, 0x03},
- 	{0x3815, 0x01},
- 	{0x3816, 0x00},
+As explained in the cover letter for the v1 patchset,
+the driver is now exposing two video device nodes.
+The VPU encoder is exposed on /dev/video0, and the VPU decoder
+is exposed on /dev/video1. Both devices are tied to the same
+memory-to-memory queue, and same media device /dev/media0.
+
+Therefore there are two media graphs:
+
+┌────────────────────────────────┐
+│ rockchip,rk3399-vpu-enc-source │
+│          /dev/video0           │
+└────────────────────────────────┘
+  ┃
+  ┃
+  ▼
+┌────────────────────────────────┐
+│  rockchip,rk3399-vpu-enc-proc  │
+└────────────────────────────────┘
+  ┃
+  ┃
+  ▼
+┌────────────────────────────────┐
+│  rockchip,rk3399-vpu-enc-sink  │
+│          /dev/video0           │
+└────────────────────────────────┘
+
+┌────────────────────────────────┐
+│ rockchip,rk3399-vpu-dec-source │
+│          /dev/video1           │
+└────────────────────────────────┘
+  ┃
+  ┃
+  ▼
+┌────────────────────────────────┐
+│  rockchip,rk3399-vpu-dec-proc  │
+└────────────────────────────────┘
+  ┃
+  ┃
+  ▼
+┌────────────────────────────────┐
+│  rockchip,rk3399-vpu-dec-sink  │
+│          /dev/video1           │
+└────────────────────────────────┘
+
+Of course, this work has been possible thanks to Jonas Karlman, who did
+the initial MPEG-2 decoding work and also got mpv+ffmpeg working using
+the Request API.
+
+Regards,
+
+Boris
+
+v3:
+  * Share more code between the encoder/decoder logic (VB2/V4L2
+    interface implementation)
+  * Add a patch to support MPEG2 decoding on RK3288 (Jonas)
+  * Several fixes/improvements all over the place (see changelog
+    in each patch for more details)
+
+v2:
+  * Fixed some minor issues brought up by v4l2-compliance.
+  * Fixed bytesused wrongly assigned 0 on the MPEG-2 decoder.
+  * Addressed comments from Hans and Tomasz on the pixel format
+    helpers.
+
+Boris Brezillon (5):
+  rockchip/vpu: Rename rockchip_vpu_common.h into rockchip_vpu_v4l2.h
+  rockchip/vpu: Remove a useless test
+  rockchip/vpu: Move encoder logic to a common place
+  rockchip/vpu: Provide a helper to reset both src and dst formats
+  rockchip/vpu: Prepare things to support decoders
+
+Ezequiel Garcia (9):
+  rockchip/vpu: Use pixel format helpers
+  rockchip/vpu: Use v4l2_m2m_buf_copy_metadata
+  rockchip/vpu: Cleanup macroblock alignment
+  rockchip/vpu: Cleanup JPEG bounce buffer management
+  rockchip/vpu: Open-code media controller register
+  rockchip/vpu: Support the Request API
+  rockchip/vpu: Add decoder boilerplate
+  rockchip/vpu: Add support for non-standard controls
+  rockchip/vpu: Add support for MPEG-2 decoding
+
+Jonas Karlman (1):
+  rockchip/vpu: Add support for MPEG-2 decoding on RK3288
+
+ drivers/staging/media/rockchip/vpu/Makefile   |   7 +-
+ .../media/rockchip/vpu/rk3288_vpu_hw.c        |  61 +-
+ .../rockchip/vpu/rk3288_vpu_hw_jpeg_enc.c     |   6 +-
+ .../rockchip/vpu/rk3288_vpu_hw_mpeg2_dec.c    | 257 +++++++
+ .../media/rockchip/vpu/rk3288_vpu_regs.h      |   1 +
+ .../media/rockchip/vpu/rk3399_vpu_hw.c        |  61 +-
+ .../rockchip/vpu/rk3399_vpu_hw_jpeg_enc.c     |  12 +-
+ .../rockchip/vpu/rk3399_vpu_hw_mpeg2_dec.c    | 273 +++++++
+ .../staging/media/rockchip/vpu/rockchip_vpu.h | 115 ++-
+ .../media/rockchip/vpu/rockchip_vpu_common.h  |  30 +-
+ .../media/rockchip/vpu/rockchip_vpu_drv.c     | 456 ++++++++++--
+ .../media/rockchip/vpu/rockchip_vpu_enc.c     | 670 ------------------
+ .../media/rockchip/vpu/rockchip_vpu_hw.h      |  44 ++
+ .../media/rockchip/vpu/rockchip_vpu_jpeg.c    |  29 +
+ .../media/rockchip/vpu/rockchip_vpu_mpeg2.c   |  61 ++
+ .../media/rockchip/vpu/rockchip_vpu_v4l2.c    | 668 +++++++++++++++++
+ .../media/rockchip/vpu/rockchip_vpu_v4l2.h    |  26 +
+ 17 files changed, 2016 insertions(+), 761 deletions(-)
+ create mode 100644 drivers/staging/media/rockchip/vpu/rk3288_vpu_hw_mpeg2_dec.c
+ create mode 100644 drivers/staging/media/rockchip/vpu/rk3399_vpu_hw_mpeg2_dec.c
+ delete mode 100644 drivers/staging/media/rockchip/vpu/rockchip_vpu_enc.c
+ create mode 100644 drivers/staging/media/rockchip/vpu/rockchip_vpu_mpeg2.c
+ create mode 100644 drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.c
+ create mode 100644 drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.h
+
 -- 
-2.7.4
+2.20.1
 
