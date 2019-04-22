@@ -2,225 +2,240 @@ Return-Path: <SRS0=+FiN=SY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F55FC10F11
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 19:51:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDD23C10F11
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 23:03:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 166D721738
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 19:51:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B870F20874
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 23:03:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731031AbfDVTvz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 15:51:55 -0400
-Received: from mga17.intel.com ([192.55.52.151]:19689 "EHLO mga17.intel.com"
+        id S1730508AbfDVXDu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Apr 2019 19:03:50 -0400
+Received: from vps-vb.mhejs.net ([37.28.154.113]:49066 "EHLO vps-vb.mhejs.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731278AbfDVTvw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Apr 2019 15:51:52 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Apr 2019 12:51:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,383,1549958400"; 
-   d="scan'208";a="339788177"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Apr 2019 12:51:50 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1hIeyk-000CZy-5i; Tue, 23 Apr 2019 03:51:50 +0800
-Date:   Tue, 23 Apr 2019 03:51:11 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org
-Subject: [ragnatech:media-tree] BUILD SUCCESS
- a4dfc8a24796ff312d1d307e11f26f8ca466e938
-Message-ID: <5cbe1b2f.U3jB5ga+iqMHpAws%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1730374AbfDVXDu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Apr 2019 19:03:50 -0400
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1hIhyR-0008Fc-2u; Tue, 23 Apr 2019 01:03:43 +0200
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Michael Krufky <mkrufky@linuxtv.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Andy Walls <awalls@md.metrocast.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH v10 0/4] [media] Add analog mode support for Medion MD95700
+Date:   Tue, 23 Apr 2019 01:03:33 +0200
+Message-Id: <cover.1555973809.git.mail@maciej.szmigiero.name>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-tree/branch: git://git.ragnatech.se/linux  media-tree
-branch HEAD: a4dfc8a24796ff312d1d307e11f26f8ca466e938  media: MAINTAINERS: Update AO CEC with ao-cec-g12a driver
+This series adds support for analog part of Medion 95700 in the cxusb
+driver.
 
-elapsed time: 133m
+What works:
+* Video capture at various sizes with sequential fields,
+* Input switching (TV Tuner, Composite, S-Video),
+* TV and radio tuning,
+* Video standard switching and auto detection,
+* Radio mode switching (stereo / mono),
+* Unplugging while capturing,
+* DVB / analog coexistence,
+* Raw BT.656 stream support.
 
-configs tested: 164
+What does not work yet:
+* Audio,
+* VBI,
+* Picture controls.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This series (as a one patch) was submitted for inclusion few years ago,
+then waited few months in a patch queue.
+Unfortunately, by the time it was supposed to be merged there
+were enough changes in media that it was no longer mergeable.
 
-i386                   randconfig-x010-201916
-i386                   randconfig-x018-201916
-i386                   randconfig-x017-201916
-i386                   randconfig-x013-201916
-i386                   randconfig-x011-201916
-i386                   randconfig-x014-201916
-i386                   randconfig-x019-201916
-i386                   randconfig-x015-201916
-i386                   randconfig-x016-201916
-i386                   randconfig-x012-201916
-i386                     randconfig-n2-201916
-i386                     randconfig-n3-201916
-i386                     randconfig-n0-201916
-i386                     randconfig-n1-201916
-x86_64                 randconfig-x004-201916
-x86_64                 randconfig-x001-201916
-x86_64                 randconfig-x000-201916
-x86_64                 randconfig-x003-201916
-x86_64                 randconfig-x008-201916
-x86_64                 randconfig-x007-201916
-x86_64                 randconfig-x002-201916
-x86_64                 randconfig-x006-201916
-x86_64                 randconfig-x009-201916
-x86_64                 randconfig-x005-201916
-ia64                             alldefconfig
-ia64                             allmodconfig
-ia64                              allnoconfig
-ia64                                defconfig
-powerpc                           allnoconfig
-powerpc                             defconfig
-powerpc                       ppc64_defconfig
-s390                        default_defconfig
-i386                     randconfig-i0-201916
-i386                     randconfig-i1-201916
-i386                     randconfig-i2-201916
-i386                     randconfig-i3-201916
-riscv                             allnoconfig
-riscv                               defconfig
-x86_64                 randconfig-x015-201916
-x86_64                 randconfig-x016-201916
-x86_64                 randconfig-x017-201916
-x86_64                 randconfig-x012-201916
-x86_64                 randconfig-x013-201916
-x86_64                 randconfig-x018-201916
-x86_64                 randconfig-x010-201916
-x86_64                 randconfig-x014-201916
-x86_64                 randconfig-x019-201916
-x86_64                 randconfig-x011-201916
-i386                     randconfig-a1-201916
-i386                     randconfig-a2-201916
-i386                     randconfig-a0-201916
-i386                     randconfig-a3-201916
-x86_64                 randconfig-k2-04220059
-x86_64                 randconfig-k0-04220059
-i386                   randconfig-k3-04220059
-i386                   randconfig-k1-04220059
-x86_64                 randconfig-k3-04220059
-x86_64                 randconfig-k1-04220059
-i386                   randconfig-k2-04220059
-i386                   randconfig-k0-04220059
-arm                              allmodconfig
-arm                               allnoconfig
-arm                         at91_dt_defconfig
-arm                           efm32_defconfig
-arm                          exynos_defconfig
-arm                        multi_v5_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-arm                           sunxi_defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-riscv                              tinyconfig
-i386                               tinyconfig
-sh                               allmodconfig
-sh                                allnoconfig
-sh                          rsk7269_defconfig
-sh                  sh7785lcr_32bit_defconfig
-sh                            titan_defconfig
-x86_64                           allmodconfig
-i386                             alldefconfig
-openrisc                    or1ksim_defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-nds32                             allnoconfig
-nds32                               defconfig
-c6x                        evmc6678_defconfig
-h8300                    h8300h-sim_defconfig
-nios2                         10m50_defconfig
-xtensa                       common_defconfig
-xtensa                          iss_defconfig
-x86_64                                  kexec
-x86_64                                    lkp
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                              fedora-25
-i386                     randconfig-m0-201916
-x86_64                   randconfig-m2-201916
-i386                     randconfig-m3-201916
-i386                     randconfig-m2-201916
-x86_64                   randconfig-m1-201916
-x86_64                   randconfig-m0-201916
-x86_64                   randconfig-m3-201916
-i386                     randconfig-m1-201916
-x86_64                 randconfig-l0-04221612
-x86_64                 randconfig-l1-04221612
-x86_64                 randconfig-l2-04221612
-x86_64                 randconfig-l3-04221612
-i386                   randconfig-l0-04221612
-i386                   randconfig-l1-04221612
-i386                   randconfig-l2-04221612
-i386                   randconfig-l3-04221612
-alpha                               defconfig
-parisc                            allnoconfig
-parisc                         b180_defconfig
-parisc                        c3000_defconfig
-parisc                              defconfig
-um                                  defconfig
-x86_64                             acpi-redef
-x86_64                           allyesdebian
-x86_64                                nfsroot
-x86_64                           allyesconfig
-i386                             allmodconfig
-sparc                               defconfig
-sparc64                          allmodconfig
-sparc64                           allnoconfig
-sparc64                             defconfig
-m68k                             allmodconfig
-m68k                       m5475evb_defconfig
-m68k                          multi_defconfig
-m68k                           sun3_defconfig
-microblaze                      mmu_defconfig
-microblaze                    nommu_defconfig
-i386                   randconfig-x077-201916
-i386                   randconfig-x074-201916
-i386                   randconfig-x070-201916
-i386                   randconfig-x072-201916
-i386                   randconfig-x075-201916
-i386                   randconfig-x071-201916
-i386                   randconfig-x079-201916
-i386                   randconfig-x078-201916
-i386                   randconfig-x073-201916
-i386                   randconfig-x076-201916
-i386                              allnoconfig
-i386                                defconfig
-i386                   randconfig-x002-201916
-i386                   randconfig-x001-201916
-i386                   randconfig-x005-201916
-i386                   randconfig-x007-201916
-i386                   randconfig-x000-201916
-i386                   randconfig-x004-201916
-i386                   randconfig-x008-201916
-i386                   randconfig-x009-201916
-i386                   randconfig-x006-201916
-i386                   randconfig-x003-201916
-mips                           32r2_defconfig
-mips                         64r6el_defconfig
-mips                             allmodconfig
-mips                              allnoconfig
-mips                      fuloong2e_defconfig
-mips                                   jz4740
-mips                      malta_kvm_defconfig
-mips                                     txx9
+I thought at that time that I will be able to rebase and retest it soon
+but unfortunately up till now I was never able to find enough time to do
+so.
+Also, with the passing of time the implementation diverged more and
+more from the current kernel code, necessitating even more reworking.
 
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+That last iteration can be found here:
+https://patchwork.linuxtv.org/patch/8048/
+
+Since that version there had been the following changes:
+* Adaptation to changes in V4L2 / DVB core,
+
+* Radio device was added, with a possibility to tune to a FM radio
+station and switch between stereo and mono modes (tested by taping
+audio signal directly at tuner output pin),
+
+* DVB / analog coexistence was improved - resolved a few cases where
+DVB core would switch off power or reset the tuner when the device
+was still being used but in the analog mode,
+
+* Fixed issues reported by v4l2-compliance,
+
+* Switching to raw BT.656 mode is now done by a custom streaming
+parameter set via VIDIOC_S_PARM ioctl instead of using a
+V4L2_BUF_TYPE_PRIVATE buffer (which was removed from V4L2),
+
+* General small code cleanups (like using BIT() or ARRAY_SIZE() macros
+instead of open coding them, code formatting improvements, etc.).
+
+Changes from v1:
+* Only support configuration of cx25840 pins that the cxusb driver is
+actually using so there is no need for an ugly CX25840_PIN() macro,
+
+* Split cxusb changes into two patches: first one implementing
+digital / analog coexistence in this driver, second one adding the
+actual implementation of the analog mode,
+
+* Fix a warning reported by kbuild test robot.
+
+Changes from v2:
+* Split out ivtv cx25840 platform data zero-initialization to a separate
+commit,
+
+* Add kernel-doc description of struct cx25840_state,
+
+* Make sure that all variables used in CX25840_VCONFIG_OPTION() and
+CX25840_VCONFIG_SET_BIT() macros are their explicit parameters,
+
+* Split out some code from cxusb_medion_copy_field() and
+cxusb_medion_v_complete_work() functions to separate ones to increase
+their readability,
+
+* Generate masks using GENMASK() and BIT() macros in cx25840.h and
+cxusb.h.
+
+Changes from v3:
+Add SPDX tag to a newly added "cxusb-analog.c" file.
+
+Changes from v4:
+* Make analog support conditional on a new DVB_USB_CXUSB_ANALOG Kconfig
+option,
+
+* Use '//' comments in the header of a newly added "cxusb-analog.c"
+file,
+
+* Don't print errors on memory allocation failures,
+
+* Get rid of the driver MODULE_VERSION(),
+
+* Small formating fix of a one line.
+
+Changes from v5:
+Rebase onto current media_tree/master.
+
+Changes from v6:
+Adapt to commit 4eb2f55728abbe changing V4L2_SUBDEV_IO_PIN_* from bit
+masks to bit numbers.
+Thanks to Dan Carpenter's kbuild bot for catching this.
+
+Changes from v7:
+* Simplify cx25840_function_to_pad() assuming that the values of
+individual members of I/O pad enum will always match the actual
+chip register values,
+
+* Add a comment that the above is now a requirement to the I/O pad enum,
+
+* Don't #undef macros in the cx25840 patch,
+
+* Change "generic_mode" variable type in struct cx25840_state to bool,
+
+* Prefix todo-style comments added by the cx25840 patch with "TODO:",
+
+* Add a core init op to the cx25840 driver and use it to turn the
+generic_mode on instead of doing it via the platform data,
+
+* Use the above core init op to also provide a vconfig configuration
+to the cx25840 driver so the cxusb driver does not have to pass this
+(constant) configuration there on every video input change,
+
+* Remove cxusb_auxbuf_advance(), cxusb_auxbuf_begin() and
+cxusb_auxbuf_isend(),
+
+* Add a missing frame sequence counter support,
+
+* Test the driver with v4l2-compliance with streaming tests enabled,
+
+* Set device_caps in struct video_device during probe instead of returning
+it manually in vidioc_querycap handler,
+
+* Don't set the format name in vidioc_enum_fmt_vid_cap handler,
+
+* Drop various memset() zeroing in ioctl handlers, as suggested during
+last review,
+
+* Enforce minimum buffer count via in_buffers_needed field of
+struct vb2_queue instead of doing it in queue_setup callback,
+
+* Rewrite stream starting / stopping / configuration mechanism using a
+'stop_streaming' flag, remove cxusb_medion_stream_busy(),
+
+* Set the lock field in struct vb2_queue so vb2_ops_wait_prepare() /
+vb2_ops_wait_finish() helpers can be utilized,
+
+* Split out raw (unprocessed) BT.656 stream capturing support to a
+separate patch, adapt it to a recent change introduced by
+commit 8a7c5594c020 ("v4l2-ioctl: clear fields in s_parm") that forced
+extendedmode set by VIDIOC_S_PARM to zero,
+
+* Add a comment that if we ever need to support analog mode in similar
+hardware then this code should be made generic,
+
+* Remove a requirement that URB length has to be less than full frame
+size,
+
+* Limit URB length to avoid very high order memory allocations,
+
+* Remove out-of-order incoming URB support: this can't really happen,
+
+* Small cleanups here and there.
+
+Changes from v8:
+Rebase onto current media_tree/master.
+
+Changes from v9:
+* Elaborate generic mode comments in cx25840 and cxusb drivers,
+add datasheet references to cx25840 chip video output settings,
+
+* Describe the new DVB_USB_ADAP_STREAMING_CTRL_NO_URB flag,
+
+* Drop likely and unlikely annotations in cxusb driver from the patches,
+
+* Exclusively use strscpy (and not strncpy, strcpy, etc.) in the patches,
+
+* Drop zeroing of various v4l fields which should be zeroed by the
+core v4l code,
+
+* Adapt VIDIOC_S_FMT handler so the video format can't be changed if
+buffers are allocated,
+
+* Add VB2_DMABUF to the list of supported I/O modes.
+
+ drivers/media/i2c/cx25840/cx25840-core.c |  377 ++++-
+ drivers/media/i2c/cx25840/cx25840-core.h |   15 +
+ drivers/media/i2c/cx25840/cx25840-vbi.c  |    3 +
+ drivers/media/usb/dvb-usb/Kconfig        |   16 +-
+ drivers/media/usb/dvb-usb/Makefile       |    3 +
+ drivers/media/usb/dvb-usb/cxusb-analog.c | 1914 ++++++++++++++++++++++
+ drivers/media/usb/dvb-usb/cxusb.c        |  452 ++++-
+ drivers/media/usb/dvb-usb/cxusb.h        |  157 ++
+ drivers/media/usb/dvb-usb/dvb-usb-dvb.c  |   20 +-
+ drivers/media/usb/dvb-usb/dvb-usb-init.c |   13 +
+ drivers/media/usb/dvb-usb/dvb-usb.h      |   14 +
+ drivers/media/v4l2-core/v4l2-ioctl.c     |    3 +-
+ include/media/drv-intf/cx25840.h         |   77 +-
+ 13 files changed, 3003 insertions(+), 61 deletions(-)
+ create mode 100644 drivers/media/usb/dvb-usb/cxusb-analog.c
