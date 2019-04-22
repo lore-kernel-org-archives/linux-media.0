@@ -2,160 +2,99 @@ Return-Path: <SRS0=+FiN=SY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBCECC282E1
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 06:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0157BC282E1
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 07:34:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BD36620811
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 06:44:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lPfK8PCK"
+	by mail.kernel.org (Postfix) with ESMTP id B91C220811
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 07:34:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbfDVGon (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 02:44:43 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:35202 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726611AbfDVGon (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Apr 2019 02:44:43 -0400
-Received: by mail-ot1-f65.google.com with SMTP id m10so8849772otp.2
-        for <linux-media@vger.kernel.org>; Sun, 21 Apr 2019 23:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XRqDGxjL9KGk8AXcmMq33XQi7fUb9V0NGGNIF1+Zqkg=;
-        b=lPfK8PCKkA9k/rv6VCsZ3GdDEsbpHH+ey5EA++ZoKT0NONYTbhyWpd87V3IqKHtB07
-         HJLSZBxyeBsTLFDiP/aY+NQVFp1kkAlCE6QmndoVNfHFamQxAq7E0yOkcgscnTV9pIZT
-         eoks5qL4y+tC8El8FePnTcmFPZmvSTQ+fEdGo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XRqDGxjL9KGk8AXcmMq33XQi7fUb9V0NGGNIF1+Zqkg=;
-        b=e6fbpAd/K78S5bCZJ7vMDXswx543b87hJ1sve1424+30HsRBte4zPg9NeH1G83sXpG
-         UdIRG36y2Up/LUGMmmNuF1NMI3ryhTPFdKvWjfuzUK+lZZ+1S09E0iDqgM4yeqD/2tSi
-         xykIhTf8E+XQXlC+H9e+ykhcSZXVv3hKCvyNmmFNNdrr9X+qJ9jhHJ7WTntGj2tzY/AW
-         gIlrIwmwLDpUMdu5ZwTz27X4HE7I80jGoSXNAuj3EETsF+HpDWimvkL5iOYI9/BDhb69
-         wvhKaI72pu66Fgv3LCMA2TqynxKjv0Z4iJy0L+tnaVWsoAp/faiJmRsQemBoTMcVVaGC
-         hfFw==
-X-Gm-Message-State: APjAAAXZvcxzCFHmjMPOrcsFpfg1YhIg48/hei2efue0/2brcEitS6Ib
-        guK+7qsYZ2zo3Dzne8Wf+QVTQkGck5QSnw==
-X-Google-Smtp-Source: APXvYqynRUPgJujiark8JKCyIeyFtJwEGECM/Q3f1OgpxhsDWKp0piAmR2dFjC7Xvwu0CwQP6OakwQ==
-X-Received: by 2002:a9d:3b04:: with SMTP id z4mr10269324otb.1.1555915481276;
-        Sun, 21 Apr 2019 23:44:41 -0700 (PDT)
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
-        by smtp.gmail.com with ESMTPSA id 2sm4987975ots.22.2019.04.21.23.44.39
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 21 Apr 2019 23:44:40 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id 103so8814498otd.9
-        for <linux-media@vger.kernel.org>; Sun, 21 Apr 2019 23:44:39 -0700 (PDT)
-X-Received: by 2002:a9d:3f61:: with SMTP id m88mr10124811otc.147.1555915479110;
- Sun, 21 Apr 2019 23:44:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <1554106718-23107-1-git-send-email-maoguang.meng@mediatek.com>
-In-Reply-To: <1554106718-23107-1-git-send-email-maoguang.meng@mediatek.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 22 Apr 2019 15:44:27 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5CUL=yE2-igsAPrt42DWW=4Xjzcyb_8zGWHRtiC5Acs6g@mail.gmail.com>
-Message-ID: <CAAFQd5CUL=yE2-igsAPrt42DWW=4Xjzcyb_8zGWHRtiC5Acs6g@mail.gmail.com>
-Subject: Re: [PATCH,v1] media: mtk-vcodec: fix vp9 content playback error with
- show exist frame
-To:     maoguang.meng@mediatek.com
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Longfei Wang <longfei.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        gtk_ruiwang@mediatek.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726583AbfDVHeR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Apr 2019 03:34:17 -0400
+Received: from mga05.intel.com ([192.55.52.43]:36279 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726440AbfDVHeQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Apr 2019 03:34:16 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Apr 2019 00:34:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,381,1549958400"; 
+   d="scan'208";a="144758503"
+Received: from shawn-bm6650-pc.itwn.intel.com ([10.5.230.127])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Apr 2019 00:29:14 -0700
+From:   Shawnx Tu <shawnx.tu@intel.com>
+To:     linux-media@vger.kernel.org
+Cc:     sakari.ailus@linux.intel.com, andy.yeh@intel.com,
+        tfiga@chromium.org, Shawnx Tu <shawnx.tu@intel.com>
+Subject: [PATCH v1] media: ov8856: modify register to fix test pattern
+Date:   Mon, 22 Apr 2019 15:29:18 +0800
+Message-Id: <1555918158-17422-1-git-send-email-shawnx.tu@intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Apr 1, 2019 at 5:19 PM <maoguang.meng@mediatek.com> wrote:
->
-> From: Maoguang Meng <maoguang.meng@mediatek.com>
->
-> Update referenced frame buffer's reference count when playing vp9
-> content which has show_existing_frame flag, and copy enough buffer
-> data to current shown frame.
->
-> Signed-off-by: Maoguang Meng <maoguang.meng@mediatek.com>
-> ---
->  .../media/platform/mtk-vcodec/vdec/vdec_vp9_if.c   |   16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-> index bc8349b..d950837 100644
-> --- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-> @@ -481,15 +481,15 @@ static void vp9_swap_frm_bufs(struct vdec_vp9_inst *inst)
->                  */
->                 if ((frm_to_show->fb != NULL) &&
->                         (inst->cur_fb->base_y.size >=
-> -                       frm_to_show->fb->base_y.size)) {
-> +                       frm_to_show->fb->base_y.size) &&
-> +                       (inst->cur_fb->base_c.size >=
-> +                       frm_to_show->fb->base_c.size)) {
->                         memcpy((void *)inst->cur_fb->base_y.va,
->                                 (void *)frm_to_show->fb->base_y.va,
-> -                               vsi->buf_w *
-> -                               vsi->buf_h);
-> +                               frm_to_show->fb->base_y.size);
->                         memcpy((void *)inst->cur_fb->base_c.va,
->                                 (void *)frm_to_show->fb->base_c.va,
-> -                               vsi->buf_w *
-> -                               vsi->buf_h / 2);
-> +                               frm_to_show->fb->base_c.size);
->                 } else {
->                         /* After resolution change case, current CAPTURE buffer
->                          * may have less buffer size than frm_to_show buffer
-> @@ -895,7 +895,7 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
->
->                 if (vsi->resolution_changed) {
->                         if (!vp9_alloc_work_buf(inst)) {
-> -                               ret = -EINVAL;
-> +                               ret = -EIO;
->                                 goto DECODE_ERROR;
->                         }
->                 }
-> @@ -924,14 +924,12 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
->
->                 if (vsi->show_existing_frame && (vsi->frm_to_show_idx <
->                                         VP9_MAX_FRM_BUF_NUM)) {
-> -                       mtk_vcodec_err(inst,
-> +                       mtk_vcodec_debug(inst,
->                                 "Skip Decode drv->new_fb_idx=%d, drv->frm_to_show_idx=%d",
->                                 vsi->new_fb_idx, vsi->frm_to_show_idx);
->
->                         vp9_ref_cnt_fb(inst, &vsi->new_fb_idx,
->                                         vsi->frm_to_show_idx);
-> -                       ret = -EINVAL;
-> -                       goto DECODE_ERROR;
->                 }
->
->                 /* VPU assign the buffer pointer in its address space,
-> --
-> 1.7.9.5
->
+modify registers to fix bayer order in test pattern mode
+---
+ drivers/media/i2c/ov8856.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Thanks for the patch!
+diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
+index dbf1095..cd347d6 100644
+--- a/drivers/media/i2c/ov8856.c
++++ b/drivers/media/i2c/ov8856.c
+@@ -195,11 +195,11 @@ static const struct ov8856_reg mode_3280x2464_regs[] = {
+ 	{0x3800, 0x00},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+-	{0x3803, 0x07},
++	{0x3803, 0x06},
+ 	{0x3804, 0x0c},
+ 	{0x3805, 0xdf},
+ 	{0x3806, 0x09},
+-	{0x3807, 0xa6},
++	{0x3807, 0xa7},
+ 	{0x3808, 0x0c},
+ 	{0x3809, 0xd0},
+ 	{0x380a, 0x09},
+@@ -211,7 +211,7 @@ static const struct ov8856_reg mode_3280x2464_regs[] = {
+ 	{0x3810, 0x00},
+ 	{0x3811, 0x00},
+ 	{0x3812, 0x00},
+-	{0x3813, 0x00},
++	{0x3813, 0x01},
+ 	{0x3814, 0x01},
+ 	{0x3815, 0x01},
+ 	{0x3816, 0x00},
+@@ -385,11 +385,11 @@ static const struct ov8856_reg mode_1640x1232_regs[] = {
+ 	{0x3800, 0x00},
+ 	{0x3801, 0x00},
+ 	{0x3802, 0x00},
+-	{0x3803, 0x07},
++	{0x3803, 0x06},
+ 	{0x3804, 0x0c},
+ 	{0x3805, 0xdf},
+ 	{0x3806, 0x09},
+-	{0x3807, 0xa6},
++	{0x3807, 0xa7},
+ 	{0x3808, 0x06},
+ 	{0x3809, 0x68},
+ 	{0x380a, 0x04},
+@@ -401,7 +401,7 @@ static const struct ov8856_reg mode_1640x1232_regs[] = {
+ 	{0x3810, 0x00},
+ 	{0x3811, 0x00},
+ 	{0x3812, 0x00},
+-	{0x3813, 0x00},
++	{0x3813, 0x01},
+ 	{0x3814, 0x03},
+ 	{0x3815, 0x01},
+ 	{0x3816, 0x00},
+-- 
+2.7.4
 
-Reviewed-by: Tomasz Figa <tfiga@chromium.org>
-
-Best regards,
-Tomasz
