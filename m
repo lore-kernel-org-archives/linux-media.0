@@ -2,216 +2,160 @@ Return-Path: <SRS0=+FiN=SY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.2 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7AF7C282E2
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 04:03:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBCECC282E1
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 06:44:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8AADE20859
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 04:03:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD36620811
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 06:44:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cVcB0bXi"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lPfK8PCK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726443AbfDVEDG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 00:03:06 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:34454 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725903AbfDVEDG (ORCPT
+        id S1726890AbfDVGon (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Apr 2019 02:44:43 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:35202 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726611AbfDVGon (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Apr 2019 00:03:06 -0400
-Received: by mail-oi1-f193.google.com with SMTP id v10so7637734oib.1
-        for <linux-media@vger.kernel.org>; Sun, 21 Apr 2019 21:03:05 -0700 (PDT)
+        Mon, 22 Apr 2019 02:44:43 -0400
+Received: by mail-ot1-f65.google.com with SMTP id m10so8849772otp.2
+        for <linux-media@vger.kernel.org>; Sun, 21 Apr 2019 23:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=t7IPS9mfga4XNGjfZtUxnnI2pw5QR9nHoPHUpg3Byiw=;
-        b=cVcB0bXih+SRU7mpeg+XFR3ke6XyQHcF9Ew6MKSYzgicJuW9pU1BPzjk6wNXjFFaF4
-         eUqvGHMMLIhghvgalAzBsJLywLKeL/r2lBTD1FKnFnT8T/xqfJis9lTpr22ULSnczccj
-         rfgM0Yw7ZasHvJFS2pOGXXBExRcr//x9bJ9vU=
+         :cc;
+        bh=XRqDGxjL9KGk8AXcmMq33XQi7fUb9V0NGGNIF1+Zqkg=;
+        b=lPfK8PCKkA9k/rv6VCsZ3GdDEsbpHH+ey5EA++ZoKT0NONYTbhyWpd87V3IqKHtB07
+         HJLSZBxyeBsTLFDiP/aY+NQVFp1kkAlCE6QmndoVNfHFamQxAq7E0yOkcgscnTV9pIZT
+         eoks5qL4y+tC8El8FePnTcmFPZmvSTQ+fEdGo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=t7IPS9mfga4XNGjfZtUxnnI2pw5QR9nHoPHUpg3Byiw=;
-        b=blTwMr83PqjLG2ysi25WTmdwekprEQncIeEDY5fmfdqcGz7/RQTq4CEnLJDTsePsSS
-         8kJQWorMsHYw13zkUGqGnugMUsm5JLIi+FBrDEFe6mrBp3cHtp9b9xIhCdH+iRUP9zDN
-         DC8Lxnty/arhHsQUAVMTjZkghO0FDvzGMQ6lv8gVt8w2Edffx8ly+BLLKv1P9aGfPt1x
-         j0aBVc/7QVP+FRsUD1bxq2kaT1DUS3t2pJESKEdRx5PhJ/o858jHPrPU4boGP4K1roPw
-         PoN621p3UZDUTe7IG5cM9GfHTIODTRVbCDirWQ2FWp5qoiYtYs/WOw5pARw0m3VyK5R/
-         tJAw==
-X-Gm-Message-State: APjAAAUvQBQ/SD0U3qy4dZpG5uVBLfDppk0QzO94wSbAlFLrp6UkERbw
-        E1zZ3WX/9xhElS2ktj2DR/QQTY19a3w=
-X-Google-Smtp-Source: APXvYqzv8DBwCqysEdTRvoAOnBI3SDSyqEXgyI/xk0f1VpmroqXXidlOfGFu2xVgNNCg8Ie9h1HqaQ==
-X-Received: by 2002:aca:f410:: with SMTP id s16mr9487401oih.87.1555905783189;
-        Sun, 21 Apr 2019 21:03:03 -0700 (PDT)
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com. [209.85.167.169])
-        by smtp.gmail.com with ESMTPSA id k73sm5936121otk.14.2019.04.21.21.03.00
+         :message-id:subject:to:cc;
+        bh=XRqDGxjL9KGk8AXcmMq33XQi7fUb9V0NGGNIF1+Zqkg=;
+        b=e6fbpAd/K78S5bCZJ7vMDXswx543b87hJ1sve1424+30HsRBte4zPg9NeH1G83sXpG
+         UdIRG36y2Up/LUGMmmNuF1NMI3ryhTPFdKvWjfuzUK+lZZ+1S09E0iDqgM4yeqD/2tSi
+         xykIhTf8E+XQXlC+H9e+ykhcSZXVv3hKCvyNmmFNNdrr9X+qJ9jhHJ7WTntGj2tzY/AW
+         gIlrIwmwLDpUMdu5ZwTz27X4HE7I80jGoSXNAuj3EETsF+HpDWimvkL5iOYI9/BDhb69
+         wvhKaI72pu66Fgv3LCMA2TqynxKjv0Z4iJy0L+tnaVWsoAp/faiJmRsQemBoTMcVVaGC
+         hfFw==
+X-Gm-Message-State: APjAAAXZvcxzCFHmjMPOrcsFpfg1YhIg48/hei2efue0/2brcEitS6Ib
+        guK+7qsYZ2zo3Dzne8Wf+QVTQkGck5QSnw==
+X-Google-Smtp-Source: APXvYqynRUPgJujiark8JKCyIeyFtJwEGECM/Q3f1OgpxhsDWKp0piAmR2dFjC7Xvwu0CwQP6OakwQ==
+X-Received: by 2002:a9d:3b04:: with SMTP id z4mr10269324otb.1.1555915481276;
+        Sun, 21 Apr 2019 23:44:41 -0700 (PDT)
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
+        by smtp.gmail.com with ESMTPSA id 2sm4987975ots.22.2019.04.21.23.44.39
         for <linux-media@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 21 Apr 2019 21:03:00 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id v7so7620059oie.8
-        for <linux-media@vger.kernel.org>; Sun, 21 Apr 2019 21:03:00 -0700 (PDT)
-X-Received: by 2002:aca:a894:: with SMTP id r142mr9084484oie.112.1555905779855;
- Sun, 21 Apr 2019 21:02:59 -0700 (PDT)
+        Sun, 21 Apr 2019 23:44:40 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id 103so8814498otd.9
+        for <linux-media@vger.kernel.org>; Sun, 21 Apr 2019 23:44:39 -0700 (PDT)
+X-Received: by 2002:a9d:3f61:: with SMTP id m88mr10124811otc.147.1555915479110;
+ Sun, 21 Apr 2019 23:44:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
- <20190418081816.GO13337@phenom.ffwll.local> <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
- <CAAFQd5CojNuiJ09gXEjnOorfDnRP1Bk436yaffHFKmmsfoUiQQ@mail.gmail.com> <52e092f7009d57087c10b5e21ea597bcad506bfd.camel@ndufresne.ca>
-In-Reply-To: <52e092f7009d57087c10b5e21ea597bcad506bfd.camel@ndufresne.ca>
+References: <1554106718-23107-1-git-send-email-maoguang.meng@mediatek.com>
+In-Reply-To: <1554106718-23107-1-git-send-email-maoguang.meng@mediatek.com>
 From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Mon, 22 Apr 2019 13:02:48 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DZ+7roRx7OADRvs3KYuMsJep=+P6vu4ricHzhWqU=ohQ@mail.gmail.com>
-Message-ID: <CAAFQd5DZ+7roRx7OADRvs3KYuMsJep=+P6vu4ricHzhWqU=ohQ@mail.gmail.com>
-Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
+Date:   Mon, 22 Apr 2019 15:44:27 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5CUL=yE2-igsAPrt42DWW=4Xjzcyb_8zGWHRtiC5Acs6g@mail.gmail.com>
+Message-ID: <CAAFQd5CUL=yE2-igsAPrt42DWW=4Xjzcyb_8zGWHRtiC5Acs6g@mail.gmail.com>
+Subject: Re: [PATCH,v1] media: mtk-vcodec: fix vp9 content playback error with
+ show exist frame
+To:     maoguang.meng@mediatek.com
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Longfei Wang <longfei.wang@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        gtk_ruiwang@mediatek.com,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Eric Anholt <eric@anholt.net>, Rob Clark <robdclark@gmail.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Sat, Apr 20, 2019 at 12:31 AM Nicolas Dufresne <nicolas@ndufresne.ca> wr=
-ote:
+On Mon, Apr 1, 2019 at 5:19 PM <maoguang.meng@mediatek.com> wrote:
 >
-> Le vendredi 19 avril 2019 =C3=A0 13:27 +0900, Tomasz Figa a =C3=A9crit :
-> > On Fri, Apr 19, 2019 at 9:30 AM Nicolas Dufresne <nicolas@ndufresne.ca>=
- wrote:
-> > > Le jeudi 18 avril 2019 =C3=A0 10:18 +0200, Daniel Vetter a =C3=A9crit=
- :
-> > > > > It would be cool if both could be used concurrently and not just =
-return
-> > > > > -EBUSY when the device is used with the other subsystem.
-> > > >
-> > > > We live in this world already :-) I think there's even patches (or =
-merged
-> > > > already) to add fences to v4l, for Android.
-> > >
-> > > This work is currently suspended. It will require some feature on DRM
-> > > display to really make this useful, but there is also a lot of
-> > > challanges in V4L2. In GFX space, most of the use case are about
-> > > rendering as soon as possible. Though, in multimedia we have two
-> > > problems, we need to synchronize the frame rendering with the audio,
-> > > and output buffers may comes out of order due to how video CODECs are
-> > > made.
-> > >
-> > > In the first, we'd need a mechanism where we can schedule a render at=
- a
-> > > specific time or vblank. We can of course already implement this in
-> > > software, but with fences, the scheduling would need to be done in th=
-e
-> > > driver. Then if the fence is signalled earlier, the driver should hol=
-d
-> > > on until the delay is met. If the fence got signalled late, we also
-> > > need to think of a workflow. As we can't schedule more then one rende=
-r
-> > > in DRM at one time, I don't really see yet how to make that work.
-> > >
-> > > For the second, it's complicated on V4L2 side. Currently we signal
-> > > buffers when they are ready in the display order. With fences, we
-> > > receive early pairs buffer and fence (in decoding order). There exist
-> > > cases where reordering is done by the driver (stateful CODEC). We
-> > > cannot schedule these immediately we would need a new mechanism to kn=
-ow
-> > > which one come next. If we just reuse current mechnism, it would void
-> > > the fence usage since the fence will always be signalled by the time =
-it
-> > > reaches DRM or other v4l2 component.
-> > >
-> > > There also other issues, for video capture pipeline, if you are not
-> > > rendering ASAP, you need the HW timestamp in order to schedule. Again=
-,
-> > > we'd get the fence early, but the actual timestamp will be signalled =
-at
-> > > the very last minutes, so we also risk of turning the fence into pure
-> > > overhead. Note that as we speak, I have colleagues who are
-> > > experimenting with frame timestamp prediction that slaves to the
-> > > effective timestamp (catching up over time). But we still have issues
-> > > when the capture driver skipped a frame (missed a capture window).
-> >
-> > Note that a fence has a timestamp internally and it can be queried for
-> > it from the user space if exposed as a sync file:
-> > https://elixir.bootlin.com/linux/v5.1-rc5/source/drivers/dma-buf/sync_f=
-ile.c#L386
+> From: Maoguang Meng <maoguang.meng@mediatek.com>
 >
-> Don't we need something the other way around ? This seems to be the
-> timestamp of when it was triggered (I'm not familiar with this though).
+> Update referenced frame buffer's reference count when playing vp9
+> content which has show_existing_frame flag, and copy enough buffer
+> data to current shown frame.
+>
+> Signed-off-by: Maoguang Meng <maoguang.meng@mediatek.com>
+> ---
+>  .../media/platform/mtk-vcodec/vdec/vdec_vp9_if.c   |   16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> index bc8349b..d950837 100644
+> --- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> +++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+> @@ -481,15 +481,15 @@ static void vp9_swap_frm_bufs(struct vdec_vp9_inst *inst)
+>                  */
+>                 if ((frm_to_show->fb != NULL) &&
+>                         (inst->cur_fb->base_y.size >=
+> -                       frm_to_show->fb->base_y.size)) {
+> +                       frm_to_show->fb->base_y.size) &&
+> +                       (inst->cur_fb->base_c.size >=
+> +                       frm_to_show->fb->base_c.size)) {
+>                         memcpy((void *)inst->cur_fb->base_y.va,
+>                                 (void *)frm_to_show->fb->base_y.va,
+> -                               vsi->buf_w *
+> -                               vsi->buf_h);
+> +                               frm_to_show->fb->base_y.size);
+>                         memcpy((void *)inst->cur_fb->base_c.va,
+>                                 (void *)frm_to_show->fb->base_c.va,
+> -                               vsi->buf_w *
+> -                               vsi->buf_h / 2);
+> +                               frm_to_show->fb->base_c.size);
+>                 } else {
+>                         /* After resolution change case, current CAPTURE buffer
+>                          * may have less buffer size than frm_to_show buffer
+> @@ -895,7 +895,7 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
+>
+>                 if (vsi->resolution_changed) {
+>                         if (!vp9_alloc_work_buf(inst)) {
+> -                               ret = -EINVAL;
+> +                               ret = -EIO;
+>                                 goto DECODE_ERROR;
+>                         }
+>                 }
+> @@ -924,14 +924,12 @@ static int vdec_vp9_decode(unsigned long h_vdec, struct mtk_vcodec_mem *bs,
+>
+>                 if (vsi->show_existing_frame && (vsi->frm_to_show_idx <
+>                                         VP9_MAX_FRM_BUF_NUM)) {
+> -                       mtk_vcodec_err(inst,
+> +                       mtk_vcodec_debug(inst,
+>                                 "Skip Decode drv->new_fb_idx=%d, drv->frm_to_show_idx=%d",
+>                                 vsi->new_fb_idx, vsi->frm_to_show_idx);
+>
+>                         vp9_ref_cnt_fb(inst, &vsi->new_fb_idx,
+>                                         vsi->frm_to_show_idx);
+> -                       ret = -EINVAL;
+> -                       goto DECODE_ERROR;
+>                 }
+>
+>                 /* VPU assign the buffer pointer in its address space,
+> --
+> 1.7.9.5
 >
 
-Honestly, I'm not fully sure what this timestamp is expected to be.
+Thanks for the patch!
 
-For video capture pipeline the fence would signal once the whole frame
-is captured, so I think it could be a reasonable value to consider
-later in the pipeline?
-
-> >
-> > Fences in V4L2 would be also useful for stateless decoders and any
-> > mem-to-mem processors that operate in order, like the blitters
-> > mentioned here or actually camera ISPs, which can be often chained
-> > into relatively sophisticated pipelines.
->
-> I agree fence can be used to optimize specific corner cases. They are
-> not as critical in V4L2 since we have async queues.
-
-I wouldn't call those corner cases. A stateful decoder is actually one
-of the opposite extremes, because one would normally just decode and
-show the frame, so not much complexity needed to handle it and async
-queues actually work quite well.
-
-I don't think async queues are very helpful for any more complicated
-use cases. The userspace still needs to wake up and push the buffers
-through the pipeline. If you have some depth across the whole
-pipeline, with queues always having some buffers waiting to be
-processed, fences indeed wouldn't change too much (+/- the CPU
-time/power wasted on context switches). However, with real time use
-cases, such as anything involving streaming from cameras, image
-processing stages and encoding into a stream to be passed to a
-latency-sensitive application, such as WebRTC, the latency imposed by
-the lack of fences would be significant. Especially if the image
-processing in between consists of several inter-dependent stages.
-
-> I think the use
-> case for fences in V4L2 is mostly to lower the latency. Not all use
-> cases requires such a low latency.
-
-Indeed, not all, but I think it doesn't make fences less important,
-given that there are use cases that require such a low latency.
-
-> There was argument around fences
-> that is simplify the the code, I haven't seen a compelling argument
-> demonstrating that this would be the case for V4L2 programming. The
-> only case is when doing V4L2 to DRM exchanges, and only in the context
-> where time synchronization does not matter.
-
-Another huge use case would be Android. The lack of fences is a
-significant show stopper for V4L2 adoption there.
-
-Also, V4L2 to GPU (GLES, Vulkan) exchange should not be forgotten too.
-
-> In fact, so far it is more
-> work since information starts flowing through separate events
-> (buffer/fence first, later timestamps and possibly critical metadata.
-> This might be induced by the design, but clearly there is a slight API
-> clash.
-
-Well, nothing is perfect from the start. (In fact, probably nothing is
-perfect in general. ;))
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
 
 Best regards,
 Tomasz
