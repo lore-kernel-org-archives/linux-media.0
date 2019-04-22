@@ -2,97 +2,99 @@ Return-Path: <SRS0=+FiN=SY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF635C10F11
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 17:36:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62400C10F11
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 19:10:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8EBD8214AE
-	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 17:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1555954563;
-	bh=fhSkKC+KAjKNe94Jy7RHG5BaywaMOuDKYh7b1WqAQ90=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=LluWV/Cqv4524dB4Sq9J6Yn/wIlRbU4+b3Xqe+S0wZKE+BB+SemmHfvg/rllv9erk
-	 81UHzZ7kCOe5idFCN701OmJUxyc4aOaJx+7BS/FKbaLZ5Bi+Sezvpqr36lTU/vahRC
-	 jUQqpjDE8/OAUxdqPVBDgLBZrbZiLK4gGT7qzeVI=
+	by mail.kernel.org (Postfix) with ESMTP id 2819A21738
+	for <linux-media@archiver.kernel.org>; Mon, 22 Apr 2019 19:10:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pIfVVvqR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727953AbfDVRgD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 13:36:03 -0400
-Received: from casper.infradead.org ([85.118.1.10]:41694 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726587AbfDVRgC (ORCPT
+        id S1727871AbfDVTKg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Apr 2019 15:10:36 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:39920 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726994AbfDVTKg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Apr 2019 13:36:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ixrkklA9r5NdzUfCbwZ4K96ZOE60p2Z9zUOACvXrMeY=; b=foamT6Mzq+DZ7JV5Z4SjC19vTf
-        pbZSr/usJX1bdAoB3lnMS9VGzQ0O61kAl+EwLUEw4bd4QUNEcVQj1gVx3rRJrgub16qgmfvRloVM2
-        ar2fxzAQqHufotw3Zn1Ma+HEo3+Nv904kdYGhMHugLLtb9sdAT7lU7qJnGvY8tSyZCsq6DuKG53Mq
-        MHb0OF6wkbHuBUkKRmrrCOx/R+5nBOl6TqjATtSG2nCW6lpdesxhLU37B/tgRjNMoOTJ3ByKTTCrg
-        MS7jiN67tEDKDpAdJ36mk/djRNYJbBW3m2+uz+DTRgTTiS0Z3LI0vedpZMRcE7sZnQB+c+y/fjxwa
-        k9asZfXA==;
-Received: from 179.176.125.229.dynamic.adsl.gvt.net.br ([179.176.125.229] helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hIcrI-0002DR-5T; Mon, 22 Apr 2019 17:36:00 +0000
-Date:   Mon, 22 Apr 2019 14:35:56 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [GIT PULL for v5.2] Venus updates
-Message-ID: <20190422143551.6d29231e@coco.lan>
-In-Reply-To: <20190401081817.14386-1-stanimir.varbanov@linaro.org>
-References: <20190401081817.14386-1-stanimir.varbanov@linaro.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Mon, 22 Apr 2019 15:10:36 -0400
+Received: by mail-lf1-f68.google.com with SMTP id d12so9760606lfk.6
+        for <linux-media@vger.kernel.org>; Mon, 22 Apr 2019 12:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Qs2o98ss5o6XrY64SaJ7MettNwzG/Ooy3LAq+IrzKKQ=;
+        b=pIfVVvqRSrAEMtQgLTEN6ieaPwW7mDYg5xFD2frOrHc8ymTzx/McxQa7Awvu8gvFRx
+         ckHnIpXISXQ/grR0w3HAjuFSTabJ2OteXNJnZnxbx+CztT3FTWZUCDknkeWYf0wunxoY
+         lxp5iPyckLGmEz63sV9QPvJhuU2WEhXvbodxfLJY5RSBsSubbH5Ei+x0/+LQPF32TNY8
+         q4NF2HvO8KbUCsH4Hpw5mibk/xXozh9EjNaFfay6GvL6MLUbcmcKfVjjq+D4k3uWgo8M
+         LlUyDMiJZFEPcP2cWpEt7pVLH8piBJ/hXpjhSZjXdmGzZVp6hWp2XfSa4h+2SmGealBZ
+         fXLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Qs2o98ss5o6XrY64SaJ7MettNwzG/Ooy3LAq+IrzKKQ=;
+        b=kqS6e2Td8IsFG6TndxSoB5uScOL4MNLHfD33e9TSrtZu4Ox/857nIdsovJpD/on3sy
+         iNsujAkMNjYN4g8WpLiZIWI7PZ7D2bNawmPS9N8GIrmxP3C6Fi3mfpuIWO7EwpxEE7Og
+         6TiDCqsQp45YHqsd6tLhYZbIwaTx7bD/Fs5CRhZU6XFK4UloA8dyZhYsLEEsq1+FYTI0
+         /H3GXml8lns8nENKcFkePxKHsUXf9+xykhdT/blas7uclM3tF2HQY+2Y0inWWPBFLL+V
+         Jtp8Ag7wDhSv45EBb6U3FZW6AGqQ1kfIj1WYcyGE9dMSqF4y2vBNpsMzSku6G5aH9Cxw
+         zQ2Q==
+X-Gm-Message-State: APjAAAXNdI8H/ZxT3HwqXkmXypTbtTM6vwqNAu3Fiv3tbF96bCsJyLrf
+        1mnVWUY+UuXatMmYWzE0oQ0=
+X-Google-Smtp-Source: APXvYqw+rg8zkU24847xx6TQZ/FhL0gb3wYmjT7fwzgzK2gV+QNkV6gglhTalzWXIBeGZWOICl9vfg==
+X-Received: by 2002:a19:c301:: with SMTP id t1mr10873304lff.167.1555960234313;
+        Mon, 22 Apr 2019 12:10:34 -0700 (PDT)
+Received: from localhost.localdomain (80-167-223-88-cable.dk.customer.tdc.net. [80.167.223.88])
+        by smtp.gmail.com with ESMTPSA id n9sm3137813lfl.35.2019.04.22.12.10.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 22 Apr 2019 12:10:33 -0700 (PDT)
+From:   Daniel Gomez <dagmcr@gmail.com>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, dagmcr@gmail.com, javier@dowhile0.org
+Subject: [PATCH] spi: IR LED: add missing of table registration
+Date:   Mon, 22 Apr 2019 21:10:20 +0200
+Message-Id: <1555960220-8720-1-git-send-email-dagmcr@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Stanimir,
+MODULE_DEVICE_TABLE(of, <of_match_table> should be called to complete DT
+OF mathing mechanism and register it.
 
+Before this patch:
+modinfo drivers/media/rc/ir-spi.ko  | grep alias
 
-Em Mon,  1 Apr 2019 11:18:17 +0300
-Stanimir Varbanov <stanimir.varbanov@linaro.org> escreveu:
+After this patch:
+modinfo drivers/media/rc/ir-spi.ko  | grep alias
+alias:          of:N*T*Cir-spi-ledC*
+alias:          of:N*T*Cir-spi-led
 
-> Hi Mauro,
-> 
-> Here are two patches, one fix and one which makes gstreamer happy with h265.
-> 
-> Please pull.
-> 
-> 
-> The following changes since commit 3e11851d16ea7eff1cfa66b1cb7b35967876dd1e:
-> 
->   media: venus: Add support for H265 controls required by gstreamer V4L2 H265 module. (2019-04-01 10:44:05 +0300)
-> 
-> are available in the Git repository at:
-> 
->   git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-5.2
-> 
-> for you to fetch changes up to 3e11851d16ea7eff1cfa66b1cb7b35967876dd1e:
-> 
->   media: venus: Add support for H265 controls required by gstreamer V4L2 H265 module. (2019-04-01 10:44:05 +0300)
-> 
-> ----------------------------------------------------------------
-> venus for 5.2
-> 
-> ----------------------------------------------------------------
+Reported-by: Javier Martinez Canillas <javier@dowhile0.org>
+Signed-off-by: Daniel Gomez <dagmcr@gmail.com>
+---
+ drivers/media/rc/ir-spi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Not sure why, but I'm not able to pull from it. It complains about some
-issues with your gpg key, and the diffstat is not there...
+diff --git a/drivers/media/rc/ir-spi.c b/drivers/media/rc/ir-spi.c
+index 66334e8..c58f2d3 100644
+--- a/drivers/media/rc/ir-spi.c
++++ b/drivers/media/rc/ir-spi.c
+@@ -161,6 +161,7 @@ static const struct of_device_id ir_spi_of_match[] = {
+ 	{ .compatible = "ir-spi-led" },
+ 	{},
+ };
++MODULE_DEVICE_TABLE(of, ir_spi_of_match);
+ 
+ static struct spi_driver ir_spi_driver = {
+ 	.probe = ir_spi_probe,
+-- 
+2.7.4
 
-I suspect that the e-mail was only partially sent.
-
-Thanks,
-Mauro
