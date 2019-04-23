@@ -3,153 +3,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9115CC10F14
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 03:56:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D939EC10F14
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 06:36:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6886A20811
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 03:56:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B349D20674
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 06:36:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727328AbfDWD4T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Apr 2019 23:56:19 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:45935 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727190AbfDWD4T (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Apr 2019 23:56:19 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:f44b:2587:4d86:77b1])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id ImXYh9XkJZVjxImXZhTy4a; Tue, 23 Apr 2019 05:56:17 +0200
-Message-ID: <0fbf50a7fd2aa46cc5498f4d6977bad7@smtp-cloud7.xs4all.net>
-Date:   Tue, 23 Apr 2019 05:56:15 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: ERRORS
-X-CMAE-Envelope: MS4wfHTqfet/0t5vZoNyy0uh8aDm3QeEP3e1AwkQpR/YSNnxk4oAJ8p0rXWNQGWjkiEM638qwa+09N53BY51yZESklJPtFiIV9M01EoGwsmN+oqlQm1XQId1
- 9M0ofqQYYuSdVlaZjVjjQ82PxxG5LyfjqKJL+cOPyyo48CSbMsZCO6dcGSfD3kACLfcl+0SZj6odTY7GX6Pxhimywg6Y8J8mUe1BNlO0WE+RhvGylf9FwjDM
+        id S1725954AbfDWGgZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 02:36:25 -0400
+Received: from mga05.intel.com ([192.55.52.43]:37818 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725882AbfDWGgZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Apr 2019 02:36:25 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Apr 2019 23:36:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,384,1549958400"; 
+   d="scan'208";a="145036303"
+Received: from dixitsau-mobl.gar.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.252.63.40])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Apr 2019 23:36:21 -0700
+Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
+        id D59DE21E9B; Tue, 23 Apr 2019 09:36:19 +0300 (EEST)
+Date:   Tue, 23 Apr 2019 09:36:19 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     MosesChristopher <moseschristopherb@gmail.com>
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org,
+        slongerbeam@gmail.com, p.zabel@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, laurent.pinchart@ideasonboard.com,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] staging: media: use help instead of ---help--- in Kconfig
+Message-ID: <20190423063619.7gkbnemmq5xrx6dl@kekkonen.localdomain>
+References: <20190420110407.20215-1-moseschristopherb@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190420110407.20215-1-moseschristopherb@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On Sat, Apr 20, 2019 at 11:04:07AM +0000, MosesChristopher wrote:
+> From: Moses Christopher <moseschristopherb@gmail.com>
+> 
+>   - Resolve the following warning from the Kconfig,
+>     "WARNING: prefer 'help' over '---help---' for new help texts"
+> 
+> Signed-off-by: Moses Christopher <moseschristopherb@gmail.com>
 
-Results of the daily build of media_tree:
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-date:			Tue Apr 23 05:00:11 CEST 2019
-media-tree git hash:	a4dfc8a24796ff312d1d307e11f26f8ca466e938
-media_build git hash:	7fb9ee4c605015dc0d4d983b9a3a8fd47d2290b6
-v4l-utils git hash:	e30639edd74f12f8f58d8e9cf10d85a1f071a6c3
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
-
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: ERRORS
-linux-3.10.108-x86_64: ERRORS
-linux-3.11.10-i686: ERRORS
-linux-3.11.10-x86_64: ERRORS
-linux-3.12.74-i686: ERRORS
-linux-3.12.74-x86_64: ERRORS
-linux-3.13.11-i686: ERRORS
-linux-3.13.11-x86_64: ERRORS
-linux-3.14.79-i686: ERRORS
-linux-3.14.79-x86_64: ERRORS
-linux-3.15.10-i686: ERRORS
-linux-3.15.10-x86_64: ERRORS
-linux-3.16.63-i686: ERRORS
-linux-3.16.63-x86_64: ERRORS
-linux-3.17.8-i686: ERRORS
-linux-3.17.8-x86_64: ERRORS
-linux-3.18.136-i686: ERRORS
-linux-3.18.136-x86_64: ERRORS
-linux-3.19.8-i686: ERRORS
-linux-3.19.8-x86_64: ERRORS
-linux-4.0.9-i686: ERRORS
-linux-4.0.9-x86_64: ERRORS
-linux-4.1.52-i686: ERRORS
-linux-4.1.52-x86_64: ERRORS
-linux-4.2.8-i686: ERRORS
-linux-4.2.8-x86_64: ERRORS
-linux-4.3.6-i686: ERRORS
-linux-4.3.6-x86_64: ERRORS
-linux-4.4.167-i686: ERRORS
-linux-4.4.167-x86_64: ERRORS
-linux-4.5.7-i686: ERRORS
-linux-4.5.7-x86_64: ERRORS
-linux-4.6.7-i686: ERRORS
-linux-4.6.7-x86_64: ERRORS
-linux-4.7.10-i686: ERRORS
-linux-4.7.10-x86_64: ERRORS
-linux-4.8.17-i686: ERRORS
-linux-4.8.17-x86_64: ERRORS
-linux-4.9.162-i686: ERRORS
-linux-4.9.162-x86_64: ERRORS
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
+-- 
+Sakari Ailus
+sakari.ailus@linux.intel.com
