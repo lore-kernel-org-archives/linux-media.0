@@ -2,162 +2,106 @@ Return-Path: <SRS0=z7aI=SZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C8D7C282E1
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E6DEC10F03
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:54:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D145421738
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:47:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6045E21738
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:54:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="MfAPbsbU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KbWflisp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727666AbfDWOrD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 10:47:03 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:56342 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726421AbfDWOrD (ORCPT
+        id S1728295AbfDWOyF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 10:54:05 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:33104 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727467AbfDWOyE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 10:47:03 -0400
-Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 676685F;
-        Tue, 23 Apr 2019 16:47:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1556030821;
-        bh=O+iTyzd681wgXCSbOQYF2psWxVGQDUZ8OO3uja5+Z1Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MfAPbsbUmrRFY8TV+bWxQYsb5rBgRcSIGU5iLK0qAX2RMN8TJDlFae0RVzE/GVFzA
-         eNxIpwQnsSoKNSqhzmvSJDdKxdG8zAoOF6QUX9ETwj7I6CHatb7DIw50h5xtfE2aUT
-         dTJPJxWthjA93BhmmRWL2Mffh+LelK4gj+qWNFdE=
-Date:   Tue, 23 Apr 2019 17:46:51 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: Re: [PATCH 6/9] media: vsp1: Add support for missing 16-bit RGB555
- formats
-Message-ID: <20190423144651.GA16111@pendragon.ideasonboard.com>
-References: <20190328070723.26553-1-laurent.pinchart+renesas@ideasonboard.com>
- <20190328070723.26553-7-laurent.pinchart+renesas@ideasonboard.com>
- <20190423135508.ppdphyqy2z55ewhm@uno.localdomain>
+        Tue, 23 Apr 2019 10:54:04 -0400
+Received: by mail-lj1-f195.google.com with SMTP id f23so13836436ljc.0
+        for <linux-media@vger.kernel.org>; Tue, 23 Apr 2019 07:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=S148436qoCoeK0FQGD1ySRqulS61+al7UnTKDQroX5A=;
+        b=KbWflispIckU5NwQWpM+AyeKsq79+WLke7js4xDk3H3TH1alUObppwZDa2H/IOCBfk
+         egrPh77z3niIctOg5AbNM2mms+XOYRjB7FSdwZX2/CbtaubAEuZb0Kwqj0YSJGTnCWL2
+         KBfeWD8b8IQscdtGSwDK2Obw32QT+6YOjP0Sf7LezTfVMwcv+QwuyWYGnz++DyH8svhP
+         B81JW4dk8s33lv/B39+hb3EXhL3IxFbGYD595nZse40vt1tPJyn9Fx590iUq7gnLHmcW
+         rqgT1zUtyLUlpdwbiTBBJhSpi6TzeH8Om4FmsqDA2lurOVKczy4IQOXwTs1ZMnC8SdXw
+         wt+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=S148436qoCoeK0FQGD1ySRqulS61+al7UnTKDQroX5A=;
+        b=mfVPz7tDBfG2+wccnWA4tU2M4scEDJTvJahL7RE7rkIpOOaqPKBgBUrlODIsic9FMh
+         p5MykV1QjswtjU+BBjPoESntgryukuM7cZpwjk5kozNPm3nPGb52YqqvIxL6ZqXGl+EB
+         vUTohaGiJXV5jfIQJnpKq+XEeMcvdhd0r0HPb9W0StSluRpoEQm88muqiJhib3VO8rJW
+         LtVMtmBSgCWtpAfZL53tkH/728IdqG0TVwGxutWoUIebyfjDy/PjzGzF4FabcgEFYePG
+         NXwSb9vGuC+9JruY0gMZ167X3zKRX7d1PfVT1P7FZvK1aDFIdC1/VErkKfN2cr3ZZkYn
+         W/bQ==
+X-Gm-Message-State: APjAAAWs61FmIWtgMyWMWgVwsy2ORj2IOUOVz3JTZITipRcjRypS+XTS
+        IsXurW1inW4mTXefSAcscdtjUA==
+X-Google-Smtp-Source: APXvYqwtE3Xbck7VgPloCq2cjRfm2LbU/XlN4Qa84xaPHbSvg8xfBdXo/v0ThbjVrpcOi/c8dtlQZg==
+X-Received: by 2002:a2e:4ca:: with SMTP id a71mr12513937ljf.39.1556031242626;
+        Tue, 23 Apr 2019 07:54:02 -0700 (PDT)
+Received: from [192.168.27.209] ([37.157.136.206])
+        by smtp.googlemail.com with ESMTPSA id b5sm3771719lfo.16.2019.04.23.07.54.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Apr 2019 07:54:01 -0700 (PDT)
+Subject: Re: [PATCH] v4l: Add source event change for bit-depth
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20190415152723.2481-1-stanimir.varbanov@linaro.org>
+ <20190423064326.lbi3gfprfegqecu4@kekkonen.localdomain>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <01bc9ad3-6e62-2b24-1238-60e65ea14610@linaro.org>
+Date:   Tue, 23 Apr 2019 17:54:00 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <20190423064326.lbi3gfprfegqecu4@kekkonen.localdomain>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190423135508.ppdphyqy2z55ewhm@uno.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+Hi Sakari,
 
-On Tue, Apr 23, 2019 at 03:55:08PM +0200, Jacopo Mondi wrote:
-> On Thu, Mar 28, 2019 at 09:07:20AM +0200, Laurent Pinchart wrote:
-> > Add support for the V4L2_PIX_FMT_RGBA555, V4L2_PIX_FMT_RGBX555,
-> > V4L2_PIX_FMT_ABGR555, V4L2_PIX_FMT_XBGR555, V4L2_PIX_FMT_BGRA555 and
-> > V4L2_PIX_FMT_BGRX555 formats to the VSP driver.
-> >
-> > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> > ---
-> >  drivers/media/platform/vsp1/vsp1_pipe.c | 32 +++++++++++++++++++++++++
-> >  1 file changed, 32 insertions(+)
-> >
-> > diff --git a/drivers/media/platform/vsp1/vsp1_pipe.c b/drivers/media/platform/vsp1/vsp1_pipe.c
-> > index f6665871aa11..92f71dec99c5 100644
-> > --- a/drivers/media/platform/vsp1/vsp1_pipe.c
-> > +++ b/drivers/media/platform/vsp1/vsp1_pipe.c
-> > @@ -66,14 +66,46 @@ static const struct vsp1_format_info vsp1_video_formats[] = {
-> >  	  VI6_FMT_BGRA_4444, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> >  	  VI6_RPF_DSWAP_P_WDS,
-> >  	  1, { 16, 0, 0 }, false, false, 1, 1, false },
-> > +#define V4L2_PIX_FMT_ARGB555 v4l2_fourcc('A', 'R', '1', '5') /* 16  ARGB-1-5-5-5  */
-> 
-> Why is this here? I see the exact same line in videodev2.h.
-> Is this a leftover?
+Thanks for the comments!
 
-Oops. It is. I'm sorry, I'll remove that.
+On 4/23/19 9:43 AM, Sakari Ailus wrote:
+> Hi Stan,
+> 
+> On Mon, Apr 15, 2019 at 06:27:23PM +0300, Stanimir Varbanov wrote:
+>> This event indicate that the source bit-depth is changed during
+>> run-time. The client must get the new format and re-allocate buffers
+>> for it. This can usually happens with video decoder (encoders) when
+>> the bit-stream depth is changed from 8 to 10bits or vice versa.
+> 
+> Thanks for the patch.
+> 
+> How about adding an event for pixelformat change, instead of bit depth? The
+> application presumably knows the formats it can work with, and can adapt to
+> that as well as a change to the bit depth.
 
-> >  	{ V4L2_PIX_FMT_ARGB555, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >  	  VI6_FMT_ARGB_1555, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> >  	  VI6_RPF_DSWAP_P_WDS,
-> >  	  1, { 16, 0, 0 }, false, false, 1, 1, true },
-> > +#define V4L2_PIX_FMT_XRGB555 v4l2_fourcc('X', 'R', '1', '5') /* 16  XRGB-1-5-5-5  */
-> 
-> same here and below
-> 
-> >  	{ V4L2_PIX_FMT_XRGB555, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >  	  VI6_FMT_XRGB_1555, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> >  	  VI6_RPF_DSWAP_P_WDS,
-> >  	  1, { 16, 0, 0 }, false, false, 1, 1, false },
-> > +#define V4L2_PIX_FMT_RGBA555 v4l2_fourcc('R', 'A', '1', '5') /* 16  RGBA-5-5-5-1  */
-> > +	{ V4L2_PIX_FMT_RGBA555, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > +	  VI6_FMT_RGBA_5551, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > +	  VI6_RPF_DSWAP_P_WDS,
-> > +	  1, { 16, 0, 0 }, false, false, 1, 1, true },
-> > +#define V4L2_PIX_FMT_RGBX555 v4l2_fourcc('R', 'X', '1', '5') /* 16  RGBX-5-5-5-1  */
-> > +	{ V4L2_PIX_FMT_RGBX555, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > +	  VI6_FMT_RGBX_5551, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > +	  VI6_RPF_DSWAP_P_WDS,
-> > +	  1, { 16, 0, 0 }, false, false, 1, 1, false },
-> > +#define V4L2_PIX_FMT_ABGR555 v4l2_fourcc('A', 'B', '1', '5') /* 16  ABGR-1-5-5-5  */
-> > +	{ V4L2_PIX_FMT_ABGR555, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > +	  VI6_FMT_ABGR_1555, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > +	  VI6_RPF_DSWAP_P_WDS,
-> > +	  1, { 16, 0, 0 }, false, false, 1, 1, true },
-> > +#define V4L2_PIX_FMT_XBGR555 v4l2_fourcc('X', 'B', '1', '5') /* 16  XBGR-1-5-5-5  */
-> > +	{ V4L2_PIX_FMT_XBGR555, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > +	  VI6_FMT_ABGR_1555, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > +	  VI6_RPF_DSWAP_P_WDS,
-> > +	  1, { 16, 0, 0 }, false, false, 1, 1, false },
-> 
-> Looks good, additional defines apart
-> 
-> > +#define V4L2_PIX_FMT_BGRA555 v4l2_fourcc('B', 'A', '1', '5') /* 16  BGRA-5-5-5-1  */
-> > +	{ V4L2_PIX_FMT_BGRA555, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > +	  VI6_FMT_BGRA_5551, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > +	  VI6_RPF_DSWAP_P_WDS,
-> > +	  1, { 16, 0, 0 }, false, false, 1, 1, true },
-> 
-> 
-> As I read this:
-> V4L2_PIX_FMT_BGRA555            VI6_FMT_BGRA_5551        LLS|LWS|WDS
-> gggrrrrr abbbbbgg               bbbbbggg ggrrrrra       ggrrrrra bbbbbggg
+Well, I'd like to hear more opinions but in principle I'd agree with you.
 
-Isn't V4L2_PIX_FMT_BGRA555 is defined as
-
-g1 g0 r4 r3 r2 r1 r0 a | b4 b3 b2 b1 b0 g4 g3 g2
-
-?
-
-> They seems different to me:
->         gggrrrrr abbbbbgg
->         ggrrrrra bbbbbggg
-> 
-> But I have not find any better combination from table 23.10 that would
-> result in the desired 'gggrrrrr abbbbbgg' ordering.
-> 
-> > +#define V4L2_PIX_FMT_BGRX555 v4l2_fourcc('B', 'X', '1', '5') /* 16  BGRX-5-5-5-1  */
-> > +	{ V4L2_PIX_FMT_BGRX555, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > +	  VI6_FMT_BGRA_5551, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > +	  VI6_RPF_DSWAP_P_WDS,
-> > +	  1, { 16, 0, 0 }, false, false, 1, 1, false },
-> 
-> Same as above.
-> 
-> The last two entries apart:
-> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-> 
-> >  	{ V4L2_PIX_FMT_RGB565, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >  	  VI6_FMT_RGB_565, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> >  	  VI6_RPF_DSWAP_P_WDS,
+<cut>
 
 -- 
-Regards,
-
-Laurent Pinchart
+regards,
+Stan
