@@ -2,1504 +2,475 @@ Return-Path: <SRS0=z7aI=SZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53E33C10F03
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 16:56:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E61C10F03
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 17:17:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8DAB21738
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 16:56:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AD63021738
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 17:17:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="lPEWdCig"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728880AbfDWQ42 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 12:56:28 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:34087 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728526AbfDWQ41 (ORCPT
+        id S1729106AbfDWRRD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 13:17:03 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:34200 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727656AbfDWRRD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 12:56:27 -0400
-X-Originating-IP: 93.29.109.196
-Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id E5F8BC0005;
-        Tue, 23 Apr 2019 16:56:20 +0000 (UTC)
-Message-ID: <aa971342fc687193541b8c991024e06e377851a1.camel@bootlin.com>
-Subject: Re: [PATCH 06/20] lib: Add video format information library
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        Tue, 23 Apr 2019 13:17:03 -0400
+Received: by mail-qt1-f193.google.com with SMTP id 43so2879298qtc.1
+        for <linux-media@vger.kernel.org>; Tue, 23 Apr 2019 10:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=olBUa7m2fL5uP1eghSSZbt9rQXsdkIUAtj0+dmrBLwQ=;
+        b=lPEWdCigyLHKaEXP1fciJvu5VvbJyE7Bsu1ayj0XdgpBPdVI86TJOhynGVJWcif8c4
+         dKJT7NwWxuKmyISxagHgSBWFJ18n2xQJhMZXVBwIAhpEAzVxoOcfGanS/jDk1qk1wZz9
+         utSJrAndOZhboVYS1YKkMwKR77iLCIU9yYjafCeDLLqhalCuDerZiaTtErtKGkxmaEk8
+         cOFTeUtT0da0mn4j/wsGExDLN4zRMgHtzOQAx2KzQxRQw/iy+taJNR/40T5r9FZ6j/B/
+         /CQ9smybxxeLtd2OOQpRWlWvhwP+d+tpldr0yynjRcPJr1KZwPjYnzN7EmlyqxaFvGEy
+         MBCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=olBUa7m2fL5uP1eghSSZbt9rQXsdkIUAtj0+dmrBLwQ=;
+        b=uSlrgFieyQe8D48z4JO14ly13NUbTMjmpm5yCcY6PT/iHyZz4OV14QDT1kVBzn3pDX
+         avHoucCD0joqJp0ouO1mD+y78pJZSr1tn12oyCAgTNO+q1Q7FodC8MTfkjsogb222CrG
+         svh2u32AHZSHHsqaTgLGEuJhUD2QvrmPgKxbZ5xzAFEVu7kGz1dOiaSCexz41VMAeH3S
+         5GAbDEZ06DzOcZW/B0A5jpJKIbDSYHTQauNqylY6b5DCGBQDzJ5k8UBiMFxR9FSlThiA
+         ukhxgK0qaFEZY2PNwXCn/W/Sb9OCVtUKkyB3WqiKWPOks6fu6yOkEmjVqzh25KW7sBiO
+         naCg==
+X-Gm-Message-State: APjAAAUx2d0EiC9/cCCK+wemvjisJzITXNb/vWyQc2Ajvem2dha4SJNz
+        UcFQYBtj7tJ6HzFxYresp66LXQ==
+X-Google-Smtp-Source: APXvYqyQA9kFVAOZVoF/V6jHYexodesddcbXpM9Du3UGN7WUbXeucOs+X/GPUsNNiJrtaLcdIpvQjQ==
+X-Received: by 2002:ac8:4283:: with SMTP id o3mr1353640qtl.316.1556039821608;
+        Tue, 23 Apr 2019 10:17:01 -0700 (PDT)
+Received: from tpx230-nicolas (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
+        by smtp.gmail.com with ESMTPSA id 6sm10961712qtt.8.2019.04.23.10.16.58
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 23 Apr 2019 10:16:59 -0700 (PDT)
+Message-ID: <f3e58f3b48c90b83143888c95acf8a886298da8c.camel@ndufresne.ca>
+Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
+ common place
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Maxime Ripard <maxime.ripard@bootlin.com>,
         Daniel Vetter <daniel.vetter@intel.com>,
         David Airlie <airlied@linux.ie>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Sean Paul <seanpaul@chromium.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-media@vger.kernel.org
-Date:   Tue, 23 Apr 2019 18:56:20 +0200
-In-Reply-To: <0aae62f0-776a-6933-2290-f0141d01c5b2@suse.de>
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Date:   Tue, 23 Apr 2019 13:16:57 -0400
+In-Reply-To: <CAKMK7uG=Mgn11nvNZWEBHhW3wQa57Vup+tjXE4Umyb8CHSTr2g@mail.gmail.com>
 References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
-         <c17a896150f0b793cfa8581d18969cd7b3e93bf2.1555487650.git-series.maxime.ripard@bootlin.com>
-         <0aae62f0-776a-6933-2290-f0141d01c5b2@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 
+         <20190417154121.GJ13337@phenom.ffwll.local>
+         <20190418062229.eyog4i62eg4pr6uf@flea>
+         <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
+         <20190418090221.e57dogn4yx5nwdni@flea>
+         <6578c22ddf5420d4dead69d29f451bc6a91f6c4a.camel@bootlin.com>
+         <20190420224045.GY4964@pendragon.ideasonboard.com>
+         <20190423073026.GX13337@phenom.ffwll.local>
+         <f288e1d29277fcd79b251d99f84fb9b165364fac.camel@bootlin.com>
+         <e29914080f1db7b331e6e1b12dc9c7c48d5d7185.camel@ndufresne.ca>
+         <CAKMK7uG=Mgn11nvNZWEBHhW3wQa57Vup+tjXE4Umyb8CHSTr2g@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-SXe6P+m1+ReTTnHtr2bw"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
 
-Le mardi 23 avril 2019 à 13:22 +0200, Thomas Zimmermann a écrit :
-> Hi
-> 
-> Am 17.04.19 um 09:54 schrieb Maxime Ripard:
-> > Move the DRM formats API to turn this into a more generic image formats API
-> > to be able to leverage it into some other places of the kernel, such as
-> > v4l2 drivers.
-> 
-> Here's some nitpicking: 'image_format_*' appears slightly vague; it
-> could refer to a disk or ROM image as well. Something like
-> 'pixel_format_*', 'pixbuf_format_*', etc. would clearly indicate graphics.
+--=-SXe6P+m1+ReTTnHtr2bw
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Yeah I'm with you on this one. It's bike-shedding, but I think it's
-fine as long as more fundamental topics are moving as well.
+Le mardi 23 avril 2019 =C3=A0 17:09 +0200, Daniel Vetter a =C3=A9crit :
+> On Tue, Apr 23, 2019 at 4:28 PM Nicolas Dufresne <nicolas@ndufresne.ca> w=
+rote:
+> > Le mardi 23 avril 2019 =C3=A0 14:33 +0200, Paul Kocialkowski a =C3=A9cr=
+it :
+> > > Hi,
+> > >=20
+> > > On Tue, 2019-04-23 at 09:30 +0200, Daniel Vetter wrote:
+> > > > On Sun, Apr 21, 2019 at 01:40:45AM +0300, Laurent Pinchart wrote:
+> > > > > Hi Paul,
+> > > > >=20
+> > > > > On Thu, Apr 18, 2019 at 01:49:54PM +0200, Paul Kocialkowski wrote=
+:
+> > > > > > On Thu, 2019-04-18 at 11:02 +0200, Maxime Ripard wrote:
+> > > > > > > On Thu, Apr 18, 2019 at 09:52:10AM +0200, Daniel Vetter wrote=
+:
+> > > > > > > > And a lot of people pushed for the "fourcc is a standard", =
+when
+> > > > > > > > really it's totally not.
+> > > > > > >=20
+> > > > > > > Even if it's not a standard, having consistency would be a go=
+od thing.
+> > > > > > >=20
+> > > > > > > And you said yourself that DRM fourcc is now pretty much an a=
+uthority
+> > > > > > > for the fourcc, so it definitely looks like a standard to me.
+> > > > > >=20
+> > > > > > I think trying to make the V4L2 and DRM fourccs converge is a l=
+ost
+> > > > > > cause, as it has already significantly diverged. Even if we coo=
+rdinate
+> > > > > > an effort to introduce new formats with the same fourcc on both=
+ sides,
+> > > > > > I don't see what good that would be since the formats we have n=
+ow are
+> > > > > > still plagued by the inconsistency.
+> > > > > >=20
+> > > > > > I think we always need an explicit translation step from either=
+ v4l2 or
+> > > > > > drm to the internal representation and back, without ever assum=
+ing that
+> > > > > > formats might be compatible because they share the same fourcc.
+> > > > >=20
+> > > > > I don't agree. APIs evolve, and while we can't switch from one se=
+t of
+> > > > > 4CCs to another in existing APIs, we could in new APIs. Boris is =
+working
+> > > > > on new ioctls to handle formats in V4L2, and while 4CC unificatio=
+n could
+> > > > > be impopular from a userspace developers point of view there, I d=
+on't
+> > > > > think we have ruled it out completely. The move to the request AP=
+I is
+> > > > > also an area where a common set of 4CCs could be used, as it will=
+ depart
+> > > > > from the existing V4L2 ioctls. To summarize my opinion, we're not=
+ there
+> > > > > yet, but I wouldn't rule it out completely for the future.
+> > > > >=20
+> > > > > > It looks like so far, V4L2 pixel formats describe a DRM pixel f=
+ormat +
+> > > > > > modifier.
+> > > > >=20
+> > > > > DRM modifiers are mostly about tiling and compression, and we har=
+dly
+> > > > > support these in V4L2. What are the modifiers you think are hardc=
+oded in
+> > > > > 4CCs in V4L2 ?
+> > > >=20
+> > > > Hm maybe it was a drm one that didn't come from v4l or anywhere els=
+e
+> > > > really, but the NV12MT one is nv12 + some tiling. I think we manage=
+d to
+> > > > uapi-bend that one into shape in at least drm.
+> > >=20
+> > > The one I had in mind is V4L2_PIX_FMT_SUNXI_TILED_NV12 which translat=
+es
+> > > to DRM_FORMAT_NV12 + DRM_FORMAT_MOD_ALLWINNER_TILED. Seems to be a
+> > > pretty similar case to the Mediatek one indeed.
+> > >=20
+> > > In our cause, that's because the video decoding engine produces its
+> > > destination buffers in a specific tiled format, that the display engi=
+ne
+> > > can take in directly.
+> >=20
+> > We also have the Samsung tiling (Z pattern) as mentioned here, but also
+> > linear 16x16 tile placement (also from Samsung ?) and I believe Amlogic
+> > CODEC patches is bringing another tiling (unavoidable on older Meson8,
+> > with 64bytes swaps). All these should be expressed as NV12 + mod in DRM
+> > space.
+> >=20
+> > What is very often not enabled, but affect the performance on mainline
+> > media drivers is the ARM frame buffer compression. I know that RK chips
+> > have support for this, and that you can't achieve the maximum
+> > throughput without that. This one is not documented anywhere, but I
+> > understand that there is multiple variants that HW vendor licence.
+> > Though, in general, each SoC are likely running a single variant, so a
+> > single mod would make sense.
+>=20
+> We have AFBC modifiers now in drm_fourcc.h, jointly developed by
+> display engineers from ARM and mali gpu reverse engineer people doing
+> the panfrost driver. So should be covered.
+>=20
+> > So all this to say that V4L2 equally needs supports for these. What I
+> > understood through DRM API is that a buffer allocated for let's say
+> > NV12 + mod, is compatible with linear NV12. That could be used to
+> > simplify some code, but at the same time, a common API that deals with
+> > the padding and alignment of each format + mod independently would do
+> > that same as long as this is not variable depending on which target HW
+> > uses that same format.
+>=20
+> Not sure why you mean with NV12 + mod is compatible with linear NV12.
+> In general fourcc + modifier !=3D fourcc =3D linear modifier, size, numbe=
+r
+> of planes, alignment constraints and everything else can be changed by
+> a modifier (and there's examples for all of these, maybe not yet in
+> all cases for NV12, but I think NV12 + AFBC modifiers gives some
+> pretty interesting results). In generally you need to think of the
+> (drm fourcc, modifier) as the pair identified the pixel format, each
+> part individually is fairly meanigless. We have lots of modifiers
+> where the exact tiling mode/layout changes depending upon the fourcc
+> code.
 
-Cheers,
+I only meant that the NV12 + mod have the same number of planes, and
+should be large enough to store a linear NV12 equivalent. Not that it
+would render correctly (even though I found it useful to be able to
+render them when I needed to reverse it).
 
-Paul
+>=20
+> The only exception is legacy interfaces, i.e. when you create a
+> framebuffer with only the drm fourcc and not a modifier. In that case
+> you get driver specific behaviour, but modifier aware drivers tend to
+> change that into a specific (fourcc, modifier) pair again (at least
+> i915.ko, and it's what I recommend).
+>=20
+> Oh and we have some legacy modifiers that depend upon the target hw,
+> but it's very much not recommended (we did it in i915 to make things
+> easier on really old platforms, on some of them we don't even know the
+> exact tiling mode since it's not documented nor correctly
+> reverse-engineered).
+>=20
+> Another fun case are some of the recent non-byte-aligned formats, for
+> which you need to have a modifier to be able to use them with anything
+> - there's not really a real linear layout for them, they just serve as
+> an index/parameter into the modifier space.
+>=20
+> > I think DRM + mod reduce the amount of dedicated formats that needs to
+> > be added, and simplify the documentation of each formats. I was looking
+> > at the Amlogic Axi configurations on Amlogic S905x recently, and for
+> > each well known format, there is a bitmask that let you do arbitrary
+> > swapping of bits, so effectively if we start exposing all these with
+> > V4L2 style, the list would become very long and hard to maintained.
+>=20
+> See above, modifiers aren't really simple ...
+> -Daniel
+>=20
+> > > Cheers,
+> > >=20
+> > > Paul
+> > >=20
+> > > > -Daniel
+> > > >=20
+> > > > > > I think Boris (CCed) is working to change that by allowing to
+> > > > > > pass a DRM modifier through V4L2. With that, we'd be in a situa=
+tion
+> > > > > > where some formats are described by the v4l2 pixfmt alone and s=
+ome
+> > > > > > formats are also described a modifier (but I looked at it from =
+a
+> > > > > > distance so might have misunderstod). That feels better since i=
+t avoids
+> > > > > > the combinatory explosion from describing each format + modifie=
+r
+> > > > > > individually.
+> > > > > >=20
+> > > > > > What do you think?
+> > > > > >=20
+> > > > > > > > v4l tends to conflate pixel format with stuff that we tend =
+to encode
+> > > > > > > > in modifiers a lot more.
+> > > > > > >=20
+> > > > > > > Boris is working on adding the modifiers concept to v4l2, so =
+we're
+> > > > > > > converging here, and we can totally have a layer in v4l2 to c=
+onvert
+> > > > > > > between old v4l2 "format+modifiers" formats, and DRM style fo=
+rmats.
+> > > > > > >=20
+> > > > > > > > There's a bunch of reasons we can't just use v4l, and they'=
+re as
+> > > > > > > > valid as ever:
+> > > > > > > >=20
+> > > > > > > > - We overlap badly in some areas, so even if fourcc codes m=
+atch, we
+> > > > > > > >   can't use them and need a duplicated DRM_FOURCC code.
+> > > > > > >=20
+> > > > > > > Do yo have an example of one of those areas?
+> > > > > > >=20
+> > > > > > > > - v4l encodes some metadata into the fourcc that we encode =
+elsewhere,
+> > > > > > > >   e.g. offset for planar yuv formats, or tiling mode
+> > > > > > >=20
+> > > > > > > As I was saying, this changes on the v4l2 side, and convergin=
+g to
+> > > > > > > what DRM is doing.
+> > > > > > >=20
+> > > > > > > > - drm fourcc code doesn't actually define the drm_format_in=
+fo
+> > > > > > > >   uniquely, drivers can override that (that's an explicit d=
+esign
+> > > > > > > >   intent of modifiers, to allow drivers to add another plan=
+e for
+> > > > > > > >   e.g. compression information). You'd need to pull that dr=
+iver
+> > > > > > > >   knowledge into your format library.
+> > > > > > >=20
+> > > > > > > I'm not sure how my patches are changing anything here. This =
+is
+> > > > > > > litterally the same code, with the functions renamed.
+> > > > > > >=20
+> > > > > > > If drivers want to override that, then yeah, fine, we can let=
+ them do
+> > > > > > > that. Just like any helper this just provides a default that =
+covers
+> > > > > > > most of the cases.
+> > > > > > >=20
+> > > > > > > > Iow there's no way we can easily adopt v4l fourcc, except i=
+f we do
+> > > > > > > > something like a new addfb flag.
+> > > > > > >=20
+> > > > > > > For the formats that would be described as a modifier, sure. =
+For all
+> > > > > > > the others (that are not yet supported by DRM), then I don't =
+really
+> > > > > > > see why not.
+> > > > > > >=20
+> > > > > > > > > And given how the current state is a mess in this regard,=
+ I'm not too
+> > > > > > > > > optimistic about keeping the formats in their relevant fr=
+ameworks.
+> > > > > > > > >=20
+> > > > > > > > > Having a shared library, governed by both, will make this=
+ far easier,
+> > > > > > > > > since it will be easy to discover the formats that are al=
+ready
+> > > > > > > > > supported by the other subsystem.
+> > > > > > > >=20
+> > > > > > > > I think a compat library that (tries to, best effort) conve=
+rt between
+> > > > > > > > v4l and drm fourcc would make sense. Somewhere in drivers/v=
+ideo, next
+> > > > > > > > to the conversion functions for videomode <-> drm_display_m=
+ode
+> > > > > > > > perhaps. That should be useful for drivers.
+> > > > > > >=20
+> > > > > > > That's not really what this series is about though. That seri=
+es is
+> > > > > > > about sharing the (image|pixels) formats database across ever=
+yone so
+> > > > > > > that everyone can benefit from it.
+> > > > > > >=20
+> > > > > > > > Unifying the formats themselves, and all the associated met=
+adata is
+> > > > > > > > imo a no-go, and was a pretty conscious decision when we im=
+plemented
+> > > > > > > > drm_fourcc a few years back.
+> > > > > > > >=20
+> > > > > > > > > If we want to keep the current library in DRM, we have tw=
+o options
+> > > > > > > > > then:
+> > > > > > > > >=20
+> > > > > > > > >   - Support all the v4l2 formats in the DRM library, whic=
+h is
+> > > > > > > > >     essentially what I'm doing in the last patches. Howev=
+er, that
+> > > > > > > > >     would require to have the v4l2 developpers also revie=
+wing stuff
+> > > > > > > > >     there. And given how busy they are, I cannot really s=
+ee how that
+> > > > > > > > >     would work.
+> > > > > > > >=20
+> > > > > > > > Well, if we end up with a common library then yes we need c=
+ross
+> > > > > > > > review. There's no way around that. Doesn't matter where ex=
+actly that
+> > > > > > > > library is in the filesystem tree, and adding a special MAI=
+NTAINERS
+> > > > > > > > entry for anything related to fourcc (both drm and v4l) to =
+make sure
+> > > > > > > > they get cross-posted is easy. No file renaming needed.
+> > > > > > >=20
+> > > > > > > That would create some governing issues as well. For example,=
+ if you
+> > > > > > > ever have a patch from one fourcc addition (that might or mig=
+ht not be
+> > > > > > > covered by v4l2), will you wait for any v4l2 developper to re=
+view it?
+> > > > > > >=20
+> > > > > > > If it's shared code, then it should be shared, and every clie=
+nt
+> > > > > > > framework put on an equal footing.
+> > > > > > >=20
+> > > > > > > > >   - Develop the same library from within v4l2. That is re=
+ally a poor
+> > > > > > > > >     solution, since the information would be greatly dupl=
+icated
+> > > > > > > > >     between the two, and in terms of maintainance, code, =
+and binary
+> > > > > > > > >     size that would be duplicated too.
+> > > > > > > >=20
+> > > > > > > > It's essentially what we decided to do for drm years back.
+> > > > > > >=20
+> > > > > > > And it was probably the right solution back then, but I'm rea=
+lly not
+> > > > > > > convinced it's still the right thing to do today.
+> > > > > > >=20
+> > > > > > > > > Having it shared allows to easily share, and discover for=
+mats from the
+> > > > > > > > > other subsystem, and to have a single, unique place where=
+ this is
+> > > > > > > > > centralized.
+> > > > > > > >=20
+> > > > > > > > What I think could work as middle ground:
+> > > > > > > > - Put drm_format stuff into a separate .ko
+> > > > > > > > - Add a MAINTAINERS entry to make sure all things fourcc ar=
+e cross
+> > > > > > > > posted to both drm and v4l lists. Easy on the drm side, sin=
+ce it's all
+> > > > > > > > separate files. Not sure it's so convenient for v4l uapi.
+> > > > > > > > - Add a conversion library that tries to best-effort map be=
+tween drm
+> > > > > > > > and v4l formats. On the drm side that most likely means you=
+ need
+> > > > > > > > offsets for planes, and modifiers too (since those are impl=
+ied in some
+> > > > > > > > v4l fourcc). Emphasis on "best effort" i.e. only support as=
+ much as
+> > > > > > > > the drivers that use this library need.
+> > > > > > > > - Add drm_fourcc as-needed by these drivers that want to us=
+e a unified
+> > > > > > > > format space.
+> > > > > > > >=20
+> > > > > > > > Forcing this unification on everyone otoh is imo way too mu=
+ch.
+> > > > > > >=20
+> > > > > > > v4l2 is starting to converge with DRM, and we're using the DR=
+M API
+> > > > > > > pretty much untouched for that library, so I'm not really sur=
+e how
+> > > > > > > anyone is hurt by that unification.
+> > > > >=20
+> > > > > --
+> > > > > Regards,
+> > > > >=20
+> > > > > Laurent Pinchart
+>=20
+>=20
 
-> Best regards
-> Thomas
-> 
-> > Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
-> > ---
-> >  include/linux/image-formats.h | 387 +++++++++++++++++++++-
-> >  lib/Kconfig                   |   7 +-
-> >  lib/Makefile                  |   3 +-
-> >  lib/image-formats-selftests.c | 325 +++++++++++++++++-
-> >  lib/image-formats.c           | 655 +++++++++++++++++++++++++++++++++++-
-> >  5 files changed, 1377 insertions(+)
-> >  create mode 100644 include/linux/image-formats.h
-> >  create mode 100644 lib/image-formats-selftests.c
-> >  create mode 100644 lib/image-formats.c
-> > 
-> > diff --git a/include/linux/image-formats.h b/include/linux/image-formats.h
-> > new file mode 100644
-> > index 000000000000..ec43d9f9a527
-> > --- /dev/null
-> > +++ b/include/linux/image-formats.h
-> > @@ -0,0 +1,387 @@
-> > +/*
-> > + * Copyright (c) 2016 Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > + * Copyright (c) 2019 Maxime Ripard <maxime.ripard@bootlin.com>
-> > + *
-> > + * Permission to use, copy, modify, distribute, and sell this software and its
-> > + * documentation for any purpose is hereby granted without fee, provided that
-> > + * the above copyright notice appear in all copies and that both that copyright
-> > + * notice and this permission notice appear in supporting documentation, and
-> > + * that the name of the copyright holders not be used in advertising or
-> > + * publicity pertaining to distribution of the software without specific,
-> > + * written prior permission.  The copyright holders make no representations
-> > + * about the suitability of this software for any purpose.  It is provided "as
-> > + * is" without express or implied warranty.
-> > + *
-> > + * THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
-> > + * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
-> > + * EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT OR
-> > + * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
-> > + * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
-> > + * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
-> > + * OF THIS SOFTWARE.
-> > + */
-> > +
-> > +#ifndef _IMAGE_FORMATS_H_
-> > +#define _IMAGE_FORMATS_H_
-> > +
-> > +#include <linux/kernel.h>
-> > +#include <linux/types.h>
-> > +
-> > +/**
-> > + * struct image_format_info - information about a image format
-> > + */
-> > +struct image_format_info {
-> > +	union {
-> > +		/**
-> > +		 * @drm_fmt:
-> > +		 *
-> > +		 * DRM 4CC format identifier (DRM_FORMAT_*)
-> > +		 */
-> > +		u32 drm_fmt;
-> > +
-> > +		/**
-> > +		 * @format:
-> > +		 *
-> > +		 * DRM 4CC format identifier (DRM_FORMAT_*). Kept
-> > +		 * around for compatibility reasons with the current
-> > +		 * DRM drivers.
-> > +		 */
-> > +		u32 format;
-> > +	};
-> > +
-> > +	/**
-> > +	 * @depth:
-> > +	 *
-> > +	 * Color depth (number of bits per pixel excluding padding bits),
-> > +	 * valid for a subset of RGB formats only. This is a legacy field, do
-> > +	 * not use in new code and set to 0 for new formats.
-> > +	 */
-> > +	u8 depth;
-> > +
-> > +	/** @num_planes: Number of color planes (1 to 3) */
-> > +	u8 num_planes;
-> > +
-> > +	union {
-> > +		/**
-> > +		 * @cpp:
-> > +		 *
-> > +		 * Number of bytes per pixel (per plane), this is aliased with
-> > +		 * @char_per_block. It is deprecated in favour of using the
-> > +		 * triplet @char_per_block, @block_w, @block_h for better
-> > +		 * describing the pixel format.
-> > +		 */
-> > +		u8 cpp[3];
-> > +
-> > +		/**
-> > +		 * @char_per_block:
-> > +		 *
-> > +		 * Number of bytes per block (per plane), where blocks are
-> > +		 * defined as a rectangle of pixels which are stored next to
-> > +		 * each other in a byte aligned memory region. Together with
-> > +		 * @block_w and @block_h this is used to properly describe tiles
-> > +		 * in tiled formats or to describe groups of pixels in packed
-> > +		 * formats for which the memory needed for a single pixel is not
-> > +		 * byte aligned.
-> > +		 *
-> > +		 * @cpp has been kept for historical reasons because there are
-> > +		 * a lot of places in drivers where it's used. In drm core for
-> > +		 * generic code paths the preferred way is to use
-> > +		 * @char_per_block, image_format_info_block_width() and
-> > +		 * image_format_info_block_height() which allows handling both
-> > +		 * block and non-block formats in the same way.
-> > +		 *
-> > +		 * For formats that are intended to be used only with non-linear
-> > +		 * modifiers both @cpp and @char_per_block must be 0 in the
-> > +		 * generic format table. Drivers could supply accurate
-> > +		 * information from their drm_mode_config.get_format_info hook
-> > +		 * if they want the core to be validating the pitch.
-> > +		 */
-> > +		u8 char_per_block[3];
-> > +	};
-> > +
-> > +	/**
-> > +	 * @block_w:
-> > +	 *
-> > +	 * Block width in pixels, this is intended to be accessed through
-> > +	 * image_format_info_block_width()
-> > +	 */
-> > +	u8 block_w[3];
-> > +
-> > +	/**
-> > +	 * @block_h:
-> > +	 *
-> > +	 * Block height in pixels, this is intended to be accessed through
-> > +	 * image_format_info_block_height()
-> > +	 */
-> > +	u8 block_h[3];
-> > +
-> > +	/** @hsub: Horizontal chroma subsampling factor */
-> > +	u8 hsub;
-> > +	/** @vsub: Vertical chroma subsampling factor */
-> > +	u8 vsub;
-> > +
-> > +	/** @has_alpha: Does the format embeds an alpha component? */
-> > +	bool has_alpha;
-> > +
-> > +	/** @is_yuv: Is it a YUV format? */
-> > +	bool is_yuv;
-> > +};
-> > +
-> > +/**
-> > + * image_format_info_is_yuv_packed - check that the format info matches a YUV
-> > + * format with data laid in a single plane
-> > + * @info: format info
-> > + *
-> > + * Returns:
-> > + * A boolean indicating whether the format info matches a packed YUV format.
-> > + */
-> > +static inline bool
-> > +image_format_info_is_yuv_packed(const struct image_format_info *info)
-> > +{
-> > +	return info->is_yuv && info->num_planes == 1;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_is_yuv_semiplanar - check that the format info matches a YUV
-> > + * format with data laid in two planes (luminance and chrominance)
-> > + * @info: format info
-> > + *
-> > + * Returns:
-> > + * A boolean indicating whether the format info matches a semiplanar YUV format.
-> > + */
-> > +static inline bool
-> > +image_format_info_is_yuv_semiplanar(const struct image_format_info *info)
-> > +{
-> > +	return info->is_yuv && info->num_planes == 2;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_is_yuv_planar - check that the format info matches a YUV
-> > + * format with data laid in three planes (one for each YUV component)
-> > + * @info: format info
-> > + *
-> > + * Returns:
-> > + * A boolean indicating whether the format info matches a planar YUV format.
-> > + */
-> > +static inline bool
-> > +image_format_info_is_yuv_planar(const struct image_format_info *info)
-> > +{
-> > +	return info->is_yuv && info->num_planes == 3;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_is_yuv_sampling_410 - check that the format info matches a
-> > + * YUV format with 4:1:0 sub-sampling
-> > + * @info: format info
-> > + *
-> > + * Returns:
-> > + * A boolean indicating whether the format info matches a YUV format with 4:1:0
-> > + * sub-sampling.
-> > + */
-> > +static inline bool
-> > +image_format_info_is_yuv_sampling_410(const struct image_format_info *info)
-> > +{
-> > +	return info->is_yuv && info->hsub == 4 && info->vsub == 4;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_is_yuv_sampling_411 - check that the format info matches a
-> > + * YUV format with 4:1:1 sub-sampling
-> > + * @info: format info
-> > + *
-> > + * Returns:
-> > + * A boolean indicating whether the format info matches a YUV format with 4:1:1
-> > + * sub-sampling.
-> > + */
-> > +static inline bool
-> > +image_format_info_is_yuv_sampling_411(const struct image_format_info *info)
-> > +{
-> > +	return info->is_yuv && info->hsub == 4 && info->vsub == 1;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_is_yuv_sampling_420 - check that the format info matches a
-> > + * YUV format with 4:2:0 sub-sampling
-> > + * @info: format info
-> > + *
-> > + * Returns:
-> > + * A boolean indicating whether the format info matches a YUV format with 4:2:0
-> > + * sub-sampling.
-> > + */
-> > +static inline bool
-> > +image_format_info_is_yuv_sampling_420(const struct image_format_info *info)
-> > +{
-> > +	return info->is_yuv && info->hsub == 2 && info->vsub == 2;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_is_yuv_sampling_422 - check that the format info matches a
-> > + * YUV format with 4:2:2 sub-sampling
-> > + * @info: format info
-> > + *
-> > + * Returns:
-> > + * A boolean indicating whether the format info matches a YUV format with 4:2:2
-> > + * sub-sampling.
-> > + */
-> > +static inline bool
-> > +image_format_info_is_yuv_sampling_422(const struct image_format_info *info)
-> > +{
-> > +	return info->is_yuv && info->hsub == 2 && info->vsub == 1;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_is_yuv_sampling_444 - check that the format info matches a
-> > + * YUV format with 4:4:4 sub-sampling
-> > + * @info: format info
-> > + *
-> > + * Returns:
-> > + * A boolean indicating whether the format info matches a YUV format with 4:4:4
-> > + * sub-sampling.
-> > + */
-> > +static inline bool
-> > +image_format_info_is_yuv_sampling_444(const struct image_format_info *info)
-> > +{
-> > +	return info->is_yuv && info->hsub == 1 && info->vsub == 1;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_plane_cpp - determine the bytes per pixel value
-> > + * @format: pixel format info
-> > + * @plane: plane index
-> > + *
-> > + * Returns:
-> > + * The bytes per pixel value for the specified plane.
-> > + */
-> > +static inline
-> > +int image_format_info_plane_cpp(const struct image_format_info *info, int plane)
-> > +{
-> > +	if (!info || plane >= info->num_planes)
-> > +		return 0;
-> > +
-> > +	return info->cpp[plane];
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_plane_width - width of the plane given the first plane
-> > + * @format: pixel format info
-> > + * @width: width of the first plane
-> > + * @plane: plane index
-> > + *
-> > + * Returns:
-> > + * The width of @plane, given that the width of the first plane is @width.
-> > + */
-> > +static inline
-> > +int image_format_info_plane_width(const struct image_format_info *info, int width,
-> > +				  int plane)
-> > +{
-> > +	if (!info || plane >= info->num_planes)
-> > +		return 0;
-> > +
-> > +	if (plane == 0)
-> > +		return width;
-> > +
-> > +	return width / info->hsub;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_plane_height - height of the plane given the first plane
-> > + * @format: pixel format info
-> > + * @height: height of the first plane
-> > + * @plane: plane index
-> > + *
-> > + * Returns:
-> > + * The height of @plane, given that the height of the first plane is @height.
-> > + */
-> > +static inline
-> > +int image_format_info_plane_height(const struct image_format_info *info, int height,
-> > +				   int plane)
-> > +{
-> > +	if (!info || plane >= info->num_planes)
-> > +		return 0;
-> > +
-> > +	if (plane == 0)
-> > +		return height;
-> > +
-> > +	return height / info->vsub;
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_block_width - width in pixels of block.
-> > + * @format: pointer to the image_format_info
-> > + * @plane: plane index
-> > + *
-> > + * Returns:
-> > + * The width in pixels of a block, depending on the plane index.
-> > + */
-> > +static inline
-> > +unsigned int image_format_info_block_width(const struct image_format_info *format,
-> > +					   int plane)
-> > +{
-> > +	if (!format)
-> > +		return 0;
-> > +
-> > +	if (plane < 0 || plane >= ARRAY_SIZE(format->block_w))
-> > +		return 0;
-> > +
-> > +	if (plane >= format->num_planes)
-> > +		return 0;
-> > +
-> > +	if (!format->block_w[plane])
-> > +		return 1;
-> > +
-> > +	return format->block_w[plane];
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_block_height - height in pixels of a block
-> > + * @info: pointer to the image_format_info
-> > + * @plane: plane index
-> > + *
-> > + * Returns:
-> > + * The height in pixels of a block, depending on the plane index.
-> > + */
-> > +static inline
-> > +unsigned int image_format_info_block_height(const struct image_format_info *format,
-> > +					    int plane)
-> > +{
-> > +	if (!format)
-> > +		return 0;
-> > +
-> > +	if (plane < 0 || plane >= ARRAY_SIZE(format->block_w))
-> > +		return 0;
-> > +
-> > +	if (plane >= format->num_planes)
-> > +		return 0;
-> > +
-> > +	if (!format->block_h[plane])
-> > +		return 1;
-> > +
-> > +	return format->block_h[plane];
-> > +}
-> > +
-> > +/**
-> > + * image_format_info_min_pitch - computes the minimum required pitch in bytes
-> > + * @info: pixel format info
-> > + * @plane: plane index
-> > + * @buffer_width: buffer width in pixels
-> > + *
-> > + * Returns:
-> > + * The minimum required pitch in bytes for a buffer by taking into consideration
-> > + * the pixel format information and the buffer width.
-> > + */
-> > +static inline
-> > +uint64_t image_format_info_min_pitch(const struct image_format_info *info,
-> > +				     int plane, unsigned int buffer_width)
-> > +{
-> > +	if (!info || plane < 0 || plane >= info->num_planes)
-> > +		return 0;
-> > +
-> > +	return DIV_ROUND_UP_ULL((u64)buffer_width * info->char_per_block[plane],
-> > +			    image_format_info_block_width(info, plane) *
-> > +			    image_format_info_block_height(info, plane));
-> > +}
-> > +
-> > +const struct image_format_info *__image_format_drm_lookup(u32 drm);
-> > +const struct image_format_info *image_format_drm_lookup(u32 drm);
-> > +
-> > +#endif /* _IMAGE_FORMATS_H_ */
-> > diff --git a/lib/Kconfig b/lib/Kconfig
-> > index fb453afff32e..9a0160d3123b 100644
-> > --- a/lib/Kconfig
-> > +++ b/lib/Kconfig
-> > @@ -625,3 +625,10 @@ config GENERIC_LIB_UCMPDI2
-> >  
-> >  config OBJAGG
-> >  	tristate "objagg" if COMPILE_TEST
-> > +
-> > +config IMAGE_FORMATS
-> > +	bool
-> > +
-> > +config IMAGE_FORMATS_SELFTESTS
-> > +	tristate "Test image format functions"
-> > +	depends on IMAGE_FORMATS
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > index 6996d2b9f401..203336b91248 100644
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> > @@ -280,3 +280,6 @@ obj-$(CONFIG_GENERIC_LIB_MULDI3) += muldi3.o
-> >  obj-$(CONFIG_GENERIC_LIB_CMPDI2) += cmpdi2.o
-> >  obj-$(CONFIG_GENERIC_LIB_UCMPDI2) += ucmpdi2.o
-> >  obj-$(CONFIG_OBJAGG) += objagg.o
-> > +
-> > +obj-$(CONFIG_IMAGE_FORMATS) += image-formats.o
-> > +obj-$(CONFIG_IMAGE_FORMATS_SELFTESTS) += image-formats-selftests.o
-> > diff --git a/lib/image-formats-selftests.c b/lib/image-formats-selftests.c
-> > new file mode 100644
-> > index 000000000000..d0f0011b535e
-> > --- /dev/null
-> > +++ b/lib/image-formats-selftests.c
-> > @@ -0,0 +1,325 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Test cases for the image_format functions
-> > + */
-> > +
-> > +#define pr_fmt(fmt) "image_format: " fmt
-> > +
-> > +#include <linux/errno.h>
-> > +#include <linux/image-formats.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/module.h>
-> > +
-> > +#include <drm/drm_fourcc.h>
-> > +
-> > +#define FAIL(test, msg, ...) \
-> > +	do { \
-> > +		if (test) { \
-> > +			pr_err("%s/%u: " msg, __FUNCTION__, __LINE__, ##__VA_ARGS__); \
-> > +			return -EINVAL; \
-> > +		} \
-> > +	} while (0)
-> > +
-> > +#define FAIL_ON(x) FAIL((x), "%s", "FAIL_ON(" __stringify(x) ")\n")
-> > +
-> > +static int test_image_format_info_block_width(void)
-> > +{
-> > +	const struct image_format_info *info = NULL;
-> > +
-> > +	/* Test invalid arguments */
-> > +	FAIL_ON(image_format_info_block_width(info, 0) != 0);
-> > +	FAIL_ON(image_format_info_block_width(info, -1) != 0);
-> > +	FAIL_ON(image_format_info_block_width(info, 1) != 0);
-> > +
-> > +	/* Test 1 plane format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_XRGB4444);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_block_width(info, 0) != 1);
-> > +	FAIL_ON(image_format_info_block_width(info, 1) != 0);
-> > +	FAIL_ON(image_format_info_block_width(info, -1) != 0);
-> > +
-> > +	/* Test 2 planes format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_NV12);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_block_width(info, 0) != 1);
-> > +	FAIL_ON(image_format_info_block_width(info, 1) != 1);
-> > +	FAIL_ON(image_format_info_block_width(info, 2) != 0);
-> > +	FAIL_ON(image_format_info_block_width(info, -1) != 0);
-> > +
-> > +	/* Test 3 planes format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_YUV422);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_block_width(info, 0) != 1);
-> > +	FAIL_ON(image_format_info_block_width(info, 1) != 1);
-> > +	FAIL_ON(image_format_info_block_width(info, 2) != 1);
-> > +	FAIL_ON(image_format_info_block_width(info, 3) != 0);
-> > +	FAIL_ON(image_format_info_block_width(info, -1) != 0);
-> > +
-> > +	/* Test a tiled format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_X0L0);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_block_width(info, 0) != 2);
-> > +	FAIL_ON(image_format_info_block_width(info, 1) != 0);
-> > +	FAIL_ON(image_format_info_block_width(info, -1) != 0);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int test_image_format_info_block_height(void)
-> > +{
-> > +	const struct image_format_info *info = NULL;
-> > +
-> > +	/* Test invalid arguments */
-> > +	FAIL_ON(image_format_info_block_height(info, 0) != 0);
-> > +	FAIL_ON(image_format_info_block_height(info, -1) != 0);
-> > +	FAIL_ON(image_format_info_block_height(info, 1) != 0);
-> > +
-> > +	/* Test 1 plane format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_XRGB4444);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_block_height(info, 0) != 1);
-> > +	FAIL_ON(image_format_info_block_height(info, 1) != 0);
-> > +	FAIL_ON(image_format_info_block_height(info, -1) != 0);
-> > +
-> > +	/* Test 2 planes format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_NV12);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_block_height(info, 0) != 1);
-> > +	FAIL_ON(image_format_info_block_height(info, 1) != 1);
-> > +	FAIL_ON(image_format_info_block_height(info, 2) != 0);
-> > +	FAIL_ON(image_format_info_block_height(info, -1) != 0);
-> > +
-> > +	/* Test 3 planes format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_YUV422);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_block_height(info, 0) != 1);
-> > +	FAIL_ON(image_format_info_block_height(info, 1) != 1);
-> > +	FAIL_ON(image_format_info_block_height(info, 2) != 1);
-> > +	FAIL_ON(image_format_info_block_height(info, 3) != 0);
-> > +	FAIL_ON(image_format_info_block_height(info, -1) != 0);
-> > +
-> > +	/* Test a tiled format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_X0L0);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_block_height(info, 0) != 2);
-> > +	FAIL_ON(image_format_info_block_height(info, 1) != 0);
-> > +	FAIL_ON(image_format_info_block_height(info, -1) != 0);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int test_image_format_info_min_pitch(void)
-> > +{
-> > +	const struct image_format_info *info = NULL;
-> > +
-> > +	/* Test invalid arguments */
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, -1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 0) != 0);
-> > +
-> > +	/* Test 1 plane 8 bits per pixel format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_RGB332);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, -1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 0) != 0);
-> > +
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1) != 1);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 2) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 640) != 640);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1024) != 1024);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1920) != 1920);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 4096) != 4096);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 671) != 671);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX) !=
-> > +			(uint64_t)UINT_MAX);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
-> > +			(uint64_t)(UINT_MAX - 1));
-> > +
-> > +	/* Test 1 plane 16 bits per pixel format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_XRGB4444);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, -1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 0) != 0);
-> > +
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 2) != 4);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 640) != 1280);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1024) != 2048);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1920) != 3840);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 4096) != 8192);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 671) != 1342);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX) !=
-> > +			(uint64_t)UINT_MAX * 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
-> > +			(uint64_t)(UINT_MAX - 1) * 2);
-> > +
-> > +	/* Test 1 plane 24 bits per pixel format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_RGB888);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, -1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 0) != 0);
-> > +
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1) != 3);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 2) != 6);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 640) != 1920);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1024) != 3072);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1920) != 5760);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 4096) != 12288);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 671) != 2013);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX) !=
-> > +			(uint64_t)UINT_MAX * 3);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
-> > +			(uint64_t)(UINT_MAX - 1) * 3);
-> > +
-> > +	/* Test 1 plane 32 bits per pixel format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_ABGR8888);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, -1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 0) != 0);
-> > +
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1) != 4);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 2) != 8);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 640) != 2560);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1024) != 4096);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1920) != 7680);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 4096) != 16384);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 671) != 2684);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX) !=
-> > +			(uint64_t)UINT_MAX * 4);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
-> > +			(uint64_t)(UINT_MAX - 1) * 4);
-> > +
-> > +	/* Test 2 planes format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_NV12);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, -1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 0) != 0);
-> > +
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1) != 1);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 1) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 2) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 1) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 640) != 640);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 320) != 640);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1024) != 1024);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 512) != 1024);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1920) != 1920);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 960) != 1920);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 4096) != 4096);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 2048) != 4096);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 671) != 671);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 336) != 672);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX) !=
-> > +			(uint64_t)UINT_MAX);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1) !=
-> > +			(uint64_t)UINT_MAX + 1);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, (UINT_MAX - 1)) !=
-> > +			(uint64_t)(UINT_MAX - 1));
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, (UINT_MAX - 1) /  2) !=
-> > +			(uint64_t)(UINT_MAX - 1));
-> > +
-> > +	/* Test 3 planes 8 bits per pixel format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_YUV422);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, -1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 3, 0) != 0);
-> > +
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1) != 1);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 1) != 1);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 1) != 1);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 2) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 2) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 2) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 640) != 640);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 320) != 320);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 320) != 320);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1024) != 1024);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 512) != 512);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 512) != 512);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1920) != 1920);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 960) != 960);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 960) != 960);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 4096) != 4096);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 2048) != 2048);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 2048) != 2048);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 671) != 671);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 336) != 336);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, 336) != 336);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX) !=
-> > +			(uint64_t)UINT_MAX);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1) !=
-> > +			(uint64_t)UINT_MAX / 2 + 1);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, UINT_MAX / 2 + 1) !=
-> > +			(uint64_t)UINT_MAX / 2 + 1);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, (UINT_MAX - 1) / 2) !=
-> > +			(uint64_t)(UINT_MAX - 1) / 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, (UINT_MAX - 1) / 2) !=
-> > +			(uint64_t)(UINT_MAX - 1) / 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2) !=
-> > +			(uint64_t)(UINT_MAX - 1) / 2);
-> > +
-> > +	/* Test tiled format */
-> > +	info = image_format_drm_lookup(DRM_FORMAT_X0L2);
-> > +	FAIL_ON(!info);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, -1, 0) != 0);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 1, 0) != 0);
-> > +
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1) != 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 2) != 4);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 640) != 1280);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1024) != 2048);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 1920) != 3840);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 4096) != 8192);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, 671) != 1342);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX) !=
-> > +			(uint64_t)UINT_MAX * 2);
-> > +	FAIL_ON(image_format_info_min_pitch(info, 0, UINT_MAX - 1) !=
-> > +			(uint64_t)(UINT_MAX - 1) * 2);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +#define selftest(test)	{ .name = #test, .func = test, }
-> > +
-> > +static struct image_format_test {
-> > +	char	*name;
-> > +	int	(*func)(void);
-> > +} tests[] = {
-> > +	selftest(test_image_format_info_block_height),
-> > +	selftest(test_image_format_info_block_width),
-> > +	selftest(test_image_format_info_min_pitch),
-> > +};
-> > +
-> > +static int __init image_format_test_init(void)
-> > +{
-> > +	unsigned int i;
-> > +
-> > +	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-> > +		struct image_format_test *test = &tests[i];
-> > +		int ret;
-> > +
-> > +		ret = test->func();
-> > +		if (ret) {
-> > +			pr_err("Failed test %s\n", test->name);
-> > +			return ret;
-> > +		}
-> > +	}
-> > +
-> > +	pr_info("All tests executed properly.\n");
-> > +	return 0;
-> > +}
-> > +module_init(image_format_test_init);
-> > +
-> > +MODULE_AUTHOR("Intel Corporation");
-> > +MODULE_AUTHOR("Maxime Ripard <maxime.ripard@bootlin.com>");
-> > +MODULE_LICENSE("GPL");
-> > diff --git a/lib/image-formats.c b/lib/image-formats.c
-> > new file mode 100644
-> > index 000000000000..1e52a7410222
-> > --- /dev/null
-> > +++ b/lib/image-formats.c
-> > @@ -0,0 +1,655 @@
-> > +/*
-> > + * Copyright (c) 2016 Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > + * Copyright (c) 2019 Maxime Ripard <maxime.ripard@bootlin.com>
-> > + *
-> > + * Permission to use, copy, modify, distribute, and sell this software and its
-> > + * documentation for any purpose is hereby granted without fee, provided that
-> > + * the above copyright notice appear in all copies and that both that copyright
-> > + * notice and this permission notice appear in supporting documentation, and
-> > + * that the name of the copyright holders not be used in advertising or
-> > + * publicity pertaining to distribution of the software without specific,
-> > + * written prior permission.  The copyright holders make no representations
-> > + * about the suitability of this software for any purpose.  It is provided "as
-> > + * is" without express or implied warranty.
-> > + *
-> > + * THE COPYRIGHT HOLDERS DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
-> > + * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
-> > + * EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY SPECIAL, INDIRECT OR
-> > + * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE,
-> > + * DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
-> > + * TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
-> > + * OF THIS SOFTWARE.
-> > + */
-> > +
-> > +#include <linux/bug.h>
-> > +#include <linux/image-formats.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/math64.h>
-> > +
-> > +#include <uapi/drm/drm_fourcc.h>
-> > +
-> > +static const struct image_format_info formats[] = {
-> > +	{
-> > +		.drm_fmt = DRM_FORMAT_C8,
-> > +		.depth = 8,
-> > +		.num_planes = 1,
-> > +		.cpp = { 1, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGB332,
-> > +		.depth = 8,
-> > +		.num_planes = 1,
-> > +		.cpp = { 1, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGR233,
-> > +		.depth = 8,
-> > +		.num_planes = 1,
-> > +		.cpp = { 1, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XRGB4444,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XBGR4444,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBX4444,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRX4444,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_ARGB4444,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_ABGR4444,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBA4444,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRA4444,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XRGB1555,
-> > +		.depth = 15,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XBGR1555,
-> > +		.depth = 15,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBX5551,
-> > +		.depth = 15,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRX5551,
-> > +		.depth = 15,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_ARGB1555,
-> > +		.depth = 15,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_ABGR1555,
-> > +		.depth = 15,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBA5551,
-> > +		.depth = 15,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRA5551,
-> > +		.depth = 15,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGB565,
-> > +		.depth = 16,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGR565,
-> > +		.depth = 16,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGB888,
-> > +		.depth = 24,
-> > +		.num_planes = 1,
-> > +		.cpp = { 3, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGR888,
-> > +		.depth = 24,
-> > +		.num_planes = 1,
-> > +		.cpp = { 3, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XRGB8888,
-> > +		.depth = 24,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XBGR8888,
-> > +		.depth = 24,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBX8888,
-> > +		.depth = 24,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRX8888,
-> > +		.depth = 24,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGB565_A8,
-> > +		.depth = 24,
-> > +		.num_planes = 2,
-> > +		.cpp = { 2, 1, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGR565_A8,
-> > +		.depth = 24,
-> > +		.num_planes = 2,
-> > +		.cpp = { 2, 1, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XRGB2101010,
-> > +		.depth = 30,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XBGR2101010,
-> > +		.depth = 30,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBX1010102,
-> > +		.depth = 30,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRX1010102,
-> > +		.depth = 30,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_ARGB2101010,
-> > +		.depth = 30,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_ABGR2101010,
-> > +		.depth = 30,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBA1010102,
-> > +		.depth = 30,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRA1010102,
-> > +		.depth = 30,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_ARGB8888,
-> > +		.depth = 32,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_ABGR8888,
-> > +		.depth = 32,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBA8888,
-> > +		.depth = 32,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRA8888,
-> > +		.depth = 32,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGB888_A8,
-> > +		.depth = 32,
-> > +		.num_planes = 2,
-> > +		.cpp = { 3, 1, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGR888_A8,
-> > +		.depth = 32,
-> > +		.num_planes = 2,
-> > +		.cpp = { 3, 1, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XRGB8888_A8,
-> > +		.depth = 32,
-> > +		.num_planes = 2,
-> > +		.cpp = { 4, 1, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XBGR8888_A8,
-> > +		.depth = 32,
-> > +		.num_planes = 2,
-> > +		.cpp = { 4, 1, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_RGBX8888_A8,
-> > +		.depth = 32,
-> > +		.num_planes = 2,
-> > +		.cpp = { 4, 1, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_BGRX8888_A8,
-> > +		.depth = 32,
-> > +		.num_planes = 2,
-> > +		.cpp = { 4, 1, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YUV410,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 4,
-> > +		.vsub = 4,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YVU410,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 4,
-> > +		.vsub = 4,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YUV411,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 4,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YVU411,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 4,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YUV420,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 2,
-> > +		.vsub = 2,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YVU420,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 2,
-> > +		.vsub = 2,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YUV422,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 2,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YVU422,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 2,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YUV444,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YVU444,
-> > +		.depth = 0,
-> > +		.num_planes = 3,
-> > +		.cpp = { 1, 1, 1 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_NV12,
-> > +		.depth = 0,
-> > +		.num_planes = 2,
-> > +		.cpp = { 1, 2, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 2,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_NV21,
-> > +		.depth = 0,
-> > +		.num_planes = 2,
-> > +		.cpp = { 1, 2, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 2,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_NV16,
-> > +		.depth = 0,
-> > +		.num_planes = 2,
-> > +		.cpp = { 1, 2, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_NV61,
-> > +		.depth = 0,
-> > +		.num_planes = 2,
-> > +		.cpp = { 1, 2, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_NV24,
-> > +		.depth = 0,
-> > +		.num_planes = 2,
-> > +		.cpp = { 1, 2, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_NV42,
-> > +		.depth = 0,
-> > +		.num_planes = 2,
-> > +		.cpp = { 1, 2, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YUYV,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_YVYU,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_UYVY,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_VYUY,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 2, 0, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_XYUV8888,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_AYUV,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.cpp = { 4, 0, 0 },
-> > +		.hsub = 1,
-> > +		.vsub = 1,
-> > +		.has_alpha = true,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_Y0L0,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.char_per_block = { 8, 0, 0 },
-> > +		.block_w = { 2, 0, 0 },
-> > +		.block_h = { 2, 0, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 2,
-> > +		.has_alpha = true,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_X0L0,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.char_per_block = { 8, 0, 0 },
-> > +		.block_w = { 2, 0, 0 },
-> > +		.block_h = { 2, 0, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 2,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_Y0L2,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.char_per_block = { 8, 0, 0 },
-> > +		.block_w = { 2, 0, 0 },
-> > +		.block_h = { 2, 0, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 2,
-> > +		.has_alpha = true,
-> > +		.is_yuv = true,
-> > +	}, {
-> > +		.drm_fmt = DRM_FORMAT_X0L2,
-> > +		.depth = 0,
-> > +		.num_planes = 1,
-> > +		.char_per_block = { 8, 0, 0 },
-> > +		.block_w = { 2, 0, 0 },
-> > +		.block_h = { 2, 0, 0 },
-> > +		.hsub = 2,
-> > +		.vsub = 2,
-> > +		.is_yuv = true,
-> > +	},
-> > +};
-> > +
-> > +#define __image_format_lookup(_field, _fmt)			\
-> > +	({							\
-> > +		const struct image_format_info *format = NULL;	\
-> > +		unsigned i;					\
-> > +								\
-> > +		for (i = 0; i < ARRAY_SIZE(formats); i++)	\
-> > +			if (formats[i]._field == _fmt)		\
-> > +				format = &formats[i];		\
-> > +								\
-> > +		format;						\
-> > +	})
-> > +
-> > +/**
-> > + * __image_format_drm_lookup - query information for a given format
-> > + * @drm: DRM fourcc pixel format (DRM_FORMAT_*)
-> > + *
-> > + * The caller should only pass a supported pixel format to this function.
-> > + *
-> > + * Returns:
-> > + * The instance of struct image_format_info that describes the pixel format, or
-> > + * NULL if the format is unsupported.
-> > + */
-> > +const struct image_format_info *__image_format_drm_lookup(u32 drm)
-> > +{
-> > +	return __image_format_lookup(drm_fmt, drm);
-> > +}
-> > +EXPORT_SYMBOL(__image_format_drm_lookup);
-> > +
-> > +/**
-> > + * image_format_drm_lookup - query information for a given format
-> > + * @drm: DRM fourcc pixel format (DRM_FORMAT_*)
-> > + *
-> > + * The caller should only pass a supported pixel format to this function.
-> > + * Unsupported pixel formats will generate a warning in the kernel log.
-> > + *
-> > + * Returns:
-> > + * The instance of struct image_format_info that describes the pixel format, or
-> > + * NULL if the format is unsupported.
-> > + */
-> > +const struct image_format_info *image_format_drm_lookup(u32 drm)
-> > +{
-> > +	const struct image_format_info *format;
-> > +
-> > +	format = __image_format_drm_lookup(drm);
-> > +
-> > +	WARN_ON(!format);
-> > +	return format;
-> > +}
-> > +EXPORT_SYMBOL(image_format_drm_lookup);
-> > 
+--=-SXe6P+m1+ReTTnHtr2bw
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXL9IiQAKCRBxUwItrAao
+HDu/AJwNcZNIJwMu9jrFzNOlrzgoSjuRcgCfafnLdn0Muu3S4QafE6H1ciwKpoE=
+=ib71
+-----END PGP SIGNATURE-----
+
+--=-SXe6P+m1+ReTTnHtr2bw--
 
