@@ -2,120 +2,121 @@ Return-Path: <SRS0=z7aI=SZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCDBAC10F14
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 06:43:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 001DCC10F14
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 07:11:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A37FB20843
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 06:43:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2E68206BA
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 07:11:54 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VgSyAW4V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726004AbfDWGnc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 02:43:32 -0400
-Received: from mga03.intel.com ([134.134.136.65]:53247 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725882AbfDWGnc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 02:43:32 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Apr 2019 23:43:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.60,384,1549958400"; 
-   d="scan'208";a="225839400"
-Received: from dixitsau-mobl.gar.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.252.63.40])
-  by orsmga001.jf.intel.com with ESMTP; 22 Apr 2019 23:43:29 -0700
-Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
-        id 2E6D621E9B; Tue, 23 Apr 2019 09:43:27 +0300 (EEST)
-Date:   Tue, 23 Apr 2019 09:43:27 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] v4l: Add source event change for bit-depth
-Message-ID: <20190423064326.lbi3gfprfegqecu4@kekkonen.localdomain>
-References: <20190415152723.2481-1-stanimir.varbanov@linaro.org>
+        id S1725937AbfDWHLy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 03:11:54 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:33183 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725888AbfDWHLy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Apr 2019 03:11:54 -0400
+Received: by mail-lj1-f193.google.com with SMTP id f23so12527682ljc.0
+        for <linux-media@vger.kernel.org>; Tue, 23 Apr 2019 00:11:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=LqJHpog146UJnxkhSPf1jgqBDrO45RdshtMURFP/4Bg=;
+        b=VgSyAW4VPltQ9MJ8iCGm/NRq93lWrkP9wO5BWxvuKVR4AC+hu/5ckA+d3xstiXfeAc
+         s7p3vhQWb3pcZSjpQNIlFVcNW2aJro47wSjzwM5cTXZodrWokGsA82cfUheBMYf52Y/Q
+         xxeyzAqWcK+Bz7XCripXt9gSdOgZ1Id5iMu0WLvrnoATQ6SoHyPzGIKH9AGOhXK3Bzs3
+         YGbmVGi32CAutrktcyVBoKP22doFdxl0LsenKXfKMM+e7OQNb4aLxm+NrMSgNxQRJxRz
+         pJQEgG6iSmUUiCiX7dX+F1TF9rIogdD4urc/uR6RYxlh5k6sFFGoEasayYiUklqTUBFm
+         idQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LqJHpog146UJnxkhSPf1jgqBDrO45RdshtMURFP/4Bg=;
+        b=QiYbRyXEo6hPlrggFLT9S3LVFt+vlwF7Px32v0PKW0mwj8xmz3MjbSNd+16zK/nijY
+         2Z55Zo3CEkzr+E99KEY0nvky+ev83Gm0BSdLPWk3pg0bc1p+okexj9ezj7CCy2c7ICzv
+         g8Wdl6zEeldI98L0RmpPkjdxJneBNmx0ekRdbIsSB9DDmPGFpqYDyqQjOoydZ0R7YHqb
+         ew+osbB9Ev22nLx7rNjhwx29lW20jsjM02JnVSrYWu0v9PKBdKXFjPXjnUFdp7QNAarw
+         rvUhprVxazkAj5z3q3AzpN7cV3BoF2gMr9PSLWMEGW/zoJNEWonlJXbvG5Q4TFi6agk9
+         EtjQ==
+X-Gm-Message-State: APjAAAX6f3xcVPeIBnsPMIlDya35CJCxi+hxZs4UXHgAJeJm0DkD9L3z
+        bjQFVVSH2YzJWC0Xy2MprGbNVfxU9IY=
+X-Google-Smtp-Source: APXvYqwqRMscSa8vvPFmYpYldN8gOjsYhK3n5jrtcCTehYkrASTsgqbzqX3cIE46nNI4ENmoKg2feg==
+X-Received: by 2002:a2e:8018:: with SMTP id j24mr1100975ljg.149.1556003511490;
+        Tue, 23 Apr 2019 00:11:51 -0700 (PDT)
+Received: from [192.168.27.209] ([37.157.136.206])
+        by smtp.googlemail.com with ESMTPSA id z15sm3144457ljz.55.2019.04.23.00.11.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Apr 2019 00:11:50 -0700 (PDT)
+Subject: Re: [GIT PULL for v5.2] Venus updates
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     linux-media@vger.kernel.org
+References: <20190401081817.14386-1-stanimir.varbanov@linaro.org>
+ <20190422143551.6d29231e@coco.lan>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <6160de59-bc55-39b8-06fd-92e5f0b98255@linaro.org>
+Date:   Tue, 23 Apr 2019 10:11:48 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190415152723.2481-1-stanimir.varbanov@linaro.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190422143551.6d29231e@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Stan,
+Hi Mauro,
 
-On Mon, Apr 15, 2019 at 06:27:23PM +0300, Stanimir Varbanov wrote:
-> This event indicate that the source bit-depth is changed during
-> run-time. The client must get the new format and re-allocate buffers
-> for it. This can usually happens with video decoder (encoders) when
-> the bit-stream depth is changed from 8 to 10bits or vice versa.
-
-Thanks for the patch.
-
-How about adding an event for pixelformat change, instead of bit depth? The
-application presumably knows the formats it can work with, and can adapt to
-that as well as a change to the bit depth.
-
+On 4/22/19 8:35 PM, Mauro Carvalho Chehab wrote:
+> Hi Stanimir,
 > 
-> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-> ---
->  Documentation/media/uapi/v4l/vidioc-dqevent.rst | 7 +++++++
->  Documentation/media/videodev2.h.rst.exceptions  | 1 +
->  include/uapi/linux/videodev2.h                  | 1 +
->  3 files changed, 9 insertions(+)
 > 
-> diff --git a/Documentation/media/uapi/v4l/vidioc-dqevent.rst b/Documentation/media/uapi/v4l/vidioc-dqevent.rst
-> index dea9c0cc00ab..92573d7c3e05 100644
-> --- a/Documentation/media/uapi/v4l/vidioc-dqevent.rst
-> +++ b/Documentation/media/uapi/v4l/vidioc-dqevent.rst
-> @@ -397,6 +397,13 @@ call.
->  	that many devices are not able to recover from a temporary loss of
->  	signal and so restarting streaming I/O is required in order for the
->  	hardware to synchronize to the video signal.
-> +    * - ``V4L2_EVENT_SRC_CH_BITDEPTH``
-> +      - 0x0002
-> +      - This event gets triggered when bit-depth change is detected from a
-> +	video decoder. Applications will have to query the new pixel format
-> +	and re-negotiate the queue. In most cases the streaming must be stopped
-> +	and restarted (:ref:`VIDIOC_STREAMOFF <VIDIOC_STREAMON>` followed by
-> +	:ref:`VIDIOC_STREAMON <VIDIOC_STREAMON>`).
->  
->  
->  Return Value
-> diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentation/media/videodev2.h.rst.exceptions
-> index 64d348e67df9..b4c35b347983 100644
-> --- a/Documentation/media/videodev2.h.rst.exceptions
-> +++ b/Documentation/media/videodev2.h.rst.exceptions
-> @@ -478,6 +478,7 @@ replace define V4L2_EVENT_CTRL_CH_FLAGS ctrl-changes-flags
->  replace define V4L2_EVENT_CTRL_CH_RANGE ctrl-changes-flags
->  
->  replace define V4L2_EVENT_SRC_CH_RESOLUTION src-changes-flags
-> +replace define V4L2_EVENT_SRC_CH_BITDEPTH src-changes-flags
->  
->  replace define V4L2_EVENT_MD_FL_HAVE_FRAME_SEQ :c:type:`v4l2_event_motion_det`
->  
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 496e6453450c..7398f42eac7d 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -2271,6 +2271,7 @@ struct v4l2_event_frame_sync {
->  };
->  
->  #define V4L2_EVENT_SRC_CH_RESOLUTION		(1 << 0)
-> +#define V4L2_EVENT_SRC_CH_BITDEPTH		(1 << 1)
->  
->  struct v4l2_event_src_change {
->  	__u32 changes;
+> Em Mon,  1 Apr 2019 11:18:17 +0300
+> Stanimir Varbanov <stanimir.varbanov@linaro.org> escreveu:
+> 
+>> Hi Mauro,
+>>
+>> Here are two patches, one fix and one which makes gstreamer happy with h265.
+>>
+>> Please pull.
+>>
+>>
+>> The following changes since commit 3e11851d16ea7eff1cfa66b1cb7b35967876dd1e:
+>>
+>>   media: venus: Add support for H265 controls required by gstreamer V4L2 H265 module. (2019-04-01 10:44:05 +0300)
+>>
+>> are available in the Git repository at:
+>>
+>>   git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-5.2
+>>
+>> for you to fetch changes up to 3e11851d16ea7eff1cfa66b1cb7b35967876dd1e:
+>>
+>>   media: venus: Add support for H265 controls required by gstreamer V4L2 H265 module. (2019-04-01 10:44:05 +0300)
+>>
+>> ----------------------------------------------------------------
+>> venus for 5.2
+>>
+>> ----------------------------------------------------------------
+> 
+> Not sure why, but I'm not able to pull from it. It complains about some
+> issues with your gpg key, and the diffstat is not there...
+> 
+> I suspect that the e-mail was only partially sent.
+
+I haven't published my public key on any server, just sent it to you via
+email - could that be the issue?
 
 -- 
-Kind regards,
-
-Sakari Ailus
-sakari.ailus@linux.intel.com
+regards,
+Stan
