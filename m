@@ -2,309 +2,284 @@ Return-Path: <SRS0=z7aI=SZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF00FC10F14
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 13:12:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A50DDC10F14
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 13:19:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 930DD2177B
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 13:12:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5747420645
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 13:19:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="aipArNB1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728072AbfDWNMG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 09:12:06 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:43903 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727656AbfDWNMF (ORCPT
+        id S1727817AbfDWNTn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 09:19:43 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:26361 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727751AbfDWNTm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 09:12:05 -0400
-Received: from [IPv6:2001:420:44c1:2579:c4cd:9df1:43f2:db66] ([IPv6:2001:420:44c1:2579:c4cd:9df1:43f2:db66])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id IvDIhCya9ZVjxIvDMhWHfG; Tue, 23 Apr 2019 15:12:02 +0200
+        Tue, 23 Apr 2019 09:19:42 -0400
+X-IronPort-AV: E=Sophos;i="5.60,385,1549954800"; 
+   d="scan'208";a="27959335"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 23 Apr 2019 06:19:41 -0700
+Received: from NAM02-BL2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.76.105) with Microsoft SMTP Server (TLS) id
+ 14.3.352.0; Tue, 23 Apr 2019 06:19:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector1-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=F6qWHCxLk19i08fJN0J/2h9lYJr0W1UeRc5pu39TcyY=;
+ b=aipArNB1Z66lS8hE87YX89DNv15HwnmetYzaJbbnkqai3w6oS+QBSEkogqLgT7X0NBo+lWucZmuYHoQHX2ioc4ksIygwV0eEsBKO2ymV2HAT4WxOBRF+RjXQKaNRbL3X7b/tMYcIQnUqehI2GPGcNcHFCPVY19ULwyuPqEP+FgE=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB1497.namprd11.prod.outlook.com (10.172.38.9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1813.14; Tue, 23 Apr 2019 13:19:38 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::e0e3:1d51:9e3e:6dc]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::e0e3:1d51:9e3e:6dc%3]) with mapi id 15.20.1835.010; Tue, 23 Apr 2019
+ 13:19:38 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <Nicolas.Ferre@microchip.com>, <mchehab@kernel.org>,
+        <ksloat@aampglobal.com>
 Subject: Re: [PATCH 4/7] media: atmel: atmel-isc: add support for
  DO_WHITE_BALANCE
-To:     Eugen.Hristev@microchip.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Nicolas.Ferre@microchip.com, mchehab@kernel.org,
-        ksloat@aampglobal.com
+Thread-Topic: [PATCH 4/7] media: atmel: atmel-isc: add support for
+ DO_WHITE_BALANCE
+Thread-Index: AQHU7sRrNLP5XTfBXUK9XK97Esze7qY1dWCAgAdZAACADQBXAIAAAOaA
+Date:   Tue, 23 Apr 2019 13:19:38 +0000
+Message-ID: <a891b3ea-6ab4-30c2-04ff-152d59530509@microchip.com>
 References: <1554807715-2353-1-git-send-email-eugen.hristev@microchip.com>
  <1554807715-2353-5-git-send-email-eugen.hristev@microchip.com>
  <08d1bf29-326b-7a8c-51c4-088d0effc4b6@xs4all.nl>
  <5fcb8f59-6979-c355-574b-40bb13610252@microchip.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <2c7b069e-f81c-a643-4feb-0839277752e1@xs4all.nl>
-Date:   Tue, 23 Apr 2019 15:11:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
-MIME-Version: 1.0
-In-Reply-To: <5fcb8f59-6979-c355-574b-40bb13610252@microchip.com>
-Content-Type: text/plain; charset=utf-8
+ <2c7b069e-f81c-a643-4feb-0839277752e1@xs4all.nl>
+In-Reply-To: <2c7b069e-f81c-a643-4feb-0839277752e1@xs4all.nl>
+Accept-Language: ro-RO, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfHoynABowKhFz3X5qPyoV39bL8KlQd2nMmgtQKhTP5caQAI9TCyYucGEldINGcHuGY+ZywcPCJVVA0fc6OCneyN5dHT4qo7nN8MXaT5FD+QtYDorEG12
- zntsetVaPaaaQy99YU+ch3YAYqlcG3IucjhScovRVLkKTimtaIeK6ObqwtS5DztQ1yHSTwErdJg4iGcLb7Xr+rQeWM227X814fQNSjZwEUuLk1DAlIkrcmyM
- E2ttokuYiT22uqMJSMm3sNd+Ala7obTlKRfvjE6GzMtdeKz2M2jqkSjDLlf4NZ1pFeqM7gXiK0rWbyxEg0rrOH2TNQVXRvNcLRQqg2W/kLYQQQW1IrF4+TTm
- y3fg1Vlwt748X8cdrSeV8nD2EVNqqj42zA0KWlYdGI2xniFjNrnEM62Tnv9F/ThSk81ALwKoL2zCNXfbKySEtUsrIMXXAuvEZuDaxSCYeJpEkNhYpIYFJtOZ
- ByNc07mXZa4ibWAaSPpLiJv+QkdZeJZ80/9kCD94Lc1OiiPA7ae9ApK5pyY=
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: VE1PR08CA0029.eurprd08.prod.outlook.com
+ (2603:10a6:803:104::42) To DM5PR11MB1242.namprd11.prod.outlook.com
+ (2603:10b6:3:14::8)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Eugen.Hristev@microchip.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tagtoolbar-keys: D20190423161509096
+x-originating-ip: [94.177.32.154]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a3d9252a-0100-4369-d935-08d6c7ee5644
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:DM5PR11MB1497;
+x-ms-traffictypediagnostic: DM5PR11MB1497:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <DM5PR11MB14977FFA0A3F280B07867FCBE8230@DM5PR11MB1497.namprd11.prod.outlook.com>
+x-forefront-prvs: 0016DEFF96
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(136003)(346002)(366004)(376002)(39860400002)(51914003)(199004)(189003)(53546011)(53936002)(14454004)(305945005)(102836004)(6436002)(8676002)(478600001)(68736007)(36756003)(7736002)(81166006)(97736004)(966005)(6246003)(6306002)(6512007)(72206003)(186003)(81156014)(26005)(6486002)(386003)(31686004)(4326008)(93886005)(6506007)(31696002)(14444005)(256004)(71200400001)(2501003)(5660300002)(476003)(86362001)(11346002)(73956011)(52116002)(71190400001)(66476007)(8936002)(446003)(66556008)(229853002)(2906002)(2616005)(486006)(66066001)(76176011)(25786009)(99286004)(110136005)(54906003)(66446008)(3846002)(316002)(6116002)(64756008)(2201001)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1497;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: lFlT5dLPiucbPxlDMsoByFnTM9gt3YKMswr4iQVDjNAjggKvg2cnZDHUDdFawMx5jI0C2oZ6N1VExOQdXIA15Jrk3G36mRnr2GjFoGct4obsLE21DcXIbfXaduJMnonx3iCCP2/9cCt2wJn7BvRjS4Bp9vOJPgOtOMCZORsfcWRiCxeiw7VUs2fm9rMYROqJfeHtNqM820dHzIonjy2H9qzXahCfE0aWvf0+pyVfMH/lkiV8xuTNgu98ZvDTiatVKd/OaFg7PgLwECnEDeB6SFA2b9wWj69b666xg44C9RIAhTJbGoJ0t/oDh91PuLe2UCTAvNDGChoqybC5jgu8wPBxZdLqCFhVYk6eVChA2UrInAe7mBOG+prrJrDItu/PhgHDUO6bOhNNApLjx5OTIaTcKeWjm+YMBLvjwjiqVBE=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FD2A4777000413489F8A7EC777477D40@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3d9252a-0100-4369-d935-08d6c7ee5644
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Apr 2019 13:19:38.6002
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1497
+X-OriginatorOrg: microchip.com
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/15/19 8:43 AM, Eugen.Hristev@microchip.com wrote:
-> 
-> 
-> On 10.04.2019 17:26, Hans Verkuil wrote:
-> 
->>
->> On 4/9/19 1:07 PM, Eugen.Hristev@microchip.com wrote:
->>> From: Eugen Hristev <eugen.hristev@microchip.com>
->>>
->>> This adds support for the 'button' control DO_WHITE_BALANCE
->>> This feature will enable the ISC to compute the white balance coefficients
->>> in a one time shot, at the user discretion.
->>> This can be used if a color chart/grey chart is present in front of the camera.
->>> The ISC will adjust the coefficients and have them fixed until next balance
->>> or until sensor mode is changed.
->>> This is particularly useful for white balance adjustment in different
->>> lighting scenarios, and then taking photos to similar scenery.
->>> The old auto white balance stays in place, where the ISC will adjust every
->>> 4 frames to the current scenery lighting, if the scenery is approximately
->>> grey in average, otherwise grey world algorithm fails.
->>> One time white balance adjustments needs streaming to be enabled, such that
->>> capture is enabled and the histogram has data to work with.
->>> Histogram without capture does not work in this hardware module.
->>>
->>> To disable auto white balance feature (first step)
->>> v4l2-ctl --set-ctrl=white_balance_automatic=0
->>>
->>> To start the one time white balance procedure:
->>> v4l2-ctl --set-ctrl=do_white_balance=1
->>>
->>> User controls now include the do_white_balance ctrl:
->>> User Controls
->>>
->>>                       brightness 0x00980900 (int)    : min=-1024 max=1023 step=1 default=0 value=0 flags=slider
->>>                         contrast 0x00980901 (int)    : min=-2048 max=2047 step=1 default=256 value=256 flags=slider
->>>          white_balance_automatic 0x0098090c (bool)   : default=1 value=1
->>>                 do_white_balance 0x0098090d (button) : flags=write-only, execute-on-write
->>>                            gamma 0x00980910 (int)    : min=0 max=2 step=1 default=2 value=2 flags=slider
->>>
->>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
->>> ---
->>>   drivers/media/platform/atmel/atmel-isc.c | 74 +++++++++++++++++++++++++++++---
->>>   1 file changed, 69 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/media/platform/atmel/atmel-isc.c b/drivers/media/platform/atmel/atmel-isc.c
->>> index f6b8b00e..e516805 100644
->>> --- a/drivers/media/platform/atmel/atmel-isc.c
->>> +++ b/drivers/media/platform/atmel/atmel-isc.c
->>> @@ -167,6 +167,9 @@ struct isc_ctrls {
->>>   	u32 brightness;
->>>   	u32 contrast;
->>>   	u8 gamma_index;
->>> +#define ISC_WB_NONE	0
->>> +#define ISC_WB_AUTO	1
->>> +#define ISC_WB_ONETIME	2
->>>   	u8 awb;
->>>   
->>>   	/* one for each component : GR, R, GB, B */
->>> @@ -210,6 +213,7 @@ struct isc_device {
->>>   	struct fmt_config	try_config;
->>>   
->>>   	struct isc_ctrls	ctrls;
->>> +	struct v4l2_ctrl	*do_wb_ctrl;
->>>   	struct work_struct	awb_work;
->>>   
->>>   	struct mutex		lock;
->>> @@ -809,7 +813,7 @@ static void isc_set_pipeline(struct isc_device *isc, u32 pipeline)
->>>   
->>>   	bay_cfg = isc->config.sd_format->cfa_baycfg;
->>>   
->>> -	if (!ctrls->awb)
->>> +	if (ctrls->awb == ISC_WB_NONE)
->>>   		isc_reset_awb_ctrls(isc);
->>>   
->>>   	regmap_write(regmap, ISC_WB_CFG, bay_cfg);
->>> @@ -1928,7 +1932,7 @@ static void isc_awb_work(struct work_struct *w)
->>>   	baysel = isc->config.sd_format->cfa_baycfg << ISC_HIS_CFG_BAYSEL_SHIFT;
->>>   
->>>   	/* if no more auto white balance, reset controls. */
->>> -	if (!ctrls->awb)
->>> +	if (ctrls->awb == ISC_WB_NONE)
->>>   		isc_reset_awb_ctrls(isc);
->>>   
->>>   	pm_runtime_get_sync(isc->dev);
->>> @@ -1937,7 +1941,7 @@ static void isc_awb_work(struct work_struct *w)
->>>   	 * only update if we have all the required histograms and controls
->>>   	 * if awb has been disabled, we need to reset registers as well.
->>>   	 */
->>> -	if (hist_id == ISC_HIS_CFG_MODE_GR || !ctrls->awb) {
->>> +	if (hist_id == ISC_HIS_CFG_MODE_GR || ctrls->awb == ISC_WB_NONE) {
->>>   		/*
->>>   		 * It may happen that DMA Done IRQ will trigger while we are
->>>   		 * updating white balance registers here.
->>> @@ -1947,6 +1951,16 @@ static void isc_awb_work(struct work_struct *w)
->>>   		spin_lock_irqsave(&isc->awb_lock, flags);
->>>   		isc_update_awb_ctrls(isc);
->>>   		spin_unlock_irqrestore(&isc->awb_lock, flags);
->>> +
->>> +		/*
->>> +		 * if we are doing just the one time white balance adjustment,
->>> +		 * we are basically done.
->>> +		 */
->>> +		if (ctrls->awb == ISC_WB_ONETIME) {
->>> +			v4l2_info(&isc->v4l2_dev,
->>> +				  "Completed one time white-balance adjustment.\n");
->>> +			ctrls->awb = ISC_WB_NONE;
->>> +		}
->>>   	}
->>>   	regmap_write(regmap, ISC_HIS_CFG, hist_id | baysel | ISC_HIS_CFG_RAR);
->>>   	isc_update_profile(isc);
->>> @@ -1974,10 +1988,56 @@ static int isc_s_ctrl(struct v4l2_ctrl *ctrl)
->>>   		ctrls->gamma_index = ctrl->val;
->>>   		break;
->>>   	case V4L2_CID_AUTO_WHITE_BALANCE:
->>> -		ctrls->awb = ctrl->val;
->>> +		if (ctrl->val == 1) {
->>> +			ctrls->awb = ISC_WB_AUTO;
->>> +			v4l2_ctrl_activate(isc->do_wb_ctrl, false);
->>> +		} else {
->>> +			ctrls->awb = ISC_WB_NONE;
->>> +			v4l2_ctrl_activate(isc->do_wb_ctrl, true);
->>> +		}
->>> +		/* we did not configure ISC yet */
->>> +		if (!isc->config.sd_format)
->>> +			break;
->>> +
->>> +		if (!ISC_IS_FORMAT_RAW(isc->config.sd_format->mbus_code)) {
->>> +			v4l2_err(&isc->v4l2_dev,
->>> +				 "White balance adjustments available only if sensor is in RAW mode.\n");
->>
->> This isn't an error, instead if the format isn't raw, then deactivate
->> the control (see v4l2_ctrl_activate()). That way the control framework
->> will handle this.
->>
->>> +			return 0;
->>> +		}
->>> +
->>>   		if (ctrls->hist_stat != HIST_ENABLED) {
->>>   			isc_reset_awb_ctrls(isc);
->>>   		}
->>> +
->>> +		if (isc->ctrls.awb && vb2_is_streaming(&isc->vb2_vidq) &&
->>> +		    ISC_IS_FORMAT_RAW(isc->config.sd_format->mbus_code))
->>> +			isc_set_histogram(isc, true);
->>> +
->>> +		break;
->>> +	case V4L2_CID_DO_WHITE_BALANCE:
->>> +		/* we did not configure ISC yet */
->>> +		if (!isc->config.sd_format)
->>> +			break;
->>> +
->>> +		if (ctrls->awb == ISC_WB_AUTO) {
->>> +			v4l2_err(&isc->v4l2_dev,
->>> +				 "To use one time white-balance adjustment, disable auto white balance first.\n");
->>
->> I'd do this differently: if auto whitebalance is already on, then just do
->> nothing for V4L2_CID_DO_WHITE_BALANCE.
->>
->>> +			return -EAGAIN;
->>> +		}
->>> +		if (!vb2_is_streaming(&isc->vb2_vidq)) {
->>> +			v4l2_err(&isc->v4l2_dev,
->>> +				 "One time white-balance adjustment requires streaming to be enabled.\n");
->>
->> This too should use v4l2_ctrl_activate(): activate the control in start_streaming,
->> deactivate in stop_streaming (and when the control is created).
->>
->>> +			return -EAGAIN;
->>> +		}
->>> +
->>> +		if (!ISC_IS_FORMAT_RAW(isc->config.sd_format->mbus_code)) {
->>> +			v4l2_err(&isc->v4l2_dev,
->>> +				 "White balance adjustments available only if sensor is in RAW mode.\n");
->>
->> Same note as above: use v4l2_ctrl_activate() for this.
-> 
-> Hello Hans,
-> 
-> I used v4l2_ctrl_activate with false parameter, and the v4l2-ctl -l 
-> looks like this:
-> 
-> 
->             do_white_balance (button) : flags=inactive, write-only, 
-> execute-on-write
-> 
-> But the inactive flag looks to be only for display purposes, as issuing :
-> 
-> v4l2-ctl --set-ctrl=do_white_balance=1
-> 
-> will continue to call my ctrl callback as if the control is still active.
-> 
-> Am I missing something here ? v4l2_s_ctrl does not check for INACTIVE 
-> status.
-
-No, you are correct. I got confused with FLAG_GRABBED.
-
-In any case, the idea was right, but you do have to add code to s_ctrl
-to handle this (e.g. if the INACTIVE flag is set, then just do nothing).
-
-The INACTIVE flag is meant to communicate that the control can still be
-set, but it just doesn't do anything. qv4l2 will disable the control if
-this flag is set.
-
-Note that when you set an inactive control, the control value should
-still be updated even if it isn't used at the moment. If the configuration
-changes so that the control becomes active again, then that last set
-value should be used by the hardware.
-
-This is the reason why s_ctrl is still called.
-
-Regards,
-
-	Hans
-
-> 
-> Thanks
-> 
->>
->>> +			return -EAGAIN;
->>> +		}
->>> +		ctrls->awb = ISC_WB_ONETIME;
->>> +		isc_set_histogram(isc, true);
->>> +		v4l2_info(&isc->v4l2_dev, "One time white-balance started.\n");
->>
->> Make this v4l2_dbg.
->>
->>>   		break;
->>>   	default:
->>>   		return -EINVAL;
->>> @@ -2000,7 +2060,7 @@ static int isc_ctrl_init(struct isc_device *isc)
->>>   	ctrls->hist_stat = HIST_INIT;
->>>   	isc_reset_awb_ctrls(isc);
->>>   
->>> -	ret = v4l2_ctrl_handler_init(hdl, 4);
->>> +	ret = v4l2_ctrl_handler_init(hdl, 5);
->>>   	if (ret < 0)
->>>   		return ret;
->>>   
->>> @@ -2012,6 +2072,10 @@ static int isc_ctrl_init(struct isc_device *isc)
->>>   	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_GAMMA, 0, GAMMA_MAX, 1, 2);
->>>   	v4l2_ctrl_new_std(hdl, ops, V4L2_CID_AUTO_WHITE_BALANCE, 0, 1, 1, 1);
->>>   
->>> +	/* do_white_balance is a button, so min,max,step,default are ignored */
->>> +	isc->do_wb_ctrl = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_DO_WHITE_BALANCE,
->>> +					    0, 0, 0, 0);
->>> +
->>>   	v4l2_ctrl_handler_setup(hdl);
->>>   
->>>   	return 0;
->>>
->>
->> Regards,
->>
->> 	Hans
->>
-
+DQoNCk9uIDIzLjA0LjIwMTkgMTY6MTEsIEhhbnMgVmVya3VpbCB3cm90ZToNCj4gT24gNC8xNS8x
+OSA4OjQzIEFNLCBFdWdlbi5IcmlzdGV2QG1pY3JvY2hpcC5jb20gd3JvdGU6DQo+Pg0KPj4NCj4+
+IE9uIDEwLjA0LjIwMTkgMTc6MjYsIEhhbnMgVmVya3VpbCB3cm90ZToNCj4+DQo+Pj4NCj4+PiBP
+biA0LzkvMTkgMTowNyBQTSwgRXVnZW4uSHJpc3RldkBtaWNyb2NoaXAuY29tIHdyb3RlOg0KPj4+
+PiBGcm9tOiBFdWdlbiBIcmlzdGV2IDxldWdlbi5ocmlzdGV2QG1pY3JvY2hpcC5jb20+DQo+Pj4+
+DQo+Pj4+IFRoaXMgYWRkcyBzdXBwb3J0IGZvciB0aGUgJ2J1dHRvbicgY29udHJvbCBET19XSElU
+RV9CQUxBTkNFDQo+Pj4+IFRoaXMgZmVhdHVyZSB3aWxsIGVuYWJsZSB0aGUgSVNDIHRvIGNvbXB1
+dGUgdGhlIHdoaXRlIGJhbGFuY2UgY29lZmZpY2llbnRzDQo+Pj4+IGluIGEgb25lIHRpbWUgc2hv
+dCwgYXQgdGhlIHVzZXIgZGlzY3JldGlvbi4NCj4+Pj4gVGhpcyBjYW4gYmUgdXNlZCBpZiBhIGNv
+bG9yIGNoYXJ0L2dyZXkgY2hhcnQgaXMgcHJlc2VudCBpbiBmcm9udCBvZiB0aGUgY2FtZXJhLg0K
+Pj4+PiBUaGUgSVNDIHdpbGwgYWRqdXN0IHRoZSBjb2VmZmljaWVudHMgYW5kIGhhdmUgdGhlbSBm
+aXhlZCB1bnRpbCBuZXh0IGJhbGFuY2UNCj4+Pj4gb3IgdW50aWwgc2Vuc29yIG1vZGUgaXMgY2hh
+bmdlZC4NCj4+Pj4gVGhpcyBpcyBwYXJ0aWN1bGFybHkgdXNlZnVsIGZvciB3aGl0ZSBiYWxhbmNl
+IGFkanVzdG1lbnQgaW4gZGlmZmVyZW50DQo+Pj4+IGxpZ2h0aW5nIHNjZW5hcmlvcywgYW5kIHRo
+ZW4gdGFraW5nIHBob3RvcyB0byBzaW1pbGFyIHNjZW5lcnkuDQo+Pj4+IFRoZSBvbGQgYXV0byB3
+aGl0ZSBiYWxhbmNlIHN0YXlzIGluIHBsYWNlLCB3aGVyZSB0aGUgSVNDIHdpbGwgYWRqdXN0IGV2
+ZXJ5DQo+Pj4+IDQgZnJhbWVzIHRvIHRoZSBjdXJyZW50IHNjZW5lcnkgbGlnaHRpbmcsIGlmIHRo
+ZSBzY2VuZXJ5IGlzIGFwcHJveGltYXRlbHkNCj4+Pj4gZ3JleSBpbiBhdmVyYWdlLCBvdGhlcndp
+c2UgZ3JleSB3b3JsZCBhbGdvcml0aG0gZmFpbHMuDQo+Pj4+IE9uZSB0aW1lIHdoaXRlIGJhbGFu
+Y2UgYWRqdXN0bWVudHMgbmVlZHMgc3RyZWFtaW5nIHRvIGJlIGVuYWJsZWQsIHN1Y2ggdGhhdA0K
+Pj4+PiBjYXB0dXJlIGlzIGVuYWJsZWQgYW5kIHRoZSBoaXN0b2dyYW0gaGFzIGRhdGEgdG8gd29y
+ayB3aXRoLg0KPj4+PiBIaXN0b2dyYW0gd2l0aG91dCBjYXB0dXJlIGRvZXMgbm90IHdvcmsgaW4g
+dGhpcyBoYXJkd2FyZSBtb2R1bGUuDQo+Pj4+DQo+Pj4+IFRvIGRpc2FibGUgYXV0byB3aGl0ZSBi
+YWxhbmNlIGZlYXR1cmUgKGZpcnN0IHN0ZXApDQo+Pj4+IHY0bDItY3RsIC0tc2V0LWN0cmw9d2hp
+dGVfYmFsYW5jZV9hdXRvbWF0aWM9MA0KPj4+Pg0KPj4+PiBUbyBzdGFydCB0aGUgb25lIHRpbWUg
+d2hpdGUgYmFsYW5jZSBwcm9jZWR1cmU6DQo+Pj4+IHY0bDItY3RsIC0tc2V0LWN0cmw9ZG9fd2hp
+dGVfYmFsYW5jZT0xDQo+Pj4+DQo+Pj4+IFVzZXIgY29udHJvbHMgbm93IGluY2x1ZGUgdGhlIGRv
+X3doaXRlX2JhbGFuY2UgY3RybDoNCj4+Pj4gVXNlciBDb250cm9scw0KPj4+Pg0KPj4+PiAgICAg
+ICAgICAgICAgICAgICAgICAgIGJyaWdodG5lc3MgMHgwMDk4MDkwMCAoaW50KSAgICA6IG1pbj0t
+MTAyNCBtYXg9MTAyMyBzdGVwPTEgZGVmYXVsdD0wIHZhbHVlPTAgZmxhZ3M9c2xpZGVyDQo+Pj4+
+ICAgICAgICAgICAgICAgICAgICAgICAgICBjb250cmFzdCAweDAwOTgwOTAxIChpbnQpICAgIDog
+bWluPS0yMDQ4IG1heD0yMDQ3IHN0ZXA9MSBkZWZhdWx0PTI1NiB2YWx1ZT0yNTYgZmxhZ3M9c2xp
+ZGVyDQo+Pj4+ICAgICAgICAgICB3aGl0ZV9iYWxhbmNlX2F1dG9tYXRpYyAweDAwOTgwOTBjIChi
+b29sKSAgIDogZGVmYXVsdD0xIHZhbHVlPTENCj4+Pj4gICAgICAgICAgICAgICAgICBkb193aGl0
+ZV9iYWxhbmNlIDB4MDA5ODA5MGQgKGJ1dHRvbikgOiBmbGFncz13cml0ZS1vbmx5LCBleGVjdXRl
+LW9uLXdyaXRlDQo+Pj4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBnYW1tYSAweDAwOTgw
+OTEwIChpbnQpICAgIDogbWluPTAgbWF4PTIgc3RlcD0xIGRlZmF1bHQ9MiB2YWx1ZT0yIGZsYWdz
+PXNsaWRlcg0KPj4+Pg0KPj4+PiBTaWduZWQtb2ZmLWJ5OiBFdWdlbiBIcmlzdGV2IDxldWdlbi5o
+cmlzdGV2QG1pY3JvY2hpcC5jb20+DQo+Pj4+IC0tLQ0KPj4+PiAgICBkcml2ZXJzL21lZGlhL3Bs
+YXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5jIHwgNzQgKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KystLS0NCj4+Pj4gICAgMSBmaWxlIGNoYW5nZWQsIDY5IGluc2VydGlvbnMoKyksIDUgZGVsZXRp
+b25zKC0pDQo+Pj4+DQo+Pj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0
+bWVsL2F0bWVsLWlzYy5jIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1pc2Mu
+Yw0KPj4+PiBpbmRleCBmNmI4YjAwZS4uZTUxNjgwNSAxMDA2NDQNCj4+Pj4gLS0tIGEvZHJpdmVy
+cy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1pc2MuYw0KPj4+PiArKysgYi9kcml2ZXJzL21l
+ZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5jDQo+Pj4+IEBAIC0xNjcsNiArMTY3LDkgQEAg
+c3RydWN0IGlzY19jdHJscyB7DQo+Pj4+ICAgIAl1MzIgYnJpZ2h0bmVzczsNCj4+Pj4gICAgCXUz
+MiBjb250cmFzdDsNCj4+Pj4gICAgCXU4IGdhbW1hX2luZGV4Ow0KPj4+PiArI2RlZmluZSBJU0Nf
+V0JfTk9ORQkwDQo+Pj4+ICsjZGVmaW5lIElTQ19XQl9BVVRPCTENCj4+Pj4gKyNkZWZpbmUgSVND
+X1dCX09ORVRJTUUJMg0KPj4+PiAgICAJdTggYXdiOw0KPj4+PiAgICANCj4+Pj4gICAgCS8qIG9u
+ZSBmb3IgZWFjaCBjb21wb25lbnQgOiBHUiwgUiwgR0IsIEIgKi8NCj4+Pj4gQEAgLTIxMCw2ICsy
+MTMsNyBAQCBzdHJ1Y3QgaXNjX2RldmljZSB7DQo+Pj4+ICAgIAlzdHJ1Y3QgZm10X2NvbmZpZwl0
+cnlfY29uZmlnOw0KPj4+PiAgICANCj4+Pj4gICAgCXN0cnVjdCBpc2NfY3RybHMJY3RybHM7DQo+
+Pj4+ICsJc3RydWN0IHY0bDJfY3RybAkqZG9fd2JfY3RybDsNCj4+Pj4gICAgCXN0cnVjdCB3b3Jr
+X3N0cnVjdAlhd2Jfd29yazsNCj4+Pj4gICAgDQo+Pj4+ICAgIAlzdHJ1Y3QgbXV0ZXgJCWxvY2s7
+DQo+Pj4+IEBAIC04MDksNyArODEzLDcgQEAgc3RhdGljIHZvaWQgaXNjX3NldF9waXBlbGluZShz
+dHJ1Y3QgaXNjX2RldmljZSAqaXNjLCB1MzIgcGlwZWxpbmUpDQo+Pj4+ICAgIA0KPj4+PiAgICAJ
+YmF5X2NmZyA9IGlzYy0+Y29uZmlnLnNkX2Zvcm1hdC0+Y2ZhX2JheWNmZzsNCj4+Pj4gICAgDQo+
+Pj4+IC0JaWYgKCFjdHJscy0+YXdiKQ0KPj4+PiArCWlmIChjdHJscy0+YXdiID09IElTQ19XQl9O
+T05FKQ0KPj4+PiAgICAJCWlzY19yZXNldF9hd2JfY3RybHMoaXNjKTsNCj4+Pj4gICAgDQo+Pj4+
+ICAgIAlyZWdtYXBfd3JpdGUocmVnbWFwLCBJU0NfV0JfQ0ZHLCBiYXlfY2ZnKTsNCj4+Pj4gQEAg
+LTE5MjgsNyArMTkzMiw3IEBAIHN0YXRpYyB2b2lkIGlzY19hd2Jfd29yayhzdHJ1Y3Qgd29ya19z
+dHJ1Y3QgKncpDQo+Pj4+ICAgIAliYXlzZWwgPSBpc2MtPmNvbmZpZy5zZF9mb3JtYXQtPmNmYV9i
+YXljZmcgPDwgSVNDX0hJU19DRkdfQkFZU0VMX1NISUZUOw0KPj4+PiAgICANCj4+Pj4gICAgCS8q
+IGlmIG5vIG1vcmUgYXV0byB3aGl0ZSBiYWxhbmNlLCByZXNldCBjb250cm9scy4gKi8NCj4+Pj4g
+LQlpZiAoIWN0cmxzLT5hd2IpDQo+Pj4+ICsJaWYgKGN0cmxzLT5hd2IgPT0gSVNDX1dCX05PTkUp
+DQo+Pj4+ICAgIAkJaXNjX3Jlc2V0X2F3Yl9jdHJscyhpc2MpOw0KPj4+PiAgICANCj4+Pj4gICAg
+CXBtX3J1bnRpbWVfZ2V0X3N5bmMoaXNjLT5kZXYpOw0KPj4+PiBAQCAtMTkzNyw3ICsxOTQxLDcg
+QEAgc3RhdGljIHZvaWQgaXNjX2F3Yl93b3JrKHN0cnVjdCB3b3JrX3N0cnVjdCAqdykNCj4+Pj4g
+ICAgCSAqIG9ubHkgdXBkYXRlIGlmIHdlIGhhdmUgYWxsIHRoZSByZXF1aXJlZCBoaXN0b2dyYW1z
+IGFuZCBjb250cm9scw0KPj4+PiAgICAJICogaWYgYXdiIGhhcyBiZWVuIGRpc2FibGVkLCB3ZSBu
+ZWVkIHRvIHJlc2V0IHJlZ2lzdGVycyBhcyB3ZWxsLg0KPj4+PiAgICAJICovDQo+Pj4+IC0JaWYg
+KGhpc3RfaWQgPT0gSVNDX0hJU19DRkdfTU9ERV9HUiB8fCAhY3RybHMtPmF3Yikgew0KPj4+PiAr
+CWlmIChoaXN0X2lkID09IElTQ19ISVNfQ0ZHX01PREVfR1IgfHwgY3RybHMtPmF3YiA9PSBJU0Nf
+V0JfTk9ORSkgew0KPj4+PiAgICAJCS8qDQo+Pj4+ICAgIAkJICogSXQgbWF5IGhhcHBlbiB0aGF0
+IERNQSBEb25lIElSUSB3aWxsIHRyaWdnZXIgd2hpbGUgd2UgYXJlDQo+Pj4+ICAgIAkJICogdXBk
+YXRpbmcgd2hpdGUgYmFsYW5jZSByZWdpc3RlcnMgaGVyZS4NCj4+Pj4gQEAgLTE5NDcsNiArMTk1
+MSwxNiBAQCBzdGF0aWMgdm9pZCBpc2NfYXdiX3dvcmsoc3RydWN0IHdvcmtfc3RydWN0ICp3KQ0K
+Pj4+PiAgICAJCXNwaW5fbG9ja19pcnFzYXZlKCZpc2MtPmF3Yl9sb2NrLCBmbGFncyk7DQo+Pj4+
+ICAgIAkJaXNjX3VwZGF0ZV9hd2JfY3RybHMoaXNjKTsNCj4+Pj4gICAgCQlzcGluX3VubG9ja19p
+cnFyZXN0b3JlKCZpc2MtPmF3Yl9sb2NrLCBmbGFncyk7DQo+Pj4+ICsNCj4+Pj4gKwkJLyoNCj4+
+Pj4gKwkJICogaWYgd2UgYXJlIGRvaW5nIGp1c3QgdGhlIG9uZSB0aW1lIHdoaXRlIGJhbGFuY2Ug
+YWRqdXN0bWVudCwNCj4+Pj4gKwkJICogd2UgYXJlIGJhc2ljYWxseSBkb25lLg0KPj4+PiArCQkg
+Ki8NCj4+Pj4gKwkJaWYgKGN0cmxzLT5hd2IgPT0gSVNDX1dCX09ORVRJTUUpIHsNCj4+Pj4gKwkJ
+CXY0bDJfaW5mbygmaXNjLT52NGwyX2RldiwNCj4+Pj4gKwkJCQkgICJDb21wbGV0ZWQgb25lIHRp
+bWUgd2hpdGUtYmFsYW5jZSBhZGp1c3RtZW50LlxuIik7DQo+Pj4+ICsJCQljdHJscy0+YXdiID0g
+SVNDX1dCX05PTkU7DQo+Pj4+ICsJCX0NCj4+Pj4gICAgCX0NCj4+Pj4gICAgCXJlZ21hcF93cml0
+ZShyZWdtYXAsIElTQ19ISVNfQ0ZHLCBoaXN0X2lkIHwgYmF5c2VsIHwgSVNDX0hJU19DRkdfUkFS
+KTsNCj4+Pj4gICAgCWlzY191cGRhdGVfcHJvZmlsZShpc2MpOw0KPj4+PiBAQCAtMTk3NCwxMCAr
+MTk4OCw1NiBAQCBzdGF0aWMgaW50IGlzY19zX2N0cmwoc3RydWN0IHY0bDJfY3RybCAqY3RybCkN
+Cj4+Pj4gICAgCQljdHJscy0+Z2FtbWFfaW5kZXggPSBjdHJsLT52YWw7DQo+Pj4+ICAgIAkJYnJl
+YWs7DQo+Pj4+ICAgIAljYXNlIFY0TDJfQ0lEX0FVVE9fV0hJVEVfQkFMQU5DRToNCj4+Pj4gLQkJ
+Y3RybHMtPmF3YiA9IGN0cmwtPnZhbDsNCj4+Pj4gKwkJaWYgKGN0cmwtPnZhbCA9PSAxKSB7DQo+
+Pj4+ICsJCQljdHJscy0+YXdiID0gSVNDX1dCX0FVVE87DQo+Pj4+ICsJCQl2NGwyX2N0cmxfYWN0
+aXZhdGUoaXNjLT5kb193Yl9jdHJsLCBmYWxzZSk7DQo+Pj4+ICsJCX0gZWxzZSB7DQo+Pj4+ICsJ
+CQljdHJscy0+YXdiID0gSVNDX1dCX05PTkU7DQo+Pj4+ICsJCQl2NGwyX2N0cmxfYWN0aXZhdGUo
+aXNjLT5kb193Yl9jdHJsLCB0cnVlKTsNCj4+Pj4gKwkJfQ0KPj4+PiArCQkvKiB3ZSBkaWQgbm90
+IGNvbmZpZ3VyZSBJU0MgeWV0ICovDQo+Pj4+ICsJCWlmICghaXNjLT5jb25maWcuc2RfZm9ybWF0
+KQ0KPj4+PiArCQkJYnJlYWs7DQo+Pj4+ICsNCj4+Pj4gKwkJaWYgKCFJU0NfSVNfRk9STUFUX1JB
+Vyhpc2MtPmNvbmZpZy5zZF9mb3JtYXQtPm1idXNfY29kZSkpIHsNCj4+Pj4gKwkJCXY0bDJfZXJy
+KCZpc2MtPnY0bDJfZGV2LA0KPj4+PiArCQkJCSAiV2hpdGUgYmFsYW5jZSBhZGp1c3RtZW50cyBh
+dmFpbGFibGUgb25seSBpZiBzZW5zb3IgaXMgaW4gUkFXIG1vZGUuXG4iKTsNCj4+Pg0KPj4+IFRo
+aXMgaXNuJ3QgYW4gZXJyb3IsIGluc3RlYWQgaWYgdGhlIGZvcm1hdCBpc24ndCByYXcsIHRoZW4g
+ZGVhY3RpdmF0ZQ0KPj4+IHRoZSBjb250cm9sIChzZWUgdjRsMl9jdHJsX2FjdGl2YXRlKCkpLiBU
+aGF0IHdheSB0aGUgY29udHJvbCBmcmFtZXdvcmsNCj4+PiB3aWxsIGhhbmRsZSB0aGlzLg0KPj4+
+DQo+Pj4+ICsJCQlyZXR1cm4gMDsNCj4+Pj4gKwkJfQ0KPj4+PiArDQo+Pj4+ICAgIAkJaWYgKGN0
+cmxzLT5oaXN0X3N0YXQgIT0gSElTVF9FTkFCTEVEKSB7DQo+Pj4+ICAgIAkJCWlzY19yZXNldF9h
+d2JfY3RybHMoaXNjKTsNCj4+Pj4gICAgCQl9DQo+Pj4+ICsNCj4+Pj4gKwkJaWYgKGlzYy0+Y3Ry
+bHMuYXdiICYmIHZiMl9pc19zdHJlYW1pbmcoJmlzYy0+dmIyX3ZpZHEpICYmDQo+Pj4+ICsJCSAg
+ICBJU0NfSVNfRk9STUFUX1JBVyhpc2MtPmNvbmZpZy5zZF9mb3JtYXQtPm1idXNfY29kZSkpDQo+
+Pj4+ICsJCQlpc2Nfc2V0X2hpc3RvZ3JhbShpc2MsIHRydWUpOw0KPj4+PiArDQo+Pj4+ICsJCWJy
+ZWFrOw0KPj4+PiArCWNhc2UgVjRMMl9DSURfRE9fV0hJVEVfQkFMQU5DRToNCj4+Pj4gKwkJLyog
+d2UgZGlkIG5vdCBjb25maWd1cmUgSVNDIHlldCAqLw0KPj4+PiArCQlpZiAoIWlzYy0+Y29uZmln
+LnNkX2Zvcm1hdCkNCj4+Pj4gKwkJCWJyZWFrOw0KPj4+PiArDQo+Pj4+ICsJCWlmIChjdHJscy0+
+YXdiID09IElTQ19XQl9BVVRPKSB7DQo+Pj4+ICsJCQl2NGwyX2VycigmaXNjLT52NGwyX2RldiwN
+Cj4+Pj4gKwkJCQkgIlRvIHVzZSBvbmUgdGltZSB3aGl0ZS1iYWxhbmNlIGFkanVzdG1lbnQsIGRp
+c2FibGUgYXV0byB3aGl0ZSBiYWxhbmNlIGZpcnN0LlxuIik7DQo+Pj4NCj4+PiBJJ2QgZG8gdGhp
+cyBkaWZmZXJlbnRseTogaWYgYXV0byB3aGl0ZWJhbGFuY2UgaXMgYWxyZWFkeSBvbiwgdGhlbiBq
+dXN0IGRvDQo+Pj4gbm90aGluZyBmb3IgVjRMMl9DSURfRE9fV0hJVEVfQkFMQU5DRS4NCj4+Pg0K
+Pj4+PiArCQkJcmV0dXJuIC1FQUdBSU47DQo+Pj4+ICsJCX0NCj4+Pj4gKwkJaWYgKCF2YjJfaXNf
+c3RyZWFtaW5nKCZpc2MtPnZiMl92aWRxKSkgew0KPj4+PiArCQkJdjRsMl9lcnIoJmlzYy0+djRs
+Ml9kZXYsDQo+Pj4+ICsJCQkJICJPbmUgdGltZSB3aGl0ZS1iYWxhbmNlIGFkanVzdG1lbnQgcmVx
+dWlyZXMgc3RyZWFtaW5nIHRvIGJlIGVuYWJsZWQuXG4iKTsNCj4+Pg0KPj4+IFRoaXMgdG9vIHNo
+b3VsZCB1c2UgdjRsMl9jdHJsX2FjdGl2YXRlKCk6IGFjdGl2YXRlIHRoZSBjb250cm9sIGluIHN0
+YXJ0X3N0cmVhbWluZywNCj4+PiBkZWFjdGl2YXRlIGluIHN0b3Bfc3RyZWFtaW5nIChhbmQgd2hl
+biB0aGUgY29udHJvbCBpcyBjcmVhdGVkKS4NCj4+Pg0KPj4+PiArCQkJcmV0dXJuIC1FQUdBSU47
+DQo+Pj4+ICsJCX0NCj4+Pj4gKw0KPj4+PiArCQlpZiAoIUlTQ19JU19GT1JNQVRfUkFXKGlzYy0+
+Y29uZmlnLnNkX2Zvcm1hdC0+bWJ1c19jb2RlKSkgew0KPj4+PiArCQkJdjRsMl9lcnIoJmlzYy0+
+djRsMl9kZXYsDQo+Pj4+ICsJCQkJICJXaGl0ZSBiYWxhbmNlIGFkanVzdG1lbnRzIGF2YWlsYWJs
+ZSBvbmx5IGlmIHNlbnNvciBpcyBpbiBSQVcgbW9kZS5cbiIpOw0KPj4+DQo+Pj4gU2FtZSBub3Rl
+IGFzIGFib3ZlOiB1c2UgdjRsMl9jdHJsX2FjdGl2YXRlKCkgZm9yIHRoaXMuDQo+Pg0KPj4gSGVs
+bG8gSGFucywNCj4+DQo+PiBJIHVzZWQgdjRsMl9jdHJsX2FjdGl2YXRlIHdpdGggZmFsc2UgcGFy
+YW1ldGVyLCBhbmQgdGhlIHY0bDItY3RsIC1sDQo+PiBsb29rcyBsaWtlIHRoaXM6DQo+Pg0KPj4N
+Cj4+ICAgICAgICAgICAgICBkb193aGl0ZV9iYWxhbmNlIChidXR0b24pIDogZmxhZ3M9aW5hY3Rp
+dmUsIHdyaXRlLW9ubHksDQo+PiBleGVjdXRlLW9uLXdyaXRlDQo+Pg0KPj4gQnV0IHRoZSBpbmFj
+dGl2ZSBmbGFnIGxvb2tzIHRvIGJlIG9ubHkgZm9yIGRpc3BsYXkgcHVycG9zZXMsIGFzIGlzc3Vp
+bmcgOg0KPj4NCj4+IHY0bDItY3RsIC0tc2V0LWN0cmw9ZG9fd2hpdGVfYmFsYW5jZT0xDQo+Pg0K
+Pj4gd2lsbCBjb250aW51ZSB0byBjYWxsIG15IGN0cmwgY2FsbGJhY2sgYXMgaWYgdGhlIGNvbnRy
+b2wgaXMgc3RpbGwgYWN0aXZlLg0KPj4NCj4+IEFtIEkgbWlzc2luZyBzb21ldGhpbmcgaGVyZSA/
+IHY0bDJfc19jdHJsIGRvZXMgbm90IGNoZWNrIGZvciBJTkFDVElWRQ0KPj4gc3RhdHVzLg0KPiAN
+Cj4gTm8sIHlvdSBhcmUgY29ycmVjdC4gSSBnb3QgY29uZnVzZWQgd2l0aCBGTEFHX0dSQUJCRUQu
+DQo+IA0KPiBJbiBhbnkgY2FzZSwgdGhlIGlkZWEgd2FzIHJpZ2h0LCBidXQgeW91IGRvIGhhdmUg
+dG8gYWRkIGNvZGUgdG8gc19jdHJsDQo+IHRvIGhhbmRsZSB0aGlzIChlLmcuIGlmIHRoZSBJTkFD
+VElWRSBmbGFnIGlzIHNldCwgdGhlbiBqdXN0IGRvIG5vdGhpbmcpLg0KPiANCj4gVGhlIElOQUNU
+SVZFIGZsYWcgaXMgbWVhbnQgdG8gY29tbXVuaWNhdGUgdGhhdCB0aGUgY29udHJvbCBjYW4gc3Rp
+bGwgYmUNCj4gc2V0LCBidXQgaXQganVzdCBkb2Vzbid0IGRvIGFueXRoaW5nLiBxdjRsMiB3aWxs
+IGRpc2FibGUgdGhlIGNvbnRyb2wgaWYNCj4gdGhpcyBmbGFnIGlzIHNldC4NCj4gDQo+IE5vdGUg
+dGhhdCB3aGVuIHlvdSBzZXQgYW4gaW5hY3RpdmUgY29udHJvbCwgdGhlIGNvbnRyb2wgdmFsdWUg
+c2hvdWxkDQo+IHN0aWxsIGJlIHVwZGF0ZWQgZXZlbiBpZiBpdCBpc24ndCB1c2VkIGF0IHRoZSBt
+b21lbnQuIElmIHRoZSBjb25maWd1cmF0aW9uDQo+IGNoYW5nZXMgc28gdGhhdCB0aGUgY29udHJv
+bCBiZWNvbWVzIGFjdGl2ZSBhZ2FpbiwgdGhlbiB0aGF0IGxhc3Qgc2V0DQo+IHZhbHVlIHNob3Vs
+ZCBiZSB1c2VkIGJ5IHRoZSBoYXJkd2FyZS4NCj4gDQo+IFRoaXMgaXMgdGhlIHJlYXNvbiB3aHkg
+c19jdHJsIGlzIHN0aWxsIGNhbGxlZC4NCg0KSGVsbG8gSGFucywNCg0KVGhhbmtzIGZvciB0aGUg
+ZXhwbGFuYXRpb24uIEkgbm90aWNlZCB3aGF0IHlvdSBzYXksIGFuZCBzYXcgb3RoZXIgDQpkcml2
+ZXJzIGp1c3QgZXhpdCB0aGUgc19jdHJsIGlmIHRoZSBmbGFnIGlzIElOQUNUSVZFLg0KVGh1cywg
+bXkgbGF0ZXN0IHBhdGNoIHJldmlzaW9uIGRvZXMgZXhhY3RseSB0aGF0IA0KaHR0cHM6Ly9wYXRj
+aHdvcmsubGludXh0di5vcmcvcGF0Y2gvNTU2ODIvDQoNClJlZ2FyZGluZyBteSBzcGVjaWZpYyBj
+b250cm9sIChET19XSElURV9CQUxBTkNFKSwgaXQncyBhIGJ1dHRvbiwgc28gaXQgDQpzaG91bGQg
+cmVhbGx5IGRvIG5vdGhpbmcgaWYgY29udHJvbCBpcyBpbmFjdGl2ZSAobm8gc3RhdGUgdG8gc2F2
+ZSkuDQoNClRoYW5rcywNCkV1Z2VuDQoNCg0KPiANCj4gUmVnYXJkcywNCj4gDQo+IAlIYW5zDQo+
+IA0KPj4NCj4+IFRoYW5rcw0KPj4NCj4+Pg0KPj4+PiArCQkJcmV0dXJuIC1FQUdBSU47DQo+Pj4+
+ICsJCX0NCj4+Pj4gKwkJY3RybHMtPmF3YiA9IElTQ19XQl9PTkVUSU1FOw0KPj4+PiArCQlpc2Nf
+c2V0X2hpc3RvZ3JhbShpc2MsIHRydWUpOw0KPj4+PiArCQl2NGwyX2luZm8oJmlzYy0+djRsMl9k
+ZXYsICJPbmUgdGltZSB3aGl0ZS1iYWxhbmNlIHN0YXJ0ZWQuXG4iKTsNCj4+Pg0KPj4+IE1ha2Ug
+dGhpcyB2NGwyX2RiZy4NCj4+Pg0KPj4+PiAgICAJCWJyZWFrOw0KPj4+PiAgICAJZGVmYXVsdDoN
+Cj4+Pj4gICAgCQlyZXR1cm4gLUVJTlZBTDsNCj4+Pj4gQEAgLTIwMDAsNyArMjA2MCw3IEBAIHN0
+YXRpYyBpbnQgaXNjX2N0cmxfaW5pdChzdHJ1Y3QgaXNjX2RldmljZSAqaXNjKQ0KPj4+PiAgICAJ
+Y3RybHMtPmhpc3Rfc3RhdCA9IEhJU1RfSU5JVDsNCj4+Pj4gICAgCWlzY19yZXNldF9hd2JfY3Ry
+bHMoaXNjKTsNCj4+Pj4gICAgDQo+Pj4+IC0JcmV0ID0gdjRsMl9jdHJsX2hhbmRsZXJfaW5pdCho
+ZGwsIDQpOw0KPj4+PiArCXJldCA9IHY0bDJfY3RybF9oYW5kbGVyX2luaXQoaGRsLCA1KTsNCj4+
+Pj4gICAgCWlmIChyZXQgPCAwKQ0KPj4+PiAgICAJCXJldHVybiByZXQ7DQo+Pj4+ICAgIA0KPj4+
+PiBAQCAtMjAxMiw2ICsyMDcyLDEwIEBAIHN0YXRpYyBpbnQgaXNjX2N0cmxfaW5pdChzdHJ1Y3Qg
+aXNjX2RldmljZSAqaXNjKQ0KPj4+PiAgICAJdjRsMl9jdHJsX25ld19zdGQoaGRsLCBvcHMsIFY0
+TDJfQ0lEX0dBTU1BLCAwLCBHQU1NQV9NQVgsIDEsIDIpOw0KPj4+PiAgICAJdjRsMl9jdHJsX25l
+d19zdGQoaGRsLCBvcHMsIFY0TDJfQ0lEX0FVVE9fV0hJVEVfQkFMQU5DRSwgMCwgMSwgMSwgMSk7
+DQo+Pj4+ICAgIA0KPj4+PiArCS8qIGRvX3doaXRlX2JhbGFuY2UgaXMgYSBidXR0b24sIHNvIG1p
+bixtYXgsc3RlcCxkZWZhdWx0IGFyZSBpZ25vcmVkICovDQo+Pj4+ICsJaXNjLT5kb193Yl9jdHJs
+ID0gdjRsMl9jdHJsX25ld19zdGQoaGRsLCBvcHMsIFY0TDJfQ0lEX0RPX1dISVRFX0JBTEFOQ0Us
+DQo+Pj4+ICsJCQkJCSAgICAwLCAwLCAwLCAwKTsNCj4+Pj4gKw0KPj4+PiAgICAJdjRsMl9jdHJs
+X2hhbmRsZXJfc2V0dXAoaGRsKTsNCj4+Pj4gICAgDQo+Pj4+ICAgIAlyZXR1cm4gMDsNCj4+Pj4N
+Cj4+Pg0KPj4+IFJlZ2FyZHMsDQo+Pj4NCj4+PiAJSGFucw0KPj4+DQo+IA0KPiANCg==
