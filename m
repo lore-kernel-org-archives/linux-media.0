@@ -6,36 +6,35 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6198FC10F14
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 07:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06D3FC10F14
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 07:41:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2807521738
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 07:41:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D603020645
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 07:41:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbfDWHk4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 03:40:56 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7229 "EHLO huawei.com"
+        id S1726426AbfDWHld (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 03:41:33 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7222 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726715AbfDWHkZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 03:40:25 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 581006EB7F09602779C8;
-        Tue, 23 Apr 2019 15:40:22 +0800 (CST)
+        id S1726689AbfDWHkY (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Apr 2019 03:40:24 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 62690D91CEAA2DD53310;
+        Tue, 23 Apr 2019 15:40:17 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.439.0; Tue, 23 Apr 2019 15:40:14 +0800
+ 14.3.439.0; Tue, 23 Apr 2019 15:40:10 +0800
 From:   Kefeng Wang <wangkefeng.wang@huawei.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     Masahiro Yamada <yamada.masahiro@socionext.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        "Steve Longerbeam" <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         <linux-media@vger.kernel.org>
-Subject: [PATCH next 22/25] media: staging/imx7: Use dev_get_drvdata()
-Date:   Tue, 23 Apr 2019 15:50:17 +0800
-Message-ID: <20190423075020.173734-23-wangkefeng.wang@huawei.com>
+Subject: [PATCH next 15/25] media: platform: Use dev_get_drvdata()
+Date:   Tue, 23 Apr 2019 15:50:10 +0800
+Message-ID: <20190423075020.173734-16-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190423075020.173734-1-wangkefeng.wang@huawei.com>
 References: <20190423075020.173734-1-wangkefeng.wang@huawei.com>
@@ -51,40 +50,39 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Using dev_get_drvdata directly.
 
-Cc: Rui Miguel Silva <rmfrfs@gmail.com>
-Cc: Steve Longerbeam <slongerbeam@gmail.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 Cc: linux-media@vger.kernel.org
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++----
+ drivers/media/platform/cros-ec-cec/cros-ec-cec.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 6cae2960eea1..19455f425416 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -1027,8 +1027,7 @@ static int mipi_csis_probe(struct platform_device *pdev)
- 
- static int mipi_csis_pm_suspend(struct device *dev, bool runtime)
+diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+index 7bc4d8a9af28..2e218c7a3a1f 100644
+--- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
++++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+@@ -174,8 +174,7 @@ static const struct cec_adap_ops cros_ec_cec_ops = {
+ #ifdef CONFIG_PM_SLEEP
+ static int cros_ec_cec_suspend(struct device *dev)
  {
 -	struct platform_device *pdev = to_platform_device(dev);
--	struct v4l2_subdev *mipi_sd = platform_get_drvdata(pdev);
-+	struct v4l2_subdev *mipi_sd = dev_get_drvdata(dev);
- 	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
- 	int ret = 0;
+-	struct cros_ec_cec *cros_ec_cec = dev_get_drvdata(&pdev->dev);
++	struct cros_ec_cec *cros_ec_cec = dev_get_drvdata(dev);
  
-@@ -1052,8 +1051,7 @@ static int mipi_csis_pm_suspend(struct device *dev, bool runtime)
+ 	if (device_may_wakeup(dev))
+ 		enable_irq_wake(cros_ec_cec->cros_ec->irq);
+@@ -185,8 +184,7 @@ static int cros_ec_cec_suspend(struct device *dev)
  
- static int mipi_csis_pm_resume(struct device *dev, bool runtime)
+ static int cros_ec_cec_resume(struct device *dev)
  {
 -	struct platform_device *pdev = to_platform_device(dev);
--	struct v4l2_subdev *mipi_sd = platform_get_drvdata(pdev);
-+	struct v4l2_subdev *mipi_sd = dev_get_drvdata(dev);
- 	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
- 	int ret = 0;
+-	struct cros_ec_cec *cros_ec_cec = dev_get_drvdata(&pdev->dev);
++	struct cros_ec_cec *cros_ec_cec = dev_get_drvdata(dev);
  
+ 	if (device_may_wakeup(dev))
+ 		disable_irq_wake(cros_ec_cec->cros_ec->irq);
 -- 
 2.20.1
 
