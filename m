@@ -2,141 +2,156 @@ Return-Path: <SRS0=z7aI=SZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 833B7C10F14
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 211C5C282E1
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:10:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5F06C217D9
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:08:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4AD6217D9
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:10:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vfffPQMY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727656AbfDWOIq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 10:08:46 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:35449 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726659AbfDWOIq (ORCPT
+        id S1727860AbfDWOKZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 10:10:25 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:56112 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727740AbfDWOKZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 10:08:46 -0400
-X-Originating-IP: 2.224.242.101
-Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id BE2091C001B;
-        Tue, 23 Apr 2019 14:08:43 +0000 (UTC)
-Date:   Tue, 23 Apr 2019 16:09:39 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        Tue, 23 Apr 2019 10:10:25 -0400
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E73D5F;
+        Tue, 23 Apr 2019 16:10:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1556028623;
+        bh=RsDr0+I9oWWQLTfb2BKk/ZrvWy0V0RJbZSdY9HReNus=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vfffPQMYwSf+AoI4pDlSbx47Z1cNobERjaY0/J2aSQ+cYSZBnJrAAwaFRBPpT0A5L
+         giHyJT8UTV+7A6CkVoa7ar1g4hfZ1ic2QJSe7iARE4NPzJT6ig+u6bPq+CTz4pL0/h
+         3Qjdf9FPnRG6kfjPb5c5Wa8+Srv2+YBU9KoRvHJA=
+Date:   Tue, 23 Apr 2019 17:10:13 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org,
         Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: Re: [PATCH 9/9] drm: rcar-du: Add support for missing 16-bit RGB1555
+Subject: Re: [PATCH 4/9] media: vsp1: Add support for missing 32-bit RGB
  formats
-Message-ID: <20190423140939.gp2rtnbyspzcbzpd@uno.localdomain>
+Message-ID: <20190423141013.GC4816@pendragon.ideasonboard.com>
 References: <20190328070723.26553-1-laurent.pinchart+renesas@ideasonboard.com>
- <20190328070723.26553-10-laurent.pinchart+renesas@ideasonboard.com>
+ <20190328070723.26553-5-laurent.pinchart+renesas@ideasonboard.com>
+ <20190404173905.n6mupqzvcr5vwhwu@uno.localdomain>
+ <20190418060645.GC4806@pendragon.ideasonboard.com>
+ <20190423132153.xfvy4dn3cflzotuf@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="xsot2cdl72g2muyj"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190328070723.26553-10-laurent.pinchart+renesas@ideasonboard.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190423132153.xfvy4dn3cflzotuf@uno.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Jacopo,
 
---xsot2cdl72g2muyj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+On Tue, Apr 23, 2019 at 03:21:53PM +0200, Jacopo Mondi wrote:
+> On Thu, Apr 18, 2019 at 09:06:45AM +0300, Laurent Pinchart wrote:
+> > On Thu, Apr 04, 2019 at 07:39:05PM +0200, Jacopo Mondi wrote:
+> >> HI Laurent,
+> >>   if you help me out understanding the bit swapping procedure in VSP
+> >> I would be more confident in saying I actually reviewed the series.
+> >
+> > I'll try my best :-)
+> 
+> Thanks!
+> 
+> >> On Thu, Mar 28, 2019 at 09:07:18AM +0200, Laurent Pinchart wrote:
+> >>> Add support for the V4L2_PIX_FMT_BGRA32, V4L2_PIX_FMT_BGRX32,
+> >>> V4L2_PIX_FMT_RGBA32 and V4L2_PIX_FMT_RGBX32 formats to the VSP driver.
+> >>>
+> >>> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> >>> ---
+> >>>  drivers/media/platform/vsp1/vsp1_pipe.c | 14 ++++++++++++++
+> >>>  1 file changed, 14 insertions(+)
+> >>>
+> >>> diff --git a/drivers/media/platform/vsp1/vsp1_pipe.c b/drivers/media/platform/vsp1/vsp1_pipe.c
+> >>> index 54ff539ffea0..9f08d85e89d7 100644
+> >>> --- a/drivers/media/platform/vsp1/vsp1_pipe.c
+> >>> +++ b/drivers/media/platform/vsp1/vsp1_pipe.c
+> >>> @@ -68,6 +68,20 @@ static const struct vsp1_format_info vsp1_video_formats[] = {
+> >>>  	{ V4L2_PIX_FMT_XBGR32, MEDIA_BUS_FMT_ARGB8888_1X32,
+> >>>  	  VI6_FMT_ARGB_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
+> >>>  	  1, { 32, 0, 0 }, false, false, 1, 1, false },
+> >>> +	{ V4L2_PIX_FMT_BGRA32, MEDIA_BUS_FMT_ARGB8888_1X32,
+> >>> +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
+> >>> +	  1, { 32, 0, 0 }, false, false, 1, 1, true },
+> >>> +	{ V4L2_PIX_FMT_BGRX32, MEDIA_BUS_FMT_ARGB8888_1X32,
+> >>> +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
+> >>> +	  1, { 32, 0, 0 }, false, false, 1, 1, false },
+> >>> +	{ V4L2_PIX_FMT_RGBA32, MEDIA_BUS_FMT_ARGB8888_1X32,
+> >>> +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
+> >>> +	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
+> >>> +	  1, { 32, 0, 0 }, false, false, 1, 1, true },
+> >>> +	{ V4L2_PIX_FMT_RGBX32, MEDIA_BUS_FMT_ARGB8888_1X32,
+> >>> +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
+> >>> +	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
+> >>> +	  1, { 32, 0, 0 }, false, false, 1, 1, false },
+> >>
+> >>
+> >> So, this is how I interpret the above lines for format BGRA32 (the
+> >> same applies to RGBA32 fwiw)
+> >>
+> >>         Bytes:          B3      B2      B1      B0
+> >> Input: ARGB8888_1X32:   A       R       G       B
+> >
+> > Note that, at the bus level, there's no byte ordering. Data is
+> > transmitted in parallel on a 32-bit bus (at least as far as I know). But
+> > this doesn't matter much anyway.
+> 
+> Indeed, but I should not use this as the description of the input
+> format but VI6_FMT_RGBA_8888, as you pointed out, which reads indeed
+> as RGBA (out of curiosity, what is the mbus code used for then?)
 
-Hi Laurent,
+In the VSP case the media bus format is used to differenciate between
+YUV and RGB. Internally after the RPF and before the WPF everything is
+transmitted with 32 bits per pixel.
 
-On Thu, Mar 28, 2019 at 09:07:23AM +0200, Laurent Pinchart wrote:
-> Add support for the DRM_FORMAT_RGBA5551, DRM_FORMAT_RGBX5551,
-> DRM_FORMAT_ABGR1555, DRM_FORMAT_XBGR1555, DRM_FORMAT_BGRA5551 and
-> DRM_FORMAT_BGRX5551 formats to the DU driver. Those formats are only
-> available on Gen3.
->
-> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> ---
->  drivers/gpu/drm/rcar-du/rcar_du_kms.c | 30 +++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
->
-> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-> index 4aaf623cbcd1..adbc4f5d8fc5 100644
-> --- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-> +++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-> @@ -153,6 +153,36 @@ static const struct rcar_du_format_info rcar_du_format_infos[] = {
->  		.v4l2 = V4L2_PIX_FMT_BGRX444,
->  		.bpp = 16,
->  		.planes = 1,
-> +	}, {
-> +		.fourcc = DRM_FORMAT_RGBA5551,
-> +		.v4l2 = V4L2_PIX_FMT_RGBA555,
-> +		.bpp = 16,
-> +		.planes = 1,
-> +	}, {
-> +		.fourcc = DRM_FORMAT_RGBX5551,
-> +		.v4l2 = V4L2_PIX_FMT_RGBX555,
-> +		.bpp = 16,
-> +		.planes = 1,
-> +	}, {
-> +		.fourcc = DRM_FORMAT_ABGR1555,
-> +		.v4l2 = V4L2_PIX_FMT_ABGR555,
-> +		.bpp = 16,
-> +		.planes = 1,
-> +	}, {
-> +		.fourcc = DRM_FORMAT_XBGR1555,
-> +		.v4l2 = V4L2_PIX_FMT_XBGR555,
-> +		.bpp = 16,
-> +		.planes = 1,
-> +	}, {
-> +		.fourcc = DRM_FORMAT_BGRA5551,
-> +		.v4l2 = V4L2_PIX_FMT_BGRA555,
-> +		.bpp = 16,
-> +		.planes = 1,
-> +	}, {
-> +		.fourcc = DRM_FORMAT_BGRX5551,
-> +		.v4l2 = V4L2_PIX_FMT_BGRX555,
-> +		.bpp = 16,
-> +		.planes = 1,
+> >> Out:   BGRA32           R       G       B       A
+> >>
+> >> If I apply LLS and LWS on the "Input Row", according to the table I get
+> >>
+> >>  Position in Table 32.10:    0  1  2  3
+> >>  IN Components ordering:     A  R  G  B  (ARGB8888_1X32
+> >>  Position in Table 32.10:    3  2  1  0  (with LLS and LWS applied)
+> >>  OUT Components ordering:    B  G  R  A
+> >>
+> >> Which to me is the ordering of components of the format named
+> >> V4L2_PIX_FMT_ARGB32 and not BGRA32 which is instead, as reported RGBA
+> >> (GREAT naming here!)
+> >>
+> >> What am I doing wrong?
+> >
+> > You need to take entry VI6_FMT_RGBA_8888 (0x14) in table 32.10, which
+> > reads R G B A. Applying LLS and LWS but not WDS and BTS swaps the bytes
+> > to A B G R (see table 32.13), so the pixel is written to memory in the A
+> > B G R order, corresponding to V4L2_PIX_FMT_BGRA32 (I agree with you
+> > about the insane naming for the 4CC, but that's not my fault :-().
+> 
+> Thanks, now that I applied flags to the correct input format, the
+> patch seems correct to me.
+> 
+> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+> 
+> >>>  	{ V4L2_PIX_FMT_ARGB32, MEDIA_BUS_FMT_ARGB8888_1X32,
+> >>>  	  VI6_FMT_ARGB_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
+> >>>  	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
 
-I have compared the format definitions and they seems fine to me!
+-- 
+Regards,
 
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-
-Thanks
-  j
-
->  	}, {
->  		.fourcc = DRM_FORMAT_BGR888,
->  		.v4l2 = V4L2_PIX_FMT_RGB24,
-> --
-> Regards,
->
-> Laurent Pinchart
->
-
---xsot2cdl72g2muyj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAly/HKMACgkQcjQGjxah
-VjwsIxAAsi2REZPG6BVz2/e7PFy7rZrsKMr3EI/26WmbmT1SfR3LVkRYq2D+FjnM
-0q9F+TT8sEbjQWjwkt0JvFxllvVER/azcBQpw0S22gAKATBkrOJgrnBYn2skXAVG
-s3lqeGsCDUfCM88kD0evcDz/4QaAgp1O+8Wa/9oA02ngcrG/jTjgl/dLZdalPi+t
-bQp4E4Aenx6JTujYUgnOlrFgBWwep7AvdIRCpo8POFmNDs9pbaalMeWNprTs+12O
-z0tm4thYEPpdA84gWa5eYu4HN7d+6OSJmsOMq01gPNw04m8CFl9or29wKkbWSD1a
-tpfbs4+VMUsoVK0SdYMc8RfO2ocJ1WcFsoIR6D7i4HMwD2osSAyD/7j02iJpDf58
-ja6u9z81gertSn99vz1XQCQx1SWYIKgO+l1p2YuUlBhr24pxhdLZ7x4k5V7dh5TA
-GiUqUvujJrj18efeDRBog3PJ8R9k1QJIEHF6WrIBxyLyBpEvmLcoO2cjZmDEX4lw
-Tlw+/zd3m5ZmUbDIbk7sDTtdbItf0EU6j6ueb2xPZaecp0n1RZu4R0uduMuKKbI5
-uHoBDeKgvRjcq6I0eOwr6q/J1Db70ekNzQ1iopnzwlqaxnwzuyJZMwci7NTo4J+Z
-s1EH6eEdOCK4QtK7hCFT5xt1J2My6iJMW/zYa6bS34C1R0GAg5U=
-=FeWy
------END PGP SIGNATURE-----
-
---xsot2cdl72g2muyj--
+Laurent Pinchart
