@@ -2,156 +2,401 @@ Return-Path: <SRS0=z7aI=SZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 211C5C282E1
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69B06C10F14
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:28:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E4AD6217D9
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:10:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2560E214AE
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 14:28:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vfffPQMY"
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="ygi9OuDj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbfDWOKZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 10:10:25 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:56112 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727740AbfDWOKZ (ORCPT
+        id S1727812AbfDWO2f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 10:28:35 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:36462 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727180AbfDWO2f (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 10:10:25 -0400
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E73D5F;
-        Tue, 23 Apr 2019 16:10:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1556028623;
-        bh=RsDr0+I9oWWQLTfb2BKk/ZrvWy0V0RJbZSdY9HReNus=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vfffPQMYwSf+AoI4pDlSbx47Z1cNobERjaY0/J2aSQ+cYSZBnJrAAwaFRBPpT0A5L
-         giHyJT8UTV+7A6CkVoa7ar1g4hfZ1ic2QJSe7iARE4NPzJT6ig+u6bPq+CTz4pL0/h
-         3Qjdf9FPnRG6kfjPb5c5Wa8+Srv2+YBU9KoRvHJA=
-Date:   Tue, 23 Apr 2019 17:10:13 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: Re: [PATCH 4/9] media: vsp1: Add support for missing 32-bit RGB
- formats
-Message-ID: <20190423141013.GC4816@pendragon.ideasonboard.com>
-References: <20190328070723.26553-1-laurent.pinchart+renesas@ideasonboard.com>
- <20190328070723.26553-5-laurent.pinchart+renesas@ideasonboard.com>
- <20190404173905.n6mupqzvcr5vwhwu@uno.localdomain>
- <20190418060645.GC4806@pendragon.ideasonboard.com>
- <20190423132153.xfvy4dn3cflzotuf@uno.localdomain>
+        Tue, 23 Apr 2019 10:28:35 -0400
+Received: by mail-qk1-f196.google.com with SMTP id m137so4996197qke.3
+        for <linux-media@vger.kernel.org>; Tue, 23 Apr 2019 07:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=kg8h0oxkbuYeyiU8lm843tXNxAiLD0i6ZCwHcRcITqw=;
+        b=ygi9OuDjJkh5HdkwmA7cVBigg4+EZRu0vDBJRl4Eb/LR5Jo4e4iLJH8dHB09Y5D/is
+         OSdHo80uu9S1PpToU9GLaH/idJ2V/nRPV6kYKzfDmA9ikKO6EyN+pPoUVLTVqR6phoTR
+         k3We+QuFll4EDl5wHzwWM5o/MM370q8ubjRrVZNNRkpY48I+kAHP34a6T7Tpn5W2GzNh
+         k41OlFe+imJOcHANcGvMEekJZE211hjOHn0+Haq2vVGHK9mbJIB6/HiGMJMK6OVsykZQ
+         Zofr0VJwRe+fDnyi0CBFv+1wR/E1Yu3NuH8IJC5/n1ya03Bs2fG+/aXwn1rkxfwbkNii
+         o68g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=kg8h0oxkbuYeyiU8lm843tXNxAiLD0i6ZCwHcRcITqw=;
+        b=In320LtKA6bIVU4BMuxSOuUQF7h11cnEhjZzwPunyNlUlZ6nfnWKpyba1ChENRJz5J
+         RkTy4iuhYV7LTuYq2x8/dcYjbitmFaho5JXWIPmQHj+eFjxXYy9IWzBquklqUs5jhKHg
+         dyUWic5oEz7F7e5DsQGuX+yRiv+lAi95hQW/IHr1KP1a0SgXwVAfpTjFy+BOGyP9Wg/U
+         ZOgv93VT7NRxXZOhmvQsT8QZbAi2Vk/BLqxLX7PXPZkUnNeoMJd+YdE0c8yc5tVTAw8e
+         X6k7qFxsy15uVbvCyRXrlEb/ujoERmlMbPd/Vojs5oWueL4b+cDTRiK8VdsLfcysEsWO
+         eBuA==
+X-Gm-Message-State: APjAAAXbMTl2i8tsAzfWqekbIpj4ngYBZz1R7fseswYslmZ50u4wzq/P
+        pxk24bpNVlZLHHmdUwa5IgBvEA==
+X-Google-Smtp-Source: APXvYqyrIkmw9+qVvg7vQzi6msMq98/vf8Y7jGas6NDXmRnfySspiwyK4o6WAnBwMoUyGD6mAksVMg==
+X-Received: by 2002:ae9:ec07:: with SMTP id h7mr4975574qkg.7.1556029714112;
+        Tue, 23 Apr 2019 07:28:34 -0700 (PDT)
+Received: from tpx230-nicolas (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
+        by smtp.gmail.com with ESMTPSA id x24sm9791557qtm.65.2019.04.23.07.28.31
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 23 Apr 2019 07:28:32 -0700 (PDT)
+Message-ID: <e29914080f1db7b331e6e1b12dc9c7c48d5d7185.camel@ndufresne.ca>
+Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
+ common place
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Maxime Ripard <maxime.ripard@bootlin.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Date:   Tue, 23 Apr 2019 10:28:30 -0400
+In-Reply-To: <f288e1d29277fcd79b251d99f84fb9b165364fac.camel@bootlin.com>
+References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
+         <20190417154121.GJ13337@phenom.ffwll.local>
+         <20190418062229.eyog4i62eg4pr6uf@flea>
+         <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
+         <20190418090221.e57dogn4yx5nwdni@flea>
+         <6578c22ddf5420d4dead69d29f451bc6a91f6c4a.camel@bootlin.com>
+         <20190420224045.GY4964@pendragon.ideasonboard.com>
+         <20190423073026.GX13337@phenom.ffwll.local>
+         <f288e1d29277fcd79b251d99f84fb9b165364fac.camel@bootlin.com>
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-Zh7rxIBSoDrjPaJGfnkv"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190423132153.xfvy4dn3cflzotuf@uno.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
 
-On Tue, Apr 23, 2019 at 03:21:53PM +0200, Jacopo Mondi wrote:
-> On Thu, Apr 18, 2019 at 09:06:45AM +0300, Laurent Pinchart wrote:
-> > On Thu, Apr 04, 2019 at 07:39:05PM +0200, Jacopo Mondi wrote:
-> >> HI Laurent,
-> >>   if you help me out understanding the bit swapping procedure in VSP
-> >> I would be more confident in saying I actually reviewed the series.
-> >
-> > I'll try my best :-)
-> 
-> Thanks!
-> 
-> >> On Thu, Mar 28, 2019 at 09:07:18AM +0200, Laurent Pinchart wrote:
-> >>> Add support for the V4L2_PIX_FMT_BGRA32, V4L2_PIX_FMT_BGRX32,
-> >>> V4L2_PIX_FMT_RGBA32 and V4L2_PIX_FMT_RGBX32 formats to the VSP driver.
-> >>>
-> >>> Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> >>> ---
-> >>>  drivers/media/platform/vsp1/vsp1_pipe.c | 14 ++++++++++++++
-> >>>  1 file changed, 14 insertions(+)
-> >>>
-> >>> diff --git a/drivers/media/platform/vsp1/vsp1_pipe.c b/drivers/media/platform/vsp1/vsp1_pipe.c
-> >>> index 54ff539ffea0..9f08d85e89d7 100644
-> >>> --- a/drivers/media/platform/vsp1/vsp1_pipe.c
-> >>> +++ b/drivers/media/platform/vsp1/vsp1_pipe.c
-> >>> @@ -68,6 +68,20 @@ static const struct vsp1_format_info vsp1_video_formats[] = {
-> >>>  	{ V4L2_PIX_FMT_XBGR32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >>>  	  VI6_FMT_ARGB_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
-> >>>  	  1, { 32, 0, 0 }, false, false, 1, 1, false },
-> >>> +	{ V4L2_PIX_FMT_BGRA32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >>> +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
-> >>> +	  1, { 32, 0, 0 }, false, false, 1, 1, true },
-> >>> +	{ V4L2_PIX_FMT_BGRX32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >>> +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
-> >>> +	  1, { 32, 0, 0 }, false, false, 1, 1, false },
-> >>> +	{ V4L2_PIX_FMT_RGBA32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >>> +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> >>> +	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
-> >>> +	  1, { 32, 0, 0 }, false, false, 1, 1, true },
-> >>> +	{ V4L2_PIX_FMT_RGBX32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >>> +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> >>> +	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
-> >>> +	  1, { 32, 0, 0 }, false, false, 1, 1, false },
-> >>
-> >>
-> >> So, this is how I interpret the above lines for format BGRA32 (the
-> >> same applies to RGBA32 fwiw)
-> >>
-> >>         Bytes:          B3      B2      B1      B0
-> >> Input: ARGB8888_1X32:   A       R       G       B
-> >
-> > Note that, at the bus level, there's no byte ordering. Data is
-> > transmitted in parallel on a 32-bit bus (at least as far as I know). But
-> > this doesn't matter much anyway.
-> 
-> Indeed, but I should not use this as the description of the input
-> format but VI6_FMT_RGBA_8888, as you pointed out, which reads indeed
-> as RGBA (out of curiosity, what is the mbus code used for then?)
+--=-Zh7rxIBSoDrjPaJGfnkv
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In the VSP case the media bus format is used to differenciate between
-YUV and RGB. Internally after the RPF and before the WPF everything is
-transmitted with 32 bits per pixel.
+Le mardi 23 avril 2019 =C3=A0 14:33 +0200, Paul Kocialkowski a =C3=A9crit :
+> Hi,
+>=20
+> On Tue, 2019-04-23 at 09:30 +0200, Daniel Vetter wrote:
+> > On Sun, Apr 21, 2019 at 01:40:45AM +0300, Laurent Pinchart wrote:
+> > > Hi Paul,
+> > >=20
+> > > On Thu, Apr 18, 2019 at 01:49:54PM +0200, Paul Kocialkowski wrote:
+> > > > On Thu, 2019-04-18 at 11:02 +0200, Maxime Ripard wrote:
+> > > > > On Thu, Apr 18, 2019 at 09:52:10AM +0200, Daniel Vetter wrote:
+> > > > > > And a lot of people pushed for the "fourcc is a standard", when
+> > > > > > really it's totally not.
+> > > > >=20
+> > > > > Even if it's not a standard, having consistency would be a good t=
+hing.
+> > > > >=20
+> > > > > And you said yourself that DRM fourcc is now pretty much an autho=
+rity
+> > > > > for the fourcc, so it definitely looks like a standard to me.
+> > > >=20
+> > > > I think trying to make the V4L2 and DRM fourccs converge is a lost
+> > > > cause, as it has already significantly diverged. Even if we coordin=
+ate
+> > > > an effort to introduce new formats with the same fourcc on both sid=
+es,
+> > > > I don't see what good that would be since the formats we have now a=
+re
+> > > > still plagued by the inconsistency.
+> > > >=20
+> > > > I think we always need an explicit translation step from either v4l=
+2 or
+> > > > drm to the internal representation and back, without ever assuming =
+that
+> > > > formats might be compatible because they share the same fourcc.
+> > >=20
+> > > I don't agree. APIs evolve, and while we can't switch from one set of
+> > > 4CCs to another in existing APIs, we could in new APIs. Boris is work=
+ing
+> > > on new ioctls to handle formats in V4L2, and while 4CC unification co=
+uld
+> > > be impopular from a userspace developers point of view there, I don't
+> > > think we have ruled it out completely. The move to the request API is
+> > > also an area where a common set of 4CCs could be used, as it will dep=
+art
+> > > from the existing V4L2 ioctls. To summarize my opinion, we're not the=
+re
+> > > yet, but I wouldn't rule it out completely for the future.
+> > >=20
+> > > > It looks like so far, V4L2 pixel formats describe a DRM pixel forma=
+t +
+> > > > modifier.
+> > >=20
+> > > DRM modifiers are mostly about tiling and compression, and we hardly
+> > > support these in V4L2. What are the modifiers you think are hardcoded=
+ in
+> > > 4CCs in V4L2 ?
+> >=20
+> > Hm maybe it was a drm one that didn't come from v4l or anywhere else
+> > really, but the NV12MT one is nv12 + some tiling. I think we managed to
+> > uapi-bend that one into shape in at least drm.
+>=20
+> The one I had in mind is V4L2_PIX_FMT_SUNXI_TILED_NV12 which translates
+> to DRM_FORMAT_NV12 + DRM_FORMAT_MOD_ALLWINNER_TILED. Seems to be a
+> pretty similar case to the Mediatek one indeed.
+>=20
+> In our cause, that's because the video decoding engine produces its
+> destination buffers in a specific tiled format, that the display engine
+> can take in directly.
 
-> >> Out:   BGRA32           R       G       B       A
-> >>
-> >> If I apply LLS and LWS on the "Input Row", according to the table I get
-> >>
-> >>  Position in Table 32.10:    0  1  2  3
-> >>  IN Components ordering:     A  R  G  B  (ARGB8888_1X32
-> >>  Position in Table 32.10:    3  2  1  0  (with LLS and LWS applied)
-> >>  OUT Components ordering:    B  G  R  A
-> >>
-> >> Which to me is the ordering of components of the format named
-> >> V4L2_PIX_FMT_ARGB32 and not BGRA32 which is instead, as reported RGBA
-> >> (GREAT naming here!)
-> >>
-> >> What am I doing wrong?
-> >
-> > You need to take entry VI6_FMT_RGBA_8888 (0x14) in table 32.10, which
-> > reads R G B A. Applying LLS and LWS but not WDS and BTS swaps the bytes
-> > to A B G R (see table 32.13), so the pixel is written to memory in the A
-> > B G R order, corresponding to V4L2_PIX_FMT_BGRA32 (I agree with you
-> > about the insane naming for the 4CC, but that's not my fault :-().
-> 
-> Thanks, now that I applied flags to the correct input format, the
-> patch seems correct to me.
-> 
-> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-> 
-> >>>  	{ V4L2_PIX_FMT_ARGB32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> >>>  	  VI6_FMT_ARGB_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> >>>  	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
+We also have the Samsung tiling (Z pattern) as mentioned here, but also
+linear 16x16 tile placement (also from Samsung ?) and I believe Amlogic
+CODEC patches is bringing another tiling (unavoidable on older Meson8,
+with 64bytes swaps). All these should be expressed as NV12 + mod in DRM
+space.
 
--- 
-Regards,
+What is very often not enabled, but affect the performance on mainline
+media drivers is the ARM frame buffer compression. I know that RK chips
+have support for this, and that you can't achieve the maximum
+throughput without that. This one is not documented anywhere, but I
+understand that there is multiple variants that HW vendor licence.
+Though, in general, each SoC are likely running a single variant, so a
+single mod would make sense.
 
-Laurent Pinchart
+So all this to say that V4L2 equally needs supports for these. What I
+understood through DRM API is that a buffer allocated for let's say
+NV12 + mod, is compatible with linear NV12. That could be used to
+simplify some code, but at the same time, a common API that deals with
+the padding and alignment of each format + mod independently would do
+that same as long as this is not variable depending on which target HW
+uses that same format.
+
+I think DRM + mod reduce the amount of dedicated formats that needs to
+be added, and simplify the documentation of each formats. I was looking
+at the Amlogic Axi configurations on Amlogic S905x recently, and for
+each well known format, there is a bitmask that let you do arbitrary
+swapping of bits, so effectively if we start exposing all these with
+V4L2 style, the list would become very long and hard to maintained.
+
+>=20
+> Cheers,
+>=20
+> Paul
+>=20
+> > -Daniel
+> >=20
+> > > > I think Boris (CCed) is working to change that by allowing to
+> > > > pass a DRM modifier through V4L2. With that, we'd be in a situation
+> > > > where some formats are described by the v4l2 pixfmt alone and some
+> > > > formats are also described a modifier (but I looked at it from a
+> > > > distance so might have misunderstod). That feels better since it av=
+oids
+> > > > the combinatory explosion from describing each format + modifier
+> > > > individually.
+> > > >=20
+> > > > What do you think?
+> > > >=20
+> > > > > > v4l tends to conflate pixel format with stuff that we tend to e=
+ncode
+> > > > > > in modifiers a lot more.
+> > > > >=20
+> > > > > Boris is working on adding the modifiers concept to v4l2, so we'r=
+e
+> > > > > converging here, and we can totally have a layer in v4l2 to conve=
+rt
+> > > > > between old v4l2 "format+modifiers" formats, and DRM style format=
+s.
+> > > > >=20
+> > > > > > There's a bunch of reasons we can't just use v4l, and they're a=
+s
+> > > > > > valid as ever:
+> > > > > >=20
+> > > > > > - We overlap badly in some areas, so even if fourcc codes match=
+, we
+> > > > > >   can't use them and need a duplicated DRM_FOURCC code.
+> > > > >=20
+> > > > > Do yo have an example of one of those areas?
+> > > > >=20
+> > > > > > - v4l encodes some metadata into the fourcc that we encode else=
+where,
+> > > > > >   e.g. offset for planar yuv formats, or tiling mode
+> > > > >=20
+> > > > > As I was saying, this changes on the v4l2 side, and converging to
+> > > > > what DRM is doing.
+> > > > >=20
+> > > > > > - drm fourcc code doesn't actually define the drm_format_info
+> > > > > >   uniquely, drivers can override that (that's an explicit desig=
+n
+> > > > > >   intent of modifiers, to allow drivers to add another plane fo=
+r
+> > > > > >   e.g. compression information). You'd need to pull that driver
+> > > > > >   knowledge into your format library.
+> > > > >=20
+> > > > > I'm not sure how my patches are changing anything here. This is
+> > > > > litterally the same code, with the functions renamed.
+> > > > >=20
+> > > > > If drivers want to override that, then yeah, fine, we can let the=
+m do
+> > > > > that. Just like any helper this just provides a default that cove=
+rs
+> > > > > most of the cases.
+> > > > >=20
+> > > > > > Iow there's no way we can easily adopt v4l fourcc, except if we=
+ do
+> > > > > > something like a new addfb flag.
+> > > > >=20
+> > > > > For the formats that would be described as a modifier, sure. For =
+all
+> > > > > the others (that are not yet supported by DRM), then I don't real=
+ly
+> > > > > see why not.
+> > > > >=20
+> > > > > > > And given how the current state is a mess in this regard, I'm=
+ not too
+> > > > > > > optimistic about keeping the formats in their relevant framew=
+orks.
+> > > > > > >=20
+> > > > > > > Having a shared library, governed by both, will make this far=
+ easier,
+> > > > > > > since it will be easy to discover the formats that are alread=
+y
+> > > > > > > supported by the other subsystem.
+> > > > > >=20
+> > > > > > I think a compat library that (tries to, best effort) convert b=
+etween
+> > > > > > v4l and drm fourcc would make sense. Somewhere in drivers/video=
+, next
+> > > > > > to the conversion functions for videomode <-> drm_display_mode
+> > > > > > perhaps. That should be useful for drivers.
+> > > > >=20
+> > > > > That's not really what this series is about though. That series i=
+s
+> > > > > about sharing the (image|pixels) formats database across everyone=
+ so
+> > > > > that everyone can benefit from it.
+> > > > >=20
+> > > > > > Unifying the formats themselves, and all the associated metadat=
+a is
+> > > > > > imo a no-go, and was a pretty conscious decision when we implem=
+ented
+> > > > > > drm_fourcc a few years back.
+> > > > > >=20
+> > > > > > > If we want to keep the current library in DRM, we have two op=
+tions
+> > > > > > > then:
+> > > > > > >=20
+> > > > > > >   - Support all the v4l2 formats in the DRM library, which is
+> > > > > > >     essentially what I'm doing in the last patches. However, =
+that
+> > > > > > >     would require to have the v4l2 developpers also reviewing=
+ stuff
+> > > > > > >     there. And given how busy they are, I cannot really see h=
+ow that
+> > > > > > >     would work.
+> > > > > >=20
+> > > > > > Well, if we end up with a common library then yes we need cross
+> > > > > > review. There's no way around that. Doesn't matter where exactl=
+y that
+> > > > > > library is in the filesystem tree, and adding a special MAINTAI=
+NERS
+> > > > > > entry for anything related to fourcc (both drm and v4l) to make=
+ sure
+> > > > > > they get cross-posted is easy. No file renaming needed.
+> > > > >=20
+> > > > > That would create some governing issues as well. For example, if =
+you
+> > > > > ever have a patch from one fourcc addition (that might or might n=
+ot be
+> > > > > covered by v4l2), will you wait for any v4l2 developper to review=
+ it?
+> > > > >=20
+> > > > > If it's shared code, then it should be shared, and every client
+> > > > > framework put on an equal footing.
+> > > > >=20
+> > > > > > >   - Develop the same library from within v4l2. That is really=
+ a poor
+> > > > > > >     solution, since the information would be greatly duplicat=
+ed
+> > > > > > >     between the two, and in terms of maintainance, code, and =
+binary
+> > > > > > >     size that would be duplicated too.
+> > > > > >=20
+> > > > > > It's essentially what we decided to do for drm years back.
+> > > > >=20
+> > > > > And it was probably the right solution back then, but I'm really =
+not
+> > > > > convinced it's still the right thing to do today.
+> > > > >=20
+> > > > > > > Having it shared allows to easily share, and discover formats=
+ from the
+> > > > > > > other subsystem, and to have a single, unique place where thi=
+s is
+> > > > > > > centralized.
+> > > > > >=20
+> > > > > > What I think could work as middle ground:
+> > > > > > - Put drm_format stuff into a separate .ko
+> > > > > > - Add a MAINTAINERS entry to make sure all things fourcc are cr=
+oss
+> > > > > > posted to both drm and v4l lists. Easy on the drm side, since i=
+t's all
+> > > > > > separate files. Not sure it's so convenient for v4l uapi.
+> > > > > > - Add a conversion library that tries to best-effort map betwee=
+n drm
+> > > > > > and v4l formats. On the drm side that most likely means you nee=
+d
+> > > > > > offsets for planes, and modifiers too (since those are implied =
+in some
+> > > > > > v4l fourcc). Emphasis on "best effort" i.e. only support as muc=
+h as
+> > > > > > the drivers that use this library need.
+> > > > > > - Add drm_fourcc as-needed by these drivers that want to use a =
+unified
+> > > > > > format space.
+> > > > > >=20
+> > > > > > Forcing this unification on everyone otoh is imo way too much.
+> > > > >=20
+> > > > > v4l2 is starting to converge with DRM, and we're using the DRM AP=
+I
+> > > > > pretty much untouched for that library, so I'm not really sure ho=
+w
+> > > > > anyone is hurt by that unification.
+> > >=20
+> > > --=20
+> > > Regards,
+> > >=20
+> > > Laurent Pinchart
+
+--=-Zh7rxIBSoDrjPaJGfnkv
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXL8hDgAKCRBxUwItrAao
+HH1WAKCYq4AV39+mMbk/uAJVx5oqTcZulACfc1HmiSCS/5VX587mgIWFv57vmn0=
+=uoRg
+-----END PGP SIGNATURE-----
+
+--=-Zh7rxIBSoDrjPaJGfnkv--
+
