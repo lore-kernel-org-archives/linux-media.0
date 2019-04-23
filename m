@@ -2,178 +2,208 @@ Return-Path: <SRS0=z7aI=SZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28621C282E1
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 13:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F881C282DD
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 13:28:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 027A520645
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 13:21:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA5AD2077C
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 13:28:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727745AbfDWNVC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 09:21:02 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:38575 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727500AbfDWNVC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 09:21:02 -0400
-X-Originating-IP: 2.224.242.101
-Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 78FDB240007;
-        Tue, 23 Apr 2019 13:20:58 +0000 (UTC)
-Date:   Tue, 23 Apr 2019 15:21:53 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: Re: [PATCH 4/9] media: vsp1: Add support for missing 32-bit RGB
- formats
-Message-ID: <20190423132153.xfvy4dn3cflzotuf@uno.localdomain>
-References: <20190328070723.26553-1-laurent.pinchart+renesas@ideasonboard.com>
- <20190328070723.26553-5-laurent.pinchart+renesas@ideasonboard.com>
- <20190404173905.n6mupqzvcr5vwhwu@uno.localdomain>
- <20190418060645.GC4806@pendragon.ideasonboard.com>
+        id S1727981AbfDWN2u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 09:28:50 -0400
+Received: from mga03.intel.com ([134.134.136.65]:10665 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727827AbfDWN2p (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Apr 2019 09:28:45 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Apr 2019 06:28:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.60,385,1549958400"; 
+   d="scan'208";a="138073643"
+Received: from dixitsau-mobl.gar.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.252.63.40])
+  by orsmga006.jf.intel.com with ESMTP; 23 Apr 2019 06:28:42 -0700
+Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
+        id 2C0C021E9B; Tue, 23 Apr 2019 16:28:40 +0300 (EEST)
+Date:   Tue, 23 Apr 2019 16:28:40 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: Route lifetime in SUBDEV_[GS]_ROUTING
+Message-ID: <20190423132839.3rybeo4rolzu6cfb@kekkonen.localdomain>
+References: <20190417104147.zlmbw32dr46vmtrq@paasikivi.fi.intel.com>
+ <20190423101932.gszkn4olqatoisde@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="hd3bbrbxqcyzbszl"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190418060645.GC4806@pendragon.ideasonboard.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190423101932.gszkn4olqatoisde@uno.localdomain>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Jacopo,
 
---hd3bbrbxqcyzbszl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-Hi Laurent,
-
-On Thu, Apr 18, 2019 at 09:06:45AM +0300, Laurent Pinchart wrote:
-> Hi Jacopo,
->
-> On Thu, Apr 04, 2019 at 07:39:05PM +0200, Jacopo Mondi wrote:
-> > HI Laurent,
-> >   if you help me out understanding the bit swapping procedure in VSP
-> > I would be more confident in saying I actually reviewed the series.
->
-> I'll try my best :-)
->
-
-Thanks!
-
-> > On Thu, Mar 28, 2019 at 09:07:18AM +0200, Laurent Pinchart wrote:
-> > > Add support for the V4L2_PIX_FMT_BGRA32, V4L2_PIX_FMT_BGRX32,
-> > > V4L2_PIX_FMT_RGBA32 and V4L2_PIX_FMT_RGBX32 formats to the VSP driver.
-> > >
-> > > Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> > > ---
-> > >  drivers/media/platform/vsp1/vsp1_pipe.c | 14 ++++++++++++++
-> > >  1 file changed, 14 insertions(+)
-> > >
-> > > diff --git a/drivers/media/platform/vsp1/vsp1_pipe.c b/drivers/media/platform/vsp1/vsp1_pipe.c
-> > > index 54ff539ffea0..9f08d85e89d7 100644
-> > > --- a/drivers/media/platform/vsp1/vsp1_pipe.c
-> > > +++ b/drivers/media/platform/vsp1/vsp1_pipe.c
-> > > @@ -68,6 +68,20 @@ static const struct vsp1_format_info vsp1_video_formats[] = {
-> > >  	{ V4L2_PIX_FMT_XBGR32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > >  	  VI6_FMT_ARGB_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
-> > >  	  1, { 32, 0, 0 }, false, false, 1, 1, false },
-> > > +	{ V4L2_PIX_FMT_BGRA32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > > +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
-> > > +	  1, { 32, 0, 0 }, false, false, 1, 1, true },
-> > > +	{ V4L2_PIX_FMT_BGRX32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > > +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS,
-> > > +	  1, { 32, 0, 0 }, false, false, 1, 1, false },
-> > > +	{ V4L2_PIX_FMT_RGBA32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > > +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > > +	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
-> > > +	  1, { 32, 0, 0 }, false, false, 1, 1, true },
-> > > +	{ V4L2_PIX_FMT_RGBX32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > > +	  VI6_FMT_RGBA_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > > +	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
-> > > +	  1, { 32, 0, 0 }, false, false, 1, 1, false },
+On Tue, Apr 23, 2019 at 12:19:32PM +0200, Jacopo Mondi wrote:
+> Hi Sakari,
+> 
+> On Wed, Apr 17, 2019 at 01:41:48PM +0300, Sakari Ailus wrote:
+> > Hi Jacopo,
 > >
+> > I promised to write a bit about the routing problem I attempted to write on
+> > #v4l. It's a bit late, but here it is. Let me know if you share my
+> > understanding (and especially do so if you don't :)).
+> 
+> Thanks for doing this, and sorry it took me a while to reply!
+> 
 > >
-> > So, this is how I interpret the above lines for format BGRA32 (the
-> > same applies to RGBA32 fwiw)
+> > A route is identified by the source and sink pads as well as the stream ID
+> > on the source and the sink pads. Its flags allow enabling or disabling a
+> > route.
 > >
-> >         Bytes:          B3      B2      B1      B0
-> > Input: ARGB8888_1X32:   A       R       G       B
->
-> Note that, at the bus level, there's no byte ordering. Data is
-> transmitted in parallel on a 32-bit bus (at least as far as I know). But
-> this doesn't matter much anyway.
->
-
-Indeed, but I should not use this as the description of the input
-format but VI6_FMT_RGBA_8888, as you pointed out, which reads indeed
-as RGBA (out of curiosity, what is the mbus code used for then?)
-
-> > Out:   BGRA32           R       G       B       A
+> > Most devices that function as transmitters (such as sensors) have a fixed
+> > number of routes they can support. These's no need to change them; enabling
+> > and disabling them will be enough for the user.
 > >
-> > If I apply LLS and LWS on the "Input Row", according to the table I get
+> 
+> Fine so far.
+> 
+> We indeed define routes as:
+> (sink pad - sink stream) -> (source pad - source stream)
+> 
+> > For receivers this is different. What needs to be supported on the receiver
+> > side is directing any incoming stream (a 32-bit unsigned integer) to any
+> > source pad.
 > >
-> >  Position in Table 32.10:    0  1  2  3
-> >  IN Components ordering:     A  R  G  B  (ARGB8888_1X32
-> >  Position in Table 32.10:    3  2  1  0  (with LLS and LWS applied)
-> >  OUT Components ordering:    B  G  R  A
+> > This is because pads are not alike --- one may be connected to a block that
+> > further processes the image whereas the others may be connected to a DMA
+> > engine, just writing the data to memory.
 > >
-> > Which to me is the ordering of components of the format named
-> > V4L2_PIX_FMT_ARGB32 and not BGRA32 which is instead, as reported RGBA
-> > (GREAT naming here!)
+> > The receivers also may not make assumptions beyond the sub-device API: the
+> > stream is a 32-bit unsigned integer, there is currently no API requirement
+> > to have the stream IDs on a particular low integer range. In principle we
+> > could define that range, but I'd rather try to find better solutions than
+> > that: it's hard to come up with a number as it depends on the hardware.
+> > Some kind of an upper limit could be the number of CSI-2 channels
+> > multiplied by CSI-2 data types. That would be enough for CSI-2. 16 or 32
+> > virtual channels and up to 64 data types would mean up to 2048 routes
+> > between a demultiplexer's sink pad and *each* of its source pads. And this
+> > comes with an assumption that the source pads only support a single
+> > stream...
+> 
+> I lost you here.
+> 
+> My mental model was far more (too?) simple:
+> 
+> - Routing tables inside an entity might have an arbitrary size, as how
+>   that configuration depends on the device and the driver
+>   implementation. As an example, the adv748x accepts 7 analogue
+>   inputs to chose from and route to a CSI-2 source pad.
+>   depending on the implementation, those 7 inputs could be modeled as
+>   7 pads with one stream each, or a single pad with 7 channels or
+>   whatever else, and I agree the 'stream_id' values range is totally
+>   up to the driver implementation -inside an entity-.
+> 
+> - The cross-entity (sorry, I lack a better term here) multiplexing
+>   happens on physical bus that allows so, and I can only think of
+>   CSI-2 at the moment. Sure, you could share the lines of a parallel
+>   bus playing with enables/disables of the transmitters, but this
+>   is a custom hack that does not play well in this model.
+>   Each CSI-2 source pad has up to 4 streams (one per VC) and the
+>   content of those streams is retrieved from the transmitter by the
+>   receiver through the remote frame_desc operation [*], as receivers
+>   might need to be setup using to filter on particular VC/DT combinations
+>   to receive the stream.
+
+Note that the concept of a "stream" is different in our proposed API and in
+CSI-2 (virtual channel): on CSI-2 virtual channels can carry multiple data
+types but in our definition they do not. That means there will be more
+streams on SUBDEV_[GS]_ROUTING API than there are on a CSI-2 bus.
+
+We also do not limit the use of the new API to old CSI-2 D-PHYs that
+only support four virtual channels. Therefore we need to think how this
+would work on 16 or 32 virtual channels, and preferrably not posing
+problems with larger numbers either.
+
+> 
+> - Each CSI-2 receiver sink pad supports 4 streams (the CSI-2 VCs) and any
+>   of those streams can be directed to any of its source pads, to
+>   implement what you have described (one pad connected to an ISP-like
+>   device, on other to the DMA engine directly etc)
+> 
+> - DT negotiation is still a bit vague. The example we have on the
+>   series (adv748x and r-car csi2) configure the receiver's accepted DT
+>   inspecting the remote frame_desc. Again, as per [*] this migh be
+>   limitied to 1 DT for VC, which might not be enough and would require
+>   re-thinking the operation used for the negotiation.
+> 
+> - Configuring a multiplexed source pad image format is today not
+>   possible, the format is always propagated from the sink pad to which
+>   a route is enabled to the source pad. Might this be a limitation on
+>   how we control which DTs are multiplexed inside a VC and won't allow
+>   to model any format conversion that might happen at the source pad
+>   output. I was toying myself with the idea of a stream-aware set
+>   format operation for multiplexed source pads, not sure it might work
+>   though.
+> 
+> Can I ask you why:
+> - you mention 16 or 32 VCs ? Each CSI-2 link supports up to 4.
+
+See above.
+
+> - you put DT in the routing mix, and I suspect it is here where our
+>   disconnection happens. I always assume DT configuration as a result
+>   of a format configuration operation, which currently has limitations
+>   as noted here above.
+
+Yes; DT comes from the format and is generally determined by the
+transmitting driver. Nothing else limits the number of DTs on a VC except
+the number of DTs --- which is currently 64.
+
+> 
+> 
+> [*] I would later like to talk about if this is the most appropriate
+> operation to handle this negotiation, as I'm not sure we can handle DT
+> negotiation properly with that, but that's for later.
+> 
 > >
-> > What am I doing wrong?
->
-> You need to take entry VI6_FMT_RGBA_8888 (0x14) in table 32.10, which
-> reads R G B A. Applying LLS and LWS but not WDS and BTS swaps the bytes
-> to A B G R (see table 32.13), so the pixel is written to memory in the A
-> B G R order, corresponding to V4L2_PIX_FMT_BGRA32 (I agree with you
-> about the insane naming for the 4CC, but that's not my fault :-().
+> > CSI-2 receivers support a number of simultaneous streams, and as the stream
+> > is demultiplexed there, this means there will be as many source pads as
+> > there are supported simultaneous streams. This heavily depe`nds on the
+> > hardware, but the number could be e.g. 1, 4 or 8. Much smaller than 2048 in
+> > any case.
+> >
+> 
+> Why 8? Is this related to DT multiplexing again?
 
-Thanks, now that I applied flags to the correct input format, the
-patch seems correct to me.
+Yes and no. It's just a random number between 1 and 2048. :-)
 
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+> 
+> > Another option could be creating no routes at all at device init time, and
+> > letting the user create them. We could add a new flag for routes telling
+> > that a route is dynamic: disabling a dynamic route would simply delete it.
+> > Likewise, a SUBDEV_G_ROUTING returning no routes (but no error either)
+> > would also tell the user only dynamic routes are supported.
+> >
+> > We should document this and change the driver implementation accordingly.
+> > No API changes are needed (apart from adding the dynamic flag --- or rather
+> > call it "volatile", to avoid confusing with routes that can be enabled or
+> > disabled while streaming).
+> >
+> 
+> I have v5 of the series ready. Do you want me to post it to progress
+> discussion, or should we clarify this first?
 
-Thanks
-   j
+Feel free to post it. But to merge the series, I think we need to address
+this.
 
->
-> > >  	{ V4L2_PIX_FMT_ARGB32, MEDIA_BUS_FMT_ARGB8888_1X32,
-> > >  	  VI6_FMT_ARGB_8888, VI6_RPF_DSWAP_P_LLS | VI6_RPF_DSWAP_P_LWS |
-> > >  	  VI6_RPF_DSWAP_P_WDS | VI6_RPF_DSWAP_P_BTS,
->
-> --
-> Regards,
->
-> Laurent Pinchart
+-- 
+Regards,
 
---hd3bbrbxqcyzbszl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAly/EXEACgkQcjQGjxah
-VjxbvA/7BIwZm1EDAo7PUFrBQv1Pa6DMs0hXy3LhsACmId9B6f4yLsrFtyma1+GT
-iyyx2ngkEQTuiGImRrGun8GSEmMxJfNtPrNbDDro9lobJqa+79lcopGmbgos3dqe
-2cywc45xsVinSCtcA1u10v+40Rii2dcx0z6bPnzVXz/amQH59nKgo3+Kyk+LwDJu
-ysfjXXvDw3Av1SwktuC8jLmuzbKamGAu37AM31YpAkl42UVPXSbTj71KOKrE2+Ja
-tV+9xMjTIeVn5DryU4Hm0+n9Jtjx45dqfNOCB9Kux0mqARfJ27quHmkKXi6jJRm2
-a/16X2ITWPJTKXYdyV7ANh8mCDm4cCTax8ZJ6shcwggsS0SJ0rOPOzQ5se+5LAIU
-lSWT9UW6o8+T+sPk/qz+lTnP5W/OKKf8tliRhNNiB3lAhuj0/SeO66dS46H1woaA
-YGevU7I5i2eqn5lGLBHOBp7UatJR3vSQaPf7uXs2WK2BsX9LkMu3RRwIbkq4UH6Y
-ihZ1P3A+2uTQHKbm5Vu4iFQW3OqJVZLavHSqBdLdVt0aFby6xlVzE7m6rQspEDN+
-fh093RNL6JPYjwkBqkjvrMIl78WC+XR6dfIMPnBXdHk+SEuHc/9IacuhWMSGEYNb
-DVcW0ZFOierI/fzPqNPJJgBFsXGpejzIB9Ov0M3nLQ4QcWGBEF4=
-=SYcg
------END PGP SIGNATURE-----
-
---hd3bbrbxqcyzbszl--
+Sakari Ailus
+sakari.ailus@linux.intel.com
