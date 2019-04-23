@@ -2,129 +2,149 @@ Return-Path: <SRS0=z7aI=SZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11288C10F14
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 08:34:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12033C10F14
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 09:00:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CCF9A20645
-	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 08:34:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C766F20674
+	for <linux-media@archiver.kernel.org>; Tue, 23 Apr 2019 09:00:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZW4fnM9"
+	dkim=pass (2048-bit key) header.d=fooishbar-org.20150623.gappssmtp.com header.i=@fooishbar-org.20150623.gappssmtp.com header.b="yp0mZZex"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726033AbfDWIeI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 04:34:08 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:37360 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbfDWIeI (ORCPT
+        id S1726648AbfDWJAC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Apr 2019 05:00:02 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45388 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726033AbfDWJAB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 04:34:08 -0400
-Received: by mail-wm1-f68.google.com with SMTP id v14so17663854wmf.2;
-        Tue, 23 Apr 2019 01:34:06 -0700 (PDT)
+        Tue, 23 Apr 2019 05:00:01 -0400
+Received: by mail-lj1-f193.google.com with SMTP id y6so12737561ljd.12
+        for <linux-media@vger.kernel.org>; Tue, 23 Apr 2019 01:59:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=faI8d3sk5W2GvXrBFVQ9tJaO4sXRhQyDKbVWY7XXzi8=;
-        b=fZW4fnM9xOfJXqCfH6wuFPmscJzQhPHukUFG3YPESRuUS52WqZqCMAsHU5bgobGc07
-         XETRw9f6L4K8RUqXLJ7X8Hy/1YBGMod6DFAbun2/OzzJ7Hf/13dJgid/U+cErY0KDuKC
-         zcQV117yeO370JNVUu8vjUGSGxxMXw2jLch/gATmCFIrSqEd4BDDLSLZo8vRb/ak1HQH
-         DsKTVwXeFQugH70s8WKOcqkk8CgoeS3aAYehdCrtEnEukFT5Qskhrfu+hHZVEH16m1Y6
-         jyN+4zfklwHVJ63alZc+epK3r9splNLeyq4lsYjPT/1DtVeU+ODHk+mSzkpTll9AsFJg
-         k8vw==
+        d=fooishbar-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=CvaomlbaXxtymqxQxD6W+RuKqP8z/iCKy231aTStM20=;
+        b=yp0mZZexkGrefH8+REJLrImRVaBKobtKjI66dAbPm9codU5dvr9ycLh+2PjGePKAAY
+         2akW89FogqEa497Wax5Fe1yLvijWjQZz088xyEqdwtC2SNoASN7ud9+mfQrt7+rSHvxu
+         tKcFXh+HbQZamfdwvjGv+RiNY7Du4eONPl/bdapBbvd4/P2jFaFEQfVYvblHb26KfXIp
+         XF04bWFGpd3yOIEozNb5M3jwShfd7EhR5P19nFzSwCZbDY3y0aeLtEwsS0r5sXMSjd/f
+         Oplb7Lg3t/rgZhuQwKXh2YGaIrQBqeEt2EB9YKHiSttV8faNwvy5/Ay4qOyvcVPGiDch
+         jpHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=faI8d3sk5W2GvXrBFVQ9tJaO4sXRhQyDKbVWY7XXzi8=;
-        b=kwHBZ12IP1nVk2YPS/tJUY/mODsX+tdrw3EweFffNQlYr3dvo9eBJFVy4NAYLa6RtD
-         JpW+ucsK4BYPdU/YT1wAOl6eXe6icl16nKYyrHCHuVDF6chJbp5UhWt8zsCIxE8ftmPY
-         Z7ebWXusKY1h8T4NnfHTx/tvQKssA55gXduvM8K2YjxtYBInIWJ3+Akpb1G7oKXaFbp+
-         pm/enLPpIMeMCbHbr4Ve3aiaWeuQxJsvqBOqCItDysQtACHzjQJlwEgzYf37eqkuJaGG
-         W7rU+66AoVP5vzqvRUf8kJKdT1qhGaISNblz9rF1pOd7ofonoaQVyso9TLVIotvBkaz6
-         3wnw==
-X-Gm-Message-State: APjAAAWDI6X7ke0Zm+UhFMgGBxgXp5FUNyXe3sVMbavzzQ9fJOahzs7Y
-        eH6k7jRN6+19sxOytPEpf8+Rf8Op2RU=
-X-Google-Smtp-Source: APXvYqy8xdlL0gC035rJWjYfM7x5UKqbnnZAYPUagygXRruLf6Ug8VUfATKJ7o1nucgsJI8CfC7TnQ==
-X-Received: by 2002:a1c:2d0e:: with SMTP id t14mr1324868wmt.33.1556008445993;
-        Tue, 23 Apr 2019 01:34:05 -0700 (PDT)
-Received: from arch-late (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id z13sm7716276wrh.41.2019.04.23.01.34.04
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 23 Apr 2019 01:34:04 -0700 (PDT)
-References: <20190423075020.173734-1-wangkefeng.wang@huawei.com> <20190423075020.173734-23-wangkefeng.wang@huawei.com>
-User-agent: mu4e 1.2.0; emacs 27.0.50
-From:   Rui Miguel Silva <rmfrfs@gmail.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        "Steve Longerbeam" <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH next 22/25] media: staging/imx7: Use dev_get_drvdata()
-In-reply-to: <20190423075020.173734-23-wangkefeng.wang@huawei.com>
-Date:   Tue, 23 Apr 2019 09:34:03 +0100
-Message-ID: <m3y3412k90.fsf@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=CvaomlbaXxtymqxQxD6W+RuKqP8z/iCKy231aTStM20=;
+        b=t8rxg7nd3vKqUfuwFNmhDtVMSNQu3iDAesT0WLcITBC0Xyf92ha6JENBpCJsmITAfc
+         dlLDFtShgyzLu4fMg+BWX72Rl+rPG3uAJBIXRt8voiyEMXQ8h+ef/W7mpRbcRb+n+5ud
+         TAZKOK9q/LERxZaE7U6uay6N5AkXvSKVjMaYrr2Lt4HP5y2MDImqoL6fVQGIzT8WG4Ow
+         SQzzShUx/b5xNX2PW06ce0ZFm9Nb0KFciC7XfGZ7xfiNg+ejfzIf/8/nzDxU6/YkiKi6
+         AJcLYBpz4ObZcIAvjmQjTmiWB+y63OJrwTISfIqI1Qre9nULlrvewBbTYZcAFxbr02Fi
+         b//g==
+X-Gm-Message-State: APjAAAXD7nGMLYcXWj71SswAWw5mAjywfse49oUkDqO91rJthkZWwdTu
+        cyc2DJrDxdtNReSpi54EqHwfbT8D3EfYKnNRTSHJtg==
+X-Google-Smtp-Source: APXvYqy9cU6GL/iq4/0pK6YvHXQbyi2BmRCdxgFf2pNhk3mst69GcT16J8QBOXIi3EvNOlWrX5v6rXN0keJV1s+MPOc=
+X-Received: by 2002:a2e:390c:: with SMTP id g12mr13958184lja.174.1556009998594;
+ Tue, 23 Apr 2019 01:59:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <cover.8ec406bf8f4f097e9dc909d5aac466556822f592.1555487650.git-series.maxime.ripard@bootlin.com>
+ <20190417154121.GJ13337@phenom.ffwll.local> <20190418062229.eyog4i62eg4pr6uf@flea>
+ <CAKMK7uHwSjqXwWGt+wQ6oMFWoPqmBxYHL7r+vTOXdYt9KMCYLQ@mail.gmail.com>
+ <20190418090221.e57dogn4yx5nwdni@flea> <CAKMK7uHN6QfYyzx4DjRT+7VLRi6N9DorQtw2GoDiNGTgie=DXA@mail.gmail.com>
+ <20190420225904.GZ4964@pendragon.ideasonboard.com> <20190423072554.GW13337@phenom.ffwll.local>
+In-Reply-To: <20190423072554.GW13337@phenom.ffwll.local>
+From:   Daniel Stone <daniel@fooishbar.org>
+Date:   Tue, 23 Apr 2019 09:59:37 +0100
+Message-ID: <CAPj87rMWdjEvTJWRvdMLTZyw7pZpo5PpPr0FWcALNRe_D8cYqw@mail.gmail.com>
+Subject: Re: [PATCH 00/20] drm: Split out the formats API and move it to a
+ common place
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Kefeng,
-Thanks for the patch.
+Hi,
 
-On Tue 23 Apr 2019 at 08:50, Kefeng Wang wrote:
-> Using dev_get_drvdata directly.
+On Tue, 23 Apr 2019 at 08:26, Daniel Vetter <daniel@ffwll.ch> wrote:
+> On Sun, Apr 21, 2019 at 01:59:04AM +0300, Laurent Pinchart wrote:
+> > > > > - drm fourcc code doesn't actually define the drm_format_info
+> > > > >   uniquely, drivers can override that (that's an explicit design
+> > > > >   intent of modifiers, to allow drivers to add another plane for
+> > > > >   e.g. compression information). You'd need to pull that driver
+> > > > >   knowledge into your format library.
+> >
+> > That's a mistake in my opinion. We tried that in V4L2 to store metadata
+> > in a separate plane, and had to go another route eventually as it
+> > created a very bad mess.
 >
-> Cc: Rui Miguel Silva <rmfrfs@gmail.com>
+> Just quick clarification in the middle here: This is how the hw works.
+> It's not metadata that sw ever touches (in general, testcases to make sure
+> we display these correctly excepted).
+>
+> There has been some talking to add maybe a bit more mixed metadata, for
+> fast-clear colors (which isn't used by any display engine afaik yet). That
+> would generally be written by the cpu (in the gl stack), but again read by
+> the hw (loaded as indirect state packet most likely, or something like
+> that). So again hw specific layout, because the hw needs to read it.
+>
+> Pure metadata only of interest for the cpu/sw stack has been shot down
+> completely on the drm side too.
 
-There was already a patch sent by Wolfram that does the same thing
-[0].
+Totally. Let's take DRM_FORMAT_XRGB8888 + I915_FORMAT_MOD_Y_TILED as
+an example. Here, there is one colour plane which is laid out in a
+documented tiled format, containing normal XRGB8888 pixels once you do
+the maths to get the correct pixel location. So that's fine.
 
-Thanks anyway.
+I915_FORMAT_MOD_Y_TILED_CCS has a base colour plane as above, but adds
+an auxiliary plane which has a few bits describing the state of every
+(differently-sized) tile. Before reading the tile from the colour
+plane, you look at the corresponding location in the auxiliary plane:
+if you read 0x55 from the auxiliary plane, then the entire cacheline
+is the value of the first pixel, i.e. a solid fill. Hardware takes
+advantage of this to only write out the first pixel: if you try to
+read the colour plane as Y_TILED then for solid-filled regions, only
+the first pixel of every tile will show correctly, and the rest will
+be garbage.
 
----
+The auxiliary plane has its own layout and placement requirements, so
+we need to carry around an offset and a stride for the auxiliary data.
+We already have this for multiple planes; stuffing it into the base
+plane would require us to reinvent the same for auxiliary data within
+a single plane.
+
+I understand at least one of the Tegra colour-compression layouts (for
+Tegra 1xx?) is similar to this.
+
+It would be good to understand what you had in mind when you said that
+using multiple planes created a mess. I haven't touched media
+encode/decode units at a low level for quite a while (hooray for
+gst-v4l2!), but I remember that they often used padding areas around
+the buffer for scratch space - maybe motion vectors or similar? That
+case is quite different to something like CCS, since the data is only
+meaningful to the media engine and must be ignored (but preserved) by
+everyone else. Using multiple planes in that case isn't appropriate,
+since it's very specific to how that hardware unit deals with that
+buffer, instead of something that every consumer needs to understand
+in order to use it.
+
 Cheers,
-	Rui
-
-[0]: https://lore.kernel.org/linux-media/20190319163622.30607-1-wsa+renesas@sang-engineering.com/
-
-> Cc: Steve Longerbeam <slongerbeam@gmail.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: linux-media@vger.kernel.org
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->  drivers/staging/media/imx/imx7-mipi-csis.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-> index 6cae2960eea1..19455f425416 100644
-> --- a/drivers/staging/media/imx/imx7-mipi-csis.c
-> +++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-> @@ -1027,8 +1027,7 @@ static int mipi_csis_probe(struct platform_device *pdev)
->  
->  static int mipi_csis_pm_suspend(struct device *dev, bool runtime)
->  {
-> -	struct platform_device *pdev = to_platform_device(dev);
-> -	struct v4l2_subdev *mipi_sd = platform_get_drvdata(pdev);
-> +	struct v4l2_subdev *mipi_sd = dev_get_drvdata(dev);
->  	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
->  	int ret = 0;
->  
-> @@ -1052,8 +1051,7 @@ static int mipi_csis_pm_suspend(struct device *dev, bool runtime)
->  
->  static int mipi_csis_pm_resume(struct device *dev, bool runtime)
->  {
-> -	struct platform_device *pdev = to_platform_device(dev);
-> -	struct v4l2_subdev *mipi_sd = platform_get_drvdata(pdev);
-> +	struct v4l2_subdev *mipi_sd = dev_get_drvdata(dev);
->  	struct csi_state *state = mipi_sd_to_csis_state(mipi_sd);
->  	int ret = 0;
-
+Daniel
