@@ -2,218 +2,88 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74A86C10F11
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 10:43:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3C7DC10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 10:50:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3EA9420811
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 10:43:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CDD0F21773
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 10:50:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727527AbfDXKn4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 06:43:56 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:47665 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726983AbfDXKn4 (ORCPT
+        id S1728447AbfDXKuO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 06:50:14 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:46423 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726790AbfDXKuO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 06:43:56 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1hJFNZ-0002f4-Pu; Wed, 24 Apr 2019 12:43:53 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     kernel@pengutronix.de, Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH v2] media: v4l2-ctrl: add MPEG-2 profile and level controls
-Date:   Wed, 24 Apr 2019 12:43:47 +0200
-Message-Id: <20190424104347.20212-1-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190412155135.13907-9-p.zabel@pengutronix.de>
-References: <20190412155135.13907-9-p.zabel@pengutronix.de>
+        Wed, 24 Apr 2019 06:50:14 -0400
+Received: from [IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676] ([IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id JFTahJiZEZVjxJFTdha81T; Wed, 24 Apr 2019 12:50:12 +0200
+Subject: Re: [PATCH 0/5] Aspeed: Enable video engine
+To:     Eddie James <eajames@linux.ibm.com>, linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        joel@jms.id.au, andrew@aj.id.au, mchehab@kernel.org,
+        linux-clk@vger.kernel.org, sboyd@kernel.org,
+        mturquette@baylibre.com, devicetree@vger.kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org
+References: <1554229504-5661-1-git-send-email-eajames@linux.ibm.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <b524e352-2e9d-6360-5517-18eee2e02c2c@xs4all.nl>
+Date:   Wed, 24 Apr 2019 12:50:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <1554229504-5661-1-git-send-email-eajames@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfClRnGEmmvsjAmZ6WsMrfn9ojbVDq+RnKJoF1TYkNQnafmXDBrLctyOIdqxY6QFyjoqJQ851+tiXMc25OcmQahV5IV9Vv3TS/+ADvNHfpR02caCnxC62
+ TrFhkBG3lPcl0VkKtI3rM3S0v+MnPUe+k1sCISaMFBQjBkrYrQ6vBdPB2yd+WCqcLmQVldn/Pzk43ifSaep5qkMx0GuNCpKdGz0i4uoW6w23HsgD7TLPNl4h
+ ydj4GLcNCgOOlBNEux1CHDjRGeyBUh/xEtnQpEargmhcxWqS5pvKFXo2HqPpbyPxlE2VnKzmX1wCnlePyOojIWhEGqafDjnchxueHZ2Ii0PcrwWsqPeLR3fB
+ 3d5p1Qe1KOontEwlj6i2XCC4DDKXhGH2bfLR0JyF5X3bpXZsHNgjF/vygZ7FPPeEUKptcO1rlb0RFf1saYmnx/iGcsWOQ4jEXATf0Ib07/xzirFu813j9s5d
+ TRDtHaySY1SO/EkGMdxO8nryob5RY4y4HW01pYFv41Gr26pYAgh0TNHCnW4ByiHefZZuvA9AYvrTbZ9APzkMltWOtgB77Y0lLz34SHrJfKx8zHoumgMxE0Da
+ J6njZ8THjga6nOrnAOGGLBj4+NNryL+PfTon1VOLjzZdlxC5FnSLL5CBhBz8iPlx2GFMy4P88Me6jrAoYSxQNzWD9UX25RZHti1mvHLosII3Mw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MPEG-2 CID definitions for profiles and levels defined in ITU-T Rec.
-H.262.
+Hi Eddie,
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
-Changes since v1:
- - Moved CIDs up to V4L2_CID_MPEG_BASE+270
----
- .../media/uapi/v4l/ext-ctrls-codec.rst        | 56 +++++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c          | 23 ++++++++
- include/uapi/linux/v4l2-controls.h            | 18 ++++++
- 3 files changed, 97 insertions(+)
+On 4/2/19 8:24 PM, Eddie James wrote:
+> This series enables the video engine on Aspeed BMC platforms. The video engine
+> clocking is added to the Aspeed clock driver. The use of the video engine reset
+> line, originally planned to be made externally available in the clock driver,
+> is removed from the video engine driver. Finally a node for the video engine is
+> added to the AST2500 devicetree.
+> The series also includes a missing property for reserved memory in the
+> devicetree documentation, and a small change to make the video engine driver
+> start without reserved memory.
 
-diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-index 4a8446203085..843c93e8e7bc 100644
---- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-@@ -759,6 +759,32 @@ enum v4l2_mpeg_video_h264_level -
- 
- 
- 
-+.. _v4l2-mpeg-video-mpeg2-level:
-+
-+``V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL``
-+    (enum)
-+
-+enum v4l2_mpeg_video_mpeg2_level -
-+    The level information for the MPEG2 elementary stream. Applicable to
-+    MPEG2 codecs. Possible values are:
-+
-+
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW``
-+      - Low Level (LL)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN``
-+      - Main Level (ML)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440``
-+      - High-1440 Level (H-14)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH``
-+      - High Level (HL)
-+
-+
-+
- .. _v4l2-mpeg-video-mpeg4-level:
- 
- ``V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL``
-@@ -845,6 +871,36 @@ enum v4l2_mpeg_video_h264_profile -
- 
- 
- 
-+.. _v4l2-mpeg-video-mpeg2-profile:
-+
-+``V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE``
-+    (enum)
-+
-+enum v4l2_mpeg_video_mpeg2_profile -
-+    The profile information for MPEG2. Applicable to MPEG2 codecs.
-+    Possible values are:
-+
-+
-+
-+.. flat-table::
-+    :header-rows:  0
-+    :stub-columns: 0
-+
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE``
-+      - Simple profile (SP)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN``
-+      - Main profile (MP)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE``
-+      - SNR Scalable profile (SNR)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE``
-+      - Spatially Scalable profile (Spt)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH``
-+      - High profile (HP)
-+    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_MULTIVIEW``
-+      - Multi-view profile (MVP)
-+
-+
-+
- .. _v4l2-mpeg-video-mpeg4-profile:
- 
- ``V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE``
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 89a1fe564675..ed2f1f2ede5a 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -406,6 +406,21 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		"Explicit",
- 		NULL,
- 	};
-+	static const char * const mpeg_mpeg2_level[] = {
-+		"Low",
-+		"Main",
-+		"High 1440",
-+		"High",
-+		NULL,
-+	};
-+	static const char * const mpeg2_profile[] = {
-+		"Simple",
-+		"Main",
-+		"SNR Scalable",
-+		"Spatially Scalable",
-+		"High",
-+		NULL,
-+	};
- 	static const char * const mpeg_mpeg4_level[] = {
- 		"0",
- 		"0b",
-@@ -622,6 +637,10 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
- 		return h264_fp_arrangement_type;
- 	case V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE:
- 		return h264_fmo_map_type;
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
-+		return mpeg_mpeg2_level;
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
-+		return mpeg2_profile;
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
- 		return mpeg_mpeg4_level;
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
-@@ -832,6 +851,8 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP:		return "H264 I-Frame Maximum QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP:		return "H264 P-Frame Minimum QP Value";
- 	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:		return "H264 P-Frame Maximum QP Value";
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:			return "MPEG2 Level";
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:			return "MPEG2 Profile";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP:		return "MPEG4 I-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP:		return "MPEG4 P-Frame QP Value";
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP:		return "MPEG4 B-Frame QP Value";
-@@ -1196,6 +1217,8 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC:
- 	case V4L2_CID_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE:
- 	case V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE:
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
-+	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
- 	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
- 	case V4L2_CID_JPEG_CHROMA_SUBSAMPLING:
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 37807f23231e..d9f2c76b71bb 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -404,6 +404,24 @@ enum v4l2_mpeg_video_multi_slice_mode {
- #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_MPEG_BASE+228)
- #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_MPEG_BASE+229)
- 
-+/* CIDs for the MPEG-2 Part 2 (H.262) codec */
-+#define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_MPEG_BASE+270)
-+enum v4l2_mpeg_video_mpeg2_level {
-+	V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW		= 0,
-+	V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN	= 1,
-+	V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440	= 2,
-+	V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH	= 3,
-+};
-+#define V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE		(V4L2_CID_MPEG_BASE+271)
-+enum v4l2_mpeg_video_mpeg2_profile {
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE				= 0,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN				= 1,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE			= 2,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE		= 3,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH				= 4,
-+	V4L2_MPEG_VIDEO_MPEG2_PROFILE_MULTIVIEW				= 5,
-+};
-+
- /* CIDs for the FWHT codec as used by the vicodec driver. */
- #define V4L2_CID_FWHT_I_FRAME_QP             (V4L2_CID_MPEG_BASE + 290)
- #define V4L2_CID_FWHT_P_FRAME_QP             (V4L2_CID_MPEG_BASE + 291)
--- 
-2.20.1
+I assume you'll post a v3 since there were some comments?
+
+If you want to get it in for 5.2, then be aware that you should post it tomorrow
+at the latest.
+
+Regards,
+
+	Hans
+
+> 
+> Eddie James (5):
+>   media: platform: Aspeed: Remove use of reset line
+>   media: platform: Aspeed: Make reserved memory optional
+>   media: dt-bindings: aspeed-video: Add missing memory-region property
+>   clk: Aspeed: Setup video engine clocking
+>   ARM: dts: aspeed-g5: Add video engine
+> 
+>  .../devicetree/bindings/media/aspeed-video.txt     |  6 ++++
+>  arch/arm/boot/dts/aspeed-g5.dtsi                   | 10 ++++++
+>  drivers/clk/clk-aspeed.c                           | 42 ++++++++++++++++++++--
+>  drivers/media/platform/aspeed-video.c              | 33 ++++-------------
+>  4 files changed, 61 insertions(+), 30 deletions(-)
+> 
 
