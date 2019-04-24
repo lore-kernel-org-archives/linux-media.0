@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94F31C10F11
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 21:30:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE682C10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 21:31:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 63DA220835
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 21:30:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 712FB20835
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 21:31:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730740AbfDXVao (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 17:30:44 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:58516 "EHLO
+        id S1730741AbfDXVbd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 17:31:33 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:58526 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726474AbfDXVan (ORCPT
+        with ESMTP id S1726474AbfDXVbc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 17:30:43 -0400
+        Wed, 24 Apr 2019 17:31:32 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: koike)
-        with ESMTPSA id 1AB8227FF5C
-Subject: Re: [PATCH v3 11/14] media: vimc: sen: Add support for multiplanar
+        with ESMTPSA id BF5912639A7
+Subject: Re: [PATCH v3 12/14] media: vimc: sca: Add support for multiplanar
  formats
 To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
         linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, kernel@collabora.com,
         lucmaga@gmail.com, lkcamp@lists.libreplanetbr.org
 References: <20190424135642.31973-1-andrealmeid@collabora.com>
- <20190424135642.31973-12-andrealmeid@collabora.com>
+ <20190424135642.31973-13-andrealmeid@collabora.com>
 From:   Helen Koike <helen.koike@collabora.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=helen.koike@collabora.com; keydata=
@@ -106,12 +106,12 @@ Autocrypt: addr=helen.koike@collabora.com; keydata=
  iR1nXfMxENVYnM5ag7mBZyD/kru5W1Uj34L6AFaDMXFPwedSCpzzqUiHb0f+nYkfOodf5xy0
  46+3THy/NUS/ZZp/rI4F7Y77+MQPVg7vARfHHX1AxYUKfRVW5j88QUB70txn8Vgi1tDrOr4J
  eD+xr0CvIGa5lKqgQacQtGkpOpJ8zY4ObSvpNubey/qYUE3DCXD0n2Xxk4muTvqlkFpOYA==
-Message-ID: <5fbd0631-4ef2-4bc0-cfae-934529078401@collabora.com>
-Date:   Wed, 24 Apr 2019 18:30:34 -0300
+Message-ID: <dc11ec96-cca6-51af-ab1b-24ec6194e9a4@collabora.com>
+Date:   Wed, 24 Apr 2019 18:31:17 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190424135642.31973-12-andrealmeid@collabora.com>
+In-Reply-To: <20190424135642.31973-13-andrealmeid@collabora.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -122,123 +122,130 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi André,
 
+Thanks for the patch, please see my comments below.
+
 On 4/24/19 10:56 AM, André Almeida wrote:
-> This commit adapts vimc-sensor to handle multiplanar pixel formats,
-> adapting the memory allocation and TPG configuration.
+> Change the scaling functions in order to scale planes. This change makes
+> easier to support multiplanar pixel formats.
 > 
 > Signed-off-by: André Almeida <andrealmeid@collabora.com>
 > ---
-> Changes in v3:
+> Change in v3:
 > - Adapt to new vimc_frame
 > 
 > Changes in v2:
-> - Fix alignment issues
-> - Remove unnecessary variable assignment
+> - Move the TODO comment to vimc-capture
 > - Reuse and share the code to free the memory of planes with a goto
+> - Fix comment block style 
 > 
->  drivers/media/platform/vimc/vimc-sensor.c | 52 +++++++++++++----------
->  1 file changed, 30 insertions(+), 22 deletions(-)
+>  drivers/media/platform/vimc/vimc-scaler.c | 113 ++++++++++++++--------
+>  1 file changed, 72 insertions(+), 41 deletions(-)
 > 
-> diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
-> index 3495a3f3dd60..d933a1db309c 100644
-> --- a/drivers/media/platform/vimc/vimc-sensor.c
-> +++ b/drivers/media/platform/vimc/vimc-sensor.c
-> @@ -97,16 +97,17 @@ static int vimc_sen_get_fmt(struct v4l2_subdev *sd,
->  static void vimc_sen_tpg_s_format(struct vimc_sen_device *vsen)
->  {
->  	u32 pixelformat = vsen->ved.stream->producer_pixfmt;
-> -	const struct v4l2_format_info *pix_info;
-> -
-> -	pix_info = v4l2_format_info(pixelformat);
-> +	unsigned int i;
+> diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
+> index f655b8312dc9..17c37076ff4e 100644
+> --- a/drivers/media/platform/vimc/vimc-scaler.c
+> +++ b/drivers/media/platform/vimc/vimc-scaler.c
+> @@ -39,6 +39,9 @@ static const u32 vimc_sca_supported_pixfmt[] = {
+>  	V4L2_PIX_FMT_BGR24,
+>  	V4L2_PIX_FMT_RGB24,
+>  	V4L2_PIX_FMT_ARGB32,
+> +	V4L2_PIX_FMT_YUV420,
+> +	V4L2_PIX_FMT_YUV420M,
+> +	V4L2_PIX_FMT_NV12M,
+>  };
 >  
->  	tpg_reset_source(&vsen->tpg, vsen->mbus_format.width,
->  			 vsen->mbus_format.height, vsen->mbus_format.field);
-> -	tpg_s_bytesperline(&vsen->tpg, 0,
-> -			   vsen->mbus_format.width * pix_info->bpp[0]);
->  	tpg_s_buf_height(&vsen->tpg, vsen->mbus_format.height);
->  	tpg_s_fourcc(&vsen->tpg, pixelformat);
-> +
-> +	for (i = 0; i < tpg_g_planes(&vsen->tpg); i++)
-> +		tpg_s_bytesperline(&vsen->tpg, i,
-> +				   vsen->frame.fmt.plane_fmt[i].bytesperline);
-> +
->  	/* TODO: add support for V4L2_FIELD_ALTERNATE */
->  	tpg_s_field(&vsen->tpg, vsen->mbus_format.field, false);
->  	tpg_s_colorspace(&vsen->tpg, vsen->mbus_format.colorspace);
-> @@ -182,8 +183,12 @@ static struct vimc_frame *vimc_sen_process_frame(struct vimc_ent_device *ved,
->  {
->  	struct vimc_sen_device *vsen = container_of(ved, struct vimc_sen_device,
->  						    ved);
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < tpg_g_planes(&vsen->tpg); i++)
-> +		tpg_fill_plane_buffer(&vsen->tpg, 0, i,
-> +				      vsen->frame.plane_addr[i]);
+>  struct vimc_sca_device {
+> @@ -51,8 +54,8 @@ struct vimc_sca_device {
+>  	struct v4l2_mbus_framefmt sink_fmt;
+>  	/* Values calculated when the stream starts */
+>  	struct vimc_frame src_frame;
+> -	unsigned int src_line_size;
+> -	unsigned int bpp;
+> +	unsigned int src_line_size[TPG_MAX_PLANES];
+> +	unsigned int bpp[TPG_MAX_PLANES];
+>  };
 >  
-> -	tpg_fill_plane_buffer(&vsen->tpg, 0, 0, vsen->frame.plane_addr[0]);
->  	return &vsen->frame;
->  }
->  
-> @@ -191,36 +196,39 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
+>  static const struct v4l2_mbus_framefmt sink_fmt_default = {
+> @@ -207,10 +210,10 @@ static const struct v4l2_subdev_pad_ops vimc_sca_pad_ops = {
+>  static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
 >  {
->  	struct vimc_sen_device *vsen =
->  				container_of(sd, struct vimc_sen_device, sd);
+>  	struct vimc_sca_device *vsca = v4l2_get_subdevdata(sd);
 > +	unsigned int i, ret = 0;
 
-ret should be int, not unsigned int, this also applies to other patches.
+int ret
 
 >  
 >  	if (enable) {
-> -		u32 pixelformat = vsen->ved.stream->producer_pixfmt;
+>  		u32 pixelformat = vsca->ved.stream->producer_pixfmt;
 > -		const struct v4l2_format_info *pix_info;
-> -		unsigned int frame_size;
-> -
->  		/* Calculate the frame size */
+>  		unsigned int frame_size;
+>  
+>  		if (!vimc_sca_is_pixfmt_supported(pixelformat)) {
+> @@ -219,34 +222,47 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
+>  			return -EINVAL;
+>  		}
+>  
+> -		/* Save the bytes per pixel of the sink */
 > -		pix_info = v4l2_format_info(pixelformat);
-> -		frame_size = vsen->mbus_format.width * pix_info->bpp[0] *
-> -			     vsen->mbus_format.height;
+> -		vsca->bpp = pix_info->bpp[0];
 > -
-> +		vimc_fill_frame(&vsen->frame, vsen->ved.stream->producer_pixfmt,
-> +				vsen->mbus_format.width,
-> +				vsen->mbus_format.height,
-> +				vsen->ved.stream->multiplanar);
->  		/*
->  		 * Allocate the frame buffer. Use vmalloc to be able to
->  		 * allocate a large amount of memory
->  		 */
-> -		vsen->frame.plane_addr[0] = vmalloc(frame_size);
-> -		if (!vsen->frame.plane_addr[0])
+> -		/* Calculate the width in bytes of the src frame */
+> -		vsca->src_line_size = vsca->sink_fmt.width *
+> -				      sca_mult * vsca->bpp;
+> -
+> -		/* Calculate the frame size of the source pad */
+> -		frame_size = vsca->src_line_size * vsca->sink_fmt.height *
+> -			     sca_mult;
+> -
+> -		/* Allocate the frame buffer. Use vmalloc to be able to
+> -		 * allocate a large amount of memory
+> -		 */
+> -		vsca->src_frame.plane_addr[0] = vmalloc(frame_size);
+> -		if (!vsca->src_frame.plane_addr[0])
 > -			return -ENOMEM;
-> +		for (i = 0; i < vsen->frame.fmt.num_planes; i++) {
-> +			vsen->frame.plane_addr[i] =
-> +				vmalloc(vsen->frame.fmt.plane_fmt[i].sizeimage);
-> +			if (!vsen->frame.plane_addr[i]) {
+> +		vimc_fill_frame(&vsca->src_frame, pixelformat,
+> +				vsca->sink_fmt.width, vsca->sink_fmt.height,
+> +				vsca->ved.stream->multiplanar);
+> +
+> +		for (i = 0; i < vsca->src_frame.fmt.num_planes; i++) {
+> +			/* Save the bytes per pixel of the sink */
+> +			vsca->bpp[i] = vsca->src_frame.fmt_info->bpp[i];
+> +
+> +			/* Calculate the width in bytes of the src frame */
+> +			vsca->src_line_size[i] =
+> +				vsca->src_frame.fmt.plane_fmt[i].bytesperline *
+> +				sca_mult;
+> +
+> +			/* Calculate the frame size of the source pad */
+> +			frame_size = vsca->src_frame.fmt.plane_fmt[i].sizeimage
+> +				* sca_mult * sca_mult;
+> +
+> +			/**
+> +			 * Allocate the frame buffer. Use vmalloc to be able to
+> +			 * allocate a large amount of memory
+> +			 */
+> +			vsca->src_frame.plane_addr[i] = vmalloc(frame_size);
+> +			if (!vsca->src_frame.plane_addr[i]) {
 > +				ret = -ENOMEM;
 > +				goto free_planes;
 > +			}
+> +			vsca->src_frame.fmt.plane_fmt[i].sizeimage = frame_size;
 > +		}
 >  
->  		/* configure the test pattern generator */
->  		vimc_sen_tpg_s_format(vsen);
->  
 >  	} else {
-> -
-> -		vfree(vsen->frame.plane_addr[0]);
-> -		vsen->frame.plane_addr[0] = NULL;
-> -		return 0;
+>  		if (!vsca->src_frame.plane_addr[0])
+>  			return 0;
+>  
+> -		vfree(vsca->src_frame.plane_addr[0]);
+> -		vsca->src_frame.plane_addr[0] = NULL;
 > +free_planes:
 
-Hmm, its a bit weird to have a goto going inside an else statement.
-It would be better if you remove the else statement, and add a return 0
-in the end of the if statement.
-This also applies to other patches.
+please, prefer to have goto labels in the end and outside and if/else
+statement.
 
-Helen
-
-> +		for (i = 0; i < vsen->frame.fmt.num_planes; i++) {
-> +			vfree(vsen->frame.plane_addr[i]);
-> +			vsen->frame.plane_addr[i] = NULL;
+> +		for (i = 0; i < vsca->src_frame.fmt.num_planes; i++) {
+> +			vfree(vsca->src_frame.plane_addr[i]);
+> +			vsca->src_frame.plane_addr[i] = NULL;
 > +		}
 >  	}
 >  
@@ -246,5 +253,137 @@ Helen
 > +	return ret;
 >  }
 >  
->  static const struct v4l2_subdev_core_ops vimc_sen_core_ops = {
+>  static const struct v4l2_subdev_video_ops vimc_sca_video_ops = {
+> @@ -269,18 +285,19 @@ static void vimc_sca_fill_pix(u8 *const ptr,
+>  		ptr[i] = pixel[i];
+>  }
+>  
+> -static void vimc_sca_scale_pix(const struct vimc_sca_device *const vsca,
+> +/* TODO: parallelize this function */
+> +static void vimc_sca_scale_plane(const struct vimc_sca_device *const vsca,
+
+I think you could keep the old name, the function stills scale one
+single pixel in a given plane.
+
+>  			       const unsigned int lin, const unsigned int col,
+> -			       const u8 *const sink_frame)
+> +			       const struct vimc_frame *sink_frame,
+> +			       u8 num_plane, u32 width)
+
+why not unsigned int for num_plane and for width ? :)
+
+You can also align the indentation of the arguments here.
+
+
+> +
+>  {
+>  	unsigned int i, j, index;
+>  	const u8 *pixel;
+>  
+>  	/* Point to the pixel value in position (lin, col) in the sink frame */
+> -	index = VIMC_FRAME_INDEX(lin, col,
+> -				 vsca->sink_fmt.width,
+> -				 vsca->bpp);
+> -	pixel = &sink_frame[index];
+> +	index = VIMC_FRAME_INDEX(lin, col, width, vsca->bpp[num_plane]);
+> +	pixel = &sink_frame->plane_addr[num_plane][index];
+>  
+>  	dev_dbg(vsca->dev,
+>  		"sca: %s: --- scale_pix sink pos %dx%d, index %d ---\n",
+> @@ -290,7 +307,7 @@ static void vimc_sca_scale_pix(const struct vimc_sca_device *const vsca,
+>  	 * in the scaled src frame
+>  	 */
+>  	index = VIMC_FRAME_INDEX(lin * sca_mult, col * sca_mult,
+> -				 vsca->sink_fmt.width * sca_mult, vsca->bpp);
+> +				 width * sca_mult, vsca->bpp[num_plane]);
+>  
+>  	dev_dbg(vsca->dev, "sca: %s: scale_pix src pos %dx%d, index %d\n",
+>  		vsca->sd.name, lin * sca_mult, col * sca_mult, index);
+> @@ -300,32 +317,46 @@ static void vimc_sca_scale_pix(const struct vimc_sca_device *const vsca,
+>  		/* Iterate through each beginning of a
+>  		 * pixel repetition in a line
+>  		 */
+> -		for (j = 0; j < sca_mult * vsca->bpp; j += vsca->bpp) {
+> +		unsigned int bpp = vsca->bpp[num_plane];
+> +
+> +		for (j = 0; j < sca_mult * bpp; j += bpp) {
+>  			dev_dbg(vsca->dev,
+>  				"sca: %s: sca: scale_pix src pos %d\n",
+>  				vsca->sd.name, index + j);
+>  
+>  			/* copy the pixel to the position index + j */
+>  			vimc_sca_fill_pix(
+> -				&vsca->src_frame.plane_addr[0][index + j],
+> -				pixel, vsca->bpp);
+> +				&vsca->src_frame.plane_addr[num_plane][index+j],
+> +				pixel, bpp);
+>  		}
+>  
+>  		/* move the index to the next line */
+> -		index += vsca->src_line_size;
+> +		index += vsca->src_line_size[num_plane];
+>  	}
+>  }
+>  
+>  static void vimc_sca_fill_src_frame(const struct vimc_sca_device *const vsca,
+> -				    const u8 *const sink_frame)
+> +				    const struct vimc_frame *sink_frame)
+>  {
+> -	unsigned int i, j;
+> +	unsigned int i, j, num_plane;
+> +	u32 width, height;
+
+why not unsigned int?
+
+> +	const struct v4l2_format_info *info;
+> +
+> +	info = v4l2_format_info(sink_frame->fmt_info->format);
+
+info and sink_frame->fmt_info should be the same, you don't need to call
+this function.
+
+>  
+>  	/* Scale each pixel from the original sink frame */
+>  	/* TODO: implement scale down, only scale up is supported for now */
+> -	for (i = 0; i < vsca->sink_fmt.height; i++)
+> -		for (j = 0; j < vsca->sink_fmt.width; j++)
+> -			vimc_sca_scale_pix(vsca, i, j, sink_frame);
+> +	for (num_plane = 0; num_plane < info->comp_planes; num_plane++) {
+
+are you sure it is not info->mem_planes that you should use?
+
+You can also use sink_frame->fmt.num_planes.
+
+> +		width = vsca->sink_fmt.width /
+> +					((num_plane == 0) ? 1 : info->vdiv);
+> +		height = vsca->sink_fmt.height /
+> +					((num_plane == 0) ? 1 : info->hdiv);
+
+these things always confuses me, one is plane width/height, the other is
+image width/height, maybe we could rename those to plane_width and
+plane_height to make it clearer, what do you think?
+
+You can also declare them inside this loop to make it clear it is just
+used here (this applies to other patches as well).
+
+Helen
+
+> +
+> +		for (i = 0; i < height; i++)
+> +			for (j = 0; j < width; j++)
+> +				vimc_sca_scale_plane(vsca, i, j, sink_frame,
+> +						     num_plane, width);
+> +	}
+>  }
+>  
+>  static struct vimc_frame *vimc_sca_process_frame(struct vimc_ent_device *ved,
+> @@ -338,7 +369,7 @@ static struct vimc_frame *vimc_sca_process_frame(struct vimc_ent_device *ved,
+>  	if (!ved->stream)
+>  		return ERR_PTR(-EINVAL);
+>  
+> -	vimc_sca_fill_src_frame(vsca, sink_frame->plane_addr[0]);
+> +	vimc_sca_fill_src_frame(vsca, sink_frame);
+>  
+>  	return &vsca->src_frame;
+>  };
 > 
