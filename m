@@ -2,215 +2,131 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 407E3C10F11
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 13:59:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A311C10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 14:09:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1A7C621900
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 13:59:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D824521900
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 14:09:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730005AbfDXN7N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 09:59:13 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57114 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727435AbfDXN7N (ORCPT
+        id S1729024AbfDXOJ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 10:09:28 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:55731 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727365AbfDXOJ1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 09:59:13 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 36CF4282C1B
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, helen.koike@collabora.com,
-        kernel@collabora.com, lucmaga@gmail.com,
-        lkcamp@lists.libreplanetbr.org,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH v3 14/14] media: vimc: Create multiplanar parameter and ioctls
-Date:   Wed, 24 Apr 2019 10:56:42 -0300
-Message-Id: <20190424135642.31973-15-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190424135642.31973-1-andrealmeid@collabora.com>
-References: <20190424135642.31973-1-andrealmeid@collabora.com>
+        Wed, 24 Apr 2019 10:09:27 -0400
+Received: from [IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676] ([IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id JIaOhARvoNExlJIaRhRKnm; Wed, 24 Apr 2019 16:09:24 +0200
+Subject: Re: KASAN: use-after-free Read in dvb_usb_device_exit
+To:     Oliver Neukum <oneukum@suse.com>,
+        syzbot <syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, syzkaller-bugs@googlegroups.com,
+        mchehab@kernel.org, corbet@lwn.net, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org
+References: <000000000000789d3d058653d9bb@google.com>
+ <1555326745.13626.10.camel@suse.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <9cfe433e-426e-19d1-9cb8-5bc2ba17145b@xs4all.nl>
+Date:   Wed, 24 Apr 2019 16:09:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1555326745.13626.10.camel@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfOe0FKDAdfm4bCG9AcSQKiJm7NixvEhPlu5RsWbkU0Oi2psahmum5efVyXtmw+1tMAIE0oGT5FBncyWwuBSF0mbcEbGtAnS/apqfkHQaORuQnL+RexMl
+ 5zo7pkMI688dCF1q0dMPMifNaFw5Ma0dGMVyUUHSL/Uhw5Bb8M3HC9QVmcTToqEz18xECeozHX5Qv6CDhIug4ZkldhdUOPL+dKaR8KsguJAjyrBBxjZ/DUup
+ WHgAewX4IYE+NOMvoLTIxnetr1Ql6QMeGQ84eUqe84OCPP0pVCQrVl1PQHPkQsboLavtv9GFaKe4De83WNgP6pSyN4nn7NGCPUcsVtdP9V6Z3offU0hpu5bJ
+ LyzuZa5KPLyuWV2eHcujXWXMQeZgsICAajU/n47e/OJ1pL9kCqF8pDoPtyTjBbBhVsvS0JZhFquizlyjOhaYy0FeK8zzqKmhHMjLNQ62OKdOlA4suTV3RqYb
+ XiPgIUUOCijkc50P6q4QydKbDm+6FUhQ/v96zOOdLZq6eZtZ0w8ZW25s7nDiJob2p6Iz7lmFKAZSBQ7rwC5riY7gKjmamCLb98q9i0MOT51H8U72GPRUNXLp
+ 3Au3RjhYe4gmOaZ4GTZ6h2cr
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Create multiplanar kernel module parameter to define if the driver is
-running in single planar or in multiplanar mode. Define the device
-capabilities and format ioctls according to the multiplanar kernel
-parameter. A device can't support both CAP_VIDEO_CAPTURE and
-CAP_VIDEO_CAPTURE_MPLANAR at the same time. Add functions to handle
-multiplanar format ioctls, calling the generic format ioctls functions
-when possible.
+On 4/15/19 1:12 PM, Oliver Neukum wrote:
+> On Fr, 2019-04-12 at 04:46 -0700, syzbot wrote:
+>> Hello,
+>>
+>> syzbot found the following crash on:
+>>
+>> HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
+>> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=1643974b200000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=26ec41e9f788b3eba396
+>> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12f5efa7200000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1395a0f3200000
+>>
+>> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+>> Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
+>>
+>> dvb-usb: schedule remote query interval to 150 msecs.
+>> dw2102: su3000_power_ctrl: 0, initialized 1
+>> dvb-usb: TeVii S421 PCI successfully initialized and connected.
+>> usb 1-1: USB disconnect, device number 2
+> 
+> Hi,
+> 
+> proposed fix. If nobody objects, I will submit it.
+> 
+> 	Regards
+> 		Oliver
+> 
+> From d6097d205ac61745334b79639d3b8b910ae66c71 Mon Sep 17 00:00:00 2001
+> From: Oliver Neukum <oneukum@suse.com>
+> Date: Mon, 15 Apr 2019 13:06:01 +0200
+> Subject: [PATCH] dvb: usb: fix use after free in dvb_usb_device_exit
+> 
+> dvb_usb_device_exit() frees and uses teh device name in that order
+> Fix by storing the name in a buffer before freeing it
+> 
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
+> ---
+>  drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+> index 99951e02a880..2e1670cc3903 100644
+> --- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
+> +++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+> @@ -288,13 +288,18 @@ void dvb_usb_device_exit(struct usb_interface *intf)
+>  {
+>  	struct dvb_usb_device *d = usb_get_intfdata(intf);
+>  	const char *name = "generic DVB-USB module";
+> +	char identifier[40];
+>  
+>  	usb_set_intfdata(intf, NULL);
+>  	if (d != NULL && d->desc != NULL) {
+>  		name = d->desc->name;
+> +		memcpy(identifier, name, 39);
+> +		identifier[39] = NULL;
+>  		dvb_usb_exit(d);
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
----
-Change in v3:
-- Squash commit with "Add handler for multiplanar fmt ioctls" 
-- Remove functions that only did the `IS_MULTIPLANAR(vcap)` check
-- Assign ioctls according to device capabilities
+Why not just move this to after the info()? You'll need to repeat the
+'if' in that case, but that way there is no need to memcpy anything.
 
-Changes in v2:
-- Squash commits to create multiplanar module parameter and to define
-the device capabilities
-- Move the creation of the multiplanar parameter to the end of
-history, so it's only added when all required changes are applied
+Regards,
 
- drivers/media/platform/vimc/vimc-capture.c | 78 +++++++++++++++++++---
- 1 file changed, 70 insertions(+), 8 deletions(-)
+	Hans
 
-diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
-index 2592ea982ff8..27caf14ddf43 100644
---- a/drivers/media/platform/vimc/vimc-capture.c
-+++ b/drivers/media/platform/vimc/vimc-capture.c
-@@ -28,6 +28,10 @@
- 
- #define VIMC_CAP_DRV_NAME "vimc-capture"
- 
-+static unsigned int multiplanar;
-+module_param(multiplanar, uint, 0000);
-+MODULE_PARM_DESC(multiplanar, "0 (default) creates a single planar device, 1 creates a multiplanar device.");
-+
- /* Checks if the device supports multiplanar capture */
- #define IS_MULTIPLANAR(vcap) \
- 	(vcap->vdev.device_caps & V4L2_CAP_VIDEO_CAPTURE_MPLANE)
-@@ -144,6 +148,10 @@ static void vimc_cap_get_format(struct vimc_ent_device *ved,
- 	*fmt = vcap->format.fmt.pix;
- }
- 
-+/*
-+ * Functions to handle both single- and multi-planar VIDIOC FMT
-+ */
-+
- static int vimc_cap_g_fmt_vid_cap(struct file *file, void *priv,
- 				  struct v4l2_format *f)
- {
-@@ -247,6 +255,41 @@ static int vimc_cap_s_fmt_vid_cap_sp(struct file *file, void *priv,
- 	return 0;
- }
- 
-+/*
-+ * VIDIOC handlers for multi-planar formats
-+ */
-+static int vimc_cap_s_fmt_vid_cap_mp(struct file *file, void *priv,
-+				     struct v4l2_format *f)
-+{
-+	struct vimc_cap_device *vcap = video_drvdata(file);
-+
-+	/* Do not change the format while stream is on */
-+	if (vb2_is_busy(&vcap->queue))
-+		return -EBUSY;
-+
-+	vimc_cap_try_fmt_vid_cap_mp(file, priv, f);
-+
-+	dev_dbg(vcap->dev, "%s: format update: "
-+		"old:%dx%d (0x%x, %d, %d, %d, %d) "
-+		"new:%dx%d (0x%x, %d, %d, %d, %d)\n", vcap->vdev.name,
-+		/* old */
-+		vcap->format.fmt.pix_mp.width, vcap->format.fmt.pix_mp.height,
-+		vcap->format.fmt.pix_mp.pixelformat,
-+		vcap->format.fmt.pix_mp.colorspace,
-+		vcap->format.fmt.pix_mp.quantization,
-+		vcap->format.fmt.pix_mp.xfer_func,
-+		vcap->format.fmt.pix_mp.ycbcr_enc,
-+		/* new */
-+		f->fmt.pix_mp.width, f->fmt.pix_mp.height,
-+		f->fmt.pix_mp.pixelformat, f->fmt.pix_mp.colorspace,
-+		f->fmt.pix_mp.quantization, f->fmt.pix_mp.xfer_func,
-+		f->fmt.pix_mp.ycbcr_enc);
-+
-+	vcap->format = *f;
-+
-+	return 0;
-+}
-+
- static bool vimc_cap_is_pixfmt_supported(u32 pixelformat)
- {
- 	unsigned int i;
-@@ -257,6 +300,7 @@ static bool vimc_cap_is_pixfmt_supported(u32 pixelformat)
- 	return false;
- }
- 
-+
- static int vimc_cap_enum_framesizes(struct file *file, void *fh,
- 				    struct v4l2_frmsizeenum *fsize)
- {
-@@ -287,13 +331,9 @@ static const struct v4l2_file_operations vimc_cap_fops = {
- 	.mmap           = vb2_fop_mmap,
- };
- 
--static const struct v4l2_ioctl_ops vimc_cap_ioctl_ops = {
-+static struct v4l2_ioctl_ops vimc_cap_ioctl_ops = {
- 	.vidioc_querycap = vimc_cap_querycap,
- 
--	.vidioc_g_fmt_vid_cap = vimc_cap_g_fmt_vid_cap,
--	.vidioc_s_fmt_vid_cap = vimc_cap_s_fmt_vid_cap_sp,
--	.vidioc_try_fmt_vid_cap = vimc_cap_try_fmt_vid_cap_sp,
--	.vidioc_enum_fmt_vid_cap = vimc_cap_enum_fmt_vid_cap,
- 	.vidioc_enum_framesizes = vimc_cap_enum_framesizes,
- 
- 	.vidioc_reqbufs = vb2_ioctl_reqbufs,
-@@ -529,6 +569,7 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
- {
- 	struct v4l2_device *v4l2_dev = master_data;
- 	struct vimc_platform_data *pdata = comp->platform_data;
-+	struct v4l2_ioctl_ops *ioctl_ops = &vimc_cap_ioctl_ops;
- 	struct vimc_cap_device *vcap;
- 	struct video_device *vdev;
- 	struct vb2_queue *q;
-@@ -560,7 +601,9 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
- 
- 	/* Initialize the vb2 queue */
- 	q = &vcap->queue;
--	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	q->type = multiplanar ?
-+		V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE :
-+		V4L2_BUF_TYPE_VIDEO_CAPTURE;
- 	q->io_modes = VB2_MMAP | VB2_DMABUF | VB2_USERPTR;
- 	q->drv_priv = vcap;
- 	q->buf_struct_size = sizeof(struct vimc_cap_buffer);
-@@ -588,13 +631,32 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
- 	dev_set_drvdata(comp, &vcap->ved);
- 	vcap->dev = comp;
- 
-+
- 	/* Initialize the video_device struct */
- 	vdev = &vcap->vdev;
--	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-+	vdev->device_caps = (multiplanar ?
-+			V4L2_CAP_VIDEO_CAPTURE_MPLANE :
-+			V4L2_CAP_VIDEO_CAPTURE) | V4L2_CAP_STREAMING;
- 	vdev->entity.ops = &vimc_cap_mops;
- 	vdev->release = vimc_cap_release;
- 	vdev->fops = &vimc_cap_fops;
--	vdev->ioctl_ops = &vimc_cap_ioctl_ops;
-+
-+	if (multiplanar) {
-+		ioctl_ops->vidioc_g_fmt_vid_cap_mplane = vimc_cap_g_fmt_vid_cap;
-+		ioctl_ops->vidioc_s_fmt_vid_cap_mplane =
-+						vimc_cap_s_fmt_vid_cap_mp;
-+		ioctl_ops->vidioc_try_fmt_vid_cap_mplane =
-+						vimc_cap_try_fmt_vid_cap_mp;
-+		ioctl_ops->vidioc_enum_fmt_vid_cap_mplane =
-+						vimc_cap_enum_fmt_vid_cap;
-+	} else {
-+		ioctl_ops->vidioc_g_fmt_vid_cap = vimc_cap_g_fmt_vid_cap;
-+		ioctl_ops->vidioc_s_fmt_vid_cap = vimc_cap_s_fmt_vid_cap_sp;
-+		ioctl_ops->vidioc_try_fmt_vid_cap = vimc_cap_try_fmt_vid_cap_sp;
-+		ioctl_ops->vidioc_enum_fmt_vid_cap = vimc_cap_enum_fmt_vid_cap;
-+	}
-+
-+	vdev->ioctl_ops = ioctl_ops;
- 	vdev->lock = &vcap->lock;
- 	vdev->queue = q;
- 	vdev->v4l2_dev = v4l2_dev;
--- 
-2.21.0
+> +	} else {
+> +		memcpy(identifier, name, 39);
+>  	}
+> -	info("%s successfully deinitialized and disconnected.", name);
+> +	info("%s successfully deinitialized and disconnected.", identifier);
+>  
+>  }
+>  EXPORT_SYMBOL(dvb_usb_device_exit);
+> 
 
