@@ -3,164 +3,130 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA834C282CE
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 14:44:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14212C282E1
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 15:00:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8B12F218FC
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 14:44:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E49C02084F
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 15:00:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731648AbfDXOjb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 10:39:31 -0400
-Received: from mail.netline.ch ([148.251.143.178]:33022 "EHLO
-        netline-mail3.netline.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731689AbfDXOjb (ORCPT
+        id S1731218AbfDXPAi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 11:00:38 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48882 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731167AbfDXPAh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 10:39:31 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by netline-mail3.netline.ch (Postfix) with ESMTP id 3405E2AA104;
-        Wed, 24 Apr 2019 16:39:27 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at netline-mail3.netline.ch
-Received: from netline-mail3.netline.ch ([127.0.0.1])
-        by localhost (netline-mail3.netline.ch [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id Z1QvlV2QawA9; Wed, 24 Apr 2019 16:39:26 +0200 (CEST)
-Received: from thor (116.245.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.245.116])
-        by netline-mail3.netline.ch (Postfix) with ESMTPSA id 809DE2AA100;
-        Wed, 24 Apr 2019 16:39:26 +0200 (CEST)
-Received: from [::1]
-        by thor with esmtp (Exim 4.92)
-        (envelope-from <michel@daenzer.net>)
-        id 1hJJ3W-0002qp-1S; Wed, 24 Apr 2019 16:39:26 +0200
-Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Wed, 24 Apr 2019 11:00:37 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3OF0Ema059105
+        for <linux-media@vger.kernel.org>; Wed, 24 Apr 2019 11:00:36 -0400
+Received: from e16.ny.us.ibm.com (e16.ny.us.ibm.com [129.33.205.206])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2s2sbjtw5r-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-media@vger.kernel.org>; Wed, 24 Apr 2019 11:00:35 -0400
+Received: from localhost
+        by e16.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-media@vger.kernel.org> from <eajames@linux.vnet.ibm.com>;
+        Wed, 24 Apr 2019 16:00:34 +0100
+Received: from b01cxnp23033.gho.pok.ibm.com (9.57.198.28)
+        by e16.ny.us.ibm.com (146.89.104.203) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 24 Apr 2019 16:00:31 +0100
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3OF0UYN18808980
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Apr 2019 15:00:30 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9AF12B2075;
+        Wed, 24 Apr 2019 15:00:29 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A445AB2064;
+        Wed, 24 Apr 2019 15:00:28 +0000 (GMT)
+Received: from [9.41.179.222] (unknown [9.41.179.222])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 24 Apr 2019 15:00:28 +0000 (GMT)
+Subject: Re: [PATCH 0/5] Aspeed: Enable video engine
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Eddie James <eajames@linux.ibm.com>,
         linux-media@vger.kernel.org
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
- <20190418081816.GO13337@phenom.ffwll.local>
- <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
- <987372acff18f4c66191ee52fa69dc2917e4a605.camel@bootlin.com>
- <1d6fb659-0516-41db-257b-258e6116a4f2@daenzer.net>
- <7479b8df108c66b1711eb89efbfeb4a16480533d.camel@ndufresne.ca>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
-Openpgp: preference=signencrypt
-Autocrypt: addr=michel@daenzer.net; prefer-encrypt=mutual; keydata=
- mQGiBDsehS8RBACbsIQEX31aYSIuEKxEnEX82ezMR8z3LG8ktv1KjyNErUX9Pt7AUC7W3W0b
- LUhu8Le8S2va6hi7GfSAifl0ih3k6Bv1Itzgnd+7ZmSrvCN8yGJaHNQfAevAuEboIb+MaVHo
- 9EMJj4ikOcRZCmQWw7evu/D9uQdtkCnRY9iJiAGxbwCguBHtpoGMxDOINCr5UU6qt+m4O+UD
- /355ohBBzzyh49lTj0kTFKr0Ozd20G2FbcqHgfFL1dc1MPyigej2gLga2osu2QY0ObvAGkOu
- WBi3LTY8Zs8uqFGDC4ZAwMPoFy3yzu3ne6T7d/68rJil0QcdQjzzHi6ekqHuhst4a+/+D23h
- Za8MJBEcdOhRhsaDVGAJSFEQB1qLBACOs0xN+XblejO35gsDSVVk8s+FUUw3TSWJBfZa3Imp
- V2U2tBO4qck+wqbHNfdnU/crrsHahjzBjvk8Up7VoY8oT+z03sal2vXEonS279xN2B92Tttr
- AgwosujguFO/7tvzymWC76rDEwue8TsADE11ErjwaBTs8ZXfnN/uAANgPLQjTWljaGVsIERh
- ZW56ZXIgPG1pY2hlbEBkYWVuemVyLm5ldD6IXgQTEQIAHgUCQFXxJgIbAwYLCQgHAwIDFQID
- AxYCAQIeAQIXgAAKCRBaga+OatuyAIrPAJ9ykonXI3oQcX83N2qzCEStLNW47gCeLWm/QiPY
- jqtGUnnSbyuTQfIySkK5AQ0EOx6FRRAEAJZkcvklPwJCgNiw37p0GShKmFGGqf/a3xZZEpjI
- qNxzshFRFneZze4f5LhzbX1/vIm5+ZXsEWympJfZzyCmYPw86QcFxyZflkAxHx9LeD+89Elx
- bw6wT0CcLvSv8ROfU1m8YhGbV6g2zWyLD0/naQGVb8e4FhVKGNY2EEbHgFBrAAMGA/0VktFO
- CxFBdzLQ17RCTwCJ3xpyP4qsLJH0yCoA26rH2zE2RzByhrTFTYZzbFEid3ddGiHOBEL+bO+2
- GNtfiYKmbTkj1tMZJ8L6huKONaVrASFzLvZa2dlc2zja9ZSksKmge5BOTKWgbyepEc5qxSju
- YsYrX5xfLgTZC5abhhztpYhGBBgRAgAGBQI7HoVFAAoJEFqBr45q27IAlscAn2Ufk2d6/3p4
- Cuyz/NX7KpL2dQ8WAJ9UD5JEakhfofed8PSqOM7jOO3LCA==
-Message-ID: <8e091392-2365-6c52-1fc2-84ebdc9e83fe@daenzer.net>
-Date:   Wed, 24 Apr 2019 16:39:25 +0200
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        joel@jms.id.au, andrew@aj.id.au, mchehab@kernel.org,
+        linux-clk@vger.kernel.org, sboyd@kernel.org,
+        mturquette@baylibre.com, devicetree@vger.kernel.org,
+        mark.rutland@arm.com, robh+dt@kernel.org
+References: <1554229504-5661-1-git-send-email-eajames@linux.ibm.com>
+ <b524e352-2e9d-6360-5517-18eee2e02c2c@xs4all.nl>
+From:   Eddie James <eajames@linux.vnet.ibm.com>
+Date:   Wed, 24 Apr 2019 10:00:28 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <7479b8df108c66b1711eb89efbfeb4a16480533d.camel@ndufresne.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <b524e352-2e9d-6360-5517-18eee2e02c2c@xs4all.nl>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+x-cbid: 19042415-0072-0000-0000-0000041E5973
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00010987; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000285; SDB=6.01193741; UDB=6.00625810; IPR=6.00974565;
+ MB=3.00026577; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-24 15:00:34
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19042415-0073-0000-0000-00004BF14B21
+Message-Id: <f3cacd11-c68d-9097-4a86-3ebeab046b93@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-24_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1904240117
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2019-04-24 2:01 p.m., Nicolas Dufresne wrote:
-> Le mercredi 24 avril 2019 à 10:31 +0200, Michel Dänzer a écrit :
->> On 2019-04-19 10:38 a.m., Paul Kocialkowski wrote:
->>> On Thu, 2019-04-18 at 20:30 -0400, Nicolas Dufresne wrote:
->>>> Le jeudi 18 avril 2019 à 10:18 +0200, Daniel Vetter a écrit :
->>
->>>> In the first, we'd need a mechanism where we can schedule a render at a
->>>> specific time or vblank. We can of course already implement this in
->>>> software, but with fences, the scheduling would need to be done in the
->>>> driver. Then if the fence is signalled earlier, the driver should hold
->>>> on until the delay is met. If the fence got signalled late, we also
->>>> need to think of a workflow. As we can't schedule more then one render
->>>> in DRM at one time, I don't really see yet how to make that work.
->>>
->>> Indeed, that's also one of the main issues I've spotted. Before using
->>> an implicit fence, we basically have to make sure the frame is due for
->>> display at the next vblank. Otherwise, we need to refrain from using
->>> the fence and schedule the flip later, which is kind of counter-
->>> productive.
->>
->> Fences are about signalling that the contents of a frame are "done" and
->> ready to be presented. They're not about specifying which frame is to be
->> presented when.
->>
->>
->>> I feel like specifying a target vblank would be a good unit for that,
->>
->> The mechanism described above works for that.
->>
->>> since it's our native granularity after all (while a timestamp is not).
->>
->> Note that variable refresh rate (Adaptive Sync / FreeSync / G-Sync)
->> changes things in this regard. It makes the vblank length variable, and
->> if you wait for multiple vblanks between flips, you get the maximum
->> vblank length corresponding to the minimum refresh rate / timing
->> granularity. Thus, it would be useful to allow userspace to specify a
->> timestamp corresponding to the earliest time when the flip is to
->> complete. The kernel could then try to hit that as closely as possible.
-> 
-> Rendering a video stream is more complex then what you describe here.
-> Whenever there is a unexpected delay (late delivery of a frame as an
-> example) you may endup in situation where one frame is ready after the
-> targeted vblank. If there is another frame that targets the following
-> vblank that gets ready on-time, the previous frame should be replaced
-> by the most recent one.
-> 
-> With fences, what happens is that even if you received the next frame
-> on time, naively replacing it is not possible, because we don't know
-> when the fence for the next frame will be signalled. If you simply
-> always replace the current frame, you may endup skipping a lot more
-> vblank then what you expect, and that results in jumpy playback.
 
-So you want to be able to replace a queued flip with another one then.
-That doesn't necessarily require allowing more than one flip to be
-queued ahead of time.
-
-Note that this can also be done in userspace with explicit fencing (by
-only selecting a frame and submitting it to the kernel after all
-corresponding fences have signalled), at least to some degree, but the
-kernel should be able to do it up to a later point in time and more
-reliably, with less risk of missing a flip for a frame which becomes
-ready just in time.
+On 4/24/19 5:50 AM, Hans Verkuil wrote:
+> Hi Eddie,
+>
+> On 4/2/19 8:24 PM, Eddie James wrote:
+>> This series enables the video engine on Aspeed BMC platforms. The video engine
+>> clocking is added to the Aspeed clock driver. The use of the video engine reset
+>> line, originally planned to be made externally available in the clock driver,
+>> is removed from the video engine driver. Finally a node for the video engine is
+>> added to the AST2500 devicetree.
+>> The series also includes a missing property for reserved memory in the
+>> devicetree documentation, and a small change to make the video engine driver
+>> start without reserved memory.
+> I assume you'll post a v3 since there were some comments?
 
 
-> Render queues with timestamp are used to smooth rendering and handle
-> rendering collision so that the latency is kept low (like when you have
-> a 100fps video over a 60Hz display). This is normally done in
-> userspace, but with fences, you ask the kernel to render something in
-> an unpredictable future, so we loose the ability to make the final
-> decision.
-
-That's just not what fences are intended to be used for with the current
-KMS UAPI.
+Sure... The only change would be a missing semi-colon in the devicetree 
+doc. And we're only on v2 :)
 
 
--- 
-Earthling Michel Dänzer               |              https://www.amd.com
-Libre software enthusiast             |             Mesa and X developer
+>
+> If you want to get it in for 5.2, then be aware that you should post it tomorrow
+> at the latest.
+>
+> Regards,
+>
+> 	Hans
+>
+>> Eddie James (5):
+>>    media: platform: Aspeed: Remove use of reset line
+>>    media: platform: Aspeed: Make reserved memory optional
+>>    media: dt-bindings: aspeed-video: Add missing memory-region property
+>>    clk: Aspeed: Setup video engine clocking
+>>    ARM: dts: aspeed-g5: Add video engine
+>>
+>>   .../devicetree/bindings/media/aspeed-video.txt     |  6 ++++
+>>   arch/arm/boot/dts/aspeed-g5.dtsi                   | 10 ++++++
+>>   drivers/clk/clk-aspeed.c                           | 42 ++++++++++++++++++++--
+>>   drivers/media/platform/aspeed-video.c              | 33 ++++-------------
+>>   4 files changed, 61 insertions(+), 30 deletions(-)
+>>
+
