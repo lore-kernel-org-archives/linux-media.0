@@ -2,273 +2,248 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F67C282CE
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 17:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66F65C10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 20:03:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0C1DF21773
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 17:43:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="klFIFsvw"
+	by mail.kernel.org (Postfix) with ESMTP id 29D4121773
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 20:03:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404088AbfDXRnN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 13:43:13 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:37079 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392102AbfDXRnI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 13:43:08 -0400
-Received: by mail-qt1-f193.google.com with SMTP id z16so21282184qtn.4
-        for <linux-media@vger.kernel.org>; Wed, 24 Apr 2019 10:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version;
-        bh=zfbTRQsKbp3cPp0fyr7ol3SsNAelGq5MLvvnmsx3x/4=;
-        b=klFIFsvw9qA9Xpyd/bVg6hoOZgM1GdIV4lVvwz/bO1bIcsHWp0S6Vpnw8WdxTSHW/q
-         VRGcmbsCaWI1wRu91TkHm1lnv9qhOA2D8OieA/gndqqE9oO/+12h0bpiwFRuWWgbvTZQ
-         SyeIPrFR4ojzYJeJHN5G1useaocfRGMvEwwqleqjCYe+r8+PUcfqeXzwHO5CWcHiuSrF
-         W182N51EbDuzVi9N/mR3Uw5/I5yaD3iR4NHKW7G93Idz2Dew6tzex4LvCNKYLWLzmYLZ
-         tvmGssu6qCowDrJBYyDLxKRwG1WiuB70sf11eLsGImqCc9pAO+oOK6oU4y5ODMjP9gfe
-         rHqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=zfbTRQsKbp3cPp0fyr7ol3SsNAelGq5MLvvnmsx3x/4=;
-        b=shkNVg9id3GQDs0r2NziEkPNCWBXOODdMjRD+d27mzAmwbpO5UM8knwYJtFtgzF9HS
-         QtTCH/eZanUP9ot0iv6RTu7N0xqLsRWD5tj95a8PUe+d4S7DGyCP8C6O2DQa8xtAMCh0
-         xcSF4tDnigdkVogrmnOWzXdpoptd8UFKwig53OA4/bq0DyDkotL5MuM9A5h2Zk91BCDC
-         9MFDPwBOwk+yZ72vc+vDB1hFpLch8Lb2riYuCBpFVljoMiO3VQrQs3fZGvYvzigAhzlP
-         MOf2MDyEHgfKdWty2mfoGtycpllyCeNyRvbrYTW7TFqyOjxz+bICyfLrdGLDWoVnOFKs
-         RdMg==
-X-Gm-Message-State: APjAAAWzZy/db3/4VPNAhgFRA4iE55GQ2gelR+EJhUMqYe7gpMpoycw4
-        sOdtnUUz5k2w8bGKfU5NZznlrA==
-X-Google-Smtp-Source: APXvYqxNNQa8vFMeQGoGdAeQEJmfpmtAZ0hBnEMzI4BONrrWBviYeXpRR6kJLlczZnbGSJsVO/fasw==
-X-Received: by 2002:ac8:2b0d:: with SMTP id 13mr26928010qtu.354.1556127787001;
-        Wed, 24 Apr 2019 10:43:07 -0700 (PDT)
-Received: from tpx230-nicolas (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
-        by smtp.gmail.com with ESMTPSA id m60sm10195256qte.81.2019.04.24.10.43.04
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 24 Apr 2019 10:43:05 -0700 (PDT)
-Message-ID: <e572f31653301f0a479fe1373b3dfd5ada8e49f3.camel@ndufresne.ca>
-Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Michel =?ISO-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Dave Airlie <airlied@redhat.com>,
+        id S1730306AbfDXUC6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 16:02:58 -0400
+Received: from vps-vb.mhejs.net ([37.28.154.113]:41526 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727528AbfDXUC5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Apr 2019 16:02:57 -0400
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1hJO6V-0005fA-Fn; Wed, 24 Apr 2019 22:02:51 +0200
+Subject: Re: [PATCH v9 2/4] [media] cxusb: implement Medion MD95700 digital /
+ analog coexistence
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Michael Krufky <mkrufky@linuxtv.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-Date:   Wed, 24 Apr 2019 13:43:03 -0400
-In-Reply-To: <65a37cec-5040-e2f0-5cd5-c9c3111827ad@daenzer.net>
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
-         <20190418081816.GO13337@phenom.ffwll.local>
-         <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
-         <987372acff18f4c66191ee52fa69dc2917e4a605.camel@bootlin.com>
-         <1d6fb659-0516-41db-257b-258e6116a4f2@daenzer.net>
-         <7479b8df108c66b1711eb89efbfeb4a16480533d.camel@ndufresne.ca>
-         <8e091392-2365-6c52-1fc2-84ebdc9e83fe@daenzer.net>
-         <93c8e6834728b7e5979013df757017d309ee6a89.camel@bootlin.com>
-         <CAKMK7uFewmCuc97Qp_2zzk9YvMPmK8zE=a6XGszsLq+SLy-vJA@mail.gmail.com>
-         <9230d330e3b57af0643abc834bcf207095cc4bd7.camel@ndufresne.ca>
-         <65a37cec-5040-e2f0-5cd5-c9c3111827ad@daenzer.net>
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-JnkdroWVrKfeW6KPNz+j"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Andy Walls <awalls@md.metrocast.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org
+References: <cover.1553903063.git.mail@maciej.szmigiero.name>
+ <07fc8594c942ab527275b29121869ffe77bc1d83.1553903063.git.mail@maciej.szmigiero.name>
+ <9ee14d2c-e8ea-5c3f-1194-f20f25678735@xs4all.nl>
+ <75f07882-1553-b7d8-c15e-9e7cbc19996f@maciej.szmigiero.name>
+ <fb8a5994-4eb7-11b0-d617-52ebecfe4ec0@xs4all.nl>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mail@maciej.szmigiero.name; prefer-encrypt=mutual; keydata=
+ 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 PA==
+Message-ID: <f673844e-e2a5-3d4c-df8a-eb71100b626d@maciej.szmigiero.name>
+Date:   Wed, 24 Apr 2019 22:02:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <fb8a5994-4eb7-11b0-d617-52ebecfe4ec0@xs4all.nl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On 24.04.2019 14:45, Hans Verkuil wrote:
+> On 4/16/19 1:38 AM, Maciej S. Szmigiero wrote:
+>> On 12.04.2019 10:56, Hans Verkuil wrote:
+>>> On 3/30/19 12:51 AM, Maciej S. Szmigiero wrote:
+>>>> This patch prepares cxusb driver for supporting the analog part of
+>>>> Medion 95700 (previously only the digital - DVB - mode was supported).
+>>>>
+>>>> Specifically, it adds support for:
+>>>> * switching the device between analog and digital modes of operation,
+>>>> * enforcing that only one mode is active at the same time due to hardware
+>>>> limitations.
+>>>>
+>>>> Actual implementation of the analog mode will be provided by the next
+>>>> commit.
+>>>>
+>>>> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+>>>> ---
+(..)
+>>>> index 8056053c9ab0..01987ec5e0c5 100644
+>>>> --- a/drivers/media/usb/dvb-usb/dvb-usb-dvb.c
+>>>> +++ b/drivers/media/usb/dvb-usb/dvb-usb-dvb.c
+>>>> @@ -15,6 +15,7 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
+>>>>  {
+>>>>  	struct dvb_usb_adapter *adap = dvbdmxfeed->demux->priv;
+>>>>  	int newfeedcount, ret;
+>>>> +	bool streaming_ctrl_no_urb;
+>>>>  
+>>>>  	if (adap == NULL)
+>>>>  		return -ENODEV;
+>>>> @@ -24,12 +25,16 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
+>>>>  		return -EINVAL;
+>>>>  	}
+>>>>  
+>>>> +	streaming_ctrl_no_urb = adap->props.fe[adap->active_fe].caps &
+>>>> +		DVB_USB_ADAP_STREAMING_CTRL_NO_URB;
+>>>>  	newfeedcount = adap->feedcount + (onoff ? 1 : -1);
+>>>>  
+>>>>  	/* stop feed before setting a new pid if there will be no pid anymore */
+>>>>  	if (newfeedcount == 0) {
+>>>>  		deb_ts("stop feeding\n");
+>>>> -		usb_urb_kill(&adap->fe_adap[adap->active_fe].stream);
+>>>> +
+>>>> +		if (streaming_ctrl_no_urb)
+>>>
+>>> Is this test right? Shouldn't it be !streaming_ctrl_no_urb in order to keep the
+>>> current (non-medion) behavior?
+>>>
+>>>> +			usb_urb_kill(&adap->fe_adap[adap->active_fe].stream);
+>>>>  
+>>>>  		if (adap->props.fe[adap->active_fe].streaming_ctrl != NULL) {
+>>>>  			ret = adap->props.fe[adap->active_fe].streaming_ctrl(adap, 0);
+>>>> @@ -38,6 +43,9 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
+>>>>  				return ret;
+>>>>  			}
+>>>>  		}
+>>>> +
+>>>> +		if (!streaming_ctrl_no_urb)
+>>>
+>>> And then this would have to be inverted as well.
+>>
+>> The newly added flag "DVB_USB_ADAP_STREAMING_CTRL_NO_URB" has the
+>> following meaning:
+>> If it is set the order of operations in dvb_usb_ctrl_feed() looks like
+>> this:
+>> 1) Call the driver streaming_ctrl(1) callback to enable streaming,
+>> 2) Submit DVB data URBs,
+>> (streaming happens)
+>> 3) Kill DVB data URBs,
+>> 4) Call the driver streaming_ctrl(0) callback to disable streaming.
+>>
+>> This is needed for Medion because:
+>> a) The device could already be open in the analog mode when
+>> streaming_ctrl(1) tries to acquire it in the digital mode.
+>> In this case it is important that no DVB URBs are scheduled before
+>> giving the callback chance to report an error,
+>>
+>> b) The device could get open in the analog mode as soon as
+>> streaming_ctrl(0) drops the last digital mode reference to it so all
+>> DVB data URB must have already been terminated at this point.
+>>
+>> If the aforementioned flag is unset, however, the order of operations in
+>> dvb_usb_ctrl_feed() looks like this:
+>> 1) Submit DVB data URBs,
+>> 2) Call the driver streaming_ctrl(1) callback to enable streaming,
+>> (streaming happens)
+>> 3) Call the driver streaming_ctrl(0) callback to disable streaming,
+>> 4) Kill DVB data URBs.
+>>
+>> Previously, the order was always like this:
+>> 1) Submit DVB data URBs,
+>> 2) Call the driver streaming_ctrl(1) callback to enable streaming,
+>> (streaming happens)
+>> 3) Kill DVB data URBs,
+>> 4) Call the driver streaming_ctrl(0) callback to disable streaming.
+>>
+>> You can see that this was asymmetric - streaming_ctrl(1) is called with
+>> data URBs already active but they are killed before streaming_ctrl(0)
+>> gets called, so switching only the submit part on "STREAMING_CTRL_NO_URB"
+>> would make this flag operation only half-correct.
+>>
+>> I have audited existing drivers that use dvb-usb framework and none of
+>> them do anything besides a synchronous USB control transfer or a
+>> synchronous USB bulk transfer to an endpoint different from the one that
+>> DVB data uses in streaming_ctrl(0) callback.
+>> Additionally, streaming_ctrl(1) and streaming_ctrl(0) paths are usually
+>> very similar in the driver code, so if streaming_ctrl(1) runs fine with
+>> data URBs being already active there is no reason to think
+>> streaming_ctrl(0) will have a problem with this.
+> 
+> Is there anything wrong with always doing:
+> 
+> 1) Call the driver streaming_ctrl(1) callback to enable streaming,
+> 2) Submit DVB data URBs,
+> (streaming happens)
+> 3) Kill DVB data URBs,
+> 4) Call the driver streaming_ctrl(0) callback to disable streaming.
 
---=-JnkdroWVrKfeW6KPNz+j
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In principle this should be fine - looking at the existing drivers
+doesn't reveal anything in their streaming_ctrl(1) callbacks that could
+depend on URBs submission order.
 
-Le mercredi 24 avril 2019 =C3=A0 18:54 +0200, Michel D=C3=A4nzer a =C3=A9cr=
-it :
-> On 2019-04-24 5:44 p.m., Nicolas Dufresne wrote:
-> > Le mercredi 24 avril 2019 =C3=A0 17:06 +0200, Daniel Vetter a =C3=A9cri=
-t :
-> > > On Wed, Apr 24, 2019 at 4:41 PM Paul Kocialkowski
-> > > <paul.kocialkowski@bootlin.com> wrote:
-> > > > On Wed, 2019-04-24 at 16:39 +0200, Michel D=C3=A4nzer wrote:
-> > > > > On 2019-04-24 2:01 p.m., Nicolas Dufresne wrote:
-> > > > > > Rendering a video stream is more complex then what you describe=
- here.
-> > > > > > Whenever there is a unexpected delay (late delivery of a frame =
-as an
-> > > > > > example) you may endup in situation where one frame is ready af=
-ter the
-> > > > > > targeted vblank. If there is another frame that targets the fol=
-lowing
-> > > > > > vblank that gets ready on-time, the previous frame should be re=
-placed
-> > > > > > by the most recent one.
-> > > > > >=20
-> > > > > > With fences, what happens is that even if you received the next=
- frame
-> > > > > > on time, naively replacing it is not possible, because we don't=
- know
-> > > > > > when the fence for the next frame will be signalled. If you sim=
-ply
-> > > > > > always replace the current frame, you may endup skipping a lot =
-more
-> > > > > > vblank then what you expect, and that results in jumpy playback=
-.
-> > > > >=20
-> > > > > So you want to be able to replace a queued flip with another one =
-then.
-> > > > > That doesn't necessarily require allowing more than one flip to b=
-e
-> > > > > queued ahead of time.
-> > > >=20
-> > > > There might be other ways to do it, but this one has plenty of
-> > > > advantages.
-> > >=20
-> > > The point of kms (well one of the reasons) was to separate the
-> > > implementation of modesetting for specific hw from policy decisions
-> > > like which frames to drop and how to schedule them. Kernel gives
-> > > tools, userspace implements the actual protocols.
-> > >=20
-> > > There's definitely a bit a gap around scheduling flips for a specific
-> > > frame or allowing to cancel/overwrite an already scheduled flip, but
-> > > no one yet has come up with a clear proposal for new uapi + example
-> > > implementation + userspace implementation + big enough support from
-> > > other compositors that this is what they want too.
->=20
-> Actually, the ATOMIC_AMEND patches propose a way to replace a scheduled
-> flip?
->=20
->=20
-> > > > > Note that this can also be done in userspace with explicit fencin=
-g (by
-> > > > > only selecting a frame and submitting it to the kernel after all
-> > > > > corresponding fences have signalled), at least to some degree, bu=
-t the
-> > > > > kernel should be able to do it up to a later point in time and mo=
-re
-> > > > > reliably, with less risk of missing a flip for a frame which beco=
-mes
-> > > > > ready just in time.
-> > > >=20
-> > > > Indeed, but it would be great if we could do that with implicit fen=
-cing
-> > > > as well.
-> > >=20
-> > > 1. extract implicit fences from dma-buf. This part is just an idea,
-> > > but easy to implement once we have someone who actually wants this.
-> > > All we need is a new ioctl on the dma-buf to export the fences from
-> > > the reservation_object as a sync_file (either the exclusive or the
-> > > shared ones, selected with a flag).
-> > > 2. do the exact same frame scheduling as with explicit fencing
-> > > 3. supply explicit fences in your atomic ioctl calls - these should
-> > > overrule any implicit fences (assuming correct kernel drivers, but we
-> > > have helpers so you can assume they all work correctly).
-> > >=20
-> > > By design this is possible, it's just that no one yet bothered enough
-> > > to make it happen.
-> > > -Daniel
-> >=20
-> > I'm not sure I understand the workflow of this one. I'm all in favour
-> > leaving the hard work to userspace. Note that I have assumed explicit
-> > fences from the start, I don't think implicit fence will ever exist in
-> > v4l2, but I might be wrong. What I understood is that there was a
-> > previous attempt in the past but it raised more issues then it actually
-> > solved. So that being said, how do handle exactly the follow use cases:
-> >=20
-> >  - A frame was lost by capture driver, but it was schedule as being the
-> > next buffer to render (normally previous frame should remain).
->=20
-> Userspace just doesn't call into the kernel to flip to the lost frame,
-> so the previous one remains.
+> Regards,
+> 
+> 	Hans
+> 
 
-We are stuck in a loop you a me. Considering v4l2 to drm, where fences
-don't exist on v4l2, it makes very little sense to bring up fences if
-we are to wait on the fence in userspace. Unless of course you have
-other operations before end making a proper use of the fences.
-
->=20
-> >  - The scheduled frame is late for the next vblank (didn't signal on-
-> > time), a new one may be better for the next vlbank, but we will only
-> > know when it's fence is signaled.
->=20
-> Userspace only selects a frame and submits it to the kernel after all
-> its fences have signalled.
->=20
-> > Better in this context means the the presentation time of this frame is
-> > closer to the next vblank time. Keep in mind that the idea is to
-> > schedule the frames before they are signal, in order to make the usage
-> > of the fence useful in lowering the latency.
->=20
-> Fences are about signalling completion, not about low latency.
-
-It can be used to remove a roundtrip with userspace at a very time
-sensitive moment. If you pass a dmabuf with it's unsignalled fence to a
-kernel driver, the driver can start the job on this dmabuf as soon as
-the fence is signalled. If you always wait on a fence in userspace, you
-have to wait for the userspace process to be scheduled, then userspace
-will setup the drm atomic request or similar action, which may take
-some time and may require another process in the kernel to have to be
-schedule. This effectively adds some variable delay, a gap where
-nothing is happening between two operations. This time is lost and
-contributes to the overall operation latency.
-
-The benefit of fences we are looking for is being able to setup before
-the fence is signalled the operations on various compatible drivers.
-This way, on the time critical moment a driver can be feed more jobs,
-there is no userspace rountrip involved. It is also proposed to use it
-to return the buffers into v4l2 queued when they are freed, which can
-in some conditions avoid let's say a capture driver from skipping due
-to random scheduling delays.
-
->=20
-> With a display server, the client can send frames to the display server
-> ahead of time, only the display server needs to wait for fences to
-> signal before submitting frames to the kernel.
->=20
->=20
-> > Of course as Michel said, we could just always wait on the fence and
-> > just schedule. But if you do that, why would you care implementing the
-> > fence in v4l2 to start with, DQBuf does just that already.
->=20
-> A fence is more likely to work out of the box with non-V4L-related code
-> than DQBuf?
-
-If you use DQBuf, you are guarantied that the data has been produced. A
-fence is not useful on a buffer that already contains the data you
-would be waiting for. That's why the fence is provided in the RFC at
-QBUf, basically when the  free buffer is given to the v4l2 driver. QBuf
-can also be passed a fence in the RFC, so if the buffer is not yet
-free, the driver would wait on the fence before using it.
-
->=20
->=20
-
---=-JnkdroWVrKfeW6KPNz+j
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXMCgJwAKCRBxUwItrAao
-HAJZAJ9sU6RxIoHvjLuu4tuWKVaxkgCLwACfa4OY20ZlCH6p+DFFhBnzAAlst10=
-=z/xV
------END PGP SIGNATURE-----
-
---=-JnkdroWVrKfeW6KPNz+j--
-
+Thanks,
+Maciej
