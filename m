@@ -2,140 +2,218 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4538C282CE
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 10:23:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74A86C10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 10:43:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9DF8321773
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 10:23:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3EA9420811
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 10:43:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727894AbfDXKXO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 06:23:14 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:35367 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727645AbfDXKXO (ORCPT
+        id S1727527AbfDXKn4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 06:43:56 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47665 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726983AbfDXKn4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 06:23:14 -0400
-Received: from [IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676] ([IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id JF3ThJXcXZVjxJF3WhZzj3; Wed, 24 Apr 2019 12:23:11 +0200
-Subject: Re: [PATCH] v4l: Add source event change for bit-depth
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20190415152723.2481-1-stanimir.varbanov@linaro.org>
- <20190423064326.lbi3gfprfegqecu4@kekkonen.localdomain>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <a61ded35-2dc1-edb9-9f9a-94bbf78c7abf@xs4all.nl>
-Date:   Wed, 24 Apr 2019 12:23:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        Wed, 24 Apr 2019 06:43:56 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hJFNZ-0002f4-Pu; Wed, 24 Apr 2019 12:43:53 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     kernel@pengutronix.de, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH v2] media: v4l2-ctrl: add MPEG-2 profile and level controls
+Date:   Wed, 24 Apr 2019 12:43:47 +0200
+Message-Id: <20190424104347.20212-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190412155135.13907-9-p.zabel@pengutronix.de>
+References: <20190412155135.13907-9-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20190423064326.lbi3gfprfegqecu4@kekkonen.localdomain>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfLCa3Ah4lBTleABLkvWMy37H1y28aM66nP2zzKGoggdVD5eemu57Faf7YmgF+LQryaXFz7tLm9y6nEriz7oRrWxtjqUw0S7e2tQZZ0BbMckbOjd9MREc
- UcSkdjdy6vEdS3m/98w9G99XyFObFiBf5lzI2Gt3cHwSb2JUFIkzRkLm4ZxVPkmVHF1l+URFPXhYZg553BauphkKMTVf91qf/cstZQtZeF0ATmZHeViVJUFl
- 6TKRyOMnE3GFeAYQPJqMRvTKgcwSOUZnlvTXQCBq8Azqel4liCLUr8gvD35L6/X51RmPwaTDj2HAxnNsFTxAR3A+eKQKJuvC4/BtAk8CP7MAm6j2MVzjfdOZ
- 3wjKa7GrEdqS71BBXk/j2YCt/X/UMhtS9Dr9Q0bk4gJrYLioB4M6I2+eXCBwQTmekUPR3FCyqmR1mEu7C+EVn1BHFzgFT32h5/lEt1FuSt4M8R+wpbyrgVxR
- gVLkRDvdbHiTqvxl
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/23/19 8:43 AM, Sakari Ailus wrote:
-> Hi Stan,
-> 
-> On Mon, Apr 15, 2019 at 06:27:23PM +0300, Stanimir Varbanov wrote:
->> This event indicate that the source bit-depth is changed during
->> run-time. The client must get the new format and re-allocate buffers
->> for it. This can usually happens with video decoder (encoders) when
->> the bit-stream depth is changed from 8 to 10bits or vice versa.
-> 
-> Thanks for the patch.
-> 
-> How about adding an event for pixelformat change, instead of bit depth? The
-> application presumably knows the formats it can work with, and can adapt to
-> that as well as a change to the bit depth.
+Add MPEG-2 CID definitions for profiles and levels defined in ITU-T Rec.
+H.262.
 
-I disagree with this. The pixelformat is set by the application, and it is
-not set by the incoming video format. Of course, a change in the incoming
-video format might force a pixelformat change, but that's not what is signaled
-here. This event just indicates that something changed w.r.t. the video source
-and the flag specifies that is it the bit depth.
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+Changes since v1:
+ - Moved CIDs up to V4L2_CID_MPEG_BASE+270
+---
+ .../media/uapi/v4l/ext-ctrls-codec.rst        | 56 +++++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls.c          | 23 ++++++++
+ include/uapi/linux/v4l2-controls.h            | 18 ++++++
+ 3 files changed, 97 insertions(+)
 
-So I think this patch is OK (but see the small comment below) since it
-correctly describes what changed.
-
-> 
->>
->> Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
->> ---
->>  Documentation/media/uapi/v4l/vidioc-dqevent.rst | 7 +++++++
->>  Documentation/media/videodev2.h.rst.exceptions  | 1 +
->>  include/uapi/linux/videodev2.h                  | 1 +
->>  3 files changed, 9 insertions(+)
->>
->> diff --git a/Documentation/media/uapi/v4l/vidioc-dqevent.rst b/Documentation/media/uapi/v4l/vidioc-dqevent.rst
->> index dea9c0cc00ab..92573d7c3e05 100644
->> --- a/Documentation/media/uapi/v4l/vidioc-dqevent.rst
->> +++ b/Documentation/media/uapi/v4l/vidioc-dqevent.rst
->> @@ -397,6 +397,13 @@ call.
->>  	that many devices are not able to recover from a temporary loss of
->>  	signal and so restarting streaming I/O is required in order for the
->>  	hardware to synchronize to the video signal.
->> +    * - ``V4L2_EVENT_SRC_CH_BITDEPTH``
->> +      - 0x0002
->> +      - This event gets triggered when bit-depth change is detected from a
->> +	video decoder. Applications will have to query the new pixel format
->> +	and re-negotiate the queue. In most cases the streaming must be stopped
->> +	and restarted (:ref:`VIDIOC_STREAMOFF <VIDIOC_STREAMON>` followed by
->> +	:ref:`VIDIOC_STREAMON <VIDIOC_STREAMON>`).
->>  
->>  
->>  Return Value
->> diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentation/media/videodev2.h.rst.exceptions
->> index 64d348e67df9..b4c35b347983 100644
->> --- a/Documentation/media/videodev2.h.rst.exceptions
->> +++ b/Documentation/media/videodev2.h.rst.exceptions
->> @@ -478,6 +478,7 @@ replace define V4L2_EVENT_CTRL_CH_FLAGS ctrl-changes-flags
->>  replace define V4L2_EVENT_CTRL_CH_RANGE ctrl-changes-flags
->>  
->>  replace define V4L2_EVENT_SRC_CH_RESOLUTION src-changes-flags
->> +replace define V4L2_EVENT_SRC_CH_BITDEPTH src-changes-flags
->>  
->>  replace define V4L2_EVENT_MD_FL_HAVE_FRAME_SEQ :c:type:`v4l2_event_motion_det`
->>  
->> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->> index 496e6453450c..7398f42eac7d 100644
->> --- a/include/uapi/linux/videodev2.h
->> +++ b/include/uapi/linux/videodev2.h
->> @@ -2271,6 +2271,7 @@ struct v4l2_event_frame_sync {
->>  };
->>  
->>  #define V4L2_EVENT_SRC_CH_RESOLUTION		(1 << 0)
->> +#define V4L2_EVENT_SRC_CH_BITDEPTH		(1 << 1)
-
-It's two words, so BIT_DEPTH.
-
-For the future I would also like to see a V4L2_EVENT_SRC_CH_COLORIMETRY flag
-to indicate when the colorimetry of the video changes.
-
-It's actually something that would be of use for vivid today.
-
-Regards,
-
-	Hans
-
->>  
->>  struct v4l2_event_src_change {
->>  	__u32 changes;
-> 
+diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+index 4a8446203085..843c93e8e7bc 100644
+--- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
++++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+@@ -759,6 +759,32 @@ enum v4l2_mpeg_video_h264_level -
+ 
+ 
+ 
++.. _v4l2-mpeg-video-mpeg2-level:
++
++``V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL``
++    (enum)
++
++enum v4l2_mpeg_video_mpeg2_level -
++    The level information for the MPEG2 elementary stream. Applicable to
++    MPEG2 codecs. Possible values are:
++
++
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW``
++      - Low Level (LL)
++    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN``
++      - Main Level (ML)
++    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440``
++      - High-1440 Level (H-14)
++    * - ``V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH``
++      - High Level (HL)
++
++
++
+ .. _v4l2-mpeg-video-mpeg4-level:
+ 
+ ``V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL``
+@@ -845,6 +871,36 @@ enum v4l2_mpeg_video_h264_profile -
+ 
+ 
+ 
++.. _v4l2-mpeg-video-mpeg2-profile:
++
++``V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE``
++    (enum)
++
++enum v4l2_mpeg_video_mpeg2_profile -
++    The profile information for MPEG2. Applicable to MPEG2 codecs.
++    Possible values are:
++
++
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++
++    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE``
++      - Simple profile (SP)
++    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN``
++      - Main profile (MP)
++    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE``
++      - SNR Scalable profile (SNR)
++    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE``
++      - Spatially Scalable profile (Spt)
++    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH``
++      - High profile (HP)
++    * - ``V4L2_MPEG_VIDEO_MPEG2_PROFILE_MULTIVIEW``
++      - Multi-view profile (MVP)
++
++
++
+ .. _v4l2-mpeg-video-mpeg4-profile:
+ 
+ ``V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE``
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 89a1fe564675..ed2f1f2ede5a 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -406,6 +406,21 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		"Explicit",
+ 		NULL,
+ 	};
++	static const char * const mpeg_mpeg2_level[] = {
++		"Low",
++		"Main",
++		"High 1440",
++		"High",
++		NULL,
++	};
++	static const char * const mpeg2_profile[] = {
++		"Simple",
++		"Main",
++		"SNR Scalable",
++		"Spatially Scalable",
++		"High",
++		NULL,
++	};
+ 	static const char * const mpeg_mpeg4_level[] = {
+ 		"0",
+ 		"0b",
+@@ -622,6 +637,10 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		return h264_fp_arrangement_type;
+ 	case V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE:
+ 		return h264_fmo_map_type;
++	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
++		return mpeg_mpeg2_level;
++	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
++		return mpeg2_profile;
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
+ 		return mpeg_mpeg4_level;
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
+@@ -832,6 +851,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_MPEG_VIDEO_H264_I_FRAME_MAX_QP:		return "H264 I-Frame Maximum QP Value";
+ 	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MIN_QP:		return "H264 P-Frame Minimum QP Value";
+ 	case V4L2_CID_MPEG_VIDEO_H264_P_FRAME_MAX_QP:		return "H264 P-Frame Maximum QP Value";
++	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:			return "MPEG2 Level";
++	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:			return "MPEG2 Profile";
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP:		return "MPEG4 I-Frame QP Value";
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_P_FRAME_QP:		return "MPEG4 P-Frame QP Value";
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_B_FRAME_QP:		return "MPEG4 B-Frame QP Value";
+@@ -1196,6 +1217,8 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC:
+ 	case V4L2_CID_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE:
+ 	case V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE:
++	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
++	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_PROFILE:
+ 	case V4L2_CID_JPEG_CHROMA_SUBSAMPLING:
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 37807f23231e..d9f2c76b71bb 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -404,6 +404,24 @@ enum v4l2_mpeg_video_multi_slice_mode {
+ #define V4L2_CID_MPEG_VIDEO_MV_V_SEARCH_RANGE		(V4L2_CID_MPEG_BASE+228)
+ #define V4L2_CID_MPEG_VIDEO_FORCE_KEY_FRAME		(V4L2_CID_MPEG_BASE+229)
+ 
++/* CIDs for the MPEG-2 Part 2 (H.262) codec */
++#define V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL			(V4L2_CID_MPEG_BASE+270)
++enum v4l2_mpeg_video_mpeg2_level {
++	V4L2_MPEG_VIDEO_MPEG2_LEVEL_LOW		= 0,
++	V4L2_MPEG_VIDEO_MPEG2_LEVEL_MAIN	= 1,
++	V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH_1440	= 2,
++	V4L2_MPEG_VIDEO_MPEG2_LEVEL_HIGH	= 3,
++};
++#define V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE		(V4L2_CID_MPEG_BASE+271)
++enum v4l2_mpeg_video_mpeg2_profile {
++	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SIMPLE				= 0,
++	V4L2_MPEG_VIDEO_MPEG2_PROFILE_MAIN				= 1,
++	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SNR_SCALABLE			= 2,
++	V4L2_MPEG_VIDEO_MPEG2_PROFILE_SPATIALLY_SCALABLE		= 3,
++	V4L2_MPEG_VIDEO_MPEG2_PROFILE_HIGH				= 4,
++	V4L2_MPEG_VIDEO_MPEG2_PROFILE_MULTIVIEW				= 5,
++};
++
+ /* CIDs for the FWHT codec as used by the vicodec driver. */
+ #define V4L2_CID_FWHT_I_FRAME_QP             (V4L2_CID_MPEG_BASE + 290)
+ #define V4L2_CID_FWHT_P_FRAME_QP             (V4L2_CID_MPEG_BASE + 291)
+-- 
+2.20.1
 
