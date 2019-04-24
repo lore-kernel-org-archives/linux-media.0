@@ -2,154 +2,180 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47F5BC10F11
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 03:55:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB23AC10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 08:39:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 133812148D
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 03:55:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86ACA20656
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 08:39:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726878AbfDXDzZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Apr 2019 23:55:25 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:55051 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726474AbfDXDzZ (ORCPT
+        id S1727548AbfDXIjO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 04:39:14 -0400
+Received: from mail.netline.ch ([148.251.143.178]:51428 "EHLO
+        netline-mail3.netline.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726878AbfDXIjO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Apr 2019 23:55:25 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:54cf:7074:ef84:3101])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id J90Eh3Wbpb8gSJ90FheOIQ; Wed, 24 Apr 2019 05:55:23 +0200
-Message-ID: <e27992c3c0863a5ea126300bedc8b522@smtp-cloud8.xs4all.net>
-Date:   Wed, 24 Apr 2019 05:55:21 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfPfMrW3MBvueBbPe7kT7SOA4YuXsoNe7semy+1FQrY3XoVL3hk7Czk8NtwTM/uP3JnTHuk6YQXduXYYHFarnWvjNfoxR04N+IDLwK7jrLMd4VSYft8MM
- 3ddjJthoL/TmWoWBce0ZHbpUgwknh8x/Z4QhfJtSpRJwOdGMUb1TQaAitXI/AD+V8HluAqEFAySvWA79YduilhGsdgq0WhQJpsenQTkZQvmm079IgR3fr7RO
+        Wed, 24 Apr 2019 04:39:14 -0400
+X-Greylist: delayed 468 seconds by postgrey-1.27 at vger.kernel.org; Wed, 24 Apr 2019 04:39:12 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by netline-mail3.netline.ch (Postfix) with ESMTP id 1DAC32AA104;
+        Wed, 24 Apr 2019 10:31:23 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at netline-mail3.netline.ch
+Received: from netline-mail3.netline.ch ([127.0.0.1])
+        by localhost (netline-mail3.netline.ch [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id pryLAOGWjk22; Wed, 24 Apr 2019 10:31:22 +0200 (CEST)
+Received: from thor (116.245.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.245.116])
+        by netline-mail3.netline.ch (Postfix) with ESMTPSA id E445E2AA100;
+        Wed, 24 Apr 2019 10:31:21 +0200 (CEST)
+Received: from [::1]
+        by thor with esmtp (Exim 4.92)
+        (envelope-from <michel@daenzer.net>)
+        id 1hJDJJ-0000N3-DS; Wed, 24 Apr 2019 10:31:21 +0200
+Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Tomasz Figa <tfiga@chromium.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
+ <20190418081816.GO13337@phenom.ffwll.local>
+ <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
+ <987372acff18f4c66191ee52fa69dc2917e4a605.camel@bootlin.com>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
+Openpgp: preference=signencrypt
+Autocrypt: addr=michel@daenzer.net; prefer-encrypt=mutual; keydata=
+ mQGiBDsehS8RBACbsIQEX31aYSIuEKxEnEX82ezMR8z3LG8ktv1KjyNErUX9Pt7AUC7W3W0b
+ LUhu8Le8S2va6hi7GfSAifl0ih3k6Bv1Itzgnd+7ZmSrvCN8yGJaHNQfAevAuEboIb+MaVHo
+ 9EMJj4ikOcRZCmQWw7evu/D9uQdtkCnRY9iJiAGxbwCguBHtpoGMxDOINCr5UU6qt+m4O+UD
+ /355ohBBzzyh49lTj0kTFKr0Ozd20G2FbcqHgfFL1dc1MPyigej2gLga2osu2QY0ObvAGkOu
+ WBi3LTY8Zs8uqFGDC4ZAwMPoFy3yzu3ne6T7d/68rJil0QcdQjzzHi6ekqHuhst4a+/+D23h
+ Za8MJBEcdOhRhsaDVGAJSFEQB1qLBACOs0xN+XblejO35gsDSVVk8s+FUUw3TSWJBfZa3Imp
+ V2U2tBO4qck+wqbHNfdnU/crrsHahjzBjvk8Up7VoY8oT+z03sal2vXEonS279xN2B92Tttr
+ AgwosujguFO/7tvzymWC76rDEwue8TsADE11ErjwaBTs8ZXfnN/uAANgPLQjTWljaGVsIERh
+ ZW56ZXIgPG1pY2hlbEBkYWVuemVyLm5ldD6IXgQTEQIAHgUCQFXxJgIbAwYLCQgHAwIDFQID
+ AxYCAQIeAQIXgAAKCRBaga+OatuyAIrPAJ9ykonXI3oQcX83N2qzCEStLNW47gCeLWm/QiPY
+ jqtGUnnSbyuTQfIySkK5AQ0EOx6FRRAEAJZkcvklPwJCgNiw37p0GShKmFGGqf/a3xZZEpjI
+ qNxzshFRFneZze4f5LhzbX1/vIm5+ZXsEWympJfZzyCmYPw86QcFxyZflkAxHx9LeD+89Elx
+ bw6wT0CcLvSv8ROfU1m8YhGbV6g2zWyLD0/naQGVb8e4FhVKGNY2EEbHgFBrAAMGA/0VktFO
+ CxFBdzLQ17RCTwCJ3xpyP4qsLJH0yCoA26rH2zE2RzByhrTFTYZzbFEid3ddGiHOBEL+bO+2
+ GNtfiYKmbTkj1tMZJ8L6huKONaVrASFzLvZa2dlc2zja9ZSksKmge5BOTKWgbyepEc5qxSju
+ YsYrX5xfLgTZC5abhhztpYhGBBgRAgAGBQI7HoVFAAoJEFqBr45q27IAlscAn2Ufk2d6/3p4
+ Cuyz/NX7KpL2dQ8WAJ9UD5JEakhfofed8PSqOM7jOO3LCA==
+Message-ID: <1d6fb659-0516-41db-257b-258e6116a4f2@daenzer.net>
+Date:   Wed, 24 Apr 2019 10:31:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <987372acff18f4c66191ee52fa69dc2917e4a605.camel@bootlin.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On 2019-04-19 10:38 a.m., Paul Kocialkowski wrote:
+> On Thu, 2019-04-18 at 20:30 -0400, Nicolas Dufresne wrote:
+>> Le jeudi 18 avril 2019 à 10:18 +0200, Daniel Vetter a écrit :
+>>>> It would be cool if both could be used concurrently and not just return
+>>>> -EBUSY when the device is used with the other subsystem.
+>>>
+>>> We live in this world already :-) I think there's even patches (or merged
+>>> already) to add fences to v4l, for Android.
+>>
+>> This work is currently suspended. It will require some feature on DRM
+>> display to really make this useful, but there is also a lot of
+>> challanges in V4L2. In GFX space, most of the use case are about
+>> rendering as soon as possible. Though, in multimedia we have two
+>> problems, we need to synchronize the frame rendering with the audio,
+>> and output buffers may comes out of order due to how video CODECs are
+>> made.
+> 
+> Definitely, it feels like the DRM display side is currently a good fit
+> for render use cases, but not so much for precise display cases where
+> we want to try and display a buffer at a given vblank target instead of
+> "as soon as possible".
+> 
+> I have a userspace project where I've implemented a page flip queue,
+> which only schedules the next flip when relevant and keeps ready
+> buffers in the queue until then. This requires explicit vblank
+> syncronisation (which DRM offsers, but pretty much all other display
+> APIs, that are higher-level don't, so I'm just using a refresh-rate
+> timer for them) and flip done notification.
+> 
+> I haven't looked too much at how to flip with a target vblank with DRM
+> directly but maybe the atomic API already has the bits in for that (but
+> I haven't heard of such a thing as a buffer queue, so that makes me
+> doubt it).
 
-Results of the daily build of media_tree:
+Not directly. What's available is that if userspace waits for vblank n
+and then submits a flip, the flip will complete in vblank n+1 (or a
+later vblank, depending on when the flip is submitted and when the
+fences the flip depends on signal).
 
-date:			Wed Apr 24 05:00:11 CEST 2019
-media-tree git hash:	a4dfc8a24796ff312d1d307e11f26f8ca466e938
-media_build git hash:	ba50779fd4c373d46c2dbe94515cc0ebcdc974dc
-v4l-utils git hash:	e30639edd74f12f8f58d8e9cf10d85a1f071a6c3
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
+There is reluctance allowing more than one flip to be queued in the
+kernel, as it would considerably increase complexity in the kernel. It
+would probably only be considered if there was a compelling use-case
+which was outright impossible otherwise.
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
 
-Detailed results are available here:
+> Well, I need to handle stuff like SDL in my userspace project, so I have
+> to have all that queuing stuff in software anyway, but it would be good
+> if each project didn't have to implement that. Worst case, it could be
+> in libdrm too.
 
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.log
+Usually, this kind of queuing will be handled in a display server such
+as Xorg or a Wayland compositor, not by the application such as a video
+player itself, or any library in the latter's address space. I'm not
+sure there's much potential for sharing code between display servers for
+this.
 
-Detailed regression test results are available here:
 
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
+>> In the first, we'd need a mechanism where we can schedule a render at a
+>> specific time or vblank. We can of course already implement this in
+>> software, but with fences, the scheduling would need to be done in the
+>> driver. Then if the fence is signalled earlier, the driver should hold
+>> on until the delay is met. If the fence got signalled late, we also
+>> need to think of a workflow. As we can't schedule more then one render
+>> in DRM at one time, I don't really see yet how to make that work.
+> 
+> Indeed, that's also one of the main issues I've spotted. Before using
+> an implicit fence, we basically have to make sure the frame is due for
+> display at the next vblank. Otherwise, we need to refrain from using
+> the fence and schedule the flip later, which is kind of counter-
+> productive.
 
-Full logs are available here:
+Fences are about signalling that the contents of a frame are "done" and
+ready to be presented. They're not about specifying which frame is to be
+presented when.
 
-http://www.xs4all.nl/~hverkuil/logs/Wednesday.tar.bz2
 
-The Media Infrastructure API from this daily build is here:
+> I feel like specifying a target vblank would be a good unit for that,
 
-http://www.xs4all.nl/~hverkuil/spec/index.html
+The mechanism described above works for that.
+
+> since it's our native granularity after all (while a timestamp is not).
+
+Note that variable refresh rate (Adaptive Sync / FreeSync / G-Sync)
+changes things in this regard. It makes the vblank length variable, and
+if you wait for multiple vblanks between flips, you get the maximum
+vblank length corresponding to the minimum refresh rate / timing
+granularity. Thus, it would be useful to allow userspace to specify a
+timestamp corresponding to the earliest time when the flip is to
+complete. The kernel could then try to hit that as closely as possible.
+
+
+-- 
+Earthling Michel Dänzer               |              https://www.amd.com
+Libre software enthusiast             |             Mesa and X developer
