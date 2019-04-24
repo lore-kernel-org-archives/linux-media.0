@@ -2,36 +2,38 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B02C3C282CE
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 13:58:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13197C10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 13:58:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8818D2077C
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 13:58:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DED2B21902
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 13:58:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730625AbfDXN6C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 09:58:02 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56966 "EHLO
+        id S1730936AbfDXN6I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 09:58:08 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:56978 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730195AbfDXN6B (ORCPT
+        with ESMTP id S1730633AbfDXN6I (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 09:58:01 -0400
+        Wed, 24 Apr 2019 09:58:08 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: tonyk)
-        with ESMTPSA id 97B0F282BC3
+        with ESMTPSA id 8E470282BC3
 From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, helen.koike@collabora.com,
         kernel@collabora.com, lucmaga@gmail.com,
         lkcamp@lists.libreplanetbr.org,
         =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH v3 00/14] media: vimc: Add support for multiplanar formats 
-Date:   Wed, 24 Apr 2019 10:56:28 -0300
-Message-Id: <20190424135642.31973-1-andrealmeid@collabora.com>
+Subject: [PATCH v3 01/14] media: vimc: Remove unnecessary stream checks
+Date:   Wed, 24 Apr 2019 10:56:29 -0300
+Message-Id: <20190424135642.31973-2-andrealmeid@collabora.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190424135642.31973-1-andrealmeid@collabora.com>
+References: <20190424135642.31973-1-andrealmeid@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -40,93 +42,104 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Change the way subdevices check if the stream is running. Verify the stream
+pointer instead of src_frame. This makes easier to get rid of the void* and
+u8* in the subdevices structs. Also, remove redundant checks for stream.
 
-This series implements support for multiplane pixel formats at Vimc.
-A lot of changes were required since vimc support for singleplane
-was "hardcoded". The code has been adapted in order to support both
-formats. When was possible, the functions were written generically,
-avoiding functions for just one type of pixel format.
-
-The debayer subdevice is the only one that currently doesn't supports
-multiplanar formats. Documentation to each device will be made in a
-future patch. In hardcoded topology, the exposed capture device
-`RGB/YUV Capture` have a debayer in the pipeline, so it will fail when
-tested with multiplanar formats.
-
-The last commit of this series was tested using Hans' virtme.sh[1]
-script here are the summary of results:
-
-Grand Total for vivid device /dev/media0: 631, Succeeded: 631, Failed: 0, Warnings: 6
-Grand Total for vivid device /dev/media1: 631, Succeeded: 631, Failed: 0, Warnings: 6
-Grand Total for vim2m device /dev/media3: 61, Succeeded: 61, Failed: 0, Warnings: 0
-Grand Total for vimc device /dev/media3: 478, Succeeded: 478, Failed: 0, Warnings: 0
-Final Summary: 1801, Succeeded: 1801, Failed: 0, Warnings: 12
-
-Thanks,
-	André
-
-[1] https://hverkuil.home.xs4all.nl/virtme/virtme.sh
-
+Signed-off-by: André Almeida <andrealmeid@collabora.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
+---
 Changes in v3:
-- Refactor vimc_frame and vimc_fill_frame in order to be more clear and
-simple
-- Squash "Add handler for multiplanar fmt ioctls" and "Create multiplanar
-parameter"
-- Define format ioctls of capture device according to it capabilities
-- Get rid of `IS_MULTIPLANAR(vcap)` verification on format ioctls
-- Remove some format ioctl handlers
-- Reorder "Move sp2mp functions to v4l2-common"
-- Minimal code style and comments changes
-- Assign ioctls according to capture device capabilities
+- None
 
 Changes in v2:
-- Fix typos
-- Fix indentations
-- Enhance v4l2_fmt_* documentation
-- Change the order of commits, now the multiplanar parameter is the last
-one with the commit to set the device capabilities
-- Squash "unnecessary checks" commits together
-- In v1, the whole media device was in singleplanar or in multiplanar
-format. Now, each stream/pipeline can be in a format
-- Check the capture capabilities to get if the stream is in
-singleplanar/multiplanar mode, instead of checking the module parameter.
-- Change `if (multiplanar)` to `if (IS_MULTIPLANAR(vcap))`
-- Add a new commit to propagate in the stream if the capture device is
-in multiplanar or singleplanar mode
+- Squashed commits that remove unnecessary checks together
+- Reworded commit message
 
-André Almeida (14):
-  media: vimc: Remove unnecessary stream checks
-  media: vimc: cap: Change vimc_cap_device.format type
-  media: vimc: cap: Dynamically define stream pixelformat
-  media: Move sp2mp functions to v4l2-common
-  media: vimc: cap: refactor singleplanar as a subset of multiplanar
-  media: vimc: cap: Add multiplanar formats
-  media: vimc: cap: Add multiplanar default format
-  media: vimc: cap: Allocate and verify mplanar buffers
-  media: vimc: Propagate multiplanar state in the stream
-  media: vimc: Add and use new struct vimc_frame
-  media: vimc: sen: Add support for multiplanar formats
-  media: vimc: sca: Add support for multiplanar formats
-  media: vimc: cap: Add support for multiplanar formats
-  media: vimc: Create multiplanar parameter and ioctls
+ drivers/media/platform/vimc/vimc-debayer.c | 5 +----
+ drivers/media/platform/vimc/vimc-scaler.c  | 7 ++-----
+ drivers/media/platform/vimc/vimc-sensor.c  | 6 +-----
+ 3 files changed, 4 insertions(+), 14 deletions(-)
 
- drivers/media/platform/vimc/vimc-capture.c    | 287 ++++++++++++++----
- drivers/media/platform/vimc/vimc-common.c     |   8 +
- drivers/media/platform/vimc/vimc-common.h     |  43 ++-
- drivers/media/platform/vimc/vimc-debayer.c    |  39 ++-
- drivers/media/platform/vimc/vimc-scaler.c     | 129 +++++---
- drivers/media/platform/vimc/vimc-sensor.c     |  66 ++--
- drivers/media/platform/vimc/vimc-streamer.c   |   2 +-
- drivers/media/platform/vimc/vimc-streamer.h   |   3 +
- drivers/media/platform/vivid/vivid-vid-cap.c  |   6 +-
- .../media/platform/vivid/vivid-vid-common.c   |  59 ----
- .../media/platform/vivid/vivid-vid-common.h   |   9 -
- drivers/media/platform/vivid/vivid-vid-out.c  |   6 +-
- drivers/media/v4l2-core/v4l2-common.c         |  62 ++++
- include/media/v4l2-common.h                   |  37 +++
- 14 files changed, 520 insertions(+), 236 deletions(-)
-
+diff --git a/drivers/media/platform/vimc/vimc-debayer.c b/drivers/media/platform/vimc/vimc-debayer.c
+index 281f9c1a7249..b221f26e01cf 100644
+--- a/drivers/media/platform/vimc/vimc-debayer.c
++++ b/drivers/media/platform/vimc/vimc-debayer.c
+@@ -270,7 +270,7 @@ static int vimc_deb_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 		/* Do not change the format while stream is on */
+-		if (vdeb->src_frame)
++		if (vdeb->ved.stream)
+ 			return -EBUSY;
+ 
+ 		sink_fmt = &vdeb->sink_fmt;
+@@ -337,9 +337,6 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
+ 		const struct v4l2_format_info *pix_info;
+ 		unsigned int frame_size;
+ 
+-		if (vdeb->src_frame)
+-			return 0;
+-
+ 		/* We only support translating bayer to RGB24 */
+ 		if (src_pixelformat != V4L2_PIX_FMT_RGB24) {
+ 			dev_err(vdeb->dev,
+diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
+index 8aecf8e92031..617f2920b86b 100644
+--- a/drivers/media/platform/vimc/vimc-scaler.c
++++ b/drivers/media/platform/vimc/vimc-scaler.c
+@@ -158,7 +158,7 @@ static int vimc_sca_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 		/* Do not change the format while stream is on */
+-		if (vsca->src_frame)
++		if (vsca->ved.stream)
+ 			return -EBUSY;
+ 
+ 		sink_fmt = &vsca->sink_fmt;
+@@ -213,9 +213,6 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
+ 		const struct v4l2_format_info *pix_info;
+ 		unsigned int frame_size;
+ 
+-		if (vsca->src_frame)
+-			return 0;
+-
+ 		if (!vimc_sca_is_pixfmt_supported(pixelformat)) {
+ 			dev_err(vsca->dev, "pixfmt (0x%08x) is not supported\n",
+ 				pixelformat);
+@@ -337,7 +334,7 @@ static void *vimc_sca_process_frame(struct vimc_ent_device *ved,
+ 						    ved);
+ 
+ 	/* If the stream in this node is not active, just return */
+-	if (!vsca->src_frame)
++	if (!ved->stream)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	vimc_sca_fill_src_frame(vsca, sink_frame);
+diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
+index 081e54204c9f..1b2b75b27952 100644
+--- a/drivers/media/platform/vimc/vimc-sensor.c
++++ b/drivers/media/platform/vimc/vimc-sensor.c
+@@ -141,7 +141,7 @@ static int vimc_sen_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
+ 		/* Do not change the format while stream is on */
+-		if (vsen->frame)
++		if (vsen->ved.stream)
+ 			return -EBUSY;
+ 
+ 		mf = &vsen->mbus_format;
+@@ -197,10 +197,6 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
+ 		const struct v4l2_format_info *pix_info;
+ 		unsigned int frame_size;
+ 
+-		if (vsen->kthread_sen)
+-			/* tpg is already executing */
+-			return 0;
+-
+ 		/* Calculate the frame size */
+ 		pix_info = v4l2_format_info(pixelformat);
+ 		frame_size = vsen->mbus_format.width * pix_info->bpp[0] *
 -- 
 2.21.0
 
