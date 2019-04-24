@@ -2,131 +2,202 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A311C10F11
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 14:09:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01921C10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 14:23:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D824521900
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 14:09:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3111218FE
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 14:23:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729024AbfDXOJ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 10:09:28 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:55731 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727365AbfDXOJ1 (ORCPT
+        id S1729383AbfDXOXd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 10:23:33 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:38299 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbfDXOXd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 10:09:27 -0400
-Received: from [IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676] ([IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id JIaOhARvoNExlJIaRhRKnm; Wed, 24 Apr 2019 16:09:24 +0200
-Subject: Re: KASAN: use-after-free Read in dvb_usb_device_exit
-To:     Oliver Neukum <oneukum@suse.com>,
-        syzbot <syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, syzkaller-bugs@googlegroups.com,
-        mchehab@kernel.org, corbet@lwn.net, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org
-References: <000000000000789d3d058653d9bb@google.com>
- <1555326745.13626.10.camel@suse.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <9cfe433e-426e-19d1-9cb8-5bc2ba17145b@xs4all.nl>
-Date:   Wed, 24 Apr 2019 16:09:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        Wed, 24 Apr 2019 10:23:33 -0400
+Received: from localhost.localdomain (aaubervilliers-681-1-27-33.w90-88.abo.wanadoo.fr [90.88.147.33])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 0FA2D100006;
+        Wed, 24 Apr 2019 14:23:22 +0000 (UTC)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     hans.verkuil@cisco.com, acourbot@chromium.org,
+        sakari.ailus@linux.intel.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     tfiga@chromium.org, posciak@chromium.org,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        nicolas.dufresne@collabora.com, jenskuske@gmail.com,
+        jernej.skrabec@gmail.com, jonas@kwiboo.se, ezequiel@collabora.com,
+        linux-sunxi@googlegroups.com,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Subject: [PATCH v10 0/4] media: cedrus: Add H264 decoding support
+Date:   Wed, 24 Apr 2019 16:22:33 +0200
+Message-Id: <20190424142237.4979-1-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <1555326745.13626.10.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfOe0FKDAdfm4bCG9AcSQKiJm7NixvEhPlu5RsWbkU0Oi2psahmum5efVyXtmw+1tMAIE0oGT5FBncyWwuBSF0mbcEbGtAnS/apqfkHQaORuQnL+RexMl
- 5zo7pkMI688dCF1q0dMPMifNaFw5Ma0dGMVyUUHSL/Uhw5Bb8M3HC9QVmcTToqEz18xECeozHX5Qv6CDhIug4ZkldhdUOPL+dKaR8KsguJAjyrBBxjZ/DUup
- WHgAewX4IYE+NOMvoLTIxnetr1Ql6QMeGQ84eUqe84OCPP0pVCQrVl1PQHPkQsboLavtv9GFaKe4De83WNgP6pSyN4nn7NGCPUcsVtdP9V6Z3offU0hpu5bJ
- LyzuZa5KPLyuWV2eHcujXWXMQeZgsICAajU/n47e/OJ1pL9kCqF8pDoPtyTjBbBhVsvS0JZhFquizlyjOhaYy0FeK8zzqKmhHMjLNQ62OKdOlA4suTV3RqYb
- XiPgIUUOCijkc50P6q4QydKbDm+6FUhQ/v96zOOdLZq6eZtZ0w8ZW25s7nDiJob2p6Iz7lmFKAZSBQ7rwC5riY7gKjmamCLb98q9i0MOT51H8U72GPRUNXLp
- 3Au3RjhYe4gmOaZ4GTZ6h2cr
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/15/19 1:12 PM, Oliver Neukum wrote:
-> On Fr, 2019-04-12 at 04:46 -0700, syzbot wrote:
->> Hello,
->>
->> syzbot found the following crash on:
->>
->> HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
->> git tree:       https://github.com/google/kasan/tree/usb-fuzzer
->> console output: https://syzkaller.appspot.com/x/log.txt?x=1643974b200000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
->> dashboard link: https://syzkaller.appspot.com/bug?extid=26ec41e9f788b3eba396
->> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12f5efa7200000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1395a0f3200000
->>
->> IMPORTANT: if you fix the bug, please add the following tag to the commit:
->> Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
->>
->> dvb-usb: schedule remote query interval to 150 msecs.
->> dw2102: su3000_power_ctrl: 0, initialized 1
->> dvb-usb: TeVii S421 PCI successfully initialized and connected.
->> usb 1-1: USB disconnect, device number 2
-> 
-> Hi,
-> 
-> proposed fix. If nobody objects, I will submit it.
-> 
-> 	Regards
-> 		Oliver
-> 
-> From d6097d205ac61745334b79639d3b8b910ae66c71 Mon Sep 17 00:00:00 2001
-> From: Oliver Neukum <oneukum@suse.com>
-> Date: Mon, 15 Apr 2019 13:06:01 +0200
-> Subject: [PATCH] dvb: usb: fix use after free in dvb_usb_device_exit
-> 
-> dvb_usb_device_exit() frees and uses teh device name in that order
-> Fix by storing the name in a buffer before freeing it
-> 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
-> ---
->  drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> index 99951e02a880..2e1670cc3903 100644
-> --- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> +++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> @@ -288,13 +288,18 @@ void dvb_usb_device_exit(struct usb_interface *intf)
->  {
->  	struct dvb_usb_device *d = usb_get_intfdata(intf);
->  	const char *name = "generic DVB-USB module";
-> +	char identifier[40];
->  
->  	usb_set_intfdata(intf, NULL);
->  	if (d != NULL && d->desc != NULL) {
->  		name = d->desc->name;
-> +		memcpy(identifier, name, 39);
-> +		identifier[39] = NULL;
->  		dvb_usb_exit(d);
+Hi,
 
-Why not just move this to after the info()? You'll need to repeat the
-'if' in that case, but that way there is no need to memcpy anything.
+Here is a new version of the H264 decoding support in the cedrus
+driver.
 
-Regards,
+As you might already know, the cedrus driver relies on the Request
+API, and is a reverse engineered driver for the video decoding engine
+found on the Allwinner SoCs.
 
-	Hans
+This work has been possible thanks to the work done by the people
+behind libvdpau-sunxi found here:
+https://github.com/linux-sunxi/libvdpau-sunxi/
 
-> +	} else {
-> +		memcpy(identifier, name, 39);
->  	}
-> -	info("%s successfully deinitialized and disconnected.", name);
-> +	info("%s successfully deinitialized and disconnected.", identifier);
->  
->  }
->  EXPORT_SYMBOL(dvb_usb_device_exit);
-> 
+I've tested the various ABI using this gdb script:
+http://code.bulix.org/jl4se4-505620?raw
+
+And this test script:
+http://code.bulix.org/8zle4s-505623?raw
+
+The application compiled is quite trivial:
+http://code.bulix.org/e34zp8-505624?raw
+
+The output is:
+arm64:  builds/arm64-test-v4l2-h264-structures
+        SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+x86:    builds/x86-test-v4l2-h264-structures
+        SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+arm:    builds/arm-test-v4l2-h264-structures
+        SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+x64:    builds/x64-test-v4l2-h264-structures
+        SHA1: 1c48d3868ac9049c6b5efed43a74bf97af710aba
+
+Let me know if there's any flaw using that test setup, or if you have
+any comments on the patches.
+
+Maxime and Paul
+
+Changes from v9:
+  - Fixed spare warnings about endianness for le32 types in the driver
+  - Rebased on next
+
+Changes from v8:
+  - Moved the format into a private header and split the controls, format
+    and format doc into three commits
+  - Changed the name of the variables in v4l2_ctrl_ptr
+  - Added a note in the format documentation to mention that the format is
+    not stable yet
+  - Fixed the label of the format documentation
+  - Fixed a reference in the format documentation
+  - Added tags
+  - Rebase on current next
+
+Changes from v7:
+  - Changed the _slice_param and _decode_param to _params
+
+Changes from v6:
+  - Rebased on next
+  - Renamed the timestamp DPB field to reference_ts
+  - Fixed the collision of control type values
+  - Removed unused fields
+  - Fixed the structure layout that was broken on x86 by reducing the
+    num_slices and nal_ref_idc to 16 bits instead of 32
+
+Changes from v5:
+  - Made the references to the H264 spec more explicit
+  - Added a flag for the IDR pic
+  - Fixed typos
+  - Rebased on v5.1-rc1
+
+Changes from v4:
+  - Changed the luma and chroma weight and offset from s8 to s16
+  - Adjusted chroma and luma denominators masks in the driver
+  - Casted the luma and chroma offset to prevent an overflow
+  - ALways write the interrupt status register
+  - Fix a bug in the sram write routine that would write something even if
+    the length was 0
+  - Make the scaling lists mandatory
+  - Made the reference list order explicit in the documentation
+  - Made the fact that the slice structure can be an array
+  - Renamed the slice format to V4L2_PIX_FMT_H264_SLICE_RAW
+  - Rebased on Hans' tag br-v5.1s
+
+Changes from v3:
+  - Reintroduced long term reference flag and documented it
+  - Reintroduced ref_pic_list_p0/b0/b1 and documented it
+  - Documented the DPB flags
+  - Treat the scaling matrix as optional in the driver, as documented
+  - Free the neighbor buffer
+  - Increase the control IDs by a large margin to be safe of collisions
+  - Reorder the fields documentation according to the structure layout
+  - Change the tag documentation by the timestamp
+  - Convert the sram array to size_t
+  - Simplify the buffer retrieval from timestamp
+  - Rebase
+
+Changes from v2:
+  - Simplified _cedrus_write_ref_list as suggested by Jernej
+  - Set whether the frame is used as reference using nal_ref_idc
+  - Respect chroma_format_idc
+  - Fixes for the scaling list and prediction tables
+  - Wrote the documentation for the flags
+  - Added a bunch of defines to the driver bit fields
+  - Reworded the controls and data format descriptions as suggested
+    by Hans
+  - Reworked the controls' structure field size to avoid padding
+  - Removed the long term reference flag
+  - Reintroduced the neighbor info buffer
+  - Removed the ref_pic_list_p0/b0/b1 arrays that are redundant with the
+    one in the DPB
+  - used the timestamps instead of tags
+  - Rebased on 5.0-rc1
+
+Changes from v1:
+  - Rebased on 4.20
+  - Did the documentation for the userspace API
+  - Used the tags instead of buffer IDs
+  - Added a comment to explain why we still needed the swdec trigger
+  - Reworked the MV col buffer in order to have one slot per frame
+  - Removed the unused neighbor info buffer
+  - Made sure to have the same structure offset and alignments across
+    32 bits and 64 bits architecture
+
+Maxime Ripard (3):
+  media: pixfmt: Add H264 Slice format
+  media: pixfmt: Add H264_SLICE_RAW format documentation
+  media: cedrus: Add H264 decoding support
+
+Pawel Osciak (1):
+  media: uapi: Add H264 low-level decoder API compound controls.
+
+ Documentation/media/uapi/v4l/biblio.rst       |   9 +
+ .../media/uapi/v4l/ext-ctrls-codec.rst        | 569 +++++++++++++++++
+ .../media/uapi/v4l/pixfmt-compressed.rst      |  25 +
+ .../media/uapi/v4l/vidioc-queryctrl.rst       |  30 +
+ .../media/videodev2.h.rst.exceptions          |   5 +
+ drivers/media/v4l2-core/v4l2-ctrls.c          |  42 ++
+ drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
+ drivers/staging/media/sunxi/cedrus/Makefile   |   3 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  31 +
+ drivers/staging/media/sunxi/cedrus/cedrus.h   |  38 +-
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  13 +
+ .../staging/media/sunxi/cedrus/cedrus_h264.c  | 576 ++++++++++++++++++
+ .../staging/media/sunxi/cedrus/cedrus_hw.c    |   4 +
+ .../staging/media/sunxi/cedrus/cedrus_regs.h  |  91 +++
+ .../staging/media/sunxi/cedrus/cedrus_video.c |   9 +
+ include/media/h264-ctrls.h                    | 197 ++++++
+ include/media/v4l2-ctrls.h                    |  13 +-
+ 17 files changed, 1653 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+ create mode 100644 include/media/h264-ctrls.h
+
+-- 
+2.21.0
 
