@@ -2,96 +2,104 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 156FEC10F11
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 15:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AAC6AC10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 15:17:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E1F0320878
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 15:09:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 87834218FC
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 15:17:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730650AbfDXPJC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 11:09:02 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:33669 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730163AbfDXPJC (ORCPT
+        id S1730600AbfDXPRK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 11:17:10 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:46846 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726351AbfDXPRK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 11:09:02 -0400
-Received: from [IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676] ([IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id JJW4hAntkNExlJJW8hRar3; Wed, 24 Apr 2019 17:09:00 +0200
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Maxime Ripard <maxime.ripard@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.2] cedrus: add H.264 support
-Message-ID: <58cf0c7b-9b2f-3311-c14b-ada98d570e90@xs4all.nl>
-Date:   Wed, 24 Apr 2019 17:08:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKK+F/sWy8+p/u5ry07WpSNayfwwabcq9lEd/oP/1GvUbTSRvzhdEAqhQwNzLpBPXX+HJRfQOAMNeCjj6t7RcH/9G4PrlItPk+lt2mUuxAt0MrYLnZX8
- S+6vR0o2jTICIJ0jfu2K43NeiI0ggKzFqLW+TkRSE/67irjK1MmTMD3ySZq7bIMDegJdcAlOm86HPxycLBJwnQtB8iQbWG+8RkhaxNq/qvqLIQBIy0sKRfv5
- r0HZYSvJUGFfsXYQNJC6oMVT0AEFEZZ3c/W48top2paqh46wE6jiKwomPwTQZUaZlhuzgcRmgr7Rvhc9yeaMdwn2gfP/svcgw0/qLzpRyUc7p1VrBbl+grzn
- LZWDKFexj+4JnaCu/ytL+Uu3AO8nrw==
+        Wed, 24 Apr 2019 11:17:10 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3OF0GDV096284
+        for <linux-media@vger.kernel.org>; Wed, 24 Apr 2019 11:17:09 -0400
+Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2s2s71v1qy-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-media@vger.kernel.org>; Wed, 24 Apr 2019 11:17:08 -0400
+Received: from localhost
+        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-media@vger.kernel.org> from <eajames@linux.ibm.com>;
+        Wed, 24 Apr 2019 16:17:07 +0100
+Received: from b03cxnp08025.gho.boulder.ibm.com (9.17.130.17)
+        by e33.co.us.ibm.com (192.168.1.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 24 Apr 2019 16:17:04 +0100
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3OFH3md31850636
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Apr 2019 15:17:03 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 232A5BE04F;
+        Wed, 24 Apr 2019 15:17:03 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8CBF1BE058;
+        Wed, 24 Apr 2019 15:17:02 +0000 (GMT)
+Received: from talon7.ibm.com (unknown [9.41.179.222])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 24 Apr 2019 15:17:02 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-aspeed@lists.ozlabs.org, devicetree@vger.kernel.org,
+        linux-media@vger.kernel.org, andrew@aj.id.au, joel@jms.id.au,
+        robh+dt@kernel.org, mark.rutland@arm.com, mchehab@kernel.org,
+        hverkuil@xs4all.nl, Eddie James <eajames@linux.ibm.com>
+Subject: [PATCH v2 0/4] Aspeed: Enable video engine
+Date:   Wed, 24 Apr 2019 10:16:56 -0500
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+x-cbid: 19042415-0036-0000-0000-00000AAE56F0
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00010987; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000285; SDB=6.01193747; UDB=6.00625813; IPR=6.00974570;
+ MB=3.00026577; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-24 15:17:07
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19042415-0037-0000-0000-00004B845CC5
+Message-Id: <1556119020-7609-1-git-send-email-eajames@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-24_09:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=1 spamscore=0
+ clxscore=1015 lowpriorityscore=1 mlxscore=0 impostorscore=0
+ mlxlogscore=894 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1904240117
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Changes since the previous pull request: rebased and some sparse warnings fixed.
+This series enables the video engine on Aspeed BMC platforms. The use of the
+video engine reset line, originally planned to be made externally available in
+the clock driver, is removed from the video engine driver. A node for the video
+engine is added to the AST2500 devicetree.
+The series also includes a missing property for reserved memory in the
+devicetree documentation, and a small change to make the video engine driver
+start without reserved memory.
 
-Regards,
+Changes since v1:
+ - Drop clock patch since it's been applied
+ - Add a missing semi-colon in the devicetree doc
 
-	Hans
+Eddie James (4):
+  media: platform: Aspeed: Remove use of reset line
+  media: platform: Aspeed: Make reserved memory optional
+  media: dt-bindings: aspeed-video: Add missing memory-region property
+  ARM: dts: aspeed-g5: Add video engine
 
-The following changes since commit a4dfc8a24796ff312d1d307e11f26f8ca466e938:
+ .../devicetree/bindings/media/aspeed-video.txt     |  6 ++++
+ arch/arm/boot/dts/aspeed-g5.dtsi                   | 10 +++++++
+ drivers/media/platform/aspeed-video.c              | 33 ++++------------------
+ 3 files changed, 22 insertions(+), 27 deletions(-)
 
-  media: MAINTAINERS: Update AO CEC with ao-cec-g12a driver (2019-04-22 13:16:35 -0400)
+-- 
+1.8.3.1
 
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-cedrus-h264b
-
-for you to fetch changes up to 5fd433dbb1bc5ca18ae2913b7e9fbdba2631ca8d:
-
-  media: cedrus: Add H264 decoding support (2019-04-24 16:50:45 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Maxime Ripard (3):
-      media: pixfmt: Add H264 Slice format
-      media: pixfmt: Add H264_SLICE_RAW format documentation
-      media: cedrus: Add H264 decoding support
-
-Pawel Osciak (1):
-      media: uapi: Add H264 low-level decoder API compound controls.
-
- Documentation/media/uapi/v4l/biblio.rst            |   9 +
- Documentation/media/uapi/v4l/ext-ctrls-codec.rst   | 569 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Documentation/media/uapi/v4l/pixfmt-compressed.rst |  25 +++
- Documentation/media/uapi/v4l/vidioc-queryctrl.rst  |  30 +++
- Documentation/media/videodev2.h.rst.exceptions     |   5 +
- drivers/media/v4l2-core/v4l2-ctrls.c               |  42 +++++
- drivers/media/v4l2-core/v4l2-ioctl.c               |   1 +
- drivers/staging/media/sunxi/cedrus/Makefile        |   3 +-
- drivers/staging/media/sunxi/cedrus/cedrus.c        |  31 ++++
- drivers/staging/media/sunxi/cedrus/cedrus.h        |  38 +++-
- drivers/staging/media/sunxi/cedrus/cedrus_dec.c    |  13 ++
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c   | 576 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- drivers/staging/media/sunxi/cedrus/cedrus_hw.c     |   4 +
- drivers/staging/media/sunxi/cedrus/cedrus_regs.h   |  91 +++++++++
- drivers/staging/media/sunxi/cedrus/cedrus_video.c  |   9 +
- include/media/h264-ctrls.h                         | 197 ++++++++++++++++++++
- include/media/v4l2-ctrls.h                         |  13 +-
- 17 files changed, 1653 insertions(+), 3 deletions(-)
- create mode 100644 drivers/staging/media/sunxi/cedrus/cedrus_h264.c
- create mode 100644 include/media/h264-ctrls.h
