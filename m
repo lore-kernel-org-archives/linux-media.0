@@ -2,248 +2,89 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EBB0C282CE
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 20:59:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BA6AC10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 21:17:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 642C620835
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 20:59:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 43045208E4
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 21:17:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1556140655;
+	bh=yhp46mg3Uxs3DPwFeEDrlniIULfxLjxvfc4gfLUfJaY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=PvyU+b0noA8vdJtQw6GU3H/SMPQJl9y+sTuZ5O8q2k1r/MU7iR7/0LO2qjjSF95E3
+	 90F0FF64V2fl1W6yBktNMGeOwMfwSzs82A4YAkSR+/G4PSnsldquO8XfpcXEHT72O1
+	 7KixnZkT+J4Ia2YCGXcC7JvyOdtzMoMdtUy43va0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731852AbfDXU67 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 16:58:59 -0400
-Received: from vps-vb.mhejs.net ([37.28.154.113]:55758 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731020AbfDXU67 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 16:58:59 -0400
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1hJOyk-0005oh-Sg; Wed, 24 Apr 2019 22:58:54 +0200
-Subject: Re: [PATCH v9 3/4] [media] cxusb: add analog mode support for Medion
- MD95700
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Michael Krufky <mkrufky@linuxtv.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Walls <awalls@md.metrocast.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org
-References: <cover.1553903063.git.mail@maciej.szmigiero.name>
- <0c30210a0d946cac6b17755e7d255541ff535023.1553903063.git.mail@maciej.szmigiero.name>
- <b33ebf2a-9507-9940-4474-6f37af4d8010@xs4all.nl>
- <3927f261-9052-0b89-62c2-6fe8b4876ba1@maciej.szmigiero.name>
- <5c01b351-7ea0-b057-32c7-1029af700fe5@xs4all.nl>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mail@maciej.szmigiero.name; prefer-encrypt=mutual; keydata=
- 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 PA==
-Message-ID: <611fe1d8-6dc6-fc16-6071-3af5dc285b22@maciej.szmigiero.name>
-Date:   Wed, 24 Apr 2019 22:58:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727573AbfDXVRe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 17:17:34 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45261 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725978AbfDXVRe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Apr 2019 17:17:34 -0400
+Received: by mail-ot1-f65.google.com with SMTP id e5so17461787otk.12;
+        Wed, 24 Apr 2019 14:17:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=e3Cis35Mfz6t7nF4S+SO9f70xq+1VEeZzlg0kG0AVac=;
+        b=h5MC45YSluJixcP0kT9cCAj6M2OTAMGR3dKjz7Xkj0LwJy5JDRFccAjMs8HQmJwoV1
+         3+2myHpxOnl5KnCaiToOoDdNuEOUA7BBi4YbjP9DsNPb4xQm7Gq8PxpSDhhne81M4J3W
+         LXGQINPyeS0H4V/FcuIxIQ26wmKIoZBcAmCZMuBgI0ZpTZBohwfyZugJ71uUoYZoR9E1
+         DKgMPjExSPjZRNbbnGnjMmLWJHB3oNDUls/1nD9Vlv6Nuj+C0jNNwyMCccDXckysX6Cj
+         3bL3JL17JKfx9UKW3Kd9MvmZEogxey2LNQxd5TXolp7KSbQpD0vjtLbM76kgg/BEEaX0
+         DHLQ==
+X-Gm-Message-State: APjAAAWD9tiulG3xp6OpacfydmLmPzw5R989e1V+l+ycOKwFmokjcrj7
+        aSpNqzn6achemoDcwa2rEA==
+X-Google-Smtp-Source: APXvYqxl/dhWOIJl2SBI0DXQnsZ9JJOKnj3Ki0iEyBxamnsPQkKBxF8gFIHiSCzgMdpVsaYq4B0j5w==
+X-Received: by 2002:a05:6830:1d4:: with SMTP id r20mr21805112ota.106.1556140653581;
+        Wed, 24 Apr 2019 14:17:33 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 96sm8366512otf.17.2019.04.24.14.17.32
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 24 Apr 2019 14:17:32 -0700 (PDT)
+Date:   Wed, 24 Apr 2019 16:17:32 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        andrew@aj.id.au, joel@jms.id.au, robh+dt@kernel.org,
+        mark.rutland@arm.com, mchehab@kernel.org, hverkuil@xs4all.nl,
+        Eddie James <eajames@linux.ibm.com>
+Subject: Re: [PATCH v2 3/4] media: dt-bindings: aspeed-video: Add missing
+ memory-region property
+Message-ID: <20190424211732.GA18914@bogus>
+References: <1556119020-7609-1-git-send-email-eajames@linux.ibm.com>
+ <1556119020-7609-4-git-send-email-eajames@linux.ibm.com>
 MIME-Version: 1.0
-In-Reply-To: <5c01b351-7ea0-b057-32c7-1029af700fe5@xs4all.nl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1556119020-7609-4-git-send-email-eajames@linux.ibm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 24.04.2019 15:06, Hans Verkuil wrote:
-> On 4/16/19 1:40 AM, Maciej S. Szmigiero wrote:
->> On 12.04.2019 11:22, Hans Verkuil wrote:
->>> On 3/30/19 12:51 AM, Maciej S. Szmigiero wrote:
->>>> This patch adds support for analog part of Medion 95700 in the cxusb
->>>> driver.
->>>>
->>>> What works:
->>>> * Video capture at various sizes with sequential fields,
->>>> * Input switching (TV Tuner, Composite, S-Video),
->>>> * TV and radio tuning,
->>>> * Video standard switching and auto detection,
->>>> * Radio mode switching (stereo / mono),
->>>> * Unplugging while capturing,
->>>> * DVB / analog coexistence.
->>>>
->>>> What does not work yet:
->>>> * Audio,
->>>> * VBI,
->>>> * Picture controls.
->>>>
->>>> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
->>>> ---
-(..)
->> In this case the code above simply tries first the bigger PAL capture
->> resolution then the smaller NTSC one.
->> Which one will be accepted by the cx25840 depends on the currently set
->> broadcast standard and parameters of the last signal that was received,
->> at least one of these resolutions seem to work even without any
->> signal being received since the chip was powered up.
->>
->> This way the API guarantees should be kept by the driver.
+On Wed, 24 Apr 2019 10:16:59 -0500, Eddie James wrote:
+> Missed documenting this property in the initial commit.
 > 
-> This is basically a work-around for a cx25840 bug.
+> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+> ---
+> Changes since v1:
+>  - Add missing semi-colon
 > 
-> In any case, since the driver initializes to PAL the 720x576 resolution
-> should be fine.
+>  Documentation/devicetree/bindings/media/aspeed-video.txt | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> BTW, I noticed that cxdev->norm is initialized to 0. Why isn't that
-> PAL?
 
-cxdev->norm is initialized to 0 since this will allow autodetection on
-the default Composite input (Composite and S-Video inputs accept any
-standard that a cx25840 chip can accept, including NTSC and SECAM).
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-The tuner and tda9887 are initialized to PAL since it is all they can
-accept.
-
->>
->>>> +int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
->>>> +{
->>>> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
->>>> +	u8 tuner_analog_msg_data[] = { 0x9c, 0x60, 0x85, 0x54 };
->>>> +	struct i2c_msg tuner_analog_msg = { .addr = 0x61, .flags = 0,
->>>> +					    .buf = tuner_analog_msg_data,
->>>> +					    .len =
->>>> +					    sizeof(tuner_analog_msg_data) };
->>>> +	struct v4l2_subdev_format subfmt;
->>>> +	int ret;
->>>> +
->>>> +	/* switch tuner to analog mode so IF demod will become accessible */
->>>> +	ret = i2c_transfer(&dvbdev->i2c_adap, &tuner_analog_msg, 1);
->>>> +	if (ret != 1)
->>>> +		dev_warn(&dvbdev->udev->dev,
->>>> +			 "tuner analog switch failed (%d)\n", ret);
->>>> +
->>>> +	/*
->>>> +	 * cx25840 might have lost power during mode switching so we need
->>>> +	 * to set it again
->>>> +	 */
->>>> +	ret = v4l2_subdev_call(cxdev->cx25840, core, reset, 0);
->>>> +	if (ret != 0)
->>>> +		dev_warn(&dvbdev->udev->dev,
->>>> +			 "cx25840 reset failed (%d)\n", ret);
->>>> +
->>>> +	ret = v4l2_subdev_call(cxdev->cx25840, video, s_routing,
->>>> +			       CX25840_COMPOSITE1, 0, 0);
->>>> +	if (ret != 0)
->>>> +		dev_warn(&dvbdev->udev->dev,
->>>> +			 "cx25840 initial input setting failed (%d)\n", ret);
->>>> +
->>>> +	/* composite */
->>>> +	cxdev->input = 1;
->>>> +	cxdev->norm = 0;
->>>> +
->>>> +	/* TODO: setup audio samples insertion */
->>>> +
->>>> +	ret = v4l2_subdev_call(cxdev->cx25840, core, s_io_pin_config,
->>>> +			       sizeof(cxusub_medion_pin_config) /
->>>> +			       sizeof(cxusub_medion_pin_config[0]),
->>>> +			       cxusub_medion_pin_config);
->>>> +	if (ret != 0)
->>>> +		dev_warn(&dvbdev->udev->dev,
->>>> +			"cx25840 pin config failed (%d)\n", ret);
->>>> +
->>>> +	/* make sure that we aren't in radio mode */
->>>> +	v4l2_subdev_call(cxdev->tda9887, video, s_std, V4L2_STD_PAL);
->>>> +	v4l2_subdev_call(cxdev->tuner, video, s_std, V4L2_STD_PAL);
->>>> +	v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
->>>> +
->>>> +	memset(&subfmt, 0, sizeof(subfmt));
->>>> +	subfmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
->>>> +	subfmt.format.width = cxdev->width;
->>>> +	subfmt.format.height = cxdev->height;
->>>> +	subfmt.format.code = MEDIA_BUS_FMT_FIXED;
->>>> +	subfmt.format.field = V4L2_FIELD_SEQ_TB;
->>>> +	subfmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
->>>> +
->>>> +	ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL, &subfmt);
->>>> +	if (ret != 0) {
->>>> +		subfmt.format.width = 640;
->>>> +		subfmt.format.height = 480;
->>>
->>> Why the fallback to 640x480?
->>
->> This resolution seems to work even without any signal being received,
->> and it is a sensible NTSC-like resolution so it makes a good fallback
->> if restoring the previously used resolution has failed.
-> 
-> But it is really a work-around for a cx25840 bug. Just fix set_fmt
-> and you should not need this anymore.
-> 
-> Regards.
-> 
-> 	Hans
-
-Thanks,
-Maciej
+If a tag was not added on purpose, please state why and what changed.
