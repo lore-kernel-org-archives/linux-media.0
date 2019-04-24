@@ -3,27 +3,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FD93C282CE
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 12:45:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2E3AC10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 13:06:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2C7DE218B0
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 12:45:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8647721773
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 13:06:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730268AbfDXMpL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 08:45:11 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:59691 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730253AbfDXMpL (ORCPT
+        id S1729107AbfDXNGf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 09:06:35 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:45799 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726322AbfDXNGe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 08:45:11 -0400
+        Wed, 24 Apr 2019 09:06:34 -0400
 Received: from [IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676] ([IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id JHGph9yFhNExlJHGthR1s1; Wed, 24 Apr 2019 14:45:08 +0200
-Subject: Re: [PATCH v9 2/4] [media] cxusb: implement Medion MD95700 digital /
- analog coexistence
+        id JHbYhA5sxNExlJHbbhR6iB; Wed, 24 Apr 2019 15:06:32 +0200
+Subject: Re: [PATCH v9 3/4] [media] cxusb: add analog mode support for Medion
+ MD95700
 To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
 Cc:     Michael Krufky <mkrufky@linuxtv.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -31,209 +31,247 @@ Cc:     Michael Krufky <mkrufky@linuxtv.org>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         linux-media@vger.kernel.org
 References: <cover.1553903063.git.mail@maciej.szmigiero.name>
- <07fc8594c942ab527275b29121869ffe77bc1d83.1553903063.git.mail@maciej.szmigiero.name>
- <9ee14d2c-e8ea-5c3f-1194-f20f25678735@xs4all.nl>
- <75f07882-1553-b7d8-c15e-9e7cbc19996f@maciej.szmigiero.name>
+ <0c30210a0d946cac6b17755e7d255541ff535023.1553903063.git.mail@maciej.szmigiero.name>
+ <b33ebf2a-9507-9940-4474-6f37af4d8010@xs4all.nl>
+ <3927f261-9052-0b89-62c2-6fe8b4876ba1@maciej.szmigiero.name>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <fb8a5994-4eb7-11b0-d617-52ebecfe4ec0@xs4all.nl>
-Date:   Wed, 24 Apr 2019 14:45:03 +0200
+Message-ID: <5c01b351-7ea0-b057-32c7-1029af700fe5@xs4all.nl>
+Date:   Wed, 24 Apr 2019 15:06:28 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.5.1
 MIME-Version: 1.0
-In-Reply-To: <75f07882-1553-b7d8-c15e-9e7cbc19996f@maciej.szmigiero.name>
+In-Reply-To: <3927f261-9052-0b89-62c2-6fe8b4876ba1@maciej.szmigiero.name>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfErZcLucoJGWftH7m3x1xXTfBqm74eqbh3U1ohfzk8lXj9PwFsHJKHYZjdjB96cfkzvfJpzaUXJsyLfb3Ck2d0QiMn+zc0MxVatUTZ/bozy3VErDReDQ
- Gzq5jSigB/d1TWjWmdR1ndinVswGM/wzNcX+OnSnL2e+qIvCRZpoORxGtUU2t0N/F0EWbkgmASEcuiLSEkY4oUurLgYZEDJ48lLoIeYmsszgyAwhW3JQnNCV
- 2sszpOerLddbpEdDmAi54Fs9NQqoQJKTjWf8N5hTzq9/N2cunN+Y09MmdRsUaz9bIWiUMN+i/nJh9hITGx1xb8dWSBfozIUsJ18XsLHZCh/1gOLVv7nSFl/n
- MTI2HQPw5vh0KEByCiBB4SE56qdX8OJw0n/YO83BKh6hofKEX8XvCLxsEnbw301vWCrWcJN/QuHqOtOOFl189rE/q2Te9K6U+tX2t9JBahZJlFzwF/M=
+X-CMAE-Envelope: MS4wfMtKnHmO81JPcaeNKsbUlQBMa6PB25U/TySKUIkB/vOyVLeN17cUniGkKOs9A+gUY9i2O2O4YBft3B/tIzUzkBTflCyFDj128Quqkl3p2xDeL+yrFhyO
+ ybbgzfR9oV9gsSNDdcPsuS4g3p9oU+gxgr2vQJ8vJnG8eft1w9JXkYqpUXe577+4wGlSqOK4hmCQeCfq6frxAmyjAENORA9aG0X2q0C36Yw7jn+SqqltKyVf
+ bemarlasMxeQGiEsCFTe6u4+uLf1RIIR7VFWIJaSciM7Q3mKUcz2UDFtY5GdFRTChVHY1RGl4M0kBnL62/z8usIH7Fo91R0/j0Va3lIJScc7xXJAl8zRjcf4
+ WypzgxeI55w39rCLSWv7lYu/Fa2eBsbSjcnRerJmjE2krEhv8PGueaNWSysCFhw1lYxd2Ps71Wqygmt5kf5bwUwMTVxYfzhFGZdVvW/R4feH+z6hCV4=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/16/19 1:38 AM, Maciej S. Szmigiero wrote:
-> On 12.04.2019 10:56, Hans Verkuil wrote:
+On 4/16/19 1:40 AM, Maciej S. Szmigiero wrote:
+> On 12.04.2019 11:22, Hans Verkuil wrote:
 >> On 3/30/19 12:51 AM, Maciej S. Szmigiero wrote:
->>> This patch prepares cxusb driver for supporting the analog part of
->>> Medion 95700 (previously only the digital - DVB - mode was supported).
+>>> This patch adds support for analog part of Medion 95700 in the cxusb
+>>> driver.
 >>>
->>> Specifically, it adds support for:
->>> * switching the device between analog and digital modes of operation,
->>> * enforcing that only one mode is active at the same time due to hardware
->>> limitations.
+>>> What works:
+>>> * Video capture at various sizes with sequential fields,
+>>> * Input switching (TV Tuner, Composite, S-Video),
+>>> * TV and radio tuning,
+>>> * Video standard switching and auto detection,
+>>> * Radio mode switching (stereo / mono),
+>>> * Unplugging while capturing,
+>>> * DVB / analog coexistence.
 >>>
->>> Actual implementation of the analog mode will be provided by the next
->>> commit.
+>>> What does not work yet:
+>>> * Audio,
+>>> * VBI,
+>>> * Picture controls.
 >>>
 >>> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
 >>> ---
 > (..)
->>> @@ -259,7 +293,7 @@ static int cxusb_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
->>>  
->>>  static u32 cxusb_i2c_func(struct i2c_adapter *adapter)
->>>  {
->>> -	return I2C_FUNC_I2C;
->>> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
->>
->> Was this change needed for the medion? While it is probably right, I am hesitant to
->> apply such a change in case it will break existing boards.
-> 
-> The cx25840 driver checks for these I2C functions at the probe time and
-> returns -EIO if its i2c host doesn't support them.
-> 
-> The early version of this patch actually removed this SMBus check from
-> the cx25840 driver, however it was decided that adding such extra
-> capability to the cxusb driver is actually safer, see the end of this
-> message:
-> https://www.mail-archive.com/linux-media@vger.kernel.org/msg37363.html
-> 
->>> index 8056053c9ab0..01987ec5e0c5 100644
->>> --- a/drivers/media/usb/dvb-usb/dvb-usb-dvb.c
->>> +++ b/drivers/media/usb/dvb-usb/dvb-usb-dvb.c
->>> @@ -15,6 +15,7 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
->>>  {
->>>  	struct dvb_usb_adapter *adap = dvbdmxfeed->demux->priv;
->>>  	int newfeedcount, ret;
->>> +	bool streaming_ctrl_no_urb;
->>>  
->>>  	if (adap == NULL)
->>>  		return -ENODEV;
->>> @@ -24,12 +25,16 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
->>>  		return -EINVAL;
->>>  	}
->>>  
->>> +	streaming_ctrl_no_urb = adap->props.fe[adap->active_fe].caps &
->>> +		DVB_USB_ADAP_STREAMING_CTRL_NO_URB;
->>>  	newfeedcount = adap->feedcount + (onoff ? 1 : -1);
->>>  
->>>  	/* stop feed before setting a new pid if there will be no pid anymore */
->>>  	if (newfeedcount == 0) {
->>>  		deb_ts("stop feeding\n");
->>> -		usb_urb_kill(&adap->fe_adap[adap->active_fe].stream);
+>>> +static int cxusb_medion_try_s_fmt_vid_cap(struct file *file,
+>>> +					  struct v4l2_format *f,
+>>> +					  bool isset)
+>>> +{
+>>> +	struct dvb_usb_device *dvbdev = video_drvdata(file);
+>>> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+>>> +	struct v4l2_subdev_format subfmt;
+>>> +	int ret;
 >>> +
->>> +		if (streaming_ctrl_no_urb)
+>>> +	if (isset && (vb2_start_streaming_called(&cxdev->videoqueue) ||
+>>> +		      cxdev->stop_streaming))
 >>
->> Is this test right? Shouldn't it be !streaming_ctrl_no_urb in order to keep the
->> current (non-medion) behavior?
+>> This should be:
 >>
->>> +			usb_urb_kill(&adap->fe_adap[adap->active_fe].stream);
->>>  
->>>  		if (adap->props.fe[adap->active_fe].streaming_ctrl != NULL) {
->>>  			ret = adap->props.fe[adap->active_fe].streaming_ctrl(adap, 0);
->>> @@ -38,6 +43,9 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
->>>  				return ret;
->>>  			}
->>>  		}
+>> 	if (isset && vb2_is_busy(&cxdev->videoqueue))
+>>
+>> As long as buffers are allocated you can no longer change the format.
+>>
+>>> +		return -EBUSY;
 >>> +
->>> +		if (!streaming_ctrl_no_urb)
+>>> +	memset(&subfmt, 0, sizeof(subfmt));
+>>> +	subfmt.which = isset ? V4L2_SUBDEV_FORMAT_ACTIVE :
+>>> +		V4L2_SUBDEV_FORMAT_TRY;
+>>> +	subfmt.format.width = f->fmt.pix.width & ~1;
+>>> +	subfmt.format.height = f->fmt.pix.height & ~1;
+>>> +	subfmt.format.code = MEDIA_BUS_FMT_FIXED;
+>>> +	subfmt.format.field = V4L2_FIELD_SEQ_TB;
 >>
->> And then this would have to be inverted as well.
+>> Why FIELD_SEQ_TB? If memory serves the cx25840 always uses FIELD_INTERLACED.
 > 
-> The newly added flag "DVB_USB_ADAP_STREAMING_CTRL_NO_URB" has the
-> following meaning:
-> If it is set the order of operations in dvb_usb_ctrl_feed() looks like
-> this:
-> 1) Call the driver streaming_ctrl(1) callback to enable streaming,
-> 2) Submit DVB data URBs,
-> (streaming happens)
-> 3) Kill DVB data URBs,
-> 4) Call the driver streaming_ctrl(0) callback to disable streaming.
+> It looks like all the existing cx25840 users use an intelligent bridge
+> chip (or a MPEG encoder), which normalize the video data received to
+> a nice V4L2_FIELD_INTERLACED.
 > 
-> This is needed for Medion because:
-> a) The device could already be open in the analog mode when
-> streaming_ctrl(1) tries to acquire it in the digital mode.
-> In this case it is important that no DVB URBs are scheduled before
-> giving the callback chance to report an error,
-> 
-> b) The device could get open in the analog mode as soon as
-> streaming_ctrl(0) drops the last digital mode reference to it so all
-> DVB data URB must have already been terminated at this point.
-> 
-> If the aforementioned flag is unset, however, the order of operations in
-> dvb_usb_ctrl_feed() looks like this:
-> 1) Submit DVB data URBs,
-> 2) Call the driver streaming_ctrl(1) callback to enable streaming,
-> (streaming happens)
-> 3) Call the driver streaming_ctrl(0) callback to disable streaming,
-> 4) Kill DVB data URBs.
-> 
-> Previously, the order was always like this:
-> 1) Submit DVB data URBs,
-> 2) Call the driver streaming_ctrl(1) callback to enable streaming,
-> (streaming happens)
-> 3) Kill DVB data URBs,
-> 4) Call the driver streaming_ctrl(0) callback to disable streaming.
-> 
-> You can see that this was asymmetric - streaming_ctrl(1) is called with
-> data URBs already active but they are killed before streaming_ctrl(0)
-> gets called, so switching only the submit part on "STREAMING_CTRL_NO_URB"
-> would make this flag operation only half-correct.
-> 
-> I have audited existing drivers that use dvb-usb framework and none of
-> them do anything besides a synchronous USB control transfer or a
-> synchronous USB bulk transfer to an endpoint different from the one that
-> DVB data uses in streaming_ctrl(0) callback.
-> Additionally, streaming_ctrl(1) and streaming_ctrl(0) paths are usually
-> very similar in the driver code, so if streaming_ctrl(1) runs fine with
-> data URBs being already active there is no reason to think
-> streaming_ctrl(0) will have a problem with this.
+> However, this device uses a "dumb" USB bridge chip which does not do any
+> video processing (other than dropping parts of it if the host PC is not
+> receiving it fast enough), so the output data matches what the cx25840
+> chip produces - and it produces a sequential fields format.
 
-Is there anything wrong with always doing:
+Ah. But in that case it is SEQ_BT for NTSC and SEQ_TB for all other standards.
 
-1) Call the driver streaming_ctrl(1) callback to enable streaming,
-2) Submit DVB data URBs,
-(streaming happens)
-3) Kill DVB data URBs,
-4) Call the driver streaming_ctrl(0) callback to disable streaming.
+> 
+>>> +	subfmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
+>>> +
+>>> +	ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL, &subfmt);
+>>> +	if (ret != 0) {
+>>> +		if (ret != -ERANGE)
+>>> +			return ret;
+>>> +
+>>> +		/* try some common formats */
+>>> +		subfmt.format.width = 720;
+>>> +		subfmt.format.height = 576;
+>>> +		ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL,
+>>> +				       &subfmt);
+>>> +		if (ret != 0) {
+>>> +			if (ret != -ERANGE)
+>>> +				return ret;
+>>> +
+>>> +			subfmt.format.width = 640;
+>>> +			subfmt.format.height = 480;
+>>> +			ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt,
+>>> +					       NULL, &subfmt);
+>>> +			if (ret != 0)
+>>> +				return ret;
+>>> +		}
+>>
+>> Why these fallbacks? Is this really needed?
+> 
+> V4L2 docs say that VIDIOC_{S,TRY}_FMT ioctls "should not return an error
+> code unless the type field is invalid", that is, they should not return
+> an error for invalid or unsupported image widths or heights.
+> They should instead return something sensible for these image parameters.
+> 
+> However, cx25840 driver set_fmt callback simply returns -ERANGE if it
+> does not like the provided width or height.
 
-Regards,
+I think the right approach here is to modify cx25840 so that it updates
+the width/height to stay within the limits of the HW.
+
+BTW, a quick scan shows that none of the drivers that call set_fmt actually
+check the return value :-)
+
+So changing the cx25840 behavior certainly won't make things worse for
+existing drivers.
+
+> In this case the code above simply tries first the bigger PAL capture
+> resolution then the smaller NTSC one.
+> Which one will be accepted by the cx25840 depends on the currently set
+> broadcast standard and parameters of the last signal that was received,
+> at least one of these resolutions seem to work even without any
+> signal being received since the chip was powered up.
+> 
+> This way the API guarantees should be kept by the driver.
+
+This is basically a work-around for a cx25840 bug.
+
+In any case, since the driver initializes to PAL the 720x576 resolution
+should be fine.
+
+BTW, I noticed that cxdev->norm is initialized to 0. Why isn't that
+PAL?
+
+> 
+>>> +int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
+>>> +{
+>>> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
+>>> +	u8 tuner_analog_msg_data[] = { 0x9c, 0x60, 0x85, 0x54 };
+>>> +	struct i2c_msg tuner_analog_msg = { .addr = 0x61, .flags = 0,
+>>> +					    .buf = tuner_analog_msg_data,
+>>> +					    .len =
+>>> +					    sizeof(tuner_analog_msg_data) };
+>>> +	struct v4l2_subdev_format subfmt;
+>>> +	int ret;
+>>> +
+>>> +	/* switch tuner to analog mode so IF demod will become accessible */
+>>> +	ret = i2c_transfer(&dvbdev->i2c_adap, &tuner_analog_msg, 1);
+>>> +	if (ret != 1)
+>>> +		dev_warn(&dvbdev->udev->dev,
+>>> +			 "tuner analog switch failed (%d)\n", ret);
+>>> +
+>>> +	/*
+>>> +	 * cx25840 might have lost power during mode switching so we need
+>>> +	 * to set it again
+>>> +	 */
+>>> +	ret = v4l2_subdev_call(cxdev->cx25840, core, reset, 0);
+>>> +	if (ret != 0)
+>>> +		dev_warn(&dvbdev->udev->dev,
+>>> +			 "cx25840 reset failed (%d)\n", ret);
+>>> +
+>>> +	ret = v4l2_subdev_call(cxdev->cx25840, video, s_routing,
+>>> +			       CX25840_COMPOSITE1, 0, 0);
+>>> +	if (ret != 0)
+>>> +		dev_warn(&dvbdev->udev->dev,
+>>> +			 "cx25840 initial input setting failed (%d)\n", ret);
+>>> +
+>>> +	/* composite */
+>>> +	cxdev->input = 1;
+>>> +	cxdev->norm = 0;
+>>> +
+>>> +	/* TODO: setup audio samples insertion */
+>>> +
+>>> +	ret = v4l2_subdev_call(cxdev->cx25840, core, s_io_pin_config,
+>>> +			       sizeof(cxusub_medion_pin_config) /
+>>> +			       sizeof(cxusub_medion_pin_config[0]),
+>>> +			       cxusub_medion_pin_config);
+>>> +	if (ret != 0)
+>>> +		dev_warn(&dvbdev->udev->dev,
+>>> +			"cx25840 pin config failed (%d)\n", ret);
+>>> +
+>>> +	/* make sure that we aren't in radio mode */
+>>> +	v4l2_subdev_call(cxdev->tda9887, video, s_std, V4L2_STD_PAL);
+>>> +	v4l2_subdev_call(cxdev->tuner, video, s_std, V4L2_STD_PAL);
+>>> +	v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
+>>> +
+>>> +	memset(&subfmt, 0, sizeof(subfmt));
+>>> +	subfmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+>>> +	subfmt.format.width = cxdev->width;
+>>> +	subfmt.format.height = cxdev->height;
+>>> +	subfmt.format.code = MEDIA_BUS_FMT_FIXED;
+>>> +	subfmt.format.field = V4L2_FIELD_SEQ_TB;
+>>> +	subfmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
+>>> +
+>>> +	ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL, &subfmt);
+>>> +	if (ret != 0) {
+>>> +		subfmt.format.width = 640;
+>>> +		subfmt.format.height = 480;
+>>
+>> Why the fallback to 640x480?
+> 
+> This resolution seems to work even without any signal being received,
+> and it is a sensible NTSC-like resolution so it makes a good fallback
+> if restoring the previously used resolution has failed.
+
+But it is really a work-around for a cx25840 bug. Just fix set_fmt
+and you should not need this anymore.
+
+Regards.
 
 	Hans
 
 > 
-> Note that DVB data URBs are handled fully inside the dvb-usb framework
-> and individual drivers don't access them.
-> 
-> Furthermore, in case the streaming_ctrl(1) callback fails the
-> dvb_usb_ctrl_feed() function returns an error to its caller while
-> leaving the already-submited URBs still active.
-> They will then endlessly resubmit themselves in their completion
-> callback.
-> This further points out that streaming_ctrl() callback is not considered
-> of need to be strongly ordered with respect to the DVB data URBs
-> submission or cancellation.
-> 
->>> +			usb_urb_kill(&adap->fe_adap[adap->active_fe].stream);
->>>  	}
->>>  
->>>  	adap->feedcount = newfeedcount;
->>> @@ -56,8 +64,10 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
->>>  	 * for reception.
->>>  	 */
->>>  	if (adap->feedcount == onoff && adap->feedcount > 0) {
->>> -		deb_ts("submitting all URBs\n");
->>> -		usb_urb_submit(&adap->fe_adap[adap->active_fe].stream);
->>> +		if (!streaming_ctrl_no_urb) {
->>> +			deb_ts("submitting all URBs early\n");
->>> +			usb_urb_submit(&adap->fe_adap[adap->active_fe].stream);
->>> +		}
->>>  
->>>  		deb_ts("controlling pid parser\n");
->>>  		if (adap->props.fe[adap->active_fe].caps & DVB_USB_ADAP_HAS_PID_FILTER &&
->>> @@ -80,6 +90,10 @@ static int dvb_usb_ctrl_feed(struct dvb_demux_feed *dvbdmxfeed, int onoff)
->>>  			}
->>>  		}
->>>  
->>> +		if (streaming_ctrl_no_urb) {
->>> +			deb_ts("submitting all URBs late\n");
->>> +			usb_urb_submit(&adap->fe_adap[adap->active_fe].stream);
->>> +		}
->>>  	}
->>>  	return 0;
->>>  }
-> 
+>>> +		ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL,
+>>> +				       &subfmt);
+>>> +		if (ret != 0)
+>>> +			dev_warn(&dvbdev->udev->dev,
+>>> +				 "cx25840 format set failed (%d)\n", ret);
+>>> +	}
+>>> +
+>>> +	if (ret == 0) {
+>>> +		cxdev->width = subfmt.format.width;
+>>> +		cxdev->height = subfmt.format.height;
+>>> +	}
+>>> +
+>>> +	return 0;
+>>> +}
+>>> +
 > 
 >>
 >> Regards,
