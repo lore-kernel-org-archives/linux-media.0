@@ -2,185 +2,131 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_MUTT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EBEDC10F11
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 09:37:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A669CC10F11
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 09:46:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0C49020878
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 09:37:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 710482077C
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 09:46:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ENSncgJX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbfDXJhz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 05:37:55 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:41493 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726262AbfDXJhz (ORCPT
+        id S1726508AbfDXJqn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 05:46:43 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:42472 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726216AbfDXJqm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 05:37:55 -0400
-Received: from [IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676] ([IPv6:2001:420:44c1:2579:8575:c0e0:a08:6676])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id JELdhJEI7ZVjxJELghZlMZ; Wed, 24 Apr 2019 11:37:52 +0200
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH] coda/venus/s5p_mfc: fix control typo
-Message-ID: <fa365332-4280-6bb2-1d1c-00960f2cc199@xs4all.nl>
-Date:   Wed, 24 Apr 2019 11:37:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        Wed, 24 Apr 2019 05:46:42 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3O9iTnk027360;
+        Wed, 24 Apr 2019 09:46:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type : in-reply-to;
+ s=corp-2018-07-02; bh=7gn/g85UucluvyTQ/CE7QmViK0K7rn8q/jgNdVGKdmI=;
+ b=ENSncgJX4LBXnbOpq71gir52wS59RQf658IUEA5714PLEixiEhCuY338Bi5LZsGmethP
+ 2MkPdPjen00nnXEpzuMynvgtvCxgbXKotF0uXQgmq9TYv2j1ib0MB8iSQOxJLDfNIFzD
+ sySxtIzdYBRNxna0Fh1rkk42OgXOh8HQ2/C8mDTmbTE3IfFOI5vrBXdXh9DAC80Otx2o
+ t4ObzNxxN01ed7NZP3zIR67qKU5PgQuIatax9OXZKnNEWT57q2nN+elbbmkRH0XGVkj2
+ gdk4W+VFvuVvyTU61LRAJAf9BNBxhyhVV/qe8/aNlZTtP2BzJ4SzsM/H6KFbvRCf7lHy hw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 2ryrxd1eug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Apr 2019 09:46:39 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3O9kS9a178684;
+        Wed, 24 Apr 2019 09:46:39 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2s0fv3fsp4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Apr 2019 09:46:38 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x3O9kb9K031445;
+        Wed, 24 Apr 2019 09:46:37 GMT
+Received: from mwanda (/105.55.12.114)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 24 Apr 2019 02:46:37 -0700
+Date:   Wed, 24 Apr 2019 12:46:27 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH v3 resend] media: davinci/vpbe: array underflow in
+ vpbe_enum_outputs()
+Message-ID: <20190424094627.GB15818@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKWEByQkDunD36YdvyjF8hMglbxPTSN/6atOGEhonIeBpQ5ZTgq93g1HVkIY5EcDzuWFyUGGCKd61KcAOFdPPUUUYvBAam5LnLSwlODkxiCZ48uU3V73
- E3iVFqYws2j1rL0+vt3bB6uCK04pJ76XKLP4gsZ2TBKUBasfnDXjdffXCdpT5+5F1FVlYSWjKriVQp/9pNep63j3fvtalHTy4JncVX24K1pzNVLujkL4+4om
- 5NP/ASMGJn69p+NhChQTuK33UBwZsqfHwECy6ZVlaBoJtH5VIMOD3t8rEu6zYP6h1S9hfa8/SCaxGpLEcU0fTcQQRT1NiHPv3h11EjiT9d5ge63nzBUSaUjk
- HDd8RbyiE5VKfs6XAQPderZ3nIJvqsdP0EUGcWnzN8W/y5hAYBg=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20180517090550.GB4250@mwanda>
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9236 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1904240082
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9236 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1904240082
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-These two slice modes used by the V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE
-control had a silly typo:
+In vpbe_enum_outputs() we check if (temp_index >= cfg->num_outputs) but
+the problem is that "temp_index" can be negative.  This patch changes
+the types to unsigned to address this array underflow bug.
 
-V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_MB
-V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES
-
-SICE should be SLICE.
-
-Rename these enum values, keeping the old ones (under #ifndef __KERNEL__)
-for backwards compatibility reasons.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 66715cdc3224 ("[media] davinci vpbe: VPBE display driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
 ---
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index eaa86737fa04..7e82ff704622 100644
---- a/drivers/media/platform/coda/coda-bit.c
-+++ b/drivers/media/platform/coda/coda-bit.c
-@@ -1043,7 +1043,7 @@ static int coda_start_encoding(struct coda_ctx *ctx)
- 		case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE:
- 			value = 0;
- 			break;
--		case V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_MB:
-+		case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB:
- 			value  = (ctx->params.slice_max_mb &
- 				  CODA_SLICING_SIZE_MASK)
- 				 << CODA_SLICING_SIZE_OFFSET;
-@@ -1051,7 +1051,7 @@ static int coda_start_encoding(struct coda_ctx *ctx)
- 				 << CODA_SLICING_UNIT_OFFSET;
- 			value |=  1 & CODA_SLICING_MODE_MASK;
- 			break;
--		case V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES:
-+		case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES:
- 			value  = (ctx->params.slice_max_bits &
- 				  CODA_SLICING_SIZE_MASK)
- 				 << CODA_SLICING_SIZE_OFFSET;
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 3ce58dee4422..67f0e519ea18 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -2034,7 +2034,7 @@ static void coda_encode_ctrls(struct coda_ctx *ctx)
- 	}
- 	v4l2_ctrl_new_std_menu(&ctx->ctrls, &coda_ctrl_ops,
- 		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
--		V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES, 0x0,
-+		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES, 0x0,
- 		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE);
- 	v4l2_ctrl_new_std(&ctx->ctrls, &coda_ctrl_ops,
- 		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MAX_MB, 1, 0x3fffffff, 1, 1);
-diff --git a/drivers/media/platform/qcom/venus/venc_ctrls.c b/drivers/media/platform/qcom/venus/venc_ctrls.c
-index ac1e1d26f341..22ee704aa740 100644
---- a/drivers/media/platform/qcom/venus/venc_ctrls.c
-+++ b/drivers/media/platform/qcom/venus/venc_ctrls.c
-@@ -274,7 +274,7 @@ int venc_ctrl_init(struct venus_inst *inst)
+I sent this patch last May but somehow the spam filters on the lists
+must have eaten it.  I didn't get a copy from the kernel-janitors list.
+The only trace I have of my original patch is that the maintainer Acked
+it.  Resending.
 
- 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
- 		V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
--		V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES,
-+		V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
- 		0, V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE);
+v2: In the first version, I clamped output->index to 0-INT_MAX for every
+    driver.  In v2, I only changed the vpbe.h driver header file.
+v3: In v3 I changed the header and the .c file (All three versions of
+    patch "worked", they just had philosophical and style issues).
 
- 	v4l2_ctrl_new_std_menu(&inst->ctrl_handler, &venc_ctrl_ops,
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c b/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-index 8fcf627dedfb..5505e4fc2090 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_enc.c
-@@ -134,7 +134,7 @@ static struct mfc_control controls[] = {
- 		.id = V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE,
- 		.type = V4L2_CTRL_TYPE_MENU,
- 		.minimum = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
--		.maximum = V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES,
-+		.maximum = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES,
- 		.default_value = V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE,
- 		.menu_skip_mask = 0,
- 	},
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
-index 6144e95f6425..e83ede3efca7 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v5.c
-@@ -695,9 +695,9 @@ static int s5p_mfc_set_enc_params(struct s5p_mfc_ctx *ctx)
- 	/* multi-slice control */
- 	/* multi-slice MB number or bit size */
- 	mfc_write(dev, p->slice_mode, S5P_FIMV_ENC_MSLICE_CTRL);
--	if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_MB) {
-+	if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
- 		mfc_write(dev, p->slice_mb, S5P_FIMV_ENC_MSLICE_MB);
--	} else if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES) {
-+	} else if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
- 		mfc_write(dev, p->slice_bit, S5P_FIMV_ENC_MSLICE_BIT);
- 	} else {
- 		mfc_write(dev, 0, S5P_FIMV_ENC_MSLICE_MB);
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
-index 281699ab7fe1..d75511190e47 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_opr_v6.c
-@@ -736,10 +736,10 @@ static int s5p_mfc_set_slice_mode(struct s5p_mfc_ctx *ctx)
- 	/* multi-slice control */
- 	/* multi-slice MB number or bit size */
- 	writel(ctx->slice_mode, mfc_regs->e_mslice_mode);
--	if (ctx->slice_mode == V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_MB) {
-+	if (ctx->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
- 		writel(ctx->slice_size.mb, mfc_regs->e_mslice_size_mb);
- 	} else if (ctx->slice_mode ==
--			V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES) {
-+			V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
- 		writel(ctx->slice_size.bits, mfc_regs->e_mslice_size_bits);
- 	} else {
- 		writel(0x0, mfc_regs->e_mslice_size_mb);
-@@ -779,11 +779,11 @@ static int s5p_mfc_set_enc_params(struct s5p_mfc_ctx *ctx)
- 	/* multi-slice MB number or bit size */
- 	ctx->slice_mode = p->slice_mode;
- 	reg = 0;
--	if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_MB) {
-+	if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB) {
- 		reg |= (0x1 << 3);
- 		writel(reg, mfc_regs->e_enc_options);
- 		ctx->slice_size.mb = p->slice_mb;
--	} else if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES) {
-+	} else if (p->slice_mode == V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES) {
- 		reg |= (0x1 << 3);
- 		writel(reg, mfc_regs->e_enc_options);
- 		ctx->slice_size.bits = p->slice_bit;
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 37807f23231e..9cad9fd969e3 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -392,8 +392,13 @@ enum v4l2_mpeg_video_header_mode {
- #define V4L2_CID_MPEG_VIDEO_MULTI_SLICE_MODE		(V4L2_CID_MPEG_BASE+221)
- enum v4l2_mpeg_video_multi_slice_mode {
- 	V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE		= 0,
-+	V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB		= 1,
-+	V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES	= 2,
-+#ifndef __KERNEL__
-+	/* Kept for backwards compatibility reasons. Stupid typo... */
- 	V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_MB		= 1,
- 	V4L2_MPEG_VIDEO_MULTI_SICE_MODE_MAX_BYTES	= 2,
-+#endif
+ drivers/media/platform/davinci/vpbe.c | 2 +-
+ include/media/davinci/vpbe.h          | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/platform/davinci/vpbe.c b/drivers/media/platform/davinci/vpbe.c
+index 8339163a5231..4e24f5d781f4 100644
+--- a/drivers/media/platform/davinci/vpbe.c
++++ b/drivers/media/platform/davinci/vpbe.c
+@@ -104,7 +104,7 @@ static int vpbe_enum_outputs(struct vpbe_device *vpbe_dev,
+ 			     struct v4l2_output *output)
+ {
+ 	struct vpbe_config *cfg = vpbe_dev->cfg;
+-	int temp_index = output->index;
++	unsigned int temp_index = output->index;
+ 
+ 	if (temp_index >= cfg->num_outputs)
+ 		return -EINVAL;
+diff --git a/include/media/davinci/vpbe.h b/include/media/davinci/vpbe.h
+index 5c31a7682492..f76d2f25a824 100644
+--- a/include/media/davinci/vpbe.h
++++ b/include/media/davinci/vpbe.h
+@@ -92,7 +92,7 @@ struct vpbe_config {
+ 	struct encoder_config_info *ext_encoders;
+ 	/* amplifier information goes here */
+ 	struct amp_config_info *amp;
+-	int num_outputs;
++	unsigned int num_outputs;
+ 	/* Order is venc outputs followed by LCD and then external encoders */
+ 	struct vpbe_output *outputs;
  };
- #define V4L2_CID_MPEG_VIDEO_VBV_SIZE			(V4L2_CID_MPEG_BASE+222)
- #define V4L2_CID_MPEG_VIDEO_DEC_PTS			(V4L2_CID_MPEG_BASE+223)
+-- 
+2.18.0
