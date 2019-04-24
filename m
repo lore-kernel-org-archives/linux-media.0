@@ -2,225 +2,273 @@ Return-Path: <SRS0=rHfj=S2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA052C282E1
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 17:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F67C282CE
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 17:43:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8F9F92148D
-	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 17:10:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C1DF21773
+	for <linux-media@archiver.kernel.org>; Wed, 24 Apr 2019 17:43:14 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="klFIFsvw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733140AbfDXRKY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Apr 2019 13:10:24 -0400
-Received: from mail.netline.ch ([148.251.143.178]:36362 "EHLO
-        netline-mail3.netline.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729842AbfDXRKY (ORCPT
+        id S2404088AbfDXRnN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Apr 2019 13:43:13 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:37079 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392102AbfDXRnI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Apr 2019 13:10:24 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by netline-mail3.netline.ch (Postfix) with ESMTP id 9FFFC2AA104;
-        Wed, 24 Apr 2019 19:10:20 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at netline-mail3.netline.ch
-Received: from netline-mail3.netline.ch ([127.0.0.1])
-        by localhost (netline-mail3.netline.ch [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id aXdULu0zn_Ok; Wed, 24 Apr 2019 19:10:20 +0200 (CEST)
-Received: from thor (116.245.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.245.116])
-        by netline-mail3.netline.ch (Postfix) with ESMTPSA id 1BB902AA100;
-        Wed, 24 Apr 2019 19:10:20 +0200 (CEST)
-Received: from [::1]
-        by thor with esmtp (Exim 4.92)
-        (envelope-from <michel@daenzer.net>)
-        id 1hJLPX-00046i-KB; Wed, 24 Apr 2019 19:10:19 +0200
+        Wed, 24 Apr 2019 13:43:08 -0400
+Received: by mail-qt1-f193.google.com with SMTP id z16so21282184qtn.4
+        for <linux-media@vger.kernel.org>; Wed, 24 Apr 2019 10:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=zfbTRQsKbp3cPp0fyr7ol3SsNAelGq5MLvvnmsx3x/4=;
+        b=klFIFsvw9qA9Xpyd/bVg6hoOZgM1GdIV4lVvwz/bO1bIcsHWp0S6Vpnw8WdxTSHW/q
+         VRGcmbsCaWI1wRu91TkHm1lnv9qhOA2D8OieA/gndqqE9oO/+12h0bpiwFRuWWgbvTZQ
+         SyeIPrFR4ojzYJeJHN5G1useaocfRGMvEwwqleqjCYe+r8+PUcfqeXzwHO5CWcHiuSrF
+         W182N51EbDuzVi9N/mR3Uw5/I5yaD3iR4NHKW7G93Idz2Dew6tzex4LvCNKYLWLzmYLZ
+         tvmGssu6qCowDrJBYyDLxKRwG1WiuB70sf11eLsGImqCc9pAO+oOK6oU4y5ODMjP9gfe
+         rHqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=zfbTRQsKbp3cPp0fyr7ol3SsNAelGq5MLvvnmsx3x/4=;
+        b=shkNVg9id3GQDs0r2NziEkPNCWBXOODdMjRD+d27mzAmwbpO5UM8knwYJtFtgzF9HS
+         QtTCH/eZanUP9ot0iv6RTu7N0xqLsRWD5tj95a8PUe+d4S7DGyCP8C6O2DQa8xtAMCh0
+         xcSF4tDnigdkVogrmnOWzXdpoptd8UFKwig53OA4/bq0DyDkotL5MuM9A5h2Zk91BCDC
+         9MFDPwBOwk+yZ72vc+vDB1hFpLch8Lb2riYuCBpFVljoMiO3VQrQs3fZGvYvzigAhzlP
+         MOf2MDyEHgfKdWty2mfoGtycpllyCeNyRvbrYTW7TFqyOjxz+bICyfLrdGLDWoVnOFKs
+         RdMg==
+X-Gm-Message-State: APjAAAWzZy/db3/4VPNAhgFRA4iE55GQ2gelR+EJhUMqYe7gpMpoycw4
+        sOdtnUUz5k2w8bGKfU5NZznlrA==
+X-Google-Smtp-Source: APXvYqxNNQa8vFMeQGoGdAeQEJmfpmtAZ0hBnEMzI4BONrrWBviYeXpRR6kJLlczZnbGSJsVO/fasw==
+X-Received: by 2002:ac8:2b0d:: with SMTP id 13mr26928010qtu.354.1556127787001;
+        Wed, 24 Apr 2019 10:43:07 -0700 (PDT)
+Received: from tpx230-nicolas (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
+        by smtp.gmail.com with ESMTPSA id m60sm10195256qte.81.2019.04.24.10.43.04
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 24 Apr 2019 10:43:05 -0700 (PDT)
+Message-ID: <e572f31653301f0a479fe1373b3dfd5ada8e49f3.camel@ndufresne.ca>
 Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Daniel Vetter <daniel@ffwll.ch>
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Michel =?ISO-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 Cc:     Alexandre Courbot <acourbot@chromium.org>,
         Maxime Ripard <maxime.ripard@bootlin.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
         Tomasz Figa <tfiga@chromium.org>,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Dave Airlie <airlied@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+Date:   Wed, 24 Apr 2019 13:43:03 -0400
+In-Reply-To: <65a37cec-5040-e2f0-5cd5-c9c3111827ad@daenzer.net>
 References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
- <20190418081816.GO13337@phenom.ffwll.local>
- <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
- <987372acff18f4c66191ee52fa69dc2917e4a605.camel@bootlin.com>
- <1d6fb659-0516-41db-257b-258e6116a4f2@daenzer.net>
- <cfb80745a780083034aae661f5b84cf6114bc186.camel@bootlin.com>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
-Openpgp: preference=signencrypt
-Autocrypt: addr=michel@daenzer.net; prefer-encrypt=mutual; keydata=
- mQGiBDsehS8RBACbsIQEX31aYSIuEKxEnEX82ezMR8z3LG8ktv1KjyNErUX9Pt7AUC7W3W0b
- LUhu8Le8S2va6hi7GfSAifl0ih3k6Bv1Itzgnd+7ZmSrvCN8yGJaHNQfAevAuEboIb+MaVHo
- 9EMJj4ikOcRZCmQWw7evu/D9uQdtkCnRY9iJiAGxbwCguBHtpoGMxDOINCr5UU6qt+m4O+UD
- /355ohBBzzyh49lTj0kTFKr0Ozd20G2FbcqHgfFL1dc1MPyigej2gLga2osu2QY0ObvAGkOu
- WBi3LTY8Zs8uqFGDC4ZAwMPoFy3yzu3ne6T7d/68rJil0QcdQjzzHi6ekqHuhst4a+/+D23h
- Za8MJBEcdOhRhsaDVGAJSFEQB1qLBACOs0xN+XblejO35gsDSVVk8s+FUUw3TSWJBfZa3Imp
- V2U2tBO4qck+wqbHNfdnU/crrsHahjzBjvk8Up7VoY8oT+z03sal2vXEonS279xN2B92Tttr
- AgwosujguFO/7tvzymWC76rDEwue8TsADE11ErjwaBTs8ZXfnN/uAANgPLQjTWljaGVsIERh
- ZW56ZXIgPG1pY2hlbEBkYWVuemVyLm5ldD6IXgQTEQIAHgUCQFXxJgIbAwYLCQgHAwIDFQID
- AxYCAQIeAQIXgAAKCRBaga+OatuyAIrPAJ9ykonXI3oQcX83N2qzCEStLNW47gCeLWm/QiPY
- jqtGUnnSbyuTQfIySkK5AQ0EOx6FRRAEAJZkcvklPwJCgNiw37p0GShKmFGGqf/a3xZZEpjI
- qNxzshFRFneZze4f5LhzbX1/vIm5+ZXsEWympJfZzyCmYPw86QcFxyZflkAxHx9LeD+89Elx
- bw6wT0CcLvSv8ROfU1m8YhGbV6g2zWyLD0/naQGVb8e4FhVKGNY2EEbHgFBrAAMGA/0VktFO
- CxFBdzLQ17RCTwCJ3xpyP4qsLJH0yCoA26rH2zE2RzByhrTFTYZzbFEid3ddGiHOBEL+bO+2
- GNtfiYKmbTkj1tMZJ8L6huKONaVrASFzLvZa2dlc2zja9ZSksKmge5BOTKWgbyepEc5qxSju
- YsYrX5xfLgTZC5abhhztpYhGBBgRAgAGBQI7HoVFAAoJEFqBr45q27IAlscAn2Ufk2d6/3p4
- Cuyz/NX7KpL2dQ8WAJ9UD5JEakhfofed8PSqOM7jOO3LCA==
-Message-ID: <625fdb56-b1c7-a76b-0a99-bd9c98adf984@daenzer.net>
-Date:   Wed, 24 Apr 2019 19:10:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+         <20190418081816.GO13337@phenom.ffwll.local>
+         <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
+         <987372acff18f4c66191ee52fa69dc2917e4a605.camel@bootlin.com>
+         <1d6fb659-0516-41db-257b-258e6116a4f2@daenzer.net>
+         <7479b8df108c66b1711eb89efbfeb4a16480533d.camel@ndufresne.ca>
+         <8e091392-2365-6c52-1fc2-84ebdc9e83fe@daenzer.net>
+         <93c8e6834728b7e5979013df757017d309ee6a89.camel@bootlin.com>
+         <CAKMK7uFewmCuc97Qp_2zzk9YvMPmK8zE=a6XGszsLq+SLy-vJA@mail.gmail.com>
+         <9230d330e3b57af0643abc834bcf207095cc4bd7.camel@ndufresne.ca>
+         <65a37cec-5040-e2f0-5cd5-c9c3111827ad@daenzer.net>
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-JnkdroWVrKfeW6KPNz+j"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-In-Reply-To: <cfb80745a780083034aae661f5b84cf6114bc186.camel@bootlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 2019-04-24 2:19 p.m., Paul Kocialkowski wrote:
-> On Wed, 2019-04-24 at 10:31 +0200, Michel Dänzer wrote:
->> On 2019-04-19 10:38 a.m., Paul Kocialkowski wrote:
->>> On Thu, 2019-04-18 at 20:30 -0400, Nicolas Dufresne wrote:
->>>> Le jeudi 18 avril 2019 à 10:18 +0200, Daniel Vetter a écrit :
->>>>>> It would be cool if both could be used concurrently and not just return
->>>>>> -EBUSY when the device is used with the other subsystem.
->>>>>
->>>>> We live in this world already :-) I think there's even patches (or merged
->>>>> already) to add fences to v4l, for Android.
->>>>
->>>> This work is currently suspended. It will require some feature on DRM
->>>> display to really make this useful, but there is also a lot of
->>>> challanges in V4L2. In GFX space, most of the use case are about
->>>> rendering as soon as possible. Though, in multimedia we have two
->>>> problems, we need to synchronize the frame rendering with the audio,
->>>> and output buffers may comes out of order due to how video CODECs are
->>>> made.
->>>
->>> Definitely, it feels like the DRM display side is currently a good fit
->>> for render use cases, but not so much for precise display cases where
->>> we want to try and display a buffer at a given vblank target instead of
->>> "as soon as possible".
->>>
->>> I have a userspace project where I've implemented a page flip queue,
->>> which only schedules the next flip when relevant and keeps ready
->>> buffers in the queue until then. This requires explicit vblank
->>> syncronisation (which DRM offsers, but pretty much all other display
->>> APIs, that are higher-level don't, so I'm just using a refresh-rate
->>> timer for them) and flip done notification.
->>>
->>> I haven't looked too much at how to flip with a target vblank with DRM
->>> directly but maybe the atomic API already has the bits in for that (but
->>> I haven't heard of such a thing as a buffer queue, so that makes me
->>> doubt it).
->>
->> Not directly. What's available is that if userspace waits for vblank n
->> and then submits a flip, the flip will complete in vblank n+1 (or a
->> later vblank, depending on when the flip is submitted and when the
->> fences the flip depends on signal).
->>
->> There is reluctance allowing more than one flip to be queued in the
->> kernel, as it would considerably increase complexity in the kernel. It
->> would probably only be considered if there was a compelling use-case
->> which was outright impossible otherwise.
-> 
-> Well, I think it's just less boilerplace for userspace. This is indeed
-> quite complex, and I prefer to see that complexity done once and well
-> in Linux rather than duplicated in userspace with more or less reliable
-> implementations.
 
-That's not the only trade-off to consider, e.g. I suspect handling this
-in the kernel is more complex than in userspace.
+--=-JnkdroWVrKfeW6KPNz+j
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Le mercredi 24 avril 2019 =C3=A0 18:54 +0200, Michel D=C3=A4nzer a =C3=A9cr=
+it :
+> On 2019-04-24 5:44 p.m., Nicolas Dufresne wrote:
+> > Le mercredi 24 avril 2019 =C3=A0 17:06 +0200, Daniel Vetter a =C3=A9cri=
+t :
+> > > On Wed, Apr 24, 2019 at 4:41 PM Paul Kocialkowski
+> > > <paul.kocialkowski@bootlin.com> wrote:
+> > > > On Wed, 2019-04-24 at 16:39 +0200, Michel D=C3=A4nzer wrote:
+> > > > > On 2019-04-24 2:01 p.m., Nicolas Dufresne wrote:
+> > > > > > Rendering a video stream is more complex then what you describe=
+ here.
+> > > > > > Whenever there is a unexpected delay (late delivery of a frame =
+as an
+> > > > > > example) you may endup in situation where one frame is ready af=
+ter the
+> > > > > > targeted vblank. If there is another frame that targets the fol=
+lowing
+> > > > > > vblank that gets ready on-time, the previous frame should be re=
+placed
+> > > > > > by the most recent one.
+> > > > > >=20
+> > > > > > With fences, what happens is that even if you received the next=
+ frame
+> > > > > > on time, naively replacing it is not possible, because we don't=
+ know
+> > > > > > when the fence for the next frame will be signalled. If you sim=
+ply
+> > > > > > always replace the current frame, you may endup skipping a lot =
+more
+> > > > > > vblank then what you expect, and that results in jumpy playback=
+.
+> > > > >=20
+> > > > > So you want to be able to replace a queued flip with another one =
+then.
+> > > > > That doesn't necessarily require allowing more than one flip to b=
+e
+> > > > > queued ahead of time.
+> > > >=20
+> > > > There might be other ways to do it, but this one has plenty of
+> > > > advantages.
+> > >=20
+> > > The point of kms (well one of the reasons) was to separate the
+> > > implementation of modesetting for specific hw from policy decisions
+> > > like which frames to drop and how to schedule them. Kernel gives
+> > > tools, userspace implements the actual protocols.
+> > >=20
+> > > There's definitely a bit a gap around scheduling flips for a specific
+> > > frame or allowing to cancel/overwrite an already scheduled flip, but
+> > > no one yet has come up with a clear proposal for new uapi + example
+> > > implementation + userspace implementation + big enough support from
+> > > other compositors that this is what they want too.
+>=20
+> Actually, the ATOMIC_AMEND patches propose a way to replace a scheduled
+> flip?
+>=20
+>=20
+> > > > > Note that this can also be done in userspace with explicit fencin=
+g (by
+> > > > > only selecting a frame and submitting it to the kernel after all
+> > > > > corresponding fences have signalled), at least to some degree, bu=
+t the
+> > > > > kernel should be able to do it up to a later point in time and mo=
+re
+> > > > > reliably, with less risk of missing a flip for a frame which beco=
+mes
+> > > > > ready just in time.
+> > > >=20
+> > > > Indeed, but it would be great if we could do that with implicit fen=
+cing
+> > > > as well.
+> > >=20
+> > > 1. extract implicit fences from dma-buf. This part is just an idea,
+> > > but easy to implement once we have someone who actually wants this.
+> > > All we need is a new ioctl on the dma-buf to export the fences from
+> > > the reservation_object as a sync_file (either the exclusive or the
+> > > shared ones, selected with a flag).
+> > > 2. do the exact same frame scheduling as with explicit fencing
+> > > 3. supply explicit fences in your atomic ioctl calls - these should
+> > > overrule any implicit fences (assuming correct kernel drivers, but we
+> > > have helpers so you can assume they all work correctly).
+> > >=20
+> > > By design this is possible, it's just that no one yet bothered enough
+> > > to make it happen.
+> > > -Daniel
+> >=20
+> > I'm not sure I understand the workflow of this one. I'm all in favour
+> > leaving the hard work to userspace. Note that I have assumed explicit
+> > fences from the start, I don't think implicit fence will ever exist in
+> > v4l2, but I might be wrong. What I understood is that there was a
+> > previous attempt in the past but it raised more issues then it actually
+> > solved. So that being said, how do handle exactly the follow use cases:
+> >=20
+> >  - A frame was lost by capture driver, but it was schedule as being the
+> > next buffer to render (normally previous frame should remain).
+>=20
+> Userspace just doesn't call into the kernel to flip to the lost frame,
+> so the previous one remains.
 
->>> Well, I need to handle stuff like SDL in my userspace project, so I have
->>> to have all that queuing stuff in software anyway, but it would be good
->>> if each project didn't have to implement that. Worst case, it could be
->>> in libdrm too.
->>
->> Usually, this kind of queuing will be handled in a display server such
->> as Xorg or a Wayland compositor, not by the application such as a video
->> player itself, or any library in the latter's address space. I'm not
->> sure there's much potential for sharing code between display servers for
->> this.
-> 
-> This assumes that you are using a display server, which is definitely
-> not always the case (there is e.g. Kodi GBM). Well, I'm not saying it
-> is essential to have it in the kernel, but it would avoid code
-> duplication and lower the complexity in userspace.
+We are stuck in a loop you a me. Considering v4l2 to drm, where fences
+don't exist on v4l2, it makes very little sense to bring up fences if
+we are to wait on the fence in userspace. Unless of course you have
+other operations before end making a proper use of the fences.
 
-For code duplication, my suggestion would be to use a display server
-instead of duplicating its functionality.
+>=20
+> >  - The scheduled frame is late for the next vblank (didn't signal on-
+> > time), a new one may be better for the next vlbank, but we will only
+> > know when it's fence is signaled.
+>=20
+> Userspace only selects a frame and submits it to the kernel after all
+> its fences have signalled.
+>=20
+> > Better in this context means the the presentation time of this frame is
+> > closer to the next vblank time. Keep in mind that the idea is to
+> > schedule the frames before they are signal, in order to make the usage
+> > of the fence useful in lowering the latency.
+>=20
+> Fences are about signalling completion, not about low latency.
 
+It can be used to remove a roundtrip with userspace at a very time
+sensitive moment. If you pass a dmabuf with it's unsignalled fence to a
+kernel driver, the driver can start the job on this dmabuf as soon as
+the fence is signalled. If you always wait on a fence in userspace, you
+have to wait for the userspace process to be scheduled, then userspace
+will setup the drm atomic request or similar action, which may take
+some time and may require another process in the kernel to have to be
+schedule. This effectively adds some variable delay, a gap where
+nothing is happening between two operations. This time is lost and
+contributes to the overall operation latency.
 
->>>> In the first, we'd need a mechanism where we can schedule a render at a
->>>> specific time or vblank. We can of course already implement this in
->>>> software, but with fences, the scheduling would need to be done in the
->>>> driver. Then if the fence is signalled earlier, the driver should hold
->>>> on until the delay is met. If the fence got signalled late, we also
->>>> need to think of a workflow. As we can't schedule more then one render
->>>> in DRM at one time, I don't really see yet how to make that work.
->>>
->>> Indeed, that's also one of the main issues I've spotted. Before using
->>> an implicit fence, we basically have to make sure the frame is due for
->>> display at the next vblank. Otherwise, we need to refrain from using
->>> the fence and schedule the flip later, which is kind of counter-
->>> productive.
->>
->> [...]
-> 
->>> I feel like specifying a target vblank would be a good unit for that,
->>
->> The mechanism described above works for that.
-> 
-> I still don't see any fence-based mechanism that can work to achieve
-> that, but maybe I'm missing your point.
+The benefit of fences we are looking for is being able to setup before
+the fence is signalled the operations on various compatible drivers.
+This way, on the time critical moment a driver can be feed more jobs,
+there is no userspace rountrip involved. It is also proposed to use it
+to return the buffers into v4l2 queued when they are freed, which can
+in some conditions avoid let's say a capture driver from skipping due
+to random scheduling delays.
 
-It's not fence based, just good old waiting for the previous vblank
-before submitting the flip to the kernel.
+>=20
+> With a display server, the client can send frames to the display server
+> ahead of time, only the display server needs to wait for fences to
+> signal before submitting frames to the kernel.
+>=20
+>=20
+> > Of course as Michel said, we could just always wait on the fence and
+> > just schedule. But if you do that, why would you care implementing the
+> > fence in v4l2 to start with, DQBuf does just that already.
+>=20
+> A fence is more likely to work out of the box with non-V4L-related code
+> than DQBuf?
 
+If you use DQBuf, you are guarantied that the data has been produced. A
+fence is not useful on a buffer that already contains the data you
+would be waiting for. That's why the fence is provided in the RFC at
+QBUf, basically when the  free buffer is given to the v4l2 driver. QBuf
+can also be passed a fence in the RFC, so if the buffer is not yet
+free, the driver would wait on the fence before using it.
 
->>> since it's our native granularity after all (while a timestamp is not).
->>
->> Note that variable refresh rate (Adaptive Sync / FreeSync / G-Sync)
->> changes things in this regard. It makes the vblank length variable, and
->> if you wait for multiple vblanks between flips, you get the maximum
->> vblank length corresponding to the minimum refresh rate / timing
->> granularity. Thus, it would be useful to allow userspace to specify a
->> timestamp corresponding to the earliest time when the flip is to
->> complete. The kernel could then try to hit that as closely as possible.
-> 
-> I'm not very familiar with how this works, but I don't really see what
-> it changes. Does it mean we can flip multiple times per vblank?
+>=20
+>=20
 
-It's not about that.
+--=-JnkdroWVrKfeW6KPNz+j
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
+-----BEGIN PGP SIGNATURE-----
 
-> And I really like a vblank count over a timestamp, as one is the native
-> unit at hand and the other one only correleates to it.
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXMCgJwAKCRBxUwItrAao
+HAJZAJ9sU6RxIoHvjLuu4tuWKVaxkgCLwACfa4OY20ZlCH6p+DFFhBnzAAlst10=
+=z/xV
+-----END PGP SIGNATURE-----
 
-From a video playback application POV it's really the other way around,
-isn't it? The target time is known (e.g. in order to sync up with
-audio), the vblank count has to be calculated from that. And with
-variable refresh rate, this calculation can't be done reliably, because
-it's not known ahead of time when the next vblank starts (at least not
-more accurately than an interval corresponding to the maximum/minimum
-refresh rates).
+--=-JnkdroWVrKfeW6KPNz+j--
 
-If the target timestamp could be specified explicitly, the kernel could
-do the conversion to the vblank count for fixed refresh, and could
-adjust the refresh rate to hit the target more accurately with variable
-refresh.
-
-
--- 
-Earthling Michel Dänzer               |              https://www.amd.com
-Libre software enthusiast             |             Mesa and X developer
