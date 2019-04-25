@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61545C43218
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05CC6C43218
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:37:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C7C7120717
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:36:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 75EE72084F
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:37:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727913AbfDYSgz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Apr 2019 14:36:55 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35400 "EHLO
+        id S1730668AbfDYSg6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Apr 2019 14:36:58 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35406 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbfDYSgz (ORCPT
+        with ESMTP id S1730661AbfDYSg6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Apr 2019 14:36:55 -0400
+        Thu, 25 Apr 2019 14:36:58 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 6BDD4282215
+        with ESMTPSA id CE4AE282BC9
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     Philipp Zabel <p.zabel@pengutronix.de>,
         linux-media@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 1/5] media: coda: Print a nicer device registered message
-Date:   Thu, 25 Apr 2019 15:35:42 -0300
-Message-Id: <20190425183546.16244-2-ezequiel@collabora.com>
+Subject: [PATCH 2/5] media: coda: Remove unbalanced and unneeded mutex unlock
+Date:   Thu, 25 Apr 2019 15:35:43 -0300
+Message-Id: <20190425183546.16244-3-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190425183546.16244-1-ezequiel@collabora.com>
 References: <20190425183546.16244-1-ezequiel@collabora.com>
@@ -40,63 +40,28 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is just a cosmetic change to print a more descriptive
-message, to distinguish decoder from encoder:
+The mutex unlock in the threaded interrupt handler is not paired
+with any mutex lock. Remove it.
 
-So, instead of printing
-
-  coda 2040000.vpu: codec registered as /dev/video[4-5]
-
-With this change, the driver now prints
-
-  coda 2040000.vpu: encoder registered as /dev/video4
-  coda 2040000.vpu: decoder registered as /dev/video5
+This bug has been here for a really long time, so it applies
+to any stable repo.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/platform/coda/coda-common.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/media/platform/coda/coda-bit.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 3ce58dee4422..1f53ca4effd2 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -2480,9 +2480,12 @@ static int coda_hw_init(struct coda_dev *dev)
- static int coda_register_device(struct coda_dev *dev, int i)
- {
- 	struct video_device *vfd = &dev->vfd[i];
-+	enum coda_inst_type type;
-+	int ret;
- 
- 	if (i >= dev->devtype->num_vdevs)
- 		return -EINVAL;
-+	type = dev->devtype->vdevs[i]->type;
- 
- 	strscpy(vfd->name, dev->devtype->vdevs[i]->name, sizeof(vfd->name));
- 	vfd->fops	= &coda_fops;
-@@ -2498,7 +2501,12 @@ static int coda_register_device(struct coda_dev *dev, int i)
- 	v4l2_disable_ioctl(vfd, VIDIOC_G_CROP);
- 	v4l2_disable_ioctl(vfd, VIDIOC_S_CROP);
- 
--	return video_register_device(vfd, VFL_TYPE_GRABBER, 0);
-+	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
-+	if (!ret)
-+		v4l2_info(&dev->v4l2_dev, "%s registered as /dev/video%d\n",
-+			  type == CODA_INST_ENCODER ? "encoder" : "decoder",
-+			  vfd->num);
-+	return ret;
- }
- 
- static void coda_copy_firmware(struct coda_dev *dev, const u8 * const buf,
-@@ -2612,9 +2620,6 @@ static void coda_fw_callback(const struct firmware *fw, void *context)
- 		}
+diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
+index eaa86737fa04..bddd2f5c8c2b 100644
+--- a/drivers/media/platform/coda/coda-bit.c
++++ b/drivers/media/platform/coda/coda-bit.c
+@@ -2308,7 +2308,6 @@ irqreturn_t coda_irq_handler(int irq, void *data)
+ 	if (ctx == NULL) {
+ 		v4l2_err(&dev->v4l2_dev,
+ 			 "Instance released before the end of transaction\n");
+-		mutex_unlock(&dev->coda_mutex);
+ 		return IRQ_HANDLED;
  	}
- 
--	v4l2_info(&dev->v4l2_dev, "codec registered as /dev/video[%d-%d]\n",
--		  dev->vfd[0].num, dev->vfd[i - 1].num);
--
- 	pm_runtime_put_sync(&pdev->dev);
- 	return;
  
 -- 
 2.20.1
