@@ -2,201 +2,373 @@ Return-Path: <SRS0=19ZY=S3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20D34C10F03
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 07:33:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39499C10F03
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 08:06:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E5F1B217FA
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 07:33:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F2D4C217D7
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 08:06:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730225AbfDYHdh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Apr 2019 03:33:37 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:58967 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730224AbfDYHdg (ORCPT
+        id S2387417AbfDYIGi convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Apr 2019 04:06:38 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60908 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728435AbfDYIGh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Apr 2019 03:33:36 -0400
-Received: from [192.168.2.10] ([212.251.195.8])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id JYsshQP5TZVjxJYsvhdikA; Thu, 25 Apr 2019 09:33:34 +0200
-Subject: Re: [PATCH v9 3/4] [media] cxusb: add analog mode support for Medion
- MD95700
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Michael Krufky <mkrufky@linuxtv.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andy Walls <awalls@md.metrocast.net>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org
-References: <cover.1553903063.git.mail@maciej.szmigiero.name>
- <0c30210a0d946cac6b17755e7d255541ff535023.1553903063.git.mail@maciej.szmigiero.name>
- <b33ebf2a-9507-9940-4474-6f37af4d8010@xs4all.nl>
- <3927f261-9052-0b89-62c2-6fe8b4876ba1@maciej.szmigiero.name>
- <5c01b351-7ea0-b057-32c7-1029af700fe5@xs4all.nl>
- <611fe1d8-6dc6-fc16-6071-3af5dc285b22@maciej.szmigiero.name>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <904a5107-3188-6f55-35a1-2a3076de8f18@xs4all.nl>
-Date:   Thu, 25 Apr 2019 09:33:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.4.0
+        Thu, 25 Apr 2019 04:06:37 -0400
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 794D92818D1;
+        Thu, 25 Apr 2019 09:06:32 +0100 (BST)
+Date:   Thu, 25 Apr 2019 10:06:28 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>, kernel@collabora.com,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v4 00/21] Add MPEG-2 decoding to Rockchip VPU
+Message-ID: <20190425100628.6f8e5894@collabora.com>
+In-Reply-To: <20190425071242.18315-1-boris.brezillon@collabora.com>
+References: <20190425071242.18315-1-boris.brezillon@collabora.com>
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <611fe1d8-6dc6-fc16-6071-3af5dc285b22@maciej.szmigiero.name>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfFmB1YW5QKJbeV+Uz27fg3+OFmSjy/V8raIEYkFVwZYmUske5XO1iLwjqrvpz+9+yQAl98mFSKSa5by8EcW5WaqciPPI7IZM8BlXQXTVlU/vlQcsrNbb
- aNGyqEHTfej2/5VGhr6NHdd4q+96vlf/OHUp12ViUSIngWgFWDzU3axeI/oxEpDqBugZ0C3jaHR0uXPy/QpvHmEHs3+kySIuG+jNxqOjH328jdmJ7HTqoZgh
- 7+xN5qrAp1pLzaTzOzTl02S8dcP9U2U4+cutN50bMegIvxwV9ooYwfTjsds4JO6efHTrTDVZyS3IlT1cWQ9lbQ+L5bA18P/s4YP9cB4XaalwUmhB64PDsSKl
- c/d6gPWA
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 4/24/19 10:58 PM, Maciej S. Szmigiero wrote:
-> On 24.04.2019 15:06, Hans Verkuil wrote:
->> On 4/16/19 1:40 AM, Maciej S. Szmigiero wrote:
->>> On 12.04.2019 11:22, Hans Verkuil wrote:
->>>> On 3/30/19 12:51 AM, Maciej S. Szmigiero wrote:
->>>>> This patch adds support for analog part of Medion 95700 in the cxusb
->>>>> driver.
->>>>>
->>>>> What works:
->>>>> * Video capture at various sizes with sequential fields,
->>>>> * Input switching (TV Tuner, Composite, S-Video),
->>>>> * TV and radio tuning,
->>>>> * Video standard switching and auto detection,
->>>>> * Radio mode switching (stereo / mono),
->>>>> * Unplugging while capturing,
->>>>> * DVB / analog coexistence.
->>>>>
->>>>> What does not work yet:
->>>>> * Audio,
->>>>> * VBI,
->>>>> * Picture controls.
->>>>>
->>>>> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
->>>>> ---
-> (..)
->>> In this case the code above simply tries first the bigger PAL capture
->>> resolution then the smaller NTSC one.
->>> Which one will be accepted by the cx25840 depends on the currently set
->>> broadcast standard and parameters of the last signal that was received,
->>> at least one of these resolutions seem to work even without any
->>> signal being received since the chip was powered up.
->>>
->>> This way the API guarantees should be kept by the driver.
->>
->> This is basically a work-around for a cx25840 bug.
->>
->> In any case, since the driver initializes to PAL the 720x576 resolution
->> should be fine.
->>
->> BTW, I noticed that cxdev->norm is initialized to 0. Why isn't that
->> PAL?
+On Thu, 25 Apr 2019 09:12:21 +0200
+Boris Brezillon <boris.brezillon@collabora.com> wrote:
+
+> This series introduces the decoding infrastructure that will be
+> used to add support for other codecs such as VP8, VP9 and H.264.
 > 
-> cxdev->norm is initialized to 0 since this will allow autodetection on
-> the default Composite input (Composite and S-Video inputs accept any
-> standard that a cx25840 chip can accept, including NTSC and SECAM).
+> As explained in the cover letter for the v1 patchset,
+> the driver is now exposing two video device nodes.
+> The VPU encoder is exposed on /dev/video0, and the VPU decoder
+> is exposed on /dev/video1. Both devices are tied to the same
+> memory-to-memory queue, and same media device /dev/media0.
 > 
-> The tuner and tda9887 are initialized to PAL since it is all they can
-> accept.
-
-Never autodetect. Just initialize it to PAL.
-
-You can't rely on autodetect since changing the standard will also change
-the resolution and therefor change the buffer sizes.
-
-Instead userspace just calls s_std explicitly. Even better if the driver
-would support VIDIOC_QUERYSTD, but it seems that was never implented in
-cx25840.
-
-Regards,
-
-	Hans
-
+> Therefore there are two media graphs:
 > 
->>>
->>>>> +int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
->>>>> +{
->>>>> +	struct cxusb_medion_dev *cxdev = dvbdev->priv;
->>>>> +	u8 tuner_analog_msg_data[] = { 0x9c, 0x60, 0x85, 0x54 };
->>>>> +	struct i2c_msg tuner_analog_msg = { .addr = 0x61, .flags = 0,
->>>>> +					    .buf = tuner_analog_msg_data,
->>>>> +					    .len =
->>>>> +					    sizeof(tuner_analog_msg_data) };
->>>>> +	struct v4l2_subdev_format subfmt;
->>>>> +	int ret;
->>>>> +
->>>>> +	/* switch tuner to analog mode so IF demod will become accessible */
->>>>> +	ret = i2c_transfer(&dvbdev->i2c_adap, &tuner_analog_msg, 1);
->>>>> +	if (ret != 1)
->>>>> +		dev_warn(&dvbdev->udev->dev,
->>>>> +			 "tuner analog switch failed (%d)\n", ret);
->>>>> +
->>>>> +	/*
->>>>> +	 * cx25840 might have lost power during mode switching so we need
->>>>> +	 * to set it again
->>>>> +	 */
->>>>> +	ret = v4l2_subdev_call(cxdev->cx25840, core, reset, 0);
->>>>> +	if (ret != 0)
->>>>> +		dev_warn(&dvbdev->udev->dev,
->>>>> +			 "cx25840 reset failed (%d)\n", ret);
->>>>> +
->>>>> +	ret = v4l2_subdev_call(cxdev->cx25840, video, s_routing,
->>>>> +			       CX25840_COMPOSITE1, 0, 0);
->>>>> +	if (ret != 0)
->>>>> +		dev_warn(&dvbdev->udev->dev,
->>>>> +			 "cx25840 initial input setting failed (%d)\n", ret);
->>>>> +
->>>>> +	/* composite */
->>>>> +	cxdev->input = 1;
->>>>> +	cxdev->norm = 0;
->>>>> +
->>>>> +	/* TODO: setup audio samples insertion */
->>>>> +
->>>>> +	ret = v4l2_subdev_call(cxdev->cx25840, core, s_io_pin_config,
->>>>> +			       sizeof(cxusub_medion_pin_config) /
->>>>> +			       sizeof(cxusub_medion_pin_config[0]),
->>>>> +			       cxusub_medion_pin_config);
->>>>> +	if (ret != 0)
->>>>> +		dev_warn(&dvbdev->udev->dev,
->>>>> +			"cx25840 pin config failed (%d)\n", ret);
->>>>> +
->>>>> +	/* make sure that we aren't in radio mode */
->>>>> +	v4l2_subdev_call(cxdev->tda9887, video, s_std, V4L2_STD_PAL);
->>>>> +	v4l2_subdev_call(cxdev->tuner, video, s_std, V4L2_STD_PAL);
->>>>> +	v4l2_subdev_call(cxdev->cx25840, video, s_std, cxdev->norm);
->>>>> +
->>>>> +	memset(&subfmt, 0, sizeof(subfmt));
->>>>> +	subfmt.which = V4L2_SUBDEV_FORMAT_ACTIVE;
->>>>> +	subfmt.format.width = cxdev->width;
->>>>> +	subfmt.format.height = cxdev->height;
->>>>> +	subfmt.format.code = MEDIA_BUS_FMT_FIXED;
->>>>> +	subfmt.format.field = V4L2_FIELD_SEQ_TB;
->>>>> +	subfmt.format.colorspace = V4L2_COLORSPACE_SMPTE170M;
->>>>> +
->>>>> +	ret = v4l2_subdev_call(cxdev->cx25840, pad, set_fmt, NULL, &subfmt);
->>>>> +	if (ret != 0) {
->>>>> +		subfmt.format.width = 640;
->>>>> +		subfmt.format.height = 480;
->>>>
->>>> Why the fallback to 640x480?
->>>
->>> This resolution seems to work even without any signal being received,
->>> and it is a sensible NTSC-like resolution so it makes a good fallback
->>> if restoring the previously used resolution has failed.
->>
->> But it is really a work-around for a cx25840 bug. Just fix set_fmt
->> and you should not need this anymore.
->>
->> Regards.
->>
->> 	Hans
+> ┌────────────────────────────────┐
+> │ rockchip,rk3399-vpu-enc-source │
+> │          /dev/video0           │
+> └────────────────────────────────┘
+>   ┃
+>   ┃
+>   ▼
+> ┌────────────────────────────────┐
+> │  rockchip,rk3399-vpu-enc-proc  │
+> └────────────────────────────────┘
+>   ┃
+>   ┃
+>   ▼
+> ┌────────────────────────────────┐
+> │  rockchip,rk3399-vpu-enc-sink  │
+> │          /dev/video0           │
+> └────────────────────────────────┘
 > 
-> Thanks,
-> Maciej
+> ┌────────────────────────────────┐
+> │ rockchip,rk3399-vpu-dec-source │
+> │          /dev/video1           │
+> └────────────────────────────────┘
+>   ┃
+>   ┃
+>   ▼
+> ┌────────────────────────────────┐
+> │  rockchip,rk3399-vpu-dec-proc  │
+> └────────────────────────────────┘
+>   ┃
+>   ┃
+>   ▼
+> ┌────────────────────────────────┐
+> │  rockchip,rk3399-vpu-dec-sink  │
+> │          /dev/video1           │
+> └────────────────────────────────┘
 > 
+> Of course, this work has been possible thanks to Jonas Karlman, who did
+> the initial MPEG-2 decoding work and also got mpv+ffmpeg working using
+> the Request API.
 
+Forgot to provide the v4l2-compliance results, so here it is:
+
+"
+v4l2-compliance SHA: 95f39aae48c6e8e5cc81e6ae6293d999f70a909b, 64 bits
+
+Compliance test for rockchip-vpu device /dev/media0:
+
+Media Driver Info:
+	Driver name      : rockchip-vpu
+	Model            : rockchip-vpu
+	Serial           : 
+	Bus info         : platform: rockchip-vpu
+	Media version    : 5.1.0
+	Hardware revision: 0x00000000 (0)
+	Driver version   : 5.1.0
+
+Required ioctls:
+	test MEDIA_IOC_DEVICE_INFO: OK
+
+Allow for multiple opens:
+	test second /dev/media0 open: OK
+	test MEDIA_IOC_DEVICE_INFO: OK
+	test for unlimited opens: OK
+
+Media Controller ioctls:
+	test MEDIA_IOC_G_TOPOLOGY: OK
+	Entities: 6 Interfaces: 2 Pads: 8 Links: 8
+	test MEDIA_IOC_ENUM_ENTITIES/LINKS: OK
+	test MEDIA_IOC_SETUP_LINK: OK
+
+Total for rockchip-vpu device /dev/media0: 7, Succeeded: 7, Failed: 0, Warnings: 0
+--------------------------------------------------------------------------------
+Compliance test for rockchip-vpu device /dev/video0:
+
+Driver Info:
+	Driver name      : rockchip-vpu
+	Card type        : rockchip,rk3399-vpu-enc
+	Bus info         : platform: rockchip-vpu
+	Driver version   : 5.1.0
+	Capabilities     : 0x84204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+	Detected JPEG Encoder
+Media Driver Info:
+	Driver name      : rockchip-vpu
+	Model            : rockchip-vpu
+	Serial           : 
+	Bus info         : platform: rockchip-vpu
+	Media version    : 5.1.0
+	Hardware revision: 0x00000000 (0)
+	Driver version   : 5.1.0
+Interface Info:
+	ID               : 0x0300000c
+	Type             : V4L Video
+Entity Info:
+	ID               : 0x00000001 (1)
+	Name             : rockchip,rk3399-vpu-enc-source
+	Function         : V4L2 I/O
+	Pad 0x01000002   : 0: Source
+	  Link 0x02000008: to remote pad 0x1000005 of entity 'rockchip,rk3399-vpu-enc-proc': Data, Enabled, Immutable
+
+Required ioctls:
+	test MC information (see 'Media Driver Info' above): OK
+	test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+	test second /dev/video0 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 2 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK (Not Supported)
+	test Composing: OK (Not Supported)
+	test Scaling: OK
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+		fail: v4l2-test-buffers.cpp(709): q.create_bufs(node, 1, &fmt) != EINVAL
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: FAIL
+	test VIDIOC_EXPBUF: OK
+testRequests:1760 ret 0
+		fail: v4l2-test-buffers.cpp(1820): !supports_requests
+	test Requests: FAIL
+
+Total for rockchip-vpu device /dev/video0: 45, Succeeded: 43, Failed: 2, Warnings: 0
+--------------------------------------------------------------------------------
+Compliance test for rockchip-vpu device /dev/video1:
+
+Driver Info:
+	Driver name      : rockchip-vpu
+	Card type        : rockchip,rk3399-vpu-dec
+	Bus info         : platform: rockchip-vpu
+	Driver version   : 5.1.0
+	Capabilities     : 0x84204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+		Device Capabilities
+	Device Caps      : 0x04204000
+		Video Memory-to-Memory Multiplanar
+		Streaming
+		Extended Pix Format
+	Detected Stateless Decoder
+Media Driver Info:
+	Driver name      : rockchip-vpu
+	Model            : rockchip-vpu
+	Serial           : 
+	Bus info         : platform: rockchip-vpu
+	Media version    : 5.1.0
+	Hardware revision: 0x00000000 (0)
+	Driver version   : 5.1.0
+Interface Info:
+	ID               : 0x0300001a
+	Type             : V4L Video
+Entity Info:
+	ID               : 0x0000000f (15)
+	Name             : rockchip,rk3399-vpu-dec-source
+	Function         : V4L2 I/O
+	Pad 0x01000010   : 0: Source
+	  Link 0x02000016: to remote pad 0x1000013 of entity 'rockchip,rk3399-vpu-dec-proc': Data, Enabled, Immutable
+
+Required ioctls:
+	test MC information (see 'Media Driver Info' above): OK
+	test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+	test second /dev/video1 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+		fail: v4l2-test-controls.cpp(673): try_ext_ctrls returned an error (22)
+	test VIDIOC_G/S/TRY_EXT_CTRLS: FAIL
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 2 Private Controls: 0
+
+Format ioctls:
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK (Not Supported)
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+		fail: v4l2-test-formats.cpp(806): fmt_cap.g_colorspace() != col
+	test VIDIOC_S_FMT: FAIL
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+	test Cropping: OK (Not Supported)
+	test Composing: OK (Not Supported)
+	test Scaling: OK
+
+Codec ioctls:
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+		fail: v4l2-test-buffers.cpp(709): q.create_bufs(node, 1, &fmt) != EINVAL
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: FAIL
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Total for rockchip-vpu device /dev/video1: 45, Succeeded: 42, Failed: 3, Warnings: 0
+
+Grand Total for rockchip-vpu device /dev/media0: 97, Succeeded: 92, Failed: 5, Warnings: 0
+
+"
+
+2 of those failures are expected: 
+
+* "fail: v4l2-test-formats.cpp(806): fmt_cap.g_colorspace() != col": is caused
+  by the reset done by the driver on the non-coded end when the coded end of
+  the pipeline is modified (which follows the behavior described in stateless
+  decoder spec)
+
+* "fail: v4l2-test-controls.cpp(673): try_ext_ctrls returned an error (22)":
+  default values for mpeg2 ctrls are not suitable, so doing
+  get_ext_ctrl()+try_ext_ctrl() does not work.
+
+I'm looking into the other failures which were not present in v3 (yes, I
+know, shame on me for not running v4l2-compliance before sending the series :-)).
