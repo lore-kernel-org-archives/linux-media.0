@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A8EBC43219
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:37:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 847DFC43218
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:37:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9EEFD2067C
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:37:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0095F2067C
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:37:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730673AbfDYShD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Apr 2019 14:37:03 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35420 "EHLO
+        id S1730674AbfDYShF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Apr 2019 14:37:05 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35426 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729070AbfDYShD (ORCPT
+        with ESMTP id S1726964AbfDYShF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Apr 2019 14:37:03 -0400
+        Thu, 25 Apr 2019 14:37:05 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id C66FF282BC9
+        with ESMTPSA id 7A0E928259F
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     Philipp Zabel <p.zabel@pengutronix.de>,
         linux-media@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 4/5] media: coda: Remove pic_run_work worker
-Date:   Thu, 25 Apr 2019 15:35:45 -0300
-Message-Id: <20190425183546.16244-5-ezequiel@collabora.com>
+Subject: [PATCH 5/5] media: coda: Clear the interrupt reason
+Date:   Thu, 25 Apr 2019 15:35:46 -0300
+Message-Id: <20190425183546.16244-6-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190425183546.16244-1-ezequiel@collabora.com>
 References: <20190425183546.16244-1-ezequiel@collabora.com>
@@ -40,58 +40,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-There isn't any reason to run the mem2mem job on a separate worker,
-because the mem2mem framework guarantees that device_run will never
-run in interrupt context.
+This commit clears the interrupt reason (INT_REASON) register
+on the interrupt handler. Without this clearing, the CODA hardware
+has been observed to get completely stalled on CODA980 variants,
+requiring a pretty deep hardware reset.
 
-Therefore, get rid of the extra pic_run_work worker, and instead
-run the job in the context of .device_run itself.
+The datasheet specifies that the INT_REASON register is set
+by the CODA hardware, and should be cleared by the host.
+
+While the CODA versions that are currently supported by this driver
+don't seem to need this change, it's a really small change,
+so it seems a wise thing to do to avoid hitting some
+rare race-condition in the hardware.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/platform/coda/coda-common.c | 9 ---------
- drivers/media/platform/coda/coda.h        | 1 -
- 2 files changed, 10 deletions(-)
+ drivers/media/platform/coda/coda-bit.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 617d4547ec82..e0227593a649 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -1306,14 +1306,6 @@ static void coda_device_run(void *m2m_priv)
- {
- 	struct coda_ctx *ctx = m2m_priv;
- 	struct coda_dev *dev = ctx->dev;
--
--	queue_work(dev->workqueue, &ctx->pic_run_work);
--}
--
--static void coda_pic_run_work(struct work_struct *work)
--{
--	struct coda_ctx *ctx = container_of(work, struct coda_ctx, pic_run_work);
--	struct coda_dev *dev = ctx->dev;
- 	int ret;
+diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
+index bddd2f5c8c2b..a653aaa3ca15 100644
+--- a/drivers/media/platform/coda/coda-bit.c
++++ b/drivers/media/platform/coda/coda-bit.c
+@@ -2301,6 +2301,7 @@ irqreturn_t coda_irq_handler(int irq, void *data)
  
- 	mutex_lock(&ctx->buffer_mutex);
-@@ -2233,7 +2225,6 @@ static int coda_open(struct file *file)
- 	ctx->ops = ctx->cvd->ops;
- 	ctx->use_bit = !ctx->cvd->direct;
- 	init_completion(&ctx->completion);
--	INIT_WORK(&ctx->pic_run_work, coda_pic_run_work);
- 	if (ctx->ops->seq_end_work)
- 		INIT_WORK(&ctx->seq_end_work, ctx->ops->seq_end_work);
- 	v4l2_fh_init(&ctx->fh, video_devdata(file));
-diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/coda/coda.h
-index 31c80bda2c0b..6870edeb6324 100644
---- a/drivers/media/platform/coda/coda.h
-+++ b/drivers/media/platform/coda/coda.h
-@@ -194,7 +194,6 @@ struct coda_context_ops {
- struct coda_ctx {
- 	struct coda_dev			*dev;
- 	struct mutex			buffer_mutex;
--	struct work_struct		pic_run_work;
- 	struct work_struct		seq_end_work;
- 	struct completion		completion;
- 	const struct coda_video_device	*cvd;
+ 	/* read status register to attend the IRQ */
+ 	coda_read(dev, CODA_REG_BIT_INT_STATUS);
++	coda_write(dev, 0, CODA_REG_BIT_INT_REASON);
+ 	coda_write(dev, CODA_REG_BIT_INT_CLEAR_SET,
+ 		      CODA_REG_BIT_INT_CLEAR);
+ 
 -- 
 2.20.1
 
