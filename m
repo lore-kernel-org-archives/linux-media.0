@@ -2,325 +2,683 @@ Return-Path: <SRS0=19ZY=S3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55634C43218
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 15:18:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B53B2C43218
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 15:22:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7121C2067D
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 15:18:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C58AE20675
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 15:22:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1556205761;
+	bh=6ZnIre0O7YmjkAPbXwHc9rDWwt+WnyIT47X5GvL8kg0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=QTPRkPQXYg4cCrZlIXgnzfdNUJ9NNpiTxSgelTTSnvxth1BLo255QAqs5RfH0wfXE
+	 KbXdYpbIzll9vDBCCMb42H0ZddoSyTgfp0Y8rwK5PBFrWo+2ZLYNotNkVixRRmb+GU
+	 9ewBgVQiYkMPazfiPuTQzckXkh3b33w42H1TZ5PM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727306AbfDYPSI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Apr 2019 11:18:08 -0400
-Received: from mail.netline.ch ([148.251.143.178]:49731 "EHLO
-        netline-mail3.netline.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbfDYPSI (ORCPT
+        id S1728404AbfDYPW3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Apr 2019 11:22:29 -0400
+Received: from casper.infradead.org ([85.118.1.10]:40264 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728227AbfDYPW3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Apr 2019 11:18:08 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by netline-mail3.netline.ch (Postfix) with ESMTP id CB9E72AA103;
-        Thu, 25 Apr 2019 17:18:03 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at netline-mail3.netline.ch
-Received: from netline-mail3.netline.ch ([127.0.0.1])
-        by localhost (netline-mail3.netline.ch [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id q6nTEBXTV1DD; Thu, 25 Apr 2019 17:18:03 +0200 (CEST)
-Received: from thor (116.245.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.245.116])
-        by netline-mail3.netline.ch (Postfix) with ESMTPSA id B8EC52A6042;
-        Thu, 25 Apr 2019 17:18:02 +0200 (CEST)
-Received: from [::1]
-        by thor with esmtp (Exim 4.92)
-        (envelope-from <michel@daenzer.net>)
-        id 1hJg8Q-0002t5-86; Thu, 25 Apr 2019 17:18:02 +0200
-Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
- <20190418081816.GO13337@phenom.ffwll.local>
- <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
- <987372acff18f4c66191ee52fa69dc2917e4a605.camel@bootlin.com>
- <1d6fb659-0516-41db-257b-258e6116a4f2@daenzer.net>
- <7479b8df108c66b1711eb89efbfeb4a16480533d.camel@ndufresne.ca>
- <8e091392-2365-6c52-1fc2-84ebdc9e83fe@daenzer.net>
- <93c8e6834728b7e5979013df757017d309ee6a89.camel@bootlin.com>
- <CAKMK7uFewmCuc97Qp_2zzk9YvMPmK8zE=a6XGszsLq+SLy-vJA@mail.gmail.com>
- <9230d330e3b57af0643abc834bcf207095cc4bd7.camel@ndufresne.ca>
- <65a37cec-5040-e2f0-5cd5-c9c3111827ad@daenzer.net>
- <e572f31653301f0a479fe1373b3dfd5ada8e49f3.camel@ndufresne.ca>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
-Openpgp: preference=signencrypt
-Autocrypt: addr=michel@daenzer.net; prefer-encrypt=mutual; keydata=
- mQGiBDsehS8RBACbsIQEX31aYSIuEKxEnEX82ezMR8z3LG8ktv1KjyNErUX9Pt7AUC7W3W0b
- LUhu8Le8S2va6hi7GfSAifl0ih3k6Bv1Itzgnd+7ZmSrvCN8yGJaHNQfAevAuEboIb+MaVHo
- 9EMJj4ikOcRZCmQWw7evu/D9uQdtkCnRY9iJiAGxbwCguBHtpoGMxDOINCr5UU6qt+m4O+UD
- /355ohBBzzyh49lTj0kTFKr0Ozd20G2FbcqHgfFL1dc1MPyigej2gLga2osu2QY0ObvAGkOu
- WBi3LTY8Zs8uqFGDC4ZAwMPoFy3yzu3ne6T7d/68rJil0QcdQjzzHi6ekqHuhst4a+/+D23h
- Za8MJBEcdOhRhsaDVGAJSFEQB1qLBACOs0xN+XblejO35gsDSVVk8s+FUUw3TSWJBfZa3Imp
- V2U2tBO4qck+wqbHNfdnU/crrsHahjzBjvk8Up7VoY8oT+z03sal2vXEonS279xN2B92Tttr
- AgwosujguFO/7tvzymWC76rDEwue8TsADE11ErjwaBTs8ZXfnN/uAANgPLQjTWljaGVsIERh
- ZW56ZXIgPG1pY2hlbEBkYWVuemVyLm5ldD6IXgQTEQIAHgUCQFXxJgIbAwYLCQgHAwIDFQID
- AxYCAQIeAQIXgAAKCRBaga+OatuyAIrPAJ9ykonXI3oQcX83N2qzCEStLNW47gCeLWm/QiPY
- jqtGUnnSbyuTQfIySkK5AQ0EOx6FRRAEAJZkcvklPwJCgNiw37p0GShKmFGGqf/a3xZZEpjI
- qNxzshFRFneZze4f5LhzbX1/vIm5+ZXsEWympJfZzyCmYPw86QcFxyZflkAxHx9LeD+89Elx
- bw6wT0CcLvSv8ROfU1m8YhGbV6g2zWyLD0/naQGVb8e4FhVKGNY2EEbHgFBrAAMGA/0VktFO
- CxFBdzLQ17RCTwCJ3xpyP4qsLJH0yCoA26rH2zE2RzByhrTFTYZzbFEid3ddGiHOBEL+bO+2
- GNtfiYKmbTkj1tMZJ8L6huKONaVrASFzLvZa2dlc2zja9ZSksKmge5BOTKWgbyepEc5qxSju
- YsYrX5xfLgTZC5abhhztpYhGBBgRAgAGBQI7HoVFAAoJEFqBr45q27IAlscAn2Ufk2d6/3p4
- Cuyz/NX7KpL2dQ8WAJ9UD5JEakhfofed8PSqOM7jOO3LCA==
-Message-ID: <24ee7263-a868-bcfe-d4aa-0e9d8e2f6ee5@daenzer.net>
-Date:   Thu, 25 Apr 2019 17:17:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Thu, 25 Apr 2019 11:22:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cNAw/7UGGQa2EoejF9l6yeoqAMDHiwOHvJfQEJxe8PY=; b=o+YVGWxNREaDYeL3fsmouMJxHA
+        ZCGPs2WL6CxdH8V/1uhgCIrM279IdhNxNs9MwX1aD6pKnR6JsCiUagilTv89BGzDy3nmGELVgRFtb
+        c9l0wz9eLQLPOnmq7AKkpZ08FyHDyI1ZbqtHKVnde58ccMDBqdxNMXeqvtQXAzB/uPp/BLL1BZQrd
+        MBdwTuGjPaNQg6Pn3WrOFRe6F6ZBz+Eam7DGUsSxgCX8Z5GxKUfxHcDREUxDOv8pFgO6kEHOldFFP
+        5VHEPJIvlerNJ2O/XnyojyaPjyhsOxMnMRfXnL6fR6OP9M0hC0zU8hiHJ5cMK+/aDIdB8c8rjyslX
+        ftastdZw==;
+Received: from [179.95.39.209] (helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hJgCT-0006Ou-7Y; Thu, 25 Apr 2019 15:22:14 +0000
+Date:   Thu, 25 Apr 2019 12:21:53 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, y2038@lists.linaro.org,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@mellanox.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Sterba <dsterba@suse.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        devel@driverdev.osuosl.org, qat-linux@intel.com,
+        linux-crypto@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-nvme@lists.infradead.org,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Sean Young <sean@mess.org>
+Subject: Re: [PATCH v3 12/26] compat_ioctl: move more drivers to
+ compat_ptr_ioctl
+Message-ID: <20190425122153.450fc094@coco.lan>
+In-Reply-To: <20190416202701.127745-1-arnd@arndb.de>
+References: <20190416202013.4034148-1-arnd@arndb.de>
+        <20190416202701.127745-1-arnd@arndb.de>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <e572f31653301f0a479fe1373b3dfd5ada8e49f3.camel@ndufresne.ca>
-Content-Type: multipart/signed; micalg=pgp-sha1;
- protocol="application/pgp-signature";
- boundary="2VcJrharQhz1ikiIY67gmutUhQ3MOiXtA"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---2VcJrharQhz1ikiIY67gmutUhQ3MOiXtA
-Content-Type: multipart/mixed; boundary="XMy5e4t38JTHemRMdAyY23YSxjokCppP8";
- protected-headers="v1"
-From: =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
-To: Nicolas Dufresne <nicolas@ndufresne.ca>, Daniel Vetter <daniel@ffwll.ch>,
- Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc: Alexandre Courbot <acourbot@chromium.org>,
- Maxime Ripard <maxime.ripard@bootlin.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- dri-devel <dri-devel@lists.freedesktop.org>, Tomasz Figa
- <tfiga@chromium.org>, Hans Verkuil <hverkuil@xs4all.nl>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Dave Airlie <airlied@redhat.com>, Mauro Carvalho Chehab
- <mchehab@kernel.org>,
- "open list:DMA BUFFER SHARING FRAMEWORK" <linux-media@vger.kernel.org>
-Message-ID: <24ee7263-a868-bcfe-d4aa-0e9d8e2f6ee5@daenzer.net>
-Subject: Re: Support for 2D engines/blitters in V4L2 and DRM
-References: <0df3d4b5178d8a37b67b275e0771741c6c268de3.camel@bootlin.com>
- <20190418081816.GO13337@phenom.ffwll.local>
- <8265f098722d0cd5aae606d7ee6d955f168ac8f3.camel@ndufresne.ca>
- <987372acff18f4c66191ee52fa69dc2917e4a605.camel@bootlin.com>
- <1d6fb659-0516-41db-257b-258e6116a4f2@daenzer.net>
- <7479b8df108c66b1711eb89efbfeb4a16480533d.camel@ndufresne.ca>
- <8e091392-2365-6c52-1fc2-84ebdc9e83fe@daenzer.net>
- <93c8e6834728b7e5979013df757017d309ee6a89.camel@bootlin.com>
- <CAKMK7uFewmCuc97Qp_2zzk9YvMPmK8zE=a6XGszsLq+SLy-vJA@mail.gmail.com>
- <9230d330e3b57af0643abc834bcf207095cc4bd7.camel@ndufresne.ca>
- <65a37cec-5040-e2f0-5cd5-c9c3111827ad@daenzer.net>
- <e572f31653301f0a479fe1373b3dfd5ada8e49f3.camel@ndufresne.ca>
-In-Reply-To: <e572f31653301f0a479fe1373b3dfd5ada8e49f3.camel@ndufresne.ca>
+Em Tue, 16 Apr 2019 22:25:33 +0200
+Arnd Bergmann <arnd@arndb.de> escreveu:
 
---XMy5e4t38JTHemRMdAyY23YSxjokCppP8
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: quoted-printable
+> The .ioctl and .compat_ioctl file operations have the same prototype so
+> they can both point to the same function, which works great almost all
+> the time when all the commands are compatible.
+> 
+> One exception is the s390 architecture, where a compat pointer is only
+> 31 bit wide, and converting it into a 64-bit pointer requires calling
+> compat_ptr(). Most drivers here will ever run in s390, but since we now
+> have a generic helper for it, it's easy enough to use it consistently.
+> 
+> I double-checked all these drivers to ensure that all ioctl arguments
+> are used as pointers or are ignored, but are not interpreted as integer
+> values.
+> 
+> Acked-by: Jason Gunthorpe <jgg@mellanox.com>
+> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: David Sterba <dsterba@suse.com>
+> Acked-by: Darren Hart (VMware) <dvhart@infradead.org>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/android/binder.c                    | 2 +-
+>  drivers/crypto/qat/qat_common/adf_ctl_drv.c | 2 +-
+>  drivers/dma-buf/dma-buf.c                   | 4 +---
+>  drivers/dma-buf/sw_sync.c                   | 2 +-
+>  drivers/dma-buf/sync_file.c                 | 2 +-
+>  drivers/gpu/drm/amd/amdkfd/kfd_chardev.c    | 2 +-
+>  drivers/hid/hidraw.c                        | 4 +---
+>  drivers/iio/industrialio-core.c             | 2 +-
+>  drivers/infiniband/core/uverbs_main.c       | 4 ++--
+>  drivers/media/rc/lirc_dev.c                 | 4 +---
 
-On 2019-04-24 7:43 p.m., Nicolas Dufresne wrote:
-> Le mercredi 24 avril 2019 =C3=A0 18:54 +0200, Michel D=C3=A4nzer a =C3=A9=
-crit :
->> On 2019-04-24 5:44 p.m., Nicolas Dufresne wrote:
->>> Le mercredi 24 avril 2019 =C3=A0 17:06 +0200, Daniel Vetter a =C3=A9c=
-rit :
->>>> On Wed, Apr 24, 2019 at 4:41 PM Paul Kocialkowski
->>>> <paul.kocialkowski@bootlin.com> wrote:
->>>>> On Wed, 2019-04-24 at 16:39 +0200, Michel D=C3=A4nzer wrote:
->>>>>> On 2019-04-24 2:01 p.m., Nicolas Dufresne wrote:
->>>>>>> Rendering a video stream is more complex then what you describe h=
-ere.
->>>>>>> Whenever there is a unexpected delay (late delivery of a frame as=
- an
->>>>>>> example) you may endup in situation where one frame is ready afte=
-r the
->>>>>>> targeted vblank. If there is another frame that targets the follo=
-wing
->>>>>>> vblank that gets ready on-time, the previous frame should be repl=
-aced
->>>>>>> by the most recent one.
->>>>>>>
->>>>>>> With fences, what happens is that even if you received the next f=
-rame
->>>>>>> on time, naively replacing it is not possible, because we don't k=
-now
->>>>>>> when the fence for the next frame will be signalled. If you simpl=
-y
->>>>>>> always replace the current frame, you may endup skipping a lot mo=
-re
->>>>>>> vblank then what you expect, and that results in jumpy playback.
->>>>>>
->>>>>> So you want to be able to replace a queued flip with another one t=
-hen.
->>>>>> That doesn't necessarily require allowing more than one flip to be=
+If I understand your patch description well, using compat_ptr_ioctl
+only works if the driver is not for s390, right?
 
->>>>>> queued ahead of time.
->>>>>
->>>>> There might be other ways to do it, but this one has plenty of
->>>>> advantages.
->>>>
->>>> The point of kms (well one of the reasons) was to separate the
->>>> implementation of modesetting for specific hw from policy decisions
->>>> like which frames to drop and how to schedule them. Kernel gives
->>>> tools, userspace implements the actual protocols.
->>>>
->>>> There's definitely a bit a gap around scheduling flips for a specifi=
-c
->>>> frame or allowing to cancel/overwrite an already scheduled flip, but=
+In thesis, nothing prevents to use LIRC API on s390 - as this isn't
+a driver but, instead, RC core feature to expose raw remote controller
+codes to userspace.
 
->>>> no one yet has come up with a clear proposal for new uapi + example
->>>> implementation + userspace implementation + big enough support from
->>>> other compositors that this is what they want too.
->>
->> Actually, the ATOMIC_AMEND patches propose a way to replace a schedule=
-d
->> flip?
->>
->>
->>>>>> Note that this can also be done in userspace with explicit fencing=
- (by
->>>>>> only selecting a frame and submitting it to the kernel after all
->>>>>> corresponding fences have signalled), at least to some degree, but=
- the
->>>>>> kernel should be able to do it up to a later point in time and mor=
-e
->>>>>> reliably, with less risk of missing a flip for a frame which becom=
-es
->>>>>> ready just in time.
->>>>>
->>>>> Indeed, but it would be great if we could do that with implicit fen=
-cing
->>>>> as well.
->>>>
->>>> 1. extract implicit fences from dma-buf. This part is just an idea,
->>>> but easy to implement once we have someone who actually wants this.
->>>> All we need is a new ioctl on the dma-buf to export the fences from
->>>> the reservation_object as a sync_file (either the exclusive or the
->>>> shared ones, selected with a flag).
->>>> 2. do the exact same frame scheduling as with explicit fencing
->>>> 3. supply explicit fences in your atomic ioctl calls - these should
->>>> overrule any implicit fences (assuming correct kernel drivers, but w=
-e
->>>> have helpers so you can assume they all work correctly).
->>>>
->>>> By design this is possible, it's just that no one yet bothered enoug=
-h
->>>> to make it happen.
->>>> -Daniel
->>>
->>> I'm not sure I understand the workflow of this one. I'm all in favour=
+Yet, lirc_dev will only work if the system has a remote controller driver.
 
->>> leaving the hard work to userspace. Note that I have assumed explicit=
+Well, we don't have any for s390. Despite we don't have such driver, 
+I can't possible see why someone would use a remote controller for a
+mainframe :-p
 
->>> fences from the start, I don't think implicit fence will ever exist i=
-n
->>> v4l2, but I might be wrong. What I understood is that there was a
->>> previous attempt in the past but it raised more issues then it actual=
-ly
->>> solved. So that being said, how do handle exactly the follow use case=
-s:
->>>
->>>  - A frame was lost by capture driver, but it was schedule as being t=
-he
->>> next buffer to render (normally previous frame should remain).
->>
->> Userspace just doesn't call into the kernel to flip to the lost frame,=
+Anyway, if someone ever come with such driver/usecase, reverting this
+change (or adding an #ifdef to check if arch is 390) should be
+pretty straight forward.
 
->> so the previous one remains.
->=20
-> We are stuck in a loop you a me. Considering v4l2 to drm, where fences
-> don't exist on v4l2, it makes very little sense to bring up fences if
-> we are to wait on the fence in userspace.
+So:
 
-It makes sense insofar as no V4L specific code would be needed to make
-sure that the contents of a buffer produced via V4L aren't consumed
-before they're ready to be.
+Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
 
->>>  - The scheduled frame is late for the next vblank (didn't signal on-=
 
->>> time), a new one may be better for the next vlbank, but we will only
->>> know when it's fence is signaled.
->>
->> Userspace only selects a frame and submits it to the kernel after all
->> its fences have signalled.
->>
->>> Better in this context means the the presentation time of this frame =
-is
->>> closer to the next vblank time. Keep in mind that the idea is to
->>> schedule the frames before they are signal, in order to make the usag=
-e
->>> of the fence useful in lowering the latency.
->>
->> Fences are about signalling completion, not about low latency.
->=20
-> It can be used to remove a roundtrip with userspace at a very time
-> sensitive moment. If you pass a dmabuf with it's unsignalled fence to a=
+>  drivers/mfd/cros_ec_dev.c                   | 4 +---
+>  drivers/misc/vmw_vmci/vmci_host.c           | 2 +-
+>  drivers/nvdimm/bus.c                        | 4 ++--
+>  drivers/nvme/host/core.c                    | 2 +-
+>  drivers/pci/switch/switchtec.c              | 2 +-
+>  drivers/platform/x86/wmi.c                  | 2 +-
+>  drivers/rpmsg/rpmsg_char.c                  | 4 ++--
+>  drivers/sbus/char/display7seg.c             | 2 +-
+>  drivers/sbus/char/envctrl.c                 | 4 +---
+>  drivers/scsi/3w-xxxx.c                      | 4 +---
+>  drivers/scsi/cxlflash/main.c                | 2 +-
+>  drivers/scsi/esas2r/esas2r_main.c           | 2 +-
+>  drivers/scsi/pmcraid.c                      | 4 +---
+>  drivers/staging/android/ion/ion.c           | 4 +---
+>  drivers/staging/vme/devices/vme_user.c      | 2 +-
+>  drivers/tee/tee_core.c                      | 2 +-
+>  drivers/usb/class/cdc-wdm.c                 | 2 +-
+>  drivers/usb/class/usbtmc.c                  | 4 +---
+>  drivers/virt/fsl_hypervisor.c               | 2 +-
+>  fs/btrfs/super.c                            | 2 +-
+>  fs/ceph/dir.c                               | 2 +-
+>  fs/ceph/file.c                              | 2 +-
+>  fs/fuse/dev.c                               | 2 +-
+>  fs/notify/fanotify/fanotify_user.c          | 2 +-
+>  fs/userfaultfd.c                            | 2 +-
+>  net/rfkill/core.c                           | 2 +-
+>  36 files changed, 39 insertions(+), 57 deletions(-)
+> 
+> diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+> index 4b9c7ca492e6..48109ade7234 100644
+> --- a/drivers/android/binder.c
+> +++ b/drivers/android/binder.c
+> @@ -5998,7 +5998,7 @@ const struct file_operations binder_fops = {
+>  	.owner = THIS_MODULE,
+>  	.poll = binder_poll,
+>  	.unlocked_ioctl = binder_ioctl,
+> -	.compat_ioctl = binder_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.mmap = binder_mmap,
+>  	.open = binder_open,
+>  	.flush = binder_flush,
+> diff --git a/drivers/crypto/qat/qat_common/adf_ctl_drv.c b/drivers/crypto/qat/qat_common/adf_ctl_drv.c
+> index abc7a7f64d64..ef0e482ee04f 100644
+> --- a/drivers/crypto/qat/qat_common/adf_ctl_drv.c
+> +++ b/drivers/crypto/qat/qat_common/adf_ctl_drv.c
+> @@ -68,7 +68,7 @@ static long adf_ctl_ioctl(struct file *fp, unsigned int cmd, unsigned long arg);
+>  static const struct file_operations adf_ctl_ops = {
+>  	.owner = THIS_MODULE,
+>  	.unlocked_ioctl = adf_ctl_ioctl,
+> -	.compat_ioctl = adf_ctl_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  struct adf_ctl_drv_info {
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 7c858020d14b..0cb336fe6324 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -325,9 +325,7 @@ static const struct file_operations dma_buf_fops = {
+>  	.llseek		= dma_buf_llseek,
+>  	.poll		= dma_buf_poll,
+>  	.unlocked_ioctl	= dma_buf_ioctl,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl	= dma_buf_ioctl,
+> -#endif
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  };
+>  
+>  /*
+> diff --git a/drivers/dma-buf/sw_sync.c b/drivers/dma-buf/sw_sync.c
+> index 32dcf7b4c935..411de6a8a0ad 100644
+> --- a/drivers/dma-buf/sw_sync.c
+> +++ b/drivers/dma-buf/sw_sync.c
+> @@ -419,5 +419,5 @@ const struct file_operations sw_sync_debugfs_fops = {
+>  	.open           = sw_sync_debugfs_open,
+>  	.release        = sw_sync_debugfs_release,
+>  	.unlocked_ioctl = sw_sync_ioctl,
+> -	.compat_ioctl	= sw_sync_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  };
+> diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+> index 4f6305ca52c8..0949f91eb85f 100644
+> --- a/drivers/dma-buf/sync_file.c
+> +++ b/drivers/dma-buf/sync_file.c
+> @@ -488,5 +488,5 @@ static const struct file_operations sync_file_fops = {
+>  	.release = sync_file_release,
+>  	.poll = sync_file_poll,
+>  	.unlocked_ioctl = sync_file_ioctl,
+> -	.compat_ioctl = sync_file_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+> index 083bd8114db1..5d6ac7885aa7 100644
+> --- a/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
+> @@ -49,7 +49,7 @@ static const char kfd_dev_name[] = "kfd";
+>  static const struct file_operations kfd_fops = {
+>  	.owner = THIS_MODULE,
+>  	.unlocked_ioctl = kfd_ioctl,
+> -	.compat_ioctl = kfd_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.open = kfd_open,
+>  	.mmap = kfd_mmap,
+>  };
+> diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
+> index 9fc51eff1079..e7284d38b66d 100644
+> --- a/drivers/hid/hidraw.c
+> +++ b/drivers/hid/hidraw.c
+> @@ -476,9 +476,7 @@ static const struct file_operations hidraw_ops = {
+>  	.release =      hidraw_release,
+>  	.unlocked_ioctl = hidraw_ioctl,
+>  	.fasync =	hidraw_fasync,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl   = hidraw_ioctl,
+> -#endif
+> +	.compat_ioctl   = compat_ptr_ioctl,
+>  	.llseek =	noop_llseek,
+>  };
+>  
+> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> index 4700fd5d8c90..eed1bea257b4 100644
+> --- a/drivers/iio/industrialio-core.c
+> +++ b/drivers/iio/industrialio-core.c
+> @@ -1635,7 +1635,7 @@ static const struct file_operations iio_buffer_fileops = {
+>  	.owner = THIS_MODULE,
+>  	.llseek = noop_llseek,
+>  	.unlocked_ioctl = iio_ioctl,
+> -	.compat_ioctl = iio_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static int iio_check_unique_scan_index(struct iio_dev *indio_dev)
+> diff --git a/drivers/infiniband/core/uverbs_main.c b/drivers/infiniband/core/uverbs_main.c
+> index 70b7d80431a9..ac4321d7c800 100644
+> --- a/drivers/infiniband/core/uverbs_main.c
+> +++ b/drivers/infiniband/core/uverbs_main.c
+> @@ -1120,7 +1120,7 @@ static const struct file_operations uverbs_fops = {
+>  	.release = ib_uverbs_close,
+>  	.llseek	 = no_llseek,
+>  	.unlocked_ioctl = ib_uverbs_ioctl,
+> -	.compat_ioctl = ib_uverbs_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static const struct file_operations uverbs_mmap_fops = {
+> @@ -1131,7 +1131,7 @@ static const struct file_operations uverbs_mmap_fops = {
+>  	.release = ib_uverbs_close,
+>  	.llseek	 = no_llseek,
+>  	.unlocked_ioctl = ib_uverbs_ioctl,
+> -	.compat_ioctl = ib_uverbs_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static struct ib_client uverbs_client = {
+> diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
+> index f862f1b7f996..9ccc7e9cbc8e 100644
+> --- a/drivers/media/rc/lirc_dev.c
+> +++ b/drivers/media/rc/lirc_dev.c
+> @@ -730,9 +730,7 @@ static const struct file_operations lirc_fops = {
+>  	.owner		= THIS_MODULE,
+>  	.write		= ir_lirc_transmit_ir,
+>  	.unlocked_ioctl	= ir_lirc_ioctl,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl	= ir_lirc_ioctl,
+> -#endif
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  	.read		= ir_lirc_read,
+>  	.poll		= ir_lirc_poll,
+>  	.open		= ir_lirc_open,
+> diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+> index d275deaecb12..4a602a40d75c 100644
+> --- a/drivers/mfd/cros_ec_dev.c
+> +++ b/drivers/mfd/cros_ec_dev.c
+> @@ -251,9 +251,7 @@ static const struct file_operations fops = {
+>  	.release = ec_device_release,
+>  	.read = ec_device_read,
+>  	.unlocked_ioctl = ec_device_ioctl,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl = ec_device_ioctl,
+> -#endif
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static void cros_ec_class_release(struct device *dev)
+> diff --git a/drivers/misc/vmw_vmci/vmci_host.c b/drivers/misc/vmw_vmci/vmci_host.c
+> index 997f92543dd4..5bb406dabe85 100644
+> --- a/drivers/misc/vmw_vmci/vmci_host.c
+> +++ b/drivers/misc/vmw_vmci/vmci_host.c
+> @@ -969,7 +969,7 @@ static const struct file_operations vmuser_fops = {
+>  	.release	= vmci_host_close,
+>  	.poll		= vmci_host_poll,
+>  	.unlocked_ioctl	= vmci_host_unlocked_ioctl,
+> -	.compat_ioctl	= vmci_host_unlocked_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  };
+>  
+>  static struct miscdevice vmci_host_miscdev = {
+> diff --git a/drivers/nvdimm/bus.c b/drivers/nvdimm/bus.c
+> index 7bbff0af29b2..065ebd584482 100644
+> --- a/drivers/nvdimm/bus.c
+> +++ b/drivers/nvdimm/bus.c
+> @@ -1167,7 +1167,7 @@ static const struct file_operations nvdimm_bus_fops = {
+>  	.owner = THIS_MODULE,
+>  	.open = nd_open,
+>  	.unlocked_ioctl = nd_ioctl,
+> -	.compat_ioctl = nd_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.llseek = noop_llseek,
+>  };
+>  
+> @@ -1175,7 +1175,7 @@ static const struct file_operations nvdimm_fops = {
+>  	.owner = THIS_MODULE,
+>  	.open = nd_open,
+>  	.unlocked_ioctl = nvdimm_ioctl,
+> -	.compat_ioctl = nvdimm_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.llseek = noop_llseek,
+>  };
+>  
+> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+> index 2c43e12b70af..560929bee5ce 100644
+> --- a/drivers/nvme/host/core.c
+> +++ b/drivers/nvme/host/core.c
+> @@ -2739,7 +2739,7 @@ static const struct file_operations nvme_dev_fops = {
+>  	.owner		= THIS_MODULE,
+>  	.open		= nvme_dev_open,
+>  	.unlocked_ioctl	= nvme_dev_ioctl,
+> -	.compat_ioctl	= nvme_dev_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  };
+>  
+>  static ssize_t nvme_sysfs_reset(struct device *dev,
+> diff --git a/drivers/pci/switch/switchtec.c b/drivers/pci/switch/switchtec.c
+> index e22766c79fe9..3a54b4b616e2 100644
+> --- a/drivers/pci/switch/switchtec.c
+> +++ b/drivers/pci/switch/switchtec.c
+> @@ -1006,7 +1006,7 @@ static const struct file_operations switchtec_fops = {
+>  	.read = switchtec_dev_read,
+>  	.poll = switchtec_dev_poll,
+>  	.unlocked_ioctl = switchtec_dev_ioctl,
+> -	.compat_ioctl = switchtec_dev_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static void link_event_work(struct work_struct *work)
+> diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
+> index 7b26b6ccf1a0..dded9cef42f4 100644
+> --- a/drivers/platform/x86/wmi.c
+> +++ b/drivers/platform/x86/wmi.c
+> @@ -889,7 +889,7 @@ static const struct file_operations wmi_fops = {
+>  	.read		= wmi_char_read,
+>  	.open		= wmi_char_open,
+>  	.unlocked_ioctl	= wmi_ioctl,
+> -	.compat_ioctl	= wmi_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  };
+>  
+>  static int wmi_dev_probe(struct device *dev)
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index eea5ebbb5119..507bfe163883 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -290,7 +290,7 @@ static const struct file_operations rpmsg_eptdev_fops = {
+>  	.write_iter = rpmsg_eptdev_write_iter,
+>  	.poll = rpmsg_eptdev_poll,
+>  	.unlocked_ioctl = rpmsg_eptdev_ioctl,
+> -	.compat_ioctl = rpmsg_eptdev_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static ssize_t name_show(struct device *dev, struct device_attribute *attr,
+> @@ -451,7 +451,7 @@ static const struct file_operations rpmsg_ctrldev_fops = {
+>  	.open = rpmsg_ctrldev_open,
+>  	.release = rpmsg_ctrldev_release,
+>  	.unlocked_ioctl = rpmsg_ctrldev_ioctl,
+> -	.compat_ioctl = rpmsg_ctrldev_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static void rpmsg_ctrldev_release_device(struct device *dev)
+> diff --git a/drivers/sbus/char/display7seg.c b/drivers/sbus/char/display7seg.c
+> index a36e4cf1841d..c9f60656f54d 100644
+> --- a/drivers/sbus/char/display7seg.c
+> +++ b/drivers/sbus/char/display7seg.c
+> @@ -155,7 +155,7 @@ static long d7s_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
+>  static const struct file_operations d7s_fops = {
+>  	.owner =		THIS_MODULE,
+>  	.unlocked_ioctl =	d7s_ioctl,
+> -	.compat_ioctl =		d7s_ioctl,
+> +	.compat_ioctl =		compat_ptr_ioctl,
+>  	.open =			d7s_open,
+>  	.release =		d7s_release,
+>  	.llseek = noop_llseek,
+> diff --git a/drivers/sbus/char/envctrl.c b/drivers/sbus/char/envctrl.c
+> index 1a6e7224017c..dd2dfa85fc68 100644
+> --- a/drivers/sbus/char/envctrl.c
+> +++ b/drivers/sbus/char/envctrl.c
+> @@ -714,9 +714,7 @@ static const struct file_operations envctrl_fops = {
+>  	.owner =		THIS_MODULE,
+>  	.read =			envctrl_read,
+>  	.unlocked_ioctl =	envctrl_ioctl,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl =		envctrl_ioctl,
+> -#endif
+> +	.compat_ioctl =		compat_ptr_ioctl,
+>  	.open =			envctrl_open,
+>  	.release =		envctrl_release,
+>  	.llseek =		noop_llseek,
+> diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
+> index 2b1e0d503020..fb6444d0409c 100644
+> --- a/drivers/scsi/3w-xxxx.c
+> +++ b/drivers/scsi/3w-xxxx.c
+> @@ -1049,9 +1049,7 @@ static int tw_chrdev_open(struct inode *inode, struct file *file)
+>  static const struct file_operations tw_fops = {
+>  	.owner		= THIS_MODULE,
+>  	.unlocked_ioctl	= tw_chrdev_ioctl,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl   = tw_chrdev_ioctl,
+> -#endif
+> +	.compat_ioctl   = compat_ptr_ioctl,
+>  	.open		= tw_chrdev_open,
+>  	.release	= NULL,
+>  	.llseek		= noop_llseek,
+> diff --git a/drivers/scsi/cxlflash/main.c b/drivers/scsi/cxlflash/main.c
+> index 7096810fd222..e13d5de1d76e 100644
+> --- a/drivers/scsi/cxlflash/main.c
+> +++ b/drivers/scsi/cxlflash/main.c
+> @@ -3589,7 +3589,7 @@ static const struct file_operations cxlflash_chr_fops = {
+>  	.owner          = THIS_MODULE,
+>  	.open           = cxlflash_chr_open,
+>  	.unlocked_ioctl	= cxlflash_chr_ioctl,
+> -	.compat_ioctl	= cxlflash_chr_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  };
+>  
+>  /**
+> diff --git a/drivers/scsi/esas2r/esas2r_main.c b/drivers/scsi/esas2r/esas2r_main.c
+> index fdbda5c05aa0..80c5a235d193 100644
+> --- a/drivers/scsi/esas2r/esas2r_main.c
+> +++ b/drivers/scsi/esas2r/esas2r_main.c
+> @@ -613,7 +613,7 @@ static int __init esas2r_init(void)
+>  
+>  /* Handle ioctl calls to "/proc/scsi/esas2r/ATTOnode" */
+>  static const struct file_operations esas2r_proc_fops = {
+> -	.compat_ioctl	= esas2r_proc_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  	.unlocked_ioctl = esas2r_proc_ioctl,
+>  };
+>  
+> diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
+> index e338d7a4f571..c0a1a1218c56 100644
+> --- a/drivers/scsi/pmcraid.c
+> +++ b/drivers/scsi/pmcraid.c
+> @@ -3988,9 +3988,7 @@ static const struct file_operations pmcraid_fops = {
+>  	.open = pmcraid_chr_open,
+>  	.fasync = pmcraid_chr_fasync,
+>  	.unlocked_ioctl = pmcraid_chr_ioctl,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl = pmcraid_chr_ioctl,
+> -#endif
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.llseek = noop_llseek,
+>  };
+>  
+> diff --git a/drivers/staging/android/ion/ion.c b/drivers/staging/android/ion/ion.c
+> index 92c2914239e3..1663c163edca 100644
+> --- a/drivers/staging/android/ion/ion.c
+> +++ b/drivers/staging/android/ion/ion.c
+> @@ -567,9 +567,7 @@ static long ion_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  static const struct file_operations ion_fops = {
+>  	.owner          = THIS_MODULE,
+>  	.unlocked_ioctl = ion_ioctl,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl	= ion_ioctl,
+> -#endif
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  };
+>  
+>  static int debug_shrink_set(void *data, u64 val)
+> diff --git a/drivers/staging/vme/devices/vme_user.c b/drivers/staging/vme/devices/vme_user.c
+> index 6a33aaa1a49f..fd0ea4dbcb91 100644
+> --- a/drivers/staging/vme/devices/vme_user.c
+> +++ b/drivers/staging/vme/devices/vme_user.c
+> @@ -494,7 +494,7 @@ static const struct file_operations vme_user_fops = {
+>  	.write = vme_user_write,
+>  	.llseek = vme_user_llseek,
+>  	.unlocked_ioctl = vme_user_unlocked_ioctl,
+> -	.compat_ioctl = vme_user_unlocked_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.mmap = vme_user_mmap,
+>  };
+>  
+> diff --git a/drivers/tee/tee_core.c b/drivers/tee/tee_core.c
+> index 17c64fccbb10..eb97acf09868 100644
+> --- a/drivers/tee/tee_core.c
+> +++ b/drivers/tee/tee_core.c
+> @@ -684,7 +684,7 @@ static const struct file_operations tee_fops = {
+>  	.open = tee_open,
+>  	.release = tee_release,
+>  	.unlocked_ioctl = tee_ioctl,
+> -	.compat_ioctl = tee_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static void tee_release_device(struct device *dev)
+> diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+> index 9e9caff905d5..d48c032580d0 100644
+> --- a/drivers/usb/class/cdc-wdm.c
+> +++ b/drivers/usb/class/cdc-wdm.c
+> @@ -724,7 +724,7 @@ static const struct file_operations wdm_fops = {
+>  	.release =	wdm_release,
+>  	.poll =		wdm_poll,
+>  	.unlocked_ioctl = wdm_ioctl,
+> -	.compat_ioctl = wdm_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.llseek =	noop_llseek,
+>  };
+>  
+> diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+> index 4942122b2346..bbd0308b13f5 100644
+> --- a/drivers/usb/class/usbtmc.c
+> +++ b/drivers/usb/class/usbtmc.c
+> @@ -2220,9 +2220,7 @@ static const struct file_operations fops = {
+>  	.release	= usbtmc_release,
+>  	.flush		= usbtmc_flush,
+>  	.unlocked_ioctl	= usbtmc_ioctl,
+> -#ifdef CONFIG_COMPAT
+> -	.compat_ioctl	= usbtmc_ioctl,
+> -#endif
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  	.fasync         = usbtmc_fasync,
+>  	.poll           = usbtmc_poll,
+>  	.llseek		= default_llseek,
+> diff --git a/drivers/virt/fsl_hypervisor.c b/drivers/virt/fsl_hypervisor.c
+> index 8ba726e600e9..fbf02bf60f62 100644
+> --- a/drivers/virt/fsl_hypervisor.c
+> +++ b/drivers/virt/fsl_hypervisor.c
+> @@ -703,7 +703,7 @@ static const struct file_operations fsl_hv_fops = {
+>  	.poll = fsl_hv_poll,
+>  	.read = fsl_hv_read,
+>  	.unlocked_ioctl = fsl_hv_ioctl,
+> -	.compat_ioctl = fsl_hv_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  };
+>  
+>  static struct miscdevice fsl_hv_misc_dev = {
+> diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
+> index 120e4340792a..162ea4b6b417 100644
+> --- a/fs/btrfs/super.c
+> +++ b/fs/btrfs/super.c
+> @@ -2307,7 +2307,7 @@ static const struct super_operations btrfs_super_ops = {
+>  static const struct file_operations btrfs_ctl_fops = {
+>  	.open = btrfs_control_open,
+>  	.unlocked_ioctl	 = btrfs_control_ioctl,
+> -	.compat_ioctl = btrfs_control_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.owner	 = THIS_MODULE,
+>  	.llseek = noop_llseek,
+>  };
+> diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
+> index 7c060cb22aa3..a493b957713f 100644
+> --- a/fs/ceph/dir.c
+> +++ b/fs/ceph/dir.c
+> @@ -1785,7 +1785,7 @@ const struct file_operations ceph_dir_fops = {
+>  	.open = ceph_open,
+>  	.release = ceph_release,
+>  	.unlocked_ioctl = ceph_ioctl,
+> -	.compat_ioctl = ceph_ioctl,
+> +	.compat_ioctl = compat_ptr_ioctl,
+>  	.fsync = ceph_fsync,
+>  	.lock = ceph_lock,
+>  	.flock = ceph_flock,
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index 9f53c3d99304..9b5fe7eee3c1 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -2112,7 +2112,7 @@ const struct file_operations ceph_file_fops = {
+>  	.splice_read = generic_file_splice_read,
+>  	.splice_write = iter_file_splice_write,
+>  	.unlocked_ioctl = ceph_ioctl,
+> -	.compat_ioctl	= ceph_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  	.fallocate	= ceph_fallocate,
+>  	.copy_file_range = ceph_copy_file_range,
+>  };
+> diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+> index 9971a35cf1ef..dcdb26068b71 100644
+> --- a/fs/fuse/dev.c
+> +++ b/fs/fuse/dev.c
+> @@ -2354,7 +2354,7 @@ const struct file_operations fuse_dev_operations = {
+>  	.release	= fuse_dev_release,
+>  	.fasync		= fuse_dev_fasync,
+>  	.unlocked_ioctl = fuse_dev_ioctl,
+> -	.compat_ioctl   = fuse_dev_ioctl,
+> +	.compat_ioctl   = compat_ptr_ioctl,
+>  };
+>  EXPORT_SYMBOL_GPL(fuse_dev_operations);
+>  
+> diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+> index a90bb19dcfa2..a55aa029a308 100644
+> --- a/fs/notify/fanotify/fanotify_user.c
+> +++ b/fs/notify/fanotify/fanotify_user.c
+> @@ -523,7 +523,7 @@ static const struct file_operations fanotify_fops = {
+>  	.fasync		= NULL,
+>  	.release	= fanotify_release,
+>  	.unlocked_ioctl	= fanotify_ioctl,
+> -	.compat_ioctl	= fanotify_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  	.llseek		= noop_llseek,
+>  };
+>  
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 89800fc7dc9d..f93dcf8c996f 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -1901,7 +1901,7 @@ static const struct file_operations userfaultfd_fops = {
+>  	.poll		= userfaultfd_poll,
+>  	.read		= userfaultfd_read,
+>  	.unlocked_ioctl = userfaultfd_ioctl,
+> -	.compat_ioctl	= userfaultfd_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  	.llseek		= noop_llseek,
+>  };
+>  
+> diff --git a/net/rfkill/core.c b/net/rfkill/core.c
+> index abca57040f37..3b2f6ea44397 100644
+> --- a/net/rfkill/core.c
+> +++ b/net/rfkill/core.c
+> @@ -1323,7 +1323,7 @@ static const struct file_operations rfkill_fops = {
+>  	.release	= rfkill_fop_release,
+>  #ifdef CONFIG_RFKILL_INPUT
+>  	.unlocked_ioctl	= rfkill_fop_ioctl,
+> -	.compat_ioctl	= rfkill_fop_ioctl,
+> +	.compat_ioctl	= compat_ptr_ioctl,
+>  #endif
+>  	.llseek		= no_llseek,
+>  };
 
-> kernel driver, the driver can start the job on this dmabuf as soon as
-> the fence is signalled. If you always wait on a fence in userspace, you=
-
-> have to wait for the userspace process to be scheduled,
-
-I doubt this magically works without something like that (e.g. a
-workqueue, which runs in normal process context) in the kernel either. :)=
 
 
-> then userspace will setup the drm atomic request or similar action, whi=
-ch
-> may take some time and may require another process in the kernel to hav=
-e
-> to be schedule. This effectively adds some variable delay, a gap where
-> nothing is happening between two operations. This time is lost and
-> contributes to the overall operation latency.
-
-It only increases latency if it causes a flip to miss its target vblank,
-and it's not possible to know this happens at an unacceptable rate
-without trying. The prudent approach is to at least prototype a solution
-with as much complexity as possible in userspace first. If that turns
-out to perform too badly, then we can think about how to improve it by
-adding complexity in the kernel.
-
-
-> The benefit of fences we are looking for is being able to setup before
-> the fence is signalled the operations on various compatible drivers.
-> This way, on the time critical moment a driver can be feed more jobs,
-> there is no userspace rountrip involved.
-
-That is possible with other operations, just not with page flipping yet.
-
-
---=20
-Earthling Michel D=C3=A4nzer               |              https://www.amd=
-=2Ecom
-Libre software enthusiast             |             Mesa and X developer
-
-
---XMy5e4t38JTHemRMdAyY23YSxjokCppP8--
-
---2VcJrharQhz1ikiIY67gmutUhQ3MOiXtA
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EARECAB0WIQSwn681vpFFIZgJURRaga+OatuyAAUCXMHPpAAKCRBaga+Oatuy
-AMleAKCXj7uOVv+7unsA8XmBgHL4l+RIngCfQdfL/h1glH56Axxq+FXY52D93Cc=
-=R+QT
------END PGP SIGNATURE-----
-
---2VcJrharQhz1ikiIY67gmutUhQ3MOiXtA--
+Thanks,
+Mauro
