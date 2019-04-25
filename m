@@ -2,147 +2,82 @@ Return-Path: <SRS0=19ZY=S3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32ED5C282E3
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 07:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE1B7C282E1
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 07:19:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0B709218D3
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 07:13:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8722E20878
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 07:19:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389207AbfDYHNF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Apr 2019 03:13:05 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60366 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389185AbfDYHMz (ORCPT
+        id S1730128AbfDYHTL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Apr 2019 03:19:11 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:33541 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725970AbfDYHTL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Apr 2019 03:12:55 -0400
-Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 73DAB282F73;
-        Thu, 25 Apr 2019 08:12:54 +0100 (BST)
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>, kernel@collabora.com,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [PATCH v4 15/21] rockchip/vpu: Provide a helper to reset both src and dst formats
-Date:   Thu, 25 Apr 2019 09:12:36 +0200
-Message-Id: <20190425071242.18315-16-boris.brezillon@collabora.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190425071242.18315-1-boris.brezillon@collabora.com>
-References: <20190425071242.18315-1-boris.brezillon@collabora.com>
+        Thu, 25 Apr 2019 03:19:11 -0400
+Received: from [192.168.2.10] ([212.251.195.8])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id JYevhQJ7SZVjxJYeyhdeWd; Thu, 25 Apr 2019 09:19:09 +0200
+Subject: Re: [PATCH v2 3/4] media: dt-bindings: aspeed-video: Add missing
+ memory-region property
+To:     Rob Herring <robh@kernel.org>, Eddie James <eajames@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        andrew@aj.id.au, joel@jms.id.au, robh+dt@kernel.org,
+        mark.rutland@arm.com, mchehab@kernel.org
+References: <1556119020-7609-1-git-send-email-eajames@linux.ibm.com>
+ <1556119020-7609-4-git-send-email-eajames@linux.ibm.com>
+ <20190424211732.GA18914@bogus>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <6a8601d6-ad30-132c-f47a-adc3b4d39958@xs4all.nl>
+Date:   Thu, 25 Apr 2019 09:19:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190424211732.GA18914@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfCtoo9rYKWTgylJx6KmzVfVLqTrto/bB6UeLKqHf9zL8ZzPwCid3pO9BmHnAPlED9zWODgDhOQAOrc+aEN8Z6jx0OYDr8BptTz7gjDTFN79VpD0v5ecM
+ HRQnOk0lHl4CSyM0drczI7olrrZNz5p01lOsCmhI0gEY+40w+BmUmXzhqnN8L3hE1v+T9WAO8V+GHWngqT+9AHvTCLQXx1n0Tz1DKCawMWz9IK7oW0Du/vuk
+ 06uIjqJnQJzE38u4cPJfUWEUS7wLkxEa5ep5Yqpb/LLKeHt7qgh98UXZ4oUAVL1hiZ0R6vbpVn7rN9zuy6DAm7jEU8PGDqpauoAFyYSSqwZ+riTVHXwpFMkQ
+ RAROPyOSTUmTZ3jcCHgQ/Jss7HB8GJh8dkuTgKyz7JrV3LEhatR+qAuN4lxPLV7UdI4Uu2dVSphUR/Jn2uXp3Y0s4SPoRPuf+UdAvl5TrjgsnjgLYtJKGD/R
+ BbR32C0+Gskl3iZ4GmYhzMaAZ8hmjYGM7WStsA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When initializing a context, the core wants to reset both src and dst
-formats. Right now the order doesn't matter, but if we want to have a
-valid default width/height on the non-coded/raw format side (src in
-case of encoders, dst in case of decoders), we need to reset those
-formats in the right order: first the coded-format side, then the other,
-such that width and height on the raw format side can be taken from
-the coded format.
+On 4/24/19 11:17 PM, Rob Herring wrote:
+> On Wed, 24 Apr 2019 10:16:59 -0500, Eddie James wrote:
+>> Missed documenting this property in the initial commit.
+>>
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>> Changes since v1:
+>>  - Add missing semi-colon
+>>
+>>  Documentation/devicetree/bindings/media/aspeed-video.txt | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+> 
+> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+> there's no need to repost patches *only* to add the tags. The upstream
+> maintainer will do that for acks received on the version they apply.
+> 
+> If a tag was not added on purpose, please state why and what changed.
+> 
 
-Let's provide a helper that will reset both formats and make sure this
-is done in the right order.
+I noticed the same when I was processing this patch. I've added back your
+'Reviewed-by' tag.
 
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
----
-Changes from v2:
-* None
+So there is no need to repost, Eddie. Just remember this for the next
+time :-)
 
-Changes from v2:
-* New patch
----
- .../staging/media/rockchip/vpu/rockchip_vpu_drv.c  |  3 +--
- .../staging/media/rockchip/vpu/rockchip_vpu_v4l2.c | 14 ++++++++++----
- .../staging/media/rockchip/vpu/rockchip_vpu_v4l2.h |  5 +----
- 3 files changed, 12 insertions(+), 10 deletions(-)
+Regards,
 
-diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-index ec18578d55d7..d85b88067b03 100644
---- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-+++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-@@ -273,8 +273,7 @@ static int rockchip_vpu_open(struct file *filp)
- 	filp->private_data = &ctx->fh;
- 	v4l2_fh_add(&ctx->fh);
- 
--	rockchip_vpu_reset_dst_fmt(vpu, ctx);
--	rockchip_vpu_reset_src_fmt(vpu, ctx);
-+	rockchip_vpu_reset_fmts(ctx);
- 
- 	ret = rockchip_vpu_ctrls_setup(vpu, ctx);
- 	if (ret) {
-diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.c
-index bd019b64fcb2..f14cd6fdbcba 100644
---- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.c
-+++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.c
-@@ -262,8 +262,8 @@ vidioc_try_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
- 	return 0;
- }
- 
--void rockchip_vpu_reset_dst_fmt(struct rockchip_vpu_dev *vpu,
--				struct rockchip_vpu_ctx *ctx)
-+static void rockchip_vpu_reset_dst_fmt(struct rockchip_vpu_dev *vpu,
-+				       struct rockchip_vpu_ctx *ctx)
- {
- 	struct v4l2_pix_format_mplane *fmt = &ctx->dst_fmt;
- 
-@@ -287,8 +287,8 @@ void rockchip_vpu_reset_dst_fmt(struct rockchip_vpu_dev *vpu,
- 		fmt->width * fmt->height * ctx->vpu_dst_fmt->max_depth;
- }
- 
--void rockchip_vpu_reset_src_fmt(struct rockchip_vpu_dev *vpu,
--				struct rockchip_vpu_ctx *ctx)
-+static void rockchip_vpu_reset_src_fmt(struct rockchip_vpu_dev *vpu,
-+				       struct rockchip_vpu_ctx *ctx)
- {
- 	struct v4l2_pix_format_mplane *fmt = &ctx->src_fmt;
- 	unsigned int width, height;
-@@ -310,6 +310,12 @@ void rockchip_vpu_reset_src_fmt(struct rockchip_vpu_dev *vpu,
- 	v4l2_fill_pixfmt_mp(fmt, ctx->vpu_src_fmt->fourcc, width, height);
- }
- 
-+void rockchip_vpu_reset_fmts(struct rockchip_vpu_ctx *ctx)
-+{
-+	rockchip_vpu_reset_dst_fmt(ctx->dev, ctx);
-+	rockchip_vpu_reset_src_fmt(ctx->dev, ctx);
-+}
-+
- static int
- vidioc_s_fmt_out_mplane(struct file *file, void *priv, struct v4l2_format *f)
- {
-diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.h b/drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.h
-index 816bd3988218..493e8751d22d 100644
---- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.h
-+++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_v4l2.h
-@@ -21,9 +21,6 @@
- extern const struct v4l2_ioctl_ops rockchip_vpu_ioctl_ops;
- extern const struct vb2_ops rockchip_vpu_queue_ops;
- 
--void rockchip_vpu_reset_src_fmt(struct rockchip_vpu_dev *vpu,
--				struct rockchip_vpu_ctx *ctx);
--void rockchip_vpu_reset_dst_fmt(struct rockchip_vpu_dev *vpu,
--				struct rockchip_vpu_ctx *ctx);
-+void rockchip_vpu_reset_fmts(struct rockchip_vpu_ctx *ctx);
- 
- #endif /* ROCKCHIP_VPU_V4L2_H_ */
--- 
-2.20.1
-
+	Hans
