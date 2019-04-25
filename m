@@ -2,74 +2,116 @@ Return-Path: <SRS0=19ZY=S3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 847DFC43218
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24E04C43219
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:39:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0095F2067C
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:37:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E7CB2053B
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:39:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730674AbfDYShF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Apr 2019 14:37:05 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35426 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726964AbfDYShF (ORCPT
+        id S1726730AbfDYSjq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Apr 2019 14:39:46 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:57553 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726324AbfDYSjq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Apr 2019 14:37:05 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 7A0E928259F
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 5/5] media: coda: Clear the interrupt reason
-Date:   Thu, 25 Apr 2019 15:35:46 -0300
-Message-Id: <20190425183546.16244-6-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190425183546.16244-1-ezequiel@collabora.com>
+        Thu, 25 Apr 2019 14:39:46 -0400
+Received: from [192.168.2.10] ([212.251.195.8])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id JjHYhR1D5b8gSJjHbhoSNJ; Thu, 25 Apr 2019 20:39:44 +0200
+Subject: Re: [PATCH 1/5] media: coda: Print a nicer device registered message
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-media@vger.kernel.org
+Cc:     kernel@collabora.com
 References: <20190425183546.16244-1-ezequiel@collabora.com>
+ <20190425183546.16244-2-ezequiel@collabora.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <c2f859e4-970e-b30e-a367-fea7eab89132@xs4all.nl>
+Date:   Thu, 25 Apr 2019 20:39:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190425183546.16244-2-ezequiel@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfGfjUj97WkYilHUKwCbOT1ulIcyS+rtVHnORedUnhvneYa/zjm+bJi/chnuf68r8l07H/j4jMSMi3KcH5RSnB3CEd2N42osx5qoO7MpgzCHiNNIIz0zG
+ slL4fInx7oFGe2hqpuOi3P9DROeHTkuLbM0R8gMltLfOoEZzfLm6gDStlW6ZbhxZnJ6YAJkO9ybx34Uuw0dV91pAt2FLnOVri+D83kXAes9hJIvN5wnROSTy
+ EVCGeVNrdtB1VdYMH7rIFxgG8G1nBOyH6vVGPGYmoMPEbNh5RVWWOxgJYR9FqrOt
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This commit clears the interrupt reason (INT_REASON) register
-on the interrupt handler. Without this clearing, the CODA hardware
-has been observed to get completely stalled on CODA980 variants,
-requiring a pretty deep hardware reset.
+On 4/25/19 8:35 PM, Ezequiel Garcia wrote:
+> This is just a cosmetic change to print a more descriptive
+> message, to distinguish decoder from encoder:
+> 
+> So, instead of printing
+> 
+>   coda 2040000.vpu: codec registered as /dev/video[4-5]
+> 
+> With this change, the driver now prints
+> 
+>   coda 2040000.vpu: encoder registered as /dev/video4
+>   coda 2040000.vpu: decoder registered as /dev/video5
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+>  drivers/media/platform/coda/coda-common.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+> index 3ce58dee4422..1f53ca4effd2 100644
+> --- a/drivers/media/platform/coda/coda-common.c
+> +++ b/drivers/media/platform/coda/coda-common.c
+> @@ -2480,9 +2480,12 @@ static int coda_hw_init(struct coda_dev *dev)
+>  static int coda_register_device(struct coda_dev *dev, int i)
+>  {
+>  	struct video_device *vfd = &dev->vfd[i];
+> +	enum coda_inst_type type;
+> +	int ret;
+>  
+>  	if (i >= dev->devtype->num_vdevs)
+>  		return -EINVAL;
+> +	type = dev->devtype->vdevs[i]->type;
+>  
+>  	strscpy(vfd->name, dev->devtype->vdevs[i]->name, sizeof(vfd->name));
+>  	vfd->fops	= &coda_fops;
+> @@ -2498,7 +2501,12 @@ static int coda_register_device(struct coda_dev *dev, int i)
+>  	v4l2_disable_ioctl(vfd, VIDIOC_G_CROP);
+>  	v4l2_disable_ioctl(vfd, VIDIOC_S_CROP);
+>  
+> -	return video_register_device(vfd, VFL_TYPE_GRABBER, 0);
+> +	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
+> +	if (!ret)
+> +		v4l2_info(&dev->v4l2_dev, "%s registered as /dev/video%d\n",
+> +			  type == CODA_INST_ENCODER ? "encoder" : "decoder",
+> +			  vfd->num);
 
-The datasheet specifies that the INT_REASON register is set
-by the CODA hardware, and should be cleared by the host.
+You can use video_device_node_name() to print the video node name.
 
-While the CODA versions that are currently supported by this driver
-don't seem to need this change, it's a really small change,
-so it seems a wise thing to do to avoid hitting some
-rare race-condition in the hardware.
+Regards,
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- drivers/media/platform/coda/coda-bit.c | 1 +
- 1 file changed, 1 insertion(+)
+	Hans
 
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index bddd2f5c8c2b..a653aaa3ca15 100644
---- a/drivers/media/platform/coda/coda-bit.c
-+++ b/drivers/media/platform/coda/coda-bit.c
-@@ -2301,6 +2301,7 @@ irqreturn_t coda_irq_handler(int irq, void *data)
- 
- 	/* read status register to attend the IRQ */
- 	coda_read(dev, CODA_REG_BIT_INT_STATUS);
-+	coda_write(dev, 0, CODA_REG_BIT_INT_REASON);
- 	coda_write(dev, CODA_REG_BIT_INT_CLEAR_SET,
- 		      CODA_REG_BIT_INT_CLEAR);
- 
--- 
-2.20.1
+> +	return ret;
+>  }
+>  
+>  static void coda_copy_firmware(struct coda_dev *dev, const u8 * const buf,
+> @@ -2612,9 +2620,6 @@ static void coda_fw_callback(const struct firmware *fw, void *context)
+>  		}
+>  	}
+>  
+> -	v4l2_info(&dev->v4l2_dev, "codec registered as /dev/video[%d-%d]\n",
+> -		  dev->vfd[0].num, dev->vfd[i - 1].num);
+> -
+>  	pm_runtime_put_sync(&pdev->dev);
+>  	return;
+>  
+> 
 
