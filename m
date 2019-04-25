@@ -2,119 +2,175 @@ Return-Path: <SRS0=19ZY=S3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7447C43219
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 14:09:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BEC1C43218
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 14:29:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C0D382077C
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 14:09:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2906220717
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 14:29:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727250AbfDYOJC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Apr 2019 10:09:02 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50026 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725965AbfDYOJC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Apr 2019 10:09:02 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 8F142ABCE;
-        Thu, 25 Apr 2019 14:09:00 +0000 (UTC)
-Message-ID: <1556201335.11912.6.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in dvb_usb_device_exit
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>, andreyknvl@google.com,
-        syzkaller-bugs@googlegroups.com, mchehab@kernel.org,
-        corbet@lwn.net,
-        syzbot <syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Date:   Thu, 25 Apr 2019 16:08:55 +0200
-In-Reply-To: <9cfe433e-426e-19d1-9cb8-5bc2ba17145b@xs4all.nl>
-References: <000000000000789d3d058653d9bb@google.com>
-         <1555326745.13626.10.camel@suse.com>
-         <9cfe433e-426e-19d1-9cb8-5bc2ba17145b@xs4all.nl>
+        id S1727290AbfDYO2y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Apr 2019 10:28:54 -0400
+Received: from shell.v3.sk ([90.176.6.54]:44518 "EHLO shell.v3.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725937AbfDYO2y (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 25 Apr 2019 10:28:54 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id EB596103095;
+        Thu, 25 Apr 2019 16:28:49 +0200 (CEST)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Cp4cTpcxYXrp; Thu, 25 Apr 2019 16:28:46 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 0EB08103096;
+        Thu, 25 Apr 2019 16:28:46 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id mVBNlyvfa4b2; Thu, 25 Apr 2019 16:28:45 +0200 (CEST)
+Received: from belphegor (nat-pool-brq-t.redhat.com [213.175.37.10])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id C951F103095;
+        Thu, 25 Apr 2019 16:28:44 +0200 (CEST)
+Message-ID: <b00ee1e4c394f5d71612eb4b0207f91e9d24b793.camel@v3.sk>
+Subject: Re: [PATCH v3 05/14] media: dt-bindings: marvell,mmp2-ccic: Add
+ Marvell MMP2 camera
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     jacopo mondi <jacopo@jmondi.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-media@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        James Cameron <quozl@laptop.org>, Pavel Machek <pavel@ucw.cz>,
+        Libin Yang <lbyang@marvell.com>,
+        Albert Wang <twang13@marvell.com>
+Date:   Thu, 25 Apr 2019 16:28:44 +0200
+In-Reply-To: <20181122200341.GA8279@w540>
+References: <20181120100318.367987-1-lkundrak@v3.sk>
+         <20181120100318.367987-6-lkundrak@v3.sk> <20181122200341.GA8279@w540>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+User-Agent: Evolution 3.32.1 (3.32.1-1.fc30) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mi, 2019-04-24 at 16:09 +0200, Hans Verkuil wrote:
-> On 4/15/19 1:12 PM, Oliver Neukum wrote:
-> > On Fr, 2019-04-12 at 04:46 -0700, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot found the following crash on:
-> > > 
-> > > HEAD commit:    9a33b369 usb-fuzzer: main usb gadget fuzzer driver
-> > > git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1643974b200000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=23e37f59d94ddd15
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=26ec41e9f788b3eba396
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12f5efa7200000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1395a0f3200000
-> > > 
-> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
-> > > 
-> > > dvb-usb: schedule remote query interval to 150 msecs.
-> > > dw2102: su3000_power_ctrl: 0, initialized 1
-> > > dvb-usb: TeVii S421 PCI successfully initialized and connected.
-> > > usb 1-1: USB disconnect, device number 2
-> > 
-> > Hi,
-> > 
-> > proposed fix. If nobody objects, I will submit it.
-> > 
-> > 	Regards
-> > 		Oliver
-> > 
-> > From d6097d205ac61745334b79639d3b8b910ae66c71 Mon Sep 17 00:00:00 2001
-> > From: Oliver Neukum <oneukum@suse.com>
-> > Date: Mon, 15 Apr 2019 13:06:01 +0200
-> > Subject: [PATCH] dvb: usb: fix use after free in dvb_usb_device_exit
-> > 
-> > dvb_usb_device_exit() frees and uses teh device name in that order
-> > Fix by storing the name in a buffer before freeing it
-> > 
-> > Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> > Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
-> > ---
-> >  drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> > index 99951e02a880..2e1670cc3903 100644
-> > --- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> > +++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-> > @@ -288,13 +288,18 @@ void dvb_usb_device_exit(struct usb_interface *intf)
-> >  {
-> >  	struct dvb_usb_device *d = usb_get_intfdata(intf);
-> >  	const char *name = "generic DVB-USB module";
-> > +	char identifier[40];
-> >  
-> >  	usb_set_intfdata(intf, NULL);
-> >  	if (d != NULL && d->desc != NULL) {
-> >  		name = d->desc->name;
-> > +		memcpy(identifier, name, 39);
-> > +		identifier[39] = NULL;
-> >  		dvb_usb_exit(d);
+On Thu, 2018-11-22 at 21:08 +0100, jacopo mondi wrote:
+> Hi Lubomir,
 > 
-> Why not just move this to after the info()? You'll need to repeat the
-> 'if' in that case, but that way there is no need to memcpy anything.
+> On Tue, Nov 20, 2018 at 11:03:10AM +0100, Lubomir Rintel wrote:
+> > Add Marvell MMP2 camera host interface.
+> > 
+> > Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+> > 
+> > ---
+> > Changes since v2:
+> > - Added #clock-cells, clock-names, port
+> > 
+> >  .../bindings/media/marvell,mmp2-ccic.txt      | 37 +++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/marvell,mmp2-ccic.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.txt b/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.txt
+> > new file mode 100644
+> > index 000000000000..e5e8ca90e7f7
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.txt
+> > @@ -0,0 +1,37 @@
+> > +Marvell MMP2 camera host interface
+> > +
+> > +Required properties:
+> > + - compatible: Should be "marvell,mmp2-ccic"
+> > + - reg: register base and size
+> > + - interrupts: the interrupt number
+> > + - #clock-cells: must be 0
+> > + - any required generic properties defined in video-interfaces.txt
+> 
+> I don't think video-interfaces applies here. It described bindings to
+> be used for endpoint and port nodes.
 
-The info() would make the incorrect claim that something has been
-freed. It looks to me like it exists to guarantee that you know that
-nothing hung while freeing.
+Yes. Will fix.
 
-	Regards
-		Oliver
+> > +
+> > +Optional properties:
+> > + - clocks: input clock (see clock-bindings.txt)
+> 
+> What do you think of:
+> "reference to the input clock as specified by clock-bindings.txt"
+
+Sounds good; I'll use that.
+
+> > + - clock-names: names of the clocks used, may include "axi", "func" and
+> > +                "phy"
+> 
+> "may include" is abit vague. Which clock should the interface be
+> powered from, and in which case?
+
+I did this somewhat intentionally, because the hardware documentation
+is secret and the only clue about the clocks comes from what is
+actually implemented in the driver.
+
+I think I can still improve it somehow though, without too much risk of
+stating things incorrectly.
+
+> > + - clock-output-names: should contain the name of the clock driving the
+> > +                       sensor master clock MCLK
+> 
+> This is a property for the clock provider part, and I will just list
+> the only clock this interfaces provides here:
+> 
+>     - clock-output-names: Optional clock source for sensors. Shall be "mclk".
+
+Thanks, will fix in next patch version.
+
+> See a comment on patch 14 on the use of the clock provider part.
+> 
+> > +
+> > +Required subnodes:
+> > + - port: the parallel bus interface port with a single endpoint linked to
+> > +         the sensor's endpoint as described in video-interfaces.txt
+> > +
+> > +Example:
+> > +
+> > +	camera0: camera@d420a000 {
+> > +		compatible = "marvell,mmp2-ccic";
+> > +		reg = <0xd420a000 0x800>;
+> > +		interrupts = <42>;
+> > +		clocks = <&soc_clocks MMP2_CLK_CCIC0>;
+> > +		clock-names = "axi";
+> > +		#clock-cells = <0>;
+> > +		clock-output-names = "mclk";
+> > +
+> > +		port {
+> > +			camera0_0: endpoint {
+> > +				remote-endpoint = <&ov7670_0>;
+> 
+> I'm debated, your sensor does not support configuring the parallel bus,
+> that's fine, but as "bindings describe hardware" shouldn't you list
+> here the bus configurations the HW interface supports and list their default
+> values? Or there are none for real in this platform?
+
+Hard to tell, given Marvell won't publish the documentation.
+
+The driver seems to have some rudimentary support for bus-type of
+<V4L2_MBUS_CSI2_DPHY>, but I have no idea whether it's on MMP2
+hardware. The 16x documentation, that may or may not be relevant, only
+lists parallel formats.
+
+I'd prefer not to take risks of making wrong guesses and don't list I
+can not verify to be correct.
+
+> Thanks
+>   j
+
+There are points above I have not responded to. I'll address them in
+the next version of the patch.
+
+Thank you
+Lubo
 
