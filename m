@@ -2,35 +2,37 @@ Return-Path: <SRS0=19ZY=S3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 937D7C43218
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61545C43218
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:36:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F31C92067C
-	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:36:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7C7120717
+	for <linux-media@archiver.kernel.org>; Thu, 25 Apr 2019 18:36:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727331AbfDYSgw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Apr 2019 14:36:52 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35394 "EHLO
+        id S1727913AbfDYSgz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Apr 2019 14:36:55 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35400 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbfDYSgw (ORCPT
+        with ESMTP id S1725941AbfDYSgz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Apr 2019 14:36:52 -0400
+        Thu, 25 Apr 2019 14:36:55 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 4CC912841F1
+        with ESMTPSA id 6BDD4282215
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     Philipp Zabel <p.zabel@pengutronix.de>,
         linux-media@vger.kernel.org,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Cc:     kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 0/5] Assorted CODA fixes
-Date:   Thu, 25 Apr 2019 15:35:41 -0300
-Message-Id: <20190425183546.16244-1-ezequiel@collabora.com>
+Subject: [PATCH 1/5] media: coda: Print a nicer device registered message
+Date:   Thu, 25 Apr 2019 15:35:42 -0300
+Message-Id: <20190425183546.16244-2-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190425183546.16244-1-ezequiel@collabora.com>
+References: <20190425183546.16244-1-ezequiel@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -38,41 +40,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While working on a SoC with CODA980 (currently not supported by the
-driver), I came across some low-hanging fruit that looked worth
-addressing.
+This is just a cosmetic change to print a more descriptive
+message, to distinguish decoder from encoder:
 
-Patch 1 is just a cosmetic change to print a different "more standard"
-device registered message, if such thing exists.
+So, instead of printing
 
-Patches 2 to 4 address unneeded usage of threaded interrupt and deferred
-worker. Careful code inspection shows the interrupt can be serviced
-on a normal handler.
+  coda 2040000.vpu: codec registered as /dev/video[4-5]
 
-In this regard, the driver is still waiting for job completion in
-the .device_run hook, which the framework already does. Therefore,
-there are two waits: one in the driver, one in the mem2mem core.
+With this change, the driver now prints
 
-Please note that I'm not addressing this for now.
+  coda 2040000.vpu: encoder registered as /dev/video4
+  coda 2040000.vpu: decoder registered as /dev/video5
 
-Finally, patch 5 clears a hardware register called INT_REASON.
-Without this clearing the firmware has been found to get stuck
-on our CODA980. I believe this fix might be useful to carry upstream,
-because it's so small and we have some  indications that it's actually
-the right thing to do.
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ drivers/media/platform/coda/coda-common.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Ezequiel Garcia (5):
-  media: coda: Print a nicer device registered message
-  media: coda: Remove unbalanced and unneeded mutex unlock
-  media: coda: Replace the threaded interrupt with a hard interrupt
-  media: coda: Remove pic_run_work worker
-  media: coda: Clear the interrupt reason
-
- drivers/media/platform/coda/coda-bit.c    |  2 +-
- drivers/media/platform/coda/coda-common.c | 26 ++++++++++-------------
- drivers/media/platform/coda/coda.h        |  1 -
- 3 files changed, 12 insertions(+), 17 deletions(-)
-
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 3ce58dee4422..1f53ca4effd2 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -2480,9 +2480,12 @@ static int coda_hw_init(struct coda_dev *dev)
+ static int coda_register_device(struct coda_dev *dev, int i)
+ {
+ 	struct video_device *vfd = &dev->vfd[i];
++	enum coda_inst_type type;
++	int ret;
+ 
+ 	if (i >= dev->devtype->num_vdevs)
+ 		return -EINVAL;
++	type = dev->devtype->vdevs[i]->type;
+ 
+ 	strscpy(vfd->name, dev->devtype->vdevs[i]->name, sizeof(vfd->name));
+ 	vfd->fops	= &coda_fops;
+@@ -2498,7 +2501,12 @@ static int coda_register_device(struct coda_dev *dev, int i)
+ 	v4l2_disable_ioctl(vfd, VIDIOC_G_CROP);
+ 	v4l2_disable_ioctl(vfd, VIDIOC_S_CROP);
+ 
+-	return video_register_device(vfd, VFL_TYPE_GRABBER, 0);
++	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
++	if (!ret)
++		v4l2_info(&dev->v4l2_dev, "%s registered as /dev/video%d\n",
++			  type == CODA_INST_ENCODER ? "encoder" : "decoder",
++			  vfd->num);
++	return ret;
+ }
+ 
+ static void coda_copy_firmware(struct coda_dev *dev, const u8 * const buf,
+@@ -2612,9 +2620,6 @@ static void coda_fw_callback(const struct firmware *fw, void *context)
+ 		}
+ 	}
+ 
+-	v4l2_info(&dev->v4l2_dev, "codec registered as /dev/video[%d-%d]\n",
+-		  dev->vfd[0].num, dev->vfd[i - 1].num);
+-
+ 	pm_runtime_put_sync(&pdev->dev);
+ 	return;
+ 
 -- 
 2.20.1
 
