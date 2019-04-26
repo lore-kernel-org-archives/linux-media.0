@@ -2,201 +2,422 @@ Return-Path: <SRS0=gA2F=S4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52243C43219
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05D06C43218
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:58:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 20BC0208CA
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:28:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD494206E0
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:58:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbfDZQ2Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 12:28:16 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:37303 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726005AbfDZQ2Q (ORCPT
+        id S1726197AbfDZQ6e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 12:58:34 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40054 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726154AbfDZQ6d (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 12:28:16 -0400
-X-Originating-IP: 93.29.109.196
-Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9710BE000A;
-        Fri, 26 Apr 2019 16:28:12 +0000 (UTC)
-Message-ID: <2023690a879a1d30b8a686962326dd18a77156f3.camel@bootlin.com>
-Subject: Re: [PATCH v4] media: docs-rst: Document m2m stateless video
- decoder interface
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Tomasz Figa <tfiga@chromium.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Dafna Hirschfeld <dafna3@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Fri, 26 Apr 2019 18:28:12 +0200
-In-Reply-To: <793af82c-6b37-6f69-648e-2cd2a2e87645@xs4all.nl>
-References: <20190306080019.159676-1-acourbot@chromium.org>
-         <371df0e4ec9e38d83d11171cbd98f19954cbf787.camel@ndufresne.ca>
-         <da5aa9ab957923a72e30b169a3c242c4fe6260f1.camel@bootlin.com>
-         <c07703459c7e48904bd7fd83be1e675c70eee83c.camel@ndufresne.ca>
-         <d81d0112b99feba0a1899f3722077a4aeec9860c.camel@bootlin.com>
-         <439b7f57aa3ba2b2ed5b043f961ef87cb83912af.camel@ndufresne.ca>
-         <59e23c5ca5bfbadf9441ea06da2e9b9b5898c6d7.camel@bootlin.com>
-         <0b495143bb260cf9f8927ee541e7f001842ac5c3.camel@ndufresne.ca>
-         <CAPBb6MVG+3jQcw3AuhYDYCZ0YJ0aX=TmEuM5izh12GLw9V6B8Q@mail.gmail.com>
-         <793af82c-6b37-6f69-648e-2cd2a2e87645@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.0 
+        Fri, 26 Apr 2019 12:58:33 -0400
+Received: from [IPv6:2804:214:82b9:c466:36a8:60fb:3e79:2f43] (unknown [IPv6:2804:214:82b9:c466:36a8:60fb:3e79:2f43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: koike)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B453D281F8A;
+        Fri, 26 Apr 2019 17:58:28 +0100 (BST)
+Subject: Re: [PATCH v4 04/14] media: Move sp2mp functions to v4l2-common
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, kernel@collabora.com,
+        lucmaga@gmail.com, lkcamp@lists.libreplanetbr.org
+References: <20190426012223.17826-1-andrealmeid@collabora.com>
+ <20190426012223.17826-5-andrealmeid@collabora.com>
+From:   Helen Koike <helen.koike@collabora.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=helen.koike@collabora.com; keydata=
+ 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
+Message-ID: <0a1546bb-642a-4360-cacf-eb100919544d@collabora.com>
+Date:   Fri, 26 Apr 2019 13:58:22 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <20190426012223.17826-5-andrealmeid@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
 
-Le vendredi 26 avril 2019 à 16:18 +0200, Hans Verkuil a écrit :
-> On 4/16/19 9:22 AM, Alexandre Courbot wrote:
-> 
-> <snip>
-> 
-> > Thanks for this great discussion. Let me try to summarize the status
-> > of this thread + the IRC discussion and add my own thoughts:
-> > 
-> > Proper support for multiple decoding units (e.g. H.264 slices) per
-> > frame should not be an afterthought ; compliance to encoded formats
-> > depend on it, and the benefit of lower latency is a significant
-> > consideration for vendors.
-> > 
-> > m2m, which we use for all stateless codecs, has a strong assumption
-> > that one OUTPUT buffer consumed results in one CAPTURE buffer being
-> > produced. This assumption can however be overruled: at least the venus
-> > driver does it to implement the stateful specification.
-> > 
-> > So we need a way to specify frame boundaries when submitting encoded
-> > content to the driver. One request should contain a single OUTPUT
-> > buffer, containing a single decoding unit, but we need a way to
-> > specify whether the driver should directly produce a CAPTURE buffer
-> > from this request, or keep using the same CAPTURE buffer with
-> > subsequent requests.
-> > 
-> > I can think of 2 ways this can be expressed:
-> > 1) We keep the current m2m behavior as the default (a CAPTURE buffer
-> > is produced), and add a flag to ask the driver to change that behavior
-> > and hold on the CAPTURE buffer and reuse it with the next request(s) ;
-> > 2) We specify that no CAPTURE buffer is produced by default, unless a
-> > flag asking so is specified.
-> > 
-> > The flag could be specified in one of two ways:
-> > a) As a new v4l2_buffer.flag for the OUTPUT buffer ;
-> > b) As a dedicated control, either format-specific or more common to all codecs.
-> > 
-> > I tend to favor 2) and b) for this, for the reason that with H.264 at
-> > least, user-space does not know whether a slice is the last slice of a
-> > frame until it starts parsing the next one, and we don't know when we
-> > will receive it. If we use a control to ask that a CAPTURE buffer be
-> > produced, we can always submit another request with only that control
-> > set once it is clear that the frame is complete (and not delay
-> > decoding meanwhile). In practice I am not that familiar with
-> > latency-sensitive streaming ; maybe a smart streamer would just append
-> > an AUD NAL unit at the end of every frame and we can thus submit the
-> > flag it with the last slice without further delay?
-> > 
-> > An extra constraint to enforce would be that each decoding unit
-> > belonging to the same frame must be submitted with the same timestamp,
-> > otherwise the request submission would fail. We really need a
-> > framework to enforce all this at a higher level than individual
-> > drivers, once we reach an agreement I will start working on this.
-> > 
-> > Formats that do not support multiple decoding units per frame would
-> > reject any request that does not carry the end-of-frame information.
-> > 
-> > Anything missing / any further comment?
-> > 
-> 
-> After reading through this thread and a further irc discussion I now
-> understand the problem. I think there are several ways this can be
-> solved, but I think this is the easiest:
-> 
-> Introduce a new V4L2_BUF_FLAG_HOLD_CAPTURE_BUFFER flag.
-> 
-> If set in the OUTPUT buffer, then don't mark the CAPTURE buffer as
-> done after processing the OUTPUT buffer.
-> 
-> If an OUTPUT buffer was queued with a different timestamp than was
-> used for the currently held CAPTURE buffer, then mark that CAPTURE
-> buffer as done before starting processing this OUTPUT buffer.
-> 
-> In other words, for slicing you can just always set this flag and
-> group the slices by the OUTPUT timestamp. If you know that you
-> reached the last slice of a frame, then you can optionally clear the
-> flag to ensure the CAPTURE buffer is marked done without having to wait
-> for the first slice of the next frame to arrive.
-> 
-> Potential disadvantage of this approach is that this relies on the
-> OUTPUT timestamp to be the same for all slices of the same frame.
-> 
-> Which sounds reasonable to me.
-> 
-> In addition add a V4L2_BUF_CAP_SUPPORTS_HOLD_CAPTURE_BUFFER
-> capability to signal support for this flag.
-> 
-> I think this can be fairly easily implemented in v4l2-mem2mem.c.
-> 
-> In addition, this approach is not specific to codecs, it can be
-> used elsewhere as well (composing multiple output buffers into one
-> capture buffer is one use-case that comes to mind).
-> 
-> Comments? Other ideas?
 
-One remark I have: this implies that the order in which requests are
-decoded will match the order in which they are submitted (in order to
-be rely on the last slice being marked as such).
+On 4/25/19 10:22 PM, André Almeida wrote:
+> Move sp2mp functions from vivid code to v4l2-common as it will be reused
+> by vimc driver for multiplanar support.
+> 
+> Signed-off-by: André Almeida <andrealmeid@collabora.com>
 
-In the future, we might want to be ablle to add support for parallel
-decoders that could handle multiple slices concurrently. I don't think
-the M2M internal API is ready for that currently, but it could
-certainly be extended to allow that eventually. In that case, we can't
-rely on the order in which slices will complete their decoding and the
-one slice that was marking the end of the frame may be decoded sooner
-than other slices scheduled at the same time. In this case, we end up
-having to wait for a new frame in order to mark the destination buffer
-as done, which introduces a major latency issue for the frame.
+Acked-by: Helen Koike <helen.koike@collabora.com>
 
-So I think the problem we should be trying to resolve should be
-formulated in terms of marking the end of a group of requests as done. 
-
-For that, my proposal is to solve the issue at the media API level, by
-introducing an entity representing a group of requests that share the
-same destination buffer. The idea would be that requests are added to
-that entity when they are submitted, and a field in the submit ioctl
-would indicate whether the request is the last one of the batch.
-
-The destination buffer gets picked up when the first request is
-processed and all subsequent requests grouped in the entity use the
-same one. Then, we can have the media core ensure that all the requests
-of that entity are completed and that the last element of the batch was
-submitted before marking the destination buffer as done.
-
-This presents a few advantages:
-- Userspace has a straightforward interface to group the completion of
-requests, which is independent from both our use case and v4l2;
-- This mechanism can then be used in other situations where grouping
-the completion of different requests is desirable: for instance, it
-could be used to sync two source feeds that need to be displayed
-synchronized;
-- Userspace can poll on a single file descriptor representing the
-entity, instead of having to do the book keeping of checking that each
-request was completed before dealing with the decoded buffer.
-
-What do you think?
-
-Cheers,
-
-Paul
-
+> ---
+> Changes in v4: none
+> 
+> Changes in v3:
+> - Change commit order
+> - Reword comments
+> 
+> Changes in v2:
+> - Fix indentation
+> - Change the style of comments. Functions now have a shorter title and a
+> better description bellow
+> 
+>  drivers/media/platform/vivid/vivid-vid-cap.c  |  6 +-
+>  .../media/platform/vivid/vivid-vid-common.c   | 59 ------------------
+>  .../media/platform/vivid/vivid-vid-common.h   |  9 ---
+>  drivers/media/platform/vivid/vivid-vid-out.c  |  6 +-
+>  drivers/media/v4l2-core/v4l2-common.c         | 62 +++++++++++++++++++
+>  include/media/v4l2-common.h                   | 37 +++++++++++
+>  6 files changed, 105 insertions(+), 74 deletions(-)
+> 
+> diff --git a/drivers/media/platform/vivid/vivid-vid-cap.c b/drivers/media/platform/vivid/vivid-vid-cap.c
+> index 530ac8decb25..208f1094b998 100644
+> --- a/drivers/media/platform/vivid/vivid-vid-cap.c
+> +++ b/drivers/media/platform/vivid/vivid-vid-cap.c
+> @@ -815,7 +815,7 @@ int vidioc_g_fmt_vid_cap(struct file *file, void *priv,
+>  
+>  	if (dev->multiplanar)
+>  		return -ENOTTY;
+> -	return fmt_sp2mp_func(file, priv, f, vivid_g_fmt_vid_cap);
+> +	return v4l2_fmt_sp2mp_func(file, priv, f, vivid_g_fmt_vid_cap);
+>  }
+>  
+>  int vidioc_try_fmt_vid_cap(struct file *file, void *priv,
+> @@ -825,7 +825,7 @@ int vidioc_try_fmt_vid_cap(struct file *file, void *priv,
+>  
+>  	if (dev->multiplanar)
+>  		return -ENOTTY;
+> -	return fmt_sp2mp_func(file, priv, f, vivid_try_fmt_vid_cap);
+> +	return v4l2_fmt_sp2mp_func(file, priv, f, vivid_try_fmt_vid_cap);
+>  }
+>  
+>  int vidioc_s_fmt_vid_cap(struct file *file, void *priv,
+> @@ -835,7 +835,7 @@ int vidioc_s_fmt_vid_cap(struct file *file, void *priv,
+>  
+>  	if (dev->multiplanar)
+>  		return -ENOTTY;
+> -	return fmt_sp2mp_func(file, priv, f, vivid_s_fmt_vid_cap);
+> +	return v4l2_fmt_sp2mp_func(file, priv, f, vivid_s_fmt_vid_cap);
+>  }
+>  
+>  int vivid_vid_cap_g_selection(struct file *file, void *priv,
+> diff --git a/drivers/media/platform/vivid/vivid-vid-common.c b/drivers/media/platform/vivid/vivid-vid-common.c
+> index 74b83bcc6119..3dd3a05d2e67 100644
+> --- a/drivers/media/platform/vivid/vivid-vid-common.c
+> +++ b/drivers/media/platform/vivid/vivid-vid-common.c
+> @@ -674,65 +674,6 @@ void vivid_send_source_change(struct vivid_dev *dev, unsigned type)
+>  	}
+>  }
+>  
+> -/*
+> - * Conversion function that converts a single-planar format to a
+> - * single-plane multiplanar format.
+> - */
+> -void fmt_sp2mp(const struct v4l2_format *sp_fmt, struct v4l2_format *mp_fmt)
+> -{
+> -	struct v4l2_pix_format_mplane *mp = &mp_fmt->fmt.pix_mp;
+> -	struct v4l2_plane_pix_format *ppix = &mp->plane_fmt[0];
+> -	const struct v4l2_pix_format *pix = &sp_fmt->fmt.pix;
+> -	bool is_out = sp_fmt->type == V4L2_BUF_TYPE_VIDEO_OUTPUT;
+> -
+> -	memset(mp->reserved, 0, sizeof(mp->reserved));
+> -	mp_fmt->type = is_out ? V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE :
+> -			   V4L2_CAP_VIDEO_CAPTURE_MPLANE;
+> -	mp->width = pix->width;
+> -	mp->height = pix->height;
+> -	mp->pixelformat = pix->pixelformat;
+> -	mp->field = pix->field;
+> -	mp->colorspace = pix->colorspace;
+> -	mp->xfer_func = pix->xfer_func;
+> -	/* Also copies hsv_enc */
+> -	mp->ycbcr_enc = pix->ycbcr_enc;
+> -	mp->quantization = pix->quantization;
+> -	mp->num_planes = 1;
+> -	mp->flags = pix->flags;
+> -	ppix->sizeimage = pix->sizeimage;
+> -	ppix->bytesperline = pix->bytesperline;
+> -	memset(ppix->reserved, 0, sizeof(ppix->reserved));
+> -}
+> -
+> -int fmt_sp2mp_func(struct file *file, void *priv,
+> -		struct v4l2_format *f, fmtfunc func)
+> -{
+> -	struct v4l2_format fmt;
+> -	struct v4l2_pix_format_mplane *mp = &fmt.fmt.pix_mp;
+> -	struct v4l2_plane_pix_format *ppix = &mp->plane_fmt[0];
+> -	struct v4l2_pix_format *pix = &f->fmt.pix;
+> -	int ret;
+> -
+> -	/* Converts to a mplane format */
+> -	fmt_sp2mp(f, &fmt);
+> -	/* Passes it to the generic mplane format function */
+> -	ret = func(file, priv, &fmt);
+> -	/* Copies back the mplane data to the single plane format */
+> -	pix->width = mp->width;
+> -	pix->height = mp->height;
+> -	pix->pixelformat = mp->pixelformat;
+> -	pix->field = mp->field;
+> -	pix->colorspace = mp->colorspace;
+> -	pix->xfer_func = mp->xfer_func;
+> -	/* Also copies hsv_enc */
+> -	pix->ycbcr_enc = mp->ycbcr_enc;
+> -	pix->quantization = mp->quantization;
+> -	pix->sizeimage = ppix->sizeimage;
+> -	pix->bytesperline = ppix->bytesperline;
+> -	pix->flags = mp->flags;
+> -	return ret;
+> -}
+> -
+>  int vivid_vid_adjust_sel(unsigned flags, struct v4l2_rect *r)
+>  {
+>  	unsigned w = r->width;
+> diff --git a/drivers/media/platform/vivid/vivid-vid-common.h b/drivers/media/platform/vivid/vivid-vid-common.h
+> index 29b6c0b40a1b..13adea56baa0 100644
+> --- a/drivers/media/platform/vivid/vivid-vid-common.h
+> +++ b/drivers/media/platform/vivid/vivid-vid-common.h
+> @@ -8,15 +8,6 @@
+>  #ifndef _VIVID_VID_COMMON_H_
+>  #define _VIVID_VID_COMMON_H_
+>  
+> -typedef int (*fmtfunc)(struct file *file, void *priv, struct v4l2_format *f);
+> -
+> -/*
+> - * Conversion function that converts a single-planar format to a
+> - * single-plane multiplanar format.
+> - */
+> -void fmt_sp2mp(const struct v4l2_format *sp_fmt, struct v4l2_format *mp_fmt);
+> -int fmt_sp2mp_func(struct file *file, void *priv,
+> -		struct v4l2_format *f, fmtfunc func);
+>  
+>  extern const struct v4l2_dv_timings_cap vivid_dv_timings_cap;
+>  
+> diff --git a/drivers/media/platform/vivid/vivid-vid-out.c b/drivers/media/platform/vivid/vivid-vid-out.c
+> index 9350ca65dd91..e9d68ccbcc5d 100644
+> --- a/drivers/media/platform/vivid/vivid-vid-out.c
+> +++ b/drivers/media/platform/vivid/vivid-vid-out.c
+> @@ -612,7 +612,7 @@ int vidioc_g_fmt_vid_out(struct file *file, void *priv,
+>  
+>  	if (dev->multiplanar)
+>  		return -ENOTTY;
+> -	return fmt_sp2mp_func(file, priv, f, vivid_g_fmt_vid_out);
+> +	return v4l2_fmt_sp2mp_func(file, priv, f, vivid_g_fmt_vid_out);
+>  }
+>  
+>  int vidioc_try_fmt_vid_out(struct file *file, void *priv,
+> @@ -622,7 +622,7 @@ int vidioc_try_fmt_vid_out(struct file *file, void *priv,
+>  
+>  	if (dev->multiplanar)
+>  		return -ENOTTY;
+> -	return fmt_sp2mp_func(file, priv, f, vivid_try_fmt_vid_out);
+> +	return v4l2_fmt_sp2mp_func(file, priv, f, vivid_try_fmt_vid_out);
+>  }
+>  
+>  int vidioc_s_fmt_vid_out(struct file *file, void *priv,
+> @@ -632,7 +632,7 @@ int vidioc_s_fmt_vid_out(struct file *file, void *priv,
+>  
+>  	if (dev->multiplanar)
+>  		return -ENOTTY;
+> -	return fmt_sp2mp_func(file, priv, f, vivid_s_fmt_vid_out);
+> +	return v4l2_fmt_sp2mp_func(file, priv, f, vivid_s_fmt_vid_out);
+>  }
+>  
+>  int vivid_vid_out_g_selection(struct file *file, void *priv,
+> diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+> index b5778b2ffa27..0aeec23e0cef 100644
+> --- a/drivers/media/v4l2-core/v4l2-common.c
+> +++ b/drivers/media/v4l2-core/v4l2-common.c
+> @@ -631,3 +631,65 @@ int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, int pixelformat, int width,
+>  	return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt);
+> +
+> +/*
+> + * Conversion functions that convert a single-planar format to a
+> + * multi-planar format.
+> + */
+> +void v4l2_fmt_sp2mp(const struct v4l2_format *sp_fmt,
+> +		    struct v4l2_format *mp_fmt)
+> +{
+> +	struct v4l2_pix_format_mplane *mp = &mp_fmt->fmt.pix_mp;
+> +	struct v4l2_plane_pix_format *ppix = &mp->plane_fmt[0];
+> +	const struct v4l2_pix_format *pix = &sp_fmt->fmt.pix;
+> +	bool is_out = sp_fmt->type == V4L2_BUF_TYPE_VIDEO_OUTPUT;
+> +
+> +	memset(mp->reserved, 0, sizeof(mp->reserved));
+> +	mp_fmt->type = is_out ? V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE :
+> +			   V4L2_CAP_VIDEO_CAPTURE_MPLANE;
+> +	mp->width = pix->width;
+> +	mp->height = pix->height;
+> +	mp->pixelformat = pix->pixelformat;
+> +	mp->field = pix->field;
+> +	mp->colorspace = pix->colorspace;
+> +	mp->xfer_func = pix->xfer_func;
+> +	/* Also copies hsv_enc */
+> +	mp->ycbcr_enc = pix->ycbcr_enc;
+> +	mp->quantization = pix->quantization;
+> +	mp->num_planes = 1;
+> +	mp->flags = pix->flags;
+> +	ppix->sizeimage = pix->sizeimage;
+> +	ppix->bytesperline = pix->bytesperline;
+> +	memset(ppix->reserved, 0, sizeof(ppix->reserved));
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_fmt_sp2mp);
+> +
+> +int v4l2_fmt_sp2mp_func(struct file *file, void *priv, struct v4l2_format *f,
+> +			v4l2_fmtfunc func)
+> +{
+> +	struct v4l2_format fmt;
+> +	struct v4l2_pix_format_mplane *mp = &fmt.fmt.pix_mp;
+> +	struct v4l2_plane_pix_format *ppix = &mp->plane_fmt[0];
+> +	struct v4l2_pix_format *pix = &f->fmt.pix;
+> +	int ret;
+> +
+> +	/* Converts to a mplane format */
+> +	v4l2_fmt_sp2mp(f, &fmt);
+> +	/* Passes it to the generic mplane format function */
+> +	ret = func(file, priv, &fmt);
+> +	/* Copies back the mplane data to the single plane format */
+> +	pix->width = mp->width;
+> +	pix->height = mp->height;
+> +	pix->pixelformat = mp->pixelformat;
+> +	pix->field = mp->field;
+> +	pix->colorspace = mp->colorspace;
+> +	pix->xfer_func = mp->xfer_func;
+> +	/* Also copies hsv_enc */
+> +	pix->ycbcr_enc = mp->ycbcr_enc;
+> +	pix->quantization = mp->quantization;
+> +	pix->sizeimage = ppix->sizeimage;
+> +	pix->bytesperline = ppix->bytesperline;
+> +	pix->flags = mp->flags;
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_fmt_sp2mp_func);
+> diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
+> index 0a41bbecf3d3..e46c1f451f8c 100644
+> --- a/include/media/v4l2-common.h
+> +++ b/include/media/v4l2-common.h
+> @@ -425,4 +425,41 @@ int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, int pixelformat,
+>  int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt, int pixelformat,
+>  			int width, int height);
+>  
+> +/**
+> + * v4l2_fmtfunc - function pointer for v4l2_fmt_sp2mp()
+> + *
+> + * @file: device's descriptor file
+> + * @priv: private data pointer
+> + * @f: format that holds a mp pixel format
+> + *
+> + * Function type used by v4l2_fmt_sp2mp_func(). Please, see v4l2_fmt_sp2mp_func
+> + * for more details.
+> + */
+> +typedef int (*v4l2_fmtfunc)(struct file *file, void *priv,
+> +			    struct v4l2_format *f);
+> +
+> +/**
+> + * v4l2_fmt_sp2mp - transforms a single-planar format struct into a multi-planar
+> + * struct
+> + *
+> + * @sp_fmt: pointer to the single-planar format struct (in)
+> + * @mp_fmt: pointer to the multi-planar format struct (out)
+> + */
+> +void v4l2_fmt_sp2mp(const struct v4l2_format *sp_fmt,
+> +		    struct v4l2_format *mp_fmt);
+> +
+> +/**
+> + * v4l2_fmt_sp2mp_func - handler for single-planar format functions
+> + * @file: device's descriptor file
+> + * @priv: private data pointer
+> + * @f: format that holds a sp pixel format
+> + * @func: generic mp function
+> + *
+> + * Handler to call a generic multi-planar format function using single-planar
+> + * format. It converts the sp to a mp (using v4l2_fmt_sp2mp), pass the mp struct
+> + * as argument to v4l2_fmtfunc func, and converts mp back to sp.
+> + */
+> +int v4l2_fmt_sp2mp_func(struct file *file, void *priv, struct v4l2_format *f,
+> +			v4l2_fmtfunc func);
+> +
+>  #endif /* V4L2_COMMON_H_ */
+> 
