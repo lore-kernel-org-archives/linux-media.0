@@ -2,160 +2,256 @@ Return-Path: <SRS0=gA2F=S4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53F96C43219
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 20:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C32ECC43219
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 22:59:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B03F2077B
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 20:34:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="RXtm8B0i"
+	by mail.kernel.org (Postfix) with ESMTP id 8D3612084F
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 22:59:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726239AbfDZUeO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 16:34:14 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:35748 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbfDZUeO (ORCPT
+        id S1727053AbfDZW7y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 18:59:54 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:58941 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727008AbfDZW7y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 16:34:14 -0400
-Received: by mail-qt1-f196.google.com with SMTP id k38so5642617qtk.2
-        for <linux-media@vger.kernel.org>; Fri, 26 Apr 2019 13:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version;
-        bh=vNqrtosD3Wa6mctcoU8eA66v5qv1B2uC9ZjPAJ2B54s=;
-        b=RXtm8B0ifFFnWr6lyY1EPadQ14vZX00kRBy81EQXlhPLJ7Rg2Hb5aUA299MY/6eQrR
-         RXFxdk7hx5sEtoeR246Le6tsSKsUpQbn/gOSNS+Ff9x2P9yu+HF3FJqkEWuVMAD3DsT5
-         0EU6MKOjSpTwF/fzl2cpLEtBrekwQ7ktXPhlMrRv70q1i0JUbIoBW2kmh+kzA0+IfqRE
-         n36cArn74CTC1qEP6Ip4gNJKKRoL25n8GDtQVJaeQPhszADdazNmkK464YRvNY7LjWYA
-         IylPWLjtVXj4WWmKmXJYqg/CkuqNBaSDJJxRdjrT1cnrlFlHr3pP7GOHdEET0XXK8/ks
-         etOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=vNqrtosD3Wa6mctcoU8eA66v5qv1B2uC9ZjPAJ2B54s=;
-        b=PywF7fjpw5fo0wCXJOQKleJq5SR8OhuuoRNUHPZkPXvwgyakz2ymD7T8BVDOw/pHnC
-         u88YX3gPwuBH7/v9G76Ln36sqGicPdnDJfAhCe5lLbum3zkrI//C1hfr+muiL+bnl7AP
-         J4Cw2a2IQk1zQaJ10pWH26r9haSxVT8pvtGyV/f1LdqH/6hhfTx/H7Pg2k69gJ4oKzol
-         EjbdgBZ8xp5JRI2iqpmMXn6uocZsHJz2UjUWd3+gZbINx/ekH3cpexNtcNliZ16fVPk5
-         pJo7I95ecxsrmIMXnEeqN2jh/rD62VOMJnrUVnwwaESW0oZugMZ8pgveKodDrK62fYSK
-         q3Bg==
-X-Gm-Message-State: APjAAAUJ7WS5dwXdNEN4OlTr8bJ+zkWKpHoftcFW+kpl2oxXLj2ZZCa+
-        ZGl+74MIQXEmJvcPtyE00ePyXQ==
-X-Google-Smtp-Source: APXvYqzsmvR+kc1cn4LW8OWb4wsz4KVln3yvZyHdNLJX35ZDFfQySitj8lczXefdpbsKwuBNb+upCg==
-X-Received: by 2002:ad4:4102:: with SMTP id i2mr4292931qvp.218.1556310853452;
-        Fri, 26 Apr 2019 13:34:13 -0700 (PDT)
-Received: from tpx230-nicolas.collaboramtl (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
-        by smtp.gmail.com with ESMTPSA id n66sm9689693qkf.49.2019.04.26.13.34.11
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 26 Apr 2019 13:34:11 -0700 (PDT)
-Message-ID: <2367b550d815bdf4c50aae692a5549f9be6a0802.camel@ndufresne.ca>
-Subject: Re: [PATCH v6 01/17] media: videodev2.h, v4l2-ioctl: add rkisp1
- meta buffer format
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Jacob Chen <jacob-chen@iotwrt.com>,
-        linux-rockchip@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        sakari.ailus@linux.intel.com, hans.verkuil@cisco.com,
-        tfiga@chromium.org, zhengsq@rock-chips.com,
-        laurent.pinchart@ideasonboard.com, zyc@rock-chips.com,
-        eddie.cai.linux@gmail.com, jeffy.chen@rock-chips.com,
-        devicetree@vger.kernel.org, heiko@sntech.de,
-        Jacob Chen <jacob2.chen@rock-chips.com>
-Date:   Fri, 26 Apr 2019 16:34:10 -0400
-In-Reply-To: <20180308094807.9443-2-jacob-chen@iotwrt.com>
-References: <20180308094807.9443-1-jacob-chen@iotwrt.com>
-         <20180308094807.9443-2-jacob-chen@iotwrt.com>
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-mOui5ucgkVhFyJMZ5z0C"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Fri, 26 Apr 2019 18:59:54 -0400
+X-Originating-IP: 37.182.44.227
+Received: from uno.localdomain (net-37-182-44-227.cust.vodafonedsl.it [37.182.44.227])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 2356B1C0004;
+        Fri, 26 Apr 2019 22:59:50 +0000 (UTC)
+Date:   Sat, 27 Apr 2019 01:00:42 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: Route lifetime in SUBDEV_[GS]_ROUTING
+Message-ID: <20190426230042.soeb7wqxd56grn72@uno.localdomain>
+References: <20190417104147.zlmbw32dr46vmtrq@paasikivi.fi.intel.com>
+ <20190423101932.gszkn4olqatoisde@uno.localdomain>
+ <20190423132839.3rybeo4rolzu6cfb@kekkonen.localdomain>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="f2klhbntmsi2rrco"
+Content-Disposition: inline
+In-Reply-To: <20190423132839.3rybeo4rolzu6cfb@kekkonen.localdomain>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---=-mOui5ucgkVhFyJMZ5z0C
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+--f2klhbntmsi2rrco
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Le jeudi 08 mars 2018 =C3=A0 17:47 +0800, Jacob Chen a =C3=A9crit :
-> From: Shunqian Zheng <zhengsq@rock-chips.com>
->=20
-> Add the Rockchip ISP1 specific processing parameter format
-> V4L2_META_FMT_RK_ISP1_PARAMS and metadata format
-> V4L2_META_FMT_RK_ISP1_STAT_3A for 3A.
->=20
-> Signed-off-by: Shunqian Zheng <zhengsq@rock-chips.com>
-> Signed-off-by: Jacob Chen <jacob2.chen@rock-chips.com>
-> Acked-by: Hans Verkuil <hans.verkuil@cisco.com>
-> ---
->  drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
->  include/uapi/linux/videodev2.h       | 4 ++++
->  2 files changed, 6 insertions(+)
->=20
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
-re/v4l2-ioctl.c
-> index 1be54429d601..bdd469290d66 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1257,6 +1257,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
-mt)
->  	case V4L2_META_FMT_VSP1_HGO:	descr =3D "R-Car VSP1 1-D Histogram"; brea=
-k;
->  	case V4L2_META_FMT_VSP1_HGT:	descr =3D "R-Car VSP1 2-D Histogram"; brea=
-k;
->  	case V4L2_META_FMT_UVC:		descr =3D "UVC payload header metadata"; break=
-;
-> +	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr =3D "Rockchip ISP1 3A params";=
- break;
-> +	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr =3D "Rockchip ISP1 3A statist=
-ics"; break;
-> =20
->  	default:
->  		/* Compressed formats */
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
-2.h
-> index e20d10df75c1..359ad8bbf9bf 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -698,6 +698,10 @@ struct v4l2_pix_format {
->  #define V4L2_META_FMT_VSP1_HGT    v4l2_fourcc('V', 'S', 'P', 'T') /* R-C=
-ar VSP1 2-D Histogram */
->  #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC=
- Payload Header metadata */
-> =20
-> +/* Vendor specific - used for IPU3 camera sub-system */
+HI Sakari,
 
-Did you mean "RK_ISP1 camera sub-system" ?
+On Tue, Apr 23, 2019 at 04:28:40PM +0300, Sakari Ailus wrote:
+> Hi Jacopo,
+>
+> On Tue, Apr 23, 2019 at 12:19:32PM +0200, Jacopo Mondi wrote:
+> > Hi Sakari,
+> >
+> > On Wed, Apr 17, 2019 at 01:41:48PM +0300, Sakari Ailus wrote:
+> > > Hi Jacopo,
+> > >
+> > > I promised to write a bit about the routing problem I attempted to write on
+> > > #v4l. It's a bit late, but here it is. Let me know if you share my
+> > > understanding (and especially do so if you don't :)).
+> >
+> > Thanks for doing this, and sorry it took me a while to reply!
+> >
+> > >
+> > > A route is identified by the source and sink pads as well as the stream ID
+> > > on the source and the sink pads. Its flags allow enabling or disabling a
+> > > route.
+> > >
+> > > Most devices that function as transmitters (such as sensors) have a fixed
+> > > number of routes they can support. These's no need to change them; enabling
+> > > and disabling them will be enough for the user.
+> > >
+> >
+> > Fine so far.
+> >
+> > We indeed define routes as:
+> > (sink pad - sink stream) -> (source pad - source stream)
+> >
+> > > For receivers this is different. What needs to be supported on the receiver
+> > > side is directing any incoming stream (a 32-bit unsigned integer) to any
+> > > source pad.
+> > >
+> > > This is because pads are not alike --- one may be connected to a block that
+> > > further processes the image whereas the others may be connected to a DMA
+> > > engine, just writing the data to memory.
+> > >
+> > > The receivers also may not make assumptions beyond the sub-device API: the
+> > > stream is a 32-bit unsigned integer, there is currently no API requirement
+> > > to have the stream IDs on a particular low integer range. In principle we
+> > > could define that range, but I'd rather try to find better solutions than
+> > > that: it's hard to come up with a number as it depends on the hardware.
+> > > Some kind of an upper limit could be the number of CSI-2 channels
+> > > multiplied by CSI-2 data types. That would be enough for CSI-2. 16 or 32
+> > > virtual channels and up to 64 data types would mean up to 2048 routes
+> > > between a demultiplexer's sink pad and *each* of its source pads. And this
+> > > comes with an assumption that the source pads only support a single
+> > > stream...
+> >
+> > I lost you here.
+> >
+> > My mental model was far more (too?) simple:
+> >
+> > - Routing tables inside an entity might have an arbitrary size, as how
+> >   that configuration depends on the device and the driver
+> >   implementation. As an example, the adv748x accepts 7 analogue
+> >   inputs to chose from and route to a CSI-2 source pad.
+> >   depending on the implementation, those 7 inputs could be modeled as
+> >   7 pads with one stream each, or a single pad with 7 channels or
+> >   whatever else, and I agree the 'stream_id' values range is totally
+> >   up to the driver implementation -inside an entity-.
+> >
+> > - The cross-entity (sorry, I lack a better term here) multiplexing
+> >   happens on physical bus that allows so, and I can only think of
+> >   CSI-2 at the moment. Sure, you could share the lines of a parallel
+> >   bus playing with enables/disables of the transmitters, but this
+> >   is a custom hack that does not play well in this model.
+> >   Each CSI-2 source pad has up to 4 streams (one per VC) and the
+> >   content of those streams is retrieved from the transmitter by the
+> >   receiver through the remote frame_desc operation [*], as receivers
+> >   might need to be setup using to filter on particular VC/DT combinations
+> >   to receive the stream.
+>
+> Note that the concept of a "stream" is different in our proposed API and in
+> CSI-2 (virtual channel): on CSI-2 virtual channels can carry multiple data
+> types but in our definition they do not. That means there will be more
+> streams on SUBDEV_[GS]_ROUTING API than there are on a CSI-2 bus.
+>
+> We also do not limit the use of the new API to old CSI-2 D-PHYs that
+> only support four virtual channels. Therefore we need to think how this
+> would work on 16 or 32 virtual channels, and preferrably not posing
+> problems with larger numbers either.
+>
 
-> +#define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* =
-Rockchip ISP1 params */
-> +#define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /*=
- Rockchip ISP1 3A statistics */
-> +
->  /* priv field value to indicates that subsequent fields are valid. */
->  #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
-> =20
+Indeed, each stream carries one DT and can be sent in one VC, so at least
+64*4 possible routes (per source pad) for what is currently specified by
+CSI-2 and maybe up to 64*32 to have space for future extensions as you
+explained below.
 
---=-mOui5ucgkVhFyJMZ5z0C
+I agree, 2048 routes per source pad is not an easily manageable number
+of entries for a routing table.
+
+> >
+> > - Each CSI-2 receiver sink pad supports 4 streams (the CSI-2 VCs) and any
+> >   of those streams can be directed to any of its source pads, to
+> >   implement what you have described (one pad connected to an ISP-like
+> >   device, on other to the DMA engine directly etc)
+> >
+> > - DT negotiation is still a bit vague. The example we have on the
+> >   series (adv748x and r-car csi2) configure the receiver's accepted DT
+> >   inspecting the remote frame_desc. Again, as per [*] this migh be
+> >   limitied to 1 DT for VC, which might not be enough and would require
+> >   re-thinking the operation used for the negotiation.
+> >
+> > - Configuring a multiplexed source pad image format is today not
+> >   possible, the format is always propagated from the sink pad to which
+> >   a route is enabled to the source pad. Might this be a limitation on
+> >   how we control which DTs are multiplexed inside a VC and won't allow
+> >   to model any format conversion that might happen at the source pad
+> >   output. I was toying myself with the idea of a stream-aware set
+> >   format operation for multiplexed source pads, not sure it might work
+> >   though.
+> >
+> > Can I ask you why:
+> > - you mention 16 or 32 VCs ? Each CSI-2 link supports up to 4.
+>
+> See above.
+>
+> > - you put DT in the routing mix, and I suspect it is here where our
+> >   disconnection happens. I always assume DT configuration as a result
+> >   of a format configuration operation, which currently has limitations
+> >   as noted here above.
+>
+> Yes; DT comes from the format and is generally determined by the
+> transmitting driver. Nothing else limits the number of DTs on a VC except
+> the number of DTs --- which is currently 64.
+>
+> >
+> >
+> > [*] I would later like to talk about if this is the most appropriate
+> > operation to handle this negotiation, as I'm not sure we can handle DT
+> > negotiation properly with that, but that's for later.
+> >
+> > >
+> > > CSI-2 receivers support a number of simultaneous streams, and as the stream
+> > > is demultiplexed there, this means there will be as many source pads as
+> > > there are supported simultaneous streams. This heavily depe`nds on the
+> > > hardware, but the number could be e.g. 1, 4 or 8. Much smaller than 2048 in
+> > > any case.
+> > >
+> >
+> > Why 8? Is this related to DT multiplexing again?
+>
+> Yes and no. It's just a random number between 1 and 2048. :-)
+>
+> >
+> > > Another option could be creating no routes at all at device init time, and
+> > > letting the user create them. We could add a new flag for routes telling
+> > > that a route is dynamic: disabling a dynamic route would simply delete it.
+> > > Likewise, a SUBDEV_G_ROUTING returning no routes (but no error either)
+> > > would also tell the user only dynamic routes are supported.
+> > >
+
+I see your point, but I cannot see how one would easily map a stream_id to a
+DT/VC combination. One way would be:
+        DT = stream_id % 64; VC = stream_id / 64;
+
+Just to make sure we're on the same page, how would you enable/disable
+transmitting, say, embedded data (DT=18) on VC=2? By enabling/disabling
+the stream_id 146 ( = 18 + 64 * 2) ?
+
+Thanks
+   j
+
+> > > We should document this and change the driver implementation accordingly.
+> > > No API changes are needed (apart from adding the dynamic flag --- or rather
+> > > call it "volatile", to avoid confusing with routes that can be enabled or
+> > > disabled while streaming).
+> > >
+> >
+> > I have v5 of the series ready. Do you want me to post it to progress
+> > discussion, or should we clarify this first?
+>
+> Feel free to post it. But to merge the series, I think we need to address
+> this.
+>
+> --
+> Regards,
+>
+> Sakari Ailus
+> sakari.ailus@linux.intel.com
+
+--f2klhbntmsi2rrco
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXMNrQgAKCRBxUwItrAao
-HMr/AKCH5EVntTk1jT5u0f41G/tqfeI+CwCgwiiFz0hcOaFAjBEJIqWm5+mUPpM=
-=9X8/
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlzDjZMACgkQcjQGjxah
+Vjys+g/9Gu+ID5RrnUGMGmzy4N2UMBwCWl9y6xqiGx1jAnZoiBerLHp+n/+3mK+m
+ypLFAnszZONW5933KtBnnTs9onbyPUbnkqOS0b3XvvB5vxits5jtGk3AXbR/H4/I
+7uk0hDLj5kPJ4sGc3D2NaabWEjvXM5yt9WOfjq5bzbYoR0aLfViwXwCN8zX0rOqT
+grs5lOU01Lki2H8WdoMnLXadRFMJ8jMEZZyZD/B7fKwQ+vRa8OU6X0L9hYh5R2lt
+oL5DWU9UCNii7ZJpg5NqttDBvP/0VSB/M1/kGryhXtpDAwqzYLWDQxJTH4h54dwn
+MS0ullEC8I+uAN02HRyZSD3Zr9HsVw0rTC83QREfOyqYRKyCZsn0dMCP+pbaMTPQ
+2H4ERR6TR6XHhL2oz8KqExVhUq9bw7dHjXMJRLfth9FR0j3JTjLhxDUtPC5Ch3nQ
+0/PAe9UGDlMYjBIn/ZId5OFbzJ3GBQiwMxRN7w9val6ZCJ/OKTZ6DL9f4eD0gZrZ
+DKPayvvid3dWfVrtEwRDkRQmpc+LKWoVpNEcZVb3AcQuZGK1ksirMnXIKEbz1sMb
+I7ZPNfVVwHAtWOrKNXUUSFo+BYVIFiFtp6qmqBLo2scyBvFZQaSKKIG5JvFJ0bhT
+XPI43r08XYoNvxVq9p0HpzFtaBuoCQnjNPxDXyWg48KirtmDLgs=
+=haCk
 -----END PGP SIGNATURE-----
 
---=-mOui5ucgkVhFyJMZ5z0C--
-
+--f2klhbntmsi2rrco--
