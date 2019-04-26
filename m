@@ -3,35 +3,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA787C43218
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:59:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B36CC43218
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:59:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 78C8C206E0
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:59:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DBC41206E0
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:59:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726206AbfDZQ7d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 12:59:33 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40122 "EHLO
+        id S1726302AbfDZQ7v (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 12:59:51 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40134 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726170AbfDZQ7c (ORCPT
+        with ESMTP id S1726170AbfDZQ7v (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 12:59:32 -0400
+        Fri, 26 Apr 2019 12:59:51 -0400
 Received: from [IPv6:2804:214:82b9:c466:36a8:60fb:3e79:2f43] (unknown [IPv6:2804:214:82b9:c466:36a8:60fb:3e79:2f43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id DC241283067;
-        Fri, 26 Apr 2019 17:59:26 +0100 (BST)
-Subject: Re: [PATCH v4 14/14] media: vimc: Create multiplanar parameter
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id AEC33281F8A;
+        Fri, 26 Apr 2019 17:59:46 +0100 (BST)
+Subject: Re: [PATCH v4 13/14] media: vimc: cap: Add support for multiplanar
+ formats
 To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
         linux-media@vger.kernel.org
 Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, kernel@collabora.com,
         lucmaga@gmail.com, lkcamp@lists.libreplanetbr.org
 References: <20190426012223.17826-1-andrealmeid@collabora.com>
- <20190426012223.17826-15-andrealmeid@collabora.com>
+ <20190426012223.17826-14-andrealmeid@collabora.com>
 From:   Helen Koike <helen.koike@collabora.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=helen.koike@collabora.com; keydata=
@@ -108,12 +109,12 @@ Autocrypt: addr=helen.koike@collabora.com; keydata=
  iR1nXfMxENVYnM5ag7mBZyD/kru5W1Uj34L6AFaDMXFPwedSCpzzqUiHb0f+nYkfOodf5xy0
  46+3THy/NUS/ZZp/rI4F7Y77+MQPVg7vARfHHX1AxYUKfRVW5j88QUB70txn8Vgi1tDrOr4J
  eD+xr0CvIGa5lKqgQacQtGkpOpJ8zY4ObSvpNubey/qYUE3DCXD0n2Xxk4muTvqlkFpOYA==
-Message-ID: <cabd5194-e82d-b4b6-5d78-6b37af6936a0@collabora.com>
-Date:   Fri, 26 Apr 2019 13:59:21 -0300
+Message-ID: <fd393f32-5bae-d3f7-ef25-2efbfa285213@collabora.com>
+Date:   Fri, 26 Apr 2019 13:59:42 -0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190426012223.17826-15-andrealmeid@collabora.com>
+In-Reply-To: <20190426012223.17826-14-andrealmeid@collabora.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -125,11 +126,8 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 
 On 4/25/19 10:22 PM, André Almeida wrote:
-> Create multiplanar kernel module parameter to define if the driver is
-> running in single planar or in multiplanar mode. Define the device
-> capabilities according to the multiplanar kernel parameter. A device can't
-> support both CAP_VIDEO_CAPTURE and CAP_VIDEO_CAPTURE_MPLANAR at the
-> same time.
+> Adapt vimc-capture to support multiplanar formats, copying
+> each plane to the correct buffer.
 > 
 > Signed-off-by: André Almeida <andrealmeid@collabora.com>
 
@@ -137,57 +135,51 @@ Acked-by: Helen Koike <helen.koike@collabora.com>
 
 > ---
 > Change in v4:
-> - Split commit with "Add handler for multiplanar fmt ioctls" 
+> - Move variables to inside the for loop
+> - Change `plane_size` type from `unsigned int` to `size_t`
 > 
 > Change in v3:
-> - Squash commit with "Add handler for multiplanar fmt ioctls" 
-> - Remove functions that only did the `IS_MULTIPLANAR(vcap)` check
-> - Assign ioctls according to device capabilities
+> - Adapt to new vimc_frame
 > 
-> Changes in v2:
-> - Squash commits to create multiplanar module parameter and to define
-> the device capabilities
-> - Move the creation of the multiplanar parameter to the end of
-> history, so it's only added when all required changes are applied
+> Change in v2: none
 > 
->  drivers/media/platform/vimc/vimc-capture.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+>  drivers/media/platform/vimc/vimc-capture.c | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
 > 
 > diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
-> index 932d622d56ca..c5959b8e21f7 100644
+> index d9dae5b3a0bf..932d622d56ca 100644
 > --- a/drivers/media/platform/vimc/vimc-capture.c
 > +++ b/drivers/media/platform/vimc/vimc-capture.c
-> @@ -28,6 +28,10 @@
+> @@ -523,7 +523,7 @@ static struct vimc_frame *vimc_cap_process_frame(struct vimc_ent_device *ved,
+>  	struct vimc_cap_device *vcap = container_of(ved, struct vimc_cap_device,
+>  						    ved);
+>  	struct vimc_cap_buffer *vimc_buf;
+> -	void *vbuf;
+> +	unsigned int i;
 >  
->  #define VIMC_CAP_DRV_NAME "vimc-capture"
+>  	spin_lock(&vcap->qlock);
 >  
-> +static unsigned int multiplanar;
-> +module_param(multiplanar, uint, 0000);
-> +MODULE_PARM_DESC(multiplanar, "0 (default) creates a single planar device, 1 creates a multiplanar device.");
+> @@ -545,13 +545,17 @@ static struct vimc_frame *vimc_cap_process_frame(struct vimc_ent_device *ved,
+>  	vimc_buf->vb2.sequence = vcap->sequence++;
+>  	vimc_buf->vb2.field = vcap->format.fmt.pix.field;
+>  
+> -	vbuf = vb2_plane_vaddr(&vimc_buf->vb2.vb2_buf, 0);
+> +	/* For each plane, copy the pixels */
+> +	for (i = 0; i < vimc_buf->vb2.vb2_buf.num_planes; i++) {
+> +		void *vbuf = vb2_plane_vaddr(&vimc_buf->vb2.vb2_buf, i);
+> +		size_t plane_size = frame->fmt.plane_fmt[i].sizeimage;
 > +
->  /* Checks if the device supports multiplanar capture */
->  #define IS_MULTIPLANAR(vcap) \
->  	(vcap->vdev.device_caps & V4L2_CAP_VIDEO_CAPTURE_MPLANE)
-> @@ -597,7 +601,9 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
+> +		memcpy(vbuf, frame->plane_addr[i], plane_size);
 >  
->  	/* Initialize the vb2 queue */
->  	q = &vcap->queue;
-> -	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-> +	q->type = multiplanar ?
-> +		V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE :
-> +		V4L2_BUF_TYPE_VIDEO_CAPTURE;
->  	q->io_modes = VB2_MMAP | VB2_DMABUF | VB2_USERPTR;
->  	q->drv_priv = vcap;
->  	q->buf_struct_size = sizeof(struct vimc_cap_buffer);
-> @@ -627,7 +633,9 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
+> -	memcpy(vbuf, frame->plane_addr[0], vcap->format.fmt.pix.sizeimage);
+> +		/* Set it as ready */
+> +		vb2_set_plane_payload(&vimc_buf->vb2.vb2_buf, i, plane_size);
+> +	}
 >  
->  	/* Initialize the video_device struct */
->  	vdev = &vcap->vdev;
-> -	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
-> +	vdev->device_caps = (multiplanar ?
-> +			V4L2_CAP_VIDEO_CAPTURE_MPLANE :
-> +			V4L2_CAP_VIDEO_CAPTURE) | V4L2_CAP_STREAMING;
->  	vdev->entity.ops = &vimc_cap_mops;
->  	vdev->release = vimc_cap_release;
->  	vdev->fops = &vimc_cap_fops;
+> -	/* Set it as ready */
+> -	vb2_set_plane_payload(&vimc_buf->vb2.vb2_buf, 0,
+> -			      vcap->format.fmt.pix.sizeimage);
+>  	vb2_buffer_done(&vimc_buf->vb2.vb2_buf, VB2_BUF_STATE_DONE);
+>  	return NULL;
+>  }
 > 
