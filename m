@@ -2,110 +2,144 @@ Return-Path: <SRS0=gA2F=S4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 975F1C43219
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 18:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7C50C43218
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 19:51:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 675D820B7C
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 18:49:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1556304564;
-	bh=tkpgRPjpxcrus50L+k6ajSzp1mBt+zxa6/mfAHOtfyo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=Y1muKGzcax9kgJfLMyp+rIqWoppfe9wp+UVGPGJ5pazKPpkYNLzhNYw2nJYJhpdad
-	 DWlxTY9WGDSz3J0eNF8J4+3FJBv/xZXa9l0uv4EAnJ6D1nfJYI/WE+x86zDImO6H9Z
-	 SLsH4jNxozDDipl3h2wGS4/eNPH7zrr4qakPLEMI=
+	by mail.kernel.org (Postfix) with ESMTP id 860D82077B
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 19:51:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbfDZStY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 14:49:24 -0400
-Received: from casper.infradead.org ([85.118.1.10]:36082 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbfDZStX (ORCPT
+        id S1726779AbfDZTvl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 15:51:41 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40632 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726310AbfDZTvk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 14:49:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ztG/Swnwe9pSqO3CoHrtVEjbONSknRON3i7WdgQagkw=; b=tZc+GWoQBT6YRGVzx8wTLKH9pz
-        nOXeV6r8xX2f7nmDSII5JFljmRERcABSJOnL2Zhg0VAQrFQIZ3ISSRQrsV/B0YBCfXQXmNgUdo4nI
-        LpZ8Ty/BBfO+TNLhT75bvFErldcJlckKKLeG5cII4wdo59MkqnHJMWXZ5RdqNKOas9u6H0iBJfwF6
-        VfK9WVJ01oIdrD2ORbLSjZWv4qErRjz6ynT6Ye6YtIx3KWWviZ3NRwS6JyrxcF3ftdekGZrx+y3UF
-        tGl2YNCuZzH46Z5/1eLPzOIr6ox/d1gQR81Xw/x3R52mkl6Dv59n71bT2/gX6VogYlF+5YyvdVjI2
-        EfPXaoGQ==;
-Received: from [179.95.39.209] (helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hK5uT-0005zH-EI; Fri, 26 Apr 2019 18:49:22 +0000
-Date:   Fri, 26 Apr 2019 15:49:17 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Gregor Jasny <gjasny@googlemail.com>
-Cc:     Sean Young <sean@mess.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: [PATCH v4l-utils] libdvbv5: leaks and double free in
- dvb_fe_open_fname()
-Message-ID: <20190426154917.75adc64a@coco.lan>
-In-Reply-To: <CAJxGH0_bmRiGKCtOf_jFZh_wVsyKR4s1DoDcSvYF7UYx8JNS0g@mail.gmail.com>
-References: <20190317163220.1881-1-sean@mess.org>
-        <20190426121344.510ef576@coco.lan>
-        <20190426124217.55ae71cc@coco.lan>
-        <CAJxGH0_bmRiGKCtOf_jFZh_wVsyKR4s1DoDcSvYF7UYx8JNS0g@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Fri, 26 Apr 2019 15:51:40 -0400
+Received: from localhost.localdomain (unknown [IPv6:2804:431:9718:9080:61b7:f4a4:2020:fc95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tonyk)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 038C32725B1;
+        Fri, 26 Apr 2019 20:51:35 +0100 (BST)
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, helen.koike@collabora.com,
+        kernel@collabora.com, lucmaga@gmail.com,
+        lkcamp@lists.libreplanetbr.org,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [PATCH v5 00/14] media: vimc: Add support for multiplanar formats 
+Date:   Fri, 26 Apr 2019 16:51:00 -0300
+Message-Id: <20190426195114.5002-1-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Fri, 26 Apr 2019 18:08:22 +0200
-Gregor Jasny <gjasny@googlemail.com> escreveu:
+Hello,
 
-> Hello,
-> 
-> On Fri, 26 Apr 2019, 17:42 Mauro Carvalho Chehab, <
-> mchehab+samsung@kernel.org> wrote:  
-> 
-> > Gregor,
-> >
-> > This patch messed with all branches since stable-1.12. I applied the revert
-> > patch already on all affected stable branches.
-> >
-> > We should probably release a new fix for them soon.
-> >
-> > Sorry for not looking this earlier.. I got some vacations earlier
-> > this month.
-> >  
-> 
-> I also got a report in Debian:
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=927341
-> 
-> I'm wondering if we could improve code quality by doing some automated
-> testing. 
+This series implements support for multiplane pixel formats at Vimc.
+A lot of changes were required since vimc support for singleplane
+was "hardcoded". The code has been adapted in order to support both
+formats. When was possible, the functions were written generically,
+avoiding functions for just one type of pixel format.
 
-That's my dream as well.
+The debayer subdevice is the only one that currently doesn't supports
+multiplanar formats. Documentation to each device will be made in a
+future patch. In hardcoded topology, the exposed capture device
+`RGB/YUV Capture` have a debayer in the pipeline, so it will fail when
+tested with multiplanar formats.
 
-> Is there a dummy dvb driver like vivi available?
+The last commit of this series was tested using Hans' virtme.sh[1]
+script here are the summary of results:
 
-Unfortunately, we don't have a full dummy dvb driver. There are some
-dummy DVB frontend drivers, but they're really dummy do-nothing
-drivers. We would need to add more stuff there for them to work, and
-then add a virtual DVB driver on the top of it.
-
-Doable, but requires someone with time for coding that.
-
-To be fair, a DVB dummy driver is a lot easier than a V4L2 one, as
-the DVB core already handles most of the stuff. The most complex
-part would likely to use the vivid image generator converting it
-into some video stream supported by DVB apps (the best would be
-to encode it as MPEG-2 - as all apps support). We could use, on
-a first version, some previously encoded video - or - even easier
-- to just stream empty frames.
+Grand Total for vivid device /dev/media0: 631, Succeeded: 631, Failed: 0, Warnings: 6
+Grand Total for vivid device /dev/media1: 631, Succeeded: 631, Failed: 0, Warnings: 6
+Grand Total for vim2m device /dev/media3: 61, Succeeded: 61, Failed: 0, Warnings: 0
+Grand Total for vimc device /dev/media3: 478, Succeeded: 478, Failed: 0, Warnings: 0
+Final Summary: 1801, Succeeded: 1801, Failed: 0, Warnings: 12
 
 Thanks,
-Mauro
+	André
+
+[1] https://hverkuil.home.xs4all.nl/virtme/virtme.sh
+
+Changes in v5:
+- Remove bpp from vimc_sca_device
+
+Changes in v4:
+- Remove unutilized commit "Propagate multiplanar state in the stream" 
+- Split "Create multiplanar parameter and ioctls"
+- Check for try_fmt return value
+- Change ret from `unsigned int` to `int`
+- Remove label `free_planes` from else scope
+- Change vars at vimc-scaler
+
+Changes in v3:
+- Refactor vimc_frame and vimc_fill_frame in order to be more clear and
+simple
+- Squash "Add handler for multiplanar fmt ioctls" and "Create multiplanar
+parameter"
+- Define format ioctls of capture device according to it capabilities
+- Get rid of `IS_MULTIPLANAR(vcap)` verification on format ioctls
+- Remove some format ioctl handlers
+- Reorder "Move sp2mp functions to v4l2-common"
+- Minimal code style and comments changes
+- Assign ioctls according to capture device capabilities
+
+Changes in v2:
+- Fix typos
+- Fix indentations
+- Enhance v4l2_fmt_* documentation
+- Change the order of commits, now the multiplanar parameter is the last
+one with the commit to set the device capabilities
+- Squash "unnecessary checks" commits together
+- In v1, the whole media device was in singleplanar or in multiplanar
+format. Now, each stream/pipeline can be in a format
+- Check the capture capabilities to get if the stream is in
+singleplanar/multiplanar mode, instead of checking the module parameter.
+- Change `if (multiplanar)` to `if (IS_MULTIPLANAR(vcap))`
+- Add a new commit to propagate in the stream if the capture device is
+in multiplanar or singleplanar mode
+
+André Almeida (14):
+  media: vimc: Remove unnecessary stream checks
+  media: vimc: cap: Change vimc_cap_device.format type
+  media: vimc: cap: Dynamically define stream pixelformat
+  media: Move sp2mp functions to v4l2-common
+  media: vimc: cap: refactor singleplanar as a subset of multiplanar
+  media: vimc: cap: Add handler for multiplanar fmt ioctls
+  media: vimc: cap: Add multiplanar formats
+  media: vimc: cap: Add multiplanar default format
+  media: vimc: cap: Allocate and verify mplanar buffers
+  media: vimc: Add and use new struct vimc_frame
+  media: vimc: sen: Add support for multiplanar formats
+  media: vimc: sca: Add support for multiplanar formats
+  media: vimc: cap: Add support for multiplanar formats
+  media: vimc: Create multiplanar parameter
+
+ drivers/media/platform/vimc/vimc-capture.c    | 288 ++++++++++++++----
+ drivers/media/platform/vimc/vimc-common.c     |   8 +
+ drivers/media/platform/vimc/vimc-common.h     |  41 ++-
+ drivers/media/platform/vimc/vimc-debayer.c    |  38 ++-
+ drivers/media/platform/vimc/vimc-scaler.c     | 127 ++++----
+ drivers/media/platform/vimc/vimc-sensor.c     |  67 ++--
+ drivers/media/platform/vimc/vimc-streamer.c   |   2 +-
+ drivers/media/platform/vivid/vivid-vid-cap.c  |   6 +-
+ .../media/platform/vivid/vivid-vid-common.c   |  59 ----
+ .../media/platform/vivid/vivid-vid-common.h   |   9 -
+ drivers/media/platform/vivid/vivid-vid-out.c  |   6 +-
+ drivers/media/v4l2-core/v4l2-common.c         |  62 ++++
+ include/media/v4l2-common.h                   |  37 +++
+ 13 files changed, 511 insertions(+), 239 deletions(-)
+
+-- 
+2.21.0
+
