@@ -2,363 +2,160 @@ Return-Path: <SRS0=gA2F=S4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F545C43219
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 19:54:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53F96C43219
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 20:34:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 426BC206DD
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 19:54:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B03F2077B
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 20:34:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="RXtm8B0i"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726584AbfDZTyt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 15:54:49 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:40786 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726503AbfDZTyt (ORCPT
+        id S1726239AbfDZUeO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 16:34:14 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:35748 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725966AbfDZUeO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 15:54:49 -0400
-Received: from [IPv6:2804:431:9718:9080:8461:642a:3a75:dbc6] (unknown [IPv6:2804:431:9718:9080:8461:642a:3a75:dbc6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: koike)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9F0602725B1;
-        Fri, 26 Apr 2019 20:54:42 +0100 (BST)
-Subject: Re: [PATCH v5 12/14] media: vimc: sca: Add support for multiplanar
- formats
-To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, kernel@collabora.com,
-        lucmaga@gmail.com, lkcamp@lists.libreplanetbr.org
-References: <20190426195114.5002-1-andrealmeid@collabora.com>
- <20190426195114.5002-13-andrealmeid@collabora.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=helen.koike@collabora.com; keydata=
- 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
-Message-ID: <1fde299e-83f4-9021-89cf-0f61756c5d58@collabora.com>
-Date:   Fri, 26 Apr 2019 16:54:38 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Fri, 26 Apr 2019 16:34:14 -0400
+Received: by mail-qt1-f196.google.com with SMTP id k38so5642617qtk.2
+        for <linux-media@vger.kernel.org>; Fri, 26 Apr 2019 13:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=vNqrtosD3Wa6mctcoU8eA66v5qv1B2uC9ZjPAJ2B54s=;
+        b=RXtm8B0ifFFnWr6lyY1EPadQ14vZX00kRBy81EQXlhPLJ7Rg2Hb5aUA299MY/6eQrR
+         RXFxdk7hx5sEtoeR246Le6tsSKsUpQbn/gOSNS+Ff9x2P9yu+HF3FJqkEWuVMAD3DsT5
+         0EU6MKOjSpTwF/fzl2cpLEtBrekwQ7ktXPhlMrRv70q1i0JUbIoBW2kmh+kzA0+IfqRE
+         n36cArn74CTC1qEP6Ip4gNJKKRoL25n8GDtQVJaeQPhszADdazNmkK464YRvNY7LjWYA
+         IylPWLjtVXj4WWmKmXJYqg/CkuqNBaSDJJxRdjrT1cnrlFlHr3pP7GOHdEET0XXK8/ks
+         etOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=vNqrtosD3Wa6mctcoU8eA66v5qv1B2uC9ZjPAJ2B54s=;
+        b=PywF7fjpw5fo0wCXJOQKleJq5SR8OhuuoRNUHPZkPXvwgyakz2ymD7T8BVDOw/pHnC
+         u88YX3gPwuBH7/v9G76Ln36sqGicPdnDJfAhCe5lLbum3zkrI//C1hfr+muiL+bnl7AP
+         J4Cw2a2IQk1zQaJ10pWH26r9haSxVT8pvtGyV/f1LdqH/6hhfTx/H7Pg2k69gJ4oKzol
+         EjbdgBZ8xp5JRI2iqpmMXn6uocZsHJz2UjUWd3+gZbINx/ekH3cpexNtcNliZ16fVPk5
+         pJo7I95ecxsrmIMXnEeqN2jh/rD62VOMJnrUVnwwaESW0oZugMZ8pgveKodDrK62fYSK
+         q3Bg==
+X-Gm-Message-State: APjAAAUJ7WS5dwXdNEN4OlTr8bJ+zkWKpHoftcFW+kpl2oxXLj2ZZCa+
+        ZGl+74MIQXEmJvcPtyE00ePyXQ==
+X-Google-Smtp-Source: APXvYqzsmvR+kc1cn4LW8OWb4wsz4KVln3yvZyHdNLJX35ZDFfQySitj8lczXefdpbsKwuBNb+upCg==
+X-Received: by 2002:ad4:4102:: with SMTP id i2mr4292931qvp.218.1556310853452;
+        Fri, 26 Apr 2019 13:34:13 -0700 (PDT)
+Received: from tpx230-nicolas.collaboramtl (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
+        by smtp.gmail.com with ESMTPSA id n66sm9689693qkf.49.2019.04.26.13.34.11
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 26 Apr 2019 13:34:11 -0700 (PDT)
+Message-ID: <2367b550d815bdf4c50aae692a5549f9be6a0802.camel@ndufresne.ca>
+Subject: Re: [PATCH v6 01/17] media: videodev2.h, v4l2-ioctl: add rkisp1
+ meta buffer format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Jacob Chen <jacob-chen@iotwrt.com>,
+        linux-rockchip@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        sakari.ailus@linux.intel.com, hans.verkuil@cisco.com,
+        tfiga@chromium.org, zhengsq@rock-chips.com,
+        laurent.pinchart@ideasonboard.com, zyc@rock-chips.com,
+        eddie.cai.linux@gmail.com, jeffy.chen@rock-chips.com,
+        devicetree@vger.kernel.org, heiko@sntech.de,
+        Jacob Chen <jacob2.chen@rock-chips.com>
+Date:   Fri, 26 Apr 2019 16:34:10 -0400
+In-Reply-To: <20180308094807.9443-2-jacob-chen@iotwrt.com>
+References: <20180308094807.9443-1-jacob-chen@iotwrt.com>
+         <20180308094807.9443-2-jacob-chen@iotwrt.com>
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-mOui5ucgkVhFyJMZ5z0C"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-In-Reply-To: <20190426195114.5002-13-andrealmeid@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
+--=-mOui5ucgkVhFyJMZ5z0C
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/26/19 4:51 PM, André Almeida wrote:
-> Change the scaling functions in order to scale planes. This change makes
-> easier to support multiplanar pixel formats.
-> 
-> Signed-off-by: André Almeida <andrealmeid@collabora.com>
-
-Acked-by: Helen Koike <helen.koike@collabora.com>
-
+Le jeudi 08 mars 2018 =C3=A0 17:47 +0800, Jacob Chen a =C3=A9crit :
+> From: Shunqian Zheng <zhengsq@rock-chips.com>
+>=20
+> Add the Rockchip ISP1 specific processing parameter format
+> V4L2_META_FMT_RK_ISP1_PARAMS and metadata format
+> V4L2_META_FMT_RK_ISP1_STAT_3A for 3A.
+>=20
+> Signed-off-by: Shunqian Zheng <zhengsq@rock-chips.com>
+> Signed-off-by: Jacob Chen <jacob2.chen@rock-chips.com>
+> Acked-by: Hans Verkuil <hans.verkuil@cisco.com>
 > ---
-> Changes in v5:
-> - Remove bpp from vimc_sca_device
-> - Changes where bpp var is declared at `vimc_sca_scale_pix`
-> 
-> Changes in v4:
-> - Rename `frame_size` to `plane_size`
-> - Correct `unsigned int ret` to `int ret`
-> - Remove label `free_planes` from else scope
-> - Change type of `width` and `heigth` to `unsigned int`
-> - Rename and move var declarations on `vimc_sca_fill_src_frame`
-> - Change `comp_planes` to `mem_planes` 
-> - Remove `v4l2_format_info()` unnecessary call
-> 
-> Change in v3:
-> - Adapt to new vimc_frame
-> 
-> Changes in v2:
-> - Move the TODO comment to vimc-capture
-> - Reuse and share the code to free the memory of planes with a goto
-> - Fix comment block style 
->  drivers/media/platform/vimc/vimc-scaler.c | 113 +++++++++++++---------
->  1 file changed, 69 insertions(+), 44 deletions(-)
-> 
-> diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
-> index f655b8312dc9..71b16ad80bc8 100644
-> --- a/drivers/media/platform/vimc/vimc-scaler.c
-> +++ b/drivers/media/platform/vimc/vimc-scaler.c
-> @@ -39,6 +39,9 @@ static const u32 vimc_sca_supported_pixfmt[] = {
->  	V4L2_PIX_FMT_BGR24,
->  	V4L2_PIX_FMT_RGB24,
->  	V4L2_PIX_FMT_ARGB32,
-> +	V4L2_PIX_FMT_YUV420,
-> +	V4L2_PIX_FMT_YUV420M,
-> +	V4L2_PIX_FMT_NV12M,
->  };
->  
->  struct vimc_sca_device {
-> @@ -51,8 +54,7 @@ struct vimc_sca_device {
->  	struct v4l2_mbus_framefmt sink_fmt;
->  	/* Values calculated when the stream starts */
->  	struct vimc_frame src_frame;
-> -	unsigned int src_line_size;
-> -	unsigned int bpp;
-> +	unsigned int src_line_size[TPG_MAX_PLANES];
->  };
->  
->  static const struct v4l2_mbus_framefmt sink_fmt_default = {
-> @@ -207,11 +209,12 @@ static const struct v4l2_subdev_pad_ops vimc_sca_pad_ops = {
->  static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
->  {
->  	struct vimc_sca_device *vsca = v4l2_get_subdevdata(sd);
-> +	unsigned int i;
-> +	int ret = 0;
->  
->  	if (enable) {
->  		u32 pixelformat = vsca->ved.stream->producer_pixfmt;
-> -		const struct v4l2_format_info *pix_info;
-> -		unsigned int frame_size;
-> +		unsigned int plane_size;
->  
->  		if (!vimc_sca_is_pixfmt_supported(pixelformat)) {
->  			dev_err(vsca->dev, "pixfmt (0x%08x) is not supported\n",
-> @@ -219,34 +222,44 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
->  			return -EINVAL;
->  		}
->  
-> -		/* Save the bytes per pixel of the sink */
-> -		pix_info = v4l2_format_info(pixelformat);
-> -		vsca->bpp = pix_info->bpp[0];
-> -
-> -		/* Calculate the width in bytes of the src frame */
-> -		vsca->src_line_size = vsca->sink_fmt.width *
-> -				      sca_mult * vsca->bpp;
-> -
-> -		/* Calculate the frame size of the source pad */
-> -		frame_size = vsca->src_line_size * vsca->sink_fmt.height *
-> -			     sca_mult;
-> +		vimc_fill_frame(&vsca->src_frame, pixelformat,
-> +				vsca->sink_fmt.width, vsca->sink_fmt.height);
+>  drivers/media/v4l2-core/v4l2-ioctl.c | 2 ++
+>  include/uapi/linux/videodev2.h       | 4 ++++
+>  2 files changed, 6 insertions(+)
+>=20
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
+re/v4l2-ioctl.c
+> index 1be54429d601..bdd469290d66 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1257,6 +1257,8 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
+mt)
+>  	case V4L2_META_FMT_VSP1_HGO:	descr =3D "R-Car VSP1 1-D Histogram"; brea=
+k;
+>  	case V4L2_META_FMT_VSP1_HGT:	descr =3D "R-Car VSP1 2-D Histogram"; brea=
+k;
+>  	case V4L2_META_FMT_UVC:		descr =3D "UVC payload header metadata"; break=
+;
+> +	case V4L2_META_FMT_RK_ISP1_PARAMS:	descr =3D "Rockchip ISP1 3A params";=
+ break;
+> +	case V4L2_META_FMT_RK_ISP1_STAT_3A:	descr =3D "Rockchip ISP1 3A statist=
+ics"; break;
+> =20
+>  	default:
+>  		/* Compressed formats */
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
+2.h
+> index e20d10df75c1..359ad8bbf9bf 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -698,6 +698,10 @@ struct v4l2_pix_format {
+>  #define V4L2_META_FMT_VSP1_HGT    v4l2_fourcc('V', 'S', 'P', 'T') /* R-C=
+ar VSP1 2-D Histogram */
+>  #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC=
+ Payload Header metadata */
+> =20
+> +/* Vendor specific - used for IPU3 camera sub-system */
+
+Did you mean "RK_ISP1 camera sub-system" ?
+
+> +#define V4L2_META_FMT_RK_ISP1_PARAMS	v4l2_fourcc('R', 'K', '1', 'P') /* =
+Rockchip ISP1 params */
+> +#define V4L2_META_FMT_RK_ISP1_STAT_3A	v4l2_fourcc('R', 'K', '1', 'S') /*=
+ Rockchip ISP1 3A statistics */
 > +
-> +		for (i = 0; i < vsca->src_frame.fmt.num_planes; i++) {
-> +			/* Calculate the width in bytes of the src frame */
-> +			vsca->src_line_size[i] =
-> +				vsca->src_frame.fmt.plane_fmt[i].bytesperline *
-> +				sca_mult;
-> +
-> +			/* Calculate the size of the nth-plane of source pad */
-> +			plane_size = vsca->src_frame.fmt.plane_fmt[i].sizeimage
-> +				* sca_mult * sca_mult;
-> +
-> +			/**
-> +			 * Allocate the frame buffer. Use vmalloc to be able to
-> +			 * allocate a large amount of memory
-> +			 */
-> +			vsca->src_frame.plane_addr[i] = vmalloc(plane_size);
-> +			if (!vsca->src_frame.plane_addr[i]) {
-> +				ret = -ENOMEM;
-> +				goto free_planes;
-> +			}
-> +			vsca->src_frame.fmt.plane_fmt[i].sizeimage = plane_size;
-> +		}
->  
-> -		/* Allocate the frame buffer. Use vmalloc to be able to
-> -		 * allocate a large amount of memory
-> -		 */
-> -		vsca->src_frame.plane_addr[0] = vmalloc(frame_size);
-> -		if (!vsca->src_frame.plane_addr[0])
-> -			return -ENOMEM;
-> +		return 0;
-> +	}
->  
-> -	} else {
-> -		if (!vsca->src_frame.plane_addr[0])
-> -			return 0;
-> +	if (!vsca->src_frame.plane_addr[0])
-> +		return 0;
->  
-> -		vfree(vsca->src_frame.plane_addr[0]);
-> -		vsca->src_frame.plane_addr[0] = NULL;
-> +free_planes:
-> +	for (i = 0; i < vsca->src_frame.fmt.num_planes; i++) {
-> +		vfree(vsca->src_frame.plane_addr[i]);
-> +		vsca->src_frame.plane_addr[i] = NULL;
->  	}
->  
-> -	return 0;
-> +	return ret;
->  }
->  
->  static const struct v4l2_subdev_video_ops vimc_sca_video_ops = {
-> @@ -269,18 +282,19 @@ static void vimc_sca_fill_pix(u8 *const ptr,
->  		ptr[i] = pixel[i];
->  }
->  
-> +/* TODO: parallelize this function */
->  static void vimc_sca_scale_pix(const struct vimc_sca_device *const vsca,
->  			       const unsigned int lin, const unsigned int col,
-> -			       const u8 *const sink_frame)
-> +			       const struct vimc_frame *sink_frame,
-> +			       unsigned int num_plane, unsigned int width)
-> +
->  {
-> -	unsigned int i, j, index;
-> +	unsigned int i, j, index, bpp = sink_frame->fmt_info->bpp[num_plane];
->  	const u8 *pixel;
->  
->  	/* Point to the pixel value in position (lin, col) in the sink frame */
-> -	index = VIMC_FRAME_INDEX(lin, col,
-> -				 vsca->sink_fmt.width,
-> -				 vsca->bpp);
-> -	pixel = &sink_frame[index];
-> +	index = VIMC_FRAME_INDEX(lin, col, width, bpp);
-> +	pixel = &sink_frame->plane_addr[num_plane][index];
->  
->  	dev_dbg(vsca->dev,
->  		"sca: %s: --- scale_pix sink pos %dx%d, index %d ---\n",
-> @@ -290,7 +304,7 @@ static void vimc_sca_scale_pix(const struct vimc_sca_device *const vsca,
->  	 * in the scaled src frame
->  	 */
->  	index = VIMC_FRAME_INDEX(lin * sca_mult, col * sca_mult,
-> -				 vsca->sink_fmt.width * sca_mult, vsca->bpp);
-> +				 width * sca_mult, bpp);
->  
->  	dev_dbg(vsca->dev, "sca: %s: scale_pix src pos %dx%d, index %d\n",
->  		vsca->sd.name, lin * sca_mult, col * sca_mult, index);
-> @@ -300,32 +314,43 @@ static void vimc_sca_scale_pix(const struct vimc_sca_device *const vsca,
->  		/* Iterate through each beginning of a
->  		 * pixel repetition in a line
->  		 */
-> -		for (j = 0; j < sca_mult * vsca->bpp; j += vsca->bpp) {
-> +		for (j = 0; j < sca_mult * bpp; j += bpp) {
->  			dev_dbg(vsca->dev,
->  				"sca: %s: sca: scale_pix src pos %d\n",
->  				vsca->sd.name, index + j);
->  
->  			/* copy the pixel to the position index + j */
->  			vimc_sca_fill_pix(
-> -				&vsca->src_frame.plane_addr[0][index + j],
-> -				pixel, vsca->bpp);
-> +				&vsca->src_frame.plane_addr[num_plane][index+j],
-> +				pixel, bpp);
->  		}
->  
->  		/* move the index to the next line */
-> -		index += vsca->src_line_size;
-> +		index += vsca->src_line_size[num_plane];
->  	}
->  }
->  
->  static void vimc_sca_fill_src_frame(const struct vimc_sca_device *const vsca,
-> -				    const u8 *const sink_frame)
-> +				    const struct vimc_frame *sink_frame)
->  {
-> -	unsigned int i, j;
-> +	unsigned int i, j, num_plane;
-> +	const struct v4l2_format_info *info;
-> +
-> +	info = sink_frame->fmt_info;
->  
->  	/* Scale each pixel from the original sink frame */
->  	/* TODO: implement scale down, only scale up is supported for now */
-> -	for (i = 0; i < vsca->sink_fmt.height; i++)
-> -		for (j = 0; j < vsca->sink_fmt.width; j++)
-> -			vimc_sca_scale_pix(vsca, i, j, sink_frame);
-> +	for (num_plane = 0; num_plane < info->mem_planes; num_plane++) {
-> +		unsigned int plane_width = vsca->sink_fmt.width /
-> +					((num_plane == 0) ? 1 : info->vdiv);
-> +		unsigned int plane_height = vsca->sink_fmt.height /
-> +					((num_plane == 0) ? 1 : info->hdiv);
-> +
-> +		for (i = 0; i < plane_height; i++)
-> +			for (j = 0; j < plane_width; j++)
-> +				vimc_sca_scale_pix(vsca, i, j, sink_frame,
-> +						     num_plane, plane_width);
-> +	}
->  }
->  
->  static struct vimc_frame *vimc_sca_process_frame(struct vimc_ent_device *ved,
-> @@ -338,7 +363,7 @@ static struct vimc_frame *vimc_sca_process_frame(struct vimc_ent_device *ved,
->  	if (!ved->stream)
->  		return ERR_PTR(-EINVAL);
->  
-> -	vimc_sca_fill_src_frame(vsca, sink_frame->plane_addr[0]);
-> +	vimc_sca_fill_src_frame(vsca, sink_frame);
->  
->  	return &vsca->src_frame;
->  };
-> 
+>  /* priv field value to indicates that subsequent fields are valid. */
+>  #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
+> =20
+
+--=-mOui5ucgkVhFyJMZ5z0C
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXMNrQgAKCRBxUwItrAao
+HMr/AKCH5EVntTk1jT5u0f41G/tqfeI+CwCgwiiFz0hcOaFAjBEJIqWm5+mUPpM=
+=9X8/
+-----END PGP SIGNATURE-----
+
+--=-mOui5ucgkVhFyJMZ5z0C--
+
