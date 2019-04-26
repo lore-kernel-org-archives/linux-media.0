@@ -2,195 +2,201 @@ Return-Path: <SRS0=gA2F=S4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71078C43219
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 15:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52243C43219
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:28:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C8832077B
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 15:42:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1556293344;
-	bh=wv+/JLUGRW5AWavFbV9fHSgJ6dZYAnq5KBTBDiClWAU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=pTZ9AFLq9vyLu0QKMmptBb+SZn8RwhcbGem8eW/P1UKP1F2xd2r38QbCCVC0TqGKR
-	 B+F2p9zhtkkbffENf4gyXnfcc0O7jGe/5ptwHlzb4isbyQOCbzubg3dNMmxrmPV0EQ
-	 V+0Qoo45P1n9L/wmS4ulVUhVtvEe1aq2l6Rl80EM=
+	by mail.kernel.org (Postfix) with ESMTP id 20BC0208CA
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 16:28:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726229AbfDZPmX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 11:42:23 -0400
-Received: from casper.infradead.org ([85.118.1.10]:49834 "EHLO
-        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbfDZPmX (ORCPT
+        id S1726088AbfDZQ2Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 12:28:16 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:37303 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726005AbfDZQ2Q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 11:42:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+/Bj+aYyKZCUAY62FJJqENJD5hnOSJGm0uYeGlQtYlk=; b=o6j1olxB7g+KGjLkzzhYx/dgVa
-        ad0CAexpkymeuXSCy+UFeKtNZ48vd9kgBcKNWyN6u9Cv+rxjwLAd4U6J693M9F2/npdj27gG2CNoy
-        LBw+K+ijv0kMwPcJ25O4/MozpUtgkQUYF46BqVnQF9YFRjlShnPEU3ij9y7UiS9Yus2O9VdfW8MHo
-        1bJLJ5mQVnM5UzuV0MaGiRIaWmWvZT6RCd9LwKBfZS0rwmmak7aiClAJbnla2pRoMISkuOs4Ir1Qv
-        E5AvuL30hv8+KJLd49JmrGEhf9zx2F6vO2zl/igujFpmLScC0VJ+zMKW3X6J0CHH7DPCpWfq0vJLK
-        tmMmbntQ==;
-Received: from [179.95.39.209] (helo=coco.lan)
-        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hK2zV-0007yL-HW; Fri, 26 Apr 2019 15:42:22 +0000
-Date:   Fri, 26 Apr 2019 12:42:17 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Sean Young <sean@mess.org>, Gregor Jasny <gjasny@googlemail.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: [PATCH v4l-utils] libdvbv5: leaks and double free in
- dvb_fe_open_fname()
-Message-ID: <20190426124217.55ae71cc@coco.lan>
-In-Reply-To: <20190426121344.510ef576@coco.lan>
-References: <20190317163220.1881-1-sean@mess.org>
-        <20190426121344.510ef576@coco.lan>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Fri, 26 Apr 2019 12:28:16 -0400
+X-Originating-IP: 93.29.109.196
+Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 9710BE000A;
+        Fri, 26 Apr 2019 16:28:12 +0000 (UTC)
+Message-ID: <2023690a879a1d30b8a686962326dd18a77156f3.camel@bootlin.com>
+Subject: Re: [PATCH v4] media: docs-rst: Document m2m stateless video
+ decoder interface
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Dafna Hirschfeld <dafna3@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Fri, 26 Apr 2019 18:28:12 +0200
+In-Reply-To: <793af82c-6b37-6f69-648e-2cd2a2e87645@xs4all.nl>
+References: <20190306080019.159676-1-acourbot@chromium.org>
+         <371df0e4ec9e38d83d11171cbd98f19954cbf787.camel@ndufresne.ca>
+         <da5aa9ab957923a72e30b169a3c242c4fe6260f1.camel@bootlin.com>
+         <c07703459c7e48904bd7fd83be1e675c70eee83c.camel@ndufresne.ca>
+         <d81d0112b99feba0a1899f3722077a4aeec9860c.camel@bootlin.com>
+         <439b7f57aa3ba2b2ed5b043f961ef87cb83912af.camel@ndufresne.ca>
+         <59e23c5ca5bfbadf9441ea06da2e9b9b5898c6d7.camel@bootlin.com>
+         <0b495143bb260cf9f8927ee541e7f001842ac5c3.camel@ndufresne.ca>
+         <CAPBb6MVG+3jQcw3AuhYDYCZ0YJ0aX=TmEuM5izh12GLw9V6B8Q@mail.gmail.com>
+         <793af82c-6b37-6f69-648e-2cd2a2e87645@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.0 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Gregor,
+Hi,
 
-This patch messed with all branches since stable-1.12. I applied the revert
-patch already on all affected stable branches.
-
-We should probably release a new fix for them soon.
-
-Sorry for not looking this earlier.. I got some vacations earlier 
-this month.
-
-Regards,
-Mauro
-
-Em Fri, 26 Apr 2019 12:13:44 -0300
-Mauro Carvalho Chehab <mchehab+samsung@kernel.org> escreveu:
-
-> Em Sun, 17 Mar 2019 16:32:20 +0000
-> Sean Young <sean@mess.org> escreveu:
+Le vendredi 26 avril 2019 à 16:18 +0200, Hans Verkuil a écrit :
+> On 4/16/19 9:22 AM, Alexandre Courbot wrote:
 > 
-> > dvb_fe_open_fname() takes ownership of fname if the function succeeds, but
-> > also in two of the error paths (e.g. if the ioctl FE_GET_PROPERTY fails).
+> <snip>
+> 
+> > Thanks for this great discussion. Let me try to summarize the status
+> > of this thread + the IRC discussion and add my own thoughts:
 > > 
-> > Adjust dvb_fe_open_fname() so it copies fname rather than taking ownership
-> > (and passing that to params). This makes the code cleaner.  
-> 
-> Just reverted this patch from stable-1.16, as it breaks Kaffeine.
-> 
-> There are two reports about the issue:
-> 
-> 	https://bugs.kde.org/show_bug.cgi?id=406145
->         https://bugzilla.redhat.com/show_bug.cgi?id=1695023
-> 
-> I was able to reproduce it locally.
-> 
-> So, better to keep a possible memory leak than to cause apps
-> to not function anymore.
-> 
+> > Proper support for multiple decoding units (e.g. H.264 slices) per
+> > frame should not be an afterthought ; compliance to encoded formats
+> > depend on it, and the benefit of lower latency is a significant
+> > consideration for vendors.
 > > 
-> > Signed-off-by: Sean Young <sean@mess.org>
-> > ---
-> >  lib/libdvbv5/dvb-dev-local.c |  2 +-
-> >  lib/libdvbv5/dvb-fe.c        | 18 ++++++++----------
-> >  2 files changed, 9 insertions(+), 11 deletions(-)
+> > m2m, which we use for all stateless codecs, has a strong assumption
+> > that one OUTPUT buffer consumed results in one CAPTURE buffer being
+> > produced. This assumption can however be overruled: at least the venus
+> > driver does it to implement the stateful specification.
 > > 
-> > diff --git a/lib/libdvbv5/dvb-dev-local.c b/lib/libdvbv5/dvb-dev-local.c
-> > index e98b967a..2de9a614 100644
-> > --- a/lib/libdvbv5/dvb-dev-local.c
-> > +++ b/lib/libdvbv5/dvb-dev-local.c
-> > @@ -467,7 +467,7 @@ static struct dvb_open_descriptor
-> >  			flags &= ~O_NONBLOCK;
-> >  		}
-> >  
-> > -		ret = dvb_fe_open_fname(parms, strdup(dev->path), flags);
-> > +		ret = dvb_fe_open_fname(parms, dev->path, flags);
-> >  		if (ret) {
-> >  			free(open_dev);
-> >  			return NULL;
-> > diff --git a/lib/libdvbv5/dvb-fe.c b/lib/libdvbv5/dvb-fe.c
-> > index 5dcf492e..7f634766 100644
-> > --- a/lib/libdvbv5/dvb-fe.c
-> > +++ b/lib/libdvbv5/dvb-fe.c
-> > @@ -133,7 +133,6 @@ struct dvb_v5_fe_parms *dvb_fe_open_flags(int adapter, int frontend,
-> >  					  int flags)
-> >  {
-> >  	int ret;
-> > -	char *fname;
-> >  	struct dvb_device *dvb;
-> >  	struct dvb_dev_list *dvb_dev;
-> >  	struct dvb_v5_fe_parms_priv *parms = NULL;
-> > @@ -153,7 +152,6 @@ struct dvb_v5_fe_parms *dvb_fe_open_flags(int adapter, int frontend,
-> >  		dvb_dev_free(dvb);
-> >  		return NULL;
-> >  	}
-> > -	fname = strdup(dvb_dev->path);
-> >  
-> >  	if (!strcmp(dvb_dev->bus_addr, "platform:dvbloopback")) {
-> >  		logfunc(LOG_WARNING, _("Detected dvbloopback"));
-> > @@ -161,14 +159,10 @@ struct dvb_v5_fe_parms *dvb_fe_open_flags(int adapter, int frontend,
-> >  	}
-> >  
-> >  	dvb_dev_free(dvb);
-> > -	if (!fname) {
-> > -		logfunc(LOG_ERR, _("fname calloc: %s"), strerror(errno));
-> > -		return NULL;
-> > -	}
-> > +
-> >  	parms = calloc(sizeof(*parms), 1);
-> >  	if (!parms) {
-> >  		logfunc(LOG_ERR, _("parms calloc: %s"), strerror(errno));
-> > -		free(fname);
-> >  		return NULL;
-> >  	}
-> >  	parms->p.verbose = verbose;
-> > @@ -183,7 +177,7 @@ struct dvb_v5_fe_parms *dvb_fe_open_flags(int adapter, int frontend,
-> >  	if (use_legacy_call)
-> >  		parms->p.legacy_fe = 1;
-> >  
-> > -	ret = dvb_fe_open_fname(parms, fname, flags);
-> > +	ret = dvb_fe_open_fname(parms, dvb_dev->path, flags);
-> >  	if (ret < 0) {
-> >  		dvb_v5_free(parms);
-> >  		return NULL;
-> > @@ -203,7 +197,6 @@ int dvb_fe_open_fname(struct dvb_v5_fe_parms_priv *parms, char *fname,
-> >  	fd = open(fname, flags, 0);
-> >  	if (fd == -1) {
-> >  		dvb_logerr(_("%s while opening %s"), strerror(errno), fname);
-> > -		free(fname);
-> >  		return -errno;
-> >  	}
-> >  
-> > @@ -224,7 +217,12 @@ int dvb_fe_open_fname(struct dvb_v5_fe_parms_priv *parms, char *fname,
-> >  		}
-> >  	}
-> >  
-> > -	parms->fname = fname;
-> > +	parms->fname = strdup(fname);
-> > +	if (!parms->fname) {
-> > +		dvb_logerr(_("fname calloc: %s"), strerror(errno));
-> > +		return -errno;
-> > +	}
-> > +
-> >  	parms->fd = fd;
-> >  	parms->fe_flags = flags;
-> >  	parms->dvb_prop[0].cmd = DTV_API_VERSION;  
+> > So we need a way to specify frame boundaries when submitting encoded
+> > content to the driver. One request should contain a single OUTPUT
+> > buffer, containing a single decoding unit, but we need a way to
+> > specify whether the driver should directly produce a CAPTURE buffer
+> > from this request, or keep using the same CAPTURE buffer with
+> > subsequent requests.
+> > 
+> > I can think of 2 ways this can be expressed:
+> > 1) We keep the current m2m behavior as the default (a CAPTURE buffer
+> > is produced), and add a flag to ask the driver to change that behavior
+> > and hold on the CAPTURE buffer and reuse it with the next request(s) ;
+> > 2) We specify that no CAPTURE buffer is produced by default, unless a
+> > flag asking so is specified.
+> > 
+> > The flag could be specified in one of two ways:
+> > a) As a new v4l2_buffer.flag for the OUTPUT buffer ;
+> > b) As a dedicated control, either format-specific or more common to all codecs.
+> > 
+> > I tend to favor 2) and b) for this, for the reason that with H.264 at
+> > least, user-space does not know whether a slice is the last slice of a
+> > frame until it starts parsing the next one, and we don't know when we
+> > will receive it. If we use a control to ask that a CAPTURE buffer be
+> > produced, we can always submit another request with only that control
+> > set once it is clear that the frame is complete (and not delay
+> > decoding meanwhile). In practice I am not that familiar with
+> > latency-sensitive streaming ; maybe a smart streamer would just append
+> > an AUD NAL unit at the end of every frame and we can thus submit the
+> > flag it with the last slice without further delay?
+> > 
+> > An extra constraint to enforce would be that each decoding unit
+> > belonging to the same frame must be submitted with the same timestamp,
+> > otherwise the request submission would fail. We really need a
+> > framework to enforce all this at a higher level than individual
+> > drivers, once we reach an agreement I will start working on this.
+> > 
+> > Formats that do not support multiple decoding units per frame would
+> > reject any request that does not carry the end-of-frame information.
+> > 
+> > Anything missing / any further comment?
+> > 
 > 
+> After reading through this thread and a further irc discussion I now
+> understand the problem. I think there are several ways this can be
+> solved, but I think this is the easiest:
 > 
+> Introduce a new V4L2_BUF_FLAG_HOLD_CAPTURE_BUFFER flag.
 > 
-> Thanks,
-> Mauro
+> If set in the OUTPUT buffer, then don't mark the CAPTURE buffer as
+> done after processing the OUTPUT buffer.
+> 
+> If an OUTPUT buffer was queued with a different timestamp than was
+> used for the currently held CAPTURE buffer, then mark that CAPTURE
+> buffer as done before starting processing this OUTPUT buffer.
+> 
+> In other words, for slicing you can just always set this flag and
+> group the slices by the OUTPUT timestamp. If you know that you
+> reached the last slice of a frame, then you can optionally clear the
+> flag to ensure the CAPTURE buffer is marked done without having to wait
+> for the first slice of the next frame to arrive.
+> 
+> Potential disadvantage of this approach is that this relies on the
+> OUTPUT timestamp to be the same for all slices of the same frame.
+> 
+> Which sounds reasonable to me.
+> 
+> In addition add a V4L2_BUF_CAP_SUPPORTS_HOLD_CAPTURE_BUFFER
+> capability to signal support for this flag.
+> 
+> I think this can be fairly easily implemented in v4l2-mem2mem.c.
+> 
+> In addition, this approach is not specific to codecs, it can be
+> used elsewhere as well (composing multiple output buffers into one
+> capture buffer is one use-case that comes to mind).
+> 
+> Comments? Other ideas?
 
+One remark I have: this implies that the order in which requests are
+decoded will match the order in which they are submitted (in order to
+be rely on the last slice being marked as such).
 
+In the future, we might want to be ablle to add support for parallel
+decoders that could handle multiple slices concurrently. I don't think
+the M2M internal API is ready for that currently, but it could
+certainly be extended to allow that eventually. In that case, we can't
+rely on the order in which slices will complete their decoding and the
+one slice that was marking the end of the frame may be decoded sooner
+than other slices scheduled at the same time. In this case, we end up
+having to wait for a new frame in order to mark the destination buffer
+as done, which introduces a major latency issue for the frame.
 
-Thanks,
-Mauro
+So I think the problem we should be trying to resolve should be
+formulated in terms of marking the end of a group of requests as done. 
+
+For that, my proposal is to solve the issue at the media API level, by
+introducing an entity representing a group of requests that share the
+same destination buffer. The idea would be that requests are added to
+that entity when they are submitted, and a field in the submit ioctl
+would indicate whether the request is the last one of the batch.
+
+The destination buffer gets picked up when the first request is
+processed and all subsequent requests grouped in the entity use the
+same one. Then, we can have the media core ensure that all the requests
+of that entity are completed and that the last element of the batch was
+submitted before marking the destination buffer as done.
+
+This presents a few advantages:
+- Userspace has a straightforward interface to group the completion of
+requests, which is independent from both our use case and v4l2;
+- This mechanism can then be used in other situations where grouping
+the completion of different requests is desirable: for instance, it
+could be used to sync two source feeds that need to be displayed
+synchronized;
+- Userspace can poll on a single file descriptor representing the
+entity, instead of having to do the book keeping of checking that each
+request was completed before dealing with the decoded buffer.
+
+What do you think?
+
+Cheers,
+
+Paul
+
