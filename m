@@ -2,118 +2,159 @@ Return-Path: <SRS0=gA2F=S4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1621C4321A
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 14:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9E0EC43219
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 14:18:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CC78B2089E
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 14:11:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC3E2206C1
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 14:18:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbfDZOLm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 10:11:42 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:59306 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726411AbfDZOLl (ORCPT
+        id S1726202AbfDZOSq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 10:18:46 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:60681 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726060AbfDZOSp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 10:11:41 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x3QEAwgZ059497
-        for <linux-media@vger.kernel.org>; Fri, 26 Apr 2019 10:11:40 -0400
-Received: from e12.ny.us.ibm.com (e12.ny.us.ibm.com [129.33.205.202])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2s43d4gmhu-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-media@vger.kernel.org>; Fri, 26 Apr 2019 10:11:39 -0400
-Received: from localhost
-        by e12.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-media@vger.kernel.org> from <eajames@linux.ibm.com>;
-        Fri, 26 Apr 2019 15:11:37 +0100
-Received: from b01cxnp22034.gho.pok.ibm.com (9.57.198.24)
-        by e12.ny.us.ibm.com (146.89.104.199) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 26 Apr 2019 15:11:33 +0100
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x3QEBWXK11206780
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Apr 2019 14:11:32 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8BC2BAE066;
-        Fri, 26 Apr 2019 14:11:32 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C6BA0AE05F;
-        Fri, 26 Apr 2019 14:11:31 +0000 (GMT)
-Received: from [9.80.210.106] (unknown [9.80.210.106])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 26 Apr 2019 14:11:31 +0000 (GMT)
-Subject: Re: [PATCH v2 3/4] media: dt-bindings: aspeed-video: Add missing
- memory-region property
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
-        devicetree@vger.kernel.org, linux-media@vger.kernel.org,
-        andrew@aj.id.au, joel@jms.id.au, robh+dt@kernel.org,
-        mark.rutland@arm.com, mchehab@kernel.org, hverkuil@xs4all.nl
-References: <1556119020-7609-1-git-send-email-eajames@linux.ibm.com>
- <1556119020-7609-4-git-send-email-eajames@linux.ibm.com>
- <20190424211732.GA18914@bogus>
-From:   Eddie James <eajames@linux.ibm.com>
-Date:   Fri, 26 Apr 2019 09:11:31 -0500
+        Fri, 26 Apr 2019 10:18:45 -0400
+Received: from [IPv6:2001:420:44c1:2579:108d:59b8:4aa1:d99c] ([IPv6:2001:420:44c1:2579:108d:59b8:4aa1:d99c])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id K1gUhcizbb8gSK1gYhsNEF; Fri, 26 Apr 2019 16:18:43 +0200
+Subject: Re: [PATCH v4] media: docs-rst: Document m2m stateless video decoder
+ interface
+To:     Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Dafna Hirschfeld <dafna3@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20190306080019.159676-1-acourbot@chromium.org>
+ <371df0e4ec9e38d83d11171cbd98f19954cbf787.camel@ndufresne.ca>
+ <da5aa9ab957923a72e30b169a3c242c4fe6260f1.camel@bootlin.com>
+ <c07703459c7e48904bd7fd83be1e675c70eee83c.camel@ndufresne.ca>
+ <d81d0112b99feba0a1899f3722077a4aeec9860c.camel@bootlin.com>
+ <439b7f57aa3ba2b2ed5b043f961ef87cb83912af.camel@ndufresne.ca>
+ <59e23c5ca5bfbadf9441ea06da2e9b9b5898c6d7.camel@bootlin.com>
+ <0b495143bb260cf9f8927ee541e7f001842ac5c3.camel@ndufresne.ca>
+ <CAPBb6MVG+3jQcw3AuhYDYCZ0YJ0aX=TmEuM5izh12GLw9V6B8Q@mail.gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <793af82c-6b37-6f69-648e-2cd2a2e87645@xs4all.nl>
+Date:   Fri, 26 Apr 2019 16:18:38 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-In-Reply-To: <20190424211732.GA18914@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CAPBb6MVG+3jQcw3AuhYDYCZ0YJ0aX=TmEuM5izh12GLw9V6B8Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-TM-AS-GCONF: 00
-x-cbid: 19042614-0060-0000-0000-00000335033B
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00010999; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000285; SDB=6.01194671; UDB=6.00626376; IPR=6.00975506;
- MB=3.00026608; MTD=3.00000008; XFM=3.00000015; UTC=2019-04-26 14:11:36
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19042614-0061-0000-0000-0000491B1609
-Message-Id: <6fd356ba-815b-aa34-abd4-d3709daf453a@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-04-26_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1904260098
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfFL8Ja44FZFIsmjQo2LHxrQGhfa6RjonS9rLymDquLpVkq7T+XX0hne0yVz60Kj8L8tnCtbjnpxbQrB1zRsp7jyr4bMDUilgjnfPU/UzyJYO5Pi4upe7
+ z8fV0C47wE7jR5wi1GoJ80A49QSpfrMxdlJmS/z+BFIGJ0huGbSIUMgDlGeyygk4wGSd7xk3sbY7IE2X0KcU5akYOCOVa83y6S7vOZmN42gMBOJ6xnZCvI4f
+ X21EN1hjuZ2zWULzwsY70z590jqGXq6zKuzneS3zONHdvreAN+URkDLyLgBPY8eUbP8+6NkU5gRZ0AsyAZZSHuJRtYPBcHSIPuP13CF0eYtlrIL6/eU5cP7j
+ sxce+1kApepkcSXj2SCUT/Pw3um2F3z28rtELMCPbikohTFj+KhmVRUw0FMVGpIWgrjuKeokhrplJtOzWdpZndx6/doyeq6BaEffnMMPAzctslYdz6WKUx4O
+ Ul2IzrWwkv9sQgsycTCiQSR8eMiENF6wvj8m84vnGFSWEy1qPDqkIQnwLsIrE08azp4jGTxmlt+RVNoKiETMjK4FRBwasQQGUzOEsQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On 4/16/19 9:22 AM, Alexandre Courbot wrote:
 
-On 4/24/19 4:17 PM, Rob Herring wrote:
-> On Wed, 24 Apr 2019 10:16:59 -0500, Eddie James wrote:
->> Missed documenting this property in the initial commit.
->>
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->> Changes since v1:
->>   - Add missing semi-colon
->>
->>   Documentation/devicetree/bindings/media/aspeed-video.txt | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
->
-> If a tag was not added on purpose, please state why and what changed.
+<snip>
 
+> Thanks for this great discussion. Let me try to summarize the status
+> of this thread + the IRC discussion and add my own thoughts:
+> 
+> Proper support for multiple decoding units (e.g. H.264 slices) per
+> frame should not be an afterthought ; compliance to encoded formats
+> depend on it, and the benefit of lower latency is a significant
+> consideration for vendors.
+> 
+> m2m, which we use for all stateless codecs, has a strong assumption
+> that one OUTPUT buffer consumed results in one CAPTURE buffer being
+> produced. This assumption can however be overruled: at least the venus
+> driver does it to implement the stateful specification.
+> 
+> So we need a way to specify frame boundaries when submitting encoded
+> content to the driver. One request should contain a single OUTPUT
+> buffer, containing a single decoding unit, but we need a way to
+> specify whether the driver should directly produce a CAPTURE buffer
+> from this request, or keep using the same CAPTURE buffer with
+> subsequent requests.
+> 
+> I can think of 2 ways this can be expressed:
+> 1) We keep the current m2m behavior as the default (a CAPTURE buffer
+> is produced), and add a flag to ask the driver to change that behavior
+> and hold on the CAPTURE buffer and reuse it with the next request(s) ;
+> 2) We specify that no CAPTURE buffer is produced by default, unless a
+> flag asking so is specified.
+> 
+> The flag could be specified in one of two ways:
+> a) As a new v4l2_buffer.flag for the OUTPUT buffer ;
+> b) As a dedicated control, either format-specific or more common to all codecs.
+> 
+> I tend to favor 2) and b) for this, for the reason that with H.264 at
+> least, user-space does not know whether a slice is the last slice of a
+> frame until it starts parsing the next one, and we don't know when we
+> will receive it. If we use a control to ask that a CAPTURE buffer be
+> produced, we can always submit another request with only that control
+> set once it is clear that the frame is complete (and not delay
+> decoding meanwhile). In practice I am not that familiar with
+> latency-sensitive streaming ; maybe a smart streamer would just append
+> an AUD NAL unit at the end of every frame and we can thus submit the
+> flag it with the last slice without further delay?
+> 
+> An extra constraint to enforce would be that each decoding unit
+> belonging to the same frame must be submitted with the same timestamp,
+> otherwise the request submission would fail. We really need a
+> framework to enforce all this at a higher level than individual
+> drivers, once we reach an agreement I will start working on this.
+> 
+> Formats that do not support multiple decoding units per frame would
+> reject any request that does not carry the end-of-frame information.
+> 
+> Anything missing / any further comment?
+> 
 
-Yes, I left it off because I added a semi-colon (trivial, I know, but it 
-did change). The change log is there below the commit message.
+After reading through this thread and a further irc discussion I now
+understand the problem. I think there are several ways this can be
+solved, but I think this is the easiest:
 
-Thanks,
+Introduce a new V4L2_BUF_FLAG_HOLD_CAPTURE_BUFFER flag.
 
-Eddie
+If set in the OUTPUT buffer, then don't mark the CAPTURE buffer as
+done after processing the OUTPUT buffer.
 
+If an OUTPUT buffer was queued with a different timestamp than was
+used for the currently held CAPTURE buffer, then mark that CAPTURE
+buffer as done before starting processing this OUTPUT buffer.
 
->
+In other words, for slicing you can just always set this flag and
+group the slices by the OUTPUT timestamp. If you know that you
+reached the last slice of a frame, then you can optionally clear the
+flag to ensure the CAPTURE buffer is marked done without having to wait
+for the first slice of the next frame to arrive.
 
+Potential disadvantage of this approach is that this relies on the
+OUTPUT timestamp to be the same for all slices of the same frame.
+
+Which sounds reasonable to me.
+
+In addition add a V4L2_BUF_CAP_SUPPORTS_HOLD_CAPTURE_BUFFER
+capability to signal support for this flag.
+
+I think this can be fairly easily implemented in v4l2-mem2mem.c.
+
+In addition, this approach is not specific to codecs, it can be
+used elsewhere as well (composing multiple output buffers into one
+capture buffer is one use-case that comes to mind).
+
+Comments? Other ideas?
+
+Regards,
+
+	Hans
