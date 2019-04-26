@@ -3,139 +3,129 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED5F3C43218
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 07:06:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44373C43218
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 07:46:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BB1452089E
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 07:06:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF623206E0
+	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 07:46:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725899AbfDZHGG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 03:06:06 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37626 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbfDZHGG (ORCPT
+        id S1726188AbfDZHqc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 03:46:32 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:38494 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbfDZHqc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 03:06:06 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: gtucker)
-        with ESMTPSA id E4E20260BC9
-Subject: Re: [STATUS UPDATE] test-media regression script status
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-References: <37927084-3fd6-51dc-9868-4c84cf034f38@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        =?UTF-8?B?TWljaGHFgiBHYcWCa2E=?= <michal.galka@collabora.com>,
-        kernelci@groups.io
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-Message-ID: <3c2c4099-b2cc-d925-8aff-6bbd3beb3837@collabora.com>
-Date:   Fri, 26 Apr 2019 08:06:01 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        Fri, 26 Apr 2019 03:46:32 -0400
+Received: by mail-qt1-f193.google.com with SMTP id d13so3099026qth.5;
+        Fri, 26 Apr 2019 00:46:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ai+vP/B94Ve42WDYthMy68WDqGtKeGDhz8vwsuWoKYY=;
+        b=FG7fOj59wwyOPVaYrKZUOZkuiWAvC9akOixlTflJRlZBaD5Nk1Q5lt4sNCVKQ0Ymoj
+         52Mw/cEb5bga48QDfZ25/IosOd7f4DVtReblKt78Tddb6JbvCOKlsnW4ZPHxwbqCcDWl
+         AQM/p3uZiav0jkbogyOgR/4xxAbV+hxPuEvbksaoHrj3hkC5yYwUQGGxb0feSPNshzXf
+         S+dmruYGKTPfi7MC8NPxeUYIYDBmFZwedMocX20dgkFMvHU+dhbQkTwmaEk2O8qXcQ6g
+         uJAGfAJII+Qyt2ArmRK2SZ3h6YsW8oPqMVHZ/GGnoBbS0uiS7s2iVgur4G88lQugZgI8
+         33hw==
+X-Gm-Message-State: APjAAAVBrPBraidJkoagVa/Iqi808354m7O7uJIVMSDvP510mK1VadoD
+        QO8l3m/Yer2pZRboxgbgjpAGH2eZtedEhQ8mJXg=
+X-Google-Smtp-Source: APXvYqzr09tBTeb1FTaqfVBhYsMoMqeG81qMW2qxny43/8KyQQnSkk725v7OZs6m0g32Hp/ZRVlDu6HuZidDEo5Nyhc=
+X-Received: by 2002:ac8:276b:: with SMTP id h40mr35193967qth.319.1556264790155;
+ Fri, 26 Apr 2019 00:46:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <37927084-3fd6-51dc-9868-4c84cf034f38@xs4all.nl>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190416202013.4034148-1-arnd@arndb.de> <20190416202701.127745-1-arnd@arndb.de>
+ <20190425122153.450fc094@coco.lan> <20190425153534.GS2217@ZenIV.linux.org.uk>
+ <CAK8P3a2HmiYQJ2FV2FgLiFsD8M9UKteC9Jetx7ja06PQVZWYfA@mail.gmail.com> <5511420228cb38d08a67c0f6a614b7671d7d23d4.camel@sipsolutions.net>
+In-Reply-To: <5511420228cb38d08a67c0f6a614b7671d7d23d4.camel@sipsolutions.net>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 26 Apr 2019 09:46:13 +0200
+Message-ID: <CAK8P3a3CzKLvpUiVV_k__kkaZ=wg2fqnFEzWYL9qNwBfxMKZ9w@mail.gmail.com>
+Subject: Re: [PATCH v3 12/26] compat_ioctl: move more drivers to compat_ptr_ioctl
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        y2038 Mailman List <y2038@lists.linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Sterba <dsterba@suse.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        driverdevel <devel@driverdev.osuosl.org>, qat-linux@intel.com,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-iio@vger.kernel.org, linux-rdma <linux-rdma@vger.kernel.org>,
+        linux-nvdimm@lists.01.org, linux-nvme@lists.infradead.org,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        ceph-devel <ceph-devel@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, Sean Young <sean@mess.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+On Thu, Apr 25, 2019 at 11:25 PM Johannes Berg
+<johannes@sipsolutions.net> wrote:
+> On Thu, 2019-04-25 at 17:55 +0200, Arnd Bergmann wrote:
+> > On Thu, Apr 25, 2019 at 5:35 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > >
+> > > On Thu, Apr 25, 2019 at 12:21:53PM -0300, Mauro Carvalho Chehab wrote:
+> > >
+> > > > If I understand your patch description well, using compat_ptr_ioctl
+> > > > only works if the driver is not for s390, right?
+> > >
+> > > No; s390 is where "oh, just set ->compat_ioctl same as ->unlocked_ioctl
+> > > and be done with that; compat_ptr() is a no-op anyway" breaks.  IOW,
+> > > s390 is the reason for having compat_ptr_ioctl() in the first place;
+> > > that thing works on all biarch architectures, as long as all stuff
+> > > handled by ->ioctl() takes pointer to arch-independent object as
+> > > argument.  IOW,
+> > >         argument ignored => OK
+> > >         any arithmetical type => no go, compat_ptr() would bugger it
+> > >         pointer to int => OK
+> > >         pointer to string => OK
+> > >         pointer to u64 => OK
+> > >         pointer to struct {u64 addr; char s[11];} => OK
+> >
+> > To be extra pedantic, the 'struct {u64 addr; char s[11];} '
+> > case is also broken on x86, because sizeof (obj) is smaller
+> > on i386, even though the location of the members are
+> > the same. i.e. you can copy_from_user() this
+>
+> Actually, you can't even do that because the struct might sit at the end
+> of a page and then you'd erroneously fault in this case.
+>
+> We had this a while ago with struct ifreq, see commit 98406133dd and its
+> parents.
 
-On 13/03/2019 08:54, Hans Verkuil wrote:
-> Hi all,
-> 
-> As you all know I have been working on creating a regression test script
-> to help catch regressions before they get into released kernels.
-> 
-> The test-media script is in v4l-utils, contrib/test. It is currently testing
-> with vivid, vim2m and vimc. Once vicodec is stable enough it will be added
-> to the test suite as well.
-> 
-> It is already run as part of the daily build using a kernel config with many
-> debug options enabled.
+Yes, you are right. Very rare to hit with real-life code, but easily
+reproduced by intentionally hitting it and clearly a bug.
 
-Sounds great.  Out of interest, do you have a config fragment or
-the list of debug configs enabled in your builds somewhere?
+As the saying goes
 
-> The daily build summary looks like this:
-> 
-> 	virtme: OK: Final Summary: 1981, Succeeded: 1981, Failed: 0, Warnings: 14
-> 
-> 	<snip>
-> 
-> 	Detailed regression test results are available here:
-> 
-> 	http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media.log
-> 	http://www.xs4all.nl/~hverkuil/logs/Wednesday-test-media-dmesg.log
-> 
-> The daily build is currently only checking for failures in the compliance tests
-> and ignores warnings. It also ignores issues in the kernel log.
-[...]
+  | the difference between "always works" and "almost always works"
+  | is called data corruption
 
-> The test can be run on a system (or VM) running the kernel you want to test with
-> by simply running it as root.
-> 
-> Usually for V4L2/MC changes it is enough to run it as:
-> 
-> sudo test-media mc
-> 
-> If you want the script to unload all media modules first, then add the -unload
-> option. If you want the script to scan for memory leaks (and the corresponding
-> debug option is enabled in the kernel), then add the -kmemleak option. To dump
-> the kernel log when done, add the -dmesg option.
-> 
-> Run test-media without options to see a help text.
-> 
-> Note that 'mc' is shorthand for 'vivid vim2m vimc'.
-> 
-> There are also cec compliance tests and the 'all' test which tests everything
-> (used in the daily build). The cec tests are slow (especially the cec-pwr tests),
-> so unless you changed something in the cec subsystem you want to avoid running
-> those.
-> 
-> The test script assumes that the very latest v4l-utils are installed.
+here the difference is an -EFAULT.
 
-This sounds very similar to what the KernelCI tests are doing.
-The main differences are that your script has a neater way of
-picking the media devices, and that the KernelCI tests break down
-the results into individual cases to spot regressions
-automatically [1].
-
-At the moment we have a shell script to parse the output of
-v4l2-compliance to find each test case result.  Ultimately, it
-would be better to have some machine-readable output available,
-as I believe we've already agreed.  It should then enable
-KernelCI to run your test-media script directly, removing extra
-post-processing and making the system more robust.
-
-If this sounds like a good idea then we can discuss how to
-proceed, i.e. agree on the format and command line options to
-enable it.  A popular format which would seem suitable for this
-is TAP 13 [2].  As Michał now has a fix to address the last issue
-with the KernelCI email reports, we should be available to work
-on this next.
-
-[...]
-
-> Future plans (besides adding vicodec support) is adding support for other drivers
-> like uvc and perhaps au0828 (for testing the upcoming Media Device Allocator API).
-> But those tests require real hardware to be connected, and there may be different
-> variants of the same hardware. We'll see how that will work out.
-
-This is obviously another strength of running the tests in
-KernelCI, such hardware could be added to an existing test lab.
-
-Best wishes,
-Guillaume
-
-[1] https://people.collabora.com/~gtucker/kernelci/doc/v4l2-compliance-uvcvideo-5.1-rc6.txt
-[2] https://testanything.org/tap-version-13-specification.html
+      Arnd
