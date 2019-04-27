@@ -1,257 +1,158 @@
-Return-Path: <SRS0=gA2F=S4=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=ExWS=S5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C32ECC43219
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 22:59:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 853FEC43218
+	for <linux-media@archiver.kernel.org>; Sat, 27 Apr 2019 00:01:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D3612084F
-	for <linux-media@archiver.kernel.org>; Fri, 26 Apr 2019 22:59:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B2E72086A
+	for <linux-media@archiver.kernel.org>; Sat, 27 Apr 2019 00:01:17 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="bXtM8uiX";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="FAGEYtkF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbfDZW7y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 18:59:54 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:58941 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727008AbfDZW7y (ORCPT
+        id S1727146AbfD0ABQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Apr 2019 20:01:16 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:39086 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727086AbfD0ABQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 18:59:54 -0400
-X-Originating-IP: 37.182.44.227
-Received: from uno.localdomain (net-37-182-44-227.cust.vodafonedsl.it [37.182.44.227])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 2356B1C0004;
-        Fri, 26 Apr 2019 22:59:50 +0000 (UTC)
-Date:   Sat, 27 Apr 2019 01:00:42 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org
-Subject: Re: Route lifetime in SUBDEV_[GS]_ROUTING
-Message-ID: <20190426230042.soeb7wqxd56grn72@uno.localdomain>
-References: <20190417104147.zlmbw32dr46vmtrq@paasikivi.fi.intel.com>
- <20190423101932.gszkn4olqatoisde@uno.localdomain>
- <20190423132839.3rybeo4rolzu6cfb@kekkonen.localdomain>
+        Fri, 26 Apr 2019 20:01:16 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 02A0E608CC; Sat, 27 Apr 2019 00:01:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1556323275;
+        bh=F9CGa1Jb2BIbUCAdHSZn16z6iMU0C8BjBM1CfdG9Eq0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bXtM8uiX+vy0KnovAk5bMjJoF9sll4MMtktbetNLmeGP/uxPJ/wRWDkYh6CDGIa+r
+         ss1SbaBfnq2G+oMdGGhDA6CUuTPasZcFSS8PRobV84MJpy8fzSDrgFazzDhVpfJQTz
+         BzBvUiZb+s3ULe3yEK2hLZYBpY2/B8cP4wWLQO4A=
+Received: from lmark-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: lmark@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id BA46E607CA;
+        Sat, 27 Apr 2019 00:01:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1556323274;
+        bh=F9CGa1Jb2BIbUCAdHSZn16z6iMU0C8BjBM1CfdG9Eq0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=FAGEYtkFc5dOVwHcmJJ98hSwBOLXgeDsS8tL1n4kkhHr+6bx6yPOe9Yg8YheRUtpJ
+         vzSteCyWdTcCTiNRbkcLuod3cdYefNgywkqmrKAApK9l/u56HnhsJLVIxkeerM0uZn
+         u8YrW4O5Wd2JP9jw0rRgbecULmkPY9Yff3Big+24=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BA46E607CA
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=lmark@codeaurora.org
+From:   Liam Mark <lmark@codeaurora.org>
+To:     ckoenig.leichtzumerken@gmail.com
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, sumit.semwal@linaro.org,
+        lmark@codeaurora.org
+Subject: [PATCH 01/12] dma-buf: add dynamic caching of sg_table
+Date:   Fri, 26 Apr 2019 17:01:09 -0700
+Message-Id: <1556323269-19670-1-git-send-email-lmark@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <20190416183841.1577-1-christian.koenig@amd.com>
+References: <20190416183841.1577-1-christian.koenig@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="f2klhbntmsi2rrco"
-Content-Disposition: inline
-In-Reply-To: <20190423132839.3rybeo4rolzu6cfb@kekkonen.localdomain>
-User-Agent: NeoMutt/20180716
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Tue, 16 Apr 2019, Christian König wrote:
 
---f2klhbntmsi2rrco
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+> To allow a smooth transition from pinning buffer objects to dynamic
+> invalidation we first start to cache the sg_table for an attachment
+> unless the driver explicitly says to not do so.
+> 
+> ---
+>  drivers/dma-buf/dma-buf.c | 24 ++++++++++++++++++++++++
+>  include/linux/dma-buf.h   | 11 +++++++++++
+>  2 files changed, 35 insertions(+)
+> 
+> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+> index 7c858020d14b..65161a82d4d5 100644
+> --- a/drivers/dma-buf/dma-buf.c
+> +++ b/drivers/dma-buf/dma-buf.c
+> @@ -573,6 +573,20 @@ struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
+>  	list_add(&attach->node, &dmabuf->attachments);
+>  
+>  	mutex_unlock(&dmabuf->lock);
+> +
+> +	if (!dmabuf->ops->dynamic_sgt_mapping) {
+> +		struct sg_table *sgt;
+> +
+> +		sgt = dmabuf->ops->map_dma_buf(attach, DMA_BIDIRECTIONAL);
+> +		if (!sgt)
+> +			sgt = ERR_PTR(-ENOMEM);
+> +		if (IS_ERR(sgt)) {
+> +			dma_buf_detach(dmabuf, attach);
+> +			return ERR_CAST(sgt);
+> +		}
+> +		attach->sgt = sgt;
+> +	}
+> +
+>  	return attach;
+>  
+>  err_attach:
+> @@ -595,6 +609,10 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
+>  	if (WARN_ON(!dmabuf || !attach))
+>  		return;
+>  
+> +	if (attach->sgt)
+> +		dmabuf->ops->unmap_dma_buf(attach, attach->sgt,
+> +					   DMA_BIDIRECTIONAL);
+> +
+>  	mutex_lock(&dmabuf->lock);
+>  	list_del(&attach->node);
+>  	if (dmabuf->ops->detach)
+> @@ -630,6 +648,9 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
+>  	if (WARN_ON(!attach || !attach->dmabuf))
+>  		return ERR_PTR(-EINVAL);
+>  
+> +	if (attach->sgt)
+> +		return attach->sgt;
+> +
 
-HI Sakari,
+I am concerned by this change to make caching the sg_table the default 
+behavior as this will result in the exporter's map_dma_buf/unmap_dma_buf 
+calls are no longer being called in 
+dma_buf_map_attachment/dma_buf_unmap_attachment.
+	
+This seems concerning to me as it appears to ignore the cache maintenance 
+aspect of the map_dma_buf/unmap_dma_buf calls.
+For example won't this potentially cause issues for clients of ION.
 
-On Tue, Apr 23, 2019 at 04:28:40PM +0300, Sakari Ailus wrote:
-> Hi Jacopo,
->
-> On Tue, Apr 23, 2019 at 12:19:32PM +0200, Jacopo Mondi wrote:
-> > Hi Sakari,
-> >
-> > On Wed, Apr 17, 2019 at 01:41:48PM +0300, Sakari Ailus wrote:
-> > > Hi Jacopo,
-> > >
-> > > I promised to write a bit about the routing problem I attempted to write on
-> > > #v4l. It's a bit late, but here it is. Let me know if you share my
-> > > understanding (and especially do so if you don't :)).
-> >
-> > Thanks for doing this, and sorry it took me a while to reply!
-> >
-> > >
-> > > A route is identified by the source and sink pads as well as the stream ID
-> > > on the source and the sink pads. Its flags allow enabling or disabling a
-> > > route.
-> > >
-> > > Most devices that function as transmitters (such as sensors) have a fixed
-> > > number of routes they can support. These's no need to change them; enabling
-> > > and disabling them will be enough for the user.
-> > >
-> >
-> > Fine so far.
-> >
-> > We indeed define routes as:
-> > (sink pad - sink stream) -> (source pad - source stream)
-> >
-> > > For receivers this is different. What needs to be supported on the receiver
-> > > side is directing any incoming stream (a 32-bit unsigned integer) to any
-> > > source pad.
-> > >
-> > > This is because pads are not alike --- one may be connected to a block that
-> > > further processes the image whereas the others may be connected to a DMA
-> > > engine, just writing the data to memory.
-> > >
-> > > The receivers also may not make assumptions beyond the sub-device API: the
-> > > stream is a 32-bit unsigned integer, there is currently no API requirement
-> > > to have the stream IDs on a particular low integer range. In principle we
-> > > could define that range, but I'd rather try to find better solutions than
-> > > that: it's hard to come up with a number as it depends on the hardware.
-> > > Some kind of an upper limit could be the number of CSI-2 channels
-> > > multiplied by CSI-2 data types. That would be enough for CSI-2. 16 or 32
-> > > virtual channels and up to 64 data types would mean up to 2048 routes
-> > > between a demultiplexer's sink pad and *each* of its source pads. And this
-> > > comes with an assumption that the source pads only support a single
-> > > stream...
-> >
-> > I lost you here.
-> >
-> > My mental model was far more (too?) simple:
-> >
-> > - Routing tables inside an entity might have an arbitrary size, as how
-> >   that configuration depends on the device and the driver
-> >   implementation. As an example, the adv748x accepts 7 analogue
-> >   inputs to chose from and route to a CSI-2 source pad.
-> >   depending on the implementation, those 7 inputs could be modeled as
-> >   7 pads with one stream each, or a single pad with 7 channels or
-> >   whatever else, and I agree the 'stream_id' values range is totally
-> >   up to the driver implementation -inside an entity-.
-> >
-> > - The cross-entity (sorry, I lack a better term here) multiplexing
-> >   happens on physical bus that allows so, and I can only think of
-> >   CSI-2 at the moment. Sure, you could share the lines of a parallel
-> >   bus playing with enables/disables of the transmitters, but this
-> >   is a custom hack that does not play well in this model.
-> >   Each CSI-2 source pad has up to 4 streams (one per VC) and the
-> >   content of those streams is retrieved from the transmitter by the
-> >   receiver through the remote frame_desc operation [*], as receivers
-> >   might need to be setup using to filter on particular VC/DT combinations
-> >   to receive the stream.
->
-> Note that the concept of a "stream" is different in our proposed API and in
-> CSI-2 (virtual channel): on CSI-2 virtual channels can carry multiple data
-> types but in our definition they do not. That means there will be more
-> streams on SUBDEV_[GS]_ROUTING API than there are on a CSI-2 bus.
->
-> We also do not limit the use of the new API to old CSI-2 D-PHYs that
-> only support four virtual channels. Therefore we need to think how this
-> would work on 16 or 32 virtual channels, and preferrably not posing
-> problems with larger numbers either.
->
+If we had the following
+- #1 dma_buf_attach coherent_device
+- #2 dma_buf attach non_coherent_device
+- #3 dma_buf_map_attachment non_coherent_device
+- #4 non_coherent_device writes to buffer
+- #5 dma_buf_unmap_attachment non_coherent_device
+- #6 dma_buf_map_attachment coherent_device
+- #7 coherent_device reads buffer
+- #8 dma_buf_unmap_attachment coherent_device	
 
-Indeed, each stream carries one DT and can be sent in one VC, so at least
-64*4 possible routes (per source pad) for what is currently specified by
-CSI-2 and maybe up to 64*32 to have space for future extensions as you
-explained below.
+There wouldn't be any CMO at step #5 anymore (specifically no invalidate) 
+so now at step #7 the coherent_device could read a stale cache line.
 
-I agree, 2048 routes per source pad is not an easily manageable number
-of entries for a routing table.
+Also, now by default dma_buf_unmap_attachment no longer removes the 
+mappings from the iommu, so now by default dma_buf_unmap_attachment is not 
+doing what I would expect and clients are losing the potential sandboxing 
+benefits of removing the mappings.
+Shouldn't this caching behavior be something that clients opt into instead 
+of being the default?
 
-> >
-> > - Each CSI-2 receiver sink pad supports 4 streams (the CSI-2 VCs) and any
-> >   of those streams can be directed to any of its source pads, to
-> >   implement what you have described (one pad connected to an ISP-like
-> >   device, on other to the DMA engine directly etc)
-> >
-> > - DT negotiation is still a bit vague. The example we have on the
-> >   series (adv748x and r-car csi2) configure the receiver's accepted DT
-> >   inspecting the remote frame_desc. Again, as per [*] this migh be
-> >   limitied to 1 DT for VC, which might not be enough and would require
-> >   re-thinking the operation used for the negotiation.
-> >
-> > - Configuring a multiplexed source pad image format is today not
-> >   possible, the format is always propagated from the sink pad to which
-> >   a route is enabled to the source pad. Might this be a limitation on
-> >   how we control which DTs are multiplexed inside a VC and won't allow
-> >   to model any format conversion that might happen at the source pad
-> >   output. I was toying myself with the idea of a stream-aware set
-> >   format operation for multiplexed source pads, not sure it might work
-> >   though.
-> >
-> > Can I ask you why:
-> > - you mention 16 or 32 VCs ? Each CSI-2 link supports up to 4.
->
-> See above.
->
-> > - you put DT in the routing mix, and I suspect it is here where our
-> >   disconnection happens. I always assume DT configuration as a result
-> >   of a format configuration operation, which currently has limitations
-> >   as noted here above.
->
-> Yes; DT comes from the format and is generally determined by the
-> transmitting driver. Nothing else limits the number of DTs on a VC except
-> the number of DTs --- which is currently 64.
->
-> >
-> >
-> > [*] I would later like to talk about if this is the most appropriate
-> > operation to handle this negotiation, as I'm not sure we can handle DT
-> > negotiation properly with that, but that's for later.
-> >
-> > >
-> > > CSI-2 receivers support a number of simultaneous streams, and as the stream
-> > > is demultiplexed there, this means there will be as many source pads as
-> > > there are supported simultaneous streams. This heavily depe`nds on the
-> > > hardware, but the number could be e.g. 1, 4 or 8. Much smaller than 2048 in
-> > > any case.
-> > >
-> >
-> > Why 8? Is this related to DT multiplexing again?
->
-> Yes and no. It's just a random number between 1 and 2048. :-)
->
-> >
-> > > Another option could be creating no routes at all at device init time, and
-> > > letting the user create them. We could add a new flag for routes telling
-> > > that a route is dynamic: disabling a dynamic route would simply delete it.
-> > > Likewise, a SUBDEV_G_ROUTING returning no routes (but no error either)
-> > > would also tell the user only dynamic routes are supported.
-> > >
+Liam
 
-I see your point, but I cannot see how one would easily map a stream_id to a
-DT/VC combination. One way would be:
-        DT = stream_id % 64; VC = stream_id / 64;
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-Just to make sure we're on the same page, how would you enable/disable
-transmitting, say, embedded data (DT=18) on VC=2? By enabling/disabling
-the stream_id 146 ( = 18 + 64 * 2) ?
-
-Thanks
-   j
-
-> > > We should document this and change the driver implementation accordingly.
-> > > No API changes are needed (apart from adding the dynamic flag --- or rather
-> > > call it "volatile", to avoid confusing with routes that can be enabled or
-> > > disabled while streaming).
-> > >
-> >
-> > I have v5 of the series ready. Do you want me to post it to progress
-> > discussion, or should we clarify this first?
->
-> Feel free to post it. But to merge the series, I think we need to address
-> this.
->
-> --
-> Regards,
->
-> Sakari Ailus
-> sakari.ailus@linux.intel.com
-
---f2klhbntmsi2rrco
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlzDjZMACgkQcjQGjxah
-Vjys+g/9Gu+ID5RrnUGMGmzy4N2UMBwCWl9y6xqiGx1jAnZoiBerLHp+n/+3mK+m
-ypLFAnszZONW5933KtBnnTs9onbyPUbnkqOS0b3XvvB5vxits5jtGk3AXbR/H4/I
-7uk0hDLj5kPJ4sGc3D2NaabWEjvXM5yt9WOfjq5bzbYoR0aLfViwXwCN8zX0rOqT
-grs5lOU01Lki2H8WdoMnLXadRFMJ8jMEZZyZD/B7fKwQ+vRa8OU6X0L9hYh5R2lt
-oL5DWU9UCNii7ZJpg5NqttDBvP/0VSB/M1/kGryhXtpDAwqzYLWDQxJTH4h54dwn
-MS0ullEC8I+uAN02HRyZSD3Zr9HsVw0rTC83QREfOyqYRKyCZsn0dMCP+pbaMTPQ
-2H4ERR6TR6XHhL2oz8KqExVhUq9bw7dHjXMJRLfth9FR0j3JTjLhxDUtPC5Ch3nQ
-0/PAe9UGDlMYjBIn/ZId5OFbzJ3GBQiwMxRN7w9val6ZCJ/OKTZ6DL9f4eD0gZrZ
-DKPayvvid3dWfVrtEwRDkRQmpc+LKWoVpNEcZVb3AcQuZGK1ksirMnXIKEbz1sMb
-I7ZPNfVVwHAtWOrKNXUUSFo+BYVIFiFtp6qmqBLo2scyBvFZQaSKKIG5JvFJ0bhT
-XPI43r08XYoNvxVq9p0HpzFtaBuoCQnjNPxDXyWg48KirtmDLgs=
-=haCk
------END PGP SIGNATURE-----
-
---f2klhbntmsi2rrco--
