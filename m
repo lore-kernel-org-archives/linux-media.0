@@ -2,157 +2,154 @@ Return-Path: <SRS0=ExWS=S5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 853FEC43218
-	for <linux-media@archiver.kernel.org>; Sat, 27 Apr 2019 00:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96A0EC43219
+	for <linux-media@archiver.kernel.org>; Sat, 27 Apr 2019 04:01:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4B2E72086A
-	for <linux-media@archiver.kernel.org>; Sat, 27 Apr 2019 00:01:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="bXtM8uiX";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="FAGEYtkF"
+	by mail.kernel.org (Postfix) with ESMTP id 70A20206BF
+	for <linux-media@archiver.kernel.org>; Sat, 27 Apr 2019 04:01:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727146AbfD0ABQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Apr 2019 20:01:16 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:39086 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727086AbfD0ABQ (ORCPT
+        id S1726240AbfD0EBU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 27 Apr 2019 00:01:20 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:46881 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725781AbfD0EBU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 26 Apr 2019 20:01:16 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 02A0E608CC; Sat, 27 Apr 2019 00:01:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1556323275;
-        bh=F9CGa1Jb2BIbUCAdHSZn16z6iMU0C8BjBM1CfdG9Eq0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bXtM8uiX+vy0KnovAk5bMjJoF9sll4MMtktbetNLmeGP/uxPJ/wRWDkYh6CDGIa+r
-         ss1SbaBfnq2G+oMdGGhDA6CUuTPasZcFSS8PRobV84MJpy8fzSDrgFazzDhVpfJQTz
-         BzBvUiZb+s3ULe3yEK2hLZYBpY2/B8cP4wWLQO4A=
-Received: from lmark-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: lmark@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BA46E607CA;
-        Sat, 27 Apr 2019 00:01:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1556323274;
-        bh=F9CGa1Jb2BIbUCAdHSZn16z6iMU0C8BjBM1CfdG9Eq0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FAGEYtkFc5dOVwHcmJJ98hSwBOLXgeDsS8tL1n4kkhHr+6bx6yPOe9Yg8YheRUtpJ
-         vzSteCyWdTcCTiNRbkcLuod3cdYefNgywkqmrKAApK9l/u56HnhsJLVIxkeerM0uZn
-         u8YrW4O5Wd2JP9jw0rRgbecULmkPY9Yff3Big+24=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BA46E607CA
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=lmark@codeaurora.org
-From:   Liam Mark <lmark@codeaurora.org>
-To:     ckoenig.leichtzumerken@gmail.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, sumit.semwal@linaro.org,
-        lmark@codeaurora.org
-Subject: [PATCH 01/12] dma-buf: add dynamic caching of sg_table
-Date:   Fri, 26 Apr 2019 17:01:09 -0700
-Message-Id: <1556323269-19670-1-git-send-email-lmark@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <20190416183841.1577-1-christian.koenig@amd.com>
-References: <20190416183841.1577-1-christian.koenig@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
+        Sat, 27 Apr 2019 00:01:20 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:fc40:a312:cd0a:1bc2])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id KEWbhQzHbNExlKEWchZHGm; Sat, 27 Apr 2019 06:01:18 +0200
+Message-ID: <f3f14932adcd2a4221ff2532d26fe93c@smtp-cloud9.xs4all.net>
+Date:   Sat, 27 Apr 2019 06:01:17 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfP8IIZTvXs99m700Yiinfn3RlcahRatRHh+i878cVv2wNTchAjIb8o5xEjUqFVP62LyzRoBQMfUN8S55aRIY5bKyrz5FhvoAj9RvwoFnWXQh0jHzwOJQ
+ f6bSFnQAdHHa1VdVhDFgXSmRP0gH1HhdaMkZJBgxbNf2qARz9QVlZiB74GOmfBjzduE++Y5iBIFA9LAsEHGcSD5Pzy0Y/dMsv7wCl/FNzWw/TCt6iFFEZaLf
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 16 Apr 2019, Christian König wrote:
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-> To allow a smooth transition from pinning buffer objects to dynamic
-> invalidation we first start to cache the sg_table for an attachment
-> unless the driver explicitly says to not do so.
-> 
-> ---
->  drivers/dma-buf/dma-buf.c | 24 ++++++++++++++++++++++++
->  include/linux/dma-buf.h   | 11 +++++++++++
->  2 files changed, 35 insertions(+)
-> 
-> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> index 7c858020d14b..65161a82d4d5 100644
-> --- a/drivers/dma-buf/dma-buf.c
-> +++ b/drivers/dma-buf/dma-buf.c
-> @@ -573,6 +573,20 @@ struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
->  	list_add(&attach->node, &dmabuf->attachments);
->  
->  	mutex_unlock(&dmabuf->lock);
-> +
-> +	if (!dmabuf->ops->dynamic_sgt_mapping) {
-> +		struct sg_table *sgt;
-> +
-> +		sgt = dmabuf->ops->map_dma_buf(attach, DMA_BIDIRECTIONAL);
-> +		if (!sgt)
-> +			sgt = ERR_PTR(-ENOMEM);
-> +		if (IS_ERR(sgt)) {
-> +			dma_buf_detach(dmabuf, attach);
-> +			return ERR_CAST(sgt);
-> +		}
-> +		attach->sgt = sgt;
-> +	}
-> +
->  	return attach;
->  
->  err_attach:
-> @@ -595,6 +609,10 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
->  	if (WARN_ON(!dmabuf || !attach))
->  		return;
->  
-> +	if (attach->sgt)
-> +		dmabuf->ops->unmap_dma_buf(attach, attach->sgt,
-> +					   DMA_BIDIRECTIONAL);
-> +
->  	mutex_lock(&dmabuf->lock);
->  	list_del(&attach->node);
->  	if (dmabuf->ops->detach)
-> @@ -630,6 +648,9 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
->  	if (WARN_ON(!attach || !attach->dmabuf))
->  		return ERR_PTR(-EINVAL);
->  
-> +	if (attach->sgt)
-> +		return attach->sgt;
-> +
+Results of the daily build of media_tree:
 
-I am concerned by this change to make caching the sg_table the default 
-behavior as this will result in the exporter's map_dma_buf/unmap_dma_buf 
-calls are no longer being called in 
-dma_buf_map_attachment/dma_buf_unmap_attachment.
-	
-This seems concerning to me as it appears to ignore the cache maintenance 
-aspect of the map_dma_buf/unmap_dma_buf calls.
-For example won't this potentially cause issues for clients of ION.
+date:			Sat Apr 27 05:00:20 CEST 2019
+media-tree git hash:	7afa8db323e37b9174cf78a1c9ab0ae7a9f5e7dd
+media_build git hash:	78eccfa404ec982e1302930cb7f45756ab404a3c
+v4l-utils git hash:	5fc75842ff3f948cc90d96e0c22a4128f21f66df
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
-If we had the following
-- #1 dma_buf_attach coherent_device
-- #2 dma_buf attach non_coherent_device
-- #3 dma_buf_map_attachment non_coherent_device
-- #4 non_coherent_device writes to buffer
-- #5 dma_buf_unmap_attachment non_coherent_device
-- #6 dma_buf_map_attachment coherent_device
-- #7 coherent_device reads buffer
-- #8 dma_buf_unmap_attachment coherent_device	
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
 
-There wouldn't be any CMO at step #5 anymore (specifically no invalidate) 
-so now at step #7 the coherent_device could read a stale cache line.
+Detailed results are available here:
 
-Also, now by default dma_buf_unmap_attachment no longer removes the 
-mappings from the iommu, so now by default dma_buf_unmap_attachment is not 
-doing what I would expect and clients are losing the potential sandboxing 
-benefits of removing the mappings.
-Shouldn't this caching behavior be something that clients opt into instead 
-of being the default?
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
 
-Liam
+Detailed regression test results are available here:
 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
 
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
