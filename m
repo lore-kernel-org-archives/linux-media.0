@@ -1,40 +1,155 @@
-Return-Path: <SRS0=ExWS=S5=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=wpjx=S6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=MAILING_LIST_MULTI,
-	PLING_QUERY,SPF_PASS,TVD_SPACE_RATIO autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C47EC43218
-	for <linux-media@archiver.kernel.org>; Sat, 27 Apr 2019 15:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA226C43219
+	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 03:48:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 568B32087C
-	for <linux-media@archiver.kernel.org>; Sat, 27 Apr 2019 15:02:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAF8C2075D
+	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 03:48:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbfD0PCv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 27 Apr 2019 11:02:51 -0400
-Received: from [111.177.172.37] ([111.177.172.37]:51083 "EHLO
-        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725937AbfD0PCv (ORCPT
+        id S1726388AbfD1Ds3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 27 Apr 2019 23:48:29 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:33413 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726291AbfD1Ds3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 27 Apr 2019 11:02:51 -0400
-X-Greylist: delayed 938 seconds by postgrey-1.27 at vger.kernel.org; Sat, 27 Apr 2019 11:02:50 EDT
-Received: from localhost (localhost [IPv6:::1])
-        by localhost.localdomain (Postfix) with SMTP id CD29F255002
-        for <linux-media@vger.kernel.org>; Sat, 27 Apr 2019 23:00:00 +0800 (CST)
-From:   linux-media@vger.kernel.org
+        Sat, 27 Apr 2019 23:48:29 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:7531:3b10:f938:5769])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id Kanih0dHzb8gSKanjhyiyK; Sun, 28 Apr 2019 05:48:27 +0200
+Message-ID: <4ae276afe5aa55b05824917baecfd367@smtp-cloud8.xs4all.net>
+Date:   Sun, 28 Apr 2019 05:48:26 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Reply-To: prodawez@armyspy.com
-Subject: Zdravstvuyte! Vas interesuyut kliyentskiye bazy dannykh?
-Message-Id: <20190427150000.CD29F255002@localhost.localdomain>
-Date:   Sat, 27 Apr 2019 23:00:00 +0800 (CST)
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfNFrHpvC3mUALJsYkaDVwfiD6CM+ciz30ZTtzQ6McyLmb9St1j5dfd93kw+6/MU+UxnzzU4AgZJuak0VxlYmqdrAUmF5F66+SJoG8aeku/OnxKwe5Qv+
+ 1Q8FBOR6LUfz1p3JQvEy2tRApWKpfNpJ6ccoLbIj2XR2ftcrNrQrxgeTNa7O0D5DgdixSb5CLN5QkGpueN8nBp21a1hzEodQEBX/yqkLGr5ruHVmonVnLs6U
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Zdravstvuyte! Vas interesuyut kliyentskiye bazy dannykh?
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
+Results of the daily build of media_tree:
 
+date:			Sun Apr 28 05:00:20 CEST 2019
+media-tree git hash:	7afa8db323e37b9174cf78a1c9ab0ae7a9f5e7dd
+media_build git hash:	78eccfa404ec982e1302930cb7f45756ab404a3c
+v4l-utils git hash:	5fc75842ff3f948cc90d96e0c22a4128f21f66df
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.1-i686: OK
+linux-5.0.1-x86_64: OK
+linux-5.1-rc1-i686: OK
+linux-5.1-rc1-x86_64: WARNINGS
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
