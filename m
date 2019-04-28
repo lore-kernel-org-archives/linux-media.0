@@ -2,111 +2,199 @@ Return-Path: <SRS0=wpjx=S6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF22AC43218
-	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 20:21:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D436C43218
+	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 20:35:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8894320679
-	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 20:21:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02D232064A
+	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 20:35:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=lixom-net.20150623.gappssmtp.com header.i=@lixom-net.20150623.gappssmtp.com header.b="IK6fU3V3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BroiY2sH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbfD1UVj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 28 Apr 2019 16:21:39 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39824 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbfD1UVi (ORCPT
+        id S1726399AbfD1Ufs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 28 Apr 2019 16:35:48 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:37131 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726393AbfD1Ufs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 28 Apr 2019 16:21:38 -0400
-Received: by mail-lj1-f193.google.com with SMTP id q10so7464139ljc.6
-        for <linux-media@vger.kernel.org>; Sun, 28 Apr 2019 13:21:37 -0700 (PDT)
+        Sun, 28 Apr 2019 16:35:48 -0400
+Received: by mail-wm1-f68.google.com with SMTP id y5so11615323wma.2
+        for <linux-media@vger.kernel.org>; Sun, 28 Apr 2019 13:35:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WivmGQO4RuW8PQL7FqfGRxyyPDqgN6IRsNst2/0ie+M=;
-        b=IK6fU3V33/STF4ZfwSdX+5qiq4VJNlidyTzsCu/Z1nfYt2W7x0aDxy86bmbM1Tx3nz
-         NxPQADhP7o40LazOf+hZjNUCIK59UprBGQ34wVbQwLfzJdHt0Sx7A/CC/kal0gqV1C0I
-         iTy6vAzYXj7xrTi72tGHWXa46iu9zdmGYhaiKW9kn0Dlqtxg+QeoxxMXuFbbOrNyojlX
-         umwJ8WDA6kvQMqrlIgV3r2KAIJbv4o+2DKGDQ8re8rdmTaON0g9Ra7MlivlRAawgAYnO
-         CKVw95nSyWQ9nbpzzv/f6742peDCzJ5oZj3F9DpS1qsjJRv4tv2ITg/clcnhVm7wWvDd
-         JTJA==
+        d=gmail.com; s=20161025;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=IZAy47XcoSM8oaf+24nONRYgmpJ1wMLHcNESne/0ILE=;
+        b=BroiY2sHfoh63xVR0xXA5FXbM+VHAv1rv4LsbOwztaw9UfMhfLyeXOlbSaHyKuEg3k
+         XV1Co4muhFvyu6AOZPktVSecY55Td+EDeBTF+CWw83W11mmeAX45FOEHpyjxXGC/dybh
+         DEIs4chJOLQkE1zLYhBwbsN56bT1rmrwXEz7grVuxTAtOQJw1Oq3PD/Nn+y92/UrnlFQ
+         NlWcxlr9o6DAuvezVY5EQmCSS1fhMcZpzuSDDxB2giJ9OQZIytDUZedM0w7z7LvqlIVU
+         tTmMTvruGpltiUUT0LDMgn+yJV0o1UAvVjErnA8ZjZUQ5qPMIYmBE/RZwaOBCB7HBDZ5
+         CPAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WivmGQO4RuW8PQL7FqfGRxyyPDqgN6IRsNst2/0ie+M=;
-        b=K1mt30szKuuIx3MWcXN3q86IccZenM32vH5yQsIfISYSpk8NRdnX+pTGtvoccxeiD1
-         Ndg9QiMwjIloauuSe0FaN/8G+e/1VU6fVCHcLCNzto2kBV4UHPt/J9oS2Nb2jecdjMUG
-         4lTMLm4PESNlTm2b4CeHf2H+tlxdbIZxEQux+aQAdVQZl9IZ0NN8A54CDVbILv1orOKP
-         MaLXCLxVhZgnOWz9kMTT1tfufYLN94mmG7E8fv4ohI6yQLVD3fMBqbHUv7sn4vhTCkp4
-         fQL8n7VQprVFvpcgO/8p1sOcNCbo+hB1DJXs7cM/Y4/Rl/juF/OAvZeNjedeQ7sUERIL
-         ETlQ==
-X-Gm-Message-State: APjAAAVQR1ofKEM5u1agCWuiDtpX6jP7PtPoZGJnaPbfYeN6/PjZSO/+
-        RDE+GjmZ3rpoSUbmPZTzE2UIpA==
-X-Google-Smtp-Source: APXvYqw/TNu1ZIHoFhah/0o8Yp9WqCWp3Q8bHghHrJKR586sMIvvkouMffjFXSNmffKQqsrav5Hk+g==
-X-Received: by 2002:a2e:8905:: with SMTP id d5mr27807997lji.59.1556482896690;
-        Sun, 28 Apr 2019 13:21:36 -0700 (PDT)
-Received: from localhost (h85-30-9-151.cust.a3fiber.se. [85.30.9.151])
-        by smtp.gmail.com with ESMTPSA id e18sm6508281ljb.12.2019.04.28.13.21.35
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=IZAy47XcoSM8oaf+24nONRYgmpJ1wMLHcNESne/0ILE=;
+        b=ZhjsuKYF76bdSn4LKIlizpYkDlo/M+jumJbFqDGe9PEjTJLDj0cUDlt0x9c2m0IA41
+         UKpG5/b5bK8U3NinQWGahMCy/MNd4KU2gYRaE+gzSnZV35aQAelaJpA/iM3qkKSt+lpO
+         uk6jGTPvMJJ5I7G2KeOxhgSaCey3l+MO1heWG8vO+HM/hmbmK2AbrFoNfaxfCEOmuYUY
+         05cblQMQ0F1W1OC6VOBS7xDX6v5SCUP8V9LlOh9Fe60mbTA/nuMH/xsr1DrP5SX7mXsT
+         Ro+WoaxqSAiEqf4k2RMdpg8n8f1zG0UCEokk3BSzb3groWFiDYZDY0XSZGyHQ1KgLTrj
+         WniQ==
+X-Gm-Message-State: APjAAAVIjEzGrF/exR3FiUFxIeL4jmncadP5IIsIqf619SmBROGC8rMZ
+        WcwiffN+Q6IQBloxQKY++VJtgLzjNWg=
+X-Google-Smtp-Source: APXvYqzIJ5IbEB6QgZ35qPVMUP+lOzBHASkLpXOrREvmF5t+xGKUFobpaLc0Fmm5yCDeE3X7L7yC1g==
+X-Received: by 2002:a1c:4d1a:: with SMTP id o26mr2423373wmh.133.1556483744571;
+        Sun, 28 Apr 2019 13:35:44 -0700 (PDT)
+Received: from arch-late (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id e7sm28046130wme.37.2019.04.28.13.35.43
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 28 Apr 2019 13:21:35 -0700 (PDT)
-Date:   Sun, 28 Apr 2019 12:57:40 -0700
-From:   Olof Johansson <olof@lixom.net>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     arm-soc <arm@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Erin Lo <erin.lo@mediatek.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Seiya Wang <seiya.wang@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>
-Subject: Re: [GIT PULL] dts64 updates for v5.2
-Message-ID: <20190428195740.37housyryoxv4p47@localhost>
-References: <5ea296e5-92bd-5790-c075-cf4bcb74d88c@gmail.com>
+        Sun, 28 Apr 2019 13:35:43 -0700 (PDT)
+References: <20190412164400.1270-1-rui.silva@linaro.org> <a375ed17-72e3-21d7-59c1-60b1fbe4b166@gmail.com>
+User-agent: mu4e 1.2.0; emacs 27.0.50
+From:   Rui Miguel Silva <rmfrfs@gmail.com>
+To:     driverdev-devel@linuxdriverproject.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devel@driverdev.osuosl.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: staging/imx: add media device to capture register
+In-reply-to: <a375ed17-72e3-21d7-59c1-60b1fbe4b166@gmail.com>
+Date:   Sun, 28 Apr 2019 21:35:42 +0100
+Message-ID: <m3wojdx3z5.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5ea296e5-92bd-5790-c075-cf4bcb74d88c@gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Apr 23, 2019 at 06:12:24PM +0200, Matthias Brugger wrote:
-> Hi Anrd and Olof,
-> 
-> you can find below the pull request for mediatek related dts64.
-> 
-> Please have a look :)
-> 
-> Regards,
-> Matthias
-> 
-> ---
-> 
-> The following changes since commit 9e98c678c2d6ae3a17cb2de55d17f69dddaa231b:
-> 
->   Linux 5.1-rc1 (2019-03-17 14:22:26 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/
-> tags/v5.1-next-dts64
-> 
-> for you to fetch changes up to a4599f6ec8e844f53dac15f719084d3b5ffe68c3:
-> 
->   arm64: dts: mt8173: add pmu nodes for mt8173 (2019-04-16 10:55:30 +0200)
+Hi Steve,
+On Sun 28 Apr 2019 at 19:53, Steve Longerbeam wrote:
+> Hi Rui,
+>
+> On second thought, there is no reason to pass the media device to 
+> imx_media_capture_device_register(), because it is already available via 
+> v4l2_dev->mdev. I will be posting a patch in v2 of the "Switch to sync 
+> registration for IPU subdevs" series that fixes this.
 
-Merged, thanks!
+That make sense to me. I've already took a look to v2 and I like
+the ideas in there, I will give it a proper test and review
+tomorrow. Will send feedback afterwards.
 
+Thanks so much for your work on this.
 
--Olof
+---
+Cheers,
+	Rui
+
+>
+> Steve
+>
+>
+> On 4/12/19 9:44 AM, Rui Miguel Silva wrote:
+>> When register the capture media device it is assumed that the device
+>> data is the media device. In the imx6 case is but in the imx7 is not
+>> case. The device data is the csi structure.
+>>
+>> Add the explicit argument of the media device that we want to
+>> associate with the capture device.
+>>
+>> Reported-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+>> Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
+>> ---
+>>   drivers/staging/media/imx/imx-ic-prpencvf.c   | 2 +-
+>>   drivers/staging/media/imx/imx-media-capture.c | 6 +++---
+>>   drivers/staging/media/imx/imx-media-csi.c     | 2 +-
+>>   drivers/staging/media/imx/imx-media.h         | 3 ++-
+>>   drivers/staging/media/imx/imx7-media-csi.c    | 2 +-
+>>   5 files changed, 8 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
+>> index 5c8e6ad8c025..3ca1422f6154 100644
+>> --- a/drivers/staging/media/imx/imx-ic-prpencvf.c
+>> +++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
+>> @@ -1270,7 +1270,7 @@ static int prp_registered(struct v4l2_subdev *sd)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	ret = imx_media_capture_device_register(priv->vdev);
+>> +	ret = imx_media_capture_device_register(priv->md, priv->vdev);
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
+>> index 9703c85b19c4..7688238a3396 100644
+>> --- a/drivers/staging/media/imx/imx-media-capture.c
+>> +++ b/drivers/staging/media/imx/imx-media-capture.c
+>> @@ -706,7 +706,8 @@ void imx_media_capture_device_error(struct imx_media_video_dev *vdev)
+>>   }
+>>   EXPORT_SYMBOL_GPL(imx_media_capture_device_error);
+>>   
+>> -int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
+>> +int imx_media_capture_device_register(struct imx_media_dev *md,
+>> +				      struct imx_media_video_dev *vdev)
+>>   {
+>>   	struct capture_priv *priv = to_capture_priv(vdev);
+>>   	struct v4l2_subdev *sd = priv->src_sd;
+>> @@ -715,8 +716,7 @@ int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
+>>   	struct v4l2_subdev_format fmt_src;
+>>   	int ret;
+>>   
+>> -	/* get media device */
+>> -	priv->md = dev_get_drvdata(sd->v4l2_dev->dev);
+>> +	priv->md = md;
+>>   
+>>   	vfd->v4l2_dev = sd->v4l2_dev;
+>>   
+>> diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
+>> index 3b7517348666..3408ec023d29 100644
+>> --- a/drivers/staging/media/imx/imx-media-csi.c
+>> +++ b/drivers/staging/media/imx/imx-media-csi.c
+>> @@ -1806,7 +1806,7 @@ static int csi_registered(struct v4l2_subdev *sd)
+>>   	if (ret)
+>>   		goto free_fim;
+>>   
+>> -	ret = imx_media_capture_device_register(priv->vdev);
+>> +	ret = imx_media_capture_device_register(priv->md, priv->vdev);
+>>   	if (ret)
+>>   		goto free_fim;
+>>   
+>> diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
+>> index ae964c8d5be1..c3a8512bd10f 100644
+>> --- a/drivers/staging/media/imx/imx-media.h
+>> +++ b/drivers/staging/media/imx/imx-media.h
+>> @@ -271,7 +271,8 @@ int imx_media_of_add_csi(struct imx_media_dev *imxmd,
+>>   struct imx_media_video_dev *
+>>   imx_media_capture_device_init(struct v4l2_subdev *src_sd, int pad);
+>>   void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
+>> -int imx_media_capture_device_register(struct imx_media_video_dev *vdev);
+>> +int imx_media_capture_device_register(struct imx_media_dev *md,
+>> +				       struct imx_media_video_dev *vdev);
+>>   void imx_media_capture_device_unregister(struct imx_media_video_dev *vdev);
+>>   struct imx_media_buffer *
+>>   imx_media_capture_device_next_buf(struct imx_media_video_dev *vdev);
+>> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+>> index 3fba7c27c0ec..a907c5feb3eb 100644
+>> --- a/drivers/staging/media/imx/imx7-media-csi.c
+>> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+>> @@ -1124,7 +1124,7 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
+>>   	if (ret < 0)
+>>   		return ret;
+>>   
+>> -	ret = imx_media_capture_device_register(csi->vdev);
+>> +	ret = imx_media_capture_device_register(csi->imxmd, csi->vdev);
+>>   	if (ret < 0)
+>>   		return ret;
+>>   
+>
+> _______________________________________________
+> devel mailing list
+> devel@linuxdriverproject.org
+> http://driverdev.linuxdriverproject.org/mailman/listinfo/driverdev-devel
+
