@@ -2,268 +2,125 @@ Return-Path: <SRS0=wpjx=S6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB7E3C43218
-	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 10:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61DA7C43218
+	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 11:17:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D51F206BF
-	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 10:55:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E3D8206C1
+	for <linux-media@archiver.kernel.org>; Sun, 28 Apr 2019 11:17:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Obb3OpNI"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="b+1A76ua"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbfD1KzD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 28 Apr 2019 06:55:03 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:36284 "EHLO
+        id S1726480AbfD1LRS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 28 Apr 2019 07:17:18 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:36332 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbfD1KzD (ORCPT
+        with ESMTP id S1726404AbfD1LRS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 28 Apr 2019 06:55:03 -0400
-Received: from pendragon.station (net-37-182-44-227.cust.vodafonedsl.it [37.182.44.227])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3D8682D1
-        for <linux-media@vger.kernel.org>; Sun, 28 Apr 2019 12:55:01 +0200 (CEST)
+        Sun, 28 Apr 2019 07:17:18 -0400
+Received: from pendragon.ideasonboard.com (net-37-182-44-227.cust.vodafonedsl.it [37.182.44.227])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 232872D1;
+        Sun, 28 Apr 2019 13:17:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1556448901;
-        bh=4VlDnR7RwhZjNtLmgndLacSg3Zbj0EehZcxXdFg/Wu4=;
-        h=From:To:Subject:Date:From;
-        b=Obb3OpNIW6yGjHLJ3u97PFMFMqfotmmRL2ny0BXX2wyN4on6ykSKGLPLCRnB28jAT
-         AMnQEFar7DeHHw4AgiFE9l3FvxZv0q5GQVdZYlSxSVxnKMi3I/WcCohkwEn3buu/gH
-         J+Ic2t1bMSL6A0S9l+NJmkiLu63v3pv1YdR5cg6c=
+        s=mail; t=1556450236;
+        bh=d8Qpe9g1sUuyq2gdGVv1YTl0pLxsYj68hVn+duguwiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b+1A76ua1SEyiVpwIcOUJDmgqo8MnH8ZobK7CKnfIYQ+wGLAkqKT601JOlHTcEnIX
+         MFyuauSorrJrKz+mMi+1iuBitqKbhb/ib9n1y/oK84QUR5uS3viqz4vzsAnVb6jiUg
+         D1rpLmZpVhhONPFOhM968oNyqRGhj5HtYHoGcYCQ=
+Date:   Sun, 28 Apr 2019 14:17:04 +0300
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH] media: uvcvideo: Replace copyright text with SPDX header
-Date:   Sun, 28 Apr 2019 13:54:46 +0300
-Message-Id: <20190428105446.13192-1-laurent.pinchart@ideasonboard.com>
-X-Mailer: git-send-email 2.21.0
+To:     Torleiv Sundre <torleiv@huddly.com>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: uvcvido: Include streaming interface number in
+ debugfs dir name
+Message-ID: <20190428111704.GA12066@pendragon.ideasonboard.com>
+References: <20190428052113.32650-1-torleiv@huddly.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190428052113.32650-1-torleiv@huddly.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Copyright texts are deprecated in favour of SPDX headers, replace it.
+Hi Torleiv,
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
- drivers/media/usb/uvc/uvc_ctrl.c     | 7 +------
- drivers/media/usb/uvc/uvc_debugfs.c  | 7 +------
- drivers/media/usb/uvc/uvc_driver.c   | 7 +------
- drivers/media/usb/uvc/uvc_entity.c   | 7 +------
- drivers/media/usb/uvc/uvc_isight.c   | 7 +------
- drivers/media/usb/uvc/uvc_metadata.c | 6 +-----
- drivers/media/usb/uvc/uvc_queue.c    | 7 +------
- drivers/media/usb/uvc/uvc_status.c   | 7 +------
- drivers/media/usb/uvc/uvc_v4l2.c     | 7 +------
- drivers/media/usb/uvc/uvc_video.c    | 7 +------
- 10 files changed, 10 insertions(+), 59 deletions(-)
+Thank you for the patch.
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 14cff91b7aea..dadd9491c36c 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -1,14 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_ctrl.c  --  USB Video Class driver - Controls
-  *
-  *      Copyright (C) 2005-2010
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/kernel.h>
-diff --git a/drivers/media/usb/uvc/uvc_debugfs.c b/drivers/media/usb/uvc/uvc_debugfs.c
-index 77e7c2419b9b..52839cfada61 100644
---- a/drivers/media/usb/uvc/uvc_debugfs.c
-+++ b/drivers/media/usb/uvc/uvc_debugfs.c
-@@ -1,14 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_debugfs.c --  USB Video Class driver - Debugging support
-  *
-  *      Copyright (C) 2011
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/module.h>
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 10cfe8e51626..8b2ec749e0a9 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -1,14 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_driver.c  --  USB Video Class driver
-  *
-  *      Copyright (C) 2005-2010
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/atomic.h>
-diff --git a/drivers/media/usb/uvc/uvc_entity.c b/drivers/media/usb/uvc/uvc_entity.c
-index 06bffdf8828b..a16a4711889f 100644
---- a/drivers/media/usb/uvc/uvc_entity.c
-+++ b/drivers/media/usb/uvc/uvc_entity.c
-@@ -1,14 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_entity.c  --  USB Video Class driver
-  *
-  *      Copyright (C) 2005-2011
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/kernel.h>
-diff --git a/drivers/media/usb/uvc/uvc_isight.c b/drivers/media/usb/uvc/uvc_isight.c
-index 39a4e4482b23..d2667ce11ef6 100644
---- a/drivers/media/usb/uvc/uvc_isight.c
-+++ b/drivers/media/usb/uvc/uvc_isight.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_isight.c  --  USB Video Class driver - iSight support
-  *
-@@ -5,12 +6,6 @@
-  *		Ivan N. Zlatev <contact@i-nz.net>
-  *	Copyright (C) 2008-2009
-  *		Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/usb.h>
-diff --git a/drivers/media/usb/uvc/uvc_metadata.c b/drivers/media/usb/uvc/uvc_metadata.c
-index 5f535b515c23..19d263ff8d5e 100644
---- a/drivers/media/usb/uvc/uvc_metadata.c
-+++ b/drivers/media/usb/uvc/uvc_metadata.c
-@@ -1,13 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_metadata.c  --  USB Video Class driver - Metadata handling
-  *
-  *      Copyright (C) 2016
-  *          Guennadi Liakhovetski (guennadi.liakhovetski@intel.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/drivers/media/usb/uvc/uvc_queue.c b/drivers/media/usb/uvc/uvc_queue.c
-index 682698ec1118..be821257233d 100644
---- a/drivers/media/usb/uvc/uvc_queue.c
-+++ b/drivers/media/usb/uvc/uvc_queue.c
-@@ -1,14 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_queue.c  --  USB Video Class driver - Buffers management
-  *
-  *      Copyright (C) 2005-2010
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/atomic.h>
-diff --git a/drivers/media/usb/uvc/uvc_status.c b/drivers/media/usb/uvc/uvc_status.c
-index 883e4cab45e7..13a70e808fd6 100644
---- a/drivers/media/usb/uvc/uvc_status.c
-+++ b/drivers/media/usb/uvc/uvc_status.c
-@@ -1,14 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_status.c  --  USB Video Class driver - Status endpoint
-  *
-  *      Copyright (C) 2005-2009
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/kernel.h>
-diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
-index 84be596d3269..4964ab695438 100644
---- a/drivers/media/usb/uvc/uvc_v4l2.c
-+++ b/drivers/media/usb/uvc/uvc_v4l2.c
-@@ -1,14 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_v4l2.c  --  USB Video Class driver - V4L2 API
-  *
-  *      Copyright (C) 2005-2010
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/compat.h>
-diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
-index 182dcac49aa3..e0268d6f1e95 100644
---- a/drivers/media/usb/uvc/uvc_video.c
-+++ b/drivers/media/usb/uvc/uvc_video.c
-@@ -1,14 +1,9 @@
-+// SPDX-License-Identifier: GPL-2.0+
- /*
-  *      uvc_video.c  --  USB Video Class driver - Video handling
-  *
-  *      Copyright (C) 2005-2010
-  *          Laurent Pinchart (laurent.pinchart@ideasonboard.com)
-- *
-- *      This program is free software; you can redistribute it and/or modify
-- *      it under the terms of the GNU General Public License as published by
-- *      the Free Software Foundation; either version 2 of the License, or
-- *      (at your option) any later version.
-- *
-  */
- 
- #include <linux/kernel.h>
+In the subject line uvcvido should be written uvcvideo.
+
+On Sun, Apr 28, 2019 at 07:21:13AM +0200, Torleiv Sundre wrote:
+> uvcvideo creates a debugfs directory based on the device bus number and
+> device number. If a device contains more than one uvc function, the
+> creation of the second and following debugfs directories will fail and
+> print an info message like this:
+>   "uvcvideo: Unable to create debugfs 3-2 directory."
+> 
+> This patch includes the uvc streaming interface number in the debugfs
+> directory name, to make sure it is unique. The directory name format is
+> changed from "<busnum>-<devnum>" to "<busnum>-<devnum>-<intfnum>"
+
+Good idea. Please see below for a few comments.
+
+> Signed-off-by: Torleiv Sundre <torleiv@huddly.com>
+> ---
+>  drivers/media/usb/uvc/uvc_debugfs.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_debugfs.c b/drivers/media/usb/uvc/uvc_debugfs.c
+> index 77e7c2419b9b..6e244acb80ab 100644
+> --- a/drivers/media/usb/uvc/uvc_debugfs.c
+> +++ b/drivers/media/usb/uvc/uvc_debugfs.c
+> @@ -84,7 +84,8 @@ void uvc_debugfs_init_stream(struct uvc_streaming *stream)
+>  	if (uvc_debugfs_root_dir == NULL)
+>  		return;
+>  
+> -	sprintf(dir_name, "%u-%u", udev->bus->busnum, udev->devnum);
+> +	sprintf(dir_name, "%u-%u-%d", udev->bus->busnum, udev->devnum,
+> +		stream->intfnum);
+
+intfnum should never be negative, I would thus use %u instead of %d.
+Furthermore, the dir_name buffer is 32 bytes long, so if something
+really wrongs happen and the three variables end up being very large,
+sprintf could overflow (10 chars for each value, 2 for the dashes, 1
+for the ending \0). I propose extending dir_name to 33 bytes, and using
+snprintf() instead of sprintf() to be on the safe side.
+
+ {
+ 	struct usb_device *udev = stream->dev->udev;
+ 	struct dentry *dent;
+-	char dir_name[32];
++	char dir_name[33];
+
+ 	if (uvc_debugfs_root_dir == NULL)
+ 		return;
+
+-	sprintf(dir_name, "%u-%u", udev->bus->busnum, udev->devnum);
++	snprintf(dir_name, sizeof(dir_name), "%u-%u-%u", udev->bus->busnum,
++		 udev->devnum, stream->intfnum);
+
+ 	dent = debugfs_create_dir(dir_name, uvc_debugfs_root_dir);
+ 	if (IS_ERR_OR_NULL(dent)) {
+
+With those changes,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+If you're fine with the changes there's no need to resubmit, I'll apply
+the modified patch.
+
+>  
+>  	dent = debugfs_create_dir(dir_name, uvc_debugfs_root_dir);
+>  	if (IS_ERR_OR_NULL(dent)) {
+
 -- 
 Regards,
 
 Laurent Pinchart
-
