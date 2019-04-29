@@ -2,38 +2,38 @@ Return-Path: <SRS0=h0Qw=S7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6505AC43219
-	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 09:18:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C54B7C43219
+	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 09:18:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3CD9E214AE
-	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 09:18:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 94A5420578
+	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 09:18:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727899AbfD2JSC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Apr 2019 05:18:02 -0400
-Received: from shell.v3.sk ([90.176.6.54]:59263 "EHLO shell.v3.sk"
+        id S1727866AbfD2JRG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Apr 2019 05:17:06 -0400
+Received: from shell.v3.sk ([90.176.6.54]:59238 "EHLO shell.v3.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727884AbfD2JRJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Apr 2019 05:17:09 -0400
+        id S1727829AbfD2JRG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 29 Apr 2019 05:17:06 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 8DFA01036A0;
-        Mon, 29 Apr 2019 11:17:04 +0200 (CEST)
+        by zimbra.v3.sk (Postfix) with ESMTP id C7F19103685;
+        Mon, 29 Apr 2019 11:16:58 +0200 (CEST)
 Received: from shell.v3.sk ([127.0.0.1])
         by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id nfkfA1vzJ1e3; Mon, 29 Apr 2019 11:16:45 +0200 (CEST)
+        with ESMTP id KBELO8rOCpzy; Mon, 29 Apr 2019 11:16:44 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id A1853103695;
-        Mon, 29 Apr 2019 11:16:43 +0200 (CEST)
+        by zimbra.v3.sk (Postfix) with ESMTP id E5BB8103692;
+        Mon, 29 Apr 2019 11:16:42 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at zimbra.v3.sk
 Received: from shell.v3.sk ([127.0.0.1])
         by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QUJh-FssglVF; Mon, 29 Apr 2019 11:16:39 +0200 (CEST)
+        with ESMTP id s7BXmGS662Aw; Mon, 29 Apr 2019 11:16:40 +0200 (CEST)
 Received: from belphegor.brq.redhat.com (nat-pool-brq-t.redhat.com [213.175.37.10])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 6487810367B;
-        Mon, 29 Apr 2019 11:16:38 +0200 (CEST)
+        by zimbra.v3.sk (Postfix) with ESMTPSA id A811C10367F;
+        Mon, 29 Apr 2019 11:16:39 +0200 (CEST)
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-media@vger.kernel.org
@@ -44,11 +44,14 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Libin Yang <lbyang@marvell.com>,
         Albert Wang <twang13@marvell.com>,
         jacopo mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v4 00/14] media: make Marvell camera work on DT-based OLPC XO-1.75
-Date:   Mon, 29 Apr 2019 11:16:22 +0200
-Message-Id: <20190429091632.2462285-1-lkundrak@v3.sk>
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Lubomir Rintel <lkundrak@v3.sk>
+Subject: [PATCH v4 03/10] [media] marvell-ccic: don't generate EOF on parallel bus
+Date:   Mon, 29 Apr 2019 11:16:25 +0200
+Message-Id: <20190429091632.2462285-4-lkundrak@v3.sk>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190429091632.2462285-1-lkundrak@v3.sk>
+References: <20190429091632.2462285-1-lkundrak@v3.sk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
@@ -56,26 +59,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+The commit 05fed81625bf ("[media] marvell-ccic: add MIPI support for
+marvell-ccic driver") that claimed to add CSI2 turned on C0_EOF_VSYNC for
+parallel bus without a very good explanation.
 
-Hi,
+That broke camera on OLPC XO-1.75 which precisely uses a sensor on a
+parallel bus. Revert that chunk.
 
-this is the fourth spin of a patchset that modernizes the Marvell MMP2 CC=
-IC
-driver.
+Tested on an OLPC XO-1.75.
 
-At the core of the rework is the move to asynchronous sensor discovery
-and clock management with the standard clock framework. There are also
-some straightforward fixes for the bitrotten parts.
+Fixes: 05fed81625bf755cc67c5864cdfd18b69ea828d1
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+---
+ drivers/media/platform/marvell-ccic/mcam-core.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Compared the the previous version it addresses things pointed out in last
-review, in patches [01/10] and [10/10]. Details in the changelogs of
-the individual patches.
-
-Tested on OLPC XO-1 and OLPC XO-1.75 laptops.
-
-Thanks,
-Lubo
-
-
-
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/me=
+dia/platform/marvell-ccic/mcam-core.c
+index d97f39bde9bd..d24e5b7a3bc5 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -792,12 +792,6 @@ static void mcam_ctlr_image(struct mcam_camera *cam)
+ 	 * Make sure it knows we want to use hsync/vsync.
+ 	 */
+ 	mcam_reg_write_mask(cam, REG_CTRL0, C0_SIF_HVSYNC, C0_SIFM_MASK);
+-	/*
+-	 * This field controls the generation of EOF(DVP only)
+-	 */
+-	if (cam->bus_type !=3D V4L2_MBUS_CSI2_DPHY)
+-		mcam_reg_set_bit(cam, REG_CTRL0,
+-				C0_EOF_VSYNC | C0_VEDGE_CTRL);
+ }
+=20
+=20
+--=20
+2.21.0
 
