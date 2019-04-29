@@ -2,207 +2,299 @@ Return-Path: <SRS0=h0Qw=S7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB44EC43219
-	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 12:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1389FC43219
+	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 16:17:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BAC4220656
-	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 12:06:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4F4D2147A
+	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 16:17:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728170AbfD2MGc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Apr 2019 08:06:32 -0400
-Received: from mail-it1-f199.google.com ([209.85.166.199]:44903 "EHLO
-        mail-it1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727927AbfD2MGI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Apr 2019 08:06:08 -0400
-Received: by mail-it1-f199.google.com with SMTP id v193so9210926itv.9
-        for <linux-media@vger.kernel.org>; Mon, 29 Apr 2019 05:06:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=wj6fLx0DbQ6fBhMkAy+RVA3Qi0FbrV2Dz7SLdx6mXsY=;
-        b=HGsz5Xxxo5cyqiulsVOCCLLqMGkFU35UuJA24sRsjyseAZSAKGrUQ4VsuYI7r2x+nF
-         Z/daqXJEkutTAnWTqE/6Uo4j1fF8fRrDv7iiE7iY6/A89333d1FOd8aQ4IbiiDTCuM2f
-         2P+8RY7XRB9G6eNNJcbqogdhU3cQgCI3+02Kpu3ba+jXRqupCIHLylFI/zrV0l+CBeN3
-         uOSauELd1n2t2JSCKiUpXtf4P+SblU8Y+2Icuvh8Zvv0u2GAqHqR+tJwkGbPHbs/wien
-         9UIq0ny+T7g37kBFcz7aV/QDBtiLMxlhpS+fTeRW6xBjQcKJxgnDv8NibMZbimh64JYP
-         b5QQ==
-X-Gm-Message-State: APjAAAVg7d7plAzZp+nRk2KuYQRVRjov/DC4Q81cRpPEfgiXJsFe1GKx
-        gTM9R/86vnsqv/pdGmlBVFq9YW9VtqgaZpvPOHmIwCf+w4Ad
-X-Google-Smtp-Source: APXvYqyyrwio/l9VPnBGrCfTpcNZABNUSruyO028bEFLLyvoWMSoMYKDXEQhqESPhr1N5A/uKzEO5kcJdF3hNxoB0G1h889N74En
+        id S1728542AbfD2QRL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Apr 2019 12:17:11 -0400
+Received: from vps-vb.mhejs.net ([37.28.154.113]:56154 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728481AbfD2QRL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 29 Apr 2019 12:17:11 -0400
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1hL8xl-0002p5-Am; Mon, 29 Apr 2019 18:17:05 +0200
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Michael Krufky <mkrufky@linuxtv.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Andy Walls <awalls@md.metrocast.net>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH v12 0/8] [media] Add analog mode support for Medion MD95700
+Date:   Mon, 29 Apr 2019 18:16:51 +0200
+Message-Id: <cover.1556554056.git.mail@maciej.szmigiero.name>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-X-Received: by 2002:a24:50cc:: with SMTP id m195mr17995253itb.160.1556539567199;
- Mon, 29 Apr 2019 05:06:07 -0700 (PDT)
-Date:   Mon, 29 Apr 2019 05:06:07 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fb811f0587aa1b7f@google.com>
-Subject: KASAN: use-after-free Write in v4l2_device_release
-From:   syzbot <syzbot+62d0ec9a8d05fffcf12e@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ezequiel@collabora.com,
-        hans.verkuil@cisco.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, niklas.soderlund+renesas@ragnatech.se,
-        sakari.ailus@linux.intel.com, sque@chromium.org,
-        syzkaller-bugs@googlegroups.com, tfiga@chromium.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+This series adds support for analog part of Medion 95700 in the cxusb
+driver.
 
-syzbot found the following crash on:
+What works:
+* Video capture at various sizes with sequential fields,
+* Input switching (TV Tuner, Composite, S-Video),
+* TV and radio tuning,
+* Video standard switching and auto detection,
+* Radio mode switching (stereo / mono),
+* Unplugging while capturing,
+* DVB / analog coexistence,
+* Raw BT.656 stream support.
 
-HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=13f56538a00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-dashboard link: https://syzkaller.appspot.com/bug?extid=62d0ec9a8d05fffcf12e
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+What does not work yet:
+* Audio,
+* VBI,
+* Picture controls.
 
-Unfortunately, I don't have any reproducer for this crash yet.
+This series (as a one patch) was submitted for inclusion few years ago,
+then waited few months in a patch queue.
+Unfortunately, by the time it was supposed to be merged there
+were enough changes in media that it was no longer mergeable.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+62d0ec9a8d05fffcf12e@syzkaller.appspotmail.com
+I thought at that time that I will be able to rebase and retest it soon
+but unfortunately up till now I was never able to find enough time to do
+so.
+Also, with the passing of time the implementation diverged more and
+more from the current kernel code, necessitating even more reworking.
 
-==================================================================
-BUG: KASAN: use-after-free in v4l2_device_release+0x3ce/0x408  
-drivers/media/v4l2-core/v4l2-dev.c:197
-Write of size 8 at addr ffff88809a266c08 by task v4l_id/7544
+That last iteration can be found here:
+https://patchwork.linuxtv.org/patch/8048/
 
-CPU: 1 PID: 7544 Comm: v4l_id Not tainted 5.1.0-rc3-319004-g43151d6 #6
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  print_address_description+0x6c/0x236 mm/kasan/report.c:187
-  kasan_report.cold+0x1a/0x3c mm/kasan/report.c:317
-  v4l2_device_release+0x3ce/0x408 drivers/media/v4l2-core/v4l2-dev.c:197
-  device_release+0x7d/0x210 drivers/base/core.c:1064
-  kobject_cleanup lib/kobject.c:662 [inline]
-  kobject_release lib/kobject.c:691 [inline]
-  kref_put include/linux/kref.h:67 [inline]
-  kobject_put+0x1df/0x4f0 lib/kobject.c:708
-  put_device+0x21/0x30 drivers/base/core.c:2205
-  video_put drivers/media/v4l2-core/v4l2-dev.c:174 [inline]
-  v4l2_release+0x2d1/0x390 drivers/media/v4l2-core/v4l2-dev.c:469
-  __fput+0x2df/0x8c0 fs/file_table.c:278
-  task_work_run+0x149/0x1c0 kernel/task_work.c:113
-  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-  exit_to_usermode_loop+0x243/0x270 arch/x86/entry/common.c:166
-  prepare_exit_to_usermode arch/x86/entry/common.c:197 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:268 [inline]
-  do_syscall_64+0x40c/0x4f0 arch/x86/entry/common.c:293
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7fc1f5f952b0
-Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
-07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-RSP: 002b:00007ffd270a0138 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007fc1f5f952b0
-RDX: 00007fc1f624bdf0 RSI: 0000000000000001 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 00007fc1f624bdf0 R09: 000000000000000a
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-R13: 00007ffd270a0290 R14: 0000000000000000 R15: 0000000000000000
+Since that version there had been the following changes:
+* Adaptation to changes in V4L2 / DVB core,
 
-Allocated by task 5354:
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_kmalloc mm/kasan/common.c:497 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:470
-  slab_post_alloc_hook mm/slab.h:437 [inline]
-  slab_alloc_node mm/slub.c:2756 [inline]
-  __kmalloc_node_track_caller+0xf3/0x320 mm/slub.c:4372
-  alloc_dr drivers/base/devres.c:103 [inline]
-  devm_kmalloc+0x8c/0x190 drivers/base/devres.c:793
-  devm_kzalloc include/linux/device.h:679 [inline]
-  usb_raremono_probe+0x34/0x235 drivers/media/radio/radio-raremono.c:298
-  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
-  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
-  really_probe+0x2da/0xb10 drivers/base/dd.c:509
-  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
-  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
-  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
-  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
-  device_add+0xad2/0x16e0 drivers/base/core.c:2106
-  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+* Radio device was added, with a possibility to tune to a FM radio
+station and switch between stereo and mono modes (tested by taping
+audio signal directly at tuner output pin),
 
-Freed by task 5354:
-  set_track mm/kasan/common.c:87 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:459
-  slab_free_hook mm/slub.c:1429 [inline]
-  slab_free_freelist_hook+0x5e/0x140 mm/slub.c:1456
-  slab_free mm/slub.c:3003 [inline]
-  kfree+0xce/0x290 mm/slub.c:3958
-  release_nodes+0x4ac/0x920 drivers/base/devres.c:508
-  devres_release_all+0x79/0xc8 drivers/base/devres.c:529
-  __device_release_driver drivers/base/dd.c:1086 [inline]
-  device_release_driver_internal+0x23a/0x4f0 drivers/base/dd.c:1113
-  bus_remove_device+0x302/0x5c0 drivers/base/bus.c:556
-  device_del+0x467/0xb90 drivers/base/core.c:2269
-  usb_disable_device+0x242/0x790 drivers/usb/core/message.c:1237
-  usb_disconnect+0x298/0x870 drivers/usb/core/hub.c:2197
-  hub_port_connect drivers/usb/core/hub.c:4940 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0xcd2/0x3b00 drivers/usb/core/hub.c:5432
-  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
-  kthread+0x313/0x420 kernel/kthread.c:253
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+* DVB / analog coexistence was improved - resolved a few cases where
+DVB core would switch off power or reset the tuner when the device
+was still being used but in the analog mode,
 
-The buggy address belongs to the object at ffff88809a266600
-  which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 1544 bytes inside of
-  4096-byte region [ffff88809a266600, ffff88809a267600)
-The buggy address belongs to the page:
-page:ffffea0002689800 count:1 mapcount:0 mapping:ffff88812c3f4600 index:0x0  
-compound_mapcount: 0
-flags: 0xfff00000010200(slab|head)
-raw: 00fff00000010200 dead000000000100 dead000000000200 ffff88812c3f4600
-raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
+* Fixed issues reported by v4l2-compliance,
 
-Memory state around the buggy address:
-  ffff88809a266b00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff88809a266b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff88809a266c00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                       ^
-  ffff88809a266c80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff88809a266d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+* Switching to raw BT.656 mode is now done by a custom streaming
+parameter set via VIDIOC_S_PARM ioctl instead of using a
+V4L2_BUF_TYPE_PRIVATE buffer (which was removed from V4L2),
 
+* General small code cleanups (like using BIT() or ARRAY_SIZE() macros
+instead of open coding them, code formatting improvements, etc.).
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes from v1:
+* Only support configuration of cx25840 pins that the cxusb driver is
+actually using so there is no need for an ugly CX25840_PIN() macro,
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+* Split cxusb changes into two patches: first one implementing
+digital / analog coexistence in this driver, second one adding the
+actual implementation of the analog mode,
+
+* Fix a warning reported by kbuild test robot.
+
+Changes from v2:
+* Split out ivtv cx25840 platform data zero-initialization to a separate
+commit,
+
+* Add kernel-doc description of struct cx25840_state,
+
+* Make sure that all variables used in CX25840_VCONFIG_OPTION() and
+CX25840_VCONFIG_SET_BIT() macros are their explicit parameters,
+
+* Split out some code from cxusb_medion_copy_field() and
+cxusb_medion_v_complete_work() functions to separate ones to increase
+their readability,
+
+* Generate masks using GENMASK() and BIT() macros in cx25840.h and
+cxusb.h.
+
+Changes from v3:
+Add SPDX tag to a newly added "cxusb-analog.c" file.
+
+Changes from v4:
+* Make analog support conditional on a new DVB_USB_CXUSB_ANALOG Kconfig
+option,
+
+* Use '//' comments in the header of a newly added "cxusb-analog.c"
+file,
+
+* Don't print errors on memory allocation failures,
+
+* Get rid of the driver MODULE_VERSION(),
+
+* Small formating fix of a one line.
+
+Changes from v5:
+Rebase onto current media_tree/master.
+
+Changes from v6:
+Adapt to commit 4eb2f55728abbe changing V4L2_SUBDEV_IO_PIN_* from bit
+masks to bit numbers.
+Thanks to Dan Carpenter's kbuild bot for catching this.
+
+Changes from v7:
+* Simplify cx25840_function_to_pad() assuming that the values of
+individual members of I/O pad enum will always match the actual
+chip register values,
+
+* Add a comment that the above is now a requirement to the I/O pad enum,
+
+* Don't #undef macros in the cx25840 patch,
+
+* Change "generic_mode" variable type in struct cx25840_state to bool,
+
+* Prefix todo-style comments added by the cx25840 patch with "TODO:",
+
+* Add a core init op to the cx25840 driver and use it to turn the
+generic_mode on instead of doing it via the platform data,
+
+* Use the above core init op to also provide a vconfig configuration
+to the cx25840 driver so the cxusb driver does not have to pass this
+(constant) configuration there on every video input change,
+
+* Remove cxusb_auxbuf_advance(), cxusb_auxbuf_begin() and
+cxusb_auxbuf_isend(),
+
+* Add a missing frame sequence counter support,
+
+* Test the driver with v4l2-compliance with streaming tests enabled,
+
+* Set device_caps in struct video_device during probe instead of returning
+it manually in vidioc_querycap handler,
+
+* Don't set the format name in vidioc_enum_fmt_vid_cap handler,
+
+* Drop various memset() zeroing in ioctl handlers, as suggested during
+last review,
+
+* Enforce minimum buffer count via in_buffers_needed field of
+struct vb2_queue instead of doing it in queue_setup callback,
+
+* Rewrite stream starting / stopping / configuration mechanism using a
+'stop_streaming' flag, remove cxusb_medion_stream_busy(),
+
+* Set the lock field in struct vb2_queue so vb2_ops_wait_prepare() /
+vb2_ops_wait_finish() helpers can be utilized,
+
+* Split out raw (unprocessed) BT.656 stream capturing support to a
+separate patch, adapt it to a recent change introduced by
+commit 8a7c5594c020 ("v4l2-ioctl: clear fields in s_parm") that forced
+extendedmode set by VIDIOC_S_PARM to zero,
+
+* Add a comment that if we ever need to support analog mode in similar
+hardware then this code should be made generic,
+
+* Remove a requirement that URB length has to be less than full frame
+size,
+
+* Limit URB length to avoid very high order memory allocations,
+
+* Remove out-of-order incoming URB support: this can't really happen,
+
+* Small cleanups here and there.
+
+Changes from v8:
+Rebase onto current media_tree/master.
+
+Changes from v9:
+* Elaborate generic mode comments in cx25840 and cxusb drivers,
+add datasheet references to cx25840 chip video output settings,
+
+* Describe the new DVB_USB_ADAP_STREAMING_CTRL_NO_URB flag,
+
+* Drop likely and unlikely annotations in cxusb driver from the patches,
+
+* Exclusively use strscpy (and not strncpy, strcpy, etc.) in the patches,
+
+* Drop zeroing of various v4l fields which should be zeroed by the
+core v4l code,
+
+* Adapt VIDIOC_S_FMT handler so the video format can't be changed if
+buffers are allocated,
+
+* Add VB2_DMABUF to the list of supported I/O modes.
+
+Changes from v10:
+* Add a commit cleaning up cx25840_load_fw() and its comments
+(no functional change intended),
+
+* Add a commit renaming cx25840 g_std operation to querystd operation
+since this is what this handler does,
+
+* Add a commit that clamps out-of-range picture sizes in cx25840
+set_fmt subdev operation so it conforms better to the V4L2 API,
+
+* cx25840 driver generic mode (enabled by calling its init op) is currently
+only implemented for cx2584x-family chips.
+Add a relevant comment and a warning to catch unintentional uses,
+
+* Program cx25840 driver video timings in the generic mode to the same
+values that the chip autoconfig would set.
+
+While improving the set_fmt subdev operation it became obvious that
+the video timings that cx25840 driver was setting resulted in a strange
+BT.656 PAL stream that had two active video areas per field (one with
+just a single line) and 580 active lines total.
+An output format with 580 active lines total meant that the most common
+PAL capture line count of 576 needed a non-identity scaling factor.
+
+This is the reason why in the generic mode the driver now uses the same
+values that the chip autoconfig would set (read from the chip).
+These give a nice, BT.656-compliant PAL stream with 576 lines and one
+active video area per field.
+
+cxusb raw mode, as provided by the last commit, is very useful for
+diagnosing these issues as it gives access to a raw BT.656 stream
+from the cx25840 chip where one can see line count for each field, see
+where VBI lines lie, which lines actually contain samples (as it is
+possible to have some active video lines without any samples at all and
+some VBI lines with normal line samples - cx25840 can move a VBI marker
+independently of a "start capturing samples" marker and, in fact, can have
+a slightly different VBI / active video divider between the two fields in
+a frame),
+
+* Remove the dvb-usb framework DVB_USB_ADAP_STREAMING_CTRL_NO_URB flag
+and always assume its behaviour (always make sure that data URBs are
+not active before calling a driver streaming_ctrl callback),
+
+* Initialize cxusb driver to PAL mode instead of trying to autodetect
+the standard,
+
+* Change videodev->tvnorms and the currently set standard when switching
+inputs so VIDIOC_ENUMSTD and VIDIOC_G_STD correctly return a limited
+standard set for TV tuner input,
+
+* Implement VIDIOC_QUERYSTD operation,
+
+* Make sure to return bottom-top field order for 525-line signal
+captures.
+
+Changes from v11:
+Add g_std operation to cx25840 driver and use it instead of querystd
+operation when determining field order in cxusb driver.
+
+ drivers/media/i2c/cx25840/cx25840-core.c |  554 +++++-
+ drivers/media/i2c/cx25840/cx25840-core.h |   15 +
+ drivers/media/i2c/cx25840/cx25840-vbi.c  |    4 +
+ drivers/media/usb/dvb-usb/Kconfig        |   16 +-
+ drivers/media/usb/dvb-usb/Makefile       |    3 +
+ drivers/media/usb/dvb-usb/cxusb-analog.c | 1974 ++++++++++++++++++++++
+ drivers/media/usb/dvb-usb/cxusb.c        |  451 ++++-
+ drivers/media/usb/dvb-usb/cxusb.h        |  158 ++
+ drivers/media/usb/dvb-usb/dvb-usb-dvb.c  |    5 +-
+ drivers/media/usb/dvb-usb/dvb-usb-init.c |   13 +
+ drivers/media/usb/dvb-usb/dvb-usb.h      |   10 +
+ drivers/media/v4l2-core/v4l2-ioctl.c     |    3 +-
+ include/media/drv-intf/cx25840.h         |  105 +-
+ 13 files changed, 3176 insertions(+), 135 deletions(-)
+ create mode 100644 drivers/media/usb/dvb-usb/cxusb-analog.c
