@@ -6,47 +6,47 @@ X-Spam-Status: No, score=-5.7 required=3.0 tests=FROM_LOCAL_HEX,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00AF3C004C9
-	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 12:06:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14AF3C43219
+	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 12:06:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C9B6520656
-	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 12:06:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7E7D20656
+	for <linux-media@archiver.kernel.org>; Mon, 29 Apr 2019 12:06:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728180AbfD2MGI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 29 Apr 2019 08:06:08 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:46976 "EHLO
+        id S1728002AbfD2MGT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 29 Apr 2019 08:06:19 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:38678 "EHLO
         mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728163AbfD2MGH (ORCPT
+        with ESMTP id S1728172AbfD2MGI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 29 Apr 2019 08:06:07 -0400
-Received: by mail-io1-f69.google.com with SMTP id i84so8618842iof.13
-        for <linux-media@vger.kernel.org>; Mon, 29 Apr 2019 05:06:06 -0700 (PDT)
+        Mon, 29 Apr 2019 08:06:08 -0400
+Received: by mail-io1-f69.google.com with SMTP id b16so8609099iot.5
+        for <linux-media@vger.kernel.org>; Mon, 29 Apr 2019 05:06:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=2OKFrl0iztzbP3p1e8FXflIAxnOKYTyuwdcHCmFUgac=;
-        b=i3t4obBHtmHcxiWEEuOn/kPhTlih6ti3ETUDs99UibbDvI4Owj6Dc8GN3BNqipYBLU
-         i5LIACIMKehUPDxirVsDoGKUp80DTznvsIwv22QNBC9uDD0n67kc+2DshNEZ9mKqJe87
-         82jJ22+xtku27O3LQGtzcW7ujhA/bW7gLNdXQeU5I4ARmpBxCwDWN6vQEJhqzfrjm3I6
-         oWdIfjGA9J/xgLhk2mcoZofk5Kzmp1NF8Bb1a5PajpGWYVYxLz8m29t4hos5MI2en6pw
-         Q11cafnLnd4nqX/0mEf9UNTSScC++bOny+2kaO8ALW94BFtg3SlhTtRRIgjzU6o8j3b/
-         Ey8A==
-X-Gm-Message-State: APjAAAWXi5keyMC0SZHA029C9HZjnZFAY7h9GU7T3xqWxMp6woWnM/qQ
-        OPQ1hNenE2xUn3WTWggp4nREj2UrD4v3ucWWnPVsiuv5v0Ba
-X-Google-Smtp-Source: APXvYqz3NyLk2zuX1NNIYhzXyOJdTnzzQK8nJWPItWhEO6u50uRLlD1ulqcMVxkBABBeJtBlBPqoKfN0cH4pgG/s9bH2v3X/xKSD
+        bh=rDeQFW7ur3bD5DVlx58zRUEpG0d8EGxbNzUv5hd9aJg=;
+        b=HssL1yTF2ZXmH5IvmlzQxcIZgbJ+siSQVZL3Bbs8TKzASa/pTmpI1KEtullGgPRu4H
+         rzqF4YeoNdwJa3m97wncTXySOp3s0uB/YxInm31tFfp3rfdsQl50z464rpOPPSbgpkl6
+         w9slubN4kQrlk85NJVZQOhwhrrzO+EKkVrCqO6GC/8Z9Ytx+Rp4tM2F/9UwAvLxXctxw
+         FE0UlB9WmnHXt2yGvYJakqTNrO1tdAv0fXXfwnzzxvO64utHQOhu5ZovLbAfkyoP1764
+         8ERNtNbBjSWKKvUwb6I82kOAKKry4JugeMn0GLvBkiXSvYyfOjlyj233WFPCxTGG9Cmz
+         IFLg==
+X-Gm-Message-State: APjAAAVo6XEFkB3Wp30/uL2mLt9iUyzM5Vi/RLa+rakUDgZdAZHdGbp7
+        FBAqwhrQbmJsquQR1ktunjbnytlC5nxa8yq5dpxWfCfMQ67E
+X-Google-Smtp-Source: APXvYqxWAijp8HtMDdopw8UkXEtp9e/OiyQ3ux05IGIpuY2mfbZjMM+THEIzV7KtLPe6JzPQC/s7pJMB0OE8a8+OSiqakCebPZ6r
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9489:: with SMTP id v9mr31225502ioj.129.1556539566644;
- Mon, 29 Apr 2019 05:06:06 -0700 (PDT)
-Date:   Mon, 29 Apr 2019 05:06:06 -0700
+X-Received: by 2002:a6b:f008:: with SMTP id w8mr29131590ioc.251.1556539567488;
+ Mon, 29 Apr 2019 05:06:07 -0700 (PDT)
+Date:   Mon, 29 Apr 2019 05:06:07 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f2e3f90587aa1b2b@google.com>
-Subject: KASAN: null-ptr-deref Read in zr364xx_vidioc_querycap
-From:   syzbot <syzbot+66010012fd4c531a1a96@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+Message-ID: <000000000000ffc8c80587aa1bb1@google.com>
+Subject: BUG: unable to handle kernel paging request in au0828_usb_disconnect
+From:   syzbot <syzbot+15e91d49c4c757c3d363@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, brad@nextdimension.cc,
+        hans.verkuil@cisco.com, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, royale@zerezo.com,
-        syzkaller-bugs@googlegroups.com
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -59,55 +59,92 @@ syzbot found the following crash on:
 
 HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
 git tree:       https://github.com/google/kasan/tree/usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=139fc338a00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=106c9498a00000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-dashboard link: https://syzkaller.appspot.com/bug?extid=66010012fd4c531a1a96
+dashboard link: https://syzkaller.appspot.com/bug?extid=15e91d49c4c757c3d363
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1661d17ca00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=177d7262a00000
+
+Unfortunately, I don't have any reproducer for this crash yet.
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+66010012fd4c531a1a96@syzkaller.appspotmail.com
+Reported-by: syzbot+15e91d49c4c757c3d363@syzkaller.appspotmail.com
 
-==================================================================
-BUG: KASAN: null-ptr-deref in read_word_at_a_time+0xe/0x20  
-include/linux/compiler.h:274
-Read of size 1 at addr 0000000000000000 by task v4l_id/5287
-
-CPU: 1 PID: 5287 Comm: v4l_id Not tainted 5.1.0-rc3-319004-g43151d6 #6
+usb 5-1: selecting invalid altsetting 5
+au0828: Failure setting usb interface0 to as5
+au0828: au0828_usb_probe() au0828_analog_register failed to register on V4L2
+BUG: unable to handle kernel paging request at fffffffc4508a958
+#PF error: [normal kernel read fault]
+PGD 1167e067 P4D 1167e067 PUD 0
+Oops: 0000 [#1] SMP KASAN PTI
+CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.1.0-rc3-319004-g43151d6 #6
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:decode_cpu kernel/locking/osq_lock.c:34 [inline]
+RIP: 0010:osq_lock+0xfd/0x5a0 kernel/locking/osq_lock.c:111
+Code: 48 63 e8 48 b8 00 00 00 00 00 fc ff df 48 8d 3c ed 60 b0 39 91 48 89  
+f9 48 c1 e9 03 80 3c 01 00 0f 85 2c 04 00 00 48 8d 53 08 <4c> 03 2c ed 60  
+b0 39 91 48 b8 00 00 00 00 00 fc ff df 48 89 d6 48
+RSP: 0018:ffff8880a84f70e8 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff8880ad12dfc0 RCX: 1fffffff88a1152b
+RDX: ffff8880ad12dfc8 RSI: 0000000000000004 RDI: fffffffc4508a958
+RBP: ffffffff9679df1f R08: 0000000000000000 R09: ffffed10122cb31e
+R10: ffffed10122cb31d R11: ffff8880916598eb R12: ffff8880ad12dfd0
+R13: 000000000002dfc0 R14: ffff8880a84db100 R15: ffff8880916598e8
+FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffffffc4508a958 CR3: 00000000824b6000 CR4: 00000000001406e0
 Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xe8/0x16e lib/dump_stack.c:113
-  kasan_report.cold+0x5/0x3c mm/kasan/report.c:321
-  read_word_at_a_time+0xe/0x20 include/linux/compiler.h:274
-  strscpy+0x8a/0x280 lib/string.c:207
-  zr364xx_vidioc_querycap+0xb5/0x210 drivers/media/usb/zr364xx/zr364xx.c:706
-  v4l_querycap+0x12b/0x340 drivers/media/v4l2-core/v4l2-ioctl.c:1062
-  __video_do_ioctl+0x5bb/0xb40 drivers/media/v4l2-core/v4l2-ioctl.c:2874
-  video_usercopy+0x44e/0xf00 drivers/media/v4l2-core/v4l2-ioctl.c:3056
-  v4l2_ioctl+0x14e/0x1a0 drivers/media/v4l2-core/v4l2-dev.c:364
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xced/0x12f0 fs/ioctl.c:696
-  ksys_ioctl+0xa0/0xc0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x74/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xcf/0x4f0 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7f3b56d8b347
-Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff  
-ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
-RSP: 002b:00007ffe005d5d68 EFLAGS: 00000202 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f3b56d8b347
-RDX: 00007ffe005d5d70 RSI: 0000000080685600 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000400884
-R13: 00007ffe005d5ec0 R14: 0000000000000000 R15: 0000000000000000
-==================================================================
+  mutex_optimistic_spin kernel/locking/mutex.c:630 [inline]
+  __mutex_lock_common kernel/locking/mutex.c:928 [inline]
+  __mutex_lock+0x27d/0x12b0 kernel/locking/mutex.c:1072
+  au0828_usb_disconnect+0xa3/0x130 drivers/media/usb/au0828/au0828-core.c:194
+  au0828_usb_probe.cold+0x121/0x7d8  
+drivers/media/usb/au0828/au0828-core.c:661
+  usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2023
+  generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
+  usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
+  really_probe+0x2da/0xb10 drivers/base/dd.c:509
+  driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
+  __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
+  bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x223/0x3a0 drivers/base/dd.c:844
+  bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
+  device_add+0xad2/0x16e0 drivers/base/core.c:2106
+  usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
+  process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+  worker_thread+0x9b/0xe20 kernel/workqueue.c:2415
+  kthread+0x313/0x420 kernel/kthread.c:253
+  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
+Modules linked in:
+CR2: fffffffc4508a958
+---[ end trace e04421c5fdf22ecf ]---
+RIP: 0010:decode_cpu kernel/locking/osq_lock.c:34 [inline]
+RIP: 0010:osq_lock+0xfd/0x5a0 kernel/locking/osq_lock.c:111
+Code: 48 63 e8 48 b8 00 00 00 00 00 fc ff df 48 8d 3c ed 60 b0 39 91 48 89  
+f9 48 c1 e9 03 80 3c 01 00 0f 85 2c 04 00 00 48 8d 53 08 <4c> 03 2c ed 60  
+b0 39 91 48 b8 00 00 00 00 00 fc ff df 48 89 d6 48
+RSP: 0018:ffff8880a84f70e8 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff8880ad12dfc0 RCX: 1fffffff88a1152b
+RDX: ffff8880ad12dfc8 RSI: 0000000000000004 RDI: fffffffc4508a958
+RBP: ffffffff9679df1f R08: 0000000000000000 R09: ffffed10122cb31e
+R10: ffffed10122cb31d R11: ffff8880916598eb R12: ffff8880ad12dfd0
+R13: 000000000002dfc0 R14: ffff8880a84db100 R15: ffff8880916598e8
+FS:  0000000000000000(0000) GS:ffff8880ad100000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffffffc4508a958 CR3: 00000000824b6000 CR4: 00000000001406e0
 
 
 ---
@@ -117,5 +154,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this bug report. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
