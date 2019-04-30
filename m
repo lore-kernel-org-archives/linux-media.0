@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D294BC43219
-	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:25:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 240A4C43219
+	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:25:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A266C21743
-	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:25:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E742E21783
+	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:25:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cjAZo1be"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eEiOGFet"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727885AbfD3NZ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Apr 2019 09:25:29 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:32905 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728098AbfD3NZ2 (ORCPT
+        id S1728566AbfD3NZ4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Apr 2019 09:25:56 -0400
+Received: from mail-ua1-f73.google.com ([209.85.222.73]:39617 "EHLO
+        mail-ua1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728549AbfD3NZz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Apr 2019 09:25:28 -0400
-Received: by mail-pf1-f202.google.com with SMTP id i23so9103533pfa.0
-        for <linux-media@vger.kernel.org>; Tue, 30 Apr 2019 06:25:27 -0700 (PDT)
+        Tue, 30 Apr 2019 09:25:55 -0400
+Received: by mail-ua1-f73.google.com with SMTP id v5so1911420ual.6
+        for <linux-media@vger.kernel.org>; Tue, 30 Apr 2019 06:25:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=IkuD9zPPDPrNqKOg+1EuZo5HlTMskU88lY/hO73XGBQ=;
-        b=cjAZo1bevEgDG9f0Gp0lCqBUDVGf7WH9HfahHvPYK3yXKOMpkTJl6c0Qs/+BaViS4F
-         SVbEHv0pbmF0M0fXn45Xz+XZ5NA51A6Q84gce81tqYq+4vQ4fSd4Vfr74XM9VMTqpEUn
-         hpbIVHi0Y6E4lGzikQQHuG5LSWrNkshsuGLGjPRywGWJWT4PFmQUF2llhQi6ncC/Vlfh
-         XyXZ2xzPVmh+mASSDoCOMBPHpUNh2v+x16jbihEdr4DI6v1V/jUL7ilAE/v54hqYIVN8
-         AFB4b6bLnE3ptsM0NTOpxh1giv5Af/8Vei/jZ/b9XgJhABJa8DnBXyZnippbFF98erxD
-         64TA==
+        bh=/erHdYVyxDvhPu3v7RMhd3dO9bpNIdyHyuRFKthPw/o=;
+        b=eEiOGFetYWxih+SqIZFzGNfWcb2WG27fgr8umX6U99zGn9TVk7qoyvUJvyLbyO9646
+         My6AFQXfx+E54pBbdCbbmUTy552nSiekbu8p+Z3EjOZkkRzKh6/KPKq2xMXR6PGCbeOC
+         fF7Wnybo7p7oNGCxEtdGcC/SjUjb33krZmpxfplFBazN0BgfioX0FSzySTA4N97gTFrT
+         W6ijBCliSwnkOOpdiWk5kSemwYixok6PKUQxZHW6VplcdEwGvrCZqCKdW+XjRywAL4b4
+         tr3KgVn6nyJgYRcK+gwURasQznomoMLJd50NL8tFT/I0TUKbeATfwfeLLEXDX2wH0kWJ
+         cXSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=IkuD9zPPDPrNqKOg+1EuZo5HlTMskU88lY/hO73XGBQ=;
-        b=iMX/B5fmWIyVD7HiJ4Wv4o+j/sepsQrZu53mZ3fneJ54NlL0XKraRfKLsu5A5lxy8p
-         U2nVdL3ofwBvpNYrc0aocG0dVizi9KxARdHBG1C5Jnwpj9uZ6ERm8QHX/hLUP2C0k5vX
-         akwzIbPArvs7rP22nMrvVv4zHljGTfolKRqEHDliG8Ro1MMTDzIZcVG+I6slV2CSvztm
-         plP0jitxOMtg5F1zZz97wImdd72Jl4SoPgaazDr70ikc+VUmZinz6xsYWrKSz6GU1Z0D
-         QS5Da+UicwEsDLNa50CHyQLDRmJ+H+e78Hyl69UYVQNabHO0VYBTpdfECL7pKRXBe8Qf
-         xaMQ==
-X-Gm-Message-State: APjAAAUUqVW7eDhNjDH/DEpkES9VM1PTVVI/xPxslX6Grpi+8vNp1str
-        7l0zft5AfTN4yR6tw9ForPT/o5mp3yCrU4gV
-X-Google-Smtp-Source: APXvYqxwzeO4aaEq5t7dlXsyLEMZLxNA1xUAM/PWlhFhSshLHzTvKlXrQBr9Il+4R5AJQuOw/QR46XMvR3q8fhhC
-X-Received: by 2002:a65:534b:: with SMTP id w11mr7522791pgr.210.1556630723459;
- Tue, 30 Apr 2019 06:25:23 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 15:24:58 +0200
+        bh=/erHdYVyxDvhPu3v7RMhd3dO9bpNIdyHyuRFKthPw/o=;
+        b=iBPlyST3zyUh1UpQQwiEqjXsGITSKoKNbuYfzltx/V6SV68gOpqaMDoL0O9hS9RYiB
+         4LN0MJfs1+BL1q2m/xkCljYxhk37DlM6lIApPYhcfv99gnHSOpxhJ0iFtHpV5WKxaYdF
+         nmbblWqjMR44eVX0/9SC24CE1J7Y8AYYArh9CoyKlmLuDSjgC09xvrXgq27zqmPvXr81
+         0xfm3GGdZ13Iq83p07GlFv6pVsh2ygnXxPw/8UETglHpyhSm7lAX3Nl2kAQd2mOUbJiJ
+         SXI9bF1R0M3niBiKNAtfqARbkbb0nUBnrsmh0SxGYrk9qK5ZchbKlmOOMIYKBIbAzQ/o
+         Cr4Q==
+X-Gm-Message-State: APjAAAUQ63EUVKDKCMUrXMiQtn6IRwCJRlkzefSUQStqCL8jnzylknkC
+        4cRz4UjAPRbeFtQlgwbmNq4l+YoDhQPgQC1i
+X-Google-Smtp-Source: APXvYqz67px3tLUaZFP489IW2cHQSs+LvJjC7bfPcwFfPsiBelEm070ukqvUpFmAC3UEaQxQ+Sud/QNcvCPvUR/K
+X-Received: by 2002:a67:82c8:: with SMTP id e191mr36596964vsd.24.1556630754448;
+ Tue, 30 Apr 2019 06:25:54 -0700 (PDT)
+Date:   Tue, 30 Apr 2019 15:25:08 +0200
 In-Reply-To: <cover.1556630205.git.andreyknvl@google.com>
-Message-Id: <29b7234f48a282037bdfc23e07ff167756fca0df.1556630205.git.andreyknvl@google.com>
+Message-Id: <9a50ef07d927cbccd9620894bda825e551168c3d.1556630205.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1556630205.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
-Subject: [PATCH v14 02/17] arm64: untag user pointers in access_ok and __uaccess_mask_ptr
+Subject: [PATCH v14 12/17] drm/radeon, arm64: untag user pointers
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -103,60 +103,48 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-copy_from_user (and a few other similar functions) are used to copy data
-from user memory into the kernel memory or vice versa. Since a user can
-provided a tagged pointer to one of the syscalls that use copy_from_user,
-we need to correctly handle such pointers.
+radeon_ttm_tt_pin_userptr() uses provided user pointers for vma
+lookups, which can only by done with untagged pointers. This patch
+untags user pointers when they are being set in
+radeon_ttm_tt_pin_userptr().
 
-Do this by untagging user pointers in access_ok and in __uaccess_mask_ptr,
-before performing access validity checks.
+In amdgpu_gem_userptr_ioctl() an MMU notifier is set up with a (tagged)
+userspace pointer. The untagged address should be used so that MMU
+notifiers for the untagged address get correctly matched up with the right
+BO. This patch untags user pointers in radeon_gem_userptr_ioctl().
 
-Note, that this patch only temporarily untags the pointers to perform the
-checks, but then passes them as is into the kernel internals.
-
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- arch/arm64/include/asm/uaccess.h | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/radeon/radeon_gem.c | 2 ++
+ drivers/gpu/drm/radeon/radeon_ttm.c | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index e5d5f31c6d36..9164ecb5feca 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -94,7 +94,7 @@ static inline unsigned long __range_ok(const void __user *addr, unsigned long si
- 	return ret;
- }
+diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+index 44617dec8183..90eb78fb5eb2 100644
+--- a/drivers/gpu/drm/radeon/radeon_gem.c
++++ b/drivers/gpu/drm/radeon/radeon_gem.c
+@@ -291,6 +291,8 @@ int radeon_gem_userptr_ioctl(struct drm_device *dev, void *data,
+ 	uint32_t handle;
+ 	int r;
  
--#define access_ok(addr, size)	__range_ok(addr, size)
-+#define access_ok(addr, size)	__range_ok(untagged_addr(addr), size)
- #define user_addr_max			get_fs
++	args->addr = untagged_addr(args->addr);
++
+ 	if (offset_in_page(args->addr | args->size))
+ 		return -EINVAL;
  
- #define _ASM_EXTABLE(from, to)						\
-@@ -226,7 +226,8 @@ static inline void uaccess_enable_not_uao(void)
+diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
+index 9920a6fc11bf..dce722c494c1 100644
+--- a/drivers/gpu/drm/radeon/radeon_ttm.c
++++ b/drivers/gpu/drm/radeon/radeon_ttm.c
+@@ -742,7 +742,7 @@ int radeon_ttm_tt_set_userptr(struct ttm_tt *ttm, uint64_t addr,
+ 	if (gtt == NULL)
+ 		return -EINVAL;
  
- /*
-  * Sanitise a uaccess pointer such that it becomes NULL if above the
-- * current addr_limit.
-+ * current addr_limit. In case the pointer is tagged (has the top byte set),
-+ * untag the pointer before checking.
-  */
- #define uaccess_mask_ptr(ptr) (__typeof__(ptr))__uaccess_mask_ptr(ptr)
- static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
-@@ -234,10 +235,11 @@ static inline void __user *__uaccess_mask_ptr(const void __user *ptr)
- 	void __user *safe_ptr;
- 
- 	asm volatile(
--	"	bics	xzr, %1, %2\n"
-+	"	bics	xzr, %3, %2\n"
- 	"	csel	%0, %1, xzr, eq\n"
- 	: "=&r" (safe_ptr)
--	: "r" (ptr), "r" (current_thread_info()->addr_limit)
-+	: "r" (ptr), "r" (current_thread_info()->addr_limit),
-+	  "r" (untagged_addr(ptr))
- 	: "cc");
- 
- 	csdb();
+-	gtt->userptr = addr;
++	gtt->userptr = untagged_addr(addr);
+ 	gtt->usermm = current->mm;
+ 	gtt->userflags = flags;
+ 	return 0;
 -- 
 2.21.0.593.g511ec345e18-goog
 
