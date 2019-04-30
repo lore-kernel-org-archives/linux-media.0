@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A833FC04AA6
-	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38D72C04AA6
+	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:27:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 774972173E
-	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:27:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03A9F20644
+	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:27:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="btEcp2ne"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wJdQ1UGK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbfD3N1B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Apr 2019 09:27:01 -0400
-Received: from mail-oi1-f201.google.com ([209.85.167.201]:54683 "EHLO
-        mail-oi1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727179AbfD3NZw (ORCPT
+        id S1728303AbfD3N1T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Apr 2019 09:27:19 -0400
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:55480 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728435AbfD3NZq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Apr 2019 09:25:52 -0400
-Received: by mail-oi1-f201.google.com with SMTP id f21so2252395oib.21
-        for <linux-media@vger.kernel.org>; Tue, 30 Apr 2019 06:25:51 -0700 (PDT)
+        Tue, 30 Apr 2019 09:25:46 -0400
+Received: by mail-qk1-f201.google.com with SMTP id r13so11716497qke.22
+        for <linux-media@vger.kernel.org>; Tue, 30 Apr 2019 06:25:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=+qKylFjMLP53K9qAejYeg4zQoAltlSq0MdIVnvcZCpk=;
-        b=btEcp2nedxD/RSSqWCBp6Rk8cMJhftnRu9ZW20tW9H57Xw0aRxokGUkdPaQcz9rkFo
-         41vHcxVyWnumGF2h8AA/tvaQ1eb1WCyLG8jJc1HuBhG3r5Wd1fM3SW30CuGnpg1TRhOv
-         wnQvFrUnasvGEjcZv5QbKz23EvdFctZuk2lHQH4EeEAFL4Kx+vSjlXZtQRydk7j1idAx
-         /UUAwj84w5Pi95UWsOVe8tS152xj2ZfcEWPp7jNQzN52h4BmJiS1Ku9e/jk70X0Z2EPY
-         SDSyNof0IogZBTJr94e5UKMwPIftjzOfnH+SY8xUjb5s8afDb//mLKaZWdWGUI38Snzl
-         JsbQ==
+        bh=XhTfun6kQ0RRzRGxeYV1Lxl9M9fvGqRUvmzO5QW1/Iw=;
+        b=wJdQ1UGK5yN+4uNr4h/B5QAZg4CL5PwyVx/Pw0wXlRL/1oGZsU8xxjXpZhWnko4SRI
+         fd58gicIFCILzVPy4t7gpYBYkZYkBR3FmblDk49rQtqjc+3RWgZP2PESfhPKYuSabBw/
+         B0hXw+/teu1vbGfMkq/9KC8ilccnVzEvxDboYdIBbHp/DJQFCI0D5tDe+o/VISE54DyV
+         St7L+ZfiWURBvKb49SaxC44tIWiHtqDmkV/TM32oplri8v6dnEdHN+6rXyhwe32Swezt
+         x0OHZZDCsWZFgoiC74TFCi6OtAop9i/h8/+cUKSH3r+foqub7XosNX+XNvDEf+4uDkZz
+         /4Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=+qKylFjMLP53K9qAejYeg4zQoAltlSq0MdIVnvcZCpk=;
-        b=sMPya+9Elf1vgFH8tp4Xfh/Z96OvQCCu0lwbdgJI4pZqALOL72VLN30SgmtB0aXGis
-         02sFsYJTJaFnrXiVIw0/XG4CyQRKsZSlIYDLhy9ObzrnU411j78dlmwje2wvt8hp38lI
-         sIqbjUb5fyB2PjNSIRPEGupetqpJw3Ir5OGheuNk0SePrpXzYNcJRLuT1c6vTfdSRvmN
-         OcRYuugrgw2+57elyjiHmdqLTEKfy0EJhxODpECB22TuYIcUJGbmxW7/q04KvPa09GxE
-         1Z6ekBwtERvRvfTBQp5c+uKFW7WDVYYchXxuuOBbKY4fwywpUlweO/2Z8I1ZbDr5oNty
-         uELw==
-X-Gm-Message-State: APjAAAXGCosV/SRTYN973zeMPeqA1WtHOoHQSaZuq/YztupBId2xv3po
-        DbZgejCQgdZJSFtHYZbzmgVp4fVczO4NsCPh
-X-Google-Smtp-Source: APXvYqz7KleMfXSb2xWhqBUaqWJTSwZR2ghM1vwfjJsnESBwGEPHMng/yx10KRFE5q5G6LCNFaFlFnciq2Xk09j0
-X-Received: by 2002:aca:4e83:: with SMTP id c125mr2833389oib.13.1556630751340;
- Tue, 30 Apr 2019 06:25:51 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 15:25:07 +0200
+        bh=XhTfun6kQ0RRzRGxeYV1Lxl9M9fvGqRUvmzO5QW1/Iw=;
+        b=eTReg7c4ssP1Wc7ed27J8XKerubPe7rmyh5HrNzO6A1gZqC7UFH4PR9MPSimNVy0Xe
+         k7EVBZU1A9PY2fR5KO98oWPxppsaKfOomRRvylorfzYK41vSDS/yjEDC5fJiOoBatkyJ
+         O8FpVzs7R8UugQGTivVa9bTujp/egbbAn6bKl1//Zhe5WE6vrrA6RLA5eb15zaaSNCA7
+         F2FEUog/N3+D5n82AjG1MAQ+S7mZRlQB/aJ07Qr83imzREn0qcol8wjJWq84OlMyY3hS
+         pf3RVeSrNOVDboU+HvOdxyVPm7/waiSAny6Fh7ktfpn+Y4xgnTpoaV/cBgup5ft2xISs
+         eOGg==
+X-Gm-Message-State: APjAAAWJ4VPD/ygcgtz5GTl0BWMyjy/Y4gyQAnDCVMBXJe2R8oz3mfuJ
+        8cDhcBU6tSfEfvPTon4fc8y3bUrKf6ygWZiW
+X-Google-Smtp-Source: APXvYqznoxmsWRf0TRsMetoUzYzE4dAnT0nzUuom4UB8P1UAcmj3+/tm6hiTUWLYkHc/SM6nPM/1vvtkZ4BWAaOU
+X-Received: by 2002:a37:b683:: with SMTP id g125mr147309qkf.249.1556630745179;
+ Tue, 30 Apr 2019 06:25:45 -0700 (PDT)
+Date:   Tue, 30 Apr 2019 15:25:05 +0200
 In-Reply-To: <cover.1556630205.git.andreyknvl@google.com>
-Message-Id: <2e827b5c484be14044933049fec180cd6acb054b.1556630205.git.andreyknvl@google.com>
+Message-Id: <f7a89f69f95e471f161e4000d0e13f57364bc90d.1556630205.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1556630205.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
-Subject: [PATCH v14 11/17] drm/amdgpu, arm64: untag user pointers
+Subject: [PATCH v14 09/17] fs, arm64: untag user pointers in copy_mount_options
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -103,65 +103,32 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-amdgpu_ttm_tt_get_user_pages() uses provided user pointers for vma
-lookups, which can only by done with untagged pointers. This patch
-untag user pointers when they are being set in
-amdgpu_ttm_tt_set_userptr().
+In copy_mount_options a user address is being subtracted from TASK_SIZE.
+If the address is lower than TASK_SIZE, the size is calculated to not
+allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
+However if the address is tagged, then the size will be calculated
+incorrectly.
 
-In amdgpu_gem_userptr_ioctl() and amdgpu_amdkfd_gpuvm.c/init_user_pages()
-an MMU notifier is set up with a (tagged) userspace pointer. The untagged
-address should be used so that MMU notifiers for the untagged address get
-correctly matched up with the right BO. This patch untag user pointers in
-amdgpu_gem_userptr_ioctl() for the GEM case and in
-amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu() for the KFD case.
+Untag the address before subtracting.
 
-Suggested-by: Kuehling, Felix <Felix.Kuehling@amd.com>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c          | 2 ++
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c          | 2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+ fs/namespace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-index 1921dec3df7a..20cac44ed449 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -1121,7 +1121,7 @@ int amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu(
- 		alloc_flags = 0;
- 		if (!offset || !*offset)
- 			return -EINVAL;
--		user_addr = *offset;
-+		user_addr = untagged_addr(*offset);
- 	} else if (flags & ALLOC_MEM_FLAGS_DOORBELL) {
- 		domain = AMDGPU_GEM_DOMAIN_GTT;
- 		alloc_domain = AMDGPU_GEM_DOMAIN_CPU;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-index d21dd2f369da..985cb82b2aa6 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-@@ -286,6 +286,8 @@ int amdgpu_gem_userptr_ioctl(struct drm_device *dev, void *data,
- 	uint32_t handle;
- 	int r;
+diff --git a/fs/namespace.c b/fs/namespace.c
+index c9cab307fa77..c27e5713bf04 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2825,7 +2825,7 @@ void *copy_mount_options(const void __user * data)
+ 	 * the remainder of the page.
+ 	 */
+ 	/* copy_from_user cannot cross TASK_SIZE ! */
+-	size = TASK_SIZE - (unsigned long)data;
++	size = TASK_SIZE - (unsigned long)untagged_addr(data);
+ 	if (size > PAGE_SIZE)
+ 		size = PAGE_SIZE;
  
-+	args->addr = untagged_addr(args->addr);
-+
- 	if (offset_in_page(args->addr | args->size))
- 		return -EINVAL;
- 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 73e71e61dc99..1d30e97ac2c4 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -1248,7 +1248,7 @@ int amdgpu_ttm_tt_set_userptr(struct ttm_tt *ttm, uint64_t addr,
- 	if (gtt == NULL)
- 		return -EINVAL;
- 
--	gtt->userptr = addr;
-+	gtt->userptr = untagged_addr(addr);
- 	gtt->userflags = flags;
- 
- 	if (gtt->usertask)
 -- 
 2.21.0.593.g511ec345e18-goog
 
