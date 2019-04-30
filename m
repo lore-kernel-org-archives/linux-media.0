@@ -2,131 +2,118 @@ Return-Path: <SRS0=ibS4=TA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CBBEC43219
-	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:28:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02F88C43219
+	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:50:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0EA1621707
-	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:28:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jG67MQO6"
+	by mail.kernel.org (Postfix) with ESMTP id D36B121707
+	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 13:50:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727725AbfD3NZW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Apr 2019 09:25:22 -0400
-Received: from mail-yw1-f73.google.com ([209.85.161.73]:40541 "EHLO
-        mail-yw1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727599AbfD3NZV (ORCPT
+        id S1727406AbfD3Nt4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Apr 2019 09:49:56 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:43624 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727138AbfD3Ntz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Apr 2019 09:25:21 -0400
-Received: by mail-yw1-f73.google.com with SMTP id y66so624046ywy.7
-        for <linux-media@vger.kernel.org>; Tue, 30 Apr 2019 06:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Yt+PWI13/w7NMYz3zwPrNGqq+ReXtpTWddPqmKmBKgk=;
-        b=jG67MQO6uSTq+PQJ7NLS3u3pGPqYxBD6j6Z7zSYau7uP7jvgt3bFEq3faUxv1qOiIb
-         Lhjg89Y6A0R/eNow3E4oC26RwU4x5nya0AVoMdWDIBSbYBBhFLCViwOATovkHqYFgw83
-         hOVUMM4j6unbJMoC5S4qfPmdZGJuwasxoQN5pLBzNoODYCmMWIdN+DK/0OhTFTFrX99t
-         6EDwehqEld5biejrj0QAkLSZAfR6m8nobezuReC4ugk/eXbqiTH4l+ivloQAzM7wUwIe
-         NZAar432hbtNkfGtL2tuOjYFn681Ww9UC8SmNz4UpJpUm1tSs7E6peMLsrX4yxW2SbA8
-         caHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Yt+PWI13/w7NMYz3zwPrNGqq+ReXtpTWddPqmKmBKgk=;
-        b=bUlfp9ofAtvBD3KoDv8chdLtMs8T4CuERcCfMxfeq+O+1vlOATRiUPI896Skr2lSi+
-         tWjat+/jLrbhs4xWbwoHzpvYbQQj3x850rdNhT5Jn4zmFnfEt7k5RUrqX/E8drhLTf8I
-         2dN/Y5CvTnuR4Ny1OBjaiK+oH1bbuk/BLqST+26//6H4v9iOTAKhXxFI1wJm/9EDRxfv
-         cKQBcfi5o3U0stZRt/tq0bkXvkdm2pD1q81w2MyDqnRhOBsa7GddpJSAZpb5TKO3SkO7
-         EZkBTszzWJvfqNWJfGom5JrkK0i+vrvl992ZvRIs4SmFdEez32qI0bx+Zm7A4Dc51idD
-         Hhug==
-X-Gm-Message-State: APjAAAUYJF9TPJGM+FDrLPPOgDQRsiJFViFH6ArPg7vhOlvJnN9sNGbK
-        qkhYGUr+j5U6Y3rpe2cK9yhUAk2h7wGkI7ST
-X-Google-Smtp-Source: APXvYqzn+VCXcz3/MPYUKI1STEW4oOzSku7o6dMmFF+1zuaxsiuVuMrbdGrvK+1IRDapYK9+TGfb+TbRJGhClYr2
-X-Received: by 2002:a81:3d51:: with SMTP id k78mr56599045ywa.106.1556630720203;
- Tue, 30 Apr 2019 06:25:20 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 15:24:57 +0200
-In-Reply-To: <cover.1556630205.git.andreyknvl@google.com>
-Message-Id: <c66c15554ff43b09aa97595907d4231be3fb7b31.1556630205.git.andreyknvl@google.com>
-Mime-Version: 1.0
-References: <cover.1556630205.git.andreyknvl@google.com>
-X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
-Subject: [PATCH v14 01/17] uaccess: add untagged_addr definition for other arches
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>, Kuehling@google.com,
-        Felix <Felix.Kuehling@amd.com>, Deucher@google.com,
-        Alexander <Alexander.Deucher@amd.com>, Koenig@google.com,
-        Christian <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Chintan Pandya <cpandya@codeaurora.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 30 Apr 2019 09:49:55 -0400
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 4C576634C7B;
+        Tue, 30 Apr 2019 16:49:45 +0300 (EEST)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.89)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1hLT8i-0000hV-Td; Tue, 30 Apr 2019 16:49:44 +0300
+Date:   Tue, 30 Apr 2019 16:49:44 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Nicholas Mc Guire <hofrat@opentech.at>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] media: smiapp: core: add range to usleep_range
+Message-ID: <20190430134944.6sutxdztj6crgo6w@valkosipuli.retiisi.org.uk>
+References: <1554603364-10500-1-git-send-email-hofrat@opentech.at>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1554603364-10500-1-git-send-email-hofrat@opentech.at>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-To allow arm64 syscalls to accept tagged pointers from userspace, we must
-untag them when they are passed to the kernel. Since untagging is done in
-generic parts of the kernel, the untagged_addr macro needs to be defined
-for all architectures.
+Hi Nicholas,
 
-Define it as a noop for architectures other than arm64.
+On Sun, Apr 07, 2019 at 04:16:02AM +0200, Nicholas Mc Guire wrote:
+> Allow the hrtimer subsystem to coalesce delay timers of lower accuracy
+> by providing a suitable range
+> 
+> Signed-off-by: Nicholas Mc Guire <hofrat@opentech.at>
+> ---
+> 
+> Problem located by an experimental coccinelle script
+> 
+> hrtimers in atomic context have limited accuracy due to possible
+> context-switching and interruption so the accuracy is limited 
+> anyway. Giving the hrtimer subsystem a reasonable range for merging
+> hrtimers helps to reduce the load on the hrtimer subsystem. As this
+> delays do not seem to mandate high accuracy the range of a factor
+> two seems acceptable.
+> 
+> Patch was compile tested with: x86_64_defconfig + MEDIA_SUPPORT=m,
+> MEDIA_CAMERA_SUPPORT=y, MEDIA_CONTROLLER=y, VIDEO_V4L2_SUBDEV_API=y,
+> VIDEO_SMIAPP=m                                                                                               
+> (with a number of sparse warnings on sizeof() usage)
+> 
+> Patch is against 5.1-rc3 (localversion-next is next-20190405)
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- include/linux/mm.h | 4 ++++
- 1 file changed, 4 insertions(+)
+The delays are exact for the reason that they are user-visible delays in
+image capturing related use cases. Sometimes milliseconds matter, or at
+least adding more does not help.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 6b10c21630f5..44041df804a6 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -99,6 +99,10 @@ extern int mmap_rnd_compat_bits __read_mostly;
- #include <asm/pgtable.h>
- #include <asm/processor.h>
- 
-+#ifndef untagged_addr
-+#define untagged_addr(addr) (addr)
-+#endif
-+
- #ifndef __pa_symbol
- #define __pa_symbol(x)  __pa(RELOC_HIDE((unsigned long)(x), 0))
- #endif
+> 
+>  drivers/media/i2c/smiapp/smiapp-core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+> index 58a45c3..c0c29ec 100644
+> --- a/drivers/media/i2c/smiapp/smiapp-core.c
+> +++ b/drivers/media/i2c/smiapp/smiapp-core.c
+> @@ -1222,19 +1222,19 @@ static int smiapp_power_on(struct device *dev)
+>  		dev_err(&client->dev, "failed to enable vana regulator\n");
+>  		return rval;
+>  	}
+> -	usleep_range(1000, 1000);
+> +	usleep_range(1000, 2000);
+>  
+>  	rval = clk_prepare_enable(sensor->ext_clk);
+>  	if (rval < 0) {
+>  		dev_dbg(&client->dev, "failed to enable xclk\n");
+>  		goto out_xclk_fail;
+>  	}
+> -	usleep_range(1000, 1000);
+> +	usleep_range(1000, 2000);
+>  
+>  	gpiod_set_value(sensor->xshutdown, 1);
+>  
+>  	sleep = SMIAPP_RESET_DELAY(sensor->hwcfg->ext_clk);
+> -	usleep_range(sleep, sleep);
+> +	usleep_range(sleep, sleep*2);
+>  
+>  	mutex_lock(&sensor->mutex);
+>  
+> @@ -1381,7 +1381,7 @@ static int smiapp_power_off(struct device *dev)
+>  
+>  	gpiod_set_value(sensor->xshutdown, 0);
+>  	clk_disable_unprepare(sensor->ext_clk);
+> -	usleep_range(5000, 5000);
+> +	usleep_range(5000, 10000);
+>  	regulator_disable(sensor->vana);
+>  	sensor->streaming = false;
+>  
+
 -- 
-2.21.0.593.g511ec345e18-goog
-
+Sakari Ailus
