@@ -1,278 +1,223 @@
-Return-Path: <SRS0=ibS4=TA=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=DGSE=TB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99EB1C04AA6
-	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 22:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A16BC43219
+	for <linux-media@archiver.kernel.org>; Wed,  1 May 2019 00:10:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5E6622087B
-	for <linux-media@archiver.kernel.org>; Tue, 30 Apr 2019 22:51:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C5E520866
+	for <linux-media@archiver.kernel.org>; Wed,  1 May 2019 00:10:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWF1Briv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T7MUrTrv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727752AbfD3Wuc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Apr 2019 18:50:32 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34290 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727632AbfD3Wuc (ORCPT
+        id S1727344AbfEAAKB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Apr 2019 20:10:01 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35321 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbfEAAKB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Apr 2019 18:50:32 -0400
-Received: by mail-pl1-f194.google.com with SMTP id ck18so3123554plb.1;
-        Tue, 30 Apr 2019 15:50:31 -0700 (PDT)
+        Tue, 30 Apr 2019 20:10:01 -0400
+Received: by mail-ed1-f68.google.com with SMTP id p26so266283edr.2;
+        Tue, 30 Apr 2019 17:09:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=vh+f8bdLjY+HSfSVBVy8Lc/Hv+xFPxT6P6Duza4D9HA=;
-        b=QWF1Brivv6UYPTfnGYxh65xCPC355OfYFV4gRXatH6/B8ysnJyxlopK6fDa/AlFt7y
-         UirQeeopbmjHzhIRlfJi5llLDU+USeQn7qCKhj4h6F8OvgXR8bHfRYEh8WZUyhOCZ50j
-         yV+74quXCpLkEcelg2bMUtVSF8xrcUT4jFeF1Qm1bk6n6B3rm3CIwqMfi5ert4gW3o/H
-         ubSNTTti+IYFghxXV4uGegFfbBk9NN+xmAV7fBUqHmPPiK1ooLjN+dVUS7nTcCzK7ssy
-         QySHADfiSXRxdAnS4x+lCinazqHS6v8BRxphg6XMPF4z630YdAR+IBrIFsrSJ3xyodB5
-         mxoQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=vDc2NAfwngSD2SBV9GqIkt/fZAL5j7gsnT/KZR7zH+U=;
+        b=T7MUrTrvSkrfy6W3lr/DfLoKSU/nZe+XIEbrzylw+PuQMY0jbTmnGqmSYZIcR1oT3r
+         Y6YpA8462Yksit22z4vEyrulpe0MHE890+LEh7YF1kuCB3Mu7RVRog2MaEZouC14DpQ1
+         AJWv1+LY7j86/QhF4K/nY5lmzNu/V+rMHE/VcGZVWmstS44orMC8vZQ1tPzgHmlCx1Hc
+         EyRfJsJPmoW7uV2bp9YG1xxolcR8XrPysEMe6+87928HfTwkrywI7MZRJ+6mbMa2yWd9
+         k/Vw9bUZibHRhZN2kLCNSXoKrKt8jth2BEjVQC/qvGP8WbKo5wlLO8S47iqwXGZF0Jwp
+         V8Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=vh+f8bdLjY+HSfSVBVy8Lc/Hv+xFPxT6P6Duza4D9HA=;
-        b=GTgi/emF96r+JHQiX5qrHsE9CQcLBEmOjd0++/do4z0Hnaj2OD1a8z2ibkga0irJl3
-         1fHgYkXSVsjooPhMsH+1vC1ne6bVN6EpoPGzhtUf/dvNWN3Vz0TpJ77GVrT6/tIgETnn
-         TDRdaFsdOp/iRs3vdTPqskeGcBYOEshARDCa84IV+U1I4j3UMSi9aI7yidzc4QL64zK/
-         Q6c3MRoHJ9KkAsLxzNf7sccuSSYRjtdkDPL8l/lpE/G9iY8EXQr0HYze4+C6cPMlI432
-         M82GU8GYqWv9g0nVeBdqY6gCCGDqpoAqFMJmCz+PC6LOa2Gogj/Niyfdj/ROQxptjd9k
-         1PRg==
-X-Gm-Message-State: APjAAAVcKazMJcvZcJFp4x7UZeLMuJb7h4I1WHUpjrzmATpGRiYtKh7+
-        XcT/xnFyYuJJ7ENtf0XNdUPr+HmL
-X-Google-Smtp-Source: APXvYqzgxHH9h0Pzqxdp8sUAXY2Vm1yvlKg4e5WXIJfSkWgSCE6OMbeTB40i15/ZOtYF2sgg2pE4BQ==
-X-Received: by 2002:a17:902:9a95:: with SMTP id w21mr73614035plp.74.1556664631158;
-        Tue, 30 Apr 2019 15:50:31 -0700 (PDT)
-Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id l23sm9804654pgj.36.2019.04.30.15.50.29
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=vDc2NAfwngSD2SBV9GqIkt/fZAL5j7gsnT/KZR7zH+U=;
+        b=BrgRIPmrKvjJew2nGfR3GznfFOTA458/B26GvtvGnQ+NIDKxoBdcDj9UybLOznzjv6
+         exH68Y3ajvf9rM2ryX7Akpunm1MKQ4uQ9FW2vOYnVOIqcLDz2IKTa1+lU6wD0l6+KxDd
+         NR1CxohlKQp1npNn+6ng0bEkf7ZgT+opfV/mdCdR+RyHIUTk9vrZ++OuxPTY/T/+dq3w
+         He7jFNBjh1Ah1+bWyivVn6FJ3OiwgGG00jzBw8iP9vjyH6ZKwkC1IBvjL84xHBvte7VJ
+         P7iO8PegL0YzUA0Zs5VW5i4drjbYAXz7DNVaIUVRUVHVPaHzKbAjYyKd6USnwxPX0T9V
+         b0vQ==
+X-Gm-Message-State: APjAAAW+c8hY3GVmLPM92ci5jLZEh2I6/Io9FABbhAXIZ++Bi9u9mdrG
+        1FnxQNbztGg323gtW+F7DuqyOc31
+X-Google-Smtp-Source: APXvYqzQz8zKDAveFHkv4KDLg1PrXIAVJLYTUn6srJT1I+BtIKk7HmO1pJnc6k2AcQyyOxgzsB/CcA==
+X-Received: by 2002:a50:ca88:: with SMTP id x8mr44800906edh.139.1556669398309;
+        Tue, 30 Apr 2019 17:09:58 -0700 (PDT)
+Received: from [172.30.89.180] (sjewanfw1-nat.mentorg.com. [139.181.7.34])
+        by smtp.gmail.com with ESMTPSA id h2sm5434463ejj.61.2019.04.30.17.09.55
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 15:50:30 -0700 (PDT)
-From:   Steve Longerbeam <slongerbeam@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Tue, 30 Apr 2019 17:09:57 -0700 (PDT)
+Subject: Re: Questions regarding Documentation/media/uapi/v4l/field-order.rst
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        "Rodin, Michael (Ferchau; ADITG/ESM1)" <mrodin@de.adit-jv.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 2/8] media: staging/imx: Pass device to alloc/free_dma_buf
-Date:   Tue, 30 Apr 2019 15:50:12 -0700
-Message-Id: <20190430225018.30252-3-slongerbeam@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190430225018.30252-1-slongerbeam@gmail.com>
-References: <20190430225018.30252-1-slongerbeam@gmail.com>
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>
+Cc:     "Friedrich, Eugen (ADITG/ESM1)" <efriedrich@de.adit-jv.com>,
+        "Rosca, Eugeniu (ADITG/ESM1)" <erosca@de.adit-jv.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <AC35D0CFBC66A84AAA9DF4334B52828D13614162@HI2EXCH01.adit-jv.com>
+ <187c237b-6b75-f408-ae41-6065baf5cd7f@xs4all.nl>
+From:   Steve Longerbeam <slongerbeam@gmail.com>
+Message-ID: <4f57076c-9a41-dfe3-2d26-568be09b1637@gmail.com>
+Date:   Tue, 30 Apr 2019 17:09:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <187c237b-6b75-f408-ae41-6065baf5cd7f@xs4all.nl>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allocate and free a DMA coherent buffer in imx_media_alloc/free_dma_buf()
-from the given device. This allows DMA alloc and free using a device
-that is backed by real hardware, which for the imx5/6/7 CSI is the CSI
-unit, and for the internal IPU sub-devices, is the parent IPU.
+Hi Hans,
 
-Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
----
- drivers/staging/media/imx/imx-ic-prpencvf.c | 18 +++++++++---------
- drivers/staging/media/imx/imx-media-csi.c   |  6 +++---
- drivers/staging/media/imx/imx-media-utils.c | 13 ++++++-------
- drivers/staging/media/imx/imx-media.h       |  4 ++--
- drivers/staging/media/imx/imx7-media-csi.c  |  4 ++--
- 5 files changed, 22 insertions(+), 23 deletions(-)
+Thanks for the clarifications.
 
-diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
-index 069cce512280..ddcd87a17c71 100644
---- a/drivers/staging/media/imx/imx-ic-prpencvf.c
-+++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
-@@ -464,13 +464,13 @@ static int prp_setup_rotation(struct prp_priv *priv)
- 	incc = priv->cc[PRPENCVF_SINK_PAD];
- 	outcc = vdev->cc;
- 
--	ret = imx_media_alloc_dma_buf(ic_priv->md, &priv->rot_buf[0],
-+	ret = imx_media_alloc_dma_buf(ic_priv->ipu_dev, &priv->rot_buf[0],
- 				      outfmt->sizeimage);
- 	if (ret) {
- 		v4l2_err(&ic_priv->sd, "failed to alloc rot_buf[0], %d\n", ret);
- 		return ret;
- 	}
--	ret = imx_media_alloc_dma_buf(ic_priv->md, &priv->rot_buf[1],
-+	ret = imx_media_alloc_dma_buf(ic_priv->ipu_dev, &priv->rot_buf[1],
- 				      outfmt->sizeimage);
- 	if (ret) {
- 		v4l2_err(&ic_priv->sd, "failed to alloc rot_buf[1], %d\n", ret);
-@@ -543,9 +543,9 @@ static int prp_setup_rotation(struct prp_priv *priv)
- unsetup_vb2:
- 	prp_unsetup_vb2_buf(priv, VB2_BUF_STATE_QUEUED);
- free_rot1:
--	imx_media_free_dma_buf(ic_priv->md, &priv->rot_buf[1]);
-+	imx_media_free_dma_buf(ic_priv->ipu_dev, &priv->rot_buf[1]);
- free_rot0:
--	imx_media_free_dma_buf(ic_priv->md, &priv->rot_buf[0]);
-+	imx_media_free_dma_buf(ic_priv->ipu_dev, &priv->rot_buf[0]);
- 	return ret;
- }
- 
-@@ -563,8 +563,8 @@ static void prp_unsetup_rotation(struct prp_priv *priv)
- 
- 	ipu_ic_disable(priv->ic);
- 
--	imx_media_free_dma_buf(ic_priv->md, &priv->rot_buf[0]);
--	imx_media_free_dma_buf(ic_priv->md, &priv->rot_buf[1]);
-+	imx_media_free_dma_buf(ic_priv->ipu_dev, &priv->rot_buf[0]);
-+	imx_media_free_dma_buf(ic_priv->ipu_dev, &priv->rot_buf[1]);
- }
- 
- static int prp_setup_norotation(struct prp_priv *priv)
-@@ -656,7 +656,7 @@ static int prp_start(struct prp_priv *priv)
- 
- 	outfmt = &vdev->fmt.fmt.pix;
- 
--	ret = imx_media_alloc_dma_buf(ic_priv->md, &priv->underrun_buf,
-+	ret = imx_media_alloc_dma_buf(ic_priv->ipu_dev, &priv->underrun_buf,
- 				      outfmt->sizeimage);
- 	if (ret)
- 		goto out_put_ipu;
-@@ -726,7 +726,7 @@ static int prp_start(struct prp_priv *priv)
- out_unsetup:
- 	prp_unsetup(priv, VB2_BUF_STATE_QUEUED);
- out_free_underrun:
--	imx_media_free_dma_buf(ic_priv->md, &priv->underrun_buf);
-+	imx_media_free_dma_buf(ic_priv->ipu_dev, &priv->underrun_buf);
- out_put_ipu:
- 	prp_put_ipu_resources(priv);
- 	return ret;
-@@ -763,7 +763,7 @@ static void prp_stop(struct prp_priv *priv)
- 
- 	prp_unsetup(priv, VB2_BUF_STATE_ERROR);
- 
--	imx_media_free_dma_buf(ic_priv->md, &priv->underrun_buf);
-+	imx_media_free_dma_buf(ic_priv->ipu_dev, &priv->underrun_buf);
- 
- 	/* cancel the EOF timeout timer */
- 	del_timer_sync(&priv->eof_timeout_timer);
-diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-index 93b107eab5f5..ea3d13103c91 100644
---- a/drivers/staging/media/imx/imx-media-csi.c
-+++ b/drivers/staging/media/imx/imx-media-csi.c
-@@ -612,7 +612,7 @@ static int csi_idmac_start(struct csi_priv *priv)
- 
- 	outfmt = &vdev->fmt.fmt.pix;
- 
--	ret = imx_media_alloc_dma_buf(priv->md, &priv->underrun_buf,
-+	ret = imx_media_alloc_dma_buf(priv->dev, &priv->underrun_buf,
- 				      outfmt->sizeimage);
- 	if (ret)
- 		goto out_put_ipu;
-@@ -666,7 +666,7 @@ static int csi_idmac_start(struct csi_priv *priv)
- out_unsetup:
- 	csi_idmac_unsetup(priv, VB2_BUF_STATE_QUEUED);
- out_free_dma_buf:
--	imx_media_free_dma_buf(priv->md, &priv->underrun_buf);
-+	imx_media_free_dma_buf(priv->dev, &priv->underrun_buf);
- out_put_ipu:
- 	csi_idmac_put_ipu_resources(priv);
- 	return ret;
-@@ -698,7 +698,7 @@ static void csi_idmac_stop(struct csi_priv *priv)
- 
- 	csi_idmac_unsetup(priv, VB2_BUF_STATE_ERROR);
- 
--	imx_media_free_dma_buf(priv->md, &priv->underrun_buf);
-+	imx_media_free_dma_buf(priv->dev, &priv->underrun_buf);
- 
- 	/* cancel the EOF timeout timer */
- 	del_timer_sync(&priv->eof_timeout_timer);
-diff --git a/drivers/staging/media/imx/imx-media-utils.c b/drivers/staging/media/imx/imx-media-utils.c
-index 1c63a2765a81..c52aa59acd05 100644
---- a/drivers/staging/media/imx/imx-media-utils.c
-+++ b/drivers/staging/media/imx/imx-media-utils.c
-@@ -679,29 +679,28 @@ int imx_media_ipu_image_to_mbus_fmt(struct v4l2_mbus_framefmt *mbus,
- }
- EXPORT_SYMBOL_GPL(imx_media_ipu_image_to_mbus_fmt);
- 
--void imx_media_free_dma_buf(struct imx_media_dev *imxmd,
-+void imx_media_free_dma_buf(struct device *dev,
- 			    struct imx_media_dma_buf *buf)
- {
- 	if (buf->virt)
--		dma_free_coherent(imxmd->md.dev, buf->len,
--				  buf->virt, buf->phys);
-+		dma_free_coherent(dev, buf->len, buf->virt, buf->phys);
- 
- 	buf->virt = NULL;
- 	buf->phys = 0;
- }
- EXPORT_SYMBOL_GPL(imx_media_free_dma_buf);
- 
--int imx_media_alloc_dma_buf(struct imx_media_dev *imxmd,
-+int imx_media_alloc_dma_buf(struct device *dev,
- 			    struct imx_media_dma_buf *buf,
- 			    int size)
- {
--	imx_media_free_dma_buf(imxmd, buf);
-+	imx_media_free_dma_buf(dev, buf);
- 
- 	buf->len = PAGE_ALIGN(size);
--	buf->virt = dma_alloc_coherent(imxmd->md.dev, buf->len, &buf->phys,
-+	buf->virt = dma_alloc_coherent(dev, buf->len, &buf->phys,
- 				       GFP_DMA | GFP_KERNEL);
- 	if (!buf->virt) {
--		dev_err(imxmd->md.dev, "failed to alloc dma buffer\n");
-+		dev_err(dev, "%s: failed\n", __func__);
- 		return -ENOMEM;
- 	}
- 
-diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-index fadde3435cb7..ba2d75bcc4c9 100644
---- a/drivers/staging/media/imx/imx-media.h
-+++ b/drivers/staging/media/imx/imx-media.h
-@@ -208,9 +208,9 @@ struct imx_media_dma_buf {
- 	unsigned long  len;
- };
- 
--void imx_media_free_dma_buf(struct imx_media_dev *imxmd,
-+void imx_media_free_dma_buf(struct device *dev,
- 			    struct imx_media_dma_buf *buf);
--int imx_media_alloc_dma_buf(struct imx_media_dev *imxmd,
-+int imx_media_alloc_dma_buf(struct device *dev,
- 			    struct imx_media_dma_buf *buf,
- 			    int size);
- 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 95f3808762b4..96d01d8af874 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -714,7 +714,7 @@ static int imx7_csi_dma_start(struct imx7_csi *csi)
- 	struct v4l2_pix_format *out_pix = &vdev->fmt.fmt.pix;
- 	int ret;
- 
--	ret = imx_media_alloc_dma_buf(csi->imxmd, &csi->underrun_buf,
-+	ret = imx_media_alloc_dma_buf(csi->dev, &csi->underrun_buf,
- 				      out_pix->sizeimage);
- 	if (ret < 0) {
- 		v4l2_warn(&csi->sd, "consider increasing the CMA area\n");
-@@ -754,7 +754,7 @@ static void imx7_csi_dma_stop(struct imx7_csi *csi)
- 
- 	imx7_csi_dma_unsetup_vb2_buf(csi, VB2_BUF_STATE_ERROR);
- 
--	imx_media_free_dma_buf(csi->imxmd, &csi->underrun_buf);
-+	imx_media_free_dma_buf(csi->dev, &csi->underrun_buf);
- }
- 
- static int imx7_csi_configure(struct imx7_csi *csi)
--- 
-2.17.1
+I have one additional comment.
+
+The distinction between which field is _older_ (e.g. the field that was 
+recorded or captured first by the video camera) and which field is 
+_transmitted_ first needs to be more clear IMHO.
+
+Even if there is no distinction, that is, all video equipment transmit 
+fields in the same order they were recorded, I think this should be 
+clarified better. The doc is using both terminology (captured first vs. 
+transmitted first) so it would be helpful to clarify that they mean the 
+same thing.
+
+Steve
+
+
+On 4/23/19 7:05 AM, Hans Verkuil wrote:
+> On 4/16/19 3:54 PM, Rodin, Michael (Ferchau; ADITG/ESM1) wrote:
+>> Hi,
+>>
+>> I would like to ask several questions regarding the documentation of the enum "v4l2_field" [1].
+>> These questions came up during my investigations of issues with interaction between
+>> the gstreamer plugin v4l2src and the rcar video input driver [2].
+>>
+>> The documentation [1] specifies that:
+>> "All video capture and output devices must report the current field order.
+>> Some drivers may permit the selection of a different order, to this end
+>> applications initialize the field field of struct v4l2_pix_format before
+>> calling the VIDIOC_S_FMT ioctl. If this is not desired it should have
+>> the value V4L2_FIELD_ANY (0)."
+>>
+>> If I have understood these lines correctly, this means that if userspace sets "field" member of
+>> the struct "v4l2_pix_format" to V4L2_FIELD_ANY and uses this as parameter for the VIDIOC_S_FMT ioctl,
+>> then a driver should select/report the field order, which was previously set by media-ctl utility
+>> in the next subdevice, which is connected to the /dev/videoX node
+>> (From my understanding this would be equivalent to the "current field order").
+>>
+>> If the described behavior is correct, then the description in the table row for V4L2_FIELD_ANY in [1] is incomplete:
+>> "Applications request this field order when any one of the V4L2_FIELD_NONE, V4L2_FIELD_TOP, V4L2_FIELD_BOTTOM, or V4L2_FIELD_INTERLACED formats is acceptable."
+>> What if V4L2_FIELD_ALTERNATE or V4L2_FIELD_SEQ_TB or V4L2_FIELD_SEQ_BT are also acceptable for the application?
+>> I think that the specification is either unprecise or my understanding of the specification is wrong.
+> The spec is a bit out of date: those missing field values were probably added after this
+> text was written. I'll make a patch fixing this.
+>
+>> Another potential issue, which I found in this documentation is that it does not distinguish between
+>> multiple contexts in which enum v4l2_field can be used. I can think of at least two different contexts:
+>> - When used to select the field order with VIDIOC_S_FMT ioctl.
+>> - When used to report the field order in a buffer: for example application sets V4L2_FIELD_ALTERNATE in VIDIOC_S_FMT ioctl and then gets buffers, which have V4L2_FIELD_TOP/BOTTOM set.
+> IMHO the text is reasonably clear on that. But if you have suggestions to
+> improve it, then make a proposal.
+>
+>> Now with this in mind, when I read the description of V4L2_FIELD_NONE:
+>> "The driver may also indicate this order when it cannot distinguish between V4L2_FIELD_TOP and V4L2_FIELD_BOTTOM."
+> Whoops, that makes no sense. There are no drivers that do this. I'll remove this
+> line. If a driver can't tell the difference, then it should just pick FIELD_TOP
+> or BOTTOM.
+>
+>> I see two possible meanings/interpretations:
+>> - If application sets V4L2_FIELD_ALTERNATE in VIDIOC_S_FMT ioctl, report V4L2_FIELD_NONE back
+>>     so the application knows that the driver can not provide any TOP/BOTTOM metadata in the buffers
+>>     (which may be necessary for the application for example for deinterlacing) before it has got any buffer.
+>> - If application sets V4L2_FIELD_ALTERNATE in VIDIOC_S_FMT ioctl, driver reports V4L2_FIELD_ALTERNATE back,
+>>     even if it can not distinguish between TOP/BOTTOM. But when the application starts to read buffers,
+>>     they have V4L2_FIELD_NONE set if it's not possible to distinguish between TOP/BOTTOM.
+> Actually, drivers cannot ever return NONE for a top or bottom field. FIELD_NONE
+> indicates that a full frame has arrived, and doing something else would break
+> userspace.
+>
+>> Also there is another ambiguity in the description of V4L2_FIELD_NONE:
+>> "Images are in progressive format, not interlaced."
+>> What does "interlaced" mean in this case? Does it mean the other possible enum values or just the V4L2_FIELD_INTERLACED?
+> It means that the source video transmitted full frames, not top and bottom
+> fields. I clarified the text a bit.
+>
+>> If this just means V4L2_FIELD_INTERLACED, then it would imply that for example V4L2_FIELD_SEQ_TB
+>> and V4L2_FIELD_ALTERNATE are progressive formats, which is obviously not true.
+>> And also generally, in which of described contexts should be V4L2_FIELD_NONE set or reported (buffer or VIDIOC_S_FMT ioctl)?
+> For video capture (that's what we are talking about here) it is returned by the
+> driver in v4l2_buffer, never by userspace. Userspace can try to request a specific
+> field value when calling S_FMT, but the driver can overwrite it.
+>
+> The possible field values that a driver can support are dependent on the video
+> source (i.e. sensors are always FIELD_NONE) and the hardware capabilities.
+>
+>> Another point is that V4L2_FIELD_INTERLACED is also used by v4l2src to tell rcar-vin driver to combine the fields before giving them to application,
+>> so basically it requests progressive signal. So the meanings of V4L2_FIELD_INTERLACED and V4L2_FIELD_NONE are basically the same in this case.
+> Certainly not. FIELD_INTERLACED combines two fields into a single buffer, but the
+> odd and even lines in the frame were captured at different times. Whereas for
+> FIELD_NONE all lines were captured at the same time.
+>
+> So a FIELD_INTERLACED buffer may need to undergo additional deinterlacing.
+>
+> If the hardware already does high-quality deinterlacing then that might be
+> a reason for the driver to return FIELD_NONE to avoid additional deinterlacing
+> in userspace.
+>
+> In practice there are three main categories in the way the field is handled:
+>
+> 1) The video source is a webcam: field is always FIELD_NONE, set by the driver.
+>
+> 2) The video source is HDMI: if the video is progressive, then the field is always
+>     FIELD_NONE. If the video is interlaced, then the field is always FIELD_ALTERNATE
+>     in v4l2_format and alternating FIELD_TOP and BOTTOM in v4l2_buffer.
+>
+> 3) The video source is SDTV (i.e. S-Video or composite): the video is always
+>     interlaced, and it depends on the hardware which field values are supported,
+>     except for FIELD_NONE, which is never returned as far as I am aware.
+>
+> Regards,
+>
+> 	Hans
+>
+>> Thank you in advance and sorry for the long mail!
+>>
+>> [1] Documentation/media/uapi/v4l/field-order.rst
+>> [2] drivers/media/platform/rcar-vin
+>>
+>> Best regards
+>>
+>> Michael Rodin
+>>
+>> Advanced Driver Information Technology GmbH
+>> Engineering Software Multimedia 1 (ADITG/ESM1)
+>> Robert-Bosch-Str. 200
+>> 31139 Hildesheim
+>> Germany
+>>
+>> Tel. +49 5121 49 6936
+>> Fax +49 5121 49 6999
+>> mrodin@de.adit-jv.com
+>> Web: www.adit-jv.com
+>>
+>> ADIT is a joint venture company of Robert Bosch GmbH/Robert Bosch Car Multimedia GmbH and DENSO Corporation
+>> Sitz: Hildesheim, Registergericht: Amtsgericht Hildesheim HRB 3438
+>> Geschaeftsfuehrung: Wilhelm Grabow, Ken Yaguchi
+>>
 
