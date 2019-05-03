@@ -6,24 +6,24 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 920E7C43219
-	for <linux-media@archiver.kernel.org>; Fri,  3 May 2019 11:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 813ABC04AAA
+	for <linux-media@archiver.kernel.org>; Fri,  3 May 2019 11:47:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BD9721479
-	for <linux-media@archiver.kernel.org>; Fri,  3 May 2019 11:47:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52C4F21670
+	for <linux-media@archiver.kernel.org>; Fri,  3 May 2019 11:47:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbfECLr1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 3 May 2019 07:47:27 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:46234 "EHLO
+        id S1727773AbfECLr2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 3 May 2019 07:47:28 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:46274 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727753AbfECLr0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 3 May 2019 07:47:26 -0400
+        with ESMTP id S1727682AbfECLr1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 3 May 2019 07:47:27 -0400
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 802D628361A;
-        Fri,  3 May 2019 12:47:24 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9AD2A283621;
+        Fri,  3 May 2019 12:47:25 +0100 (BST)
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
@@ -37,9 +37,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [PATCH v5 03/15] media: v4l2-common: Support custom imagesize/bytesperline in fill_pixfmt()
-Date:   Fri,  3 May 2019 13:47:07 +0200
-Message-Id: <20190503114719.28784-4-boris.brezillon@collabora.com>
+Subject: [PATCH v5 05/15] rockchip/vpu: Open-code media controller register
+Date:   Fri,  3 May 2019 13:47:09 +0200
+Message-Id: <20190503114719.28784-6-boris.brezillon@collabora.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190503114719.28784-1-boris.brezillon@collabora.com>
 References: <20190503114719.28784-1-boris.brezillon@collabora.com>
@@ -50,140 +50,380 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Users can define custom sizeimage and bytesperline as long as they're
-big enough to store the amount of pixels required for a specific
-width/height under a specific format. Avoid overriding those fields in
-this case.
+From: Ezequiel Garcia <ezequiel@collabora.com>
 
+In preparation to support decoders, using a single memory-to-memory
+device, we need to roll our own media controller entities registration.
+
+To do that, we define a rockchip_vpu_func object that embeds the
+video_device object plus all the elements that are needed to attach this
+vdev to the media device.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+--
+Changes from v3:
+* Rework the media controller registration logic (Boris)
+* Fix media controller deregistration (Jonas)
+
+Changes from v2:
+* Use kvasprintf instead of kmalloc and snprintf.
+* Fix missing kfree in error paths.
+* Remove unneeded media_remove_intf_links on error paths.
 ---
-Hello Hans,
+ .../staging/media/rockchip/vpu/rockchip_vpu.h |  39 +++-
+ .../media/rockchip/vpu/rockchip_vpu_drv.c     | 209 +++++++++++++++---
+ 2 files changed, 216 insertions(+), 32 deletions(-)
 
-The sizeimage/bytesperline check on !MPLANE formats is still not 100%
-sure, as custom bytesperline might induce bigger sizeimage than what
-we calculate.
-
-I tried implementing something smarter taking the per-component plane
-bpp + hdiv param as we discussed the other day but decided to step
-back after realizing the per-component plane macro block might also
-differ at least in theory (not sure that's true in practice) and that
-has an impact on bytesperline too.
-
-Let me know how you want to handle that case.
-
-Regards,
-
-Boris
-
-Changes in v5:
-* New patch
----
- drivers/media/v4l2-core/v4l2-common.c | 54 +++++++++++++++++++--------
- 1 file changed, 39 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 3c6f5c115fc5..37bfc984a8b5 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -563,9 +563,10 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
- 	pixfmt->num_planes = info->mem_planes;
+diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+index b15c02333a70..aba257c663a7 100644
+--- a/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
++++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu.h
+@@ -71,12 +71,47 @@ enum rockchip_vpu_codec_mode {
+ 	RK_VPU_MODE_JPEG_ENC,
+ };
  
- 	if (info->mem_planes == 1) {
-+		u32 bytesperline, sizeimage = 0;
++/*
++ * struct rockchip_vpu_func - rockchip VPU functionality
++ *
++ * @id:			processing functionality ID (can be
++ *			%MEDIA_ENT_F_PROC_VIDEO_ENCODER or
++ *			%MEDIA_ENT_F_PROC_VIDEO_DECODER)
++ * @vdev:		&struct video_device that exposes the encoder or
++ *			decoder functionality
++ * @source_pad:		&struct media_pad with the source pad.
++ * @sink:		&struct media_entity pointer with the sink entity
++ * @sink_pad:		&struct media_pad with the sink pad.
++ * @proc:		&struct media_entity pointer with the M2M device itself.
++ * @proc_pads:		&struct media_pad with the @proc pads.
++ * @intf_devnode:	&struct media_intf devnode pointer with the interface
++ *			with controls the M2M device.
++ *
++ * Contains everything needed to attach the video device to the media device.
++ */
++struct rockchip_vpu_func {
++	unsigned int id;
++	struct video_device vdev;
++	struct media_pad source_pad;
++	struct media_entity sink;
++	struct media_pad sink_pad;
++	struct media_entity proc;
++	struct media_pad proc_pads[2];
++	struct media_intf_devnode *intf_devnode;
++};
 +
- 		plane = &pixfmt->plane_fmt[0];
--		plane->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
--		plane->sizeimage = 0;
-+		bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
- 
- 		for (i = 0; i < info->comp_planes; i++) {
- 			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-@@ -576,10 +577,17 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
- 			aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
- 			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
- 
--			plane->sizeimage += info->bpp[i] *
--				DIV_ROUND_UP(aligned_width, hdiv) *
--				DIV_ROUND_UP(aligned_height, vdiv);
-+			sizeimage += info->bpp[i] *
-+				     DIV_ROUND_UP(aligned_width, hdiv) *
-+				     DIV_ROUND_UP(aligned_height, vdiv);
- 		}
++static inline struct rockchip_vpu_func *
++rockchip_vpu_vdev_to_func(struct video_device *vdev)
++{
++	return container_of(vdev, struct rockchip_vpu_func, vdev);
++}
 +
-+		/*
-+		 * The user might have specified custom sizeimage/bytesperline,
-+		 * only override them if they're not big enough.
-+		 */
-+		plane->sizeimage = max(sizeimage, plane->sizeimage);
-+		plane->bytesperline = max(bytesperline, plane->bytesperline);
- 	} else {
- 		for (i = 0; i < info->comp_planes; i++) {
- 			unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-@@ -591,10 +599,20 @@ int v4l2_fill_pixfmt_mp(struct v4l2_pix_format_mplane *pixfmt,
- 			aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
- 
- 			plane = &pixfmt->plane_fmt[i];
--			plane->bytesperline =
--				info->bpp[i] * DIV_ROUND_UP(aligned_width, hdiv);
--			plane->sizeimage =
--				plane->bytesperline * DIV_ROUND_UP(aligned_height, vdiv);
-+
-+			/*
-+			 * The user might have specified custom
-+			 * sizeimage/bytesperline, only override them if
-+			 * they're not big enough.
-+			 */
-+			plane->bytesperline = max_t(u32,
-+						    info->bpp[i] *
-+						    DIV_ROUND_UP(aligned_width, hdiv),
-+						    plane->bytesperline);
-+			plane->sizeimage = max_t(u32,
-+						 plane->bytesperline *
-+						 DIV_ROUND_UP(aligned_height, vdiv),
-+						 plane->sizeimage);
- 		}
- 	}
- 	return 0;
-@@ -605,6 +623,7 @@ int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, u32 pixelformat,
- 		     u32 width, u32 height)
+ /**
+  * struct rockchip_vpu_dev - driver data
+  * @v4l2_dev:		V4L2 device to register video devices for.
+  * @m2m_dev:		mem2mem device associated to this device.
+  * @mdev:		media device associated to this device.
+- * @vfd_enc:		Video device for encoder.
++ * @encoder:		encoder functionality.
+  * @pdev:		Pointer to VPU platform device.
+  * @dev:		Pointer to device for convenient logging using
+  *			dev_ macros.
+@@ -93,7 +128,7 @@ struct rockchip_vpu_dev {
+ 	struct v4l2_device v4l2_dev;
+ 	struct v4l2_m2m_dev *m2m_dev;
+ 	struct media_device mdev;
+-	struct video_device *vfd_enc;
++	struct rockchip_vpu_func *encoder;
+ 	struct platform_device *pdev;
+ 	struct device *dev;
+ 	struct clk_bulk_data clocks[ROCKCHIP_VPU_MAX_CLOCKS];
+diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+index 3c3ce3baeb6d..fa02354a0f8a 100644
+--- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
++++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+@@ -239,6 +239,7 @@ static int rockchip_vpu_open(struct file *filp)
  {
- 	const struct v4l2_format_info *info;
-+	u32 bytesperline, sizeimage = 0;
- 	int i;
+ 	struct rockchip_vpu_dev *vpu = video_drvdata(filp);
+ 	struct video_device *vdev = video_devdata(filp);
++	struct rockchip_vpu_func *func = rockchip_vpu_vdev_to_func(vdev);
+ 	struct rockchip_vpu_ctx *ctx;
+ 	int ret;
  
- 	info = v4l2_format_info(pixelformat);
-@@ -618,8 +637,7 @@ int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, u32 pixelformat,
- 	pixfmt->width = width;
- 	pixfmt->height = height;
- 	pixfmt->pixelformat = pixelformat;
--	pixfmt->bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
--	pixfmt->sizeimage = 0;
-+	bytesperline = ALIGN(width, v4l2_format_block_width(info, 0)) * info->bpp[0];
+@@ -256,7 +257,7 @@ static int rockchip_vpu_open(struct file *filp)
+ 		return -ENOMEM;
  
- 	for (i = 0; i < info->comp_planes; i++) {
- 		unsigned int hdiv = (i == 0) ? 1 : info->hdiv;
-@@ -629,11 +647,17 @@ int v4l2_fill_pixfmt(struct v4l2_pix_format *pixfmt, u32 pixelformat,
+ 	ctx->dev = vpu;
+-	if (vdev == vpu->vfd_enc)
++	if (func->id == MEDIA_ENT_F_PROC_VIDEO_ENCODER)
+ 		ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(vpu->m2m_dev, ctx,
+ 						    &enc_queue_init);
+ 	else
+@@ -324,52 +325,206 @@ static const struct of_device_id of_rockchip_vpu_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, of_rockchip_vpu_match);
  
- 		aligned_width = ALIGN(width, v4l2_format_block_width(info, i));
- 		aligned_height = ALIGN(height, v4l2_format_block_height(info, i));
--
--		pixfmt->sizeimage += info->bpp[i] *
--			DIV_ROUND_UP(aligned_width, hdiv) *
--			DIV_ROUND_UP(aligned_height, vdiv);
-+		sizeimage += info->bpp[i] * DIV_ROUND_UP(aligned_width, hdiv) *
-+			     DIV_ROUND_UP(aligned_height, vdiv);
+-static int rockchip_vpu_video_device_register(struct rockchip_vpu_dev *vpu)
++static int rockchip_vpu_register_entity(struct media_device *mdev,
++					struct media_entity *entity,
++					const char *entity_name,
++					struct media_pad *pads, int num_pads,
++					int function,
++					struct video_device *vdev)
++{
++	char *name;
++	int ret;
++
++	entity->obj_type = MEDIA_ENTITY_TYPE_BASE;
++	if (function == MEDIA_ENT_F_IO_V4L) {
++		entity->info.dev.major = VIDEO_MAJOR;
++		entity->info.dev.minor = vdev->minor;
++	}
++
++	name = devm_kasprintf(mdev->dev, GFP_KERNEL, "%s-%s", vdev->name,
++			      entity_name);
++	if (!name)
++		return -ENOMEM;
++
++	entity->name = name;
++	entity->function = function;
++
++	ret = media_entity_pads_init(entity, num_pads, pads);
++	if (ret)
++		return ret;
++
++	ret = media_device_register_entity(mdev, entity);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static int rockchip_attach_func(struct rockchip_vpu_dev *vpu,
++				struct rockchip_vpu_func *func)
++{
++	struct media_device *mdev = &vpu->mdev;
++	struct media_link *link;
++	int ret;
++
++	/* Create the three encoder entities with their pads */
++	func->source_pad.flags = MEDIA_PAD_FL_SOURCE;
++	ret = rockchip_vpu_register_entity(mdev, &func->vdev.entity,
++					   "source", &func->source_pad, 1,
++					   MEDIA_ENT_F_IO_V4L, &func->vdev);
++	if (ret)
++		return ret;
++
++	func->proc_pads[0].flags = MEDIA_PAD_FL_SINK;
++	func->proc_pads[1].flags = MEDIA_PAD_FL_SOURCE;
++	ret = rockchip_vpu_register_entity(mdev, &func->proc, "proc",
++					   func->proc_pads, 2, func->id,
++					   &func->vdev);
++	if (ret)
++		goto err_rel_entity0;
++
++	func->sink_pad.flags = MEDIA_PAD_FL_SINK;
++	ret = rockchip_vpu_register_entity(mdev, &func->sink, "sink",
++					   &func->sink_pad, 1,
++					   MEDIA_ENT_F_IO_V4L, &func->vdev);
++	if (ret)
++		goto err_rel_entity1;
++
++	/* Connect the three entities */
++	ret = media_create_pad_link(&func->vdev.entity, 0, &func->proc, 1,
++				    MEDIA_LNK_FL_IMMUTABLE |
++				    MEDIA_LNK_FL_ENABLED);
++	if (ret)
++		goto err_rel_entity2;
++
++	ret = media_create_pad_link(&func->proc, 0, &func->sink, 0,
++				    MEDIA_LNK_FL_IMMUTABLE |
++				    MEDIA_LNK_FL_ENABLED);
++	if (ret)
++		goto err_rm_links0;
++
++	/* Create video interface */
++	func->intf_devnode = media_devnode_create(mdev, MEDIA_INTF_T_V4L_VIDEO,
++						  0, VIDEO_MAJOR,
++						  func->vdev.minor);
++	if (!func->intf_devnode) {
++		ret = -ENOMEM;
++		goto err_rm_links1;
++	}
++
++	/* Connect the two DMA engines to the interface */
++	link = media_create_intf_link(&func->vdev.entity,
++				      &func->intf_devnode->intf,
++				      MEDIA_LNK_FL_IMMUTABLE |
++				      MEDIA_LNK_FL_ENABLED);
++	if (!link) {
++		ret = -ENOMEM;
++		goto err_rm_devnode;
++	}
++
++	link = media_create_intf_link(&func->sink, &func->intf_devnode->intf,
++				      MEDIA_LNK_FL_IMMUTABLE |
++				      MEDIA_LNK_FL_ENABLED);
++	if (!link) {
++		ret = -ENOMEM;
++		goto err_rm_devnode;
++	}
++	return 0;
++
++err_rm_devnode:
++	media_devnode_remove(func->intf_devnode);
++
++err_rm_links1:
++	media_entity_remove_links(&func->sink);
++
++err_rm_links0:
++	media_entity_remove_links(&func->proc);
++	media_entity_remove_links(&func->vdev.entity);
++
++err_rel_entity2:
++	media_device_unregister_entity(&func->sink);
++
++err_rel_entity1:
++	media_device_unregister_entity(&func->proc);
++
++err_rel_entity0:
++	media_device_unregister_entity(&func->vdev.entity);
++	return ret;
++}
++
++static void rockchip_detach_func(struct rockchip_vpu_func *func)
++{
++	media_devnode_remove(func->intf_devnode);
++	media_entity_remove_links(&func->sink);
++	media_entity_remove_links(&func->proc);
++	media_entity_remove_links(&func->vdev.entity);
++	media_device_unregister_entity(&func->sink);
++	media_device_unregister_entity(&func->proc);
++	media_device_unregister_entity(&func->vdev.entity);
++}
++
++static int rockchip_vpu_add_enc_func(struct rockchip_vpu_dev *vpu)
+ {
+ 	const struct of_device_id *match;
++	struct rockchip_vpu_func *func;
+ 	struct video_device *vfd;
+-	int function, ret;
++	int ret;
+ 
+ 	match = of_match_node(of_rockchip_vpu_match, vpu->dev->of_node);
+-	vfd = video_device_alloc();
+-	if (!vfd) {
++	func = devm_kzalloc(vpu->dev, sizeof(*func), GFP_KERNEL);
++	if (!func) {
+ 		v4l2_err(&vpu->v4l2_dev, "Failed to allocate video device\n");
+ 		return -ENOMEM;
+ 	}
+ 
++	func->id = MEDIA_ENT_F_PROC_VIDEO_ENCODER;
++
++	vfd = &func->vdev;
+ 	vfd->fops = &rockchip_vpu_fops;
+-	vfd->release = video_device_release;
++	vfd->release = video_device_release_empty;
+ 	vfd->lock = &vpu->vpu_mutex;
+ 	vfd->v4l2_dev = &vpu->v4l2_dev;
+ 	vfd->vfl_dir = VFL_DIR_M2M;
+ 	vfd->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_M2M_MPLANE;
+ 	vfd->ioctl_ops = &rockchip_vpu_enc_ioctl_ops;
+ 	snprintf(vfd->name, sizeof(vfd->name), "%s-enc", match->compatible);
+-	vpu->vfd_enc = vfd;
++
++	vpu->encoder = func;
+ 	video_set_drvdata(vfd, vpu);
+ 
+ 	ret = video_register_device(vfd, VFL_TYPE_GRABBER, -1);
+ 	if (ret) {
+ 		v4l2_err(&vpu->v4l2_dev, "Failed to register video device\n");
+-		goto err_free_dev;
++		return ret;
  	}
 +
-+	/*
-+	 * The user might have specified its own sizeimage/bytesperline values,
-+	 * only override them if they're not big enough.
-+	 */
-+	pixfmt->sizeimage = max(sizeimage, pixfmt->sizeimage);
-+	pixfmt->bytesperline = max(bytesperline, pixfmt->bytesperline);
++	ret = rockchip_attach_func(vpu, func);
++	if (ret) {
++		v4l2_err(&vpu->v4l2_dev,
++			 "Failed to attach functionality to the media device\n");
++		goto err_unreg_dev;
++	}
++
+ 	v4l2_info(&vpu->v4l2_dev, "registered as /dev/video%d\n", vfd->num);
+ 
+-	function = MEDIA_ENT_F_PROC_VIDEO_ENCODER;
+-	ret = v4l2_m2m_register_media_controller(vpu->m2m_dev, vfd, function);
+-	if (ret) {
+-		v4l2_err(&vpu->v4l2_dev, "Failed to init mem2mem media controller\n");
+-		goto err_unreg_video;
+-	}
+ 	return 0;
+ 
+-err_unreg_video:
++err_unreg_dev:
+ 	video_unregister_device(vfd);
+-err_free_dev:
+-	video_device_release(vfd);
+ 	return ret;
+ }
+ 
++static void rockchip_vpu_remove_enc_func(struct rockchip_vpu_dev *vpu)
++{
++	struct rockchip_vpu_func *func = vpu->encoder;
++
++	if (!func)
++		return;
++
++	rockchip_detach_func(func);
++	video_unregister_device(&func->vdev);
++}
++
+ static int rockchip_vpu_probe(struct platform_device *pdev)
+ {
+ 	const struct of_device_id *match;
+@@ -464,7 +619,7 @@ static int rockchip_vpu_probe(struct platform_device *pdev)
+ 	media_device_init(&vpu->mdev);
+ 	vpu->v4l2_dev.mdev = &vpu->mdev;
+ 
+-	ret = rockchip_vpu_video_device_register(vpu);
++	ret = rockchip_vpu_add_enc_func(vpu);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Failed to register encoder\n");
+ 		goto err_m2m_rel;
+@@ -473,15 +628,13 @@ static int rockchip_vpu_probe(struct platform_device *pdev)
+ 	ret = media_device_register(&vpu->mdev);
+ 	if (ret) {
+ 		v4l2_err(&vpu->v4l2_dev, "Failed to register mem2mem media device\n");
+-		goto err_video_dev_unreg;
++		goto err_rm_enc_func;
+ 	}
 +
  	return 0;
- }
- EXPORT_SYMBOL_GPL(v4l2_fill_pixfmt);
+-err_video_dev_unreg:
+-	if (vpu->vfd_enc) {
+-		v4l2_m2m_unregister_media_controller(vpu->m2m_dev);
+-		video_unregister_device(vpu->vfd_enc);
+-		video_device_release(vpu->vfd_enc);
+-	}
++
++err_rm_enc_func:
++	rockchip_vpu_remove_enc_func(vpu);
+ err_m2m_rel:
+ 	media_device_cleanup(&vpu->mdev);
+ 	v4l2_m2m_release(vpu->m2m_dev);
+@@ -501,11 +654,7 @@ static int rockchip_vpu_remove(struct platform_device *pdev)
+ 	v4l2_info(&vpu->v4l2_dev, "Removing %s\n", pdev->name);
+ 
+ 	media_device_unregister(&vpu->mdev);
+-	if (vpu->vfd_enc) {
+-		v4l2_m2m_unregister_media_controller(vpu->m2m_dev);
+-		video_unregister_device(vpu->vfd_enc);
+-		video_device_release(vpu->vfd_enc);
+-	}
++	rockchip_vpu_remove_enc_func(vpu);
+ 	media_device_cleanup(&vpu->mdev);
+ 	v4l2_m2m_release(vpu->m2m_dev);
+ 	v4l2_device_unregister(&vpu->v4l2_dev);
 -- 
 2.20.1
 
