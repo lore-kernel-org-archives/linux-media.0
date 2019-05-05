@@ -2,76 +2,105 @@ Return-Path: <SRS0=r3Yg=TF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9DB9C004C9
-	for <linux-media@archiver.kernel.org>; Sun,  5 May 2019 14:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47B44C004C9
+	for <linux-media@archiver.kernel.org>; Sun,  5 May 2019 15:11:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 87D1D208C2
-	for <linux-media@archiver.kernel.org>; Sun,  5 May 2019 14:02:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A164208C0
+	for <linux-media@archiver.kernel.org>; Sun,  5 May 2019 15:11:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1557069085;
+	bh=29Ns3mM74Ky+ju6uxOaSJ/6kMwlQ1AH4JKwc3yBAeyc=;
+	h=From:To:Subject:Date:List-ID:From;
+	b=yhcQI1EpLB4KSWkVmB7vhgXWNiO9C/RFoASK9AaG1M+3wa0bHsJysZ3BUAvEV1dlv
+	 LN/mD73IZj0Tl6/3dhWJcH+Jzu2tSD3yE3Jw97u9ZImYWT5M2nMosmObopGuQn/LET
+	 nnbO51dXJRbu0JpSafpDjt8ArOd57yiN8GqZ3tik=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727634AbfEEOA6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 5 May 2019 10:00:58 -0400
-Received: from shell.v3.sk ([90.176.6.54]:55673 "EHLO shell.v3.sk"
+        id S1727714AbfEEPLT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 May 2019 11:11:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34388 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726397AbfEEOA5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 5 May 2019 10:00:57 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id A6400103D35;
-        Sun,  5 May 2019 16:00:52 +0200 (CEST)
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id iH3liF-fHYco; Sun,  5 May 2019 16:00:38 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 5B25E103D2B;
-        Sun,  5 May 2019 16:00:37 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at zimbra.v3.sk
-Received: from shell.v3.sk ([127.0.0.1])
-        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id hQjYDOwTATBy; Sun,  5 May 2019 16:00:35 +0200 (CEST)
-Received: from nedofet.lan (ip-89-102-31-34.net.upcbroadband.cz [89.102.31.34])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id E05B0103D24;
-        Sun,  5 May 2019 16:00:34 +0200 (CEST)
-From:   Lubomir Rintel <lkundrak@v3.sk>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-media@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        James Cameron <quozl@laptop.org>, Pavel Machek <pavel@ucw.cz>,
-        Libin Yang <lbyang@marvell.com>,
-        Albert Wang <twang13@marvell.com>,
-        jacopo mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: [PATCH v5 00/10] media: make Marvell camera work on DT-based OLPC XO-1.75
-Date:   Sun,  5 May 2019 16:00:21 +0200
-Message-Id: <20190505140031.9636-1-lkundrak@v3.sk>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        id S1727343AbfEEPLT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 5 May 2019 11:11:19 -0400
+Received: from localhost.localdomain (unknown [194.230.155.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F039B208C0;
+        Sun,  5 May 2019 15:11:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557069078;
+        bh=29Ns3mM74Ky+ju6uxOaSJ/6kMwlQ1AH4JKwc3yBAeyc=;
+        h=From:To:Subject:Date:From;
+        b=Nok77GAegvIzsoGdmcUM0seHVHAUwvH7B4J3o7SzHN9sUReol23cgELFgTcbzaO+M
+         A8XRYai5Gn5ExqXsfz8GeCmb3DiGZ2poH+qpAdU4TI9RDKPGOvF+ADdqlN6aUTaOwU
+         EZGNXtfB7pQLXTKXPdGUIWvEcfw3P1MKxiDyil60=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Kyungmin Park <kyungmin.park@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] [media] exynos4-is: Add missing of_node_put to fix reference leaks
+Date:   Sun,  5 May 2019 17:11:09 +0200
+Message-Id: <20190505151109.4361-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Drop the reference to "parallel-ports" and remote endpoint's parent
+nodes obtained previously with of_get_child_by_name() and
+of_get_parent() respectively.
 
-this is the fifth spin of a patchset that modernizes the Marvell MMP2 CCI=
-C
-driver, making it work on DT-based systems such as OLPC XO-1.75 laptop.
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/media/platform/exynos4-is/media-dev.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-At the core of the rework is the move to asynchronous sensor discovery
-and clock management with the standard clock framework. There are also
-some straightforward fixes for the bitrotten parts.
-
-Compared the the previous version it just fixes issues with the device
-bindings, pointed out by Sakari Ailus, in patch [01/10].
-
-Tested on OLPC XO-1 and OLPC XO-1.75.
-
-Thanks,
-Lubo
-
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index 463f2d84553e..d1d5041cdae5 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -449,6 +449,7 @@ static int fimc_md_parse_port_node(struct fimc_md *fmd,
+ 		pd->fimc_bus_type = FIMC_BUS_TYPE_ISP_WRITEBACK;
+ 	else
+ 		pd->fimc_bus_type = pd->sensor_bus_type;
++	of_node_put(np);
+ 
+ 	if (WARN_ON(index >= ARRAY_SIZE(fmd->sensor))) {
+ 		of_node_put(rem);
+@@ -474,7 +475,8 @@ static int fimc_md_parse_port_node(struct fimc_md *fmd,
+ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
+ {
+ 	struct device_node *parent = fmd->pdev->dev.of_node;
+-	struct device_node *node, *ports;
++	struct device_node *ports = NULL;
++	struct device_node *node;
+ 	int index = 0;
+ 	int ret;
+ 
+@@ -523,12 +525,14 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
+ 		}
+ 		index++;
+ 	}
++	of_node_put(ports);
+ 
+ rpm_put:
+ 	pm_runtime_put(fmd->pmf);
+ 	return 0;
+ 
+ cleanup:
++	of_node_put(ports);
+ 	v4l2_async_notifier_cleanup(&fmd->subdev_notifier);
+ 	pm_runtime_put(fmd->pmf);
+ 	return ret;
+-- 
+2.17.1
 
