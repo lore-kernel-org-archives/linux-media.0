@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F563C004C9
-	for <linux-media@archiver.kernel.org>; Sun,  5 May 2019 14:01:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02074C004C9
+	for <linux-media@archiver.kernel.org>; Sun,  5 May 2019 14:01:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2C53C208C2
-	for <linux-media@archiver.kernel.org>; Sun,  5 May 2019 14:01:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D2B19208C0
+	for <linux-media@archiver.kernel.org>; Sun,  5 May 2019 14:01:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727978AbfEEOBG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 5 May 2019 10:01:06 -0400
-Received: from shell.v3.sk ([90.176.6.54]:55699 "EHLO shell.v3.sk"
+        id S1728030AbfEEOBQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 5 May 2019 10:01:16 -0400
+Received: from shell.v3.sk ([90.176.6.54]:55734 "EHLO shell.v3.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727928AbfEEOBF (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 5 May 2019 10:01:05 -0400
+        id S1728014AbfEEOBO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 5 May 2019 10:01:14 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 2AB51103B0D;
-        Sun,  5 May 2019 16:01:02 +0200 (CEST)
+        by zimbra.v3.sk (Postfix) with ESMTP id 0C35C103D33;
+        Sun,  5 May 2019 16:01:11 +0200 (CEST)
 Received: from shell.v3.sk ([127.0.0.1])
         by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id gDN4k7d2-d6Q; Sun,  5 May 2019 16:00:40 +0200 (CEST)
+        with ESMTP id pgcmbJxAORS0; Sun,  5 May 2019 16:00:55 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra.v3.sk (Postfix) with ESMTP id 862D5103D28;
-        Sun,  5 May 2019 16:00:39 +0200 (CEST)
+        by zimbra.v3.sk (Postfix) with ESMTP id DAEAC103D2C;
+        Sun,  5 May 2019 16:00:44 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at zimbra.v3.sk
 Received: from shell.v3.sk ([127.0.0.1])
         by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id XI1YjrdYj3JR; Sun,  5 May 2019 16:00:36 +0200 (CEST)
+        with ESMTP id xbn8MtY8qh-p; Sun,  5 May 2019 16:00:40 +0200 (CEST)
 Received: from nedofet.lan (ip-89-102-31-34.net.upcbroadband.cz [89.102.31.34])
-        by zimbra.v3.sk (Postfix) with ESMTPSA id 7A093103D25;
-        Sun,  5 May 2019 16:00:35 +0200 (CEST)
+        by zimbra.v3.sk (Postfix) with ESMTPSA id B5672103D24;
+        Sun,  5 May 2019 16:00:38 +0200 (CEST)
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>, linux-media@vger.kernel.org
@@ -46,9 +46,9 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         jacopo mondi <jacopo@jmondi.org>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Lubomir Rintel <lkundrak@v3.sk>
-Subject: [PATCH v5 01/10] media: dt-bindings: marvell,mmp2-ccic: Add Marvell MMP2 camera
-Date:   Sun,  5 May 2019 16:00:22 +0200
-Message-Id: <20190505140031.9636-2-lkundrak@v3.sk>
+Subject: [PATCH v5 07/10] [media] marvell-ccic: rename the clocks
+Date:   Sun,  5 May 2019 16:00:28 +0200
+Message-Id: <20190505140031.9636-8-lkundrak@v3.sk>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190505140031.9636-1-lkundrak@v3.sk>
 References: <20190505140031.9636-1-lkundrak@v3.sk>
@@ -59,91 +59,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add Marvell MMP2 camera host interface.
+Use the names more suitable for devicetree bindings.
+
+There are no board files utilizing this, thus we seem to be at liberty
+at renaming this without consequences.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 
 ---
-Changes since v4:
-- s/Nust/Must/
-- Documented required endpoint properties; bus-type, hsync-active,
-  vsync-active and pclk-sample.
-
-Changes since v3:
-- Dropped the video-interfaces.txt reference
-- Clarify "clocks", "clock-names" and "clock-output-names" descriptions
-- Refer to other documentation by full path
-
 Changes since v2:
-- Added #clock-cells, clock-names, port
+- This patch was added to the series
 
- .../bindings/media/marvell,mmp2-ccic.txt      | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/marvell,mmp2-=
-ccic.txt
+ drivers/media/platform/marvell-ccic/mmp-driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.tx=
-t b/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.txt
-new file mode 100644
-index 0000000000000..7ec2c8c8a3b98
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/marvell,mmp2-ccic.txt
-@@ -0,0 +1,50 @@
-+Marvell MMP2 camera host interface
-+
-+Required properties:
-+ - compatible: Should be "marvell,mmp2-ccic".
-+ - reg: Register base and size.
-+ - interrupts: The interrupt number.
-+ - #clock-cells: Must be 0.
-+
-+Optional properties:
-+ - clocks: Reference to the input clock as specified by
-+           Documentation/devicetree/bindings/clock/clock-bindings.txt.
-+ - clock-names: Names of the clocks used; "axi" for the AXI bus interfac=
-e,
-+                "func" for the peripheral clock and "phy" for the parall=
-el
-+                video bus interface.
-+ - clock-output-names: Optional clock source for sensors. Shall be "mclk=
-".
-+
-+Required subnodes:
-+ - port: The parallel bus interface port with a single endpoint linked t=
-o
-+         the sensor's endpoint as described in
-+         Documentation/devicetree/bindings/media/video-interfaces.txt.
-+
-+Required endpoint properties:
-+ - bus-type: data bus type, <5> or <6> for Parallel or Bt.656 respective=
-ly
-+ - pclk-sample: pixel clock polarity
-+ - hsync-active: horizontal synchronization polarity (only required for
-+   parallel bus)
-+ - vsync-active: vertical synchronization polarity (only required for
-+   parallel bus)
-+
-+Example:
-+
-+	camera0: camera@d420a000 {
-+		compatible =3D "marvell,mmp2-ccic";
-+		reg =3D <0xd420a000 0x800>;
-+		interrupts =3D <42>;
-+		clocks =3D <&soc_clocks MMP2_CLK_CCIC0>;
-+		clock-names =3D "axi";
-+		#clock-cells =3D <0>;
-+		clock-output-names =3D "mclk";
-+
-+		port {
-+			camera0_0: endpoint {
-+				remote-endpoint =3D <&ov7670_0>;
-+                                bus-type =3D <5>;      /* Parallel */
-+                                hsync-active =3D <1>;  /* Active high */
-+                                vsync-active =3D <1>;  /* Active high */
-+                                pclk-sample =3D <0>;   /* Falling */
-+			};
-+		};
-+	};
+diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/m=
+edia/platform/marvell-ccic/mmp-driver.c
+index 352e67fc10621..8f1d2a972bc9f 100644
+--- a/drivers/media/platform/marvell-ccic/mmp-driver.c
++++ b/drivers/media/platform/marvell-ccic/mmp-driver.c
+@@ -33,7 +33,7 @@ MODULE_ALIAS("platform:mmp-camera");
+ MODULE_AUTHOR("Jonathan Corbet <corbet@lwn.net>");
+ MODULE_LICENSE("GPL");
+=20
+-static char *mcam_clks[] =3D {"CCICAXICLK", "CCICFUNCLK", "CCICPHYCLK"};
++static char *mcam_clks[] =3D {"axi", "func", "phy"};
+=20
+ struct mmp_camera {
+ 	void __iomem *power_regs;
 --=20
 2.21.0
 
