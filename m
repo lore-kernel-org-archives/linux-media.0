@@ -7,56 +7,56 @@ X-Spam-Status: No, score=-16.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_PASS,T_DKIMWL_WL_MED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7F70C04A6B
-	for <linux-media@archiver.kernel.org>; Mon,  6 May 2019 16:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 619B2C04A6B
+	for <linux-media@archiver.kernel.org>; Mon,  6 May 2019 16:33:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BA5A0205C9
-	for <linux-media@archiver.kernel.org>; Mon,  6 May 2019 16:32:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32DEA205C9
+	for <linux-media@archiver.kernel.org>; Mon,  6 May 2019 16:33:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kEClrhOV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lVlAxmmY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727172AbfEFQcv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 6 May 2019 12:32:51 -0400
-Received: from mail-yw1-f73.google.com ([209.85.161.73]:45437 "EHLO
-        mail-yw1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727163AbfEFQbj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 6 May 2019 12:31:39 -0400
-Received: by mail-yw1-f73.google.com with SMTP id 11so26237839ywt.12
-        for <linux-media@vger.kernel.org>; Mon, 06 May 2019 09:31:38 -0700 (PDT)
+        id S1727063AbfEFQdL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 6 May 2019 12:33:11 -0400
+Received: from mail-qt1-f201.google.com ([209.85.160.201]:56992 "EHLO
+        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727051AbfEFQb3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 6 May 2019 12:31:29 -0400
+Received: by mail-qt1-f201.google.com with SMTP id e7so8722816qtq.23
+        for <linux-media@vger.kernel.org>; Mon, 06 May 2019 09:31:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=XsLXWNDlsBBI0M98p6y9Vt03OYjBcfLHAOwfOkL6Mk8=;
-        b=kEClrhOVjhAItZ8ad4444tIss3a4M0x8Yot0yP0UgDJhkHPz5JJSrKt8hPGcBCGy4k
-         n4A8xX+jnj6SxUqb5Teq0gUiCKNzkVcA04YhcbUNwlyz4R1O6RfjMZcPvXzWJ1RdceKB
-         oQhTiP7SkvbOtmqbJ2RUuk4j1OYZLTrgQf9mkPglzFxH/VOrmTQ4nsN9RjYlhUC2s+eh
-         3RVGdXHQ+PFLeCy7nvUg/hvDRpVltVdy/tgWDjXNd7yymqhFMcWgbq1pcJP1+YPDmRyD
-         x5gmgR7lpn+iTAg+S4pO9Zaw/FFLdxShW6UDAYaJnd95g7v5e/84elY+8pkkjOlGa4Nw
-         P+ag==
+        bh=TZHV8An4OEXfkqFgrZuDjdlNeU7w3PdkPz1ZU4+cbAs=;
+        b=lVlAxmmY4nFExOi7qcKMHLUyvk1dgMtcIDWsIxNnuOIKi7SENIWoorvqYx22FhFeiH
+         qNv3aCOvVP2Cd8JsXC4f5fwupU4T2PFYzqayLiNCFI9HFlqX4lWPhufSiUZxYZlKJbSP
+         xpayFPpaQpM+egkX1gh0HyRA3qPTTcL2EH50qtn8LLi1pPJilWqtH0/kYJiIyAq+8b8K
+         r7XbnjhrPxJ/+aU0+7xAQJYRuQVqDAYCQIetrAi8pdeAX3hMSEX83RJtSz7KeAzNa4AL
+         TEi4LWr1V919AH8PPG3nTQ8k7FsrBwYY7/UQoSLOaq/gIbNGSmHdWR4W58sdfzeJRSfR
+         CtWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=XsLXWNDlsBBI0M98p6y9Vt03OYjBcfLHAOwfOkL6Mk8=;
-        b=DquyifRneQo+44pfPdLse0yVZQuJ3VpC5F8iP+DtRx2PcRPostXmpm0M+aV6PJdB2V
-         6qQbdwvyWiZmnEgOLtOi9qxabILgB49ryMK9iqDUqFpjIOaBsUOEdBytYBco+OeS2Phb
-         9e3Mo3ZWF+UmyiOc5h/mkRC7IApm9juWqwPe/28pGw/N2nkfKsI8car3XRxEflUriofB
-         1BIuxLqckpPTKFl2boAfdGTc49AH0PyPWnzpmGJ5bfI9bI8Uc3chAQVV2EuwVeuydWZO
-         XrKD75WmZe2uthpZP2dGP/I+ZmB4vQz3oJCw5w+QXaIZawbMx+g3gsCpE+iEOFuA+Tq8
-         24pw==
-X-Gm-Message-State: APjAAAUnNhEMxMSjgz5Rsmi1j0PdX96Q0lZ21HqF0UTq1p3Tvy44EkoX
-        uaqjZtJ2+byFIyMzdbCKsr6J+adeFKczyal9
-X-Google-Smtp-Source: APXvYqynTJlFStkm7itRuyZbu5fDIV0oTx6a8awLBBeIPofcOk875PcBne7EkMsm55r8chxW1lodIy8g+/aDw2aV
-X-Received: by 2002:a81:7903:: with SMTP id u3mr17016403ywc.478.1557160297906;
- Mon, 06 May 2019 09:31:37 -0700 (PDT)
-Date:   Mon,  6 May 2019 18:30:56 +0200
+        bh=TZHV8An4OEXfkqFgrZuDjdlNeU7w3PdkPz1ZU4+cbAs=;
+        b=Z+vMyt0nSoJwJOluUW3rfIA8Ek5zMkiuz2lAe9w+QmPoY22/UXqdjIs68ZPjNs34P8
+         c/VUQus9XIJXWABns+QotnqsBYIZluzEq0Q0RWZMsitHc2UIC2C2ygxdKYsOIjVNIXiI
+         u+8hpBqQsR0VtBifF8UZ4x8dcnILcxQg5dbegh/tHwDvUq2eWQm7g/AAUzayJplOcSq1
+         nFMqdCOFBw0pmOfTbT4ZxQZpNtG7rTfuRdsrWa9Jg1RefK5ojjjq66JDrgmdUUfgVsl2
+         pgbMoUBpyv1uqeD5WVozVHg8XDAkNCj4URWVQbITQkDFWyeCvYhMdBWjVGPeekJG6kyh
+         4yIA==
+X-Gm-Message-State: APjAAAVKvYEqImeMb9fbToyO2vHS+O8dGONnRjGf/7HlrZY1TyqFARzj
+        IyYrOWLXwTuD7b/esEU1NpEAqER+eaETpSoD
+X-Google-Smtp-Source: APXvYqzHIfoRqtGD9gbf6U+p/ZZcVtiOU3rLeCD3rrtZumSW95xfAvgD6n9pasKaBp9DQWdRwfRV+d2riHaf6boR
+X-Received: by 2002:a0c:d449:: with SMTP id r9mr16625749qvh.223.1557160288557;
+ Mon, 06 May 2019 09:31:28 -0700 (PDT)
+Date:   Mon,  6 May 2019 18:30:53 +0200
 In-Reply-To: <cover.1557160186.git.andreyknvl@google.com>
-Message-Id: <30b44d469bb545c608531faf01fb10248ed78887.1557160186.git.andreyknvl@google.com>
+Message-Id: <d234cd71774f35229bdfc0a793c34d6712b73093.1557160186.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1557160186.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [PATCH v15 10/17] fs, arm64: untag user pointers in fs/userfaultfd.c
+Subject: [PATCH v15 07/17] mm, arm64: untag user pointers in mm/gup.c
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -101,94 +101,40 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-userfaultfd code use provided user pointers for vma lookups, which can
-only by done with untagged pointers.
+mm/gup.c provides a kernel interface that accepts user addresses and
+manipulates user pages directly (for example get_user_pages, that is used
+by the futex syscall). Since a user can provided tagged addresses, we need
+to handle this case.
 
-Untag user pointers in validate_range().
+Add untagging to gup.c functions that use user addresses for vma lookups.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- fs/userfaultfd.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ mm/gup.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index f5de1e726356..aa47ed0969dd 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1261,21 +1261,23 @@ static __always_inline void wake_userfault(struct userfaultfd_ctx *ctx,
- }
+diff --git a/mm/gup.c b/mm/gup.c
+index 91819b8ad9cc..2f477a0a7180 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -696,6 +696,8 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
+ 	if (!nr_pages)
+ 		return 0;
  
- static __always_inline int validate_range(struct mm_struct *mm,
--					  __u64 start, __u64 len)
-+					  __u64 *start, __u64 len)
- {
- 	__u64 task_size = mm->task_size;
- 
--	if (start & ~PAGE_MASK)
-+	*start = untagged_addr(*start);
++	start = untagged_addr(start);
 +
-+	if (*start & ~PAGE_MASK)
- 		return -EINVAL;
- 	if (len & ~PAGE_MASK)
- 		return -EINVAL;
- 	if (!len)
- 		return -EINVAL;
--	if (start < mmap_min_addr)
-+	if (*start < mmap_min_addr)
- 		return -EINVAL;
--	if (start >= task_size)
-+	if (*start >= task_size)
- 		return -EINVAL;
--	if (len > task_size - start)
-+	if (len > task_size - *start)
- 		return -EINVAL;
- 	return 0;
- }
-@@ -1325,7 +1327,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 		goto out;
- 	}
+ 	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
  
--	ret = validate_range(mm, uffdio_register.range.start,
-+	ret = validate_range(mm, &uffdio_register.range.start,
- 			     uffdio_register.range.len);
- 	if (ret)
- 		goto out;
-@@ -1514,7 +1516,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 	if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
- 		goto out;
- 
--	ret = validate_range(mm, uffdio_unregister.start,
-+	ret = validate_range(mm, &uffdio_unregister.start,
- 			     uffdio_unregister.len);
- 	if (ret)
- 		goto out;
-@@ -1665,7 +1667,7 @@ static int userfaultfd_wake(struct userfaultfd_ctx *ctx,
- 	if (copy_from_user(&uffdio_wake, buf, sizeof(uffdio_wake)))
- 		goto out;
- 
--	ret = validate_range(ctx->mm, uffdio_wake.start, uffdio_wake.len);
-+	ret = validate_range(ctx->mm, &uffdio_wake.start, uffdio_wake.len);
- 	if (ret)
- 		goto out;
- 
-@@ -1705,7 +1707,7 @@ static int userfaultfd_copy(struct userfaultfd_ctx *ctx,
- 			   sizeof(uffdio_copy)-sizeof(__s64)))
- 		goto out;
- 
--	ret = validate_range(ctx->mm, uffdio_copy.dst, uffdio_copy.len);
-+	ret = validate_range(ctx->mm, &uffdio_copy.dst, uffdio_copy.len);
- 	if (ret)
- 		goto out;
  	/*
-@@ -1761,7 +1763,7 @@ static int userfaultfd_zeropage(struct userfaultfd_ctx *ctx,
- 			   sizeof(uffdio_zeropage)-sizeof(__s64)))
- 		goto out;
+@@ -858,6 +860,8 @@ int fixup_user_fault(struct task_struct *tsk, struct mm_struct *mm,
+ 	struct vm_area_struct *vma;
+ 	vm_fault_t ret, major = 0;
  
--	ret = validate_range(ctx->mm, uffdio_zeropage.range.start,
-+	ret = validate_range(ctx->mm, &uffdio_zeropage.range.start,
- 			     uffdio_zeropage.range.len);
- 	if (ret)
- 		goto out;
++	address = untagged_addr(address);
++
+ 	if (unlocked)
+ 		fault_flags |= FAULT_FLAG_ALLOW_RETRY;
+ 
 -- 
 2.21.0.1020.gf2820cf01a-goog
 
