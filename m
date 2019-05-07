@@ -2,154 +2,103 @@ Return-Path: <SRS0=IAAs=TH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
+	T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE847C004C9
-	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 04:11:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2ACBC04AAD
+	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 05:40:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7ECA3206A3
-	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 04:11:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93D6F214AE
+	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 05:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1557207608;
+	bh=mybmYd28yC+E0RdWF+IdtO+ykCH8Uoyv3hzAE4MP8r8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=W2Cy2eAraEVm9rsCaZ8w2Z1Zir7OgtoIHFud+JZgQqmT1hPOxua+jhq1VM2lt5PXR
+	 aX4hIQEf+sqIp8ZmhD/khyw+tRSbWpygQueywwzpScbOiJZ5kWvEdF4EgVYRuZ1EAH
+	 JcwVrt/+90YnxjKNsBVLHiuJHxBZDo2A5Sdl0VmQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725859AbfEGELZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 May 2019 00:11:25 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:41569 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725843AbfEGELZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 7 May 2019 00:11:25 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:937:b8af:19c2:fa3])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id NrRqhTTtpNExlNrRsh3pVu; Tue, 07 May 2019 06:11:24 +0200
-Message-ID: <cd98b12bd42bdcc305614b21f34f8207@smtp-cloud9.xs4all.net>
-Date:   Tue, 07 May 2019 06:11:22 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfL8stKT1kFty7XHqmUVO1NNi4Hbn0SdK3MgzVyPaCHPB7mfNxgjFBKCETj/44ckq9UPFuMEOMJ+hUhBaHk8twXic0WWoGErL0e1yPXwu7m9zXPTbMn4L
- +FD5aqbuc2msaKRXc6r6LKG83DN4FTCX6o9x8PdtDCZH4gRbFZoupbHJU5cUaJTF1XA0cAafqqkHLXynoFPQjbkC46X768P/tiV2tCus0RUDVhvpzqAgVWYN
+        id S1729023AbfEGFkH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 May 2019 01:40:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59606 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728214AbfEGFkG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 7 May 2019 01:40:06 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D8B0B216C8;
+        Tue,  7 May 2019 05:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557207605;
+        bh=mybmYd28yC+E0RdWF+IdtO+ykCH8Uoyv3hzAE4MP8r8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iYQLF4/eZXZwTdnl7agelMIGS/gAJI1Z2vm+TwAVpY6Hj8a6kll6pZ+RkI+f8K94t
+         /flh3XIYBxwNiEXMKFznRJnhNra2IG+ULajaZ+U8T0xchGDo4m0e+ZpbHA/0Lz3Ejw
+         cJxrP/BM8Tnjr4jr4nGIrEIQblY3Sz4BhjVZ/LD0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hugues Fruchet <hugues.fruchet@st.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Sasha Levin <alexander.levin@microsoft.com>,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 52/95] media: ov5640: fix auto controls values when switching to manual mode
+Date:   Tue,  7 May 2019 01:37:41 -0400
+Message-Id: <20190507053826.31622-52-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190507053826.31622-1-sashal@kernel.org>
+References: <20190507053826.31622-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+From: Hugues Fruchet <hugues.fruchet@st.com>
 
-Results of the daily build of media_tree:
+[ Upstream commit a8f438c684eaa4cbe6c98828eb996d5ec53e24fb ]
 
-date:			Tue May  7 05:00:13 CEST 2019
-media-tree git hash:	7afa8db323e37b9174cf78a1c9ab0ae7a9f5e7dd
-media_build git hash:	78eccfa404ec982e1302930cb7f45756ab404a3c
-v4l-utils git hash:	5b59b0fd7a5d37921c64e8640527e1180e3e289a
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:                   https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:                   https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
+When switching from auto to manual mode, V4L2 core is calling
+g_volatile_ctrl() in manual mode in order to get the manual initial value.
+Remove the manual mode check/return to not break this behaviour.
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.1-i686: OK
-linux-5.0.1-x86_64: OK
-linux-5.1-rc1-i686: OK
-linux-5.1-rc1-x86_64: WARNINGS
-apps: WARNINGS
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+Tested-by: Jacopo Mondi <jacopo@jmondi.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Sasha Levin <alexander.levin@microsoft.com>
+---
+ drivers/media/i2c/ov5640.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Detailed results are available here:
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 0366c8dc6ecf..acf5c8a55bbd 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -1900,16 +1900,12 @@ static int ov5640_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+ 
+ 	switch (ctrl->id) {
+ 	case V4L2_CID_AUTOGAIN:
+-		if (!ctrl->val)
+-			return 0;
+ 		val = ov5640_get_gain(sensor);
+ 		if (val < 0)
+ 			return val;
+ 		sensor->ctrls.gain->val = val;
+ 		break;
+ 	case V4L2_CID_EXPOSURE_AUTO:
+-		if (ctrl->val == V4L2_EXPOSURE_MANUAL)
+-			return 0;
+ 		val = ov5640_get_exposure(sensor);
+ 		if (val < 0)
+ 			return val;
+-- 
+2.20.1
 
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
