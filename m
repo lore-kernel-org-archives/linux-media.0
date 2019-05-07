@@ -2,235 +2,113 @@ Return-Path: <SRS0=IAAs=TH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,T_DKIMWL_WL_HIGH,
+	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C864C004C9
-	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 05:51:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C760C004C9
+	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 06:33:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4FFC720675
-	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 05:51:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 69A822087F
+	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 06:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1557208285;
-	bh=H3dWrCyGMHt6/kIAA/p0j5jcMdF3+J6wuk9C3kpEW4A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=iCf3ZeLwiirnqFHnJYnaKMiaLPkRSAQuefAmVdkK5anu20gB4dOk9aShSookr29MD
-	 hrWg+FFxqJz5HZdFHOr3Ih4DpWzC8wF9UO0SCmEJLd8m6V8htwagTcocYA0mLrPMls
-	 yLHUn0AEttHk4IXYUwSXjFz8k1emDVJUz+TI/aT0=
+	s=default; t=1557210828;
+	bh=oBFyk7fpihJdB0jCxegQVyX+6vGmLC1DK9IvU35itFk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=lwYM+P9akMogvMUugJtN4azNpnTPOS9BfFrE4z1JPxL8ED+JSYFJ8quc0a2Ae1A7X
+	 JjwCUl4z+nKvioY96e8Zl0MlPXOdy6jG8EFcwjfEvmHYJ8AI5HdvIebf+gR6K3J++G
+	 GBw6sIetOv04Qhgjjz1nAFwBiKCvPEkbSLYNH2X4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728568AbfEGFj4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 May 2019 01:39:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59410 "EHLO mail.kernel.org"
+        id S1726559AbfEGGdn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 May 2019 02:33:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728963AbfEGFjz (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 7 May 2019 01:39:55 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726349AbfEGGdn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 7 May 2019 02:33:43 -0400
+Received: from localhost (unknown [37.142.3.125])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B78D20578;
-        Tue,  7 May 2019 05:39:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D6C092087F;
+        Tue,  7 May 2019 06:33:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557207593;
-        bh=H3dWrCyGMHt6/kIAA/p0j5jcMdF3+J6wuk9C3kpEW4A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1URkmRTRI59pRPjMZJnVdqn9Azxy8kCB0KfZzy+ufXRejiR15iD9004febJl6d45o
-         3soFBUUJTrRnD6rAszSpKAqmROlEK55sr1yQ2G/hXE/4mlCyS8Td3T3ehRgdjueyiR
-         6QTUs7QVgqg74+8uRz6vEUdBP5ELv/RZdT/AuKdE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <alexander.levin@microsoft.com>,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 43/95] media: cec: make cec_get_edid_spa_location() an inline function
-Date:   Tue,  7 May 2019 01:37:32 -0400
-Message-Id: <20190507053826.31622-43-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190507053826.31622-1-sashal@kernel.org>
-References: <20190507053826.31622-1-sashal@kernel.org>
+        s=default; t=1557210822;
+        bh=oBFyk7fpihJdB0jCxegQVyX+6vGmLC1DK9IvU35itFk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RyPsl6lmqvcCnKl41VkY/GHW2+ETy7nDPo8Tpqc6bp7gDCBLdqWePFxG5B2Wa9vwT
+         R3/WlBSqCc8Bj3KtWz9uGTPPZS6ordaRPlQ/fveMibMSWfgfc4tq1AglaAlmwW4kMa
+         oMxOIvxG2cStHRR+RV/gLi/uVrPbQ27CrKcpR2aA=
+Date:   Tue, 7 May 2019 09:33:37 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Subject: Re: [PATCH v15 13/17] IB, arm64: untag user pointers in
+ ib_uverbs_(re)reg_mr()
+Message-ID: <20190507063337.GP6938@mtr-leonro.mtl.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <66d044ab9445dcf36a96205a109458ac23f38b73.1557160186.git.andreyknvl@google.com>
+ <20190506195020.GD6201@ziepe.ca>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190506195020.GD6201@ziepe.ca>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hans.verkuil@cisco.com>
+On Mon, May 06, 2019 at 04:50:20PM -0300, Jason Gunthorpe wrote:
+> On Mon, May 06, 2019 at 06:30:59PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > ib_uverbs_(re)reg_mr() use provided user pointers for vma lookups (through
+> > e.g. mlx4_get_umem_mr()), which can only by done with untagged pointers.
+> >
+> > Untag user pointers in these functions.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > ---
+> >  drivers/infiniband/core/uverbs_cmd.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+>
+> I think this is OK.. We should really get it tested though.. Leon?
 
-[ Upstream commit b915bf575d5b7774d0f22d57d6c143e07dcaade2 ]
+It can be done after v5.2-rc1.
 
-This function is needed by both V4L2 and CEC, so move this to
-cec.h as a static inline since there are no obvious shared
-modules between the two subsystems.
+Thanks
 
-This patch, together with the following ones, fixes a
-dependency bug: if CEC_CORE is disabled, then building adv7604
-(and other HDMI receivers) will fail because an essential
-function is now stubbed out.
-
-Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
-Cc: <stable@vger.kernel.org>      # for v4.17 and up
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Sasha Levin <alexander.levin@microsoft.com>
----
- drivers/media/cec/cec-edid.c | 60 -------------------------------
- include/media/cec.h          | 70 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 70 insertions(+), 60 deletions(-)
-
-diff --git a/drivers/media/cec/cec-edid.c b/drivers/media/cec/cec-edid.c
-index 38e3fec6152b..19a31d4c8603 100644
---- a/drivers/media/cec/cec-edid.c
-+++ b/drivers/media/cec/cec-edid.c
-@@ -22,66 +22,6 @@
- #include <linux/types.h>
- #include <media/cec.h>
- 
--/*
-- * This EDID is expected to be a CEA-861 compliant, which means that there are
-- * at least two blocks and one or more of the extensions blocks are CEA-861
-- * blocks.
-- *
-- * The returned location is guaranteed to be < size - 1.
-- */
--static unsigned int cec_get_edid_spa_location(const u8 *edid, unsigned int size)
--{
--	unsigned int blocks = size / 128;
--	unsigned int block;
--	u8 d;
--
--	/* Sanity check: at least 2 blocks and a multiple of the block size */
--	if (blocks < 2 || size % 128)
--		return 0;
--
--	/*
--	 * If there are fewer extension blocks than the size, then update
--	 * 'blocks'. It is allowed to have more extension blocks than the size,
--	 * since some hardware can only read e.g. 256 bytes of the EDID, even
--	 * though more blocks are present. The first CEA-861 extension block
--	 * should normally be in block 1 anyway.
--	 */
--	if (edid[0x7e] + 1 < blocks)
--		blocks = edid[0x7e] + 1;
--
--	for (block = 1; block < blocks; block++) {
--		unsigned int offset = block * 128;
--
--		/* Skip any non-CEA-861 extension blocks */
--		if (edid[offset] != 0x02 || edid[offset + 1] != 0x03)
--			continue;
--
--		/* search Vendor Specific Data Block (tag 3) */
--		d = edid[offset + 2] & 0x7f;
--		/* Check if there are Data Blocks */
--		if (d <= 4)
--			continue;
--		if (d > 4) {
--			unsigned int i = offset + 4;
--			unsigned int end = offset + d;
--
--			/* Note: 'end' is always < 'size' */
--			do {
--				u8 tag = edid[i] >> 5;
--				u8 len = edid[i] & 0x1f;
--
--				if (tag == 3 && len >= 5 && i + len <= end &&
--				    edid[i + 1] == 0x03 &&
--				    edid[i + 2] == 0x0c &&
--				    edid[i + 3] == 0x00)
--					return i + 4;
--				i += len + 1;
--			} while (i < end);
--		}
--	}
--	return 0;
--}
--
- u16 cec_get_edid_phys_addr(const u8 *edid, unsigned int size,
- 			   unsigned int *offset)
- {
-diff --git a/include/media/cec.h b/include/media/cec.h
-index df6b3bd31284..b7339cc6fd3d 100644
---- a/include/media/cec.h
-+++ b/include/media/cec.h
-@@ -435,4 +435,74 @@ static inline void cec_phys_addr_invalidate(struct cec_adapter *adap)
- 	cec_s_phys_addr(adap, CEC_PHYS_ADDR_INVALID, false);
- }
- 
-+/**
-+ * cec_get_edid_spa_location() - find location of the Source Physical Address
-+ *
-+ * @edid: the EDID
-+ * @size: the size of the EDID
-+ *
-+ * This EDID is expected to be a CEA-861 compliant, which means that there are
-+ * at least two blocks and one or more of the extensions blocks are CEA-861
-+ * blocks.
-+ *
-+ * The returned location is guaranteed to be <= size-2.
-+ *
-+ * This is an inline function since it is used by both CEC and V4L2.
-+ * Ideally this would go in a module shared by both, but it is overkill to do
-+ * that for just a single function.
-+ */
-+static inline unsigned int cec_get_edid_spa_location(const u8 *edid,
-+						     unsigned int size)
-+{
-+	unsigned int blocks = size / 128;
-+	unsigned int block;
-+	u8 d;
-+
-+	/* Sanity check: at least 2 blocks and a multiple of the block size */
-+	if (blocks < 2 || size % 128)
-+		return 0;
-+
-+	/*
-+	 * If there are fewer extension blocks than the size, then update
-+	 * 'blocks'. It is allowed to have more extension blocks than the size,
-+	 * since some hardware can only read e.g. 256 bytes of the EDID, even
-+	 * though more blocks are present. The first CEA-861 extension block
-+	 * should normally be in block 1 anyway.
-+	 */
-+	if (edid[0x7e] + 1 < blocks)
-+		blocks = edid[0x7e] + 1;
-+
-+	for (block = 1; block < blocks; block++) {
-+		unsigned int offset = block * 128;
-+
-+		/* Skip any non-CEA-861 extension blocks */
-+		if (edid[offset] != 0x02 || edid[offset + 1] != 0x03)
-+			continue;
-+
-+		/* search Vendor Specific Data Block (tag 3) */
-+		d = edid[offset + 2] & 0x7f;
-+		/* Check if there are Data Blocks */
-+		if (d <= 4)
-+			continue;
-+		if (d > 4) {
-+			unsigned int i = offset + 4;
-+			unsigned int end = offset + d;
-+
-+			/* Note: 'end' is always < 'size' */
-+			do {
-+				u8 tag = edid[i] >> 5;
-+				u8 len = edid[i] & 0x1f;
-+
-+				if (tag == 3 && len >= 5 && i + len <= end &&
-+				    edid[i + 1] == 0x03 &&
-+				    edid[i + 2] == 0x0c &&
-+				    edid[i + 3] == 0x00)
-+					return i + 4;
-+				i += len + 1;
-+			} while (i < end);
-+		}
-+	}
-+	return 0;
-+}
-+
- #endif /* _MEDIA_CEC_H */
--- 
-2.20.1
-
+>
+> Jason
