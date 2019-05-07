@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,
-	T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88619C004C9
-	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 05:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97246C004C9
+	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 05:51:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5280220675
-	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 05:51:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6019420675
+	for <linux-media@archiver.kernel.org>; Tue,  7 May 2019 05:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1557208274;
-	bh=T86Ozqa4zQwnEIPLFsnsGeVLTp6aZdkd1zJOQJbGNi8=;
+	s=default; t=1557208281;
+	bh=zfyqsegOSabOX3b11HPuSPLvhWLqVAZAvUI1iZD029I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VBYxkIVM+awp8B/XYt4nWc65JMpjixzmIqLYR32RtTmvvQaD718r4+R4TwH/GDhav
-	 2JUgGmrPnWAyvyRTrgjpYdnBrXmF/93xqHN7SWSQ36vg36GZh8RUAojBUKxkDs03+b
-	 Df2QIgOsMq/iZrItbA2hIFKBI1RqQnFtnCwwUT20=
+	b=F8yZy3fDxArvQYjWTQ+krYphmlb3SYvSVjdBdyGHdA3b9Iut0q9kEY+oId7gTIkZo
+	 0r0XGxCxGlmVBV8XwIz4QYf7XkbrKBIZXSGJad0B3PQwLs8bFb7BmtBIzFWVR7tSPd
+	 77eiCh175LECrAWu2pTotv78XBTQCnE5851XArrY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728890AbfEGFvM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 7 May 2019 01:51:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59444 "EHLO mail.kernel.org"
+        id S1728978AbfEGFj4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 7 May 2019 01:39:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59422 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728989AbfEGFj5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 7 May 2019 01:39:57 -0400
+        id S1728618AbfEGFjz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 7 May 2019 01:39:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8895C216C4;
-        Tue,  7 May 2019 05:39:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 52A5E214AE;
+        Tue,  7 May 2019 05:39:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557207597;
-        bh=T86Ozqa4zQwnEIPLFsnsGeVLTp6aZdkd1zJOQJbGNi8=;
+        s=default; t=1557207595;
+        bh=zfyqsegOSabOX3b11HPuSPLvhWLqVAZAvUI1iZD029I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ktvlgAkdVzgLpEU+g4sYERpClVVQrnwTn8ftkdOrbhhCkrHgJR6UoscKL9WNvK6cJ
-         9MgYUYplaBGS2PDiEbTcVfFvO80bDcNFBCZpupp3Pkh8q4G4b2AyKK2lk0qjCKA24u
-         rOeq9XoyM3GDcJMb71x36frCK4S6re6FPmyBV4B0=
+        b=QZsvKgMU3GWbyamH98S51Kzh7kYhvBhF8LM6ADoiYMAufE81Mm4NqOYt1VZ2NsDXp
+         ctO2Pr2KbGwMaE4ro3cgP49Rtyz8yQ/3eJzk9EdO7eV7vkVmz+nKexbuUu/yrfyCS1
+         TFsXxfZQ3RlCC4Qsl6PnRr9+aIrDZofyfXSbpv8E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <alexander.levin@microsoft.com>,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 46/95] media: adv7842: when the EDID is cleared, unconfigure CEC as well
-Date:   Tue,  7 May 2019 01:37:35 -0400
-Message-Id: <20190507053826.31622-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 44/95] media: cec: integrate cec_validate_phys_addr() in cec-api.c
+Date:   Tue,  7 May 2019 01:37:33 -0400
+Message-Id: <20190507053826.31622-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190507053826.31622-1-sashal@kernel.org>
 References: <20190507053826.31622-1-sashal@kernel.org>
@@ -61,35 +61,58 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Hans Verkuil <hans.verkuil@cisco.com>
 
-[ Upstream commit ab83203e181015b099720aff43ffabc1812e0fb3 ]
+[ Upstream commit e81bff39489a06384822bb38ce7a59f9e365bbe9 ]
 
-When there is no EDID the CEC adapter should be unconfigured as
-well. So call cec_phys_addr_invalidate() when this happens.
+The cec_phys_addr_validate() function will be moved to V4L2,
+so use a simplified variant of that function in cec-api.c.
+cec now no longer calls cec_phys_addr_validate() and it can
+be safely moved to V4L2.
 
 Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
-Cc: <stable@vger.kernel.org>      # for v4.18 and up
+Cc: <stable@vger.kernel.org>      # for v4.17 and up
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <alexander.levin@microsoft.com>
 ---
- drivers/media/i2c/adv7842.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/cec/cec-api.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/adv7842.c b/drivers/media/i2c/adv7842.c
-index f9c23173c9fa..dcce8d030e5d 100644
---- a/drivers/media/i2c/adv7842.c
-+++ b/drivers/media/i2c/adv7842.c
-@@ -799,8 +799,10 @@ static int edid_write_hdmi_segment(struct v4l2_subdev *sd, u8 port)
- 	/* Disable I2C access to internal EDID ram from HDMI DDC ports */
- 	rep_write_and_or(sd, 0x77, 0xf3, 0x00);
+diff --git a/drivers/media/cec/cec-api.c b/drivers/media/cec/cec-api.c
+index a079f7fe018c..21a5f45e0259 100644
+--- a/drivers/media/cec/cec-api.c
++++ b/drivers/media/cec/cec-api.c
+@@ -113,6 +113,23 @@ static long cec_adap_g_phys_addr(struct cec_adapter *adap,
+ 	return 0;
+ }
  
--	if (!state->hdmi_edid.present)
-+	if (!state->hdmi_edid.present) {
-+		cec_phys_addr_invalidate(state->cec_adap);
- 		return 0;
-+	}
++static int cec_validate_phys_addr(u16 phys_addr)
++{
++	int i;
++
++	if (phys_addr == CEC_PHYS_ADDR_INVALID)
++		return 0;
++	for (i = 0; i < 16; i += 4)
++		if (phys_addr & (0xf << i))
++			break;
++	if (i == 16)
++		return 0;
++	for (i += 4; i < 16; i += 4)
++		if ((phys_addr & (0xf << i)) == 0)
++			return -EINVAL;
++	return 0;
++}
++
+ static long cec_adap_s_phys_addr(struct cec_adapter *adap, struct cec_fh *fh,
+ 				 bool block, __u16 __user *parg)
+ {
+@@ -124,7 +141,7 @@ static long cec_adap_s_phys_addr(struct cec_adapter *adap, struct cec_fh *fh,
+ 	if (copy_from_user(&phys_addr, parg, sizeof(phys_addr)))
+ 		return -EFAULT;
  
- 	pa = cec_get_edid_phys_addr(edid, 256, &spa_loc);
- 	err = cec_phys_addr_validate(pa, &pa, NULL);
+-	err = cec_phys_addr_validate(phys_addr, NULL, NULL);
++	err = cec_validate_phys_addr(phys_addr);
+ 	if (err)
+ 		return err;
+ 	mutex_lock(&adap->lock);
 -- 
 2.20.1
 
