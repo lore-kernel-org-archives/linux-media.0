@@ -2,237 +2,122 @@ Return-Path: <SRS0=dm45=TK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_PASS,T_DKIMWL_WL_MED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2750C04AB2
-	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 00:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FBCBC04AB1
+	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 02:01:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A7CB72182B
-	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 00:00:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="StQx3pXT"
+	by mail.kernel.org (Postfix) with ESMTP id 79448217F4
+	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 02:01:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726862AbfEJAAi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 May 2019 20:00:38 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:53006 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726694AbfEJAAi (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 May 2019 20:00:38 -0400
-Received: by mail-qt1-f202.google.com with SMTP id c48so3261253qta.19
-        for <linux-media@vger.kernel.org>; Thu, 09 May 2019 17:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=gajNK+eaXAkA4VRl6/dTyngKGgS840DD0yMbWQwHpJk=;
-        b=StQx3pXTz9nlOqpe4jzFUgYd8pSqETXTQnTWa9CFOUrMtJPFB16HL/knloQh0RvsDL
-         YEG1/aMcAQdEJ7eeT6+Ec/x4kt0MgcKkTAzForocIa0xsDIqFTNOoVPzcpfDHsf5e7CW
-         AORrgXG9ozxsU8TDoeFyf1PjTy+3Jx6JhJnOYJ3kKQv13cMuZl/NXFztkd/JzpEMYtQK
-         UHHxe38yoAmLaTa7Ep7j92pCbpXvYH2McHunc0CA83y7iFE81kDp1aHFg1Msi/WGhyZP
-         OMNagW/InIDVAHIc5PHIhPfNJw02NNDYMg3eqBvFy/ic3uHIdkW/XDwE4MKYAXF44AaE
-         E3zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=gajNK+eaXAkA4VRl6/dTyngKGgS840DD0yMbWQwHpJk=;
-        b=CZOLtp0dhQ7l9zP0MRxaReHwJTT3xeKNXLhhnSsF+seF2zshWRtqgRK3r11ocp5NoY
-         9oucBUyByVtMi410XoIZbq0MHeiQAPkWMris8HFFIWV0+OWEYTn2rRcGPk9uay/sozaE
-         zhvH/8OPTY4zN+vZbRHraQCazJbHuRXTntbawCpxrX2VKBKQ2n9PrsR8ACrypEnvP8or
-         pF8vKDaUQhv2/L7y51gPoK69IbMCr51HaaVJ1FgZh+nh8PbtCdpkShIGzR6cHW2oCReu
-         kPehB82fEHXaXGtFsRMnvNAQ54mTFGWn3mXeSGN7bjqMKyQlbGQq+WJluWhmVER2JX6E
-         bzNg==
-X-Gm-Message-State: APjAAAXfuyyLPfixyzsnJaFkFzH3izFOUIXSe/Fl9hZiey+8Xb7VIxvP
-        TQDFniw+yXXDFbWdHZdmxxPpVPTcPA==
-X-Google-Smtp-Source: APXvYqyrykg6LhonB5E0Xc2fQnfppFoKDq3KTv5cA/JDKFevQ+EjrXDwR8LM84x3PrH7bXcbkJ2Fbz+60g==
-X-Received: by 2002:ac8:375d:: with SMTP id p29mr6286750qtb.88.1557446437681;
- Thu, 09 May 2019 17:00:37 -0700 (PDT)
-Date:   Thu,  9 May 2019 17:00:30 -0700
-In-Reply-To: <20190510000032.40749-1-fengc@google.com>
-Message-Id: <20190510000032.40749-2-fengc@google.com>
-Mime-Version: 1.0
-References: <20190510000032.40749-1-fengc@google.com>
-X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [dma-buf v3 1/3] dma-buf: give each buffer a full-fledged inode
-From:   Chenbo Feng <fengc@google.com>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>, erickreyes@google.com,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1726862AbfEJCBz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 May 2019 22:01:55 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:56065 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726799AbfEJCBz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 May 2019 22:01:55 -0400
+X-UUID: b9d62f3c0b6d4c259b49b2e7b56d8fda-20190510
+X-UUID: b9d62f3c0b6d4c259b49b2e7b56d8fda-20190510
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
+        (envelope-from <jungo.lin@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 2095654483; Fri, 10 May 2019 10:01:49 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs03n1.mediatek.inc (172.21.101.181) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 10 May 2019 10:01:48 +0800
+Received: from mtkslt306.mediatek.inc (10.21.14.136) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 10 May 2019 10:01:48 +0800
+From:   Jungo Lin <jungo.lin@mediatek.com>
+To:     <tfiga@chromium.org>, <hans.verkuil@cisco.com>,
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        <matthias.bgg@gmail.com>, <mchehab@kernel.org>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, <Sean.Cheng@mediatek.com>,
+        <sj.huang@mediatek.com>, <christie.yu@mediatek.com>,
+        <frederic.chen@mediatek.com>, <Jerry-ch.Chen@mediatek.com>,
+        <frankie.chiu@mediatek.com>, <seraph.huang@mediatek.com>,
+        <ryan.yu@mediatek.com>, <Rynn.Wu@mediatek.com>,
+        <yuzhao@chromium.org>, <zwisler@chromium.org>, <shik@chromium.org>,
+        <suleiman@chromium.org>, Jungo Lin <jungo.lin@mediatek.com>
+Subject: [RFC,V2,01/11] dt-bindings: mt8183: Add binding for ISP Pass 1 reserved memory
+Date:   Fri, 10 May 2019 09:57:47 +0800
+Message-ID: <20190510015755.51495-2-jungo.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <Jungo Lin <jungo.lin@mediatek.com>
+References: <Jungo Lin <jungo.lin@mediatek.com>
+Reply-To: Jungo Lin <jungo.lin@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Greg Hackmann <ghackmann@google.com>
+This patch adds the binding for describing the reserved
+shared memory used to exchange ISP configuration and tuning
+data between the co-processor and Pass 1 (P1) unit of the
+camera ISP system on Mediatek SoCs.
 
-By traversing /proc/*/fd and /proc/*/map_files, processes with CAP_ADMIN
-can get a lot of fine-grained data about how shmem buffers are shared
-among processes.  stat(2) on each entry gives the caller a unique
-ID (st_ino), the buffer's size (st_size), and even the number of pages
-currently charged to the buffer (st_blocks / 512).
-
-In contrast, all dma-bufs share the same anonymous inode.  So while we
-can count how many dma-buf fds or mappings a process has, we can't get
-the size of the backing buffers or tell if two entries point to the same
-dma-buf.  On systems with debugfs, we can get a per-buffer breakdown of
-size and reference count, but can't tell which processes are actually
-holding the references to each buffer.
-
-Replace the singleton inode with full-fledged inodes allocated by
-alloc_anon_inode().  This involves creating and mounting a
-mini-pseudo-filesystem for dma-buf, following the example in fs/aio.c.
-
-Signed-off-by: Greg Hackmann <ghackmann@google.com>
-Signed-off-by: Chenbo Feng <fengc@google.com>
+Signed-off-by: Jungo Lin <jungo.lin@mediatek.com>
 ---
- drivers/dma-buf/dma-buf.c  | 63 ++++++++++++++++++++++++++++++++++----
- include/uapi/linux/magic.h |  1 +
- 2 files changed, 58 insertions(+), 6 deletions(-)
+ .../mediatek,reserve-memory-cam-smem.txt      | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam-smem.txt
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 7c858020d14b..ffd5a2ad7d6f 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -34,8 +34,10 @@
- #include <linux/poll.h>
- #include <linux/reservation.h>
- #include <linux/mm.h>
-+#include <linux/mount.h>
- 
- #include <uapi/linux/dma-buf.h>
-+#include <uapi/linux/magic.h>
- 
- static inline int is_dma_buf_file(struct file *);
- 
-@@ -46,6 +48,25 @@ struct dma_buf_list {
- 
- static struct dma_buf_list db_list;
- 
-+static const struct dentry_operations dma_buf_dentry_ops = {
-+	.d_dname = simple_dname,
-+};
+diff --git a/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam-smem.txt b/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam-smem.txt
+new file mode 100644
+index 000000000000..65a967cff91e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reserved-memory/mediatek,reserve-memory-cam-smem.txt
+@@ -0,0 +1,42 @@
++Mediatek ISP Pass 1 Shared Memory binding
 +
-+static struct vfsmount *dma_buf_mnt;
++This binding describes the shared memory, which serves the purpose of
++describing the shared memory region used to exchange data between Pass 1
++unit of Image Signal Processor (ISP) and the co-processor in Mediatek
++SoCs.
 +
-+static struct dentry *dma_buf_fs_mount(struct file_system_type *fs_type,
-+		int flags, const char *name, void *data)
-+{
-+	return mount_pseudo(fs_type, "dmabuf:", NULL, &dma_buf_dentry_ops,
-+			DMA_BUF_MAGIC);
-+}
++The co-processor doesn't have the iommu so we need to use the physical
++address to access the shared buffer in the firmware.
 +
-+static struct file_system_type dma_buf_fs_type = {
-+	.name = "dmabuf",
-+	.mount = dma_buf_fs_mount,
-+	.kill_sb = kill_anon_super,
-+};
++The Pass 1 unit of ISP can access memory through the iommu so it
++uses the dma address to access the memory region.
++(See iommu/mediatek,iommu.txt for the detailed description of Mediatek IOMMU)
 +
- static int dma_buf_release(struct inode *inode, struct file *file)
- {
- 	struct dma_buf *dmabuf;
-@@ -338,6 +359,31 @@ static inline int is_dma_buf_file(struct file *file)
- 	return file->f_op == &dma_buf_fops;
- }
- 
-+static struct file *dma_buf_getfile(struct dma_buf *dmabuf, int flags)
-+{
-+	struct file *file;
-+	struct inode *inode = alloc_anon_inode(dma_buf_mnt->mnt_sb);
++For additional details about reserved memory regions see reserved-memory.txt
 +
-+	if (IS_ERR(inode))
-+		return ERR_CAST(inode);
++Required properties:
 +
-+	inode->i_size = dmabuf->size;
-+	inode_set_bytes(inode, dmabuf->size);
++- compatible: must be "mediatek,reserve-memory-cam-smem"
 +
-+	file = alloc_file_pseudo(inode, dma_buf_mnt, "dmabuf",
-+				 flags, &dma_buf_fops);
-+	if (IS_ERR(file))
-+		goto err_alloc_file;
-+	file->f_flags = flags & (O_ACCMODE | O_NONBLOCK);
-+	file->private_data = dmabuf;
++- size: required for dynamic allocation. The unit is bytes.
 +
-+	return file;
++- alloc-range: required for dynamic allocation. The range must
++  between 0x40000000 and 0x100000000 due to the co-processer's
++  addressing limitation.
 +
-+err_alloc_file:
-+	iput(inode);
-+	return file;
-+}
++Example:
 +
- /**
-  * DOC: dma buf device access
-  *
-@@ -433,8 +479,7 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
- 	}
- 	dmabuf->resv = resv;
- 
--	file = anon_inode_getfile("dmabuf", &dma_buf_fops, dmabuf,
--					exp_info->flags);
-+	file = dma_buf_getfile(dmabuf, exp_info->flags);
- 	if (IS_ERR(file)) {
- 		ret = PTR_ERR(file);
- 		goto err_dmabuf;
-@@ -1025,8 +1070,8 @@ static int dma_buf_debug_show(struct seq_file *s, void *unused)
- 		return ret;
- 
- 	seq_puts(s, "\nDma-buf Objects:\n");
--	seq_printf(s, "%-8s\t%-8s\t%-8s\t%-8s\texp_name\n",
--		   "size", "flags", "mode", "count");
-+	seq_printf(s, "%-8s\t%-8s\t%-8s\t%-8s\texp_name\t%-8s\n",
-+		   "size", "flags", "mode", "count", "ino");
- 
- 	list_for_each_entry(buf_obj, &db_list.head, list_node) {
- 		ret = mutex_lock_interruptible(&buf_obj->lock);
-@@ -1037,11 +1082,12 @@ static int dma_buf_debug_show(struct seq_file *s, void *unused)
- 			continue;
- 		}
- 
--		seq_printf(s, "%08zu\t%08x\t%08x\t%08ld\t%s\n",
-+		seq_printf(s, "%08zu\t%08x\t%08x\t%08ld\t%s\t%08lu\n",
- 				buf_obj->size,
- 				buf_obj->file->f_flags, buf_obj->file->f_mode,
- 				file_count(buf_obj->file),
--				buf_obj->exp_name);
-+				buf_obj->exp_name,
-+				file_inode(buf_obj->file)->i_ino);
- 
- 		robj = buf_obj->resv;
- 		while (true) {
-@@ -1136,6 +1182,10 @@ static inline void dma_buf_uninit_debugfs(void)
- 
- static int __init dma_buf_init(void)
- {
-+	dma_buf_mnt = kern_mount(&dma_buf_fs_type);
-+	if (IS_ERR(dma_buf_mnt))
-+		return PTR_ERR(dma_buf_mnt);
++The following example shows the ISP Pass 1 shared memory setup for MT8183.
 +
- 	mutex_init(&db_list.lock);
- 	INIT_LIST_HEAD(&db_list.head);
- 	dma_buf_init_debugfs();
-@@ -1146,5 +1196,6 @@ subsys_initcall(dma_buf_init);
- static void __exit dma_buf_deinit(void)
- {
- 	dma_buf_uninit_debugfs();
-+	kern_unmount(dma_buf_mnt);
- }
- __exitcall(dma_buf_deinit);
-diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-index f8c00045d537..665e18627f78 100644
---- a/include/uapi/linux/magic.h
-+++ b/include/uapi/linux/magic.h
-@@ -91,5 +91,6 @@
- #define UDF_SUPER_MAGIC		0x15013346
- #define BALLOON_KVM_MAGIC	0x13661366
- #define ZSMALLOC_MAGIC		0x58295829
-+#define DMA_BUF_MAGIC		0x444d4142	/* "DMAB" */
- 
- #endif /* __LINUX_MAGIC_H__ */
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++		cam_mem_reserved: cam_mem_region {
++			compatible = "mediatek,reserve-memory-cam-smem";
++			size = <0 0x1400000>;
++			no-map;
++			alignment = <0 0x1000>;
++			alloc-ranges = <0 0x40000000 0 0x10000000>;
++		};
++	};
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.18.0
 
