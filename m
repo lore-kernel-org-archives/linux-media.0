@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30C61C04A6B
-	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 21:50:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFE23C04AB3
+	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 21:50:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 005EB217F9
-	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 21:50:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81A0E217F9
+	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 21:50:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8EBxrb4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NgXXGSE9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728234AbfEJVu0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 10 May 2019 17:50:26 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42872 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728160AbfEJVu0 (ORCPT
+        id S1728446AbfEJVum (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 10 May 2019 17:50:42 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37535 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728432AbfEJVul (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 10 May 2019 17:50:26 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 13so3882878pfw.9;
-        Fri, 10 May 2019 14:50:25 -0700 (PDT)
+        Fri, 10 May 2019 17:50:41 -0400
+Received: by mail-pl1-f194.google.com with SMTP id p15so3406361pll.4;
+        Fri, 10 May 2019 14:50:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ILFENIjP3pNWcBKSRP9eS47C60iumECdMiBouSjU6so=;
-        b=I8EBxrb4hQF/HSjVAZ0eX7cqdImmzwpA3qZcWlY5J2qRLntWR6PFM5K78S3hQJZfJS
-         kxG157XHFOBnJa/z2didiEjDqhpbMxmPCHOuUo7T2HCmcNED9Z9IKsopKIrbLIHxXNJz
-         ILpQQs1NFcRsLNrJy1iTllpA2zyb2LQ/B8bTQaqK5C2GwbaxTk52zsz2A65Ms7ORJnVS
-         tf+2X8dszuwdO/2iTA+QIxc441zuMjN9umjxNCZZeSoDzQpkK5hqe5q3hrPT9r1Pa9B6
-         Fz+kIRQilBs0OWeOwyp0ac9tHtav93sXvMT/u8+CYvwPW8MgsIhu5tF5vvL5TTnAad2x
-         hTww==
+        bh=HM8iB4CzObwG2SEPGqDToLb7gQBrHKKFyiCMsrsHU3Y=;
+        b=NgXXGSE9dUt5C/NqrKnCc2UqY9QJJYvFLuj2267CRjQO49pJWLXHbQS1IqB+yFALMG
+         k9sTKqAHSFlRQpxcGNnmQGvb9FwJHfOeuijjzpnMUSsmiXq1owLbVbTi2QD337nU2gWV
+         qqXtEtb9dzEWiHffUE5BcKhbYT8FnpmbPWpsWLAegbsdaBX/NKst26rNV32GqVa+u9NB
+         ITszyXft/DO4qYjn0pkuO5q8pfhD147urgycJgQuYX1zv6etn66n66cZa/M9JWnjJONl
+         c3++HHYtN84InhNRX7vFq4prmWlbkg05rrC6gl9eOOUsoLu9BFHVVMzYFZ1VV5DX4DQ5
+         aMbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=ILFENIjP3pNWcBKSRP9eS47C60iumECdMiBouSjU6so=;
-        b=S0w6BIJ2pzJVwnvynDPU+I+7Tb8wkK03r9rhD4WbnKJBHHesd8w/ameVGPlVhn44Xa
-         FeTCKaD4tFKOs6kgdmAYJ5vHu//Qy+jKYJVnY3pf7NOXMmSKR21hOBrhkh8B4FfgQobY
-         tnQ4DZCVAwY2ion5FEsWh2hgflZkzyv8t2hLH5N+XSINH7nQLX/+YaaBsziU34f7ET1o
-         K+QEBXgOMipUje8gOxDmDkBxxbDbCN6EvX/YEK81EwFSxmFLj9orvQUBI1og2qV1db0R
-         wFAgb3oTj+cPCY5Rjq+WuEWEibhjgo1yarM4RXn+cKn/XsQshPraaDf+fJPr3ZLOv66r
-         AX0g==
-X-Gm-Message-State: APjAAAXgXIcilnMcpJETwDChgRYiUDCCfDO7P1IWt/r6eXzswVApyEDn
-        bx0tol48whfC47BNPzNfxOLMsv/0
-X-Google-Smtp-Source: APXvYqzaJ6rfIHRoopXu6KSUaSoTGT0Dcukd0y1BznTi/uh/wLgpQfhBydkA1OoqzeaoXG8sz0DNLA==
-X-Received: by 2002:a65:500d:: with SMTP id f13mr17052699pgo.250.1557525024766;
-        Fri, 10 May 2019 14:50:24 -0700 (PDT)
+        bh=HM8iB4CzObwG2SEPGqDToLb7gQBrHKKFyiCMsrsHU3Y=;
+        b=CSB5dw7/TGXtj2yQ0BMzKpxdASZKUux8PzgWkJ//SWdty26m5nv4DZLxDBc5oQT/pB
+         /VNkPqYMYDxY98iX4NWr8BkI3pRs1ZXa8aBVV8C8edPeUoubBUuOVKzB1lfnkqesztkF
+         /y/t48H0XQoSq7cnGTmcD55R9WUHP/CRyXfP0giNEJGBPpFhKZoNdbRDq5mH9pLl8lfA
+         6HR2Mx7VPnkUruJDVFvWd0yGbV1XYpDgkGIYwt28AMZ2AzpcOClZ/L/GmZUPt8ki4KQe
+         9A99JvQUIf8C4zjK2Ba5sBFiyBuL5gLBCtxYwjoSnaUicxMqTa5EZjOe/PaKFuuvQeC9
+         gnow==
+X-Gm-Message-State: APjAAAW5JuHrGiT2vf4pcb8xTqGp5hgE5prHuzCQJC1cv6UpmxY67dI4
+        lZ3hFPLMm8zA61fmc6tiyjIaUN7a
+X-Google-Smtp-Source: APXvYqzeA56o0lX0C5kucO+TP19p5SLh1xvQ90ckb1eSEgmgse3i7wnFyVr4AFouuna3FP2qlWPwxQ==
+X-Received: by 2002:a17:902:7406:: with SMTP id g6mr15440315pll.328.1557525040632;
+        Fri, 10 May 2019 14:50:40 -0700 (PDT)
 Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id e14sm1524108pff.60.2019.05.10.14.50.23
+        by smtp.googlemail.com with ESMTPSA id e14sm1524108pff.60.2019.05.10.14.50.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 May 2019 14:50:23 -0700 (PDT)
+        Fri, 10 May 2019 14:50:39 -0700 (PDT)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
@@ -65,13 +65,12 @@ Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
         devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
         linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
         / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v5 1/9] Revert "media: staging/imx: add media device to capture register"
-Date:   Fri, 10 May 2019 14:50:04 -0700
-Message-Id: <20190510215012.13881-2-slongerbeam@gmail.com>
+Subject: [PATCH v5 9/9] media: staging/imx: Don't set driver data for v4l2_dev
+Date:   Fri, 10 May 2019 14:50:12 -0700
+Message-Id: <20190510215012.13881-10-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190510215012.13881-1-slongerbeam@gmail.com>
 References: <20190510215012.13881-1-slongerbeam@gmail.com>
@@ -80,98 +79,78 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The imx6-specific subdevs that register a capture device will no
-longer hold a reference to the media device, so this commit must be
-reverted.
+The media device is already available via multiple methods, there is no
+need to set driver data for v4l2_dev to the media device.
 
-This reverts commit 16204b8a1c1af77725533b77936e6c73953486ae.
+In imx_media_link_notify(), get media device from link->graph_obj.mdev.
+
+In imx_media_capture_device_register(), get media device from
+v4l2_dev->mdev.
 
 Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
- drivers/staging/media/imx/imx-ic-prpencvf.c   | 2 +-
- drivers/staging/media/imx/imx-media-capture.c | 6 +++---
- drivers/staging/media/imx/imx-media-csi.c     | 2 +-
- drivers/staging/media/imx/imx-media.h         | 3 +--
- drivers/staging/media/imx/imx7-media-csi.c    | 2 +-
- 5 files changed, 7 insertions(+), 8 deletions(-)
+ drivers/staging/media/imx/imx-media-capture.c    | 5 +++--
+ drivers/staging/media/imx/imx-media-dev-common.c | 7 ++-----
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx-ic-prpencvf.c b/drivers/staging/media/imx/imx-ic-prpencvf.c
-index 3ca1422f6154..5c8e6ad8c025 100644
---- a/drivers/staging/media/imx/imx-ic-prpencvf.c
-+++ b/drivers/staging/media/imx/imx-ic-prpencvf.c
-@@ -1270,7 +1270,7 @@ static int prp_registered(struct v4l2_subdev *sd)
- 	if (ret)
- 		return ret;
- 
--	ret = imx_media_capture_device_register(priv->md, priv->vdev);
-+	ret = imx_media_capture_device_register(priv->vdev);
- 	if (ret)
- 		return ret;
- 
 diff --git a/drivers/staging/media/imx/imx-media-capture.c b/drivers/staging/media/imx/imx-media-capture.c
-index 7688238a3396..9703c85b19c4 100644
+index 8a908c3e5e60..ea7f2decfc16 100644
 --- a/drivers/staging/media/imx/imx-media-capture.c
 +++ b/drivers/staging/media/imx/imx-media-capture.c
-@@ -706,8 +706,7 @@ void imx_media_capture_device_error(struct imx_media_video_dev *vdev)
- }
- EXPORT_SYMBOL_GPL(imx_media_capture_device_error);
- 
--int imx_media_capture_device_register(struct imx_media_dev *md,
--				      struct imx_media_video_dev *vdev)
-+int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
+@@ -735,15 +735,16 @@ int imx_media_capture_device_register(struct imx_media_video_dev *vdev)
  {
  	struct capture_priv *priv = to_capture_priv(vdev);
  	struct v4l2_subdev *sd = priv->src_sd;
-@@ -716,7 +715,8 @@ int imx_media_capture_device_register(struct imx_media_dev *md,
++	struct v4l2_device *v4l2_dev = sd->v4l2_dev;
+ 	struct video_device *vfd = vdev->vfd;
+ 	struct vb2_queue *vq = &priv->q;
  	struct v4l2_subdev_format fmt_src;
  	int ret;
  
--	priv->md = md;
-+	/* get media device */
-+	priv->md = dev_get_drvdata(sd->v4l2_dev->dev);
+ 	/* get media device */
+-	priv->md = dev_get_drvdata(sd->v4l2_dev->dev);
++	priv->md = container_of(v4l2_dev->mdev, struct imx_media_dev, md);
  
- 	vfd->v4l2_dev = sd->v4l2_dev;
+-	vfd->v4l2_dev = sd->v4l2_dev;
++	vfd->v4l2_dev = v4l2_dev;
  
-diff --git a/drivers/staging/media/imx/imx-media-csi.c b/drivers/staging/media/imx/imx-media-csi.c
-index c33d714ed953..41965d8b56c4 100644
---- a/drivers/staging/media/imx/imx-media-csi.c
-+++ b/drivers/staging/media/imx/imx-media-csi.c
-@@ -1816,7 +1816,7 @@ static int csi_registered(struct v4l2_subdev *sd)
- 	if (ret)
- 		goto free_fim;
+ 	ret = video_register_device(vfd, VFL_TYPE_GRABBER, -1);
+ 	if (ret) {
+diff --git a/drivers/staging/media/imx/imx-media-dev-common.c b/drivers/staging/media/imx/imx-media-dev-common.c
+index 89dc4ec8dadb..66b505f7e8df 100644
+--- a/drivers/staging/media/imx/imx-media-dev-common.c
++++ b/drivers/staging/media/imx/imx-media-dev-common.c
+@@ -260,10 +260,11 @@ static int imx_media_inherit_controls(struct imx_media_dev *imxmd,
+ static int imx_media_link_notify(struct media_link *link, u32 flags,
+ 				 unsigned int notification)
+ {
++	struct imx_media_dev *imxmd = container_of(link->graph_obj.mdev,
++						   struct imx_media_dev, md);
+ 	struct media_entity *source = link->source->entity;
+ 	struct imx_media_pad_vdev *pad_vdev;
+ 	struct list_head *pad_vdev_list;
+-	struct imx_media_dev *imxmd;
+ 	struct video_device *vfd;
+ 	struct v4l2_subdev *sd;
+ 	int pad_idx, ret;
+@@ -279,8 +280,6 @@ static int imx_media_link_notify(struct media_link *link, u32 flags,
+ 	sd = media_entity_to_v4l2_subdev(source);
+ 	pad_idx = link->source->index;
  
--	ret = imx_media_capture_device_register(priv->md, priv->vdev);
-+	ret = imx_media_capture_device_register(priv->vdev);
- 	if (ret)
- 		goto free_fim;
+-	imxmd = dev_get_drvdata(sd->v4l2_dev->dev);
+-
+ 	pad_vdev_list = to_pad_vdev_list(sd, pad_idx);
+ 	if (!pad_vdev_list) {
+ 		/* nothing to do if source sd has no pad vdev list */
+@@ -384,8 +383,6 @@ struct imx_media_dev *imx_media_dev_init(struct device *dev,
+ 		goto cleanup;
+ 	}
  
-diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-index fc5d969ded79..dd603a6b3a70 100644
---- a/drivers/staging/media/imx/imx-media.h
-+++ b/drivers/staging/media/imx/imx-media.h
-@@ -272,8 +272,7 @@ int imx_media_of_add_csi(struct imx_media_dev *imxmd,
- struct imx_media_video_dev *
- imx_media_capture_device_init(struct v4l2_subdev *src_sd, int pad);
- void imx_media_capture_device_remove(struct imx_media_video_dev *vdev);
--int imx_media_capture_device_register(struct imx_media_dev *md,
--				      struct imx_media_video_dev *vdev);
-+int imx_media_capture_device_register(struct imx_media_video_dev *vdev);
- void imx_media_capture_device_unregister(struct imx_media_video_dev *vdev);
- struct imx_media_buffer *
- imx_media_capture_device_next_buf(struct imx_media_video_dev *vdev);
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index a708a0340eb1..18eb5d3ecf10 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1126,7 +1126,7 @@ static int imx7_csi_registered(struct v4l2_subdev *sd)
- 	if (ret < 0)
- 		return ret;
+-	dev_set_drvdata(imxmd->v4l2_dev.dev, imxmd);
+-
+ 	INIT_LIST_HEAD(&imxmd->vdev_list);
  
--	ret = imx_media_capture_device_register(csi->imxmd, csi->vdev);
-+	ret = imx_media_capture_device_register(csi->vdev);
- 	if (ret < 0)
- 		return ret;
- 
+ 	v4l2_async_notifier_init(&imxmd->notifier);
 -- 
 2.17.1
 
