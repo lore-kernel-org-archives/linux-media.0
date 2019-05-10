@@ -2,59 +2,61 @@ Return-Path: <SRS0=dm45=TK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,
-	T_DKIMWL_WL_MED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_PASS,T_DKIMWL_WL_MED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFE27C04AB1
-	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 00:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97D9BC04AB1
+	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 00:00:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7C72F2182B
-	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 00:00:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53D902183F
+	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 00:00:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tSZ3t6N4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IaPLSmzK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbfEJAAh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 May 2019 20:00:37 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:42276 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726694AbfEJAAg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 May 2019 20:00:36 -0400
-Received: by mail-qt1-f202.google.com with SMTP id z7so4454934qtb.9
-        for <linux-media@vger.kernel.org>; Thu, 09 May 2019 17:00:35 -0700 (PDT)
+        id S1726931AbfEJAAp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 May 2019 20:00:45 -0400
+Received: from mail-vk1-f202.google.com ([209.85.221.202]:51130 "EHLO
+        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726928AbfEJAAo (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 May 2019 20:00:44 -0400
+Received: by mail-vk1-f202.google.com with SMTP id k78so1675030vkk.17
+        for <linux-media@vger.kernel.org>; Thu, 09 May 2019 17:00:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=M35jpHh+HUdAc93UKOjDO7JbyHiHSckhQH2gYDGobXY=;
-        b=tSZ3t6N4Z1hNAMYvgS92eIL566ndUhmt5xsPPoUSXPzweWrogmxc+KJ10EVf3pttkF
-         merVBSZHG0xLznvz4TKUL7L/GZ2cjBzn9Uqwa07TqFu+hek4xO0PQZfpn+9AYYxEqHRe
-         iG61HVtIimI9EQNzmCMq2HhMo1YFeWooHmUb1dCm4Km/pTzPbAhRn7WUXoNAQprfpOYl
-         KpalQjheFynt2AC8LlfdwPcJT2Dd9exlL1kqGHdpBmSVkj/RAc0c7GLZHzWoZStRx/DU
-         OVyvgiKkjGPP01EUrs0iwK5npCTDem8hdHBbtbZEpi9IcUifRkYzYt5ron+RYMbsxchS
-         oAYA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=qD8P7476YfiQtjv1E6lcuRrJ6WjHMdxq7Sq+F+HQQEQ=;
+        b=IaPLSmzKORGLubRZrX1/p4t4QHdGUfNfnAEmoGdLAHRQoPsbSW6uDDBJOb9f3LXHek
+         sk+DwsYhcfhq+7j7K45imBSSCNuSDwLYpIRvzQc8+Nu5EJrX/tI4imfG8SYqs9ghzmuM
+         EWqHxg0TO7vL6iRBOVhbxCQr9Frq6HSfIio/r8BFcFG3YqICHmpbYug5nLJyKSSuIZnm
+         4z9JtbJZ6F/gyewF5ZKdOLsVPObowxwUPTH8fP2+Jab1Q4XT5XJSoLn509G7HlSfKNux
+         OQ1pHDC1iRC+lLM1SfCg3g+mij6MB0TAg6QuSwiXXC4ZX3CoHijLVAdRnvhmiGsvI+j4
+         5Aow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=M35jpHh+HUdAc93UKOjDO7JbyHiHSckhQH2gYDGobXY=;
-        b=n49BFG/gKlh4dA0q7kh/QKJ0neULp++jGwodwDsRIdI6WqlzKtJyEcUO75ZH05+xcX
-         WQkMLFTgSF0RHcQomUZd6ytxuaKy5zZo7jZuX32pX3qA+EgK14iZPIZnMZukuMW9AAyC
-         x3AtORlYNKrrScG6pOrD1cIAigHnMGCoTMeQKA2GljB/dVW0XlerWlJVnbLyNfxlvgtF
-         KYnSIUZFdMX+KkKyZ6XVjD4ta6bYkAfs/LtjiicdVoKpE31s4JYe0q23kQIjVlB1R/yJ
-         sDH8VtfA7LiCcmhI++7xIZy7IbUog+H1rlkU1yoq2Gjo9SBw4z2HhjCMsS366N6odvnj
-         CYQw==
-X-Gm-Message-State: APjAAAUDgsD0Kg/S5Ia0Ue1DkTtEEXqyRPpx9Cf2pwm3uOzSJo2lufL6
-        BnQK3ST0j9WkaLiIBEkUuoZmKfVYGA==
-X-Google-Smtp-Source: APXvYqxnWMeG08te3Sc05EXGTxd8eHwJqSeZWK3/hm9AqvlKOJ36EdgmCBMpQKg7lKin0TXW98MNSIkgsQ==
-X-Received: by 2002:ac8:29af:: with SMTP id 44mr6461067qts.352.1557446435276;
- Thu, 09 May 2019 17:00:35 -0700 (PDT)
-Date:   Thu,  9 May 2019 17:00:29 -0700
-Message-Id: <20190510000032.40749-1-fengc@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=qD8P7476YfiQtjv1E6lcuRrJ6WjHMdxq7Sq+F+HQQEQ=;
+        b=AvzuC+r3kZLZCSN36hPvvoPipIyF0tex4SllPCl/QOOmIa2EGudE6FMqKpeekweP53
+         J4uSrmShye839vnhOsWsV0z+RFshnx3L2JyBzekQNlTNGO3l3S6XPz15VAmtkL+NZzDG
+         b8PAgwcxtVwrONlJml1RzS+hPGVbwBc00pFzj46tIqINJCHFwsgRiS80BGc1YGFoUnSk
+         6sDfhJplM91yOASQ2uT8RrXeC8WxRjex6+L1ErZzaGxcNxS3GP07jv+tYRhjkwbIqlxR
+         bafXZy7nBxTRYMb9McMrnlnjYXW4z1y2TrM5zQ2Z4PbPRbeVwFAsmI+xPnjWLO/K5TzG
+         Vu/w==
+X-Gm-Message-State: APjAAAWBa3Mt87z3KXvFB95CiLygMzsEIXBWhy3Y6KAOcZR9Uz2g/l6R
+        abqXAVugmO80Mf/2ZapPf6MD0uYB+Q==
+X-Google-Smtp-Source: APXvYqyQxj4h5EKFqbJwstNLfU5pFLcxwQyE6tubj5ad3UX+SHoN3VqGEtU8yaujXV/3yBwO0e+/NOKcuw==
+X-Received: by 2002:a67:79ca:: with SMTP id u193mr3938693vsc.20.1557446442991;
+ Thu, 09 May 2019 17:00:42 -0700 (PDT)
+Date:   Thu,  9 May 2019 17:00:32 -0700
+In-Reply-To: <20190510000032.40749-1-fengc@google.com>
+Message-Id: <20190510000032.40749-4-fengc@google.com>
 Mime-Version: 1.0
+References: <20190510000032.40749-1-fengc@google.com>
 X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [dma-buf v3 0/3] Improve the dma-buf tracking
+Subject: [dma-buf v3 3/3] dma-buf: add show_fdinfo handler
 From:   Chenbo Feng <fengc@google.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-media@vger.kernel.org
@@ -62,61 +64,55 @@ Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
         Daniel Vetter <daniel@ffwll.ch>, erickreyes@google.com,
         kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently, all dma-bufs share the same anonymous inode. While we can count
-how many dma-buf fds or mappings a process has, we can't get the size of
-the backing buffers or tell if two entries point to the same dma-buf. And
-in debugfs, we can get a per-buffer breakdown of size and reference count,
-but can't tell which processes are actually holding the references to each
-buffer.
+From: Greg Hackmann <ghackmann@google.com>
 
-To resolve the issue above and provide better method for userspace to track
-the dma-buf usage across different processes, the following changes are
-proposed in dma-buf kernel side. First of all, replace the singleton inode
-inside the dma-buf subsystem with a mini-filesystem, and assign each
-dma-buf a unique inode out of this filesystem.  With this change, calling
-stat(2) on each entry gives the caller a unique ID (st_ino), the buffer's
-size (st_size), and even the number of pages assigned to each dma-buffer.
-Secoundly, add the inode information to /sys/kernel/debug/dma_buf/bufinfo
-so in the case where a buffer is mmap()ed into a process=E2=80=99s address =
-space
-but all remaining fds have been closed, we can still get the dma-buf
-information and try to accociate it with the process by searching the
-proc/pid/maps and looking for the corresponding inode number exposed in
-dma-buf debug fs. Thirdly, created an ioctl to assign names to dma-bufs
-which lets userspace assign short names (e.g., "CAMERA") to buffers. This
-information can be extremely helpful for tracking and accounting shared
-buffers based on their usage and original purpose. Last but not least, add
-dma-buf information to /proc/pid/fdinfo by adding a show_fdinfo() handler
-to dma_buf_file_operations. The handler will print the file_count and name
-of each buffer.
+The show_fdinfo handler exports the same information available through
+debugfs on a per-buffer basis.
 
-Change in v2:
-* Add a check to prevent changing dma-buf name when it is attached to
-  devices.
-* Fixed some compile warnings
+Signed-off-by: Greg Hackmann <ghackmann@google.com>
+Signed-off-by: Chenbo Feng <fengc@google.com>
+---
+ drivers/dma-buf/dma-buf.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Change in v3:
-* Removed the GET_DMA_BUF_NAME ioctls, add the dma_buf pointer to dentry
-  d_fsdata so the name can be displayed in proc/pid/maps and
-  proc/pid/map_files.
-
-Greg Hackmann (3):
-  dma-buf: give each buffer a full-fledged inode
-  dma-buf: add DMA_BUF_{GET,SET}_NAME ioctls
-  dma-buf: add show_fdinfo handler
-
- drivers/dma-buf/dma-buf.c    | 122 +++++++++++++++++++++++++++++++++--
- include/linux/dma-buf.h      |   5 +-
- include/uapi/linux/dma-buf.h |   3 +
- include/uapi/linux/magic.h   |   1 +
- 4 files changed, 124 insertions(+), 7 deletions(-)
-
---=20
+diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
+index c1da5f9ce44d..c4efc272fc34 100644
+--- a/drivers/dma-buf/dma-buf.c
++++ b/drivers/dma-buf/dma-buf.c
+@@ -381,6 +381,20 @@ static long dma_buf_ioctl(struct file *file,
+ 	}
+ }
+ 
++static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
++{
++	struct dma_buf *dmabuf = file->private_data;
++
++	seq_printf(m, "size:\t%zu\n", dmabuf->size);
++	/* Don't count the temporary reference taken inside procfs seq_show */
++	seq_printf(m, "count:\t%ld\n", file_count(dmabuf->file) - 1);
++	seq_printf(m, "exp_name:\t%s\n", dmabuf->exp_name);
++	mutex_lock(&dmabuf->lock);
++	if (dmabuf->name)
++		seq_printf(m, "name:\t%s\n", dmabuf->name);
++	mutex_unlock(&dmabuf->lock);
++}
++
+ static const struct file_operations dma_buf_fops = {
+ 	.release	= dma_buf_release,
+ 	.mmap		= dma_buf_mmap_internal,
+@@ -390,6 +404,7 @@ static const struct file_operations dma_buf_fops = {
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl	= dma_buf_ioctl,
+ #endif
++	.show_fdinfo	= dma_buf_show_fdinfo,
+ };
+ 
+ /*
+-- 
 2.21.0.1020.gf2820cf01a-goog
 
