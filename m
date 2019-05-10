@@ -4,32 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32720C04AB1
-	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 02:02:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44BA5C04AB1
+	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 02:02:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 07B2C2184C
-	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 02:02:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 209DE21850
+	for <linux-media@archiver.kernel.org>; Fri, 10 May 2019 02:02:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726835AbfEJCCN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 9 May 2019 22:02:13 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:10023 "EHLO
+        id S1726866AbfEJCCz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 9 May 2019 22:02:55 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:17306 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726799AbfEJCCN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 9 May 2019 22:02:13 -0400
-X-UUID: e2aa072ccc824ed6b37442924fe6ee32-20190510
-X-UUID: e2aa072ccc824ed6b37442924fe6ee32-20190510
+        with ESMTP id S1726799AbfEJCCz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 9 May 2019 22:02:55 -0400
+X-UUID: 52bc2170f38e4a96b7101ad943b46761-20190510
+X-UUID: 52bc2170f38e4a96b7101ad943b46761-20190510
 Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <jungo.lin@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 481075728; Fri, 10 May 2019 10:01:59 +0800
+        with ESMTP id 1230836266; Fri, 10 May 2019 10:02:30 +0800
 Received: from mtkcas09.mediatek.inc (172.21.101.178) by
  mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 10 May 2019 10:01:58 +0800
+ 15.0.1395.4; Fri, 10 May 2019 10:02:28 +0800
 Received: from mtkslt306.mediatek.inc (10.21.14.136) by mtkcas09.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 10 May 2019 10:01:58 +0800
+ Transport; Fri, 10 May 2019 10:02:28 +0800
 From:   Jungo Lin <jungo.lin@mediatek.com>
 To:     <tfiga@chromium.org>, <hans.verkuil@cisco.com>,
         <laurent.pinchart+renesas@ideasonboard.com>,
@@ -44,55 +44,74 @@ CC:     <linux-mediatek@lists.infradead.org>,
         <ryan.yu@mediatek.com>, <Rynn.Wu@mediatek.com>,
         <yuzhao@chromium.org>, <zwisler@chromium.org>, <shik@chromium.org>,
         <suleiman@chromium.org>, Jungo Lin <jungo.lin@mediatek.com>
-Subject: [RFC,V2,02/11] dts: arm64: mt8183: Add ISP Pass 1 shared memory node
-Date:   Fri, 10 May 2019 09:57:49 +0800
-Message-ID: <20190510015755.51495-3-jungo.lin@mediatek.com>
+Subject: [RFC,V2,04/11] dts: arm64: mt8183: Add ISP Pass 1 nodes
+Date:   Fri, 10 May 2019 09:57:54 +0800
+Message-ID: <20190510015755.51495-5-jungo.lin@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <Jungo Lin <jungo.lin@mediatek.com>
 References: <Jungo Lin <jungo.lin@mediatek.com>
 Reply-To: Jungo Lin <jungo.lin@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: F32938AF36E6E9DDC4BF96FB570711809D9BFFB53312E52EAD9E0B510ACAB4192000:8
+X-TM-SNTS-SMTP: 994DC7035D47087A22DFA3A364B1B3D460E8C7B4587C2A3605B8DE427128280C2000:8
 X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch adds a shared memory region used on mt8183 for
-exchanging tuning data between co-processor and the
-Pass 1 unit of the camera ISP system.
+Add nodes for Pass 1 unit of Mediatek's camera ISP system.
+Pass 1 unit embedded in Mediatek SoCs, works with the
+co-processor to process image signal from the image sensor
+and output RAW image data.
 
 Signed-off-by: Jungo Lin <jungo.lin@mediatek.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 32 ++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 75c4881bbe5e..d5d83a05f8a1 100644
+index d5d83a05f8a1..5f195236a762 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -133,6 +133,19 @@
- 		clock-output-names = "clk26m";
- 	};
- 
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+		cam_mem_reserved: cam_mem_region {
-+			compatible = "mediatek,reserve-memory-cam-smem";
-+			no-map;
-+			size = <0 0x01400000>; /* 20 MB share mem size */
-+			alignment = <0 0x1000>;
-+			alloc-ranges = <0 0x40000000 0 0x10000000>;
-+		};
-+	};
+@@ -382,5 +382,37 @@
+ 			reg = <0 0x1a000000 0 0x1000>;
+ 			#clock-cells = <1>;
+ 		};
 +
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupt-parent = <&gic>;
++		camisp: camisp@1a000000 {
++			compatible = "mediatek,mt8183-camisp", "syscon";
++			reg = <0 0x1a000000 0 0x1000>,
++			      <0 0x1a003000 0 0x1000>,
++			      <0 0x1a004000 0 0x2000>,
++			      <0 0x1a006000 0 0x2000>;
++			reg-names = "camisp",
++				    "cam1",
++				    "cam2",
++				    "cam3";
++			interrupts = <GIC_SPI 253 IRQ_TYPE_LEVEL_LOW>,
++				     <GIC_SPI 254 IRQ_TYPE_LEVEL_LOW>,
++				     <GIC_SPI 255 IRQ_TYPE_LEVEL_LOW>;
++			interrupt-names = "cam1",
++					  "cam2",
++					  "cam3";
++			iommus = <&iommu M4U_PORT_CAM_LSCI0>,
++				 <&iommu M4U_PORT_CAM_LSCI1>,
++				 <&iommu M4U_PORT_CAM_BPCI>;
++			#clock-cells = <1>;
++			power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
++			/* Camera CCF */
++			clocks = <&camsys CLK_CAM_CAM>,
++				 <&camsys CLK_CAM_CAMTG>;
++			clock-names = "CAMSYS_CAM_CGPDN",
++				      "CAMSYS_CAMTG_CGPDN";
++			mediatek,larb = <&larb3>,
++					<&larb6>;
++			mediatek,scp = <&scp>;
++			memory-region = <&cam_mem_reserved>;
++		};
+ 	};
+ };
 -- 
 2.18.0
 
