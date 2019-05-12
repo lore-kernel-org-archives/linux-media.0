@@ -2,35 +2,35 @@ Return-Path: <SRS0=8OQt=TM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5630BC04A6B
-	for <linux-media@archiver.kernel.org>; Sun, 12 May 2019 06:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68E10C04A6B
+	for <linux-media@archiver.kernel.org>; Sun, 12 May 2019 06:00:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 214CD216C4
-	for <linux-media@archiver.kernel.org>; Sun, 12 May 2019 06:00:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F1C320C01
+	for <linux-media@archiver.kernel.org>; Sun, 12 May 2019 06:00:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725934AbfELGAU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 May 2019 02:00:20 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:35006 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725919AbfELGAT (ORCPT
+        id S1726031AbfELGAZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 May 2019 02:00:25 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:15902 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725946AbfELGAZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 May 2019 02:00:19 -0400
-X-UUID: c9ceb09b73f0400fa49c78d6f3825fde-20190512
-X-UUID: c9ceb09b73f0400fa49c78d6f3825fde-20190512
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        Sun, 12 May 2019 02:00:25 -0400
+X-UUID: 7e1d099f60434de4918b5b78e41d0153-20190512
+X-UUID: 7e1d099f60434de4918b5b78e41d0153-20190512
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
         (envelope-from <louis.kuo@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1786277383; Sun, 12 May 2019 14:00:11 +0800
+        with ESMTP id 721356067; Sun, 12 May 2019 14:00:17 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Sun, 12 May 2019 14:00:10 +0800
+ mtkmbs03n2.mediatek.inc (172.21.101.182) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sun, 12 May 2019 14:00:16 +0800
 Received: from mtkslt306.mediatek.inc (10.21.14.136) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Sun, 12 May 2019 14:00:10 +0800
+ Transport; Sun, 12 May 2019 14:00:16 +0800
 From:   Louis Kuo <louis.kuo@mediatek.com>
 To:     <hans.verkuil@cisco.com>,
         <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
@@ -43,65 +43,57 @@ CC:     <yuzhao@chromium.org>, <zwisler@chromium.org>,
         <holmes.chiou@mediatek.com>, <frederic.chen@mediatek.com>,
         <Jerry-ch.Chen@mediatek.com>, <jungo.lin@mediatek.com>,
         <Rynn.Wu@mediatek.com>, <linux-media@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>
-Subject: [RFC PATCH V2 0/4] media: support Mediatek sensor interface driver 
-Date:   Sun, 12 May 2019 14:00:01 +0800
-Message-ID: <20190512060005.5444-1-louis.kuo@mediatek.com>
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        Louis Kuo <louis.kuo@mediatek.com>
+Subject: [RFC PATCH V2 2/4] media: platform: Add Mediatek sensor interface driver KConfig
+Date:   Sun, 12 May 2019 14:00:03 +0800
+Message-ID: <20190512060005.5444-3-louis.kuo@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20190512060005.5444-1-louis.kuo@mediatek.com>
+References: <20190512060005.5444-1-louis.kuo@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: F1BAF76B964635C53C9FD0FAE498C53B51366C98D4CAF45D188115E51A8B78A12000:8
+X-TM-SNTS-SMTP: DF53BF8B6971C61179F1785A44F193CA7107797E9AC2D6AFABE7C54F95F8D5D72000:8
 X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+This patch adds KConfig for sensor interface driver. Sensor interface driver
+is a MIPI-CSI2 host driver, namely, a HW camera interface controller.
+It support a widely adopted, simple, high-speed protocol primarily intended
+for point-to-point image and video transmission between cameras and host
+devices.
 
-This is the RFC patch adding Sensor Inferface(seninf) driver on
-Mediatek mt8183 SoC, which will be used in camera features on CrOS application.
-It belongs to the first Mediatek's camera driver series based on V4L2 and media controller framework.
-I posted the main part of the seninf driver as RFC to discuss first and would like some review comments
-on the overall structure of the driver.
-
-The driver is implemented with V4L2 framework.
-1. Register as a V4L2 sub-device.
-2. Only one entity with sink pads linked to camera sensors for choosing desired camera sensor by setup link
-   and with source pads linked to cam-io for routing different types of decoded packet datas to PASS1 driver
-   to generate sensor image frame and meta-data.
-
-The overall file structure of the seninf driver is as following:
-
-* mtk_seninf.c: Implement software and HW control flow of seninf driver.
-* mtk_seninf_def.h: Define data structure and enumeration.
-* mtk_seninf_reg.h: Define HW register R/W macros and HW register names.
-
-[ v2: use recommended coding style, fix v4l2-compliance issue, add v4l2 async notifier operations, remove redundant code]
-
-  media: platform: mtk-isp: Add Mediatek sensor interface driver
-  media: platform: Add Mediatek sensor interface driver KConfig
-  dt-bindings: mt8183: Add sensor interface dt-bindings
-  dts: arm64: mt8183: Add sensor interface nodes
-
- .../bindings/media/mediatek-seninf.txt        |   52 +
- arch/arm64/boot/dts/mediatek/mt8183.dtsi      |   34 +
- drivers/media/platform/Makefile               |    2 +
- drivers/media/platform/mtk-isp/Kconfig        |   16 +
- drivers/media/platform/mtk-isp/Makefile       |   14 +
- .../media/platform/mtk-isp/isp_50/Makefile    |   17 +
- .../platform/mtk-isp/isp_50/seninf/Makefile   |    4 +
- .../mtk-isp/isp_50/seninf/mtk_seninf.c        | 1366 +++++++++++++++++
- .../mtk-isp/isp_50/seninf/mtk_seninf_def.h    |  170 ++
- .../mtk-isp/isp_50/seninf/mtk_seninf_reg.h    |  992 ++++++++++++
- 10 files changed, 2667 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek-seninf.txt
+Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
+---
+ drivers/media/platform/mtk-isp/Kconfig | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
  create mode 100644 drivers/media/platform/mtk-isp/Kconfig
- create mode 100644 drivers/media/platform/mtk-isp/Makefile
- create mode 100644 drivers/media/platform/mtk-isp/isp_50/Makefile
- create mode 100644 drivers/media/platform/mtk-isp/isp_50/seninf/Makefile
- create mode 100644 drivers/media/platform/mtk-isp/isp_50/seninf/mtk_seninf.c
- create mode 100644 drivers/media/platform/mtk-isp/isp_50/seninf/mtk_seninf_def.h
- create mode 100644 drivers/media/platform/mtk-isp/isp_50/seninf/mtk_seninf_reg.h
 
+diff --git a/drivers/media/platform/mtk-isp/Kconfig b/drivers/media/platform/mtk-isp/Kconfig
+new file mode 100644
+index 000000000000..c665fa1bb121
+--- /dev/null
++++ b/drivers/media/platform/mtk-isp/Kconfig
+@@ -0,0 +1,16 @@
++config MTK_SENINF
++	bool "Mediatek mipi csi2 driver"
++	depends on VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
++	depends on MEDIA_CAMERA_SUPPORT
++	select V4L2_FWNODE
++
++	default n
++	help
++	    This driver provides a mipi-csi2 host driver used as a
++	    interface to connect camera with Mediatek's
++	    MT8183 SOCs. It is able to handle multiple cameras
++	    at the same time.
++
++		Choose y if you want to use Mediatek SoCs to create image
++		capture application such as video recording and still image
++		capture.
+-- 
+2.18.0
 
