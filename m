@@ -1,127 +1,155 @@
-Return-Path: <SRS0=8OQt=TM=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=JGZI=TN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6242FC04A6B
-	for <linux-media@archiver.kernel.org>; Sun, 12 May 2019 20:16:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03C8AC04AB1
+	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 03:52:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3256C20989
-	for <linux-media@archiver.kernel.org>; Sun, 12 May 2019 20:16:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cnbyhlvq"
+	by mail.kernel.org (Postfix) with ESMTP id D1B3F20873
+	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 03:52:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbfELUQJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 May 2019 16:16:09 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:33918 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726967AbfELUQJ (ORCPT
+        id S1727541AbfEMDwu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 12 May 2019 23:52:50 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:48755 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727359AbfEMDwu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 May 2019 16:16:09 -0400
-Received: by mail-lf1-f65.google.com with SMTP id v18so7502104lfi.1;
-        Sun, 12 May 2019 13:16:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6ShPsfgNxAyDNGvYH09X9UbQVn099K4SJecdsrvSXfY=;
-        b=CnbyhlvqQdcF2qVjzfnZntJnhwGqVkvbl3RUiSWoDZDwMuAd1rHKuxEHCytyMj3A/4
-         +KDfVHgDmttslDE4dih8Kk7Z/t4YxS0pjthJ+OnH+pDTfBg6vwUoSSHZII93HGXjgcv3
-         SGIEy8KH8CwXvbBlCNPLusLP9Fcu9iA8dmndncESTTp1TKs+f4/S3RTfLLqlarQvUm0G
-         y1jvofju5PK0CZUwcvCwzXlcLYrqGYeHekKfG/W1dD/BPzQmvdSE3yhTJ0QErWQHKjz0
-         jk1BuH/CXdM7r1f7DeDjJOwVPnY3abKQTQdqfRUSrFDeXdoskztiUA22WM5mNO4lQlrq
-         Ma5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6ShPsfgNxAyDNGvYH09X9UbQVn099K4SJecdsrvSXfY=;
-        b=eorXcU95qoJkxFZtA6kZE6cKCAhAUBIOEt7yWtRYvPyyINf53WBxynRU0YN9oSjG/Z
-         WL8+0MdYvYrQfs8TS4Fx3gXgTolWzS0TeU5vqdkXFAn8nGTipQTdKmVqhO9tkTCDQbZy
-         2SBP5qjUdNcTdUes0joNcwni/+1FfqTX2vVYOeVz9AdoLWxvGskNZ5fdZUIu9n2rHStB
-         vZf4BijMIOZxB+xNBDOH+dDnimN0CyAPAuiioLA09KCswkI1X+nPBN7UIvRAwfS9KCVG
-         b7+r6eCq+LwT8O6y+G60yzk1G/pGGlAislGjNGvKpVJh3Dg8eAle7Txa8yiGmn02nU8U
-         NzKQ==
-X-Gm-Message-State: APjAAAUGkRvEoTBytq5+0wgUL6Xi01cim1f5K+rqb1J1jJ7afXf96bTu
-        93dWHNWvZgV9DcCdLeeETys=
-X-Google-Smtp-Source: APXvYqySBhro9od/qFdiyoXY+fJGuZw99bk+6QDRW4pLh0oT89rRwf17mWP+ZV4EW2cujQAJ4LbBdw==
-X-Received: by 2002:a19:29c4:: with SMTP id p187mr11561576lfp.69.1557692166774;
-        Sun, 12 May 2019 13:16:06 -0700 (PDT)
-Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
-        by smtp.gmail.com with ESMTPSA id w20sm2360533ljd.39.2019.05.12.13.16.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 12 May 2019 13:16:06 -0700 (PDT)
-From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: [PATCH v5 0/4] media: v4l2-subdev: Verify arguments in v4l2_subdev_call()
-Date:   Sun, 12 May 2019 22:15:47 +0200
-Message-Id: <20190512201551.18724-1-jmkrzyszt@gmail.com>
-X-Mailer: git-send-email 2.21.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 12 May 2019 23:52:50 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:c9fb:58cc:c828:ff10])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id Q218hgRo33qlsQ21AhpjCW; Mon, 13 May 2019 05:52:48 +0200
+Message-ID: <a1634260a2a4ae6e2774ab148b19de08@smtp-cloud7.xs4all.net>
+Date:   Mon, 13 May 2019 05:52:46 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfAtNNMaxcT9C2CeVtZQD2834DN/h1NHw/XvVIzd9YvGHpsFQq5ErGrL9Ky40ssKWcoPntWgVoZg2iY1kPGoZoYRWZF+RVG7KkHWwK2eJjZsuNxp+lxjr
+ iF0f7FnhXe5CngJvL3yhDwikyleb946SqdLAcdvibSJogw/7anxb3JYkRiDd2peizPatNtgSdgTfHdN7mhyFS9Ezw0nzVL7htxhcJiUpj8EMn98Vv9svoRIu
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Correctness of format type (try or active) and pad ID parameters passed
-to subdevice operation callbacks is now verified only for IOCTL calls.
-However, those callbacks are also used by drivers, e.g., V4L2 host
-interfaces.
-    
-Since both subdev_do_ioctl() and drivers are using v4l2_subdev_call()
-macro while calling subdevice operations, move those parameter checks
-from subdev_do_ioctl() to v4l2_subdev_call().  Also, add check for
-non-NULL pointers, including pad config if V4L2_SUBDEV_FORMAT_tRY is
-requested.  Since invalid arguments generally mean bugs, be noisy about
-them.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Having that done, we can avoid taking care of those checks inside
-drivers.
+Results of the daily build of media_tree:
 
-Janusz Krzysztofik (4):
-  media: v4l2-subdev: Verify arguments in v4l2_subdev_call()
-  media: v4l2-subdev: WARN_ON invalid v4l2_subdev_call() arguments
-  media: v4l2-subdev: Verify v4l2_subdev_call() pointer arguments
-  media: v4l2-subdev: Verify v4l2_subdev_call() pad config argument
+date:			Mon May 13 05:00:10 CEST 2019
+media-tree git hash:	1199fa8c0ddd34dae6d72b653b27dfb3554e9b57
+media_build git hash:	78eccfa404ec982e1302930cb7f45756ab404a3c
+v4l-utils git hash:	0d61ddede7d340ffa1c75a2882e30c455ef3d8b8
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
- drivers/media/v4l2-core/v4l2-subdev.c | 257 +++++++++++++++++---------
- include/media/v4l2-subdev.h           |   6 +
- 2 files changed, 179 insertions(+), 84 deletions(-)
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: WARNINGS
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: WARNINGS
+apps: WARNINGS
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: OK
+smatch: OK
 
-Changelog:
-v4->v5:
-- a few coding style and code formatting changes,
-- require CONFIG_MEDIA_CONTROLLER, not CONFIG_VIDEO_V4L2_SUBDEV_API,
-  for a valid pad ID check,
-- perform pad ID check only if at least one pad is configured so
-  drivers which don't configure pads are not affected if built with
-  CONFIG_MEDIA_CONTROLLER defined,
-- issue kernel warnings on invalid parameters (new patch - 2/4),
-- validate pointers before using them (new patch - 3/4).
+Detailed results are available here:
 
-v3->v4:
-- fix 'struct' keyword missing from patch 2/2,
-- fix checkpatch reported style issue in patch 2/2
-Sorry for that.
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
 
-v2->v3:
-- add patch 2/2 with pad config check,
-- adjust continuation line alignments in patch 1/2 to match those
-  used in 2/2.
+Detailed regression test results are available here:
 
-v1->v2:
-- replace the horrible macro with a structure of wrapper functions;
-  inspired by Hans' and Sakari's comments - thanks!
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
 
--- 
-2.21.0
+Full logs are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
