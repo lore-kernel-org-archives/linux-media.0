@@ -2,154 +2,159 @@ Return-Path: <SRS0=JGZI=TN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03C8AC04AB1
-	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 03:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04142C04AB1
+	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 06:25:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D1B3F20873
-	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 03:52:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C890A20989
+	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 06:25:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="spGrzAge"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727541AbfEMDwu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 12 May 2019 23:52:50 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:48755 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727359AbfEMDwu (ORCPT
+        id S1726181AbfEMGZA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 May 2019 02:25:00 -0400
+Received: from condef-08.nifty.com ([202.248.20.73]:50208 "EHLO
+        condef-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbfEMGZA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 12 May 2019 23:52:50 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:c9fb:58cc:c828:ff10])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id Q218hgRo33qlsQ21AhpjCW; Mon, 13 May 2019 05:52:48 +0200
-Message-ID: <a1634260a2a4ae6e2774ab148b19de08@smtp-cloud7.xs4all.net>
-Date:   Mon, 13 May 2019 05:52:46 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfAtNNMaxcT9C2CeVtZQD2834DN/h1NHw/XvVIzd9YvGHpsFQq5ErGrL9Ky40ssKWcoPntWgVoZg2iY1kPGoZoYRWZF+RVG7KkHWwK2eJjZsuNxp+lxjr
- iF0f7FnhXe5CngJvL3yhDwikyleb946SqdLAcdvibSJogw/7anxb3JYkRiDd2peizPatNtgSdgTfHdN7mhyFS9Ezw0nzVL7htxhcJiUpj8EMn98Vv9svoRIu
+        Mon, 13 May 2019 02:25:00 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-08.nifty.com with ESMTP id x4D6MTCa018819
+        for <linux-media@vger.kernel.org>; Mon, 13 May 2019 15:22:29 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id x4D6MKME031944;
+        Mon, 13 May 2019 15:22:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x4D6MKME031944
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1557728543;
+        bh=9WmgoZ6MOoUcNdNy3f/mHVIMz/MpA2ctylEVPm/El5c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=spGrzAgeORLNZynLGITRRbr1n+792X7Scys3nwwD1XnBuur4ixM3QvVdszjGVvCtj
+         3XI1mCr1eGp8gxk4kKUGUiJb1keRKWnAFMsCY1Tfk9Nwqf1yR8cdWcj5bJaSJXmZP0
+         cKU0jDAdRgScevMPnGnHY9SOlR0FwtC7x7hYC+vennalEaqdNVwG/OHz0vSZ3logTg
+         SVLxCJQzdKUaQQ3uB19H0LnhCqcIhe219ZwuzES5LQa56mY/4d/CaV9pNbINuM/8dk
+         rxMsjY3oezw8XmDkzRZcpTVD/Ns4S6Wp4P90TphFnILyJq6V7THLNg2FCbtSR0Pt0a
+         xMWSnuc9gxPSQ==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Subject: [PATCH 1/4] media: remove unneeded header search paths
+Date:   Mon, 13 May 2019 15:22:14 +0900
+Message-Id: <20190513062217.20750-2-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190513062217.20750-1-yamada.masahiro@socionext.com>
+References: <20190513062217.20750-1-yamada.masahiro@socionext.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+I was able to build without these extra header search paths.
 
-Results of the daily build of media_tree:
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+---
 
-date:			Mon May 13 05:00:10 CEST 2019
-media-tree git hash:	1199fa8c0ddd34dae6d72b653b27dfb3554e9b57
-media_build git hash:	78eccfa404ec982e1302930cb7f45756ab404a3c
-v4l-utils git hash:	0d61ddede7d340ffa1c75a2882e30c455ef3d8b8
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
+I split this kind of cleanups per-subsystem,
+and all of them were merged, except the media subsystem.
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: WARNINGS
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: WARNINGS
-apps: WARNINGS
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: OK
-smatch: OK
+I sent ping several times to the media subsystem
+but I could not get response at all.
+https://lkml.org/lkml/2019/4/11/1040
 
-Detailed results are available here:
+It is almost 4 months since the submission.
+Meanwhile, I asked 0day bot to test this, and I did not
+get any problem report.
+I am going to apply this to kbuild tree
+since this is a prerequisite for the Kbuild core change.
 
-http://www.xs4all.nl/~hverkuil/logs/Monday.log
 
-Detailed regression test results are available here:
+ drivers/media/dvb-frontends/cxd2880/Makefile  | 2 --
+ drivers/media/pci/bt8xx/Makefile              | 1 -
+ drivers/media/platform/sti/c8sectpfe/Makefile | 1 -
+ drivers/media/radio/Makefile                  | 2 --
+ drivers/media/spi/Makefile                    | 2 --
+ drivers/media/usb/cx231xx/Makefile            | 1 -
+ drivers/media/usb/usbvision/Makefile          | 2 --
+ 7 files changed, 11 deletions(-)
 
-http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
+diff --git a/drivers/media/dvb-frontends/cxd2880/Makefile b/drivers/media/dvb-frontends/cxd2880/Makefile
+index c6baa4caba19..646598b556d5 100644
+--- a/drivers/media/dvb-frontends/cxd2880/Makefile
++++ b/drivers/media/dvb-frontends/cxd2880/Makefile
+@@ -14,5 +14,3 @@ cxd2880-objs := cxd2880_common.o \
+ 		cxd2880_top.o
+ 
+ obj-$(CONFIG_DVB_CXD2880) += cxd2880.o
+-
+-ccflags-y += -Idrivers/media/dvb-frontends
+diff --git a/drivers/media/pci/bt8xx/Makefile b/drivers/media/pci/bt8xx/Makefile
+index 7f1c3beb1bbc..0b5032c8a9c0 100644
+--- a/drivers/media/pci/bt8xx/Makefile
++++ b/drivers/media/pci/bt8xx/Makefile
+@@ -7,5 +7,4 @@ obj-$(CONFIG_VIDEO_BT848) += bttv.o
+ obj-$(CONFIG_DVB_BT8XX) += bt878.o dvb-bt8xx.o dst.o dst_ca.o
+ 
+ ccflags-y += -Idrivers/media/dvb-frontends
+-ccflags-y += -Idrivers/media/common
+ ccflags-y += -Idrivers/media/tuners
+diff --git a/drivers/media/platform/sti/c8sectpfe/Makefile b/drivers/media/platform/sti/c8sectpfe/Makefile
+index 34d69472b6f0..4bf0c6bf20e1 100644
+--- a/drivers/media/platform/sti/c8sectpfe/Makefile
++++ b/drivers/media/platform/sti/c8sectpfe/Makefile
+@@ -4,6 +4,5 @@ c8sectpfe-y += c8sectpfe-core.o c8sectpfe-common.o c8sectpfe-dvb.o \
+ 
+ obj-$(CONFIG_DVB_C8SECTPFE) += c8sectpfe.o
+ 
+-ccflags-y += -Idrivers/media/common
+ ccflags-y += -Idrivers/media/dvb-frontends/
+ ccflags-y += -Idrivers/media/tuners/
+diff --git a/drivers/media/radio/Makefile b/drivers/media/radio/Makefile
+index 37e6e8255b57..53c7ae135460 100644
+--- a/drivers/media/radio/Makefile
++++ b/drivers/media/radio/Makefile
+@@ -36,5 +36,3 @@ obj-$(CONFIG_RADIO_TEA575X) += tea575x.o
+ obj-$(CONFIG_USB_RAREMONO) += radio-raremono.o
+ 
+ shark2-objs := radio-shark2.o radio-tea5777.o
+-
+-ccflags-y += -Isound
+diff --git a/drivers/media/spi/Makefile b/drivers/media/spi/Makefile
+index 9e536777a330..c254e2a70ec5 100644
+--- a/drivers/media/spi/Makefile
++++ b/drivers/media/spi/Makefile
+@@ -1,6 +1,4 @@
+ obj-$(CONFIG_VIDEO_GS1662) += gs1662.o
+ obj-$(CONFIG_CXD2880_SPI_DRV) += cxd2880-spi.o
+ 
+-ccflags-y += -Idrivers/media/dvb-core
+-ccflags-y += -Idrivers/media/dvb-frontends
+ ccflags-y += -Idrivers/media/dvb-frontends/cxd2880
+diff --git a/drivers/media/usb/cx231xx/Makefile b/drivers/media/usb/cx231xx/Makefile
+index c023d97407de..af824fd80366 100644
+--- a/drivers/media/usb/cx231xx/Makefile
++++ b/drivers/media/usb/cx231xx/Makefile
+@@ -11,4 +11,3 @@ obj-$(CONFIG_VIDEO_CX231XX_DVB) += cx231xx-dvb.o
+ 
+ ccflags-y += -Idrivers/media/tuners
+ ccflags-y += -Idrivers/media/dvb-frontends
+-ccflags-y += -Idrivers/media/usb/dvb-usb
+diff --git a/drivers/media/usb/usbvision/Makefile b/drivers/media/usb/usbvision/Makefile
+index 494d030b4979..e8e5eda08b6f 100644
+--- a/drivers/media/usb/usbvision/Makefile
++++ b/drivers/media/usb/usbvision/Makefile
+@@ -1,5 +1,3 @@
+ usbvision-objs  := usbvision-core.o usbvision-video.o usbvision-i2c.o usbvision-cards.o
+ 
+ obj-$(CONFIG_VIDEO_USBVISION) += usbvision.o
+-
+-ccflags-y += -Idrivers/media/tuners
+-- 
+2.17.1
 
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
