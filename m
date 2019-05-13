@@ -2,139 +2,94 @@ Return-Path: <SRS0=JGZI=TN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A83CC04AB1
-	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 06:26:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13F5AC04AB1
+	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 07:09:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 36B3020B7C
-	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 06:26:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nifty.com header.i=@nifty.com header.b="Ukcj8KGP"
+	by mail.kernel.org (Postfix) with ESMTP id E717321479
+	for <linux-media@archiver.kernel.org>; Mon, 13 May 2019 07:09:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbfEMG0D (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 13 May 2019 02:26:03 -0400
-Received: from condef-03.nifty.com ([202.248.20.68]:35316 "EHLO
-        condef-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726486AbfEMG0D (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 13 May 2019 02:26:03 -0400
-Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-03.nifty.com with ESMTP id x4D6MUP8016585;
-        Mon, 13 May 2019 15:22:30 +0900
-Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id x4D6MKMD031944;
-        Mon, 13 May 2019 15:22:21 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x4D6MKMD031944
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1557728542;
-        bh=swEZk/Cz28om8/f0Dg5Vc4B35GQqTxoFUbP1b15szx0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ukcj8KGPL9n5eGX37YX+59e9VBeS2YQuC2ctkglb/oRV9CSvYxQ46LPf030QpAX1n
-         FiBvQlvVtcYFSAYmziyEYqZTTJflZmchyBGt8wMfisMRFXsZfz5r5/P+3zx5IY6esv
-         eK1Ut+jP6Jmu4AvAZFOuIqXe4pCF0xMrI4C+uhLppzqYDbv5OZpF9b/YdISs+URE1c
-         QU1x/JlipyxnSVOsoFS6ZGlED+EOufNSh662uQPRRfz85fM143fhiXd43ZN9bYof/n
-         +4/86QmaRcOoFujKqBrgT6/4Ro0iBauFyDyyKmuXaaC6c46sVv5ts1rG6tffPFLPQ3
-         Ei0/PevcXe2Dg==
-X-Nifty-SrcIP: [153.142.97.92]
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, x86@kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 0/4] kbuild: remove 'addtree' and 'flags' magic
-Date:   Mon, 13 May 2019 15:22:13 +0900
-Message-Id: <20190513062217.20750-1-yamada.masahiro@socionext.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727720AbfEMHJk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 13 May 2019 03:09:40 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:42854 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725980AbfEMHJk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 13 May 2019 03:09:40 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id A9CC21403EFB371D35F4;
+        Mon, 13 May 2019 15:09:37 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.439.0; Mon, 13 May 2019 15:09:31 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH] media: vim2m: fix two double-free issues
+Date:   Mon, 13 May 2019 15:18:29 +0800
+Message-ID: <20190513071829.140076-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The 'addtree' and 'flags' are longstanding PITA.
+vim2m_device_release() will be called by video_unregister_device() to release
+various objects.
 
-When we discussed this in kbuild ML,
-(https://patchwork.kernel.org/patch/9632347/)
-we agreed to get rid of this hack.
+There are two double-free issue,
+1. dev->m2m_dev will be freed twice in error_m2m path/vim2m_device_release
+2. the error_v4l2 and error_free path in vim2m_probe() will release
+   same objects, since vim2m_device_release has done.
 
-This required lots of efforts to send many fixups
-to each subsystem.
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: ea6c7e34f3b2 ("media: vim2m: replace devm_kzalloc by kzalloc")
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ drivers/media/platform/vim2m.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I did it, all the per-subsystem fixups were merged
-except media subsystem.
-
-I will apply all the remaining fixups,
-and delete 'addtree' and 'flags' magic.
-
-I have tested this series for a long time,
-and addressed all the reported issues.
-
-
-
-Masahiro Yamada (4):
-  media: remove unneeded header search paths
-  media: prefix header search paths with $(srctree)/
-  treewide: prefix header search paths with $(srctree)/
-  kbuild: remove 'addtree' and 'flags' magic for header search paths
-
- arch/mips/pnx833x/Platform                    |  2 +-
- arch/powerpc/Makefile                         |  2 +-
- arch/sh/Makefile                              |  4 +--
- arch/x86/kernel/Makefile                      |  2 +-
- arch/x86/mm/Makefile                          |  2 +-
- arch/xtensa/boot/lib/Makefile                 |  2 +-
- drivers/hid/intel-ish-hid/Makefile            |  2 +-
- drivers/media/common/b2c2/Makefile            |  4 +--
- drivers/media/dvb-frontends/cxd2880/Makefile  |  2 --
- drivers/media/i2c/smiapp/Makefile             |  2 +-
- drivers/media/mmc/siano/Makefile              |  3 +--
- drivers/media/pci/b2c2/Makefile               |  2 +-
- drivers/media/pci/bt8xx/Makefile              |  5 ++--
- drivers/media/pci/cx18/Makefile               |  4 +--
- drivers/media/pci/cx23885/Makefile            |  4 +--
- drivers/media/pci/cx88/Makefile               |  4 +--
- drivers/media/pci/ddbridge/Makefile           |  4 +--
- drivers/media/pci/dm1105/Makefile             |  2 +-
- drivers/media/pci/mantis/Makefile             |  2 +-
- drivers/media/pci/netup_unidvb/Makefile       |  2 +-
- drivers/media/pci/ngene/Makefile              |  4 +--
- drivers/media/pci/pluto2/Makefile             |  2 +-
- drivers/media/pci/pt1/Makefile                |  4 +--
- drivers/media/pci/pt3/Makefile                |  4 +--
- drivers/media/pci/smipcie/Makefile            |  5 ++--
- drivers/media/pci/ttpci/Makefile              |  4 +--
- drivers/media/platform/sti/c8sectpfe/Makefile |  5 ++--
- drivers/media/radio/Makefile                  |  2 --
- drivers/media/spi/Makefile                    |  4 +--
- drivers/media/usb/as102/Makefile              |  2 +-
- drivers/media/usb/au0828/Makefile             |  4 +--
- drivers/media/usb/b2c2/Makefile               |  2 +-
- drivers/media/usb/cx231xx/Makefile            |  5 ++--
- drivers/media/usb/em28xx/Makefile             |  4 +--
- drivers/media/usb/go7007/Makefile             |  2 +-
- drivers/media/usb/pvrusb2/Makefile            |  4 +--
- drivers/media/usb/siano/Makefile              |  2 +-
- drivers/media/usb/tm6000/Makefile             |  4 +--
- drivers/media/usb/ttusb-budget/Makefile       |  2 +-
- drivers/media/usb/usbvision/Makefile          |  2 --
- drivers/net/ethernet/chelsio/libcxgb/Makefile |  2 +-
- drivers/target/iscsi/cxgbit/Makefile          |  6 ++---
- drivers/usb/storage/Makefile                  |  2 +-
- fs/ocfs2/dlm/Makefile                         |  3 +--
- fs/ocfs2/dlmfs/Makefile                       |  2 +-
- fs/xfs/Makefile                               |  4 +--
- net/bpfilter/Makefile                         |  2 +-
- scripts/Kbuild.include                        |  8 ------
- scripts/Makefile.host                         | 12 ++++-----
- scripts/Makefile.lib                          | 26 ++++++-------------
- scripts/dtc/Makefile                          |  6 ++---
- scripts/genksyms/Makefile                     |  4 +--
- scripts/kconfig/Makefile                      |  4 +--
- 53 files changed, 85 insertions(+), 119 deletions(-)
-
+diff --git a/drivers/media/platform/vim2m.c b/drivers/media/platform/vim2m.c
+index 243c82b5d537..acd3bd48c7e2 100644
+--- a/drivers/media/platform/vim2m.c
++++ b/drivers/media/platform/vim2m.c
+@@ -1359,7 +1359,7 @@ static int vim2m_probe(struct platform_device *pdev)
+ 						 MEDIA_ENT_F_PROC_VIDEO_SCALER);
+ 	if (ret) {
+ 		v4l2_err(&dev->v4l2_dev, "Failed to init mem2mem media controller\n");
+-		goto error_m2m;
++		goto error_dev;
+ 	}
+ 
+ 	ret = media_device_register(&dev->mdev);
+@@ -1373,11 +1373,11 @@ static int vim2m_probe(struct platform_device *pdev)
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ error_m2m_mc:
+ 	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
+-error_m2m:
+-	v4l2_m2m_release(dev->m2m_dev);
+ #endif
+ error_dev:
+ 	video_unregister_device(&dev->vfd);
++	/* vim2m_device_release called by video_unregister_device to release various objects */
++	return ret;
+ error_v4l2:
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ error_free:
 -- 
-2.17.1
+2.20.1
 
