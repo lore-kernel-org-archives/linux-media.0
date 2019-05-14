@@ -2,35 +2,36 @@ Return-Path: <SRS0=tLen=TO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-6.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,UNPARSEABLE_RELAY,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC08CC04AB6
-	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 06:14:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C711DC04AB4
+	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 06:15:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 904CF214C6
-	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 06:14:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A2C54208CA
+	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 06:15:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbfENGOK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 May 2019 02:14:10 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:11083 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726381AbfENGOK (ORCPT
+        id S1726429AbfENGOJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 May 2019 02:14:09 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:12311 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726369AbfENGOI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 May 2019 02:14:10 -0400
-X-UUID: ed75a129c3aa410fac1c7ff51932ac53-20190514
-X-UUID: ed75a129c3aa410fac1c7ff51932ac53-20190514
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        Tue, 14 May 2019 02:14:08 -0400
+X-UUID: 62bf8201188e4b89a77600afbef2a306-20190514
+X-UUID: 62bf8201188e4b89a77600afbef2a306-20190514
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
         (envelope-from <stu.hsieh@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1038240998; Tue, 14 May 2019 14:13:56 +0800
+        with ESMTP id 2053767142; Tue, 14 May 2019 14:13:57 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 14 May 2019 14:13:53 +0800
+ mtkmbs03n2.mediatek.inc (172.21.101.182) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 14 May 2019 14:13:56 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 14 May 2019 14:13:54 +0800
+ Transport; Tue, 14 May 2019 14:13:55 +0800
 From:   Stu Hsieh <stu.hsieh@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, CK Hu <ck.hu@mediatek.com>
@@ -41,178 +42,153 @@ CC:     Mark Rutland <mark.rutland@arm.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
-Subject: [PATCH v3 01/13] dt-bindings: media: Add binding for MT2712 MIPI-CSI2
-Date:   Tue, 14 May 2019 14:13:38 +0800
-Message-ID: <1557814430-9675-2-git-send-email-stu.hsieh@mediatek.com>
+Subject: [PATCH v3 13/13] [media] mtk-mipicsi: add debugfs for mipicsi driver
+Date:   Tue, 14 May 2019 14:13:50 +0800
+Message-ID: <1557814430-9675-14-git-send-email-stu.hsieh@mediatek.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1557814430-9675-1-git-send-email-stu.hsieh@mediatek.com>
 References: <1557814430-9675-1-git-send-email-stu.hsieh@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 52F22A3B8030EDB752AF9E792A3AD372CBFC3B55B8488575710DCC25A6C3F40E2000:8
+X-TM-SNTS-SMTP: CDF3EB988DABE039B2641AA95D6392CF9BF315A6D47140D27D15623F11EF166C2000:8
 X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MIPI-CSI2 dt-binding for Mediatek MT2712 SoC
+This patch add debugfs for mipicsi driver.
 
 Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
 ---
- .../bindings/media/mediatek-mipicsi-camsv.txt | 53 ++++++++++++++++++
- .../media/mediatek-mipicsi-common.txt         | 19 +++++++
- .../bindings/media/mediatek-mipicsi.txt       | 54 +++++++++++++++++++
- 3 files changed, 126 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
- create mode 100644 Documentation/devicetree/bindings/media/mediatek-mipicsi-common.txt
- create mode 100644 Documentation/devicetree/bindings/media/mediatek-mipicsi.txt
+ .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt b/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
-new file mode 100644
-index 000000000000..5f34974f12ac
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
-@@ -0,0 +1,53 @@
-+* Mediatek MIPI-CSI2 receiver camsv
+diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
+index c1cbeb3c60e1..b6abd5a35752 100644
+--- a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
++++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
+@@ -49,6 +49,7 @@
+ #include <soc/mediatek/smi.h>
+ #include <linux/regmap.h>
+ #include <linux/mfd/syscon.h>
++#include <linux/debugfs.h>
+ 
+ #define MTK_MIPICSI_DRV_NAME "mtk-mipicsi"
+ #define MTK_PLATFORM_STR "platform:mt2712"
+@@ -83,6 +84,7 @@
+ #define SENINF_NCSI2_INT_EN				0xB0
+ #define SENINF_NCSI2_INT_STATUS				0xB4
+ #define SENINF_NCSI2_DBG_SEL				0xB8
++#define SENINF_NCSI2_DBG_PORT				0xBC
+ #define SENINF_NCSI2_HSRX_DBG				0xD8
+ #define SENINF_NCSI2_DI					0xDC
+ #define SENINF_NCSI2_DI_CTRL				0xE4
+@@ -92,6 +94,7 @@
+ #define SENINF_TOP_MUX					0x08
+ 
+ #define SENINF_MUX_CTRL					0x00
++#define SENINF_MUX_DEBUG_2				0x14
+ 
+ #define CAMSV_MODULE_EN					0x10
+ #define CAMSV_FMT_SEL					0x14
+@@ -114,6 +117,7 @@
+ #define DMA_FRAME_HEADER_EN				0xE00
+ 
+ #define SerDes_support 1
++#define CONFIG_DEBUG_FS 1
+ 
+ static int mtk_mipicsi_dbg_level;
+ #define mtk_mipicsi_dbg(level, fmt, args...)				 \
+@@ -165,6 +169,9 @@ struct mtk_mipicsi_dev {
+ 	u32 width;
+ 	u32 height;
+ 	u32 bytesperline;
++#ifdef CONFIG_DEBUG_FS
++	struct dentry *mtk_mipicsi_debugfs;
++#endif
+ };
+ 
+ static const struct soc_mbus_lookup mtk_mipicsi_formats[] = {
+@@ -220,6 +227,49 @@ static const struct soc_mbus_lookup mtk_mipicsi_formats[] = {
+ 		V4L2_MBUS_PCLK_SAMPLE_FALLING |	\
+ 		V4L2_MBUS_DATA_ACTIVE_HIGH)
+ 
++#ifdef CONFIG_DEBUG_FS
++static ssize_t mtk_mipicsi_debug_read(struct file *file, char __user *user_buf,
++			      size_t count, loff_t *ppos)
++{
++	struct device *dev = file->private_data;
++	struct soc_camera_host *soc_host = to_soc_camera_host(dev);
++	struct mtk_mipicsi_dev *mipicsi = soc_host->priv;
++	u32 int_val;
++	u32 dbg_port;
++	u32 cnt_val;
++	u32 hcnt;
++	u32 vcnt;
++	char buf[256];
++	char cnt_info[150];
++	int i;
 +
-+Mediatek MIPI-CSI2 receiver camsv transfer data to DRAM in Mediatek SoCs
++	int_val = readl(mipicsi->seninf + SENINF_NCSI2_INT_STATUS);
++	dbg_port = readl(mipicsi->seninf + SENINF_NCSI2_DBG_PORT);
++	memset(buf, 0, sizeof(buf));
++	snprintf(buf, sizeof(buf), "%s\nSENINF_NCSI2_INT_STATUS: 0x%X\n"
++		"SENINF_NCSI2_DBG_PORT: 0x%X\n",
++		dev_name(dev), int_val, dbg_port);
 +
-+Required properties:
-+- reg : physical base address of the mipicsi receiver registers and length of
-+  memory mapped region.
-+- clocks: device clocks, see
-+  Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
-+- interrupts : interrupt number to the interrupt controller.
++	for (i = 0; i < mipicsi->camsv_num; ++i) {
++		cnt_val = readl(mipicsi->seninf_mux[i] + SENINF_MUX_DEBUG_2);
++		hcnt = (cnt_val >> 16) & 0xFFFF;
++		vcnt = cnt_val & 0xFFFF;
++		memset(cnt_info, 0, sizeof(cnt_info));
++		snprintf(cnt_info, sizeof(cnt_info),
++			"HCNT[%d]: 0x%X\n"
++			"VCNT[%d]: 0x%X\n",
++			i, hcnt, i, vcnt);
++		strcat(buf, cnt_info);
++	}
 +
-+Example:
-+	seninf1_mux_camsv0: seninf_mux_camsv@15002100 {
-+		reg = <0 0x15002120 0 0x40>,
-+		      <0 0x15004000 0 0x1000>;
-+		clocks = <&imgsys CLK_IMG_CAM_SV_EN>;
-+		interrupts = <GIC_SPI 222 IRQ_TYPE_LEVEL_LOW>;
-+	};
++	return simple_read_from_buffer(user_buf, count, ppos, buf, strlen(buf));
++}
++static const struct file_operations mtk_mipicsi_debug_fops = {
++	.open = simple_open,
++	.read = mtk_mipicsi_debug_read,
++};
++#endif /* CONFIG_DEBUG_FS */
 +
-+	seninf2_mux_camsv1: seninf_mux_camsv@15002500 {
-+		reg = <0 0x15002520 0 0x40>,
-+		      <0 0x15005000 0 0x1000>;
-+		clocks = <&imgsys CLK_IMG_CAM_SV_EN>;
-+		interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_LOW>;
-+	};
+ static void mtk_mipicsi_ana_clk_enable(void __iomem *base, bool enable)
+ {
+ 	if (enable) {
+@@ -1521,6 +1571,16 @@ static int mtk_mipicsi_probe(struct platform_device *pdev)
+ 		goto clean;
+ 	}
+ 
++#ifdef CONFIG_DEBUG_FS
++	mipicsi->mtk_mipicsi_debugfs =
++		debugfs_create_file(mipicsi->drv_name, 0444, NULL,
++			(void *)(&pdev->dev), &mtk_mipicsi_debug_fops);
++	if (mipicsi->mtk_mipicsi_debugfs == NULL) {
++		dev_err(&pdev->dev, "debugfs_create_file fail\n");
++		goto clean;
++	}
++#endif
 +
-+	seninf3_mux_camsv2: seninf_mux_camsv@15002900 {
-+		reg = <0 0x15002920 0 0x40>,
-+		      <0 0x15006000 0 0x1000>;
-+		clocks = <&imgsys CLK_IMG_CAM_SV1_EN>;
-+		interrupts = <GIC_SPI 268 IRQ_TYPE_LEVEL_LOW>;
-+	};
+ 	dev_set_drvdata(&pdev->dev, mipicsi);
+ 
+ 	dev_info(&pdev->dev, "probe done\n");
+@@ -1535,6 +1595,11 @@ static int mtk_mipicsi_remove(struct platform_device *pdev)
+ {
+ 	struct soc_camera_host *soc_host = to_soc_camera_host(&pdev->dev);
+ 
++#ifdef CONFIG_DEBUG_FS
++	struct mtk_mipicsi_dev *mipicsi = soc_host->priv;
 +
-+	seninf4_mux_camsv3: seninf_mux_camsv@15002D00 {
-+		reg = <0 0x15002D20 0 0x40>,
-+		      <0 0x15007000 0 0x1000>;
-+		clocks = <&imgsys CLK_IMG_CAM_SV1_EN>;
-+		interrupts = <GIC_SPI 269 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
-+	seninf5_mux_camsv4: seninf_mux_camsv@15003100 {
-+		reg = <0 0x15003120 0 0x40>,
-+		      <0 0x15008000 0 0x1000>;
-+		clocks = <&imgsys CLK_IMG_CAM_SV2_EN>;
-+		interrupts = <GIC_SPI 270 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+
-+	seninf6_mux_camsv5: seninf_mux_camsv@15003500 {
-+		reg = <0 0x15003520 0 0x40>,
-+		      <0 0x15009000 0 0x1000>;
-+		clocks = <&imgsys CLK_IMG_CAM_SV2_EN>;
-+		interrupts = <GIC_SPI 271 IRQ_TYPE_LEVEL_LOW>;
-+	};
-diff --git a/Documentation/devicetree/bindings/media/mediatek-mipicsi-common.txt b/Documentation/devicetree/bindings/media/mediatek-mipicsi-common.txt
-new file mode 100644
-index 000000000000..a67c744b75f0
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek-mipicsi-common.txt
-@@ -0,0 +1,19 @@
-+* Mediatek MIPI-CSI2 receiver common
-+
-+Mediatek MIPI-CSI2 receiver is the MIPI Signal capture hardware present in Mediatek SoCs
-+
-+Required properties:
-+- compatible: should be "mediatek,mt2712-mipicsi-common"
-+- reg : physical base address of the mipicsi receiver registers and length of
-+  memory mapped region.
-+- clocks: device clocks, see
-+  Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
-+
-+
-+Example:
-+	mipicsi: mipicsi@15002000 {
-+		compatible = "mediatek,mt2712-mipicsi-common", "syscon";
-+		reg = <0 0x15002000 0 0x10>;
-+		clocks = <&imgsys CLK_IMG_SENINF_CAM_EN>,
-+			 <&imgsys CLK_IMG_SENINF_SCAM_EN>;
-+	};
-diff --git a/Documentation/devicetree/bindings/media/mediatek-mipicsi.txt b/Documentation/devicetree/bindings/media/mediatek-mipicsi.txt
-new file mode 100644
-index 000000000000..24741ed62b25
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek-mipicsi.txt
-@@ -0,0 +1,54 @@
-+* Mediatek MIPI-CSI2 receiver
-+
-+Mediatek MIPI-CSI2 receiver is the MIPI Signal capture hardware present in Mediatek SoCs
-+
-+Required properties:
-+- compatible: should be "mediatek,mt2712-mipicsi"
-+- reg : physical base address of the mipicsi receiver registers and length of
-+  memory mapped region.
-+- power-domains: a phandle to the power domain, see
-+  Documentation/devicetree/bindings/power/power_domain.txt for details.
-+- mediatek,larb: must contain the local arbiters in the current Socs, see
-+  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
-+  for details.
-+- iommus: should point to the respective IOMMU block with master port as
-+  argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
-+  for details.
-+- mediatek,seninf_mux_camsv: seninf_mux_camsv the data go through of the mipicsi port
-+- mediatek,mipicsiid: the id of the mipicsi port
-+- mediatek,mipicsi: the common component of the two mipicsi port
-+
-+Example:
-+	mipicsi0: mipicsi@10217000 {
-+		compatible = "mediatek,mt2712-mipicsi";
-+		mediatek,mipicsi = <&mipicsi>;
-+		iommus = <&iommu0 M4U_PORT_CAM_DMA0>,
-+			 <&iommu0 M4U_PORT_CAM_DMA1>;
-+		mediatek,larb = <&larb2>;
-+		power-domains = <&scpsys MT2712_POWER_DOMAIN_ISP>;
-+
-+		mediatek,seninf_mux_camsv = <&seninf1_mux_camsv0
-+					     &seninf2_mux_camsv1
-+					     &seninf3_mux_camsv2
-+					     &seninf4_mux_camsv3>;
-+		reg = <0 0x10217000 0 0x60>,
-+		      <0 0x15002100 0 0x4>,
-+		      <0 0x15002300 0 0x100>;
-+		mediatek,mipicsiid = <0>;
-+		status="disabled";
-+	};
-+
-+	mipicsi1: mipicsi@10218000 {
-+		compatible = "mediatek,mt2712-mipicsi";
-+		mediatek,mipicsi = <&mipicsi>;
-+		iommus = <&iommu0 M4U_PORT_CAM_DMA2>;
-+		mediatek,larb = <&larb2>;
-+		power-domains = <&scpsys MT2712_POWER_DOMAIN_ISP>;
-+		mediatek,seninf_mux_camsv = <&seninf5_mux_camsv4
-+					     &seninf6_mux_camsv5>;
-+		reg = <0 0x10218000 0 0x60>,
-+		      <0 0x15002500 0 0x4>,
-+		      <0 0x15002700 0 0x100>;
-+		mediatek,mipicsiid = <1>;
-+		status="disabled";
-+	};
-\ No newline at end of file
++	debugfs_remove(mipicsi->mtk_mipicsi_debugfs);
++#endif
+ 	soc_camera_host_unregister(soc_host);
+ 	pm_runtime_disable(&pdev->dev);
+ 
 -- 
 2.18.0
 
