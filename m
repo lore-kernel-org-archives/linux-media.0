@@ -2,170 +2,167 @@ Return-Path: <SRS0=tLen=TO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF582C04AB4
-	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 13:56:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0FEDC04AB4
+	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 16:14:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFEE521537
-	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 13:56:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="srwoGdM2"
+	by mail.kernel.org (Postfix) with ESMTP id C2D3120863
+	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 16:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1557850474;
+	bh=jeKRXr0M9XXFqWmVjnjpDyGUpNBVkxLC/ans2pFYR2w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=W//strPI/6LIkSJxfEF/fb5F9+BAg73kii7qkLcghCBFB/sj2vNBXpXZKq27J2BVx
+	 3mVhFZYlrbYvfx+IQQLFl8k+6OQERCHzn2zueQlZHYJR2pbMwAeb3PWgW4ZQkD2/vM
+	 Cs40iZfqf/opaIYT63NJp4MQeYz2mzKA1JAHprhw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbfENN4p (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 May 2019 09:56:45 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:38573 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726265AbfENN4T (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 May 2019 09:56:19 -0400
-Received: by mail-wr1-f65.google.com with SMTP id v11so1508096wru.5
-        for <linux-media@vger.kernel.org>; Tue, 14 May 2019 06:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3Z3XkroftFEOZ+oKRERn/ytHnCEs/zdgDA4cYGSY7DY=;
-        b=srwoGdM2pi3FUKVWb1bVPrzv+PX1GFaTRXsw3dRT8fB5USvGoV1sYMg53QdODFcxno
-         Q0dQocvYEG5gARTTaO4iSMlbRUw5ZFHdIjykqvm/sK+VgDNWhBLVYrpWGt/VpfiSU7L1
-         feo74fD6wjwCBdVYIDgvTwfDVDbfS02dmUaA8PZUv2D2A5SxpCtrd2ZsTJlhZs0E71C4
-         XjYy9KGfSI+p2m6BHcAB5HvvtmMu81IckC0kmMmOvOB7mANygS4KrcrekKkjs4bJjqyW
-         agiikBfaeI4Ee70Qu7YqT5BhX02BPGcNvWkzxUtuRfIr5n9xl+YCHs4tWyp5Vv/xUCxJ
-         uOjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3Z3XkroftFEOZ+oKRERn/ytHnCEs/zdgDA4cYGSY7DY=;
-        b=o4SjYwo97PcrH9vaD5Kfk/Wj7EBsJx5uYs9LK3ToVvNVsqWkN68e+56Y5mfLFX6pID
-         lOCsxEwPrAq75O/qZpR8+xg4qaVywGAtsjBn24v/7pzeKaNMgZvxV0b2leIl9d5laZNa
-         tZ8ZldCNtCBvT+I1vlS0fdeSnCdeJT0uXHU2fQXm0xeQ8E9aomhYjYyvJmWNcJ5a9vsN
-         4kraGgyvJfHj1FJ4Uqp2gXvNSqvVwmtwLT344/U6nQsgANjdieAoxZsUtRmeFlI24Qy1
-         95RCibIeIHPUWwzTq207cFSjs+UyjofuhNIv+zc3arz4NiWVOyXj50euUxNUmIwrc8nP
-         +c3Q==
-X-Gm-Message-State: APjAAAVRTmDvL3DGeCuo01TEtvTYKdFS7ArB1oFB9hrS/SzEuZk+jBCZ
-        xqsdevBSaIu8Y1Iu/TW1Ehxu4Q==
-X-Google-Smtp-Source: APXvYqyzK4kQnCJQWuc1QqSsGoqGq9pNNeIqQotMC679d3W+STr2oaNTyTLUAtjUp3koLKbf/YLfPA==
-X-Received: by 2002:adf:ebd2:: with SMTP id v18mr3451395wrn.108.1557842177761;
-        Tue, 14 May 2019 06:56:17 -0700 (PDT)
-Received: from mjourdan-pc.numericable.fr (abo-99-183-68.mtp.modulonet.fr. [85.68.183.99])
-        by smtp.gmail.com with ESMTPSA id d72sm1375764wmd.12.2019.05.14.06.56.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 May 2019 06:56:17 -0700 (PDT)
-From:   Maxime Jourdan <mjourdan@baylibre.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 1/4] dt-bindings: media: add Amlogic Video Decoder Bindings
-Date:   Tue, 14 May 2019 15:56:09 +0200
-Message-Id: <20190514135612.30822-2-mjourdan@baylibre.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190514135612.30822-1-mjourdan@baylibre.com>
-References: <20190514135612.30822-1-mjourdan@baylibre.com>
+        id S1726084AbfENQOd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 May 2019 12:14:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48244 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725916AbfENQOd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 14 May 2019 12:14:33 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0263720879;
+        Tue, 14 May 2019 16:14:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557850472;
+        bh=jeKRXr0M9XXFqWmVjnjpDyGUpNBVkxLC/ans2pFYR2w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vDxrSC2Lnyi8cE34RZ63IW6xbzA/RS3z0FIfxWTNzEOquRd9xmxMQfmff6u+vFaSa
+         nq0KreWUXK8VjnyPNbRFmiEXf75uZbIGC/q8ZaWCZy8uIOjSdRb61J5u0YitZbyOlw
+         B9UyjFaSfEEm5NegC/LI/2btCOASzv4Aioy6lQKA=
+Received: by mail-qt1-f179.google.com with SMTP id m32so16615997qtf.0;
+        Tue, 14 May 2019 09:14:31 -0700 (PDT)
+X-Gm-Message-State: APjAAAXYm4ObKX9bFk+DQNKysSO1SphYUNaBMSBXi6MyaYd/NCeGkjbD
+        mfS/nd4+WniB5KB8/+oPe5lARP8jTd1mOH46sA==
+X-Google-Smtp-Source: APXvYqzkPStG3BhXhS/DE7x7FQdm19fjYXKqLaaVHeqaJH60sMGfCRR/KG+4+ERIuURoEhyV/MKK079WsfWsQlzxXXM=
+X-Received: by 2002:ac8:641:: with SMTP id e1mr30147087qth.76.1557850471187;
+ Tue, 14 May 2019 09:14:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190417104511.21514-1-frederic.chen@mediatek.com>
+ <20190417104511.21514-4-frederic.chen@mediatek.com> <20190430011619.GA22170@bogus>
+ <1557238579.11663.15.camel@mtksdccf07>
+In-Reply-To: <1557238579.11663.15.camel@mtksdccf07>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 14 May 2019 11:14:19 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJ7+qrBEi4fXx1qC-3g17UGDJQ-LmahU9YUHaqr7QZQtQ@mail.gmail.com>
+Message-ID: <CAL_JsqJ7+qrBEi4fXx1qC-3g17UGDJQ-LmahU9YUHaqr7QZQtQ@mail.gmail.com>
+Subject: Re: [RFC PATCH V1 3/6] dt-bindings: mt8183: Added DIP dt-bindings
+To:     Frederic Chen <frederic.chen@mediatek.com>
+Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        yuzhao@chromium.org, zwisler@chromium.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>, Sean.Cheng@mediatek.com,
+        sj.huang@mediatek.com, christie.yu@mediatek.com,
+        holmes.chiou@mediatek.com,
+        Jerry-ch Chen <Jerry-ch.Chen@mediatek.com>,
+        jungo.lin@mediatek.com, Rynn.Wu@mediatek.com,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        devicetree@vger.kernel.org, shik@chromium.org,
+        suleiman@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add documentation for the meson vdec dts node.
+On Tue, May 7, 2019 at 9:16 AM Frederic Chen <frederic.chen@mediatek.com> w=
+rote:
+>
+> Dear Rob,
+>
+> I appreciate your comments.
+>
+> On Mon, 2019-04-29 at 20:16 -0500, Rob Herring wrote:
+> > On Wed, Apr 17, 2019 at 06:45:08PM +0800, Frederic Chen wrote:
+> > > This patch adds DT binding documentation for the Digital Image
+> > > Processing (DIP) unit of camera ISP system on Mediatek's SoCs.
+> > >
+> > > Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
+> > > ---
+> > >  .../bindings/media/mediatek,mt8183-dip.txt    | 35 +++++++++++++++++=
+++
+> > >  1 file changed, 35 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/media/mediatek,=
+mt8183-dip.txt
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8183-=
+dip.txt b/Documentation/devicetree/bindings/media/mediatek,mt8183-dip.txt
+> > > new file mode 100644
+> > > index 000000000000..0e1994bf82f0
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/media/mediatek,mt8183-dip.txt
+> > > @@ -0,0 +1,35 @@
+> > > +* Mediatek Digital Image Processor (DIP)
+> > > +
+> > > +Digital Image Processor (DIP) unit in Mediatek ISP system is respons=
+ible for
+> > > +image content adjustment according to the tuning parameters. DIP can=
+ process
+> > > +the image form memory buffer and output the processed image to multi=
+ple output
+> > > +buffers. Furthermore, it can support demosaicing and noise reduction=
+ on the
+> > > +images.
+> > > +
+> > > +Required properties:
+> > > +- compatible: "mediatek,mt8183-dip"
+> > > +- reg: Physical base address and length of the function block regist=
+er space
+> > > +- interrupts: interrupt number to the cpu
+> > > +- iommus: should point to the respective IOMMU block with master por=
+t as
+> > > +  argument, see Documentation/devicetree/bindings/iommu/mediatek,iom=
+mu.txt
+> > > +  for details.
+> > > +- mediatek,larb: must contain the local arbiters in the current Socs=
+, see
+> > > +  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-=
+larb.txt
+> > > +  for details.
+> > > +- clocks: must contain the local arbiters 5 (LARB5) and DIP clock
+> > > +- clock-names: must contain DIP_CG_IMG_LARB5 and DIP_CG_IMG_DIP
+> > > +
+> > > +Example:
+> > > +   dip: dip@15022000 {
+> > > +           compatible =3D "mediatek,mt8183-dip";
+> > > +           mediatek,larb =3D <&larb5>;
+> >
+> > > +           mediatek,mdp3 =3D <&mdp_rdma0>;
+> > > +           mediatek,vpu =3D <&vpu>;
+> >
+> > Not documented.
+> >
+>
+> =E2=80=9Cmediatek,vpu=E2=80=9D will be replaced by =E2=80=9Cmediatek,scp.=
+=E2=80=9D I would like to
+> add the following description in next version of the patch:
+>
+> - mediatek,scp: must point to the scp block of the co-processor used
+>   with DIP. Please see
+>   Documentation/devicetree/bindings/remoteproc/mtk,scp.txt for the
+>   detail.
+>
+> - mediatek,mdp3: must point to the Media Data Path 3 (MDP3) block.
+>   Please see
+>   Documentation/devicetree/bindings/media/mediatek,mt8183-mdp3.txt
+>   for the detail.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
----
- .../bindings/media/amlogic,vdec.txt           | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/amlogic,vdec.txt
+If there's only 1 of each of these blocks, there's no need to have
+phandle. Just find the matching node using the compatible string(s).
 
-diff --git a/Documentation/devicetree/bindings/media/amlogic,vdec.txt b/Documentation/devicetree/bindings/media/amlogic,vdec.txt
-new file mode 100644
-index 000000000000..aabdd01bcf32
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/amlogic,vdec.txt
-@@ -0,0 +1,71 @@
-+Amlogic Video Decoder
-+================================
-+
-+The video decoding IP lies within the DOS memory region,
-+except for the hardware bitstream parser that makes use of an undocumented
-+region.
-+
-+It makes use of the following blocks:
-+
-+- ESPARSER is a bitstream parser that outputs to a VIFIFO. Further VDEC blocks
-+then feed from this VIFIFO.
-+- VDEC_1 can decode MPEG-1, MPEG-2, MPEG-4 part 2, MJPEG, H.263, H.264, VC-1.
-+- VDEC_HEVC can decode HEVC and VP9.
-+
-+Both VDEC_1 and VDEC_HEVC share the "vdec" IRQ and as such cannot run
-+concurrently.
-+
-+Device Tree Bindings:
-+---------------------
-+
-+VDEC: Video Decoder
-+--------------------------
-+
-+Required properties:
-+- compatible: value should be different for each SoC family as :
-+	- GXBB (S905) : "amlogic,gxbb-vdec"
-+	- GXL (S905X, S905D) : "amlogic,gxl-vdec"
-+	- GXM (S912) : "amlogic,gxm-vdec"
-+- reg: base address and size of he following memory-mapped regions :
-+	- dos
-+	- esparser
-+- reg-names: should contain the names of the previous memory regions
-+- interrupts: should contain the following IRQs:
-+	- vdec
-+	- esparser
-+- interrupt-names: should contain the names of the previous interrupts
-+- amlogic,ao-sysctrl: should point to the AOBUS sysctrl node
-+- amlogic,canvas: should point to a canvas provider node
-+- clocks: should contain the following clocks :
-+	- dos_parser
-+	- dos
-+	- vdec_1
-+	- vdec_hevc
-+- clock-names: should contain the names of the previous clocks
-+- resets: should contain the parser reset
-+- reset-names: should be "esparser"
-+
-+Example:
-+
-+vdec: video-decoder@c8820000 {
-+	compatible = "amlogic,gxbb-vdec";
-+	reg = <0x0 0xc8820000 0x0 0x10000>,
-+	      <0x0 0xc110a580 0x0 0xe4>;
-+	reg-names = "dos", "esparser";
-+
-+	interrupts = <GIC_SPI 44 IRQ_TYPE_EDGE_RISING>,
-+		     <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
-+	interrupt-names = "vdec", "esparser";
-+
-+	amlogic,ao-sysctrl = <&sysctrl_AO>;
-+	amlogic,canvas = <&canvas>;
-+
-+	clocks = <&clkc CLKID_DOS_PARSER>,
-+		 <&clkc CLKID_DOS>,
-+		 <&clkc CLKID_VDEC_1>,
-+		 <&clkc CLKID_VDEC_HEVC>;
-+	clock-names = "dos_parser", "dos", "vdec_1", "vdec_hevc";
-+
-+	resets = <&reset RESET_PARSER>;
-+	reset-names = "esparser";
-+};
--- 
-2.21.0
-
+Rob
