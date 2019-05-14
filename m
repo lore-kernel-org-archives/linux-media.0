@@ -2,152 +2,127 @@ Return-Path: <SRS0=tLen=TO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4D20C04AB7
-	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 08:12:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD748C04AB4
+	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 08:23:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B2D332084A
-	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 08:12:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E41020675
+	for <linux-media@archiver.kernel.org>; Tue, 14 May 2019 08:23:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SqRCNlo6"
+	dkim=pass (2048-bit key) header.d=imgtec.com header.i=@imgtec.com header.b="uv78+xKC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726060AbfENIMM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 14 May 2019 04:12:12 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:44080 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725985AbfENIMM (ORCPT
+        id S1726369AbfENIXO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 14 May 2019 04:23:14 -0400
+Received: from mx07-00376f01.pphosted.com ([185.132.180.163]:28378 "EHLO
+        mx07-00376f01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725985AbfENIXO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 14 May 2019 04:12:12 -0400
-Received: by mail-pf1-f195.google.com with SMTP id g9so8694393pfo.11
-        for <linux-media@vger.kernel.org>; Tue, 14 May 2019 01:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ELhRuMsUIWwL7cdxk7yZxKy2OTGQGdFenKWb/rZoxgA=;
-        b=SqRCNlo6hgzL0YlpNY/t44ggLN4avw6PNEKVCowpQgDmtPe0yYAQj9zGkyyZYVInr7
-         tU3BoBdA/O05irkUhvlaGqhHK4oBnhKrmD7FKGxl4h/VRzJGhAafoL/L0RUuIgzFTDz9
-         4plTolbqfLjzBlqbOscGy6bSw0pQMx+M3HnI0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ELhRuMsUIWwL7cdxk7yZxKy2OTGQGdFenKWb/rZoxgA=;
-        b=B8BtrFdKZYnKutq7xHVa5awBV9Qw6smJJozseTlEO5KgNmxlaaIbLpGeehycOZ5fOr
-         djFp1nOrumgCFSpV3C0Fr2sW7TAFS8TcKVv62uTB1yKmGOvK/2YhBvLOUvpmi73bKMdo
-         gOaUj7dfY+8uuGAxfx+FMPFc9RwPoZAuwjQc4EIKKHy90dO6Yrc9vRM32w5FKa411X+0
-         HnhY4gjB9ZRi7TVKjKHFiyiuLAz9awXjQYBiXsEU+Socqv1vZTCV/ZZLE5mV0krXb6KH
-         Znji9MfOhkuURZaeHLbB4c1Jk79C0bgr2j71MOc9jt0Fv+bOy2qZwiTmtarrxV3syVnH
-         qxPQ==
-X-Gm-Message-State: APjAAAUPTdP3ti5jb8AHWOemMKNRRJLmuzmI0+HnNCRrE6XxdUbDzK/j
-        CHcDnBFOp4z2rdELKde763Osyw==
-X-Google-Smtp-Source: APXvYqwo+K+cbzWQE4wnVaj+lvOIDoSw50OP67oo8SVrG+i1C9Q42J+rxF8oGU2S0atGGLD19ZYbkA==
-X-Received: by 2002:a62:6807:: with SMTP id d7mr38391742pfc.75.1557821531245;
-        Tue, 14 May 2019 01:12:11 -0700 (PDT)
-Received: from chromium.org ([2401:fa00:4:4:6d27:f13:a0fa:d4b6])
-        by smtp.gmail.com with ESMTPSA id f87sm23387384pff.56.2019.05.14.01.12.06
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 14 May 2019 01:12:10 -0700 (PDT)
-Date:   Tue, 14 May 2019 17:12:04 +0900
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     Michael Tretter <m.tretter@pengutronix.de>
-Cc:     Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pawel Osciak <posciak@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Kamil Debski <kamil@wypas.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Tiffany Lin =?utf-8?B?KOael+aFp+ePiik=?= 
-        <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen =?utf-8?B?KOmZs+aZuui/qik=?= 
-        <andrew-ct.chen@mediatek.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Todor Tomov <todor.tomov@linaro.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dave.stevenson@raspberrypi.org,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Maxime Jourdan <maxi.jourdan@wanadoo.fr>
-Subject: Re: [PATCH v3 2/2] media: docs-rst: Document memory-to-memory video
- encoder interface
-Message-ID: <20190514081204.GA132745@chromium.org>
-References: <20190124100419.26492-1-tfiga@chromium.org>
- <20190124100419.26492-3-tfiga@chromium.org>
- <20190430193412.4291fca8@litschi.hi.pengutronix.de>
+        Tue, 14 May 2019 04:23:14 -0400
+X-Greylist: delayed 1637 seconds by postgrey-1.27 at vger.kernel.org; Tue, 14 May 2019 04:23:12 EDT
+Received: from pps.filterd (m0168889.ppops.net [127.0.0.1])
+        by mx07-00376f01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4E7hLLU012623;
+        Tue, 14 May 2019 08:55:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imgtec.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=dk201812; bh=uKFpAT7GrQSucExulDdH+qORJ6Ns2etUzr/PYek6Ejo=;
+ b=uv78+xKCIP2KAgoPoLFzjakPS3sRS4qdQA4jVZnoFVUCXbE0As6rDPZpgOZFpxLGLw5W
+ bIgn2bPSswq6S4LlAeBOwR0sw2DOFb3JllXfs8GWs0xiuKQ8IgqzN+kyPHvDUU3PqoCw
+ IRV+wOq11mv3MpakmxE0ekRjIuIFa3VtKZM/e0EoaVlXPqT14i542tlMsrRjMRD9795t
+ hksBwX+1eIgBFbGa3JodYXnlkXS7cP6rvyVR9Vv/7RSK1NC1dbZRjsWvqQxADTOKmbQ5
+ eOeRvzAV+5lB7ngjVxdFv6BoqQkOQJl9QQceVp5A7qSN2c60J9n9x31u1kDFBScL4lU8 tw== 
+Received: from hhmail02.hh.imgtec.org ([217.156.249.195])
+        by mx07-00376f01.pphosted.com with ESMTP id 2sdpft2tqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 14 May 2019 08:55:42 +0100
+Received: from michael-imgtec (10.80.17.22) by hhmail02.hh.imgtec.org
+ (10.100.10.21) with Microsoft SMTP Server (TLS) id 14.3.408.0; Tue, 14 May
+ 2019 08:55:41 +0100
+Date:   Tue, 14 May 2019 15:55:37 +0800
+From:   Michael Yang <michael.yang@imgtec.com>
+To:     Chris Wilson <chris@chris-wilson.co.uk>
+CC:     <sumit.semwal@linaro.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <gustavo@padovan.org>,
+        <linux-media@vger.kernel.org>, <linaro-mm-sig@lists.linaro.org>,
+        <gregkh@linuxfoundation.org>
+Subject: Re: [EXTERNAL] Re: [PATCH] sync_file: Return reasonable timestamp
+ when merging signaled fences
+Message-ID: <20190514075537.GA7483@michael-imgtec>
+References: <1554710495-6646-1-git-send-email-michael.yang@imgtec.com>
+ <1557376451-20164-1-git-send-email-michael.yang@imgtec.com>
+ <155740236592.28545.17880521046408313036@skylake-alporthouse-com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20190430193412.4291fca8@litschi.hi.pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <155740236592.28545.17880521046408313036@skylake-alporthouse-com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.17.22]
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Michael,
-
-On Tue, Apr 30, 2019 at 07:34:12PM +0200, Michael Tretter wrote:
-> On Thu, 24 Jan 2019 19:04:19 +0900, Tomasz Figa wrote:
-
-[snip]
-
-> > +State machine
-> > +=============
+On Thu, May 09, 2019 at 12:46:05PM +0100, Chris Wilson wrote:
+> Quoting Michael Yang (2019-05-09 05:34:11)
+> > If all the sync points were signaled in both fences a and b,
+> > there was only one sync point in merged fence which is a_fence[0].
+> > The Fence structure in android framework might be confused about
+> > timestamp if there were any sync points which were signaled after
+> > a_fence[0]. It might be more reasonable to use timestamp of last signaled
+> > sync point to represent the merged fence.
+> > The issue can be found from EGL extension ANDROID_get_frame_timestamps.
+> > Sometimes the return value of EGL_READS_DONE_TIME_ANDROID is head of
+> > the return value of EGL_RENDERING_COMPLETE_TIME_ANDROID.
+> > That means display/composition had been completed before rendering
+> > was completed that is incorrect.
+> > 
+> > Some discussion can be found at:
+> > https://urldefense.proofpoint.com/v2/url?u=https-3A__android-2Dreview.googlesource.com_c_kernel_common_-2B_907009&d=DwIFaQ&c=bq9ppmgvSw3oQFfR871D_w&r=Ngg6vhouPkgwSIbDMU7rDN0ZfT2Qax50xuWkXXqQ3zw&m=N9R9dXGJ3zk0e0gXNM4tsiro7xCOLlWx6c3HAEseSSw&s=6sY2t9i2wvylWH-rPUlvY1MIuWKjCPzT8SeCgpZOIGk&e= 
+> > 
+> > Signed-off-by: Michael Yang <michael.yang@imgtec.com>
+> > ---
+> > Hi,
+> > I didn't get response since I previously sent this a month ago.
+> > Could someone have a chance to look at it please?
+> > Thanks.
+> >  drivers/dma-buf/sync_file.c | 25 +++++++++++++++++++++++--
+> >  1 file changed, 23 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/dma-buf/sync_file.c b/drivers/dma-buf/sync_file.c
+> > index 4f6305c..d46bfe1 100644
+> > --- a/drivers/dma-buf/sync_file.c
+> > +++ b/drivers/dma-buf/sync_file.c
+> > @@ -274,8 +274,29 @@ static struct sync_file *sync_file_merge(const char *name, struct sync_file *a,
+> >         for (; i_b < b_num_fences; i_b++)
+> >                 add_fence(fences, &i, b_fences[i_b]);
+> >  
+> > -       if (i == 0)
+> > -               fences[i++] = dma_fence_get(a_fences[0]);
+> > +       /* If all the sync pts were signaled, then adding the sync_pt who
+> > +        * was the last signaled to the fence.
+> > +        */
+> > +       if (i == 0) {
+> > +               struct dma_fence *last_signaled_sync_pt = a_fences[0];
+> > +               int iter;
 > > +
-> > +.. kernel-render:: DOT
-> > +   :alt: DOT digraph of encoder state machine
-> > +   :caption: Encoder state machine
-> > +
-> > +   digraph encoder_state_machine {
-> > +       node [shape = doublecircle, label="Encoding"] Encoding;
-> > +
-> > +       node [shape = circle, label="Initialization"] Initialization;
-> > +       node [shape = circle, label="Stopped"] Stopped;
-> > +       node [shape = circle, label="Drain"] Drain;
-> > +       node [shape = circle, label="Reset"] Reset;
-> > +
-> > +       node [shape = point]; qi
-> > +       qi -> Initialization [ label = "open()" ];
-> > +
-> > +       Initialization -> Encoding [ label = "Both queues streaming" ];
-> > +
-> > +       Encoding -> Drain [ label = "V4L2_DEC_CMD_STOP" ];
-> > +       Encoding -> Reset [ label = "VIDIOC_STREAMOFF(CAPTURE)" ];
-> > +       Encoding -> Stopped [ label = "VIDIOC_STREAMOFF(OUTPUT)" ];
-> > +       Encoding -> Encoding;
-> > +
-> > +       Drain -> Stopped [ label = "All CAPTURE\nbuffers dequeued\nor\nVIDIOC_STREAMOFF(CAPTURE)" ];
+> > +               for (iter = 1; iter < a_num_fences; iter++) {
 > 
-> Shouldn't this be
+> If there is more than one fence, sync_file->fence is a fence_array and
+> its timestamp is what you want. If there is one fence, sync_file->fence
+> is a pointer to that fence, and naturally has the right timestamp.
 > 
-> 	Drain -> Stopped [ label = "All OUTPUT\nbuffers dequeued\nor\nVIDIOC_STREAMOFF(OUTPUT)" ];
-> 
-> ? While draining, the encoder continues encoding until all source
-> buffers, i.e., buffers in the OUTPUT queue, are encoded or STREAMOFF
-> happens on the OUTPUT queue. At the same time, the client continues to
-> queue and dequeue buffers on the CAPTURE queue and there might be
-> buffers queued on the CAPTURE queue even if the driver returned the
-> buffer with the FLAG_LAST set and returns -EPIPE on further DQBUF
-> requests.
->
-
-The STREAMOFF should be on OUTPUT indeed, because that immediately
-removes any OUTPUT buffers from the queue, so there is nothing to be
-encoded to wait for anymore.
-
-The "All OUTPUT buffers dequeued" part is correct, though. The last
-OUTPUT buffer in the flush sequence is considered encoded after the
-application dequeues the corresponding CAPTURE buffer is dequeued and
-that buffer is marked with the V4L2_BUF_FLAG_LAST flag.
-
-Best regards,
-Tomasz
+> In short, this should be handled by dma_fence_array_create() when given
+> a complete set of signaled fences, it too should inherit the signaled
+> status with the timestamp being taken from the last fence. It should
+> also be careful to inherit the error status.
+> -Chris
+Thanks Chris for the inputs. For this case, there will be only one fence
+in sync_file->fence after doing sync_file_merge(). Regarding to the current
+implementation, dma_fence_array_create() is not called as num_fences is equal
+to 1. I was wondering do you suggest that we pass a complete set of signaled
+fences to sync_file_set_fence() and handle it in dma_fence_array_create().
+Thanks.
+- Michael
