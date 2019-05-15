@@ -6,28 +6,28 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A23EC04E84
-	for <linux-media@archiver.kernel.org>; Wed, 15 May 2019 07:58:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28EB0C04E53
+	for <linux-media@archiver.kernel.org>; Wed, 15 May 2019 07:58:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5BB4620843
+	by mail.kernel.org (Postfix) with ESMTP id EF5FB2084A
 	for <linux-media@archiver.kernel.org>; Wed, 15 May 2019 07:58:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725974AbfEOH6c (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 May 2019 03:58:32 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:53207 "EHLO
+        id S1726330AbfEOH6d (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 May 2019 03:58:33 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:42765 "EHLO
         lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725902AbfEOH6c (ORCPT
+        by vger.kernel.org with ESMTP id S1725933AbfEOH6c (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 15 May 2019 03:58:32 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id QonyhZzGqsDWyQoo2hrxaV; Wed, 15 May 2019 09:58:30 +0200
+        id QonyhZzGqsDWyQoo2hrxat; Wed, 15 May 2019 09:58:30 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 1/6] cec: cec_transmit_msg_fh: do sanity checks first
-Date:   Wed, 15 May 2019 09:58:21 +0200
-Message-Id: <20190515075826.18073-2-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 3/6] cec-ioc-receive.rst: document CEC_MSG_FL_RAW
+Date:   Wed, 15 May 2019 09:58:23 +0200
+Message-Id: <20190515075826.18073-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190515075826.18073-1-hverkuil-cisco@xs4all.nl>
 References: <20190515075826.18073-1-hverkuil-cisco@xs4all.nl>
@@ -40,44 +40,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The code that fills in the CEC_MSG_CDC_MESSAGE physical address
-is now done after the sanity checks. It also only does this if the
-message length is >= 4 (i.e. there is room for the physical address).
+Document this new cec_msg flag.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/cec/cec-adap.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ Documentation/media/uapi/cec/cec-ioc-receive.rst | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/cec/cec-adap.c b/drivers/media/cec/cec-adap.c
-index f1261cc2b6fa..b6102510e203 100644
---- a/drivers/media/cec/cec-adap.c
-+++ b/drivers/media/cec/cec-adap.c
-@@ -740,11 +740,6 @@ int cec_transmit_msg_fh(struct cec_adapter *adap, struct cec_msg *msg,
- 	else
- 		msg->flags = 0;
+diff --git a/Documentation/media/uapi/cec/cec-ioc-receive.rst b/Documentation/media/uapi/cec/cec-ioc-receive.rst
+index c3a685ff05cb..22187a659525 100644
+--- a/Documentation/media/uapi/cec/cec-ioc-receive.rst
++++ b/Documentation/media/uapi/cec/cec-ioc-receive.rst
+@@ -223,6 +223,16 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
+ 	result of the :ref:`ioctl CEC_TRANSMIT <CEC_TRANSMIT>`, and once via
+ 	:ref:`ioctl CEC_RECEIVE <CEC_RECEIVE>`.
  
--	if (msg->len > 1 && msg->msg[1] == CEC_MSG_CDC_MESSAGE) {
--		msg->msg[2] = adap->phys_addr >> 8;
--		msg->msg[3] = adap->phys_addr & 0xff;
--	}
--
- 	/* Sanity checks */
- 	if (msg->len == 0 || msg->len > CEC_MAX_MSG_SIZE) {
- 		dprintk(1, "%s: invalid length %d\n", __func__, msg->len);
-@@ -765,6 +760,12 @@ int cec_transmit_msg_fh(struct cec_adapter *adap, struct cec_msg *msg,
- 		dprintk(1, "%s: can't reply to poll msg\n", __func__);
- 		return -EINVAL;
- 	}
++    * .. _`CEC-MSG-FL-RAW`:
 +
-+	if (msg->len >= 4 && msg->msg[1] == CEC_MSG_CDC_MESSAGE) {
-+		msg->msg[2] = adap->phys_addr >> 8;
-+		msg->msg[3] = adap->phys_addr & 0xff;
-+	}
++      - ``CEC_MSG_FL_RAW``
++      - 2
++      - Normally CEC messages are validated before transmitting them. If this
++        flag is set when :ref:`ioctl CEC_TRANSMIT <CEC_TRANSMIT>` is called *and*
++	the ioctl was called with superuser privileges, then no validation takes
++	place and the message is transmitted as-is. This is useful when
++	debugging CEC issues.
 +
- 	if (msg->len == 1) {
- 		if (cec_msg_destination(msg) == 0xf) {
- 			dprintk(1, "%s: invalid poll message\n", __func__);
+ 
+ .. tabularcolumns:: |p{5.6cm}|p{0.9cm}|p{11.0cm}|
+ 
+@@ -358,7 +368,8 @@ ENOTTY
+ 
+ EPERM
+     The CEC adapter is not configured, i.e. :ref:`ioctl CEC_ADAP_S_LOG_ADDRS <CEC_ADAP_S_LOG_ADDRS>`
+-    has never been called.
++    has never been called, or ``CEC_MSG_FL_RAW`` was used without superuser
++    privileges.
+ 
+ ENONET
+     The CEC adapter is not configured, i.e. :ref:`ioctl CEC_ADAP_S_LOG_ADDRS <CEC_ADAP_S_LOG_ADDRS>`
 -- 
 2.20.1
 
