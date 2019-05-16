@@ -2,79 +2,164 @@ Return-Path: <SRS0=hQl8=TQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	HK_RANDOM_FROM,MAILING_LIST_MULTI,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AAB5C04E84
-	for <linux-media@archiver.kernel.org>; Thu, 16 May 2019 01:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16864C04E84
+	for <linux-media@archiver.kernel.org>; Thu, 16 May 2019 03:23:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7687420843
-	for <linux-media@archiver.kernel.org>; Thu, 16 May 2019 01:49:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D78E120862
+	for <linux-media@archiver.kernel.org>; Thu, 16 May 2019 03:23:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727340AbfEPBq0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 15 May 2019 21:46:26 -0400
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:34442 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726792AbfEPAfx (ORCPT
+        id S1726324AbfEPDXs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 15 May 2019 23:23:48 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:44557 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726265AbfEPDXs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 15 May 2019 20:35:53 -0400
-X-Halon-ID: 863493b3-7772-11e9-8601-0050569116f7
-Authorized-sender: niklas@soderlund.pp.se
-Received: from bismarck.berto.se (unknown [89.233.230.99])
-        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
-        id 863493b3-7772-11e9-8601-0050569116f7;
-        Thu, 16 May 2019 02:35:47 +0200 (CEST)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        kbuild test robot <lkp@intel.com>
-Subject: [PATCH] rcar-csi2: Fix coccinelle warning for PTR_ERR_OR_ZERO()
-Date:   Thu, 16 May 2019 02:35:38 +0200
-Message-Id: <20190516003538.32172-1-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.21.0
+        Wed, 15 May 2019 23:23:48 -0400
+X-UUID: cb5929ee5c964214889ae047939b2683-20190516
+X-UUID: cb5929ee5c964214889ae047939b2683-20190516
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <daoyuan.huang@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1152327031; Thu, 16 May 2019 11:23:42 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs03n1.mediatek.inc (172.21.101.181) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 16 May 2019 11:23:41 +0800
+Received: from mtkslt306.mediatek.inc (10.21.14.136) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 16 May 2019 11:23:41 +0800
+From:   Daoyuan Huang <daoyuan.huang@mediatek.com>
+To:     <hans.verkuil@cisco.com>,
+        <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
+        <matthias.bgg@gmail.com>, <mchehab@kernel.org>
+CC:     <yuzhao@chromium.org>, <zwisler@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <Sean.Cheng@mediatek.com>,
+        <sj.huang@mediatek.com>, <christie.yu@mediatek.com>,
+        <holmes.chiou@mediatek.com>, <frederic.chen@mediatek.com>,
+        <Jerry-ch.Chen@mediatek.com>, <jungo.lin@mediatek.com>,
+        <Rynn.Wu@mediatek.com>, <linux-media@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>
+Subject: [RFC v2 0/4] media: mediatek: support mdp3 on mt8183 platform
+Date:   Thu, 16 May 2019 11:23:28 +0800
+Message-ID: <20190516032332.56844-1-daoyuan.huang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the PTR_ERR_OR_ZERO() macro instead of construct:
+Hi,
 
-    if (IS_ERR(foo))
-        return PTR_ERR(foo);
+This is the first version of RFC patch for Media Data Path 3 (MDP3),
+MDP3 is used for scaling and color format conversion.
+support using GCE to write register in critical time limitation.
+support V4L2 m2m device control.
 
-    return 0;
+Changes since v1:
+- modify code for CMDQ v3 API support
+- EC ipi cmd migration
+- fix compliance test fail item (m2m cmd with -f)
+due to there is two problem in runing all format(-f) cmd:
+1. out of memory before test complete
+	Due to capture buffer mmap (refcount + 1) after reqbuf but seems
+	no corresponding munmap called before device close.
+	There are total 12XX items(formats) in format test and each format
+	alloc 8 capture/output buffers.
+2. unceasingly captureBufs() (randomly)
+	Seems the break statement didn't catch the count == 0 situation:
+	In v4l2-test-buffers.cpp, function: captureBufs()
+			...
+			count--;
+			if (!node->is_m2m && !count)
+				break;
+	Log is as attachment
 
-Reported-by: kbuild test robot <lkp@intel.com>
-Fixes: 3ae854cafd76 ("rcar-csi2: Use standby mode instead of resetting")
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+I will paste the test result with problem part in another e-mail
+
+
+
 ---
- drivers/media/platform/rcar-vin/rcar-csi2.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Based on v5.0-rc1 and these series:
+device tree:
+http://lists.infradead.org/pipermail/linux-mediatek/2019-February/017570.html
+clock control:
+http://lists.infradead.org/pipermail/linux-mediatek/2019-February/017320.html
+system control processor (SCP):
+http://lists.infradead.org/pipermail/linux-mediatek/2019-February/017774.html
+global command engine (GCE):
+http://lists.infradead.org/pipermail/linux-mediatek/2019-January/017143.html
+---
 
-diff --git a/drivers/media/platform/rcar-vin/rcar-csi2.c b/drivers/media/platform/rcar-vin/rcar-csi2.c
-index 8f097e514900307f..c14af1b929dffd34 100644
---- a/drivers/media/platform/rcar-vin/rcar-csi2.c
-+++ b/drivers/media/platform/rcar-vin/rcar-csi2.c
-@@ -1019,10 +1019,8 @@ static int rcsi2_probe_resources(struct rcar_csi2 *priv,
- 		return ret;
- 
- 	priv->rstc = devm_reset_control_get(&pdev->dev, NULL);
--	if (IS_ERR(priv->rstc))
--		return PTR_ERR(priv->rstc);
- 
--	return 0;
-+	return PTR_ERR_OR_ZERO(priv->rstc);
- }
- 
- static const struct rcar_csi2_info rcar_csi2_info_r8a7795 = {
+daoyuan huang (4):
+  dt-binding: mt8183: Add Mediatek MDP3 dt-bindings
+  dts: arm64: mt8183: Add Mediatek MDP3 nodes
+  media: platform: Add Mediatek MDP3 driver KConfig
+  media: platform: mtk-mdp3: Add Mediatek MDP3 driver
+
+ .../bindings/media/mediatek,mt8183-mdp3.txt   |  217 +++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  173 +++
+ drivers/media/platform/Kconfig                |   18 +
+ drivers/media/platform/Makefile               |    2 +
+ drivers/media/platform/mtk-mdp3/Makefile      |    9 +
+ drivers/media/platform/mtk-mdp3/isp_reg.h     |   38 +
+ .../media/platform/mtk-mdp3/mdp-platform.h    |   67 +
+ .../media/platform/mtk-mdp3/mdp_reg_ccorr.h   |   76 +
+ .../media/platform/mtk-mdp3/mdp_reg_rdma.h    |  207 +++
+ drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h |  110 ++
+ .../media/platform/mtk-mdp3/mdp_reg_wdma.h    |  126 ++
+ .../media/platform/mtk-mdp3/mdp_reg_wrot.h    |  116 ++
+ .../media/platform/mtk-mdp3/mmsys_config.h    |  189 +++
+ drivers/media/platform/mtk-mdp3/mmsys_mutex.h |   36 +
+ .../media/platform/mtk-mdp3/mmsys_reg_base.h  |   39 +
+ drivers/media/platform/mtk-mdp3/mtk-img-ipi.h |  282 ++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.c   |  442 ++++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-cmdq.h   |   57 +
+ .../media/platform/mtk-mdp3/mtk-mdp3-comp.c   | 1325 +++++++++++++++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-comp.h   |  177 +++
+ .../media/platform/mtk-mdp3/mtk-mdp3-core.c   |  256 ++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-core.h   |   88 ++
+ .../media/platform/mtk-mdp3/mtk-mdp3-m2m.c    |  823 ++++++++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-m2m.h    |   52 +
+ .../media/platform/mtk-mdp3/mtk-mdp3-regs.c   |  757 ++++++++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-regs.h   |  386 +++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-vpu.c    |  277 ++++
+ .../media/platform/mtk-mdp3/mtk-mdp3-vpu.h    |   90 ++
+ 28 files changed, 6435 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8183-mdp3.txt
+ create mode 100644 drivers/media/platform/mtk-mdp3/Makefile
+ create mode 100644 drivers/media/platform/mtk-mdp3/isp_reg.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mdp-platform.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_ccorr.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rdma.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_rsz.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wdma.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mdp_reg_wrot.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mmsys_config.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mmsys_mutex.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mmsys_reg_base.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.c
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-comp.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-core.c
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-core.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.c
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-m2m.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.c
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-regs.h
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.c
+ create mode 100644 drivers/media/platform/mtk-mdp3/mtk-mdp3-vpu.h
+
 -- 
-2.21.0
+2.18.0
+
+
 
