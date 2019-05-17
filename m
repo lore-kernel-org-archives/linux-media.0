@@ -6,32 +6,32 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F689C04AB4
-	for <linux-media@archiver.kernel.org>; Fri, 17 May 2019 03:24:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE797C04AB4
+	for <linux-media@archiver.kernel.org>; Fri, 17 May 2019 03:26:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 17B0F20815
-	for <linux-media@archiver.kernel.org>; Fri, 17 May 2019 03:24:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 950E320815
+	for <linux-media@archiver.kernel.org>; Fri, 17 May 2019 03:26:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727241AbfEQDYf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 16 May 2019 23:24:35 -0400
-Received: from mga01.intel.com ([192.55.52.88]:43499 "EHLO mga01.intel.com"
+        id S1727308AbfEQD0F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 16 May 2019 23:26:05 -0400
+Received: from mga01.intel.com ([192.55.52.88]:43554 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725929AbfEQDYf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 16 May 2019 23:24:35 -0400
+        id S1725929AbfEQD0E (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 16 May 2019 23:26:04 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 May 2019 20:24:34 -0700
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 May 2019 20:26:04 -0700
 X-ExtLoop1: 1
 Received: from ipu5-build.bj.intel.com ([10.238.232.187])
-  by orsmga006.jf.intel.com with ESMTP; 16 May 2019 20:24:33 -0700
+  by orsmga005.jf.intel.com with ESMTP; 16 May 2019 20:26:03 -0700
 From:   bingbu.cao@intel.com
 To:     linux-media@vger.kernel.org
 Cc:     sakari.ailus@linux.intel.com, tfiga@chromium.org,
         andy.yeh@intel.com, bingbu.cao@linux.intel.com
-Subject: [PATCH v2] media:staging/intel-ipu3: update minimal GDC envelope size to 4
-Date:   Fri, 17 May 2019 11:32:04 +0800
-Message-Id: <1558063924-4529-1-git-send-email-bingbu.cao@intel.com>
+Subject: [PATCH v3] media:staging/intel-ipu3: update minimal GDC envelope size to 4
+Date:   Fri, 17 May 2019 11:33:34 +0800
+Message-Id: <1558064014-4610-1-git-send-email-bingbu.cao@intel.com>
 X-Mailer: git-send-email 1.9.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -46,13 +46,11 @@ Current value 4 was defined for older version GDC, this patch
 correct it.
 
 Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
+
 ---
  drivers/staging/media/ipu3/ipu3-css.c | 14 ++++++--------
  1 file changed, 6 insertions(+), 8 deletions(-)
-
----
-Change from v1:
-- just rebase
 
 diff --git a/drivers/staging/media/ipu3/ipu3-css.c b/drivers/staging/media/ipu3/ipu3-css.c
 index 23cf5b2cfe8b..fd1ed84c400c 100644
