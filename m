@@ -1,408 +1,70 @@
-Return-Path: <SRS0=ggLZ=TR=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=qfkP=TS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C3DDC04AB4
-	for <linux-media@archiver.kernel.org>; Fri, 17 May 2019 22:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E36B7C04E87
+	for <linux-media@archiver.kernel.org>; Sat, 18 May 2019 00:47:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 09A9A2166E
-	for <linux-media@archiver.kernel.org>; Fri, 17 May 2019 22:32:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bu0IdENP"
+	by mail.kernel.org (Postfix) with ESMTP id BB66121883
+	for <linux-media@archiver.kernel.org>; Sat, 18 May 2019 00:47:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729380AbfEQWbv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 17 May 2019 18:31:51 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54382 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729158AbfEQWbv (ORCPT
+        id S1729380AbfERAre (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 17 May 2019 20:47:34 -0400
+Received: from bin-mail-out-05.binero.net ([195.74.38.228]:25899 "EHLO
+        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726870AbfERArd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 17 May 2019 18:31:51 -0400
-Received: from localhost.localdomain (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4C192336;
-        Sat, 18 May 2019 00:31:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1558132308;
-        bh=LDZ60/Ee44rD+jbGQ+7fcgzOj40I+eQ8PFLp7q7HQNI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bu0IdENP7wwO2/3ZLgMtVhzsANbQ3K+FgCk3bb4QAmVnbrLjhB59GYC1ud7N5fDbJ
-         mVKMj4jlgdi4XQBJwHtphhQG8blL1juo34ff4dW6bqqU9xrKZd7dNPyqIXJMXccKud
-         w0fRTZNCKNETBKknkCI/KM/a4zLBPhdCtLSZoAE4=
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-renesas-soc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 1/3] media: vsp1: drm: Split vsp1_du_setup_lif()
-Date:   Fri, 17 May 2019 23:31:41 +0100
-Message-Id: <20190517223143.26251-2-kieran.bingham+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190517223143.26251-1-kieran.bingham+renesas@ideasonboard.com>
-References: <20190517223143.26251-1-kieran.bingham+renesas@ideasonboard.com>
+        Fri, 17 May 2019 20:47:33 -0400
+X-Halon-ID: 7eeb583f-7906-11e9-8601-0050569116f7
+Authorized-sender: niklas@soderlund.pp.se
+Received: from bismarck.berto.se (unknown [89.233.230.99])
+        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
+        id 7eeb583f-7906-11e9-8601-0050569116f7;
+        Sat, 18 May 2019 02:47:26 +0200 (CEST)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Helen Koike <helen.koike@collabora.com>,
+        linux-media@vger.kernel.org
+Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH] vimc: Remove unneeded return statement in vimc_sen_s_stream()
+Date:   Sat, 18 May 2019 02:46:54 +0200
+Message-Id: <20190518004654.12719-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Break vsp1_du_setup_lif() into components more suited to the DRM Atomic
-API. The existing vsp1_du_setup_lif() API call is maintained as it is
-still used from the DU.
+The other subdevice implementations in vimc (debayer and scaler) which
+share there code structure with the sensor does not have an explicit
+return statement at the end of the s_stream(0) code path. Align the
+sensor subdevices by dropping the return statement.
 
-Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
- drivers/media/platform/vsp1/vsp1_drm.c | 233 ++++++++++++++++++-------
- include/media/vsp1.h                   |  32 +++-
- 2 files changed, 199 insertions(+), 66 deletions(-)
+ drivers/media/platform/vimc/vimc-sensor.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/platform/vsp1/vsp1_drm.c b/drivers/media/platform/vsp1/vsp1_drm.c
-index a4a45d68a6ef..ce5c0780680f 100644
---- a/drivers/media/platform/vsp1/vsp1_drm.c
-+++ b/drivers/media/platform/vsp1/vsp1_drm.c
-@@ -616,18 +616,15 @@ int vsp1_du_init(struct device *dev)
- EXPORT_SYMBOL_GPL(vsp1_du_init);
+diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
+index 081e54204c9f4ece..baca9ca67ce0af0b 100644
+--- a/drivers/media/platform/vimc/vimc-sensor.c
++++ b/drivers/media/platform/vimc/vimc-sensor.c
+@@ -221,7 +221,6 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
  
- /**
-- * vsp1_du_setup_lif - Setup the output part of the VSP pipeline
-+ * vsp1_du_atomic_modeset - Configure the mode as part of an atomic update
-  * @dev: the VSP device
-  * @pipe_index: the DRM pipeline index
-- * @cfg: the LIF configuration
-+ * @cfg: the mode configuration
-  *
-  * Configure the output part of VSP DRM pipeline for the given frame @cfg.width
-  * and @cfg.height. This sets up formats on the BRx source pad, the WPF sink and
-  * source pads, and the LIF sink pad.
-  *
-- * The @pipe_index argument selects which DRM pipeline to setup. The number of
-- * available pipelines depend on the VSP instance.
-- *
-  * As the media bus code on the blend unit source pad is conditioned by the
-  * configuration of its sink 0 pad, we also set up the formats on all blend unit
-  * sinks, even if the configuration will be overwritten later by
-@@ -635,15 +632,14 @@ EXPORT_SYMBOL_GPL(vsp1_du_init);
-  * a well defined state.
-  *
-  * Return 0 on success or a negative error code on failure.
-+ *
-  */
--int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
--		      const struct vsp1_du_lif_config *cfg)
-+int vsp1_du_atomic_modeset(struct device *dev, unsigned int pipe_index,
-+			   const struct vsp1_du_modeset_config *cfg)
- {
- 	struct vsp1_device *vsp1 = dev_get_drvdata(dev);
- 	struct vsp1_drm_pipeline *drm_pipe;
- 	struct vsp1_pipeline *pipe;
--	unsigned long flags;
--	unsigned int i;
- 	int ret;
- 
- 	if (pipe_index >= vsp1->info->lif_count)
-@@ -652,60 +648,6 @@ int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
- 	drm_pipe = &vsp1->drm->pipe[pipe_index];
- 	pipe = &drm_pipe->pipe;
- 
--	if (!cfg) {
--		struct vsp1_brx *brx;
--
--		mutex_lock(&vsp1->drm->lock);
--
--		brx = to_brx(&pipe->brx->subdev);
--
--		/*
--		 * NULL configuration means the CRTC is being disabled, stop
--		 * the pipeline and turn the light off.
--		 */
--		ret = vsp1_pipeline_stop(pipe);
--		if (ret == -ETIMEDOUT)
--			dev_err(vsp1->dev, "DRM pipeline stop timeout\n");
--
--		for (i = 0; i < ARRAY_SIZE(pipe->inputs); ++i) {
--			struct vsp1_rwpf *rpf = pipe->inputs[i];
--
--			if (!rpf)
--				continue;
--
--			/*
--			 * Remove the RPF from the pipe and the list of BRx
--			 * inputs.
--			 */
--			WARN_ON(!rpf->entity.pipe);
--			rpf->entity.pipe = NULL;
--			list_del(&rpf->entity.list_pipe);
--			pipe->inputs[i] = NULL;
--
--			brx->inputs[rpf->brx_input].rpf = NULL;
--		}
--
--		drm_pipe->du_complete = NULL;
--		pipe->num_inputs = 0;
--
--		dev_dbg(vsp1->dev, "%s: pipe %u: releasing %s\n",
--			__func__, pipe->lif->index,
--			BRX_NAME(pipe->brx));
--
--		list_del(&pipe->brx->list_pipe);
--		pipe->brx->pipe = NULL;
--		pipe->brx = NULL;
--
--		mutex_unlock(&vsp1->drm->lock);
--
--		vsp1_dlm_reset(pipe->output->dlm);
--		vsp1_device_put(vsp1);
--
--		dev_dbg(vsp1->dev, "%s: pipeline disabled\n", __func__);
--
+ 		vfree(vsen->frame);
+ 		vsen->frame = NULL;
 -		return 0;
--	}
--
- 	drm_pipe->width = cfg->width;
- 	drm_pipe->height = cfg->height;
- 	pipe->interlaced = cfg->interlaced;
-@@ -722,8 +664,43 @@ int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
- 		goto unlock;
- 
- 	ret = vsp1_du_pipeline_setup_output(vsp1, pipe);
--	if (ret < 0)
--		goto unlock;
-+
-+unlock:
-+	mutex_unlock(&vsp1->drm->lock);
-+
-+	return ret;
-+}
-+
-+/**
-+ * vsp1_du_atomic_enable - Enable and start a DU pipeline
-+ * @dev: the VSP device
-+ * @pipe_index: the DRM pipeline index
-+ * @cfg: the enablement configuration
-+ *
-+ * The @pipe_index argument selects which DRM pipeline to enable. The number of
-+ * available pipelines depend on the VSP instance.
-+ *
-+ * The configuration passes a callback function to register notification of
-+ * frame completion events.
-+ *
-+ * Return 0 on success or a negative error code on failure.
-+ */
-+int vsp1_du_atomic_enable(struct device *dev, unsigned int pipe_index,
-+			  const struct vsp1_du_enable_config *cfg)
-+{
-+	struct vsp1_device *vsp1 = dev_get_drvdata(dev);
-+	struct vsp1_drm_pipeline *drm_pipe;
-+	struct vsp1_pipeline *pipe;
-+	unsigned long flags;
-+	int ret;
-+
-+	if (pipe_index >= vsp1->info->lif_count)
-+		return -EINVAL;
-+
-+	drm_pipe = &vsp1->drm->pipe[pipe_index];
-+	pipe = &drm_pipe->pipe;
-+
-+	mutex_lock(&vsp1->drm->lock);
- 
- 	/* Enable the VSP1. */
- 	ret = vsp1_device_get(vsp1);
-@@ -758,6 +735,132 @@ int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
- 	dev_dbg(vsp1->dev, "%s: pipeline enabled\n", __func__);
+ 	}
  
  	return 0;
-+
-+}
-+EXPORT_SYMBOL_GPL(vsp1_du_atomic_enable);
-+
-+
-+/**
-+ * vsp1_du_atomic_disable - Disable and stop a DU pipeline
-+ * @dev: the VSP device
-+ * @pipe_index: the DRM pipeline index
-+ *
-+ * The @pipe_index argument selects which DRM pipeline to disable. The number
-+ * of available pipelines depend on the VSP instance.
-+ *
-+ * Return 0 on success or a negative error code on failure.
-+ */
-+int vsp1_du_atomic_disable(struct device *dev, unsigned int pipe_index)
-+{
-+	struct vsp1_device *vsp1 = dev_get_drvdata(dev);
-+	struct vsp1_drm_pipeline *drm_pipe;
-+	struct vsp1_pipeline *pipe;
-+	struct vsp1_brx *brx;
-+	unsigned int i;
-+	int ret;
-+
-+	if (pipe_index >= vsp1->info->lif_count)
-+		return -EINVAL;
-+
-+	drm_pipe = &vsp1->drm->pipe[pipe_index];
-+	pipe = &drm_pipe->pipe;
-+
-+	mutex_lock(&vsp1->drm->lock);
-+
-+	brx = to_brx(&pipe->brx->subdev);
-+
-+	/*
-+	 * NULL configuration means the CRTC is being disabled, stop
-+	 * the pipeline and turn the light off.
-+	 */
-+	ret = vsp1_pipeline_stop(pipe);
-+	if (ret == -ETIMEDOUT)
-+		dev_err(vsp1->dev, "DRM pipeline stop timeout\n");
-+
-+	for (i = 0; i < ARRAY_SIZE(pipe->inputs); ++i) {
-+		struct vsp1_rwpf *rpf = pipe->inputs[i];
-+
-+		if (!rpf)
-+			continue;
-+
-+		/*
-+		 * Remove the RPF from the pipe and the list of BRx
-+		 * inputs.
-+		 */
-+		WARN_ON(!rpf->entity.pipe);
-+		rpf->entity.pipe = NULL;
-+		list_del(&rpf->entity.list_pipe);
-+		pipe->inputs[i] = NULL;
-+
-+		brx->inputs[rpf->brx_input].rpf = NULL;
-+	}
-+
-+	drm_pipe->du_complete = NULL;
-+	pipe->num_inputs = 0;
-+
-+	dev_dbg(vsp1->dev, "%s: pipe %u: releasing %s\n",
-+		__func__, pipe->lif->index,
-+		BRX_NAME(pipe->brx));
-+
-+	list_del(&pipe->brx->list_pipe);
-+	pipe->brx->pipe = NULL;
-+	pipe->brx = NULL;
-+
-+	mutex_unlock(&vsp1->drm->lock);
-+
-+	vsp1_dlm_reset(pipe->output->dlm);
-+	vsp1_device_put(vsp1);
-+
-+	dev_dbg(vsp1->dev, "%s: pipeline disabled\n", __func__);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(vsp1_du_atomic_disable);
-+
-+/**
-+ * vsp1_du_setup_lif - Setup the output part of the VSP pipeline
-+ * @dev: the VSP device
-+ * @pipe_index: the DRM pipeline index
-+ * @cfg: the LIF configuration
-+ *
-+ * Configure the output part of VSP DRM pipeline for the given frame @cfg.width
-+ * and @cfg.height. This sets up formats on the BRx source pad, the WPF sink and
-+ * source pads, and the LIF sink pad.
-+ *
-+ * The @pipe_index argument selects which DRM pipeline to setup. The number of
-+ * available pipelines depend on the VSP instance.
-+ *
-+ * As the media bus code on the blend unit source pad is conditioned by the
-+ * configuration of its sink 0 pad, we also set up the formats on all blend unit
-+ * sinks, even if the configuration will be overwritten later by
-+ * vsp1_du_setup_rpf(). This ensures that the blend unit configuration is set to
-+ * a well defined state.
-+ *
-+ * Return 0 on success or a negative error code on failure.
-+ */
-+int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
-+		      const struct vsp1_du_lif_config *cfg)
-+{
-+	int ret;
-+
-+	struct vsp1_du_modeset_config modes = {
-+		.width = cfg->width,
-+		.height = cfg->height,
-+		.interlaced = cfg->interlaced,
-+	};
-+	struct vsp1_du_enable_config enable = {
-+		.callback = cfg->callback,
-+		.callback_data = cfg->callback_data,
-+	};
-+
-+	if (!cfg)
-+		return vsp1_du_atomic_disable(dev, pipe_index);
-+
-+	ret = vsp1_du_atomic_modeset(dev, pipe_index, &modes);
-+	if (ret)
-+		return ret;
-+
-+	return vsp1_du_atomic_enable(dev, pipe_index, &enable);
- }
- EXPORT_SYMBOL_GPL(vsp1_du_setup_lif);
- 
-diff --git a/include/media/vsp1.h b/include/media/vsp1.h
-index cc1b0d42ce95..13f5a1c4d45a 100644
---- a/include/media/vsp1.h
-+++ b/include/media/vsp1.h
-@@ -21,7 +21,7 @@ int vsp1_du_init(struct device *dev);
- #define VSP1_DU_STATUS_WRITEBACK	BIT(1)
- 
- /**
-- * struct vsp1_du_lif_config - VSP LIF configuration
-+ * struct vsp1_du_lif_config - VSP LIF configuration - Deprecated
-  * @width: output frame width
-  * @height: output frame height
-  * @interlaced: true for interlaced pipelines
-@@ -42,6 +42,30 @@ struct vsp1_du_lif_config {
- int vsp1_du_setup_lif(struct device *dev, unsigned int pipe_index,
- 		      const struct vsp1_du_lif_config *cfg);
- 
-+/**
-+ * struct vsp1_du_modeset_config - VSP LIF Mode configuration
-+ * @width: output frame width
-+ * @height: output frame height
-+ * @interlaced: true for interlaced pipelines
-+ */
-+struct vsp1_du_modeset_config {
-+	unsigned int width;
-+	unsigned int height;
-+	bool interlaced;
-+};
-+
-+/**
-+ * struct vsp1_du_enable_config - VSP enable configuration
-+ * @callback: frame completion callback function (optional). When a callback
-+ *	      is provided, the VSP driver guarantees that it will be called once
-+ *	      and only once for each vsp1_du_atomic_flush() call.
-+ * @callback_data: data to be passed to the frame completion callback
-+ */
-+struct vsp1_du_enable_config {
-+	void (*callback)(void *data, unsigned int status, u32 crc);
-+	void *callback_data;
-+};
-+
- /**
-  * struct vsp1_du_atomic_config - VSP atomic configuration parameters
-  * @pixelformat: plane pixel format (V4L2 4CC)
-@@ -106,6 +130,12 @@ struct vsp1_du_atomic_pipe_config {
- 	struct vsp1_du_writeback_config writeback;
- };
- 
-+
-+int vsp1_du_atomic_modeset(struct device *dev, unsigned int pipe_index,
-+		    const struct vsp1_du_modeset_config *cfg);
-+int vsp1_du_atomic_enable(struct device *dev, unsigned int pipe_index,
-+		   const struct vsp1_du_enable_config *cfg);
-+int vsp1_du_atomic_disable(struct device *dev, unsigned int pipe_index);
- void vsp1_du_atomic_begin(struct device *dev, unsigned int pipe_index);
- int vsp1_du_atomic_update(struct device *dev, unsigned int pipe_index,
- 			  unsigned int rpf,
 -- 
-2.20.1
+2.21.0
 
