@@ -4,121 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	USER_AGENT_NEOMUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7332DC04AB4
-	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 18:47:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE468C04AB4
+	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 19:49:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5052620578
-	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 18:47:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89A4420675
+	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 19:49:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729993AbfESSrm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 19 May 2019 14:47:42 -0400
-Received: from mail-out-3.itc.rwth-aachen.de ([134.130.5.48]:3720 "EHLO
-        mail-out-3.itc.rwth-aachen.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726970AbfESSrm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sun, 19 May 2019 14:47:42 -0400
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2BeBABgO+Fc/54agoZkHQEBBQEHBQGBZ?=
- =?us-ascii?q?YIRgTxZCoQIlHGTYocTCQEBAQEBAQEBAQcBLQIBAYRAAoI0IzgTAQMBAQUBAQE?=
- =?us-ascii?q?BBG0ohUsGIwQLAUYQJQImAgJXBg4FgyKCCwSpcXwziRuBDwkBgQIohnuEVoIWg?=
- =?us-ascii?q?TgMgx2FEYI9glgEiyYKghWHIJMzBwKBMl2SdiGMQYleLaFgAgICAgkCFYFmIYF?=
- =?us-ascii?q?XcYM7gkaODT4yfAwhjREBgSABAQ?=
-X-IPAS-Result: =?us-ascii?q?A2BeBABgO+Fc/54agoZkHQEBBQEHBQGBZYIRgTxZCoQIlHG?=
- =?us-ascii?q?TYocTCQEBAQEBAQEBAQcBLQIBAYRAAoI0IzgTAQMBAQUBAQEBBG0ohUsGIwQLA?=
- =?us-ascii?q?UYQJQImAgJXBg4FgyKCCwSpcXwziRuBDwkBgQIohnuEVoIWgTgMgx2FEYI9glg?=
- =?us-ascii?q?EiyYKghWHIJMzBwKBMl2SdiGMQYleLaFgAgICAgkCFYFmIYFXcYM7gkaODT4yf?=
- =?us-ascii?q?AwhjREBgSABAQ?=
-Received: from rwthex-w2-a.rwth-ad.de ([134.130.26.158])
-  by mail-in-3.itc.rwth-aachen.de with ESMTP; 19 May 2019 13:19:01 +0200
-Received: from pebbles.fritz.box (2.243.143.238) by rwthex-w2-a.rwth-ad.de
- (2a00:8a60:1:e500::26:158) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Sun, 19
- May 2019 13:18:59 +0200
-From:   =?UTF-8?q?Stefan=20Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
-To:     <linux-media@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Antti Palosaari <crope@iki.fi>, Sean Young <sean@mess.org>,
-        =?UTF-8?q?Stefan=20Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
-Subject: [PATCH v2 2/3] media: dvbsky: Remove duplicate error reporting for dvbsky_usb_generic_rw
-Date:   Sun, 19 May 2019 13:18:30 +0200
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190519111831.26746-1-stefan.bruens@rwth-aachen.de>
-References: <20190519111831.26746-1-stefan.bruens@rwth-aachen.de>
+        id S1729987AbfESTtB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 19 May 2019 15:49:01 -0400
+Received: from gofer.mess.org ([88.97.38.141]:44355 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728287AbfESTtB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 19 May 2019 15:49:01 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 7519460E1A; Sun, 19 May 2019 20:48:58 +0100 (BST)
+Date:   Sun, 19 May 2019 20:48:58 +0100
+From:   Sean Young <sean@mess.org>
+To:     syzbot <syzbot+357d86bcb4cca1a2f572@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Subject: [PATCH] media: au0828: fix null dereference in error path
+Message-ID: <20190519194858.2bojwep7monfytk2@gofer.mess.org>
+References: <000000000000faf6000588ef7a11@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [2.243.143.238]
-X-ClientProxiedBy: rwthex-w3-a.rwth-ad.de (2a00:8a60:1:e500::26:162) To
- rwthex-w2-a.rwth-ad.de (2a00:8a60:1:e500::26:158)
-Message-ID: <c6ebb00d-2d9c-4c35-8967-7d66dfaec39d@rwthex-w2-a.rwth-ad.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000faf6000588ef7a11@google.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Errors are already reported by the common code in dvb_usb_v2_generic_io
-(which dvbsky_usb_generic_rw is a wrapper of), so there is no reason
-report the error again.
+au0828_usb_disconnect() gets the au0828_dev struct via usb_get_intfdata,
+so it needs to set up for the error paths.
 
-Signed-off-by: Stefan Brüns <stefan.bruens@rwth-aachen.de>
+Reported-by: syzbot+357d86bcb4cca1a2f572@syzkaller.appspotmail.com
+Signed-off-by: Sean Young <sean@mess.org>
 ---
- drivers/media/usb/dvb-usb-v2/dvbsky.c | 11 -----------
- 1 file changed, 11 deletions(-)
+ drivers/media/usb/au0828/au0828-core.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/dvbsky.c b/drivers/media/usb/dvb-usb-v2/dvbsky.c
-index ae0814dd202a..3ff9833597e5 100644
---- a/drivers/media/usb/dvb-usb-v2/dvbsky.c
-+++ b/drivers/media/usb/dvb-usb-v2/dvbsky.c
-@@ -100,8 +100,6 @@ static int dvbsky_gpio_ctrl(struct dvb_usb_device *d, u8 gport, u8 value)
- 	obuf[1] = gport;
- 	obuf[2] = value;
- 	ret = dvbsky_usb_generic_rw(d, obuf, 3, ibuf, 1);
--	if (ret)
--		dev_err(&d->udev->dev, "failed=%d\n", ret);
- 	return ret;
- }
+diff --git a/drivers/media/usb/au0828/au0828-core.c b/drivers/media/usb/au0828/au0828-core.c
+index 925a80437822..e306d5d5bebb 100644
+--- a/drivers/media/usb/au0828/au0828-core.c
++++ b/drivers/media/usb/au0828/au0828-core.c
+@@ -729,6 +729,12 @@ static int au0828_usb_probe(struct usb_interface *interface,
+ 	/* Setup */
+ 	au0828_card_setup(dev);
  
-@@ -139,8 +137,6 @@ static int dvbsky_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 			obuf[3] = msg[0].addr;
- 			ret = dvbsky_usb_generic_rw(d, obuf, 4,
- 					ibuf, msg[0].len + 1);
--			if (ret)
--				dev_err(&d->udev->dev, "failed=%d\n", ret);
- 			if (!ret)
- 				memcpy(msg[0].buf, &ibuf[1], msg[0].len);
- 		} else {
-@@ -151,8 +147,6 @@ static int dvbsky_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 			memcpy(&obuf[3], msg[0].buf, msg[0].len);
- 			ret = dvbsky_usb_generic_rw(d, obuf,
- 					msg[0].len + 3, ibuf, 1);
--			if (ret)
--				dev_err(&d->udev->dev, "failed=%d\n", ret);
- 		}
- 	} else {
- 		if ((msg[0].len > 60) || (msg[1].len > 60)) {
-@@ -170,9 +164,6 @@ static int dvbsky_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msg[],
- 		memcpy(&obuf[4], msg[0].buf, msg[0].len);
- 		ret = dvbsky_usb_generic_rw(d, obuf,
- 			msg[0].len + 4, ibuf, msg[1].len + 1);
--		if (ret)
--			dev_err(&d->udev->dev, "failed=%d\n", ret);
++	/*
++	 * Store the pointer to the au0828_dev so it can be accessed in
++	 * au0828_usb_disconnect
++	 */
++	usb_set_intfdata(interface, dev);
++
+ 	/* Analog TV */
+ 	retval = au0828_analog_register(dev, interface);
+ 	if (retval) {
+@@ -747,12 +753,6 @@ static int au0828_usb_probe(struct usb_interface *interface,
+ 	/* Remote controller */
+ 	au0828_rc_register(dev);
+ 
+-	/*
+-	 * Store the pointer to the au0828_dev so it can be accessed in
+-	 * au0828_usb_disconnect
+-	 */
+-	usb_set_intfdata(interface, dev);
 -
- 		if (!ret)
- 			memcpy(msg[1].buf, &ibuf[1], msg[1].len);
- 	}
-@@ -201,8 +192,6 @@ static int dvbsky_rc_query(struct dvb_usb_device *d)
+ 	pr_info("Registered device AU0828 [%s]\n",
+ 		dev->board.name == NULL ? "Unset" : dev->board.name);
  
- 	obuf[0] = 0x10;
- 	ret = dvbsky_usb_generic_rw(d, obuf, 1, ibuf, 2);
--	if (ret)
--		dev_err(&d->udev->dev, "failed=%d\n", ret);
- 	if (ret == 0)
- 		code = (ibuf[0] << 8) | ibuf[1];
- 	if (code != 0xffff) {
 -- 
-2.21.0
+2.20.1
 
