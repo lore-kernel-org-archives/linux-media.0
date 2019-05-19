@@ -2,111 +2,86 @@ Return-Path: <SRS0=VOtr=TT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.0 required=3.0 tests=DATE_IN_PAST_06_12,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 763DFC04AB4
-	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 18:24:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F306C04AB4
+	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 18:45:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 441BD20675
-	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 18:24:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C7Irj0IL"
+	by mail.kernel.org (Postfix) with ESMTP id 1C17A20578
+	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 18:45:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbfESSYD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 19 May 2019 14:24:03 -0400
-Received: from mail-lj1-f169.google.com ([209.85.208.169]:44281 "EHLO
-        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbfESSYD (ORCPT
+        id S1727074AbfESSpJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 19 May 2019 14:45:09 -0400
+Received: from mail-out-4.itc.rwth-aachen.de ([134.130.5.49]:55912 "EHLO
+        mail-out-4.itc.rwth-aachen.de" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726074AbfESSpJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 19 May 2019 14:24:03 -0400
-Received: by mail-lj1-f169.google.com with SMTP id e13so10362269ljl.11
-        for <linux-media@vger.kernel.org>; Sun, 19 May 2019 11:24:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fXjVevl6BP66mFQKoiB3+26NGeA1iCJUXHTsVSV02p4=;
-        b=C7Irj0ILXi8E16663mgBBXjMpYpabNSLuwM88Zc/D9J5iswYLLWB9kzMwAdkHJjD+1
-         LnZeKP6rzX/WS6g2mX2ftktsbxxBHXtemQ95IzIijTeTxRohhrKmO50aUxBP9Cawl6n0
-         hOqeo0SuxrrSvMBRXVm1ffnuXEUW2KkzfewC0k1kiOuMMDCLT53qX/TO2acOn7DYdJtv
-         PRRQiHJk5CVxERX55sVX8ivJsjQYw7wnz/5X5vW6wIolzZ5yXzPwk3Szg+syyeFUX44+
-         qPhTyK0Tofrv8EaQLh5lvK1eh3i96BLPj3/7TUDWdGGsK/95OEWJEmxS2WVMD+s7UhW4
-         Qbgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fXjVevl6BP66mFQKoiB3+26NGeA1iCJUXHTsVSV02p4=;
-        b=lvg2jymcnj1bDPdPVjgoSSaUP0BRTJxca9n2TN4ZX2u5Odvn5/COtys+AoxefadUc0
-         UqcufcXKsHOPBG8cqa49mqo0+aPRYJu1kRvcDfZqEtU76g+t+CJqeNXfNFiNLHihS3nl
-         aNYYE9howvwdtVRxK8iL3VzslI822hxKAX0ulKKR6KMNHqxLfS20zwIQGS5hEVmQ1Ars
-         opQwTLonercRluKiN602dMwifw4Iv0mLFbKT2RpgICOwVfesdfVGRRtO0VaWvRdOGCxw
-         /Eg/XWTl0PgfzeVqs7AZnBnLytFKe+pLRoyPW4XcqKbD3U6rA6gfBPgmv/hG/OAJXpLf
-         Kd3Q==
-X-Gm-Message-State: APjAAAXnm6Sfi0Fp6OM5mS4RZH6DjAFduODLBWgtUK8/whRNvfBsfbml
-        iLDdEb0kkiIodArc/V/YOe/yW+KC+nRBUn1lNUMsqds35Ww=
-X-Google-Smtp-Source: APXvYqyV4vV10URHWppWiMJTzxUVb/1+6TPomIkmWxiU3Ua9C6L3Kdr/ebLFjdM6XIUKTlP/73RGgj9ITx4UZ215XHQ=
-X-Received: by 2002:a2e:8516:: with SMTP id j22mr3930380lji.119.1558259013312;
- Sun, 19 May 2019 02:43:33 -0700 (PDT)
+        Sun, 19 May 2019 14:45:09 -0400
+X-Greylist: delayed 3603 seconds by postgrey-1.27 at vger.kernel.org; Sun, 19 May 2019 14:45:08 EDT
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2AEAwDnOuFc/54agoZkHAEBAQQBAQcEA?=
+ =?us-ascii?q?QGBZYIRgTxZCoQIlHGTYocTCQEBAQEBAQEBAQcBLQIBAYRAAoI0IzgTAQMBAQU?=
+ =?us-ascii?q?BAQEBBG0ohUsGIwQLAUYQJQImAgJXBg4FgyKCCwSpcXwziRuBDwkBgQIohnuEV?=
+ =?us-ascii?q?oIWgTgMgx2FEYI9glgEiyaCH4cgkzMHAoEyXZJ2IYxBiV4toWACAgICCQIVgWY?=
+ =?us-ascii?q?hgVdxgzuCRo4NPjJ8DCGNEQGBIAEB?=
+X-IPAS-Result: =?us-ascii?q?A2AEAwDnOuFc/54agoZkHAEBAQQBAQcEAQGBZYIRgTxZCoQ?=
+ =?us-ascii?q?IlHGTYocTCQEBAQEBAQEBAQcBLQIBAYRAAoI0IzgTAQMBAQUBAQEBBG0ohUsGI?=
+ =?us-ascii?q?wQLAUYQJQImAgJXBg4FgyKCCwSpcXwziRuBDwkBgQIohnuEVoIWgTgMgx2FEYI?=
+ =?us-ascii?q?9glgEiyaCH4cgkzMHAoEyXZJ2IYxBiV4toWACAgICCQIVgWYhgVdxgzuCRo4NP?=
+ =?us-ascii?q?jJ8DCGNEQGBIAEB?=
+Received: from rwthex-w2-a.rwth-ad.de ([134.130.26.158])
+  by mail-in-4.itc.rwth-aachen.de with ESMTP; 19 May 2019 13:19:05 +0200
+Received: from pebbles.fritz.box (2.243.143.238) by rwthex-w2-a.rwth-ad.de
+ (2a00:8a60:1:e500::26:158) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Sun, 19
+ May 2019 13:18:59 +0200
+From:   =?UTF-8?q?Stefan=20Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
+To:     <linux-media@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Antti Palosaari <crope@iki.fi>, Sean Young <sean@mess.org>,
+        =?UTF-8?q?Stefan=20Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
+Subject: [PATCH v2 3/3] media: af9035: Remove duplicate error reporting for dvbsky_usb_generic_rw
+Date:   Sun, 19 May 2019 13:18:31 +0200
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190519111831.26746-1-stefan.bruens@rwth-aachen.de>
+References: <20190519111831.26746-1-stefan.bruens@rwth-aachen.de>
 MIME-Version: 1.0
-References: <CAM+RvBRfLUPS7uaQG3Drj_oSX1ACj7cCT_fMM9o9NSwr=6JT3Q@mail.gmail.com>
- <20190514090528.78965584@coco.lan> <CAM+RvBRhG_Am=eGKog8a-rDAULrkNjKpbH+C+bqOk=wx5gXLJQ@mail.gmail.com>
- <20190518080408.40b3822f@coco.lan>
-In-Reply-To: <20190518080408.40b3822f@coco.lan>
-From:   Tomasz Borowczyk <tomboro88@gmail.com>
-Date:   Sun, 19 May 2019 11:43:58 +0200
-Message-ID: <CAM+RvBR5LxB=Kauc=4=y_gaP6jfQbWETaJJp_X=ZEav5jzAZvw@mail.gmail.com>
-Subject: Re: cx231xx with 3 grabbers
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [2.243.143.238]
+X-ClientProxiedBy: rwthex-w3-a.rwth-ad.de (2a00:8a60:1:e500::26:162) To
+ rwthex-w2-a.rwth-ad.de (2a00:8a60:1:e500::26:158)
+Message-ID: <85c470fd-cba0-4447-9852-c09794883f10@rwthex-w2-a.rwth-ad.de>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-sob., 18 maj 2019 o 13:04 Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> napisa=C5=82(a):
->
-> Tomasz,
->
-> Please don't top-post. Makes very confusing to for people to follow
-> the discussions on mailing lists.
+All error cases inside the function already report errors via dev_err(),
+and dvb_usb_v2_generic_rw also reports all error cases, so there is
+no silent code path when an error has occured.
 
-I'm sorry.
+Signed-off-by: Stefan Brüns <stefan.bruens@rwth-aachen.de>
+---
+ drivers/media/usb/dvb-usb-v2/af9035.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-> Most laptops use a single USB bus shared on all their ports. This is
-> easy to verify: the lsusb command shows on what bus a device is connected=
-.
-> If you can place the 3 cameras on different buses, it may work there
-> (or if you have an USB 3.0 hub and connect the hub to an USB 3.0 port,
-> and the cameras on it, it might work as well).
+diff --git a/drivers/media/usb/dvb-usb-v2/af9035.c b/drivers/media/usb/dvb-usb-v2/af9035.c
+index 1b7f1af399fb..15643e2f9395 100644
+--- a/drivers/media/usb/dvb-usb-v2/af9035.c
++++ b/drivers/media/usb/dvb-usb-v2/af9035.c
+@@ -120,8 +120,6 @@ static int af9035_ctrl_msg(struct dvb_usb_device *d, struct usb_req *req)
+ 		memcpy(req->rbuf, &state->buf[ACK_HDR_LEN], req->rlen);
+ exit:
+ 	mutex_unlock(&d->usb_mutex);
+-	if (ret < 0)
+-		dev_dbg(&intf->dev, "failed=%d\n", ret);
+ 	return ret;
+ }
+ 
+-- 
+2.21.0
 
-Hmm. I have both USB 3.0 and USB 2.0 on my laptop, and I connected the
-3 grabbers to USB 3.0 HUB,
-but the HUB was then connected to USB2.0 port :(. My mistake.
-So I need to check what will happen when I connect the HUB to USB3.0 port.
-But I will be at home in a week. If it works, then maybe it will be
-possible to use 3 grabbers with a single Orange Pi 3 (it has USB3.0),
-or  NVIDIA Jetson Nano (the same price as 3x Raspberry Pi 3).
-
->Without taking into account the limited speed and features of the CPU
->found on RPi3, probably the only solution for using 3 cameras on a single
->RPi3 would be:
->
->        - 1 RPi Camera module using the special camera connector;
->        - 1 USB camera to a RPi USB port;
->        - 1 USB hat;
->        - 1 USB camera connected to the USB hat.
-
-I want to use 3 grabbers, because I have already installed 3 analog
-cameras at home, which are connected to a small CRT Display.
-I want to have remote access to them, and it looks like a fun project for a=
- SBC.
-
-Thanks,
-Tomasz
