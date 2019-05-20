@@ -2,32 +2,61 @@ Return-Path: <SRS0=LX5l=TU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.1 required=3.0 tests=DATE_IN_PAST_03_06,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E430DC04AAC
-	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 18:32:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D0A8C04AAC
+	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 19:32:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD4ED214DA
-	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 18:32:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C7AC20851
+	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 19:32:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726238AbfETScg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 May 2019 14:32:36 -0400
-Received: from westpalmbeachmassagegroup.com ([45.35.221.60]:42997 "EHLO
-        wolfgangdigital.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726207AbfETScf (ORCPT
+        id S1726074AbfETTcJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 May 2019 15:32:09 -0400
+Received: from keetweej.vanheusden.com ([82.161.210.122]:45797 "EHLO
+        keetweej.vanheusden.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725776AbfETTcI (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 May 2019 14:32:35 -0400
-To:     linux-media@vger.kernel.org
-Subject: Print your logo
-Message-ID: <76e65ac33596de4323b86e0d2f112971@esquire.com>
-Date:   Mon, 20 May 2019 17:02:21 +0200
-From:   "Heather" <heather@usblogo.space>
-Reply-To: flashdrive@aliyun.com
+        Mon, 20 May 2019 15:32:08 -0400
+X-Greylist: delayed 515 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 May 2019 15:32:08 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by keetweej.vanheusden.com (Postfix) with ESMTP id CDE0516311E;
+        Mon, 20 May 2019 21:23:31 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at vanheusden.com
+Received: from keetweej.vanheusden.com ([127.0.0.1])
+        by localhost (mauer.intranet.vanheusden.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id DXTv2cNDonkn; Mon, 20 May 2019 21:23:30 +0200 (CEST)
+Received: from belle.intranet.vanheusden.com (belle.intranet.vanheusden.com [192.168.64.100])
+        by keetweej.vanheusden.com (Postfix) with ESMTP id D9A47162F46;
+        Mon, 20 May 2019 21:23:30 +0200 (CEST)
+Received: by belle.intranet.vanheusden.com (Postfix, from userid 1000)
+        id B90FB160657; Mon, 20 May 2019 21:23:30 +0200 (CEST)
+Date:   Mon, 20 May 2019 21:23:30 +0200
+From:   folkert <folkert@vanheusden.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Gregor Jasny <gjasny@googlemail.com>, 929262@bugs.debian.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Subject: Re: Bug#929262: libv4l-dev: pac207 cam(s) give frame decode errors
+Message-ID: <20190520192330.utegmzoih25of4lj@belle.intranet.vanheusden.com>
+References: <155834073601.757.12828508994068038463.reportbug@scrollert>
+ <c2d8869f-4ca5-7f70-1c0e-44d4c1e094f4@googlemail.com>
+ <d5e3d25f-4df3-9aee-a212-4ad64d3c1fd7@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d5e3d25f-4df3-9aee-a212-4ad64d3c1fd7@xs4all.nl>
+Organization: www.vanheusden.com
+X-Chameleon-Return-To: folkert@vanheusden.com
+X-Xfmail-Return-To: folkert@vanheusden.com
+X-Phonenumber: +31-6-41278122
+X-URL:  http://www.vanheusden.com/
+X-PGP-KeyID: 1F077C42
+X-GPG-fingerprint: AC89 09CE 41F2 00B4 FCF2  B174 3019 0E8C 1F28 D8AE
+X-Key:  http://pgp.surfnet.nl:11371/pks/lookup?op=get&search=0x1F077C42
+Read-Receipt-To: <folkert@vanheusden.com>
+Reply-By: Wed May  8 14:21:33 CEST 2019
+User-Agent: NeoMutt/20170306 (1.8.0)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -35,36 +64,21 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi,
 
-I didn’t know if you had received my email from last week?
+> I strongly recommend that you buy a new webcam. This is ancient hardware.
+> Even the cheapest UVC webcams you can buy today will have far better
+> quality than a pac207. If you really, really need this to work, then I
+> need the full dmesg output and you also need to check if you can reproduce
+> this issue with the v4l2-ctl command:
+> 
+> v4l2-ctl -d /dev/videoX --stream-mmap
+> (it keeps capturing frames until you press ctrl-X)
 
-We manufacture ALL custom LOGO and branded products – over 300,000 to
-choose from.
+v4l2-ctl:
+- raspberry pi 2 and 3b+: fail
+- laptop: ok for at least a few minutes
 
-The most asked about product that we make, is the custom printed USB flash
-drives!
-We can print your logo on them and load your digital images, videos and
-files!
 
-Here is what we include:
--Any size memory you need: 64MB up to 128GB
--We will print your logo on both sides, just ask!
--Very Low Order Minimums
--Need them quickly?  Not a problem, we offer Rush Service
+> I should have one of these webcams, but won't be able to test until next
+> week.
 
-Email over a copy of your logo and we will create a design mock up for you
-at no cost!
-
-Our higher memory sizes are a really good option right now!
-
-Pricing is low right now, so let us know what you need and we will get you
-a quick quote.
-
-We always offer great rates for schools and nonprofits as well.
-
-Let us know what you would like quoted?
-
-Regards,
-
-Heather Millons
-Custom USB Account Manager
-
+Thanks but it looks to be a raspberry pi problem.
