@@ -2,90 +2,105 @@ Return-Path: <SRS0=LX5l=TU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7B57C04AAC
-	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 11:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAEDDC04AAC
+	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 13:56:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8632D20815
-	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 11:55:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D385216B7
+	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 13:56:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lZ4XWFAV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730773AbfETLzk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 20 May 2019 07:55:40 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:38685 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730534AbfETLzk (ORCPT
+        id S1730740AbfETN4s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 20 May 2019 09:56:48 -0400
+Received: from mail-lj1-f179.google.com ([209.85.208.179]:46074 "EHLO
+        mail-lj1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730228AbfETN4r (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 20 May 2019 07:55:40 -0400
-Received: from [192.168.2.10] ([46.9.252.75])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id SgtDhrW8y3qlsSgtGhjXWA; Mon, 20 May 2019 13:55:38 +0200
-Subject: Re: Bug#929262: libv4l-dev: pac207 cam(s) give frame decode errors
-To:     Gregor Jasny <gjasny@googlemail.com>, folkert@vanheusden.com,
-        929262@bugs.debian.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-References: <155834073601.757.12828508994068038463.reportbug@scrollert>
- <c2d8869f-4ca5-7f70-1c0e-44d4c1e094f4@googlemail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <d5e3d25f-4df3-9aee-a212-4ad64d3c1fd7@xs4all.nl>
-Date:   Mon, 20 May 2019 13:55:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Mon, 20 May 2019 09:56:47 -0400
+Received: by mail-lj1-f179.google.com with SMTP id r76so12515970lja.12
+        for <linux-media@vger.kernel.org>; Mon, 20 May 2019 06:56:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h8FyerFcC8rxtoPBlcw4IeblJtG6XuunC6x9HaI2Vo4=;
+        b=lZ4XWFAVApokp7FGmIea8ZO7d/lO54NT7Mk6geukFClNbjbB9OsRjDbSqBA1B6ZERq
+         fej8pGOFNRK9PTvs6BsC6chSjlCvMApLP6HX9nqIdQhKHpF6VZrPuo1k8jd33QhiMQe0
+         yB9y0T4cmEn+tw1Z2wVdqCcmbZ7+0pcPT/izzIMiOcKI+S9oz6FIojBkygnOr/37yY2a
+         hxSBpDibrpTU0b/1xqh4yZFqfSgUB5P80XdHHY7XVIuaJNWESGE65pHhM/77kItMsYuO
+         uo+DYI1YSBG84BlwsVDBN1TkplClG5pgXJlI/1vRgq8Mq7r0xJvDvnp/+yl4Gntzxpar
+         6STg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h8FyerFcC8rxtoPBlcw4IeblJtG6XuunC6x9HaI2Vo4=;
+        b=GbxDK3JOS1Qa6CkCZe5ki1Qef8WQhSKmM5tbXTWBIcNEA4gF9+woreUKOuKTxsgPVp
+         ADt+IpFXQY6aYvhhvXkn6V+CVnrdQDZ3D8mGQE4Ei4XsrwZC50fypZhqdoXTe1uel3EJ
+         usLW3ZIcYoazX3l2J5/iF++XzsB15VoGdFxOQfMgFIgs8v4BRMY7IwMLVrWhRcTbVZE3
+         mdE5Ynuoz7wpsGsF9DE8yOc7hgT5wwMD6bzoVTpIQHnLsz5NsLIgZtmZzrp52aTUoc2q
+         5sWpz5iHBn/1KyXtgOfFm4t++CShS/QYJjCtXnfJWaDeSWt/WA14TW6sUCqt58iq6ax0
+         q8Kg==
+X-Gm-Message-State: APjAAAU50oh3jW/lkazg3BaZio/ZD5InWCnC9+34CsD2m84GO2t2awVQ
+        5iQnoby4ZXyO1zdDv+/7yCOW6QRgfAV4mqinYRi96Q==
+X-Google-Smtp-Source: APXvYqw37JWr2ZHF3WkgKza90V0bWwsnMPl8Ui4YFzyw4nbDcjCtd10JcYxvYpIBOJ0fdTyE45QWI6ryVDU3xxTN8Xc=
+X-Received: by 2002:a2e:7411:: with SMTP id p17mr21387151ljc.24.1558360605783;
+ Mon, 20 May 2019 06:56:45 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <c2d8869f-4ca5-7f70-1c0e-44d4c1e094f4@googlemail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfJ//8h6RrW+1uTIm9LdLoMy4IWti/rDUommRVIBEMl46SvXh9SE19SbLGTcLFmy+XwklRmKtWJR5lfTOj8yTs+0psQGGdJCUBFeTuX+8GLRSJAdoUEBM
- YNP97tCTKGY4b/ZlnQwcD22lK3yYKXvuKLrAXFnhSwgR/JvQTUy//MN9FunjGOGSDEZsEp8onJj7U9r8tDQbsmM5gs4604i6G1rge6Cq3dBr8Co7o570BzKU
- RzMUP5yOZiKJLC61CHIClmCDDGenKs1Vwbxcgj55kH0=
+References: <CA+G9fYuC8dgKs04HmyCaKeQ_xwqKBxnh=zsOFjQK+3Fq7AZRyw@mail.gmail.com>
+ <5de0df37-f0d0-f54c-2eef-a7533cbe7a25@xs4all.nl>
+In-Reply-To: <5de0df37-f0d0-f54c-2eef-a7533cbe7a25@xs4all.nl>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 20 May 2019 19:26:34 +0530
+Message-ID: <CA+G9fYtbb82EPY9gG63+U2FTVswt7f3FjHdaHMA2kibxgVvZcw@mail.gmail.com>
+Subject: Re: test VIDIOC_G/S_PARM: FAIL on stable 4.14, 4.9 and 4.4
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        paul.kocialkowski@bootlin.com, ezequiel@collabora.com,
+        treding@nvidia.com, niklas.soderlund+renesas@ragnatech.se,
+        sakari.ailus@linux.intel.com,
+        Hans Verkuil <hans.verkuil@cisco.com>, mchehab@kernel.org,
+        lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 5/20/19 1:38 PM, Gregor Jasny wrote:
-> Hello,
-> 
-> On 20.05.19 10:25, folkert@vanheusden.com wrote:
->> Trying to get a pac207 camera to work with constatus.
->>
->> 2019-05-20 10:22:34.864900  INFO constatus [1-1] source v4l2 thread started
->> libv4l2: error got 4 consecutive frame decode errors, last error: v4l-convert: error unknown pac207 row header: 0x0000
->> 2019-05-20 10:22:35.597949 ERROR cs:src_v4l2 [1-1] VIDIOC_DQBUF failed: Input/output error
->> ioctl(VIDIOC_QBUF) failed
->> errno: 22 (Invalid argument)
->>
->> To verify that it is not a constatus-problem I also tried a raspberry-pi camera via its video4linux-interface and that works fine.
-> 
-> According to the Linux Kernel Maintainers file the device driver is 
-> maintained by Hans, which I CC'ed on this bug report:
-> 
-> GSPCA PAC207 SONIXB SUBDRIVER
-> M:	Hans Verkuil <hverkuil@xs4all.nl>
-> L:	linux-media@vger.kernel.org
-> T:	git git://linuxtv.org/media_tree.git
-> S:	Odd Fixes
-> F:	drivers/media/usb/gspca/pac207.c
-> 
-> Did your camera ever work on another Kernel, CPU architecture, or 
-> v4l-utils version? Do you have anything suspicious in dmesg output?
+Hi Hans,
 
-I strongly recommend that you buy a new webcam. This is ancient hardware.
-Even the cheapest UVC webcams you can buy today will have far better
-quality than a pac207. If you really, really need this to work, then I
-need the full dmesg output and you also need to check if you can reproduce
-this issue with the v4l2-ctl command:
+On Mon, 13 May 2019 at 19:08, Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+>
+> On 5/13/19 3:32 PM, Naresh Kamboju wrote:
+> > Do you see test VIDIOC_G/S_PARM: FAIL on stable 4.14, 4.9 and 4.4
+> > kernel branches ?
+>
+> Probably related to commit 8a7c5594c0202 (media: v4l2-ioctl: clear fields in s_parm).
 
-v4l2-ctl -d /dev/videoX --stream-mmap
+I have cherry-picked on stable rc 4.9 branch and tested and test got
+PASS on x86_64.
 
-(it keeps capturing frames until you press ctrl-X)
+Test output:
+----------------
+test VIDIOC_G/S_PARM: OK
+https://lkft.validation.linaro.org/scheduler/job/736243#L1744
 
-I should have one of these webcams, but won't be able to test until next
-week.
+log:
+----
+git  cherry-pick  8a7c5594c0202
+warning: inexact rename detection was skipped due to too many files.
+warning: you may want to set your merge.renamelimit variable to at
+least 9371 and retry the command.
+[linux-4.9.y 7b9dab8fe870] media: v4l2-ioctl: clear fields in s_parm
+ Author: Hans Verkuil <hans.verkuil@cisco.com>
+ Date: Sat May 12 10:44:02 2018 -0400
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-Regards,
-
-	Hans
+Thank you.
+Naresh Kamboju
