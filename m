@@ -1,34 +1,34 @@
-Return-Path: <SRS0=VOtr=TT=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=LX5l=TU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44225C04AB4
-	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 20:15:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35067C04AAF
+	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 03:47:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1B1AF20578
-	for <linux-media@archiver.kernel.org>; Sun, 19 May 2019 20:15:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F02520657
+	for <linux-media@archiver.kernel.org>; Mon, 20 May 2019 03:47:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729325AbfESUPo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 19 May 2019 16:15:44 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:36833 "EHLO
+        id S1729816AbfETDrf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 19 May 2019 23:47:35 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:57487 "EHLO
         lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726066AbfESUPo (ORCPT
+        by vger.kernel.org with ESMTP id S1726014AbfETDrf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 19 May 2019 16:15:44 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:db:4e38:36ca:29c2])
+        Sun, 19 May 2019 23:47:35 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:5943:85eb:98d6:977d])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id SCmwhOKHZsDWySCmxh6OiR; Sun, 19 May 2019 05:47:07 +0200
-Message-ID: <a7ba383c9320a563e6b106c5ba7b4557@smtp-cloud9.xs4all.net>
-Date:   Sun, 19 May 2019 05:47:06 +0200
+        id SZGthZWRlsDWySZGuh9FHk; Mon, 20 May 2019 05:47:32 +0200
+Message-ID: <c9b439dc7ba22a4388d3b9544dfce198@smtp-cloud9.xs4all.net>
+Date:   Mon, 20 May 2019 05:47:31 +0200
 From:   "Hans Verkuil" <hverkuil@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Subject: cron job: media_tree daily build: OK
-X-CMAE-Envelope: MS4wfP1mmnGRwT6n2AXdSTdEwOwMrFTsy1wgk7r8BVIJXAkthFK7mH3D2vnItzpBeajbuC7grBQBV6W/I+pbaYbuSIlWdr11Vyl8iTHhDYdH2it977qdvE4H
- nJCEmmC1/vqILMHSj/l/wKF8HF1FKgAAgYADNbWeOs1orrBeTfkNd7kuKJWTJPzgOF8hvBqTyPScOdpUnApS30FIDTe4bfkulrS5ku4FZiK8IzM7kPStbCuj
+X-CMAE-Envelope: MS4wfGQedwPGbOeGCGaSYNcucIw/rEf+49ZrTGXndAV8pSJ7McJhVLgniRxxr8rRfCtG2MU2+vpRG6+eolz4guC4fFKmW7GPmTIXqGuM2cQygU+ybqwvJT7u
+ ZlNmPG7Cb6sVT1CyIRy1kaD9xG44ghKHp1luG40dV2GbDPFdmazaJYaQHX94eEkZqYXXHUpzL/AeSKfkiap1CzAS9hYnOrCdjjL4Go2TvuvKcZn8Tzx/6qKa
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -39,7 +39,7 @@ the kernels and architectures in the list below.
 
 Results of the daily build of media_tree:
 
-date:			Sun May 19 05:00:09 CEST 2019
+date:			Mon May 20 05:00:12 CEST 2019
 media-tree git hash:	fc8670d1f72b746ff3a5fe441f1fca4c4dba0e6f
 media_build git hash:	78eccfa404ec982e1302930cb7f45756ab404a3c
 v4l-utils git hash:	5cd5b668d79134976c9a9d816bddf9412c22de7a
@@ -141,16 +141,16 @@ smatch: OK
 
 Detailed results are available here:
 
-http://www.xs4all.nl/~hverkuil/logs/Sunday.log
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
 
 Detailed regression test results are available here:
 
-http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
 
 Full logs are available here:
 
-http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
 
 The Media Infrastructure API from this daily build is here:
 
