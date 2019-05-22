@@ -2,136 +2,112 @@ Return-Path: <SRS0=OIs4=TW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=0.1 required=3.0 tests=DATE_IN_PAST_06_12,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AC23C282CE
-	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 19:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F8CDC282CE
+	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 19:39:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D099A21855
-	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 19:37:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1558553861;
-	bh=WeJsRdSZVlFBrxd9T9tJ8zeLOk+9iaySj+649hQDRCM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OKGxTFSXgz+yfaeWT346jtpM9JdIUhP6idqxNFOko5Lch3c5AQrwhywo/ShjY0iO7
-	 jXWe2kfE8IhiWuFkWowQT5smhPcwdSvZ6NK5rbb+Y8Qiq4ffHgmb7Ss0l+k5ogphTV
-	 9yCjet/+DlCdrHtljGpAEwXLitht+bNn8N56cHLM=
+	by mail.kernel.org (Postfix) with ESMTP id 272252081C
+	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 19:39:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733191AbfEVTaO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 May 2019 15:30:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53658 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733178AbfEVTaO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 May 2019 15:30:14 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B134C21473;
-        Wed, 22 May 2019 19:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553413;
-        bh=WeJsRdSZVlFBrxd9T9tJ8zeLOk+9iaySj+649hQDRCM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h6D2jayMPyxHHKyGXIFmO1Vt61A5P3fGULFNpZi3ps2vm+dbA7DpByliFVi4Y8kiF
-         ldEvll9Y2IUHy/Qw6KP05ytqIuPbpPxXy7jOP4WtPs0MZ2MIWmlcfmbc4vmxBQZcSJ
-         ycIY+cUDRPqZrcdjeZMK52M3qjOYleI+BjnSBhJE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 060/167] media: ov6650: Move v4l2_clk_get() to ov6650_video_probe() helper
-Date:   Wed, 22 May 2019 15:26:55 -0400
-Message-Id: <20190522192842.25858-60-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192842.25858-1-sashal@kernel.org>
-References: <20190522192842.25858-1-sashal@kernel.org>
+        id S1731813AbfEVTjU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 May 2019 15:39:20 -0400
+Received: from 107-174-234-49-host.colocrossing.com ([107.174.234.49]:47067
+        "EHLO venetian.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730899AbfEVTjT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 22 May 2019 15:39:19 -0400
+To:     linux-media@vger.kernel.org
+Subject: Use logo on USB drive
+Message-ID: <47fd57f21e4a35de6e536e18da39cba3@walgreens.com>
+Date:   Wed, 22 May 2019 12:48:07 +0200
+From:   "David" <david@usbcustom.site>
+Reply-To: jensanke@aliyun.com
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; format=flowed; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Hi,
 
-[ Upstream commit ccdd85d518d8b9320ace1d87271f0ba2175f21fa ]
+Not sure if you received my last email?
 
-In preparation for adding asynchronous subdevice support to the driver,
-don't acquire v4l2_clk from the driver .probe() callback as that may
-fail if the clock is provided by a bridge driver which may be not yet
-initialized.  Move the v4l2_clk_get() to ov6650_video_probe() helper
-which is going to be converted to v4l2_subdev_internal_ops.registered()
-callback, executed only when the bridge driver is ready.
+Are you interested in purchasing your LOGO promotional and marketing
+products for your company?
+We produce USB Drives with your Logo Printed or artwork printed to be used
+for gifts or marketing.
+Here is more info from our website:
 
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/i2c/ov6650.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+We can pre-load your media files, images, presentations and files onto the
+drives for you.
 
-diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 768f2950ea361..965043578323e 100644
---- a/drivers/media/i2c/ov6650.c
-+++ b/drivers/media/i2c/ov6650.c
-@@ -822,9 +822,16 @@ static int ov6650_video_probe(struct i2c_client *client)
- 	u8		pidh, pidl, midh, midl;
- 	int		ret;
- 
-+	priv->clk = v4l2_clk_get(&client->dev, NULL);
-+	if (IS_ERR(priv->clk)) {
-+		ret = PTR_ERR(priv->clk);
-+		dev_err(&client->dev, "v4l2_clk request err: %d\n", ret);
-+		return ret;
-+	}
-+
- 	ret = ov6650_s_power(&priv->subdev, 1);
- 	if (ret < 0)
--		return ret;
-+		goto eclkput;
- 
- 	/*
- 	 * check and show product ID and manufacturer ID
-@@ -859,6 +866,11 @@ static int ov6650_video_probe(struct i2c_client *client)
- 
- done:
- 	ov6650_s_power(&priv->subdev, 0);
-+	if (!ret)
-+		return 0;
-+eclkput:
-+	v4l2_clk_put(priv->clk);
-+
- 	return ret;
- }
- 
-@@ -1004,18 +1016,9 @@ static int ov6650_probe(struct i2c_client *client,
- 	priv->code	  = MEDIA_BUS_FMT_YUYV8_2X8;
- 	priv->colorspace  = V4L2_COLORSPACE_JPEG;
- 
--	priv->clk = v4l2_clk_get(&client->dev, NULL);
--	if (IS_ERR(priv->clk)) {
--		ret = PTR_ERR(priv->clk);
--		goto eclkget;
--	}
--
- 	ret = ov6650_video_probe(client);
--	if (ret) {
--		v4l2_clk_put(priv->clk);
--eclkget:
-+	if (ret)
- 		v4l2_ctrl_handler_free(&priv->hdl);
--	}
- 
- 	return ret;
- }
--- 
-2.20.1
+Some reasons to get the USB drives from us:
+We make Custom Shaped USB drives in the shape of your logo, product or
+anything you like.
+Our USB drives are Eco-friendly
+We supply USB drives to Fortune 100 companies.
+We have over 150 styles and colors to choose from.
+People will keep the USB drive you give them and show it to others
+increasing your marketing value
+
+Please click
+to see all of our stock models and get a quote.
+
+If you are nonprofit, have further discounts for schools and charities.
+
+Thanks,
+David
+USB Drive Specialist
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+http://walgreens.com/mail/link.php?M=29715907&N=3584&L=29&F=T
 
