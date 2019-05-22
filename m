@@ -4,86 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BDD3C193F2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA0D9C282DC
 	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 09:55:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 61F03206BA
+	by mail.kernel.org (Postfix) with ESMTP id C0496206BA
 	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 09:55:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729097AbfEVJz4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 May 2019 05:55:56 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:58095 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729081AbfEVJz4 (ORCPT
+        id S1728835AbfEVJz5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 May 2019 05:55:57 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:44613 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728852AbfEVJz4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 22 May 2019 05:55:56 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id TNyQhNk4I0YQeTNyVhvAlB; Wed, 22 May 2019 11:55:55 +0200
+        id TNyQhNk4I0YQeTNyUhvAkw; Wed, 22 May 2019 11:55:54 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv2 6/7] cec: allow any initiator for Ping and Image/Text View On
-Date:   Wed, 22 May 2019 11:55:49 +0200
-Message-Id: <20190522095550.22026-7-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv2 4/7] cec-ioc-receive.rst: document CEC_MSG_FL_RAW
+Date:   Wed, 22 May 2019 11:55:47 +0200
+Message-Id: <20190522095550.22026-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190522095550.22026-1-hverkuil-cisco@xs4all.nl>
 References: <20190522095550.22026-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfNrAqzfM/n8RrN5GrrMonzrQIqigQxNgN6WsC7DvM5V090WC4OUZILGjMt268ZV5N/oHjcc/Nw+lKXJNpsI3cUL+4nxnzl5GzPIW7CISyAj5vFGll9V9
- z+EOkf+C72Ifc0+xl4FLh2w+LMrxcTTPdIGr5KCV0KYiExPOXWirl0YuhVAaeHJkfD9W7/r9keT3vd8WOqXUWKNpzJrVtBg+VI0+VXNI6GtUmXbJzi1i7ldT
+X-CMAE-Envelope: MS4wfIcmtYl3UQfYh3G38ZQhSQHa7SHIksiZYZ/LbMIZTD+JaNvxnbX3RctSzWq1T1sKc/uxgP3mJBuLjkC2CiOkYwnQeRjkp+ZuseeCDJmDkhA/e7cEx1pq
+ YcIDzDOhaSgvkrsz+y3G1lwccmnoAq0OCR9GVM/u04X5KLNpaP1nyFc8Po6mAOmZFAh4X5R5FqerSCwxbbN+drK16b2hkEFtkWpuhQDedAh8eZTeqp7brV9F
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some displays pull down the HPD when in standby, but CEC is still
-active and the display can be woken up by sending an Image View On
-or Text View On CEC command. The CEC specification doesn't tell you
-what the initiator should be for such a command (without a HPD it's
-unclear if the CEC adapter can claim a logical address).
-
-This patch allows any initiator value when there is no HPD for the
-Image/Text View On commands and for the Ping command.
+Document this new cec_msg flag.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/cec/cec-adap.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ Documentation/media/uapi/cec/cec-ioc-receive.rst | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/cec/cec-adap.c b/drivers/media/cec/cec-adap.c
-index 9a1ec9299aca..5827d8c3742a 100644
---- a/drivers/media/cec/cec-adap.c
-+++ b/drivers/media/cec/cec-adap.c
-@@ -809,14 +809,23 @@ int cec_transmit_msg_fh(struct cec_adapter *adap, struct cec_msg *msg,
- 				__func__);
- 			return -EINVAL;
- 		}
--		if (msg->len > 1 && adap->is_configured &&
-+		if (adap->is_configured &&
- 		    !cec_has_log_addr(adap, cec_msg_initiator(msg))) {
- 			dprintk(1, "%s: initiator has unknown logical address %d\n",
- 				__func__, cec_msg_initiator(msg));
- 			return -EINVAL;
- 		}
-+		/*
-+		 * Special case: allow Ping and IMAGE/TEXT_VIEW_ON to be
-+		 * transmitted to a TV, even if the adapter is unconfigured.
-+		 * This makes it possible to detect or wake up displays that
-+		 * pull down the HPD when in standby.
-+		 */
- 		if (!adap->is_configured && !adap->is_configuring &&
--		    msg->msg[0] != 0xf0) {
-+		    (msg->len > 2 ||
-+		     cec_msg_destination(msg) != CEC_LOG_ADDR_TV ||
-+		     (msg->len == 2 && msg->msg[1] != CEC_MSG_IMAGE_VIEW_ON &&
-+		      msg->msg[1] != CEC_MSG_TEXT_VIEW_ON))) {
- 			dprintk(1, "%s: adapter is unconfigured\n", __func__);
- 			return -ENONET;
- 		}
+diff --git a/Documentation/media/uapi/cec/cec-ioc-receive.rst b/Documentation/media/uapi/cec/cec-ioc-receive.rst
+index c3a685ff05cb..4137903d672e 100644
+--- a/Documentation/media/uapi/cec/cec-ioc-receive.rst
++++ b/Documentation/media/uapi/cec/cec-ioc-receive.rst
+@@ -223,6 +223,18 @@ View On' messages from initiator 0xf ('Unregistered') to destination 0 ('TV').
+ 	result of the :ref:`ioctl CEC_TRANSMIT <CEC_TRANSMIT>`, and once via
+ 	:ref:`ioctl CEC_RECEIVE <CEC_RECEIVE>`.
+ 
++    * .. _`CEC-MSG-FL-RAW`:
++
++      - ``CEC_MSG_FL_RAW``
++      - 2
++      - Normally CEC messages are validated before transmitting them. If this
++        flag is set when :ref:`ioctl CEC_TRANSMIT <CEC_TRANSMIT>` is called,
++	then no validation takes place and the message is transmitted as-is.
++	This is useful when debugging CEC issues.
++	This flag is only allowed if the process has the ``CAP_SYS_RAWIO``
++	capability. If that is not set, then the ``EPERM`` error code is
++	returned.
++
+ 
+ .. tabularcolumns:: |p{5.6cm}|p{0.9cm}|p{11.0cm}|
+ 
+@@ -358,7 +370,8 @@ ENOTTY
+ 
+ EPERM
+     The CEC adapter is not configured, i.e. :ref:`ioctl CEC_ADAP_S_LOG_ADDRS <CEC_ADAP_S_LOG_ADDRS>`
+-    has never been called.
++    has never been called, or ``CEC_MSG_FL_RAW`` was used from a process that
++    did not have the ``CAP_SYS_RAWIO`` capability.
+ 
+ ENONET
+     The CEC adapter is not configured, i.e. :ref:`ioctl CEC_ADAP_S_LOG_ADDRS <CEC_ADAP_S_LOG_ADDRS>`
 -- 
 2.20.1
 
