@@ -2,78 +2,85 @@ Return-Path: <SRS0=OIs4=TW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8B80C282CE
-	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 11:51:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CA5DC282DC
+	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 11:51:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AC3C32173C
-	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 11:51:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2E5472173C
+	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 11:51:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729215AbfEVLvK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 May 2019 07:51:10 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:56756 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727464AbfEVLvK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 May 2019 07:51:10 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id BEE91634C7B
-        for <linux-media@vger.kernel.org>; Wed, 22 May 2019 14:50:47 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.89)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1hTPlf-0000ni-MN
-        for linux-media@vger.kernel.org; Wed, 22 May 2019 14:50:47 +0300
-Date:   Wed, 22 May 2019 14:50:47 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for 5.3] Videobuf2 corner case fixes
-Message-ID: <20190522115047.7iid3axhq443q7ka@valkosipuli.retiisi.org.uk>
+        id S1729238AbfEVLvs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 May 2019 07:51:48 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:48742 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727464AbfEVLvs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 22 May 2019 07:51:48 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73C4E80D;
+        Wed, 22 May 2019 04:51:47 -0700 (PDT)
+Received: from mbp (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A731F3F575;
+        Wed, 22 May 2019 04:51:41 -0700 (PDT)
+Date:   Wed, 22 May 2019 12:51:39 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Subject: Re: [PATCH v15 06/17] mm: untag user pointers in do_pages_move
+Message-ID: <20190522115138.52ew2totjd6i4aaq@mbp>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <474b3c113edae1f2fa679dc7237ec070ff4efb70.1557160186.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <474b3c113edae1f2fa679dc7237ec070ff4efb70.1557160186.git.andreyknvl@google.com>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+On Mon, May 06, 2019 at 06:30:52PM +0200, Andrey Konovalov wrote:
+> This patch is a part of a series that extends arm64 kernel ABI to allow to
+> pass tagged user pointers (with the top byte set to something else other
+> than 0x00) as syscall arguments.
+> 
+> do_pages_move() is used in the implementation of the move_pages syscall.
+> 
+> Untag user pointers in this function.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-Here are the videobuf2 corner case fixes.
-
-Please pull.
-
-
-The following changes since commit bc8c479a5b19bd44f7379e42e627170957985ee9:
-
-  media: venus: helpers: fix dynamic buffer mode for v4 (2019-05-21 09:03:25 -0400)
-
-are available in the git repository at:
-
-  ssh://linuxtv.org/git/sailus/media_tree.git tags/vb2-fix-5.3-1-signed
-
-for you to fetch changes up to 1e210b78171d7d60e4053a8f865efac1693e2213:
-
-  videobuf2-core.h: Document the alloc memop size argument as page aligned (2019-05-22 12:03:24 +0300)
-
-----------------------------------------------------------------
-vb2 corner case fixes
-
-----------------------------------------------------------------
-Sakari Ailus (3):
-      videobuf2-core: Prevent size alignment wrapping buffer size to 0
-      videobuf2-dma-sg: Prevent size from overflowing
-      videobuf2-core.h: Document the alloc memop size argument as page aligned
-
- drivers/media/common/videobuf2/videobuf2-core.c   | 5 +++++
- drivers/media/common/videobuf2/videobuf2-dma-sg.c | 2 +-
- include/media/videobuf2-core.h                    | 3 ++-
- 3 files changed, 8 insertions(+), 2 deletions(-)
-
--- 
-Sakari Ailus
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
