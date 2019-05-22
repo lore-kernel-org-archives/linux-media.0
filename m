@@ -2,112 +2,130 @@ Return-Path: <SRS0=OIs4=TW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.1 required=3.0 tests=DATE_IN_PAST_06_12,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FF59C282DC
-	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 19:50:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E89DFC282DD
+	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 19:56:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4C29A2081C
-	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 19:50:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA87C217D9
+	for <linux-media@archiver.kernel.org>; Wed, 22 May 2019 19:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1558555010;
+	bh=o2DyYICtDDi92G9bAt/y1p5sGO/JSMfMvTFH3uurWqE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ESmusazC6detYWyw85hPN/rmIGZ8/nfCwcutVbUPCqtYNXF3gaNPbciGkB28ZOnVa
+	 4qaX2GiDE0wbehV9ME/XvbFeBqlfIKLMwnnq63tqzUx1NA0EwYIigCtjmv/CVcFqqf
+	 h5mXGrlScaw9lVtfmtvUN+bieCNztZhb/L6PFxn0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732243AbfEVTuc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 22 May 2019 15:50:32 -0400
-Received: from 107-174-234-49-host.colocrossing.com ([107.174.234.49]:59294
-        "EHLO venetian.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731521AbfEVTuc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 22 May 2019 15:50:32 -0400
-To:     linux-media@vger.kernel.org
-Subject: Use logo on USB drive
-Message-ID: <274db46c7ca8fa44211039f6624a4a95@walgreens.com>
-Date:   Wed, 22 May 2019 13:28:05 +0200
-From:   "David" <david@usbcustom.site>
-Reply-To: jensanke@aliyun.com
+        id S1731383AbfEVTYn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 22 May 2019 15:24:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45900 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731371AbfEVTYn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 22 May 2019 15:24:43 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9CE9D217D9;
+        Wed, 22 May 2019 19:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558553082;
+        bh=o2DyYICtDDi92G9bAt/y1p5sGO/JSMfMvTFH3uurWqE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=cFsg5MlTj4crXqHYF3/QdD3y5gJgNigRltZvc8NrcpjB/FNWJN0WXBgWA07OQSoP4
+         sFl6RKckjRzhdjZ+nMbgjtVdzopoBgvjnD58K770TgXokt9WW/I0ywqRt7UjOWCY9S
+         KGhlRAf+P3kf8uHdKQBObl1RX2Lzgmrd6gO9bwCs=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Fabien Dessenne <fabien.dessenne@st.com>,
+        Hugues Fruchet <hugues.fruchet@st.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.0 038/317] media: stm32-dcmi: return appropriate error codes during probe
+Date:   Wed, 22 May 2019 15:18:59 -0400
+Message-Id: <20190522192338.23715-38-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
+References: <20190522192338.23715-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+From: Fabien Dessenne <fabien.dessenne@st.com>
 
-Not sure if you received my last email?
+[ Upstream commit b5b5a27bee5884860798ffd0f08e611a3942064b ]
 
-Are you interested in purchasing your LOGO promotional and marketing
-products for your company?
-We produce USB Drives with your Logo Printed or artwork printed to be used
-for gifts or marketing.
-Here is more info from our website:
+During probe, return the provided errors value instead of -ENODEV.
+This allows the driver to be deferred probed if needed.
 
-We can pre-load your media files, images, presentations and files onto the
-drives for you.
+Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+Acked-by: Hugues Fruchet <hugues.fruchet@st.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/media/platform/stm32/stm32-dcmi.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-Some reasons to get the USB drives from us:
-We make Custom Shaped USB drives in the shape of your logo, product or
-anything you like.
-Our USB drives are Eco-friendly
-We supply USB drives to Fortune 100 companies.
-We have over 150 styles and colors to choose from.
-People will keep the USB drive you give them and show it to others
-increasing your marketing value
-
-Please click
-to see all of our stock models and get a quote.
-
-If you are nonprofit, have further discounts for schools and charities.
-
-Thanks,
-David
-USB Drive Specialist
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-http://walgreens.com/mail/link.php?M=26955733&N=3585&L=29&F=T
+diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
+index 6732874114cf7..918e49f27c7ed 100644
+--- a/drivers/media/platform/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/stm32/stm32-dcmi.c
+@@ -1645,7 +1645,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	dcmi->rstc = devm_reset_control_get_exclusive(&pdev->dev, NULL);
+ 	if (IS_ERR(dcmi->rstc)) {
+ 		dev_err(&pdev->dev, "Could not get reset control\n");
+-		return -ENODEV;
++		return PTR_ERR(dcmi->rstc);
+ 	}
+ 
+ 	/* Get bus characteristics from devicetree */
+@@ -1660,7 +1660,7 @@ static int dcmi_probe(struct platform_device *pdev)
+ 	of_node_put(np);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Could not parse the endpoint\n");
+-		return -ENODEV;
++		return ret;
+ 	}
+ 
+ 	if (ep.bus_type == V4L2_MBUS_CSI2_DPHY) {
+@@ -1673,8 +1673,9 @@ static int dcmi_probe(struct platform_device *pdev)
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq <= 0) {
+-		dev_err(&pdev->dev, "Could not get irq\n");
+-		return -ENODEV;
++		if (irq != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "Could not get irq\n");
++		return irq;
+ 	}
+ 
+ 	dcmi->res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+@@ -1694,12 +1695,13 @@ static int dcmi_probe(struct platform_device *pdev)
+ 					dev_name(&pdev->dev), dcmi);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Unable to request irq %d\n", irq);
+-		return -ENODEV;
++		return ret;
+ 	}
+ 
+ 	mclk = devm_clk_get(&pdev->dev, "mclk");
+ 	if (IS_ERR(mclk)) {
+-		dev_err(&pdev->dev, "Unable to get mclk\n");
++		if (PTR_ERR(mclk) != -EPROBE_DEFER)
++			dev_err(&pdev->dev, "Unable to get mclk\n");
+ 		return PTR_ERR(mclk);
+ 	}
+ 
+-- 
+2.20.1
 
