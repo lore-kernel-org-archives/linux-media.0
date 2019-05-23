@@ -2,174 +2,101 @@ Return-Path: <SRS0=LuGi=TX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 117FAC282DD
-	for <linux-media@archiver.kernel.org>; Thu, 23 May 2019 21:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CAA8C282DD
+	for <linux-media@archiver.kernel.org>; Thu, 23 May 2019 21:49:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D4EDA2168B
-	for <linux-media@archiver.kernel.org>; Thu, 23 May 2019 21:43:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="i5j6lJ3z"
+	by mail.kernel.org (Postfix) with ESMTP id 0609620868
+	for <linux-media@archiver.kernel.org>; Thu, 23 May 2019 21:49:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388256AbfEWVnh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 May 2019 17:43:37 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:53272 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387709AbfEWVnh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 May 2019 17:43:37 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4NLYrP6194020;
-        Thu, 23 May 2019 21:42:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2018-07-02;
- bh=fChv2jZysnH0YR2y5rlBhLoHF4XJSOv5yE7IjBMa6MI=;
- b=i5j6lJ3z4Hf6Mwe1uFCyW+Dx0BGc6CLgnMT05UhOAfwtXEFuubZ+5cv8bNXRQH8SGgIo
- 3OyLnYWAZcw9X87yhv0YScSmwlfD77yg0wTvg1PD2uhxSUM5Gy8pVikHFeRo6px2TaaX
- 1T5zqOZo/S3v8s0hewcbGZ3eIMfGRoZXC5u4QclbQcN+yRHCnMRvFytz7HBe/xVcQAjJ
- q7QGNHrFLf5im7IlibITLPPps1G2JhmeRisj45eynyh1gJCP32P+yM8kZMYnSTS9vT+Y
- qf/xCuv9cZn8I8m8yv46kQ4CowM5trlHuA6dN6lqyIZI05Jf3nu9oHXNSoc9l5912SdM mQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 2smsk5n8d7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 May 2019 21:42:41 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4NLfaot156717;
-        Thu, 23 May 2019 21:42:41 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2smsgtgmuy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 May 2019 21:42:41 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4NLgaOB031829;
-        Thu, 23 May 2019 21:42:37 GMT
-Received: from [192.168.1.16] (/24.9.64.241)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 23 May 2019 21:42:36 +0000
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Elliott Hughes <enh@google.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
- <20190523201105.oifkksus4rzcwqt4@mbp>
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-Organization: Oracle Corp
-Message-ID: <047e3b90-d73e-0ca8-869c-d03b7580e644@oracle.com>
-Date:   Thu, 23 May 2019 15:42:33 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2388232AbfEWVtg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 May 2019 17:49:36 -0400
+Received: from mga17.intel.com ([192.55.52.151]:61477 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388134AbfEWVtg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 23 May 2019 17:49:36 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 May 2019 14:49:35 -0700
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 23 May 2019 14:49:34 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1hTvaf-0004Yj-TB; Fri, 24 May 2019 05:49:33 +0800
+Date:   Fri, 24 May 2019 05:49:06 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Jungo Lin <jungo.lin@mediatek.com>
+Cc:     kbuild-all@01.org, linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [linuxtv-media:master 51/52] drivers/media/media-device.c:521:9:
+ sparse: sparse: incorrect type in argument 1 (different address spaces)
+Message-ID: <201905240504.XLNXJBMV%lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20190523201105.oifkksus4rzcwqt4@mbp>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9266 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905230138
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9266 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905230138
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 5/23/19 2:11 PM, Catalin Marinas wrote:
-> Hi Khalid,
->=20
-> On Thu, May 23, 2019 at 11:51:40AM -0600, Khalid Aziz wrote:
->> On 5/21/19 6:04 PM, Kees Cook wrote:
->>> As an aside: I think Sparc ADI support in Linux actually side-stepped=
+tree:   git://linuxtv.org/media_tree.git master
+head:   3d3515312f97582136644a7327ed262c7bb7ea31
+commit: f49308878d7202e07d8761238e01bd0e5fce2750 [51/52] media: media_device_enum_links32: clean a reserved field
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-rc1-7-g2b96cd8-dirty
+        git checkout f49308878d7202e07d8761238e01bd0e5fce2750
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
->>> this[1] (i.e. chose "solution 1"): "All addresses passed to kernel mu=
-st
->>> be non-ADI tagged addresses." (And sadly, "Kernel does not enable ADI=
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
->>> for kernel code.") I think this was a mistake we should not repeat fo=
-r
->>> arm64 (we do seem to be at least in agreement about this, I think).
->>>
->>> [1] https://lore.kernel.org/patchwork/patch/654481/
->>
->> That is a very early version of the sparc ADI patch. Support for tagge=
-d
->> addresses in syscalls was added in later versions and is in the patch
->> that is in the kernel.
->=20
-> I tried to figure out but I'm not familiar with the sparc port. How did=
 
-> you solve the tagged address going into various syscall implementations=
+sparse warnings: (new ones prefixed by >>)
 
-> in the kernel (e.g. sys_write)? Is the tag removed on kernel entry or i=
-t
-> ends up deeper in the core code?
+>> drivers/media/media-device.c:521:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected void *s @@    got unsigned int [noderef] <asvoid *s @@
+>> drivers/media/media-device.c:521:9: sparse:    expected void *s
+>> drivers/media/media-device.c:521:9: sparse:    got unsigned int [noderef] <asn:1> *
 
-Tag is not removed from the user addresses. Kernel passes tagged
-addresses to copy_from_user and copy_to_user. MMU checks the tag
-embedded in the address when kernel accesses userspace addresses. This
-maintains the ADI integrity even when userspace attempts to access any
-userspace addresses through system calls.
+vim +521 drivers/media/media-device.c
 
-On sparc, access_ok() is defined as:
+   499	
+   500	static long media_device_enum_links32(struct media_device *mdev,
+   501					      struct media_links_enum32 __user *ulinks)
+   502	{
+   503		struct media_links_enum links;
+   504		compat_uptr_t pads_ptr, links_ptr;
+   505		int ret;
+   506	
+   507		memset(&links, 0, sizeof(links));
+   508	
+   509		if (get_user(links.entity, &ulinks->entity)
+   510		    || get_user(pads_ptr, &ulinks->pads)
+   511		    || get_user(links_ptr, &ulinks->links))
+   512			return -EFAULT;
+   513	
+   514		links.pads = compat_ptr(pads_ptr);
+   515		links.links = compat_ptr(links_ptr);
+   516	
+   517		ret = media_device_enum_links(mdev, &links);
+   518		if (ret)
+   519			return ret;
+   520	
+ > 521		memset(ulinks->reserved, 0, sizeof(ulinks->reserved));
+   522	
+   523		return 0;
+   524	}
+   525	
 
-#define access_ok(addr, size) __access_ok((unsigned long)(addr), size)
-#define __access_ok(addr, size) (__user_ok((addr) & get_fs().seg, (size))=
-)
-#define __user_ok(addr, size) ({ (void)(size); (addr) < STACK_TOP; })
-
-STACK_TOP for M7 processor (which is the first sparc processor to
-support ADI) is 0xfff8000000000000UL. Tagged addresses pass the
-access_ok() check fine. Any tag mismatches that happen during kernel
-access to userspace addresses are handled by do_mcd_err().
-
---
-Khalid
-
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
