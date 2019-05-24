@@ -2,79 +2,97 @@ Return-Path: <SRS0=UxAd=TY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93A17C282E3
-	for <linux-media@archiver.kernel.org>; Fri, 24 May 2019 13:54:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C869EC072B5
+	for <linux-media@archiver.kernel.org>; Fri, 24 May 2019 14:05:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 69DEB206BA
-	for <linux-media@archiver.kernel.org>; Fri, 24 May 2019 13:54:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A3BE82184E
+	for <linux-media@archiver.kernel.org>; Fri, 24 May 2019 14:05:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403895AbfEXNyD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 24 May 2019 09:54:03 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:36644 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2403843AbfEXNyD (ORCPT
+        id S2404010AbfEXOF0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 24 May 2019 10:05:26 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53279 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403918AbfEXOF0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 24 May 2019 09:54:03 -0400
-Received: (qmail 1597 invoked by uid 2102); 24 May 2019 09:54:02 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 May 2019 09:54:02 -0400
-Date:   Fri, 24 May 2019 09:54:02 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg KH <greg@kroah.com>
-cc:     andreyknvl@google.com,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <wen.yang99@zte.com.cn>
-Subject: Re: [PATCH] media: usb: siano: Fix general protection fault in smsusb
-In-Reply-To: <20190524103540.250a69e7@coco.lan>
-Message-ID: <Pine.LNX.4.44L0.1905240951470.1435-100000@iolanthe.rowland.org>
+        Fri, 24 May 2019 10:05:26 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hUAp3-0002Dk-5J; Fri, 24 May 2019 16:05:25 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 01/10] rockchip/vpu: remove unused declarations
+Date:   Fri, 24 May 2019 16:04:50 +0200
+Message-Id: <20190524140459.4002-2-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190524140459.4002-1-p.zabel@pengutronix.de>
+References: <20190524140459.4002-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 24 May 2019, Mauro Carvalho Chehab wrote:
+Remove unused function and struct declarations from the
+rockchip_vpu_common.h header file.
 
-> Em Tue, 7 May 2019 12:39:47 -0400 (EDT)
-> Alan Stern <stern@rowland.harvard.edu> escreveu:
-> 
-> > The syzkaller USB fuzzer found a general-protection-fault bug in the
-> > smsusb part of the Siano DVB driver.  The fault occurs during probe
-> > because the driver assumes without checking that the device has both
-> > IN and OUT endpoints and the IN endpoint is ep1.
-> > 
-> > By slightly rearranging the driver's initialization code, we can make
-> > the appropriate checks early on and thus avoid the problem.  If the
-> > expected endpoints aren't present, the new code safely returns -ENODEV
-> > from the probe routine.
-> > 
-> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > Reported-and-tested-by: syzbot+53f029db71c19a47325a@syzkaller.appspotmail.com
-> > CC: <stable@vger.kernel.org>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ .../media/rockchip/vpu/rockchip_vpu_common.h  | 25 -------------------
+ 1 file changed, 25 deletions(-)
 
-> Patch looks correct, and I'm applying it. It exposes another potential
-> problem though: what happens if sizeof(desc.wMaxPacketSize) < sizeof(struct sms_msg_hdr)?
-> 
-> I'm enclosing a followup patch that should solve this situation
-> (and clean up a sparse warning).
-> 
-> Thanks,
-> Mauro
-
-Your points are well taken.
-
-However, Greg KH has already taken the original patch and a fix for the 
-sparse warning into his tree.  I guess the two of you should figure out 
-how best to straighten this out.
-
-Alan Stern
+diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_common.h b/drivers/staging/media/rockchip/vpu/rockchip_vpu_common.h
+index 0b6a3fb1a48e..96948ec49c18 100644
+--- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_common.h
++++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_common.h
+@@ -18,31 +18,6 @@
+ 
+ #include "rockchip_vpu.h"
+ 
+-extern const struct v4l2_ioctl_ops rockchip_vpu_enc_ioctl_ops;
+-extern const struct vb2_ops rockchip_vpu_enc_src_queue_ops;
+-extern const struct vb2_ops rockchip_vpu_enc_dst_queue_ops;
+-extern const struct v4l2_ioctl_ops rockchip_vpu_dec_ioctl_ops;
+-extern const struct vb2_ops rockchip_vpu_dec_src_queue_ops;
+-extern const struct vb2_ops rockchip_vpu_dec_dst_queue_ops;
+-
+-void rockchip_vpu_buf_queue(struct vb2_buffer *vb);
+-int rockchip_vpu_src_queue_setup(struct vb2_queue *vq,
+-				 unsigned int *num_buffers,
+-				 unsigned int *num_planes,
+-				 unsigned int sizes[],
+-				 struct device *alloc_devs[]);
+-int rockchip_vpu_dst_queue_setup(struct vb2_queue *vq,
+-				 unsigned int *num_buffers,
+-				 unsigned int *num_planes,
+-				 unsigned int sizes[],
+-				 struct device *alloc_devs[]);
+-void rockchip_vpu_buf_request_complete(struct vb2_buffer *vb);
+-int rockchip_vpu_buf_out_validate(struct vb2_buffer *vb);
+-int rockchip_vpu_src_buf_prepare(struct vb2_buffer *vb);
+-int rockchip_vpu_dst_buf_prepare(struct vb2_buffer *vb);
+-int rockchip_vpu_start(struct vb2_queue *q, unsigned int count);
+-void rockchip_vpu_stop(struct vb2_queue *q);
+-
+ void *rockchip_vpu_get_ctrl(struct rockchip_vpu_ctx *ctx, u32 id);
+ dma_addr_t rockchip_vpu_get_ref(struct vb2_queue *q, u64 ts);
+ 
+-- 
+2.20.1
 
