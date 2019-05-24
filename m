@@ -2,111 +2,158 @@ Return-Path: <SRS0=UxAd=TY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E84E2C072B5
-	for <linux-media@archiver.kernel.org>; Fri, 24 May 2019 03:31:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBE55C072B5
+	for <linux-media@archiver.kernel.org>; Fri, 24 May 2019 03:58:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AC072217D9
-	for <linux-media@archiver.kernel.org>; Fri, 24 May 2019 03:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1558668678;
-	bh=CUoB1/lohw4IFNZnQRxH8vK9OnSsYAl12HWN/ZrYLFw=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=jnMNOuWJfw6TZFlOdqE2UUhbyGrjY8NaTEUdUaTk/zeFTS8gKRwXQgw6BS5Ptpo0J
-	 bUxTXS08Ir3rgG19Y200hk+g6lNrm1ttZAlnRA+dNDP63F9FIeXn3UyoTa2ssp/wso
-	 ku4G358HxpMQGIbbhbjvOpPW9VkTJxEUm8JH/MGc=
+	by mail.kernel.org (Postfix) with ESMTP id 9E96321773
+	for <linux-media@archiver.kernel.org>; Fri, 24 May 2019 03:58:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388800AbfEXDbF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 23 May 2019 23:31:05 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:46668 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388735AbfEXDbF (ORCPT
+        id S2387885AbfEXD6T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 23 May 2019 23:58:19 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:51211 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387703AbfEXD6T (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 23 May 2019 23:31:05 -0400
-Received: by mail-io1-f65.google.com with SMTP id q21so6622593iog.13
-        for <linux-media@vger.kernel.org>; Thu, 23 May 2019 20:31:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4IMXeSPz07H/1FS+L5wog9k24C98hcuyfvlIBRrFToQ=;
-        b=JuooVbNFZqVGK0ePviE0+zQb5HLSPgmBhi22D2BkiE/7yFc3PTJNQPFhzTnHXwXDO/
-         JweFIXmAX8zk6C7iGGlZ8FZ3K7jJswX+d2yJ+56Yho3vHWhkyP2jP4CFjXXhQCbbZTk6
-         tn1Y3UpMIIKQI6eOHSBeOwAZuvY9AONqt+uic=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4IMXeSPz07H/1FS+L5wog9k24C98hcuyfvlIBRrFToQ=;
-        b=d/p7i51W5x+v5yBvMZpUjpsf63wzCMK7t5cQtyVJuFQZuFc68fE5EpnQyqflJk9MhG
-         CJOBCMiBjd1gYL3MW6FhAqsUxePode71yN+rzPsd2k2MprJg4SKRkkK9HcjJdXDo4flH
-         HlIB8sv/2iVh64Q6HsScba5XmzLpPkE7cp1bKXeAm5ZMTcK3VntJxjL31DsSOKypDjpB
-         luQmy+fGiQNqcefl4qRY+ahsOA2HAVIX+iXn01hMyxs+YTNWZ/RqxejesYz+Y3JJAL6t
-         s/TCSA4QCJRc/IqlA5NRVr4ijyhGHepc/YtNTtNdJfM9Wk9p89ZrDUri08vG03w4Yy+x
-         LexQ==
-X-Gm-Message-State: APjAAAX4DWBUFff6eXTI9j/x7O7lltr4e34LDgZiWpEF6lRdUqjRcRq0
-        Sdiv9xVIhLiuwZSN+f3tyot68g==
-X-Google-Smtp-Source: APXvYqw5FmID+PmO0aMdsdSEbVeSQErU4FoC610/wj0wuiUVHLFvpKEsMgkeFn5w6ac6DAfyipIrXQ==
-X-Received: by 2002:a6b:4408:: with SMTP id r8mr3147213ioa.103.1558668664632;
-        Thu, 23 May 2019 20:31:04 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h185sm794380itb.16.2019.05.23.20.31.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 May 2019 20:31:04 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        helen.koike@collabora.com
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] Use Media Dev Allocator to fix vimc dev lifetime bugs
-Date:   Thu, 23 May 2019 21:31:00 -0600
-Message-Id: <cover.1558667245.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 23 May 2019 23:58:19 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:1c59:cd67:ed42:fb0c])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id U1LThGuH7sDWyU1LUhQFZH; Fri, 24 May 2019 05:58:17 +0200
+Message-ID: <22601c7f0d5511825580f272ab0ce463@smtp-cloud9.xs4all.net>
+Date:   Fri, 24 May 2019 05:58:15 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: OK
+X-CMAE-Envelope: MS4wfHkS7uE79mVENn51rYV9necdkT7zWP0L6LYVNsdVolx2XqsRfOJpoJ4Q18dKGv+c52a2O61vt9VyX19LXYeBo8QwSEJMMjJPvlv6nT4+MJqqr5fvDQCc
+ M5ybgHgrshWcmUIuFbkFFDl1GafbdCXdHUK5p2RuvXqVk/C0Yrs72/oJgnbX13oB0GjDwR2AWzJ4N4fcShRzKHuRYgRBNodl7aejqgDtEdyNSZYdteRk3A3V
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-media_device is embedded in struct vimc_device and when vimc is removed
-vimc_device and the embedded media_device goes with it, while the active
-stream and vimc_capture continue to access it.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Fix the media_device lifetime problem by changing vimc to create shared
-media_device using Media Device Allocator API and vimc_capture getting
-a reference to vimc module. With this change, vimc module can be removed
-only when the references are gone. vimc can be removed after vimc_capture
-is removed.
+Results of the daily build of media_tree:
 
-Media Device Allocator API supports just USB devices. Enhance it
-adding a genetic device allocate interface to support other media
-drivers.
+date:			Fri May 24 05:00:10 CEST 2019
+media-tree git hash:	3d3515312f97582136644a7327ed262c7bb7ea31
+media_build git hash:	483b4f0f48283ddaf1ba54d079051b58cdff2ef9
+v4l-utils git hash:	1cbe6e53dcb10745fcf8569a9cd0ba0979c2808e
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: f324e8d7f445042ca6a3f85a18cfec395c27df23
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
-The new interface takes pointer to struct device instead and creates
-media device. This interface allows a group of drivers that have a
-common root device to share media device resource and ensure media
-device doesn't get deleted as long as one of the drivers holds its
-reference.
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2-rc1-i686: OK
+linux-5.2-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: WARNINGS
+smatch: OK
 
-The new interface has been tested with vimc component driver to fix
-panics when vimc module is removed while streaming is in progress.
+Detailed results are available here:
 
-Shuah Khan (2):
-  media: add generic device allocate interface to media-dev-allocator
-  vimc: fix BUG: unable to handle kernel NULL pointer dereference
+http://www.xs4all.nl/~hverkuil/logs/Friday.log
 
- drivers/media/Makefile                     |  4 +-
- drivers/media/media-dev-allocator.c        | 39 ++++++++++++++
- drivers/media/platform/vimc/vimc-capture.c | 17 +++++-
- drivers/media/platform/vimc/vimc-core.c    | 60 ++++++++++++----------
- include/media/media-dev-allocator.h        | 46 ++++++++++++++---
- 5 files changed, 130 insertions(+), 36 deletions(-)
+Detailed regression test results are available here:
 
--- 
-2.17.1
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Friday-test-media-dmesg.log
 
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Friday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
