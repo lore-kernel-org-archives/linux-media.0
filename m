@@ -2,113 +2,122 @@ Return-Path: <SRS0=+SCM=TZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=FROM_EXCESS_BASE64,
+X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C1DBC282CE
-	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 12:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDB55C07542
+	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 18:09:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4F085217F9
-	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 12:51:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 957D2216E3
+	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 18:09:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AS/eNOcu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbfEYMvm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 25 May 2019 08:51:42 -0400
-Received: from mailoutvs9.siol.net ([185.57.226.200]:53339 "EHLO mail.siol.net"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726585AbfEYMvm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 25 May 2019 08:51:42 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 37BEE52243C;
-        Sat, 25 May 2019 14:51:38 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id mbbF_S_xVf-j; Sat, 25 May 2019 14:51:37 +0200 (CEST)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id BC98B522442;
-        Sat, 25 May 2019 14:51:37 +0200 (CEST)
-Received: from jernej-laptop.localnet (89-212-178-211.dynamic.t-2.net [89.212.178.211])
-        (Authenticated sender: jernej.skrabec@siol.net)
-        by mail.siol.net (Postfix) with ESMTPA id 2A20C52243C;
-        Sat, 25 May 2019 14:51:35 +0200 (CEST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@siol.net>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id S1727433AbfEYSJk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 25 May 2019 14:09:40 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52257 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727405AbfEYSJj (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 25 May 2019 14:09:39 -0400
+Received: by mail-wm1-f67.google.com with SMTP id y3so12351271wmm.2;
+        Sat, 25 May 2019 11:09:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=C9g/LoE0ZpkZVP3pL23ne066/SyPh+9LNI5RSIoN1oM=;
+        b=AS/eNOcuOWZrNY5F73b3tRw6W1rm1ShvuCJ8NsyV7sck53nwFFQ1NJ9XWjtd2qbvRy
+         m8zszAG1jKyqoOhnyYeycFtOik1jC+/ZIAL1Vlk9aL19WbQmZ7LXySmsTPOyW2NE1muh
+         LwUEz7Iem3belCk3GnAdfIO3IMhtH5iOwUsFq09HucZJGaDkxDQElmfi0b+rTgjLEbx4
+         2qu14WLti9k6TSToja1a5V6lViC87Oi6jOzLFVViOq7z/zKh6FyDgUxyxLtBBDjYMMYU
+         NYfgmw8oHTK5lTxZKq0Ucz7m9THTm4wMFRoivjCsMZ8vwREWcFvWqb9UAMXlrbPeXzz6
+         V2IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=C9g/LoE0ZpkZVP3pL23ne066/SyPh+9LNI5RSIoN1oM=;
+        b=bJvbwEnr1ruaPsII8pM46vBNk2yM6vJi1+fiXRbs7YAfMP1HcgOYKGNKNi2KB6J9a1
+         qF75ao9RlAk1OoXGoggwfTtQAe6742NPIjxeF/7Zc0UV5FG4Tk/y78YuuOWGSNJHkhjh
+         oUKGlMJ+ESDIQvGckn7SkWxEowoviqMA5Z/ExygTVy4WlX4AUbH+FBRvuekN61D5wDmF
+         dGW5J90yO/hYE09u2omKtymhBx0FIYxP2G/mDx5sqk133KJzw6EyNHgles6zxThBQFjR
+         JZBgXQF4nyLFsVzw8PjK6sXYk4enmWIA6Q4VOgSjNi+cfRup7MoWcmEFYfsbIcmZhrrk
+         Ek9A==
+X-Gm-Message-State: APjAAAUsPrVYjPMvJP9HTgINsdr2JKvspFaeBfV3CpouYnyQLu7M/bOt
+        h4fT0efUq96tuMXKyaluXhk=
+X-Google-Smtp-Source: APXvYqxHLZVgAdIIsU0FKFQ49/TWoLdxUaOWJDFX8vHrq/7KokfZQneNmxMcqZEdoz0vbuvGzyTscw==
+X-Received: by 2002:a7b:c8c1:: with SMTP id f1mr3762382wml.159.1558807777790;
+        Sat, 25 May 2019 11:09:37 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:1f1:d0f0::4e2b:d7ca])
+        by smtp.gmail.com with ESMTPSA id s127sm5656914wmf.48.2019.05.25.11.09.36
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 25 May 2019 11:09:37 -0700 (PDT)
+From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
         Maxime Ripard <maxime.ripard@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 2/4] media: pixfmt: Add HEVC slice pixel format
-Date:   Sat, 25 May 2019 14:51:34 +0200
-Message-ID: <9334832.WyQZ0g7QqJ@jernej-laptop>
-In-Reply-To: <20190524093635.1832-3-paul.kocialkowski@bootlin.com>
-References: <20190524093635.1832-1-paul.kocialkowski@bootlin.com> <20190524093635.1832-3-paul.kocialkowski@bootlin.com>
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+Subject: [PATCH 08/10] arm64: dts: allwiner: h6: Add IR receiver node
+Date:   Sat, 25 May 2019 20:09:21 +0200
+Message-Id: <20190525180923.6105-9-peron.clem@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190525180923.6105-1-peron.clem@gmail.com>
+References: <20190525180923.6105-1-peron.clem@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi!
+Allwiner H6 IR is similar to A31 and can use same driver.
 
-Dne petek, 24. maj 2019 ob 11:36:33 CEST je Paul Kocialkowski napisal(a):
-> Introduce the V4L2_PIX_FMT_HEVC_SLICE pixel format, which currently
-> describes an output buffer with enough appended slice data for
-> producing one decoded frame with a stateless video decoder.
-> 
-> This will need to be reworked (along with the controls and the core) to
-> allow passing slice data individually, as it is the natural decoding
-> unit in HEVC.
-> 
-> We also need to figure out the description of the possible source data:
-> * Compressed slice data only, with slice controls attached;
-> * Slice data in Annex-B format (with raw slice header), without slice
->   controls attached;
-> * Slice data in Annex-B format (with raw slice header), with slice
->   controls attached.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  include/media/hevc-ctrls.h | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index 9ea013c88afc..2de83d9f6d47 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -11,6 +11,9 @@
->  #ifndef _HEVC_CTRLS_H_
->  #define _HEVC_CTRLS_H_
-> 
-> +/* The pixel format isn't stable at the moment and will likely be renamed.
-> */ +#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC
+Add support for it.
 
-You should add include to cover v4l2_fourcc() macro.
+Signed-off-by: Clément Péron <peron.clem@gmail.com>
+---
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-Best regards,
-Jernej
-
-> parsed slices */ +
->  #define V4L2_CID_MPEG_VIDEO_HEVC_SPS		(V4L2_CID_MPEG_BASE + 
-1008)
->  #define V4L2_CID_MPEG_VIDEO_HEVC_PPS		(V4L2_CID_MPEG_BASE + 
-1009)
->  #define V4L2_CID_MPEG_VIDEO_HEVC_SLICE_PARAMS	(V4L2_CID_MPEG_BASE + 
-1010)
-
-
-
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+index 16c5c3d0fd81..649cbdfe452e 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+@@ -647,6 +647,25 @@
+ 				pins = "PL0", "PL1";
+ 				function = "s_i2c";
+ 			};
++
++			r_ir_rx_pin: r-ir-rx-pin {
++				pins = "PL9";
++				function = "s_cir_rx";
++			};
++		};
++
++		r_ir: ir@7040000 {
++				compatible = "allwinner,sun50i-h6-ir",
++					     "allwinner,sun6i-a31-ir";
++				reg = <0x07040000 0x400>;
++				interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>;
++				clocks = <&r_ccu CLK_R_APB1_IR>,
++					 <&r_ccu CLK_IR>;
++				clock-names = "apb", "ir";
++				resets = <&r_ccu RST_R_APB1_IR>;
++				pinctrl-names = "default";
++				pinctrl-0 = <&r_ir_rx_pin>;
++				status = "disabled";
+ 		};
+ 
+ 		r_i2c: i2c@7081400 {
+-- 
+2.20.1
 
