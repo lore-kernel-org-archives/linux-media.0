@@ -2,60 +2,59 @@ Return-Path: <SRS0=+SCM=TZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D792C07542
-	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 18:10:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0248FC07542
+	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 18:10:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E966520815
-	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 18:10:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D053120879
+	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 18:10:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tNLwJOqN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hA1ETWwq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727551AbfEYSK0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 25 May 2019 14:10:26 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:56061 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727278AbfEYSJe (ORCPT
+        id S1727286AbfEYSJc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 25 May 2019 14:09:32 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34991 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727278AbfEYSJc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 25 May 2019 14:09:34 -0400
-Received: by mail-wm1-f67.google.com with SMTP id x64so12309005wmb.5;
-        Sat, 25 May 2019 11:09:33 -0700 (PDT)
+        Sat, 25 May 2019 14:09:32 -0400
+Received: by mail-wr1-f66.google.com with SMTP id m3so12958037wrv.2;
+        Sat, 25 May 2019 11:09:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Txw4I/nlIjGWNbpamPSvup0QUY5nkiK5clorHOj/5is=;
-        b=tNLwJOqNzTRUVhwemZqWMHv7UdnenD9nBAsVH4I2TGf+dETUCKkmXYw4R4RQ0ViNJD
-         gHq/PRSFoIDKh6ytEpURv20hL2r5y8xOZHrRLZJSQTPfIARLWr/3HatRriSL8CHdHt7H
-         dFWJScNTQb4lD7zUDpb5slmoGy1PG6vWqKl1ptNzrsTTKFM974kA8hQ77G0EihDmVfA0
-         y4GFjCjF8uPqq2BSTxL3VlWkHLSFe14SeD6ZK9oxrcv9aOge7P6sIBLNJwNXwhj0JZ/0
-         cJ6OeS1Y+XYIQlgAHhQ5yQJMlst2A/6pXS0h3yzG3XqqMfxfprY2ulzvczOa+WH/ybuE
-         viEg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=arTMrDnZfRr2oC1YgiWwIELzhnqDrvGvkslS7X+mMzM=;
+        b=hA1ETWwq1RFBgDXp0XWT3rlQ3Bx3tpvsW2EE7raknAvoDXNzyoYA0j+i8HCVZmc6yi
+         yEp9NzEFFne7+6R3HHR8IGwD7XunbJDXrKd+PXcPqGrU6ybNXKaK9ICB34zGJcd2Xv3M
+         ahOUapJrs+00YIS4U3AdFwvYkfXQIrwjw0DCA8E3+O3WY+naic1C/czUPt0l6T5DlDrq
+         VaLMLdLWeSaN40yxzmkZuBn6IPi7OsM7z7+xi0sAEjUp1A350K6iaCogHORkdVZqz279
+         LYFNgNldW8dZCrqB9qkWLmGhngvEJsYCQOTgLKKzhQcwLaLEtGGPDCJWJOAylxklbx4/
+         tieA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Txw4I/nlIjGWNbpamPSvup0QUY5nkiK5clorHOj/5is=;
-        b=ihg6U815f9/O4Z6FtmBqOXIPYh7ydyRPGglMm3RX0EZfAs5/xgiBrzlGtns9643bkM
-         QyfkKpbB0Nug5BzvEEL347QyuRjBQTGdk1Sl2f77ofpeFlrpCc5DucnzZcvAPTIPREiF
-         XikzRiZJfkNZ/HHjdRJAlgU/OHaopxY5rMxIjqyNDRNTlFRK/kH9XeSED+7c1p/z2FNg
-         pcqaGzJyl14HnE+jW+hadq0hxG2P/tKHx+9S/w1l9y8Ug0qEY/QK8e983xZVrshTo2S/
-         bug7lDIEtxAq6MUGFeBi7KaLvQo8E90J9lCepiDds3dTg53vx4M4Qb14Gn+YHpgQyMVH
-         ScsQ==
-X-Gm-Message-State: APjAAAUQfL8uspOgXIfEw3cHcyzHtvyJg5Z96/vh4hLGwgyGzLyagNTZ
-        l9MdLUQHipLLymiiZZMFrZ8=
-X-Google-Smtp-Source: APXvYqwOkJuokQudRPmhh1EXSAWRSV25N8yYzUEBr4S3uGDF0zOlWBxTHcZs4RO7MzoAPcW3AhKQqg==
-X-Received: by 2002:a1c:1ad6:: with SMTP id a205mr20050587wma.80.1558807772772;
-        Sat, 25 May 2019 11:09:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=arTMrDnZfRr2oC1YgiWwIELzhnqDrvGvkslS7X+mMzM=;
+        b=jV3bAXHHgXq3/QUCgC/Q2x2SfZOWSrunjOLcJ6vlDvCW/OaO92zooSmdzHTTyOKjkY
+         lR/EK0sbpo8+XaPxjvmzSLlFrNJpwvPxEFVu+jKwamDZdtYtEl4YG4Zejy4MXdNt53bA
+         ikwwCHxODxh83o7aLNhuu9za4blaO7j60avnqxtI+gVpL26nEgX01L1BD087C3l/ZL4O
+         MEXrJ8eb7zkkO5BkQbOk8R2wJ4PHHihGRfMhZlmaN/u7NsuIC3P2JBXzrzsmt6DIcDTE
+         GgwLDd2mgNkVJLrHlALyWmSGExzPVPNjbE9LZBHxHHA5Xv6t5xMHPwBHXBQsrMblN9gL
+         7vvw==
+X-Gm-Message-State: APjAAAWz2clE90tKMhWMoz0iu6QL4oCAjB1smcDuVMIHWYjTtYIrZ/XD
+        lkMz/i6u5Az4aeQtKwknQZLuol9Vm/Qppg==
+X-Google-Smtp-Source: APXvYqzwGqeGwmwYPdmQPkcptYHBYFkXN5Iham1dBSArtqgGwT0omke9cxGVq8Sux1JvKcwJUpXPJg==
+X-Received: by 2002:a5d:624c:: with SMTP id m12mr3990228wrv.354.1558807769625;
+        Sat, 25 May 2019 11:09:29 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:1f1:d0f0::4e2b:d7ca])
-        by smtp.gmail.com with ESMTPSA id s127sm5656914wmf.48.2019.05.25.11.09.31
+        by smtp.gmail.com with ESMTPSA id s127sm5656914wmf.48.2019.05.25.11.09.28
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 25 May 2019 11:09:32 -0700 (PDT)
+        Sat, 25 May 2019 11:09:28 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -65,12 +64,10 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Subject: [PATCH 03/10] ARM: dts: sunxi: prefer A31 instead of A13 for ir
-Date:   Sat, 25 May 2019 20:09:16 +0200
-Message-Id: <20190525180923.6105-4-peron.clem@gmail.com>
+Subject: [PATCH 00/10] Allwiner A64/H6 IR support
+Date:   Sat, 25 May 2019 20:09:13 +0200
+Message-Id: <20190525180923.6105-1-peron.clem@gmail.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190525180923.6105-1-peron.clem@gmail.com>
-References: <20190525180923.6105-1-peron.clem@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -79,70 +76,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since A31 memory mapping of the IR driver has changed.
+Hi,
 
-Prefer the A31 bindings instead of A13.
+A64 IR support series[1] pointed out that an A31 bindinds should be
+introduced.
 
-Signed-off-by: Clément Péron <peron.clem@gmail.com>
----
- arch/arm/boot/dts/sun6i-a31.dtsi   | 2 +-
- arch/arm/boot/dts/sun8i-a83t.dtsi  | 2 +-
- arch/arm/boot/dts/sun9i-a80.dtsi   | 2 +-
- arch/arm/boot/dts/sunxi-h3-h5.dtsi | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+This series introduce the A31 compatible bindings, then switch it on
+the already existing board.
 
-diff --git a/arch/arm/boot/dts/sun6i-a31.dtsi b/arch/arm/boot/dts/sun6i-a31.dtsi
-index c04efad81bbc..110622b30796 100644
---- a/arch/arm/boot/dts/sun6i-a31.dtsi
-+++ b/arch/arm/boot/dts/sun6i-a31.dtsi
-@@ -1351,7 +1351,7 @@
- 		};
- 
- 		ir: ir@1f02000 {
--			compatible = "allwinner,sun5i-a13-ir";
-+			compatible = "allwinner,sun6i-a31-ir";
- 			clocks = <&apb0_gates 1>, <&ir_clk>;
- 			clock-names = "apb", "ir";
- 			resets = <&apb0_rst 1>;
-diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
-index 392b0cabbf0d..8d603f3309f2 100644
---- a/arch/arm/boot/dts/sun8i-a83t.dtsi
-+++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
-@@ -1067,7 +1067,7 @@
- 
- 		r_cir: ir@1f02000 {
- 			compatible = "allwinner,sun8i-a83t-ir",
--				"allwinner,sun5i-a13-ir";
-+				"allwinner,sun6i-a31-ir";
- 			clocks = <&r_ccu CLK_APB0_IR>, <&r_ccu CLK_IR>;
- 			clock-names = "apb", "ir";
- 			resets = <&r_ccu RST_APB0_IR>;
-diff --git a/arch/arm/boot/dts/sun9i-a80.dtsi b/arch/arm/boot/dts/sun9i-a80.dtsi
-index 0c1eec9000e3..310cd972ee5b 100644
---- a/arch/arm/boot/dts/sun9i-a80.dtsi
-+++ b/arch/arm/boot/dts/sun9i-a80.dtsi
-@@ -1167,7 +1167,7 @@
- 		};
- 
- 		r_ir: ir@8002000 {
--			compatible = "allwinner,sun5i-a13-ir";
-+			compatible = "allwinner,sun6i-a31-ir";
- 			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&r_ir_pins>;
-diff --git a/arch/arm/boot/dts/sunxi-h3-h5.dtsi b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-index 84977d4eb97a..f0f5ba349c1b 100644
---- a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-+++ b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-@@ -822,7 +822,7 @@
- 		};
- 
- 		ir: ir@1f02000 {
--			compatible = "allwinner,sun5i-a13-ir";
-+			compatible = "allwinner,sun6i-a31-ir";
- 			clocks = <&r_ccu CLK_APB0_IR>, <&r_ccu CLK_IR>;
- 			clock-names = "apb", "ir";
- 			resets = <&r_ccu RST_APB0_IR>;
+Finally introduce A64 and H6 support.
+
+Regards,
+Clément
+
+[1] https://lore.kernel.org/patchwork/patch/1031390/#1221464
+
+Clément Péron (8):
+  dt-bindings: media: A31 compatible
+  media: rc: sunxi: Add A31 compatible
+  ARM: dts: sunxi: prefer A31 instead of A13 for ir
+  dt-bindings: media: sunxi-ir: Add A64 compatible
+  dt-bindings: media: sunxi-ir: Add H6 compatible
+  arm64: dts: allwiner: h6: Add IR receiver node
+  arm64: dts: allwinner: h6: Enable IR on H6 boards
+  arm64: defconfig: enable IR SUNXI option
+
+Igors Makejevs (1):
+  arm64: dts: allwinner: a64: Add IR node
+
+Jernej Skrabec (1):
+  arm64: dts: allwinner: a64: Enable IR on Orange Pi Win
+
+ .../devicetree/bindings/media/sunxi-ir.txt    |  7 ++++++-
+ arch/arm/boot/dts/sun6i-a31.dtsi              |  2 +-
+ arch/arm/boot/dts/sun8i-a83t.dtsi             |  2 +-
+ arch/arm/boot/dts/sun9i-a80.dtsi              |  2 +-
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi            |  2 +-
+ .../dts/allwinner/sun50i-a64-orangepi-win.dts |  4 ++++
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 18 ++++++++++++++++++
+ .../dts/allwinner/sun50i-h6-beelink-gs1.dts   |  4 ++++
+ .../dts/allwinner/sun50i-h6-orangepi.dtsi     |  4 ++++
+ .../boot/dts/allwinner/sun50i-h6-pine-h64.dts |  4 ++++
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 19 +++++++++++++++++++
+ arch/arm64/configs/defconfig                  |  1 +
+ drivers/media/rc/sunxi-cir.c                  |  1 +
+ 13 files changed, 65 insertions(+), 5 deletions(-)
+
 -- 
 2.20.1
 
