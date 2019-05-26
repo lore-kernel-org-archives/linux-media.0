@@ -6,65 +6,65 @@ X-Spam-Status: No, score=-7.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E695BC282E3
-	for <linux-media@archiver.kernel.org>; Sun, 26 May 2019 20:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEA3BC282E3
+	for <linux-media@archiver.kernel.org>; Sun, 26 May 2019 20:48:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B970620863
-	for <linux-media@archiver.kernel.org>; Sun, 26 May 2019 20:48:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B48B2075E
+	for <linux-media@archiver.kernel.org>; Sun, 26 May 2019 20:48:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h6tdj+sL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NaSCG09k"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbfEZUsa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 26 May 2019 16:48:30 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:41151 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbfEZUsS (ORCPT
+        id S1726073AbfEZUsP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 26 May 2019 16:48:15 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45381 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725788AbfEZUsP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 26 May 2019 16:48:18 -0400
-Received: by mail-lj1-f196.google.com with SMTP id q16so4530021ljj.8;
-        Sun, 26 May 2019 13:48:16 -0700 (PDT)
+        Sun, 26 May 2019 16:48:15 -0400
+Received: by mail-lj1-f193.google.com with SMTP id r76so2120651lja.12;
+        Sun, 26 May 2019 13:48:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yxy8jhb7vj4f583mX+9bjwUeoCyJQOsv4k9GjkXUQ2g=;
-        b=h6tdj+sL53sdFiNAj75lH6fUo0CsOzTPQ7xv1AERtT/h1WVe35E4pq/nB90f9V/C+v
-         WHORIAj3z4FRPd24Z2dwdelOP5Yf05LMyqDj5HGxWqNXp50gGmyFnAXVZFCg7uhOEM8J
-         7dJRsJ4htsB3CDvLc6j+GbjBe88DML8fUMdpFzYpFTYNg5icFqxfRJEi8aimcrUc7QiY
-         MQZbDjfUfvC60XnIwlMoqYInsEZn9P+iDMKfGQIDMFRNo6j4GPfKD17sSprcD/Oxa491
-         lCvEVEhZKZGNePdbgFhtpolAfYzL0IrfCzqCsc55FUUXf2yk4D5sNMD4Ym6JHg/jpQNn
-         p5qg==
+        bh=Yx1xMRaM6E8Nc7cDm7I5aJSojnIVrzlfHniVdC7mgZM=;
+        b=NaSCG09kgCfM525wIDxNzdNP3ZIh9qVU2HoElxhryrOQR7JhlzBSF3mhGMRinPGEYo
+         pUk/bGXnkU0R66MZx9ygsUje+oeCntM78jvBDHsz0C0ylujt8utOk0aDFetJDZHmTIqs
+         fvaQQRIEZfixaH34rsX24HXFxHzG8q8Nv7MOrszyN7DNgoMDNNmq+LxgO9xhmOes82Yh
+         13lEZjE/hEq87YWyyWR/W+Nb4fNWbTMWMnvJu9N0PwDZyMKbNa0NgZYkIAsWETA+cWEu
+         /9KdITGQ0DJJ+6cheBvuaT/YOxdA9BpD+FdzhFrVf2Ul4NF8qoytNKRcpaS9U9K5WBiQ
+         9Yuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yxy8jhb7vj4f583mX+9bjwUeoCyJQOsv4k9GjkXUQ2g=;
-        b=Yc9F4mB1xhp8voF8CxhXMe6AJU2HWZMh/DxFdNV+sCyhtSg1X8MSLJ9Irq88h3inX0
-         yU3DgiuvfqSGuXh5iLmniKa187Xrd2CaTJzcK1aq4Vd/FtegDEhJSv+dAt++k8eFijV7
-         Ty7w38st/ciwOMytF0wWaantMaCpe62P/a61HT2siZYS2CRc+lDkF+yn72SDTxPTG609
-         TuuMsIwyH5rY3TmwOSa+36Edqm5GQHz40K/n7tbQ7ReEP8mnypbd59zCdvin/0Vh56V5
-         z8YbSozILYalMrXnnM7awCfQSdk22+UU21EC+x+8cSJR0ajrRhCOcAyl+sQAi14WnAm2
-         e8Og==
-X-Gm-Message-State: APjAAAWlQ7NPrRRh9h1/vjz555DzD0+u1a5l62Wd3BR3AotqgVLSgcJ5
-        zLLwGN1xA7DUdbx/PVUvesM=
-X-Google-Smtp-Source: APXvYqxdqLj3Qk75k2XIFwOaySBHWie+VHdFb+eGV2zH1WXrGaxvKJfUF+5xAiND0OBA1r98FCNhEQ==
-X-Received: by 2002:a2e:900e:: with SMTP id h14mr39180739ljg.77.1558903696049;
-        Sun, 26 May 2019 13:48:16 -0700 (PDT)
+        bh=Yx1xMRaM6E8Nc7cDm7I5aJSojnIVrzlfHniVdC7mgZM=;
+        b=pC6BABpnrpQCcaVNpDESY3CEnqI5JgQ5WNcW5GI5KJcSe2oGVXWDqFJLdRUU0jN8Zu
+         yymKOFWXkBzR0NRDhMLrCFPQDwX1NGDGDqwYukAkXlEsPsEN9HMB/12aVJa8KF6oDgZ7
+         x+7kPYYQJoYoizEoZjXasHCgOQm1uZl2jx5lohuPTivVDORyB0L0uCFDkFWCqbWRpYQc
+         z8QH4F9ZqpGvwYTX/DBLzITzIVw7kBQRkfkAsf6JqTxuBRTKMeZQqwUwlJmuxhSA2dbg
+         fcpnXgMBO+O/oCs8G71j/z7bPTJTiFCH6owyMnK8AHhZd/lUCKfOKtkB6U9WFEMXo5fg
+         k6Ug==
+X-Gm-Message-State: APjAAAWmXFUQpt/8ag2jwlfiL44gHWseNJI6NwvTl24Jx+WC9e+h/EiL
+        M57UyIMLmHd3I8YLJ3MP6Ac=
+X-Google-Smtp-Source: APXvYqy4K3OXlf0fm1AbMZwyV7Raqtcu50PZoucXv9BRVqbBfKcd7S1k1c+cjzyNhauyNYUmrHOzTQ==
+X-Received: by 2002:a2e:960e:: with SMTP id v14mr7851486ljh.31.1558903693154;
+        Sun, 26 May 2019 13:48:13 -0700 (PDT)
 Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
-        by smtp.gmail.com with ESMTPSA id i187sm1859475lfe.64.2019.05.26.13.48.14
+        by smtp.gmail.com with ESMTPSA id i187sm1859475lfe.64.2019.05.26.13.48.12
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 May 2019 13:48:15 -0700 (PDT)
+        Sun, 26 May 2019 13:48:12 -0700 (PDT)
 From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>
 Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: [RFC PATCH 4/5] media: ov6650: Fix frame scaling not reset on crop
-Date:   Sun, 26 May 2019 22:47:57 +0200
-Message-Id: <20190526204758.1904-5-jmkrzyszt@gmail.com>
+Subject: [RFC PATCH 2/5] media: ov6650: Refactor ov6650_s_fmt() helper
+Date:   Sun, 26 May 2019 22:47:55 +0200
+Message-Id: <20190526204758.1904-3-jmkrzyszt@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190526204758.1904-1-jmkrzyszt@gmail.com>
 References: <20190526204758.1904-1-jmkrzyszt@gmail.com>
@@ -75,45 +75,123 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-According to V4L2 subdevice interface specification, frame scaling
-factors should be reset to default values on modification of input frame
-format.  Assuming that requirement also applies in case of crop
-rectangle modification unless V4L2_SEL_FLAG_KEEP_CONFIG is requested,
-the driver now does not respect it.
+The driver suffers from a few compliance and implementation issues:
+- crop rectangle is affected by .set_fmt() pad operation callback,
+- frame scaling is not reset on modification of crop rectangle,
+- V4L2_SUBDEV_FORMAT_TRY support in .set_fmt() uses active crop
+  rectangle, not the one from a pad config, as a reference.
 
-The KEEP_CONFIG case is already implemented, fix the other path.
+For easy resolution of those issues, ov6650_s_fmt() will first be
+refactored.
+
+The ov6650_s_fmt() helper function, mostly called form .set_fmt() pad
+operation callback, now takes a decision if half scaling is applicable
+for current crop rectangle and requested frame size, then possibly
+adjusts hardware crop settings, frame scaling and media bus frame
+format.  It accepts a struct v4l2_mbus_framefmt argument passed by a
+user to .set_fmt().
+
+Move the decision on applicability of half scaling up to .set_fmt(),
+then modify the ov6650_s_fmt() API so it accepts a half scaling flag.
+In order to avoid passing full struct v4l2_mbus_framefmt argument to it
+when called from functions other than .set_fmt(), also accept a target
+pixel code as an argument and make the struct v4l2_mbus_framefmt used
+for crop rectangle modification optional.
 
 Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 ---
- drivers/media/i2c/ov6650.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/i2c/ov6650.c | 38 ++++++++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 47590cd51190..cc70d8952999 100644
+index 1b02479b616f..8cb30f3e4851 100644
 --- a/drivers/media/i2c/ov6650.c
 +++ b/drivers/media/i2c/ov6650.c
-@@ -472,6 +472,8 @@ static int ov6650_get_selection(struct v4l2_subdev *sd,
- 	}
+@@ -570,25 +570,18 @@ static u8 to_clkrc(struct v4l2_fract *timeperframe,
  }
  
-+static int ov6650_s_fmt(struct v4l2_subdev *sd, u32 code, bool half_scale);
+ /* set the format we will capture in */
+-static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
++static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf,
++			u32 code, bool half_scale)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	struct ov6650 *priv = to_ov6650(client);
+-	bool half_scale = !is_unscaled_ok(mf->width, mf->height, &priv->rect);
+ 	struct v4l2_subdev_selection sel = {
+ 		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
+ 		.target = V4L2_SEL_TGT_CROP,
+-		.r.left = priv->rect.left + (priv->rect.width >> 1) -
+-			(mf->width >> (1 - half_scale)),
+-		.r.top = priv->rect.top + (priv->rect.height >> 1) -
+-			(mf->height >> (1 - half_scale)),
+-		.r.width = mf->width << half_scale,
+-		.r.height = mf->height << half_scale,
+ 	};
+-	u32 code = mf->code;
+ 	unsigned long mclk, pclk;
+ 	u8 coma_set = 0, coma_mask = 0, coml_set, coml_mask, clkrc;
+-	int ret;
++	int ret = 0;
+ 
+ 	/* select color matrix configuration for given color encoding */
+ 	switch (code) {
+@@ -668,7 +661,16 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
+ 	dev_dbg(&client->dev, "pixel clock divider: %ld.%ld\n",
+ 			mclk / pclk, 10 * mclk % pclk / pclk);
+ 
+-	ret = ov6650_set_selection(sd, NULL, &sel);
++	if (mf) {
++		sel.r.left = priv->rect.left + (priv->rect.width >> 1) -
++			(mf->width >> (1 - half_scale)),
++		sel.r.top = priv->rect.top + (priv->rect.height >> 1) -
++			(mf->height >> (1 - half_scale)),
++		sel.r.width = mf->width << half_scale,
++		sel.r.height = mf->height << half_scale,
 +
- static int ov6650_set_selection(struct v4l2_subdev *sd,
- 		struct v4l2_subdev_pad_config *cfg,
- 		struct v4l2_subdev_selection *sel)
-@@ -515,7 +517,13 @@ static int ov6650_set_selection(struct v4l2_subdev *sd,
- 	}
- 	if (!ret)
- 		priv->rect.height = sel->r.height;
-+	else
-+		return ret;
- 
-+	if (priv->half_scale) {
-+		/* turn off half scaling, preserve media bus format */
-+		ret = ov6650_s_fmt(sd, priv->code, false);
++		ret = ov6650_set_selection(sd, NULL, &sel);
 +	}
- 	return ret;
- }
+ 	if (!ret)
+ 		ret = ov6650_reg_rmw(client, REG_COMA, coma_set, coma_mask);
+ 	if (!ret)
+@@ -691,11 +693,14 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
+ 	struct v4l2_mbus_framefmt *mf = &format->format;
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	struct ov6650 *priv = to_ov6650(client);
++	bool half_scale;
+ 
+ 	if (format->pad)
+ 		return -EINVAL;
+ 
+-	if (is_unscaled_ok(mf->width, mf->height, &priv->rect))
++	half_scale = !is_unscaled_ok(mf->width, mf->height, &priv->rect);
++
++	if (!half_scale)
+ 		v4l_bound_align_image(&mf->width, 2, W_CIF, 1,
+ 				&mf->height, 2, H_CIF, 1, 0);
+ 
+@@ -730,7 +735,7 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
+ 
+ 	} else {
+ 		/* apply new media bus format code and frame size */
+-		int ret = ov6650_s_fmt(sd, mf);
++		int ret = ov6650_s_fmt(sd, mf, mf->code, half_scale);
+ 
+ 		if (ret)
+ 			return ret;
+@@ -885,11 +890,8 @@ static int ov6650_video_probe(struct v4l2_subdev *sd)
+ 	ret = ov6650_reset(client);
+ 	if (!ret)
+ 		ret = ov6650_prog_dflt(client);
+-	if (!ret) {
+-		struct v4l2_mbus_framefmt mf = ov6650_def_fmt;
+-
+-		ret = ov6650_s_fmt(sd, &mf);
+-	}
++	if (!ret)
++		ret = ov6650_s_fmt(sd, NULL, ov6650_def_fmt.code, false);
+ 	if (!ret)
+ 		ret = v4l2_ctrl_handler_setup(&priv->hdl);
  
 -- 
 2.21.0
