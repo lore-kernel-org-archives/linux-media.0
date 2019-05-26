@@ -1,127 +1,159 @@
-Return-Path: <SRS0=+SCM=TZ=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=aOZo=T2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0248FC07542
-	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 18:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E035CC282E1
+	for <linux-media@archiver.kernel.org>; Sun, 26 May 2019 03:48:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D053120879
-	for <linux-media@archiver.kernel.org>; Sat, 25 May 2019 18:10:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hA1ETWwq"
+	by mail.kernel.org (Postfix) with ESMTP id BC898212F5
+	for <linux-media@archiver.kernel.org>; Sun, 26 May 2019 03:48:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727286AbfEYSJc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 25 May 2019 14:09:32 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34991 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727278AbfEYSJc (ORCPT
+        id S1727611AbfEZDs5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 25 May 2019 23:48:57 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:43655 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726548AbfEZDs4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 25 May 2019 14:09:32 -0400
-Received: by mail-wr1-f66.google.com with SMTP id m3so12958037wrv.2;
-        Sat, 25 May 2019 11:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=arTMrDnZfRr2oC1YgiWwIELzhnqDrvGvkslS7X+mMzM=;
-        b=hA1ETWwq1RFBgDXp0XWT3rlQ3Bx3tpvsW2EE7raknAvoDXNzyoYA0j+i8HCVZmc6yi
-         yEp9NzEFFne7+6R3HHR8IGwD7XunbJDXrKd+PXcPqGrU6ybNXKaK9ICB34zGJcd2Xv3M
-         ahOUapJrs+00YIS4U3AdFwvYkfXQIrwjw0DCA8E3+O3WY+naic1C/czUPt0l6T5DlDrq
-         VaLMLdLWeSaN40yxzmkZuBn6IPi7OsM7z7+xi0sAEjUp1A350K6iaCogHORkdVZqz279
-         LYFNgNldW8dZCrqB9qkWLmGhngvEJsYCQOTgLKKzhQcwLaLEtGGPDCJWJOAylxklbx4/
-         tieA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=arTMrDnZfRr2oC1YgiWwIELzhnqDrvGvkslS7X+mMzM=;
-        b=jV3bAXHHgXq3/QUCgC/Q2x2SfZOWSrunjOLcJ6vlDvCW/OaO92zooSmdzHTTyOKjkY
-         lR/EK0sbpo8+XaPxjvmzSLlFrNJpwvPxEFVu+jKwamDZdtYtEl4YG4Zejy4MXdNt53bA
-         ikwwCHxODxh83o7aLNhuu9za4blaO7j60avnqxtI+gVpL26nEgX01L1BD087C3l/ZL4O
-         MEXrJ8eb7zkkO5BkQbOk8R2wJ4PHHihGRfMhZlmaN/u7NsuIC3P2JBXzrzsmt6DIcDTE
-         GgwLDd2mgNkVJLrHlALyWmSGExzPVPNjbE9LZBHxHHA5Xv6t5xMHPwBHXBQsrMblN9gL
-         7vvw==
-X-Gm-Message-State: APjAAAWz2clE90tKMhWMoz0iu6QL4oCAjB1smcDuVMIHWYjTtYIrZ/XD
-        lkMz/i6u5Az4aeQtKwknQZLuol9Vm/Qppg==
-X-Google-Smtp-Source: APXvYqzwGqeGwmwYPdmQPkcptYHBYFkXN5Iham1dBSArtqgGwT0omke9cxGVq8Sux1JvKcwJUpXPJg==
-X-Received: by 2002:a5d:624c:: with SMTP id m12mr3990228wrv.354.1558807769625;
-        Sat, 25 May 2019 11:09:29 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:1f1:d0f0::4e2b:d7ca])
-        by smtp.gmail.com with ESMTPSA id s127sm5656914wmf.48.2019.05.25.11.09.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 25 May 2019 11:09:28 -0700 (PDT)
-From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Subject: [PATCH 00/10] Allwiner A64/H6 IR support
-Date:   Sat, 25 May 2019 20:09:13 +0200
-Message-Id: <20190525180923.6105-1-peron.clem@gmail.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Sat, 25 May 2019 23:48:56 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:6081:f7d7:b93c:24af])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id Uk9VhEeZv3qlsUk9WhQdca; Sun, 26 May 2019 05:48:54 +0200
+Message-ID: <08238297dd8b6b90af095326c616b35b@smtp-cloud7.xs4all.net>
+Date:   Sun, 26 May 2019 05:48:53 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: OK
+X-CMAE-Envelope: MS4wfC4qKobVsMD2qYstYc/5CIN55S4rgSEmU8fMwQRJ58LDDB3ZWRfknzl+LgkaXNC0oalu7qoACpjjIVGljoBUQ0kFpMM6/bTHGsRZTe7+R0HEGmrf7v8a
+ zYy7oksGgdNOR/N4gPUlN4hJ2olAsmXWFhu4hyrQ1tNRI+oYNQE7zzL6vr7bjpvKzskMINmwxKZQVkVEqEf0wU5ulgvQGe/20cSIe9PvH8SNCU8/2HEtw/67
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-A64 IR support series[1] pointed out that an A31 bindinds should be
-introduced.
+Results of the daily build of media_tree:
 
-This series introduce the A31 compatible bindings, then switch it on
-the already existing board.
+date:			Sun May 26 05:00:11 CEST 2019
+media-tree git hash:	2c41cc0be07b5ee2f1167f41cd8a86fc5b53d82c
+media_build git hash:	483b4f0f48283ddaf1ba54d079051b58cdff2ef9
+v4l-utils git hash:	1cbe6e53dcb10745fcf8569a9cd0ba0979c2808e
+edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: f1eea1117281d36d3f15e8955933d17600bb047e
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
-Finally introduce A64 and H6 support.
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2-rc1-i686: OK
+linux-5.2-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
+sparse: WARNINGS
+smatch: OK
 
-Regards,
-Clément
+Detailed results are available here:
 
-[1] https://lore.kernel.org/patchwork/patch/1031390/#1221464
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
 
-Clément Péron (8):
-  dt-bindings: media: A31 compatible
-  media: rc: sunxi: Add A31 compatible
-  ARM: dts: sunxi: prefer A31 instead of A13 for ir
-  dt-bindings: media: sunxi-ir: Add A64 compatible
-  dt-bindings: media: sunxi-ir: Add H6 compatible
-  arm64: dts: allwiner: h6: Add IR receiver node
-  arm64: dts: allwinner: h6: Enable IR on H6 boards
-  arm64: defconfig: enable IR SUNXI option
+Detailed regression test results are available here:
 
-Igors Makejevs (1):
-  arm64: dts: allwinner: a64: Add IR node
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
 
-Jernej Skrabec (1):
-  arm64: dts: allwinner: a64: Enable IR on Orange Pi Win
+Full logs are available here:
 
- .../devicetree/bindings/media/sunxi-ir.txt    |  7 ++++++-
- arch/arm/boot/dts/sun6i-a31.dtsi              |  2 +-
- arch/arm/boot/dts/sun8i-a83t.dtsi             |  2 +-
- arch/arm/boot/dts/sun9i-a80.dtsi              |  2 +-
- arch/arm/boot/dts/sunxi-h3-h5.dtsi            |  2 +-
- .../dts/allwinner/sun50i-a64-orangepi-win.dts |  4 ++++
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 18 ++++++++++++++++++
- .../dts/allwinner/sun50i-h6-beelink-gs1.dts   |  4 ++++
- .../dts/allwinner/sun50i-h6-orangepi.dtsi     |  4 ++++
- .../boot/dts/allwinner/sun50i-h6-pine-h64.dts |  4 ++++
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 19 +++++++++++++++++++
- arch/arm64/configs/defconfig                  |  1 +
- drivers/media/rc/sunxi-cir.c                  |  1 +
- 13 files changed, 65 insertions(+), 5 deletions(-)
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
 
--- 
-2.20.1
+The Media Infrastructure API from this daily build is here:
 
+http://www.xs4all.nl/~hverkuil/spec/index.html
