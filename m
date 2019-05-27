@@ -3,59 +3,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FAD3C07542
-	for <linux-media@archiver.kernel.org>; Mon, 27 May 2019 08:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D244CC07542
+	for <linux-media@archiver.kernel.org>; Mon, 27 May 2019 09:11:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 706372173B
-	for <linux-media@archiver.kernel.org>; Mon, 27 May 2019 08:43:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A376721743
+	for <linux-media@archiver.kernel.org>; Mon, 27 May 2019 09:11:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbfE0Inc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 May 2019 04:43:32 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:48145 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725908AbfE0Inc (ORCPT
+        id S1726185AbfE0JLf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 27 May 2019 05:11:35 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:51141 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725943AbfE0JLf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 May 2019 04:43:32 -0400
+        Mon, 27 May 2019 05:11:35 -0400
 Received: from [IPv6:2001:983:e9a7:1:f4bd:6355:63eb:2e52] ([IPv6:2001:983:e9a7:1:f4bd:6355:63eb:2e52])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id VBE9hZaDisDWyVBEAhY8kP; Mon, 27 May 2019 10:43:30 +0200
+        id VBfIhZmU5sDWyVBfJhYICd; Mon, 27 May 2019 11:11:33 +0200
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [PATCH] v4l2-pci-skeleton.c: fix doc warning
-Message-ID: <3392f8f8-ae66-8381-819b-2b99915190bf@xs4all.nl>
-Date:   Mon, 27 May 2019 10:43:29 +0200
+Subject: [PATCH] media-ioc-enum-links.rst: fix incorrect reserved field
+ documentation
+Message-ID: <db111993-2071-3023-56c2-1bffc83eb994@xs4all.nl>
+Date:   Mon, 27 May 2019 11:11:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfCLGLxV+44C3/A9YVbKarmK/wM171TzYiG9CJ3XPID8XaBewuE/XKlnFdm1dcq6T3Aw0S1/9JUXJC4wgYUEoU948FjT2jHqShV5XxOJoeF/Tv3UWKzI+
- rEcBQlC9Ln1faqUnsqgeciQb5RPAYpvJ2vdNe4BEV1eEQ0gRQI7UE0cGNxhcT6S1UogOifTDlTSagt7Sy8d8DkUv7Y1l7P0j2flYdq2q5LH55Mjf3LKalOsN
- 6MYd5gMJPp9QDvEU4xCdco5QHwWZcS+AOhkZYv/7oEo=
+X-CMAE-Envelope: MS4wfAkgZd2OUJw4qH7sXOog7JcsU7T/etf4oPPK8AujuZ30qMtJFaJqmk6oKI3e9Ot21/yIP8PHWDRUHSGew3QuF+JHdByEnQMNnof/ZAz5+CsL/o8ZhCnm
+ XnaG7GvrpMJM+ocR6m5HxzHpSpUVJ4lUtTVCrry+NIkoe2mu/qUIinWu51rcnbCUoGVWtFG+bIhNmLXsZTwSQnFtPMGktThURrwtXDKj24pqYdMjY3u7sO9t
+ oc4Uvvs8h78k4Q4LdwDorS+rKGjdnQ/RRjg/ZAbp9Z0=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the 'field' field to fix this warning:
+The reserved field array for struct media_link_desc has length 2, not 4.
 
-samples/v4l/v4l2-pci-skeleton.c:80: warning: Function parameter or member 'field' not described in 'skeleton'
+And the reserved field array of struct media_links_enum was never documented
+at all.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
-diff --git a/samples/v4l/v4l2-pci-skeleton.c b/samples/v4l/v4l2-pci-skeleton.c
-index 758ced8c3d06..f6a551bd57ef 100644
---- a/samples/v4l/v4l2-pci-skeleton.c
-+++ b/samples/v4l/v4l2-pci-skeleton.c
-@@ -58,6 +58,7 @@ MODULE_LICENSE("GPL v2");
-  * @queue: vb2 video capture queue
-  * @qlock: spinlock controlling access to buf_list and sequence
-  * @buf_list: list of buffers queued for DMA
-+ * @field: the field (TOP/BOTTOM/other) of the current buffer
-  * @sequence: frame sequence counter
-  */
- struct skeleton {
+diff --git a/Documentation/media/uapi/mediactl/media-ioc-enum-links.rst b/Documentation/media/uapi/mediactl/media-ioc-enum-links.rst
+index a982f16e55a4..b827ebc398f8 100644
+--- a/Documentation/media/uapi/mediactl/media-ioc-enum-links.rst
++++ b/Documentation/media/uapi/mediactl/media-ioc-enum-links.rst
+@@ -84,6 +84,11 @@ returned during the enumeration process.
+        -  Pointer to a links array allocated by the application. Ignored if
+ 	  NULL.
+
++    *  -  __u32
++       -  ``reserved[4]``
++       -  Reserved for future extensions. Drivers and applications must set
++          the array to zero.
++
+
+ .. c:type:: media_pad_desc
+
+@@ -135,7 +140,7 @@ returned during the enumeration process.
+        -  Link flags, see :ref:`media-link-flag` for more details.
+
+     *  -  __u32
+-       -  ``reserved[4]``
++       -  ``reserved[2]``
+        -  Reserved for future extensions. Drivers and applications must set
+           the array to zero.
+
