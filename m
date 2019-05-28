@@ -2,158 +2,265 @@ Return-Path: <SRS0=uFep=T4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 763A3C072B1
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 03:49:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49250C04E84
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 05:57:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 540DD208C3
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 03:49:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 139152075C
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 05:57:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="edV0Rw6V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728118AbfE1Dtk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 27 May 2019 23:49:40 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:54217 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728115AbfE1Dtk (ORCPT
+        id S1727459AbfE1F5R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 May 2019 01:57:17 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:42110 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727327AbfE1F5R (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 27 May 2019 23:49:40 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:10b2:2e62:e4b1:bd13])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id VT7IhfNKtsDWyVT7JhbMIj; Tue, 28 May 2019 05:49:37 +0200
-Message-ID: <5fde9fbc830e1477174a3f0091b4ee56@smtp-cloud9.xs4all.net>
-Date:   Tue, 28 May 2019 05:49:36 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: OK
-X-CMAE-Envelope: MS4wfOKHKH3dnPmnO9nbAcepSLoSakK8JcxWDm2fiaw4nsDcjpXp+AEdmv8ixQT3kTJgVmTnaDKJlj2GRlCCDXD1tvuWfMCbAp6I09XPZqNtbLvXRmM8b/YY
- Maby6G/grll2yAIe3ljWguGNny68oti5/GT8qLBFnI4K7D+isHLYBVd/eWmrQ/dvM+95IN/vLAGpFQtuqA972YOu4qL0Av/rB/s+9HJRg9Z0DeULXK9usLwR
+        Tue, 28 May 2019 01:57:17 -0400
+Received: by mail-pl1-f193.google.com with SMTP id go2so7848477plb.9
+        for <linux-media@vger.kernel.org>; Mon, 27 May 2019 22:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iQX7cJHbDOGy3qbp4R0uiyoHDzieblpMxlf5nPE+1kI=;
+        b=edV0Rw6VsNp8oYJ3Dl4lZy5wN59+hfWnriCYwZl9+hyoyfhbXsZVWVuUzz1nLQbjSv
+         pUUKbUJsNrn81w0Ly+3KJ/nIidVATG+IpCnMfXSaO5Y6GrwNW0Mz3CHQYO0eCBsO/OB1
+         P3ChRYoRGn4LdSThVGpd77SC0gG9dauF2qewc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iQX7cJHbDOGy3qbp4R0uiyoHDzieblpMxlf5nPE+1kI=;
+        b=kiW3mwsoLM5OUJzOk73QNNlcht8AhXRbZjav8Pv2UHpXMN/Z0dqglzNt7xdQghFE6Q
+         GDZCzcMAKOpJQAh1hVlx91jZBoyAISiu8DkyALfgehl85J8/p+rFLmigR+zk0nuJ1hcS
+         4ZZvg8k7htQ6TLi5g4ea4KL4PmT/JozAoSn7gwTQ/VoaZtDKJ8ERC5NZJG6rKxiUfxSb
+         Aj5ufIoB9wTz9U6OHoRygkTo6Mg7oJ6XxVd/CXnNsKG2FFNbDA+ZT4CqF5Y92Dri10oR
+         /42j8/kj5EP1Y1mNAx8yN2b2aFfFkwZl0KrZwLvPELfveqzoxDb7bLCWmtYMR4lcozCX
+         GVyQ==
+X-Gm-Message-State: APjAAAVwfjtATnLVUdLaetpZpGMj6+Vv3tmunqS3VDSCMd5+G6A5Xo/k
+        ZHe7TGcZbRqOUTdDRSz+p6x4SA==
+X-Google-Smtp-Source: APXvYqwX6h3pdPPGLbBek6F3fq3R4CGcdFenGdZlESWWcc6QO7Pr3r2/3O/xfa3VSw+xU96R877Kfg==
+X-Received: by 2002:a17:902:6948:: with SMTP id k8mr7937401plt.81.1559023036256;
+        Mon, 27 May 2019 22:57:16 -0700 (PDT)
+Received: from acourbot.tok.corp.google.com ([2401:fa00:4:4:9712:8cf1:d0f:7d33])
+        by smtp.gmail.com with ESMTPSA id w1sm13950551pfg.51.2019.05.27.22.57.13
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 May 2019 22:57:15 -0700 (PDT)
+From:   Alexandre Courbot <acourbot@chromium.org>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>
+Subject: [RFCv1 02/12] media: mtk-vcodec: remove unneeded proxy functions
+Date:   Tue, 28 May 2019 14:56:25 +0900
+Message-Id: <20190528055635.12109-3-acourbot@chromium.org>
+X-Mailer: git-send-email 2.22.0.rc1.257.g3120a18244-goog
+In-Reply-To: <20190528055635.12109-1-acourbot@chromium.org>
+References: <20190528055635.12109-1-acourbot@chromium.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+We were getting the codec interface through a proxy function that does
+not bring anything compared to just accessing the interface definition
+directly, so just do that. Also make the decoder interfaces const.
 
-Results of the daily build of media_tree:
+Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+---
+ .../media/platform/mtk-vcodec/vdec/vdec_h264_if.c    |  9 +--------
+ drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c |  9 +--------
+ drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c |  9 +--------
+ drivers/media/platform/mtk-vcodec/vdec_drv_if.c      | 12 ++++++------
+ .../media/platform/mtk-vcodec/venc/venc_h264_if.c    |  9 +--------
+ drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c |  9 +--------
+ drivers/media/platform/mtk-vcodec/venc_drv_if.c      |  8 ++++----
+ 7 files changed, 15 insertions(+), 50 deletions(-)
 
-date:			Tue May 28 05:00:14 CEST 2019
-media-tree git hash:	2c41cc0be07b5ee2f1167f41cd8a86fc5b53d82c
-media_build git hash:	483b4f0f48283ddaf1ba54d079051b58cdff2ef9
-v4l-utils git hash:	449f9cc496b513ad4033f53da6b5a225c47b17e0
-edid-decode git hash:	dc763d7b1a95a74c6d109a03e34ba45315212195
-gcc version:		i686-linux-gcc (GCC) 8.3.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: f1eea1117281d36d3f15e8955933d17600bb047e
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
+diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
+index 2b29e004575d..185d8e7bdc87 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
+@@ -493,16 +493,9 @@ static int vdec_h264_get_param(void *h_vdec, enum vdec_get_param_type type,
+ 	return 0;
+ }
+ 
+-static struct vdec_common_if vdec_h264_if = {
++const struct vdec_common_if vdec_h264_if = {
+ 	.init		= vdec_h264_init,
+ 	.decode		= vdec_h264_decode,
+ 	.get_param	= vdec_h264_get_param,
+ 	.deinit		= vdec_h264_deinit,
+ };
+-
+-struct vdec_common_if *get_h264_dec_comm_if(void);
+-
+-struct vdec_common_if *get_h264_dec_comm_if(void)
+-{
+-	return &vdec_h264_if;
+-}
+diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
+index a13253242e90..28475b8d27fe 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
+@@ -618,16 +618,9 @@ static void vdec_vp8_deinit(void *h_vdec)
+ 	kfree(inst);
+ }
+ 
+-static struct vdec_common_if vdec_vp8_if = {
++const struct vdec_common_if vdec_vp8_if = {
+ 	.init		= vdec_vp8_init,
+ 	.decode		= vdec_vp8_decode,
+ 	.get_param	= vdec_vp8_get_param,
+ 	.deinit		= vdec_vp8_deinit,
+ };
+-
+-struct vdec_common_if *get_vp8_dec_comm_if(void);
+-
+-struct vdec_common_if *get_vp8_dec_comm_if(void)
+-{
+-	return &vdec_vp8_if;
+-}
+diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+index 65b88a2bef4c..f4af69c543ba 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
+@@ -1008,16 +1008,9 @@ static int vdec_vp9_get_param(void *h_vdec, enum vdec_get_param_type type,
+ 	return ret;
+ }
+ 
+-static struct vdec_common_if vdec_vp9_if = {
++const struct vdec_common_if vdec_vp9_if = {
+ 	.init		= vdec_vp9_init,
+ 	.decode		= vdec_vp9_decode,
+ 	.get_param	= vdec_vp9_get_param,
+ 	.deinit		= vdec_vp9_deinit,
+ };
+-
+-struct vdec_common_if *get_vp9_dec_comm_if(void);
+-
+-struct vdec_common_if *get_vp9_dec_comm_if(void)
+-{
+-	return &vdec_vp9_if;
+-}
+diff --git a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+index 1e3778738f3b..dfe63bb39dbb 100644
+--- a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
++++ b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
+@@ -23,9 +23,9 @@
+ #include "mtk_vcodec_dec_pm.h"
+ #include "mtk_vpu.h"
+ 
+-const struct vdec_common_if *get_h264_dec_comm_if(void);
+-const struct vdec_common_if *get_vp8_dec_comm_if(void);
+-const struct vdec_common_if *get_vp9_dec_comm_if(void);
++extern const struct vdec_common_if vdec_h264_if;
++extern const struct vdec_common_if vdec_vp8_if;
++extern const struct vdec_common_if vdec_vp9_if;
+ 
+ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+ {
+@@ -33,13 +33,13 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+ 
+ 	switch (fourcc) {
+ 	case V4L2_PIX_FMT_H264:
+-		ctx->dec_if = get_h264_dec_comm_if();
++		ctx->dec_if = &vdec_h264_if;
+ 		break;
+ 	case V4L2_PIX_FMT_VP8:
+-		ctx->dec_if = get_vp8_dec_comm_if();
++		ctx->dec_if = &vdec_vp8_if;
+ 		break;
+ 	case V4L2_PIX_FMT_VP9:
+-		ctx->dec_if = get_vp9_dec_comm_if();
++		ctx->dec_if = &vdec_vp9_if;
+ 		break;
+ 	default:
+ 		return -EINVAL;
+diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
+index b6feb786bebf..eb015ce0fd3e 100644
+--- a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
+@@ -664,16 +664,9 @@ static int h264_enc_deinit(void *handle)
+ 	return ret;
+ }
+ 
+-static const struct venc_common_if venc_h264_if = {
++const struct venc_common_if venc_h264_if = {
+ 	.init = h264_enc_init,
+ 	.encode = h264_enc_encode,
+ 	.set_param = h264_enc_set_param,
+ 	.deinit = h264_enc_deinit,
+ };
+-
+-const struct venc_common_if *get_h264_enc_comm_if(void);
+-
+-const struct venc_common_if *get_h264_enc_comm_if(void)
+-{
+-	return &venc_h264_if;
+-}
+diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
+index 8656d89369bc..ad8008c865db 100644
+--- a/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
+@@ -469,16 +469,9 @@ static int vp8_enc_deinit(void *handle)
+ 	return ret;
+ }
+ 
+-static const struct venc_common_if venc_vp8_if = {
++const struct venc_common_if venc_vp8_if = {
+ 	.init = vp8_enc_init,
+ 	.encode = vp8_enc_encode,
+ 	.set_param = vp8_enc_set_param,
+ 	.deinit = vp8_enc_deinit,
+ };
+-
+-const struct venc_common_if *get_vp8_enc_comm_if(void);
+-
+-const struct venc_common_if *get_vp8_enc_comm_if(void)
+-{
+-	return &venc_vp8_if;
+-}
+diff --git a/drivers/media/platform/mtk-vcodec/venc_drv_if.c b/drivers/media/platform/mtk-vcodec/venc_drv_if.c
+index 4b04652be6de..94bb530f7d2d 100644
+--- a/drivers/media/platform/mtk-vcodec/venc_drv_if.c
++++ b/drivers/media/platform/mtk-vcodec/venc_drv_if.c
+@@ -26,8 +26,8 @@
+ #include "mtk_vcodec_enc_pm.h"
+ #include "mtk_vpu.h"
+ 
+-const struct venc_common_if *get_h264_enc_comm_if(void);
+-const struct venc_common_if *get_vp8_enc_comm_if(void);
++extern const struct venc_common_if venc_h264_if;
++extern const struct venc_common_if venc_vp8_if;
+ 
+ int venc_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+ {
+@@ -35,10 +35,10 @@ int venc_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
+ 
+ 	switch (fourcc) {
+ 	case V4L2_PIX_FMT_VP8:
+-		ctx->enc_if = get_vp8_enc_comm_if();
++		ctx->enc_if = &venc_vp8_if;
+ 		break;
+ 	case V4L2_PIX_FMT_H264:
+-		ctx->enc_if = get_h264_enc_comm_if();
++		ctx->enc_if = &venc_h264_if;
+ 		break;
+ 	default:
+ 		return -EINVAL;
+-- 
+2.22.0.rc1.257.g3120a18244-goog
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2-rc1-i686: OK
-linux-5.2-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 1963, Succeeded: 1963, Failed: 0, Warnings: 12
-sparse: WARNINGS
-smatch: OK
-
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
