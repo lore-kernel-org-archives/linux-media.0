@@ -2,92 +2,119 @@ Return-Path: <SRS0=uFep=T4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E08FC04AB6
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 08:05:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AAC7C04AB6
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 08:34:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F077208CB
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 08:05:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB52C208C3
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 08:34:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726921AbfE1IFu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 May 2019 04:05:50 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:59121 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726305AbfE1IFu (ORCPT
+        id S1726831AbfE1Iel (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 May 2019 04:34:41 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:39687 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726780AbfE1Iel (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 May 2019 04:05:50 -0400
-Received: from [IPv6:2001:983:e9a7:1:10b2:2e62:e4b1:bd13] ([IPv6:2001:983:e9a7:1:10b2:2e62:e4b1:bd13])
+        Tue, 28 May 2019 04:34:41 -0400
+Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:10b2:2e62:e4b1:bd13])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id VX7Dhgcf2sDWyVX7Ehc36i; Tue, 28 May 2019 10:05:48 +0200
-Subject: Re: [PATCH v7 1/3] media: cec: expose HDMI connector to CEC dev
- mapping
-To:     Dariusz Marcinkiewicz <darekm@google.com>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190521105203.154043-1-darekm@google.com>
- <16889839-b4e9-9984-2e36-5f07ceb7d7f2@xs4all.nl>
- <CALFZZQH7-mzRZbji1w-UwRLdw6c8+CThn0e96oG8E2Eq1ivANQ@mail.gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <8e575d0b-4765-ae54-019e-0fab522fe1d5@xs4all.nl>
-Date:   Tue, 28 May 2019 10:05:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id VXZ7hgpQIsDWyVXZ8hcDJ9; Tue, 28 May 2019 10:34:38 +0200
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 1/2] v4l2-mem2mem: add try_en/decoder_cmd ioctl helpers
+Date:   Tue, 28 May 2019 10:34:36 +0200
+Message-Id: <20190528083437.103215-2-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190528083437.103215-1-hverkuil-cisco@xs4all.nl>
+References: <20190528083437.103215-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-In-Reply-To: <CALFZZQH7-mzRZbji1w-UwRLdw6c8+CThn0e96oG8E2Eq1ivANQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfI0zvfm6RKxnUHwaDkefRQt5vwHDdDDmoCixtWbm0IBhnZfpUCNXMA/QPOHKUnNfBG3JPyE/VCOe722VEDiFBEEXIZ6Tgb+vDqJs/J4tYtu+04oASdlw
- +ftguDsGm49XsUWVyyhcoYf3TFKARSYRiNbQKfK0mNVlekk+DQyCYnSnDLVqaU3cXg/16wHpcDRPz53Mvt6Dp0/iEx5YaK36EyvfFyyjRjFf3gpZxuPLKHOT
- k2vzUlFDjeBrhOhjUZKsHRRtJJU2+g+EBpKtaHMiozRfq5StoHXGFnSs8NwefHUKq1QHI7RkoiUVNVcbADq9vE6m6Get+QBOP+3ELcA0CZkuwSZLULhcE/uN
- 8tkVGtMo
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfI9l6tLUfrUuVQofcLgE1S8ygrzy3IcIo+YkQYMmM6MfCekDOGXi/ihiQqP9b6udegUPzWcZ/p4CuSXGhNMi6DU4FS3J2OstAqtpgTCqju9X3EMLAxZm
+ cshT2EpTyY0W3a9VEh5bjakARxTQBzRgXcp0Q2ZmgYKLpYBiGtR0HskBzCmy+PW8A+TJZhGJNKXCSHSra/+ge48+5IA2cT1bbScYtdwrsT/fVkDk48y3Rg+s
+ dHZCnTDNajFrnRk/3OdsrBfbbQJGBzOvmUU2xEBknDXbte1OL13Ih+dAUWaK4THii70slJsqdB+yOD8swoArKQADkh0KF7BjoKHHQl2NQhN2t7Rnp6LsTA1R
+ PPB7OGbBls4+tTKPQf5WhWjmp48oOYyNvwMZqqUw0j3BmFvidpPFmMBQZlWXb7t1W7NP6Z2MtvE2PVU7AErVKutoheB0EA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 5/28/19 9:53 AM, Dariusz Marcinkiewicz wrote:
-> On Fri, May 24, 2019 at 11:21 AM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->>
->> Hi Dariusz,
->>
->> I did some more testing with the Khadas VIM2 and found another problem,
->> something that will, unfortunately, require some redesign.
->>
-> ...
->>
->> The other problem is in the CEC driver: it creates the CEC device as
->> soon as the HDMI device is found (cec_notifier_parse_hdmi_phandle).
->>
->> But that doesn't mean that the HDMI device also had registered itself
->> as a CEC notifier.
->>
->> Until now that never mattered: as long as the HDMI device was found
->> the CEC adapter would function fine, it would just have no physical
->> address until so notified by the HDMI device once it registered its
->> CEC notifier.
->>
->> But if we want to have valid connector info during the lifetime of
->> the CEC adapter, then this no longer works.
->>
->> I'm not entirely sure how to handle this.
->>
->> Another issue here is that when the HDMI driver removes the notifier,
->> then it should also zero the connector info. Remember that both the
->> HDMI and the CEC drivers can be loaded and unloaded independently from
->> one another.
->>
-> Given all of the above, what do you think about coming back to the v1
-> of the patch, where a connector info could be set on an adapter at any
-> time and an event was used to notify userland when that happened? That
-> approach seems to cover all the scenarios mentioned above.
+Most if not all codecs will need to implement these ioctls and
+it is expected to be the same for all codecs. So add this to
+the core v4l2-mem2mem framework so that this code can easily be
+reused.
 
-That's just hiding the real problems :-)
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 32 ++++++++++++++++++++++++++
+ include/media/v4l2-mem2mem.h           |  4 ++++
+ 2 files changed, 36 insertions(+)
 
-I hope to spend some time on CEC tomorrow and I'll get back to you then.
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 3392833d9541..ba799db5866a 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -1122,6 +1122,38 @@ int v4l2_m2m_ioctl_streamoff(struct file *file, void *priv,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_streamoff);
+ 
++int v4l2_m2m_ioctl_try_encoder_cmd(struct file *file, void *fh,
++				   struct v4l2_encoder_cmd *ec)
++{
++	if (ec->cmd != V4L2_ENC_CMD_STOP && ec->cmd != V4L2_ENC_CMD_START)
++		return -EINVAL;
++
++	if (ec->cmd == V4L2_ENC_CMD_START)
++		ec->flags = 0;
++	return ec->flags ? -EINVAL : 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_try_encoder_cmd);
++
++int v4l2_m2m_ioctl_try_decoder_cmd(struct file *file, void *fh,
++				   struct v4l2_decoder_cmd *dc)
++{
++	if (dc->cmd != V4L2_DEC_CMD_STOP && dc->cmd != V4L2_DEC_CMD_START)
++		return -EINVAL;
++
++	if (dc->flags)
++		return -EINVAL;
++
++	if (dc->cmd == V4L2_DEC_CMD_STOP && dc->stop.pts)
++		return -EINVAL;
++
++	if (dc->cmd == V4L2_DEC_CMD_START) {
++		dc->start.speed = 0;
++		dc->start.format = V4L2_DEC_START_FMT_NONE;
++	}
++	return 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_try_decoder_cmd);
++
+ /*
+  * v4l2_file_operations helpers. It is assumed here same lock is used
+  * for the output and the capture buffer queue.
+diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+index bb3e63d6bd1a..2e0c989266a7 100644
+--- a/include/media/v4l2-mem2mem.h
++++ b/include/media/v4l2-mem2mem.h
+@@ -672,6 +672,10 @@ int v4l2_m2m_ioctl_streamon(struct file *file, void *fh,
+ 				enum v4l2_buf_type type);
+ int v4l2_m2m_ioctl_streamoff(struct file *file, void *fh,
+ 				enum v4l2_buf_type type);
++int v4l2_m2m_ioctl_try_encoder_cmd(struct file *file, void *fh,
++				   struct v4l2_encoder_cmd *ec);
++int v4l2_m2m_ioctl_try_decoder_cmd(struct file *file, void *fh,
++				   struct v4l2_decoder_cmd *dc);
+ int v4l2_m2m_fop_mmap(struct file *file, struct vm_area_struct *vma);
+ __poll_t v4l2_m2m_fop_poll(struct file *file, poll_table *wait);
+ 
+-- 
+2.20.1
 
-Regards,
-
-	Hans
