@@ -2,142 +2,91 @@ Return-Path: <SRS0=uFep=T4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C366C04AB6
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 13:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CC44C04AB6
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 13:09:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F08F21670
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 13:05:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F1E3208C3
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 13:09:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbfE1NF2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 May 2019 09:05:28 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:57252 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726620AbfE1NF1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 May 2019 09:05:27 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D01EC80D;
-        Tue, 28 May 2019 06:05:26 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 479923F5AF;
-        Tue, 28 May 2019 06:05:21 -0700 (PDT)
-Date:   Tue, 28 May 2019 14:05:18 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-Message-ID: <20190528130518.GB32006@arrakis.emea.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+        id S1727250AbfE1NJZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 May 2019 09:09:25 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:53967 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726985AbfE1NJZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 28 May 2019 09:09:25 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1hVbr1-0005s0-QM; Tue, 28 May 2019 15:09:23 +0200
+Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1hVbr1-0001Au-2Z; Tue, 28 May 2019 15:09:23 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     kernel@pengutronix.de, robh+dt@kernel.org, mchehab@kernel.org,
+        tfiga@chromium.org, dshah@xilinx.com, hverkuil@xs4all.nl,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH v7 1/5] videobuf2-v4l2: set last_buffer_dequeued in dqbuf
+Date:   Tue, 28 May 2019 15:09:16 +0200
+Message-Id: <20190528130920.4450-2-m.tretter@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190528130920.4450-1-m.tretter@pengutronix.de>
+References: <20190528130920.4450-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
->  /*
->   * Wrappers to pass the pt_regs argument.
->   */
->  #define sys_personality		sys_arm64_personality
-> +#define sys_mmap_pgoff		sys_arm64_mmap_pgoff
-> +#define sys_mremap		sys_arm64_mremap
-> +#define sys_munmap		sys_arm64_munmap
-> +#define sys_brk			sys_arm64_brk
-> +#define sys_get_mempolicy	sys_arm64_get_mempolicy
-> +#define sys_madvise		sys_arm64_madvise
-> +#define sys_mbind		sys_arm64_mbind
-> +#define sys_mlock		sys_arm64_mlock
-> +#define sys_mlock2		sys_arm64_mlock2
-> +#define sys_munlock		sys_arm64_munlock
-> +#define sys_mprotect		sys_arm64_mprotect
-> +#define sys_msync		sys_arm64_msync
-> +#define sys_mincore		sys_arm64_mincore
-> +#define sys_remap_file_pages	sys_arm64_remap_file_pages
-> +#define sys_shmat		sys_arm64_shmat
-> +#define sys_shmdt		sys_arm64_shmdt
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-This hunk should be (I sent a separate patch for sys_personality):
+last_buffer_dequeued was set to true in __fill_v4l2_buffer, but this
+is called for qbuf as well. Move it to vb2_dqbuf.
 
-@@ -160,23 +163,23 @@ SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
- /*
-  * Wrappers to pass the pt_regs argument.
-  */
--#define sys_personality		sys_arm64_personality
--#define sys_mmap_pgoff		sys_arm64_mmap_pgoff
--#define sys_mremap		sys_arm64_mremap
--#define sys_munmap		sys_arm64_munmap
--#define sys_brk			sys_arm64_brk
--#define sys_get_mempolicy	sys_arm64_get_mempolicy
--#define sys_madvise		sys_arm64_madvise
--#define sys_mbind		sys_arm64_mbind
--#define sys_mlock		sys_arm64_mlock
--#define sys_mlock2		sys_arm64_mlock2
--#define sys_munlock		sys_arm64_munlock
--#define sys_mprotect		sys_arm64_mprotect
--#define sys_msync		sys_arm64_msync
--#define sys_mincore		sys_arm64_mincore
--#define sys_remap_file_pages	sys_arm64_remap_file_pages
--#define sys_shmat		sys_arm64_shmat
--#define sys_shmdt		sys_arm64_shmdt
-+#define __arm64_sys_personality		__arm64_sys_arm64_personality
-+#define __arm64_sys_mmap_pgoff		__arm64_sys_arm64_mmap_pgoff
-+#define __arm64_sys_mremap		__arm64_sys_arm64_mremap
-+#define __arm64_sys_munmap		__arm64_sys_arm64_munmap
-+#define __arm64_sys_brk			__arm64_sys_arm64_brk
-+#define __arm64_sys_get_mempolicy	__arm64_sys_arm64_get_mempolicy
-+#define __arm64_sys_madvise		__arm64_sys_arm64_madvise
-+#define __arm64_sys_mbind		__arm64_sys_arm64_mbind
-+#define __arm64_sys_mlock		__arm64_sys_arm64_mlock
-+#define __arm64_sys_mlock2		__arm64_sys_arm64_mlock2
-+#define __arm64_sys_munlock		__arm64_sys_arm64_munlock
-+#define __arm64_sys_mprotect		__arm64_sys_arm64_mprotect
-+#define __arm64_sys_msync		__arm64_sys_arm64_msync
-+#define __arm64_sys_mincore		__arm64_sys_arm64_mincore
-+#define __arm64_sys_remap_file_pages	__arm64_sys_arm64_remap_file_pages
-+#define __arm64_sys_shmat		__arm64_sys_arm64_shmat
-+#define __arm64_sys_shmdt		__arm64_sys_arm64_shmdt
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/common/videobuf2/videobuf2-v4l2.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index fb9ac7696fc6..40d76eb4c2fe 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -563,11 +563,6 @@ static void __fill_v4l2_buffer(struct vb2_buffer *vb, void *pb)
+ 		b->flags |= V4L2_BUF_FLAG_REQUEST_FD;
+ 		b->request_fd = vbuf->request_fd;
+ 	}
+-
+-	if (!q->is_output &&
+-		b->flags & V4L2_BUF_FLAG_DONE &&
+-		b->flags & V4L2_BUF_FLAG_LAST)
+-		q->last_buffer_dequeued = true;
+ }
  
- asmlinkage long sys_ni_syscall(const struct pt_regs *);
- #define __arm64_sys_ni_syscall	sys_ni_syscall
-
+ /*
+@@ -786,6 +781,11 @@ int vb2_dqbuf(struct vb2_queue *q, struct v4l2_buffer *b, bool nonblocking)
+ 
+ 	ret = vb2_core_dqbuf(q, NULL, b, nonblocking);
+ 
++	if (!q->is_output &&
++	    b->flags & V4L2_BUF_FLAG_DONE &&
++	    b->flags & V4L2_BUF_FLAG_LAST)
++		q->last_buffer_dequeued = true;
++
+ 	/*
+ 	 *  After calling the VIDIOC_DQBUF V4L2_BUF_FLAG_DONE must be
+ 	 *  cleared.
 -- 
-Catalin
+2.20.1
+
