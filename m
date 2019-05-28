@@ -8,59 +8,59 @@ X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A27CC04AB6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 41EC3C072B1
 	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:19:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E317221721
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:19:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B6DC21726
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:19:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jalgBXwZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KdTG4Fsh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbfE1QTu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 May 2019 12:19:50 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:33876 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726362AbfE1QTt (ORCPT
+        id S1726939AbfE1QTv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 May 2019 12:19:51 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:42340 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726698AbfE1QTu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 May 2019 12:19:49 -0400
-Received: by mail-ed1-f65.google.com with SMTP id p27so32668391eda.1
-        for <linux-media@vger.kernel.org>; Tue, 28 May 2019 09:19:47 -0700 (PDT)
+        Tue, 28 May 2019 12:19:50 -0400
+Received: by mail-ed1-f68.google.com with SMTP id g24so4681954eds.9
+        for <linux-media@vger.kernel.org>; Tue, 28 May 2019 09:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2Liz4NCCkeIBXJzHuCYEdHXabuK8WltPZOXFWQKF9Lk=;
-        b=jalgBXwZsJpWeL9E3HwrJxvMQDgU/P7voF2qpNXwtWvw8IkfMlOtvGoCXFdvo+urXG
-         RAu4wCv0qzVHuYYlPWONgahgXqnK8RViEcmOh/zznULmV7kKG+mVR4kDhvQIZGbhLyws
-         PVT/Drmauo63evOGJk6wHdbhv4oLX0WpMVezstM56s0NTHRBFfz4E6UsddhOdVpQ/wpz
-         FU//8RVSLuy/UBFLOBvVkjU8lw2GFqrsSoOfOu1iWvIvLdiagiumrzzyDn9AgNLjBQfk
-         Mth1NpufUaSLXKwvwCGBX6V//x71uP1QkAV7ORat05J4iUrWiiT8vDyC1kQ1np/Z/xjN
-         NkgA==
+        bh=whUELaBiLoKOS1VsPI86n4TCafSUCO6vv98fgHZdlOc=;
+        b=KdTG4Fsh5NcX93ZJ5yK17Ml6KVWLkausbgdZhfSPrzi02iDjJd5F8VN6qMXzamJOlK
+         uvQZ6TtPJjuhawpjIMvXbn+kNsXOtmoJTHnrAmPg5qmdlgM9YbE60sdn6n0Fl7LfOLAf
+         7DKRPKWdTrIDEl7g/ypYdEELFhHXSgWjb2QSeDHGcp5Lu/8dd7V1AHyOdBKYC36kzJXw
+         sDVKpNatp9/QYKMipy4UD26pU4qTn4ULbvGCiVXLwAmvWNQ6udvAdbt07HujeriYUj2A
+         MwZCESwbh/m9rb2ooExUEOLV3zYNXXT1O+2IFdAhqTvx9a3H3BFxqfGC0U3BgxyJ7VEc
+         QHEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=2Liz4NCCkeIBXJzHuCYEdHXabuK8WltPZOXFWQKF9Lk=;
-        b=iQU9UzGVkNBieWfPXwalgTme+wAntrgtr5TzyVQODBqmi5Jg864oWFL8OZIlWSY7YY
-         D/NWtSAhggR+OJ8hNuAX+KI8uGZipwybGMxlx1rQyd1HAhlAj0kYGPCLeD3cseqHAOCq
-         gOC7hHlq4DYgJZc892bYtBvVHpTqAnDE5AUEPT/zbcuAsIJgbeU5fx1ptU64pXWYEvg9
-         Iwqg1Gckx9gI0Iwf1LJNuACk8BwqJQL7EUnOYi12kgxr6PpoTGRZ9NdbZ2I0bmGb4hLh
-         sxt4iVGV21yOX8LgQp20G1TBoKcnHUMgd7sSsg1FSckZU/8faPZh8OB94ZR86vNIR3Wo
-         xuKA==
-X-Gm-Message-State: APjAAAVF+s6A5ixl1+vmMlP+QpXZWF68j0DJnWmDcx6aBTVOv25PUlEW
-        /WC38BL9/B8CIboiYsN5IiVCh3ifxXE=
-X-Google-Smtp-Source: APXvYqz7gMtmIbeSsTb06GqFztbuXy7/KZ2IXlF+/bRJVc5AquVG+TovskMFkl0StLcppglmbOhf6g==
-X-Received: by 2002:a50:b865:: with SMTP id k34mr131325632ede.16.1559060386621;
-        Tue, 28 May 2019 09:19:46 -0700 (PDT)
+        bh=whUELaBiLoKOS1VsPI86n4TCafSUCO6vv98fgHZdlOc=;
+        b=i9iKDpQB6HFxuEf0sJb99QvqtPkU3bG5VEEaDMjZTjcF7uuLO/DHGYSs8BOwWC0j3B
+         T65p+GqHrW1b2euBLKCvaUA05tEo7M04vElwfhrtJwgMh7ZQylnAVNogvxUBIccyr3jz
+         8lCPVsJK0n54SObuV1X7wlTlKUEDGXgnK/tCYZKtNs2LzEW4cqmcaq4OB6EuUzaRUnYe
+         x7njsZfnNCSIpY6hggh5wON3dp8js/gtMJO/JhQuG9QhkLPKwDyGrJTTex1j3vdRbUya
+         BWM1XW26MY/grVdsPNI9En7GhOGsTVS36W/uaamTwAkhvG+cn7SZVLV9lHgjECkUyOqg
+         UBfw==
+X-Gm-Message-State: APjAAAUKYaizCUEQ4CNy6Sl3dIpxN8zf9iJof7qDDf3xgQNhUAYLcPwV
+        JqEf5U93EeoKqbeBfbkNebmc/uMDka8=
+X-Google-Smtp-Source: APXvYqxT6T75vAKnwhOTeDXHLTysM44F4opO+9YIySIMSRhRiZkvS+dLjfGlRN41611ozQAu1BVwMA==
+X-Received: by 2002:aa7:c5d2:: with SMTP id h18mr87897585eds.110.1559060388680;
+        Tue, 28 May 2019 09:19:48 -0700 (PDT)
 Received: from ubuntu.localdomain ([173.38.220.62])
-        by smtp.gmail.com with ESMTPSA id c38sm4313002edc.22.2019.05.28.09.19.45
+        by smtp.gmail.com with ESMTPSA id c38sm4313002edc.22.2019.05.28.09.19.47
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 09:19:46 -0700 (PDT)
+        Tue, 28 May 2019 09:19:48 -0700 (PDT)
 From:   johan.korsnes@gmail.com
 To:     linux-media@vger.kernel.org
 Cc:     Johan Korsnes <johan.korsnes@gmail.com>
-Subject: [PATCH 3/8] media: vivid: add display present control
-Date:   Tue, 28 May 2019 10:19:07 -0700
-Message-Id: <20190528171912.3688-4-johan.korsnes@gmail.com>
+Subject: [PATCH 5/8] media: vivid: add HDMI (dis)connect TX emulation
+Date:   Tue, 28 May 2019 10:19:09 -0700
+Message-Id: <20190528171912.3688-6-johan.korsnes@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190528171912.3688-1-johan.korsnes@gmail.com>
 References: <20190528171912.3688-1-johan.korsnes@gmail.com>
@@ -71,126 +71,92 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Johan Korsnes <johan.korsnes@gmail.com>
 
-Add a custom control for selecting the presence of a display connected
-to the active output. This control is part of an effort to implement
-proper HDMI (dis)connect behavior for vivid.
+Adds the following bitmask controls:
+-V4L2_CID_DV_TX_EDID_PRESENT
+-V4L2_CID_DV_TX_HOTPLUG
+-V4L2_CID_DV_TX_RXSENSE
+
+The bitmasks are all set based on the custom vivid DISPLAY_PRESENT
+control. This also removes 2/2 v4l2-compliance warnings for vivid
+output device.
 
 Signed-off-by: Johan Korsnes <johan.korsnes@gmail.com>
 ---
- drivers/media/platform/vivid/vivid-core.c    |  3 +++
- drivers/media/platform/vivid/vivid-core.h    |  2 ++
- drivers/media/platform/vivid/vivid-ctrls.c   | 18 ++++++++++++++++++
- drivers/media/platform/vivid/vivid-vid-out.c |  6 ++++++
- 4 files changed, 29 insertions(+)
+ drivers/media/platform/vivid/vivid-core.h  |  3 +++
+ drivers/media/platform/vivid/vivid-ctrls.c | 25 +++++++++++++++++++++-
+ 2 files changed, 27 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/vivid/vivid-core.c b/drivers/media/platform/vivid/vivid-core.c
-index c4c31d0e006a..20a0dcebd783 100644
---- a/drivers/media/platform/vivid/vivid-core.c
-+++ b/drivers/media/platform/vivid/vivid-core.c
-@@ -732,6 +732,7 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
- 	for (i = 0; i < dev->num_outputs; i++) {
- 		dev->output_type[i] = ((output_types[inst] >> i) & 1) ? HDMI : SVID;
- 		dev->output_name_counter[i] = out_type_counter[dev->output_type[i]]++;
-+		dev->display_present[i] = true;
- 	}
- 	dev->has_audio_outputs = out_type_counter[SVID];
- 	if (out_type_counter[HDMI] == 16) {
-@@ -1040,6 +1041,8 @@ static int vivid_create_instance(struct platform_device *pdev, int inst)
- 		goto unreg_dev;
- 
- 	/* enable/disable interface specific controls */
-+	if (dev->num_outputs && dev->output_type[0] != HDMI)
-+		v4l2_ctrl_activate(dev->ctrl_display_present, false);
- 	if (dev->num_inputs && dev->input_type[0] != HDMI) {
- 		v4l2_ctrl_activate(dev->ctrl_dv_timings_signal_mode, false);
- 		v4l2_ctrl_activate(dev->ctrl_dv_timings, false);
 diff --git a/drivers/media/platform/vivid/vivid-core.h b/drivers/media/platform/vivid/vivid-core.h
-index a18fd19215b6..24104df6c444 100644
+index 1d04b7209f2b..b7307cbba2a5 100644
 --- a/drivers/media/platform/vivid/vivid-core.h
 +++ b/drivers/media/platform/vivid/vivid-core.h
-@@ -237,6 +237,7 @@ struct vivid_dev {
- 		struct v4l2_ctrl	*ctrl_dv_timings_signal_mode;
- 		struct v4l2_ctrl	*ctrl_dv_timings;
- 	};
-+	struct v4l2_ctrl		*ctrl_display_present;
- 	struct v4l2_ctrl		*ctrl_has_crop_cap;
- 	struct v4l2_ctrl		*ctrl_has_compose_cap;
- 	struct v4l2_ctrl		*ctrl_has_scaler_cap;
-@@ -361,6 +362,7 @@ struct vivid_dev {
- 	u8				*scaled_line;
- 	u8				*blended_line;
- 	unsigned			cur_scaled_line;
-+	bool				display_present[MAX_OUTPUTS];
+@@ -248,6 +248,9 @@ struct vivid_dev {
+ 	struct v4l2_ctrl		*ctrl_has_scaler_out;
+ 	struct v4l2_ctrl		*ctrl_tx_mode;
+ 	struct v4l2_ctrl		*ctrl_tx_rgb_range;
++	struct v4l2_ctrl		*ctrl_tx_edid_present;
++	struct v4l2_ctrl		*ctrl_tx_hotplug;
++	struct v4l2_ctrl		*ctrl_tx_rxsense;
  
- 	/* Output Overlay */
- 	void				*fb_vbase_out;
+ 	struct v4l2_ctrl		*radio_tx_rds_pi;
+ 	struct v4l2_ctrl		*radio_tx_rds_pty;
 diff --git a/drivers/media/platform/vivid/vivid-ctrls.c b/drivers/media/platform/vivid/vivid-ctrls.c
-index 74b2c92fbfa0..67a330f15552 100644
+index 67a330f15552..5cb7232a8278 100644
 --- a/drivers/media/platform/vivid/vivid-ctrls.c
 +++ b/drivers/media/platform/vivid/vivid-ctrls.c
-@@ -68,6 +68,7 @@
- #define VIVID_CID_PERCENTAGE_FILL	(VIVID_CID_VIVID_BASE + 41)
- #define VIVID_CID_REDUCED_FPS		(VIVID_CID_VIVID_BASE + 42)
- #define VIVID_CID_HSV_ENC		(VIVID_CID_VIVID_BASE + 43)
-+#define VIVID_CID_DISPLAY_PRESENT	(VIVID_CID_VIVID_BASE + 44)
+@@ -912,6 +912,8 @@ static int vivid_vid_out_s_ctrl(struct v4l2_ctrl *ctrl)
+ {
+ 	struct vivid_dev *dev = container_of(ctrl->handler, struct vivid_dev, ctrl_hdl_vid_out);
+ 	struct v4l2_bt_timings *bt = &dev->dv_timings_out.bt;
++	u32 display_present = 0;
++	unsigned i, j;
  
- #define VIVID_CID_STD_SIGNAL_MODE	(VIVID_CID_VIVID_BASE + 60)
- #define VIVID_CID_STANDARD		(VIVID_CID_VIVID_BASE + 61)
-@@ -944,6 +945,12 @@ static int vivid_vid_out_s_ctrl(struct v4l2_ctrl *ctrl)
- 		if (dev->loop_video)
- 			vivid_send_source_change(dev, HDMI);
- 		break;
-+	case VIVID_CID_DISPLAY_PRESENT:
-+		if (dev->output_type[dev->output] != HDMI)
-+			break;
+ 	switch (ctrl->id) {
+ 	case VIVID_CID_HAS_CROP_OUT:
+@@ -950,6 +952,15 @@ static int vivid_vid_out_s_ctrl(struct v4l2_ctrl *ctrl)
+ 			break;
+ 
+ 		dev->display_present[dev->output] = ctrl->val;
 +
-+		dev->display_present[dev->output] = ctrl->val;
-+		break;
++		for (i = 0, j = 0; i < dev->num_outputs; i++)
++			if (dev->output_type[i] == HDMI)
++				display_present |=
++					dev->display_present[i] << j++;
++
++		__v4l2_ctrl_s_ctrl(dev->ctrl_tx_hotplug, display_present);
++		__v4l2_ctrl_s_ctrl(dev->ctrl_tx_rxsense, display_present);
++		__v4l2_ctrl_s_ctrl(dev->ctrl_tx_edid_present, display_present);
+ 		break;
  	}
  	return 0;
- }
-@@ -982,6 +989,15 @@ static const struct v4l2_ctrl_config vivid_ctrl_has_scaler_out = {
- 	.step = 1,
- };
- 
-+static const struct v4l2_ctrl_config vivid_ctrl_display_present = {
-+	.ops = &vivid_vid_out_ctrl_ops,
-+	.id = VIVID_CID_DISPLAY_PRESENT,
-+	.name = "Display Present",
-+	.type = V4L2_CTRL_TYPE_BOOLEAN,
-+	.max = 1,
-+	.def = 1,
-+	.step = 1,
-+};
- 
- /* Streaming Controls */
- 
-@@ -1587,6 +1603,8 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
- 		dev->ctrl_tx_mode = v4l2_ctrl_new_std_menu(hdl_vid_out, NULL,
- 			V4L2_CID_DV_TX_MODE, V4L2_DV_TX_MODE_HDMI,
+@@ -1592,7 +1603,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
+ 			V4L2_CID_DV_RX_RGB_RANGE, V4L2_DV_RGB_RANGE_FULL,
+ 			0, V4L2_DV_RGB_RANGE_AUTO);
+ 	}
+-	if (has_hdmi && dev->has_vid_out) {
++	if (dev->num_hdmi_outputs) {
+ 		/*
+ 		 * We aren't doing anything with this at the moment, but
+ 		 * HDMI outputs typically have this controls.
+@@ -1605,6 +1616,18 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
  			0, V4L2_DV_TX_MODE_HDMI);
-+		dev->ctrl_display_present = v4l2_ctrl_new_custom(hdl_vid_out,
-+			&vivid_ctrl_display_present, NULL);
+ 		dev->ctrl_display_present = v4l2_ctrl_new_custom(hdl_vid_out,
+ 			&vivid_ctrl_display_present, NULL);
++		dev->ctrl_tx_hotplug = v4l2_ctrl_new_std(hdl_vid_out,
++			NULL, V4L2_CID_DV_TX_HOTPLUG, 0,
++			(2 << (dev->num_hdmi_outputs - 1)) - 1, 0,
++			(2 << (dev->num_hdmi_outputs - 1)) - 1);
++		dev->ctrl_tx_rxsense = v4l2_ctrl_new_std(hdl_vid_out,
++			NULL, V4L2_CID_DV_TX_RXSENSE, 0,
++			(2 << (dev->num_hdmi_outputs - 1)) - 1, 0,
++			(2 << (dev->num_hdmi_outputs - 1)) - 1);
++		dev->ctrl_tx_edid_present = v4l2_ctrl_new_std(hdl_vid_out,
++			NULL, V4L2_CID_DV_TX_EDID_PRESENT, 0,
++			(2 << (dev->num_hdmi_outputs - 1)) - 1, 0,
++			(2 << (dev->num_hdmi_outputs - 1)) - 1);
  	}
  	if ((dev->has_vid_cap && dev->has_vid_out) ||
  	    (dev->has_vbi_cap && dev->has_vbi_out))
-diff --git a/drivers/media/platform/vivid/vivid-vid-out.c b/drivers/media/platform/vivid/vivid-vid-out.c
-index 9350ca65dd91..148b663a6075 100644
---- a/drivers/media/platform/vivid/vivid-vid-out.c
-+++ b/drivers/media/platform/vivid/vivid-vid-out.c
-@@ -1094,6 +1094,12 @@ int vidioc_s_output(struct file *file, void *priv, unsigned o)
- 
- 	dev->vbi_out_dev.tvnorms = dev->vid_out_dev.tvnorms;
- 	vivid_update_format_out(dev);
-+
-+	v4l2_ctrl_activate(dev->ctrl_display_present, vivid_is_hdmi_out(dev));
-+	if (vivid_is_hdmi_out(dev))
-+		v4l2_ctrl_s_ctrl(dev->ctrl_display_present,
-+				 dev->display_present[dev->output]);
-+
- 	return 0;
- }
- 
 -- 
 2.17.1
 
