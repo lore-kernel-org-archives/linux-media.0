@@ -7,51 +7,51 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49250C04E84
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 05:57:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43E67C04AB6
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 05:57:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 139152075C
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 05:57:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C9A9208CB
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 05:57:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="edV0Rw6V"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hwSZWxSl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727459AbfE1F5R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 May 2019 01:57:17 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:42110 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727327AbfE1F5R (ORCPT
+        id S1727547AbfE1F5X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 May 2019 01:57:23 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:37613 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727536AbfE1F5X (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 May 2019 01:57:17 -0400
-Received: by mail-pl1-f193.google.com with SMTP id go2so7848477plb.9
-        for <linux-media@vger.kernel.org>; Mon, 27 May 2019 22:57:16 -0700 (PDT)
+        Tue, 28 May 2019 01:57:23 -0400
+Received: by mail-pf1-f196.google.com with SMTP id a23so10788420pff.4
+        for <linux-media@vger.kernel.org>; Mon, 27 May 2019 22:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iQX7cJHbDOGy3qbp4R0uiyoHDzieblpMxlf5nPE+1kI=;
-        b=edV0Rw6VsNp8oYJ3Dl4lZy5wN59+hfWnriCYwZl9+hyoyfhbXsZVWVuUzz1nLQbjSv
-         pUUKbUJsNrn81w0Ly+3KJ/nIidVATG+IpCnMfXSaO5Y6GrwNW0Mz3CHQYO0eCBsO/OB1
-         P3ChRYoRGn4LdSThVGpd77SC0gG9dauF2qewc=
+        bh=dct7sUqIN4yTDR2HFtwSyXfQaPLYionNUf3R7g65wJc=;
+        b=hwSZWxSlG9xeAnA9TUeD7ON0voDdUj314TGa+yz9do/gM6mzbANrtu0Ks/sFbwBm63
+         rKJQTeV99HciujXRGhmL2Z91P9RLUC5gzPp/HTBeW0iwdSsZZPNvjc3r7EbGBrX8f2mR
+         1QJ1d3JZUAftEP/UEB13JiDPfSCNfe/IM6iME=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iQX7cJHbDOGy3qbp4R0uiyoHDzieblpMxlf5nPE+1kI=;
-        b=kiW3mwsoLM5OUJzOk73QNNlcht8AhXRbZjav8Pv2UHpXMN/Z0dqglzNt7xdQghFE6Q
-         GDZCzcMAKOpJQAh1hVlx91jZBoyAISiu8DkyALfgehl85J8/p+rFLmigR+zk0nuJ1hcS
-         4ZZvg8k7htQ6TLi5g4ea4KL4PmT/JozAoSn7gwTQ/VoaZtDKJ8ERC5NZJG6rKxiUfxSb
-         Aj5ufIoB9wTz9U6OHoRygkTo6Mg7oJ6XxVd/CXnNsKG2FFNbDA+ZT4CqF5Y92Dri10oR
-         /42j8/kj5EP1Y1mNAx8yN2b2aFfFkwZl0KrZwLvPELfveqzoxDb7bLCWmtYMR4lcozCX
-         GVyQ==
-X-Gm-Message-State: APjAAAVwfjtATnLVUdLaetpZpGMj6+Vv3tmunqS3VDSCMd5+G6A5Xo/k
-        ZHe7TGcZbRqOUTdDRSz+p6x4SA==
-X-Google-Smtp-Source: APXvYqwX6h3pdPPGLbBek6F3fq3R4CGcdFenGdZlESWWcc6QO7Pr3r2/3O/xfa3VSw+xU96R877Kfg==
-X-Received: by 2002:a17:902:6948:: with SMTP id k8mr7937401plt.81.1559023036256;
-        Mon, 27 May 2019 22:57:16 -0700 (PDT)
+        bh=dct7sUqIN4yTDR2HFtwSyXfQaPLYionNUf3R7g65wJc=;
+        b=HmlScECwkn+EqkhtpVpfH3MZuOyJk8jch1UoDlH2RVs1oQ7kVJO86/ORyCjHTssobW
+         wgjWKxKhhB/xiYeslHg5qtPak6oPJ2RmSVUJhlWiiDy1uOJnZEH27OVy3pGacHJJHs0z
+         qmwMLbtkCVUOSB+zRRAIVDZUtF/38LGcme0AioR6oHpt1VOBsY0K8ItzfQ7SHitthL/5
+         8MTJZXM0VcqJMohagGqbODrskBA/AIyhXsv4xaALesWMh/aXHLhVsgEGc3lCU+RSlx75
+         8+Ym2BQ69i5sZ+ejDsRjdj04tkUBCAcJ8X8ncVgzEJBQKOtC7/tKB4zh3SKDwV2wc46d
+         e6wA==
+X-Gm-Message-State: APjAAAWZs96JTWmHFlSUjhDWYMafMIOzmuwU2APWL0lfaHwo+dvGti+d
+        6NyTvPvmnlDVFsCuZTCJBBYGY1/DN1w=
+X-Google-Smtp-Source: APXvYqwgF6QrvKVy4NuktZ4Afik+l8WeNLrMISF78vUJAwwwPB3Dap6m/TxwNSRrS/H7YEFHvMRX2A==
+X-Received: by 2002:a17:90a:1aa8:: with SMTP id p37mr3381669pjp.17.1559023042073;
+        Mon, 27 May 2019 22:57:22 -0700 (PDT)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:4:4:9712:8cf1:d0f:7d33])
-        by smtp.gmail.com with ESMTPSA id w1sm13950551pfg.51.2019.05.27.22.57.13
+        by smtp.gmail.com with ESMTPSA id w1sm13950551pfg.51.2019.05.27.22.57.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 27 May 2019 22:57:15 -0700 (PDT)
+        Mon, 27 May 2019 22:57:21 -0700 (PDT)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
@@ -61,9 +61,9 @@ To:     Yunfei Dong <yunfei.dong@mediatek.com>,
 Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [RFCv1 02/12] media: mtk-vcodec: remove unneeded proxy functions
-Date:   Tue, 28 May 2019 14:56:25 +0900
-Message-Id: <20190528055635.12109-3-acourbot@chromium.org>
+Subject: [RFCv1 04/12] media: mtk-vcodec: fix copyright indent
+Date:   Tue, 28 May 2019 14:56:27 +0900
+Message-Id: <20190528055635.12109-5-acourbot@chromium.org>
 X-Mailer: git-send-email 2.22.0.rc1.257.g3120a18244-goog
 In-Reply-To: <20190528055635.12109-1-acourbot@chromium.org>
 References: <20190528055635.12109-1-acourbot@chromium.org>
@@ -74,193 +74,122 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We were getting the codec interface through a proxy function that does
-not bring anything compared to just accessing the interface definition
-directly, so just do that. Also make the decoder interfaces const.
+From: Yunfei Dong <yunfei.dong@mediatek.com>
 
+Minor identation fix for copyright notice in a few source files.
+
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+[acourbot: refactor, cleanup and split]
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
 ---
- .../media/platform/mtk-vcodec/vdec/vdec_h264_if.c    |  9 +--------
- drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c |  9 +--------
- drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c |  9 +--------
- drivers/media/platform/mtk-vcodec/vdec_drv_if.c      | 12 ++++++------
- .../media/platform/mtk-vcodec/venc/venc_h264_if.c    |  9 +--------
- drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c |  9 +--------
- drivers/media/platform/mtk-vcodec/venc_drv_if.c      |  8 ++++----
- 7 files changed, 15 insertions(+), 50 deletions(-)
+ .../platform/mtk-vcodec/mtk_vcodec_drv.h      | 26 +++++++++----------
+ .../platform/mtk-vcodec/mtk_vcodec_enc.c      | 26 +++++++++----------
+ .../platform/mtk-vcodec/mtk_vcodec_enc_pm.c   | 24 ++++++++---------
+ 3 files changed, 38 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-index 2b29e004575d..185d8e7bdc87 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c
-@@ -493,16 +493,9 @@ static int vdec_h264_get_param(void *h_vdec, enum vdec_get_param_type type,
- 	return 0;
- }
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index 109c7578a8b2..76905e2d56a7 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -1,17 +1,17 @@
+ /*
+-* Copyright (c) 2016 MediaTek Inc.
+-* Author: PC Chen <pc.chen@mediatek.com>
+-*         Tiffany Lin <tiffany.lin@mediatek.com>
+-*
+-* This program is free software; you can redistribute it and/or modify
+-* it under the terms of the GNU General Public License version 2 as
+-* published by the Free Software Foundation.
+-*
+-* This program is distributed in the hope that it will be useful,
+-* but WITHOUT ANY WARRANTY; without even the implied warranty of
+-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-* GNU General Public License for more details.
+-*/
++ * Copyright (c) 2016 MediaTek Inc.
++ * Author: PC Chen <pc.chen@mediatek.com>
++ *         Tiffany Lin <tiffany.lin@mediatek.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
  
--static struct vdec_common_if vdec_h264_if = {
-+const struct vdec_common_if vdec_h264_if = {
- 	.init		= vdec_h264_init,
- 	.decode		= vdec_h264_decode,
- 	.get_param	= vdec_h264_get_param,
- 	.deinit		= vdec_h264_deinit,
- };
--
--struct vdec_common_if *get_h264_dec_comm_if(void);
--
--struct vdec_common_if *get_h264_dec_comm_if(void)
--{
--	return &vdec_h264_if;
--}
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-index a13253242e90..28475b8d27fe 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c
-@@ -618,16 +618,9 @@ static void vdec_vp8_deinit(void *h_vdec)
- 	kfree(inst);
- }
+ #ifndef _MTK_VCODEC_DRV_H_
+ #define _MTK_VCODEC_DRV_H_
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+index 2d5a61c06287..32d8ce9c8f6e 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c
+@@ -1,17 +1,17 @@
+ /*
+-* Copyright (c) 2016 MediaTek Inc.
+-* Author: PC Chen <pc.chen@mediatek.com>
+-*         Tiffany Lin <tiffany.lin@mediatek.com>
+-*
+-* This program is free software; you can redistribute it and/or modify
+-* it under the terms of the GNU General Public License version 2 as
+-* published by the Free Software Foundation.
+-*
+-* This program is distributed in the hope that it will be useful,
+-* but WITHOUT ANY WARRANTY; without even the implied warranty of
+-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-* GNU General Public License for more details.
+-*/
++ * Copyright (c) 2016 MediaTek Inc.
++ * Author: PC Chen <pc.chen@mediatek.com>
++ *         Tiffany Lin <tiffany.lin@mediatek.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
  
--static struct vdec_common_if vdec_vp8_if = {
-+const struct vdec_common_if vdec_vp8_if = {
- 	.init		= vdec_vp8_init,
- 	.decode		= vdec_vp8_decode,
- 	.get_param	= vdec_vp8_get_param,
- 	.deinit		= vdec_vp8_deinit,
- };
--
--struct vdec_common_if *get_vp8_dec_comm_if(void);
--
--struct vdec_common_if *get_vp8_dec_comm_if(void)
--{
--	return &vdec_vp8_if;
--}
-diff --git a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-index 65b88a2bef4c..f4af69c543ba 100644
---- a/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c
-@@ -1008,16 +1008,9 @@ static int vdec_vp9_get_param(void *h_vdec, enum vdec_get_param_type type,
- 	return ret;
- }
+ #include <media/v4l2-event.h>
+ #include <media/v4l2-mem2mem.h>
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+index 39375b8ea27c..2fdae50173be 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c
+@@ -1,16 +1,16 @@
+ /*
+-* Copyright (c) 2016 MediaTek Inc.
+-* Author: Tiffany Lin <tiffany.lin@mediatek.com>
+-*
+-* This program is free software; you can redistribute it and/or modify
+-* it under the terms of the GNU General Public License version 2 as
+-* published by the Free Software Foundation.
+-*
+-* This program is distributed in the hope that it will be useful,
+-* but WITHOUT ANY WARRANTY; without even the implied warranty of
+-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-* GNU General Public License for more details.
+-*/
++ * Copyright (c) 2016 MediaTek Inc.
++ * Author: Tiffany Lin <tiffany.lin@mediatek.com>
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
  
--static struct vdec_common_if vdec_vp9_if = {
-+const struct vdec_common_if vdec_vp9_if = {
- 	.init		= vdec_vp9_init,
- 	.decode		= vdec_vp9_decode,
- 	.get_param	= vdec_vp9_get_param,
- 	.deinit		= vdec_vp9_deinit,
- };
--
--struct vdec_common_if *get_vp9_dec_comm_if(void);
--
--struct vdec_common_if *get_vp9_dec_comm_if(void)
--{
--	return &vdec_vp9_if;
--}
-diff --git a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
-index 1e3778738f3b..dfe63bb39dbb 100644
---- a/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
-+++ b/drivers/media/platform/mtk-vcodec/vdec_drv_if.c
-@@ -23,9 +23,9 @@
- #include "mtk_vcodec_dec_pm.h"
- #include "mtk_vpu.h"
- 
--const struct vdec_common_if *get_h264_dec_comm_if(void);
--const struct vdec_common_if *get_vp8_dec_comm_if(void);
--const struct vdec_common_if *get_vp9_dec_comm_if(void);
-+extern const struct vdec_common_if vdec_h264_if;
-+extern const struct vdec_common_if vdec_vp8_if;
-+extern const struct vdec_common_if vdec_vp9_if;
- 
- int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
- {
-@@ -33,13 +33,13 @@ int vdec_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
- 
- 	switch (fourcc) {
- 	case V4L2_PIX_FMT_H264:
--		ctx->dec_if = get_h264_dec_comm_if();
-+		ctx->dec_if = &vdec_h264_if;
- 		break;
- 	case V4L2_PIX_FMT_VP8:
--		ctx->dec_if = get_vp8_dec_comm_if();
-+		ctx->dec_if = &vdec_vp8_if;
- 		break;
- 	case V4L2_PIX_FMT_VP9:
--		ctx->dec_if = get_vp9_dec_comm_if();
-+		ctx->dec_if = &vdec_vp9_if;
- 		break;
- 	default:
- 		return -EINVAL;
-diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-index b6feb786bebf..eb015ce0fd3e 100644
---- a/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-+++ b/drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c
-@@ -664,16 +664,9 @@ static int h264_enc_deinit(void *handle)
- 	return ret;
- }
- 
--static const struct venc_common_if venc_h264_if = {
-+const struct venc_common_if venc_h264_if = {
- 	.init = h264_enc_init,
- 	.encode = h264_enc_encode,
- 	.set_param = h264_enc_set_param,
- 	.deinit = h264_enc_deinit,
- };
--
--const struct venc_common_if *get_h264_enc_comm_if(void);
--
--const struct venc_common_if *get_h264_enc_comm_if(void)
--{
--	return &venc_h264_if;
--}
-diff --git a/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c b/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
-index 8656d89369bc..ad8008c865db 100644
---- a/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
-+++ b/drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c
-@@ -469,16 +469,9 @@ static int vp8_enc_deinit(void *handle)
- 	return ret;
- }
- 
--static const struct venc_common_if venc_vp8_if = {
-+const struct venc_common_if venc_vp8_if = {
- 	.init = vp8_enc_init,
- 	.encode = vp8_enc_encode,
- 	.set_param = vp8_enc_set_param,
- 	.deinit = vp8_enc_deinit,
- };
--
--const struct venc_common_if *get_vp8_enc_comm_if(void);
--
--const struct venc_common_if *get_vp8_enc_comm_if(void)
--{
--	return &venc_vp8_if;
--}
-diff --git a/drivers/media/platform/mtk-vcodec/venc_drv_if.c b/drivers/media/platform/mtk-vcodec/venc_drv_if.c
-index 4b04652be6de..94bb530f7d2d 100644
---- a/drivers/media/platform/mtk-vcodec/venc_drv_if.c
-+++ b/drivers/media/platform/mtk-vcodec/venc_drv_if.c
-@@ -26,8 +26,8 @@
- #include "mtk_vcodec_enc_pm.h"
- #include "mtk_vpu.h"
- 
--const struct venc_common_if *get_h264_enc_comm_if(void);
--const struct venc_common_if *get_vp8_enc_comm_if(void);
-+extern const struct venc_common_if venc_h264_if;
-+extern const struct venc_common_if venc_vp8_if;
- 
- int venc_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
- {
-@@ -35,10 +35,10 @@ int venc_if_init(struct mtk_vcodec_ctx *ctx, unsigned int fourcc)
- 
- 	switch (fourcc) {
- 	case V4L2_PIX_FMT_VP8:
--		ctx->enc_if = get_vp8_enc_comm_if();
-+		ctx->enc_if = &venc_vp8_if;
- 		break;
- 	case V4L2_PIX_FMT_H264:
--		ctx->enc_if = get_h264_enc_comm_if();
-+		ctx->enc_if = &venc_h264_if;
- 		break;
- 	default:
- 		return -EINVAL;
+ #include <linux/clk.h>
+ #include <linux/of_address.h>
 -- 
 2.22.0.rc1.257.g3120a18244-goog
 
