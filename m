@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-6.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCF23C04E84
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 22:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D851BC04AB6
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 23:14:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 94B6B208CB
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 22:28:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F9F120989
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 23:14:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20150623.gappssmtp.com header.i=@kernelci-org.20150623.gappssmtp.com header.b="0W5Orofr"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20150623.gappssmtp.com header.i=@kernelci-org.20150623.gappssmtp.com header.b="rTeIkvqe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbfE1W2o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 May 2019 18:28:44 -0400
-Received: from mail-wr1-f46.google.com ([209.85.221.46]:40807 "EHLO
-        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727367AbfE1W2o (ORCPT
+        id S1726653AbfE1XO6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 May 2019 19:14:58 -0400
+Received: from mail-wm1-f44.google.com ([209.85.128.44]:53944 "EHLO
+        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbfE1XO6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 May 2019 18:28:44 -0400
-Received: by mail-wr1-f46.google.com with SMTP id t4so250126wrx.7
-        for <linux-media@vger.kernel.org>; Tue, 28 May 2019 15:28:43 -0700 (PDT)
+        Tue, 28 May 2019 19:14:58 -0400
+Received: by mail-wm1-f44.google.com with SMTP id d17so246395wmb.3
+        for <linux-media@vger.kernel.org>; Tue, 28 May 2019 16:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=2keHTMI0tR3BpwKPvlcxzZppVbFWziiLopjzLRy/T3o=;
-        b=0W5OrofrkPZpB4/kW2VfVCTNDvkQ4H1QuJG/MNIY0t5bCCG1iDpusrLgYzgFgaS008
-         l3BV1pAenxDq5QH1yX8rR/+LjU/gELymYWPUEo5ur1P8oVBBZG91JBDjVrvL35i4FEDN
-         2jgQtY03WBj3SgDs2yX2H/ckFbLFKtDZDU+T0vXiH+3flVw3HaFq8IvEkfmzrKsddkXT
-         atSSOgEkW+QS4ggn6ITIFJyCWb97OzNhrXzdsPKD6i8PRi8op6uFIJL5BSVb35o+h0Hs
-         vEePLg1NlEDSW+15FxQueR6WQgJ8praeSSP4Ot5gJHcIygIpFwaVCRvcHvUkVH7RXXTM
-         qkJA==
+        bh=RXmKUUbCNPo4lF4wCNX+nAAtKTgjKh/v2WSwOssaHRQ=;
+        b=rTeIkvqejkqDarMBVls/kpvmGyenVBIsPzT99lEsRc4q2BS4nz11Tta0I/MTjN1PdE
+         pwMHawxj8JVdeh40hXFkos+1q0wrvk4hB9CI9i7Q+ql2orET3KMz2d669gR0odOZAtUy
+         TDcU6JANbOBdUFOGBzXaS8arXXTKSAam26qmAsVS5bdu6S0Grnb+kLt6Y2hLJL7fi7u+
+         L6V3hskE6Gv58vM37mN9lV6n3YaGyYrw1eLjIqCJFUZ7JxBE4AO0bz45/OJBHKelXKIq
+         ZJnRZ5lY5VK0bB765d3X4ZRwU87eCHvp6kv5ZZWWzFy5zt0uBLAIr6QC4EpD1xqAhUTF
+         0LEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=2keHTMI0tR3BpwKPvlcxzZppVbFWziiLopjzLRy/T3o=;
-        b=jNvf6wQSW0gmpGpaBJ/i7AOTEETczb0Pt3GW8AOa6FDZgmD7uXXx9Ti6p3wW/zOSx2
-         rorTs/AOFtu/kX8nsK7bZOJj1vH372eBxVJKquOThgAKRsqXHN6ROFALwMEgOQV5s8Ll
-         Cr9Lv3KAGWTFNhMjnqm7qahb13sfJpqvcAMQIugfsA+bAp+CH/gAul44jRtGUXNsheCy
-         /EpwLm5xhOd+kVYwWAqOJEvmTU2L4r0p2SYiQPZ0yhJ2tIollVt1KyLfQFgEc6CsiSJS
-         MXmn9vKv/AUnJj6t6Gb2dDdSFGHlYRqnCYhZQUOvgVX3U1POv2JTh38/nOKw9qtOd+iZ
-         aUeQ==
-X-Gm-Message-State: APjAAAV6uZMNDQUegFybn5tqRmzef+VnYqouaI0nKcqYBrSaoTaYRQ23
-        vLAvQDVTRPJcMCzjexTWt3/vqx2AwTZ1NA==
-X-Google-Smtp-Source: APXvYqz8ASdm/yoy/2FVUY7W6v44BxYztqBob+Hma1tVp8PPg+3MXx9tJqA7ypXh21Sf8wFiezQtVA==
-X-Received: by 2002:adf:e94b:: with SMTP id m11mr714075wrn.133.1559082522497;
-        Tue, 28 May 2019 15:28:42 -0700 (PDT)
+        bh=RXmKUUbCNPo4lF4wCNX+nAAtKTgjKh/v2WSwOssaHRQ=;
+        b=cuN8KyO+0R6rK2uyCrxBZDNZDn4nf0cPAGoqddUys6pF/t9XiUz1wJslyFtU0qGnCa
+         zqvUdnIxexLoBw/Tmzwmt820QQeaBXzH+B46pQp7JgHcj206dM1USb4vlW5622wkUnug
+         eGf9PvPiufAIu7Lvdj3qchza9wB7K9UDZfbCub4+oc4cmK5D5rmK0REDIE5zZaECuBsq
+         +CkcmD701rzxGc98OmC8HmtUzmg/p1kVq+tvnS+Jyg6DmSAjGZB7KLwWZMFcHXRS44/l
+         N3Y+gRxhb5GkFZJHyPe7Ol/TO0e4tgAFula8q2nHt+Ad2EZkiz93fFm+wleG2e0YjnmX
+         uVJQ==
+X-Gm-Message-State: APjAAAXn+pDI4rPYc8DAq5dAXPiDPcdKMNQULiXDtlrgo+p7pEYsNSj+
+        VHi838HGmDhvSxAtOwkSB+yzbpfKVBaZzg==
+X-Google-Smtp-Source: APXvYqxakFl9eLHieRjoAaUSU2zOBUi34dFLJm/gSSoffPHUig/VzRi5rvqQMDwocJO4LGRiZoJURQ==
+X-Received: by 2002:a1c:9e92:: with SMTP id h140mr4588656wme.82.1559085295535;
+        Tue, 28 May 2019 16:14:55 -0700 (PDT)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id c63sm4466717wma.29.2019.05.28.15.28.40
+        by smtp.gmail.com with ESMTPSA id k2sm376779wrx.84.2019.05.28.16.14.54
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 15:28:41 -0700 (PDT)
-Message-ID: <5cedb619.1c69fb81.6f18.8ba2@mx.google.com>
-Date:   Tue, 28 May 2019 15:28:41 -0700 (PDT)
+        Tue, 28 May 2019 16:14:55 -0700 (PDT)
+Message-ID: <5cedc0ef.1c69fb81.58922.207f@mx.google.com>
+Date:   Tue, 28 May 2019 16:14:55 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: test
 X-Kernelci-Tree: media
 X-Kernelci-Branch: master
-X-Kernelci-Kernel: v5.2-rc2-98-g39cb46751e2f
-Subject: media/master v4l2-compliance on vivid: 236 tests,
- 0 regressions (v5.2-rc2-98-g39cb46751e2f)
+X-Kernelci-Kernel: v5.2-rc2-82-g9bec226d8c79
+Subject: media/master v4l2-compliance on vivid: 235 tests,
+ 0 regressions (v5.2-rc2-82-g9bec226d8c79)
 To:     linux-media@vger.kernel.org, kernel-build-reports@lists.linaro.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-media-owner@vger.kernel.org
@@ -73,8 +73,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-media/master v4l2-compliance on vivid: 236 tests, 0 regressions (v5.2-rc2-9=
-8-g39cb46751e2f)
+media/master v4l2-compliance on vivid: 235 tests, 0 regressions (v5.2-rc2-8=
+2-g9bec226d8c79)
 
 Test results summary
 --------------------
@@ -91,13 +91,13 @@ particular revision that was used to build the test binaries.
 
   Tree:    media
   Branch:  master
-  Kernel:  v5.2-rc2-98-g39cb46751e2f
+  Kernel:  v5.2-rc2-82-g9bec226d8c79
   URL:     https://git.linuxtv.org/media_tree.git
-  Commit:  39cb46751e2fbb72e0698f80e339db1fd4e1f50e
+  Commit:  9bec226d8c79fcbc95817b082557f72a79d182f5
 
 
 1  | qemu                   | arm64 | 118 total: 118 PASS   0 FAIL   0 SKIP
-2  | qemu                   | arm   | 118 total: 118 PASS   0 FAIL   0 SKIP=
+2  | qemu                   | arm   | 117 total: 117 PASS   0 FAIL   0 SKIP=
   =
 
   =
