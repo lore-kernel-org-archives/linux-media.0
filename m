@@ -2,100 +2,135 @@ Return-Path: <SRS0=uFep=T4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2FBC04E84
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 15:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE40BC04AB6
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:15:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CDD4321670
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 15:56:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9811C21721
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:15:00 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EyM0D5Ga"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbfE1P4y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 May 2019 11:56:54 -0400
-Received: from foss.arm.com ([217.140.101.70]:59854 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726313AbfE1P4y (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 May 2019 11:56:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8540E341;
-        Tue, 28 May 2019 08:56:53 -0700 (PDT)
-Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9F273F59C;
-        Tue, 28 May 2019 08:56:47 -0700 (PDT)
-Date:   Tue, 28 May 2019 16:56:45 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrew Murray <andrew.murray@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        Lee Smith <Lee.Smith@arm.com>, linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        Evgeniy Stepanov <eugenis@google.com>,
-        linux-media@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        linux-kernel@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-Message-ID: <20190528155644.GD28398@e103592.cambridge.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
- <20190527143719.GA59948@MBP.local>
- <20190528145411.GA709@e119886-lin.cambridge.arm.com>
- <20190528154057.GD32006@arrakis.emea.arm.com>
+        id S1727070AbfE1QO7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 May 2019 12:14:59 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:37187 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726560AbfE1QO6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 28 May 2019 12:14:58 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 7so3539242wmo.2;
+        Tue, 28 May 2019 09:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=K/XHCO5OpLMI7hm5w9MXtKPLk5GaTtp3symSRQtLrEY=;
+        b=EyM0D5GavuIb2ZHU3Ey2iuUrjxx5yFjgNYGJtX+8Zore5n4WfYzSMfIgAzEJ3qhtY1
+         AB2Nw7oYWntoTt98IWF8mPj9NyY/gWEkWlQR9cOLwsqfFJk072jFtE/XYVsSxoPCr738
+         pNqDCTpQ8OzCwhfrXj5tgKUrqX37WBC1im8BiXLOtQn4R5VLAsaCbcCcOZMPW3M4Fpqp
+         z2PPhRioLG6uAcgAvrBiYITN2get23JzjqSzdqf3sUf2huHQUSBFLezGXXkQM9WRAwuf
+         dcZeZ0/WyT8I6lpM/QCXXFP8KGkbzITB6Hqi3pOGKNZbpHo7KxGem4JdEFbN4yE0Bedl
+         wU/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=K/XHCO5OpLMI7hm5w9MXtKPLk5GaTtp3symSRQtLrEY=;
+        b=Q0bUmrijQ3Ict16S2JAFzWemH/DpspHXRhgVHlJJY+zAdRl/zGm/m8HDM0glldy8GK
+         G0UeCra2+34hA1qE5O+0B+FdrcNRH7l2/r38zcap3o1xgxPX93MoAFEyMHGIdkjPjela
+         PrqoeN7iB3zusYA+U+rkbxM/5jmSn6wj+ghBE3EVBMhicwRCxbKb9gI8kvJnoGBJQxmu
+         JevK1Mym5YtnGN/Vlo4sCN8zSPiTAbRcO3kJI67ca5cyrH2JZ6IRkOS36AKXT+NWlI40
+         9oSXecR+b3tVzuH8j/pvQ+fF2HY9KF6xyM77x8gg3C9xfXFdRB34uuWvA+QHjXrOaxfm
+         t5mw==
+X-Gm-Message-State: APjAAAXvDLM525rau8VWc6aWQ/uxy6edq8oShoNyeKLJQTwDK5cdwQKC
+        3tpKIsr66Ja1MJXAp1Y0k97vfwCEDdxryQ==
+X-Google-Smtp-Source: APXvYqyEiWcBV7Gxq6C/3F0I6ecov4ivFns4OBUBpcj4xXx1WWacV5+gIGN9TAndCV5ongzHxXWx0A==
+X-Received: by 2002:a1c:730d:: with SMTP id d13mr3664693wmb.88.1559060096018;
+        Tue, 28 May 2019 09:14:56 -0700 (PDT)
+Received: from localhost.localdomain (18.189-60-37.rdns.acropolistelecom.net. [37.60.189.18])
+        by smtp.gmail.com with ESMTPSA id l14sm13678787wrt.57.2019.05.28.09.14.54
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 28 May 2019 09:14:55 -0700 (PDT)
+From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com,
+        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
+Subject: [PATCH v3 01/12] dt-bindings: media: sunxi-ir: add A31 compatible
+Date:   Tue, 28 May 2019 18:14:29 +0200
+Message-Id: <20190528161440.27172-2-peron.clem@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190528161440.27172-1-peron.clem@gmail.com>
+References: <20190528161440.27172-1-peron.clem@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190528154057.GD32006@arrakis.emea.arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
+Allwinner A31 has introduced a new memory mapping and a
+reset line.
 
-[...]
+The difference in memory mapping are :
 
-> My thoughts on allowing tags (quick look):
->
-> brk - no
+- In the configure register there is a new sample bit
+  and Allwinner has introduced the active threshold feature.
 
-[...]
+- In the status register a new STAT bit is present.
 
-> mlock, mlock2, munlock - yes
-> mmap - no (we may change this with MTE but not for TBI)
+Note: CGPO and DRQ_EN bits are removed on A31 but present on A13
+and on new SoCs like A64/H6.
+This is actually not an issue as these bits are togglable and new
+SoCs have a dedicated bindings.
 
-[...]
+Introduce this bindings to make a difference since this generation.
+And declare the reset line required since A31.
 
-> mprotect - yes
+Signed-off-by: Clément Péron <peron.clem@gmail.com>
+---
+ Documentation/devicetree/bindings/media/sunxi-ir.txt | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-I haven't following this discussion closely... what's the rationale for
-the inconsistencies here (feel free to refer me back to the discussion
-if it's elsewhere).
+diff --git a/Documentation/devicetree/bindings/media/sunxi-ir.txt b/Documentation/devicetree/bindings/media/sunxi-ir.txt
+index 278098987edb..2e59a32a7e33 100644
+--- a/Documentation/devicetree/bindings/media/sunxi-ir.txt
++++ b/Documentation/devicetree/bindings/media/sunxi-ir.txt
+@@ -1,16 +1,21 @@
+ Device-Tree bindings for SUNXI IR controller found in sunXi SoC family
+ 
+ Required properties:
+-- compatible	    : "allwinner,sun4i-a10-ir" or "allwinner,sun5i-a13-ir"
++- compatible	    :
++	"allwinner,sun4i-a10-ir"
++	"allwinner,sun5i-a13-ir"
++	"allwinner,sun6i-a31-ir"
+ - clocks	    : list of clock specifiers, corresponding to
+ 		      entries in clock-names property;
+ - clock-names	    : should contain "apb" and "ir" entries;
+ - interrupts	    : should contain IR IRQ number;
+ - reg		    : should contain IO map address for IR.
+ 
++Required properties since A31:
++- resets	    : phandle + reset specifier pair
++
+ Optional properties:
+ - linux,rc-map-name: see rc.txt file in the same directory.
+-- resets : phandle + reset specifier pair
+ - clock-frequency  : IR Receiver clock frequency, in Hertz. Defaults to 8 MHz
+ 		     if missing.
+ 
+-- 
+2.20.1
 
-Cheers
----Dave
