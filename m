@@ -5,139 +5,101 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3A2EC04AB6
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:16:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A4E4C04AB6
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:19:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 875942173B
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:16:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2C91421721
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 16:19:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dpSBRvHt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/XvfrKM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbfE1QO5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 May 2019 12:14:57 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35573 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfE1QO5 (ORCPT
+        id S1726661AbfE1QTp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 28 May 2019 12:19:45 -0400
+Received: from mail-ed1-f47.google.com ([209.85.208.47]:42712 "EHLO
+        mail-ed1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726362AbfE1QTp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 28 May 2019 12:14:57 -0400
-Received: by mail-wr1-f66.google.com with SMTP id m3so20903454wrv.2;
-        Tue, 28 May 2019 09:14:55 -0700 (PDT)
+        Tue, 28 May 2019 12:19:45 -0400
+Received: by mail-ed1-f47.google.com with SMTP id g24so4681569eds.9
+        for <linux-media@vger.kernel.org>; Tue, 28 May 2019 09:19:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t4fNuHNyNd5YWtEhF5ffcGp/LQDSV+yF804x4uNxMPE=;
-        b=dpSBRvHt0/ewBa230CkxQ60kS10EXTbLJLifOiTz4RZTmmVQM2vRxd8unWYqDmUSp1
-         EWsPKepGFokj30p8xyfx9N5JbPdIdmzXmtwJ5yCZzrVMUzKYIAwT/jiF01HS8hw4eLWr
-         d0NGjVfDfY4kil+Qc6Fdv1HRNLbyoU3Pq6Pi9O1CbkrNKQnOdbhOmnP5dkgmvqh/nsQV
-         /JnIjF9xrxK7zJogasjEBQQLi/HcVDwlhtzjYOKAL3boLxE9eQHAtEKwMZboHXbe9ceT
-         J2KmGaSgXRZDu6/jnLSjhSkwUmHBOYmKcAkK/mj9QzazUi0O6ts7tYwxfYK6ge5prHq5
-         dlnA==
+        h=from:to:subject:date:message-id;
+        bh=oFmnIQV+QxgU1Tn8914ynnNHesr2pnNWjmNrkwm6kr8=;
+        b=P/XvfrKMNYbsBJe7Z79OxZM7pYgpGzSr5o7PchUfT7SXpbEV5zapftyZHlERyKfHjW
+         bQKVmyt32fwuEvGfiky/S225TcMpC0sArfvJzc9+jvmvxwqr8eIHPQvvRjcO46hVvtJB
+         9Z+FMFsOlqb/GCAqKy1vyjkmsCj8mmXAZbQfpdXtPbf5jlCJbKxawbshdgM8/ZxUznhd
+         VNhCXasP2HK6kMhoTuM1rwi9VCX6W0lfPpo427FQM/SDjRRh3qsUmFQXFFcOLr5vptoj
+         ab1tf29MHnCrQ5mjYFPlrKYmy5iVNEqe+zUONoyl4Nf+1d8vWwb+V39+scDhf/13aiBv
+         LK9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t4fNuHNyNd5YWtEhF5ffcGp/LQDSV+yF804x4uNxMPE=;
-        b=VDLuMsxVMaFoLDMDphgNBTE5CNfIF1A6aj5IYkKrNMtS4EEYuS2E36kgSCC56PlK4i
-         XvUWgwYbdxx3pxbPzNM4RjSlraV/a87dTH/XvKmjULc5kO7sJYgK7xO9XsOxDTRAwBmH
-         ewWUdWRNTldLgrHCe9k0cQfZFRHRH1W/gx3VvdHfKe7wv5a52BDxwBZf/jl6aL3vu+I5
-         rASPvL5tUgVIfK/6fojYcEO+/GuEP+5SSE9gmgFGLYz8K2ZgVDpKC7lXJ4trC6ZYfmeS
-         q3ug7gvjrU7PPwXXPVuB+MQCt4dlUwFxkzpEALWxyOA/1klM9WojmhC02vL9Rs5/2KE4
-         tBVQ==
-X-Gm-Message-State: APjAAAU853ghIiHAdIQhEa+bNAu0snXpR/n7vobLvKuyA5aD472C3SYa
-        2/qk8/CSbQs4S/FqiKsWcMQ=
-X-Google-Smtp-Source: APXvYqwz2aW7Eu9zLK7jrGuM0szO6rQV52q6NbuzpwC4zNuAynJd1LRd/HFIVRILdoCmMC8bYpqUyA==
-X-Received: by 2002:a05:6000:1285:: with SMTP id f5mr9066145wrx.112.1559060094876;
-        Tue, 28 May 2019 09:14:54 -0700 (PDT)
-Received: from localhost.localdomain (18.189-60-37.rdns.acropolistelecom.net. [37.60.189.18])
-        by smtp.gmail.com with ESMTPSA id l14sm13678787wrt.57.2019.05.28.09.14.53
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 28 May 2019 09:14:54 -0700 (PDT)
-From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com,
-        =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
-Subject: [PATCH v3 00/12] Allwinner A64/H6 IR support
-Date:   Tue, 28 May 2019 18:14:28 +0200
-Message-Id: <20190528161440.27172-1-peron.clem@gmail.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=oFmnIQV+QxgU1Tn8914ynnNHesr2pnNWjmNrkwm6kr8=;
+        b=fpsVOE0vKC+4Yu+RgZWtuwxxRyaFZRGPqTSFvAMGnIxa9QOeGq3OVhgrGbrKfhVbCp
+         h1rCK9iAX8FI3k2nLJjmhpa9rdcIl+pIlJ8kqRWTs08w1hdWoHPMhwY8KGoKeG55Uwnz
+         mmlBmN2MMktyYGISMpmuKU+F5U1saBwS7yANp482Es9qzo3cFr6AxgwBrLvUPbyWHl9h
+         B9syVUEZH28hT2amD3mh15ajVmsBjs4tVdYb7OIkCiXxVZDequ5XhhGMs/C/fHND7/2x
+         3dW225OmfVuq2Pcv8tD9fghdj87xGhprOEFWCzEJAWLLmmH7x/zJcnB/Kg1mrG17hCPR
+         vPWQ==
+X-Gm-Message-State: APjAAAUPpnKmCpmrnSedWTeWX4Oj3SEPHdSiCs6QeFgrLlLGzALvlmOE
+        7ukmXokDG2zM/TehmK4QfclNW3SnPMU=
+X-Google-Smtp-Source: APXvYqwO4q7ZcyfZ9BB70YpZNU1XeYIT3H6TN5ugMg9AaOAhVT2MM7HJmm5FyzC0OC1F0I+26AW3wA==
+X-Received: by 2002:a50:a5ed:: with SMTP id b42mr128350266edc.178.1559060383828;
+        Tue, 28 May 2019 09:19:43 -0700 (PDT)
+Received: from ubuntu.localdomain ([173.38.220.62])
+        by smtp.gmail.com with ESMTPSA id c38sm4313002edc.22.2019.05.28.09.19.42
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 May 2019 09:19:43 -0700 (PDT)
+From:   johan.korsnes@gmail.com
+To:     linux-media@vger.kernel.org
+Subject: vivid: Add HDMI (dis)connect emulation
+Date:   Tue, 28 May 2019 10:19:04 -0700
+Message-Id: <20190528171912.3688-1-johan.korsnes@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+This patch series makes vivid V4L2-compliant* by adding HDMI (dis)-
+connect emulation. This is done by by adding a custom display_present
+control to vivid output HDMI devices, along with the following standard
+controls:
 
-A64 IR support series[1] pointed out that an A31 bindings should be
-introduced.
+-ctrl_tx_edid_present
+-ctrl_tx_hotplug
+-ctrl_tx_rxsense
+-ctrl_rx_power_present
 
-This series introduce the A31 compatible bindings, then switch it on
-the already existing board.
+* Fixes the following warning for HDMI input devices:
+   -V4L2_CID_DV_RX_POWER_PRESENT not found for input n
+  Fixes the following warnings for HDMI ouptut devices:
+   -V4L2_CID_DV_TX_HOTPLUG not found for output n
+   -V4L2_CID_DV_TX_EDID_PRESENT not found for output n
 
-Finally introduce A64 and H6 support.
+Johan Korsnes (8):
+      media: vivid: make input dv_timings per-input
+      media: vivid: make input std_signal per-input
+      media: vivid: add display present control
+      media: vivid: add number of HDMI ports to device state
+      media: vivid: add HDMI (dis)connect TX emulation
+      media: vivid: add HDMI (dis)connect RX emulation
+      media: vivid: add CEC support to display present ctrl
+      media: vivid.rst: describe display present control
 
-I didn't enable the IR on other H6 boards as Ondrej reported an issue
-on his board[2].
+Documentation/media/v4l-drivers/vivid.rst     |   5 +
+drivers/media/platform/vivid/vivid-core.c     |  36 ++++--
+drivers/media/platform/vivid/vivid-core.h     |  32 +++--
+drivers/media/platform/vivid/vivid-ctrls.c    | 105 ++++++++++++++--
+.../media/platform/vivid/vivid-kthread-cap.c  |   8 +-
+drivers/media/platform/vivid/vivid-vbi-cap.c  |  16 +--
+drivers/media/platform/vivid/vivid-vid-cap.c  | 119 +++++++++++-------
+.../media/platform/vivid/vivid-vid-common.c   |   8 +-
+drivers/media/platform/vivid/vivid-vid-out.c  |   6 +
+9 files changed, 245 insertions(+), 90 deletions(-)
 
-Regards,
-Clément
-
-[1] https://lore.kernel.org/patchwork/patch/1031390/#1221464
-[2] https://lkml.org/lkml/2019/5/27/321
-
-Changes since v2:
- - Disable IR for other H6 boards
- - Split DTS patch for H3/H5
- - Introduce IR quirks
-
-Changes since v1:
- - Document reset lines as required since A31
- - Explain the memory mapping difference in commit log
- - Fix misspelling "Allwiner" to "Allwinner"
-
-Clément Péron (10):
-  dt-bindings: media: sunxi-ir: add A31 compatible
-  media: rc: Introduce sunxi_ir_quirks
-  media: rc: sunxi: Add A31 compatible
-  ARM: dts: sunxi: Prefer A31 bindings for IR
-  ARM: dts: sunxi: Prefer A31 bindings for IR
-  dt-bindings: media: sunxi-ir: Add A64 compatible
-  dt-bindings: media: sunxi-ir: Add H6 compatible
-  arm64: dts: allwinner: h6: Add IR receiver node
-  arm64: dts: allwinner: h6: Enable IR on Beelink GS1
-  arm64: defconfig: enable IR SUNXI option
-
-Igors Makejevs (1):
-  arm64: dts: allwinner: a64: Add IR node
-
-Jernej Skrabec (1):
-  arm64: dts: allwinner: a64: Enable IR on Orange Pi Win
-
- .../devicetree/bindings/media/sunxi-ir.txt    | 11 ++-
- arch/arm/boot/dts/sun6i-a31.dtsi              |  2 +-
- arch/arm/boot/dts/sun8i-a83t.dtsi             |  2 +-
- arch/arm/boot/dts/sun9i-a80.dtsi              |  2 +-
- arch/arm/boot/dts/sunxi-h3-h5.dtsi            |  2 +-
- .../dts/allwinner/sun50i-a64-orangepi-win.dts |  4 ++
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 18 +++++
- .../dts/allwinner/sun50i-h6-beelink-gs1.dts   |  4 ++
- arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  | 19 +++++
- arch/arm64/configs/defconfig                  |  1 +
- drivers/media/rc/sunxi-cir.c                  | 70 +++++++++++++++----
- 11 files changed, 115 insertions(+), 20 deletions(-)
-
--- 
-2.20.1
 
