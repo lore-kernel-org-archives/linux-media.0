@@ -2,92 +2,83 @@ Return-Path: <SRS0=uFep=T4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DD98C04AB6
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 09:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70382C072B1
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 09:08:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 62B88208C3
-	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 09:08:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OP/IgysQ"
+	by mail.kernel.org (Postfix) with ESMTP id 45BC2208C3
+	for <linux-media@archiver.kernel.org>; Tue, 28 May 2019 09:08:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727117AbfE1JIk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 28 May 2019 05:08:40 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:44992 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727443AbfE1JIO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S1727473AbfE1JIO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 28 May 2019 05:08:14 -0400
-Received: by mail-oi1-f175.google.com with SMTP id z65so13664646oia.11
-        for <linux-media@vger.kernel.org>; Tue, 28 May 2019 02:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kDByEXQ6Hf0CbYi5tGfeP4Y/wNBK9tNQLpjcw1bOeZo=;
-        b=OP/IgysQdXyBC7aWcc8ztRELyrZYczvf6ydXAFrauGcAeQPQ0aQnrLJXIIYpVOmxav
-         P0uChtMDV5cZ69pAuopjFCS5FE2RovXlnTPZzChBtLIav+10P9CnxY/BWxIGjVBzCQeP
-         6TjLD3xAnXvZm6vT318aWMnXZamSlqFjbL0Oo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kDByEXQ6Hf0CbYi5tGfeP4Y/wNBK9tNQLpjcw1bOeZo=;
-        b=dE1olceKFzO/NeWiN+CdLYa93tHEQX0vQ0x5Ya5GzCljoujso9wsad3gUnXbEn9OKz
-         7rmX8wwoupxMzsEg0mJjZ7qjC8nKMRAfUvfBiQy3C2KwXqCeVBwJ0cjFdbp48b/kiBiF
-         nbd491FWStHDwWbTqJhdPQEVdtMBTXpizdWuFuvrYwcQ/4RDnvq2ZpQT3IV7kZ4iedGI
-         oLZJEdzajXAQYXFHfi6ElIBOvDDtXCz+o9DMDTZyyco6OORFal8o9S0XyaDMbmQ05BbJ
-         HLKbRf4EwxZVQq1J0eqLsYSDQhUVw/E+rx+x854IGRnC/ojLQiyKAId3KbWAegskHvXi
-         UjiQ==
-X-Gm-Message-State: APjAAAV9N2f82RZq6caO/yaKBm40EP0kcoZ0yBxVKU920nJWforI7uBk
-        YT/+qWMlCSvTJ9z/CUOEBa16SG1pVg8=
-X-Google-Smtp-Source: APXvYqy7W5cXJpy3EJ0CIi0cT6ofAnAgVY3CugQLnphNodIOMOBLrg0pd5lWpQ0Vnu0SsVfS8BxIeA==
-X-Received: by 2002:aca:330b:: with SMTP id z11mr678249oiz.27.1559034493444;
-        Tue, 28 May 2019 02:08:13 -0700 (PDT)
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com. [209.85.167.178])
-        by smtp.gmail.com with ESMTPSA id x21sm4664585otk.4.2019.05.28.02.08.12
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 02:08:12 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id u64so13688937oib.1
-        for <linux-media@vger.kernel.org>; Tue, 28 May 2019 02:08:12 -0700 (PDT)
-X-Received: by 2002:aca:3c1:: with SMTP id 184mr2080922oid.170.1559034491936;
- Tue, 28 May 2019 02:08:11 -0700 (PDT)
+Received: from shell.v3.sk ([90.176.6.54]:36871 "EHLO shell.v3.sk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726668AbfE1JHx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 28 May 2019 05:07:53 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 5C2011048AA;
+        Tue, 28 May 2019 11:07:50 +0200 (CEST)
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Z1xslYVOyXUb; Tue, 28 May 2019 11:07:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.v3.sk (Postfix) with ESMTP id 5567D10489D;
+        Tue, 28 May 2019 11:07:37 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at zimbra.v3.sk
+Received: from shell.v3.sk ([127.0.0.1])
+        by localhost (zimbra.v3.sk [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RJ9icm1v8IgK; Tue, 28 May 2019 11:07:35 +0200 (CEST)
+Received: from belphegor.brq.redhat.com (nat-pool-brq-t.redhat.com [213.175.37.10])
+        by zimbra.v3.sk (Postfix) with ESMTPSA id AAB601048A2;
+        Tue, 28 May 2019 11:07:34 +0200 (CEST)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>
+Subject: [PATCH v6 4/7] [media] marvell-ccic: rename the clocks
+Date:   Tue, 28 May 2019 11:07:28 +0200
+Message-Id: <20190528090731.10341-5-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190528090731.10341-1-lkundrak@v3.sk>
+References: <20190528090731.10341-1-lkundrak@v3.sk>
 MIME-Version: 1.0
-References: <20190528055635.12109-1-acourbot@chromium.org> <20190528055635.12109-5-acourbot@chromium.org>
- <fa11a504-071e-f786-8564-cb7e95248f64@xs4all.nl>
-In-Reply-To: <fa11a504-071e-f786-8564-cb7e95248f64@xs4all.nl>
-From:   Alexandre Courbot <acourbot@chromium.org>
-Date:   Tue, 28 May 2019 18:08:00 +0900
-X-Gmail-Original-Message-ID: <CAPBb6MWKm2DxRdtWur80EkxvLYj_t7Dr62E2h0Xdm5A6wURV5A@mail.gmail.com>
-Message-ID: <CAPBb6MWKm2DxRdtWur80EkxvLYj_t7Dr62E2h0Xdm5A6wURV5A@mail.gmail.com>
-Subject: Re: [RFCv1 04/12] media: mtk-vcodec: fix copyright indent
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, May 28, 2019 at 6:07 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
->
-> On 5/28/19 7:56 AM, Alexandre Courbot wrote:
-> > From: Yunfei Dong <yunfei.dong@mediatek.com>
-> >
-> > Minor identation fix for copyright notice in a few source files.
->
-> How about converting to using SPDX as well?
+Use the names more suitable for devicetree bindings.
 
-Yeah, that would be much better. Should have thought about it.
+There are no board files utilizing this, thus we seem to be at liberty
+at renaming this without consequences.
+
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+
+---
+Changes since v2:
+- This patch was added to the series
+
+ drivers/media/platform/marvell-ccic/mmp-driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/marvell-ccic/mmp-driver.c b/drivers/m=
+edia/platform/marvell-ccic/mmp-driver.c
+index 352e67fc1062..8f1d2a972bc9 100644
+--- a/drivers/media/platform/marvell-ccic/mmp-driver.c
++++ b/drivers/media/platform/marvell-ccic/mmp-driver.c
+@@ -33,7 +33,7 @@ MODULE_ALIAS("platform:mmp-camera");
+ MODULE_AUTHOR("Jonathan Corbet <corbet@lwn.net>");
+ MODULE_LICENSE("GPL");
+=20
+-static char *mcam_clks[] =3D {"CCICAXICLK", "CCICFUNCLK", "CCICPHYCLK"};
++static char *mcam_clks[] =3D {"axi", "func", "phy"};
+=20
+ struct mmp_camera {
+ 	void __iomem *power_regs;
+--=20
+2.21.0
+
