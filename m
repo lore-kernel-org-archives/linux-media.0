@@ -2,93 +2,110 @@ Return-Path: <SRS0=CnRj=T5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28452C28CC0
-	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 09:49:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B23DEC28CC2
+	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 09:54:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED0E120B7C
-	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 09:49:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95B8E20B7C
+	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 09:54:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726399AbfE2JtI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 May 2019 05:49:08 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:48033 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725861AbfE2JtI (ORCPT
+        id S1726535AbfE2Jyc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 May 2019 05:54:32 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:41745 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726245AbfE2Jyc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 May 2019 05:49:08 -0400
-Received: from [IPv6:2001:983:e9a7:1:352c:d076:e7aa:19ae] ([IPv6:2001:983:e9a7:1:352c:d076:e7aa:19ae])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id VvCjh5LNL3qlsVvCkhsjEz; Wed, 29 May 2019 11:49:06 +0200
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.3] Various fixes
-Message-ID: <40e92b58-c725-f854-50b4-9b9bd7cbb450@xs4all.nl>
-Date:   Wed, 29 May 2019 11:49:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Wed, 29 May 2019 05:54:32 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hVvHz-0002DF-6a; Wed, 29 May 2019 11:54:31 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH v2 3/9] media: hantro: add PM runtime resume callback
+Date:   Wed, 29 May 2019 11:54:18 +0200
+Message-Id: <20190529095424.23614-4-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190529095424.23614-1-p.zabel@pengutronix.de>
+References: <20190529095424.23614-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfBHzG6kWYkDSzEYPh1B85UX74r5UuebLx4Gn9vW3L+JreBJSOmCputAvesZ8PjJTnpVB47JHAutQV30KHUegjkFUlWM/6A9jAi2F1HvlX9dGPC0E8W5Y
- x/KChSr5bWN3nSaFUdDtI5opR85cn7GWRYUPrItthuk84zMMaFFbYKuWhTlMrG0FcMxuq7JqMlU0J71I0oU4jJDv7GlUTFWS4uMuRxFMF98KYGRNT7GhYH1j
- jMG0LuTEXYIHT1bW/vqsqDqPx2V/JkaT0kHMjdkifgU=
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Note: this includes two regressions for 5.3:
+It seems that on i.MX8MQ the power domain controller does not propagate
+resets to the VPU cores on resume. Add a callback to allow implementing
+manual reset of the VPU cores after ungating the power domain.
 
-      mc-device.c: don't memset __user pointer contents
-      cec-adap: fix regression in ping sanity check
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ drivers/staging/media/hantro/hantro.h     |  2 ++
+ drivers/staging/media/hantro/hantro_drv.c | 13 +++++++++++++
+ 2 files changed, 15 insertions(+)
 
-Regards,
+diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
+index 14e685428203..296b9ffad547 100644
+--- a/drivers/staging/media/hantro/hantro.h
++++ b/drivers/staging/media/hantro/hantro.h
+@@ -56,6 +56,7 @@ struct hantro_codec_ops;
+  * @codec:			Supported codecs
+  * @codec_ops:			Codec ops.
+  * @init:			Initialize hardware.
++ * @runtime_resume:		reenable hardware after power gating
+  * @vepu_irq:			encoder interrupt handler
+  * @vdpu_irq:			decoder interrupt handler
+  * @clk_names:			array of clock names
+@@ -71,6 +72,7 @@ struct hantro_variant {
+ 	unsigned int codec;
+ 	const struct hantro_codec_ops *codec_ops;
+ 	int (*init)(struct hantro_dev *vpu);
++	int (*runtime_resume)(struct hantro_dev *vpu);
+ 	irqreturn_t (*vepu_irq)(int irq, void *priv);
+ 	irqreturn_t (*vdpu_irq)(int irq, void *priv);
+ 	const char *clk_names[HANTRO_MAX_CLOCKS];
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index e4390aa5c213..fb5f140dbaae 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -831,9 +831,22 @@ static int hantro_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_PM
++static int hantro_runtime_resume(struct device *dev)
++{
++	struct hantro_dev *vpu = dev_get_drvdata(dev);
++
++	if (vpu->variant->runtime_resume)
++		return vpu->variant->runtime_resume(vpu);
++
++	return 0;
++}
++#endif
++
+ static const struct dev_pm_ops hantro_pm_ops = {
+ 	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+ 				pm_runtime_force_resume)
++	SET_RUNTIME_PM_OPS(NULL, hantro_runtime_resume, NULL)
+ };
+ 
+ static struct platform_driver hantro_driver = {
+-- 
+2.20.1
 
-	Hans
-
-The following changes since commit 39cb46751e2fbb72e0698f80e339db1fd4e1f50e:
-
-  media: imx7-media-csi: Change imx7_csi_enable() to void (2019-05-28 14:20:12 -0400)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.3h
-
-for you to fetch changes up to 6d40d995f877ef1cec20bec1135207f0dfac4c5a:
-
-  cec-adap: fix regression in ping sanity check (2019-05-29 11:41:05 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Hans Verkuil (4):
-      videobuf2-vmalloc: get_userptr: buffers are always writable
-      media-ioc-enum-links.rst: fix incorrect reserved field documentation
-      mc-device.c: don't memset __user pointer contents
-      cec-adap: fix regression in ping sanity check
-
-Kefeng Wang (1):
-      media: saa7164: fix remove_proc_entry warning
-
-Wen Yang (2):
-      media: mtk-vpu: fix leaked of_node references
-      media: mtk-vcodec: fix leaked of_node references
-
- Documentation/media/uapi/mediactl/media-ioc-enum-links.rst |  7 ++++++-
- drivers/media/cec/cec-adap.c                               |  2 +-
- drivers/media/common/videobuf2/videobuf2-dma-contig.c      |  3 +--
- drivers/media/common/videobuf2/videobuf2-dma-sg.c          |  3 +--
- drivers/media/common/videobuf2/videobuf2-memops.c          |  9 ++-------
- drivers/media/common/videobuf2/videobuf2-vmalloc.c         |  3 +--
- drivers/media/mc/mc-device.c                               |  5 +++--
- drivers/media/pci/saa7164/saa7164-core.c                   | 33 ++++++++++++++++++++++-----------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c      |  2 +-
- drivers/media/platform/mtk-vpu/mtk_vpu.c                   |  2 +-
- include/media/videobuf2-memops.h                           |  3 +--
- 11 files changed, 40 insertions(+), 32 deletions(-)
