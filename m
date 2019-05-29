@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-8.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D48BC28CC0
-	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 11:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4F38C28CC0
+	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 11:28:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4386420B1F
-	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 11:25:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C170A20B1F
+	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 11:28:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbfE2LZZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 May 2019 07:25:25 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:53500 "EHLO
+        id S1726076AbfE2L2T (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 May 2019 07:28:19 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:53524 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725914AbfE2LZZ (ORCPT
+        by vger.kernel.org with ESMTP id S1726012AbfE2L2T (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 May 2019 07:25:25 -0400
+        Wed, 29 May 2019 07:28:19 -0400
 Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id A101C634C7B
-        for <linux-media@vger.kernel.org>; Wed, 29 May 2019 14:25:17 +0300 (EEST)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 67DD9634C7B
+        for <linux-media@vger.kernel.org>; Wed, 29 May 2019 14:28:10 +0300 (EEST)
 Received: from sailus by valkosipuli.localdomain with local (Exim 4.89)
         (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1hVwhp-0000TN-GX
-        for linux-media@vger.kernel.org; Wed, 29 May 2019 14:25:17 +0300
-Date:   Wed, 29 May 2019 14:25:17 +0300
+        id 1hVwkc-0000TY-8N
+        for linux-media@vger.kernel.org; Wed, 29 May 2019 14:28:10 +0300
+Date:   Wed, 29 May 2019 14:28:10 +0300
 From:   Sakari Ailus <sakari.ailus@iki.fi>
 To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for 5.3] ImgU driver warning fixes
-Message-ID: <20190529112517.bzgwluhhhdi7nqdb@valkosipuli.retiisi.org.uk>
+Subject: [GIT PULL for 5.3] Sensor and sun6i patches
+Message-ID: <20190529112810.h4rvqsfhe2zokopq@valkosipuli.retiisi.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -44,9 +44,8 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 Hi Mauro,
 
-Here are the warning fixes for the ImgU driver. There's also a patch
-dropping support for page sizes other than 4 kiB --- the hardware doesn't
-have that either.
+Here are patches for the sun6i driver (+ DT bindings) and a fix for the
+ov8856 driver missed earlier due to a missing SoB.
 
 Please pull.
 
@@ -57,31 +56,27 @@ The following changes since commit 2c41cc0be07b5ee2f1167f41cd8a86fc5b53d82c:
 
 are available in the git repository at:
 
-  ssh://linuxtv.org/git/sailus/media_tree.git tags/ipu3-warn-5.3-1-signed
+  ssh://linuxtv.org/git/sailus/media_tree.git tags/for-5.3-2-signed
 
-for you to fetch changes up to 2d6220de348248e68c8f5045e3060ca212d6e70f:
+for you to fetch changes up to 30831731f2464e312524d7c8960563c1f53e7dd1:
 
-  staging: imgu: Drop support for other page sizes (2019-05-29 13:42:57 +0300)
-
-----------------------------------------------------------------
-ipu3 warning fixes
+  media: sun6i: Support A83T variant (2019-05-29 13:11:22 +0300)
 
 ----------------------------------------------------------------
-Sakari Ailus (5):
-      staging: imgu: Address a compiler warning on alignment
-      staging: imgu: Remove redundant checks
-      staging: imgu: Address compiler / checker warnings in MMU code
-      Revert "media: ipu3: shut up warnings produced with W=1"
-      staging: imgu: Drop support for other page sizes
+sensor + sun6i patches
 
- drivers/staging/media/ipu3/Makefile             |   6 --
- drivers/staging/media/ipu3/TODO                 |   2 -
- drivers/staging/media/ipu3/include/intel-ipu3.h |   2 +-
- drivers/staging/media/ipu3/ipu3-css-fw.c        |   6 +-
- drivers/staging/media/ipu3/ipu3-dmamap.c        |  15 +--
- drivers/staging/media/ipu3/ipu3-mmu.c           | 125 ++++++++++--------------
- drivers/staging/media/ipu3/ipu3-mmu.h           |   5 +-
- 7 files changed, 59 insertions(+), 102 deletions(-)
+----------------------------------------------------------------
+Chen-Yu Tsai (2):
+      dt-bindings: media: sun6i-csi: Add compatible string for A83T variant
+      media: sun6i: Support A83T variant
+
+Shawn Tu (1):
+      ov8856: modify register to fix test pattern
+
+ Documentation/devicetree/bindings/media/sun6i-csi.txt |  1 +
+ drivers/media/i2c/ov8856.c                            | 12 ++++++------
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c    |  1 +
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
 -- 
 Kind regards,
