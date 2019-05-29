@@ -2,124 +2,88 @@ Return-Path: <SRS0=CnRj=T5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D85C28CC0
-	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 09:54:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB80C28CC0
+	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 09:55:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 46D0020B7C
-	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 09:54:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B362208CB
+	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 09:55:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfE2Jym (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 May 2019 05:54:42 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:45591 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726512AbfE2Jyc (ORCPT
+        id S1726005AbfE2JzV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 May 2019 05:55:21 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:33929 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725861AbfE2JzU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 May 2019 05:54:32 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
-        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1hVvHz-0002DF-DG; Wed, 29 May 2019 11:54:31 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH v2 7/9] media: dt-bindings: Document i.MX8MQ and i.MX8MM VPU bindings
-Date:   Wed, 29 May 2019 11:54:22 +0200
-Message-Id: <20190529095424.23614-8-p.zabel@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190529095424.23614-1-p.zabel@pengutronix.de>
-References: <20190529095424.23614-1-p.zabel@pengutronix.de>
+        Wed, 29 May 2019 05:55:20 -0400
+Received: from [IPv6:2001:983:e9a7:1:352c:d076:e7aa:19ae] ([IPv6:2001:983:e9a7:1:352c:d076:e7aa:19ae])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id VvIfh5RzU3qlsVvIghslMC; Wed, 29 May 2019 11:55:19 +0200
+Subject: Re: [PATCH v2 00/11] Improve stability and add bug fixes of Aspeed
+ video engine driver
+To:     Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Eddie James <eajames@linux.ibm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     linux-aspeed@lists.ozlabs.org, linux-media@vger.kernel.org
+References: <20190524231725.12320-1-jae.hyun.yoo@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <c841359a-96fe-eb74-e14c-29e304c6ba16@xs4all.nl>
+Date:   Wed, 29 May 2019 11:55:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <20190524231725.12320-1-jae.hyun.yoo@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfPjUXrhJBvgXPPTEcsOCCcQshm3OE949Fo+PmiY2sJqd9MTPCcW7w/kbN4SONV4X4KXcJJglV8h/GN5HneFa6mBcsvu3y53EEeBXYrHYbT1eBEGkiDjF
+ VKdE+PvDK344JZrQJbYA/Muy9gXbe1TepPLInRQ96MHSijq+SRwiCQ0XBXf3vWnGKPiOu4AL0xMNge3Rs+doGaKmESdhoBG1ET6VPSsMRjYPe83txEf+qWCJ
+ DKC74tek992HCyelgeoJO4oo8ULpI0J0xMgLTn2jdokB2ZJSCQDcfAko9DgEVTXt36FtwyJ42VeafXofx99C0ZMCQZSkeihMW+n+xh90XgsrRiNC1yLpsm77
+ ijEBlrvHa2pRGma9LnKxtN0KU98BY++vhvXA0EDHXcZ6C2oBjT+ZOQb0d33FmJf+O3prLZVDGwDDme3Jk2RybXviGbyWihNVIUGWOJFlF6Ehhao7RChc6qMU
+ ByjxR2/nnl/baF6xBAOODTPuPRxRXEX/j9M/tQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add devicetree binding documentation for the Hantro G1/G2 VPU on i.MX8MQ
-and for the Hantro G1/G2/H1 VPU on i.MX8MM.
+Eddie,
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
- .../devicetree/bindings/media/imx8m-vpu.txt   | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/imx8m-vpu.txt
+Can you review the last 4 new patches? If all is OK, then I can make a pull
+request for this series.
 
-diff --git a/Documentation/devicetree/bindings/media/imx8m-vpu.txt b/Documentation/devicetree/bindings/media/imx8m-vpu.txt
-new file mode 100644
-index 000000000000..659bd28dd002
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/imx8m-vpu.txt
-@@ -0,0 +1,56 @@
-+device-tree bindings for Hantro G1/G2/H1 VPU codecs implemented on i.MX8M SoCs
-+
-+Required properties:
-+- compatible: value should be one of the following
-+		"nxp,imx8mq-vpu",
-+		"nxp,imx8mm-vpu";
-+- regs: VPU core and control block register ranges
-+- reg-names: should be
-+		"g1", "g2", "ctrl" on i.MX8MQ,
-+		"g1", "g2", "h1", "ctrl" on i.MX8MM.
-+- interrupts: encoding and decoding interrupt specifiers
-+- interrupt-names: should be
-+		"g1", "g2" on i.MX8MQ,
-+		"g1", "g2", "h1" on i.MX8MM.
-+- clocks: phandle to VPU core clocks and bus clock
-+- clock-names: should be
-+		"g1", "g2", "bus" on i.MX8MQ,
-+		"g1", "g2", "h1", "bus" on i.MX8MM.
-+- power-domains: phandle to power domain node
-+
-+Examples:
-+
-+	vpu: vpu@38300000 {
-+		compatible = "nxp,imx8mq-vpu";
-+		reg = <0x38300000 0x10000>,
-+		      <0x38310000 0x10000>,
-+		      <0x38320000 0x10000>;
-+		reg-names = "g1", "g2", "ctrl";
-+		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "g1", "g2";
-+		clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+		clock-names = "g1", "g2", "bus";
-+		power-domains = <&pgc_vpu>;
-+	};
-+
-+	vpu: vpu@38300000 {
-+		compatible = "nxp,imx8mm-vpu";
-+		reg = <0x38300000 0x10000>,
-+		      <0x38310000 0x10000>,
-+		      <0x38320000 0x10000>;
-+		      <0x38330000 0x10000>;
-+		reg-names = "g1", "g2", "h1", "ctrl";
-+		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+			     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "g1", "g2", "h1";
-+		clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_H1_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+		clock-names = "g1", "g2", "h1", "bus";
-+		power-domains = <&pgc_vpu>;
-+	};
--- 
-2.20.1
+Regards,
+
+	Hans
+
+On 5/25/19 1:17 AM, Jae Hyun Yoo wrote:
+> This patch series improves stability of Aspeed video engine driver by fixing
+> clock control and irq handling logic in the driver. Also, it adds a couple of
+> bug fixes and a workaroud for a silicon bug.
+> 
+> Changes since v1:
+> - Removed spinlock handling code from 0001 patch.
+> - Added 4 more patches.
+> 
+> Jae Hyun Yoo (11):
+>   media: aspeed: fix a kernel warning on clk control
+>   media: aspeed: refine clock control logic
+>   media: aspeed: change irq to threaded irq
+>   media: aspeed: remove IRQF_SHARED flag
+>   media: aspeed: reduce noisy log printing outs
+>   media: aspeed: remove checking of VE_INTERRUPT_CAPTURE_COMPLETE
+>   media: aspeed: refine interrupt handling logic
+>   media: aspeed: remove source buffer allocation before mode detection
+>   media: aspeed: use different delays for triggering VE H/W reset
+>   media: aspeed: fix an incorrect timeout checking in mode detection
+>   media: aspeed: add a workaround to fix a silicon bug
+> 
+>  drivers/media/platform/aspeed-video.c | 140 +++++++++++++++-----------
+>  1 file changed, 80 insertions(+), 60 deletions(-)
+> 
 
