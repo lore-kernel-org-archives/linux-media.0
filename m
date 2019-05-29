@@ -2,116 +2,194 @@ Return-Path: <SRS0=CnRj=T5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_NEOMUTT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49EF9C07542
-	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 06:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71615C04AB3
+	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 06:27:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 227F820B7C
-	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 06:11:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="C63n5tH5"
+	by mail.kernel.org (Postfix) with ESMTP id 4856C21019
+	for <linux-media@archiver.kernel.org>; Wed, 29 May 2019 06:27:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726033AbfE2GLd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 29 May 2019 02:11:33 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57898 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725855AbfE2GLc (ORCPT
+        id S1726049AbfE2G1m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 29 May 2019 02:27:42 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:46179 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725895AbfE2G1m (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 29 May 2019 02:11:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Ki8wlzJaAXUMUjbjK207hScTMszow2OB9kp3Ebyx2W4=; b=C63n5tH5sy21OVy69pE2Oeedi
-        R/8G/O4R+cqkOb+iay2A6/Ut98QvmOoVxDkFq9W2+7U/LqR+H8f2OYu4N8PPxCiXmTn6+ZCacke9R
-        NiVaBNHylJKbX5saC2PVaMZWgJI/vqUasbLHzdYAaf6JMJZnN5dnuUb+xuFqzNQ1JfxCcFuQJ4xK+
-        6qWDzjNi2j3o36d3TPB8w5XNqN0HcN+Qs09ffRNSsIKDnPfv3T/Ev6qXrq/Wr6gPHomkX4l/KvNpH
-        N2TnBmCl3vuVelWduaIB1cfkd9FE3VcX3LaRbJyskNDE+jHFkxAKB3R4p6SImibWTKLIlWDTUm7UG
-        kjPLjC7pg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hVro6-0006Yh-Is; Wed, 29 May 2019 06:11:26 +0000
-Date:   Tue, 28 May 2019 23:11:26 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Elliott Hughes <enh@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-Message-ID: <20190529061126.GA18124@infradead.org>
-References: <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp>
- <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
- <20190523201105.oifkksus4rzcwqt4@mbp>
- <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
- <20190524101139.36yre4af22bkvatx@mbp>
- <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
- <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
+        Wed, 29 May 2019 02:27:42 -0400
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 53C34200009;
+        Wed, 29 May 2019 06:27:35 +0000 (UTC)
+Date:   Wed, 29 May 2019 08:28:44 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-media@vger.kernel.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] media: dt-bindings: Add Intersil ISL7998x DT bindings
+Message-ID: <20190529062844.bsdg7u7rgvkcmq6k@uno.localdomain>
+References: <20190520201812.7937-1-marex@denx.de>
+ <20190528114758.a4oac3zgdy7dkx7k@uno.localdomain>
+ <6cd36678-2a2c-2a43-e245-4263c0e0f666@denx.de>
+ <20190528151036.nxsh7tjyqrbpbrhy@uno.localdomain>
+ <08c1a65e-dcc5-e1ae-053a-823931b9ec15@denx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="a2t74hpkruw7u57r"
 Content-Disposition: inline
-In-Reply-To: <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <08c1a65e-dcc5-e1ae-053a-823931b9ec15@denx.de>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, May 28, 2019 at 04:14:45PM +0200, Andrey Konovalov wrote:
-> Thanks for a lot of valuable input! I've read through all the replies
-> and got somewhat lost. What are the changes I need to do to this
-> series?
-> 
-> 1. Should I move untagging for memory syscalls back to the generic
-> code so other arches would make use of it as well, or should I keep
-> the arm64 specific memory syscalls wrappers and address the comments
-> on that patch?
 
-It absolutely needs to move to common code.  Having arch code leads
-to pointless (often unintentional) semantic difference between
-architectures, and lots of boilerplate code.
+--a2t74hpkruw7u57r
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Btw, can anyone of the arm crowd or Khalid comment on the linux-mm
-thread on generic gup where I'm dealing with the pre-existing ADI
-case of pointer untagging?
+Hi Marek,
+
+On Tue, May 28, 2019 at 07:49:57PM +0200, Marek Vasut wrote:
+> On 5/28/19 5:10 PM, Jacopo Mondi wrote:
+> [...]
+>
+> >>> From my understanding of the product page, both the ISL79987 and
+> >>> ILS79988 devices support up to 4 analog inputs, and provide a CSI-2
+> >>> output and a BT656 output respectively.
+> >>>
+> >>> What am I reading wrong ?
+> >>
+> >> ISL79987 is analog video to mipi csi2 ; I have this chip.
+> >> ISL79988 is analog video to bt656 ; I don't have this chip.
+> >>
+> >
+> > So please change the description to "Analog to MIPI CSI-2/BT565
+> > decoder"
+>
+> Done
+>
+
+Great!
+
+> >>> [1] https://www.renesas.com/eu/en/products/audio-video/video-decoders-encoders/video-decoders/device/ISL79987.html
+> >>>
+> >>>> +Required Properties:
+> >>>> +- compatible: value should be "isil,isl79987"
+> >
+> > And here you might want to have 2 different compatibles for 79987 and
+> > 79988.
+>
+> The 79988 is not supported yet, do we want to have it in the binding doc?
+>
+
+I got mislead by the isl7998x naming scheme you used...
+
+I would say that's up to you, the two chips seems very similar,
+and it might make sense to provide bindings that support both. At the
+same time, as long as the here defined bindings does not prevent
+future expansions to include the ISL79988, its support could be safely
+post-poned. In that case please s/isl7998x/isl79987/ in this document
+and do not mention BT565 in the description.
+
+> [...]
+>
+> >>> I see from the example you only support one output port? How do you
+> >>> model the input ones.
+> >>
+> >> I don't . Do we model analog inputs now somehow ?
+> >
+> > I really think so, please see:
+> > Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
+> >
+> > And as an example of a board device tree using connectors to model
+> > analog input see how the cvbs input on Salvator-X is described:
+> >
+> > 	cvbs-in {
+> > 		compatible = "composite-video-connector";
+> > 		label = "CVBS IN";
+> >
+> > 		port {
+> > 			cvbs_con: endpoint {
+> > 				remote-endpoint = <&adv7482_ain7>;
+> > 			};
+> > 		};
+> > 	};
+> >
+> > I think you should provide 4 input ports, where to connect input from
+> > the analog connectors, and derive the number of enabled inputs from
+> > the number of endpoints connected to an active remote.
+>
+> Deriving the number of active physical inputs from some existing binding
+> makes sense.
+>
+> However unlike the adv7482, the isl79987 does not support remapping the
+> physical inputs to ADCs in the chip. It does support some remapping of
+> physical inputs to MIPI CSI2 channels, but that's probably not very useful.
+>
+
+I understand, but I will now use against you the argument you have
+correctly pointed out here below that DT should describe hardware, and
+the hardware has indeed 4 input ports..
+
+> > Also, you might want to provide 2 output ports, one CSI-2 and one
+> > BT565 and parse the right one depending on the compatible string.
+>
+> The chip only has one physical output port (either CSI2 or parallel) and
+> DT should model the hardware, so I would expect there to be one output
+> port per chip ?
+
+You are right indeed, there should be one output port only, whose
+content will be different between the two chips... Sorry for the
+confusion.
+
+Thanks
+  j
+
+>
+> > I would also place the input ports last (from port@2 to port@5) so
+> > that we make easier to support similar chips with more inputs (if
+> > any).
+> >
+> > That said, I'm no expert of analog video, so others might have
+> > different opinions :)
+> >
+> > Thanks
+> >    j
+> >
+> >>
+> >> --
+> >> Best regards,
+> >> Marek Vasut
+>
+>
+> --
+> Best regards,
+> Marek Vasut
+
+--a2t74hpkruw7u57r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAlzuJpwACgkQcjQGjxah
+VjzIGRAAtsw3MhWO3BwmgmflQx2QaaVMuwMaFlcBfDwXPfAz3zLn2yDVNVIU3DEs
+8osyvaJvejZGhIMzkDkKCMiGZ/uJftwuxQ3xAhj7HERkdTqcxpIzD60AUz/4S4My
+VqZndDlOTxW7GVmZAYeOnc/CrgYDdjcY0cO7joGC+m51mgKTcAdbxuSFnLndKs4l
+YWgjtNu9Zn1o7iT5Cz59x/SO8uhzcePxcT2UiClO8t01G8nRLjPWUNmIu/cjePeu
+jPfHWUCeCp6PnEOlkYZY2k6AbZZsIhqpaceTuxCpGQYTKfMN3KDapQEHEI0I1s4w
+Av4/TDh/5tSm9p1wNq0U8MrR+SbUXMFE+onzbBNHV/V/e5Q9UUGLOdvKSZg88Gxs
+QVyMK2TfBG/Yhv2Knd2ulv6hci7wagaiooGKDOahmBuBa5ewf64TT/7R54M6Y6wT
+cs0Mh5nSu7lUP9SPc2Orhwj3oP1j2LNqrRLRe9gCAb7WELplJmINqJWb3ugokODi
+oBqjtFWduPYZWVg2RBsOI9spLMid1o4pIIxCbtjFngKseZlhUEKtDRqE5FNW6/1q
+rVEQnlgV0k354vmyTDnFgzyp9VikjqXINLDD1ba5RA4S8VU1+VBK38sBGYX6xE80
+2+qbkee+hNiGsciMU6cwrQAgZZgBncj0wzPHtPSPSgP+DEfgGJQ=
+=CnbC
+-----END PGP SIGNATURE-----
+
+--a2t74hpkruw7u57r--
