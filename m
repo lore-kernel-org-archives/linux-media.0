@@ -2,79 +2,103 @@ Return-Path: <SRS0=FvsI=T6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB1ABC28CC0
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 21:16:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C1DFC28CC0
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 21:59:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9F8BE25C57
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 21:16:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B16F26242
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 21:59:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S9eXJfZu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbfE3VPd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 May 2019 17:15:33 -0400
-Received: from mailoutvs35.siol.net ([185.57.226.226]:55309 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726100AbfE3VPd (ORCPT
+        id S1726547AbfE3V7Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 May 2019 17:59:25 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38444 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726485AbfE3V7Z (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 May 2019 17:15:33 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 77B93522867;
-        Thu, 30 May 2019 23:15:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta11.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta11.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Q4d6PDinGsox; Thu, 30 May 2019 23:15:30 +0200 (CEST)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id 23ACA522869;
-        Thu, 30 May 2019 23:15:30 +0200 (CEST)
-Received: from localhost.localdomain (cpe-86-58-52-202.static.triera.net [86.58.52.202])
-        (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id 41B70522867;
-        Thu, 30 May 2019 23:15:28 +0200 (CEST)
-From:   Jernej Skrabec <jernej.skrabec@siol.net>
-To:     paul.kocialkowski@bootlin.com, maxime.ripard@bootlin.com
-Cc:     wens@csie.org, mchehab@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] media: cedrus: Improvements/cleanup
-Date:   Thu, 30 May 2019 23:15:09 +0200
-Message-Id: <20190530211516.1891-1-jernej.skrabec@siol.net>
-X-Mailer: git-send-email 2.21.0
+        Thu, 30 May 2019 17:59:25 -0400
+Received: by mail-ot1-f67.google.com with SMTP id s19so7183588otq.5
+        for <linux-media@vger.kernel.org>; Thu, 30 May 2019 14:59:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U58pfpDsRofxHqxnUaKCYBB7e9RDYJThRvdjVgqxrCk=;
+        b=S9eXJfZusE4Ncy72dEfa3qGKl7k0BfrWf4NqHgQa967nKllQc7fmQ+lMhZxkoCt1sW
+         JXXsHGxh5pqFq/SY82aEzKr9XBtpxAbBkQo8uAU22R7imcmL6efWuKnt1B7UT8keiz4h
+         tQo+J0kaadwL8wGxkH7HLJx0o7ESRBEdSxEdiu68IqlWQfgR5u4tBDpsKLjHOGrTmxMu
+         7nOK/yMCOWUW2fj/UGLaceFLaldx2BUO5cI/eu749p0n3XjYj5hZB99x7IIlqn3k5AGU
+         OJH0ofWMqn1gzgPn2RV39KWfbv/wghWs9mh6R59oRpHcxNOB2IUe+ojQhwvlMztjyZHR
+         pIXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U58pfpDsRofxHqxnUaKCYBB7e9RDYJThRvdjVgqxrCk=;
+        b=Nf/h4SWgOyP4IAd+p5K/I0z+9lkXPaxVHWZZ2W8imguNHp7gAIRwsnD4yFEbwlMxNI
+         WPTDoXjrLNzuBk/BwILgLrEsoXI3wazcOi24bCtdQsv4WS/68ItmWOEau+o8Kip/sI8R
+         SpZQzo7H+eEUQ3omgnvjvfU2wVXDwM8dViXTmt/ihx4Atzpv1dxFjY5CPyRmwzLoTqnn
+         A4+Fyv0tRfbu3i03Tzg3hE0h9fA3h2JcgL7/P4PjOksbhFl18ViN83l+79i5wmGaX1+9
+         SDNIhnDr4qTl88S9QpjtEJsXgGlvVIBZCkxt08aMUZEgZe1G3a/oOSCYLhnbOpsiGEAD
+         gB+w==
+X-Gm-Message-State: APjAAAXvLweIxIv557gtafHdtO60i96D6/vY2pMfyuBI9Ut9GlYtY8sy
+        i5cdQ26Y79faVYlIaROBrn9WkcSqMK8vnDP4F82msLb1
+X-Google-Smtp-Source: APXvYqzYB7AFwxqSumrziyshC2LCBBoDbQ2IzAwAzcK6Uh6kiDExieuqspqxuSIDeKDcL/3Ww8xKEpdTxbKjoVMDQis=
+X-Received: by 2002:a9d:6e0f:: with SMTP id e15mr4605038otr.0.1559252089416;
+ Thu, 30 May 2019 14:34:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20190418164414.29373-1-p.zabel@pengutronix.de>
+ <20190529154431.11177-1-TheSven73@gmail.com> <CAOMZO5BeEMyEPUbPB8vAbJb1OoUuPxGLh=EBGif12uAMG4=qoQ@mail.gmail.com>
+ <CAGngYiWdyzhmsRuAsH_35qdt1SLguh2sUxh=cAK58RWnhm2Y7A@mail.gmail.com> <4afffe3822026e23a55c05b7e18b43a2d6d0274e.camel@ndufresne.ca>
+In-Reply-To: <4afffe3822026e23a55c05b7e18b43a2d6d0274e.camel@ndufresne.ca>
+From:   Sven Van Asbroeck <thesven73@gmail.com>
+Date:   Thu, 30 May 2019 17:34:38 -0400
+Message-ID: <CAGngYiUZJCwg-VgOafU=gBgDtaSV++UVmNQawn6d5LunBFg1FQ@mail.gmail.com>
+Subject: Re: [v8] media: imx: add mem2mem device
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-media <linux-media@vger.kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Here is first batch of random Cedrus improvements/cleanups. Only patch 2
-has a change which raises a question about H264 controls.
+Nicholas and Fabio, thank you so much for your help !
 
-Changes were tested on H3 SoC using modified ffmpeg and Kodi.
+On Thu, May 30, 2019 at 5:09 PM Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
+>
+> Just for your information, I tested with this pipeline, with kernel
+> "5.2.0-rc2-00024-gbec7550cca10":
+>
+> Execution ended after 0:00:12.860395248
 
-Please take a look.
+I noticed that my mainline kernel was using imx-sdma firmware from ROM,
+but the Freescale kernel was downloading version 1.1 from the filesystem.
 
-Best regards,
-Jernej
+So after d/l-ing the latest imx-sdma firmware and adding that to my
+4.19 mainline kernel, my performance is now identical to yours !
+Fantastic !
 
-Jernej Skrabec (7):
-  media: cedrus: Disable engine after each slice decoding
-  media: cedrus: Fix H264 default reference index count
-  media: cedrus: Fix decoding for some H264 videos
-  media: cedrus: Remove dst_bufs from context
-  media: cedrus: Don't set chroma size for scale & rotation
-  media: cedrus: Add infra for extra buffers connected to capture
-    buffers
-  media: cedrus: Improve H264 memory efficiency
+# dmesg | grep imx-sdma
+[    1.202715] imx-sdma 20ec000.sdma: loaded firmware 3.3
+# time gst-launch-1.0 filesrc
+location=/home/default/jellyfish-10-mbps-hd-h264.mkv !
+matroskademux ! h264parse ! v4l2h264dec ! fakevideosink sync=0
+Execution ended after 0:00:12.851651008
 
- drivers/staging/media/sunxi/cedrus/cedrus.h   |  12 +-
- .../staging/media/sunxi/cedrus/cedrus_h264.c  | 115 ++++++++----------
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |   4 +-
- .../staging/media/sunxi/cedrus/cedrus_video.c |  25 ++--
- 4 files changed, 68 insertions(+), 88 deletions(-)
+Unfortunately I cannot load any imx-sdma firmware on the latest mainline
+kernel. Right after the firmware is loaded, reads seem to get corrupted
+and the whole kernel crashes / hangs.
 
---=20
-2.21.0
-
+I am currently bisecting to find the offending commit:
+v.4.20 good
+v5.0 bad
