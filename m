@@ -2,96 +2,89 @@ Return-Path: <SRS0=FvsI=T6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	T_DKIMWL_WL_HIGH,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38872C28CC0
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 22:18:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB0BC28CC0
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 22:22:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0819C26288
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 22:18:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aA+kIPno"
+	by mail.kernel.org (Postfix) with ESMTP id 9102920449
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 22:22:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1559254943;
+	bh=8MgfUmuzxK42VbrpBBlF+a1Qa90gCAfIPee+BPMwH0g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=0J7gYc+V03MPOPUHJ4JSsFGE74n4Xx/c4pXeNG/E5VJFAToECjNs0W0xVnjV+hrcR
+	 38f6bg+fDNwnLC+PAYVrv9i3NGpHXLUxCHBbk5VV2YWnTV0rfxw7Jc/stu8phjpg5w
+	 CobZIELW3vGkFQq5lDYXQ4b5PyhQWWzg0WA1Zpew=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbfE3WSR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 May 2019 18:18:17 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42993 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbfE3WSR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 May 2019 18:18:17 -0400
-Received: by mail-lf1-f67.google.com with SMTP id y13so6248192lfh.9
-        for <linux-media@vger.kernel.org>; Thu, 30 May 2019 15:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cfZDu0nfyBLTaiN3tKuiZ+GpsXOx+pX9J56Zm8+dWQI=;
-        b=aA+kIPnoEuuVQ5S6RGmMjQ/97AKHju7NlTKocTr3RIbGP0r1RPavluWiwolkV0JvOc
-         l++KXeFPgKfLbCoKk86SlazPw4kJw/r5b4TV4EmyyT+XE5QIeV2FVDxxH8yEbOePKVXh
-         pGYAV17YPe+QZpPSRtG37MOcAJ8YPeBIeYhnx5ot5TBQEYjSxH4vq0H2srV/HzhJamfm
-         6WdHof/tSQgZkaXUPcmPuuNNMwxdPUcEOESCCbK1DSWjQtthulGeN5WU8041bKD5jmeu
-         YVJoFaChIP/px6HwxJf9mw7/axaNM/fjbCAy47I54Q+nfqePtQUqAsJukVHnM6yvbViT
-         HTCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cfZDu0nfyBLTaiN3tKuiZ+GpsXOx+pX9J56Zm8+dWQI=;
-        b=rAhEZXtjEvibH2rjp2uZxzx8BMjZ3pSO4ZfmqFX4Lg4rlW8G+jL5Xxgsno9JA3uzM/
-         jFjvHWDP2gIVaSm9PmeBJ/qyD0tr/sl5Mj7zexoPI2MwOS6FUARtGh9AdzWumOkdMBJb
-         9JU1J6cez/xRDWCj7NR+OOTVrdQKs4XC9p5S3uOBv+Nd7b1InMJXnogls4dBxl5vgi6B
-         bWqYm8nbgm1R0H5UvF8W+u0w++xpopOLzbdaq8DN449Q8VKbibV8UtOYoo02XsNL/H4g
-         fLskDXj7k5msrqa0ZZWdfoTfD52KehKRX/NgeY9TG6yBtKMJ+mAX1ZczHwcRgdrOrDjd
-         BJ2w==
-X-Gm-Message-State: APjAAAWaJ0YU0O8aEIHBgZPja4CNkuONVKV5mnoqZkqovJVd590IkQYn
-        uuUxYG2VRELgN9xGQrUBCKYkM3+ifLEF9LU0U+M=
-X-Google-Smtp-Source: APXvYqzz26uIDXMLWWjDb3+Cls1RkOKmckWD1iZJFK421RrAnmovwGPagAufLwszSDogLrYBQrVe0Uq/qyQBi0OnYXY=
-X-Received: by 2002:ac2:5383:: with SMTP id g3mr3514931lfh.107.1559254695296;
- Thu, 30 May 2019 15:18:15 -0700 (PDT)
+        id S1726485AbfE3WWX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 May 2019 18:22:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33618 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726326AbfE3WWX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 30 May 2019 18:22:23 -0400
+Received: from localhost (unknown [207.225.69.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D466D261CE;
+        Thu, 30 May 2019 21:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559251519;
+        bh=8MgfUmuzxK42VbrpBBlF+a1Qa90gCAfIPee+BPMwH0g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bTrx5JrjxtNwuKsaVAT9K/1RrgMVFBIenItMO5BOMSzvJU9P1CAz/WBuRx5AfdZSH
+         wX2LpcE0cIxf5inzF8M5ObUtMjHuoydajrV41G7huwSI/xBHKSHQdXe4/ftXs/i1p0
+         Kn5DQsClgmyWtlFYfFBX3OpkCZRX9udwzlWgOQ3c=
+Date:   Thu, 30 May 2019 14:25:19 -0700
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Nishka Dasgupta <nishkadg.linux@gmail.com>
+Cc:     devel@driverdev.osuosl.org, code@wizofe.uk,
+        linux-kernel@vger.kernel.org, hans.verkuil@cisco.com,
+        mchehab@kernel.org, ezequiel@collabora.com,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] staging: media: davinci_vpfe: Remove variable vpfe_dev
+Message-ID: <20190530212519.GB18779@kroah.com>
+References: <20190530204718.29892-1-nishkadg.linux@gmail.com>
+ <20190530205540.GA5308@kroah.com>
+ <9b870baa-4d15-cb72-0579-6bb6ca57cadd@gmail.com>
 MIME-Version: 1.0
-References: <20190418164414.29373-1-p.zabel@pengutronix.de>
- <20190529154431.11177-1-TheSven73@gmail.com> <CAOMZO5BeEMyEPUbPB8vAbJb1OoUuPxGLh=EBGif12uAMG4=qoQ@mail.gmail.com>
- <CAGngYiWdyzhmsRuAsH_35qdt1SLguh2sUxh=cAK58RWnhm2Y7A@mail.gmail.com>
- <4afffe3822026e23a55c05b7e18b43a2d6d0274e.camel@ndufresne.ca> <CAGngYiUZJCwg-VgOafU=gBgDtaSV++UVmNQawn6d5LunBFg1FQ@mail.gmail.com>
-In-Reply-To: <CAGngYiUZJCwg-VgOafU=gBgDtaSV++UVmNQawn6d5LunBFg1FQ@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 30 May 2019 19:18:06 -0300
-Message-ID: <CAOMZO5AxL6MeOY=Pooq65B-Ly=t41JVp0Y_nXrYUKk03yh0KJQ@mail.gmail.com>
-Subject: Re: [v8] media: imx: add mem2mem device
-To:     Sven Van Asbroeck <thesven73@gmail.com>,
-        Robin Gong <yibin.gong@nxp.com>
-Cc:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-media <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9b870baa-4d15-cb72-0579-6bb6ca57cadd@gmail.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sven,
+On Fri, May 31, 2019 at 02:39:23AM +0530, Nishka Dasgupta wrote:
+> On 31/05/19 2:25 AM, Greg KH wrote:
+> > On Fri, May 31, 2019 at 02:17:18AM +0530, Nishka Dasgupta wrote:
+> > > Remove variable vpfe_dev and replace it with its value (since the
+> > > function otherwise uses values directly instead of local variables).
+> > 
+> > This says _what_ you do.  But we can see that in the patch itself.
+> > 
+> > You need to say _why_ you are doing this.
+> > 
+> > There's no need for this change at all.  Again, as I have said before,
+> > we write code for developers to read first, the compiler second.  By
+> > making these types of changes you are making it harder to
+> > read/understand by a developer, and providing absolutely no benifit to
+> > the compiler at all.
+> > 
+> > So it's actually making the code worse!
+> > 
+> > not good at all.
+> > 
+> > Please reconsider this type of change, as I keep asking you to.
+> 
+> Okay. In this case I thought it wouldn't make it worse since the function is
+> low on local variables anyway? Clearly I was wrong, so I won't count this
+> case as an exception in future.
 
-[Addin Robin]
+Did you check the object file output to verify this?  Try it and see :)
 
-On Thu, May 30, 2019 at 6:34 PM Sven Van Asbroeck <thesven73@gmail.com> wrote:
-
-> Unfortunately I cannot load any imx-sdma firmware on the latest mainline
-> kernel. Right after the firmware is loaded, reads seem to get corrupted
-> and the whole kernel crashes / hangs.
->
-> I am currently bisecting to find the offending commit:
-> v.4.20 good
-> v5.0 bad
-
-I am not sure I understood the sdma firmware issue correctly.
-
-Please start a new thread in linux-arm-kernel on this topic and also
-copy Robin and the folks from
-./scripts/get_maintainer.pl -f drivers/dma/imx-sdma.c
-
-Thanks
