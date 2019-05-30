@@ -2,89 +2,151 @@ Return-Path: <SRS0=FvsI=T6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	T_DKIMWL_WL_HIGH,USER_AGENT_MUTT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBB0BC28CC0
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 22:22:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1768C28CC0
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 22:25:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9102920449
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 22:22:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559254943;
-	bh=8MgfUmuzxK42VbrpBBlF+a1Qa90gCAfIPee+BPMwH0g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=0J7gYc+V03MPOPUHJ4JSsFGE74n4Xx/c4pXeNG/E5VJFAToECjNs0W0xVnjV+hrcR
-	 38f6bg+fDNwnLC+PAYVrv9i3NGpHXLUxCHBbk5VV2YWnTV0rfxw7Jc/stu8phjpg5w
-	 CobZIELW3vGkFQq5lDYXQ4b5PyhQWWzg0WA1Zpew=
+	by mail.kernel.org (Postfix) with ESMTP id 89E97218C3
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 22:25:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SnOvK8D+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbfE3WWX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 May 2019 18:22:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33618 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726326AbfE3WWX (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 May 2019 18:22:23 -0400
-Received: from localhost (unknown [207.225.69.115])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D466D261CE;
-        Thu, 30 May 2019 21:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559251519;
-        bh=8MgfUmuzxK42VbrpBBlF+a1Qa90gCAfIPee+BPMwH0g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bTrx5JrjxtNwuKsaVAT9K/1RrgMVFBIenItMO5BOMSzvJU9P1CAz/WBuRx5AfdZSH
-         wX2LpcE0cIxf5inzF8M5ObUtMjHuoydajrV41G7huwSI/xBHKSHQdXe4/ftXs/i1p0
-         Kn5DQsClgmyWtlFYfFBX3OpkCZRX9udwzlWgOQ3c=
-Date:   Thu, 30 May 2019 14:25:19 -0700
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nishka Dasgupta <nishkadg.linux@gmail.com>
-Cc:     devel@driverdev.osuosl.org, code@wizofe.uk,
-        linux-kernel@vger.kernel.org, hans.verkuil@cisco.com,
-        mchehab@kernel.org, ezequiel@collabora.com,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] staging: media: davinci_vpfe: Remove variable vpfe_dev
-Message-ID: <20190530212519.GB18779@kroah.com>
-References: <20190530204718.29892-1-nishkadg.linux@gmail.com>
- <20190530205540.GA5308@kroah.com>
- <9b870baa-4d15-cb72-0579-6bb6ca57cadd@gmail.com>
+        id S1726386AbfE3WZp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 May 2019 18:25:45 -0400
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:43487 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726045AbfE3WZp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 30 May 2019 18:25:45 -0400
+Received: by mail-yw1-f68.google.com with SMTP id t5so3302129ywf.10;
+        Thu, 30 May 2019 15:25:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Kt2e7koKuS/w3st+6pWFlXYytQQLT+iijBY66G3TGIQ=;
+        b=SnOvK8D+8dpl/JHjhGSOn/PI1ZA6KFmskkWxxxQdlclHWjqHzPvtclCjTKeO36GZOk
+         ihwqNfm97yuAToZWuIj0NmC4XoK2WRFV69VbOVUfDRHKnbEheioPoQ9qmBbLxo5RkE7P
+         ia3nHxPpgZEUCunu1GQ1HXOwUd1dKSMjMGiwTQjwRQSPQh+chTyTkBJtmEYGuhzP0cj0
+         iOVE8gfcOErvVpykcJUqnxo16i4XNxAXatTaPEm8VCHg8ipPrl424x+xKOHuRFwCGQtB
+         qlapFWyryZ5rN+EI/cj+vyzzmCrtcU/DyfdkA+du4y8ZK4UgqN6DtNR/wZ/fIob5aoeG
+         jnNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=Kt2e7koKuS/w3st+6pWFlXYytQQLT+iijBY66G3TGIQ=;
+        b=rTkERJhYCaIeP0ezuDkpCbTR1GFCE99yOO3PkpZ8hSL21lzgZFbJnN9bDWmvHfUhBl
+         Lgo0lN6A2AdiPJxfuTjR2wjs4FJQRi84W556HVS494U9mLdf+NQ9uVPJmrOeUbW7VICX
+         cUv+dvpkNx+eBDmmzwoYGJkcNd3IP/Q1K5wDegV+41836BD+oeJ+ui7QOOanc7TAn1EB
+         DMkQsv44uJz/oPmGsvnCBx9AdjCmU5jd3p2mvDqRXeGm9mDdrk36KlAiofxcgV3RfSHu
+         CmbI/Cq3mQZvRCUOYB68ydpiNrzskTg5SrL0YTZoOTaLkV9rJfubqfP9crqm4mfjPrWO
+         dgBg==
+X-Gm-Message-State: APjAAAW6KW7Zrnvb0aw8o6jIMT3t9rvyafSr9AWR8/YyibRC9etIr6iN
+        UBfSaI6ugr/FQIkLfYlnPRYINqISGPj+kRJdbMY=
+X-Google-Smtp-Source: APXvYqxdINa9M9mKr8zLme+nf6O33yXjlqtzYPUvsQPUOfScvf6wA1/YkYHtuXtS+cQaog6bPnLQyU5UY/WjfuBPMX4=
+X-Received: by 2002:a81:59c2:: with SMTP id n185mr3501471ywb.21.1559255144144;
+ Thu, 30 May 2019 15:25:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b870baa-4d15-cb72-0579-6bb6ca57cadd@gmail.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+References: <20190528161440.27172-1-peron.clem@gmail.com> <20190528161440.27172-11-peron.clem@gmail.com>
+ <20190530145550.amalnxmx7kpokykv@core.my.home>
+In-Reply-To: <20190530145550.amalnxmx7kpokykv@core.my.home>
+From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
+Date:   Fri, 31 May 2019 00:25:32 +0200
+Message-ID: <CAJiuCce7nHSktVsDKcR8GLRpD3WrN5yP3Nb_Hbu_Q9NjUQbSMw@mail.gmail.com>
+Subject: Re: [PATCH v3 10/12] arm64: dts: allwinner: h6: Add IR receiver node
+To:     =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-sunxi <linux-sunxi@googlegroups.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, May 31, 2019 at 02:39:23AM +0530, Nishka Dasgupta wrote:
-> On 31/05/19 2:25 AM, Greg KH wrote:
-> > On Fri, May 31, 2019 at 02:17:18AM +0530, Nishka Dasgupta wrote:
-> > > Remove variable vpfe_dev and replace it with its value (since the
-> > > function otherwise uses values directly instead of local variables).
-> > 
-> > This says _what_ you do.  But we can see that in the patch itself.
-> > 
-> > You need to say _why_ you are doing this.
-> > 
-> > There's no need for this change at all.  Again, as I have said before,
-> > we write code for developers to read first, the compiler second.  By
-> > making these types of changes you are making it harder to
-> > read/understand by a developer, and providing absolutely no benifit to
-> > the compiler at all.
-> > 
-> > So it's actually making the code worse!
-> > 
-> > not good at all.
-> > 
-> > Please reconsider this type of change, as I keep asking you to.
-> 
-> Okay. In this case I thought it wouldn't make it worse since the function is
-> low on local variables anyway? Clearly I was wrong, so I won't count this
-> case as an exception in future.
+Hi Ondrej,
 
-Did you check the object file output to verify this?  Try it and see :)
+On Thu, 30 May 2019 at 16:55, Ond=C5=99ej Jirman <megous@megous.com> wrote:
+>
+> Hello Cl=C3=A9ment,
+>
+> On Tue, May 28, 2019 at 06:14:38PM +0200, Cl=C3=A9ment P=C3=A9ron wrote:
+> > Allwinner H6 IR is similar to A31 and can use same driver.
+> >
+> > Add support for it.
+> >
+> > Signed-off-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
+> > ---
+> >  arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi | 19 +++++++++++++++++++
+> >  1 file changed, 19 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/=
+boot/dts/allwinner/sun50i-h6.dtsi
+> > index 16c5c3d0fd81..649cbdfe452e 100644
+> > --- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> > +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+> > @@ -647,6 +647,25 @@
+> >                               pins =3D "PL0", "PL1";
+> >                               function =3D "s_i2c";
+> >                       };
+> > +
+> > +                     r_ir_rx_pin: r-ir-rx-pin {
+> > +                             pins =3D "PL9";
+> > +                             function =3D "s_cir_rx";
+> > +                     };
+> > +             };
+> > +
+> > +             r_ir: ir@7040000 {
+> > +                             compatible =3D "allwinner,sun50i-h6-ir",
+> > +                                          "allwinner,sun6i-a31-ir";
+> > +                             reg =3D <0x07040000 0x400>;
+> > +                             interrupts =3D <GIC_SPI 109 IRQ_TYPE_LEVE=
+L_HIGH>;
+> > +                             clocks =3D <&r_ccu CLK_R_APB1_IR>,
+> > +                                      <&r_ccu CLK_IR>;
+> > +                             clock-names =3D "apb", "ir";
+> > +                             resets =3D <&r_ccu RST_R_APB1_IR>;
+> > +                             pinctrl-names =3D "default";
+> > +                             pinctrl-0 =3D <&r_ir_rx_pin>;
+> > +                             status =3D "disabled";
+> >               };
+>
+> Please make a comment here, that this is known broken on some boards and =
+may
+> result IRQ flood if enabled. Otherwise noone will know.
 
+I'm planning to send a v4 next week with the IRQ_NONE return as Maxime
+suggested it.
+https://github.com/clementperon/linux/tree/h6_ir_v4
+
+But maybe we could also use the bit 5 of the IRQ status.
+
+Regards, Clement
+
+>
+> thanks,
+>         o.
+>
+> >               r_i2c: i2c@7081400 {
+> > --
+> > 2.20.1
+> >
+> >
+> > _______________________________________________
+> > linux-arm-kernel mailing list
+> > linux-arm-kernel@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
