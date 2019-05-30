@@ -2,138 +2,101 @@ Return-Path: <SRS0=FvsI=T6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3956DC28CC0
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 09:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 658F3C28CC0
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 10:15:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 129EB25637
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 09:33:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F94E256E8
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 10:15:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dmyIRlMR"
+	dkim=pass (1024-bit key) header.d=originalcard.eu header.i=@originalcard.eu header.b="sPMjCj4l"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbfE3Jda (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 May 2019 05:33:30 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39097 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726985AbfE3Jd3 (ORCPT
+        id S1727954AbfE3KPF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 May 2019 06:15:05 -0400
+Received: from mail.originalcard.eu ([80.211.22.181]:33777 "EHLO
+        mail.originalcard.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727451AbfE3KPD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 May 2019 05:33:29 -0400
-Received: by mail-wr1-f66.google.com with SMTP id x4so3724712wrt.6
-        for <linux-media@vger.kernel.org>; Thu, 30 May 2019 02:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=6m1gjqr7LLo5czWaTNxbcS9O7G75X5W+OVxVsjgwdOk=;
-        b=dmyIRlMRlkjOTvPMU8h28OONRBSGMbu5OSkC56ceQtI82uyy9wZSUWnAAFvv4qeefD
-         1uH+WS2sxeXVRW2DNdtQA1dDIEw6uVypGKzciRZoT6bctV3lMYh+jNP1ZR36djmDCLjw
-         VKLc53Cg59P21NX3oLbIHnVwGGcPUG1neQP65J7MTFocgNYwh20lwAGvv3Ngi8M2C82+
-         0fvLmrK0jdeSOBNSEQdAbiJWsx3fUupQM0n/aD6hJWbVcLzf+l4XVtOED3rcZchEf3ut
-         bVwX3gW/aTaj4Dm6vSGvA5Jlw9ng9ZXieYne8XtFL5y7PF4Y3iBDODeM8v5OEF8Ttnc3
-         biHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=6m1gjqr7LLo5czWaTNxbcS9O7G75X5W+OVxVsjgwdOk=;
-        b=hph3X1QPqXkRSwV9/lNIjNyzHhr521tYZeDjxlQuW0/HvjNoLJBsf6s2bibQdwMKnY
-         /eHvg3x4U5kKjcCOdFU3aXQUTA180EKjmuulwDfAn6bCXNHE01sM5NYGVu4xsmMTLjai
-         py7ZHAJtgOeCrixToYB3SqLg+gkzvaga4Q/sdWPZQU/zvaYXlYKx847Rw0O1L2NggHtZ
-         jDe6LmOipj8rftwrHGAuSNR0sH60NzqQJE645ysgUY8yFzJrt1rcyP6akcoqfoUs2BIF
-         +/eeELIFEfyhrTuOIColb0XH28z/2z6QpBo5tETAxz1A471xZKd8fJzUu2NXrNdY8sIB
-         ZcYg==
-X-Gm-Message-State: APjAAAXT+HfcJf5gqWxeBRJ9MDYkJqN2RavVkyqU9XMop20A11k6pStu
-        YUN/yEL3ndaNxJgNWE4wjn3uauxHWFE=
-X-Google-Smtp-Source: APXvYqxEASlLnIkp5PQbSa4BfrTxFJ6g24r6qZiMp+C9TsnMS8uQxuD/y1DzZGzNDx7DhMVpHGITmg==
-X-Received: by 2002:adf:c982:: with SMTP id f2mr1940460wrh.235.1559208808019;
-        Thu, 30 May 2019 02:33:28 -0700 (PDT)
-Received: from localhost.localdomain ([37.157.136.206])
-        by smtp.gmail.com with ESMTPSA id a124sm2863900wmh.3.2019.05.30.02.33.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 May 2019 02:33:26 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v3] media/doc: Allow sizeimage to be set by v4l clients
-Date:   Thu, 30 May 2019 12:33:12 +0300
-Message-Id: <20190530093312.27562-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Thu, 30 May 2019 06:15:03 -0400
+X-Greylist: delayed 465 seconds by postgrey-1.27 at vger.kernel.org; Thu, 30 May 2019 06:15:02 EDT
+Received: by mail.originalcard.eu (Postfix, from userid 1001)
+        id B3CC487E1A; Thu, 30 May 2019 12:07:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=originalcard.eu;
+        s=mail; t=1559210836;
+        bh=pU1Ykvzl3adJBZV7imduP50iKN5NTUdr3w+tN5tXtoc=;
+        h=Date:From:To:Subject:From;
+        b=sPMjCj4lj/NiPVWYPBw8l1B+vrKHsvYACv4PJ/JzP/fwyrvsDAG60y1XJnMnKIXJb
+         lQ0jF0K8uJyb7ZLmYqVGFQD/Kz6sildtxx5uJLVTwe1pL+OfzcbtJhzhN79eR4LfoG
+         6Mrj/37+tI3Y86DDSQaomHzu6iPH4yohwdBFRHMQ=
+Received: by mail.originalcard.eu for <linux-media@vger.kernel.org>; Thu, 30 May 2019 10:07:05 GMT
+Message-ID: <20190530100644-0.1.d.15x0.0.railaeje8c@originalcard.eu>
+Date:   Thu, 30 May 2019 10:07:05 GMT
+From:   "Radoslav Dobrev" <radoslav.dobrev@originalcard.eu>
+To:     <linux-media@vger.kernel.org>
+Subject: =?UTF-8?Q?=D0=92=D0=B5=D0=BB=D0=B8=D0=BA=D0=B4=D0=B5=D0=BD=D1=81=D0=BA=D0=B8_=D0=B1=D0=BE=D0=BD=D1=83=D1=81=D0=B8?=
+X-Mailer: mail.originalcard.eu
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This changes v4l2_pix_format and v4l2_plane_pix_format sizeimage
-field description to allow v4l clients to set bigger image size
-in case of variable length compressed data.
+=D0=97=D0=B4=D1=80=D0=B0=D0=B2=D0=B5=D0=B9=D1=82=D0=B5!
 
-Presently s5p-mfc and mtk-vcodec codec drivers use that. Lets
-make it obvious in the documentation.
+=D0=92=D0=B0=D1=83=D1=87=D0=B5=D1=80=D0=B8=D1=82=D0=B5 =D0=B7=D0=B0 =D1=85=
+=D1=80=D0=B0=D0=BD=D0=B0 =D1=81=D0=B5 =D0=BD=D0=B0=D1=80=D0=B5=D0=B6=D0=B4=
+=D0=B0=D1=82 =D1=81=D1=80=D0=B5=D0=B4 =D0=BB=D1=8E=D0=B1=D0=B8=D0=BC=D0=B8=
+=D1=82=D0=B5 =D1=81=D0=BE=D1=86=D0=B8=D0=B0=D0=BB=D0=BD=D0=B8 =D0=BF=D1=80=
+=D0=B8=D0=B4=D0=BE=D0=B1=D0=B8=D0=B2=D0=BA=D0=B8 =D0=BD=D0=B0 =D1=80=D0=B0=
+=D0=B1=D0=BE=D1=82=D0=B5=D1=89=D0=B8=D1=82=D0=B5 =D1=85=D0=BE=D1=80=D0=B0=
+ =D0=B8 =D1=81=D1=80=D0=B5=D0=B4 =D0=BD=D0=B0=D0=B9-=D0=BF=D1=80=D0=B5=D0=
+=B4=D0=BF=D0=BE=D1=87=D0=B8=D1=82=D0=B0=D0=BD=D0=B8=D1=82=D0=B5 =D0=BD=D0=
+=B0=D1=87=D0=B8=D0=BD=D0=B8 =D0=B7=D0=B0 =D1=81=D1=82=D0=B8=D0=BC=D1=83=D0=
+=BB=D0=B8=D1=80=D0=B0=D0=BD=D0=B5 =D0=BE=D1=82 =D1=80=D0=B0=D0=B1=D0=BE=D1=
+=82=D0=BE=D0=B4=D0=B0=D1=82=D0=B5=D0=BB=D0=B8=D1=82=D0=B5. =D0=A2=D0=B5 =D0=
+=BF=D0=BE=D0=B4=D0=BE=D0=B1=D1=80=D1=8F=D0=B2=D0=B0=D1=82 =D0=B5=D1=84=D0=
+=B5=D0=BA=D1=82=D0=B8=D0=B2=D0=BD=D0=BE=D1=81=D1=82=D1=82=D0=B0 =D0=B8 =D0=
+=BF=D1=80=D0=BE=D0=B8=D0=B7=D0=B2=D0=BE=D0=B4=D0=B8=D1=82=D0=B5=D0=BB=D0=BD=
+=D0=BE=D1=81=D1=82=D1=82=D0=B0 =D0=BD=D0=B0 =D0=92=D0=B0=D1=88=D0=B8=D1=82=
+=D0=B5 =D1=81=D0=BB=D1=83=D0=B6=D0=B8=D1=82=D0=B5=D0=BB=D0=B8.
 
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
----
-Changes since v2:
-Addressed review comments from Mauro.
+=D0=91=D0=BB=D0=B0=D0=B3=D0=BE=D0=B4=D0=B0=D1=80=D0=B5=D0=BD=D0=B8=D0=B5 =
+=D0=BD=D0=B0 =D0=B2=D0=B0=D1=83=D1=87=D0=B5=D1=80=D0=B8=D1=82=D0=B5 =D0=B7=
+=D0=B0 =D1=85=D1=80=D0=B0=D0=BD=D0=B0 =D1=80=D0=B5=D0=B0=D0=BB=D0=B8=D0=B7=
+=D0=B8=D1=80=D0=B0=D1=82=D0=B5 =D1=81=D0=BF=D0=B5=D1=81=D1=82=D1=8F=D0=B2=
+=D0=B0=D0=BD=D0=B8=D1=8F =E2=80=93 =D1=81=D1=82=D0=BE=D0=B9=D0=BD=D0=BE=D1=
+=81=D1=82=D1=82=D0=B0 =D0=BD=D0=B0 =D0=B2=D0=B0=D1=83=D1=87=D0=B5=D1=80=D0=
+=B8=D1=82=D0=B5 =D0=BD=D0=B5 =D1=81=D0=B5 =D0=BE=D0=B1=D0=BB=D0=B0=D0=B3=D0=
+=B0 =D1=81 =D0=B4=D0=B0=D0=BD=D1=8A=D1=86=D0=B8 =D0=B8 =D0=BE=D1=81=D0=B8=
+=D0=B3=D1=83=D1=80=D0=BE=D0=B2=D0=BA=D0=B8 =D0=B4=D0=BE 60=D0=BB=D0=B2 =D0=
+=BC=D0=B5=D1=81=D0=B5=D1=87=D0=BD=D0=BE =D0=B7=D0=B0 =D0=B2=D1=81=D0=B5=D0=
+=BA=D0=B8 =D1=80=D0=B0=D0=B1=D0=BE=D1=82=D0=BD=D0=B8=D0=BA, =D0=B0 =D0=B2=
+ =D1=81=D1=8A=D1=89=D0=BE=D1=82=D0=BE =D0=B2=D1=80=D0=B5=D0=BC=D0=B5 =D0=BC=
+=D0=BE=D1=82=D0=B8=D0=B2=D0=B0=D1=86=D0=B8=D1=8F=D1=82=D0=B0 =D0=B8 =D0=BF=
+=D0=BE=D0=BA=D1=83=D0=BF=D0=B0=D1=82=D0=B5=D0=BB=D0=BD=D0=B0=D1=82=D0=B0 =
+=D1=81=D0=BF=D0=BE=D1=81=D0=BE=D0=B1=D0=BD=D0=BE=D1=81=D1=82 =D0=BD=D0=B0=
+ =D1=81=D0=BB=D1=83=D0=B6=D0=B8=D1=82=D0=B5=D0=BB=D0=B8=D1=82=D0=B5 =D0=BD=
+=D0=B0=D1=80=D0=B0=D1=81=D1=82=D0=B2=D0=B0.
 
- .../media/uapi/v4l/pixfmt-v4l2-mplane.rst         | 15 ++++++++++++++-
- Documentation/media/uapi/v4l/pixfmt-v4l2.rst      | 13 ++++++++++++-
- 2 files changed, 26 insertions(+), 2 deletions(-)
+=D0=90=D0=BA=D0=BE =D0=BF=D1=80=D0=BE=D1=8F=D0=B2=D1=8F=D0=B2=D0=B0=D1=82=
+=D0=B5 =D0=B8=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81 =D0=BA=D1=8A=D0=BC =D0=B2=
+=D1=8A=D0=B7=D0=BC=D0=BE=D0=B6=D0=BD=D0=BE=D1=81=D1=82=D0=B8=D1=82=D0=B5 =
+=D0=B7=D0=B0 =D0=B2=D1=8A=D0=B2=D0=B5=D0=B6=D0=B4=D0=B0=D0=BD=D0=B5 =D0=BD=
+=D0=B0 =D0=B2=D0=B0=D1=83=D1=87=D0=B5=D1=80=D0=B8 =D0=B7=D0=B0 =D1=85=D1=80=
+=D0=B0=D0=BD=D0=B0 =D0=B2=D1=8A=D0=B2 =D0=92=D0=B0=D1=88=D0=B0=D1=82=D0=B0=
+ =D1=84=D0=B8=D1=80=D0=BC=D0=B0 =D0=B8 =D0=B6=D0=B5=D0=BB=D0=B0=D0=B5=D1=82=
+=D0=B5 =D0=BF=D0=BE-=D0=BF=D0=BE=D0=B4=D1=80=D0=BE=D0=B1=D0=BD=D0=B0 =D0=B8=
+=D0=BD=D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=D0=B8=D1=8F, =D0=B8=D0=B7=D0=BF=
+=D1=80=D0=B0=D1=82=D0=B5=D1=82=D0=B5 =D0=BC=D0=B8 =D1=81=D1=8A=D0=BE=D0=B1=
+=D1=89=D0=B5=D0=BD=D0=B8=D0=B5.
 
-diff --git a/Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst b/Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst
-index 5688c816e334..db43dda5aafb 100644
---- a/Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst
-+++ b/Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst
-@@ -31,7 +31,20 @@ describing all planes of that format.
- 
-     * - __u32
-       - ``sizeimage``
--      - Maximum size in bytes required for image data in this plane.
-+      - Maximum size in bytes required for image data in this plane,
-+	set by the driver. When the image consists of variable length
-+	compressed data this is the number of bytes required by the
-+	codec to support the worst-case compression scenario.
-+
-+	The driver will set the value for uncompressed images.
-+
-+	Clients are allowed to set the sizeimage field for variable length
-+	compressed data flagged with ``V4L2_FMT_FLAG_COMPRESSED`` at
-+	:ref:`VIDIOC_ENUM_FMT`, but the driver may ignore it and set the
-+	value itself, or it may modify the provided value based on
-+	alignment requirements or minimum/maximum size requirements.
-+	If the client wants to leave this to the driver, then it should
-+	set sizeimage to 0.
-     * - __u32
-       - ``bytesperline``
-       - Distance in bytes between the leftmost pixels in two adjacent
-diff --git a/Documentation/media/uapi/v4l/pixfmt-v4l2.rst b/Documentation/media/uapi/v4l/pixfmt-v4l2.rst
-index 71eebfc6d853..da6da2ef139a 100644
---- a/Documentation/media/uapi/v4l/pixfmt-v4l2.rst
-+++ b/Documentation/media/uapi/v4l/pixfmt-v4l2.rst
-@@ -89,7 +89,18 @@ Single-planar format structure
-       - Size in bytes of the buffer to hold a complete image, set by the
- 	driver. Usually this is ``bytesperline`` times ``height``. When
- 	the image consists of variable length compressed data this is the
--	maximum number of bytes required to hold an image.
-+	number of bytes required by the codec to support the worst-case
-+	compression scenario.
-+
-+	The driver will set the value for uncompressed images.
-+
-+	Clients are allowed to set the sizeimage field for variable length
-+	compressed data flagged with ``V4L2_FMT_FLAG_COMPRESSED`` at
-+	:ref:`VIDIOC_ENUM_FMT`, but the driver may ignore it and set the
-+	value itself, or it may modify the provided value based on
-+	alignment requirements or minimum/maximum size requirements.
-+	If the client wants to leave this to the driver, then it should
-+	set sizeimage to 0.
-     * - __u32
-       - ``colorspace``
-       - Image colorspace, from enum :c:type:`v4l2_colorspace`.
--- 
-2.17.1
 
+=D0=A0=D0=B0=D0=B4=D0=BE=D1=81=D0=BB=D0=B0=D0=B2 =D0=94=D0=BE=D0=B1=D1=80=
+=D0=B5=D0=B2
+Head of HR Benefit Team
+www.originalcard.eu
