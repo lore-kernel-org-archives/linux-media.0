@@ -2,163 +2,134 @@ Return-Path: <SRS0=FvsI=T6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8B8AC28CC0
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 21:09:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4499C28CC3
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 21:15:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7CF3D261A2
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 21:09:36 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="NjyepZ24"
+	by mail.kernel.org (Postfix) with ESMTP id 85B4D261CB
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 21:15:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbfE3VJf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 May 2019 17:09:35 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:40978 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726079AbfE3VJf (ORCPT
+        id S1726736AbfE3VPl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 May 2019 17:15:41 -0400
+Received: from mailoutvs15.siol.net ([185.57.226.206]:55376 "EHLO
+        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726100AbfE3VPl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 May 2019 17:09:35 -0400
-Received: by mail-qt1-f194.google.com with SMTP id s57so8822852qte.8
-        for <linux-media@vger.kernel.org>; Thu, 30 May 2019 14:09:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version;
-        bh=dLFtjp03Vgo6B2GvcUY6WSCIkQ9o9IYjnvwRJt1vM18=;
-        b=NjyepZ24do8xzlg7lCYLGXxfnFuCW9BU1KXAucrTT5V1GRbfbO4RR8cre0nmw1HUlR
-         gDKrqmL3zfGxfW2MyQGmdYUXjT/9WGnH0Vn8a2KRSMwnycx/PMIPLdQpV8swpr3OqM7t
-         gPcc4bI1uXVQxQQzhXo/vaeK0YDHd3jb/7Rif/lFyZOgY2x8lGxyJ3yIdmtVwbJ7vnbX
-         uumMBdQ2lkVCDKCfE0m5s5uSIcM9z4nTpZeXJKphg2BJH2x99cLvWo86a4Q/P/GfeHA3
-         Pnq23Q8LuQuREeg+nwAX0hHatQYjjFZtT6tmL15M8vHDleknY+JrdzsumeEXPf/3rroE
-         c7FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=dLFtjp03Vgo6B2GvcUY6WSCIkQ9o9IYjnvwRJt1vM18=;
-        b=qM3RT491mL/2T/RlnlGLbnt/VwFwf7dqDf7f/xJ1Sks6Qvr+cC0psm9nK/WdA1MI35
-         Ze56Zl7jtj5x5oAiUTUssuRGyw0j8UrQfVfUea8I3tME9GWwNY7OKEWBcm39LfP/YV+x
-         knQitC1pifMCG70zq6V3MEt67wL65ECC85Mbk+SgjJlA3rx7D0SSopuuHj9+VS9uHNfA
-         8ZaPaLq1OLY7Ld1UcxKhMXaZrG/yjVjpviTJpTOpx1np+MVBYi4qIvq9QYrPA+FmqRxf
-         sC3rZjQhYLxHB/vQm9zzvuOzq6RMFtt/JpAP9vSGGhyPuGIQ892USr/yTJ++0VppUp0N
-         GJ/Q==
-X-Gm-Message-State: APjAAAUMNFVd6DRAdhvRXiC2kngZpGvX7FkOO4FMPmcm3BzrZyyYU1iV
-        SFExRrFheeiV9tpaqZ+b7C0+gQ==
-X-Google-Smtp-Source: APXvYqwO4LhUsY0Z+GdPbgTrAjGio/2PlOaUA3lxTEQdXctnoPxhicDdnT6s1UhwpBIdWtpCW1Lb5A==
-X-Received: by 2002:a0c:9bae:: with SMTP id o46mr5583757qve.196.1559250574155;
-        Thu, 30 May 2019 14:09:34 -0700 (PDT)
-Received: from tpx230-nicolas (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
-        by smtp.gmail.com with ESMTPSA id s64sm1949663qkb.56.2019.05.30.14.09.30
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 30 May 2019 14:09:31 -0700 (PDT)
-Message-ID: <4afffe3822026e23a55c05b7e18b43a2d6d0274e.camel@ndufresne.ca>
-Subject: Re: [v8] media: imx: add mem2mem device
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Sven Van Asbroeck <thesven73@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Date:   Thu, 30 May 2019 17:09:29 -0400
-In-Reply-To: <CAGngYiWdyzhmsRuAsH_35qdt1SLguh2sUxh=cAK58RWnhm2Y7A@mail.gmail.com>
-References: <20190418164414.29373-1-p.zabel@pengutronix.de>
-         <20190529154431.11177-1-TheSven73@gmail.com>
-         <CAOMZO5BeEMyEPUbPB8vAbJb1OoUuPxGLh=EBGif12uAMG4=qoQ@mail.gmail.com>
-         <CAGngYiWdyzhmsRuAsH_35qdt1SLguh2sUxh=cAK58RWnhm2Y7A@mail.gmail.com>
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-l2h13S2Pdid4KfhSnhtW"
-User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
+        Thu, 30 May 2019 17:15:41 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTP id 315DB522886;
+        Thu, 30 May 2019 23:15:38 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at psrvmta11.zcs-production.pri
+Received: from mail.siol.net ([127.0.0.1])
+        by localhost (psrvmta11.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id PPEPfU0nYuBA; Thu, 30 May 2019 23:15:37 +0200 (CEST)
+Received: from mail.siol.net (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTPS id D4DE45228C1;
+        Thu, 30 May 2019 23:15:37 +0200 (CEST)
+Received: from localhost.localdomain (cpe-86-58-52-202.static.triera.net [86.58.52.202])
+        (Authenticated sender: 031275009)
+        by mail.siol.net (Postfix) with ESMTPSA id 8FA5F522886;
+        Thu, 30 May 2019 23:15:35 +0200 (CEST)
+From:   Jernej Skrabec <jernej.skrabec@siol.net>
+To:     paul.kocialkowski@bootlin.com, maxime.ripard@bootlin.com
+Cc:     wens@csie.org, mchehab@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 3/7] media: cedrus: Fix decoding for some H264 videos
+Date:   Thu, 30 May 2019 23:15:12 +0200
+Message-Id: <20190530211516.1891-4-jernej.skrabec@siol.net>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190530211516.1891-1-jernej.skrabec@siol.net>
+References: <20190530211516.1891-1-jernej.skrabec@siol.net>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+It seems that for some H264 videos at least one bitstream parsing
+trigger must be called in order to be decoded correctly. There is no
+explanation why this helps, but it was observed that two sample videos
+with this fix are now decoded correctly and there is no regression with
+others.
 
---=-l2h13S2Pdid4KfhSnhtW
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+---
+I have two samples which are fixed by this:
+http://jernej.libreelec.tv/videos/h264/test.mkv
+http://jernej.libreelec.tv/videos/h264/Dredd%20%E2%80%93%20DTS%20Sound%20=
+Check%20DTS-HD%20MA%207.1.m2ts
 
-Le mercredi 29 mai 2019 =C3=A0 16:55 -0400, Sven Van Asbroeck a =C3=A9crit =
-:
-> Philipp and Fabio,
->=20
-> On Wed, May 29, 2019 at 12:53 PM Fabio Estevam <festevam@gmail.com> wrote=
-:
-> > Does this patch from Philipp fix the problem?
-> > https://git.pengutronix.de/cgit/pza/linux/commit/?h=3Dimx-drm/fixes&id=
-=3D137caa702f2308f7ef03876e164b0d0f3300712a
->=20
-> I am now running 5.2-rc2 with Philipp's non-plus imx6q patch.
->=20
-> Performance is still much worse than the Freescale baseline.
->=20
-> I am not at all worried about vpu scaler performance, after all v8 is an
-> in-progress patch.
->=20
-> I am much more concerned about the CODA h264 slowdown. My 1080p30 test
-> video runs at half the speed compared to the Freescale kernel. The best i=
-t
-> can do is 28fps, which results in visible 'jerks' in the video. Note that
-> this is without using the scaler.
->=20
-> Questions:
-> - is the performance slowdown a known issue?
-> - is there anything I've missed in the gstreamer pipelines below?
-> - is there anything I can do to help?
->=20
-> A) mainline 5.2-rc2 with Philipp's latest non-plus patch:
-> $ time gst-launch-1.0 filesrc
-> location=3D/home/default/jellyfish-10-mbps-hd-h264.mkv ! matroskademux !
-> h264parse ! v4l2h264dec ! kmssink can-scale=3D0 sync=3D0
-> real 0m 32.01s
+Although second one also needs support for multi-slice frames, which is n=
+ot yet implemented here.
 
-Just for your information, I tested with this pipeline, with kernel
-"5.2.0-rc2-00024-gbec7550cca10":
+ .../staging/media/sunxi/cedrus/cedrus_h264.c  | 22 ++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-time gst-launch-1.0 filesrc location=3D~/Videos/jellyfish-10-mbps-hd-
-h264.mkv ! matroskademux ! h264parse ! v4l2h264dec ! fakevideosink
-sync=3D0=20
-D=C3=A9finition du pipeline =C3=A0 PAUSED...
-Le pipeline est en phase de PREROLL=E2=80=A6
-Le pipeline a termin=C3=A9 la phase PREROLL=E2=80=A6
-Passage du pipeline =C3=A0 la phase PLAYING=E2=80=A6
-New clock: GstSystemClock
-EOS re=C3=A7u de l=E2=80=99=C3=A9l=C3=A9ment =C2=AB pipeline0 =C2=BB.
-Execution ended after 0:00:12.860395248
-D=C3=A9finition du pipeline =C3=A0 PAUSED...
-D=C3=A9finition du pipeline =C3=A0 READY (pr=C3=AAt)=E2=80=A6
-D=C3=A9finition du pipeline =C3=A0 NULL=E2=80=A6
-Lib=C3=A9ration du pipeline=E2=80=A6
-
-real	0m13,411s
-user	0m1,398s
-sys	0m1,006s
-
-That's about 70fps.
-
->=20
-> B) Freescale kernel:
-> $ time gst-launch-0.10 filesrc
-> location=3D/home/default/jellyfish-10-mbps-hd-h264.mkv ! decodebin !
-> mfw_v4lsink sync=3D0
-> Running time 0:00:14.781129554 render fps 59.941
-
---=-l2h13S2Pdid4KfhSnhtW
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXPBGiQAKCRBxUwItrAao
-HFlHAJsH/et6mOgRlYB8HCAmLZTpkvLbywCeIVKSkZB4Ua9rQ653tNJFvWKlVBM=
-=jyA8
------END PGP SIGNATURE-----
-
---=-l2h13S2Pdid4KfhSnhtW--
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/s=
+taging/media/sunxi/cedrus/cedrus_h264.c
+index cc8d17f211a1..d0ee3f90ff46 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -6,6 +6,7 @@
+  * Copyright (c) 2018 Bootlin
+  */
+=20
++#include <linux/delay.h>
+ #include <linux/types.h>
+=20
+ #include <media/videobuf2-dma-contig.h>
+@@ -289,6 +290,20 @@ static void cedrus_write_pred_weight_table(struct ce=
+drus_ctx *ctx,
+ 	}
+ }
+=20
++static void cedrus_skip_bits(struct cedrus_dev *dev, int num)
++{
++	for (; num > 32; num -=3D 32) {
++		cedrus_write(dev, VE_H264_TRIGGER_TYPE, 0x3 | (32 << 8));
++		while (cedrus_read(dev, VE_H264_STATUS) & (1 << 8))
++			udelay(1);
++	}
++	if (num > 0) {
++		cedrus_write(dev, VE_H264_TRIGGER_TYPE, 0x3 | (num << 8));
++		while (cedrus_read(dev, VE_H264_STATUS) & (1 << 8))
++			udelay(1);
++	}
++}
++
+ static void cedrus_set_params(struct cedrus_ctx *ctx,
+ 			      struct cedrus_run *run)
+ {
+@@ -299,12 +314,11 @@ static void cedrus_set_params(struct cedrus_ctx *ct=
+x,
+ 	struct vb2_buffer *src_buf =3D &run->src->vb2_buf;
+ 	struct cedrus_dev *dev =3D ctx->dev;
+ 	dma_addr_t src_buf_addr;
+-	u32 offset =3D slice->header_bit_size;
+-	u32 len =3D (slice->size * 8) - offset;
++	u32 len =3D slice->size * 8;
+ 	u32 reg;
+=20
+ 	cedrus_write(dev, VE_H264_VLD_LEN, len);
+-	cedrus_write(dev, VE_H264_VLD_OFFSET, offset);
++	cedrus_write(dev, VE_H264_VLD_OFFSET, 0);
+=20
+ 	src_buf_addr =3D vb2_dma_contig_plane_dma_addr(src_buf, 0);
+ 	cedrus_write(dev, VE_H264_VLD_END,
+@@ -323,6 +337,8 @@ static void cedrus_set_params(struct cedrus_ctx *ctx,
+ 	cedrus_write(dev, VE_H264_TRIGGER_TYPE,
+ 		     VE_H264_TRIGGER_TYPE_INIT_SWDEC);
+=20
++	cedrus_skip_bits(dev, slice->header_bit_size);
++
+ 	if (((pps->flags & V4L2_H264_PPS_FLAG_WEIGHTED_PRED) &&
+ 	     (slice->slice_type =3D=3D V4L2_H264_SLICE_TYPE_P ||
+ 	      slice->slice_type =3D=3D V4L2_H264_SLICE_TYPE_SP)) ||
+--=20
+2.21.0
 
