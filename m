@@ -2,61 +2,77 @@ Return-Path: <SRS0=FvsI=T6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01ABCC072B1
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 04:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E506C072B1
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 06:45:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C817F25302
-	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 04:20:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E043A25AE2
+	for <linux-media@archiver.kernel.org>; Thu, 30 May 2019 06:45:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731397AbfE3EUm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 30 May 2019 00:20:42 -0400
-Received: from smtprelay0033.hostedemail.com ([216.40.44.33]:37168 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731287AbfE3EUl (ORCPT
+        id S1727379AbfE3Gpv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 30 May 2019 02:45:51 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:57267 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727296AbfE3Gpv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 30 May 2019 00:20:41 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id C3C53182251B2;
-        Thu, 30 May 2019 04:20:39 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: nose55_5a26eccd8617
-X-Filterd-Recvd-Size: 1484
-Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
-        (Authenticated sender: joe@perches.com)
-        by omf13.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 30 May 2019 04:20:38 +0000 (UTC)
-Message-ID: <a47d7093b10d671ae89fa6f6962d69d6913a30f7.camel@perches.com>
-Subject: Re: [PATCH v2] drivers/media/dvb-frontends: Implement probe/remove
- for stv6110x
-From:   Joe Perches <joe@perches.com>
-To:     Tobias Klausmann <tobias.johannes.klausmann@mni.thm.de>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        mchehab@kernel.org, sean@mess.org
-Date:   Wed, 29 May 2019 21:20:37 -0700
-In-Reply-To: <d1afd4d3-0dc5-718d-f7b4-f763f367ca1e@mni.thm.de>
-References: <20190509195118.23027-1-tobias.johannes.klausmann@mni.thm.de>
-         <20190529165633.8779-1-tobias.johannes.klausmann@mni.thm.de>
-         <bcd12350374533ef090ae911be444e702e85134b.camel@perches.com>
-         <d1afd4d3-0dc5-718d-f7b4-f763f367ca1e@mni.thm.de>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.30.1-1build1 
-Mime-Version: 1.0
+        Thu, 30 May 2019 02:45:51 -0400
+Received: from [IPv6:2001:983:e9a7:1:c843:3d28:cba4:8b6e] ([IPv6:2001:983:e9a7:1:c843:3d28:cba4:8b6e])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id WEouhL4s93qlsWEovhyNJH; Thu, 30 May 2019 08:45:49 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH] dvb-usb/cxusb-analog.c: fix coccinelle warning, use ktime.h
+Message-ID: <7cdb41ac-6c11-270b-8864-adafad423b9a@xs4all.nl>
+Date:   Thu, 30 May 2019 08:45:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfOK2EN16f+FDSeoq1v5+S2/rwt1yesuTJbR3yZQnKT7dAiPrnrEjXnTcBLOwFqetAiy1sQEB4GbdNkQCX+ScGKQ+YkOET/laCnwFRffqZp1REcs/Wmay
+ DuiGHHmc0NxvMgmJWMfXE6DPiOaY3on/GlZXVw5n6RvO/KjeF9+bhtojxocrdej2w41ws5rnhD1io16lzM8X+GPinhGBVFCTfX5jJT9acXCGhzZ4M0woVoE/
+ cpPTDpnELIB25pMSDwTukv0/XL6rGbkFJU56C078V8xsTvm0t+4DnDwI7R22jM1o
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2019-05-29 at 21:03 +0200, Tobias Klausmann wrote:
-> thanks for the comments! If really desired i can change the code 
-> further, adapting to your comments, but note that the code was 
-> essentially just moved around to cater to both _probe() and attach(), 
-> intentionally leaving it as it was before the patch!
+This patch fixes a coccinelle warning and includes ktime.h instead of
+timekeeping.h. The first includes the latter, but the latter doesn't
+exist before 3.17, causing problems for our compat build. It's easier
+to just use ktime.h instead.
 
-Up to you.
-My general preference is for human intelligible and simple code.
+coccinelle warnings: (new ones prefixed by >>)
 
+>> drivers/media/usb/dvb-usb/cxusb-analog.c:1498:41-42: WARNING: Use ARRAY_SIZE
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: kbuild test robot <lkp@intel.com>
+---
+diff --git a/drivers/media/usb/dvb-usb/cxusb-analog.c b/drivers/media/usb/dvb-usb/cxusb-analog.c
+index 9b42ca71c177..9b4f17ec63d3 100644
+--- a/drivers/media/usb/dvb-usb/cxusb-analog.c
++++ b/drivers/media/usb/dvb-usb/cxusb-analog.c
+@@ -25,7 +25,7 @@
+ #include <linux/device.h>
+ #include <linux/slab.h>
+ #include <linux/string.h>
+-#include <linux/timekeeping.h>
++#include <linux/ktime.h>
+ #include <linux/vmalloc.h>
+ #include <media/drv-intf/cx25840.h>
+ #include <media/tuner.h>
+@@ -1622,8 +1622,7 @@ int cxusb_medion_analog_init(struct dvb_usb_device *dvbdev)
+ 	/* TODO: setup audio samples insertion */
+
+ 	ret = v4l2_subdev_call(cxdev->cx25840, core, s_io_pin_config,
+-			       sizeof(cxusub_medion_pin_config) /
+-			       sizeof(cxusub_medion_pin_config[0]),
++			       ARRAY_SIZE(cxusub_medion_pin_config),
+ 			       cxusub_medion_pin_config);
+ 	if (ret != 0)
+ 		dev_warn(&dvbdev->udev->dev,
