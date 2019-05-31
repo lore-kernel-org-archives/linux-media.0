@@ -6,23 +6,23 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 211E5C04AB6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4CCBC28CC3
 	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:55:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAA4C25D30
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:55:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E52525D30
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:55:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbfEaIzf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727096AbfEaIzf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 31 May 2019 04:55:35 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49185 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:49005 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727058AbfEaIz1 (ORCPT
+        with ESMTP id S1727053AbfEaIz1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 31 May 2019 04:55:27 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.89)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hWdJt-0003zW-H0; Fri, 31 May 2019 10:55:25 +0200
+        id 1hWdJt-0003zW-Ew; Fri, 31 May 2019 10:55:25 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -32,9 +32,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH v3 10/10] media: hantro: allow arbitrary number of clocks
-Date:   Fri, 31 May 2019 10:55:23 +0200
-Message-Id: <20190531085523.10892-11-p.zabel@pengutronix.de>
+Subject: [PATCH v3 08/10] media: hantro: add initial i.MX8MQ support
+Date:   Fri, 31 May 2019 10:55:21 +0200
+Message-Id: <20190531085523.10892-9-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190531085523.10892-1-p.zabel@pengutronix.de>
 References: <20190531085523.10892-1-p.zabel@pengutronix.de>
@@ -49,169 +49,259 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dynamically allocate clocks and move clock names out of struct
-hantro_variant. This lifts the four clock limit and allows to use
-ARRAY_SIZE() to fill .num_clocks to reduce the risk of mismatches.
+For now this just enables MPEG-2 decoding on the Hantro G1 on i.MX8MQ.
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
-New in v3.
----
- drivers/staging/media/hantro/hantro.h        |  6 ++----
- drivers/staging/media/hantro/hantro_drv.c    |  5 +++++
- drivers/staging/media/hantro/imx8m_vpu_hw.c  | 10 ++++++----
- drivers/staging/media/hantro/rk3288_vpu_hw.c |  8 ++++++--
- drivers/staging/media/hantro/rk3399_vpu_hw.c | 12 ++++++++----
- 5 files changed, 27 insertions(+), 14 deletions(-)
+Changes since v2 [1]:
+ - Adapted to changes in patches 4 and 5
 
-diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index 295a00d59a5f..0a3b2a8b3e67 100644
---- a/drivers/staging/media/hantro/hantro.h
-+++ b/drivers/staging/media/hantro/hantro.h
-@@ -25,8 +25,6 @@
- 
- #include "hantro_hw.h"
- 
--#define HANTRO_MAX_CLOCKS		4
--
- #define MPEG2_MB_DIM			16
- #define MPEG2_MB_WIDTH(w)		DIV_ROUND_UP(w, MPEG2_MB_DIM)
- #define MPEG2_MB_HEIGHT(h)		DIV_ROUND_UP(h, MPEG2_MB_DIM)
-@@ -88,7 +86,7 @@ struct hantro_variant {
- 	int (*runtime_resume)(struct hantro_dev *vpu);
- 	const struct hantro_irq *irqs;
- 	int num_irqs;
--	const char *clk_names[HANTRO_MAX_CLOCKS];
-+	const char * const *clk_names;
- 	int num_clocks;
- 	const char * const *reg_names;
- 	int num_regs;
-@@ -182,7 +180,7 @@ struct hantro_dev {
- 	struct hantro_func *decoder;
- 	struct platform_device *pdev;
- 	struct device *dev;
--	struct clk_bulk_data clocks[HANTRO_MAX_CLOCKS];
-+	struct clk_bulk_data *clocks;
- 	void __iomem **bases;
- 	void __iomem *enc_base;
- 	void __iomem *dec_base;
+[1] https://patchwork.linuxtv.org/patch/56420/
+---
+ drivers/staging/media/hantro/Kconfig        |   8 +-
+ drivers/staging/media/hantro/Makefile       |   1 +
+ drivers/staging/media/hantro/hantro_drv.c   |   1 +
+ drivers/staging/media/hantro/hantro_hw.h    |   1 +
+ drivers/staging/media/hantro/imx8m_vpu_hw.c | 171 ++++++++++++++++++++
+ 5 files changed, 178 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/staging/media/hantro/imx8m_vpu_hw.c
+
+diff --git a/drivers/staging/media/hantro/Kconfig b/drivers/staging/media/hantro/Kconfig
+index 660cca358f04..6fdb72df7bd3 100644
+--- a/drivers/staging/media/hantro/Kconfig
++++ b/drivers/staging/media/hantro/Kconfig
+@@ -1,15 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0
+ config VIDEO_HANTRO
+ 	tristate "Hantro VPU driver"
+-	depends on ARCH_ROCKCHIP || COMPILE_TEST
++	depends on ARCH_MXC || ARCH_ROCKCHIP || COMPILE_TEST
+ 	depends on VIDEO_DEV && VIDEO_V4L2 && MEDIA_CONTROLLER
+ 	depends on MEDIA_CONTROLLER_REQUEST_API
+ 	select VIDEOBUF2_DMA_CONTIG
+ 	select VIDEOBUF2_VMALLOC
+ 	select V4L2_MEM2MEM_DEV
+ 	help
+-	  Support for the Hantro IP based Video Processing Unit present on
+-	  Rockchip SoC, which accelerates video and image encoding and
+-	  decoding.
++	  Support for the Hantro IP based Video Processing Units present on
++	  Rockchip and NXP i.MX8M SoCs, which accelerate video and image
++	  encoding and decoding.
+ 	  To compile this driver as a module, choose M here: the module
+ 	  will be called hantro-vpu.
+diff --git a/drivers/staging/media/hantro/Makefile b/drivers/staging/media/hantro/Makefile
+index 14f17a4e48cb..1dac16af451e 100644
+--- a/drivers/staging/media/hantro/Makefile
++++ b/drivers/staging/media/hantro/Makefile
+@@ -9,5 +9,6 @@ hantro-vpu-y += \
+ 		rk3399_vpu_hw.o \
+ 		rk3399_vpu_hw_jpeg_enc.o \
+ 		rk3399_vpu_hw_mpeg2_dec.o \
++		imx8m_vpu_hw.o \
+ 		hantro_jpeg.o \
+ 		hantro_mpeg2.o
 diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index ef2b29d50100..d9624ee9fdc3 100644
+index 1f756e06dfc6..bf88e594d440 100644
 --- a/drivers/staging/media/hantro/hantro_drv.c
 +++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -688,6 +688,11 @@ static int hantro_probe(struct platform_device *pdev)
+@@ -418,6 +418,7 @@ static const struct of_device_id of_hantro_match[] = {
+ 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
++	{ .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, of_hantro_match);
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index 3c361c2e9b88..fd6ad017a1cf 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -81,6 +81,7 @@ enum hantro_enc_fmt {
+ extern const struct hantro_variant rk3399_vpu_variant;
+ extern const struct hantro_variant rk3328_vpu_variant;
+ extern const struct hantro_variant rk3288_vpu_variant;
++extern const struct hantro_variant imx8mq_vpu_variant;
  
- 	INIT_DELAYED_WORK(&vpu->watchdog_work, hantro_watchdog);
- 
-+	vpu->clocks = devm_kcalloc(&pdev->dev, vpu->variant->num_clocks,
-+				   sizeof(*vpu->clocks), GFP_KERNEL);
-+	if (!vpu->clocks)
-+		return -ENOMEM;
-+
- 	for (i = 0; i < vpu->variant->num_clocks; i++)
- 		vpu->clocks[i].id = vpu->variant->clk_names[i];
- 	ret = devm_clk_bulk_get(&pdev->dev, vpu->variant->num_clocks,
+ void hantro_watchdog(struct work_struct *work);
+ void hantro_run(struct hantro_ctx *ctx);
 diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-index fbe84c5f5619..811899e8416a 100644
---- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
+new file mode 100644
+index 000000000000..3da5cbd1eab1
+--- /dev/null
 +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-@@ -266,6 +266,7 @@ static const struct hantro_irq imx8mq_irqs[] = {
- 	{ "g2", NULL /* TODO: imx8m_vpu_g2_irq */ },
- };
- 
-+static const char * const imx8mq_clk_names[] = { "g1", "g2", "bus" };
- static const char * const imx8mq_reg_names[] = { "g1", "g2", "ctrl" };
- 
- const struct hantro_variant imx8mq_vpu_variant = {
-@@ -278,8 +279,8 @@ const struct hantro_variant imx8mq_vpu_variant = {
- 	.irqs = imx8mq_irqs,
- 	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
- 	.num_irqs = 2,
--	.clk_names = { "g1", "g2", "bus" },
--	.num_clocks = 3,
-+	.clk_names = imx8mq_clk_names,
-+	.num_clocks = ARRAY_SIZE(imx8mq_clk_names),
- 	.reg_names = imx8mq_reg_names,
- 	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
- };
-@@ -290,6 +291,7 @@ static const struct hantro_irq imx8mm_irqs[] = {
- 	{ "h1", imx8mm_vpu_h1_irq },
- };
- 
-+static const char * const imx8mm_clk_names[] = { "g1", "g2", "h1", "bus" };
- static const char * const imx8mm_reg_names[] = { "g1", "g2", "h1", "ctrl" };
- 
- const struct hantro_variant imx8mm_vpu_variant = {
-@@ -301,8 +303,8 @@ const struct hantro_variant imx8mm_vpu_variant = {
- 	.runtime_resume = imx8mm_runtime_resume,
- 	.irqs = imx8mm_irqs,
- 	.num_irqs = ARRAY_SIZE(imx8mm_irqs),
--	.clk_names = { "g1", "g2", "h1", "bus" },
--	.num_clocks = 4,
-+	.clk_names = imx8mm_clk_names,
-+	.num_clocks = ARRAY_SIZE(imx8mm_clk_names),
- 	.reg_names = imx8mm_reg_names,
- 	.num_regs = ARRAY_SIZE(imx8mm_reg_names)
- };
-diff --git a/drivers/staging/media/hantro/rk3288_vpu_hw.c b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-index b4d5e24167db..fe721e0b948d 100644
---- a/drivers/staging/media/hantro/rk3288_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-@@ -165,6 +165,10 @@ static const struct hantro_irq rk3288_irqs[] = {
- 	{ "vdpu", rk3288_vdpu_irq },
- };
- 
-+static const char * const rk3288_clk_names[] = {
-+	"aclk", "hclk"
+@@ -0,0 +1,171 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Hantro VPU codec driver
++ *
++ * Copyright (C) 2019 Pengutronix, Philipp Zabel <kernel@pengutronix.de>
++ */
++
++#include <linux/clk.h>
++#include <linux/delay.h>
++
++#include "hantro.h"
++#include "hantro_jpeg.h"
++#include "rk3288_vpu_regs.h"
++
++#define CTRL_SOFT_RESET		0x00
++#define RESET_G1		BIT(1)
++#define RESET_G2		BIT(0)
++
++#define CTRL_CLOCK_ENABLE	0x04
++#define CLOCK_G1		BIT(1)
++#define CLOCK_G2		BIT(0)
++
++#define CTRL_G1_DEC_FUSE	0x08
++#define CTRL_G1_PP_FUSE		0x0c
++#define CTRL_G2_DEC_FUSE	0x10
++
++static void imx8m_soft_reset(struct hantro_dev *vpu, u32 reset_bits)
++{
++	u32 val;
++
++	/* Assert */
++	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
++	val &= ~reset_bits;
++	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
++
++	udelay(2);
++
++	/* Release */
++	val = readl(vpu->ctrl_base + CTRL_SOFT_RESET);
++	val |= reset_bits;
++	writel(val, vpu->ctrl_base + CTRL_SOFT_RESET);
++}
++
++static void imx8m_clk_enable(struct hantro_dev *vpu, u32 clock_bits)
++{
++	u32 val;
++
++	val = readl(vpu->ctrl_base + CTRL_CLOCK_ENABLE);
++	val |= clock_bits;
++	writel(val, vpu->ctrl_base + CTRL_CLOCK_ENABLE);
++}
++
++static int imx8mq_runtime_resume(struct hantro_dev *vpu)
++{
++	int ret;
++
++	ret = clk_bulk_prepare_enable(vpu->variant->num_clocks, vpu->clocks);
++	if (ret) {
++		dev_err(vpu->dev, "Failed to enable clocks\n");
++		return ret;
++	}
++
++	imx8m_soft_reset(vpu, RESET_G1 | RESET_G2);
++	imx8m_clk_enable(vpu, CLOCK_G1 | CLOCK_G2);
++
++	/* Set values of the fuse registers */
++	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_DEC_FUSE);
++	writel(0xffffffff, vpu->ctrl_base + CTRL_G1_PP_FUSE);
++	writel(0xffffffff, vpu->ctrl_base + CTRL_G2_DEC_FUSE);
++
++	clk_bulk_disable_unprepare(vpu->variant->num_clocks, vpu->clocks);
++
++	return 0;
++}
++
++/*
++ * Supported formats.
++ */
++
++static const struct hantro_fmt imx8m_vpu_dec_fmts[] = {
++	{
++		.fourcc = V4L2_PIX_FMT_NV12,
++		.codec_mode = HANTRO_MODE_NONE,
++	},
++	{
++		.fourcc = V4L2_PIX_FMT_MPEG2_SLICE,
++		.codec_mode = HANTRO_MODE_MPEG2_DEC,
++		.max_depth = 2,
++		.frmsize = {
++			.min_width = 48,
++			.max_width = 1920,
++			.step_width = MPEG2_MB_DIM,
++			.min_height = 48,
++			.max_height = 1088,
++			.step_height = MPEG2_MB_DIM,
++		},
++	},
 +};
 +
- const struct hantro_variant rk3288_vpu_variant = {
- 	.enc_offset = 0x0,
- 	.enc_fmts = rk3288_vpu_enc_fmts,
-@@ -177,6 +181,6 @@ const struct hantro_variant rk3288_vpu_variant = {
- 	.irqs = rk3288_irqs,
- 	.num_irqs = ARRAY_SIZE(rk3288_irqs),
- 	.init = rk3288_vpu_hw_init,
--	.clk_names = {"aclk", "hclk"},
--	.num_clocks = 2
-+	.clk_names = rk3288_clk_names,
-+	.num_clocks = ARRAY_SIZE(rk3288_clk_names)
- };
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw.c b/drivers/staging/media/hantro/rk3399_vpu_hw.c
-index fc52bedf3665..f8400e49bc50 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw.c
-@@ -165,6 +165,10 @@ static const struct hantro_irq rk3399_irqs[] = {
- 	{ "vdpu", rk3399_vdpu_irq },
- };
- 
-+static const char * const rk3399_clk_names[] = {
-+	"aclk", "hclk"
++static irqreturn_t imx8m_vpu_g1_irq(int irq, void *dev_id)
++{
++	struct hantro_dev *vpu = dev_id;
++	enum vb2_buffer_state state;
++	u32 status;
++
++	status = vdpu_read(vpu, VDPU_REG_INTERRUPT);
++	state = (status & VDPU_REG_INTERRUPT_DEC_RDY_INT) ?
++		 VB2_BUF_STATE_DONE : VB2_BUF_STATE_ERROR;
++
++	vdpu_write(vpu, 0, VDPU_REG_INTERRUPT);
++	vdpu_write(vpu, VDPU_REG_CONFIG_DEC_CLK_GATE_E, VDPU_REG_CONFIG);
++
++	hantro_irq_done(vpu, 0, state);
++
++	return IRQ_HANDLED;
++}
++
++static int imx8mq_vpu_hw_init(struct hantro_dev *vpu)
++{
++	vpu->dec_base = vpu->bases[0];
++	vpu->ctrl_base = vpu->bases[vpu->variant->num_regs - 1];
++
++	return 0;
++}
++
++static void imx8m_vpu_g1_reset(struct hantro_ctx *ctx)
++{
++	struct hantro_dev *vpu = ctx->dev;
++
++	imx8m_soft_reset(vpu, RESET_G1);
++}
++
++/*
++ * Supported codec ops.
++ */
++
++static const struct hantro_codec_ops imx8mq_vpu_codec_ops[] = {
++	[HANTRO_MODE_MPEG2_DEC] = {
++		.run = hantro_g1_mpeg2_dec_run,
++		.reset = imx8m_vpu_g1_reset,
++		.init = hantro_mpeg2_dec_init,
++		.exit = hantro_mpeg2_dec_exit,
++	},
 +};
 +
- const struct hantro_variant rk3399_vpu_variant = {
- 	.enc_offset = 0x0,
- 	.enc_fmts = rk3399_vpu_enc_fmts,
-@@ -177,8 +181,8 @@ const struct hantro_variant rk3399_vpu_variant = {
- 	.irqs = rk3399_irqs,
- 	.num_irqs = ARRAY_SIZE(rk3399_irqs),
- 	.init = rk3399_vpu_hw_init,
--	.clk_names = {"aclk", "hclk"},
--	.num_clocks = 2
-+	.clk_names = rk3399_clk_names,
-+	.num_clocks = ARRAY_SIZE(rk3399_clk_names)
- };
- 
- static const struct hantro_irq rk3328_irqs[] = {
-@@ -194,6 +198,6 @@ const struct hantro_variant rk3328_vpu_variant = {
- 	.irqs = rk3328_irqs,
- 	.num_irqs = ARRAY_SIZE(rk3328_irqs),
- 	.init = rk3399_vpu_hw_init,
--	.clk_names = {"aclk", "hclk"},
--	.num_clocks = 2
-+	.clk_names = rk3399_clk_names,
-+	.num_clocks = ARRAY_SIZE(rk3399_clk_names),
- };
++/*
++ * VPU variants.
++ */
++
++static const struct hantro_irq imx8mq_irqs[] = {
++	{ "g1", imx8m_vpu_g1_irq },
++	{ "g2", NULL /* TODO: imx8m_vpu_g2_irq */ },
++};
++
++static const char * const imx8mq_reg_names[] = { "g1", "g2", "ctrl" };
++
++const struct hantro_variant imx8mq_vpu_variant = {
++	.dec_fmts = imx8m_vpu_dec_fmts,
++	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
++	.codec = HANTRO_MPEG2_DECODER,
++	.codec_ops = imx8mq_vpu_codec_ops,
++	.init = imx8mq_vpu_hw_init,
++	.runtime_resume = imx8mq_runtime_resume,
++	.irqs = imx8mq_irqs,
++	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
++	.num_irqs = 2,
++	.clk_names = { "g1", "g2", "bus" },
++	.num_clocks = 3,
++	.reg_names = imx8mq_reg_names,
++	.num_regs = ARRAY_SIZE(imx8mq_reg_names)
++};
 -- 
 2.20.1
 
