@@ -2,109 +2,76 @@ Return-Path: <SRS0=lOn+=T7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B305C04AB6
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E1E1C04AB6
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:55:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 203BA26561
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:07:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=cogentembedded-com.20150623.gappssmtp.com header.i=@cogentembedded-com.20150623.gappssmtp.com header.b="S04+oLu0"
+	by mail.kernel.org (Postfix) with ESMTP id 43E2F26625
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:55:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726649AbfEaIHF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 May 2019 04:07:05 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:38231 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbfEaIHF (ORCPT
+        id S1727065AbfEaIz0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 May 2019 04:55:26 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:39409 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726835AbfEaIz0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 May 2019 04:07:05 -0400
-Received: by mail-wm1-f67.google.com with SMTP id t5so5296152wmh.3
-        for <linux-media@vger.kernel.org>; Fri, 31 May 2019 01:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=kXajL38jtroQRK1inSfA5o1UhLh96/R1VmmZLy58S0M=;
-        b=S04+oLu0VvmfqkGp7cZ9u1kAzRSHW7yu4ilUH7VbdVVWbLDCJj5wi7PDEbaQPRoRJI
-         /lSaJvGA0vo2VyMKD3ecGUrEhHqajrka8Hv8V3w2ZnNBdkt0d0NQzj8/BrBSU53g+I1X
-         AnMp5YEE5qMJdBb3Zq6Sd6ltqUnKShQ2hrtLzYVqJuPsH17H86bJH+U4ct+b4GtHZzMS
-         shPw2PdXZ3GKThkwhVvxcOoJjJ9aEqhB0pkWZIuwrylxopLnB9aAZhKspyif0uAUYFCS
-         3v4npfRXbfomqE7NJymm2zNlqvhL7eWB6Lded6WQ5YkRR6fq1uyUOW/7DuhST4NFQpAS
-         eouA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kXajL38jtroQRK1inSfA5o1UhLh96/R1VmmZLy58S0M=;
-        b=VNeCBjieRC5hxZ4Tj4MQmD1O8ztNb+mgrv1rZfUNXLtUy9PFaFeMbltXU0IqP3N+Zj
-         eRm9v4Ak12e7cWABFevwXzGJusjuI8Lth+UAbVS2FP+/3YoRg5EDGFisVRYJ3l2kQkpf
-         N6wkaNeM1GfaUvTL422cmNiVxVJl/29zU6zovyI7jlH/AUmvGkH69gI1z1Hw4B/alPvx
-         ldqhgJEjNLQQUVRWqu6VaVjmErPUUjOrkTmNT7Hm32TFZ1z7OvlDbdzme/VN1xfxP203
-         wAOIw/YyL/CekSwWgmSsSy+Hw5PQfjCLFGxNf2cduEuCGxg1WMorMXRUYaw+eP7ieX3Q
-         TfYg==
-X-Gm-Message-State: APjAAAXKnUYeNqtQ1cyrfBYSfrKkmEMotKBKhHEWjYeTQT15TutJ6H2L
-        VtScq0yZy0oYIorWx1y2Z/I+EQ==
-X-Google-Smtp-Source: APXvYqztXy2WnV+tfHqRnZCIpfF56H23uNYivX8K7jrgceeZauQrsQB9mdWVtq8E17XgsWqmbGhQhg==
-X-Received: by 2002:a1c:ca01:: with SMTP id a1mr4724931wmg.30.1559290023359;
-        Fri, 31 May 2019 01:07:03 -0700 (PDT)
-Received: from cobook.home (nikaet.starlink.ru. [94.141.168.29])
-        by smtp.gmail.com with ESMTPSA id g2sm5958147wru.37.2019.05.31.01.07.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 31 May 2019 01:07:02 -0700 (PDT)
-From:   Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Subject: [PATCH] media: avoid skipping MEDIA_PAD_FL_MUST_CONNECT logic
-Date:   Fri, 31 May 2019 11:06:37 +0300
-Message-Id: <20190531080637.4341-1-nikita.yoush@cogentembedded.com>
-X-Mailer: git-send-email 2.11.0
+        Fri, 31 May 2019 04:55:26 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.89)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hWdJt-0003zW-0t; Fri, 31 May 2019 10:55:25 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH v3 02/10] media: hantro: print video device name in addition to device node
+Date:   Fri, 31 May 2019 10:55:15 +0200
+Message-Id: <20190531085523.10892-3-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190531085523.10892-1-p.zabel@pengutronix.de>
+References: <20190531085523.10892-1-p.zabel@pengutronix.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In the current code, __media_pipeline_start() skips check of
-MEDIA_PAD_FL_MUST_CONNECT logic for entity not providing link_validate()
-op.
+It can be helpful to know which video device was registered at which
+device node.
 
-Fix that by checking for existence of link_validate() at different code
-location.
-
-Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
 ---
- drivers/media/mc/mc-entity.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/staging/media/hantro/hantro_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index a998a2e0ea1d..8b4912be30d1 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -449,9 +449,6 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
- 		if (entity->stream_count > 1)
- 			continue;
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index f01d1ed10d4a..e4390aa5c213 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -606,7 +606,8 @@ static int hantro_add_func(struct hantro_dev *vpu, unsigned int funcid)
+ 		goto err_unreg_dev;
+ 	}
  
--		if (!entity->ops || !entity->ops->link_validate)
--			continue;
--
- 		bitmap_zero(active, entity->num_pads);
- 		bitmap_fill(has_no_links, entity->num_pads);
+-	v4l2_info(&vpu->v4l2_dev, "registered as /dev/video%d\n", vfd->num);
++	v4l2_info(&vpu->v4l2_dev, "registered %s as /dev/video%d\n", vfd->name,
++		  vfd->num);
  
-@@ -479,6 +476,9 @@ __must_check int __media_pipeline_start(struct media_entity *entity,
- 			    !(link->flags & MEDIA_LNK_FL_ENABLED))
- 				continue;
+ 	return 0;
  
-+			if (!entity->ops || !entity->ops->link_validate)
-+				continue;
-+
- 			ret = entity->ops->link_validate(link);
- 			if (ret < 0 && ret != -ENOIOCTLCMD) {
- 				dev_dbg(entity->graph_obj.mdev->dev,
 -- 
-2.11.0
+2.20.1
 
