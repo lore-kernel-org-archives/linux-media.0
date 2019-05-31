@@ -2,84 +2,136 @@ Return-Path: <SRS0=lOn+=T7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7424C04AB6
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 16:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C82BC04AB6
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 16:17:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9EBF424D37
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 16:07:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m9Es9Q9n"
+	by mail.kernel.org (Postfix) with ESMTP id DCCBC26BD7
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 16:17:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726576AbfEaQHb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 May 2019 12:07:31 -0400
-Received: from mail-ot1-f52.google.com ([209.85.210.52]:43820 "EHLO
-        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726550AbfEaQHb (ORCPT
+        id S1726649AbfEaQRE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 May 2019 12:17:04 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:50500 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726518AbfEaQRE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 May 2019 12:07:31 -0400
-Received: by mail-ot1-f52.google.com with SMTP id i8so9666337oth.10
-        for <linux-media@vger.kernel.org>; Fri, 31 May 2019 09:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X+6Hn0nFVDDkuAPujDZhWPety1dkf7dDFIkK6FkxeNc=;
-        b=m9Es9Q9noI05Wm6DeIp22EnPOTplDd9hrqBJ2j+kYkgwK5RfKoR8PfkoRhViY8w3LU
-         ZanmaW8XePI2JikQ5+dWTm4g02cVhpX4yCWnI6K4P/jyKdjMrXkpUHHTI3QTZ05fvwk7
-         /QgcJw/V/7bo3Q3Rr+THIBIlEpmTBJUr2D98GsN1wEHpu0gzyHS3+8M+UiIalz5vPx9A
-         CzOZ5czLM652rwpPEEutsWuMPk73NxNZDD0+B//lOSwgKx7zmL+nZ7islexlWBkYNDT8
-         lD4eUYfI0KPgEe94PAv3wz/+IOL9wXYTBpl2SgsfsS0/U3SG73DkkOMud54wBzERtcsJ
-         /euA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X+6Hn0nFVDDkuAPujDZhWPety1dkf7dDFIkK6FkxeNc=;
-        b=mWjkAda6J5r9bQMnYstvMuyrU2piGAwJiYuXJWQfVkyCQATpY2LRDufMS6VTZGFfNQ
-         2JbCivqq0stnT2g04ribdKJdzVXx3KMSJ+bQxJ/+Qu/Mqm/Xdb5NZGlgsKUdPY7Y/K8B
-         6RY6em6CNT0XTWd54V8GXQ3U6fGYDQ3y7WjIjhDXRZoWytMoCgbEVxmKIlAdXdrxhJmB
-         M8LHO6mcY7ZNC4+dvrHVemA2JVZc+/Fdm3ggpGIiBOOIG0jZNnYgYAw5bgsOhhi4Vj6G
-         Qc4FYWOiMso6J1AHVP8186zWNkxJXfi6CMzPH+knqbGlbH7QwfayEhhtWRqRESoBEuLy
-         UuyQ==
-X-Gm-Message-State: APjAAAXkAZNlgplNgXGioqf4JYuJjlY4naJBTz9ASFxdpExsAggvCJD1
-        MlCWdhZKftSlKyV26G8FkayufUb3pSWDDbavo7c=
-X-Google-Smtp-Source: APXvYqxajrV0W3igqalAYSSBIKYfPqkq32wSYVp1+xY0wEK/Sc5kQcU8TMK0UGSSUz1Klx+kpwVZrs0cgN4k5KQtbmE=
-X-Received: by 2002:a9d:6e0f:: with SMTP id e15mr2592138otr.0.1559318850195;
- Fri, 31 May 2019 09:07:30 -0700 (PDT)
+        Fri, 31 May 2019 12:17:04 -0400
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id ABA8A634C7B;
+        Fri, 31 May 2019 19:16:58 +0300 (EEST)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.89)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1hWkDC-0000Lt-QG; Fri, 31 May 2019 19:16:58 +0300
+Date:   Fri, 31 May 2019 19:16:58 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     dongchun.zhu@mediatek.com
+Cc:     mchehab@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        matthias.bgg@gmail.com, bingbu.cao@intel.com,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        louis.kuo@mediatek.com, menghui.lin@mediatek.com,
+        shengnan.wang@mediatek.com
+Subject: Re: [PATCH 3/3] media: dt-bindings: media: i2c: Add bindings for
+ ov02a10
+Message-ID: <20190531161658.2y2amfngbhfbllj7@valkosipuli.retiisi.org.uk>
+References: <20190523102204.24112-1-dongchun.zhu@mediatek.com>
+ <20190523102204.24112-4-dongchun.zhu@mediatek.com>
 MIME-Version: 1.0
-References: <20190418164414.29373-1-p.zabel@pengutronix.de>
- <20190529154431.11177-1-TheSven73@gmail.com> <CAOMZO5BeEMyEPUbPB8vAbJb1OoUuPxGLh=EBGif12uAMG4=qoQ@mail.gmail.com>
- <CAGngYiWdyzhmsRuAsH_35qdt1SLguh2sUxh=cAK58RWnhm2Y7A@mail.gmail.com>
- <fa48a38ee8e370c195a872ba302f70329d52dca5.camel@ndufresne.ca> <e16e87bfdeee242a1dfb8c62b6f1528b346c3a99.camel@ndufresne.ca>
-In-Reply-To: <e16e87bfdeee242a1dfb8c62b6f1528b346c3a99.camel@ndufresne.ca>
-From:   Sven Van Asbroeck <thesven73@gmail.com>
-Date:   Fri, 31 May 2019 12:07:19 -0400
-Message-ID: <CAGngYiX3Hv3mkd-GB=LuvmwaAuVMsGg2vpjx_F2-J3F6hOBVZw@mail.gmail.com>
-Subject: Re: [v8] media: imx: add mem2mem device
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-media <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Tim Harvey <tharvey@gateworks.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190523102204.24112-4-dongchun.zhu@mediatek.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Nicholas, thank you so much for investigating.
+Hi Dongchun,
 
-On Fri, May 31, 2019 at 11:34 AM Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
->
-> Now, if that pipeline was live, this would be a problem.
+Thanks for the patch.
 
-This is where my gstreamer knowledge gets really hazy.
-What does it mean for a pipeline to be 'live' ?
-Would this be a problem when playing a 1080p30 h264
-video from a file?
+On Thu, May 23, 2019 at 06:22:04PM +0800, dongchun.zhu@mediatek.com wrote:
+> From: Dongchun Zhu <dongchun.zhu@mediatek.com>
+> 
+> Add device tree binding documentation for the OV02A10 CMOS image sensor.
+> 
+> Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
+> ---
+>  .../devicetree/bindings/media/i2c/ov02a10.txt      | 43 ++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ov02a10.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ov02a10.txt b/Documentation/devicetree/bindings/media/i2c/ov02a10.txt
+> new file mode 100644
+> index 0000000..fdc2904
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ov02a10.txt
+> @@ -0,0 +1,43 @@
+> +* Omnivision OV02A10 MIPI CSI-2 sensor
+> +
+> +Required Properties:
+> +- compatible: shall be "ovti,ov02a10"
+> +- clocks: reference to the xvclk input clock
+> +- clock-names: shall be "xvclk"
+> +- avdd-supply: Analog voltage supply, 2.8 volts
+> +- dovdd-supply: Digital I/O voltage supply, 1.8 volts
+> +- dvdd-supply: Digital core voltage supply, 1.8 volts
+> +- reset-gpios: Low active reset gpio
+> +
+> +The device node shall contain one 'port' child node with an
+> +'endpoint' subnode for its digital output video port,
+> +in accordance with the video interface bindings defined in
+> +Documentation/devicetree/bindings/media/video-interfaces.txt.
+> +The endpoint optional property 'data-lanes' shall be "<1>".
+
+If the sensor only supports a single lane configuration (one lane), you can
+omit that property altogether. Is that the only possible configuration for
+the sensor?
+
+Please also wrap the text at 80 characters, not 65 or so.
+
+> +
+> +Example:
+> +&i2c4 {
+> +	sensor_sub: sensor_sub {
+
+camera-sensor@3d {
+
+> +		compatible = "ovti,ov02a10";
+> +		reg = <0x3d>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&camera_pins_cam1_mclk_on>;
+> +
+> +		clocks = <&topckgen CLK_TOP_MUX_CAMTG2>,
+> +			<&topckgen CLK_TOP_UNIVP_192M_D8>;
+> +		clock-names = "xvclk", "freq_mux";
+> +
+> +		avdd-supply = <&mt6358_vcama1_reg>;
+> +		dvdd-supply = <&mt6358_vcn18_reg>;
+> +		dovdd-supply = <&mt6358_vcamio_reg>;
+> +		pwdn-gpios = <&pio 107 1>;
+> +		reset-gpios = <&pio 109 1>;
+> +
+> +		port@0 {
+> +		   ov02a10_core: endpoint {
+> +		       remote-endpoint = <&ov02a10_0>;
+> +			   data-lanes = <1>;
+> +		   };
+
+Tabs for indentation, please.
+
+> +		};
+> +	};
+> +};
+
+-- 
+Kind regards,
+
+Sakari Ailus
