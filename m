@@ -6,25 +6,25 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0387C46460
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 22:16:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58945C28CC2
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 22:16:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A803226FAB
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 22:16:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AAEF26FAB
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 22:16:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbfEaWQF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726800AbfEaWQF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 31 May 2019 18:16:05 -0400
 Received: from mga02.intel.com ([134.134.136.20]:36052 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726798AbfEaWQE (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 May 2019 18:16:04 -0400
+        id S1725913AbfEaWQD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 31 May 2019 18:16:03 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 May 2019 15:16:04 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 May 2019 15:16:03 -0700
 X-ExtLoop1: 1
 Received: from maru.jf.intel.com ([10.54.51.75])
-  by orsmga001.jf.intel.com with ESMTP; 31 May 2019 15:16:04 -0700
+  by orsmga001.jf.intel.com with ESMTP; 31 May 2019 15:16:03 -0700
 From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 To:     Eddie James <eajames@linux.ibm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -33,9 +33,9 @@ To:     Eddie James <eajames@linux.ibm.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>
 Cc:     linux-aspeed@lists.ozlabs.org, linux-media@vger.kernel.org,
         Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v3 09/10] media: aspeed: use different delays for triggering VE H/W reset
-Date:   Fri, 31 May 2019 15:15:47 -0700
-Message-Id: <20190531221548.14757-10-jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH v3 08/10] media: aspeed: remove source buffer allocation before mode detection
+Date:   Fri, 31 May 2019 15:15:46 -0700
+Message-Id: <20190531221548.14757-9-jae.hyun.yoo@linux.intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190531221548.14757-1-jae.hyun.yoo@linux.intel.com>
 References: <20190531221548.14757-1-jae.hyun.yoo@linux.intel.com>
@@ -46,64 +46,79 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In case of watchdog timeout detected while doing mode detection,
-it's better triggering video engine hardware reset immediately so
-this commit fixes code for the case. Other than the case, it will
-trigger video engine hardware reset after RESOLUTION_CHANGE_DELAY.
+Mode detection doesn't require source buffer allocation so this
+commit removes that.
 
 Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 Reviewed-by: Eddie James <eajames@linux.ibm.com>
 ---
 v2 -> v3:
- None.
+ Corrected re-allocation logic of source buffers.
 
 v1 -> v2:
  New.
 
- drivers/media/platform/aspeed-video.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/media/platform/aspeed-video.c | 37 ++++-----------------------
+ 1 file changed, 5 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index d6708ddb0391..ba093096a5a7 100644
+index c0b889141b8f..d6708ddb0391 100644
 --- a/drivers/media/platform/aspeed-video.c
 +++ b/drivers/media/platform/aspeed-video.c
-@@ -522,7 +522,7 @@ static void aspeed_video_bufs_done(struct aspeed_video *video,
- 	spin_unlock_irqrestore(&video->lock, flags);
- }
+@@ -731,27 +731,6 @@ static void aspeed_video_get_resolution(struct aspeed_video *video)
+ 	det->height = MIN_HEIGHT;
+ 	video->v4l2_input_status = V4L2_IN_ST_NO_SIGNAL;
  
--static void aspeed_video_irq_res_change(struct aspeed_video *video)
-+static void aspeed_video_irq_res_change(struct aspeed_video *video, ulong delay)
- {
- 	dev_dbg(video->dev, "Resolution changed; resetting\n");
+-	/*
+-	 * Since we need max buffer size for detection, free the second source
+-	 * buffer first.
+-	 */
+-	if (video->srcs[1].size)
+-		aspeed_video_free_buf(video, &video->srcs[1]);
+-
+-	if (video->srcs[0].size < VE_MAX_SRC_BUFFER_SIZE) {
+-		if (video->srcs[0].size)
+-			aspeed_video_free_buf(video, &video->srcs[0]);
+-
+-		if (!aspeed_video_alloc_buf(video, &video->srcs[0],
+-					    VE_MAX_SRC_BUFFER_SIZE)) {
+-			dev_err(video->dev,
+-				"Failed to allocate source buffers\n");
+-			return;
+-		}
+-	}
+-
+-	aspeed_video_write(video, VE_SRC0_ADDR, video->srcs[0].dma);
+-
+ 	do {
+ 		if (tries) {
+ 			set_current_state(TASK_INTERRUPTIBLE);
+@@ -871,20 +850,14 @@ static void aspeed_video_set_resolution(struct aspeed_video *video)
  
-@@ -532,7 +532,7 @@ static void aspeed_video_irq_res_change(struct aspeed_video *video)
- 	aspeed_video_off(video);
- 	aspeed_video_bufs_done(video, VB2_BUF_STATE_ERROR);
+ 	size *= 4;
  
--	schedule_delayed_work(&video->res_work, RESOLUTION_CHANGE_DELAY);
-+	schedule_delayed_work(&video->res_work, delay);
- }
+-	if (size == video->srcs[0].size / 2) {
+-		aspeed_video_write(video, VE_SRC1_ADDR,
+-				   video->srcs[0].dma + size);
+-	} else if (size == video->srcs[0].size) {
+-		if (!aspeed_video_alloc_buf(video, &video->srcs[1], size))
+-			goto err_mem;
+-
+-		aspeed_video_write(video, VE_SRC1_ADDR, video->srcs[1].dma);
+-	} else {
+-		aspeed_video_free_buf(video, &video->srcs[0]);
++	if (size != video->srcs[0].size) {
++		if (video->srcs[0].size)
++			aspeed_video_free_buf(video, &video->srcs[0]);
++		if (video->srcs[1].size)
++			aspeed_video_free_buf(video, &video->srcs[1]);
  
- static irqreturn_t aspeed_video_irq(int irq, void *arg)
-@@ -545,7 +545,7 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
- 	 * re-initialize
- 	 */
- 	if (sts & VE_INTERRUPT_MODE_DETECT_WD) {
--		aspeed_video_irq_res_change(video);
-+		aspeed_video_irq_res_change(video, 0);
- 		return IRQ_HANDLED;
- 	}
+ 		if (!aspeed_video_alloc_buf(video, &video->srcs[0], size))
+ 			goto err_mem;
+-
+ 		if (!aspeed_video_alloc_buf(video, &video->srcs[1], size))
+ 			goto err_mem;
  
-@@ -563,7 +563,8 @@ static irqreturn_t aspeed_video_irq(int irq, void *arg)
- 			 * Signal acquired while NOT doing resolution
- 			 * detection; reset the engine and re-initialize
- 			 */
--			aspeed_video_irq_res_change(video);
-+			aspeed_video_irq_res_change(video,
-+						    RESOLUTION_CHANGE_DELAY);
- 			return IRQ_HANDLED;
- 		}
- 	}
 -- 
 2.21.0
 
