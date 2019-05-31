@@ -2,29 +2,29 @@ Return-Path: <SRS0=lOn+=T7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BF7CC28CC3
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 22:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C09D9C28CC2
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 22:16:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4D6FA26FAA
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 22:16:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9091A26FAA
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 22:16:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbfEaWQB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 May 2019 18:16:01 -0400
-Received: from mga02.intel.com ([134.134.136.20]:36039 "EHLO mga02.intel.com"
+        id S1726776AbfEaWQD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 May 2019 18:16:03 -0400
+Received: from mga02.intel.com ([134.134.136.20]:36048 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726450AbfEaWQB (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 May 2019 18:16:01 -0400
+        id S1726450AbfEaWQC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 31 May 2019 18:16:02 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 May 2019 15:15:57 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 May 2019 15:15:56 -0700
 X-ExtLoop1: 1
 Received: from maru.jf.intel.com ([10.54.51.75])
-  by orsmga001.jf.intel.com with ESMTP; 31 May 2019 15:15:57 -0700
+  by orsmga001.jf.intel.com with ESMTP; 31 May 2019 15:15:55 -0700
 From:   Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 To:     Eddie James <eajames@linux.ibm.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -33,12 +33,10 @@ To:     Eddie James <eajames@linux.ibm.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>
 Cc:     linux-aspeed@lists.ozlabs.org, linux-media@vger.kernel.org,
         Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Subject: [PATCH v3 02/10] media: aspeed: refine clock control logic
-Date:   Fri, 31 May 2019 15:15:40 -0700
-Message-Id: <20190531221548.14757-3-jae.hyun.yoo@linux.intel.com>
+Subject: [PATCH v3 00/10] Improve stability and add bug fixes of Aspeed video engine driver
+Date:   Fri, 31 May 2019 15:15:38 -0700
+Message-Id: <20190531221548.14757-1-jae.hyun.yoo@linux.intel.com>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190531221548.14757-1-jae.hyun.yoo@linux.intel.com>
-References: <20190531221548.14757-1-jae.hyun.yoo@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -46,114 +44,33 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently, this driver calls clk_prepare and clk_unprepare from
-interrupt context too but these should be called from sleepable
-context only. To fix this issue, this commit splits out
-clk_enable/disable and clk_prepare/unprepare, and it places
-clk_prepare/unprepare calls into the module probe/remove function.
+This patch series improves stability of Aspeed video engine driver by fixing
+clock control and irq handling logic in the driver. Also, it adds a couple of
+bug fixes and a workaroud for a silicon bug.
 
-Signed-off-by: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
----
-v2 -> v3:
- None.
+Changes since v2:
+- Corrected re-allocation logic of source buffer.
+- Removed an incorrect patch from this series (10/11 in v2).
+- Added more details into the silicon bug workaround fix comment.
 
-v1 -> v2:
- None.
+Changes since v1:
+- Removed spinlock handling code from 0001 patch.
+- Added 4 more patches.
+Jae Hyun Yoo (10):
+  media: aspeed: fix a kernel warning on clk control
+  media: aspeed: refine clock control logic
+  media: aspeed: change irq to threaded irq
+  media: aspeed: remove IRQF_SHARED flag
+  media: aspeed: reduce noisy log printing outs
+  media: aspeed: remove checking of VE_INTERRUPT_CAPTURE_COMPLETE
+  media: aspeed: refine interrupt handling logic
+  media: aspeed: remove source buffer allocation before mode detection
+  media: aspeed: use different delays for triggering VE H/W reset
+  media: aspeed: add a workaround to fix a silicon bug
 
- drivers/media/platform/aspeed-video.c | 38 ++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 9 deletions(-)
+ drivers/media/platform/aspeed-video.c | 156 ++++++++++++++------------
+ 1 file changed, 86 insertions(+), 70 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index 562d7c0adc78..7982ce634936 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -491,8 +491,8 @@ static void aspeed_video_off(struct aspeed_video *video)
- 	aspeed_video_write(video, VE_INTERRUPT_CTRL, 0);
- 
- 	/* Turn off the relevant clocks */
--	clk_disable_unprepare(video->vclk);
--	clk_disable_unprepare(video->eclk);
-+	clk_disable(video->vclk);
-+	clk_disable(video->eclk);
- 
- 	clear_bit(VIDEO_CLOCKS_ON, &video->flags);
- }
-@@ -503,8 +503,8 @@ static void aspeed_video_on(struct aspeed_video *video)
- 		return;
- 
- 	/* Turn on the relevant clocks */
--	clk_prepare_enable(video->eclk);
--	clk_prepare_enable(video->vclk);
-+	clk_enable(video->eclk);
-+	clk_enable(video->vclk);
- 
- 	set_bit(VIDEO_CLOCKS_ON, &video->flags);
- }
-@@ -1613,31 +1613,46 @@ static int aspeed_video_init(struct aspeed_video *video)
- 		return PTR_ERR(video->eclk);
- 	}
- 
-+	rc = clk_prepare(video->eclk);
-+	if (rc)
-+		return rc;
-+
- 	video->vclk = devm_clk_get(dev, "vclk");
- 	if (IS_ERR(video->vclk)) {
- 		dev_err(dev, "Unable to get VCLK\n");
--		return PTR_ERR(video->vclk);
-+		rc = PTR_ERR(video->vclk);
-+		goto err_unprepare_eclk;
- 	}
- 
-+	rc = clk_prepare(video->vclk);
-+	if (rc)
-+		goto err_unprepare_eclk;
-+
- 	of_reserved_mem_device_init(dev);
- 
- 	rc = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
- 	if (rc) {
- 		dev_err(dev, "Failed to set DMA mask\n");
--		of_reserved_mem_device_release(dev);
--		return rc;
-+		goto err_release_reserved_mem;
- 	}
- 
- 	if (!aspeed_video_alloc_buf(video, &video->jpeg,
- 				    VE_JPEG_HEADER_SIZE)) {
- 		dev_err(dev, "Failed to allocate DMA for JPEG header\n");
--		of_reserved_mem_device_release(dev);
--		return rc;
-+		goto err_release_reserved_mem;
- 	}
- 
- 	aspeed_video_init_jpeg_table(video->jpeg.virt, video->yuv420);
- 
- 	return 0;
-+
-+err_release_reserved_mem:
-+	of_reserved_mem_device_release(dev);
-+	clk_unprepare(video->vclk);
-+err_unprepare_eclk:
-+	clk_unprepare(video->eclk);
-+
-+	return rc;
- }
- 
- static int aspeed_video_probe(struct platform_device *pdev)
-@@ -1681,6 +1696,11 @@ static int aspeed_video_remove(struct platform_device *pdev)
- 	struct v4l2_device *v4l2_dev = dev_get_drvdata(dev);
- 	struct aspeed_video *video = to_aspeed_video(v4l2_dev);
- 
-+	aspeed_video_off(video);
-+
-+	clk_unprepare(video->vclk);
-+	clk_unprepare(video->eclk);
-+
- 	video_unregister_device(&video->vdev);
- 
- 	vb2_queue_release(&video->queue);
 -- 
 2.21.0
 
