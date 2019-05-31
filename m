@@ -2,333 +2,128 @@ Return-Path: <SRS0=lOn+=T7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B38EDC04AB6
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 17:33:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47418C04AB6
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 17:34:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 75B1026D39
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 17:33:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10E9726D3A
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 17:34:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=nextdimension.cc header.i=@nextdimension.cc header.b="W1KmSuam"
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="jKjgfLFq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbfEaRdK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 May 2019 13:33:10 -0400
-Received: from bonobo.maple.relay.mailchannels.net ([23.83.214.22]:24182 "EHLO
-        bonobo.maple.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726725AbfEaRdI (ORCPT
+        id S1726439AbfEaRed (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 May 2019 13:34:33 -0400
+Received: from mail-qt1-f181.google.com ([209.85.160.181]:41025 "EHLO
+        mail-qt1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbfEaRed (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 May 2019 13:33:08 -0400
-X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 897D820D95;
-        Fri, 31 May 2019 17:33:06 +0000 (UTC)
-Received: from pdx1-sub0-mail-a61.g.dreamhost.com (100-96-11-129.trex.outbound.svc.cluster.local [100.96.11.129])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 1F70621AAC;
-        Fri, 31 May 2019 17:32:51 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|brad@nextdimension.ws
-Received: from pdx1-sub0-mail-a61.g.dreamhost.com ([TEMPUNAVAIL].
- [64.90.62.162])
-        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
-        by 0.0.0.0:2500 (trex/5.17.2);
-        Fri, 31 May 2019 17:33:06 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|brad@nextdimension.ws
-X-MailChannels-Auth-Id: dreamhost
-X-Snatch-Illustrious: 781097b24c75d551_1559323986394_1570353169
-X-MC-Loop-Signature: 1559323986394:1378519039
-X-MC-Ingress-Time: 1559323986393
-Received: from pdx1-sub0-mail-a61.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTP id BE41C80170;
-        Fri, 31 May 2019 10:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=nextdimension.cc; h=from
-        :to:cc:subject:date:message-id:in-reply-to:references; s=
-        nextdimension.cc; bh=7ptGAFhIFCD03koaxstgOYgW7Pc=; b=W1KmSuamoKm
-        IczfDUaBj8U2/UepX3gVGEY6t9jbd32hJobeeG06+RAdr5LFKkDSF99KlWIGFjYs
-        Zb2Dq7K5FiRLZMcRevvN8cI4o/1MGMvE3oH2eOnk3aMA62k/sBJWB3HV+pVLDJKn
-        hmkU+2Ph/j6mJ+gvumkQ6Nk3YL84PUCI=
-Received: from localhost.localdomain (67-198-57-188.static.grandenetworks.net [67.198.57.188])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: brad@nextdimension.ws)
-        by pdx1-sub0-mail-a61.g.dreamhost.com (Postfix) with ESMTPSA id 02B208018A;
-        Fri, 31 May 2019 10:32:44 -0700 (PDT)
-X-DH-BACKEND: pdx1-sub0-mail-a61
-From:   Brad Love <brad@nextdimension.cc>
-To:     linux-media@vger.kernel.org, mchehab@kernel.org, sean@mess.org
-Cc:     Brad Love <brad@nextdimension.cc>
-Subject: [PATCH v5 2/4] pvrusb2: Add multiple dvb frontend support
-Date:   Fri, 31 May 2019 12:32:22 -0500
-Message-Id: <1559323944-15639-3-git-send-email-brad@nextdimension.cc>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1559323944-15639-1-git-send-email-brad@nextdimension.cc>
-References: <1559323944-15639-1-git-send-email-brad@nextdimension.cc>
-X-VR-OUT-STATUS: OK
-X-VR-OUT-SCORE: 30
-X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduuddrudefuddguddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucggtfgfnhhsuhgsshgtrhhisggvpdfftffgtefojffquffvnecuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdeftddmnecujfgurhephffvufffkffojghfsedttdertdertddtnecuhfhrohhmpeeurhgrugcunfhovhgvuceosghrrggusehnvgigthguihhmvghnshhiohhnrdgttgeqnecukfhppeeijedrudelkedrheejrddukeeknecurfgrrhgrmhepmhhouggvpehsmhhtphdphhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepieejrdduleekrdehjedrudekkedprhgvthhurhhnqdhprghthhepuehrrgguucfnohhvvgcuoegsrhgrugesnhgvgihtughimhgvnhhsihhonhdrtggtqedpmhgrihhlfhhrohhmpegsrhgrugesnhgvgihtughimhgvnhhsihhonhdrtggtpdhnrhgtphhtthhopegsrhgrugesnhgvgihtughimhgvnhhsihhonhdrtggtnecuvehluhhsthgvrhfuihiivgepud
+        Fri, 31 May 2019 13:34:33 -0400
+Received: by mail-qt1-f181.google.com with SMTP id s57so1820754qte.8
+        for <linux-media@vger.kernel.org>; Fri, 31 May 2019 10:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=6lx68IjyoXNHnEwVqZqtfrVRaTubo98gbYHgesOeQXA=;
+        b=jKjgfLFqIX/vlkEA4U6elyOu0Nry4OhSHwaBBGakJ4SldVI2l6CKfx/itdGivTYnDx
+         dHwI/9Yfrq/yE7NF9kbTnKNv6YNhlQqUbjMsoAKOVZR8hFdgNdBxuFXxYCDqEIN5D4C4
+         omAEtjPEztnXQ+5ATdiiNg3ubFcectMntiMQcmRn9cjfJuQZS9bdJ8sOHT/86GBXqyB8
+         m8OOkw5tYe92Xub9QWo04hUWSwXKl74GjH5g7UxbXg+tPTyYK7MzPgfpxOyw+bo57/li
+         y47s5SEbJTMiAK1ecLLJvVTSOQ8ILOy+KBerJkdPzSp/7zvdKCnitUuyGL6MlP8Kpbd/
+         qN8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=6lx68IjyoXNHnEwVqZqtfrVRaTubo98gbYHgesOeQXA=;
+        b=hmxbzDXQBTnuH8nfqT2DspFaU6P8C37F2VqKNv9qOSL5SYj9+TblJCdqwXVAOIkr+g
+         BEOvn2XfVdYF1K6NAe4H5EBwkqmsih+3YM3Pntr6nHzmUE3hlrmws3wc8FOHwp6KBp83
+         YWlwr43xL+APYjLlJW1Em4jzSS0htyjcmJsOBf3YhRZN5afkcsfdGGfSKKobc97dOLGi
+         2F6APZHNFiTaJJRydujf4sX4qaeCgo+Fft1ezY1ThqIQ7JZKhbA9mv2/8eT0IHz2/xgE
+         /t2KD9y4EkzPMTvnSEp6t6Ey4DIdfu/xsRAdq9otkbpln2cu93OfXuSDWjCKNyAdDXtX
+         24jQ==
+X-Gm-Message-State: APjAAAUjDNrzzQAQP5cLKsWhn1VVam3fmzxaiZrND2IXH2GI8olyoRcE
+        4QYdzbNXQTB+JACC5mMwHYKULl/xxA4=
+X-Google-Smtp-Source: APXvYqysC8YYIH4YglnIyQgGGSMDyJ/WlDs78ugPwXWR003s9vwWOkUrkAu89nFNTBjlbIrdswSOUw==
+X-Received: by 2002:aed:2315:: with SMTP id h21mr10595345qtc.303.1559324072113;
+        Fri, 31 May 2019 10:34:32 -0700 (PDT)
+Received: from tpx230-nicolas (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
+        by smtp.gmail.com with ESMTPSA id t17sm4169382qte.66.2019.05.31.10.34.30
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 31 May 2019 10:34:30 -0700 (PDT)
+Message-ID: <c119f93921ea61fde490d33165495fa39620f940.camel@ndufresne.ca>
+Subject: Re: [v8] media: imx: add mem2mem device
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Sven Van Asbroeck <thesven73@gmail.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-media <linux-media@vger.kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Tim Harvey <tharvey@gateworks.com>
+Date:   Fri, 31 May 2019 13:34:28 -0400
+In-Reply-To: <CAGngYiX3Hv3mkd-GB=LuvmwaAuVMsGg2vpjx_F2-J3F6hOBVZw@mail.gmail.com>
+References: <20190418164414.29373-1-p.zabel@pengutronix.de>
+         <20190529154431.11177-1-TheSven73@gmail.com>
+         <CAOMZO5BeEMyEPUbPB8vAbJb1OoUuPxGLh=EBGif12uAMG4=qoQ@mail.gmail.com>
+         <CAGngYiWdyzhmsRuAsH_35qdt1SLguh2sUxh=cAK58RWnhm2Y7A@mail.gmail.com>
+         <fa48a38ee8e370c195a872ba302f70329d52dca5.camel@ndufresne.ca>
+         <e16e87bfdeee242a1dfb8c62b6f1528b346c3a99.camel@ndufresne.ca>
+         <CAGngYiX3Hv3mkd-GB=LuvmwaAuVMsGg2vpjx_F2-J3F6hOBVZw@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
+        boundary="=-g4ooUj0IBdVwWawtumXy"
+User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
+MIME-Version: 1.0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Multiple frontends are required by Hauppauge HVR-1975, which is added
-in a later commit.
 
-All changes are equivalent and backwards compatible.
-All current devices have been changed to use fe[0]
-Code has been added to dvb init to support cleanup after failure.
+--=-g4ooUj0IBdVwWawtumXy
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Brad Love <brad@nextdimension.cc>
----
-Since v4:
-- checkpatch strict fixes
-- commit message expansion
+Le vendredi 31 mai 2019 =C3=A0 12:07 -0400, Sven Van Asbroeck a =C3=A9crit =
+:
+> Hello Nicholas, thank you so much for investigating.
+>=20
+> On Fri, May 31, 2019 at 11:34 AM Nicolas Dufresne <nicolas@ndufresne.ca> =
+wrote:
+> > Now, if that pipeline was live, this would be a problem.
+>=20
+> This is where my gstreamer knowledge gets really hazy.
+> What does it mean for a pipeline to be 'live' ?
+> Would this be a problem when playing a 1080p30 h264
+> video from a file?
 
- drivers/media/usb/pvrusb2/pvrusb2-devattr.c | 46 ++++++++---------
- drivers/media/usb/pvrusb2/pvrusb2-dvb.c     | 77 ++++++++++++++++++++++-------
- drivers/media/usb/pvrusb2/pvrusb2-dvb.h     |  2 +-
- 3 files changed, 82 insertions(+), 43 deletions(-)
+Playback from file is not live. That basically means that the input of
+your pipeline is not paced. You can read it as fast as you can, and you
+don't have a limited amount of time to deal with it. An example live
+pipeline would be:
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-devattr.c b/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
-index 06de1c8..a4a27e0 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-devattr.c
-@@ -188,10 +188,10 @@ static struct lgdt330x_config pvr2_lgdt3303_config = {
- 
- static int pvr2_lgdt3303_attach(struct pvr2_dvb_adapter *adap)
- {
--	adap->fe = dvb_attach(lgdt330x_attach, &pvr2_lgdt3303_config,
--			      0x0e,
--			      &adap->channel.hdw->i2c_adap);
--	if (adap->fe)
-+	adap->fe[0] = dvb_attach(lgdt330x_attach, &pvr2_lgdt3303_config,
-+				 0x0e,
-+				 &adap->channel.hdw->i2c_adap);
-+	if (adap->fe[0])
- 		return 0;
- 
- 	return -EIO;
-@@ -199,7 +199,7 @@ static int pvr2_lgdt3303_attach(struct pvr2_dvb_adapter *adap)
- 
- static int pvr2_lgh06xf_attach(struct pvr2_dvb_adapter *adap)
- {
--	dvb_attach(simple_tuner_attach, adap->fe,
-+	dvb_attach(simple_tuner_attach, adap->fe[0],
- 		   &adap->channel.hdw->i2c_adap, 0x61,
- 		   TUNER_LG_TDVS_H06XF);
- 
-@@ -248,10 +248,10 @@ static struct lgdt330x_config pvr2_lgdt3302_config = {
- 
- static int pvr2_lgdt3302_attach(struct pvr2_dvb_adapter *adap)
- {
--	adap->fe = dvb_attach(lgdt330x_attach, &pvr2_lgdt3302_config,
--			      0x0e,
--			      &adap->channel.hdw->i2c_adap);
--	if (adap->fe)
-+	adap->fe[0] = dvb_attach(lgdt330x_attach, &pvr2_lgdt3302_config,
-+				 0x0e,
-+				 &adap->channel.hdw->i2c_adap);
-+	if (adap->fe[0])
- 		return 0;
- 
- 	return -EIO;
-@@ -259,7 +259,7 @@ static int pvr2_lgdt3302_attach(struct pvr2_dvb_adapter *adap)
- 
- static int pvr2_fcv1236d_attach(struct pvr2_dvb_adapter *adap)
- {
--	dvb_attach(simple_tuner_attach, adap->fe,
-+	dvb_attach(simple_tuner_attach, adap->fe[0],
- 		   &adap->channel.hdw->i2c_adap, 0x61,
- 		   TUNER_PHILIPS_FCV1236D);
- 
-@@ -335,9 +335,9 @@ static struct tda18271_config hauppauge_tda18271_dvb_config = {
- 
- static int pvr2_tda10048_attach(struct pvr2_dvb_adapter *adap)
- {
--	adap->fe = dvb_attach(tda10048_attach, &hauppauge_tda10048_config,
--			      &adap->channel.hdw->i2c_adap);
--	if (adap->fe)
-+	adap->fe[0] = dvb_attach(tda10048_attach, &hauppauge_tda10048_config,
-+				 &adap->channel.hdw->i2c_adap);
-+	if (adap->fe[0])
- 		return 0;
- 
- 	return -EIO;
-@@ -345,10 +345,10 @@ static int pvr2_tda10048_attach(struct pvr2_dvb_adapter *adap)
- 
- static int pvr2_73xxx_tda18271_8295_attach(struct pvr2_dvb_adapter *adap)
- {
--	dvb_attach(tda829x_attach, adap->fe,
-+	dvb_attach(tda829x_attach, adap->fe[0],
- 		   &adap->channel.hdw->i2c_adap, 0x42,
- 		   &tda829x_no_probe);
--	dvb_attach(tda18271_attach, adap->fe, 0x60,
-+	dvb_attach(tda18271_attach, adap->fe[0], 0x60,
- 		   &adap->channel.hdw->i2c_adap,
- 		   &hauppauge_tda18271_dvb_config);
- 
-@@ -433,9 +433,9 @@ static struct tda18271_config hauppauge_tda18271_config = {
- 
- static int pvr2_s5h1409_attach(struct pvr2_dvb_adapter *adap)
- {
--	adap->fe = dvb_attach(s5h1409_attach, &pvr2_s5h1409_config,
--			      &adap->channel.hdw->i2c_adap);
--	if (adap->fe)
-+	adap->fe[0] = dvb_attach(s5h1409_attach, &pvr2_s5h1409_config,
-+				 &adap->channel.hdw->i2c_adap);
-+	if (adap->fe[0])
- 		return 0;
- 
- 	return -EIO;
-@@ -443,9 +443,9 @@ static int pvr2_s5h1409_attach(struct pvr2_dvb_adapter *adap)
- 
- static int pvr2_s5h1411_attach(struct pvr2_dvb_adapter *adap)
- {
--	adap->fe = dvb_attach(s5h1411_attach, &pvr2_s5h1411_config,
--			      &adap->channel.hdw->i2c_adap);
--	if (adap->fe)
-+	adap->fe[0] = dvb_attach(s5h1411_attach, &pvr2_s5h1411_config,
-+				 &adap->channel.hdw->i2c_adap);
-+	if (adap->fe[0])
- 		return 0;
- 
- 	return -EIO;
-@@ -453,10 +453,10 @@ static int pvr2_s5h1411_attach(struct pvr2_dvb_adapter *adap)
- 
- static int pvr2_tda18271_8295_attach(struct pvr2_dvb_adapter *adap)
- {
--	dvb_attach(tda829x_attach, adap->fe,
-+	dvb_attach(tda829x_attach, adap->fe[0],
- 		   &adap->channel.hdw->i2c_adap, 0x42,
- 		   &tda829x_no_probe);
--	dvb_attach(tda18271_attach, adap->fe, 0x60,
-+	dvb_attach(tda18271_attach, adap->fe[0], 0x60,
- 		   &adap->channel.hdw->i2c_adap,
- 		   &hauppauge_tda18271_config);
- 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-index 4b32b21..f302f1e 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.c
-@@ -343,26 +343,19 @@ static int pvr2_dvb_frontend_init(struct pvr2_dvb_adapter *adap)
- 		goto done;
- 	}
- 
--	if ((dvb_props->frontend_attach(adap) == 0) && (adap->fe)) {
--
--		if (dvb_register_frontend(&adap->dvb_adap, adap->fe)) {
-+	if (dvb_props->frontend_attach(adap) == 0 && adap->fe[0]) {
-+		if (dvb_register_frontend(&adap->dvb_adap, adap->fe[0])) {
- 			pvr2_trace(PVR2_TRACE_ERROR_LEGS,
- 				   "frontend registration failed!");
--			dvb_frontend_detach(adap->fe);
--			adap->fe = NULL;
- 			ret = -ENODEV;
--			goto done;
-+			goto fail_frontend0;
- 		}
-+		if (adap->fe[0]->ops.analog_ops.standby)
-+			adap->fe[0]->ops.analog_ops.standby(adap->fe[0]);
- 
--		if (dvb_props->tuner_attach)
--			dvb_props->tuner_attach(adap);
--
--		if (adap->fe->ops.analog_ops.standby)
--			adap->fe->ops.analog_ops.standby(adap->fe);
--
--		/* Ensure all frontends negotiate bus access */
--		adap->fe->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
--
-+		pvr2_trace(PVR2_TRACE_INFO, "transferring fe[%d] ts_bus_ctrl() to pvr2_dvb_bus_ctrl()",
-+			   adap->fe[0]->id);
-+		adap->fe[0]->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
- 	} else {
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
- 			   "no frontend was attached!");
-@@ -370,16 +363,62 @@ static int pvr2_dvb_frontend_init(struct pvr2_dvb_adapter *adap)
- 		return ret;
- 	}
- 
-- done:
-+	if (dvb_props->tuner_attach && dvb_props->tuner_attach(adap)) {
-+		pvr2_trace(PVR2_TRACE_ERROR_LEGS, "tuner attach failed");
-+		ret = -ENODEV;
-+		goto fail_tuner;
-+	}
-+
-+	if (adap->fe[1]) {
-+		adap->fe[1]->id = 1;
-+		adap->fe[1]->tuner_priv = adap->fe[0]->tuner_priv;
-+		memcpy(&adap->fe[1]->ops.tuner_ops,
-+		       &adap->fe[0]->ops.tuner_ops,
-+		       sizeof(struct dvb_tuner_ops));
-+
-+		if (dvb_register_frontend(&adap->dvb_adap, adap->fe[1])) {
-+			pvr2_trace(PVR2_TRACE_ERROR_LEGS,
-+				   "frontend registration failed!");
-+			ret = -ENODEV;
-+			goto fail_frontend1;
-+		}
-+		/* MFE lock */
-+		adap->dvb_adap.mfe_shared = 1;
-+
-+		if (adap->fe[1]->ops.analog_ops.standby)
-+			adap->fe[1]->ops.analog_ops.standby(adap->fe[1]);
-+
-+		pvr2_trace(PVR2_TRACE_INFO, "transferring fe[%d] ts_bus_ctrl() to pvr2_dvb_bus_ctrl()",
-+			   adap->fe[1]->id);
-+		adap->fe[1]->ops.ts_bus_ctrl = pvr2_dvb_bus_ctrl;
-+	}
-+done:
- 	pvr2_channel_limit_inputs(&adap->channel, 0);
- 	return ret;
-+
-+fail_frontend1:
-+	dvb_frontend_detach(adap->fe[1]);
-+	adap->fe[1] = NULL;
-+fail_tuner:
-+	dvb_unregister_frontend(adap->fe[0]);
-+fail_frontend0:
-+	dvb_frontend_detach(adap->fe[0]);
-+	adap->fe[0] = NULL;
-+
-+	return ret;
- }
- 
- static int pvr2_dvb_frontend_exit(struct pvr2_dvb_adapter *adap)
- {
--	if (adap->fe != NULL) {
--		dvb_unregister_frontend(adap->fe);
--		dvb_frontend_detach(adap->fe);
-+	if (adap->fe[1]) {
-+		dvb_unregister_frontend(adap->fe[1]);
-+		dvb_frontend_detach(adap->fe[1]);
-+		adap->fe[1] = NULL;
-+	}
-+	if (adap->fe[0]) {
-+		dvb_unregister_frontend(adap->fe[0]);
-+		dvb_frontend_detach(adap->fe[0]);
-+		adap->fe[0] = NULL;
- 	}
- 	return 0;
- }
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-dvb.h b/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
-index e7f71fb..91bff57 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-dvb.h
-@@ -18,7 +18,7 @@ struct pvr2_dvb_adapter {
- 	struct dmxdev		dmxdev;
- 	struct dvb_demux	demux;
- 	struct dvb_net		dvb_net;
--	struct dvb_frontend	*fe;
-+	struct dvb_frontend	*fe[2];
- 
- 	int			feedcount;
- 	int			max_feed_count;
--- 
-2.7.4
+  v4l2src ! v4l2h264enc ! rtph264pay ! udpsink
+
+In this case, if v4l2h264 has too much latency, or is too slow, the
+capture driver will start skipping captures, loosing information. The
+latency is mostly for the case you have multiple streams though (e.g.
+audio and video).
+
+Nicolas
+
+--=-g4ooUj0IBdVwWawtumXy
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXPFlpAAKCRBxUwItrAao
+HKDsAJ4yqSaYiYk6KBpABmZXYTGCV57W9ACZAXdKTw9ZPJ5efDlSkvkshGKB9Io=
+=5wEu
+-----END PGP SIGNATURE-----
+
+--=-g4ooUj0IBdVwWawtumXy--
 
