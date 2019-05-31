@@ -2,27 +2,27 @@ Return-Path: <SRS0=lOn+=T7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89C39C46460
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 229CAC28CC4
 	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:55:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CF9A25D30
+	by mail.kernel.org (Postfix) with ESMTP id 059FE25D30
 	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 08:55:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbfEaIz1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727068AbfEaIz1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 31 May 2019 04:55:27 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:39553 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:52529 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727016AbfEaIz1 (ORCPT
+        with ESMTP id S1726593AbfEaIz1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 31 May 2019 04:55:27 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.89)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hWdJt-0003zW-Cm; Fri, 31 May 2019 10:55:25 +0200
+        id 1hWdJs-0003zW-UN; Fri, 31 May 2019 10:55:24 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -32,12 +32,10 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH v3 07/10] media: dt-bindings: Document i.MX8MQ and i.MX8MM VPU bindings
-Date:   Fri, 31 May 2019 10:55:20 +0200
-Message-Id: <20190531085523.10892-8-p.zabel@pengutronix.de>
+Subject: [PATCH v3 00/10] Rename Rockchip VPU driver to Hantro, add initial i.MX8M support
+Date:   Fri, 31 May 2019 10:55:13 +0200
+Message-Id: <20190531085523.10892-1-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190531085523.10892-1-p.zabel@pengutronix.de>
-References: <20190531085523.10892-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
@@ -49,77 +47,99 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add devicetree binding documentation for the Hantro G1/G2 VPU on i.MX8MQ
-and for the Hantro G1/G2/H1 VPU on i.MX8MM.
+There are several other SoCs that contain Hantro IP based VPUs, such as
+NXP i.MX8MQ (Hantro G1 and G2) and i.MX8MM (Hantro G1, G2, and H1). To
+maximize code sharing, add initial support for these SoCs to the
+Rockchip VPU driver, after renaming it to Hantro VPU.
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
- .../devicetree/bindings/media/imx8m-vpu.txt   | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
+This series is based on the br-v5.3g tag, commit e568d2cc1ef6
+("rockchip/vpu: Add support for MPEG-2 decoding on RK3288") with
+https://patchwork.linuxtv.org/patch/56402/ ("rockchip/vpu: Add support
+for MPEG-2 decoding on RK3328") applied on top. It supports MPEG-2
+decoding on i.MX8MQ. MPEG-2 decoding and JPEG encoding on i.MX8MM may
+or may not work, I don't have the hardware to test.
+
+Changes since v2:
+ - Introduce struct hantro_irq, containing irq name and handler
+ - Replace separate integrated arrays in struct hantro_variant with
+   single external array of struct hantro_irq.
+ - Move array of reg_names out of struct hantro_variant
+ - Use ARRAY_SIZE to set num_irqs and num_regs
+ - Dynamically allocate base address array in struct hantro_dev and
+   rename it to bases
+ - More concise IORESOURCE_MEM setup in hantro_probe
+ - Add a patch to allow arbitrary number of clocks
+
+regards
+Philipp
+
+Philipp Zabel (10):
+  rockchip/vpu: rename from rockchip to hantro
+  media: hantro: print video device name in addition to device node
+  media: hantro: add PM runtime resume callback
+  media: hantro: make irq names configurable
+  media: hantro: add support for named register ranges
+  media: hantro: add support for separate control block
+  media: dt-bindings: Document i.MX8MQ and i.MX8MM VPU bindings
+  media: hantro: add initial i.MX8MQ support
+  media: hantro: add initial i.MX8MM support (untested)
+  media: hantro: allow arbitrary number of clocks
+
+ .../devicetree/bindings/media/imx8m-vpu.txt   |  56 +++
+ MAINTAINERS                                   |   4 +-
+ drivers/staging/media/Kconfig                 |   2 +-
+ drivers/staging/media/Makefile                |   2 +-
+ drivers/staging/media/hantro/Kconfig          |  15 +
+ drivers/staging/media/hantro/Makefile         |  14 +
+ .../media/{rockchip/vpu => hantro}/TODO       |   0
+ .../vpu/rockchip_vpu.h => hantro/hantro.h}    | 167 +++++----
+ .../hantro_drv.c}                             | 331 +++++++++---------
+ .../hantro_g1_mpeg2_dec.c}                    |  55 ++-
+ .../hantro_h1_jpeg_enc.c}                     |  44 +--
+ drivers/staging/media/hantro/hantro_hw.h      | 104 ++++++
+ .../hantro_jpeg.c}                            |  18 +-
+ drivers/staging/media/hantro/hantro_jpeg.h    |  13 +
+ .../hantro_mpeg2.c}                           |  14 +-
+ .../hantro_v4l2.c}                            | 234 ++++++-------
+ .../hantro_v4l2.h}                            |  16 +-
+ drivers/staging/media/hantro/imx8m_vpu_hw.c   | 310 ++++++++++++++++
+ .../{rockchip/vpu => hantro}/rk3288_vpu_hw.c  |  81 +++--
+ .../vpu => hantro}/rk3288_vpu_regs.h          |   2 +-
+ .../{rockchip/vpu => hantro}/rk3399_vpu_hw.c  |  92 ++---
+ .../vpu => hantro}/rk3399_vpu_hw_jpeg_enc.c   |  32 +-
+ .../vpu => hantro}/rk3399_vpu_hw_mpeg2_dec.c  |  37 +-
+ .../vpu => hantro}/rk3399_vpu_regs.h          |   2 +-
+ drivers/staging/media/rockchip/vpu/Kconfig    |  14 -
+ drivers/staging/media/rockchip/vpu/Makefile   |  14 -
+ .../media/rockchip/vpu/rockchip_vpu_hw.h      | 103 ------
+ .../media/rockchip/vpu/rockchip_vpu_jpeg.h    |  14 -
+ 28 files changed, 1103 insertions(+), 687 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/media/imx8m-vpu.txt
+ create mode 100644 drivers/staging/media/hantro/Kconfig
+ create mode 100644 drivers/staging/media/hantro/Makefile
+ rename drivers/staging/media/{rockchip/vpu => hantro}/TODO (100%)
+ rename drivers/staging/media/{rockchip/vpu/rockchip_vpu.h => hantro/hantro.h} (66%)
+ rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_drv.c => hantro/hantro_drv.c} (69%)
+ rename drivers/staging/media/{rockchip/vpu/rk3288_vpu_hw_mpeg2_dec.c => hantro/hantro_g1_mpeg2_dec.c} (87%)
+ rename drivers/staging/media/{rockchip/vpu/rk3288_vpu_hw_jpeg_enc.c => hantro/hantro_h1_jpeg_enc.c} (76%)
+ create mode 100644 drivers/staging/media/hantro/hantro_hw.h
+ rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_jpeg.c => hantro/hantro_jpeg.c} (95%)
+ create mode 100644 drivers/staging/media/hantro/hantro_jpeg.h
+ rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_mpeg2.c => hantro/hantro_mpeg2.c} (79%)
+ rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_v4l2.c => hantro/hantro_v4l2.c} (69%)
+ rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_v4l2.h => hantro/hantro_v4l2.h} (53%)
+ create mode 100644 drivers/staging/media/hantro/imx8m_vpu_hw.c
+ rename drivers/staging/media/{rockchip/vpu => hantro}/rk3288_vpu_hw.c (64%)
+ rename drivers/staging/media/{rockchip/vpu => hantro}/rk3288_vpu_regs.h (99%)
+ rename drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw.c (62%)
+ rename drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw_jpeg_enc.c (86%)
+ rename drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw_mpeg2_dec.c (92%)
+ rename drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_regs.h (99%)
+ delete mode 100644 drivers/staging/media/rockchip/vpu/Kconfig
+ delete mode 100644 drivers/staging/media/rockchip/vpu/Makefile
+ delete mode 100644 drivers/staging/media/rockchip/vpu/rockchip_vpu_hw.h
+ delete mode 100644 drivers/staging/media/rockchip/vpu/rockchip_vpu_jpeg.h
 
-diff --git a/Documentation/devicetree/bindings/media/imx8m-vpu.txt b/Documentation/devicetree/bindings/media/imx8m-vpu.txt
-new file mode 100644
-index 000000000000..659bd28dd002
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/imx8m-vpu.txt
-@@ -0,0 +1,56 @@
-+device-tree bindings for Hantro G1/G2/H1 VPU codecs implemented on i.MX8M SoCs
-+
-+Required properties:
-+- compatible: value should be one of the following
-+		"nxp,imx8mq-vpu",
-+		"nxp,imx8mm-vpu";
-+- regs: VPU core and control block register ranges
-+- reg-names: should be
-+		"g1", "g2", "ctrl" on i.MX8MQ,
-+		"g1", "g2", "h1", "ctrl" on i.MX8MM.
-+- interrupts: encoding and decoding interrupt specifiers
-+- interrupt-names: should be
-+		"g1", "g2" on i.MX8MQ,
-+		"g1", "g2", "h1" on i.MX8MM.
-+- clocks: phandle to VPU core clocks and bus clock
-+- clock-names: should be
-+		"g1", "g2", "bus" on i.MX8MQ,
-+		"g1", "g2", "h1", "bus" on i.MX8MM.
-+- power-domains: phandle to power domain node
-+
-+Examples:
-+
-+	vpu: vpu@38300000 {
-+		compatible = "nxp,imx8mq-vpu";
-+		reg = <0x38300000 0x10000>,
-+		      <0x38310000 0x10000>,
-+		      <0x38320000 0x10000>;
-+		reg-names = "g1", "g2", "ctrl";
-+		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "g1", "g2";
-+		clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+		clock-names = "g1", "g2", "bus";
-+		power-domains = <&pgc_vpu>;
-+	};
-+
-+	vpu: vpu@38300000 {
-+		compatible = "nxp,imx8mm-vpu";
-+		reg = <0x38300000 0x10000>,
-+		      <0x38310000 0x10000>,
-+		      <0x38320000 0x10000>;
-+		      <0x38330000 0x10000>;
-+		reg-names = "g1", "g2", "h1", "ctrl";
-+		interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
-+			     <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "g1", "g2", "h1";
-+		clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_H1_ROOT>,
-+			 <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
-+		clock-names = "g1", "g2", "h1", "bus";
-+		power-domains = <&pgc_vpu>;
-+	};
 -- 
 2.20.1
 
