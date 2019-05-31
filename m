@@ -2,97 +2,170 @@ Return-Path: <SRS0=lOn+=T7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CEFDC28CC2
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 09:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7038FC28CC2
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 09:31:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0FDFA266DA
-	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 09:31:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44D62266E8
+	for <linux-media@archiver.kernel.org>; Fri, 31 May 2019 09:31:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Hztvbtdd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbfEaJaz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 31 May 2019 05:30:55 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:51248 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726232AbfEaJaz (ORCPT
+        id S1727143AbfEaJbe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 31 May 2019 05:31:34 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42975 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727075AbfEaJbd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 31 May 2019 05:30:55 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 3CE6F80225; Fri, 31 May 2019 11:30:43 +0200 (CEST)
-Date:   Fri, 31 May 2019 11:30:52 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Fabien Dessenne <fabien.dessenne@st.com>
-Cc:     Hugues Fruchet <hugues.fruchet@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Pavel Machek <pavel@denx.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH] media: stm32-dcmi: fix irq = 0 case
-Message-ID: <20190531093052.GA23111@amd>
-References: <1559294295-20573-1-git-send-email-fabien.dessenne@st.com>
+        Fri, 31 May 2019 05:31:33 -0400
+Received: by mail-wr1-f65.google.com with SMTP id l2so6018950wrb.9
+        for <linux-media@vger.kernel.org>; Fri, 31 May 2019 02:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=rvJtQg+661w+5Ir5BueWWyrmozrX3JR+SPJBE4ojBNo=;
+        b=HztvbtddFm0o/wzj4gVgfBz9gDX87DCVUe5fNi3WlmKcceoMGOS59ILOIA+oppmT9i
+         Hx+8hKK37vNOxtIAd4nhhUiZeri7/gHgLHnOjfBVLXlAhHALWhroAKyCC2E5THBWPPya
+         QmhZzbtFpjhLZ1KwOfY/NrXW8b9fiVsyeBQHj5+z45dT/IJNHTulASsqKa4BW00ZgeAn
+         Z36w62rK3XRlBQNyvw3nDQhpnD9ohlyfVivFd2UlsbMi24/1gL6ndr6T3SaCyT6VRmwJ
+         vevMu25h1j1gYvqOSFLkswxt8ypnEot57oB3gyZZXeYsScqIDLWMjkmSt5+e2Z5ZGT8K
+         r0EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rvJtQg+661w+5Ir5BueWWyrmozrX3JR+SPJBE4ojBNo=;
+        b=Cq5SENhE5JsD7UJHVXp9UZnX4RqOcLUrkP7OYDZjMQncXuQw8s71pnqKyE1Xzr3HwF
+         czJN9x+zYmKZL3TXvAA/8FP9/SHZkiyuFL+vFOZ15t+n58cDDGvH5VgPEH5Q3qMRWfUV
+         Yxwif3+lomU/F92vnllFCucWTZeJ6ywQhjncVtu3h5PLfPemq8PL1Wi7MqXIRmc3xCWm
+         0eLJd74lG5TWn9VQyo1K1DE0pLX5kvtqufT0Qzvm9PLZ8YzNCVXREcG2rTuhdQTb7qy2
+         BluzEJFWMy1YB35mnDr16pze7mQcjSlrgBfLk7TUf8tbrwvwS4GGuSStBH1CVVhcuAwv
+         D8Qw==
+X-Gm-Message-State: APjAAAVek0cadaE04u7hLpHm9WRejKUaFo1S/5PGcIBDWaNCI3zddSmD
+        ZBwnfDS0/5QEDaGlc42pD6Qqpg==
+X-Google-Smtp-Source: APXvYqykUEMys93iiEwCmuP7w5CqsGhyG8Yk3Jmpbk3LQsC/f/QxSVCIY45nYJLLMoTJYHHeP8lxcw==
+X-Received: by 2002:adf:e584:: with SMTP id l4mr5753247wrm.54.1559295091602;
+        Fri, 31 May 2019 02:31:31 -0700 (PDT)
+Received: from mjourdan-pc.numericable.fr (abo-99-183-68.mtp.modulonet.fr. [85.68.183.99])
+        by smtp.gmail.com with ESMTPSA id b136sm7187023wme.30.2019.05.31.02.31.30
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 31 May 2019 02:31:31 -0700 (PDT)
+From:   Maxime Jourdan <mjourdan@baylibre.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v7 1/4] dt-bindings: media: add Amlogic Video Decoder Bindings
+Date:   Fri, 31 May 2019 11:31:23 +0200
+Message-Id: <20190531093126.26956-2-mjourdan@baylibre.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190531093126.26956-1-mjourdan@baylibre.com>
+References: <20190531093126.26956-1-mjourdan@baylibre.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ZGiS0Q5IWpPtfppv"
-Content-Disposition: inline
-In-Reply-To: <1559294295-20573-1-git-send-email-fabien.dessenne@st.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Add documentation for the meson vdec dts node.
 
---ZGiS0Q5IWpPtfppv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/media/amlogic,vdec.txt           | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/amlogic,vdec.txt
 
-On Fri 2019-05-31 11:18:15, Fabien Dessenne wrote:
-> Manage the irq =3D 0 case, where we shall return an error.
->=20
-> Fixes: b5b5a27bee58 ("media: stm32-dcmi: return appropriate error codes d=
-uring probe")
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+diff --git a/Documentation/devicetree/bindings/media/amlogic,vdec.txt b/Documentation/devicetree/bindings/media/amlogic,vdec.txt
+new file mode 100644
+index 000000000000..aabdd01bcf32
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/amlogic,vdec.txt
+@@ -0,0 +1,71 @@
++Amlogic Video Decoder
++================================
++
++The video decoding IP lies within the DOS memory region,
++except for the hardware bitstream parser that makes use of an undocumented
++region.
++
++It makes use of the following blocks:
++
++- ESPARSER is a bitstream parser that outputs to a VIFIFO. Further VDEC blocks
++then feed from this VIFIFO.
++- VDEC_1 can decode MPEG-1, MPEG-2, MPEG-4 part 2, MJPEG, H.263, H.264, VC-1.
++- VDEC_HEVC can decode HEVC and VP9.
++
++Both VDEC_1 and VDEC_HEVC share the "vdec" IRQ and as such cannot run
++concurrently.
++
++Device Tree Bindings:
++---------------------
++
++VDEC: Video Decoder
++--------------------------
++
++Required properties:
++- compatible: value should be different for each SoC family as :
++	- GXBB (S905) : "amlogic,gxbb-vdec"
++	- GXL (S905X, S905D) : "amlogic,gxl-vdec"
++	- GXM (S912) : "amlogic,gxm-vdec"
++- reg: base address and size of he following memory-mapped regions :
++	- dos
++	- esparser
++- reg-names: should contain the names of the previous memory regions
++- interrupts: should contain the following IRQs:
++	- vdec
++	- esparser
++- interrupt-names: should contain the names of the previous interrupts
++- amlogic,ao-sysctrl: should point to the AOBUS sysctrl node
++- amlogic,canvas: should point to a canvas provider node
++- clocks: should contain the following clocks :
++	- dos_parser
++	- dos
++	- vdec_1
++	- vdec_hevc
++- clock-names: should contain the names of the previous clocks
++- resets: should contain the parser reset
++- reset-names: should be "esparser"
++
++Example:
++
++vdec: video-decoder@c8820000 {
++	compatible = "amlogic,gxbb-vdec";
++	reg = <0x0 0xc8820000 0x0 0x10000>,
++	      <0x0 0xc110a580 0x0 0xe4>;
++	reg-names = "dos", "esparser";
++
++	interrupts = <GIC_SPI 44 IRQ_TYPE_EDGE_RISING>,
++		     <GIC_SPI 32 IRQ_TYPE_EDGE_RISING>;
++	interrupt-names = "vdec", "esparser";
++
++	amlogic,ao-sysctrl = <&sysctrl_AO>;
++	amlogic,canvas = <&canvas>;
++
++	clocks = <&clkc CLKID_DOS_PARSER>,
++		 <&clkc CLKID_DOS>,
++		 <&clkc CLKID_VDEC_1>,
++		 <&clkc CLKID_VDEC_HEVC>;
++	clock-names = "dos_parser", "dos", "vdec_1", "vdec_hevc";
++
++	resets = <&reset RESET_PARSER>;
++	reset-names = "esparser";
++};
+-- 
+2.21.0
 
-Acked-by: Pavel Machek <pavel@ucw.cz>
-Reported-by: Pavel Machek <pavel@ucw.cz>
-
-:-).
-								Pavel
-
-> +++ b/drivers/media/platform/stm32/stm32-dcmi.c
-> @@ -1702,7 +1702,7 @@ static int dcmi_probe(struct platform_device *pdev)
->  	if (irq <=3D 0) {
->  		if (irq !=3D -EPROBE_DEFER)
->  			dev_err(&pdev->dev, "Could not get irq\n");
-> -		return irq;
-> +		return irq ? irq : -ENXIO;
->  	}
-> =20
->  	dcmi->res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---ZGiS0Q5IWpPtfppv
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAlzw9EwACgkQMOfwapXb+vI91gCgrymhw+fLQG9ycygMMLdOh9Mv
-Ao8AoKLSVLOH71CRZXNcxqg8QDUQpczh
-=7mwO
------END PGP SIGNATURE-----
-
---ZGiS0Q5IWpPtfppv--
