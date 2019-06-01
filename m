@@ -7,46 +7,48 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64922C28CC4
-	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 13:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FDD7C28CC1
+	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 13:41:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3D7CE275FB
-	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 13:38:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C9FA2767B
+	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 13:41:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559396303;
-	bh=LKMQHcklJvIWS99udh9eSLS62WW47Rn8+BrT4bYHeeQ=;
+	s=default; t=1559396467;
+	bh=NHp4Zus6V4JDtlhyZgmwXxF/CbFxoMXzr6qTYcrfCPI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=UWyBjKX0m67HF6rEP++cuSDbXZEp1CewSl+hRkoAjfiocYtdTzvxc+gGC/yux3DWi
-	 DlS4xdniMcUJIug6ThKDa0BuTNucetQ76+RaxjTptaGdnR49+5hxPiV3FyhDucLOq7
-	 fe8ByZpfI7+AVPDY74k+bfHsus7vfEB439bvjuVE=
+	b=ajxGvjykfdMNT0A+b0TZEwGRVoBV81AgjU9WPHihgHLJdrJUsvjV2DRXFRfOHxFEl
+	 H9rnCCkyJ2H37QRZ1zr0MHM8eaLkhQ/JJedqfwLXRIG9XJCO6zsJ7ZccbSnHJ0/Dze
+	 sjyeZA3K0Yqc5SUpX6nprMTk5qpcZFnu5HyRmDI4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728676AbfFANiW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Jun 2019 09:38:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48916 "EHLO mail.kernel.org"
+        id S1727271AbfFANTr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 1 Jun 2019 09:19:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46860 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728534AbfFANVb (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 1 Jun 2019 09:21:31 -0400
+        id S1726794AbfFANTr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 1 Jun 2019 09:19:47 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B3D8127301;
-        Sat,  1 Jun 2019 13:21:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9EF082725F;
+        Sat,  1 Jun 2019 13:19:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559395290;
-        bh=LKMQHcklJvIWS99udh9eSLS62WW47Rn8+BrT4bYHeeQ=;
+        s=default; t=1559395186;
+        bh=NHp4Zus6V4JDtlhyZgmwXxF/CbFxoMXzr6qTYcrfCPI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gXGeq+4EyIPWwLFt6wQyMYMJIsdMd/wTh/31HAZWPkKa+I4d9Zuk4iTjh2DpUB5X0
-         fmuv8Zt9pq97hJCj8SuVPS/KqCptpN+7kwkT4+MOVl7NwMfPKbPSsGRoYkIHeGu7LD
-         /KZE4JdKNmWXnrl98Na2wUxkqucc71McIoUExIas=
+        b=VuiUhad7NAChNF9UZcoCgwfFn9BF/KQ8m6F3TGnJ5ul9mPMLLGFw7rd0UqzSll1ER
+         6+yk36QjCl/ZGDeXH2kKjAGpP0JjGO5Qzfqsy4id4n+r3f1iQllGL0xtbagcvFpT/g
+         4DiI0wNSwIYhjGtMvxfYX+M+ZfPGXEx7aStUYXnU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Eugen Hristev <eugen.hristev@microchip.com>,
+Cc:     Jonas Karlman <jonas@kwiboo.se>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 053/173] media: atmel: atmel-isc: fix asd memory allocation
-Date:   Sat,  1 Jun 2019 09:17:25 -0400
-Message-Id: <20190601131934.25053-53-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-rockchip@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.0 002/173] media: rockchip/vpu: Add missing dont_use_autosuspend() calls
+Date:   Sat,  1 Jun 2019 09:16:34 -0400
+Message-Id: <20190601131934.25053-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190601131934.25053-1-sashal@kernel.org>
 References: <20190601131934.25053-1-sashal@kernel.org>
@@ -59,54 +61,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Eugen Hristev <eugen.hristev@microchip.com>
+From: Jonas Karlman <jonas@kwiboo.se>
 
-[ Upstream commit 1e4e25c4959c10728fbfcc6a286f9503d32dfe02 ]
+[ Upstream commit 5c5b90f5cbad77dc15d8b5582efdb2e362bcd710 ]
 
-The subsystem will free the asd memory on notifier cleanup, if the asd is
-added to the notifier.
-However the memory is freed using kfree.
-Thus, we cannot allocate the asd using devm_*
-This can lead to crashes and problems.
-To test this issue, just return an error at probe, but cleanup the
-notifier beforehand.
+Those calls are needed to restore a clean PM state when the probe fails
+or when the driver is unloaded such that future ->probe() calls can
+initialize runtime PM again.
 
-Fixes: 106267444f ("[media] atmel-isc: add the Image Sensor Controller code")
-
-Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/atmel/atmel-isc.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/platform/atmel/atmel-isc.c b/drivers/media/platform/atmel/atmel-isc.c
-index 50178968b8a63..5b0e96bd8c7e5 100644
---- a/drivers/media/platform/atmel/atmel-isc.c
-+++ b/drivers/media/platform/atmel/atmel-isc.c
-@@ -2065,8 +2065,11 @@ static int isc_parse_dt(struct device *dev, struct isc_device *isc)
- 			break;
- 		}
- 
--		subdev_entity->asd = devm_kzalloc(dev,
--				     sizeof(*subdev_entity->asd), GFP_KERNEL);
-+		/* asd will be freed by the subsystem once it's added to the
-+		 * notifier list
-+		 */
-+		subdev_entity->asd = kzalloc(sizeof(*subdev_entity->asd),
-+					     GFP_KERNEL);
- 		if (!subdev_entity->asd) {
- 			of_node_put(rem);
- 			ret = -ENOMEM;
-@@ -2210,6 +2213,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 						     subdev_entity->asd);
- 		if (ret) {
- 			fwnode_handle_put(subdev_entity->asd->match.fwnode);
-+			kfree(subdev_entity->asd);
- 			goto cleanup_subdev;
- 		}
- 
+diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+index 33b556b3f0df8..d489b5dd54d7a 100644
+--- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
++++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
+@@ -492,6 +492,7 @@ static int rockchip_vpu_probe(struct platform_device *pdev)
+ 	v4l2_device_unregister(&vpu->v4l2_dev);
+ err_clk_unprepare:
+ 	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
++	pm_runtime_dont_use_autosuspend(vpu->dev);
+ 	pm_runtime_disable(vpu->dev);
+ 	return ret;
+ }
+@@ -512,6 +513,7 @@ static int rockchip_vpu_remove(struct platform_device *pdev)
+ 	v4l2_m2m_release(vpu->m2m_dev);
+ 	v4l2_device_unregister(&vpu->v4l2_dev);
+ 	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
++	pm_runtime_dont_use_autosuspend(vpu->dev);
+ 	pm_runtime_disable(vpu->dev);
+ 	return 0;
+ }
 -- 
 2.20.1
 
