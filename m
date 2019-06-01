@@ -2,102 +2,77 @@ Return-Path: <SRS0=7B5B=UA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97480C28CC3
-	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 13:44:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D14EFC28CC1
+	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 14:03:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 679452771C
-	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 13:44:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A31B12692B
+	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 14:03:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1559396660;
-	bh=NHp4Zus6V4JDtlhyZgmwXxF/CbFxoMXzr6qTYcrfCPI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=lHeLudVkQer1HEV2ggon1Ybet6PL7xCFREtMZbGZyAFggT62brRkDC1enrjnIsFRZ
-	 IbgkzH0A/pgARo11lUWE2gorDSWCpgu85Je0bhfbchCrJ+c+ZmzGeeAaaRyZWQYH9K
-	 Fkz6VfsGQI05F+Mcda/dbopBQTN1MCB+NgNgQR+A=
+	s=default; t=1559397806;
+	bh=v0LrETNumBSzOdfcO9SplNOuuMpdyL4QdkEXtDe1++k=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=0M0mhPr+fWl6H6iA98pZTHoAPVyR3UfA6rPnxGQ2EHWAdLdf8MFD2xzdCo48vu+L5
+	 Xh/iWGaLGUuQLComo1QlyXymapRsMvF7toBUhJuYc8wwkYfAjw3AF7PGzNWp7Cwv0l
+	 qz6nl2CpS1kDUBxRnt7c9ngbJcWcQ2HGYtOt/TiQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727217AbfFANRF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Jun 2019 09:17:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41810 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726210AbfFANRE (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 1 Jun 2019 09:17:04 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3291A27251;
-        Sat,  1 Jun 2019 13:17:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559395024;
-        bh=NHp4Zus6V4JDtlhyZgmwXxF/CbFxoMXzr6qTYcrfCPI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNUZChqcrX7RYjqW3ujH5RAmPbu1pel6gD8tgdY/QkGbjGwWIytXBtiod+Xf0Yfb9
-         Ip4Ypidz1vhoy0vVjBBMs70b+l/i1chrFzEQIOkkoJVLFzOCT2dPSxwm8RgUDNd/PD
-         0c/aD1dYfIONqXL+CWThXyo0LA0a4SRhBEU6wBtQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jonas Karlman <jonas@kwiboo.se>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.1 002/186] media: rockchip/vpu: Add missing dont_use_autosuspend() calls
-Date:   Sat,  1 Jun 2019 09:13:38 -0400
-Message-Id: <20190601131653.24205-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190601131653.24205-1-sashal@kernel.org>
-References: <20190601131653.24205-1-sashal@kernel.org>
+        id S1726655AbfFAODZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 1 Jun 2019 10:03:25 -0400
+Received: from casper.infradead.org ([85.118.1.10]:40544 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726135AbfFAODZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 1 Jun 2019 10:03:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=v0LrETNumBSzOdfcO9SplNOuuMpdyL4QdkEXtDe1++k=; b=UlLJQVZgPChSP8Uk9dq3h6IR2R
+        4gU4+F+Ij+aULct1GC/dh6JFgerVeR9bNNCqhhACq1KMt4zxi3tjplk27D/05TyMHUzx4FrinW1wP
+        gzEx10Sc78ly1c5O9JRlHE7YExko48zhmjBEOdlM7Y1Y0iC1uWyRUC0KOVbTitSKLNLS7ZymBgIkL
+        Vr9z+M72lnd+A4pZ5rNesnOebhTkYoRoIjgxQmYrosxC3qETIMbGN8gQBe5KZbp+Usk48HLqqqSmH
+        wyNWJedM66ImpzOszka5orPXf+DyqK51aRwQ+Zus8jXwMLt7QB84MT+NZ1h6chJ49zzR5Fj7Ku4fZ
+        zQPJu1Wg==;
+Received: from 179.187.96.185.dynamic.adsl.gvt.net.br ([179.187.96.185] helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hX4bR-0005d5-3q; Sat, 01 Jun 2019 14:03:22 +0000
+Date:   Sat, 1 Jun 2019 11:03:17 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@collabora.com>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [ANN] Patchwork version upgrade
+Message-ID: <20190601110317.4b8e50dd@coco.lan>
+In-Reply-To: <ac538d8e-5b2a-788f-f425-a59283497a85@collabora.com>
+References: <20190531124050.3f06e1b8@coco.lan>
+        <ac538d8e-5b2a-788f-f425-a59283497a85@collabora.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jonas Karlman <jonas@kwiboo.se>
+Em Fri, 31 May 2019 17:07:01 -0300
+Andr=C3=A9 Almeida <andrealmeid@collabora.com> escreveu:
 
-[ Upstream commit 5c5b90f5cbad77dc15d8b5582efdb2e362bcd710 ]
+> If one tries to access a page that doesn't exists (e.g. [1]), the page
+> shows that Django is on debug mode. According to Django
+> documentation[2], is not a good idea running with debugging enabled on
+> production environment. To fix this, just change the `DEBUG =3D True` to
+> `DEBUG =3D False` on `settings.py`. The result should be something like
+> this [3].
 
-Those calls are needed to restore a clean PM state when the probe fails
-or when the driver is unloaded such that future ->probe() calls can
-initialize runtime PM again.
+Fixed.
 
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c | 2 ++
- 1 file changed, 2 insertions(+)
+>=20
+> Thanks,
+> Andr=C3=A9
 
-diff --git a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-index 33b556b3f0df8..d489b5dd54d7a 100644
---- a/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-+++ b/drivers/staging/media/rockchip/vpu/rockchip_vpu_drv.c
-@@ -492,6 +492,7 @@ static int rockchip_vpu_probe(struct platform_device *pdev)
- 	v4l2_device_unregister(&vpu->v4l2_dev);
- err_clk_unprepare:
- 	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
-+	pm_runtime_dont_use_autosuspend(vpu->dev);
- 	pm_runtime_disable(vpu->dev);
- 	return ret;
- }
-@@ -512,6 +513,7 @@ static int rockchip_vpu_remove(struct platform_device *pdev)
- 	v4l2_m2m_release(vpu->m2m_dev);
- 	v4l2_device_unregister(&vpu->v4l2_dev);
- 	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
-+	pm_runtime_dont_use_autosuspend(vpu->dev);
- 	pm_runtime_disable(vpu->dev);
- 	return 0;
- }
--- 
-2.20.1
-
+Thanks,
+Mauro
