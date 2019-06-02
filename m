@@ -2,69 +2,74 @@ Return-Path: <SRS0=WdNM=UB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33527C282DC
-	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 21:22:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 174CCC282DC
+	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 21:44:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0A29B246A0
-	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 21:22:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2B77268AF
+	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 21:44:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CGUGzSna"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OiCbszUX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726713AbfFBVW1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 2 Jun 2019 17:22:27 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40706 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726561AbfFBVW1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 2 Jun 2019 17:22:27 -0400
-Received: by mail-lj1-f193.google.com with SMTP id q62so14282996ljq.7;
-        Sun, 02 Jun 2019 14:22:25 -0700 (PDT)
+        id S1727266AbfFBVol (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 2 Jun 2019 17:44:41 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:36832 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726786AbfFBVok (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 2 Jun 2019 17:44:40 -0400
+Received: by mail-lf1-f65.google.com with SMTP id q26so11995112lfc.3;
+        Sun, 02 Jun 2019 14:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fz1ltyVFvVWw0/t6pPLFHhNIn1MdgnWyz2QGoYgJ52U=;
-        b=CGUGzSnatSXJWaLOSZq3Mb4UjEy+vI/7kOY3a/2heaGwtjHRHjOE66/LeMqv/vQp6o
-         Ff/nm9C/KRzryxYS5B/RmvAhQNOvGIUFfQ7Mn8PEOsxIrDTxsgyIJYR7vmwGr9huvwWQ
-         laLnthk5eKnJeNtVxMk0tdNn5qJu+Gk9/T7chkKT2DWmlQ0iYsENBZ1cl1B/3eKPGI0d
-         8nUQmO0hpaHoNLSKSXUUw8ZuSlo+mPTUPRDlijPWKTi9f4ZGqz2eLnuMJsKubpdVhl4O
-         tI0/tT4w3BfBpE/BO8uroFnNAO0tmTlLzxnJOSg2Tx3srNG2Xhc+WkmJjTbEZrUdjYia
-         Ox1g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=v8z6rRyWnHKBHTgKVhKWAyQ8XR13rNpWMzD0eUYSFO0=;
+        b=OiCbszUXlmN6Tzhfkv1LwVF4TPTvleSZ7mCi1x0wtGf1dtlipNsDfa/d+e9QrykZ9N
+         EbF/ejBx8pnOX4KBCQx9LTlTAydPScDE/BgumKbk1MQOprn9D+Vi68Ab+ardIySV+UVr
+         BjRR+s+vVfb6tzIlhxKO9v15ZtETWhSpL0KQ63+bvz3Ga3hutTBPcrM8IdW5nMZvnDgB
+         +o6STAuD+ofam0vnf5Y0maIyX7DufRTl32/mXfHJJwSCO0CNJaj18RTPeuEIx8Y2UVc6
+         OmBkylgIf8G3FP6LLTGtVR+MLjj+TCHRvC1DRLGkTOcuQ7bQ7aKs6908zUPZctpekNDo
+         B7kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fz1ltyVFvVWw0/t6pPLFHhNIn1MdgnWyz2QGoYgJ52U=;
-        b=tRT0kuErEGHG3lS4+PQmEe2wXx3cnpZFCQYx7NzWEHqEWs2yx2f/A9bhqzT3zp7vvs
-         gkqrgQBI5kB9daRiPUfMkLgl6W37j/UXUhXbQLxsbvR5zBykpyCfep5Df/aMpuTKnHSQ
-         ueXt0mkLlZFhPArf7rL2zq38JavUyflpRBfRKfzytzydg91QGdMfUR7EyWCfI7hokWTO
-         WvXvVvKPZJ3FuYdW4Ijhbj3bd0eT2Hmz2Yu6zvUPgVYPNrQJhbyPtv3QRpwkivnHF9Pu
-         B3xvUl8uwPf/G5fDpKXZPDpsoJVLSQa9k9zf5lA57tEdnncu+NTAuJM5M9xDbc+Y1QI5
-         bxvg==
-X-Gm-Message-State: APjAAAX+0ra98FJ62/y/RQJsj9/yUnLuca2pzSkpMRp6HbLLenzkbEdl
-        iZaDnRJpCJndNoZndSFvva1rv0USQIk=
-X-Google-Smtp-Source: APXvYqxvhE4gZ/BFQvzhcXN5ZGedfhX2RC5p6Tu43cmdMyaKqAO3/eULvdg6lBSkQfsToOfJ0v8gpg==
-X-Received: by 2002:a2e:809a:: with SMTP id i26mr12499635ljg.182.1559510545309;
-        Sun, 02 Jun 2019 14:22:25 -0700 (PDT)
-Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
-        by smtp.gmail.com with ESMTPSA id j11sm2758551lfm.29.2019.06.02.14.22.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=v8z6rRyWnHKBHTgKVhKWAyQ8XR13rNpWMzD0eUYSFO0=;
+        b=CwmCnC+jbKdNGh3EAA5WwNBZJ0YZ4b7qfevSU4mn+GtsfZZUNPISEWB/7swcQYTQqV
+         WvUjNlpfLXDfhZ+1GhhryGux1iOwzIgVTs56xpmpgM+WQU3b27SOMdFBPxhVk6mcjKi5
+         WyMbR9N8gKJpjjSuCwvHbBxOzDB6AuubXWZYAnOTA0RtcqGfztHiqf1G0jGazWmUQ4OK
+         6C9Pa5Ab2/ZRw3DiVsPs4RqQ6pMk+SjmdwtF5NQSFyP3hl9UUHLHQl/sVLsRBc59hwJO
+         wUrfBcvCoLPjZkEzHe7dqHRLeJuLdwLoNHuPyPYXVn70+LNgl0rfBTwuOb/Rg+UJL+Is
+         wL9Q==
+X-Gm-Message-State: APjAAAWKjUrHc8sLLOYjN8w5L4C1rqhai9ak+jxdi5hKTH+1U/efG1yZ
+        ps2ZeSa2O9CQMjjGvs+KAnOSH3m/
+X-Google-Smtp-Source: APXvYqzyORzjm83J0I4MlzrRe1oyXZ2OeIj8QffTLOl0ldVu/NN8oUgdlQ840HpNzpsQXplba0WRaA==
+X-Received: by 2002:ac2:43b7:: with SMTP id t23mr11501647lfl.110.1559511878164;
+        Sun, 02 Jun 2019 14:44:38 -0700 (PDT)
+Received: from localhost.localdomain ([94.29.35.141])
+        by smtp.gmail.com with ESMTPSA id g22sm2803653lje.43.2019.06.02.14.44.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 02 Jun 2019 14:22:24 -0700 (PDT)
-From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: [PATCH] media: ov6650: Fix device node exposed without proper locking
-Date:   Sun,  2 Jun 2019 23:22:15 +0200
-Message-Id: <20190602212215.26734-1-jmkrzyszt@gmail.com>
+        Sun, 02 Jun 2019 14:44:37 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] ARM: dts: tegra30: Connect SMMU with Video Decoder Engine
+Date:   Mon,  3 Jun 2019 00:37:06 +0300
+Message-Id: <20190602213712.26857-2-digetx@gmail.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190602213712.26857-1-digetx@gmail.com>
+References: <20190602213712.26857-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -72,32 +77,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit c62b96050bee ("media: ov6650: Register with asynchronous
-subdevice framework") carelessly requested creation of a video device
-node by setting a V4L2_SUBDEV_FL_HAS_DEVNODE flag.  The driver is not
-ready for that as it doesn't implement proper locking required for
-serialization of IOCTLs.
+Enable IOMMU support for the video decoder.
 
-Fix it by dropping the flag assignment.
-
-Fixes: c62b96050bee ("media: ov6650: Register with asynchronous subdevice framework")
-Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/media/i2c/ov6650.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm/boot/dts/tegra30.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 1b972e591b48..ace95ba7dd19 100644
---- a/drivers/media/i2c/ov6650.c
-+++ b/drivers/media/i2c/ov6650.c
-@@ -1009,7 +1009,6 @@ static int ov6650_probe(struct i2c_client *client,
- 	priv->colorspace  = V4L2_COLORSPACE_JPEG;
+diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
+index 934caa83c8db..ce162125e7bf 100644
+--- a/arch/arm/boot/dts/tegra30.dtsi
++++ b/arch/arm/boot/dts/tegra30.dtsi
+@@ -424,6 +424,7 @@
+ 		clocks = <&tegra_car TEGRA30_CLK_VDE>;
+ 		reset-names = "vde", "mc";
+ 		resets = <&tegra_car 61>, <&mc TEGRA30_MC_RESET_VDE>;
++		iommus = <&mc TEGRA_SWGROUP_VDE>;
+ 	};
  
- 	priv->subdev.internal_ops = &ov6650_internal_ops;
--	priv->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 
- 	ret = v4l2_async_register_subdev(&priv->subdev);
- 	if (ret)
+ 	apbmisc@70000800 {
 -- 
 2.21.0
 
