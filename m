@@ -1,78 +1,188 @@
-Return-Path: <SRS0=7B5B=UA=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=WdNM=UB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A0A0C28CC3
-	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 23:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D217FC28CC5
+	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 05:06:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2A3F72773A
-	for <linux-media@archiver.kernel.org>; Sat,  1 Jun 2019 23:41:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB3332783D
+	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 05:06:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=comcast.net header.i=@comcast.net header.b="x1TGfQPc"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="I+l433GU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbfFAXlb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 1 Jun 2019 19:41:31 -0400
-Received: from resqmta-po-04v.sys.comcast.net ([96.114.154.163]:35628 "EHLO
-        resqmta-po-04v.sys.comcast.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726211AbfFAXlb (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 1 Jun 2019 19:41:31 -0400
-Received: from resomta-po-17v.sys.comcast.net ([96.114.154.241])
-        by resqmta-po-04v.sys.comcast.net with ESMTP
-        id XD0zhnmA0d4wBXDV5hihbE; Sat, 01 Jun 2019 23:33:23 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=comcast.net;
-        s=20190202a; t=1559432003;
-        bh=/YfxZJjiQez5lydNaQDlhF87AQ8ivWgL0uroog7jX7g=;
-        h=Received:Received:From:Subject:To:Message-ID:Date:MIME-Version:
-         Content-Type;
-        b=x1TGfQPc5nHLq4Wp0BxB+EwnEefi9yXhUK6udV+Ojat4LoLFUmylVLGAEY36Dzihd
-         6UA74WtBZxyANL3l1kjRMZNd2spB//x6TvdZGs73Pe3L9VAzeGusyTY7eiQG3Nujfq
-         WYl+vAOfYFXRRXIVeV4O5DAFPkGuUg/hlck+F8c5gGPQWtW+ExcsGwfy8nZI2Hvt1F
-         UpunLeakanZtXDZFoPjpSwRJhjVdLGCC7cSQ5cIYU40oiKdUsGOznZSwnkYOtnMR53
-         KrvBR7aqb1sUGRj/KVmuT58ZMIqLitTf10HJNEdnRWrx+8O7hEJW/AJMUCnV84Ikux
-         0NmMbV5gbq67A==
-Received: from [192.168.4.4] ([73.248.220.215])
-        by resomta-po-17v.sys.comcast.net with ESMTPA
-        id XDUphogfO0ExbXDV4h6aso; Sat, 01 Jun 2019 23:33:23 +0000
-X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgeduuddrudefgedgvdefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvehomhgtrghsthdqtfgvshhipdfqfgfvpdfpqffurfetoffkrfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffuvffkffgfgggtgfesthejredttdefjeenucfhrhhomheptecuufhunhcuoegrshdutdeffeigsegtohhmtggrshhtrdhnvghtqeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppeejfedrvdegkedrvddvtddrvdduheenucfrrghrrghmpehhvghloheplgduledvrdduieekrdegrdegngdpihhnvghtpeejfedrvdegkedrvddvtddrvdduhedpmhgrihhlfhhrohhmpegrshdutdeffeigsegtohhmtggrshhtrdhnvghtpdhrtghpthhtohepmhgthhgvhhgrsgesohhsghdrshgrmhhsuhhnghdrtghomhdprhgtphhtthhopehsvggrnhesmhgvshhsrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedt
-X-Xfinity-VMeta: sc=-100;st=legit
-From:   A Sun <as1033x@comcast.net>
-Subject: [PATCH v1 0/3] [media] mceusb: Error message text and reporting
- revisions
-To:     linux-media@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@osg.samsung.com>
-Message-ID: <b1d16ea3-71cb-1298-f0d0-f34fccab2d27@comcast.net>
-Date:   Sat, 1 Jun 2019 19:33:22 -0400
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1725877AbfFBFGO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 2 Jun 2019 01:06:14 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:35911 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725875AbfFBFGO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 2 Jun 2019 01:06:14 -0400
+Received: by mail-pf1-f195.google.com with SMTP id u22so8641943pfm.3
+        for <linux-media@vger.kernel.org>; Sat, 01 Jun 2019 22:06:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8FrEn8Oc47oyqvsIyUn+ei84DckXK5ddHX1nKUOQVF0=;
+        b=I+l433GU6rh5Vh+cXRg2sWftONjf5E0xtYRJR0maMC3On194A0XuFQ8es0fmdrLaO4
+         QMulbFvcAdi+pOn8HpskX0ufgW7qoStMxwwMGtpoIzBLU8ImYfubQhLJZlu5J4RYe6TO
+         Yim8ter4osHiihcYza518LDlKNV+048cHSWMc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8FrEn8Oc47oyqvsIyUn+ei84DckXK5ddHX1nKUOQVF0=;
+        b=dOyVe9Weoa4TcOlXXqPsnZAzoO3H6QxI6f4X0Hl4NuZGH87Digto9sIjMvNdYM9GdN
+         Q0A6tq9LNjCpnvAxgzbAcMzwRAwNDpXJFYGj3PpDM1ighJJzGCLVvVgeklw4AUcNhqqm
+         uRv5i6YhiZ+7R9hv4CL/gBkBnxjVKBArL6SPQyqOEv60w1giwIccSsIVl0y0Vy0OJV5C
+         laNvDHWH89cGQTR2Hqpm5rPKSUh6Y5n2zPAYZGCFbSqPMIvKuQRzSYlb74ritRAVN/lw
+         FRLDH/bLaW64VIVBV9ZzCE9m3y1c/eMrrSdb6Gh0VSMCPGJX0ztxweMFBG2+yaAKsz52
+         2VGQ==
+X-Gm-Message-State: APjAAAXOsQnfQ3dyB7EjYDJjZRhhcQpcsdA1yUb/ZLQU8yH39e5KOiji
+        nJZdc/Vb4YyWMt+hWwCyB4Mehg==
+X-Google-Smtp-Source: APXvYqww51z53Fj+SFur89FkVZvsAjQrEhIV13t8870aGnrYJ2f32X4e6lxRmTKOa2Pc17jm0i7ppA==
+X-Received: by 2002:a65:520b:: with SMTP id o11mr20347226pgp.184.1559451973138;
+        Sat, 01 Jun 2019 22:06:13 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x28sm12472404pfo.78.2019.06.01.22.06.11
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 01 Jun 2019 22:06:12 -0700 (PDT)
+Date:   Sat, 1 Jun 2019 22:06:10 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     enh <enh@google.com>, Evgenii Stepanov <eugenis@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+Message-ID: <201906012156.55E2C45@keescook>
+References: <201905211633.6C0BF0C2@keescook>
+ <20190522101110.m2stmpaj7seezveq@mbp>
+ <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
+ <20190522163527.rnnc6t4tll7tk5zw@mbp>
+ <201905221316.865581CF@keescook>
+ <20190523144449.waam2mkyzhjpqpur@mbp>
+ <201905230917.DEE7A75EF0@keescook>
+ <20190523174345.6sv3kcipkvlwfmox@mbp>
+ <201905231327.77CA8D0A36@keescook>
+ <20190528170244.GF32006@arrakis.emea.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190528170244.GF32006@arrakis.emea.arm.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Several error message and error reporting revisions for mceusb.c
+On Tue, May 28, 2019 at 06:02:45PM +0100, Catalin Marinas wrote:
+> On Thu, May 23, 2019 at 02:31:16PM -0700, Kees Cook wrote:
+> > syzkaller already attempts to randomly inject non-canonical and
+> > 0xFFFF....FFFF addresses for user pointers in syscalls in an effort to
+> > find bugs like CVE-2017-5123 where waitid() via unchecked put_user() was
+> > able to write directly to kernel memory[1].
+> > 
+> > It seems that using TBI by default and not allowing a switch back to
+> > "normal" ABI without a reboot actually means that userspace cannot inject
+> > kernel pointers into syscalls any more, since they'll get universally
+> > stripped now. Is my understanding correct, here? i.e. exploiting
+> > CVE-2017-5123 would be impossible under TBI?
+> > 
+> > If so, then I think we should commit to the TBI ABI and have a boot
+> > flag to disable it, but NOT have a process flag, as that would allow
+> > attackers to bypass the masking. The only flag should be "TBI or MTE".
+> > 
+> > If so, can I get top byte masking for other architectures too? Like,
+> > just to strip high bits off userspace addresses? ;)
+> 
+> Just for fun, hack/attempt at your idea which should not interfere with
+> TBI. Only briefly tested on arm64 (and the s390 __TYPE_IS_PTR macro is
+> pretty weird ;)):
 
-proposed patches applicable to mceusb.c version
-https://github.com/torvalds/linux/blob/master/drivers/media/rc/mceusb.c
-Mar 1, 2019 commit 04ad30112aec61004f994d8f51461ec06e208e54
+OMG, this is amazing and bonkers. I love it.
 
+> --------------------------8<---------------------------------
+> diff --git a/arch/s390/include/asm/compat.h b/arch/s390/include/asm/compat.h
+> index 63b46e30b2c3..338455a74eff 100644
+> --- a/arch/s390/include/asm/compat.h
+> +++ b/arch/s390/include/asm/compat.h
+> @@ -11,9 +11,6 @@
+>  
+>  #include <asm-generic/compat.h>
+>  
+> -#define __TYPE_IS_PTR(t) (!__builtin_types_compatible_p( \
+> -				typeof(0?(__force t)0:0ULL), u64))
+> -
+>  #define __SC_DELOUSE(t,v) ({ \
+>  	BUILD_BUG_ON(sizeof(t) > 4 && !__TYPE_IS_PTR(t)); \
+>  	(__force t)(__TYPE_IS_PTR(t) ? ((v) & 0x7fffffff) : (v)); \
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index e2870fe1be5b..b1b9fe8502da 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -119,8 +119,15 @@ struct io_uring_params;
+>  #define __TYPE_IS_L(t)	(__TYPE_AS(t, 0L))
+>  #define __TYPE_IS_UL(t)	(__TYPE_AS(t, 0UL))
+>  #define __TYPE_IS_LL(t) (__TYPE_AS(t, 0LL) || __TYPE_AS(t, 0ULL))
+> +#define __TYPE_IS_PTR(t) (!__builtin_types_compatible_p(typeof(0 ? (__force t)0 : 0ULL), u64))
+>  #define __SC_LONG(t, a) __typeof(__builtin_choose_expr(__TYPE_IS_LL(t), 0LL, 0L)) a
+> +#ifdef CONFIG_64BIT
+> +#define __SC_CAST(t, a)	(__TYPE_IS_PTR(t) \
+> +				? (__force t) ((__u64)a & ~(1UL << 55)) \
+> +				: (__force t) a)
+> +#else
+>  #define __SC_CAST(t, a)	(__force t) a
+> +#endif
+>  #define __SC_ARGS(t, a)	a
+>  #define __SC_TEST(t, a) (void)BUILD_BUG_ON_ZERO(!__TYPE_IS_LL(t) && sizeof(t) > sizeof(long))
 
-Test platform:
+I'm laughing, I'm crying. Now I have to go look at the disassembly to
+see how this actually looks. (I mean, it _does_ solve my specific case
+of the waitid() flaw, but wouldn't help with pointers deeper in structs,
+etc, though TBI does, I think still help with that. I have to catch back
+up on the thread...) Anyway, if it's not too expensive it'd block
+reachability for those kinds of flaws.
 
-Raspberry Pi 3B+
-Linux raspberrypi 4.14.98-v7+ #1200 SMP Tue Feb 12 20:27:48 GMT 2019 armv7l GNU/Linux
+I wonder what my chances are of actually getting this landed? :)
+(Though, I guess I need to find a "VA width" macro instead of a raw 55.)
 
-mceusb 1-1.2.7:1.0: long-range (0x1) receiver active
-mceusb 1-1.2.7:1.0: Registered Pinnacle Systems PCTV Remote USB with mce emulator interface version 1
-mceusb 1-1.2.7:1.0: 2 tx ports (0x3 cabled) and 2 rx sensors (0x1 active)
+Thanks for thinking of __SC_CAST() and __TYPE_IS_PTR() together. Really
+made my day. :)
 
+-- 
+Kees Cook
