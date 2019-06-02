@@ -2,106 +2,134 @@ Return-Path: <SRS0=WdNM=UB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02E19C282DC
-	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 21:45:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 539A5C282DC
+	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 23:09:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C9F09279E6
-	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 21:45:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YsDpK0en"
+	by mail.kernel.org (Postfix) with ESMTP id 24987279DB
+	for <linux-media@archiver.kernel.org>; Sun,  2 Jun 2019 23:09:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727064AbfFBVoj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 2 Jun 2019 17:44:39 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:42253 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726776AbfFBVoj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 2 Jun 2019 17:44:39 -0400
-Received: by mail-lf1-f66.google.com with SMTP id y13so11961729lfh.9;
-        Sun, 02 Jun 2019 14:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SBjg5eRa81EzQPPSxTQMKBg6nX0dKdVE0RBDky8GBmA=;
-        b=YsDpK0enaC3AKpHJBpeWesF3I3XFx4UEa2ArMOUJ2gsU4VYeNUUuq4kR/nx155oPpP
-         xl6GGEIP9QYoSDkJ5aAoJUMPa2/3s0W852J27jTTKA45mngN7mX8kMnfXIHTQxukywXz
-         q7vYo5pRad4doGyTnwL4f7QLHY/pm2sRcSSA03cDGkvt94fRYjgUWlfCsj5CiHL4FfSS
-         LRlmMRRq+MH5nc0Nua1SOa69PCFksPfDcwUv74z9l8SruttXz2bBmMhcpQHswHTTA4z0
-         QgHoXCM5GYRgJrB6GtS2USoORtnW0OVNnzkTo3vEywkLWMLh3AdQyA3iQx2MIlgjw05P
-         HZAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=SBjg5eRa81EzQPPSxTQMKBg6nX0dKdVE0RBDky8GBmA=;
-        b=bn1sZQikJF3LR6BshmspF4bgHkC8ILuknU7t4UpFOkphnASqKH0wJW86felA2a9uHd
-         b6tH77ZcSWVtoofJgJ1/6RlhiZVsHV+3omLX9DOS0/OK/q1TSsGYqDN9sEOXS1F+QoLW
-         2suR73dRVi2OwpdUOnJYlM7p4BL5KtIIG/hEcmCcHvCSdGtT+ZZ440hNNe+fiRAvv/wl
-         zmkTcLoxtiYyKdMlTzHvvV9gzY8C1HGrrFYXRiS2zxVN+BDOoj7lumst6cqj5H5y9q3P
-         qs2rDnGJYkSwn/g3w1fgLObH+hJ2CyWjK9TClC+KrK8iFBu+97HN0PRqy28J0CYkGAQU
-         nJpw==
-X-Gm-Message-State: APjAAAV1MWyBhm5cdCpLq91HTol1i2HoVNsA9xyNbW2omSI+NyAofELK
-        aX18wps5D+rrF2zPCpSSb8c=
-X-Google-Smtp-Source: APXvYqzRFvCNnsb07UorKV39uaj4aB8VnwzziVDJkkHdhszJ9fxKQWmdYoy/eC6HvwChuiuiNPCnww==
-X-Received: by 2002:a19:6a01:: with SMTP id u1mr10103527lfu.141.1559511876507;
-        Sun, 02 Jun 2019 14:44:36 -0700 (PDT)
-Received: from localhost.localdomain ([94.29.35.141])
-        by smtp.gmail.com with ESMTPSA id g22sm2803653lje.43.2019.06.02.14.44.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 02 Jun 2019 14:44:35 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 0/4] NVIDIA Tegra Video Decoder driver improvements
-Date:   Mon,  3 Jun 2019 00:37:05 +0300
-Message-Id: <20190602213712.26857-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.21.0
+        id S1726587AbfFBXJJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 2 Jun 2019 19:09:09 -0400
+Received: from mga03.intel.com ([134.134.136.65]:16004 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726305AbfFBXJJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 2 Jun 2019 19:09:09 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Jun 2019 16:09:07 -0700
+X-ExtLoop1: 1
+Received: from lfgiles-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.252.33.77])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Jun 2019 16:09:05 -0700
+Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
+        id 85BDC21D78; Mon,  3 Jun 2019 02:08:54 +0300 (EEST)
+Date:   Mon, 3 Jun 2019 02:08:54 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl
+Subject: Re: [RESEND PATCH 1/1] v4l2-subdev: Try formats are only available
+ if subdev API is enabled
+Message-ID: <20190602230853.zjeoklpuwi26nd5e@kekkonen.localdomain>
+References: <20190531115426.15697-1-sakari.ailus@linux.intel.com>
+ <4923128.VWv0Upv8b6@z50>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4923128.VWv0Upv8b6@z50>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Hi Janusz,
 
-This series cleans up some of minor shortcomings that are caused by
-checkpatch recommendations that are not very applicable for the driver.
-Then IOMMU support is added to the driver and now it can handle sparse
-memory buffers that GPU hands to VDE in a default kernel configuration
-on Tegra30+.
+On Fri, May 31, 2019 at 08:40:26PM +0200, Janusz Krzysztofik wrote:
+> Hi Sakari,
+> 
+> On Friday, May 31, 2019 1:54:26 PM CEST Sakari Ailus wrote:
+> > Return an error for which == V4L2_SUBDEV_FORMAT_TRY if
+> > CONFIG_VIDEO_V4L2_SUBDEV_API is not enabled.  This is because the try
+> > formats are not available in that case. 
+> 
+> As far as I can see, there are 21 V4L2 subdevice drivers which don't support 
+> V4L2 subdev API but implement V4L2_SUBDEV_FORMAT_TRY operation mode somehow.  
+> Someone already took that decision in the past and replaced video operation 
+> callbacks with pad operation callbacks supporting V4L2_SUBDEV_FORMAT_TRY 
+> without the requirement for V4L2 subdev API support.
+> 
+> With this change in place, those drivers will loose that functionality if 
+> built without CONFIG_VIDEO_V4L2_SUBDEV_API, but will happily work as before 
+> otherwise.  That's probably not exactly what you intended.
 
-Dmitry Osipenko (4):
-  staging: media: tegra-vde: Remove BIT() macro from UAPI header
-  staging: media: tegra-vde: Manually pack UAPI structures
-  staging: media: tegra-vde: Add IOMMU support
-  staging: media: tegra-vde: Defer dmabuf's unmapping
+Right. Indeed. The old format video ops were converted to use the pad
+ops, even for drivers that knew nothing about pads. When writing this
+patch, I missed the try_fmt was actually still supported the same way. Not
+many drivers use it, but it's still there.
 
- drivers/staging/media/tegra-vde/Kconfig       |   1 +
- drivers/staging/media/tegra-vde/Makefile      |   1 +
- .../staging/media/tegra-vde/dmabuf-cache.c    | 223 ++++++++++++++++++
- drivers/staging/media/tegra-vde/iommu.c       | 146 ++++++++++++
- drivers/staging/media/tegra-vde/trace.h       |   1 +
- drivers/staging/media/tegra-vde/uapi.h        |  48 ++--
- .../media/tegra-vde/{tegra-vde.c => vde.c}    | 212 ++++++-----------
- drivers/staging/media/tegra-vde/vde.h         | 105 +++++++++
- 8 files changed, 574 insertions(+), 163 deletions(-)
- create mode 100644 drivers/staging/media/tegra-vde/dmabuf-cache.c
- create mode 100644 drivers/staging/media/tegra-vde/iommu.c
- rename drivers/staging/media/tegra-vde/{tegra-vde.c => vde.c} (88%)
- create mode 100644 drivers/staging/media/tegra-vde/vde.h
+I believe your earlier patchset almost covers the thinkable pitfalls that
+could arise from supporting both legacy subdev format and subder pad format
+semantics. I'll submit another patch, let's see if people can poke holes
+into that one. :-)
+
+> 
+> > Do the check here so that drivers
+> > don't need to.
+> 
+> So only beneficiaries of this change will be V4L2 subdevice drivers which don't 
+> support V4L2 subdev API and don't support V4L2_SUBDEV_FORMAT_TRY.  Existing 
+> drivers of that kind already have that check in place and I can hardly imagine 
+> someone is going to optimize them by removing it.  Any new drivers will 
+> probably support V4L2 subdev API from the beginning so they'll not benefit from 
+> this patch at all as they won't build without CONFIG_VIDEO_V4L2_SUBDEV_API.
+> 
+> I think that if a driver doesn't support V4L2_SUBDEV_FORMAT_TRY, it should 
+> simply check for that value itself and respond accordingly, no matter if it 
+> supports V4L2 subdev API or not.  As time passes, old drivers will be either 
+> depreciated or refreshed to handle V4L2_SUBDEV_FORMAT_TRY the V4L2 subdev API 
+> way, as we would like them to.
+> 
+> Thanks,
+> Janusz
+> 
+> 
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Depends-on: ("media: v4l2-subdev: Verify v4l2_subdev_call() pad config 
+> argument")
+> > ---
+> >  drivers/media/v4l2-core/v4l2-subdev.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/media/v4l2-core/v4l2-subdev.c b/drivers/media/v4l2-core/
+> v4l2-subdev.c
+> > index 34219e489be27..88b4b9d7c41be 100644
+> > --- a/drivers/media/v4l2-core/v4l2-subdev.c
+> > +++ b/drivers/media/v4l2-core/v4l2-subdev.c
+> > @@ -122,7 +122,10 @@ static int subdev_close(struct file *file)
+> >  
+> >  static inline int check_which(__u32 which)
+> >  {
+> > -	if (which != V4L2_SUBDEV_FORMAT_TRY &&
+> > +	if (
+> > +#ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+> > +	    which != V4L2_SUBDEV_FORMAT_TRY &&
+> > +#endif
+> >  	    which != V4L2_SUBDEV_FORMAT_ACTIVE)
+> >  		return -EINVAL;
+> >  
+> > 
+> 
+> 
+> 
+> 
 
 -- 
-2.21.0
+Regards,
 
+Sakari Ailus
+sakari.ailus@linux.intel.com
