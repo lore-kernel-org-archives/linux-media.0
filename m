@@ -2,250 +2,130 @@ Return-Path: <SRS0=yKew=UC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=FROM_EXCESS_BASE64,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_MED,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C9C5C04AB5
-	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE728C04AB5
+	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:55:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5078E27310
-	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:37:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8563C274DE
+	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:55:51 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MjNLlQZl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727256AbfFCQhT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Jun 2019 12:37:19 -0400
-Received: from mailoutvs42.siol.net ([185.57.226.233]:41050 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726463AbfFCQhT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Jun 2019 12:37:19 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Zimbra) with ESMTP id CE84852103D;
-        Mon,  3 Jun 2019 18:37:15 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta12.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta12.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id GZTcyyvsd1rj; Mon,  3 Jun 2019 18:37:15 +0200 (CEST)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Zimbra) with ESMTPS id 38591521345;
-        Mon,  3 Jun 2019 18:37:15 +0200 (CEST)
-Received: from jernej-laptop.localnet (cpe-86-58-52-202.static.triera.net [86.58.52.202])
-        (Authenticated sender: jernej.skrabec@siol.net)
-        by mail.siol.net (Zimbra) with ESMTPA id C479752103D;
-        Mon,  3 Jun 2019 18:37:14 +0200 (CEST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@siol.net>
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     paul.kocialkowski@bootlin.com, wens@csie.org, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] media: cedrus: Improve H264 memory efficiency
-Date:   Mon, 03 Jun 2019 18:37:14 +0200
-Message-ID: <30580764.erAxqE4FcP@jernej-laptop>
-In-Reply-To: <20190603122328.kczqsr4pza2ggvbk@flea>
-References: <20190530211516.1891-1-jernej.skrabec@siol.net> <20190530211516.1891-8-jernej.skrabec@siol.net> <20190603122328.kczqsr4pza2ggvbk@flea>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1729587AbfFCQzr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Jun 2019 12:55:47 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:55225 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729571AbfFCQzq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Jun 2019 12:55:46 -0400
+Received: by mail-qk1-f202.google.com with SMTP id y190so964342qkc.21
+        for <linux-media@vger.kernel.org>; Mon, 03 Jun 2019 09:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=/k2k5Ar8aCCQf+9D9Tu+JwXv9rH7AXQNa2sn1Y51ZQ4=;
+        b=MjNLlQZlNit0qhAOpvEzanta6aMm/HnKYesq3iqhkQTbbVYKucWsuURNV/pZ0fdIgr
+         1ylaKkgQteB/frXQLyR10kOE8zU+ZyRD8TpKfDcQZGCnFFNsjXxOEavz8cj17GKJRCyB
+         J2x5kMGyd9MMKiWAlK7ocfm8aGFbZzr0Rdh98fVFvwjIhfiuVXpvvAuYt2OnDM/XCpZC
+         VWufB4qSPQOsK3r33NC8xnn++nCnsO734V+hLJqo/vulWZ1igyxoTiVpIzF6BQyRc9HL
+         xirXgN3vt5YoqdUqHeQ92rql4obffE5Q5C/gZo+mx+uqLs8kG3FDDu05FA2VnYDjJKl9
+         Kwrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=/k2k5Ar8aCCQf+9D9Tu+JwXv9rH7AXQNa2sn1Y51ZQ4=;
+        b=nfMyv+FfjwyrbO8ispHvhkc238pj3Z1QmcFX9jtuxyqAe0f5N/WmmMQNs5QRZsBZyw
+         zcJb5UKH3sVI3Dc/hHyCNUlrnHCxpObZLulZQ+uAHG6qJ63hIdD5eVWCVaL4xisQxuiT
+         KpkXglLAOGmB7B4MyNxwd/OYdb4uWRX42ILcSUuTgFaBbqiLr4ca9gqKPXDHh7VCgZu5
+         WT2/AvzzjdR7PQmrjDEmRtVsjUhRcWI5dod5ZDfYt2PTi+JidR9pXeUb/QQHcq2Kabge
+         e58nRfPOAQuX04/1xq0MmWYJTrAThZzGRVnYZAQb5d2zXJTVdICilPcgIHgG+JTQFSOs
+         dthQ==
+X-Gm-Message-State: APjAAAXBHBqO4DLYUlH+wEaHiuO652rin4Hf7lzxquB1MAbfVP5F43Qx
+        IILPLw/BxTAuoBMQ7sGaOWD9mhrpegHO7t3U
+X-Google-Smtp-Source: APXvYqwZjlBwbqsUyeG8rZrRtMFJQ4x0s68oHB37CApZiK1GoR+JjJPXBY4ob8DyF+o+kojgj7/dpioneK7jLRPa
+X-Received: by 2002:a0c:b5c5:: with SMTP id o5mr3845483qvf.6.1559580946056;
+ Mon, 03 Jun 2019 09:55:46 -0700 (PDT)
+Date:   Mon,  3 Jun 2019 18:55:09 +0200
+In-Reply-To: <cover.1559580831.git.andreyknvl@google.com>
+Message-Id: <da1d0e0f6d69c15a12987379e372182f416cbc02.1559580831.git.andreyknvl@google.com>
+Mime-Version: 1.0
+References: <cover.1559580831.git.andreyknvl@google.com>
+X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
+Subject: [PATCH v16 07/16] mm, arm64: untag user pointers in get_vaddr_frames
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dne ponedeljek, 03. junij 2019 ob 14:23:28 CEST je Maxime Ripard napisal(a):
-> On Thu, May 30, 2019 at 11:15:16PM +0200, Jernej Skrabec wrote:
-> > H264 decoder driver preallocated pretty big worst case mv col buffer
-> > pool. It turns out that pool is most of the time much bigger than it
-> > needs to be.
-> > 
-> > Solution implemented here is to allocate memory only if capture buffer
-> > is actually used and only as much as it is really necessary.
-> > 
-> > This is also preparation for 4K video decoding support, which will be
-> > implemented later.
-> 
-> What is it doing exactly to prepare for 4k?
+This patch is a part of a series that extends arm64 kernel ABI to allow to
+pass tagged user pointers (with the top byte set to something else other
+than 0x00) as syscall arguments.
 
-Well, with that change 4K videos can be actually watched with 256 MiB CMA 
-pool, but I can drop this statement in next version.
+get_vaddr_frames uses provided user pointers for vma lookups, which can
+only by done with untagged pointers. Instead of locating and changing
+all callers of this function, perform untagging in it.
 
-I concentrated on 256 MiB CMA pool, because it's maximum memory size supported 
-by older VPU versions, but I think they don't support 4K decoding. I don't 
-have them, so I can't test that hypothesis.
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ mm/frame_vector.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> 
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-> > ---
-> > 
-> >  drivers/staging/media/sunxi/cedrus/cedrus.h   |  4 -
-> >  .../staging/media/sunxi/cedrus/cedrus_h264.c  | 81 +++++++------------
-> >  2 files changed, 28 insertions(+), 57 deletions(-)
-> > 
-> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > b/drivers/staging/media/sunxi/cedrus/cedrus.h index
-> > 16c1bdfd243a..fcbbbef65494 100644
-> > --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > @@ -106,10 +106,6 @@ struct cedrus_ctx {
-> > 
-> >  	union {
-> >  	
-> >  		struct {
-> > 
-> > -			void		*mv_col_buf;
-> > -			dma_addr_t	mv_col_buf_dma;
-> > -			ssize_t		mv_col_buf_field_size;
-> > -			ssize_t		mv_col_buf_size;
-> > 
-> >  			void		*pic_info_buf;
-> >  			dma_addr_t	pic_info_buf_dma;
-> >  			void		*neighbor_info_buf;
-> > 
-> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c index
-> > b2290f98d81a..758fd0049e8f 100644
-> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > @@ -54,17 +54,14 @@ static void cedrus_h264_write_sram(struct cedrus_dev
-> > *dev,> 
-> >  		cedrus_write(dev, VE_AVC_SRAM_PORT_DATA, *buffer++);
-> >  
-> >  }
-> > 
-> > -static dma_addr_t cedrus_h264_mv_col_buf_addr(struct cedrus_ctx *ctx,
-> > -					      unsigned int 
-position,
-> > +static dma_addr_t cedrus_h264_mv_col_buf_addr(struct cedrus_buffer *buf,
-> > 
-> >  					      unsigned int 
-field)
-> >  
-> >  {
-> > 
-> > -	dma_addr_t addr = ctx->codec.h264.mv_col_buf_dma;
-> > -
-> > -	/* Adjust for the position */
-> > -	addr += position * ctx->codec.h264.mv_col_buf_field_size * 2;
-> > +	dma_addr_t addr = buf->extra_buf_dma;
-> > 
-> >  	/* Adjust for the field */
-> > 
-> > -	addr += field * ctx->codec.h264.mv_col_buf_field_size;
-> > +	if (field)
-> > +		addr += buf->extra_buf_size / 2;
-> > 
-> >  	return addr;
-> >  
-> >  }
-> > 
-> > @@ -76,7 +73,6 @@ static void cedrus_fill_ref_pic(struct cedrus_ctx *ctx,
-> > 
-> >  				struct cedrus_h264_sram_ref_pic 
-*pic)
-> >  
-> >  {
-> >  
-> >  	struct vb2_buffer *vbuf = &buf->m2m_buf.vb.vb2_buf;
-> > 
-> > -	unsigned int position = buf->codec.h264.position;
-> > 
-> >  	pic->top_field_order_cnt = cpu_to_le32(top_field_order_cnt);
-> >  	pic->bottom_field_order_cnt = cpu_to_le32(bottom_field_order_cnt);
-> > 
-> > @@ -84,10 +80,8 @@ static void cedrus_fill_ref_pic(struct cedrus_ctx *ctx,
-> > 
-> >  	pic->luma_ptr = cpu_to_le32(cedrus_buf_addr(vbuf, &ctx->dst_fmt, 
-0));
-> >  	pic->chroma_ptr = cpu_to_le32(cedrus_buf_addr(vbuf, &ctx->dst_fmt, 
-1));
-> > 
-> > -	pic->mv_col_top_ptr =
-> > -		cpu_to_le32(cedrus_h264_mv_col_buf_addr(ctx, position, 
-0));
-> > -	pic->mv_col_bot_ptr =
-> > -		cpu_to_le32(cedrus_h264_mv_col_buf_addr(ctx, position, 
-1));
-> > +	pic->mv_col_top_ptr = cpu_to_le32(cedrus_h264_mv_col_buf_addr(buf, 
-0));
-> > +	pic->mv_col_bot_ptr = cpu_to_le32(cedrus_h264_mv_col_buf_addr(buf, 
-1));
-> > 
-> >  }
-> >  
-> >  static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
-> > 
-> > @@ -142,6 +136,28 @@ static void cedrus_write_frame_list(struct cedrus_ctx
-> > *ctx,> 
-> >  	output_buf = vb2_to_cedrus_buffer(&run->dst->vb2_buf);
-> >  	output_buf->codec.h264.position = position;
-> > 
-> > +	if (!output_buf->extra_buf_size) {
-> > +		const struct v4l2_ctrl_h264_sps *sps = run->h264.sps;
-> > +		unsigned int field_size;
-> > +
-> > +		field_size = DIV_ROUND_UP(ctx->src_fmt.width, 16) *
-> > +			DIV_ROUND_UP(ctx->src_fmt.height, 16) * 16;
-> > +		if (!(sps->flags & 
-V4L2_H264_SPS_FLAG_DIRECT_8X8_INFERENCE))
-> > +			field_size = field_size * 2;
-> > +		if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
-> > +			field_size = field_size * 2;
-> > +
-> > +		output_buf->extra_buf_size = field_size * 2;
-> > +		output_buf->extra_buf =
-> > +			dma_alloc_coherent(dev->dev,
-> > +					   output_buf-
->extra_buf_size,
-> > +					   &output_buf-
->extra_buf_dma,
-> > +					   GFP_KERNEL);
-> > +
-> > +		if (!output_buf->extra_buf)
-> > +			output_buf->extra_buf_size = 0;
-> > +	}
-> > +
-> 
-> That also means that instead of allocating that buffer exactly once,
-> you now allocate it for each output buffer?
-
-It's not completely the same. I'm allocating multiple times, yes, but much 
-smaller chunks and only if needed.
-
-Still, this slight overhead happens only when buffer is used for the first time. 
-When buffer is reused, this MV buffer is also reused.
-
-> 
-> I guess that it will cleaned up by your previous patch at
-> buffer_cleanup time, so after it's no longer a reference frame?
-
-Yes, it will be deallocated in buffer_cleanup, but only after capture buffers 
-are freed, which usually happens when device file descriptor is closed.
-
-Buffers which holds reference frames are later reused, together with it's MV 
-buffer, so there's no overhead.
-
-> 
-> What is the average memory usage before, and after that change during
-> a playback, and what is the runtime cost of doing it multiple times
-> instead of once?
-
-As I already said, overhead is present only when buffer is used for the first 
-time, which is not ideal, but allows to calculate minimal buffer size needed 
-and even doesn't allocate anything if capture buffer is not used at all.
-
-I didn't collect any exact numbers, but with this change I can play H264 and 
-HEVC (with similar modification) 4K video samples with 256 MiB CMA pool. 
-Without this change, it's not really possible. You can argue "but what if 4K 
-video use 16 reference frames", then yes, only solution is to increase CMA 
-pool, but why reserve extra memory which will never be used?
-
-I've been using this optimization for past ~6 month with no issues noticed. If 
-you feel better, I can change this to be a bit conservative and allocate MV 
-buffer when buffer_init is called. This will consume a bit more memory as SPS is 
-not available at that time (worst case buffer size estimation), but it still 
-won't allocate MV buffers for unallocated capture frames.
-
-Best regards,
-Jernej
-
+diff --git a/mm/frame_vector.c b/mm/frame_vector.c
+index c64dca6e27c2..c431ca81dad5 100644
+--- a/mm/frame_vector.c
++++ b/mm/frame_vector.c
+@@ -46,6 +46,8 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
+ 	if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
+ 		nr_frames = vec->nr_allocated;
+ 
++	start = untagged_addr(start);
++
+ 	down_read(&mm->mmap_sem);
+ 	locked = 1;
+ 	vma = find_vma_intersection(mm, start, start + 1);
+-- 
+2.22.0.rc1.311.g5d7573a151-goog
 
