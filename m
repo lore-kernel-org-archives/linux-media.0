@@ -4,59 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_MED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_MED,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33B5AC28CC6
-	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BE64C04AB5
+	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:57:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0C7F62760F
-	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:57:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5272C27645
+	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:57:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aMwQlO/u"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uyCC5R6P"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726818AbfFCQ5Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Jun 2019 12:57:16 -0400
-Received: from mail-oi1-f201.google.com ([209.85.167.201]:37542 "EHLO
-        mail-oi1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729701AbfFCQ4K (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Jun 2019 12:56:10 -0400
-Received: by mail-oi1-f201.google.com with SMTP id 5so5442231oix.4
-        for <linux-media@vger.kernel.org>; Mon, 03 Jun 2019 09:56:10 -0700 (PDT)
+        id S1729661AbfFCQ4B (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Jun 2019 12:56:01 -0400
+Received: from mail-ot1-f73.google.com ([209.85.210.73]:48682 "EHLO
+        mail-ot1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729647AbfFCQ4A (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Jun 2019 12:56:00 -0400
+Received: by mail-ot1-f73.google.com with SMTP id b4so191829otf.15
+        for <linux-media@vger.kernel.org>; Mon, 03 Jun 2019 09:56:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=UdKHGBZnbXnYOdacGwXVLbo2mp7I3OpbNnEy2rn9dE0=;
-        b=aMwQlO/uqKNquhxQCaOybakc925QpZfJO8wh15xEZQIyCg72vlDGXrUg/ROAuoQDUD
-         yCBHc/elg2gmmBaFllCt7o9fko/cMYEXNqMBN5Ib8jP974H6cgrFWFCLBOtmTziaRGQQ
-         SwI/Xt1vXIDm1HuVmNbFHcArxU2bsmwx6xs/PbNEoDywCtOeBm47QoZ+wae08e7pzq/K
-         a7mRKG2GqnFCVji4AY+94HQ5eVsYgsMp8E/PA4r/OPS0psFqvjDQbyz4YEbR/PgBj2Aq
-         436HnabGuSm3Rvtg2LN9VhA8Rs2mRcn4xgL77EZC0LMuRu0EvZQAUUg9zFkbP9a8AWHr
-         YN2w==
+        bh=J9pRn7M3NANi3nsm6t0U9rkGUXnmKvJ1SqswIr7oBNs=;
+        b=uyCC5R6PocJkucx1jg/Ao87LrvuuxuIBF6MJgtDNhRfSLGfd93TT+616KNBdU1kmQ0
+         AgUDtRxuemeCNPWARnIzmKXOHJHBg+nlDVnGcRWa1zFo9sO/boLQmVSMKTOceUEyeuWg
+         mQemhEJH0YpA4zNTW5udZ12GKI5bnl80kC7VZlC60TPzrs4d4KpnJ4TkMFczujBnqjPI
+         s1PIMD6Bv9mJiTZ+Ezsulw1mODRNfzAxvwpKccvPVlqp//q9tEM3ODpqGbBulPCkTHr1
+         l2f+hVLNHUHhV92giHpjab5jQ7AF27XvPV9Duk2JrwjNtkOIOBAX18N6EpfDx4AK8S9m
+         dKQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=UdKHGBZnbXnYOdacGwXVLbo2mp7I3OpbNnEy2rn9dE0=;
-        b=XR66AUkDV0OZR3REdr7awU3oxI8XlxJexnEmrZFmG8NfTg64e15kjaOdqCU5C9haXx
-         P+m8ZAkcGkJGNfUTE4ktJiL2tj4WRBLH3ORLPO1HEvuyS0tZ0V62ed4rqgpxOB9D3TjI
-         pj/lGwQ3aORaUqY0yD8WIFjNz7IktVv9kHGTqGfqjkqpUb5r/r+y49HgzJJ5KrM2Rr8f
-         ZGfHM0Ju4pAUNh0kBV047EBo4miLs5Zcdr3OoEiDn/vSJu5slaOZsFPHbG/JYHbHSi0B
-         rwnN9V9sMUh9FU1inHivpvLEhFcdg6/X2rGSujSNgMJKsqv/3obBdmjKiyLXO9mDtafN
-         FcGQ==
-X-Gm-Message-State: APjAAAXT30Q+RNccja7VnX8L8ODOvp4LvOSeGZk/l047bkcBoYiAqr1E
-        Qq86qDCZZjGie/VbJkYWIiGB9n11R8RYl1or
-X-Google-Smtp-Source: APXvYqxMjN/4yHR2ThXEEFJeDuxNxY18SC+MmNXgYJ7rlNGji/L0sGyo9f6aEs2c6lSgFUC7mMKDb3c6mMlyiMDt
-X-Received: by 2002:a9d:4109:: with SMTP id o9mr1768838ote.353.1559580969728;
- Mon, 03 Jun 2019 09:56:09 -0700 (PDT)
-Date:   Mon,  3 Jun 2019 18:55:16 +0200
+        bh=J9pRn7M3NANi3nsm6t0U9rkGUXnmKvJ1SqswIr7oBNs=;
+        b=kMXAXidvNzAN5j4LwZs1+k2dC0J4MtFiB12yhMGEGoHydDjvNyrB966ucHSVAI0Sb0
+         3IFpLr30A12qgvkxbm0McO0HZr6wrgjx19zlWCek1j0Vm+yj+1SFgwnJxygrDaRHj0aE
+         iH3ZIDZoLZO8D/P0SNk65EhbGESDogFXkhoLHqoyC7ztkcQ6LVUI+8ttBDQ/vU+jU0Ni
+         W6+q/PyQQywQpKy1VhKfqJlx+HtgXwDYJ5C/DIFk3S6OLugpstGTzLXG94PsZiqVaGFG
+         tyOKsn/MDaHOG7pD06JkKMsr6LjRnKbk6DVZJNG8F+bjs/AmeswsxNLSEc0OKs53fm4Y
+         lVSA==
+X-Gm-Message-State: APjAAAW1fJXgioLXumOT6c4rDzlbPZnDf1aGXXHSGLGTjh2oVNdNBHYH
+        Tns5/ULB/MA4m2Fe9rUUO0A6r+EWd2lIQFQY
+X-Google-Smtp-Source: APXvYqxkxhXEjx8ehUwO+4U+/PSwW95cfpd51BrO1CGROW1JbuARWLoPLbgzmMBGokFlEw6Kw7ByzaocLX6whXWc
+X-Received: by 2002:aca:4341:: with SMTP id q62mr1665112oia.140.1559580959661;
+ Mon, 03 Jun 2019 09:55:59 -0700 (PDT)
+Date:   Mon,  3 Jun 2019 18:55:13 +0200
 In-Reply-To: <cover.1559580831.git.andreyknvl@google.com>
-Message-Id: <dc3f3092abbc0d48e51b2e2a2ca8f4c4f69fa0f4.1559580831.git.andreyknvl@google.com>
+Message-Id: <f293884fad5f741b9202a9db6006f4bfdaedc2bd.1559580831.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1559580831.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
-Subject: [PATCH v16 14/16] tee, arm64: untag user pointers in tee_shm_register
+Subject: [PATCH v16 11/16] drm/radeon, arm64: untag user pointers in radeon_gem_userptr_ioctl
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -93,7 +94,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>
+        Andrey Konovalov <andreyknvl@google.com>, Kuehling@google.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -104,29 +105,35 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-tee_shm_register()->optee_shm_unregister()->check_mem_type() uses provided
-user pointers for vma lookups (via __check_mem_type()), which can only by
-done with untagged pointers.
+In radeon_gem_userptr_ioctl() an MMU notifier is set up with a (tagged)
+userspace pointer. The untagged address should be used so that MMU
+notifiers for the untagged address get correctly matched up with the right
+BO. This funcation also calls radeon_ttm_tt_pin_userptr(), which uses
+provided user pointers for vma lookups, which can only by done with
+untagged pointers.
 
-Untag user pointers in this function.
+This patch untags user pointers in radeon_gem_userptr_ioctl().
 
+Suggested-by: Kuehling, Felix <Felix.Kuehling@amd.com>
+Acked-by: Felix Kuehling <Felix.Kuehling@amd.com>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/tee/tee_shm.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/radeon/radeon_gem.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-index 49fd7312e2aa..96945f4cefb8 100644
---- a/drivers/tee/tee_shm.c
-+++ b/drivers/tee/tee_shm.c
-@@ -263,6 +263,7 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
- 	shm->teedev = teedev;
- 	shm->ctx = ctx;
- 	shm->id = -1;
-+	addr = untagged_addr(addr);
- 	start = rounddown(addr, PAGE_SIZE);
- 	shm->offset = addr - start;
- 	shm->size = length;
+diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+index 44617dec8183..90eb78fb5eb2 100644
+--- a/drivers/gpu/drm/radeon/radeon_gem.c
++++ b/drivers/gpu/drm/radeon/radeon_gem.c
+@@ -291,6 +291,8 @@ int radeon_gem_userptr_ioctl(struct drm_device *dev, void *data,
+ 	uint32_t handle;
+ 	int r;
+ 
++	args->addr = untagged_addr(args->addr);
++
+ 	if (offset_in_page(args->addr | args->size))
+ 		return -EINVAL;
+ 
 -- 
 2.22.0.rc1.311.g5d7573a151-goog
 
