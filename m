@@ -4,59 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_MED,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_MED,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CBF0C04AB5
-	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:56:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6A76C282CE
+	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:56:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 66C3E27425
-	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:56:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 929672755E
+	for <linux-media@archiver.kernel.org>; Mon,  3 Jun 2019 16:56:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TJVcn1cL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E8Ist5LC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729673AbfFCQ4F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 3 Jun 2019 12:56:05 -0400
-Received: from mail-qk1-f201.google.com ([209.85.222.201]:43036 "EHLO
-        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729666AbfFCQ4E (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Jun 2019 12:56:04 -0400
-Received: by mail-qk1-f201.google.com with SMTP id v4so984685qkj.10
-        for <linux-media@vger.kernel.org>; Mon, 03 Jun 2019 09:56:03 -0700 (PDT)
+        id S1729775AbfFCQ43 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 3 Jun 2019 12:56:29 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:48901 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729734AbfFCQ4R (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 3 Jun 2019 12:56:17 -0400
+Received: by mail-qt1-f202.google.com with SMTP id q13so4407095qtj.15
+        for <linux-media@vger.kernel.org>; Mon, 03 Jun 2019 09:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=EspxEupGJGiWEDXD9P4jjgWKmcXH74NzvYIbJ/AWgMI=;
-        b=TJVcn1cLKwrCDqfOoDXp30a4H6TaXBKiwiHjDAdwongHK/bKzo02AftS+NOLHZV2qk
-         uaXFTsh7OP9kK6tBgKChXJ2KBusgSI13ByE5QAJT4opcCyHzVAEN7KnoiqvVvgIk9UeZ
-         thbX5DYw+Ya/O9Bt8a5AL4KNqAUsZ4B4hEfnsQKdt+gJFBe02e/Gllpw40I3Eh8jjzXh
-         yX2E6mPgl8q0tFyhEApdfs/i0GKdcLnrmq2mOZHSQm727N+W9pKIuuH8ohRLmjbmQDTf
-         QCPeVpMCsS5AlW/faffrLj+KIOBAFryuyM2XhBVLl0qrMu2w3WMArdINiV+/WP+bh/um
-         j3qg==
+        bh=v9MzlIb7HY1yKtXIqdaDnLUOCgnoLYityVGh+V+FCFI=;
+        b=E8Ist5LC6WVHrU8hj11VtWQb5rjU7iBORWjaptcqcX3l9oPWYIMo05KmXzzCVgt3cu
+         lYJ4Yvl8mbNlJpJWSEYMIryL5scHXmPmVUqUSjI9X7Fuxa39wo8rzDRZFWMAkoj3uwjY
+         mqiCqrBWPtOVkiL+4ZV5H/HhzxJmpTR97uHC/IdXM4tljhuvgYTiLw3741mzKX8NYLUt
+         uc6Aqh8uuXDuaxHP4yeJ0XLPpMovyAE85DGwVCzioR0Gt6moVfBUOYshZAWVCnGUBbU4
+         06NzOvSR4tkaeqT9+eniQMZF90V1u65K6kkbFscWsH7pqN+ptT1wb5JpdkKVZRneJwoH
+         CGYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=EspxEupGJGiWEDXD9P4jjgWKmcXH74NzvYIbJ/AWgMI=;
-        b=QTJZu+EOcau0KR3wRCy67R+OY9kF9t3CXIHVcU/xVdQXidbMoW7AYnnzCLktok1eIh
-         bllXKp5idlUwijeXQhF9c8vfiLgcrc21XMkTvrYNTaP7URNaSmCkKqgRFUtNYnA4ERFc
-         nsa9qn2JxDcK4RAWfXT6iqPN+8utB4GNA6KCW7RnGv7jXxU6k/B5qTdAf0TTLT4xdG8r
-         dTwdyxYHyXUsMlofKclpQGj61D2Xlfi0yI7BjGUdsvrJq5k3zOkxUdbAzrs9quJOG7Ol
-         7v48IYBhLHsreXKpy897hpzyjUz0hrXvOWO8Qs6zGjnj+6BgW6uY7QQiu6hKM4668VV4
-         4FZw==
-X-Gm-Message-State: APjAAAUeOPees51oZX07SAIqnZSoD5CorjBHvvlMi7AkahQoVmd/kgR3
-        eMka3zlgaTmYqfwO863VRK0xvb66oZzYU3Z+
-X-Google-Smtp-Source: APXvYqyTJQX58jIU+0IdRLMyhel9C9SXAf29MqpC57OIYMzhYLqjfoH2DhcsbA5oBHVd1rJqiIiEUBwjKZJxchdB
-X-Received: by 2002:a0c:be87:: with SMTP id n7mr3853859qvi.65.1559580963191;
- Mon, 03 Jun 2019 09:56:03 -0700 (PDT)
-Date:   Mon,  3 Jun 2019 18:55:14 +0200
+        bh=v9MzlIb7HY1yKtXIqdaDnLUOCgnoLYityVGh+V+FCFI=;
+        b=oenRPbOPLBkJvx+qTeY8oFyH8tWbQnWqt5N3/AV+srBRWr92WkVwK2b5gvVyJb0+aU
+         sM9oyuJFQQLFwllNDGat5/ie4X1Q/p9UU6BxPtHCxVUiH2BOvwkLfkOAVMjMANUdkAfH
+         MBsLMEgy0UtrqT+Kwl6QLCGAEjoa5xZvxQi9UTP6rTSPOlL0fChQaY9irPicV+JxqYpX
+         zprbO0ZJKFcQFAuQ0Tcly6bv6xlFvx1oxEjLtAJ0d/f5UyBZ1BV2KVOSLprZkg32OMcx
+         /LMGjtpgHqLaFdWWpaNS3JlvR/NIedp2ACYUGrGiADe1fpXk5QDXvKYvzFTsaF5BnIyA
+         bshw==
+X-Gm-Message-State: APjAAAWcuW+Twf/V+sNRszt0JG9YambRpAboRKc2UjFXvZriZotiBxcS
+        vub8F5QWfY9Sya641csO2R+ywi29Wk7U79+7
+X-Google-Smtp-Source: APXvYqyupRnjjQO94efnTljbt6p9DxywyyDuZaQUfwBf3Y405Fl40dWCznelJThhDpEIkj52c6mVbKSb6DjD/rvF
+X-Received: by 2002:a37:de06:: with SMTP id h6mr3881914qkj.322.1559580976267;
+ Mon, 03 Jun 2019 09:56:16 -0700 (PDT)
+Date:   Mon,  3 Jun 2019 18:55:18 +0200
 In-Reply-To: <cover.1559580831.git.andreyknvl@google.com>
-Message-Id: <c829f93b19ad6af1b13be8935ce29baa8e58518f.1559580831.git.andreyknvl@google.com>
+Message-Id: <9e1b5998a28f82b16076fc85ab4f88af5381cf74.1559580831.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1559580831.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
-Subject: [PATCH v16 12/16] IB, arm64: untag user pointers in ib_uverbs_(re)reg_mr()
+Subject: [PATCH v16 16/16] selftests, arm64: add a selftest for passing tagged
+ pointers to kernel
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -104,38 +106,149 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-ib_uverbs_(re)reg_mr() use provided user pointers for vma lookups (through
-e.g. mlx4_get_umem_mr()), which can only by done with untagged pointers.
-
-Untag user pointers in these functions.
+This patch adds a simple test, that calls the uname syscall with a
+tagged user pointer as an argument. Without the kernel accepting tagged
+user pointers the test fails with EFAULT.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/infiniband/core/uverbs_cmd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/arm64/.gitignore      |  1 +
+ tools/testing/selftests/arm64/Makefile        | 22 ++++++++++
+ .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++
+ tools/testing/selftests/arm64/tags_lib.c      | 42 +++++++++++++++++++
+ tools/testing/selftests/arm64/tags_test.c     | 18 ++++++++
+ 5 files changed, 95 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/Makefile
+ create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
+ create mode 100644 tools/testing/selftests/arm64/tags_lib.c
+ create mode 100644 tools/testing/selftests/arm64/tags_test.c
 
-diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
-index 5a3a1780ceea..f88ee733e617 100644
---- a/drivers/infiniband/core/uverbs_cmd.c
-+++ b/drivers/infiniband/core/uverbs_cmd.c
-@@ -709,6 +709,8 @@ static int ib_uverbs_reg_mr(struct uverbs_attr_bundle *attrs)
- 	if (ret)
- 		return ret;
- 
-+	cmd.start = untagged_addr(cmd.start);
+diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
+new file mode 100644
+index 000000000000..e8fae8d61ed6
+--- /dev/null
++++ b/tools/testing/selftests/arm64/.gitignore
+@@ -0,0 +1 @@
++tags_test
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+new file mode 100644
+index 000000000000..9dee18727923
+--- /dev/null
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -0,0 +1,22 @@
++# SPDX-License-Identifier: GPL-2.0
 +
- 	if ((cmd.start & ~PAGE_MASK) != (cmd.hca_va & ~PAGE_MASK))
- 		return -EINVAL;
- 
-@@ -791,6 +793,8 @@ static int ib_uverbs_rereg_mr(struct uverbs_attr_bundle *attrs)
- 	if (ret)
- 		return ret;
- 
-+	cmd.start = untagged_addr(cmd.start);
++include ../lib.mk
 +
- 	if (cmd.flags & ~IB_MR_REREG_SUPPORTED || !cmd.flags)
- 		return -EINVAL;
- 
++# ARCH can be overridden by the user for cross compiling
++ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++
++ifneq (,$(filter $(ARCH),aarch64 arm64))
++
++TEST_CUSTOM_PROGS := $(OUTPUT)/tags_test
++
++$(OUTPUT)/tags_test: tags_test.c $(OUTPUT)/tags_lib.so
++	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $<
++
++$(OUTPUT)/tags_lib.so: tags_lib.c
++	$(CC) -o $@ -shared $(CFLAGS) $(LDFLAGS) $^
++
++TEST_PROGS := run_tags_test.sh
++
++all: $(TEST_CUSTOM_PROGS)
++
++endif
+diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/run_tags_test.sh
+new file mode 100755
+index 000000000000..2bbe0cd4220b
+--- /dev/null
++++ b/tools/testing/selftests/arm64/run_tags_test.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++echo "--------------------"
++echo "running tags test"
++echo "--------------------"
++LD_PRELOAD=./tags_lib.so ./tags_test
++if [ $? -ne 0 ]; then
++	echo "[FAIL]"
++else
++	echo "[PASS]"
++fi
+diff --git a/tools/testing/selftests/arm64/tags_lib.c b/tools/testing/selftests/arm64/tags_lib.c
+new file mode 100644
+index 000000000000..8a674509216e
+--- /dev/null
++++ b/tools/testing/selftests/arm64/tags_lib.c
+@@ -0,0 +1,42 @@
++#include <stdlib.h>
++
++#define TAG_SHIFT	(56)
++#define TAG_MASK	(0xffUL << TAG_SHIFT)
++
++void *__libc_malloc(size_t size);
++void __libc_free(void *ptr);
++void *__libc_realloc(void *ptr, size_t size);
++void *__libc_calloc(size_t nmemb, size_t size);
++
++static void *tag_ptr(void *ptr)
++{
++	unsigned long tag = rand() & 0xff;
++	if (!ptr)
++		return ptr;
++	return (void *)((unsigned long)ptr | (tag << TAG_SHIFT));
++}
++
++static void *untag_ptr(void *ptr)
++{
++	return (void *)((unsigned long)ptr & ~TAG_MASK);
++}
++
++void *malloc(size_t size)
++{
++	return tag_ptr(__libc_malloc(size));
++}
++
++void free(void *ptr)
++{
++	__libc_free(untag_ptr(ptr));
++}
++
++void *realloc(void *ptr, size_t size)
++{
++	return tag_ptr(__libc_realloc(untag_ptr(ptr), size));
++}
++
++void *calloc(size_t nmemb, size_t size)
++{
++	return tag_ptr(__libc_calloc(nmemb, size));
++}
+diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
+new file mode 100644
+index 000000000000..263b302874ed
+--- /dev/null
++++ b/tools/testing/selftests/arm64/tags_test.c
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <stdint.h>
++#include <sys/utsname.h>
++
++int main(void)
++{
++	struct utsname *ptr;
++	int err;
++
++	ptr = (struct utsname *)malloc(sizeof(*ptr));
++	err = uname(ptr);
++	free(ptr);
++	return err;
++}
 -- 
 2.22.0.rc1.311.g5d7573a151-goog
 
