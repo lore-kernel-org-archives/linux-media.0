@@ -2,95 +2,141 @@ Return-Path: <SRS0=wOjJ=UD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AB927C282CE
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 17:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4815EC282CE
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 18:20:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 879D42075B
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 17:57:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VQdFpnTT"
+	by mail.kernel.org (Postfix) with ESMTP id 2BEF9207E0
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 18:20:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbfFDR5h (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jun 2019 13:57:37 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:38551 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbfFDR5h (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 13:57:37 -0400
-Received: by mail-ot1-f68.google.com with SMTP id d17so6221807oth.5
-        for <linux-media@vger.kernel.org>; Tue, 04 Jun 2019 10:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qhMXDz9g6dTVucbRQt0OlnTKawIs8btTxKTIU4apLKM=;
-        b=VQdFpnTT6rFdVrjSuRWSrHUX6Iunu3X++RWpbvHNbxNG4xPBA9hrdidNDld5SYpTKo
-         p0IG4BtuZGg1cILHnHM2VYBBPObGSMox5dQPxDIIlnRexDVxIyy7PvTiDhtVljKeiE+5
-         Qlf9uAc6shHkJ2bT9opvcXnUVt+0FOrudpKIo0Qeoq363eRSM+D8afiam38mmpxfOKrn
-         qQfjwl05EF3Uy4+Tzt4LfnAOalCVdYi+1U5mUwpjlnjAoFVmCQ5Ca3fizi8VaDW2iE/+
-         dBF3Kpws1AUnNcFkF8EkBkSUtKKg4sNY/d2xlfOdnhUGDZYtowy4KXbmbkaTOQx6cO/F
-         LsYA==
+        id S1726593AbfFDSUt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jun 2019 14:20:49 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:39028 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726179AbfFDSUs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 14:20:48 -0400
+Received: by mail-qk1-f193.google.com with SMTP id i125so3473388qkd.6;
+        Tue, 04 Jun 2019 11:20:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qhMXDz9g6dTVucbRQt0OlnTKawIs8btTxKTIU4apLKM=;
-        b=dUL4snNo7yBPSljMW+ncXr0DnkRMrZlnX2iP04ejnl6bJjp/nnsJvpQbmbcj+4WXf1
-         BBco2IZAXS3E2zAifWAi+63NaYlFZAJak2mUrhTII/46IIXMjpeQOf7O35L5+5eqMfbw
-         KcKv+NVnk0IA70RPZq05ZV1R5LwUEQy+1VKkZSDNndnHAvTN1CV05kOo3IKU18MpxQyY
-         dRJTIa5Dp6a6kQiAx3esY111xgaV8gjopCwsWlONiBsDcLPaO2ivK/va5/6+CJxjNeQw
-         ZF89CYsgG2nkxGQOZa0C7ypOaHTYoJxZsqk54dk0Cz8nV6ufzg1oziII8VzG77zQHJfa
-         vhmA==
-X-Gm-Message-State: APjAAAUKz0X0u1BtxWr9P+iX3DxE1eojXApqVBgEimbZ0xKdeQmAMCmm
-        AOFfJiOGJBYTeb/DHR37nhKd03zOLKvcyk+DGH0=
-X-Google-Smtp-Source: APXvYqwdpYA6RtUKz9Mu21cGyOgI5ZxYKUg3FShcR/LnlyI+XT2v3AbNSy/XbkX1/b0jPnRVEI0ixyJ0s+e33O7Uad8=
-X-Received: by 2002:a9d:68c5:: with SMTP id i5mr6264074oto.224.1559671055920;
- Tue, 04 Jun 2019 10:57:35 -0700 (PDT)
+        bh=fQhpQeHfjr7pr+7f8qd7u/ZaT6BtUjv/QYyj8bAPAzE=;
+        b=gkae9fyqxlKdK2zhmiq1R3vKkMIGG4+8Goz7dmSheLbpNKRrfKou8VnKZFLJERxtPz
+         YN3vDosPUPEONnEasvyKe4AOUqHBvPWZg1JD0ohjkREjMt+y5hpT6nTnyoUYkjHhhlkx
+         BPI0365uS3t+mYIy7W1X/Zrj+GpaaI5UDgbvz98cjStwxB5M/KwSsQ+QXkj2LrjEAwap
+         98TWaX0khFyYtOoAqKImLdvO3IKEFD4jEOj3GZ2Xtl6wstnEEfwRHDe83gHrTf7fUzUL
+         O5o4KVJTaLq6ufdxtHPkbrfYz9VuRItQ2i5+j6F3emvFPCMuHCCeranPSzHVax2BISbq
+         upkA==
+X-Gm-Message-State: APjAAAXimky9AHvK4ZWRKZYdsY2D8csHRXnZfosWHO/quMQfnydy/8H1
+        V/HSnG8ntpQ+SFeDTPZe8qs0lCZ4UpxVSvg8f77rhsQF
+X-Google-Smtp-Source: APXvYqxPjPBgDsgzeBtCCa9fhlWMow8VQw4843sOSqGqDdUUeqUxZWI9r6CcQc/jbpBMS/IxKaTsN47H9K44JoQVz98=
+X-Received: by 2002:a05:620a:16c1:: with SMTP id a1mr28229029qkn.269.1559672447021;
+ Tue, 04 Jun 2019 11:20:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190418164414.29373-1-p.zabel@pengutronix.de>
- <20190529154431.11177-1-TheSven73@gmail.com> <CAOMZO5BeEMyEPUbPB8vAbJb1OoUuPxGLh=EBGif12uAMG4=qoQ@mail.gmail.com>
- <CAGngYiWdyzhmsRuAsH_35qdt1SLguh2sUxh=cAK58RWnhm2Y7A@mail.gmail.com>
- <4afffe3822026e23a55c05b7e18b43a2d6d0274e.camel@ndufresne.ca>
- <CAGngYiUZJCwg-VgOafU=gBgDtaSV++UVmNQawn6d5LunBFg1FQ@mail.gmail.com>
- <CAOMZO5AxL6MeOY=Pooq65B-Ly=t41JVp0Y_nXrYUKk03yh0KJQ@mail.gmail.com>
- <VE1PR04MB6638C5E75F797BD3114C467A89190@VE1PR04MB6638.eurprd04.prod.outlook.com>
- <CAGngYiX3xOHYw97VU-buuLLwu7vuMk23HEatDpk6vgieE7ozXg@mail.gmail.com> <VE1PR04MB663874C6BDAE5ED7B5A36A3F89150@VE1PR04MB6638.eurprd04.prod.outlook.com>
-In-Reply-To: <VE1PR04MB663874C6BDAE5ED7B5A36A3F89150@VE1PR04MB6638.eurprd04.prod.outlook.com>
-From:   Sven Van Asbroeck <thesven73@gmail.com>
-Date:   Tue, 4 Jun 2019 13:57:24 -0400
-Message-ID: <CAGngYiW9vqHXVt771P7tQvHwJ1ifr2qbtmxnVm7Ff6vY=DjKwg@mail.gmail.com>
-Subject: Re: [v8] media: imx: add mem2mem device
-To:     Robin Gong <yibin.gong@nxp.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        linux-media <linux-media@vger.kernel.org>
+References: <20190604111334.22182-1-yamada.masahiro@socionext.com>
+ <8cf48e20064eabdfe150795365e6ca6f36032e9f.camel@perches.com>
+ <CAK8P3a1oDfNF_T+NCoPsXkJAY2x4_uCWSwrDXHi7dDSaMqfnfA@mail.gmail.com>
+ <CAK7LNAS0Ph2Z6x0-UPSkJUC31NvPi09BmFrve+YJcXMrop-BGA@mail.gmail.com>
+ <20190604134213.GA26263@kroah.com> <CAK7LNARyqW3q6_46e-aYjmF8c0jUNDLdyB28zNaBEXqTV+5QSA@mail.gmail.com>
+In-Reply-To: <CAK7LNARyqW3q6_46e-aYjmF8c0jUNDLdyB28zNaBEXqTV+5QSA@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 4 Jun 2019 20:20:30 +0200
+Message-ID: <CAK8P3a0bz8XYJOsmND2=CT_oTDmGMJGaRo9+QMroEhpekSMEaQ@mail.gmail.com>
+Subject: Re: [PATCH] media: do not use C++ style comments in uapi headers
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Joe Perches <joe@perches.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Robin,
+On Tue, Jun 4, 2019 at 5:28 PM Masahiro Yamada
+<yamada.masahiro@socionext.com> wrote:
+> On Tue, Jun 4, 2019 at 10:44 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > On Tue, Jun 04, 2019 at 09:48:12PM +0900, Masahiro Yamada wrote:
+> > > On Tue, Jun 4, 2019 at 8:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > # Unlike the kernel space, uapi headers are written in more strict C.
+> > > > # -std=c90 (equivalent to -ansi) catches the violation of those.
+> > > > # We cannot go as far as adding -Wpedantic since it emits too many warnings.
 
-On Tue, Jun 4, 2019 at 4:51 AM Robin Gong <yibin.gong@nxp.com> wrote:
+At least with clang, we might be able to be more specific about which
+warnings to add or not to add.
+
+> > >
+> > > There are two ways to define fixed-width type.
+> > >
+> > > [1] #include <linux/types.h>, __u8, __u16, __u32, __u64
+> > >
+> > >       vs
+> > >
+> > > [2] #include <stdint.h>, uint8_t, uint16_t, uint32_t, uint64_t
+> > >
+> > >
+> > > Both are used in UAPI headers.
+> > > IIRC, <stdint.h> was standardized by C99.
+> > >
+> > > So, we have already relied on C99 in user-space too.
+
+A related problem is that using the stdint.h types requires
+including stdint.h first, but the C library requires that including
+one standard header does not include another one recursively.
+
+So if sys/socket.h includes linux/socket.h, that must not include
+stdint.h or any other header file that does so.
+
+> > Just because we have relied on it in the past, does not mean we need to
+> > keep relying on it.  I have had numerous complaints over the years from
+> > libc authors that our uapi headers are _NOT_ able to be directly
+> > consumed by them.  They all end up having to fix things up and include
+> > local "sanitized" copies.
+
+Yes, and this is getting worse with 64-bit time_t as we now get conflicting
+definitions of timespec, timeval and derived types. We probably need to
+change a lot of the common headers that conflict with libc definitions
+and come up with a better way of exposing the interfaces there.
+
+Similarly, a header that may get included by libc should not define any
+data structures with members that may conflict with a user space macro
+name. E.g.
+
+struct foo {
+      __u32 bar;
+};
+
+uses the correct type, but if an application contains
+
+#define bar __read_bar()
+#include <linux/foo.h>
+
+then it will get a compile failure. Not sure what we can do about this,
+but we might need a form of classification of headers into those
+that can be included by libc and must follow very strict rules,
+as opposed to those headers that are specific to a driver or subsystem
+that will not be included unless some application specifically needs the
+symbols in that header to talk to the kernel.
+
+> > So any work we can do here to make them more sane and work properly
+> > everywhere is a good thing, as right now, they are broken.
 >
-> Hi Sven,
->         I saw similar kernel crash issue on the latest linux-next during kernel boot up, but not on
-> the 'Linux 5.2-rc1 ' tag. Will do bisect later. But v5.0 should be okay, could you help double check?
+>
+> Maybe, we should document UAPI header coding guideline.
+>
+> Without To-Don't list,
+> people will do anything.
 
-Of course. My tests show:
+This also came up recently with the discussion on how to define
+data structures in a portable way that avoids not only the identifier
+conflicts but also differences in size or alignment of member types.
 
-v5.0 bad
-v5.2-rc1 bad
-v5.2-rc2 bad
-v5.2-rc3 bad
-v4.20 good
-
-where "bad" means: kernel crashes on boot if sdma firmware is loaded.
-kernel works ok if we use sdma firmware already in rom.
-
-Are you able to reproduce this issue? I started bisecting last week, but
-ran out of time. I could try again here, if you cannot reliably reproduce it.
+        Arnd
