@@ -7,26 +7,26 @@ X-Spam-Status: No, score=-6.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	UNPARSEABLE_RELAY,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F1CFC282CE
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 10:13:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE344C282CE
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 10:13:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D5C32084A
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 10:13:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B6F82084A
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 10:13:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727279AbfFDKMM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jun 2019 06:12:12 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:16528 "EHLO
+        id S1727118AbfFDKNS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jun 2019 06:13:18 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:21251 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727110AbfFDKMI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 06:12:08 -0400
-X-UUID: 913cc3a306454d96b3044610a02c493d-20190604
-X-UUID: 913cc3a306454d96b3044610a02c493d-20190604
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
+        with ESMTP id S1727107AbfFDKMN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 06:12:13 -0400
+X-UUID: 62a2ad958e424d779cde763c8a056289-20190604
+X-UUID: 62a2ad958e424d779cde763c8a056289-20190604
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
         (envelope-from <stu.hsieh@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1893859149; Tue, 04 Jun 2019 18:12:02 +0800
+        with ESMTP id 1540687792; Tue, 04 Jun 2019 18:12:02 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
  15.0.1395.4; Tue, 4 Jun 2019 18:12:01 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
@@ -41,9 +41,9 @@ CC:     Mark Rutland <mark.rutland@arm.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
-Subject: [PATCH v4 10/14] [media] mtk-mipicsi: set the output address in HW reg
-Date:   Tue, 4 Jun 2019 18:11:51 +0800
-Message-ID: <1559643115-15124-11-git-send-email-stu.hsieh@mediatek.com>
+Subject: [PATCH v4 08/14] [media] mtk-mipicsi: enable/disable cmos for mt2712
+Date:   Tue, 4 Jun 2019 18:11:49 +0800
+Message-ID: <1559643115-15124-9-git-send-email-stu.hsieh@mediatek.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1559643115-15124-1-git-send-email-stu.hsieh@mediatek.com>
 References: <1559643115-15124-1-git-send-email-stu.hsieh@mediatek.com>
@@ -55,80 +55,81 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch set the output address in HW reg when buffer queue and ISR.
+This patch enable/disable cmos setting for mt2712 when
+streaming start/stop streaming.
 
 Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
 ---
- .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
 diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-index dc5c5c888914..9e45786a0282 100644
+index ea1edbc6401b..8bb40656bcb1 100644
 --- a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
 +++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-@@ -100,6 +100,7 @@
+@@ -88,9 +88,11 @@
+ #define CAMSV_MODULE_EN					0x10
+ #define CAMSV_FMT_SEL					0x14
+ #define CAMSV_INT_EN					0x18
++#define CAMSV_SW_CTL					0x20
+ #define CAMSV_CLK_EN					0x30
+ 
+ #define CAMSV_TG_SEN_MODE				0x500
++#define CAMSV_TG_VF_CON					0x504
+ #define CAMSV_TG_SEN_GRAB_PXL				0x508
  #define CAMSV_TG_SEN_GRAB_LIN				0x50C
  #define CAMSV_TG_PATH_CFG				0x510
- 
-+#define IMGO_BASE_ADDR					0x220
- #define IMGO_XSIZE					0x230
- #define IMGO_YSIZE					0x234
- #define IMGO_STRIDE					0x238
-@@ -538,6 +539,32 @@ static int mtk_mipicsi_vb2_prepare(struct vb2_buffer *vb)
- 	return 0;
+@@ -541,11 +543,41 @@ static void mtk_mipicsi_vb2_queue(struct vb2_buffer *vb)
+ 	spin_unlock(&mipicsi->queue_lock);
  }
  
-+static void mtk_mipicsi_fill_buffer(void __iomem *base, dma_addr_t dma_handle)
++static void mtk_mipicsi_cmos_vf_enable(struct mtk_mipicsi_dev *mipicsi,
++				       unsigned int max_camsv_num,
++				       bool enable)
 +{
-+	writel(dma_handle, base + IMGO_BASE_ADDR);
-+}
-+
-+static void mtk_mipicsi_write_camsv(struct mtk_mipicsi_dev *mipicsi,
-+				    unsigned int index,
-+				    unsigned int max_camsv_num)
-+{
-+	struct mtk_mipicsi_channel *ch = mipicsi->channel;
-+	unsigned int i = 0;
-+	u8 link_index = 0;
-+	u32 bytesperline = mipicsi->fmt.fmt.pix.bytesperline;
-+	u32 height = mipicsi->fmt.fmt.pix.height;
-+	u64 offset = 0;
++	void __iomem *base = NULL;
++	u32 mask = enable ? (u32)1 : ~(u32)1;
++	int i;
 +
 +	for (i = 0; i < max_camsv_num; i++)
-+		if (((mipicsi->link_reg_val >> i) & 0x01) == 0x01) {
-+			offset = (u64)link_index * bytesperline * height;
-+			mtk_mipicsi_fill_buffer(ch[i].camsv,
-+				mipicsi->cam_buf[index].vb_dma_addr_phy
-+					+ offset);
-+			link_index++;
++		if (((mipicsi->link_reg_val >> i) & 0x01U) == 0x01U) {
++			if (enable) {
++				/*enable cmos_en and vf_en*/
++				base = mipicsi->camsv[i];
++				writel(readl(base + CAMSV_TG_SEN_MODE) | mask,
++				       base + CAMSV_TG_SEN_MODE);
++				writel(readl(base + CAMSV_TG_VF_CON) | mask,
++				       base + CAMSV_TG_VF_CON);
++			} else {
++				/*disable cmos_en and vf_en*/
++				base = mipicsi->camsv[i];
++				writel(readl(base + CAMSV_TG_SEN_MODE) & mask,
++					base + CAMSV_TG_SEN_MODE);
++				writel(readl(base + CAMSV_TG_VF_CON) & mask,
++					base + CAMSV_TG_VF_CON);
++			}
 +		}
 +}
 +
- static void mtk_mipicsi_vb2_queue(struct vb2_buffer *vb)
+ static int mtk_mipicsi_vb2_start_streaming(struct vb2_queue *vq,
+ 		unsigned int count)
  {
- 	struct mtk_mipicsi_dev *mipicsi = vb2_get_drv_priv(vb->vb2_queue);
-@@ -546,6 +573,12 @@ static void mtk_mipicsi_vb2_queue(struct vb2_buffer *vb)
- 	list_add_tail(&(mipicsi->cam_buf[vb->index].queue),
- 		&(mipicsi->fb_list));
- 	spin_unlock(&mipicsi->queue_lock);
-+
-+	spin_lock(&mipicsi->irqlock);
-+	if (!mipicsi->streamon)
-+		mtk_mipicsi_write_camsv(mipicsi, vb->index, mipicsi->camsv_num);
-+
-+	spin_unlock(&mipicsi->irqlock);
- }
+ 	struct mtk_mipicsi_dev *mipicsi = vb2_get_drv_priv(vq);
  
- static void mtk_mipicsi_cmos_vf_enable(struct mtk_mipicsi_dev *mipicsi,
-@@ -875,6 +908,8 @@ static void mtk_mipicsi_irq_buf_process(struct mtk_mipicsi_dev *mipicsi)
- 		++i;
- 	}
- 
-+	mtk_mipicsi_write_camsv(mipicsi, next, mipicsi->camsv_num);
++	mtk_mipicsi_cmos_vf_enable(mipicsi, mipicsi->camsv_num, true);
 +
- 	/*
- 	 * fb_list has one more buffer. Free the first buffer to user
- 	 * and fill the second buffer to HW.
+ 	mipicsi->streamon = true;
+ 
+ 	return 0;
+@@ -558,6 +590,8 @@ static void mtk_mipicsi_vb2_stop_streaming(struct vb2_queue *vq)
+ 	struct mtk_mipicsi_buf *tmp = NULL;
+ 	unsigned int index = 0;
+ 
++	mtk_mipicsi_cmos_vf_enable(mipicsi, mipicsi->camsv_num, false);
++
+ 	spin_lock(&mipicsi->queue_lock);
+ 	while (list_empty(&(mipicsi->fb_list)) == 0) {
+ 		list_for_each_entry_safe(buf, tmp, &(mipicsi->fb_list), queue) {
 -- 
 2.18.0
 
