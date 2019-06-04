@@ -3,74 +3,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1DA4C282CE
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 11:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38989C28CC6
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 12:05:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A4F8624643
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 11:54:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1CF9D249DA
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 12:05:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727462AbfFDLyj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jun 2019 07:54:39 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:33261 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727386AbfFDLyj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 07:54:39 -0400
-Received: by mail-qk1-f193.google.com with SMTP id r6so2600499qkc.0;
-        Tue, 04 Jun 2019 04:54:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=l7u7zcpebtQqDAFBJ4GQV49RycFqTe6brbuYMnPGWBc=;
-        b=DXo0nYcM2Cf6bxKIp3lSvnMG0SnLtBEh7fGpjoHNDWN/3oUiB/q7BXsmO6LG0+IUlL
-         tNG6w6OdkAoNB6htxhVmum9Vh+dT1DqrcZ5IaVW4RuxcnGN4jhelJgaQPX+5JG67PPXi
-         tj8rt5Gy7TWGi5+QWpS03rZ7qc5MopF32Iv2kI0kzbsmNnXPJWm+I2h1JVbdAw9PHbjk
-         FYhHFRWjuHXBVvJa6bQYshNzDT342d7nUEcfZ7RFvcQ00qwHlMU9jfdjRr/s+eac1KuV
-         nK/mpiRQTpG6+Gt1VdBv2qlzOjaNBXZavu+3C9gK2cfrLAFE9c4vuXbGW3ZNg9uwiU2X
-         y2Dw==
-X-Gm-Message-State: APjAAAVP+EQj0x+wZg/3pO37j5pQB/xO+ySAPZ1mBO3J0iL7ePNgQ/0e
-        vqI1llYTrl4u1CdcD7L1DykRvhsAdoX6LBfsk9k=
-X-Google-Smtp-Source: APXvYqzIzX1IhiJLP1fnowJhpYd+xc9lAbqTr/l91wUmVLpDG7g8w8gOBLlNhwyMN0IgwwBrPtxjBBeNtoXvVw93HkY=
-X-Received: by 2002:a37:a4d3:: with SMTP id n202mr26081936qke.84.1559649277706;
- Tue, 04 Jun 2019 04:54:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190604111334.22182-1-yamada.masahiro@socionext.com> <8cf48e20064eabdfe150795365e6ca6f36032e9f.camel@perches.com>
-In-Reply-To: <8cf48e20064eabdfe150795365e6ca6f36032e9f.camel@perches.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 4 Jun 2019 13:54:21 +0200
-Message-ID: <CAK8P3a1oDfNF_T+NCoPsXkJAY2x4_uCWSwrDXHi7dDSaMqfnfA@mail.gmail.com>
+        id S1727538AbfFDMFA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jun 2019 08:05:00 -0400
+Received: from smtprelay0146.hostedemail.com ([216.40.44.146]:44039 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727250AbfFDME7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 4 Jun 2019 08:04:59 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 6F9BE100E86D1;
+        Tue,  4 Jun 2019 12:04:58 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: class59_827f50f7dee18
+X-Filterd-Recvd-Size: 2744
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf14.hostedemail.com (Postfix) with ESMTPA;
+        Tue,  4 Jun 2019 12:04:56 +0000 (UTC)
+Message-ID: <2674b675063812e7c422a7964afdef6b7c712e4b.camel@perches.com>
 Subject: Re: [PATCH] media: do not use C++ style comments in uapi headers
-To:     Joe Perches <joe@perches.com>
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
+From:   Joe Perches <joe@perches.com>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Greg KH <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         Randy Dunlap <rdunlap@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 04 Jun 2019 05:04:55 -0700
+In-Reply-To: <CAK7LNAR9iz8_wvybmrVFqDaiP3bzxjQ18EUwkvC1LMjR96WWag@mail.gmail.com>
+References: <20190604111334.22182-1-yamada.masahiro@socionext.com>
+         <8cf48e20064eabdfe150795365e6ca6f36032e9f.camel@perches.com>
+         <CAK7LNAR9iz8_wvybmrVFqDaiP3bzxjQ18EUwkvC1LMjR96WWag@mail.gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Jun 4, 2019 at 1:23 PM Joe Perches <joe@perches.com> wrote:
->
-> On Tue, 2019-06-04 at 20:13 +0900, Masahiro Yamada wrote:
-> > On the other hand, uapi headers are written in more strict C, where
-> > the C++ comment style is forbidden.
->
-> Is this a real problem for any toolchain?
+On Tue, 2019-06-04 at 20:48 +0900, Masahiro Yamada wrote:
+> On Tue, Jun 4, 2019 at 8:24 PM Joe Perches <joe@perches.com> wrote:
+> > On Tue, 2019-06-04 at 20:13 +0900, Masahiro Yamada wrote:
+> > > On the other hand, uapi headers are written in more strict C, where
+> > > the C++ comment style is forbidden.
+> > 
+> > Is this a real problem for any toolchain?
+> 
+> I was waiting for this comment!
+> 
+> Which standard should UAPI headers follow?
+> Is it defined somewhere?
+> 
+> If there is no rule, is it up to subsystem maintainers?
+> 
+> We have a certain of unknowledge in user-space,
+> I do not know it it is a real problem.
+> 
+> Actually, this patch is related to this thread:
+> https://lkml.org/lkml/2019/5/22/1441
+> 
+> Thomas and you agreed
+> // should be avoided for SPDX tags in UAPI headers.
 
-There is likely some code that is built with -Wpedandic -Werror --std=c89
-or similar. Since glibc allows this combination for its own headers, it seems
-best to also allow it in kernel headers that may be included by libc headers
-or by applications, at least where it does not hurt.
+If it's really a generic issue, I think there are more
+uses of // comments in uapi files.
 
-Realistically though, we probably assume c99 or gnu89 in user space
-headers anyway, since there is no 'long long' in earlier standards.
+$ git grep '//' include/uapi/ | grep -vP '(http://|https://|ftp:/)' | wc -l
+101
 
-       Arnd
+> So, I just thought C99 was forbidden for user-space.
+
+No idea, I just believe if it's really a problem
+it likely would have been reported already.
+
+> If C89/C90 is already fantasy,
+> let's clearly say "Kernel requires C99 for user-space",
+> and use // everywhere for SPDX tags?
+
+OK by me.
+
+I have a checkpatch patch waiting to submit to remove the
+requirement to use the /* */ comment style in .h files.
+
+The docs need to be updated too.
+
+cheers, Joe
+
