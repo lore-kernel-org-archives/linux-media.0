@@ -5,56 +5,56 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C03BC282CE
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 16:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA881C282CE
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 16:30:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 227052084B
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 16:30:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5AC92084B
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 16:30:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y5cjZ26j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UtWAy/s+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727866AbfFDQaO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jun 2019 12:30:14 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45429 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727844AbfFDQaO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 12:30:14 -0400
-Received: by mail-wr1-f65.google.com with SMTP id f9so1795945wre.12;
-        Tue, 04 Jun 2019 09:30:13 -0700 (PDT)
+        id S1727973AbfFDQaX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jun 2019 12:30:23 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41497 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727883AbfFDQaW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 12:30:22 -0400
+Received: by mail-wr1-f68.google.com with SMTP id c2so16527284wrm.8;
+        Tue, 04 Jun 2019 09:30:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JnmvhZZD8Mx24yTeSpnfmQh3x3T3CVtR6CE0dBfbLB8=;
-        b=Y5cjZ26jlUxFNeNaiMKAFzUilMvI+Dc6dprxGIq8ITJDnDN8XGenta0Zc0Qt2xzz+T
-         CUPjfuM/M3IFsd5YHkVn3jG0ZF+d7ttvSaW4BqSKDhwjKZhGnckRWrIKfqzaVnVT0DOg
-         XrrRP/AewELt8Ljf3Bixp1jBv8HqPSRWjWxstJLZWnAOSEPa6KaPJLfnUY7ljzM38xj5
-         hWBEgZ/wqjDM8gIcaSwO3XVYPrC3Sc/M+0defamCm42VoZoxVykwsLWFXkOer6+UImm9
-         1N1T2JFEWwCWtRYt+7i62Okzt95sKHAPrKvZUt3BIZqfwx3ul1tYgjOIw4BHvS1NF7zU
-         tyAQ==
+        bh=ZFHFRMwqhia+MVch9pKGgEBNeKukD3ZLzLQ+6+PB9fg=;
+        b=UtWAy/s+q+oOrOGO9ddEb8t2OEIfKzvD69ZeZVZ5v/jTkNNG0s2Fv02hKMNkhfmLEB
+         nEJSyqLMvoCfJr5kOm2zxQ1dxurFm99V33Ti0NLVgqHvJjKkmCZDGe3ty5Jde3wIRNhD
+         ubh3UALjiGOSUot57QvMF9tYkCT+mu3GA1xBjBHtQY5IDnOVAreEB1iX9E55C+A9l9vG
+         Crny42MKSkmkPxFGyi+TlsxgVevgXY8NmcQeRtJftAYgGcl+nZRTenDf4lqV1q+Re4KL
+         TRPzTOazfppgw4xKjQMCPgSXlRmnCvMcu0pFKiQ1YmGwm3C8HSiRDU8lwuIvz/vJb0Xu
+         omyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JnmvhZZD8Mx24yTeSpnfmQh3x3T3CVtR6CE0dBfbLB8=;
-        b=q2PJ1CaeUCF0R8RfMOj7Jj0Ljfm6yLgAoiJsSkSCatOPteubu02AIXkGmhj0lzUPwu
-         xs9qTHck/2b1XMnTCrD5yPNgOQ6xl/DE3qInOlDGgoYOi0rho0D7wmzzBs61fcR4YpqL
-         TGb5I21f13Cr/oMod8ZUdLesMG+Redzz7pkuisIMPm6bucQL2Yvv2dT5LWh+6bPUCNLv
-         DSQ/rBsOTrKPkahkWnydGSRY0HE9ddeb15Aea+Gk2Q8vvLuuskcQAUC6nyJbaNu0M9xu
-         Bu5SdjlvX0iH61os84rLsk7diQDSYBi5DyY5KHRNUXgVPwVNVZpmv7ILHZQ0DZCFFDYE
-         lH6g==
-X-Gm-Message-State: APjAAAXhapliSQJ9p73ACxxkONcQB7DyxkG1YTNcNZ5lgAjs63KAyj+M
-        CoFNHLSRrEvNIPfe7GDMQt8=
-X-Google-Smtp-Source: APXvYqwA70yB81shWvgQA1UmGXj4nMXog36OwjUoh3hCQCaHYnAaQiNf5aqqateTqEOy2jYk39HyUg==
-X-Received: by 2002:adf:e40f:: with SMTP id g15mr20287449wrm.174.1559665812558;
-        Tue, 04 Jun 2019 09:30:12 -0700 (PDT)
+        bh=ZFHFRMwqhia+MVch9pKGgEBNeKukD3ZLzLQ+6+PB9fg=;
+        b=fwZtJiJG8gwXnL7m49FzBbR81KLCiqKpowV93JKT26tmJDGRGp8t9JHdwy/UPofouN
+         HJv+QaQcHcif4JdHJvLPWd96BGbkNQTPc1dcvR+LAOIu7qtdM3jI8PICTS4B5Ipqz0d5
+         UAaNtivSXcvu53tISSx46RpUM+aaTWXVFgVPI5UrLYFxgubEdJc1surCygI8cMBJHyUP
+         GBKD2krwCHfYXwwVi0LvnEKl7f9ndJ7/h9llsyaaWTUyPb0wOIr6y/Vt7OSuWIPWajEV
+         bqqW2A1Y5OK71aqVxEZ6wqSaW9QiYmQglPnXpfMXhNFYOmbKcDZyKFbPH26yJdoGTOtU
+         en3w==
+X-Gm-Message-State: APjAAAW0Tz5Bzuyw6hl/HguQoZ/FOBqoceucKCFdVHoU/ZY8nzYDVhPk
+        bSQUMSFNFjkNG4YmApDbiu8=
+X-Google-Smtp-Source: APXvYqxN5FxMq3dstg70O5Vq9/ZTLRvXIVMei8vJ5wsTOXTBnMS5w/jM6SkXPVj8JCNy1EBZfeqFwA==
+X-Received: by 2002:a5d:6acc:: with SMTP id u12mr12031486wrw.349.1559665820930;
+        Tue, 04 Jun 2019 09:30:20 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:1f1:d0f0::4e2b:d7ca])
-        by smtp.gmail.com with ESMTPSA id y12sm15108176wrh.40.2019.06.04.09.30.11
+        by smtp.gmail.com with ESMTPSA id y12sm15108176wrh.40.2019.06.04.09.30.20
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 04 Jun 2019 09:30:11 -0700 (PDT)
+        Tue, 04 Jun 2019 09:30:20 -0700 (PDT)
 From:   =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -66,9 +66,9 @@ Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-sunxi@googlegroups.com,
         =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= <peron.clem@gmail.com>,
         Sean Young <sean@mess.org>
-Subject: [PATCH v4 06/13] ARM: dts: sunxi: Prefer A31 bindings for IR
-Date:   Tue,  4 Jun 2019 18:29:52 +0200
-Message-Id: <20190604162959.29199-7-peron.clem@gmail.com>
+Subject: [PATCH v4 13/13] arm64: defconfig: Enable IR SUNXI option
+Date:   Tue,  4 Jun 2019 18:29:59 +0200
+Message-Id: <20190604162959.29199-14-peron.clem@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190604162959.29199-1-peron.clem@gmail.com>
 References: <20190604162959.29199-1-peron.clem@gmail.com>
@@ -80,29 +80,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since A31, memory mapping of the IR driver has changed.
-
-Prefer the A31 bindings instead of A13.
+Enable CONFIG_IR_SUNXI option for ARM64, so that Allwinner A64/H6 SoCs
+can use their IR receiver controller.
 
 Signed-off-by: Clément Péron <peron.clem@gmail.com>
 Acked-by: Sean Young <sean@mess.org>
 ---
- arch/arm/boot/dts/sunxi-h3-h5.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/sunxi-h3-h5.dtsi b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-index 84977d4eb97a..f0f5ba349c1b 100644
---- a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-+++ b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-@@ -822,7 +822,7 @@
- 		};
- 
- 		ir: ir@1f02000 {
--			compatible = "allwinner,sun5i-a13-ir";
-+			compatible = "allwinner,sun6i-a31-ir";
- 			clocks = <&r_ccu CLK_APB0_IR>, <&r_ccu CLK_IR>;
- 			clock-names = "apb", "ir";
- 			resets = <&r_ccu RST_APB0_IR>;
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 4d583514258c..5128029100d2 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -460,6 +460,7 @@ CONFIG_RC_CORE=m
+ CONFIG_RC_DECODERS=y
+ CONFIG_RC_DEVICES=y
+ CONFIG_IR_MESON=m
++CONFIG_IR_SUNXI=m
+ CONFIG_MEDIA_SUPPORT=m
+ CONFIG_MEDIA_CAMERA_SUPPORT=y
+ CONFIG_MEDIA_ANALOG_TV_SUPPORT=y
 -- 
 2.20.1
 
