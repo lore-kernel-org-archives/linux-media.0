@@ -2,35 +2,35 @@ Return-Path: <SRS0=wOjJ=UD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE344C282CE
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 10:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60A58C28CC6
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 10:13:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8B6F82084A
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 10:13:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44DEE2084A
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 10:13:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbfFDKNS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jun 2019 06:13:18 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:21251 "EHLO
+        id S1727239AbfFDKMI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jun 2019 06:12:08 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:11494 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727107AbfFDKMN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 06:12:13 -0400
-X-UUID: 62a2ad958e424d779cde763c8a056289-20190604
-X-UUID: 62a2ad958e424d779cde763c8a056289-20190604
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        with ESMTP id S1727107AbfFDKMI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 06:12:08 -0400
+X-UUID: ba1ccf79b92949c6900fef6057c08ab0-20190604
+X-UUID: ba1ccf79b92949c6900fef6057c08ab0-20190604
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
         (envelope-from <stu.hsieh@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1540687792; Tue, 04 Jun 2019 18:12:02 +0800
+        with ESMTP id 834335591; Tue, 04 Jun 2019 18:12:01 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 4 Jun 2019 18:12:01 +0800
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 4 Jun 2019 18:12:00 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 4 Jun 2019 18:12:01 +0800
+ Transport; Tue, 4 Jun 2019 18:11:59 +0800
 From:   Stu Hsieh <stu.hsieh@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, CK Hu <ck.hu@mediatek.com>
@@ -41,9 +41,9 @@ CC:     Mark Rutland <mark.rutland@arm.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>, <srv_heupstream@mediatek.com>
-Subject: [PATCH v4 08/14] [media] mtk-mipicsi: enable/disable cmos for mt2712
-Date:   Tue, 4 Jun 2019 18:11:49 +0800
-Message-ID: <1559643115-15124-9-git-send-email-stu.hsieh@mediatek.com>
+Subject: [PATCH v4 03/14] dt-bindings: media: Add camsv binding for MT2712 MIPI-CSI2
+Date:   Tue, 4 Jun 2019 18:11:44 +0800
+Message-ID: <1559643115-15124-4-git-send-email-stu.hsieh@mediatek.com>
 X-Mailer: git-send-email 1.9.1
 In-Reply-To: <1559643115-15124-1-git-send-email-stu.hsieh@mediatek.com>
 References: <1559643115-15124-1-git-send-email-stu.hsieh@mediatek.com>
@@ -55,81 +55,75 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch enable/disable cmos setting for mt2712 when
-streaming start/stop streaming.
+Add camsv binding for MT2712 MIPI-CSI2
 
 Signed-off-by: Stu Hsieh <stu.hsieh@mediatek.com>
 ---
- .../media/platform/mtk-mipicsi/mtk_mipicsi.c  | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .../bindings/media/mediatek-mipicsi-camsv.txt | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
 
-diff --git a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-index ea1edbc6401b..8bb40656bcb1 100644
---- a/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-+++ b/drivers/media/platform/mtk-mipicsi/mtk_mipicsi.c
-@@ -88,9 +88,11 @@
- #define CAMSV_MODULE_EN					0x10
- #define CAMSV_FMT_SEL					0x14
- #define CAMSV_INT_EN					0x18
-+#define CAMSV_SW_CTL					0x20
- #define CAMSV_CLK_EN					0x30
- 
- #define CAMSV_TG_SEN_MODE				0x500
-+#define CAMSV_TG_VF_CON					0x504
- #define CAMSV_TG_SEN_GRAB_PXL				0x508
- #define CAMSV_TG_SEN_GRAB_LIN				0x50C
- #define CAMSV_TG_PATH_CFG				0x510
-@@ -541,11 +543,41 @@ static void mtk_mipicsi_vb2_queue(struct vb2_buffer *vb)
- 	spin_unlock(&mipicsi->queue_lock);
- }
- 
-+static void mtk_mipicsi_cmos_vf_enable(struct mtk_mipicsi_dev *mipicsi,
-+				       unsigned int max_camsv_num,
-+				       bool enable)
-+{
-+	void __iomem *base = NULL;
-+	u32 mask = enable ? (u32)1 : ~(u32)1;
-+	int i;
+diff --git a/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt b/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
+new file mode 100644
+index 000000000000..c9b4af9eeeff
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek-mipicsi-camsv.txt
+@@ -0,0 +1,55 @@
++* Mediatek MIPI-CSI2 receiver camsv
 +
-+	for (i = 0; i < max_camsv_num; i++)
-+		if (((mipicsi->link_reg_val >> i) & 0x01U) == 0x01U) {
-+			if (enable) {
-+				/*enable cmos_en and vf_en*/
-+				base = mipicsi->camsv[i];
-+				writel(readl(base + CAMSV_TG_SEN_MODE) | mask,
-+				       base + CAMSV_TG_SEN_MODE);
-+				writel(readl(base + CAMSV_TG_VF_CON) | mask,
-+				       base + CAMSV_TG_VF_CON);
-+			} else {
-+				/*disable cmos_en and vf_en*/
-+				base = mipicsi->camsv[i];
-+				writel(readl(base + CAMSV_TG_SEN_MODE) & mask,
-+					base + CAMSV_TG_SEN_MODE);
-+				writel(readl(base + CAMSV_TG_VF_CON) & mask,
-+					base + CAMSV_TG_VF_CON);
-+			}
-+		}
-+}
++Mediatek MIPI-CSI2 receiver camsv transfer data to DRAM in Mediatek SoCs
 +
- static int mtk_mipicsi_vb2_start_streaming(struct vb2_queue *vq,
- 		unsigned int count)
- {
- 	struct mtk_mipicsi_dev *mipicsi = vb2_get_drv_priv(vq);
- 
-+	mtk_mipicsi_cmos_vf_enable(mipicsi, mipicsi->camsv_num, true);
++These node are refer by mipicsi
 +
- 	mipicsi->streamon = true;
- 
- 	return 0;
-@@ -558,6 +590,8 @@ static void mtk_mipicsi_vb2_stop_streaming(struct vb2_queue *vq)
- 	struct mtk_mipicsi_buf *tmp = NULL;
- 	unsigned int index = 0;
- 
-+	mtk_mipicsi_cmos_vf_enable(mipicsi, mipicsi->camsv_num, false);
++Required properties:
++- reg : physical base address of the mipicsi receiver registers and length of
++  memory mapped region.
++- clocks: device clocks, see
++  Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
++- interrupts : interrupt number to the interrupt controller.
 +
- 	spin_lock(&mipicsi->queue_lock);
- 	while (list_empty(&(mipicsi->fb_list)) == 0) {
- 		list_for_each_entry_safe(buf, tmp, &(mipicsi->fb_list), queue) {
++Example:
++	seninf1_mux_camsv0: seninf_mux_camsv@15002100 {
++		reg = <0 0x15002120 0 0x40>,
++		      <0 0x15004000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV_EN>;
++		interrupts = <GIC_SPI 222 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf2_mux_camsv1: seninf_mux_camsv@15002500 {
++		reg = <0 0x15002520 0 0x40>,
++		      <0 0x15005000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV_EN>;
++		interrupts = <GIC_SPI 223 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf3_mux_camsv2: seninf_mux_camsv@15002900 {
++		reg = <0 0x15002920 0 0x40>,
++		      <0 0x15006000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV1_EN>;
++		interrupts = <GIC_SPI 268 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf4_mux_camsv3: seninf_mux_camsv@15002D00 {
++		reg = <0 0x15002D20 0 0x40>,
++		      <0 0x15007000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV1_EN>;
++		interrupts = <GIC_SPI 269 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf5_mux_camsv4: seninf_mux_camsv@15003100 {
++		reg = <0 0x15003120 0 0x40>,
++		      <0 0x15008000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV2_EN>;
++		interrupts = <GIC_SPI 270 IRQ_TYPE_LEVEL_LOW>;
++	};
++
++	seninf6_mux_camsv5: seninf_mux_camsv@15003500 {
++		reg = <0 0x15003520 0 0x40>,
++		      <0 0x15009000 0 0x1000>;
++		clocks = <&imgsys CLK_IMG_CAM_SV2_EN>;
++		interrupts = <GIC_SPI 271 IRQ_TYPE_LEVEL_LOW>;
++	};
 -- 
 2.18.0
 
