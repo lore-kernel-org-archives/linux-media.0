@@ -2,37 +2,41 @@ Return-Path: <SRS0=wOjJ=UD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFBE4C282CE
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 11:20:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53E13C28CC6
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 11:20:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BF96924BBB
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 11:20:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3456324BBB
+	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 11:20:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727373AbfFDLUF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727380AbfFDLUF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 4 Jun 2019 07:20:05 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:57489 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727180AbfFDLUF (ORCPT
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:40579 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727328AbfFDLUF (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 4 Jun 2019 07:20:05 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id Y7TyhSHLnsDWyY7U2hwRng; Tue, 04 Jun 2019 13:20:02 +0200
+        id Y7TyhSHLnsDWyY7U3hwRoB; Tue, 04 Jun 2019 13:20:03 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [PATCH 0/7] media: set device_caps in struct video_device
-Date:   Tue,  4 Jun 2019 13:19:51 +0200
-Message-Id: <20190604111958.22331-1-hverkuil-cisco@xs4all.nl>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 3/7] rtl2832_sdr: set device_caps in struct video_device
+Date:   Tue,  4 Jun 2019 13:19:54 +0200
+Message-Id: <20190604111958.22331-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190604111958.22331-1-hverkuil-cisco@xs4all.nl>
+References: <20190604111958.22331-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfHaWiNjrhZITwcUOG57KXwXrHmokhtTXksPETFCntQkuJWbjnleLo6IF3NggSrl6+1CJs3kOSIveUWBTOoaIFZJ38mKimMqAtI4P5Gxn4D3zEmfYJceQ
- O0xScIQV2ODrc4CUvYSMjt8CADibBEzd+HZnltxQynxVld81XNMGvZyae27Hr5JB18XgThJVQDJR0+mAjV1BTLD7QmC5q2VsjpVutZuYAL0t3kjyqGLuvflf
+X-CMAE-Envelope: MS4wfNXflZfKsX1jYcVAlD942UrGn+kiyHuHj6hWxbkWPPybWSHphyf5W7P1zXK9b5vnrEPGBjHqbkGry2GxS2JB/eZKLw/+sHTR4G/nCzJHYWCjTPVbIAzZ
+ Ejkdb7ir/i6R/PFyIETQsJngpJ+b91T4gjwnjP6MAu8CYQZ2iLazjdXJ91TLyv5BvFZmS69U5AOsvO3mJuxu9HE9sRc8ZETh0LHNx9UDiPC40XgTUaH8P9b/
+ Pfhw+dZ1CdRgsODGx0gXdTvQr5p/P8+UGVR4PvaUQU0=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -44,74 +48,37 @@ field, fill in the struct video_device device_caps field.
 That way the V4L2 core knows what the capabilities of the
 video device are.
 
-But this only really works if all drivers use this, so this series
-converts all except pci and platform drivers.
+But this only really works if all drivers use this, so convert
+this SDR driver in this patch.
 
-Those will be addressed in a second phase.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/dvb-frontends/rtl2832_sdr.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Regards,
-
-	Hans
-
-Hans Verkuil (7):
-  media/radio: set device_caps in struct video_device
-  media/usb: set device_caps in struct video_device
-  rtl2832_sdr: set device_caps in struct video_device
-  usb/gadget/f_uvc: set device_caps in struct video_device
-  touchscreen/sur40: set device_caps in struct video_device
-  vc04_services/bcm2835-camera: set device_caps in struct video_device
-  staging/media: set device_caps in struct video_device
-
- drivers/input/touchscreen/sur40.c             |  6 ++--
- drivers/media/dvb-frontends/rtl2832_sdr.c     |  5 ++-
- drivers/media/radio/dsbr100.c                 |  3 +-
- drivers/media/radio/radio-cadet.c             |  5 ++-
- drivers/media/radio/radio-isa.c               |  4 +--
- drivers/media/radio/radio-keene.c             |  3 +-
- drivers/media/radio/radio-ma901.c             |  3 +-
- drivers/media/radio/radio-miropcm20.c         |  4 +--
- drivers/media/radio/radio-mr800.c             |  5 ++-
- drivers/media/radio/radio-raremono.c          |  3 +-
- drivers/media/radio/radio-sf16fmi.c           |  3 +-
- drivers/media/radio/radio-si476x.c            | 21 +++++-------
- drivers/media/radio/radio-tea5764.c           |  3 +-
- drivers/media/radio/radio-tea5777.c           |  5 ++-
- drivers/media/radio/radio-timb.c              |  3 +-
- drivers/media/radio/radio-wl1273.c            | 12 +++----
- drivers/media/radio/si470x/radio-si470x-i2c.c |  7 ++--
- drivers/media/radio/si470x/radio-si470x-usb.c |  6 ++--
- .../radio/si4713/radio-platform-si4713.c      |  4 +--
- drivers/media/radio/si4713/radio-usb-si4713.c |  4 +--
- drivers/media/radio/tea575x.c                 |  7 ++--
- drivers/media/radio/wl128x/fmdrv_v4l2.c       | 10 ++----
- drivers/media/usb/airspy/airspy.c             |  6 ++--
- drivers/media/usb/au0828/au0828-video.c       | 21 ++++++------
- drivers/media/usb/cpia2/cpia2_v4l.c           |  9 ++----
- drivers/media/usb/cx231xx/cx231xx-video.c     | 28 ++++++++--------
- drivers/media/usb/em28xx/em28xx-video.c       | 32 +++++++++----------
- drivers/media/usb/go7007/go7007-v4l2.c        | 15 ++++-----
- drivers/media/usb/gspca/gspca.c               |  6 ++--
- drivers/media/usb/hackrf/hackrf.c             | 14 ++++----
- drivers/media/usb/hdpvr/hdpvr-video.c         |  5 ++-
- drivers/media/usb/msi2500/msi2500.c           |  5 ++-
- drivers/media/usb/pvrusb2/pvrusb2-v4l2.c      | 17 ++++------
- drivers/media/usb/pwc/pwc-if.c                |  2 ++
- drivers/media/usb/pwc/pwc-v4l.c               |  3 --
- drivers/media/usb/s2255/s2255drv.c            |  5 ++-
- drivers/media/usb/stk1160/stk1160-v4l.c       |  7 ++--
- drivers/media/usb/stkwebcam/stk-webcam.c      |  6 ++--
- drivers/media/usb/tm6000/tm6000-video.c       | 20 ++++++------
- drivers/media/usb/usbtv/usbtv-video.c         |  5 ++-
- drivers/media/usb/usbvision/usbvision-video.c | 20 ++++++------
- drivers/media/usb/zr364xx/zr364xx.c           |  7 ++--
- drivers/staging/media/bcm2048/radio-bcm2048.c |  7 ++--
- .../staging/media/davinci_vpfe/vpfe_video.c   |  9 +++---
- drivers/staging/media/omap4iss/iss_video.c    | 11 +++----
- .../bcm2835-camera/bcm2835-camera.c           |  6 ++--
- drivers/usb/gadget/function/f_uvc.c           |  1 +
- drivers/usb/gadget/function/uvc_v4l2.c        |  4 ---
- 48 files changed, 161 insertions(+), 236 deletions(-)
-
+diff --git a/drivers/media/dvb-frontends/rtl2832_sdr.c b/drivers/media/dvb-frontends/rtl2832_sdr.c
+index cf1a8f77ee02..e05c21d35dc8 100644
+--- a/drivers/media/dvb-frontends/rtl2832_sdr.c
++++ b/drivers/media/dvb-frontends/rtl2832_sdr.c
+@@ -428,9 +428,6 @@ static int rtl2832_sdr_querycap(struct file *file, void *fh,
+ 	strscpy(cap->driver, KBUILD_MODNAME, sizeof(cap->driver));
+ 	strscpy(cap->card, dev->vdev.name, sizeof(cap->card));
+ 	usb_make_path(dev->udev, cap->bus_info, sizeof(cap->bus_info));
+-	cap->device_caps = V4L2_CAP_SDR_CAPTURE | V4L2_CAP_STREAMING |
+-			V4L2_CAP_READWRITE | V4L2_CAP_TUNER;
+-	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+ 	return 0;
+ }
+ 
+@@ -1242,6 +1239,8 @@ static struct video_device rtl2832_sdr_template = {
+ 	.release                  = video_device_release_empty,
+ 	.fops                     = &rtl2832_sdr_fops,
+ 	.ioctl_ops                = &rtl2832_sdr_ioctl_ops,
++	.device_caps		  = V4L2_CAP_SDR_CAPTURE | V4L2_CAP_STREAMING |
++				    V4L2_CAP_READWRITE | V4L2_CAP_TUNER,
+ };
+ 
+ static int rtl2832_sdr_s_ctrl(struct v4l2_ctrl *ctrl)
 -- 
 2.20.1
 
