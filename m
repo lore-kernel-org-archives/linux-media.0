@@ -2,142 +2,215 @@ Return-Path: <SRS0=8X75=UE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84050C28CC5
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 21:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAB54C28CC5
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 21:30:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 65D432075B
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 21:10:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84C5520883
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 21:30:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=marek-ca.20150623.gappssmtp.com header.i=@marek-ca.20150623.gappssmtp.com header.b="XvoSyiJW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726658AbfFEVKZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jun 2019 17:10:25 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:47155 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726528AbfFEVKY (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 17:10:24 -0400
-X-Originating-IP: 93.29.109.196
-Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 802F8E0002;
-        Wed,  5 Jun 2019 21:10:18 +0000 (UTC)
-Message-ID: <e45ea296476b2966a3800552dae259d7117a7751.camel@bootlin.com>
-Subject: Re: [PATCH 6/7] media: cedrus: Add infra for extra buffers
- connected to capture buffers
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@siol.net>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     wens@csie.org, mchehab@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Wed, 05 Jun 2019 23:10:17 +0200
-In-Reply-To: <3029072.frl2UAsRGt@jernej-laptop>
-References: <20190530211516.1891-1-jernej.skrabec@siol.net>
-         <20190530211516.1891-7-jernej.skrabec@siol.net>
-         <20190603121859.sbphcjy75kmed6oc@flea> <3029072.frl2UAsRGt@jernej-laptop>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1 
+        id S1726589AbfFEVaY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jun 2019 17:30:24 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:37606 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726510AbfFEVaY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 17:30:24 -0400
+Received: by mail-qt1-f194.google.com with SMTP id y57so308846qtk.4
+        for <linux-media@vger.kernel.org>; Wed, 05 Jun 2019 14:30:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=marek-ca.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=W1SwKAzrSsraL2rJYcRqKU9p/AAS2w/6bHcCd/yWVTY=;
+        b=XvoSyiJWJjZ8O1byGZWAjxvlsniWLJz+KAPD8l0fEGvVihiVdIjoMHmThPQX0IAFdH
+         OLqH7L3HbIGle+BLtliIEpNU1RAx77yleEYUd4/aDvcm6TsXvCyho10McqEwwgT+ijpy
+         T+KX7DYWNUWYDeSwUfcf6U1ZHeoKqx6ITYk/euysVAF5CbCqDHfJtMhkCiul5BcuG6lo
+         38k2HB4XhrKWEscKB6syZx8Vk0sEnseixgDsFPzglKe4XEQlkGY+9ucGLOccEbzG/AWX
+         ra2tCcqsL9Av0/NvkHGdxCG6kRAGY7Lt5+1chyd5k4HqT0rAaaP0nLhUgE5Cxjv73qVB
+         vQ+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=W1SwKAzrSsraL2rJYcRqKU9p/AAS2w/6bHcCd/yWVTY=;
+        b=KGMtWQNKf0a7Rd7x7cK+HUIVx6ecmnQ6iKveNkdT5dyTwTr1rz0p7qErXw21LhdmZ6
+         UgUMNFrc4gfGsDcGTPFesQlBTfO2BOplQLB4gE0HGfDTqerx35f/y8IeOv0nITuU2pZk
+         cv9qwBSzo8s4QkRwaaiyo4H5QwRXYOac954dUqAglNoYTDP0Q5NljYHMl+AToHEOk4hH
+         jBsTGLtWMzvXocQQQCc4qjHxgfEgnMegnrKiii22mfhkAc1qrsWeErtScP52jVRA8oiy
+         H2YmUt5ZSTxWOSkyfNHDHy7RJm2qo03CV8CJ+xFCDDRSIVqIpAvU3p+9HSwc8Qk84gvu
+         ReRA==
+X-Gm-Message-State: APjAAAXveSaVJLOVmIziPfdPqGbHsMyGfuCu+QFXR7XEZVGnJqwYAAbo
+        4XJVMVJeb9F2v/fWSz6O/Z6jVw==
+X-Google-Smtp-Source: APXvYqyr179W7aDtAChmKkptnBIc2kMcBdRREpSZmu+3HLBiaBVJv0h7CtNC7XKvc89sY8BUrLtvGQ==
+X-Received: by 2002:aed:3a87:: with SMTP id o7mr36089666qte.310.1559770223223;
+        Wed, 05 Jun 2019 14:30:23 -0700 (PDT)
+Received: from [192.168.0.189] ([147.253.86.153])
+        by smtp.gmail.com with ESMTPSA id v195sm12092964qka.28.2019.06.05.14.30.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 14:30:22 -0700 (PDT)
+Subject: Re: [PATCH] Revert "media: hfi_parser: don't trick gcc with a wrong
+ expected size"
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        "open list:QUALCOMM VENUS VIDEO ACCELERATOR DRIVER" 
+        <linux-media@vger.kernel.org>,
+        "open list:QUALCOMM VENUS VIDEO ACCELERATOR DRIVER" 
+        <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20190605201941.4150-1-jonathan@marek.ca>
+ <20190605174044.65ac1e4a@coco.lan>
+From:   Jonathan Marek <jonathan@marek.ca>
+Message-ID: <c0a251c1-d36a-613b-4573-5939cdfc3ebe@marek.ca>
+Date:   Wed, 5 Jun 2019 17:27:38 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190605174044.65ac1e4a@coco.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+hfi_capabilities /  hfi_profile_level_supported come from hardware so 
+there is no option to dynamically allocate, and using size [1] doesn't 
+cause any bug.
 
-Le lundi 03 juin 2019 à 17:48 +0200, Jernej Škrabec a écrit :
-> Dne ponedeljek, 03. junij 2019 ob 14:18:59 CEST je Maxime Ripard napisal(a):
-> > Hi,
-> > 
-> > On Thu, May 30, 2019 at 11:15:15PM +0200, Jernej Skrabec wrote:
-> > > H264 and HEVC engines need additional buffers for each capture buffer.
-> > > H264 engine has this currently solved by allocating fixed size pool,
-> > > which is not ideal. Most of the time pool size is much bigger than it
-> > > needs to be.
-> > > 
-> > > Ideally, extra buffer should be allocated at buffer initialization, but
-> > > that's not efficient. It's size in H264 depends on flags set in SPS, but
-> > > that information is not available in buffer init callback.
-> > > 
-> > > Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-> > > ---
-> > > 
-> > >  drivers/staging/media/sunxi/cedrus/cedrus.h   |  4 ++++
-> > >  .../staging/media/sunxi/cedrus/cedrus_video.c | 19 +++++++++++++++++++
-> > >  2 files changed, 23 insertions(+)
-> > > 
-> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > > b/drivers/staging/media/sunxi/cedrus/cedrus.h index
-> > > d8e6777e5e27..16c1bdfd243a 100644
-> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > > @@ -81,6 +81,10 @@ struct cedrus_run {
-> > > 
-> > >  struct cedrus_buffer {
-> > >  
-> > >  	struct v4l2_m2m_buffer          m2m_buf;
-> > > 
-> > > +	void		*extra_buf;
-> > > +	dma_addr_t	extra_buf_dma;
-> > > +	ssize_t		extra_buf_size;
-> > > +
-> > > 
-> > >  	union {
-> > >  	
-> > >  		struct {
-> > >  		
-> > >  			unsigned int			position;
-> > > 
-> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-> > > b/drivers/staging/media/sunxi/cedrus/cedrus_video.c index
-> > > 681dfe3367a6..d756e0e69634 100644
-> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-> > > @@ -411,6 +411,24 @@ static void cedrus_queue_cleanup(struct vb2_queue
-> > > *vq, u32 state)> 
-> > >  	}
-> > >  
-> > >  }
-> > > 
-> > > +static void cedrus_buf_cleanup(struct vb2_buffer *vb)
-> > > +{
-> > > +	struct vb2_queue *vq = vb->vb2_queue;
-> > > +
-> > > +	if (!V4L2_TYPE_IS_OUTPUT(vq->type)) {
-> > > +		struct cedrus_ctx *ctx = vb2_get_drv_priv(vq);
-> > > +		struct cedrus_buffer *cedrus_buf;
-> > > +
-> > > +		cedrus_buf = vb2_to_cedrus_buffer(vq->bufs[vb->index]);
-> > > +
-> > > +		if (cedrus_buf->extra_buf_size)
-> > > +			dma_free_coherent(ctx->dev->dev,
-> > > +					  cedrus_buf-
-> > extra_buf_size,
-> > > +					  cedrus_buf-
-> > extra_buf,
-> > > +					  cedrus_buf-
-> > extra_buf_dma);
-> > > +	}
-> > > +}
-> > > +
-> > 
-> > I'm really not a fan of allocating something somewhere, and freeing it
-> > somewhere else. Making sure you don't leak something is hard enough to
-> > not have some non-trivial allocation scheme.
+Your enclosed patch is wrong in a way because MAX_CAP_ENTRIES is not a 
+hardware limit but the size of the statically allocated array used by 
+the driver. I don't think there is any defined hardware limit, otherwise 
+the driver author would've defined it as they did with 
+HFI_MAX_PROFILE_COUNT.
+
+A better solution (IMO) if you want to avoid these warnings is to remove 
+those memcpy() and work on the data[] / profile_level[] from the struct 
+directly:
+
+diff --git a/drivers/media/platform/qcom/venus/hfi_parser.c 
+b/drivers/media/platform/qcom/venus/hfi_parser.c
+index 2293d936e49c..ecaa336b2cb9 100644
+--- a/drivers/media/platform/qcom/venus/hfi_parser.c
++++ b/drivers/media/platform/qcom/venus/hfi_parser.c
+@@ -94,16 +94,12 @@ static void
+  parse_profile_level(struct venus_core *core, u32 codecs, u32 domain, 
+void *data)
+  {
+  	struct hfi_profile_level_supported *pl = data;
+-	struct hfi_profile_level *proflevel = pl->profile_level;
+-	struct hfi_profile_level pl_arr[HFI_MAX_PROFILE_COUNT] = {};
+
+  	if (pl->profile_count > HFI_MAX_PROFILE_COUNT)
+  		return;
+
+-	memcpy(pl_arr, proflevel, pl->profile_count * sizeof(*proflevel));
+-
+  	for_each_codec(core->caps, ARRAY_SIZE(core->caps), codecs, domain,
+-		       fill_profile_level, pl_arr, pl->profile_count);
++		       fill_profile_level, pl->profile_level, pl->profile_count);
+  }
+
+  static void
+@@ -119,17 +115,12 @@ static void
+  parse_caps(struct venus_core *core, u32 codecs, u32 domain, void *data)
+  {
+  	struct hfi_capabilities *caps = data;
+-	struct hfi_capability *cap = caps->data;
+-	u32 num_caps = caps->num_capabilities;
+-	struct hfi_capability caps_arr[MAX_CAP_ENTRIES] = {};
+
+-	if (num_caps > MAX_CAP_ENTRIES)
++	if (caps->num_capabilities > MAX_CAP_ENTRIES)
+  		return;
+
+-	memcpy(caps_arr, cap, num_caps * sizeof(*cap));
+-
+  	for_each_codec(core->caps, ARRAY_SIZE(core->caps), codecs, domain,
+-		       fill_caps, caps_arr, num_caps);
++		       fill_caps, caps->data, caps->num_capabilities);
+  }
+
+  static void fill_raw_fmts(struct venus_caps *cap, const void *fmts,
+
+On 6/5/19 4:41 PM, Mauro Carvalho Chehab wrote:
+> Em Wed,  5 Jun 2019 16:19:40 -0400
+> Jonathan Marek <jonathan@marek.ca> escreveu:
 > 
-> Ok, what about introducing two new optional methods in engine callbacks, 
-> buffer_init and buffer_destroy, which would be called from cedrus_buf_init() and 
-> cedrus_buf_cleanup(), respectively. That way all (de)allocation logic stays 
-> within the same engine.
-
-I'm thinking that we should have v4l2-framework-level per-codec helpers
-to provide ops for these kinds of things, since they tend be quite
-common across decoders.
-
-Cheers,
-
-Paul
-
+>> This reverts commit ded716267196862809e5926072adc962a611a1e3.
+>>
+>> This change doesn't make any sense and breaks the driver.
+> 
+> The fix is indeed wrong, but reverting is the wrong thing to do.
+> 
+> The problem is that the driver is trying to write past the
+> allocated area, as reported:
+> 
+> 	drivers/media/platform/qcom/venus/hfi_parser.c:103 parse_profile_level() error: memcpy() 'proflevel' too small (8 vs 128)
+> 	drivers/media/platform/qcom/venus/hfi_parser.c:129 parse_caps() error: memcpy() 'cap' too small (16 vs 512)
+> 
+> If you check the memcpy() logic at the above lines, you'll see that
+> hfi_capability.data may have up to 32 entries, and
+> hfi_profile_level_supported.profile level can have up to it can be up
+> to 16 entries.
+> 
+> So, the buffer should either be dynamically allocated with the real
+> size or we need something like the enclosed patch.
+> 
+> Thanks,
+> Mauro
+> 
+> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+> index 7a3feb5cee00..06a84f266bcc 100644
+> --- a/drivers/media/platform/qcom/venus/core.h
+> +++ b/drivers/media/platform/qcom/venus/core.h
+> @@ -59,7 +59,6 @@ struct venus_format {
+>   
+>   #define MAX_PLANES		4
+>   #define MAX_FMT_ENTRIES		32
+> -#define MAX_CAP_ENTRIES		32
+>   #define MAX_ALLOC_MODE_ENTRIES	16
+>   #define MAX_CODEC_NUM		32
+>   
+> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+> index 34ea503a9842..ca8033381515 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+> @@ -560,6 +560,8 @@ struct hfi_bitrate {
+>   #define HFI_CAPABILITY_HIER_P_HYBRID_NUM_ENH_LAYERS	0x15
+>   #define HFI_CAPABILITY_MBS_PER_SECOND_POWERSAVE		0x16
+>   
+> +#define MAX_CAP_ENTRIES                32
+> +
+>   struct hfi_capability {
+>   	u32 capability_type;
+>   	u32 min;
+> @@ -569,7 +571,7 @@ struct hfi_capability {
+>   
+>   struct hfi_capabilities {
+>   	u32 num_capabilities;
+> -	struct hfi_capability *data;
+> +	struct hfi_capability data[MAX_CAP_ENTRIES];
+>   };
+>   
+>   #define HFI_DEBUG_MSG_LOW	0x01
+> @@ -726,7 +728,7 @@ struct hfi_profile_level {
+>   
+>   struct hfi_profile_level_supported {
+>   	u32 profile_count;
+> -	struct hfi_profile_level *profile_level;
+> +	struct hfi_profile_level profile_level[HFI_MAX_PROFILE_COUNT];
+>   };
+>   
+>   struct hfi_quality_vs_speed {
+> 
+> 
+> 
