@@ -1,72 +1,177 @@
-Return-Path: <SRS0=wOjJ=UD=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=8X75=UE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_NEOMUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA310C282CE
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 19:23:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B30A5C282CE
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 00:12:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AF2C9207E0
-	for <linux-media@archiver.kernel.org>; Tue,  4 Jun 2019 19:23:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B0CC2070B
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 00:12:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbfFDTXv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jun 2019 15:23:51 -0400
-Received: from mga09.intel.com ([134.134.136.24]:40972 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726179AbfFDTXv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 4 Jun 2019 15:23:51 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Jun 2019 12:23:49 -0700
-X-ExtLoop1: 1
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jun 2019 12:23:45 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 9177E20BEB; Tue,  4 Jun 2019 22:23:44 +0300 (EEST)
-Date:   Tue, 4 Jun 2019 22:23:44 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Vishal Sagar <vishal.sagar@xilinx.com>
-Cc:     Hyun Kwon <hyunk@xilinx.com>, laurent.pinchart@ideasonboard.com,
-        mchehab@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        Michal Simek <michals@xilinx.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, hans.verkuil@cisco.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dinesh Kumar <dineshk@xilinx.com>,
-        Sandip Kothari <sandipk@xilinx.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: Re: [PATCH v8 1/2] media: dt-bindings: media: xilinx: Add Xilinx
- MIPI CSI-2 Rx Subsystem
-Message-ID: <20190604192344.7tycwffjd3yeizxh@paasikivi.fi.intel.com>
-References: <1559555971-193235-1-git-send-email-vishal.sagar@xilinx.com>
- <1559555971-193235-2-git-send-email-vishal.sagar@xilinx.com>
+        id S1726536AbfFEAMH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jun 2019 20:12:07 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:41115 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726464AbfFEAMH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 20:12:07 -0400
+Received: by mail-io1-f70.google.com with SMTP id i7so17631495ioh.8
+        for <linux-media@vger.kernel.org>; Tue, 04 Jun 2019 17:12:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=FGuzGX/odArR8Wasi2hmCQXeCrMlVsnJR2R5E+8BwFQ=;
+        b=be9Q3cNueXnvrKOZymxwMPC0UbQXC1Dpdu8ooDw9MJWGKEkUa4aLgMxoDD8wDU03ff
+         YFRhwXXPrjy/t44c/6QEUDLSPrZd5KivItQi1T4d2KQKqmdnlRkla3p49U0lGkxwKgjK
+         nz1y1DTFWiSy8DqNLByx9XWE4xXDzknZ0RUns4tl44OeyhNwJbIBG9jnuIEvQm25apQT
+         PgVNqxWQrZIxi9E/1mINGBiwV3hORWmgdt7JGYZ36+0ixC9UP9RuAcWclSoknrznVzmD
+         Dvf/9ABws0LjyRgmjXU2fdGQRpqmhmEQz+Sn5qWUGps5L5YfSevPm+Kye62Lg/xBMM1j
+         Z1cg==
+X-Gm-Message-State: APjAAAWhNDPHD03MQdj1wk/C6JMkqOpIvu+TvVzOCIkCDLwBDQqmuJ+e
+        W6zhvbZ0kRcxVQwK8EHOYzX3sgGBOQP+1P8eHuLTDl32zuF2
+X-Google-Smtp-Source: APXvYqx0Aj831JIJffguwTlX4uz3Q/32KuSI38Eju+sXqcM9OTtpYBImR7kQ+fu2UKaBv4U7UIJd+hphh+G4QKtljQi9ZhVa2Txy
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1559555971-193235-2-git-send-email-vishal.sagar@xilinx.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+X-Received: by 2002:a24:7d08:: with SMTP id b8mr22607288itc.155.1559693526558;
+ Tue, 04 Jun 2019 17:12:06 -0700 (PDT)
+Date:   Tue, 04 Jun 2019 17:12:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009bf1bd058a887277@google.com>
+Subject: KMSAN: uninit-value in sd_init
+From:   syzbot <syzbot+1a35278dd0ebfb3a038a@syzkaller.appspotmail.com>
+To:     glider@google.com, hverkuil@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Vishal,
+Hello,
 
-On Mon, Jun 03, 2019 at 03:29:30PM +0530, Vishal Sagar wrote:
+syzbot found the following crash on:
 
-> +Optional properties:
-> +--------------------
-> +- xlnx,vfb: This is present when Video Format Bridge is enabled.
-> +  Without this property the driver won't be loaded as IP won't be able to generate
-> +  media bus format compliant stream output.
+HEAD commit:    f75e4cfe kmsan: use kmsan_handle_urb() in urb.c
+git tree:       kmsan
+console output: https://syzkaller.appspot.com/x/log.txt?x=17eadebaa00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=602468164ccdc30a
+dashboard link: https://syzkaller.appspot.com/bug?extid=1a35278dd0ebfb3a038a
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+06d00afa61eef8f7f501ebdb4e8612ea43ec2d78)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=147f4136a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17aec4f2a00000
 
-I think we previously concluded that the format will be just different in
-this case. So the description appears incorrect.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+1a35278dd0ebfb3a038a@syzkaller.appspotmail.com
 
--- 
-Sakari Ailus
-sakari.ailus@linux.intel.com
+usb 1-1: config 0 has an invalid interface number: 142 but max is 0
+usb 1-1: config 0 has no interface number 0
+usb 1-1: New USB device found, idVendor=08ca, idProduct=2018,  
+bcdDevice=95.4a
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+gspca_main: sunplus-2.14.0 probing 08ca:2018
+gspca_sunplus: reg_w_riv err -71
+==================================================================
+BUG: KMSAN: uninit-value in spca504B_PollingDataReady  
+drivers/media/usb/gspca/sunplus.c:409 [inline]
+BUG: KMSAN: uninit-value in sd_init+0x5b6f/0x5e60  
+drivers/media/usb/gspca/sunplus.c:643
+CPU: 0 PID: 3902 Comm: kworker/0:2 Not tainted 5.1.0+ #1
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x130/0x2a0 mm/kmsan/kmsan.c:622
+  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:310
+  spca504B_PollingDataReady drivers/media/usb/gspca/sunplus.c:409 [inline]
+  sd_init+0x5b6f/0x5e60 drivers/media/usb/gspca/sunplus.c:643
+  gspca_dev_probe2+0xee0/0x2240 drivers/media/usb/gspca/gspca.c:1546
+  gspca_dev_probe+0x346/0x3b0 drivers/media/usb/gspca/gspca.c:1619
+  sd_probe+0x8d/0xa0 drivers/media/usb/gspca/gl860/gl860.c:523
+  usb_probe_interface+0xd66/0x1320 drivers/usb/core/driver.c:361
+  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x454/0x730 drivers/base/dd.c:844
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+  device_add+0x288d/0x30e0 drivers/base/core.c:2106
+  usb_set_configuration+0x30dc/0x3750 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x14c/0x200 drivers/usb/core/driver.c:266
+  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x454/0x730 drivers/base/dd.c:844
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+  device_add+0x288d/0x30e0 drivers/base/core.c:2106
+  usb_new_device+0x23e5/0x2ff0 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x48d1/0x7290 drivers/usb/core/hub.c:5432
+  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
+  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  kthread+0x4b5/0x4f0 kernel/kthread.c:254
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+
+Uninit was created at:
+  kmsan_save_stack_with_flags mm/kmsan/kmsan.c:208 [inline]
+  kmsan_internal_poison_shadow+0x92/0x150 mm/kmsan/kmsan.c:162
+  kmsan_kmalloc+0xa4/0x130 mm/kmsan/kmsan_hooks.c:175
+  kmem_cache_alloc_trace+0x503/0xae0 mm/slub.c:2801
+  kmalloc include/linux/slab.h:547 [inline]
+  gspca_dev_probe2+0x30c/0x2240 drivers/media/usb/gspca/gspca.c:1480
+  gspca_dev_probe+0x346/0x3b0 drivers/media/usb/gspca/gspca.c:1619
+  sd_probe+0x8d/0xa0 drivers/media/usb/gspca/gl860/gl860.c:523
+  usb_probe_interface+0xd66/0x1320 drivers/usb/core/driver.c:361
+  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x454/0x730 drivers/base/dd.c:844
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+  device_add+0x288d/0x30e0 drivers/base/core.c:2106
+  usb_set_configuration+0x30dc/0x3750 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x14c/0x200 drivers/usb/core/driver.c:266
+  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
+  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x454/0x730 drivers/base/dd.c:844
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
+  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
+  device_add+0x288d/0x30e0 drivers/base/core.c:2106
+  usb_new_device+0x23e5/0x2ff0 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x48d1/0x7290 drivers/usb/core/hub.c:5432
+  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
+  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  kthread+0x4b5/0x4f0 kernel/kthread.c:254
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
