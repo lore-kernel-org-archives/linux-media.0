@@ -2,146 +2,136 @@ Return-Path: <SRS0=8X75=UE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A20A4C28CC5
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 13:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A38BBC28CC5
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 13:39:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 83BB8206BA
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 13:07:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86BA720684
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 13:39:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727839AbfFENHS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jun 2019 09:07:18 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:48543 "EHLO
+        id S1727970AbfFENjr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jun 2019 09:39:47 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:45351 "EHLO
         lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727703AbfFENHR (ORCPT
+        by vger.kernel.org with ESMTP id S1727966AbfFENjr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 5 Jun 2019 09:07:17 -0400
+        Wed, 5 Jun 2019 09:39:47 -0400
 Received: from [IPv6:2001:420:44c1:2579:c806:4d76:5b3c:eea9] ([IPv6:2001:420:44c1:2579:c806:4d76:5b3c:eea9])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id YVdJhm8dI3qlsYVdMhgFM4; Wed, 05 Jun 2019 15:07:16 +0200
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [GIT PULL FOR v5.3] Various fixes/improvements
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Message-ID: <8a653d9b-8f4c-030d-3b37-39e5c3fd4504@xs4all.nl>
-Date:   Wed, 5 Jun 2019 15:07:13 +0200
+        id YW8ihmUzN3qlsYW8mhgRsz; Wed, 05 Jun 2019 15:39:44 +0200
+Subject: Re: [PATCH v7 2/4] media: videodev2: add
+ V4L2_FMT_FLAG_FIXED_RESOLUTION
+To:     Maxime Jourdan <mjourdan@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20190531093126.26956-1-mjourdan@baylibre.com>
+ <20190531093126.26956-3-mjourdan@baylibre.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <9731b2db-efd4-87d0-c48d-87adec433747@xs4all.nl>
+Date:   Wed, 5 Jun 2019 15:39:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.5.1
 MIME-Version: 1.0
+In-Reply-To: <20190531093126.26956-3-mjourdan@baylibre.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfLATlu2x92sP/whTiIMa4d94YrKd8m78HSfc0IzFtlfGFkW/wtY6IH9xejnQFaEa6fnVIP+2x4qBG37zFJydEMOiBcJlW0UDkVfM/A7k4kReRYAu2SuB
- caAPTOTG6YiS4KcIFGjBJmJGBCnwE6PknxpRF1o8cRwI0+qBDs0PhkyJPH2uY0l/sW0N5oXf+6A2sBHNX9VMrCm6AB7a4W3nMELaIv+z9eNbqiTy0UwcCW2g
- pxbRMd82VbY2HjOW5ytqEt8V/OE8t6JkhJYSlHNbWDMf9RMxDv61fC0FO+RFclak
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfL/7ZtmqqJer1hsK60jgZcgv+ioTMnBw2zhprc8Tz/bSylE8VX716nESUCWjidOuDf++DgPrGp2TlmKV5m4/D8Uig0rBNJDhyiYnBcNPYN0uSWQYEbqc
+ iGPqk330/IS2JJurKbAu7zb5CiKZnIF0mh86cRmofiHBhEJpBAvfw+b2ZhBs0791Ti17gyoh1Kb1p+cj8jTcxar9xMevoSncdv+OcQj7vqP9QX3QDu1/V0fw
+ Cjr+Ss9igdPPnCorYJa7CRHkI6LmnZ26jdOuCy2C6GkXKAf6SVG242m4NBWVYP0O4wS3q/QhCD+1UWVihM8BdbN/2RhSH4G9kgp/0oZGV2jvYX76BzgVgyQM
+ 1q1rGgIaYu252pObFB0QHBhd2nxcVRaflTFhSv6QNXOwWqdAiETXCVJ/B0HTr9Zb3/OltbHHB5mo7rrQFCdu4xf/8mCX8/0vgOTTUdDKpLfpCU08YO4blDdv
+ NPpTQMBErTJOwzpD4/R0i6O6lfR0ZIdtbTcCA/VXx8Y+UVRAB9QwVtn9tGLSYyVWjHd7l+TzvFNZ1fbTVjPTIO5NewY9QQCybH3da4oeZ0GBkwCazm3iLiJB
+ guYMTtfR7IUQGlSU2YYVcJJwj/gLClyKMlV6r5DU4Dhs+Kd2kVHTL950rjCC6IKKR7yKnEsKMoShErTrTGGsWxPZPexQf2CbHAjql8hY9QJT1rTSoMwjdDPD
+ c0iwon8trQ0=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hi Maxime,
 
-Nothing special, except for "media/doc: Allow sizeimage to be set by v4l clients".
-Please review that again to check if your earlier comments are now all addressed.
+I am wondering if this flag shouldn't be inverted: you set
+V4L2_FMT_FLAG_DYN_RESOLUTION if dynamic resolution is supported,
+otherwise it isn't.
 
-Also note the cxusb revert patch. That's my fault, I never intended to accept that
-patch (https://patchwork.linuxtv.org/patch/55944/) but I accidentally added it to
-my PR anyway.
+Can all the existing mainlined codec drivers handle midstream
+resolution changes?
+
+s5p-mfc, venus and mediatek can, but I see no SOURCE_CHANGE event in
+the coda drivers, so I suspect that that can't handle this.
+
+Philipp, what is the status of the coda driver for dynamic resolution
+changes?
+
+Another reason is that AFAIK all encoders are of the fixed resolution
+type.
+
+And a final reason is that usually flags should indicate the presence
+of a feature, not the absence.
 
 Regards,
 
 	Hans
 
-The following changes since commit 9b925365569eb4e845c006fdc254257e78fc12a4:
+On 5/31/19 11:31 AM, Maxime Jourdan wrote:
+> When a v4l2 driver exposes V4L2_EVENT_SOURCE_CHANGE, some (usually
+> OUTPUT) formats may not be able to trigger this event.
+> 
+> For instance, MPEG2 on Amlogic hardware does not support resolution
+> switching on the fly, and a decode session must operate at a set
+> resolution defined before the decoding start.
+> 
+> Add a enum_fmt format flag to tag those specific formats.
+> 
+> Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
+> ---
+>  Documentation/media/uapi/v4l/vidioc-enum-fmt.rst | 6 ++++++
+>  include/uapi/linux/videodev2.h                   | 5 +++--
+>  2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst b/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
+> index 822d6730e7d2..b11448a1848b 100644
+> --- a/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
+> +++ b/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
+> @@ -127,6 +127,12 @@ one until ``EINVAL`` is returned.
+>        - This format is not native to the device but emulated through
+>  	software (usually libv4l2), where possible try to use a native
+>  	format instead for better performance.
+> +    * - ``V4L2_FMT_FLAG_FIXED_RESOLUTION``
+> +      - 0x0004
+> +      - Dynamic resolution switching is not supported for this format,
+> +        even if the event ``V4L2_EVENT_SOURCE_CHANGE`` is supported by
+> +        the device.
+> +
+>  
+>  
+>  Return Value
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+> index 1050a75fb7ef..9b0a7f82dd92 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -768,8 +768,9 @@ struct v4l2_fmtdesc {
+>  	__u32		    reserved[4];
+>  };
+>  
+> -#define V4L2_FMT_FLAG_COMPRESSED 0x0001
+> -#define V4L2_FMT_FLAG_EMULATED   0x0002
+> +#define V4L2_FMT_FLAG_COMPRESSED	0x0001
+> +#define V4L2_FMT_FLAG_EMULATED		0x0002
+> +#define V4L2_FMT_FLAG_FIXED_RESOLUTION	0x0004
+>  
+>  	/* Frame Size and frame rate enumeration */
+>  /*
+> 
 
-  media: vicodec: use new v4l2_m2m_ioctl_try_en/decoder_cmd funcs (2019-06-05 08:50:41 -0400)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.3k
-
-for you to fetch changes up to 4a6d854b95c02b69861ad95ecdddb36847b9a4d2:
-
-  cxusb: Revert "media: cxusb: add raw mode support for, Medion MD95700" (2019-06-05 15:00:07 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Alexandre Courbot (3):
-      media: mtk-vcodec: replace GPLv2 with SPDX
-      media: mtk-vcodec: avoid unneeded pointer-to-long conversions
-      media: mtk-vcodec: constify formats
-
-André Almeida (1):
-      media: vimc: Remove or modify stream checks
-
-Colin Ian King (1):
-      media: vivid: fix incorrect assignment operation when setting video mode
-
-Fabio Estevam (3):
-      media: imx7-mipi-csis: Propagate the error if clock enabling fails
-      media: imx7-mipi-csis: Remove unneeded 'ret' initialization
-      media: imx7-mipi-csis: Remove extra blank line
-
-Hans Verkuil (1):
-      cxusb: Revert "media: cxusb: add raw mode support for, Medion MD95700"
-
-Shobhit Kukreti (1):
-      media: platform: Fix Warning of Unneeded Semicolon reported by coccicheck
-
-Stanimir Varbanov (1):
-      media/doc: Allow sizeimage to be set by v4l clients
-
-Yunfei Dong (1):
-      media: mtk-vcodec: support single-buffer frames
-
- Documentation/media/uapi/v4l/pixfmt-v4l2-mplane.rst    |  15 ++++++-
- Documentation/media/uapi/v4l/pixfmt-v4l2.rst           |  13 +++++-
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c     |  45 ++++++++------------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.h     |  15 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c |  15 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c  |  14 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.h  |  14 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     |  19 ++-------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.c     |  34 +++++----------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc.h     |  15 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c |  15 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.c  |  14 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_pm.h  |  14 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.c    |  14 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_intr.h    |  14 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_util.c    |  15 +------
- drivers/media/platform/mtk-vcodec/mtk_vcodec_util.h    |  15 +------
- drivers/media/platform/mtk-vcodec/vdec/vdec_h264_if.c  |  26 ++++--------
- drivers/media/platform/mtk-vcodec/vdec/vdec_vp8_if.c   |  27 ++++--------
- drivers/media/platform/mtk-vcodec/vdec/vdec_vp9_if.c   |  30 ++++---------
- drivers/media/platform/mtk-vcodec/vdec_drv_base.h      |  22 +++-------
- drivers/media/platform/mtk-vcodec/vdec_drv_if.c        |  17 +-------
- drivers/media/platform/mtk-vcodec/vdec_drv_if.h        |  15 +------
- drivers/media/platform/mtk-vcodec/vdec_ipi_msg.h       |  15 +------
- drivers/media/platform/mtk-vcodec/vdec_vpu_if.c        |  14 +------
- drivers/media/platform/mtk-vcodec/vdec_vpu_if.h        |  14 +------
- drivers/media/platform/mtk-vcodec/venc/venc_h264_if.c  |  27 +++---------
- drivers/media/platform/mtk-vcodec/venc/venc_vp8_if.c   |  26 +++---------
- drivers/media/platform/mtk-vcodec/venc_drv_base.h      |  25 +++--------
- drivers/media/platform/mtk-vcodec/venc_drv_if.c        |  19 +--------
- drivers/media/platform/mtk-vcodec/venc_drv_if.h        |  17 +-------
- drivers/media/platform/mtk-vcodec/venc_ipi_msg.h       |  17 +-------
- drivers/media/platform/mtk-vcodec/venc_vpu_if.c        |  15 +------
- drivers/media/platform/mtk-vcodec/venc_vpu_if.h        |  15 +------
- drivers/media/platform/pxa_camera.c                    |   2 +-
- drivers/media/platform/qcom/venus/vdec_ctrls.c         |   2 +-
- drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c   |   4 +-
- drivers/media/platform/vimc/vimc-debayer.c             |   5 +--
- drivers/media/platform/vimc/vimc-scaler.c              |   7 +---
- drivers/media/platform/vimc/vimc-sensor.c              |   6 +--
- drivers/media/platform/vivid/vivid-osd.c               |   2 +-
- drivers/media/usb/dvb-usb/cxusb-analog.c               | 190 ++++++++++++++---------------------------------------------------------------------
- drivers/media/usb/dvb-usb/cxusb.h                      |   4 --
- drivers/media/v4l2-core/v4l2-ioctl.c                   |   3 +-
- drivers/staging/media/imx/imx7-mipi-csis.c             |  17 ++++----
- 45 files changed, 177 insertions(+), 706 deletions(-)
