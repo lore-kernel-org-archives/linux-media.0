@@ -2,87 +2,239 @@ Return-Path: <SRS0=8X75=UE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,T_DKIMWL_WL_HIGH autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84A65C28CC5
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 22:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4DF8C28CC5
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 23:42:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4EC702067C
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 22:23:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="HCuTRIjJ"
+	by mail.kernel.org (Postfix) with ESMTP id B99872070B
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 23:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1559778135;
+	bh=Ty+IDfPl32At1TBBsThkdN3q4Gmgm0ckdjpO0uqs2CY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=WEUeBQRtEqFduJW7uX/qj0vYRuvCoyXgf6MUQfAo8fT6Ar/7yQChSX8B06o1KdX0j
+	 0JTFeXbZaZHTYNajpbsdfVm4+oev+6gxnSG7tUT+lZQPhB56A+b7tZQx5tUT1MOHgc
+	 pn3i3ukpGNaM0AquNSO+vNRiJKvZ2HOVmyYTYs24=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfFEWW7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jun 2019 18:22:59 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:37802 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbfFEWW7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 18:22:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1559773376; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=vYXmQr/7cLomc7L2vWT2Hwyls4I65jEhBN+6anSml8Y=;
-        b=HCuTRIjJLOASltCPPWDDUfBs6u5KN0r6LpRVIpDZrmpc7y67UFCZdJMfm/g/txjZ/wEJmD
-        T+we2elfGngzcsIuXNrr6ZPv2wCu0cObxse9WOrVFGLe5fRKHl4YEzQY4Bkh9Who3GA+q7
-        fbnSSdD6qk9kS59V0xeRVdLScn175Nw=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Thierry Reding <thierry.reding@gmail.com>,
+        id S1726734AbfFEXmK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jun 2019 19:42:10 -0400
+Received: from casper.infradead.org ([85.118.1.10]:48604 "EHLO
+        casper.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726532AbfFEXmJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 19:42:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IllZgL/Tvx6ZdOkE8cT0VBvSJHPyC9Kw4E2FxJB9wHw=; b=bm2K2e36Q7ozSQDpAX71FjdUg5
+        t45M9rkJZI5xIcP2xoJLYpzZUzxXj5u12tnAWWX/54JMNifGsA3V/jP6Zrl1YcjUW2xd2uoS2797t
+        rWjOKTkQkRR2q3GJokt0uftfimyVD9gZj99nAn+sKuqn/Lz+4J14aO/TTgBXbwebFpm1HG5ZbQc5r
+        r+lJ//XEq817K3pBD3daHKUeJc6792qKmE1ORtKU5Pw6mhY47ZxiYcbQKWIuiC2FZ1ZTi/l3mQy7p
+        JLKVZGXWt/OZJe8s1MBs5i/bBZYZEHgeKBqh22giDHB2znPppochw2XIRxntaEgnxgoiOUv181hH9
+        ff7H7oiQ==;
+Received: from [179.182.172.34] (helo=coco.lan)
+        by casper.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hYfXa-0004Gc-V0; Wed, 05 Jun 2019 23:41:59 +0000
+Date:   Wed, 5 Jun 2019 20:41:52 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        od@zcrc.me, Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 1/3] dt-bindings: display: Add GiantPlus GPM940B0 panel documentation
-Date:   Thu,  6 Jun 2019 00:22:45 +0200
-Message-Id: <20190605222247.25657-1-paul@crapouillou.net>
+        od@zcrc.me
+Subject: Re: [PATCH v5 2/3] media: uapi: Add MEDIA_BUS_FMT_RGB888_3X8 media
+ bus format
+Message-ID: <20190605204152.36f81ebd@coco.lan>
+In-Reply-To: <20190605222247.25657-2-paul@crapouillou.net>
+References: <20190605222247.25657-1-paul@crapouillou.net>
+        <20190605222247.25657-2-paul@crapouillou.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The GPM940B0 is a 3.0" 320x240 24-bit TFT LCD panel.
+Em Thu,  6 Jun 2019 00:22:46 +0200
+Paul Cercueil <paul@crapouillou.net> escreveu:
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
+> This patch adds MEDIA_BUS_FMT_RGB888_3X8, used for the GiantPlus
+> GPM940B0 24-bit TFT panel, where the RGB components are transferred
+> sequentially on a 8-bit bus.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Notes:
-    v2: New patch
-    
-    v3: Add Rob's ack
-    
-    v4-v5: No change
+Looks ok to me. Feel free to apply via DRM tree.
 
- .../bindings/display/panel/giantplus,gpm940b0.txt    | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/display/panel/giantplus,gpm940b0.txt
+Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-diff --git a/Documentation/devicetree/bindings/display/panel/giantplus,gpm940b0.txt b/Documentation/devicetree/bindings/display/panel/giantplus,gpm940b0.txt
-new file mode 100644
-index 000000000000..3dab52f92c26
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/giantplus,gpm940b0.txt
-@@ -0,0 +1,12 @@
-+GiantPlus 3.0" (320x240 pixels) 24-bit TFT LCD panel
-+
-+Required properties:
-+- compatible: should be "giantplus,gpm940b0"
-+- power-supply: as specified in the base binding
-+
-+Optional properties:
-+- backlight: as specified in the base binding
-+- enable-gpios: as specified in the base binding
-+
-+This binding is compatible with the simple-panel binding, which is specified
-+in simple-panel.txt in this directory.
--- 
-2.21.0.593.g511ec345e18
+> ---
+> 
+> Notes:
+>     v2: New patch
+>     
+>     v3: No change
+>     
+>     v4: Add only MEDIA_BUS_FMT_RGB888_3X8, as we don't have to care about
+>         endianness
+>     
+>     v5: Also update Documentation/media/uapi/v4l/subdev-formats.rst
+> 
+>  .../media/uapi/v4l/subdev-formats.rst         | 107 ++++++++++++++++++
+>  include/uapi/linux/media-bus-format.h         |   3 +-
+>  2 files changed, 109 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/media/uapi/v4l/subdev-formats.rst b/Documentation/media/uapi/v4l/subdev-formats.rst
+> index ab1a48a5ae80..f4f8de31ac63 100644
+> --- a/Documentation/media/uapi/v4l/subdev-formats.rst
+> +++ b/Documentation/media/uapi/v4l/subdev-formats.rst
+> @@ -1305,6 +1305,113 @@ The following tables list existing packed RGB formats.
+>        - g\ :sub:`6`
+>        - g\ :sub:`5`
+>        - g\ :sub:`4`
+> +    * .. _MEDIA-BUS-FMT-RGB888-3X8:
+> +
+> +      - MEDIA_BUS_FMT_RGB888_3X8
+> +      - 0x101c
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - r\ :sub:`7`
+> +      - r\ :sub:`6`
+> +      - r\ :sub:`5`
+> +      - r\ :sub:`4`
+> +      - r\ :sub:`3`
+> +      - r\ :sub:`2`
+> +      - r\ :sub:`1`
+> +      - r\ :sub:`0`
+> +    * -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - g\ :sub:`7`
+> +      - g\ :sub:`6`
+> +      - g\ :sub:`5`
+> +      - g\ :sub:`4`
+> +      - g\ :sub:`3`
+> +      - g\ :sub:`2`
+> +      - g\ :sub:`1`
+> +      - g\ :sub:`0`
+> +    * -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      -
+> +      - b\ :sub:`7`
+> +      - b\ :sub:`6`
+> +      - b\ :sub:`5`
+> +      - b\ :sub:`4`
+> +      - b\ :sub:`3`
+> +      - b\ :sub:`2`
+> +      - b\ :sub:`1`
+> +      - b\ :sub:`0`
+>      * .. _MEDIA-BUS-FMT-ARGB888-1X32:
+>  
+>        - MEDIA_BUS_FMT_ARGB888_1X32
+> diff --git a/include/uapi/linux/media-bus-format.h b/include/uapi/linux/media-bus-format.h
+> index 2a6b253cfb05..16c1fa2d89a4 100644
+> --- a/include/uapi/linux/media-bus-format.h
+> +++ b/include/uapi/linux/media-bus-format.h
+> @@ -34,7 +34,7 @@
+>  
+>  #define MEDIA_BUS_FMT_FIXED			0x0001
+>  
+> -/* RGB - next is	0x101c */
+> +/* RGB - next is	0x101d */
+>  #define MEDIA_BUS_FMT_RGB444_1X12		0x1016
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_BE	0x1001
+>  #define MEDIA_BUS_FMT_RGB444_2X8_PADHI_LE	0x1002
+> @@ -55,6 +55,7 @@
+>  #define MEDIA_BUS_FMT_RGB888_1X24		0x100a
+>  #define MEDIA_BUS_FMT_RGB888_2X12_BE		0x100b
+>  #define MEDIA_BUS_FMT_RGB888_2X12_LE		0x100c
+> +#define MEDIA_BUS_FMT_RGB888_3X8		0x101c
+>  #define MEDIA_BUS_FMT_RGB888_1X7X4_SPWG		0x1011
+>  #define MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA	0x1012
+>  #define MEDIA_BUS_FMT_ARGB8888_1X32		0x100d
 
+
+
+Thanks,
+Mauro
