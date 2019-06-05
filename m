@@ -2,44 +2,73 @@ Return-Path: <SRS0=8X75=UE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98EDCC28CC5
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 21:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93264C28CC5
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 21:54:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 70ED6206BB
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 21:53:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 602B8206BB
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 21:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1559771642;
+	bh=NI4PAi7U+n7W9+1SuYtLVELE87TLQbUIbXQy7ITF7bQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=TwPHYbUKJruk5has3Z1iz0vUQchUvurIviYhAb6+U2ODKeoIVJQ8A3apeQZwe5wr8
+	 /ni+jzw7cU0z8MfZJq8RUeNUVndn/5D3HKp0hb+AVC4VNirapwlT+d1Dz+F0hYb6mU
+	 tG9IoQE7SGqKJK884lyvfgRCJF+Lg2THGP44losQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726541AbfFEVxb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jun 2019 17:53:31 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:60650 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbfFEVxa (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 17:53:30 -0400
-Received: from relay12.mail.gandi.net (unknown [217.70.178.232])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 5B3033A3DA3;
-        Wed,  5 Jun 2019 21:13:02 +0000 (UTC)
-Received: from collins (196.109.29.93.rev.sfr.net [93.29.109.196])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay12.mail.gandi.net (Postfix) with ESMTPSA id F3779200003;
-        Wed,  5 Jun 2019 21:12:52 +0000 (UTC)
-Message-ID: <c1b57cddd7945c02c348a8fb253445e61a56cc7c.camel@bootlin.com>
-Subject: Re: [PATCH 7/7] media: cedrus: Improve H264 memory efficiency
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@siol.net>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     wens@csie.org, mchehab@kernel.org, gregkh@linuxfoundation.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Wed, 05 Jun 2019 23:12:52 +0200
-In-Reply-To: <30580764.erAxqE4FcP@jernej-laptop>
-References: <20190530211516.1891-1-jernej.skrabec@siol.net>
-         <20190530211516.1891-8-jernej.skrabec@siol.net>
-         <20190603122328.kczqsr4pza2ggvbk@flea> <30580764.erAxqE4FcP@jernej-laptop>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.1 
+        id S1726794AbfFEVyB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jun 2019 17:54:01 -0400
+Received: from mail-it1-f193.google.com ([209.85.166.193]:35332 "EHLO
+        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726754AbfFEVx7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 17:53:59 -0400
+Received: by mail-it1-f193.google.com with SMTP id n189so10947itd.0
+        for <linux-media@vger.kernel.org>; Wed, 05 Jun 2019 14:53:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+MFyANsOfT2/dVaaB+yS4Zlbz3DsUe/iLn0n5jQfuhY=;
+        b=c/+iPmc5OhjPBTC8fIGFRCsAv5tx4rbBrYosMDKZ8NdpwyG6jN+XuJWOsYqj/42nGI
+         Fh9xT4wddK2o/2Z7qvXDX7pK1gLyHS5w7cmoEQGTCpDn40F4WkrLdMrKGI/EYYU4UmiN
+         UJxeW6HmsjKDp99T3/4JaO4r86yGjtdQAsEK8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+MFyANsOfT2/dVaaB+yS4Zlbz3DsUe/iLn0n5jQfuhY=;
+        b=uTLxaACKfcvFd+x1r1KxfSszHwt3VpcWp5EodkAu3kjgbVsNCE9TwwaR958LYxlM7E
+         0zCcqzMzmY9lbtCXH8N8zIDn1lufe8ZGG9tDespTm2NL2itHHTTtEr+0OWfaERT4Vl2m
+         smps0ve+ItGzKKeEEBoaqxD7Pp3krF1zgPEVe4HFyMtd6Y2L0B/J+egJO03CJPalY1LU
+         MYZTWOJ5dzYKNld61bHBKosdh468/Od0h15sb9yT+kCrWlzhaGDRFMrSXOPDRFlgmMYT
+         i1NVMDu7tXIZOrPPkR0IBRIkqc/ZhTrnADr2bAsQvaNaEizTD9ar8Az+hFYVX4jhaGpp
+         Mp6w==
+X-Gm-Message-State: APjAAAWrRjYIPd1EkSHGPdunxZNNqmiOIqV50Pw2agBztejupZ1qxq9z
+        xukipE2XLLTlqLnfPP44O31R0A==
+X-Google-Smtp-Source: APXvYqxvQbbOCGSd5hhFsnMM4rfLypzKXLxd+LF3XfEkwiqqQQIsrXgSBq3EtDBtpnneODuE0ChWPg==
+X-Received: by 2002:a24:4a13:: with SMTP id k19mr28902699itb.5.1559771633929;
+        Wed, 05 Jun 2019 14:53:53 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id e127sm37484ite.33.2019.06.05.14.53.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 14:53:53 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        sakari.ailus@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, ezequiel@collabora.com,
+        paul.kocialkowski@bootlin.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] media: v4l2-core: Shifting signed 32-bit value by 31 bits error
+Date:   Wed,  5 Jun 2019 15:53:47 -0600
+Message-Id: <bac3ee3b10de409b6cdf7286e0e84737e63662ee.1559764506.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1559764506.git.skhan@linuxfoundation.org>
+References: <cover.1559764506.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -47,210 +76,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Fix the following cppcheck error:
 
-Le lundi 03 juin 2019 à 18:37 +0200, Jernej Škrabec a écrit :
-> Dne ponedeljek, 03. junij 2019 ob 14:23:28 CEST je Maxime Ripard napisal(a):
-> > On Thu, May 30, 2019 at 11:15:16PM +0200, Jernej Skrabec wrote:
-> > > H264 decoder driver preallocated pretty big worst case mv col buffer
-> > > pool. It turns out that pool is most of the time much bigger than it
-> > > needs to be.
-> > > 
-> > > Solution implemented here is to allocate memory only if capture buffer
-> > > is actually used and only as much as it is really necessary.
-> > > 
-> > > This is also preparation for 4K video decoding support, which will be
-> > > implemented later.
-> > 
-> > What is it doing exactly to prepare for 4k?
-> 
-> Well, with that change 4K videos can be actually watched with 256 MiB CMA 
-> pool, but I can drop this statement in next version.
-> 
-> I concentrated on 256 MiB CMA pool, because it's maximum memory size supported 
-> by older VPU versions, but I think they don't support 4K decoding. I don't 
-> have them, so I can't test that hypothesis.
+Checking drivers/media/v4l2-core/v4l2-ioctl.c ...
+[drivers/media/v4l2-core/v4l2-ioctl.c:1370]: (error) Shifting signed 32-bit value by 31 bits is undefined behaviour
 
-I think it's a fair goal to try and optimize the CMA pool usage, maybe
-it should be presented as that and I guess it's fine to connect that to
-4K decoding if you like :)
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ drivers/media/v4l2-core/v4l2-ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Either way, I think we should have per-codec framework callbacks for
-these kinds of things.
-
-Cheers,
-
-Paul
-
-> > > Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-> > > ---
-> > > 
-> > >  drivers/staging/media/sunxi/cedrus/cedrus.h   |  4 -
-> > >  .../staging/media/sunxi/cedrus/cedrus_h264.c  | 81 +++++++------------
-> > >  2 files changed, 28 insertions(+), 57 deletions(-)
-> > > 
-> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > > b/drivers/staging/media/sunxi/cedrus/cedrus.h index
-> > > 16c1bdfd243a..fcbbbef65494 100644
-> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-> > > @@ -106,10 +106,6 @@ struct cedrus_ctx {
-> > > 
-> > >  	union {
-> > >  	
-> > >  		struct {
-> > > 
-> > > -			void		*mv_col_buf;
-> > > -			dma_addr_t	mv_col_buf_dma;
-> > > -			ssize_t		mv_col_buf_field_size;
-> > > -			ssize_t		mv_col_buf_size;
-> > > 
-> > >  			void		*pic_info_buf;
-> > >  			dma_addr_t	pic_info_buf_dma;
-> > >  			void		*neighbor_info_buf;
-> > > 
-> > > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > > b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c index
-> > > b2290f98d81a..758fd0049e8f 100644
-> > > --- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-> > > @@ -54,17 +54,14 @@ static void cedrus_h264_write_sram(struct cedrus_dev
-> > > *dev,> 
-> > >  		cedrus_write(dev, VE_AVC_SRAM_PORT_DATA, *buffer++);
-> > >  
-> > >  }
-> > > 
-> > > -static dma_addr_t cedrus_h264_mv_col_buf_addr(struct cedrus_ctx *ctx,
-> > > -					      unsigned int 
-> position,
-> > > +static dma_addr_t cedrus_h264_mv_col_buf_addr(struct cedrus_buffer *buf,
-> > > 
-> > >  					      unsigned int 
-> field)
-> > >  
-> > >  {
-> > > 
-> > > -	dma_addr_t addr = ctx->codec.h264.mv_col_buf_dma;
-> > > -
-> > > -	/* Adjust for the position */
-> > > -	addr += position * ctx->codec.h264.mv_col_buf_field_size * 2;
-> > > +	dma_addr_t addr = buf->extra_buf_dma;
-> > > 
-> > >  	/* Adjust for the field */
-> > > 
-> > > -	addr += field * ctx->codec.h264.mv_col_buf_field_size;
-> > > +	if (field)
-> > > +		addr += buf->extra_buf_size / 2;
-> > > 
-> > >  	return addr;
-> > >  
-> > >  }
-> > > 
-> > > @@ -76,7 +73,6 @@ static void cedrus_fill_ref_pic(struct cedrus_ctx *ctx,
-> > > 
-> > >  				struct cedrus_h264_sram_ref_pic 
-> *pic)
-> > >  
-> > >  {
-> > >  
-> > >  	struct vb2_buffer *vbuf = &buf->m2m_buf.vb.vb2_buf;
-> > > 
-> > > -	unsigned int position = buf->codec.h264.position;
-> > > 
-> > >  	pic->top_field_order_cnt = cpu_to_le32(top_field_order_cnt);
-> > >  	pic->bottom_field_order_cnt = cpu_to_le32(bottom_field_order_cnt);
-> > > 
-> > > @@ -84,10 +80,8 @@ static void cedrus_fill_ref_pic(struct cedrus_ctx *ctx,
-> > > 
-> > >  	pic->luma_ptr = cpu_to_le32(cedrus_buf_addr(vbuf, &ctx->dst_fmt, 
-> 0));
-> > >  	pic->chroma_ptr = cpu_to_le32(cedrus_buf_addr(vbuf, &ctx->dst_fmt, 
-> 1));
-> > > -	pic->mv_col_top_ptr =
-> > > -		cpu_to_le32(cedrus_h264_mv_col_buf_addr(ctx, position, 
-> 0));
-> > > -	pic->mv_col_bot_ptr =
-> > > -		cpu_to_le32(cedrus_h264_mv_col_buf_addr(ctx, position, 
-> 1));
-> > > +	pic->mv_col_top_ptr = cpu_to_le32(cedrus_h264_mv_col_buf_addr(buf, 
-> 0));
-> > > +	pic->mv_col_bot_ptr = cpu_to_le32(cedrus_h264_mv_col_buf_addr(buf, 
-> 1));
-> > >  }
-> > >  
-> > >  static void cedrus_write_frame_list(struct cedrus_ctx *ctx,
-> > > 
-> > > @@ -142,6 +136,28 @@ static void cedrus_write_frame_list(struct cedrus_ctx
-> > > *ctx,> 
-> > >  	output_buf = vb2_to_cedrus_buffer(&run->dst->vb2_buf);
-> > >  	output_buf->codec.h264.position = position;
-> > > 
-> > > +	if (!output_buf->extra_buf_size) {
-> > > +		const struct v4l2_ctrl_h264_sps *sps = run->h264.sps;
-> > > +		unsigned int field_size;
-> > > +
-> > > +		field_size = DIV_ROUND_UP(ctx->src_fmt.width, 16) *
-> > > +			DIV_ROUND_UP(ctx->src_fmt.height, 16) * 16;
-> > > +		if (!(sps->flags & 
-> V4L2_H264_SPS_FLAG_DIRECT_8X8_INFERENCE))
-> > > +			field_size = field_size * 2;
-> > > +		if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
-> > > +			field_size = field_size * 2;
-> > > +
-> > > +		output_buf->extra_buf_size = field_size * 2;
-> > > +		output_buf->extra_buf =
-> > > +			dma_alloc_coherent(dev->dev,
-> > > +					   output_buf-
-> > extra_buf_size,
-> > > +					   &output_buf-
-> > extra_buf_dma,
-> > > +					   GFP_KERNEL);
-> > > +
-> > > +		if (!output_buf->extra_buf)
-> > > +			output_buf->extra_buf_size = 0;
-> > > +	}
-> > > +
-> > 
-> > That also means that instead of allocating that buffer exactly once,
-> > you now allocate it for each output buffer?
-> 
-> It's not completely the same. I'm allocating multiple times, yes, but much 
-> smaller chunks and only if needed.
-> 
-> Still, this slight overhead happens only when buffer is used for the first time. 
-> When buffer is reused, this MV buffer is also reused.
-> 
-> > I guess that it will cleaned up by your previous patch at
-> > buffer_cleanup time, so after it's no longer a reference frame?
-> 
-> Yes, it will be deallocated in buffer_cleanup, but only after capture buffers 
-> are freed, which usually happens when device file descriptor is closed.
-> 
-> Buffers which holds reference frames are later reused, together with it's MV 
-> buffer, so there's no overhead.
-> 
-> > What is the average memory usage before, and after that change during
-> > a playback, and what is the runtime cost of doing it multiple times
-> > instead of once?
-> 
-> As I already said, overhead is present only when buffer is used for the first 
-> time, which is not ideal, but allows to calculate minimal buffer size needed 
-> and even doesn't allocate anything if capture buffer is not used at all.
-> 
-> I didn't collect any exact numbers, but with this change I can play H264 and 
-> HEVC (with similar modification) 4K video samples with 256 MiB CMA pool. 
-> Without this change, it's not really possible. You can argue "but what if 4K 
-> video use 16 reference frames", then yes, only solution is to increase CMA 
-> pool, but why reserve extra memory which will never be used?
-> 
-> I've been using this optimization for past ~6 month with no issues noticed. If 
-> you feel better, I can change this to be a bit conservative and allocate MV 
-> buffer when buffer_init is called. This will consume a bit more memory as SPS is 
-> not available at that time (worst case buffer size estimation), but it still 
-> won't allocate MV buffers for unallocated capture frames.
-> 
-> Best regards,
-> Jernej
-> 
-> 
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index 6859bdac86fe..333e387bafeb 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1364,7 +1364,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 					(char)((fmt->pixelformat >> 8) & 0x7f),
+ 					(char)((fmt->pixelformat >> 16) & 0x7f),
+ 					(char)((fmt->pixelformat >> 24) & 0x7f),
+-					(fmt->pixelformat & (1 << 31)) ? "-BE" : "");
++					(fmt->pixelformat & BIT(31)) ? "-BE" : "");
+ 			break;
+ 		}
+ 	}
+-- 
+2.17.1
 
