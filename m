@@ -2,173 +2,141 @@ Return-Path: <SRS0=8X75=UE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3A69C282CE
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 00:12:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFB07C282CE
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 01:50:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D6AF2070B
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 00:12:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A90342075C
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 01:50:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2ZhmDd8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726572AbfFEAML (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 4 Jun 2019 20:12:11 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:50132 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726519AbfFEAMH (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 20:12:07 -0400
-Received: by mail-io1-f71.google.com with SMTP id z15so10527782ioz.16
-        for <linux-media@vger.kernel.org>; Tue, 04 Jun 2019 17:12:07 -0700 (PDT)
+        id S1726538AbfFEBuC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 4 Jun 2019 21:50:02 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:42779 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbfFEBuC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 4 Jun 2019 21:50:02 -0400
+Received: by mail-pl1-f193.google.com with SMTP id go2so9063155plb.9;
+        Tue, 04 Jun 2019 18:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=oLcbN+sqNNUljN8SYZgZre8PT46JsMzRtoXG7+KZZ+Y=;
+        b=D2ZhmDd8IgeO63b01TNQ6LlzGQoxkyA0e0DSkKG6rrnq3Q4IhVICRMbR0WZh34tEpd
+         shqUkEkW3hE+q7G5/w0BQZK2RtZYd/at1/P4uPuF7moMYapZZiy5Q3b4CwI6W8j7+r8c
+         OOIOTfogtwO+PbWsYPWQ1X9CNyb+PRMy3ziRqBpFun2YzTqTT5RhAnhmLsv4Mfj278CK
+         H+1/DP8+9calXzBJcBRKUKvIT/mYf3fAoKTxTzmGmlovv5K1MVqkc2yV5ge93FeiIQaS
+         aFBC9is2Zz0zeLbaoFxDZ8r+nwiFUOkI8AYPgenrJSLsf9+HcU3dYAv9umK4oAXEAtfs
+         LuAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=jgCMdX0ZEsmY8XvkNK3Jyfdn5ZUGJpEvgmM+oqBcr0g=;
-        b=uFr0rd5Qd1HGJy+j3BDqZdTI5SaqOscVZ+fRmkMVmTgS7LDsZbJrAcSnomxitxeG2y
-         B//PrRUZnSsxpjDcqqTLdvn9zjwG2C1ZjtAvwxxcqPSCEuDt1pHfhwajhFoQmdVtb140
-         U+xyzhAn4QUulr+CjMm/Yk7jdGbTKWLUDei9QYgo4F1SULlKqBUxhgPR7mWxEYPTSVpK
-         mfttDuhLorEUru+vH1B5ygvzW0xdD0S+16qH8wErIJsM2uvpTb2j/roU6mxO55ynbQTn
-         7gpsefJNk5nN3Fc6q8MwoUBYc5Gbp3wmqCbRUOZbx5/tbQwrmRoF9SjBMylaFNn3HaCk
-         tVTg==
-X-Gm-Message-State: APjAAAUN5Ia898dUS445Hj9nJ4ojZQFvuwDabxK4m6tD48zOGXvSFPnj
-        2LK3EBMIKx+lyaVyTirlClgP1nkqrTC//CwKi5MLbkXZOi+m
-X-Google-Smtp-Source: APXvYqw8ukmx46TfaN7DnsSRAfMuScTMSkn/jtZMeHP5wDxzXSTrSTaZ1cxgD5RSWu37DUSofPSvoAMJ10+058loG/8E69D8Ob9B
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=oLcbN+sqNNUljN8SYZgZre8PT46JsMzRtoXG7+KZZ+Y=;
+        b=n2xHymxmRKXn9+iMIY7VBhnesucC1WKI3zmUbtHJkGNrWTlVYhSS60ZcR16L1tAtEC
+         xJ7qKInPcIWHfy5owySCMNiEg+HX+YPp3JloR5arRkx8hCs2iU5oUAMQVZRN+J2r2R90
+         oKfs6q4f6aCxfR4T8BZ8JATE3OCn016/0jDDO97yOu1p8Pxl2cWRhmKcJ8Hw0s7NJ3ON
+         qx0LUJ44q97ArcSD9WtHWtbXj69SfD12n93GTkimPt1rVdV/lY8s6AOkGTl4PI1L/oIo
+         tubn50Q5+uyKk28NmVsvufuh5vGKyNp973VhDBBuEmqS0vSGpk3CZooLHhfdK8YAJb2o
+         ISwA==
+X-Gm-Message-State: APjAAAWMQalEnQwsObgvFc7E7lTveVruyymBZVP/ssZW2Rh/WQOQFmeq
+        HQzgJN28j0hIpdZc88NyBHc=
+X-Google-Smtp-Source: APXvYqyyBoxg5MuZwMd4gEFNxoBQznN4qlivJRyMCm3oDum4O+DVprxx7d0aKb+vDLAWAI8dNK5ysw==
+X-Received: by 2002:a17:902:b201:: with SMTP id t1mr40607734plr.328.1559699401652;
+        Tue, 04 Jun 2019 18:50:01 -0700 (PDT)
+Received: from t-1000 (c-98-210-58-162.hsd1.ca.comcast.net. [98.210.58.162])
+        by smtp.gmail.com with ESMTPSA id p6sm6884415pfp.88.2019.06.04.18.49.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 04 Jun 2019 18:50:00 -0700 (PDT)
+Date:   Tue, 4 Jun 2019 18:49:58 -0700
+From:   Shobhit Kukreti <shobhitkukreti@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shobhitkukreti@gmail.com
+Subject: [PATCH] media: platform: Fix Warning of Unneeded Semicolon reported
+ by coccicheck
+Message-ID: <20190605014955.GA3077@t-1000>
 MIME-Version: 1.0
-X-Received: by 2002:a24:eec1:: with SMTP id b184mr25361888iti.61.1559693526866;
- Tue, 04 Jun 2019 17:12:06 -0700 (PDT)
-Date:   Tue, 04 Jun 2019 17:12:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a0a468058a88723d@google.com>
-Subject: KMSAN: uninit-value in i2c_w
-From:   syzbot <syzbot+397fd082ce5143e2f67d@syzkaller.appspotmail.com>
-To:     glider@google.com, hverkuil@xs4all.nl,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+fixed the warning in the files below
 
-syzbot found the following crash on:
+drivers/media/platform/pxa_camera.c:1391:2-3: Unneeded semicolon
+drivers/media/platform/qcom/venus/vdec_ctrls.c:78:2-3: Unneeded semicolon
+drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c:146:3-4: Unneeded semicolon
 
-HEAD commit:    f75e4cfe kmsan: use kmsan_handle_urb() in urb.c
-git tree:       kmsan
-console output: https://syzkaller.appspot.com/x/log.txt?x=1514cdaaa00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=602468164ccdc30a
-dashboard link: https://syzkaller.appspot.com/bug?extid=397fd082ce5143e2f67d
-compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
-06d00afa61eef8f7f501ebdb4e8612ea43ec2d78)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e7a54aa00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ab35dea00000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+397fd082ce5143e2f67d@syzkaller.appspotmail.com
-
-usb 1-1: New USB device found, idVendor=06a2, idProduct=6810,  
-bcdDevice=1b.af
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: string descriptor 0 read error: -71
-gspca_main: gspca_topro-2.14.0 probing 06a2:6810
-gspca_topro: reg_w err -71
-==================================================================
-BUG: KMSAN: uninit-value in i2c_w+0xb7a/0xd70  
-drivers/media/usb/gspca/topro.c:1043
-CPU: 1 PID: 3338 Comm: kworker/1:2 Not tainted 5.1.0+ #1
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-  kmsan_report+0x130/0x2a0 mm/kmsan/kmsan.c:622
-  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:310
-  i2c_w+0xb7a/0xd70 drivers/media/usb/gspca/topro.c:1043
-  probe_6810 drivers/media/usb/gspca/topro.c:1126 [inline]
-  sd_init+0xc05/0x7ca0 drivers/media/usb/gspca/topro.c:4081
-  gspca_dev_probe2+0xee0/0x2240 drivers/media/usb/gspca/gspca.c:1546
-  gspca_dev_probe+0x346/0x3b0 drivers/media/usb/gspca/gspca.c:1619
-  sd_probe+0x8d/0xa0 drivers/media/usb/gspca/gl860/gl860.c:523
-  usb_probe_interface+0xd66/0x1320 drivers/usb/core/driver.c:361
-  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
-  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x454/0x730 drivers/base/dd.c:844
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
-  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
-  device_add+0x288d/0x30e0 drivers/base/core.c:2106
-  usb_set_configuration+0x30dc/0x3750 drivers/usb/core/message.c:2027
-  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
-  usb_probe_device+0x14c/0x200 drivers/usb/core/driver.c:266
-  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
-  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x454/0x730 drivers/base/dd.c:844
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
-  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
-  device_add+0x288d/0x30e0 drivers/base/core.c:2106
-  usb_new_device+0x23e5/0x2ff0 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x48d1/0x7290 drivers/usb/core/hub.c:5432
-  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
-  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
-  kthread+0x4b5/0x4f0 kernel/kthread.c:254
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-
-Uninit was created at:
-  kmsan_save_stack_with_flags mm/kmsan/kmsan.c:208 [inline]
-  kmsan_internal_poison_shadow+0x92/0x150 mm/kmsan/kmsan.c:162
-  kmsan_kmalloc+0xa4/0x130 mm/kmsan/kmsan_hooks.c:175
-  kmem_cache_alloc_trace+0x503/0xae0 mm/slub.c:2801
-  kmalloc include/linux/slab.h:547 [inline]
-  gspca_dev_probe2+0x30c/0x2240 drivers/media/usb/gspca/gspca.c:1480
-  gspca_dev_probe+0x346/0x3b0 drivers/media/usb/gspca/gspca.c:1619
-  sd_probe+0x8d/0xa0 drivers/media/usb/gspca/gl860/gl860.c:523
-  usb_probe_interface+0xd66/0x1320 drivers/usb/core/driver.c:361
-  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
-  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x454/0x730 drivers/base/dd.c:844
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
-  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
-  device_add+0x288d/0x30e0 drivers/base/core.c:2106
-  usb_set_configuration+0x30dc/0x3750 drivers/usb/core/message.c:2027
-  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
-  usb_probe_device+0x14c/0x200 drivers/usb/core/driver.c:266
-  really_probe+0xdae/0x1d80 drivers/base/dd.c:513
-  driver_probe_device+0x1b3/0x4f0 drivers/base/dd.c:671
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:778
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x454/0x730 drivers/base/dd.c:844
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:891
-  bus_probe_device+0x137/0x390 drivers/base/bus.c:514
-  device_add+0x288d/0x30e0 drivers/base/core.c:2106
-  usb_new_device+0x23e5/0x2ff0 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x48d1/0x7290 drivers/usb/core/hub.c:5432
-  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
-  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
-  kthread+0x4b5/0x4f0 kernel/kthread.c:254
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-==================================================================
-
-
+Signed-off-by: Shobhit Kukreti <shobhitkukreti@gmail.com>
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/media/platform/pxa_camera.c                  | 2 +-
+ drivers/media/platform/qcom/venus/vdec_ctrls.c       | 2 +-
+ drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
+index 6addc5e..1c9bfaa 100644
+--- a/drivers/media/platform/pxa_camera.c
++++ b/drivers/media/platform/pxa_camera.c
+@@ -1388,7 +1388,7 @@ static int pxa_buffer_init(struct pxa_camera_dev *pcdev,
+ 		break;
+ 	default:
+ 		return -EINVAL;
+-	};
++	}
+ 	buf->nb_planes = nb_channels;
+ 
+ 	ret = sg_split(sgt->sgl, sgt->nents, 0, nb_channels,
+diff --git a/drivers/media/platform/qcom/venus/vdec_ctrls.c b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+index f4604b0..90f7620 100644
+--- a/drivers/media/platform/qcom/venus/vdec_ctrls.c
++++ b/drivers/media/platform/qcom/venus/vdec_ctrls.c
+@@ -75,7 +75,7 @@ static int vdec_op_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	default:
+ 		return -EINVAL;
+-	};
++	}
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c
+index 075d469..a79250a 100644
+--- a/drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c
++++ b/drivers/media/platform/sti/c8sectpfe/c8sectpfe-dvb.c
+@@ -143,7 +143,7 @@ int c8sectpfe_frontend_attach(struct dvb_frontend **fe,
+ 				"%s: stv0367ter_attach failed for NIM card %s\n"
+ 				, __func__, dvb_card_str(tsin->dvb_card));
+ 			return -ENODEV;
+-		};
++		}
+ 
+ 		/*
+ 		 * init the demod so that i2c gate_ctrl
+@@ -203,7 +203,7 @@ int c8sectpfe_frontend_attach(struct dvb_frontend **fe,
+ 				"%s: stv6110x_attach failed for NIM card %s\n"
+ 				, __func__, dvb_card_str(tsin->dvb_card));
+ 			return -ENODEV;
+-		};
++		}
+ 
+ 		stv090x_config.tuner_init = fe2->tuner_init;
+ 		stv090x_config.tuner_set_mode = fe2->tuner_set_mode;
+-- 
+2.7.4
+
