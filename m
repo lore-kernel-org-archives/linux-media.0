@@ -2,162 +2,83 @@ Return-Path: <SRS0=8X75=UE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FROM_EXCESS_BASE64,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9683C28CC5
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 20:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83A4CC28CC5
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 20:41:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 81E1820866
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 20:35:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 592F82067C
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 20:41:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YWjYKCzN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XzH/f0bG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726573AbfFEUfL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jun 2019 16:35:11 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:45301 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFEUfL (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 16:35:11 -0400
-Received: by mail-yw1-f65.google.com with SMTP id m16so4779138ywh.12;
-        Wed, 05 Jun 2019 13:35:10 -0700 (PDT)
+        id S1726685AbfFEUlR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jun 2019 16:41:17 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:42106 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726305AbfFEUlQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 16:41:16 -0400
+Received: by mail-vs1-f67.google.com with SMTP id z11so16546071vsq.9;
+        Wed, 05 Jun 2019 13:41:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=l03+E+1rYHoeHYqvcAbN6UcQV0/t8ZT8Ua4GYoPSknY=;
-        b=YWjYKCzNUvXBxodopAhJImDU8t2GnSwlHigPq68mI+bY3lLTg03GzAiy9C3b64VMAd
-         /lWQvmyXBGx4rVvjkEDSMZIxmWGzGQb15ioNnK6BWd/Dpc9qCVU50C9Fk6WN0kkepVXK
-         ZHx8ic7c0rfHE2SNaISUu3mUpecLHDUO/3qPE6gA6ATPhRWbP237x0nLCDmBa8SGDgyO
-         2BN22d2dWejW/FpRu93YfY2noI7nhdmW0pYLgKgkwFsWfIfeVZnuEofHyLfCTFyR0fJM
-         d4t/574oDLDtjB+/A8wWIpy/TZDZZ0L6UlFidYeU0Nf5hd19q4JOZoTyzBKVgdnf/Wst
-         pBMw==
+         :cc;
+        bh=EhtXy4UWQwP12EecpVe4mAF89wcEtevNoGW2PWVKNj8=;
+        b=XzH/f0bGQr9JHNffSaN3NDiFUdpNEfh7aYqpjMqiUq16LYB77Xxozu8hBwhsuhaSB/
+         d3isnhvTzK1bz7oTh+OjXNGO69DbSrFu4oDJzI8pzwhpmAMqM6QtAv+21v6TNG7qnFyQ
+         fzwRtlb9VFlBZ4MvDCKiVOvaR53GbUzLgWCXxxXVCvGJL3feaiqU4H7pTsWxD9afyrkl
+         gHbcBQ4vU+ZUjqA1BGGnQ5gXCWd7MrRy/po+fXivghdoC8rUkoUKE2KcNnpe9FLtdurk
+         Wa9ICHl5yaoSHqo3eE32fz651T09R+ifNGfQY9t+mcsA1X+WlUuLnAkrjP7M70YloKkC
+         KUjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=l03+E+1rYHoeHYqvcAbN6UcQV0/t8ZT8Ua4GYoPSknY=;
-        b=I5CRRUKdtlMp1IUoIVCkEfW2rvOobhjdgdvXlbDPK4NvkaqvKp4LSTaAimVW5/x9dG
-         WqnMwoXEQxInJxUArEwW+XJxtxMhf0OJlV3PQgP5zR0DlxUYLDlbPN7FPXgpL6VS1by8
-         YNLL0VlT5KFHJAiqfl+j3PS+ku8L+oLQeV7FSRxg1JFP82rfZF9ycZ8LIQm467l9iXLd
-         F6wD4PYLIGhzyJeqsyiuS6WxtzK+vfn/CMmCyKhjg5ZDw7kq/5VO5jNy4hV73EKniIkq
-         e6XS5pZzLwJU6/Vf4MMdh0bvG6wUU0rqolvmsqSr38CboIA0+/mbgIFION4odSVSofMF
-         Ly4Q==
-X-Gm-Message-State: APjAAAW6bb1Ffo7B+nx1cCPFavis3b2JL9qW39MuOpH5ZLaLDy6rCmiC
-        ryHTFGma9BsSuy2OEkWF/liMvw2/6id5EH3TxPE=
-X-Google-Smtp-Source: APXvYqxQCxoaa23XSM9kh7nxBMVdszGzffy/2HEGfA6pHWSkToo3IshmE6fASP2xWcrw/Z52pr/+OPpkJypCjSyqRh4=
-X-Received: by 2002:a81:5f54:: with SMTP id t81mr21100308ywb.234.1559766909845;
- Wed, 05 Jun 2019 13:35:09 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=EhtXy4UWQwP12EecpVe4mAF89wcEtevNoGW2PWVKNj8=;
+        b=XG8AuKtII4N+pucFcmhtkq344bhMVj2AVPpAZ7tKuXH1387A2xNzQeSYgWc+Tu5S23
+         rRh/wO43B3aNOcLnmB++kS3YOK0K6i2E4wajjrid4t2el91RDvGZOZvADJKCUijOuHRg
+         hCR7+BsnkdHH+KZKb8VrQw3RNIXTC/ykkCXcIh6cIajMAHKzXi6fRUK4YW3z4D0RMKGV
+         cnojeqAV1Sq+2HBCHo+KQifaBUt5xBaisPbKLgWRV0sUP+fhEbQEk6HLBe0lahJO3cI9
+         oZR8KOLKbZJD8U8t2WtYsUxsmW7EPcGBcn1MYPouruw681VegXO877gagy6y25aD0zd5
+         Pulw==
+X-Gm-Message-State: APjAAAVIen+qrMs/44k6IdbyIeTD3ChWPcWTrsT0P/nuBBKNBW5Ghj3E
+        gcij5XuZKzK9OKd5ZOE5AmtUDkElfInDbamFSFo=
+X-Google-Smtp-Source: APXvYqwsaHTIZZ1e295x7b77gVgiPmxiSewtzvTkvz+RIRW3NkAJ1BXravjDUzEsPMM4euyle8zQouERJF/btpGDIHU=
+X-Received: by 2002:a67:7143:: with SMTP id m64mr22339994vsc.131.1559767275349;
+ Wed, 05 Jun 2019 13:41:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190604162959.29199-1-peron.clem@gmail.com> <20190604162959.29199-5-peron.clem@gmail.com>
- <20190605095141.psrq6mhk63zto77s@flea> <CAJiuCceZa=WEiF8_LK+jDdiXOn1i8+z8Smr6YKCpo9_XftgueQ@mail.gmail.com>
- <20190605200020.tmyom3lg3inu6vvf@flea>
-In-Reply-To: <20190605200020.tmyom3lg3inu6vvf@flea>
-From:   =?UTF-8?B?Q2zDqW1lbnQgUMOpcm9u?= <peron.clem@gmail.com>
-Date:   Wed, 5 Jun 2019 22:34:58 +0200
-Message-ID: <CAJiuCceuN8JHwLBeoKSzwY2s0-wFJf-N8FbqOGemkhtyax73Eg@mail.gmail.com>
-Subject: Re: [PATCH v4 04/13] media: rc: sunxi: Add RXSTA bits definition
-To:     Maxime Ripard <maxime.ripard@bootlin.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>, linux-media@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-sunxi <linux-sunxi@googlegroups.com>
+References: <20190605161436.3ac174f3@canb.auug.org.au> <4857750b-a4f4-8539-218c-7e9ac1a6006e@infradead.org>
+In-Reply-To: <4857750b-a4f4-8539-218c-7e9ac1a6006e@infradead.org>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Wed, 5 Jun 2019 17:41:07 -0300
+Message-ID: <CAOMZO5Db6Lh1L9Fw8QXfuQVLHq_c6Y8YBqy9_1=wjs=vSHTMjA@mail.gmail.com>
+Subject: Re: linux-next: Tree for Jun 5 (staging/media/imx/)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 5 Jun 2019 at 22:00, Maxime Ripard <maxime.ripard@bootlin.com> wrot=
-e:
->
-> On Wed, Jun 05, 2019 at 02:44:06PM +0200, Cl=C3=A9ment P=C3=A9ron wrote:
-> > Hi Maxime,
-> >
-> > On Wed, 5 Jun 2019 at 11:51, Maxime Ripard <maxime.ripard@bootlin.com> =
-wrote:
-> > >
-> > > On Tue, Jun 04, 2019 at 06:29:50PM +0200, Cl=C3=A9ment P=C3=A9ron wro=
-te:
-> > > > We are using RXINT bits definition when looking at RXSTA register.
-> > > >
-> > > > These bits are equal but it's not really proper.
-> > > >
-> > > > Introduce the RXSTA bits and use them to have coherency.
-> > > >
-> > > > Signed-off-by: Cl=C3=A9ment P=C3=A9ron <peron.clem@gmail.com>
-> > > > ---
-> > > >  drivers/media/rc/sunxi-cir.c | 18 ++++++++++++------
-> > > >  1 file changed, 12 insertions(+), 6 deletions(-)
-> > > >
-> > > > diff --git a/drivers/media/rc/sunxi-cir.c b/drivers/media/rc/sunxi-=
-cir.c
-> > > > index 0504ebfc831f..572bd2257d35 100644
-> > > > --- a/drivers/media/rc/sunxi-cir.c
-> > > > +++ b/drivers/media/rc/sunxi-cir.c
-> > > > @@ -48,11 +48,11 @@
-> > > >
-> > > >  /* Rx Interrupt Enable */
-> > > >  #define SUNXI_IR_RXINT_REG    0x2C
-> > > > -/* Rx FIFO Overflow */
-> > > > +/* Rx FIFO Overflow Interrupt Enable */
-> > > >  #define REG_RXINT_ROI_EN             BIT(0)
-> > > > -/* Rx Packet End */
-> > > > +/* Rx Packet End Interrupt Enable */
-> > > >  #define REG_RXINT_RPEI_EN            BIT(1)
-> > > > -/* Rx FIFO Data Available */
-> > > > +/* Rx FIFO Data Available Interrupt Enable */
-> > > >  #define REG_RXINT_RAI_EN             BIT(4)
-> > > >
-> > > >  /* Rx FIFO available byte level */
-> > > > @@ -60,6 +60,12 @@
-> > > >
-> > > >  /* Rx Interrupt Status */
-> > > >  #define SUNXI_IR_RXSTA_REG    0x30
-> > > > +/* Rx FIFO Overflow */
-> > > > +#define REG_RXSTA_ROI                        BIT(0)
-> > > > +/* Rx Packet End */
-> > > > +#define REG_RXSTA_RPE                        BIT(1)
-> > > > +/* Rx FIFO Data Available */
-> > > > +#define REG_RXSTA_RA                 BIT(4)
-> > >
-> > > I'm fine with it on principle, but if the consistency needs to be
-> > > maintained then we could just reuse the above defines
-> >
-> > There is no comment why we can reuse them, they can also be some wrong
-> > case for example the RXINT_DRQ_EN bit is not present in RXSTA and same
-> > for STAT bit present in RXSTA and not present in RXINT.
-> >
-> > I have discover and read this code a month ago and this logic is
-> > really not obvious nor explain.
-> >
-> > Maybe this hack could be done when we will introduce a quirks, but for
-> > the moment I really think that it's more proper and readable to
-> > introduce them properly.
->
-> I don't think we understood each other :)
->
-> I was talking about having something like
->
-> #define REG_RXSTA_ROI  REG_RXINT_ROI_EN
-Ok, I will send an update.
+Hi Randy,
 
-Thanks for the review,
-Cl=C3=A9ment
+On Wed, Jun 5, 2019 at 4:37 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 
+> on x86_64:
+>
+> ld: drivers/staging/media/imx/imx-media-internal-sd.o: in function `imx_media_register_ipu_internal_subdevs':
+> imx-media-internal-sd.c:(.text+0xd1): undefined reference to `ipu_get_num'
 
->
-> Maxime
->
-> --
-> Maxime Ripard, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Thanks for reporting this problem.
+
+I will submit a fix.
