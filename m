@@ -2,140 +2,322 @@ Return-Path: <SRS0=8X75=UE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90EB7C28CC5
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 12:20:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C807DC28CC5
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 12:28:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AF02206BA
-	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 12:20:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="Wv9vQQd/"
+	by mail.kernel.org (Postfix) with ESMTP id 97C5B206BA
+	for <linux-media@archiver.kernel.org>; Wed,  5 Jun 2019 12:28:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727549AbfFEMUV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 5 Jun 2019 08:20:21 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:51854 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727273AbfFEMUU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 5 Jun 2019 08:20:20 -0400
-Received: by mail-wm1-f68.google.com with SMTP id f10so2045828wmb.1
-        for <linux-media@vger.kernel.org>; Wed, 05 Jun 2019 05:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K9+itV6gvcKTvZTJ23CoapFRSjBat54J+JPGPwZJU6U=;
-        b=Wv9vQQd/p4ldbEntOP3nTrl+uW+FK3tXRRFfsnrCBdcBVruZhghiJ1wE3wZp7W29kf
-         a6UJqlNJ6ato4IK7kvkjGHdsw2U7wG2LrWHOk3V1cAhAqbsVU/CZEBJBvgQhh5XEqL34
-         3D6cpSM8+xoea3UR0otiqorkpj98tvK3JGpqmPKGjUFKILoQ29UiZ3U3yXQYWdKy+heG
-         hHxQFLw3fsAv1ksFtnS0AGx5RsEqcc2k5h9KrWoWBYi49azh9mHTj5HROPAhjYQ0fXQd
-         mtx840tFC8T4PshbnCWFOjXqQYumgVL6o3PqfeBswZ/XJyQGK8ywutOaffA8zDIsS4Mr
-         sgIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K9+itV6gvcKTvZTJ23CoapFRSjBat54J+JPGPwZJU6U=;
-        b=Uwd+oHPVmYq/Ds3N4pxRDr6qQT3cmVg2h1b392u1CJ8YN/AfQ/f4DuE3ZwNE64oOCf
-         TNSdWwP6cBdnT7Rw5uYMn4j7EcSK282bQ/w6V9/++AcmveaC7nYIIDMRBsB42Cxayc8k
-         BuSaHixf6qPxWJ90r089hEVlLbs0SkZRLMaf2hu3nMaW5xwA91Jru74EOA9BWEAkgnAy
-         JxlGc7rcQGI8e1jAyrB/n/LVnnmEyLwm3oUc8sPlor4BLgwCuCkwfOx4a+CK53toEc0S
-         jLXvWqSFFq1Si+TV2JmNwLUhwRVyFHFXPL40cZXzLESSnmAygmAjVoyPeYBuTjdlaxmn
-         oJRQ==
-X-Gm-Message-State: APjAAAXp7+3pzF8iTG2hg9mrWKAcXOZ/zPOqVf9k6jQrM6Xgqc5e/pjg
-        oMwx+3tJLIJ18bqe1d8RHSq4eg==
-X-Google-Smtp-Source: APXvYqysnXtOWluZlgLMwVxp2vvHbNt6n9UeEcG5RaOZ4Ta/Y3CrtREPbkT4dwZQZ7XIPfhGq4TOVA==
-X-Received: by 2002:a1c:6242:: with SMTP id w63mr18921552wmb.161.1559737217689;
-        Wed, 05 Jun 2019 05:20:17 -0700 (PDT)
-Received: from bender.baylibre.local (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id s63sm11521467wme.17.2019.06.05.05.20.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 05 Jun 2019 05:20:17 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     mchehab@kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        linux-media@vger.kernel.org, linux-media@lists.freedesktop.org,
-        linux-amlogic@lists.infradead.org,
+        id S1727529AbfFEM2M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 5 Jun 2019 08:28:12 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:43899 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727273AbfFEM2M (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 5 Jun 2019 08:28:12 -0400
+Received: from [IPv6:2001:420:44c1:2579:c806:4d76:5b3c:eea9] ([IPv6:2001:420:44c1:2579:c806:4d76:5b3c:eea9])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id YV1Rhlf1q3qlsYV1VhfwGp; Wed, 05 Jun 2019 14:28:09 +0200
+Subject: Re: [PATCH v2] media: atmel: atmel-isc: split driver into driver base
+ and isc
+To:     Eugen.Hristev@microchip.com, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: platform: ao-cec-g12a: remove spin_lock_irqsave() locking in meson_ao_cec_g12a_read/write
-Date:   Wed,  5 Jun 2019 14:20:15 +0200
-Message-Id: <20190605122015.11439-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.21.0
+Cc:     ksloat@aampglobal.com
+References: <1559202331-15397-1-git-send-email-eugen.hristev@microchip.com>
+ <4f1925a5-9361-7f57-4526-3d28be8291dd@xs4all.nl>
+ <613e2e74-6ac7-93ce-6fb7-d570852bf1e3@microchip.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <b4444af5-a7d6-f1f5-6954-7f05d4003484@xs4all.nl>
+Date:   Wed, 5 Jun 2019 14:28:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <613e2e74-6ac7-93ce-6fb7-d570852bf1e3@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfMeHU7VVk+ubjOu/mUoIBGWaluTGLBBs//VsEtNMMDYM7cCmD0EFyo96JFYBLs0yTNipRACLpxdMuZnVbtwY+efDwrzNAAOZgyvc4eCftiNhoTB7rnXB
+ yuhlZcx4sJWqcreG/D4OzWHC+0X7XhWBZySBrvwPcYJAbq75kbIHuMg5gk+cXB38qSMdz/3f8LkLuJwOhKi9ZXoA89zC34OQcu2xIcZ/i0nCByqVOm9CvXMo
+ wiTdTzwdn9cLXcyV/kVetmoD04MC8Fl8ZPWH3Yhg5c3S8gHRnM02+aIV6FMhnrpRLnHlFFcTu8LsCnbm1j953lGYCO84D5Jn2KhTwJKO1yPavB2Q3knyBvCm
+ NGPk8tShPKN6KOcmY0obUI+HSxKm02erA5liR0tymAHWCWm2MraElslsuFH0PKEfuoM2VIDeU8h1AwMSysrb1SIUwEMnoX8Vhied3Q7/fJvqy/29w20=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since locking is handled by regmap, the spin_lock_irqsave() in the
-meson_ao_cec_g12a_read/write() regmap callbacks is not needed.
+On 6/5/19 2:08 PM, Eugen.Hristev@microchip.com wrote:
+> 
+> 
+> On 05.06.2019 14:56, Hans Verkuil wrote:
+> 
+>>
+>> Hi Eugen,
+>>
+>> On 5/30/19 9:50 AM, Eugen.Hristev@microchip.com wrote:
+>>> From: Eugen Hristev <eugen.hristev@microchip.com>
+>>>
+>>> This splits the Atmel ISC driver into a common base: atmel-isc-base.c
+>>> and the driver probe/dt part , atmel-sama5d2-isc.c
+>>> This is needed to keep a common ground for the sensor controller which will
+>>> be reused.
+>>> The atmel-isc will use the common symbols inside the atmel-isc-base
+>>> Future driver will also use the same symbols and redefine different aspects,
+>>> for a different version of the ISC.
+>>> This is done to avoid complete code duplication by creating a totally
+>>> different driver for the new variant of the ISC.
+>>>
+>>> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+>>> ---
+>>>
+>>> Hello Hans,
+>>>
+>>> I am resending this with the required fixes.
+>>> You asked me about the #ifdef around ATMEL_ISC_NAME, it's because I was
+>>> thinking to have the ATMEL_ISC_NAME different by each driver that use
+>>> the atmel-isc.h, but for now I removed any ifdef around it, and will
+>>> consider a different define for new drivers.
+>>>
+>>> Changes in v2:
+>>> - renamed atmel-isc.c to atmel-sama5d2-isc.c as sama5d2 is the SoC that
+>>>    includes this hardware block. The module will still be named atmel-isc.ko
+>>> - removed ifdef around definition of ATMEL_ISC_NAME
+>>> - moved external declarations in the specific files, this was breaking
+>>>    module loading
+>>>
+>>> v4l2-compliance SHA: 0d61ddede7d340ffa1c75a2882e30c455ef3d8b8, 32 bitatmel-isc f0008000.isc: =================  START STATUS  =================
+>>>
+>>> atmelpliance test for atmel-isc device /dev/video0:
+>>>
+>>> Driver Info:
+>>>          Driver name      : atmel-isc
+>>>          Card type        : Atmel Image Sensor Controller
+>>>          Bus info         : platform:atmel-isc f0008000.isc
+>>>          Driver version   : 5.2.0
+>>>          Capabilities     : 0x84200001
+>>>                  Video Capture
+>>>                  Streaming
+>>>                  Extended Pix Format
+>>>                  Device Capabilities
+>>>          Device Caps      : 0x04200001
+>>>                  Video Capture
+>>>                  Streaming
+>>>                  Extended Pix Format
+>>>
+>>> Required ioctls:
+>>>          test VIDIOC_QUERYCAP: OK
+>>>
+>>> Allow for multiple opens:
+>>>          test second /dev/video0 open: OK
+>>>          test VIDIOC_QUERYCAP: OK
+>>>          test VIDIOC_G/S_PRIORITY: OK
+>>>          test for unlimited opens: OK
+>>>
+>>> Debug ioctls:
+>>>          test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+>>> -isc f0008000.isc: Brightness: 0
+>>> atmel-isc f0008000.isc: Contrast: 256
+>>> atmel-isc f0008000.isc: Gamma: 2
+>>> atmel-isc f0008000.isc: White Balance, Automatic: true
+>>> atmel-isc f0008000.isc: ==================  END STATUS  ==================
+>>>          test VIDIOC_LOG_STATUS: OK
+>>>
+>>> Input ioctls:
+>>>          test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+>>>          test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>>>          test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+>>>          test VIDIOC_ENUMAUDIO: OK (Not Supported)
+>>>          test VIDIOC_G/S/ENUMINPUT: OK
+>>>          test VIDIOC_G/S_AUDIO: OK (Not Supported)
+>>>          Inputs: 1 Audio Inputs: 0 Tuners: 0
+>>>
+>>> Output ioctls:
+>>>          test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+>>>          test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+>>>          test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+>>>          test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+>>>          test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+>>>          Outputs: 0 Audio Outputs: 0 Modulators: 0
+>>>
+>>> Input/Output configuration ioctls:
+>>>          test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+>>>          test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+>>>          test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+>>>          test VIDIOC_G/S_EDID: OK (Not Supported)
+>>>
+>>> Control ioctls (Input 0):
+>>>          test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+>>>          test VIDIOC_QUERYCTRL: OK
+>>>          test VIDIOC_G/S_CTRL: OK
+>>>          test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+>>>          test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+>>>          test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+>>>          Standard Controls: 6 Private Controls: 0
+>>>
+>>> Format ioctls (Input 0):
+>>>          test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+>>>          test VIDIOC_G/S_PARM: OK
+>>>          test VIDIOC_G_FBUF: OK (Not Supported)
+>>>          test VIDIOC_G_FMT: OK
+>>>          test VIDIOC_TRY_FMT: OK
+>>>          test VIDIOC_S_FMT: OK
+>>>          test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+>>>          test Cropping: OK (Not Supported)
+>>>          test Composing: OK (Not Supported)
+>>>          test Scaling: OK (Not Supported)
+>>>
+>>> Codec ioctls (Input 0):
+>>>          test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+>>>          test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+>>>          test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+>>>
+>>> Buffer ioctls (Input 0):
+>>>          test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+>>>          test VIDIOC_EXPBUF: OK
+>>>          test Requests: OK (Not Supported)
+>>>
+>>> Total for atmel-isc device /dev/video0: 44, Succeeded: 44, Failed: 0, Warnings: 0
+>>>
+>>>
+>>>   MAINTAINERS                                      |    4 +-
+>>>   drivers/media/platform/atmel/Makefile            |    4 +-
+>>>   drivers/media/platform/atmel/atmel-isc-base.c    | 2148 ++++++++++++++++++
+>>>   drivers/media/platform/atmel/atmel-isc.c         | 2634 ----------------------
+>>>   drivers/media/platform/atmel/atmel-isc.h         |  192 ++
+>>>   drivers/media/platform/atmel/atmel-sama5d2-isc.c |  365 +++
+>>>   6 files changed, 2711 insertions(+), 2636 deletions(-)
+>>>   create mode 100644 drivers/media/platform/atmel/atmel-isc-base.c
+>>>   delete mode 100644 drivers/media/platform/atmel/atmel-isc.c
+>>>   create mode 100644 drivers/media/platform/atmel/atmel-isc.h
+>>>   create mode 100644 drivers/media/platform/atmel/atmel-sama5d2-isc.c
+>>>
+>>
+>> Checkpatch gave me various warnings that I think should be addressed:
+> 
+> 
+> Hello Hans,
+> 
+> I saw the checkpatch issues as well, but most of them are inherited and 
+> appear now because of code move...
+> I would think it would be cleaner to solve these issues in a an a-priori 
+> patch, and then do the split as a "clean,just-split" patch afterwards.
+> What do you think?
+> 
+> And for the externs, I can handle it, but I would create a separate 
+> header file for them that would be included in new atmel-sama5d2-isc.c
+> 
+> Are you ok with this approach ?
 
-Fixes: b7778c46683c ("media: platform: meson: Add Amlogic Meson G12A AO CEC Controller driver")
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- drivers/media/platform/meson/ao-cec-g12a.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+The extern issues are introduced by this patch, so they should be solved
+here.
 
-diff --git a/drivers/media/platform/meson/ao-cec-g12a.c b/drivers/media/platform/meson/ao-cec-g12a.c
-index ddfd060625da..fb52e5dd044a 100644
---- a/drivers/media/platform/meson/ao-cec-g12a.c
-+++ b/drivers/media/platform/meson/ao-cec-g12a.c
-@@ -365,28 +365,22 @@ static int meson_ao_cec_g12a_read(void *context, unsigned int addr,
- {
- 	struct meson_ao_cec_g12a_device *ao_cec = context;
- 	u32 reg = FIELD_PREP(CECB_RW_ADDR, addr);
--	unsigned long flags;
- 	int ret = 0;
- 
--	spin_lock_irqsave(&ao_cec->cec_reg_lock, flags);
--
- 	ret = regmap_write(ao_cec->regmap, CECB_RW_REG, reg);
- 	if (ret)
--		goto read_out;
-+		return ret;
- 
- 	ret = regmap_read_poll_timeout(ao_cec->regmap, CECB_RW_REG, reg,
- 				       !(reg & CECB_RW_BUS_BUSY),
- 				       5, 1000);
- 	if (ret)
--		goto read_out;
-+		return ret;
- 
- 	ret = regmap_read(ao_cec->regmap, CECB_RW_REG, &reg);
- 
- 	*data = FIELD_GET(CECB_RW_RD_DATA, reg);
- 
--read_out:
--	spin_unlock_irqrestore(&ao_cec->cec_reg_lock, flags);
--
- 	return ret;
- }
- 
-@@ -394,19 +388,11 @@ static int meson_ao_cec_g12a_write(void *context, unsigned int addr,
- 				   unsigned int data)
- {
- 	struct meson_ao_cec_g12a_device *ao_cec = context;
--	unsigned long flags;
- 	u32 reg = FIELD_PREP(CECB_RW_ADDR, addr) |
- 		  FIELD_PREP(CECB_RW_WR_DATA, data) |
- 		  CECB_RW_WRITE_EN;
--	int ret = 0;
- 
--	spin_lock_irqsave(&ao_cec->cec_reg_lock, flags);
--
--	ret = regmap_write(ao_cec->regmap, CECB_RW_REG, reg);
--
--	spin_unlock_irqrestore(&ao_cec->cec_reg_lock, flags);
--
--	return ret;
-+	return regmap_write(ao_cec->regmap, CECB_RW_REG, reg);
- }
- 
- static const struct regmap_config meson_ao_cec_g12a_cec_regmap_conf = {
--- 
-2.21.0
+The other issues can be fixed in a separate follow-up patch.
+
+Regards,
+
+	Hans
+
+> 
+> Thanks for review,
+> Eugen
+> 
+>>
+>> WARNING: externs should be avoided in .c files
+>> #249: FILE: drivers/media/platform/atmel/atmel-isc-base.c:40:
+>> +extern unsigned int sensor_preferred;
+>>
+>> It looks like these module parameters can be moved to atmel-isc-base.c
+>> and only an extern unsigned int debug should be added to the atmel-isc.h.
+>>
+>> Externs in a source is indeed dubious.
+>>
+>> CHECK: spinlock_t definition without comment
+>> #681: FILE: drivers/media/platform/atmel/atmel-isc.h:27:
+>> +       spinlock_t      lock;
+>>
+>> I know there was no comment before, but it might be nice to add one
+>> now.
+>>
+>> CHECK: Macro argument reuse 'hw' - possible side-effects?
+>> #688: FILE: drivers/media/platform/atmel/atmel-isc.h:34:
+>> +#define to_isc_clk(hw) container_of(hw, struct isc_clk, hw)
+>>
+>> This seems really wrong. One hw refers to the argument, the
+>> other is the name of a field in a struct. Use a different
+>> name as the macro argument to avoid this confusion.
+>>
+>>
+>> CHECK: spinlock_t definition without comment
+>> #814: FILE: drivers/media/platform/atmel/atmel-isc.h:160:
+>> +       spinlock_t              dma_queue_lock;
+>>
+>> CHECK: struct mutex definition without comment
+>> #832: FILE: drivers/media/platform/atmel/atmel-isc.h:178:
+>> +       struct mutex            lock;
+>>
+>> CHECK: spinlock_t definition without comment
+>> #833: FILE: drivers/media/platform/atmel/atmel-isc.h:179:
+>> +       spinlock_t              awb_lock;
+>>
+>> Comments would be nice.
+>>
+>> WARNING: externs should be avoided in .c files
+>> #909: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:57:
+>> +extern struct isc_format formats_list[];
+>>
+>> WARNING: externs should be avoided in .c files
+>> #910: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:58:
+>> +extern struct isc_format controller_formats[];
+>>
+>> WARNING: externs should be avoided in .c files
+>> #911: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:59:
+>> +extern const u32 isc_gamma_table[GAMMA_MAX + 1][GAMMA_ENTRIES];
+>>
+>> WARNING: externs should be avoided in .c files
+>> #912: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:60:
+>> +extern const struct regmap_config isc_regmap_config;
+>>
+>> WARNING: externs should be avoided in .c files
+>> #913: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:61:
+>> +extern const struct v4l2_async_notifier_operations isc_async_ops;
+>>
+>> This should be in a header.
+>>
+>> WARNING: externs should be avoided in .c files
+>> #915: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:63:
+>> +extern irqreturn_t isc_interrupt(int irq, void *dev_id);
+>>
+>> WARNING: externs should be avoided in .c files
+>> #916: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:64:
+>> +extern int isc_pipeline_init(struct isc_device *isc);
+>>
+>> WARNING: externs should be avoided in .c files
+>> #917: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:65:
+>> +extern int isc_clk_init(struct isc_device *isc);
+>>
+>> WARNING: externs should be avoided in .c files
+>> #918: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:66:
+>> +extern void isc_subdev_cleanup(struct isc_device *isc);
+>>
+>> WARNING: externs should be avoided in .c files
+>> #919: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:67:
+>> +extern void isc_clk_cleanup(struct isc_device *isc);
+>>
+>> Should also be in a header. No need to extern when just declaring the
+>> function prototype, BTW.
+>>
+>> CHECK: Alignment should match open parenthesis
+>> #964: FILE: drivers/media/platform/atmel/atmel-sama5d2-isc.c:112:
+>> +               subdev_entity = devm_kzalloc(dev,
+>> +                                         sizeof(*subdev_entity), GFP_KERNEL);
+>>
+>> Please fix this as well.
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
 
