@@ -5,70 +5,71 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED36C28EB3
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:47:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9687BC28D1D
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:47:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7838320868
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:47:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FFDD20874
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:47:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="v0l1t7mo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ct2B8euO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbfFFJrU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Jun 2019 05:47:20 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38026 "EHLO
+        id S1728150AbfFFJre (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Jun 2019 05:47:34 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44923 "EHLO
         mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728031AbfFFJrT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 05:47:19 -0400
-Received: by mail-lj1-f196.google.com with SMTP id o13so1370988lji.5
-        for <linux-media@vger.kernel.org>; Thu, 06 Jun 2019 02:47:18 -0700 (PDT)
+        with ESMTP id S1728141AbfFFJrd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 05:47:33 -0400
+Received: by mail-lj1-f196.google.com with SMTP id k18so1346763ljc.11
+        for <linux-media@vger.kernel.org>; Thu, 06 Jun 2019 02:47:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=dQfbJoiQ5WTWGjUJ1PADkmMlX7UTg1NHq4Oh3Ljtrbo=;
-        b=v0l1t7motrGGJZjUZw7mZhdXu71rcqkX14qgcfNJsj0pBDkflH+Yc72Rh58UO+K/ma
-         NkcmwaO4ZRwUGSEf8FDCBIG9d5FZ14s3/Wu+e7uRpuc3N+NwdVmPkgZ3ASVth/T3MdYP
-         zkyIoXbtLNxGxDWBwLZLLWP5BgK4Cj1MAjGGDwMPETEClXrqSkfGB+ui3a6x4JzT1JRI
-         G7GVtXsWqf6Jrl0j4cKaP5Z91IJPDBMDrMDcVB3HTk4V95x6QgEjoib0TMkiQWzWtb0X
-         Fwk6a3D+h0Vdr8Ji3cBC+l5ZJv9LqytaxcbMrFHRJKAG/dbb4ZLq/iU1m+2Kc78Nhxrd
-         PHug==
+        bh=J2Cqvkykb6IzlqW52A480gg6SUQ50ONET6S3EycqghE=;
+        b=Ct2B8euOQrdzpG+cBAg47dgcUgrlI6vJX6UvUSSPeNwsKDpV+z4nSYOjKzI7W0wXTu
+         r4jjtQhfwhUWEQvY5WPDdCcoU0aNZzPqjiQACNymjSE/whrVITUQW+sfJJRh67N7gAPV
+         Y6aGOOnJIzpqaVpPjdK9zk+OILcF70TrXSnFDTE9d0Uy3ATZRk6SB8Wm0vsDLnuEgW9u
+         Msd37JC1CJnUF4yMZWBh8aTUaup5fRhVX6rYUFH8B7T1WP2DESSOhwHMhzvxVFXo3gDL
+         7pyLCCCDkdbKjJb4GMB88KOLLQZUiiIkR93f5TCKdSUkMPxl4b0iKh4nvjQxFwzkSw/n
+         PuYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=dQfbJoiQ5WTWGjUJ1PADkmMlX7UTg1NHq4Oh3Ljtrbo=;
-        b=klz1IRgTy2iGJ9yUeQs+nCu6Tl7rELSgY9HbK1wg0V0HsupwK49Sy+y61sCNm5xQYJ
-         eQxwxhi3WgQu0aXRqNez/2+lH77eQ19ZUxnjSVcyuGmRkUBlNkZzP1S9ErUqZmEX9ECh
-         ILYzVmmBLiv5qTaNHhUJqwKyLXNXxPyHbm//CUc9bpEn4ko9ekVGwTsMDlMYWCMNCiJG
-         55cj0rpBe5WKlsPYluWaMCuhtHrbdUSGcol/pC55cl1kYIKxPOF1ZygHZwB7S+yWp75S
-         Gjk9GbV6df1RmT9DJM8IzaPwivk+LAzBvqgyFY48hf3Y8nfwjEYyo1Dl/YRMaPIkm4rc
-         rF1g==
-X-Gm-Message-State: APjAAAVzR8/JUVdMiYrtsfBppDNHzk9rVx5beiePnpVKxsfy8gTW3jxC
-        ZRiqBj8njf9Hkp5smOk6pCi3bw==
-X-Google-Smtp-Source: APXvYqynVELsYqcqQ3WkOuXVc21SB/kMXSnXwhm4rJjbGqpBW3X6B+fXTZsFIXnZIxLxYIvULF3Ugg==
-X-Received: by 2002:a2e:9cc3:: with SMTP id g3mr9015135ljj.117.1559814437482;
-        Thu, 06 Jun 2019 02:47:17 -0700 (PDT)
+        bh=J2Cqvkykb6IzlqW52A480gg6SUQ50ONET6S3EycqghE=;
+        b=jiPdhgkcvHMnyopQaVCpZLQkPCMHrYKJCVT08sX26yAm0tIWtwdoOV0BU4Q51WsPGZ
+         sF4DB1OJF+ZsTJbHR4OZtAJsEKd3KvYh/d+TaoI93lsS/ATDtgg/Gh2tWjF75Sy3w834
+         G49mN8L7co7b4VNsqQYI4kqFDYqy6oNoCMlAjJns2pDrNhC2sZwsLVMQlPdtt2d9aAxq
+         1r6W6bVvh+aUFC/TOS8mLkXHtHWX6VjFEZNJyp5Y1voRu9mU5t6tjpsLH3G78v/lolyX
+         G/gtfedFr4qsl+ZLlJ4xhuohE0XTfAz3EBK9DGFtI25XG1HsAB0FLq3c7a9QA+KCLYhg
+         Jn/w==
+X-Gm-Message-State: APjAAAUE8P0fgflXs/sgi78iYxDNHUZKqUjUFIt5DVCHtnJFTvor7UTT
+        D6enzVjZV+ZUB984sl8dGCv+Sw==
+X-Google-Smtp-Source: APXvYqzYFWFgXwM4oVScr/7MwzKqnuStv9TQA+4YHbIIppvBW9LTDZNPdBEJzK7doqcYm4prjjpeQg==
+X-Received: by 2002:a2e:751c:: with SMTP id q28mr563236ljc.178.1559814451458;
+        Thu, 06 Jun 2019 02:47:31 -0700 (PDT)
 Received: from localhost (c-1c3670d5.07-21-73746f28.bbcust.telenor.se. [213.112.54.28])
-        by smtp.gmail.com with ESMTPSA id s20sm214365lfb.95.2019.06.06.02.47.16
+        by smtp.gmail.com with ESMTPSA id y6sm256967ljj.20.2019.06.06.02.47.30
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 06 Jun 2019 02:47:16 -0700 (PDT)
+        Thu, 06 Jun 2019 02:47:30 -0700 (PDT)
 From:   Anders Roxell <anders.roxell@linaro.org>
-To:     marex@denx.de, stefan@agner.ch, airlied@linux.ie, daniel@ffwll.ch,
-        shawnguo@kernel.org, s.hauer@pengutronix.de,
-        b.zolnierkie@samsung.com
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+To:     andrew@lunn.ch, f.fainelli@gmail.com, hkallweit1@gmail.com,
+        davem@davemloft.net
+Cc:     vivien.didelot@gmail.com, marex@denx.de, stefan@agner.ch,
+        airlied@linux.ie, daniel@ffwll.ch, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, b.zolnierkie@samsung.com,
         a.hajda@samsung.com, mchehab@kernel.org, p.zabel@pengutronix.de,
-        hkallweit1@gmail.com, lee.jones@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        lee.jones@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
         linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
         linux-media@vger.kernel.org,
         Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 3/8] drivers: (video|gpu): fix warning same module names
-Date:   Thu,  6 Jun 2019 11:47:12 +0200
-Message-Id: <20190606094712.23715-1-anders.roxell@linaro.org>
+Subject: [PATCH 6/8] drivers: net: phy: fix warning same module names
+Date:   Thu,  6 Jun 2019 11:47:26 +0200
+Message-Id: <20190606094727.23868-1-anders.roxell@linaro.org>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,45 +78,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When building with CONFIG_DRM_MXSFB and CONFIG_FB_MXS enabled as
+When building with CONFIG_ASIX_PHY and CONFIG_USB_NET_AX8817X enabled as
 loadable modules, we see the following warning:
 
 warning: same module names found:
-  drivers/video/fbdev/mxsfb.ko
-  drivers/gpu/drm/mxsfb/mxsfb.ko
+  drivers/net/phy/asix.ko
+  drivers/net/usb/asix.ko
 
-Rework so the names matches the config fragment.
+Rework so media coda matches the config fragment. Leaving
+CONFIG_USB_NET_AX8817X as is since thats a well known module.
 
 Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- drivers/gpu/drm/mxsfb/Makefile | 4 ++--
- drivers/video/fbdev/Makefile   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ drivers/net/phy/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/mxsfb/Makefile b/drivers/gpu/drm/mxsfb/Makefile
-index ff6e358088fa..5d49d7548e66 100644
---- a/drivers/gpu/drm/mxsfb/Makefile
-+++ b/drivers/gpu/drm/mxsfb/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
--mxsfb-y := mxsfb_drv.o mxsfb_crtc.o mxsfb_out.o
--obj-$(CONFIG_DRM_MXSFB)	+= mxsfb.o
-+drm-mxsfb-y := mxsfb_drv.o mxsfb_crtc.o mxsfb_out.o
-+obj-$(CONFIG_DRM_MXSFB)	+= drm-mxsfb.o
-diff --git a/drivers/video/fbdev/Makefile b/drivers/video/fbdev/Makefile
-index 655f2537cac1..7ee967525af2 100644
---- a/drivers/video/fbdev/Makefile
-+++ b/drivers/video/fbdev/Makefile
-@@ -131,7 +131,8 @@ obj-$(CONFIG_FB_VGA16)            += vga16fb.o
- obj-$(CONFIG_FB_OF)               += offb.o
- obj-$(CONFIG_FB_MX3)		  += mx3fb.o
- obj-$(CONFIG_FB_DA8XX)		  += da8xx-fb.o
--obj-$(CONFIG_FB_MXS)		  += mxsfb.o
-+obj-$(CONFIG_FB_MXS)		  += fb-mxs.o
-+fb-mxs-objs			  := mxsfb.o
- obj-$(CONFIG_FB_SSD1307)	  += ssd1307fb.o
- obj-$(CONFIG_FB_SIMPLE)           += simplefb.o
- 
+diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
+index 947c974bc69e..bab179b75a2a 100644
+--- a/drivers/net/phy/Makefile
++++ b/drivers/net/phy/Makefile
+@@ -52,7 +52,8 @@ ifdef CONFIG_HWMON
+ aquantia-objs			+= aquantia_hwmon.o
+ endif
+ obj-$(CONFIG_AQUANTIA_PHY)	+= aquantia.o
+-obj-$(CONFIG_ASIX_PHY)		+= asix.o
++obj-$(CONFIG_ASIX_PHY)		+= asix-phy.o
++asix-phy-objs			:= asix.o
+ obj-$(CONFIG_AT803X_PHY)	+= at803x.o
+ obj-$(CONFIG_BCM63XX_PHY)	+= bcm63xx.o
+ obj-$(CONFIG_BCM7XXX_PHY)	+= bcm7xxx.o
 -- 
 2.20.1
 
