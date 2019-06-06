@@ -2,247 +2,103 @@ Return-Path: <SRS0=7IOK=UF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA32C04AB5
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 18:19:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03A22C04AB5
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 19:08:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 781232083D
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 18:19:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1E2C20872
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 19:08:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729335AbfFFSTR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Jun 2019 14:19:17 -0400
-Received: from 7.mo6.mail-out.ovh.net ([46.105.59.196]:32875 "EHLO
-        7.mo6.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727559AbfFFSTQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 14:19:16 -0400
-X-Greylist: delayed 9594 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 Jun 2019 14:19:15 EDT
-Received: from player697.ha.ovh.net (unknown [10.109.143.246])
-        by mo6.mail-out.ovh.net (Postfix) with ESMTP id B8D6A1CAC05
-        for <linux-media@vger.kernel.org>; Thu,  6 Jun 2019 17:39:19 +0200 (CEST)
-Received: from armadeus.com (lfbn-1-7591-179.w90-126.abo.wanadoo.fr [90.126.248.179])
-        (Authenticated sender: sebastien.szymanski@armadeus.com)
-        by player697.ha.ovh.net (Postfix) with ESMTPSA id D6299697A73E;
-        Thu,  6 Jun 2019 15:38:59 +0000 (UTC)
-From:   =?UTF-8?q?S=C3=A9bastien=20Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-To:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        =?UTF-8?q?S=C3=A9bastien=20Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-Subject: [PATCH v2 2/3] media: imx7-media-csi: add i.MX6UL support
-Date:   Thu,  6 Jun 2019 17:38:24 +0200
-Message-Id: <20190606153825.8183-2-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20190606153825.8183-1-sebastien.szymanski@armadeus.com>
-References: <20190606153825.8183-1-sebastien.szymanski@armadeus.com>
+        id S1728777AbfFFTIg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Jun 2019 15:08:36 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60260 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727961AbfFFTIg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 15:08:36 -0400
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 8A59A283ED2;
+        Thu,  6 Jun 2019 20:08:34 +0100 (BST)
+Date:   Thu, 6 Jun 2019 21:08:31 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>,
+        kernel@collabora.com, Kyungmin Park <kyungmin.park@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Pawel Osciak <pawel@osciak.com>
+Subject: Re: [PATCH 0/5] media: Access videobuf2 buffers via an accessor
+Message-ID: <20190606210831.0ba7b354@collabora.com>
+In-Reply-To: <0647e37ad859aa3ada953c6a202584622b8dcada.camel@collabora.com>
+References: <20190606154426.6899-1-ezequiel@collabora.com>
+        <20190606194316.080288c2@collabora.com>
+        <0647e37ad859aa3ada953c6a202584622b8dcada.camel@collabora.com>
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 3721943620884780228
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduuddrudeggedgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-i.MX7 and i.MX6UL/L have the same CSI controller. So add i.MX6UL/L support
-to imx7-media-csi driver.
+On Thu, 06 Jun 2019 15:13:00 -0300
+Ezequiel Garcia <ezequiel@collabora.com> wrote:
 
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
----
+> On Thu, 2019-06-06 at 19:43 +0200, Boris Brezillon wrote:
+> > On Thu,  6 Jun 2019 12:44:21 -0300
+> > Ezequiel Garcia <ezequiel@collabora.com> wrote:
+> >   
+> > > Hi,
+> > > 
+> > > This patchset introduces a new vb2_get_buffer accessor and then
+> > > uses it on all the drivers that are accessing videobuf2
+> > > private buffer array directly.  
+> > 
+> > Just curious, how did you find all occurrences of direct q->bufs[]
+> > accesses? If you used a cocci script it might be worth submitting it so
+> > we don't end up with new offenders of the "don't access q->bufs[]
+> > directly" rule.
+> >   
+> 
+> No, I just inspected the code and tried a few grep variants.
 
-Changes for v2:
- - rebase on top of linuxtv/master
- - mention i.MX6UL/L in header and Kconfig help text
- - rename csi_type to csi_soc_id
+Okay.
 
- drivers/staging/media/imx/Kconfig          |  4 +-
- drivers/staging/media/imx/imx7-media-csi.c | 62 ++++++++++++++++------
- 2 files changed, 49 insertions(+), 17 deletions(-)
+> 
+> Hopefully, I haven't missed any!
+> 
+> > > I'm skipping Intel IPU3 driver here, since the code goes beyond
+> > > just accessing the buffer. It also modifies the buffer queue
+> > > directly. I believe this driver would need some more cleanup
+> > > and love from its maintainers.
+> > > 
+> > > Note that OMAP2/OMAP3 display driver is videobuf1 and so not
+> > > affected by this change.
+> > > 
+> > > Lastly, note that I'm doing the minimum changes to drivers I can't test,
+> > > only using the new accessor and avoiding any further changes.  
+> > 
+> > Can you also add a patch to remove the private buf pointers array in the
+> > cedrus driver?
+> >   
+> 
+> You mean removing the dst_bufs field?
 
-diff --git a/drivers/staging/media/imx/Kconfig b/drivers/staging/media/imx/Kconfig
-index ad3d7df6bb3c..8b6dc42c39e0 100644
---- a/drivers/staging/media/imx/Kconfig
-+++ b/drivers/staging/media/imx/Kconfig
-@@ -22,11 +22,11 @@ config VIDEO_IMX_CSI
- 	  A video4linux camera sensor interface driver for i.MX5/6.
- 
- config VIDEO_IMX7_CSI
--	tristate "i.MX7 Camera Sensor Interface driver"
-+	tristate "i.MX6UL/L / i.MX7 Camera Sensor Interface driver"
- 	depends on VIDEO_IMX_MEDIA && VIDEO_DEV && I2C
- 	default y
- 	help
- 	  Enable support for video4linux camera sensor interface driver for
--	  i.MX7.
-+	  i.MX6UL/L or i.MX7.
- endmenu
- endif
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index 9101566f3f67..902bdce594cf 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * V4L2 Capture CSI Subdev for Freescale i.MX7 SOC
-+ * V4L2 Capture CSI Subdev for Freescale i.MX6UL/L / i.MX7 SOC
-  *
-  * Copyright (c) 2019 Linaro Ltd
-  *
-@@ -152,6 +152,11 @@
- #define CSI_CSICR18		0x48
- #define CSI_CSICR19		0x4c
- 
-+enum csi_soc_id {
-+	IMX7,
-+	IMX6UL
-+};
-+
- struct imx7_csi {
- 	struct device *dev;
- 	struct v4l2_subdev sd;
-@@ -191,6 +196,7 @@ struct imx7_csi {
- 	bool is_init;
- 	bool is_streaming;
- 	bool is_csi2;
-+	enum csi_soc_id soc_id;
- 
- 	struct completion last_eof_completion;
- };
-@@ -548,6 +554,14 @@ static int imx7_csi_pad_link_validate(struct v4l2_subdev *sd,
- 	if (ret)
- 		return ret;
- 
-+	if (csi->soc_id == IMX6UL) {
-+		mutex_lock(&csi->lock);
-+		csi->is_csi2 = false;
-+		mutex_unlock(&csi->lock);
-+
-+		return 0;
-+	}
-+
- 	ret = imx7_csi_get_upstream_endpoint(csi, &upstream_ep, true);
- 	if (ret) {
- 		v4l2_err(&csi->sd, "failed to find upstream endpoint\n");
-@@ -757,6 +771,7 @@ static int imx7_csi_configure(struct imx7_csi *csi)
- 	struct v4l2_pix_format *out_pix = &vdev->fmt.fmt.pix;
- 	__u32 in_code = csi->format_mbus[IMX7_CSI_PAD_SINK].code;
- 	u32 cr1, cr18;
-+	int width = out_pix->width;
- 
- 	if (out_pix->field == V4L2_FIELD_INTERLACED) {
- 		imx7_csi_deinterlace_enable(csi, true);
-@@ -766,15 +781,27 @@ static int imx7_csi_configure(struct imx7_csi *csi)
- 		imx7_csi_buf_stride_set(csi, 0);
- 	}
- 
--	imx7_csi_set_imagpara(csi, out_pix->width, out_pix->height);
-+	cr18 = imx7_csi_reg_read(csi, CSI_CSICR18);
-+
-+	if (!csi->is_csi2) {
-+		if (out_pix->pixelformat == V4L2_PIX_FMT_UYVY ||
-+		    out_pix->pixelformat == V4L2_PIX_FMT_YUYV)
-+			width *= 2;
-+
-+		imx7_csi_set_imagpara(csi, width, out_pix->height);
-+
-+		cr18 |= (BIT_BASEADDR_SWITCH_EN | BIT_BASEADDR_SWITCH_SEL |
-+			BIT_BASEADDR_CHG_ERR_EN);
-+		imx7_csi_reg_write(csi, cr18, CSI_CSICR18);
- 
--	if (!csi->is_csi2)
- 		return 0;
-+	}
-+
-+	imx7_csi_set_imagpara(csi, width, out_pix->height);
- 
- 	cr1 = imx7_csi_reg_read(csi, CSI_CSICR1);
- 	cr1 &= ~BIT_GCLK_MODE;
- 
--	cr18 = imx7_csi_reg_read(csi, CSI_CSICR18);
- 	cr18 &= BIT_MIPI_DATA_FORMAT_MASK;
- 	cr18 |= BIT_DATA_FROM_MIPI;
- 
-@@ -809,11 +836,9 @@ static void imx7_csi_enable(struct imx7_csi *csi)
- {
- 	imx7_csi_sw_reset(csi);
- 
--	if (csi->is_csi2) {
--		imx7_csi_dmareq_rff_enable(csi);
--		imx7_csi_hw_enable_irq(csi);
--		imx7_csi_hw_enable(csi);
--	}
-+	imx7_csi_dmareq_rff_enable(csi);
-+	imx7_csi_hw_enable_irq(csi);
-+	imx7_csi_hw_enable(csi);
- }
- 
- static void imx7_csi_disable(struct imx7_csi *csi)
-@@ -1166,19 +1191,32 @@ static int imx7_csi_parse_endpoint(struct device *dev,
- 	return fwnode_device_is_available(asd->match.fwnode) ? 0 : -EINVAL;
- }
- 
-+static const struct of_device_id imx7_csi_of_match[] = {
-+	{ .compatible = "fsl,imx7-csi", .data = (void *)IMX7 },
-+	{ .compatible = "fsl,imx6ul-csi", .data = (void *)IMX6UL },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, imx7_csi_of_match);
-+
- static int imx7_csi_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct device_node *node = dev->of_node;
- 	struct imx_media_dev *imxmd;
- 	struct imx7_csi *csi;
-+	const struct of_device_id *of_id;
- 	int ret;
- 
-+	of_id = of_match_node(imx7_csi_of_match, node);
-+	if (!of_id)
-+		return -ENODEV;
-+
- 	csi = devm_kzalloc(&pdev->dev, sizeof(*csi), GFP_KERNEL);
- 	if (!csi)
- 		return -ENOMEM;
- 
- 	csi->dev = dev;
-+	csi->soc_id = (enum csi_soc_id)of_id->data;
- 
- 	csi->mclk = devm_clk_get(&pdev->dev, "mclk");
- 	if (IS_ERR(csi->mclk)) {
-@@ -1294,12 +1332,6 @@ static int imx7_csi_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--static const struct of_device_id imx7_csi_of_match[] = {
--	{ .compatible = "fsl,imx7-csi" },
--	{ },
--};
--MODULE_DEVICE_TABLE(of, imx7_csi_of_match);
--
- static struct platform_driver imx7_csi_driver = {
- 	.probe = imx7_csi_probe,
- 	.remove = imx7_csi_remove,
--- 
-2.19.2
+Yes.
 
+> 
+> I can but it's not part of this series, is it?
+
+Fair enough.
+
+> 
+> And I'd rather someone else test it, as my cedrus boards
+> are not wired at the moment.
+
+I guess we can ask Jernej, Jonas, Paul or Maxime if they can test.
