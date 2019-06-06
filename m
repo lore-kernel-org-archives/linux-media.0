@@ -2,73 +2,134 @@ Return-Path: <SRS0=7IOK=UF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_NEOMUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D24BC04AB5
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 12:11:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 677E5C04AB5
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 12:12:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 623AB2070B
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 12:11:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C24C2070B
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 12:12:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728052AbfFFMLm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Jun 2019 08:11:42 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:33751 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726818AbfFFMLg (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 6 Jun 2019 08:11:36 -0400
-Received: from tschai.fritz.box ([46.9.252.75])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id YrExhzc7c3qlsYrF0hma8W; Thu, 06 Jun 2019 14:11:34 +0200
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 1/9] vicodec: move v4l2_ctrl_request_complete after spin_unlock
-Date:   Thu,  6 Jun 2019 14:11:23 +0200
-Message-Id: <20190606121131.37110-2-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190606121131.37110-1-hverkuil-cisco@xs4all.nl>
-References: <20190606121131.37110-1-hverkuil-cisco@xs4all.nl>
+        id S1728103AbfFFMMq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Jun 2019 08:12:46 -0400
+Received: from mga04.intel.com ([192.55.52.120]:19764 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726757AbfFFMMq (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 6 Jun 2019 08:12:46 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Jun 2019 05:12:45 -0700
+X-ExtLoop1: 1
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Jun 2019 05:12:39 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id E6E6C20D69; Thu,  6 Jun 2019 15:12:38 +0300 (EEST)
+Date:   Thu, 6 Jun 2019 15:12:38 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Vishal Sagar <vsagar@xilinx.com>
+Cc:     Vishal Sagar <vishal.sagar@xilinx.com>,
+        Hyun Kwon <hyunk@xilinx.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dinesh Kumar <dineshk@xilinx.com>,
+        Sandip Kothari <sandipk@xilinx.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH v8 1/2] media: dt-bindings: media: xilinx: Add Xilinx
+ MIPI CSI-2 Rx Subsystem
+Message-ID: <20190606121238.zxdvvogob3umzid4@paasikivi.fi.intel.com>
+References: <1559555971-193235-1-git-send-email-vishal.sagar@xilinx.com>
+ <1559555971-193235-2-git-send-email-vishal.sagar@xilinx.com>
+ <20190604192344.7tycwffjd3yeizxh@paasikivi.fi.intel.com>
+ <CH2PR02MB60889B850DCAA810A772160DA7170@CH2PR02MB6088.namprd02.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfOn0xyroRqL5QP8liqsoTsLycAN2IBYMo8Q3SNQCOA0k+iBTi8+pKVp8arNb/HcMLRnep9VamkauqlctVcItfilNYM/JmofT87+ttE719AFWE8JnEtL1
- RbMJnJh+HqaYKk6dkiYi+rmHvGEV0E+GKG/mld8LHlIcXK069NZ7i0k8BbDVk+cn/DqUqTrbSTCNr7xeD2IwY7Rc8AGnGjKjficRNYB13N1UojCCxGkTl4wf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CH2PR02MB60889B850DCAA810A772160DA7170@CH2PR02MB6088.namprd02.prod.outlook.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v4l2_ctrl_request_complete can sleep, so can't be called while
-a spinlock is held.
+Hi Vishal,
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/platform/vicodec/vicodec-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, Jun 06, 2019 at 11:54:19AM +0000, Vishal Sagar wrote:
+> Hi Sakari,
+> 
+> > -----Original Message-----
+> > From: Sakari Ailus [mailto:sakari.ailus@linux.intel.com]
+> > Sent: Wednesday, June 05, 2019 12:54 AM
+> > To: Vishal Sagar <vishal.sagar@xilinx.com>
+> > Cc: Hyun Kwon <hyunk@xilinx.com>; laurent.pinchart@ideasonboard.com;
+> > mchehab@kernel.org; robh+dt@kernel.org; mark.rutland@arm.com; Michal
+> > Simek <michals@xilinx.com>; linux-media@vger.kernel.org;
+> > devicetree@vger.kernel.org; hans.verkuil@cisco.com; linux-arm-
+> > kernel@lists.infradead.org; linux-kernel@vger.kernel.org; Dinesh Kumar
+> > <dineshk@xilinx.com>; Sandip Kothari <sandipk@xilinx.com>; Luca Ceresoli
+> > <luca@lucaceresoli.net>; Jacopo Mondi <jacopo@jmondi.org>
+> > Subject: Re: [PATCH v8 1/2] media: dt-bindings: media: xilinx: Add Xilinx MIPI
+> > CSI-2 Rx Subsystem
+> > 
+> > EXTERNAL EMAIL
+> > 
+> > Hi Vishal,
+> > 
+> > On Mon, Jun 03, 2019 at 03:29:30PM +0530, Vishal Sagar wrote:
+> > 
+> > > +Optional properties:
+> > > +--------------------
+> > > +- .
+> > > +  Without this property the driver won't be loaded as IP won't be able to
+> > generate
+> > > +  media bus format compliant stream output.
+> > 
+> > I think we previously concluded that the format will be just different in
+> > this case. So the description appears incorrect.
+> > 
+> 
+> Referring to your email https://lkml.org/lkml/2019/3/22/1823 in response to v6 patches,
+> if the video format bridge is not enabled, then the way in which pixels are transported on
+> the bus don't correspond to the existing media bus formats in Linux.
+> 
+> If not loading the driver is incorrect way, is it ok for the driver to allow same media bus format
+> for packed and unpacked data type on the sink pad?
+> 
+> Or is it ok for the driver to not validate the media bus format set on the sink pad?
 
-diff --git a/drivers/media/platform/vicodec/vicodec-core.c b/drivers/media/platform/vicodec/vicodec-core.c
-index 72c56756e45b..358469f23191 100644
---- a/drivers/media/platform/vicodec/vicodec-core.c
-+++ b/drivers/media/platform/vicodec/vicodec-core.c
-@@ -442,14 +442,14 @@ static void device_run(void *priv)
- 		ctx->comp_has_next_frame = false;
- 	}
- 	v4l2_m2m_buf_done(dst_buf, state);
--	if (ctx->is_stateless && src_req)
--		v4l2_ctrl_request_complete(src_req, &ctx->hdl);
- 
- 	ctx->comp_size = 0;
- 	ctx->header_size = 0;
- 	ctx->comp_magic_cnt = 0;
- 	ctx->comp_has_frame = false;
- 	spin_unlock(ctx->lock);
-+	if (ctx->is_stateless && src_req)
-+		v4l2_ctrl_request_complete(src_req, &ctx->hdl);
- 
- 	if (ctx->is_enc)
- 		v4l2_m2m_job_finish(dev->stateful_enc.m2m_dev, ctx->fh.m2m_ctx);
+Taking a fresh look at the issue --- usually such unpacking is done by the
+DMA engine, or the same device contains both the CSI-2 RX and DMA. But here
+it actually affects the input of that DMA engine. You're right in saying we
+don't have format definitions from which you could tell which case it is,
+and we also don't have other pre-existing means to tell them apart.
+
+Feel free to keep the check in the driver, but we can't refer to the driver
+loading in DT binding documentation: this is really not supposed to be
+related to that driver, or even Linux at all.
+
+How about changing this to:
+
+xlnx,vfb: Present when Video Format Bridge is enabled in IP configuration.
+
+That'd be aligned with the other properties and would more accurately
+convey what this means.
+
 -- 
-2.20.1
+Kind regards,
 
+Sakari Ailus
+sakari.ailus@linux.intel.com
