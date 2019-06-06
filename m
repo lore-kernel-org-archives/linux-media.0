@@ -7,68 +7,68 @@ X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C79C28EB3
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:47:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83C21C28D1E
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:47:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1D55620883
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:47:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 57F5F2064A
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:47:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CzwkPpSR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vHUW3+ZZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728113AbfFFJr3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Jun 2019 05:47:29 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41664 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728104AbfFFJr2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 05:47:28 -0400
-Received: by mail-lf1-f68.google.com with SMTP id 136so1058384lfa.8
-        for <linux-media@vger.kernel.org>; Thu, 06 Jun 2019 02:47:27 -0700 (PDT)
+        id S1728196AbfFFJr4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Jun 2019 05:47:56 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:40671 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728106AbfFFJrh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 05:47:37 -0400
+Received: by mail-lf1-f65.google.com with SMTP id a9so1061527lff.7
+        for <linux-media@vger.kernel.org>; Thu, 06 Jun 2019 02:47:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7nW3mZt+9ZnxuAFL1+ZAaurMAqAqlQaogmKT12Q9bkc=;
-        b=CzwkPpSR7JxGv5fTN1QNy7x2oHDM4EE8O4QEeZBUh+hN0z2w54ETNmPLmP8r76XLto
-         0t2kV0IsL0DtZ2SDzJ+pWYFnxocbxNTPMpf8NM/nEingkJX16quxgrdNYsaygv8MPFeP
-         T6YjtAE91PsFnmwPSI61gDl+JP5ex5/7e2lk/zMJqwzzT+zn5JfQptytp+gdMp0WbXK2
-         +Tb9akU37mhth+Ae11wWtu1UJB/ifvxQuDvtpN55ghdIfW1yoDCZimq1r3mopfO2mRuk
-         GwgyTcqRHiAxJJdsqlYjM4kjEgnzoKo5ZFhnQqZ6s1WgSTyFViIFBRK7V3Lo4Vr9wIRD
-         F/GQ==
+        bh=tqLAHFWcFPPRWg/WUmIKVQXRfjbKzLHes3un8tM9Gvg=;
+        b=vHUW3+ZZeGk/a3xl67ZoRzH2OeuOzTB13K64lPfM8o6ubuED7MfpLkMU42xD3KDTGG
+         htbekOtb95OTRxYqsJ57kJ+7eBDSb9YsOUmpEOfAcgfbUH9drA+CYkDRQb87juXm2gDt
+         PRFJrv4x5Ttdpe+wr/kbs1XGegjxwq3YM3U0+pItUlRiB/RsC1+ymGjhCv80Qtj5/TQ8
+         AqvCFqeTSw5zMAvuBjLvyf9ZiJ4xirXkcbH6DZ2pUywixzEe4js0aoa9r9FrXYnmpn5M
+         vZnPIw5AOdPXDPoJIijX0vfgQCekmdrDEIiznGfYyqbX9Z1nQdeDTa0Oszi4RPnzcCdd
+         nFmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7nW3mZt+9ZnxuAFL1+ZAaurMAqAqlQaogmKT12Q9bkc=;
-        b=XzfZ6aC8/3dKB70uBzH4R06mcfWGktMPy0Fz+iJVtnuhBjLT3iLOI2eQaG/2Y6RZJ9
-         YS/VS3WuBSpTuN0qNArzJ+OF9fCgrcm67GJC8qTI4on/7eEjg8locs8mRID+QKwCWZj5
-         MrnkgnfFCTHEEhk8uWHoEWKr+wJNvGxItnzCMu2shLZcRhEGscaQDBviCSnM4/Mp4+ZN
-         1gmYaAR31OOSJI3GbuKMwR/yd+VMdVbEGVozpxH9OaaBPwVciBvoejStosamZ18NjFLJ
-         wHa11RUkFBUUhZa1yVYu86DvC/FPc9INeY7CRHgL3qjEzaFTuubj4yq/SdKoRbfeaYs5
-         Wryw==
-X-Gm-Message-State: APjAAAVb2j0jmGvCNgaCOkLdEl3FlwMPCuQVDP0yIhpEfJd+oBrSGpWo
-        Tev2W3pXRsZzUGlBrWO9o5Cpew==
-X-Google-Smtp-Source: APXvYqx/DDTeaN+7wcBnH7SJY8W7bd3Q5Vdb+xcU4CnRCqt72c8lJvk4A3phFKwb3KZM6axwL3tiRQ==
-X-Received: by 2002:ac2:5938:: with SMTP id v24mr12708910lfi.161.1559814446768;
-        Thu, 06 Jun 2019 02:47:26 -0700 (PDT)
+        bh=tqLAHFWcFPPRWg/WUmIKVQXRfjbKzLHes3un8tM9Gvg=;
+        b=jaqMGTvJdOVPxuxsBlDXUSrIcxJAkgzE7BPGpbkIlR101f2sMfjFeOOYDP1d/yoAmT
+         XmsqxPlJ3JhSXRj01fHoGlaExeqpLx+mPOSH1gmhyGGSe0F9RHxTkmOSZ4BQEwgMOGtb
+         SvXYyrgLuaR/fKTEeR/S4Or81h14Y9hUcpXA0Asy7PEToNZyRA6OVMF/idrsxgmhsI6J
+         VmKMD16wfhfe96GB/eK0VZpQorigjo5aozfUHM1fEhSFRN4N8iwuVx+RfLVcGpKdoKdA
+         0xCjtUzF8J3q9mSuCepAJI2IY1utpz3mMu+AI6Sg4EtXseJF4h1B526d1fkRLrTgyfl6
+         LB+Q==
+X-Gm-Message-State: APjAAAW31ijlqjJb4641kbagDsq0vQ31jrQhwrMAz868kaoFBFAYfCU3
+        64L87h8uVZQUFlNRbHowQhVe/w==
+X-Google-Smtp-Source: APXvYqzwnsLpfjtk0CIHJjGAd3PHOuMbYbXAW2joQUfJaemcbv8dWKNOhuhIygzLFkH6KdzB5dTdug==
+X-Received: by 2002:a19:e05c:: with SMTP id g28mr8736392lfj.167.1559814455812;
+        Thu, 06 Jun 2019 02:47:35 -0700 (PDT)
 Received: from localhost (c-1c3670d5.07-21-73746f28.bbcust.telenor.se. [213.112.54.28])
-        by smtp.gmail.com with ESMTPSA id k7sm250518ljc.92.2019.06.06.02.47.25
+        by smtp.gmail.com with ESMTPSA id u13sm220277lfl.61.2019.06.06.02.47.35
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 06 Jun 2019 02:47:25 -0700 (PDT)
+        Thu, 06 Jun 2019 02:47:35 -0700 (PDT)
 From:   Anders Roxell <anders.roxell@linaro.org>
-To:     mchehab@kernel.org, p.zabel@pengutronix.de
+To:     lee.jones@linaro.org
 Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
         marex@denx.de, stefan@agner.ch, airlied@linux.ie, daniel@ffwll.ch,
         shawnguo@kernel.org, s.hauer@pengutronix.de,
-        b.zolnierkie@samsung.com, a.hajda@samsung.com,
-        hkallweit1@gmail.com, lee.jones@linaro.org, lgirdwood@gmail.com,
+        b.zolnierkie@samsung.com, a.hajda@samsung.com, mchehab@kernel.org,
+        p.zabel@pengutronix.de, hkallweit1@gmail.com, lgirdwood@gmail.com,
         broonie@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
         linux-media@vger.kernel.org,
         Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 5/8] drivers: media: coda: fix warning same module names
-Date:   Thu,  6 Jun 2019 11:47:22 +0200
-Message-Id: <20190606094722.23816-1-anders.roxell@linaro.org>
+Subject: [PATCH 7/8] drivers: mfd: 88pm800: fix warning same module names
+Date:   Thu,  6 Jun 2019 11:47:31 +0200
+Message-Id: <20190606094731.23918-1-anders.roxell@linaro.org>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,34 +77,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When building with CONFIG_VIDEO_CODA and CONFIG_CODA_FS enabled as
-loadable modules, we see the following warning:
+When building with CONFIG_MFD_88PM800 and CONFIG_REGULATOR_88PM800
+enabled as loadable modules, we see the following warning:
 
 warning: same module names found:
-  fs/coda/coda.ko
-  drivers/media/platform/coda/coda.ko
+  drivers/regulator/88pm800.ko
+  drivers/mfd/88pm800.ko
 
-Rework so media coda matches the config fragment. Leaving CODA_FS as is
-since thats a well known module.
+Rework so the names matches the config fragment.
 
 Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- drivers/media/platform/coda/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/mfd/Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/coda/Makefile b/drivers/media/platform/coda/Makefile
-index 54e9a73a92ab..588e6bf7c190 100644
---- a/drivers/media/platform/coda/Makefile
-+++ b/drivers/media/platform/coda/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
+diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+index 52b1a90ff515..5e870eef6a20 100644
+--- a/drivers/mfd/Makefile
++++ b/drivers/mfd/Makefile
+@@ -5,8 +5,11 @@
  
--coda-objs := coda-common.o coda-bit.o coda-gdi.o coda-h264.o coda-mpeg2.o coda-mpeg4.o coda-jpeg.o
-+video-coda-objs := coda-common.o coda-bit.o coda-gdi.o coda-h264.o coda-mpeg2.o coda-mpeg4.o coda-jpeg.o
- 
--obj-$(CONFIG_VIDEO_CODA) += coda.o
-+obj-$(CONFIG_VIDEO_CODA) += video-coda.o
- obj-$(CONFIG_VIDEO_IMX_VDOA) += imx-vdoa.o
+ 88pm860x-objs			:= 88pm860x-core.o 88pm860x-i2c.o
+ obj-$(CONFIG_MFD_88PM860X)	+= 88pm860x.o
+-obj-$(CONFIG_MFD_88PM800)	+= 88pm800.o 88pm80x.o
+-obj-$(CONFIG_MFD_88PM805)	+= 88pm805.o 88pm80x.o
++obj-$(CONFIG_MFD_88PM800)	+= mfd-88pm800.o mfd-88pm80x.o
++mfd-88pm800-objs		:= 88pm800.o
++obj-$(CONFIG_MFD_88PM805)	+= mfd-88pm805.o mfd-88pm80x.o
++mfd-88pm805-objs		:= 88pm805.o
++mfd-88pm80x-objs		:= 88pm80x.o
+ obj-$(CONFIG_MFD_ACT8945A)	+= act8945a.o
+ obj-$(CONFIG_MFD_SM501)		+= sm501.o
+ obj-$(CONFIG_MFD_ASIC3)		+= asic3.o tmio_core.o
 -- 
 2.20.1
 
