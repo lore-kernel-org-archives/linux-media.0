@@ -2,97 +2,108 @@ Return-Path: <SRS0=7IOK=UF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-11.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B9B9C04AB5
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 15:55:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 495ADC28EB3
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 16:05:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E40F92083E
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 15:55:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F7DC20645
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 16:05:29 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="kKQ+Velk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729276AbfFFPze (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Jun 2019 11:55:34 -0400
-Received: from 6.mo173.mail-out.ovh.net ([46.105.43.93]:38095 "EHLO
-        6.mo173.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728871AbfFFPze (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 11:55:34 -0400
-X-Greylist: delayed 995 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 Jun 2019 11:55:33 EDT
-Received: from player697.ha.ovh.net (unknown [10.108.57.150])
-        by mo173.mail-out.ovh.net (Postfix) with ESMTP id AD8DF10CDAE
-        for <linux-media@vger.kernel.org>; Thu,  6 Jun 2019 17:38:55 +0200 (CEST)
-Received: from armadeus.com (lfbn-1-7591-179.w90-126.abo.wanadoo.fr [90.126.248.179])
-        (Authenticated sender: sebastien.szymanski@armadeus.com)
-        by player697.ha.ovh.net (Postfix) with ESMTPSA id 0AFA9697A5DB;
-        Thu,  6 Jun 2019 15:38:36 +0000 (UTC)
-From:   =?UTF-8?q?S=C3=A9bastien=20Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-To:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        =?UTF-8?q?S=C3=A9bastien=20Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-Subject: [PATCH v2 1/3] ARM: dts: imx6ul: Add csi node
-Date:   Thu,  6 Jun 2019 17:38:23 +0200
-Message-Id: <20190606153825.8183-1-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.19.2
+        id S1729577AbfFFQF1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Jun 2019 12:05:27 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33335 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729565AbfFFQF0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 12:05:26 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n9so3047370wru.0
+        for <linux-media@vger.kernel.org>; Thu, 06 Jun 2019 09:05:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=REJ+F/EoJF8y7ON3vJSgKlf1KSRuyaPRK39EHGB3NLk=;
+        b=kKQ+VelkUt6JaYM6/XzEtySTnRdqSxbVzVFAxBo810/cywmokiLiR9kZNee1J0oD8f
+         ZUiQBCwReVS8IyTTxN1o5MB7Sfd2YRlfLfxryIof6HGtRhKx2z3iC42g0gt6pdBEmz/J
+         ErTPSjLXXxXyj5qQQEumXBGTkg42dC6rF7dt4FYx3io5Zdg31GFQvL9+QfjHedb295WE
+         F85dgv+buyyOakKpy5ZmUS+XaQqk632bXD2ZFp1o0aBdSrrEp/DlP6ar/Z9eWPRkwnpo
+         GudcD18NWBPIchRHYt5YhwfABUMyzJJp7v3A+4jOj65U46ofalj9D+2VhG5iJgz0MkT8
+         3/xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=REJ+F/EoJF8y7ON3vJSgKlf1KSRuyaPRK39EHGB3NLk=;
+        b=AT7yFt+zfEbs/L37HrsJEPemBqZHGiJZJb3lscPCJX6VuZjmTGYibUnhYqjMDZUB0w
+         t3aHjKYRTwrt7PjzXowr4vXLB3HFEr4pxqQY0ATHKwhRTAubwZAMSEL19lE54RhzZOg7
+         wmdLVpTD8rXMOhShPgGT5uC2bKxsVb4J395yl/kL2NccbcvsnbhZMqMaMAm/y/1xL353
+         USJ4FHiiDZb2CFdPxtzl1VAVAeo2VXAdbUZaSym4ppCGCHN8yeciB/QUD5CKtJfXgZgs
+         ACSIvdf2qLUJS/EJJFPf5mDp9iHMFFv77hOc1heEFHtnSo98odXH2AgX59nygG794TNL
+         22Xw==
+X-Gm-Message-State: APjAAAUi1zWvcTGjaYUAqOXeIOMSbWcDNVOjjz9rmWNRYMZCetX65k/p
+        q3Ax8yypzQN/ClAmMy+XUfUA9g==
+X-Google-Smtp-Source: APXvYqz3gbNA2D0bF0Eq0O2oDIySuKiZynD3XFfUkI1kKWkAxWifm2Gws82DrVcaBKGHZEl7uIaLzQ==
+X-Received: by 2002:a05:6000:1c6:: with SMTP id t6mr31836953wrx.236.1559837125386;
+        Thu, 06 Jun 2019 09:05:25 -0700 (PDT)
+Received: from mjourdan-pc.numericable.fr (abo-99-183-68.mtp.modulonet.fr. [85.68.183.99])
+        by smtp.gmail.com with ESMTPSA id t140sm2180901wmt.0.2019.06.06.09.05.24
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 06 Jun 2019 09:05:24 -0700 (PDT)
+From:   Maxime Jourdan <mjourdan@baylibre.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Subject: [PATCH v10 3/3] MAINTAINERS: Add meson video decoder
+Date:   Thu,  6 Jun 2019 18:05:12 +0200
+Message-Id: <20190606160512.26211-4-mjourdan@baylibre.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190606160512.26211-1-mjourdan@baylibre.com>
+References: <20190606160512.26211-1-mjourdan@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 3715188221214217412
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduuddrudeggedgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddm
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add csi node for i.MX6UL SoC.
+Add an entry for the meson video decoder for amlogic SoCs.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
 ---
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Changes for v2:
- - only "mclk" clock is required now.
-
- arch/arm/boot/dts/imx6ul.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
-index bbf010c73336..f10012de5eb6 100644
---- a/arch/arm/boot/dts/imx6ul.dtsi
-+++ b/arch/arm/boot/dts/imx6ul.dtsi
-@@ -951,6 +951,15 @@
- 				};
- 			};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b8fbf41865c2..7cf3ece9f0cb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10222,6 +10222,14 @@ S:	Maintained
+ F:	drivers/mtd/nand/raw/meson_*
+ F:	Documentation/devicetree/bindings/mtd/amlogic,meson-nand.txt
  
-+			csi: csi@21c4000 {
-+				compatible = "fsl,imx6ul-csi", "fsl,imx7-csi";
-+				reg = <0x021c4000 0x4000>;
-+				interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+				clocks = <&clks IMX6UL_CLK_CSI>;
-+				clock-names = "mclk";
-+				status = "disabled";
-+			};
++MESON VIDEO DECODER DRIVER FOR AMLOGIC SOCS
++M:	Maxime Jourdan <mjourdan@baylibre.com>
++L:	linux-media@lists.freedesktop.org
++L:	linux-amlogic@lists.infradead.org
++S:	Supported
++F:	drivers/staging/media/meson/vdec/
++T:	git git://linuxtv.org/media_tree.git
 +
- 			lcdif: lcdif@21c8000 {
- 				compatible = "fsl,imx6ul-lcdif", "fsl,imx28-lcdif";
- 				reg = <0x021c8000 0x4000>;
+ METHODE UDPU SUPPORT
+ M:	Vladimir Vid <vladimir.vid@sartura.hr>
+ S:	Maintained
 -- 
-2.19.2
+2.21.0
 
