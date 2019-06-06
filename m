@@ -2,144 +2,194 @@ Return-Path: <SRS0=7IOK=UF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DBF8C04AB5
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 07:10:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB72DC04AB5
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 07:43:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C75B2083D
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 07:10:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AF414207E0
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 07:43:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="02pCeqF2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbfFFHKh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Jun 2019 03:10:37 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:45659 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725782AbfFFHKh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 6 Jun 2019 03:10:37 -0400
-Received: from [192.168.2.10] ([46.9.252.75])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id YmXfhfIAMsDWyYmXjh2WA1; Thu, 06 Jun 2019 09:10:35 +0200
-Subject: Re: [PATCH] media: v4l2: Fix the _MPLANE format check in
- v4l_enum_fmt()
-To:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        kernel@collabora.com, Hirokazu Honda <hiroh@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Maxime Jourdan <mjourdan@baylibre.com>
-References: <20190605164625.5109-1-boris.brezillon@collabora.com>
- <CAAFQd5Aji4v7fJZ+at_W58L_0+wC5E9wvSW=gCPLWswFECBMJA@mail.gmail.com>
- <20190606085159.3454aecb@collabora.com>
- <20190606090916.33c78976@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <948b3939-81d4-49a0-c9b4-32261309922e@xs4all.nl>
-Date:   Thu, 6 Jun 2019 09:10:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190606090916.33c78976@collabora.com>
-Content-Type: text/plain; charset=utf-8
+        id S1726324AbfFFHnv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Jun 2019 03:43:51 -0400
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:23789 "EHLO
+        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725267AbfFFHnv (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 03:43:51 -0400
+Received-SPF: Pass (esa1.microchip.iphmx.com: domain of
+  Eugen.Hristev@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="Eugen.Hristev@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa1.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa1.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa1.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+X-IronPort-AV: E=Sophos;i="5.63,558,1557212400"; 
+   d="scan'208";a="37787026"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Jun 2019 00:43:49 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
+ chn-vm-ex01.mchp-main.com (10.10.87.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 6 Jun 2019 00:43:48 -0700
+Received: from NAM03-BY2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Thu, 6 Jun 2019 00:43:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector1-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZxUaxfUF16SrrG6LmI5Z40i9ZX7L0zOteUQtVFuPFeI=;
+ b=02pCeqF2o2AX5+D7hb3JeXHuZ5szUDRkRc0PRH2LA6+sv1SvJJCzRfxnGNHxuPpc3TsCtBkHq3tiGIgGEmzjzfdRgMRHW18ZhGtNdlf1nKSxRjKB+tNSkXt9/wfqtJHl8mIrgWbp57OcaO7ktw31RTYsX2PnulD9VDyOirweyec=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB1628.namprd11.prod.outlook.com (10.172.38.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1965.14; Thu, 6 Jun 2019 07:43:47 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::2807:f606:3b7c:cce9]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::2807:f606:3b7c:cce9%9]) with mapi id 15.20.1965.011; Thu, 6 Jun 2019
+ 07:43:47 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <Eugen.Hristev@microchip.com>
+Subject: [PATCH v3 2/2] media: atmel: atmel-sama5d2-isc: fixed checkpatch
+ warnings
+Thread-Topic: [PATCH v3 2/2] media: atmel: atmel-sama5d2-isc: fixed checkpatch
+ warnings
+Thread-Index: AQHVHDuT5UCMUNFMLE2y7UE951xenw==
+Date:   Thu, 6 Jun 2019 07:43:47 +0000
+Message-ID: <1559806756-16683-2-git-send-email-eugen.hristev@microchip.com>
+References: <1559806756-16683-1-git-send-email-eugen.hristev@microchip.com>
+In-Reply-To: <1559806756-16683-1-git-send-email-eugen.hristev@microchip.com>
+Accept-Language: ro-RO, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKMAN0wO+a6bqLVSIr4+isktf5uVSO1QkOi2r8d/a6yOGSUg2fGBbW/wMNbQDoT+hpJpThHJkoSZwNPB6/oFMgJUQCjEiTPPDr9AgAnqj83EUeK834zL
- oJnRbkHJt8+TdXnThP4LFS2tsagTjuwxf3b9IM+yI9NTqleigDpHLEFhlaRe6rj3YuKOFW3Quhff6g0ZBgBfDa8PGJ6CxAuC/CKkNryXshjd/yHAqK1NPkwR
- vBEnl/tAoBTfX9tdMavI1sLyENiTuEXxuQ3KJPlK1d6ccEvxBZg60aqhalIz0jiuctuufYynyDNONjUPmifZRYpb75eJGWqxvpzt8z/BvMlAZoZJ+2RNtb/c
- S+yzTalc1uknpaBcGEdtHmMxPo1UVapEhAucblZTf6H+lhXY6o34lsYzM2YhIKxgr/DuvC9+BMxlOWr+L4ABEyIq6XFYxGbx5geL7aoJZyLQFr+YzWssJ6eN
- +HyVGG9DbwwV5xTc4bIFigGqu9XbTpEgl0/sG+zGBh2j9x4xfrQ5SS+WvZoOo7GNAd6PjY8HxKmoDR16
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: VI1P193CA0001.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:800:bd::11) To DM5PR11MB1242.namprd11.prod.outlook.com
+ (2603:10b6:3:14::8)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.7.4
+x-originating-ip: [94.177.32.154]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 737dfef9-47be-4e3b-73b5-08d6ea52b555
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DM5PR11MB1628;
+x-ms-traffictypediagnostic: DM5PR11MB1628:
+x-microsoft-antispam-prvs: <DM5PR11MB162869A437DD15C3E1A1B3C7E8170@DM5PR11MB1628.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 00603B7EEF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(366004)(136003)(376002)(39860400002)(396003)(189003)(199004)(51234002)(26005)(186003)(2906002)(66066001)(316002)(8676002)(86362001)(5660300002)(8936002)(50226002)(81166006)(68736007)(81156014)(72206003)(6116002)(3846002)(446003)(305945005)(7736002)(36756003)(476003)(2616005)(66946007)(66476007)(73956011)(11346002)(66446008)(66556008)(486006)(64756008)(6512007)(107886003)(14444005)(102836004)(110136005)(256004)(99286004)(14454004)(6436002)(2501003)(6486002)(71200400001)(4326008)(71190400001)(25786009)(52116002)(53936002)(76176011)(386003)(2201001)(6506007)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1628;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: fuIVOibtO+umRiPxIociwL/fROSV23VELqYabOofHw5FQGusK+3n9pEUDUpkZmnpurgnETqS4GkgeFsTNHOuq/hC7CcUoiE1bhTKvgrp0XCO3nWgGWPv8h8l4KK3H437Rut8vDfwBDLuH79fvUl+kV3mYliPE5qSPad9sgOiZAQ9hr2jcjqYHWu42WtUCQDEKf2VOS+dzKxXFKR9fzmijvYxz6ABlbwlXF2XX3yzFJeYBW3ZgvInXbU47ojmFKYH93IM0xHCIb1EZ86UsFN67zdw7IPWVwPVBaKMkXWYP1Btaw7sZKWEgE/F0J26YmHCkarx8RxkQRImrlze7dFz1HRcWRcUCesSaLZrLjjza1PWrTVOyeA5fjRDdYgtXGhEYlmTx4NzSO1L+MnANbN7lPPgyx2q1djtuZy9on86e5I=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 737dfef9-47be-4e3b-73b5-08d6ea52b555
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2019 07:43:47.4331
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: eugen.hristev@microchip.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1628
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 6/6/19 9:09 AM, Boris Brezillon wrote:
-> On Thu, 6 Jun 2019 08:51:59 +0200
-> Boris Brezillon <boris.brezillon@collabora.com> wrote:
-> 
->> On Thu, 6 Jun 2019 12:53:57 +0900
->> Tomasz Figa <tfiga@chromium.org> wrote:
->>
->>> On Thu, Jun 6, 2019 at 1:46 AM Boris Brezillon
->>> <boris.brezillon@collabora.com> wrote:  
->>>>
->>>> CAP_M2M_MPLANE means the device supports _MPLANE formats for both
->>>> capture and output. Adjust the check to avoid EINVAL errors on
->>>> such devices.
->>>>
->>>> Fixes: 366c719d6479 ("media: v4l2: Get rid of ->vidioc_enum_fmt_vid_{cap,out}_mplane")
->>>> Reported-by: Maxime Jourdan <mjourdan@baylibre.com>
->>>> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
->>>> ---
->>>>  drivers/media/v4l2-core/v4l2-ioctl.c | 9 +++++++--
->>>>  1 file changed, 7 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
->>>> index b4c73e8f23c5..ace9b9761bed 100644
->>>> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
->>>> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
->>>> @@ -1385,6 +1385,7 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
->>>>         struct video_device *vdev = video_devdata(file);
->>>>         struct v4l2_fmtdesc *p = arg;
->>>>         int ret = check_fmt(file, p->type);
->>>> +       u32 cap_mask;
->>>>
->>>>         if (ret)
->>>>                 return ret;
->>>> @@ -1393,7 +1394,9 @@ static int v4l_enum_fmt(const struct v4l2_ioctl_ops *ops,
->>>>         switch (p->type) {
->>>>         case V4L2_BUF_TYPE_VIDEO_CAPTURE:
->>>>         case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
->>>> -               if (!!(vdev->device_caps & V4L2_CAP_VIDEO_CAPTURE_MPLANE) !=
->>>> +               cap_mask = V4L2_CAP_VIDEO_CAPTURE_MPLANE |
->>>> +                          V4L2_CAP_VIDEO_M2M_MPLANE;
->>>> +               if (!!(vdev->device_caps & cap_mask) !=    
->>>
->>> Shouldn't devices that report V4L2_CAP_VIDEO_M2M_MPLANE have also
->>> V4L2_CAP_VIDEO_CAPTURE_MPLANE and V4L2_CAP_VIDEO_OUTPUT_MPLANE
->>> reported anyway?  
->>
->> That's the other option, force drivers that set
->> V4L2_CAP_VIDEO_M2M_MPLANE to also set
->> V4L2_CAP_VIDEO_{CAPTURE,OUTPUT}_MPLANE (or we can let the core do it).
-> 
-> That would basically look like this. Hans, let me know if you want me
-> to send a new version with the below diff.
-
-No, I don't want that :-)
-
-See my earlier reply for the reason.
-
-Regards,
-
-	Hans
-
-> 
-> --->8---
-> diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-> index 29946a2b2752..9cb782c62f69 100644
-> --- a/drivers/media/v4l2-core/v4l2-dev.c
-> +++ b/drivers/media/v4l2-core/v4l2-dev.c
-> @@ -933,6 +933,14 @@ int __video_register_device(struct video_device *vdev,
->         }
->  #endif
->  
-> +       /*
-> +        * Adjust ->device_caps: CAP_M2M_MPLANE implies CAP_CAPTURE_MPLANES and
-> +        * CAP_OUTPUT_MLANES.
-> +        */
-> +       if (vdev->device_caps & V4L2_CAP_VIDEO_M2M_MPLANE)
-> +               vdev->device_caps |= V4L2_CAP_VIDEO_CAPTURE_MPLANE |
-> +                                    V4L2_CAP_VIDEO_OUTPUT_MPLANE;
-> +
->         /* Pick a device node number */
->         mutex_lock(&videodev_lock);
->         nr = devnode_find(vdev, nr == -1 ? 0 : nr, minor_cnt);
-> 
-
+RnJvbTogRXVnZW4gSHJpc3RldiA8ZXVnZW4uaHJpc3RldkBtaWNyb2NoaXAuY29tPg0KDQpDaGVj
+a3BhdGNoIGNvbXBsYWluaW5nIHRoYXQgbG9ja3MgZG8gbm90IGhhdmUgY29tbWVudHMsDQp1bmFs
+aWduZWQgY29kZSBhbmQgbWFjcm8gcmV1c2Ugb2Ygc2FtZSBhcmd1bWVudCBpbiB0b19pc2NfY2xr
+Lg0KRml4ZWQgdGhlbSBieSByZW5hbWluZywgcmVhbGlnbmluZyBhbmQgYWRkaW5nIHN0cnVjdCBj
+b21tZW50cw0KDQpTaWduZWQtb2ZmLWJ5OiBFdWdlbiBIcmlzdGV2IDxldWdlbi5ocmlzdGV2QG1p
+Y3JvY2hpcC5jb20+DQotLS0NCkNoYW5nZXMgaW4gdjM6DQotIG5ldyBwYXRjaCwgYWRkcmVzc2Vz
+IHRoZSBjaGVja3BhdGNoIGlzc3VlcyB0aGF0IEhhbnMgYXNrZWQgdG8gZml4DQoNCiBkcml2ZXJz
+L21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5oICAgICAgICAgfCA1MSArKysrKysrKysr
+KysrKysrKysrKystLS0NCiBkcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLXNhbWE1
+ZDItaXNjLmMgfCAgNCArLQ0KIDIgZmlsZXMgY2hhbmdlZCwgNDggaW5zZXJ0aW9ucygrKSwgNyBk
+ZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcGxhdGZvcm0vYXRtZWwv
+YXRtZWwtaXNjLmggYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLWlzYy5oDQpp
+bmRleCAwYmQ1ZGZmLi42ZmY5ZmE4IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9y
+bS9hdG1lbC9hdG1lbC1pc2MuaA0KKysrIGIvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9h
+dG1lbC1pc2MuaA0KQEAgLTI0LDE0ICsyNCwxNCBAQCBzdHJ1Y3QgaXNjX2NsayB7DQogCXN0cnVj
+dCBjbGtfaHcgICBodzsNCiAJc3RydWN0IGNsayAgICAgICpjbGs7DQogCXN0cnVjdCByZWdtYXAg
+ICAqcmVnbWFwOw0KLQlzcGlubG9ja190CWxvY2s7DQorCXNwaW5sb2NrX3QJbG9jazsJLyogc3lu
+Y2hyb25pemUgYWNjZXNzIHRvIGNsb2NrIHJlZ2lzdGVycyAqLw0KIAl1OAkJaWQ7DQogCXU4CQlw
+YXJlbnRfaWQ7DQogCXUzMgkJZGl2Ow0KIAlzdHJ1Y3QgZGV2aWNlCSpkZXY7DQogfTsNCiANCi0j
+ZGVmaW5lIHRvX2lzY19jbGsoaHcpIGNvbnRhaW5lcl9vZihodywgc3RydWN0IGlzY19jbGssIGh3
+KQ0KKyNkZWZpbmUgdG9faXNjX2Nsayh2KSBjb250YWluZXJfb2Yodiwgc3RydWN0IGlzY19jbGss
+IGh3KQ0KIA0KIHN0cnVjdCBpc2NfYnVmZmVyIHsNCiAJc3RydWN0IHZiMl92NGwyX2J1ZmZlciAg
+dmI7DQpAQCAtMTQ2LDYgKzE0Niw0NyBAQCBzdHJ1Y3QgaXNjX2N0cmxzIHsNCiANCiAjZGVmaW5l
+IElTQ19QSVBFX0xJTkVfTk9ERV9OVU0JMTENCiANCisvKg0KKyAqIHN0cnVjdCBpc2NfZGV2aWNl
+IC0gSVNDIGRldmljZSBkcml2ZXIgZGF0YS9jb25maWcgc3RydWN0DQorICogQHJlZ21hcDoJCVJl
+Z2lzdGVyIG1hcA0KKyAqIEBoY2xvY2s6CQlIY2xvY2sgY2xvY2sgaW5wdXQgKHJlZmVyIGRhdGFz
+aGVldCkNCisgKiBAaXNwY2s6CQlpc2NwY2sgY2xvY2sgKHJlZmVyIGRhdGFzaGVldCkNCisgKiBA
+aXNjX2Nsa3M6CQlJU0MgY2xvY2tzDQorICoNCisgKiBAZGV2OgkJUmVnaXN0ZXJlZCBkZXZpY2Ug
+ZHJpdmVyDQorICogQHY0bDJfZGV2OgkJdjRsMiByZWdpc3RlcmVkIGRldmljZQ0KKyAqIEB2aWRl
+b19kZXY6CQlyZWdpc3RlcmVkIHZpZGVvIGRldmljZQ0KKyAqDQorICogQHZiMl92aWRxOgkJdmlk
+ZW8gYnVmZmVyIDIgdmlkZW8gcXVldWUNCisgKiBAZG1hX3F1ZXVlX2xvY2s6CWxvY2sgdG8gc3lu
+Y2hyb25pemUgdGhlIGRtYSBidWZmZXIgcXVldWUNCisgKiBAZG1hX3F1ZXVlOgkJdGhlIHF1ZXVl
+IGZvciBkbWEgYnVmZmVycw0KKyAqIEBjdXJfZnJtOgkJY3VycmVudCBpc2MgZnJhbWUvYnVmZmVy
+DQorICogQHNlcXVlbmNlOgkJY3VycmVudCBmcmFtZSBudW1iZXINCisgKiBAc3RvcDoJCXRydWUg
+aWYgaXNjIGlzIG5vdCBzdHJlYW1pbmcsIGZhbHNlIGlmIHN0cmVhbWluZw0KKyAqIEBjb21wOgkJ
+Y29tcGxldGlvbiByZWZlcmVuY2UgdGhhdCBzaWduYWxzIGZyYW1lIGNvbXBsZXRpb24NCisgKg0K
+KyAqIEBmbXQ6CQljdXJyZW50IHY0MmwgZm9ybWF0DQorICogQHVzZXJfZm9ybWF0czoJbGlzdCBv
+ZiBmb3JtYXRzIHRoYXQgYXJlIHN1cHBvcnRlZCBhbmQgYWdyZWVkIHdpdGggc2QNCisgKiBAbnVt
+X3VzZXJfZm9ybWF0czoJaG93IG1hbnkgZm9ybWF0cyBhcmUgaW4gdXNlcl9mb3JtYXRzDQorICoN
+CisgKiBAY29uZmlnOgkJY3VycmVudCBJU0MgZm9ybWF0IGNvbmZpZ3VyYXRpb24NCisgKiBAdHJ5
+X2NvbmZpZzoJCXRoZSBjdXJyZW50IElTQyB0cnkgZm9ybWF0ICwgbm90IHlldCBhY3RpdmF0ZWQN
+CisgKg0KKyAqIEBjdHJsczoJCWhvbGRzIGluZm9ybWF0aW9uIGFib3V0IElTQyBjb250cm9scw0K
+KyAqIEBkb193Yl9jdHJsOgkJY29udHJvbCByZWdhcmRpbmcgdGhlIERPX1dISVRFX0JBTEFOQ0Ug
+YnV0dG9uDQorICogQGF3Yl93b3JrOgkJd29ya3F1ZXVlIHJlZmVyZW5jZSBmb3IgYXV0b3doaXRl
+YmFsYW5jZSBoaXN0b2dyYW0NCisgKgkJCWFuYWx5c2lzDQorICoNCisgKiBAbG9jazoJCWxvY2sg
+Zm9yIHN5bmNocm9uaXppbmcgdXNlcnNwYWNlIGZpbGUgb3BlcmF0aW9ucw0KKyAqCQkJd2l0aCBJ
+U0Mgb3BlcmF0aW9ucw0KKyAqIEBhd2JfbG9jazoJCWxvY2sgZm9yIHN5bmNocm9uaXppbmcgYXdi
+IHdvcmsgcXVldWUgb3BlcmF0aW9ucw0KKyAqCQkJd2l0aCBETUEvYnVmZmVyIG9wZXJhdGlvbnMN
+CisgKg0KKyAqIEBwaXBlbGluZToJCWNvbmZpZ3VyYXRpb24gb2YgdGhlIElTQyBwaXBlbGluZQ0K
+KyAqDQorICogQGN1cnJlbnRfc3ViZGV2OgljdXJyZW50IHN1YmRldmljZTogdGhlIHNlbnNvcg0K
+KyAqIEBzdWJkZXZfZW50aXRpZXM6CWxpc3Qgb2Ygc3ViZGV2aWNlIGVudGl0aXRlcw0KKyAqLw0K
+IHN0cnVjdCBpc2NfZGV2aWNlIHsNCiAJc3RydWN0IHJlZ21hcAkJKnJlZ21hcDsNCiAJc3RydWN0
+IGNsawkJKmhjbG9jazsNCkBAIC0xNTcsNyArMTk4LDcgQEAgc3RydWN0IGlzY19kZXZpY2Ugew0K
+IAlzdHJ1Y3QgdmlkZW9fZGV2aWNlCXZpZGVvX2RldjsNCiANCiAJc3RydWN0IHZiMl9xdWV1ZQl2
+YjJfdmlkcTsNCi0Jc3BpbmxvY2tfdAkJZG1hX3F1ZXVlX2xvY2s7DQorCXNwaW5sb2NrX3QJCWRt
+YV9xdWV1ZV9sb2NrOyAvKiBzeW5jIGFjY2VzcyB0byBkbWEgcXVldWUgKi8NCiAJc3RydWN0IGxp
+c3RfaGVhZAlkbWFfcXVldWU7DQogCXN0cnVjdCBpc2NfYnVmZmVyCSpjdXJfZnJtOw0KIAl1bnNp
+Z25lZCBpbnQJCXNlcXVlbmNlOw0KQEAgLTE3NSw4ICsyMTYsOCBAQCBzdHJ1Y3QgaXNjX2Rldmlj
+ZSB7DQogCXN0cnVjdCB2NGwyX2N0cmwJKmRvX3diX2N0cmw7DQogCXN0cnVjdCB3b3JrX3N0cnVj
+dAlhd2Jfd29yazsNCiANCi0Jc3RydWN0IG11dGV4CQlsb2NrOw0KLQlzcGlubG9ja190CQlhd2Jf
+bG9jazsNCisJc3RydWN0IG11dGV4CQlsb2NrOyAvKiBzeW5jIGFjY2VzcyB0byBmaWxlIG9wZXJh
+dGlvbnMgKi8NCisJc3BpbmxvY2tfdAkJYXdiX2xvY2s7IC8qIHN5bmMgYWNjZXNzIHRvIERNQSBi
+dWZmZXJzIGZyb20gYXdiIHdvcmsgcXVldWUgKi8NCiANCiAJc3RydWN0IHJlZ21hcF9maWVsZAkq
+cGlwZWxpbmVbSVNDX1BJUEVfTElORV9OT0RFX05VTV07DQogDQpkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1zYW1hNWQyLWlzYy5jIGIvZHJpdmVycy9tZWRp
+YS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1zYW1hNWQyLWlzYy5jDQppbmRleCA2OWZhYWFmLi4yOTky
+NDNmIDEwMDY0NA0KLS0tIGEvZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9hdG1lbC9hdG1lbC1zYW1h
+NWQyLWlzYy5jDQorKysgYi9kcml2ZXJzL21lZGlhL3BsYXRmb3JtL2F0bWVsL2F0bWVsLXNhbWE1
+ZDItaXNjLmMNCkBAIC04Nyw4ICs4Nyw4IEBAIHN0YXRpYyBpbnQgaXNjX3BhcnNlX2R0KHN0cnVj
+dCBkZXZpY2UgKmRldiwgc3RydWN0IGlzY19kZXZpY2UgKmlzYykNCiAJCQlicmVhazsNCiAJCX0N
+CiANCi0JCXN1YmRldl9lbnRpdHkgPSBkZXZtX2t6YWxsb2MoZGV2LA0KLQkJCQkJICBzaXplb2Yo
+KnN1YmRldl9lbnRpdHkpLCBHRlBfS0VSTkVMKTsNCisJCXN1YmRldl9lbnRpdHkgPSBkZXZtX2t6
+YWxsb2MoZGV2LCBzaXplb2YoKnN1YmRldl9lbnRpdHkpLA0KKwkJCQkJICAgICBHRlBfS0VSTkVM
+KTsNCiAJCWlmICghc3ViZGV2X2VudGl0eSkgew0KIAkJCW9mX25vZGVfcHV0KHJlbSk7DQogCQkJ
+cmV0ID0gLUVOT01FTTsNCi0tIA0KMi43LjQNCg0K
