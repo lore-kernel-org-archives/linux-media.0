@@ -2,135 +2,222 @@ Return-Path: <SRS0=7IOK=UF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81D45C28EB2
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B420C28D1E
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:53:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5477420874
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:48:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K+PqH70M"
+	by mail.kernel.org (Postfix) with ESMTP id E13F32083E
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 09:53:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbfFFJrY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Jun 2019 05:47:24 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46417 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727734AbfFFJrX (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 05:47:23 -0400
-Received: by mail-lj1-f195.google.com with SMTP id m15so1345091ljg.13
-        for <linux-media@vger.kernel.org>; Thu, 06 Jun 2019 02:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rKGTOfiJLhxkK5DAGNPwC06vm8bKZwP8i9X7cgh9zRA=;
-        b=K+PqH70Mt8b5TNW5xvyKMCLzJtovkyWC4zw7/gWft90LGfZ2cANg/5W/zie4WCakja
-         iqBzR6M/vddI7/EJkTSwFeHsH6hRt4shQeumyR/ZYmDdgkZiqc5Wm6oLzCIacG4Q0Mqv
-         lvJIBpKkC+6yMDO0x90jeibFkzrw1QpAao7YTIOOadlwLYolHX6oIJ4WCgLM2CD/yUgl
-         ePdQIpZw28df1WlqwFUyJoe6wpBHUCyVK64DdRONB0FcZyGGFE9EMlKystWQFaI1LAzr
-         Lg6zc7EfV2TgzfWHFK+Ug4ER7oXkMFTR73mMQVaH3VMxJUeutxA+xdU/7CS1ix1hp2qW
-         ig2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rKGTOfiJLhxkK5DAGNPwC06vm8bKZwP8i9X7cgh9zRA=;
-        b=q+dH5ozWMJoFmCfVva7eOQU/bM0vlWcOipi+Qbfq5RV7kdeI07I4OymH2ScrPAp+XX
-         1TR5K2DJowgtDuS0hj3gwHFhhLDHQzoqbVJyWsQAxIXikJ+cpwJPeh9Qp65bPtiHvsRh
-         RA9JXXd4SuTgjc/0mQMMCKfkLeexs5ztPj1ovvPti1cUVZNOhaKw8Dp18BWoz8/xoXc/
-         VWo9dzkBy82Mfwy+v2+gYIdQB7o4Kd7IWK4yhg2GdvjAnPz4igvDMHuIXb0t/lrZTQDy
-         YlwIKF2zgxW1FDgcfCUtEPvnvbEuUKj7kEcX37Kox6AFB2QV0ImEUhHd2KlCXngoyqMs
-         avyg==
-X-Gm-Message-State: APjAAAUzrIQibJ6wn5sBcSFv0y+ZbRA4z2P6yZSraciitforIO3P0J4I
-        naaUzrW5GFKPXIFxVmAinvKRuw==
-X-Google-Smtp-Source: APXvYqxPlKZHL9CiyClyWDvutiKzyHn6nhVbMEAw7QIESvJ4dLD6VWjiINM1rxgc+VbZYV5LMX8zug==
-X-Received: by 2002:a2e:9284:: with SMTP id d4mr24398129ljh.26.1559814442103;
-        Thu, 06 Jun 2019 02:47:22 -0700 (PDT)
-Received: from localhost (c-1c3670d5.07-21-73746f28.bbcust.telenor.se. [213.112.54.28])
-        by smtp.gmail.com with ESMTPSA id r24sm124610ljb.72.2019.06.06.02.47.21
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 06 Jun 2019 02:47:21 -0700 (PDT)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     airlied@linux.ie, daniel@ffwll.ch, a.hajda@samsung.com,
-        mchehab@kernel.org
-Cc:     andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        marex@denx.de, stefan@agner.ch, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, b.zolnierkie@samsung.com,
-        p.zabel@pengutronix.de, hkallweit1@gmail.com, lee.jones@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-media@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH 4/8] drivers: media: i2c: fix warning same module names
-Date:   Thu,  6 Jun 2019 11:47:17 +0200
-Message-Id: <20190606094717.23766-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.20.1
+        id S1728318AbfFFJxk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Jun 2019 05:53:40 -0400
+Received: from gofer.mess.org ([88.97.38.141]:32803 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727971AbfFFJxj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 6 Jun 2019 05:53:39 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id BD8F9601E6; Thu,  6 Jun 2019 10:53:37 +0100 (BST)
+Date:   Thu, 6 Jun 2019 10:53:37 +0100
+From:   Sean Young <sean@mess.org>
+To:     A Sun <as1033x@comcast.net>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@osg.samsung.com>
+Subject: Re: [PATCH v1 3/3] [media] mceusb: Show USB halt/stall error recovery
+Message-ID: <20190606095337.jfhmc6jqgyhmxn4q@gofer.mess.org>
+References: <999ae5cd-d72b-983f-2f96-5aaca72e8214@comcast.net>
+ <43f4ef6e-2c64-cd7a-26f7-3c1309b68936@comcast.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43f4ef6e-2c64-cd7a-26f7-3c1309b68936@comcast.net>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When building with CONFIG_VIDEO_ADV7511 and CONFIG_DRM_I2C_ADV7511
-enabled as loadable modules, we see the following warning:
+On Sat, Jun 01, 2019 at 07:35:09PM -0400, A Sun wrote:
+> Update dev_err() messages to report status (including success) for each
+> step of USB RX HALT and TX HALT error recovery. If error recovery fails,
+> show the message:
+>         stuck RX HALT state requires USB Reset Device to clear
+> or
+>         stuck TX HALT state requires USB Reset Device to clear
+> 
+> This and related message revisions pertain to functions:
+>         mceusb_defer_kevent()           error handler dispatcher
+>         mceusb_deferred_kevent()        error handler itself
+> 
+> This patch just affects RX and TX HALT error handling and recovery
+> reporting.
+> 
+> A possible future patch may enable the mceusb driver to attempt
+> itself usb_reset_device() when necessary.
+> 
+> ---
+> 
+> As seen on very rare occasions with mceusb device 2304:0225
+>         [59388.696941] mceusb 1-1.1.2:1.0: Error: urb status = -32 (RX HALT)
+>         [59388.698838] mceusb 1-1.1.2:1.0: rx clear halt error -32
+> the device can get into RX or TX HALT state where usb_clear_halt()
+> also fails and also returns -EPIPE (HALT/STALL). After which,
+> all further mceusb device control and data I/O fails with HALT/STALL.
+> Cause and problem replication conditions are still unknown.
+> 
+> As seen in https://ubuntuforums.org/showthread.php?t=2406882
+>         ...
+>         mceusb 2-1.4:1.0: Error: urb status = -32 (RX HALT)
+>         ...
+> for an unknown mceusb device, usb_clear_halt() apparently can return
+> false success. After which, RX HALT immediately reoccurs resulting in
 
-warning: same module names found:
-  drivers/gpu/drm/bridge/adv7511/adv7511.ko
-  drivers/media/i2c/adv7511.ko
+I'm having trouble understanding this. usb_clear_halt() returns an int.
+Do you mean usb_clear_halt() returns 0? 
 
-Rework so the names matches the config fragment.
+> a RX halt and clear halt infinite loop and message flooding. Again,
+> cause and problem replication conditions remain unknown.
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
-This is only one issue that have been addressed.
-The other issue is that itseems to refer to the same device name in
-i2c_device_id, any guidance how that should be solved?
+So usb_clear_halt() returns 0 yet after the next usb_submit_urb() 
+the completion function gets -EPIPE again?
+
+Are you trying to address this problem in this patch or just the error
+reporting? If you're trying to change the error reporting then there is
+no reason to move code around like you have.
+
+> 
+> After observing a rx clear halt fault with mceusb 2304:0225, further
+> troubleshooting reveals usb_reset_device() is able to restore device
+> functionality.
+>         $ lsusb
+>         Bus 001 Device 010: ID 2304:0225 Pinnacle Systems, Inc. Remote Kit Infrared Transceiver
+>         ...
+>         $ sudo ./usbreset /dev/bus/usb/001/010  # ioctl(fd, USBDEVFS_RESET, 0);
+>         Resetting USB device /dev/bus/usb/001/010
+>         Reset successful
+>         $ dmesg
+>         ...
+>         [272392.540679] usb 1-1.2.7: reset full-speed USB device number 10 using dwc_otg
+>         [272392.676616] Registered IR keymap rc-rc6-mce
+>         ...
+>         [272392.678313] rc rc0: lirc_dev: driver ir-lirc-codec (mceusb) registered at minor = 0
+
+Note the ir-lirc-codec. This is a pre-4.16 kernel. 
+
+>         [272392.678616] mceusb 1-1.2.7:1.0: long-range (0x1) receiver active
+>         [272392.940671] mceusb 1-1.2.7:1.0: Registered Pinnacle Systems PCTV Remote USB with mce emulator interface version 1
+>         [272392.940687] mceusb 1-1.2.7:1.0: 2 tx ports (0x3 cabled) and 2 rx sensors (0x1 active)
 
 
-Cheers,
-Anders
+>         ...
+> 
+> Additional findings are "modprobe -r mceusb" and "modprobe mceusb"
+> are unable to clear stuck RX or TX HALT state.
+> Attempts to call usb_reset_endpoint() and usb_reset_configuration()
+> from within the mceusb driver also did not clear stuck HALTs.
+> 
+> A possible future patch could have the mceusb call usb_reset_device()
+> on itself, when necessary. Limiting the number of HALT error recovery
+> attempts may also be necessary to prevent halt/clear-halt loops.
+> 
+> Unresolved for now, deadlock complications occur if mceusb's worker
+> thread, mceusb_deferred_kevent(), calls usb_reset_device(),
+> which calls mceusb_dev_disconnect(), which calls cancel_work_sync(),
+> which waits on the still active worker thread.
 
- drivers/gpu/drm/bridge/adv7511/Makefile | 10 +++++-----
- drivers/media/i2c/Makefile              |  3 ++-
- 2 files changed, 7 insertions(+), 6 deletions(-)
+I think you can call usb_lock_device_for_reset() to prevent that problem.
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/Makefile b/drivers/gpu/drm/bridge/adv7511/Makefile
-index b46ebeb35fd4..e367426bd73e 100644
---- a/drivers/gpu/drm/bridge/adv7511/Makefile
-+++ b/drivers/gpu/drm/bridge/adv7511/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
--adv7511-y := adv7511_drv.o
--adv7511-$(CONFIG_DRM_I2C_ADV7511_AUDIO) += adv7511_audio.o
--adv7511-$(CONFIG_DRM_I2C_ADV7511_CEC) += adv7511_cec.o
--adv7511-$(CONFIG_DRM_I2C_ADV7533) += adv7533.o
--obj-$(CONFIG_DRM_I2C_ADV7511) += adv7511.o
-+drm-i2c-adv7511-y := adv7511_drv.o
-+drm-i2c-adv7511-$(CONFIG_DRM_I2C_ADV7511_AUDIO) += adv7511_audio.o
-+drm-i2c-adv7511-$(CONFIG_DRM_I2C_ADV7511_CEC) += adv7511_cec.o
-+drm-i2c-adv7511-$(CONFIG_DRM_I2C_ADV7533) += adv7533.o
-+obj-$(CONFIG_DRM_I2C_ADV7511) += drm-i2c-adv7511.o
-diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-index d8ad9dad495d..b71a427a89fd 100644
---- a/drivers/media/i2c/Makefile
-+++ b/drivers/media/i2c/Makefile
-@@ -35,7 +35,8 @@ obj-$(CONFIG_VIDEO_ADV748X) += adv748x/
- obj-$(CONFIG_VIDEO_ADV7604) += adv7604.o
- obj-$(CONFIG_VIDEO_ADV7842) += adv7842.o
- obj-$(CONFIG_VIDEO_AD9389B) += ad9389b.o
--obj-$(CONFIG_VIDEO_ADV7511) += adv7511.o
-+obj-$(CONFIG_VIDEO_ADV7511) += video-adv7511.o
-+video-adv7511-objs          := adv7511.o
- obj-$(CONFIG_VIDEO_VPX3220) += vpx3220.o
- obj-$(CONFIG_VIDEO_VS6624)  += vs6624.o
- obj-$(CONFIG_VIDEO_BT819) += bt819.o
--- 
-2.20.1
+It would be nice to see this implemented too.
 
+> 
+> Signed-off-by: A Sun <as1033x@comcast.net>
+> ---
+>  drivers/media/rc/mceusb.c | 35 +++++++++++++++++++++++++----------
+>  1 file changed, 25 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/media/rc/mceusb.c b/drivers/media/rc/mceusb.c
+> index efffb1795..5d81ccafc 100644
+> --- a/drivers/media/rc/mceusb.c
+> +++ b/drivers/media/rc/mceusb.c
+> @@ -765,7 +765,7 @@ static void mceusb_defer_kevent(struct mceusb_dev *ir, int kevent)
+>  {
+>  	set_bit(kevent, &ir->kevent_flags);
+>  	if (!schedule_work(&ir->kevent))
+> -		dev_err(ir->dev, "kevent %d may have been dropped", kevent);
+> +		dev_dbg(ir->dev, "kevent %d already scheduled", kevent);
+>  	else
+>  		dev_dbg(ir->dev, "kevent %d scheduled", kevent);
+>  }
+> @@ -1404,19 +1404,26 @@ static void mceusb_deferred_kevent(struct work_struct *work)
+>  		container_of(work, struct mceusb_dev, kevent);
+>  	int status;
+>  
+> +	dev_info(ir->dev, "kevent handler called (flags 0x%lx)",
+> +		 ir->kevent_flags);
+> +
+>  	if (test_bit(EVENT_RX_HALT, &ir->kevent_flags)) {
+>  		usb_unlink_urb(ir->urb_in);
+>  		status = usb_clear_halt(ir->usbdev, ir->pipe_in);
+> +		dev_err(ir->dev, "rx clear halt status = %d", status);
+>  		if (status < 0) {
+> -			dev_err(ir->dev, "rx clear halt error %d",
+> -				status);
+> -		}
+> -		clear_bit(EVENT_RX_HALT, &ir->kevent_flags);
+> -		if (status == 0) {
+> +			/*
+> +			 * Unable to clear RX stall/halt.
+> +			 * Will need to call usb_reset_device().
+> +			 */
+> +			dev_err(ir->dev,
+> +				"stuck RX HALT state requires USB Reset Device to clear");
+
+Here you say if the usb_clear_halt() returns < 0 then we're in the bad
+code path. But in this code path, we're not re-submitting the urb so
+we wouldn't end up in an infinite loop.
+
+
+> +		} else {
+> +			clear_bit(EVENT_RX_HALT, &ir->kevent_flags);
+
+Why have you moved this line?
+
+>  			status = usb_submit_urb(ir->urb_in, GFP_KERNEL);
+>  			if (status < 0) {
+>  				dev_err(ir->dev,
+> -					"rx unhalt submit urb error %d",
+> +					"rx unhalt submit urb error = %d",
+>  					status);
+>  			}
+>  		}
+
+I don't understand how this code change has changed anything. In the existing
+code and the patch code the urb only gets re-submitted if usb_clear_halt()
+succeeds.
+
+> @@ -1424,9 +1431,17 @@ static void mceusb_deferred_kevent(struct work_struct *work)
+>  
+>  	if (test_bit(EVENT_TX_HALT, &ir->kevent_flags)) {
+>  		status = usb_clear_halt(ir->usbdev, ir->pipe_out);
+> -		if (status < 0)
+> -			dev_err(ir->dev, "tx clear halt error %d", status);
+> -		clear_bit(EVENT_TX_HALT, &ir->kevent_flags);
+> +		dev_err(ir->dev, "tx clear halt status = %d", status);
+> +		if (status < 0) {
+> +			/*
+> +			 * Unable to clear TX stall/halt.
+> +			 * Will need to call usb_reset_device().
+> +			 */
+> +			dev_err(ir->dev,
+> +				"stuck TX HALT state requires USB Reset Device to clear");
+> +		} else {
+> +			clear_bit(EVENT_TX_HALT, &ir->kevent_flags);
+> +		}
+>  	}
+>  }
+>  
+> -- 
+> 2.11.0
