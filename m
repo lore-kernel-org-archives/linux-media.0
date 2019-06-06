@@ -2,91 +2,84 @@ Return-Path: <SRS0=7IOK=UF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A017C28EB4
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 16:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62D9FC04AB5
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 17:36:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C00C20693
-	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 16:55:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32C4A2083D
+	for <linux-media@archiver.kernel.org>; Thu,  6 Jun 2019 17:36:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729733AbfFFQzo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 6 Jun 2019 12:55:44 -0400
-Received: from 7.mo2.mail-out.ovh.net ([188.165.48.182]:52455 "EHLO
-        7.mo2.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728718AbfFFQzo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 12:55:44 -0400
-X-Greylist: delayed 2401 seconds by postgrey-1.27 at vger.kernel.org; Thu, 06 Jun 2019 12:55:43 EDT
-Received: from player697.ha.ovh.net (unknown [10.109.160.230])
-        by mo2.mail-out.ovh.net (Postfix) with ESMTP id B954219E389
-        for <linux-media@vger.kernel.org>; Thu,  6 Jun 2019 17:39:41 +0200 (CEST)
-Received: from armadeus.com (lfbn-1-7591-179.w90-126.abo.wanadoo.fr [90.126.248.179])
-        (Authenticated sender: sebastien.szymanski@armadeus.com)
-        by player697.ha.ovh.net (Postfix) with ESMTPSA id 20984697A803;
-        Thu,  6 Jun 2019 15:39:22 +0000 (UTC)
-From:   =?UTF-8?q?S=C3=A9bastien=20Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-To:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        =?UTF-8?q?S=C3=A9bastien=20Szymanski?= 
-        <sebastien.szymanski@armadeus.com>
-Subject: [PATCH v2 3/3] media: dt-bindings: imx7-csi: add i.MX6UL/L support
-Date:   Thu,  6 Jun 2019 17:38:25 +0200
-Message-Id: <20190606153825.8183-3-sebastien.szymanski@armadeus.com>
-X-Mailer: git-send-email 2.19.2
-In-Reply-To: <20190606153825.8183-1-sebastien.szymanski@armadeus.com>
-References: <20190606153825.8183-1-sebastien.szymanski@armadeus.com>
+        id S1730198AbfFFRgs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 6 Jun 2019 13:36:48 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:59748 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730192AbfFFRgs (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 6 Jun 2019 13:36:48 -0400
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9A5DC2605F9;
+        Thu,  6 Jun 2019 18:36:47 +0100 (BST)
+Date:   Thu, 6 Jun 2019 19:36:44 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>,
+        kernel@collabora.com
+Subject: Re: [PATCH v3 1/2] media: v4l2-ctrl: Initialize _BUTTON and
+ _CTRL_CLASS
+Message-ID: <20190606193644.767f5246@collabora.com>
+In-Reply-To: <20190606161254.17311-1-ezequiel@collabora.com>
+References: <20190606161254.17311-1-ezequiel@collabora.com>
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 3728136069398615236
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduuddrudeggedgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document "fsl,imx6ul-csi" entry.
+On Thu,  6 Jun 2019 13:12:53 -0300
+Ezequiel Garcia <ezequiel@collabora.com> wrote:
 
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
----
+> These two control types don't really need a default value,
+> as they are not expected to carry any value.
+> 
+> However, it's slightly clearer to initialize them explicitly
+> instead of falling back to the switch default.
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 
-Changes for v2:
- - New patch to document new "fsl,imx6ul-csi" entry.
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
 
- Documentation/devicetree/bindings/media/imx7-csi.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/media/imx7-csi.txt b/Documentation/devicetree/bindings/media/imx7-csi.txt
-index 3c07bc676bc3..49e9af19b3ea 100644
---- a/Documentation/devicetree/bindings/media/imx7-csi.txt
-+++ b/Documentation/devicetree/bindings/media/imx7-csi.txt
-@@ -9,7 +9,7 @@ to connect directly to external CMOS image sensors.
- 
- Required properties:
- 
--- compatible    : "fsl,imx7-csi";
-+- compatible    : "fsl,imx7-csi" or "fsl,imx6ul-csi";
- - reg           : base address and length of the register set for the device;
- - interrupts    : should contain CSI interrupt;
- - clocks        : list of clock specifiers, see
--- 
-2.19.2
+> ---
+> Changes from v2:
+> * Initialize the controls to zero, instead of default.
+> 
+> Changes from v1:
+> * No change.
+> ---
+>  drivers/media/v4l2-core/v4l2-ctrls.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+> index 1870cecad9ae..92a5521f6813 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+> @@ -1532,6 +1532,10 @@ static void std_init(const struct v4l2_ctrl *ctrl, u32 idx,
+>  	case V4L2_CTRL_TYPE_BOOLEAN:
+>  		ptr.p_s32[idx] = ctrl->default_value;
+>  		break;
+> +	case V4L2_CTRL_TYPE_BUTTON:
+> +	case V4L2_CTRL_TYPE_CTRL_CLASS:
+> +		ptr.p_s32[idx] = 0;
+> +		break;
+>  	case V4L2_CTRL_TYPE_U8:
+>  		ptr.p_u8[idx] = ctrl->default_value;
+>  		break;
 
