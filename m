@@ -7,63 +7,64 @@ X-Spam-Status: No, score=-9.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F86CC468BD
-	for <linux-media@archiver.kernel.org>; Sun,  9 Jun 2019 14:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C795C28EBD
+	for <linux-media@archiver.kernel.org>; Sun,  9 Jun 2019 14:38:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 663DF208C0
-	for <linux-media@archiver.kernel.org>; Sun,  9 Jun 2019 14:38:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14A2B20652
+	for <linux-media@archiver.kernel.org>; Sun,  9 Jun 2019 14:38:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="qQtE5FBZ"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="atWxPP4k"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728885AbfFIOi1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 9 Jun 2019 10:38:27 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:34522 "EHLO
+        id S1728888AbfFIOi2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 9 Jun 2019 10:38:28 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:44709 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728534AbfFIOi1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 9 Jun 2019 10:38:27 -0400
-Received: by mail-wr1-f68.google.com with SMTP id e16so6632472wrn.1
-        for <linux-media@vger.kernel.org>; Sun, 09 Jun 2019 07:38:26 -0700 (PDT)
+        with ESMTP id S1728628AbfFIOi2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 9 Jun 2019 10:38:28 -0400
+Received: by mail-wr1-f68.google.com with SMTP id b17so6582686wrq.11
+        for <linux-media@vger.kernel.org>; Sun, 09 Jun 2019 07:38:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=D7Oj4se8zl+NJx3YkAtsQsr0NdSieA+H2NUxJiLn6qY=;
-        b=qQtE5FBZUWMtl/GtcgkdHhTCQuWjTkjdAwQNlq/VawTnKF/93O05ofWYkcVUz6jXy5
-         sKjbZL61yjAhcyNoGW0nACLRyhFIzRKVar5Wm7eBj/duoPNOoH0UIMcJI/b5VaSwl3wJ
-         QN5QxeaOUMkXSNHEYOw40Q6GKViuVBpVi/02U6TmStVhuyHsTVWDnsgYC8gz0jiJv1NK
-         PRb493Kk5CfGb7W9+0vrvxdThrgjVXWFr33FdYDwCVjdnVYWa+jBkHjM9sb8/Nzo0DQ5
-         qJ44g8cHJvK5UwE98jsDsS6TU06xXE5tAylTZh9sHrFf5LH9u/2tsREKtA0LZtweal3T
-         SOBg==
+        bh=qMRVP7C/IdJ8PZCV/MlCO/BDw6sh0m9vXzahS116MSs=;
+        b=atWxPP4kELwL4yZgzLbyJLp3x659utUHJmna+2V4oZY1n0Nm++gR+oRFWlEP6QnEux
+         Ix2MmAhUN3dKzIx9aFXnJ7AoUGbXXFmJAJuHz1OlsJfAyXR+SLfH8BW5ZznAs6Q63df7
+         1g55Nb85VeVs7jQsUEsPwSlS55mtU3WGCp1PtwdnhANFK66R1V8z2sOoQfQFuTre6j5s
+         P+riUZGmTRkq9tRMSNpLoRcU4nmzMiTzs/nq8Q7wLMtRGINg14PeU1POT1Al+00mNqrm
+         V+ahAIL5b4lHnImrZoaBA9EPXS01sytbiCzeuPBb3yLGS9HK7DUlaLLsxmf7mz2Z33Dn
+         4CMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=D7Oj4se8zl+NJx3YkAtsQsr0NdSieA+H2NUxJiLn6qY=;
-        b=AWg9Q/cHxrQpzk58is1uzPrpfElEOKSw5LR5tVbenW52RnPTo502cvRU3Zj66tMMis
-         MznOeac1PfeM6JSyKXmVHHOXuQoSmCPUxapT0Qk3AUI1O9cduNXab+KVcHyPJvLrjn7r
-         XwhLeEp9V9TnY6GQtkHrz/d2igF/p7RYJCun3Kq63xP8DHVOfn+P39Dqnc67v3HAkkSn
-         8GoSaH36kRCbRff7/k7JE2jmCq1CU8+InJ6YJHdZkZ7otMYV0fQTqqeGVOZ8KVjW9UOx
-         B2VPfggvN1rPVAD8yW/yRR/dI9sH5MCCVNwQSG5ApvKWhKXFBOZZ8e7xHsLlxvJqjZ0z
-         YHnw==
-X-Gm-Message-State: APjAAAU/4lGVrF1yDPhI8hZI+fU0DJ8IldShw6wAJhsyE7RL5fH1i7Tp
-        WM4LcnGlbb3lXu4a+bUIlYrRJQ==
-X-Google-Smtp-Source: APXvYqzFtLgp4TQi2A/SR/UYnBIjYWacMyORchtKYAawLRYmeIkGKNjwXfoXQaPRYoUCLJd8/JMCUw==
-X-Received: by 2002:a5d:6b49:: with SMTP id x9mr24708793wrw.170.1560091105423;
-        Sun, 09 Jun 2019 07:38:25 -0700 (PDT)
+        bh=qMRVP7C/IdJ8PZCV/MlCO/BDw6sh0m9vXzahS116MSs=;
+        b=n+9M7MBx31FamUJqoBqT1QmlFNscpL5YS0H+E3OjZN1vPr1Hmlw9yVjngEuWrjYo7r
+         TMzNPK9XmtuXheyORMQrnvOawCGwKgbXlBKMTwfeM0SCNIc02Z6kq7fdOrp0MjjFgqho
+         7kNrhR56nJyfnDKdGTgsxzVR9KcPxC+OaPUsgYIpAa9AXP2p1aT6kx1+3wWlw2rEIZFS
+         B8bYkF+YKiQqrNiqI1sCpHL7AL6Z6juOEjBdzkEAdzUOLeufBQ+qvJ93RI2Utb9vUQDc
+         WJ86TYmGeXXzB2hZO3HGpU0Xga9N7qkUaUZQ/03tlukWNur6xNfAao/sp+WnIjkGpzv4
+         moPQ==
+X-Gm-Message-State: APjAAAXJAO4DW6WnbflwSLomBdg5GgTVe08U0XgzeiyT9rCjKI4O810F
+        iWM6rpAfJILp7ypt3KmP3ZzSVw==
+X-Google-Smtp-Source: APXvYqxQHwKbI9iBfoXhJCIlVBx0GsDju4gY8jXwjkQ+Ec2HwAZ4L/Gx58bk55XaOY+hRS74pE2kqQ==
+X-Received: by 2002:a5d:43d0:: with SMTP id v16mr39530296wrr.252.1560091107003;
+        Sun, 09 Jun 2019 07:38:27 -0700 (PDT)
 Received: from mjourdan-pc.numericable.fr (abo-99-183-68.mtp.modulonet.fr. [85.68.183.99])
-        by smtp.gmail.com with ESMTPSA id c17sm6047713wrv.82.2019.06.09.07.38.24
+        by smtp.gmail.com with ESMTPSA id c17sm6047713wrv.82.2019.06.09.07.38.26
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 09 Jun 2019 07:38:24 -0700 (PDT)
+        Sun, 09 Jun 2019 07:38:26 -0700 (PDT)
 From:   Maxime Jourdan <mjourdan@baylibre.com>
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+To:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
         Hans Verkuil <hans.verkuil@cisco.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Tomasz Figa <tfiga@chromium.org>
-Subject: [RFC PATCH 2/5] media: venus: vdec: flag OUTPUT formats with V4L2_FMT_FLAG_DYN_RESOLUTION
-Date:   Sun,  9 Jun 2019 16:38:17 +0200
-Message-Id: <20190609143820.4662-3-mjourdan@baylibre.com>
+Subject: [RFC PATCH 4/5] media: mtk-vcodec: flag OUTPUT formats with V4L2_FMT_FLAG_DYN_RESOLUTION
+Date:   Sun,  9 Jun 2019 16:38:19 +0200
+Message-Id: <20190609143820.4662-5-mjourdan@baylibre.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190609143820.4662-1-mjourdan@baylibre.com>
 References: <20190609143820.4662-1-mjourdan@baylibre.com>
@@ -74,92 +75,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Tag all the coded formats where the venus vdec supports dynamic
+Tag all the coded formats where the mtk-vcodec decoder supports dynamic
 resolution switching.
 
 Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
 ---
- drivers/media/platform/qcom/venus/core.h |  1 +
- drivers/media/platform/qcom/venus/vdec.c | 11 +++++++++++
- 2 files changed, 12 insertions(+)
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c | 4 ++++
+ drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 7a3feb5cee00..74eb42668627 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -55,6 +55,7 @@ struct venus_format {
- 	u32 pixfmt;
- 	unsigned int num_planes;
- 	u32 type;
-+	u32 flags;
- };
- 
- #define MAX_PLANES		4
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 2a47b9b8c5bc..8aabc23966b8 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -46,42 +46,52 @@ static const struct venus_format vdec_formats[] = {
- 		.pixfmt = V4L2_PIX_FMT_MPEG4,
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+index aee1ddc35de4..0a7e75de56cd 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
+@@ -24,16 +24,19 @@ static const struct mtk_video_fmt mtk_video_formats[] = {
+ 		.fourcc = V4L2_PIX_FMT_H264,
+ 		.type = MTK_FMT_DEC,
  		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_MPEG2,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_H263,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_H264,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_VP8,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_VP9,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_XVID,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_HEVC,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
 +		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
  	},
- };
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_VP8,
+ 		.type = MTK_FMT_DEC,
+ 		.num_planes = 1,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	},
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_VP9,
+ 		.type = MTK_FMT_DEC,
+ 		.num_planes = 1,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	},
+ 	{
+ 		.fourcc = V4L2_PIX_FMT_MT21C,
+@@ -943,6 +946,7 @@ static int vidioc_enum_fmt(struct v4l2_fmtdesc *f, bool output_queue)
  
-@@ -360,6 +370,7 @@ static int vdec_enum_fmt(struct file *file, void *fh, struct v4l2_fmtdesc *f)
- 		return -EINVAL;
- 
- 	f->pixelformat = fmt->pixfmt;
+ 	fmt = &mtk_video_formats[i];
+ 	f->pixelformat = fmt->fourcc;
 +	f->flags = fmt->flags;
  
  	return 0;
  }
+diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+index 7306aeabe229..e9b5322973e1 100644
+--- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+@@ -94,6 +94,7 @@ struct mtk_video_fmt {
+ 	u32	fourcc;
+ 	enum mtk_fmt_type	type;
+ 	u32	num_planes;
++	u32	flags;
+ };
+ 
+ /**
 -- 
 2.21.0
 
