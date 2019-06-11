@@ -6,23 +6,23 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A115C43218
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 12:51:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA4D9C4321D
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 12:51:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6173B20896
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 12:51:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B3C020896
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 12:51:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388722AbfFKMvE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Jun 2019 08:51:04 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50565 "EHLO
+        id S2389228AbfFKMvO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Jun 2019 08:51:14 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48407 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388160AbfFKMvE (ORCPT
+        with ESMTP id S2387963AbfFKMvE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 11 Jun 2019 08:51:04 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.89)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hagEw-00077w-SO; Tue, 11 Jun 2019 14:51:02 +0200
+        id 1hagEw-00077w-P5; Tue, 11 Jun 2019 14:51:02 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -32,9 +32,9 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH v4 07/10] media: hantro: allow arbitrary number of clocks
-Date:   Tue, 11 Jun 2019 14:50:55 +0200
-Message-Id: <20190611125058.13470-8-p.zabel@pengutronix.de>
+Subject: [PATCH v4 05/10] media: hantro: add support for named register ranges
+Date:   Tue, 11 Jun 2019 14:50:53 +0200
+Message-Id: <20190611125058.13470-6-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190611125058.13470-1-p.zabel@pengutronix.de>
 References: <20190611125058.13470-1-p.zabel@pengutronix.de>
@@ -49,128 +49,102 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Dynamically allocate clocks and move clock names out of struct
-hantro_variant. This lifts the four clock limit and allows to use
-ARRAY_SIZE() to fill .num_clocks to reduce the risk of mismatches.
+Add support for multiple register ranges with SoC specific names.
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
 ---
-Changed since v3:
- - Moved before adding i.MX8M support.
+Changes since v3 [1]:
+ - Renamed bases to reg_bases
+
+[1] https://patchwork.linuxtv.org/patch/56467/
 ---
- drivers/staging/media/hantro/hantro.h        |  6 ++----
- drivers/staging/media/hantro/hantro_drv.c    |  5 +++++
- drivers/staging/media/hantro/rk3288_vpu_hw.c |  8 ++++++--
- drivers/staging/media/hantro/rk3399_vpu_hw.c | 12 ++++++++----
- 4 files changed, 21 insertions(+), 10 deletions(-)
+ drivers/staging/media/hantro/hantro.h     |  8 ++++++--
+ drivers/staging/media/hantro/hantro_drv.c | 24 +++++++++++++++++------
+ 2 files changed, 24 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index 5c2f87272ce2..62dcca9ff19c 100644
+index d041d36a0805..e8eb747f22ef 100644
 --- a/drivers/staging/media/hantro/hantro.h
 +++ b/drivers/staging/media/hantro/hantro.h
-@@ -25,8 +25,6 @@
- 
- #include "hantro_hw.h"
- 
--#define HANTRO_MAX_CLOCKS		4
--
- #define MPEG2_MB_DIM			16
- #define MPEG2_MB_WIDTH(w)		DIV_ROUND_UP(w, MPEG2_MB_DIM)
- #define MPEG2_MB_HEIGHT(h)		DIV_ROUND_UP(h, MPEG2_MB_DIM)
-@@ -88,7 +86,7 @@ struct hantro_variant {
- 	int (*runtime_resume)(struct hantro_dev *vpu);
- 	const struct hantro_irq *irqs;
+@@ -72,6 +72,8 @@ struct hantro_irq {
+  * @num_irqs:			number of irqs in the array
+  * @clk_names:			array of clock names
+  * @num_clocks:			number of clocks in the array
++ * @reg_names:			array of register range names
++ * @num_regs:			number of register range names in the array
+  */
+ struct hantro_variant {
+ 	unsigned int enc_offset;
+@@ -88,6 +90,8 @@ struct hantro_variant {
  	int num_irqs;
--	const char *clk_names[HANTRO_MAX_CLOCKS];
-+	const char * const *clk_names;
+ 	const char *clk_names[HANTRO_MAX_CLOCKS];
  	int num_clocks;
- 	const char * const *reg_names;
- 	int num_regs;
-@@ -182,7 +180,7 @@ struct hantro_dev {
- 	struct hantro_func *decoder;
++	const char * const *reg_names;
++	int num_regs;
+ };
+ 
+ /**
+@@ -160,7 +164,7 @@ hantro_vdev_to_func(struct video_device *vdev)
+  * @dev:		Pointer to device for convenient logging using
+  *			dev_ macros.
+  * @clocks:		Array of clock handles.
+- * @base:		Mapped address of VPU registers.
++ * @reg_bases:		Mapped addresses of VPU registers.
+  * @enc_base:		Mapped address of VPU encoder register for convenience.
+  * @dec_base:		Mapped address of VPU decoder register for convenience.
+  * @vpu_mutex:		Mutex to synchronize V4L2 calls.
+@@ -178,7 +182,7 @@ struct hantro_dev {
  	struct platform_device *pdev;
  	struct device *dev;
--	struct clk_bulk_data clocks[HANTRO_MAX_CLOCKS];
-+	struct clk_bulk_data *clocks;
- 	void __iomem **reg_bases;
+ 	struct clk_bulk_data clocks[HANTRO_MAX_CLOCKS];
+-	void __iomem *base;
++	void __iomem **reg_bases;
  	void __iomem *enc_base;
  	void __iomem *dec_base;
+ 
 diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index fa933960687d..d1f061dd8ede 100644
+index 4507a5e87fee..fa933960687d 100644
 --- a/drivers/staging/media/hantro/hantro_drv.c
 +++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -688,6 +688,11 @@ static int hantro_probe(struct platform_device *pdev)
+@@ -671,6 +671,7 @@ static int hantro_probe(struct platform_device *pdev)
+ 	const struct of_device_id *match;
+ 	struct hantro_dev *vpu;
+ 	struct resource *res;
++	int num_bases;
+ 	int i, ret;
  
- 	INIT_DELAYED_WORK(&vpu->watchdog_work, hantro_watchdog);
+ 	vpu = devm_kzalloc(&pdev->dev, sizeof(*vpu), GFP_KERNEL);
+@@ -694,12 +695,23 @@ static int hantro_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
  
-+	vpu->clocks = devm_kcalloc(&pdev->dev, vpu->variant->num_clocks,
-+				   sizeof(*vpu->clocks), GFP_KERNEL);
-+	if (!vpu->clocks)
+-	res = platform_get_resource(vpu->pdev, IORESOURCE_MEM, 0);
+-	vpu->base = devm_ioremap_resource(vpu->dev, res);
+-	if (IS_ERR(vpu->base))
+-		return PTR_ERR(vpu->base);
+-	vpu->enc_base = vpu->base + vpu->variant->enc_offset;
+-	vpu->dec_base = vpu->base + vpu->variant->dec_offset;
++	num_bases = vpu->variant->num_regs ?: 1;
++	vpu->reg_bases = devm_kcalloc(&pdev->dev, num_bases,
++				      sizeof(*vpu->reg_bases), GFP_KERNEL);
++	if (!vpu->reg_bases)
 +		return -ENOMEM;
 +
- 	for (i = 0; i < vpu->variant->num_clocks; i++)
- 		vpu->clocks[i].id = vpu->variant->clk_names[i];
- 	ret = devm_clk_bulk_get(&pdev->dev, vpu->variant->num_clocks,
-diff --git a/drivers/staging/media/hantro/rk3288_vpu_hw.c b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-index c5473bc1ac29..bcacc4f51093 100644
---- a/drivers/staging/media/hantro/rk3288_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rk3288_vpu_hw.c
-@@ -166,6 +166,10 @@ static const struct hantro_irq rk3288_irqs[] = {
- 	{ "vdpu", rk3288_vdpu_irq },
- };
++	for (i = 0; i < num_bases; i++) {
++		res = vpu->variant->reg_names ?
++		      platform_get_resource_byname(vpu->pdev, IORESOURCE_MEM,
++						   vpu->variant->reg_names[i]) :
++		      platform_get_resource(vpu->pdev, IORESOURCE_MEM, 0);
++		vpu->reg_bases[i] = devm_ioremap_resource(vpu->dev, res);
++		if (IS_ERR(vpu->reg_bases[i]))
++			return PTR_ERR(vpu->reg_bases[i]);
++	}
++	vpu->enc_base = vpu->reg_bases[0] + vpu->variant->enc_offset;
++	vpu->dec_base = vpu->reg_bases[0] + vpu->variant->dec_offset;
  
-+static const char * const rk3288_clk_names[] = {
-+	"aclk", "hclk"
-+};
-+
- const struct hantro_variant rk3288_vpu_variant = {
- 	.enc_offset = 0x0,
- 	.enc_fmts = rk3288_vpu_enc_fmts,
-@@ -178,6 +182,6 @@ const struct hantro_variant rk3288_vpu_variant = {
- 	.irqs = rk3288_irqs,
- 	.num_irqs = ARRAY_SIZE(rk3288_irqs),
- 	.init = rk3288_vpu_hw_init,
--	.clk_names = {"aclk", "hclk"},
--	.num_clocks = 2
-+	.clk_names = rk3288_clk_names,
-+	.num_clocks = ARRAY_SIZE(rk3288_clk_names)
- };
-diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw.c b/drivers/staging/media/hantro/rk3399_vpu_hw.c
-index fc52bedf3665..f8400e49bc50 100644
---- a/drivers/staging/media/hantro/rk3399_vpu_hw.c
-+++ b/drivers/staging/media/hantro/rk3399_vpu_hw.c
-@@ -165,6 +165,10 @@ static const struct hantro_irq rk3399_irqs[] = {
- 	{ "vdpu", rk3399_vdpu_irq },
- };
- 
-+static const char * const rk3399_clk_names[] = {
-+	"aclk", "hclk"
-+};
-+
- const struct hantro_variant rk3399_vpu_variant = {
- 	.enc_offset = 0x0,
- 	.enc_fmts = rk3399_vpu_enc_fmts,
-@@ -177,8 +181,8 @@ const struct hantro_variant rk3399_vpu_variant = {
- 	.irqs = rk3399_irqs,
- 	.num_irqs = ARRAY_SIZE(rk3399_irqs),
- 	.init = rk3399_vpu_hw_init,
--	.clk_names = {"aclk", "hclk"},
--	.num_clocks = 2
-+	.clk_names = rk3399_clk_names,
-+	.num_clocks = ARRAY_SIZE(rk3399_clk_names)
- };
- 
- static const struct hantro_irq rk3328_irqs[] = {
-@@ -194,6 +198,6 @@ const struct hantro_variant rk3328_vpu_variant = {
- 	.irqs = rk3328_irqs,
- 	.num_irqs = ARRAY_SIZE(rk3328_irqs),
- 	.init = rk3399_vpu_hw_init,
--	.clk_names = {"aclk", "hclk"},
--	.num_clocks = 2
-+	.clk_names = rk3399_clk_names,
-+	.num_clocks = ARRAY_SIZE(rk3399_clk_names),
- };
+ 	ret = dma_set_coherent_mask(vpu->dev, DMA_BIT_MASK(32));
+ 	if (ret) {
 -- 
 2.20.1
 
