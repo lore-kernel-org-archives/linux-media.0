@@ -2,380 +2,589 @@ Return-Path: <SRS0=r2j8=UK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH autolearn=ham autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,T_DKIMWL_WL_HIGH autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F348C43218
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 11:56:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DB25C4321B
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 12:11:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 04F12212F5
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 11:56:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B743B212F5
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 12:11:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="dtTNVQMw"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="L7nCFWvd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403779AbfFKL45 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Jun 2019 07:56:57 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:57643 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389499AbfFKL4z (ORCPT
+        id S2404623AbfFKMLH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Jun 2019 08:11:07 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:35741 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390121AbfFKMLH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Jun 2019 07:56:55 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20190611115652euoutp0157ecb80574d88f0f5ae02994b12d8a9a~nIvCq80-x1967919679euoutp01o
-        for <linux-media@vger.kernel.org>; Tue, 11 Jun 2019 11:56:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20190611115652euoutp0157ecb80574d88f0f5ae02994b12d8a9a~nIvCq80-x1967919679euoutp01o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1560254213;
-        bh=de7jhGNZRZuNo1UqYYANESkFYlezoNkhrV5uY5tfa1Q=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=dtTNVQMwtd6X2i6cD6Em9gZjZuyWGZc6DUAZJagGV8G4FDGMZE3OfIBkyILLm7lzr
-         bCNS2LWzxi2fEZw7QYFtsEBvN2CqzhCh0CJKgSCs1tRR5D3ztUl8PwBcCNrkFxnxk7
-         ln5VTI0OpF9fZGSipSRGpVWhwCOyMtcPoTO1E7jI=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20190611115652eucas1p12926f59ba5c205fa3430a51c013d1de5~nIvCSonUK2678726787eucas1p1a;
-        Tue, 11 Jun 2019 11:56:52 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id BF.40.04377.4079FFC5; Tue, 11
-        Jun 2019 12:56:52 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20190611115651eucas1p19245e653642884f8c93530720adc128d~nIvBjnM2F2544625446eucas1p1k;
-        Tue, 11 Jun 2019 11:56:51 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20190611115651eusmtrp168203623472f72479a3bbcb6c523f611~nIvBjH9UX2496224962eusmtrp1d;
-        Tue, 11 Jun 2019 11:56:51 +0000 (GMT)
-X-AuditID: cbfec7f4-113ff70000001119-9b-5cff97046c70
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 14.07.04146.3079FFC5; Tue, 11
-        Jun 2019 12:56:51 +0100 (BST)
-Received: from [106.120.50.25] (unknown [106.120.50.25]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20190611115651eusmtip1f1d46fcb0b30228ff06e4765a5f61150~nIvBL3wKt1260312603eusmtip1F;
-        Tue, 11 Jun 2019 11:56:51 +0000 (GMT)
-Subject: Re: [PATCH for v5.2] videobuf2-core.c: always reacquire USERPTR
- memory
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <8bf9afbb-3904-9fa0-f6ad-f0f1396c48ff@samsung.com>
-Date:   Tue, 11 Jun 2019 13:56:50 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.0
+        Tue, 11 Jun 2019 08:11:07 -0400
+Received: by mail-vs1-f68.google.com with SMTP id u124so7748776vsu.2
+        for <linux-media@vger.kernel.org>; Tue, 11 Jun 2019 05:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UKbtgnrIdKibbN6m/ISNjAfiQ8uyZzD+2my0o3GYXOw=;
+        b=L7nCFWvdLpZmzZoTD1gCquej1IS5b7Up5xy1+Wy/7TsM31L5LAa6J4hqlcbZCgdfLy
+         hY67zEQxESfd8RdwRE3tV2yfaaxq5xhmFE+Wyv+5fi2xikmsC1zjblzSakoy6R0etiQe
+         BYIdu+1I6RqfDR6rhbtc6mWY4tJmNqlY1ujoQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UKbtgnrIdKibbN6m/ISNjAfiQ8uyZzD+2my0o3GYXOw=;
+        b=YxdLq0Lv7A66n9eP6uq3Wx4vmuVUOEQGc10+nncIa2+4p9Jq6zgbqjK6k1+x0f1D0H
+         QtUUUfde6WMKMEyswSu1is4S4S1Hby1QqpXcic+LJrr+odXLwT9xczrZuUq7//iHaKrD
+         pm+dxRT4B9kVNFZn+VWteiI3c4MmtbLmXjH1B6ljDS+qb0g7yW9RE+HkWowpa1wlXVWE
+         Ih+gaKw1iaKDHeOHtkBh2zFAUco4ldU6eSTgEO9kujDLIJlhnGIZK8Od64JL8U6mkRkb
+         WaJkvdfL9Jx+o3pgZ32MpRLKlhuYXB5Mh1lrgu+LfHqcz6lDcB6fH6a5H9ERhFRAr0Di
+         cblA==
+X-Gm-Message-State: APjAAAVEO3ahGtdbNZwMkLji4f/RT/D+FfY8GhcOPuBMlDYxcQLSziNI
+        VQ370gnwtuzY+Bf0RtyQNoCaDGAXGbgO331v+lb3iA==
+X-Google-Smtp-Source: APXvYqzUa3rUdgJs4alXCWIUFMOnASopvg97r7kjN6PZcrWPLrJLxd22Tf0be4uqZpgorP7pBRn6bBp9b6RIKkBPSOo=
+X-Received: by 2002:a67:eada:: with SMTP id s26mr24853945vso.163.1560255065021;
+ Tue, 11 Jun 2019 05:11:05 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <d3bf5fe7-02ab-8c6a-a495-33459dfdcb09@xs4all.nl>
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDKsWRmVeSWpSXmKPExsWy7djP87os0//HGDS08VucmvyMyaJz4hJ2
-        i54NW1ktPp3ayWzxacs3JovPrf/YHNg8ZjdcZPGY3TGT1WPeyUCPzS+6mT0+b5LzOPX1M3sA
-        WxSXTUpqTmZZapG+XQJXxu5rP5gLPidUzP+zkqmBcY9vFyMnh4SAicTKb5cZuxi5OIQEVjBK
-        vFp1hAXC+cIocf/8CyjnM6PEl6fLgco4wFrWdAVDxJczSny7sJ8NwnnLKDH/xQkWkLnCAoES
-        92bcYgVJiAi0MUrsv3gcrIpZoJtRYv2sBawgVWwChhJdb7vYQGxeATuJ/1fWsYPYLAKqEte7
-        JjKD2KICMRJf919lhqgRlDg58wnYBk4BW4mDO3oZQWxmAXmJ5q2zmSFscYlbT+YzgSyTENjG
-        LnGq/wY7xKsuEs2f9rBA2MISr45vgYrLSJye3MMC0dDMKPHw3Fp2CKeHUeJy0wxGiCpricPH
-        L7KCQoBZQFNi/S59iLCjxJ+9B9khAcMnceOtIMQRfBKTtk1nhgjzSnS0CUFUq0nMOr4Obu3B
-        C5eYJzAqzULy2iwk78xC8s4shL0LGFlWMYqnlhbnpqcWG+WllusVJ+YWl+al6yXn525iBKah
-        0/+Of9nBuOtP0iFGAQ5GJR7eiOh/MUKsiWXFlbmHGCU4mJVEeLu+A4V4UxIrq1KL8uOLSnNS
-        iw8xSnOwKInzVjM8iBYSSE8sSc1OTS1ILYLJMnFwSjUwhu9eac/4veph3PvdnS/UWCbvbdN+
-        zh3LeTe3htuT/6GVoe/q1OgJ84V52VdY3ordufVwh2E6z5/o/v+2ZYYz5lfctXrgtjWw13Dz
-        voVaJn8NX68P9sib1/9ljd13Jr91C7ge1eyQUDF26eHxX/XC4bJWaE/2/zNXSi8FXtKM9lj0
-        VuPMwVgNJZbijERDLeai4kQAi/FAZD8DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsVy+t/xu7rM0//HGEw8qWNxavIzJovOiUvY
-        LXo2bGW1+HRqJ7PFpy3fmCw+t/5jc2DzmN1wkcVjdsdMVo95JwM9Nr/oZvb4vEnO49TXz+wB
-        bFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6Gbuv
-        /WAu+JxQMf/PSqYGxj2+XYwcHBICJhJruoK7GLk4hASWMkpcmNXE2sXICRSXkTg5rQHKFpb4
-        c62LDaLoNaNE5/SpTCAJYYFAiXszbrGCJEQE2hgl9nQ2s4A4zALdjBJHG+4zQrRcY5X4ubAT
-        bBabgKFE11uQWZwcvAJ2Ev+vrGMHsVkEVCWud01kBrFFBWIk+hpXsEDUCEqcnPkEzOYUsJU4
-        uKOXEcRmFjCTmLf5ITOELS/RvHU2lC0ucevJfKYJjEKzkLTPQtIyC0nLLCQtCxhZVjGKpJYW
-        56bnFhvqFSfmFpfmpesl5+duYgTG3bZjPzfvYLy0MfgQowAHoxIPb0T0vxgh1sSy4srcQ4wS
-        HMxKIrxd34FCvCmJlVWpRfnxRaU5qcWHGE2BnpvILCWanA9MCXkl8YamhuYWlobmxubGZhZK
-        4rwdAgdjhATSE0tSs1NTC1KLYPqYODilGhgzez89/MF2xv/I1KepnvOnzsqe9iiw4knuP2GT
-        uIKmuSc+y5yvNta+lZG4X8DD0FE0xjd4/TKTFhHXKVaSAT0fPpYFlc+8f1A7/baQ7PRVnvYS
-        uVqhRru2qnRnGlhfb9jjVeh0YEuK6tpNwV3dPextSz9IPNda8iPS2rBkWovw/0t9arbbDiix
-        FGckGmoxFxUnAgAu2CEo0QIAAA==
-X-CMS-MailID: 20190611115651eucas1p19245e653642884f8c93530720adc128d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20190607120150epcas3p34178a04f712c89b013a263264cf2184f
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20190607120150epcas3p34178a04f712c89b013a263264cf2184f
-References: <69e87f9a-a5ce-8c85-3862-de552f83f13e@xs4all.nl>
-        <20190607111634.GA7593@pendragon.ideasonboard.com>
-        <CGME20190607120150epcas3p34178a04f712c89b013a263264cf2184f@epcas3p3.samsung.com>
-        <cb129a47-e114-6841-44cc-ec34ffa562c7@xs4all.nl>
-        <e674539f-6b40-7b54-90bd-d1ed96ea5f55@samsung.com>
-        <6c3ffe98-9d64-b881-470a-bfef8b9280de@xs4all.nl>
-        <1f754020-296c-cf9b-1331-598bb774fa42@xs4all.nl>
-        <4e711a70-ef25-b9f2-e27a-ae6c80288388@xs4all.nl>
-        <ddacf8a1-61c4-bc04-8c52-cd56dfd13842@samsung.com>
-        <07253fe3-0152-24e1-87f1-ba77d8630a97@xs4all.nl>
-        <3e0cf83d-1f69-0d71-96b5-339dad660b1d@samsung.com>
-        <5bc8b7842e16cfc31a2e86befab223b4cb01131b.camel@ndufresne.ca>
-        <d3bf5fe7-02ab-8c6a-a495-33459dfdcb09@xs4all.nl>
+References: <20190603043251.226549-1-cychiang@chromium.org>
+ <20190603043251.226549-2-cychiang@chromium.org> <41e7052b-a58c-5a8c-5d94-37237e0c2070@xs4all.nl>
+ <20190603080931.GG21222@phenom.ffwll.local> <CAFv8Nw+1sB8i1d87vLeKxRricZOi4gnXFSgOzW9k0sa_Tzybjg@mail.gmail.com>
+ <20190604072411.GP21222@phenom.ffwll.local>
+In-Reply-To: <20190604072411.GP21222@phenom.ffwll.local>
+From:   Cheng-yi Chiang <cychiang@chromium.org>
+Date:   Tue, 11 Jun 2019 20:10:38 +0800
+Message-ID: <CAFv8NwKL9ZL=gNpDmdRV+R9eq22+Da_1kzuYBv8kMMyV3Hq14g@mail.gmail.com>
+Subject: Re: [PATCH 1/7] video: add HDMI state notifier support
+To:     Cheng-yi Chiang <cychiang@chromium.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        David Airlie <airlied@linux.ie>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Doug Anderson <dianders@chromium.org>,
+        Dylan Reid <dgreid@chromium.org>, tzungbi@chromium.org,
+        linux-media@vger.kernel.org,
+        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
+        <alsa-devel@alsa-project.org>, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        Dariusz Marcinkiewicz <darekm@google.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+On Tue, Jun 4, 2019 at 3:24 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+>
+> On Tue, Jun 04, 2019 at 10:32:50AM +0800, Cheng-yi Chiang wrote:
+> > On Mon, Jun 3, 2019 at 4:09 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > >
+> > > On Mon, Jun 03, 2019 at 09:45:49AM +0200, Hans Verkuil wrote:
+> > > > On 6/3/19 6:32 AM, Cheng-Yi Chiang wrote:
+> > > > > From: Hans Verkuil <hans.verkuil@cisco.com>
+> > > > >
+> > > > > Add support for HDMI hotplug and EDID notifiers, which is used to convey
+> > > > > information from HDMI drivers to their CEC and audio counterparts.
+> > > > >
+> > > > > Based on an earlier version from Russell King:
+> > > > >
+> > > > > https://patchwork.kernel.org/patch/9277043/
+> > > > >
+> > > > > The hdmi_notifier is a reference counted object containing the HDMI state
+> > > > > of an HDMI device.
+> > > > >
+> > > > > When a new notifier is registered the current state will be reported to
+> > > > > that notifier at registration time.
+> > > > >
+> > > > > Based on Hans Verkuil's patch:
+> > > > >
+> > > > > https://patchwork.kernel.org/patch/9472521/
+> > > >
+> > > > Erm, you are aware that this patch morphed into a CEC-specific notifier
+> > > > found in drivers/media/cec/cec-notifier.c?
+> > > >
+> > > > I don't think it makes sense to have two notifier implementations in the kernel.
+> > > > The original intention was to have the notifier deal with both CEC and ASoC
+> > > > notifications, but there was not enough interest for the ASoC bits at the time
+> > > > and it was dropped.
+> > > >
+> > > > I am planning changes to the cec-notifier API, I hope to work on that this
+> > > > week. I'll CC you when I post those. Those might be a good starting point
+> > > > to convert the cec-notifier to an hdmi-notifier as was originally intended.
+> > > >
+> > > > I've added your colleague Dariusz Marcinkiewicz to the CC list since he's been
+> > > > working on some nice cec-notifier improvements as well.
+> > >
+> > > We also have some interfaces for drm/alsa interactions around hdmi
+> > > already in drm/drm_audio_component.h, but it's not used by anything
+> > > outside of i915. Imo we should extend that, not reinvent a new wheel.
+> > >
+> > Hi Daniel,
+> > Thank you for the pointer. Looking at the ops, it seems that it is
+> > specific to HDA.
+> > I am not familiar with drm and HDA. I am not sure how applicable it
+> > would be to report jack status to ASoC.
+> > There is a use case in sound/soc/codecs/hdac_hdmi.c though so it
+> > should be possible.
+>
+> Currently hda is the only user, but the idea was to make it more generic.
+> Jack status in alsa is what drm calls connector status btw.
+>
+> So if we can take that as a baseline and extend it (probably needs some
+> registration boilerplate and helpers to look up the right endpoint using
+> of/dt for soc systems, we use component.c in i915/hda for this), that
+> would be great I think.
+>
+> > > Another note: notifiers considered evil, imo. Gets the job done for one
+> > > case, as soon as you have multiple devices and need to make sure you get
+> > > the update for the right one it all comes crashing down. Please create an
+> > > api which registers for updates from a specific device only, plus
+> > > something that has real callbacks (like the drm_audio_component.h thing we
+> > > started already).
+> >
+> > To clarify a bit, this hdmi-notifier indeed supports updating from a
+> > specific device only.
+> > hdmi_notifier_get takes a device and return the notifier.
+>
+> Hm I missed that, I thought it's global, so one of my usual notifier
+> concerns addressed.
+>
+> > It seems that a major difference between drm_audio_components and
+> > hdmi-notifier is that
+> > drm_audio_components defines all supported ops in drm_audio_component_audio_ops.
+> > On the other hand, hdmi-notifier passes different events using an enum
+> > like HDMI_CONNECTED and let listener handle different events.
+> > In this regard I agree with you that drm_audio_component is cleaner.
+> > Anyway, I will look into it a bit more and see how it works.
+>
+> Yeah I think if we could combine the approach, i.e. notifier side for
+> registration, some _ops structure for the actual notifications, then
+> there's a solid interface. I just really don't like the opaque void *
+> interface notifier provides, it encourages abuse way too much.
+>
+> Ofc the registration side would then no longer be based on the notifier
+> datastructure, list_head (like cec-notifier.c) of registeres devices with
+> their _ops structure should be enough.
+> -Daniel
+
+Hi Daniel,
+Yes, I agree the above statement that we should have a more solid interface.
+
 Hi Hans,
+I am not sure if I missed the patch.
+Do you have a estimated timeline for new cec-notifier interface you
+are working on?
+It seems that your PoC patch needs Dariusz's patch to work.
+I would like to seek your advice on whether I can proceed without your
+patch and Dariusz's patch.
 
-On 2019-06-11 09:52, Hans Verkuil wrote:
-> On 6/7/19 9:43 PM, Nicolas Dufresne wrote:
->> Le vendredi 07 juin 2019 à 16:39 +0200, Marek Szyprowski a écrit :
->>> Hi Hans,
->>>
->>> On 2019-06-07 16:11, Hans Verkuil wrote:
->>>> On 6/7/19 3:55 PM, Marek Szyprowski wrote:
->>>>> On 2019-06-07 15:40, Hans Verkuil wrote:
->>>>>> On 6/7/19 2:47 PM, Hans Verkuil wrote:
->>>>>>> On 6/7/19 2:23 PM, Hans Verkuil wrote:
->>>>>>>> On 6/7/19 2:14 PM, Marek Szyprowski wrote:
->>>>>>>>> On 2019-06-07 14:01, Hans Verkuil wrote:
->>>>>>>>>> On 6/7/19 1:16 PM, Laurent Pinchart wrote:
->>>>>>>>>>> Thank you for the patch.
->>>>>>>>>>>
->>>>>>>>>>> On Fri, Jun 07, 2019 at 10:45:31AM +0200, Hans Verkuil wrote:
->>>>>>>>>>>> The __prepare_userptr() function made the incorrect assumption that if the
->>>>>>>>>>>> same user pointer was used as the last one for which memory was acquired, then
->>>>>>>>>>>> there was no need to re-acquire the memory. This assumption was never properly
->>>>>>>>>>>> tested, and after doing that it became clear that this was in fact wrong.
->>>>>>>>>>> Could you explain in the commit message why the assumption is not
->>>>>>>>>>> correct ?
->>>>>>>>>> You can free the memory, then allocate it again and you can get the same pointer,
->>>>>>>>>> even though it is not necessarily using the same physical pages for the memory
->>>>>>>>>> that the kernel is still using for it.
->>>>>>>>>>
->>>>>>>>>> Worse, you can free the memory, then allocate only half the memory you need and
->>>>>>>>>> get back the same pointer. vb2 wouldn't notice this. And it seems to work (since
->>>>>>>>>> the original mapping still remains), but this can corrupt userspace memory
->>>>>>>>>> causing the application to crash. It's not quite clear to me how the memory can
->>>>>>>>>> get corrupted. I don't know enough of those low-level mm internals to understand
->>>>>>>>>> the sequence of events.
->>>>>>>>>>
->>>>>>>>>> I have test code for v4l2-compliance available if someone wants to test this.
->>>>>>>>> I'm interested, I would really like to know what happens in the mm
->>>>>>>>> subsystem in such case.
->>>>>>>> Here it is:
->>>>>>>>
->>>>>>>> diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
->>>>>>>> index be606e48..9abf41da 100644
->>>>>>>> --- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
->>>>>>>> +++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
->>>>>>>> @@ -797,7 +797,7 @@ int testReadWrite(struct node *node)
->>>>>>>>     	return 0;
->>>>>>>>     }
->>>>>>>>
->>>>>>>> -static int captureBufs(struct node *node, const cv4l_queue &q,
->>>>>>>> +static int captureBufs(struct node *node, cv4l_queue &q,
->>>>>>>>     		const cv4l_queue &m2m_q, unsigned frame_count, int pollmode,
->>>>>>>>     		unsigned &capture_count)
->>>>>>>>     {
->>>>>>>> @@ -962,6 +962,21 @@ static int captureBufs(struct node *node, const cv4l_queue &q,
->>>>>>>>     				buf.s_flags(V4L2_BUF_FLAG_REQUEST_FD);
->>>>>>>>     				buf.s_request_fd(buf_req_fds[req_idx]);
->>>>>>>>     			}
->>>>>>>> +			if (v4l_type_is_capture(buf.g_type()) && q.g_memory() == V4L2_MEMORY_USERPTR) {
->>>>>>>> +				printf("\nidx: %d", buf.g_index());
->>>>>>>> +				for (unsigned p = 0; p < q.g_num_planes(); p++) {
->>>>>>>> +					printf(" old buf[%d]: %p ", p, buf.g_userptr(p));
->>>>>>>> +					fflush(stdout);
->>>>>>>> +					free(buf.g_userptr(p));
->>>>>>>> +					void *m = calloc(1, q.g_length(p)/2);
->>>>>>>> +
->>>>>>>> +					fail_on_test(m == NULL);
->>>>>>>> +					q.s_userptr(buf.g_index(), p, m);
->>>>>>>> +					printf("new buf[%d]: %p", p, m);
->>>>>>>> +					buf.s_userptr(m, p);
->>>>>>>> +				}
->>>>>>>> +				printf("\n");
->>>>>>>> +			}
->>>>>>>>     			fail_on_test(buf.qbuf(node, q));
->>>>>>>>     			fail_on_test(buf.g_flags() & V4L2_BUF_FLAG_DONE);
->>>>>>>>     			if (buf.g_flags() & V4L2_BUF_FLAG_REQUEST_FD) {
->>>>>>>>
->>>>>>>>
->>>>>>>>
->>>>>>>> Load the vivid driver and just run 'v4l2-compliance -s10' and you'll see:
->>>>>>>>
->>>>>>>> ...
->>>>>>>> Streaming ioctls:
->>>>>>>>            test read/write: OK
->>>>>>>>            test blocking wait: OK
->>>>>>>>            test MMAP (no poll): OK
->>>>>>>>            test MMAP (select): OK
->>>>>>>>            test MMAP (epoll): OK
->>>>>>>>            Video Capture: Frame #000
->>>>>>>> idx: 0 old buf[0]: 0x7f71c6e7c010 new buf[0]: 0x7f71c6eb4010
->>>>>>>>            Video Capture: Frame #001
->>>>>>>> idx: 1 old buf[0]: 0x7f71c6e0b010 new buf[0]: 0x7f71c6e7b010
->>>>>>>>            Video Capture: Frame #002
->>>>>>>> idx: 0 old buf[0]: 0x7f71c6eb4010 free(): invalid pointer
->>>>>>>> Aborted
->>>>>>> To clarify: two full size buffers are allocated and queued (that happens in setupUserPtr()),
->>>>>>> then streaming starts and captureBufs is called which basically just calls dqbuf
->>>>>>> and qbuf.
->>>>>>>
->>>>>>> Tomasz pointed out that all the pointers in this log are actually different. That's
->>>>>>> correct, but here is a log where the old and new buf ptr are the same:
->>>>>>>
->>>>>>> Streaming ioctls:
->>>>>>>            test read/write: OK
->>>>>>>            test blocking wait: OK
->>>>>>>            test MMAP (no poll): OK
->>>>>>>            test MMAP (select): OK
->>>>>>>            test MMAP (epoll): OK
->>>>>>>            Video Capture: Frame #000
->>>>>>> idx: 0 old buf[0]: 0x7f1094e16010 new buf[0]: 0x7f1094e4e010
->>>>>>>            Video Capture: Frame #001
->>>>>>> idx: 1 old buf[0]: 0x7f1094da5010 new buf[0]: 0x7f1094e15010
->>>>>>>            Video Capture: Frame #002
->>>>>>> idx: 0 old buf[0]: 0x7f1094e4e010 new buf[0]: 0x7f1094e4e010
->>>>>>>            Video Capture: Frame #003
->>>>>>> idx: 1 old buf[0]: 0x7f1094e15010 free(): invalid pointer
->>>>>>> Aborted
->>>>>>>
->>>>>>> It's weird that the first log fails that way: if the pointers are different,
->>>>>>> then vb2 will call get_userptr and it should discover that the buffer isn't
->>>>>>> large enough, causing qbuf to fail. That doesn't seem to happen.
->>>>>> I think that the reason for this corruption is that the memory pool used
->>>>>> by glibc is now large enough for vb2 to think it can map the full length
->>>>>> of the user pointer into memory, even though only the first half is actually
->>>>>> from the buffer that's allocated. When you capture a frame you just overwrite
->>>>>> a random part of the application's memory pool, causing this invalid pointer.
->>>>>>
->>>>>> But that's a matter of garbage in, garbage out. So that's not the issue here.
->>>>>>
->>>>>> The real question is what happens when you free the old buffer, allocate a
->>>>>> new buffer, end up with the same userptr, but it's using one or more different
->>>>>> pages for its memory compared to the mapping that the kernel uses.
->>>>>>
->>>>>> I managed to reproduce this with v4l2-ctl:
->>>>>>
->>>>>> diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
->>>>>> index 28b2b3b9..8f2ed9b5 100644
->>>>>> --- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
->>>>>> +++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
->>>>>> @@ -1422,6 +1422,24 @@ static int do_handle_cap(cv4l_fd &fd, cv4l_queue &q, FILE *fout, int *index,
->>>>>>     		 * has the size that fits the old resolution and might not
->>>>>>     		 * fit to the new one.
->>>>>>     		 */
->>>>>> +		if (q.g_memory() == V4L2_MEMORY_USERPTR) {
->>>>>> +			printf("\nidx: %d", buf.g_index());
->>>>>> +			for (unsigned p = 0; p < q.g_num_planes(); p++) {
->>>>>> +				unsigned *pb = (unsigned *)buf.g_userptr(p);
->>>>>> +				printf(" old buf[%d]: %p first pixel: 0x%x", p, buf.g_userptr(p), *pb);
->>>>>> +				fflush(stdout);
->>>>>> +				free(buf.g_userptr(p));
->>>>>> +				void *m = calloc(1, q.g_length(p));
->>>>>> +
->>>>>> +				if (m == NULL)
->>>>>> +					return QUEUE_ERROR;
->>>>>> +				q.s_userptr(buf.g_index(), p, m);
->>>>>> +				if (m == buf.g_userptr(p))
->>>>>> +					printf(" identical new buf");
->>>>>> +				buf.s_userptr(m, p);
->>>>>> +			}
->>>>>> +			printf("\n");
->>>>>> +		}
->>>>>>     		if (fd.qbuf(buf) && errno != EINVAL) {
->>>>>>     			fprintf(stderr, "%s: qbuf error\n", __func__);
->>>>>>     			return QUEUE_ERROR;
->>>>>>
->>>>>>
->>>>>> Load vivid, setup a pure white test pattern:
->>>>>>
->>>>>> v4l2-ctl -c test_pattern=6
->>>>>>
->>>>>> Now run v4l2-ctl --stream-user and you'll see:
->>>>>>
->>>>>> idx: 0 old buf[0]: 0x7f91551cb010 first pixel: 0x80ea80ea identical new buf
->>>>>> <
->>>>>> idx: 1 old buf[0]: 0x7f915515a010 first pixel: 0x80ea80ea identical new buf
->>>>>> <
->>>>>> idx: 2 old buf[0]: 0x7f91550e9010 first pixel: 0x80ea80ea identical new buf
->>>>>> <
->>>>>> idx: 3 old buf[0]: 0x7f9155078010 first pixel: 0x80ea80ea identical new buf
->>>>>> <
->>>>>> idx: 0 old buf[0]: 0x7f91551cb010 first pixel: 0x0 identical new buf
->>>>>> <
->>>>>> idx: 1 old buf[0]: 0x7f915515a010 first pixel: 0x0 identical new buf
->>>>>> < 5.00 fps
->>>>>>
->>>>>> idx: 2 old buf[0]: 0x7f91550e9010 first pixel: 0x0 identical new buf
->>>>>> <
->>>>>> idx: 3 old buf[0]: 0x7f9155078010 first pixel: 0x0 identical new buf
->>>>>>
->>>>>> The first four dequeued buffers are filled with data, after that the
->>>>>> returned buffer is empty because vivid is actually writing to different
->>>>>> memory pages.
->>>>>>
->>>>>> With this patch the first pixel is always non-zero.
->>>>> Good catch. The question is weather we treat that as undefined behavior
->>>>> and keep the optimization for 'good applications' or assume that every
->>>>> broken userspace code has to be properly handled. The good thing is that
->>>>> there is still imho no security issue. The physical pages gathered by
->>>> Yeah, that scared me for a bit, but it all looks secure.
->>>>
->>>>> vb2 in worst case belongs to noone else (vb2 is their last user, they
->>>>> are not yet returned to free pages pool).
->>>> I see three options:
->>>>
->>>> 1) just always reacquire the buffer, and if anyone complains about it
->>>>      being slower we point them towards DMABUF.
->>>>
->>>> 2) keep the current behavior, but document it.
->>>>
->>>> 3) as 2), but also add a new buffer flag that forces a reacquire of the
->>>>      buffer. This could be valid for DMABUF as well. E.g.:
->>>>
->>>>      V4L2_BUF_FLAG_REACQUIRE
->>>>
->>>> I'm leaning towards the third option since it won't slow down existing
->>>> implementations, yet if you do change the userptr every time, then you
->>>> can now force this to work safely.
->>> Is there are valid use case for third variant? I would rather go for second.
->>>
->>> There is one more issue related to this. There are many apps which use
->>> either USERPTR or DMAbuf, but in a bit odd way: they use the same
->>> buffers all the time, but they ignore buf->index and never match it to
->>> respective buffer pointers or fds. This makes the current caching
->>> mechanism useless. Maybe it would make a bit sense do rewrite the
->>> caching in qbuf to ignore the provided buffer->index?
->> Notably GStreamer, which inherited this issue from a public API design
->> error some 15 years ago. Complaint wise, I don't remember someone
->> complaining about that, so option 1) would simply make the performance
->> consistent for the framework.
-> After analyzing the DMABUF behavior in this case I realized that the
-> dma_buf framework refcount the mapping, so it won't map again unless
-> it's really necessary. So there is (almost) no performance hit for
-> DMABUF if users do not match dmabuf fds with the buffer index.
+I looked through the patch from Dariusz
 
-Well, not really. If you consider only the first fs/userptr vs. index 
-mismatch, you are right, the mapping for the queued buffer already 
-exists are will be reused, but this also means that the mapping for the 
-buffer which used that index will be freed. Considering the next calls, 
-you will end up with a typical map/unmap pattern what really hits the 
-performance.
+https://lkml.org/lkml/2019/5/21/389
 
-The question is how to implement a smart caching? If we are talking 
-about the gstreamer and v4l2 plugin, which afair doesn't even match the 
-number of buffers between source and destination between the pipeline 
-elements (for example: codec produces 8 buffers, but scaler operates 
-only with 2 buffers).
+, and saw that you were thinking whether we should use cec-notifier
+for both HDMI and CEC.
 
-> So option 1 *would* slow down the USERPTR performance compared to
-> the other streaming models.
+https://lkml.org/lkml/2019/5/24/298
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Could you please let me know your latest thought on whether we should
+reuse cec-notifier?
+I agree with you that I should not proceed with hdmi-notifier. Reasons include:
+1. Method like cec_notifier_parse_hdmi_phandle can be reused. It is
+error prone to memory leak if it is implemented by user, like the
+patch in hdmi-codec.c in this series did not handle the ref count.
+2. cec-notifier has a simpler implementation of register / unregister
+because there is no call chain. I am not aware of the need for
+hdmi-notifier to support a chain of callbacks. So I think that call
+chain support can be removed.
 
+If I go ahead and add a new interface to register ops to handle
+connector status report from cec-notifer, based on current
+cec-notifier, do you think that would work ?
+I think it might work if I add another cec_notifier object inside
+dw-hdmi.c, but only for HDMI jack reporting, not for CEC related
+reporting.
+
+And after some investigation, I realize that my requirement is even
+simpler. I don't need hdmi_event_new_edid and hdmi_event_new_eld in my
+use case.
+I just need to report the connector status from synopsys/dw-hdmi.c to
+codecs/hdmi-codec.c for codec driver to update the jack status.
+Do you think I can proceed in this direction ? Or do you prefer I wait
+for a while and work on it based on your new patch.
+
+Thanks a lot!
+
+
+>
+> >
+> > Thanks again!
+> >
+> > > -Daniel
+> > >
+> > > >
+> > > > Regards,
+> > > >
+> > > >       Hans
+> > > >
+> > > > >
+> > > > > Modified by Cheng-Yi Chiang:
+> > > > >  - Add a section in MAINTAINER.
+> > > > >  - Changes connected and has_eld to bitfield of unsigned int.
+> > > > >  - Other minor fixes to pass checkpatch.pl --strict checks.
+> > > > >
+> > > > > Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+> > > > > Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+> > > > > Signed-off-by: Cheng-Yi Chiang <cychiang@chromium.org>
+> > > > > ---
+> > > > > The original patch is at
+> > > > > https://lore.kernel.org/linux-arm-kernel/20161213150813.37966-2-hverkuil@xs4all.nl
+> > > > >
+> > > > >  MAINTAINERS                   |   6 ++
+> > > > >  drivers/video/Kconfig         |   3 +
+> > > > >  drivers/video/Makefile        |   1 +
+> > > > >  drivers/video/hdmi-notifier.c | 145 ++++++++++++++++++++++++++++++++++
+> > > > >  include/linux/hdmi-notifier.h | 112 ++++++++++++++++++++++++++
+> > > > >  5 files changed, 267 insertions(+)
+> > > > >  create mode 100644 drivers/video/hdmi-notifier.c
+> > > > >  create mode 100644 include/linux/hdmi-notifier.h
+> > > > >
+> > > > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > > > index 5cfbea4ce575..ffb7376f9509 100644
+> > > > > --- a/MAINTAINERS
+> > > > > +++ b/MAINTAINERS
+> > > > > @@ -16676,6 +16676,12 @@ W: https://linuxtv.org
+> > > > >  S: Maintained
+> > > > >  F: drivers/media/platform/vicodec/*
+> > > > >
+> > > > > +VIDEO FRAMEWORK
+> > > > > +M: Hans Verkuil <hverkuil@xs4all.nl>
+> > > > > +L: linux-media@vger.kernel.org
+> > > > > +F: drivers/video/hdmi-notifier.*
+> > > > > +S: Maintained
+> > > > > +
+> > > > >  VIDEO MULTIPLEXER DRIVER
+> > > > >  M: Philipp Zabel <p.zabel@pengutronix.de>
+> > > > >  L: linux-media@vger.kernel.org
+> > > > > diff --git a/drivers/video/Kconfig b/drivers/video/Kconfig
+> > > > > index 83d3d271ca15..000ba9bc0ae7 100644
+> > > > > --- a/drivers/video/Kconfig
+> > > > > +++ b/drivers/video/Kconfig
+> > > > > @@ -34,6 +34,9 @@ config VIDEOMODE_HELPERS
+> > > > >  config HDMI
+> > > > >     bool
+> > > > >
+> > > > > +config HDMI_NOTIFIERS
+> > > > > +   bool
+> > > > > +
+> > > > >  endif # HAS_IOMEM
+> > > > >
+> > > > >  if VT
+> > > > > diff --git a/drivers/video/Makefile b/drivers/video/Makefile
+> > > > > index df7650adede9..eff4736102ca 100644
+> > > > > --- a/drivers/video/Makefile
+> > > > > +++ b/drivers/video/Makefile
+> > > > > @@ -1,6 +1,7 @@
+> > > > >  # SPDX-License-Identifier: GPL-2.0
+> > > > >  obj-$(CONFIG_VGASTATE)            += vgastate.o
+> > > > >  obj-$(CONFIG_HDMI)                += hdmi.o
+> > > > > +obj-$(CONFIG_HDMI_NOTIFIERS)      += hdmi-notifier.o
+> > > > >
+> > > > >  obj-$(CONFIG_VT)             += console/
+> > > > >  obj-$(CONFIG_FB_STI)                 += console/
+> > > > > diff --git a/drivers/video/hdmi-notifier.c b/drivers/video/hdmi-notifier.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..d1eedf661648
+> > > > > --- /dev/null
+> > > > > +++ b/drivers/video/hdmi-notifier.c
+> > > > > @@ -0,0 +1,145 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0
+> > > > > +/* hdmi-notifier.c - notify interested parties of (dis)connect and EDID
+> > > > > + * events
+> > > > > + *
+> > > > > + * Copyright 2016 Russell King <rmk+kernel@arm.linux.org.uk>
+> > > > > + * Copyright 2016 Cisco Systems, Inc. and/or its affiliates.
+> > > > > + * All rights reserved.
+> > > > > + */
+> > > > > +
+> > > > > +#include <linux/export.h>
+> > > > > +#include <linux/hdmi-notifier.h>
+> > > > > +#include <linux/string.h>
+> > > > > +#include <linux/slab.h>
+> > > > > +#include <linux/list.h>
+> > > > > +
+> > > > > +static LIST_HEAD(hdmi_notifiers);
+> > > > > +static DEFINE_MUTEX(hdmi_notifiers_lock);
+> > > > > +
+> > > > > +struct hdmi_notifier *hdmi_notifier_get(struct device *dev)
+> > > > > +{
+> > > > > +   struct hdmi_notifier *n;
+> > > > > +
+> > > > > +   mutex_lock(&hdmi_notifiers_lock);
+> > > > > +   list_for_each_entry(n, &hdmi_notifiers, head) {
+> > > > > +           if (n->dev == dev) {
+> > > > > +                   mutex_unlock(&hdmi_notifiers_lock);
+> > > > > +                   kref_get(&n->kref);
+> > > > > +                   return n;
+> > > > > +           }
+> > > > > +   }
+> > > > > +   n = kzalloc(sizeof(*n), GFP_KERNEL);
+> > > > > +   if (!n)
+> > > > > +           goto unlock;
+> > > > > +   n->dev = dev;
+> > > > > +   mutex_init(&n->lock);
+> > > > > +   BLOCKING_INIT_NOTIFIER_HEAD(&n->notifiers);
+> > > > > +   kref_init(&n->kref);
+> > > > > +   list_add_tail(&n->head, &hdmi_notifiers);
+> > > > > +unlock:
+> > > > > +   mutex_unlock(&hdmi_notifiers_lock);
+> > > > > +   return n;
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(hdmi_notifier_get);
+> > > > > +
+> > > > > +static void hdmi_notifier_release(struct kref *kref)
+> > > > > +{
+> > > > > +   struct hdmi_notifier *n =
+> > > > > +           container_of(kref, struct hdmi_notifier, kref);
+> > > > > +
+> > > > > +   mutex_lock(&hdmi_notifiers_lock);
+> > > > > +   list_del(&n->head);
+> > > > > +   mutex_unlock(&hdmi_notifiers_lock);
+> > > > > +   kfree(n->edid);
+> > > > > +   kfree(n);
+> > > > > +}
+> > > > > +
+> > > > > +void hdmi_notifier_put(struct hdmi_notifier *n)
+> > > > > +{
+> > > > > +   kref_put(&n->kref, hdmi_notifier_release);
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(hdmi_notifier_put);
+> > > > > +
+> > > > > +int hdmi_notifier_register(struct hdmi_notifier *n, struct notifier_block *nb)
+> > > > > +{
+> > > > > +   int ret = blocking_notifier_chain_register(&n->notifiers, nb);
+> > > > > +
+> > > > > +   if (ret)
+> > > > > +           return ret;
+> > > > > +   kref_get(&n->kref);
+> > > > > +   mutex_lock(&n->lock);
+> > > > > +   if (n->connected) {
+> > > > > +           blocking_notifier_call_chain(&n->notifiers, HDMI_CONNECTED, n);
+> > > > > +           if (n->edid_size)
+> > > > > +                   blocking_notifier_call_chain(&n->notifiers,
+> > > > > +                                                HDMI_NEW_EDID, n);
+> > > > > +           if (n->has_eld)
+> > > > > +                   blocking_notifier_call_chain(&n->notifiers,
+> > > > > +                                                HDMI_NEW_ELD, n);
+> > > > > +   }
+> > > > > +   mutex_unlock(&n->lock);
+> > > > > +   return 0;
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(hdmi_notifier_register);
+> > > > > +
+> > > > > +int hdmi_notifier_unregister(struct hdmi_notifier *n, struct notifier_block *nb)
+> > > > > +{
+> > > > > +   int ret = blocking_notifier_chain_unregister(&n->notifiers, nb);
+> > > > > +
+> > > > > +   if (ret == 0)
+> > > > > +           hdmi_notifier_put(n);
+> > > > > +   return ret;
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(hdmi_notifier_unregister);
+> > > > > +
+> > > > > +void hdmi_event_connect(struct hdmi_notifier *n)
+> > > > > +{
+> > > > > +   mutex_lock(&n->lock);
+> > > > > +   n->connected = true;
+> > > > > +   blocking_notifier_call_chain(&n->notifiers, HDMI_CONNECTED, n);
+> > > > > +   mutex_unlock(&n->lock);
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(hdmi_event_connect);
+> > > > > +
+> > > > > +void hdmi_event_disconnect(struct hdmi_notifier *n)
+> > > > > +{
+> > > > > +   mutex_lock(&n->lock);
+> > > > > +   n->connected = false;
+> > > > > +   n->has_eld = false;
+> > > > > +   n->edid_size = 0;
+> > > > > +   blocking_notifier_call_chain(&n->notifiers, HDMI_DISCONNECTED, n);
+> > > > > +   mutex_unlock(&n->lock);
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(hdmi_event_disconnect);
+> > > > > +
+> > > > > +int hdmi_event_new_edid(struct hdmi_notifier *n, const void *edid, size_t size)
+> > > > > +{
+> > > > > +   mutex_lock(&n->lock);
+> > > > > +   if (n->edid_allocated_size < size) {
+> > > > > +           void *p = kmalloc(size, GFP_KERNEL);
+> > > > > +
+> > > > > +           if (!p) {
+> > > > > +                   mutex_unlock(&n->lock);
+> > > > > +                   return -ENOMEM;
+> > > > > +           }
+> > > > > +           kfree(n->edid);
+> > > > > +           n->edid = p;
+> > > > > +           n->edid_allocated_size = size;
+> > > > > +   }
+> > > > > +   memcpy(n->edid, edid, size);
+> > > > > +   n->edid_size = size;
+> > > > > +   blocking_notifier_call_chain(&n->notifiers, HDMI_NEW_EDID, n);
+> > > > > +   mutex_unlock(&n->lock);
+> > > > > +   return 0;
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(hdmi_event_new_edid);
+> > > > > +
+> > > > > +void hdmi_event_new_eld(struct hdmi_notifier *n, const u8 eld[128])
+> > > > > +{
+> > > > > +   mutex_lock(&n->lock);
+> > > > > +   memcpy(n->eld, eld, sizeof(n->eld));
+> > > > > +   n->has_eld = true;
+> > > > > +   blocking_notifier_call_chain(&n->notifiers, HDMI_NEW_ELD, n);
+> > > > > +   mutex_unlock(&n->lock);
+> > > > > +}
+> > > > > +EXPORT_SYMBOL_GPL(hdmi_event_new_eld);
+> > > > > diff --git a/include/linux/hdmi-notifier.h b/include/linux/hdmi-notifier.h
+> > > > > new file mode 100644
+> > > > > index 000000000000..c8f35110e3e3
+> > > > > --- /dev/null
+> > > > > +++ b/include/linux/hdmi-notifier.h
+> > > > > @@ -0,0 +1,112 @@
+> > > > > +/* SPDX-License-Identifier: GPL-2.0
+> > > > > + * hdmi-notifier.h - notify interested parties of (dis)connect and EDID
+> > > > > + * events
+> > > > > + *
+> > > > > + * Copyright 2016 Russell King <rmk+kernel@arm.linux.org.uk>
+> > > > > + * Copyright 2016 Cisco Systems, Inc. and/or its affiliates.
+> > > > > + * All rights reserved.
+> > > > > + */
+> > > > > +
+> > > > > +#ifndef LINUX_HDMI_NOTIFIER_H
+> > > > > +#define LINUX_HDMI_NOTIFIER_H
+> > > > > +
+> > > > > +#include <linux/types.h>
+> > > > > +#include <linux/notifier.h>
+> > > > > +#include <linux/kref.h>
+> > > > > +
+> > > > > +enum {
+> > > > > +   HDMI_CONNECTED,
+> > > > > +   HDMI_DISCONNECTED,
+> > > > > +   HDMI_NEW_EDID,
+> > > > > +   HDMI_NEW_ELD,
+> > > > > +};
+> > > > > +
+> > > > > +struct device;
+> > > > > +
+> > > > > +struct hdmi_notifier {
+> > > > > +   /* Lock to protect callback registration and notification. */
+> > > > > +   struct mutex lock;
+> > > > > +   struct list_head head;
+> > > > > +   struct kref kref;
+> > > > > +   struct blocking_notifier_head notifiers;
+> > > > > +   struct device *dev;
+> > > > > +
+> > > > > +   /* Current state */
+> > > > > +   unsigned int connected : 1;
+> > > > > +   unsigned int has_eld : 1;
+> > > > > +   unsigned char eld[128];
+> > > > > +   void *edid;
+> > > > > +   size_t edid_size;
+> > > > > +   size_t edid_allocated_size;
+> > > > > +};
+> > > > > +
+> > > > > +/**
+> > > > > + * hdmi_notifier_get - find or create a new hdmi_notifier for the given device.
+> > > > > + * @dev: device that sends the events.
+> > > > > + *
+> > > > > + * If a notifier for device @dev already exists, then increase the refcount
+> > > > > + * and return that notifier.
+> > > > > + *
+> > > > > + * If it doesn't exist, then allocate a new notifier struct and return a
+> > > > > + * pointer to that new struct.
+> > > > > + *
+> > > > > + * Return NULL if the memory could not be allocated.
+> > > > > + */
+> > > > > +struct hdmi_notifier *hdmi_notifier_get(struct device *dev);
+> > > > > +
+> > > > > +/**
+> > > > > + * hdmi_notifier_put - decrease refcount and delete when the refcount reaches 0.
+> > > > > + * @n: notifier
+> > > > > + */
+> > > > > +void hdmi_notifier_put(struct hdmi_notifier *n);
+> > > > > +
+> > > > > +/**
+> > > > > + * hdmi_notifier_register - register the notifier with the notifier_block.
+> > > > > + * @n: the HDMI notifier
+> > > > > + * @nb: the notifier_block
+> > > > > + */
+> > > > > +int hdmi_notifier_register(struct hdmi_notifier *n, struct notifier_block *nb);
+> > > > > +
+> > > > > +/**
+> > > > > + * hdmi_notifier_unregister - unregister the notifier with the notifier_block.
+> > > > > + * @n: the HDMI notifier
+> > > > > + * @nb: the notifier_block
+> > > > > + */
+> > > > > +int hdmi_notifier_unregister(struct hdmi_notifier *n,
+> > > > > +                        struct notifier_block *nb);
+> > > > > +
+> > > > > +/**
+> > > > > + * hdmi_event_connect - send a connect event.
+> > > > > + * @n: the HDMI notifier
+> > > > > + *
+> > > > > + * Send an HDMI_CONNECTED event to any registered parties.
+> > > > > + */
+> > > > > +void hdmi_event_connect(struct hdmi_notifier *n);
+> > > > > +
+> > > > > +/**
+> > > > > + * hdmi_event_disconnect - send a disconnect event.
+> > > > > + * @n: the HDMI notifier
+> > > > > + *
+> > > > > + * Send an HDMI_DISCONNECTED event to any registered parties.
+> > > > > + */
+> > > > > +void hdmi_event_disconnect(struct hdmi_notifier *n);
+> > > > > +
+> > > > > +/**
+> > > > > + * hdmi_event_new_edid - send a new EDID event.
+> > > > > + * @n: the HDMI notifier
+> > > > > + *
+> > > > > + * Send an HDMI_NEW_EDID event to any registered parties.
+> > > > > + * This function will make a copy the EDID so it can return -ENOMEM if
+> > > > > + * no memory could be allocated.
+> > > > > + */
+> > > > > +int hdmi_event_new_edid(struct hdmi_notifier *n, const void *edid, size_t size);
+> > > > > +
+> > > > > +/**
+> > > > > + * hdmi_event_new_eld - send a new ELD event.
+> > > > > + * @n: the HDMI notifier
+> > > > > + *
+> > > > > + * Send an HDMI_NEW_ELD event to any registered parties.
+> > > > > + */
+> > > > > +void hdmi_event_new_eld(struct hdmi_notifier *n, const u8 eld[128]);
+> > > > > +
+> > > > > +#endif
+> > > > >
+> > > >
+> > >
+> > > --
+> > > Daniel Vetter
+> > > Software Engineer, Intel Corporation
+> > > http://blog.ffwll.ch
+>
+> --
+> Daniel Vetter
+> Software Engineer, Intel Corporation
+> http://blog.ffwll.ch
