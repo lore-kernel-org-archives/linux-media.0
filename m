@@ -1,124 +1,111 @@
-Return-Path: <SRS0=EX/k=UJ=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=r2j8=UK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	T_DKIMWL_WL_HIGH autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D7FCC43218
-	for <linux-media@archiver.kernel.org>; Mon, 10 Jun 2019 22:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51FDBC43218
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 03:54:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 068A121721
-	for <linux-media@archiver.kernel.org>; Mon, 10 Jun 2019 22:08:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1560204498;
-	bh=e8XjUFtZMStDPYS3FRKtj43AwF2CGKnQQ24s2uVvYvo=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=bgybfa015dlndyQxe7aak97my1BXx+1VnQ8uPHurF5GMGTPI90IQQkPy1V/q3qWJh
-	 nARY04MtHk5BJavcLSlQ4uA1MFn3Nqpxg7WI6ZdYGu9Z6wBj0pUXCskhNdrUclXcty
-	 Khi9N2pOzcVCCalIRnPnL1Znvvq0uA26lu6q5z6Y=
+	by mail.kernel.org (Postfix) with ESMTP id 28B4421726
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 03:54:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390096AbfFJWIO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 10 Jun 2019 18:08:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390036AbfFJWIO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 10 Jun 2019 18:08:14 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 317032082E;
-        Mon, 10 Jun 2019 22:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560204493;
-        bh=e8XjUFtZMStDPYS3FRKtj43AwF2CGKnQQ24s2uVvYvo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=BIlELQVmQiXsINDdVkW14pOS9K8s3Gx2mingJ1IaepHxagdpMTpD4ZzyEKsLXADQu
-         LDDLzvbv2yQR2aXp8ujaMwhG5b7sVH+1JVNw3f8Wr643gACxp2ikFsJnG7lIjoeKQt
-         enV0L8Nd0qyRS4RKerZLlzNTADXiWwd0A8vbWeho=
-Subject: Re: [PATCH v16 16/16] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-To:     Kees Cook <keescook@chromium.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>, shuah <shuah@kernel.org>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <9e1b5998a28f82b16076fc85ab4f88af5381cf74.1559580831.git.andreyknvl@google.com>
- <201906072055.7DFED7B@keescook>
-From:   shuah <shuah@kernel.org>
-Message-ID: <2bc277f8-e67e-30e0-5824-8184c2b03237@kernel.org>
-Date:   Mon, 10 Jun 2019 16:08:10 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S2391031AbfFKDx7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 10 Jun 2019 23:53:59 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42882 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2390941AbfFKDx6 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 10 Jun 2019 23:53:58 -0400
+X-UUID: 367fe8d72e474a2e923c66944546bbc7-20190611
+X-UUID: 367fe8d72e474a2e923c66944546bbc7-20190611
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <jungo.lin@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 792253258; Tue, 11 Jun 2019 11:53:54 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 11 Jun 2019 11:53:51 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 11 Jun 2019 11:53:51 +0800
+From:   Jungo Lin <jungo.lin@mediatek.com>
+To:     <tfiga@chromium.org>, <hverkuil@xs4all.nl>,
+        <laurent.pinchart@ideasonboard.com>, <matthias.bgg@gmail.com>,
+        <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <ddavenport@chromium.org>, <robh@kernel.org>,
+        <sean.cheng@mediatek.com>, <sj.huang@mediatek.com>,
+        <frederic.chen@mediatek.com>, <ryan.yu@mediatek.com>,
+        <rynn.wu@mediatek.com>, <jungo.lin@mediatek.com>,
+        <frankie.chiu@mediatek.com>
+Subject: [RFC,v3 2/9] dts: arm64: mt8183: Add ISP Pass 1 nodes
+Date:   Tue, 11 Jun 2019 11:53:37 +0800
+Message-ID: <20190611035344.29814-3-jungo.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20190611035344.29814-1-jungo.lin@mediatek.com>
+References: <jungo.lin@mediatek.com>
+ <20190611035344.29814-1-jungo.lin@mediatek.com>
+Reply-To: <jungo.lin@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <201906072055.7DFED7B@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 51E3951B510457039F7BF5A18CAC5160CF13C347259EFDA5390D689C6282BB822000:8
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 6/7/19 9:56 PM, Kees Cook wrote:
-> On Mon, Jun 03, 2019 at 06:55:18PM +0200, Andrey Konovalov wrote:
->> This patch is a part of a series that extends arm64 kernel ABI to allow to
->> pass tagged user pointers (with the top byte set to something else other
->> than 0x00) as syscall arguments.
->>
->> This patch adds a simple test, that calls the uname syscall with a
->> tagged user pointer as an argument. Without the kernel accepting tagged
->> user pointers the test fails with EFAULT.
->>
->> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> 
-> I'm adding Shuah to CC in case she has some suggestions about the new
-> selftest.
+Add nodes for Pass 1 unit of Mediatek's camera ISP system.
+Pass 1 unit embedded in Mediatek SoCs, works with the
+co-processor to process image signal from the image sensor
+and output RAW image data.
 
-Thanks Kees.
+Signed-off-by: Jungo Lin <jungo.lin@mediatek.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-> -Kees
-> 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 75c4881bbe5e..8a725357c594 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -369,5 +369,29 @@
+ 			reg = <0 0x1a000000 0 0x1000>;
+ 			#clock-cells = <1>;
+ 		};
++
++		camisp: camisp@1a000000 {
++			compatible = "mediatek,mt8183-camisp", "syscon";
++			reg = <0 0x1a000000 0 0x1000>,
++			      <0 0x1a003000 0 0x1000>,
++			      <0 0x1a004000 0 0x2000>,
++			      <0 0x1a006000 0 0x2000>;
++			reg-names = "cam_sys",
++				    "cam_uni",
++				    "cam_a",
++				    "cam_b";
++			interrupts = <GIC_SPI 253 IRQ_TYPE_LEVEL_LOW>,
++				     <GIC_SPI 254 IRQ_TYPE_LEVEL_LOW>,
++				     <GIC_SPI 255 IRQ_TYPE_LEVEL_LOW>;
++			iommus = <&iommu M4U_PORT_CAM_IMGO>;
++			clocks = <&camsys CLK_CAM_CAM>,
++				 <&camsys CLK_CAM_CAMTG>;
++			clock-names = "camsys_cam_cgpdn",
++				      "camsys_camtg_cgpdn";
++			mediatek,larb = <&larb3>,
++					<&larb6>;
++			mediatek,scp = <&scp>;
++		};
++
+ 	};
+ };
+-- 
+2.18.0
 
-Looks good to me.
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
