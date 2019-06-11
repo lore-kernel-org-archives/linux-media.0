@@ -2,119 +2,292 @@ Return-Path: <SRS0=r2j8=UK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,T_DKIMWL_WL_HIGH autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30FD1C43218
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 10:18:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6EF7C43218
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 10:24:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0708C205F4
-	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 10:18:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A72D22089E
+	for <linux-media@archiver.kernel.org>; Tue, 11 Jun 2019 10:24:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NM4NN/J7"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="lvGkT9ro"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405456AbfFKKSE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 11 Jun 2019 06:18:04 -0400
-Received: from mail-ed1-f42.google.com ([209.85.208.42]:35160 "EHLO
-        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405339AbfFKKSD (ORCPT
+        id S2405289AbfFKKY3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 11 Jun 2019 06:24:29 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:57318 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405151AbfFKKY2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 11 Jun 2019 06:18:03 -0400
-Received: by mail-ed1-f42.google.com with SMTP id p26so15213020edr.2
-        for <linux-media@vger.kernel.org>; Tue, 11 Jun 2019 03:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c8jnMiv81FwEUDuhouV41YRUAtMXDx9VCwEGz+YrJoE=;
-        b=NM4NN/J7d9ru8kd3dn7OtVQIZ0cawvdRGuCDqIkNkZMD8Ez/odI0RulfUMhxKDaWQg
-         T4oSh/0nKy4M7wpOstzpi3+Gsqe/9d2tghUe8nzifFPlv2s5t4e2dU/mC3rydpUTxSeK
-         G43KHW5c1W6w8DW2R0xGyThcHmBk8WMIZIcig=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c8jnMiv81FwEUDuhouV41YRUAtMXDx9VCwEGz+YrJoE=;
-        b=pVLqey0/OEOzT4a6IiKp4zCXna0uDqLygCKUAEaAySOn0uzAMT/1po/G/uWaYzRSX7
-         Msb/6bFhj+QVv7ojzXbLst/F+CjDGaFcbZhe9GWsjoxloPpYc9a9DmqP/Z+7ezCZ/Spd
-         L/1D+mGw9RiyzxsfROpJifCO6ZbKenZw2p2gIDjX3zbDore2NMs8bDZmXAOmzu4IaPzc
-         noAYyJyL/X1Wh7EJyvEvuL/qal5/kV5WKZAXOnfoEZmPUNV1MoI/lMZvvJhC59U6G4RO
-         Kvd9ai4/38cH/gGmn3Rra8K3u5ZNVHT/SrKOD4cirzRFOZACyLaB0KIfYSbSas+zLefY
-         MpHA==
-X-Gm-Message-State: APjAAAVBOYweV7RZoX1AhA4TZZHci6W14k+OTIJ98XOpO/UcOtZwjiO4
-        fETI+CQtWNjjzhjb92LeONHTA5wQL6HK7w==
-X-Google-Smtp-Source: APXvYqzWP/7Be+Tu88S4hv9kbRCxYopYuRFbFmoah79dcTiljwwTGMGbWMWOvQwDPC3CMCo8qk99NA==
-X-Received: by 2002:a17:906:1f48:: with SMTP id d8mr36317187ejk.288.1560248281644;
-        Tue, 11 Jun 2019 03:18:01 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id 93sm3622566edk.84.2019.06.11.03.18.01
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 03:18:01 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id f9so12331704wre.12
-        for <linux-media@vger.kernel.org>; Tue, 11 Jun 2019 03:18:01 -0700 (PDT)
-X-Received: by 2002:adf:f246:: with SMTP id b6mr554368wrp.92.1560247928904;
- Tue, 11 Jun 2019 03:12:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190516032332.56844-1-daoyuan.huang@mediatek.com>
- <20190516032332.56844-5-daoyuan.huang@mediatek.com> <20190604112039.GA12168@chromium.org>
- <1560244803.15624.6.camel@mtksdccf07>
-In-Reply-To: <1560244803.15624.6.camel@mtksdccf07>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 11 Jun 2019 19:11:57 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5BmSrkRmQFuiGz5RcBP01Ae32w6EhtP0n3cO7Pki=9Rng@mail.gmail.com>
-Message-ID: <CAAFQd5BmSrkRmQFuiGz5RcBP01Ae32w6EhtP0n3cO7Pki=9Rng@mail.gmail.com>
-Subject: Re: [RFC v2 4/4] media: platform: mtk-mdp3: Add Mediatek MDP3 driver
-To:     Daoyuan Huang <daoyuan.huang@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>
-Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        yuzhao@chromium.org, zwisler@chromium.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
-        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?U2VhbiBDaGVuZyAo6YSt5piH5byYKQ==?= 
-        <Sean.Cheng@mediatek.com>, Sj Huang <sj.huang@mediatek.com>,
-        =?UTF-8?B?Q2hyaXN0aWUgWXUgKOa4uOmbheaDoCk=?= 
-        <christie.yu@mediatek.com>,
-        =?UTF-8?B?SG9sbWVzIENoaW91ICjpgrHmjLop?= 
-        <holmes.chiou@mediatek.com>,
-        =?UTF-8?B?RnJlZGVyaWMgQ2hlbiAo6Zmz5L+K5YWDKQ==?= 
-        <frederic.chen@mediatek.com>,
-        Jerry-ch Chen <Jerry-ch.Chen@mediatek.com>,
-        =?UTF-8?B?SnVuZ28gTGluICjmnpfmmI7kv4op?= <jungo.lin@mediatek.com>,
-        =?UTF-8?B?UnlubiBXdSAo5ZCz6IKy5oGpKQ==?= <Rynn.Wu@mediatek.com>,
+        Tue, 11 Jun 2019 06:24:28 -0400
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFC96320;
+        Tue, 11 Jun 2019 12:24:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1560248666;
+        bh=HSz6CQ25wYWLyP6jZSDyL4A+kiBRxHybjKh5ZW0GsQc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lvGkT9rolIy9P4D2YG1DsQ3MiB4gAaPGXFGGx+f1zDwIlecyhCjtsoOfy07ITjlEH
+         zfhALIQnQgXMCe+drTXYf1Ej3SsFAtZQ9vYCz1FcwFXKRAAkfNBL/RY1nfiR8uSszp
+         wAyeV2fQWT9UrZh4uYjn8AgXoiyenKE4eKNdvAb4=
+Date:   Tue, 11 Jun 2019 13:24:10 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
         Linux Media Mailing List <linux-media@vger.kernel.org>,
-        srv_heupstream <srv_heupstream@mediatek.com>,
-        devicetree@vger.kernel.org,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tomasz Figa <tfiga@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH for v5.2] videobuf2-core.c: always reacquire USERPTR
+ memory
+Message-ID: <20190611102410.GD5016@pendragon.ideasonboard.com>
+References: <20190607111634.GA7593@pendragon.ideasonboard.com>
+ <CGME20190607120150epcas3p34178a04f712c89b013a263264cf2184f@epcas3p3.samsung.com>
+ <cb129a47-e114-6841-44cc-ec34ffa562c7@xs4all.nl>
+ <e674539f-6b40-7b54-90bd-d1ed96ea5f55@samsung.com>
+ <6c3ffe98-9d64-b881-470a-bfef8b9280de@xs4all.nl>
+ <1f754020-296c-cf9b-1331-598bb774fa42@xs4all.nl>
+ <4e711a70-ef25-b9f2-e27a-ae6c80288388@xs4all.nl>
+ <ddacf8a1-61c4-bc04-8c52-cd56dfd13842@samsung.com>
+ <20190607135815.GN7593@pendragon.ideasonboard.com>
+ <675dc8c2985754f6c72c06ec36a00ebca4f49fc8.camel@ndufresne.ca>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <675dc8c2985754f6c72c06ec36a00ebca4f49fc8.camel@ndufresne.ca>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Daoyuan,
+Hi Nicolas,
 
-On Tue, Jun 11, 2019 at 6:20 PM Daoyuan Huang
-<daoyuan.huang@mediatek.com> wrote:
->
-> hi Tomasz:
->
-> Thanks for your review comments, the corresponding modification
-> & explanation is under preparation, will update soon.
->
-> Thanks.
+On Fri, Jun 07, 2019 at 03:38:39PM -0400, Nicolas Dufresne wrote:
+> Le vendredi 07 juin 2019 à 16:58 +0300, Laurent Pinchart a écrit :
+> > On Fri, Jun 07, 2019 at 03:55:05PM +0200, Marek Szyprowski wrote:
+> >> On 2019-06-07 15:40, Hans Verkuil wrote:
+> >>> On 6/7/19 2:47 PM, Hans Verkuil wrote:
+> >>>> On 6/7/19 2:23 PM, Hans Verkuil wrote:
+> >>>>> On 6/7/19 2:14 PM, Marek Szyprowski wrote:
+> >>>>>> On 2019-06-07 14:01, Hans Verkuil wrote:
+> >>>>>>> On 6/7/19 1:16 PM, Laurent Pinchart wrote:
+> >>>>>>>> Thank you for the patch.
+> >>>>>>>> 
+> >>>>>>>> On Fri, Jun 07, 2019 at 10:45:31AM +0200, Hans Verkuil wrote:
+> >>>>>>>>> The __prepare_userptr() function made the incorrect assumption that if the
+> >>>>>>>>> same user pointer was used as the last one for which memory was acquired, then
+> >>>>>>>>> there was no need to re-acquire the memory. This assumption was never properly
+> >>>>>>>>> tested, and after doing that it became clear that this was in fact wrong.
+> >>>>>>>> Could you explain in the commit message why the assumption is not
+> >>>>>>>> correct ?
+> >>>>>>> You can free the memory, then allocate it again and you can get the same pointer,
+> >>>>>>> even though it is not necessarily using the same physical pages for the memory
+> >>>>>>> that the kernel is still using for it.
+> >>>>>>> 
+> >>>>>>> Worse, you can free the memory, then allocate only half the memory you need and
+> >>>>>>> get back the same pointer. vb2 wouldn't notice this. And it seems to work (since
+> >>>>>>> the original mapping still remains), but this can corrupt userspace memory
+> >>>>>>> causing the application to crash. It's not quite clear to me how the memory can
+> >>>>>>> get corrupted. I don't know enough of those low-level mm internals to understand
+> >>>>>>> the sequence of events.
+> >>>>>>> 
+> >>>>>>> I have test code for v4l2-compliance available if someone wants to test this.
+> >>>>>> I'm interested, I would really like to know what happens in the mm
+> >>>>>> subsystem in such case.
+> >>>>> Here it is:
+> >>>>> 
+> >>>>> diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
+> >>>>> index be606e48..9abf41da 100644
+> >>>>> --- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
+> >>>>> +++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
+> >>>>> @@ -797,7 +797,7 @@ int testReadWrite(struct node *node)
+> >>>>>   	return 0;
+> >>>>>   }
+> >>>>> 
+> >>>>> -static int captureBufs(struct node *node, const cv4l_queue &q,
+> >>>>> +static int captureBufs(struct node *node, cv4l_queue &q,
+> >>>>>   		const cv4l_queue &m2m_q, unsigned frame_count, int pollmode,
+> >>>>>   		unsigned &capture_count)
+> >>>>>   {
+> >>>>> @@ -962,6 +962,21 @@ static int captureBufs(struct node *node, const cv4l_queue &q,
+> >>>>>   				buf.s_flags(V4L2_BUF_FLAG_REQUEST_FD);
+> >>>>>   				buf.s_request_fd(buf_req_fds[req_idx]);
+> >>>>>   			}
+> >>>>> +			if (v4l_type_is_capture(buf.g_type()) && q.g_memory() == V4L2_MEMORY_USERPTR) {
+> >>>>> +				printf("\nidx: %d", buf.g_index());
+> >>>>> +				for (unsigned p = 0; p < q.g_num_planes(); p++) {
+> >>>>> +					printf(" old buf[%d]: %p ", p, buf.g_userptr(p));
+> >>>>> +					fflush(stdout);
+> >>>>> +					free(buf.g_userptr(p));
+> >>>>> +					void *m = calloc(1, q.g_length(p)/2);
+> >>>>> +
+> >>>>> +					fail_on_test(m == NULL);
+> >>>>> +					q.s_userptr(buf.g_index(), p, m);
+> >>>>> +					printf("new buf[%d]: %p", p, m);
+> >>>>> +					buf.s_userptr(m, p);
+> >>>>> +				}
+> >>>>> +				printf("\n");
+> >>>>> +			}
+> >>>>>   			fail_on_test(buf.qbuf(node, q));
+> >>>>>   			fail_on_test(buf.g_flags() & V4L2_BUF_FLAG_DONE);
+> >>>>>   			if (buf.g_flags() & V4L2_BUF_FLAG_REQUEST_FD) {
+> >>>>> 
+> >>>>> 
+> >>>>> 
+> >>>>> Load the vivid driver and just run 'v4l2-compliance -s10' and you'll see:
+> >>>>> 
+> >>>>> ...
+> >>>>> Streaming ioctls:
+> >>>>>          test read/write: OK
+> >>>>>          test blocking wait: OK
+> >>>>>          test MMAP (no poll): OK
+> >>>>>          test MMAP (select): OK
+> >>>>>          test MMAP (epoll): OK
+> >>>>>          Video Capture: Frame #000
+> >>>>> idx: 0 old buf[0]: 0x7f71c6e7c010 new buf[0]: 0x7f71c6eb4010
+> >>>>>          Video Capture: Frame #001
+> >>>>> idx: 1 old buf[0]: 0x7f71c6e0b010 new buf[0]: 0x7f71c6e7b010
+> >>>>>          Video Capture: Frame #002
+> >>>>> idx: 0 old buf[0]: 0x7f71c6eb4010 free(): invalid pointer
+> >>>>> Aborted
+> >>>> To clarify: two full size buffers are allocated and queued (that happens in setupUserPtr()),
+> >>>> then streaming starts and captureBufs is called which basically just calls dqbuf
+> >>>> and qbuf.
+> >>>> 
+> >>>> Tomasz pointed out that all the pointers in this log are actually different. That's
+> >>>> correct, but here is a log where the old and new buf ptr are the same:
+> >>>> 
+> >>>> Streaming ioctls:
+> >>>>          test read/write: OK
+> >>>>          test blocking wait: OK
+> >>>>          test MMAP (no poll): OK
+> >>>>          test MMAP (select): OK
+> >>>>          test MMAP (epoll): OK
+> >>>>          Video Capture: Frame #000
+> >>>> idx: 0 old buf[0]: 0x7f1094e16010 new buf[0]: 0x7f1094e4e010
+> >>>>          Video Capture: Frame #001
+> >>>> idx: 1 old buf[0]: 0x7f1094da5010 new buf[0]: 0x7f1094e15010
+> >>>>          Video Capture: Frame #002
+> >>>> idx: 0 old buf[0]: 0x7f1094e4e010 new buf[0]: 0x7f1094e4e010
+> >>>>          Video Capture: Frame #003
+> >>>> idx: 1 old buf[0]: 0x7f1094e15010 free(): invalid pointer
+> >>>> Aborted
+> >>>> 
+> >>>> It's weird that the first log fails that way: if the pointers are different,
+> >>>> then vb2 will call get_userptr and it should discover that the buffer isn't
+> >>>> large enough, causing qbuf to fail. That doesn't seem to happen.
+> >>> I think that the reason for this corruption is that the memory pool used
+> >>> by glibc is now large enough for vb2 to think it can map the full length
+> >>> of the user pointer into memory, even though only the first half is actually
+> >>> from the buffer that's allocated. When you capture a frame you just overwrite
+> >>> a random part of the application's memory pool, causing this invalid pointer.
+> >>> 
+> >>> But that's a matter of garbage in, garbage out. So that's not the issue here.
+> >>> 
+> >>> The real question is what happens when you free the old buffer, allocate a
+> >>> new buffer, end up with the same userptr, but it's using one or more different
+> >>> pages for its memory compared to the mapping that the kernel uses.
+> >>> 
+> >>> I managed to reproduce this with v4l2-ctl:
+> >>> 
+> >>> diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> >>> index 28b2b3b9..8f2ed9b5 100644
+> >>> --- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> >>> +++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
+> >>> @@ -1422,6 +1422,24 @@ static int do_handle_cap(cv4l_fd &fd, cv4l_queue &q, FILE *fout, int *index,
+> >>>   		 * has the size that fits the old resolution and might not
+> >>>   		 * fit to the new one.
+> >>>   		 */
+> >>> +		if (q.g_memory() == V4L2_MEMORY_USERPTR) {
+> >>> +			printf("\nidx: %d", buf.g_index());
+> >>> +			for (unsigned p = 0; p < q.g_num_planes(); p++) {
+> >>> +				unsigned *pb = (unsigned *)buf.g_userptr(p);
+> >>> +				printf(" old buf[%d]: %p first pixel: 0x%x", p, buf.g_userptr(p), *pb);
+> >>> +				fflush(stdout);
+> >>> +				free(buf.g_userptr(p));
+> >>> +				void *m = calloc(1, q.g_length(p));
+> >>> +
+> >>> +				if (m == NULL)
+> >>> +					return QUEUE_ERROR;
+> >>> +				q.s_userptr(buf.g_index(), p, m);
+> >>> +				if (m == buf.g_userptr(p))
+> >>> +					printf(" identical new buf");
+> >>> +				buf.s_userptr(m, p);
+> >>> +			}
+> >>> +			printf("\n");
+> >>> +		}
+> >>>   		if (fd.qbuf(buf) && errno != EINVAL) {
+> >>>   			fprintf(stderr, "%s: qbuf error\n", __func__);
+> >>>   			return QUEUE_ERROR;
+> >>> 
+> >>> 
+> >>> Load vivid, setup a pure white test pattern:
+> >>> 
+> >>> v4l2-ctl -c test_pattern=6
+> >>> 
+> >>> Now run v4l2-ctl --stream-user and you'll see:
+> >>> 
+> >>> idx: 0 old buf[0]: 0x7f91551cb010 first pixel: 0x80ea80ea identical new buf
+> >>> <
+> >>> idx: 1 old buf[0]: 0x7f915515a010 first pixel: 0x80ea80ea identical new buf
+> >>> <
+> >>> idx: 2 old buf[0]: 0x7f91550e9010 first pixel: 0x80ea80ea identical new buf
+> >>> <
+> >>> idx: 3 old buf[0]: 0x7f9155078010 first pixel: 0x80ea80ea identical new buf
+> >>> <
+> >>> idx: 0 old buf[0]: 0x7f91551cb010 first pixel: 0x0 identical new buf
+> >>> <
+> >>> idx: 1 old buf[0]: 0x7f915515a010 first pixel: 0x0 identical new buf
+> >>> < 5.00 fps
+> >>> 
+> >>> idx: 2 old buf[0]: 0x7f91550e9010 first pixel: 0x0 identical new buf
+> >>> <
+> >>> idx: 3 old buf[0]: 0x7f9155078010 first pixel: 0x0 identical new buf
+> >>> 
+> >>> The first four dequeued buffers are filled with data, after that the
+> >>> returned buffer is empty because vivid is actually writing to different
+> >>> memory pages.
+> >>> 
+> >>> With this patch the first pixel is always non-zero.
+> >> 
+> >> Good catch. The question is weather we treat that as undefined behavior 
+> >> and keep the optimization for 'good applications' or assume that every 
+> >> broken userspace code has to be properly handled.
+> > 
+> > Given how long we've been saying that USERPTR should be replaced by
+> > DMABUF, I would consider that any userspace code using USERPTR is broken
+> > :-) One could however question whether we were effective at getting that
+> > message across...
+> 
+> Just a reminder that DMABuf is not a replacement for USERPTR. It only
+> cover a subset in absence of an allocater for it. There is no clean way
+> to allocate a DMAbuf. Notably, memfds (which could have filled the gap)
+> are not DMABuf, even though they are they are similar to the buffers
+> allocated by vivid or uvcvideo.
 
-Thanks.
+You always have the option to use MMAP to allocate buffers on the V4L2
+device. What prevents you from doing so and forces usage of USERPTR ?
 
-Note that Alexandre may already be reviewing the rest of this patch,
-so I'd consult with him if sending a next revision or waiting for his
-review is preferred.
+> >> The good thing is that 
+> >> there is still imho no security issue. The physical pages gathered by 
+> >> vb2 in worst case belongs to noone else (vb2 is their last user, they 
+> >> are not yet returned to free pages pool).
+> >> 
+> >>> I wonder if it isn't possible to just check the physical address of
+> >>> the received user pointer with the physical address of the previous
+> >>> user pointer. Or something like that. I'll dig around a bit more.
+> >> 
+> >> Such check won't be so simple. Pages contiguous in the virtual memory 
+> >> won't map to pages contiguous in the physical memory, so you would need 
+> >> to check every single memory page. Make no sense. It is better to 
+> >> reacquire buffer on every queue operation. This indeed show how broken 
+> >> the USERPTR related part of v4l2 API is.
 
-Best regards,
-Tomasz
+-- 
+Regards,
+
+Laurent Pinchart
