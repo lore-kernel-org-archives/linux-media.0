@@ -4,27 +4,26 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A72F9C31E45
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 17:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86498C31E49
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 17:01:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8A3C820665
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 17:01:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E0972080A
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 17:01:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729721AbfFMRBV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Jun 2019 13:01:21 -0400
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:32270 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729722AbfFLXqT (ORCPT
+        id S1729816AbfFMRBW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Jun 2019 13:01:22 -0400
+Received: from bin-mail-out-06.binero.net ([195.74.38.229]:39071 "EHLO
+        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729725AbfFLXqT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 12 Jun 2019 19:46:19 -0400
-X-Halon-ID: 3f986b21-8d6c-11e9-8ab4-005056917a89
+X-Halon-ID: 401b3da8-8d6c-11e9-8ab4-005056917a89
 Authorized-sender: niklas@soderlund.pp.se
 Received: from bismarck.berto.se (unknown [89.233.230.99])
         by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id 3f986b21-8d6c-11e9-8ab4-005056917a89;
+        id 401b3da8-8d6c-11e9-8ab4-005056917a89;
         Thu, 13 Jun 2019 01:46:08 +0200 (CEST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
@@ -34,9 +33,9 @@ Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Ulrich Hecht <uli+renesas@fpond.eu>
-Subject: [PATCH v3 1/8] rcar-vin: Do not call pm_runtime_{resume,suspend}()
-Date:   Thu, 13 Jun 2019 01:45:40 +0200
-Message-Id: <20190612234547.14486-2-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v3 2/8] rcar-vin: Remove unneeded calls to pm_runtime_{enable,disable}
+Date:   Thu, 13 Jun 2019 01:45:41 +0200
+Message-Id: <20190612234547.14486-3-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190612234547.14486-1-niklas.soderlund+renesas@ragnatech.se>
 References: <20190612234547.14486-1-niklas.soderlund+renesas@ragnatech.se>
@@ -48,46 +47,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The driver does not implement runtime resume and suspend function so
-there is little point in trying to call them. This is a leftover from
-the drivers soc_camera beginnings.
+Runtime PM is already enabled unconditionally when the driver is probed
+and disabled when it's removed. There is no point in doing it again for
+Gen2 when opening and closing the video device.
 
 Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
 ---
- drivers/media/platform/rcar-vin/rcar-v4l2.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-v4l2.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-index 7cbdcbf9b090c638..b821ea01786eb1ff 100644
+index b821ea01786eb1ff..0841f1a0bfd7ba3a 100644
 --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
 +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-@@ -798,9 +798,6 @@ static int rvin_initialize_device(struct file *file)
+@@ -797,8 +797,6 @@ static int rvin_initialize_device(struct file *file)
+ 	if (ret < 0)
  		return ret;
  
- 	pm_runtime_enable(&vin->vdev.dev);
--	ret = pm_runtime_resume(&vin->vdev.dev);
--	if (ret < 0 && ret != -ENOSYS)
--		goto eresume;
- 
+-	pm_runtime_enable(&vin->vdev.dev);
+-
  	/*
  	 * Try to configure with default parameters. Notice: this is the
-@@ -817,7 +814,6 @@ static int rvin_initialize_device(struct file *file)
+ 	 * very first open, so, we cannot race against other calls,
+@@ -813,7 +811,6 @@ static int rvin_initialize_device(struct file *file)
+ 
  	return 0;
  esfmt:
- 	pm_runtime_disable(&vin->vdev.dev);
--eresume:
+-	pm_runtime_disable(&vin->vdev.dev);
  	rvin_power_off(vin);
  
  	return ret;
-@@ -868,7 +864,6 @@ static int rvin_release(struct file *file)
+@@ -863,10 +860,8 @@ static int rvin_release(struct file *file)
+ 	 * If this was the last open file.
  	 * Then de-initialize hw module.
  	 */
- 	if (fh_singular) {
--		pm_runtime_suspend(&vin->vdev.dev);
- 		pm_runtime_disable(&vin->vdev.dev);
+-	if (fh_singular) {
+-		pm_runtime_disable(&vin->vdev.dev);
++	if (fh_singular)
  		rvin_power_off(vin);
- 	}
+-	}
+ 
+ 	mutex_unlock(&vin->lock);
+ 
 -- 
 2.21.0
 
