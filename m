@@ -6,38 +6,34 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1BB1C31E46
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 09:39:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 243C3C31E46
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 09:42:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8F9022082C
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 09:39:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0332320866
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 09:42:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437584AbfFLJjW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jun 2019 05:39:22 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:46713 "EHLO
+        id S2437585AbfFLJmM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Jun 2019 05:42:12 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:55703 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437456AbfFLJjW (ORCPT
+        with ESMTP id S2437405AbfFLJmM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Jun 2019 05:39:22 -0400
+        Wed, 12 Jun 2019 05:42:12 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1haziz-00053v-6v; Wed, 12 Jun 2019 11:39:21 +0200
+        id 1hazli-0005ur-Fx; Wed, 12 Jun 2019 11:42:10 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Ezequiel Garcia <ezequiel@collabora.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Jonas Karlman <jonas@kwiboo.se>, devicetree@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH v5 05/10] media: hantro: add support for named register ranges
-Date:   Wed, 12 Jun 2019 11:39:10 +0200
-Message-Id: <20190612093915.18973-6-p.zabel@pengutronix.de>
+        Jonas Karlman <jonas@kwiboo.se>, kernel@pengutronix.de
+Subject: [PATCH v7] media: hantro: Add support for MPEG-2 decoding on RK3328
+Date:   Wed, 12 Jun 2019 11:42:08 +0200
+Message-Id: <20190612094208.20221-1-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190612093915.18973-1-p.zabel@pengutronix.de>
-References: <20190612093915.18973-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
@@ -49,97 +45,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support for multiple register ranges with SoC specific names.
+From: Jonas Karlman <jonas@kwiboo.se>
 
+Add necessary bits to support MPEG2 decoding on RK3328.
+
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
 ---
- drivers/staging/media/hantro/hantro.h     |  8 ++++++--
- drivers/staging/media/hantro/hantro_drv.c | 24 +++++++++++++++++------
- 2 files changed, 24 insertions(+), 8 deletions(-)
+Changes since v6 [1]:
+- Rebased onto Hantro rename series [2]
 
-diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index d041d36a0805..e8eb747f22ef 100644
---- a/drivers/staging/media/hantro/hantro.h
-+++ b/drivers/staging/media/hantro/hantro.h
-@@ -72,6 +72,8 @@ struct hantro_irq {
-  * @num_irqs:			number of irqs in the array
-  * @clk_names:			array of clock names
-  * @num_clocks:			number of clocks in the array
-+ * @reg_names:			array of register range names
-+ * @num_regs:			number of register range names in the array
-  */
- struct hantro_variant {
- 	unsigned int enc_offset;
-@@ -88,6 +90,8 @@ struct hantro_variant {
- 	int num_irqs;
- 	const char *clk_names[HANTRO_MAX_CLOCKS];
- 	int num_clocks;
-+	const char * const *reg_names;
-+	int num_regs;
- };
- 
- /**
-@@ -160,7 +164,7 @@ hantro_vdev_to_func(struct video_device *vdev)
-  * @dev:		Pointer to device for convenient logging using
-  *			dev_ macros.
-  * @clocks:		Array of clock handles.
-- * @base:		Mapped address of VPU registers.
-+ * @reg_bases:		Mapped addresses of VPU registers.
-  * @enc_base:		Mapped address of VPU encoder register for convenience.
-  * @dec_base:		Mapped address of VPU decoder register for convenience.
-  * @vpu_mutex:		Mutex to synchronize V4L2 calls.
-@@ -178,7 +182,7 @@ struct hantro_dev {
- 	struct platform_device *pdev;
- 	struct device *dev;
- 	struct clk_bulk_data clocks[HANTRO_MAX_CLOCKS];
--	void __iomem *base;
-+	void __iomem **reg_bases;
- 	void __iomem *enc_base;
- 	void __iomem *dec_base;
- 
+[1] https://patchwork.linuxtv.org/patch/56402/
+[2] https://patchwork.linuxtv.org/cover/56825/
+---
+ drivers/staging/media/hantro/Kconfig         |  2 +-
+ drivers/staging/media/hantro/hantro_drv.c    |  1 +
+ drivers/staging/media/hantro/rk3399_vpu_hw.c | 17 +++++++++++++++++
+ 3 files changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/staging/media/hantro/Kconfig b/drivers/staging/media/hantro/Kconfig
+index e0627ce454fc..99aed9a5b0b9 100644
+--- a/drivers/staging/media/hantro/Kconfig
++++ b/drivers/staging/media/hantro/Kconfig
+@@ -28,4 +28,4 @@ config VIDEO_HANTRO_ROCKCHIP
+ 	depends on ARCH_ROCKCHIP || COMPILE_TEST
+ 	default y
+ 	help
+-	  Enable support for RK3288 and RK3399 SoCs.
++	  Enable support for RK3288, RK3328, and RK3399 SoCs.
 diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 4ed39728da3d..fc8f3ed8e80c 100644
+index af26672b4538..1187a6ca68be 100644
 --- a/drivers/staging/media/hantro/hantro_drv.c
 +++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -670,6 +670,7 @@ static int hantro_probe(struct platform_device *pdev)
- 	const struct of_device_id *match;
- 	struct hantro_dev *vpu;
- 	struct resource *res;
-+	int num_bases;
- 	int i, ret;
- 
- 	vpu = devm_kzalloc(&pdev->dev, sizeof(*vpu), GFP_KERNEL);
-@@ -693,12 +694,23 @@ static int hantro_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	res = platform_get_resource(vpu->pdev, IORESOURCE_MEM, 0);
--	vpu->base = devm_ioremap_resource(vpu->dev, res);
--	if (IS_ERR(vpu->base))
--		return PTR_ERR(vpu->base);
--	vpu->enc_base = vpu->base + vpu->variant->enc_offset;
--	vpu->dec_base = vpu->base + vpu->variant->dec_offset;
-+	num_bases = vpu->variant->num_regs ?: 1;
-+	vpu->reg_bases = devm_kcalloc(&pdev->dev, num_bases,
-+				      sizeof(*vpu->reg_bases), GFP_KERNEL);
-+	if (!vpu->reg_bases)
-+		return -ENOMEM;
+@@ -417,6 +417,7 @@ static const struct v4l2_file_operations hantro_fops = {
+ static const struct of_device_id of_hantro_match[] = {
+ #ifdef CONFIG_VIDEO_HANTRO_ROCKCHIP
+ 	{ .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
++	{ .compatible = "rockchip,rk3328-vpu", .data = &rk3328_vpu_variant, },
+ 	{ .compatible = "rockchip,rk3288-vpu", .data = &rk3288_vpu_variant, },
+ #endif
+ #ifdef CONFIG_VIDEO_HANTRO_IMX8M
+diff --git a/drivers/staging/media/hantro/rk3399_vpu_hw.c b/drivers/staging/media/hantro/rk3399_vpu_hw.c
+index 5718f8063542..f8400e49bc50 100644
+--- a/drivers/staging/media/hantro/rk3399_vpu_hw.c
++++ b/drivers/staging/media/hantro/rk3399_vpu_hw.c
+@@ -184,3 +184,20 @@ const struct hantro_variant rk3399_vpu_variant = {
+ 	.clk_names = rk3399_clk_names,
+ 	.num_clocks = ARRAY_SIZE(rk3399_clk_names)
+ };
 +
-+	for (i = 0; i < num_bases; i++) {
-+		res = vpu->variant->reg_names ?
-+		      platform_get_resource_byname(vpu->pdev, IORESOURCE_MEM,
-+						   vpu->variant->reg_names[i]) :
-+		      platform_get_resource(vpu->pdev, IORESOURCE_MEM, 0);
-+		vpu->reg_bases[i] = devm_ioremap_resource(vpu->dev, res);
-+		if (IS_ERR(vpu->reg_bases[i]))
-+			return PTR_ERR(vpu->reg_bases[i]);
-+	}
-+	vpu->enc_base = vpu->reg_bases[0] + vpu->variant->enc_offset;
-+	vpu->dec_base = vpu->reg_bases[0] + vpu->variant->dec_offset;
- 
- 	ret = dma_set_coherent_mask(vpu->dev, DMA_BIT_MASK(32));
- 	if (ret) {
++static const struct hantro_irq rk3328_irqs[] = {
++	{ "vdpu", rk3399_vdpu_irq },
++};
++
++const struct hantro_variant rk3328_vpu_variant = {
++	.dec_offset = 0x400,
++	.dec_fmts = rk3399_vpu_dec_fmts,
++	.num_dec_fmts = ARRAY_SIZE(rk3399_vpu_dec_fmts),
++	.codec = HANTRO_MPEG2_DECODER,
++	.codec_ops = rk3399_vpu_codec_ops,
++	.irqs = rk3328_irqs,
++	.num_irqs = ARRAY_SIZE(rk3328_irqs),
++	.init = rk3399_vpu_hw_init,
++	.clk_names = rk3399_clk_names,
++	.num_clocks = ARRAY_SIZE(rk3399_clk_names),
++};
 -- 
 2.20.1
 
