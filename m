@@ -2,143 +2,169 @@ Return-Path: <SRS0=cYqX=UL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D78CC31E46
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 11:37:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A97FC31E49
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 11:43:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 54F89206E0
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 11:37:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D997B2082C
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 11:43:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wWQdCeaE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438361AbfFLLhV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jun 2019 07:37:21 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:42267 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2438329AbfFLLhU (ORCPT
+        id S2436606AbfFLLnp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Jun 2019 07:43:45 -0400
+Received: from mail-ot1-f73.google.com ([209.85.210.73]:43496 "EHLO
+        mail-ot1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2409094AbfFLLnn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Jun 2019 07:37:20 -0400
-Received: from [IPv6:2001:420:44c1:2579:6148:fbe2:6f51:a270] ([IPv6:2001:420:44c1:2579:6148:fbe2:6f51:a270])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id b1Z4hE9a55qKab1Z7h89R8; Wed, 12 Jun 2019 13:37:18 +0200
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT PULL FOR v5.3] Rename Rockchip VPU driver to Hantro, prepare for
- initial i.MX8M support
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>
-Message-ID: <42bb65b6-382c-662e-4ed0-1e164a0eced8@xs4all.nl>
-Date:   Wed, 12 Jun 2019 13:37:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfEbn16bBIEaWQpziOkopNhdjOXW3tsl6wjkmdbbnT1bStnW5Anm5d9RTGJQryvkunmIBwEmbTnGhFSEN7YtIK2rG8NRiuvhNCKaouvekzRxpTBRbJAR4
- ihtgLFFq/xmAA+Vppg4uCKy2wDGYKm8loHm1+QFpmLscZG7bBl77yMZCsYIpzAlrDacUAec7JoN8cLtBI6xNp98okKpfgImDDJ2PueYRIg/0RldFrUq4wC6d
- QOREcWs+P/+oQcuBiK4aRA7FtE8D+n75bKRsBxbnxdjguFrk23LdDdmEKTrvZIdkxJGuIzneaQeeerK+F1ZIAZpRdON9QN/ILHG07scrgNo=
+        Wed, 12 Jun 2019 07:43:43 -0400
+Received: by mail-ot1-f73.google.com with SMTP id w110so7613047otb.10
+        for <linux-media@vger.kernel.org>; Wed, 12 Jun 2019 04:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=UjHW3gvZNVNgT5aLmmsHnPxo+B7J7BC6tuQvc/RhPNk=;
+        b=wWQdCeaEB2u6K2FokoVH57TiuY9+YM+iloWJZ9olfqp0zjmIdmC5f6DPCzUKmsxGdy
+         S65EVOJIDT5V4zwCQfqNTJzphOcFWfUmY+gXBOeFncv77kXLYdKYGCkdMxc+OyweaWX0
+         0fKTo4iZRRAvEu0L5K9N5O0E1jscX+Pk92PzQ1PknQ2YOc6xMrIj1RN7n/IEUROoLRHK
+         DSyTNlm/Sr+vicrs5WJhiUx/1nLhQ5Q4ACjS55YPvH7eOOqFTP/CfYXsftMzptdGowR3
+         ikQ6jhRMQBxQ3FPli1xBTZa23yNKdUvKN2sR5HTTLiPeqs1dY61XYlyLOGrjNBMaj6hd
+         3iow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=UjHW3gvZNVNgT5aLmmsHnPxo+B7J7BC6tuQvc/RhPNk=;
+        b=HoaW8YV/teN4nlmeMKCZCJVHlMUkR37Zyge+5q7RzKRCH6fD0JE8oDHg90nIPM+Lqn
+         Ol4LPsgY44mLKzPir426K9edSLeQdgYAvklw0VWRLYOKI9ZFQ8NuM2DBwK19hp4wRCmV
+         4GbYg9+G++5P3j9+6jLSL85o/u4pwZz4NHttkwJaS1eu/06jTMOTXk0y+6k6ONSMHlxJ
+         ykxcyLmUk5vVFIdLsWW7Pm2muITLwb2fFVO6qxXiA/LgkIYXyRrbDWeKa1Zp7yzIP3DG
+         vFIJgQ2/7UA7VBvGyQMHKNOmYIRalyalMpzFrsPA5sUwOrJrTl//X1H6S9c/Yh0H2EnX
+         VdwQ==
+X-Gm-Message-State: APjAAAW63nOCSJe23AofXpkDHmeWbgdjJYoR4y0616R0bKpmWQ1cd5TQ
+        kMNFCYJBtbOIfoCeQMa7l9Eo2m7hQ4vQH5pL
+X-Google-Smtp-Source: APXvYqwN3f56c3YdzV4vuBZtnTaXMq2rkbV7EZJhl+9vuDir+VdtrZMmSzDSSPuiOLJaxWwDb81r7VAwTgFT1eUN
+X-Received: by 2002:a9d:764d:: with SMTP id o13mr6499138otl.298.1560339823090;
+ Wed, 12 Jun 2019 04:43:43 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 13:43:19 +0200
+In-Reply-To: <cover.1560339705.git.andreyknvl@google.com>
+Message-Id: <a76c014f9b12a082d31ef1459907cabdab78491e.1560339705.git.andreyknvl@google.com>
+Mime-Version: 1.0
+References: <cover.1560339705.git.andreyknvl@google.com>
+X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
+Subject: [PATCH v17 02/15] lib, arm64: untag user pointers in strn*_user
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This PR contains patches 1-7 of this series:
+This patch is a part of a series that extends arm64 kernel ABI to allow to
+pass tagged user pointers (with the top byte set to something else other
+than 0x00) as syscall arguments.
 
-https://www.mail-archive.com/linux-media@vger.kernel.org/msg147710.html
+strncpy_from_user and strnlen_user accept user addresses as arguments, and
+do not go through the same path as copy_from_user and others, so here we
+need to handle the case of tagged user addresses separately.
 
-Patch 8 is still waiting for an Acked-by so I postpone that and the
-following patches for a future PR.
+Untag user pointers passed to these functions.
 
-Let's do the rename now to get that out of the way.
+Note, that this patch only temporarily untags the pointers to perform
+validity checks, but then uses them as is to perform user memory accesses.
 
-Regards,
+Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
+Acked-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ lib/strncpy_from_user.c | 3 ++-
+ lib/strnlen_user.c      | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-	Hans
+diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
+index 023ba9f3b99f..dccb95af6003 100644
+--- a/lib/strncpy_from_user.c
++++ b/lib/strncpy_from_user.c
+@@ -6,6 +6,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/kernel.h>
+ #include <linux/errno.h>
++#include <linux/mm.h>
+ 
+ #include <asm/byteorder.h>
+ #include <asm/word-at-a-time.h>
+@@ -108,7 +109,7 @@ long strncpy_from_user(char *dst, const char __user *src, long count)
+ 		return 0;
+ 
+ 	max_addr = user_addr_max();
+-	src_addr = (unsigned long)src;
++	src_addr = (unsigned long)untagged_addr(src);
+ 	if (likely(src_addr < max_addr)) {
+ 		unsigned long max = max_addr - src_addr;
+ 		long retval;
+diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
+index 7f2db3fe311f..28ff554a1be8 100644
+--- a/lib/strnlen_user.c
++++ b/lib/strnlen_user.c
+@@ -2,6 +2,7 @@
+ #include <linux/kernel.h>
+ #include <linux/export.h>
+ #include <linux/uaccess.h>
++#include <linux/mm.h>
+ 
+ #include <asm/word-at-a-time.h>
+ 
+@@ -109,7 +110,7 @@ long strnlen_user(const char __user *str, long count)
+ 		return 0;
+ 
+ 	max_addr = user_addr_max();
+-	src_addr = (unsigned long)str;
++	src_addr = (unsigned long)untagged_addr(str);
+ 	if (likely(src_addr < max_addr)) {
+ 		unsigned long max = max_addr - src_addr;
+ 		long retval;
+-- 
+2.22.0.rc2.383.gf4fbbf30c2-goog
 
-The following changes since commit 4e8c120de9268fc26f583268b9d22e7d37c4595f:
-
-  media: fdp1: Support M3N and E3 platforms (2019-06-11 12:29:54 -0400)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/br-hantro
-
-for you to fetch changes up to 2f744a9d14e2779428f3e5b1110001cc37ce2afc:
-
-  media: hantro: allow arbitrary number of clocks (2019-06-12 13:02:23 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Philipp Zabel (7):
-      rockchip/vpu: rename from rockchip to hantro
-      media: hantro: print video device name in addition to device node
-      media: hantro: add PM runtime resume callback
-      media: hantro: make irq names configurable
-      media: hantro: add support for named register ranges
-      media: hantro: add support for separate control block
-      media: hantro: allow arbitrary number of clocks
-
- MAINTAINERS                                                               |   4 +-
- drivers/staging/media/Kconfig                                             |   4 +-
- drivers/staging/media/Makefile                                            |   2 +-
- drivers/staging/media/hantro/Kconfig                                      |  23 ++
- drivers/staging/media/hantro/Makefile                                     |  15 ++
- drivers/staging/media/{rockchip/vpu => hantro}/TODO                       |   0
- drivers/staging/media/{rockchip/vpu/rockchip_vpu.h => hantro/hantro.h}    | 167 +++++++------
- .../media/{rockchip/vpu/rockchip_vpu_drv.c => hantro/hantro_drv.c}        | 331 +++++++++++++------------
- drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c                        | 260 ++++++++++++++++++++
- drivers/staging/media/hantro/hantro_g1_regs.h                             | 301 +++++++++++++++++++++++
- drivers/staging/media/hantro/hantro_h1_jpeg_enc.c                         | 125 ++++++++++
- drivers/staging/media/hantro/hantro_h1_regs.h                             | 154 ++++++++++++
- drivers/staging/media/hantro/hantro_hw.h                                  | 102 ++++++++
- .../media/{rockchip/vpu/rockchip_vpu_jpeg.c => hantro/hantro_jpeg.c}      |  18 +-
- drivers/staging/media/hantro/hantro_jpeg.h                                |  13 +
- .../media/{rockchip/vpu/rockchip_vpu_mpeg2.c => hantro/hantro_mpeg2.c}    |  14 +-
- .../media/{rockchip/vpu/rockchip_vpu_v4l2.c => hantro/hantro_v4l2.c}      | 234 +++++++++---------
- .../media/{rockchip/vpu/rockchip_vpu_v4l2.h => hantro/hantro_v4l2.h}      |  16 +-
- drivers/staging/media/hantro/rk3288_vpu_hw.c                              | 187 ++++++++++++++
- drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw.c            |  77 +++---
- drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw_jpeg_enc.c   |  32 +--
- drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw_mpeg2_dec.c  |  37 ++-
- drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_regs.h          |   2 +-
- drivers/staging/media/rockchip/vpu/Kconfig                                |  14 --
- drivers/staging/media/rockchip/vpu/Makefile                               |  14 --
- drivers/staging/media/rockchip/vpu/rk3288_vpu_hw.c                        | 177 --------------
- drivers/staging/media/rockchip/vpu/rk3288_vpu_hw_jpeg_enc.c               | 125 ----------
- drivers/staging/media/rockchip/vpu/rk3288_vpu_hw_mpeg2_dec.c              | 261 --------------------
- drivers/staging/media/rockchip/vpu/rk3288_vpu_regs.h                      | 443 ----------------------------------
- drivers/staging/media/rockchip/vpu/rockchip_vpu_hw.h                      | 102 --------
- drivers/staging/media/rockchip/vpu/rockchip_vpu_jpeg.h                    |  14 --
- 31 files changed, 1667 insertions(+), 1601 deletions(-)
- create mode 100644 drivers/staging/media/hantro/Kconfig
- create mode 100644 drivers/staging/media/hantro/Makefile
- rename drivers/staging/media/{rockchip/vpu => hantro}/TODO (100%)
- rename drivers/staging/media/{rockchip/vpu/rockchip_vpu.h => hantro/hantro.h} (66%)
- rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_drv.c => hantro/hantro_drv.c} (69%)
- create mode 100644 drivers/staging/media/hantro/hantro_g1_mpeg2_dec.c
- create mode 100644 drivers/staging/media/hantro/hantro_g1_regs.h
- create mode 100644 drivers/staging/media/hantro/hantro_h1_jpeg_enc.c
- create mode 100644 drivers/staging/media/hantro/hantro_h1_regs.h
- create mode 100644 drivers/staging/media/hantro/hantro_hw.h
- rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_jpeg.c => hantro/hantro_jpeg.c} (95%)
- create mode 100644 drivers/staging/media/hantro/hantro_jpeg.h
- rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_mpeg2.c => hantro/hantro_mpeg2.c} (79%)
- rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_v4l2.c => hantro/hantro_v4l2.c} (69%)
- rename drivers/staging/media/{rockchip/vpu/rockchip_vpu_v4l2.h => hantro/hantro_v4l2.h} (53%)
- create mode 100644 drivers/staging/media/hantro/rk3288_vpu_hw.c
- rename drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw.c (65%)
- rename drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw_jpeg_enc.c (86%)
- rename drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_hw_mpeg2_dec.c (92%)
- rename drivers/staging/media/{rockchip/vpu => hantro}/rk3399_vpu_regs.h (99%)
- delete mode 100644 drivers/staging/media/rockchip/vpu/Kconfig
- delete mode 100644 drivers/staging/media/rockchip/vpu/Makefile
- delete mode 100644 drivers/staging/media/rockchip/vpu/rk3288_vpu_hw.c
- delete mode 100644 drivers/staging/media/rockchip/vpu/rk3288_vpu_hw_jpeg_enc.c
- delete mode 100644 drivers/staging/media/rockchip/vpu/rk3288_vpu_hw_mpeg2_dec.c
- delete mode 100644 drivers/staging/media/rockchip/vpu/rk3288_vpu_regs.h
- delete mode 100644 drivers/staging/media/rockchip/vpu/rockchip_vpu_hw.h
- delete mode 100644 drivers/staging/media/rockchip/vpu/rockchip_vpu_jpeg.h
