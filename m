@@ -7,57 +7,57 @@ X-Spam-Status: No, score=-16.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
 	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DDADC31E4B
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 11:44:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63161C31E46
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 11:44:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E8CF02082C
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 11:44:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3CD45208C2
+	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 11:44:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UD79Ay48"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l++ZaaCo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438511AbfFLLoO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jun 2019 07:44:14 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:50457 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438508AbfFLLoM (ORCPT
+        id S2438571AbfFLLoZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 12 Jun 2019 07:44:25 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:40013 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438551AbfFLLoV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Jun 2019 07:44:12 -0400
-Received: by mail-qt1-f202.google.com with SMTP id g30so14396904qtm.17
-        for <linux-media@vger.kernel.org>; Wed, 12 Jun 2019 04:44:12 -0700 (PDT)
+        Wed, 12 Jun 2019 07:44:21 -0400
+Received: by mail-qk1-f202.google.com with SMTP id n5so13502757qkf.7
+        for <linux-media@vger.kernel.org>; Wed, 12 Jun 2019 04:44:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=eb4SnUCHaoFPTU0EqMrx7H6L5ANcvzM3zwsiyq0FV40=;
-        b=UD79Ay48r+Qt/fUB4eQQS+u7jB3BFWRYtdLCt6Qa95VfLfmvvw7Hya/RkyTUwkhx0D
-         +1vmB8M4RBQZbJNIhwkYxv5AEL21ErrNvQCQ8+lOs4BCA4LMOTjJTuV8BlTNIfNEsvvi
-         S8RTYx74gNWKftQMTjEJ+kHo6ZnD8masl8ZG8ezS9xy8uaiMn8te593VaiscKSGKojp2
-         e5Cc4FqtUoN3q8YTe+OydLtjYtDNOm5Wm5t/bbuGQhbg9sf44AZgifS6zPiIE4WlbsCF
-         2CX+HbBHE4vO/HCGylKIpSsIsXiK8frsZe8Lb15lkTfFpYP5OsKznhL91S0FrbJQy23X
-         yoqw==
+        bh=dC40GuuRrFkQnjrApJXQmFxRiKKrkesKJBcqRTZL8Hw=;
+        b=l++ZaaCoh/Va878Z1RknZZDdHUxfk157JnrRAUHz0jkL8fnv4FiiLmIp7Mk+/+dj5Z
+         udFWoFOVhW7criNi8EMt8LBSnQaHvMhhUZ7BDvFNW7/H/rP4O9cpUiWmbFdx7WqJb0YL
+         NYshnqAqHIeJqfZE1jL/Or9LTpuDIXYOfI1A2lvZRf82GFgwU4vOl8q53aA7Al9b8vAL
+         /40xfjd6Br1Z56pIH7ZQuk9+yAf8Fr4GxAKL+l48BRvqpFH3utDdPvwMyQ57y2D4Zbcd
+         AbEKWCBEQKFZuNPc6Vhcbi8LrlZtqOM5E/akcRiPUbRsuxCCoPgb7uahyTdqK4vvCrOk
+         BhgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=eb4SnUCHaoFPTU0EqMrx7H6L5ANcvzM3zwsiyq0FV40=;
-        b=PAN5vM8GF6dlQDwTgnIn4WbimeLpP7HlJGfYH93AONsJNVTtNrK20Or0UkBHRR8i0b
-         ErfOv69yY7WsZp+Ji9hlEHRV8Ul7k3nHb0lGfQLC9pNymm6e8i760xJ/8Aw3Ki+kb4FD
-         DvCVwDtf6UGJhmk/DM03OCdPb93FbJFAt6z58X7PkQbEVizwwlGtM9ln7hjdcNho9O14
-         I9r15JtKhQIep5SoAtWLdEBYXys1avTRSVmB2cDP9KRkMPqc9egaKEoSYngrX2CvFlUE
-         WpwdQlZHRg2d+E80y3iBAkXXPGWymBDR2Ua6mQDIOo9EhPMDT/zops5ReorQ04xGbPpk
-         TYyg==
-X-Gm-Message-State: APjAAAXUknerG7bGI7f2MPlUseFUtumSgM7IJKXlznvHpxWA37ELOFx+
-        7T03tkjNiGUzYBebV2EQ+wVpACz6/mx2mrtW
-X-Google-Smtp-Source: APXvYqziQbsGJB+s1a1ziaRcl+e8Gmo6MzSM6gFLtwRxsTnl2K0xyr2RS7DkrrH2w0nPz/f56zeYNt9ix1U3jsHZ
-X-Received: by 2002:ae9:f107:: with SMTP id k7mr2472892qkg.215.1560339851579;
- Wed, 12 Jun 2019 04:44:11 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 13:43:28 +0200
+        bh=dC40GuuRrFkQnjrApJXQmFxRiKKrkesKJBcqRTZL8Hw=;
+        b=NgUDr074rDLiuD7d031nQt8a9IKO7GTjrbDt2RaYxxmkDMBh3CfSDHf5v1FUXYEg9H
+         U+NjlxNf6P2LKyatZVoHcqSDFzy6WDrAd0jhjkU3oUv/2948fZXbEDfVeUK8NmZwpHcX
+         ZujXdrxHOInkEdViBqGJoZzTF62BjwYMyjZTi4DA7XHUGXX6uzWHKom7VevAGus9L+c3
+         9E9Mf5KfrxwLhpLVXK4wao8IiqO3nRznwCyGIKyv1ZLc2BmVZS2gK3DD1XYiEho+JKwn
+         Z7OSjT4KMbu1a6vkGRNMfYAWaiDAtMjG3WilpEIsFhJUdHTIfWz2cxhMLrp2FN7onoNr
+         m2BQ==
+X-Gm-Message-State: APjAAAUfE4ewMksvc8seqszL7+G2B9bs5xZnVJYR9R7j7y1H8wzWBcqB
+        xD2FHQfnYxpUYyJ/P2AM1wNSc8WJSIatOtKr
+X-Google-Smtp-Source: APXvYqwZjeFH8QvU8JlQ9TXNVd73FVhiQa5kjrzjuBPKvVuXz62UTyjAI0ty22a00jJqk9SVHlzrZWd7SRmSPg0y
+X-Received: by 2002:ac8:30c4:: with SMTP id w4mr67672128qta.314.1560339860763;
+ Wed, 12 Jun 2019 04:44:20 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 13:43:31 +0200
 In-Reply-To: <cover.1560339705.git.andreyknvl@google.com>
-Message-Id: <50293fea168d5252f79ee0bf160c64c72edbf270.1560339705.git.andreyknvl@google.com>
+Message-Id: <e86d8cd6bd0ade9cce6304594bcaf0c8e7f788b0.1560339705.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1560339705.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.rc2.383.gf4fbbf30c2-goog
-Subject: [PATCH v17 11/15] IB/mlx4, arm64: untag user pointers in mlx4_get_umem_mr
+Subject: [PATCH v17 14/15] vfio/type1, arm64: untag user pointers in vaddr_get_pfn
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -105,41 +105,31 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
+vaddr_get_pfn() uses provided user pointers for vma lookups, which can
 only by done with untagged pointers.
 
 Untag user pointers in this function.
 
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/vfio/vfio_iommu_type1.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/infiniband/hw/mlx4/mr.c b/drivers/infiniband/hw/mlx4/mr.c
-index 355205a28544..13d9f917f249 100644
---- a/drivers/infiniband/hw/mlx4/mr.c
-+++ b/drivers/infiniband/hw/mlx4/mr.c
-@@ -378,6 +378,7 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
- 	 * again
- 	 */
- 	if (!ib_access_writable(access_flags)) {
-+		unsigned long untagged_start = untagged_addr(start);
- 		struct vm_area_struct *vma;
+diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+index 3ddc375e7063..528e39a1c2dd 100644
+--- a/drivers/vfio/vfio_iommu_type1.c
++++ b/drivers/vfio/vfio_iommu_type1.c
+@@ -384,6 +384,8 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
  
- 		down_read(&current->mm->mmap_sem);
-@@ -386,9 +387,9 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
- 		 * cover the memory, but for now it requires a single vma to
- 		 * entirely cover the MR to support RO mappings.
- 		 */
--		vma = find_vma(current->mm, start);
--		if (vma && vma->vm_end >= start + length &&
--		    vma->vm_start <= start) {
-+		vma = find_vma(current->mm, untagged_start);
-+		if (vma && vma->vm_end >= untagged_start + length &&
-+		    vma->vm_start <= untagged_start) {
- 			if (vma->vm_flags & VM_WRITE)
- 				access_flags |= IB_ACCESS_LOCAL_WRITE;
- 		} else {
+ 	down_read(&mm->mmap_sem);
+ 
++	vaddr = untagged_addr(vaddr);
++
+ 	vma = find_vma_intersection(mm, vaddr, vaddr + 1);
+ 
+ 	if (vma && vma->vm_flags & VM_PFNMAP) {
 -- 
 2.22.0.rc2.383.gf4fbbf30c2-goog
 
