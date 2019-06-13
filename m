@@ -1,90 +1,92 @@
-Return-Path: <SRS0=cYqX=UL=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=gKyG=UM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCB70C31E46
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 21:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17A82C31E45
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 15:04:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B8507215EA
-	for <linux-media@archiver.kernel.org>; Wed, 12 Jun 2019 21:12:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4C85207E0
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 15:04:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728662AbfFLVMv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 12 Jun 2019 17:12:51 -0400
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:58479 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726599AbfFLVMv (ORCPT
+        id S1732849AbfFMPEF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Jun 2019 11:04:05 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:45540 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732475AbfFMOSq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 12 Jun 2019 17:12:51 -0400
-X-Halon-ID: d2605675-8d56-11e9-8d05-005056917f90
-Authorized-sender: niklas@soderlund.pp.se
-Received: from bismarck.berto.se (unknown [89.233.230.99])
-        by bin-vsp-out-02.atm.binero.net (Halon) with ESMTPA
-        id d2605675-8d56-11e9-8d05-005056917f90;
-        Wed, 12 Jun 2019 23:12:47 +0200 (CEST)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Ulrich Hecht <uli+renesas@fpond.eu>
-Subject: [PATCH v2] dt-bindings: rcar-{csi2,vin}: Rename bindings documentation files
-Date:   Wed, 12 Jun 2019 23:12:41 +0200
-Message-Id: <20190612211241.1455-1-niklas.soderlund+renesas@ragnatech.se>
+        Thu, 13 Jun 2019 10:18:46 -0400
+Received: from [109.168.11.45] (port=39754 helo=pc-ceresoli.dev.aim)
+        by hostingweb31.netsons.net with esmtpa (Exim 4.92)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1hbQYs-0005He-T4; Thu, 13 Jun 2019 16:18:42 +0200
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+To:     linux-media@vger.kernel.org
+Cc:     Luca Ceresoli <luca@lucaceresoli.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH 9/9] media: docs: v4l2-controls: remove outdated paragraph
+Date:   Thu, 13 Jun 2019 16:18:26 +0200
+Message-Id: <20190613141826.26775-9-luca@lucaceresoli.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190613141826.26775-1-luca@lucaceresoli.net>
+References: <20190613141826.26775-1-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Renesas media binding documentation files uses a naming schema of
-'renesas,<module>.txt'. Rename VIN and CSI-2 files to match this
-pattern.
+This paragraph was added by commit a42b57f5aacf ("V4L/DVB: Documentation:
+add v4l2-controls.txt documenting the new controls API") back in 2010, when
+the controls API has been improved. Nowadays it is a bit anachronistic, so
+remove it.
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
+The same information is stated in up-to-date wording a few paragraphs later
+anyway:
+
+> You’re done! And this is sufficient for most of the drivers we have. No
+> need to do any validation of control values, or implement QUERYCTRL,
+> QUERY_EXT_CTRL and QUERYMENU. And G/S_CTRL as well as G/TRY/S_EXT_CTRLS
+> are automatically supported.
+
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- .../media/{renesas,rcar-csi2.txt => renesas,csi2.txt}         | 0
- .../bindings/media/{rcar_vin.txt => renesas,vin.txt}          | 0
- MAINTAINERS                                                   | 4 ++--
- 3 files changed, 2 insertions(+), 2 deletions(-)
- rename Documentation/devicetree/bindings/media/{renesas,rcar-csi2.txt => renesas,csi2.txt} (100%)
- rename Documentation/devicetree/bindings/media/{rcar_vin.txt => renesas,vin.txt} (100%)
+ Documentation/media/kapi/v4l2-controls.rst | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/renesas,rcar-csi2.txt b/Documentation/devicetree/bindings/media/renesas,csi2.txt
-similarity index 100%
-rename from Documentation/devicetree/bindings/media/renesas,rcar-csi2.txt
-rename to Documentation/devicetree/bindings/media/renesas,csi2.txt
-diff --git a/Documentation/devicetree/bindings/media/rcar_vin.txt b/Documentation/devicetree/bindings/media/renesas,vin.txt
-similarity index 100%
-rename from Documentation/devicetree/bindings/media/rcar_vin.txt
-rename to Documentation/devicetree/bindings/media/renesas,vin.txt
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6a3bac28ebb47830..a0d21ff13c8e8989 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9807,8 +9807,8 @@ L:	linux-media@vger.kernel.org
- L:	linux-renesas-soc@vger.kernel.org
- T:	git git://linuxtv.org/media_tree.git
- S:	Supported
--F:	Documentation/devicetree/bindings/media/renesas,rcar-csi2.txt
--F:	Documentation/devicetree/bindings/media/rcar_vin.txt
-+F:	Documentation/devicetree/bindings/media/renesas,csi2.txt
-+F:	Documentation/devicetree/bindings/media/renesas,vin.txt
- F:	drivers/media/platform/rcar-vin/
+diff --git a/Documentation/media/kapi/v4l2-controls.rst b/Documentation/media/kapi/v4l2-controls.rst
+index 407617b1d0ce..ebe2a55908be 100644
+--- a/Documentation/media/kapi/v4l2-controls.rst
++++ b/Documentation/media/kapi/v4l2-controls.rst
+@@ -98,11 +98,6 @@ For V4L2 drivers:
  
- MEDIA DRIVERS FOR RENESAS - VSP1
+ 	foo->v4l2_dev.ctrl_handler = &foo->ctrl_handler;
+ 
+-Finally, remove all control functions from your v4l2_ioctl_ops (if any):
+-vidioc_queryctrl, vidioc_query_ext_ctrl, vidioc_querymenu, vidioc_g_ctrl,
+-vidioc_s_ctrl, vidioc_g_ext_ctrls, vidioc_try_ext_ctrls and vidioc_s_ext_ctrls.
+-Those are now no longer needed.
+-
+ For sub-device drivers:
+ 
+ .. code-block:: c
 -- 
 2.21.0
 
