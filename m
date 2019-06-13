@@ -2,66 +2,100 @@ Return-Path: <SRS0=gKyG=UM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5285BC31E49
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 16:00:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B3A6C31E45
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 16:09:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 319B020679
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 16:00:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF44120679
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 16:09:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="MaYeShQX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728676AbfFMQAA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Jun 2019 12:00:00 -0400
-Received: from gofer.mess.org ([88.97.38.141]:58595 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731475AbfFMIt3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:49:29 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id BCA8A603E8; Thu, 13 Jun 2019 09:49:26 +0100 (BST)
-Date:   Thu, 13 Jun 2019 09:49:26 +0100
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Cc:     Takashi Kanamaru <neuralassembly@gmail.com>
-Subject: [PATCH] media: rc: IR signal for Panasonic air conditioner too long
- sequences is too small
-Message-ID: <20190613084926.bjxv2vdkp3qqpkuu@gofer.mess.org>
-References: <CAKL8oB_qPGVXd3MCj=f1Lzh02ifGzYTS2YAD77s2MY2LAnc+1A@mail.gmail.com>
- <20190612150132.iemhbronjjaonpt2@gofer.mess.org>
- <CAKL8oB-KxsGxHAUac7sYBf-Gs4UkAPVkXg75LwwVbut9GkQ-sQ@mail.gmail.com>
+        id S1731577AbfFMQJb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Jun 2019 12:09:31 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:48430 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391372AbfFMQJU (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 13 Jun 2019 12:09:20 -0400
+Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E37D052B;
+        Thu, 13 Jun 2019 18:09:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1560442158;
+        bh=1S2z8/40XlzEcH5YWVP4Pilnjo5IJKQr1Fm7+C3qfLY=;
+        h=Subject:To:Cc:References:From:Reply-To:Date:In-Reply-To:From;
+        b=MaYeShQXACx9Mw/ZEjRmb1d6RLXKmp9fhgZhzn3v8tiK8EnHYRq6VncvBCcJylW9F
+         tviIjYCHXp0lHxd0xtrl9RhP99rUsPH3PcXU4sL3DSCjHT8u54XcBdN0E3wOlqp8Gs
+         qeD04bt17uu7W/DbLWIxUN57qst50e4tKJPQ9AM4=
+Subject: Re: [PATCH 1/4] media: cxd2820r: don't check retval after our own
+ assignemt
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org, Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20190613155421.16408-1-wsa+renesas@sang-engineering.com>
+ <20190613155421.16408-2-wsa+renesas@sang-engineering.com>
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Reply-To: kieran.bingham+renesas@ideasonboard.com
+Organization: Ideas on Board
+Message-ID: <550e0dbf-1776-000b-27ca-40e40e317da2@ideasonboard.com>
+Date:   Thu, 13 Jun 2019 17:09:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKL8oB-KxsGxHAUac7sYBf-Gs4UkAPVkXg75LwwVbut9GkQ-sQ@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190613155421.16408-2-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The IR signal to control the Panasonic ACXA75C00600 air conditioner has
-439 pulse/spaces. Increase limit to make it possible to transmit signal.
+Hi Wolfram,
 
-Reported-by: Takashi Kanamaru <neuralassembly@gmail.com>
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/rc/lirc_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/rc/lirc_dev.c b/drivers/media/rc/lirc_dev.c
-index 10830605c734..f078f8a3aec8 100644
---- a/drivers/media/rc/lirc_dev.c
-+++ b/drivers/media/rc/lirc_dev.c
-@@ -19,7 +19,7 @@
- #include "rc-core-priv.h"
- #include <uapi/linux/lirc.h>
- 
--#define LIRCBUF_SIZE	256
-+#define LIRCBUF_SIZE	1024
- 
- static dev_t lirc_base_dev;
- 
--- 
-2.20.1
+In the title/subject:
+
+media: cxd2820r: don't check retval after our own assignemt
+
+s/assignemt/assignment/
+
+
+On 13/06/2019 16:54, Wolfram Sang wrote:
+> No need to check a retval after we assigned a constant to it.
+
+Hrm... Good spots!
+
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/media/dvb-frontends/cxd2820r_core.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/dvb-frontends/cxd2820r_core.c b/drivers/media/dvb-frontends/cxd2820r_core.c
+> index 1f006f8e8cc2..99a186ddddb2 100644
+> --- a/drivers/media/dvb-frontends/cxd2820r_core.c
+> +++ b/drivers/media/dvb-frontends/cxd2820r_core.c
+> @@ -636,8 +636,7 @@ static int cxd2820r_probe(struct i2c_client *client,
+>  	if (!priv->client[1]) {
+>  		ret = -ENODEV;
+>  		dev_err(&client->dev, "I2C registration failed\n");
+> -		if (ret)
+
+Can't argue with that.
+
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+
+> -			goto err_regmap_0_regmap_exit;
+> +		goto err_regmap_0_regmap_exit;
+>  	}
+>  
+>  	priv->regmap[1] = regmap_init_i2c(priv->client[1], &regmap_config1);
+> 
 
