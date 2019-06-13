@@ -2,78 +2,121 @@ Return-Path: <SRS0=gKyG=UM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45636C31E45
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 16:36:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05380C31E45
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 16:42:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 103CD20449
-	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 16:36:11 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="KyS1UsvA"
+	by mail.kernel.org (Postfix) with ESMTP id DC02120673
+	for <linux-media@archiver.kernel.org>; Thu, 13 Jun 2019 16:42:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392550AbfFMQgF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 13 Jun 2019 12:36:05 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:48700 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726795AbfFMQfx (ORCPT
+        id S1730529AbfFMQm3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 13 Jun 2019 12:42:29 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:37507 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730509AbfFMGs1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:35:53 -0400
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F0CFE52B;
-        Thu, 13 Jun 2019 18:35:50 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1560443751;
-        bh=xYJTnR0BQQsX9pSkqK7GIQ6uoOB+X60qJ0Nav0xrwYE=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=KyS1UsvAm48Ahvvu+6wlakTthmDnIYVISXTkkNlPky7ERMbQ1PMQXh6v0ldpM28nm
-         aIDWrWBjv/Pd6LtreDBJoFGhYFGnCv4BG852XXxKhNq8AXCGb4X4LpaxjbB8IYr2MB
-         NGeOj4EUmKkSGfBqRLqdpqUCITWZ2pZe2FM1qqug=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH 1/4] media: cxd2820r: don't check retval after our own
- assignemt
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20190613155421.16408-1-wsa+renesas@sang-engineering.com>
- <20190613155421.16408-2-wsa+renesas@sang-engineering.com>
- <550e0dbf-1776-000b-27ca-40e40e317da2@ideasonboard.com>
- <20190613161922.GA5015@kunai>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <cbf928b6-33d6-d412-87dd-05f1fb5f1b6c@ideasonboard.com>
-Date:   Thu, 13 Jun 2019 17:35:48 +0100
+        Thu, 13 Jun 2019 02:48:27 -0400
+Received: from [192.168.2.10] ([46.9.252.75])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id bJX2hLTZJ5qKabJX5hEEZ8; Thu, 13 Jun 2019 08:48:25 +0200
+Subject: Re: [PATCHv4 0/2] Document memory-to-memory video codec interfaces
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Cc:     Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Pawel Osciak <posciak@chromium.org>
+References: <20190603112835.19661-1-hverkuil-cisco@xs4all.nl>
+Message-ID: <259bb812-9cc9-8fe7-8fc6-2cbd5ef44ac3@xs4all.nl>
+Date:   Thu, 13 Jun 2019 08:48:20 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190613161922.GA5015@kunai>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20190603112835.19661-1-hverkuil-cisco@xs4all.nl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfBCxlUJmg0N4Q2GZyAqhrK28SVHEKjholBSkcw0ri9bw/4dzuQ6WLxdOkaY5QJhKT0zRJOS3uHj/eYNmaeeEd4Ntdvjp+hSVMACqP4G2VehyWwS7LffX
+ WLvBeAxh/OZHl5XXelSW9XYy2hQMjgsD4B/oQGt22WTlo/nxj/qgoeGJ7ZGZNmrQn19oMAFoP42UBJ80/eTDP9+SgBcKk2zsdCb8NH4ohcsBf4x6f6WSYLZq
+ x509Z7B+g+2ZT826iSTaXj5BJn1qQYwaKfVoqz6f3hhxyPVn8C8raJd+at+hs0c4wDI1v+CTgBZnqJ2tFsrIpW4MkCg8g3S4FnYxHlRxDbPS9JhEyxGN1Qi3
+ /QAdo9ZXRph+Np6JyVIWgZxBJaiQYM4FywX21BHNbjlKcqmr+hybLBGpA/4jYxVyWimN4wMHjSwV7BauBCKY6UM88w8MY6HwMMhgoT+stF3q1FRxgtuuiXwg
+ BATUeIxK9k96WB5T
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Wolfram,
+On 6/3/19 1:28 PM, Hans Verkuil wrote:
+> Since Tomasz was very busy with other things, I've taken over this
+> patch series. This v4 includes his draft changes and additional changes
+> from me.
+> 
+> This series attempts to add the documentation of what was discussed
+> during Media Workshops at LinuxCon Europe 2012 in Barcelona and then
+> later Embedded Linux Conference Europe 2014 in Düsseldorf and then
+> eventually written down by Pawel Osciak and tweaked a bit by Chrome OS
+> video team (but mostly in a cosmetic way or making the document more
+> precise), during the several years of Chrome OS using the APIs in
+> production.
+> 
+> Note that most, if not all, of the API is already implemented in
+> existing mainline drivers, such as s5p-mfc or mtk-vcodec. Intention of
+> this series is just to formalize what we already have.
+> 
+> Thanks everyone for the huge amount of useful comments to previous
+> versions of this series. Much of the credits should go to Pawel Osciak
+> too, for writing most of the original text of the initial RFC.
+> 
+> This v4 incorporates all known comments (let me know if I missed
+> something!) and should be complete for the decoder.
+> 
+> For the encoder there are two remaining TODOs for the API:
+> 
+> 1) Setting the frame rate so bitrate control can make sense, since
+>    they need to know this information.
+> 
+>    Suggested solution: require support for ENUM_FRAMEINTERVALS for the
+>    coded pixelformats and S_PARM(OUTPUT). Open question: some drivers
+>    (mediatek, hva, coda) require S_PARM(OUTPUT), some (venus) allow both
+>    S_PARM(CAPTURE) and S_PARM(OUTPUT). I am inclined to allow both since
+>    this is not a CAPTURE vs OUTPUT thing, it is global to both queues.
 
-On 13/06/2019 17:19, Wolfram Sang wrote:
-> 
->> In the title/subject:
->>
->> media: cxd2820r: don't check retval after our own assignemt
->>
->> s/assignemt/assignment/
-> 
-> Eeeks, in deed :( Shall I resend? Sorry for the noise.
-> 
+Alternative proposal:
 
-Not necessary for me, so I guess that's up to Mauro/Hans.
-Not sure who will pick these up and apply them.
---
-Kieran
+1) Add support for fractions (struct v4l2_fract) as a control type:
+   V4L2_CTRL_TYPE_FRACT.
+
+2) Add a new V4L2_CID_MPEG_FRAME_INTERVAL control.
+
+Encoders shall support this control.
+
+3) For backwards compatibility reasons encoder drivers still have to
+support G/S_PARM, but this can now be implemented by standard helpers
+that query this control. Drivers also have to implement ENUM_FRAMEINTERVALS.
+If the range of intervals is always the same regardless of the frame size,
+then a helper can be used that queries the min/max/step of the control, but
+if it is dependent on the frame size, then it has to be implemented in the
+driver itself.
+
+I'm sticking to frame intervals instead of frame rates for the simple reason
+that that's what V4L2 has used since the beginning. I think it is too confusing
+to change this to a frame rate. This is just my opinion, though.
+
+I also chose to make this a codec control, not a generic user control: this
+value together with the bit rate control(s) determine the compression size,
+it does not determine the actual time it takes for the encoder to compress
+the raw frames. Hence it is really not the same thing as the frame interval
+of a video capture device. If we want to use a control for that as well in
+the future as a replacement for G/S_PARM, then that should be a new control.
+And we would like need per-pad controls as well in order to implement that.
+Which is a lot more work.
+
+Regards,
+
+	Hans
