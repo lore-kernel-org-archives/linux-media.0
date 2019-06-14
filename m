@@ -2,163 +2,102 @@ Return-Path: <SRS0=+Dkd=UN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_MUTT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 000B3C31E4B
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 16:56:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EA27C31E4E
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 20:18:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C85D12183F
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 16:56:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 34BCC2168B
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 20:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1560531367;
-	bh=E9L299lGdyShn8Gw9XD7T+sW6pEJPecYd0C9ECJ67k4=;
+	s=default; t=1560543531;
+	bh=yUw78ab31KsAgb4Dq4yNI0QclpRo4jAujaKvDNXeT30=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=IlVPkXZwtPgUgvHup2C2WZI3RC9WzzrpeOK5UHlE7FOwLwi8JsuGRCrQUnl8XgWmR
-	 Uv8MeLSAPBG+7RECofrYqCCAe+/parqVUV3cM7GaM9SbgmrNI15BvY9GkquRt+AXgE
-	 9hXvdCApMJsUl+ixeXq32PxwSSzwzLwq6yFJz0qU=
+	b=JcvXwDsf5YH4XLz8ctUtHJdIauup5utboghczHSqftvfZeI1mydRUZbvGlCxbI2Q7
+	 Pkpt0BsomNivjVw3nAJBQM5dO4Fyh7DKUWW++XJ16armsWLIl39mvtaxMqvonSxu9+
+	 G55ibeOaN/vIgFPmuHOx+Nl6P6GJ4VQn9ThrpaFY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbfFNQ4H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jun 2019 12:56:07 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:33716 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725908AbfFNQ4G (ORCPT
+        id S1725908AbfFNUSq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jun 2019 16:18:46 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:33599 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725808AbfFNUSq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Jun 2019 12:56:06 -0400
-Received: by mail-qt1-f195.google.com with SMTP id x2so3289459qtr.0;
-        Fri, 14 Jun 2019 09:56:06 -0700 (PDT)
+        Fri, 14 Jun 2019 16:18:46 -0400
+Received: by mail-qk1-f195.google.com with SMTP id r6so2543305qkc.0;
+        Fri, 14 Jun 2019 13:18:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BW1xnYGWg+aoTF/Yaq1jahB+G0s53KZIsKdfCRLCS5M=;
-        b=uEcut09jaC8j2kkKPZHvfItobvM10u4m8o7PXc3kPe53zLrKIwZgef4flM1Q2WMvCM
-         POMvGSd3RQbWDAr8wCPe5McULBFXGaLIMa/3XcPxCFq7wP+kvH2qsQulicYQD87g+94D
-         iXDKOvCQpOs0O6/r+JodqTQzHXFT55EkpSA/SdOT8r/PY34fAjmEQtP5GiiziKasI2w1
-         RS/Bn78K2F6SpuUZqpsw3Rk5G7nxBBfc9qDc8gTdzniSU1QYroUr+s2NuglNhb8rW4+f
-         mSbCPUQd+iCTJpfCc8F+kQkv3k/RgZ+33/jri3WahNqCZGy6XaV0RLA8x26ZyWPISc2N
-         dGpw==
-X-Gm-Message-State: APjAAAXs6T0heDj96KQViNvIYlYO8WBuHSVsb6epLxP6iaqmi/oyRF5c
-        ioNVut3KbNVmitkSkGrMNA==
-X-Google-Smtp-Source: APXvYqwKw7gEikdDCeeVBg/sr7wzmaN+sPvOXjG11rUJ9NjiqHre30+rVmiZbgs/Z8FdHdOZJiRV0g==
-X-Received: by 2002:ac8:70d1:: with SMTP id g17mr37959971qtp.124.1560531365401;
-        Fri, 14 Jun 2019 09:56:05 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=2S0DTzr7T25H6ahTWfAr0eKoReCAR3ggo1mfN8CFCHQ=;
+        b=ZXPPb90LqGM4qxfK8ApOkyeWsu4ywqFSj0R6QWJBxAtrd0Vprwy6N9GHREaZVFYpyq
+         m/Kv7D8foYoWI0l31FU7soeuBmCnv/+SGTYuujLt4chgm/mCHK8WNgoVdCcTkB75k7f+
+         Pu+KbAA1PurYloVqpPofEIrITMxkdw26ArsMFujnm1AJwRXEowUh3vZiufjLxTphGanh
+         nvo+xLC5kOxiMqvzCIgTC80t0FCe2nF2jgdGnyLeI2ii7KPhOTkVUpYccZJixMWyQIok
+         FSpSwuioNPxhdB9Sg/Oz37FUxuTf739p+Y2BYXBRRptgJTcoj4Igjfxx+e9M/STFs+k7
+         j7wQ==
+X-Gm-Message-State: APjAAAUlp3RYnW5m8EDmvxQHWAcYE2A6RyavayhZvgudlX67I+cCaIhQ
+        6p0WYqC9R19vAWin4mVfuQ==
+X-Google-Smtp-Source: APXvYqwsKNTd0AOI6kAgPfjhl2V5K+SFwP4wtJ8cEJEVgj35zYt85Q1VitdZH1kp+GJIOs7FE8KOVw==
+X-Received: by 2002:a37:e40a:: with SMTP id y10mr20766206qkf.303.1560543525092;
+        Fri, 14 Jun 2019 13:18:45 -0700 (PDT)
 Received: from localhost ([64.188.179.243])
-        by smtp.gmail.com with ESMTPSA id e63sm1697857qkd.57.2019.06.14.09.56.04
+        by smtp.gmail.com with ESMTPSA id l6sm1705339qkc.89.2019.06.14.13.18.43
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 14 Jun 2019 09:56:04 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 10:56:03 -0600
+        Fri, 14 Jun 2019 13:18:44 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 14:18:42 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     dongchun.zhu@mediatek.com, mchehab@kernel.org,
-        mark.rutland@arm.com, matthias.bgg@gmail.com, bingbu.cao@intel.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        louis.kuo@mediatek.com, menghui.lin@mediatek.com,
-        shengnan.wang@mediatek.com
-Subject: Re: [PATCH 3/3] media: dt-bindings: media: i2c: Add bindings for
- ov02a10
-Message-ID: <20190614165603.GA30462@bogus>
-References: <20190523102204.24112-1-dongchun.zhu@mediatek.com>
- <20190523102204.24112-4-dongchun.zhu@mediatek.com>
- <20190531161658.2y2amfngbhfbllj7@valkosipuli.retiisi.org.uk>
+To:     =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@googlegroups.com,
+        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
+Subject: Re: [PATCH v3 01/12] dt-bindings: media: sunxi-ir: add A31 compatible
+Message-ID: <20190614201842.GA6768@bogus>
+References: <20190528161440.27172-1-peron.clem@gmail.com>
+ <20190528161440.27172-2-peron.clem@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20190531161658.2y2amfngbhfbllj7@valkosipuli.retiisi.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190528161440.27172-2-peron.clem@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, May 31, 2019 at 07:16:58PM +0300, Sakari Ailus wrote:
-> Hi Dongchun,
+On Tue, 28 May 2019 18:14:29 +0200, =?UTF-8?q?Cl=C3=A9ment=20P=C3=A9ron?= wrote:
+> Allwinner A31 has introduced a new memory mapping and a
+> reset line.
 > 
-> Thanks for the patch.
+> The difference in memory mapping are :
 > 
-> On Thu, May 23, 2019 at 06:22:04PM +0800, dongchun.zhu@mediatek.com wrote:
-> > From: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> > 
-> > Add device tree binding documentation for the OV02A10 CMOS image sensor.
-> > 
-> > Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> > ---
-> >  .../devicetree/bindings/media/i2c/ov02a10.txt      | 43 ++++++++++++++++++++++
-> >  1 file changed, 43 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/ov02a10.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/ov02a10.txt b/Documentation/devicetree/bindings/media/i2c/ov02a10.txt
-> > new file mode 100644
-> > index 0000000..fdc2904
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/i2c/ov02a10.txt
-> > @@ -0,0 +1,43 @@
-> > +* Omnivision OV02A10 MIPI CSI-2 sensor
-> > +
-> > +Required Properties:
-> > +- compatible: shall be "ovti,ov02a10"
-> > +- clocks: reference to the xvclk input clock
-> > +- clock-names: shall be "xvclk"
-> > +- avdd-supply: Analog voltage supply, 2.8 volts
-> > +- dovdd-supply: Digital I/O voltage supply, 1.8 volts
-> > +- dvdd-supply: Digital core voltage supply, 1.8 volts
-> > +- reset-gpios: Low active reset gpio
-> > +
-> > +The device node shall contain one 'port' child node with an
-> > +'endpoint' subnode for its digital output video port,
-> > +in accordance with the video interface bindings defined in
-> > +Documentation/devicetree/bindings/media/video-interfaces.txt.
-> > +The endpoint optional property 'data-lanes' shall be "<1>".
+> - In the configure register there is a new sample bit
+>   and Allwinner has introduced the active threshold feature.
 > 
-> If the sensor only supports a single lane configuration (one lane), you can
-> omit that property altogether. Is that the only possible configuration for
-> the sensor?
+> - In the status register a new STAT bit is present.
 > 
-> Please also wrap the text at 80 characters, not 65 or so.
+> Note: CGPO and DRQ_EN bits are removed on A31 but present on A13
+> and on new SoCs like A64/H6.
+> This is actually not an issue as these bits are togglable and new
+> SoCs have a dedicated bindings.
 > 
-> > +
-> > +Example:
-> > +&i2c4 {
-> > +	sensor_sub: sensor_sub {
+> Introduce this bindings to make a difference since this generation.
+> And declare the reset line required since A31.
 > 
-> camera-sensor@3d {
+> Signed-off-by: Clément Péron <peron.clem@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/media/sunxi-ir.txt | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> > +		compatible = "ovti,ov02a10";
-> > +		reg = <0x3d>;
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&camera_pins_cam1_mclk_on>;
-> > +
-> > +		clocks = <&topckgen CLK_TOP_MUX_CAMTG2>,
-> > +			<&topckgen CLK_TOP_UNIVP_192M_D8>;
-> > +		clock-names = "xvclk", "freq_mux";
-> > +
-> > +		avdd-supply = <&mt6358_vcama1_reg>;
-> > +		dvdd-supply = <&mt6358_vcn18_reg>;
-> > +		dovdd-supply = <&mt6358_vcamio_reg>;
-> > +		pwdn-gpios = <&pio 107 1>;
-> > +		reset-gpios = <&pio 109 1>;
-> > +
-> > +		port@0 {
 
-Also, drop the unit-address as there is no 'reg' property. Building your 
-dts file will 'W=1' will tell you this.
-
-> > +		   ov02a10_core: endpoint {
-> > +		       remote-endpoint = <&ov02a10_0>;
-> > +			   data-lanes = <1>;
-> > +		   };
-> 
-> Tabs for indentation, please.
-> 
-> > +		};
-> > +	};
-> > +};
-> 
-> -- 
-> Kind regards,
-> 
-> Sakari Ailus
+Reviewed-by: Rob Herring <robh@kernel.org>
