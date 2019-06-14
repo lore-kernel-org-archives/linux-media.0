@@ -2,36 +2,43 @@ Return-Path: <SRS0=+Dkd=UN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB084C31E4B
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 14:50:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77B40C31E4B
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 15:01:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B87FD21721
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 14:50:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54F6121537
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 15:01:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728550AbfFNOuc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jun 2019 10:50:32 -0400
-Received: from verein.lst.de ([213.95.11.211]:47594 "EHLO newverein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727560AbfFNOuc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Jun 2019 10:50:32 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 94A01227A82; Fri, 14 Jun 2019 16:50:02 +0200 (CEST)
-Date:   Fri, 14 Jun 2019 16:50:01 +0200
-From:   'Christoph Hellwig' <hch@lst.de>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Christoph Hellwig' <hch@lst.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        id S1725846AbfFNPB1 convert rfc822-to-8bit (ORCPT
+        <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jun 2019 11:01:27 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:26304 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725789AbfFNPB1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Jun 2019 11:01:27 -0400
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id uk-mta-6-Ae-vvi9EMKOPr28p6sbQQA-1;
+ Fri, 14 Jun 2019 16:01:23 +0100
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
+ (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri,
+ 14 Jun 2019 16:01:22 +0100
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Fri, 14 Jun 2019 16:01:22 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Christoph Hellwig' <hch@lst.de>
+CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <maxime.ripard@bootlin.com>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Ian Abbott <abbotti@mev.co.uk>,
+        "Ian Abbott" <abbotti@mev.co.uk>,
         H Hartley Sweeten <hsweeten@visionengravers.com>,
         Intel Linux Wireless <linuxwifi@intel.com>,
         "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
@@ -46,24 +53,56 @@ Cc:     'Christoph Hellwig' <hch@lst.de>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 16/16] dma-mapping: use exact allocation in
+Subject: RE: [PATCH 16/16] dma-mapping: use exact allocation in
  dma_alloc_contiguous
-Message-ID: <20190614145001.GB9088@lst.de>
-References: <20190614134726.3827-1-hch@lst.de> <20190614134726.3827-17-hch@lst.de> <a90cf7ec5f1c4166b53c40e06d4d832a@AcuMS.aculab.com>
+Thread-Topic: [PATCH 16/16] dma-mapping: use exact allocation in
+ dma_alloc_contiguous
+Thread-Index: AQHVIrfpTFjppS25RkWUhwqPPyqZ4qabLzdw///7eICAABIeYA==
+Date:   Fri, 14 Jun 2019 15:01:22 +0000
+Message-ID: <d93fd4c2c1584d92a05dd641929f6d63@AcuMS.aculab.com>
+References: <20190614134726.3827-1-hch@lst.de>
+ <20190614134726.3827-17-hch@lst.de>
+ <a90cf7ec5f1c4166b53c40e06d4d832a@AcuMS.aculab.com>
+ <20190614145001.GB9088@lst.de>
+In-Reply-To: <20190614145001.GB9088@lst.de>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a90cf7ec5f1c4166b53c40e06d4d832a@AcuMS.aculab.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+X-MC-Unique: Ae-vvi9EMKOPr28p6sbQQA-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Jun 14, 2019 at 02:15:44PM +0000, David Laight wrote:
-> Does this still guarantee that requests for 16k will not cross a 16k boundary?
-> It looks like you are losing the alignment parameter.
+From: 'Christoph Hellwig'
+> Sent: 14 June 2019 15:50
+> To: David Laight
+> On Fri, Jun 14, 2019 at 02:15:44PM +0000, David Laight wrote:
+> > Does this still guarantee that requests for 16k will not cross a 16k boundary?
+> > It looks like you are losing the alignment parameter.
+> 
+> The DMA API never gave you alignment guarantees to start with,
+> and you can get not naturally aligned memory from many of our
+> current implementations.
 
-The DMA API never gave you alignment guarantees to start with,
-and you can get not naturally aligned memory from many of our
-current implementations.
+Hmmm...
+I thought that was even documented.
+
+I'm pretty sure there is a lot of code out there that makes that assumption.
+Without it many drivers will have to allocate almost double the
+amount of memory they actually need in order to get the required alignment.
+So instead of saving memory you'll actually make more be used.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
