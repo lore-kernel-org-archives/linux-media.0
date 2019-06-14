@@ -2,149 +2,65 @@ Return-Path: <SRS0=+Dkd=UN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C622DC31E4B
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 14:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1141C31E4B
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 14:49:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A7C3F2133D
-	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 14:39:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C184C2133D
+	for <linux-media@archiver.kernel.org>; Fri, 14 Jun 2019 14:49:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728882AbfFNOjx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 14 Jun 2019 10:39:53 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:52451 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728374AbfFNOj1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 14 Jun 2019 10:39:27 -0400
-Received: from localhost.localdomain (aaubervilliers-681-1-81-150.w90-88.abo.wanadoo.fr [90.88.23.150])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id BC3AB24000E;
-        Fri, 14 Jun 2019 14:39:09 +0000 (UTC)
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@googlegroups.com
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        id S1728447AbfFNOt2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 14 Jun 2019 10:49:28 -0400
+Received: from verein.lst.de ([213.95.11.211]:47569 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728208AbfFNOt2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 14 Jun 2019 10:49:28 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id C373F68AFE; Fri, 14 Jun 2019 16:48:57 +0200 (CEST)
+Date:   Fri, 14 Jun 2019 16:48:57 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <maxime.ripard@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v6 0/5] HEVC/H.265 stateless support for V4L2 and Cedrus
-Date:   Fri, 14 Jun 2019 16:38:32 +0200
-Message-Id: <20190614143837.15605-1-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.21.0
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        devel@driverdev.osuosl.org, linux-s390@vger.kernel.org,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 12/16] staging/comedi: mark as broken
+Message-ID: <20190614144857.GA9088@lst.de>
+References: <20190614134726.3827-1-hch@lst.de> <20190614134726.3827-13-hch@lst.de> <20190614140239.GA7234@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190614140239.GA7234@kroah.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is early support for HEVC/H.265 stateless decoding in V4L2,
-including both definitions and driver support for the Cedrus VPU
-driver, which concerns Allwinner devices.
+On Fri, Jun 14, 2019 at 04:02:39PM +0200, Greg KH wrote:
+> Perhaps a hint as to how we can fix this up?  This is the first time
+> I've heard of the comedi code not handling dma properly.
 
-A specific pixel format is introduced for the HEVC slice format and
-controls are provided to pass the bitstream metadata to the decoder.
-Some bitstream extensions are intentionally not supported at this point.
+It can be fixed by:
 
-Since this is the first proposal for stateless HEVC/H.265 support in
-V4L2, reviews and comments about the controls definitions are
-particularly welcome.
-
-On the Cedrus side, the H.265 implementation covers frame pictures
-with both uni-directional and bi-direction prediction modes (P/B
-slices). Field pictures (interleaved), scaling lists and 10-bit output
-are not supported at this point.
-
-This series is based upon the following series:
-* media: cedrus: Add H264 decoding support
-
-Changes since v5:
-* Rebased atop latest next media tree;
-* Moved to flags instead of u8 fields;
-* Added padding to ensure 64-bit alignment
-  (tested with GDB on 32 and 64-bit architectures);
-* Reworked cedrus H.265 driver support a bit for flags;
-* Split off codec-specific control validation and init;
-* Added HEVC controls fields cleanup at std_validate to allow reliable
-  control comparison with memcmp;
-* Fixed various misc reported mistakes.
-
-Changes since v4:
-* Rebased atop latest H.254 series.
-
-Changes since v3:
-* Updated commit messages;
-* Updated CID base to avoid conflicts;
-* Used cpu_to_le32 for packed le32 data;
-* Fixed misc minor issues in the drive code;
-* Made it clear in the docs that the API will evolve;
-* Made the pixfmt private and split commits about it.
-
-Changes since v2:
-* Moved headers to non-public API;
-* Added H265 capability for A64 and H5;
-* Moved docs to ext-ctrls-codec.rst;
-* Mentionned sections of the spec in the docs;
-* Added padding to control structures for 32-bit alignment;
-* Made write function use void/size in bytes;
-* Reduced the number of arguments to helpers when possible;
-* Removed PHYS_OFFSET since we already set PFN_OFFSET;
-* Added comments where suggested;
-* Moved to timestamp for references instead of index;
-* Fixed some style issues reported by checkpatch.
-
-Changes since v1:
-* Added a H.265 capability to whitelist relevant platforms;
-* Switched over to tags instead of buffer indices in the DPB
-* Declared variable in their reduced scope as suggested;
-* Added the H.265/HEVC spec to the biblio;
-* Used in-doc references to the spec and the required APIs;
-* Removed debugging leftovers.
-
-Cheers!
-
-Paul Kocialkowski (5):
-  media: v4l2-ctrls: Split off MPEG-2 controls validation
-  media: v4l2-ctrls: Split off MPEG-2 controls initialization
-  media: v4l: Add definitions for the HEVC slice controls
-  media: pixfmt: Document the HEVC slice pixel format
-  media: cedrus: Add HEVC/H.265 decoding support
-
- Documentation/media/uapi/v4l/biblio.rst       |   9 +
- .../media/uapi/v4l/ext-ctrls-codec.rst        | 474 +++++++++++++-
- .../media/uapi/v4l/pixfmt-compressed.rst      |  21 +
- .../media/uapi/v4l/vidioc-queryctrl.rst       |  18 +
- .../media/videodev2.h.rst.exceptions          |   3 +
- drivers/media/v4l2-core/v4l2-ctrls.c          | 231 +++++--
- drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
- drivers/staging/media/sunxi/cedrus/Makefile   |   2 +-
- drivers/staging/media/sunxi/cedrus/cedrus.c   |  31 +-
- drivers/staging/media/sunxi/cedrus/cedrus.h   |  18 +
- .../staging/media/sunxi/cedrus/cedrus_dec.c   |   9 +
- .../staging/media/sunxi/cedrus/cedrus_h265.c  | 616 ++++++++++++++++++
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |   4 +
- .../staging/media/sunxi/cedrus/cedrus_regs.h  | 271 ++++++++
- .../staging/media/sunxi/cedrus/cedrus_video.c |  10 +
- include/media/hevc-ctrls.h                    | 197 ++++++
- include/media/v4l2-ctrls.h                    |   7 +
- 17 files changed, 1860 insertions(+), 62 deletions(-)
- create mode 100644 drivers/staging/media/sunxi/cedrus/cedrus_h265.c
- create mode 100644 include/media/hevc-ctrls.h
-
--- 
-2.21.0
-
+ a) never calling virt_to_page (or vmalloc_to_page for that matter)
+    on dma allocation
+ b) never remapping dma allocation with conflicting cache modes
+    (no remapping should be doable after a) anyway).
