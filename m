@@ -2,110 +2,103 @@ Return-Path: <SRS0=dKyM=UO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25935C31E47
-	for <linux-media@archiver.kernel.org>; Sat, 15 Jun 2019 08:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7D67C31E50
+	for <linux-media@archiver.kernel.org>; Sat, 15 Jun 2019 15:01:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EE12A206B7
-	for <linux-media@archiver.kernel.org>; Sat, 15 Jun 2019 08:26:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 787EB2133D
+	for <linux-media@archiver.kernel.org>; Sat, 15 Jun 2019 15:01:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ru header.i=@mail.ru header.b="eS4UYFFd";
-	dkim=pass (1024-bit key) header.d=mail.ru header.i=@mail.ru header.b="eS4UYFFd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mlxe0+lC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbfFOI0L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Jun 2019 04:26:11 -0400
-Received: from fallback22.m.smailru.net ([94.100.176.132]:41458 "EHLO
-        fallback22.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbfFOI0K (ORCPT
+        id S1726581AbfFOPBK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Jun 2019 11:01:10 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:35792 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbfFOPBK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Jun 2019 04:26:10 -0400
-X-Greylist: delayed 2311 seconds by postgrey-1.27 at vger.kernel.org; Sat, 15 Jun 2019 04:26:09 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail2;
-        h=Message-Id:Date:Subject:Cc:To:From; bh=NZ7xqSZZwr1eCoczOURixtqyghD8Goo4kPSXVEszrcQ=;
-        b=eS4UYFFdePCEUx+xarhSZf04dnud3Jsi2YD/a2Py/bDZCvv0Sw6KHftNq23csx+l5mfLrekzIDW0cX6sYPJNeTrvlI3AY5URFCQ+mmm4HKyF2uo9/p3PZYzsbnAcXVALlcP1p7wt54wm7UO3UCSt0Q4vgRZzq8KRSS6klgiMkqI=;
-Received: from [10.161.17.67] (port=47486 helo=smtpng2.m.smailru.net)
-        by fallback22.m.smailru.net with esmtp (envelope-from <andreykosh000@mail.ru>)
-        id 1hc3PU-0002eV-KY; Sat, 15 Jun 2019 10:47:36 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail2;
-        h=Message-Id:Date:Subject:Cc:To:From; bh=NZ7xqSZZwr1eCoczOURixtqyghD8Goo4kPSXVEszrcQ=;
-        b=eS4UYFFdePCEUx+xarhSZf04dnud3Jsi2YD/a2Py/bDZCvv0Sw6KHftNq23csx+l5mfLrekzIDW0cX6sYPJNeTrvlI3AY5URFCQ+mmm4HKyF2uo9/p3PZYzsbnAcXVALlcP1p7wt54wm7UO3UCSt0Q4vgRZzq8KRSS6klgiMkqI=;
-Received: by smtpng2.m.smailru.net with esmtpa (envelope-from <andreykosh000@mail.ru>)
-        id 1hc3PR-0001Ol-RZ; Sat, 15 Jun 2019 10:47:34 +0300
-From:   Andrei Koshkosh <andreykosh000@mail.ru>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Andrei Koshkosh <andreykosh000@mail.ru>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: dvbsky: use a single mutex and state buffers for all R/W ops
-Date:   Sat, 15 Jun 2019 10:47:28 +0300
-Message-Id: <1560584848-10278-1-git-send-email-andreykosh000@mail.ru>
+        Sat, 15 Jun 2019 11:01:10 -0400
+Received: by mail-pl1-f196.google.com with SMTP id p1so2251353plo.2
+        for <linux-media@vger.kernel.org>; Sat, 15 Jun 2019 08:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=d/LYfEaalp5LFqT9rkfYpwhznVcTdVjFdPH1FV2t1KU=;
+        b=mlxe0+lC6cabtTmQeoZyhhBKKesqoZDy/LH67jIaW73jeMJZ1/bbmCtLepu5YpleEk
+         hwyAX+1Ll6J4iyoj18nNx05VXbYGtu8E4KvXhBwcxrvv7GCA/Wbu9XkvdkcGDHwCYWlj
+         1/8+HyKYWJEgKAWzmsbf/a98MVgrgrIuwT/RjnAs+PEX7vj2fNEv9TeOX1YUOdaUmEeq
+         gSjSPzwX3AtEKnXNmz9HdGmBor/XCmrgRAd6D5gZlD/0i47OTHDrkobUFkdmZ/xOigl5
+         dGc+aJmSIFZuHiFAHgDznRg6LhDfwXrZgwrOpY/k6kN/jd7czsEOn/4AzvDIgre2q7aY
+         Ca8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=d/LYfEaalp5LFqT9rkfYpwhznVcTdVjFdPH1FV2t1KU=;
+        b=MFYkJ8rXWZ0YbTJJrmb2i1w98kuTsD8m/I51iT88VH43hhoOUppIExXQYDsW3IxX0G
+         /RtHFD8GHDOA1t1aWDvFZoctet1FIgPBEkaS7sT6zbCPT+tPHCGCOPV6w/7K9WfTR0Uy
+         XwiF/PvdzWeJyO/LMaAC5eIYQDwkrB4SboNjnbUHAQ3reOQ8uhom+hBqBqUZ4AqEyCui
+         KtLiRFo3k8UV8X8EN2Dw3ycaCNRRh82iah2bUjTptak1qkFu+gGYOXskeE+DvKpdN8ST
+         /i5iXcK2gOFUiWiCHAkCG+DNkBGYTYCG2f/C38Hv57nWqUp7Ur870w/r/tStgKP0ZkyA
+         3p1A==
+X-Gm-Message-State: APjAAAV1UjP3nGC6wTLvDq4pPEOFgC8HD8WqgwzJMBe38lecPcv3zzVM
+        OS8QWDjxXo1TyUHiB4BEV+xY1mp2QOg=
+X-Google-Smtp-Source: APXvYqyPPnCZ8d9YmWIC4DEOfES3sehFVbLwy2rJbt94MtUCVjMMq5zZ3+tXP8p0CdxwRNnQOw4jYg==
+X-Received: by 2002:a17:902:2006:: with SMTP id n6mr41875637pla.232.1560610869668;
+        Sat, 15 Jun 2019 08:01:09 -0700 (PDT)
+Received: from localhost.localdomain ([240f:34:212d:1:1b24:991b:df50:ea3f])
+        by smtp.gmail.com with ESMTPSA id m6sm7428633pgr.18.2019.06.15.08.01.07
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Sat, 15 Jun 2019 08:01:08 -0700 (PDT)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH] media: video-i2c: use V4L2_FRACT_COMPARE
+Date:   Sun, 16 Jun 2019 00:00:57 +0900
+Message-Id: <1560610857-20978-1-git-send-email-akinobu.mita@gmail.com>
 X-Mailer: git-send-email 2.7.4
-X-77F55803: 3FFC80838138E3AB5A78504BD2AC29415F63F23068B96592D340142D26E5A2AD4F871D01266C2C0BAA7BE44824A8E890
-X-7FA49CB5: 0D63561A33F958A5DE9C03C5AB07920869F2AB6D17B09CADEA1ECB185F66D82E8941B15DA834481FA18204E546F3947C0839144E5BB460BAF6B57BC7E64490618DEB871D839B7333395957E7521B51C2545D4CF71C94A83E9FA2833FD35BB23D27C277FBC8AE2E8B55B19328CBC4F849A471835C12D1D977C4224003CC836476C0CAF46E325F83A522CA9DD8327EE4930A3850AC1BE2E735E0AFE302A0308CE02318B5DA399B2AA7731C566533BA786A40A5AABA2AD371193C9F3DD0FB1AF5EB12B0DC9DCFD8E1403C9F3DD0FB1AF5EB4E70A05D1297E1BBCB5012B2E24CD356
-X-Mailru-Sender: 689FA8AB762F739359CD701D0F70D3B1EFFF278F0162BBDA04EF5B5499625FC7EC1B5849042ADB87648B0B2FE8089527E13B0FA3D5E9F256A7B6C1515A0AD0BE5FEEDEB644C299C0ED14614B50AE0675
-X-Mras: OK
-X-77F55803: 6AF0DA0BABFA9FDB7F9F52485CB584D7271FD7DF62800FDCA810FEE225402DC7B23ED1ED492BA22DA1CA62FC8FA672EABD18DB83BCE98094
-X-7FA49CB5: 0D63561A33F958A53855C23AFDFEAAE8B4BFE28A7C37969C43478AF22D0A241D8941B15DA834481FA18204E546F3947C744B801E316CB65FF6B57BC7E64490618DEB871D839B7333395957E7521B51C2545D4CF71C94A83E9FA2833FD35BB23D27C277FBC8AE2E8B3733B5EC72352B9FA471835C12D1D977C4224003CC836476C0CAF46E325F83A50BF2EBBBDD9D6B0F1569AAA11F4ECC86574AF45C6390F7469DAA53EE0834AAEE
-X-Mailru-Sender: A5480F10D64C9005CE454BE6AEE84EA23CF0444B96A59535B23ED1ED492BA22DE28E2421BF3B429A9CF37106FBEB56E73DDE9B364B0DF28929FC7850ADD9CF1E225EC17F3711B6CFAE208404248635DF
-X-Mras: OK
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
----
- drivers/media/usb/dvb-usb-v2/dvbsky.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+Use V4L2_FRACT_COMPARE to check whether two v4l2_fract structs are equal.
 
-diff --git a/drivers/media/usb/dvb-usb-v2/dvbsky.c b/drivers/media/usb/dvb-usb-v2/dvbsky.c
-index c41e10b..0b5da891 100644
---- a/drivers/media/usb/dvb-usb-v2/dvbsky.c
-+++ b/drivers/media/usb/dvb-usb-v2/dvbsky.c
-@@ -22,7 +22,7 @@ MODULE_PARM_DESC(disable_rc, "Disable inbuilt IR receiver.");
- DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
+Cc: Matt Ranostay <matt.ranostay@konsulko.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+---
+ drivers/media/i2c/video-i2c.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
+index abd3152..0781417 100644
+--- a/drivers/media/i2c/video-i2c.c
++++ b/drivers/media/i2c/video-i2c.c
+@@ -190,12 +190,8 @@ static int mlx90640_setup(struct video_i2c_data *data)
+ 	unsigned int n, idx;
  
- struct dvbsky_state {
--	struct mutex stream_mutex;
-+	//struct mutex stream_mutex;
- 	u8 ibuf[DVBSKY_BUF_LEN];
- 	u8 obuf[DVBSKY_BUF_LEN];
- 	u8 last_lock;
-@@ -61,16 +61,18 @@ static int dvbsky_stream_ctrl(struct dvb_usb_device *d, u8 onoff)
- {
- 	struct dvbsky_state *state = d_to_priv(d);
- 	int ret;
--	u8 obuf_pre[3] = { 0x37, 0, 0 };
--	u8 obuf_post[3] = { 0x36, 3, 0 };
-+	static u8 obuf_pre[3] = { 0x37, 0, 0 };
-+	static u8 obuf_post[3] = { 0x36, 3, 0 };
- 
--	mutex_lock(&state->stream_mutex);
--	ret = dvbsky_usb_generic_rw(d, obuf_pre, 3, NULL, 0);
-+	mutex_lock(&d->usb_mutex);
-+	memcpy(state->obuf, obuf_pre, 3);
-+	ret = dvb_usbv2_generic_write_locked(d, state->obuf, 3);
- 	if (!ret && onoff) {
- 		msleep(20);
--		ret = dvbsky_usb_generic_rw(d, obuf_post, 3, NULL, 0);
-+		memcpy(state->obuf, obuf_post, 3);
-+		ret = dvb_usbv2_generic_write_locked(d, state->obuf, 3);
+ 	for (n = 0; n < data->chip->num_frame_intervals - 1; n++) {
+-		if (data->frame_interval.numerator
+-				!= data->chip->frame_intervals[n].numerator)
+-			continue;
+-
+-		if (data->frame_interval.denominator
+-				== data->chip->frame_intervals[n].denominator)
++		if (V4L2_FRACT_COMPARE(data->frame_interval, ==,
++				       data->chip->frame_intervals[n]))
+ 			break;
  	}
--	mutex_unlock(&state->stream_mutex);
-+	mutex_unlock(&d->usb_mutex);
- 	return ret;
- }
- 
-@@ -599,7 +601,7 @@ static int dvbsky_init(struct dvb_usb_device *d)
- 	if (ret)
- 		return ret;
- 	*/
--	mutex_init(&state->stream_mutex);
-+	//mutex_init(&state->stream_mutex);
- 
- 	state->last_lock = 0;
  
 -- 
 2.7.4
