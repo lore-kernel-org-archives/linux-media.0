@@ -2,187 +2,111 @@ Return-Path: <SRS0=dKyM=UO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1245C31E50
-	for <linux-media@archiver.kernel.org>; Sat, 15 Jun 2019 08:08:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25935C31E47
+	for <linux-media@archiver.kernel.org>; Sat, 15 Jun 2019 08:26:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BA34D2084D
-	for <linux-media@archiver.kernel.org>; Sat, 15 Jun 2019 08:08:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE12A206B7
+	for <linux-media@archiver.kernel.org>; Sat, 15 Jun 2019 08:26:14 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=mail.ru header.i=@mail.ru header.b="eS4UYFFd";
+	dkim=pass (1024-bit key) header.d=mail.ru header.i=@mail.ru header.b="eS4UYFFd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfFOII4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 15 Jun 2019 04:08:56 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:54321 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725825AbfFOIIz (ORCPT
+        id S1725999AbfFOI0L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 15 Jun 2019 04:26:11 -0400
+Received: from fallback22.m.smailru.net ([94.100.176.132]:41458 "EHLO
+        fallback22.mail.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbfFOI0K (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 15 Jun 2019 04:08:55 -0400
-Received: from [IPv6:2001:983:e9a7:1:cc45:ac5:3048:e495] ([IPv6:2001:983:e9a7:1:cc45:ac5:3048:e495])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id c3k0hgjMK5qKac3k2hPzyG; Sat, 15 Jun 2019 10:08:53 +0200
-Subject: Re: [PATCHv4 0/2] Document memory-to-memory video codec interfaces
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        linux-media@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Pawel Osciak <posciak@chromium.org>
-References: <20190603112835.19661-1-hverkuil-cisco@xs4all.nl>
- <259bb812-9cc9-8fe7-8fc6-2cbd5ef44ac3@xs4all.nl>
- <615f53383f8f65011d1ce3ec49f6d78b67b8ddea.camel@ndufresne.ca>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <74c25415-01d4-eed6-c277-124a8ef1bf3e@xs4all.nl>
-Date:   Sat, 15 Jun 2019 10:08:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <615f53383f8f65011d1ce3ec49f6d78b67b8ddea.camel@ndufresne.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfLGBM5gcGisHSFXeUWBoGOyrd/k9//nlnQCEgl0PnzJxYLAMR2DeUyh0usoMdOw0diyNRO0ElanCRr03NS3YOeO2L1aBXlcHWTFV7/VK222c3hpqJldO
- oQSUCBmrUs3bSqOIueyqMz/cMiVek5R1/ja9DrcWG/BZ9wx5XEhFMTXcpqtvLsd5GAXcxYNNWEan0hFFeM3OdiI2DDC4fquyipRbrmbG2MV2N0iJiz2iSVym
- /hd80vnsQkdBAa8Q7JnVZ9vfojPnkd7q6wJkw5wBD2LUm02sn9Xkaob34F1/qkYHYpZtBycTUsgYKEHPl1mqw7KSKr+W0ejq0h/YBJY6cLo35tKkIc5bjb5J
- iSSbb7ht5qFKHzeAghoOkGGdnrNiuvzMXBPJIr8o8Cx/1oib7C8Cj5arYgHh/W7CQJttE/xsM9DxFkS3eTP+7SN8c+Cqb8PKb3gK4PY3u7x4KO2bIlKVHIRS
- D/8Pa2e30qybgU1sQR7ccBSO+HvLrg7/rMjjAjpMxXytlbLfT/Y6GTbnZMwxsUbSzZPbMhIJsYY0fq8UfgaELWQgwvHYrnk4aes64NSQJ2xY+TNOLEbdtlAM
- kQ6v9YT77P54RdfX3pRV0lsZ
+        Sat, 15 Jun 2019 04:26:10 -0400
+X-Greylist: delayed 2311 seconds by postgrey-1.27 at vger.kernel.org; Sat, 15 Jun 2019 04:26:09 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail2;
+        h=Message-Id:Date:Subject:Cc:To:From; bh=NZ7xqSZZwr1eCoczOURixtqyghD8Goo4kPSXVEszrcQ=;
+        b=eS4UYFFdePCEUx+xarhSZf04dnud3Jsi2YD/a2Py/bDZCvv0Sw6KHftNq23csx+l5mfLrekzIDW0cX6sYPJNeTrvlI3AY5URFCQ+mmm4HKyF2uo9/p3PZYzsbnAcXVALlcP1p7wt54wm7UO3UCSt0Q4vgRZzq8KRSS6klgiMkqI=;
+Received: from [10.161.17.67] (port=47486 helo=smtpng2.m.smailru.net)
+        by fallback22.m.smailru.net with esmtp (envelope-from <andreykosh000@mail.ru>)
+        id 1hc3PU-0002eV-KY; Sat, 15 Jun 2019 10:47:36 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail2;
+        h=Message-Id:Date:Subject:Cc:To:From; bh=NZ7xqSZZwr1eCoczOURixtqyghD8Goo4kPSXVEszrcQ=;
+        b=eS4UYFFdePCEUx+xarhSZf04dnud3Jsi2YD/a2Py/bDZCvv0Sw6KHftNq23csx+l5mfLrekzIDW0cX6sYPJNeTrvlI3AY5URFCQ+mmm4HKyF2uo9/p3PZYzsbnAcXVALlcP1p7wt54wm7UO3UCSt0Q4vgRZzq8KRSS6klgiMkqI=;
+Received: by smtpng2.m.smailru.net with esmtpa (envelope-from <andreykosh000@mail.ru>)
+        id 1hc3PR-0001Ol-RZ; Sat, 15 Jun 2019 10:47:34 +0300
+From:   Andrei Koshkosh <andreykosh000@mail.ru>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Andrei Koshkosh <andreykosh000@mail.ru>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: dvbsky: use a single mutex and state buffers for all R/W ops
+Date:   Sat, 15 Jun 2019 10:47:28 +0300
+Message-Id: <1560584848-10278-1-git-send-email-andreykosh000@mail.ru>
+X-Mailer: git-send-email 2.7.4
+X-77F55803: 3FFC80838138E3AB5A78504BD2AC29415F63F23068B96592D340142D26E5A2AD4F871D01266C2C0BAA7BE44824A8E890
+X-7FA49CB5: 0D63561A33F958A5DE9C03C5AB07920869F2AB6D17B09CADEA1ECB185F66D82E8941B15DA834481FA18204E546F3947C0839144E5BB460BAF6B57BC7E64490618DEB871D839B7333395957E7521B51C2545D4CF71C94A83E9FA2833FD35BB23D27C277FBC8AE2E8B55B19328CBC4F849A471835C12D1D977C4224003CC836476C0CAF46E325F83A522CA9DD8327EE4930A3850AC1BE2E735E0AFE302A0308CE02318B5DA399B2AA7731C566533BA786A40A5AABA2AD371193C9F3DD0FB1AF5EB12B0DC9DCFD8E1403C9F3DD0FB1AF5EB4E70A05D1297E1BBCB5012B2E24CD356
+X-Mailru-Sender: 689FA8AB762F739359CD701D0F70D3B1EFFF278F0162BBDA04EF5B5499625FC7EC1B5849042ADB87648B0B2FE8089527E13B0FA3D5E9F256A7B6C1515A0AD0BE5FEEDEB644C299C0ED14614B50AE0675
+X-Mras: OK
+X-77F55803: 6AF0DA0BABFA9FDB7F9F52485CB584D7271FD7DF62800FDCA810FEE225402DC7B23ED1ED492BA22DA1CA62FC8FA672EABD18DB83BCE98094
+X-7FA49CB5: 0D63561A33F958A53855C23AFDFEAAE8B4BFE28A7C37969C43478AF22D0A241D8941B15DA834481FA18204E546F3947C744B801E316CB65FF6B57BC7E64490618DEB871D839B7333395957E7521B51C2545D4CF71C94A83E9FA2833FD35BB23D27C277FBC8AE2E8B3733B5EC72352B9FA471835C12D1D977C4224003CC836476C0CAF46E325F83A50BF2EBBBDD9D6B0F1569AAA11F4ECC86574AF45C6390F7469DAA53EE0834AAEE
+X-Mailru-Sender: A5480F10D64C9005CE454BE6AEE84EA23CF0444B96A59535B23ED1ED492BA22DE28E2421BF3B429A9CF37106FBEB56E73DDE9B364B0DF28929FC7850ADD9CF1E225EC17F3711B6CFAE208404248635DF
+X-Mras: OK
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 6/14/19 3:09 AM, Nicolas Dufresne wrote:
-> Le jeudi 13 juin 2019 à 08:48 +0200, Hans Verkuil a écrit :
->> On 6/3/19 1:28 PM, Hans Verkuil wrote:
->>> Since Tomasz was very busy with other things, I've taken over this
->>> patch series. This v4 includes his draft changes and additional changes
->>> from me.
->>>
->>> This series attempts to add the documentation of what was discussed
->>> during Media Workshops at LinuxCon Europe 2012 in Barcelona and then
->>> later Embedded Linux Conference Europe 2014 in Düsseldorf and then
->>> eventually written down by Pawel Osciak and tweaked a bit by Chrome OS
->>> video team (but mostly in a cosmetic way or making the document more
->>> precise), during the several years of Chrome OS using the APIs in
->>> production.
->>>
->>> Note that most, if not all, of the API is already implemented in
->>> existing mainline drivers, such as s5p-mfc or mtk-vcodec. Intention of
->>> this series is just to formalize what we already have.
->>>
->>> Thanks everyone for the huge amount of useful comments to previous
->>> versions of this series. Much of the credits should go to Pawel Osciak
->>> too, for writing most of the original text of the initial RFC.
->>>
->>> This v4 incorporates all known comments (let me know if I missed
->>> something!) and should be complete for the decoder.
->>>
->>> For the encoder there are two remaining TODOs for the API:
->>>
->>> 1) Setting the frame rate so bitrate control can make sense, since
->>>    they need to know this information.
->>>
->>>    Suggested solution: require support for ENUM_FRAMEINTERVALS for the
->>>    coded pixelformats and S_PARM(OUTPUT). Open question: some drivers
->>>    (mediatek, hva, coda) require S_PARM(OUTPUT), some (venus) allow both
->>>    S_PARM(CAPTURE) and S_PARM(OUTPUT). I am inclined to allow both since
->>>    this is not a CAPTURE vs OUTPUT thing, it is global to both queues.
->>
->> Alternative proposal:
->>
->> 1) Add support for fractions (struct v4l2_fract) as a control type:
->>    V4L2_CTRL_TYPE_FRACT.
->>
->> 2) Add a new V4L2_CID_MPEG_FRAME_INTERVAL control.
-> 
-> Is the MPEG namespace historical ? That might be confusing for users.
+---
+ drivers/media/usb/dvb-usb-v2/dvbsky.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-Yes, it's historical. I have toyed with the idea of renaming all the
-defines to something like V4L2_CID_CODEC_... (keeping the old defines, of
-course), but I'm not sure it is worth it.
-
-> 
->>
->> Encoders shall support this control.
->>
->> 3) For backwards compatibility reasons encoder drivers still have to
->> support G/S_PARM, but this can now be implemented by standard helpers
->> that query this control. Drivers also have to implement ENUM_FRAMEINTERVALS.
-> 
-> That's won't be very friendly for UI generator like qv4l2. Support for
-> v4l2_fract as control should include a way to describe the supported
-> values of that control the usual way I think.
-
-Such a control will definitely have the usual min/max/step/default control
-values.
-
-> Also, long term, it would be nice to have two sets of frame rates. The
-> one that the HW can handle "real-time" and the one that can be used for
-> bitrate calculation. So staying away from ENUM_FRAMEINTERVALS for
-> bitrate configuration would be nicer.
-
-I'm not sure if that's feasible in practice, although the idea is nice.
-The 'real-time' framerate will likely depend to a huge extent on the
-frequency of various internal clocks and the content of the bitstream.
-
-I suspect it will be very hard if not impossible to report realistic
-ENUM_FRAMEINTERVAL values for codecs.
-
-> 
->> If the range of intervals is always the same regardless of the frame size,
->> then a helper can be used that queries the min/max/step of the control, but
->> if it is dependent on the frame size, then it has to be implemented in the
->> driver itself.
->>
->> I'm sticking to frame intervals instead of frame rates for the simple reason
->> that that's what V4L2 has used since the beginning. I think it is too confusing
->> to change this to a frame rate. This is just my opinion, though.
-> 
-> I suggested frame rate since this is what I saw implemented by HW
-> registers (if you think it's worth it, I can try and make a list).
-> Also, frame-interval steps are not compatible with frame-rate steps
-> (something that was raised through a venus driver bug) last year. Even
-> v4l2-ctl was displaying that in a very confusing way. Something as
-> simple as 1 to 30 fps cannot be exposed through ENU_FRAMEINTERVALS. You
-> are forced to expose the full fractional range of interval, from 1/30
-> to 1/1. For Venus it was not that much of a trouble, since its stores a
-> framerate as Q16..
-
-Since this is used for bitrate calculations, and not for determining the
-exact framerate, I'm not sure it matters all that much in this particular
-case. Since you still need to implement G/S_PARM in drivers for backwards
-compatibility reasons I think it is easiest to keep using frame interval
-instead of frame rate.
-
-Actually, that raises a new question: are there codecs that store the frame rate
-in the bitstream? I haven't heard of that, so I suspect not, but I'm not certain.
-
-Regards,
-
-	Hans
-
-> 
->>
->> I also chose to make this a codec control, not a generic user control: this
->> value together with the bit rate control(s) determine the compression size,
->> it does not determine the actual time it takes for the encoder to compress
->> the raw frames. Hence it is really not the same thing as the frame interval
-> 
-> That's a good point.
-> 
->> of a video capture device. If we want to use a control for that as well in
->> the future as a replacement for G/S_PARM, then that should be a new control.
->> And we would like need per-pad controls as well in order to implement that.
->> Which is a lot more work.
->>
->> Regards,
->>
->> 	Hans
-> 
-> 
+diff --git a/drivers/media/usb/dvb-usb-v2/dvbsky.c b/drivers/media/usb/dvb-usb-v2/dvbsky.c
+index c41e10b..0b5da891 100644
+--- a/drivers/media/usb/dvb-usb-v2/dvbsky.c
++++ b/drivers/media/usb/dvb-usb-v2/dvbsky.c
+@@ -22,7 +22,7 @@ MODULE_PARM_DESC(disable_rc, "Disable inbuilt IR receiver.");
+ DVB_DEFINE_MOD_OPT_ADAPTER_NR(adapter_nr);
+ 
+ struct dvbsky_state {
+-	struct mutex stream_mutex;
++	//struct mutex stream_mutex;
+ 	u8 ibuf[DVBSKY_BUF_LEN];
+ 	u8 obuf[DVBSKY_BUF_LEN];
+ 	u8 last_lock;
+@@ -61,16 +61,18 @@ static int dvbsky_stream_ctrl(struct dvb_usb_device *d, u8 onoff)
+ {
+ 	struct dvbsky_state *state = d_to_priv(d);
+ 	int ret;
+-	u8 obuf_pre[3] = { 0x37, 0, 0 };
+-	u8 obuf_post[3] = { 0x36, 3, 0 };
++	static u8 obuf_pre[3] = { 0x37, 0, 0 };
++	static u8 obuf_post[3] = { 0x36, 3, 0 };
+ 
+-	mutex_lock(&state->stream_mutex);
+-	ret = dvbsky_usb_generic_rw(d, obuf_pre, 3, NULL, 0);
++	mutex_lock(&d->usb_mutex);
++	memcpy(state->obuf, obuf_pre, 3);
++	ret = dvb_usbv2_generic_write_locked(d, state->obuf, 3);
+ 	if (!ret && onoff) {
+ 		msleep(20);
+-		ret = dvbsky_usb_generic_rw(d, obuf_post, 3, NULL, 0);
++		memcpy(state->obuf, obuf_post, 3);
++		ret = dvb_usbv2_generic_write_locked(d, state->obuf, 3);
+ 	}
+-	mutex_unlock(&state->stream_mutex);
++	mutex_unlock(&d->usb_mutex);
+ 	return ret;
+ }
+ 
+@@ -599,7 +601,7 @@ static int dvbsky_init(struct dvb_usb_device *d)
+ 	if (ret)
+ 		return ret;
+ 	*/
+-	mutex_init(&state->stream_mutex);
++	//mutex_init(&state->stream_mutex);
+ 
+ 	state->last_lock = 0;
+ 
+-- 
+2.7.4
 
