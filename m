@@ -2,142 +2,101 @@ Return-Path: <SRS0=uyBa=UQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-10.7 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA271C31E50
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 13:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3C38C31E50
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 13:47:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 802382084B
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 13:45:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="DfyeHbBo"
+	by mail.kernel.org (Postfix) with ESMTP id C56372084B
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 13:47:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbfFQNpW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jun 2019 09:45:22 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:13828 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725884AbfFQNpW (ORCPT
+        id S1726872AbfFQNrk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jun 2019 09:47:40 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:56925 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726822AbfFQNrk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jun 2019 09:45:22 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5HDfLpV026019;
-        Mon, 17 Jun 2019 15:44:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=TukET5a1B87T8jAy8Pcez1BbOi6ltkalZ8o/aJvv4Ow=;
- b=DfyeHbBodyNC7xlupkSuyuz6HEZY+FH5jtORUN+y9B1TKxuO2geqtoBs17rQpOTY6AGW
- 6rXrn6AUZXu3Wmyybdol0t2C+TyZ/yf3IqE27CzZG4C4ngTjf/3ps7U2h/UDZGvGPhN7
- v0Iet8Gd643ilcQLocoYPG3MWyLKWismAQmejWLhNgLEmKu+zHKAMbmviCyriSRPtroZ
- LqspCfwS8YJx0V88PVDqCsQJ1dcvfM5/nbVA+tG3Xc9sp+F9GsGYbd90hXWdZeOF7ddo
- dAxbWXccgSywZ5RWkt+NKeOHj6PD4Fj0UJbBElvDiLLSGvf0OjzbH9D4ox57lOTz3drB KQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2t4nt834nu-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 17 Jun 2019 15:44:15 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 78C743A;
-        Mon, 17 Jun 2019 13:44:14 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2CCB12AFF;
-        Mon, 17 Jun 2019 13:44:14 +0000 (GMT)
-Received: from SAFEX1HUBCAS24.st.com (10.75.90.95) by SAFEX1HUBCAS21.st.com
- (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 17 Jun
- 2019 15:44:14 +0200
-Received: from localhost (10.201.23.19) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 17 Jun 2019 15:44:13
- +0200
-From:   Hugues Fruchet <hugues.fruchet@st.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mickael Guene <mickael.guene@st.com>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Hugues Fruchet" <hugues.fruchet@st.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>
-Subject: [PATCH v2 3/3] media: st-mipid02: add support of JPEG
-Date:   Mon, 17 Jun 2019 15:43:58 +0200
-Message-ID: <1560779038-26012-4-git-send-email-hugues.fruchet@st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1560779038-26012-1-git-send-email-hugues.fruchet@st.com>
-References: <1560779038-26012-1-git-send-email-hugues.fruchet@st.com>
+        Mon, 17 Jun 2019 09:47:40 -0400
+Received: from [IPv6:2001:983:e9a7:1:9450:c90a:3140:14fc] ([IPv6:2001:983:e9a7:1:9450:c90a:3140:14fc])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id cryzhvG3R5qKacrz0hXDRU; Mon, 17 Jun 2019 15:47:38 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.3] Various fixes.
+Message-ID: <fe3b41fb-ee6c-8b63-b5de-831df3401c16@xs4all.nl>
+Date:   Mon, 17 Jun 2019 15:47:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.19]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-17_06:,,
- signatures=0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfKILzBZXFKsbRHVesEGE1pnKP/myEex7L42An0BLP+RvloGnqlYgO2X3iXkp9UPsFMsZL/ftg4uKMMSKDgRpgN0E68Jp0bpSwT/zRh9OdeF1cOlQN9zm
+ UQkgmTCBNa89mJqmohVhYPOAcQDfLxRzU5lDhNEOVj1v8riQVivpjYb4yIbuS1ja3mecXPg4l9jhCpPxOfTwUGmgC+1SwSWYAdg2a7q6o1zZdYqg3wOFfsLt
+ o23X6PCYhfeaCnkaErIn/1HS1KyG5B6fAAyZtRz3y60=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add support of JPEG pixel format.
-This requires auto detection of data type from CSI-2 stream.
+The following changes since commit 513dbd35b5d93c45fa7291147f21fc0227a9f999:
 
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
----
- drivers/media/i2c/st-mipid02.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+  media: add SPDX headers to some files (2019-06-12 11:42:27 -0400)
 
-diff --git a/drivers/media/i2c/st-mipid02.c b/drivers/media/i2c/st-mipid02.c
-index 35946ad..ff8a4d8 100644
---- a/drivers/media/i2c/st-mipid02.c
-+++ b/drivers/media/i2c/st-mipid02.c
-@@ -64,6 +64,7 @@ static const u32 mipid02_supported_fmt_codes[] = {
- 	MEDIA_BUS_FMT_UYVY8_1X16, MEDIA_BUS_FMT_BGR888_1X24,
- 	MEDIA_BUS_FMT_RGB565_2X8_LE, MEDIA_BUS_FMT_RGB565_2X8_BE,
- 	MEDIA_BUS_FMT_YUYV8_2X8, MEDIA_BUS_FMT_UYVY8_2X8,
-+	MEDIA_BUS_FMT_JPEG_1X8
- };
- 
- /* regulator supplies */
-@@ -101,6 +102,7 @@ struct mipid02_dev {
- 		u8 data_lane1_reg1;
- 		u8 mode_reg1;
- 		u8 mode_reg2;
-+		u8 data_selection_ctrl;
- 		u8 data_id_rreg;
- 		u8 pix_width_ctrl;
- 		u8 pix_width_ctrl_emb;
-@@ -463,6 +465,7 @@ static int mipid02_configure_from_tx(struct mipid02_dev *bridge)
- {
- 	struct v4l2_fwnode_endpoint *ep = &bridge->tx;
- 
-+	bridge->r.data_selection_ctrl = SELECTION_MANUAL_WIDTH;
- 	bridge->r.pix_width_ctrl = ep->bus.parallel.bus_width;
- 	bridge->r.pix_width_ctrl_emb = ep->bus.parallel.bus_width;
- 	if (ep->bus.parallel.flags & V4L2_MBUS_HSYNC_ACTIVE_HIGH)
-@@ -478,10 +481,15 @@ static int mipid02_configure_from_code(struct mipid02_dev *bridge)
- 	u8 data_type;
- 
- 	bridge->r.data_id_rreg = 0;
--	data_type = data_type_from_code(bridge->fmt.code);
--	if (!data_type)
--		return -EINVAL;
--	bridge->r.data_id_rreg = data_type;
-+
-+	if (bridge->fmt.code != MEDIA_BUS_FMT_JPEG_1X8) {
-+		bridge->r.data_selection_ctrl |= SELECTION_MANUAL_DATA;
-+
-+		data_type = data_type_from_code(bridge->fmt.code);
-+		if (!data_type)
-+			return -EINVAL;
-+		bridge->r.data_id_rreg = data_type;
-+	}
- 
- 	return 0;
- }
-@@ -565,7 +573,7 @@ static int mipid02_stream_enable(struct mipid02_dev *bridge)
- 	if (ret)
- 		goto error;
- 	ret = mipid02_write_reg(bridge, MIPID02_DATA_SELECTION_CTRL,
--		SELECTION_MANUAL_DATA | SELECTION_MANUAL_WIDTH);
-+		bridge->r.data_selection_ctrl);
- 	if (ret)
- 		goto error;
- 	ret = mipid02_write_reg(bridge, MIPID02_PIX_WIDTH_CTRL,
--- 
-2.7.4
+are available in the Git repository at:
 
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.3r
+
+for you to fetch changes up to c0d1b0b083620e1755a563102368c35686df5f18:
+
+  staging: media: tegra-vde: Manually pack UAPI structures (2019-06-17 15:37:55 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Akinobu Mita (2):
+      media: vivid: remove unnecessary min and max timeperframe constants
+      media: video-i2c: use V4L2_FRACT_COMPARE
+
+André Almeida (2):
+      media: vimc: stream: add missing function documentation
+      media: docs: create vimc documentation
+
+Dmitry Osipenko (2):
+      staging: media: tegra-vde: Remove BIT() macro from UAPI header
+      staging: media: tegra-vde: Manually pack UAPI structures
+
+Fabio Estevam (2):
+      media: dt-bindings: imx7-csi: Document a single CSI clock
+      media: coda: Use devm_platform_ioremap_resource()
+
+Jae Hyun Yoo (1):
+      media: aspeed: add a workaround to fix a silicon bug
+
+Luca Ceresoli (1):
+      media: docs: v4l2-controls: fix sentence rendered in a nonsense way
+
+YueHaibing (1):
+      media: meye: Fix build COMPILE_TEST error
+
+ Documentation/devicetree/bindings/media/imx7-csi.txt |  9 ++----
+ Documentation/media/uapi/v4l/extended-controls.rst   |  9 +++---
+ Documentation/media/v4l-drivers/index.rst            |  1 +
+ Documentation/media/v4l-drivers/vimc.dot             | 22 +++++++++++++++
+ Documentation/media/v4l-drivers/vimc.rst             | 98 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/media/i2c/video-i2c.c                        |  8 ++----
+ drivers/media/pci/meye/Kconfig                       |  3 +-
+ drivers/media/platform/aspeed-video.c                | 28 ++++++++++++++-----
+ drivers/media/platform/coda/coda-common.c            |  4 +--
+ drivers/media/platform/vimc/vimc-streamer.c          | 22 +++++++++++++++
+ drivers/media/platform/vivid/vivid-core.h            | 12 --------
+ drivers/media/platform/vivid/vivid-vid-cap.c         |  7 -----
+ drivers/staging/media/tegra-vde/tegra-vde.c          | 13 +++++++--
+ drivers/staging/media/tegra-vde/uapi.h               | 48 ++++++++++++++++----------------
+ 14 files changed, 212 insertions(+), 72 deletions(-)
+ create mode 100644 Documentation/media/v4l-drivers/vimc.dot
+ create mode 100644 Documentation/media/v4l-drivers/vimc.rst
