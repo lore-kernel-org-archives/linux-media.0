@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B5EBC31E5F
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B550C31E5E
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:10:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6F4CE20861
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:10:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EBED20861
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:10:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="NNSYt4L6"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="mCMnqLJE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728102AbfFQVJ7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jun 2019 17:09:59 -0400
+        id S1728147AbfFQVKB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jun 2019 17:10:01 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:41574 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728040AbfFQVJ7 (ORCPT
+        with ESMTP id S1728115AbfFQVKA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jun 2019 17:09:59 -0400
+        Mon, 17 Jun 2019 17:10:00 -0400
 Received: from pendragon.bb.dnainternet.fi (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 095991200;
-        Mon, 17 Jun 2019 23:09:53 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E05292AF;
+        Mon, 17 Jun 2019 23:09:54 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1560805794;
-        bh=h9TT31z7AozYsCJ9BWV0m8flK1mMwqN4iYMmzb8g2a0=;
+        s=mail; t=1560805795;
+        bh=jykX+GW5ELgx/3v26bE+LaTvqVLuHhmEi55L841++20=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NNSYt4L6qYiEP/YJqJwZi2XwHkgHiTVboMf7jGrgMKdul/ARfbTcZoLPJsEO6SQu8
-         1d2xNG1sfkzMhTqe7ewCejvm1YRm4nwJgOA8X8shDq15VCVseyiYxQuxMyVhMdxTX3
-         udmCmTFMPAB/eblfW0AQ8kgbuBtAvfLS3EwMTm44=
+        b=mCMnqLJE0xVh/VRSNYmlBgafugZhCeWxgxAPgzx9mOdzPhjF8/ezaM5GSoyUANsfr
+         AxVIcnRyNZBTyoDQsnQBzL2nLhwXebpvEdSzuzpLp/dllr1tWGSJcK/h6yYzAKXkmO
+         c231wgNs/d2b3YEFWE2KV+mxpbi3RtIMMSkTHenw=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: [PATCH v3 05/10] drm: rcar-du: Handle CRTC standby from commit tail handler
-Date:   Tue, 18 Jun 2019 00:09:25 +0300
-Message-Id: <20190617210930.6054-6-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH v3 07/10] drm: rcar-du: Provide for_each_group helper
+Date:   Tue, 18 Jun 2019 00:09:27 +0300
+Message-Id: <20190617210930.6054-8-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190617210930.6054-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20190617210930.6054-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -51,217 +51,75 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-Manage the power state, and initial configuration of the CRTC from the
-commit tail handler. CRTCs which need to be activated are taken out of
-standby, and any deactivated CRTCs are put into standby.
-
-This aims at removing CRTC state tracking from the rcar_du_crtc
-structure. The initial configuration of the CRTC background colours and
-disabling of all planes is taken out of rcar_du_crtc_setup() and moved
-inline into rcar_du_crtc_enable(). rcar_du_crtc_get() and
-rcar_du_crtc_put() are kept as they are needed to configure the VSP at
-the correct time, this will be addressed in a separate change.
+Refactoring of the group control code will soon require more iteration
+over the available groups. Simplify this process by introducing a group
+iteration helper.
 
 Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
 Changes since v2:
 
-- Add more documentation
-- Keep rcar_du_crtc_get() and rcar_du_crtc_put()
-- Renamed rcar_du_crtc_enable() to rcar_du_crtc_exit_standby() and
-  rcar_du_crtc_disable() to rcar_du_crtc_enter_standby()
-- Reword commit message
-
-Changes since v1:
-
-- Registers sequence confirmed unchanged
-- Re-ordered in the series to handle before groups
-- Do not merge rcar_du_crtc_setup() (now handled by _crtc_pre_commit)
+- Don't assign __group in the condition part of the for statement of the
+  for_each_rcdu_group() macro
 ---
- drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 90 ++++++++++++++++++++------
- drivers/gpu/drm/rcar-du/rcar_du_crtc.h |  5 ++
- drivers/gpu/drm/rcar-du/rcar_du_kms.c  |  4 ++
- 3 files changed, 81 insertions(+), 18 deletions(-)
+ drivers/gpu/drm/rcar-du/rcar_du_drv.h |  5 +++++
+ drivers/gpu/drm/rcar-du/rcar_du_kms.c | 10 ++--------
+ 2 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-index cccd6fe85749..23f4bdef0e3a 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-@@ -480,17 +480,10 @@ static void rcar_du_crtc_wait_page_flip(struct rcar_du_crtc *rcrtc)
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.h b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
+index 1327cd0df90a..0cc0984bf2ea 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_drv.h
++++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
+@@ -96,6 +96,11 @@ struct rcar_du_device {
+ 	unsigned int vspd1_sink;
+ };
  
- static void rcar_du_crtc_setup(struct rcar_du_crtc *rcrtc)
++#define for_each_rcdu_group(__rcdu, __group, __i) \
++	for ((__i) = 0, (__group) = &(__rcdu)->groups[0]; \
++	     (__i) < DIV_ROUND_UP((__rcdu)->num_crtcs, 2); \
++	     __i++, __group++)
++
+ static inline bool rcar_du_has(struct rcar_du_device *rcdu,
+ 			       unsigned int feature)
  {
--	/* Set display off and background to black */
--	rcar_du_crtc_write(rcrtc, DOOR, DOOR_RGB(0, 0, 0));
--	rcar_du_crtc_write(rcrtc, BPOR, BPOR_RGB(0, 0, 0));
--
- 	/* Configure display timings and output routing */
- 	rcar_du_crtc_set_display_timing(rcrtc);
- 	rcar_du_group_set_routing(rcrtc->group);
- 
--	/* Start with all planes disabled. */
--	rcar_du_group_write(rcrtc->group, rcrtc->index % 2 ? DS2PR : DS1PR, 0);
--
- 	/* Enable the VSP compositor. */
- 	if (rcar_du_has(rcrtc->dev, RCAR_DU_FEATURE_VSP1_SOURCE)) {
- 		rcar_du_vsp_modeset(rcrtc);
-@@ -501,17 +494,10 @@ static void rcar_du_crtc_setup(struct rcar_du_crtc *rcrtc)
- 	drm_crtc_vblank_on(&rcrtc->crtc);
- }
- 
--static int rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
-+static int rcar_du_crtc_exit_standby(struct rcar_du_crtc *rcrtc)
- {
- 	int ret;
- 
--	/*
--	 * Guard against double-get, as the function is called from both the
--	 * .atomic_enable() and .atomic_begin() handlers.
--	 */
--	if (rcrtc->initialized)
--		return 0;
--
- 	ret = clk_prepare_enable(rcrtc->clock);
- 	if (ret < 0)
- 		return ret;
-@@ -524,8 +510,12 @@ static int rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
- 	if (ret < 0)
- 		goto error_group;
- 
--	rcar_du_crtc_setup(rcrtc);
--	rcrtc->initialized = true;
-+	/* Set display off and background to black. */
-+	rcar_du_crtc_write(rcrtc, DOOR, DOOR_RGB(0, 0, 0));
-+	rcar_du_crtc_write(rcrtc, BPOR, BPOR_RGB(0, 0, 0));
-+
-+	/* Start with all planes disabled. */
-+	rcar_du_group_write(rcrtc->group, rcrtc->index % 2 ? DS2PR : DS1PR, 0);
- 
- 	return 0;
- 
-@@ -536,13 +526,29 @@ static int rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
- 	return ret;
- }
- 
--static void rcar_du_crtc_put(struct rcar_du_crtc *rcrtc)
-+static void rcar_du_crtc_enter_standby(struct rcar_du_crtc *rcrtc)
- {
- 	rcar_du_group_put(rcrtc->group);
- 
- 	clk_disable_unprepare(rcrtc->extclock);
- 	clk_disable_unprepare(rcrtc->clock);
-+}
- 
-+static void rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
-+{
-+	/*
-+	 * Guard against double-get, as the function is called from both the
-+	 * .atomic_enable() and .atomic_begin() handlers.
-+	 */
-+	if (rcrtc->initialized)
-+		return;
-+
-+	rcar_du_crtc_setup(rcrtc);
-+	rcrtc->initialized = true;
-+}
-+
-+static void rcar_du_crtc_put(struct rcar_du_crtc *rcrtc)
-+{
- 	rcrtc->initialized = false;
- }
- 
-@@ -662,6 +668,54 @@ static int rcar_du_crtc_atomic_check(struct drm_crtc *crtc,
- 	return 0;
- }
- 
-+/*
-+ * Take all CRTCs that are made active in this commit out of standby.
-+ * CRTCs that are deactivated by the commit are untouched and will be
-+ * put in standby by rcar_du_crtc_atomic_enter_standby().
-+ */
-+int rcar_du_crtc_atomic_exit_standby(struct drm_device *dev,
-+				     struct drm_atomic_state *state)
-+{
-+	struct drm_crtc_state *crtc_state;
-+	struct drm_crtc *crtc;
-+	unsigned int i;
-+	int ret;
-+
-+	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
-+		struct rcar_du_crtc *rcrtc = to_rcar_crtc(crtc);
-+
-+		if (crtc_state->active_changed && crtc_state->active) {
-+			ret = rcar_du_crtc_exit_standby(rcrtc);
-+			if (ret)
-+				return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * Put all CRTCs that have been deactivated by this commit in standby.
-+ * This shall be called at the end of the commit tail handler as the
-+ * last operation that touches the CRTC hardware.
-+ */
-+int rcar_du_crtc_atomic_enter_standby(struct drm_device *dev,
-+				      struct drm_atomic_state *state)
-+{
-+	struct drm_crtc_state *crtc_state;
-+	struct drm_crtc *crtc;
-+	unsigned int i;
-+
-+	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
-+		struct rcar_du_crtc *rcrtc = to_rcar_crtc(crtc);
-+
-+		if (crtc_state->active_changed && !crtc_state->active)
-+			rcar_du_crtc_enter_standby(rcrtc);
-+	}
-+
-+	return 0;
-+}
-+
- static void rcar_du_crtc_atomic_enable(struct drm_crtc *crtc,
- 				       struct drm_crtc_state *old_state)
- {
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.h b/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
-index 3b7fc668996f..3ce7610793b2 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
-@@ -107,6 +107,11 @@ int rcar_du_crtc_create(struct rcar_du_group *rgrp, unsigned int swindex,
- 
- void rcar_du_crtc_finish_page_flip(struct rcar_du_crtc *rcrtc);
- 
-+int rcar_du_crtc_atomic_exit_standby(struct drm_device *dev,
-+				     struct drm_atomic_state *state);
-+int rcar_du_crtc_atomic_enter_standby(struct drm_device *dev,
-+				      struct drm_atomic_state *state);
-+
- void rcar_du_crtc_dsysr_clr_set(struct rcar_du_crtc *rcrtc, u32 clr, u32 set);
- 
- #endif /* __RCAR_DU_CRTC_H__ */
 diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-index 2dc9caee8767..59680de271cc 100644
+index 144c0c1b1591..c04136674e58 100644
 --- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
 +++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-@@ -409,11 +409,15 @@ static void rcar_du_atomic_commit_tail(struct drm_atomic_state *old_state)
- 	}
+@@ -627,9 +627,9 @@ int rcar_du_modeset_init(struct rcar_du_device *rcdu)
  
- 	/* Apply the atomic update. */
-+	rcar_du_crtc_atomic_exit_standby(dev, old_state);
-+
- 	drm_atomic_helper_commit_modeset_disables(dev, old_state);
- 	drm_atomic_helper_commit_planes(dev, old_state,
- 					DRM_PLANE_COMMIT_ACTIVE_ONLY);
- 	drm_atomic_helper_commit_modeset_enables(dev, old_state);
+ 	struct drm_device *dev = rcdu->ddev;
+ 	struct drm_encoder *encoder;
++	struct rcar_du_group *rgrp;
+ 	unsigned int dpad0_sources;
+ 	unsigned int num_encoders;
+-	unsigned int num_groups;
+ 	unsigned int swindex;
+ 	unsigned int hwindex;
+ 	unsigned int i;
+@@ -670,11 +670,7 @@ int rcar_du_modeset_init(struct rcar_du_device *rcdu)
+ 		return ret;
  
-+	rcar_du_crtc_atomic_enter_standby(dev, old_state);
-+
- 	drm_atomic_helper_commit_hw_done(old_state);
- 	drm_atomic_helper_wait_for_flip_done(dev, old_state);
+ 	/* Initialize the groups. */
+-	num_groups = DIV_ROUND_UP(rcdu->num_crtcs, 2);
+-
+-	for (i = 0; i < num_groups; ++i) {
+-		struct rcar_du_group *rgrp = &rcdu->groups[i];
+-
++	for_each_rcdu_group(rcdu, rgrp, i) {
+ 		mutex_init(&rgrp->lock);
  
+ 		rgrp->dev = rcdu;
+@@ -711,8 +707,6 @@ int rcar_du_modeset_init(struct rcar_du_device *rcdu)
+ 
+ 	/* Create the CRTCs. */
+ 	for (swindex = 0, hwindex = 0; swindex < rcdu->num_crtcs; ++hwindex) {
+-		struct rcar_du_group *rgrp;
+-
+ 		/* Skip unpopulated DU channels. */
+ 		if (!(rcdu->info->channels_mask & BIT(hwindex)))
+ 			continue;
 -- 
 Regards,
 
