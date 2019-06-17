@@ -7,38 +7,38 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01C3DC31E5D
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9488C31E5C
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:10:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC59A20861
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:10:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9FA8820861
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:10:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="AajAoR9w"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DFI49PEZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728173AbfFQVKB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jun 2019 17:10:01 -0400
+        id S1728207AbfFQVKD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jun 2019 17:10:03 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:41562 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728057AbfFQVKA (ORCPT
+        with ESMTP id S1728040AbfFQVKC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jun 2019 17:10:00 -0400
+        Mon, 17 Jun 2019 17:10:02 -0400
 Received: from pendragon.bb.dnainternet.fi (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 75F1D120A;
-        Mon, 17 Jun 2019 23:09:54 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C7F751217;
+        Mon, 17 Jun 2019 23:09:55 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1560805794;
-        bh=yL+6oclHjQiqkSoIjsFaHo3x81rVWwwP0zTyIDZf0iE=;
+        s=mail; t=1560805796;
+        bh=09tZsVSx072b7Ql590jhy7bvmtHSpCR6J3rF+0Dhypo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AajAoR9wl1gTDwoibtkta+jCZHwbumig2ThK6bgeqQ0kVvJDkKj9CWvbRdgcLS4xI
-         cR1NEql9qYOdn5ty0vXBwtnu37h80zPX87lf34av61CU4+rAsY90v0Z2Fa45axKeF0
-         LwvCM2VUEbjmc5M1tX0jPDaXQvlygTFdNDldW4A0=
+        b=DFI49PEZyLKX0TsHJePcfOSDZiPX0rPBA4VnLL7ULo5M4VYHc1KiI6nW9BlP1hPBK
+         E8Xu2i7xEEdJov67vNs0K6zmqRyLHze6tLPW3J97HVgXtXVCK7kR02CC8qfgh6AZK+
+         u6TM/e7hDvo0DQISAoHbZE7kMQ0cxPg5dQgJ2VDE=
 From:   Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         Kieran Bingham <kieran.bingham@ideasonboard.com>
-Subject: [PATCH v3 06/10] drm: rcar-du: Handle CRTC configuration from commit tail handler
-Date:   Tue, 18 Jun 2019 00:09:26 +0300
-Message-Id: <20190617210930.6054-7-laurent.pinchart+renesas@ideasonboard.com>
+Subject: [PATCH v3 09/10] drm: rcar-du: Perform group setup from the atomic tail handler
+Date:   Tue, 18 Jun 2019 00:09:29 +0300
+Message-Id: <20190617210930.6054-10-laurent.pinchart+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190617210930.6054-1-laurent.pinchart+renesas@ideasonboard.com>
 References: <20190617210930.6054-1-laurent.pinchart+renesas@ideasonboard.com>
@@ -51,107 +51,165 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-The CRTC mode setting and routing configuration are performed at the
-earliest of atomic enable and atomic begin, to ensure that a valid
-configuration is applied to the hardware before the CRTC gets enabled
-and before planes are setup (the latter being required in particular by
-the VSP). This requires the rcar_du_crtc structure to track the CRTC
-enabled state.
+Create rcar_du_group_atomic_check() and rcar_du_group_atomic_setup()
+functions to track and apply group state through the DRM atomic state.
+The use_count field is moved from the rcar_du_group structure to an
+enabled field in the rcar_du_group_state structure.
 
-Simplify the code and remove the manual state tracking by moving CRTC
-setup to a new rcar_du_crtc_atomic_modeset() function, called directly
-from the commit tail handler. The function iterates over all CRTCs in
-the state transaction and performs CRTC mode setting, routing
-configuration and VSP configuration.
+This allows separating group setup from the configuration of the CRTCs
+that are part of the group, simplifying the CRTC code and improving
+overall readability. The existing rcar_du_group_{get,put}() functions
+are now redundant and removed.
 
-drm_crtc_vblank_on() has to be called from the atomic begin handler, to
-ensure that vertical blanking reporting is enabled before the call to
-drm_crtc_vblank_get() in the atomic flush handler. As the
-drm_crtc_vblank_on() and drm_crtc_vblank_off() calls don't need to be
-balanced this is not an issue. A balanced alternative would have been to
-call drm_crtc_vblank_on() and drm_crtc_vblank_off() from the CRTC exit
-and enter standby handlers respectively, but
-drm_atomic_helper_commit_modeset_disables() complains if
-drm_crtc_vblank_off() hasn't been called by the atomic disable handler.
-
-As a result, the vsp1_du_atomic_flush() operation can be called with the
-DRM pipeline disabled. Correct operation has been ensured by "media:
-vsp1: drm: Don't configure hardware when the pipeline is disabled".
+The groups share clocking with the CRTCs within the group, and so are
+accessible only when one of its CRTCs has been powered through
+rcar_du_crtc_atomic_exit_standby().
 
 Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
 Changes since v2:
 
-- Deconstruct rcar_du_crtc_setup() completely
+- Simplify error handling in rcar_du_crtc_enable()
+- Rename rcar_du_group_atomic_pre_commit() to
+  rcar_du_group_atomic_setup() and turn it into a void function
+- Remove rcar_du_group_atomic_post_commit()
+- Replace group state use_count field by enabled
+- Rename group state variable from rstate to gstate
+
+Changes since v1:
+
+- All register sequences now maintained.
+- Clock management is no longer handled by the group
+  (_crtc_{exit,enter}_standby handles this for us)
 ---
- drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 89 +++++++++++---------------
- drivers/gpu/drm/rcar-du/rcar_du_crtc.h |  4 +-
- drivers/gpu/drm/rcar-du/rcar_du_kms.c  |  1 +
- 3 files changed, 42 insertions(+), 52 deletions(-)
+ drivers/gpu/drm/rcar-du/rcar_du_crtc.c  | 18 ++---
+ drivers/gpu/drm/rcar-du/rcar_du_group.c | 91 ++++++++++++++++---------
+ drivers/gpu/drm/rcar-du/rcar_du_group.h | 12 ++--
+ drivers/gpu/drm/rcar-du/rcar_du_kms.c   |  5 ++
+ 4 files changed, 76 insertions(+), 50 deletions(-)
 
 diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-index 23f4bdef0e3a..d11a474f6f72 100644
+index d11a474f6f72..ab5c288f9d09 100644
 --- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
 +++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-@@ -478,22 +478,6 @@ static void rcar_du_crtc_wait_page_flip(struct rcar_du_crtc *rcrtc)
-  * Start/Stop and Suspend/Resume
-  */
+@@ -487,12 +487,10 @@ static int rcar_du_crtc_exit_standby(struct rcar_du_crtc *rcrtc)
+ 		return ret;
  
--static void rcar_du_crtc_setup(struct rcar_du_crtc *rcrtc)
--{
--	/* Configure display timings and output routing */
--	rcar_du_crtc_set_display_timing(rcrtc);
--	rcar_du_group_set_routing(rcrtc->group);
+ 	ret = clk_prepare_enable(rcrtc->extclock);
+-	if (ret < 0)
+-		goto error_clock;
 -
--	/* Enable the VSP compositor. */
--	if (rcar_du_has(rcrtc->dev, RCAR_DU_FEATURE_VSP1_SOURCE)) {
--		rcar_du_vsp_modeset(rcrtc);
--		rcar_du_vsp_enable(rcrtc);
--	}
+-	ret = rcar_du_group_get(rcrtc->group);
+-	if (ret < 0)
+-		goto error_group;
++	if (ret < 0) {
++		clk_disable_unprepare(rcrtc->clock);
++		return ret;
++	}
+ 
+ 	/* Set display off and background to black. */
+ 	rcar_du_crtc_write(rcrtc, DOOR, DOOR_RGB(0, 0, 0));
+@@ -502,18 +500,10 @@ static int rcar_du_crtc_exit_standby(struct rcar_du_crtc *rcrtc)
+ 	rcar_du_group_write(rcrtc->group, rcrtc->index % 2 ? DS2PR : DS1PR, 0);
+ 
+ 	return 0;
 -
--	/* Turn vertical blanking interrupt reporting on. */
--	drm_crtc_vblank_on(&rcrtc->crtc);
--}
--
- static int rcar_du_crtc_exit_standby(struct rcar_du_crtc *rcrtc)
+-error_group:
+-	clk_disable_unprepare(rcrtc->extclock);
+-error_clock:
+-	clk_disable_unprepare(rcrtc->clock);
+-	return ret;
+ }
+ 
+ static void rcar_du_crtc_enter_standby(struct rcar_du_crtc *rcrtc)
  {
- 	int ret;
-@@ -534,24 +518,6 @@ static void rcar_du_crtc_enter_standby(struct rcar_du_crtc *rcrtc)
+-	rcar_du_group_put(rcrtc->group);
+-
+ 	clk_disable_unprepare(rcrtc->extclock);
  	clk_disable_unprepare(rcrtc->clock);
  }
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_group.c b/drivers/gpu/drm/rcar-du/rcar_du_group.c
+index 8e12bd42890e..7c9145778567 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_group.c
++++ b/drivers/gpu/drm/rcar-du/rcar_du_group.c
+@@ -24,6 +24,7 @@
+  */
  
--static void rcar_du_crtc_get(struct rcar_du_crtc *rcrtc)
--{
--	/*
--	 * Guard against double-get, as the function is called from both the
--	 * .atomic_enable() and .atomic_begin() handlers.
--	 */
--	if (rcrtc->initialized)
--		return;
--
--	rcar_du_crtc_setup(rcrtc);
--	rcrtc->initialized = true;
--}
--
--static void rcar_du_crtc_put(struct rcar_du_crtc *rcrtc)
--{
--	rcrtc->initialized = false;
--}
--
- static void rcar_du_crtc_start(struct rcar_du_crtc *rcrtc)
- {
- 	bool interlaced;
-@@ -716,6 +682,40 @@ int rcar_du_crtc_atomic_enter_standby(struct drm_device *dev,
- 	return 0;
+ #include <linux/clk.h>
++#include <linux/err.h>
+ #include <linux/io.h>
+ #include <linux/slab.h>
+ 
+@@ -173,38 +174,6 @@ static void rcar_du_group_setup(struct rcar_du_group *rgrp)
+ 	mutex_unlock(&rgrp->lock);
  }
  
-+/*
-+ * Configure the mode for all CRTCs that require it. For now we only handle mode
-+ * set on the VSP, CRTC configuration will be handled later.
-+ */
-+int rcar_du_crtc_atomic_modeset(struct drm_device *dev,
-+				struct drm_atomic_state *state)
+-/*
+- * rcar_du_group_get - Acquire a reference to the DU channels group
+- *
+- * Acquiring the first reference setups core registers. A reference must be held
+- * before accessing any hardware registers.
+- *
+- * This function must be called with the DRM mode_config lock held.
+- *
+- * Return 0 in case of success or a negative error code otherwise.
+- */
+-int rcar_du_group_get(struct rcar_du_group *rgrp)
+-{
+-	if (rgrp->use_count)
+-		goto done;
+-
+-	rcar_du_group_setup(rgrp);
+-
+-done:
+-	rgrp->use_count++;
+-	return 0;
+-}
+-
+-/*
+- * rcar_du_group_put - Release a reference to the DU
+- *
+- * This function must be called with the DRM mode_config lock held.
+- */
+-void rcar_du_group_put(struct rcar_du_group *rgrp)
+-{
+-	--rgrp->use_count;
+-}
+-
+ static void __rcar_du_group_start_stop(struct rcar_du_group *rgrp, bool start)
+ {
+ 	struct rcar_du_device *rcdu = rgrp->dev;
+@@ -389,6 +358,23 @@ static const struct drm_private_state_funcs rcar_du_group_state_funcs = {
+ 	.atomic_destroy_state = rcar_du_group_atomic_destroy_state,
+ };
+ 
++#define for_each_oldnew_group_in_state(__state, __obj, __old_state, __new_state, __i) \
++	for_each_oldnew_private_obj_in_state((__state), (__obj), (__old_state), (__new_state), (__i)) \
++		for_each_if((__obj)->funcs == &rcar_du_group_state_funcs)
++
++static struct rcar_du_group_state *
++rcar_du_get_group_state(struct drm_atomic_state *state,
++			struct rcar_du_group *rgrp)
++{
++	struct drm_private_state *pstate;
++
++	pstate = drm_atomic_get_private_obj_state(state, &rgrp->private);
++	if (IS_ERR(pstate))
++		return ERR_CAST(pstate);
++
++	return to_rcar_group_state(pstate);
++}
++
+ /**
+  * rcar_du_get_old_group_state - get old group state, if it exists
+  * @state: global atomic state object
+@@ -441,6 +427,47 @@ rcar_du_get_new_group_state(struct drm_atomic_state *state,
+ 	return NULL;
+ }
+ 
++int rcar_du_group_atomic_check(struct drm_device *dev,
++			       struct drm_atomic_state *state)
 +{
 +	struct drm_crtc_state *crtc_state;
 +	struct drm_crtc *crtc;
@@ -159,120 +217,118 @@ index 23f4bdef0e3a..d11a474f6f72 100644
 +
 +	for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
 +		struct rcar_du_crtc *rcrtc = to_rcar_crtc(crtc);
++		struct rcar_du_group_state *gstate;
 +
-+		/*
-+		 * Skip commits that don't change the mode. We manually skip
-+		 * inactive CRTCs as disabling a CRTC is considered as a mode
-+		 * set by drm_atomic_crtc_needs_modeset().
-+		 */
-+		if (!drm_atomic_crtc_needs_modeset(crtc_state) ||
-+		    !crtc_state->active)
-+			continue;
++		gstate = rcar_du_get_group_state(state, rcrtc->group);
++		if (IS_ERR(gstate))
++			return PTR_ERR(gstate);
 +
-+		/* Configure display timings and output routing. */
-+		rcar_du_crtc_set_display_timing(rcrtc);
-+		rcar_du_group_set_routing(rcrtc->group);
-+
-+		if (rcar_du_has(rcrtc->dev, RCAR_DU_FEATURE_VSP1_SOURCE))
-+			rcar_du_vsp_modeset(rcrtc);
++		if (crtc_state->active)
++			gstate->enabled = true;
 +	}
 +
 +	return 0;
 +}
 +
- static void rcar_du_crtc_atomic_enable(struct drm_crtc *crtc,
- 				       struct drm_crtc_state *old_state)
- {
-@@ -723,8 +723,6 @@ static void rcar_du_crtc_atomic_enable(struct drm_crtc *crtc,
- 	struct rcar_du_crtc_state *rstate = to_rcar_crtc_state(crtc->state);
- 	struct rcar_du_device *rcdu = rcrtc->dev;
- 
--	rcar_du_crtc_get(rcrtc);
--
- 	/*
- 	 * On D3/E3 the dot clock is provided by the LVDS encoder attached to
- 	 * the DU channel. We need to enable its clock output explicitly if
-@@ -741,6 +739,9 @@ static void rcar_du_crtc_atomic_enable(struct drm_crtc *crtc,
- 				     mode->clock * 1000);
- 	}
- 
-+	if (rcar_du_has(rcrtc->dev, RCAR_DU_FEATURE_VSP1_SOURCE))
-+		rcar_du_vsp_enable(rcrtc);
++void rcar_du_group_atomic_setup(struct drm_device *dev,
++				struct drm_atomic_state *state)
++{
++	struct drm_private_state *old_pstate, *new_pstate;
++	struct drm_private_obj *obj;
++	unsigned int i;
 +
- 	rcar_du_crtc_start(rcrtc);
- }
++	for_each_oldnew_group_in_state(state, obj, old_pstate, new_pstate, i) {
++		struct rcar_du_group *rgrp = to_rcar_group(obj);
++		struct rcar_du_group_state *old_state, *new_state;
++
++		old_state = to_rcar_group_state(old_pstate);
++		new_state = to_rcar_group_state(new_pstate);
++
++		if (!old_state->enabled && new_state->enabled)
++			rcar_du_group_setup(rgrp);
++	}
++}
++
+ /* -----------------------------------------------------------------------------
+  * Init and Cleanup
+  */
+diff --git a/drivers/gpu/drm/rcar-du/rcar_du_group.h b/drivers/gpu/drm/rcar-du/rcar_du_group.h
+index f9961f89fd97..20efd2251ec4 100644
+--- a/drivers/gpu/drm/rcar-du/rcar_du_group.h
++++ b/drivers/gpu/drm/rcar-du/rcar_du_group.h
+@@ -26,7 +26,6 @@ struct rcar_du_device;
+  * @index: group index
+  * @channels_mask: bitmask of populated DU channels in this group
+  * @num_crtcs: number of CRTCs in this group (1 or 2)
+- * @use_count: number of users of the group (rcar_du_group_(get|put))
+  * @used_crtcs: number of CRTCs currently in use
+  * @lock: protects the dptsr_planes field and the DPTSR register
+  * @dptsr_planes: bitmask of planes driven by dot-clock and timing generator 1
+@@ -43,7 +42,6 @@ struct rcar_du_group {
  
-@@ -752,7 +753,6 @@ static void rcar_du_crtc_atomic_disable(struct drm_crtc *crtc,
- 	struct rcar_du_device *rcdu = rcrtc->dev;
+ 	unsigned int channels_mask;
+ 	unsigned int num_crtcs;
+-	unsigned int use_count;
+ 	unsigned int used_crtcs;
  
- 	rcar_du_crtc_stop(rcrtc);
--	rcar_du_crtc_put(rcrtc);
+ 	struct mutex lock;
+@@ -59,9 +57,12 @@ struct rcar_du_group {
+ /**
+  * struct rcar_du_group_state - Driver-specific group state
+  * @state: base DRM private state
++ * @enabled: true if at least one CRTC in the group is enabled
+  */
+ struct rcar_du_group_state {
+ 	struct drm_private_state state;
++
++	bool enabled;
+ };
  
- 	if (rcdu->info->lvds_clk_mask & BIT(rcrtc->index) &&
- 	    rstate->outputs == BIT(RCAR_DU_OUTPUT_DPAD0)) {
-@@ -781,19 +781,8 @@ static void rcar_du_crtc_atomic_begin(struct drm_crtc *crtc,
+ #define to_rcar_group_state(s) \
+@@ -70,8 +71,6 @@ struct rcar_du_group_state {
+ u32 rcar_du_group_read(struct rcar_du_group *rgrp, u32 reg);
+ void rcar_du_group_write(struct rcar_du_group *rgrp, u32 reg, u32 data);
  
- 	WARN_ON(!crtc->state->enable);
+-int rcar_du_group_get(struct rcar_du_group *rgrp);
+-void rcar_du_group_put(struct rcar_du_group *rgrp);
+ void rcar_du_group_start_stop(struct rcar_du_group *rgrp, bool start);
+ void rcar_du_group_restart(struct rcar_du_group *rgrp);
+ int rcar_du_group_set_routing(struct rcar_du_group *rgrp);
+@@ -85,6 +84,11 @@ struct rcar_du_group_state *
+ rcar_du_get_new_group_state(struct drm_atomic_state *state,
+ 			    struct rcar_du_group *rgrp);
  
--	/*
--	 * If a mode set is in progress we can be called with the CRTC disabled.
--	 * We thus need to first get and setup the CRTC in order to configure
--	 * planes. We must *not* put the CRTC in .atomic_flush(), as it must be
--	 * kept awake until the .atomic_enable() call that will follow. The get
--	 * operation in .atomic_enable() will in that case be a no-op, and the
--	 * CRTC will be put later in .atomic_disable().
--	 *
--	 * If a mode set is not in progress the CRTC is enabled, and the
--	 * following get call will be a no-op. There is thus no need to balance
--	 * it in .atomic_flush() either.
--	 */
--	rcar_du_crtc_get(rcrtc);
-+	/* Turn vertical blanking interrupt reporting on. */
-+	drm_crtc_vblank_on(&rcrtc->crtc);
- 
- 	if (rcar_du_has(rcrtc->dev, RCAR_DU_FEATURE_VSP1_SOURCE))
- 		rcar_du_vsp_atomic_begin(rcrtc);
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.h b/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
-index 3ce7610793b2..61d79aa7c8e8 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.h
-@@ -30,7 +30,6 @@ struct rcar_du_vsp;
-  * @extclock: external pixel dot clock (optional)
-  * @mmio_offset: offset of the CRTC registers in the DU MMIO block
-  * @index: CRTC hardware index
-- * @initialized: whether the CRTC has been initialized and clocks enabled
-  * @dsysr: cached value of the DSYSR register
-  * @vblank_enable: whether vblank events are enabled on this CRTC
-  * @event: event to post when the pending page flip completes
-@@ -51,7 +50,6 @@ struct rcar_du_crtc {
- 	struct clk *extclock;
- 	unsigned int mmio_offset;
- 	unsigned int index;
--	bool initialized;
- 
- 	u32 dsysr;
- 
-@@ -111,6 +109,8 @@ int rcar_du_crtc_atomic_exit_standby(struct drm_device *dev,
- 				     struct drm_atomic_state *state);
- int rcar_du_crtc_atomic_enter_standby(struct drm_device *dev,
- 				      struct drm_atomic_state *state);
-+int rcar_du_crtc_atomic_modeset(struct drm_device *dev,
++int rcar_du_group_atomic_check(struct drm_device *dev,
++			       struct drm_atomic_state *state);
++void rcar_du_group_atomic_setup(struct drm_device *dev,
 +				struct drm_atomic_state *state);
- 
- void rcar_du_crtc_dsysr_clr_set(struct rcar_du_crtc *rcrtc, u32 clr, u32 set);
- 
++
+ int rcar_du_group_init(struct rcar_du_device *rcdu, struct rcar_du_group *rgrp,
+ 		       unsigned int index);
+ void rcar_du_group_cleanup(struct rcar_du_group *rgrp);
 diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-index 59680de271cc..144c0c1b1591 100644
+index f57a035a94ee..65396134fba1 100644
 --- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
 +++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-@@ -412,6 +412,7 @@ static void rcar_du_atomic_commit_tail(struct drm_atomic_state *old_state)
+@@ -377,6 +377,10 @@ static int rcar_du_atomic_check(struct drm_device *dev,
+ 	if (ret)
+ 		return ret;
+ 
++	ret = rcar_du_group_atomic_check(dev, state);
++	if (ret)
++		return ret;
++
+ 	if (rcar_du_has(rcdu, RCAR_DU_FEATURE_VSP1_SOURCE))
+ 		return 0;
+ 
+@@ -411,6 +415,7 @@ static void rcar_du_atomic_commit_tail(struct drm_atomic_state *old_state)
+ 
+ 	/* Apply the atomic update. */
  	rcar_du_crtc_atomic_exit_standby(dev, old_state);
++	rcar_du_group_atomic_setup(dev, old_state);
  
  	drm_atomic_helper_commit_modeset_disables(dev, old_state);
-+	rcar_du_crtc_atomic_modeset(dev, old_state);
- 	drm_atomic_helper_commit_planes(dev, old_state,
- 					DRM_PLANE_COMMIT_ACTIVE_ONLY);
- 	drm_atomic_helper_commit_modeset_enables(dev, old_state);
+ 	rcar_du_crtc_atomic_modeset(dev, old_state);
 -- 
 Regards,
 
