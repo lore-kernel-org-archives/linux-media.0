@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 82E69C31E5D
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BED86C31E5B
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:17:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 51CF621873
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:17:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 993D12147A
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:17:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqbFvTiP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PVwfTRAB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730054AbfFRQRA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 12:17:00 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:34258 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729496AbfFRQQe (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S1729563AbfFRQQe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 18 Jun 2019 12:16:34 -0400
-Received: by mail-lj1-f194.google.com with SMTP id p17so176367ljg.1;
-        Tue, 18 Jun 2019 09:16:32 -0700 (PDT)
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:35049 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729916AbfFRQQd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 18 Jun 2019 12:16:33 -0400
+Received: by mail-lf1-f66.google.com with SMTP id a25so9749818lfg.2;
+        Tue, 18 Jun 2019 09:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fiDbgWSuMaVMjc324RSS41lxTRe5uMme7Lnt8EdVzLs=;
-        b=OqbFvTiP3qFRvTdrI+qWbkQB4HGZushXrOtI04RqNu3nkaUX/ziogPybWa/uaQ6jnx
-         hzGLSK4FI809qkO3bu+Kl48b5Cupwda0ypWaGgmsBoSitfD0pKKe435TiaXsj5zxg14Y
-         vAikyUoeop3BStqr4gB5HJ2MpYWZ3gYZuPF/66I3Fs1nsdR3EBqGxMmpqcDuXcRfjO+1
-         b6TfFHqrmwBY5cnBh7xajMzhZ6/lsQ7vb8BiB4IbqsQAIF5yhabKLr6v/nPLfMZML80e
-         hOI2nXeidbP+PiB+gZVk47PtuAEzSOMz4sk3to3btLHN+CEpbIlOzGMkctS7Umm79am0
-         6DYA==
+        bh=6bCoUgdAjlieVdbURwPlYalmssR6MihNiC0B3+iRako=;
+        b=PVwfTRABktYrQbA1EEWkz8UDWUkcYXqwJga1n/jSb+4/WAf3CKHIRkXaapjBceHLDX
+         WHW8JUggG3JkzoxjU/xg1TnACf4SQRFgTUzhtM1n/YkGcuCrGQhKlwRIMjNoFphkiI4+
+         X8bizwvX99TJbRXQ6CTOs2b1NwUmp8PJRbLYae7KtOM7+nfnumzKlJBgazOw2SAG7AeP
+         vv05qVHZeFiWy8abRcsTu/tPYiFqcn4pXdvj1Xc4ERSgAmZqw3I1qE4ZLI7rvpjDkZaq
+         DS2OewG6fRMNrP/LosGNRXQf0QYyQrG4/mnQnIdsaVMwkbVYfpuIGU4eGBalQIBHkP1O
+         3z/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fiDbgWSuMaVMjc324RSS41lxTRe5uMme7Lnt8EdVzLs=;
-        b=X9XEnNIQrOC/VAB7Lcvaty8s/1DEAusUdN5fW/swzXtkmzJJccRNDud22x3buk3HXo
-         nhgyRgv70HO/95RY541hzth8eGZXIBToufbEw4DeL4tR6jbsY+yVpugBfwmfFz/VIf1a
-         3CXgT6wzDaKMe0uhdcKBlXQJX3riTGDzkc/32IsXRdm7kUR+J4KU/f1Z49Ec8sGgekAo
-         F+yNHrE5E3lqRpjbnQBH2To/1NBtnAfVGzkYcINNk6/YFZKt38cETfkkosoDkefAyyCm
-         CqZoW1l/I2RpRM10FpeqxF0Pczcnknj6C1KcCPHNY23TT/UWkS/1SUPUyXwg45refhfV
-         gRUg==
-X-Gm-Message-State: APjAAAUCGukJ3W9UZ4YikzA0ZEp1W6mfgAYMThtUX3QZ9DtdNsLYn5Ob
-        XYMa5c7vDsPz88gGvqCwEWg=
-X-Google-Smtp-Source: APXvYqz1g5qDjpXCaRuXHc43SAtsUCYLwQipqckqG2izu5e3CqXn9H0HQ88Sl5Ka3eu0crkgsNXsAA==
-X-Received: by 2002:a2e:9b48:: with SMTP id o8mr16355885ljj.122.1560874592102;
-        Tue, 18 Jun 2019 09:16:32 -0700 (PDT)
+        bh=6bCoUgdAjlieVdbURwPlYalmssR6MihNiC0B3+iRako=;
+        b=ncF5nK1EJQWra8lo7mC1eSYEOa1t1xjmD5Oo5IC+wx+oaPxA1iJY+Chd74EhUXNlTT
+         pulkpZJcc8S01pX9o4IVu/fpZMMA/qmkfKyvGwfj5nf4KeQcz6wv0lflbR9ZKNEhBCl+
+         GUM3+dWAJFcWD3xTmv6cGhaY2gs8tWF0LVEmrnzpKmbZAt7BMYTa8qHmaJhyMwbqHeWE
+         jh+L/W5aXKyX1dTJsOzv5DOwZbsNU88CRBTwnSEk927TEHTFrD/Hw807rzTuaLSMGx+R
+         037ciwAPdQ9j57Wm7BPiq4WOjTfAlpZ0tRWFoVApcXe3WWX81OAK5EFhJruYsFNVh1Px
+         8Qqg==
+X-Gm-Message-State: APjAAAUPb1g8x8XL5nrb6f9wXpYljS9AYqj2yYtY0xBQRG/IEYsOo7o/
+        L7InAfyn3xA84cSM5ue1jA8=
+X-Google-Smtp-Source: APXvYqxdrOPiY8cM1U1jT9ylZcRc2fxV0JtT47I+Bw9ekNdiHVK2JQhCwg+fUJP7N9HF5oa+S4eUkQ==
+X-Received: by 2002:a19:488e:: with SMTP id v136mr57485272lfa.192.1560874590847;
+        Tue, 18 Jun 2019 09:16:30 -0700 (PDT)
 Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id v15sm2273295lfd.53.2019.06.18.09.16.30
+        by smtp.gmail.com with ESMTPSA id v15sm2273295lfd.53.2019.06.18.09.16.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 18 Jun 2019 09:16:31 -0700 (PDT)
+        Tue, 18 Jun 2019 09:16:30 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -65,9 +65,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         linux-tegra@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2] media: dt: bindings: tegra-vde: Document new optional IOMMU property
-Date:   Tue, 18 Jun 2019 19:14:54 +0300
-Message-Id: <20190618161458.20499-4-digetx@gmail.com>
+Subject: [PATCH v2] ARM: tegra: Enable Tegra VDE driver in tegra_defconfig
+Date:   Tue, 18 Jun 2019 19:14:53 +0300
+Message-Id: <20190618161458.20499-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190618161458.20499-1-digetx@gmail.com>
 References: <20190618161458.20499-1-digetx@gmail.com>
@@ -78,33 +78,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All NVIDIA Tegra SoC generations provide IOMMU support for the video
-decoder engine. Document new optional device-tree property that connects
-VDE with the IOMMU provider.
+The video decoder driver was tested by time and works absolutely fine.
+The reason why it is in staging is because it doesn't provide common V4L
+interface yet, this shouldn't stop driver enabling in the defconfig since
+our userspace (libvdpau-tegra) provides combined acceleration of decoding
+and displaying without use of V4L.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt | 2 ++
+ arch/arm/configs/tegra_defconfig | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt b/Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
-index 7302e949e662..602169b8aa19 100644
---- a/Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
-+++ b/Documentation/devicetree/bindings/media/nvidia,tegra-vde.txt
-@@ -35,6 +35,7 @@ Optional properties:
- - resets : Must contain an entry for each entry in reset-names.
- - reset-names : Must include the following entries:
-   - mc
-+- iommus: Must contain phandle to the IOMMU device node.
- 
- Example:
- 
-@@ -59,4 +60,5 @@ video-codec@6001a000 {
- 	clocks = <&tegra_car TEGRA20_CLK_VDE>;
- 	reset-names = "vde", "mc";
- 	resets = <&tegra_car 61>, <&mc TEGRA20_MC_RESET_VDE>;
-+	iommus = <&mc TEGRA_SWGROUP_VDE>;
- };
+diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
+index 8f5c6a5b444c..a27592d3b1fa 100644
+--- a/arch/arm/configs/tegra_defconfig
++++ b/arch/arm/configs/tegra_defconfig
+@@ -250,6 +250,8 @@ CONFIG_KEYBOARD_NVEC=y
+ CONFIG_SERIO_NVEC_PS2=y
+ CONFIG_NVEC_POWER=y
+ CONFIG_NVEC_PAZ00=y
++CONFIG_STAGING_MEDIA=y
++CONFIG_TEGRA_VDE=y
+ CONFIG_TEGRA_IOMMU_GART=y
+ CONFIG_TEGRA_IOMMU_SMMU=y
+ CONFIG_ARCH_TEGRA_2x_SOC=y
 -- 
 2.22.0
 
