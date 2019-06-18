@@ -2,96 +2,111 @@ Return-Path: <SRS0=dfwv=UR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DC25C31E51
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 09:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 970D8C31E5F
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 09:18:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 23C9A206BA
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 09:13:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B16D21479
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 09:18:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729240AbfFRJNJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 05:13:09 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:35689 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728385AbfFRJNJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Jun 2019 05:13:09 -0400
-X-Originating-IP: 90.88.23.150
-Received: from aptenodytes (aaubervilliers-681-1-81-150.w90-88.abo.wanadoo.fr [90.88.23.150])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 08404E001C;
-        Tue, 18 Jun 2019 09:13:00 +0000 (UTC)
-Message-ID: <dd632e5d4cc25a75ee78e688297ed793eae84819.camel@bootlin.com>
-Subject: Re: [PATCH] media: Clarify the meaning of file descriptors in
- VIDIOC_DQBUF
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Tomasz Figa <tfiga@chromium.org>, linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
+        id S1729257AbfFRJSU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jun 2019 05:18:20 -0400
+Received: from foss.arm.com ([217.140.110.172]:58798 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729137AbfFRJSU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 18 Jun 2019 05:18:20 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D19DC344;
+        Tue, 18 Jun 2019 02:18:18 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2BBBB3F246;
+        Tue, 18 Jun 2019 02:18:14 -0700 (PDT)
+Date:   Tue, 18 Jun 2019 10:18:12 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        dri-devel@lists.freedesktop.org,
+        Kostya Serebryany <kcc@google.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Lee Smith <Lee.Smith@arm.com>, linux-kselftest@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hirokazu Honda <hiroh@chromium.org>
-Date:   Tue, 18 Jun 2019 11:13:00 +0200
-In-Reply-To: <20190612093648.47412-1-tfiga@chromium.org>
-References: <20190612093648.47412-1-tfiga@chromium.org>
-Organization: Bootlin
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.2 
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Subject: Re: [PATCH v17 03/15] arm64: Introduce prctl() options to control
+ the tagged user addresses ABI
+Message-ID: <20190618091811.GC2790@e103592.cambridge.arm.com>
+References: <cover.1560339705.git.andreyknvl@google.com>
+ <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
+ <20190613110235.GW28398@e103592.cambridge.arm.com>
+ <20190613152632.GT28951@C02TF0J2HF1T.local>
+ <201906132209.FC65A3C771@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201906132209.FC65A3C771@keescook>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
-
-On Wed, 2019-06-12 at 18:36 +0900, Tomasz Figa wrote:
-> When the application calls VIDIOC_DQBUF with the DMABUF memory type, the
-> v4l2_buffer structure (or v4l2_plane structures) are filled with DMA-buf
-> file descriptors. However, the current documentation does not explain
-> whether those are new file descriptors referring to the same DMA-bufs or
-> just the same integers as passed to VIDIOC_QBUF back in time. Clarify
-> the documentation that it's the latter.
-
-LGTM,
-
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-
-Cheers,
-
-Paul
-
-> Signed-off-by: Tomasz Figa <tfiga@chromium.org>
-> ---
->  Documentation/media/uapi/v4l/vidioc-qbuf.rst | 8 ++++++++
->  1 file changed, 8 insertions(+)
+On Thu, Jun 13, 2019 at 10:13:54PM -0700, Kees Cook wrote:
+> On Thu, Jun 13, 2019 at 04:26:32PM +0100, Catalin Marinas wrote:
+> > On Thu, Jun 13, 2019 at 12:02:35PM +0100, Dave P Martin wrote:
+> > > On Wed, Jun 12, 2019 at 01:43:20PM +0200, Andrey Konovalov wrote:
+> > > > +static int zero;
+> > > > +static int one = 1;
+> > > 
+> > > !!!
+> > > 
+> > > And these can't even be const without a cast.  Yuk.
+> > > 
+> > > (Not your fault though, but it would be nice to have a proc_dobool() to
+> > > avoid this.)
+> > 
+> > I had the same reaction. Maybe for another patch sanitising this pattern
+> > across the kernel.
 > 
-> diff --git a/Documentation/media/uapi/v4l/vidioc-qbuf.rst b/Documentation/media/uapi/v4l/vidioc-qbuf.rst
-> index dbf7b445a27b..407302d80684 100644
-> --- a/Documentation/media/uapi/v4l/vidioc-qbuf.rst
-> +++ b/Documentation/media/uapi/v4l/vidioc-qbuf.rst
-> @@ -139,6 +139,14 @@ may continue as normal, but should be aware that data in the dequeued
->  buffer might be corrupted. When using the multi-planar API, the planes
->  array must be passed in as well.
->  
-> +If the application sets the ``memory`` field to ``V4L2_MEMORY_DMABUF`` to
-> +dequeue a :ref:`DMABUF <dmabuf>` buffer, the driver fills the ``m.fd`` field
-> +with a file descriptor numerically the same as the one given to ``VIDIOC_QBUF``
-> +when the buffer was enqueued. No new file descriptor is created at dequeue time
-> +and the value is only for the application convenience. When the multi-planar
-> +API is used the ``m.fd`` fields of the passed array of struct
-> +:c:type:`v4l2_plane` are filled instead.
-> +
->  By default ``VIDIOC_DQBUF`` blocks when no buffer is in the outgoing
->  queue. When the ``O_NONBLOCK`` flag was given to the
->  :ref:`open() <func-open>` function, ``VIDIOC_DQBUF`` returns
--- 
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+> That's actually already happening (via -mm tree last I looked). tl;dr:
+> it ends up using a cast hidden in a macro. It's in linux-next already
+> along with a checkpatch.pl addition to yell about doing what's being
+> done here. ;)
+> 
+> https://lore.kernel.org/lkml/20190430180111.10688-1-mcroce@redhat.com/#r
 
+Hmmm, that is marginally less bad.
+
+Ideally we'd have a union in there, not just a bunch of void *.  I may
+look at that someday...
+
+Cheers
+---Dave
