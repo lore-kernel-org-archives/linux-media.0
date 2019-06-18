@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35D2DC31E5B
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 481E4C31E5D
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:46:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0CF4421855
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:46:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BF4921530
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:46:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730075AbfFRQp7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 12:45:59 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:49637 "EHLO
+        id S1730070AbfFRQp5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jun 2019 12:45:57 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:38485 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729949AbfFRQpp (ORCPT
+        with ESMTP id S1730003AbfFRQpp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 18 Jun 2019 12:45:45 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hdHEt-0003WX-Iz; Tue, 18 Jun 2019 18:45:43 +0200
+        id 1hdHEt-0003WX-VT; Tue, 18 Jun 2019 18:45:43 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>, kernel@pengutronix.de
-Subject: [PATCH 10/28] media: coda: integrate internal frame metadata into a structure
-Date:   Tue, 18 Jun 2019 18:45:17 +0200
-Message-Id: <20190618164535.20162-11-p.zabel@pengutronix.de>
+Subject: [PATCH 17/28] media: coda: mark the last output buffer on decoder stop command
+Date:   Tue, 18 Jun 2019 18:45:24 +0200
+Message-Id: <20190618164535.20162-18-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190618164535.20162-1-p.zabel@pengutronix.de>
 References: <20190618164535.20162-1-p.zabel@pengutronix.de>
@@ -44,219 +44,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Combine the separate auxiliary buffer, buffer meta, frame type, and
-decode error arrays into an array of struct coda_internal_frame.
+Mark the last output buffer to be decoded and only copy pending queued
+output buffers into the bitstream ring buffer in the BIT processor
+decoder case.
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/coda/coda-bit.c | 62 +++++++++++++-------------
- drivers/media/platform/coda/coda.h     | 12 +++--
- 2 files changed, 40 insertions(+), 34 deletions(-)
+ drivers/media/platform/coda/coda-bit.c    | 3 +++
+ drivers/media/platform/coda/coda-common.c | 6 ++++++
+ 2 files changed, 9 insertions(+)
 
 diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index 9f8e2342d175..494bc130c7af 100644
+index bfe6019e68a8..cbcec571a014 100644
 --- a/drivers/media/platform/coda/coda-bit.c
 +++ b/drivers/media/platform/coda/coda-bit.c
-@@ -395,7 +395,7 @@ static void coda_free_framebuffers(struct coda_ctx *ctx)
- 	int i;
+@@ -312,6 +312,9 @@ static bool coda_bitstream_try_queue(struct coda_ctx *ctx,
+ 	if (ctx == v4l2_m2m_get_curr_priv(ctx->dev->m2m_dev))
+ 		coda_kfifo_sync_to_device_write(ctx);
  
- 	for (i = 0; i < CODA_MAX_FRAMEBUFFERS; i++)
--		coda_free_aux_buf(ctx->dev, &ctx->internal_frames[i]);
-+		coda_free_aux_buf(ctx->dev, &ctx->internal_frames[i].buf);
- }
++	/* Set the stream-end flag after the last buffer is queued */
++	if (src_buf->flags & V4L2_BUF_FLAG_LAST)
++		coda_bit_stream_end_flag(ctx);
+ 	ctx->hold = false;
  
- static int coda_alloc_framebuffers(struct coda_ctx *ctx,
-@@ -435,7 +435,7 @@ static int coda_alloc_framebuffers(struct coda_ctx *ctx,
- 			coda_free_framebuffers(ctx);
- 			return -ENOMEM;
- 		}
--		ret = coda_alloc_context_buf(ctx, &ctx->internal_frames[i],
-+		ret = coda_alloc_context_buf(ctx, &ctx->internal_frames[i].buf,
- 					     size, name);
- 		kfree(name);
- 		if (ret < 0) {
-@@ -449,7 +449,7 @@ static int coda_alloc_framebuffers(struct coda_ctx *ctx,
- 		u32 y, cb, cr, mvcol;
+ 	return true;
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 29d050fbb899..9b32b5862aa8 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -1071,6 +1071,7 @@ static int coda_decoder_cmd(struct file *file, void *fh,
+ {
+ 	struct coda_ctx *ctx = fh_to_ctx(fh);
+ 	struct coda_dev *dev = ctx->dev;
++	struct vb2_v4l2_buffer *buf;
+ 	struct vb2_queue *dst_vq;
+ 	int ret;
  
- 		/* Start addresses of Y, Cb, Cr planes */
--		y = ctx->internal_frames[i].paddr;
-+		y = ctx->internal_frames[i].buf.paddr;
- 		cb = y + ysize;
- 		cr = y + ysize + ysize/4;
- 		mvcol = y + ysize + ysize/4 + ysize/4;
-@@ -1202,9 +1202,9 @@ static int coda_start_encoding(struct coda_ctx *ctx)
- 			coda9_set_frame_cache(ctx, q_data_src->fourcc);
- 
- 			/* FIXME */
--			coda_write(dev, ctx->internal_frames[2].paddr,
-+			coda_write(dev, ctx->internal_frames[2].buf.paddr,
- 				   CODA9_CMD_SET_FRAME_SUBSAMP_A);
--			coda_write(dev, ctx->internal_frames[3].paddr,
-+			coda_write(dev, ctx->internal_frames[3].buf.paddr,
- 				   CODA9_CMD_SET_FRAME_SUBSAMP_B);
- 		}
- 	}
-@@ -1993,7 +1993,7 @@ static int coda_prepare_decode(struct coda_ctx *ctx)
- 	    ctx->display_idx < ctx->num_internal_frames) {
- 		vdoa_device_run(ctx->vdoa,
- 				vb2_dma_contig_plane_dma_addr(&dst_buf->vb2_buf, 0),
--				ctx->internal_frames[ctx->display_idx].paddr);
-+				ctx->internal_frames[ctx->display_idx].buf.paddr);
- 	} else {
- 		if (dev->devtype->product == CODA_960) {
- 			/*
-@@ -2091,6 +2091,7 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 	int width, height;
- 	int decoded_idx;
- 	int display_idx;
-+	struct coda_internal_frame *decoded_frame = NULL;
- 	u32 src_fourcc;
- 	int success;
- 	u32 err_mb;
-@@ -2216,6 +2217,8 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 		v4l2_err(&dev->v4l2_dev,
- 			 "decoded frame index out of range: %d\n", decoded_idx);
- 	} else {
-+		decoded_frame = &ctx->internal_frames[decoded_idx];
+@@ -1092,6 +1093,11 @@ static int coda_decoder_cmd(struct file *file, void *fh,
+ 		mutex_unlock(&ctx->bitstream_mutex);
+ 		break;
+ 	case V4L2_DEC_CMD_STOP:
++		buf = v4l2_m2m_last_src_buf(ctx->fh.m2m_ctx);
++		if (buf)
++			/* Mark last buffer */
++			buf->flags |= V4L2_BUF_FLAG_LAST;
 +
- 		val = coda_read(dev, CODA_RET_DEC_PIC_FRAME_NUM);
- 		if (ctx->sequence_offset == -1)
- 			ctx->sequence_offset = val;
-@@ -2240,28 +2243,25 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 					 val, ctx->sequence_offset,
- 					 meta->sequence);
- 			}
--			ctx->frame_metas[decoded_idx] = *meta;
-+			decoded_frame->meta = *meta;
- 			kfree(meta);
- 		} else {
- 			spin_unlock(&ctx->buffer_meta_lock);
- 			v4l2_err(&dev->v4l2_dev, "empty timestamp list!\n");
--			memset(&ctx->frame_metas[decoded_idx], 0,
-+			memset(&decoded_frame->meta, 0,
- 			       sizeof(struct coda_buffer_meta));
--			ctx->frame_metas[decoded_idx].sequence = val;
-+			decoded_frame->meta.sequence = val;
- 			ctx->sequence_offset++;
- 		}
- 
--		trace_coda_dec_pic_done(ctx, &ctx->frame_metas[decoded_idx]);
-+		trace_coda_dec_pic_done(ctx, &decoded_frame->meta);
- 
- 		val = coda_read(dev, CODA_RET_DEC_PIC_TYPE) & 0x7;
--		if (val == 0)
--			ctx->frame_types[decoded_idx] = V4L2_BUF_FLAG_KEYFRAME;
--		else if (val == 1)
--			ctx->frame_types[decoded_idx] = V4L2_BUF_FLAG_PFRAME;
--		else
--			ctx->frame_types[decoded_idx] = V4L2_BUF_FLAG_BFRAME;
-+		decoded_frame->type = (val == 0) ? V4L2_BUF_FLAG_KEYFRAME :
-+				      (val == 1) ? V4L2_BUF_FLAG_PFRAME :
-+						   V4L2_BUF_FLAG_BFRAME;
- 
--		ctx->frame_errors[decoded_idx] = err_mb;
-+		decoded_frame->error = err_mb;
- 	}
- 
- 	if (display_idx == -1) {
-@@ -2281,6 +2281,10 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 	/* If a frame was copied out, return it */
- 	if (ctx->display_idx >= 0 &&
- 	    ctx->display_idx < ctx->num_internal_frames) {
-+		struct coda_internal_frame *ready_frame;
-+
-+		ready_frame = &ctx->internal_frames[ctx->display_idx];
-+
- 		dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
- 		dst_buf->sequence = ctx->osequence++;
- 
-@@ -2288,8 +2292,8 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 		dst_buf->flags &= ~(V4L2_BUF_FLAG_KEYFRAME |
- 					     V4L2_BUF_FLAG_PFRAME |
- 					     V4L2_BUF_FLAG_BFRAME);
--		dst_buf->flags |= ctx->frame_types[ctx->display_idx];
--		meta = &ctx->frame_metas[ctx->display_idx];
-+		dst_buf->flags |= ready_frame->type;
-+		meta = &ready_frame->meta;
- 		dst_buf->timecode = meta->timecode;
- 		dst_buf->vb2_buf.timestamp = meta->timestamp;
- 
-@@ -2298,18 +2302,17 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 		vb2_set_plane_payload(&dst_buf->vb2_buf, 0,
- 				      q_data_dst->sizeimage);
- 
--		if (ctx->frame_errors[ctx->display_idx] || err_vdoa)
-+		if (ready_frame->error || err_vdoa)
- 			coda_m2m_buf_done(ctx, dst_buf, VB2_BUF_STATE_ERROR);
- 		else
- 			coda_m2m_buf_done(ctx, dst_buf, VB2_BUF_STATE_DONE);
- 
--		if (decoded_idx >= 0 &&
--		    decoded_idx < ctx->num_internal_frames) {
-+		if (decoded_frame) {
- 			coda_dbg(1, ctx, "job finished: decoded %c frame %u, returned %c frame %u (%u/%u)%s\n",
--				 coda_frame_type_char(ctx->frame_types[decoded_idx]),
--				 ctx->frame_metas[decoded_idx].sequence,
-+				 coda_frame_type_char(decoded_frame->type),
-+				 decoded_frame->meta.sequence,
- 				 coda_frame_type_char(dst_buf->flags),
--				 ctx->frame_metas[ctx->display_idx].sequence,
-+				 ready_frame->meta.sequence,
- 				 dst_buf->sequence, ctx->qsequence,
- 				 (dst_buf->flags & V4L2_BUF_FLAG_LAST) ?
- 				 " (last)" : "");
-@@ -2317,17 +2320,16 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 			coda_dbg(1, ctx, "job finished: no frame decoded (%d), returned %c frame %u (%u/%u)%s\n",
- 				 decoded_idx,
- 				 coda_frame_type_char(dst_buf->flags),
--				 ctx->frame_metas[ctx->display_idx].sequence,
-+				 ready_frame->meta.sequence,
- 				 dst_buf->sequence, ctx->qsequence,
- 				 (dst_buf->flags & V4L2_BUF_FLAG_LAST) ?
- 				 " (last)" : "");
- 		}
- 	} else {
--		if (decoded_idx >= 0 &&
--		    decoded_idx < ctx->num_internal_frames) {
-+		if (decoded_frame) {
- 			coda_dbg(1, ctx, "job finished: decoded %c frame %u, no frame returned (%d)\n",
--				 coda_frame_type_char(ctx->frame_types[decoded_idx]),
--				 ctx->frame_metas[decoded_idx].sequence,
-+				 coda_frame_type_char(decoded_frame->type),
-+				 decoded_frame->meta.sequence,
- 				 ctx->display_idx);
- 		} else {
- 			coda_dbg(1, ctx, "job finished: no frame decoded (%d) or returned (%d)\n",
-diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/coda/coda.h
-index c97ea3e24b80..10207e9534c2 100644
---- a/drivers/media/platform/coda/coda.h
-+++ b/drivers/media/platform/coda/coda.h
-@@ -190,6 +190,13 @@ struct coda_context_ops {
- 	void (*release)(struct coda_ctx *ctx);
- };
- 
-+struct coda_internal_frame {
-+	struct coda_aux_buf		buf;
-+	struct coda_buffer_meta		meta;
-+	u32				type;
-+	u32				error;
-+};
-+
- struct coda_ctx {
- 	struct coda_dev			*dev;
- 	struct mutex			buffer_mutex;
-@@ -233,10 +240,7 @@ struct coda_ctx {
- 	struct coda_aux_buf		parabuf;
- 	struct coda_aux_buf		psbuf;
- 	struct coda_aux_buf		slicebuf;
--	struct coda_aux_buf		internal_frames[CODA_MAX_FRAMEBUFFERS];
--	u32				frame_types[CODA_MAX_FRAMEBUFFERS];
--	struct coda_buffer_meta		frame_metas[CODA_MAX_FRAMEBUFFERS];
--	u32				frame_errors[CODA_MAX_FRAMEBUFFERS];
-+	struct coda_internal_frame	internal_frames[CODA_MAX_FRAMEBUFFERS];
- 	struct list_head		buffer_meta_list;
- 	spinlock_t			buffer_meta_lock;
- 	int				num_metas;
+ 		/* Set the stream-end flag on this context */
+ 		coda_bit_stream_end_flag(ctx);
+ 		ctx->hold = false;
 -- 
 2.20.1
 
