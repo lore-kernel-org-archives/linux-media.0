@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3588C31E5D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70FE7C31E60
 	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ABD4621530
+	by mail.kernel.org (Postfix) with ESMTP id 4BE7321530
 	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730054AbfFRQpr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 12:45:47 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:60325 "EHLO
+        id S1730053AbfFRQpq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jun 2019 12:45:46 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43461 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730022AbfFRQpp (ORCPT
+        with ESMTP id S1730010AbfFRQpp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 18 Jun 2019 12:45:45 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hdHEu-0003WX-55; Tue, 18 Jun 2019 18:45:44 +0200
+        id 1hdHEu-0003WX-2r; Tue, 18 Jun 2019 18:45:44 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>, kernel@pengutronix.de
-Subject: [PATCH 25/28] media: coda: mark last returned frame
-Date:   Tue, 18 Jun 2019 18:45:32 +0200
-Message-Id: <20190618164535.20162-26-p.zabel@pengutronix.de>
+Subject: [PATCH 21/28] media: coda: only wake up capture queue if no pending buffers to encode
+Date:   Tue, 18 Jun 2019 18:45:28 +0200
+Message-Id: <20190618164535.20162-22-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190618164535.20162-1-p.zabel@pengutronix.de>
 References: <20190618164535.20162-1-p.zabel@pengutronix.de>
@@ -44,44 +44,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If reordering is not enabled, the last decoded frame has to be the last
-returned buffer. Otherwise wait for the firmware to report no more
-frame to display. In that case the return buffer is the last one as
-well, and can be reported as such.
+If there are no pending queued output buffers to be encoded, waking up
+the capture queue with -EPIPE signals end of stream. If there are
+pending buffers on the other hand, setting the V4L2_BUF_FLAG_LAST on
+the resulting encoded capture buffers is all that is needed.
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/coda/coda-bit.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ drivers/media/platform/coda/coda-common.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index 1157454e3bc8..167a92772c84 100644
---- a/drivers/media/platform/coda/coda-bit.c
-+++ b/drivers/media/platform/coda/coda-bit.c
-@@ -2381,6 +2381,23 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 					     V4L2_BUF_FLAG_BFRAME);
- 		dst_buf->flags |= ready_frame->type;
- 		meta = &ready_frame->meta;
-+		if (meta->last && !coda_reorder_enable(ctx)) {
-+			/*
-+			 * If this was the last decoded frame, and reordering
-+			 * is disabled, this will be the last display frame.
-+			 */
-+			coda_dbg(1, ctx, "last meta, marking as last frame\n");
-+			dst_buf->flags |= V4L2_BUF_FLAG_LAST;
-+		} else if (ctx->bit_stream_param & CODA_BIT_STREAM_END_FLAG &&
-+			   display_idx == -1) {
-+			/*
-+			 * If there is no designated presentation frame anymore,
-+			 * this frame has to be the last one.
-+			 */
-+			coda_dbg(1, ctx,
-+				 "no more frames to return, marking as last frame\n");
-+			dst_buf->flags |= V4L2_BUF_FLAG_LAST;
-+		}
- 		dst_buf->timecode = meta->timecode;
- 		dst_buf->vb2_buf.timestamp = meta->timestamp;
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 9349df773077..0d64ddc49494 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -1035,17 +1035,18 @@ static int coda_encoder_cmd(struct file *file, void *fh,
+ 		return ret;
  
+ 	buf = v4l2_m2m_last_src_buf(ctx->fh.m2m_ctx);
+-	if (buf)
++	if (buf) {
+ 		buf->flags |= V4L2_BUF_FLAG_LAST;
++	} else {
++		/* Set the stream-end flag on this context */
++		ctx->bit_stream_param |= CODA_BIT_STREAM_END_FLAG;
+ 
+-	/* Set the stream-end flag on this context */
+-	ctx->bit_stream_param |= CODA_BIT_STREAM_END_FLAG;
+-
+-	flush_work(&ctx->pic_run_work);
++		flush_work(&ctx->pic_run_work);
+ 
+-	/* If there is no buffer in flight, wake up */
+-	if (!ctx->streamon_out || ctx->qsequence == ctx->osequence)
+-		coda_wake_up_capture_queue(ctx);
++		/* If there is no buffer in flight, wake up */
++		if (!ctx->streamon_out || ctx->qsequence == ctx->osequence)
++			coda_wake_up_capture_queue(ctx);
++	}
+ 
+ 	return 0;
+ }
 -- 
 2.20.1
 
