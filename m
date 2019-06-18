@@ -2,148 +2,126 @@ Return-Path: <SRS0=uyBa=UQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DATE_IN_FUTURE_06_12,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3AD8C31E5B
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79F55C31E5B
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 22:39:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6EC412080C
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 21:59:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4A8C8208CB
+	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 22:39:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kvgoo1AW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fstsoOW9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727731AbfFQV7m (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jun 2019 17:59:42 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:32909 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726834AbfFQV7m (ORCPT
+        id S1726427AbfFQWjU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jun 2019 18:39:20 -0400
+Received: from mail-lj1-f175.google.com ([209.85.208.175]:45218 "EHLO
+        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbfFQWjU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jun 2019 17:59:42 -0400
-Received: by mail-ua1-f68.google.com with SMTP id f20so4142707ual.0
-        for <linux-media@vger.kernel.org>; Mon, 17 Jun 2019 14:59:41 -0700 (PDT)
+        Mon, 17 Jun 2019 18:39:20 -0400
+Received: by mail-lj1-f175.google.com with SMTP id m23so10940762lje.12
+        for <linux-media@vger.kernel.org>; Mon, 17 Jun 2019 15:39:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EAhatab0HAVyw+PnT7+3nUVy3uXQEI6O1vd8Cnx2LKk=;
-        b=kvgoo1AWJ53ectZxNh7vumo7uHVF3ezzA+dmS6OCiyHy7q38adiyo8Mt48b9s1ecuS
-         8vbgSWAHi7F66ZbJb0OnnHkka0SZfIdhx44ptJvkStf7KSPyjOUktnOEWU+P5uVTHP64
-         eN+AH0Y198g5GhXwzgWWBTwbfohtVJT/rFQhRmBXLkxVDGhPtni3s7vOLmfSoppPuiMS
-         fw+6xL0t8nIg9W/VqAlmea2Xi/QAMj43r70NCnqPKdZOQ+k2pXu+G5fUMaRe8zFdt2fk
-         JWWQc2NJ/zMPTaMg9M5+VHQpiaQGfqqosa4YWPSG3qztsQIxZrsszWUCVKNg2vbMMWht
-         a6XA==
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xOJW4OZ6HcRQ7BnMRKuqlT7fDpt92CWroJQ6GPCfF6Q=;
+        b=fstsoOW97DHdgJqzpe/5hY0tBxvZOdPyJMfdoRwZAHYx5EdFwc9u4lZh1XvCLBMG8E
+         EY4YX0yC7HcUlAi49cKLAUt0I68mO9q0how+WGLVHrLdPdPbkaLJQSPQMB2QtEJvBB+k
+         AoDd51ASxoQoCQOSUMwieRBAeE9iwFQtygnWe+d4MA0EpAUFlg7/ThFqTlWdTWYw3LXs
+         Hq8bOWNPzZdCrPaOqIWX18xxLQ28eg8mxYoTJASMO4hxm2E45qbjzR3ElfYqISYQvXpo
+         pMsKOrdjGer8x06Sgfh8g5DIP40fliJyk0gjgQpcSKhnZJABd3fz8WPwv8K74iyijb4q
+         xYgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EAhatab0HAVyw+PnT7+3nUVy3uXQEI6O1vd8Cnx2LKk=;
-        b=HcKJCySq1cFcpjTXncTqc5KKk4leSBMENyNFZxD7gAYa4/cS8rigrdlB5vzTd+wDyg
-         C8/2yXM2qClFuciyTMsH5tapl9I9/SNSeIBt00ZLiJNQyS+coNpTrVNYlUT3uOKbANWf
-         qY4G0FV5UzlTRKn+zNOJwvwpx/PeQF8J4sdNvpTfm8UprreAo2MohIn3C8vaPseENHfx
-         JT/Z3HKHXCR4F/u+Jot9Gwl5Z51fT00XfIzXRi1f9Ns79K3rf+myTE+sN9dbWdcPUKFm
-         cBeNriFcCikMyIfyoqPxdIVvoB/GyPliVTrz4qKT05ZDPdfyH3ijRr1jfpcVOvfVyo/V
-         b6ug==
-X-Gm-Message-State: APjAAAUCVbCeTjrfcjnL7lOKVemQu/iqtRBtD3V2GWXLbhUDA9tS+sj/
-        4mwzY7YMaxXhfrGYDk31WEvbxnWZCbjFlSDcR1Kdsg==
-X-Google-Smtp-Source: APXvYqx2nWcd1UUVmxVOfqTdpy/EjWGEE63D+8CgDq6wsvkYXGUtTG/eldJ/84K4uXpb1xaJ0VQplOCTsiiUpsYmcEg=
-X-Received: by 2002:ab0:234e:: with SMTP id h14mr10788176uao.25.1560808781025;
- Mon, 17 Jun 2019 14:59:41 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xOJW4OZ6HcRQ7BnMRKuqlT7fDpt92CWroJQ6GPCfF6Q=;
+        b=acmld0qD09+hd/+GquP6F9XIsafyAmXPaLHyAssCgVx3x9tz0+8dktRaeADGMh0MuK
+         t1BY62L3+S0fHLoH/YOkVVBPzDlvTTH9pKcmA7/WAPk6SHVJoJoG42bngJrD/UZtetwJ
+         pdRVKkoOYQF3I6RcZPvO5bUKzcuDGF2KGe+PPsz1PlgeOZRnzvNQZurH/6GP+qJgUZIt
+         02iJUJ4/khCOt8FZNH/v7Van1ihfYIySBHgbucODhyS8mzHoSX7WazmDNjA8+jm6qvrE
+         cwQLQyN+G3OEMLx0a8jtpjdCQpgvC68YJFQY76UOy7yFfHqd7GINAbjOBgMHAzuvHSH0
+         UIRQ==
+X-Gm-Message-State: APjAAAXAoQe5fj8bDydr8NwFIdTIqVAJvpdAix35AfnUlCJggU3JWGEo
+        sqHmv1G525575BlZXt7nj1XZIShWWV0=
+X-Google-Smtp-Source: APXvYqwCkNvu6C9WnT82XWGcu0gNrX0s8+JZnHni9J77GnKIbThzpN4mpIpE1tkAjxfRUGFR+uf93Q==
+X-Received: by 2002:a2e:8613:: with SMTP id a19mr43135lji.163.1560811158249;
+        Mon, 17 Jun 2019 15:39:18 -0700 (PDT)
+Received: from localhost.localdomain ([178.74.2.49])
+        by smtp.gmail.com with ESMTPSA id i23sm2287347ljb.7.2019.06.17.15.39.17
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 17 Jun 2019 15:39:17 -0700 (PDT)
+From:   Johan Korsnes <johan.korsnes@gmail.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH v3 0/9] media: vivid: add HDMI (dis)connect emulation
+Date:   Tue, 18 Jun 2019 09:37:17 +0200
+Message-Id: <20190618073726.61776-1-johan.korsnes@gmail.com>
+X-Mailer: git-send-email 2.19.1
 MIME-Version: 1.0
-References: <cover.1560339705.git.andreyknvl@google.com> <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
- <20190617135636.GC1367@arrakis.emea.arm.com> <CAFKCwrjJ+0ijNKa3ioOP7xa91QmZU0NhkO=tNC-Q_ThC69vTug@mail.gmail.com>
- <20190617171813.GC34565@arrakis.emea.arm.com>
-In-Reply-To: <20190617171813.GC34565@arrakis.emea.arm.com>
-From:   Evgenii Stepanov <eugenis@google.com>
-Date:   Mon, 17 Jun 2019 14:59:29 -0700
-Message-ID: <CAFKCwrhuQ+x-KprJV=CPCrnQR9Ky9qL=M5q_pa3fGj27oo4mng@mail.gmail.com>
-Subject: Re: [PATCH v17 03/15] arm64: Introduce prctl() options to control the
- tagged user addresses ABI
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 10:18 AM Catalin Marinas
-<catalin.marinas@arm.com> wrote:
->
-> On Mon, Jun 17, 2019 at 09:57:36AM -0700, Evgenii Stepanov wrote:
-> > On Mon, Jun 17, 2019 at 6:56 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > On Wed, Jun 12, 2019 at 01:43:20PM +0200, Andrey Konovalov wrote:
-> > > > From: Catalin Marinas <catalin.marinas@arm.com>
-> > > >
-> > > > It is not desirable to relax the ABI to allow tagged user addresses into
-> > > > the kernel indiscriminately. This patch introduces a prctl() interface
-> > > > for enabling or disabling the tagged ABI with a global sysctl control
-> > > > for preventing applications from enabling the relaxed ABI (meant for
-> > > > testing user-space prctl() return error checking without reconfiguring
-> > > > the kernel). The ABI properties are inherited by threads of the same
-> > > > application and fork()'ed children but cleared on execve().
-> > > >
-> > > > The PR_SET_TAGGED_ADDR_CTRL will be expanded in the future to handle
-> > > > MTE-specific settings like imprecise vs precise exceptions.
-> > > >
-> > > > Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> > >
-> > > A question for the user-space folk: if an application opts in to this
-> > > ABI, would you want the sigcontext.fault_address and/or siginfo.si_addr
-> > > to contain the tag? We currently clear it early in the arm64 entry.S but
-> > > we could find a way to pass it down if needed.
-> >
-> > For HWASan this would not be useful because we instrument memory
-> > accesses with explicit checks anyway. For MTE, on the other hand, it
-> > would be very convenient to know the fault address tag without
-> > disassembling the code.
->
-> I could as this differently: does anything break if, once the user
-> opts in to TBI, fault_address and/or si_addr have non-zero top byte?
+This patch series makes vivid V4L2-compliant by adding HDMI (dis)-
+connect emulation. This is done by by adding a custom display_present
+control to vivid output HDMI devices, along with the following standard
+controls:
 
-I think it would be fine.
+-ctrl_tx_edid_present
+-ctrl_tx_hotplug
+-ctrl_tx_rxsense
+-ctrl_rx_power_present
 
-> Alternatively, we could present the original FAR_EL1 register as a
-> separate field as we do with ESR_EL1, independently of whether the user
-> opted in to TBI or not.
->
-> --
-> Catalin
+With regard to v4l2-compliance:
+Series fixes the following 1/1 warning for HDMI input devices:
+   -V4L2_CID_DV_RX_POWER_PRESENT not found for input n
+Series fixes the following 2/2 warnings for HDMI ouptut devices:
+   -V4L2_CID_DV_TX_HOTPLUG not found for output n
+   -V4L2_CID_DV_TX_EDID_PRESENT not found for output n
+
+Regards,
+Johan
+
+v2 -> v3:
+- Various checkpatch.pl fixes. There are still some warnings as I am
+  not sure those really apply. Please let me know if they do, and I
+  will fix them ASAP.
+- PTR_ERR_OR_ZERO -> PTR_ERR where applicable
+- Fix broken check for cec adapter not NULL
+
+v1 -> v2:
+- New patch: media: vivid: reorder CEC allocation and control set-up
+- vidioc_s_edid: Use bitmask (not boolean) value for bitmask controls
+- vidioc_g_edid: Changed dev->output to edid->pad
+
+Johan Korsnes (9):
+      media: vivid: make input dv_timings per-input
+      media: vivid: make input std_signal per-input
+      media: vivid: add display present control
+      media: vivid: add number of HDMI ports to device state
+      media: vivid: add HDMI (dis)connect TX emulation
+      media: vivid: add HDMI (dis)connect RX emulation
+      media: vivid: reorder CEC allocation and control set-up
+      media: vivid: add CEC support to display present ctrl
+      media: vivid.rst: describe display present control
+
+Documentation/media/v4l-drivers/vivid.rst     |   5 +
+drivers/media/platform/vivid/vivid-core.c     | 120 ++++++++++------
+drivers/media/platform/vivid/vivid-core.h     |  32 +++--
+drivers/media/platform/vivid/vivid-ctrls.c    | 108 ++++++++++++--
+.../media/platform/vivid/vivid-kthread-cap.c  |   8 +-
+drivers/media/platform/vivid/vivid-vbi-cap.c  |  16 +--
+drivers/media/platform/vivid/vivid-vid-cap.c  | 135 ++++++++++++------
+.../media/platform/vivid/vivid-vid-common.c   |   8 +-
+drivers/media/platform/vivid/vivid-vid-out.c  |   6 +
+9 files changed, 312 insertions(+), 126 deletions(-)
+
+
+
