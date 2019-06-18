@@ -2,129 +2,74 @@ Return-Path: <SRS0=dfwv=UR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4F19C31E5B
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 21:38:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D5E5C31E5B
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 23:13:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C553120873
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 21:38:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58DA620873
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 23:13:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730555AbfFRViK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 17:38:10 -0400
-Received: from sauhun.de ([88.99.104.3]:45320 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730176AbfFRViK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Jun 2019 17:38:10 -0400
-Received: from localhost (p5486CE06.dip0.t-ipconnect.de [84.134.206.6])
-        by pokefinder.org (Postfix) with ESMTPSA id 6249B2C047A;
-        Tue, 18 Jun 2019 23:38:07 +0200 (CEST)
-Date:   Tue, 18 Jun 2019 23:38:07 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ruslan Babayev <ruslan@babayev.com>,
-        Andrew de Quincey <adq_dvb@lidskialf.net>,
-        Michael Buesch <m@bues.ch>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] media: tua6100: Remove some ugly defines
-Message-ID: <20190618213807.GA8356@kunai>
-References: <20190612081929.GA1687@kunai>
- <fa93fecaa9d8e33f7d3b335872e9082893b775ae.1560338665.git.mchehab+samsung@kernel.org>
+        id S1726037AbfFRXNq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jun 2019 19:13:46 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36588 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725913AbfFRXNq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 18 Jun 2019 19:13:46 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 250AD2639EC
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH] media: hantro: Use vb2_get_buffer
+Date:   Tue, 18 Jun 2019 20:12:37 -0300
+Message-Id: <20190618231237.27466-1-ezequiel@collabora.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <12f39255-bae4-0382-740e-4de4802c374d@xs4all.nl>
+References: <12f39255-bae4-0382-740e-4de4802c374d@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pf9I7BMVVzbSWLtt"
-Content-Disposition: inline
-In-Reply-To: <fa93fecaa9d8e33f7d3b335872e9082893b775ae.1560338665.git.mchehab+samsung@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Use the newly introduced vb2_get_buffer API and avoid
+accessing buffers in the queue directly.
 
---pf9I7BMVVzbSWLtt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+---
+ drivers/staging/media/hantro/hantro_drv.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-On Wed, Jun 12, 2019 at 08:25:03AM -0300, Mauro Carvalho Chehab wrote:
-> As reported by Stephen:
->=20
-> > After merging the i2c tree, today's linux-next build (x86_64 allmodconf=
-ig)
-> > produced this warning:
-> >
-> > drivers/media/dvb-frontends/tua6100.c: In function 'tua6100_set_params':
-> > drivers/media/dvb-frontends/tua6100.c:71: warning: "_P" redefined
-> >  #define _P 32
-> >
-> > In file included from include/acpi/platform/aclinux.h:54,
-> >                  from include/acpi/platform/acenv.h:152,
-> >                  from include/acpi/acpi.h:22,
-> >                  from include/linux/acpi.h:21,
-> >                  from include/linux/i2c.h:17,
-> >                  from drivers/media/dvb-frontends/tua6100.h:22,
-> >                  from drivers/media/dvb-frontends/tua6100.c:24:
-> > include/linux/ctype.h:14: note: this is the location of the previous de=
-finition
-> >  #define _P 0x10 /* punct */
-> >
-> > Exposed by commit
-> >
-> >   5213d7efc8ec ("i2c: acpi: export i2c_acpi_find_adapter_by_handle")
-> >
-> > Since that included <linux/acpi.h> from <linux/i2c.h>
-> >
-> > Originally introduced by commit
-> >
-> >   00be2e7c6415 ("V4L/DVB (4606): Add driver for TUA6100")
-> >
-> > The _P in <linux/ctype.h> has existed since before git.
->=20
-> The addition of include <linux/ctype.h> at the I2C code caused a
-> breakage at the tua6100 driver. The reason is that the code there
-> used defines for 3 parameters used at the calculus for the
-> divide ratio.
->=20
-> In thesis, those are board-dependent, but, as there's just one
-> driver using it (ttpci/budget-av), there was no need to make
-> the code more generic. While it sounds unlikely that this old
-> DVB-S frontend would ever be used on new projects, one might
-> some day come with a variant using a different configuration. So,
-> let's do the right thing and store those values at its private
-> struct.
->=20
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 1d3af881d088..c3665f0e87a2 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -45,12 +45,14 @@ void *hantro_get_ctrl(struct hantro_ctx *ctx, u32 id)
+ 
+ dma_addr_t hantro_get_ref(struct vb2_queue *q, u64 ts)
+ {
++	struct vb2_buffer *buf;
+ 	int index;
+ 
+ 	index = vb2_find_timestamp(q, ts, 0);
+-	if (index >= 0)
+-		return vb2_dma_contig_plane_dma_addr(q->bufs[index], 0);
+-	return 0;
++	if (index < 0)
++		return 0;
++	buf = vb2_get_buffer(q, index);
++	return vb2_dma_contig_plane_dma_addr(buf, 0);
+ }
+ 
+ static int
+-- 
+2.20.1
 
-I see there is a build-fix from davem now in linux-next. Shall I still
-apply this patch to my i2c tree once Mauro applied it to his?
-
-
---pf9I7BMVVzbSWLtt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl0JWboACgkQFA3kzBSg
-Kbaa/w//dkLZr3BGmVtNIAhtFtIVjejosTZf8PSX+avUaQH4EJQqe8kEwVzWHN7P
-o90IAkHqohbxmtgryeqROQQpzy8QIjKsr0zzqYIZlacU5z694Jev6AGhpw0dYx/j
-3uYth51SjXmY/efoVQa+Z0tTCj5zNh8crkGQqitPgl0I0zzGBHDmfOh8pdJBYgYo
-HCuVP0NdugdIBOWcbiDEtF0mik7k71Zh1J1ZGcJw/LC5WrZ2WNS2ILHFH1yKDjVe
-1WLFb8yE/Ea313X+f1Hgh3BSVxUszkFSRyfZvMabvdZb2jzzkUlxzHd78ZoAvvEb
-HjQ7oocJCy6XP312JllhG+TdLChu92HcNpaSbh4vxo15ilCQtcVPMXQIehvtgme0
-Wn7MpuA3hjX1cltpjfsMYjl+LsAe1MlHPF5xFZusiA2N1OUIVhEcMTSvm5me44MB
-/syQnj8oCnOEtoPE7JaMwKxO0kj/z2HJrv7WEJg9eqRdigFq89SsXYt8UM0oh+UN
-pKPhHsdr5s2hY8Z2vw/p2K+um53tGCDwwswOJ1BC/I3LhOM9vg/dLDigA7bOpmmt
-7HXf1cpBVJ/pDumoBq1sKfGIy4IqWNRw++/a7jjTMBogNSE14H7xAG17D9AowMkc
-ncqhh0FIPFr9DPZzFdLSHwvXIrbR6UOr0yuimIG3ukxOyTiktUg=
-=/ckW
------END PGP SIGNATURE-----
-
---pf9I7BMVVzbSWLtt--
