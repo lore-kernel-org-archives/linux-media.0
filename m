@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79FD6C31E5F
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1689C31E5D
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5EAD321881
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D608221855
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730061AbfFRQpv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 12:45:51 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:41281 "EHLO
+        id S1730058AbfFRQpu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jun 2019 12:45:50 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:35519 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730025AbfFRQpq (ORCPT
+        with ESMTP id S1730006AbfFRQpq (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 18 Jun 2019 12:45:46 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hdHEu-0003WX-65; Tue, 18 Jun 2019 18:45:44 +0200
+        id 1hdHEu-0003WX-2L; Tue, 18 Jun 2019 18:45:44 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>, kernel@pengutronix.de
-Subject: [PATCH 27/28] media: coda: add coda_slice_mode() function
-Date:   Tue, 18 Jun 2019 18:45:34 +0200
-Message-Id: <20190618164535.20162-28-p.zabel@pengutronix.de>
+Subject: [PATCH 20/28] media: coda: retire coda_buf_is_end_of_stream
+Date:   Tue, 18 Jun 2019 18:45:27 +0200
+Message-Id: <20190618164535.20162-21-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190618164535.20162-1-p.zabel@pengutronix.de>
 References: <20190618164535.20162-1-p.zabel@pengutronix.de>
@@ -44,77 +44,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Changing slice mode dynamically while encoding will require to calculate
-the register value again, so split it out into a separate function.
+Using the output queue sequence counter to determine the last buffer to
+be encoded or decoded always was fragile at best. Now that we have the
+last buffer flag propagating from the output queue to the capture queue
+correctly, this is not needed anymore.
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/coda/coda-bit.c | 45 ++++++++++++++------------
- 1 file changed, 24 insertions(+), 21 deletions(-)
+ drivers/media/platform/coda/coda-common.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index de6a4216a182..b59cb16f75a1 100644
---- a/drivers/media/platform/coda/coda-bit.c
-+++ b/drivers/media/platform/coda/coda-bit.c
-@@ -675,6 +675,29 @@ static int coda_encode_header(struct coda_ctx *ctx, struct vb2_v4l2_buffer *buf,
- 	return 0;
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index c55124e8b4c8..9349df773077 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -900,13 +900,6 @@ static int coda_dqbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
+ 	return ret;
  }
  
-+static u32 coda_slice_mode(struct coda_ctx *ctx)
-+{
-+	int size, unit;
-+
-+	switch (ctx->params.slice_mode) {
-+	case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE:
-+	default:
-+		return 0;
-+	case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB:
-+		size = ctx->params.slice_max_mb;
-+		unit = 1;
-+		break;
-+	case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES:
-+		size = ctx->params.slice_max_bits;
-+		unit = 0;
-+		break;
-+	}
-+
-+	return ((size & CODA_SLICING_SIZE_MASK) << CODA_SLICING_SIZE_OFFSET) |
-+	       ((unit & CODA_SLICING_UNIT_MASK) << CODA_SLICING_UNIT_OFFSET) |
-+	       ((1 & CODA_SLICING_MODE_MASK) << CODA_SLICING_MODE_OFFSET);
-+}
-+
- static phys_addr_t coda_iram_alloc(struct coda_iram_info *iram, size_t size)
+-static bool coda_buf_is_end_of_stream(struct coda_ctx *ctx,
+-				      struct vb2_v4l2_buffer *buf)
+-{
+-	return ((ctx->bit_stream_param & CODA_BIT_STREAM_END_FLAG) &&
+-		(buf->sequence == (ctx->qsequence - 1)));
+-}
+-
+ void coda_m2m_buf_done(struct coda_ctx *ctx, struct vb2_v4l2_buffer *buf,
+ 		       enum vb2_buffer_state state)
  {
- 	phys_addr_t ret;
-@@ -1113,27 +1136,7 @@ static int coda_start_encoding(struct coda_ctx *ctx)
- 	 * in JPEG mode
- 	 */
- 	if (dst_fourcc != V4L2_PIX_FMT_JPEG) {
--		switch (ctx->params.slice_mode) {
--		case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_SINGLE:
--			value = 0;
--			break;
--		case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_MB:
--			value  = (ctx->params.slice_max_mb &
--				  CODA_SLICING_SIZE_MASK)
--				 << CODA_SLICING_SIZE_OFFSET;
--			value |= (1 & CODA_SLICING_UNIT_MASK)
--				 << CODA_SLICING_UNIT_OFFSET;
--			value |=  1 & CODA_SLICING_MODE_MASK;
--			break;
--		case V4L2_MPEG_VIDEO_MULTI_SLICE_MODE_MAX_BYTES:
--			value  = (ctx->params.slice_max_bits &
--				  CODA_SLICING_SIZE_MASK)
--				 << CODA_SLICING_SIZE_OFFSET;
--			value |= (0 & CODA_SLICING_UNIT_MASK)
--				 << CODA_SLICING_UNIT_OFFSET;
--			value |=  1 & CODA_SLICING_MODE_MASK;
--			break;
--		}
-+		value = coda_slice_mode(ctx);
- 		coda_write(dev, value, CODA_CMD_ENC_SEQ_SLICE_MODE);
- 		value = ctx->params.gop_size;
- 		coda_write(dev, value, CODA_CMD_ENC_SEQ_GOP_SIZE);
+@@ -914,11 +907,8 @@ void coda_m2m_buf_done(struct coda_ctx *ctx, struct vb2_v4l2_buffer *buf,
+ 		.type = V4L2_EVENT_EOS
+ 	};
+ 
+-	if (coda_buf_is_end_of_stream(ctx, buf)) {
+-		buf->flags |= V4L2_BUF_FLAG_LAST;
+-
++	if (buf->flags & V4L2_BUF_FLAG_LAST)
+ 		v4l2_event_queue_fh(&ctx->fh, &eos_event);
+-	}
+ 
+ 	v4l2_m2m_buf_done(buf, state);
+ }
 -- 
 2.20.1
 
