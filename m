@@ -2,118 +2,83 @@ Return-Path: <SRS0=dfwv=UR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64964C31E5B
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C397FC31E5B
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3DD28213F2
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:17:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ct1sAJ72"
+	by mail.kernel.org (Postfix) with ESMTP id 98E7E21873
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729930AbfFRQQc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 12:16:32 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:39929 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729496AbfFRQQb (ORCPT
+        id S1730013AbfFRQpp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jun 2019 12:45:45 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:41647 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729903AbfFRQpo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Jun 2019 12:16:31 -0400
-Received: by mail-lj1-f193.google.com with SMTP id v18so141250ljh.6;
-        Tue, 18 Jun 2019 09:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=d8ND7EMqaMTRopWlb9o22BJGzZDsnY6w/hHhefd0ijU=;
-        b=ct1sAJ72OfB3a7/VItKwWaSDmJQErSldkaPh8Hg2zwhb8dkdhBO5l07HrG1HPzr2Cq
-         BX8/hcHEi2jUxzEJODMJlesBskFGwyntCcRmWSczwh6xGsPgzAyCUFU3T1ebFaJ3u0vo
-         r3LmRCsAr1Aw+S8iXpRppPZo+pFNLxa3QsfZDFri5Sf54zrxIgLFWGpfPbMW4XQ5tnfZ
-         RdKXQc2j3dX3p/G17K0qbRg/so9Uh9IoY80w0UjAK+pOTTKvJPSq5GwqSzDWZfPbC2Dl
-         2QgF8Oxi9A6EjHtGuiAIiULB+VTVINjT3tHmjF5xCi5PZ3vvGPp5+Gsd34vHF1EONBZS
-         4HHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=d8ND7EMqaMTRopWlb9o22BJGzZDsnY6w/hHhefd0ijU=;
-        b=Xa3dA/aDQAldD4IVxuZMwAO/uOiLNXeeNQ+1OEnjzx/WHwX8AifLPMmoDgoa47SePL
-         mSK0XeCFexb9S1FCTIE/eE0HrBGC16BMBmW022/YrPleKJvhx/sXF3yhZNQRY8mxPO5H
-         vmhaw3xD7UKIHklwHIxiqPHFexwXDr1hBgYv8E4Y6J87AJuAPBQXTNIzclOMfOL7pN9E
-         W6wbXuJ/m0MBtWw7iF96phOOxdm/ikslevF02GyDsSbl8Jlx0NWoUZyi2dG7ptbNGDZq
-         gDvU6JbPJSYMBEhEwWfcqnuTvz7oOU+sSHDMqkPLJLgU9f4hGYueHKi7hh+Yexv3UXXD
-         t4yw==
-X-Gm-Message-State: APjAAAWAULMWbmK4wQO3SET6ejdv6VHLHvCejw3NgEzAA2I6EbVglzHa
-        RP88KI94YWAt07Sx3nhh+l+Jrdza
-X-Google-Smtp-Source: APXvYqzQZqoqlL5858/34W8b9dFe+28g3zDpsZLYQzftoSykaQpl1uH4YqhI48VZjTWooCY0JCYU+A==
-X-Received: by 2002:a2e:868e:: with SMTP id l14mr22398515lji.16.1560874588806;
-        Tue, 18 Jun 2019 09:16:28 -0700 (PDT)
-Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id v15sm2273295lfd.53.2019.06.18.09.16.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 18 Jun 2019 09:16:27 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/4] NVIDIA Tegra Video Decoder driver improvements
-Date:   Tue, 18 Jun 2019 19:14:51 +0300
-Message-Id: <20190618161458.20499-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
+        Tue, 18 Jun 2019 12:45:44 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hdHEt-0003WX-ES; Tue, 18 Jun 2019 18:45:43 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, kernel@pengutronix.de
+Subject: [PATCH 04/28] media: coda: fix last buffer handling in V4L2_ENC_CMD_STOP
+Date:   Tue, 18 Jun 2019 18:45:11 +0200
+Message-Id: <20190618164535.20162-5-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190618164535.20162-1-p.zabel@pengutronix.de>
+References: <20190618164535.20162-1-p.zabel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+From: Marco Felsch <m.felsch@pengutronix.de>
 
-This series cleans up some of minor shortcomings that are caused by
-checkpatch recommendations that are not very applicable for the driver.
-Then IOMMU support is added to the driver and now it can handle sparse
-memory buffers that GPU hands to VDE in a default kernel configuration
-on Tegra30+.
+coda_encoder_cmd() is racy, as the last scheduled picture run worker can
+still be in-flight while the ENC_CMD_STOP command is issued. Depending
+on the exact timing the sequence numbers might already be changed, but
+the last buffer might not have been put on the destination queue yet.
 
-Changelog:
+In this case the current implementation would prematurely wake the
+destination queue with last_buffer_dequeued=true, causing userspace to
+call streamoff before the last buffer is handled.
 
-v2: - Fixed use-after-free bug and uninitialized-variable warning that
-      were reported by smatch and pointed out by Hans Verkuil in the
-      review comment to v1.
+Close this race window by synchronizing with the pic_run_worker before
+doing the sequence check.
 
-    - Fixed build failure when CONFIG_ARM_DMA_USE_IOMMU=y and tested this
-      case properly (multi-platform kernel config).
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+[l.stach@pengutronix.de: switch to flush_work, reword commit message]
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ drivers/media/platform/coda/coda-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-    - Made some extra minor changes, prettifying code a tad more.
-
-Dmitry Osipenko (4):
-  staging: media: tegra-vde: Remove BIT() macro from UAPI header
-  staging: media: tegra-vde: Manually pack UAPI structures
-  staging: media: tegra-vde: Add IOMMU support
-  staging: media: tegra-vde: Defer dmabuf's unmapping
-
- drivers/staging/media/tegra-vde/Kconfig       |   1 +
- drivers/staging/media/tegra-vde/Makefile      |   1 +
- .../staging/media/tegra-vde/dmabuf-cache.c    | 226 ++++++++++++++++++
- drivers/staging/media/tegra-vde/iommu.c       | 149 ++++++++++++
- drivers/staging/media/tegra-vde/trace.h       |   2 +
- drivers/staging/media/tegra-vde/uapi.h        |  48 ++--
- .../media/tegra-vde/{tegra-vde.c => vde.c}    | 212 ++++++----------
- drivers/staging/media/tegra-vde/vde.h         | 105 ++++++++
- 8 files changed, 581 insertions(+), 163 deletions(-)
- create mode 100644 drivers/staging/media/tegra-vde/dmabuf-cache.c
- create mode 100644 drivers/staging/media/tegra-vde/iommu.c
- rename drivers/staging/media/tegra-vde/{tegra-vde.c => vde.c} (88%)
- create mode 100644 drivers/staging/media/tegra-vde/vde.h
-
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index e09d48170e5c..d3b1e7b87a8a 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -1018,6 +1018,8 @@ static int coda_encoder_cmd(struct file *file, void *fh,
+ 	/* Set the stream-end flag on this context */
+ 	ctx->bit_stream_param |= CODA_BIT_STREAM_END_FLAG;
+ 
++	flush_work(&ctx->pic_run_work);
++
+ 	/* If there is no buffer in flight, wake up */
+ 	if (!ctx->streamon_out || ctx->qsequence == ctx->osequence) {
+ 		dst_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
 -- 
-2.22.0
+2.20.1
 
