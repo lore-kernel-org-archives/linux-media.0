@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C397FC31E5B
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48249C31E5E
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98E7E21873
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21B2921880
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730013AbfFRQpp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730040AbfFRQpp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 18 Jun 2019 12:45:45 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:41647 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:60007 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729903AbfFRQpo (ORCPT
+        with ESMTP id S1729952AbfFRQpo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 18 Jun 2019 12:45:44 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hdHEt-0003WX-ES; Tue, 18 Jun 2019 18:45:43 +0200
+        id 1hdHEt-0003WX-IT; Tue, 18 Jun 2019 18:45:43 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>, kernel@pengutronix.de
-Subject: [PATCH 04/28] media: coda: fix last buffer handling in V4L2_ENC_CMD_STOP
-Date:   Tue, 18 Jun 2019 18:45:11 +0200
-Message-Id: <20190618164535.20162-5-p.zabel@pengutronix.de>
+Subject: [PATCH 09/28] media: coda: implement decoder source change event
+Date:   Tue, 18 Jun 2019 18:45:16 +0200
+Message-Id: <20190618164535.20162-10-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190618164535.20162-1-p.zabel@pengutronix.de>
 References: <20190618164535.20162-1-p.zabel@pengutronix.de>
@@ -44,41 +44,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Marco Felsch <m.felsch@pengutronix.de>
+The stateful decoder API requires decoders to signal detection
+of stream dimensions via the V4L2_EVENT_SOURCE_CHANGE event.
 
-coda_encoder_cmd() is racy, as the last scheduled picture run worker can
-still be in-flight while the ENC_CMD_STOP command is issued. Depending
-on the exact timing the sequence numbers might already be changed, but
-the last buffer might not have been put on the destination queue yet.
-
-In this case the current implementation would prematurely wake the
-destination queue with last_buffer_dequeued=true, causing userspace to
-call streamoff before the last buffer is handled.
-
-Close this race window by synchronizing with the pic_run_worker before
-doing the sequence check.
-
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-[l.stach@pengutronix.de: switch to flush_work, reword commit message]
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/coda/coda-common.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/coda/coda-common.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index e09d48170e5c..d3b1e7b87a8a 100644
+index f8cfafa2ce42..b30945fa0a70 100644
 --- a/drivers/media/platform/coda/coda-common.c
 +++ b/drivers/media/platform/coda/coda-common.c
-@@ -1018,6 +1018,8 @@ static int coda_encoder_cmd(struct file *file, void *fh,
- 	/* Set the stream-end flag on this context */
- 	ctx->bit_stream_param |= CODA_BIT_STREAM_END_FLAG;
- 
-+	flush_work(&ctx->pic_run_work);
+@@ -1255,9 +1255,16 @@ static int coda_s_parm(struct file *file, void *fh, struct v4l2_streamparm *a)
+ static int coda_subscribe_event(struct v4l2_fh *fh,
+ 				const struct v4l2_event_subscription *sub)
+ {
++	struct coda_ctx *ctx = fh_to_ctx(fh);
 +
- 	/* If there is no buffer in flight, wake up */
- 	if (!ctx->streamon_out || ctx->qsequence == ctx->osequence) {
- 		dst_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
+ 	switch (sub->type) {
+ 	case V4L2_EVENT_EOS:
+ 		return v4l2_event_subscribe(fh, sub, 0, NULL);
++	case V4L2_EVENT_SOURCE_CHANGE:
++		if (ctx->inst_type == CODA_INST_DECODER)
++			return v4l2_event_subscribe(fh, sub, 0, NULL);
++		else
++			return -EINVAL;
+ 	default:
+ 		return v4l2_ctrl_subscribe_event(fh, sub);
+ 	}
+@@ -1642,6 +1649,16 @@ void coda_update_profile_level_ctrls(struct coda_ctx *ctx, u8 profile_idc,
+ 	}
+ }
+ 
++static void coda_queue_source_change_event(struct coda_ctx *ctx)
++{
++	static const struct v4l2_event source_change_event = {
++		.type = V4L2_EVENT_SOURCE_CHANGE,
++		.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
++	};
++
++	v4l2_event_queue_fh(&ctx->fh, &source_change_event);
++}
++
+ static void coda_buf_queue(struct vb2_buffer *vb)
+ {
+ 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+@@ -1696,6 +1713,9 @@ static void coda_buf_queue(struct vb2_buffer *vb)
+ 					   &ctx->seq_init_work);
+ 				flush_work(&ctx->seq_init_work);
+ 			}
++
++			if (ctx->initialized)
++				coda_queue_source_change_event(ctx);
+ 		}
+ 	} else {
+ 		if (ctx->inst_type == CODA_INST_ENCODER &&
 -- 
 2.20.1
 
