@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E82A7C31E5B
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:46:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3407C31E5D
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:46:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C2B8B21855
-	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:46:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81D8621530
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:46:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730077AbfFRQqB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 12:46:01 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:48633 "EHLO
+        id S1730081AbfFRQqC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jun 2019 12:46:02 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:48743 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729968AbfFRQpp (ORCPT
+        with ESMTP id S1729947AbfFRQpp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 18 Jun 2019 12:45:45 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hdHEt-0003WX-N6; Tue, 18 Jun 2019 18:45:43 +0200
+        id 1hdHEt-0003WX-Hv; Tue, 18 Jun 2019 18:45:43 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>, kernel@pengutronix.de
-Subject: [PATCH 12/28] media: coda: pad first buffer with repeated MPEG headers to fix sequence init
-Date:   Tue, 18 Jun 2019 18:45:19 +0200
-Message-Id: <20190618164535.20162-13-p.zabel@pengutronix.de>
+Subject: [PATCH 08/28] media: coda: add sequence initialization work
+Date:   Tue, 18 Jun 2019 18:45:15 +0200
+Message-Id: <20190618164535.20162-9-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190618164535.20162-1-p.zabel@pengutronix.de>
 References: <20190618164535.20162-1-p.zabel@pengutronix.de>
@@ -44,230 +44,128 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If the first buffer contains only headers, the sequence initialization
-command fails. On CodaHx4 the buffer must be padded to at least 512
-bytes, on CODA960 it seems to be enough to just repeat the sequence and
-extension headers (MPEG-2) or the VOS and VO headers (MPEG-4) once for
-for sequence initialization to succeed without further bitstream data.
-On CodaHx4 the headers can be repeated multiple times until the 512 byte
-mark is reached.
-
-A similar issue was solved for h.264 by padding with a filler NAL in
-commit 0eef89403ece ("[media] coda: pad first h.264 buffer to 512
-bytes").
+Add a sequence initialization work item to be run when OUTPUT buffers
+are queued in the initialization state.
 
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/coda/coda-bit.c   | 59 ++++++++++++++++++++++--
- drivers/media/platform/coda/coda-mpeg2.c | 43 +++++++++++++++++
- drivers/media/platform/coda/coda-mpeg4.c | 38 +++++++++++++++
- drivers/media/platform/coda/coda.h       |  2 +
- 4 files changed, 139 insertions(+), 3 deletions(-)
+ drivers/media/platform/coda/coda-bit.c    | 25 +++++++++++++++++++++++
+ drivers/media/platform/coda/coda-common.c | 24 ++++++++++++++++++++++
+ drivers/media/platform/coda/coda.h        |  2 ++
+ 3 files changed, 51 insertions(+)
 
 diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index 4f96f808b4dd..5a1016243032 100644
+index cecfd51e3838..9f8e2342d175 100644
 --- a/drivers/media/platform/coda/coda-bit.c
 +++ b/drivers/media/platform/coda/coda-bit.c
-@@ -180,7 +180,7 @@ static void coda_kfifo_sync_to_device_write(struct coda_ctx *ctx)
- 	coda_write(dev, wr_ptr, CODA_REG_BIT_WR_PTR(ctx->reg_idx));
+@@ -1824,6 +1824,30 @@ static int __coda_decoder_seq_init(struct coda_ctx *ctx)
+ 	return 0;
  }
  
--static int coda_bitstream_pad(struct coda_ctx *ctx, u32 size)
-+static int coda_h264_bitstream_pad(struct coda_ctx *ctx, u32 size)
- {
- 	unsigned char *buf;
- 	u32 n;
-@@ -206,12 +206,34 @@ static int coda_bitstream_queue(struct coda_ctx *ctx, const u8 *buf, u32 size)
- 	return (n < size) ? -ENOSPC : 0;
- }
- 
-+static u32 coda_buffer_parse_headers(struct coda_ctx *ctx,
-+				     struct vb2_v4l2_buffer *src_buf,
-+				     u32 payload)
++static void coda_dec_seq_init_work(struct work_struct *work)
 +{
-+	u8 *vaddr = vb2_plane_vaddr(&src_buf->vb2_buf, 0);
-+	u32 size = 0;
++	struct coda_ctx *ctx = container_of(work,
++					    struct coda_ctx, seq_init_work);
++	struct coda_dev *dev = ctx->dev;
++	int ret;
 +
-+	switch (ctx->codec->src_fourcc) {
-+	case V4L2_PIX_FMT_MPEG2:
-+		size = coda_mpeg2_parse_headers(ctx, vaddr, payload);
-+		break;
-+	case V4L2_PIX_FMT_MPEG4:
-+		size = coda_mpeg4_parse_headers(ctx, vaddr, payload);
-+		break;
-+	default:
-+		break;
-+	}
++	mutex_lock(&ctx->buffer_mutex);
++	mutex_lock(&dev->coda_mutex);
 +
-+	return size;
++	if (ctx->initialized == 1)
++		goto out;
++
++	ret = __coda_decoder_seq_init(ctx);
++	if (ret < 0)
++		goto out;
++
++	ctx->initialized = 1;
++
++out:
++	mutex_unlock(&dev->coda_mutex);
++	mutex_unlock(&ctx->buffer_mutex);
 +}
 +
- static bool coda_bitstream_try_queue(struct coda_ctx *ctx,
- 				     struct vb2_v4l2_buffer *src_buf)
+ static int __coda_start_decoding(struct coda_ctx *ctx)
  {
- 	unsigned long payload = vb2_get_plane_payload(&src_buf->vb2_buf, 0);
- 	u8 *vaddr = vb2_plane_vaddr(&src_buf->vb2_buf, 0);
- 	int ret;
-+	int i;
- 
- 	if (coda_get_bitstream_payload(ctx) + payload + 512 >=
- 	    ctx->bitstream.size)
-@@ -222,10 +244,41 @@ static bool coda_bitstream_try_queue(struct coda_ctx *ctx,
- 		return true;
- 	}
- 
--	/* Add zero padding before the first H.264 buffer, if it is too small */
-+	if (ctx->qsequence == 0 && payload < 512) {
-+		/*
-+		 * Add padding after the first buffer, if it is too small to be
-+		 * fetched by the CODA, by repeating the headers. Without
-+		 * repeated headers, or the first frame already queued, decoder
-+		 * sequence initialization fails with error code 0x2000 on i.MX6
-+		 * or error code 0x1 on i.MX51.
-+		 */
-+		u32 header_size = coda_buffer_parse_headers(ctx, src_buf,
-+							    payload);
+ 	struct coda_q_data *q_data_src, *q_data_dst;
+@@ -2352,6 +2376,7 @@ const struct coda_context_ops coda_bit_decode_ops = {
+ 	.prepare_run = coda_prepare_decode,
+ 	.finish_run = coda_finish_decode,
+ 	.run_timeout = coda_decode_timeout,
++	.seq_init_work = coda_dec_seq_init_work,
+ 	.seq_end_work = coda_seq_end_work,
+ 	.release = coda_bit_release,
+ };
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 232bda4b7016..f8cfafa2ce42 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -1684,6 +1684,19 @@ static void coda_buf_queue(struct vb2_buffer *vb)
+ 			/* This set buf->sequence = ctx->qsequence++ */
+ 			coda_fill_bitstream(ctx, NULL);
+ 		mutex_unlock(&ctx->bitstream_mutex);
 +
-+		if (header_size) {
-+			coda_dbg(1, ctx, "pad with %u-byte header\n",
-+				 header_size);
-+			for (i = payload; i < 512; i += header_size) {
-+				ret = coda_bitstream_queue(ctx, vaddr,
-+							   header_size);
-+				if (ret < 0) {
-+					v4l2_err(&ctx->dev->v4l2_dev,
-+						 "bitstream buffer overflow\n");
-+					return false;
-+				}
-+				if (ctx->dev->devtype->product == CODA_960)
-+					break;
++		if (!ctx->initialized) {
++			/*
++			 * Run sequence initialization in case the queued
++			 * buffer contained headers.
++			 */
++			if (vb2_is_streaming(vb->vb2_queue) &&
++			    ctx->ops->seq_init_work) {
++				queue_work(ctx->dev->workqueue,
++					   &ctx->seq_init_work);
++				flush_work(&ctx->seq_init_work);
 +			}
-+		} else {
-+			coda_dbg(1, ctx,
-+				 "could not parse header, sequence initialization might fail\n");
 +		}
-+	}
+ 	} else {
+ 		if (ctx->inst_type == CODA_INST_ENCODER &&
+ 		    vq->type == V4L2_BUF_TYPE_VIDEO_OUTPUT)
+@@ -1761,6 +1774,15 @@ static int coda_start_streaming(struct vb2_queue *q, unsigned int count)
+ 				ret = -EINVAL;
+ 				goto err;
+ 			}
 +
-+	/* Add padding before the first buffer, if it is too small */
- 	if (ctx->qsequence == 0 && payload < 512 &&
- 	    ctx->codec->src_fourcc == V4L2_PIX_FMT_H264)
--		coda_bitstream_pad(ctx, 512 - payload);
-+		coda_h264_bitstream_pad(ctx, 512 - payload);
++			if (!ctx->initialized) {
++				/* Run sequence initialization */
++				if (ctx->ops->seq_init_work) {
++					queue_work(ctx->dev->workqueue,
++						   &ctx->seq_init_work);
++					flush_work(&ctx->seq_init_work);
++				}
++			}
+ 		}
  
- 	ret = coda_bitstream_queue(ctx, vaddr, payload);
- 	if (ret < 0) {
-diff --git a/drivers/media/platform/coda/coda-mpeg2.c b/drivers/media/platform/coda/coda-mpeg2.c
-index 73e50dabce19..6f3f6721d286 100644
---- a/drivers/media/platform/coda/coda-mpeg2.c
-+++ b/drivers/media/platform/coda/coda-mpeg2.c
-@@ -42,3 +42,46 @@ int coda_mpeg2_level(int level_idc)
- 		return -EINVAL;
- 	}
- }
-+
-+/*
-+ * Check if the buffer starts with the MPEG-2 sequence header (with or without
-+ * quantization matrix) and extension header, for example:
-+ *
-+ *   00 00 01 b3 2d 01 e0 34 08 8b a3 81
-+ *               10 11 11 12 12 12 13 13 13 13 14 14 14 14 14 15
-+ *               15 15 15 15 15 16 16 16 16 16 16 16 17 17 17 17
-+ *               17 17 17 17 18 18 18 19 18 18 18 19 1a 1a 1a 1a
-+ *               19 1b 1b 1b 1b 1b 1c 1c 1c 1c 1e 1e 1e 1f 1f 21
-+ *   00 00 01 b5 14 8a 00 01 00 00
-+ *
-+ * or:
-+ *
-+ *   00 00 01 b3 08 00 40 15 ff ff e0 28
-+ *   00 00 01 b5 14 8a 00 01 00 00
-+ *
-+ * Returns the detected header size in bytes or 0.
-+ */
-+u32 coda_mpeg2_parse_headers(struct coda_ctx *ctx, u8 *buf, u32 size)
-+{
-+	static const u8 sequence_header_start[4] = { 0x00, 0x00, 0x01, 0xb3 };
-+	static const union {
-+		u8 extension_start[4];
-+		u8 start_code_prefix[3];
-+	} u = { { 0x00, 0x00, 0x01, 0xb5 } };
-+
-+	if (size < 22 ||
-+	    memcmp(buf, sequence_header_start, 4) != 0)
-+		return 0;
-+
-+	if ((size == 22 ||
-+	     (size >= 25 && memcmp(buf + 22, u.start_code_prefix, 3) == 0)) &&
-+	    memcmp(buf + 12, u.extension_start, 4) == 0)
-+		return 22;
-+
-+	if ((size == 86 ||
-+	     (size > 89 && memcmp(buf + 86, u.start_code_prefix, 3) == 0)) &&
-+	    memcmp(buf + 76, u.extension_start, 4) == 0)
-+		return 86;
-+
-+	return 0;
-+}
-diff --git a/drivers/media/platform/coda/coda-mpeg4.c b/drivers/media/platform/coda/coda-mpeg4.c
-index c3aca763c320..483a4fba1b4f 100644
---- a/drivers/media/platform/coda/coda-mpeg4.c
-+++ b/drivers/media/platform/coda/coda-mpeg4.c
-@@ -47,3 +47,41 @@ int coda_mpeg4_level(int level_idc)
- 		return -EINVAL;
- 	}
- }
-+
-+/*
-+ * Check if the buffer starts with the MPEG-4 visual object sequence and visual
-+ * object headers, for example:
-+ *
-+ *   00 00 01 b0 f1
-+ *   00 00 01 b5 a9 13 00 00 01 00 00 00 01 20 08
-+ *               d4 8d 88 00 f5 04 04 08 14 30 3f
-+ *
-+ * Returns the detected header size in bytes or 0.
-+ */
-+u32 coda_mpeg4_parse_headers(struct coda_ctx *ctx, u8 *buf, u32 size)
-+{
-+	static const u8 vos_start[4] = { 0x00, 0x00, 0x01, 0xb0 };
-+	static const union {
-+		u8 vo_start[4];
-+		u8 start_code_prefix[3];
-+	} u = { { 0x00, 0x00, 0x01, 0xb5 } };
-+
-+	if (size < 30 ||
-+	    memcmp(buf, vos_start, 4) != 0 ||
-+	    memcmp(buf + 5, u.vo_start, 4) != 0)
-+		return 0;
-+
-+	if (size == 30 ||
-+	    (size >= 33 && memcmp(buf + 30, u.start_code_prefix, 3) == 0))
-+		return 30;
-+
-+	if (size == 31 ||
-+	    (size >= 34 && memcmp(buf + 31, u.start_code_prefix, 3) == 0))
-+		return 31;
-+
-+	if (size == 32 ||
-+	    (size >= 35 && memcmp(buf + 32, u.start_code_prefix, 3) == 0))
-+		return 32;
-+
-+	return 0;
-+}
+ 		ctx->streamon_out = 1;
+@@ -2317,6 +2339,8 @@ static int coda_open(struct file *file)
+ 	ctx->use_bit = !ctx->cvd->direct;
+ 	init_completion(&ctx->completion);
+ 	INIT_WORK(&ctx->pic_run_work, coda_pic_run_work);
++	if (ctx->ops->seq_init_work)
++		INIT_WORK(&ctx->seq_init_work, ctx->ops->seq_init_work);
+ 	if (ctx->ops->seq_end_work)
+ 		INIT_WORK(&ctx->seq_end_work, ctx->ops->seq_end_work);
+ 	v4l2_fh_init(&ctx->fh, video_devdata(file));
 diff --git a/drivers/media/platform/coda/coda.h b/drivers/media/platform/coda/coda.h
-index 10207e9534c2..12bbd3129269 100644
+index 0c2cace53ce8..c97ea3e24b80 100644
 --- a/drivers/media/platform/coda/coda.h
 +++ b/drivers/media/platform/coda/coda.h
-@@ -338,8 +338,10 @@ int coda_h264_sps_fixup(struct coda_ctx *ctx, int width, int height, char *buf,
- 
- int coda_mpeg2_profile(int profile_idc);
- int coda_mpeg2_level(int level_idc);
-+u32 coda_mpeg2_parse_headers(struct coda_ctx *ctx, u8 *buf, u32 size);
- int coda_mpeg4_profile(int profile_idc);
- int coda_mpeg4_level(int level_idc);
-+u32 coda_mpeg4_parse_headers(struct coda_ctx *ctx, u8 *buf, u32 size);
- 
- void coda_update_profile_level_ctrls(struct coda_ctx *ctx, u8 profile_idc,
- 				     u8 level_idc);
+@@ -185,6 +185,7 @@ struct coda_context_ops {
+ 	int (*prepare_run)(struct coda_ctx *ctx);
+ 	void (*finish_run)(struct coda_ctx *ctx);
+ 	void (*run_timeout)(struct coda_ctx *ctx);
++	void (*seq_init_work)(struct work_struct *work);
+ 	void (*seq_end_work)(struct work_struct *work);
+ 	void (*release)(struct coda_ctx *ctx);
+ };
+@@ -193,6 +194,7 @@ struct coda_ctx {
+ 	struct coda_dev			*dev;
+ 	struct mutex			buffer_mutex;
+ 	struct work_struct		pic_run_work;
++	struct work_struct		seq_init_work;
+ 	struct work_struct		seq_end_work;
+ 	struct completion		completion;
+ 	const struct coda_video_device	*cvd;
 -- 
 2.20.1
 
