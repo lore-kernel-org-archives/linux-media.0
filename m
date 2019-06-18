@@ -6,30 +6,30 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 516EDC31E5E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72127C31E5B
 	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2B78521855
+	by mail.kernel.org (Postfix) with ESMTP id 56B4921530
 	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 16:45:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730056AbfFRQpu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 18 Jun 2019 12:45:50 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:44895 "EHLO
+        id S1730041AbfFRQpp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 18 Jun 2019 12:45:45 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44189 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730004AbfFRQpq (ORCPT
+        with ESMTP id S1729946AbfFRQpp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 18 Jun 2019 12:45:46 -0400
+        Tue, 18 Jun 2019 12:45:45 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
         by metis.ext.pengutronix.de with esmtp (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1hdHEt-0003WX-W0; Tue, 18 Jun 2019 18:45:43 +0200
+        id 1hdHEt-0003WX-FO; Tue, 18 Jun 2019 18:45:43 +0200
 From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil@xs4all.nl>, kernel@pengutronix.de
-Subject: [PATCH 18/28] media: coda: only set the stream end flags if there are no more pending output buffers
-Date:   Tue, 18 Jun 2019 18:45:25 +0200
-Message-Id: <20190618164535.20162-19-p.zabel@pengutronix.de>
+Subject: [PATCH 06/28] media: coda: fix V4L2_DEC_CMD_STOP when all buffers are already consumed
+Date:   Tue, 18 Jun 2019 18:45:13 +0200
+Message-Id: <20190618164535.20162-7-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190618164535.20162-1-p.zabel@pengutronix.de>
 References: <20190618164535.20162-1-p.zabel@pengutronix.de>
@@ -44,46 +44,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If there are still queued output buffers pending to be copied into the
-bitstream ring buffer, setting the stream end flag should be deferred
-until the marked last output buffer is written into the bitstream ring
-buffer.
+From: Marco Felsch <m.felsch@pengutronix.de>
 
+When the DEC_CMD_STOP command is issued after the context has already
+consumed all the queued buffers, we need to make sure to wake the
+destination queue with last_buffer_dequeued set, to allow userspace to
+make progress in its EOS handling.
+
+As there might still be picture run workers pending at that point, we
+need to synchronize with them, so the sequence number comparison reads
+stable values.
+
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+[l.stach@pengutronix.de: rewrite to fix multi-context use-cases,
+ reword commit message]
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/media/platform/coda/coda-common.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/media/platform/coda/coda-common.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index 9b32b5862aa8..4002a5b8c9ea 100644
+index 7dbeb80d40f4..232bda4b7016 100644
 --- a/drivers/media/platform/coda/coda-common.c
 +++ b/drivers/media/platform/coda/coda-common.c
-@@ -1098,16 +1098,20 @@ static int coda_decoder_cmd(struct file *file, void *fh,
- 			/* Mark last buffer */
- 			buf->flags |= V4L2_BUF_FLAG_LAST;
- 
--		/* Set the stream-end flag on this context */
--		coda_bit_stream_end_flag(ctx);
--		ctx->hold = false;
--		v4l2_m2m_try_schedule(ctx->fh.m2m_ctx);
-+		if (v4l2_m2m_num_src_bufs_ready(ctx->fh.m2m_ctx) == 0) {
-+			/* Set the stream-end flag on this context */
-+			coda_bit_stream_end_flag(ctx);
-+			ctx->hold = false;
-+			v4l2_m2m_try_schedule(ctx->fh.m2m_ctx);
- 
--		flush_work(&ctx->pic_run_work);
-+			flush_work(&ctx->pic_run_work);
+@@ -1071,6 +1071,12 @@ static int coda_decoder_cmd(struct file *file, void *fh,
+ 		coda_bit_stream_end_flag(ctx);
+ 		ctx->hold = false;
+ 		v4l2_m2m_try_schedule(ctx->fh.m2m_ctx);
 +
-+			/* If there is no buffer in flight, wake up */
-+			if (!ctx->streamon_out ||
-+			    ctx->qsequence == ctx->osequence)
-+				coda_wake_up_capture_queue(ctx);
-+		}
- 
--		/* If there is no buffer in flight, wake up */
--		if (!ctx->streamon_out || ctx->qsequence == ctx->osequence)
--			coda_wake_up_capture_queue(ctx);
++		flush_work(&ctx->pic_run_work);
++
++		/* If there is no buffer in flight, wake up */
++		if (!ctx->streamon_out || ctx->qsequence == ctx->osequence)
++			coda_wake_up_capture_queue(ctx);
  		break;
  	default:
  		return -EINVAL;
