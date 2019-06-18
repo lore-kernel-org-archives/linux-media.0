@@ -1,98 +1,101 @@
-Return-Path: <SRS0=uyBa=UQ=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=dfwv=UR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DATE_IN_FUTURE_06_12,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DB4BC31E5B
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 22:39:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 016B0C31E51
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 03:28:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 12290208C0
-	for <linux-media@archiver.kernel.org>; Mon, 17 Jun 2019 22:39:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qx58ufnv"
+	by mail.kernel.org (Postfix) with ESMTP id C90C22089E
+	for <linux-media@archiver.kernel.org>; Tue, 18 Jun 2019 03:28:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbfFQWjh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 17 Jun 2019 18:39:37 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:39611 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727366AbfFQWjh (ORCPT
+        id S1726095AbfFRD2t (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 17 Jun 2019 23:28:49 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:58288 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfFRD2t (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 17 Jun 2019 18:39:37 -0400
-Received: by mail-lj1-f194.google.com with SMTP id v18so10979275ljh.6
-        for <linux-media@vger.kernel.org>; Mon, 17 Jun 2019 15:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=28N3PePFT9joKDkGzCl16JvPLy5A0HrfnCUTU2OTqP4=;
-        b=qx58ufnvMZrd8UNh/2/vzUdSDhE9QKaa5lpPkelYwJ350MmK07h7dkQOP/uz06g82C
-         6211+yUc6n8/qiWnIih/rx+sYLw1bF1ekSyfDoODLPzUaihbBqRe+nLscufgGuUCuXC8
-         INICzh+62QYkqfgQEZtHLwSN/9m5lv8qKFLoAGJfMBUaRcgxFhbyPBuB47ErPMiju706
-         c6Cz4zV1prmqPSnOW4k5buThE8LzrXQHMjbbwYzpsp6XiGjEPZkXA6AhlWlSqyR/8GA6
-         j83tMOQzJDCnO3Q54/ln6pvZdi3MLDWLe93HWxRaZDKiKVnwmfvYHteMyedvsrlzKbSk
-         jfuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=28N3PePFT9joKDkGzCl16JvPLy5A0HrfnCUTU2OTqP4=;
-        b=HQ8j7igmu0GFha6EdnOB4s0NL8fMg8OK8phj0deA0OR6ZolGPiURCU7Q+gJPJe8SFN
-         CQ1X2P94zPIJ43/knZA1jE9ocJzGUNCsuIcLf4kfvzGVle4XcXNDJIklP3jKxWUygqUx
-         efy5bqYX06Ez7Gj+pNgilZBxpiZ1SuctxHCGE92+P+qwIVT0YmN+vT3IO6G8grUGnNAu
-         C65KPc6YL09ASOAeiqhW/24uDa1Dw9NlWz41SeLcoRnVEEmR/zZSRs70tGob4BvVVVSZ
-         7h75NGpuyrjdLC31jxuFP3M/n2Yv2eHn6bZaEQFnAoGsMIo/4B/YQq+bNimfIVlwGZLG
-         kXww==
-X-Gm-Message-State: APjAAAVlLBJUH3pn+kpTpTWumBIqxMa+H5ciOn/S1dSu9C4n6fgvGTKO
-        HQnDeuqIqdxqQHluymD6Yiq6ugRgujpGXA==
-X-Google-Smtp-Source: APXvYqy7byZ28VV5lPENUhLoVmmVPgV4vhpOYz/s5XBTJTP5gAmNNN3Q3Qtsvfl+/9LkqgErgViQyQ==
-X-Received: by 2002:a2e:534a:: with SMTP id t10mr33692552ljd.109.1560811174542;
-        Mon, 17 Jun 2019 15:39:34 -0700 (PDT)
-Received: from localhost.localdomain ([178.74.2.49])
-        by smtp.gmail.com with ESMTPSA id i23sm2287347ljb.7.2019.06.17.15.39.33
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 17 Jun 2019 15:39:34 -0700 (PDT)
-From:   Johan Korsnes <johan.korsnes@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     Johan Korsnes <johan.korsnes@gmail.com>
-Subject: [PATCH v3 9/9] media: vivid.rst: describe display present control
-Date:   Tue, 18 Jun 2019 09:37:26 +0200
-Message-Id: <20190618073726.61776-10-johan.korsnes@gmail.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20190618073726.61776-1-johan.korsnes@gmail.com>
-References: <20190618073726.61776-1-johan.korsnes@gmail.com>
+        Mon, 17 Jun 2019 23:28:49 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 37C452639AE
+Message-ID: <06161391ed2bbb0a2fc9085792b8db7c049d67db.camel@collabora.com>
+Subject: Re: [PATCH v2 0/4] vicodec: a couple fixes towards spec compliancy
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>
+Date:   Tue, 18 Jun 2019 00:28:38 -0300
+In-Reply-To: <879d93cc-3777-bd61-5c14-34108fc8501a@xs4all.nl>
+References: <20181102155206.13681-1-ezequiel@collabora.com>
+         <879d93cc-3777-bd61-5c14-34108fc8501a@xs4all.nl>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Signed-off-by: Johan Korsnes <johan.korsnes@gmail.com>
----
- Documentation/media/v4l-drivers/vivid.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+On Mon, 2019-06-17 at 14:43 +0200, Hans Verkuil wrote:
+> Hi Ezequiel,
+> 
+> On 11/2/18 4:52 PM, Ezequiel Garcia wrote:
+> > Given the stateful codec specification is still a moving target,
+> > it doesn't make any sense to try to comply fully with it.
+> > 
+> > On the other side, we can still comply with some basic userspace
+> > expectations, with just a couple small changes.
+> > 
+> > This series implements proper resolution changes propagation,
+> > and fixes the CMD_STOP so it actually works.
+> > 
+> > The intention of this series is to be able to test this driver
+> > using already existing userspace, gstreamer in particular.
+> > With this changes, it's possible to construct variations of
+> > this pipeline:
+> > 
+> >   gst-launch-1.0 videotestsrc ! v4l2fwhtenc ! v4l2fwhtdec ! fakevideosink
+> > 
+> > Also, as discussed in v1 feedback [1,2], I'm including pixel format
+> > helpers, as RFC for now. Hans, Tomasz: is this what you had in mind?
+> > 
+> > [1] https://www.spinics.net/lists/linux-media/msg141912.html
+> > [2] https://www.spinics.net/lists/linux-media/msg142099.html
+> > 
+> > v2:
+> >   * Add more info to commit logs
+> >   * Propagate changes on both encoders and decoders
+> >   * Add pixel format helpers
+> > 
+> > Ezequiel Garcia (4):
+> >   media: Introduce helpers to fill pixel format structs
+> 
+> This one has been applied (or probably a later version) already.
+> 
+> >   vicodec: Use pixel format helpers
+> 
+> This doesn't apply anymore, but it would be useful to have.
+> 
+> If you can rebase it, then that would be nice.
+> 
 
-diff --git a/Documentation/media/v4l-drivers/vivid.rst b/Documentation/media/v4l-drivers/vivid.rst
-index edb6f33e029c..7082fec4075d 100644
---- a/Documentation/media/v4l-drivers/vivid.rst
-+++ b/Documentation/media/v4l-drivers/vivid.rst
-@@ -941,6 +941,11 @@ Digital Video Controls
- 	affects the reported colorspace since DVI_D outputs will always use
- 	sRGB.
- 
-+- Display Present:
-+
-+	sets the presence of a "display" on the HDMI output. This affects
-+	the tx_edid_present, tx_hotplug and tx_rxsense controls.
-+
- 
- FM Radio Receiver Controls
- ~~~~~~~~~~~~~~~~~~~~~~~~~~
--- 
-2.19.1
+Sure.
+
+> >   vicodec: Propagate changes to the CAPTURE queue
+> >   vicodec: Implement spec-compliant stop command
+> 
+> This two are obsolete as far as I know. The vicodec driver should handle
+> this correctly now. If you think otherwise, please let me know.
+> 
+
+Sure, let me re-test it.
+
+Thanks,
 
