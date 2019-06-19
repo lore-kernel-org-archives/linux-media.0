@@ -2,84 +2,102 @@ Return-Path: <SRS0=8QUH=US=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78DA7C31E5E
-	for <linux-media@archiver.kernel.org>; Wed, 19 Jun 2019 09:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB8FC31E49
+	for <linux-media@archiver.kernel.org>; Wed, 19 Jun 2019 11:05:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5219120B1F
-	for <linux-media@archiver.kernel.org>; Wed, 19 Jun 2019 09:21:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 197B52070B
+	for <linux-media@archiver.kernel.org>; Wed, 19 Jun 2019 11:05:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uRIbyl+L"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731374AbfFSJVj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Jun 2019 05:21:39 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39208 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730996AbfFSJVj (ORCPT
+        id S1731423AbfFSLFY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Jun 2019 07:05:24 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:39947 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727126AbfFSLFY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Jun 2019 05:21:39 -0400
-Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B2ABC2614E9;
-        Wed, 19 Jun 2019 10:21:37 +0100 (BST)
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Cc:     kernel@collabora.com,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] media: v4l2: Test type instead of cfg->type in v4l2_ctrl_new_custom()
-Date:   Wed, 19 Jun 2019 11:21:33 +0200
-Message-Id: <20190619092133.28977-1-boris.brezillon@collabora.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 19 Jun 2019 07:05:24 -0400
+Received: by mail-io1-f66.google.com with SMTP id n5so37133352ioc.7
+        for <linux-media@vger.kernel.org>; Wed, 19 Jun 2019 04:05:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rCYlhd274MLja1aUjw9jbduFZsTE4iqm0XJqesczC2M=;
+        b=uRIbyl+LBSLzrLgEFoRCXr89GPeHdisG96TJxaKDMULVeZsHUdogijixV+ND5zVaqX
+         MJVl5pKFkSpIUFYawtVhoagKOYReGf58P5kKHrWQB0sNmS75c+iKdm4YsGisvFLz+gHi
+         nOCGvdxlTADF7UIkLMfSOq1pRDe3YHqR1DbU08nx95eTqBsM0Dg4nVtiPpFGWkOZ0O7e
+         KC/7kyd5JLcj/Dne4UaPNNjtzozxEhqgDc1TfSVWzrV2TpsRBOmjqu0s+l993ORMyK5R
+         ifgZk01ODPnZjlQNqYJdVMFeQEn+P9cbmGapOLUoWemFJ7MAB2ZyRycuZg8/D5tbsSXE
+         +WUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rCYlhd274MLja1aUjw9jbduFZsTE4iqm0XJqesczC2M=;
+        b=dVWXyt2j6uUbwqufJ+UA9OmIRPKsGsnPvr+DYWxFUnMU1q1oFijJRQ7lRdfp5N4e0p
+         ikWCRXtp6YVUbDxj8XyqB2pzmBvL0aWK/IgrygaphAG3bHYZxuMsmDLCjFhRYuWtpouK
+         m9ZiJLYMK7faol6x/lNjEsVcby5HxLKCHy0p4mVJjDrBYviFQk1Q71uaew/d7cM2yssC
+         3eCKx+p+p2E8/EYgZ926SOwWM1h6qoy/bpAlfLR3RxP/3eNGVtNb82bx7eZ6EaGH/xAq
+         ixHOK305qFEra4l6ylzEgdRM2H+MM4OR8NwtJalAipCl4tC+U0Sxj/uPeqr4p4RQPCmC
+         b5VQ==
+X-Gm-Message-State: APjAAAULR2ugtVO7RHbwxwcEXWNU2I/BhJct/hBKUZchUOKPhBUb+kEm
+        boYE6COD55goCrV5W6jtBJ2cVmZ7dUjduhkYsQOpVg==
+X-Google-Smtp-Source: APXvYqzVSJCHAIJzw2Ki3xuEU2OcQ/reJ6yVjoNZ0bCjDZE+rA3BhQAMsiKRSNqwKqr3zDdwk7MKk4vF1gx3otshkzc=
+X-Received: by 2002:a5d:8845:: with SMTP id t5mr6046407ios.37.1560942323320;
+ Wed, 19 Jun 2019 04:05:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190521105203.154043-1-darekm@google.com> <16889839-b4e9-9984-2e36-5f07ceb7d7f2@xs4all.nl>
+In-Reply-To: <16889839-b4e9-9984-2e36-5f07ceb7d7f2@xs4all.nl>
+From:   Dariusz Marcinkiewicz <darekm@google.com>
+Date:   Wed, 19 Jun 2019 13:05:11 +0200
+Message-ID: <CALFZZQEao3vqVxKO-3mT5ATtC=ZWO+bc3dA_Xo-mgpqmna_fMQ@mail.gmail.com>
+Subject: Re: [PATCH v7 1/3] media: cec: expose HDMI connector to CEC dev mapping
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, hans.verkuil@cisco.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-cfg->type can be overridden by v4l2_ctrl_fill() and the new value is
-stored in the local type var. Fix the tests to use this local var.
+Hi Hans.
 
-Fixes: 0996517cf8ea ("V4L/DVB: v4l2: Add new control handling framework")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
----
- drivers/media/v4l2-core/v4l2-ctrls.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+I would like to come back to this thread.
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index c342385baec3..1acc249aaeed 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -2470,16 +2470,15 @@ struct v4l2_ctrl *v4l2_ctrl_new_custom(struct v4l2_ctrl_handler *hdl,
- 		v4l2_ctrl_fill(cfg->id, &name, &type, &min, &max, &step,
- 								&def, &flags);
- 
--	is_menu = (cfg->type == V4L2_CTRL_TYPE_MENU ||
--		   cfg->type == V4L2_CTRL_TYPE_INTEGER_MENU);
-+	is_menu = (type == V4L2_CTRL_TYPE_MENU ||
-+		   type == V4L2_CTRL_TYPE_INTEGER_MENU);
- 	if (is_menu)
- 		WARN_ON(step);
- 	else
- 		WARN_ON(cfg->menu_skip_mask);
--	if (cfg->type == V4L2_CTRL_TYPE_MENU && qmenu == NULL)
-+	if (type == V4L2_CTRL_TYPE_MENU && qmenu == NULL) {
- 		qmenu = v4l2_ctrl_get_menu(cfg->id);
--	else if (cfg->type == V4L2_CTRL_TYPE_INTEGER_MENU &&
--		 qmenu_int == NULL) {
-+	} else if (type == V4L2_CTRL_TYPE_INTEGER_MENU && qmenu_int == NULL) {
- 		handler_set_err(hdl, -EINVAL);
- 		return NULL;
- 	}
--- 
-2.20.1
+On Fri, May 24, 2019 at 11:21 AM Hans Verkuil <hverkuil@xs4all.nl> wrote:
+>
+> Hi Dariusz,
+>
+> I did some more testing with the Khadas VIM2 and found another problem,
+> something that will, unfortunately, require some redesign.
+>
+> See my comments below...
+>
+...
+>
+> Another issue here is that when the HDMI driver removes the notifier,
+> then it should also zero the connector info. Remember that both the
+> HDMI and the CEC drivers can be loaded and unloaded independently from
+> one another.
+>
 
+I took a peek at the changes in
+https://git.linuxtv.org/hverkuil/media_tree.git/log/?h=cec-conn. Do I
+understand it correctly, that the above problem is addressed there by
+unregistering an adapter in cec_notifier_conn_unregister (which will
+result in /dev/cecX node going away)? I wonder to what degree this
+solves the problem of HDMI and CEC drivers being loaded and unloaded
+independently. It seems that in cases where HDMI driver is unloaded
+and then loaded again, counterintuitively, the /dev/cecX might not
+come back again, is this right, or am I missing something? Also, is it
+guaranteed that adapter drivers won't try to access an adapter once it
+gets removed by cec_notifier_conn_unregister?
+
+Thank you.
