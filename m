@@ -2,75 +2,80 @@ Return-Path: <SRS0=8QUH=US=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_NEOMUTT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28BEEC31E49
-	for <linux-media@archiver.kernel.org>; Wed, 19 Jun 2019 08:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE91C31E49
+	for <linux-media@archiver.kernel.org>; Wed, 19 Jun 2019 08:03:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F2DAB214AF
-	for <linux-media@archiver.kernel.org>; Wed, 19 Jun 2019 08:01:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=comcast.net header.i=@comcast.net header.b="UO+5q+rL"
+	by mail.kernel.org (Postfix) with ESMTP id 067E820823
+	for <linux-media@archiver.kernel.org>; Wed, 19 Jun 2019 08:03:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731093AbfFSIBt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 19 Jun 2019 04:01:49 -0400
-Received: from resqmta-ch2-10v.sys.comcast.net ([69.252.207.42]:54192 "EHLO
-        resqmta-ch2-10v.sys.comcast.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731065AbfFSIBt (ORCPT
+        id S1731215AbfFSIDw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 19 Jun 2019 04:03:52 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:45124 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726142AbfFSIDw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 19 Jun 2019 04:01:49 -0400
-Received: from resomta-ch2-20v.sys.comcast.net ([69.252.207.116])
-        by resqmta-ch2-10v.sys.comcast.net with ESMTP
-        id dVOohD9BW8ekNdVPYhZW2v; Wed, 19 Jun 2019 07:53:40 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=comcast.net;
-        s=20190202a; t=1560930820;
-        bh=jtZ93MYxczinqiABEpJMEjrjLWcXFP4Znz193IhPL3g=;
-        h=Received:Received:Subject:To:From:Message-ID:Date:MIME-Version:
-         Content-Type;
-        b=UO+5q+rLe7Wa1omZ4H/TPRv0UdsLqxci+qhwU4WZ2DxM+Rx4opffBSI9oIJjnzJ5M
-         5YhBpcSu2emRdnidWFU8h9cFOOKNQd7JXBlUobs4Id024SbqJKGsJh0KheVMpCt7gd
-         czq+simIH7YXXWNP4Xo4N1CqLeTtgJnLMZecMjmPthArA2bo7SG/e8oBUi6lqiaf4g
-         JdMGcGsnM1sJSPG7jH+TqAVQZ6IZKU0wO9D3E324+5GdNUdseJGiS7lC4Rn03mapYg
-         iqATVTjgXiKi7GfVlg/6zNpdJW12abhK80S6RIY3SZaO36fH0QamKjKEBuamQLsIVD
-         PEkx8JacwgiXg==
-Received: from [192.168.4.4] ([73.248.220.215])
-        by resomta-ch2-20v.sys.comcast.net with ESMTPA
-        id dVPRheLdZdiHjdVPYh33td; Wed, 19 Jun 2019 07:53:40 +0000
-X-Xfinity-VAAS: gggruggvucftvghtrhhoucdtuddrgeduvddrtddugdduvdehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuvehomhgtrghsthdqtfgvshhipdfqfgfvpdfpqffurfetoffkrfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomheptecuufhunhcuoegrshdutdeffeigsegtohhmtggrshhtrdhnvghtqeenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppeejfedrvdegkedrvddvtddrvdduheenucfrrghrrghmpehhvghloheplgduledvrdduieekrdegrdegngdpihhnvghtpeejfedrvdegkedrvddvtddrvdduhedpmhgrihhlfhhrohhmpegrshdutdeffeigsegtohhmtggrshhtrdhnvghtpdhrtghpthhtohepmhgthhgvhhgrsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhgvughirgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsvggrnhesmhgvshhsrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
-X-Xfinity-VMeta: sc=-100;st=legit
-Subject: [PATCH v2 0/3] [media] mceusb: Error message text revisions
-To:     Sean Young <sean@mess.org>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <999ae5cd-d72b-983f-2f96-5aaca72e8214@comcast.net>
- <43f4ef6e-2c64-cd7a-26f7-3c1309b68936@comcast.net>
- <20190606095337.jfhmc6jqgyhmxn4q@gofer.mess.org>
- <2548e827-1d11-4ce2-013f-bf36c9f5436e@comcast.net>
- <20190608083729.bw47vkplpf3r4e4b@gofer.mess.org>
-From:   A Sun <as1033x@comcast.net>
-Message-ID: <72ee52cb-8127-3035-a146-2784ac4265b6@comcast.net>
-Date:   Wed, 19 Jun 2019 03:53:28 -0400
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Wed, 19 Jun 2019 04:03:52 -0400
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 4498F634C7B;
+        Wed, 19 Jun 2019 11:03:24 +0300 (EEST)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.89)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1hdVYy-0000zL-A5; Wed, 19 Jun 2019 11:03:24 +0300
+Date:   Wed, 19 Jun 2019 11:03:24 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Eugen.Hristev@microchip.com
+Cc:     hverkuil@xs4all.nl, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: atmel: atmel-isc: fix i386 build error
+Message-ID: <20190619080324.nc33gtuxzwpailmy@valkosipuli.retiisi.org.uk>
+References: <1560928828-31471-1-git-send-email-eugen.hristev@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <20190608083729.bw47vkplpf3r4e4b@gofer.mess.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1560928828-31471-1-git-send-email-eugen.hristev@microchip.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Eugen,
 
-patch v2 revisions:
-  . limit patch to message changes only in part 3/3
+On Wed, Jun 19, 2019 at 07:24:41AM +0000, Eugen.Hristev@microchip.com wrote:
+> From: Eugen Hristev <eugen.hristev@microchip.com>
+> 
+> ld: drivers/media/platform/atmel/atmel-isc-base.o:(.bss+0x0): multiple definition of `debug'; arch/x86/entry/entry_32.o:(.entry.text+0x21ac): first defined here
+> 
+> Changed module parameters to static.
+> 
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> ---
+> 
+> Hello Hans,
+> 
+> Sorry for this, it looks like i386 has a stray weird 'debug' symbol which
+> causes an error.
+> I changed the module parameters of the atmel-isc to 'static' but now they
+> cannot be accessed in the other module files.
+> Will have to create a get function to be used in the other files if needed
+> later. Any other way to make a symbol static to current module and not
+> current file ? It would be useful for other config variables as well.
+> I was not sure if you want to squash this over the faulty patch or add it
+> as a separate patch.
 
-Several error message revisions for mceusb.c
+Please consider using dev_dbg() instead of a driver specific parameter for
+debug.
 
-proposed patches applicable to mceusb.c version
-https://github.com/torvalds/linux/blob/master/drivers/media/rc/mceusb.c
-Mar 1, 2019 commit 04ad30112aec61004f994d8f51461ec06e208e54
+For the patch:
+
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+-- 
+Sakari Ailus
