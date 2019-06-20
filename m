@@ -2,58 +2,52 @@ Return-Path: <SRS0=eAtd=UT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_MUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.7 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31E7FC43613
-	for <linux-media@archiver.kernel.org>; Thu, 20 Jun 2019 14:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EE61C43613
+	for <linux-media@archiver.kernel.org>; Thu, 20 Jun 2019 14:21:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E9CA120679
-	for <linux-media@archiver.kernel.org>; Thu, 20 Jun 2019 14:20:15 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="TatzaAb+"
+	by mail.kernel.org (Postfix) with ESMTP id E9C6920679
+	for <linux-media@archiver.kernel.org>; Thu, 20 Jun 2019 14:21:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbfFTOUP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 20 Jun 2019 10:20:15 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:33642 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726391AbfFTOUP (ORCPT
+        id S1726811AbfFTOVH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 20 Jun 2019 10:21:07 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:36019 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726391AbfFTOVH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 20 Jun 2019 10:20:15 -0400
-Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1F65452A;
-        Thu, 20 Jun 2019 16:20:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1561040413;
-        bh=Axu8bikjTPR/MFTtXfYZHRgaN2HoQlgRm5rz9eneFG4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TatzaAb+XYwc5EQnOa0qxfbX33MASYTQ82KuLNo6srp1KySeVYyQF8IhHT6TKh27P
-         yc6P17ZLfJ+09hVOa45YzC6HVXjQjms/AfPigOAOJhk1zULODFW4M6UCKFpS34G2xH
-         nc0tbYAJ9LY9mSuCkWIEiFb4fJWgEbJUuYxuie8I=
-Date:   Thu, 20 Jun 2019 17:19:55 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, mchehab@kernel.org, hverkuil@xs4all.nl
+        Thu, 20 Jun 2019 10:21:07 -0400
+Received: from [IPv6:2001:983:e9a7:1:4588:eede:a2a7:f8e] ([IPv6:2001:983:e9a7:1:4588:eede:a2a7:f8e])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id dxvzhKbNa7KeZdxw0hM7xQ; Thu, 20 Jun 2019 16:21:05 +0200
 Subject: Re: [PATCH 1/1] MAINTAINERS: Add maintainers for Media Controller
-Message-ID: <20190620141955.GF5720@pendragon.ideasonboard.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, laurent.pinchart@ideasonboard.com
 References: <20190620141753.15983-1-sakari.ailus@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <ec866523-216f-1e6a-d28b-3168a9daf7ed@xs4all.nl>
+Date:   Thu, 20 Jun 2019 16:21:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 In-Reply-To: <20190620141753.15983-1-sakari.ailus@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfIO1Xgi3btFkFMw6dAynM2J9f++AnhC7UKHVkso0duBHGsCK4GY+EC9d0OJqjJN3ry/zOy+BP/AeQJVaoqnFfxP9twED4dqsnJu1rF1hwkO4P37uXsdF
+ tJDJKE9wfDubSGlxRZ+zlZFAEU3FbnsMTkMGo02bfYF44Tsz9DydiJf1XJKm2wS/cQlErOkM5zYZByo62Pej4aGnWQJdkkSuOUIq/gY6JEbLVXT99aPbS7RL
+ BFXnewLY+k6SNwWi8jVYtPRWZlVvFtt6cKCqf7ldpJ9ump2buVLoZoXH0JE0qdgFQhlsM/4kebrWowXc/YMEhkdk+tOqDN2N7gE/hi54Fhl92//NzjOP/ufh
+ pSVwO4Htpm0XvXCQkgZ47UPA6+fXEP4jr19MU70CVdKVGd4cAgc=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari,
-
-Thank you for the patch.
-
-On Thu, Jun 20, 2019 at 05:17:53PM +0300, Sakari Ailus wrote:
+On 6/20/19 4:17 PM, Sakari Ailus wrote:
 > When Media Controller was merged to mainline long, long time ago, no-one
 > bothered to think what its MAINTAINERS entry should be. Now that Media
 > Controller is moved into its own directory, address this at the same time.
@@ -66,13 +60,11 @@ On Thu, Jun 20, 2019 at 05:17:53PM +0300, Sakari Ailus wrote:
 > 
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-This will help me catching changes to the media controller, and being
-more active on reviews, so I welcome that change.
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Regards,
 
-(pick the tag you find the most appropriate, or both if you desire)
+	Hans
 
 > ---
 > This patch adds a MAINTAINERS entry for the MC framework and API, as
@@ -103,8 +95,5 @@ Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 >  MEDIA DRIVERS FOR ASCOT2E
 >  M:	Sergey Kozlov <serjk@netup.ru>
 >  M:	Abylay Ospan <aospan@netup.ru>
+> 
 
--- 
-Regards,
-
-Laurent Pinchart
