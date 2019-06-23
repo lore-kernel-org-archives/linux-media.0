@@ -2,125 +2,155 @@ Return-Path: <SRS0=rMWn=UW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64A22C43613
-	for <linux-media@archiver.kernel.org>; Sun, 23 Jun 2019 17:08:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9515C48BE8
+	for <linux-media@archiver.kernel.org>; Sun, 23 Jun 2019 21:28:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 39180206BA
-	for <linux-media@archiver.kernel.org>; Sun, 23 Jun 2019 17:08:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pgdexjan"
+	by mail.kernel.org (Postfix) with ESMTP id B917220679
+	for <linux-media@archiver.kernel.org>; Sun, 23 Jun 2019 21:28:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbfFWRIF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 23 Jun 2019 13:08:05 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:40265 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726417AbfFWRIE (ORCPT
+        id S1726343AbfFWV2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 23 Jun 2019 17:28:04 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:43082 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726312AbfFWV2E (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 23 Jun 2019 13:08:04 -0400
-Received: by mail-qt1-f196.google.com with SMTP id a15so12104695qtn.7;
-        Sun, 23 Jun 2019 10:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s6kjF5fXn7CUbLQsdln+pNA94ruY+IQSwhFY01H/Qs0=;
-        b=PgdexjanEdOhiC1e7XrrB0kACIXlVM4YPZNLusSVxV8F7FdKSyoaeGZUuzGLwol3hv
-         9jSCHyPbTgtJLupSe12qTtZLFZmYVv7WHAjSBbJwa9veh+3hSA4lOStXc1Vb6jTH6YE1
-         8IM5XrdHWpbbFJqawEjt2uFSCHnBbJdM0bcsPyDxYrWhnwIIPdtMDW5DgCLV1bkovRw/
-         ykU5WzMuEx+qSFwYP4ZLOqIAnYKQahoU2BxDPUot1kR+kBBlCe6c8vbLEJZlzqnUWBgC
-         CzHa/NvuP+R9HF55wfCXXs/w5TCh8fCSk3TindbHsnkNEVMPKeC0aFoIlBeVr53EdvZi
-         WPzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s6kjF5fXn7CUbLQsdln+pNA94ruY+IQSwhFY01H/Qs0=;
-        b=DM6Gov4qHAQnKjnfqxni+qnaduHtk+8aqg+LdBV3nkhY2Y3yR+bbVtO2/yXmsEsgD3
-         zJs+9BOf8xayQ0jXlM4L07G4W20wfXMG569l3NYMI2bjg0A+mw7BjjEhCErB29ra93ih
-         FghVphyaWqrcK49V7+qSWrO09SUMl3dX7TAyzPHmus6dZXOSkrMU+I3C2nRvFL+1+6dx
-         iOmgfcO/l+P3V2Il00zvwxpik/rGy2XM1Nq2AGLMQfemL2w0FhkFUMj3T9ihlC4WeDee
-         VSEmZF3BQQuMrxjZ/pa8ZZyUbhJ1eaUCsYk7mw2WwZSsmXF19JUr6XvGrjRCaP2U0ihA
-         ZZVA==
-X-Gm-Message-State: APjAAAUAo1fE/DEKPTlQl3G0RjHz6NnxPM4f4glP/F1S2n+cLJ28hpQK
-        YJ9lLgsbx/mdsQD3AJsYYgU=
-X-Google-Smtp-Source: APXvYqxzaFsjcPSti6Fji5wNYEaAxx/IvO8JkiRdoec5MecyPJfs37elqCcHrmJjE1ZnPjcyqooRuw==
-X-Received: by 2002:ac8:2e14:: with SMTP id r20mr68598966qta.241.1561309683700;
-        Sun, 23 Jun 2019 10:08:03 -0700 (PDT)
-Received: from localhost.localdomain (ppp91-79-162-197.pppoe.mtu-net.ru. [91.79.162.197])
-        by smtp.gmail.com with ESMTPSA id o54sm5790756qtb.63.2019.06.23.10.08.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 23 Jun 2019 10:08:02 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/4] NVIDIA Tegra Video Decoder driver improvements
-Date:   Sun, 23 Jun 2019 20:07:23 +0300
-Message-Id: <20190623170730.5095-1-digetx@gmail.com>
-X-Mailer: git-send-email 2.22.0
+        Sun, 23 Jun 2019 17:28:04 -0400
+Received: from [IPv6:2804:431:d719:dd85:d711:794d:1c68:5ed3] (unknown [IPv6:2804:431:d719:dd85:d711:794d:1c68:5ed3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tonyk)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 3C4B626111E;
+        Sun, 23 Jun 2019 22:27:59 +0100 (BST)
+Subject: Re: [PATCH 3/5] media: vimc: stream: format comments as kernel-doc
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, helen.koike@collabora.com,
+        kernel@collabora.com, linux-kernel@vger.kernel.org
+References: <20190623164024.9836-1-andrealmeid@collabora.com>
+ <20190623164024.9836-3-andrealmeid@collabora.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
+Message-ID: <a1973442-5ccb-5ba3-e508-132514b6e83e@collabora.com>
+Date:   Sun, 23 Jun 2019 18:27:22 -0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
+In-Reply-To: <20190623164024.9836-3-andrealmeid@collabora.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
 
-This series cleans up some of minor shortcomings that are caused by
-checkpatch recommendations that are not very applicable for the driver.
-Then IOMMU support is added to the driver and now it can handle sparse
-memory buffers that GPU hands to VDE in a default kernel configuration
-on Tegra30+.
-
-Changelog:
-
-v3: - Fixed memory leak on driver's module reload. For some reason I
-      erroneously assumed that IOVA reservations are released on IOVA
-      destruction themselves.
-
-    - Corrected PFN's for the last-page's IOVA reservation. We want to
-      reserve the last page, but a page before the last was reserved.
-
-v2: - Fixed use-after-free bug and uninitialized-variable warning that
-      were reported by smatch and pointed out by Hans Verkuil in the
-      review comment to v1.
-
-    - Fixed build failure when CONFIG_ARM_DMA_USE_IOMMU=y and tested this
-      case properly (multi-platform kernel config).
-
-    - Made some extra minor changes, prettifying code a tad more.
-
-Dmitry Osipenko (4):
-  staging: media: tegra-vde: Remove BIT() macro from UAPI header
-  staging: media: tegra-vde: Manually pack UAPI structures
-  staging: media: tegra-vde: Add IOMMU support
-  staging: media: tegra-vde: Defer dmabuf's unmapping
-
- drivers/staging/media/tegra-vde/Kconfig       |   1 +
- drivers/staging/media/tegra-vde/Makefile      |   1 +
- .../staging/media/tegra-vde/dmabuf-cache.c    | 226 ++++++++++++++++++
- drivers/staging/media/tegra-vde/iommu.c       | 157 ++++++++++++
- drivers/staging/media/tegra-vde/trace.h       |   2 +
- drivers/staging/media/tegra-vde/uapi.h        |  48 ++--
- .../media/tegra-vde/{tegra-vde.c => vde.c}    | 212 ++++++----------
- drivers/staging/media/tegra-vde/vde.h         | 107 +++++++++
- 8 files changed, 591 insertions(+), 163 deletions(-)
- create mode 100644 drivers/staging/media/tegra-vde/dmabuf-cache.c
- create mode 100644 drivers/staging/media/tegra-vde/iommu.c
- rename drivers/staging/media/tegra-vde/{tegra-vde.c => vde.c} (88%)
- create mode 100644 drivers/staging/media/tegra-vde/vde.h
-
--- 
-2.22.0
-
+On 6/23/19 1:40 PM, André Almeida wrote:
+> Format the current existing comments as kernel-doc comments, to be
+> reused at kernel documention. Add opening marks (/**) and return values.
+>
+> Signed-off-by: André Almeida <andrealmeid@collabora.com>
+> ---
+>  drivers/media/platform/vimc/vimc-streamer.c | 38 +++++++++++++--------
+>  1 file changed, 24 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/media/platform/vimc/vimc-streamer.c b/drivers/media/platform/vimc/vimc-streamer.c
+> index 3b3f36357a0e..9970650b0f26 100644
+> --- a/drivers/media/platform/vimc/vimc-streamer.c
+> +++ b/drivers/media/platform/vimc/vimc-streamer.c
+> @@ -20,6 +20,8 @@
+>   *
+>   * Helper function that returns the media entity containing the source pad
+>   * linked with the first sink pad from the given media entity pad list.
+> + *
+> + * Return: The source pad or NULL, if it wasn't found.
+>   */
+>  static struct media_entity *vimc_get_source_entity(struct media_entity *ent)
+>  {
+> @@ -35,7 +37,7 @@ static struct media_entity *vimc_get_source_entity(struct media_entity *ent)
+>  	return NULL;
+>  }
+>  
+> -/*
+> +/**
+>   * vimc_streamer_pipeline_terminate - Disable stream in all ved in stream
+>   *
+>   * @stream: the pointer to the stream structure with the pipeline to be
+> @@ -63,15 +65,18 @@ static void vimc_streamer_pipeline_terminate(struct vimc_stream *stream)
+>  	}
+>  }
+>  
+> -/*
+> - * vimc_streamer_pipeline_init - initializes the stream structure
+> +/**
+> + * vimc_streamer_pipeline_init - Initializes the stream structure
+>   *
+>   * @stream: the pointer to the stream structure to be initialized
+>   * @ved:    the pointer to the vimc entity initializing the stream
+>   *
+>   * Initializes the stream structure. Walks through the entity graph to
+>   * construct the pipeline used later on the streamer thread.
+> - * Calls s_stream to enable stream in all entities of the pipeline.
+> + * Calls ``vimc_streamer_s_stream`` to enable stream in all entities of
+``vimc_streamer_s_stream`` could also been written as
+:c:func:`vimc_streamer_s_stream`. In this latest setup, the
+Documentation output would display a nice hyperlink to the documentation
+of  vimc_streamer_s_stream function. Is this a good improvement or it
+will be too verbose?
+> + * the pipeline.
+> + *
+> + * Return: 0 if success, error code otherwise.
+>   */
+>  static int vimc_streamer_pipeline_init(struct vimc_stream *stream,
+>  				       struct vimc_ent_device *ved)
+> @@ -122,13 +127,17 @@ static int vimc_streamer_pipeline_init(struct vimc_stream *stream,
+>  	return -EINVAL;
+>  }
+>  
+> -/*
+> - * vimc_streamer_thread - process frames through the pipeline
+> +/**
+> + * vimc_streamer_thread - Process frames through the pipeline
+>   *
+>   * @data:	vimc_stream struct of the current stream
+>   *
+>   * From the source to the sink, gets a frame from each subdevice and send to
+>   * the next one of the pipeline at a fixed framerate.
+> + *
+> + * Return:
+> + * Always zero (created as ``int`` instead of ``void`` to comply with
+> + * kthread API).
+>   */
+>  static int vimc_streamer_thread(void *data)
+>  {
+> @@ -157,19 +166,20 @@ static int vimc_streamer_thread(void *data)
+>  	return 0;
+>  }
+>  
+> -/*
+> - * vimc_streamer_s_stream - start/stop the streaming on the media pipeline
+> +/**
+> + * vimc_streamer_s_stream - Start/stop the streaming on the media pipeline
+>   *
+>   * @stream:	the pointer to the stream structure of the current stream
+>   * @ved:	pointer to the vimc entity of the entity of the stream
+>   * @enable:	flag to determine if stream should start/stop
+>   *
+> - * When starting, check if there is no stream->kthread allocated. This should
+> - * indicate that a stream is already running. Then, it initializes
+> - * the pipeline, creates and runs a kthread to consume buffers through the
+> - * pipeline.
+> - * When stopping, analogously check if there is a stream running, stop
+> - * the thread and terminates the pipeline.
+> + * When starting, check if there is no ``stream->kthread`` allocated. This
+> + * should indicate that a stream is already running. Then, it initializes the
+> + * pipeline, creates and runs a kthread to consume buffers through the pipeline.
+> + * When stopping, analogously check if there is a stream running, stop the
+> + * thread and terminates the pipeline.
+> + *
+> + * Return: 0 if success, error code otherwise.
+>   */
+>  int vimc_streamer_s_stream(struct vimc_stream *stream,
+>  			   struct vimc_ent_device *ved,
