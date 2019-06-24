@@ -2,97 +2,81 @@ Return-Path: <SRS0=DyX0=UX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17184C43613
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 12:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC12EC43613
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 12:39:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E4731205F4
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 12:35:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC45E2133F
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 12:39:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730294AbfFXMfu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Jun 2019 08:35:50 -0400
-Received: from mga05.intel.com ([192.55.52.43]:14694 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726834AbfFXMfu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Jun 2019 08:35:50 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Jun 2019 05:35:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,412,1557212400"; 
-   d="scan'208";a="336491091"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jun 2019 05:35:47 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id D030E2056B; Mon, 24 Jun 2019 15:35:46 +0300 (EEST)
-Date:   Mon, 24 Jun 2019 15:35:46 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, hverkuil@xs4all.nl
-Subject: Re: [PATCH 1/1] MAINTAINERS: Add maintainers for Media Controller
-Message-ID: <20190624123546.xhrd4kwizbzrl6pc@paasikivi.fi.intel.com>
-References: <20190620141753.15983-1-sakari.ailus@linux.intel.com>
- <20190620141955.GF5720@pendragon.ideasonboard.com>
- <20190624093012.3a1b5101@coco.lan>
+        id S1730307AbfFXMjl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Jun 2019 08:39:41 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48224 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726811AbfFXMjk (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 24 Jun 2019 08:39:40 -0400
+Received: from turingmachine.home (unknown [IPv6:2804:431:d719:dd85:d711:794d:1c68:5ed3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tonyk)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 522552656C4;
+        Mon, 24 Jun 2019 13:39:37 +0100 (BST)
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, helen.koike@collabora.com,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [PATCH v2 2/5] media: vimc: stream: fix style of argument description
+Date:   Mon, 24 Jun 2019 09:37:26 -0300
+Message-Id: <20190624123729.5847-2-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190624123729.5847-1-andrealmeid@collabora.com>
+References: <20190624123729.5847-1-andrealmeid@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190624093012.3a1b5101@coco.lan>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+As in "Function parameters" at doc-guide/kernel-doc.rst, "the
+continuation of the description should start at the same column as the
+previous line". Make the @producer_pixfmt comply with that.
 
-On Mon, Jun 24, 2019 at 09:30:12AM -0300, Mauro Carvalho Chehab wrote:
-> Em Thu, 20 Jun 2019 17:19:55 +0300
-> Laurent Pinchart <laurent.pinchart@ideasonboard.com> escreveu:
-> 
-> > Hi Sakari,
-> > 
-> > Thank you for the patch.
-> > 
-> > On Thu, Jun 20, 2019 at 05:17:53PM +0300, Sakari Ailus wrote:
-> > > When Media Controller was merged to mainline long, long time ago, no-one
-> > > bothered to think what its MAINTAINERS entry should be. Now that Media
-> > > Controller is moved into its own directory, address this at the same time.
-> > > 
-> > > So tell people to mail patches to myself and Laurent Pinchart.
-> > > 
-> > > Note that the patches are still merged through the Media tree, just like
-> > > any other driver or framework bits that have separate "mail patches to"
-> > > entries different from the main drivers/media one.
-> > > 
-> > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>  
-> > 
-> > This will help me catching changes to the media controller, and being
-> > more active on reviews, so I welcome that change.
-> 
-> Ok, but please notice that this is a core part of the subsystem, and
-> not a driver one.
-> 
-> So, you should be sure that you'll have enough bandwidth to not
-> get patches accumulated here for no more than a reasonable time
-> (a couple of weeks).
-> 
-> If both you and Sakari are ok with that, I'll pick it.
+Signed-off-by: André Almeida <andrealmeid@collabora.com>
+---
 
-I already do review MC patches (at least as long as I've noticed the
-patches myself, I believed a few have slipped past my eyes over the years),
-so this isn't really adding to my workload.
+Changes in v2: none
 
-So to answer the question, yes, I've prepared to do this.
+ drivers/media/platform/vimc/vimc-streamer.h | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/media/platform/vimc/vimc-streamer.h b/drivers/media/platform/vimc/vimc-streamer.h
+index 28c3706e3c21..d744a787e0e7 100644
+--- a/drivers/media/platform/vimc/vimc-streamer.h
++++ b/drivers/media/platform/vimc/vimc-streamer.h
+@@ -26,10 +26,12 @@
+  * @pipe_size:		size of @ved_pipeline
+  * @kthread:		thread that generates the frames of the stream.
+  * @producer_pixfmt:	the pixel format requested from the pipeline. This must
+- * be set just before calling vimc_streamer_s_stream(ent, 1). This value is
+- * propagated up to the source of the base image (usually a sensor node) and
+- * can be modified by entities during s_stream callback to request a different
+- * format from rest of the pipeline.
++ *			be set just before calling
++ *			vimc_streamer_s_stream(ent, 1). This value is propagated
++ *			up to the source of the base image (usually a sensor
++ *			node) and can be modified by entities during s_stream
++ *			callback to request a differentformat from rest of
++ *			the pipeline.
+  *
+  * When the user call stream_on in a video device, struct vimc_stream is
+  * used to keep track of all entities and subdevices that generates and
 -- 
-Kind regards,
+2.22.0
 
-Sakari Ailus
-sakari.ailus@linux.intel.com
