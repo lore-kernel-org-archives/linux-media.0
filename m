@@ -6,39 +6,39 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC9E0C48BE8
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 16:03:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FB55C43613
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 16:03:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9513F20449
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 16:03:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 724FC20449
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 16:03:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731489AbfFXQDn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Jun 2019 12:03:43 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:55269 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729593AbfFXQDl (ORCPT
+        id S1731499AbfFXQDp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Jun 2019 12:03:45 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:35507 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729496AbfFXQDm (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Jun 2019 12:03:41 -0400
+        Mon, 24 Jun 2019 12:03:42 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id fRRKhHRxHF85OfRRShZabG; Mon, 24 Jun 2019 18:03:38 +0200
+        id fRRKhHRxHF85OfRRVhZacp; Mon, 24 Jun 2019 18:03:41 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
         dri-devel@lists.freedesktop.org,
         Cheng-yi Chiang <cychiang@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv8 06/13] drm_dp_cec: add connector info support.
-Date:   Mon, 24 Jun 2019 18:03:23 +0200
-Message-Id: <20190624160330.38048-7-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv8 13/13] drm/vc4/vc4_hdmi: fill in connector info
+Date:   Mon, 24 Jun 2019 18:03:30 +0200
+Message-Id: <20190624160330.38048-14-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190624160330.38048-1-hverkuil-cisco@xs4all.nl>
 References: <20190624160330.38048-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfJHC8gnzmC6VsiHnhAT8Mnidw5ZU62gn3HZHqKNX7UVaXyuhfnr8nar7qUT3qlGmLsDkHKBOJjxOpQkAxPvSMU3uLSYaB+Wh29+IGNwTHaGSotCleMaH
- jydz2acYQRgsFtg5uESRnzo2+IhsZuls1iSK2+Qfkk2rRICKaq20ln8sxj5KvqE5TGegRK8uzBLdcF1HlbC6OaX8lMJjgnGzWc0jjfkuWs4X7YDCfmEum+4X
- EcZCyIsFh8k2xFRLcU5Gc0W61YkPGvB1b8ApD3uhy0omGT08+E7McH1Hf2S5Ig/VzyXS/OrQ4ZvogWElIONKW9fR0hITkbJmUhYwMOL6l1o=
+X-CMAE-Envelope: MS4wfOIEYMngRDIwgK74lnlvOXIt+9xy5ZfdkyY50fEwdUfHLW3a6HQUX9qOjaoewFZqmrrw97CMmILYvYcruHFXffRTdMS8h1EKdAXjyCM+KJiPP3i3kA/l
+ qbLIqY3uC0qPtLV/o7kL0awPNFc9OKys1ntf6O23b4W7fj04WjYHw2DGvGepT6Wik/vmWq4BwiW315yaB2gGUOKXRc8N0MHw9k57P8wa91Rnj6J8J37y2RfB
+ SONLuSvtwaGLT4XJDRjRQQmP0X9/oh3fYjonz8QEg5cTYANXwxJc9mU2sj2fXQYYNde+ac6na/uTLAwU7nBVKiVT2g5DREcVczC7BpIllgQ=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -46,187 +46,49 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dariusz Marcinkiewicz <darekm@google.com>
 
-Pass the connector info to the CEC adapter. This makes it possible
-to associate the CEC adapter with the corresponding drm connector.
+Fill in the connector info, allowing userspace to associate
+the CEC device with the drm connector.
 
 Signed-off-by: Dariusz Marcinkiewicz <darekm@google.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../display/amdgpu_dm/amdgpu_dm_mst_types.c   |  2 +-
- drivers/gpu/drm/drm_dp_cec.c                  | 25 ++++++++++++-------
- drivers/gpu/drm/i915/intel_dp.c               |  4 +--
- drivers/gpu/drm/nouveau/nouveau_connector.c   |  3 +--
- include/drm/drm_dp_helper.h                   | 14 +++++------
- 5 files changed, 26 insertions(+), 22 deletions(-)
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-index 6e205ee36ac3..7f2eb4eb1035 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-@@ -394,7 +394,7 @@ void amdgpu_dm_initialize_dp_connector(struct amdgpu_display_manager *dm,
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 99fc8569e0f5..a998bb35b375 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -1279,6 +1279,9 @@ static const struct cec_adap_ops vc4_hdmi_cec_adap_ops = {
  
- 	drm_dp_aux_register(&aconnector->dm_dp_aux.aux);
- 	drm_dp_cec_register_connector(&aconnector->dm_dp_aux.aux,
--				      aconnector->base.name, dm->adev->dev);
-+				      &aconnector->base);
- 	aconnector->mst_mgr.cbs = &dm_mst_cbs;
- 	drm_dp_mst_topology_mgr_init(
- 		&aconnector->mst_mgr,
-diff --git a/drivers/gpu/drm/drm_dp_cec.c b/drivers/gpu/drm/drm_dp_cec.c
-index b15cee85b702..b457c16c3a8b 100644
---- a/drivers/gpu/drm/drm_dp_cec.c
-+++ b/drivers/gpu/drm/drm_dp_cec.c
-@@ -8,7 +8,9 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/slab.h>
-+#include <drm/drm_connector.h>
- #include <drm/drm_dp_helper.h>
-+#include <drm/drmP.h>
- #include <media/cec.h>
- 
- /*
-@@ -295,7 +297,10 @@ static void drm_dp_cec_unregister_work(struct work_struct *work)
-  */
- void drm_dp_cec_set_edid(struct drm_dp_aux *aux, const struct edid *edid)
+ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
  {
--	u32 cec_caps = CEC_CAP_DEFAULTS | CEC_CAP_NEEDS_HPD;
-+	struct drm_connector *connector = aux->cec.connector;
-+	u32 cec_caps = CEC_CAP_DEFAULTS | CEC_CAP_NEEDS_HPD |
-+		       CEC_CAP_CONNECTOR_INFO;
++#ifdef CONFIG_DRM_VC4_HDMI_CEC
 +	struct cec_connector_info conn_info;
- 	unsigned int num_las = 1;
- 	u8 cap;
- 
-@@ -344,13 +349,17 @@ void drm_dp_cec_set_edid(struct drm_dp_aux *aux, const struct edid *edid)
- 
- 	/* Create a new adapter */
- 	aux->cec.adap = cec_allocate_adapter(&drm_dp_cec_adap_ops,
--					     aux, aux->cec.name, cec_caps,
-+					     aux, connector->name, cec_caps,
- 					     num_las);
- 	if (IS_ERR(aux->cec.adap)) {
- 		aux->cec.adap = NULL;
- 		goto unlock;
- 	}
--	if (cec_register_adapter(aux->cec.adap, aux->cec.parent)) {
++#endif
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct drm_device *drm = dev_get_drvdata(master);
+ 	struct vc4_dev *vc4 = drm->dev_private;
+@@ -1397,13 +1400,15 @@ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
+ #ifdef CONFIG_DRM_VC4_HDMI_CEC
+ 	hdmi->cec_adap = cec_allocate_adapter(&vc4_hdmi_cec_adap_ops,
+ 					      vc4, "vc4",
+-					      CEC_CAP_TRANSMIT |
+-					      CEC_CAP_LOG_ADDRS |
+-					      CEC_CAP_PASSTHROUGH |
+-					      CEC_CAP_RC, 1);
++					      CEC_CAP_DEFAULTS |
++					      CEC_CAP_CONNECTOR_INFO, 1);
+ 	ret = PTR_ERR_OR_ZERO(hdmi->cec_adap);
+ 	if (ret < 0)
+ 		goto err_destroy_conn;
 +
-+	cec_fill_conn_info_from_drm(&conn_info, connector);
-+	cec_s_conn_info(aux->cec.adap, &conn_info);
++	cec_fill_conn_info_from_drm(&conn_info, hdmi->connector);
++	cec_s_conn_info(hdmi->cec_adap, &conn_info);
 +
-+	if (cec_register_adapter(aux->cec.adap, connector->dev->dev)) {
- 		cec_delete_adapter(aux->cec.adap);
- 		aux->cec.adap = NULL;
- 	} else {
-@@ -406,22 +415,20 @@ EXPORT_SYMBOL(drm_dp_cec_unset_edid);
- /**
-  * drm_dp_cec_register_connector() - register a new connector
-  * @aux: DisplayPort AUX channel
-- * @name: name of the CEC device
-- * @parent: parent device
-+ * @connector: drm connector
-  *
-  * A new connector was registered with associated CEC adapter name and
-  * CEC adapter parent device. After registering the name and parent
-  * drm_dp_cec_set_edid() is called to check if the connector supports
-  * CEC and to register a CEC adapter if that is the case.
-  */
--void drm_dp_cec_register_connector(struct drm_dp_aux *aux, const char *name,
--				   struct device *parent)
-+void drm_dp_cec_register_connector(struct drm_dp_aux *aux,
-+				   struct drm_connector *connector)
- {
- 	WARN_ON(aux->cec.adap);
- 	if (WARN_ON(!aux->transfer))
- 		return;
--	aux->cec.name = name;
--	aux->cec.parent = parent;
-+	aux->cec.connector = connector;
- 	INIT_DELAYED_WORK(&aux->cec.unregister_work,
- 			  drm_dp_cec_unregister_work);
- }
-diff --git a/drivers/gpu/drm/i915/intel_dp.c b/drivers/gpu/drm/i915/intel_dp.c
-index 560274d1c50b..1dfd16848e03 100644
---- a/drivers/gpu/drm/i915/intel_dp.c
-+++ b/drivers/gpu/drm/i915/intel_dp.c
-@@ -5518,7 +5518,6 @@ static int
- intel_dp_connector_register(struct drm_connector *connector)
- {
- 	struct intel_dp *intel_dp = intel_attached_dp(connector);
--	struct drm_device *dev = connector->dev;
- 	int ret;
- 
- 	ret = intel_connector_register(connector);
-@@ -5533,8 +5532,7 @@ intel_dp_connector_register(struct drm_connector *connector)
- 	intel_dp->aux.dev = connector->kdev;
- 	ret = drm_dp_aux_register(&intel_dp->aux);
- 	if (!ret)
--		drm_dp_cec_register_connector(&intel_dp->aux,
--					      connector->name, dev->dev);
-+		drm_dp_cec_register_connector(&intel_dp->aux, connector);
- 	return ret;
- }
- 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_connector.c b/drivers/gpu/drm/nouveau/nouveau_connector.c
-index 4116ee62adaf..4438824ca88b 100644
---- a/drivers/gpu/drm/nouveau/nouveau_connector.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_connector.c
-@@ -1413,8 +1413,7 @@ nouveau_connector_create(struct drm_device *dev,
- 	switch (type) {
- 	case DRM_MODE_CONNECTOR_DisplayPort:
- 	case DRM_MODE_CONNECTOR_eDP:
--		drm_dp_cec_register_connector(&nv_connector->aux,
--					      connector->name, dev->dev);
-+		drm_dp_cec_register_connector(&nv_connector->aux, connector);
- 		break;
- 	}
- 
-diff --git a/include/drm/drm_dp_helper.h b/include/drm/drm_dp_helper.h
-index 97ce790a5b5a..eeb42abc343c 100644
---- a/include/drm/drm_dp_helper.h
-+++ b/include/drm/drm_dp_helper.h
-@@ -1208,6 +1208,7 @@ struct drm_dp_aux_msg {
- 
- struct cec_adapter;
- struct edid;
-+struct drm_connector;
- 
- /**
-  * struct drm_dp_aux_cec - DisplayPort CEC-Tunneling-over-AUX
-@@ -1220,8 +1221,7 @@ struct edid;
- struct drm_dp_aux_cec {
- 	struct mutex lock;
- 	struct cec_adapter *adap;
--	const char *name;
--	struct device *parent;
-+	struct drm_connector *connector;
- 	struct delayed_work unregister_work;
- };
- 
-@@ -1418,8 +1418,8 @@ drm_dp_has_quirk(const struct drm_dp_desc *desc, enum drm_dp_quirk quirk)
- 
- #ifdef CONFIG_DRM_DP_CEC
- void drm_dp_cec_irq(struct drm_dp_aux *aux);
--void drm_dp_cec_register_connector(struct drm_dp_aux *aux, const char *name,
--				   struct device *parent);
-+void drm_dp_cec_register_connector(struct drm_dp_aux *aux,
-+				   struct drm_connector *connector);
- void drm_dp_cec_unregister_connector(struct drm_dp_aux *aux);
- void drm_dp_cec_set_edid(struct drm_dp_aux *aux, const struct edid *edid);
- void drm_dp_cec_unset_edid(struct drm_dp_aux *aux);
-@@ -1428,9 +1428,9 @@ static inline void drm_dp_cec_irq(struct drm_dp_aux *aux)
- {
- }
- 
--static inline void drm_dp_cec_register_connector(struct drm_dp_aux *aux,
--						 const char *name,
--						 struct device *parent)
-+static inline void
-+drm_dp_cec_register_connector(struct drm_dp_aux *aux,
-+			      struct drm_connector *connector)
- {
- }
- 
+ 	HDMI_WRITE(VC4_HDMI_CPU_MASK_SET, 0xffffffff);
+ 	value = HDMI_READ(VC4_HDMI_CEC_CNTRL_1);
+ 	value &= ~VC4_HDMI_CEC_DIV_CLK_CNT_MASK;
 -- 
 2.20.1
 
