@@ -6,297 +6,180 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A861C48BE9
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 16:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CB59C43613
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 16:03:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 32F4A20449
-	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 16:03:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0ED6220449
+	for <linux-media@archiver.kernel.org>; Mon, 24 Jun 2019 16:03:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731478AbfFXQDk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 24 Jun 2019 12:03:40 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:53963 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729544AbfFXQDj (ORCPT
+        id S1731483AbfFXQDl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 24 Jun 2019 12:03:41 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:41047 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729496AbfFXQDk (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 24 Jun 2019 12:03:39 -0400
+        Mon, 24 Jun 2019 12:03:40 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id fRRKhHRxHF85OfRRRhZaaO; Mon, 24 Jun 2019 18:03:37 +0200
+        id fRRKhHRxHF85OfRRShZab5; Mon, 24 Jun 2019 18:03:38 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
         dri-devel@lists.freedesktop.org,
         Cheng-yi Chiang <cychiang@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv8 03/13] cec: add new notifier functions
-Date:   Mon, 24 Jun 2019 18:03:20 +0200
-Message-Id: <20190624160330.38048-4-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv8 05/13] cec: document CEC_ADAP_G_CONNECTOR_INFO
+Date:   Mon, 24 Jun 2019 18:03:22 +0200
+Message-Id: <20190624160330.38048-6-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190624160330.38048-1-hverkuil-cisco@xs4all.nl>
 References: <20190624160330.38048-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfJPtxEILZeyd+1hNNapPJTUzULx9a7NHOdTyj2m18gP87rd/mmxdyMQ8FWKPReSZu2PhQGFPr5jEyOckfq5Kdxy48pKA3FrrG22rMHJtAn0YtJbbeSAv
- PCnI/TzWTMFlcxjljSbYg2HJ7mAsT/ZahZKUd98hr69uz09ADn8pp5HZcGlpaOM2CsglFciI74P57QQYTAnvNOH8k/24tACJRenT1jCHGJn76DV35bR6XR4r
- ZaAZqsobnXxYWbbLyHZdacWBRVM80BAXhghXnTN4evGUZqdz6N+1f0yLsjkkJw2K2q/3awIKwVO8oXgZagG25XadOo7KtxMaYhmYEFc97xA=
+X-CMAE-Envelope: MS4wfJHC8gnzmC6VsiHnhAT8Mnidw5ZU62gn3HZHqKNX7UVaXyuhfnr8nar7qUT3qlGmLsDkHKBOJjxOpQkAxPvSMU3uLSYaB+Wh29+IGNwTHaGSotCleMaH
+ jydz2acYQRgsFtg5uESRnzo2+IhsZuls1iSK2+Qfkk2rRICKaq20ln8sxj5KvqE5TGegRK8uzBLdcF1HlbC6OaX8lMJjgnGzWc0jjfkuWs4X7YDCfmEum+4X
+ EcZCyIsFh8k2xFRLcU5Gc0W61YkPGvB1b8ApD3uhy0omGT08+E7McH1Hf2S5Ig/VzyXS/OrQ4ZvogWElIONKW9fR0hITkbJmUhYwMOL6l1o=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to support multiple CEC devices for an HDMI connector,
-and to support cec_connector_info, drivers should use either a
-cec_notifier_conn_(un)register pair of functions (HDMI drivers)
-or a cec_notifier_cec_adap_(un)register pair (CEC adapter drivers).
-
-This replaces cec_notifier_get_conn/cec_notifier_put.
-
-For CEC adapters it is also no longer needed to call cec_notifier_register,
-cec_register_cec_notifier and cec_notifier_unregister. This is now
-all handled internally by the new functions.
-
-The called_cec_notifier_register bool is needed to handle the case where
-a CEC adapter driver called the old cec_notifier_register() function
-instead of cec_notifier_cec_adap_unregister().
-
-Once those old functions are removed in the future, that bool can also
-be removed.
+Document the new CEC_ADAP_G_CONNECTOR_INFO ioctl.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/cec/cec-notifier.c | 89 ++++++++++++++++++++++++++++++++
- include/media/cec-notifier.h     | 78 ++++++++++++++++++++++++++++
- 2 files changed, 167 insertions(+)
+ Documentation/media/uapi/cec/cec-funcs.rst    |   1 +
+ .../uapi/cec/cec-ioc-adap-g-conn-info.rst     | 109 ++++++++++++++++++
+ 2 files changed, 110 insertions(+)
+ create mode 100644 Documentation/media/uapi/cec/cec-ioc-adap-g-conn-info.rst
 
-diff --git a/drivers/media/cec/cec-notifier.c b/drivers/media/cec/cec-notifier.c
-index ce10dfd400bb..49d6ec198d38 100644
---- a/drivers/media/cec/cec-notifier.c
-+++ b/drivers/media/cec/cec-notifier.c
-@@ -22,9 +22,11 @@ struct cec_notifier {
- 	struct list_head head;
- 	struct kref kref;
- 	struct device *hdmi_dev;
-+	struct cec_connector_info conn_info;
- 	const char *conn_name;
- 	struct cec_adapter *cec_adap;
- 	void (*callback)(struct cec_adapter *adap, u16 pa);
-+	bool called_cec_notifier_register;
- 
- 	u16 phys_addr;
- };
-@@ -87,6 +89,85 @@ void cec_notifier_put(struct cec_notifier *n)
- }
- EXPORT_SYMBOL_GPL(cec_notifier_put);
- 
-+struct cec_notifier *
-+cec_notifier_conn_register(struct device *hdmi_dev, const char *conn_name,
-+			   const struct cec_connector_info *conn_info)
-+{
-+	struct cec_notifier *n = cec_notifier_get_conn(hdmi_dev, conn_name);
+diff --git a/Documentation/media/uapi/cec/cec-funcs.rst b/Documentation/media/uapi/cec/cec-funcs.rst
+index 620590b168c9..dc6da9c639a8 100644
+--- a/Documentation/media/uapi/cec/cec-funcs.rst
++++ b/Documentation/media/uapi/cec/cec-funcs.rst
+@@ -24,6 +24,7 @@ Function Reference
+     cec-ioc-adap-g-caps
+     cec-ioc-adap-g-log-addrs
+     cec-ioc-adap-g-phys-addr
++    cec-ioc-adap-g-conn-info
+     cec-ioc-dqevent
+     cec-ioc-g-mode
+     cec-ioc-receive
+diff --git a/Documentation/media/uapi/cec/cec-ioc-adap-g-conn-info.rst b/Documentation/media/uapi/cec/cec-ioc-adap-g-conn-info.rst
+new file mode 100644
+index 000000000000..87f475d7dfed
+--- /dev/null
++++ b/Documentation/media/uapi/cec/cec-ioc-adap-g-conn-info.rst
+@@ -0,0 +1,109 @@
++.. SPDX-License-Identifier: GPL-2.0
++..
++.. Copyright 2019 Google LLC
++..
++.. This documentation is free software; you can redistribute it and/or
++.. modify it under the terms of the GNU General Public License
++.. version 2 as published by the Free Software Foundation.
++..
++.. This documentation is distributed in the hope that it will be useful,
++.. but WITHOUT ANY WARRANTY; without even the implied warranty of
++.. MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++.. GNU General Public License for more details.
++..
++.. _CEC_ADAP_G_CONNECTOR_INFO:
 +
-+	if (!n)
-+		return n;
++*******************************
++ioctl CEC_ADAP_G_CONNECTOR_INFO
++*******************************
 +
-+	mutex_lock(&n->lock);
-+	n->phys_addr = CEC_PHYS_ADDR_INVALID;
-+	if (conn_info)
-+		n->conn_info = *conn_info;
-+	else
-+		memset(&n->conn_info, 0, sizeof(n->conn_info));
-+	if (n->cec_adap) {
-+		cec_phys_addr_invalidate(n->cec_adap);
-+		cec_s_conn_info(n->cec_adap, conn_info);
-+	}
-+	mutex_unlock(&n->lock);
-+	return n;
-+}
-+EXPORT_SYMBOL_GPL(cec_notifier_conn_register);
++Name
++====
 +
-+void cec_notifier_conn_unregister(struct cec_notifier *n)
-+{
-+	if (!n)
-+		return;
++CEC_ADAP_G_CONNECTOR_INFO - Query HDMI connector information
 +
-+	mutex_lock(&n->lock);
-+	memset(&n->conn_info, 0, sizeof(n->conn_info));
-+	n->phys_addr = CEC_PHYS_ADDR_INVALID;
-+	if (n->cec_adap) {
-+		cec_phys_addr_invalidate(n->cec_adap);
-+		cec_s_conn_info(n->cec_adap, NULL);
-+	}
-+	mutex_unlock(&n->lock);
-+	cec_notifier_put(n);
-+}
-+EXPORT_SYMBOL_GPL(cec_notifier_conn_unregister);
++Synopsis
++========
 +
-+struct cec_notifier *
-+cec_notifier_cec_adap_register(struct device *hdmi_dev, const char *conn_name,
-+			       struct cec_adapter *adap)
-+{
-+	struct cec_notifier *n;
++.. c:function:: int ioctl( int fd, CEC_ADAP_G_CONNECTOR_INFO, struct cec_connector_info *argp )
++    :name: CEC_ADAP_G_CONNECTOR_INFO
 +
-+	if (WARN_ON(!adap))
-+		return NULL;
++Arguments
++=========
 +
-+	n = cec_notifier_get_conn(hdmi_dev, conn_name);
-+	if (!n)
-+		return n;
++``fd``
++    File descriptor returned by :c:func:`open() <cec-open>`.
 +
-+	mutex_lock(&n->lock);
-+	n->cec_adap = adap;
-+	adap->conn_info = n->conn_info;
-+	adap->notifier = n;
-+	cec_s_phys_addr(adap, n->phys_addr, false);
-+	mutex_unlock(&n->lock);
-+	return n;
-+}
-+EXPORT_SYMBOL_GPL(cec_notifier_cec_adap_register);
++``argp``
 +
-+void cec_notifier_cec_adap_unregister(struct cec_notifier *n)
-+{
-+	if (!n)
-+		return;
 +
-+	mutex_lock(&n->lock);
-+	memset(&n->cec_adap->conn_info, 0, sizeof(n->cec_adap->conn_info));
-+	n->cec_adap->notifier = NULL;
-+	n->cec_adap = NULL;
-+	n->callback = NULL;
-+	mutex_unlock(&n->lock);
-+	cec_notifier_put(n);
-+}
-+EXPORT_SYMBOL_GPL(cec_notifier_cec_adap_unregister);
++Description
++===========
 +
- void cec_notifier_set_phys_addr(struct cec_notifier *n, u16 pa)
- {
- 	if (n == NULL)
-@@ -96,6 +177,8 @@ void cec_notifier_set_phys_addr(struct cec_notifier *n, u16 pa)
- 	n->phys_addr = pa;
- 	if (n->callback)
- 		n->callback(n->cec_adap, n->phys_addr);
-+	else if (n->cec_adap)
-+		cec_s_phys_addr(n->cec_adap, n->phys_addr, false);
- 	mutex_unlock(&n->lock);
- }
- EXPORT_SYMBOL_GPL(cec_notifier_set_phys_addr);
-@@ -121,6 +204,7 @@ void cec_notifier_register(struct cec_notifier *n,
- {
- 	kref_get(&n->kref);
- 	mutex_lock(&n->lock);
-+	n->called_cec_notifier_register = true;
- 	n->cec_adap = adap;
- 	n->callback = callback;
- 	n->callback(adap, n->phys_addr);
-@@ -130,8 +214,13 @@ EXPORT_SYMBOL_GPL(cec_notifier_register);
- 
- void cec_notifier_unregister(struct cec_notifier *n)
- {
-+	/* Do nothing unless cec_notifier_register was called first */
-+	if (!n->called_cec_notifier_register)
-+		return;
++Using this ioctl an application can learn which HDMI connector this CEC
++device corresponds to. While calling this ioctl the application should
++provide pointer to a cec_connector_info struct which will be populated
++by the kernel with the info provided by the adapter's driver. Not all
++drivers supply this information.
 +
- 	mutex_lock(&n->lock);
- 	n->callback = NULL;
-+	n->called_cec_notifier_register = false;
- 	mutex_unlock(&n->lock);
- 	cec_notifier_put(n);
- }
-diff --git a/include/media/cec-notifier.h b/include/media/cec-notifier.h
-index 57b3a9f6ea1d..313b6905c203 100644
---- a/include/media/cec-notifier.h
-+++ b/include/media/cec-notifier.h
-@@ -42,6 +42,60 @@ struct cec_notifier *cec_notifier_get_conn(struct device *dev,
-  */
- void cec_notifier_put(struct cec_notifier *n);
- 
-+/**
-+ * cec_notifier_conn_register - find or create a new cec_notifier for the given
-+ * HDMI device and connector tuple.
-+ * @hdmi_dev: HDMI device that sends the events.
-+ * @conn_name: the connector name from which the event occurs. May be NULL
-+ * if there is always only one HDMI connector created by the HDMI device.
-+ * @conn_info: the connector info from which the event occurs (may be NULL)
-+ *
-+ * If a notifier for device @dev and connector @conn_name already exists, then
-+ * increase the refcount and return that notifier.
-+ *
-+ * If it doesn't exist, then allocate a new notifier struct and return a
-+ * pointer to that new struct.
-+ *
-+ * Return NULL if the memory could not be allocated.
-+ */
-+struct cec_notifier *
-+cec_notifier_conn_register(struct device *hdmi_dev, const char *conn_name,
-+			   const struct cec_connector_info *conn_info);
++.. tabularcolumns:: |p{1.0cm}|p{4.4cm}|p{2.5cm}|p{9.6cm}|
 +
-+/**
-+ * cec_notifier_conn_unregister - decrease refcount and delete when the
-+ * refcount reaches 0.
-+ * @n: notifier
-+ */
-+void cec_notifier_conn_unregister(struct cec_notifier *n);
++.. c:type:: cec_connector_info
 +
-+/**
-+ * cec_notifier_cec_adap_register - find or create a new cec_notifier for the
-+ * given device.
-+ * @hdmi_dev: HDMI device that sends the events.
-+ * @conn_name: the connector name from which the event occurs. May be NULL
-+ * if there is always only one HDMI connector created by the HDMI device.
-+ * @adap: the cec adapter that registered this notifier.
-+ *
-+ * If a notifier for device @dev and connector @conn_name already exists, then
-+ * increase the refcount and return that notifier.
-+ *
-+ * If it doesn't exist, then allocate a new notifier struct and return a
-+ * pointer to that new struct.
-+ *
-+ * Return NULL if the memory could not be allocated.
-+ */
-+struct cec_notifier *
-+cec_notifier_cec_adap_register(struct device *hdmi_dev, const char *conn_name,
-+			       struct cec_adapter *adap);
++.. flat-table:: struct cec_connector_info
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       1 1 1 8
 +
-+/**
-+ * cec_notifier_cec_adap_unregister - decrease refcount and delete when the
-+ * refcount reaches 0.
-+ * @n: notifier
-+ */
-+void cec_notifier_cec_adap_unregister(struct cec_notifier *n);
++    * - __u32
++      - ``type``
++      - The type of connector this adapter is associated with.
++    * - union
++      - ``(anonymous)``
++      -
++    * -
++      - ``struct cec_drm_connector_info``
++      - drm
++      - :ref:`cec-drm-connector-info`.
 +
- /**
-  * cec_notifier_set_phys_addr - set a new physical address.
-  * @n: the CEC notifier
-@@ -110,6 +164,30 @@ static inline void cec_notifier_put(struct cec_notifier *n)
- {
- }
- 
-+static inline struct cec_notifier *
-+cec_notifier_conn_register(struct device *hdmi_dev, const char *conn_name,
-+			   const struct cec_connector_info *conn_info)
-+{
-+	/* A non-NULL pointer is expected on success */
-+	return (struct cec_notifier *)0xdeadfeed;
-+}
 +
-+static inline void cec_notifier_conn_unregister(struct cec_notifier *n)
-+{
-+}
++.. tabularcolumns:: |p{4.4cm}|p{2.5cm}|p{10.6cm}|
 +
-+static inline struct cec_notifier *
-+cec_notifier_cec_adap_register(struct device *hdmi_dev, const char *conn_name,
-+			       struct cec_adapter *adap)
-+{
-+	/* A non-NULL pointer is expected on success */
-+	return (struct cec_notifier *)0xdeadfeed;
-+}
++.. _connector-type:
 +
-+static inline void cec_notifier_cec_adap_unregister(struct cec_notifier *n)
-+{
-+}
++.. flat-table:: Connector types
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       3 1 8
 +
- static inline void cec_notifier_set_phys_addr(struct cec_notifier *n, u16 pa)
- {
- }
++    * .. _`CEC-CONNECTOR-TYPE-NO-CONNECTOR`:
++
++      - ``CEC_CONNECTOR_TYPE_NO_CONNECTOR``
++      - 0
++      - No connector is associated with the adapter/the information is not provided by the driver.
++    * .. _`CEC-CONNECTOR-TYPE-DRM`:
++
++      - ``CEC_CONNECTOR_TYPE_DRM``
++      - 1
++      - Indicates that a DRM connector is associated with this adapter. Info about the
++        connector can be found in :ref:`cec-drm-connector-info`.
++
++.. tabularcolumns:: |p{4.4cm}|p{2.5cm}|p{10.6cm}|
++
++.. c:type:: cec_drm_connector_info
++
++.. _cec-drm-connector-info:
++
++.. flat-table:: struct cec_drm_connector_info
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       3 1 8
++
++    * .. _`CEC-DRM-CONNECTOR-TYPE-CARD-NO`:
++
++      - __u32
++      - ``card_no``
++      - DRM card number - the digit from a card's path, e.g. 0 in case of /dev/card0.
++    * .. _`CEC-DRM-CONNECTOR-TYPE-CONNECTOR_ID`:
++
++      - __u32
 -- 
 2.20.1
 
