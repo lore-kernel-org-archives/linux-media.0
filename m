@@ -2,100 +2,73 @@ Return-Path: <SRS0=f2lN=UY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E3F8FC48BD4
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 13:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3B22C48BD4
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 13:22:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE63B2080C
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 13:19:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KeT30z/A"
+	by mail.kernel.org (Postfix) with ESMTP id 7FAAD208CA
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 13:22:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbfFYNTt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jun 2019 09:19:49 -0400
-Received: from mail-io1-f44.google.com ([209.85.166.44]:45236 "EHLO
-        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726545AbfFYNTt (ORCPT
+        id S1726927AbfFYNWb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jun 2019 09:22:31 -0400
+Received: from smtprelay0194.hostedemail.com ([216.40.44.194]:45882 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726707AbfFYNWb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jun 2019 09:19:49 -0400
-Received: by mail-io1-f44.google.com with SMTP id e3so3037423ioc.12
-        for <linux-media@vger.kernel.org>; Tue, 25 Jun 2019 06:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CjQxlcCcMybS1PlA3cbedI86fLsLoU2UaRYnx0yjR64=;
-        b=KeT30z/A3i+X9U6BGJsY7TlwhrAfYCRSTkIx6yUYHoYcXKsERLYGzvZiDQjOSWqBVU
-         8/o311LX4TqrP4Rp3nLMJRNHrZhqc39M/62AUtHJHOx/6oKxW6gBFHr41MrAh0cj6tQk
-         1ipgm4HlNazyDETEXifCzS16ss6fdgFY02yeW5ykUG171fFJuoGW24HawgYMnkjNden+
-         FYoInYEwrX/GQpuUJjTH3tOpQ+D5EvCqywQ3p3zlcsseVjbSt8Iuu2x9JsHS9fo12UuB
-         Rm6ePAEkk7Qsw11WNRZyvNqbWc8MSMC7i7/k5V7l3oK2GrxGTVm168Bqfqr7AvnsFEid
-         zj7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CjQxlcCcMybS1PlA3cbedI86fLsLoU2UaRYnx0yjR64=;
-        b=KZqn9CRIz42tzkHaxFaGnPfsb6WRCJoqEgCj5PcnxermpYkmZNCsGCGZ4J9s1i7DQt
-         M7c9XrwAqpdSMI5Vg/hsktpa8Gln5/8inMg7BuDHwjxfPo88RdNCd/X/sXddx1aIxu9N
-         pWsLYVekdLGyyXDHekjnCsxtAM1nLrbTq6iQM/fqls8otbpguaG3mLHU6Yj/BJU6WujL
-         X9Cn5JafgG38k6Qw2MH1YTgfGN9LzxwmjY/e4ail4iflDR17dhMsnqily9FkN7YJ281r
-         jIkT516izDDmBnU/yjsORsngyZ5y17nNLxydTjfyWYRqos9f0vxAp5Y9caIg5rqs1Otp
-         2G2A==
-X-Gm-Message-State: APjAAAWGTpcIfxI1lJAZxtSJvsOSsBwWamh/x1Oiy7LolTb8tkxslh39
-        OBOxMfMNmqqF0IwTB2K2N884rNC9NK5GCGmTLauh3Q==
-X-Google-Smtp-Source: APXvYqz8IMITSh/Xie95zh7BbBKKdq7Ur761LqrsqGuNmBgDWZZxs0U+4ZdvPrS8GrP20xK3X9tsxWaSp/jOQBj+4hM=
-X-Received: by 2002:a6b:b256:: with SMTP id b83mr19284468iof.48.1561468788034;
- Tue, 25 Jun 2019 06:19:48 -0700 (PDT)
+        Tue, 25 Jun 2019 09:22:31 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 11F8D100E86CB;
+        Tue, 25 Jun 2019 13:22:30 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: wood78_8a0682b7adc37
+X-Filterd-Recvd-Size: 1694
+Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf04.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 25 Jun 2019 13:22:28 +0000 (UTC)
+Message-ID: <56190c099e31dd0c9f56296186fdb6296afbe630.camel@perches.com>
+Subject: Re: [PATCH 1/1] staging: media: fix style problem
+From:   Joe Perches <joe@perches.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Aliasgar Surti <aliasgar.surti500@gmail.com>,
+        mchehab@kernel.org, gregkh@linuxfoundation.org,
+        sakari.ailus@linux.intel.com, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org
+Date:   Tue, 25 Jun 2019 06:22:26 -0700
+In-Reply-To: <6536b57d-fea2-e16d-2092-e9e27c51c0f1@xs4all.nl>
+References: <1561099192-19638-1-git-send-email-aliasgar.surti500@gmail.com>
+         <6536b57d-fea2-e16d-2092-e9e27c51c0f1@xs4all.nl>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
-References: <20190624160330.38048-1-hverkuil-cisco@xs4all.nl> <20190624160330.38048-3-hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20190624160330.38048-3-hverkuil-cisco@xs4all.nl>
-From:   Dariusz Marcinkiewicz <darekm@google.com>
-Date:   Tue, 25 Jun 2019 15:19:37 +0200
-Message-ID: <CALFZZQGuAB9rt4Px0VXPwRE1HOipxmT7q1tF890bMBiNw2JLgA@mail.gmail.com>
-Subject: Re: [PATCHv8 02/13] cec: add struct cec_connector_info support
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Cheng-yi Chiang <cychiang@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans.
+On Tue, 2019-06-25 at 09:17 +0200, Hans Verkuil wrote:
+> On 6/21/19 8:39 AM, Aliasgar Surti wrote:
+> > From: Aliasgar Surti <aliasgar.surti500@gmail.com>
+> > 
+> > checkpatch reported "WARNING: line over 80 characters".
+> > This patch fixes the warning for file soc_camera/soc_ov5642.c
+> 
+> FYI: we're not accepting patches for staging/media/soc_camera: these
+> are obsolete and broken drivers.
 
-Patches 1 and 2 look good to me. There is one comment here that I
-forgot to update as the code evolved.
+Then mark the MAINTAINERS entry as Orphan / Obsolete
 
-On Mon, Jun 24, 2019 at 6:03 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
-...
-> +/**
-> + * struct cec_event_connector - tells if and which connector is associated
-> + * with the CEC adapter.
-> + * @card_no: drm card number
-> + * @connector_id: drm connector ID
-> + */
-> +struct cec_drm_connector_info {
-> +       __u32 card_no;
-> +       __u32 connector_id;
-> +};
-> +
-The comment for the above struct is now appropriate for the struct below.
+It's currently:
 
-> +#define CEC_CONNECTOR_TYPE_NO_CONNECTOR        0
-> +#define CEC_CONNECTOR_TYPE_DRM         1
-> +struct cec_connector_info {
-> +       __u32 type;
-> +       union {
-> +               struct cec_drm_connector_info drm;
-> +               __u32 raw[16];
-> +       };
-> +};
-> +
+SOC-CAMERA V4L2 SUBSYSTEM
+L:	linux-media@vger.kernel.org
+T:	git git://linuxtv.org/media_tree.git
+S:	Orphan
+F:	include/media/soc_camera.h
+F:	drivers/staging/media/soc_camera/
 
-Best regards.
+
