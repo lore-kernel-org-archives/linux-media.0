@@ -2,89 +2,159 @@ Return-Path: <SRS0=f2lN=UY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5943DC48BD5
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 13:59:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F3D3C48BD6
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:11:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2178D20656
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 13:59:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ecAb+aHb"
+	by mail.kernel.org (Postfix) with ESMTP id DAEA2208E3
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:11:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726659AbfFYN7n (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jun 2019 09:59:43 -0400
-Received: from mail-io1-f41.google.com ([209.85.166.41]:39342 "EHLO
-        mail-io1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726532AbfFYN7n (ORCPT
+        id S1729593AbfFYOLR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jun 2019 10:11:17 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:56129 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726532AbfFYOLR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jun 2019 09:59:43 -0400
-Received: by mail-io1-f41.google.com with SMTP id r185so3219777iod.6
-        for <linux-media@vger.kernel.org>; Tue, 25 Jun 2019 06:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FSKVD6KDrsHOIAGdSS2iIF1paS8HEckPICs4ZTQha7A=;
-        b=ecAb+aHbHVfPXb4iypgv8GeAIglpM84hLdzUkIAqyhk+2wCosCq++FUV3WnVdwdZHP
-         Qch8cQ7/Igi0Rip6A1zWPj4+XhCHHmqy9CgrRC0iVgejvjnxDudL08zdh0CYSBuuJva/
-         FCwN1NKMec7zGB//MtWibOZd3NLnbKhZya0Q5J3iKBfBJjhiCnqo9VnCfJHzFoqF4HCv
-         rv8b1pumw5qbRiTiOPeI7+uHYWJZQVylfH0ywNFf0GBf3D3pQ1sw2itesbLUig6TqspN
-         gDlnibWpEsF6KhMcRz029tjCFI9rsnVAnPr5ZmC2IduFoQI1R9XYUp7A+YFAi6QjyvLc
-         DsRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FSKVD6KDrsHOIAGdSS2iIF1paS8HEckPICs4ZTQha7A=;
-        b=BvvHMLL2PfbtnYEXv5QtVMvojxfn20G/UWNtXM3w5Lp+BZBOhQUK5Cs20AGA9/eS97
-         WY75ITBYqE6t3DWiXFAk3MT8AfJVVXC+FCyoZtxUK0jQqlTN+wP9jElRXoZvXJW05rs7
-         bQFTsIfZgZKZLBzMcX1nh3h8hbUIr43j5Df+xjkw1tloYGY2jgdDZHfoJOorSbXGAXm8
-         3i8pyEK62/QhDc0CXvBzPlnvIuwRT87HmWQH9OEkmE9x1geOS8EhKcgDTJSxgCVaS3iF
-         SkPLH9zUY+T3Z8VnhmKoX/+IpuQyH7lK1q/7Hf3Ye7kH6bR1V/5Xk4WmtDBDiqyXJWev
-         PcdA==
-X-Gm-Message-State: APjAAAX7A+CMkeUMvHQWUHotW/z5GeU6hpfFeVwTS9JvAPLGPm10mFFt
-        +YlS56rZwLW9La8LmAR2Pk31KrWYWLcP2aeT94CXjw==
-X-Google-Smtp-Source: APXvYqxmnt8MEd1RguBGDPqLRfzzb9romTQZPdCDEivRbQSFmE/+w6gs05eJ6i7Cam4Ehk7qMOhLxD8u0q7TEYPp0B4=
-X-Received: by 2002:a02:7420:: with SMTP id o32mr49882917jac.117.1561471181881;
- Tue, 25 Jun 2019 06:59:41 -0700 (PDT)
+        Tue, 25 Jun 2019 10:11:17 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1hfmAF-00042q-Ts; Tue, 25 Jun 2019 16:11:15 +0200
+Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1hfmAF-0007yD-Ct; Tue, 25 Jun 2019 16:11:15 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     kernel@pengutronix.de, pawel@osciak.com, hverkuil-cisco@xs4all.nl,
+        mchehab@kernel.org, Michael Tretter <m.tretter@pengutronix.de>
+Subject: [PATCH 2/2] media: v4l2-mem2mem: reorder checks in v4l2_m2m_poll()
+Date:   Tue, 25 Jun 2019 16:11:13 +0200
+Message-Id: <20190625141113.30301-3-m.tretter@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190625141113.30301-1-m.tretter@pengutronix.de>
+References: <20190625141113.30301-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
-References: <20190624160330.38048-1-hverkuil-cisco@xs4all.nl> <20190624160330.38048-5-hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20190624160330.38048-5-hverkuil-cisco@xs4all.nl>
-From:   Dariusz Marcinkiewicz <darekm@google.com>
-Date:   Tue, 25 Jun 2019 15:59:31 +0200
-Message-ID: <CALFZZQHLz6jV95NRMrbOdpu1oNh=KCrNpC+t2YiL-8MAUi0dTQ@mail.gmail.com>
-Subject: Re: [PATCHv8 04/13] cec: expose the new connector info API
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Cheng-yi Chiang <cychiang@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi.
+When reaching the end of stream, V4L2 m2m clients may expect the
+V4L2_EOS_EVENT. Although the V4L2_EOS_EVENT is deprecated behavior,
+drivers must signal that event before dequeuing the buffer that has the
+V4L2_BUF_FLAG_LAST flag set.
 
-This looks good except one comment about the ioctl.
+If a driver queues the V4L2_EOS_EVENT event and returns the buffer after
+the check for events but before the check for buffers, vb2_m2m_poll()
+will signal that the buffer with V4L2_BUF_FLAG_LAST can be read but not
+that the V4L2_EOS_EVENT is available.
 
-On Mon, Jun 24, 2019 at 6:03 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->
-...
-> +static long cec_adap_g_connector_info(struct cec_adapter *adap,
-> +                                     struct cec_log_addrs __user *parg)
-> +{
-> +       if (!(adap->capabilities & CEC_CAP_CONNECTOR_INFO))
-> +               return -ENOTTY;
-I guess access to adap->conn_info needs to be guarded by the lock now.
+Split the check for buffers into a separate function and check for
+available buffers before checking for events. This ensures that if
+vb2_m2m_poll() signals POLLIN | POLLRDNORM for the V4L2_BUF_FLAG_LAST
+buffer, it signals POLLPRI for the V4L2_EOS_EVENT, too.
 
-> +       if (copy_to_user(parg, &adap->conn_info,
-> +                        sizeof(adap->conn_info)))
-> +               return -EFAULT;
-> +       return 0;
-> +}
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+---
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 47 +++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 20 deletions(-)
 
-Best regards.
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 4f5176702937..f18fdce31d6f 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -603,11 +603,10 @@ int v4l2_m2m_streamoff(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_streamoff);
+ 
+-__poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+-			   struct poll_table_struct *wait)
++static __poll_t __v4l2_m2m_poll(struct file *file,
++				struct v4l2_m2m_ctx *m2m_ctx,
++				struct poll_table_struct *wait)
+ {
+-	struct video_device *vfd = video_devdata(file);
+-	__poll_t req_events = poll_requested_events(wait);
+ 	struct vb2_queue *src_q, *dst_q;
+ 	struct vb2_buffer *src_vb = NULL, *dst_vb = NULL;
+ 	__poll_t rc = 0;
+@@ -619,16 +618,6 @@ __poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 	poll_wait(file, &src_q->done_wq, wait);
+ 	poll_wait(file, &dst_q->done_wq, wait);
+ 
+-	if (test_bit(V4L2_FL_USES_V4L2_FH, &vfd->flags)) {
+-		struct v4l2_fh *fh = file->private_data;
+-
+-		poll_wait(file, &fh->wait, wait);
+-		if (v4l2_event_pending(fh))
+-			rc = EPOLLPRI;
+-		if (!(req_events & (EPOLLOUT | EPOLLWRNORM | EPOLLIN | EPOLLRDNORM)))
+-			return rc;
+-	}
+-
+ 	/*
+ 	 * There has to be at least one buffer queued on each queued_list, which
+ 	 * means either in driver already or waiting for driver to claim it
+@@ -637,10 +626,8 @@ __poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 	if ((!src_q->streaming || src_q->error ||
+ 	     list_empty(&src_q->queued_list)) &&
+ 	    (!dst_q->streaming || dst_q->error ||
+-	     list_empty(&dst_q->queued_list))) {
+-		rc |= EPOLLERR;
+-		goto end;
+-	}
++	     list_empty(&dst_q->queued_list)))
++		return EPOLLERR;
+ 
+ 	spin_lock_irqsave(&dst_q->done_lock, flags);
+ 	if (list_empty(&dst_q->done_list)) {
+@@ -650,7 +637,7 @@ __poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 		 */
+ 		if (dst_q->last_buffer_dequeued) {
+ 			spin_unlock_irqrestore(&dst_q->done_lock, flags);
+-			return rc | EPOLLIN | EPOLLRDNORM;
++			return EPOLLIN | EPOLLRDNORM;
+ 		}
+ 	}
+ 	spin_unlock_irqrestore(&dst_q->done_lock, flags);
+@@ -673,7 +660,27 @@ __poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ 		rc |= EPOLLIN | EPOLLRDNORM;
+ 	spin_unlock_irqrestore(&dst_q->done_lock, flags);
+ 
+-end:
++	return rc;
++}
++
++__poll_t v4l2_m2m_poll(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
++			   struct poll_table_struct *wait)
++{
++	struct video_device *vfd = video_devdata(file);
++	__poll_t req_events = poll_requested_events(wait);
++	__poll_t rc = 0;
++
++	if (req_events & (EPOLLOUT | EPOLLWRNORM | EPOLLIN | EPOLLRDNORM))
++		rc = __v4l2_m2m_poll(file, m2m_ctx, wait);
++
++	if (test_bit(V4L2_FL_USES_V4L2_FH, &vfd->flags)) {
++		struct v4l2_fh *fh = file->private_data;
++
++		poll_wait(file, &fh->wait, wait);
++		if (v4l2_event_pending(fh))
++			rc |= EPOLLPRI;
++	}
++
+ 	return rc;
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_poll);
+-- 
+2.20.1
+
