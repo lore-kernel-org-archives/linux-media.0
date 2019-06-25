@@ -2,222 +2,169 @@ Return-Path: <SRS0=f2lN=UY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCAE5C48BD5
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90BB6C48BD4
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:48:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFED5213F2
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:45:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66B2E2080C
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:48:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731168AbfFYOpZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jun 2019 10:45:25 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:50663 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730905AbfFYOpS (ORCPT
+        id S1730607AbfFYOsy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jun 2019 10:48:54 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:48357 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730505AbfFYOsx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jun 2019 10:45:18 -0400
-Received: from cobaltpc1.rd.cisco.com ([IPv6:2001:420:44c1:2579:b032:593c:25fc:ff9b])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id fmh4hQwJSSfvXfmh9hHozS; Tue, 25 Jun 2019 16:45:15 +0200
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+        Tue, 25 Jun 2019 10:48:53 -0400
+X-Originating-IP: 83.155.44.161
+Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
+        (Authenticated sender: hadess@hadess.net)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 9C6F31BF21C
+        for <linux-media@vger.kernel.org>; Tue, 25 Jun 2019 14:48:50 +0000 (UTC)
+Message-ID: <dc1d65ef9019bb582133fd6f10bb3cc226c38c49.camel@hadess.net>
+Subject: [PATCH] keytable: Add keymap test
+From:   Bastien Nocera <hadess@hadess.net>
 To:     linux-media@vger.kernel.org
-Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
-        dri-devel@lists.freedesktop.org,
-        Cheng-yi Chiang <cychiang@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv9 05/13] cec: document CEC_ADAP_G_CONNECTOR_INFO and capability
-Date:   Tue, 25 Jun 2019 16:45:02 +0200
-Message-Id: <20190625144510.122214-6-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190625144510.122214-1-hverkuil-cisco@xs4all.nl>
-References: <20190625144510.122214-1-hverkuil-cisco@xs4all.nl>
+Date:   Tue, 25 Jun 2019 16:48:49 +0200
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfP1HhDxx2e9wZi4i8ZcXqQoOcGzGa4fKsVYmXt9nU2Qj4AfFWNVk981GzYRX2gTsiwoddBMxxk9pAfFLdRuwSfgw3OyGvtsf7R4z2nAEEOyGswU0fivE
- zpDhTah8gmvrYb0YMjoatUiNjw8ZeD0NX379atdhV7WvGob3Ew6MQjgSwOl/3sNJiSEjdbOjUPr+3726GIRsagXsQ0q1H5KiU61mYu+oX0tfGWwicj4v8W2u
- 243st8beky4IVsDjWavuHOalUhsiprIqQETnT8hTXMS8DrVnlg3pG/5oDak7UwLY7UHLmQgLDkJySgJKlnvoVlFd3yR1yGwh3t8504AMXgQC2cfVN334lDN0
- qXWYSSsRGr4Qi5RkGtg3G6TBfBoqlvlOZ1KCRfGRQMkDqaI2GuWUb6xCGUOMi+ON/h6FVZyW
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the new CEC_ADAP_G_CONNECTOR_INFO ioctl and the new
-CEC_CAP_CONNECTOR_INFO capability.
+This new test will try to parse all the ".toml" files in the directory
+path passed to it, error'ing out on the first parsing problem.
 
-Signed-off-by: Dariusz Marcinkiewicz <darekm@google.com>
-Co-developed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-[hverkuil-cisco@xs4all.nl: added CEC_CAP_CONNECTOR_INFO]
-[hverkuil-cisco@xs4all.nl: added DQEVENT have_conn_info]
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Run as "make check" in the keytable directory.
 ---
- Documentation/media/uapi/cec/cec-funcs.rst    |   1 +
- .../media/uapi/cec/cec-ioc-adap-g-caps.rst    |   6 +-
- .../uapi/cec/cec-ioc-adap-g-conn-info.rst     | 102 ++++++++++++++++++
- .../media/uapi/cec/cec-ioc-dqevent.rst        |   8 ++
- 4 files changed, 116 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/media/uapi/cec/cec-ioc-adap-g-conn-info.rst
 
-diff --git a/Documentation/media/uapi/cec/cec-funcs.rst b/Documentation/media/uapi/cec/cec-funcs.rst
-index 620590b168c9..dc6da9c639a8 100644
---- a/Documentation/media/uapi/cec/cec-funcs.rst
-+++ b/Documentation/media/uapi/cec/cec-funcs.rst
-@@ -24,6 +24,7 @@ Function Reference
-     cec-ioc-adap-g-caps
-     cec-ioc-adap-g-log-addrs
-     cec-ioc-adap-g-phys-addr
-+    cec-ioc-adap-g-conn-info
-     cec-ioc-dqevent
-     cec-ioc-g-mode
-     cec-ioc-receive
-diff --git a/Documentation/media/uapi/cec/cec-ioc-adap-g-caps.rst b/Documentation/media/uapi/cec/cec-ioc-adap-g-caps.rst
-index 0c44f31a9b59..76761a98c312 100644
---- a/Documentation/media/uapi/cec/cec-ioc-adap-g-caps.rst
-+++ b/Documentation/media/uapi/cec/cec-ioc-adap-g-caps.rst
-@@ -135,8 +135,12 @@ returns the information to the application. The ioctl never fails.
-       - The CEC hardware can monitor CEC pin changes from low to high voltage
-         and vice versa. When in pin monitoring mode the application will
- 	receive ``CEC_EVENT_PIN_CEC_LOW`` and ``CEC_EVENT_PIN_CEC_HIGH`` events.
-+    * .. _`CEC-CAP-CONNECTOR-INFO`:
+At least 4 keymaps look broken in the current git:
+it913x_v2.toml
+pinnacle310e.toml
+hisi_poplar.toml
+imon_mce.toml
+
+Let me know if you want patches to remove the duplicate entries from
+those.
+
+ utils/keytable/Makefile.am    |  6 ++++
+ utils/keytable/test_keymaps.c | 68 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 74 insertions(+)
+ create mode 100644 utils/keytable/test_keymaps.c
+
+diff --git a/utils/keytable/Makefile.am b/utils/keytable/Makefile.am
+index 148b9446..086d53c2 100644
+--- a/utils/keytable/Makefile.am
++++ b/utils/keytable/Makefile.am
+@@ -1,9 +1,12 @@
+ bin_PROGRAMS = ir-keytable
++noinst_PROGRAMS = test-keymaps
+ man_MANS = ir-keytable.1 rc_keymap.5
+ sysconf_DATA = rc_maps.cfg
+ keytablesystem_DATA = $(srcdir)/rc_keymaps/*
+ udevrules_DATA = 70-infrared.rules
  
--
-+      - ``CEC_CAP_CONNECTOR_INFO``
-+      - 0x00000100
-+      - If this capability is set, then :ref:`CEC_ADAP_G_CONNECTOR_INFO` can
-+        be used.
++test_keymaps_SOURCES = toml.c toml.h test_keymaps.c
++
+ ir_keytable_SOURCES = keytable.c parse.h ir-encode.c ir-encode.h
+toml.c toml.h
  
- Return Value
- ============
-diff --git a/Documentation/media/uapi/cec/cec-ioc-adap-g-conn-info.rst b/Documentation/media/uapi/cec/cec-ioc-adap-g-conn-info.rst
+ if WITH_BPF
+@@ -21,6 +24,9 @@ endif
+ EXTRA_DIST = 70-infrared.rules rc_keymaps rc_keymaps_userspace
+gen_keytables.pl ir-keytable.1 rc_maps.cfg rc_keymap.5
+ 
+ # custom target
++check: test-keymaps
++	$(builddir)/test-keymaps $(srcdir)/rc_keymaps/
++
+ install-data-local:
+ 	$(install_sh) -d "$(DESTDIR)$(keytableuserdir)"
+ 
+diff --git a/utils/keytable/test_keymaps.c
+b/utils/keytable/test_keymaps.c
 new file mode 100644
-index 000000000000..74500cc896a9
+index 00000000..23084331
 --- /dev/null
-+++ b/Documentation/media/uapi/cec/cec-ioc-adap-g-conn-info.rst
-@@ -0,0 +1,102 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+..
-+.. Copyright 2019 Google LLC
-+..
-+.. _CEC_ADAP_G_CONNECTOR_INFO:
++++ b/utils/keytable/test_keymaps.c
+@@ -0,0 +1,68 @@
++#include <string.h>
++#include <errno.h>
++#include <stdio.h>
++#include <sys/types.h>
++#include <dirent.h>
 +
-+*******************************
-+ioctl CEC_ADAP_G_CONNECTOR_INFO
-+*******************************
++#include "toml.h"
 +
-+Name
-+====
++static int
++has_suffix(const char *str, const char *suffix)
++{
++	if (strlen(str) < strlen(suffix))
++		return 0;
++	if (strncmp(str + strlen(str) - strlen(suffix), suffix,
+strlen(suffix)) == 0)
++		return 1;
++	return 0;
++}
 +
-+CEC_ADAP_G_CONNECTOR_INFO - Query HDMI connector information
++int main (int argc, char **argv)
++{
++	DIR *dir;
++	struct dirent *entry;
 +
-+Synopsis
-+========
++	if (argc != 2) {
++		fprintf(stderr, "Usage: %s KEYMAPS-DIRECTORY\n",
+argv[0]);
++		return 1;
++	}
 +
-+.. c:function:: int ioctl( int fd, CEC_ADAP_G_CONNECTOR_INFO, struct cec_connector_info *argp )
-+    :name: CEC_ADAP_G_CONNECTOR_INFO
++	dir = opendir(argv[1]);
++	if (!dir) {
++		perror("Could not open directory");
++		return 1;
++	}
 +
-+Arguments
-+=========
++	while ((entry = readdir(dir)) != NULL) {
++		struct toml_table_t *root;
++		FILE *fin;
++		char buf[200];
++		char path[2048];
 +
-+``fd``
-+    File descriptor returned by :c:func:`open() <cec-open>`.
++		if (!has_suffix(entry->d_name, ".toml")) {
++			/* Skipping file */
++			continue;
++		}
 +
-+``argp``
++		memset(path, 0, sizeof(path));
++		strcpy(path, argv[1]);
++		strcpy(path + strlen(argv[1]), "/");
++		strcpy(path + strlen(argv[1]) + 1, entry->d_name);
++		strcpy(path + strlen(argv[1]) + 1 + strlen(entry-
+>d_name), "\0");
 +
++		fin = fopen(path, "r");
++		if (!fin) {
++			fprintf(stderr, "Could not open file %s: %s",
+path, strerror(errno));
++			return 1;
++		}
 +
-+Description
-+===========
++		root = toml_parse_file(fin, buf, sizeof(buf));
++		fclose(fin);
++		if (!root) {
++			fprintf(stderr, "Failed to parse %s: %s\n",
+path, buf);
++			return 1;
++		}
++		toml_free(root);
++	}
 +
-+Using this ioctl an application can learn which HDMI connector this CEC
-+device corresponds to. While calling this ioctl the application should
-+provide pointer to a cec_connector_info struct which will be populated
-+by the kernel with the info provided by the adapter's driver. This ioctl
-+is only available if the ``CEC_CAP_CONNECTOR_INFO`` capability is set.
-+
-+.. tabularcolumns:: |p{1.0cm}|p{4.4cm}|p{2.5cm}|p{9.6cm}|
-+
-+.. c:type:: cec_connector_info
-+
-+.. flat-table:: struct cec_connector_info
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       1 1 1 8
-+
-+    * - __u32
-+      - ``type``
-+      - The type of connector this adapter is associated with.
-+    * - union
-+      - ``(anonymous)``
-+      -
-+    * -
-+      - ``struct cec_drm_connector_info``
-+      - drm
-+      - :ref:`cec-drm-connector-info`
-+
-+
-+.. tabularcolumns:: |p{4.4cm}|p{2.5cm}|p{10.6cm}|
-+
-+.. _connector-type:
-+
-+.. flat-table:: Connector types
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       3 1 8
-+
-+    * .. _`CEC-CONNECTOR-TYPE-NO-CONNECTOR`:
-+
-+      - ``CEC_CONNECTOR_TYPE_NO_CONNECTOR``
-+      - 0
-+      - No connector is associated with the adapter/the information is not provided by the driver.
-+    * .. _`CEC-CONNECTOR-TYPE-DRM`:
-+
-+      - ``CEC_CONNECTOR_TYPE_DRM``
-+      - 1
-+      - Indicates that a DRM connector is associated with this adapter. Info about the
-+        connector can be found in :ref:`cec-drm-connector-info`.
-+
-+.. tabularcolumns:: |p{4.4cm}|p{2.5cm}|p{10.6cm}|
-+
-+.. c:type:: cec_drm_connector_info
-+
-+.. _cec-drm-connector-info:
-+
-+.. flat-table:: struct cec_drm_connector_info
-+    :header-rows:  0
-+    :stub-columns: 0
-+    :widths:       3 1 8
-+
-+    * .. _`CEC-DRM-CONNECTOR-TYPE-CARD-NO`:
-+
-+      - __u32
-+      - ``card_no``
-+      - DRM card number: the digit from a card's path, e.g. 0 in case of /dev/card0.
-+    * .. _`CEC-DRM-CONNECTOR-TYPE-CONNECTOR_ID`:
-+
-+      - __u32
-+      - ``connector_id``
-+      - DRM connector ID.
-diff --git a/Documentation/media/uapi/cec/cec-ioc-dqevent.rst b/Documentation/media/uapi/cec/cec-ioc-dqevent.rst
-index 46a1c99a595e..5e21b1fbfc01 100644
---- a/Documentation/media/uapi/cec/cec-ioc-dqevent.rst
-+++ b/Documentation/media/uapi/cec/cec-ioc-dqevent.rst
-@@ -70,6 +70,14 @@ it is guaranteed that the state did change in between the two events.
-         addresses are claimed or if ``phys_addr`` is ``CEC_PHYS_ADDR_INVALID``.
- 	If bit 15 is set (``1 << CEC_LOG_ADDR_UNREGISTERED``) then this device
- 	has the unregistered logical address. In that case all other bits are 0.
-+    * - __u16
-+      - ``have_conn_info``
-+      - If non-zero, then HDMI connector information is available.
-+        This field is only valid if ``CEC_CAP_CONNECTOR_INFO`` is set. If that
-+        capability is set and ``have_conn_info`` is zero, then that indicates
-+        that the HDMI connector device is not instantiated, either because
-+        the HDMI driver is still configuring the device or because the HDMI
-+        device was unbound.
- 
- 
- .. c:type:: cec_event_lost_msgs
--- 
-2.20.1
++	return 0;
++}
 
