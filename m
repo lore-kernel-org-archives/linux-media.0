@@ -6,156 +6,90 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45666C48BD6
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:45:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15673C48BD4
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:45:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 27AAD213F2
+	by mail.kernel.org (Postfix) with ESMTP id E149D208CB
 	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:45:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731214AbfFYOpW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jun 2019 10:45:22 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:44659 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731091AbfFYOpT (ORCPT
+        id S1731222AbfFYOpX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jun 2019 10:45:23 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:59381 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731156AbfFYOpT (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 25 Jun 2019 10:45:19 -0400
 Received: from cobaltpc1.rd.cisco.com ([IPv6:2001:420:44c1:2579:b032:593c:25fc:ff9b])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id fmh4hQwJSSfvXfmhBhHp0S; Tue, 25 Jun 2019 16:45:17 +0200
+        id fmh4hQwJSSfvXfmhBhHp13; Tue, 25 Jun 2019 16:45:18 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
         dri-devel@lists.freedesktop.org,
         Cheng-yi Chiang <cychiang@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv9 10/13] meson/ao-cec: use cec_notifier_cec_adap_(un)register
-Date:   Tue, 25 Jun 2019 16:45:07 +0200
-Message-Id: <20190625144510.122214-11-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv9 13/13] drm/vc4/vc4_hdmi: fill in connector info
+Date:   Tue, 25 Jun 2019 16:45:10 +0200
+Message-Id: <20190625144510.122214-14-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190625144510.122214-1-hverkuil-cisco@xs4all.nl>
 References: <20190625144510.122214-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfIo22fLBIrqLMrXisr54Oz7ccU5U7XrkX5DqS6e4gjZCJDJZRwR7HVkEE6n7qWgdpxc4gdVprEUsxmIO7u7A4kSJm1ZMYKCM9GPw4XNwYWyQ+Yy206sO
- 8UOAgAhk2FID2WCfrssWt2OuksRbq/48El4w9eIkWbzZOD5di6vBRkkL0fJAaPA6KJGO0jDFY6McPqSDGQ1vgv3TBj1bvljUvLVCq3SBaXB4pIfT7mBmBEFn
- EJsZDAkB/wkU88ekHbdFfvLcrLiVt/xlTF/6Svej/c7UAtEOmfOW9g91mLRz6JgxP90TrHaHLf/mh3cXLf/04ILJvo/77mQOiwliRa/+EKmLkuo258l2WAuP
- cQRujG7QhQEvHiym9xGYBJXIZfyp27/4N/GZpDbUdehbVYPqSmOkJB8xCaw8oEBetoqYoi0p
+X-CMAE-Envelope: MS4wfAmmUw9q6uiM1nj+wUtdShpnwGt7yA9zV7MO0O148nnex4re9arbQBOEnyC4zQ/J/JT8UBY8rNytGmew7lke6jd4Hj3KalD5+6gQfLfDEQF9f6q2KNsl
+ gLnYYb4ewhtsYZHu2wD85Q3sjagNBS02tLK1F+rYcq5skFdJaBeOn+cM2vWLR70I1Z4SzHPaofEU2NGq99dY6t8ithPnhjzeR8laCtmTFP69DfbqDusoYiwW
+ zcvXPRPVkGe1fvH9OB7ZWGnaYWK3VKv1wf0NZzCU2pgc2MQgwQoIqYe3bhj+fHAyT9yy9Awf2IRRdzR8zHBvbioMad1Nu+tqSt34pMlGsk5aVVtvWbP0P8GX
+ b3by0se3xcTj1DwAbk10tI31/AIFFJFIERCrzNiFW9RLuBzG03u+kpRqR0ZpwLjDAASMGbMM
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use the new cec_notifier_cec_adap_(un)register() functions to
-(un)register the notifier for the CEC adapter.
+From: Dariusz Marcinkiewicz <darekm@google.com>
 
+Fill in the connector info, allowing userspace to associate
+the CEC device with the drm connector.
+
+Signed-off-by: Dariusz Marcinkiewicz <darekm@google.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/platform/meson/ao-cec.c | 37 +++++++++++++--------------
- 1 file changed, 18 insertions(+), 19 deletions(-)
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/meson/ao-cec.c b/drivers/media/platform/meson/ao-cec.c
-index facf9b029e79..b80eb8f9b422 100644
---- a/drivers/media/platform/meson/ao-cec.c
-+++ b/drivers/media/platform/meson/ao-cec.c
-@@ -616,20 +616,22 @@ static int meson_ao_cec_probe(struct platform_device *pdev)
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 99fc8569e0f5..a998bb35b375 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -1279,6 +1279,9 @@ static const struct cec_adap_ops vc4_hdmi_cec_adap_ops = {
  
- 	spin_lock_init(&ao_cec->cec_reg_lock);
- 
--	ao_cec->notify = cec_notifier_get(hdmi_dev);
--	if (!ao_cec->notify)
--		return -ENOMEM;
--
- 	ao_cec->adap = cec_allocate_adapter(&meson_ao_cec_ops, ao_cec,
- 					    "meson_ao_cec",
- 					    CEC_CAP_LOG_ADDRS |
- 					    CEC_CAP_TRANSMIT |
- 					    CEC_CAP_RC |
--					    CEC_CAP_PASSTHROUGH,
-+					    CEC_CAP_PASSTHROUGH |
-+					    CEC_CAP_CONNECTOR_INFO,
- 					    1); /* Use 1 for now */
--	if (IS_ERR(ao_cec->adap)) {
--		ret = PTR_ERR(ao_cec->adap);
--		goto out_probe_notify;
-+	if (IS_ERR(ao_cec->adap))
-+		return PTR_ERR(ao_cec->adap);
+ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
+ {
++#ifdef CONFIG_DRM_VC4_HDMI_CEC
++	struct cec_connector_info conn_info;
++#endif
+ 	struct platform_device *pdev = to_platform_device(dev);
+ 	struct drm_device *drm = dev_get_drvdata(master);
+ 	struct vc4_dev *vc4 = drm->dev_private;
+@@ -1397,13 +1400,15 @@ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
+ #ifdef CONFIG_DRM_VC4_HDMI_CEC
+ 	hdmi->cec_adap = cec_allocate_adapter(&vc4_hdmi_cec_adap_ops,
+ 					      vc4, "vc4",
+-					      CEC_CAP_TRANSMIT |
+-					      CEC_CAP_LOG_ADDRS |
+-					      CEC_CAP_PASSTHROUGH |
+-					      CEC_CAP_RC, 1);
++					      CEC_CAP_DEFAULTS |
++					      CEC_CAP_CONNECTOR_INFO, 1);
+ 	ret = PTR_ERR_OR_ZERO(hdmi->cec_adap);
+ 	if (ret < 0)
+ 		goto err_destroy_conn;
 +
-+	ao_cec->notify = cec_notifier_cec_adap_register(hdmi_dev, NULL,
-+							ao_cec->adap);
-+	if (!ao_cec->notify) {
-+		ret = -ENOMEM;
-+		goto out_probe_adapter;
- 	}
- 
- 	ao_cec->adap->owner = THIS_MODULE;
-@@ -638,7 +640,7 @@ static int meson_ao_cec_probe(struct platform_device *pdev)
- 	ao_cec->base = devm_ioremap_resource(&pdev->dev, res);
- 	if (IS_ERR(ao_cec->base)) {
- 		ret = PTR_ERR(ao_cec->base);
--		goto out_probe_adapter;
-+		goto out_probe_notify;
- 	}
- 
- 	irq = platform_get_irq(pdev, 0);
-@@ -648,20 +650,20 @@ static int meson_ao_cec_probe(struct platform_device *pdev)
- 					0, NULL, ao_cec);
- 	if (ret) {
- 		dev_err(&pdev->dev, "irq request failed\n");
--		goto out_probe_adapter;
-+		goto out_probe_notify;
- 	}
- 
- 	ao_cec->core = devm_clk_get(&pdev->dev, "core");
- 	if (IS_ERR(ao_cec->core)) {
- 		dev_err(&pdev->dev, "core clock request failed\n");
- 		ret = PTR_ERR(ao_cec->core);
--		goto out_probe_adapter;
-+		goto out_probe_notify;
- 	}
- 
- 	ret = clk_prepare_enable(ao_cec->core);
- 	if (ret) {
- 		dev_err(&pdev->dev, "core clock enable failed\n");
--		goto out_probe_adapter;
-+		goto out_probe_notify;
- 	}
- 
- 	ret = clk_set_rate(ao_cec->core, CEC_CLK_RATE);
-@@ -685,19 +687,17 @@ static int meson_ao_cec_probe(struct platform_device *pdev)
- 	writel_relaxed(CEC_GEN_CNTL_RESET,
- 		       ao_cec->base + CEC_GEN_CNTL_REG);
- 
--	cec_register_cec_notifier(ao_cec->adap, ao_cec->notify);
--
- 	return 0;
- 
- out_probe_clk:
- 	clk_disable_unprepare(ao_cec->core);
- 
-+out_probe_notify:
-+	cec_notifier_cec_adap_unregister(ao_cec->notify);
++	cec_fill_conn_info_from_drm(&conn_info, hdmi->connector);
++	cec_s_conn_info(hdmi->cec_adap, &conn_info);
 +
- out_probe_adapter:
- 	cec_delete_adapter(ao_cec->adap);
- 
--out_probe_notify:
--	cec_notifier_put(ao_cec->notify);
--
- 	dev_err(&pdev->dev, "CEC controller registration failed\n");
- 
- 	return ret;
-@@ -709,10 +709,9 @@ static int meson_ao_cec_remove(struct platform_device *pdev)
- 
- 	clk_disable_unprepare(ao_cec->core);
- 
-+	cec_notifier_cec_adap_unregister(ao_cec->notify);
- 	cec_unregister_adapter(ao_cec->adap);
- 
--	cec_notifier_put(ao_cec->notify);
--
- 	return 0;
- }
- 
+ 	HDMI_WRITE(VC4_HDMI_CPU_MASK_SET, 0xffffffff);
+ 	value = HDMI_READ(VC4_HDMI_CEC_CNTRL_1);
+ 	value &= ~VC4_HDMI_CEC_DIV_CLK_CNT_MASK;
 -- 
 2.20.1
 
