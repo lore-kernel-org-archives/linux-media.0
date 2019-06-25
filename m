@@ -2,39 +2,41 @@ Return-Path: <SRS0=f2lN=UY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B95A2C48BD5
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9B3BC48BD7
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:11:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 912D9208E3
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:11:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7DE9D21670
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 14:11:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729599AbfFYOLR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jun 2019 10:11:17 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50531 "EHLO
+        id S1728818AbfFYOLT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jun 2019 10:11:19 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43411 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728703AbfFYOLR (ORCPT
+        with ESMTP id S1729476AbfFYOLR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 25 Jun 2019 10:11:17 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mtr@pengutronix.de>)
-        id 1hfmAF-00042o-Ts; Tue, 25 Jun 2019 16:11:15 +0200
+        id 1hfmAF-00042p-Tq; Tue, 25 Jun 2019 16:11:15 +0200
 Received: from mtr by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mtr@pengutronix.de>)
-        id 1hfmAF-0007xt-Bi; Tue, 25 Jun 2019 16:11:15 +0200
+        id 1hfmAF-0007y4-CO; Tue, 25 Jun 2019 16:11:15 +0200
 From:   Michael Tretter <m.tretter@pengutronix.de>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@pengutronix.de, pawel@osciak.com, hverkuil-cisco@xs4all.nl,
         mchehab@kernel.org, Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH 0/2] vb2: check for events before checking for buffers
-Date:   Tue, 25 Jun 2019 16:11:11 +0200
-Message-Id: <20190625141113.30301-1-m.tretter@pengutronix.de>
+Subject: [PATCH 1/2] media: vb2: reorder checks in vb2_poll()
+Date:   Tue, 25 Jun 2019 16:11:12 +0200
+Message-Id: <20190625141113.30301-2-m.tretter@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190625141113.30301-1-m.tretter@pengutronix.de>
+References: <20190625141113.30301-1-m.tretter@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
@@ -46,28 +48,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The patches fix a race condition in the poll functions of v4l2 devices.
+When reaching the end of stream, V4L2 clients may expect the
+V4L2_EOS_EVENT before being able to dequeue the last buffer, which has
+the V4L2_BUF_FLAG_LAST flag set.
 
-Whenever a driver returns a buffer with the V4L2_BUF_FLAG_LAST flag set, it
-must also return a V4L2_EVENT_EOS. Checking for events before checking for
-buffers creates a race condition where drivers can return the buffer and event
-between the checks and thus only signal the buffer without the event.
-Reordering the checks avoids the race condition.
+If the vb2_poll() function first checks for events and afterwards if
+buffers are available, a driver can queue the V4L2_EOS_EVENT event and
+return the buffer after the check for events but before the check for
+buffers. This causes vb2_poll() to signal that the buffer with
+V4L2_BUF_FLAG_LAST can be read without the V4L2_EOS_EVENT being
+available.
 
-I discovered this issue in the allegro-dvt driver [0].
+First, check for available buffers and afterwards for events to ensure
+that if vb2_poll() signals POLLIN | POLLRDNORM for the
+V4L2_BUF_FLAG_LAST buffer, it also signals POLLPRI for the
+V4L2_EOS_EVENT.
 
-Michael
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+---
+ drivers/media/common/videobuf2/videobuf2-v4l2.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-[0] https://lore.kernel.org/linux-media/20190527154557.62278063@litschi.hi.pengutronix.de/
-
-Michael Tretter (2):
-  media: vb2: reorder checks in vb2_poll()
-  media: v4l2-mem2mem: reorder checks in v4l2_m2m_poll()
-
- .../media/common/videobuf2/videobuf2-v4l2.c   |  8 ++--
- drivers/media/v4l2-core/v4l2-mem2mem.c        | 47 +++++++++++--------
- 2 files changed, 32 insertions(+), 23 deletions(-)
-
+diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+index 40d76eb4c2fe..5a9ba3846f0a 100644
+--- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
++++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+@@ -872,17 +872,19 @@ EXPORT_SYMBOL_GPL(vb2_queue_release);
+ __poll_t vb2_poll(struct vb2_queue *q, struct file *file, poll_table *wait)
+ {
+ 	struct video_device *vfd = video_devdata(file);
+-	__poll_t res = 0;
++	__poll_t res;
++
++	res = vb2_core_poll(q, file, wait);
+ 
+ 	if (test_bit(V4L2_FL_USES_V4L2_FH, &vfd->flags)) {
+ 		struct v4l2_fh *fh = file->private_data;
+ 
+ 		poll_wait(file, &fh->wait, wait);
+ 		if (v4l2_event_pending(fh))
+-			res = EPOLLPRI;
++			res |= EPOLLPRI;
+ 	}
+ 
+-	return res | vb2_core_poll(q, file, wait);
++	return res;
+ }
+ EXPORT_SYMBOL_GPL(vb2_poll);
+ 
 -- 
 2.20.1
 
