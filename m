@@ -2,143 +2,65 @@ Return-Path: <SRS0=f2lN=UY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11174C48BD5
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 16:28:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC4C1C48BD6
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 20:19:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DE7B0208E3
-	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 16:28:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="ibbxoANa";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=codeaurora.org header.i=@codeaurora.org header.b="E1Npiens"
+	by mail.kernel.org (Postfix) with ESMTP id 8AF7720663
+	for <linux-media@archiver.kernel.org>; Tue, 25 Jun 2019 20:19:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729968AbfFYQ2C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 25 Jun 2019 12:28:02 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:33124 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726740AbfFYQ2C (ORCPT
+        id S1726576AbfFYUTg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 25 Jun 2019 16:19:36 -0400
+Received: from asavdk4.altibox.net ([109.247.116.15]:43796 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726443AbfFYUTg (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 25 Jun 2019 12:28:02 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id F250660A50; Tue, 25 Jun 2019 16:27:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561480080;
-        bh=9YJM4tU5HxDZl9fZSxJofxKk+vfCRAK8/CRj4QgCb8E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ibbxoANaKtrFmaGLUaWfC/EsfPbTyKu5A1MpYnuG3DdppVI1FR6ch7MMlwIzz9M81
-         RkLjQK+02H0hWeZS9k64j6+FZUtoTpNOwN2ngDXwqjwhkO6ftKvQKtP+NDFCRBQ+VK
-         UWtgmUcVPdELQ6tGNy+u0Yl2YQIo9KJNY7plUkAQ=
-Received: from amasule-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        Tue, 25 Jun 2019 16:19:36 -0400
+Received: from ravnborg.org (unknown [158.248.194.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: amasule@codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 19F0B60ACA;
-        Tue, 25 Jun 2019 16:27:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1561480077;
-        bh=9YJM4tU5HxDZl9fZSxJofxKk+vfCRAK8/CRj4QgCb8E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E1Npiens45yXJ9e7WRQ433JEcVM2EmXT39qOJUuZ0PSuo2YuAY3Ti1e8ftgit0m4z
-         dNbzlRIP77ZXAz/s/WbH8cUSPNYGpERElQiMjER1kwWko+X6hzFiwXR88ItFAADv6U
-         awWxCp08ZvXHibMteKh0hhsSeT5WMUMKhYhbHvzQ=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 19F0B60ACA
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=amasule@codeaurora.org
-From:   Aniket Masule <amasule@codeaurora.org>
-To:     linux-media@vger.kernel.org, stanimir.varbanov@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        vgarodia@codeaurora.org, Aniket Masule <amasule@codeaurora.org>
-Subject: [PATCH v3 3/4] media: venus: Add interface for load per core
-Date:   Tue, 25 Jun 2019 21:57:23 +0530
-Message-Id: <1561480044-11834-4-git-send-email-amasule@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1561480044-11834-1-git-send-email-amasule@codeaurora.org>
-References: <1561480044-11834-1-git-send-email-amasule@codeaurora.org>
+        by asavdk4.altibox.net (Postfix) with ESMTPS id A415980301;
+        Tue, 25 Jun 2019 22:19:32 +0200 (CEST)
+Date:   Tue, 25 Jun 2019 22:19:31 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        od@zcrc.me, Artur Rojek <contact@artur-rojek.eu>
+Subject: Re: [PATCH v5 3/3] drm/panel: simple: Add GiantPlus GPM940B0 panel
+ support
+Message-ID: <20190625201931.GA16534@ravnborg.org>
+References: <20190605222247.25657-1-paul@crapouillou.net>
+ <20190605222247.25657-3-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190605222247.25657-3-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=VcLZwmh9 c=1 sm=1 tr=0
+        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
+        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=ER_8r6IbAAAA:8
+        a=p6pI0oa4AAAA:8 a=GuWfQEC4cNS6DloS6WAA:9 a=CjuIK1q_8ugA:10
+        a=xLgPWTrI3asA:10 a=9LHmKk7ezEChjTCyhBa9:22 a=9cw2y2bKwytFd151gpuR:22
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add and interface to calculate load per core. Also,
-add an interface to get maximum cores available with
-video. This interface is preparation for updating core
-selection.
+On Thu, Jun 06, 2019 at 12:22:47AM +0200, Paul Cercueil wrote:
+> The GiantPlus GPM940B0 is a simple 3.0" 320x240 24-bit TFT panel.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Tested-by: Artur Rojek <contact@artur-rojek.eu>
 
-Signed-off-by: Aniket Masule <amasule@codeaurora.org>
----
- drivers/media/platform/qcom/venus/helpers.c    | 19 +++++++++++++++++++
- drivers/media/platform/qcom/venus/hfi_helper.h |  1 +
- drivers/media/platform/qcom/venus/hfi_parser.h |  5 +++++
- 3 files changed, 25 insertions(+)
+All patches applied to drm-misc-next.
+Added the ack from the mails to patch 2.
 
-diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
-index e1a0247..b79e83a 100644
---- a/drivers/media/platform/qcom/venus/helpers.c
-+++ b/drivers/media/platform/qcom/venus/helpers.c
-@@ -26,6 +26,7 @@
- #include "helpers.h"
- #include "hfi_helper.h"
- #include "hfi_venus_io.h"
-+#include "hfi_parser.h"
- 
- struct intbuf {
- 	struct list_head list;
-@@ -331,6 +332,24 @@ static u32 load_per_instance(struct venus_inst *inst)
- 	return mbs * inst->fps;
- }
- 
-+static u32 load_per_core(struct venus_core *core, u32 core_id)
-+{
-+	struct venus_inst *inst = NULL;
-+	u32 mbs_per_sec = 0, load = 0;
-+
-+	mutex_lock(&core->lock);
-+	list_for_each_entry(inst, &core->instances, list) {
-+		if (!(inst->clk_data.core_id == core_id))
-+			continue;
-+
-+		mbs_per_sec = load_per_instance(inst);
-+		load = mbs_per_sec * inst->clk_data.codec_freq_data->vpp_freq;
-+	}
-+	mutex_unlock(&core->lock);
-+
-+	return load;
-+}
-+
- static u32 load_per_type(struct venus_core *core, u32 session_type)
- {
- 	struct venus_inst *inst = NULL;
-diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-index 34ea503..f3d1018 100644
---- a/drivers/media/platform/qcom/venus/hfi_helper.h
-+++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-@@ -559,6 +559,7 @@ struct hfi_bitrate {
- #define HFI_CAPABILITY_LCU_SIZE				0x14
- #define HFI_CAPABILITY_HIER_P_HYBRID_NUM_ENH_LAYERS	0x15
- #define HFI_CAPABILITY_MBS_PER_SECOND_POWERSAVE		0x16
-+#define HFI_CAPABILITY_MAX_VIDEOCORES		0x2B
- 
- struct hfi_capability {
- 	u32 capability_type;
-diff --git a/drivers/media/platform/qcom/venus/hfi_parser.h b/drivers/media/platform/qcom/venus/hfi_parser.h
-index 3e931c7..264e6dd 100644
---- a/drivers/media/platform/qcom/venus/hfi_parser.h
-+++ b/drivers/media/platform/qcom/venus/hfi_parser.h
-@@ -107,4 +107,9 @@ static inline u32 frate_step(struct venus_inst *inst)
- 	return cap_step(inst, HFI_CAPABILITY_FRAMERATE);
- }
- 
-+static inline u32 core_num_max(struct venus_inst *inst)
-+{
-+	return cap_max(inst, HFI_CAPABILITY_MAX_VIDEOCORES);
-+}
-+
- #endif
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+	Sam
