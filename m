@@ -6,35 +6,37 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05F79C48BD3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59127C48BD6
 	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DF81B2086D
-	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F8BA2086D
+	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727058AbfFZHoa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Jun 2019 03:44:30 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:45505 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727025AbfFZHo3 (ORCPT
+        id S1727059AbfFZHob (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Jun 2019 03:44:31 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:41161 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727007AbfFZHo3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 26 Jun 2019 03:44:29 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id g2bNh3RUP7KeZg2bThhHol; Wed, 26 Jun 2019 09:44:28 +0200
+        id g2bNh3RUP7KeZg2bRhhHnu; Wed, 26 Jun 2019 09:44:26 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 08/16] pxa_camera: set device_caps in struct video_device
-Date:   Wed, 26 Jun 2019 09:44:13 +0200
-Message-Id: <20190626074421.38739-9-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: [PATCH 03/16] s3c-camif/s5p-g2d/s5p-jpeg: set device_caps in struct video_device
+Date:   Wed, 26 Jun 2019 09:44:08 +0200
+Message-Id: <20190626074421.38739-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
 References: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfAMxzN4FUyPeZTym9v7gc0ycLbc7FiT7ilC6KdR/vAZsnW1y5GPq1P9y+j+zRAZI5JfoUdgzCy7wAJHBCrMWWq2CxD0K8657n1s8OscrvzuZi7obxnHF
- 0UXPVB1NsmhM69tdw24Pj0WjETUET6jViFvDQOw3IqzJN93/Be6ygk2O1HCR4sCzqesYP/+kJbnU7KUg5FJgZQG16hNJq34S253wMHMSYFgwxwdl78Y9o0yO
+X-CMAE-Envelope: MS4wfPhWcZmTM3uGjHlmVJfH7WGtY8O4exJsKuN6Y6jgaswPyPeLEYLnsiA8QAPwUtSX9L1yu2hoKRQ+jutvRzCZtKYMn2IXFeVoFaBej1YUvmJujVnI0Zq7
+ SbSRkngWPdJNYfh3pUXkFmy9UppQLZh792PZ+6nYT5mP06Un/Ji6ujFSv5Ryrpv4VWBvYYupuq1R7j619vWII3XMICSTZbLAmaDXjGQRnJXnGCwfaH6DU8jw
+ kSpSNG/wOWjDCAE4eoLYkQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -47,24 +49,86 @@ That way the V4L2 core knows what the capabilities of the
 video device are.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
 ---
- drivers/media/platform/pxa_camera.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/media/platform/s3c-camif/camif-capture.c | 5 +----
+ drivers/media/platform/s5p-g2d/g2d.c             | 3 +--
+ drivers/media/platform/s5p-jpeg/jpeg-core.c      | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/pxa_camera.c b/drivers/media/platform/pxa_camera.c
-index 1c9bfaabc54c..53682da099c5 100644
---- a/drivers/media/platform/pxa_camera.c
-+++ b/drivers/media/platform/pxa_camera.c
-@@ -1992,9 +1992,6 @@ static int pxac_vidioc_querycap(struct file *file, void *priv,
- 	strscpy(cap->bus_info, "platform:pxa-camera", sizeof(cap->bus_info));
- 	strscpy(cap->driver, PXA_CAM_DRV_NAME, sizeof(cap->driver));
- 	strscpy(cap->card, pxa_cam_driver_description, sizeof(cap->card));
--	cap->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+diff --git a/drivers/media/platform/s3c-camif/camif-capture.c b/drivers/media/platform/s3c-camif/camif-capture.c
+index c3fc94ef251e..2ef0ca9bbbcb 100644
+--- a/drivers/media/platform/s3c-camif/camif-capture.c
++++ b/drivers/media/platform/s3c-camif/camif-capture.c
+@@ -644,10 +644,6 @@ static int s3c_camif_vidioc_querycap(struct file *file, void *priv,
+ 	strscpy(cap->card, S3C_CAMIF_DRIVER_NAME, sizeof(cap->card));
+ 	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s.%d",
+ 		 dev_name(vp->camif->dev), vp->id);
+-
+-	cap->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_CAPTURE;
 -	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
 -
  	return 0;
  }
  
+@@ -1166,6 +1162,7 @@ int s3c_camif_register_video_node(struct camif_dev *camif, int idx)
+ 		goto err_me_cleanup;
+ 
+ 	vfd->ctrl_handler = &vp->ctrl_handler;
++	vfd->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_CAPTURE;
+ 
+ 	ret = video_register_device(vfd, VFL_TYPE_GRABBER, -1);
+ 	if (ret)
+diff --git a/drivers/media/platform/s5p-g2d/g2d.c b/drivers/media/platform/s5p-g2d/g2d.c
+index 152d192d5c3f..131d55cc7450 100644
+--- a/drivers/media/platform/s5p-g2d/g2d.c
++++ b/drivers/media/platform/s5p-g2d/g2d.c
+@@ -296,8 +296,6 @@ static int vidioc_querycap(struct file *file, void *priv,
+ 	strscpy(cap->driver, G2D_NAME, sizeof(cap->driver));
+ 	strscpy(cap->card, G2D_NAME, sizeof(cap->card));
+ 	cap->bus_info[0] = 0;
+-	cap->device_caps = V4L2_CAP_VIDEO_M2M | V4L2_CAP_STREAMING;
+-	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+ 	return 0;
+ }
+ 
+@@ -704,6 +702,7 @@ static int g2d_probe(struct platform_device *pdev)
+ 	set_bit(V4L2_FL_QUIRK_INVERTED_CROP, &vfd->flags);
+ 	vfd->lock = &dev->mutex;
+ 	vfd->v4l2_dev = &dev->v4l2_dev;
++	vfd->device_caps = V4L2_CAP_VIDEO_M2M | V4L2_CAP_STREAMING;
+ 	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
+ 	if (ret) {
+ 		v4l2_err(&dev->v4l2_dev, "Failed to register video device\n");
+diff --git a/drivers/media/platform/s5p-jpeg/jpeg-core.c b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+index 8cc730eccb6c..3ecb29c75968 100644
+--- a/drivers/media/platform/s5p-jpeg/jpeg-core.c
++++ b/drivers/media/platform/s5p-jpeg/jpeg-core.c
+@@ -1288,8 +1288,6 @@ static int s5p_jpeg_querycap(struct file *file, void *priv,
+ 	}
+ 	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s",
+ 		 dev_name(ctx->jpeg->dev));
+-	cap->device_caps = V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_M2M;
+-	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+ 	return 0;
+ }
+ 
+@@ -2977,6 +2975,7 @@ static int s5p_jpeg_probe(struct platform_device *pdev)
+ 	jpeg->vfd_encoder->lock		= &jpeg->lock;
+ 	jpeg->vfd_encoder->v4l2_dev	= &jpeg->v4l2_dev;
+ 	jpeg->vfd_encoder->vfl_dir	= VFL_DIR_M2M;
++	jpeg->vfd_encoder->device_caps	= V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_M2M;
+ 
+ 	ret = video_register_device(jpeg->vfd_encoder, VFL_TYPE_GRABBER, -1);
+ 	if (ret) {
+@@ -3006,6 +3005,7 @@ static int s5p_jpeg_probe(struct platform_device *pdev)
+ 	jpeg->vfd_decoder->lock		= &jpeg->lock;
+ 	jpeg->vfd_decoder->v4l2_dev	= &jpeg->v4l2_dev;
+ 	jpeg->vfd_decoder->vfl_dir	= VFL_DIR_M2M;
++	jpeg->vfd_decoder->device_caps	= V4L2_CAP_STREAMING | V4L2_CAP_VIDEO_M2M;
+ 
+ 	ret = video_register_device(jpeg->vfd_decoder, VFL_TYPE_GRABBER, -1);
+ 	if (ret) {
 -- 
 2.20.1
 
