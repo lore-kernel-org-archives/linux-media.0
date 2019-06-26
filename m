@@ -2,81 +2,158 @@ Return-Path: <SRS0=aREJ=UZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AD45C4646B
-	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D47FCC4646B
+	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:45:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF0FB2086D
-	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B60C02133F
+	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:45:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727091AbfFZHoi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Jun 2019 03:44:38 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:50687 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727078AbfFZHoe (ORCPT
+        id S1726445AbfFZHp0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Jun 2019 03:45:26 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37039 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbfFZHpZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Jun 2019 03:44:34 -0400
-Received: from tschai.fritz.box ([46.9.252.75])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id g2bNh3RUP7KeZg2bZhhHrA; Wed, 26 Jun 2019 09:44:34 +0200
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benoit Parrot <bparrot@ti.com>
-Subject: [PATCH 15/16] ti-vpe: set device_caps in struct video_device
-Date:   Wed, 26 Jun 2019 09:44:20 +0200
-Message-Id: <20190626074421.38739-16-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
-References: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfNCjFJhN1Fb9b8791SEdpL66jnzKmHxA7Y2YcugEaS6lZhnfnYwS7Wy6OLrQnLe7km97hwYQIdginfY0t3a7ODFpVWISW4gTrQ6QkI5rBX13sjTA7Mnw
- aTwBMHX2g69MJnvTQZPAgwEG5GK+Qdl1zjQDHBPS00C4vWGsGsv5CfWZJSuX2YePe3NV1RagXv39Y9QevMPSN3qaXZRRKHYU+5agTsZWa9Kv2eonzIJr+rXD
- 25kr0h6t5IDYdItxv5Q3sQ==
+        Wed, 26 Jun 2019 03:45:25 -0400
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1hg2cN-0007JV-7o; Wed, 26 Jun 2019 09:45:23 +0200
+Message-ID: <1561535121.4870.1.camel@pengutronix.de>
+Subject: Re: [PATCH] media: imx: mipi csi-2: Don't fail if initial state
+ times-out
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        kernel@collabora.com, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Date:   Wed, 26 Jun 2019 09:45:21 +0200
+In-Reply-To: <20190625203945.28081-1-ezequiel@collabora.com>
+References: <20190625203945.28081-1-ezequiel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of filling in the struct v4l2_capability device_caps
-field, fill in the struct video_device device_caps field.
+On Tue, 2019-06-25 at 17:39 -0300, Ezequiel Garcia wrote:
+> Not all sensors will be able to guarantee a proper initial state.
+> This may be either because the driver is not properly written,
+> or (probably unlikely) because the hardware won't support it.
+> 
+> While the right solution in the former case is to fix the sensor
+> driver, the real world not always allows right solutions, due to lack
+> of available documentation and support on these sensors.
 
-That way the V4L2 core knows what the capabilities of the
-video device are.
+Do you have a real world example for this?
 
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Benoit Parrot <bparrot@ti.com>
----
- drivers/media/platform/ti-vpe/cal.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> Let's relax this requirement, and allow the driver to support stream start,
+> even if the sensor initial sequence wasn't the expected.
+> A warning is still emitted, so users should be hinted that something is off.
 
-diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 8d075683e448..3fa306a45787 100644
---- a/drivers/media/platform/ti-vpe/cal.c
-+++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -916,9 +916,6 @@ static int cal_querycap(struct file *file, void *priv,
- 
- 	snprintf(cap->bus_info, sizeof(cap->bus_info),
- 		 "platform:%s", ctx->v4l2_dev.name);
--	cap->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
--			    V4L2_CAP_READWRITE;
--	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
- 	return 0;
- }
- 
-@@ -1422,6 +1419,8 @@ static const struct video_device cal_videodev = {
- 	.ioctl_ops	= &cal_ioctl_ops,
- 	.minor		= -1,
- 	.release	= video_device_release_empty,
-+	.device_caps	= V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING |
-+			  V4L2_CAP_READWRITE,
- };
- 
- /* -----------------------------------------------------------------
--- 
-2.20.1
+I think the messages could use a note that they may be due to a sensor
+or sensor driver bug, and that there might be image artifacts or
+outright failure to capture as a consequence.
 
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+
+regards
+Philipp
+
+> ---
+>  drivers/staging/media/imx/imx6-mipi-csi2.c | 33 ++++++----------------
+>  1 file changed, 9 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging/media/imx/imx6-mipi-csi2.c
+> index f29e28df36ed..10342434e797 100644
+> --- a/drivers/staging/media/imx/imx6-mipi-csi2.c
+> +++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
+> @@ -243,7 +243,7 @@ static int __maybe_unused csi2_dphy_wait_ulp(struct csi2_dev *csi2)
+>  }
+>  
+>  /* Waits for low-power LP-11 state on data and clock lanes. */
+> -static int csi2_dphy_wait_stopstate(struct csi2_dev *csi2)
+> +static void csi2_dphy_wait_stopstate(struct csi2_dev *csi2)
+>  {
+>  	u32 mask, reg;
+>  	int ret;
+> @@ -253,29 +253,21 @@ static int csi2_dphy_wait_stopstate(struct csi2_dev *csi2)
+>  
+>  	ret = readl_poll_timeout(csi2->base + CSI2_PHY_STATE, reg,
+>  				 (reg & mask) == mask, 0, 500000);
+> -	if (ret) {
+> -		v4l2_err(&csi2->sd, "LP-11 timeout, phy_state = 0x%08x\n", reg);
+> -		return ret;
+> -	}
+> -
+> -	return 0;
+> +	if (ret)
+> +		v4l2_warn(&csi2->sd, "LP-11 timeout, phy_state = 0x%08x\n", reg);
+>  }
+>  
+>  /* Wait for active clock on the clock lane. */
+> -static int csi2_dphy_wait_clock_lane(struct csi2_dev *csi2)
+> +static void csi2_dphy_wait_clock_lane(struct csi2_dev *csi2)
+>  {
+>  	u32 reg;
+>  	int ret;
+>  
+>  	ret = readl_poll_timeout(csi2->base + CSI2_PHY_STATE, reg,
+>  				 (reg & PHY_RXCLKACTIVEHS), 0, 500000);
+> -	if (ret) {
+> -		v4l2_err(&csi2->sd, "clock lane timeout, phy_state = 0x%08x\n",
+> -			 reg);
+> -		return ret;
+> -	}
+> -
+> -	return 0;
+> +	if (ret)
+> +		v4l2_warn(&csi2->sd, "clock lane timeout, phy_state = 0x%08x\n",
+> +			  reg);
+>  }
+>  
+>  /* Setup the i.MX CSI2IPU Gasket */
+> @@ -316,9 +308,7 @@ static int csi2_start(struct csi2_dev *csi2)
+>  	csi2_enable(csi2, true);
+>  
+>  	/* Step 5 */
+> -	ret = csi2_dphy_wait_stopstate(csi2);
+> -	if (ret)
+> -		goto err_assert_reset;
+> +	csi2_dphy_wait_stopstate(csi2);
+>  
+>  	/* Step 6 */
+>  	ret = v4l2_subdev_call(csi2->src_sd, video, s_stream, 1);
+> @@ -327,14 +317,9 @@ static int csi2_start(struct csi2_dev *csi2)
+>  		goto err_assert_reset;
+>  
+>  	/* Step 7 */
+> -	ret = csi2_dphy_wait_clock_lane(csi2);
+> -	if (ret)
+> -		goto err_stop_upstream;
+> -
+> +	csi2_dphy_wait_clock_lane(csi2);
+>  	return 0;
+>  
+> -err_stop_upstream:
+> -	v4l2_subdev_call(csi2->src_sd, video, s_stream, 0);
+>  err_assert_reset:
+>  	csi2_enable(csi2, false);
+>  err_disable_clk:
