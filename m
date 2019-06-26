@@ -6,37 +6,35 @@ X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A117C48BD3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5713C48BD6
 	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 041AD2086D
+	by mail.kernel.org (Postfix) with ESMTP id A21372086D
 	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbfFZHoc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Jun 2019 03:44:32 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:50385 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727042AbfFZHoa (ORCPT
+        id S1727077AbfFZHod (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Jun 2019 03:44:33 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:57443 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727001AbfFZHo2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Jun 2019 03:44:30 -0400
+        Wed, 26 Jun 2019 03:44:28 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id g2bNh3RUP7KeZg2bUhhHpO; Wed, 26 Jun 2019 09:44:29 +0200
+        id g2bNh3RUP7KeZg2bThhHoO; Wed, 26 Jun 2019 09:44:27 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCH 11/16] xilinx: set device_caps in struct video_device
-Date:   Wed, 26 Jun 2019 09:44:16 +0200
-Message-Id: <20190626074421.38739-12-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 06/16] mx2_emmaprp: set device_caps in struct video_device
+Date:   Wed, 26 Jun 2019 09:44:11 +0200
+Message-Id: <20190626074421.38739-7-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
 References: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfB55D53BG9qdt5+XrqwddPCA/aD9C9IqX9YFfWEP/vdI6LGk7M9PMiUle47KC5GB2OlymaKciyfcyOs/94u1bQwn8N01bFFIw8XgWc5GMiTt0yduup/o
- HOdQYoNs4rzt5KH2tQMJh3jO4b1bAfdCXnD0H0ddtv/DFxbdpe4cP88xCfLZbHBuOMCOsMmHBCw16ovgkTkPFKAaF6XK5OgIjIY/PHpzmROS1cSG7OGz1pP8
- FTWpj6O/405J7xL/Mg9lASC0YjznfDKRCShiAlYUW/o=
+X-CMAE-Envelope: MS4wfK5lngGVNa+o3sMUctkGWqBSwmYTdwh9qXbm6bcB1vfyH7RxcPDxrwCVg8cgs+jACveYg4HHrUQnKwy+MnlHag+f1uaaf99B+b+4kJd9myxOnEnMgUhc
+ v/3Wvz9gnARXXwv3HmHZWFUDjFCSKmcwlamPmGmqPF7BJC/1Mq3N3o5Pq8cPHkSxzfqafaa2BAH26h6oASjgOAKCMwCrn5tS1yKx1aT+8bdv6Oy6y7ykeetU
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -49,45 +47,31 @@ That way the V4L2 core knows what the capabilities of the
 video device are.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/media/platform/xilinx/xilinx-dma.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ drivers/media/platform/mx2_emmaprp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/xilinx/xilinx-dma.c b/drivers/media/platform/xilinx/xilinx-dma.c
-index c9d5fdb2d407..bcd783d9e5ae 100644
---- a/drivers/media/platform/xilinx/xilinx-dma.c
-+++ b/drivers/media/platform/xilinx/xilinx-dma.c
-@@ -491,15 +491,8 @@ xvip_dma_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
- 	struct v4l2_fh *vfh = file->private_data;
- 	struct xvip_dma *dma = to_xvip_dma(vfh->vdev);
+diff --git a/drivers/media/platform/mx2_emmaprp.c b/drivers/media/platform/mx2_emmaprp.c
+index 333324c75027..a77fff122467 100644
+--- a/drivers/media/platform/mx2_emmaprp.c
++++ b/drivers/media/platform/mx2_emmaprp.c
+@@ -383,8 +383,6 @@ static int vidioc_querycap(struct file *file, void *priv,
+ {
+ 	strscpy(cap->driver, MEM2MEM_NAME, sizeof(cap->driver));
+ 	strscpy(cap->card, MEM2MEM_NAME, sizeof(cap->card));
+-	cap->device_caps = V4L2_CAP_VIDEO_M2M | V4L2_CAP_STREAMING;
+-	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+ 	return 0;
+ }
  
--	cap->device_caps = V4L2_CAP_STREAMING;
--
--	if (dma->queue.type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
--		cap->device_caps |= V4L2_CAP_VIDEO_CAPTURE;
--	else
--		cap->device_caps |= V4L2_CAP_VIDEO_OUTPUT;
--
--	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS
--			  | dma->xdev->v4l2_caps;
-+	cap->capabilities = dma->xdev->v4l2_caps | V4L2_CAP_STREAMING |
-+			    V4L2_CAP_DEVICE_CAPS;
+@@ -866,6 +864,7 @@ static const struct video_device emmaprp_videodev = {
+ 	.minor		= -1,
+ 	.release	= video_device_release,
+ 	.vfl_dir	= VFL_DIR_M2M,
++	.device_caps	= V4L2_CAP_VIDEO_M2M | V4L2_CAP_STREAMING,
+ };
  
- 	strscpy(cap->driver, "xilinx-vipp", sizeof(cap->driver));
- 	strscpy(cap->card, dma->video.name, sizeof(cap->card));
-@@ -700,6 +693,11 @@ int xvip_dma_init(struct xvip_composite_device *xdev, struct xvip_dma *dma,
- 	dma->video.release = video_device_release_empty;
- 	dma->video.ioctl_ops = &xvip_dma_ioctl_ops;
- 	dma->video.lock = &dma->lock;
-+	dma->video.device_caps = V4L2_CAP_STREAMING;
-+	if (type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
-+		dma->video.device_caps |= V4L2_CAP_VIDEO_CAPTURE;
-+	else
-+		dma->video.device_caps |= V4L2_CAP_VIDEO_OUTPUT;
- 
- 	video_set_drvdata(&dma->video, dma);
- 
+ static const struct v4l2_m2m_ops m2m_ops = {
 -- 
 2.20.1
 
