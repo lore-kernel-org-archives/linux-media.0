@@ -2,86 +2,307 @@ Return-Path: <SRS0=aREJ=UZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_MUTT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A5DACC48BD3
-	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 13:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86F4FC48BD3
+	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 13:55:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7F8E0214DA
-	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 13:09:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E847214DA
+	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 13:55:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="XPS8CEt1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727221AbfFZNJw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 26 Jun 2019 09:09:52 -0400
-Received: from zyloware.com ([23.95.19.78]:45215 "EHLO chulaseafood.com"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726347AbfFZNJw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 26 Jun 2019 09:09:52 -0400
-X-Greylist: delayed 4552 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jun 2019 09:09:51 EDT
-To:     linux-media@vger.kernel.org
-Subject: =?UTF-8?B?wrcgICAgICAgICBjYW4geW91IGd1aWRlIG1lPw==?=
-Message-ID: <e2467b69bf06f53fb197e71a4dc92f20@inaflashweb.com>
-Date:   Wed, 26 Jun 2019 13:35:59 +0200
-From:   "Laura" <ansitaasdsaksi@verizon.net>
-Reply-To: ansitaasdsaksi@verizon.net
+        id S1726984AbfFZNzf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 26 Jun 2019 09:55:35 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:57896 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726131AbfFZNzf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 26 Jun 2019 09:55:35 -0400
+Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E1ED8510;
+        Wed, 26 Jun 2019 15:55:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1561557332;
+        bh=+CC9ANi8/Ku0f/Ys9SGE2LCev3ajWW2zat4vq9Rbj9E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XPS8CEt1LclSnzTpUQSz8pUZazvbymw0/GSb+IhA6vcVCohDCC+uwuupWcCfYRaDO
+         HSOdtOISzB4CsJxQKqXlK9p2haBVM4qZXux3iIBRfyVZNBbnXH8rudwJfjZh+C8fQ7
+         9hU1PepZ/CKM2IFbDUlfDp+LBkRCPST1VM1f1UVA=
+Date:   Wed, 26 Jun 2019 16:55:12 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Prabhakar Lad <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH] drivers/media: don't set pix->priv = 0
+Message-ID: <20190626135512.GB5015@pendragon.ideasonboard.com>
+References: <2269be5f-c57a-a63b-9603-63e02de6767e@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2269be5f-c57a-a63b-9603-63e02de6767e@xs4all.nl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+Hi Hans,
 
-Did you see my email below from last week?
+Thank you for the patch.
 
-We manufacture ALL custom LOGO and branded products – over 300,000 to
-choose from.
+On Wed, Jun 26, 2019 at 11:58:02AM +0200, Hans Verkuil wrote:
+> The priv field of struct v4l2_pix_format shouldn't be set by drivers,
+> it's set by the v4l2 core instead to V4L2_PIX_FMT_PRIV_MAGIC.
+> 
+> Drop this from the few media drivers that still do this.
+> 
+> Note that the gspca patch is slightly more involved since some of the
+> sub-gspca drivers use the priv field internally.
 
-The most asked about product that we make, are the custom printed USB flash
-drives!
-We can print your logo on them and load your digital images, videos and
-files!
+Do they use it in a non-standard way towards userspace, or just for
+communication with the gspca driver within the kernel ? In the former
+case, are you aware of applications using that ?
 
-http://inaflashweb.com
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Here is what we include:
--Any size memory you need: 64MB up to 128GB
--We will print your logo on both sides, just ask!
--Very Low Order Minimums
--Need them quickly? Not a problem, we offer Rush Service
-http://inaflashweb.com
+For everything but gspca,
 
-NEW: We can make a custom shaped USB drive to look like your Logo or
-product!
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Email over a copy of your logo and we will create a design mock up for you
-at no cost!
+> ---
+> diff --git a/drivers/media/pci/cobalt/cobalt-v4l2.c b/drivers/media/pci/cobalt/cobalt-v4l2.c
+> index 39dabd4da60f..c8cd4c407540 100644
+> --- a/drivers/media/pci/cobalt/cobalt-v4l2.c
+> +++ b/drivers/media/pci/cobalt/cobalt-v4l2.c
+> @@ -788,7 +788,6 @@ static int cobalt_try_fmt_vid_cap(struct file *file, void *priv_fh,
+> 
+>  	pix->sizeimage = pix->bytesperline * pix->height;
+>  	pix->field = V4L2_FIELD_NONE;
+> -	pix->priv = 0;
+> 
+>  	return 0;
+>  }
+> diff --git a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
+> index 609100a46ff8..88e0cb0bf592 100644
+> --- a/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
+> +++ b/drivers/media/pci/solo6x10/solo6x10-v4l2-enc.c
+> @@ -886,7 +886,6 @@ static int solo_enc_try_fmt_cap(struct file *file, void *priv,
+>  	pix->colorspace = V4L2_COLORSPACE_SMPTE170M;
+>  	pix->sizeimage = FRAME_BUF_SIZE;
+>  	pix->bytesperline = 0;
+> -	pix->priv = 0;
+> 
+>  	return 0;
+>  }
+> @@ -941,7 +940,6 @@ static int solo_enc_get_fmt_cap(struct file *file, void *priv,
+>  		     V4L2_FIELD_NONE;
+>  	pix->sizeimage = FRAME_BUF_SIZE;
+>  	pix->colorspace = V4L2_COLORSPACE_SMPTE170M;
+> -	pix->priv = 0;
+> 
+>  	return 0;
+>  }
+> diff --git a/drivers/media/pci/solo6x10/solo6x10-v4l2.c b/drivers/media/pci/solo6x10/solo6x10-v4l2.c
+> index a968f75920b5..a670fe8e4f9c 100644
+> --- a/drivers/media/pci/solo6x10/solo6x10-v4l2.c
+> +++ b/drivers/media/pci/solo6x10/solo6x10-v4l2.c
+> @@ -479,7 +479,6 @@ static int solo_try_fmt_cap(struct file *file, void *priv,
+>  	pix->field = V4L2_FIELD_INTERLACED;
+>  	pix->pixelformat = V4L2_PIX_FMT_UYVY;
+>  	pix->colorspace = V4L2_COLORSPACE_SMPTE170M;
+> -	pix->priv = 0;
+>  	return 0;
+>  }
+> 
+> @@ -509,7 +508,6 @@ static int solo_get_fmt_cap(struct file *file, void *priv,
+>  	pix->sizeimage = solo_image_size(solo_dev);
+>  	pix->colorspace = V4L2_COLORSPACE_SMPTE170M;
+>  	pix->bytesperline = solo_bytesperline(solo_dev);
+> -	pix->priv = 0;
+> 
+>  	return 0;
+>  }
+> diff --git a/drivers/media/pci/tw68/tw68-video.c b/drivers/media/pci/tw68/tw68-video.c
+> index 8e0952d65ad4..d0c2ec70f9cd 100644
+> --- a/drivers/media/pci/tw68/tw68-video.c
+> +++ b/drivers/media/pci/tw68/tw68-video.c
+> @@ -592,7 +592,6 @@ static int tw68_g_fmt_vid_cap(struct file *file, void *priv,
+>  	f->fmt.pix.sizeimage =
+>  		f->fmt.pix.height * f->fmt.pix.bytesperline;
+>  	f->fmt.pix.colorspace	= V4L2_COLORSPACE_SMPTE170M;
+> -	f->fmt.pix.priv = 0;
+>  	return 0;
+>  }
+> 
+> diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
+> index f0f7ef638c56..21a2ba797d0a 100644
+> --- a/drivers/media/platform/davinci/vpif_capture.c
+> +++ b/drivers/media/platform/davinci/vpif_capture.c
+> @@ -979,7 +979,6 @@ static int vpif_try_fmt_vid_cap(struct file *file, void *priv,
+>  		pixfmt->bytesperline = common->fmt.fmt.pix.width * 2;
+>  		pixfmt->sizeimage = pixfmt->bytesperline * pixfmt->height;
+>  	}
+> -	pixfmt->priv = 0;
+> 
+>  	dev_dbg(vpif_dev, "%s: %d x %d; pitch=%d pixelformat=0x%08x, field=%d, size=%d\n", __func__,
+>  		pixfmt->width, pixfmt->height,
+> diff --git a/drivers/media/usb/au0828/au0828-video.c b/drivers/media/usb/au0828/au0828-video.c
+> index 5e00019bce8a..37acfcb56822 100644
+> --- a/drivers/media/usb/au0828/au0828-video.c
+> +++ b/drivers/media/usb/au0828/au0828-video.c
+> @@ -1153,7 +1153,6 @@ static int au0828_set_format(struct au0828_dev *dev, unsigned int cmd,
+>  	format->fmt.pix.sizeimage = width * height * 2;
+>  	format->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
+>  	format->fmt.pix.field = V4L2_FIELD_INTERLACED;
+> -	format->fmt.pix.priv = 0;
+> 
+>  	if (cmd == VIDIOC_TRY_FMT)
+>  		return 0;
+> @@ -1231,7 +1230,6 @@ static int vidioc_g_fmt_vid_cap(struct file *file, void *priv,
+>  	f->fmt.pix.sizeimage = dev->frame_size;
+>  	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M; /* NTSC/PAL */
+>  	f->fmt.pix.field = V4L2_FIELD_INTERLACED;
+> -	f->fmt.pix.priv = 0;
+>  	return 0;
+>  }
+> 
+> diff --git a/drivers/media/usb/cpia2/cpia2_v4l.c b/drivers/media/usb/cpia2/cpia2_v4l.c
+> index 0feae825cebb..9232461669c8 100644
+> --- a/drivers/media/usb/cpia2/cpia2_v4l.c
+> +++ b/drivers/media/usb/cpia2/cpia2_v4l.c
+> @@ -338,7 +338,6 @@ static int cpia2_try_fmt_vid_cap(struct file *file, void *fh,
+>  	f->fmt.pix.bytesperline = 0;
+>  	f->fmt.pix.sizeimage = cam->frame_size;
+>  	f->fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
+> -	f->fmt.pix.priv = 0;
+> 
+>  	switch (cpia2_match_video_size(f->fmt.pix.width, f->fmt.pix.height)) {
+>  	case VIDEOSIZE_VGA:
+> @@ -449,7 +448,6 @@ static int cpia2_g_fmt_vid_cap(struct file *file, void *fh,
+>  	f->fmt.pix.bytesperline = 0;
+>  	f->fmt.pix.sizeimage = cam->frame_size;
+>  	f->fmt.pix.colorspace = V4L2_COLORSPACE_JPEG;
+> -	f->fmt.pix.priv = 0;
+> 
+>  	return 0;
+>  }
+> diff --git a/drivers/media/usb/em28xx/em28xx-video.c b/drivers/media/usb/em28xx/em28xx-video.c
+> index 0512e1959394..9a6956813259 100644
+> --- a/drivers/media/usb/em28xx/em28xx-video.c
+> +++ b/drivers/media/usb/em28xx/em28xx-video.c
+> @@ -1517,7 +1517,6 @@ static int vidioc_try_fmt_vid_cap(struct file *file, void *priv,
+>  	else
+>  		f->fmt.pix.field = v4l2->interlaced_fieldmode ?
+>  			   V4L2_FIELD_INTERLACED : V4L2_FIELD_TOP;
+> -	f->fmt.pix.priv = 0;
+> 
+>  	return 0;
+>  }
+> diff --git a/drivers/media/usb/gspca/gspca.c b/drivers/media/usb/gspca/gspca.c
+> index be11f7830bca..072d280c1824 100644
+> --- a/drivers/media/usb/gspca/gspca.c
+> +++ b/drivers/media/usb/gspca/gspca.c
+> @@ -1040,11 +1040,11 @@ static int vidioc_g_fmt_vid_cap(struct file *file, void *priv,
+>  			    struct v4l2_format *fmt)
+>  {
+>  	struct gspca_dev *gspca_dev = video_drvdata(file);
+> +	u32 priv = fmt->fmt.pix.priv;
+> 
+>  	fmt->fmt.pix = gspca_dev->pixfmt;
+> -	/* some drivers use priv internally, zero it before giving it back to
+> -	   the core */
+> -	fmt->fmt.pix.priv = 0;
+> +	/* some drivers use priv internally, so keep the original value */
+> +	fmt->fmt.pix.priv = priv;
+>  	return 0;
+>  }
+> 
+> @@ -1079,9 +1079,6 @@ static int try_fmt_vid_cap(struct gspca_dev *gspca_dev,
+>  		fmt->fmt.pix.height = h;
+>  		gspca_dev->sd_desc->try_fmt(gspca_dev, fmt);
+>  	}
+> -	/* some drivers use priv internally, zero it before giving it back to
+> -	   the core */
+> -	fmt->fmt.pix.priv = 0;
+>  	return mode;			/* used when s_fmt */
+>  }
+> 
+> @@ -1090,9 +1087,12 @@ static int vidioc_try_fmt_vid_cap(struct file *file,
+>  			      struct v4l2_format *fmt)
+>  {
+>  	struct gspca_dev *gspca_dev = video_drvdata(file);
+> +	u32 priv = fmt->fmt.pix.priv;
+> 
+>  	if (try_fmt_vid_cap(gspca_dev, fmt) < 0)
+>  		return -EINVAL;
+> +	/* some drivers use priv internally, so keep the original value */
+> +	fmt->fmt.pix.priv = priv;
+>  	return 0;
+>  }
+> 
+> @@ -1100,6 +1100,7 @@ static int vidioc_s_fmt_vid_cap(struct file *file, void *priv,
+>  			    struct v4l2_format *fmt)
+>  {
+>  	struct gspca_dev *gspca_dev = video_drvdata(file);
+> +	u32 priv = fmt->fmt.pix.priv;
+>  	int mode;
+> 
+>  	if (vb2_is_busy(&gspca_dev->queue))
+> @@ -1115,6 +1116,8 @@ static int vidioc_s_fmt_vid_cap(struct file *file, void *priv,
+>  		gspca_dev->pixfmt = fmt->fmt.pix;
+>  	else
+>  		gspca_dev->pixfmt = gspca_dev->cam.cam_mode[mode];
+> +	/* some drivers use priv internally, so keep the original value */
+> +	fmt->fmt.pix.priv = priv;
+>  	return 0;
+>  }
+> 
+> diff --git a/drivers/media/usb/s2255/s2255drv.c b/drivers/media/usb/s2255/s2255drv.c
+> index aa90558479f7..1a5b46c6992b 100644
+> --- a/drivers/media/usb/s2255/s2255drv.c
+> +++ b/drivers/media/usb/s2255/s2255drv.c
+> @@ -759,7 +759,6 @@ static int vidioc_g_fmt_vid_cap(struct file *file, void *priv,
+>  	f->fmt.pix.bytesperline = f->fmt.pix.width * (vc->fmt->depth >> 3);
+>  	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
+>  	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
+> -	f->fmt.pix.priv = 0;
+>  	return 0;
+>  }
+> 
+> @@ -811,7 +810,6 @@ static int vidioc_try_fmt_vid_cap(struct file *file, void *priv,
+>  	f->fmt.pix.bytesperline = (f->fmt.pix.width * fmt->depth) >> 3;
+>  	f->fmt.pix.sizeimage = f->fmt.pix.height * f->fmt.pix.bytesperline;
+>  	f->fmt.pix.colorspace = V4L2_COLORSPACE_SMPTE170M;
+> -	f->fmt.pix.priv = 0;
+>  	dprintk(vc->dev, 50, "%s: set width %d height %d field %d\n", __func__,
+>  		f->fmt.pix.width, f->fmt.pix.height, f->fmt.pix.field);
+>  	return 0;
+> diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+> index 203329cadbc4..0335e69b70ab 100644
+> --- a/drivers/media/usb/uvc/uvc_v4l2.c
+> +++ b/drivers/media/usb/uvc/uvc_v4l2.c
+> @@ -253,7 +253,6 @@ static int uvc_v4l2_try_format(struct uvc_streaming *stream,
+>  	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(format, frame);
+>  	fmt->fmt.pix.sizeimage = probe->dwMaxVideoFrameSize;
+>  	fmt->fmt.pix.colorspace = format->colorspace;
+> -	fmt->fmt.pix.priv = 0;
+> 
+>  	if (uvc_format != NULL)
+>  		*uvc_format = format;
+> @@ -290,7 +289,6 @@ static int uvc_v4l2_get_format(struct uvc_streaming *stream,
+>  	fmt->fmt.pix.bytesperline = uvc_v4l2_get_bytesperline(format, frame);
+>  	fmt->fmt.pix.sizeimage = stream->ctrl.dwMaxVideoFrameSize;
+>  	fmt->fmt.pix.colorspace = format->colorspace;
+> -	fmt->fmt.pix.priv = 0;
+> 
+>  done:
+>  	mutex_unlock(&stream->mutex);
 
-Our higher memory sizes are a really good option right now!
-
-Ask about the “Double Your Memory” upgrade promotion going on right
-now!
-
-Pricing is low right now, so let us know what you need and we will get you
-a quick quote.
-
-We will beat any competitors pricing, send us your last invoice and we will
-beat it!
-
-We always offer great rates for schools and nonprofits as well.
-
-Let us know what you would like quoted?
-http://inaflashweb.com
-
+-- 
 Regards,
 
-
-
-Sabrina Millons
-+1-888-480-8218
-Custom USB Account Manager
-http://inaflashweb.com
-
+Laurent Pinchart
