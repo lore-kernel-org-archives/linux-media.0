@@ -2,36 +2,41 @@ Return-Path: <SRS0=aREJ=UZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B74CBC4646B
-	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D7E0C48BD6
+	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 93E572086D
-	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 552812086D
+	for <linux-media@archiver.kernel.org>; Wed, 26 Jun 2019 07:44:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727005AbfFZHo1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727016AbfFZHo1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 26 Jun 2019 03:44:27 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:33505 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726076AbfFZHo1 (ORCPT
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:39193 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727001AbfFZHo1 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 26 Jun 2019 03:44:27 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id g2bNh3RUP7KeZg2bQhhHnQ; Wed, 26 Jun 2019 09:44:25 +0200
+        id g2bNh3RUP7KeZg2bRhhHnd; Wed, 26 Jun 2019 09:44:25 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 00/16] media/platform: set device_caps in struct video_device
-Date:   Wed, 26 Jun 2019 09:44:05 +0200
-Message-Id: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH 02/16] coda: set device_caps in struct video_device
+Date:   Wed, 26 Jun 2019 09:44:07 +0200
+Message-Id: <20190626074421.38739-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
+References: <20190626074421.38739-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4wfIj3dZgglss+tf4PXeuCKB+HXvyTYrUKj32m1X7tI6K/ziBELb3FaqsxZxhj9nnBA9jyIwHOfHA95IwCaWb+b4cHtz/EakH0fDudTLunc/74bVfrF/mB
- BTuJt9wQXQHQXS4sv2zWxs6y5YWxHPbesfZcPLweMyN0bp5KXkxqddGXZtekGh/RkLpMWhFaU1kEOw==
+ BTuJt9wQXQHQXTZNN23aWb00JECxh0szhOG996HlnrE/fYccKE4w10VtUgeFDCsOP5+6jnF3xJHUZDxBT/DXUva/xIqIeDXMSiw/2gz8MQYocN9DM2ulOX9C
+ boJC1w9jW1mpT/VUImppVw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
@@ -43,53 +48,34 @@ field, fill in the struct video_device device_caps field.
 That way the V4L2 core knows what the capabilities of the
 video device are.
 
-But this only really works if all drivers use this, so convert
-all platform drivers in this patch series.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ drivers/media/platform/coda/coda-common.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Hans Verkuil (16):
-  am437x/davinci: set device_caps in struct video_device
-  coda: set device_caps in struct video_device
-  s3c-camif/s5p-g2d/s5p-jpeg: set device_caps in struct video_device
-  fsl-viu: set device_caps in struct video_device
-  m2m-deinterlace: set device_caps in struct video_device
-  mx2_emmaprp: set device_caps in struct video_device
-  marvell-ccic: set device_caps in struct video_device
-  pxa_camera: set device_caps in struct video_device
-  bdisp: set device_caps in struct video_device
-  via-camera: set device_caps in struct video_device
-  xilinx: set device_caps in struct video_device
-  sh_veu/sh_vou: set device_caps in struct video_device
-  vsp1: set device_caps in struct video_device
-  omap_vout: set device_caps in struct video_device
-  ti-vpe: set device_caps in struct video_device
-  omap3isp: set device_caps in struct video_device
-
- drivers/media/platform/am437x/am437x-vpfe.c      |  6 ++----
- drivers/media/platform/coda/coda-common.c        |  4 +---
- drivers/media/platform/davinci/vpbe_display.c    |  3 +--
- drivers/media/platform/davinci/vpfe_capture.c    |  3 +--
- drivers/media/platform/davinci/vpif_capture.c    |  3 +--
- drivers/media/platform/davinci/vpif_display.c    |  3 +--
- drivers/media/platform/fsl-viu.c                 |  7 ++-----
- drivers/media/platform/m2m-deinterlace.c         | 10 +---------
- drivers/media/platform/marvell-ccic/mcam-core.c  |  5 ++---
- drivers/media/platform/mx2_emmaprp.c             |  3 +--
- drivers/media/platform/omap/omap_vout.c          |  6 ++----
- drivers/media/platform/omap3isp/ispvideo.c       | 13 +++++++------
- drivers/media/platform/pxa_camera.c              |  3 ---
- drivers/media/platform/s3c-camif/camif-capture.c |  5 +----
- drivers/media/platform/s5p-g2d/g2d.c             |  3 +--
- drivers/media/platform/s5p-jpeg/jpeg-core.c      |  4 ++--
- drivers/media/platform/sh_veu.c                  |  4 +---
- drivers/media/platform/sh_vou.c                  |  5 ++---
- drivers/media/platform/sti/bdisp/bdisp-v4l2.c    |  6 +-----
- drivers/media/platform/ti-vpe/cal.c              |  5 ++---
- drivers/media/platform/via-camera.c              |  5 ++---
- drivers/media/platform/vsp1/vsp1_histo.c         |  3 +--
- drivers/media/platform/vsp1/vsp1_video.c         | 12 ++++--------
- drivers/media/platform/xilinx/xilinx-dma.c       | 16 +++++++---------
- 24 files changed, 46 insertions(+), 91 deletions(-)
-
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 01428de2596e..73222c0615c0 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -390,9 +390,6 @@ static int coda_querycap(struct file *file, void *priv,
+ 	strscpy(cap->card, coda_product_name(ctx->dev->devtype->product),
+ 		sizeof(cap->card));
+ 	strscpy(cap->bus_info, "platform:" CODA_NAME, sizeof(cap->bus_info));
+-	cap->device_caps = V4L2_CAP_VIDEO_M2M | V4L2_CAP_STREAMING;
+-	cap->capabilities = cap->device_caps | V4L2_CAP_DEVICE_CAPS;
+-
+ 	return 0;
+ }
+ 
+@@ -2699,6 +2696,7 @@ static int coda_register_device(struct coda_dev *dev, int i)
+ 	vfd->lock	= &dev->dev_mutex;
+ 	vfd->v4l2_dev	= &dev->v4l2_dev;
+ 	vfd->vfl_dir	= VFL_DIR_M2M;
++	vfd->device_caps = V4L2_CAP_VIDEO_M2M | V4L2_CAP_STREAMING;
+ 	video_set_drvdata(vfd, dev);
+ 
+ 	/* Not applicable, use the selection API instead */
 -- 
 2.20.1
 
