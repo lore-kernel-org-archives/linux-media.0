@@ -8,31 +8,31 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A0B1C4321A
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 21:10:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4504BC5B576
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 21:10:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 294CB2146E
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 21:10:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1ED3E2146E
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 21:10:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="eh0rZ0J4"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="A1OLX6By"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbfF0VKJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 17:10:09 -0400
-Received: from mout.gmx.net ([212.227.15.18]:59483 "EHLO mout.gmx.net"
+        id S1726502AbfF0VKK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 17:10:10 -0400
+Received: from mout.gmx.net ([212.227.15.18]:40033 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726426AbfF0VKJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726465AbfF0VKJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 27 Jun 2019 17:10:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561669791;
-        bh=xdTAATWF8qX6yvXCOv29YdhPGUUPpJi7l7udO3XOz3o=;
+        s=badeba3b8450; t=1561669790;
+        bh=oQ7ZxVIFsPJFpqsCJWfGwqfjesiNRBqjqbY8LvGfqVk=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=eh0rZ0J45FuY/n5E4be49hyEsA37PoCc2+4E/PHiBSK7lCRrDptyda4gD0kWyuAvz
-         PrOHIo7Hqi//pKQ18kN0WOjudFUFGK2gr0+EQdgTr9RdRg9IBnNUqKLJruf7eSrrWB
-         I8JCo/Mn3sr1PHZeRf5bp+yiLM4y7lZscxCeIglc=
+        b=A1OLX6ByhH9WDn8bKzXseYkA8Q5ZV06x9b9Kcjb+STncDfhkBI7x5W6QrFRihWFHG
+         Qt7I8yQi66LdSdKPYRNchq1/SyOJjMhzrkxK6zFxRMGZVaqBa8w8YaUnjUtKCANNXc
+         9eVZbJ3IY5y4PscHoszzh20sNZD2yH9CQwjbM5iE=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1M2f9h-1hhztI1mox-0049H6; Thu, 27 Jun 2019 23:09:51 +0200
+ 1MvsIv-1iWn8530r9-00sxdo; Thu, 27 Jun 2019 23:09:50 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 30/31] staging: bcm2835-camera: Set the field value within ach buffer
-Date:   Thu, 27 Jun 2019 23:09:28 +0200
-Message-Id: <1561669769-2498-4-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH 28/31] staging: bcm2835-camera: Fix stride on RGB3/BGR3 formats
+Date:   Thu, 27 Jun 2019 23:09:26 +0200
+Message-Id: <1561669769-2498-2-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561669769-2498-1-git-send-email-wahrenst@gmx.net>
 References: <1561669769-2498-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:4p9yOIhIrBTeY/wdnhkFhlYsxDf8BdSb0lYlxYcw2+9Vz6In7NX
- 4cP0I6lDzSRKKuBytlRDRK0xrHTB7ACIcOl9DieNvK1jFc+ufRd0rReoLe2iX3gpZ8PhbQz
- IASrz/oLgKDRk4lCN59DFHobxwqGHwe80LwpVTgDO/JZOVGiyzW3H2P2mGHxIHpihVV0PfL
- /na5UGu+9jWfsJLE27D8A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rQHcc4g8hC8=:AAy4aEqkn1m0W9xIIDySBU
- oh3Evqj4xbse6o61KfZlJjpfmCbdXi/IUkoHmfQ1Rv8a/xeGWBjXW6PDb4kZZ30UFuz4alRXU
- FNmdbIQI0ZdCzNliyM8ykBo++fxfFjRkJMrWF1uNh2/E+bQwwKzoZY2funCkntAx/WE8noVED
- datZfkE6SmuBDtf3j8iiZzDjBYasIqjrobqeOLe96mno6Jf7dcU4bmzHYp7IQPN0j7nLHL7i9
- 41+BrxhqK6GfVHP28S+vMw5JCRN2xc3rOQzrYZlLs+AfLDYqqCTTtoKSlHbtn+xHhZJbznu0M
- JGT9Xe/eUDYaqW3ETycs9m2VcIXIrdIyOXdS19CUYcAPDsyNhYqlHM5055tXb6A3pRaHcRHWW
- zS9ceVypNhvPaBJs+Hotc9FM0JSapYnSl1rHpbZIBzrracNUmEtsqzOqXZxDz7Xf+rpgarLS7
- dX09UdQLL96dM9zj2dl6LPwXe00WWcYMVvxS3lEHQD63rh3CaW537dGxE1En1waseKp4okXz/
- Ula4r5ISnjzlsB2t97+XGdbHq1nK2KcTFR+XNM+AycurOsQptl/mqJOw2Fd7TzwqH5pGLqDKV
- PlCSzaEEYI8Rirz+EZSDxD3rJyLZkNALUYKePiVdVF1ZHvky9PLL362CMBo72RpDJ5Fr81pQG
- 3aPbhV3LNsh2Crmh6VArK7iLVyNWhB3zum62eNr4+4OC5cpy/tmtkxcPnzPhpuuPsaX8PnmqR
- /eMlUO6NhvH7sSM3xlxCKLAuiiC/qBT1gP7QETXvzkr/p3+RDic3bbyM4yBZpMCCNLLRonuSh
- f6DXaF6xwXZwFa1HeFg6hwzOmXpMKemml7vWehVlv/P9LZFlbq4O9ABQLEcoVjGymzS8EdL3Q
- lwLjn2yRHeIiiYfuWfPiQc8FW1pR6Y01yivUlm+0tRpFhxF8Eemm/WjlHFUcjisspAvdrDHBD
- klSGgb6XbBibS9FotkMUpBB0QyuwJ4gCdjlS6bPlqQjWQp4aODB6qa8Q+g+OGJ5Mo1REeu7rq
- qugNDIHRdNRtdtfE8uGDvNBJzZVOfrmhHbF19JOnUZ21BxpXBY9iRx1yeBeiVJA1Hmb4Wrizw
- 79+xRaH+Zb0x5c=
+X-Provags-ID: V03:K1:6/n/L8DRjvOqCMDP7KzcXt4ACN7nJOvMmlG3h+XGo+4YJgv4/Mu
+ YRA85BxZx2CQW8A0PJp/cCjIE/oQfjf0rzMp7+l4gkHQ2LhgMiXp/z85njn5ne99Qz0TaSh
+ LeQvhor7xY3IvWxh7rkcq5OuqacBD2+HJnxJFL6reWstWSNwKGEsSfINfkIKBF10Hu2NncC
+ +AMIVaMb5CaPmfnATTXqA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:yBBX1gyANN0=:hZXgWhfMcDYebZnyJtpOiJ
+ nHIEJr/Ok0F8qB9kXSQduKpyyr4kXes7MfvUeXeLdFD9LVBooU9cpvXq62CztLdonlFPyEQQW
+ JonTinfrYCk58yufXP1Ea8GUlnJDMHzJfs8JDuMfvRIj6szOyAuwPG2dZOMAf+laooWkalT0t
+ lsaD83E2vonG3HsFArJ6NRXe4YV5w3Sbt9cXggz9iKVUnscFl74yCVhJ4PaE5u4C+vBXvteqF
+ QjjatGY6Ji6kuoHCTPEHM7NwBGu14lImOoLX5EJK0eXk4xvy9D6v4haZ3RxTCL0UFfmEWLodB
+ /BCw6XLdXkPUmKlzJ9tUTu7jYPJ8V5RU4fC9YuftvU6Jngafgk+yGT/YhookHEgZI63jaqKew
+ Ijl5vklgNT6ZLfORTYDdMlt5tixAZ/ipRuheNLBRO3BCYct07B5WLDL/j7pPTYMQPKaN0REnh
+ sG1voYj7/3FyPp/w9DIwg1+jLlknswfR6M6MLFu5zK9DwM2qPrsr2Me8MXptkVOslsytre0kc
+ b+HsyFYihL/XJcepknaa+dVV+E/qrI0g1GqQzuEZguv4gFQ7NmkhACbY1v2zikxp6F+EC9TU5
+ /MB+WSVSVeY5qxkAFpayyC/c4Iq6dttArmhTn8ie3exKggeuw30j+HbK2DJLMLerLahjTc1L6
+ Of1YaEIBnIZty/bp8sUAXnRgLwVEei9pyxd5sz+U6Ga8bki+qnZgbgq1lVE5vGFntz5FTVYqq
+ 8YkysdTeYCja8MiuzWf9motpj3ghKot/uF03ghHEASqMwwxYUfj84NKDQ+/kOQ4uqNItoJlct
+ 5tqEisHRIZ4YNQaCBSIFO2Ulkt/ZoZDcw+f7BG26LtPdqSp/IOznPaq4mKoXV0tJO3pDNB6Tx
+ XDtbzZhEbCvFNsP/TD/aZxfcaeA+zU6Jxi5EAEJIkrOEKZ8R7JLZNP+8pamqkyEbNQZ859zoP
+ LP3gNnZg9SVcJEQon8VogIe3gvBqc1oQ/xWicByUwIY1vnRFCaNC20VvDpqFFH0sh3AEg/vot
+ y9TwrZYXjOTupbmsGZjB/Caacy6z88zIvQLJYHQJju5PMBwGn8aX/94R0ZrLatDQcDw3n6N36
+ Mj24VasdS9LrsU=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,31 +77,58 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Fixes a v4l2-compliance failure
-v4l2-test-buffers.cpp(415): g_field() =3D=3D V4L2_FIELD_ANY
-
-The driver only ever produces progresive frames, so field should
-always be set to V4L2_FIELD_NONE.
+RGB3/BGR3 end up being 3 bytes per pixel, which meant that
+the alignment code ended up trying to align using bitmasking
+with a mask of 96.
+That doesn't work, so switch to an arithmetic alignment for
+those formats.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 =2D--
- drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../vc04_services/bcm2835-camera/bcm2835-camera.c  | 26 +++++++++++++++++=
+=2D----
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
  b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index 705644c..78d5bca 100644
+index bef0052..256667b 100644
 =2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
 +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -420,6 +420,7 @@ static void buffer_cb(struct vchiq_mmal_instance *inst=
-ance,
+@@ -978,13 +978,27 @@ static int vidioc_try_fmt_vid_cap(struct file *file,=
+ void *priv,
+ 			      1, 0);
+ 	f->fmt.pix.bytesperline =3D f->fmt.pix.width * mfmt->ybbp;
+ 	if (!mfmt->remove_padding) {
+-		int align_mask =3D ((32 * mfmt->depth) >> 3) - 1;
+-		/* GPU isn't removing padding, so stride is aligned to 32 */
+-		f->fmt.pix.bytesperline =3D
+-			(f->fmt.pix.bytesperline + align_mask) & ~align_mask;
++		if (mfmt->depth =3D=3D 24) {
++			/*
++			 * 24bpp is a pain as we can't use simple masking.
++			 * Min stride is width aligned to 16, times 24bpp.
++			 */
++			f->fmt.pix.bytesperline =3D
++				((f->fmt.pix.width + 15) & ~15) * 3;
++		} else {
++			/*
++			 * GPU isn't removing padding, so stride is aligned to
++			 * 32
++			 */
++			int align_mask =3D ((32 * mfmt->depth) >> 3) - 1;
++
++			f->fmt.pix.bytesperline =3D
++				(f->fmt.pix.bytesperline + align_mask) &
++							~align_mask;
++		}
+ 		v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
+-			 "Not removing padding, so bytes/line =3D %d, (align_mask %d)\n",
+-			 f->fmt.pix.bytesperline, align_mask);
++			 "Not removing padding, so bytes/line =3D %d\n",
++			 f->fmt.pix.bytesperline);
  	}
- 	dev->capture.last_timestamp =3D buf->vb.vb2_buf.timestamp;
- 	buf->vb.sequence =3D dev->capture.sequence++;
-+	buf->vb.field =3D V4L2_FIELD_NONE;
 
- 	vb2_set_plane_payload(&buf->vb.vb2_buf, 0, length);
- 	if (mmal_flags & MMAL_BUFFER_HEADER_FLAG_KEYFRAME)
+ 	/* Image buffer has to be padded to allow for alignment, even though
 =2D-
 2.7.4
 
