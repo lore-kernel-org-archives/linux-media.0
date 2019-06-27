@@ -2,37 +2,37 @@ Return-Path: <SRS0=+xV6=U2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A268C48BD7
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D325AC48BE7
 	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EDEF520B7C
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B641E2133F
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="OiMdz/sG"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="YlYRsrJx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbfF0S5P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726596AbfF0S5P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 27 Jun 2019 14:57:15 -0400
-Received: from mout.gmx.net ([212.227.15.19]:41329 "EHLO mout.gmx.net"
+Received: from mout.gmx.net ([212.227.15.18]:37311 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726563AbfF0S5M (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 14:57:12 -0400
+        id S1726587AbfF0S5O (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Jun 2019 14:57:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561661815;
-        bh=8zy/CF8eq6vCciU1LYPKVRt1nppxuwPwBxjk8BgMHCI=;
+        s=badeba3b8450; t=1561661809;
+        bh=lZmOeAftlgqo1vdHP3EjpsXSMad709JwC3ovNFUjiwQ=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=OiMdz/sG7vnUhoMUouJV7XUASaR917O5b29ggMTZrpM+aNhu4zax4rINDSp1y5TAz
-         i73CVq6TdG04Vx5YZSOzXzYS2SsMH5lDzBi7z046mTd0HStJHXmvlGxnvoc+3rmmyv
-         qsF0nftIgZhok+qENMZFTeZ8EdX9Qze76+0MUf4o=
+        b=YlYRsrJx3moT3XGmZzynd1klvf22rerTxmigVrvdXQWeUPm0hCd/v2PaVgW3NzYLe
+         s2qmVG6OPIS/o3vh+X6K4xiE8QVzr+RzviwTjTZYPAlsXYEBWeEGKgKfEuxyHtldvU
+         DWJc6xDjkUpBtpljK/+sU26VeQzlFWdQtWaGur5k=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx002 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0LqQzp-1iBDQV3k81-00e1fu; Thu, 27 Jun 2019 20:56:55 +0200
+ 0M9ra4-1hrcBl0tDc-00B3Zb; Thu, 27 Jun 2019 20:56:49 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 16/31] staging: bcm2835-camera: Remove check of the number of buffers supplied
-Date:   Thu, 27 Jun 2019 20:56:13 +0200
-Message-Id: <1561661788-22744-17-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH 02/31] staging: bcm2835-camera: Check the error for REPEAT_SEQ_HEADER
+Date:   Thu, 27 Jun 2019 20:55:59 +0200
+Message-Id: <1561661788-22744-3-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
 References: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:B9slWFuCxy+02ZPi3VQFLXOYRQyTHeed6m6D9LbksOSlspD/mcl
- lUiQc25qvasefDg65qcaQ4JyNgnfNb6utBdEqNMz5Kzd/Q5lZzxp737BxT27weFFSOXQH8K
- H3kBji/p3t46KVOYuclYZ/FXqCcavbNEGml1l++aU24MR314GHcc/gKlgd4dKOxCIB9uDTA
- LlfQvA2olDokT3FAdW8Bg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5Pe78/5ZErA=:j2IiReNY+mN7+vbsSSS1nD
- W0M8UFWxE99aSvM1mQtYylv0ZqO8Bhhs7ASsoNj8EdRZrV09dgGG5/YsHtS5DFJKTQom41q3t
- wzShstS/BBmS4GuVEZ5G91nVVpHSzHbhwmKCaHYE9czAPaUYT2GOs8SeOyBZiptZA2liOecuu
- A7rWaOg7aGGpWmC1bRq4A9Z2rw0n0AsrJQHW+l7/Ove6FFA+yIiuzqgCSydbylxx98k+9JZYI
- MB/3jFzOGm/Y8gegBJGRC1Qix5QxO+y3+9ouQeK7/BBsoUJbTtqUpWAj5en15m0myHxj7gyIT
- yQbOfSSZ6afFE84vnpzepG+7hFOos65n7HC+lBM3bbI4bRAnT4i7w4graVTpfxEaFYlie4IlA
- iRZU9X/eoWJrSt9CLjWf0CDRBi7EaI8PtNFoHmPwNUduFgPaN6wRcvOxGE3iUeXkQA01gb/rk
- dsiUKzI7DrULjuDwCynjpk7KtoXuFakpeRS5eN3R6fOKISyG0kd7MTyYEF+Mho/zd8w8nI7Er
- ioMyD7GyIzLdj1yXeZFeDbbIZI64BZI/jfxtQDMEuScxjptD7ZNl5qpIRlI+gMtPWguRprbvB
- F+UG9mPl62t3FXSUBna7JNbBUZTltuSrxY5vEynldZW7UewjaIwxwBwZZXxq7KJqDskDNdwYZ
- t7O2cCrOcAOROHIAG4LeUcfTu+P2RvqHKcrnIXpREj4EnX+UnpaOmwrp9Wt4epgtsS7VZ5onk
- KZFrf1n/A4bNlpW58xTMhx1fd1TYB1e9lKYUbr7f2eHpAeNxcc9fYeiqbjcp+IntRAhh5f5oL
- hLD1+ub2aJxtBIFoCmQVXgYLclnLrxFXPEUaeajF4B+OvS7OCabTflKlJZWehemcz0iiBjIy6
- FgjJ4b3oliDcmKb5nnelSUgzMWYyP0Vcu487X6qho+2aHIIh9x/7dRwvT7dqvdp+IUwy0HEL4
- ZIckcSqwQgbKofrC6zcjZtyjkXG65ijIkHFriSxhcVifpieV/WO5nPT6a4aQnsVTWZe8u8j+m
- fNKO9fqRzU/w4ew3oTmJkcSk0hsSLyfhIH49Pza4kLDBki5IBrCUC8tWATdTh8Na3Ff+TcUq7
- 7YoYkTGzEldgU8=
+X-Provags-ID: V03:K1:xRoSxi74f4luJ+Wk+0kZTsX3xHfSkTrMrkgOD1IOPvxzVJjunLe
+ uZ+aAlxUHYIg6CvrOviaV/iIGAl9mLUUr3noPuL5j2LLEUogEle+eM280eSTHoYX0PQE3O4
+ K1AViH65lOMhThZSKZA5BRSUzVHQtv4k4wCA5YvrJsvrbd+0urJdyCWB61pL8szP6DZ/NFx
+ ZrjMX6kZR6umiAFEOP7Eg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:L8WFhcwKCGs=:Ys1zgqTPTO+npU8LQsHmfC
+ 1d48g2/7lNUJALcj5MPVIlqzwiV0dJcDISjgjozwjyoJcPdkJ602j+CUQ8DxPRl/VO9j0XPSB
+ tOxdrTQK+Irfqkx1cWFMXNB4H3Bjam6DVLxPD8N4AKp8OY6nlbjzx6gAKMc9Cf6iEm4n2Vckk
+ dDiiLeXYnhaphVOEzjOA5WxGtPSpuROzohdTRHE69Y8BxDvQ/5PVnT8md8hYg2jI1hXBgOQU3
+ RMRDVeDbCvZ3lWHNgLGKc9xoVckFEojTXTpe++Kww0L93NhtGCCzEcDx2BeHZ2xDVIAkk+NAu
+ 4JTJhHFKr7YzJFJrk2uoWop3R4E/YlZP18tKKx7VFfOM3D4I4yTsOK8qM04RbZ30dutE4AWww
+ LNtrCz+qqYszluUR4WkjXnqtGkk4j/LzOqW4SpI5DFECQ/e7++x22lPJorQpRI3Sy5u32KN+b
+ dlbts5kFLZMr6wsVG3Y3+KLxgHk3pP7VEyDCHKf2tLpZ2NC2QmZteTqS0mpuhbju0z9RyRSW9
+ gFY8h5Jl1wYWHXWB8dMYONiU6foQbUkbjIm0ioO+G0q7+swx8rKdsIL9ZmZOL+zMbqHXlxVZ+
+ UNUkpq34PifnperGy9ijc9nX1I07ZsjuGWV9E2NsX8Y4EBf8Pt/D2DCUgiWvVCdMcaeIb68ek
+ FLn0R4kBlMSoRFk38lNN8AKEeO2MLvqLMsN4/QJZQ6B+iKhRFFjJ1JRmAPcHiWCrIUfVm/GYB
+ CzL+oUEq+eu7Di9KxG0C3DqS4H1DIbIQydU7BrVmabeESvALAuwFD4MszV8lXMOkKRCcrhu7d
+ K9iV5xY3TA/0N9ohy1x4z5+xN0UBfLbEanZXKIxn8MAH7TxcLTLb8/Yng3mFiVSPPkUhtuk85
+ hp/g6vjkKFtF4QjM2I+/3D2gK5jNmeQtXooSfaxfFi0R3stSC569J8GIHS8TwhNZx1m8kkV0d
+ SRTnsJ8FMdJAi6Udk7s99uqNGT7t8wW2bp71FkQ6tEidrnnPB1D9+TRJlxX3L1BZEr5089LJv
+ YRxTp5ARi7MSfalo6ZbNbXawbN7fyYOD7Fe/xbJAycKkP4mMrSZehY9Kj+Eu0ylxvMvLQJGVy
+ +ssb39vGj+6PBo=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,45 +77,36 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Before commit "staging: bcm2835-camera: Remove V4L2/MMAL buffer remapping"
-there was a need to ensure that there were sufficient buffers supplied fro=
-m
-the user to cover those being sent to the VPU (always 1).
+When handling for V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER was added
+the firmware would reject the setting if H264 hadn't already been
+selected. This was fixed in the firmware at that point, but to
+enable backwards compatibility the returned error was ignored.
 
-Now the buffers are linked 1:1 between MMAL and V4L2,
-therefore there is no need for that check, and indeed it is wrong
-as there is no need to submit all the buffers before starting streaming.
+That was Dec 2013, so the chances of having a firmware that still
+has that issue is so close to zero that the workaround can be
+removed.
 
-Fixes: 938416707071 ("staging: bcm2835-camera: Remove V4L2/MMAL buffer rem=
-apping")
+Link: https://github.com/raspberrypi/linux/pull/2782/
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 =2D--
- drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ drivers/staging/vc04_services/bcm2835-camera/controls.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c b/d=
-rivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-index 4d63176..59eb812 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-@@ -1338,16 +1338,6 @@ static int port_enable(struct vchiq_mmal_instance *=
-instance,
- 	if (port->enabled)
- 		return 0;
-
--	/* ensure there are enough buffers queued to cover the buffer headers */
--	if (port->buffer_cb) {
--		hdr_count =3D 0;
--		list_for_each(buf_head, &port->buffers) {
--			hdr_count++;
--		}
--		if (hdr_count < port->current_buffer.num)
--			return -ENOSPC;
--	}
--
- 	ret =3D port_action_port(instance, port,
- 			       MMAL_MSG_PORT_ACTION_TYPE_ENABLE);
- 	if (ret)
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/dri=
+vers/staging/vc04_services/bcm2835-camera/controls.c
+index c251164..133aa6e 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
+@@ -1124,7 +1124,7 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
+[V4L2_CTRL_COUNT] =3D {
+ 		0, 1, NULL,
+ 		MMAL_PARAMETER_VIDEO_ENCODE_INLINE_HEADER,
+ 		ctrl_set_video_encode_param_output,
+-		true	/* Errors ignored as requires latest firmware to work */
++		false
+ 	},
+ 	{
+ 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
 =2D-
 2.7.4
 
