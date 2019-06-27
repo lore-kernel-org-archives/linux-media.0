@@ -2,37 +2,37 @@ Return-Path: <SRS0=+xV6=U2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D325AC48BE7
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B89C5C48BE9
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B641E2133F
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 91A5B2133F
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="YlYRsrJx"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="JmZdPjvJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbfF0S5P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 14:57:15 -0400
-Received: from mout.gmx.net ([212.227.15.18]:37311 "EHLO mout.gmx.net"
+        id S1726597AbfF0S5Q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 14:57:16 -0400
+Received: from mout.gmx.net ([212.227.15.15]:34291 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726587AbfF0S5O (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 14:57:14 -0400
+        id S1726561AbfF0S5P (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Jun 2019 14:57:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561661809;
-        bh=lZmOeAftlgqo1vdHP3EjpsXSMad709JwC3ovNFUjiwQ=;
+        s=badeba3b8450; t=1561661810;
+        bh=yz9ARinC93og+5jnEIbXwHj/wwjzpB1P6r189rBFmnA=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=YlYRsrJx3moT3XGmZzynd1klvf22rerTxmigVrvdXQWeUPm0hCd/v2PaVgW3NzYLe
-         s2qmVG6OPIS/o3vh+X6K4xiE8QVzr+RzviwTjTZYPAlsXYEBWeEGKgKfEuxyHtldvU
-         DWJc6xDjkUpBtpljK/+sU26VeQzlFWdQtWaGur5k=
+        b=JmZdPjvJMhyeNhR2D+BN3g9qLceztN6NcA3URY76jvLgAgzc5l18ROHoTbxjm2skr
+         ZrpZ0f1kyHmjpl7uDjzW+4dw7Uq0+HEUmDHUVvT76YcYfihyoJ45kv5mBSkwkA0yc4
+         +cfmPBI77doKFgp2vIINtP37cwli/EkomJvLrHS0=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx002 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0M9ra4-1hrcBl0tDc-00B3Zb; Thu, 27 Jun 2019 20:56:49 +0200
+ 0Meg8W-1hw21a04DY-00OGyR; Thu, 27 Jun 2019 20:56:50 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 02/31] staging: bcm2835-camera: Check the error for REPEAT_SEQ_HEADER
-Date:   Thu, 27 Jun 2019 20:55:59 +0200
-Message-Id: <1561661788-22744-3-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH 04/31] staging: bcm2835-camera: Do not bulk receive from service thread
+Date:   Thu, 27 Jun 2019 20:56:01 +0200
+Message-Id: <1561661788-22744-5-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
 References: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:xRoSxi74f4luJ+Wk+0kZTsX3xHfSkTrMrkgOD1IOPvxzVJjunLe
- uZ+aAlxUHYIg6CvrOviaV/iIGAl9mLUUr3noPuL5j2LLEUogEle+eM280eSTHoYX0PQE3O4
- K1AViH65lOMhThZSKZA5BRSUzVHQtv4k4wCA5YvrJsvrbd+0urJdyCWB61pL8szP6DZ/NFx
- ZrjMX6kZR6umiAFEOP7Eg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L8WFhcwKCGs=:Ys1zgqTPTO+npU8LQsHmfC
- 1d48g2/7lNUJALcj5MPVIlqzwiV0dJcDISjgjozwjyoJcPdkJ602j+CUQ8DxPRl/VO9j0XPSB
- tOxdrTQK+Irfqkx1cWFMXNB4H3Bjam6DVLxPD8N4AKp8OY6nlbjzx6gAKMc9Cf6iEm4n2Vckk
- dDiiLeXYnhaphVOEzjOA5WxGtPSpuROzohdTRHE69Y8BxDvQ/5PVnT8md8hYg2jI1hXBgOQU3
- RMRDVeDbCvZ3lWHNgLGKc9xoVckFEojTXTpe++Kww0L93NhtGCCzEcDx2BeHZ2xDVIAkk+NAu
- 4JTJhHFKr7YzJFJrk2uoWop3R4E/YlZP18tKKx7VFfOM3D4I4yTsOK8qM04RbZ30dutE4AWww
- LNtrCz+qqYszluUR4WkjXnqtGkk4j/LzOqW4SpI5DFECQ/e7++x22lPJorQpRI3Sy5u32KN+b
- dlbts5kFLZMr6wsVG3Y3+KLxgHk3pP7VEyDCHKf2tLpZ2NC2QmZteTqS0mpuhbju0z9RyRSW9
- gFY8h5Jl1wYWHXWB8dMYONiU6foQbUkbjIm0ioO+G0q7+swx8rKdsIL9ZmZOL+zMbqHXlxVZ+
- UNUkpq34PifnperGy9ijc9nX1I07ZsjuGWV9E2NsX8Y4EBf8Pt/D2DCUgiWvVCdMcaeIb68ek
- FLn0R4kBlMSoRFk38lNN8AKEeO2MLvqLMsN4/QJZQ6B+iKhRFFjJ1JRmAPcHiWCrIUfVm/GYB
- CzL+oUEq+eu7Di9KxG0C3DqS4H1DIbIQydU7BrVmabeESvALAuwFD4MszV8lXMOkKRCcrhu7d
- K9iV5xY3TA/0N9ohy1x4z5+xN0UBfLbEanZXKIxn8MAH7TxcLTLb8/Yng3mFiVSPPkUhtuk85
- hp/g6vjkKFtF4QjM2I+/3D2gK5jNmeQtXooSfaxfFi0R3stSC569J8GIHS8TwhNZx1m8kkV0d
- SRTnsJ8FMdJAi6Udk7s99uqNGT7t8wW2bp71FkQ6tEidrnnPB1D9+TRJlxX3L1BZEr5089LJv
- YRxTp5ARi7MSfalo6ZbNbXawbN7fyYOD7Fe/xbJAycKkP4mMrSZehY9Kj+Eu0ylxvMvLQJGVy
- +ssb39vGj+6PBo=
+X-Provags-ID: V03:K1:IYmTXewCTBPdP7XHifBO0a02+9akpP8FpA6NR/xAJmt0DQgv9h4
+ 9YdL+mb7XEvg0lGA7PqRPs0GjfQNr4mp3qeQ7fRrHNa231WcijKkL6F41PUfLoYgUt9lQDf
+ 33KdXe19iGJMwnoQXX2jqFlA0twde1eyYqdPvBKx2KVoxbWeTZmEVJirnp//gnXZw49496Z
+ m7XRSV5YazjGGRT1MXFmA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:X4zk92MyG2g=:f96coLNfkaoQCRIC/4Mc06
+ pvUb1YcnKh/ulqvDeoshWXjyFNkPVgUsgznngJqQj5fBiuDmGFmBp1E/PPLesUHwr3rEkcdsF
+ mJpVO661a/cM9beCZf1Fb7HAMfKKVBRHNLTIkyX7USej/ICDBU2PRL0pj14vTpZHt9o+wFGSe
+ HjNwtkDsX8Af4U1aoPB3NR9uWsj1J0x/QiHtk6KSBxiRAIQiw1ZiNAaNk64E1ViB0wBpTo2fG
+ UVHspJIZm7xUumaYVcIUkJQJW54XCwyXEeXKun7ZsGzNirKitsyALS4sRwKDvqdHHgKAQC+E1
+ xawtHHVJUtgCY1NUOk65U8tw5JqlS6m+ikUaLkWAyEv/X1HBeyzlaUDwZv/5LwCkMXmhiV51n
+ nFDHOLAm8uaiUquRASqQ00fGubd4pylsT+MDTqFCGmErQ3DHgPVeloQtTPspmNHAL7xCbAsZa
+ H+C6yVRTDfQkJvNVi3AA+mfJZBl5zi87nXVDZcTJcdXI+fVG4vySZUKdpnnVSbWNEqUD29UK8
+ DOsC3SseYsGgs3BWM0yVxIqaC8k37jK6nV4i3nFRaybMUBzsvwKdACHxNNt8x/Boi2AAUYt9X
+ 6KWl7F+c/8P59NiE+/gswOIz9uTiTMtsEBhvNIaYz6R9nrJspwnJrbJC9fcafJWqncwGkP+tw
+ yS+AClWrQcdzExS13K7J8qqTZVg02FxzZVfYWAVEYvv4D3NPrvQTfCoASzKgZdb7klf2M6yhj
+ gkXQ+M+9mY6YyGXq6MUm9OT2U4XuVfWJCQzkov54RdhawWS+muB/iQ60ZoZDaqOkOptkKFu0d
+ rQdoWKm7/+W9SaeEVMWLRv9SASxee+knkqSJvcLOnsuxpMF4zn+2uZ4mpBbjqsBv+5uTIODh+
+ QEguQ4RNv8nXFysL9gbMReI6k+Iy6EHfM/DBnLV7VnGDP1k77nvsLXrj0h5UGVdOJY2T9s2sV
+ 52EvEdPbWskxnrMB+T9GPgo4XHNp8Jlt+lgTywZbVKw/IYmRXNn6StA5woct6NlKD23BJd3qX
+ TebxpQRpJj76jSjL+t0SD5PGE8lrLN59UAG/uTDzFo36bv7lQdAq+12rdRG5XND+vAQu0hWuG
+ 7sVONezGN0qQbI=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,36 +77,208 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-When handling for V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER was added
-the firmware would reject the setting if H264 hadn't already been
-selected. This was fixed in the firmware at that point, but to
-enable backwards compatibility the returned error was ignored.
+vchi_bulk_queue_receive will queue up to a default of 4
+bulk receives on a connection before blocking.
+If called from the VCHI service_callback thread, then
+that thread is unable to service the VCHI_CALLBACK_BULK_RECEIVED
+events that would enable the queue call to succeed.
 
-That was Dec 2013, so the chances of having a firmware that still
-has that issue is so close to zero that the workaround can be
-removed.
+Add a workqueue to schedule the call vchi_bulk_queue_receive
+in an alternate context to avoid the lock up.
 
-Link: https://github.com/raspberrypi/linux/pull/2782/
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 =2D--
- drivers/staging/vc04_services/bcm2835-camera/controls.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../vc04_services/bcm2835-camera/mmal-vchiq.c      | 101 ++++++++++++----=
+-----
+ 1 file changed, 59 insertions(+), 42 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/dri=
-vers/staging/vc04_services/bcm2835-camera/controls.c
-index c251164..133aa6e 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-@@ -1124,7 +1124,7 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
-[V4L2_CTRL_COUNT] =3D {
- 		0, 1, NULL,
- 		MMAL_PARAMETER_VIDEO_ENCODE_INLINE_HEADER,
- 		ctrl_set_video_encode_param_output,
--		true	/* Errors ignored as requires latest firmware to work */
-+		false
- 	},
- 	{
- 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c b/d=
+rivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
+index f1bb900..1a343d8 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
+@@ -117,8 +117,10 @@ struct mmal_msg_context {
+
+ 	union {
+ 		struct {
+-			/* work struct for defered callback - must come first */
++			/* work struct for buffer_cb callback */
+ 			struct work_struct work;
++			/* work struct for deferred callback */
++			struct work_struct buffer_to_host_work;
+ 			/* mmal instance */
+ 			struct vchiq_mmal_instance *instance;
+ 			/* mmal port */
+@@ -167,6 +169,9 @@ struct vchiq_mmal_instance {
+ 	/* component to use next */
+ 	int component_idx;
+ 	struct vchiq_mmal_component component[VCHIQ_MMAL_MAX_COMPONENTS];
++
++	/* ordered workqueue to process all bulk operations */
++	struct workqueue_struct *bulk_wq;
+ };
+
+ static struct mmal_msg_context *
+@@ -248,7 +253,44 @@ static void buffer_work_cb(struct work_struct *work)
+ 					    msg_context->u.bulk.mmal_flags,
+ 					    msg_context->u.bulk.dts,
+ 					    msg_context->u.bulk.pts);
++}
+
++/* workqueue scheduled callback to handle receiving buffers
++ *
++ * VCHI will allow up to 4 bulk receives to be scheduled before blocking.
++ * If we block in the service_callback context then we can't process the
++ * VCHI_CALLBACK_BULK_RECEIVED message that would otherwise allow the blo=
+cked
++ * vchi_bulk_queue_receive() call to complete.
++ */
++static void buffer_to_host_work_cb(struct work_struct *work)
++{
++	struct mmal_msg_context *msg_context =3D
++		container_of(work, struct mmal_msg_context,
++			     u.bulk.buffer_to_host_work);
++	struct vchiq_mmal_instance *instance =3D msg_context->instance;
++	unsigned long len =3D msg_context->u.bulk.buffer_used;
++	int ret;
++
++	if (!len)
++		/* Dummy receive to ensure the buffers remain in order */
++		len =3D 8;
++	/* queue the bulk submission */
++	vchi_service_use(instance->handle);
++	ret =3D vchi_bulk_queue_receive(instance->handle,
++				      msg_context->u.bulk.buffer->buffer,
++				      /* Actual receive needs to be a multiple
++				       * of 4 bytes
++				       */
++				      (len + 3) & ~3,
++				      VCHI_FLAGS_CALLBACK_WHEN_OP_COMPLETE |
++				      VCHI_FLAGS_BLOCK_UNTIL_QUEUED,
++				      msg_context);
++
++	vchi_service_release(instance->handle);
++
++	if (ret !=3D 0)
++		pr_err("%s: ctx: %p, vchi_bulk_queue_receive failed %d\n",
++		       __func__, msg_context, ret);
+ }
+
+ /* enqueue a bulk receive for a given message context */
+@@ -257,7 +299,6 @@ static int bulk_receive(struct vchiq_mmal_instance *in=
+stance,
+ 			struct mmal_msg_context *msg_context)
+ {
+ 	unsigned long rd_len;
+-	int ret;
+
+ 	rd_len =3D msg->u.buffer_from_host.buffer_header.length;
+
+@@ -293,45 +334,10 @@ static int bulk_receive(struct vchiq_mmal_instance *=
+instance,
+ 	msg_context->u.bulk.dts =3D msg->u.buffer_from_host.buffer_header.dts;
+ 	msg_context->u.bulk.pts =3D msg->u.buffer_from_host.buffer_header.pts;
+
+-	/* queue the bulk submission */
+-	vchi_service_use(instance->handle);
+-	ret =3D vchi_bulk_queue_receive(instance->handle,
+-				      msg_context->u.bulk.buffer->buffer,
+-				      /* Actual receive needs to be a multiple
+-				       * of 4 bytes
+-				       */
+-				      (rd_len + 3) & ~3,
+-				      VCHI_FLAGS_CALLBACK_WHEN_OP_COMPLETE |
+-				      VCHI_FLAGS_BLOCK_UNTIL_QUEUED,
+-				      msg_context);
+-
+-	vchi_service_release(instance->handle);
++	queue_work(msg_context->instance->bulk_wq,
++		   &msg_context->u.bulk.buffer_to_host_work);
+
+-	return ret;
+-}
+-
+-/* enque a dummy bulk receive for a given message context */
+-static int dummy_bulk_receive(struct vchiq_mmal_instance *instance,
+-			      struct mmal_msg_context *msg_context)
+-{
+-	int ret;
+-
+-	/* zero length indicates this was a dummy transfer */
+-	msg_context->u.bulk.buffer_used =3D 0;
+-
+-	/* queue the bulk submission */
+-	vchi_service_use(instance->handle);
+-
+-	ret =3D vchi_bulk_queue_receive(instance->handle,
+-				      instance->bulk_scratch,
+-				      8,
+-				      VCHI_FLAGS_CALLBACK_WHEN_OP_COMPLETE |
+-				      VCHI_FLAGS_BLOCK_UNTIL_QUEUED,
+-				      msg_context);
+-
+-	vchi_service_release(instance->handle);
+-
+-	return ret;
++	return 0;
+ }
+
+ /* data in message, memcpy from packet into output buffer */
+@@ -379,6 +385,8 @@ buffer_from_host(struct vchiq_mmal_instance *instance,
+
+ 	/* initialise work structure ready to schedule callback */
+ 	INIT_WORK(&msg_context->u.bulk.work, buffer_work_cb);
++	INIT_WORK(&msg_context->u.bulk.buffer_to_host_work,
++		  buffer_to_host_work_cb);
+
+ 	/* prep the buffer from host message */
+ 	memset(&m, 0xbc, sizeof(m));	/* just to make debug clearer */
+@@ -459,7 +467,7 @@ static void buffer_to_host_cb(struct vchiq_mmal_instan=
+ce *instance,
+ 		if (msg->u.buffer_from_host.buffer_header.flags &
+ 		    MMAL_BUFFER_HEADER_FLAG_EOS) {
+ 			msg_context->u.bulk.status =3D
+-			    dummy_bulk_receive(instance, msg_context);
++			    bulk_receive(instance, msg, msg_context);
+ 			if (msg_context->u.bulk.status =3D=3D 0)
+ 				return;	/* successful bulk submission, bulk
+ 					 * completion will trigger callback
+@@ -1793,6 +1801,9 @@ int vchiq_mmal_finalise(struct vchiq_mmal_instance *=
+instance)
+
+ 	mutex_unlock(&instance->vchiq_mutex);
+
++	flush_workqueue(instance->bulk_wq);
++	destroy_workqueue(instance->bulk_wq);
++
+ 	vfree(instance->bulk_scratch);
+
+ 	idr_destroy(&instance->context_map);
+@@ -1855,6 +1866,11 @@ int vchiq_mmal_init(struct vchiq_mmal_instance **ou=
+t_instance)
+
+ 	params.callback_param =3D instance;
+
++	instance->bulk_wq =3D alloc_ordered_workqueue("mmal-vchiq",
++						    WQ_MEM_RECLAIM);
++	if (!instance->bulk_wq)
++		goto err_free;
++
+ 	status =3D vchi_service_open(vchi_instance, &params, &instance->handle);
+ 	if (status) {
+ 		pr_err("Failed to open VCHI service connection (status=3D%d)\n",
+@@ -1869,8 +1885,9 @@ int vchiq_mmal_init(struct vchiq_mmal_instance **out=
+_instance)
+ 	return 0;
+
+ err_close_services:
+-
+ 	vchi_service_close(instance->handle);
++	destroy_workqueue(instance->bulk_wq);
++err_free:
+ 	vfree(instance->bulk_scratch);
+ 	kfree(instance);
+ 	return -ENODEV;
 =2D-
 2.7.4
 
