@@ -2,37 +2,37 @@ Return-Path: <SRS0=+xV6=U2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F31DEC48BD7
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF15FC48BE7
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D15D42147A
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1C8B2147A
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="kneeQV6a"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="RKnMp8hZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbfF0S5I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 14:57:08 -0400
-Received: from mout.gmx.net ([212.227.15.15]:54605 "EHLO mout.gmx.net"
+        id S1726537AbfF0S5J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 14:57:09 -0400
+Received: from mout.gmx.net ([212.227.15.15]:36441 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726467AbfF0S5H (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 14:57:07 -0400
+        id S1726467AbfF0S5I (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Jun 2019 14:57:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561661809;
-        bh=JJVkmfbW6N0NvT9ruDXhbQcny8kYrpPTfEhBaZDhb3M=;
+        s=badeba3b8450; t=1561661810;
+        bh=oLnjN52EnE2DOibkkrUsKEoboTm6occkriot7kdGOWc=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=kneeQV6aiwq//qL0SNrWVx6slJXGkEW+5JAbrO95yJvzJEpH3iP84+GHT8p5skE4Y
-         fE1ZprQ7AZPyWj4wu6WPODAhHvWwi4DnHdVDBIao+EE0E8fD+BcQ8gI+Wqn3qWU0k7
-         F+l6CprxzwWm3zH7Ykhz5cRCWl6bwjPoR+J+OQNo=
+        b=RKnMp8hZU20lqiGxc90wHuETi2g7AFvuAAL5zIuDEPG/xvXcauzV4BWngTwdUBrhi
+         2ttIZA9hw6yppVjT2JG3TZ6Iu21B+AFb9ZuFs7mfUR6RIlhMfbeD9BRsrsm1yGOjsR
+         1HMbqjQIbe5RyNDaTVFamsu+SeiBK0RqPZZrV2cI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx002 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0LZhsq-1iPr4u3QI0-00lUJz; Thu, 27 Jun 2019 20:56:48 +0200
+ 0LnwxU-1iDhT01mrA-00fwPr; Thu, 27 Jun 2019 20:56:50 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 01/31] staging: bcm2835-camera: Ensure H264 header bytes get a sensible timestamp
-Date:   Thu, 27 Jun 2019 20:55:58 +0200
-Message-Id: <1561661788-22744-2-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH 05/31] staging: bcm2835-camera: Correctly denote key frames in encoded data
+Date:   Thu, 27 Jun 2019 20:56:02 +0200
+Message-Id: <1561661788-22744-6-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
 References: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:WAIkKWpwVdxTM/+coczNlxmlJbV5WdBPgtR/3uHZeto+K08Eclu
- svQNmXV5h9vW+mdUk9XfNzTa76HYH94DgyrcbG9ysEHKf7Y7q5mwONpBh2f1zxUXNKRDk7J
- 94I1oiiLSSgAG3KMoByyQOHl1c6eYOj+CEvhHGREnO/EfomE/znzsLsSiUwtvpGEs9f2/+/
- AGHU7n95xzI6TFywU3VNg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gswxCD8kVYE=:xiyG4+ypd7rsY7IMwgK+p9
- oSpNQ4FmJeADjcHkrPLX37xpNApU771sNLIElrvDrdbt8aFoG94JIIYdsmhS+oiIgUMcVWtU3
- cI6IaQndpj+QeBrx9M8iGWR8SnsnzOV1Wf6RItduKoUcmoM1MzYtt0V6liCThgGksM4C/zztN
- hzHI1gq0BSB4x2KGDQ5ryUbZYU5uj7EXZ60VDCSIkLHZfyFo7dtXPS30G3y4pz4cpRXVSh/40
- SnB6X91zO2glqAouKv5FaWM3id8lVEdRKIzODu4KNDf0cggODa+V46K/y815su2KCLoTr06dw
- ngCgqnMnAMv9B8FsdNeZ/ccFl40Genrwf3zqBVWMVUb4gr1rfCGHDCYNLfUkCMkkfvbvZGlQn
- wxjMggZ0xdLJZkq6/Js4UY6n5iaoO5vc1btBk9DvTe3vBindkHbRmz9GnkXLUP2tjz7Lv83zg
- aZ+uKuipihzvA06ef2IdYWUZzvfCUzm8CIsxq3nAKFO3UW6lPhcPmvA3OFcpv+AU9FByZAD95
- NugRbunYJdQhAEsJwMwH8fsuTIu+JGz/dpeqkNQd+etIOCIrcXhue+HcwOWV/0xqfhROfNX4o
- VsXZMMFwIWZIAk49BbUI3CV70OtBxzIYN+yyMEQF0HVFi+Uhcj9BcDUlmOOpfnOao+t/d/QLH
- UcOvv1heFDn8+BF1laIZoBq2m6m7iNtt1OxKZry0ykprLdrfG54EeDm03oPN3ktaHIoP5AYEA
- jK6UMwtNFdlzFmj8empbxqG3//mloU0ioeswXeIakZBJHfnlAYVNcMiP/uCzKZ1CPqrQulzkf
- zF3avInqa/R1xxsu1nHLsDBKj0fLrQQa1RYCiDU1bzvsUq/kcafC38nHYAguVbK6zf8LchGVE
- 6qmNt0Qk964u2AiR55D8EO8cBJT1VWse867szrgRnkIxAT8TN+Kk4ab4SGs9mVWM+EqInEHjG
- j4WIfAwqc2woBd8kYGvqTfF7gafKbBi0E9vQsu2xve4hXuvvrQmR+M6pv8ZCX3/uq7QHWG72G
- C7nnGhX3kAzu+xPncLrChstdqoorQ9UgsyGkmC/fH9cfGaaVS01vTeEhUFzKbicahvx9FX5zu
- frldOegjUoid+Y=
+X-Provags-ID: V03:K1:yZ1iRnEdO/zCVfwT0Jup2xWKW1hJcfyIxLMQ6raD3e/K42260gg
+ sJpGrJ9+VGPSRXyTOiZV/d6DuJ4Wf/px0uBMNMxghtmP3CuyqrlKknImVks1Uj/B1hc+vW5
+ Y0H4pBYw972XKbYWN+acwiqOMebVNZuqnakrfrU5q4IpA0DaKZsOtA320Pef0MDCGSj4PT5
+ eNUCvM/AZzIoFeXkTllXA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:E9CXXj22YFg=:npWE8aj9lMTYCPhz1hA5Io
+ LX0cFJTv2+agRUQfFUqMJEsx2bNaMgp8eGLcRj4ByUfpm3RtOwmfiwUrAfOQg5E14cA4w5lxL
+ rvkkjvv1aT9R0wR7r37gMgTMTK+8SKFu7Lml1T+mba3A9ReUmfh35g8uo9hRhlA+SkzwvCpec
+ WCIcaCPiCvyv6fbxJ+UT7UcZ5OqCiWUvO9Eh8z5LakYDwdLB1s0u7wivt7/+RpvVHTguVlArI
+ qHtAwyVapFpmwpON74e31ClJIZyiYzDWVh2Tgixkbz/R2s6oEOKnji0nTPIYKxNoTShRrhFz1
+ 3xZLANtdfI0kff3F5qrt/Tqp61WmPW7N2R+KDPD48b9PpGRBKttVgQs/1GvAf0jYFMpvVl9Um
+ rfKGHBXXPi3fIC7Q/Xg/dOIUkOSleSfVCARvmU4Vbcxiz8OdGSUM9Okqc+cGa4vAMV+A9zgG+
+ aYsZVJCDh7IzwqDozUyh0ZkgoWG9YyJ8QaxfmI5fjmFUs418vtSG5eUrJliXZ0QSsk0cTOzO8
+ 2WvnxR4N3XrankAlMpa6Lep8BbGAN/MUyL+Co1dsjG0C/+akbITiLrAo6ozCjvWaMJE458ppP
+ nf5kYjSvf6BQ8J5d7WAsu6isrmrphaRKn/ZJU//IKgJnnkWOsqZVUY5ha/kPTJR/p4VvLGOvq
+ I30ljE6IGwk7710rOPqU92Sdz6WNVID5ieILU+YU4PY8LjwNZqDxh6K0Qs0Ezhav++K7oLKhI
+ AM/2AxEubOPp3eECQlSkllQ7hYDGCM3A3QJK40Y/qfKYY2Y+IBziEY0AXn8tYxK86r92wWN/e
+ ZY1Jcpy8Xfr+tE3uA3hlwmRSzHzY554vX8MunfkpXMuLXEuXsoz66n0QFiKKLx1l3M9JsQ4sG
+ TW0S3L/uOp3P8J97IJuAeBkzg5zYtNYR6ejQJBJvHtPKpMbuxdoCIcPIA94esWW1G53CmUXR9
+ A1gPI1yqXZPrXFepimiLXJ7paDr3hq2ICSOEwJoPi9T1laDLMIhN6jHBzgNimUg5i1mtz4iZE
+ Owy4H6DzwYUS9H4m8WBTP+jg1iD3dbzHZeHY7wsFwkZ3oAY9e0bN+T20/FMCs4aZCkwdAD+DL
+ ziEj/D0cdINm34=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,78 +77,29 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-H264 header come from VC with 0 timestamps, which means they get a
-strange timestamp when processed with VC/kernel start times,
-particularly if used with the inline header option.
-Remember the last frame timestamp and use that if set, or otherwise
-use the kernel start time.
+Forward MMAL key frame flags to the V4L2 buffers.
 
-Link: https://github.com/raspberrypi/linux/issues/1836
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 =2D--
- .../staging/vc04_services/bcm2835-camera/bcm2835-camera.c  | 14 +++++++++=
-+++--
- .../staging/vc04_services/bcm2835-camera/bcm2835-camera.h  |  2 ++
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
  b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index dce6e6d..0c04815 100644
+index 0c04815..456b686 100644
 =2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
 +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -359,7 +359,9 @@ static void buffer_cb(struct vchiq_mmal_instance *inst=
+@@ -385,6 +385,9 @@ static void buffer_cb(struct vchiq_mmal_instance *inst=
 ance,
- 		}
- 	} else {
- 		if (dev->capture.frame_count) {
--			if (dev->capture.vc_start_timestamp !=3D -1 && pts) {
-+			if (dev->capture.vc_start_timestamp !=3D -1) {
-+				buf->vb.vb2_buf.timestamp =3D ktime_get_ns();
-+			} else if (pts) {
- 				ktime_t timestamp;
- 				s64 runtime_us =3D pts -
- 				    dev->capture.vc_start_timestamp;
-@@ -372,8 +374,15 @@ static void buffer_cb(struct vchiq_mmal_instance *ins=
-tance,
- 					 ktime_to_ns(timestamp));
- 				buf->vb.vb2_buf.timestamp =3D ktime_to_ns(timestamp);
- 			} else {
--				buf->vb.vb2_buf.timestamp =3D ktime_get_ns();
-+				if (dev->capture.last_timestamp) {
-+					buf->vb.vb2_buf.timestamp =3D
-+						dev->capture.last_timestamp;
-+				} else {
-+					buf->vb.vb2_buf.timestamp =3D
-+						ktime_to_ns(dev->capture.kernel_start_ts);
-+				}
- 			}
-+			dev->capture.last_timestamp =3D buf->vb.vb2_buf.timestamp;
+ 			dev->capture.last_timestamp =3D buf->vb.vb2_buf.timestamp;
 
  			vb2_set_plane_payload(&buf->vb.vb2_buf, 0, length);
++			if (mmal_flags & MMAL_BUFFER_HEADER_FLAG_KEYFRAME)
++				buf->vb.flags |=3D V4L2_BUF_FLAG_KEYFRAME;
++
  			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
-@@ -541,6 +550,7 @@ static int start_streaming(struct vb2_queue *vq, unsig=
-ned int count)
- 			 dev->capture.vc_start_timestamp, parameter_size);
 
- 	dev->capture.kernel_start_ts =3D ktime_get();
-+	dev->capture.last_timestamp =3D 0;
-
- 	/* enable the camera port */
- 	dev->capture.port->cb_ctx =3D dev;
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h=
- b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-index 2b5679e..09273b0 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-@@ -90,6 +90,8 @@ struct bm2835_mmal_dev {
- 		s64         vc_start_timestamp;
- 		/* Kernel start timestamp for streaming */
- 		ktime_t kernel_start_ts;
-+		/* Timestamp of last frame */
-+		u64		last_timestamp;
-
- 		struct vchiq_mmal_port  *port; /* port being used for capture */
- 		/* camera port being used for capture */
+ 			if (mmal_flags & MMAL_BUFFER_HEADER_FLAG_EOS &&
 =2D-
 2.7.4
 
