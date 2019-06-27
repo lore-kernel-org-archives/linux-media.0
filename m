@@ -2,101 +2,153 @@ Return-Path: <SRS0=+xV6=U2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80E17C48BD7
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F31DEC48BD7
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6A2AE2075E
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:45:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D15D42147A
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="kneeQV6a"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726443AbfF0Spd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 14:45:33 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48070 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbfF0Spd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 14:45:33 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 4BDF126D296
-Message-ID: <143cb82ff2ff5c5f389109def45ee47b9ad076d8.camel@collabora.com>
-Subject: Re: [PATCH] media: imx: mipi csi-2: Don't fail if initial state
- times-out
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        kernel@collabora.com, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-media <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Date:   Thu, 27 Jun 2019 15:45:24 -0300
-In-Reply-To: <1561640172.4216.16.camel@pengutronix.de>
-References: <20190625203945.28081-1-ezequiel@collabora.com>
-         <1561535121.4870.1.camel@pengutronix.de>
-         <CAOMZO5Be-5Em0DR5nCBfzsW4mKMz6ThF+kSukcG6WuFF-0vwaQ@mail.gmail.com>
-         <3797cdd2-f6c8-f23d-788c-b8efc3e75b21@gmail.com>
-         <CAOMZO5AGZcsrzogzxRo9UNauYgWZLdiVE8vJ3-FxU2X4K8Jwxg@mail.gmail.com>
-         <ba0f4a0f-cb61-6c5b-1db9-21536ae38c6f@gmail.com>
-         <1561624997.4216.11.camel@pengutronix.de>
-         <CAOMZO5D1Lq7MuK55hydP3JNGki71iNeubzfUgAvVhEDuzDcZFA@mail.gmail.com>
-         <1561640172.4216.16.camel@pengutronix.de>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726476AbfF0S5I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 14:57:08 -0400
+Received: from mout.gmx.net ([212.227.15.15]:54605 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726467AbfF0S5H (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Jun 2019 14:57:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1561661809;
+        bh=JJVkmfbW6N0NvT9ruDXhbQcny8kYrpPTfEhBaZDhb3M=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=kneeQV6aiwq//qL0SNrWVx6slJXGkEW+5JAbrO95yJvzJEpH3iP84+GHT8p5skE4Y
+         fE1ZprQ7AZPyWj4wu6WPODAhHvWwi4DnHdVDBIao+EE0E8fD+BcQ8gI+Wqn3qWU0k7
+         F+l6CprxzwWm3zH7Ykhz5cRCWl6bwjPoR+J+OQNo=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
+ (mrgmx002 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 0LZhsq-1iPr4u3QI0-00lUJz; Thu, 27 Jun 2019 20:56:48 +0200
+From:   Stefan Wahren <wahrenst@gmx.net>
+To:     Eric Anholt <eric@anholt.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH 01/31] staging: bcm2835-camera: Ensure H264 header bytes get a sensible timestamp
+Date:   Thu, 27 Jun 2019 20:55:58 +0200
+Message-Id: <1561661788-22744-2-git-send-email-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
+References: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
+X-Provags-ID: V03:K1:WAIkKWpwVdxTM/+coczNlxmlJbV5WdBPgtR/3uHZeto+K08Eclu
+ svQNmXV5h9vW+mdUk9XfNzTa76HYH94DgyrcbG9ysEHKf7Y7q5mwONpBh2f1zxUXNKRDk7J
+ 94I1oiiLSSgAG3KMoByyQOHl1c6eYOj+CEvhHGREnO/EfomE/znzsLsSiUwtvpGEs9f2/+/
+ AGHU7n95xzI6TFywU3VNg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:gswxCD8kVYE=:xiyG4+ypd7rsY7IMwgK+p9
+ oSpNQ4FmJeADjcHkrPLX37xpNApU771sNLIElrvDrdbt8aFoG94JIIYdsmhS+oiIgUMcVWtU3
+ cI6IaQndpj+QeBrx9M8iGWR8SnsnzOV1Wf6RItduKoUcmoM1MzYtt0V6liCThgGksM4C/zztN
+ hzHI1gq0BSB4x2KGDQ5ryUbZYU5uj7EXZ60VDCSIkLHZfyFo7dtXPS30G3y4pz4cpRXVSh/40
+ SnB6X91zO2glqAouKv5FaWM3id8lVEdRKIzODu4KNDf0cggODa+V46K/y815su2KCLoTr06dw
+ ngCgqnMnAMv9B8FsdNeZ/ccFl40Genrwf3zqBVWMVUb4gr1rfCGHDCYNLfUkCMkkfvbvZGlQn
+ wxjMggZ0xdLJZkq6/Js4UY6n5iaoO5vc1btBk9DvTe3vBindkHbRmz9GnkXLUP2tjz7Lv83zg
+ aZ+uKuipihzvA06ef2IdYWUZzvfCUzm8CIsxq3nAKFO3UW6lPhcPmvA3OFcpv+AU9FByZAD95
+ NugRbunYJdQhAEsJwMwH8fsuTIu+JGz/dpeqkNQd+etIOCIrcXhue+HcwOWV/0xqfhROfNX4o
+ VsXZMMFwIWZIAk49BbUI3CV70OtBxzIYN+yyMEQF0HVFi+Uhcj9BcDUlmOOpfnOao+t/d/QLH
+ UcOvv1heFDn8+BF1laIZoBq2m6m7iNtt1OxKZry0ykprLdrfG54EeDm03oPN3ktaHIoP5AYEA
+ jK6UMwtNFdlzFmj8empbxqG3//mloU0ioeswXeIakZBJHfnlAYVNcMiP/uCzKZ1CPqrQulzkf
+ zF3avInqa/R1xxsu1nHLsDBKj0fLrQQa1RYCiDU1bzvsUq/kcafC38nHYAguVbK6zf8LchGVE
+ 6qmNt0Qk964u2AiR55D8EO8cBJT1VWse867szrgRnkIxAT8TN+Kk4ab4SGs9mVWM+EqInEHjG
+ j4WIfAwqc2woBd8kYGvqTfF7gafKbBi0E9vQsu2xve4hXuvvrQmR+M6pv8ZCX3/uq7QHWG72G
+ C7nnGhX3kAzu+xPncLrChstdqoorQ9UgsyGkmC/fH9cfGaaVS01vTeEhUFzKbicahvx9FX5zu
+ frldOegjUoid+Y=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 2019-06-27 at 14:56 +0200, Philipp Zabel wrote:
-> Hi Fabio,
-> 
-> On Thu, 2019-06-27 at 09:38 -0300, Fabio Estevam wrote:
-> > Hi Philipp,
-> > 
-> > On Thu, Jun 27, 2019 at 5:43 AM Philipp Zabel <p.zabel@pengutronix.de> wrote:
-> > 
-> > > Are there any visual artifacts in the first frame(s) in this case?
-> > 
-> > I do not observe visual artifacts when running gst-launch-1.0 v4l2src ! kmssink
-> > 
-> > > > So in my opinion the next version of this patch should make LP-11
-> > > > timeout a warning only, but keep the error return on clock lane timeouts.
-> > > 
-> > > I agree.
-> > 
-> > Here is a reworked version of Ezequiel's patch as per the suggestions:
-> > http://code.bulix.org/g5qap5-780475
-> > 
-> > Does this one look good?
-> 
-> Limiting the change to wait_stopstate is fine, the actual message
-> makes assumptions that could be misleading. How about:
-> 
-> "Timeout waiting for LP-11 state on all active lanes.
->  This is most likely caused by a bug in the sensor driver.
->  Capture might fail or contain visual artifacts."
-> 
-> I'd like to keep the phy_state register output though, if only as
-> dev_dbg(). It contains useful output for debugging, for example if only
-> some of the lanes are in stop state, which could indicate an issue with
-> connections or lane configuration.
-> 
-> 
+From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-I think Philipp's suggestions looks very good, both the text and keeping
-the phy state. I think both should be kept in the warning.
+H264 header come from VC with 0 timestamps, which means they get a
+strange timestamp when processed with VC/kernel start times,
+particularly if used with the inline header option.
+Remember the last frame timestamp and use that if set, or otherwise
+use the kernel start time.
 
-Fabio: feel free to submit a v2, or let me know so I'll add it to my TODO.
+Link: https://github.com/raspberrypi/linux/issues/1836
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+=2D--
+ .../staging/vc04_services/bcm2835-camera/bcm2835-camera.c  | 14 +++++++++=
++++--
+ .../staging/vc04_services/bcm2835-camera/bcm2835-camera.h  |  2 ++
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-Thanks,
-Eze
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index dce6e6d..0c04815 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -359,7 +359,9 @@ static void buffer_cb(struct vchiq_mmal_instance *inst=
+ance,
+ 		}
+ 	} else {
+ 		if (dev->capture.frame_count) {
+-			if (dev->capture.vc_start_timestamp !=3D -1 && pts) {
++			if (dev->capture.vc_start_timestamp !=3D -1) {
++				buf->vb.vb2_buf.timestamp =3D ktime_get_ns();
++			} else if (pts) {
+ 				ktime_t timestamp;
+ 				s64 runtime_us =3D pts -
+ 				    dev->capture.vc_start_timestamp;
+@@ -372,8 +374,15 @@ static void buffer_cb(struct vchiq_mmal_instance *ins=
+tance,
+ 					 ktime_to_ns(timestamp));
+ 				buf->vb.vb2_buf.timestamp =3D ktime_to_ns(timestamp);
+ 			} else {
+-				buf->vb.vb2_buf.timestamp =3D ktime_get_ns();
++				if (dev->capture.last_timestamp) {
++					buf->vb.vb2_buf.timestamp =3D
++						dev->capture.last_timestamp;
++				} else {
++					buf->vb.vb2_buf.timestamp =3D
++						ktime_to_ns(dev->capture.kernel_start_ts);
++				}
+ 			}
++			dev->capture.last_timestamp =3D buf->vb.vb2_buf.timestamp;
+
+ 			vb2_set_plane_payload(&buf->vb.vb2_buf, 0, length);
+ 			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
+@@ -541,6 +550,7 @@ static int start_streaming(struct vb2_queue *vq, unsig=
+ned int count)
+ 			 dev->capture.vc_start_timestamp, parameter_size);
+
+ 	dev->capture.kernel_start_ts =3D ktime_get();
++	dev->capture.last_timestamp =3D 0;
+
+ 	/* enable the camera port */
+ 	dev->capture.port->cb_ctx =3D dev;
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
+index 2b5679e..09273b0 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
+@@ -90,6 +90,8 @@ struct bm2835_mmal_dev {
+ 		s64         vc_start_timestamp;
+ 		/* Kernel start timestamp for streaming */
+ 		ktime_t kernel_start_ts;
++		/* Timestamp of last frame */
++		u64		last_timestamp;
+
+ 		struct vchiq_mmal_port  *port; /* port being used for capture */
+ 		/* camera port being used for capture */
+=2D-
+2.7.4
 
