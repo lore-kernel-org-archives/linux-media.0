@@ -2,414 +2,181 @@ Return-Path: <SRS0=+xV6=U2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UPPERCASE_75_100,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BF94C48BD7
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 19:07:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A496EC48BD7
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 19:33:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 71BC020644
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 19:07:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="Un9vUkeE"
+	by mail.kernel.org (Postfix) with ESMTP id 841DF208E3
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 19:33:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbfF0THR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 15:07:17 -0400
-Received: from mout.gmx.net ([212.227.17.22]:60867 "EHLO mout.gmx.net"
+        id S1726443AbfF0Tdw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 15:33:52 -0400
+Received: from gofer.mess.org ([88.97.38.141]:38147 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726498AbfF0THP (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 15:07:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561662413;
-        bh=3mqqxDb8bLQ5CzkTAa0h20P0V3BJrxb/3RrHc2khICs=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Un9vUkeEDDdEmqidE6QKyOw0lvi4XIrIQk0pnoVfAzqvfhC0hUsT/3H1YlwoN+mW8
-         v2Y0J32+g+PgZM4oWk8ws2/81v7qUvG0522LGwchpV3jDP32xrwtr/+q8eeeOBHMK4
-         91XWdfi5phuMJP56xMUPtOzWc1WBjn8VBd4gZBm4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
- (mrgmx101 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0LgMCe-1iJEPh0riu-00njBV; Thu, 27 Jun 2019 21:06:53 +0200
-From:   Stefan Wahren <wahrenst@gmx.net>
-To:     Eric Anholt <eric@anholt.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH 23/31] staging: bcm2835-camera: Fix up mmal-parameters.h
-Date:   Thu, 27 Jun 2019 21:06:18 +0200
-Message-Id: <1561662386-23045-4-git-send-email-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1561662386-23045-1-git-send-email-wahrenst@gmx.net>
-References: <1561662386-23045-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:UXQ+zIyZZhoUihwmsQML4qZ8j+ZTGuDbVWpOWIcNNIOSvN2BSvO
- hQoowbqbAhv4Fnw0X68Fb16Af6m5tJ3LaZXJlnaVIq1ih81Ia7vrBxUk6vhwaKRasZWOzZN
- QOYqdbcWpQKBYcbqQA6OdVLYy0gH++LJLXH+EL7Xibh4PGtkt1rUFzHFZmNwZ/REqlGuZK4
- MVLorg3GZ3Nhq032zFYFQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:tT+7U1H6yWY=:HpzEeacWS7tHS6st5pnpcN
- FP3sw+OtXAv6VkPDYv0aIeF/aLeNkBe7Oaezk1L1gR2+IdhX015Vn33wE3niR5S043Lh94zsU
- yn6shCHQInMGCJYXsUkIfmw0D6KEq6XjcdRXvrFkDQqCMwXyQqSusNm1DpH+zM7q9Rr1dPMmo
- uyalbKU+B67z44i9G2vfoK4D0enrhOLNpRMVcw3pXipdEN7s1PyOsk7O5bUxN0ddwBWtGwYse
- ey27kjSrxGZlJfWAwNPMXZs+2UbLiLIH3zuobttyZUhPfQOKdTsXFNokm2GwZXh78HMlQd+D0
- i1goFqa9uXEguH9JuiT+24qMxJ+QrTIMJTE6YV1TfxfIRVFE8ExSXbRbqNckosfOgkL+Mlzao
- ZFNVe9nz9QtoOzMyG4SjB696z3u0woZ27FzD/glKbnc97eV4mXKSZcBoFqcPkkVppoQS1M+oL
- 4XWllkUfSetNj+LEdcOjo8NgW2C8mYFoE2JA6q7T+atdyZY21wJTPKH5+PT4sR9ubLyDBrkBk
- lLZXG5DLKgHh92vYtT1uA0VIVpFhUAu5Y7qBos/VlvbnQR9VpXcHRbHV5t7BS5I5Lm056rRbK
- 4/CHZ+aSQ5nZ5kcQBGzHdjPGGxOSi7g4YZvghOrPiExf2KM9I9QM9UULBsbWghW6fKQYYvsx4
- eFAHMGXcDIy0CAA7A+KQ/6WRRe5hhF7tHivUgYUjBwpt+I/5J9hJgc88OqRHBp8xbDqbqJhao
- X/i6kVFOZSxWCp8V5qBpEiHOLtG2fjDJv5T9Y41i0ztZote+rVtUeklmZhToEakHv2/XQLHrQ
- 75CBxDBXxg7ocEl6F5zBmfQ+Mu2JL1elAcH5cMI/j91tQf/B+G3sCXoLBGu4ZvANoxj6oe5RD
- I1xBK18G1EfQesl0gPMRK2z1H2A0GWsXPN96pcXLIuXM8fn/kV4lRntAQynP6lfqHYCHDQSeT
- mezLwt4m4FGTVlydDwrn0+v92PPmInQdWJwMTO7GVQqihMqvVktLfU+rk7RtZU4rkvBapH2iA
- Q3W9ZA0nCgzdLjqXCFjSiEtZTIY/rOYavafIlXwzCk71pxYF8Pm8qrUka+WhLGFk9dqJMJmjd
- JVrR4pVcWjQz/A=
-Content-Transfer-Encoding: quoted-printable
+        id S1726384AbfF0Tdw (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Jun 2019 15:33:52 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 92C0B60AD1; Thu, 27 Jun 2019 20:33:49 +0100 (BST)
+Date:   Thu, 27 Jun 2019 20:33:49 +0100
+From:   Sean Young <sean@mess.org>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [PATCH v2] keytable: Add keymap test
+Message-ID: <20190627193348.d53sbpys32i7qyi3@gofer.mess.org>
+References: <b6ffea1984f05adec9f52cd60902a95c82bf8666.camel@hadess.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b6ffea1984f05adec9f52cd60902a95c82bf8666.camel@hadess.net>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+On Thu, Jun 27, 2019 at 10:13:56AM +0200, Bastien Nocera wrote:
+> This new test will try to parse all the ".toml" files in the directory
+> path passed to it, error'ing out on the first parsing problem.
+> 
+> Run as "make check" in the keytable directory.
 
-Fixes up all the checkpatch error "line over 80 characters" in
-mmal-parameters.h
+Good catch, and I like your solution.
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
-=2D--
- .../vc04_services/bcm2835-camera/mmal-parameters.h | 261 +++++++++++++---=
------
- 1 file changed, 159 insertions(+), 102 deletions(-)
+It needs a Signed-off-by.
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.=
-h b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-index da21ec5..80a9912 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-+++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-@@ -37,134 +37,190 @@
+> ---
+> Changes since v1:
+> - Fix patch formatting
+> 
+> At least 4 keymaps look broken in the current git:
+> it913x_v2.toml
+> pinnacle310e.toml
+> hisi_poplar.toml
+> imon_mce.toml
+> 
+> Let me know if you want patches to remove the duplicate entries from
+> those.
 
- /* Common parameters */
- enum mmal_parameter_common_type {
--	MMAL_PARAMETER_UNUSED  /**< Never a valid parameter ID */
--		=3D MMAL_PARAMETER_GROUP_COMMON,
--	MMAL_PARAMETER_SUPPORTED_ENCODINGS, /**< MMAL_PARAMETER_ENCODING_T */
--	MMAL_PARAMETER_URI, /**< MMAL_PARAMETER_URI_T */
--
--	/** MMAL_PARAMETER_CHANGE_EVENT_REQUEST_T */
-+		/**< Never a valid parameter ID */
-+	MMAL_PARAMETER_UNUSED =3D MMAL_PARAMETER_GROUP_COMMON,
-+
-+		/**< MMAL_PARAMETER_ENCODING_T */
-+	MMAL_PARAMETER_SUPPORTED_ENCODINGS,
-+		/**< MMAL_PARAMETER_URI_T */
-+	MMAL_PARAMETER_URI,
-+		/** MMAL_PARAMETER_CHANGE_EVENT_REQUEST_T */
- 	MMAL_PARAMETER_CHANGE_EVENT_REQUEST,
--
--	/** MMAL_PARAMETER_BOOLEAN_T */
-+		/** MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_ZERO_COPY,
--
--	/**< MMAL_PARAMETER_BUFFER_REQUIREMENTS_T */
-+		/**< MMAL_PARAMETER_BUFFER_REQUIREMENTS_T */
- 	MMAL_PARAMETER_BUFFER_REQUIREMENTS,
--
--	MMAL_PARAMETER_STATISTICS, /**< MMAL_PARAMETER_STATISTICS_T */
--	MMAL_PARAMETER_CORE_STATISTICS, /**< MMAL_PARAMETER_CORE_STATISTICS_T */
--	MMAL_PARAMETER_MEM_USAGE, /**< MMAL_PARAMETER_MEM_USAGE_T */
--	MMAL_PARAMETER_BUFFER_FLAG_FILTER, /**< MMAL_PARAMETER_UINT32_T */
--	MMAL_PARAMETER_SEEK, /**< MMAL_PARAMETER_SEEK_T */
--	MMAL_PARAMETER_POWERMON_ENABLE, /**< MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_LOGGING, /**< MMAL_PARAMETER_LOGGING_T */
--	MMAL_PARAMETER_SYSTEM_TIME, /**< MMAL_PARAMETER_UINT64_T */
--	MMAL_PARAMETER_NO_IMAGE_PADDING  /**< MMAL_PARAMETER_BOOLEAN_T */
-+		/**< MMAL_PARAMETER_STATISTICS_T */
-+	MMAL_PARAMETER_STATISTICS,
-+		/**< MMAL_PARAMETER_CORE_STATISTICS_T */
-+	MMAL_PARAMETER_CORE_STATISTICS,
-+		/**< MMAL_PARAMETER_MEM_USAGE_T */
-+	MMAL_PARAMETER_MEM_USAGE,
-+		/**< MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_BUFFER_FLAG_FILTER,
-+		/**< MMAL_PARAMETER_SEEK_T */
-+	MMAL_PARAMETER_SEEK,
-+		/**< MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_POWERMON_ENABLE,
-+		/**< MMAL_PARAMETER_LOGGING_T */
-+	MMAL_PARAMETER_LOGGING,
-+		/**< MMAL_PARAMETER_UINT64_T */
-+	MMAL_PARAMETER_SYSTEM_TIME,
-+		/**< MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_NO_IMAGE_PADDING,
- };
+That would be great. They have to be patched in the kernel tree, they
+are generated from there.
 
- /* camera parameters */
+>  utils/keytable/Makefile.am    |  6 ++++
+>  utils/keytable/test_keymaps.c | 68 +++++++++++++++++++++++++++++++++++
+>  2 files changed, 74 insertions(+)
+>  create mode 100644 utils/keytable/test_keymaps.c
+> 
+> diff --git a/utils/keytable/Makefile.am b/utils/keytable/Makefile.am
+> index 148b9446..086d53c2 100644
+> --- a/utils/keytable/Makefile.am
+> +++ b/utils/keytable/Makefile.am
+> @@ -1,9 +1,12 @@
+>  bin_PROGRAMS = ir-keytable
+> +noinst_PROGRAMS = test-keymaps
+>  man_MANS = ir-keytable.1 rc_keymap.5
+>  sysconf_DATA = rc_maps.cfg
+>  keytablesystem_DATA = $(srcdir)/rc_keymaps/*
+>  udevrules_DATA = 70-infrared.rules
+>  
+> +test_keymaps_SOURCES = toml.c toml.h test_keymaps.c
+> +
 
- enum mmal_parameter_camera_type {
- 	/* 0 */
--	/** @ref MMAL_PARAMETER_THUMBNAIL_CONFIG_T */
--	MMAL_PARAMETER_THUMBNAIL_CONFIGURATION
--		=3D MMAL_PARAMETER_GROUP_CAMERA,
--	MMAL_PARAMETER_CAPTURE_QUALITY, /**< Unused? */
--	MMAL_PARAMETER_ROTATION, /**< @ref MMAL_PARAMETER_INT32_T */
--	MMAL_PARAMETER_EXIF_DISABLE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_EXIF, /**< @ref MMAL_PARAMETER_EXIF_T */
--	MMAL_PARAMETER_AWB_MODE, /**< @ref MMAL_PARAM_AWBMODE_T */
--	MMAL_PARAMETER_IMAGE_EFFECT, /**< @ref MMAL_PARAMETER_IMAGEFX_T */
--	MMAL_PARAMETER_COLOUR_EFFECT, /**< @ref MMAL_PARAMETER_COLOURFX_T */
--	MMAL_PARAMETER_FLICKER_AVOID, /**< @ref MMAL_PARAMETER_FLICKERAVOID_T */
--	MMAL_PARAMETER_FLASH, /**< @ref MMAL_PARAMETER_FLASH_T */
--	MMAL_PARAMETER_REDEYE, /**< @ref MMAL_PARAMETER_REDEYE_T */
--	MMAL_PARAMETER_FOCUS, /**< @ref MMAL_PARAMETER_FOCUS_T */
--	MMAL_PARAMETER_FOCAL_LENGTHS, /**< Unused? */
--	MMAL_PARAMETER_EXPOSURE_COMP, /**< @ref MMAL_PARAMETER_INT32_T */
--	MMAL_PARAMETER_ZOOM, /**< @ref MMAL_PARAMETER_SCALEFACTOR_T */
--	MMAL_PARAMETER_MIRROR, /**< @ref MMAL_PARAMETER_MIRROR_T */
-+		/** @ref MMAL_PARAMETER_THUMBNAIL_CONFIG_T */
-+	MMAL_PARAMETER_THUMBNAIL_CONFIGURATION =3D
-+		MMAL_PARAMETER_GROUP_CAMERA,
-+		/**< Unused? */
-+	MMAL_PARAMETER_CAPTURE_QUALITY,
-+		/**< @ref MMAL_PARAMETER_INT32_T */
-+	MMAL_PARAMETER_ROTATION,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_EXIF_DISABLE,
-+		/**< @ref MMAL_PARAMETER_EXIF_T */
-+	MMAL_PARAMETER_EXIF,
-+		/**< @ref MMAL_PARAM_AWBMODE_T */
-+	MMAL_PARAMETER_AWB_MODE,
-+		/**< @ref MMAL_PARAMETER_IMAGEFX_T */
-+	MMAL_PARAMETER_IMAGE_EFFECT,
-+		/**< @ref MMAL_PARAMETER_COLOURFX_T */
-+	MMAL_PARAMETER_COLOUR_EFFECT,
-+		/**< @ref MMAL_PARAMETER_FLICKERAVOID_T */
-+	MMAL_PARAMETER_FLICKER_AVOID,
-+		/**< @ref MMAL_PARAMETER_FLASH_T */
-+	MMAL_PARAMETER_FLASH,
-+		/**< @ref MMAL_PARAMETER_REDEYE_T */
-+	MMAL_PARAMETER_REDEYE,
-+		/**< @ref MMAL_PARAMETER_FOCUS_T */
-+	MMAL_PARAMETER_FOCUS,
-+		/**< Unused? */
-+	MMAL_PARAMETER_FOCAL_LENGTHS,
-+		/**< @ref MMAL_PARAMETER_INT32_T */
-+	MMAL_PARAMETER_EXPOSURE_COMP,
-+		/**< @ref MMAL_PARAMETER_SCALEFACTOR_T */
-+	MMAL_PARAMETER_ZOOM,
-+		/**< @ref MMAL_PARAMETER_MIRROR_T */
-+	MMAL_PARAMETER_MIRROR,
+It could be called check keymaps in line with the make target.
 
- 	/* 0x10 */
--	MMAL_PARAMETER_CAMERA_NUM, /**< @ref MMAL_PARAMETER_UINT32_T */
--	MMAL_PARAMETER_CAPTURE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_EXPOSURE_MODE, /**< @ref MMAL_PARAMETER_EXPOSUREMODE_T */
--	MMAL_PARAMETER_EXP_METERING_MODE, /**< @ref MMAL_PARAMETER_EXPOSUREMETER=
-INGMODE_T */
--	MMAL_PARAMETER_FOCUS_STATUS, /**< @ref MMAL_PARAMETER_FOCUS_STATUS_T */
--	MMAL_PARAMETER_CAMERA_CONFIG, /**< @ref MMAL_PARAMETER_CAMERA_CONFIG_T *=
-/
--	MMAL_PARAMETER_CAPTURE_STATUS, /**< @ref MMAL_PARAMETER_CAPTURE_STATUS_T=
- */
--	MMAL_PARAMETER_FACE_TRACK, /**< @ref MMAL_PARAMETER_FACE_TRACK_T */
--	MMAL_PARAMETER_DRAW_BOX_FACES_AND_FOCUS, /**< @ref MMAL_PARAMETER_BOOLEA=
-N_T */
--	MMAL_PARAMETER_JPEG_Q_FACTOR, /**< @ref MMAL_PARAMETER_UINT32_T */
--	MMAL_PARAMETER_FRAME_RATE, /**< @ref MMAL_PARAMETER_FRAME_RATE_T */
--	MMAL_PARAMETER_USE_STC, /**< @ref MMAL_PARAMETER_CAMERA_STC_MODE_T */
--	MMAL_PARAMETER_CAMERA_INFO, /**< @ref MMAL_PARAMETER_CAMERA_INFO_T */
--	MMAL_PARAMETER_VIDEO_STABILISATION, /**< @ref MMAL_PARAMETER_BOOLEAN_T *=
-/
--	MMAL_PARAMETER_FACE_TRACK_RESULTS, /**< @ref MMAL_PARAMETER_FACE_TRACK_R=
-ESULTS_T */
--	MMAL_PARAMETER_ENABLE_RAW_CAPTURE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/**< @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_CAMERA_NUM,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_CAPTURE,
-+		/**< @ref MMAL_PARAMETER_EXPOSUREMODE_T */
-+	MMAL_PARAMETER_EXPOSURE_MODE,
-+		/**< @ref MMAL_PARAMETER_EXPOSUREMETERINGMODE_T */
-+	MMAL_PARAMETER_EXP_METERING_MODE,
-+		/**< @ref MMAL_PARAMETER_FOCUS_STATUS_T */
-+	MMAL_PARAMETER_FOCUS_STATUS,
-+		/**< @ref MMAL_PARAMETER_CAMERA_CONFIG_T */
-+	MMAL_PARAMETER_CAMERA_CONFIG,
-+		/**< @ref MMAL_PARAMETER_CAPTURE_STATUS_T */
-+	MMAL_PARAMETER_CAPTURE_STATUS,
-+		/**< @ref MMAL_PARAMETER_FACE_TRACK_T */
-+	MMAL_PARAMETER_FACE_TRACK,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_DRAW_BOX_FACES_AND_FOCUS,
-+		/**< @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_JPEG_Q_FACTOR,
-+		/**< @ref MMAL_PARAMETER_FRAME_RATE_T */
-+	MMAL_PARAMETER_FRAME_RATE,
-+		/**< @ref MMAL_PARAMETER_CAMERA_STC_MODE_T */
-+	MMAL_PARAMETER_USE_STC,
-+		/**< @ref MMAL_PARAMETER_CAMERA_INFO_T */
-+	MMAL_PARAMETER_CAMERA_INFO,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_VIDEO_STABILISATION,
-+		/**< @ref MMAL_PARAMETER_FACE_TRACK_RESULTS_T */
-+	MMAL_PARAMETER_FACE_TRACK_RESULTS,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_ENABLE_RAW_CAPTURE,
+>  ir_keytable_SOURCES = keytable.c parse.h ir-encode.c ir-encode.h toml.c toml.h
+>  
+>  if WITH_BPF
+> @@ -21,6 +24,9 @@ endif
+>  EXTRA_DIST = 70-infrared.rules rc_keymaps rc_keymaps_userspace gen_keytables.pl ir-keytable.1 rc_maps.cfg rc_keymap.5
+>  
+>  # custom target
+> +check: test-keymaps
+> +	$(builddir)/test-keymaps $(srcdir)/rc_keymaps/
+> +
+>  install-data-local:
+>  	$(install_sh) -d "$(DESTDIR)$(keytableuserdir)"
+>  
+> diff --git a/utils/keytable/test_keymaps.c b/utils/keytable/test_keymaps.c
+> new file mode 100644
+> index 00000000..23084331
+> --- /dev/null
+> +++ b/utils/keytable/test_keymaps.c
+> @@ -0,0 +1,68 @@
+> +#include <string.h>
+> +#include <errno.h>
+> +#include <stdio.h>
+> +#include <sys/types.h>
+> +#include <dirent.h>
+> +
+> +#include "toml.h"
+> +
+> +static int
+> +has_suffix(const char *str, const char *suffix)
+> +{
+> +	if (strlen(str) < strlen(suffix))
+> +		return 0;
+> +	if (strncmp(str + strlen(str) - strlen(suffix), suffix, strlen(suffix)) == 0)
+> +		return 1;
+> +	return 0;
+> +}
+> +
+> +int main (int argc, char **argv)
+> +{
+> +	DIR *dir;
+> +	struct dirent *entry;
+> +
+> +	if (argc != 2) {
+> +		fprintf(stderr, "Usage: %s KEYMAPS-DIRECTORY\n", argv[0]);
+> +		return 1;
+> +	}
+> +
+> +	dir = opendir(argv[1]);
+> +	if (!dir) {
+> +		perror("Could not open directory");
+> +		return 1;
+> +	}
+> +
+> +	while ((entry = readdir(dir)) != NULL) {
+> +		struct toml_table_t *root;
+> +		FILE *fin;
+> +		char buf[200];
+> +		char path[2048];
+> +
+> +		if (!has_suffix(entry->d_name, ".toml")) {
+> +			/* Skipping file */
+> +			continue;
+> +		}
+> +
+> +		memset(path, 0, sizeof(path));
+> +		strcpy(path, argv[1]);
+> +		strcpy(path + strlen(argv[1]), "/");
+> +		strcpy(path + strlen(argv[1]) + 1, entry->d_name);
+> +		strcpy(path + strlen(argv[1]) + 1 + strlen(entry->d_name), "\0");
 
- 	/* 0x20 */
--	MMAL_PARAMETER_DPF_FILE, /**< @ref MMAL_PARAMETER_URI_T */
--	MMAL_PARAMETER_ENABLE_DPF_FILE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_DPF_FAIL_IS_FATAL, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_CAPTURE_MODE, /**< @ref MMAL_PARAMETER_CAPTUREMODE_T */
--	MMAL_PARAMETER_FOCUS_REGIONS, /**< @ref MMAL_PARAMETER_FOCUS_REGIONS_T *=
-/
--	MMAL_PARAMETER_INPUT_CROP, /**< @ref MMAL_PARAMETER_INPUT_CROP_T */
--	MMAL_PARAMETER_SENSOR_INFORMATION, /**< @ref MMAL_PARAMETER_SENSOR_INFOR=
-MATION_T */
--	MMAL_PARAMETER_FLASH_SELECT, /**< @ref MMAL_PARAMETER_FLASH_SELECT_T */
--	MMAL_PARAMETER_FIELD_OF_VIEW, /**< @ref MMAL_PARAMETER_FIELD_OF_VIEW_T *=
-/
--	MMAL_PARAMETER_HIGH_DYNAMIC_RANGE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_DYNAMIC_RANGE_COMPRESSION, /**< @ref MMAL_PARAMETER_DRC_T=
- */
--	MMAL_PARAMETER_ALGORITHM_CONTROL, /**< @ref MMAL_PARAMETER_ALGORITHM_CON=
-TROL_T */
--	MMAL_PARAMETER_SHARPNESS, /**< @ref MMAL_PARAMETER_RATIONAL_T */
--	MMAL_PARAMETER_CONTRAST, /**< @ref MMAL_PARAMETER_RATIONAL_T */
--	MMAL_PARAMETER_BRIGHTNESS, /**< @ref MMAL_PARAMETER_RATIONAL_T */
--	MMAL_PARAMETER_SATURATION, /**< @ref MMAL_PARAMETER_RATIONAL_T */
-+		/**< @ref MMAL_PARAMETER_URI_T */
-+	MMAL_PARAMETER_DPF_FILE,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_ENABLE_DPF_FILE,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_DPF_FAIL_IS_FATAL,
-+		/**< @ref MMAL_PARAMETER_CAPTUREMODE_T */
-+	MMAL_PARAMETER_CAPTURE_MODE,
-+		/**< @ref MMAL_PARAMETER_FOCUS_REGIONS_T */
-+	MMAL_PARAMETER_FOCUS_REGIONS,
-+		/**< @ref MMAL_PARAMETER_INPUT_CROP_T */
-+	MMAL_PARAMETER_INPUT_CROP,
-+		/**< @ref MMAL_PARAMETER_SENSOR_INFORMATION_T */
-+	MMAL_PARAMETER_SENSOR_INFORMATION,
-+		/**< @ref MMAL_PARAMETER_FLASH_SELECT_T */
-+	MMAL_PARAMETER_FLASH_SELECT,
-+		/**< @ref MMAL_PARAMETER_FIELD_OF_VIEW_T */
-+	MMAL_PARAMETER_FIELD_OF_VIEW,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_HIGH_DYNAMIC_RANGE,
-+		/**< @ref MMAL_PARAMETER_DRC_T */
-+	MMAL_PARAMETER_DYNAMIC_RANGE_COMPRESSION,
-+		/**< @ref MMAL_PARAMETER_ALGORITHM_CONTROL_T */
-+	MMAL_PARAMETER_ALGORITHM_CONTROL,
-+		/**< @ref MMAL_PARAMETER_RATIONAL_T */
-+	MMAL_PARAMETER_SHARPNESS,
-+		/**< @ref MMAL_PARAMETER_RATIONAL_T */
-+	MMAL_PARAMETER_CONTRAST,
-+		/**< @ref MMAL_PARAMETER_RATIONAL_T */
-+	MMAL_PARAMETER_BRIGHTNESS,
-+		/**< @ref MMAL_PARAMETER_RATIONAL_T */
-+	MMAL_PARAMETER_SATURATION,
+These five lines could be replaced with a single snprintf().
 
- 	/* 0x30 */
--	MMAL_PARAMETER_ISO, /**< @ref MMAL_PARAMETER_UINT32_T */
--	MMAL_PARAMETER_ANTISHAKE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--
--	/** @ref MMAL_PARAMETER_IMAGEFX_PARAMETERS_T */
-+		/**< @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_ISO,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_ANTISHAKE,
-+		/** @ref MMAL_PARAMETER_IMAGEFX_PARAMETERS_T */
- 	MMAL_PARAMETER_IMAGE_EFFECT_PARAMETERS,
--
--	/** @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/** @ref MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_CAMERA_BURST_CAPTURE,
--
--	/** @ref MMAL_PARAMETER_UINT32_T */
-+		/** @ref MMAL_PARAMETER_UINT32_T */
- 	MMAL_PARAMETER_CAMERA_MIN_ISO,
--
--	/** @ref MMAL_PARAMETER_CAMERA_USE_CASE_T */
-+		/** @ref MMAL_PARAMETER_CAMERA_USE_CASE_T */
- 	MMAL_PARAMETER_CAMERA_USE_CASE,
--
--	/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_CAPTURE_STATS_PASS,
--
--	/** @ref MMAL_PARAMETER_UINT32_T */
-+		/** @ref MMAL_PARAMETER_UINT32_T */
- 	MMAL_PARAMETER_CAMERA_CUSTOM_SENSOR_CONFIG,
--
--	/** @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/** @ref MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_ENABLE_REGISTER_FILE,
--
--	/** @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/** @ref MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_REGISTER_FAIL_IS_FATAL,
--
--	/** @ref MMAL_PARAMETER_CONFIGFILE_T */
-+		/** @ref MMAL_PARAMETER_CONFIGFILE_T */
- 	MMAL_PARAMETER_CONFIGFILE_REGISTERS,
--
--	/** @ref MMAL_PARAMETER_CONFIGFILE_CHUNK_T */
-+		/** @ref MMAL_PARAMETER_CONFIGFILE_CHUNK_T */
- 	MMAL_PARAMETER_CONFIGFILE_CHUNK_REGISTERS,
--	MMAL_PARAMETER_JPEG_ATTACH_LOG, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_ZERO_SHUTTER_LAG, /**< @ref MMAL_PARAMETER_ZEROSHUTTERLAG=
-_T */
--	MMAL_PARAMETER_FPS_RANGE, /**< @ref MMAL_PARAMETER_FPS_RANGE_T */
--	MMAL_PARAMETER_CAPTURE_EXPOSURE_COMP, /**< @ref MMAL_PARAMETER_INT32_T *=
-/
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_JPEG_ATTACH_LOG,
-+		/**< @ref MMAL_PARAMETER_ZEROSHUTTERLAG_T */
-+	MMAL_PARAMETER_ZERO_SHUTTER_LAG,
-+		/**< @ref MMAL_PARAMETER_FPS_RANGE_T */
-+	MMAL_PARAMETER_FPS_RANGE,
-+		/**< @ref MMAL_PARAMETER_INT32_T */
-+	MMAL_PARAMETER_CAPTURE_EXPOSURE_COMP,
+> +
+> +		fin = fopen(path, "r");
+> +		if (!fin) {
+> +			fprintf(stderr, "Could not open file %s: %s", path, strerror(errno));
+> +			return 1;
+> +		}
+> +
+> +		root = toml_parse_file(fin, buf, sizeof(buf));
+> +		fclose(fin);
+> +		if (!root) {
+> +			fprintf(stderr, "Failed to parse %s: %s\n", path, buf);
+> +			return 1;
+> +		}
+> +		toml_free(root);
+> +	}
+> +
+> +	return 0;
+> +}
 
- 	/* 0x40 */
--	MMAL_PARAMETER_SW_SHARPEN_DISABLE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_FLASH_REQUIRED, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_SW_SATURATION_DISABLE, /**< @ref MMAL_PARAMETER_BOOLEAN_T=
- */
--	MMAL_PARAMETER_SHUTTER_SPEED,             /**< Takes a @ref MMAL_PARAMET=
-ER_UINT32_T */
--	MMAL_PARAMETER_CUSTOM_AWB_GAINS,          /**< Takes a @ref MMAL_PARAMET=
-ER_AWB_GAINS_T */
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_SW_SHARPEN_DISABLE,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_FLASH_REQUIRED,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_SW_SATURATION_DISABLE,
-+		/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_SHUTTER_SPEED,
-+		/**< Takes a @ref MMAL_PARAMETER_AWB_GAINS_T */
-+	MMAL_PARAMETER_CUSTOM_AWB_GAINS,
- };
+Great idea!
 
- struct mmal_parameter_rational {
-@@ -411,7 +467,8 @@ enum mmal_parameter_video_type {
- 	MMAL_PARAMETER_MINIMISE_FRAGMENTATION,
-
- 	/** @ref MMAL_PARAMETER_UINT32_T.
--	 * Setting the value to zero resets to the default (one slice per frame)=
-.
-+	 * Setting the value to zero resets to the default (one slice per
-+	 * frame).
- 	 */
- 	MMAL_PARAMETER_MB_ROWS_PER_SLICE,
-
-=2D-
-2.7.4
-
+Thanks
+Sean
