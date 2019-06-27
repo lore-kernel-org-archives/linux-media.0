@@ -2,63 +2,39 @@ Return-Path: <SRS0=+xV6=U2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2054BC48BD7
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 20:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A0B1C4321A
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 21:10:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F0CD12075E
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 20:01:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 294CB2146E
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 21:10:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="eUJdgwor"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="eh0rZ0J4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbfF0UBP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 16:01:15 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:36602 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726384AbfF0UBP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 16:01:15 -0400
-Received: by mail-qt1-f195.google.com with SMTP id p15so3879390qtl.3
-        for <linux-media@vger.kernel.org>; Thu, 27 Jun 2019 13:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version;
-        bh=qKK2KDX7frtrIKr1EplmktiBaWbPgSjQcBIIxMVX2RU=;
-        b=eUJdgworBLQew89Ab56iS1MHkbPZfN/a/hYyu+uNK5hrjQviRKG1CHF7ouGaxJOzn9
-         FfpU3W26Z0xXwnbfh5ymfHSBUZysfAWmcwPTY3H1KBraiH4P5UcY6yg3BJzVB9XE+cqM
-         /fLXGZEewVl7CUcgfXsRia3fZz0GUyxQrClwKAeJnk0MiAiF5n+XrWBBOScqBl5vMx3f
-         hmLKsEPOG4VMvp4T7ybl6RxasQ2GQJ42ZJi/fKR961njNW1y4M3ugmcljjll+vWspBm0
-         khCqghz04HYTMqIk3Lm/5F7ePHQ+J92m8I+/Zh0u6kenqQi4m+O2rV8i9V0urQQz2Nfm
-         ekYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=qKK2KDX7frtrIKr1EplmktiBaWbPgSjQcBIIxMVX2RU=;
-        b=p6nMjbNDLIN55qd0qcrGfZxRgd15GuVKmqA8b/egqJClmJxkiuPdcbmiv32nnt3zcQ
-         i4wiBwNEnMm7LzdP+WWsnp1W3rV2LcuHhnjQMnJpkCCFa71A0N50fMMMabIgfJ8xrWhM
-         o6qfJr1YiJ2xmBGwIk47p37Bhp4y08Vc4HTk+NfHu09sYdrNUOhAd1TztQnNDBlhcFao
-         /8sK+QbT9LbV+nFYQMXfOyFM1THhPWfif/fIe2YwegKafAho0p1hD3+AApC2gHbAINYo
-         JgtGi5dY/u9Hv2616onoTUFp9OIc6Kc2832MyT4DMwXBj7RNldA1IKaMfUDiIXStlzCd
-         2EhA==
-X-Gm-Message-State: APjAAAVRBEXih4R4lZAtFd6Giap1aW/LJUgljv4EZiSWA/TbUr7+C2Cm
-        ScSDH76t4le7z/xPrpYqK+nTeg==
-X-Google-Smtp-Source: APXvYqzXytLoY5aMFDhelaZYmwxxaAOnY02e5QhQ6jI4M7w1awpujSXVkKSKeJpgDsT4OqNja6A5Kg==
-X-Received: by 2002:ac8:2734:: with SMTP id g49mr4936133qtg.228.1561665674052;
-        Thu, 27 Jun 2019 13:01:14 -0700 (PDT)
-Received: from tpx230-nicolas.collaboramtl (modemcable154.55-37-24.static.videotron.ca. [24.37.55.154])
-        by smtp.gmail.com with ESMTPSA id c18sm32024qkk.73.2019.06.27.13.01.12
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 27 Jun 2019 13:01:13 -0700 (PDT)
-Message-ID: <804b1c4708bb0292ba32535d4b986a129d6492b8.camel@ndufresne.ca>
-Subject: Re: [PATCH 19/31] staging: bcm2835-camera: Ensure timestamps never
- go backwards.
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Stefan Wahren <wahrenst@gmx.net>, Eric Anholt <eric@anholt.net>,
+        id S1726497AbfF0VKJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 17:10:09 -0400
+Received: from mout.gmx.net ([212.227.15.18]:59483 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726426AbfF0VKJ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Jun 2019 17:10:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1561669791;
+        bh=xdTAATWF8qX6yvXCOv29YdhPGUUPpJi7l7udO3XOz3o=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=eh0rZ0J45FuY/n5E4be49hyEsA37PoCc2+4E/PHiBSK7lCRrDptyda4gD0kWyuAvz
+         PrOHIo7Hqi//pKQ18kN0WOjudFUFGK2gr0+EQdgTr9RdRg9IBnNUqKLJruf7eSrrWB
+         I8JCo/Mn3sr1PHZeRf5bp+yiLM4y7lZscxCeIglc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
+ (mrgmx004 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1M2f9h-1hhztI1mox-0049H6; Thu, 27 Jun 2019 23:09:51 +0200
+From:   Stefan Wahren <wahrenst@gmx.net>
+To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Dave Stevenson <dave.stevenson@raspberrypi.org>,
         Hans Verkuil <hverkuil@xs4all.nl>,
@@ -66,84 +42,66 @@ To:     Stefan Wahren <wahrenst@gmx.net>, Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org
-Date:   Thu, 27 Jun 2019 16:01:11 -0400
-In-Reply-To: <1561661788-22744-20-git-send-email-wahrenst@gmx.net>
-References: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
-         <1561661788-22744-20-git-send-email-wahrenst@gmx.net>
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-SF32Srt50qYIqOq3jLza"
-User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
-MIME-Version: 1.0
+Subject: [PATCH 30/31] staging: bcm2835-camera: Set the field value within ach buffer
+Date:   Thu, 27 Jun 2019 23:09:28 +0200
+Message-Id: <1561669769-2498-4-git-send-email-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1561669769-2498-1-git-send-email-wahrenst@gmx.net>
+References: <1561669769-2498-1-git-send-email-wahrenst@gmx.net>
+X-Provags-ID: V03:K1:4p9yOIhIrBTeY/wdnhkFhlYsxDf8BdSb0lYlxYcw2+9Vz6In7NX
+ 4cP0I6lDzSRKKuBytlRDRK0xrHTB7ACIcOl9DieNvK1jFc+ufRd0rReoLe2iX3gpZ8PhbQz
+ IASrz/oLgKDRk4lCN59DFHobxwqGHwe80LwpVTgDO/JZOVGiyzW3H2P2mGHxIHpihVV0PfL
+ /na5UGu+9jWfsJLE27D8A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rQHcc4g8hC8=:AAy4aEqkn1m0W9xIIDySBU
+ oh3Evqj4xbse6o61KfZlJjpfmCbdXi/IUkoHmfQ1Rv8a/xeGWBjXW6PDb4kZZ30UFuz4alRXU
+ FNmdbIQI0ZdCzNliyM8ykBo++fxfFjRkJMrWF1uNh2/E+bQwwKzoZY2funCkntAx/WE8noVED
+ datZfkE6SmuBDtf3j8iiZzDjBYasIqjrobqeOLe96mno6Jf7dcU4bmzHYp7IQPN0j7nLHL7i9
+ 41+BrxhqK6GfVHP28S+vMw5JCRN2xc3rOQzrYZlLs+AfLDYqqCTTtoKSlHbtn+xHhZJbznu0M
+ JGT9Xe/eUDYaqW3ETycs9m2VcIXIrdIyOXdS19CUYcAPDsyNhYqlHM5055tXb6A3pRaHcRHWW
+ zS9ceVypNhvPaBJs+Hotc9FM0JSapYnSl1rHpbZIBzrracNUmEtsqzOqXZxDz7Xf+rpgarLS7
+ dX09UdQLL96dM9zj2dl6LPwXe00WWcYMVvxS3lEHQD63rh3CaW537dGxE1En1waseKp4okXz/
+ Ula4r5ISnjzlsB2t97+XGdbHq1nK2KcTFR+XNM+AycurOsQptl/mqJOw2Fd7TzwqH5pGLqDKV
+ PlCSzaEEYI8Rirz+EZSDxD3rJyLZkNALUYKePiVdVF1ZHvky9PLL362CMBo72RpDJ5Fr81pQG
+ 3aPbhV3LNsh2Crmh6VArK7iLVyNWhB3zum62eNr4+4OC5cpy/tmtkxcPnzPhpuuPsaX8PnmqR
+ /eMlUO6NhvH7sSM3xlxCKLAuiiC/qBT1gP7QETXvzkr/p3+RDic3bbyM4yBZpMCCNLLRonuSh
+ f6DXaF6xwXZwFa1HeFg6hwzOmXpMKemml7vWehVlv/P9LZFlbq4O9ABQLEcoVjGymzS8EdL3Q
+ lwLjn2yRHeIiiYfuWfPiQc8FW1pR6Y01yivUlm+0tRpFhxF8Eemm/WjlHFUcjisspAvdrDHBD
+ klSGgb6XbBibS9FotkMUpBB0QyuwJ4gCdjlS6bPlqQjWQp4aODB6qa8Q+g+OGJ5Mo1REeu7rq
+ qugNDIHRdNRtdtfE8uGDvNBJzZVOfrmhHbF19JOnUZ21BxpXBY9iRx1yeBeiVJA1Hmb4Wrizw
+ 79+xRaH+Zb0x5c=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
---=-SF32Srt50qYIqOq3jLza
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Fixes a v4l2-compliance failure
+v4l2-test-buffers.cpp(415): g_field() =3D=3D V4L2_FIELD_ANY
 
-Le jeudi 27 juin 2019 =C3=A0 20:56 +0200, Stefan Wahren a =C3=A9crit :
-> From: Dave Stevenson <dave.stevenson@raspberrypi.org>
->=20
-> There is an awkward situation with H264 header bytes. Currently
-> they are returned with a PTS of 0 because they aren't associated
-> with a timestamped frame to encode. These are handled by either
-> returning the timestamp of the last buffer to have been received,
-> or in the case of the first buffer the timestamp taken at
-> start_streaming.
-> This results in a race where the current frame may have started
-> before we take the start time, which results in the first encoded
-> frame having an earlier timestamp than the header bytes.
->=20
-> Ensure that we never return a negative delta to the user by checking
-> against the previous timestamp.
->=20
-> Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
-> ---
->  drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.=
-c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> index 9967df9..6205793 100644
-> --- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> +++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-> @@ -387,6 +387,11 @@ static void buffer_cb(struct vchiq_mmal_instance *in=
-stance,
->  			 ktime_to_ns(dev->capture.kernel_start_ts),
->  			 dev->capture.vc_start_timestamp, pts,
->  			 ktime_to_ns(timestamp));
-> +		if (timestamp < dev->capture.last_timestamp) {
-> +			v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
-> +				 "Negative delta - using last time\n");
-> +			timestamp =3D dev->capture.last_timestamp;
-> +		}
+The driver only ever produces progresive frames, so field should
+always be set to V4L2_FIELD_NONE.
 
-Instead of that, maybe you could request a minimum number of buffers,
-and not let the header buffer go until you have a proper "following
-timestamp" to give it. This way you don't need this hack, and you won't
-have an off-by-one in timestamps.
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+=2D--
+ drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->  		buf->vb.vb2_buf.timestamp =3D ktime_to_ns(timestamp);
->  	} else {
->  		if (dev->capture.last_timestamp) {
-> --
-> 2.7.4
->=20
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index 705644c..78d5bca 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -420,6 +420,7 @@ static void buffer_cb(struct vchiq_mmal_instance *inst=
+ance,
+ 	}
+ 	dev->capture.last_timestamp =3D buf->vb.vb2_buf.timestamp;
+ 	buf->vb.sequence =3D dev->capture.sequence++;
++	buf->vb.field =3D V4L2_FIELD_NONE;
 
---=-SF32Srt50qYIqOq3jLza
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXRUghwAKCRBxUwItrAao
-HA1iAKCyzh8vUusnUfIKgzx/hlvymYLNSwCgxSxj2SPDEegMp+kNFm//eoQOfv0=
-=pCKP
------END PGP SIGNATURE-----
-
---=-SF32Srt50qYIqOq3jLza--
+ 	vb2_set_plane_payload(&buf->vb.vb2_buf, 0, length);
+ 	if (mmal_flags & MMAL_BUFFER_HEADER_FLAG_KEYFRAME)
+=2D-
+2.7.4
 
