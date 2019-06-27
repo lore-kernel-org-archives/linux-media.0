@@ -8,31 +8,31 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A59EC48BE4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6A65C48BE9
 	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5496721738
+	by mail.kernel.org (Postfix) with ESMTP id AA51E2146E
 	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="QV+WwnWK"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="OfiHhM+Z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726583AbfF0S5N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726586AbfF0S5N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 27 Jun 2019 14:57:13 -0400
-Received: from mout.gmx.net ([212.227.15.18]:55115 "EHLO mout.gmx.net"
+Received: from mout.gmx.net ([212.227.15.15]:55643 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726542AbfF0S5M (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726497AbfF0S5M (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 27 Jun 2019 14:57:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561661812;
-        bh=zPuVzIwG7oo6cIYjOb93FcXMzly3ELJRL6cmztU+WNQ=;
+        s=badeba3b8450; t=1561661813;
+        bh=y9U91GGxjVzyJQpb1plbYIEJEQmZ+InsHm6KQ2qTC64=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=QV+WwnWKRTyIriZCQ+RvGKG3Dk4Ujo/cTOatzw3+eObUwolddk6UFqRI68CCuZh68
-         EtFRxZrNkce4RXtVono1p7emYHfCY3T/ZVLcZmNHKljxzEFAhD3U1qrS3fzUs50ZC4
-         qXIBpl9yOiFL/bPKaX9CLwpUznVXkaxuJ3+QfOm0=
+        b=OfiHhM+ZsYHf1e67o0JonceiUwMajz6I1biGNnKCIzTUWlhpKtvFAbS0jL7jMIeEC
+         kdMGRk2dXpquInZbyq6Op51eFzFPpy37nIaUcUQoCDSVNKFyyBIYeQcS3/EPAFxGBT
+         o98cKSygwS9c4BHXO3TEOOF/cjRurA0wz/Qf1Cy8=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx002 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0LqQzp-1iBDQT0OLR-00e1fu; Thu, 27 Jun 2019 20:56:52 +0200
+ 0M1msU-1iaKvX1H6Q-00tm2j; Thu, 27 Jun 2019 20:56:53 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 09/31] staging: bcm2835-camera: Fix spacing around operators
-Date:   Thu, 27 Jun 2019 20:56:06 +0200
-Message-Id: <1561661788-22744-10-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH 12/31] staging: bcm2835-camera: Fix brace style issues.
+Date:   Thu, 27 Jun 2019 20:56:09 +0200
+Message-Id: <1561661788-22744-13-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
 References: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:NT/Mec+cri+fykMHmyqvjkqXqGn5VJZ3ZEojfBcXBu9tYhF80KD
- cxSUBLNchH7OlDk2+f4Sxn7aEI/dT2OGsYchfsIO6TzjWFiRJ6og4GVj5dr/7QaVNBjbNW5
- ZBaTcThWYAqN24Xx4K5b0MwHVCliVoxHGD/G3Khnh9YIZ9VSMs/krXArkb+OYXpyu8EDWJL
- 6HZCL8HnPLIaJAm+DpWbw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:X0KZXUA+KFQ=:FYJv15bP809Y5HZebAIlBR
- RpL5SdtC0AqGskMrZ53Qkt23k2Lnp18M96ruYUSDW2E+OhJvB1nB4tCdQ8Qc6Vz+wFjHc9Fmt
- 7Yvoq32rqjUYg9s1t19fdHOfJEQHqwd2yio9p7Mx4rBB0lhesrhZnfxG162V2NZKOwJ5EFD6G
- yd/L30f/4p7b/Hij+c6T8+JfgnKUCvMdLubFhM1F6I2JUz539b7cqAGeiuJm9p/UcMxrEvGXm
- crEqRfTEGvaBK98Dhg4lhiAOPIGg+weksyBsqSRIpstUffnYBeaAQTXtlDaLi/CS7IjVyLY7R
- 4LpmAdlcZChIbdD/nhD7WLflAtSUQjoPNhlkZxPhss821iX+eFQXSuwvd3rwWOAJ8eH3WBmJe
- qMfYUMUk000IsvmYBuPJlfCNIApp88IAd1VaojqvIFBaqGwtR/da8z84VeRE5c++IfPcoTbpH
- fx49obV8vpHNySJdDTPd+VScc+Eg+Ro50oI42w/BI6IYFF3wK9tMh2WoYZyxDcKhAhXxvjWgF
- PQeEJ/qwpc9JaTkZL8AwfuBAEL2czSvUVeDrvSyM2+X9sct0PcEOKZbjAMC3bJw9+a2xQjoRQ
- 9zqpZgGAq/zhzkqhgxBKBU9ojET1fIEGmitEA28qnqiKwfyn2b0sGLJcwD1i7MlCs2GcKyLOs
- 5BpqGdcnqL6ZwVoxcnoJmgcVhxyKgKSoXVYg0VPxalDIMjKYxKOdTLGEo/hrpOS7xw1bT6s/u
- iT6P5HQJLKdAHGx2N/8AGzSeGfbIXT+sKMnbj6HfHm5leHmViWVGkGbx0NWL9URTzMBAf+YUq
- P5Jcn1TpwmmN53XeQugyxKY9P4FKHQ3HEWmoV+lNBu2F1MQ8951HRCP82Xsq3/bHpYOREnNzl
- sw18VKXn8KKMQz+z0BAxXiR+af0zmhSzxCnQQ6rwXH74pKRwUWWoNpEC3NA34gmG/2Ytt854n
- 4FH7TFJF58OtMhAk1vPlnbFOIrXNa1uLrxVdpXiBPbw2dzs+iQtHKIVRrs2HnRnEtbgXjey/J
- wnNq++idhSp9e2egKIthRjboJrvvvPssXEZcdF6vwfgei3cnaWYA7VqhzoSnWsYOGHQ6ayWeX
- riTNMArq39kUkY=
+X-Provags-ID: V03:K1:qVIKql/T/zw8kAu25TQYjRoKyLK87blKkEMQxwagdJRaqd3HSNg
+ nnBxoYrPsVk+jLPDEdhmy+rNpT9ASf7hytS4IN8naiT4ma0wSIOLg0851yvLvoGvkEdJtlW
+ oNAI6pBO2Jn10Hh0YCRGjyKwmLgX5Ncb4Zsm5ob3Tg4d+jo8kWpq/xfgZcXATzcm1K+p3EO
+ L0TthjF9lznuR17YGuEYA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YI/u3WTu1tU=:KE6ESASlgMx3wbH0VlbqbU
+ pI4QSiGkGMmyL4rGdwxG9C9nl03vnI60JEeXXaFFvUiot6U4cl6yzgegf25+05osESNv0qZDj
+ PJtIbOu9GykDcvDyzIy5vTy1mHbrazirRPRndDdLaKxws9GM1S9svKDQ8gtynd+Lt4/itEf4F
+ 9iQmf85+j9NyVi6pCHGCxnlLe3TPRjRCvWh5AyCfYUj+1O4nTXaZwbm0g40Niz9ASStGSzljc
+ dlaFPYG63IHNSJ7Qn3iLE7YvnoFVWWOJ3TDYA0RbZUNYKOYNri2i5xGYp9EoRfKi2lg0OS9q7
+ P09fH+XSiqpu/H6GDJzQUwA9qS8Dj0m0eedW72TvAsmeU0YiCjWhSmshY0lGhax+pkhtngin+
+ be2MVOMMda4obbkRuNeuoyfcFB6qbuQWDDceuJ9PHtpMfFCmkRIEiSEYg5JRAS0xOj4npA00V
+ iRp3YpmMqien3Hk9PECAeBazpYNvhLGNMrzJBx/YhDWfwt/aKUj7L4d7k0vy7Hq87aGusUSfX
+ rXGNsC7xOukSFPwyML/kvPForYajCkEIXLz6CkUYm1RKBfKy0dUDLp1gq14DpnKTtUDV8Wqtg
+ mUVOBmrN5t5fSPVaV9S44rBENi/lJ103GWwNb4sMTDWbGgDdOUsBYCE1KoGxrXfxWwpmacYmT
+ SuuXLg27Hw9zMne/WVYo5GtYoZiE96De0dXZyKQGzWP1qhCsIQYAUGjrSZOAYBcWzqzCRIguF
+ 23XvTPcI3087KAJQRqud4J24HhUF6kPSRfqj0uSwRVhmNhJUWBtX/1Ua1ZyxKTL4Saul85D/A
+ BnPV4eWx00K+sOGoeXPbYfDnIuSEguM5eoD160GKoxDc2sB4bWVe5DxWeKrt5++IQ2Vfbtj/J
+ zi1dKZzFhXn9lCQYJnwonJtVsIUhV8sP5xf6c8RS32G0TNEC95rDLJkkIM4Tfx2BV4mAUMfWK
+ gQPLjH4ReDT+/cJQ+2T/BYg91IemiTyBUZkdLOmvsRsQLdYYID6IxayR41UrjaJI9TgqsQBU8
+ 2OBVhAid9BQapWdOUAE3WXbO/P1DNLki/5Kl7cUOX0iWffsAkYVBiTgpCTnu8wiydNoTIoaLW
+ 5ZfB964EfOUYrQ=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,116 +77,69 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Fix checkpatch warnings over spaces around operators.
-Many were around operations that can be replaced with the
-BIT(x) macro, so replace with that where appropriate.
+Fix mismatched or missing brace issues flagged by checkpatch.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 =2D--
- .../vc04_services/bcm2835-camera/controls.c        | 32 +++++++++++------=
------
- .../vc04_services/bcm2835-camera/mmal-msg.h        |  3 +-
- .../vc04_services/bcm2835-camera/mmal-parameters.h | 12 ++++----
- 3 files changed, 24 insertions(+), 23 deletions(-)
+ drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 3 ++-
+ drivers/staging/vc04_services/bcm2835-camera/controls.c       | 3 ++-
+ drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c     | 3 ++-
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index bde3548..c1f6141 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -553,10 +553,11 @@ static int start_streaming(struct vb2_queue *vq, uns=
+igned int count)
+
+ 		/* Flag to indicate just to rely on kernel timestamps */
+ 		dev->capture.vc_start_timestamp =3D -1;
+-	} else
++	} else {
+ 		v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
+ 			 "Start time %lld size %d\n",
+ 			 dev->capture.vc_start_timestamp, parameter_size);
++	}
+
+ 	dev->capture.kernel_start_ts =3D ktime_get();
+ 	dev->capture.last_timestamp =3D 0;
 diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/dri=
 vers/staging/vc04_services/bcm2835-camera/controls.c
-index b142130..e79e7cd 100644
+index b3d7029..1a7588d 100644
 =2D-- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
 +++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-@@ -1130,10 +1130,10 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctr=
-ls[V4L2_CTRL_COUNT] =3D {
- 	{
- 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
- 		MMAL_CONTROL_TYPE_STD_MENU,
--		~((1<<V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
--			(1<<V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
--			(1<<V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
--			(1<<V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
-+		~(BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
- 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
- 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH, 1, NULL,
- 		MMAL_PARAMETER_PROFILE,
-@@ -1142,18 +1142,18 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctr=
-ls[V4L2_CTRL_COUNT] =3D {
- 	},
- 	{
- 		V4L2_CID_MPEG_VIDEO_H264_LEVEL, MMAL_CONTROL_TYPE_STD_MENU,
--		~((1<<V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
--			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_4_0)),
-+		~(BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
-+		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_0)),
- 		V4L2_MPEG_VIDEO_H264_LEVEL_4_0,
- 		V4L2_MPEG_VIDEO_H264_LEVEL_4_0, 1, NULL,
- 		MMAL_PARAMETER_PROFILE,
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-msg.h b/dri=
-vers/staging/vc04_services/bcm2835-camera/mmal-msg.h
-index f165ddf..8e0aee8 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-msg.h
-+++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-msg.h
-@@ -223,7 +223,8 @@ struct mmal_msg_port_action_reply {
- #define MMAL_BUFFER_HEADER_FLAG_FRAME_END              BIT(2)
- /* Signals that the current payload contains only complete frames (>1) */
- #define MMAL_BUFFER_HEADER_FLAG_FRAME                  \
--	(MMAL_BUFFER_HEADER_FLAG_FRAME_START|MMAL_BUFFER_HEADER_FLAG_FRAME_END)
-+	(MMAL_BUFFER_HEADER_FLAG_FRAME_START | \
-+	 MMAL_BUFFER_HEADER_FLAG_FRAME_END)
- /* Signals that the current payload is a keyframe (i.e. self decodable) *=
-/
- #define MMAL_BUFFER_HEADER_FLAG_KEYFRAME               BIT(3)
- /*
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.=
-h b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-index 96e987d..6d21594 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-+++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-@@ -23,17 +23,17 @@
- #define __MMAL_PARAMETERS_H
+@@ -407,8 +407,9 @@ static int ctrl_set_metering_mode(struct bm2835_mmal_d=
+ev *dev,
+ 		return vchiq_mmal_port_parameter_set(dev->instance, control,
+ 					     mmal_ctrl->mmal_id,
+ 					     &u32_value, sizeof(u32_value));
+-	} else
++	} else {
+ 		return 0;
++	}
+ }
 
- /** Common parameter ID group, used with many types of component. */
--#define MMAL_PARAMETER_GROUP_COMMON            (0<<16)
-+#define MMAL_PARAMETER_GROUP_COMMON            (0 << 16)
- /** Camera-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_CAMERA            (1<<16)
-+#define MMAL_PARAMETER_GROUP_CAMERA            (1 << 16)
- /** Video-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_VIDEO             (2<<16)
-+#define MMAL_PARAMETER_GROUP_VIDEO             (2 << 16)
- /** Audio-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_AUDIO             (3<<16)
-+#define MMAL_PARAMETER_GROUP_AUDIO             (3 << 16)
- /** Clock-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_CLOCK             (4<<16)
-+#define MMAL_PARAMETER_GROUP_CLOCK             (4 << 16)
- /** Miracast-specific parameter ID group. */
--#define MMAL_PARAMETER_GROUP_MIRACAST       (5<<16)
-+#define MMAL_PARAMETER_GROUP_MIRACAST       (5 << 16)
+ static int ctrl_set_flicker_avoidance(struct bm2835_mmal_dev *dev,
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c b/d=
+rivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
+index 5175e2c..73cb295 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
+@@ -1262,9 +1262,10 @@ static int port_parameter_get(struct vchiq_mmal_ins=
+tance *instance,
+ 		memcpy(value, &rmsg->u.port_parameter_get_reply.value,
+ 		       *value_size);
+ 		*value_size =3D rmsg->u.port_parameter_get_reply.size;
+-	} else
++	} else {
+ 		memcpy(value, &rmsg->u.port_parameter_get_reply.value,
+ 		       rmsg->u.port_parameter_get_reply.size);
++	}
 
- /* Common parameters */
- enum mmal_parameter_common_type {
+ 	pr_debug("%s:result:%d component:0x%x port:%d parameter:%d\n", __func__,
+ 		 ret, port->component->handle, port->handle, parameter_id);
 =2D-
 2.7.4
 
