@@ -2,175 +2,190 @@ Return-Path: <SRS0=+xV6=U2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_NEOMUTT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EAE5C48BD6
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 07:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23650C48BD7
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 07:38:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2951E2063F
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 07:29:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 000F820843
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 07:38:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbfF0H3C (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 03:29:02 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:38761 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725787AbfF0H3C (ORCPT
+        id S1726416AbfF0His (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 03:38:48 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:53975 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726059AbfF0His (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 03:29:02 -0400
-Received: from [192.168.2.10] ([46.9.252.75])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id gOpzhdbibF85OgOq3hn8pH; Thu, 27 Jun 2019 09:29:00 +0200
-Subject: Re: [PATCH] media:vivid: add sanity check to avoid divide error and
- set value to 1 if 0.
-To:     Vandana BN <bnvandana@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20190626060115.4305-1-bnvandana@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <3d2662db-21d8-3495-b0e4-e7c4cafbdb65@xs4all.nl>
-Date:   Thu, 27 Jun 2019 09:28:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Thu, 27 Jun 2019 03:38:48 -0400
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 16A30240005;
+        Thu, 27 Jun 2019 07:38:41 +0000 (UTC)
+Date:   Thu, 27 Jun 2019 09:39:57 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        kernel@collabora.com, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Subject: Re: [PATCH] media: imx: mipi csi-2: Don't fail if initial state
+ times-out
+Message-ID: <20190627073957.z55pa24ih2xqw5pa@uno.localdomain>
+References: <20190625203945.28081-1-ezequiel@collabora.com>
 MIME-Version: 1.0
-In-Reply-To: <20190626060115.4305-1-bnvandana@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfLO/p0V++7tdga2bVLm5eQkbgv1ITzDxrrENvqaSbRE+raTgd9YTCDbkDU+IdDLaPaLwolfNT1OHxSs75kRtS+n6f66CwikkEyTxrOjXmO5zPfh7RhOF
- r0xEH9dVPqntyR4EQuJD3xMXJidIlk7B3kJqNdQ6N8TXnnoaP00AK6d/fyfuahOa0txJTqZ2AgTNYlhUiHwP/nEeMOXirQw+KuTTjDZqU/5sAwvtxn8W2jQd
- r1UrCZa083fNlo2ABTZ5Jle/9k01x5E6/TqoYXUuv+/qNvkvB4yssb1umMm3/NM03naBK7UCaokoJXt1Ya0T9H3bl17u8L0zCJ7yIslL+DOSGghoxCa1f39t
- jT6TgmrjbjbIz24U2x3v1s+GyWDXwI3QTOSHYLTKYYWYMjIlPrH3baSIRL4zSxWiG9rOHuID
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bdzir2qwavwpd4vz"
+Content-Disposition: inline
+In-Reply-To: <20190625203945.28081-1-ezequiel@collabora.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 6/26/19 8:01 AM, Vandana BN wrote:
-> Syzbot reported divide error in vivid_thread_vid_cap, which has been
-> seen only once and doesnot have a reproducer.
-> This patch sanity checks for the denominator value with WARN_ON if it is 0 and replaces it with 1.
-> 
-> Reported-by: syz...@syzkaller.appspotmail.com
-> 
-> divide error: 0000 [#1] PREEMPT SMP KASAN
-> kobject: 'tx-0' (0000000017161f7f): kobject_uevent_env
-> CPU: 0 PID: 23689 Comm: vivid-003-vid-c Not tainted 5.0.0-rc4+ #58
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> RIP: 0010:vivid_cap_update_frame_period
-> drivers/media/platform/vivid/vivid-kthread-cap.c:661 [inline]
-> RIP: 0010:vivid_thread_vid_cap+0x221/0x284
-> drivers/media/platform/vivid/vivid-kthread-cap.c:789
-> Code: 48 c1 e9 03 0f b6 0c 11 48 89 f2 48 69 c0 00 ca 9a 3b 83 c2 03 38
-> ca
-> 7c 08 84 c9 0f 85 f0 1e 00 00 41 8b 8f 24 64 00 00 31 d2 <48> f7 f1 49
-> 89
-> c4 48 89 c3 49 8d 87 28 64 00 00 48 89 c2 48 89 45
-> RSP: 0018:ffff88808b4afd68 EFLAGS: 00010246
-> kobject: 'tx-0' (0000000017161f7f): fill_kobj_path: path
-> = '/devices/virtual/net/gre0/queues/tx-0'
-> RAX: 000000de5a6f8e00 RBX: 0000000100047b22 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000004
-> RBP: ffff88808b4aff00 R08: ffff88804862e1c0 R09: ffffffff89997008
-> R10: ffffffff89997010 R11: 0000000000000001 R12: 00000000fffffffc
-> R13: ffff8880a17e0500 R14: ffff88803e40f760 R15: ffff8882182b0140
-> FS:  0000000000000000(0000) GS:ffff8880ae800000(0000)
-> knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00000000004cdc90 CR3: 000000005d827000 CR4: 00000000001426f0
-> Call Trace:
-> kobject: 'gretap0' (00000000d7549098): kobject_add_internal: parent:
-> 'net',
-> set: 'devices'
-> kobject: 'loop2' (0000000094ed4ee4): kobject_uevent_env
-> kobject: 'loop2' (0000000094ed4ee4): fill_kobj_path: path
-> = '/devices/virtual/block/loop2'
->   kthread+0x357/0x430 kernel/kthread.c:246
-> kobject: 'gretap0' (00000000d7549098): kobject_uevent_env
->   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-> Modules linked in:
-> kobject: 'gretap0' (00000000d7549098): fill_kobj_path: path
-> = '/devices/virtual/net/gretap0'
-> ---[ end trace bc5c8b25b64d768f ]---
-> kobject: 'loop1' (0000000032036b86): kobject_uevent_env
-> RIP: 0010:vivid_cap_update_frame_period
-> drivers/media/platform/vivid/vivid-kthread-cap.c:661 [inline]
-> RIP: 0010:vivid_thread_vid_cap+0x221/0x2840
-> drivers/media/platform/vivid/vivid-kthread-cap.c:789
-> kobject: 'loop1' (0000000032036b86): fill_kobj_path: path
-> = '/devices/virtual/block/loop1'
-> Code: 48 c1 e9 03 0f b6 0c 11 48 89 f2 48 69 c0 00 ca 9a 3b 83 c2 03 38
-> ca
-> 7c 08 84 c9 0f 85 f0 1e 00 00 41 8b 8f 24 64 00 00 31 d2 <48> f7 f1 49
-> 89
-> c4 48 89 c3 49 8d 87 28 64 00 00 48 89 c2 48 89 45
-> kobject: 'loop0' (00000000dd9927c3): kobject_uevent_env
-> RSP: 0018:ffff88808b4afd68 EFLAGS: 00010246
-> RAX: 000000de5a6f8e00 RBX: 0000000100047b22 RCX: 0000000000000000
-> kobject: 'queues' (000000007ed20666): kobject_add_internal:
-> parent: 'gretap0', set: '<NULL>'
-> RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000004
-> RBP: ffff88808b4aff00 R08: ffff88804862e1c0 R09: ffffffff89997008
-> kobject: 'loop0' (00000000dd9927c3): fill_kobj_path: path
-> = '/devices/virtual/block/loop0'
-> R10: ffffffff89997010 R11: 0000000000000001 R12: 00000000fffffffc
-> kobject: 'queues' (000000007ed20666): kobject_uevent_env
-> R13: ffff8880a17e0500 R14: ffff88803e40f760 R15: ffff8882182b0140
-> FS:  0000000000000000(0000) GS:ffff8880ae800000(0000)
-> knlGS:0000000000000000
-> kobject: 'loop5' (00000000a41f9e79): kobject_uevent_env
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> kobject: 'queues' (000000007ed20666): kobject_uevent_env: filter
-> function
-> caused the event to drop!
-> CR2: 00000000004cdc90 CR3: 000000005d827000 CR4: 00000000001426f0
-> kobject: 'loop5' (00000000a41f9e79): fill_kobj_path: path
-> = '/devices/virtual/block/loop5'
-> 
-> Signed-off-by: Vandana BN <bnvandana@gmail.com>
+
+--bdzir2qwavwpd4vz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+Hi Ezequiel,
+
+On Tue, Jun 25, 2019 at 05:39:45PM -0300, Ezequiel Garcia wrote:
+> Not all sensors will be able to guarantee a proper initial state.
+> This may be either because the driver is not properly written,
+> or (probably unlikely) because the hardware won't support it.
+>
+> While the right solution in the former case is to fix the sensor
+> driver, the real world not always allows right solutions, due to lack
+> of available documentation and support on these sensors.
+>
+
+We hit this in the past with the ov5640 sensor, whose driver was not
+properly initializing its data lanes in LP-11 state, so yes, I'm not
+surprised other sensors might fail in the same way.
+
+Do you get frames after you hit the error? I recall it was not
+possible with ov5640, even with something similar to what you've done
+here in the CSI-2 receiver driver.
+
+> Let's relax this requirement, and allow the driver to support stream start,
+> even if the sensor initial sequence wasn't the expected.
+> A warning is still emitted, so users should be hinted that something is off.
+>
+
+It seems you're also silencing errors related to clock lane detection.
+I would mention that.
+
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 > ---
->  drivers/media/platform/vivid/vivid-kthread-cap.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/media/platform/vivid/vivid-kthread-cap.c b/drivers/media/platform/vivid/vivid-kthread-cap.c
-> index f8006a30c12f..025a8c68bd1c 100644
-> --- a/drivers/media/platform/vivid/vivid-kthread-cap.c
-> +++ b/drivers/media/platform/vivid/vivid-kthread-cap.c
-> @@ -658,6 +658,8 @@ static void vivid_cap_update_frame_period(struct vivid_dev *dev)
->  	u64 f_period;
->  
->  	f_period = (u64)dev->timeperframe_vid_cap.numerator * 1000000000;
-> +	if(WARN_ON(dev->timeperframe_vid_cap.denominator == 0))
-> +		dev->timeperframe_vid_cap.denominator = 1;
->  	do_div(f_period, dev->timeperframe_vid_cap.denominator);
->  	if (dev->field_cap == V4L2_FIELD_ALTERNATE)
->  		f_period >>= 1;
-> 
+>  drivers/staging/media/imx/imx6-mipi-csi2.c | 33 ++++++----------------
+>  1 file changed, 9 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/staging/media/imx/imx6-mipi-csi2.c b/drivers/staging/media/imx/imx6-mipi-csi2.c
+> index f29e28df36ed..10342434e797 100644
+> --- a/drivers/staging/media/imx/imx6-mipi-csi2.c
+> +++ b/drivers/staging/media/imx/imx6-mipi-csi2.c
+> @@ -243,7 +243,7 @@ static int __maybe_unused csi2_dphy_wait_ulp(struct csi2_dev *csi2)
+>  }
+>
+>  /* Waits for low-power LP-11 state on data and clock lanes. */
+> -static int csi2_dphy_wait_stopstate(struct csi2_dev *csi2)
+> +static void csi2_dphy_wait_stopstate(struct csi2_dev *csi2)
+>  {
+>  	u32 mask, reg;
+>  	int ret;
+> @@ -253,29 +253,21 @@ static int csi2_dphy_wait_stopstate(struct csi2_dev *csi2)
+>
+>  	ret = readl_poll_timeout(csi2->base + CSI2_PHY_STATE, reg,
+>  				 (reg & mask) == mask, 0, 500000);
+> -	if (ret) {
+> -		v4l2_err(&csi2->sd, "LP-11 timeout, phy_state = 0x%08x\n", reg);
+> -		return ret;
+> -	}
+> -
+> -	return 0;
+> +	if (ret)
+> +		v4l2_warn(&csi2->sd, "LP-11 timeout, phy_state = 0x%08x\n", reg);
+>  }
+>
+>  /* Wait for active clock on the clock lane. */
+> -static int csi2_dphy_wait_clock_lane(struct csi2_dev *csi2)
+> +static void csi2_dphy_wait_clock_lane(struct csi2_dev *csi2)
+>  {
+>  	u32 reg;
+>  	int ret;
+>
+>  	ret = readl_poll_timeout(csi2->base + CSI2_PHY_STATE, reg,
+>  				 (reg & PHY_RXCLKACTIVEHS), 0, 500000);
+> -	if (ret) {
+> -		v4l2_err(&csi2->sd, "clock lane timeout, phy_state = 0x%08x\n",
+> -			 reg);
+> -		return ret;
+> -	}
+> -
+> -	return 0;
+> +	if (ret)
+> +		v4l2_warn(&csi2->sd, "clock lane timeout, phy_state = 0x%08x\n",
+> +			  reg);
+>  }
+>
+>  /* Setup the i.MX CSI2IPU Gasket */
+> @@ -316,9 +308,7 @@ static int csi2_start(struct csi2_dev *csi2)
+>  	csi2_enable(csi2, true);
+>
+>  	/* Step 5 */
+> -	ret = csi2_dphy_wait_stopstate(csi2);
+> -	if (ret)
+> -		goto err_assert_reset;
+> +	csi2_dphy_wait_stopstate(csi2);
+>
+>  	/* Step 6 */
+>  	ret = v4l2_subdev_call(csi2->src_sd, video, s_stream, 1);
+> @@ -327,14 +317,9 @@ static int csi2_start(struct csi2_dev *csi2)
+>  		goto err_assert_reset;
+>
+>  	/* Step 7 */
+> -	ret = csi2_dphy_wait_clock_lane(csi2);
+> -	if (ret)
+> -		goto err_stop_upstream;
+> -
+> +	csi2_dphy_wait_clock_lane(csi2);
+>  	return 0;
+>
+> -err_stop_upstream:
+> -	v4l2_subdev_call(csi2->src_sd, video, s_stream, 0);
+>  err_assert_reset:
+>  	csi2_enable(csi2, false);
+>  err_disable_clk:
+> --
+> 2.20.1
+>
 
-Always run the patch over 'checkpatch.pl --strict'. It gives me:
+--bdzir2qwavwpd4vz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-#83:
-This patch sanity checks for the denominator value with WARN_ON if it is 0 and replaces it with 1.
+-----BEGIN PGP SIGNATURE-----
 
-ERROR: space required before the open parenthesis '('
-#175: FILE: drivers/media/platform/vivid/vivid-kthread-cap.c:661:
-+       if(WARN_ON(dev->timeperframe_vid_cap.denominator == 0))
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl0Ucs0ACgkQcjQGjxah
+Vjw9AQ//XyeBDHUkzW5v/hP3QjhExjfzvqrf020W3P6PglCFHO31JYzaOo3v5/t7
+33KrxrpFd5VTJzdrn7cSCaKo2hkKbAiODYPKJ1/ASvwbnOEIBtWZAJ70EMFv3ANB
+aH4tiFkJMYcvFTZMw60r5PExjIUmy2o8/In29Ob8Jmkl+wochKwe2UwmA/T2qwJo
+7VUW6qcWw8Hn9XToblKwZAO4ipTF3d9sGhqgrBGvBjJ1A1F5YKK5H52rsQQMUzdb
+1BLSvdvPQyPRzwJk8wz15xarNJ/Q+f6ZPPdJ1NLakHt9mPmDFfjD7LbatLbRK48a
+5MX826uz9+7mJdLsZVUX+WRhpColArCD8egfd1GQqODAY0/Ms0uLrLxUGeiFAq8Z
+3D53Zyg8FEz3nvxgCnyVv3STV7wa6MQfW+YyVwO62IydxaBPymvNOtwbneoOwRNm
+KEBir2kNBElWOEutU09ZRqoGqJsWi9Q/2AD/Ygh5wVjDDs7bXe4sRm01BhjuxOIF
+bIUVqYYPw+nsb6au/rSM/MDdO/6gUS5SDv4TB0UVJMcWcdxOOuzQ9lhSk1QnUVot
+Q95RCrjCbedjGlHVxKd+b5QqqaQ4mKzY8ZGISSwv/DgoQqa76axwW/4B9rydg9Wn
+thBaNCCJ22RbZF/UJZA6b1qRY39wCox+HHUfkfecsUnviBik/Kw=
+=BS/G
+-----END PGP SIGNATURE-----
 
-total: 1 errors, 1 warnings, 0 checks, 8 lines checked
-
-NOTE: For some of the reported defects, checkpatch may be able to
-      mechanically convert to the typical style using --fix or --fix-inplace.
-
-/home/hans/x.eml has style problems, please review.
-
-NOTE: If any of the errors are false positives, please report
-      them to the maintainer, see CHECKPATCH in MAINTAINERS.
-
-Regards,
-
-	Hans
+--bdzir2qwavwpd4vz--
