@@ -8,31 +8,31 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DEA5C48BD7
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A59EC48BE4
 	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E28492133F
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5496721738
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 18:57:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="D2n/GfnR"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="QV+WwnWK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbfF0S5N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726583AbfF0S5N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 27 Jun 2019 14:57:13 -0400
-Received: from mout.gmx.net ([212.227.15.19]:56599 "EHLO mout.gmx.net"
+Received: from mout.gmx.net ([212.227.15.18]:55115 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726561AbfF0S5M (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726542AbfF0S5M (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Thu, 27 Jun 2019 14:57:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561661809;
-        bh=jFtiONca1hdVFxm/usbMzIOKsZXNfYtIs0InExv49OQ=;
+        s=badeba3b8450; t=1561661812;
+        bh=zPuVzIwG7oo6cIYjOb93FcXMzly3ELJRL6cmztU+WNQ=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=D2n/GfnRCEz2ywceZA/kKouLEZ8IkCehCjlO5aCmz5+tC8z030yAjvdqyB0woCQeN
-         H09IhGDFTlzXp9AbFu9SJX3i2YwAk1/NGSQ1+j+NCrJwtEvKmh9tgOeu+CTO3Renvy
-         fzrN02XCH8IWytAfITKVaxSZm8rhnIDEreVKRfko=
+        b=QV+WwnWKRTyIriZCQ+RvGKG3Dk4Ujo/cTOatzw3+eObUwolddk6UFqRI68CCuZh68
+         EtFRxZrNkce4RXtVono1p7emYHfCY3T/ZVLcZmNHKljxzEFAhD3U1qrS3fzUs50ZC4
+         qXIBpl9yOiFL/bPKaX9CLwpUznVXkaxuJ3+QfOm0=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx002 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0M92lh-1hqF922WeD-00CQcQ; Thu, 27 Jun 2019 20:56:49 +0200
+ 0LqQzp-1iBDQT0OLR-00e1fu; Thu, 27 Jun 2019 20:56:52 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 03/31] staging: bcm2835-camera: Replace spinlock protecting context_map with mutex
-Date:   Thu, 27 Jun 2019 20:56:00 +0200
-Message-Id: <1561661788-22744-4-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH 09/31] staging: bcm2835-camera: Fix spacing around operators
+Date:   Thu, 27 Jun 2019 20:56:06 +0200
+Message-Id: <1561661788-22744-10-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
 References: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:D2AkJfxcnXtCj6sokPxOpiTqs4No+MBrwT2O1aUmi8Tnu7VKWpY
- ZFyRQTMI7ZkQVPnbVGSo2fbjdP/sTozwpiHjpLkN4cGBYUtit3jU8k6ejuGXndm024u31kq
- CEMvzZJtgy68BFC4kNFKSOKqeMU56wyUQr1OTrnVo/ptijmkU1vNNLav5iuMGT5yAsO/KKl
- mOW8FQsL6mvuvLq2Hd5Wg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YoEFoI43RE0=:uqiLpOzWe7CCbDvKSmvf4u
- hv6fV2QWvbr6aOXQD1uX8MtNNg4lU2dk3lQFsfOA7Meu1Pn79kuJnEe08ilfhnMeQpwzmkbMD
- TTdRUaCm0ntceexWCPrXahYEgeAzp7TeH2eEL9LHNHdh/Tm1fUupwq2Tzv4tZrBGX1bhRn0Kw
- V2XOP0rE07+F8dS5YLd5nREB+Z4KqIG5Wny37p62GEK0lfyN/mIBLoq7R6m5IPJ3gPG26ienD
- hJg9N9oyV4VhrKmTDEb4dCdfhQnIKCD9MWAAzA4jeSvN95bZ+aTRnTNpnRxWSkS4ZfvGUZet5
- BernveDdnDGOR3W9W/nN+aH0zZnBITGvFNV0Ctnc0m0GJ3wciwIfZfYKNoV7TRuJKtH9G0dwm
- Gf1Rsc96auPYWwGGw0qnBeY+nj5yZeSVNJoqfYutoSoYvFtIcwlfDtn6r0+KUH4NHfzYKFXDF
- +QzjdCKEADgsVpF+w2J/m7pYLj+6NTCE536Qwf2ATTHxjeN2DK8PP0P0xdrtXW6J8ob6UQpzJ
- aYVIXFUiw/KTdc94/LDrbwix9ehCsdtWfglwLjVEoZRjWe2M7/V9cXSKCAkCjRqqxABbKS//s
- cFmgH7rLOo45JZQiDU3Ph0c9ZAOdt4tk5rrc4HMK4IA1/Y5OGb272uohTkfZc8+OsuzPsCwdU
- JTZ+tJW9TKlMxcKqgoBPj2znffLz9ZkBReeFgxacfR8yEY48M6x7mLaybZZbMUyalldj56jGu
- ugn05DtisHQ3NQtsAe7ExK5Ql4d1snFZKfXg2dipIzUv+ePlv/tsDSd/f4fYHjIr1BFf+ACA5
- uUaQHjSfmPBEEXEdt9xoayihczLwsbDSFkPNtooeSWW68mcTdloMXaexBfMYY5RtzssS4KsHI
- j/hVtzOa97dzujhsSCXqJ3xV+tETDYzIkC3tmmJkMSinxsJOEb8JDuGPRrM9MwZvSRMpHCIO9
- Ne0uTNT5KJ/ilJVdNLXLCsqc1DIv1AG/ytGM6zhRVNGmvHB+0EnCoSyHIeMolWrbMaBcvn60x
- pTdHScginuRG8EVT4wxqihbRRwPjOuAW1o7qExTSK98mJCmGFSJY8gmavl+8/K44NSBb6TYpj
- BMG0VCs1qIKoKo=
+X-Provags-ID: V03:K1:NT/Mec+cri+fykMHmyqvjkqXqGn5VJZ3ZEojfBcXBu9tYhF80KD
+ cxSUBLNchH7OlDk2+f4Sxn7aEI/dT2OGsYchfsIO6TzjWFiRJ6og4GVj5dr/7QaVNBjbNW5
+ ZBaTcThWYAqN24Xx4K5b0MwHVCliVoxHGD/G3Khnh9YIZ9VSMs/krXArkb+OYXpyu8EDWJL
+ 6HZCL8HnPLIaJAm+DpWbw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:X0KZXUA+KFQ=:FYJv15bP809Y5HZebAIlBR
+ RpL5SdtC0AqGskMrZ53Qkt23k2Lnp18M96ruYUSDW2E+OhJvB1nB4tCdQ8Qc6Vz+wFjHc9Fmt
+ 7Yvoq32rqjUYg9s1t19fdHOfJEQHqwd2yio9p7Mx4rBB0lhesrhZnfxG162V2NZKOwJ5EFD6G
+ yd/L30f/4p7b/Hij+c6T8+JfgnKUCvMdLubFhM1F6I2JUz539b7cqAGeiuJm9p/UcMxrEvGXm
+ crEqRfTEGvaBK98Dhg4lhiAOPIGg+weksyBsqSRIpstUffnYBeaAQTXtlDaLi/CS7IjVyLY7R
+ 4LpmAdlcZChIbdD/nhD7WLflAtSUQjoPNhlkZxPhss821iX+eFQXSuwvd3rwWOAJ8eH3WBmJe
+ qMfYUMUk000IsvmYBuPJlfCNIApp88IAd1VaojqvIFBaqGwtR/da8z84VeRE5c++IfPcoTbpH
+ fx49obV8vpHNySJdDTPd+VScc+Eg+Ro50oI42w/BI6IYFF3wK9tMh2WoYZyxDcKhAhXxvjWgF
+ PQeEJ/qwpc9JaTkZL8AwfuBAEL2czSvUVeDrvSyM2+X9sct0PcEOKZbjAMC3bJw9+a2xQjoRQ
+ 9zqpZgGAq/zhzkqhgxBKBU9ojET1fIEGmitEA28qnqiKwfyn2b0sGLJcwD1i7MlCs2GcKyLOs
+ 5BpqGdcnqL6ZwVoxcnoJmgcVhxyKgKSoXVYg0VPxalDIMjKYxKOdTLGEo/hrpOS7xw1bT6s/u
+ iT6P5HQJLKdAHGx2N/8AGzSeGfbIXT+sKMnbj6HfHm5leHmViWVGkGbx0NWL9URTzMBAf+YUq
+ P5Jcn1TpwmmN53XeQugyxKY9P4FKHQ3HEWmoV+lNBu2F1MQ8951HRCP82Xsq3/bHpYOREnNzl
+ sw18VKXn8KKMQz+z0BAxXiR+af0zmhSzxCnQQ6rwXH74pKRwUWWoNpEC3NA34gmG/2Ytt854n
+ 4FH7TFJF58OtMhAk1vPlnbFOIrXNa1uLrxVdpXiBPbw2dzs+iQtHKIVRrs2HnRnEtbgXjey/J
+ wnNq++idhSp9e2egKIthRjboJrvvvPssXEZcdF6vwfgei3cnaWYA7VqhzoSnWsYOGHQ6ayWeX
+ riTNMArq39kUkY=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,78 +77,116 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-The commit "staging: bcm2835-camera: Replace open-coded idr with a struct =
-idr."
-replaced an internal implementation of an idr with the standard functions
-and a spinlock. idr_alloc(GFP_KERNEL) can sleep whilst calling kmem_cache_=
-alloc
-to allocate the new node, but this is not valid whilst in an atomic contex=
-t
-due to the spinlock.
+Fix checkpatch warnings over spaces around operators.
+Many were around operations that can be replaced with the
+BIT(x) macro, so replace with that where appropriate.
 
-There is no need for this to be a spinlock as a standard mutex is
-sufficient.
-
-Fixes: 950fd867c635 ("staging: bcm2835-camera: Replace open-coded idr with=
- a struct idr.")
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 =2D--
- drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c | 13 +++++++---=
----
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ .../vc04_services/bcm2835-camera/controls.c        | 32 +++++++++++------=
+-----
+ .../vc04_services/bcm2835-camera/mmal-msg.h        |  3 +-
+ .../vc04_services/bcm2835-camera/mmal-parameters.h | 12 ++++----
+ 3 files changed, 24 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c b/d=
-rivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-index 16af735..f1bb900 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-@@ -161,7 +161,8 @@ struct vchiq_mmal_instance {
- 	void *bulk_scratch;
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/dri=
+vers/staging/vc04_services/bcm2835-camera/controls.c
+index b142130..e79e7cd 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
+@@ -1130,10 +1130,10 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctr=
+ls[V4L2_CTRL_COUNT] =3D {
+ 	{
+ 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
+ 		MMAL_CONTROL_TYPE_STD_MENU,
+-		~((1<<V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
+-			(1<<V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
+-			(1<<V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
+-			(1<<V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
++		~(BIT(V4L2_MPEG_VIDEO_H264_PROFILE_BASELINE) |
++		  BIT(V4L2_MPEG_VIDEO_H264_PROFILE_CONSTRAINED_BASELINE) |
++		  BIT(V4L2_MPEG_VIDEO_H264_PROFILE_MAIN) |
++		  BIT(V4L2_MPEG_VIDEO_H264_PROFILE_HIGH)),
+ 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH,
+ 		V4L2_MPEG_VIDEO_H264_PROFILE_HIGH, 1, NULL,
+ 		MMAL_PARAMETER_PROFILE,
+@@ -1142,18 +1142,18 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctr=
+ls[V4L2_CTRL_COUNT] =3D {
+ 	},
+ 	{
+ 		V4L2_CID_MPEG_VIDEO_H264_LEVEL, MMAL_CONTROL_TYPE_STD_MENU,
+-		~((1<<V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
+-			(1<<V4L2_MPEG_VIDEO_H264_LEVEL_4_0)),
++		~(BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_0) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1B) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_1) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_2) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_1_3) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_0) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_1) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_2_2) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_0) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_1) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_3_2) |
++		  BIT(V4L2_MPEG_VIDEO_H264_LEVEL_4_0)),
+ 		V4L2_MPEG_VIDEO_H264_LEVEL_4_0,
+ 		V4L2_MPEG_VIDEO_H264_LEVEL_4_0, 1, NULL,
+ 		MMAL_PARAMETER_PROFILE,
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-msg.h b/dri=
+vers/staging/vc04_services/bcm2835-camera/mmal-msg.h
+index f165ddf..8e0aee8 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-msg.h
++++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-msg.h
+@@ -223,7 +223,8 @@ struct mmal_msg_port_action_reply {
+ #define MMAL_BUFFER_HEADER_FLAG_FRAME_END              BIT(2)
+ /* Signals that the current payload contains only complete frames (>1) */
+ #define MMAL_BUFFER_HEADER_FLAG_FRAME                  \
+-	(MMAL_BUFFER_HEADER_FLAG_FRAME_START|MMAL_BUFFER_HEADER_FLAG_FRAME_END)
++	(MMAL_BUFFER_HEADER_FLAG_FRAME_START | \
++	 MMAL_BUFFER_HEADER_FLAG_FRAME_END)
+ /* Signals that the current payload is a keyframe (i.e. self decodable) *=
+/
+ #define MMAL_BUFFER_HEADER_FLAG_KEYFRAME               BIT(3)
+ /*
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.=
+h b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
+index 96e987d..6d21594 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
++++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
+@@ -23,17 +23,17 @@
+ #define __MMAL_PARAMETERS_H
 
- 	struct idr context_map;
--	spinlock_t context_map_lock;
-+	/* protect accesses to context_map */
-+	struct mutex context_map_lock;
+ /** Common parameter ID group, used with many types of component. */
+-#define MMAL_PARAMETER_GROUP_COMMON            (0<<16)
++#define MMAL_PARAMETER_GROUP_COMMON            (0 << 16)
+ /** Camera-specific parameter ID group. */
+-#define MMAL_PARAMETER_GROUP_CAMERA            (1<<16)
++#define MMAL_PARAMETER_GROUP_CAMERA            (1 << 16)
+ /** Video-specific parameter ID group. */
+-#define MMAL_PARAMETER_GROUP_VIDEO             (2<<16)
++#define MMAL_PARAMETER_GROUP_VIDEO             (2 << 16)
+ /** Audio-specific parameter ID group. */
+-#define MMAL_PARAMETER_GROUP_AUDIO             (3<<16)
++#define MMAL_PARAMETER_GROUP_AUDIO             (3 << 16)
+ /** Clock-specific parameter ID group. */
+-#define MMAL_PARAMETER_GROUP_CLOCK             (4<<16)
++#define MMAL_PARAMETER_GROUP_CLOCK             (4 << 16)
+ /** Miracast-specific parameter ID group. */
+-#define MMAL_PARAMETER_GROUP_MIRACAST       (5<<16)
++#define MMAL_PARAMETER_GROUP_MIRACAST       (5 << 16)
 
- 	/* component to use next */
- 	int component_idx;
-@@ -184,10 +185,10 @@ get_msg_context(struct vchiq_mmal_instance *instance=
-)
- 	 * that when we service the VCHI reply, we can look up what
- 	 * message is being replied to.
- 	 */
--	spin_lock(&instance->context_map_lock);
-+	mutex_lock(&instance->context_map_lock);
- 	handle =3D idr_alloc(&instance->context_map, msg_context,
- 			   0, 0, GFP_KERNEL);
--	spin_unlock(&instance->context_map_lock);
-+	mutex_unlock(&instance->context_map_lock);
-
- 	if (handle < 0) {
- 		kfree(msg_context);
-@@ -211,9 +212,9 @@ release_msg_context(struct mmal_msg_context *msg_conte=
-xt)
- {
- 	struct vchiq_mmal_instance *instance =3D msg_context->instance;
-
--	spin_lock(&instance->context_map_lock);
-+	mutex_lock(&instance->context_map_lock);
- 	idr_remove(&instance->context_map, msg_context->handle);
--	spin_unlock(&instance->context_map_lock);
-+	mutex_unlock(&instance->context_map_lock);
- 	kfree(msg_context);
- }
-
-@@ -1849,7 +1850,7 @@ int vchiq_mmal_init(struct vchiq_mmal_instance **out=
-_instance)
-
- 	instance->bulk_scratch =3D vmalloc(PAGE_SIZE);
-
--	spin_lock_init(&instance->context_map_lock);
-+	mutex_init(&instance->context_map_lock);
- 	idr_init_base(&instance->context_map, 1);
-
- 	params.callback_param =3D instance;
+ /* Common parameters */
+ enum mmal_parameter_common_type {
 =2D-
 2.7.4
 
