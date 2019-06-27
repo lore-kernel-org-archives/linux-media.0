@@ -8,31 +8,31 @@ X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10314C48BD7
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 19:07:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15F53C48BE9
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 19:07:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7DAA20644
-	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 19:07:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EB49420644
+	for <linux-media@archiver.kernel.org>; Thu, 27 Jun 2019 19:07:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="GirP0flj"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="boyR1b1c"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbfF0THM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 15:07:12 -0400
-Received: from mout.gmx.net ([212.227.17.20]:36039 "EHLO mout.gmx.net"
+        id S1726506AbfF0THO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 15:07:14 -0400
+Received: from mout.gmx.net ([212.227.17.22]:35127 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726384AbfF0THM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 15:07:12 -0400
+        id S1726497AbfF0THN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Jun 2019 15:07:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561662414;
-        bh=LRyz6YBXxxPj6I4Vwjk1xVVm3VP1fgqB6kgOc9SZZ2c=;
+        s=badeba3b8450; t=1561662412;
+        bh=jDTS8viFYqrDbHal1MRfayty/onAySUVJktCMM7U9LA=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=GirP0fljl41TxQXSm1O9gJJhCN7MtAvA2NBIiwQ1KIGrkVfPAHj5Sw6fDcvYKJtfu
-         E2osrqmE8u2cTkC3cE840XaN8IrmJZu7A/fIroOc7WbAh3bGnOCjBGDXaha1CpbSbd
-         zZoHQI4w7AkPHYC0kt1W6a9CXQRsjQtCaDZHzNsg=
+        b=boyR1b1cVnoKHMYAWqz5F14XVnOO+5f+PR5CnjctNVZzad1WK3Vy7CadjSAX0ljbH
+         O6Pk7QST70wbzg6ci6XpQ7XmQsQeBk2s1EDQ7PIn9caoY/6l/g8chMvCYxfyYKa1Qe
+         nXUBRA9lg6F9vG3GD28ROjT+q8WtCG8Ph6IZqkdM=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx101 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0MLB89-1hgIcJ1gDx-000Nai; Thu, 27 Jun 2019 21:06:54 +0200
+ 0M6730-1iVuty1hPe-00y91P; Thu, 27 Jun 2019 21:06:52 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org
-Subject: [PATCH 26/31] staging: bcm2835-camera: Remove/amend some obsolete comments
-Date:   Thu, 27 Jun 2019 21:06:21 +0200
-Message-Id: <1561662386-23045-7-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH 21/31] staging: bcm2835-camera: Unify header inclusion defines
+Date:   Thu, 27 Jun 2019 21:06:16 +0200
+Message-Id: <1561662386-23045-2-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561662386-23045-1-git-send-email-wahrenst@gmx.net>
 References: <1561662386-23045-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:4xomtyWSvBDrQz0zJqh5x0hXvsx0k3JhFaFYg3KGa6+d+DFRHEf
- bxv7FTElzUlvQ4k51+EbPC6FX/4pGQbQ4EKK5gQOxEoefI9XJMHsohhv7Sr87ki0H6aV+by
- GX7eVNC2peAsNFNkVgXvYJxN6YStYZi3vtpUzeoQ309nbnK0uWHnU354e36D8hBOUJpsfkw
- SkIiLpwSJsfSQRg98to6A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZnwXJ6Xicg4=:lytjMVXwZM643hxn+PT0hD
- L/OZl/YY16Ftz3EXRg2qGYJRcT1eXFvSBo2v/CCL3DMphM4+c4ugw6rlorf0e0+DfR4nwTpel
- zCFReDmiZ+b+JLnkQ5TmfsxUm5EZaoTJI/S8goBbuLxCzctOId5FBoUgX6epxXKv6kty99lqV
- 7hqXn7dtmDoPYVer7R6PvvnKWM7FhFVDvJsloC4IFzxhnHaRlrvNynisitWfs/vwSyyJNRXfs
- QLwSSmw+9zud3MyS20SOItxYjn5rmajUTg+xHDiJTkXn60+0VTFnWfrT03pKeECt/dV3Y7HNG
- zSWv6Zt9hZCAONTZlcqtIkgwn5b8wYYtNfWY24kthmz9/TWaIr8rWFSZUpvdndfjhoc+iyP2x
- zaPAXJZ+MynjnMLvRKShmK/xlUNT/KocM4RtJCG8a/7QJV5WVcjUR6AmR2rndubwnLAhmeHqP
- um4Q0KQw1S0uIr9NG6220M51MjM4HTCrdEFvLYxj3jwPEP0m9XC+j4AeJgzRglYb2YYMYr7qY
- 47rASphbqix3KtXZEoLNpRFIqoYDJcvOlA27Cf2hNnSQAeHxWRbHlWsdZ119Gd3rDmZIRObOH
- 29xyIin8zMCtqu84GaN+Cfe7SEGwPSakbOW0gJRpHrQ+RL1QRkugRhI7wIQfcdQZFfwckckMi
- x6Qvz9GzW1lyEmFLol6azUFLu3fbW/yh+W7uZpmj0nFlKi049NuUMXTM8Bh1sAI6PHAM4xcL6
- oQOcPmVX0clJAsuLbmoXsFUxaOsufsfmlUwd86blc6UaA1fYPsttn3eFkFcaFvm74pPMD76fK
- xyGXm0k9xjsIcqnKW4tXuJPZ1KctvzX0jSgRhhfGvK1UpcfIpX6fxQK2iv0UjrHMctfbckThR
- dc8i7Y7uCR0Yp3h5gzWj+RA15KbX4G4zJQYw0aFqx8eh0tE6Y1o4Yc4fNLaqwhPoLi0Ic5VGw
- NsLoaXsQnnvdwJ/G5HMqBBVPNtXB4dpW9wXx9QS2KD7F0zYkxPdKeJ+tGSJMYrvKBQ5rST8e+
- ini5oieKZ7DFA/JEvcgIAyUAyYyThr82ux+g0Md5sHPtP7QyAhfaiMzHgIXlNGcXFyr7hxb21
- pAaWxZ7mpklkYY=
+X-Provags-ID: V03:K1:u2byLpeY81owIOe0u0m7dsEbi1BMOnsvUw8J/3/4FrRXeaW/irC
+ LoXykJgzLFToxCJLBQfNgDO3MuvZJ78slALKTqVjV5Ln8lJCa+ONkMb4KLK03VBpkYLIPqV
+ waJKxhxujuJXV29xe7NALB9W7esBFPD46qUJ2wo6/K35MUpWRSo0Lub26e+9NpeIWqsv6ax
+ klNVgSeMRmS0FU3LTlYSg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Dz6jkUEmH98=:d5Jk/boCMg8s1Sc0nJL9K3
+ 7TrzZunCtfiu8SMe6z4qS/qwMuGih7CpkVhHJEYspFnnOmcpIlWUAuYXbR8M7zMyCWqo3om+D
+ FLmBcTKDSiLvqdrGhi/X4Xvjtsd0xS3w07bPiN1ozjF/f0n5yE6eVPOJid1U6wAASNavjUpj/
+ CR7YbVBNyMp42Hqf8XKIUiTXFS/4VE0m1pfaCq1XavTj5VLhuzafPwXV9hJmR2E2OAy52MhlA
+ fZzg65dtHyahvFzYW6ynkl7XLJmYNw89JjC04300NJ6AwBuqAik6r9gdPctofRfU42x7K5cz1
+ j88PIsx4Is56WQhjskTfBlRnt/ZnQFrUkw0gAqtgWj29NrF5zHd2HLA40dWxfeUV5T31lG4OT
+ pWR+YpzY3FNQoiK6H0BfxOabM9p+9/OtZRIgG74EPRKFPSYX5NhPDZw4SHzTbLbdXANiNsb45
+ g2IJjijr72WX48pUWcK0M0Y0XaaH983wsXm+pCn0u5SYwy0CbyAL0aykZNF7AeA8M58U+ExTz
+ o0yb0VzKrqtVwqVz5Nmo4y7S1+eCUSo/UTAJA/RptPhfpm1RgUB0mIbDWEvaG6tvUAm7xBxjM
+ akVIGlzgI1KD2hJj9LHsJWSLDvgyvFh7Fsg85s2zluAYQgvJbNPmr5u0Ak+w1yQPvkknhB4u6
+ 49QoIoKiEhWJR0XzH+0htR3i24EvPG69+hfVug1pi1k5BL2sRhxMaaKYg7OYf0qS4xmfPHCKw
+ WvuCZfVTQ8nzaB3ehfiYDN71MjwY+RMy2qNEro8DUzpiE0rEd72vIP/N7HPrKFEYlpGgFoqA/
+ 7XFd8EGLrdyj3rfLN5AOrM+3xmBNWCCbrbFW6vWyoqcZ/jJ2CwmXyzjdSR2jcZSsT7h0UuwAe
+ KVj2bo5C9c/igB4fv5EtOgXYhBSCOMOu+J+7ozqGdxKhIuXZsbSs9B2Nr3EYmxpi/VUKH14Zm
+ wEXAcUsuIx83vHacAWD+pKiXNBTRi0LF7TPGZ9vFnNyZz3lhMf/BtSeyBJsAlOFruHPzPlDB4
+ kIPrfg1P/18XBzQzRvJ5RiZunT0pBQp9wdfskaK/GcKwvvTZX4zyedAsaksY+9veSBjYXxO7/
+ KSQppR5fjlZh00=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,55 +77,33 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Remove a todo which has been done.
-Remove a template line that was redundant.
-Make a comment clearer as to the non-obvious meaning of a field.
+Most of the headers use ifndef FOO_H, whilst mmal-parameters.h
+used ifndef __FOO_H.
+
+Revise mmal-parameters.h to drop the underscores and make the
+headers all consistent.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 =2D--
- drivers/staging/vc04_services/bcm2835-camera/controls.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+ drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/dri=
-vers/staging/vc04_services/bcm2835-camera/controls.c
-index b8aaedd..848b14a 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-@@ -971,10 +971,6 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls[=
-V4L2_CTRL_COUNT] =3D {
- 		ctrl_set_value,
- 		false
- 	},
--/*	{
-- *		0, MMAL_CONTROL_TYPE_CLUSTER, 3, 1, 0, NULL, 0, NULL
-- *	},
-- */
- 	{
- 		V4L2_CID_EXPOSURE_AUTO, MMAL_CONTROL_TYPE_STD_MENU,
- 		~0x03, V4L2_EXPOSURE_APERTURE_PRIORITY, V4L2_EXPOSURE_AUTO, 0,
-@@ -982,11 +978,6 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls[=
-V4L2_CTRL_COUNT] =3D {
- 		ctrl_set_exposure,
- 		false
- 	},
--/* todo this needs mixing in with set exposure
-- *	{
-- *		V4L2_CID_SCENE_MODE, MMAL_CONTROL_TYPE_STD_MENU,
-- *	},
-- */
- 	{
- 		V4L2_CID_EXPOSURE_ABSOLUTE, MMAL_CONTROL_TYPE_STD,
- 		/* Units of 100usecs */
-@@ -1152,7 +1143,7 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
-[V4L2_CTRL_COUNT] =3D {
- 	},
- 	{
- 		V4L2_CID_SCENE_MODE, MMAL_CONTROL_TYPE_STD_MENU,
--		-1,	/* Min is computed at runtime */
-+		-1,	/* Min (mask) is computed at runtime */
- 		V4L2_SCENE_MODE_TEXT,
- 		V4L2_SCENE_MODE_NONE, 1, NULL,
- 		MMAL_PARAMETER_PROFILE,
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.=
+h b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
+index 6d21594..da21ec5 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
++++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
+@@ -19,8 +19,8 @@
+  * @{
+  */
+
+-#ifndef __MMAL_PARAMETERS_H
+-#define __MMAL_PARAMETERS_H
++#ifndef MMAL_PARAMETERS_H
++#define MMAL_PARAMETERS_H
+
+ /** Common parameter ID group, used with many types of component. */
+ #define MMAL_PARAMETER_GROUP_COMMON            (0 << 16)
 =2D-
 2.7.4
 
