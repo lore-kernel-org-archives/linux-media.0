@@ -2,123 +2,120 @@ Return-Path: <SRS0=b75e=U3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.3 required=3.0 tests=DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEC00C4321A
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 02:48:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48A0CC5B577
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 03:03:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C5EFE208CB
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 02:48:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q0Kmn6JB"
+	by mail.kernel.org (Postfix) with ESMTP id 2ADBA208CB
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 03:03:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727179AbfF1CsD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 27 Jun 2019 22:48:03 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44908 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726818AbfF1CsD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 27 Jun 2019 22:48:03 -0400
-Received: by mail-pf1-f194.google.com with SMTP id t16so2177771pfe.11;
-        Thu, 27 Jun 2019 19:48:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=rsPonA+LoPMnREzyOjv+yCOVy4+lZMOat92F/ls7OsU=;
-        b=q0Kmn6JBDMWr863rqbl043/wnXxZdt2WetVxNy6oyj9hJ14E30v+VuIz9qgeZiSpce
-         nWj5PQSXUsr0lAUNeQf6Ui16vkL3YFlMhoYjuPa/sIva667KZPce+Hg9qh4znBQ6AIPn
-         A6aJ46/T/OctXwOkliS9qpPKNU8pxhBJRsPj0S2WLWz6Z0jiedOnUcQY1auGNHpYmjnX
-         UW64IyROag4ph/sFjkZpxM1EseAXjKAJC6aM+ePJoAgnXcitTqVC1hxgiMYrSKHND4yz
-         Dk2hSqxq/0tRXYtJkWlktQbxVrIay1rB6P8JPQ4MXxJngULVk4m0a7M8V9TCy2zJ8k2e
-         tRjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=rsPonA+LoPMnREzyOjv+yCOVy4+lZMOat92F/ls7OsU=;
-        b=gPtUY1wPw7P8nDjNa4mg1NtqHtkDyV3SLtXrAsdK7NcFFYxXh7Dc1phyitLwbmllvu
-         ujFCbUixRKx5fhl2rn5fRTBxFd8UiHT9RZ8KGjB09113LcpN99oWZIQTX5e7eslGw+Mz
-         PMKwZDfzKH7FggDF9Jf7lQYYTHm7bM/ANEumjIxG0Xn3fw3uDXxDTUmv0+jSEE6vnBSA
-         0z3cZUU+882EMzCGNrG2EhYuKV2fEdhTJ9Prj2hPkZKUlps5wrZpyI2Rlm163KYia4yj
-         xy/TCS9eJCJ/GZMbJj1PhTjZBsh/jPJ5sx0xstwPEi4dX5PVvM9FR4vuKiP1UWLoq+zs
-         wYLQ==
-X-Gm-Message-State: APjAAAUsah01W6WdHs4OiD8NylYOMN37zaO8tsolki+M0+kWvnGu125y
-        nozMN4+SkMbxTMwq+UBe5tU=
-X-Google-Smtp-Source: APXvYqym3fkD8EOsdW/dAOTE2+FIluU4b7I3vmxn1f0D3QENIyYOZwV4riKQHXlQt8k6csxXiy6dxg==
-X-Received: by 2002:a63:24c1:: with SMTP id k184mr7161368pgk.120.1561690082750;
-        Thu, 27 Jun 2019 19:48:02 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id g13sm454755pfi.93.2019.06.27.19.48.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 19:48:02 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Fuqian Huang <huangfq.daxian@gmail.com>,
-        Mike Isely <isely@pobox.com>,
+        id S1726730AbfF1DDk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 27 Jun 2019 23:03:40 -0400
+Received: from mx7.zte.com.cn ([202.103.147.169]:54190 "EHLO mxct.zte.com.cn"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726542AbfF1DDj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 27 Jun 2019 23:03:39 -0400
+Received: from mse-fl1.zte.com.cn (unknown [10.30.14.238])
+        by Forcepoint Email with ESMTPS id BBF1EA339E319CD62CE4;
+        Fri, 28 Jun 2019 11:03:37 +0800 (CST)
+Received: from notes_smtp.zte.com.cn ([10.30.1.239])
+        by mse-fl1.zte.com.cn with ESMTP id x5S32eB1063726;
+        Fri, 28 Jun 2019 11:02:40 +0800 (GMT-8)
+        (envelope-from wen.yang99@zte.com.cn)
+Received: from fox-host8.localdomain ([10.74.120.8])
+          by szsmtp06.zte.com.cn (Lotus Domino Release 8.5.3FP6)
+          with ESMTP id 2019062811031122-1800719 ;
+          Fri, 28 Jun 2019 11:03:11 +0800 
+From:   Wen Yang <wen.yang99@zte.com.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     wang.yi59@zte.com.cn, Wen Yang <wen.yang99@zte.com.cn>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 12/27] media: use kzalloc instead of kmalloc and memset
-Date:   Fri, 28 Jun 2019 10:47:56 +0800
-Message-Id: <20190628024756.15422-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 2/3] media: exynos4-is: fix leaked of_node references
+Date:   Fri, 28 Jun 2019 11:01:15 +0800
+Message-Id: <1561690876-20977-3-git-send-email-wen.yang99@zte.com.cn>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1561690876-20977-1-git-send-email-wen.yang99@zte.com.cn>
+References: <1561690876-20977-1-git-send-email-wen.yang99@zte.com.cn>
+X-MIMETrack: Itemize by SMTP Server on SZSMTP06/server/zte_ltd(Release 8.5.3FP6|November
+ 21, 2013) at 2019-06-28 11:03:11,
+        Serialize by Router on notes_smtp/zte_ltd(Release 9.0.1FP7|August  17, 2016) at
+ 2019-06-28 11:02:45,
+        Serialize complete at 2019-06-28 11:02:45
+X-MAIL: mse-fl1.zte.com.cn x5S32eB1063726
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace kmalloc followed by a memset with kzalloc.
+The call to of_get_child_by_name returns a node pointer with refcount
+incremented thus it must be explicitly decremented after the last
+usage.
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+Detected by coccinelle with the following warnings:
+drivers/media/platform/exynos4-is/fimc-is.c:813:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/fimc-is.c:870:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/fimc-is.c:885:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:545:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 541, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:528:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 499, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:534:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 499, but without a corresponding object release within this function.
+
+Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
+Cc: Kyungmin Park <kyungmin.park@samsung.com>
+Cc: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Kukjin Kim <kgene@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 ---
- drivers/media/usb/pvrusb2/pvrusb2-eeprom.c | 3 +--
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c    | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-is.c   | 1 +
+ drivers/media/platform/exynos4-is/media-dev.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-eeprom.c b/drivers/media/usb/pvrusb2/pvrusb2-eeprom.c
-index 79f0e0c6df37..fac90af8b537 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-eeprom.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-eeprom.c
-@@ -39,7 +39,7 @@ static u8 *pvr2_eeprom_fetch(struct pvr2_hdw *hdw)
- 	int ret;
- 	int mode16 = 0;
- 	unsigned pcnt,tcnt;
--	eeprom = kmalloc(EEPROM_SIZE,GFP_KERNEL);
-+	eeprom = kzalloc(EEPROM_SIZE,GFP_KERNEL);
- 	if (!eeprom) {
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
- 			   "Failed to allocate memory required to read eeprom");
-@@ -74,7 +74,6 @@ static u8 *pvr2_eeprom_fetch(struct pvr2_hdw *hdw)
- 	   (1) we're only fetching part of the eeprom, and (2) if we were
- 	   getting the whole thing our I2C driver can't grab it in one
- 	   pass - which is what tveeprom is otherwise going to attempt */
--	memset(eeprom,0,EEPROM_SIZE);
- 	for (tcnt = 0; tcnt < EEPROM_SIZE; tcnt += pcnt) {
- 		pcnt = 16;
- 		if (pcnt + tcnt > EEPROM_SIZE) pcnt = EEPROM_SIZE-tcnt;
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index 70b5cb08d65b..ff75b4a53dfa 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -3309,7 +3309,7 @@ static u8 *pvr2_full_eeprom_fetch(struct pvr2_hdw *hdw)
- 	int ret;
- 	int mode16 = 0;
- 	unsigned pcnt,tcnt;
--	eeprom = kmalloc(EEPROM_SIZE,GFP_KERNEL);
-+	eeprom = kzalloc(EEPROM_SIZE,GFP_KERNEL);
- 	if (!eeprom) {
- 		pvr2_trace(PVR2_TRACE_ERROR_LEGS,
- 			   "Failed to allocate memory required to read eeprom");
-@@ -3344,7 +3344,6 @@ static u8 *pvr2_full_eeprom_fetch(struct pvr2_hdw *hdw)
- 	   (1) we're only fetching part of the eeprom, and (2) if we were
- 	   getting the whole thing our I2C driver can't grab it in one
- 	   pass - which is what tveeprom is otherwise going to attempt */
--	memset(eeprom,0,EEPROM_SIZE);
- 	for (tcnt = 0; tcnt < EEPROM_SIZE; tcnt += pcnt) {
- 		pcnt = 16;
- 		if (pcnt + tcnt > EEPROM_SIZE) pcnt = EEPROM_SIZE-tcnt;
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+index e043d55..b7cc8e6 100644
+--- a/drivers/media/platform/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/exynos4-is/fimc-is.c
+@@ -806,6 +806,7 @@ static int fimc_is_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 
+ 	is->pmu_regs = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!is->pmu_regs)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index d53427a..a838189 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -501,6 +501,7 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
+ 			continue;
+ 
+ 		ret = fimc_md_parse_port_node(fmd, port, index);
++		of_node_put(port);
+ 		if (ret < 0) {
+ 			of_node_put(node);
+ 			goto cleanup;
+@@ -542,6 +543,7 @@ static int __of_get_csis_id(struct device_node *np)
+ 	if (!np)
+ 		return -EINVAL;
+ 	of_property_read_u32(np, "reg", &reg);
++	of_node_put(np);
+ 	return reg - FIMC_INPUT_MIPI_CSI2_0;
+ }
+ 
 -- 
-2.11.0
+2.9.5
 
