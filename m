@@ -2,255 +2,99 @@ Return-Path: <SRS0=b75e=U3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51807C5B57A
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 11:57:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24BF2C5B57A
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:00:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2A4AD2086D
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 11:57:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 072EC2086D
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:00:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726887AbfF1L5q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jun 2019 07:57:46 -0400
-Received: from mga18.intel.com ([134.134.136.126]:64478 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726524AbfF1L5q (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jun 2019 07:57:46 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Jun 2019 04:57:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,427,1557212400"; 
-   d="scan'208";a="246147293"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga001.jf.intel.com with ESMTP; 28 Jun 2019 04:57:42 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id DA4522071F; Fri, 28 Jun 2019 14:57:42 +0300 (EEST)
-Date:   Fri, 28 Jun 2019 14:57:42 +0300
+        id S1726953AbfF1MA5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jun 2019 08:00:57 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:32908 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726943AbfF1MA5 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 28 Jun 2019 08:00:57 -0400
+Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id CDB7B634C80;
+        Fri, 28 Jun 2019 15:00:39 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     linux-media@vger.kernel.org, hverkuil@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, niklas.soderlund@ragnatech.se
-Subject: Re: [PATCH v2 9/9] ipu3-cio2: Parse information from firmware
- without using callbacks
-Message-ID: <20190628115742.iw3v2kh4crvquitf@paasikivi.fi.intel.com>
-References: <20190606130225.10751-1-sakari.ailus@linux.intel.com>
- <20190606130225.10751-10-sakari.ailus@linux.intel.com>
- <20190614163142.uoj6bg27js5gks3w@uno.localdomain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190614163142.uoj6bg27js5gks3w@uno.localdomain>
-User-Agent: NeoMutt/20170113 (1.7.2)
+To:     linux-media@vger.kernel.org
+Cc:     hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        jacopo@jmondi.org, niklas.soderlund@ragnatech.se
+Subject: [PATCH v4 1/8] davinci-vpif: Don't dereference endpoint after putting it, fix refcounting
+Date:   Fri, 28 Jun 2019 15:00:47 +0300
+Message-Id: <20190628120054.11818-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20190628120054.11818-1-sakari.ailus@linux.intel.com>
+References: <20190628120054.11818-1-sakari.ailus@linux.intel.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Jacopo,
+The davinci-vpif driver dereferences its local endpoints after releasing
+the reference to them.
 
-On Fri, Jun 14, 2019 at 06:31:42PM +0200, Jacopo Mondi wrote:
-> Hi Sakari,
-> 
-> On Thu, Jun 06, 2019 at 04:02:25PM +0300, Sakari Ailus wrote:
-> > Instead of using the convenience function
-> > v4l2_async_notifier_parse_fwnode_endpoints(), parse the endpoints and set
-> > up the async sub-devices without using callbacks. While this adds a little
-> > bit of code, it makes parsing the endpoints quite a bit more simple and
-> > gives more control to the driver over the process. The parsing assumes
-> > D-PHY instead of letting the V4L2 fwnode framework guess it.
-> >
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  drivers/media/pci/intel/ipu3/ipu3-cio2.c | 92 +++++++++++++++++---------------
-> >  1 file changed, 49 insertions(+), 43 deletions(-)
-> >
-> > diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> > index 690d3bd08ddd..40e8b8617f55 100644
-> > --- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> > +++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-> > @@ -1475,36 +1475,51 @@ static const struct v4l2_async_notifier_operations cio2_async_ops = {
-> >  	.complete = cio2_notifier_complete,
-> >  };
-> >
-> > -static int cio2_fwnode_parse(struct device *dev,
-> > -			     struct v4l2_fwnode_endpoint *vep,
-> > -			     struct v4l2_async_subdev *asd)
-> > +static int cio2_parse_firmware(struct cio2_device *cio2)
-> >  {
-> > -	struct sensor_async_subdev *s_asd =
-> > -			container_of(asd, struct sensor_async_subdev, asd);
-> > +	unsigned int i;
-> > +	int ret;
-> >
-> > -	if (vep->bus_type != V4L2_MBUS_CSI2_DPHY) {
-> > -		dev_err(dev, "Only CSI2 bus type is currently supported\n");
-> > -		return -EINVAL;
-> > -	}
-> > +	for (i = 0; i < CIO2_NUM_PORTS; i++) {
-> > +		struct v4l2_fwnode_endpoint vep = {
-> > +			.bus_type = V4L2_MBUS_CSI2_DPHY
-> > +		};
-> > +		struct sensor_async_subdev *s_asd = NULL;
-> > +		struct fwnode_handle *ep;
-> >
-> > -	s_asd->csi2.port = vep->base.port;
-> > -	s_asd->csi2.lanes = vep->bus.mipi_csi2.num_data_lanes;
-> > +		ep = fwnode_graph_get_endpoint_by_id(
-> > +			dev_fwnode(&cio2->pci_dev->dev), i, 0,
-> > +			FWNODE_GRAPH_ENDPOINT_NEXT);
-> >
-> > -	return 0;
-> > -}
-> > +		if (!ep)
-> > +			continue;
-> >
-> > -static int cio2_notifier_init(struct cio2_device *cio2)
-> > -{
-> > -	int ret;
-> > +		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-> > +		if (ret)
-> > +			goto err_parse;
-> >
-> > -	v4l2_async_notifier_init(&cio2->notifier);
-> > +		s_asd = kzalloc(sizeof(*s_asd), GFP_KERNEL);
-> > +		if (!s_asd) {
-> > +			ret = -ENOMEM;
-> > +			goto err_parse;
-> > +		}
-> >
-> > -	ret = v4l2_async_notifier_parse_fwnode_endpoints(
-> 
-> How would you feel trying to remove this function completely? There
-> are only 2 users mainline (rcar-vin and sunxi) and this is 'yet
-> another way to parse an endpoint and add it to a notifier async list'.
-> 
-> I would say, stabilizing on the use of one of the three
-> v4l2_async_notifier_add_ versions could be desirable...
+The driver also puts its endpoints explicitly while the
+of_graph_get_next_endpoint() does that, too, leading to obtaining a
+reference once and releasing it twice.
 
-I agree. The reason I didn't do it in this patchset is that I have no
-hardware to test. I'd like to get in what I can test first.
+Both are fixed by this patch.
 
-> 
-> > -		&cio2->pci_dev->dev, &cio2->notifier,
-> > -		sizeof(struct sensor_async_subdev),
-> > -		cio2_fwnode_parse);
-> > -	if (ret < 0)
-> > -		goto out;
-> > +		s_asd->csi2.port = vep.base.port;
-> > +		s_asd->csi2.lanes = vep.bus.mipi_csi2.num_data_lanes;
-> > +
-> > +		ret = v4l2_async_notifier_add_fwnode_remote_subdev(
-> > +			&cio2->notifier, ep, &s_asd->asd);
-> > +		fwnode_handle_put(ep);
-> > +		if (ret)
-> > +			goto err_parse;
-> > +
-> > +		continue;
-> > +
-> > +err_parse:
-> > +		fwnode_handle_put(ep);
-> 
-> Won't the notifier cleanup put this device node for us?
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/platform/davinci/vpif_capture.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-There was an error so no. But we already did so before checking for the
-error. Good catch! ;)
-
-> 
-> This apart, for the patch itself:
-> Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-> 
-> Thanks
->   j
-> 
-> > +		kfree(s_asd);
-> > +		return ret;
-> > +	}
-> >
-> >  	/*
-> >  	 * Proceed even without sensors connected to allow the device to
-> > @@ -1512,25 +1527,13 @@ static int cio2_notifier_init(struct cio2_device *cio2)
-> >  	 */
-> >  	cio2->notifier.ops = &cio2_async_ops;
-> >  	ret = v4l2_async_notifier_register(&cio2->v4l2_dev, &cio2->notifier);
-> > -	if (ret) {
-> > +	if (ret)
-> >  		dev_err(&cio2->pci_dev->dev,
-> >  			"failed to register async notifier : %d\n", ret);
-> > -		goto out;
-> > -	}
-> > -
-> > -out:
-> > -	if (ret)
-> > -		v4l2_async_notifier_cleanup(&cio2->notifier);
-> >
-> >  	return ret;
-> >  }
-> >
-> > -static void cio2_notifier_exit(struct cio2_device *cio2)
-> > -{
-> > -	v4l2_async_notifier_unregister(&cio2->notifier);
-> > -	v4l2_async_notifier_cleanup(&cio2->notifier);
-> > -}
-> > -
-> >  /**************** Queue initialization ****************/
-> >  static const struct media_entity_operations cio2_media_ops = {
-> >  	.link_validate = v4l2_subdev_link_validate,
-> > @@ -1814,16 +1817,18 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
-> >  	if (r)
-> >  		goto fail_v4l2_device_unregister;
-> >
-> > +	v4l2_async_notifier_init(&cio2->notifier);
-> > +
-> >  	/* Register notifier for subdevices we care */
-> > -	r = cio2_notifier_init(cio2);
-> > +	r = cio2_parse_firmware(cio2);
-> >  	if (r)
-> > -		goto fail_cio2_queue_exit;
-> > +		goto fail_clean_notifier;
-> >
-> >  	r = devm_request_irq(&pci_dev->dev, pci_dev->irq, cio2_irq,
-> >  			     IRQF_SHARED, CIO2_NAME, cio2);
-> >  	if (r) {
-> >  		dev_err(&pci_dev->dev, "failed to request IRQ (%d)\n", r);
-> > -		goto fail;
-> > +		goto fail_clean_notifier;
-> >  	}
-> >
-> >  	pm_runtime_put_noidle(&pci_dev->dev);
-> > @@ -1831,9 +1836,9 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
-> >
-> >  	return 0;
-> >
-> > -fail:
-> > -	cio2_notifier_exit(cio2);
-> > -fail_cio2_queue_exit:
-> > +fail_clean_notifier:
-> > +	v4l2_async_notifier_unregister(&cio2->notifier);
-> > +	v4l2_async_notifier_cleanup(&cio2->notifier);
-> >  	cio2_queues_exit(cio2);
-> >  fail_v4l2_device_unregister:
-> >  	v4l2_device_unregister(&cio2->v4l2_dev);
-> > @@ -1852,7 +1857,8 @@ static void cio2_pci_remove(struct pci_dev *pci_dev)
-> >  	struct cio2_device *cio2 = pci_get_drvdata(pci_dev);
-> >
-> >  	media_device_unregister(&cio2->media_dev);
-> > -	cio2_notifier_exit(cio2);
-> > +	v4l2_async_notifier_unregister(&cio2->notifier);
-> > +	v4l2_async_notifier_cleanup(&cio2->notifier);
-> >  	cio2_queues_exit(cio2);
-> >  	cio2_fbpt_exit_dummy(cio2);
-> >  	v4l2_device_unregister(&cio2->v4l2_dev);
-> > --
-> > 2.11.0
-> >
-
-
-
+diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
+index f0f7ef638c56..394202c28b1a 100644
+--- a/drivers/media/platform/davinci/vpif_capture.c
++++ b/drivers/media/platform/davinci/vpif_capture.c
+@@ -1554,7 +1554,6 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 		if (!rem) {
+ 			dev_dbg(&pdev->dev, "Remote device at %pOF not found\n",
+ 				endpoint);
+-			of_node_put(endpoint);
+ 			goto done;
+ 		}
+ 
+@@ -1566,7 +1565,6 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 					    GFP_KERNEL);
+ 		if (!chan->inputs) {
+ 			of_node_put(rem);
+-			of_node_put(endpoint);
+ 			goto err_cleanup;
+ 		}
+ 
+@@ -1577,7 +1575,6 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 
+ 		err = v4l2_fwnode_endpoint_parse(of_fwnode_handle(endpoint),
+ 						 &bus_cfg);
+-		of_node_put(endpoint);
+ 		if (err) {
+ 			dev_err(&pdev->dev, "Could not parse the endpoint\n");
+ 			of_node_put(rem);
+@@ -1608,6 +1605,7 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 	}
+ 
+ done:
++	of_node_put(endpoint);
+ 	pdata->asd_sizes[0] = i;
+ 	pdata->subdev_count = i;
+ 	pdata->card_name = "DA850/OMAP-L138 Video Capture";
+@@ -1615,6 +1613,7 @@ vpif_capture_get_pdata(struct platform_device *pdev)
+ 	return pdata;
+ 
+ err_cleanup:
++	of_node_put(endpoint);
+ 	v4l2_async_notifier_cleanup(&vpif_obj.notifier);
+ 
+ 	return NULL;
 -- 
-Sakari Ailus
-sakari.ailus@linux.intel.com
+2.11.0
+
