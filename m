@@ -2,77 +2,84 @@ Return-Path: <SRS0=b75e=U3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCE37C5B57A
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:01:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6198CC4321A
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:15:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B53F62086D
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:01:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 42AB1208C4
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:15:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbfF1MBC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jun 2019 08:01:02 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:32972 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726957AbfF1MA6 (ORCPT
+        id S1726673AbfF1MPD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jun 2019 08:15:03 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:33211 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726542AbfF1MPC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jun 2019 08:00:58 -0400
-Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 28E63634C89;
-        Fri, 28 Jun 2019 15:00:41 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
-        jacopo@jmondi.org, niklas.soderlund@ragnatech.se
-Subject: [PATCH v4 7/8] ipu3-cio2: Proceed with notifier init even if there are no subdevs
-Date:   Fri, 28 Jun 2019 15:00:53 +0300
-Message-Id: <20190628120054.11818-8-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190628120054.11818-1-sakari.ailus@linux.intel.com>
-References: <20190628120054.11818-1-sakari.ailus@linux.intel.com>
+        Fri, 28 Jun 2019 08:15:02 -0400
+Received: by mail-qk1-f196.google.com with SMTP id r6so4587553qkc.0;
+        Fri, 28 Jun 2019 05:15:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1TAwC61JS4eXqZ82OujM9dlobazLqVa1FIeOqHjXlt0=;
+        b=Yhs8q16ww190EQsZo2yQwQr8JXW0IK8KDmoshG9U73ABjiE+FENH8UCQH4MKnQnRzp
+         vUGK55+3w5xZMPiHlwxnIXWzYEsnLspqvchDdXAoQxk91klCmy+3peLowrsE3iqzrj3A
+         dgnBp/WuyJNTYIcv9PuEX9IcrKGhmvpj6pB/tT7SU6hBwRWfJQC/Qa//y5ZjCqCp82/f
+         9tjQ2pnBU8zJkhkP3DwIRYYB9rw9BL1ANvcoAZj/1uSSqlcigg28PufETdzUkVpFKLYf
+         0OMODFSWoj6w6ifhDW62rdNjjB1NoZ/ubZOuefC/3lVcGTAWcONuNEAA6qrLSvPMT6BJ
+         pWGg==
+X-Gm-Message-State: APjAAAU0qa7x1iyRAUMBISbgF33ea5/UCXbjgKeEYRV9pF04boZ6/cPQ
+        yDruNcCdlGNcnK1o41/ywn81Xaj7K9Mmpln6AjzZUr+N
+X-Google-Smtp-Source: APXvYqwNxgHRzw4z0Rr9Q4yX5hm7cI8WvoLsLEbd5pABPHANQdawqiZmtxqhSSYgYnw4qgfGuspgeXqzbjHf70WenTY=
+X-Received: by 2002:a37:ad12:: with SMTP id f18mr8197153qkm.3.1561724101537;
+ Fri, 28 Jun 2019 05:15:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190313211709.486583-1-arnd@arndb.de> <20190403163444.2psjymq5kb3c6ok6@gofer.mess.org>
+In-Reply-To: <20190403163444.2psjymq5kb3c6ok6@gofer.mess.org>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 28 Jun 2019 14:14:42 +0200
+Message-ID: <CAK8P3a0w0AWCotSSDpLORgOPHq-Cmy7u+AWzs1thU7V_bqNRNw@mail.gmail.com>
+Subject: Re: [PATCH] media: dib0700: fix link error for dibx000_i2c_set_speed
+To:     Sean Young <sean@mess.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The notifier may be registered even if there are no subdevs. Do that to
-simplify the code.
+On Wed, Apr 3, 2019 at 6:34 PM Sean Young <sean@mess.org> wrote:
+>
+> On Wed, Mar 13, 2019 at 10:16:53PM +0100, Arnd Bergmann wrote:
+> > When CONFIG_DVB_DIB9000 is disabled, we can still compile code that
+> > now fails to link against dibx000_i2c_set_speed:
+> >
+> > drivers/media/usb/dvb-usb/dib0700_devices.o: In function `dib01x0_pmu_update.constprop.7':
+> > dib0700_devices.c:(.text.unlikely+0x1c9c): undefined reference to `dibx000_i2c_set_speed'
+> >
+> > The call sites are both through dib01x0_pmu_update(), which gets
+> > passed an 'i2c' pointer from dib9000_get_i2c_master(), which has
+> > returned NULL. Checking this pointer seems to be a good idea
+> > anyway, and it avoids the link failure.
+>
+> So I reproduced the link failure with attached config, and your patch
+> does not fix it.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/pci/intel/ipu3/ipu3-cio2.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+I ran into the old problem I reported once more, and checked my
+original patch, as well as your configuration file, which indeed shows
+the same symptom.
 
-diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-index 373970f812f4..690d3bd08ddd 100644
---- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-+++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
-@@ -1506,9 +1506,10 @@ static int cio2_notifier_init(struct cio2_device *cio2)
- 	if (ret < 0)
- 		goto out;
- 
--	if (list_empty(&cio2->notifier.asd_list))
--		return -ENODEV;	/* no endpoint */
--
-+	/*
-+	 * Proceed even without sensors connected to allow the device to
-+	 * suspend.
-+	 */
- 	cio2->notifier.ops = &cio2_async_ops;
- 	ret = v4l2_async_notifier_register(&cio2->v4l2_dev, &cio2->notifier);
- 	if (ret) {
-@@ -1815,8 +1816,7 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
- 
- 	/* Register notifier for subdevices we care */
- 	r = cio2_notifier_init(cio2);
--	/* Proceed without sensors connected to allow the device to suspend. */
--	if (r && r != -ENODEV)
-+	if (r)
- 		goto fail_cio2_queue_exit;
- 
- 	r = devm_request_irq(&pci_dev->dev, pci_dev->irq, cio2_irq,
--- 
-2.11.0
+Interestingly, the link error after my patch appears to be the result
+of a compiler bug, as the function reference is from dead code that
+should have been eliminated. Sending a replacement patch now.
 
+        Arnd
