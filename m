@@ -2,154 +2,239 @@ Return-Path: <SRS0=b75e=U3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABAEFC4321A
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49018C5B579
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 13:00:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 848A92133F
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:46:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1632520645
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 13:00:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=web.de header.i=@web.de header.b="g9PNJmJj"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="De101qpt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbfF1MqS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jun 2019 08:46:18 -0400
-Received: from mout.web.de ([212.227.17.12]:45947 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726564AbfF1MqR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jun 2019 08:46:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1561725934;
-        bh=WJ4YspNRxX3z4+SabxP1w77yIoFj91Ur5saxynC5GSA=;
-        h=X-UI-Sender-Class:Cc:References:Subject:To:From:Date:In-Reply-To;
-        b=g9PNJmJjZZOXkHInlSomEYyQiPLzKj3zCIJpagWCtlcgl8phIctSchAzD32ccLOxO
-         +py2LaMD8O2JPH8HdQF6j5VzQDQ4IvXHkOi5WHlF7fex0zEzXL7PF+dC0+SGrRIhW6
-         kdeeGjGJtTVqFnqP05JdCofFKbv6Xj5AVnmztvsU=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([78.48.53.73]) by smtp.web.de (mrweb102
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0LbrUu-1iNulW2Lp6-00jH1V; Fri, 28
- Jun 2019 14:45:34 +0200
-Cc:     Hyun Kwon <hyun.kwon@xilinx.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Yi Wang <wang.yi59@zte.com.cn>
-References: <1561690876-20977-2-git-send-email-wen.yang99@zte.com.cn>
-Subject: Re: [PATCH 1/3] media: xilinx: fix leaked of_node references
-To:     Wen Yang <wen.yang99@zte.com.cn>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-From:   Markus Elfring <Markus.Elfring@web.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <e01175e4-1e4d-e9d7-5e5b-ec6e2f7b5065@web.de>
-Date:   Fri, 28 Jun 2019 14:45:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <1561690876-20977-2-git-send-email-wen.yang99@zte.com.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:G8aN08LqWn3qrvB5aUgyBJbcbpZl8TRocsYrYRjl7gs3ye8Z/36
- wAxJRNRENs5q/h2Tndz8JblC/vSaXX5hArq6qHKcn9Y88FLcubEYJGlmIBE3OnQRzx1ql+E
- O9DOK43cBEcJx8SIWpsUkfMaLhKrAmTeyTajcvI4KFV8ilM5M06bVBtA8Fhfptl//Ln+a6j
- KgY+5ARVQZLTixtOHtfzw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zorQ4pzKHVk=:JC/JZi7fYOGJQQMNDBJH3P
- V7+NcblUcaqbLN6RSr4UFjx9JW06UE+QxsEB+wr+G2h1JxZDrfedFofOiunS1eqahU4Ss+4pf
- HOPMhm11BXeTSwDRQLYxz/2RiY+oSKDPwqF/ZcEr6QsKk5PIQ1b8xPFK2w9E4Vi3u5gM5Kou0
- sFtUa9sO2e+GssW7S3x5PgadSouVx9lGcwhD2TfEGkGIvnb4jIpBsD+W8fIh2AFBLBDnJdhKV
- ZakAuE58hwf7Ppc/xnnpCIdF9NtpiN6n/U/Eh4M1BV4MOyxMB9u4l/qpZoX7eQVsNdOUzAoBt
- 8WvZn2e5T4e0m83p37LYdLbNX7vOlhlpZ2GZyfQsE7FLKQ38f6zcdPsgTH+dPmNrcqZ3grlE0
- coAW4/2NzaZPB7U550xNBYvkLViT+dDlhxAXRQJsFMF2VmoDppp67b4+GQ2sBwdQquEMcsgCn
- xLYIQ3G9IZW86c38L5d9Gi8L3kuJMJ7YhcHgmSbh+Ae0nGF4N7stoEb1h0Nu2ZRwKfQuJLLKD
- 3PLxW4M07BEUgy1maG1Q7UC8GD232ejEY4eP3MuNXVGS31jvqZ6eCKsTzB7VbaqZWlJVMkS41
- +ZnnBkfFwGakgHqEWI1kSVx6iBCsrN75GrAOyjukxV6FX5Uf3VZpsH1UBHg93Aiwa6b1m6KvX
- 6wQg+tSKCDhyOkoyifGX/7ME4yAosi/iiJEE+YFnxLRjp4iie1bawKssmTf1nA43NPVIMXVd2
- bpRJLXgT5JfTvYyGblPmaq0J5zmgUwzX2Ntb+nWSXIavAnLmFiCm4SQyeMuH3iMI2xn7UfD2H
- XemhlSsk+upCgmjNq/dND3ehK7pFDh3lfqIjjO2vEDROVhTC0T1GnRRLG8gX9f7M9coZblwuI
- bIEU9TKjoEzUPMwffPVfBwOhKN/TgwufdMqnuQ0L5C06tqJIVNbHLkK6be/8QHadzLfvhfFwc
- 50R3ys4wVaL9v16nrTS5dFRr7jU4zwiBtk9TUm0S7Pcx9ZPnIlTbQD1Sc6PkAvB4wmY9thkte
- skzTQsHl3TCcPDcAeOHR7yXMF6HzjJo5G376QcWGMI8ynYiE6Q24oL6YrjzQgJQAR+sSa6vF2
- qllMX5NJIRk3io995E3m79VlzjJ9+zXZXrW
+        id S1727162AbfF1NAa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jun 2019 09:00:30 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:53955 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727142AbfF1NA3 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 28 Jun 2019 09:00:29 -0400
+Received: by mail-wm1-f66.google.com with SMTP id x15so9039878wmj.3
+        for <linux-media@vger.kernel.org>; Fri, 28 Jun 2019 06:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=GusbBynaCqv/R7PuXUh9f4fYgooqYn7QcUElwV3IoHw=;
+        b=De101qptdsYL0UicblH+0MmEOsOwGd+uz5zS5yDQ7qsD6kvBZYe/p2vCHilDdo/kyW
+         roUJ+dw0+3tBeymz8w0ZRPrYuVgOrzi6pyZIQxUNmXVcIk8xpLw3jSoGeopa9+5zPPTK
+         P+xdVmMx4llnfrZUDtUnH3UFf24VDmU/TJ9j5hDHt4KxdL1RWUT9hmIY8H4UbOF6ivvj
+         0QnmGV476jPRt2QNUNKPUEGCBL2F5/VOc9oO8703SM5fNxwZHRIe9q93+mDVsBzlcp4o
+         7y6NXhMXdWhEh/oXqp0bTX0dNoRp0RTEEN2h+gvNgEmTwfFBpEP3lxHToapNIdFg1p+V
+         MMww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=GusbBynaCqv/R7PuXUh9f4fYgooqYn7QcUElwV3IoHw=;
+        b=YydnXWscK2ktAA5wH5s2UIxKlFRJvAW00bQ23y+MHqZx1+OgdM65caj98ksTXS5QNM
+         UXBfabpTkUkl5c35mbZwQ4L4eufSHSScin3uQkZBsV4N1RtH6DDeT9QPi3jiCwHO/a5p
+         85BHex/iZT0Y6eUV2PqMWCAq/aNrOrM10GW5smMCUoVn+HBwwPr2wg6joDvHuKF48EZV
+         vaaypqy1KxWRaG8xZTwlFH+aKOD6Gff4nmg1yVM8ZuzybxbPGYWlEhiLvZfzPe/YrI28
+         5YgbEEOBv9q+k3l13Upx3O++dJ7B7uDOZA7ymzJLfLP3ksXEbIRLUYZ4WYY7Md7s01Jg
+         4gLw==
+X-Gm-Message-State: APjAAAVPS6k5xenz6k++oGWx5YioGAlEeLIOg2lZz4prpK396MmnwQuI
+        zcmJc6vF2en8Vf7NctnyVAUp8NTjnJ8=
+X-Google-Smtp-Source: APXvYqy9IA/jZh85Sd5TI3JjPUEhztL9jxR/hNYIUVg+erIRX6stbueqHYOe92u5XALzqsqDswq1DA==
+X-Received: by 2002:a1c:407:: with SMTP id 7mr7658444wme.113.1561726827460;
+        Fri, 28 Jun 2019 06:00:27 -0700 (PDT)
+Received: from localhost.localdomain ([37.157.136.206])
+        by smtp.gmail.com with ESMTPSA id w20sm3717174wra.96.2019.06.28.06.00.26
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 28 Jun 2019 06:00:26 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Vikash Garodia <vgarodia@codeaurora.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH v2 02/11] venus: helpers: export few helper functions
+Date:   Fri, 28 Jun 2019 15:59:53 +0300
+Message-Id: <20190628130002.24293-3-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190628130002.24293-1-stanimir.varbanov@linaro.org>
+References: <20190628130002.24293-1-stanimir.varbanov@linaro.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-> +++ b/drivers/media/platform/xilinx/xilinx-tpg.c
-> @@ -713,10 +713,13 @@  static int xtpg_parse_of(struct xtpg_device *xtpg=
-)
->  	struct device_node *port;
->  	unsigned int nports =3D 0;
->  	bool has_endpoint =3D false;
-> +	int ret =3D 0;
->
->  	ports =3D of_get_child_by_name(node, "ports");
-> -	if (ports =3D=3D NULL)
-> +	if (ports =3D=3D NULL) {
+Here we export few helper function to use them from decoder to
+implement more granular control needed for stateful Codec API
+compliance.
 
-The script =E2=80=9Ccheckpatch.pl=E2=80=9D can point information out like =
-=E2=80=9CComparison to NULL
-could be written =E2=80=A6=E2=80=9D.
-Thus fix the affected source code place.
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+---
+ drivers/media/platform/qcom/venus/helpers.c | 29 ++++++++++++---------
+ drivers/media/platform/qcom/venus/helpers.h |  6 +++++
+ 2 files changed, 23 insertions(+), 12 deletions(-)
 
-+	if (!ports) {
+diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+index 71b06dfc6dc4..63af69acc068 100644
+--- a/drivers/media/platform/qcom/venus/helpers.c
++++ b/drivers/media/platform/qcom/venus/helpers.c
+@@ -79,7 +79,7 @@ bool venus_helper_check_codec(struct venus_inst *inst, u32 v4l2_pixfmt)
+ }
+ EXPORT_SYMBOL_GPL(venus_helper_check_codec);
+ 
+-static int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
++int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
+ {
+ 	struct intbuf *buf;
+ 	int ret = 0;
+@@ -100,6 +100,7 @@ static int venus_helper_queue_dpb_bufs(struct venus_inst *inst)
+ fail:
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(venus_helper_queue_dpb_bufs);
+ 
+ int venus_helper_free_dpb_bufs(struct venus_inst *inst)
+ {
+@@ -278,7 +279,7 @@ static const unsigned int intbuf_types_4xx[] = {
+ 	HFI_BUFFER_INTERNAL_PERSIST_1,
+ };
+ 
+-static int intbufs_alloc(struct venus_inst *inst)
++int venus_helper_intbufs_alloc(struct venus_inst *inst)
+ {
+ 	const unsigned int *intbuf;
+ 	size_t arr_sz, i;
+@@ -304,11 +305,13 @@ static int intbufs_alloc(struct venus_inst *inst)
+ 	intbufs_unset_buffers(inst);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(venus_helper_intbufs_alloc);
+ 
+-static int intbufs_free(struct venus_inst *inst)
++int venus_helper_intbufs_free(struct venus_inst *inst)
+ {
+ 	return intbufs_unset_buffers(inst);
+ }
++EXPORT_SYMBOL_GPL(venus_helper_intbufs_free);
+ 
+ static u32 load_per_instance(struct venus_inst *inst)
+ {
+@@ -339,7 +342,7 @@ static u32 load_per_type(struct venus_core *core, u32 session_type)
+ 	return mbs_per_sec;
+ }
+ 
+-static int load_scale_clocks(struct venus_core *core)
++int venus_helper_load_scale_clocks(struct venus_core *core)
+ {
+ 	const struct freq_tbl *table = core->res->freq_tbl;
+ 	unsigned int num_rows = core->res->freq_tbl_size;
+@@ -388,6 +391,7 @@ static int load_scale_clocks(struct venus_core *core)
+ 	dev_err(dev, "failed to set clock rate %lu (%d)\n", freq, ret);
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(venus_helper_load_scale_clocks);
+ 
+ static void fill_buffer_desc(const struct venus_buffer *buf,
+ 			     struct hfi_buffer_desc *bd, bool response)
+@@ -472,7 +476,7 @@ static bool is_dynamic_bufmode(struct venus_inst *inst)
+ 	return caps->cap_bufs_mode_dynamic;
+ }
+ 
+-static int session_unregister_bufs(struct venus_inst *inst)
++int venus_helper_unregister_bufs(struct venus_inst *inst)
+ {
+ 	struct venus_buffer *buf, *n;
+ 	struct hfi_buffer_desc bd;
+@@ -489,6 +493,7 @@ static int session_unregister_bufs(struct venus_inst *inst)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(venus_helper_unregister_bufs);
+ 
+ static int session_register_bufs(struct venus_inst *inst)
+ {
+@@ -1009,8 +1014,8 @@ void venus_helper_vb2_stop_streaming(struct vb2_queue *q)
+ 	if (inst->streamon_out & inst->streamon_cap) {
+ 		ret = hfi_session_stop(inst);
+ 		ret |= hfi_session_unload_res(inst);
+-		ret |= session_unregister_bufs(inst);
+-		ret |= intbufs_free(inst);
++		ret |= venus_helper_unregister_bufs(inst);
++		ret |= venus_helper_intbufs_free(inst);
+ 		ret |= hfi_session_deinit(inst);
+ 
+ 		if (inst->session_error || core->sys_error)
+@@ -1021,7 +1026,7 @@ void venus_helper_vb2_stop_streaming(struct vb2_queue *q)
+ 
+ 		venus_helper_free_dpb_bufs(inst);
+ 
+-		load_scale_clocks(core);
++		venus_helper_load_scale_clocks(core);
+ 		INIT_LIST_HEAD(&inst->registeredbufs);
+ 	}
+ 
+@@ -1041,7 +1046,7 @@ int venus_helper_vb2_start_streaming(struct venus_inst *inst)
+ 	struct venus_core *core = inst->core;
+ 	int ret;
+ 
+-	ret = intbufs_alloc(inst);
++	ret = venus_helper_intbufs_alloc(inst);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1049,7 +1054,7 @@ int venus_helper_vb2_start_streaming(struct venus_inst *inst)
+ 	if (ret)
+ 		goto err_bufs_free;
+ 
+-	load_scale_clocks(core);
++	venus_helper_load_scale_clocks(core);
+ 
+ 	ret = hfi_session_load_res(inst);
+ 	if (ret)
+@@ -1070,9 +1075,9 @@ int venus_helper_vb2_start_streaming(struct venus_inst *inst)
+ err_unload_res:
+ 	hfi_session_unload_res(inst);
+ err_unreg_bufs:
+-	session_unregister_bufs(inst);
++	venus_helper_unregister_bufs(inst);
+ err_bufs_free:
+-	intbufs_free(inst);
++	venus_helper_intbufs_free(inst);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(venus_helper_vb2_start_streaming);
+diff --git a/drivers/media/platform/qcom/venus/helpers.h b/drivers/media/platform/qcom/venus/helpers.h
+index 153783687a0c..70288dc860ff 100644
+--- a/drivers/media/platform/qcom/venus/helpers.h
++++ b/drivers/media/platform/qcom/venus/helpers.h
+@@ -9,6 +9,7 @@
+ #include <media/videobuf2-v4l2.h>
+ 
+ struct venus_inst;
++struct venus_core;
+ 
+ bool venus_helper_check_codec(struct venus_inst *inst, u32 v4l2_pixfmt);
+ struct vb2_v4l2_buffer *venus_helper_find_buf(struct venus_inst *inst,
+@@ -53,4 +54,9 @@ int venus_helper_alloc_dpb_bufs(struct venus_inst *inst);
+ int venus_helper_free_dpb_bufs(struct venus_inst *inst);
+ int venus_helper_power_enable(struct venus_core *core, u32 session_type,
+ 			      bool enable);
++int venus_helper_intbufs_alloc(struct venus_inst *inst);
++int venus_helper_intbufs_free(struct venus_inst *inst);
++int venus_helper_queue_dpb_bufs(struct venus_inst *inst);
++int venus_helper_unregister_bufs(struct venus_inst *inst);
++int venus_helper_load_scale_clocks(struct venus_core *core);
+ #endif
+-- 
+2.17.1
 
-
->  		ports =3D node;
-> +		of_node_get(ports);
-> +	}
->
->  	for_each_child_of_node(ports, port) {
->  		const struct xvip_video_format *format;
-
-
-Regards,
-Markus
