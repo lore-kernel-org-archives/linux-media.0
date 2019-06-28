@@ -6,29 +6,29 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0562C4321A
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2506BC5B579
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:01:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8F11C208C4
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:01:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 066DA2133F
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 12:01:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbfF1MA7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jun 2019 08:00:59 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:32940 "EHLO
+        id S1726966AbfF1MBA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jun 2019 08:01:00 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:32974 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726952AbfF1MA6 (ORCPT
+        by vger.kernel.org with ESMTP id S1726958AbfF1MA7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jun 2019 08:00:58 -0400
+        Fri, 28 Jun 2019 08:00:59 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 6013B634C86;
-        Fri, 28 Jun 2019 15:00:40 +0300 (EEST)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 601D2634C8A;
+        Fri, 28 Jun 2019 15:00:41 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl, laurent.pinchart@ideasonboard.com,
         jacopo@jmondi.org, niklas.soderlund@ragnatech.se
-Subject: [PATCH v4 4/8] omap3isp: Rework OF endpoint parsing
-Date:   Fri, 28 Jun 2019 15:00:50 +0300
-Message-Id: <20190628120054.11818-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH v4 8/8] ipu3-cio2: Parse information from firmware without using callbacks
+Date:   Fri, 28 Jun 2019 15:00:54 +0300
+Message-Id: <20190628120054.11818-9-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20190628120054.11818-1-sakari.ailus@linux.intel.com>
 References: <20190628120054.11818-1-sakari.ailus@linux.intel.com>
@@ -37,383 +37,171 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rework OF endpoint parsing for the omap3isp driver. This does add some
-lines of code. The benefits are still clear:
+Instead of using the convenience function
+v4l2_async_notifier_parse_fwnode_endpoints(), parse the endpoints and set
+up the async sub-devices without using callbacks. While this adds a little
+bit of code, it makes parsing the endpoints quite a bit more simple and
+gives more control to the driver over the process. The parsing assumes
+D-PHY instead of letting the V4L2 fwnode framework guess it.
 
-- the great complication related to callbacks in endpoint parsing is gone;
-  instead endpoints are obtained port by port and
-
-- endpoints may now have a default bus configuration which was not
-  possible while using callbacks. This driver does not benefit from that
-  feature, but as the omap3isp is one of the exemplary drivers, this works
-  as an example for driver developers.
-
-Depends-on: ("device property: Add fwnode_graph_get_endpoint_by_id")
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
 ---
- drivers/media/platform/omap3isp/isp.c | 331 ++++++++++++++++++++--------------
- 1 file changed, 197 insertions(+), 134 deletions(-)
+ drivers/media/pci/intel/ipu3/ipu3-cio2.c | 93 +++++++++++++++++---------------
+ 1 file changed, 50 insertions(+), 43 deletions(-)
 
-diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index 008933beebe0..5db4e3c8cd6a 100644
---- a/drivers/media/platform/omap3isp/isp.c
-+++ b/drivers/media/platform/omap3isp/isp.c
-@@ -2017,136 +2017,6 @@ enum isp_of_phy {
- 	ISP_OF_PHY_CSIPHY2,
+diff --git a/drivers/media/pci/intel/ipu3/ipu3-cio2.c b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+index 690d3bd08ddd..f4d71767be11 100644
+--- a/drivers/media/pci/intel/ipu3/ipu3-cio2.c
++++ b/drivers/media/pci/intel/ipu3/ipu3-cio2.c
+@@ -1475,36 +1475,52 @@ static const struct v4l2_async_notifier_operations cio2_async_ops = {
+ 	.complete = cio2_notifier_complete,
  };
  
--static int isp_fwnode_parse(struct device *dev,
--			    struct v4l2_fwnode_endpoint *vep,
--			    struct v4l2_async_subdev *asd)
--{
--	struct isp_async_subdev *isd =
--		container_of(asd, struct isp_async_subdev, asd);
--	struct isp_bus_cfg *buscfg = &isd->bus;
--	bool csi1 = false;
--	unsigned int i;
--
--	dev_dbg(dev, "parsing endpoint %pOF, interface %u\n",
--		to_of_node(vep->base.local_fwnode), vep->base.port);
--
--	switch (vep->base.port) {
--	case ISP_OF_PHY_PARALLEL:
--		buscfg->interface = ISP_INTERFACE_PARALLEL;
--		buscfg->bus.parallel.data_lane_shift =
--			vep->bus.parallel.data_shift;
--		buscfg->bus.parallel.clk_pol =
--			!!(vep->bus.parallel.flags
--			   & V4L2_MBUS_PCLK_SAMPLE_FALLING);
--		buscfg->bus.parallel.hs_pol =
--			!!(vep->bus.parallel.flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
--		buscfg->bus.parallel.vs_pol =
--			!!(vep->bus.parallel.flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
--		buscfg->bus.parallel.fld_pol =
--			!!(vep->bus.parallel.flags & V4L2_MBUS_FIELD_EVEN_LOW);
--		buscfg->bus.parallel.data_pol =
--			!!(vep->bus.parallel.flags & V4L2_MBUS_DATA_ACTIVE_LOW);
--		buscfg->bus.parallel.bt656 = vep->bus_type == V4L2_MBUS_BT656;
--		break;
--
--	case ISP_OF_PHY_CSIPHY1:
--	case ISP_OF_PHY_CSIPHY2:
--		switch (vep->bus_type) {
--		case V4L2_MBUS_CCP2:
--		case V4L2_MBUS_CSI1:
--			dev_dbg(dev, "CSI-1/CCP-2 configuration\n");
--			csi1 = true;
--			break;
--		case V4L2_MBUS_CSI2_DPHY:
--			dev_dbg(dev, "CSI-2 configuration\n");
--			csi1 = false;
--			break;
--		default:
--			dev_err(dev, "unsupported bus type %u\n",
--				vep->bus_type);
--			return -EINVAL;
--		}
--
--		switch (vep->base.port) {
--		case ISP_OF_PHY_CSIPHY1:
--			if (csi1)
--				buscfg->interface = ISP_INTERFACE_CCP2B_PHY1;
--			else
--				buscfg->interface = ISP_INTERFACE_CSI2C_PHY1;
--			break;
--		case ISP_OF_PHY_CSIPHY2:
--			if (csi1)
--				buscfg->interface = ISP_INTERFACE_CCP2B_PHY2;
--			else
--				buscfg->interface = ISP_INTERFACE_CSI2A_PHY2;
--			break;
--		}
--		if (csi1) {
--			buscfg->bus.ccp2.lanecfg.clk.pos =
--				vep->bus.mipi_csi1.clock_lane;
--			buscfg->bus.ccp2.lanecfg.clk.pol =
--				vep->bus.mipi_csi1.lane_polarity[0];
--			dev_dbg(dev, "clock lane polarity %u, pos %u\n",
--				buscfg->bus.ccp2.lanecfg.clk.pol,
--				buscfg->bus.ccp2.lanecfg.clk.pos);
--
--			buscfg->bus.ccp2.lanecfg.data[0].pos =
--				vep->bus.mipi_csi1.data_lane;
--			buscfg->bus.ccp2.lanecfg.data[0].pol =
--				vep->bus.mipi_csi1.lane_polarity[1];
--
--			dev_dbg(dev, "data lane polarity %u, pos %u\n",
--				buscfg->bus.ccp2.lanecfg.data[0].pol,
--				buscfg->bus.ccp2.lanecfg.data[0].pos);
--
--			buscfg->bus.ccp2.strobe_clk_pol =
--				vep->bus.mipi_csi1.clock_inv;
--			buscfg->bus.ccp2.phy_layer = vep->bus.mipi_csi1.strobe;
--			buscfg->bus.ccp2.ccp2_mode =
--				vep->bus_type == V4L2_MBUS_CCP2;
--			buscfg->bus.ccp2.vp_clk_pol = 1;
--
--			buscfg->bus.ccp2.crc = 1;
--		} else {
--			buscfg->bus.csi2.lanecfg.clk.pos =
--				vep->bus.mipi_csi2.clock_lane;
--			buscfg->bus.csi2.lanecfg.clk.pol =
--				vep->bus.mipi_csi2.lane_polarities[0];
--			dev_dbg(dev, "clock lane polarity %u, pos %u\n",
--				buscfg->bus.csi2.lanecfg.clk.pol,
--				buscfg->bus.csi2.lanecfg.clk.pos);
--
--			buscfg->bus.csi2.num_data_lanes =
--				vep->bus.mipi_csi2.num_data_lanes;
--
--			for (i = 0; i < buscfg->bus.csi2.num_data_lanes; i++) {
--				buscfg->bus.csi2.lanecfg.data[i].pos =
--					vep->bus.mipi_csi2.data_lanes[i];
--				buscfg->bus.csi2.lanecfg.data[i].pol =
--					vep->bus.mipi_csi2.lane_polarities[i + 1];
--				dev_dbg(dev,
--					"data lane %u polarity %u, pos %u\n", i,
--					buscfg->bus.csi2.lanecfg.data[i].pol,
--					buscfg->bus.csi2.lanecfg.data[i].pos);
--			}
--			/*
--			 * FIXME: now we assume the CRC is always there.
--			 * Implement a way to obtain this information from the
--			 * sensor. Frame descriptors, perhaps?
--			 */
--			buscfg->bus.csi2.crc = 1;
--		}
--		break;
--
--	default:
--		dev_warn(dev, "%pOF: invalid interface %u\n",
--			 to_of_node(vep->base.local_fwnode), vep->base.port);
+-static int cio2_fwnode_parse(struct device *dev,
+-			     struct v4l2_fwnode_endpoint *vep,
+-			     struct v4l2_async_subdev *asd)
++static int cio2_parse_firmware(struct cio2_device *cio2)
+ {
+-	struct sensor_async_subdev *s_asd =
+-			container_of(asd, struct sensor_async_subdev, asd);
++	unsigned int i;
++	int ret;
+ 
+-	if (vep->bus_type != V4L2_MBUS_CSI2_DPHY) {
+-		dev_err(dev, "Only CSI2 bus type is currently supported\n");
 -		return -EINVAL;
 -	}
--
--	return 0;
--}
--
- static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
- {
- 	struct isp_device *isp = container_of(async, struct isp_device,
-@@ -2176,6 +2046,201 @@ static int isp_subdev_notifier_complete(struct v4l2_async_notifier *async)
- 	return media_device_register(&isp->media_dev);
- }
- 
-+static void isp_parse_of_parallel_endpoint(struct device *dev,
-+					   struct v4l2_fwnode_endpoint *vep,
-+					   struct isp_bus_cfg *buscfg)
-+{
-+	buscfg->interface = ISP_INTERFACE_PARALLEL;
-+	buscfg->bus.parallel.data_lane_shift = vep->bus.parallel.data_shift;
-+	buscfg->bus.parallel.clk_pol =
-+		!!(vep->bus.parallel.flags & V4L2_MBUS_PCLK_SAMPLE_FALLING);
-+	buscfg->bus.parallel.hs_pol =
-+		!!(vep->bus.parallel.flags & V4L2_MBUS_VSYNC_ACTIVE_LOW);
-+	buscfg->bus.parallel.vs_pol =
-+		!!(vep->bus.parallel.flags & V4L2_MBUS_HSYNC_ACTIVE_LOW);
-+	buscfg->bus.parallel.fld_pol =
-+		!!(vep->bus.parallel.flags & V4L2_MBUS_FIELD_EVEN_LOW);
-+	buscfg->bus.parallel.data_pol =
-+		!!(vep->bus.parallel.flags & V4L2_MBUS_DATA_ACTIVE_LOW);
-+	buscfg->bus.parallel.bt656 = vep->bus_type == V4L2_MBUS_BT656;
-+}
-+
-+static void isp_parse_of_csi2_endpoint(struct device *dev,
-+				       struct v4l2_fwnode_endpoint *vep,
-+				       struct isp_bus_cfg *buscfg)
-+{
-+	unsigned int i;
-+
-+	buscfg->bus.csi2.lanecfg.clk.pos = vep->bus.mipi_csi2.clock_lane;
-+	buscfg->bus.csi2.lanecfg.clk.pol =
-+		vep->bus.mipi_csi2.lane_polarities[0];
-+	dev_dbg(dev, "clock lane polarity %u, pos %u\n",
-+		buscfg->bus.csi2.lanecfg.clk.pol,
-+		buscfg->bus.csi2.lanecfg.clk.pos);
-+
-+	buscfg->bus.csi2.num_data_lanes = vep->bus.mipi_csi2.num_data_lanes;
-+
-+	for (i = 0; i < buscfg->bus.csi2.num_data_lanes; i++) {
-+		buscfg->bus.csi2.lanecfg.data[i].pos =
-+			vep->bus.mipi_csi2.data_lanes[i];
-+		buscfg->bus.csi2.lanecfg.data[i].pol =
-+			vep->bus.mipi_csi2.lane_polarities[i + 1];
-+		dev_dbg(dev,
-+			"data lane %u polarity %u, pos %u\n", i,
-+			buscfg->bus.csi2.lanecfg.data[i].pol,
-+			buscfg->bus.csi2.lanecfg.data[i].pos);
-+	}
-+	/*
-+	 * FIXME: now we assume the CRC is always there. Implement a way to
-+	 * obtain this information from the sensor. Frame descriptors, perhaps?
-+	 */
-+	buscfg->bus.csi2.crc = 1;
-+}
-+
-+static void isp_parse_of_csi1_endpoint(struct device *dev,
-+				       struct v4l2_fwnode_endpoint *vep,
-+				       struct isp_bus_cfg *buscfg)
-+{
-+	buscfg->bus.ccp2.lanecfg.clk.pos = vep->bus.mipi_csi1.clock_lane;
-+	buscfg->bus.ccp2.lanecfg.clk.pol = vep->bus.mipi_csi1.lane_polarity[0];
-+	dev_dbg(dev, "clock lane polarity %u, pos %u\n",
-+		buscfg->bus.ccp2.lanecfg.clk.pol,
-+	buscfg->bus.ccp2.lanecfg.clk.pos);
-+
-+	buscfg->bus.ccp2.lanecfg.data[0].pos = vep->bus.mipi_csi1.data_lane;
-+	buscfg->bus.ccp2.lanecfg.data[0].pol =
-+		vep->bus.mipi_csi1.lane_polarity[1];
-+
-+	dev_dbg(dev, "data lane polarity %u, pos %u\n",
-+		buscfg->bus.ccp2.lanecfg.data[0].pol,
-+		buscfg->bus.ccp2.lanecfg.data[0].pos);
-+
-+	buscfg->bus.ccp2.strobe_clk_pol = vep->bus.mipi_csi1.clock_inv;
-+	buscfg->bus.ccp2.phy_layer = vep->bus.mipi_csi1.strobe;
-+	buscfg->bus.ccp2.ccp2_mode = vep->bus_type == V4L2_MBUS_CCP2;
-+	buscfg->bus.ccp2.vp_clk_pol = 1;
-+
-+	buscfg->bus.ccp2.crc = 1;
-+}
-+
-+static int isp_alloc_isd(struct isp_async_subdev **isd,
-+			 struct isp_bus_cfg **buscfg)
-+{
-+	struct isp_async_subdev *__isd;
-+
-+	__isd = kzalloc(sizeof(*__isd), GFP_KERNEL);
-+	if (!__isd)
-+		return -ENOMEM;
-+
-+	*isd = __isd;
-+	*buscfg = &__isd->bus;
-+
-+	return 0;
-+}
-+
-+static struct {
-+	u32 phy;
-+	u32 csi2_if;
-+	u32 csi1_if;
-+} isp_bus_interfaces[2] = {
-+	{ ISP_OF_PHY_CSIPHY1,
-+	  ISP_INTERFACE_CSI2C_PHY1, ISP_INTERFACE_CCP2B_PHY1 },
-+	{ ISP_OF_PHY_CSIPHY2,
-+	  ISP_INTERFACE_CSI2A_PHY2, ISP_INTERFACE_CCP2B_PHY2 },
-+};
-+
-+static int isp_parse_of_endpoints(struct isp_device *isp)
-+{
-+	struct fwnode_handle *ep;
-+	struct isp_async_subdev *isd = NULL;
-+	struct isp_bus_cfg *buscfg;
-+	unsigned int i;
-+
-+	ep = fwnode_graph_get_endpoint_by_id(
-+		dev_fwnode(isp->dev), ISP_OF_PHY_PARALLEL, 0,
-+		FWNODE_GRAPH_ENDPOINT_NEXT);
-+
-+	if (ep) {
-+		struct v4l2_fwnode_endpoint vep = {
-+			.bus_type = V4L2_MBUS_PARALLEL
-+		};
-+		int ret;
-+
-+		dev_dbg(isp->dev, "parsing parallel interface\n");
-+
-+		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-+
-+		if (!ret) {
-+			ret = isp_alloc_isd(&isd, &buscfg);
-+			if (ret)
-+				return ret;
-+		}
-+
-+		if (!ret) {
-+			isp_parse_of_parallel_endpoint(isp->dev, &vep, buscfg);
-+			ret = v4l2_async_notifier_add_fwnode_remote_subdev(
-+				&isp->notifier, ep, &isd->asd);
-+		}
-+
-+		fwnode_handle_put(ep);
-+		if (ret)
-+			kfree(isd);
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(isp_bus_interfaces); i++) {
++	for (i = 0; i < CIO2_NUM_PORTS; i++) {
 +		struct v4l2_fwnode_endpoint vep = {
 +			.bus_type = V4L2_MBUS_CSI2_DPHY
 +		};
-+		int ret;
-+
++		struct sensor_async_subdev *s_asd = NULL;
++		struct fwnode_handle *ep;
+ 
+-	s_asd->csi2.port = vep->base.port;
+-	s_asd->csi2.lanes = vep->bus.mipi_csi2.num_data_lanes;
 +		ep = fwnode_graph_get_endpoint_by_id(
-+			dev_fwnode(isp->dev), isp_bus_interfaces[i].phy, 0,
++			dev_fwnode(&cio2->pci_dev->dev), i, 0,
 +			FWNODE_GRAPH_ENDPOINT_NEXT);
-+
+ 
+-	return 0;
+-}
 +		if (!ep)
 +			continue;
-+
-+		dev_dbg(isp->dev, "parsing serial interface %u, node %pOF\n", i,
-+			to_of_node(ep));
-+
-+		ret = isp_alloc_isd(&isd, &buscfg);
-+		if (ret)
-+			return ret;
-+
+ 
+-static int cio2_notifier_init(struct cio2_device *cio2)
+-{
+-	int ret;
 +		ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-+		if (!ret) {
-+			buscfg->interface = isp_bus_interfaces[i].csi2_if;
-+			isp_parse_of_csi2_endpoint(isp->dev, &vep, buscfg);
-+		} else if (ret == -ENXIO) {
-+			vep = (struct v4l2_fwnode_endpoint)
-+				{ .bus_type = V4L2_MBUS_CSI1 };
-+			ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-+
-+			if (ret == -ENXIO) {
-+				vep = (struct v4l2_fwnode_endpoint)
-+					{ .bus_type = V4L2_MBUS_CCP2 };
-+				ret = v4l2_fwnode_endpoint_parse(ep, &vep);
-+			}
-+			if (!ret) {
-+				buscfg->interface =
-+					isp_bus_interfaces[i].csi1_if;
-+				isp_parse_of_csi1_endpoint(isp->dev, &vep,
-+							   buscfg);
-+			}
-+		}
-+
-+		if (!ret)
-+			ret = v4l2_async_notifier_add_fwnode_remote_subdev(
-+				&isp->notifier, ep, &isd->asd);
-+
-+		fwnode_handle_put(ep);
 +		if (ret)
-+			kfree(isd);
-+	}
-+
-+	return 0;
-+}
-+
- static const struct v4l2_async_notifier_operations isp_subdev_notifier_ops = {
- 	.complete = isp_subdev_notifier_complete,
- };
-@@ -2226,14 +2291,12 @@ static int isp_probe(struct platform_device *pdev)
- 	mutex_init(&isp->isp_mutex);
- 	spin_lock_init(&isp->stat_lock);
- 	v4l2_async_notifier_init(&isp->notifier);
-+	isp->dev = &pdev->dev;
++			goto err_parse;
+ 
+-	v4l2_async_notifier_init(&cio2->notifier);
++		s_asd = kzalloc(sizeof(*s_asd), GFP_KERNEL);
++		if (!s_asd) {
++			ret = -ENOMEM;
++			goto err_parse;
++		}
  
 -	ret = v4l2_async_notifier_parse_fwnode_endpoints(
--		&pdev->dev, &isp->notifier, sizeof(struct isp_async_subdev),
--		isp_fwnode_parse);
-+	ret = isp_parse_of_endpoints(isp);
- 	if (ret < 0)
- 		goto error;
+-		&cio2->pci_dev->dev, &cio2->notifier,
+-		sizeof(struct sensor_async_subdev),
+-		cio2_fwnode_parse);
+-	if (ret < 0)
+-		goto out;
++		s_asd->csi2.port = vep.base.port;
++		s_asd->csi2.lanes = vep.bus.mipi_csi2.num_data_lanes;
++
++		ret = v4l2_async_notifier_add_fwnode_remote_subdev(
++			&cio2->notifier, ep, &s_asd->asd);
++		if (ret)
++			goto err_parse;
++
++		fwnode_handle_put(ep);
++
++		continue;
++
++err_parse:
++		fwnode_handle_put(ep);
++		kfree(s_asd);
++		return ret;
++	}
  
--	isp->dev = &pdev->dev;
- 	isp->ref_count = 0;
+ 	/*
+ 	 * Proceed even without sensors connected to allow the device to
+@@ -1512,25 +1528,13 @@ static int cio2_notifier_init(struct cio2_device *cio2)
+ 	 */
+ 	cio2->notifier.ops = &cio2_async_ops;
+ 	ret = v4l2_async_notifier_register(&cio2->v4l2_dev, &cio2->notifier);
+-	if (ret) {
++	if (ret)
+ 		dev_err(&cio2->pci_dev->dev,
+ 			"failed to register async notifier : %d\n", ret);
+-		goto out;
+-	}
+-
+-out:
+-	if (ret)
+-		v4l2_async_notifier_cleanup(&cio2->notifier);
  
- 	ret = dma_coerce_mask_and_coherent(isp->dev, DMA_BIT_MASK(32));
+ 	return ret;
+ }
+ 
+-static void cio2_notifier_exit(struct cio2_device *cio2)
+-{
+-	v4l2_async_notifier_unregister(&cio2->notifier);
+-	v4l2_async_notifier_cleanup(&cio2->notifier);
+-}
+-
+ /**************** Queue initialization ****************/
+ static const struct media_entity_operations cio2_media_ops = {
+ 	.link_validate = v4l2_subdev_link_validate,
+@@ -1814,16 +1818,18 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
+ 	if (r)
+ 		goto fail_v4l2_device_unregister;
+ 
++	v4l2_async_notifier_init(&cio2->notifier);
++
+ 	/* Register notifier for subdevices we care */
+-	r = cio2_notifier_init(cio2);
++	r = cio2_parse_firmware(cio2);
+ 	if (r)
+-		goto fail_cio2_queue_exit;
++		goto fail_clean_notifier;
+ 
+ 	r = devm_request_irq(&pci_dev->dev, pci_dev->irq, cio2_irq,
+ 			     IRQF_SHARED, CIO2_NAME, cio2);
+ 	if (r) {
+ 		dev_err(&pci_dev->dev, "failed to request IRQ (%d)\n", r);
+-		goto fail;
++		goto fail_clean_notifier;
+ 	}
+ 
+ 	pm_runtime_put_noidle(&pci_dev->dev);
+@@ -1831,9 +1837,9 @@ static int cio2_pci_probe(struct pci_dev *pci_dev,
+ 
+ 	return 0;
+ 
+-fail:
+-	cio2_notifier_exit(cio2);
+-fail_cio2_queue_exit:
++fail_clean_notifier:
++	v4l2_async_notifier_unregister(&cio2->notifier);
++	v4l2_async_notifier_cleanup(&cio2->notifier);
+ 	cio2_queues_exit(cio2);
+ fail_v4l2_device_unregister:
+ 	v4l2_device_unregister(&cio2->v4l2_dev);
+@@ -1852,7 +1858,8 @@ static void cio2_pci_remove(struct pci_dev *pci_dev)
+ 	struct cio2_device *cio2 = pci_get_drvdata(pci_dev);
+ 
+ 	media_device_unregister(&cio2->media_dev);
+-	cio2_notifier_exit(cio2);
++	v4l2_async_notifier_unregister(&cio2->notifier);
++	v4l2_async_notifier_cleanup(&cio2->notifier);
+ 	cio2_queues_exit(cio2);
+ 	cio2_fbpt_exit_dummy(cio2);
+ 	v4l2_device_unregister(&cio2->v4l2_dev);
 -- 
 2.11.0
 
