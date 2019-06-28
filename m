@@ -2,244 +2,132 @@ Return-Path: <SRS0=b75e=U3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B583C4321A
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 13:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ABFB8C4321A
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 13:13:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 26535208E3
-	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 13:01:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R2iSA2g3"
+	by mail.kernel.org (Postfix) with ESMTP id 8A0242083B
+	for <linux-media@archiver.kernel.org>; Fri, 28 Jun 2019 13:13:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbfF1NA0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 28 Jun 2019 09:00:26 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:36624 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726720AbfF1NA0 (ORCPT
+        id S1726653AbfF1NNK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 28 Jun 2019 09:13:10 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:57531 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726589AbfF1NNK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 28 Jun 2019 09:00:26 -0400
-Received: by mail-wm1-f67.google.com with SMTP id u8so8902080wmm.1
-        for <linux-media@vger.kernel.org>; Fri, 28 Jun 2019 06:00:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=phd6grQaPeAKpxGCc8e9yaooyxfgwldd6Z0yhWR1iak=;
-        b=R2iSA2g3Ls9YJZ8155Z6dZbfM9TXzEMWMS8nJZVcJwAWIG+jOf2gWrQFMRlujxAKnc
-         0S5hQ8sAXBaT27zBNs7azSbhGlAz2jdL9M2KvTiQyW8le+Uez+cU1fnicdQpdjaO58NN
-         lE/sONL5XKDfuTFVZ4Z/jp0AIKOgvBTLhC9mDbHaoH48pLEEO7Yt+zcPQLsbusf5VEoV
-         CSmt6RxIJ5w31LA1KWX+Nhw90WMLPKNkCaAcEq7VExv3/1yncVTwoGJoF9I1ibdQkf94
-         gllASUZ7vkStpFWOD13XIbCzA6BvKHaavRiFg3YgbeAc6rrBbvwDLEZbvDKyVafxNQAv
-         IJWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=phd6grQaPeAKpxGCc8e9yaooyxfgwldd6Z0yhWR1iak=;
-        b=Nmh7mDy8BynUFLh70RBgdKUThyW4Qqp4FtfJCQfeR4ZnBexNIL33JLrOoTPXewuC/a
-         fPeGxjEQc47eHjTvANu3Kdbt8OFLESxoaxnyB2JiSem6+jrmFnXxvCA5l/lvD4bC0uQ7
-         ORtoOxRIMDhohVM/c4VVzxddHd4zpJQQnMpYqPwLP7co9SmpE2/Fc+YREJPzNtf4bXo1
-         yQEv3geCDTZJyqvaCMKRSZuWr0gC0zh7AWcmuLhYqJ7Nhbz50sx2Q0dA/xeMN9Z2XS2a
-         xzAEVQ0Jq/+BQbYG3yNGWA1HPQqa5L28mlHlyZSV9r8yqKvcHBTRszf+NvAdBn0T1Gy6
-         rinA==
-X-Gm-Message-State: APjAAAU2pwGm1Z6Kv6AeCk/UP183M79hl6telVe17TtQ4mA21H3QZMhO
-        UjA7PUOBCJ2W8+wZE20jkkcf0HWawIM=
-X-Google-Smtp-Source: APXvYqxOm3l1AGHuh7dTn+a9WVN6btU7RpwaLearjhiH/vNsp/s0ppDemaLZPZU95gRHvk7Fa1n4mQ==
-X-Received: by 2002:a1c:1a06:: with SMTP id a6mr7223207wma.128.1561726822914;
-        Fri, 28 Jun 2019 06:00:22 -0700 (PDT)
-Received: from localhost.localdomain ([37.157.136.206])
-        by smtp.gmail.com with ESMTPSA id w20sm3717174wra.96.2019.06.28.06.00.21
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 28 Jun 2019 06:00:22 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Vikash Garodia <vgarodia@codeaurora.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Subject: [PATCH v2 00/11] Venus stateful Codec API
-Date:   Fri, 28 Jun 2019 15:59:51 +0300
-Message-Id: <20190628130002.24293-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Fri, 28 Jun 2019 09:13:10 -0400
+Received: from [192.168.2.10] ([46.9.252.75])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id gqgahmB0KSfvXgqgdhS3hH; Fri, 28 Jun 2019 15:13:07 +0200
+Subject: Re: [PATCH 00/31] staging: bcm2835-camera: Improvements
+To:     Stefan Wahren <wahrenst@gmx.net>, Eric Anholt <eric@anholt.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
+        linux-media@vger.kernel.org
+References: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <a276361b-a111-aa2e-ce9b-37ad2c1646dc@xs4all.nl>
+Date:   Fri, 28 Jun 2019 15:13:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <1561661788-22744-1-git-send-email-wahrenst@gmx.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfPX0wKdI6YJjmGSGjyolqCwjE4HsrSV3REhpkyUvMFCR4n8JtR3FopzDG9Y912VSq0dqocUiM1X1dMWc4BD0rWXi160fiXbAAdQM/8xoSwg+k2NqBQbd
+ gbmwYyYuP2QVFrMLPDFbpXemgFBds82dLVpV8IXZC0s2cdUwWplyIgkQcUsrY7/QnoRuXcvcQW2qeX9mv4P686/udBCY4t4COT1iB2sbHZpX5FGpRH+XBpal
+ mwqWp5E2OIvTnE1ReXAe9GfKZeH0AG6W+iVsrnMp5crLIpgQlZDmtBHrYHI9BmVv/Ap6ozlNGcrwt3a2I7HXJzXSh39tUz+vDmL3zaGjFfJm7T/KoM1Ov2U2
+ zHHyxHhBIY4EbxG+szAt93uc/Ci3bFwUQb3wPubFbnbesPE4VzxuR+nYjj26odnOuZnobMNrqD6IDlQgpp6pj3nNhKeLR4xIShGog2vt7YXIC+MQTslz2ns1
+ VODv9BhcqN1uAM6V
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+On 6/27/19 8:55 PM, Stefan Wahren wrote:
+> This is an attempt to help Dave Stevenson to get all the fixes and
+> improvements of the bcm2835-camera driver into mainline.
+> 
+> Mostly i only polished the commit logs for upstream.
+> 
+> The series based on the latest bugfix V2 of staging: bcm2835-camera: Resto=
+> re
+> return behavior of ctrl_set_bitrate().
+> 
+> Dave Stevenson (31):
+>   staging: bcm2835-camera: Ensure H264 header bytes get a sensible
+>     timestamp
+>   staging: bcm2835-camera: Check the error for REPEAT_SEQ_HEADER
+>   staging: bcm2835-camera: Replace spinlock protecting context_map with
+>     mutex
+>   staging: bcm2835-camera: Do not bulk receive from service thread
+>   staging: bcm2835-camera: Correctly denote key frames in encoded data
+>   staging: bcm2835-camera: Return early on errors
+>   staging: bcm2835-camera: Remove dead email addresses
+>   staging: bcm2835-camera: Fix comment style violations.
+>   staging: bcm2835-camera: Fix spacing around operators
+>   staging: bcm2835-camera: Reduce length of enum names
+>   staging: bcm2835-camera: Fix multiple line dereference errors
+>   staging: bcm2835-camera: Fix brace style issues.
+>   staging: bcm2835-camera: Fix missing lines between items
+>   staging: bcm2835-camera: Fix open parenthesis alignment
+>   staging: bcm2835-camera: Ensure all buffers are returned on disable
+>   staging: bcm2835-camera: Remove check of the number of buffers
+>     supplied
+>   staging: bcm2835-camera: Handle empty EOS buffers whilst streaming
+>   staging: bcm2835-camera: Set sequence number correctly
+>   staging: bcm2835-camera: Ensure timestamps never go backwards.
+>   staging: bcm2835-camera: Add multiple inclusion protection to headers
+>   staging: bcm2835-camera: Unify header inclusion defines
+>   staging: bcm2835-camera: Fix multiple assignments should be avoided
+>   staging: bcm2835-camera: Fix up mmal-parameters.h
+>   staging: bcm2835-camera: Use enums for max value in controls
+>   staging: bcm2835-camera: Correct V4L2_CID_COLORFX_CBCR behaviour
+>   staging: bcm2835-camera: Remove/amend some obsolete comments
+>   staging: mmal-vchiq: Avoid use of bool in structures
+>   staging: bcm2835-camera: Fix stride on RGB3/BGR3 formats
+>   staging: bcm2835-camera: Add sanity checks for queue_setup/CREATE_BUFS
+>   staging: bcm2835-camera: Set the field value within ach buffer
 
-Here is v2 of the Venus transition to stateful codec API
-compliance. The v2 can be found at [1].
+ach -> each
 
-Changes since v1:
- * codec_state is now enum
- * dropped IS_OUT and IS_CAP macros and use vb2_start_streaming_called()
- * corrected g_fmt and reconfig logic
- * s/vdec_dst_buffers_done/vdec_cancel_dst_buffers
- * use v4l2_m2m_ioctl_try_decoder_cmd M2M helper
- * various fixes to make v4l2-compliance pass the streaming test
+>   staging: bcm2835-camera: Correct ctrl min/max/step/def to 64bit
+> 
+>  .../vc04_services/bcm2835-camera/bcm2835-camera.c  | 378 ++++++++++++----=
+> -----
+>  .../vc04_services/bcm2835-camera/bcm2835-camera.h  |  34 +-
+>  .../vc04_services/bcm2835-camera/controls.c        | 184 +++++-----
+>  .../vc04_services/bcm2835-camera/mmal-common.h     |  12 +-
+>  .../vc04_services/bcm2835-camera/mmal-encodings.h  |   9 +-
+>  .../vc04_services/bcm2835-camera/mmal-msg-common.h |   9 +-
+>  .../vc04_services/bcm2835-camera/mmal-msg-format.h | 104 +++---
+>  .../vc04_services/bcm2835-camera/mmal-msg-port.h   | 133 ++++----
+>  .../vc04_services/bcm2835-camera/mmal-msg.h        | 150 ++++----
+>  .../vc04_services/bcm2835-camera/mmal-parameters.h | 286 +++++++++-------
+>  .../vc04_services/bcm2835-camera/mmal-vchiq.c      | 159 +++++----
+>  .../vc04_services/bcm2835-camera/mmal-vchiq.h      |  22 +-
+>  12 files changed, 826 insertions(+), 654 deletions(-)
+> 
+> =2D-
+> 2.7.4
+> 
 
-To test the streaming with --stream-from-hdr v4l2-compliance option I have
-to make the following hack (it is needed because the size of decoder input
-buffers (OUTPUT queue) is not enough for the h264 bitstream, i.e the driver
-default resolution is 64x64 but the h264 stream is 320x240):
+This series looks good. Others made some comments that should be addressed,
+and the H264 changes should, I think, be dealt with in a separate patch
+series.
 
-diff --git a/utils/v4l2-compliance/v4l2-test-buffers.cpp b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-index c71dcf65b721..dc0fcf20d3e4 100644
---- a/utils/v4l2-compliance/v4l2-test-buffers.cpp
-+++ b/utils/v4l2-compliance/v4l2-test-buffers.cpp
-@@ -1294,6 +1294,11 @@ int testMmap(struct node *node, unsigned frame_count, enum poll_mode pollmode)
-                                        fmt.s_sizeimage(fmt.g_sizeimage(p) * 2, p);
-                        }
-                        fail_on_test(q.create_bufs(node, 1, &fmt));
-+
-+                       for (unsigned p = 0; p < fmt.g_num_planes(); p++)
-+                               fmt.s_sizeimage(fmt.g_sizeimage(p) * 2, p);
-+                       node->s_fmt(fmt);
-+
-                        fail_on_test(q.reqbufs(node, 2));
-                }
-                if (v4l_type_is_output(type))
- 
-... and with it the output of the test is:
+I guess this should go in via Greg? When you make a v2 (excluding the H264
+changes, and incorporating Dan's comments), then you can add my:
 
-dragonboard-410c:~/v4l-utils$ v4l2-compliance --stream-from-hdr test-25fps.h264.hdr -s250 -d /dev/video1
-v4l2-compliance SHA: 08fed4d0edb1492b91d9d1054c36fed95c372eaa, 64 bits                                                                                                                                             
-                                                                                                                                                                                                                   
-Compliance test for qcom-venus device /dev/video1:
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-Driver Info:
-        Driver name      : qcom-venus
-        Card type        : Qualcomm Venus video decoder
-        Bus info         : platform:qcom-venus
-        Driver version   : 5.2.0
-        Capabilities     : 0x84204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-                Device Capabilities
-        Device Caps      : 0x04204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-        Detected Stateful Decoder
+Thanks!
 
-Required ioctls:
-        test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-        test second /dev/video1 open: OK
-        test VIDIOC_QUERYCAP: OK
-        test VIDIOC_G/S_PRIORITY: OK
-        test for unlimited opens: OK
-
-Debug ioctls:
-        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-        test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-        test VIDIOC_ENUMAUDIO: OK (Not Supported)
-        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDIO: OK (Not Supported)
-        Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-        Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-        test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-        test VIDIOC_QUERYCTRL: OK
-        test VIDIOC_G/S_CTRL: OK
-        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-        Standard Controls: 9 Private Controls: 0
-
-Format ioctls:
-        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-        test VIDIOC_G/S_PARM: OK (Not Supported)
-        test VIDIOC_G_FBUF: OK (Not Supported)
-        test VIDIOC_G_FMT: OK
-        test VIDIOC_TRY_FMT: OK
-        test VIDIOC_S_FMT: OK
-        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-        test Cropping: OK
-        test Composing: OK
-        test Scaling: OK
-
-Codec ioctls:
-        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-        test VIDIOC_(TRY_)DECODER_CMD: OK
-
-Buffer ioctls:
-        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-        test VIDIOC_EXPBUF: OK
-        test Requests: OK (Not Supported)
-
-Test input 0:
-
-Streaming ioctls:
-        test read/write: OK (Not Supported)
-        test blocking wait: OK
-        Video Capture Multiplanar: Captured 251 buffers   
-        test MMAP (select): OK
-        Video Capture Multiplanar: Captured 251 buffers   
-        test MMAP (epoll): OK
-        test USERPTR (select): OK (Not Supported)
-        test DMABUF: Cannot test, specify --expbuf-device
-
-Total for qcom-venus device /dev/video1: 49, Succeeded: 49, Failed: 0, Warnings: 0
-
-regards,
-Stan
-
-[1] https://lore.kernel.org/lkml/0fc547f46d2ff90a2a8adf957cca7297@codeaurora.org/T/
-
-Malathi Gottam (1):
-  venus: venc: amend buffer size for bitstream plane
-
-Stanimir Varbanov (10):
-  venus: helpers: export few helper functions
-  venus: hfi: add type argument to hfi flush function
-  venus: hfi: export few HFI functions
-  venus: hfi: return an error if session_init is already called
-  venus: helpers: add three more helper functions
-  venus: vdec_ctrls: get real minimum buffers for capture
-  venus: vdec: allow bigger sizeimage set by clients
-  venus: make decoder compliant with stateful codec API
-  venus: helpers: handle correctly vbuf field
-  venus: dec: populate properly timestamps and flags for capture buffers
-
- drivers/media/platform/qcom/venus/core.h      |  32 +-
- drivers/media/platform/qcom/venus/helpers.c   | 199 ++++++-
- drivers/media/platform/qcom/venus/helpers.h   |  12 +
- drivers/media/platform/qcom/venus/hfi.c       |  11 +-
- drivers/media/platform/qcom/venus/hfi.h       |   2 +-
- drivers/media/platform/qcom/venus/vdec.c      | 537 ++++++++++++++----
- .../media/platform/qcom/venus/vdec_ctrls.c    |   7 +-
- drivers/media/platform/qcom/venus/venc.c      |  13 +-
- 8 files changed, 656 insertions(+), 157 deletions(-)
-
--- 
-2.17.1
-
+	Hans
