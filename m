@@ -8,31 +8,31 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FF69C5B579
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2A3AC4321A
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 06ABA21726
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79101208E3
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="A3Ac58Gt"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="AiKFmEsK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbfF2MO3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 29 Jun 2019 08:14:29 -0400
-Received: from mout.gmx.net ([212.227.17.20]:44097 "EHLO mout.gmx.net"
+        id S1726993AbfF2MOa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 29 Jun 2019 08:14:30 -0400
+Received: from mout.gmx.net ([212.227.17.22]:34649 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726906AbfF2MO2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 29 Jun 2019 08:14:28 -0400
+        id S1726963AbfF2MOa (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 29 Jun 2019 08:14:30 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561810450;
-        bh=lqb0GYVfx1zv6fO8FMllOzy0xCPuxLT1hKd8sJfD9HU=;
+        s=badeba3b8450; t=1561810451;
+        bh=rIM3Cz1WAKPV0BYtLr0jELwNn1BK7VirmbeWmMyEk3Q=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=A3Ac58GtFkjzDPTsuHI66QgLUsSHx7UXS+Be9ozhe/MTT5ZX+NA8C5n0NLLBRVV9g
-         qF014PXESDBFwlKvzH8T6VDJ4UPdEcgV4fTKWEosp6mwkSvR0zTOJy0G5dLXgcAP2K
-         T51SfbBpXHmrMuo63ZE0akhEBl1bemQeQzYYTpeI=
+        b=AiKFmEsKy4deUoljE7ODH/oe/LorZoaNke4syWVP47iEzWjsVWIfv9JJiNkYP3huL
+         1yLYiMnL0m+cuHz5ZEekT4QciIaO6Hxr/rA8Fa/DuRWK9WIPEVB/SzaeytQBZdd0QR
+         ADVvdczRUmXXcY483JoVu6/+81VEUYq52m77urLE=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx103 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0LfTC1-1iMsrA34qf-00p35n; Sat, 29 Jun 2019 14:14:09 +0200
+ 0M1FAK-1iaGs7066y-00tDwY; Sat, 29 Jun 2019 14:14:11 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 12/29] staging: bcm2835-camera: Fix missing lines between items
-Date:   Sat, 29 Jun 2019 14:13:27 +0200
-Message-Id: <1561810410-8829-13-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH V2 15/29] staging: bcm2835-camera: Remove check of the number of buffers supplied
+Date:   Sat, 29 Jun 2019 14:13:30 +0200
+Message-Id: <1561810410-8829-16-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
 References: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:AouCbZc7Dgcy2VJXo5BzkXG8P6sTu0cIpPoIeko7pitM1iIcSTq
- 6J2Sv/bRRNbyszHl1LN0b+FgDjflg311LO0lzMVZyNhPU83CGbIrOXnct+wPzZb9d4nkvbs
- /n1J2GjbM637uSOpIKwUHCKfuZkPhHaO0N79w+se5CTamoz8thAPdxL7VXtFdFVmUi+8gG8
- RVvu+eQlPXbAVlAbG0DgQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:O5qRPkUdzdU=:4Ie1ZpOk3U4XKRXkw3H19L
- fhuy7yZLkBAIvZpSNsLhW75FvEu1Lp1zW0TemM7Z37qocomGNkP2wptdFKnBSBSk7yMUugcws
- 1NeYqh1lVs7o8NlT6a+sBPfVNex8NdsWrOAkui7LqY1ZCNdb86zioun51QU0PzSWf3b2m2HJn
- q0X2z9g6PCQg707MSL6ugU025dtFGmuUFpLWuHEpiAJLHnm49/7iy9xlSNz/MUb/LjFkXYbv5
- XxD4A8w6eXJSRXUP+ufxisyOUCl6CuijtSdYEZ/iaQpj32dArROu1W7A9N2BPZn2MXOVK/nZ0
- e7xWgPOIr74YdG8b+rVUg4l+e8wBk+LhBUBTkMhHdsehk5mQ43uo6T5sdsc2/nz/WACbe7rnm
- B/2HcniqzXXW3LBAlkSM6nipukleeRieX8zVb/JEF+RlExalbjZ8NPZ/cKHahV0vD8lZEhEVu
- l3A8tKyQHs/Cm/pveWEGYNbKX2l9Gziev5oMOR9pMQaxU606Jyvw8GgdERkh3wW1IBO4+epw0
- 0TKIL3bmcxhmz2iK9xYV4Q3+l/k1HvHNNddiEh7GKbDMQGviL7EYN32NM8dO0XRN+IxBpUlm1
- vfY2vRBbA6/M4+F44IxbKpbfQAJW8lmO2HMkzCPA77yv/hDs1zPYq137AJEq4p5MXd9a2D95q
- Q8qWbduO/fSBwP65DToYnt5S4j4On6Vw4Zs+JV19rQ/FO6Ztkc83nLIuSHnMKjnuzTMLnczU7
- gT3bLGmgGCujJcSgBIaa9OPXYbd7D0pocSGqeBFSNNQ9otyPSK6BMQ9KK7ML+WVNJBZZWa+YD
- mJQv27Wmzt4ggpFel2E2njXX5VvDd6x7Irdfer+tOYe/gzK+4VcIqPQwdlgS/F26VCXfjRZtz
- 3ZxpP6tNhV0eqDNF62xumX7unnaHOjzyP9oljAwQdOytozkZ0Czza+CZ7iNYrVBDon1w5Zs5b
- zfQcxd2LHYVEHjZfHtNOCitGjNBaY40hO/3FzYrYTHp/Oci6nKkhzzv1Dydzb4SvpfmY8lUJQ
- iPductemKgh8BnWDp4Dng7QT4OgfvViMMjDwh8v4WT2OWYWlQ3uaIXf6v/wi0AlY6B6z/hZ7k
- nWxcwEqAQAhtjM=
+X-Provags-ID: V03:K1:tad7qdgkQl4RWv6RpdHYArIVesPr8zvsMAid0YbAv94c5hbQZFf
+ Xd5Wce7JOaEknJSu9kRrrtJBpHF+eqb4DTfJL/pheuXLMQUPcGw43RRw5zLL6Omw2ur6bN4
+ o70QIbb6S3xVJyz0iOiY5nhZ5CeI7GIeheQeNJh96uxLYWH4QCL5i9dEI7rpzCouTjXO8l3
+ 21wAWCJJQvHAROw8zXW/Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:J27WurzvVEU=:mKcxB0F3zxrgBpjD3Hm/Yh
+ XrRWggz/+56tCDUSUgXhJU+XhsfVW0BzFp7s6Pd4Wr4lHdoH2px1FBtlJmTd2sjEd3paZ4TCW
+ pW82mbDcNqgpCPkVZyXwLk6bq+PnIzW9lNXC3GPAVcYsl9jjB42yH1a7SwFr51PdVNEOTTOrs
+ +yqWG6BpEk4wugZJJkBwjhdl7RU+segMOjTw4FiKUv6gZdXYI+iUP/ijP6LMHQXh1Mw+LOlD/
+ ZAcdSD8sDWP0zhIM3F+hHRD1cTfgdBZFNSyN9ISWuKneK88I0mEUlr9in3o49cvtTQoaNLau8
+ jWq/ckN7qTSkIvDOlZmOVAQOmpzy4j2qKX8ORLDV9kWCUadd0TSEynuhAkgvg/Bg2fFdm3IF6
+ C+CUgtF+KB3uxOFOCrP07he/8Jcrty2QkvCp2f9Os6co50NJrHgeBfZMnU2SP5gCJjtZ09Mc7
+ V7YGixvu/yd1u7K/IQXMs2EeEMuUJmbnrLgBgKDcx/X62NJEoctvBEPW9zyd7h1QwiIg3Bafe
+ 8HHwNRXoiOEFA4ZAFzYAwM+yQD5XZh+xqx/7gVbZI1+7YATSp6HN1Zsk87xUd7OYJYCEaoW3i
+ 3YaT7KdrMjkAHFjcXOnLSvoevtS7e2xeOT9TsGxC5bUsqdoLyJkevL1Ns0qfns1ynq8h0jsal
+ B9BsmNNYpNkAE/0Sbl43Pu44FAiu9H37So6JVqgHkT2P+w/E8QLyg/T9x/1uBX5UfoOQndVPq
+ Hg5e7rdJJECpG9DfESwFZaWEdX7VyMrw4UdJPKtGCCSfeBfPk0fBTEWmyOXAHdCOYNiz4XKbv
+ UEAn8zUzAetnvjo3yLAL0dDWV5zOIFZetCSr8ylv3VlgMz/2tanDzqOtYKLH/BxePOabOpxc1
+ o3/sJwcE0DvuhRkKW1B3FnkRJr5yv32qKd7f18oULfnh5aW+eIJcnT5WPgBbvhzqISQOrx0Rb
+ LXlUalqil235FrDmg28UaBORWQTQOntFRdq2PvRpEAnLqMgvWO8ECCsGBjjEzet3fWJNkprp+
+ 5vzRvOqScVxz89POZjl9bVnwyOu9Pd6QyBZUGAqvZdTsdNaOwDHW5a1okBvlCc7MKCBNZ4oHF
+ dBlNoY721NWP+U=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,30 +77,48 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Fix checkpatch errors for missing blank lines after variable
-or structure declarations.
+Before commit "staging: bcm2835-camera: Remove V4L2/MMAL buffer remapping"
+there was a need to ensure that there were sufficient buffers supplied fro=
+m
+the user to cover those being sent to the VPU (always 1).
 
+Now the buffers are linked 1:1 between MMAL and V4L2,
+therefore there is no need for that check, and indeed it is wrong
+as there is no need to submit all the buffers before starting streaming.
+
+Fixes: 938416707071 ("staging: bcm2835-camera: Remove V4L2/MMAL buffer rem=
+apping")
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 =2D--
- drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h=
- b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-index 9bd262d..d9f0411 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
-@@ -128,6 +128,7 @@ int set_framerate_params(struct bm2835_mmal_dev *dev);
- 		(pix_fmt)->pixelformat, (pix_fmt)->bytesperline,	\
- 		(pix_fmt)->sizeimage, (pix_fmt)->colorspace, (pix_fmt)->priv); \
- }
-+
- #define v4l2_dump_win_format(level, debug, dev, win_fmt, desc)	\
- {	\
- 	v4l2_dbg(level, debug, dev,	\
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c b/d=
+rivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
+index 4d63176..59eb812 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
+@@ -1338,16 +1338,6 @@ static int port_enable(struct vchiq_mmal_instance *=
+instance,
+ 	if (port->enabled)
+ 		return 0;
+
+-	/* ensure there are enough buffers queued to cover the buffer headers */
+-	if (port->buffer_cb) {
+-		hdr_count =3D 0;
+-		list_for_each(buf_head, &port->buffers) {
+-			hdr_count++;
+-		}
+-		if (hdr_count < port->current_buffer.num)
+-			return -ENOSPC;
+-	}
+-
+ 	ret =3D port_action_port(instance, port,
+ 			       MMAL_MSG_PORT_ACTION_TYPE_ENABLE);
+ 	if (ret)
 =2D-
 2.7.4
 
