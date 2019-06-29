@@ -2,147 +2,126 @@ Return-Path: <SRS0=n4nG=U4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1702C4321A
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:06:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A7E5C5B57A
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A0FF52086D
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:06:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CEBAF21743
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y0J1+75N"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="Jf73JgXL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbfF2MGT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 29 Jun 2019 08:06:19 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:46773 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726832AbfF2MGS (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 29 Jun 2019 08:06:18 -0400
-Received: by mail-lj1-f194.google.com with SMTP id v24so8508871ljg.13
-        for <linux-media@vger.kernel.org>; Sat, 29 Jun 2019 05:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7TKQBGVeJu0V7i4jo68D+am2nJ6itLmxQim2/MjQy7c=;
-        b=Y0J1+75NHivm0jvjG35/xojKIFVBG7sZfg18nnJ0nhH56Ga6rLlTgSB6UWi4moOhCp
-         St0T+ztlFa7HiUrwBsRgQK5rjiNS/h1QRM4OoCeSE5s5lNVJKUaxx6HsRp75BnZY3TWc
-         FnIZbF0FBZ+GnU/QRpjU387yht8fMsBiGk5GAYaoYezFONAaUVrvdNHa6VRqFIEBXpqh
-         ZoM78iMkATdACnxQIvHWnVtn91Zt7gf4izMSS+/ZTwCbpUFlie2wjH8wH7m8lIFCnz9a
-         XH/w9PGwrJN3NAh+vKqh+fuT/3QwBdUs8QAYN+vscdT3rQ7hkkGmxhhzfYhbDdSTmVpo
-         uWDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7TKQBGVeJu0V7i4jo68D+am2nJ6itLmxQim2/MjQy7c=;
-        b=RDkCQxaZnHnZTdr5guTeamakEu/djXFP7O38BXzF9q2036sNc7DnESNOK6zPmkvcnC
-         rwRTc+p7CU8LdC/u8W3Vx9S88/TmVw79BE3Dam+9S7NpZgItljx3+TNsouS9Z1Vk0ZtB
-         AOUUiI7KBLvysabD+Cu8MQ64l1tmRpIKQn+4OLxZZaVaOCGMEzBmTIK8rnhlAkGE372L
-         yUqFX4iSC9srtyCPbFxzCrX0TrzA/OX6H4rJD8fpBkeHHg8r7QMGxKcj3HGL3H2CZ1rM
-         dZfyjcQocBarTZtKvhIXRv19kx22ELOw2dblfgx3MZ1nuTD1W2qgMbnIhe2cOAaonBpk
-         mtKg==
-X-Gm-Message-State: APjAAAWCUvYuV8/cYwmB7ySpwpVGUEPHb7SWFeOzNKr/Uz8zuniqPEDx
-        7sGSvqqPVTPZARBviInVYzE=
-X-Google-Smtp-Source: APXvYqzXkIDVsJm6U1OOuV9HL9jGMM+jiQavzENPEYWRGhRKqBkCl8/6TQLkEstqSPs3HlbYNDcM5Q==
-X-Received: by 2002:a2e:298a:: with SMTP id p10mr8709911ljp.74.1561809977050;
-        Sat, 29 Jun 2019 05:06:17 -0700 (PDT)
-Received: from z50.localnet (93-181-165-181.internetia.net.pl. [93.181.165.181])
-        by smtp.gmail.com with ESMTPSA id t21sm1325477lfl.17.2019.06.29.05.06.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 29 Jun 2019 05:06:16 -0700 (PDT)
-From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: Re: [PATCH for v5.3] v4l2-subdev: fix regression in check_pad()
-Date:   Sat, 29 Jun 2019 14:06:14 +0200
-Message-ID: <6794762.LFFAoRDyN6@z50>
-In-Reply-To: <5686be05-660e-ee01-06a0-5505479c34c8@xs4all.nl>
-References: <5686be05-660e-ee01-06a0-5505479c34c8@xs4all.nl>
-MIME-Version: 1.0
+        id S1726958AbfF2MO3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 29 Jun 2019 08:14:29 -0400
+Received: from mout.gmx.net ([212.227.17.20]:51391 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726909AbfF2MO2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 29 Jun 2019 08:14:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1561810449;
+        bh=DRr7lscebZ8wctMokVnVvWYIcPpsVGDYxVCVDlgab8Y=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Jf73JgXLpu8P1OqTc1ysI742Dp0LsmYDy3Yw/BJDEjcjOFA7ek79lVphxS7fIZHMU
+         3C9WWmAXEGLjT8ube1N4xz4lFfbdoQddRtwap8ohiNb7K6MX7LBNKu0J3Dn4meChgy
+         ZMDX/GSQyk8HoEyX6kQCge4wmXSt0ysomBP+gRB4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
+ (mrgmx103 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 0LfTC1-1iMsrB3eoL-00p35n; Sat, 29 Jun 2019 14:14:09 +0200
+From:   Stefan Wahren <wahrenst@gmx.net>
+To:     Eric Anholt <eric@anholt.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
+        linux-media@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH V2 10/29] staging: bcm2835-camera: Fix multiple line dereference errors
+Date:   Sat, 29 Jun 2019 14:13:25 +0200
+Message-Id: <1561810410-8829-11-git-send-email-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
+References: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
+X-Provags-ID: V03:K1:mIp1k00YLYIRTQPgciwE7hDEy8fupJdyLOgpvG+ZfkBfWRhYiKK
+ 1B0oaaIJL/kqiFJmDpE0dfUdRMrRQgkbIKy/V7QTD2kAYIrp1T5WtP5HwVy2Ac3ZieJwJew
+ BW5g8PtgmP7z0oumhPN+lOolZOvwijqvBIZVfPCFlcIx02Nmtq8+ghOSLMSigc+vDJU+ze5
+ lwnIhbS+fMLP79hGE9Obg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Tym/dFtHE4A=:OinOAHIJJfCiT0JGpKiVS6
+ 7tMQHsZ5Lk2yhUAou1py6asMsBoRqXt2Of+eFscNozQFRxvm1gCdY6YBjrmL0dfvmq60fePy4
+ DVV3XciQb5IDvNfMIexplpaSdN8y/M0m8hbZk5LbVn0HgER+0q1nDRiONl9/F3KFXJjFDFoW7
+ KVkfe2+EX9hsLKaZ7L3e/gaup0SDnliYzIAN+6GwZuXc9V71D8cQN/FM4meEwlXcKALqJGywl
+ NN2hPn/Cuz01SdC2UPIyMnjtbLb8sBEFoyB4CpfSacWKXgbWXy7lW77JBnRi0oSihfI+fHDMB
+ +eAQSd+V+hn1WSaa3he0BetbwPvckNiaTUaq/KQxp5St68xIX30JSjPBzv4f7UARO7q9bgn1J
+ 3NCTzWXbLIDtwMGYFOC3H+G1miFr5hj52L6nNRegzw9HG/eXjHsWFCAs2FJWEoLq1xqeYeY1i
+ 5yqAbNqREkjY0HHmMpioayAfyMabSb1piZBTPoenQLEHLpFd4XCeaZSak4VeoD0cZkuE4/BBX
+ aqg1rHN8nOy/ueiScBFKjC6Tiwd4prRK0UCi++vIeihqwY1ykSeeRt7t5p0Fi3s/GKEFFLHjq
+ juaBpKiWp76hlzMAzfgicA7zF4Z2IU3ijLIsM/sdnUZ9CfrVaIg41I14ujMl4DjgMHTs4O8rs
+ I7yw/yKC4K1r+Hanjzkuo00SLtFH/YJDwyixeDYuzTmdsm7dDYQtG8WXq3RorwjuAVsetHFU8
+ vzCDBP/guic3CRX9pvQ0zvSI9XD+lK6pe0/ex36lpSyrUq6uX2Kv/zZXotUdbXuImtHP38Q8X
+ qNP32Jnjl4TFiKznLHXnefLQ/Ea16d45853LHRTqtx+/gsjZ4pRgsW5A1x1BZiUAVVs5qbNK/
+ ySla07DiMiLaQCeqHB6h8/9es1IRVodazoW4dp+AVWtvUPSmII76hm7zHj6CENETiI3Xmm+/2
+ bDm1sYedAw/tm2tNDychX7iqVvZ/8xynwNNkXqkmjjr9NEZu+q8eyHWdAJZfovvSfmJ33lnnm
+ R56EdO6dQoZAJDQUZ+jznUNM8Rs6zV0sUsT2XfplWhnx+flBC/y8D2gdTR/C/aR3ugF8nWMcb
+ LugtI+f3Fh0tXU=
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-On Saturday, June 29, 2019 12:00:24 P.M. CEST Hans Verkuil wrote:
-> sd->entity.graph_obj.mdev can be NULL when this function is called, and
-> that breaks existing drivers (rcar-vin, but probably others as well).
->=20
-> Check if sd->entity.num_pads is non-zero instead since that doesn't depend
-> on mdev.
->=20
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Reported-by: Niklas S=F6derlund <niklas.soderlund+renesas@ragnatech.se>
-> Fixes: a8fa55078a77 ("media: v4l2-subdev: Verify arguments in
-> v4l2_subdev_call()") ---
-> diff --git a/drivers/media/v4l2-core/v4l2-subdev.c
-> b/drivers/media/v4l2-core/v4l2-subdev.c index 21fb90d66bfc..bc32fc1e0c0b
-> 100644
-> --- a/drivers/media/v4l2-core/v4l2-subdev.c
-> +++ b/drivers/media/v4l2-core/v4l2-subdev.c
-> @@ -124,16 +124,11 @@ static inline int check_which(__u32 which)
->  static inline int check_pad(struct v4l2_subdev *sd, __u32 pad)
->  {
->  #if defined(CONFIG_MEDIA_CONTROLLER)
-> -	if (sd->entity.graph_obj.mdev) {
-> -		if (pad >=3D sd->entity.num_pads)
-> -			return -EINVAL;
-> -		return 0;
-> -	}
-> +	if (sd->entity.num_pads)
+Fix checkpatch errors "Avoid multiple line dereference"
 
-This reverts a change introduced on Sakari's request in v7 of the series wh=
-ich=20
-is the source of the regression.  The intention was to fail if num_pads =3D=
-=3D 0=20
-on a valid media entity. Maybe we should still keep that restriction and fa=
-il=20
-in case mdev is not NULL? In other words:=20
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+=2D--
+ drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 11 ++++--=
+-----
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-=2D	if (sd->entity.num_pads)
-+	if (sd->entity.num_pads || sd->entity.graph_obj.mdev)
-
-Thanks,
-Janusz
-
-> +		return pad >=3D sd->entity.num_pads ? -EINVAL : 0;
-
-This and below look like coding style changes, not related strictly to the=
-=20
-merit.  Shouldn't they rather be split into a separate patch?
-
-BTW, the current coding style follows original implementation of check_*=20
-functions present before that series was introduced.  Maybe it would be bet=
-ter=20
-to keep them unified, i.e., either as is or all updated with the new style.
-
-Thanks,
-Janusz
-
->  #endif
->  	/* allow pad 0 on subdevices not registered as media entities */
-> -	if (pad > 0)
-> -		return -EINVAL;
-> -	return 0;
-> +	return pad ? -EINVAL : 0;
->  }
->=20
->  static int check_cfg(__u32 which, struct v4l2_subdev_pad_config *cfg)
-
-
-
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index c16a206..753c3cb 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -1015,12 +1015,10 @@ static int mmal_setup_components(struct bm2835_mma=
+l_dev *dev,
+ 		if (f->fmt.pix.width <=3D max_video_width &&
+ 		    f->fmt.pix.height <=3D max_video_height)
+ 			camera_port =3D port =3D
+-			    &dev->component[COMP_CAMERA]->
+-			    output[CAM_PORT_VIDEO];
++			    &dev->component[COMP_CAMERA]->output[CAM_PORT_VIDEO];
+ 		else
+ 			camera_port =3D port =3D
+-			    &dev->component[COMP_CAMERA]->
+-			    output[CAM_PORT_CAPTURE];
++			    &dev->component[COMP_CAMERA]->output[CAM_PORT_CAPTURE];
+ 		break;
+ 	case COMP_IMAGE_ENCODE:
+ 		encode_component =3D dev->component[COMP_IMAGE_ENCODE];
+@@ -1211,9 +1209,8 @@ static int mmal_setup_components(struct bm2835_mmal_=
+dev *dev,
+ 						 port->current_buffer.size);
+ 					port->current_buffer.size =3D
+ 					    (f->fmt.pix.sizeimage <
+-					     (100 << 10))
+-					    ? (100 << 10)
+-					    : f->fmt.pix.sizeimage;
++					     (100 << 10)) ?
++					    (100 << 10) : f->fmt.pix.sizeimage;
+ 				}
+ 				v4l2_dbg(1, bcm2835_v4l2_debug,
+ 					 &dev->v4l2_dev,
+=2D-
+2.7.4
 
