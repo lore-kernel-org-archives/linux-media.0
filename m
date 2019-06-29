@@ -2,417 +2,244 @@ Return-Path: <SRS0=n4nG=U4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UPPERCASE_75_100,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77A40C5B57A
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73661C4321A
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:55:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3D700215EA
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:49:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2D358208E3
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:55:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="eCIN+5R9"
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="tW/Z6bXl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbfF2MtX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 29 Jun 2019 08:49:23 -0400
-Received: from mout.gmx.net ([212.227.17.21]:50445 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727017AbfF2MtW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 29 Jun 2019 08:49:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561812540;
-        bh=zIDxrGudFPMMsthCnbnUJqePqq4wZR0Ef4CLxj7NdbQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=eCIN+5R9BwgC2bqfiT1d0WhMwXSdEFtN3G1310OOCWmB9pZnGYVsRyCHhgXxqLx1I
-         sQ5usl/xjiiqHEP8CBSrdj+8oL55qxt6eB7Ag36N6FbvdcXRkJ3nL9Kl/W/Svnfece
-         nZCNkf/BywZhqPiiooxjt8KLgpuqgu3n+dSvfzZE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
- (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MWigq-1i5LMa10hM-00X5FK; Sat, 29 Jun 2019 14:49:00 +0200
-From:   Stefan Wahren <wahrenst@gmx.net>
-To:     Eric Anholt <eric@anholt.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
-        linux-media@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 21/29] staging: bcm2835-camera: Fix up mmal-parameters.h
-Date:   Sat, 29 Jun 2019 14:48:28 +0200
-Message-Id: <1561812516-9087-6-git-send-email-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1561812516-9087-1-git-send-email-wahrenst@gmx.net>
-References: <1561812516-9087-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:N7cWgk3xIU5ET+vZPb4lBamTe87E8lrkWHkd5ecDssIBjig1HV2
- /BIg1H04eqOL257YA7vY7zBTWjgznQMutG6d3iWXKyVyO25tGksjeYp1HzXZh4tFIcntFrJ
- /GygNO/eJ52VffymWGSpcKauWb7D1no7wFjqFaLi5kd2DEOw+aMmfX5XSvqOdRxdNLe2L8M
- unofru4J20+qeLqLByY7A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NIgd8vPi8xo=:EP7qb6oUS9ht1RK/hvndXY
- wezw5ZgpL2QdqcLMSfuk7oVYJbC/kzQon6yR6mhFAmbeHIitMGKbrA/s7H39vlJK4ejIcRQPO
- tycmjkgunuhjIlx8MZQ+DJt3HBFglSMJHRFED8mkDnV3P6s8x42LgynHvsLX1xHYWpkl6kTdF
- ZunXiCkiON6uXtlFfV/h4V08JM06fqRu0lPPyZzoBz5fK5VtH1OzT6VSkLOnQUX/CqMPsey0j
- 16jm2X0FApWnrf/W/AkYFxD38qae2fpKneZvX0HYjOkuCO1Nkw1MXvItzldPS/xkYSkVlSQDc
- RHShpznn1pWlQ8gelNc61P/0mSCOmJ2DVcMAiQ/WStzh0rMADExneULQJ2ec8Ii4duyg07LM5
- wtai5R3lNTo+CMULMTC49nfwTLJogb/vfAoM/6QcjLsLqa89LzCkfR1JprV1Da5BVALTNXx0I
- bEgujXLvmXB9jY4pRA6OIs7HGXNrr9tBsl9awgTIJOREQ7tPSHzFAjIhvkmesQLlzU4U3vcC0
- Alcuwi0SPnJMqD00ZoIuCZWA1CJ8FU3j2oO+EM4QnZjMRmOGahEZFFDDPlugDs+b5cJTniz6R
- gAtf7taXM4WE1u3D0+OyujbXJ9EGIq1B0tGoqgta+NxGUi1Ov6aggioGffjWkOmtVWoxFirnP
- TLk/KO/HBUFLv2wzinWIgOGMeTvvbCgt3tbzOksG/yXMx1T0n0ZLZLVF7R+MetTa4CbeYaivI
- PuTl9WY/3nlyoJVb9oBQwpANJiVSdAPyy3MBaGPnZ0oQ0/P/sdcS4nGvBroKOuPmWI6FgKsHD
- lYvcekwThpDjC3dR6+cTGefmSwfiXHQmy5BZtkX16SPYQcjaz1r6zfvOCfIEEdWaVa831xWAL
- liOX+Ka+EVNi8P/E7vbVHo5aCiMWef5X0JqQG9qQ08Pn2oldqZlijVLNdbqU12jlWDPlIhdCL
- MpwY8eLlmDY70HCRM19AuFSKNm+NQ5yC1/hwbBdlkxXHVFRekZDA7/oLSVE9L6SylDIzKgiBe
- RkPwdys+k2CX20zKde6VQd2T6nFJzDxyrgwWnZEf+jP03FacJulTAEaIY45Rv+f/M3VvE4JZw
- V6z5i31ox3Rqsc=
-Content-Transfer-Encoding: quoted-printable
+        id S1726912AbfF2Mz0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 29 Jun 2019 08:55:26 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:41477 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726906AbfF2Mz0 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 29 Jun 2019 08:55:26 -0400
+Received: by mail-qk1-f193.google.com with SMTP id c11so7327931qkk.8
+        for <linux-media@vger.kernel.org>; Sat, 29 Jun 2019 05:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=qCvVTC+Oc6PFoRGrjpMRBIYbKkI0wh0d/5g7+dPyweI=;
+        b=tW/Z6bXlvNn6GuiaLzmro1oT3AbBh0JhOKMZo4SNKIl8li8rmQ4ZLFgUjbSb7gPihh
+         +XwCNun6n1jfVXCTtq1lwmTPMM+aRV54jrGR6UcmlFn1gQZcrnsC9R7HlPPtOFpJuzMH
+         CJvF5S7BMCet+ZSE82nnoWGatYD7WXFsa6XTZgSUTg4uzoUeH3Zfqr7VlzPi0pjArLxz
+         HV/8o5TtZ8s+Jtr9FPGy6v09dLO5Hp3YsvuJMkzh3AZDhb12Xy3P5Fhn0MJTVaV9v43E
+         zFOjH0uv5KtB6SY/ZTtIgIrMqpzzJPbSD0cIRfLUg5eKyYtefpok7hipSNDBN6mBgtGs
+         oszg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=qCvVTC+Oc6PFoRGrjpMRBIYbKkI0wh0d/5g7+dPyweI=;
+        b=JPBNM9KeAiSaN/8zCXmufyo24J1d1GsdSiPE50TdOqbLFtqLGzO8hlh0Qnsnd/bSIH
+         Xd8wWqpJkXGPxXmGVyZhiyl7Epue4LnoWguxAdxJInxZqF9eZAP+13FYo71SubNpaAXv
+         db0IjTzvIiKjzFVqYcmxPgoh/cyzsBDfmpI+Twi4gvMWg2yxcInMGVCCkGe/voiz8JxS
+         /j7Wiy91RlUCcXfiijqCU/AYzb3bQknS1mjxuz+e0VYOgvqcIV2h0X44SM2xCy253Ahh
+         6noruxb+nH8fNJIy3xTx6HNgBh7e0Usypm8VSUyyi9FyFGoW12yrb8G401JHQIWnf3vo
+         XbmA==
+X-Gm-Message-State: APjAAAWHdMwvQf1bnTXxQbyqiYV/oehkMOf1BezUKrGicuKhHzI0jT19
+        p9b3lhfLua1Ff1C4WW0cYfyr0A==
+X-Google-Smtp-Source: APXvYqzSAdyvY7M6S52Fe9DhGG+X7Viz0p2ZxuwRIAvU5apJ535KdaMt953wKOnb4V59xZEhvdww2Q==
+X-Received: by 2002:a37:7e84:: with SMTP id z126mr12449627qkc.386.1561812924955;
+        Sat, 29 Jun 2019 05:55:24 -0700 (PDT)
+Received: from skullcanyon ([192.222.193.21])
+        by smtp.gmail.com with ESMTPSA id g5sm2525735qta.77.2019.06.29.05.55.23
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sat, 29 Jun 2019 05:55:24 -0700 (PDT)
+Message-ID: <ce8251cfb964610fed9c9d55e777deaabd017abb.camel@ndufresne.ca>
+Subject: Re: [RFC] Stateful codecs and requirements for compressed formats
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Dave Stevenson <dave.stevenson@raspberrypi.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Date:   Sat, 29 Jun 2019 08:55:22 -0400
+In-Reply-To: <CAAoAYcPhssrTG9X7mztLv=LG5R7z1UmLJkgZsw=DK7V1s32V+A@mail.gmail.com>
+References: <530f28e9-f686-6222-c6cc-9a5207b151f7@xs4all.nl>
+         <CAAoAYcOa7ngH5pPJze+H25rDQgjeNnpKY=HWQqsGFTTrO5iFgg@mail.gmail.com>
+         <9c3fe7a71aa4c2f9c3f92fa8d7a8fe0290f51da0.camel@ndufresne.ca>
+         <CAAoAYcPhssrTG9X7mztLv=LG5R7z1UmLJkgZsw=DK7V1s32V+A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.org>
+Le samedi 29 juin 2019 à 11:02 +0100, Dave Stevenson a écrit :
+> Hi Nicolas
+> 
+> On Fri, 28 Jun 2019 at 16:48, Nicolas Dufresne <nicolas@ndufresne.ca> wrote:
+> > Le vendredi 28 juin 2019 à 16:21 +0100, Dave Stevenson a écrit :
+> > > Hi Hans
+> > > 
+> > > On Fri, 28 Jun 2019 at 15:34, Hans Verkuil <hverkuil@xs4all.nl> wrote:
+> > > > Hi all,
+> > > > 
+> > > > I hope I Cc-ed everyone with a stake in this issue.
+> > > > 
+> > > > One recurring question is how a stateful encoder fills buffers and how a stateful
+> > > > decoder consumes buffers.
+> > > > 
+> > > > The most generic case is that an encoder produces a bitstream and just fills each
+> > > > CAPTURE buffer to the brim before continuing with the next buffer.
+> > > > 
+> > > > I don't think there are drivers that do this, I believe that all drivers just
+> > > > output a single compressed frame. For interlaced formats I understand it is either
+> > > > one compressed field per buffer, or two compressed fields per buffer (this is
+> > > > what I heard, I don't know if this is true).
+> > > 
+> > > From the discussion that started this thread, with H264 and similar,
+> > > does the V4L2 buffer contain just the frame data, or the SPS/PPS
+> > > headers as well.
+> > 
+> > In existing mainline encoder driver the SPS/PPS is included in the
+> > first frame produced. Decoders expect them to be in the first frame
+> > queued. For decoder, this is being relaxed now that we have a mechanism
+> > to notify the state change after the header has been processed.
+> 
+> So it sounds like the one bit missing is everyone's "friend" -
+> documentation. I'm eternally grateful to those who are making the
+> efforts in updating it. It's a thankless task, but absolutely
+> necessary.
+> 
+> For those outside the core linux-media circles there is a choice to be
+> made, and different APIs do adopt different approaches.
+> OpenMAX IL for one explicitly documents exactly the opposite approach
+> to V4L2, although admittedly through an optional flag. 1.1.2 spec [1],
+> section 3.1.2.7.1 (page 70)
+> 
+> The OMX_BUFFERFLAG_CODECCONFIG is an optional flag that is
+> set by an output port when all bytes in the buffer form part or all of a set of
+> codec specific configuration data. Examples include SPS/PPS nal units
+> for OMX_VIDEO_CodingAVC or AudioSpecificConfig data for
+> OMX_AUDIO_CodingAAC. Any component that for a given stream sets
+> OMX_BUFFERFLAG_CODECCONFIG shall not mix codec
+> configuration bytes with frame data in the same buffer, and shall send all
+> buffers containing codec configuration bytes before any buffers containing
+> frame data that those configurations bytes describe.
 
-Fixes up all the checkpatch error "line over 80 characters" in
-mmal-parameters.h
+That only applies to OMX encoders. OMX decoders accepts any alignment
+but will have higher latency. On the decoder side they use an
+END_OF_FRAME kind of flag for when the data is pre-parsed in order to
+reduce that latency (I have only found NVidia respecting this).
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-=2D--
- .../vc04_services/bcm2835-camera/mmal-parameters.h | 261 +++++++++++++---=
------
- 1 file changed, 159 insertions(+), 102 deletions(-)
+A rational for doing it like this is that it will ease use cases where
+you want to pass the codec config out-of-band. This is notably the case
+for ISOMP4, but then you need to convert start-code into AVC header
+(which requires parsing) or for some RTP based protocols where you'd
+pass the headers through an SDP or other signalling. I have never met
+two OMX stack doing the same thing is this regard, so we ended merging
+these together and letting our generic parser handle the conversion.
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.=
-h b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-index da21ec5..80a9912 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-+++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-parameters.h
-@@ -37,134 +37,190 @@
+For the Linux kernel, I don't think we have an equivalent of
+OMX_BUFFERFLAG_CODECCONFIG. I believe we also have the problem that if
+a firmware decides to merge things, we would have to do some bitstream
+parsing in order to separate them (which has been clearly stated as a
+no-go so far). Note that some firmware don't even produce the headers,
+the drivers need to produce them.
 
- /* Common parameters */
- enum mmal_parameter_common_type {
--	MMAL_PARAMETER_UNUSED  /**< Never a valid parameter ID */
--		=3D MMAL_PARAMETER_GROUP_COMMON,
--	MMAL_PARAMETER_SUPPORTED_ENCODINGS, /**< MMAL_PARAMETER_ENCODING_T */
--	MMAL_PARAMETER_URI, /**< MMAL_PARAMETER_URI_T */
--
--	/** MMAL_PARAMETER_CHANGE_EVENT_REQUEST_T */
-+		/**< Never a valid parameter ID */
-+	MMAL_PARAMETER_UNUSED =3D MMAL_PARAMETER_GROUP_COMMON,
-+
-+		/**< MMAL_PARAMETER_ENCODING_T */
-+	MMAL_PARAMETER_SUPPORTED_ENCODINGS,
-+		/**< MMAL_PARAMETER_URI_T */
-+	MMAL_PARAMETER_URI,
-+		/** MMAL_PARAMETER_CHANGE_EVENT_REQUEST_T */
- 	MMAL_PARAMETER_CHANGE_EVENT_REQUEST,
--
--	/** MMAL_PARAMETER_BOOLEAN_T */
-+		/** MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_ZERO_COPY,
--
--	/**< MMAL_PARAMETER_BUFFER_REQUIREMENTS_T */
-+		/**< MMAL_PARAMETER_BUFFER_REQUIREMENTS_T */
- 	MMAL_PARAMETER_BUFFER_REQUIREMENTS,
--
--	MMAL_PARAMETER_STATISTICS, /**< MMAL_PARAMETER_STATISTICS_T */
--	MMAL_PARAMETER_CORE_STATISTICS, /**< MMAL_PARAMETER_CORE_STATISTICS_T */
--	MMAL_PARAMETER_MEM_USAGE, /**< MMAL_PARAMETER_MEM_USAGE_T */
--	MMAL_PARAMETER_BUFFER_FLAG_FILTER, /**< MMAL_PARAMETER_UINT32_T */
--	MMAL_PARAMETER_SEEK, /**< MMAL_PARAMETER_SEEK_T */
--	MMAL_PARAMETER_POWERMON_ENABLE, /**< MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_LOGGING, /**< MMAL_PARAMETER_LOGGING_T */
--	MMAL_PARAMETER_SYSTEM_TIME, /**< MMAL_PARAMETER_UINT64_T */
--	MMAL_PARAMETER_NO_IMAGE_PADDING  /**< MMAL_PARAMETER_BOOLEAN_T */
-+		/**< MMAL_PARAMETER_STATISTICS_T */
-+	MMAL_PARAMETER_STATISTICS,
-+		/**< MMAL_PARAMETER_CORE_STATISTICS_T */
-+	MMAL_PARAMETER_CORE_STATISTICS,
-+		/**< MMAL_PARAMETER_MEM_USAGE_T */
-+	MMAL_PARAMETER_MEM_USAGE,
-+		/**< MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_BUFFER_FLAG_FILTER,
-+		/**< MMAL_PARAMETER_SEEK_T */
-+	MMAL_PARAMETER_SEEK,
-+		/**< MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_POWERMON_ENABLE,
-+		/**< MMAL_PARAMETER_LOGGING_T */
-+	MMAL_PARAMETER_LOGGING,
-+		/**< MMAL_PARAMETER_UINT64_T */
-+	MMAL_PARAMETER_SYSTEM_TIME,
-+		/**< MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_NO_IMAGE_PADDING,
- };
+What I'm bringing here is what drivers has been doing since 2011. I
+think most userspace will work regardless of the encoder buffer
+alignment, but some glitches may also exist. An example, in GStreamer
+the code that do input/output timestamp matching was commented out
+because the value coming from Samsung MFC driver was completely random.
+No one have worked on re-enabling this since, as all drivers started
+following this 1 buffer 1 frame rule. The side effect, is that the
+matching of metadata (timestamp, timecode, AFB, CC, Tags, etc.) may be
+off by a small amount of frames. In general it does not break
+completely.
 
- /* camera parameters */
+> 
+>   Dave
+> 
+> [1] https://www.khronos.org/registry/OpenMAX-IL/specs/OpenMAX_IL_1_1_2_Specification.pdf
 
- enum mmal_parameter_camera_type {
- 	/* 0 */
--	/** @ref MMAL_PARAMETER_THUMBNAIL_CONFIG_T */
--	MMAL_PARAMETER_THUMBNAIL_CONFIGURATION
--		=3D MMAL_PARAMETER_GROUP_CAMERA,
--	MMAL_PARAMETER_CAPTURE_QUALITY, /**< Unused? */
--	MMAL_PARAMETER_ROTATION, /**< @ref MMAL_PARAMETER_INT32_T */
--	MMAL_PARAMETER_EXIF_DISABLE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_EXIF, /**< @ref MMAL_PARAMETER_EXIF_T */
--	MMAL_PARAMETER_AWB_MODE, /**< @ref MMAL_PARAM_AWBMODE_T */
--	MMAL_PARAMETER_IMAGE_EFFECT, /**< @ref MMAL_PARAMETER_IMAGEFX_T */
--	MMAL_PARAMETER_COLOUR_EFFECT, /**< @ref MMAL_PARAMETER_COLOURFX_T */
--	MMAL_PARAMETER_FLICKER_AVOID, /**< @ref MMAL_PARAMETER_FLICKERAVOID_T */
--	MMAL_PARAMETER_FLASH, /**< @ref MMAL_PARAMETER_FLASH_T */
--	MMAL_PARAMETER_REDEYE, /**< @ref MMAL_PARAMETER_REDEYE_T */
--	MMAL_PARAMETER_FOCUS, /**< @ref MMAL_PARAMETER_FOCUS_T */
--	MMAL_PARAMETER_FOCAL_LENGTHS, /**< Unused? */
--	MMAL_PARAMETER_EXPOSURE_COMP, /**< @ref MMAL_PARAMETER_INT32_T */
--	MMAL_PARAMETER_ZOOM, /**< @ref MMAL_PARAMETER_SCALEFACTOR_T */
--	MMAL_PARAMETER_MIRROR, /**< @ref MMAL_PARAMETER_MIRROR_T */
-+		/** @ref MMAL_PARAMETER_THUMBNAIL_CONFIG_T */
-+	MMAL_PARAMETER_THUMBNAIL_CONFIGURATION =3D
-+		MMAL_PARAMETER_GROUP_CAMERA,
-+		/**< Unused? */
-+	MMAL_PARAMETER_CAPTURE_QUALITY,
-+		/**< @ref MMAL_PARAMETER_INT32_T */
-+	MMAL_PARAMETER_ROTATION,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_EXIF_DISABLE,
-+		/**< @ref MMAL_PARAMETER_EXIF_T */
-+	MMAL_PARAMETER_EXIF,
-+		/**< @ref MMAL_PARAM_AWBMODE_T */
-+	MMAL_PARAMETER_AWB_MODE,
-+		/**< @ref MMAL_PARAMETER_IMAGEFX_T */
-+	MMAL_PARAMETER_IMAGE_EFFECT,
-+		/**< @ref MMAL_PARAMETER_COLOURFX_T */
-+	MMAL_PARAMETER_COLOUR_EFFECT,
-+		/**< @ref MMAL_PARAMETER_FLICKERAVOID_T */
-+	MMAL_PARAMETER_FLICKER_AVOID,
-+		/**< @ref MMAL_PARAMETER_FLASH_T */
-+	MMAL_PARAMETER_FLASH,
-+		/**< @ref MMAL_PARAMETER_REDEYE_T */
-+	MMAL_PARAMETER_REDEYE,
-+		/**< @ref MMAL_PARAMETER_FOCUS_T */
-+	MMAL_PARAMETER_FOCUS,
-+		/**< Unused? */
-+	MMAL_PARAMETER_FOCAL_LENGTHS,
-+		/**< @ref MMAL_PARAMETER_INT32_T */
-+	MMAL_PARAMETER_EXPOSURE_COMP,
-+		/**< @ref MMAL_PARAMETER_SCALEFACTOR_T */
-+	MMAL_PARAMETER_ZOOM,
-+		/**< @ref MMAL_PARAMETER_MIRROR_T */
-+	MMAL_PARAMETER_MIRROR,
+Just a reminder that OMX is a dead specification. All member of the
+board have left and no further update will be made available. There was
+very good advances in 1.2 draft, but it still got abandoned. In the
+end, each implementation represent it's own fork of the specification.
+You'll even find some DMABuf support on the ZynqMP OMX stack. But
+supporting OMX has became a incredible mess and is not portable at all
+(which defeat the purpose of the spec in the first place).
 
- 	/* 0x10 */
--	MMAL_PARAMETER_CAMERA_NUM, /**< @ref MMAL_PARAMETER_UINT32_T */
--	MMAL_PARAMETER_CAPTURE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_EXPOSURE_MODE, /**< @ref MMAL_PARAMETER_EXPOSUREMODE_T */
--	MMAL_PARAMETER_EXP_METERING_MODE, /**< @ref MMAL_PARAMETER_EXPOSUREMETER=
-INGMODE_T */
--	MMAL_PARAMETER_FOCUS_STATUS, /**< @ref MMAL_PARAMETER_FOCUS_STATUS_T */
--	MMAL_PARAMETER_CAMERA_CONFIG, /**< @ref MMAL_PARAMETER_CAMERA_CONFIG_T *=
-/
--	MMAL_PARAMETER_CAPTURE_STATUS, /**< @ref MMAL_PARAMETER_CAPTURE_STATUS_T=
- */
--	MMAL_PARAMETER_FACE_TRACK, /**< @ref MMAL_PARAMETER_FACE_TRACK_T */
--	MMAL_PARAMETER_DRAW_BOX_FACES_AND_FOCUS, /**< @ref MMAL_PARAMETER_BOOLEA=
-N_T */
--	MMAL_PARAMETER_JPEG_Q_FACTOR, /**< @ref MMAL_PARAMETER_UINT32_T */
--	MMAL_PARAMETER_FRAME_RATE, /**< @ref MMAL_PARAMETER_FRAME_RATE_T */
--	MMAL_PARAMETER_USE_STC, /**< @ref MMAL_PARAMETER_CAMERA_STC_MODE_T */
--	MMAL_PARAMETER_CAMERA_INFO, /**< @ref MMAL_PARAMETER_CAMERA_INFO_T */
--	MMAL_PARAMETER_VIDEO_STABILISATION, /**< @ref MMAL_PARAMETER_BOOLEAN_T *=
-/
--	MMAL_PARAMETER_FACE_TRACK_RESULTS, /**< @ref MMAL_PARAMETER_FACE_TRACK_R=
-ESULTS_T */
--	MMAL_PARAMETER_ENABLE_RAW_CAPTURE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/**< @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_CAMERA_NUM,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_CAPTURE,
-+		/**< @ref MMAL_PARAMETER_EXPOSUREMODE_T */
-+	MMAL_PARAMETER_EXPOSURE_MODE,
-+		/**< @ref MMAL_PARAMETER_EXPOSUREMETERINGMODE_T */
-+	MMAL_PARAMETER_EXP_METERING_MODE,
-+		/**< @ref MMAL_PARAMETER_FOCUS_STATUS_T */
-+	MMAL_PARAMETER_FOCUS_STATUS,
-+		/**< @ref MMAL_PARAMETER_CAMERA_CONFIG_T */
-+	MMAL_PARAMETER_CAMERA_CONFIG,
-+		/**< @ref MMAL_PARAMETER_CAPTURE_STATUS_T */
-+	MMAL_PARAMETER_CAPTURE_STATUS,
-+		/**< @ref MMAL_PARAMETER_FACE_TRACK_T */
-+	MMAL_PARAMETER_FACE_TRACK,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_DRAW_BOX_FACES_AND_FOCUS,
-+		/**< @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_JPEG_Q_FACTOR,
-+		/**< @ref MMAL_PARAMETER_FRAME_RATE_T */
-+	MMAL_PARAMETER_FRAME_RATE,
-+		/**< @ref MMAL_PARAMETER_CAMERA_STC_MODE_T */
-+	MMAL_PARAMETER_USE_STC,
-+		/**< @ref MMAL_PARAMETER_CAMERA_INFO_T */
-+	MMAL_PARAMETER_CAMERA_INFO,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_VIDEO_STABILISATION,
-+		/**< @ref MMAL_PARAMETER_FACE_TRACK_RESULTS_T */
-+	MMAL_PARAMETER_FACE_TRACK_RESULTS,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_ENABLE_RAW_CAPTURE,
-
- 	/* 0x20 */
--	MMAL_PARAMETER_DPF_FILE, /**< @ref MMAL_PARAMETER_URI_T */
--	MMAL_PARAMETER_ENABLE_DPF_FILE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_DPF_FAIL_IS_FATAL, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_CAPTURE_MODE, /**< @ref MMAL_PARAMETER_CAPTUREMODE_T */
--	MMAL_PARAMETER_FOCUS_REGIONS, /**< @ref MMAL_PARAMETER_FOCUS_REGIONS_T *=
-/
--	MMAL_PARAMETER_INPUT_CROP, /**< @ref MMAL_PARAMETER_INPUT_CROP_T */
--	MMAL_PARAMETER_SENSOR_INFORMATION, /**< @ref MMAL_PARAMETER_SENSOR_INFOR=
-MATION_T */
--	MMAL_PARAMETER_FLASH_SELECT, /**< @ref MMAL_PARAMETER_FLASH_SELECT_T */
--	MMAL_PARAMETER_FIELD_OF_VIEW, /**< @ref MMAL_PARAMETER_FIELD_OF_VIEW_T *=
-/
--	MMAL_PARAMETER_HIGH_DYNAMIC_RANGE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_DYNAMIC_RANGE_COMPRESSION, /**< @ref MMAL_PARAMETER_DRC_T=
- */
--	MMAL_PARAMETER_ALGORITHM_CONTROL, /**< @ref MMAL_PARAMETER_ALGORITHM_CON=
-TROL_T */
--	MMAL_PARAMETER_SHARPNESS, /**< @ref MMAL_PARAMETER_RATIONAL_T */
--	MMAL_PARAMETER_CONTRAST, /**< @ref MMAL_PARAMETER_RATIONAL_T */
--	MMAL_PARAMETER_BRIGHTNESS, /**< @ref MMAL_PARAMETER_RATIONAL_T */
--	MMAL_PARAMETER_SATURATION, /**< @ref MMAL_PARAMETER_RATIONAL_T */
-+		/**< @ref MMAL_PARAMETER_URI_T */
-+	MMAL_PARAMETER_DPF_FILE,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_ENABLE_DPF_FILE,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_DPF_FAIL_IS_FATAL,
-+		/**< @ref MMAL_PARAMETER_CAPTUREMODE_T */
-+	MMAL_PARAMETER_CAPTURE_MODE,
-+		/**< @ref MMAL_PARAMETER_FOCUS_REGIONS_T */
-+	MMAL_PARAMETER_FOCUS_REGIONS,
-+		/**< @ref MMAL_PARAMETER_INPUT_CROP_T */
-+	MMAL_PARAMETER_INPUT_CROP,
-+		/**< @ref MMAL_PARAMETER_SENSOR_INFORMATION_T */
-+	MMAL_PARAMETER_SENSOR_INFORMATION,
-+		/**< @ref MMAL_PARAMETER_FLASH_SELECT_T */
-+	MMAL_PARAMETER_FLASH_SELECT,
-+		/**< @ref MMAL_PARAMETER_FIELD_OF_VIEW_T */
-+	MMAL_PARAMETER_FIELD_OF_VIEW,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_HIGH_DYNAMIC_RANGE,
-+		/**< @ref MMAL_PARAMETER_DRC_T */
-+	MMAL_PARAMETER_DYNAMIC_RANGE_COMPRESSION,
-+		/**< @ref MMAL_PARAMETER_ALGORITHM_CONTROL_T */
-+	MMAL_PARAMETER_ALGORITHM_CONTROL,
-+		/**< @ref MMAL_PARAMETER_RATIONAL_T */
-+	MMAL_PARAMETER_SHARPNESS,
-+		/**< @ref MMAL_PARAMETER_RATIONAL_T */
-+	MMAL_PARAMETER_CONTRAST,
-+		/**< @ref MMAL_PARAMETER_RATIONAL_T */
-+	MMAL_PARAMETER_BRIGHTNESS,
-+		/**< @ref MMAL_PARAMETER_RATIONAL_T */
-+	MMAL_PARAMETER_SATURATION,
-
- 	/* 0x30 */
--	MMAL_PARAMETER_ISO, /**< @ref MMAL_PARAMETER_UINT32_T */
--	MMAL_PARAMETER_ANTISHAKE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--
--	/** @ref MMAL_PARAMETER_IMAGEFX_PARAMETERS_T */
-+		/**< @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_ISO,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_ANTISHAKE,
-+		/** @ref MMAL_PARAMETER_IMAGEFX_PARAMETERS_T */
- 	MMAL_PARAMETER_IMAGE_EFFECT_PARAMETERS,
--
--	/** @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/** @ref MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_CAMERA_BURST_CAPTURE,
--
--	/** @ref MMAL_PARAMETER_UINT32_T */
-+		/** @ref MMAL_PARAMETER_UINT32_T */
- 	MMAL_PARAMETER_CAMERA_MIN_ISO,
--
--	/** @ref MMAL_PARAMETER_CAMERA_USE_CASE_T */
-+		/** @ref MMAL_PARAMETER_CAMERA_USE_CASE_T */
- 	MMAL_PARAMETER_CAMERA_USE_CASE,
--
--	/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_CAPTURE_STATS_PASS,
--
--	/** @ref MMAL_PARAMETER_UINT32_T */
-+		/** @ref MMAL_PARAMETER_UINT32_T */
- 	MMAL_PARAMETER_CAMERA_CUSTOM_SENSOR_CONFIG,
--
--	/** @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/** @ref MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_ENABLE_REGISTER_FILE,
--
--	/** @ref MMAL_PARAMETER_BOOLEAN_T */
-+		/** @ref MMAL_PARAMETER_BOOLEAN_T */
- 	MMAL_PARAMETER_REGISTER_FAIL_IS_FATAL,
--
--	/** @ref MMAL_PARAMETER_CONFIGFILE_T */
-+		/** @ref MMAL_PARAMETER_CONFIGFILE_T */
- 	MMAL_PARAMETER_CONFIGFILE_REGISTERS,
--
--	/** @ref MMAL_PARAMETER_CONFIGFILE_CHUNK_T */
-+		/** @ref MMAL_PARAMETER_CONFIGFILE_CHUNK_T */
- 	MMAL_PARAMETER_CONFIGFILE_CHUNK_REGISTERS,
--	MMAL_PARAMETER_JPEG_ATTACH_LOG, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_ZERO_SHUTTER_LAG, /**< @ref MMAL_PARAMETER_ZEROSHUTTERLAG=
-_T */
--	MMAL_PARAMETER_FPS_RANGE, /**< @ref MMAL_PARAMETER_FPS_RANGE_T */
--	MMAL_PARAMETER_CAPTURE_EXPOSURE_COMP, /**< @ref MMAL_PARAMETER_INT32_T *=
-/
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_JPEG_ATTACH_LOG,
-+		/**< @ref MMAL_PARAMETER_ZEROSHUTTERLAG_T */
-+	MMAL_PARAMETER_ZERO_SHUTTER_LAG,
-+		/**< @ref MMAL_PARAMETER_FPS_RANGE_T */
-+	MMAL_PARAMETER_FPS_RANGE,
-+		/**< @ref MMAL_PARAMETER_INT32_T */
-+	MMAL_PARAMETER_CAPTURE_EXPOSURE_COMP,
-
- 	/* 0x40 */
--	MMAL_PARAMETER_SW_SHARPEN_DISABLE, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_FLASH_REQUIRED, /**< @ref MMAL_PARAMETER_BOOLEAN_T */
--	MMAL_PARAMETER_SW_SATURATION_DISABLE, /**< @ref MMAL_PARAMETER_BOOLEAN_T=
- */
--	MMAL_PARAMETER_SHUTTER_SPEED,             /**< Takes a @ref MMAL_PARAMET=
-ER_UINT32_T */
--	MMAL_PARAMETER_CUSTOM_AWB_GAINS,          /**< Takes a @ref MMAL_PARAMET=
-ER_AWB_GAINS_T */
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_SW_SHARPEN_DISABLE,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_FLASH_REQUIRED,
-+		/**< @ref MMAL_PARAMETER_BOOLEAN_T */
-+	MMAL_PARAMETER_SW_SATURATION_DISABLE,
-+		/**< Takes a @ref MMAL_PARAMETER_UINT32_T */
-+	MMAL_PARAMETER_SHUTTER_SPEED,
-+		/**< Takes a @ref MMAL_PARAMETER_AWB_GAINS_T */
-+	MMAL_PARAMETER_CUSTOM_AWB_GAINS,
- };
-
- struct mmal_parameter_rational {
-@@ -411,7 +467,8 @@ enum mmal_parameter_video_type {
- 	MMAL_PARAMETER_MINIMISE_FRAGMENTATION,
-
- 	/** @ref MMAL_PARAMETER_UINT32_T.
--	 * Setting the value to zero resets to the default (one slice per frame)=
-.
-+	 * Setting the value to zero resets to the default (one slice per
-+	 * frame).
- 	 */
- 	MMAL_PARAMETER_MB_ROWS_PER_SLICE,
-
-=2D-
-2.7.4
+> 
+> > > > In any case, I don't think this is specified anywhere. Please correct me if I am
+> > > > wrong.
+> > > > 
+> > > > The latest stateful codec spec is here:
+> > > > 
+> > > > https://hverkuil.home.xs4all.nl/codec-api/uapi/v4l/dev-mem2mem.html
+> > > > 
+> > > > Assuming what I described above is indeed the case, then I think this should
+> > > > be documented. I don't know enough if a flag is needed somewhere to describe
+> > > > the behavior for interlaced formats, or can we leave this open and have userspace
+> > > > detect this?
+> > > > 
+> > > > 
+> > > > For decoders it is more complicated. The stateful decoder spec is written with
+> > > > the assumption that userspace can just fill each OUTPUT buffer to the brim with
+> > > > the compressed bitstream. I.e., no need to split at frame or other boundaries.
+> > > > 
+> > > > See section 4.5.1.7 in the spec.
+> > > > 
+> > > > But I understand that various HW decoders *do* have limitations. I would really
+> > > > like to know about those, since that needs to be exposed to userspace somehow.
+> > > > 
+> > > > Specifically, the venus decoder needs to know the resolution of the coded video
+> > > > beforehand and it expects a single frame per buffer (how does that work for
+> > > > interlaced formats?).
+> > > > 
+> > > > Such requirements mean that some userspace parsing is still required, so these
+> > > > decoders are not completely stateful.
+> > > > 
+> > > > Can every codec author give information about their decoder/encoder?
+> > > > 
+> > > > I'll start off with my virtual codec driver:
+> > > > 
+> > > > vicodec: the decoder fully parses the bitstream. The encoder produces a single
+> > > > compressed frame per buffer. This driver doesn't yet support interlaced formats,
+> > > > but when that is added it will encode one field per buffer.
+> > > 
+> > > On BCM283x:
+> > > 
+> > > The underlying decoder will accept anything, but giving it a single
+> > > frame per buffer reduces latency as the bitstream parser gets kicked
+> > > earlier. Based on previous discussions I am setting the flag so that
+> > > it expects one compressed frame per buffer, but I don't believe it
+> > > goes wrong should that not be the case (it'll just waste a bit of
+> > > processing effort).
+> > > It'll parse the headers and produce a V4L2_EVENT_SOURCE_CHANGE event
+> > > should the capture queue format not match the stream parameters.
+> > > Interlacing isn't supported yet (it's on the list), but I believe the
+> > > hardware produces the equivalent to V4L2_FIELD_INTERLACED_[TB|BT].
+> > > 
+> > > The encoder currently spits out the H264 SPS/PPS headers as a separate
+> > > V4L2 buffer, and then one compressed frame per V4L2 buffer (provided
+> > > the buffer is big enough). Should
+> > > V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER be set, then it will repeat the
+> > > headers in an independent V4L2 buffer before each I frame.
+> > > I'm quite happy to amend this should we have a decent spec of what is
+> > > required. As I've never found a spec it's been trial and error until
+> > > now.
+> > > There is no interlaced support available.
+> > > 
+> > >   Dave
 
