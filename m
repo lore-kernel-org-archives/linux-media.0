@@ -8,31 +8,31 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 402C9C5B57C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF646C4646D
 	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 19:33:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 17C0A21726
+	by mail.kernel.org (Postfix) with ESMTP id A7CE421726
 	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 19:33:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="TL3VRguo"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="ZsSBlnTD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726993AbfF2TdC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 29 Jun 2019 15:33:02 -0400
-Received: from mout.gmx.net ([212.227.15.19]:36879 "EHLO mout.gmx.net"
+        id S1727000AbfF2TdD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 29 Jun 2019 15:33:03 -0400
+Received: from mout.gmx.net ([212.227.15.15]:44279 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726891AbfF2TdC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726921AbfF2TdC (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 29 Jun 2019 15:33:02 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
         s=badeba3b8450; t=1561836763;
-        bh=jrRQkN3aA1piA4Bl07G3I8c6oLly5GccQgg7xp8+yzY=;
+        bh=rK8rvK0E2D7ZbAe4zS7pHvQrYn5x7ohLrrBKZLknkUU=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=TL3VRguo29vAIRsylpLnKAbl0ZOQxVlF7zB7RQlTgvyLIkxoD2iJrv0W6NkcPxpew
-         xV/syWOAEe/npkRjkyHU2hsn3Vn71bSF6sos2tlxhZ3y+F0uXiwL8zDku5Mywhd9zD
-         ioiraiGlRxSwI2+a16G9yq3MoXnuH2sWCKv9d8oo=
+        b=ZsSBlnTDSZMEPKIUQfRD9f8auVzzQnnbvPImq8j0bJvhsuV5RyblYgAsmmpPW5k7+
+         +ZGkxNj5aVGN+PveqUip6qftjkiMLIzsFDyYNoTqzu0MBsdrSLWRZ9IzRH6dfAWhuT
+         d2Y+rnvlPP6kAO0/3w5fFlRKYakv7x1MQ2Yw2N5U=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx003 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 0LkgAG-1iFGKV2Owe-00aYV1; Sat, 29 Jun 2019 21:32:43 +0200
+ 0MLOMM-1hgl7g3DrG-000fz3; Sat, 29 Jun 2019 21:32:42 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 29/29] staging: bcm2835-camera: Correct ctrl min/max/step/def to 64bit
-Date:   Sat, 29 Jun 2019 21:31:43 +0200
-Message-Id: <1561836703-2528-5-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH V2 27/29] staging: bcm2835-camera: Add sanity checks for queue_setup/CREATE_BUFS
+Date:   Sat, 29 Jun 2019 21:31:41 +0200
+Message-Id: <1561836703-2528-3-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561836703-2528-1-git-send-email-wahrenst@gmx.net>
 References: <1561836703-2528-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:bgoZcbjSjDVWzSZxUn5AN5Hf5YZPfhECDzvHxY8GV8k7q6xAZ1D
- S26PqL7/wPSstvrQ4QMSo+mHwA03PVdghA8/Zx+sBtRX1i7cUpTn3IAhH/tNBpVNajLjuOJ
- GWehO2nKTB25aOP+23Nko5bNVBMtIIWcnQU60FL0933UEJYDaalCcqBA2nyx+gag2moRq3z
- POo/9FZEXY2AyrlzcXCUA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:D3MrqUVb8cg=:LFsnxrzTQAbxiXnlCQFW3E
- I/jdmQSM/ySirOv4nz/dqQuxk/Ghaq5Mayle8jHaxGma/hLQCnR9fetbmp5HnZKSSHvHztFx+
- OHMIl7L/tHYYI6HEacwxAhYlLLhcVS3ScCw3Sdo+XXYPC/xd2xhSDO8TUCWtK84mrNK0M8IBm
- 5wJGlJBAm7+ngYDss5dkUDKo0cVIeVXiciCOzDTnuup9aTar6YwLADpFNw9rl3PRMfcYGn7BL
- VGQoshSH4RLkEe9SVicuggN67jink9qJt/v3Oc/TyZG0E9dhtW2ZlRNxPgVyyVl92m6FT20Fe
- tdhOL13KUcWXJYqItB/filIjtcmAAC8ZamBY2a3YPzs3WQtHShUfiiWwv2EBWNvjgGv7StBa/
- w/II9CJwJAWfVpym/Fn1TXjExbO5VA5qQ1S/5HvIqNOb0OrTaOLzPp/7xq1AabQDk5Y4ipP6G
- Tc5pEdkXm8UfXPzcYAJ7g57VW0Yd0XI80uYV/sFH1tgX72MZLO2HvFaAGCdbttLpoRYhgHNEs
- QKmZgHWfi+/G+ILQD9qS3MS5Q6oMeRYCArlOEf/rdZvQ6ZCiem/Z8BovM0RsLHIxdtfGPFgwC
- WW969VzT15rxZsUFA9pQwdIWEVWMWsen4Ldi1qPPmqarIGDRsbDUI1It+Dl1QCP9Rm/80/xEX
- 9ovcWDiyDgJSLXz+zEEdoqhNl8ivYFFSGCaS6ui+DrhTQ2ocyIL8IM3jTtekeSqFsdVry36rj
- S7UvDFZkfNsOyPsJgRz+VIfAX40w2wJ9HnQb7zVaFP7C2Uqs8mdx0o04JNOx9vw4miaGpFJCB
- B2/LRA5vpteMOsJMtOxUg8WOvMyjOBLZZPlD5FlHDa3b+3MPY6v62LATD2XC44K8hXHjCKeyk
- nh7xBgtK/jOinyjFjOPggobNu5ObzO5bV/ioTemfYZA0fwo/JA7NZ1n6dY9wYxmy3TJB0opqS
- yQJZT8plt/+39JF2sIs+2dOTP4f8Q60FdRsYu6D2gQLqPXDjAGO2trC+xDuNRrUmlzhngAwIQ
- g4Hv1UsOoAsaeWrwXOcFtA98OwXwdWqYwF6uX9z/8WG9gXPqeEFb7GqcR8FJmO4dgE3qo79GL
- B2wzwQ0MT9vcNw=
+X-Provags-ID: V03:K1:sDOOOORNsaWE+WMzRK4FSnZQ1bYVt3B2/9OPCk1Nghqhx6Vg08C
+ whJM09RSK77gyrEeJlCWCiqRQyKzXNEmEVCKKQB9emDR/jrRSNXjUo/R/2dEHlyvnOflWFI
+ wrnSRvFYi2nRBRjdTaa8OTpe25ngXRbpFcCSb6vEaDY0p/4jGsQ5AeSdpOQgou1rp3L6S6d
+ ilZ9Ie2P9fKd5/JdxxBdA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:OBdmlzNyHJE=:V4tpvH6KCtlRVIuQuCx7N4
+ uIP4XdWgNZVSM5w4NnwMRBWObJBBy4wA8taWEJTf/rFK/0zPusAOuRT1YHCHQ9WaymbfQPHP1
+ dTBYbt8YxklwJYee53uOc5GHTVDExnfhOYSpjNWVnIl3KdgTzQhogP1iummvVnFx7Mw+ssucC
+ L4tlohDr83gk5JLPDCoteeJuN18NWBRTZcy54qxKnuKCNkzXgS7XPxU6E810k+KQENeKlDDfd
+ j25IgSeBMwC1Bhp0Q//PfSntR/wAzd6ohieB75X9baidQG82LqMNVhUo61P3jCm3gVd3UMncw
+ 7QgtXgArVmnnXe0BrP3fBtC/oX1XI12QLbZIUGQ6wF7UB7MzT9J0Hsj78IJUazjj1Mxrq2QUW
+ rNeSNdlmwMJANCgnMPj1VOLme08DN8LQP4AHyBW6s1m/G/YDB6X+CNAUchEb37iOhjRTdE9gQ
+ CpgVha+1npK+WnF27wR8pjuvrG0fX50/E3XwTsA0RI4SnG4ZflfPr13atf4ekraC/IGl51Yxr
+ f1qylPOTjfUj3tg7CI3bR3qBWNilmxg5RjdGymRikKseH3iT0QUmcMJuS3GPavBxJQXVLKC6T
+ 1uazOi/q6fMTsj1OxYqo1f/d7FGK1wYOPkiS7b845pN1OimL+onTEv4nIaDteajuiNgHBlaqD
+ Rtl8Ecpyk8gz6zEfxBQMf+1cQSoZTG1i3HhsfQE/g9mNavBiPEaALgvbzIUXazMEht11KNUpd
+ Nh7LBHq1iHbdtBBjV1BsqIddHJRA2NnxWOA7kQPM3HRqehQEUPzb+t47mmK00cAbY5ASGPioe
+ K/Yvyzf32tvkRpKnrSOfSNS0wd0UgcWOxhUfhTNJgbkgD5zMDgJaoqEW3fOzHljOkCdr2aEaI
+ 7yLNbZciqNTDAbaCkTGgPqWW+jfMmCPNybpWhkC2HJvwDveP9d+XLcVhPl/HgfJ4y6b4pLbqH
+ 9XuPmcqi7jd+7mL4jT1rbhhvKW7VUg06BA+VBZE2BzVerzSmFMaHRA2eFg4Iv6KU/EAalN8m4
+ ZwbCKOLaTpe4zLkRXOAxZ0hEYaAZQmrwjD59kOx/wam+hg5M5Mdki4ESsvYj7TcB75pMmbKML
+ 6bYYQ3HS7627i8=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,67 +77,52 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-The V4L2 control API was expanded to take 64 bit values in commit
-0ba2aeb6dab (Apr 16 2014), but as this driver wasn't in the mainline
-kernel at that point this was overlooked.
-
-Update to use 64 bit values. This also fixes a couple of warnings
-in 64 bit builds.
+Fixes a v4l2-compliance failure when passed a buffer that is
+too small.
+queue_setup wasn't handling the case where *nplanes !=3D 0, as
+used from CREATE_BUFS and requiring the driver to sanity
+check the provided buffer parameters. It was assuming that
+it was always being used in the REQBUFS case where it provides
+the buffer properties.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 =2D--
- drivers/staging/vc04_services/bcm2835-camera/controls.c | 14 +++++++-----=
---
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ .../vc04_services/bcm2835-camera/bcm2835-camera.c        | 16 +++++++++++=
++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/dri=
-vers/staging/vc04_services/bcm2835-camera/controls.c
-index 848b14a..89786c2 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-@@ -78,10 +78,10 @@ struct bm2835_mmal_v4l2_ctrl {
- 	/* control minimum value or
- 	 * mask for MMAL_CONTROL_TYPE_STD_MENU
- 	 */
--	s32 min;
--	s32 max; /* maximum value of control */
--	s32 def;  /* default value of control */
--	s32 step; /* step size of the control */
-+	s64 min;
-+	s64 max; /* maximum value of control */
-+	s64 def;  /* default value of control */
-+	u64 step; /* step size of the control */
- 	const s64 *imenu; /* integer menu array */
- 	u32 mmal_id; /* mmal parameter id */
- 	bm2835_mmal_v4l2_ctrl_cb *setter;
-@@ -1250,7 +1250,7 @@ int bm2835_mmal_init_controls(struct bm2835_mmal_dev=
- *dev,
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index 1ad65dd..9c90d9b 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -236,6 +236,22 @@ static int queue_setup(struct vb2_queue *vq,
+ 		return -EINVAL;
+ 	}
 
- 		case MMAL_CONTROL_TYPE_STD_MENU:
- 		{
--			int mask =3D ctrl->min;
-+			u64 mask =3D ctrl->min;
-
- 			if (ctrl->id =3D=3D V4L2_CID_SCENE_MODE) {
- 				/* Special handling to work out the mask
-@@ -1260,11 +1260,11 @@ int bm2835_mmal_init_controls(struct bm2835_mmal_d=
-ev *dev,
- 				 */
- 				int i;
-
--				mask =3D 1 << V4L2_SCENE_MODE_NONE;
-+				mask =3D BIT(V4L2_SCENE_MODE_NONE);
- 				for (i =3D 0;
- 				     i < ARRAY_SIZE(scene_configs);
- 				     i++) {
--					mask |=3D 1 << scene_configs[i].v4l2_scene;
-+					mask |=3D BIT(scene_configs[i].v4l2_scene);
- 				}
- 				mask =3D ~mask;
- 			}
++	/* Handle CREATE_BUFS situation - *nplanes !=3D 0 */
++	if (*nplanes) {
++		if (*nplanes !=3D 1 ||
++		    sizes[0] < dev->capture.port->current_buffer.size) {
++			v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
++				 "%s: dev:%p Invalid buffer request from CREATE_BUFS, size %u < %u, n=
+planes %u !=3D 1\n",
++				 __func__, dev, sizes[0],
++				 dev->capture.port->current_buffer.size,
++				 *nplanes);
++			return -EINVAL;
++		} else {
++			return 0;
++		}
++	}
++
++	/* Handle REQBUFS situation */
+ 	size =3D dev->capture.port->current_buffer.size;
+ 	if (size =3D=3D 0) {
+ 		v4l2_err(&dev->v4l2_dev,
 =2D-
 2.7.4
 
