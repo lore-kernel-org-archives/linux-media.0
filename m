@@ -2,36 +2,37 @@ Return-Path: <SRS0=n4nG=U4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 413B0C5B57B
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57542C4321A
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 16C30217D9
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2748D215EA
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="NAA7PjMU"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="dQe1gCjQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbfF2MOg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 29 Jun 2019 08:14:36 -0400
-Received: from mout.gmx.net ([212.227.17.21]:43857 "EHLO mout.gmx.net"
+        id S1727060AbfF2MOh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 29 Jun 2019 08:14:37 -0400
+Received: from mout.gmx.net ([212.227.17.21]:55295 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727039AbfF2MOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 29 Jun 2019 08:14:35 -0400
+        id S1727043AbfF2MOg (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 29 Jun 2019 08:14:36 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561810444;
-        bh=IgtQslhkTRAPZTdIBjC2QqunwNN90a5/Hkx+p3JH1so=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=NAA7PjMUI5GHjC17OvfXGa+jyv2yw8+ASxKtbfPUbCVKO5UtecE99tDi7oPYu0Epx
-         LLSiS+5A4+Pnu6scz55sIHdZJ+U/hftYdegjwN2hxJRZQyh4tyHMgFeUcIUIMcPZLe
-         36yos/uT8uQ68Q0D701JmZwLzBMO9w5/FRQ7K6AI=
+        s=badeba3b8450; t=1561810446;
+        bh=XsCSZFtMGn8TEqXeoQWK7pBSlK9ZoMDMSNSPhL3eAqg=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=dQe1gCjQZec8NuvQ8p5TxSq4dqcQ1a24W0+kR/ax6Qu3CAAUm4sCLlpWylvVpZeKf
+         5pCOzYH355TMyvFLCIY6WlnDoqF67sIqZLmO6/2L+dNkaROQue2kL3GmI37XMlTbX0
+         hnjXoUWscgtVy1yMz/ma79lNhaINqA13QPa3Pq7I=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx103 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0LwJko-1id2261skA-0185Vs; Sat, 29 Jun 2019 14:14:04 +0200
+ 0LyEUz-1ib6MN2SAf-015cXP; Sat, 29 Jun 2019 14:14:06 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,99 +42,195 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 00/29] staging: bcm2835-camera: Improvements
-Date:   Sat, 29 Jun 2019 14:13:15 +0200
-Message-Id: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH V2 05/29] staging: bcm2835-camera: Return early on errors
+Date:   Sat, 29 Jun 2019 14:13:20 +0200
+Message-Id: <1561810410-8829-6-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
-X-Provags-ID: V03:K1:P7U/wtS7v06WxFnAVxhWHIE9GlgDT9jYUUoPl+qegISrELkH2qI
- TLdd4N26rGGApPf6GhIj8Reio5vXmnEl7JHHKd/6fuS0rh8keHsidukJBioOLPPm+XRkh/s
- hMUEk34chSkhS4eoZteSeXyZgi0+tjBVfoGf4PIzUCEnCxeEYZt/J0LHUnNQUKMzb8p397w
- cftwDolL+MHP58LV5OI0Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Cu+rMgQ67QE=:SPPHy4ODqLgCN6NyTmZdxY
- dNt2t7uJ8unPlQo2skoClrCSY2yB86U5PVE1aw29ocKPSz2EnIEh40IwK4ktvU/P1J0TRdKos
- ez6fSMaIifQ1r5vm6O4SQLp1ltBkq3YarGtqq6gg1xk2ffjM3utgVIswx2cwG1t8HAe2/g3q1
- dCq047X/P61NTnc98PSt2eLnpptU0rGcvEGeJdE/aiSJ181Q3qaQQ1Syd43oAQuPMduhys7xt
- xyZ4estYZZHYeAcp1xdNdx6D5y5fQN5pPz+BXh6Xk013DqXcp5L0yTM125RnSs9ztE9l/teqp
- GSbC42OeIMtKG/o9IQc7Vz6DtiurVKxajdsDzUcffTkhxJOETHzpkdQPg3y/JT1jzif76k4Ro
- niWDI1b3fg3jeTFt9acukepeVVxGF5qqLP+IzZqJqrsMwu+JpHKPI6o2QeV54NWZ+SrIqa4sg
- F3N9GUotSzvPrH/hnr3FJ1B3gtp78yXY9MHwJcbHzXn+9ijfVoluEJyX0Gq8oghJ0gXC4zWet
- WQrNfZ3qnKINwt2QnhuRMAJCOujrTEXwd86nkCZRSHF1YGvBxuUYzQGx/2CHM2QuYfhyZuwtI
- zouijWcHeE77tj+tbhybn6v7RyKW9Hs0JS/VUL34I0GUAjbcniFXpQuO2/0R5VqmWXOwpzakO
- T2CrWt9B1tqH+kmeiYDI+nE31W5GseYswpGQQsfPTsWeP1e/hGA/IrITzRSOaXUHKUH8o3N3d
- PfxXVRjQjDuozWv485NbKQg1UIKy0TbgEVCdcAV9NSWZH6X8TQRxWYChuiPjs1oorMY4Rlyks
- 2s9JotR16VLl9rcQa1UsZQtWzf101xJP7TM84rXZoN6YvZi7NJCHMhq4hm9IImPBHX7MnLuPe
- B4MhpN0D1Qinqn9ICGAC4qyZYOWeEFovcilaEpoXhI+Kva45QHZs+1rt0p9nhS6hSdVLxi2P2
- VaRtfWvZxtrYtDCYO/afKQALP76VgGj3/QJywiN5LiyqEUG1rztWc2EeSM4PDR7s0kLYsLTTD
- bdfiI45irdyy36Jfku4AD9hdVeD1odoiTdcE3rjFX0B7R4USmjWEj51+Zm5gtHG3OgiULbL06
- 5+XUfxE4RVCaLM=
+In-Reply-To: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
+References: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
+X-Provags-ID: V03:K1:uHemwYg13/jic9QLGpqUQIie5rCHxJoQET8DxwVg2MpLubY1wp2
+ 8ohoUL3hv8zWd5L+p9BBdA0+nGuEbRwGZaY7wtFTyV4VgxNhMeVkZRhCnnH730vEpZ1V3lF
+ 1tnOyMcVgY7rgMLtcyfoU2XAfNhsgSCGWVWXt5KKcnHmMRMx9oYNiNaDgVU3FBo6ILieaD7
+ /xYqe/WOI+HFH6jhaj49A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:HaRXCETBJO0=:MGe1Qp12avPevQPeXCtJUy
+ tOqT2yE/R0QzP6Q6JQPU9aICM2esTj8rJsLG4kF1/r9cJnJQgKc4iA0F1hptBMYwdARIAsGzt
+ seNbb2N6yD+eAg/lh0oFj0jXX3vyWO4wb6HZywmrr+tGGaXe2tzyk2C/pYgmrbvBPWbiZ+4Jj
+ s016J4cy5ynY2q52JFBrelXfwpkWtDKs6lQwA7QlNsOlMXS6X/UayvDI9kUzO95Y969qWdvBM
+ pI6WKcTv9tzqslZa4kueI/H5KBi1lPDFsMS8fgtzxm0bNDauosPXOXmy+R1wL+Y9JsUJI/4M9
+ E0Uz8XB01MuD+5rq9I/ZMJk2JmyCDpaHVfVRydS1dRpclrfMv1FHCHZ0oPJfVowL22QE1js/c
+ bqFkbinepocFKex7E7JAjgOKw4enytfXR+LCz50gS/fVfUFOLxevpCNEVDycHvtfFGJWoZ/ZY
+ ELhjc5ss5Pm47pxYCfQRAv7xoM5/hoS9FF6BUw3J7z9jMisUDA91T83kLj24XgGq3z9+77kFG
+ uu+83a82hqBSva+nPYzGsvjHmhRfkpvzgoogbWN9VcnTUyaCKQi5Nnz1v9AF8MCIC5AkjLX63
+ 3Qz8cfWg+ptREsgJTsZipf8ZJfsWAMk7kpShe3BjVu0vuQ6krhuD3KgPPDPyVQ4/FgiW0N0c6
+ lMfbwkT8NOx6Bt4lOpjuVVmNqbc0omEqCjC4BQEtWXzNjTSfb0yhwR5tdLzEt1RA9n+/cC90o
+ 1qplWmbmG2Vlkro14R6JE2FxE4wKNkq0dPHMSnd5rokPoBX/NUuXW56p3RnJmV/JZTP+Hj/83
+ YQ19PshzwvY3LCuTX8jVWa/aQtlXkMxOFx8Blv8qHP0HaIaIv4+SRqZA3/ZqZvTEmJ4qHh9oF
+ 1sy7LVqWg5iZUpQqFEFREdWMyyJ/8HHPUmil0akZc+w0B9jKXDx4jDk+U01Yo5vHgufJnTRh+
+ FLanyR9Q9z9lJdTl0DN1qMZYPjFA+vsqV9TlmONus0Z9MXMf4aWHktloxhwx/cRaDgBpORCwE
+ f+DrEZkokpkdpksbKsNGyOrEdpB30pJii83FC/neYfFgDvhBeK2eXCZY6kyRS5zG9P3pd0GpI
+ SCgDF+m2/ukeR4=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is an attempt to help Dave Stevenson to get all the fixes and
-improvements of the bcm2835-camera driver into mainline.
+From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Mostly i only polished the commit logs for upstream.
+Fix several instances where it is easier to return
+early on error conditions than handle it as an else
+clause. As requested by Mauro.
 
-The series based on the latest bugfix V2 of staging: bcm2835-camera: Resto=
-re
-return behavior of ctrl_set_bitrate().
-
-Changes in V2:
-- add my own SOB
-- drop H264 timestamp patches (1,19 from V1) from series
-- addressed Dan's and Hans' comments in patch 6, 29 and 30
-
-Dave Stevenson (29):
-  staging: bcm2835-camera: Check the error for REPEAT_SEQ_HEADER
-  staging: bcm2835-camera: Replace spinlock protecting context_map with
-    mutex
-  staging: bcm2835-camera: Do not bulk receive from service thread
-  staging: bcm2835-camera: Correctly denote key frames in encoded data
-  staging: bcm2835-camera: Return early on errors
-  staging: bcm2835-camera: Remove dead email addresses
-  staging: bcm2835-camera: Fix comment style violations.
-  staging: bcm2835-camera: Fix spacing around operators
-  staging: bcm2835-camera: Reduce length of enum names
-  staging: bcm2835-camera: Fix multiple line dereference errors
-  staging: bcm2835-camera: Fix brace style issues.
-  staging: bcm2835-camera: Fix missing lines between items
-  staging: bcm2835-camera: Fix open parenthesis alignment
-  staging: bcm2835-camera: Ensure all buffers are returned on disable
-  staging: bcm2835-camera: Remove check of the number of buffers
-    supplied
-  staging: bcm2835-camera: Handle empty EOS buffers whilst streaming
-  staging: bcm2835-camera: Set sequence number correctly
-  staging: bcm2835-camera: Add multiple inclusion protection to headers
-  staging: bcm2835-camera: Unify header inclusion defines
-  staging: bcm2835-camera: Fix multiple assignments should be avoided
-  staging: bcm2835-camera: Fix up mmal-parameters.h
-  staging: bcm2835-camera: Use enums for max value in controls
-  staging: bcm2835-camera: Correct V4L2_CID_COLORFX_CBCR behaviour
-  staging: bcm2835-camera: Remove/amend some obsolete comments
-  staging: mmal-vchiq: Avoid use of bool in structures
-  staging: bcm2835-camera: Fix stride on RGB3/BGR3 formats
-  staging: bcm2835-camera: Add sanity checks for queue_setup/CREATE_BUFS
-  staging: bcm2835-camera: Set the field value within each buffer
-  staging: bcm2835-camera: Correct ctrl min/max/step/def to 64bit
-
- .../vc04_services/bcm2835-camera/bcm2835-camera.c  | 366 ++++++++++++----=
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+=2D--
+ .../vc04_services/bcm2835-camera/bcm2835-camera.c  | 94 +++++++++++------=
 -----
- .../vc04_services/bcm2835-camera/bcm2835-camera.h  |  32 +-
- .../vc04_services/bcm2835-camera/controls.c        | 184 +++++------
- .../vc04_services/bcm2835-camera/mmal-common.h     |  12 +-
- .../vc04_services/bcm2835-camera/mmal-encodings.h  |   9 +-
- .../vc04_services/bcm2835-camera/mmal-msg-common.h |   9 +-
- .../vc04_services/bcm2835-camera/mmal-msg-format.h | 104 +++---
- .../vc04_services/bcm2835-camera/mmal-msg-port.h   | 133 ++++----
- .../vc04_services/bcm2835-camera/mmal-msg.h        | 150 +++++----
- .../vc04_services/bcm2835-camera/mmal-parameters.h | 286 +++++++++-------
- .../vc04_services/bcm2835-camera/mmal-vchiq.c      | 159 +++++----
- .../vc04_services/bcm2835-camera/mmal-vchiq.h      |  22 +-
- 12 files changed, 809 insertions(+), 657 deletions(-)
+ 1 file changed, 49 insertions(+), 45 deletions(-)
 
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index e81d4df..1e2b51b 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -334,7 +334,9 @@ static void buffer_cb(struct vchiq_mmal_instance *inst=
+ance,
+ 			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
+ 		}
+ 		return;
+-	} else if (length =3D=3D 0) {
++	}
++
++	if (length =3D=3D 0) {
+ 		/* stream ended */
+ 		if (buf) {
+ 			/* this should only ever happen if the port is
+@@ -357,46 +359,48 @@ static void buffer_cb(struct vchiq_mmal_instance *in=
+stance,
+ 			/* signal frame completion */
+ 			complete(&dev->capture.frame_cmplt);
+ 		}
++		return;
++	}
++
++	if (!dev->capture.frame_count) {
++		/* signal frame completion */
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++		complete(&dev->capture.frame_cmplt);
++		return;
++	}
++
++	if (dev->capture.vc_start_timestamp !=3D -1 && pts) {
++		ktime_t timestamp;
++		s64 runtime_us =3D pts -
++		    dev->capture.vc_start_timestamp;
++		timestamp =3D ktime_add_us(dev->capture.kernel_start_ts,
++					 runtime_us);
++		v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
++			 "Convert start time %llu and %llu with offset %llu to %llu\n",
++			 ktime_to_ns(dev->capture.kernel_start_ts),
++			 dev->capture.vc_start_timestamp, pts,
++			 ktime_to_ns(timestamp));
++		buf->vb.vb2_buf.timestamp =3D ktime_to_ns(timestamp);
+ 	} else {
+-		if (dev->capture.frame_count) {
+-			if (dev->capture.vc_start_timestamp !=3D -1 && pts) {
+-				ktime_t timestamp;
+-				s64 runtime_us =3D pts -
+-				    dev->capture.vc_start_timestamp;
+-				timestamp =3D ktime_add_us(dev->capture.kernel_start_ts,
+-							 runtime_us);
+-				v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
+-					 "Convert start time %llu and %llu with offset %llu to %llu\n",
+-					 ktime_to_ns(dev->capture.kernel_start_ts),
+-					 dev->capture.vc_start_timestamp, pts,
+-					 ktime_to_ns(timestamp));
+-				buf->vb.vb2_buf.timestamp =3D ktime_to_ns(timestamp);
+-			} else {
+-				buf->vb.vb2_buf.timestamp =3D ktime_get_ns();
+-			}
++		buf->vb.vb2_buf.timestamp =3D ktime_get_ns();
++	}
+
+-			vb2_set_plane_payload(&buf->vb.vb2_buf, 0, length);
+-			if (mmal_flags & MMAL_BUFFER_HEADER_FLAG_KEYFRAME)
+-				buf->vb.flags |=3D V4L2_BUF_FLAG_KEYFRAME;
++	vb2_set_plane_payload(&buf->vb.vb2_buf, 0, length);
++	if (mmal_flags & MMAL_BUFFER_HEADER_FLAG_KEYFRAME)
++		buf->vb.flags |=3D V4L2_BUF_FLAG_KEYFRAME;
+
+-			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
++	vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
+
+-			if (mmal_flags & MMAL_BUFFER_HEADER_FLAG_EOS &&
+-			    is_capturing(dev)) {
+-				v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
+-					 "Grab another frame as buffer has EOS");
+-				vchiq_mmal_port_parameter_set(
+-					instance,
+-					dev->capture.camera_port,
+-					MMAL_PARAMETER_CAPTURE,
+-					&dev->capture.frame_count,
+-					sizeof(dev->capture.frame_count));
+-			}
+-		} else {
+-			/* signal frame completion */
+-			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
+-			complete(&dev->capture.frame_cmplt);
+-		}
++	if (mmal_flags & MMAL_BUFFER_HEADER_FLAG_EOS &&
++	    is_capturing(dev)) {
++		v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
++			 "Grab another frame as buffer has EOS");
++		vchiq_mmal_port_parameter_set(
++			instance,
++			dev->capture.camera_port,
++			MMAL_PARAMETER_CAPTURE,
++			&dev->capture.frame_count,
++			sizeof(dev->capture.frame_count));
+ 	}
+ }
+
+@@ -775,28 +779,28 @@ static int vidioc_overlay(struct file *file, void *f=
+, unsigned int on)
+
+ 	ret =3D vchiq_mmal_port_set_format(dev->instance, src);
+ 	if (ret < 0)
+-		goto error;
++		return ret;
+
+ 	ret =3D set_overlay_params(dev, dst);
+ 	if (ret < 0)
+-		goto error;
++		return ret;
+
+ 	if (enable_camera(dev) < 0)
+-		goto error;
++		return -EINVAL;
+
+ 	ret =3D vchiq_mmal_component_enable(
+ 			dev->instance,
+ 			dev->component[MMAL_COMPONENT_PREVIEW]);
+ 	if (ret < 0)
+-		goto error;
++		return ret;
+
+ 	v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev, "connecting %p to %p\n",
+ 		 src, dst);
+ 	ret =3D vchiq_mmal_port_connect_tunnel(dev->instance, src, dst);
+-	if (!ret)
+-		ret =3D vchiq_mmal_port_enable(dev->instance, src, NULL);
+-error:
+-	return ret;
++	if (ret)
++		return ret;
++
++	return vchiq_mmal_port_enable(dev->instance, src, NULL);
+ }
+
+ static int vidioc_g_fbuf(struct file *file, void *fh,
 =2D-
 2.7.4
 
