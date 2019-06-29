@@ -8,31 +8,31 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC3BCC4321A
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:49:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD174C5B579
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:49:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A5B062086D
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:49:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B66AB21670
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:49:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="SBVowYsx"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="XDV6MBnW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727035AbfF2MtU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727037AbfF2MtU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 29 Jun 2019 08:49:20 -0400
-Received: from mout.gmx.net ([212.227.17.20]:54777 "EHLO mout.gmx.net"
+Received: from mout.gmx.net ([212.227.17.21]:54151 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726961AbfF2MtT (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 29 Jun 2019 08:49:19 -0400
+        id S1727025AbfF2MtU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 29 Jun 2019 08:49:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
         s=badeba3b8450; t=1561812540;
-        bh=y9m97Wf190flRY/FkjssAEHMINPsT0DgpJSYt7gV5jk=;
+        bh=AO24dhR33sAimyv1ny5zTcoHxXYyQIqUHySiBAbYjys=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=SBVowYsxUrIPB3LmgQtaC4QKvIlrowGhIoEbXoPWy6xP+XFd9FkyxztiE5HZqWsQf
-         IyC9TfMSrOEzzMbhYlwrgMcLx5oROxhYByeFO9D83eHK4/4onMwzSKQmmBk+VRSKhR
-         ofnEcQ1r5bPDNYQKYIEIjKsR/j3LB0HjeOMmOJSI=
+        b=XDV6MBnWhQN6JHJAe6lAfXxJOZkAk7rOVJnbN9256tOkxGGUAxnJoJAX/0IFT58dL
+         TpyC4l0qMv1nxA7hzI6KCF3uIavwEQ6YpbHePEBWGEsNGSqDZvWY+a+oxniDcOH69F
+         yO81LRDrZV4g/GFwCEQwTG1GuTTkqW6udLSacFUI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 1MYNNy-1i2bHC2lRy-00VRcW; Sat, 29 Jun 2019 14:49:00 +0200
+ 1M2f5T-1hhSy43Ryp-004ANR; Sat, 29 Jun 2019 14:48:59 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 22/29] staging: bcm2835-camera: Use enums for max value in controls
-Date:   Sat, 29 Jun 2019 14:48:29 +0200
-Message-Id: <1561812516-9087-7-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH V2 20/29] staging: bcm2835-camera: Fix multiple assignments should be avoided
+Date:   Sat, 29 Jun 2019 14:48:27 +0200
+Message-Id: <1561812516-9087-5-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561812516-9087-1-git-send-email-wahrenst@gmx.net>
 References: <1561812516-9087-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:xAm5i4guJHEE2OzWyqtVW+g+GY6h9CQ5fCfoYk7BWskckUgggKA
- 1gd/Z1LbxBlTvCDkpeF6xhQPAlQ1P7AqRcK48LHPZQHWlFDjnwdvNLZAUwKuAfjxHn3/MTl
- +vpkibuOvRWp23BvxnmSzB1+07VJWyGfF0t2sv1XG/U5XyN1/Hi1hSCrCvPRkvAT2anI77O
- 3fy0Gn5aij+7gRm47P5hQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nlycN+a7BJ4=:flC5BhW5HIdydHoAOBxPCx
- dQBMzEVxz8+He0UUfVqO+C+jpjxqwIjtUX9eZrOywqBteseMHyK5Af6APhFWDx15Z8nDYdT99
- t4lj45U7ihpK3LqtHpJNeND76uU0WebYrzs+xbbQnpqs4VJ+aMe5lznzlbfmLcksdMziEXauQ
- zMzapiyIy5y4IELHMQBpTvKK0d3nGK2+3agUD/72qBkAC123tdYBht8FzMOAxQt0ZgZNsdPnO
- q16KGStT8zfJv/wumfM/9bYwTGS4nKWTfReEKORFCJu6z8fqn/gLZUd5XOTBoajtd0NpVIbcJ
- uN9ON0/wCqsLfwmtTidPLoJoUl7XtVFJty52MSmneYGlmC2o0NuU+WH77y2lC+PN29yd9Ftfb
- W4vzCVJY7URVnbWr1pypRbegj5IOz/cx+NGMOHvAIDKcxPSXywSxvLbrD1l4TcfoyJJWd6cn8
- 7sUnJAEguAxsrK1Kx3b6UJIXP5Rs+OFMf1uENbJdpv9zOvWUPG8NQx9nUFJIIVfEXKHsaKwdV
- cU0dTcWcNhk7qC/xLOs4Cmys0T47kbyyZMK2i7dOsyh3DfpOl3gKWUencvM5WDJA5krSNydGJ
- 2XCfXpTXg8KKan9ZJlNbZeeb+EWlIkmG1f87pGPlBnVp9vGcYR4IJaEuREVg3CV9P+ihF2YQu
- WzPC9OlDgRaNpznPwOyYE/QPv+xUh+V9ZUOjIIldMTPg4KDlEc1depMRf1p6bAwUeaNsQbd3r
- FA2iFSMPKby/6r65KVe5oZFnFUmh4wejxB3MjLCXhyYuur6IC6U/WOEfSWn3MGWl5nsuEq/Vo
- zGkHHSql3LncDosGvAmqMdpqiemAeUOs/N3gL8T7RH56SYq3haUQ6DKQYZiD+cabMhj+tVhyR
- H5zKLX8qxNojG5H2QsmA9gmEivlR+OPk6wmxepGKWiCclIa8cUxddznBYHrMBbRv70Xs3zOfI
- Fnc2xzkutT3WRq21T2d5hkZnmx4bn5hpTRsNRrf4Rt51sHYQ4/lK6XYUJfzM58ulNi+FGYFqE
- n1cOTUN8R3JY45+6FfRfIfCg18LcMwPN7UFaRYS4IgbenYh7E3VIPx0nvP+TbeAhdnZtyKdB4
- AiJY+ypyhvJEnA=
+X-Provags-ID: V03:K1:4nTPGPJkQrZ8QTOIRCsHWddGEo5EsUCmCY5X0F+iDLRIBIVxF6C
+ 26GoGSvixmPNbN6zYQcGnBQl04fIlxac5RwX53y807grnU82/cDIAeNWslR3irBOqztgqKN
+ fZbfqZ+KYfqXph7uNjBnJAvhuVBqoyAP0ebiIqVjdnMFnsYZVgKdHDOdwePXakjf4xqUviZ
+ pek0ZzHKdnTa1XHsuEJ4A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:x4SvSKJslW4=:XhhQjHajOyXEX0D8Ngd4o5
+ hYAGfjuTsXHXPFHiaq0YJM4H+wLwfx6r0U7EtyEAL9g7lEhzw/4xpl2BOgB2dQPT6W83i63xx
+ aZzNnd2cJjpSCNpixwN96iRxfJYxwiZSZKIiP9sPEZnunaA1XYfeGEyusQhkttQfXsJ5HWCnn
+ MMJGDrldzVoF4bBN6Jo5vvGmsBHwNGhMC9T851HLsrRsxko7y8ZJ3Uzp7zjl3xk7r5Ngj6fML
+ 6FHaRleI8qP0DddjVyWVu0FnvAi/Ldf5p8CHINEtQq7wZx7WjfcgfJ2k7fBg6lWnpjx0j26Qv
+ KPvkspuxvaoMldUGUy76bqsEYiPFkmwWoNpJaJzcfGpoWRg29TkPw9reJKSHV9LvpTnqg5z/D
+ HKzE2hz6/08wz8koPDVQY6KAj+/5ZCLOJNhm8yV3Ol5sLJn0NXJ+VkJ7QuT4O9jkONgiXmZuX
+ Cv0IAAlNfhg3aM+1IILk39hySfgiSRNHOqkptR1i+HkbSyMDWrKszqhN4mC16Q/SQ9DQecKGr
+ Di63Bd93evDOSHlqqFVv/oQM3cuCBVvyXaBsNhnri8h8HKS2P7/OJ/wqa9MLPAjS64NgNKUI/
+ K8Vz/86KNeZfG4Yd1lz/NsyDkieVbLxUuoAZYMoaiVZeXNrJoPSJkYpmjMxp7TAJTQCwR0/es
+ h2LSftp+N0k6AOlu+qJ/mmY5x2Nk6/b2bebxCAoBPrjxzcmiNY/qgvzOauC45pj/upPtKQ6Lw
+ oUDRcNI5VoHahTK/IW0I81GoYs128HLMgFZXIMpfNwKTU/AJgs4HWw2xdpLeEJrwNUvPmqg8z
+ fHD3NOjuLKI/inU7njlRzw6AwwlLCZgSGN6SexPGPyHbotGpmuYNMGZj5X63AYzrsX2iYbYqM
+ E+i1QuKMhwAK9UJ+Sw7hh7hmYMj2Ovb5/PVmp3BxKjaAyUi6SH7EQIYGUoP8Wtz31HDp5Xn2D
+ NIN9pZTRs/JQb/5El1VmJYFJ3He/1I45aCG2i1ARBlShvJqHf1lfJl35Ej+WAZF8z90IfD/iO
+ AL8T+mBvA0dZHw7DVyDV97F/XoaW41IXseCqyejKjS9LfHaVftTDm5EpmJoBlqFGAftGSyCJR
+ NMXiP1U7V3MJ8c=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,126 +77,37 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Controls of type MMAL_CONTROL_TYPE_STD_MENU call v4l2_ctrl_new_std_menu
-with a max value and a mask. The max value is one of the defined
-values for the control, however in the config array there are several
-entries where raw numbers have been used instead. Replace these
-with the appropriate enum.
+Clear checkpatch complaints of "multiple assignments should be avoided"
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 =2D--
- .../vc04_services/bcm2835-camera/controls.c        | 37 ++++++++---------=
------
- 1 file changed, 13 insertions(+), 24 deletions(-)
+ drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/dri=
-vers/staging/vc04_services/bcm2835-camera/controls.c
-index bc2f3f4..038b9b9 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
-@@ -58,19 +58,6 @@ static const u32 iso_values[] =3D {
- 	0, 100, 200, 400, 800,
- };
-
--static const s64 mains_freq_qmenu[] =3D {
--	V4L2_CID_POWER_LINE_FREQUENCY_DISABLED,
--	V4L2_CID_POWER_LINE_FREQUENCY_50HZ,
--	V4L2_CID_POWER_LINE_FREQUENCY_60HZ,
--	V4L2_CID_POWER_LINE_FREQUENCY_AUTO
--};
--
--/* Supported video encode modes */
--static const s64 bitrate_mode_qmenu[] =3D {
--	(s64)V4L2_MPEG_VIDEO_BITRATE_MODE_VBR,
--	(s64)V4L2_MPEG_VIDEO_BITRATE_MODE_CBR,
--};
--
- enum bm2835_mmal_ctrl_type {
- 	MMAL_CONTROL_TYPE_STD,
- 	MMAL_CONTROL_TYPE_STD_MENU,
-@@ -972,8 +959,8 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls[V=
-4L2_CTRL_COUNT] =3D {
- 	},
- 	{
- 		V4L2_CID_ISO_SENSITIVITY_AUTO, MMAL_CONTROL_TYPE_STD_MENU,
--		0, 1, V4L2_ISO_SENSITIVITY_AUTO, 1, NULL,
--		MMAL_PARAMETER_ISO,
-+		0, V4L2_ISO_SENSITIVITY_AUTO, V4L2_ISO_SENSITIVITY_AUTO, 1,
-+		NULL, MMAL_PARAMETER_ISO,
- 		ctrl_set_iso,
- 		false
- 	},
-@@ -990,8 +977,8 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls[V=
-4L2_CTRL_COUNT] =3D {
-  */
- 	{
- 		V4L2_CID_EXPOSURE_AUTO, MMAL_CONTROL_TYPE_STD_MENU,
--		~0x03, 3, V4L2_EXPOSURE_AUTO, 0, NULL,
--		MMAL_PARAMETER_EXPOSURE_MODE,
-+		~0x03, V4L2_EXPOSURE_APERTURE_PRIORITY, V4L2_EXPOSURE_AUTO, 0,
-+		NULL, MMAL_PARAMETER_EXPOSURE_MODE,
- 		ctrl_set_exposure,
- 		false
- 	},
-@@ -1027,7 +1014,8 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
-[V4L2_CTRL_COUNT] =3D {
- 	{
- 		V4L2_CID_EXPOSURE_METERING,
- 		MMAL_CONTROL_TYPE_STD_MENU,
--		~0x7, 2, V4L2_EXPOSURE_METERING_AVERAGE, 0, NULL,
-+		~0x7, V4L2_EXPOSURE_METERING_SPOT,
-+		V4L2_EXPOSURE_METERING_AVERAGE, 0, NULL,
- 		MMAL_PARAMETER_EXP_METERING_MODE,
- 		ctrl_set_metering_mode,
- 		false
-@@ -1035,7 +1023,8 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
-[V4L2_CTRL_COUNT] =3D {
- 	{
- 		V4L2_CID_AUTO_N_PRESET_WHITE_BALANCE,
- 		MMAL_CONTROL_TYPE_STD_MENU,
--		~0x3ff, 9, V4L2_WHITE_BALANCE_AUTO, 0, NULL,
-+		~0x3ff, V4L2_WHITE_BALANCE_SHADE, V4L2_WHITE_BALANCE_AUTO, 0,
-+		NULL,
- 		MMAL_PARAMETER_AWB_MODE,
- 		ctrl_set_awb_mode,
- 		false
-@@ -1056,7 +1045,7 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
-[V4L2_CTRL_COUNT] =3D {
- 	},
- 	{
- 		V4L2_CID_COLORFX, MMAL_CONTROL_TYPE_STD_MENU,
--		0, 15, V4L2_COLORFX_NONE, 0, NULL,
-+		0, V4L2_COLORFX_SET_CBCR, V4L2_COLORFX_NONE, 0, NULL,
- 		MMAL_PARAMETER_IMAGE_EFFECT,
- 		ctrl_set_image_effect,
- 		false
-@@ -1091,8 +1080,8 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
-[V4L2_CTRL_COUNT] =3D {
- 	},
- 	{
- 		V4L2_CID_MPEG_VIDEO_BITRATE_MODE, MMAL_CONTROL_TYPE_STD_MENU,
--		0, ARRAY_SIZE(bitrate_mode_qmenu) - 1,
--		0, 0, bitrate_mode_qmenu,
-+		0, V4L2_MPEG_VIDEO_BITRATE_MODE_CBR,
-+		0, 0, NULL,
- 		MMAL_PARAMETER_RATECONTROL,
- 		ctrl_set_bitrate_mode,
- 		false
-@@ -1114,8 +1103,8 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
-[V4L2_CTRL_COUNT] =3D {
- 	},
- 	{
- 		V4L2_CID_POWER_LINE_FREQUENCY, MMAL_CONTROL_TYPE_STD_MENU,
--		0, ARRAY_SIZE(mains_freq_qmenu) - 1,
--		1, 1, mains_freq_qmenu,
-+		0, V4L2_CID_POWER_LINE_FREQUENCY_AUTO,
-+		1, 1, NULL,
- 		MMAL_PARAMETER_FLICKER_AVOID,
- 		ctrl_set_flicker_avoidance,
- 		false
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+index 167c218..1aaae57 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
+@@ -1031,11 +1031,12 @@ static int mmal_setup_components(struct bm2835_mma=
+l_dev *dev,
+ 		/* Make a further decision on port based on resolution */
+ 		if (f->fmt.pix.width <=3D max_video_width &&
+ 		    f->fmt.pix.height <=3D max_video_height)
+-			camera_port =3D port =3D
++			camera_port =3D
+ 			    &dev->component[COMP_CAMERA]->output[CAM_PORT_VIDEO];
+ 		else
+-			camera_port =3D port =3D
++			camera_port =3D
+ 			    &dev->component[COMP_CAMERA]->output[CAM_PORT_CAPTURE];
++		port =3D camera_port;
+ 		break;
+ 	case COMP_IMAGE_ENCODE:
+ 		encode_component =3D dev->component[COMP_IMAGE_ENCODE];
 =2D-
 2.7.4
 
