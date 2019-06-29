@@ -2,37 +2,37 @@ Return-Path: <SRS0=n4nG=U4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-14.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55644C5B57A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DF13C5B579
 	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2BC372177B
+	by mail.kernel.org (Postfix) with ESMTP id 57A3B21670
 	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="GGL2Cui2"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="NIlyFeqI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbfF2MOf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727050AbfF2MOf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 29 Jun 2019 08:14:35 -0400
-Received: from mout.gmx.net ([212.227.17.22]:51089 "EHLO mout.gmx.net"
+Received: from mout.gmx.net ([212.227.17.21]:35505 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727013AbfF2MOc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 29 Jun 2019 08:14:32 -0400
+        id S1727022AbfF2MOf (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 29 Jun 2019 08:14:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561810450;
-        bh=PsXPKTFlFy3F5v1GrxunrIbc0Yz6bQq+zN7/aiCfhr8=;
+        s=badeba3b8450; t=1561810445;
+        bh=zHE1SAFCsIAD5cnmVInCnyPS/jtZB3P6kyZA/ddYnsY=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=GGL2Cui21skezh03MLIAqtwX733RXjVzL25OHafdZFiP/lnXUEexKeljJZ/frWJGw
-         X/U2oguQkQyTskiVWF22rRPqGC2mjA6rPePYzjnb7oU+tQVeTKEDk8xUetq4LZ9NqD
-         jL97VwTqXUf3fUWgudrDCMa5iSXtS8FkU/YFIxyc=
+        b=NIlyFeqI6+azaUctC9gXYrfj1LV5ePh2QNfII5UevbcaXA+Mr1fjLI564p/7qBgrX
+         f1cHmTFzcAjJpCF7iBZzHUqW0HHNq8B/c8FIeXA4lHcRFKYPyspJlgM6CiAHGOYMhi
+         eXSHJ1oqL3vzjo7S0DvYcrilL1JwGnxx/urR+vBk=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx103 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0LymjL-1iaY7h2Y23-016Alh; Sat, 29 Jun 2019 14:14:10 +0200
+ 0M5tzh-1iVa2X3c9h-00xsmR; Sat, 29 Jun 2019 14:14:04 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 14/29] staging: bcm2835-camera: Ensure all buffers are returned on disable
-Date:   Sat, 29 Jun 2019 14:13:29 +0200
-Message-Id: <1561810410-8829-15-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH V2 01/29] staging: bcm2835-camera: Check the error for REPEAT_SEQ_HEADER
+Date:   Sat, 29 Jun 2019 14:13:16 +0200
+Message-Id: <1561810410-8829-2-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
 References: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:wyjbWJY8Q2242ZTH+m/0IHN6J/mB8YMeACQ9qibx2sJtIw+WokY
- 7mCx/PHEVXIKhMLT7IlMRXaxgYIXpwGDMVjEPG6FfGQHfuIf/v/BUFKJE+o5kWBLZgN/VtU
- oxY2Av5a0RtGwZ7eJ9d814JeFG+UitWBJoaBB1F0dY/jFXQMz8lNe3j9JZDZ1jIy14sq9rg
- k6RAx/moRh5AoRPzuP6qw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LT2QB84/kq4=:8vlHi/aT3jOjYqLyYGym3L
- LHJpVf59moRvH11N7E1MxS+r6L1EwAd0rQRwPzUv6KLx6b7tZE7ZUCfqWENr/skXle6emQaP6
- pTizpwXDjLYHbIWz4fOjEhqJqEzfStD93aqIWX95DNObnwwgvQaF9kWj64pGSiS3DafSQ7Hhk
- hy5lyKeisOrfsiXm35JKOI5RA3lobbSWBqiTT8pPd26LJX71hDjga2O/Z0rlRavxMMnwRPWhX
- lWdOq2Y+5v5a4OlvMFKlk5ig9lpmc6nkcfnfbpUism0s9qBP9IgnXCjWwIyhTplQrbPIh7ldL
- LSycy1RSb6PJInodBNMrV4d86kJkHMZPVzRUsr5voClqlytgjGj/YLOS2aPPG4XjyRxHMb5dz
- VwJc6XcJH1D1P+xY9C3PdQRb8kifoWx/MAg/jIEFiIFyg74872VpdT7Ur8XSyKyq+0yx0lQT3
- yNdDVzVyuRyWtKV5A4uYpFqy4lH2RoTwWnwRqu60rGiZ+MNRbepzkkBinkkzoFhY6XRz+l+2u
- N0JZag31x7Wk+cLQN8CAStwSGIoUbUE9OI30v6cACXyJ3Use1+UthaZIp+SiQEBR+NskjGtaB
- p1ZbuUHYPaclPemNqWuDRCaWh8/5NVgpwpMvacmqACC+WzGbk4cpxIh6Qk2404gOwEcZy395M
- 6aV/zi8FPfFDC03e8k2Tg8uZLZaWOP2pm6ZJmwyYOl84TBWo86yVEDo0BIkLmaYbaTBGze8OF
- jZz2lfdRIsLIoHMTMtJTGdvTku3RDDchWacU6vR+OrmM4ZVhqZXCA5NTbrc250yXkuS/9P+kv
- TOLmpuMySlTSgxrTnoc52j2YO+fOS4/JxenTP1JneqT8XEKiNWEX66Kzgl2edC6KYNstERRUl
- DASFXzngY3bWWLPybrvx+Cda57ASWp6m3eM/n3gR/3II+uInhF+uky364lm9tG9hvBLbHBTn1
- /bopLBqahnpJMNK2mOkDezHCp3lvczZjk+/N+fx/cUvxYBWG3I71VJ1N1u4tpOviSQQDPpbUf
- b/9fFIF+/mrL+CuLIjpcLLMgxtunk1pjLmSeLBctYpwmeaTp5m9CTjfXV2r15D4PCJfw69GIf
- Tm0U00qxR8gOgg=
+X-Provags-ID: V03:K1:3in6uZLTp+rEkuSmOzoEoeteDWMTZ5q7niOWNVOuFVnkYiqRT21
+ JFR1IOWjc1BvnIbOH8H8A0HnTJaqy0lUIT/aTU4QEMpq2aI7UQCTX4KlEn8TawymmXvpb+v
+ DP31/Tom34aVSlToKwukFAV61xft+FnZ43DUhIWt5Y2Oz2KaaHR+WiT/Bnp7MiuxiYbbS11
+ 8QJpg/BtDDTlGy+vvucEQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Agt0BPubglA=:2DQ1hO8GU9eQh3j0ufWSvn
+ CYEuiGkZnHsWnOfrO9+SsW2JLKk6+erLB/11feNtKm1VpCML0vAo7t1Djxz8D4jKigfpcZyCv
+ D60ad4kpp5ew3kIehJG3uGRd4HyejoW1QG9+e4TnsfPxaQTtzXT7byCCd+W8Lo4/4Y9WMra+i
+ fwwH7kysQC55z/UD38EvdbNiOq/JbpGzkeH+5a3/9uTZt9em3hXrIkUx5kIHuN8AFw89yNfOr
+ GJvVYBMjh/GvHst3bl7JSVrbt7f05+qRyEpHC/fogA4Z1nenuXwk/kluqlvD1uaqGYRRDWqDh
+ /GKz3hO5MJlt5lNDDIjBMSsS5tkgzOaTHk4mPVujUL/HYozqozMcH43lwx+3jijte1uYTja1o
+ AWaTk/dujEjVScUKI/MtEFWfNPw6FMLvQ5fWv2B+/OS+MuucOwMGuQAy68LYN/0xgYTvjlE/w
+ Yk9y50bHPVf1sK/SvIxXobau6BDeBUOkQ+UVwR2FhtXWbgaOv+eaVXHYFEm/IgADKrdkS9GXi
+ uWGOQp/3gbne/eWAoKKiGP3AzCdz+2HHRDUoWep4evf88tY9ZP7gqAxhKZs2ghmXZhfvWcOTE
+ WGc86PFyLnkiGWw21yQswQbEwJwifWsnEqZSujeXcSYZXYK2yuqCgc+xVqlYgvRdZV/xaenP/
+ 4GVPtrC54MX8G9v3oLAbKS/onPLKwDJL271WnFCB/8AwFeGC9IlOZKEEHaJ4h0dtKGiH0C5B7
+ Gw1PVgU92CqtqEkqY9PboHwonwK5FkZb0DMz/iYWBlpeYOkxl4qHlYH4EJOz/XOXVdxrQEC28
+ BPPUO6p5UxpSQWdyfbwP5fuigCe7gu8Se2udzZKqPIeuORjOazL93eGMaoo3hVT5LFAkXbob7
+ rTHnJ2qkW3iFJy+iEF+HFjn4FM8d4EOP8WhwlN2ZmIi29slChdswmvJDUSn7Can992bj14ROQ
+ DkW7fLOfZhsOx08VdCVz5+JwmUuK/JfbE6NlLmOLwMuYLnBS39ywm5m7d5L7hLWTVGDP2oR52
+ R3ZhvwxFMucSnrBOeOUcT0o0eGGNPbpkkuPFdmK7SDlnMTW4k876EBaFprnep6uQwSLJZldZo
+ c56QRiLT+r+Bc0=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,110 +77,39 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-With the recent change to match MMAL and V4L2 buffers there
-is a need to wait for all MMAL buffers to be returned during
-stop_streaming.
+When handling for V4L2_CID_MPEG_VIDEO_REPEAT_SEQ_HEADER was added
+the firmware would reject the setting if H264 hadn't already been
+selected. This was fixed in the firmware at that point, but to
+enable backwards compatibility the returned error was ignored.
 
-Fixes: 938416707071 ("staging: bcm2835-camera: Remove V4L2/MMAL buffer rem=
-apping")
+That was Dec 2013, so the chances of having a firmware that still
+has that issue is so close to zero that the workaround can be
+removed.
+
+Link: https://github.com/raspberrypi/linux/pull/2782/
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 =2D--
- .../vc04_services/bcm2835-camera/bcm2835-camera.c  | 22 ++++++++++++++++-=
------
- .../vc04_services/bcm2835-camera/mmal-vchiq.c      |  4 ++++
- .../vc04_services/bcm2835-camera/mmal-vchiq.h      |  3 +++
- 3 files changed, 23 insertions(+), 6 deletions(-)
+ drivers/staging/vc04_services/bcm2835-camera/controls.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
- b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index 5ca644c..296f4f0 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -584,6 +584,7 @@ static void stop_streaming(struct vb2_queue *vq)
- 	int ret;
- 	unsigned long timeout;
- 	struct bm2835_mmal_dev *dev =3D vb2_get_drv_priv(vq);
-+	struct vchiq_mmal_port *port =3D dev->capture.port;
-
- 	v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev, "%s: dev:%p\n",
- 		 __func__, dev);
-@@ -607,12 +608,6 @@ static void stop_streaming(struct vb2_queue *vq)
- 				      &dev->capture.frame_count,
- 				      sizeof(dev->capture.frame_count));
-
--	/* wait for last frame to complete */
--	timeout =3D wait_for_completion_timeout(&dev->capture.frame_cmplt, HZ);
--	if (timeout =3D=3D 0)
--		v4l2_err(&dev->v4l2_dev,
--			 "timed out waiting for frame completion\n");
--
- 	v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
- 		 "disabling connection\n");
-
-@@ -627,6 +622,21 @@ static void stop_streaming(struct vb2_queue *vq)
- 			 ret);
- 	}
-
-+	/* wait for all buffers to be returned */
-+	while (atomic_read(&port->buffers_with_vpu)) {
-+		v4l2_dbg(1, bcm2835_v4l2_debug, &dev->v4l2_dev,
-+			 "%s: Waiting for buffers to be returned - %d outstanding\n",
-+			 __func__, atomic_read(&port->buffers_with_vpu));
-+		timeout =3D wait_for_completion_timeout(&dev->capture.frame_cmplt,
-+						      HZ);
-+		if (timeout =3D=3D 0) {
-+			v4l2_err(&dev->v4l2_dev, "%s: Timeout waiting for buffers to be return=
-ed - %d outstanding\n",
-+				 __func__,
-+				 atomic_read(&port->buffers_with_vpu));
-+			break;
-+		}
-+	}
-+
- 	if (disable_camera(dev) < 0)
- 		v4l2_err(&dev->v4l2_dev, "Failed to disable camera\n");
- }
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c b/d=
-rivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-index 0b95723..4d63176 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.c
-@@ -246,6 +246,8 @@ static void buffer_work_cb(struct work_struct *work)
- 	struct mmal_msg_context *msg_context =3D
- 		container_of(work, struct mmal_msg_context, u.bulk.work);
-
-+	atomic_dec(&msg_context->u.bulk.port->buffers_with_vpu);
-+
- 	msg_context->u.bulk.port->buffer_cb(msg_context->u.bulk.instance,
- 					    msg_context->u.bulk.port,
- 					    msg_context->u.bulk.status,
-@@ -389,6 +391,8 @@ buffer_from_host(struct vchiq_mmal_instance *instance,
- 	INIT_WORK(&msg_context->u.bulk.buffer_to_host_work,
- 		  buffer_to_host_work_cb);
-
-+	atomic_inc(&port->buffers_with_vpu);
-+
- 	/* prep the buffer from host message */
- 	memset(&m, 0xbc, sizeof(m));	/* just to make debug clearer */
-
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.h b/d=
-rivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.h
-index 3498555..1750ff0 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.h
-+++ b/drivers/staging/vc04_services/bcm2835-camera/mmal-vchiq.h
-@@ -72,6 +72,9 @@ struct vchiq_mmal_port {
- 	struct list_head buffers;
- 	/* lock to serialise adding and removing buffers from list */
- 	spinlock_t slock;
-+
-+	/* Count of buffers the VPU has yet to return */
-+	atomic_t buffers_with_vpu;
- 	/* callback on buffer completion */
- 	vchiq_mmal_buffer_cb buffer_cb;
- 	/* callback context */
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/controls.c b/dri=
+vers/staging/vc04_services/bcm2835-camera/controls.c
+index c251164..133aa6e 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/controls.c
++++ b/drivers/staging/vc04_services/bcm2835-camera/controls.c
+@@ -1124,7 +1124,7 @@ static const struct bm2835_mmal_v4l2_ctrl v4l2_ctrls=
+[V4L2_CTRL_COUNT] =3D {
+ 		0, 1, NULL,
+ 		MMAL_PARAMETER_VIDEO_ENCODE_INLINE_HEADER,
+ 		ctrl_set_video_encode_param_output,
+-		true	/* Errors ignored as requires latest firmware to work */
++		false
+ 	},
+ 	{
+ 		V4L2_CID_MPEG_VIDEO_H264_PROFILE,
 =2D-
 2.7.4
 
