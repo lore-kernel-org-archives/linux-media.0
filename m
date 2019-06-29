@@ -8,31 +8,31 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A7E5C5B57A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FF69C5B579
 	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CEBAF21743
-	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06ABA21726
+	for <linux-media@archiver.kernel.org>; Sat, 29 Jun 2019 12:14:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="Jf73JgXL"
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="A3Ac58Gt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbfF2MO3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1726961AbfF2MO3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sat, 29 Jun 2019 08:14:29 -0400
-Received: from mout.gmx.net ([212.227.17.20]:51391 "EHLO mout.gmx.net"
+Received: from mout.gmx.net ([212.227.17.20]:44097 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726909AbfF2MO2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1726906AbfF2MO2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Sat, 29 Jun 2019 08:14:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1561810449;
-        bh=DRr7lscebZ8wctMokVnVvWYIcPpsVGDYxVCVDlgab8Y=;
+        s=badeba3b8450; t=1561810450;
+        bh=lqb0GYVfx1zv6fO8FMllOzy0xCPuxLT1hKd8sJfD9HU=;
         h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Jf73JgXLpu8P1OqTc1ysI742Dp0LsmYDy3Yw/BJDEjcjOFA7ek79lVphxS7fIZHMU
-         3C9WWmAXEGLjT8ube1N4xz4lFfbdoQddRtwap8ohiNb7K6MX7LBNKu0J3Dn4meChgy
-         ZMDX/GSQyk8HoEyX6kQCge4wmXSt0ysomBP+gRB4=
+        b=A3Ac58GtFkjzDPTsuHI66QgLUsSHx7UXS+Be9ozhe/MTT5ZX+NA8C5n0NLLBRVV9g
+         qF014PXESDBFwlKvzH8T6VDJ4UPdEcgV4fTKWEosp6mwkSvR0zTOJy0G5dLXgcAP2K
+         T51SfbBpXHmrMuo63ZE0akhEBl1bemQeQzYYTpeI=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from localhost.localdomain ([37.4.249.111]) by mail.gmx.com
  (mrgmx103 [212.227.17.168]) with ESMTPSA (Nemesis) id
- 0LfTC1-1iMsrB3eoL-00p35n; Sat, 29 Jun 2019 14:14:09 +0200
+ 0LfTC1-1iMsrA34qf-00p35n; Sat, 29 Jun 2019 14:14:09 +0200
 From:   Stefan Wahren <wahrenst@gmx.net>
 To:     Eric Anholt <eric@anholt.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -42,33 +42,33 @@ To:     Eric Anholt <eric@anholt.net>,
 Cc:     linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, devel@driverdev.osuosl.org,
         linux-media@vger.kernel.org, Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V2 10/29] staging: bcm2835-camera: Fix multiple line dereference errors
-Date:   Sat, 29 Jun 2019 14:13:25 +0200
-Message-Id: <1561810410-8829-11-git-send-email-wahrenst@gmx.net>
+Subject: [PATCH V2 12/29] staging: bcm2835-camera: Fix missing lines between items
+Date:   Sat, 29 Jun 2019 14:13:27 +0200
+Message-Id: <1561810410-8829-13-git-send-email-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
 References: <1561810410-8829-1-git-send-email-wahrenst@gmx.net>
-X-Provags-ID: V03:K1:mIp1k00YLYIRTQPgciwE7hDEy8fupJdyLOgpvG+ZfkBfWRhYiKK
- 1B0oaaIJL/kqiFJmDpE0dfUdRMrRQgkbIKy/V7QTD2kAYIrp1T5WtP5HwVy2Ac3ZieJwJew
- BW5g8PtgmP7z0oumhPN+lOolZOvwijqvBIZVfPCFlcIx02Nmtq8+ghOSLMSigc+vDJU+ze5
- lwnIhbS+fMLP79hGE9Obg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Tym/dFtHE4A=:OinOAHIJJfCiT0JGpKiVS6
- 7tMQHsZ5Lk2yhUAou1py6asMsBoRqXt2Of+eFscNozQFRxvm1gCdY6YBjrmL0dfvmq60fePy4
- DVV3XciQb5IDvNfMIexplpaSdN8y/M0m8hbZk5LbVn0HgER+0q1nDRiONl9/F3KFXJjFDFoW7
- KVkfe2+EX9hsLKaZ7L3e/gaup0SDnliYzIAN+6GwZuXc9V71D8cQN/FM4meEwlXcKALqJGywl
- NN2hPn/Cuz01SdC2UPIyMnjtbLb8sBEFoyB4CpfSacWKXgbWXy7lW77JBnRi0oSihfI+fHDMB
- +eAQSd+V+hn1WSaa3he0BetbwPvckNiaTUaq/KQxp5St68xIX30JSjPBzv4f7UARO7q9bgn1J
- 3NCTzWXbLIDtwMGYFOC3H+G1miFr5hj52L6nNRegzw9HG/eXjHsWFCAs2FJWEoLq1xqeYeY1i
- 5yqAbNqREkjY0HHmMpioayAfyMabSb1piZBTPoenQLEHLpFd4XCeaZSak4VeoD0cZkuE4/BBX
- aqg1rHN8nOy/ueiScBFKjC6Tiwd4prRK0UCi++vIeihqwY1ykSeeRt7t5p0Fi3s/GKEFFLHjq
- juaBpKiWp76hlzMAzfgicA7zF4Z2IU3ijLIsM/sdnUZ9CfrVaIg41I14ujMl4DjgMHTs4O8rs
- I7yw/yKC4K1r+Hanjzkuo00SLtFH/YJDwyixeDYuzTmdsm7dDYQtG8WXq3RorwjuAVsetHFU8
- vzCDBP/guic3CRX9pvQ0zvSI9XD+lK6pe0/ex36lpSyrUq6uX2Kv/zZXotUdbXuImtHP38Q8X
- qNP32Jnjl4TFiKznLHXnefLQ/Ea16d45853LHRTqtx+/gsjZ4pRgsW5A1x1BZiUAVVs5qbNK/
- ySla07DiMiLaQCeqHB6h8/9es1IRVodazoW4dp+AVWtvUPSmII76hm7zHj6CENETiI3Xmm+/2
- bDm1sYedAw/tm2tNDychX7iqVvZ/8xynwNNkXqkmjjr9NEZu+q8eyHWdAJZfovvSfmJ33lnnm
- R56EdO6dQoZAJDQUZ+jznUNM8Rs6zV0sUsT2XfplWhnx+flBC/y8D2gdTR/C/aR3ugF8nWMcb
- LugtI+f3Fh0tXU=
+X-Provags-ID: V03:K1:AouCbZc7Dgcy2VJXo5BzkXG8P6sTu0cIpPoIeko7pitM1iIcSTq
+ 6J2Sv/bRRNbyszHl1LN0b+FgDjflg311LO0lzMVZyNhPU83CGbIrOXnct+wPzZb9d4nkvbs
+ /n1J2GjbM637uSOpIKwUHCKfuZkPhHaO0N79w+se5CTamoz8thAPdxL7VXtFdFVmUi+8gG8
+ RVvu+eQlPXbAVlAbG0DgQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:O5qRPkUdzdU=:4Ie1ZpOk3U4XKRXkw3H19L
+ fhuy7yZLkBAIvZpSNsLhW75FvEu1Lp1zW0TemM7Z37qocomGNkP2wptdFKnBSBSk7yMUugcws
+ 1NeYqh1lVs7o8NlT6a+sBPfVNex8NdsWrOAkui7LqY1ZCNdb86zioun51QU0PzSWf3b2m2HJn
+ q0X2z9g6PCQg707MSL6ugU025dtFGmuUFpLWuHEpiAJLHnm49/7iy9xlSNz/MUb/LjFkXYbv5
+ XxD4A8w6eXJSRXUP+ufxisyOUCl6CuijtSdYEZ/iaQpj32dArROu1W7A9N2BPZn2MXOVK/nZ0
+ e7xWgPOIr74YdG8b+rVUg4l+e8wBk+LhBUBTkMhHdsehk5mQ43uo6T5sdsc2/nz/WACbe7rnm
+ B/2HcniqzXXW3LBAlkSM6nipukleeRieX8zVb/JEF+RlExalbjZ8NPZ/cKHahV0vD8lZEhEVu
+ l3A8tKyQHs/Cm/pveWEGYNbKX2l9Gziev5oMOR9pMQaxU606Jyvw8GgdERkh3wW1IBO4+epw0
+ 0TKIL3bmcxhmz2iK9xYV4Q3+l/k1HvHNNddiEh7GKbDMQGviL7EYN32NM8dO0XRN+IxBpUlm1
+ vfY2vRBbA6/M4+F44IxbKpbfQAJW8lmO2HMkzCPA77yv/hDs1zPYq137AJEq4p5MXd9a2D95q
+ Q8qWbduO/fSBwP65DToYnt5S4j4On6Vw4Zs+JV19rQ/FO6Ztkc83nLIuSHnMKjnuzTMLnczU7
+ gT3bLGmgGCujJcSgBIaa9OPXYbd7D0pocSGqeBFSNNQ9otyPSK6BMQ9KK7ML+WVNJBZZWa+YD
+ mJQv27Wmzt4ggpFel2E2njXX5VvDd6x7Irdfer+tOYe/gzK+4VcIqPQwdlgS/F26VCXfjRZtz
+ 3ZxpP6tNhV0eqDNF62xumX7unnaHOjzyP9oljAwQdOytozkZ0Czza+CZ7iNYrVBDon1w5Zs5b
+ zfQcxd2LHYVEHjZfHtNOCitGjNBaY40hO/3FzYrYTHp/Oci6nKkhzzv1Dydzb4SvpfmY8lUJQ
+ iPductemKgh8BnWDp4Dng7QT4OgfvViMMjDwh8v4WT2OWYWlQ3uaIXf6v/wi0AlY6B6z/hZ7k
+ nWxcwEqAQAhtjM=
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -77,51 +77,30 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.org>
 
-Fix checkpatch errors "Avoid multiple line dereference"
+Fix checkpatch errors for missing blank lines after variable
+or structure declarations.
 
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.org>
 Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 =2D--
- drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c | 11 ++++--=
------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c=
- b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index c16a206..753c3cb 100644
-=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -1015,12 +1015,10 @@ static int mmal_setup_components(struct bm2835_mma=
-l_dev *dev,
- 		if (f->fmt.pix.width <=3D max_video_width &&
- 		    f->fmt.pix.height <=3D max_video_height)
- 			camera_port =3D port =3D
--			    &dev->component[COMP_CAMERA]->
--			    output[CAM_PORT_VIDEO];
-+			    &dev->component[COMP_CAMERA]->output[CAM_PORT_VIDEO];
- 		else
- 			camera_port =3D port =3D
--			    &dev->component[COMP_CAMERA]->
--			    output[CAM_PORT_CAPTURE];
-+			    &dev->component[COMP_CAMERA]->output[CAM_PORT_CAPTURE];
- 		break;
- 	case COMP_IMAGE_ENCODE:
- 		encode_component =3D dev->component[COMP_IMAGE_ENCODE];
-@@ -1211,9 +1209,8 @@ static int mmal_setup_components(struct bm2835_mmal_=
-dev *dev,
- 						 port->current_buffer.size);
- 					port->current_buffer.size =3D
- 					    (f->fmt.pix.sizeimage <
--					     (100 << 10))
--					    ? (100 << 10)
--					    : f->fmt.pix.sizeimage;
-+					     (100 << 10)) ?
-+					    (100 << 10) : f->fmt.pix.sizeimage;
- 				}
- 				v4l2_dbg(1, bcm2835_v4l2_debug,
- 					 &dev->v4l2_dev,
+diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h=
+ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
+index 9bd262d..d9f0411 100644
+=2D-- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
++++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.h
+@@ -128,6 +128,7 @@ int set_framerate_params(struct bm2835_mmal_dev *dev);
+ 		(pix_fmt)->pixelformat, (pix_fmt)->bytesperline,	\
+ 		(pix_fmt)->sizeimage, (pix_fmt)->colorspace, (pix_fmt)->priv); \
+ }
++
+ #define v4l2_dump_win_format(level, debug, dev, win_fmt, desc)	\
+ {	\
+ 	v4l2_dbg(level, debug, dev,	\
 =2D-
 2.7.4
 
