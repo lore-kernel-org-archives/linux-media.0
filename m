@@ -2,108 +2,178 @@ Return-Path: <SRS0=uXYw=U6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-7.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F450C0650E
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 10:30:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39300C0650E
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 10:47:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 11F6B206A3
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 10:30:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D373208E4
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 10:47:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afu7G7C6"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20150623.gappssmtp.com header.i=@baylibre-com.20150623.gappssmtp.com header.b="F2tVnR2j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727128AbfGAKaZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Jul 2019 06:30:25 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:41255 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbfGAKaZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Jul 2019 06:30:25 -0400
-Received: by mail-vs1-f65.google.com with SMTP id 2so8548025vso.8
-        for <linux-media@vger.kernel.org>; Mon, 01 Jul 2019 03:30:24 -0700 (PDT)
+        id S1727801AbfGAKrx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Jul 2019 06:47:53 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34847 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727641AbfGAKrf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Jul 2019 06:47:35 -0400
+Received: by mail-wr1-f68.google.com with SMTP id c27so5570080wrb.2
+        for <linux-media@vger.kernel.org>; Mon, 01 Jul 2019 03:47:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=IHX+69SaG6p2yhg0r5EPi4ytgF/KynZ9G8D4StwVSO0=;
-        b=afu7G7C6mpvhxDgO0OcI3XQff47FGlklaawMSBNibU3Hewl91X/l0ee6gQHtAtl4W5
-         fxfOzC2AayhJFZ+Aebja7jtXD+ONOoLR7R6OV2u5wXitWaDeoKIGwM807dbweUUh4bO9
-         67Ho8GchaVZa7hAndMd/x+GXVv1mMQDtpIaBZrq3uPUDux54Hizya6X9jxmKyjNdllXF
-         LaTQcx1XqOuKRGemWjKeo4Ddf3ZGtjI6J0LQlXh/qVMFdEw0XNxnfxGLQ9SlCe/5bEgz
-         VlVkZo4Uh5xDsO+quOhcrdmjPQJWbOpwIk091zAf/FCgvxASosE842oMv7YEKw8vwDc4
-         Dj2Q==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=cDNMs7vyeGU4ItBEGrxn4uIQX4icW4tE6CY0BwZzeYU=;
+        b=F2tVnR2jB1XsZNfj2okEZqzs3xC3S6Oouj9gTyIXZeHtZkiw7Tr7BpMKwvWpEsrnEF
+         9r0B+gGVGc/sGn7hHLtY8ANc5U1LcH+3Y1eCtdPqJfPltCwiMBEkgJ9G+OKTHAaZlJ48
+         yma5ZbqOeVvZh0Eg0T9x+OQQhHnKlMoCgEkD9vYf9NMkRZI3nDx6/gIw2WceJc8G42Wg
+         YIsplADMwrUIO7ccZkoaRCM8QfNQjENnDuZVZQNBHjTEE1TlicwLy/mShIMkXuMPsdgV
+         Wc53lZRkmtAimiE45onkPUne/3lB73K3/Onicirxd0UcJgqg9IFAhnN9PEwJZzHlgdBH
+         SXmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=IHX+69SaG6p2yhg0r5EPi4ytgF/KynZ9G8D4StwVSO0=;
-        b=krzVSby4J53Sp3IMwpJLlgrFJh/QUVkNlUtZvrA5n1RHngiOZqBhmRf/+TB12visgu
-         HYHhJQW9mZn5DQmFJRoywXBzq/vDgDFRCObuVBQ0G6gx5I0yMK0c/8QnGPCqfFoBWLiw
-         bEO8kuP3zPHJQinZWiB/ewwAteTaiNy3y9d+jSK1Zymkv5E1UHPjHz2k2L1AJJgmYzBm
-         BGXyu2NrDNhrsyLgJwiM5hpOuSwTSgTKCLu+EIjrUwwLFqD6m6SqlNJNz1PUIjr1m/fz
-         y9xT3aB4PSJXksa/CnhZb4eVRHcbmD6/UDm4TL3q9uTT3u928xgBAZ171D8NPpl7HDMC
-         rnsA==
-X-Gm-Message-State: APjAAAUsgAywDLB+KvWMYCRw73UUchQwWWBapGQfN7XH+ThBsZa6JlNw
-        UehQ6NtswmS6wcRkmLxW+33GZX4zlt9iom7+5jM=
-X-Google-Smtp-Source: APXvYqxOWvMj6TeYGTd/zOOSNtF+Q+R/7RJSzdClfiO+1mjtfGTb9IzWhj05mXee9s7tjcDkT9cRV3jGLQDkT1c4nMM=
-X-Received: by 2002:a67:e244:: with SMTP id w4mr6362023vse.176.1561977024409;
- Mon, 01 Jul 2019 03:30:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=cDNMs7vyeGU4ItBEGrxn4uIQX4icW4tE6CY0BwZzeYU=;
+        b=nwyWWNpUxwgvQL3bsD3uUWI+POmwCl5rF1yVnLopq/O4rCe6AA6d0ayFYuJYUKbn72
+         NoCrfptAbnpTSoaXpTyLPdAV31B5hSsP1DRfQQ2mxx22PyD/7myDnkZ1IrnrEuCDjgYT
+         Tk3G9w6fA2sjNpK+k8cYv6jiAttk8hYmgEDVetR8wFY7l6RFEjMQNLL9y3583DkxLqfc
+         sBrDHoOOH7M9mevklFxfhCFOkJ0EAttrLKadsrapzh1y3XO7sLUzt6gMIhXBFI47o1uF
+         NK7qREGHaI0NlQabJWymFWnPtVn2EkFqp66Jv1eOdlucaDpJvIQv/g41zv4zvrjc23ki
+         zP/Q==
+X-Gm-Message-State: APjAAAUSJkTnVAdeiPh/Rps4bsKHMURW4KhZjH8eM06KYeXdqRB8B92J
+        /V5+jakI5f0NOYvUSN+2dwa56A==
+X-Google-Smtp-Source: APXvYqxpvZ+wXD54f65Y9xIdncQZjnJsorwD7241UA/QyH8HN4LyX5o51WdwgdOmqi81S5Pu3reXYQ==
+X-Received: by 2002:a5d:5112:: with SMTP id s18mr17922728wrt.111.1561978052849;
+        Mon, 01 Jul 2019 03:47:32 -0700 (PDT)
+Received: from localhost.localdomain (176-150-251-154.abo.bbox.fr. [176.150.251.154])
+        by smtp.gmail.com with ESMTPSA id d24sm11658802wra.43.2019.07.01.03.47.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 01 Jul 2019 03:47:31 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     jbrunet@baylibre.com, khilman@baylibre.com,
+        linux-media@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: [RFC 08/11] media: platform: meson-ao-cec-g12a: add support for SM1
+Date:   Mon,  1 Jul 2019 12:47:02 +0200
+Message-Id: <20190701104705.18271-9-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190701104705.18271-1-narmstrong@baylibre.com>
+References: <20190701104705.18271-1-narmstrong@baylibre.com>
 MIME-Version: 1.0
-From:   Dafna Hirschfeld <dafna3@gmail.com>
-Date:   Mon, 1 Jul 2019 12:30:12 +0200
-Message-ID: <CAJ1myNR7stUdFmnAnnWLdE008p5_BvXkHnr7au+TH3HW183X1w@mail.gmail.com>
-Subject: regarding commit "v4l2-ctl: get fmt after source change" in v4l-utils repository
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-commit 84219e2b5d013709ee5259621715966c46eec746
-Author: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Date:   Sat Mar 30 14:16:25 2019 +0100
+Add support for the Amlogic SM1 SoC Family to the G12A AO-CECB
+derivative.
 
-    v4l2-ctl: get fmt after source change
+It only adds a single init register.
 
-    When a source change event arrives during decoding get the new
-    format at that point instead of after restarting streaming.
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ drivers/media/platform/meson/ao-cec-g12a.c | 37 +++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
-    If there is another source change queued up, then when you call
-    streamon for CAPTURE again it might send the new source change
-    event and update the format for that one, so reading the format
-    after streamon might give the wrong format.
+diff --git a/drivers/media/platform/meson/ao-cec-g12a.c b/drivers/media/platform/meson/ao-cec-g12a.c
+index 3620a1e310f5..1c696a126ee8 100644
+--- a/drivers/media/platform/meson/ao-cec-g12a.c
++++ b/drivers/media/platform/meson/ao-cec-g12a.c
+@@ -121,6 +121,9 @@
+ #define CECB_CTRL_TYPE_NEXT	2
+ 
+ #define CECB_CTRL2		0x01
++
++#define CECB_CTRL2_RISE_DEL_MAX	GENMASK(4, 0)
++
+ #define CECB_INTR_MASK		0x02
+ #define CECB_LADD_LOW		0x05
+ #define CECB_LADD_HIGH		0x06
+@@ -165,6 +168,11 @@
+ 
+ #define CECB_WAKEUPCTRL		0x31
+ 
++struct meson_ao_cec_g12a_data {
++	/* Setup the internal CECB_CTRL2 register */
++	bool				ctrl2_setup;
++};
++
+ struct meson_ao_cec_g12a_device {
+ 	struct platform_device		*pdev;
+ 	struct regmap			*regmap;
+@@ -175,6 +183,7 @@ struct meson_ao_cec_g12a_device {
+ 	struct cec_msg			rx_msg;
+ 	struct clk			*oscin;
+ 	struct clk			*core;
++	const struct meson_ao_cec_g12a_data *data;
+ };
+ 
+ static const struct regmap_config meson_ao_cec_g12a_regmap_conf = {
+@@ -620,6 +629,10 @@ static int meson_ao_cec_g12a_adap_enable(struct cec_adapter *adap, bool enable)
+ 	regmap_update_bits(ao_cec->regmap, CECB_GEN_CNTL_REG,
+ 			   CECB_GEN_CNTL_RESET, 0);
+ 
++	if (ao_cec->data->ctrl2_setup)
++		regmap_write(ao_cec->regmap_cec, CECB_CTRL2,
++			     FIELD_PREP(CECB_CTRL2_RISE_DEL_MAX, 2));
++
+ 	meson_ao_cec_g12a_irq_setup(ao_cec, true);
+ 
+ 	return 0;
+@@ -639,6 +652,7 @@ static int meson_ao_cec_g12a_probe(struct platform_device *pdev)
+ 	void __iomem *base;
+ 	int ret, irq;
+ 
++
+ 	hdmi_dev = cec_notifier_parse_hdmi_phandle(&pdev->dev);
+ 	if (IS_ERR(hdmi_dev))
+ 		return PTR_ERR(hdmi_dev);
+@@ -647,6 +661,12 @@ static int meson_ao_cec_g12a_probe(struct platform_device *pdev)
+ 	if (!ao_cec)
+ 		return -ENOMEM;
+ 
++	ao_cec->data = of_device_get_match_data(&pdev->dev);
++	if (!ao_cec->data) {
++		dev_err(&pdev->dev, "failed to get match data\n");
++		return -ENODEV;
++	}
++
+ 	spin_lock_init(&ao_cec->cec_reg_lock);
+ 	ao_cec->pdev = pdev;
+ 
+@@ -757,8 +777,23 @@ static int meson_ao_cec_g12a_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct meson_ao_cec_g12a_data ao_cec_g12a_data = {
++	.ctrl2_setup = false,
++};
++
++static const struct meson_ao_cec_g12a_data ao_cec_sm1_data = {
++	.ctrl2_setup = true,
++};
++
+ static const struct of_device_id meson_ao_cec_g12a_of_match[] = {
+-	{ .compatible = "amlogic,meson-g12a-ao-cec", },
++	{
++		.compatible = "amlogic,meson-g12a-ao-cec",
++		.data = &ao_cec_g12a_data,
++	},
++	{
++		.compatible = "amlogic,meson-sm1-ao-cec",
++		.data = &ao_cec_sm1_data,
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, meson_ao_cec_g12a_of_match);
+-- 
+2.21.0
 
-    Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-
-diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-index bb656584..3695a027 100644
---- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-+++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-@@ -2363,12 +2363,11 @@ static void stateful_m2m(cv4l_fd &fd,
-cv4l_queue &in, cv4l_queue &out,
-                        if (in_source_change_event) {
-                                in_source_change_event = false;
-                                last_buffer = false;
-+                               fd.g_fmt(fmt_in, in.g_type());
-                                if (capture_setup(fd, in, exp_fd_p))
-                                        return;
-                                fps_ts[CAP].reset();
-                                fps_ts[OUT].reset();
--                               fd.g_fmt(fmt_out, out.g_type());
--                               fd.g_fmt(fmt_in, in.g_type());
-Removing those lines cause inconsistency when the user send the wanted
-capture pixel format when decoding with the `v4l2-ctl` command. In
-this case the value of `-v pixelformat=...` is updated in the kernel
-with the capture_setup function but it is not updated in the fmt_in
-variable and so the command will try to save the decoded video in a
-different format from what is configured in the kernel.
-
-                                cap_streaming = true;
-                        } else {
-                                break;
-
-
-Dafna
