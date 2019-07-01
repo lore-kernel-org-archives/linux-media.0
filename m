@@ -2,100 +2,124 @@ Return-Path: <SRS0=uXYw=U6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 363FAC0650E
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 09:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB25FC0650F
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 09:44:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 13F122089C
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 09:24:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E9EF212F5
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 09:44:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FqCGWxP0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728243AbfGAJYr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Jul 2019 05:24:47 -0400
-Received: from mga07.intel.com ([134.134.136.100]:4854 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728111AbfGAJYr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 1 Jul 2019 05:24:47 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Jul 2019 01:46:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.63,438,1557212400"; 
-   d="scan'208";a="174157463"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga002.jf.intel.com with ESMTP; 01 Jul 2019 01:46:39 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 741D72080B; Mon,  1 Jul 2019 11:46:38 +0300 (EEST)
-Date:   Mon, 1 Jul 2019 11:46:38 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 2/2] media: i2c: isl7998x: Add driver for Intersil
- ISL7998x
-Message-ID: <20190701084638.kt3bdyzfumk6ujgu@paasikivi.fi.intel.com>
-References: <20190520201812.7937-1-marex@denx.de>
- <20190520201812.7937-2-marex@denx.de>
+        id S1728477AbfGAJoN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Jul 2019 05:44:13 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:34966 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728470AbfGAJoN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Jul 2019 05:44:13 -0400
+Received: by mail-wm1-f67.google.com with SMTP id c6so15161423wml.0;
+        Mon, 01 Jul 2019 02:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=Wpl34t7pEEK79q3TGA4TYVX4j5sGst2FWPYV+cG9ZgQ=;
+        b=FqCGWxP07Zk0mb9fi11yD9qbrg46ZxDMf6TAAhLTryUorNkAmjegD69qSKZQzKeIAn
+         0s89ug6dEwg8L0+BEBBSAbCf3g7qTgsCUBh9aAp/nvNjGM8ZrPGOJ280HS1mn3PPt6Z7
+         FkiCK9ryGXe48hSKSavf2BCdkAKZu00flMMqEcqN/jFRxbVO3clzXy/B8lAGQZUlUVDO
+         n1l1VBVNK+FV3ZQJub7OuYXT9EBfLgwg2wubv9lMt4KR4F4cylnh2M6SjInEyoyQCXKW
+         kc8jNbl3hlbq5zuOc2yJ9EOknAXMTPdnQNsJSJxTTDIFVtpvdh3rG4ZzuKYfGwhpSLPD
+         afbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=Wpl34t7pEEK79q3TGA4TYVX4j5sGst2FWPYV+cG9ZgQ=;
+        b=j4HCLTnyg2ak2PqR5owt4JgNcxU4iNo7Ix6QVAS7OVSSaLOQOK4sz+bVo2UJ//QcJj
+         j3+SMoam8dqSyg03PWDa17FLdFaqRccqKAAjwsEJIKRpeuyvLpn1zaLZLsxxCJZG1D5R
+         deECgEK0OPeSS1rEizWuO6yitjBb3VymI3BXF7wke1ycbyp6NXoYmkVMphEcPpFh4ruG
+         forTCuwdinihQn700P2+hF6Ri//qSaqg76DVlHGDoedY95/gDp5710QcNTZG2c7XJOU5
+         05HMBTXXBt8di3WEy3giSa+kp5iKWnEtyDia1pqWuPhwk5Ea4Em6lx8L/Ww9w9NfFb31
+         /Zng==
+X-Gm-Message-State: APjAAAVHK20rQnuWOc2MrQzcN7HOMVLnSgRSqIicMDJySSb5wIprGCdd
+        vpzNCMUegFUriIkTsJIhLevLLF7UUD8=
+X-Google-Smtp-Source: APXvYqwE+Q7AnLDk4oMLFL/k5V2IsWF4NCm7kbDDvvTbUOZGjDlQHcN8+h+kh/QLkteSGPRbtaW/5w==
+X-Received: by 2002:a1c:9d86:: with SMTP id g128mr17778545wme.51.1561974250603;
+        Mon, 01 Jul 2019 02:44:10 -0700 (PDT)
+Received: from arch-late (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id f21sm9951878wmb.2.2019.07.01.02.44.08
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 01 Jul 2019 02:44:09 -0700 (PDT)
+References: <20190630034905.7124-1-chinmaya.mahesh@disroot.org>
+User-agent: mu4e 1.2.0; emacs 27.0.50
+From:   Rui Miguel Silva <rmfrfs@gmail.com>
+To:     Chinmaya Krishnan Mahesh <chinmaya.mahesh@disroot.org>
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] media: imx7-media-csi: Remove unneeded break after return
+In-reply-to: <20190630034905.7124-1-chinmaya.mahesh@disroot.org>
+Date:   Mon, 01 Jul 2019 10:44:07 +0100
+Message-ID: <m3o92egkd4.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190520201812.7937-2-marex@denx.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Type: text/plain
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-One more comment...
+Hi Chinmaya,
+Thanks for your patch.
 
-On Mon, May 20, 2019 at 10:18:12PM +0200, Marek Vasut wrote:
-...
-> +static int isl7998x_set_fmt(struct v4l2_subdev *sd,
-> +		struct v4l2_subdev_pad_config *cfg,
-> +		struct v4l2_subdev_format *format)
-> +{
-> +	struct isl7998x *isl7998x = sd_to_isl7998x(sd);
-> +	struct v4l2_mbus_framefmt *mf = &format->format;
-> +	int ret;
-> +
-> +	if (format->pad != 0)
-> +		return -EINVAL;
-> +
-> +	if (format->format.width != 720 ||
-> +	    (format->format.height != 480 && format->format.height != 576))
-> +		return -EINVAL;
-> +
-> +	if (format->format.code != MEDIA_BUS_FMT_YUYV8_2X8)
-> +		return -EINVAL;
-> +
-> +	mf->width	= format->format.width;
-> +	mf->height	= format->format.height;
-> +	mf->code	= format->format.code;
-> +	mf->field	= V4L2_FIELD_INTERLACED;
-> +	mf->colorspace	= 0;
-> +
-> +	if (format->which != V4L2_SUBDEV_FORMAT_TRY) {
-> +		ret = isl7998x_update_std(isl7998x);
-> +		if (ret)
-> +			return ret;
-> +		mf->width = isl7998x->width;
-> +		mf->height = isl7998x->height;
-> +		isl7998x->fmt = &isl7998x_colour_fmts[0];
-> +	}
+On Sun 30 Jun 2019 at 04:49, Chinmaya Krishnan Mahesh wrote:
+> This patch fixes the checkpatch.pl warning:
+>
+> WARNING: break is not useful after a goto or return
 
-Note that as the driver exposes a sub-device node to the user space, it's
-responsible for serialising the access to its own data structures that are
-accessed by other drivers or through its uAPI nodes. Most drivers use the
-same mutex as the control handler, as controls usually deal with at least
-some of the same data.
+but this is already fixed in the media subsystem tree, by a patch
+from Fabio:
 
--- 
-Regards,
+964fcacddf media: imx7-media-csi: Remove unneeded break
 
-Sakari Ailus
-sakari.ailus@linux.intel.com
+It is better to use that tree as reference for media fixes,
+sometimes some are already fixed there.
+
+Nevertheless many thanks for the patch.
+
+---
+Cheers,
+	Rui
+
+
+>
+> Signed-off-by: Chinmaya Krishnan Mahesh <chinmaya.mahesh@disroot.org>
+> ---
+>  drivers/staging/media/imx/imx7-media-csi.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+> index a708a0340eb1..c15acca1dc0d 100644
+> --- a/drivers/staging/media/imx/imx7-media-csi.c
+> +++ b/drivers/staging/media/imx/imx7-media-csi.c
+> @@ -1021,7 +1021,6 @@ static int imx7_csi_try_fmt(struct imx7_csi *csi,
+>  		break;
+>  	default:
+>  		return -EINVAL;
+> -		break;
+>  	}
+>  	return 0;
+>  }
+
