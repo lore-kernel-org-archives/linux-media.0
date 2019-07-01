@@ -6,50 +6,63 @@ X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA3E6C0650E
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 16:38:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE581C0650E
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 16:40:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8DB7D21473
-	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 16:38:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A19F21473
+	for <linux-media@archiver.kernel.org>; Mon,  1 Jul 2019 16:40:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729336AbfGAQia (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 1 Jul 2019 12:38:30 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:51571 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729264AbfGAQia (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Jul 2019 12:38:30 -0400
+        id S1728253AbfGAQkz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 1 Jul 2019 12:40:55 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:42621 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727419AbfGAQky (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 1 Jul 2019 12:40:54 -0400
 X-Originating-IP: 83.155.44.161
 Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
         (Authenticated sender: hadess@hadess.net)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 29C0060005;
-        Mon,  1 Jul 2019 16:38:23 +0000 (UTC)
-Message-ID: <e02bb1c0552601c75fd4971c7b56755fb8e7c241.camel@hadess.net>
-Subject: Keymap with duplicate entries
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 4063C1C0002;
+        Mon,  1 Jul 2019 16:40:53 +0000 (UTC)
+Message-ID: <1dc6a433435719074a3c72a45fa68bbda5096edb.camel@hadess.net>
+Subject: Re: [PATCH v2] keytable: Add keymap test
 From:   Bastien Nocera <hadess@hadess.net>
-To:     aet@rasterburn.org
-Cc:     linux-media@vger.kernel.org, Sean Young <sean@mess.org>
-Date:   Mon, 01 Jul 2019 18:38:23 +0200
+To:     Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org
+Date:   Mon, 01 Jul 2019 18:40:52 +0200
+In-Reply-To: <3bbb2edc0b34a029c7514fdf67af70d5e7e514f3.camel@hadess.net>
+References: <b6ffea1984f05adec9f52cd60902a95c82bf8666.camel@hadess.net>
+         <20190627193348.d53sbpys32i7qyi3@gofer.mess.org>
+         <3bbb2edc0b34a029c7514fdf67af70d5e7e514f3.camel@hadess.net>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.32.3 (3.32.3-1.fc30) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hey Aapo,
+On Mon, 2019-07-01 at 16:27 +0200, Bastien Nocera wrote:
+> > That would be great. They have to be patched in the kernel tree,
+> > they
+> > are generated from there.
+> 
+> It's customary to put a comment at the top of generated files
+> indicating that they shouldn't be modified and list the name and
+> version of the tools used to generate that file.
+> 
+> So, what's the name of the tool used, and where does it live? :)
 
-There seems to be a problem in  the keymap you provided for inclusion
-in the kernel.
+Apparently it's called gen_keytables.pl, and I've sent a couple of
+patches to it because it didn't ignore comments, and then sent a couple
+of mails to broken definitions in the kernel.
 
-In drivers/media/usb/dvb-usb/m920x.c, 2 keys are triggered by the same
-keycode:
- 790 ↦       { 0x08, KEY_SUBTITLE },•
- 794 ↦       { 0x08, KEY_VIDEO },↦   ↦       /* A/V */•
+Once the 3 broken definitions in the kernel are fixed, fixing all the
+keymaps in v4l-utils will be as easy as regenerating the keymaps, and
+I'll send the updated patch for the "check" target.
 
-Could you please check what the correct values are for both of those
-keys?
+Don't forget to remove the files before generating them again, a number
+of keymaps were removed from the upstream kernel.
 
-Thanks!
+Cheers
 
