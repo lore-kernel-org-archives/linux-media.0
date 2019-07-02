@@ -2,167 +2,124 @@ Return-Path: <SRS0=1THm=U7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 506F6C06511
-	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 09:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A22C5C06510
+	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 11:14:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2B3BA21721
-	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 09:51:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 733582146F
+	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 11:14:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="CN/HkxfC"
+	dkim=pass (1024-bit key) header.d=teoenmingcorp.onmicrosoft.com header.i=@teoenmingcorp.onmicrosoft.com header.b="ZSghtGp9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbfGBJvi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Jul 2019 05:51:38 -0400
-Received: from mout.gmx.net ([212.227.15.19]:45561 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725868AbfGBJvh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Jul 2019 05:51:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1562061072;
-        bh=FGM5WXyOI1pXMifsCCwhO9soc1ANArWFrlQ2lZN8tTQ=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=CN/HkxfCLv1B4CD87a9WrW6LKKkgb0CwQ3XEaBmdDQ3ObqzNk5DLrG0kALBpaOjWw
-         uA043edWLxP62RdSCvDQjGDmwLeAzpWQ7IK0gJ2qFvait18MWgfcO2riRf9tz6gE31
-         5O31tl9G//BCar1XWX38JIf6kyd7An6k+1DLg4Wc=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([109.90.233.87]) by mail.gmx.com (mrgmx003
- [212.227.17.190]) with ESMTPSA (Nemesis) id 0Lvkwm-1icWvk2Pds-017RP0; Tue, 02
- Jul 2019 11:51:12 +0200
-Date:   Tue, 2 Jul 2019 11:51:09 +0200
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Brad Love <brad@nextdimension.cc>
-Subject: Re: [PATCH v1] media: si2168: Refactor command setup code
-Message-ID: <20190702095109.GC22408@latitude>
-References: <6a8f9a5b-2e88-8c26-440b-76af0d91eda6@free.fr>
+        id S1726213AbfGBLOk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Jul 2019 07:14:40 -0400
+Received: from mail-eopbgr1320079.outbound.protection.outlook.com ([40.107.132.79]:6426
+        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725801AbfGBLOj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 2 Jul 2019 07:14:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=teoenmingcorp.onmicrosoft.com; s=selector1-teoenmingcorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1EF0mLyJo4FSIyvMojzRsbdJuMyeaM06IVq4oUo1YTk=;
+ b=ZSghtGp9w6U4YPxJJzNf3T67xMPgBPDBLHNIqlLIpB1t01oR13sDX0F5/yT9uiyWT1V1vOia5qWpB4qIoWz9YCbDNfXCt2XN0rq1Tp0r6FvLr58Dzcm4N7vBCJwkTPdbM7vaDugJL/a0CmT1lFKxlGJmk86pju71CYUOl3n439s=
+Received: from SG2PR01MB2141.apcprd01.prod.exchangelabs.com (10.170.143.19) by
+ SG2PR01MB2442.apcprd01.prod.exchangelabs.com (20.177.82.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2032.20; Tue, 2 Jul 2019 11:14:35 +0000
+Received: from SG2PR01MB2141.apcprd01.prod.exchangelabs.com
+ ([fe80::d503:3d71:ce06:19d2]) by SG2PR01MB2141.apcprd01.prod.exchangelabs.com
+ ([fe80::d503:3d71:ce06:19d2%6]) with mapi id 15.20.2032.019; Tue, 2 Jul 2019
+ 11:14:35 +0000
+From:   Turritopsis Dohrnii Teo En Ming <ceo@teo-en-ming-corp.com>
+To:     "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+CC:     Turritopsis Dohrnii Teo En Ming <ceo@teo-en-ming-corp.com>
+Subject: Are there any device drivers for Hauppauge WinTV-HVR-935 HD Tri-Mode
+ TV Stick DVB-T2 TV Tuner?
+Thread-Topic: Are there any device drivers for Hauppauge WinTV-HVR-935 HD
+ Tri-Mode TV Stick DVB-T2 TV Tuner?
+Thread-Index: AdUwxw8cui4+EbAXQCmeFhdX2QGEhw==
+Date:   Tue, 2 Jul 2019 11:14:35 +0000
+Message-ID: <SG2PR01MB2141854D0E99451C9F4A951B87F80@SG2PR01MB2141.apcprd01.prod.exchangelabs.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ceo@teo-en-ming-corp.com; 
+x-originating-ip: [118.189.211.120]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9336ee13-1109-41ba-1913-08d6fede775e
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:SG2PR01MB2442;
+x-ms-traffictypediagnostic: SG2PR01MB2442:
+x-ms-exchange-purlcount: 4
+x-microsoft-antispam-prvs: <SG2PR01MB2442671E4171990312D98D1487F80@SG2PR01MB2442.apcprd01.prod.exchangelabs.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 008663486A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(39830400003)(366004)(396003)(376002)(346002)(189003)(199004)(316002)(33656002)(6436002)(4326008)(9686003)(3846002)(107886003)(55016002)(6116002)(2906002)(53936002)(86362001)(186003)(6306002)(66066001)(26005)(6506007)(66946007)(7736002)(76116006)(7696005)(8936002)(71190400001)(102836004)(71200400001)(8676002)(81156014)(99286004)(68736007)(25786009)(6916009)(73956011)(81166006)(66556008)(14454004)(966005)(476003)(74316002)(486006)(64756008)(305945005)(4744005)(66446008)(256004)(52536014)(5660300002)(66476007)(508600001);DIR:OUT;SFP:1101;SCL:1;SRVR:SG2PR01MB2442;H:SG2PR01MB2141.apcprd01.prod.exchangelabs.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: teo-en-ming-corp.com does not
+ designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: ekiFAfwHe9Sm6ZA99fS7/Jn3aBWXaBanh9iHFm7Sw3Y6oGFLFa/Sox4/QIHmdDt/aE1eZU0ibHepZsd6uWu1Zq7L8n6iQq7Ec5VO980ipuDw/kecfF9H3In+wHn9K5G+Vyob/u2PKx7f34ZNgrZBnB25+cXhU7efd2XKQNYHsiuPQRRwGoMedYxNCkVZTFd4CeJ/IyeecVsvBCRKLf2odfT2Zi0hLrB8t5ALpOqjRSITwemFgc7lEa+t665XV+gr1hlLesMjunnone9o00wqipnXX5I0s3zDgiLIgXy476QO/ypxa88YEPjZfS0eZztMb9N0cbxtbLRrmOgbRBEum1p6OAYiw8rtDIhTdyF166rgVHZM1Wv2mrQRB9yn1+q/soGwNL8rx7CjUsEpRSgR3IKwnviy2ZCO2iYrt/VoKOY=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mojUlQ0s9EVzWg2t"
-Content-Disposition: inline
-In-Reply-To: <6a8f9a5b-2e88-8c26-440b-76af0d91eda6@free.fr>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Provags-ID: V03:K1:meVnSL0vkDuUwFstQh5OanUzm5dthphT8V4mbTD14FxbGuHVDs6
- FeqySYV+ms5Yw43+AuYlRt9/9CHHw4z1szwTYsUW2yemNKOomvosKKGm2dhcKMJs7cGyKfP
- auUSUdQJsVEcZsmoiXExB6vQDesJoobtg2sy1Qd6IWVkKZUGtu4zzo3srS+11sQlEHN1qau
- e+fzYIbkty7SjWbfhnRew==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1037Dn98csI=:xzpDmgYxeaJVGHc3FJvXiN
- bJIQpn/qbD55TI5fpa4LXWOS78BYLi8v/denNJu9at/B5LpDuXSi1Rhfu+8G39yNyvkHr62zK
- JD/Ozn1TKpuaJcMFzimWL6EzoMMnnqQH9rCdOfUOE4s3bw3jjSkpvC1qg9Cc0xXpDlmtPSNSP
- 5zT5+BCxv08oZNjcxJF8deFxVnJ4PT9k20PM9pvq/lkFVDcXYy0e2ADXBDKu+Wrke0WqOiRrs
- OLKxG5PfSHvtfqn2DZNeRiCVlk38kcnVnE7Dbtym5G7AJxZQAPe0tjnw+82tzReiardtZgU3f
- QmLJWKCyhUTPI9QGjRTz2cXd6RSO7gp8/nS+wN4ipQj60KEgOUnvQVsUOouvvpD4djOGhSaUJ
- 9h9Mzp0EuDV8ZMrSaMupvNLjMpHDpBQ5OpYYECOZEKWARmVfbn06B0xzI7/sVccFG/hr3AYl1
- 8kASndiedP/ulQRncXEBKfYpOsFtJ9xIJB7Lr0LTPk01dWAXiA369L9n0B3GNVK98enOFkZyl
- 1TFs6DPR2Iy98xIdShnZRcOKydA0+Nj4Wn4UkoU+ydp3AzsVogkb8n8l1hUQOmcuBSGHF2PKp
- 5mSOPre4Jp32M8Zp5mU4YnPlOg6rLUqQvDECUPOdqaXB8QrzlsTtY2PGiVMSVz81uuFriZyD9
- ulrJPwuM7gFZQP23+lRl1y7YV2Il+iX/6V9rFGb3XQ8bzqZQlNSrSurCds+OTSZ4EyRG1y5OA
- /guTzcwqax9wu6zVE78ogzCyXiMU7BM2Jz4de7t4uAEPV0WZdN+LlTpKjpy8PO67/xDsvBxSB
- YFo0afMkK7rmmcjwu1fIehylG0sWuA7gsTo3j6FBhj3HxTHIgI3+zEsnaEet1PDz4bYEKf1Gl
- nEqIlAOP3XUxhAV8EYI1DrD7QAO+6SSlEBZskNR0padkK1UjX6mB7XIEduUcv/rSgNsxVC5mj
- BWFAMNVtrJa3wpFScEdqpFJPxFxBP8UM+sDOpQEZfmbjIwmitPwlTJF8cOXSkalgEsyJswD+y
- 88TGH8Sc5qzpn4mM6noKsJi0yqQE3tbxbY1Izo7mEutSWTmSm+N3q4bp3fmDXFbh4mBlIzj2j
- YhlNUT6b/2ndtU=
+X-OriginatorOrg: teo-en-ming-corp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9336ee13-1109-41ba-1913-08d6fede775e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jul 2019 11:14:35.7354
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 23b3f6ae-c453-4b93-aec9-f17508e5885c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ceo@teo-en-ming-corp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR01MB2442
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Good evening from Singapore,
 
---mojUlQ0s9EVzWg2t
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Are there any Linux device drivers for Hauppauge WinTV-HVR-935 HD Tri-Mode =
+TV Stick DVB-T2 TV Tuner?
 
-Hi,
+I would also need an open source TV tuner app for Linux as well. Please rec=
+ommend.
 
-On Mon, Jul 01, 2019 at 01:44:09PM +0200, Marc Gonzalez wrote:
-> By refactoring the command setup code, we can let the compiler
-> determine the size of each command.
+I am using the above-mentioned DVB-T2 TV Tuner in Singapore.
 
-I like the idea, it definitely saves some code.
-
-The conversion also looks correct.
-
-> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
-> ---
->  drivers/media/dvb-frontends/si2168.c | 142 ++++++++-------------------
->  1 file changed, 41 insertions(+), 101 deletions(-)
->=20
-> diff --git a/drivers/media/dvb-frontends/si2168.c b/drivers/media/dvb-fro=
-ntends/si2168.c
-> index 168c503e9154..19398f041c79 100644
-> --- a/drivers/media/dvb-frontends/si2168.c
-> +++ b/drivers/media/dvb-frontends/si2168.c
-> @@ -11,6 +11,12 @@
-> =20
->  static const struct dvb_frontend_ops si2168_ops;
-> =20
-> +#define CMD_SETUP(cmd, __args, __rlen) do {	\
-> +	int wlen =3D sizeof(__args) - 1;		\
-> +	memcpy(cmd.args, __args, wlen);		\
-> +	cmd.wlen =3D wlen; cmd.rlen =3D __rlen;	\
-> +} while (0)
-
-It would be nice for casual readers to have a little comment here, that
-explains (briefly) what this macro does, and what the arguments mean,
-and their types.
-
-Why cmd rather than __cmd? This seems inconsistent.
-
-The wlen local variable can be avoided by a bit of suffling:
-
-	#define CMD_SETUP(cmd, __args, __rlen) do {	\
-		cmd.rlen =3D __rlen;			\
-		cmd.wlen =3D sizeof(__args) - 1;		\
-		memcpy(cmd.args, __args, cmd.wlen);	\
-	} while (0)
+Thank you.
 
 
-[from the other mail]
-> I'm planning on sending a v2 where drivers/media/tuners/si2157.c
-> is refactored the same way.
-
-Makes sense.
-
-> Not sure where to store the macro. Maybe include/media/dvb_frontend.h?
-
-Then include/media/dvb_frontend.h would contain information about the
-private structs of a few (two) drivers. This doesn't seem like a good
-idea to me.
 
 
-Greetings,
-Jonathan Neusch=C3=A4fer
 
---mojUlQ0s9EVzWg2t
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+-----BEGIN EMAIL SIGNATURE-----
 
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl0bKMwACgkQCDBEmo7z
-X9v5PhAA0ywTpuolHgb0WWPyGBKYIBUbCWzyB7tfctjB1AIjKcW2/Y3pNYuAB/rQ
-AfguO8KOAP48SZD29BEYvlOIfY7xZ6MJs39cMfJbuV8YahtJZ79T6oEDFzblXo9o
-KB800d2BBB6O1tffQH465mOxHjsD32hTzRT+QZsPljNIi3x24ujBVhP6LqGjJI3z
-imBmoUuwk8RVoSFrrxWrhJuQ5OtbSxRn/oZ3A/GMXrx9RpOU62H63brSEDEv6vzw
-CpfqaIkEvpDPbbo7BZj37LYqUOWlbi/MnC5O5l0HbXbp7+xnJZcNdn6EsE+6E08S
-cbH1ySFBHp17zZdBtv4qu3zwULGNPCvM8iN1WNf3rI1U1iTjfqZmZcJkTHCRmdMh
-bSQ/EAQSEm5KTAIAvA2X62/x5SAsRursdejB7q8aLPJ6y6wKsQoN0wPGtJqT9DBQ
-I5FnKjJ7NbHpcBH8Fg2kyZxLJUVyiAcnoseKnvorRfJ+Au2TBlXc9k3NnCoZIAPs
-sP19WmTDeh3KLU24Otumut9qB5KveR763T9I0u2U9wBwgK3NJw/+S+6Y2XPUxrNW
-ArlOEtFaEi7Lznv9PmWfgyvKZz9WI24tpRPn0B//3OoYZ1la1ZboJICyeUJ8/sNc
-tZVA1Ylz3xlhzUnU2HaQ2sxwhvZzPFEv/I8EI80M90NHeCqPd5M=
-=aW/y
------END PGP SIGNATURE-----
+The Gospel for all Targeted Individuals (TIs):
 
---mojUlQ0s9EVzWg2t--
+[The New York Times] Microwave Weapons Are Prime Suspect in Ills of
+U.S. Embassy Workers
+
+Link: https://www.nytimes.com/2018/09/01/science/sonic-attack-cuba-microwav=
+e.html
+
+***************************************************************************=
+*****************
+
+Singaporean Mr. Turritopsis Dohrnii Teo En Ming's Academic
+Qualifications as at 14 Feb 2019
+
+[1] https://tdtemcerts.wordpress.com/
+
+[2] https://tdtemcerts.blogspot.sg/
+
+[3] https://www.scribd.com/user/270125049/Teo-En-Ming
+
+-----END EMAIL SIGNATURE-----
+
