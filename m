@@ -2,77 +2,86 @@ Return-Path: <SRS0=1THm=U7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C72BFC06513
-	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 15:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3153C06510
+	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 16:05:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 94FE42082F
-	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 15:54:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA581206A3
+	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 16:05:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="n4odCdH+"
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="UeeVHpsq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbfGBPyV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Jul 2019 11:54:21 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:60190 "EHLO
+        id S1726103AbfGBQF7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Jul 2019 12:05:59 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:33844 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727264AbfGBPyU (ORCPT
+        by vger.kernel.org with ESMTP id S1725858AbfGBQF6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 2 Jul 2019 11:54:20 -0400
+        Tue, 2 Jul 2019 12:05:58 -0400
 Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x62Fq4gV027625;
-        Tue, 2 Jul 2019 17:53:08 +0200
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x62Fuw61030898;
+        Tue, 2 Jul 2019 18:05:49 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=81SO5cQN/Vk/Wp509G8RTV/IPzucLq/XsCbMheDBFkk=;
- b=n4odCdH+TQcQ2pDR7Foa89Pp5ertUKO4QW/pq+zD67CB0Kupf/ujuoEbY1Gt/O/dow/V
- 17wX3+Ph2LlWscWEATZAsr1KwAvMKVCSE1QWSGrOVTZ75YpSZ4Q9ZNzOXbyOTC7wRSlY
- KoKaKGERf2K7ILpg/epTYkdjjsJKxd/I7HHcSDyAffAAx3peyq/PIej3dO/ivetmyzbn
- sK0s71s16zagrENUxPLogox4Zqw+6jAh0Z40e/T+ymNmi4fkmBTfHOqBFZEVdutfUWnu
- ZSlEg1d7y8GmTOcbPl5MIbW06MIg3PWCenT/KKm5gztLsB94J6fNeO6aZjdQGA/HCbmX Vg== 
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=Gv8n01/kBVlf7RCnuKc035bJ+prAX5fBSZIeFogqO0Y=;
+ b=UeeVHpsqzhJo5dalvREnkx+f0cyhh0XxSmE2hOzqEjj4vPQNpzN44dR+e4KVZCbGjOVm
+ SrEskEH2JWxa+ffN125ztSBQxmZLvB1Tj0qPUiVxZkw+y9hUQiaQSNh9xsAEWo9m56OT
+ GjVNqldPm2YNGVvQNfYA/llh+oMHO0Muaee+xpY6hGYrOjLjQlvIhGrC5CvDg/IzFjRt
+ lzuzRb5NePrlHmxAE9FZg52ZLOqyOR9SzhRu+wLceg5T0boQrTqvji+LX79fso71ow/5
+ 0ujfX0V+TYNjYleiTpjQJ4eKMk3Y775Fb87pgICos0qV7B2eK23//w610BnWjjl99Wzn tQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2tdxvhw24w-1
+        by mx08-00178001.pphosted.com with ESMTP id 2tdxvhw44j-1
         (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 02 Jul 2019 17:53:08 +0200
+        Tue, 02 Jul 2019 18:05:49 +0200
 Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3366D34;
-        Tue,  2 Jul 2019 15:53:08 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas23.st.com [10.75.90.46])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0DB6F4ADC;
-        Tue,  2 Jul 2019 15:53:08 +0000 (GMT)
-Received: from SAFEX1HUBCAS24.st.com (10.75.90.95) by SAFEX1HUBCAS23.st.com
- (10.75.90.46) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 2 Jul 2019
- 17:53:08 +0200
-Received: from localhost (10.201.23.19) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 2 Jul 2019 17:53:07
- +0200
-From:   Hugues Fruchet <hugues.fruchet@st.com>
-To:     Alexandre Torgue <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 64EBA34;
+        Tue,  2 Jul 2019 16:05:47 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 104C44DDA;
+        Tue,  2 Jul 2019 16:05:47 +0000 (GMT)
+Received: from SFHDAG5NODE1.st.com (10.75.127.13) by SFHDAG5NODE3.st.com
+ (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 2 Jul
+ 2019 18:05:46 +0200
+Received: from SFHDAG5NODE1.st.com ([fe80::cc53:528c:36c8:95f6]) by
+ SFHDAG5NODE1.st.com ([fe80::cc53:528c:36c8:95f6%20]) with mapi id
+ 15.00.1347.000; Tue, 2 Jul 2019 18:05:46 +0200
+From:   Hugues FRUCHET <hugues.fruchet@st.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+CC:     Steve Longerbeam <slongerbeam@gmail.com>,
         Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
         <linux-stm32@st-md-mailman.stormreply.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>,
-        "Hugues Fruchet" <hugues.fruchet@st.com>,
-        Mickael GUENE <mickael.guene@st.com>
-Subject: [PATCH v3 1/3] media: stm32-dcmi: improve sensor subdev naming
-Date:   Tue, 2 Jul 2019 17:52:57 +0200
-Message-ID: <1562082779-31165-2-git-send-email-hugues.fruchet@st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1562082779-31165-1-git-send-email-hugues.fruchet@st.com>
-References: <1562082779-31165-1-git-send-email-hugues.fruchet@st.com>
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Subject: Re: [PATCH v2] media: ov5640: add support of V4L2_CID_LINK_FREQ
+Thread-Topic: [PATCH v2] media: ov5640: add support of V4L2_CID_LINK_FREQ
+Thread-Index: AQHVLQJlOjCpwYSvfEindPL7LJBZs6a3ZHgA
+Date:   Tue, 2 Jul 2019 16:05:46 +0000
+Message-ID: <5b43d59c-92d0-7234-71aa-b283e7462a84@st.com>
+References: <1561640224-24062-1-git-send-email-hugues.fruchet@st.com>
+ <20190627160518.ylc2xfvqdw5w77xc@paasikivi.fi.intel.com>
+In-Reply-To: <20190627160518.ylc2xfvqdw5w77xc@paasikivi.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.50]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C21B5DD38A0804489BBFFBC360264F22@st.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.19]
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-02_08:,,
  signatures=0
 Sender: linux-media-owner@vger.kernel.org
@@ -80,214 +89,66 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename "subdev" entity struct field to "source"
-to prepare for several subdev support.
-Move asd field on top of entity struct.
-
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
-Change-Id: I1545a1a29a8061ee67cc6e4b799e9a69071911e7
----
- drivers/media/platform/stm32/stm32-dcmi.c | 46 +++++++++++++++----------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index b9dad0a..b462f71 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -100,10 +100,10 @@ enum state {
- #define OVERRUN_ERROR_THRESHOLD	3
- 
- struct dcmi_graph_entity {
--	struct device_node *node;
--
- 	struct v4l2_async_subdev asd;
--	struct v4l2_subdev *subdev;
-+
-+	struct device_node *remote_node;
-+	struct v4l2_subdev *source;
- };
- 
- struct dcmi_format {
-@@ -595,7 +595,7 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	}
- 
- 	/* Enable stream on the sub device */
--	ret = v4l2_subdev_call(dcmi->entity.subdev, video, s_stream, 1);
-+	ret = v4l2_subdev_call(dcmi->entity.source, video, s_stream, 1);
- 	if (ret && ret != -ENOIOCTLCMD) {
- 		dev_err(dcmi->dev, "%s: Failed to start streaming, subdev streamon error",
- 			__func__);
-@@ -685,7 +685,7 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	return 0;
- 
- err_subdev_streamoff:
--	v4l2_subdev_call(dcmi->entity.subdev, video, s_stream, 0);
-+	v4l2_subdev_call(dcmi->entity.source, video, s_stream, 0);
- 
- err_pm_put:
- 	pm_runtime_put(dcmi->dev);
-@@ -713,7 +713,7 @@ static void dcmi_stop_streaming(struct vb2_queue *vq)
- 	int ret;
- 
- 	/* Disable stream on the sub device */
--	ret = v4l2_subdev_call(dcmi->entity.subdev, video, s_stream, 0);
-+	ret = v4l2_subdev_call(dcmi->entity.source, video, s_stream, 0);
- 	if (ret && ret != -ENOIOCTLCMD)
- 		dev_err(dcmi->dev, "%s: Failed to stop streaming, subdev streamoff error (%d)\n",
- 			__func__, ret);
-@@ -857,7 +857,7 @@ static int dcmi_try_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f,
- 	}
- 
- 	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, set_fmt,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, set_fmt,
- 			       &pad_cfg, &format);
- 	if (ret < 0)
- 		return ret;
-@@ -934,7 +934,7 @@ static int dcmi_set_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f)
- 	mf->width = sd_framesize.width;
- 	mf->height = sd_framesize.height;
- 
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad,
- 			       set_fmt, NULL, &format);
- 	if (ret < 0)
- 		return ret;
-@@ -991,7 +991,7 @@ static int dcmi_get_sensor_format(struct stm32_dcmi *dcmi,
- 	};
- 	int ret;
- 
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, get_fmt, NULL, &fmt);
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, get_fmt, NULL, &fmt);
- 	if (ret)
- 		return ret;
- 
-@@ -1020,7 +1020,7 @@ static int dcmi_set_sensor_format(struct stm32_dcmi *dcmi,
- 	}
- 
- 	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, set_fmt,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, set_fmt,
- 			       &pad_cfg, &format);
- 	if (ret < 0)
- 		return ret;
-@@ -1043,7 +1043,7 @@ static int dcmi_get_sensor_bounds(struct stm32_dcmi *dcmi,
- 	/*
- 	 * Get sensor bounds first
- 	 */
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, get_selection,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, get_selection,
- 			       NULL, &bounds);
- 	if (!ret)
- 		*r = bounds.r;
-@@ -1224,7 +1224,7 @@ static int dcmi_enum_framesizes(struct file *file, void *fh,
- 
- 	fse.code = sd_fmt->mbus_code;
- 
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, enum_frame_size,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, enum_frame_size,
- 			       NULL, &fse);
- 	if (ret)
- 		return ret;
-@@ -1241,7 +1241,7 @@ static int dcmi_g_parm(struct file *file, void *priv,
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
- 
--	return v4l2_g_parm_cap(video_devdata(file), dcmi->entity.subdev, p);
-+	return v4l2_g_parm_cap(video_devdata(file), dcmi->entity.source, p);
- }
- 
- static int dcmi_s_parm(struct file *file, void *priv,
-@@ -1249,7 +1249,7 @@ static int dcmi_s_parm(struct file *file, void *priv,
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
- 
--	return v4l2_s_parm_cap(video_devdata(file), dcmi->entity.subdev, p);
-+	return v4l2_s_parm_cap(video_devdata(file), dcmi->entity.source, p);
- }
- 
- static int dcmi_enum_frameintervals(struct file *file, void *fh,
-@@ -1271,7 +1271,7 @@ static int dcmi_enum_frameintervals(struct file *file, void *fh,
- 
- 	fie.code = sd_fmt->mbus_code;
- 
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad,
- 			       enum_frame_interval, NULL, &fie);
- 	if (ret)
- 		return ret;
-@@ -1291,7 +1291,7 @@ MODULE_DEVICE_TABLE(of, stm32_dcmi_of_match);
- static int dcmi_open(struct file *file)
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
--	struct v4l2_subdev *sd = dcmi->entity.subdev;
-+	struct v4l2_subdev *sd = dcmi->entity.source;
- 	int ret;
- 
- 	if (mutex_lock_interruptible(&dcmi->lock))
-@@ -1322,7 +1322,7 @@ static int dcmi_open(struct file *file)
- static int dcmi_release(struct file *file)
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
--	struct v4l2_subdev *sd = dcmi->entity.subdev;
-+	struct v4l2_subdev *sd = dcmi->entity.source;
- 	bool fh_singular;
- 	int ret;
- 
-@@ -1433,7 +1433,7 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
- {
- 	const struct dcmi_format *sd_fmts[ARRAY_SIZE(dcmi_formats)];
- 	unsigned int num_fmts = 0, i, j;
--	struct v4l2_subdev *subdev = dcmi->entity.subdev;
-+	struct v4l2_subdev *subdev = dcmi->entity.source;
- 	struct v4l2_subdev_mbus_code_enum mbus_code = {
- 		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
- 	};
-@@ -1479,7 +1479,7 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
- static int dcmi_framesizes_init(struct stm32_dcmi *dcmi)
- {
- 	unsigned int num_fsize = 0;
--	struct v4l2_subdev *subdev = dcmi->entity.subdev;
-+	struct v4l2_subdev *subdev = dcmi->entity.source;
- 	struct v4l2_subdev_frame_size_enum fse = {
- 		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
- 		.code = dcmi->sd_format->mbus_code,
-@@ -1526,7 +1526,7 @@ static int dcmi_graph_notify_complete(struct v4l2_async_notifier *notifier)
- 	struct stm32_dcmi *dcmi = notifier_to_dcmi(notifier);
- 	int ret;
- 
--	dcmi->vdev->ctrl_handler = dcmi->entity.subdev->ctrl_handler;
-+	dcmi->vdev->ctrl_handler = dcmi->entity.source->ctrl_handler;
- 	ret = dcmi_formats_init(dcmi);
- 	if (ret) {
- 		dev_err(dcmi->dev, "No supported mediabus format found\n");
-@@ -1582,7 +1582,7 @@ static int dcmi_graph_notify_bound(struct v4l2_async_notifier *notifier,
- 
- 	dev_dbg(dcmi->dev, "Subdev %s bound\n", subdev->name);
- 
--	dcmi->entity.subdev = subdev;
-+	dcmi->entity.source = subdev;
- 
- 	return 0;
- }
-@@ -1608,7 +1608,7 @@ static int dcmi_graph_parse(struct stm32_dcmi *dcmi, struct device_node *node)
- 		return -EINVAL;
- 
- 	/* Remote node to connect */
--	dcmi->entity.node = remote;
-+	dcmi->entity.remote_node = remote;
- 	dcmi->entity.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
- 	dcmi->entity.asd.match.fwnode = of_fwnode_handle(remote);
- 	return 0;
-@@ -1631,7 +1631,7 @@ static int dcmi_graph_init(struct stm32_dcmi *dcmi)
- 					     &dcmi->entity.asd);
- 	if (ret) {
- 		dev_err(dcmi->dev, "Failed to add subdev notifier\n");
--		of_node_put(dcmi->entity.node);
-+		of_node_put(dcmi->entity.remote_node);
- 		return ret;
- 	}
- 
--- 
-2.7.4
-
+SGkgU2FrYXJpLA0KDQpPbiA2LzI3LzE5IDY6MDUgUE0sIFNha2FyaSBBaWx1cyB3cm90ZToNCj4g
+SGkgSHVndWVzLA0KPiANCj4gT24gVGh1LCBKdW4gMjcsIDIwMTkgYXQgMDI6NTc6MDRQTSArMDIw
+MCwgSHVndWVzIEZydWNoZXQgd3JvdGU6DQo+PiBBZGQgc3VwcG9ydCBvZiBWNEwyX0NJRF9MSU5L
+X0ZSRVEsIHRoaXMgaXMgbmVlZGVkDQo+PiBieSBzb21lIENTSS0yIHJlY2VpdmVycy4NCj4+DQo+
+PiAzODRNSHogaXMgZXhwb3NlZCBmb3IgdGhlIHRpbWUgYmVpbmcsIGNvcnJlc3BvbmRpbmcNCj4+
+IHRvIDk2TUh6IHBpeGVsIGNsb2NrIHdpdGggMiBieXRlcyBwZXIgcGl4ZWwgb24gMiBkYXRhIGxh
+bmVzLg0KPj4NCj4+IFRoaXMgc2V0dXAgaGFzIGJlZW4gdGVzdGVkIHN1Y2Nlc3NmdWxseSB3aXRo
+IFNUIE1JUElEMDINCj4+IENTSS0yIHRvIHBhcmFsbGVsIGJyaWRnZS4NCj4+DQo+PiBTaWduZWQt
+b2ZmLWJ5OiBIdWd1ZXMgRnJ1Y2hldCA8aHVndWVzLmZydWNoZXRAc3QuY29tPg0KPj4gLS0tDQo+
+IA0KPiBUaGFua3MgZm9yIHRoZSBwYXRjaC4NCj4gDQo+IFRoZSBkcml2ZXIgY2FsY3VsYXRlcyB0
+aGUgc2Vuc29yIGNvbmZpZ3VyYXRpb24gYmFzZWQgb24gaXRzIGNvbmZpZ3VyYXRpb24sDQo+IGFu
+ZCB0aGlzIG5lZWRzIHRvIGJlIHJlZmxlY3RlZCBpbiB0aGUgbGluayBmcmVxdWVuY3k6IGl0J3Mg
+bm90IGEgc3RhdGljDQo+IHZhbHVlLiBTZWUgZS5nLiBvdjU2NDBfY2FsY19zeXNfY2xrKCkuDQo+
+IA0KDQpJIGtub3cgdGhpcyBjb2RlLCBidXQgZm9yIGEgcmVhc29uIEkgZG9uJ3QgdW5kZXJzdGFu
+ZCB5ZXQsIHRoaXMgc2VlbXMNCnRvIG5vdCBoYXZlIGVmZmVjdHMgb24gdGhlIENTSS0yIGxpbmsg
+ZnJlcXVlbmN5Lg0KDQpUaGlzIGhhcyBiZWVuIHZlcmlmaWVkIHdpdGggTUlQSUQwMiBDU0ktMiBi
+cmlkZ2Ugd2hpY2ggb25seSB3b3JrIHdpdGgNCnRoaXMgZml4ZWQgbGluayBmcmVxdWVuY3kgYXMg
+aW5wdXQgdG8gcHJvZ3JhbSBpdHMgdWlfeDQgcmVnaXN0ZXIgDQpzZXR0aW5nLCBzZWUgDQpodHRw
+czovL3d3dy5tYWlsLWFyY2hpdmUuY29tL2xpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcvbXNn
+MjAyODE3MS5odG1sLg0KQWxsIHJlc29sdXRpb25zIGFuZCBhbGwgZnJhbWVyYXRlIGhhdmUgYmVl
+biB0ZXN0ZWQgc3VjY2VzZnVsbHkgd2l0aCB0aGlzIA0Kc2V0dGluZy4NCg0KSW5pdGlhbGx5IEkg
+dHJpZWQgdG8gc2V0IHRoZSBsaW5rIGZyZXF1ZW5jeSBhY2NvcmRpbmcgdG8gdGhlIHZhbHVlIA0K
+Y29tcHV0ZWQgaW4gb3Y1NjQwX2NhbGNfc3lzX2NsaygpIGJ1dCBpdCB3YXMgb25seSBmdW5jdGlv
+bmFsIHdoZW4gDQpyZXNvbHV0aW9ucy9mcmFtZXJhdGUgd2FzIGNsb3NlIHRvIHRoZSAzODRNSHog
+dmFsdWUuLi4NCg0KQXMgT1Y1NjQwIEQzIGVuZ2luZWVyaW5nIGJvYXJkIGhhcyBiZWVuIGluaXRp
+YWxseSBkZXZlbG9wcGVkIGZvciANCmRyYWdvbmJvYXJkLCBJJ2xsIGRpZyBpbnRvIHRoaXMgYW5k
+IGZvdW5kIHRoaXMgY29tbWl0Og0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3Bh
+dGNoLzg4Njc5NC8NCndoaWNoIHNldCBhIGZpeGVkIHBpeGVsIHJhdGUgdmFsdWUgdG8gOTZNSHos
+IHdoaWNoIG1hdGNoIHBlcmZlY3RseQ0Kd2l0aCB0aGUgMzg0TUh6IHZhbHVlIEkgZm91bmQgZm9y
+IGxpbmsgZnJlcXVlbmN5Li4uDQoNClBlcmhhcHMgb3RoZXIgQ1NJLTIgT1Y1NjQwIHVzZXJzIGNh
+biBjb21tZW50IGFib3V0IGl0IGFuZCBoYXZlIHRoZSANCmV4cGxhbmF0aW9ucyBvZiB3aGF0IEkg
+ZXhwZXJpbWVudC4uLg0KTWF4aW1lLCBKYWNvcG8sIGRvIHlvdSBoYXZlIGFueSBpZGVhIGFib3V0
+IGl0ID8NCg0KDQo+PiB2ZXJzaW9uIDI6DQo+PiAgICAtIGRvIG5vdCBzZXQgY29udHJvbCByZWFk
+IG9ubHkgYXMgcGVyIEhhbnMnIGNvbW1lbnQ6DQo+PiAgICAgIFNlZSBodHRwczovL3d3dy5tYWls
+LWFyY2hpdmUuY29tL2xpbnV4LW1lZGlhQHZnZXIua2VybmVsLm9yZy9tc2cxNDc5MTAuaHRtbA0K
+Pj4NCj4+ICAgZHJpdmVycy9tZWRpYS9pMmMvb3Y1NjQwLmMgfCAxMCArKysrKysrKysrDQo+PiAg
+IDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvbWVkaWEvaTJjL292NTY0MC5jIGIvZHJpdmVycy9tZWRpYS9pMmMvb3Y1NjQwLmMNCj4+
+IGluZGV4IDgyZDRjZTkuLmU2MzA3ZjMgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL21lZGlhL2ky
+Yy9vdjU2NDAuYw0KPj4gKysrIGIvZHJpdmVycy9tZWRpYS9pMmMvb3Y1NjQwLmMNCj4+IEBAIC0y
+MTgsNiArMjE4LDcgQEAgc3RydWN0IG92NTY0MF9jdHJscyB7DQo+PiAgIAlzdHJ1Y3QgdjRsMl9j
+dHJsICp0ZXN0X3BhdHRlcm47DQo+PiAgIAlzdHJ1Y3QgdjRsMl9jdHJsICpoZmxpcDsNCj4+ICAg
+CXN0cnVjdCB2NGwyX2N0cmwgKnZmbGlwOw0KPj4gKwlzdHJ1Y3QgdjRsMl9jdHJsICpsaW5rX2Zy
+ZXE7DQo+PiAgIH07DQo+PiAgIA0KPj4gICBzdHJ1Y3Qgb3Y1NjQwX2RldiB7DQo+PiBAQCAtMjE5
+OCw2ICsyMTk5LDEwIEBAIHN0YXRpYyBpbnQgb3Y1NjQwX3RyeV9mbXRfaW50ZXJuYWwoc3RydWN0
+IHY0bDJfc3ViZGV2ICpzZCwNCj4+ICAgCXJldHVybiAwOw0KPj4gICB9DQo+PiAgIA0KPj4gK3N0
+YXRpYyBjb25zdCBzNjQgbGlua19mcmVxX21lbnVfaXRlbXNbXSA9IHsNCj4+ICsJMzg0MDAwMDAw
+LA0KPj4gK307DQo+PiArDQo+PiAgIHN0YXRpYyBpbnQgb3Y1NjQwX3NldF9mbXQoc3RydWN0IHY0
+bDJfc3ViZGV2ICpzZCwNCj4+ICAgCQkJICBzdHJ1Y3QgdjRsMl9zdWJkZXZfcGFkX2NvbmZpZyAq
+Y2ZnLA0KPj4gICAJCQkgIHN0cnVjdCB2NGwyX3N1YmRldl9mb3JtYXQgKmZvcm1hdCkNCj4+IEBA
+IC0yNjM2LDYgKzI2NDEsOCBAQCBzdGF0aWMgaW50IG92NTY0MF9zX2N0cmwoc3RydWN0IHY0bDJf
+Y3RybCAqY3RybCkNCj4+ICAgCWNhc2UgVjRMMl9DSURfVkZMSVA6DQo+PiAgIAkJcmV0ID0gb3Y1
+NjQwX3NldF9jdHJsX3ZmbGlwKHNlbnNvciwgY3RybC0+dmFsKTsNCj4+ICAgCQlicmVhazsNCj4+
+ICsJY2FzZSBWNEwyX0NJRF9MSU5LX0ZSRVE6DQo+PiArCQlyZXR1cm4gMDsNCj4+ICAgCWRlZmF1
+bHQ6DQo+PiAgIAkJcmV0ID0gLUVJTlZBTDsNCj4+ICAgCQlicmVhazsNCj4+IEBAIC0yNzAzLDYg
+KzI3MTAsOSBAQCBzdGF0aWMgaW50IG92NTY0MF9pbml0X2NvbnRyb2xzKHN0cnVjdCBvdjU2NDBf
+ZGV2ICpzZW5zb3IpDQo+PiAgIAkJCQkgICAgICAgVjRMMl9DSURfUE9XRVJfTElORV9GUkVRVUVO
+Q1lfQVVUTywgMCwNCj4+ICAgCQkJCSAgICAgICBWNEwyX0NJRF9QT1dFUl9MSU5FX0ZSRVFVRU5D
+WV81MEhaKTsNCj4+ICAgDQo+PiArCWN0cmxzLT5saW5rX2ZyZXEgPSB2NGwyX2N0cmxfbmV3X2lu
+dF9tZW51KGhkbCwgb3BzLCBWNEwyX0NJRF9MSU5LX0ZSRVEsDQo+PiArCQkJCQkJICAwLCAwLCBs
+aW5rX2ZyZXFfbWVudV9pdGVtcyk7DQo+PiArDQo+PiAgIAlpZiAoaGRsLT5lcnJvcikgew0KPj4g
+ICAJCXJldCA9IGhkbC0+ZXJyb3I7DQo+PiAgIAkJZ290byBmcmVlX2N0cmxzOw0KPj4gLS0gDQo+
+PiAyLjcuNA0KPj4NCj4gDQoNCkJSLA0KSHVndWVzLg==
