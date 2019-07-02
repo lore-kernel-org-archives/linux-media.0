@@ -2,927 +2,199 @@ Return-Path: <SRS0=1THm=U7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20FBEC06510
-	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 15:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16498C06510
+	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 15:49:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D70F721473
-	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 15:49:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E12FA20989
+	for <linux-media@archiver.kernel.org>; Tue,  2 Jul 2019 15:49:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbfGBPtE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Jul 2019 11:49:04 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:58366 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725996AbfGBPtD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Jul 2019 11:49:03 -0400
-Received: from turingmachine.home (unknown [IPv6:2804:431:c7f4:61e7:d711:794d:1c68:5ed3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tonyk)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 6D4BD26056D;
-        Tue,  2 Jul 2019 16:48:57 +0100 (BST)
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     mchehab@kernel.org, hverkuil@xs4all.nl, helen.koike@collabora.com,
-        kernel@collabora.com, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH 1/7] media: vimc: Create video module
-Date:   Tue,  2 Jul 2019 12:47:46 -0300
-Message-Id: <20190702154752.14939-2-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190702154752.14939-1-andrealmeid@collabora.com>
-References: <20190702154752.14939-1-andrealmeid@collabora.com>
+        id S1727013AbfGBPtj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Jul 2019 11:49:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:52344 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725922AbfGBPtj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 2 Jul 2019 11:49:39 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22AF128;
+        Tue,  2 Jul 2019 08:49:38 -0700 (PDT)
+Received: from [10.1.197.57] (e110467-lin.cambridge.arm.com [10.1.197.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFEAD3F246;
+        Tue,  2 Jul 2019 08:49:35 -0700 (PDT)
+Subject: Re: [RFC PATCH 0/2] Support for TI Page-based Address Translator
+To:     "Andrew F. Davis" <afd@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Tero Kristo <t-kristo@ti.com>,
+        William Mills <wmills@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        John Stultz <john.stultz@linaro.org>
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org
+References: <20190607193523.25700-1-afd@ti.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <f706bfe0-fdf6-afdd-fea7-13b78b16cdee@arm.com>
+Date:   Tue, 2 Jul 2019 16:49:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190607193523.25700-1-afd@ti.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-V4L2 video capture and video output devices shares a lot of common code.
-To enhance code reuse with future video output, split vimc-capture.c in
-three files: vimc-capture.c and vimc-video.{c,h}. Keep strict capture
-related functions on vimc-capture.c. This change is meant to the future
-addition of a video output device in vimc, as it will make easier for code
-reuse and simplicity.
+On 07/06/2019 20:35, Andrew F. Davis wrote:
+> Hello all,
+> 
+> So I've got a new IP on our new SoC I'm looking to make use of and would
+> like some help figuring out what framework best matches its function. The
+> IP is called a "Page-based Address Translator" or PAT. A PAT instance
+> (there are 5 of these things on our J721e device[0]) is basically a
+> really simple IOMMU sitting on the interconnect between the device bus
+> and what is effectively our northbridge called
+> MSMC (DRAM/SRAM/L3-Cache/Coherency controller).
+> 
+> Simplified it looks about like this:
+> 
+>           CPUs
+>            |
+> DRAM --- MSMC --- SRAM/L3
+>            |
+>          NAVSS - (PATs)
+>            |
+>    --- Device Bus ---------
+>   |      |      |          |
+> Device  Device  Device   etc..
+> 
+> Each PAT has a set a window in high memory (about 0x48_0000_0000 area)
+> for which any transaction with an address targeting its window will be
+> routed into that PAT. The PAT then does a simple calculation based on
+> the how far into the window the address is and the current page size,
+> does a lookup to an internally held table of translations, then sends the
+> transaction back out on the interconnect with a new address. Usually this
+> address should be towards somewhere in DRAM, but can be some other device
+> or even back into PAT (I'm not sure there is a valid use-case for this
+> but just a point of interest).
+> 
+> My gut reaction is that this is an IOMMU which belongs in the IOMMU
+> subsystem. But there are a couple oddities that make me less sure it is
+> really suitable for the IOMMU framework. First it doesn't sit in front of
+> any devices, it sits in front of *all* devices, this means we would have
+> every device claim it as an IOMMU parent, even though many devices also
+> have a traditional IOMMU connected. Second, there is only a limited
+> window of address space per PAT, this means we will get fragmentation and
+> allocation failures on occasion, in this way it looks to me more like AGP
+> GART. Third, the window is in high-memory, so unlike some IOMMU devices
+> which can be used to allow DMA to high-mem from low-mem only devices, PAT
+> can't be used for that. Lastly it doesn't provide any isolation, if the
+> access does not target the PAT window it is not used (that is not to say
+> we don't have isolation, just that it is taken care of by other parts of
+> the interconnect).
+> 
+> This means, to me, that PAT has one main purpose: making
+> physically-contiguous views of scattered pages in system memory for DMA.
+> But it does that really well, the whole translation table is held in a
+> PAT-internal SRAM giving 1 bus cycle latency and at full bus bandwidth.
+> 
+> So what are my options here, is IOMMU the right way to go or not?
 
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
----
- drivers/media/platform/vimc/Makefile       |   2 +-
- drivers/media/platform/vimc/vimc-capture.c | 341 ++-------------------
- drivers/media/platform/vimc/vimc-video.c   | 264 ++++++++++++++++
- drivers/media/platform/vimc/vimc-video.h   | 127 ++++++++
- 4 files changed, 417 insertions(+), 317 deletions(-)
- create mode 100644 drivers/media/platform/vimc/vimc-video.c
- create mode 100644 drivers/media/platform/vimc/vimc-video.h
+FWIW, that sounds almost exactly like my (vague) understanding of other 
+GARTs, and as such should be pretty well manageable via the IOMMU API - 
+we already have tegra-gart, for example. The aperture contention issue 
+could certainly be mitigated by letting the firmware claim it's only 
+associated with the display and any other devices which really need it.
 
-diff --git a/drivers/media/platform/vimc/Makefile b/drivers/media/platform/vimc/Makefile
-index 96d06f030c31..fb90aa0f33a5 100644
---- a/drivers/media/platform/vimc/Makefile
-+++ b/drivers/media/platform/vimc/Makefile
-@@ -1,5 +1,5 @@
- # SPDX-License-Identifier: GPL-2.0
- vimc-y := vimc-core.o vimc-common.o vimc-streamer.o
- 
--obj-$(CONFIG_VIDEO_VIMC) += vimc.o vimc-capture.o vimc-debayer.o \
-+obj-$(CONFIG_VIDEO_VIMC) += vimc.o vimc-video.o vimc-capture.o vimc-debayer.o \
-                 vimc-scaler.o vimc-sensor.o
-diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
-index 664855708fdf..e80fa1ee3dc1 100644
---- a/drivers/media/platform/vimc/vimc-capture.c
-+++ b/drivers/media/platform/vimc/vimc-capture.c
-@@ -5,231 +5,18 @@
-  * Copyright (C) 2015-2017 Helen Koike <helen.fornazier@gmail.com>
-  */
- 
--#include <linux/component.h>
--#include <linux/module.h>
--#include <linux/mod_devicetable.h>
--#include <linux/platform_device.h>
--#include <media/v4l2-ioctl.h>
--#include <media/videobuf2-core.h>
--#include <media/videobuf2-vmalloc.h>
--
--#include "vimc-common.h"
--#include "vimc-streamer.h"
-+#include "vimc-video.h"
- 
- #define VIMC_CAP_DRV_NAME "vimc-capture"
- 
--static const u32 vimc_cap_supported_pixfmt[] = {
--	V4L2_PIX_FMT_BGR24,
--	V4L2_PIX_FMT_RGB24,
--	V4L2_PIX_FMT_ARGB32,
--	V4L2_PIX_FMT_SBGGR8,
--	V4L2_PIX_FMT_SGBRG8,
--	V4L2_PIX_FMT_SGRBG8,
--	V4L2_PIX_FMT_SRGGB8,
--	V4L2_PIX_FMT_SBGGR10,
--	V4L2_PIX_FMT_SGBRG10,
--	V4L2_PIX_FMT_SGRBG10,
--	V4L2_PIX_FMT_SRGGB10,
--	V4L2_PIX_FMT_SBGGR10ALAW8,
--	V4L2_PIX_FMT_SGBRG10ALAW8,
--	V4L2_PIX_FMT_SGRBG10ALAW8,
--	V4L2_PIX_FMT_SRGGB10ALAW8,
--	V4L2_PIX_FMT_SBGGR10DPCM8,
--	V4L2_PIX_FMT_SGBRG10DPCM8,
--	V4L2_PIX_FMT_SGRBG10DPCM8,
--	V4L2_PIX_FMT_SRGGB10DPCM8,
--	V4L2_PIX_FMT_SBGGR12,
--	V4L2_PIX_FMT_SGBRG12,
--	V4L2_PIX_FMT_SGRBG12,
--	V4L2_PIX_FMT_SRGGB12,
--};
--
--struct vimc_cap_device {
--	struct vimc_ent_device ved;
--	struct video_device vdev;
--	struct device *dev;
--	struct v4l2_pix_format format;
--	struct vb2_queue queue;
--	struct list_head buf_list;
--	/*
--	 * NOTE: in a real driver, a spin lock must be used to access the
--	 * queue because the frames are generated from a hardware interruption
--	 * and the isr is not allowed to sleep.
--	 * Even if it is not necessary a spinlock in the vimc driver, we
--	 * use it here as a code reference
--	 */
--	spinlock_t qlock;
--	struct mutex lock;
--	u32 sequence;
--	struct vimc_stream stream;
--};
--
--static const struct v4l2_pix_format fmt_default = {
--	.width = 640,
--	.height = 480,
--	.pixelformat = V4L2_PIX_FMT_RGB24,
--	.field = V4L2_FIELD_NONE,
--	.colorspace = V4L2_COLORSPACE_DEFAULT,
--};
--
--struct vimc_cap_buffer {
--	/*
--	 * struct vb2_v4l2_buffer must be the first element
--	 * the videobuf2 framework will allocate this struct based on
--	 * buf_struct_size and use the first sizeof(struct vb2_buffer) bytes of
--	 * memory as a vb2_buffer
--	 */
--	struct vb2_v4l2_buffer vb2;
--	struct list_head list;
--};
--
--static int vimc_cap_querycap(struct file *file, void *priv,
--			     struct v4l2_capability *cap)
--{
--	strscpy(cap->driver, VIMC_PDEV_NAME, sizeof(cap->driver));
--	strscpy(cap->card, KBUILD_MODNAME, sizeof(cap->card));
--	snprintf(cap->bus_info, sizeof(cap->bus_info),
--		 "platform:%s", VIMC_PDEV_NAME);
--
--	return 0;
--}
--
--static void vimc_cap_get_format(struct vimc_ent_device *ved,
--				struct v4l2_pix_format *fmt)
--{
--	struct vimc_cap_device *vcap = container_of(ved, struct vimc_cap_device,
--						    ved);
--
--	*fmt = vcap->format;
--}
--
--static int vimc_cap_g_fmt_vid_cap(struct file *file, void *priv,
--				  struct v4l2_format *f)
--{
--	struct vimc_cap_device *vcap = video_drvdata(file);
--
--	f->fmt.pix = vcap->format;
--
--	return 0;
--}
--
--static int vimc_cap_try_fmt_vid_cap(struct file *file, void *priv,
--				    struct v4l2_format *f)
--{
--	struct v4l2_pix_format *format = &f->fmt.pix;
--
--	format->width = clamp_t(u32, format->width, VIMC_FRAME_MIN_WIDTH,
--				VIMC_FRAME_MAX_WIDTH) & ~1;
--	format->height = clamp_t(u32, format->height, VIMC_FRAME_MIN_HEIGHT,
--				 VIMC_FRAME_MAX_HEIGHT) & ~1;
--
--	vimc_colorimetry_clamp(format);
--
--	if (format->field == V4L2_FIELD_ANY)
--		format->field = fmt_default.field;
--
--	/* TODO: Add support for custom bytesperline values */
--
--	/* Don't accept a pixelformat that is not on the table */
--	if (!v4l2_format_info(format->pixelformat))
--		format->pixelformat = fmt_default.pixelformat;
--
--	return v4l2_fill_pixfmt(format, format->pixelformat,
--				format->width, format->height);
--}
--
--static int vimc_cap_s_fmt_vid_cap(struct file *file, void *priv,
--				  struct v4l2_format *f)
--{
--	struct vimc_cap_device *vcap = video_drvdata(file);
--	int ret;
--
--	/* Do not change the format while stream is on */
--	if (vb2_is_busy(&vcap->queue))
--		return -EBUSY;
--
--	ret = vimc_cap_try_fmt_vid_cap(file, priv, f);
--	if (ret)
--		return ret;
--
--	dev_dbg(vcap->dev, "%s: format update: "
--		"old:%dx%d (0x%x, %d, %d, %d, %d) "
--		"new:%dx%d (0x%x, %d, %d, %d, %d)\n", vcap->vdev.name,
--		/* old */
--		vcap->format.width, vcap->format.height,
--		vcap->format.pixelformat, vcap->format.colorspace,
--		vcap->format.quantization, vcap->format.xfer_func,
--		vcap->format.ycbcr_enc,
--		/* new */
--		f->fmt.pix.width, f->fmt.pix.height,
--		f->fmt.pix.pixelformat,	f->fmt.pix.colorspace,
--		f->fmt.pix.quantization, f->fmt.pix.xfer_func,
--		f->fmt.pix.ycbcr_enc);
--
--	vcap->format = f->fmt.pix;
--
--	return 0;
--}
--
--static int vimc_cap_enum_fmt_vid_cap(struct file *file, void *priv,
--				     struct v4l2_fmtdesc *f)
--{
--	if (f->index >= ARRAY_SIZE(vimc_cap_supported_pixfmt))
--		return -EINVAL;
--
--	f->pixelformat = vimc_cap_supported_pixfmt[f->index];
--
--	return 0;
--}
--
--static bool vimc_cap_is_pixfmt_supported(u32 pixelformat)
--{
--	unsigned int i;
--
--	for (i = 0; i < ARRAY_SIZE(vimc_cap_supported_pixfmt); i++)
--		if (vimc_cap_supported_pixfmt[i] == pixelformat)
--			return true;
--	return false;
--}
--
--static int vimc_cap_enum_framesizes(struct file *file, void *fh,
--				    struct v4l2_frmsizeenum *fsize)
--{
--	if (fsize->index)
--		return -EINVAL;
--
--	if (!vimc_cap_is_pixfmt_supported(fsize->pixel_format))
--		return -EINVAL;
--
--	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
--	fsize->stepwise.min_width = VIMC_FRAME_MIN_WIDTH;
--	fsize->stepwise.max_width = VIMC_FRAME_MAX_WIDTH;
--	fsize->stepwise.min_height = VIMC_FRAME_MIN_HEIGHT;
--	fsize->stepwise.max_height = VIMC_FRAME_MAX_HEIGHT;
--	fsize->stepwise.step_width = 1;
--	fsize->stepwise.step_height = 1;
--
--	return 0;
--}
--
--static const struct v4l2_file_operations vimc_cap_fops = {
--	.owner		= THIS_MODULE,
--	.open		= v4l2_fh_open,
--	.release	= vb2_fop_release,
--	.read           = vb2_fop_read,
--	.poll		= vb2_fop_poll,
--	.unlocked_ioctl = video_ioctl2,
--	.mmap           = vb2_fop_mmap,
--};
--
- static const struct v4l2_ioctl_ops vimc_cap_ioctl_ops = {
--	.vidioc_querycap = vimc_cap_querycap,
-+	.vidioc_querycap = vimc_vid_querycap,
- 
--	.vidioc_g_fmt_vid_cap = vimc_cap_g_fmt_vid_cap,
--	.vidioc_s_fmt_vid_cap = vimc_cap_s_fmt_vid_cap,
--	.vidioc_try_fmt_vid_cap = vimc_cap_try_fmt_vid_cap,
--	.vidioc_enum_fmt_vid_cap = vimc_cap_enum_fmt_vid_cap,
--	.vidioc_enum_framesizes = vimc_cap_enum_framesizes,
-+	.vidioc_g_fmt_vid_cap = vimc_vid_g_fmt,
-+	.vidioc_s_fmt_vid_cap = vimc_vid_s_fmt,
-+	.vidioc_try_fmt_vid_cap = vimc_vid_try_fmt,
-+	.vidioc_enum_fmt_vid_cap = vimc_vid_enum_fmt,
-+	.vidioc_enum_framesizes = vimc_vid_enum_framesizes,
- 
- 	.vidioc_reqbufs = vb2_ioctl_reqbufs,
- 	.vidioc_create_bufs = vb2_ioctl_create_bufs,
-@@ -242,24 +29,9 @@ static const struct v4l2_ioctl_ops vimc_cap_ioctl_ops = {
- 	.vidioc_streamoff = vb2_ioctl_streamoff,
- };
- 
--static void vimc_cap_return_all_buffers(struct vimc_cap_device *vcap,
--					enum vb2_buffer_state state)
--{
--	struct vimc_cap_buffer *vbuf, *node;
--
--	spin_lock(&vcap->qlock);
--
--	list_for_each_entry_safe(vbuf, node, &vcap->buf_list, list) {
--		list_del(&vbuf->list);
--		vb2_buffer_done(&vbuf->vb2.vb2_buf, state);
--	}
--
--	spin_unlock(&vcap->qlock);
--}
--
- static int vimc_cap_start_streaming(struct vb2_queue *vq, unsigned int count)
- {
--	struct vimc_cap_device *vcap = vb2_get_drv_priv(vq);
-+	struct vimc_vid_device *vcap = vb2_get_drv_priv(vq);
- 	struct media_entity *entity = &vcap->vdev.entity;
- 	int ret;
- 
-@@ -268,7 +40,7 @@ static int vimc_cap_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	/* Start the media pipeline */
- 	ret = media_pipeline_start(entity, &vcap->stream.pipe);
- 	if (ret) {
--		vimc_cap_return_all_buffers(vcap, VB2_BUF_STATE_QUEUED);
-+		vimc_vid_return_all_buffers(vcap, VB2_BUF_STATE_QUEUED);
- 		return ret;
- 	}
- 
-@@ -276,7 +48,7 @@ static int vimc_cap_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	ret = vimc_streamer_s_stream(&vcap->stream, &vcap->ved, 1);
- 	if (ret) {
- 		media_pipeline_stop(entity);
--		vimc_cap_return_all_buffers(vcap, VB2_BUF_STATE_QUEUED);
-+		vimc_vid_return_all_buffers(vcap, VB2_BUF_STATE_QUEUED);
- 		return ret;
- 	}
- 
-@@ -287,65 +59,23 @@ static int vimc_cap_start_streaming(struct vb2_queue *vq, unsigned int count)
-  * Stop the stream engine. Any remaining buffers in the stream queue are
-  * dequeued and passed on to the vb2 framework marked as STATE_ERROR.
-  */
--static void vimc_cap_stop_streaming(struct vb2_queue *vq)
-+void vimc_cap_stop_streaming(struct vb2_queue *vq)
- {
--	struct vimc_cap_device *vcap = vb2_get_drv_priv(vq);
-+	struct vimc_vid_device *vcap = vb2_get_drv_priv(vq);
- 
- 	vimc_streamer_s_stream(&vcap->stream, &vcap->ved, 0);
- 
--	/* Stop the media pipeline */
- 	media_pipeline_stop(&vcap->vdev.entity);
- 
--	/* Release all active buffers */
--	vimc_cap_return_all_buffers(vcap, VB2_BUF_STATE_ERROR);
--}
--
--static void vimc_cap_buf_queue(struct vb2_buffer *vb2_buf)
--{
--	struct vimc_cap_device *vcap = vb2_get_drv_priv(vb2_buf->vb2_queue);
--	struct vimc_cap_buffer *buf = container_of(vb2_buf,
--						   struct vimc_cap_buffer,
--						   vb2.vb2_buf);
--
--	spin_lock(&vcap->qlock);
--	list_add_tail(&buf->list, &vcap->buf_list);
--	spin_unlock(&vcap->qlock);
--}
--
--static int vimc_cap_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
--				unsigned int *nplanes, unsigned int sizes[],
--				struct device *alloc_devs[])
--{
--	struct vimc_cap_device *vcap = vb2_get_drv_priv(vq);
--
--	if (*nplanes)
--		return sizes[0] < vcap->format.sizeimage ? -EINVAL : 0;
--	/* We don't support multiplanes for now */
--	*nplanes = 1;
--	sizes[0] = vcap->format.sizeimage;
--
--	return 0;
--}
--
--static int vimc_cap_buffer_prepare(struct vb2_buffer *vb)
--{
--	struct vimc_cap_device *vcap = vb2_get_drv_priv(vb->vb2_queue);
--	unsigned long size = vcap->format.sizeimage;
--
--	if (vb2_plane_size(vb, 0) < size) {
--		dev_err(vcap->dev, "%s: buffer too small (%lu < %lu)\n",
--			vcap->vdev.name, vb2_plane_size(vb, 0), size);
--		return -EINVAL;
--	}
--	return 0;
-+	vimc_vid_return_all_buffers(vcap, VB2_BUF_STATE_ERROR);
- }
- 
- static const struct vb2_ops vimc_cap_qops = {
- 	.start_streaming	= vimc_cap_start_streaming,
- 	.stop_streaming		= vimc_cap_stop_streaming,
--	.buf_queue		= vimc_cap_buf_queue,
--	.queue_setup		= vimc_cap_queue_setup,
--	.buf_prepare		= vimc_cap_buffer_prepare,
-+	.buf_queue		= vimc_vid_buf_queue,
-+	.queue_setup		= vimc_vid_queue_setup,
-+	.buf_prepare		= vimc_vid_buffer_prepare,
- 	/*
- 	 * Since q->lock is set we can use the standard
- 	 * vb2_ops_wait_prepare/finish helper functions.
-@@ -358,33 +88,12 @@ static const struct media_entity_operations vimc_cap_mops = {
- 	.link_validate		= vimc_link_validate,
- };
- 
--static void vimc_cap_release(struct video_device *vdev)
--{
--	struct vimc_cap_device *vcap =
--		container_of(vdev, struct vimc_cap_device, vdev);
--
--	vimc_pads_cleanup(vcap->ved.pads);
--	kfree(vcap);
--}
--
--static void vimc_cap_comp_unbind(struct device *comp, struct device *master,
--				 void *master_data)
--{
--	struct vimc_ent_device *ved = dev_get_drvdata(comp);
--	struct vimc_cap_device *vcap = container_of(ved, struct vimc_cap_device,
--						    ved);
--
--	vb2_queue_release(&vcap->queue);
--	media_entity_cleanup(ved->ent);
--	video_unregister_device(&vcap->vdev);
--}
--
- static void *vimc_cap_process_frame(struct vimc_ent_device *ved,
- 				    const void *frame)
- {
--	struct vimc_cap_device *vcap = container_of(ved, struct vimc_cap_device,
-+	struct vimc_vid_device *vcap = container_of(ved, struct vimc_vid_device,
- 						    ved);
--	struct vimc_cap_buffer *vimc_buf;
-+	struct vimc_vid_buffer *vimc_buf;
- 	void *vbuf;
- 
- 	spin_lock(&vcap->qlock);
-@@ -423,12 +132,12 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
- {
- 	struct v4l2_device *v4l2_dev = master_data;
- 	struct vimc_platform_data *pdata = comp->platform_data;
--	struct vimc_cap_device *vcap;
-+	struct vimc_vid_device *vcap;
- 	struct video_device *vdev;
- 	struct vb2_queue *q;
- 	int ret;
- 
--	/* Allocate the vimc_cap_device struct */
-+	/* Allocate the vimc_vid_device struct */
- 	vcap = kzalloc(sizeof(*vcap), GFP_KERNEL);
- 	if (!vcap)
- 		return -ENOMEM;
-@@ -457,7 +166,7 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
- 	q->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
- 	q->io_modes = VB2_MMAP | VB2_DMABUF | VB2_USERPTR;
- 	q->drv_priv = vcap;
--	q->buf_struct_size = sizeof(struct vimc_cap_buffer);
-+	q->buf_struct_size = sizeof(struct vimc_vid_buffer);
- 	q->ops = &vimc_cap_qops;
- 	q->mem_ops = &vb2_vmalloc_memops;
- 	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
-@@ -483,7 +192,7 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
- 	/* Fill the vimc_ent_device struct */
- 	vcap->ved.ent = &vcap->vdev.entity;
- 	vcap->ved.process_frame = vimc_cap_process_frame;
--	vcap->ved.vdev_get_format = vimc_cap_get_format;
-+	vcap->ved.vdev_get_format = vimc_vid_get_format;
- 	dev_set_drvdata(comp, &vcap->ved);
- 	vcap->dev = comp;
- 
-@@ -491,8 +200,8 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
- 	vdev = &vcap->vdev;
- 	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
- 	vdev->entity.ops = &vimc_cap_mops;
--	vdev->release = vimc_cap_release;
--	vdev->fops = &vimc_cap_fops;
-+	vdev->release = vimc_vid_release;
-+	vdev->fops = &vimc_vid_fops;
- 	vdev->ioctl_ops = &vimc_cap_ioctl_ops;
- 	vdev->lock = &vcap->lock;
- 	vdev->queue = q;
-@@ -525,7 +234,7 @@ static int vimc_cap_comp_bind(struct device *comp, struct device *master,
- 
- static const struct component_ops vimc_cap_comp_ops = {
- 	.bind = vimc_cap_comp_bind,
--	.unbind = vimc_cap_comp_unbind,
-+	.unbind = vimc_vid_comp_unbind,
- };
- 
- static int vimc_cap_probe(struct platform_device *pdev)
-diff --git a/drivers/media/platform/vimc/vimc-video.c b/drivers/media/platform/vimc/vimc-video.c
-new file mode 100644
-index 000000000000..f7ccb2e9d6c5
---- /dev/null
-+++ b/drivers/media/platform/vimc/vimc-video.c
-@@ -0,0 +1,264 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * vimc-video.c Virtual Media Controller Driver
-+ *
-+ *	Derivated work from original vimc-capture by:
-+ *		Helen Koike <helen.koike@collabora.com>
-+ *
-+ * Copyright 2019 Collabora, Ltd.
-+ */
-+
-+#include "vimc-video.h"
-+
-+/*
-+ * TODO: video device should only enum formats that all subdevices on
-+ * topology accepts
-+ */
-+static const u32 vimc_vid_supported_pixfmt[] = {
-+	V4L2_PIX_FMT_BGR24,
-+	V4L2_PIX_FMT_RGB24,
-+	V4L2_PIX_FMT_ARGB32,
-+	V4L2_PIX_FMT_SBGGR8,
-+	V4L2_PIX_FMT_SGBRG8,
-+	V4L2_PIX_FMT_SGRBG8,
-+	V4L2_PIX_FMT_SRGGB8,
-+	V4L2_PIX_FMT_SBGGR10,
-+	V4L2_PIX_FMT_SGBRG10,
-+	V4L2_PIX_FMT_SGRBG10,
-+	V4L2_PIX_FMT_SRGGB10,
-+	V4L2_PIX_FMT_SBGGR10ALAW8,
-+	V4L2_PIX_FMT_SGBRG10ALAW8,
-+	V4L2_PIX_FMT_SGRBG10ALAW8,
-+	V4L2_PIX_FMT_SRGGB10ALAW8,
-+	V4L2_PIX_FMT_SBGGR10DPCM8,
-+	V4L2_PIX_FMT_SGBRG10DPCM8,
-+	V4L2_PIX_FMT_SGRBG10DPCM8,
-+	V4L2_PIX_FMT_SRGGB10DPCM8,
-+	V4L2_PIX_FMT_SBGGR12,
-+	V4L2_PIX_FMT_SGBRG12,
-+	V4L2_PIX_FMT_SGRBG12,
-+	V4L2_PIX_FMT_SRGGB12,
-+};
-+
-+int vimc_vid_querycap(struct file *file, void *priv,
-+		      struct v4l2_capability *cap)
-+{
-+	strscpy(cap->driver, VIMC_PDEV_NAME, sizeof(cap->driver));
-+	strscpy(cap->card, KBUILD_MODNAME, sizeof(cap->card));
-+	snprintf(cap->bus_info, sizeof(cap->bus_info),
-+		 "platform:%s", VIMC_PDEV_NAME);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_querycap);
-+
-+void vimc_vid_get_format(struct vimc_ent_device *ved,
-+			 struct v4l2_pix_format *fmt)
-+{
-+	struct vimc_vid_device *vid = container_of(ved, struct vimc_vid_device,
-+						    ved);
-+
-+	*fmt = vid->format;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_get_format);
-+
-+int vimc_vid_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
-+{
-+	struct vimc_vid_device *vid = video_drvdata(file);
-+
-+	f->fmt.pix = vid->format;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_g_fmt);
-+
-+int vimc_vid_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
-+{
-+	struct v4l2_pix_format *format = &f->fmt.pix;
-+
-+	format->width = clamp_t(u32, format->width, VIMC_FRAME_MIN_WIDTH,
-+				VIMC_FRAME_MAX_WIDTH) & ~1;
-+	format->height = clamp_t(u32, format->height, VIMC_FRAME_MIN_HEIGHT,
-+				 VIMC_FRAME_MAX_HEIGHT) & ~1;
-+
-+	vimc_colorimetry_clamp(format);
-+
-+	if (format->field == V4L2_FIELD_ANY)
-+		format->field = fmt_default.field;
-+
-+	/* TODO: Add support for custom bytesperline values */
-+
-+	/* Don't accept a pixelformat that is not on the table */
-+	if (!v4l2_format_info(format->pixelformat))
-+		format->pixelformat = fmt_default.pixelformat;
-+
-+	return v4l2_fill_pixfmt(format, format->pixelformat,
-+				format->width, format->height);
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_try_fmt);
-+
-+int vimc_vid_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
-+{
-+	struct vimc_vid_device *vid = video_drvdata(file);
-+	int ret;
-+
-+	/* Do not change the format while stream is on */
-+	if (vb2_is_busy(&vid->queue))
-+		return -EBUSY;
-+
-+	ret = vimc_vid_try_fmt(file, priv, f);
-+	if (ret)
-+		return ret;
-+
-+	dev_dbg(vid->dev, "%s: format update: "
-+		"old:%dx%d (0x%x, %d, %d, %d, %d) "
-+		"new:%dx%d (0x%x, %d, %d, %d, %d)\n", vid->vdev.name,
-+		/* old */
-+		vid->format.width, vid->format.height,
-+		vid->format.pixelformat, vid->format.colorspace,
-+		vid->format.quantization, vid->format.xfer_func,
-+		vid->format.ycbcr_enc,
-+		/* new */
-+		f->fmt.pix.width, f->fmt.pix.height,
-+		f->fmt.pix.pixelformat,	f->fmt.pix.colorspace,
-+		f->fmt.pix.quantization, f->fmt.pix.xfer_func,
-+		f->fmt.pix.ycbcr_enc);
-+
-+	vid->format = f->fmt.pix;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_s_fmt);
-+
-+int vimc_vid_enum_fmt(struct file *file, void *priv, struct v4l2_fmtdesc *f)
-+{
-+	if (f->index >= ARRAY_SIZE(vimc_vid_supported_pixfmt))
-+		return -EINVAL;
-+
-+	f->pixelformat = vimc_vid_supported_pixfmt[f->index];
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_enum_fmt);
-+
-+bool vimc_vid_is_pixfmt_supported(u32 pixelformat)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(vimc_vid_supported_pixfmt); i++)
-+		if (vimc_vid_supported_pixfmt[i] == pixelformat)
-+			return true;
-+	return false;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_is_pixfmt_supported);
-+
-+int vimc_vid_enum_framesizes(struct file *file, void *fh,
-+			     struct v4l2_frmsizeenum *fsize)
-+{
-+	if (fsize->index)
-+		return -EINVAL;
-+
-+	if (!vimc_vid_is_pixfmt_supported(fsize->pixel_format))
-+		return -EINVAL;
-+
-+	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
-+	fsize->stepwise.min_width = VIMC_FRAME_MIN_WIDTH;
-+	fsize->stepwise.max_width = VIMC_FRAME_MAX_WIDTH;
-+	fsize->stepwise.min_height = VIMC_FRAME_MIN_HEIGHT;
-+	fsize->stepwise.max_height = VIMC_FRAME_MAX_HEIGHT;
-+	fsize->stepwise.step_width = 1;
-+	fsize->stepwise.step_height = 1;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_enum_framesizes);
-+
-+void vimc_vid_return_all_buffers(struct vimc_vid_device *vid,
-+				 enum vb2_buffer_state state)
-+{
-+	struct vimc_vid_buffer *vbuf, *node;
-+
-+	spin_lock(&vid->qlock);
-+
-+	list_for_each_entry_safe(vbuf, node, &vid->buf_list, list) {
-+		list_del(&vbuf->list);
-+		vb2_buffer_done(&vbuf->vb2.vb2_buf, state);
-+	}
-+
-+	spin_unlock(&vid->qlock);
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_return_all_buffers);
-+
-+/*
-+ * vb2 operations
-+ */
-+
-+void vimc_vid_buf_queue(struct vb2_buffer *vb2_buf)
-+{
-+	struct vimc_vid_device *vid = vb2_get_drv_priv(vb2_buf->vb2_queue);
-+	struct vimc_vid_buffer *buf = container_of(vb2_buf,
-+						   struct vimc_vid_buffer,
-+						   vb2.vb2_buf);
-+
-+	spin_lock(&vid->qlock);
-+	list_add_tail(&buf->list, &vid->buf_list);
-+	spin_unlock(&vid->qlock);
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_buf_queue);
-+
-+int vimc_vid_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
-+			 unsigned int *nplanes, unsigned int sizes[],
-+			 struct device *alloc_devs[])
-+{
-+	struct vimc_vid_device *vid = vb2_get_drv_priv(vq);
-+
-+	if (*nplanes)
-+		return sizes[0] < vid->format.sizeimage ? -EINVAL : 0;
-+	/* We don't support multiplanes for now */
-+	*nplanes = 1;
-+	sizes[0] = vid->format.sizeimage;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_queue_setup);
-+
-+int vimc_vid_buffer_prepare(struct vb2_buffer *vb)
-+{
-+	struct vimc_vid_device *vid = vb2_get_drv_priv(vb->vb2_queue);
-+	unsigned long size = vid->format.sizeimage;
-+
-+	if (vb2_plane_size(vb, 0) < size) {
-+		dev_err(vid->dev, "%s: buffer too small (%lu < %lu)\n",
-+			vid->vdev.name, vb2_plane_size(vb, 0), size);
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_buffer_prepare);
-+
-+void vimc_vid_release(struct video_device *vdev)
-+{
-+	struct vimc_vid_device *vid =
-+		container_of(vdev, struct vimc_vid_device, vdev);
-+
-+	vimc_pads_cleanup(vid->ved.pads);
-+	kfree(vid);
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_release);
-+
-+void vimc_vid_comp_unbind(struct device *comp, struct device *master,
-+			  void *master_data)
-+{
-+	struct vimc_ent_device *ved = dev_get_drvdata(comp);
-+	struct vimc_vid_device *vid = container_of(ved, struct vimc_vid_device,
-+						    ved);
-+
-+	vb2_queue_release(&vid->queue);
-+	media_entity_cleanup(ved->ent);
-+	video_unregister_device(&vid->vdev);
-+}
-+EXPORT_SYMBOL_GPL(vimc_vid_comp_unbind);
-+
-+MODULE_DESCRIPTION("Virtual Media Controller Driver (VIMC) Video");
-+MODULE_AUTHOR("André Almeida <andrealmeid@collabora.com>");
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/media/platform/vimc/vimc-video.h b/drivers/media/platform/vimc/vimc-video.h
-new file mode 100644
-index 000000000000..d329345cc77f
---- /dev/null
-+++ b/drivers/media/platform/vimc/vimc-video.h
-@@ -0,0 +1,127 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * vimc-video.h Virtual Media Controller Driver
-+ *
-+ *	Derivated work from original vimc-capture by:
-+ *		Helen Koike <helen.koike@collabora.com>
-+ *
-+ * Copyright 2019 Collabora, Ltd.
-+ */
-+
-+#ifndef _VIMC_VIDEO_H_
-+#define _VIMC_VIDEO_H_
-+
-+#include <linux/component.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/platform_device.h>
-+#include <media/v4l2-ioctl.h>
-+#include <media/videobuf2-core.h>
-+#include <media/videobuf2-vmalloc.h>
-+
-+#include "vimc-common.h"
-+#include "vimc-streamer.h"
-+
-+static const struct v4l2_pix_format fmt_default = {
-+	.width = 640,
-+	.height = 480,
-+	.pixelformat = V4L2_PIX_FMT_RGB24,
-+	.field = V4L2_FIELD_NONE,
-+	.colorspace = V4L2_COLORSPACE_DEFAULT,
-+};
-+
-+static const struct v4l2_file_operations vimc_vid_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= v4l2_fh_open,
-+	.release	= vb2_fop_release,
-+	.read           = vb2_fop_read,
-+	.poll		= vb2_fop_poll,
-+	.unlocked_ioctl = video_ioctl2,
-+	.mmap           = vb2_fop_mmap,
-+};
-+
-+struct vimc_vid_device {
-+	struct vimc_ent_device ved;
-+	struct video_device vdev;
-+	struct device *dev;
-+	struct v4l2_pix_format format;
-+	struct vb2_queue queue;
-+	struct list_head buf_list;
-+	/*
-+	 * NOTE: in a real driver, a spin lock must be used to access the
-+	 * queue because the frames are generated from a hardware interruption
-+	 * and the isr is not allowed to sleep.
-+	 * Even if it is not necessary a spinlock in the vimc driver, we
-+	 * use it here as a code reference
-+	 */
-+	spinlock_t qlock;
-+	struct mutex lock;
-+	u32 sequence;
-+	struct vimc_stream stream;
-+	u8 *frame;
-+	struct task_struct *kthread_fd;
-+};
-+
-+struct vimc_vid_buffer {
-+	/*
-+	 * struct vb2_v4l2_buffer must be the first element
-+	 * the videobuf2 framework will allocate this struct based on
-+	 * buf_struct_size and use the first sizeof(struct vb2_buffer) bytes of
-+	 * memory as a vb2_buffer
-+	 */
-+	struct vb2_v4l2_buffer vb2;
-+	struct list_head list;
-+};
-+
-+int vimc_vid_querycap(struct file *file, void *priv,
-+		      struct v4l2_capability *cap);
-+
-+void vimc_vid_get_format(struct vimc_ent_device *ved,
-+			 struct v4l2_pix_format *fmt);
-+
-+int vimc_vid_g_fmt(struct file *file, void *priv,
-+		   struct v4l2_format *f);
-+
-+int vimc_vid_try_fmt(struct file *file, void *priv,
-+		     struct v4l2_format *f);
-+
-+int vimc_vid_s_fmt(struct file *file, void *priv,
-+		   struct v4l2_format *f);
-+
-+int vimc_vid_enum_fmt_vid(struct file *file, void *priv,
-+			  struct v4l2_fmtdesc *f);
-+
-+bool vimc_vid_is_pixfmt_supported(u32 pixelformat);
-+
-+void vimc_vid_release(struct video_device *vdev);
-+
-+void vimc_vid_comp_unbind(struct device *comp, struct device *master,
-+			  void *master_data);
-+
-+int vimc_vid_enum_fmt(struct file *file, void *priv,
-+				 struct v4l2_fmtdesc *f);
-+
-+int vimc_vid_enum_framesizes(struct file *file, void *fh,
-+			     struct v4l2_frmsizeenum *fsize);
-+
-+void vimc_vid_return_all_buffers(struct vimc_vid_device *vid,
-+				 enum vb2_buffer_state state);
-+
-+void vimc_vid_buf_queue(struct vb2_buffer *vb2_buf);
-+
-+int vimc_vid_queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
-+			 unsigned int *nplanes, unsigned int sizes[],
-+			 struct device *alloc_devs[]);
-+
-+int vimc_vid_buffer_prepare(struct vb2_buffer *vb);
-+
-+int vimc_vid_probe(struct platform_device *pdev);
-+
-+int vimc_vid_remove(struct platform_device *pdev);
-+
-+void vimc_vid_release(struct video_device *vdev);
-+
-+void vimc_vid_comp_unbind(struct device *comp, struct device *master,
-+				 void *master_data);
-+
-+#endif /* _VIMC_COMMON_H_ */
--- 
-2.22.0
+A further interesting avenue of investigation - now that Christoph's 
+recent work has made it much more possible - would be a second set of 
+IOMMU DMA ops tailored for "GART-like" domains where force_aperture=0, 
+which could behave as dma-direct wherever possible and only use IOMMU 
+remaps when absolutely necessary.
 
+Robin.
+
+> Looking around the kernel I also see the char dev ARP/GART interface
+> which looks like a good fit, but also looks quite dated and my guess
+> deprecated at this point. Moving right along..
+> 
+> Another thing I saw is we have the support upstream of the DMM device[1]
+> available in some OMAPx/AM57x SoCs. I'm a little more familiar with this
+> device. The DMM is a bundle of IPs and in fact one of them is called
+> "PAT" and it even does basically the same thing this incarnation of "PAT"
+> does. It's upstream integration design is a bit questionable
+> unfortunately, the DMM support was integrated into the OMAPDRM display
+> driver, which does make some sense then given its support for rotation
+> (using TILER IP contained in DMM). The issue with this was that the
+> DMM/TILER/PAT IP was not part of the our display IP, but instead out at
+> the end of the shared device bus, inside the external memory controller.
+> Like this new PAT this meant that any IP that could make use of it, but
+> only the display framework could actually provide buffers backed by it.
+> This meant, for instance, if we wanted to decode some video buffer using
+> our video decoder we would have to allocate from DRM framework then pass
+> that over to the V4L2 system. This doesn't make much sense and required
+> the user-space to know about this odd situation and allocate from the
+> right spot or else have to use up valuable CMA space or waste memory with
+> dedicated carveouts.
+> 
+> Another idea would be to have this as a special central allocator
+> (exposed through DMA-BUF heaps[2] or ION) that would give out normal
+> system memory as a DMA-BUF but remap it with PAT if a device that only
+> supports contiguous memory tries to attach/map that DMA-BUF.
+> 
+> One last option would be to allow user-space to choose to make the buffer
+> contiguous when it needs. That's what the driver in this series allows.
+> We expose a remapping device, user-space passes it a non-contiguous
+> DMA-BUF handle and it passes a contiguous one back. Simple as that.
+> 
+> So how do we use this, lets take Android for example, we don't know at
+> allocation time if a rendering buffer will end up going back into the GPU
+> for further processing, or if it will be consumed directly by the display.
+> This is a problem for us as our GPU can work with non-contiguous buffers
+> but our display cannot, so any buffers that could possibly go to the
+> display at some point currently needs to be allocated as contiguous from
+> the start, this leads to a lot of unneeded use of carveout/CMA memory.
+> With this driver on the other hand, we allocate regular non-contiguous
+> system memory (again using DMA-BUF heaps, but ION could work here too),
+> then only when a buffer is about to be sent to the display we pass the
+> handle to this DMA-BUF to our driver here and take the handle it gives
+> back and pass that to the display instead.
+> 
+> As said, it is probably not the ideal solution but it does work and was
+> used for some early testing of the IP.
+> 
+> Well, sorry for the wall of text.
+> Any and all suggestions very welcome and appreciated.
+> 
+> Thanks,
+> Andrew
+> 
+> [0] http://www.ti.com/lit/pdf/spruil1
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/omapdrm/omap_dmm_tiler.c
+> [2] https://lkml.org/lkml/2019/6/6/1211
+> 
+> Andrew F. Davis (2):
+>    dt-bindings: soc: ti: Add TI PAT bindings
+>    soc: ti: Add Support for the TI Page-based Address Translator (PAT)
+> 
+>   .../devicetree/bindings/misc/ti,pat.txt       |  34 ++
+>   drivers/soc/ti/Kconfig                        |   9 +
+>   drivers/soc/ti/Makefile                       |   1 +
+>   drivers/soc/ti/ti-pat.c                       | 569 ++++++++++++++++++
+>   include/uapi/linux/ti-pat.h                   |  44 ++
+>   5 files changed, 657 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/misc/ti,pat.txt
+>   create mode 100644 drivers/soc/ti/ti-pat.c
+>   create mode 100644 include/uapi/linux/ti-pat.h
+> 
