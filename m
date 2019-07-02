@@ -2,94 +2,120 @@ Return-Path: <SRS0=7UeB=VA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=DATE_IN_PAST_03_06,
+	DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7933EC06511
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 00:51:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C14C5B57D
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 00:58:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4ECEB21E70
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 00:51:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C91220828
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 00:58:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VN8cXQDF"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Mc9Zgzxi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727364AbfGCAvv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Jul 2019 20:51:51 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:54964 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727381AbfGCAvu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Jul 2019 20:51:50 -0400
-Received: by mail-wm1-f68.google.com with SMTP id g135so390564wme.4
-        for <linux-media@vger.kernel.org>; Tue, 02 Jul 2019 17:51:49 -0700 (PDT)
+        id S1727320AbfGCA6L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Jul 2019 20:58:11 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38745 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727142AbfGCA6J (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Jul 2019 20:58:09 -0400
+Received: by mail-pl1-f194.google.com with SMTP id 9so223204ple.5
+        for <linux-media@vger.kernel.org>; Tue, 02 Jul 2019 17:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=U54YwsNtS2uRPTkuyBTbqC0eDJkz/d3esOWtzB3Av64=;
-        b=VN8cXQDFekyhZ4VDkuevxKKKQQYzJwphunhiMyB4eGeouWunciaEyHqTDwK7boebEa
-         AGzfidcFdOpjOlmwAikuYrCsXazbMiexAiJ4QQ61V9P+Ly3IU24J7cB1FCkTVrBiJamg
-         FwU2mnPpOY1TMDzeZj+etaDMT3t5eW42jG8OD2JayMdqtDiwbNwmXoWTOe2R7/edzWU6
-         GDuzIhc4pVsgpIhOih8+kWUjhgge1JHjmua01tib2crxKe7YE4MekI3xAhGN5l4lv1UD
-         b40wfQnmHGL13HZMVHo6gDWd4MC3gEtP5ni/SVh6b65gpFz2l1JyHhKqRlq6byVTfIvB
-         Ubow==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eB6S4cIG2ic7xIJ0b0BVpA8z0egoMH0hNtHA1F0tef4=;
+        b=Mc9Zgzxi7WpN1Y0XEo1iD+dNo1ILtatcJksAae4nWOPbWm7s2Ed/HD0mGWbza1EhPs
+         f9+5ef3wLIriMDbYvAeVswhba6w815dbKYeDrem+W/TdNTlX9rJYEzgxE+XVttyzoTgt
+         a+QZZCoV7jcLA1bE9U/R0g1i0+VJUSz6AH6hU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=U54YwsNtS2uRPTkuyBTbqC0eDJkz/d3esOWtzB3Av64=;
-        b=dTl1lfPrzuIZJWV0qAgwvLzbved8CsgscUZUmRyLPA6DUpNfhPz2WSgG6enXEKl/0h
-         oVm+TnFYc4ccmccmtM1HA/mVg10j7Re5sqqK0eWf8haGo+6QJp5HdTmlWaVJKzW7hi/C
-         BFK7VVDM9ByYfZRBpfoDZwwz/dMLtAo2+HLbdhuIswDebBynjAgLgFEUD0iM9Ix9h2nZ
-         lR/yKsyVca2xe5gFyXKafroJ5rp31xS/FFN/L6EVFIiRvZsRbcGJfgC8BoITlAk3CqE4
-         sTLJfdkNAx6yPkh92mHeZt+qK0XUXvowQ5U1Ou1V7AcMI0lgWG+MqmRFaO2wZ+vR3eE6
-         8zSQ==
-X-Gm-Message-State: APjAAAWIXNExTKOozdxEE+QZ9KMgv6VX6lEqYyKLy+T9t/NYDbj+C7D9
-        lzVqSG9qXGuH7jIMuSpVZjxf3aDN
-X-Google-Smtp-Source: APXvYqxwxNtE7wdsRIJTLLwUWTTqo0weVAfJMvRtxd8DrmfVCld8+U1ssljmYDRvtTOVnBs2/L7WtA==
-X-Received: by 2002:a7b:cf32:: with SMTP id m18mr4859007wmg.27.1562106600494;
-        Tue, 02 Jul 2019 15:30:00 -0700 (PDT)
-Received: from [192.168.43.227] (188.29.164.238.threembb.co.uk. [188.29.164.238])
-        by smtp.gmail.com with ESMTPSA id h19sm511471wrb.81.2019.07.02.15.29.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Jul 2019 15:29:59 -0700 (PDT)
-Subject: Re: Keymap with duplicate entries
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-media@vger.kernel.org, Sean Young <sean@mess.org>
-References: <7d2bf66655bfdaeeea45ef0878e7920b485bb120.camel@hadess.net>
-From:   Malcolm Priestley <tvboxspy@gmail.com>
-Message-ID: <2b07545f-94b6-7c12-e569-0e0a341b961a@gmail.com>
-Date:   Tue, 2 Jul 2019 23:29:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eB6S4cIG2ic7xIJ0b0BVpA8z0egoMH0hNtHA1F0tef4=;
+        b=dkh3+RAuF/IovJXHlPjGxii3xbY5ht2hj4eaXfJdeL25G4kDY6QxGLSCOzfQUAILel
+         aPArVbcV4cw8JckS4On7IIGvYyhwBBNbP/b8YWLYRJeTo/HtoL9Ta5WpKcTFvlrWEmRr
+         SJJqZEeWFsDsgOb6NFYoUb/07z6kRmzMYdamslUTPkw58WJtm+nofwV+4WD7BKdLjXII
+         VwyBumuPyGI28rIdZC590ZluGZQHszLLXVavICwTnNBmlkI+XhRhs2WH5eADfW1qX1wd
+         Uf+QWHtcpMHfAe8zA0tfBHL43tO7CAisJYiooNoYi/1W9pjvO+MNHU0MRuG9gjQA7xxI
+         y8vQ==
+X-Gm-Message-State: APjAAAW86u2fiu0wOtxlou8n9XjMB/zSaKQg0ZO94XQjpyb9BNZJQiVM
+        jKNCQ84CopoF7S3iYGnLbvw42bEd5l8=
+X-Google-Smtp-Source: APXvYqwmPOBAaXQUnvIdrwl5iMJ1KFOaDS7/wjSob7es+yD/2C7SqHepeXjWMhCH7KaKi48XGbBdkA==
+X-Received: by 2002:a17:902:8d97:: with SMTP id v23mr10594527plo.157.1562102157592;
+        Tue, 02 Jul 2019 14:15:57 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s193sm62332pgc.32.2019.07.02.14.15.56
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Jul 2019 14:15:56 -0700 (PDT)
+Date:   Tue, 2 Jul 2019 09:03:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Phong Tran <tranmanphong@gmail.com>
+Cc:     syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com,
+        andreyknvl@google.com, hans.verkuil@cisco.com, mchehab@kernel.org,
+        skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] media: usb: technisat-usb2: fix buffer overflow
+Message-ID: <201907020858.66B63B24@keescook>
+References: <000000000000089d7f058683115e@google.com>
+ <20190702140211.28399-1-tranmanphong@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <7d2bf66655bfdaeeea45ef0878e7920b485bb120.camel@hadess.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190702140211.28399-1-tranmanphong@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-> Hey Malcolm,
+On Tue, Jul 02, 2019 at 09:02:11PM +0700, Phong Tran wrote:
+> The buffer will be overflow in case of the while loop can not break.
+> Add the checking buffer condition in while loop for avoiding
+> overlooping index.
 > 
-> There seems to be a problem in  the keymap you provided for inclusion
-> in the kernel.
+> This issue was reported by syzbot
 > 
-> In media/rc/keymaps/rc-it913x-v2.c, 2 keys are triggered by the same
-> keycode:
->  53 ↦       { 0x866b18, KEY_VOLUMEDOWN },•
->  55 ↦       { 0x866b18, KEY_CHANNELDOWN },•
-Hmm
+> Reported-by: syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com
+> 
+> Tested by:
+> https://groups.google.com/d/msg/syzkaller-bugs/CySBCKuUOOs/0hKq1CdjCwAJ
+> 
+> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+> ---
+>  drivers/media/usb/dvb-usb/technisat-usb2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/dvb-usb/technisat-usb2.c b/drivers/media/usb/dvb-usb/technisat-usb2.c
+> index c659e18b358b..4e0b6185666a 100644
+> --- a/drivers/media/usb/dvb-usb/technisat-usb2.c
+> +++ b/drivers/media/usb/dvb-usb/technisat-usb2.c
+> @@ -655,7 +655,7 @@ static int technisat_usb2_get_ir(struct dvb_usb_device *d)
+>  #endif
+>  
+>  	ev.pulse = 0;
+> -	while (1) {
+> +	while (b != (buf + 63)) {
 
-I don't have this remote only the first one in this file.
+This matches the "62" from the earlier read -- instead of these literal
+numbers, could you replace the "62"s with a named define for whatever
+would make sense for this driver (maybe "IR_MAX_EVENTS"?), and then you
+can make the above be something like:
 
-I am pretty sure the values for the second type were forwarded to me by another user.
+	while (b <= buf + IR_MAX_EVENTS) {
 
-Regards
 
-Malcolm
+>  		ev.pulse = !ev.pulse;
+>  		ev.duration = (*b * FIRMWARE_CLOCK_DIVISOR * FIRMWARE_CLOCK_TICK) / 1000;
+>  		ir_raw_event_store(d->rc_dev, &ev);
+> -- 
+> 2.11.0
+> 
 
+-- 
+Kees Cook
