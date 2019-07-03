@@ -2,128 +2,143 @@ Return-Path: <SRS0=7UeB=VA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 33CBBC5B57D
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 02:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC676C06511
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 02:26:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0DA272187F
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 02:15:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8626A206E0
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 02:26:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eMgdo5cx"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZGzQGMEI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbfGCCPC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 2 Jul 2019 22:15:02 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:45575 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726329AbfGCCPC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Jul 2019 22:15:02 -0400
-Received: by mail-pl1-f193.google.com with SMTP id bi6so299697plb.12;
-        Tue, 02 Jul 2019 19:15:01 -0700 (PDT)
+        id S1727387AbfGCC0f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 2 Jul 2019 22:26:35 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40687 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726635AbfGCC0e (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 2 Jul 2019 22:26:34 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w10so355427pgj.7
+        for <linux-media@vger.kernel.org>; Tue, 02 Jul 2019 19:26:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Isqfps/O6LwRnu+dRSzriy5CxI0umRBIFUrqM+okdCs=;
-        b=eMgdo5cxD8xocs0qEkS5EHNLEtNLZV+yO9aTlypZIbft8FBVAa/yS1ZqB/gmuI9J/0
-         Y8Pu2DxexEkDszk9Vt58d1mBAWJBnWu1X/ISi5igs1bfkab1EeO/UYJxuIodJvv+bug8
-         RLH6+zu3qy8OB+mCmUxEv2K/a6RmUkDmtOIcoYpld8hLAO5MFAPgxNp+m6D4M9n0Ouc3
-         DHY9n/2eiMdeYjvHF07NkRPu7wpGYeBMmMZXtpBr1e91vJDDJf405wmxpI0DIi/xxU+x
-         tuuOLTUVeWD5skWO0zu3+1OIW3Bq7UykHev7jtjweIeTsCh1C7mqHXKyVYOfCz+rDy+o
-         mSPA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9LSa6wcOyCAEFmmrefvYQyX7fTvyeHlG+veSDCcI4eE=;
+        b=ZGzQGMEI0xBc+6ht3TyJxLoqzKZvxKS3cyCqFs5aNkK82JwWf02bh1UI6nY7VvlV1d
+         uxCEdDgsuN+DEyiHLBmniA2W8TDStSwHNgznxmpeHL6R2gayEYEOJNRFT2roT+TZEonK
+         aegVewSeCatWM1lQmM9X0xcytloRWyF8MrjaU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Isqfps/O6LwRnu+dRSzriy5CxI0umRBIFUrqM+okdCs=;
-        b=Aeavo+47bzaP0DLTpADFMMtDRqyFIN21vTuHT0oykWfA0sH1wajrDBV2i0dF5Xf084
-         XUu7NH3rM9vbTCbhwcbJebcbZvp/T9gBQeNcGa8qN0SzTEyCyB8icjg3U948Qmbx6IDr
-         8RnTIPCWbg/A7lZl7d9P+dcWhuXuKmTUA74yzhWCms0ASn8PmoYU9bqB99HxmEugOgfF
-         oH/UH5HFoylAjLfMLaSQQML6CYpU0EYJCGIZVXIWUlwbvane7Q1k25a9WJVTp4CIcTvq
-         oHu/TL77NNqXszzIg604TGu1JfHaCPpfFmZ4XQqJqhkDHfBkxvnYKhx4WENUL7tRTrV3
-         VhgQ==
-X-Gm-Message-State: APjAAAWtoVjybjiq8ADL66h6clmA+A7EqoyeqmmgdVMQM6Qn+wv6Ssxh
-        B2d0iuaULxImOdOiD6oFDa4=
-X-Google-Smtp-Source: APXvYqzbJaktcOHx/dP/TVDMSw89q+FpGXl/R5M9ermN1pbkJ4Zt5sJqY6gmBfin0c4K0V1idxIXQA==
-X-Received: by 2002:a17:902:b944:: with SMTP id h4mr30236136pls.179.1562120101420;
-        Tue, 02 Jul 2019 19:15:01 -0700 (PDT)
-Received: from debian.net.fpt ([2405:4800:58f7:1cb1:98e0:87d3:2c8b:b6ed])
-        by smtp.gmail.com with ESMTPSA id h2sm382955pgs.17.2019.07.02.19.14.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 02 Jul 2019 19:15:00 -0700 (PDT)
-From:   Phong Tran <tranmanphong@gmail.com>
-To:     tranmanphong@gmail.com
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9LSa6wcOyCAEFmmrefvYQyX7fTvyeHlG+veSDCcI4eE=;
+        b=b1ExTIEMGNtlyVlVEVe22MqXGt+sIDixJeT6EMMAgYMRyds3E6lldVRXstzj4QqvuN
+         8U7lLI43Kd3M4geySsGrMKq/81AtraP3/mlq5eUiFJ7UVpwul5vBt3rVSiGDdRWJlA5c
+         rUWUoM+iX8YoAsmJoTYlVgw+QaBo32ZxxC5nWQ7jFR7Zh3ozJvY01tPHOLl+FMwpRxHV
+         nsx+f4pmMjjzO9m+na/hc+OEltFy8WKZxI0aLdVOT1GPQJYyCJT5AKulZolnmpsuriio
+         EfGV+ZSCJGdVOKLVOoXM9v7Q5XC7iy9T6nlDHJbGgsNo5msWxDgO5XkNyIdpJ1BENOGm
+         nTjQ==
+X-Gm-Message-State: APjAAAXI1A+AIa7pO6CKwVgMHG2HQn3IgxxUk6c5W2XNox8CcIr4bjib
+        Ofgq3mpBCqYaJmdaN5Hp92LDTw==
+X-Google-Smtp-Source: APXvYqzUnWHYQYw1cWjaDgpFIjT2QkKOSvq0HCjk5aFq7gXYzZR0rDEacBdmW9A7MSnrcYSG4GBVCQ==
+X-Received: by 2002:a63:d756:: with SMTP id w22mr33125752pgi.156.1562120794171;
+        Tue, 02 Jul 2019 19:26:34 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y133sm404949pfb.28.2019.07.02.19.26.33
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Jul 2019 19:26:33 -0700 (PDT)
+Date:   Tue, 2 Jul 2019 19:26:32 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Phong Tran <tranmanphong@gmail.com>
 Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        hans.verkuil@cisco.com, keescook@chromium.org,
+        hans.verkuil@cisco.com,
         linux-kernel-mentees@lists.linuxfoundation.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-usb@vger.kernel.org, mchehab@kernel.org,
         skhan@linuxfoundation.org,
         syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com,
         syzkaller-bugs@googlegroups.com, glider@google.com
-Subject: [PATCH V2] media: usb: technisat-usb2: fix buffer overflow
-Date:   Wed,  3 Jul 2019 09:14:44 +0700
-Message-Id: <20190703021444.19954-1-tranmanphong@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190702140211.28399-1-tranmanphong@gmail.com>
+Subject: Re: [PATCH V2] media: usb: technisat-usb2: fix buffer overflow
+Message-ID: <201907021925.1F24D6ADA3@keescook>
 References: <20190702140211.28399-1-tranmanphong@gmail.com>
+ <20190703021444.19954-1-tranmanphong@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190703021444.19954-1-tranmanphong@gmail.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The buffer will be overflow in case of the while loop can not break.
-Add the checking buffer condition in while loop for avoiding
-overlooping index.
+On Wed, Jul 03, 2019 at 09:14:44AM +0700, Phong Tran wrote:
+> The buffer will be overflow in case of the while loop can not break.
+> Add the checking buffer condition in while loop for avoiding
+> overlooping index.
+> 
+> This issue was reported by syzbot
+> 
+> Reported-by: syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com
+> 
+> Tested-by:
+> https://groups.google.com/d/msg/syzkaller-bugs/CySBCKuUOOs/t3PvVheSAAAJ
+> 
 
-This issue was reported by syzbot
+Avoid these blank lines please. (More below...)
 
-Reported-by: syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com
+> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+> ---
+> Change Log:
+>  * V2: add IR_MAX_BUFFER_INDEX and adjust the while loop condition as comments
+> ---
+>  drivers/media/usb/dvb-usb/technisat-usb2.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/media/usb/dvb-usb/technisat-usb2.c b/drivers/media/usb/dvb-usb/technisat-usb2.c
+> index c659e18b358b..cdabff97c1ea 100644
+> --- a/drivers/media/usb/dvb-usb/technisat-usb2.c
+> +++ b/drivers/media/usb/dvb-usb/technisat-usb2.c
+> @@ -49,6 +49,7 @@ MODULE_PARM_DESC(disable_led_control,
+>  		"disable LED control of the device (default: 0 - LED control is active).");
+>  
+>  /* device private data */
+> +#define IR_MAX_BUFFER_INDEX	63
 
-Tested-by:
-https://groups.google.com/d/msg/syzkaller-bugs/CySBCKuUOOs/t3PvVheSAAAJ
+How does this map to the literal "62" used before the loop you're
+fixing?
 
-Signed-off-by: Phong Tran <tranmanphong@gmail.com>
----
-Change Log:
- * V2: add IR_MAX_BUFFER_INDEX and adjust the while loop condition as comments
----
- drivers/media/usb/dvb-usb/technisat-usb2.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Otherwise, it's looking good; thanks!
 
-diff --git a/drivers/media/usb/dvb-usb/technisat-usb2.c b/drivers/media/usb/dvb-usb/technisat-usb2.c
-index c659e18b358b..cdabff97c1ea 100644
---- a/drivers/media/usb/dvb-usb/technisat-usb2.c
-+++ b/drivers/media/usb/dvb-usb/technisat-usb2.c
-@@ -49,6 +49,7 @@ MODULE_PARM_DESC(disable_led_control,
- 		"disable LED control of the device (default: 0 - LED control is active).");
- 
- /* device private data */
-+#define IR_MAX_BUFFER_INDEX	63
- struct technisat_usb2_state {
- 	struct dvb_usb_device *dev;
- 	struct delayed_work green_led_work;
-@@ -56,7 +57,7 @@ struct technisat_usb2_state {
- 
- 	u16 last_scan_code;
- 
--	u8 buf[64];
-+	u8 buf[IR_MAX_BUFFER_INDEX + 1];
- };
- 
- /* debug print helpers */
-@@ -655,7 +656,7 @@ static int technisat_usb2_get_ir(struct dvb_usb_device *d)
- #endif
- 
- 	ev.pulse = 0;
--	while (1) {
-+	while (b <= (buf + IR_MAX_BUFFER_INDEX)) {
- 		ev.pulse = !ev.pulse;
- 		ev.duration = (*b * FIRMWARE_CLOCK_DIVISOR * FIRMWARE_CLOCK_TICK) / 1000;
- 		ir_raw_event_store(d->rc_dev, &ev);
+-Kees
+
+>  struct technisat_usb2_state {
+>  	struct dvb_usb_device *dev;
+>  	struct delayed_work green_led_work;
+> @@ -56,7 +57,7 @@ struct technisat_usb2_state {
+>  
+>  	u16 last_scan_code;
+>  
+> -	u8 buf[64];
+> +	u8 buf[IR_MAX_BUFFER_INDEX + 1];
+>  };
+>  
+>  /* debug print helpers */
+> @@ -655,7 +656,7 @@ static int technisat_usb2_get_ir(struct dvb_usb_device *d)
+>  #endif
+>  
+>  	ev.pulse = 0;
+> -	while (1) {
+> +	while (b <= (buf + IR_MAX_BUFFER_INDEX)) {
+>  		ev.pulse = !ev.pulse;
+>  		ev.duration = (*b * FIRMWARE_CLOCK_DIVISOR * FIRMWARE_CLOCK_TICK) / 1000;
+>  		ir_raw_event_store(d->rc_dev, &ev);
+> -- 
+> 2.11.0
+> 
+
 -- 
-2.11.0
-
+Kees Cook
