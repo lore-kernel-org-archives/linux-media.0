@@ -5,23 +5,23 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.0 required=3.0
 	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46800C06511
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 19:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96DB1C06514
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 19:10:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 164E7218A6
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 19:10:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E2DA218A4
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 19:10:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727303AbfGCTKD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Jul 2019 15:10:03 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42336 "EHLO
+        id S1727351AbfGCTKQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Jul 2019 15:10:16 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:42370 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727242AbfGCTKC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Jul 2019 15:10:02 -0400
+        with ESMTP id S1726973AbfGCTKP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Jul 2019 15:10:15 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: koike)
-        with ESMTPSA id 6375A28AB6A
+        with ESMTPSA id BC4BB28AB67
 From:   Helen Koike <helen.koike@collabora.com>
 To:     linux-rockchip@lists.infradead.org
 Cc:     devicetree@vger.kernel.org, eddie.cai.linux@gmail.com,
@@ -32,13 +32,12 @@ Cc:     devicetree@vger.kernel.org, eddie.cai.linux@gmail.com,
         sakari.ailus@linux.intel.com, kernel@collabora.com,
         ezequiel@collabora.com, linux-media@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, zhengsq@rock-chips.com,
-        Helen Koike <helen.koike@collabora.com>,
-        Zheng Yang <zhengyang@rock-chips.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: [PATCH v7 04/14] media: rkisp1: add Rockchip MIPI Synopsys DPHY driver
-Date:   Wed,  3 Jul 2019 16:09:00 -0300
-Message-Id: <20190703190910.32633-5-helen.koike@collabora.com>
+        Jacob Chen <cc@rock-chips.com>,
+        Allon Huang <allon.huang@rock-chips.com>,
+        Helen Koike <helen.koike@collabora.com>
+Subject: [PATCH v7 06/14] media: rkisp1: add ISP1 statistics driver
+Date:   Wed,  3 Jul 2019 16:09:02 -0300
+Message-Id: <20190703190910.32633-7-helen.koike@collabora.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190703190910.32633-1-helen.koike@collabora.com>
 References: <20190703190910.32633-1-helen.koike@collabora.com>
@@ -51,480 +50,613 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jacob Chen <jacob2.chen@rock-chips.com>
 
-This commit adds a subdev driver for Rockchip MIPI Synopsys DPHY driver
+Add the capture video driver for rockchip isp1 statistics block.
 
 Signed-off-by: Jacob Chen <jacob2.chen@rock-chips.com>
 Signed-off-by: Shunqian Zheng <zhengsq@rock-chips.com>
+Signed-off-by: Yichong Zhong <zyc@rock-chips.com>
+Signed-off-by: Jacob Chen <cc@rock-chips.com>
+Signed-off-by: Eddie Cai <eddie.cai.linux@gmail.com>
+Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+Signed-off-by: Allon Huang <allon.huang@rock-chips.com>
 Signed-off-by: Tomasz Figa <tfiga@chromium.org>
-[migrate to phy framework]
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 [update for upstream]
 Signed-off-by: Helen Koike <helen.koike@collabora.com>
+Acked-by: Hans Verkuil <hans.verkuil@cisco.com>
 
 ---
 
 Changes in v7:
-- Migrate dphy specific code from
-drivers/media/platform/rockchip/isp1/mipi_dphy_sy.c
-to drivers/phy/rockchip/phy-rockchip-dphy.c
-- Drop support for rk3288
-- Drop support for dphy txrx
+- s/strlcpy/strscpy
+- sort out the locks in isp stats
 - code styling and checkpatch fixes
 
- drivers/phy/rockchip/Kconfig             |   8 +
- drivers/phy/rockchip/Makefile            |   1 +
- drivers/phy/rockchip/phy-rockchip-dphy.c | 412 +++++++++++++++++++++++
- 3 files changed, 421 insertions(+)
- create mode 100644 drivers/phy/rockchip/phy-rockchip-dphy.c
+ .../media/platform/rockchip/isp1/isp_stats.c  | 508 ++++++++++++++++++
+ .../media/platform/rockchip/isp1/isp_stats.h  |  60 +++
+ 2 files changed, 568 insertions(+)
+ create mode 100644 drivers/media/platform/rockchip/isp1/isp_stats.c
+ create mode 100644 drivers/media/platform/rockchip/isp1/isp_stats.h
 
-diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
-index c454c90cd99e..afd072f135e6 100644
---- a/drivers/phy/rockchip/Kconfig
-+++ b/drivers/phy/rockchip/Kconfig
-@@ -9,6 +9,14 @@ config PHY_ROCKCHIP_DP
- 	help
- 	  Enable this to support the Rockchip Display Port PHY.
- 
-+config PHY_ROCKCHIP_DPHY
-+	tristate "Rockchip MIPI Synopsys DPHY driver"
-+	depends on ARCH_ROCKCHIP && OF
-+	select GENERIC_PHY_MIPI_DPHY
-+	select GENERIC_PHY
-+	help
-+	  Enable this to support the Rockchip MIPI Synopsys DPHY.
-+
- config PHY_ROCKCHIP_EMMC
- 	tristate "Rockchip EMMC PHY Driver"
- 	depends on ARCH_ROCKCHIP && OF
-diff --git a/drivers/phy/rockchip/Makefile b/drivers/phy/rockchip/Makefile
-index fd21cbaf40dd..f62e9010bcaf 100644
---- a/drivers/phy/rockchip/Makefile
-+++ b/drivers/phy/rockchip/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_PHY_ROCKCHIP_DP)		+= phy-rockchip-dp.o
-+obj-$(CONFIG_PHY_ROCKCHIP_DPHY)		+= phy-rockchip-dphy.o
- obj-$(CONFIG_PHY_ROCKCHIP_EMMC)		+= phy-rockchip-emmc.o
- obj-$(CONFIG_PHY_ROCKCHIP_INNO_HDMI)	+= phy-rockchip-inno-hdmi.o
- obj-$(CONFIG_PHY_ROCKCHIP_INNO_USB2)	+= phy-rockchip-inno-usb2.o
-diff --git a/drivers/phy/rockchip/phy-rockchip-dphy.c b/drivers/phy/rockchip/phy-rockchip-dphy.c
+diff --git a/drivers/media/platform/rockchip/isp1/isp_stats.c b/drivers/media/platform/rockchip/isp1/isp_stats.c
 new file mode 100644
-index 000000000000..ad8e373a08a6
+index 000000000000..01d947867c70
 --- /dev/null
-+++ b/drivers/phy/rockchip/phy-rockchip-dphy.c
-@@ -0,0 +1,412 @@
++++ b/drivers/media/platform/rockchip/isp1/isp_stats.c
+@@ -0,0 +1,508 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
-+ * Rockchip MIPI Synopsys DPHY driver
++ * Rockchip isp1 driver
 + *
-+ * Based on:
-+ *
-+ * Copyright (C) 2016 FuZhou Rockchip Co., Ltd.
-+ * Author: Yakir Yang <ykk@@rock-chips.com>
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License.
++ * Copyright (C) 2017 Rockchip Electronics Co., Ltd.
 + */
 +
-+#include <linux/clk.h>
-+#include <linux/io.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/phy/phy.h>
-+#include <linux/phy/phy-mipi-dphy.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
++#include <media/v4l2-common.h>
++#include <media/v4l2-event.h>
++#include <media/v4l2-ioctl.h>
++#include <media/videobuf2-core.h>
++#include <media/videobuf2-vmalloc.h>	/* for ISP statistics */
 +
-+#define RK3399_GRF_SOC_CON9	0x6224
-+#define RK3399_GRF_SOC_CON21	0x6254
-+#define RK3399_GRF_SOC_CON22	0x6258
-+#define RK3399_GRF_SOC_CON23	0x625c
-+#define RK3399_GRF_SOC_CON24	0x6260
-+#define RK3399_GRF_SOC_CON25	0x6264
-+#define RK3399_GRF_SOC_STATUS1	0xe2a4
++#include "dev.h"
++#include "regs.h"
 +
-+#define CLOCK_LANE_HS_RX_CONTROL		0x34
-+#define LANE0_HS_RX_CONTROL			0x44
-+#define LANE1_HS_RX_CONTROL			0x54
-+#define LANE2_HS_RX_CONTROL			0x84
-+#define LANE3_HS_RX_CONTROL			0x94
-+#define HS_RX_DATA_LANES_THS_SETTLE_CONTROL	0x75
++#define RKISP1_ISP_STATS_REQ_BUFS_MIN 2
++#define RKISP1_ISP_STATS_REQ_BUFS_MAX 8
 +
-+#define MAX_DPHY_CLK 8
-+
-+#define PHY_TESTEN_ADDR			(0x1 << 16)
-+#define PHY_TESTEN_DATA			(0x0 << 16)
-+#define PHY_TESTCLK			(0x1 << 1)
-+#define PHY_TESTCLR			(0x1 << 0)
-+#define THS_SETTLE_COUNTER_THRESHOLD	0x04
-+
-+#define HIWORD_UPDATE(val, mask, shift) \
-+	((val) << (shift) | (mask) << ((shift) + 16))
-+
-+#define GRF_SOC_CON12                           0x0274
-+
-+#define GRF_EDP_REF_CLK_SEL_INTER_HIWORD_MASK   BIT(20)
-+#define GRF_EDP_REF_CLK_SEL_INTER               BIT(4)
-+
-+#define GRF_EDP_PHY_SIDDQ_HIWORD_MASK           BIT(21)
-+#define GRF_EDP_PHY_SIDDQ_ON                    0
-+#define GRF_EDP_PHY_SIDDQ_OFF                   BIT(5)
-+
-+struct hsfreq_range {
-+	u32 range_h;
-+	u8 cfg_bit;
-+};
-+
-+static const struct hsfreq_range rk3399_mipidphy_hsfreq_ranges[] = {
-+	{  89, 0x00}, {  99, 0x10}, { 109, 0x20}, { 129, 0x01},
-+	{ 139, 0x11}, { 149, 0x21}, { 169, 0x02}, { 179, 0x12},
-+	{ 199, 0x22}, { 219, 0x03}, { 239, 0x13}, { 249, 0x23},
-+	{ 269, 0x04}, { 299, 0x14}, { 329, 0x05}, { 359, 0x15},
-+	{ 399, 0x25}, { 449, 0x06}, { 499, 0x16}, { 549, 0x07},
-+	{ 599, 0x17}, { 649, 0x08}, { 699, 0x18}, { 749, 0x09},
-+	{ 799, 0x19}, { 849, 0x29}, { 899, 0x39}, { 949, 0x0a},
-+	{ 999, 0x1a}, {1049, 0x2a}, {1099, 0x3a}, {1149, 0x0b},
-+	{1199, 0x1b}, {1249, 0x2b}, {1299, 0x3b}, {1349, 0x0c},
-+	{1399, 0x1c}, {1449, 0x2c}, {1500, 0x3c}
-+};
-+
-+static const char * const rk3399_mipidphy_clks[] = {
-+	"dphy-ref",
-+	"dphy-cfg",
-+	"grf",
-+};
-+
-+enum dphy_reg_id {
-+	GRF_DPHY_RX0_TURNDISABLE = 0,
-+	GRF_DPHY_RX0_FORCERXMODE,
-+	GRF_DPHY_RX0_FORCETXSTOPMODE,
-+	GRF_DPHY_RX0_ENABLE,
-+	GRF_DPHY_RX0_TESTCLR,
-+	GRF_DPHY_RX0_TESTCLK,
-+	GRF_DPHY_RX0_TESTEN,
-+	GRF_DPHY_RX0_TESTDIN,
-+	GRF_DPHY_RX0_TURNREQUEST,
-+	GRF_DPHY_RX0_TESTDOUT,
-+	GRF_DPHY_TX0_TURNDISABLE,
-+	GRF_DPHY_TX0_FORCERXMODE,
-+	GRF_DPHY_TX0_FORCETXSTOPMODE,
-+	GRF_DPHY_TX0_TURNREQUEST,
-+	GRF_DPHY_TX1RX1_TURNDISABLE,
-+	GRF_DPHY_TX1RX1_FORCERXMODE,
-+	GRF_DPHY_TX1RX1_FORCETXSTOPMODE,
-+	GRF_DPHY_TX1RX1_ENABLE,
-+	GRF_DPHY_TX1RX1_MASTERSLAVEZ,
-+	GRF_DPHY_TX1RX1_BASEDIR,
-+	GRF_DPHY_TX1RX1_ENABLECLK,
-+	GRF_DPHY_TX1RX1_TURNREQUEST,
-+	GRF_DPHY_RX1_SRC_SEL,
-+	/* rk3288 only */
-+	GRF_CON_DISABLE_ISP,
-+	GRF_CON_ISP_DPHY_SEL,
-+	GRF_DSI_CSI_TESTBUS_SEL,
-+	GRF_DVP_V18SEL,
-+	/* below is for rk3399 only */
-+	GRF_DPHY_RX0_CLK_INV_SEL,
-+	GRF_DPHY_RX1_CLK_INV_SEL,
-+};
-+
-+struct dphy_reg {
-+	u32 offset;
-+	u32 mask;
-+	u32 shift;
-+};
-+
-+#define PHY_REG(_offset, _width, _shift) \
-+	{ .offset = _offset, .mask = BIT(_width) - 1, .shift = _shift, }
-+
-+static const struct dphy_reg rk3399_grf_dphy_regs[] = {
-+	[GRF_DPHY_RX0_TURNREQUEST] = PHY_REG(RK3399_GRF_SOC_CON9, 4, 0),
-+	[GRF_DPHY_RX0_CLK_INV_SEL] = PHY_REG(RK3399_GRF_SOC_CON9, 1, 10),
-+	[GRF_DPHY_RX1_CLK_INV_SEL] = PHY_REG(RK3399_GRF_SOC_CON9, 1, 11),
-+	[GRF_DPHY_RX0_ENABLE] = PHY_REG(RK3399_GRF_SOC_CON21, 4, 0),
-+	[GRF_DPHY_RX0_FORCERXMODE] = PHY_REG(RK3399_GRF_SOC_CON21, 4, 4),
-+	[GRF_DPHY_RX0_FORCETXSTOPMODE] = PHY_REG(RK3399_GRF_SOC_CON21, 4, 8),
-+	[GRF_DPHY_RX0_TURNDISABLE] = PHY_REG(RK3399_GRF_SOC_CON21, 4, 12),
-+	[GRF_DPHY_TX0_FORCERXMODE] = PHY_REG(RK3399_GRF_SOC_CON22, 4, 0),
-+	[GRF_DPHY_TX0_FORCETXSTOPMODE] = PHY_REG(RK3399_GRF_SOC_CON22, 4, 4),
-+	[GRF_DPHY_TX0_TURNDISABLE] = PHY_REG(RK3399_GRF_SOC_CON22, 4, 8),
-+	[GRF_DPHY_TX0_TURNREQUEST] = PHY_REG(RK3399_GRF_SOC_CON22, 4, 12),
-+	[GRF_DPHY_TX1RX1_ENABLE] = PHY_REG(RK3399_GRF_SOC_CON23, 4, 0),
-+	[GRF_DPHY_TX1RX1_FORCERXMODE] = PHY_REG(RK3399_GRF_SOC_CON23, 4, 4),
-+	[GRF_DPHY_TX1RX1_FORCETXSTOPMODE] = PHY_REG(RK3399_GRF_SOC_CON23, 4, 8),
-+	[GRF_DPHY_TX1RX1_TURNDISABLE] = PHY_REG(RK3399_GRF_SOC_CON23, 4, 12),
-+	[GRF_DPHY_TX1RX1_TURNREQUEST] = PHY_REG(RK3399_GRF_SOC_CON24, 4, 0),
-+	[GRF_DPHY_RX1_SRC_SEL] = PHY_REG(RK3399_GRF_SOC_CON24, 1, 4),
-+	[GRF_DPHY_TX1RX1_BASEDIR] = PHY_REG(RK3399_GRF_SOC_CON24, 1, 5),
-+	[GRF_DPHY_TX1RX1_ENABLECLK] = PHY_REG(RK3399_GRF_SOC_CON24, 1, 6),
-+	[GRF_DPHY_TX1RX1_MASTERSLAVEZ] = PHY_REG(RK3399_GRF_SOC_CON24, 1, 7),
-+	[GRF_DPHY_RX0_TESTDIN] = PHY_REG(RK3399_GRF_SOC_CON25, 8, 0),
-+	[GRF_DPHY_RX0_TESTEN] = PHY_REG(RK3399_GRF_SOC_CON25, 1, 8),
-+	[GRF_DPHY_RX0_TESTCLK] = PHY_REG(RK3399_GRF_SOC_CON25, 1, 9),
-+	[GRF_DPHY_RX0_TESTCLR] = PHY_REG(RK3399_GRF_SOC_CON25, 1, 10),
-+	[GRF_DPHY_RX0_TESTDOUT] = PHY_REG(RK3399_GRF_SOC_STATUS1, 8, 0),
-+};
-+
-+struct dphy_drv_data {
-+	const char * const *clks;
-+	int num_clks;
-+	const struct hsfreq_range *hsfreq_ranges;
-+	int num_hsfreq_ranges;
-+	const struct dphy_reg *regs;
-+};
-+
-+struct rockchip_dphy {
-+	struct device *dev;
-+	struct regmap *grf;
-+	const struct dphy_reg *grf_regs;
-+	struct clk_bulk_data clks[MAX_DPHY_CLK];
-+
-+	const struct dphy_drv_data *drv_data;
-+	struct phy_configure_opts_mipi_dphy config;
-+};
-+
-+static inline void write_grf_reg(struct rockchip_dphy *priv,
-+				 int index, u8 value)
++static int rkisp1_stats_enum_fmt_meta_cap(struct file *file, void *priv,
++					  struct v4l2_fmtdesc *f)
 +{
-+	const struct dphy_reg *reg = &priv->grf_regs[index];
-+	unsigned int val = HIWORD_UPDATE(value, reg->mask, reg->shift);
++	struct video_device *video = video_devdata(file);
++	struct rkisp1_isp_stats_vdev *stats_vdev = video_get_drvdata(video);
 +
-+	WARN_ON(!reg->offset);
-+	regmap_write(priv->grf, reg->offset, val);
++	if (f->index > 0 || f->type != video->queue->type)
++		return -EINVAL;
++
++	f->pixelformat = stats_vdev->vdev_fmt.fmt.meta.dataformat;
++	return 0;
 +}
 +
-+static void mipidphy0_wr_reg(struct rockchip_dphy *priv,
-+			     u8 test_code, u8 test_data)
++static int rkisp1_stats_g_fmt_meta_cap(struct file *file, void *priv,
++				       struct v4l2_format *f)
 +{
-+	/*
-+	 * With the falling edge on TESTCLK, the TESTDIN[7:0] signal content
-+	 * is latched internally as the current test code. Test data is
-+	 * programmed internally by rising edge on TESTCLK.
-+	 */
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTCLK, 1);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTDIN, test_code);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTEN, 1);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTCLK, 0);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTEN, 0);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTDIN, test_data);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTCLK, 1);
-+}
++	struct video_device *video = video_devdata(file);
++	struct rkisp1_isp_stats_vdev *stats_vdev = video_get_drvdata(video);
++	struct v4l2_meta_format *meta = &f->fmt.meta;
 +
-+/* should be move to power_on */
-+static int mipidphy_rx_stream_on(struct rockchip_dphy *priv)
-+{
-+	const struct dphy_drv_data *drv_data = priv->drv_data;
-+	const struct hsfreq_range *hsfreq_ranges = drv_data->hsfreq_ranges;
-+	struct phy_configure_opts_mipi_dphy *config = &priv->config;
-+	unsigned int i, hsfreq = 0, data_rate_mbps = config->hs_clk_rate;
-+	int num_hsfreq_ranges = drv_data->num_hsfreq_ranges;
++	if (f->type != video->queue->type)
++		return -EINVAL;
 +
-+	do_div(data_rate_mbps, 1000 * 1000);
-+
-+	dev_dbg(priv->dev, "%s: lanes %d - data_rate_mbps %u\n",
-+		__func__, config->lanes, data_rate_mbps);
-+
-+	for (i = 0; i < num_hsfreq_ranges; i++) {
-+		if (hsfreq_ranges[i].range_h >= data_rate_mbps) {
-+			hsfreq = hsfreq_ranges[i].cfg_bit;
-+			break;
-+		}
-+	}
-+
-+	write_grf_reg(priv, GRF_DPHY_RX0_FORCERXMODE, 0);
-+	write_grf_reg(priv, GRF_DPHY_RX0_FORCETXSTOPMODE, 0);
-+
-+	/* Disable lan turn around, which is ignored in receive mode */
-+	write_grf_reg(priv, GRF_DPHY_RX0_TURNREQUEST, 0);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TURNDISABLE, 0xf);
-+
-+	write_grf_reg(priv, GRF_DPHY_RX0_ENABLE, GENMASK(config->lanes - 1, 0));
-+
-+	/* dphy start */
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTCLK, 1);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTCLR, 1);
-+	usleep_range(100, 150);
-+	write_grf_reg(priv, GRF_DPHY_RX0_TESTCLR, 0);
-+	usleep_range(100, 150);
-+
-+	/* set clock lane */
-+	/* HS hsfreq_range & lane 0  settle bypass */
-+	mipidphy0_wr_reg(priv, CLOCK_LANE_HS_RX_CONTROL, 0);
-+	/* HS RX Control of lane0 */
-+	mipidphy0_wr_reg(priv, LANE0_HS_RX_CONTROL, hsfreq << 1);
-+	/* HS RX Control of lane1 */
-+	mipidphy0_wr_reg(priv, LANE1_HS_RX_CONTROL, 0);
-+	/* HS RX Control of lane2 */
-+	mipidphy0_wr_reg(priv, LANE2_HS_RX_CONTROL, 0);
-+	/* HS RX Control of lane3 */
-+	mipidphy0_wr_reg(priv, LANE3_HS_RX_CONTROL, 0);
-+	/* HS RX Data Lanes Settle State Time Control */
-+	mipidphy0_wr_reg(priv, HS_RX_DATA_LANES_THS_SETTLE_CONTROL,
-+			 THS_SETTLE_COUNTER_THRESHOLD);
-+
-+	/* Normal operation */
-+	mipidphy0_wr_reg(priv, 0x0, 0);
++	memset(meta, 0, sizeof(*meta));
++	meta->dataformat = stats_vdev->vdev_fmt.fmt.meta.dataformat;
++	meta->buffersize = stats_vdev->vdev_fmt.fmt.meta.buffersize;
 +
 +	return 0;
 +}
 +
-+static int rockchip_dphy_configure(struct phy *phy, union phy_configure_opts *opts)
++static int rkisp1_stats_querycap(struct file *file,
++				 void *priv, struct v4l2_capability *cap)
 +{
-+	struct rockchip_dphy *priv = phy_get_drvdata(phy);
-+	int ret;
++	struct video_device *vdev = video_devdata(file);
 +
-+	/* pass with phy_mipi_dphy_get_default_config (with pixel rate?) */
-+	ret = phy_mipi_dphy_config_validate(&opts->mipi_dphy);
-+	if (ret)
-+		return ret;
-+
-+	memcpy(&priv->config, opts, sizeof(priv->config));
++	strscpy(cap->driver, DRIVER_NAME, sizeof(cap->driver));
++	strscpy(cap->card, vdev->name, sizeof(cap->card));
++	strscpy(cap->bus_info, "platform: " DRIVER_NAME, sizeof(cap->bus_info));
 +
 +	return 0;
 +}
 +
-+static int rockchip_dphy_power_on(struct phy *phy)
-+{
-+	struct rockchip_dphy *priv = phy_get_drvdata(phy);
-+	int ret;
-+
-+	ret = clk_bulk_enable(priv->drv_data->num_clks, priv->clks);
-+	if (ret)
-+		return ret;
-+
-+	return mipidphy_rx_stream_on(priv);
-+}
-+
-+static int rockchip_dphy_power_off(struct phy *phy)
-+{
-+	struct rockchip_dphy *priv = phy_get_drvdata(phy);
-+
-+	clk_bulk_disable(priv->drv_data->num_clks, priv->clks);
-+	return 0;
-+}
-+
-+static int rockchip_dphy_init(struct phy *phy)
-+{
-+	struct rockchip_dphy *priv = phy_get_drvdata(phy);
-+	int ret;
-+
-+	ret = clk_bulk_prepare(priv->drv_data->num_clks, priv->clks);
-+	if (ret)
-+		return ret;
-+	return 0;
-+}
-+
-+static int rockchip_dphy_exit(struct phy *phy)
-+{
-+	struct rockchip_dphy *priv = phy_get_drvdata(phy);
-+
-+	clk_bulk_unprepare(priv->drv_data->num_clks, priv->clks);
-+	return 0;
-+}
-+
-+static const struct phy_ops rockchip_dphy_ops = {
-+	.power_on	= rockchip_dphy_power_on,
-+	.power_off	= rockchip_dphy_power_off,
-+	.init		= rockchip_dphy_init,
-+	.exit		= rockchip_dphy_exit,
-+	.configure	= rockchip_dphy_configure,
-+	.owner		= THIS_MODULE,
++/* ISP video device IOCTLs */
++static const struct v4l2_ioctl_ops rkisp1_stats_ioctl = {
++	.vidioc_reqbufs = vb2_ioctl_reqbufs,
++	.vidioc_querybuf = vb2_ioctl_querybuf,
++	.vidioc_create_bufs = vb2_ioctl_create_bufs,
++	.vidioc_qbuf = vb2_ioctl_qbuf,
++	.vidioc_dqbuf = vb2_ioctl_dqbuf,
++	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
++	.vidioc_expbuf = vb2_ioctl_expbuf,
++	.vidioc_streamon = vb2_ioctl_streamon,
++	.vidioc_streamoff = vb2_ioctl_streamoff,
++	.vidioc_enum_fmt_meta_cap = rkisp1_stats_enum_fmt_meta_cap,
++	.vidioc_g_fmt_meta_cap = rkisp1_stats_g_fmt_meta_cap,
++	.vidioc_s_fmt_meta_cap = rkisp1_stats_g_fmt_meta_cap,
++	.vidioc_try_fmt_meta_cap = rkisp1_stats_g_fmt_meta_cap,
++	.vidioc_querycap = rkisp1_stats_querycap,
++	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
++	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
 +};
 +
-+static const struct dphy_drv_data rk3399_mipidphy_drv_data = {
-+	.clks = rk3399_mipidphy_clks,
-+	.num_clks = ARRAY_SIZE(rk3399_mipidphy_clks),
-+	.hsfreq_ranges = rk3399_mipidphy_hsfreq_ranges,
-+	.num_hsfreq_ranges = ARRAY_SIZE(rk3399_mipidphy_hsfreq_ranges),
-+	.regs = rk3399_grf_dphy_regs,
++struct v4l2_file_operations rkisp1_stats_fops = {
++	.mmap = vb2_fop_mmap,
++	.unlocked_ioctl = video_ioctl2,
++	.poll = vb2_fop_poll,
++	.open = v4l2_fh_open,
++	.release = vb2_fop_release
 +};
 +
-+static const struct of_device_id rockchip_dphy_dt_ids[] = {
-+	{
-+		.compatible = "rockchip,rk3399-mipi-dphy",
-+		.data = &rk3399_mipidphy_drv_data,
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, rockchip_dphy_dt_ids);
-+
-+static int rockchip_dphy_probe(struct platform_device *pdev)
++static int rkisp1_stats_vb2_queue_setup(struct vb2_queue *vq,
++					unsigned int *num_buffers,
++					unsigned int *num_planes,
++					unsigned int sizes[],
++					struct device *alloc_devs[])
 +{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	const struct dphy_drv_data *drv_data;
-+	struct phy_provider *phy_provider;
-+	const struct of_device_id *of_id;
-+	struct rockchip_dphy *priv;
-+	struct regmap *grf;
-+	struct phy *phy;
++	struct rkisp1_isp_stats_vdev *stats_vdev = vq->drv_priv;
++
++	*num_planes = 1;
++
++	*num_buffers = clamp_t(u32, *num_buffers, RKISP1_ISP_STATS_REQ_BUFS_MIN,
++			       RKISP1_ISP_STATS_REQ_BUFS_MAX);
++
++	sizes[0] = sizeof(struct rkisp1_stat_buffer);
++
++	INIT_LIST_HEAD(&stats_vdev->stat);
++
++	return 0;
++}
++
++static void rkisp1_stats_vb2_buf_queue(struct vb2_buffer *vb)
++{
++	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
++	struct rkisp1_buffer *stats_buf = to_rkisp1_buffer(vbuf);
++	struct vb2_queue *vq = vb->vb2_queue;
++	struct rkisp1_isp_stats_vdev *stats_dev = vq->drv_priv;
++
++	stats_buf->vaddr[0] = vb2_plane_vaddr(vb, 0);
++
++	mutex_lock(&stats_dev->wq_lock);
++	list_add_tail(&stats_buf->queue, &stats_dev->stat);
++	mutex_unlock(&stats_dev->wq_lock);
++}
++
++static int rkisp1_stats_vb2_buf_prepare(struct vb2_buffer *vb)
++{
++	if (vb2_plane_size(vb, 0) < sizeof(struct rkisp1_stat_buffer))
++		return -EINVAL;
++
++	vb2_set_plane_payload(vb, 0, sizeof(struct rkisp1_stat_buffer));
++
++	return 0;
++}
++
++static void rkisp1_stats_vb2_stop_streaming(struct vb2_queue *vq)
++{
++	struct rkisp1_isp_stats_vdev *stats_vdev = vq->drv_priv;
++	struct rkisp1_buffer *buf;
++	unsigned long flags;
 +	unsigned int i;
-+	int ret;
 +
-+	if (!dev->parent || !dev->parent->of_node)
-+		return -ENODEV;
++	/* Make sure no new work queued in isr before draining wq */
++	spin_lock_irqsave(&stats_vdev->irq_lock, flags);
++	stats_vdev->streamon = false;
++	spin_unlock_irqrestore(&stats_vdev->irq_lock, flags);
 +
-+	if (platform_get_resource(pdev, IORESOURCE_MEM, 0)) {
-+		dev_err(&pdev->dev, "Rockchip DPHY driver only suports rx\n");
-+		return -EINVAL;
++	drain_workqueue(stats_vdev->readout_wq);
++
++	mutex_lock(&stats_vdev->wq_lock);
++	for (i = 0; i < RKISP1_ISP_STATS_REQ_BUFS_MAX; i++) {
++		if (list_empty(&stats_vdev->stat))
++			break;
++		buf = list_first_entry(&stats_vdev->stat,
++				       struct rkisp1_buffer, queue);
++		list_del(&buf->queue);
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
 +	}
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+	priv->dev = dev;
-+
-+	grf = syscon_node_to_regmap(dev->parent->of_node);
-+	if (IS_ERR(grf)) {
-+		grf = syscon_regmap_lookup_by_phandle(dev->of_node,
-+						      "rockchip,grf");
-+		if (IS_ERR(grf)) {
-+			dev_err(dev, "Can't find GRF syscon\n");
-+			return -ENODEV;
-+		}
-+	}
-+	priv->grf = grf;
-+
-+	of_id = of_match_device(rockchip_dphy_dt_ids, dev);
-+	if (!of_id)
-+		return -EINVAL;
-+
-+	drv_data = of_id->data;
-+	priv->grf_regs = drv_data->regs;
-+	priv->drv_data = drv_data;
-+	for (i = 0; i < drv_data->num_clks; i++)
-+		priv->clks[i].id = drv_data->clks[i];
-+	ret = devm_clk_bulk_get(&pdev->dev, drv_data->num_clks, priv->clks);
-+	if (ret)
-+		return ret;
-+
-+	phy = devm_phy_create(dev, np, &rockchip_dphy_ops);
-+	if (IS_ERR(phy)) {
-+		dev_err(dev, "failed to create phy\n");
-+		return PTR_ERR(phy);
-+	}
-+	phy_set_drvdata(phy, priv);
-+
-+	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-+
-+	return PTR_ERR_OR_ZERO(phy_provider);
++	mutex_unlock(&stats_vdev->wq_lock);
 +}
 +
-+static struct platform_driver rockchip_dphy_driver = {
-+	.probe = rockchip_dphy_probe,
-+	.driver = {
-+		.name	= "rockchip-mipi-dphy",
-+		.of_match_table = rockchip_dphy_dt_ids,
-+	},
-+};
-+module_platform_driver(rockchip_dphy_driver);
++static int
++rkisp1_stats_vb2_start_streaming(struct vb2_queue *queue,
++				 unsigned int count)
++{
++	struct rkisp1_isp_stats_vdev *stats_vdev = queue->drv_priv;
 +
-+MODULE_AUTHOR("Ezequiel Garcia <ezequiel@collabora.com>");
-+MODULE_DESCRIPTION("Rockchip MIPI Synopsys DPHY driver");
-+MODULE_LICENSE("Dual MIT/GPL");
++	stats_vdev->streamon = true;
++
++	return 0;
++}
++
++static struct vb2_ops rkisp1_stats_vb2_ops = {
++	.queue_setup = rkisp1_stats_vb2_queue_setup,
++	.buf_queue = rkisp1_stats_vb2_buf_queue,
++	.buf_prepare = rkisp1_stats_vb2_buf_prepare,
++	.wait_prepare = vb2_ops_wait_prepare,
++	.wait_finish = vb2_ops_wait_finish,
++	.stop_streaming = rkisp1_stats_vb2_stop_streaming,
++	.start_streaming = rkisp1_stats_vb2_start_streaming,
++};
++
++static int rkisp1_stats_init_vb2_queue(struct vb2_queue *q,
++				       struct rkisp1_isp_stats_vdev *stats_vdev)
++{
++	struct rkisp1_vdev_node *node;
++
++	node = queue_to_node(q);
++
++	q->type = V4L2_BUF_TYPE_META_CAPTURE;
++	q->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
++	q->drv_priv = stats_vdev;
++	q->ops = &rkisp1_stats_vb2_ops;
++	q->mem_ops = &vb2_vmalloc_memops;
++	q->buf_struct_size = sizeof(struct rkisp1_buffer);
++	q->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
++	q->lock = &node->vlock;
++
++	return vb2_queue_init(q);
++}
++
++static void rkisp1_stats_get_awb_meas(struct rkisp1_isp_stats_vdev *stats_vdev,
++				      struct rkisp1_stat_buffer *pbuf)
++{
++	/* Protect against concurrent access from ISR? */
++	u32 reg_val;
++
++	pbuf->meas_type |= CIFISP_STAT_AWB;
++	reg_val = readl(stats_vdev->dev->base_addr + CIF_ISP_AWB_WHITE_CNT);
++	pbuf->params.awb.awb_mean[0].cnt = CIF_ISP_AWB_GET_PIXEL_CNT(reg_val);
++	reg_val = readl(stats_vdev->dev->base_addr + CIF_ISP_AWB_MEAN);
++
++	pbuf->params.awb.awb_mean[0].mean_cr_or_r =
++		CIF_ISP_AWB_GET_MEAN_CR_R(reg_val);
++	pbuf->params.awb.awb_mean[0].mean_cb_or_b =
++		CIF_ISP_AWB_GET_MEAN_CB_B(reg_val);
++	pbuf->params.awb.awb_mean[0].mean_y_or_g =
++		CIF_ISP_AWB_GET_MEAN_Y_G(reg_val);
++}
++
++static void rkisp1_stats_get_aec_meas(struct rkisp1_isp_stats_vdev *stats_vdev,
++				      struct rkisp1_stat_buffer *pbuf)
++{
++	void __iomem *addr = stats_vdev->dev->base_addr + CIF_ISP_EXP_MEAN_00;
++	unsigned int i;
++
++	pbuf->meas_type |= CIFISP_STAT_AUTOEXP;
++	for (i = 0; i < CIFISP_AE_MEAN_MAX; i++)
++		pbuf->params.ae.exp_mean[i] = (u8)readl(addr + i * 4);
++}
++
++static void rkisp1_stats_get_afc_meas(struct rkisp1_isp_stats_vdev *stats_vdev,
++				      struct rkisp1_stat_buffer *pbuf)
++{
++	void __iomem *base_addr;
++	struct cifisp_af_stat *af;
++
++	pbuf->meas_type = CIFISP_STAT_AFM_FIN;
++
++	af = &pbuf->params.af;
++	base_addr = stats_vdev->dev->base_addr;
++	af->window[0].sum = readl(base_addr + CIF_ISP_AFM_SUM_A);
++	af->window[0].lum = readl(base_addr + CIF_ISP_AFM_LUM_A);
++	af->window[1].sum = readl(base_addr + CIF_ISP_AFM_SUM_B);
++	af->window[1].lum = readl(base_addr + CIF_ISP_AFM_LUM_B);
++	af->window[2].sum = readl(base_addr + CIF_ISP_AFM_SUM_C);
++	af->window[2].lum = readl(base_addr + CIF_ISP_AFM_LUM_C);
++}
++
++static void rkisp1_stats_get_hst_meas(struct rkisp1_isp_stats_vdev *stats_vdev,
++				      struct rkisp1_stat_buffer *pbuf)
++{
++	void __iomem *addr = stats_vdev->dev->base_addr + CIF_ISP_HIST_BIN_0;
++	unsigned int i;
++
++	pbuf->meas_type |= CIFISP_STAT_HIST;
++	for (i = 0; i < CIFISP_HIST_BIN_N_MAX; i++)
++		pbuf->params.hist.hist_bins[i] = readl(addr + (i * 4));
++}
++
++static void rkisp1_stats_get_bls_meas(struct rkisp1_isp_stats_vdev *stats_vdev,
++				      struct rkisp1_stat_buffer *pbuf)
++{
++	struct rkisp1_device *dev = stats_vdev->dev;
++	const struct ispsd_in_fmt *in_fmt =
++			rkisp1_get_ispsd_in_fmt(&dev->isp_sdev);
++	void __iomem *base = stats_vdev->dev->base_addr;
++	struct cifisp_bls_meas_val *bls_val;
++
++	bls_val = &pbuf->params.ae.bls_val;
++	if (in_fmt->bayer_pat == RAW_BGGR) {
++		bls_val->meas_b = readl(base + CIF_ISP_BLS_A_MEASURED);
++		bls_val->meas_gb = readl(base + CIF_ISP_BLS_B_MEASURED);
++		bls_val->meas_gr = readl(base + CIF_ISP_BLS_C_MEASURED);
++		bls_val->meas_r = readl(base + CIF_ISP_BLS_D_MEASURED);
++	} else if (in_fmt->bayer_pat == RAW_GBRG) {
++		bls_val->meas_gb = readl(base + CIF_ISP_BLS_A_MEASURED);
++		bls_val->meas_b = readl(base + CIF_ISP_BLS_B_MEASURED);
++		bls_val->meas_r = readl(base + CIF_ISP_BLS_C_MEASURED);
++		bls_val->meas_gr = readl(base + CIF_ISP_BLS_D_MEASURED);
++	} else if (in_fmt->bayer_pat == RAW_GRBG) {
++		bls_val->meas_gr = readl(base + CIF_ISP_BLS_A_MEASURED);
++		bls_val->meas_r = readl(base + CIF_ISP_BLS_B_MEASURED);
++		bls_val->meas_b = readl(base + CIF_ISP_BLS_C_MEASURED);
++		bls_val->meas_gb = readl(base + CIF_ISP_BLS_D_MEASURED);
++	} else if (in_fmt->bayer_pat == RAW_RGGB) {
++		bls_val->meas_r = readl(base + CIF_ISP_BLS_A_MEASURED);
++		bls_val->meas_gr = readl(base + CIF_ISP_BLS_B_MEASURED);
++		bls_val->meas_gb = readl(base + CIF_ISP_BLS_C_MEASURED);
++		bls_val->meas_b = readl(base + CIF_ISP_BLS_D_MEASURED);
++	}
++}
++
++static void
++rkisp1_stats_send_measurement(struct rkisp1_isp_stats_vdev *stats_vdev,
++			      struct rkisp1_isp_readout_work *meas_work)
++{
++	struct rkisp1_stat_buffer *cur_stat_buf;
++	struct rkisp1_buffer *cur_buf = NULL;
++	unsigned int cur_frame_id = -1;
++
++	cur_frame_id = atomic_read(&stats_vdev->dev->isp_sdev.frm_sync_seq) - 1;
++	if (cur_frame_id != meas_work->frame_id) {
++		v4l2_warn(stats_vdev->vnode.vdev.v4l2_dev,
++			  "Measurement late(%d, %d)\n",
++			  cur_frame_id, meas_work->frame_id);
++		cur_frame_id = meas_work->frame_id;
++	}
++
++	mutex_lock(&stats_vdev->wq_lock);
++	/* get one empty buffer */
++	if (!list_empty(&stats_vdev->stat)) {
++		cur_buf = list_first_entry(&stats_vdev->stat,
++					   struct rkisp1_buffer, queue);
++		list_del(&cur_buf->queue);
++	}
++	mutex_unlock(&stats_vdev->wq_lock);
++
++	if (!cur_buf)
++		return;
++
++	cur_stat_buf =
++		(struct rkisp1_stat_buffer *)(cur_buf->vaddr[0]);
++
++	if (meas_work->isp_ris & CIF_ISP_AWB_DONE) {
++		rkisp1_stats_get_awb_meas(stats_vdev, cur_stat_buf);
++		cur_stat_buf->meas_type |= CIFISP_STAT_AWB;
++	}
++
++	if (meas_work->isp_ris & CIF_ISP_AFM_FIN) {
++		rkisp1_stats_get_afc_meas(stats_vdev, cur_stat_buf);
++		cur_stat_buf->meas_type |= CIFISP_STAT_AFM_FIN;
++	}
++
++	if (meas_work->isp_ris & CIF_ISP_EXP_END) {
++		rkisp1_stats_get_aec_meas(stats_vdev, cur_stat_buf);
++		rkisp1_stats_get_bls_meas(stats_vdev, cur_stat_buf);
++		cur_stat_buf->meas_type |= CIFISP_STAT_AUTOEXP;
++	}
++
++	if (meas_work->isp_ris & CIF_ISP_HIST_MEASURE_RDY) {
++		rkisp1_stats_get_hst_meas(stats_vdev, cur_stat_buf);
++		cur_stat_buf->meas_type |= CIFISP_STAT_HIST;
++	}
++
++	vb2_set_plane_payload(&cur_buf->vb.vb2_buf, 0,
++			      sizeof(struct rkisp1_stat_buffer));
++	cur_buf->vb.sequence = cur_frame_id;
++	cur_buf->vb.vb2_buf.timestamp = ktime_get_ns();
++	vb2_buffer_done(&cur_buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
++}
++
++static void rkisp1_stats_readout_work(struct work_struct *work)
++{
++	struct rkisp1_isp_readout_work *readout_work = container_of(work,
++						struct rkisp1_isp_readout_work,
++						work);
++	struct rkisp1_isp_stats_vdev *stats_vdev = readout_work->stats_vdev;
++
++	if (readout_work->readout == RKISP1_ISP_READOUT_MEAS)
++		rkisp1_stats_send_measurement(stats_vdev, readout_work);
++
++	kfree(readout_work);
++}
++
++int rkisp1_stats_isr(struct rkisp1_isp_stats_vdev *stats_vdev, u32 isp_ris)
++{
++	unsigned int cur_frame_id =
++		atomic_read(&stats_vdev->dev->isp_sdev.frm_sync_seq) - 1;
++	struct rkisp1_isp_readout_work *work;
++	unsigned int isp_mis_tmp = 0;
++#ifdef LOG_ISR_EXE_TIME
++	ktime_t in_t = ktime_get();
++#endif
++
++	spin_lock(&stats_vdev->irq_lock);
++
++	writel((CIF_ISP_AWB_DONE | CIF_ISP_AFM_FIN | CIF_ISP_EXP_END |
++		CIF_ISP_HIST_MEASURE_RDY),
++		stats_vdev->dev->base_addr + CIF_ISP_ICR);
++
++	isp_mis_tmp = readl(stats_vdev->dev->base_addr + CIF_ISP_MIS);
++	if (isp_mis_tmp &
++		(CIF_ISP_AWB_DONE | CIF_ISP_AFM_FIN |
++		 CIF_ISP_EXP_END | CIF_ISP_HIST_MEASURE_RDY))
++		v4l2_err(stats_vdev->vnode.vdev.v4l2_dev,
++			 "isp icr 3A info err: 0x%x\n",
++			 isp_mis_tmp);
++
++	if (!stats_vdev->streamon)
++		goto unlock;
++	if (isp_ris & (CIF_ISP_AWB_DONE | CIF_ISP_AFM_FIN | CIF_ISP_EXP_END |
++		CIF_ISP_HIST_MEASURE_RDY)) {
++		work = (struct rkisp1_isp_readout_work *)
++			kzalloc(sizeof(struct rkisp1_isp_readout_work),
++				GFP_ATOMIC);
++		if (work) {
++			INIT_WORK(&work->work,
++				  rkisp1_stats_readout_work);
++			work->readout = RKISP1_ISP_READOUT_MEAS;
++			work->stats_vdev = stats_vdev;
++			work->frame_id = cur_frame_id;
++			work->isp_ris = isp_ris;
++			if (!queue_work(stats_vdev->readout_wq,
++					&work->work))
++				kfree(work);
++		} else {
++			v4l2_err(stats_vdev->vnode.vdev.v4l2_dev,
++				 "Could not allocate work\n");
++		}
++	}
++
++#ifdef LOG_ISR_EXE_TIME
++	if (isp_ris & (CIF_ISP_EXP_END | CIF_ISP_AWB_DONE |
++		       CIF_ISP_FRAME | CIF_ISP_HIST_MEASURE_RDY)) {
++		unsigned int diff_us =
++				ktime_to_us(ktime_sub(ktime_get(), in_t));
++
++		if (diff_us > g_longest_isr_time)
++			g_longest_isr_time = diff_us;
++
++		v4l2_info(stats_vdev->vnode.vdev.v4l2_dev,
++			  "isp_isr time %d %d\n", diff_us, g_longest_isr_time);
++	}
++#endif
++
++unlock:
++	spin_unlock(&stats_vdev->irq_lock);
++
++	return 0;
++}
++
++static void rkisp1_init_stats_vdev(struct rkisp1_isp_stats_vdev *stats_vdev)
++{
++	stats_vdev->vdev_fmt.fmt.meta.dataformat =
++		V4L2_META_FMT_RK_ISP1_STAT_3A;
++	stats_vdev->vdev_fmt.fmt.meta.buffersize =
++		sizeof(struct rkisp1_stat_buffer);
++}
++
++int rkisp1_register_stats_vdev(struct rkisp1_isp_stats_vdev *stats_vdev,
++			       struct v4l2_device *v4l2_dev,
++			       struct rkisp1_device *dev)
++{
++	struct rkisp1_vdev_node *node = &stats_vdev->vnode;
++	struct video_device *vdev = &node->vdev;
++	unsigned int ret;
++
++	stats_vdev->dev = dev;
++	mutex_init(&stats_vdev->wq_lock);
++	mutex_init(&node->vlock);
++	INIT_LIST_HEAD(&stats_vdev->stat);
++	spin_lock_init(&stats_vdev->irq_lock);
++
++	strlcpy(vdev->name, "rkisp1-statistics", sizeof(vdev->name));
++
++	video_set_drvdata(vdev, stats_vdev);
++	vdev->ioctl_ops = &rkisp1_stats_ioctl;
++	vdev->fops = &rkisp1_stats_fops;
++	vdev->release = video_device_release_empty;
++	vdev->lock = &node->vlock;
++	vdev->v4l2_dev = v4l2_dev;
++	vdev->queue = &node->buf_queue;
++	vdev->device_caps = V4L2_CAP_META_CAPTURE | V4L2_CAP_STREAMING;
++	vdev->vfl_dir =  VFL_DIR_RX;
++	rkisp1_stats_init_vb2_queue(vdev->queue, stats_vdev);
++	rkisp1_init_stats_vdev(stats_vdev);
++	video_set_drvdata(vdev, stats_vdev);
++
++	node->pad.flags = MEDIA_PAD_FL_SINK;
++	ret = media_entity_pads_init(&vdev->entity, 1, &node->pad);
++	if (ret < 0)
++		goto err_release_queue;
++
++	ret = video_register_device(vdev, VFL_TYPE_GRABBER, -1);
++	if (ret < 0) {
++		dev_err(&vdev->dev,
++			"could not register Video for Linux device\n");
++		goto err_cleanup_media_entity;
++	}
++
++	stats_vdev->readout_wq =
++	    alloc_workqueue("measurement_queue",
++			    WQ_UNBOUND | WQ_MEM_RECLAIM, 1);
++
++	if (!stats_vdev->readout_wq) {
++		ret = -ENOMEM;
++			goto err_unreg_vdev;
++	}
++
++	return 0;
++err_unreg_vdev:
++	video_unregister_device(vdev);
++err_cleanup_media_entity:
++	media_entity_cleanup(&vdev->entity);
++err_release_queue:
++	vb2_queue_release(vdev->queue);
++	return ret;
++}
++
++void rkisp1_unregister_stats_vdev(struct rkisp1_isp_stats_vdev *stats_vdev)
++{
++	struct rkisp1_vdev_node *node = &stats_vdev->vnode;
++	struct video_device *vdev = &node->vdev;
++
++	destroy_workqueue(stats_vdev->readout_wq);
++	video_unregister_device(vdev);
++	media_entity_cleanup(&vdev->entity);
++	vb2_queue_release(vdev->queue);
++}
+diff --git a/drivers/media/platform/rockchip/isp1/isp_stats.h b/drivers/media/platform/rockchip/isp1/isp_stats.h
+new file mode 100644
+index 000000000000..b46c8537e1c7
+--- /dev/null
++++ b/drivers/media/platform/rockchip/isp1/isp_stats.h
+@@ -0,0 +1,60 @@
++/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
++/*
++ * Rockchip isp1 driver
++ *
++ * Copyright (C) 2017 Rockchip Electronics Co., Ltd.
++ */
++
++#ifndef _RKISP1_ISP_STATS_H
++#define _RKISP1_ISP_STATS_H
++
++#include <linux/rkisp1-config.h>
++
++#include "common.h"
++
++struct rkisp1_isp_stats_vdev;
++
++enum rkisp1_isp_readout_cmd {
++	RKISP1_ISP_READOUT_MEAS,
++	RKISP1_ISP_READOUT_META,
++};
++
++struct rkisp1_isp_readout_work {
++	struct work_struct work;
++	struct rkisp1_isp_stats_vdev *stats_vdev;
++
++	unsigned int frame_id;
++	unsigned int isp_ris;
++	enum rkisp1_isp_readout_cmd readout;
++	struct vb2_buffer *vb;
++};
++
++/*
++ * struct rkisp1_isp_stats_vdev - ISP Statistics device
++ *
++ * @irq_lock: buffer queue lock
++ * @stat: stats buffer list
++ * @readout_wq: workqueue for statistics information read
++ */
++struct rkisp1_isp_stats_vdev {
++	struct rkisp1_vdev_node vnode;
++	struct rkisp1_device *dev;
++
++	spinlock_t irq_lock;
++	struct list_head stat;
++	struct v4l2_format vdev_fmt;
++	bool streamon;
++
++	struct workqueue_struct *readout_wq;
++	struct mutex wq_lock;
++};
++
++int rkisp1_stats_isr(struct rkisp1_isp_stats_vdev *stats_vdev, u32 isp_ris);
++
++int rkisp1_register_stats_vdev(struct rkisp1_isp_stats_vdev *stats_vdev,
++			       struct v4l2_device *v4l2_dev,
++			       struct rkisp1_device *dev);
++
++void rkisp1_unregister_stats_vdev(struct rkisp1_isp_stats_vdev *stats_vdev);
++
++#endif /* _RKISP1_ISP_STATS_H */
 -- 
 2.20.1
 
