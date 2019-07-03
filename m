@@ -2,86 +2,73 @@ Return-Path: <SRS0=7UeB=VA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACBC1C0650E
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 19:11:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E729BC0650E
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 19:20:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 946AB218BA
-	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 19:11:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEEB9218A4
+	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 19:20:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1562181654;
+	bh=MVMDN4XhcFLvLmPxXPdmheT8Fyttmv50Wohokop0BGs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=mjLzQZ5ZHKphApZu8D6vL7U8AJfB0N588JobCxL/o+0cyWr2jqoASm3zwY2NS0qHd
+	 dJJDBWTBsCMmHXjWOH3CMj1O53j+B3IazKfXoa+y+V3ykR8m0OM/s3KwhE7xm/RPHY
+	 6HzZnd+/Av/f+++e9/o5wlDe0dVPLg1jnKtfvhoA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727483AbfGCTLD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Jul 2019 15:11:03 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42582 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726736AbfGCTLC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Jul 2019 15:11:02 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 5EFA228ABC7
-From:   Helen Koike <helen.koike@collabora.com>
-To:     linux-rockchip@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, eddie.cai.linux@gmail.com,
-        mchehab@kernel.org, heiko@sntech.de, jacob2.chen@rock-chips.com,
-        jeffy.chen@rock-chips.com, zyc@rock-chips.com,
-        linux-kernel@vger.kernel.org, tfiga@chromium.org,
-        hans.verkuil@cisco.com, laurent.pinchart@ideasonboard.com,
-        sakari.ailus@linux.intel.com, kernel@collabora.com,
-        ezequiel@collabora.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, zhengsq@rock-chips.com,
-        Helen Koike <helen.koike@collabora.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v7 14/14] MAINTAINERS: add entry for Rockchip ISP1 driver
-Date:   Wed,  3 Jul 2019 16:09:10 -0300
-Message-Id: <20190703190910.32633-15-helen.koike@collabora.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190703190910.32633-1-helen.koike@collabora.com>
-References: <20190703190910.32633-1-helen.koike@collabora.com>
+        id S1726823AbfGCTUy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Jul 2019 15:20:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45686 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726581AbfGCTUy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Jul 2019 15:20:54 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A989F218A4;
+        Wed,  3 Jul 2019 19:20:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562181653;
+        bh=MVMDN4XhcFLvLmPxXPdmheT8Fyttmv50Wohokop0BGs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eAgPd92vSwKyiHcRoLri86VtfD+vNXaulegJ1l00GuU3GvKuvWSWvmFXhRLOx0f/F
+         VSe8sQL1g6ifls0rVtnVq+QG7u8xUyzrqqYfTqtxF4v6Y1cSqK5WEIa/Oxr6Dcnz6g
+         CcdoPuMzzaKz8uBkLR0sPeYZp14dxW27QAmIG7Po=
+Date:   Wed, 3 Jul 2019 21:20:50 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Masanari Iida <standby24x7@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, corbet@lwn.net,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] driver core: node: Fix warning while make xmldocs
+Message-ID: <20190703192050.GA20873@kroah.com>
+References: <20190624035807.20628-1-standby24x7@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190624035807.20628-1-standby24x7@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add MAINTAINERS entry for the rockchip isp1 driver.
+On Mon, Jun 24, 2019 at 12:58:07PM +0900, Masanari Iida wrote:
+> This patch fixes following warning while make xmldocs.
+> ./drivers/base/node.c:690: warning: Excess function parameter
+>  'mem_node' description in 'register_memory_node_under_compute_node'
+> ./drivers/base/node.c:690: warning: Excess function parameter
+>  'cpu_node' description in 'register_memory_node_under_compute_node'
+> 
+> Signed-off-by: Masanari Iida <standby24x7@gmail.com>
+> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/node.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Helen Koike <helen.koike@collabora.com>
----
+Someone sent this patch before you did, sorry.
 
-Changes in v7: None
-
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 866969b36a13..47c8f17b0b1f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13518,6 +13518,14 @@ F:	drivers/hid/hid-roccat*
- F:	include/linux/hid-roccat*
- F:	Documentation/ABI/*/sysfs-driver-hid-roccat*
- 
-+ROCKCHIP ISP V1 DRIVER
-+M:	Helen Koike <helen.koike@collabora.com>
-+L:	linux-media@vger.kernel.org
-+S:	Maintained
-+F:	drivers/media/platform/rockchip/isp1/
-+F:	Documentation/devicetree/bindings/media/rockchip-isp1.txt
-+F:	Documentation/devicetree/bindings/media/rockchip-mipi-dphy.txt
-+
- ROCKCHIP RASTER 2D GRAPHIC ACCELERATION UNIT DRIVER
- M:	Jacob chen <jacob2.chen@rock-chips.com>
- L:	linux-media@vger.kernel.org
--- 
-2.20.1
-
+greg k-h
