@@ -4,75 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.0 required=3.0
 	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C68AC0650E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A369BC06513
 	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 14:12:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0303821881
+	by mail.kernel.org (Postfix) with ESMTP id 85E2921881
 	for <linux-media@archiver.kernel.org>; Wed,  3 Jul 2019 14:12:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726490AbfGCOMO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Jul 2019 10:12:14 -0400
-Received: from gofer.mess.org ([88.97.38.141]:48283 "EHLO gofer.mess.org"
+        id S1726605AbfGCOMP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Jul 2019 10:12:15 -0400
+Received: from gofer.mess.org ([88.97.38.141]:41179 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725830AbfGCOMO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S1725944AbfGCOMO (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Wed, 3 Jul 2019 10:12:14 -0400
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id D6E2060A67; Wed,  3 Jul 2019 15:12:12 +0100 (BST)
+        id 0B25561A6D; Wed,  3 Jul 2019 15:12:12 +0100 (BST)
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
 Cc:     Bastien Nocera <hadess@hadess.net>
-Subject: [PATCH v4l-utils 1/2] gen_keytables.pl: strip comments from C files
-Date:   Wed,  3 Jul 2019 15:12:11 +0100
-Message-Id: <20190703141212.31719-1-sean@mess.org>
+Subject: [PATCH v4l-utils 2/2] gen_keytables.pl: remove duplicate scancodes from keymap
+Date:   Wed,  3 Jul 2019 15:12:12 +0100
+Message-Id: <20190703141212.31719-2-sean@mess.org>
 X-Mailer: git-send-email 2.11.0
+In-Reply-To: <20190703141212.31719-1-sean@mess.org>
+References: <20190703141212.31719-1-sean@mess.org>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some keymaps contain mappings in comments which should have not been
-included.
+One scancode can only be mapped to one keycode. In addition, the
+toml is invalid so the keymap cannot be loaded.
 
 Cc: Bastien Nocera <hadess@hadess.net>
 Signed-off-by: Sean Young <sean@mess.org>
 ---
- utils/keytable/gen_keytables.pl | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ utils/keytable/gen_keytables.pl | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/utils/keytable/gen_keytables.pl b/utils/keytable/gen_keytables.pl
-index 4124e366..8f3a87e6 100755
+index 8f3a87e6..c14aded3 100755
 --- a/utils/keytable/gen_keytables.pl
 +++ b/utils/keytable/gen_keytables.pl
-@@ -82,7 +82,17 @@ sub parse_file($$)
+@@ -76,6 +76,7 @@ sub parse_file($$)
+ 	my $legacy = shift;
  
- 	printf "processing file $filename\n" if ($debug);
- 	open IN, "<$filename" or die "couldn't find $filename";
--	while (<IN>) {
-+	# read the entire file
-+	my $file = do { local $/ = undef; <IN> };
-+	close IN;
-+
-+	# remove comments
-+	$file =~ s,/\*.*?\*/,,sg;
-+	$file =~ s,//[^\n]*,,sg;
-+
-+	my @lines = split /\n/, $file;
-+
-+	foreach (@lines) {
- 		if (m/struct\s+rc_map_table\s+(\w[\w\d_]+)/) {
- 			flush($filename, $legacy);
+ 	my $num_tables = 0;
++	my %scancodes = ();
+ 	$warn = 0;
  
-@@ -140,7 +150,6 @@ sub parse_file($$)
- 			}
+ 	next if ($filename =~ m/\.mod.c/);
+@@ -101,6 +102,7 @@ sub parse_file($$)
+ 			$keyname =~ s/_table$//;
+ 			$read = 1;
+ 			$num_tables++;
++			%scancodes = ();
+ 			next;
  		}
- 	}
--	close IN;
+ 		if (m/struct\s+rc_map_list.*=\s+{/) {
+@@ -142,7 +144,15 @@ sub parse_file($$)
  
- 	flush($filename, $legacy);
- 
+ 		if ($read) {
+ 			if (m/(0x[\dA-Fa-f]+)[\s\,]+(KEY|BTN)(\_[^\s\,\}]+)/) {
+-				$out .= "$1 = \"$2$3\"\n";
++				my $scancode = hex($1);
++				my $keycode = "$2$3";
++
++				if (exists($scancodes{$scancode})) {
++					printf STDERR "WARNING: duplicate scancode $1 in file $filename, set to $keycode and $scancodes{$scancode}\n";
++				} else {
++					$out .= "$1 = \"$keycode\"\n";
++					$scancodes{$scancode} = $keycode;
++				}
+ 				next;
+ 			}
+ 			if (m/\}/) {
 -- 
 2.21.0
 
