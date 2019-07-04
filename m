@@ -2,29 +2,30 @@ Return-Path: <SRS0=l0G/=VB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A897C06511
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66038C06513
 	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 01:58:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E4E9F218B0
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 01:58:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C9C0218B8
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 01:58:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727123AbfGDB62 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Jul 2019 21:58:28 -0400
-Received: from bin-mail-out-06.binero.net ([195.74.38.229]:57698 "EHLO
-        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726955AbfGDB62 (ORCPT
+        id S1727202AbfGDB63 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Jul 2019 21:58:29 -0400
+Received: from bin-mail-out-05.binero.net ([195.74.38.228]:43506 "EHLO
+        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727087AbfGDB62 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 3 Jul 2019 21:58:28 -0400
-X-Halon-ID: 3231f3b8-9dff-11e9-8ab4-005056917a89
+X-Halon-ID: 36677fd0-9dff-11e9-8ab4-005056917a89
 Authorized-sender: niklas@soderlund.pp.se
 Received: from bismarck.berto.se (unknown [145.14.112.32])
         by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
-        id 3231f3b8-9dff-11e9-8ab4-005056917a89;
-        Thu, 04 Jul 2019 03:58:25 +0200 (CEST)
+        id 36677fd0-9dff-11e9-8ab4-005056917a89;
+        Thu, 04 Jul 2019 03:58:27 +0200 (CEST)
 From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -32,10 +33,12 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Cc:     linux-renesas-soc@vger.kernel.org,
         =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>
-Subject: [PATCH v3 0/4] rcar-vin: Add support for RGB formats with alpha 
-Date:   Thu,  4 Jul 2019 03:58:13 +0200
-Message-Id: <20190704015817.17083-1-niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v3 2/4] rcar-vin: Add control for alpha component
+Date:   Thu,  4 Jul 2019 03:58:15 +0200
+Message-Id: <20190704015817.17083-3-niklas.soderlund+renesas@ragnatech.se>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190704015817.17083-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20190704015817.17083-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -44,39 +47,161 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+In preparation to adding support for RGB pixel formats with an alpha
+component add a control to allow the user to control which alpha value
+should be used.
 
-This small series adds support for two new pixel formats for the
-rcar-vin driver; V4L2_PIX_FMT_ARGB555 and V4L2_PIX_FMT_ABGR32. Both
-formats have an alpha component so a new standard control is also added
-to control its value, V4L2_CID_ALPHA_COMPONENT.
-
-The series is based on the latest media-tree and is tested on both
-Renesas Gen2 and Gen3 hardware without any regressions found.
-
-Patch 1/4 fixes a badly named register name, 2/4 adds the new control
-while 3/4 adds the two new pixel formats. Patch 4/4 is a clean up now 
-that Gen2 and Gen3 always have controls and v4l2_ctrl_handler_setup() 
-should be called for both cases.
-
-* Changes since v2
-- Protect the writing of the alpha value when streaming with the spin 
-  lock to make sure the streaming state is stable.
-- Add patch 4/4 to call v4l2_ctrl_handler_setup() for the media 
-  controller centric Gen3 mode of the driver.
-
-Niklas Söderlund (4):
-  rcar-vin: Rename VNDMR_DTMD_ARGB1555 to VNDMR_DTMD_ARGB
-  rcar-vin: Add control for alpha component
-  rcar-vin: Add support for RGB formats with alpha component
-  rcar-vin: Always setup controls when opening video device
-
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
  drivers/media/platform/rcar-vin/rcar-core.c | 53 ++++++++++++++++++++-
- drivers/media/platform/rcar-vin/rcar-dma.c  | 44 ++++++++++++++++-
- drivers/media/platform/rcar-vin/rcar-v4l2.c | 38 +++++++++------
+ drivers/media/platform/rcar-vin/rcar-dma.c  |  5 ++
  drivers/media/platform/rcar-vin/rcar-vin.h  |  5 ++
- 4 files changed, 121 insertions(+), 19 deletions(-)
+ 3 files changed, 61 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
+index 64f9cf790445d14e..ee6e6cb39c749675 100644
+--- a/drivers/media/platform/rcar-vin/rcar-core.c
++++ b/drivers/media/platform/rcar-vin/rcar-core.c
+@@ -389,6 +389,28 @@ static void rvin_group_put(struct rvin_dev *vin)
+ 	kref_put(&group->refcount, rvin_group_release);
+ }
+ 
++/* -----------------------------------------------------------------------------
++ * Controls
++ */
++
++static int rvin_s_ctrl(struct v4l2_ctrl *ctrl)
++{
++	struct rvin_dev *vin =
++		container_of(ctrl->handler, struct rvin_dev, ctrl_handler);
++
++	switch (ctrl->id) {
++	case V4L2_CID_ALPHA_COMPONENT:
++		rvin_set_alpha(vin, ctrl->val);
++		break;
++	}
++
++	return 0;
++}
++
++static const struct v4l2_ctrl_ops rvin_ctrl_ops = {
++	.s_ctrl = rvin_s_ctrl,
++};
++
+ /* -----------------------------------------------------------------------------
+  * Async notifier
+  */
+@@ -478,6 +500,15 @@ static int rvin_parallel_subdevice_attach(struct rvin_dev *vin,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	v4l2_ctrl_new_std(&vin->ctrl_handler, &rvin_ctrl_ops,
++			  V4L2_CID_ALPHA_COMPONENT, 0, 255, 1, 255);
++
++	if (vin->ctrl_handler.error) {
++		ret = vin->ctrl_handler.error;
++		v4l2_ctrl_handler_free(&vin->ctrl_handler);
++		return ret;
++	}
++
+ 	ret = v4l2_ctrl_add_handler(&vin->ctrl_handler, subdev->ctrl_handler,
+ 				    NULL, true);
+ 	if (ret < 0) {
+@@ -870,6 +901,21 @@ static int rvin_mc_init(struct rvin_dev *vin)
+ 	if (ret)
+ 		rvin_group_put(vin);
+ 
++	ret = v4l2_ctrl_handler_init(&vin->ctrl_handler, 1);
++	if (ret < 0)
++		return ret;
++
++	v4l2_ctrl_new_std(&vin->ctrl_handler, &rvin_ctrl_ops,
++			  V4L2_CID_ALPHA_COMPONENT, 0, 255, 1, 255);
++
++	if (vin->ctrl_handler.error) {
++		ret = vin->ctrl_handler.error;
++		v4l2_ctrl_handler_free(&vin->ctrl_handler);
++		return ret;
++	}
++
++	vin->vdev.ctrl_handler = &vin->ctrl_handler;
++
+ 	return ret;
+ }
+ 
+@@ -1245,6 +1291,7 @@ static int rcar_vin_probe(struct platform_device *pdev)
+ 
+ 	vin->dev = &pdev->dev;
+ 	vin->info = of_device_get_match_data(&pdev->dev);
++	vin->alpha = 0xff;
+ 
+ 	/*
+ 	 * Special care is needed on r8a7795 ES1.x since it
+@@ -1288,6 +1335,8 @@ static int rcar_vin_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ error_group_unregister:
++	v4l2_ctrl_handler_free(&vin->ctrl_handler);
++
+ 	if (vin->info->use_mc) {
+ 		mutex_lock(&vin->group->lock);
+ 		if (&vin->v4l2_dev == vin->group->notifier.v4l2_dev) {
+@@ -1323,10 +1372,10 @@ static int rcar_vin_remove(struct platform_device *pdev)
+ 		}
+ 		mutex_unlock(&vin->group->lock);
+ 		rvin_group_put(vin);
+-	} else {
+-		v4l2_ctrl_handler_free(&vin->ctrl_handler);
+ 	}
+ 
++	v4l2_ctrl_handler_free(&vin->ctrl_handler);
++
+ 	rvin_dma_unregister(vin);
+ 
+ 	return 0;
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index 2d146ecf93d66ad5..4e991cce5fb56a90 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -1343,3 +1343,8 @@ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel)
+ 
+ 	return 0;
+ }
++
++void rvin_set_alpha(struct rvin_dev *vin, unsigned int alpha)
++{
++	vin->alpha = alpha;
++}
+diff --git a/drivers/media/platform/rcar-vin/rcar-vin.h b/drivers/media/platform/rcar-vin/rcar-vin.h
+index 0b13b34d03e3dce4..365dfde06ec25add 100644
+--- a/drivers/media/platform/rcar-vin/rcar-vin.h
++++ b/drivers/media/platform/rcar-vin/rcar-vin.h
+@@ -178,6 +178,8 @@ struct rvin_info {
+  * @compose:		active composing
+  * @source:		active size of the video source
+  * @std:		active video standard of the video source
++ *
++ * @alpha:		Alpha component to fill in for supported pixel formats
+  */
+ struct rvin_dev {
+ 	struct device *dev;
+@@ -215,6 +217,8 @@ struct rvin_dev {
+ 	struct v4l2_rect compose;
+ 	struct v4l2_rect source;
+ 	v4l2_std_id std;
++
++	unsigned int alpha;
+ };
+ 
+ #define vin_to_source(vin)		((vin)->parallel->subdev)
+@@ -266,5 +270,6 @@ const struct rvin_video_format *rvin_format_from_pixel(u32 pixelformat);
+ void rvin_crop_scale_comp(struct rvin_dev *vin);
+ 
+ int rvin_set_channel_routing(struct rvin_dev *vin, u8 chsel);
++void rvin_set_alpha(struct rvin_dev *vin, unsigned int alpha);
+ 
+ #endif
 -- 
 2.21.0
 
