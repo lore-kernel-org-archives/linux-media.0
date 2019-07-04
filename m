@@ -2,103 +2,85 @@ Return-Path: <SRS0=l0G/=VB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F9A2C5B578
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 01:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B836C06511
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 01:58:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 03071218A3
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 01:26:44 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N4AwCV45"
+	by mail.kernel.org (Postfix) with ESMTP id 40B27218A3
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 01:58:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbfGDB0o (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 3 Jul 2019 21:26:44 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40133 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726574AbfGDB0o (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 3 Jul 2019 21:26:44 -0400
-Received: by mail-lj1-f195.google.com with SMTP id a21so4434069ljh.7
-        for <linux-media@vger.kernel.org>; Wed, 03 Jul 2019 18:26:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yXAVFnfiEEYWzq0T+eyNtBYxPznXS/lsG7WFq1O+HB4=;
-        b=N4AwCV45XwI15Coac1umbUkl+TRhFw7Mha+OVqChHsg4gakcLlx8q9tUnIUMz1CqYc
-         Rcpv+g+ah2i8GYILTn+RbqDokms8zztXe654W6jHn9obhbcn9vZxhS9jtQv9Ujr+mtlr
-         /3DpRbTsIN+fnr3DFy/xywciF9pTcJIBvrfQY6FCvPeYgkbNrZwPryVTAW1yc+Znv/eT
-         4xI+2ozvlA/waqLlk6w+Gi0Tvd1H8Gi/18geQyFvAqDKS3W+pGvhHjHFPgFdW5TqmWVT
-         wVmvM6Q2ziFatFAjpW3N6kOaHNDEKnMuQw1OQVvjtlLqHrh12UmCWwllOjqIDTdK19UF
-         hVGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yXAVFnfiEEYWzq0T+eyNtBYxPznXS/lsG7WFq1O+HB4=;
-        b=YVEMnA8PrRzhdv882UShnrlpTLmf7dzb77qAgH55LmizSoVUkmVyVq516vVTq1FD2r
-         ixVFBO8HIqBhrfG0R5hg4aP6hp5Rd2el0LQtzPppXcMLF/BcLU8LW78W6G5neeFk8SML
-         z1YcRa66NRyWaaLFp6SW19CJzV296P7qExSXP5woRMGg0t50ral57yrdnZXjcuf1cqeg
-         smC07in8YM/+pW6uz1k7Awt9hL2sAYs7/wbOJ3PkolbpD/3WmGQTTZT7Tzko03B9USbs
-         DLfcf3eSODmESeHvPRsrSXttErQhuxwpoTH2d4jDy47yaUKR7gNC0qrNTw+zJVOyRXg7
-         ActA==
-X-Gm-Message-State: APjAAAXsk+87NZvc1VuEfV295XIgW7+h9Uhbyq3uzCtKd+JXuhAKtfjW
-        9KSIA+6t2ZltStXMS/Pak9xsdi6VhvoKDzNAd8jpG+b8
-X-Google-Smtp-Source: APXvYqx3p3p6ZwmqN/nwRwhqCn8hXWwIMFCchowPkSRi0lGqKYW7aFqFIw9G8m8KEjk0/pzQZRIbAWns7SkvDGIARCI=
-X-Received: by 2002:a2e:5d1:: with SMTP id 200mr23040611ljf.10.1562203601878;
- Wed, 03 Jul 2019 18:26:41 -0700 (PDT)
+        id S1727114AbfGDB62 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 3 Jul 2019 21:58:28 -0400
+Received: from bin-mail-out-05.binero.net ([195.74.38.228]:43499 "EHLO
+        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727049AbfGDB62 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 3 Jul 2019 21:58:28 -0400
+X-Halon-ID: 36002bda-9dff-11e9-8ab4-005056917a89
+Authorized-sender: niklas@soderlund.pp.se
+Received: from bismarck.berto.se (unknown [145.14.112.32])
+        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
+        id 36002bda-9dff-11e9-8ab4-005056917a89;
+        Thu, 04 Jul 2019 03:58:26 +0200 (CEST)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Ulrich Hecht <uli+renesas@fpond.eu>
+Subject: [PATCH v3 1/4] rcar-vin: Rename VNDMR_DTMD_ARGB1555 to VNDMR_DTMD_ARGB
+Date:   Thu,  4 Jul 2019 03:58:14 +0200
+Message-Id: <20190704015817.17083-2-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190704015817.17083-1-niklas.soderlund+renesas@ragnatech.se>
+References: <20190704015817.17083-1-niklas.soderlund+renesas@ragnatech.se>
 MIME-Version: 1.0
-References: <20190703131044.7656-1-ezequiel@collabora.com>
-In-Reply-To: <20190703131044.7656-1-ezequiel@collabora.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 3 Jul 2019 22:26:31 -0300
-Message-ID: <CAOMZO5DtUsfV3GXw8f18-t+6q7hCvsWVh3Dw=H2Q7sykTNy1PQ@mail.gmail.com>
-Subject: Re: [PATCH] media: i2c: ov5645: Fix power up sequence
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        kernel@collabora.com, linux-media <linux-media@vger.kernel.org>,
-        Todor Tomov <todor.tomov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Ezequiel,
+The value have nothing to do with ARGB1555, it controls if the alpha
+component should be filled in for ARGB1555 or ARGB888. Rename it to
+reflect this.
 
-On Wed, Jul 3, 2019 at 10:10 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
->
-> This is mostly a port of Jacopo's fix:
->
->   commit aa4bb8b8838ffcc776a79f49a4d7476b82405349
->   Author: Jacopo Mondi <jacopo@jmondi.org>
->   Date:   Fri Jul 6 05:51:52 2018 -0400
->
->   media: ov5640: Re-work MIPI startup sequence
->
-> In the OV5645 case, the changes are:
->
-> - Move OV5645_IO_MIPI_CTRL00 (0x300e) out of the initial setting blob.
-> - At set_power(1) time power up MIPI Tx/Rx and set data and clock lanes in
->   LP11 during 'sleep' and 'idle' with MIPI clock in non-continuous mode.
-> - At set_power(0) time power down MIPI Tx/Rx (in addition to the current
->   power down of regulators and clock gating).
-> - At s_stream time enable/disable the MIPI interface output.
->
-> With this commit the sensor is able to enter LP-11 mode during power up,
-> as expected by some CSI-2 controllers.
->
-> Many thanks to Fabio Estevam for his help debugging this issue.
->
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Ulrich Hecht <uli+renesas@fpond.eu>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/platform/rcar-vin/rcar-dma.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-With this patch the applied the OV5645 camera successfully enters in
-LP-11 and the imx6 capture driver does not complain anymore.
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index 91ab064404a185af..2d146ecf93d66ad5 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -114,7 +114,7 @@
+ #define VNDMR_EXRGB		(1 << 8)
+ #define VNDMR_BPSM		(1 << 4)
+ #define VNDMR_DTMD_YCSEP	(1 << 1)
+-#define VNDMR_DTMD_ARGB1555	(1 << 0)
++#define VNDMR_DTMD_ARGB		(1 << 0)
+ 
+ /* Video n Data Mode Register 2 bits */
+ #define VNDMR2_VPS		(1 << 30)
+@@ -721,7 +721,7 @@ static int rvin_setup(struct rvin_dev *vin)
+ 		output_is_yuv = true;
+ 		break;
+ 	case V4L2_PIX_FMT_XRGB555:
+-		dmr = VNDMR_DTMD_ARGB1555;
++		dmr = VNDMR_DTMD_ARGB;
+ 		break;
+ 	case V4L2_PIX_FMT_RGB565:
+ 		dmr = 0;
+-- 
+2.21.0
 
-Tested-by: Fabio Estevam <festevam@gmail.com>
-
-Thanks!
