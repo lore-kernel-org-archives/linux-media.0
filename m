@@ -2,69 +2,73 @@ Return-Path: <SRS0=l0G/=VB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EEBBC0650E
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 23:58:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE21AC0650E
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 23:58:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 801C321738
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 23:58:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9586F21738
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 23:58:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727775AbfGDX56 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jul 2019 19:57:58 -0400
-Received: from smtprelay0137.hostedemail.com ([216.40.44.137]:38067 "EHLO
+        id S1727684AbfGDX5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jul 2019 19:57:55 -0400
+Received: from smtprelay0069.hostedemail.com ([216.40.44.69]:57118 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727644AbfGDX56 (ORCPT
+        by vger.kernel.org with ESMTP id S1727313AbfGDX5y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 4 Jul 2019 19:57:58 -0400
+        Thu, 4 Jul 2019 19:57:54 -0400
 Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 6ADDB181D33FC;
-        Thu,  4 Jul 2019 23:57:57 +0000 (UTC)
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 1896C100E86C0;
+        Thu,  4 Jul 2019 23:57:53 +0000 (UTC)
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: knife28_6279edf363622
-X-Filterd-Recvd-Size: 1637
+X-HE-Tag: girl52_61bbf4fecba19
+X-Filterd-Recvd-Size: 1739
 Received: from joe-laptop.perches.com (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
         (Authenticated sender: joe@perches.com)
         by omf14.hostedemail.com (Postfix) with ESMTPA;
-        Thu,  4 Jul 2019 23:57:56 +0000 (UTC)
+        Thu,  4 Jul 2019 23:57:51 +0000 (UTC)
 From:   Joe Perches <joe@perches.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Subject: [PATCH 3/8] media: m2m-deinterlace: Fix misuse of strscpy
-Date:   Thu,  4 Jul 2019 16:57:43 -0700
-Message-Id: <d29e3c34305c1c74648262fe122145aff265225e.1562283944.git.joe@perches.com>
+To:     Dan Murphy <dmurphy@ti.com>, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-nfs@vger.kernel.org
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 0/8] treewide: correct misuses of strscpy/strlcpy
+Date:   Thu,  4 Jul 2019 16:57:40 -0700
+Message-Id: <cover.1562283944.git.joe@perches.com>
 X-Mailer: git-send-email 2.15.0
-In-Reply-To: <cover.1562283944.git.joe@perches.com>
-References: <cover.1562283944.git.joe@perches.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Probable cut&paste typo - use the correct field size.
+These are all likely copy/paste defects where the field size of the
+'copied to' array is incorrect.
 
-Signed-off-by: Joe Perches <joe@perches.com>
----
- drivers/media/platform/m2m-deinterlace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Each patch in this series is independent.
 
-diff --git a/drivers/media/platform/m2m-deinterlace.c b/drivers/media/platform/m2m-deinterlace.c
-index beb7fd7442fb..dd573d23d0ce 100644
---- a/drivers/media/platform/m2m-deinterlace.c
-+++ b/drivers/media/platform/m2m-deinterlace.c
-@@ -436,7 +436,7 @@ static int vidioc_querycap(struct file *file, void *priv,
- {
- 	strscpy(cap->driver, MEM2MEM_NAME, sizeof(cap->driver));
- 	strscpy(cap->card, MEM2MEM_NAME, sizeof(cap->card));
--	strscpy(cap->bus_info, MEM2MEM_NAME, sizeof(cap->card));
-+	strscpy(cap->bus_info, MEM2MEM_NAME, sizeof(cap->bus_info));
- 	/*
- 	 * This is only a mem-to-mem video device. The capture and output
- 	 * device capability flags are left only for backward compatibility
+Joe Perches (8):
+  Input: synaptics: Fix misuse of strlcpy
+  leds: as3645a: Fix misuse of strlcpy
+  media: m2m-deinterlace: Fix misuse of strscpy
+  media: go7007: Fix misuse of strscpy
+  net: ethernet: sun4i-emac: Fix misuse of strlcpy
+  net: nixge: Fix misuse of strlcpy
+  tty: hvcs: Fix odd use of strlcpy
+  nfsd: Fix misuse of strlcpy
+
+ drivers/input/mouse/synaptics.c             | 2 +-
+ drivers/leds/leds-as3645a.c                 | 2 +-
+ drivers/media/platform/m2m-deinterlace.c    | 2 +-
+ drivers/media/usb/go7007/snd-go7007.c       | 2 +-
+ drivers/net/ethernet/allwinner/sun4i-emac.c | 4 ++--
+ drivers/net/ethernet/ni/nixge.c             | 2 +-
+ drivers/tty/hvc/hvcs.c                      | 4 ++--
+ fs/nfsd/nfs4idmap.c                         | 2 +-
+ 8 files changed, 10 insertions(+), 10 deletions(-)
+
 -- 
 2.15.0
 
