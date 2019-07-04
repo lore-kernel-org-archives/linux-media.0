@@ -2,49 +2,69 @@ Return-Path: <SRS0=l0G/=VB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B53C6C46495
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 23:28:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35026C0650E
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 23:58:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 96AAC20659
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 23:28:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1651121738
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 23:58:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727261AbfGDX2H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jul 2019 19:28:07 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:39117 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727502AbfGDX2G (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jul 2019 19:28:06 -0400
-Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
-        (Authenticated sender: hadess@hadess.net)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id DE4BF240002;
-        Thu,  4 Jul 2019 23:28:02 +0000 (UTC)
-Message-ID: <7e5fe1fc1bfbdcc30cfb731e27dd7fe6f131bd88.camel@hadess.net>
-Subject: Re: [PATCH v3] keymaps
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Sean Young <sean@mess.org>
-Cc:     linux-media@vger.kernel.org
-Date:   Fri, 05 Jul 2019 01:28:02 +0200
-In-Reply-To: <20190704161339.wbkfpns2d7zguttx@gofer.mess.org>
-References: <20190704132356.10420-1-hadess@hadess.net>
-         <20190704161339.wbkfpns2d7zguttx@gofer.mess.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.3 (3.32.3-1.fc30) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727908AbfGDX6S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jul 2019 19:58:18 -0400
+Received: from smtprelay0121.hostedemail.com ([216.40.44.121]:36085 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727390AbfGDX57 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Jul 2019 19:57:59 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id CA77718224D86;
+        Thu,  4 Jul 2019 23:57:58 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: pig35_62a88801a8023
+X-Filterd-Recvd-Size: 1590
+Received: from joe-laptop.perches.com (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf14.hostedemail.com (Postfix) with ESMTPA;
+        Thu,  4 Jul 2019 23:57:57 +0000 (UTC)
+From:   Joe Perches <joe@perches.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4/8] media: go7007: Fix misuse of strscpy
+Date:   Thu,  4 Jul 2019 16:57:44 -0700
+Message-Id: <9eb80bdbfdb6a2c33e8a1804e687f5a858036666.1562283944.git.joe@perches.com>
+X-Mailer: git-send-email 2.15.0
+In-Reply-To: <cover.1562283944.git.joe@perches.com>
+References: <cover.1562283944.git.joe@perches.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 2019-07-04 at 17:13 +0100, Sean Young wrote:
-> On Thu, Jul 04, 2019 at 03:23:56PM +0200, Bastien Nocera wrote:
-> > ---
-> 
-> No commit message, subject or signed-off-by.
+Probable cut&paste typo - use the correct field size.
 
-Sent in error because git send-mail's interface is horrid.
+Signed-off-by: Joe Perches <joe@perches.com>
+---
+ drivers/media/usb/go7007/snd-go7007.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/go7007/snd-go7007.c b/drivers/media/usb/go7007/snd-go7007.c
+index 4a449c62fc32..b05fa227ffb2 100644
+--- a/drivers/media/usb/go7007/snd-go7007.c
++++ b/drivers/media/usb/go7007/snd-go7007.c
+@@ -253,7 +253,7 @@ int go7007_snd_init(struct go7007 *go)
+ 		return ret;
+ 	}
+ 	strscpy(gosnd->card->driver, "go7007", sizeof(gosnd->card->driver));
+-	strscpy(gosnd->card->shortname, go->name, sizeof(gosnd->card->driver));
++	strscpy(gosnd->card->shortname, go->name, sizeof(gosnd->card->shortname));
+ 	strscpy(gosnd->card->longname, gosnd->card->shortname,
+ 		sizeof(gosnd->card->longname));
+ 
+-- 
+2.15.0
 
