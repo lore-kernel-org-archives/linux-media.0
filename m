@@ -2,127 +2,85 @@ Return-Path: <SRS0=l0G/=VB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 874B0C46484
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 17:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 45376C4648D
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 17:16:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 69C31218A3
-	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 17:04:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E14A218A0
+	for <linux-media@archiver.kernel.org>; Thu,  4 Jul 2019 17:16:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727287AbfGDREv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 4 Jul 2019 13:04:51 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:53626 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726966AbfGDREv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 4 Jul 2019 13:04:51 -0400
-Received: from [IPv6:2804:431:c7f5:f63c:d711:794d:1c68:5ed3] (unknown [IPv6:2804:431:c7f5:f63c:d711:794d:1c68:5ed3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: tonyk)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id B79B728B0E7;
-        Thu,  4 Jul 2019 18:04:43 +0100 (BST)
-Subject: Re: [PATCH v7 11/14] dt-bindings: Document the Rockchip MIPI RX D-PHY
- bindings
-To:     Helen Koike <helen.koike@collabora.com>,
-        linux-rockchip@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, eddie.cai.linux@gmail.com,
-        mchehab@kernel.org, heiko@sntech.de, jacob2.chen@rock-chips.com,
-        jeffy.chen@rock-chips.com, zyc@rock-chips.com,
-        linux-kernel@vger.kernel.org, tfiga@chromium.org,
-        hans.verkuil@cisco.com, laurent.pinchart@ideasonboard.com,
-        sakari.ailus@linux.intel.com, kernel@collabora.com,
-        ezequiel@collabora.com, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, zhengsq@rock-chips.com,
-        Rob Herring <robh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-References: <20190703190910.32633-1-helen.koike@collabora.com>
- <20190703190910.32633-12-helen.koike@collabora.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>
-Message-ID: <e9102ab5-3e79-bda5-fefc-0541958c215f@collabora.com>
-Date:   Thu, 4 Jul 2019 14:04:00 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727374AbfGDRQW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 4 Jul 2019 13:16:22 -0400
+Received: from bin-mail-out-06.binero.net ([195.74.38.229]:13160 "EHLO
+        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727446AbfGDRQW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 4 Jul 2019 13:16:22 -0400
+X-Halon-ID: 6acd8e76-9e7f-11e9-8ab4-005056917a89
+Authorized-sender: niklas@soderlund.pp.se
+Received: from bismarck.berto.se (unknown [145.14.112.32])
+        by bin-vsp-out-01.atm.binero.net (Halon) with ESMTPA
+        id 6acd8e76-9e7f-11e9-8ab4-005056917a89;
+        Thu, 04 Jul 2019 19:16:19 +0200 (CEST)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v4 0/4] rcar-vin: Add support for RGB formats with alpha component
+Date:   Thu,  4 Jul 2019 19:15:58 +0200
+Message-Id: <20190704171602.29541-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <20190703190910.32633-12-helen.koike@collabora.com>
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello Helen,
+Hi,
 
-On 7/3/19 4:09 PM, Helen Koike wrote:
-> From: Jacob Chen <jacob2.chen@rock-chips.com>
->
-> Add DT bindings documentation for Rockchip MIPI D-PHY RX
->
-> Signed-off-by: Jacob Chen <jacob2.chen@rock-chips.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> [update for upstream]
-> Signed-off-by: Helen Koike <helen.koike@collabora.com>
->
-> ---
->
-> Changes in v7:
-> - updated doc with new design and tested example
->
->  .../bindings/media/rockchip-mipi-dphy.txt     | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/rockchip-mipi-dphy.txt
->
-> diff --git a/Documentation/devicetree/bindings/media/rockchip-mipi-dphy.txt b/Documentation/devicetree/bindings/media/rockchip-mipi-dphy.txt
-> new file mode 100644
-> index 000000000000..2305d44d92db
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/rockchip-mipi-dphy.txt
-> @@ -0,0 +1,38 @@
-> +Rockchip SoC MIPI RX D-PHY
-> +-------------------------------------------------------------
-Here I would also remove those extra `---`.
+This small series adds support for two new pixel formats for the
+rcar-vin driver; V4L2_PIX_FMT_ARGB555 and V4L2_PIX_FMT_ABGR32. Both
+formats have an alpha component so a new standard control is also added
+to control its value, V4L2_CID_ALPHA_COMPONENT.
 
-Thanks,
-    André
-> +
-> +Required properties:
-> +- compatible: value should be one of the following
-> +	"rockchip,rk3288-mipi-dphy"
-> +	"rockchip,rk3399-mipi-dphy"
-> +- clocks : list of clock specifiers, corresponding to entries in
-> +	clock-names property;
-> +- clock-names: required clock name.
-> +- #phy-cells: Number of cells in a PHY specifier; Should be 0.
-> +
-> +MIPI RX D-PHY use registers in "general register files", it
-> +should be a child of the GRF.
-> +
-> +Optional properties:
-> +- reg: offset and length of the register set for the device.
-> +- rockchip,grf: MIPI TX1RX1 D-PHY not only has its own register but also
-> +		the GRF, so it is only necessary for MIPI TX1RX1 D-PHY.
-> +
-> +Device node example
-> +-------------------
-> +
-> +grf: syscon@ff770000 {
-> +	compatible = "rockchip,rk3399-grf", "syscon", "simple-mfd";
-> +
-> +...
-> +
-> +	dphy: mipi-dphy {
-> +		compatible = "rockchip,rk3399-mipi-dphy";
-> +		clocks = <&cru SCLK_MIPIDPHY_REF>,
-> +			<&cru SCLK_DPHY_RX0_CFG>,
-> +			<&cru PCLK_VIO_GRF>;
-> +		clock-names = "dphy-ref", "dphy-cfg", "grf";
-> +		power-domains = <&power RK3399_PD_VIO>;
-> +		#phy-cells = <0>;
-> +	};
-> +};
+The series is based on the latest media-tree and is tested on both
+Renesas Gen2 and Gen3 hardware without any regressions found.
+
+Patch 1/4 fixes a badly named register name, 2/4 adds the new control
+while 3/4 adds the two new pixel formats. Patch 4/4 is a clean up now
+that Gen2 and Gen3 always have controls and v4l2_ctrl_handler_setup()
+should be called for both cases.
+
+* Changes since v3
+- Fixed up commit message.
+- Collected review tags.
+
+* Changes since v2
+- Protect the writing of the alpha value when streaming with the spin
+  lock to make sure the streaming state is stable.
+- Add patch 4/4 to call v4l2_ctrl_handler_setup() for the media
+  controller centric Gen3 mode of the driver.
+
+Niklas Söderlund (4):
+  rcar-vin: Rename VNDMR_DTMD_ARGB1555 to VNDMR_DTMD_ARGB
+  rcar-vin: Add control for alpha component
+  rcar-vin: Add support for RGB formats with alpha component
+  rcar-vin: Always setup controls when opening video device
+
+ drivers/media/platform/rcar-vin/rcar-core.c | 53 ++++++++++++++++++++-
+ drivers/media/platform/rcar-vin/rcar-dma.c  | 44 ++++++++++++++++-
+ drivers/media/platform/rcar-vin/rcar-v4l2.c | 38 +++++++++------
+ drivers/media/platform/rcar-vin/rcar-vin.h  |  5 ++
+ 4 files changed, 121 insertions(+), 19 deletions(-)
+
+-- 
+2.21.0
+
