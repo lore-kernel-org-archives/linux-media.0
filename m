@@ -2,213 +2,146 @@ Return-Path: <SRS0=vHo0=VC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1AF7C46499
-	for <linux-media@archiver.kernel.org>; Fri,  5 Jul 2019 12:02:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C6BAC4649C
+	for <linux-media@archiver.kernel.org>; Fri,  5 Jul 2019 12:11:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9812F218CA
-	for <linux-media@archiver.kernel.org>; Fri,  5 Jul 2019 12:02:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E94DA218D0
+	for <linux-media@archiver.kernel.org>; Fri,  5 Jul 2019 12:11:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZY6pJFD4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726116AbfGEMCC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Jul 2019 08:02:02 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:55782 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725601AbfGEMCB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 5 Jul 2019 08:02:01 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 0AF72634C7B;
-        Fri,  5 Jul 2019 15:01:16 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.89)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1hjMtv-0001jA-7e; Fri, 05 Jul 2019 15:01:15 +0300
-Date:   Fri, 5 Jul 2019 15:01:15 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Edgar Thier <info@edgarthier.net>
-Cc:     laurent.pinchart@ideasonboard.com,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: [PATCH 1/2] v4l: Add 12-bit raw bayer linear packed formats
-Message-ID: <20190705120115.kf7becjc54rc7ihf@valkosipuli.retiisi.org.uk>
-References: <20190705110723.29685-1-info@edgarthier.net>
+        id S1728302AbfGEMLi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 5 Jul 2019 08:11:38 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35044 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726505AbfGEMLi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Jul 2019 08:11:38 -0400
+Received: by mail-pl1-f195.google.com with SMTP id w24so4533710plp.2
+        for <linux-media@vger.kernel.org>; Fri, 05 Jul 2019 05:11:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fGg5cmQPJco2qB5UDLvFiWfaIFjGf3sdq62tG9ZVImE=;
+        b=ZY6pJFD4rbKle44KkGiMoNj9hXi7Xp+EL6hAnQSSJhI4vj6R/BOzRackxznm0/aFcv
+         QFV3qyiwYaTZc9ME3Si/B5tq4Y3u7/lcrSxK4RgaaYbcBNxgQjusG4U87YZYSX4+yjRB
+         HODp5hO69Tm9qMuW+lCUF5+eNhfTRTbFkBxf6+lh1yb5JnTwvMDrtXrPWzb15JTKmp12
+         QgIsxqLWyUEveXJq2Iyk2zXHQbyPUld9+MRTBl9TJX8uJTYq+dlP6K4v3DFYY6OVzzfy
+         nnaQFsNGZJ8ERRO0BQ2e1s1K5w5RVN+nVn7Vfo4yjlmZthI+6En/Vz/WB1sQCzc4F94h
+         Te+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fGg5cmQPJco2qB5UDLvFiWfaIFjGf3sdq62tG9ZVImE=;
+        b=NyEvVzLMiImAp7ka7lDSJs5OVL3iK1zLsA4HoHFW4sSEtIoH4plXpvn2V1o4f5iZ6P
+         ABkiZhlQBK/JvgztIco7kwWOPij+eQdcH0oE2bFpEFZDnXI4z79sshhlRkoEDoTx3Jnb
+         UfODJUw34n0ZheWaZXzPP1M73bb8uw4S8Nbfu02qBTobEC+SROOUFzUxWA5feynD5Txi
+         IG+Cg8uRQOH54M5a3UBTyaK/eT8l5KwnYGIXydx0kg1Mtlpc0h0yXSR9kPHhDI2AvJ9a
+         QHx7xqrZtRjX9xgev8hoedGt+Kv+s39pqApZyzmsxNJFFnkWg1pRNhe6hoDtoVANFklC
+         EM0A==
+X-Gm-Message-State: APjAAAX05VueZVpmP+25DeUUG5iSo6y5XqHd1ixdoBtAPerb1oXFR9jN
+        n14rWUzarLM9SX5DNaRGb8+MOGME
+X-Google-Smtp-Source: APXvYqzsy1r0hgrfbmfcd/68Z1oyOkJvepWGSLGX0UsVBJP9RB1teHvNd3rCpUvJh7rDk5p2+nTgag==
+X-Received: by 2002:a17:902:b603:: with SMTP id b3mr5302378pls.9.1562328697756;
+        Fri, 05 Jul 2019 05:11:37 -0700 (PDT)
+Received: from [10.0.2.15] ([122.163.64.117])
+        by smtp.gmail.com with ESMTPSA id o16sm24507895pgi.36.2019.07.05.05.11.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Jul 2019 05:11:37 -0700 (PDT)
+Subject: Re: [PATCH 1/2] staging: media: sunxi: Change return type of
+ cedrus_find_format()
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     maxime.ripard@bootlin.com, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, wens@csie.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20190703081317.22795-1-nishkadg.linux@gmail.com>
+ <20190705102603.GA1645@aptenodytes>
+From:   Nishka Dasgupta <nishkadg.linux@gmail.com>
+Message-ID: <e177ab7b-2e1d-536c-6b30-3fdb9ae0ff31@gmail.com>
+Date:   Fri, 5 Jul 2019 16:41:26 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190705110723.29685-1-info@edgarthier.net>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190705102603.GA1645@aptenodytes>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Edgar,
-
-Thanks for the update.
-
-On Fri, Jul 05, 2019 at 01:07:23PM +0200, Edgar Thier wrote:
-> These formats are compressed 12-bit raw bayer formats with four different
-> pixel orders. The pixel follow one another without any padding,
-> thus are packed in a 'linear' fashion.
+On 05/07/19 3:56 PM, Paul Kocialkowski wrote:
+> Hi,
 > 
-> Signed-off-by: Edgar Thier <info@edgarthier.net>
-> ---
->  Documentation/media/uapi/v4l/pixfmt-rgb.rst   |  1 +
->  .../media/uapi/v4l/pixfmt-srggb12lp.rst       | 60 +++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-ioctl.c          |  4 ++
->  include/uapi/linux/videodev2.h                |  7 +++
->  4 files changed, 72 insertions(+)
->  create mode 100644 Documentation/media/uapi/v4l/pixfmt-srggb12lp.rst
+> On Wed 03 Jul 19, 13:43, Nishka Dasgupta wrote:
+>> Change return type of cedrus_find_format to bool as it is only called
+>> once, by a function whose return value is bool, and the return value of
+>> cedrus_find_format is returned as-is at the call-site.
+>> Issue found with Coccinelle.
 > 
-> diff --git a/Documentation/media/uapi/v4l/pixfmt-rgb.rst b/Documentation/media/uapi/v4l/pixfmt-rgb.rst
-> index 48ab80024835..9efa500c02dc 100644
-> --- a/Documentation/media/uapi/v4l/pixfmt-rgb.rst
-> +++ b/Documentation/media/uapi/v4l/pixfmt-rgb.rst
-> @@ -26,5 +26,6 @@ RGB Formats
->      pixfmt-srggb10-ipu3
->      pixfmt-srggb12
->      pixfmt-srggb12p
-> +    pixfmt-srggb12lp
->      pixfmt-srggb14p
->      pixfmt-srggb16
-> diff --git a/Documentation/media/uapi/v4l/pixfmt-srggb12lp.rst b/Documentation/media/uapi/v4l/pixfmt-srggb12lp.rst
-> new file mode 100644
-> index 000000000000..13d32ad92c73
-> --- /dev/null
-> +++ b/Documentation/media/uapi/v4l/pixfmt-srggb12lp.rst
-> @@ -0,0 +1,60 @@
-> +.. -*- coding: utf-8; mode: rst -*-
-> +
-> +.. _v4l2-pix-fmt-sgrbg12lp:
-> +.. _v4l2-pix-fmt-srggb12lp:
-> +.. _v4l2-pix-fmt-sbggr12lp:
-> +.. _v4l2-pix-fmt-sgbrg12lp:
-> +
-> +**********************************************************************************************************************************
-> +V4L2_PIX_FMT_SBGGR12LP ('BGCp'), V4L2_PIX_FMT_SGBRG12LP ('GBCp'), V4L2_PIX_FMT_SGRBG12LP ('GRCp'), V4L2_PIX_FMT_SRGGB12LP ('RGCp')
-> +**********************************************************************************************************************************
-> +
-> +12-bit Bayer formats
-> +
-> +Description
-> +===========
-> +
-> +These four pixel formats are used by industrial cameras, often in conjunction
+> The purpose of this function (although definitely under-used at this point),
+> was to return the pointer to the element structure, not to indicate whether
+> the format format is part of the list or not.
+> 
+> In spite of that, this change reduces the use case for the function, so I do
+> not think it is beneficial, sorry.
 
-s/four pixel/packed Bayer/
+Okay, thank you for the clarification.
 
-> +with UsbVision (see https://www.visiononline.org/userAssets/aiaUploads/file/USB3_Vision_Specification_v1-0-1.pdf).
-> +
-> +The formats are equal to the Genicam PFNC Bayer12p formats
-> +(see https://www.emva.org/wp-content/uploads/GenICam_PFNC_2_3.pdf).
-> +
-> +They are raw sRGB / Bayer formats with 12 bits
-> +per sample with 3 bytes for every 2 pixels.
-> +
-> +The format is little endian.
-> +
-> +Below is an example of a small image in V4L2_PIX_FMT_PFNC_BAYERBG12P format.
+Nishka
 
-V4L2_PIX_FMT_SBGGR12LP?
+> Cheers,
+> 
+> Paul
+> 
+>> Signed-off-by: Nishka Dasgupta <nishkadg.linux@gmail.com>
+>> ---
+>>   drivers/staging/media/sunxi/cedrus/cedrus_video.c | 11 ++++-------
+>>   1 file changed, 4 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+>> index 9673874ece10..0ec31b9e0aea 100644
+>> --- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+>> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+>> @@ -55,8 +55,8 @@ static inline struct cedrus_ctx *cedrus_file2ctx(struct file *file)
+>>   	return container_of(file->private_data, struct cedrus_ctx, fh);
+>>   }
+>>   
+>> -static struct cedrus_format *cedrus_find_format(u32 pixelformat, u32 directions,
+>> -						unsigned int capabilities)
+>> +static bool cedrus_find_format(u32 pixelformat, u32 directions,
+>> +			       unsigned int capabilities)
+>>   {
+>>   	struct cedrus_format *fmt;
+>>   	unsigned int i;
+>> @@ -70,13 +70,10 @@ static struct cedrus_format *cedrus_find_format(u32 pixelformat, u32 directions,
+>>   
+>>   		if (fmt->pixelformat == pixelformat &&
+>>   		    (fmt->directions & directions) != 0)
+>> -			break;
+>> +			return true;
+>>   	}
+>>   
+>> -	if (i == CEDRUS_FORMATS_COUNT)
+>> -		return NULL;
+>> -
+>> -	return &cedrus_formats[i];
+>> +	return false;
+>>   }
+>>   
+>>   static bool cedrus_check_format(u32 pixelformat, u32 directions,
+>> -- 
+>> 2.19.1
+>>
+> 
 
-> +
-> +**Byte Order.**
-> +Each cell is one byte.
-> +
-> +.. tabularcolumns:: |p{0.8cm}|p{4.0cm}|p{4.0cm}|p{4.0cm}|p{4.0cm}|
-> +
-> +.. flat-table::
-> +
-> +    * - start + 0:
-> +      - B\ :sub:`00low`
-> +      - G\ :sub:`01low`\ (bits 7--4)
-
-01 -> 10
-
-> +        B\ :sub:`00high`\ (bits 0--3)
-> +      - G\ :sub:`01high`\
-
-01 -> 10
-
-> +
-> +    * - start + 6:
-
-start + 3 ?
-
-And add three for each line of pixels below, too. Or you could add more
-pixels per line, up to you.
-
-> +      - G\ :sub:`02low`
-> +      - R\ :sub:`03low`\ (bits 7--4)
-> +        G\ :sub:`02high`\ (bits 0--3)
-> +      - R\ :sub:`03high`
-
-The line and column numbers seem to be a bit off --- I assume the first
-number is the line, isn't it?
-
-> +
-> +    * - start + 12:
-> +      - B\ :sub:`04low`
-> +      - G\ :sub:`05low`\ (bits 7--4)
-> +        B\ :sub:`04high`\ (bits 0--3)
-> +      - G\ :sub:`05high`
-> +
-> +    * - start + 24:
-> +      - G\ :sub:`06low`
-> +      - R\ :sub:`07low`\ (bits 7--4)
-> +        G\ :sub:`06high`\ (bits 0--3)
-> +      - R\ :sub:`07high`
-> +
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index ac87c3e37280..98c3c7fde046 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1275,6 +1275,10 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_SGBRG12:	descr = "12-bit Bayer GBGB/RGRG"; break;
->  	case V4L2_PIX_FMT_SGRBG12:	descr = "12-bit Bayer GRGR/BGBG"; break;
->  	case V4L2_PIX_FMT_SRGGB12:	descr = "12-bit Bayer RGRG/GBGB"; break;
-> +	case V4L2_PIX_FMT_SGBRG12LP:	descr = "12-bit Bayer GBGB/RGRG Linear Packed"; break;
-
-You only have 32 bytes (including nil character). How about:
-
-"12-bit Bayer GBRG Linear Packed".
-
-> +	case V4L2_PIX_FMT_SGRBG12LP:	descr = "12-bit Bayer GRGR/BGBG Linear Packed"; break;
-> +	case V4L2_PIX_FMT_SBGGR12LP:	descr = "12-bit Bayer BGBG/GRGR Linear Packed"; break;
-> +	case V4L2_PIX_FMT_SRGGB12LP:	descr = "12-bit Bayer RGRG/GBGB Linear Packed"; break;
-
-Could you arrange these after the other packed formats, the way they're in
-documentation? Same below.
-
->  	case V4L2_PIX_FMT_SBGGR12P:	descr = "12-bit Bayer BGBG/GRGR Packed"; break;
->  	case V4L2_PIX_FMT_SGBRG12P:	descr = "12-bit Bayer GBGB/RGRG Packed"; break;
->  	case V4L2_PIX_FMT_SGRBG12P:	descr = "12-bit Bayer GRGR/BGBG Packed"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 1050a75fb7ef..f0b81b870f29 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -646,6 +646,13 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_SGBRG12 v4l2_fourcc('G', 'B', '1', '2') /* 12  GBGB.. RGRG.. */
->  #define V4L2_PIX_FMT_SGRBG12 v4l2_fourcc('B', 'A', '1', '2') /* 12  GRGR.. BGBG.. */
->  #define V4L2_PIX_FMT_SRGGB12 v4l2_fourcc('R', 'G', '1', '2') /* 12  RGRG.. GBGB.. */
-> +
-> +	/* 12bit raw bayer simple packed, 6 bytes for every 4 pixels */
-
-"linearly packed"
-
-> +#define V4L2_PIX_FMT_SBGGR12LP v4l2_fourcc('B', 'G', 'C', 'p')
-> +#define V4L2_PIX_FMT_SGBRG12LP v4l2_fourcc('G', 'B', 'C', 'p')
-> +#define V4L2_PIX_FMT_SGRBG12LP v4l2_fourcc('G', 'R', 'C', 'p')
-> +#define V4L2_PIX_FMT_SRGGB12LP v4l2_fourcc('R', 'G', 'C', 'p')
-> +
->  	/* 12bit raw bayer packed, 6 bytes for every 4 pixels */
->  #define V4L2_PIX_FMT_SBGGR12P v4l2_fourcc('p', 'B', 'C', 'C')
->  #define V4L2_PIX_FMT_SGBRG12P v4l2_fourcc('p', 'G', 'C', 'C')
-
--- 
-Regards,
-
-Sakari Ailus
