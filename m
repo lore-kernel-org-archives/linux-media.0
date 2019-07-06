@@ -1,105 +1,123 @@
-Return-Path: <SRS0=vHo0=VC=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=GPzn=VD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1098FC46499
-	for <linux-media@archiver.kernel.org>; Fri,  5 Jul 2019 17:17:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40F6EC5B578
+	for <linux-media@archiver.kernel.org>; Sat,  6 Jul 2019 09:23:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DF00E20989
-	for <linux-media@archiver.kernel.org>; Fri,  5 Jul 2019 17:17:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 16E3F216B7
+	for <linux-media@archiver.kernel.org>; Sat,  6 Jul 2019 09:23:49 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=eng.ucsd.edu header.i=@eng.ucsd.edu header.b="dg+5O6A3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727918AbfGERRW convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 5 Jul 2019 13:17:22 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37428 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727903AbfGERRW (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 5 Jul 2019 13:17:22 -0400
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id D0F9928B61B;
-        Fri,  5 Jul 2019 18:17:19 +0100 (BST)
-Date:   Fri, 5 Jul 2019 19:17:16 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomasz Figa <tfiga@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>, kernel@collabora.com,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: Re: [PATCH 3/9] media: hantro: Constify the control array
-Message-ID: <20190705191716.41ea819e@collabora.com>
-In-Reply-To: <1fdb3115e6f5903b55a915c45bbfdec484842e83.camel@collabora.com>
-References: <20190619121540.29320-1-boris.brezillon@collabora.com>
-        <20190619121540.29320-4-boris.brezillon@collabora.com>
-        <1fdb3115e6f5903b55a915c45bbfdec484842e83.camel@collabora.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1725973AbfGFJXt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 6 Jul 2019 05:23:49 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:35244 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfGFJXt (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 6 Jul 2019 05:23:49 -0400
+Received: by mail-lj1-f194.google.com with SMTP id x25so4628918ljh.2
+        for <linux-media@vger.kernel.org>; Sat, 06 Jul 2019 02:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eng.ucsd.edu; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=ALgZ6/TH1TMMHtthc8F5W9I7v5d4Oi+UuqN4eyBdrw4=;
+        b=dg+5O6A3uPa8xOtRcfFX0oHBjZZWZV5meMagQazqVO4+KShJachCtOw9uhwUsdM5LM
+         KEYjIyZskOEqbXsRqnT1N4mdlT4aFScBIFJQH7WYEl/LJMAvvunpegz9vo/mbpjsUeDO
+         VXvw3VKSj/qH3kKUOmNJIuwxsgk+QRg9tia5k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=ALgZ6/TH1TMMHtthc8F5W9I7v5d4Oi+UuqN4eyBdrw4=;
+        b=aJ/E5JfJ2Mz9jEdTL1Z7vfaBvei5wesKAn46MVu5PKTTm+FfJZDS132EXoIN3wFXkI
+         EpIxBC6qCdnBAkLyrkhm2T+f2cM5zOOy09wF24Y/oI8gG4Y00+wkXDPBHoFUyGfLEaBV
+         btQBtEWjx+CsuLV7Vb2eyd+cuf42wTvnoJgnfTuBbSgj46LjvebsNz09s2fMj6viZUSt
+         eM54+bBcHXS4wvIdUbEH25jpWs3yZ2SusgngQvsg7q9NsVOtpQJi4ZAq0Jd31YBWnBqy
+         T8aQF4LaZ1Dx/JweRJJPubNYde27BVFFtLFJtZ4D+T7+JM/gPH8RriT5WM0m1nPdf+dm
+         obmQ==
+X-Gm-Message-State: APjAAAUbfEewJaRkymoBAxBtZu8PZvmn0ttMiOO4Qxf+/d5q8hR2lySY
+        KMpuDF8QFqTFUYpGKWg5QzMuRs9FSjo=
+X-Google-Smtp-Source: APXvYqw1ntoBeZnHh/HrOwmD43yT4LAlmjebxU5w4jF8XDt6jcy1ycTShdBv5CNWP/NlmqE0uhqfgA==
+X-Received: by 2002:a2e:894a:: with SMTP id b10mr3893454ljk.99.1562405026913;
+        Sat, 06 Jul 2019 02:23:46 -0700 (PDT)
+Received: from luke-XPS-13 (77-255-206-190.adsl.inetia.pl. [77.255.206.190])
+        by smtp.gmail.com with ESMTPSA id 137sm2278544ljj.46.2019.07.06.02.23.46
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sat, 06 Jul 2019 02:23:46 -0700 (PDT)
+Date:   Sat, 6 Jul 2019 02:23:43 -0700
+From:   Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>
+To:     hverkuil@xs4all.nl
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH RESEND] media: hdpvr: Add device num check and handling
+Message-ID: <20190706092343.GA5462@luke-XPS-13>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, 05 Jul 2019 13:05:10 -0300
-Ezequiel Garcia <ezequiel@collabora.com> wrote:
+Add hdpvr device num check and error handling
 
-> On Wed, 2019-06-19 at 14:15 +0200, Boris Brezillon wrote:
-> > controls[] is not supposed to be modified at runtime, let's make it
-> > explicit by adding a const specifier.
-> > 
-> > Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-> > ---
-> >  drivers/staging/media/hantro/hantro_drv.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> > index 28b0fed89dcb..db49d643ddb7 100644
-> > --- a/drivers/staging/media/hantro/hantro_drv.c
-> > +++ b/drivers/staging/media/hantro/hantro_drv.c
-> > @@ -264,7 +264,7 @@ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
-> >  	.s_ctrl = hantro_s_ctrl,
-> >  };
-> >  
-> > -static struct hantro_ctrl controls[] = {
-> > +static const struct hantro_ctrl controls[] = {
-> >  	{
-> >  		.id = V4L2_CID_JPEG_COMPRESSION_QUALITY,
-> >  		.codec = HANTRO_JPEG_ENCODER,  
-> 
-> This patch here breaks the build:
-> 
->   CC [M]  drivers/staging/media/hantro/hantro_drv.o
-> /home/zeta/repos/linux/media_tree/drivers/staging/media/hantro/hantro_drv.c: In function ‘hantro_ctrls_setup’:
-> /home/zeta/repos/linux/media_tree/drivers/staging/media/hantro/hantro_drv.c:319:23: error: assignment of member ‘id’ in read-only object
->     controls[i].cfg.id = controls[i].id;
->                        ^
+We need to increment the device count atomically before we checkout a
+device to make sure that we do not reach the max count, otherwise we get
+out-of-bounds errors as reported by syzbot. 
 
-Oops, didn't check bisectability.
+Reported-and-tested-by: syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com
+Signed-off-by: Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>
+---
+Changes in V1:
++ add storing of incremented index in dev_num var
++ add bounds check on dev_num and appropriate error handling
+- remove attomic_inc_return from inside of hdpvr_register call
 
-> You can fix it by simply moving it after:
-> 
-> [PATCH 4/9] media: hantro: Simplify the controls creation logic
+ drivers/media/usb/hdpvr/hdpvr-core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Yep, I'll do that.
+diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
+index 29ac7fc5b039..640ef83b57c9 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-core.c
++++ b/drivers/media/usb/hdpvr/hdpvr-core.c
+@@ -275,6 +275,7 @@ static int hdpvr_probe(struct usb_interface *interface,
+ #endif
+ 	size_t buffer_size;
+ 	int i;
++	int dev_num;
+ 	int retval = -ENOMEM;
+ 
+ 	/* allocate memory for our device state and initialize it */
+@@ -371,9 +372,18 @@ static int hdpvr_probe(struct usb_interface *interface,
+ 		goto reg_fail;
+ 	}
+ #endif
+-
++
++	dev_num = atomic_inc_return(&dev_nr);
++	if (dev_num >= HDPVR_MAX) {
++		v4l2_err(&dev->v4l2_dev,
++			 "max device number reached, device register failed\n");
++		atomic_dec(&dev_nr);
++		retval = -ENODEV;
++		goto reg_fail;
++	}
++
+ 	retval = hdpvr_register_videodev(dev, &interface->dev,
+-				    video_nr[atomic_inc_return(&dev_nr)]);
++				    video_nr[dev_num]);
+ 	if (retval < 0) {
+ 		v4l2_err(&dev->v4l2_dev, "registering videodev failed\n");
+ 		goto reg_fail;
+-- 
+2.20.1
 
-Thanks,
-
-Boris
