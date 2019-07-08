@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77848C606AC
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jul 2019 11:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E1FC606AF
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jul 2019 11:05:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DDC9214AF
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jul 2019 11:05:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F166720861
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jul 2019 11:05:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730233AbfGHLFQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Jul 2019 07:05:16 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:6792 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727625AbfGHLFQ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Jul 2019 07:05:16 -0400
-X-UUID: 93a036b51f1a4d229457502ae060a8cc-20190708
-X-UUID: 93a036b51f1a4d229457502ae060a8cc-20190708
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
+        id S1730237AbfGHLFZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Jul 2019 07:05:25 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:8910 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727662AbfGHLFZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Jul 2019 07:05:25 -0400
+X-UUID: a150150cc7f04f8baf7de15bd4742239-20190708
+X-UUID: a150150cc7f04f8baf7de15bd4742239-20190708
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
         (envelope-from <frederic.chen@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 704489793; Mon, 08 Jul 2019 19:05:10 +0800
+        with ESMTP id 1317092747; Mon, 08 Jul 2019 19:05:18 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
  mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 8 Jul 2019 19:05:08 +0800
+ 15.0.1395.4; Mon, 8 Jul 2019 19:05:16 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 8 Jul 2019 19:05:08 +0800
+ Transport; Mon, 8 Jul 2019 19:05:17 +0800
 From:   <frederic.chen@mediatek.com>
 To:     <hans.verkuil@cisco.com>,
         <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
@@ -45,9 +45,9 @@ CC:     <yuzhao@chromium.org>, <zwisler@chromium.org>,
         <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
         <shik@chromium.org>, <suleiman@chromium.org>,
         <Allan.Yang@mediatek.com>
-Subject: [RFC PATCH V2 2/6] dts: arm64: mt8183: Add DIP nodes
-Date:   Mon, 8 Jul 2019 19:04:56 +0800
-Message-ID: <20190708110500.7242-3-frederic.chen@mediatek.com>
+Subject: [RFC PATCH V2 6/6] media: platform: mtk-mdp3: Add struct tuning_addr to identify user tuning data
+Date:   Mon, 8 Jul 2019 19:05:00 +0800
+Message-ID: <20190708110500.7242-7-frederic.chen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20190708110500.7242-1-frederic.chen@mediatek.com>
 References: <20190708110500.7242-1-frederic.chen@mediatek.com>
@@ -61,44 +61,41 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Frederic Chen <frederic.chen@mediatek.com>
 
-This patch adds nodes for Digital Image Processing (DIP). DIP is
-embedded in Mediatek SoCs and works with the co-processor to
-adjust image content according to tuning input data. It also
-provides image format conversion, resizing, and rotation
-features.
+We added a struct tuning_addr which contains a field "present"
+so that the driver can tell the firmware if we have user tuning
+dataor not.
 
 Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/media/platform/mtk-mdp3/mtk-img-ipi.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 0f2646c9eb65..d7b0fb8230f0 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -513,6 +513,22 @@
- 			#clock-cells = <1>;
- 		};
+diff --git a/drivers/media/platform/mtk-mdp3/mtk-img-ipi.h b/drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
+index 9fabe7e8b71d..0944fe911d97 100644
+--- a/drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
++++ b/drivers/media/platform/mtk-mdp3/mtk-img-ipi.h
+@@ -38,6 +38,12 @@ struct img_addr {
+ 	u32	iova;	/* Used by IOMMU HW access */
+ } __attribute__ ((__packed__));
  
-+		dip: dip@15022000 {
-+			compatible = "mediatek,mt8183-dip";
-+			mediatek,larb = <&larb5>;
-+			mediatek,mdp3 = <&mdp_rdma0>;
-+			mediatek,scp = <&scp>;
-+			iommus = <&iommu M4U_PORT_CAM_IMGI>;
-+			reg = <0 0x15022000 0 0x6000>;
-+			interrupts = <GIC_SPI 268 IRQ_TYPE_LEVEL_LOW>;
-+			clocks =
-+					<&imgsys CLK_IMG_LARB5>,
-+					<&imgsys CLK_IMG_DIP>;
-+			clock-names =
-+					"larb5",
-+					"dip";
-+		};
++struct tuning_addr {
++	u32	present;
++	u32	pa;	/* Used by CM4 access */
++	u32	iova;	/* Used by IOMMU HW access */
++} __attribute__ ((__packed__));
 +
- 		vdecsys: syscon@16000000 {
- 			compatible = "mediatek,mt8183-vdecsys", "syscon";
- 			reg = <0 0x16000000 0 0x1000>;
+ struct img_sw_addr {
+ 	u64	va;	/* Used by APMCU access */
+ 	u32	pa;	/* Used by CM4 access */
+@@ -105,7 +111,7 @@ struct img_ipi_frameparam {
+ 	u64		drv_data;
+ 	struct img_input	inputs[IMG_MAX_HW_INPUTS];
+ 	struct img_output	outputs[IMG_MAX_HW_OUTPUTS];
+-	struct img_addr		tuning_data;
++	struct tuning_addr	tuning_data;
+ 	struct img_addr		subfrm_data;
+ 	struct img_sw_addr	config_data;
+ 	struct img_sw_addr  self_data;
 -- 
 2.18.0
 
