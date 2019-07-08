@@ -2,29 +2,32 @@ Return-Path: <SRS0=gs31=VF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7C0CC606BF
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jul 2019 14:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7568EC606BD
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jul 2019 15:03:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 909D321537
-	for <linux-media@archiver.kernel.org>; Mon,  8 Jul 2019 14:45:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4EB512171F
+	for <linux-media@archiver.kernel.org>; Mon,  8 Jul 2019 15:03:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730173AbfGHOpG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 8 Jul 2019 10:45:06 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:56281 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725869AbfGHOpG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 8 Jul 2019 10:45:06 -0400
-Received: from [192.168.1.110] ([95.117.164.184]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1N0X4c-1igq9K0K28-00wTJK; Mon, 08 Jul 2019 16:44:06 +0200
+        id S1732066AbfGHPD5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 8 Jul 2019 11:03:57 -0400
+Received: from ns.iliad.fr ([212.27.33.1]:58226 "EHLO ns.iliad.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730192AbfGHPD5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 8 Jul 2019 11:03:57 -0400
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 3788B1FF8E;
+        Mon,  8 Jul 2019 17:03:55 +0200 (CEST)
+Received: from [192.168.108.49] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id 1D49020DD5;
+        Mon,  8 Jul 2019 17:03:55 +0200 (CEST)
 Subject: Re: [RFC] SW connection between DVB Transport Stream demuxer and
  I2C-based frontend
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        I2C <linux-i2c@vger.kernel.org>,
+To:     Enrico Weigelt <lkml@metux.net>, I2C <linux-i2c@vger.kernel.org>,
         linux-media <linux-media@vger.kernel.org>,
         GPIO <linux-gpio@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -40,50 +43,46 @@ Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Peter Korsgaard <peter@korsgaard.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 References: <5e35b4fb-646d-6428-f372-ee47d7352cd6@free.fr>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <b6abf5a2-3151-29e5-8eb7-c960580fd4ea@metux.net>
-Date:   Mon, 8 Jul 2019 16:44:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+ <b6abf5a2-3151-29e5-8eb7-c960580fd4ea@metux.net>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Message-ID: <79b9bd5e-be05-daa8-0d16-d84a383138a7@free.fr>
+Date:   Mon, 8 Jul 2019 17:03:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <5e35b4fb-646d-6428-f372-ee47d7352cd6@free.fr>
+In-Reply-To: <b6abf5a2-3151-29e5-8eb7-c960580fd4ea@metux.net>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:2jvRaVlfIBbTWqmqs0v71/intYTyRlJx4arYouNLUMLImoa4JE8
- Due+PYAz9HHlV+Oh+JGvJQEVWaMqdW8Uon8bE6aHmyP8jq9DMorJEvkmsLYY+Y0Qhs4zwbv
- y7HQMEjNaeKMhE2X4e5YLDubhQW/BSnmjtMmJ0aTTdDAmP18wIi5s3lNhDqQs+e+WaQDOxX
- AADgUj4XIC3nDfJfDfgyw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BNa//kL+MSA=:/U9k6JExtxUNSL7QQzrsVO
- Qc/YmJFqFi09e6T66lH+eMgVWarfdks/PkAbhyQSktly45MzYnQ/s0DecPsTJhutefvm2VPNm
- BCMRR7bsmjcQQjkDgIdf4xHk+1c6xMilKnXtdnfDMXpLyBXSFAbS+CeBEWLqwqg6IMvfOiEPG
- TeXkmT31LlnLRirAyV21Ukz1h2ZNsLo/NAG7Ca6VcoSYx4Fjd1IfLON0F5/5SGTKjNV+HlgIU
- 4MZSLWYhGjywPlPOdguG924KONrEzbE6D00X7MKuS0vvvmbsp2SN/+1ddSuFqOSO5YPToO7OO
- z2WVRY1fPvJC9eyLIsKuLhWcNOxVnvMClIMPmNS58Nh/1nxhf0RJFOk1DL8e6T6CP4tcHvxx9
- wSMXRQ/sohx+GsBr1KQRnKxEGky965NbmzBsFydKdioBZBH0wWf8cFDyvhjD/pTZmqEDrAwpb
- j9XByJy8tLYTTeqk/Sv9OGOZ6KYW0dztaQ/JW52ntYX+VDhgkOVRha04v/DB9YXks9FbCUiWA
- KNNcl3u9Fe8ag8l/GItK1aMpzTndlSInXTFhy4BsIkNmmL1gukAmSKU85++AM8Fodg4DDTpJh
- DQVkgDKbnZUxRcYqx1NGSuT6tPyVLnSy6Hjc47WTUUqCD3IPgJyj+3SIIe3BmcO4CfbspoeRA
- 9r4I7e9GvgSlCYfeS2jkSrc8ulDdK5oSWZxOso/tj52W1AzLqwfqf2+R51B1HtkS+WT55N6Hp
- YnzujFdSNwMrvyhmlmWS9KPxKeBdKdw4o4yq+nokVHMPRqwhRrvgB9Crp5Kmz0fMfGIGHRXv1
- jXVRq9ud3voStvHFMZCXWHqw49Vmwhds5x4uGs5GrIDnc5MS0B1CEjGDMSzp5Y59Mz0qyif
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Mon Jul  8 17:03:55 2019 +0200 (CEST)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 08.07.19 13:08, Marc Gonzalez wrote:
+On 08/07/2019 16:44, Enrico Weigelt wrote:
 
-> The tuner (si2157) is not on the i2c5 bus, instead it is on a private
-> i2c bus *behind* si2168, which routes requests to the proper client.
+> On 08.07.19 13:08, Marc Gonzalez wrote:
+> 
+>> The tuner (si2157) is not on the i2c5 bus, instead it is on a private
+>> i2c bus *behind* si2168, which routes requests to the proper client.
+> 
+> Should the si2168 make up its own i2c controller ?
 
-Should the si2168 make up it's own i2c controller ?
+It does AFAIU ;-)
+
+https://elixir.bootlin.com/linux/latest/source/drivers/media/dvb-frontends/si2168.c#L780
+
+	/* create mux i2c adapter for tuner */
+	dev->muxc = i2c_mux_alloc(client->adapter, &client->dev, 1, 0, I2C_MUX_LOCKED, si2168_select, si2168_deselect);
+
+	ret = i2c_mux_add_adapter(dev->muxc, 0, 0, 0);
+
+	/* this is the new internal i2c bus */
+	struct i2c_adapter *si2168_bus = dev->muxc->adapter[0];
 
 
---mtx
+One problem is that since the internal bus is "created" (declared?) at run-time,
+it doesn't seem possible to define it (or its client) in DT.
 
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Regards.
