@@ -2,73 +2,92 @@ Return-Path: <SRS0=YaJU=VH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4751C73C68
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 05:05:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DC4FC73C68
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 05:05:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 82E6520861
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 05:05:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4008220844
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 05:05:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727052AbfGJFFK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Jul 2019 01:05:10 -0400
-Received: from smtprelay0059.hostedemail.com ([216.40.44.59]:56967 "EHLO
+        id S1726067AbfGJFEf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jul 2019 01:04:35 -0400
+Received: from smtprelay0012.hostedemail.com ([216.40.44.12]:43575 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726820AbfGJFFA (ORCPT
+        by vger.kernel.org with ESMTP id S1725791AbfGJFEf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Jul 2019 01:05:00 -0400
+        Wed, 10 Jul 2019 01:04:35 -0400
 Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id F29BF1803A16D;
-        Wed, 10 Jul 2019 05:04:56 +0000 (UTC)
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 2D69B181D3403;
+        Wed, 10 Jul 2019 05:04:33 +0000 (UTC)
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: foot64_ddc8b497611c
-X-Filterd-Recvd-Size: 1852
+X-HE-Tag: help91_a3a1c1ec484c
+X-Filterd-Recvd-Size: 2833
 Received: from joe-laptop.perches.com (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
         (Authenticated sender: joe@perches.com)
         by omf06.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 10 Jul 2019 05:04:54 +0000 (UTC)
+        Wed, 10 Jul 2019 05:04:30 +0000 (UTC)
 From:   Joe Perches <joe@perches.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 11/12] staging: media: cedrus: Fix misuse of GENMASK macro
-Date:   Tue,  9 Jul 2019 22:04:24 -0700
-Message-Id: <cd543a5f26b031a0bbd3baa55e1f15813f59f107.1562734889.git.joe@perches.com>
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Andrew Jeffery <andrew@aj.id.au>, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-wireless@vger.kernel.org, linux-media@vger.kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
+        linux-mmc@vger.kernel.org, devel@driverdev.osuosl.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH 00/12] treewide: Fix GENMASK misuses
+Date:   Tue,  9 Jul 2019 22:04:13 -0700
+Message-Id: <cover.1562734889.git.joe@perches.com>
 X-Mailer: git-send-email 2.15.0
-In-Reply-To: <cover.1562734889.git.joe@perches.com>
-References: <cover.1562734889.git.joe@perches.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Arguments are supposed to be ordered high then low.
+These GENMASK uses are inverted argument order and the
+actual masks produced are incorrect.  Fix them.
 
-Signed-off-by: Joe Perches <joe@perches.com>
----
- drivers/staging/media/sunxi/cedrus/cedrus_regs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Add checkpatch tests to help avoid more misuses too.
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-index 3e9931416e45..ddd29788d685 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-@@ -110,7 +110,7 @@
- #define VE_DEC_MPEG_MBADDR			(VE_ENGINE_DEC_MPEG + 0x10)
- 
- #define VE_DEC_MPEG_MBADDR_X(w)			(((w) << 8) & GENMASK(15, 8))
--#define VE_DEC_MPEG_MBADDR_Y(h)			(((h) << 0) & GENMASK(0, 7))
-+#define VE_DEC_MPEG_MBADDR_Y(h)			(((h) << 0) & GENMASK(7, 0))
- 
- #define VE_DEC_MPEG_CTRL			(VE_ENGINE_DEC_MPEG + 0x14)
- 
+Joe Perches (12):
+  checkpatch: Add GENMASK tests
+  clocksource/drivers/npcm: Fix misuse of GENMASK macro
+  drm: aspeed_gfx: Fix misuse of GENMASK macro
+  iio: adc: max9611: Fix misuse of GENMASK macro
+  irqchip/gic-v3-its: Fix misuse of GENMASK macro
+  mmc: meson-mx-sdio: Fix misuse of GENMASK macro
+  net: ethernet: mediatek: Fix misuses of GENMASK macro
+  net: stmmac: Fix misuses of GENMASK macro
+  rtw88: Fix misuse of GENMASK macro
+  phy: amlogic: G12A: Fix misuse of GENMASK macro
+  staging: media: cedrus: Fix misuse of GENMASK macro
+  ASoC: wcd9335: Fix misuse of GENMASK macro
+
+ drivers/clocksource/timer-npcm7xx.c               |  2 +-
+ drivers/gpu/drm/aspeed/aspeed_gfx.h               |  2 +-
+ drivers/iio/adc/max9611.c                         |  2 +-
+ drivers/irqchip/irq-gic-v3-its.c                  |  2 +-
+ drivers/mmc/host/meson-mx-sdio.c                  |  2 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h       |  2 +-
+ drivers/net/ethernet/mediatek/mtk_sgmii.c         |  2 +-
+ drivers/net/ethernet/stmicro/stmmac/descs.h       |  2 +-
+ drivers/net/ethernet/stmicro/stmmac/dwmac-sun8i.c |  4 ++--
+ drivers/net/wireless/realtek/rtw88/rtw8822b.c     |  2 +-
+ drivers/phy/amlogic/phy-meson-g12a-usb2.c         |  2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_regs.h  |  2 +-
+ scripts/checkpatch.pl                             | 15 +++++++++++++++
+ sound/soc/codecs/wcd-clsh-v2.c                    |  2 +-
+ 14 files changed, 29 insertions(+), 14 deletions(-)
+
 -- 
 2.15.0
 
