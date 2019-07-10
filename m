@@ -2,44 +2,54 @@ Return-Path: <SRS0=YaJU=VH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10C97C74A35
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 21:52:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10B7EC74A3E
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 21:52:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DD997208E4
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 21:52:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9F1C20838
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 21:52:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="iqI91jb/"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="SlJBN11p"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727717AbfGJVwA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Jul 2019 17:52:00 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:39936 "EHLO
+        id S1727789AbfGJVwF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jul 2019 17:52:05 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:39976 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726708AbfGJVwA (ORCPT
+        with ESMTP id S1727752AbfGJVwE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Jul 2019 17:52:00 -0400
+        Wed, 10 Jul 2019 17:52:04 -0400
 Received: from localhost.localdomain (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F68B31C;
-        Wed, 10 Jul 2019 23:51:57 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2A34F31C;
+        Wed, 10 Jul 2019 23:52:01 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1562795517;
-        bh=yCre66/S0NmxK7EvPStcEWCQs8iwh4sKNiukq1nK/oM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=iqI91jb/q2WWr0AutcKlt+HAMErhN4o26QT88YVclWMS8mVOzk9DbAWRVPaBkgG3W
-         VH46fxEci+MnvtP6Z4esoNS0eMkhe00tWaQcJ5om2sq2ebhxpfhfd2RoTq3RoW73Tt
-         KAKiTgq9b2Y+mBpZE3I6zRovz4go0i6LXzXAmTm4=
+        s=mail; t=1562795521;
+        bh=1ViAwmntyEFjf2y6O088ww3Zj3YwtPrX0lSOLg0/11Y=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SlJBN11pV0zXcDXzrQx+YV0qhPRt+Ufhlj2IcF5LkvSnmbLV/hLgtCSD4EQspGao9
+         JHCdaFd/zaymd6Qrd/L8YewB4ZSa65RY2cz4PfIFCvvSA4HaprwhLTgsY8Nm4EtvvO
+         ExxD+jDSeHFdoLdKB/TCLeiKaUqUwn3vkwWRappI=
 From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 To:     linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Subject: [PATCH 0/6] media: i2c: Convert to probe_new()
-Date:   Wed, 10 Jul 2019 22:51:43 +0100
-Message-Id: <20190710215149.9208-1-kieran.bingham+renesas@ideasonboard.com>
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "Pawe? Chmiel" <pawel.mikolaj.chmiel@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 2/6] media: radio: si470x: Convert to new i2c device probe()
+Date:   Wed, 10 Jul 2019 22:51:45 +0100
+Message-Id: <20190710215149.9208-3-kieran.bingham+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190710215149.9208-1-kieran.bingham+renesas@ideasonboard.com>
+References: <20190710215149.9208-1-kieran.bingham+renesas@ideasonboard.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -47,60 +57,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The I2C driver framework aims to deprecate the current .probe() function which
-requires both an i2c_client structure, and an i2c_device_id structure in favour
-of a simpler probe_new() which takes only the i2c_client parameter.
+The I2C core framework provides a simplified probe framework from commit
+b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type").
 
-Once all drivers are converted to the probe_new() a global rename can put this
-back to probe().
+This driver does not utilise the i2c_device_id table in the probe, so we can
+easily convert it to utilise the simplfied i2c driver registration.
 
-This small series aims to rekindle this effort by converting a selection of the
-media based drivers which do not utilise the i2c_device_id parameter and thus are
-straightforward renames.
-
-In a future series, these drivers could have their i2c_device_id tables
-removed; however doing so may affect their module auto-loading due to a change
-in their module alias representations.
-
-I have submitted an RFC patch [0] to discuss if this could be handled at the
-file2alias.c component of the modpost stage.
-
-[0] https://lore.kernel.org/lkml/20190710193918.31135-1-kieran.bingham+renesas@ideasonboard.com/
-
-Kieran Bingham (6):
-  media: radio: si4713: Convert to new i2c device probe()
-  media: radio: si470x: Convert to new i2c device probe()
-  media: i2c: smiapp: Convert to new i2c device probe()
-  media: i2c: s5c73m3: Convert to new i2c device probe()
-  media: i2c: et8ek8: Convert to new i2c device probe()
-  media: i2c: Convert to new i2c device probe()
-
- drivers/media/i2c/adv7343.c                   | 5 ++---
- drivers/media/i2c/et8ek8/et8ek8_driver.c      | 5 ++---
- drivers/media/i2c/imx274.c                    | 5 ++---
- drivers/media/i2c/max2175.c                   | 5 ++---
- drivers/media/i2c/mt9m001.c                   | 5 ++---
- drivers/media/i2c/mt9m111.c                   | 5 ++---
- drivers/media/i2c/ov2640.c                    | 5 ++---
- drivers/media/i2c/ov2659.c                    | 5 ++---
- drivers/media/i2c/ov5640.c                    | 5 ++---
- drivers/media/i2c/ov5645.c                    | 5 ++---
- drivers/media/i2c/ov5647.c                    | 5 ++---
- drivers/media/i2c/ov772x.c                    | 5 ++---
- drivers/media/i2c/ov7740.c                    | 5 ++---
- drivers/media/i2c/ov9650.c                    | 5 ++---
- drivers/media/i2c/s5c73m3/s5c73m3-core.c      | 5 ++---
- drivers/media/i2c/s5k5baf.c                   | 5 ++---
- drivers/media/i2c/s5k6a3.c                    | 5 ++---
- drivers/media/i2c/smiapp/smiapp-core.c        | 5 ++---
- drivers/media/i2c/tc358743.c                  | 5 ++---
- drivers/media/i2c/ths8200.c                   | 5 ++---
- drivers/media/i2c/tvp5150.c                   | 5 ++---
- drivers/media/i2c/tvp7002.c                   | 4 ++--
+Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+---
  drivers/media/radio/si470x/radio-si470x-i2c.c | 5 ++---
- drivers/media/radio/si4713/si4713.c           | 5 ++---
- 24 files changed, 48 insertions(+), 71 deletions(-)
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/media/radio/si470x/radio-si470x-i2c.c b/drivers/media/radio/si470x/radio-si470x-i2c.c
+index 7d53422b3b56..7541698a0be1 100644
+--- a/drivers/media/radio/si470x/radio-si470x-i2c.c
++++ b/drivers/media/radio/si470x/radio-si470x-i2c.c
+@@ -330,8 +330,7 @@ static irqreturn_t si470x_i2c_interrupt(int irq, void *dev_id)
+ /*
+  * si470x_i2c_probe - probe for the device
+  */
+-static int si470x_i2c_probe(struct i2c_client *client,
+-			    const struct i2c_device_id *id)
++static int si470x_i2c_probe(struct i2c_client *client)
+ {
+ 	struct si470x_device *radio;
+ 	int retval = 0;
+@@ -544,7 +543,7 @@ static struct i2c_driver si470x_i2c_driver = {
+ 		.pm		= &si470x_i2c_pm,
+ #endif
+ 	},
+-	.probe			= si470x_i2c_probe,
++	.probe_new		= si470x_i2c_probe,
+ 	.remove			= si470x_i2c_remove,
+ 	.id_table		= si470x_i2c_id,
+ };
 -- 
 2.20.1
 
