@@ -7,46 +7,42 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 317C8C74A35
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 21:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15949C74A3E
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 21:52:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F3CFC2087F
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 21:52:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC5E1208C4
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 21:52:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="nPv/43Tb"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="ml2zs2nJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727737AbfGJVwC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Jul 2019 17:52:02 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:39948 "EHLO
+        id S1727856AbfGJVwV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jul 2019 17:52:21 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:39984 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726708AbfGJVwC (ORCPT
+        with ESMTP id S1727779AbfGJVwE (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Jul 2019 17:52:02 -0400
+        Wed, 10 Jul 2019 17:52:04 -0400
 Received: from localhost.localdomain (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1E52054B;
-        Wed, 10 Jul 2019 23:51:59 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 30FB29AF;
+        Wed, 10 Jul 2019 23:52:02 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1562795519;
-        bh=n9Pm9Mc4TgImTCNTyykIU/BdefXoMk27hoxsRwtAEf4=;
+        s=mail; t=1562795522;
+        bh=0SwOJRCTU2AsqkMSBgvX4XVvxWl+8kQxsBvARbCej04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nPv/43TbmXMd3Dvb1afM5V++ioSzUNFPm0UnkVjEvj0BXJuwVc0hvmCUbPWWgooJa
-         xOrK98+2FvN0L3pD6WuPuoUFqo8WuoGpd/EBdCvK1bVhCyw+9JdDKDtbJXuGwNujVX
-         mN8rKf+b8wcHtDbbPHN0qqTY+wRcpdpLxEx+LDmk=
+        b=ml2zs2nJucN0TCW8rKbkACRYKBo6WAI8pzMknKyPdNywA0FHVb3k947ysGGp+7o+I
+         GBBUgTPAEj6yldHea3kuSt4VqwRfoT1RA0/pAYuasqPz5pHuSwLfinYXvgEOZQUfi/
+         UFHR1d3rT6idpKs2PGhiXj13RiDUYFsGraNLlQvE=
 From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 To:     linux-i2c@vger.kernel.org, linux-media@vger.kernel.org,
         linux-renesas-soc@vger.kernel.org
 Cc:     Wolfram Sang <wsa@the-dreams.de>,
         Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 1/6] media: radio: si4713: Convert to new i2c device probe()
-Date:   Wed, 10 Jul 2019 22:51:44 +0100
-Message-Id: <20190710215149.9208-2-kieran.bingham+renesas@ideasonboard.com>
+Subject: [PATCH 3/6] media: i2c: smiapp: Convert to new i2c device probe()
+Date:   Wed, 10 Jul 2019 22:51:46 +0100
+Message-Id: <20190710215149.9208-4-kieran.bingham+renesas@ideasonboard.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190710215149.9208-1-kieran.bingham+renesas@ideasonboard.com>
 References: <20190710215149.9208-1-kieran.bingham+renesas@ideasonboard.com>
@@ -65,31 +61,31 @@ easily convert it to utilise the simplfied i2c driver registration.
 
 Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 ---
- drivers/media/radio/si4713/si4713.c | 5 ++---
+ drivers/media/i2c/smiapp/smiapp-core.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/radio/si4713/si4713.c b/drivers/media/radio/si4713/si4713.c
-index 7d97de2fa56c..7f3aee495ed3 100644
---- a/drivers/media/radio/si4713/si4713.c
-+++ b/drivers/media/radio/si4713/si4713.c
-@@ -1427,8 +1427,7 @@ static const struct v4l2_ctrl_config si4713_alt_freqs_ctrl = {
-  * I2C driver interface
-  */
- /* si4713_probe - probe for the device */
--static int si4713_probe(struct i2c_client *client,
--					const struct i2c_device_id *id)
-+static int si4713_probe(struct i2c_client *client)
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index 2d78e846d822..9adf8e034e7d 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -2847,8 +2847,7 @@ static struct smiapp_hwconfig *smiapp_get_hwconfig(struct device *dev)
+ 	return NULL;
+ }
+ 
+-static int smiapp_probe(struct i2c_client *client,
+-			const struct i2c_device_id *devid)
++static int smiapp_probe(struct i2c_client *client)
  {
- 	struct si4713_device *sdev;
- 	struct v4l2_ctrl_handler *hdl;
-@@ -1660,7 +1659,7 @@ static struct i2c_driver si4713_i2c_driver = {
- 		.name	= "si4713",
- 		.of_match_table = of_match_ptr(si4713_of_match),
+ 	struct smiapp_sensor *sensor;
+ 	struct smiapp_hwconfig *hwcfg = smiapp_get_hwconfig(&client->dev);
+@@ -3172,7 +3171,7 @@ static struct i2c_driver smiapp_i2c_driver = {
+ 		.name = SMIAPP_NAME,
+ 		.pm = &smiapp_pm_ops,
  	},
--	.probe		= si4713_probe,
-+	.probe_new	= si4713_probe,
- 	.remove         = si4713_remove,
- 	.id_table       = si4713_id,
+-	.probe	= smiapp_probe,
++	.probe_new = smiapp_probe,
+ 	.remove	= smiapp_remove,
+ 	.id_table = smiapp_id_table,
  };
 -- 
 2.20.1
