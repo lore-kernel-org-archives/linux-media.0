@@ -2,130 +2,73 @@ Return-Path: <SRS0=YaJU=VH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C38C8C73C69
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 04:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4751C73C68
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 05:05:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9721520645
-	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 04:12:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bWsVGu9Z"
+	by mail.kernel.org (Postfix) with ESMTP id 82E6520861
+	for <linux-media@archiver.kernel.org>; Wed, 10 Jul 2019 05:05:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726129AbfGJEMR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 10 Jul 2019 00:12:17 -0400
-Received: from mail-vs1-f68.google.com ([209.85.217.68]:43830 "EHLO
-        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726125AbfGJEMR (ORCPT
+        id S1727052AbfGJFFK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 10 Jul 2019 01:05:10 -0400
+Received: from smtprelay0059.hostedemail.com ([216.40.44.59]:56967 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726820AbfGJFFA (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 10 Jul 2019 00:12:17 -0400
-Received: by mail-vs1-f68.google.com with SMTP id j26so595892vsn.10
-        for <linux-media@vger.kernel.org>; Tue, 09 Jul 2019 21:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jsT84thXZgrjljKWPHUjY7JeFgImc9+U4hEoxyiTJcc=;
-        b=bWsVGu9ZtrSBJl4JbELamsoGGvbUEuoJyLkzEdD/lBLkOe2SuDywqNJvjhLcdkFQIV
-         uQzhsHZfClHSSErFS8YngoK5icUK/zOzfk2MyJE77f/EpBtLGiDl5OLXwZaYMg1H4xvi
-         8bZw2KyzNEgXQhxeZxd3j43hSpSd9KAK3Vxwk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jsT84thXZgrjljKWPHUjY7JeFgImc9+U4hEoxyiTJcc=;
-        b=d7sms4b7Ec8ebRI+xdZwpR24fuQB7K3ABftajzo/Jj7lLJy5WW3oWLYX67veGawv9E
-         SF+Fz4tj7Z0KOdo9RzE0UVyChPkD1RROPaijeej78ytWQAT2PK5ALy7cWSfyF2ekeZ4X
-         ENHBfHtmHGc6BAhafZ74tC6FPqZJqY7wFFV1P3lfy96ZDDXCBuhPtStbxWAYRn4MUCjx
-         Il8KHxPumV0D3stvG13wcLPc5jvfZrZJOTGvDjiUhy5Rab6HaFBel6YS0+Hc/DbZ/kP1
-         KRJF/SRvXH2NV0vud8p2A2qI+mXaJSTg1pKAb0YY3ph55ucPmCPZiUSQteZ4XlWjJ+g3
-         z55Q==
-X-Gm-Message-State: APjAAAVdt2/WWh7Hpmg5AOtynn2oKvUMOJccyLXf2gXMBcc3TDWU0u0P
-        3ZdpAwhJimxw7hSZis4ew6/C75HOKgliJTymy7M/XA==
-X-Google-Smtp-Source: APXvYqwRDoiekjMfVg1dAkd95CbZGZ3jhAzyHEQ1N/LeXKKIJksHQNLAm0BnKpQtXYeH+ZnDwbVN+JmCCFjQkCNhqMc=
-X-Received: by 2002:a67:f7cd:: with SMTP id a13mr14190782vsp.163.1562731935844;
- Tue, 09 Jul 2019 21:12:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190603043251.226549-1-cychiang@chromium.org>
- <20190603043251.226549-6-cychiang@chromium.org> <20190709200121.GA19118@bogus>
-In-Reply-To: <20190709200121.GA19118@bogus>
-From:   Cheng-yi Chiang <cychiang@chromium.org>
-Date:   Wed, 10 Jul 2019 12:11:48 +0800
-Message-ID: <CAFv8NwLiKu055S7apzj+gTYh0neQ5rLmPYEYkEj6Zf3hikWWpA@mail.gmail.com>
-Subject: Re: [PATCH 5/7] ASoC: rockchip: rockchip-max98090: Add node for HDMI
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Wed, 10 Jul 2019 01:05:00 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id F29BF1803A16D;
+        Wed, 10 Jul 2019 05:04:56 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: foot64_ddc8b497611c
+X-Filterd-Recvd-Size: 1852
+Received: from joe-laptop.perches.com (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf06.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 10 Jul 2019 05:04:54 +0000 (UTC)
+From:   Joe Perches <joe@perches.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Doug Anderson <dianders@chromium.org>,
-        Dylan Reid <dgreid@chromium.org>, tzungbi@chromium.org,
-        linux-media@vger.kernel.org,
-        "moderated list:SOUND - SOC LAYER / DYNAMIC AUDIO POWER MANAGEM..." 
-        <alsa-devel@alsa-project.org>, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 11/12] staging: media: cedrus: Fix misuse of GENMASK macro
+Date:   Tue,  9 Jul 2019 22:04:24 -0700
+Message-Id: <cd543a5f26b031a0bbd3baa55e1f15813f59f107.1562734889.git.joe@perches.com>
+X-Mailer: git-send-email 2.15.0
+In-Reply-To: <cover.1562734889.git.joe@perches.com>
+References: <cover.1562734889.git.joe@perches.com>
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jul 10, 2019 at 4:01 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Mon, Jun 03, 2019 at 12:32:49PM +0800, Cheng-Yi Chiang wrote:
-> > Let user specify HDMI node so machine driver can use it to let codec
-> > driver register callback on correct hdmi-notifier.
-> >
-> > Signed-off-by: Cheng-Yi Chiang <cychiang@chromium.org>
-> > ---
-> >  Documentation/devicetree/bindings/sound/rockchip-max98090.txt | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/sound/rockchip-max98090.txt b/Documentation/devicetree/bindings/sound/rockchip-max98090.txt
-> > index a805aa99ad75..dae57c14864e 100644
-> > --- a/Documentation/devicetree/bindings/sound/rockchip-max98090.txt
-> > +++ b/Documentation/devicetree/bindings/sound/rockchip-max98090.txt
-> > @@ -7,6 +7,7 @@ Required properties:
-> >    connected to the CODEC
-> >  - rockchip,audio-codec: The phandle of the MAX98090 audio codec
-> >  - rockchip,headset-codec: The phandle of Ext chip for jack detection
-> > +- rockchip,hdmi: The phandle of HDMI node for HDMI jack detection
-> >
-> >  Example:
-> >
-> > @@ -16,4 +17,5 @@ sound {
-> >       rockchip,i2s-controller = <&i2s>;
-> >       rockchip,audio-codec = <&max98090>;
-> >       rockchip,headset-codec = <&headsetcodec>;
-> > +     rockchip,hdmi= <&hdmi>;
->
-> space                ^
->
-> With that,
->
-> Acked-by: Rob Herring <robh@kernel.org>
->
-Hi Rob,
-Thank you for the review.
-But I have changed the approach in v2 so there is no need for machine
-driver to expose this property.
-Thanks!
-> >  };
-> > --
-> > 2.22.0.rc1.257.g3120a18244-goog
-> >
+Arguments are supposed to be ordered high then low.
+
+Signed-off-by: Joe Perches <joe@perches.com>
+---
+ drivers/staging/media/sunxi/cedrus/cedrus_regs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+index 3e9931416e45..ddd29788d685 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+@@ -110,7 +110,7 @@
+ #define VE_DEC_MPEG_MBADDR			(VE_ENGINE_DEC_MPEG + 0x10)
+ 
+ #define VE_DEC_MPEG_MBADDR_X(w)			(((w) << 8) & GENMASK(15, 8))
+-#define VE_DEC_MPEG_MBADDR_Y(h)			(((h) << 0) & GENMASK(0, 7))
++#define VE_DEC_MPEG_MBADDR_Y(h)			(((h) << 0) & GENMASK(7, 0))
+ 
+ #define VE_DEC_MPEG_CTRL			(VE_ENGINE_DEC_MPEG + 0x14)
+ 
+-- 
+2.15.0
+
