@@ -4,159 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B80EC74A4B
-	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 08:23:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81213C74A4B
+	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 08:53:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0ED2421019
-	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 08:23:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4F0BA20872
+	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 08:53:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728194AbfGKIXH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Jul 2019 04:23:07 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:58865 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727991AbfGKIXH (ORCPT
+        id S1727849AbfGKIx2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Jul 2019 04:53:28 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:45071 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727595AbfGKIx2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Jul 2019 04:23:07 -0400
-X-Originating-IP: 86.250.200.211
-Received: from aptenodytes (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 8A20D20005;
-        Thu, 11 Jul 2019 08:18:08 +0000 (UTC)
-Date:   Thu, 11 Jul 2019 10:18:08 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Mirela Rabulea <mirela.rabulea@nxp.com>
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        vivek.kasireddy@intel.com, sakari.ailus@linux.intel.com,
-        s.nawrocki@samsung.com, niklas.soderlund+renesas@ragnatech.se,
-        ezequiel@collabora.com, boris.brezillon@collabora.com,
-        robert.chiras@nxp.com, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH] media: v4l: Add packed YUV444 24bpp pixel format
-Message-ID: <20190711081808.GA15389@aptenodytes>
-References: <1562166911-27454-1-git-send-email-mirela.rabulea@nxp.com>
+        Thu, 11 Jul 2019 04:53:28 -0400
+Received: from [IPv6:2001:983:e9a7:1:8d1:5ef:6c45:bece] ([IPv6:2001:983:e9a7:1:8d1:5ef:6c45:bece])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id lUpRhC5wCuEBxlUpShAaHn; Thu, 11 Jul 2019 10:53:27 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH for 5.3] videodev2.h: change V4L2_PIX_FMT_BGRA444 define:
+ fourcc was already in use
+Message-ID: <27374021-a714-f49f-5ea2-9ebfd1992e54@xs4all.nl>
+Date:   Thu, 11 Jul 2019 10:53:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1562166911-27454-1-git-send-email-mirela.rabulea@nxp.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfA1OxVU+YGMgrcz+7xqYv5y44NOw5XOysBO0g2OFLDf+hhANC1YQQpodJEufX1hS/Oa4JDCOASgil0P4gxGsGJ6MWfPvIkNfG6gnrg5IrSlbT1G/z+lf
+ N2klF/QMZ6qauJpscOihxT5HKAo4UhsOk8MQ5l9Uk0XVnLJHl3a3N5GF+058azgkgM/ZEXfA498ZFF0eWe/ys3X1GC61tGcdK1r8YX/eXG1DphpyJgmnUq0U
+ 7M1rIFL+BNYAK+JEBsf/qYA39KlGZXvcg7w4UpA14eVsAGjcmAT4+kGJu67sBg9r7+DTayJcGVrrNT2QCxv8ibQf2G6x6crBn+bHAOS2Vi6LLSfQNlyDFEuA
+ DCc9cchz
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+The V4L2_PIX_FMT_BGRA444 define clashed with the pre-existing V4L2_PIX_FMT_SGRBG12
+which strangely enough used the same fourcc, even though that fourcc made no sense
+for a Bayer format. In any case, you can't have duplicates, so change the fourcc of
+V4L2_PIX_FMT_BGRA444.
 
-On Wed 03 Jul 19, 18:15, Mirela Rabulea wrote:
-> The added format is V4L2_PIX_FMT_YUV24, this is a packed
-> YUV 4:4:4 format, with 8 bits for each component, 24 bits
-> per sample.
-> 
-> This format is used by the i.MX 8QuadMax and i.MX 8DualXPlus/8QuadXPlus
-> JPEG encoder/decoder.
-
-So this format is not aligned to 32-bit words at all and we can expect
-to see cases where a single 32-bit word contains data for two pixels?
-
-Nothing wrong with that, just checking whether I understood this right :)
-
-Cheers,
-
-Paul
-
-> Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
-> ---
->  Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst | 37 +++++++++++++++++++++-
->  drivers/media/v4l2-core/v4l2-ioctl.c               |  1 +
->  include/uapi/linux/videodev2.h                     |  1 +
->  3 files changed, 38 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst b/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
-> index 41b60fa..5750ff6 100644
-> --- a/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
-> +++ b/Documentation/media/uapi/v4l/pixfmt-packed-yuv.rst
-> @@ -17,7 +17,8 @@ Description
->  ===========
->  
->  Similar to the packed RGB formats these formats store the Y, Cb and Cr
-> -component of each pixel in one 16 or 32 bit word.
-> +component of each pixel next to each other in memory. They occupy 16, 24 or 32
-> +bits per pixel.
->  
->  
->  .. raw:: latex
-> @@ -157,6 +158,40 @@ component of each pixel in one 16 or 32 bit word.
->  
->        -  :cspan:`15`
->  
-> +    * .. _V4L2-PIX-FMT-YUV24:
-> +
-> +      - ``V4L2_PIX_FMT_YUV24``
-> +      - 'YUV3'
-> +
-> +      - Y'\ :sub:`7`
-> +      - Y'\ :sub:`6`
-> +      - Y'\ :sub:`5`
-> +      - Y'\ :sub:`4`
-> +      - Y'\ :sub:`3`
-> +      - Y'\ :sub:`2`
-> +      - Y'\ :sub:`1`
-> +      - Y'\ :sub:`0`
-> +
-> +      - Cb\ :sub:`7`
-> +      - Cb\ :sub:`6`
-> +      - Cb\ :sub:`5`
-> +      - Cb\ :sub:`4`
-> +      - Cb\ :sub:`3`
-> +      - Cb\ :sub:`2`
-> +      - Cb\ :sub:`1`
-> +      - Cb\ :sub:`0`
-> +
-> +      - Cr\ :sub:`7`
-> +      - Cr\ :sub:`6`
-> +      - Cr\ :sub:`5`
-> +      - Cr\ :sub:`4`
-> +      - Cr\ :sub:`3`
-> +      - Cr\ :sub:`2`
-> +      - Cr\ :sub:`1`
-> +      - Cr\ :sub:`0`
-> +
-> +      -  :cspan:`7`
-> +
->      * .. _V4L2-PIX-FMT-YUV32:
->  
->        - ``V4L2_PIX_FMT_YUV32``
-> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-> index b1f4b99..9bb6579 100644
-> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
-> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-> @@ -1215,6 +1215,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
->  	case V4L2_PIX_FMT_YUV444:	descr = "16-bit A/XYUV 4-4-4-4"; break;
->  	case V4L2_PIX_FMT_YUV555:	descr = "16-bit A/XYUV 1-5-5-5"; break;
->  	case V4L2_PIX_FMT_YUV565:	descr = "16-bit YUV 5-6-5"; break;
-> +	case V4L2_PIX_FMT_YUV24:	descr = "24-bit YUV 4:4:4 8-8-8"; break;
->  	case V4L2_PIX_FMT_YUV32:	descr = "32-bit A/XYUV 8-8-8-8"; break;
->  	case V4L2_PIX_FMT_AYUV32:	descr = "32-bit AYUV 8-8-8-8"; break;
->  	case V4L2_PIX_FMT_XYUV32:	descr = "32-bit XYUV 8-8-8-8"; break;
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 9d9705c..752dd33 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -577,6 +577,7 @@ struct v4l2_pix_format {
->  #define V4L2_PIX_FMT_YUV444  v4l2_fourcc('Y', '4', '4', '4') /* 16  xxxxyyyy uuuuvvvv */
->  #define V4L2_PIX_FMT_YUV555  v4l2_fourcc('Y', 'U', 'V', 'O') /* 16  YUV-5-5-5     */
->  #define V4L2_PIX_FMT_YUV565  v4l2_fourcc('Y', 'U', 'V', 'P') /* 16  YUV-5-6-5     */
-> +#define V4L2_PIX_FMT_YUV24   v4l2_fourcc('Y', 'U', 'V', '3') /* 24  YUV-8-8-8     */
->  #define V4L2_PIX_FMT_YUV32   v4l2_fourcc('Y', 'U', 'V', '4') /* 32  YUV-8-8-8-8   */
->  #define V4L2_PIX_FMT_AYUV32  v4l2_fourcc('A', 'Y', 'U', 'V') /* 32  AYUV-8-8-8-8  */
->  #define V4L2_PIX_FMT_XYUV32  v4l2_fourcc('X', 'Y', 'U', 'V') /* 32  XYUV-8-8-8-8  */
-> -- 
-> 2.7.4
-> 
-
--- 
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: <stable@vger.kernel.org>      # for v5.2 and up
+---
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 9d9705ceda76..2427bc4d8eba 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -518,7 +518,13 @@ struct v4l2_pix_format {
+ #define V4L2_PIX_FMT_RGBX444 v4l2_fourcc('R', 'X', '1', '2') /* 16  rrrrgggg bbbbxxxx */
+ #define V4L2_PIX_FMT_ABGR444 v4l2_fourcc('A', 'B', '1', '2') /* 16  aaaabbbb ggggrrrr */
+ #define V4L2_PIX_FMT_XBGR444 v4l2_fourcc('X', 'B', '1', '2') /* 16  xxxxbbbb ggggrrrr */
+-#define V4L2_PIX_FMT_BGRA444 v4l2_fourcc('B', 'A', '1', '2') /* 16  bbbbgggg rrrraaaa */
++
++/*
++ * Originally this had 'BA12' as fourcc, but this clashed with the older
++ * V4L2_PIX_FMT_SGRBG12 which inexplicably used that same fourcc.
++ * So use 'GA12' instead for V4L2_PIX_FMT_BGRA444.
++ */
++#define V4L2_PIX_FMT_BGRA444 v4l2_fourcc('G', 'A', '1', '2') /* 16  bbbbgggg rrrraaaa */
+ #define V4L2_PIX_FMT_BGRX444 v4l2_fourcc('B', 'X', '1', '2') /* 16  bbbbgggg rrrrxxxx */
+ #define V4L2_PIX_FMT_RGB555  v4l2_fourcc('R', 'G', 'B', 'O') /* 16  RGB-5-5-5     */
+ #define V4L2_PIX_FMT_ARGB555 v4l2_fourcc('A', 'R', '1', '5') /* 16  ARGB-1-5-5-5  */
