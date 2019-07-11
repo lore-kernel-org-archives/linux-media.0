@@ -2,73 +2,139 @@ Return-Path: <SRS0=Mc+u=VI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16215C74A4B
-	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 10:52:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 897CBC74A35
+	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 11:51:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAA352064B
-	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 10:52:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63FA52166E
+	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 11:51:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Aiif3cHs"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727946AbfGKKwE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Jul 2019 06:52:04 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:36663 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727785AbfGKKwE (ORCPT
+        id S1728637AbfGKLv6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Jul 2019 07:51:58 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:45655 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728467AbfGKLv6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Jul 2019 06:52:04 -0400
-Received: from [IPv6:2001:983:e9a7:1:1579:d284:7580:63e0] ([IPv6:2001:983:e9a7:1:1579:d284:7580:63e0])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id lWgDh2jOC0SBqlWgEhC7l0; Thu, 11 Jul 2019 12:52:02 +0200
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [GIT FIXES FOR v5.3] Two regression fixes
-Message-ID: <b8e4f52d-5cf7-375c-0d3c-e9d851934fdd@xs4all.nl>
-Date:   Thu, 11 Jul 2019 12:52:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Thu, 11 Jul 2019 07:51:58 -0400
+Received: by mail-wr1-f68.google.com with SMTP id f9so5923417wre.12
+        for <linux-media@vger.kernel.org>; Thu, 11 Jul 2019 04:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zaPZMljsy0yHOYNSxl8b1F0ape91l7kBJLjuwmKXgmI=;
+        b=Aiif3cHsIQa82TNkM6+QmA2sT/UV0vXJB3VpZ3SiLYILAUgMCE6vup2v+cQkbBrW4X
+         +7OVHQrygLKcfbYD4fUbtkpqgjoDovY148WNymAAM9eFWkAv1ONTlh7eqkPKGRUksjR0
+         yz99iql203lSG2L3GjZOZmKPc8WmZIVaREC3C4njbDvQ2+d742C1qb1QkUb3Kdxry3zh
+         gEwMsypISvtbtOtvS2HUsan8yS8nt88FaCuE3JaZCdUNLaNGepZSVd0cgTPf5zgXIeOc
+         IkLBpdIHozignBoKlXkrVtDFIHdqNJgR8OQZT2fnh7ON6+Bq2ag8RIy8bOOFMJZh0Cy5
+         QYNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zaPZMljsy0yHOYNSxl8b1F0ape91l7kBJLjuwmKXgmI=;
+        b=pSsuo/7Z/uTmBDbzeFAsXvb5jY9VVbGOvKxwhQeRoSD+dSKUvVYnsF7DRPWjWUB1ud
+         MEUH3QyVAgNM9lHBtZQUfP6302pK4E29Ky1cK5m0mcIlMEf1sEjwnT1anRFILsgvm4OQ
+         FabdMXMQfw2daxGrMz7Z9/bGg4cz9TdB+0EoX335pOcDQT6JQYFVwAdwzstNFIOSkZN6
+         i3mzXDH0hQuczTAYIDWnyVuQTeYD/mWh8bXMp/MqekFIIi6Idjpc3/ixKXy1xHS8lDsW
+         IKiTmiuHejI/2yQMkFhtNlCIWvVi46K6HNsZMngWOmTsF8FiT0Mp2sivUSfYbjZAAUO8
+         pxAA==
+X-Gm-Message-State: APjAAAX6a/jcJrVPJRn9heZ8fwovyrt6D8jI99O1nHu5S/CWavy6gihY
+        ypLhR+M5jpPriym4+5nqxahtMgcSybpk3bbLb9Y=
+X-Google-Smtp-Source: APXvYqzHp1XIhXFwrZpWMZYWiDsRoYpJyEkt62oR5QgGqWOqw+oHaeq2KL0tMyV+KumP8bmwMGJjYa0aM9KL2js9BjM=
+X-Received: by 2002:a5d:5152:: with SMTP id u18mr4985650wrt.9.1562845917142;
+ Thu, 11 Jul 2019 04:51:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfDDsfnoHXOuP6iCBrHvEVAPkCTjhV6psLuKz62PTlrF7u6yVK6qvcZeqo33fQsSi873il/QnJ287LeqUdBztKxxjB2EZvcl+FTTgNYxhDtsYsJmjQA9z
- SBNSi+MpuwDuXv5q+fLQ6p6iRvI/pxj8OJL0Cs+FS0+pTUrMKa07DQo3H7UqdVPZ7d9pxcJzQ9q6B2gw40JM0nMJNPqYGGG0j4Cu0mvTJ+aezaTrtEkjgR2r
- I5XNpb/8b0vX2+qrQBMpgZa/SpTPtwx/mZoeKgoxFl8=
+References: <CAGb2v65AHjF4oNBixiEb=yqHF_gZyz91K_65U7kUAPGd6_cOkg@mail.gmail.com>
+ <20190711093842.GB15882@aptenodytes>
+In-Reply-To: <20190711093842.GB15882@aptenodytes>
+From:   wens Tsai <wens213@gmail.com>
+Date:   Thu, 11 Jul 2019 19:51:45 +0800
+Message-ID: <CAGb2v67sq16Btmk_bFFUjV7tuish+Q3uOVvcOiqOtT6TwrV+WA@mail.gmail.com>
+Subject: Re: Single- vs Multi-planar APIs for mem2mem devices
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The videodev2.h has a CC to stable since it has to be applied to 5.2 as well,
-unfortunately.
+On Thu, Jul 11, 2019 at 5:39 PM Paul Kocialkowski
+<paul.kocialkowski@bootlin.com> wrote:
+>
+> Hi,
+>
+> On Thu 11 Jul 19, 17:21, wens Tsai wrote:
+> > I noticed that recent codec driver additions, such as hantro, meson/vdec,
+> > mtk, used the multi-planar API (mplane) instead of the single-planar API.
+> >
+> > Is there a preference for moving towards mplane?
+>
+> Well, there is strict technical requirement for using the single-planar API
+> instead of the multi-planar one in cedrus.
+>
+> Historically, we started with mplane because we can definitely pass
+> different addresses for luma and chroma to our decoder. However, we found
+> out that there are some internal limitations of the decoder block and the
+> addresses cannot be "too far apart". This means that if we allocate luma
+> at the begging of our pool and chroma at the end, the gap was too big
+> and the resulting decoded frame was not stored at the right address.
+>
+> We found out about this purely by accident, where one particular sequence of
+> events lead to such a gap and showed the issue. One possible explanation
+> would be that the decoder uses an offset from the luma address for chroma
+> internally, on a limited number of bits.
+>
+> So unfortunately, this means we're stuck with having our multi-planar
+> (in the YUV sense) buffers allocated in a single chunk (the single-plane
+> V4L2 API). I don't have any better answer than "userspace should cope with both
+> APIs as it reflects a hardware constraint", which is indeed what ffmpeg is
+> already doing.
 
-Regards,
+If I understand the API correctly, using the multi-planar API doesn't mean
+you have to actually support multi-planar formats such as NVxyM and YUVxyzM.
+AFAICT these are the only two families that have non contiguous planes.
 
-	Hans
+So for all the other existing formats, the buffers will still be contiguous,
+which means cedrus can actually support the multi-planar API, right?
 
-The following changes since commit f81cbfc4f82a75ca0a2dc181a9c93b88f0e6509d:
+ChenYu
 
-  media: allegro: use new v4l2_m2m_ioctl_try_encoder_cmd funcs (2019-06-27 07:36:06 -0400)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/hverkuil/media_tree.git tags/fix-v5.3a
-
-for you to fetch changes up to df4801b1aa687b5885340cb9d1f3e731d6f59f46:
-
-  videodev2.h: change V4L2_PIX_FMT_BGRA444 define: fourcc was already in use (2019-07-11 12:44:12 +0200)
-
-----------------------------------------------------------------
-Tag branch
-
-----------------------------------------------------------------
-Hans Verkuil (2):
-      v4l2-subdev: fix regression in check_pad()
-      videodev2.h: change V4L2_PIX_FMT_BGRA444 define: fourcc was already in use
-
- drivers/media/v4l2-core/v4l2-subdev.c | 2 +-
- include/uapi/linux/videodev2.h        | 8 +++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+> Cheers,
+>
+> Paul
+>
+> > Also I noticed that v4l-utils has a plugin that seamlessly adapts mplane
+> > devices to work with single-planar API calls, but there isn't one the
+> > other way around. Would that be something worthwhile working on? To me
+> > it seems having one central adapter is better than having applications
+> > try to use both APIs, though some such as FFmpeg already do so.
+> >
+> > My interest in this is trying to get Chromium's v4l2 video decode
+> > accelerator to work on the Raspberry Pi 3 with their downstream kernel,
+> > which has the bcm2835-v4l2 driver. It would also benefit other platforms
+> > that have a stateful VPU, such as Amlogic (meson) or Mediatek SoCs.
+> > Chromium's code uses MPLANE exclusively, and it's geared towards ChromeOS,
+> > not standard Linux, but still it might be interesting to get it to work.
+> >
+> > There's also the v4l2 slice video decode accelerator which uses the
+> > request API which has the same issue, but lets not get ahead of ourselves.
+> >
+> > Regards
+> > ChenYu
+>
+> --
+> Paul Kocialkowski, Bootlin
+> Embedded Linux and kernel engineering
+> https://bootlin.com
