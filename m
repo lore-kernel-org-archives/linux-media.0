@@ -2,139 +2,103 @@ Return-Path: <SRS0=Mc+u=VI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 897CBC74A35
-	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 11:51:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82534C74A35
+	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 12:15:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 63FA52166E
-	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 11:51:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Aiif3cHs"
+	by mail.kernel.org (Postfix) with ESMTP id 6146B21537
+	for <linux-media@archiver.kernel.org>; Thu, 11 Jul 2019 12:15:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728637AbfGKLv6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 11 Jul 2019 07:51:58 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45655 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728467AbfGKLv6 (ORCPT
+        id S1728694AbfGKMPZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 11 Jul 2019 08:15:25 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:45913 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725934AbfGKMPV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 11 Jul 2019 07:51:58 -0400
-Received: by mail-wr1-f68.google.com with SMTP id f9so5923417wre.12
-        for <linux-media@vger.kernel.org>; Thu, 11 Jul 2019 04:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zaPZMljsy0yHOYNSxl8b1F0ape91l7kBJLjuwmKXgmI=;
-        b=Aiif3cHsIQa82TNkM6+QmA2sT/UV0vXJB3VpZ3SiLYILAUgMCE6vup2v+cQkbBrW4X
-         +7OVHQrygLKcfbYD4fUbtkpqgjoDovY148WNymAAM9eFWkAv1ONTlh7eqkPKGRUksjR0
-         yz99iql203lSG2L3GjZOZmKPc8WmZIVaREC3C4njbDvQ2+d742C1qb1QkUb3Kdxry3zh
-         gEwMsypISvtbtOtvS2HUsan8yS8nt88FaCuE3JaZCdUNLaNGepZSVd0cgTPf5zgXIeOc
-         IkLBpdIHozignBoKlXkrVtDFIHdqNJgR8OQZT2fnh7ON6+Bq2ag8RIy8bOOFMJZh0Cy5
-         QYNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zaPZMljsy0yHOYNSxl8b1F0ape91l7kBJLjuwmKXgmI=;
-        b=pSsuo/7Z/uTmBDbzeFAsXvb5jY9VVbGOvKxwhQeRoSD+dSKUvVYnsF7DRPWjWUB1ud
-         MEUH3QyVAgNM9lHBtZQUfP6302pK4E29Ky1cK5m0mcIlMEf1sEjwnT1anRFILsgvm4OQ
-         FabdMXMQfw2daxGrMz7Z9/bGg4cz9TdB+0EoX335pOcDQT6JQYFVwAdwzstNFIOSkZN6
-         i3mzXDH0hQuczTAYIDWnyVuQTeYD/mWh8bXMp/MqekFIIi6Idjpc3/ixKXy1xHS8lDsW
-         IKiTmiuHejI/2yQMkFhtNlCIWvVi46K6HNsZMngWOmTsF8FiT0Mp2sivUSfYbjZAAUO8
-         pxAA==
-X-Gm-Message-State: APjAAAX6a/jcJrVPJRn9heZ8fwovyrt6D8jI99O1nHu5S/CWavy6gihY
-        ypLhR+M5jpPriym4+5nqxahtMgcSybpk3bbLb9Y=
-X-Google-Smtp-Source: APXvYqzHp1XIhXFwrZpWMZYWiDsRoYpJyEkt62oR5QgGqWOqw+oHaeq2KL0tMyV+KumP8bmwMGJjYa0aM9KL2js9BjM=
-X-Received: by 2002:a5d:5152:: with SMTP id u18mr4985650wrt.9.1562845917142;
- Thu, 11 Jul 2019 04:51:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAGb2v65AHjF4oNBixiEb=yqHF_gZyz91K_65U7kUAPGd6_cOkg@mail.gmail.com>
- <20190711093842.GB15882@aptenodytes>
-In-Reply-To: <20190711093842.GB15882@aptenodytes>
-From:   wens Tsai <wens213@gmail.com>
-Date:   Thu, 11 Jul 2019 19:51:45 +0800
-Message-ID: <CAGb2v67sq16Btmk_bFFUjV7tuish+Q3uOVvcOiqOtT6TwrV+WA@mail.gmail.com>
-Subject: Re: Single- vs Multi-planar APIs for mem2mem devices
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Thu, 11 Jul 2019 08:15:21 -0400
+Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (Authenticated sender: maxime.ripard@bootlin.com)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 51A21100017;
+        Thu, 11 Jul 2019 12:15:18 +0000 (UTC)
+From:   Maxime Ripard <maxime.ripard@bootlin.com>
+To:     Hans Verkuil <hans.verkuil@cisco.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
         Maxime Ripard <maxime.ripard@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v6 2/5] media: sunxi: Refactor the Makefile and Kconfig
+Date:   Thu, 11 Jul 2019 14:15:04 +0200
+Message-Id: <a68df210e89e53e58e6bb2da64f634e8598066ae.1562847292.git-series.maxime.ripard@bootlin.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.34bcd988943a26671681eaf849aacab51fab1cfe.1562847292.git-series.maxime.ripard@bootlin.com>
+References: <cover.34bcd988943a26671681eaf849aacab51fab1cfe.1562847292.git-series.maxime.ripard@bootlin.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Jul 11, 2019 at 5:39 PM Paul Kocialkowski
-<paul.kocialkowski@bootlin.com> wrote:
->
-> Hi,
->
-> On Thu 11 Jul 19, 17:21, wens Tsai wrote:
-> > I noticed that recent codec driver additions, such as hantro, meson/vdec,
-> > mtk, used the multi-planar API (mplane) instead of the single-planar API.
-> >
-> > Is there a preference for moving towards mplane?
->
-> Well, there is strict technical requirement for using the single-planar API
-> instead of the multi-planar one in cedrus.
->
-> Historically, we started with mplane because we can definitely pass
-> different addresses for luma and chroma to our decoder. However, we found
-> out that there are some internal limitations of the decoder block and the
-> addresses cannot be "too far apart". This means that if we allocate luma
-> at the begging of our pool and chroma at the end, the gap was too big
-> and the resulting decoded frame was not stored at the right address.
->
-> We found out about this purely by accident, where one particular sequence of
-> events lead to such a gap and showed the issue. One possible explanation
-> would be that the decoder uses an offset from the luma address for chroma
-> internally, on a limited number of bits.
->
-> So unfortunately, this means we're stuck with having our multi-planar
-> (in the YUV sense) buffers allocated in a single chunk (the single-plane
-> V4L2 API). I don't have any better answer than "userspace should cope with both
-> APIs as it reflects a hardware constraint", which is indeed what ffmpeg is
-> already doing.
+The Makefile and Kconfig for the sun6i CSI driver are included in the main
+Makefile / KConfig file. Since we're going to add a new CSI driver for an
+older chip, and the Cedrus driver eventually, it makes more sense to put
+those in our directory.
 
-If I understand the API correctly, using the multi-planar API doesn't mean
-you have to actually support multi-planar formats such as NVxyM and YUVxyzM.
-AFAICT these are the only two families that have non contiguous planes.
+Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+---
+ drivers/media/platform/Kconfig        | 2 +-
+ drivers/media/platform/Makefile       | 2 +-
+ drivers/media/platform/sunxi/Kconfig  | 1 +
+ drivers/media/platform/sunxi/Makefile | 1 +
+ 4 files changed, 4 insertions(+), 2 deletions(-)
+ create mode 100644 drivers/media/platform/sunxi/Kconfig
+ create mode 100644 drivers/media/platform/sunxi/Makefile
 
-So for all the other existing formats, the buffers will still be contiguous,
-which means cedrus can actually support the multi-planar API, right?
-
-ChenYu
-
-> Cheers,
->
-> Paul
->
-> > Also I noticed that v4l-utils has a plugin that seamlessly adapts mplane
-> > devices to work with single-planar API calls, but there isn't one the
-> > other way around. Would that be something worthwhile working on? To me
-> > it seems having one central adapter is better than having applications
-> > try to use both APIs, though some such as FFmpeg already do so.
-> >
-> > My interest in this is trying to get Chromium's v4l2 video decode
-> > accelerator to work on the Raspberry Pi 3 with their downstream kernel,
-> > which has the bcm2835-v4l2 driver. It would also benefit other platforms
-> > that have a stateful VPU, such as Amlogic (meson) or Mediatek SoCs.
-> > Chromium's code uses MPLANE exclusively, and it's geared towards ChromeOS,
-> > not standard Linux, but still it might be interesting to get it to work.
-> >
-> > There's also the v4l2 slice video decode accelerator which uses the
-> > request API which has the same issue, but lets not get ahead of ourselves.
-> >
-> > Regards
-> > ChenYu
->
-> --
-> Paul Kocialkowski, Bootlin
-> Embedded Linux and kernel engineering
-> https://bootlin.com
+diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+index 8a19654b393a..2abf4ea8b9b1 100644
+--- a/drivers/media/platform/Kconfig
++++ b/drivers/media/platform/Kconfig
+@@ -146,7 +146,7 @@ source "drivers/media/platform/am437x/Kconfig"
+ source "drivers/media/platform/xilinx/Kconfig"
+ source "drivers/media/platform/rcar-vin/Kconfig"
+ source "drivers/media/platform/atmel/Kconfig"
+-source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
++source "drivers/media/platform/sunxi/Kconfig"
+ 
+ config VIDEO_TI_CAL
+ 	tristate "TI CAL (Camera Adaptation Layer) driver"
+diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+index 7cbbd925124c..6ee7eb0d36f4 100644
+--- a/drivers/media/platform/Makefile
++++ b/drivers/media/platform/Makefile
+@@ -100,4 +100,4 @@ obj-y					+= meson/
+ 
+ obj-y					+= cros-ec-cec/
+ 
+-obj-$(CONFIG_VIDEO_SUN6I_CSI)		+= sunxi/sun6i-csi/
++obj-y					+= sunxi/
+diff --git a/drivers/media/platform/sunxi/Kconfig b/drivers/media/platform/sunxi/Kconfig
+new file mode 100644
+index 000000000000..1b6e89cb78b2
+--- /dev/null
++++ b/drivers/media/platform/sunxi/Kconfig
+@@ -0,0 +1 @@
++source "drivers/media/platform/sunxi/sun6i-csi/Kconfig"
+diff --git a/drivers/media/platform/sunxi/Makefile b/drivers/media/platform/sunxi/Makefile
+new file mode 100644
+index 000000000000..8d06f98500ee
+--- /dev/null
++++ b/drivers/media/platform/sunxi/Makefile
+@@ -0,0 +1 @@
++obj-y		+= sun6i-csi/
+-- 
+git-series 0.9.1
