@@ -2,151 +2,102 @@ Return-Path: <SRS0=Qizv=VK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8891C71142
-	for <linux-media@archiver.kernel.org>; Sat, 13 Jul 2019 10:03:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 855DBC742DF
+	for <linux-media@archiver.kernel.org>; Sat, 13 Jul 2019 11:39:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7E14D20838
-	for <linux-media@archiver.kernel.org>; Sat, 13 Jul 2019 10:03:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563012194;
-	bh=TxtOHxlj1UM5kOxd51FMoUzHCD4JmllPUm/FrXorgTc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=i0HyOmWykEIBsvMgo3p2mu7dnxVawbJrNzxFiOy/8utl+vSFrITKMIVUkZkW+Q29m
-	 gIIIqVfbwR41gtU6BACS4+/EIufHHdgpnVmbqRh8DDrVaPRo03VSJICJ7pMRJUqeVo
-	 5/ANXZsYNaJCG3osZGC3A7cGGvk5zbEtKejlSBV8=
+	by mail.kernel.org (Postfix) with ESMTP id 4961F20848
+	for <linux-media@archiver.kernel.org>; Sat, 13 Jul 2019 11:39:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=gmx.net header.i=@gmx.net header.b="l0bP+nVq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727489AbfGMKDI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 13 Jul 2019 06:03:08 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:51328 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726474AbfGMKDI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Sat, 13 Jul 2019 06:03:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=kD2v2doj/MSy4rIsMW/AsXHEzihMEUmo0XWWNm5VWns=; b=bPfNYHh+FI47Ct/mVyg6Q4cNM
-        Pzj7lea2J/E5sROuREXk6KzQE63C0EMuvJucfIr7h12J0rhQLriitphDLDC/n5VxFBB3HDxO8dp48
-        dKIbdX2GEtF0PxE0bqnm/YUWV6fIuPfyQHdsrWKRtQwxoiBT7ryeL079syGzYU0avT2IEu5cf61tC
-        YDnKlRYw8K91LSsAI+1YDudiQuHeY5ph3ZO/KWalvuPx6+JzEOhuHZ0z3mTMZqYik7RR6te6ISDki
-        tNFSzgXuZ8Bt/u9GN5mmLkVqoDcBB5MuzyCWz89R15sslwy0LKeUE69B7WzcAyJgRCUu9PlirOot2
-        GvOz0eO3A==;
-Received: from 201.86.163.160.dynamic.adsl.gvt.net.br ([201.86.163.160] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hmErt-0004hn-M2; Sat, 13 Jul 2019 10:03:02 +0000
-Date:   Sat, 13 Jul 2019 07:02:56 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Brad Love <brad@nextdimension.cc>, Antti Palosaari <crope@iki.fi>,
-        Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v3] media: si2168: Refactor command setup code
-Message-ID: <20190713070256.3495de51@coco.lan>
-In-Reply-To: <10f064c5-1634-c9f9-fcc9-6ab51b7f8f0b@free.fr>
-References: <544859b5-108a-1909-d612-64f67a02aeec@free.fr>
-        <bde6e367-61a4-7501-2459-eecad5db1d1b@nextdimension.cc>
-        <20190712144537.2bad2482@coco.lan>
-        <10f064c5-1634-c9f9-fcc9-6ab51b7f8f0b@free.fr>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1727706AbfGMLjO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 13 Jul 2019 07:39:14 -0400
+Received: from mout.gmx.net ([212.227.15.18]:47861 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726474AbfGMLjO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 13 Jul 2019 07:39:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1563017934;
+        bh=BWWyqYc0Q9lHRlufOjwlKzREgcGCirILPkFoZng2iMw=;
+        h=X-UI-Sender-Class:Subject:From:Cc:References:To:Date:In-Reply-To;
+        b=l0bP+nVq4Z/ym5mL673tifm3R/v/AN0xnxmc1JYY10LUxZ3WuGZ55pdJQC9bwHMNL
+         l1ooHC6BxBuuT/OHSV5dck2DI9VztTOLJ0zzQumDVRtaVN/2kiwXQQyEQrwfJkafLx
+         kAz8lu5VMpuvk50bYQZw4tKiRVyKQLqb+gNuTR4E=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.43.122] ([92.40.248.250]) by mail.gmx.com (mrgmx005
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1MGyxN-1hiBm21fEp-00E2qN; Sat, 13
+ Jul 2019 13:38:54 +0200
+Subject: [REGRESSION] Xorg segfaults on Asus Chromebook CP101 with Linux v5.2
+ (was Asus C101P Chromeboot fails to boot with Linux 5.2)
+From:   Alex Dewar <alex.dewar@gmx.co.uk>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org
+References: <59042b09-7651-be1d-347f-0dc4aa02a91b@gmx.co.uk>
+ <CANBLGcyO5wAHgSVjYFB+hcp+SzaKY9d0QJm-hxqnSYbZ4Yv97g@mail.gmail.com>
+ <862e98f3-8a89-a05e-1e85-e6f6004da32b@gmx.co.uk>
+ <5fe66d5d-0624-323f-3bf8-56134ca85eca@gmx.co.uk>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Message-ID: <f47f8759-8113-812a-b17a-4be09665369e@gmx.co.uk>
+Date:   Sat, 13 Jul 2019 12:38:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <5fe66d5d-0624-323f-3bf8-56134ca85eca@gmx.co.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Provags-ID: V03:K1:LbPaPzVSq7PJlnapOmV+BlI1ChwWNYoa0SaFu0C21B84M97YvV7
+ 85RffBT6jaGa40g+bVMVtOXftprToNyjJMhZ21zY+IwVtRgW6GMAs+zzSL7CbLyh+DcuWbv
+ Gc+je70JuDlPCVNZZpllDXJ7wB/EiAjB7ad7ycDyadGdxCqNbl33o80PMLvk321yAP8t/E3
+ zta3oivBwYDmHGCSViX/Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zRO9TRRdg4Q=:OTrf3LHKXJB0WL90b8u/YF
+ WpIex8PeEtoGFs631qIMrNBEK8Fb8vjim+Y0TmYya94HQsEJbHlkyPnn3xE/k/IJZVFnHRaxp
+ 1EagelV6OS8zlcViSPsuljs7/OKHU4f48Ogd/4KXNJaFFj5adg9YAYi0osg4m+Bk4e3uMvazn
+ /fAtprsvifQwZM8Vk7bsGXYuCezEDDF17AbaFO7p13oaFNYhA+T52VstQr+9gZftY0GcBfph+
+ K6B+FBi7JGyXglL7RdQna2Kf/U+VlKHz/YgkQEawnT84LBu21KKNOtOuAbLP0IsE9jN8iWETw
+ 47Shx5L2rJCD/05K981Hm35Mw4xft/gRpuCzKpsVG1Rkc6yzq1bxaZ7j1musUBC6gUzaHeBi9
+ 0BtIWbJn0u630XsvVU/6E3VRDX9qnuAu8pestYlV8oAzXzaAUG+9MmO86DK4fc31olRyn1WTs
+ mpZzd/xZ9rX1cWZb0FBPDzXD/GiCiM/eJ/ifGjJokKnrVK9sfcIp8HiFNDNUgc77Et0LfC/jN
+ GvMaiVRMH7eBTsy/ZLDegArWn4S/bsazA75tQtchmx1+X0/ymqkrYENO63CGVBpz/OSbhM4oP
+ wX7gmS9mgp3dxVBRdpNQd3mWSIpUHiJMcQJVWyJEzTdqMhZmWtGr5M0TydHmIcG3OIKixSk6u
+ b8HXYPPML0ugB+F4rmSP/hvSReKr/6r40xaNHaAR5JM3vbTSlU09tdkle60bkiKEQh+uXDLxo
+ YzLc2ciQn8om5Tg0ro+4cTaj3h1I3HQ7BHqle0Xmj3AbK8nFXZmjYuf1GSp5tm30ogK4TAtME
+ PN1433KPbgvUNTDzostkGze0dyaPqVND116h7oysndGY8oTQUUeS39qsMc0fAwGDmnHujKOiL
+ GjA7veBdsXC0EgdgjniItnk7JRPMJEziFINoz0DGfvtJXEvlwPl/pAMe+eEDHrz92NQPP+SJn
+ RwK+Sso8zaB+seDgnl5safxDVdgtjnmZysM5qQswcZuI0HYWCgL9GKBmmb44niMoZbcdxM6Xk
+ 2M1Nv3wyETg9T2xVXZmwFka3LMN8dnFfnl2Gzq15Cc96cVfzMIF+PkXrw1UTqTTPigDUx6dA5
+ syw/bFdIZskDDZ9egAc79E5s/r1mYt2cc93
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Sat, 13 Jul 2019 00:11:12 +0200
-Marc Gonzalez <marc.w.gonzalez@free.fr> escreveu:
+Hi all,
 
-> On 12/07/2019 19:45, Mauro Carvalho Chehab wrote:
-> 
-> > Brad Love <brad@nextdimension.cc> escreveu:
-> >   
-> >> On 04/07/2019 05.33, Marc Gonzalez wrote:
-> >>  
-> >>> +#define CMD_SETUP(cmd, args, rlen) \
-> >>> +	cmd_setup(cmd, args, sizeof(args) - 1, rlen)
-> >>> +    
-> >>
-> >> This is only a valid helper if args is a null terminated string. It just
-> >> so happens that every instance in this driver is, but that could be a
-> >> silent pitfall if someone used a u8 array with this macro.  
-> > 
-> > Actually, it is uglier than that. If one writes something like:
-> > 
-> > 	char buf[20];
-> > 
-> > 	buf[0] = 0x20;
-> > 	buf[1] = 0x03;
-> > 
-> > 	CMD_SETUP(cmd, buf, 0);
-> > 
-> > 	// some other init, up to 5 values, then another CMD_SETUP()  
-> 
-> I'm not sure what you mean in the // comment.
-> What kind of init? Why up to 5 values? Why another CMD_SETUP?
+I initially thought my machine was failing to boot entirely, but it
+turns out it was just failing to start the display manager. I managed to
+escape to a tty by hammering the keyboard a bit.
 
-I mean that the same buffer could be re-used to do something like:
+I suspect the culprit is the rockchip_vpu driver (in staging/media),
+which has been renamed to hantro in this merge window. When I run startx
+from a terminal, X fails to start and Xorg segfaults (log here:
+http://users.sussex.ac.uk/~ad374/xorg.log). X seems to work without any
+issues in v5.1.
 
- 	char buf[20];
- 
- 	buf[0] = 0x20;
- 	buf[1] = 0x03;
- 
- 	CMD_SETUP(cmd, buf, 0);   // write size here should be 2
+I've also tried running trace on the Xorg process, but the output was
+pretty verbose. I can share if that would be helpful though.
 
-	buf[2] = 0x04
-	buf[3] = 0x00
-	buf[4] = 0x05
+Best,
+Alex
 
-	CMD_SETUP(cmd, buf, 0); // write size here should be 5
-
-This kind of pattern happens on other drivers and someone may
-end needing something like that at this driver on some future.
-
-> > sizeof() will evaluate to 20, and not to 2, with would be the
-> > expected buffer size, and it will pass 18 random values.
-> > 
-> > IMHO, using sizeof() here is a very bad idea.  
-> 
-> You may have a point...
-> (Though I'm not proposing a kernel API function, merely code
-> refactoring for a single file that's unlikely to change going
-> forward.)
-
-Yes, I know, but we had already some bugs due to the usage of
-sizeof() on similar macros at drivers in the past.
-
-> It's also bad form to repeat the cmd size (twice) when the compiler
-> can figure it out automatically for string literals (which is 95%
-> of the use-cases).
-> 
-> I can drop the macro, and just use the helper...
-
-The helper function sounds fine.
-
-> 
-> Or maybe there's a GCC extension to test that an argument is a
-> string literal...
-
-If this could be evaluated by some advanced macro logic that
-would work not only with gcc but also with clang, then a
-macro that does what you proposed could be useful.
-
-There are some ways to check the type of a macro argument, but I'm
-not sure if are there any way for it to distinguish between a
-string constant from a char * array.
-
-Thanks,
-Mauro
