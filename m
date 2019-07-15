@@ -2,100 +2,164 @@ Return-Path: <SRS0=PKt4=VM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 91D6BC76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:14:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1FFDC76195
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:59:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5E00C2054F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:14:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203685;
-	bh=VRgrytHTVCFlT5csoh3aKEF0uzbhluzYmPoRtKfok/0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qQGfFVTI+42bhoKtu4Vg0uXXPrhPnAUzlXmg11DK7jqFHzR143/w0iIgyCzghUptQ
-	 XRycYHMYGxz7wIHSAQEYzGB/dpVoeXpuE0L/X225i6MYMJv2sXd26IJPyR2TNzoJyh
-	 5czWU53otGJ0o8fi2SDZZAOJcz6je1KiRXmBFT2I=
+	by mail.kernel.org (Postfix) with ESMTP id BAD3D2083D
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:59:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N+eU86f/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731325AbfGONsB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:48:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57774 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731215AbfGONsA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:48:00 -0400
-Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B0302067C;
-        Mon, 15 Jul 2019 13:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563198479;
-        bh=VRgrytHTVCFlT5csoh3aKEF0uzbhluzYmPoRtKfok/0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rll7xxbJTZjnIm9uFaR8A3LosHlX8FVHv18cUFpdVg65ahv8ba+XmxrnMvDvBeJul
-         ObzYbA0m7yRfQU5cZlViB0xG3ZCUb8IhhwvEKZ6jjtrdOh3w8xiHnjiiceLMJhDh+1
-         4s+P7eZmUl0GEXFswtRswFhcOa6gqQMqx4UprYsw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniel Gomez <dagmcr@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 020/249] media: spi: IR LED: add missing of table registration
-Date:   Mon, 15 Jul 2019 09:43:05 -0400
-Message-Id: <20190715134655.4076-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
-References: <20190715134655.4076-1-sashal@kernel.org>
+        id S1730650AbfGOP7F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 11:59:05 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36603 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730296AbfGOP7E (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 11:59:04 -0400
+Received: by mail-lj1-f195.google.com with SMTP id i21so16794137ljj.3
+        for <linux-media@vger.kernel.org>; Mon, 15 Jul 2019 08:59:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HjbeDhOV51A8sdpXnqafwlfJ9iwiNhonhrxyNQUI16E=;
+        b=N+eU86f/1K4jXpLed142Olwx09e8H8Iivx69wTDwzoqwqFbC8Pe3Y7pdRrF6bmBl1f
+         JhdQC7tAw/WwyEYSmz5ltzaNJ2xL7+fD+UmUOm4E4KvTPROstgSY6AXe9Tm8qYYPrS2K
+         c9J9vJzxL6CrmTWBVQwLKPD9vYqRpjkpgcdwY/4H4sO7/+cMGdHMI64j+DBSE+dvsFc5
+         xTJlfTlD5s0iyTDoz9gh5jLj5fLF4b2spjq3k7oowVEbmTqoKHcNx483USXg1drtBEFk
+         buTzA7D5lMjlsRhVlWy3p5a+YlYB7pORyFDmytvW9qASNVxT/sQoj7DRdWrapqSeaqXn
+         F8dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HjbeDhOV51A8sdpXnqafwlfJ9iwiNhonhrxyNQUI16E=;
+        b=jUNIS4vL0t4sUz9T1X1j70uaB2V0t/+w9YVD1NfjncODJRIcfUH29ZnPXLiWbh9MfO
+         aiSMPWAflD7El8wO0fLcfsoEgiao3w3Vqu89xlncuN9tlEVkmbKc1ByhcExXJkrKIsih
+         VEP2szG+26wluDCkmuprGU0Q4p91vVI1RGlcB4V/okdT2QJ6jVICBB5s4KZQP+eZVkJt
+         YSygO8Myo9VHT6Luizmkh8EUHlucV+HKO6RSpSdHNIId1CVLex9cr3qUOvnDkOsmD5a+
+         osVlj3pFy/z00+zoGms8QOCaOCdvByCi3kp5/DQIT6aNKXXQsKoN00mjLjpreT8N/3nr
+         4C1w==
+X-Gm-Message-State: APjAAAX+zZnVfPgtuwxTbLjNyvsCWMv1ShMgD3tWmNfwpXbAqcXMKlRg
+        i6svvGiGo3G/bj82PoZOp2ifbg==
+X-Google-Smtp-Source: APXvYqzV20YelwwZmVujNBOuf0KewDUAlMY5R7oPdGUPxlJpzk4n5D9ibscxmdTuGZoa2l4u193jag==
+X-Received: by 2002:a2e:3e01:: with SMTP id l1mr11682242lja.208.1563206342726;
+        Mon, 15 Jul 2019 08:59:02 -0700 (PDT)
+Received: from [192.168.27.209] ([37.157.136.206])
+        by smtp.googlemail.com with ESMTPSA id f24sm2633350lfk.72.2019.07.15.08.59.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Jul 2019 08:59:01 -0700 (PDT)
+Subject: Re: [PATCH v4 3/4] media: venus: Update to bitrate based clock
+ scaling
+To:     Aniket Masule <amasule@codeaurora.org>, linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        vgarodia@codeaurora.org
+References: <1562078787-516-1-git-send-email-amasule@codeaurora.org>
+ <1562078787-516-4-git-send-email-amasule@codeaurora.org>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <06248dce-2c01-279b-20be-4dfcafbd792f@linaro.org>
+Date:   Mon, 15 Jul 2019 18:58:58 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1562078787-516-4-git-send-email-amasule@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Daniel Gomez <dagmcr@gmail.com>
+Hi,
 
-[ Upstream commit 24e4cf770371df6ad49ed873f21618d9878f64c8 ]
+On 7/2/19 5:46 PM, Aniket Masule wrote:
+> Introduced clock scaling using bitrate, preavious
+> calculations consider only the cycles per mb.
+> Also, clock scaling is now triggered before every
+> buffer being queued to the device. This helps in
+> deciding precise clock cycles required.
+> 
+> Signed-off-by: Aniket Masule <amasule@codeaurora.org>
+> ---
+>  drivers/media/platform/qcom/venus/helpers.c | 31 +++++++++++++++++++++++++----
+>  1 file changed, 27 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/media/platform/qcom/venus/helpers.c b/drivers/media/platform/qcom/venus/helpers.c
+> index 2c976e4..5726d86 100644
+> --- a/drivers/media/platform/qcom/venus/helpers.c
+> +++ b/drivers/media/platform/qcom/venus/helpers.c
+> @@ -399,17 +399,26 @@ static int scale_clocks(struct venus_inst *inst)
+>  	return ret;
+>  }
+>  
+> -static unsigned long calculate_vpp_freq(struct venus_inst *inst)
+> +static unsigned long calculate_inst_freq(struct venus_inst *inst,
+> +					 unsigned long filled_len)
+>  {
+> -	unsigned long vpp_freq = 0;
+> +	unsigned long vpp_freq = 0, vsp_freq = 0;
+> +	u64 fps = inst->fps;
+>  	u32 mbs_per_sec;
+>  
+>  	mbs_per_sec = load_per_instance(inst);
+>  	vpp_freq = mbs_per_sec * inst->clk_data.codec_freq_data->vpp_freq;
+>  	/* 21 / 20 is overhead factor */
+>  	vpp_freq += vpp_freq / 20;
+> +	vsp_freq = mbs_per_sec * inst->clk_data.codec_freq_data->vsp_freq;
+>  
+> -	return vpp_freq;
+> +	/* 10 / 7 is overhead factor */
+> +	if (inst->session_type == VIDC_SESSION_TYPE_ENC)
+> +		vsp_freq += (inst->controls.enc.bitrate * 10) / 7;
+> +	else
+> +		vsp_freq += ((fps * filled_len * 8) * 10) / 7;
+> +
+> +	return max(vpp_freq, vsp_freq);
+>  }
+>  
+>  static int scale_clocks_v4(struct venus_inst *inst)
+> @@ -417,13 +426,27 @@ static int scale_clocks_v4(struct venus_inst *inst)
+>  	struct venus_core *core = inst->core;
+>  	const struct freq_tbl *table = core->res->freq_tbl;
+>  	unsigned int num_rows = core->res->freq_tbl_size;
+> +	struct v4l2_m2m_ctx *m2m_ctx = inst->m2m_ctx;
+>  	struct clk *clk = core->clks[0];
+>  	struct device *dev = core->dev;
+>  	unsigned int i;
+>  	unsigned long freq = 0, freq_core1 = 0, freq_core2 = 0;
+> +	unsigned long filled_len = 0;
+> +	struct venus_buffer *buf, *n;
+> +	struct vb2_buffer *vb;
+>  	int ret;
+>  
+> -	freq = calculate_vpp_freq(inst);
+> +	mutex_lock(&inst->lock);
+> +	v4l2_m2m_for_each_src_buf_safe(m2m_ctx, buf, n) {
+> +		vb = &buf->vb.vb2_buf;
+> +		filled_len = max(filled_len, vb2_get_plane_payload(vb, 0));
+> +	}
+> +	mutex_unlock(&inst->lock);
+> +
+> +	if (inst->session_type == VIDC_SESSION_TYPE_DEC && !filled_len)
+> +		return 0;
+> +
+> +	freq = calculate_inst_freq(inst, filled_len);
+>  
+>  	if (freq > table[0].freq)
+>  		dev_warn(dev, "HW is overloaded, needed: %lu max: %lu\n",
+> 
 
-MODULE_DEVICE_TABLE(of, <of_match_table> should be called to complete DT
-OF mathing mechanism and register it.
+The original patch has a call to load_scale_clocks from
+venus_helper_vb2_buf_queue, why it is not included here?
 
-Before this patch:
-modinfo drivers/media/rc/ir-spi.ko  | grep alias
-
-After this patch:
-modinfo drivers/media/rc/ir-spi.ko  | grep alias
-alias:          of:N*T*Cir-spi-ledC*
-alias:          of:N*T*Cir-spi-led
-
-Reported-by: Javier Martinez Canillas <javier@dowhile0.org>
-Signed-off-by: Daniel Gomez <dagmcr@gmail.com>
-Signed-off-by: Sean Young <sean@mess.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/rc/ir-spi.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/media/rc/ir-spi.c b/drivers/media/rc/ir-spi.c
-index 66334e8d63ba..c58f2d38a458 100644
---- a/drivers/media/rc/ir-spi.c
-+++ b/drivers/media/rc/ir-spi.c
-@@ -161,6 +161,7 @@ static const struct of_device_id ir_spi_of_match[] = {
- 	{ .compatible = "ir-spi-led" },
- 	{},
- };
-+MODULE_DEVICE_TABLE(of, ir_spi_of_match);
- 
- static struct spi_driver ir_spi_driver = {
- 	.probe = ir_spi_probe,
 -- 
-2.20.1
-
+regards,
+Stan
