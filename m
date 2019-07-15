@@ -4,51 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A84E0C76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E53F2C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:04:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7C8092067C
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDF6C205ED
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:04:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563202970;
-	bh=0Bgi0YSXLFbXE7fMMsBZyv5DRfzZzaNOaviqSvdjufA=;
+	s=default; t=1563203040;
+	bh=aI4TlpQf3gNjCRK+KshtpcJSU85X20kTXRGcmVMJzkA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=oLYcABFSWvGYd0WKgi5MTYua0z19ijkyfOPH4DdDU/McCT+JcqljYS0jbKOLmOm6H
-	 sTotfS3345Z7DhLQhwzlAhM1bA9H/phQ3+5BvW786Ft1kL6TZ3tkY2zH3auiCJZH8B
-	 G1Jrxl376TVeuvtHCqttzRCQ/5kRJhFGzqE7+0t4=
+	b=EK2f38o4KHHqBVp22LfN2if4WDCzEtuWiQmyBdk9FlCHWshVHBz2l+Y2NjUwm3ehc
+	 wUz2BNuRXw1pozP/7KlrBz6Q+ub2v1zmt9sUIA4I7o9/5MPw+KszA8Sm3jkPeZUtA4
+	 b4WqhDj3wsnGphXAG2d84Bzbzo3inzv069Qn3M5A=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389525AbfGOPCp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 11:02:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48150 "EHLO mail.kernel.org"
+        id S2388549AbfGOOIi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:08:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59146 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388617AbfGOOLu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:11:50 -0400
+        id S2388545AbfGOOIh (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:08:37 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 246272081C;
-        Mon, 15 Jul 2019 14:11:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5F40206B8;
+        Mon, 15 Jul 2019 14:08:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199909;
-        bh=0Bgi0YSXLFbXE7fMMsBZyv5DRfzZzaNOaviqSvdjufA=;
+        s=default; t=1563199716;
+        bh=aI4TlpQf3gNjCRK+KshtpcJSU85X20kTXRGcmVMJzkA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vid3Q2bYufmlNwr1SrMyOSp7NbKQZ5z2VGUoPqPFiLApmILNTIMdnpF7+v4AMjHRG
-         lKlRnz+xgrO94VW7mLvTiwrIZsB3aA4zi8HFxVYFXaWSAJm7LCKfsZbTUuUx1nQ/Tt
-         i+IzDjRpu5mhmolI1LYCFenJXS0kugPdABehyFFM=
+        b=lQ1nmviYWQG9xvkQELrQFMq14fR4gJA/nGl0Z45gXgbw+nPe/F3XRVjVV12RJnJtL
+         x+8GmKvLNWvS6caBIBdpxcmZb1nQFM3kxMRSzCH4I/PvJualBcJT32tJYwdYlEKKw2
+         +vHo8sEVTtW7MFFZ4JQJvQYdMQ8f0gKdhJMFnxnA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marco Felsch <m.felsch@pengutronix.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+Cc:     Young Xiao <92siuyang@gmail.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 134/219] media: coda: fix last buffer handling in V4L2_ENC_CMD_STOP
-Date:   Mon, 15 Jul 2019 10:02:15 -0400
-Message-Id: <20190715140341.6443-134-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 082/219] media: davinci: vpif_capture: fix memory leak in vpif_probe()
+Date:   Mon, 15 Jul 2019 10:01:23 -0400
+Message-Id: <20190715140341.6443-82-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -61,46 +59,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Marco Felsch <m.felsch@pengutronix.de>
+From: Young Xiao <92siuyang@gmail.com>
 
-[ Upstream commit f3775f89852d167990b0d718587774cf00d22ac2 ]
+[ Upstream commit 64f883cd98c6d43013fb0cea788b63e50ebc068c ]
 
-coda_encoder_cmd() is racy, as the last scheduled picture run worker can
-still be in-flight while the ENC_CMD_STOP command is issued. Depending
-on the exact timing the sequence numbers might already be changed, but
-the last buffer might not have been put on the destination queue yet.
+If vpif_probe() fails on v4l2_device_register() and vpif_probe_complete(),
+then memory allocated at initialize_vpif() for global vpif_obj.dev[i]
+become unreleased.
 
-In this case the current implementation would prematurely wake the
-destination queue with last_buffer_dequeued=true, causing userspace to
-call streamoff before the last buffer is handled.
+The patch adds deallocation of vpif_obj.dev[i] on the error path.
 
-Close this race window by synchronizing with the pic_run_worker before
-doing the sequence check.
-
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-[l.stach@pengutronix.de: switch to flush_work, reword commit message]
-Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Young Xiao <92siuyang@gmail.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/coda-common.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/davinci/vpif_capture.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
-index fa0b22fb7991..9bf2116ffc76 100644
---- a/drivers/media/platform/coda/coda-common.c
-+++ b/drivers/media/platform/coda/coda-common.c
-@@ -1007,6 +1007,8 @@ static int coda_encoder_cmd(struct file *file, void *fh,
- 	/* Set the stream-end flag on this context */
- 	ctx->bit_stream_param |= CODA_BIT_STREAM_END_FLAG;
+diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
+index 6216b7ac6875..a20cb6fff2ec 100644
+--- a/drivers/media/platform/davinci/vpif_capture.c
++++ b/drivers/media/platform/davinci/vpif_capture.c
+@@ -1384,6 +1384,14 @@ static int initialize_vpif(void)
+ 	return err;
+ }
  
-+	flush_work(&ctx->pic_run_work);
++static inline void free_vpif_objs(void)
++{
++	int i;
 +
- 	/* If there is no buffer in flight, wake up */
- 	if (!ctx->streamon_out || ctx->qsequence == ctx->osequence) {
- 		dst_vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
++	for (i = 0; i < VPIF_CAPTURE_MAX_DEVICES; i++)
++		kfree(vpif_obj.dev[i]);
++}
++
+ static int vpif_async_bound(struct v4l2_async_notifier *notifier,
+ 			    struct v4l2_subdev *subdev,
+ 			    struct v4l2_async_subdev *asd)
+@@ -1653,7 +1661,7 @@ static __init int vpif_probe(struct platform_device *pdev)
+ 	err = v4l2_device_register(vpif_dev, &vpif_obj.v4l2_dev);
+ 	if (err) {
+ 		v4l2_err(vpif_dev->driver, "Error registering v4l2 device\n");
+-		goto cleanup;
++		goto vpif_free;
+ 	}
+ 
+ 	while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, res_idx))) {
+@@ -1700,7 +1708,9 @@ static __init int vpif_probe(struct platform_device *pdev)
+ 				  "registered sub device %s\n",
+ 				   subdevdata->name);
+ 		}
+-		vpif_probe_complete();
++		err = vpif_probe_complete();
++		if (err)
++			goto probe_subdev_out;
+ 	} else {
+ 		vpif_obj.notifier.ops = &vpif_async_ops;
+ 		err = v4l2_async_notifier_register(&vpif_obj.v4l2_dev,
+@@ -1719,6 +1729,8 @@ static __init int vpif_probe(struct platform_device *pdev)
+ 	kfree(vpif_obj.sd);
+ vpif_unregister:
+ 	v4l2_device_unregister(&vpif_obj.v4l2_dev);
++vpif_free:
++	free_vpif_objs();
+ cleanup:
+ 	v4l2_async_notifier_cleanup(&vpif_obj.notifier);
+ 
 -- 
 2.20.1
 
