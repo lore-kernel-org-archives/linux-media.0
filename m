@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A0FC76195
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:37:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6029C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:37:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A16452081C
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:37:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B55492086C
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:37:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563197869;
-	bh=aISJD8jToyQDZQQixjprAUFaH+IJQNwqr1ZEViTeoBA=;
+	s=default; t=1563197874;
+	bh=VRgrytHTVCFlT5csoh3aKEF0uzbhluzYmPoRtKfok/0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BuKkEQ6KkgNZQuQwEKl3WL0oFoNRq1OB78aihKXNb8rQpTn0enNH2c16WJzRvfDbV
-	 lgv6WJfKJHSnyJe4Tx5QSthMFMTvQQDIPKNW/XNBoXewu1B0rWR9ld+9kISxRr07PN
-	 sHITkagZmbQxi36fGXHmQ88d7hyokkR+wLojOb8E=
+	b=YTc6LasJPYabNxHmMKSOz8LYz2SqSUiUWVouuQnC88EZBDJ21ShBPno+ychqznk7a
+	 IWIja+AZZ2yLK6tdTvIZTcA6QmGn9nRcGxfT2bnzjR1uc11xWPxL30fRPJU2VqclkI
+	 JCCfwipzOL+0NVC0brvAHMKolArkrRO6fA4WJyBI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730569AbfGONhs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:37:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36544 "EHLO mail.kernel.org"
+        id S1730382AbfGONhl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:37:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36342 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730408AbfGONhr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:37:47 -0400
+        id S1730263AbfGONhk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:37:40 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F11E121530;
-        Mon, 15 Jul 2019 13:37:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6DBE32080A;
+        Mon, 15 Jul 2019 13:37:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563197866;
-        bh=aISJD8jToyQDZQQixjprAUFaH+IJQNwqr1ZEViTeoBA=;
+        s=default; t=1563197858;
+        bh=VRgrytHTVCFlT5csoh3aKEF0uzbhluzYmPoRtKfok/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GYmzHExuv7qXO4/qMBVY4pqJJUXRxCyEhAXDAeS2u+MHuO1h5BU0YrBxPUl7PLgUb
-         qu28s7YMS9xkaM9G+XoLxGBIQFeHT/Fjn9qpqNc9GZ5c00gF9JNBzubGShIIVDGFbR
-         kalk4/JihA3zndHnTPVzBoU+qfJ5i/VYrVVmgdlU=
+        b=EYJK2+OXZni6MbammLA6D47NZ6ig9ebOA1ax/FiMAr9M58WWQAfmdCNn8oJeK2bbC
+         5mgPtC43dxyzgiVN4Eoqul2R/NqAOfwSFd6jr/8Uu2ITSJRcRra9ltMDrFslrYDn3l
+         yoV4Fvs6cbbz/v4gukBWqW7DAvu4vTfuQLXiYeyA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Daniel Gomez <dagmcr@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 022/249] media: ov7740: avoid invalid framesize setting
-Date:   Mon, 15 Jul 2019 09:32:03 -0400
-Message-Id: <20190715133550.1772-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 020/249] media: spi: IR LED: add missing of table registration
+Date:   Mon, 15 Jul 2019 09:32:01 -0400
+Message-Id: <20190715133550.1772-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715133550.1772-1-sashal@kernel.org>
 References: <20190715133550.1772-1-sashal@kernel.org>
@@ -61,43 +60,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Akinobu Mita <akinobu.mita@gmail.com>
+From: Daniel Gomez <dagmcr@gmail.com>
 
-[ Upstream commit 6e4ab830ac6d6a0d7cd7f87dc5d6536369bf24a8 ]
+[ Upstream commit 24e4cf770371df6ad49ed873f21618d9878f64c8 ]
 
-If the requested framesize by VIDIOC_SUBDEV_S_FMT is larger than supported
-framesizes, it causes an out of bounds array access and the resulting
-framesize is unexpected.
+MODULE_DEVICE_TABLE(of, <of_match_table> should be called to complete DT
+OF mathing mechanism and register it.
 
-Avoid out of bounds array access and select the default framesize.
+Before this patch:
+modinfo drivers/media/rc/ir-spi.ko  | grep alias
 
-Cc: Wenyou Yang <wenyou.yang@microchip.com>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+After this patch:
+modinfo drivers/media/rc/ir-spi.ko  | grep alias
+alias:          of:N*T*Cir-spi-ledC*
+alias:          of:N*T*Cir-spi-led
+
+Reported-by: Javier Martinez Canillas <javier@dowhile0.org>
+Signed-off-by: Daniel Gomez <dagmcr@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov7740.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/media/rc/ir-spi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
-index 54e80a60aa57..63011d4b4738 100644
---- a/drivers/media/i2c/ov7740.c
-+++ b/drivers/media/i2c/ov7740.c
-@@ -785,7 +785,11 @@ static int ov7740_try_fmt_internal(struct v4l2_subdev *sd,
+diff --git a/drivers/media/rc/ir-spi.c b/drivers/media/rc/ir-spi.c
+index 66334e8d63ba..c58f2d38a458 100644
+--- a/drivers/media/rc/ir-spi.c
++++ b/drivers/media/rc/ir-spi.c
+@@ -161,6 +161,7 @@ static const struct of_device_id ir_spi_of_match[] = {
+ 	{ .compatible = "ir-spi-led" },
+ 	{},
+ };
++MODULE_DEVICE_TABLE(of, ir_spi_of_match);
  
- 		fsize++;
- 	}
--
-+	if (i >= ARRAY_SIZE(ov7740_framesizes)) {
-+		fsize = &ov7740_framesizes[0];
-+		fmt->width = fsize->width;
-+		fmt->height = fsize->height;
-+	}
- 	if (ret_frmsize != NULL)
- 		*ret_frmsize = fsize;
- 
+ static struct spi_driver ir_spi_driver = {
+ 	.probe = ir_spi_probe,
 -- 
 2.20.1
 
