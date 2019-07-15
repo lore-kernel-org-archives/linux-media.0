@@ -7,51 +7,52 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73FABC76195
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACBE3C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 427D22054F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A6482080A
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203425;
-	bh=vMM+DidbLUbkbkXwZDyK9ry41O7bb/cL16ENjR6sUnU=;
+	s=default; t=1563203456;
+	bh=XjWXZhO01zT/rlf4XT5hYz1JGLk/R5HgAI6sRkUAsbM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=1bU4yjxG+MJHqmuAK2fDsmsD9A2OEO9YzLwbo716AS9fXeYNtMP5AaeyfGeIgfWGo
-	 /9PX9BS0w0TUgKvzvTaV6s0oquGUgH4sj07CrCXW3mzGpsCOKp64+OpTeu3R1OYVPi
-	 buBCzYOGEcPVx+U19/w6DIc1g70aN5izBDkfc7JM=
+	b=FnS/1DSLyXtu1fmsIeBWd0P4Dqx4S90zOLgH681gDhU5kAGpZt+DhKpLmCu2aoBsv
+	 TpaPRREe3dLmy8lei8mc2obCXCddXxWBctIsPRtO4SCk2ohslSFcrIG7Jj/Xw7z9l4
+	 FqiGOpXSv1TlczgOHyZFlwaLrNsOvhIySSB3HEUk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732227AbfGOPKY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 11:10:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58740 "EHLO mail.kernel.org"
+        id S1732781AbfGON4F (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:56:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60424 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732103AbfGONza (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:55:30 -0400
+        id S1732774AbfGON4C (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:56:02 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1612C217F9;
-        Mon, 15 Jul 2019 13:55:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9925F20C01;
+        Mon, 15 Jul 2019 13:55:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563198929;
-        bh=vMM+DidbLUbkbkXwZDyK9ry41O7bb/cL16ENjR6sUnU=;
+        s=default; t=1563198961;
+        bh=XjWXZhO01zT/rlf4XT5hYz1JGLk/R5HgAI6sRkUAsbM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dexlxot306ehKWUZa/dg34Aw9QKdA6VjK3ldC4trG8njRAREdRo86crJEPpTYAmMo
-         NzdFLXmyTmk2pVx5c9YyT+pe5Xt2x8ON2Dd2djg7T1faakMVnhvRzcGMzCyAbkYOyN
-         zAAqFoLPRLRTpigdZAp63ChG+3Cq/SNFAlljjQZ8=
+        b=wok7ENwHgAhuOMsOr9DIz4g3rHy0ToTgxqRcIzTDIxK+qddlZSOp6Y1uDA504lh1u
+         k2Roa/Mx3PvbcYtKScbwLg/Pbiu9YZhm/ZLmmboXf71vkfYSdUtJdNSWAJetC4v4tx
+         gEhu/Tv+emPc1JwnyO0K7xOSgHdC0PsofyO76Rpg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+Cc:     =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
+        Helen Koike <helen.koike@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 144/249] media: s5p-mfc: Make additional clocks optional
-Date:   Mon, 15 Jul 2019 09:45:09 -0400
-Message-Id: <20190715134655.4076-144-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 154/249] media: vimc: cap: check v4l2_fill_pixfmt return value
+Date:   Mon, 15 Jul 2019 09:45:19 -0400
+Message-Id: <20190715134655.4076-154-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
 References: <20190715134655.4076-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -60,44 +61,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: André Almeida <andrealmeid@collabora.com>
 
-[ Upstream commit e08efef8fe7db87206314c19b341612c719f891a ]
+[ Upstream commit 77ae46e11df5c96bb4582633851f838f5d954df4 ]
 
-Since the beginning the second clock ('special', 'sclk') was optional and
-it is not available on some variants of Exynos SoCs (i.e. Exynos5420 with
-v7 of MFC hardware).
+v4l2_fill_pixfmt() returns -EINVAL if the pixelformat used as parameter is
+invalid or if the user is trying to use a multiplanar format with the
+singleplanar API. Currently, the vimc_cap_try_fmt_vid_cap() returns such
+value, but vimc_cap_s_fmt_vid_cap() is ignoring it. Fix that and returns
+an error value if vimc_cap_try_fmt_vid_cap() has failed.
 
-However commit 1bce6fb3edf1 ("[media] s5p-mfc: Rework clock handling")
-made handling of all specified clocks mandatory. This patch restores
-original behavior of the driver and fixes its operation on
-Exynos5420 SoCs.
-
-Fixes: 1bce6fb3edf1 ("[media] s5p-mfc: Rework clock handling")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: André Almeida <andrealmeid@collabora.com>
+Suggested-by: Helen Koike <helen.koike@collabora.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-mfc/s5p_mfc_pm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/platform/vimc/vimc-capture.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c b/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-index 2e62f8721fa5..7d52431c2c83 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-@@ -34,6 +34,11 @@ int s5p_mfc_init_pm(struct s5p_mfc_dev *dev)
- 	for (i = 0; i < pm->num_clocks; i++) {
- 		pm->clocks[i] = devm_clk_get(pm->device, pm->clk_names[i]);
- 		if (IS_ERR(pm->clocks[i])) {
-+			/* additional clocks are optional */
-+			if (i && PTR_ERR(pm->clocks[i]) == -ENOENT) {
-+				pm->clocks[i] = NULL;
-+				continue;
-+			}
- 			mfc_err("Failed to get clock: %s\n",
- 				pm->clk_names[i]);
- 			return PTR_ERR(pm->clocks[i]);
+diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
+index 946dc0908566..664855708fdf 100644
+--- a/drivers/media/platform/vimc/vimc-capture.c
++++ b/drivers/media/platform/vimc/vimc-capture.c
+@@ -142,12 +142,15 @@ static int vimc_cap_s_fmt_vid_cap(struct file *file, void *priv,
+ 				  struct v4l2_format *f)
+ {
+ 	struct vimc_cap_device *vcap = video_drvdata(file);
++	int ret;
+ 
+ 	/* Do not change the format while stream is on */
+ 	if (vb2_is_busy(&vcap->queue))
+ 		return -EBUSY;
+ 
+-	vimc_cap_try_fmt_vid_cap(file, priv, f);
++	ret = vimc_cap_try_fmt_vid_cap(file, priv, f);
++	if (ret)
++		return ret;
+ 
+ 	dev_dbg(vcap->dev, "%s: format update: "
+ 		"old:%dx%d (0x%x, %d, %d, %d, %d) "
 -- 
 2.20.1
 
