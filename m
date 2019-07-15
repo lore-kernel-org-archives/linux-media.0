@@ -2,82 +2,117 @@ Return-Path: <SRS0=PKt4=VM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79CF0C7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:30:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25AB9C76192
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:30:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 569A82080A
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:30:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 050582080A
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:30:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729752AbfGOKa5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 06:30:57 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:56561 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729674AbfGOKa5 (ORCPT
+        id S1729755AbfGOKa6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 06:30:58 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:39723 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729728AbfGOKa6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 06:30:57 -0400
+        Mon, 15 Jul 2019 06:30:58 -0400
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:3de9:fbf:e548:c8fc])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id myFyhc6VO0SBqmyFzhRPK9; Mon, 15 Jul 2019 12:30:55 +0200
+        id myFyhc6VO0SBqmyG0hRPKp; Mon, 15 Jul 2019 12:30:56 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Dariusz Marcinkiewicz <darekm@google.com>
-Subject: [PATCH 0/6] media: use cec_notifier_cec_adap_(un)register
-Date:   Mon, 15 Jul 2019 12:30:48 +0200
-Message-Id: <20190715103054.84849-1-hverkuil-cisco@xs4all.nl>
+Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>
+Subject: [PATCH 4/6] s5p-cec: use cec_notifier_cec_adap_(un)register
+Date:   Mon, 15 Jul 2019 12:30:52 +0200
+Message-Id: <20190715103054.84849-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190715103054.84849-1-hverkuil-cisco@xs4all.nl>
+References: <20190715103054.84849-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfN9O7HsLv/gL8kDGuQCpjCtraycPGcFXz3R/TSiIH10v1UGBUgVtG5eXFlYnya4RJIpATPmjzSCrC797esNYjrvj/FwirWP9cx69YoBEqird4vox9Cjo
- xqv6weq8f6zl4Vo6QG84YMKqww0MGQ1f8YxcAFXcHgvOD5sqPyTDf+Exqb58sLzx7mMfMtrfCHoAuhoXGn+YI/2fUfm4vir5jzYrk26VRYCu9o2lemPtSwfB
- V/zjUUUqa1Q81zPBbdeN3ZjmikbyoPdqI2dTvIe6hwc=
+X-CMAE-Envelope: MS4wfCTcJt3rxHkjQpagPVH5KJO+2Zhdc6fLS2Qk5ffpGryCY7yPTlItemOGsDeAuXkVkWmxibR4L0JYi/hnl6iFc0+tzI4soVE59rJTIM+E1ZbhNmIWagWh
+ uzvRkU0CIL2Gmhz5BgyDa6uY1MPxn1jeqiLWJ59rbYeMuIkcDbcmdoiAqNiBBn8tqBrbYn/O5uYp6rKRFOtDOCZAOBacqzAjcQpjf/sAqJl63fdIwTRIIE+w
+ jRXFfVBMhJOyhUBrxuvYJWQ0XnDZsYETfPBTsIqBzwQnDnwYazZUi1I9nKkURTIyq59GgBg5H1QlQ2Psu39f2F1W5aslBQGP7WRL8TypSxQHjZMQYUViHy/l
+ chYwSWMlSoW96FugVynciRFheIu76Q==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series converts all media cec adapter drivers to use
-cec_notifier_cec_adap_(un)register instead of cec_notifier_get(_conn),
-cec_notifier_put and cec_register_cec_notifier.
+Use cec_notifier_cec_adap_(un)register instead of
+cec_notifier_get, cec_notifier_put and cec_register_cec_notifier.
 
 Also enable the CEC_CAP_CONNECTOR_INFO capability.
 
-The CEC_CAP_CONNECTOR_INFO capability is not yet exposed, that
-will be done later in a separate patch series that also implements
-the new CEC_ADAP_G_CONNECTOR_INFO ioctl.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Sylwester Nawrocki <snawrocki@kernel.org>
+---
+ drivers/media/platform/s5p-cec/s5p_cec.c | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
 
-Once all the drm and media cec drivers stop using cec_notifier_get(_conn),
-cec_notifier_put and cec_register_cec_notifier those functions can be
-deleted from the CEC core.
-
-These functions are blocking the development of more advanced CEC
-features such as multiple CEC adapters per HDMI connector (one for
-use when in standby, one for use when powered up).
-
-Regards,
-
-	Hans
-
-Hans Verkuil (6):
-  meson/ao-cec: use cec_notifier_cec_adap_(un)register
-  cros-ec-cec: use cec_notifier_cec_adap_(un)register
-  seco-cec: use cec_notifier_cec_adap_(un)register
-  s5p-cec: use cec_notifier_cec_adap_(un)register
-  stih-cec: use cec_notifier_cec_adap_(un)register
-  tegra-cec: use cec_notifier_cec_adap_(un)register
-
- .../media/platform/cros-ec-cec/cros-ec-cec.c  | 68 +++++++++++--------
- drivers/media/platform/meson/ao-cec-g12a.c    | 48 +++++++------
- drivers/media/platform/meson/ao-cec.c         | 44 ++++++------
- drivers/media/platform/s5p-cec/s5p_cec.c      | 23 ++++---
- drivers/media/platform/seco-cec/seco-cec.c    | 55 ++++++++-------
- drivers/media/platform/sti/cec/stih-cec.c     | 32 +++++----
- drivers/media/platform/tegra-cec/tegra_cec.c  | 35 +++++-----
- 7 files changed, 162 insertions(+), 143 deletions(-)
-
+diff --git a/drivers/media/platform/s5p-cec/s5p_cec.c b/drivers/media/platform/s5p-cec/s5p_cec.c
+index ea6231b387ed..6ddcc35b0bbd 100644
+--- a/drivers/media/platform/s5p-cec/s5p_cec.c
++++ b/drivers/media/platform/s5p-cec/s5p_cec.c
+@@ -214,21 +214,23 @@ static int s5p_cec_probe(struct platform_device *pdev)
+ 	if (IS_ERR(cec->reg))
+ 		return PTR_ERR(cec->reg);
+ 
+-	cec->notifier = cec_notifier_get(hdmi_dev);
+-	if (cec->notifier == NULL)
+-		return -ENOMEM;
+-
+ 	cec->adap = cec_allocate_adapter(&s5p_cec_adap_ops, cec, CEC_NAME,
+-		CEC_CAP_DEFAULTS | (needs_hpd ? CEC_CAP_NEEDS_HPD : 0), 1);
++		CEC_CAP_DEFAULTS | (needs_hpd ? CEC_CAP_NEEDS_HPD : 0) |
++		CEC_CAP_CONNECTOR_INFO, 1);
+ 	ret = PTR_ERR_OR_ZERO(cec->adap);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = cec_register_adapter(cec->adap, &pdev->dev);
+-	if (ret)
++	cec->notifier = cec_notifier_cec_adap_register(hdmi_dev, NULL,
++						       cec->adap);
++	if (!cec->notifier) {
++		ret = -ENOMEM;
+ 		goto err_delete_adapter;
++	}
+ 
+-	cec_register_cec_notifier(cec->adap, cec->notifier);
++	ret = cec_register_adapter(cec->adap, &pdev->dev);
++	if (ret)
++		goto err_notifier;
+ 
+ 	platform_set_drvdata(pdev, cec);
+ 	pm_runtime_enable(dev);
+@@ -236,6 +238,9 @@ static int s5p_cec_probe(struct platform_device *pdev)
+ 	dev_dbg(dev, "successfully probed\n");
+ 	return 0;
+ 
++err_notifier:
++	cec_notifier_cec_adap_unregister(cec->notifier);
++
+ err_delete_adapter:
+ 	cec_delete_adapter(cec->adap);
+ 	return ret;
+@@ -245,8 +250,8 @@ static int s5p_cec_remove(struct platform_device *pdev)
+ {
+ 	struct s5p_cec_dev *cec = platform_get_drvdata(pdev);
+ 
++	cec_notifier_cec_adap_unregister(cec->notifier);
+ 	cec_unregister_adapter(cec->adap);
+-	cec_notifier_put(cec->notifier);
+ 	pm_runtime_disable(&pdev->dev);
+ 	return 0;
+ }
 -- 
 2.20.1
 
