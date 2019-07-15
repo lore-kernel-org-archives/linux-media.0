@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B8A7C7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 169B9C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0EE8E205ED
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0E712067C
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203175;
-	bh=+IJT9rcKJXvihHeLk9LU5Vs73d9NTD4PUXQVZ9ablkU=;
+	s=default; t=1563203178;
+	bh=UZby9dVk9MFAUqpiU1hi/Ti2aHvwtkwja8ycGnSBRJ4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Se9BMs0i4UnXH5mDoNsC/3JkR1AzTr4l15E9TSY/tOr6M7x5A029sSi+XdIn8may/
-	 Mjb6GbWpoS/d7EcLrmxFQYB9s5TqlBiWhgBILneR0GCeyafhHUGCGgtCa13uCVpFoC
-	 iEgFk3YG03yTySQ/zwKHi01CJ1bbRM4rVdGx7roI=
+	b=vMPuzCBq+w0GkBQNVvnzY9nOuGSOFYHopxHT3QA+Y6+91fl0iaFxX4KR8wfzBzP9O
+	 4nagfUBZrMPqyMibExwxDUg+87BoC2ovsZBMj1bOfICx6DYy4VQwSCChpRfSFlzIXm
+	 qUAL2DYs9l7zfwybEeIvbrRc+FzNQSHpY7AFJe04=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387979AbfGOOFH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:05:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51278 "EHLO mail.kernel.org"
+        id S2388082AbfGOOFF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:05:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51196 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388084AbfGOOFG (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:05:06 -0400
+        id S2388070AbfGOOFB (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:05:01 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 07DDD2086C;
-        Mon, 15 Jul 2019 14:05:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D58B72081C;
+        Mon, 15 Jul 2019 14:04:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199505;
-        bh=+IJT9rcKJXvihHeLk9LU5Vs73d9NTD4PUXQVZ9ablkU=;
+        s=default; t=1563199501;
+        bh=UZby9dVk9MFAUqpiU1hi/Ti2aHvwtkwja8ycGnSBRJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ADQE+DfWn6fWRHn9HUQYdkfMctlLu1j84HLyT/buKPf39wCLdZ/kY9Hg0OZHrm6Sa
-         ZNhRXcrhCvI0w/sI6WDb2oV1yOUMokgW/B+ha/UICNC62urNAYPZAMyH/qzXfEyemd
-         QjIw36HiF53Zj349D0pSNi0E2L0JUeEF1vU+In54=
+        b=kl7hXu56Ddd0Z5PlpEoInQuJa/NVTiJnO9y939Kn84GHs4VqGqFHZaWv2KcLcgLHy
+         7FyYxSkQfkN+zwy+Vjd47fqJe47wbh9sz+ZpXGtHoGIt9BenzKBnRLRtpSYerPijPf
+         xXCuE5SmU0QZhi20Ox427NirRldK9U4I8+JidF4A=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jungo Lin <jungo.lin@mediatek.com>,
+Cc:     Lubomir Rintel <lkundrak@v3.sk>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 025/219] media: media_device_enum_links32: clean a reserved field
-Date:   Mon, 15 Jul 2019 10:00:26 -0400
-Message-Id: <20190715140341.6443-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 023/219] media: marvell-ccic: fix DMA s/g desc number calculation
+Date:   Mon, 15 Jul 2019 10:00:24 -0400
+Message-Id: <20190715140341.6443-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -58,55 +59,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jungo Lin <jungo.lin@mediatek.com>
+From: Lubomir Rintel <lkundrak@v3.sk>
 
-[ Upstream commit f49308878d7202e07d8761238e01bd0e5fce2750 ]
+[ Upstream commit 0c7aa32966dab0b8a7424e1b34c7f206817953ec ]
 
-In v4l2-compliance utility, test MEDIA_IOC_ENUM_ENTITIES
-will check whether reserved field of media_links_enum filled
-with zero.
+The commit d790b7eda953 ("[media] vb2-dma-sg: move dma_(un)map_sg here")
+left dma_desc_nent unset. It previously contained the number of DMA
+descriptors as returned from dma_map_sg().
 
-However, for 32 bit program, the reserved field is missing
-copy from kernel space to user space in media_device_enum_links32
-function.
+We can now (since the commit referred to above) obtain the same value from
+the sg_table and drop dma_desc_nent altogether.
 
-This patch adds the cleaning a reserved field logic in
-media_device_enum_links32 function.
+Tested on OLPC XO-1.75 machine. Doesn't affect the OLPC XO-1's Cafe
+driver, since that one doesn't do DMA.
 
-Signed-off-by: Jungo Lin <jungo.lin@mediatek.com>
+[mchehab+samsung@kernel.org: fix a checkpatch warning]
+
+Fixes: d790b7eda953 ("[media] vb2-dma-sg: move dma_(un)map_sg here")
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/media-device.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/media/platform/marvell-ccic/mcam-core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
-index b8ec88612df7..6893843edada 100644
---- a/drivers/media/media-device.c
-+++ b/drivers/media/media-device.c
-@@ -502,6 +502,7 @@ static long media_device_enum_links32(struct media_device *mdev,
+diff --git a/drivers/media/platform/marvell-ccic/mcam-core.c b/drivers/media/platform/marvell-ccic/mcam-core.c
+index f1b301810260..0a6411b877e9 100644
+--- a/drivers/media/platform/marvell-ccic/mcam-core.c
++++ b/drivers/media/platform/marvell-ccic/mcam-core.c
+@@ -200,7 +200,6 @@ struct mcam_vb_buffer {
+ 	struct list_head queue;
+ 	struct mcam_dma_desc *dma_desc;	/* Descriptor virtual address */
+ 	dma_addr_t dma_desc_pa;		/* Descriptor physical address */
+-	int dma_desc_nent;		/* Number of mapped descriptors */
+ };
+ 
+ static inline struct mcam_vb_buffer *vb_to_mvb(struct vb2_v4l2_buffer *vb)
+@@ -608,9 +607,11 @@ static void mcam_dma_contig_done(struct mcam_camera *cam, int frame)
+ static void mcam_sg_next_buffer(struct mcam_camera *cam)
  {
- 	struct media_links_enum links;
- 	compat_uptr_t pads_ptr, links_ptr;
-+	int ret;
+ 	struct mcam_vb_buffer *buf;
++	struct sg_table *sg_table;
  
- 	memset(&links, 0, sizeof(links));
- 
-@@ -513,7 +514,13 @@ static long media_device_enum_links32(struct media_device *mdev,
- 	links.pads = compat_ptr(pads_ptr);
- 	links.links = compat_ptr(links_ptr);
- 
--	return media_device_enum_links(mdev, &links);
-+	ret = media_device_enum_links(mdev, &links);
-+	if (ret)
-+		return ret;
-+
-+	memset(ulinks->reserved, 0, sizeof(ulinks->reserved));
-+
-+	return 0;
- }
- 
- #define MEDIA_IOC_ENUM_LINKS32		_IOWR('|', 0x02, struct media_links_enum32)
+ 	buf = list_first_entry(&cam->buffers, struct mcam_vb_buffer, queue);
+ 	list_del_init(&buf->queue);
++	sg_table = vb2_dma_sg_plane_desc(&buf->vb_buf.vb2_buf, 0);
+ 	/*
+ 	 * Very Bad Not Good Things happen if you don't clear
+ 	 * C1_DESC_ENA before making any descriptor changes.
+@@ -618,7 +619,7 @@ static void mcam_sg_next_buffer(struct mcam_camera *cam)
+ 	mcam_reg_clear_bit(cam, REG_CTRL1, C1_DESC_ENA);
+ 	mcam_reg_write(cam, REG_DMA_DESC_Y, buf->dma_desc_pa);
+ 	mcam_reg_write(cam, REG_DESC_LEN_Y,
+-			buf->dma_desc_nent*sizeof(struct mcam_dma_desc));
++			sg_table->nents * sizeof(struct mcam_dma_desc));
+ 	mcam_reg_write(cam, REG_DESC_LEN_U, 0);
+ 	mcam_reg_write(cam, REG_DESC_LEN_V, 0);
+ 	mcam_reg_set_bit(cam, REG_CTRL1, C1_DESC_ENA);
 -- 
 2.20.1
 
