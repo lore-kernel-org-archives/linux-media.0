@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AB48C76195
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:56:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25F45C76196
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:56:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 18B922067C
+	by mail.kernel.org (Postfix) with ESMTP id F2CBE205ED
 	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:56:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563202561;
-	bh=Vch4FLZExbIttm4bnQJbOXv7PFICLBmwk6CJZ9mV89M=;
+	s=default; t=1563202562;
+	bh=BC+5+EfGjcckXIt691p/1Wj4d2L7CEhTbjAFZuwaiqY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=K4ryIVHhakc8umzYmBKErbMQH+WuKmUouSZI+RVhM2qY3B3E2KiVq0I30KxRFIquD
-	 Ph+tdco399aekNKLBynQjRWdNakYYTReAeyiWeTx+Zfq7h7UbGkwrdjXqRdUaqf5mk
-	 mqpGjubmQyaE5UNYHxLbwYklxwu3q2k85TuzDWCw=
+	b=AY6bXUpoMZdSZ+tL0OlDleWKalX2fHB7QGMOzqFo7wttYcSQ1MC0gebn4QNr8VXrI
+	 7a/PE6TTdpDwVTjJ8eA84506xcI6YXqWwg5cDGD6HojtayNjUiSPsCWzmUVwR1W5Pr
+	 8QRYsap8HGwoat/s2u3d3SEmGeazPXxQuA6ppaVw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390793AbfGOOXx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:23:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56058 "EHLO mail.kernel.org"
+        id S2390782AbfGOOXk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:23:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390340AbfGOOXv (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:23:51 -0400
+        id S2390775AbfGOOXj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:23:39 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B7FE720896;
-        Mon, 15 Jul 2019 14:23:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 857982053B;
+        Mon, 15 Jul 2019 14:23:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200631;
-        bh=Vch4FLZExbIttm4bnQJbOXv7PFICLBmwk6CJZ9mV89M=;
+        s=default; t=1563200618;
+        bh=BC+5+EfGjcckXIt691p/1Wj4d2L7CEhTbjAFZuwaiqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X/EfPmYuzf+5czc1SoRDQk7fR5UPGR2ZIkfzTggZ0hGx1XicokbjDLYIXMcmzIQkv
-         80ZDtqHR20LDEX/1mQCWAYK3KH/QIVBqYa5+wswZQ6wvDwCXBJQz/y3AufYmU8R8Ya
-         QJyi4AKE4yd9hXouSHt95uEpGC9jF3tB2gWD1CxA=
+        b=qciBdAGYKTTlPbkos7XoDpuf3DVLrOBjI7frL2tgpeymV6op1CCni1D4MUj/qAsXq
+         Wjsji3aR7aZykd3DE6viktQHxmOxDDJJe7qsCk8k6wekcE4kPq/f1LDeD9qaADokgm
+         Xmx7OTQRrLWzfV9Ssg0IX5zNPAnNbA/QFwqWZ50s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 097/158] media: coda: fix mpeg2 sequence number handling
-Date:   Mon, 15 Jul 2019 10:17:08 -0400
-Message-Id: <20190715141809.8445-97-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 093/158] media: i2c: fix warning same module names
+Date:   Mon, 15 Jul 2019 10:17:04 -0400
+Message-Id: <20190715141809.8445-93-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
 References: <20190715141809.8445-1-sashal@kernel.org>
@@ -59,46 +59,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Philipp Zabel <p.zabel@pengutronix.de>
+From: Anders Roxell <anders.roxell@linaro.org>
 
-[ Upstream commit 56d159a4ec6d8da7313aac6fcbb95d8fffe689ba ]
+[ Upstream commit b2ce5617dad254230551feda3599f2cc68e53ad8 ]
 
-Sequence number handling assumed that the BIT processor frame number
-starts counting at 1, but this is not true for the MPEG-2 decoder,
-which starts at 0. Fix the sequence counter offset detection to handle
-this.
+When building with CONFIG_VIDEO_ADV7511 and CONFIG_DRM_I2C_ADV7511
+enabled as loadable modules, we see the following warning:
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+  drivers/gpu/drm/bridge/adv7511/adv7511.ko
+  drivers/media/i2c/adv7511.ko
+
+Rework so that the file is named adv7511-v4l2.c.
+
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/coda-bit.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/i2c/Makefile                      | 2 +-
+ drivers/media/i2c/{adv7511.c => adv7511-v4l2.c} | 5 +++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+ rename drivers/media/i2c/{adv7511.c => adv7511-v4l2.c} (99%)
 
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index a3cfefdbee12..25ef0c928a81 100644
---- a/drivers/media/platform/coda/coda-bit.c
-+++ b/drivers/media/platform/coda/coda-bit.c
-@@ -1728,6 +1728,7 @@ static int __coda_start_decoding(struct coda_ctx *ctx)
- 		v4l2_err(&dev->v4l2_dev, "CODA_COMMAND_SEQ_INIT timeout\n");
- 		return ret;
- 	}
-+	ctx->sequence_offset = ~0U;
- 	ctx->initialized = 1;
+diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
+index a94eb03d10d4..520b3c3bf48c 100644
+--- a/drivers/media/i2c/Makefile
++++ b/drivers/media/i2c/Makefile
+@@ -36,7 +36,7 @@ obj-$(CONFIG_VIDEO_ADV748X) += adv748x/
+ obj-$(CONFIG_VIDEO_ADV7604) += adv7604.o
+ obj-$(CONFIG_VIDEO_ADV7842) += adv7842.o
+ obj-$(CONFIG_VIDEO_AD9389B) += ad9389b.o
+-obj-$(CONFIG_VIDEO_ADV7511) += adv7511.o
++obj-$(CONFIG_VIDEO_ADV7511) += adv7511-v4l2.o
+ obj-$(CONFIG_VIDEO_VPX3220) += vpx3220.o
+ obj-$(CONFIG_VIDEO_VS6624)  += vs6624.o
+ obj-$(CONFIG_VIDEO_BT819) += bt819.o
+diff --git a/drivers/media/i2c/adv7511.c b/drivers/media/i2c/adv7511-v4l2.c
+similarity index 99%
+rename from drivers/media/i2c/adv7511.c
+rename to drivers/media/i2c/adv7511-v4l2.c
+index 88349b5053cc..6869bb593a68 100644
+--- a/drivers/media/i2c/adv7511.c
++++ b/drivers/media/i2c/adv7511-v4l2.c
+@@ -5,6 +5,11 @@
+  * Copyright 2013 Cisco Systems, Inc. and/or its affiliates. All rights reserved.
+  */
  
- 	/* Update kfifo out pointer from coda bitstream read pointer */
-@@ -2147,7 +2148,9 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 		v4l2_err(&dev->v4l2_dev,
- 			 "decoded frame index out of range: %d\n", decoded_idx);
- 	} else {
--		val = coda_read(dev, CODA_RET_DEC_PIC_FRAME_NUM) - 1;
-+		val = coda_read(dev, CODA_RET_DEC_PIC_FRAME_NUM);
-+		if (ctx->sequence_offset == -1)
-+			ctx->sequence_offset = val;
- 		val -= ctx->sequence_offset;
- 		spin_lock_irqsave(&ctx->buffer_meta_lock, flags);
- 		if (!list_empty(&ctx->buffer_meta_list)) {
++/*
++ * This file is named adv7511-v4l2.c so it doesn't conflict with the Analog
++ * Device ADV7511 (config fragment CONFIG_DRM_I2C_ADV7511).
++ */
++
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
 -- 
 2.20.1
 
