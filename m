@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF20EC7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:37:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3A0FC76195
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:37:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 968C421530
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:37:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A16452081C
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:37:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563197859;
-	bh=PaU5srnL3ACyaX+pzmrAHpsPBAoukadvpSBsfBVIKhs=;
+	s=default; t=1563197869;
+	bh=aISJD8jToyQDZQQixjprAUFaH+IJQNwqr1ZEViTeoBA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=hCfcpmP/SGOvOZjkHFVPGRIdLdEnpW/2PjHpZ6kbr+CoXukAbdLBzKczBLZS18hp0
-	 56Nw0zbFnG2QWeDdDvWNqIIeEZz3Xl9bK//TjlF/CMios6hU4yrI1yMYGyq05Nf4Bt
-	 /gLMk20ePHBsDepT9AzdJwRwGtwoH6KbfIzQNkyI=
+	b=BuKkEQ6KkgNZQuQwEKl3WL0oFoNRq1OB78aihKXNb8rQpTn0enNH2c16WJzRvfDbV
+	 lgv6WJfKJHSnyJe4Tx5QSthMFMTvQQDIPKNW/XNBoXewu1B0rWR9ld+9kISxRr07PN
+	 sHITkagZmbQxi36fGXHmQ88d7hyokkR+wLojOb8E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730012AbfGONhf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:37:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36216 "EHLO mail.kernel.org"
+        id S1730569AbfGONhs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:37:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36544 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730263AbfGONhf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:37:35 -0400
+        id S1730408AbfGONhr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:37:47 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 27E0221530;
-        Mon, 15 Jul 2019 13:37:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F11E121530;
+        Mon, 15 Jul 2019 13:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563197853;
-        bh=PaU5srnL3ACyaX+pzmrAHpsPBAoukadvpSBsfBVIKhs=;
+        s=default; t=1563197866;
+        bh=aISJD8jToyQDZQQixjprAUFaH+IJQNwqr1ZEViTeoBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xbSHLchOzWUz3LMRmiohF4N3B1Niq8bBk2hNRMp0Dhat6BR9M9LyVXwp/Ota+nSS7
-         EqdXu2fDKQkaOFOibE3WFRHyk05UzEnFrcNjse/1Uj8tdQqg99SGDxrktxZopbgotM
-         xxb1Jexj2qJBYZ5Kfn15Z2w529L8x+XEXEMgDrfY=
+        b=GYmzHExuv7qXO4/qMBVY4pqJJUXRxCyEhAXDAeS2u+MHuO1h5BU0YrBxPUl7PLgUb
+         qu28s7YMS9xkaM9G+XoLxGBIQFeHT/Fjn9qpqNc9GZ5c00gF9JNBzubGShIIVDGFbR
+         kalk4/JihA3zndHnTPVzBoU+qfJ5i/VYrVVmgdlU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com,
-        Sean Young <sean@mess.org>,
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 019/249] media: dvb: usb: fix use after free in dvb_usb_device_exit
-Date:   Mon, 15 Jul 2019 09:32:00 -0400
-Message-Id: <20190715133550.1772-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 022/249] media: ov7740: avoid invalid framesize setting
+Date:   Mon, 15 Jul 2019 09:32:03 -0400
+Message-Id: <20190715133550.1772-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715133550.1772-1-sashal@kernel.org>
 References: <20190715133550.1772-1-sashal@kernel.org>
@@ -60,43 +61,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Akinobu Mita <akinobu.mita@gmail.com>
 
-[ Upstream commit 6cf97230cd5f36b7665099083272595c55d72be7 ]
+[ Upstream commit 6e4ab830ac6d6a0d7cd7f87dc5d6536369bf24a8 ]
 
-dvb_usb_device_exit() frees and uses the device name in that order.
-Fix by storing the name in a buffer before freeing it.
+If the requested framesize by VIDIOC_SUBDEV_S_FMT is larger than supported
+framesizes, it causes an out of bounds array access and the resulting
+framesize is unexpected.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
-Signed-off-by: Sean Young <sean@mess.org>
+Avoid out of bounds array access and select the default framesize.
+
+Cc: Wenyou Yang <wenyou.yang@microchip.com>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov7740.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-index e97f6edc98de..65f2b1a20ca1 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-+++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-@@ -284,12 +284,15 @@ EXPORT_SYMBOL(dvb_usb_device_init);
- void dvb_usb_device_exit(struct usb_interface *intf)
- {
- 	struct dvb_usb_device *d = usb_get_intfdata(intf);
--	const char *name = "generic DVB-USB module";
-+	const char *default_name = "generic DVB-USB module";
-+	char name[40];
+diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
+index 54e80a60aa57..63011d4b4738 100644
+--- a/drivers/media/i2c/ov7740.c
++++ b/drivers/media/i2c/ov7740.c
+@@ -785,7 +785,11 @@ static int ov7740_try_fmt_internal(struct v4l2_subdev *sd,
  
- 	usb_set_intfdata(intf, NULL);
- 	if (d != NULL && d->desc != NULL) {
--		name = d->desc->name;
-+		strscpy(name, d->desc->name, sizeof(name));
- 		dvb_usb_exit(d);
-+	} else {
-+		strscpy(name, default_name, sizeof(name));
+ 		fsize++;
  	}
- 	info("%s successfully deinitialized and disconnected.", name);
+-
++	if (i >= ARRAY_SIZE(ov7740_framesizes)) {
++		fsize = &ov7740_framesizes[0];
++		fmt->width = fsize->width;
++		fmt->height = fsize->height;
++	}
+ 	if (ret_frmsize != NULL)
+ 		*ret_frmsize = fsize;
  
 -- 
 2.20.1
