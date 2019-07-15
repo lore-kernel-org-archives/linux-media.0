@@ -4,54 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFC8AC7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20455C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BC0D82080A
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E28842054F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203182;
-	bh=mhXhduWJaO04kawnAw5A60pE1lbweTRh4KXfbSeGtIQ=;
+	s=default; t=1563203401;
+	bh=uMXwY+utQlYgUVFfRs3t6FU1guKx6DjSmDsESwfCTEE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sHj6FkOkH5CUqKSZLQz3c7947+LPuSjba3GV8xK3M4hZba3AjEO1iQbhuYXgAergD
-	 Ymx2k8TigYBhnIxWP357QDX18qm7kmNCb6+Tzpv59QQpmJVWZyEz6Dw4BtEpJnv9LP
-	 Tf5i2fNbPhOZor4etHqmIVlpoNOe0pPjzLC95HWo=
+	b=cWG+mee1Yc93Fz2WlDIHd9jD2vhJ0UZzSV/KbtARQU4w7Mjbu/xZ7aOHO9719W8MD
+	 nchi4RgDVrikqDbl39j29eoXJ5TJlLE89sRqSgYi7cIpCMX+iiE2NTHufr0MPPEG0W
+	 IWHlT4mCticiQaYe8yPjA6l9V8WmKS89542kYh2I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388106AbfGOPGV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 11:06:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51142 "EHLO mail.kernel.org"
+        id S1732782AbfGON4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:56:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60556 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388060AbfGOOFA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:05:00 -0400
+        id S1732785AbfGON4H (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:56:07 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 64C1A2086C;
-        Mon, 15 Jul 2019 14:04:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CCCD82086C;
+        Mon, 15 Jul 2019 13:56:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199499;
-        bh=mhXhduWJaO04kawnAw5A60pE1lbweTRh4KXfbSeGtIQ=;
+        s=default; t=1563198966;
+        bh=uMXwY+utQlYgUVFfRs3t6FU1guKx6DjSmDsESwfCTEE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XCdcMEFhxXbxZjZybrKJlKIyM3J25Ka+3lkLAjvLCCx3mMoheQBN/DDWaCH30JcnS
-         bNBSZQAQ8puvnSn1ODt9n0Vq9qrX3FmaJ65Coxt9pTS9qMf8Hd/cbP2yLXlWlLa4QG
-         wFGkjmbGFeKNoD4himKSk0QPYHv+PVPZ6uSDWmZ8=
+        b=ttKFG2NWcJcCeFaUvc/DTUSBeLdXuL+a8ytyNdnVXoAT2IEizjzcHBgI5A5Iokesz
+         kKFP8Jvko6HNpLWWmxuN7WlM+RDqSx9bE1ncMK80ayNi7AWdSxwG55ciUfprEfQUgk
+         X6g7XoOrr/UJBaVMxNaLP8fuBKReY4WzUflpyZ9U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Eugen Hristev <eugen.hristev@microchip.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Keith Pyle <kpyle@austin.rr.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 022/219] media: ov7740: avoid invalid framesize setting
-Date:   Mon, 15 Jul 2019 10:00:23 -0400
-Message-Id: <20190715140341.6443-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 155/249] media: hdpvr: fix locking and a missing msleep
+Date:   Mon, 15 Jul 2019 09:45:20 -0400
+Message-Id: <20190715134655.4076-155-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
-References: <20190715140341.6443-1-sashal@kernel.org>
+In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
+References: <20190715134655.4076-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,43 +60,81 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Akinobu Mita <akinobu.mita@gmail.com>
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
-[ Upstream commit 6e4ab830ac6d6a0d7cd7f87dc5d6536369bf24a8 ]
+[ Upstream commit 6bc5a4a1927556ff9adce1aa95ea408c95453225 ]
 
-If the requested framesize by VIDIOC_SUBDEV_S_FMT is larger than supported
-framesizes, it causes an out of bounds array access and the resulting
-framesize is unexpected.
+This driver has three locking issues:
 
-Avoid out of bounds array access and select the default framesize.
+- The wait_event_interruptible() condition calls hdpvr_get_next_buffer(dev)
+  which uses a mutex, which is not allowed. Rewrite with list_empty_careful()
+  that doesn't need locking.
 
-Cc: Wenyou Yang <wenyou.yang@microchip.com>
-Cc: Eugen Hristev <eugen.hristev@microchip.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+- In hdpvr_read() the call to hdpvr_stop_streaming() didn't lock io_mutex,
+  but it should have since stop_streaming expects that.
+
+- In hdpvr_device_release() io_mutex was locked when calling flush_work(),
+  but there it shouldn't take that mutex since the work done by flush_work()
+  also wants to lock that mutex.
+
+There are also two other changes (suggested by Keith):
+
+- msecs_to_jiffies(4000); (a NOP) should have been msleep(4000).
+- Change v4l2_dbg to v4l2_info to always log if streaming had to be restarted.
+
+Reported-by: Keith Pyle <kpyle@austin.rr.com>
+Suggested-by: Keith Pyle <kpyle@austin.rr.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov7740.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/media/usb/hdpvr/hdpvr-video.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
-index dfece91ce96b..8207e7cf9923 100644
---- a/drivers/media/i2c/ov7740.c
-+++ b/drivers/media/i2c/ov7740.c
-@@ -761,7 +761,11 @@ static int ov7740_try_fmt_internal(struct v4l2_subdev *sd,
- 
- 		fsize++;
+diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
+index 7580fc5f2f12..6a6405b80797 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-video.c
++++ b/drivers/media/usb/hdpvr/hdpvr-video.c
+@@ -435,7 +435,7 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
+ 	/* wait for the first buffer */
+ 	if (!(file->f_flags & O_NONBLOCK)) {
+ 		if (wait_event_interruptible(dev->wait_data,
+-					     hdpvr_get_next_buffer(dev)))
++					     !list_empty_careful(&dev->rec_buff_list)))
+ 			return -ERESTARTSYS;
  	}
--
-+	if (i >= ARRAY_SIZE(ov7740_framesizes)) {
-+		fsize = &ov7740_framesizes[0];
-+		fmt->width = fsize->width;
-+		fmt->height = fsize->height;
-+	}
- 	if (ret_frmsize != NULL)
- 		*ret_frmsize = fsize;
  
+@@ -461,10 +461,17 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
+ 				goto err;
+ 			}
+ 			if (!err) {
+-				v4l2_dbg(MSG_INFO, hdpvr_debug, &dev->v4l2_dev,
+-					"timeout: restart streaming\n");
++				v4l2_info(&dev->v4l2_dev,
++					  "timeout: restart streaming\n");
++				mutex_lock(&dev->io_mutex);
+ 				hdpvr_stop_streaming(dev);
+-				msecs_to_jiffies(4000);
++				mutex_unlock(&dev->io_mutex);
++				/*
++				 * The FW needs about 4 seconds after streaming
++				 * stopped before it is ready to restart
++				 * streaming.
++				 */
++				msleep(4000);
+ 				err = hdpvr_start_streaming(dev);
+ 				if (err) {
+ 					ret = err;
+@@ -1127,9 +1134,7 @@ static void hdpvr_device_release(struct video_device *vdev)
+ 	struct hdpvr_device *dev = video_get_drvdata(vdev);
+ 
+ 	hdpvr_delete(dev);
+-	mutex_lock(&dev->io_mutex);
+ 	flush_work(&dev->worker);
+-	mutex_unlock(&dev->io_mutex);
+ 
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 	v4l2_ctrl_handler_free(&dev->hdl);
 -- 
 2.20.1
 
