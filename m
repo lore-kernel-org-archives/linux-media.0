@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34F70C76195
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:53:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDF04C7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:55:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0194820868
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:53:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A2526205ED
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:55:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563202435;
-	bh=vw/g7f5Dkswi3MkMzI2mORVT3SBrOgShtQ0N7nacFPs=;
+	s=default; t=1563202552;
+	bh=NeBiLtldBlF+JUw1LDxxHLYb/2zKYJBiEzbwMyeURHI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Qzpi/Kxjflkc16H8qbTz3FiPnbOMxdHmv+Sx1AuJfRH7CiQhOmtAfweZSLEIg+ReY
-	 +nOGACwyetwufe4/XjYF2Ah8FUEr6vtYzV64kQ3xCytbNuEQRmOUO1VT1mFR5WigNd
-	 7aRREHIAY24AWkdmpzmfDq+XSVmcFFBSKy4dmYlw=
+	b=2d5v4qqK48vZoZZ8/T+tSyK15ihC6HsINzgR78eBPgldcUxYpglPKsUt/08RDQ9PE
+	 ACGZHfu3Wktnol5EDPqeSJP/IKDHYmKzak8opZjHDJSkwsqpxVmrJjmQQU4dyiDXJL
+	 tmQQPvv4v9Y+6VWIg9XoGIXKcsUV85ozQ0TmgONo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391320AbfGOO3R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:29:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40386 "EHLO mail.kernel.org"
+        id S2390857AbfGOOYG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:24:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57040 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391533AbfGOO3Q (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:29:16 -0400
+        id S1731566AbfGOOYG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:24:06 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7611F205ED;
-        Mon, 15 Jul 2019 14:29:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CBA74206B8;
+        Mon, 15 Jul 2019 14:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200955;
-        bh=vw/g7f5Dkswi3MkMzI2mORVT3SBrOgShtQ0N7nacFPs=;
+        s=default; t=1563200645;
+        bh=NeBiLtldBlF+JUw1LDxxHLYb/2zKYJBiEzbwMyeURHI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FFzp3jUZfWxcRp9kWTzRmkfLVida6ncr1CTL6+YcRdQkD2GC1Vhg/Vlgt6Athi4xQ
-         VjQ67gRsRft0MphUDxEr2tbaa4sUfoCu03iYthicAIwE3ofG2JERK4yOlDCy+hmxvi
-         HsiGZIlIdKnEoCU4ZgS+zATs+Tn7SiQ/LIcDpmtI=
+        b=vAgmZ5k9D7MiZj5tDtQ/4ld5EIIocmT3Pr8E6F78weL2IcKveXexmZFzULrx8dz7f
+         dzVHZ4qSeHMxoIfGeSXN6DKN2YmvuQQo5u9aRyZffDTUwzoIaxVknIvQJUiuee4p4U
+         Fg2Bs9ZntPyAFIXuoklQtGBUbjjepq5walpUdmO8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniel Gomez <dagmcr@gmail.com>,
-        Javier Martinez Canillas <javier@dowhile0.org>,
-        Sean Young <sean@mess.org>,
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Keith Pyle <kpyle@austin.rr.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 009/105] media: spi: IR LED: add missing of table registration
-Date:   Mon, 15 Jul 2019 10:27:03 -0400
-Message-Id: <20190715142839.9896-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 101/158] media: hdpvr: fix locking and a missing msleep
+Date:   Mon, 15 Jul 2019 10:17:12 -0400
+Message-Id: <20190715141809.8445-101-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
-References: <20190715142839.9896-1-sashal@kernel.org>
+In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
+References: <20190715141809.8445-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,42 +60,81 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Daniel Gomez <dagmcr@gmail.com>
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
-[ Upstream commit 24e4cf770371df6ad49ed873f21618d9878f64c8 ]
+[ Upstream commit 6bc5a4a1927556ff9adce1aa95ea408c95453225 ]
 
-MODULE_DEVICE_TABLE(of, <of_match_table> should be called to complete DT
-OF mathing mechanism and register it.
+This driver has three locking issues:
 
-Before this patch:
-modinfo drivers/media/rc/ir-spi.ko  | grep alias
+- The wait_event_interruptible() condition calls hdpvr_get_next_buffer(dev)
+  which uses a mutex, which is not allowed. Rewrite with list_empty_careful()
+  that doesn't need locking.
 
-After this patch:
-modinfo drivers/media/rc/ir-spi.ko  | grep alias
-alias:          of:N*T*Cir-spi-ledC*
-alias:          of:N*T*Cir-spi-led
+- In hdpvr_read() the call to hdpvr_stop_streaming() didn't lock io_mutex,
+  but it should have since stop_streaming expects that.
 
-Reported-by: Javier Martinez Canillas <javier@dowhile0.org>
-Signed-off-by: Daniel Gomez <dagmcr@gmail.com>
-Signed-off-by: Sean Young <sean@mess.org>
+- In hdpvr_device_release() io_mutex was locked when calling flush_work(),
+  but there it shouldn't take that mutex since the work done by flush_work()
+  also wants to lock that mutex.
+
+There are also two other changes (suggested by Keith):
+
+- msecs_to_jiffies(4000); (a NOP) should have been msleep(4000).
+- Change v4l2_dbg to v4l2_info to always log if streaming had to be restarted.
+
+Reported-by: Keith Pyle <kpyle@austin.rr.com>
+Suggested-by: Keith Pyle <kpyle@austin.rr.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/ir-spi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/usb/hdpvr/hdpvr-video.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/media/rc/ir-spi.c b/drivers/media/rc/ir-spi.c
-index 29ed0638cb74..cbe585f95715 100644
---- a/drivers/media/rc/ir-spi.c
-+++ b/drivers/media/rc/ir-spi.c
-@@ -186,6 +186,7 @@ static const struct of_device_id ir_spi_of_match[] = {
- 	{ .compatible = "ir-spi-led" },
- 	{},
- };
-+MODULE_DEVICE_TABLE(of, ir_spi_of_match);
+diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
+index 1b89c77bad66..0615996572e4 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-video.c
++++ b/drivers/media/usb/hdpvr/hdpvr-video.c
+@@ -439,7 +439,7 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
+ 	/* wait for the first buffer */
+ 	if (!(file->f_flags & O_NONBLOCK)) {
+ 		if (wait_event_interruptible(dev->wait_data,
+-					     hdpvr_get_next_buffer(dev)))
++					     !list_empty_careful(&dev->rec_buff_list)))
+ 			return -ERESTARTSYS;
+ 	}
  
- static struct spi_driver ir_spi_driver = {
- 	.probe = ir_spi_probe,
+@@ -465,10 +465,17 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
+ 				goto err;
+ 			}
+ 			if (!err) {
+-				v4l2_dbg(MSG_INFO, hdpvr_debug, &dev->v4l2_dev,
+-					"timeout: restart streaming\n");
++				v4l2_info(&dev->v4l2_dev,
++					  "timeout: restart streaming\n");
++				mutex_lock(&dev->io_mutex);
+ 				hdpvr_stop_streaming(dev);
+-				msecs_to_jiffies(4000);
++				mutex_unlock(&dev->io_mutex);
++				/*
++				 * The FW needs about 4 seconds after streaming
++				 * stopped before it is ready to restart
++				 * streaming.
++				 */
++				msleep(4000);
+ 				err = hdpvr_start_streaming(dev);
+ 				if (err) {
+ 					ret = err;
+@@ -1133,9 +1140,7 @@ static void hdpvr_device_release(struct video_device *vdev)
+ 	struct hdpvr_device *dev = video_get_drvdata(vdev);
+ 
+ 	hdpvr_delete(dev);
+-	mutex_lock(&dev->io_mutex);
+ 	flush_work(&dev->worker);
+-	mutex_unlock(&dev->io_mutex);
+ 
+ 	v4l2_device_unregister(&dev->v4l2_dev);
+ 	v4l2_ctrl_handler_free(&dev->hdl);
 -- 
 2.20.1
 
