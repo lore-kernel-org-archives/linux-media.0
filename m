@@ -4,48 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3736C7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFC8AC7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5D9552080A
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC0D82080A
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203178;
-	bh=ycwk6oC+x61BQ/IrIG0u0Xkz817gkuX+WzSCZEZXK54=;
+	s=default; t=1563203182;
+	bh=mhXhduWJaO04kawnAw5A60pE1lbweTRh4KXfbSeGtIQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=dX73kOxgI/jEEXy5sdKFxHTK4iANqViW7P3DdXqRm2jGJ5qT+pcQZaBSBuGaKm1+h
-	 JkrkPP+BTLaTxTSA1exi7R8E4D+5xL5bq4UKsLSyDPjAI/SNZYiaHHr9q45N7sWfNe
-	 fV2FFsz0oTB/K+hlY3YwIby9pJBX5PMkv57yMqcc=
+	b=sHj6FkOkH5CUqKSZLQz3c7947+LPuSjba3GV8xK3M4hZba3AjEO1iQbhuYXgAergD
+	 Ymx2k8TigYBhnIxWP357QDX18qm7kmNCb6+Tzpv59QQpmJVWZyEz6Dw4BtEpJnv9LP
+	 Tf5i2fNbPhOZor4etHqmIVlpoNOe0pPjzLC95HWo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388078AbfGOOFE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:05:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51260 "EHLO mail.kernel.org"
+        id S2388106AbfGOPGV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 11:06:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51142 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387474AbfGOOFD (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:05:03 -0400
+        id S2388060AbfGOOFA (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:05:00 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 03FB72184B;
-        Mon, 15 Jul 2019 14:05:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64C1A2086C;
+        Mon, 15 Jul 2019 14:04:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199503;
-        bh=ycwk6oC+x61BQ/IrIG0u0Xkz817gkuX+WzSCZEZXK54=;
+        s=default; t=1563199499;
+        bh=mhXhduWJaO04kawnAw5A60pE1lbweTRh4KXfbSeGtIQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HCO/etppHI4Ud2WqeXo8GF2UBqKvlFbtJzfNdY95imvvlaiA/kg5bNgJ8kQEXkQhr
-         SbaehkQ8r3kL32aKVkwHx5x1KdFhpMGt8Uq63i1RMJVlUjBWi08phcq6Z6sUytzaKR
-         3pbo5QoYhifzix1iPiTVQDpWC6OkGf8hQNASEV44=
+        b=XCdcMEFhxXbxZjZybrKJlKIyM3J25Ka+3lkLAjvLCCx3mMoheQBN/DDWaCH30JcnS
+         bNBSZQAQ8puvnSn1ODt9n0Vq9qrX3FmaJ65Coxt9pTS9qMf8Hd/cbP2yLXlWlLa4QG
+         wFGkjmbGFeKNoD4himKSk0QPYHv+PVPZ6uSDWmZ8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kangjie Lu <kjlu@umn.edu>, Mukesh Ojha <mojha@codeaurora.org>,
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Eugen Hristev <eugen.hristev@microchip.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 024/219] media: vpss: fix a potential NULL pointer dereference
-Date:   Mon, 15 Jul 2019 10:00:25 -0400
-Message-Id: <20190715140341.6443-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 022/219] media: ov7740: avoid invalid framesize setting
+Date:   Mon, 15 Jul 2019 10:00:23 -0400
+Message-Id: <20190715140341.6443-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -58,36 +61,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Kangjie Lu <kjlu@umn.edu>
+From: Akinobu Mita <akinobu.mita@gmail.com>
 
-[ Upstream commit e08f0761234def47961d3252eac09ccedfe4c6a0 ]
+[ Upstream commit 6e4ab830ac6d6a0d7cd7f87dc5d6536369bf24a8 ]
 
-In case ioremap fails, the fix returns -ENOMEM to avoid NULL
-pointer dereference.
+If the requested framesize by VIDIOC_SUBDEV_S_FMT is larger than supported
+framesizes, it causes an out of bounds array access and the resulting
+framesize is unexpected.
 
-Signed-off-by: Kangjie Lu <kjlu@umn.edu>
-Reviewed-by: Mukesh Ojha <mojha@codeaurora.org>
+Avoid out of bounds array access and select the default framesize.
+
+Cc: Wenyou Yang <wenyou.yang@microchip.com>
+Cc: Eugen Hristev <eugen.hristev@microchip.com>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/vpss.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/i2c/ov7740.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/davinci/vpss.c b/drivers/media/platform/davinci/vpss.c
-index 19cf6853411e..89a86c19579b 100644
---- a/drivers/media/platform/davinci/vpss.c
-+++ b/drivers/media/platform/davinci/vpss.c
-@@ -518,6 +518,11 @@ static int __init vpss_init(void)
- 		return -EBUSY;
+diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
+index dfece91ce96b..8207e7cf9923 100644
+--- a/drivers/media/i2c/ov7740.c
++++ b/drivers/media/i2c/ov7740.c
+@@ -761,7 +761,11 @@ static int ov7740_try_fmt_internal(struct v4l2_subdev *sd,
  
- 	oper_cfg.vpss_regs_base2 = ioremap(VPSS_CLK_CTRL, 4);
-+	if (unlikely(!oper_cfg.vpss_regs_base2)) {
-+		release_mem_region(VPSS_CLK_CTRL, 4);
-+		return -ENOMEM;
+ 		fsize++;
+ 	}
+-
++	if (i >= ARRAY_SIZE(ov7740_framesizes)) {
++		fsize = &ov7740_framesizes[0];
++		fmt->width = fsize->width;
++		fmt->height = fsize->height;
 +	}
-+
- 	writel(VPSS_CLK_CTRL_VENCCLKEN |
- 		     VPSS_CLK_CTRL_DACCLKEN, oper_cfg.vpss_regs_base2);
+ 	if (ret_frmsize != NULL)
+ 		*ret_frmsize = fsize;
  
 -- 
 2.20.1
