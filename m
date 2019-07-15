@@ -4,51 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44808C76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:05:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B8A7C7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1DED42054F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:05:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0EE8E205ED
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:06:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203130;
-	bh=2gzpnHJpu2UxoceTvfn/3W2fb5i1A+gYyHKP7Gi/5d8=;
+	s=default; t=1563203175;
+	bh=+IJT9rcKJXvihHeLk9LU5Vs73d9NTD4PUXQVZ9ablkU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=G0U9Ph+JPhnu7mXhgF/6H/FAAs9B6A5Lw/6VQI8bivrrslWHZe1paPJgGW9Y7njL1
-	 G42xBmQeWwTtZZ84AhmmtFKYosXHnysk/mSYnbato8kapeN/iIGmxpkcLsoyThV8Yx
-	 YwbPXXFBZDdrrFvbztMrh0AUbKxsdlRNYStrXntU=
+	b=Se9BMs0i4UnXH5mDoNsC/3JkR1AzTr4l15E9TSY/tOr6M7x5A029sSi+XdIn8may/
+	 Mjb6GbWpoS/d7EcLrmxFQYB9s5TqlBiWhgBILneR0GCeyafhHUGCGgtCa13uCVpFoC
+	 iEgFk3YG03yTySQ/zwKHi01CJ1bbRM4rVdGx7roI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387825AbfGOOFr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:05:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52452 "EHLO mail.kernel.org"
+        id S2387979AbfGOOFH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:05:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51278 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388176AbfGOOFm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:05:42 -0400
+        id S2388084AbfGOOFG (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:05:06 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0A177217D9;
-        Mon, 15 Jul 2019 14:05:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 07DDD2086C;
+        Mon, 15 Jul 2019 14:05:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199541;
-        bh=2gzpnHJpu2UxoceTvfn/3W2fb5i1A+gYyHKP7Gi/5d8=;
+        s=default; t=1563199505;
+        bh=+IJT9rcKJXvihHeLk9LU5Vs73d9NTD4PUXQVZ9ablkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QBsv12tb0FKGpm4PfjaAGQ2w1Sf2HOwUZATdycO6XyTov1jQlWs05PzED4IGGDWXt
-         z66XitBTdofhUItImPeLrwf660HaknjpeH0lMB459GzdCQTFrDHCCJPrLeLPwoCY+1
-         ActOHzA0/PphchI3CtLaSlwIXE16u1Y12mrp+MaM=
+        b=ADQE+DfWn6fWRHn9HUQYdkfMctlLu1j84HLyT/buKPf39wCLdZ/kY9Hg0OZHrm6Sa
+         ZNhRXcrhCvI0w/sI6WDb2oV1yOUMokgW/B+ha/UICNC62urNAYPZAMyH/qzXfEyemd
+         QjIw36HiF53Zj349D0pSNi0E2L0JUeEF1vU+In54=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Jungo Lin <jungo.lin@mediatek.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 037/219] media: vim2m: fix two double-free issues
-Date:   Mon, 15 Jul 2019 10:00:38 -0400
-Message-Id: <20190715140341.6443-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 025/219] media: media_device_enum_links32: clean a reserved field
+Date:   Mon, 15 Jul 2019 10:00:26 -0400
+Message-Id: <20190715140341.6443-25-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -61,57 +58,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Kefeng Wang <wangkefeng.wang@huawei.com>
+From: Jungo Lin <jungo.lin@mediatek.com>
 
-[ Upstream commit 20059cbbf981ca954be56f7963ae494d18e2dda1 ]
+[ Upstream commit f49308878d7202e07d8761238e01bd0e5fce2750 ]
 
-vim2m_device_release() will be called by video_unregister_device() to release
-various objects.
+In v4l2-compliance utility, test MEDIA_IOC_ENUM_ENTITIES
+will check whether reserved field of media_links_enum filled
+with zero.
 
-There are two double-free issue,
-1. dev->m2m_dev will be freed twice in error_m2m path/vim2m_device_release
-2. the error_v4l2 and error_free path in vim2m_probe() will release
-   same objects, since vim2m_device_release has done.
+However, for 32 bit program, the reserved field is missing
+copy from kernel space to user space in media_device_enum_links32
+function.
 
-Fixes: ea6c7e34f3b2 ("media: vim2m: replace devm_kzalloc by kzalloc")
+This patch adds the cleaning a reserved field logic in
+media_device_enum_links32 function.
 
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Jungo Lin <jungo.lin@mediatek.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/vim2m.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/media-device.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/vim2m.c b/drivers/media/platform/vim2m.c
-index dd47821fc661..240327d2a3ad 100644
---- a/drivers/media/platform/vim2m.c
-+++ b/drivers/media/platform/vim2m.c
-@@ -1355,7 +1355,7 @@ static int vim2m_probe(struct platform_device *pdev)
- 						 MEDIA_ENT_F_PROC_VIDEO_SCALER);
- 	if (ret) {
- 		v4l2_err(&dev->v4l2_dev, "Failed to init mem2mem media controller\n");
--		goto error_m2m;
-+		goto error_dev;
- 	}
+diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
+index b8ec88612df7..6893843edada 100644
+--- a/drivers/media/media-device.c
++++ b/drivers/media/media-device.c
+@@ -502,6 +502,7 @@ static long media_device_enum_links32(struct media_device *mdev,
+ {
+ 	struct media_links_enum links;
+ 	compat_uptr_t pads_ptr, links_ptr;
++	int ret;
  
- 	ret = media_device_register(&dev->mdev);
-@@ -1369,11 +1369,11 @@ static int vim2m_probe(struct platform_device *pdev)
- #ifdef CONFIG_MEDIA_CONTROLLER
- error_m2m_mc:
- 	v4l2_m2m_unregister_media_controller(dev->m2m_dev);
--error_m2m:
--	v4l2_m2m_release(dev->m2m_dev);
- #endif
- error_dev:
- 	video_unregister_device(&dev->vfd);
-+	/* vim2m_device_release called by video_unregister_device to release various objects */
-+	return ret;
- error_v4l2:
- 	v4l2_device_unregister(&dev->v4l2_dev);
- error_free:
+ 	memset(&links, 0, sizeof(links));
+ 
+@@ -513,7 +514,13 @@ static long media_device_enum_links32(struct media_device *mdev,
+ 	links.pads = compat_ptr(pads_ptr);
+ 	links.links = compat_ptr(links_ptr);
+ 
+-	return media_device_enum_links(mdev, &links);
++	ret = media_device_enum_links(mdev, &links);
++	if (ret)
++		return ret;
++
++	memset(ulinks->reserved, 0, sizeof(ulinks->reserved));
++
++	return 0;
+ }
+ 
+ #define MEDIA_IOC_ENUM_LINKS32		_IOWR('|', 0x02, struct media_links_enum32)
 -- 
 2.20.1
 
