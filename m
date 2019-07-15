@@ -4,52 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1425C7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:56:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54F03C76196
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:05:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A173E212F5
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:56:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 241D3212F5
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:05:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563198961;
-	bh=iTBybjedNVs+5UTSuRxkPNP4PREO4wYKOsu2hwQ6ULI=;
+	s=default; t=1563199502;
+	bh=VRgrytHTVCFlT5csoh3aKEF0uzbhluzYmPoRtKfok/0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=wLQ8fhw5Uf7VawWRDDDqMvwgEZhsgvbfTmnWgpdOz09JJNIaIdaiE8RF+E9FNu95k
-	 CKq+n5Knycpl77vJ27ElLxp1J7Ca+LeX9jaXDE5X3msFl2K21tn6HjtVMAdTad30vp
-	 P1aFaV2TuoCmZ2AKyopdF6uzzwV85+3txYU4YR8o=
+	b=nwB5wp1ZBrhwGQB6zsWXQgOsHWDTlRFjKDKobX1TO9MPpl9kVOQL+NwAFiAec39E2
+	 xHwJx+x9eAoEvym68KKnzrs5ZdHLEL25RN4fOtYWV5Piu35ArhJph0A2w0Aw+cPxB9
+	 1DdQ7Mh4uXWZkXikfryEvGp/d4U85c3pjl5xWlVM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732076AbfGON4A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:56:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60356 "EHLO mail.kernel.org"
+        id S2387484AbfGOOFA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:05:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51042 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732765AbfGONz7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:55:59 -0400
+        id S2387969AbfGOOEy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:04:54 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EDD772086C;
-        Mon, 15 Jul 2019 13:55:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 52BA02086C;
+        Mon, 15 Jul 2019 14:04:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563198958;
-        bh=iTBybjedNVs+5UTSuRxkPNP4PREO4wYKOsu2hwQ6ULI=;
+        s=default; t=1563199494;
+        bh=VRgrytHTVCFlT5csoh3aKEF0uzbhluzYmPoRtKfok/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kd1oQQuwPUIBoJmBNTDy9ghaGM3wjkQddvfczKSe3lx1bzyKjXQ0GuDTaRU/5Rhmg
-         tYMdfZQ71EwcLilnFNztCvWgxqySy3Y7b/y1J4nIQaLoSBniT3keHx6tkqIikxFNl7
-         gTU430Pcp0mu32wPqmmx+thmPuWUCwEI9bYcKe3Y=
+        b=EOSligl1zk2ex/HR3TFRFUxHxiCJwVknqMsa6MlYtwjnnecSokkPlWQOPqivE0Z3J
+         E0IZSp/0SwPVYQSktJuFHRshNqq49DE8+1WjerfdySeN2iUiX7f+uIH5XwcP8/3hp+
+         0wDbpfDkAp+3wlnkvwVRDwQ0XQkEHg7KhhqbQGq0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Daniel Gomez <dagmcr@gmail.com>,
+        Javier Martinez Canillas <javier@dowhile0.org>,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 153/249] media: coda: increment sequence offset for the last returned frame
-Date:   Mon, 15 Jul 2019 09:45:18 -0400
-Message-Id: <20190715134655.4076-153-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 020/219] media: spi: IR LED: add missing of table registration
+Date:   Mon, 15 Jul 2019 10:00:21 -0400
+Message-Id: <20190715140341.6443-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
-References: <20190715134655.4076-1-sashal@kernel.org>
+In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
+References: <20190715140341.6443-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -59,37 +60,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Philipp Zabel <p.zabel@pengutronix.de>
+From: Daniel Gomez <dagmcr@gmail.com>
 
-[ Upstream commit b3b7d96817cdb8b6fc353867705275dce8f41ccc ]
+[ Upstream commit 24e4cf770371df6ad49ed873f21618d9878f64c8 ]
 
-If no more frames are decoded in bitstream end mode, and a previously
-decoded frame has been returned, the firmware still increments the frame
-number. To avoid a sequence number mismatch after decoder restart,
-increment the sequence_offset correction parameter.
+MODULE_DEVICE_TABLE(of, <of_match_table> should be called to complete DT
+OF mathing mechanism and register it.
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Before this patch:
+modinfo drivers/media/rc/ir-spi.ko  | grep alias
+
+After this patch:
+modinfo drivers/media/rc/ir-spi.ko  | grep alias
+alias:          of:N*T*Cir-spi-ledC*
+alias:          of:N*T*Cir-spi-led
+
+Reported-by: Javier Martinez Canillas <javier@dowhile0.org>
+Signed-off-by: Daniel Gomez <dagmcr@gmail.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/coda/coda-bit.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/rc/ir-spi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
-index 1eeed34f300d..8c9743e067cf 100644
---- a/drivers/media/platform/coda/coda-bit.c
-+++ b/drivers/media/platform/coda/coda-bit.c
-@@ -2147,6 +2147,9 @@ static void coda_finish_decode(struct coda_ctx *ctx)
- 		else if (ctx->display_idx < 0)
- 			ctx->hold = true;
- 	} else if (decoded_idx == -2) {
-+		if (ctx->display_idx >= 0 &&
-+		    ctx->display_idx < ctx->num_internal_frames)
-+			ctx->sequence_offset++;
- 		/* no frame was decoded, we still return remaining buffers */
- 	} else if (decoded_idx < 0 || decoded_idx >= ctx->num_internal_frames) {
- 		v4l2_err(&dev->v4l2_dev,
+diff --git a/drivers/media/rc/ir-spi.c b/drivers/media/rc/ir-spi.c
+index 66334e8d63ba..c58f2d38a458 100644
+--- a/drivers/media/rc/ir-spi.c
++++ b/drivers/media/rc/ir-spi.c
+@@ -161,6 +161,7 @@ static const struct of_device_id ir_spi_of_match[] = {
+ 	{ .compatible = "ir-spi-led" },
+ 	{},
+ };
++MODULE_DEVICE_TABLE(of, ir_spi_of_match);
+ 
+ static struct spi_driver ir_spi_driver = {
+ 	.probe = ir_spi_probe,
 -- 
 2.20.1
 
