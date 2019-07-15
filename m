@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9E11C7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92B04C7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E7E22054F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 594B22054F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:02:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563202960;
-	bh=UT4WsB0IQkPOZMcLtl1zIP1E1L51EJNRfglmRNz9A4w=;
+	s=default; t=1563202965;
+	bh=ds/aGGbk9pCIHfu3dT32DekTplwlhDTpbaGLL3qGSBk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jcZoOsF2U9mBzyJ2ZIIf/OGc12YJENCu83gkDSs98FbTEw+XTE3LnRYVGEJXQf9vq
-	 r9YpLV7jMjORfkkzhXd4EgEyxf+BAdBS7MFtscp5GY3yeoAfR+oJ+NbxyCDzr5IcD/
-	 +EF2R/5gvxvyiyGV4KwyMhV+zvTscyXBYl0PnJrE=
+	b=BwGhGXfmtTGkWm7UbvibXKmfdtk/KVsoPg7ObJZJH8FXcWoRff/wUXuepRH5MqmZt
+	 RFwdpOjyZNitXYFWIN6yinxpyMRH0Lu97izd3h+K6wZdf4I71xpUQCXZkiDgygc1SQ
+	 PsaAkHQ0Ha0vA6mt0kngQxf93DYRByR26P5wR6J0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389010AbfGOOMA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:12:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49246 "EHLO mail.kernel.org"
+        id S2388970AbfGOOLt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:11:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48038 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731005AbfGOOMA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:12:00 -0400
+        id S2388968AbfGOOLs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:11:48 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F75D2081C;
-        Mon, 15 Jul 2019 14:11:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F0FF5206B8;
+        Mon, 15 Jul 2019 14:11:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199919;
-        bh=UT4WsB0IQkPOZMcLtl1zIP1E1L51EJNRfglmRNz9A4w=;
+        s=default; t=1563199907;
+        bh=ds/aGGbk9pCIHfu3dT32DekTplwlhDTpbaGLL3qGSBk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gDJtTl1OMJ4p54+tWOcmfQyz1IoO6mR0lS4419KW+zB99zEUtXOzT6xQ6kQguMWa/
-         jCayX1nwgZtQEPOXg1ffg+1o6nQjNIZW9PICw89mVZeI0saaFdg5JBa5fJM/8g7bK1
-         i+laXWlQ/9Dz27J61B5Max62FbNz4uJbtnOKjai8=
+        b=GP1UU7tJ2g/LY/vUBcA4QaDHgkZhHlgUXZr6p1ZwNRS1WDQKiDI9M7ZZMADi7YEhy
+         V5O0Rc3iH0DeNVfQ5fxMFAaJnBMa49JSgVwLBCXkE21KBF+5f507qYTykdrFxdo+Yj
+         XkyERZ2R52WsDlevnQUfa6p3Q04+GayQA3hQ9btA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Keith Pyle <kpyle@austin.rr.com>,
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 137/219] media: hdpvr: fix locking and a missing msleep
-Date:   Mon, 15 Jul 2019 10:02:18 -0400
-Message-Id: <20190715140341.6443-137-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 133/219] media: coda: fix mpeg2 sequence number handling
+Date:   Mon, 15 Jul 2019 10:02:14 -0400
+Message-Id: <20190715140341.6443-133-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -60,81 +59,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil@xs4all.nl>
+From: Philipp Zabel <p.zabel@pengutronix.de>
 
-[ Upstream commit 6bc5a4a1927556ff9adce1aa95ea408c95453225 ]
+[ Upstream commit 56d159a4ec6d8da7313aac6fcbb95d8fffe689ba ]
 
-This driver has three locking issues:
+Sequence number handling assumed that the BIT processor frame number
+starts counting at 1, but this is not true for the MPEG-2 decoder,
+which starts at 0. Fix the sequence counter offset detection to handle
+this.
 
-- The wait_event_interruptible() condition calls hdpvr_get_next_buffer(dev)
-  which uses a mutex, which is not allowed. Rewrite with list_empty_careful()
-  that doesn't need locking.
-
-- In hdpvr_read() the call to hdpvr_stop_streaming() didn't lock io_mutex,
-  but it should have since stop_streaming expects that.
-
-- In hdpvr_device_release() io_mutex was locked when calling flush_work(),
-  but there it shouldn't take that mutex since the work done by flush_work()
-  also wants to lock that mutex.
-
-There are also two other changes (suggested by Keith):
-
-- msecs_to_jiffies(4000); (a NOP) should have been msleep(4000).
-- Change v4l2_dbg to v4l2_info to always log if streaming had to be restarted.
-
-Reported-by: Keith Pyle <kpyle@austin.rr.com>
-Suggested-by: Keith Pyle <kpyle@austin.rr.com>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-video.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ drivers/media/platform/coda/coda-bit.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
-index e082086428a4..ae6609716347 100644
---- a/drivers/media/usb/hdpvr/hdpvr-video.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-video.c
-@@ -439,7 +439,7 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
- 	/* wait for the first buffer */
- 	if (!(file->f_flags & O_NONBLOCK)) {
- 		if (wait_event_interruptible(dev->wait_data,
--					     hdpvr_get_next_buffer(dev)))
-+					     !list_empty_careful(&dev->rec_buff_list)))
- 			return -ERESTARTSYS;
+diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
+index eaa86737fa04..5eb93ac060d5 100644
+--- a/drivers/media/platform/coda/coda-bit.c
++++ b/drivers/media/platform/coda/coda-bit.c
+@@ -1743,6 +1743,7 @@ static int __coda_start_decoding(struct coda_ctx *ctx)
+ 		v4l2_err(&dev->v4l2_dev, "CODA_COMMAND_SEQ_INIT timeout\n");
+ 		return ret;
  	}
++	ctx->sequence_offset = ~0U;
+ 	ctx->initialized = 1;
  
-@@ -465,10 +465,17 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
- 				goto err;
- 			}
- 			if (!err) {
--				v4l2_dbg(MSG_INFO, hdpvr_debug, &dev->v4l2_dev,
--					"timeout: restart streaming\n");
-+				v4l2_info(&dev->v4l2_dev,
-+					  "timeout: restart streaming\n");
-+				mutex_lock(&dev->io_mutex);
- 				hdpvr_stop_streaming(dev);
--				msecs_to_jiffies(4000);
-+				mutex_unlock(&dev->io_mutex);
-+				/*
-+				 * The FW needs about 4 seconds after streaming
-+				 * stopped before it is ready to restart
-+				 * streaming.
-+				 */
-+				msleep(4000);
- 				err = hdpvr_start_streaming(dev);
- 				if (err) {
- 					ret = err;
-@@ -1133,9 +1140,7 @@ static void hdpvr_device_release(struct video_device *vdev)
- 	struct hdpvr_device *dev = video_get_drvdata(vdev);
- 
- 	hdpvr_delete(dev);
--	mutex_lock(&dev->io_mutex);
- 	flush_work(&dev->worker);
--	mutex_unlock(&dev->io_mutex);
- 
- 	v4l2_device_unregister(&dev->v4l2_dev);
- 	v4l2_ctrl_handler_free(&dev->hdl);
+ 	/* Update kfifo out pointer from coda bitstream read pointer */
+@@ -2155,7 +2156,9 @@ static void coda_finish_decode(struct coda_ctx *ctx)
+ 		v4l2_err(&dev->v4l2_dev,
+ 			 "decoded frame index out of range: %d\n", decoded_idx);
+ 	} else {
+-		val = coda_read(dev, CODA_RET_DEC_PIC_FRAME_NUM) - 1;
++		val = coda_read(dev, CODA_RET_DEC_PIC_FRAME_NUM);
++		if (ctx->sequence_offset == -1)
++			ctx->sequence_offset = val;
+ 		val -= ctx->sequence_offset;
+ 		spin_lock(&ctx->buffer_meta_lock);
+ 		if (!list_empty(&ctx->buffer_meta_list)) {
 -- 
 2.20.1
 
