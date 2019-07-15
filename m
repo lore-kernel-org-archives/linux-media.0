@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A239C76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:36:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 585B0C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:36:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E24B1217D9
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:36:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26F75217D9
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:36:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563201386;
-	bh=IQ7RPN7+t3nFxxPCkYpOIib6KCDRBhwWX793jYCiN/Y=;
+	s=default; t=1563201387;
+	bh=L5Db5kmtTkQ8U4ksSU9CHoeriaNKedcjX5JrIa39jyo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=rNHa6UdRbhht4V46Q1FApsnN5j74E5zLWNb+/h5+jKbEHlrTM7lFMEPAFbujeBFdP
-	 3EYowI0AWeQsJjmKWY9XWrTik/dciADPk8ymWN7f2tlVoty/T0rjUJyEIpnuoCMgIJ
-	 cAsa2tXEmWWOuMq2ScKSvYo/PLpH6Nl0OhiKSw8Q=
+	b=iunWpWLiI9JSyefDsE/JhyTRS/mCpmpdUNA3tFjing/rx0o8g0wn/Nk/xW+4EqZ1w
+	 +/kUQ0QbtWH0YqvSJeLz6zVxKngosjt7djlFTL0RA3NHmhJTyyJIVbdFvaE2jkuOmG
+	 da7Dq9h94pcT9z0QN/BnMM1bs4I+oD/McZdFkyP8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391695AbfGOOc6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:32:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48556 "EHLO mail.kernel.org"
+        id S2391913AbfGOOcu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:32:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48220 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391912AbfGOOc5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:32:57 -0400
+        id S2391904AbfGOOcs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:32:48 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1207E20868;
-        Mon, 15 Jul 2019 14:32:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F03B206B8;
+        Mon, 15 Jul 2019 14:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563201176;
-        bh=IQ7RPN7+t3nFxxPCkYpOIib6KCDRBhwWX793jYCiN/Y=;
+        s=default; t=1563201167;
+        bh=L5Db5kmtTkQ8U4ksSU9CHoeriaNKedcjX5JrIa39jyo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GSMeh6poRMpITinzw19OHTP8pwbk7j0NMupY/9ShpFEQDnVO1+3u+dsh28L55FGb+
-         JM8lO8RFGYakzxd5ZXoaadEzPnVmDDTHK+1fv9Lde6FTrfmb5Jh8b8CzUFbR3P5HqM
-         2pDulBhbq2hBzpGOz0PsNSN+/CQl5yhUk9paIMd4=
+        b=bE1TkBEZ+dfpxBZDBmAqOqysp7kusAj5cH23QOk+KOPjYiFAQPVweqw2/eLlPb3Y4
+         gMlnfCfad9BYx9HHmnqCKj+ToCv2tDUtOYDcrdfrf3WWJXMg2PDv+YGS7+ABWTxKbS
+         /FXWqN2g0MpUYWnpfvArA/lUIh0iJ5qEWSO7Kw4M=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Keith Pyle <kpyle@austin.rr.com>,
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 070/105] media: hdpvr: fix locking and a missing msleep
-Date:   Mon, 15 Jul 2019 10:28:04 -0400
-Message-Id: <20190715142839.9896-70-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 068/105] media: coda: increment sequence offset for the last returned frame
+Date:   Mon, 15 Jul 2019 10:28:02 -0400
+Message-Id: <20190715142839.9896-68-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
 References: <20190715142839.9896-1-sashal@kernel.org>
@@ -60,81 +59,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil@xs4all.nl>
+From: Philipp Zabel <p.zabel@pengutronix.de>
 
-[ Upstream commit 6bc5a4a1927556ff9adce1aa95ea408c95453225 ]
+[ Upstream commit b3b7d96817cdb8b6fc353867705275dce8f41ccc ]
 
-This driver has three locking issues:
+If no more frames are decoded in bitstream end mode, and a previously
+decoded frame has been returned, the firmware still increments the frame
+number. To avoid a sequence number mismatch after decoder restart,
+increment the sequence_offset correction parameter.
 
-- The wait_event_interruptible() condition calls hdpvr_get_next_buffer(dev)
-  which uses a mutex, which is not allowed. Rewrite with list_empty_careful()
-  that doesn't need locking.
-
-- In hdpvr_read() the call to hdpvr_stop_streaming() didn't lock io_mutex,
-  but it should have since stop_streaming expects that.
-
-- In hdpvr_device_release() io_mutex was locked when calling flush_work(),
-  but there it shouldn't take that mutex since the work done by flush_work()
-  also wants to lock that mutex.
-
-There are also two other changes (suggested by Keith):
-
-- msecs_to_jiffies(4000); (a NOP) should have been msleep(4000).
-- Change v4l2_dbg to v4l2_info to always log if streaming had to be restarted.
-
-Reported-by: Keith Pyle <kpyle@austin.rr.com>
-Suggested-by: Keith Pyle <kpyle@austin.rr.com>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-video.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ drivers/media/platform/coda/coda-bit.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
-index 7fb036d6a86e..991f820a4530 100644
---- a/drivers/media/usb/hdpvr/hdpvr-video.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-video.c
-@@ -439,7 +439,7 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
- 	/* wait for the first buffer */
- 	if (!(file->f_flags & O_NONBLOCK)) {
- 		if (wait_event_interruptible(dev->wait_data,
--					     hdpvr_get_next_buffer(dev)))
-+					     !list_empty_careful(&dev->rec_buff_list)))
- 			return -ERESTARTSYS;
- 	}
- 
-@@ -465,10 +465,17 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
- 				goto err;
- 			}
- 			if (!err) {
--				v4l2_dbg(MSG_INFO, hdpvr_debug, &dev->v4l2_dev,
--					"timeout: restart streaming\n");
-+				v4l2_info(&dev->v4l2_dev,
-+					  "timeout: restart streaming\n");
-+				mutex_lock(&dev->io_mutex);
- 				hdpvr_stop_streaming(dev);
--				msecs_to_jiffies(4000);
-+				mutex_unlock(&dev->io_mutex);
-+				/*
-+				 * The FW needs about 4 seconds after streaming
-+				 * stopped before it is ready to restart
-+				 * streaming.
-+				 */
-+				msleep(4000);
- 				err = hdpvr_start_streaming(dev);
- 				if (err) {
- 					ret = err;
-@@ -1133,9 +1140,7 @@ static void hdpvr_device_release(struct video_device *vdev)
- 	struct hdpvr_device *dev = video_get_drvdata(vdev);
- 
- 	hdpvr_delete(dev);
--	mutex_lock(&dev->io_mutex);
- 	flush_work(&dev->worker);
--	mutex_unlock(&dev->io_mutex);
- 
- 	v4l2_device_unregister(&dev->v4l2_dev);
- 	v4l2_ctrl_handler_free(&dev->hdl);
+diff --git a/drivers/media/platform/coda/coda-bit.c b/drivers/media/platform/coda/coda-bit.c
+index 43eb5d51cf23..f0f2175265a9 100644
+--- a/drivers/media/platform/coda/coda-bit.c
++++ b/drivers/media/platform/coda/coda-bit.c
+@@ -2091,6 +2091,9 @@ static void coda_finish_decode(struct coda_ctx *ctx)
+ 		else if (ctx->display_idx < 0)
+ 			ctx->hold = true;
+ 	} else if (decoded_idx == -2) {
++		if (ctx->display_idx >= 0 &&
++		    ctx->display_idx < ctx->num_internal_frames)
++			ctx->sequence_offset++;
+ 		/* no frame was decoded, we still return remaining buffers */
+ 	} else if (decoded_idx < 0 || decoded_idx >= ctx->num_internal_frames) {
+ 		v4l2_err(&dev->v4l2_dev,
 -- 
 2.20.1
 
