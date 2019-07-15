@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A829DC76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:05:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 973A2C7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:06:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8137921842
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:05:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C828217D8
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:06:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563199548;
-	bh=WeOczSlAxi1PpfYbpQfUm578xh1Zna2AUiZaBBpukxA=;
+	s=default; t=1563199573;
+	bh=tFcLzwTgGiyMA/mZ12kgnVzj8S5mIUQXmlKfKm3TltQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qVJAWybbhaibWVPwcSOVZWEzW2mKfFQvlVVLJnfRZwZ049UF7jOFqz0tGcZCRZlhd
-	 bbljT2g4we5vGuN3ux7pVUZajjJO7Yh9s95Gam8lALyLRFPLCqsPZw2u9I5pe0+qfd
-	 mJXSbJriaHmC35Xxg3j/OCKU4j81lvABReoK6Ihc=
+	b=orAGONHs9QgAOunBynKq+yEpN/cnur55J+ooGVRgvpyV+A6xHh8LecPaiMZfu/RGj
+	 B/RTvQH7Qd3LYo2l0k4oG8remblbZx0A29ovBjClRcfeBn3WVHy1pAEVX/cnTlmWl9
+	 LZBhiyKKYPlXtTc3j8G+RsGFYof8cktQeM+ld+Q4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388186AbfGOOFr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:05:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52574 "EHLO mail.kernel.org"
+        id S2387479AbfGOOGM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:06:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731284AbfGOOFq (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:05:46 -0400
+        id S2387762AbfGOOGM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:06:12 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3E4BF217F9;
-        Mon, 15 Jul 2019 14:05:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 20D53217D9;
+        Mon, 15 Jul 2019 14:06:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199546;
-        bh=WeOczSlAxi1PpfYbpQfUm578xh1Zna2AUiZaBBpukxA=;
+        s=default; t=1563199570;
+        bh=tFcLzwTgGiyMA/mZ12kgnVzj8S5mIUQXmlKfKm3TltQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W6wJkQAHcSr4bR3nQRzorM1NxHgBEU0j1RPf7w4xiuyuv66zElOVdJf5D8lxcJigl
-         jTUGuIoIzhucqZR8JGyo5l+wniYBWStIf93Mq7/cZNDrsKAZRdHjdDQnCPfAAf4S1a
-         zzOX+OyytoBe15sEcq3wugqk7JPtQWGrkoO/PZgc=
+        b=aL5uxlwkP7Wx8OVl6TPR2c9mQ4YAKRJTADiCWAxbC1aA+XiCHpRqVDgvcwJXt5+ED
+         EaAldHOTZu6bMWy+ZWj4xwvQwvKdO7Rk5H/gVSSgUgPr9cedIdAPBrzc3yv7SVwnZy
+         h7B1VQIgWpmXIrYmGFmNycUJp7tW9+W32gHfZ9vw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     sumitg <sumitg@nvidia.com>,
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 038/219] media: v4l2-core: fix use-after-free error
-Date:   Mon, 15 Jul 2019 10:00:39 -0400
-Message-Id: <20190715140341.6443-38-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 045/219] media: saa7164: fix remove_proc_entry warning
+Date:   Mon, 15 Jul 2019 10:00:46 -0400
+Message-Id: <20190715140341.6443-45-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -59,91 +59,104 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: sumitg <sumitg@nvidia.com>
+From: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-[ Upstream commit 3e0f724346e96daae7792262c6767449795ac3b5 ]
+[ Upstream commit 50710eeefbc1ed25375942aad0c4d1eb4af0f330 ]
 
-Fixing use-after-free within __v4l2_ctrl_handler_setup().
-Memory is being freed with kfree(new_ref) for duplicate
-control reference entry but ctrl->cluster pointer is still
-referring to freed duplicate entry resulting in error on
-access. Change done to update cluster pointer only when new
-control reference is added.
+if saa7164_proc_create() fails, saa7164_fini() will trigger a warning,
 
- ==================================================================
- BUG: KASAN: use-after-free in __v4l2_ctrl_handler_setup+0x388/0x428
- Read of size 8 at addr ffffffc324e78618 by task systemd-udevd/312
+name 'saa7164'
+WARNING: CPU: 1 PID: 6311 at fs/proc/generic.c:672 remove_proc_entry+0x1e8/0x3a0
+  ? remove_proc_entry+0x1e8/0x3a0
+  ? try_stop_module+0x7b/0x240
+  ? proc_readdir+0x70/0x70
+  ? rcu_read_lock_sched_held+0xd7/0x100
+  saa7164_fini+0x13/0x1f [saa7164]
+  __x64_sys_delete_module+0x30c/0x480
+  ? __ia32_sys_delete_module+0x480/0x480
+  ? __x64_sys_clock_gettime+0x11e/0x1c0
+  ? __x64_sys_timer_create+0x1a0/0x1a0
+  ? trace_hardirqs_off_caller+0x40/0x180
+  ? do_syscall_64+0x18/0x450
+  do_syscall_64+0x9f/0x450
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
- Allocated by task 312:
+Fix it by checking the return of proc_create_single() before
+calling remove_proc_entry().
 
- Freed by task 312:
-
- The buggy address belongs to the object at ffffffc324e78600
-  which belongs to the cache kmalloc-64 of size 64
- The buggy address is located 24 bytes inside of
-  64-byte region [ffffffc324e78600, ffffffc324e78640)
- The buggy address belongs to the page:
- page:ffffffbf0c939e00 count:1 mapcount:0 mapping:
-					(null) index:0xffffffc324e78f80
- flags: 0x4000000000000100(slab)
- raw: 4000000000000100 0000000000000000 ffffffc324e78f80 000000018020001a
- raw: 0000000000000000 0000000100000001 ffffffc37040fb80 0000000000000000
- page dumped because: kasan: bad access detected
-
- Memory state around the buggy address:
-  ffffffc324e78500: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-  ffffffc324e78580: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- >ffffffc324e78600: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-                             ^
-  ffffffc324e78680: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
-  ffffffc324e78700: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
- ==================================================================
-
-Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+[hverkuil-cisco@xs4all.nl: use 0444 instead of S_IRUGO]
+[hverkuil-cisco@xs4all.nl: use pr_info instead of KERN_INFO]
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ drivers/media/pci/saa7164/saa7164-core.c | 33 ++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 54d66dbc2a31..fd18923ccc14 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -2148,15 +2148,6 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 	if (size_extra_req)
- 		new_ref->p_req.p = &new_ref[1];
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index 05f25c9bb308..f5ad3cf207d3 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -1122,16 +1122,25 @@ static int saa7164_proc_show(struct seq_file *m, void *v)
+ 	return 0;
+ }
  
--	if (ctrl->handler == hdl) {
--		/* By default each control starts in a cluster of its own.
--		   new_ref->ctrl is basically a cluster array with one
--		   element, so that's perfect to use as the cluster pointer.
--		   But only do this for the handler that owns the control. */
--		ctrl->cluster = &new_ref->ctrl;
--		ctrl->ncontrols = 1;
--	}
++static struct proc_dir_entry *saa7164_pe;
++
+ static int saa7164_proc_create(void)
+ {
+-	struct proc_dir_entry *pe;
 -
- 	INIT_LIST_HEAD(&new_ref->node);
+-	pe = proc_create_single("saa7164", S_IRUGO, NULL, saa7164_proc_show);
+-	if (!pe)
++	saa7164_pe = proc_create_single("saa7164", 0444, NULL, saa7164_proc_show);
++	if (!saa7164_pe)
+ 		return -ENOMEM;
  
- 	mutex_lock(hdl->lock);
-@@ -2189,6 +2180,15 @@ static int handler_new_ref(struct v4l2_ctrl_handler *hdl,
- 	hdl->buckets[bucket] = new_ref;
- 	if (ctrl_ref)
- 		*ctrl_ref = new_ref;
-+	if (ctrl->handler == hdl) {
-+		/* By default each control starts in a cluster of its own.
-+		 * new_ref->ctrl is basically a cluster array with one
-+		 * element, so that's perfect to use as the cluster pointer.
-+		 * But only do this for the handler that owns the control.
-+		 */
-+		ctrl->cluster = &new_ref->ctrl;
-+		ctrl->ncontrols = 1;
-+	}
+ 	return 0;
+ }
++
++static void saa7164_proc_destroy(void)
++{
++	if (saa7164_pe)
++		remove_proc_entry("saa7164", NULL);
++}
++#else
++static int saa7164_proc_create(void) { return 0; }
++static void saa7164_proc_destroy(void) {}
+ #endif
  
- unlock:
- 	mutex_unlock(hdl->lock);
+ static int saa7164_thread_function(void *data)
+@@ -1503,19 +1512,21 @@ static struct pci_driver saa7164_pci_driver = {
+ 
+ static int __init saa7164_init(void)
+ {
+-	printk(KERN_INFO "saa7164 driver loaded\n");
++	int ret = pci_register_driver(&saa7164_pci_driver);
++
++	if (ret)
++		return ret;
+ 
+-#ifdef CONFIG_PROC_FS
+ 	saa7164_proc_create();
+-#endif
+-	return pci_register_driver(&saa7164_pci_driver);
++
++	pr_info("saa7164 driver loaded\n");
++
++	return 0;
+ }
+ 
+ static void __exit saa7164_fini(void)
+ {
+-#ifdef CONFIG_PROC_FS
+-	remove_proc_entry("saa7164", NULL);
+-#endif
++	saa7164_proc_destroy();
+ 	pci_unregister_driver(&saa7164_pci_driver);
+ }
+ 
 -- 
 2.20.1
 
