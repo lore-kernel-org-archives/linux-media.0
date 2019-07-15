@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6754C76195
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:52:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C5D3C7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:52:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 96DC42067C
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:52:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35B7220C01
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563198739;
-	bh=GjQA+u9aBEJLTJGjlbfJIQZi4rXEDUDAk/yWBcG3+zo=;
+	s=default; t=1563198753;
+	bh=KzOSdrebX3KMW/gaQ5FM80gPMnZS1CDMWI74NLOCh6g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=pIGTMwjvAIXngorvzT0ieAS/rflvhsHpg7MCtW4nZqp32ooVaTcTeFk6wWQ+6VvCe
-	 H4EfzFVzguYSZWJ1KntsdBtBPIXR8oOe5uttcH/pfMNAvQ7wqsiYCDCdddJ3Q60Fzf
-	 BITMFmrGC7khnlwrwxq65bNkIhZzq2wDaJyhtII4=
+	b=yuhgGn2OVqaBIDbwqlprkQm01Ud6C6CxKHmoPshji1h8i2XVbIbT6RSRcyO9jj5B9
+	 NkTRU6w2tOV5ilRc5EkUQy3kwTZUDR7nSVwiVuZQ4Wsw5zmK3+jJCa+xvsa+rmUvax
+	 /jV2jeHA9+BaZv1Q9SAoJBIifuGMfqdEmJerW83E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732126AbfGONvp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:51:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43784 "EHLO mail.kernel.org"
+        id S1729914AbfGONwc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:52:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46740 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732120AbfGONvo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:51:44 -0400
+        id S1731945AbfGONwb (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:52:31 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34043216C4;
-        Mon, 15 Jul 2019 13:51:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A9BB520651;
+        Mon, 15 Jul 2019 13:52:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563198703;
-        bh=GjQA+u9aBEJLTJGjlbfJIQZi4rXEDUDAk/yWBcG3+zo=;
+        s=default; t=1563198751;
+        bh=KzOSdrebX3KMW/gaQ5FM80gPMnZS1CDMWI74NLOCh6g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MXL9nTurpvAkc1o3xIBw2wylA72GOrtQ8O+L3AKGedI8FoBID9UYoQMZHlQXsU6gC
-         SjQgUkiJ2qI+UojM1/Gfr8rjeiNhELguAy0a0bcCP+HkACLeBHEdfsYX1CaoBU/CwX
-         LHy3H+GB5UTfZrJBmG5EHa2CmrPugAGUVLeoAbWc=
+        b=Rn30hy8HIDnXDCY2X3fa8WmVJbLr88zacguG5AAwK1SjrtjgueqcArVnD+uWOjQGz
+         OUhRKDFITlSqJKCJEn9pIn0p7054H4nvEF/uxHA1jIlSBixNo/n/ilY9pUyzVpSGyo
+         jij3L+rK3ttUBU8x4cR2AgYNqyaOBT6GdKBOgcJQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        syzbot+2e1ef9188251d9cc7944@syzkaller.appspotmail.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Young Xiao <92siuyang@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 087/249] media: uvcvideo: Fix access to uninitialized fields on probe error
-Date:   Mon, 15 Jul 2019 09:44:12 -0400
-Message-Id: <20190715134655.4076-87-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 094/249] media: davinci: vpif_capture: fix memory leak in vpif_probe()
+Date:   Mon, 15 Jul 2019 09:44:19 -0400
+Message-Id: <20190715134655.4076-94-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
 References: <20190715134655.4076-1-sashal@kernel.org>
@@ -60,37 +59,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Young Xiao <92siuyang@gmail.com>
 
-[ Upstream commit 11a087f484bf15ff65f0a9f277aa5a61fd07ed2a ]
+[ Upstream commit 64f883cd98c6d43013fb0cea788b63e50ebc068c ]
 
-We need to check whether this work we are canceling actually is
-initialized.
+If vpif_probe() fails on v4l2_device_register() and vpif_probe_complete(),
+then memory allocated at initialize_vpif() for global vpif_obj.dev[i]
+become unreleased.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reported-by: syzbot+2e1ef9188251d9cc7944@syzkaller.appspotmail.com
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+The patch adds deallocation of vpif_obj.dev[i] on the error path.
+
+Signed-off-by: Young Xiao <92siuyang@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/platform/davinci/vpif_capture.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index 26163a5bde7d..e399b9fad757 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -2345,7 +2345,9 @@ void uvc_ctrl_cleanup_device(struct uvc_device *dev)
- 	struct uvc_entity *entity;
- 	unsigned int i;
+diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
+index 61809d2050fa..f0f7ef638c56 100644
+--- a/drivers/media/platform/davinci/vpif_capture.c
++++ b/drivers/media/platform/davinci/vpif_capture.c
+@@ -1376,6 +1376,14 @@ static int initialize_vpif(void)
+ 	return err;
+ }
  
--	cancel_work_sync(&dev->async_ctrl.work);
-+	/* Can be uninitialized if we are aborting on probe error. */
-+	if (dev->async_ctrl.work.func)
-+		cancel_work_sync(&dev->async_ctrl.work);
++static inline void free_vpif_objs(void)
++{
++	int i;
++
++	for (i = 0; i < VPIF_CAPTURE_MAX_DEVICES; i++)
++		kfree(vpif_obj.dev[i]);
++}
++
+ static int vpif_async_bound(struct v4l2_async_notifier *notifier,
+ 			    struct v4l2_subdev *subdev,
+ 			    struct v4l2_async_subdev *asd)
+@@ -1645,7 +1653,7 @@ static __init int vpif_probe(struct platform_device *pdev)
+ 	err = v4l2_device_register(vpif_dev, &vpif_obj.v4l2_dev);
+ 	if (err) {
+ 		v4l2_err(vpif_dev->driver, "Error registering v4l2 device\n");
+-		goto cleanup;
++		goto vpif_free;
+ 	}
  
- 	/* Free controls and control mappings for all entities. */
- 	list_for_each_entry(entity, &dev->entities, list) {
+ 	while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, res_idx))) {
+@@ -1692,7 +1700,9 @@ static __init int vpif_probe(struct platform_device *pdev)
+ 				  "registered sub device %s\n",
+ 				   subdevdata->name);
+ 		}
+-		vpif_probe_complete();
++		err = vpif_probe_complete();
++		if (err)
++			goto probe_subdev_out;
+ 	} else {
+ 		vpif_obj.notifier.ops = &vpif_async_ops;
+ 		err = v4l2_async_notifier_register(&vpif_obj.v4l2_dev,
+@@ -1711,6 +1721,8 @@ static __init int vpif_probe(struct platform_device *pdev)
+ 	kfree(vpif_obj.sd);
+ vpif_unregister:
+ 	v4l2_device_unregister(&vpif_obj.v4l2_dev);
++vpif_free:
++	free_vpif_objs();
+ cleanup:
+ 	v4l2_async_notifier_cleanup(&vpif_obj.notifier);
+ 
 -- 
 2.20.1
 
