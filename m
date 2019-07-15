@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20455C76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C0ABC7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E28842054F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36060205ED
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:10:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203401;
-	bh=uMXwY+utQlYgUVFfRs3t6FU1guKx6DjSmDsESwfCTEE=;
+	s=default; t=1563203417;
+	bh=ZWaBUMLCgXFKFGVnnO8hXpKxZj7qzIwA6QnvWHk8ns8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cWG+mee1Yc93Fz2WlDIHd9jD2vhJ0UZzSV/KbtARQU4w7Mjbu/xZ7aOHO9719W8MD
-	 nchi4RgDVrikqDbl39j29eoXJ5TJlLE89sRqSgYi7cIpCMX+iiE2NTHufr0MPPEG0W
-	 IWHlT4mCticiQaYe8yPjA6l9V8WmKS89542kYh2I=
+	b=f+3Y+T1OdCwmJvODUdu9O5TqQH/znmPtzO+caKMDkeH2hJpJHMge3PQXWD9Y7wGi9
+	 3St8qZPHn8hM6CNuhsonmcxHaUrIR2O+wlcdk1tcMWsKcuAHXIFpPsOtww1v23neCa
+	 +6ZbJ8psZh90XH1RVlGX/p0udM/y381nEgQRK+UM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732782AbfGON4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:56:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60556 "EHLO mail.kernel.org"
+        id S1732567AbfGONzr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:55:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59630 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732785AbfGON4H (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:56:07 -0400
+        id S1731943AbfGONzp (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:55:45 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CCCD82086C;
-        Mon, 15 Jul 2019 13:56:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B6FD72083D;
+        Mon, 15 Jul 2019 13:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563198966;
-        bh=uMXwY+utQlYgUVFfRs3t6FU1guKx6DjSmDsESwfCTEE=;
+        s=default; t=1563198944;
+        bh=ZWaBUMLCgXFKFGVnnO8hXpKxZj7qzIwA6QnvWHk8ns8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ttKFG2NWcJcCeFaUvc/DTUSBeLdXuL+a8ytyNdnVXoAT2IEizjzcHBgI5A5Iokesz
-         kKFP8Jvko6HNpLWWmxuN7WlM+RDqSx9bE1ncMK80ayNi7AWdSxwG55ciUfprEfQUgk
-         X6g7XoOrr/UJBaVMxNaLP8fuBKReY4WzUflpyZ9U=
+        b=05VikzdbG0grCay0hOtlihnKAgKiP1Lv5vWHeC6RDE9uPjbpcQFgNBNljKRO75YbP
+         bjldoT6csaBQlpklzc2jREuY9szTln1bbGCZ+fyA3WKE/VJXEgHKYwsQrjTUnKFtzl
+         QdRMzs5CsStI+Ay46oi0FNIfPc7A5PE9QRv8w+sU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Keith Pyle <kpyle@austin.rr.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 155/249] media: hdpvr: fix locking and a missing msleep
-Date:   Mon, 15 Jul 2019 09:45:20 -0400
-Message-Id: <20190715134655.4076-155-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 148/249] media: mt9m111: fix fw-node refactoring
+Date:   Mon, 15 Jul 2019 09:45:13 -0400
+Message-Id: <20190715134655.4076-148-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
 References: <20190715134655.4076-1-sashal@kernel.org>
@@ -60,81 +59,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil@xs4all.nl>
+From: Robert Jarzmik <robert.jarzmik@free.fr>
 
-[ Upstream commit 6bc5a4a1927556ff9adce1aa95ea408c95453225 ]
+[ Upstream commit 8d4e29a51a954b43e06d916772fa4f50b7e5bbd6 ]
 
-This driver has three locking issues:
+In the patch refactoring the fw-node, the mt9m111 was broken for all
+platform_data based platforms, which were the first aim of this
+driver. Only the devicetree platform are still functional, probably
+because the testing was done on these.
 
-- The wait_event_interruptible() condition calls hdpvr_get_next_buffer(dev)
-  which uses a mutex, which is not allowed. Rewrite with list_empty_careful()
-  that doesn't need locking.
+The result is that -EINVAL is systematically return for such platforms,
+what this patch fixes.
 
-- In hdpvr_read() the call to hdpvr_stop_streaming() didn't lock io_mutex,
-  but it should have since stop_streaming expects that.
+[Sakari Ailus: Rework this to resolve a merge conflict and use dev_fwnode]
 
-- In hdpvr_device_release() io_mutex was locked when calling flush_work(),
-  but there it shouldn't take that mutex since the work done by flush_work()
-  also wants to lock that mutex.
-
-There are also two other changes (suggested by Keith):
-
-- msecs_to_jiffies(4000); (a NOP) should have been msleep(4000).
-- Change v4l2_dbg to v4l2_info to always log if streaming had to be restarted.
-
-Reported-by: Keith Pyle <kpyle@austin.rr.com>
-Suggested-by: Keith Pyle <kpyle@austin.rr.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 98480d65c48c ("media: mt9m111: allow to setup pixclk polarity")
+Signed-off-by: Robert Jarzmik <robert.jarzmik@free.fr>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-video.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ drivers/media/i2c/mt9m111.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-video.c b/drivers/media/usb/hdpvr/hdpvr-video.c
-index 7580fc5f2f12..6a6405b80797 100644
---- a/drivers/media/usb/hdpvr/hdpvr-video.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-video.c
-@@ -435,7 +435,7 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
- 	/* wait for the first buffer */
- 	if (!(file->f_flags & O_NONBLOCK)) {
- 		if (wait_event_interruptible(dev->wait_data,
--					     hdpvr_get_next_buffer(dev)))
-+					     !list_empty_careful(&dev->rec_buff_list)))
- 			return -ERESTARTSYS;
- 	}
+diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+index 362c3b93636e..5a642b5ad076 100644
+--- a/drivers/media/i2c/mt9m111.c
++++ b/drivers/media/i2c/mt9m111.c
+@@ -1245,9 +1245,11 @@ static int mt9m111_probe(struct i2c_client *client,
+ 	if (!mt9m111)
+ 		return -ENOMEM;
  
-@@ -461,10 +461,17 @@ static ssize_t hdpvr_read(struct file *file, char __user *buffer, size_t count,
- 				goto err;
- 			}
- 			if (!err) {
--				v4l2_dbg(MSG_INFO, hdpvr_debug, &dev->v4l2_dev,
--					"timeout: restart streaming\n");
-+				v4l2_info(&dev->v4l2_dev,
-+					  "timeout: restart streaming\n");
-+				mutex_lock(&dev->io_mutex);
- 				hdpvr_stop_streaming(dev);
--				msecs_to_jiffies(4000);
-+				mutex_unlock(&dev->io_mutex);
-+				/*
-+				 * The FW needs about 4 seconds after streaming
-+				 * stopped before it is ready to restart
-+				 * streaming.
-+				 */
-+				msleep(4000);
- 				err = hdpvr_start_streaming(dev);
- 				if (err) {
- 					ret = err;
-@@ -1127,9 +1134,7 @@ static void hdpvr_device_release(struct video_device *vdev)
- 	struct hdpvr_device *dev = video_get_drvdata(vdev);
+-	ret = mt9m111_probe_fw(client, mt9m111);
+-	if (ret)
+-		return ret;
++	if (dev_fwnode(&client->dev)) {
++		ret = mt9m111_probe_fw(client, mt9m111);
++		if (ret)
++			return ret;
++	}
  
- 	hdpvr_delete(dev);
--	mutex_lock(&dev->io_mutex);
- 	flush_work(&dev->worker);
--	mutex_unlock(&dev->io_mutex);
- 
- 	v4l2_device_unregister(&dev->v4l2_dev);
- 	v4l2_ctrl_handler_free(&dev->hdl);
+ 	mt9m111->clk = v4l2_clk_get(&client->dev, "mclk");
+ 	if (IS_ERR(mt9m111->clk))
 -- 
 2.20.1
 
