@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E53F2C76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBC7EC76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:04:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BDF6C205ED
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:04:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC5932054F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 15:04:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563203040;
-	bh=aI4TlpQf3gNjCRK+KshtpcJSU85X20kTXRGcmVMJzkA=;
+	s=default; t=1563203058;
+	bh=1HKtzX5MtKJ+4vkqsLa8JHD2FiqDViQ4LpJYuUZL4vk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EK2f38o4KHHqBVp22LfN2if4WDCzEtuWiQmyBdk9FlCHWshVHBz2l+Y2NjUwm3ehc
-	 wUz2BNuRXw1pozP/7KlrBz6Q+ub2v1zmt9sUIA4I7o9/5MPw+KszA8Sm3jkPeZUtA4
-	 b4WqhDj3wsnGphXAG2d84Bzbzo3inzv069Qn3M5A=
+	b=M5zIOtCPjU3evxhXm50aVk/KagB9SkbSR8AbA2Rjispu7yRanoPI2NZT04R54SVfv
+	 IyIMNHmO2DfHOUx/GZej9HKsBH1YcbcmwyuXxiQ0LVGPuNK89uEdLxqFoGdIaDT8nV
+	 Nn9Jo2pliyVqk5iPNGewoSFQEawhXyWX1fVk/NtY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388549AbfGOOIi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:08:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59146 "EHLO mail.kernel.org"
+        id S2388170AbfGOOIU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:08:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58430 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388545AbfGOOIh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:08:37 -0400
+        id S2387532AbfGOOIU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:08:20 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5F40206B8;
-        Mon, 15 Jul 2019 14:08:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E32D52083D;
+        Mon, 15 Jul 2019 14:08:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199716;
-        bh=aI4TlpQf3gNjCRK+KshtpcJSU85X20kTXRGcmVMJzkA=;
+        s=default; t=1563199699;
+        bh=1HKtzX5MtKJ+4vkqsLa8JHD2FiqDViQ4LpJYuUZL4vk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lQ1nmviYWQG9xvkQELrQFMq14fR4gJA/nGl0Z45gXgbw+nPe/F3XRVjVV12RJnJtL
-         x+8GmKvLNWvS6caBIBdpxcmZb1nQFM3kxMRSzCH4I/PvJualBcJT32tJYwdYlEKKw2
-         +vHo8sEVTtW7MFFZ4JQJvQYdMQ8f0gKdhJMFnxnA=
+        b=Yg/B4cyMDbAahlVztmcRPCPBiPNT7Z0gS5yw7t+5vKvhqnW0Yy3gbKNVPndFm9Q7o
+         6Cn+cJgAuJY12lyUnt24JoGzDUq4dD1tP/v2I4E4azzMXEdUyQz9m4/sLQaoBQOj2B
+         bFauRw2m2IBlf9qhL8ZBXQrmfgtahZ9xU6BaEjeY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Young Xiao <92siuyang@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 082/219] media: davinci: vpif_capture: fix memory leak in vpif_probe()
-Date:   Mon, 15 Jul 2019 10:01:23 -0400
-Message-Id: <20190715140341.6443-82-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 076/219] media: fdp1: Support M3N and E3 platforms
+Date:   Mon, 15 Jul 2019 10:01:17 -0400
+Message-Id: <20190715140341.6443-76-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -59,72 +60,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Young Xiao <92siuyang@gmail.com>
+From: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-[ Upstream commit 64f883cd98c6d43013fb0cea788b63e50ebc068c ]
+[ Upstream commit 4e8c120de9268fc26f583268b9d22e7d37c4595f ]
 
-If vpif_probe() fails on v4l2_device_register() and vpif_probe_complete(),
-then memory allocated at initialize_vpif() for global vpif_obj.dev[i]
-become unreleased.
+New Gen3 R-Car platforms incorporate the FDP1 with an updated version
+register. No code change is required to support these targets, but they
+will currently report an error stating that the device can not be
+identified.
 
-The patch adds deallocation of vpif_obj.dev[i] on the error path.
+Update the driver to match against the new device types.
 
-Signed-off-by: Young Xiao <92siuyang@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/davinci/vpif_capture.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ drivers/media/platform/rcar_fdp1.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
-index 6216b7ac6875..a20cb6fff2ec 100644
---- a/drivers/media/platform/davinci/vpif_capture.c
-+++ b/drivers/media/platform/davinci/vpif_capture.c
-@@ -1384,6 +1384,14 @@ static int initialize_vpif(void)
- 	return err;
- }
+diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
+index 6bda1eee9170..4f103be215d3 100644
+--- a/drivers/media/platform/rcar_fdp1.c
++++ b/drivers/media/platform/rcar_fdp1.c
+@@ -257,6 +257,8 @@ MODULE_PARM_DESC(debug, "activate debug info");
+ #define FD1_IP_H3_ES1			0x02010101
+ #define FD1_IP_M3W			0x02010202
+ #define FD1_IP_H3			0x02010203
++#define FD1_IP_M3N			0x02010204
++#define FD1_IP_E3			0x02010205
  
-+static inline void free_vpif_objs(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < VPIF_CAPTURE_MAX_DEVICES; i++)
-+		kfree(vpif_obj.dev[i]);
-+}
-+
- static int vpif_async_bound(struct v4l2_async_notifier *notifier,
- 			    struct v4l2_subdev *subdev,
- 			    struct v4l2_async_subdev *asd)
-@@ -1653,7 +1661,7 @@ static __init int vpif_probe(struct platform_device *pdev)
- 	err = v4l2_device_register(vpif_dev, &vpif_obj.v4l2_dev);
- 	if (err) {
- 		v4l2_err(vpif_dev->driver, "Error registering v4l2 device\n");
--		goto cleanup;
-+		goto vpif_free;
- 	}
- 
- 	while ((res = platform_get_resource(pdev, IORESOURCE_IRQ, res_idx))) {
-@@ -1700,7 +1708,9 @@ static __init int vpif_probe(struct platform_device *pdev)
- 				  "registered sub device %s\n",
- 				   subdevdata->name);
- 		}
--		vpif_probe_complete();
-+		err = vpif_probe_complete();
-+		if (err)
-+			goto probe_subdev_out;
- 	} else {
- 		vpif_obj.notifier.ops = &vpif_async_ops;
- 		err = v4l2_async_notifier_register(&vpif_obj.v4l2_dev,
-@@ -1719,6 +1729,8 @@ static __init int vpif_probe(struct platform_device *pdev)
- 	kfree(vpif_obj.sd);
- vpif_unregister:
- 	v4l2_device_unregister(&vpif_obj.v4l2_dev);
-+vpif_free:
-+	free_vpif_objs();
- cleanup:
- 	v4l2_async_notifier_cleanup(&vpif_obj.notifier);
- 
+ /* LUTs */
+ #define FD1_LUT_DIF_ADJ			0x1000
+@@ -2365,6 +2367,12 @@ static int fdp1_probe(struct platform_device *pdev)
+ 	case FD1_IP_H3:
+ 		dprintk(fdp1, "FDP1 Version R-Car H3\n");
+ 		break;
++	case FD1_IP_M3N:
++		dprintk(fdp1, "FDP1 Version R-Car M3N\n");
++		break;
++	case FD1_IP_E3:
++		dprintk(fdp1, "FDP1 Version R-Car E3\n");
++		break;
+ 	default:
+ 		dev_err(fdp1->dev, "FDP1 Unidentifiable (0x%08x)\n",
+ 				hw_version);
 -- 
 2.20.1
 
