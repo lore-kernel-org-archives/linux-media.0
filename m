@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B4F8C76195
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5102EC76191
 	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:49:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E010A2086C
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:49:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2058C2086C
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:49:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1563198597;
-	bh=5ctXPbqLhnzjA82zzM+P5ypMCtc2pbYr38HOAX2NH6A=;
+	bh=lGlfXHAiLZJovgA4DCHybcCib4O3ArvHEh86TD1QZiY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TENLSM0T5KCduPOev8Rt7MA+g29N6uWKjkOXJHGJNJOKNArKHI/BICZywnkFOm1zN
-	 vKKKLfHuMR0cqSHMY3XAI721jVTyOEVaNrKvenXrRsH/wu8QvtaOaJGYYYdMlkEOKa
-	 zL+2A1+l91PAaYltyWKV/p2eBszlvVTzv1yj5S5M=
+	b=rTVoh6sjWcT1TZofYQHmGf+CZWm2KCyp0zGedm5a8oX97IwtOffsLenZ3lN7RHC0x
+	 mOEQdDk86Bwzh9lP0Aa4hgDHprszJ4hw386LloyeQonxIHFBx3GZv2DnyREMVEioZo
+	 /nHaNA2YGowKc7lx9Ntw3SYXOszfTuao6X9hCIzE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731774AbfGONtk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:49:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33946 "EHLO mail.kernel.org"
+        id S1731329AbfGONt4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:49:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36928 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731768AbfGONtj (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:49:39 -0400
+        id S1731886AbfGONty (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:49:54 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B3C2420651;
-        Mon, 15 Jul 2019 13:49:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 167F020651;
+        Mon, 15 Jul 2019 13:49:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563198579;
-        bh=5ctXPbqLhnzjA82zzM+P5ypMCtc2pbYr38HOAX2NH6A=;
+        s=default; t=1563198593;
+        bh=lGlfXHAiLZJovgA4DCHybcCib4O3ArvHEh86TD1QZiY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rr56TrdvRQCg8CcJFkJaoa5CR/I70yI8e8LFBQ0bw1Dc1K8MPFvJtijGv/0FGNOuv
-         W1jaT3zHBhV1cJug3zE8k13gXjUfHT18sSvPy0Tg7PKHCYB+Ub8uUPl81s81qTgliq
-         8YtuDmxxP6gGUDv/srelPPRpsvEGec7brlVwTlpw=
+        b=Iiz1ZY4rp3N898lKSS/Xd5wM0eXzeeuYmhtTHK2+5CF5/5xU80Q1SwvtsLLjFbghG
+         Y2WII6iAsH6S9FJ+rd9UUR2vAtk5SK/adeSa3AzOk+9mT32kmXUQUuNtUH0LNsXkho
+         QTeH6T8M/8Lvr0ryDaUqFDZPIbrU4zyYkIqD1KhY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Shailendra Verma <shailendra.v@samsung.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 050/249] media: mc-device.c: don't memset __user pointer contents
-Date:   Mon, 15 Jul 2019 09:43:35 -0400
-Message-Id: <20190715134655.4076-50-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        devel@driverdev.osuosl.org
+Subject: [PATCH AUTOSEL 5.2 053/249] media: staging: media: davinci_vpfe: - Fix for memory leak if decoder initialization fails.
+Date:   Mon, 15 Jul 2019 09:43:38 -0400
+Message-Id: <20190715134655.4076-53-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
 References: <20190715134655.4076-1-sashal@kernel.org>
@@ -60,43 +59,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil@xs4all.nl>
+From: Shailendra Verma <shailendra.v@samsung.com>
 
-[ Upstream commit 518fa4e0e0da97ea2e17c95ab57647ce748a96e2 ]
+[ Upstream commit 6995a659101bd4effa41cebb067f9dc18d77520d ]
 
-You can't memset the contents of a __user pointer. Instead, call copy_to_user to
-copy links.reserved (which is zeroed) to the user memory.
+Fix to avoid possible memory leak if the decoder initialization
+got failed.Free the allocated memory for file handle object
+before return in case decoder initialization fails.
 
-This fixes this sparse warning:
-
-SPARSE:drivers/media/mc/mc-device.c drivers/media/mc/mc-device.c:521:16:  warning: incorrect type in argument 1 (different address spaces)
-
-Fixes: f49308878d720 ("media: media_device_enum_links32: clean a reserved field")
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Shailendra Verma <shailendra.v@samsung.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/media-device.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/staging/media/davinci_vpfe/vpfe_video.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
-index b9bb4904bba1..e19df5165e78 100644
---- a/drivers/media/media-device.c
-+++ b/drivers/media/media-device.c
-@@ -510,8 +510,9 @@ static long media_device_enum_links32(struct media_device *mdev,
- 	if (ret)
- 		return ret;
- 
--	memset(ulinks->reserved, 0, sizeof(ulinks->reserved));
--
-+	if (copy_to_user(ulinks->reserved, links.reserved,
-+			 sizeof(ulinks->reserved)))
-+		return -EFAULT;
- 	return 0;
- }
- 
+diff --git a/drivers/staging/media/davinci_vpfe/vpfe_video.c b/drivers/staging/media/davinci_vpfe/vpfe_video.c
+index 510202a3b091..84cca18e3e9d 100644
+--- a/drivers/staging/media/davinci_vpfe/vpfe_video.c
++++ b/drivers/staging/media/davinci_vpfe/vpfe_video.c
+@@ -419,6 +419,9 @@ static int vpfe_open(struct file *file)
+ 	/* If decoder is not initialized. initialize it */
+ 	if (!video->initialized && vpfe_update_pipe_state(video)) {
+ 		mutex_unlock(&video->lock);
++		v4l2_fh_del(&handle->vfh);
++		v4l2_fh_exit(&handle->vfh);
++		kfree(handle);
+ 		return -ENODEV;
+ 	}
+ 	/* Increment device users counter */
 -- 
 2.20.1
 
