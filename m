@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C17DCC7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43231C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:47:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8D0D321530
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:41:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 11AF32067C
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 13:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563198085;
-	bh=Fvb/B/ZkadAFgu13GC6Ecqxc7DWyO5rwggfJfhzi+m8=;
+	s=default; t=1563198476;
+	bh=PaU5srnL3ACyaX+pzmrAHpsPBAoukadvpSBsfBVIKhs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=qALJKP72VamoN8YoLYyGPrcOyXpu6nDRS81rutbw9aVQXxlmd7DQwQOXjnDctqtdG
-	 9oeuQBsYRrN4IfsrBH5Yz6GPBqvDqTb6Mmn9pTIEz+XdHP3dNCPJbW1T5wDGSnpJpP
-	 Ez/r1iRqp7qKLMCh4soXoeSyN2qGrzRL/LTk/hAg=
+	b=ax/EStctME1bTNHKgreuBPwnG/Dq+EklQu3Qbg4a8erJa9U7iHv2leg3MczycZnte
+	 LM4EC0V0Zm26LQXAEu6x4yGqp5QLLHM/2h9yb5I1kJtso82/7D9eqIk4BDUHoxECaW
+	 OmQUg4Etv0Kjy9DkxR+tMbBBtJHRUHoOwL7t2284=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731139AbfGONjE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 09:39:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40292 "EHLO mail.kernel.org"
+        id S1731294AbfGONrz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 09:47:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57600 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730370AbfGONjD (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 09:39:03 -0400
+        id S1731195AbfGONry (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 09:47:54 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4D4602086C;
-        Mon, 15 Jul 2019 13:39:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 577C02067C;
+        Mon, 15 Jul 2019 13:47:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563197942;
-        bh=Fvb/B/ZkadAFgu13GC6Ecqxc7DWyO5rwggfJfhzi+m8=;
+        s=default; t=1563198473;
+        bh=PaU5srnL3ACyaX+pzmrAHpsPBAoukadvpSBsfBVIKhs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m2uba879++0BQXS/WabZ84p+abCcCukleFzi4b2hmrYbCXSjKOK/0eesxK0EEGh0p
-         Cbm5X1nKGMr1qpVNYpg5EmiwczPD//xi0i6OpUKLzlwgqE51xiupaq9llXv23kxQnL
-         P57J3cU1aSSVDC50j2Y+OrzA90W0JxEctcPmsFaE=
+        b=abhK4TL9Efp9l22vbsDkze/hrtHT3vptKbr77XuVfMzi14033yf4By1DmpD9MbLqC
+         PMeav2CEK4uFSoGpa2CAGV2/DhlmZ5fhlxc7cgMEq0xtM4NbXsiR5bhE4E+M1ip261
+         +Xh5vy6s3HFSfqvbkS7WYdH3yKFIAyoT1em6KbkU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>,
@@ -45,12 +45,12 @@ Cc:     Oliver Neukum <oneukum@suse.com>,
         Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 019/219] media: dvb: usb: fix use after free in dvb_usb_device_exit
-Date:   Mon, 15 Jul 2019 09:34:51 -0400
-Message-Id: <20190715133811.2441-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 019/249] media: dvb: usb: fix use after free in dvb_usb_device_exit
+Date:   Mon, 15 Jul 2019 09:43:04 -0400
+Message-Id: <20190715134655.4076-19-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715133811.2441-1-sashal@kernel.org>
-References: <20190715133811.2441-1-sashal@kernel.org>
+In-Reply-To: <20190715134655.4076-1-sashal@kernel.org>
+References: <20190715134655.4076-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -77,10 +77,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-index 99951e02a880..dd063a736df5 100644
+index e97f6edc98de..65f2b1a20ca1 100644
 --- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
 +++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-@@ -287,12 +287,15 @@ EXPORT_SYMBOL(dvb_usb_device_init);
+@@ -284,12 +284,15 @@ EXPORT_SYMBOL(dvb_usb_device_init);
  void dvb_usb_device_exit(struct usb_interface *intf)
  {
  	struct dvb_usb_device *d = usb_get_intfdata(intf);
