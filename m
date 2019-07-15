@@ -2,165 +2,102 @@ Return-Path: <SRS0=PKt4=VM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41F11C7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D651FC7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 11:18:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1CB98206B8
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:53:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFF8E20665
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 11:18:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729756AbfGOKxe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 06:53:34 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:44163 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729591AbfGOKxe (ORCPT
+        id S1729843AbfGOLSV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 07:18:21 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:47171 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729756AbfGOLSV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 06:53:34 -0400
+        Mon, 15 Jul 2019 07:18:21 -0400
 Received: from [IPv6:2001:983:e9a7:1:3de9:fbf:e548:c8fc] ([IPv6:2001:983:e9a7:1:3de9:fbf:e548:c8fc])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id mybrhcH4l0SBqmybshRWEK; Mon, 15 Jul 2019 12:53:32 +0200
-Subject: Re: [PATCH v2 5/5] drm: exynos: exynos_hdmi: use
- cec_notifier_conn_(un)register
+        id myzqhcT8c0SBqmyzrhReOr; Mon, 15 Jul 2019 13:18:19 +0200
+Subject: Re: [PATCH v2 0/5] cec: convert remaining drivers to the new notifier
+ API
 To:     Dariusz Marcinkiewicz <darekm@google.com>,
         linux-media@vger.kernel.org, hverkuil@xs4all.nl
 References: <20190701145944.214098-1-darekm@google.com>
- <20190701145944.214098-6-darekm@google.com>
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <f8549313-8e2e-3de4-befa-09f3cbedc2af@xs4all.nl>
-Date:   Mon, 15 Jul 2019 12:53:31 +0200
+Message-ID: <b963102f-b318-a6ee-6762-23bd0da84010@xs4all.nl>
+Date:   Mon, 15 Jul 2019 13:18:18 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190701145944.214098-6-darekm@google.com>
+In-Reply-To: <20190701145944.214098-1-darekm@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfFfEGTCWAaLPaz0Bao3qbWpLL/CmDt6gDh+hwSyYXFwXJ5IYqOLaL9E2YnfnELAU/T9S/dZ20VSF507+HPdAIUrXk/9XLJOCCu3ddowu/cD88317XutT
- 9I8rNlpgy4jbQ0Z8U/xNIqnqB+kUx0d/drqB/fJ/CMJsA4aijZUaKtX4dOa2C6AFv4Y2bsooxQNzRuR5P4wLd6zVyqbCa+AeRMZnXXJOTNGVhk2hWrdmnvk3
- Yi15zUDwG091LbVv4iAsmpkfHhWYUBC4CJ3AlvMP9bqNOQAE+NGF6gBWz6l/8a2uXasHrHo7s70DpFozHJzLQ/Es1fYWvF9P9UNKnJR0KWo=
+X-CMAE-Envelope: MS4wfHN/VGvGy8kCBjdfu05zsnXCuQiiq7eI4WY41/9kDIhS4kQ9yu91HuE5wjiua6LOi7z+Zf88M6u8vOi+8wMEIAhIU3z8lIjCIvjMth3se+uUJZQn7nkl
+ VlRiBsuQ2Zzg8V++3IWcjqjMtyPJ3uGm81nw1x0ClFOhd+en5EUYlEiK2/ET12IbL0jXMxPvtPrK6rZLzTlCNy3eURpTded0p39QVZF5kWpUGfj2/RVrFJ31
+ 9AemonpRFQasc1l+Gms8xEWBARhyd5SYCZa64iN63hncIWkAtiLgKH3OtmYh0i4MhVV/y2T75ED71pLxLnc12lC7jSzoOVnvAn36cCNaoLo=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Dariusz,
+
 On 7/1/19 4:59 PM, Dariusz Marcinkiewicz wrote:
-> Use the new cec_notifier_conn_(un)register() functions to
-> (un)register the notifier for the HDMI connector, and fill in
-> the cec_connector_info.
+> This series updates remaining drivers in DRM to use new CEC notifier API.
 > 
-> Signed-off-by: Dariusz Marcinkiewicz <darekm@google.com>
-> ---
->  drivers/gpu/drm/exynos/exynos_hdmi.c | 33 +++++++++++++++++-----------
->  1 file changed, 20 insertions(+), 13 deletions(-)
+> Those complement the "cec: improve notifier support, add
+> connector info" patch series and also replace 2 following patches from
+> there:
+> - [PATCHv8 09/13] dw-hdmi: use cec_notifier_conn_(un)register
+> - [PATCHv9 12/13] tda998x: use cec_notifier_conn_(un)register
 > 
-> diff --git a/drivers/gpu/drm/exynos/exynos_hdmi.c b/drivers/gpu/drm/exynos/exynos_hdmi.c
-> index 19c252f659dd0..dec4149435de1 100644
-> --- a/drivers/gpu/drm/exynos/exynos_hdmi.c
-> +++ b/drivers/gpu/drm/exynos/exynos_hdmi.c
-> @@ -858,6 +858,11 @@ static enum drm_connector_status hdmi_detect(struct drm_connector *connector,
->  
->  static void hdmi_connector_destroy(struct drm_connector *connector)
->  {
-> +	struct hdmi_context *hdata = connector_to_hdmi(connector);
-> +
-> +	cec_notifier_set_phys_addr(hdata->notifier, CEC_PHYS_ADDR_INVALID);
+> None of those changes were not tested on a real hardware.
 
-You can drop this, cec_notifier_conn_unregister() takes care of this for you.
+I assume you meant 'None of those changes were tested'?
 
-> +	cec_notifier_conn_unregister(hdata->notifier);
-> +
->  	drm_connector_unregister(connector);
->  	drm_connector_cleanup(connector);
->  }
-> @@ -941,6 +946,7 @@ static int hdmi_create_connector(struct drm_encoder *encoder)
->  {
->  	struct hdmi_context *hdata = encoder_to_hdmi(encoder);
->  	struct drm_connector *connector = &hdata->connector;
-> +	struct cec_connector_info conn_info;
->  	int ret;
->  
->  	connector->interlace_allowed = true;
-> @@ -963,6 +969,15 @@ static int hdmi_create_connector(struct drm_encoder *encoder)
->  			DRM_DEV_ERROR(hdata->dev, "Failed to attach bridge\n");
->  	}
->  
-> +	cec_fill_conn_info_from_drm(&conn_info, connector);
-> +
-> +	hdata->notifier = cec_notifier_conn_register(hdata->dev, NULL,
-> +						     &conn_info);
-> +	if (hdata->notifier == NULL) {
-> +		ret = -ENOMEM;
-> +		DRM_DEV_ERROR(hdata->dev, "Failed to allocate CEC notifier\n");
-> +	}
-> +
->  	return ret;
->  }
->  
-> @@ -1534,8 +1549,9 @@ static void hdmi_disable(struct drm_encoder *encoder)
->  		 */
->  		mutex_unlock(&hdata->mutex);
->  		cancel_delayed_work(&hdata->hotplug_work);
-> -		cec_notifier_set_phys_addr(hdata->notifier,
-> -					   CEC_PHYS_ADDR_INVALID);
-> +		if (hdata->notifier)
-> +			cec_notifier_set_phys_addr(hdata->notifier,
-> +						   CEC_PHYS_ADDR_INVALID);
+I just reviewed this series. Apologies for the delay, I was out for a week and
+then had to take care of other things.
 
-Use cec_notifier_phys_addr_invalidate().
+When you post v3, can you include all older drm patches (i.e. tda9950, dw-hdmi-cec,
+and the drm-dp-cec changes)?
 
->  		return;
->  	}
->  
-> @@ -2012,12 +2028,6 @@ static int hdmi_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> -	hdata->notifier = cec_notifier_get(&pdev->dev);
-> -	if (hdata->notifier == NULL) {
-> -		ret = -ENOMEM;
-> -		goto err_hdmiphy;
-> -	}
-> -
->  	pm_runtime_enable(dev);
->  
->  	audio_infoframe = &hdata->audio.infoframe;
-> @@ -2029,7 +2039,7 @@ static int hdmi_probe(struct platform_device *pdev)
->  
->  	ret = hdmi_register_audio_device(hdata);
->  	if (ret)
-> -		goto err_notifier_put;
-> +		goto err_runtime_disable;
->  
->  	ret = component_add(&pdev->dev, &hdmi_component_ops);
->  	if (ret)
-> @@ -2040,8 +2050,7 @@ static int hdmi_probe(struct platform_device *pdev)
->  err_unregister_audio:
->  	platform_device_unregister(hdata->audio.pdev);
->  
-> -err_notifier_put:
-> -	cec_notifier_put(hdata->notifier);
-> +err_runtime_disable:
->  	pm_runtime_disable(dev);
->  
->  err_hdmiphy:
-> @@ -2060,12 +2069,10 @@ static int hdmi_remove(struct platform_device *pdev)
->  	struct hdmi_context *hdata = platform_get_drvdata(pdev);
->  
->  	cancel_delayed_work_sync(&hdata->hotplug_work);
-> -	cec_notifier_set_phys_addr(hdata->notifier, CEC_PHYS_ADDR_INVALID);
->  
->  	component_del(&pdev->dev, &hdmi_component_ops);
->  	platform_device_unregister(hdata->audio.pdev);
->  
-> -	cec_notifier_put(hdata->notifier);
->  	pm_runtime_disable(&pdev->dev);
->  
->  	if (!IS_ERR(hdata->reg_hdmi_en))
-> 
+That way there is only one patch series that I have to review.
 
 Regards,
 
 	Hans
+
+> 
+> Changes since v1:
+> 	Those patches delay creation of notifiers until respective
+> 	connectors are constructed. It seems that those patches, for a
+> 	couple of drivers, by adding the delay, introduce a race between
+> 	notifiers' creation and the IRQs handling threads - at least I
+> 	don't see anything obvious in there that would explicitly forbid
+> 	such races to occur. v2 adds a write barrier to make sure IRQ
+> 	threads see the notifier once it is created (replacing the
+> 	WRITE_ONCE I put in v1). The best thing to do here, I believe,
+> 	would be not to have any synchronization and make sure that an IRQ
+> 	only gets enabled after the notifier is created.
+> 
+> 
+> Dariusz Marcinkiewicz (5):
+>   drm: tda998x: use cec_notifier_conn_(un)register
+>   drm: sti: use cec_notifier_conn_(un)register
+>   drm: tegra: use cec_notifier_conn_(un)register
+>   drm: dw-hdmi: use cec_notifier_conn_(un)register
+>   drm: exynos: exynos_hdmi: use cec_notifier_conn_(un)register
+> 
+>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 37 +++++++++++++++--------
+>  drivers/gpu/drm/exynos/exynos_hdmi.c      | 33 ++++++++++++--------
+>  drivers/gpu/drm/i2c/tda998x_drv.c         | 32 ++++++++++++++------
+>  drivers/gpu/drm/sti/sti_hdmi.c            | 20 +++++++-----
+>  drivers/gpu/drm/tegra/output.c            | 18 ++++++-----
+>  5 files changed, 91 insertions(+), 49 deletions(-)
+> 
+
