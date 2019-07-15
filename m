@@ -2,34 +2,35 @@ Return-Path: <SRS0=PKt4=VM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8689BC76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:30:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CE71C76195
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:31:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 65BC120665
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:30:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 101022080A
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 10:31:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729756AbfGOKa6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 06:30:58 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:41339 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729739AbfGOKa6 (ORCPT
+        id S1729757AbfGOKa7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 06:30:59 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:49891 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729695AbfGOKa6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 15 Jul 2019 06:30:58 -0400
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:3de9:fbf:e548:c8fc])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id myFyhc6VO0SBqmyG0hRPL6; Mon, 15 Jul 2019 12:30:56 +0200
+        id myFyhc6VO0SBqmyG0hRPKR; Mon, 15 Jul 2019 12:30:56 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>
-Subject: [PATCH 5/6] stih-cec: use cec_notifier_cec_adap_(un)register
-Date:   Mon, 15 Jul 2019 12:30:53 +0200
-Message-Id: <20190715103054.84849-6-hverkuil-cisco@xs4all.nl>
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: [PATCH 2/6] cros-ec-cec: use cec_notifier_cec_adap_(un)register
+Date:   Mon, 15 Jul 2019 12:30:50 +0200
+Message-Id: <20190715103054.84849-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715103054.84849-1-hverkuil-cisco@xs4all.nl>
 References: <20190715103054.84849-1-hverkuil-cisco@xs4all.nl>
@@ -37,90 +38,175 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4wfCTcJt3rxHkjQpagPVH5KJO+2Zhdc6fLS2Qk5ffpGryCY7yPTlItemOGsDeAuXkVkWmxibR4L0JYi/hnl6iFc0+tzI4soVE59rJTIM+E1ZbhNmIWagWh
  uzvRkU0CIL2Gmhz5BgyDa6uY1MPxn1jeqiLWJ59rbYeMuIkcDbcmdoiAqNiBBn8tqBrbYn/O5uYp6gfLV8blEcjill/Jefyb69ntaqW+54fLhFBrI2NScsdy
- xqyaYHkETC4rFrkFKXhBVzbB3Z0Te+fWl+6cDYIWcyBskUzE6dNyZKUOssA4Ei4me5YujQ2En+BQKfWasnsVC3K01PPnONa7VxMjupEqszUFXx3Gz3TmGAeE
- IsoD5FwM
+ xqyaYHkETC4rFrkFKXhBVzbB3Z0Te+fWl+6cDYIWcyBskUzE6dNyZKUOssA4Ei4mpOZOnGydrXawqXLayWAqbx8HrNbTWB3OSrsVuvSeHhAYzJT7GYE9jXvU
+ JYe6anIL
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Use cec_notifier_cec_adap_(un)register instead of
-cec_notifier_get, cec_notifier_put and cec_register_cec_notifier.
+cec_notifier_get_conn, cec_notifier_put and cec_register_cec_notifier.
 
 Also enable the CEC_CAP_CONNECTOR_INFO capability.
 
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc: Benjamin Gaignard <benjamin.gaignard@linaro.org>
+Cc: Neil Armstrong <narmstrong@baylibre.com>
 ---
- drivers/media/platform/sti/cec/stih-cec.c | 32 ++++++++++++++---------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ .../media/platform/cros-ec-cec/cros-ec-cec.c  | 68 +++++++++++--------
+ 1 file changed, 38 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/media/platform/sti/cec/stih-cec.c b/drivers/media/platform/sti/cec/stih-cec.c
-index fc37efe1d554..8118c7365d3f 100644
---- a/drivers/media/platform/sti/cec/stih-cec.c
-+++ b/drivers/media/platform/sti/cec/stih-cec.c
-@@ -313,10 +313,6 @@ static int stih_cec_probe(struct platform_device *pdev)
- 	if (!cec)
- 		return -ENOMEM;
+diff --git a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+index 068df9888dbf..05463e4d76c2 100644
+--- a/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
++++ b/drivers/media/platform/cros-ec-cec/cros-ec-cec.c
+@@ -206,10 +206,10 @@ static SIMPLE_DEV_PM_OPS(cros_ec_cec_pm_ops,
+  */
  
--	cec->notifier = cec_notifier_get(hdmi_dev);
--	if (!cec->notifier)
--		return -ENOMEM;
+ struct cec_dmi_match {
+-	char *sys_vendor;
+-	char *product_name;
+-	char *devname;
+-	char *conn;
++	const char *sys_vendor;
++	const char *product_name;
++	const char *devname;
++	const char *conn;
+ };
+ 
+ static const struct cec_dmi_match cec_dmi_match_table[] = {
+@@ -217,8 +217,8 @@ static const struct cec_dmi_match cec_dmi_match_table[] = {
+ 	{ "Google", "Fizz", "0000:00:02.0", "Port B" },
+ };
+ 
+-static int cros_ec_cec_get_notifier(struct device *dev,
+-				    struct cec_notifier **notify)
++static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev,
++						const char **conn)
+ {
+ 	int i;
+ 
+@@ -233,26 +233,24 @@ static int cros_ec_cec_get_notifier(struct device *dev,
+ 			d = bus_find_device_by_name(&pci_bus_type, NULL,
+ 						    m->devname);
+ 			if (!d)
+-				return -EPROBE_DEFER;
 -
- 	cec->dev = dev;
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-@@ -340,30 +336,42 @@ static int stih_cec_probe(struct platform_device *pdev)
- 		return PTR_ERR(cec->clk);
+-			*notify = cec_notifier_get_conn(d, m->conn);
++				return ERR_PTR(-EPROBE_DEFER);
+ 			put_device(d);
+-			return 0;
++			*conn = m->conn;
++			return d;
+ 		}
  	}
  
--	cec->adap = cec_allocate_adapter(&sti_cec_adap_ops, cec,
--			CEC_NAME, CEC_CAP_DEFAULTS, CEC_MAX_LOG_ADDRS);
-+	cec->adap = cec_allocate_adapter(&sti_cec_adap_ops, cec, CEC_NAME,
-+					 CEC_CAP_DEFAULTS |
-+					 CEC_CAP_CONNECTOR_INFO,
-+					 CEC_MAX_LOG_ADDRS);
- 	ret = PTR_ERR_OR_ZERO(cec->adap);
- 	if (ret)
- 		return ret;
+ 	/* Hardware support must be added in the cec_dmi_match_table */
+ 	dev_warn(dev, "CEC notifier not configured for this hardware\n");
  
--	ret = cec_register_adapter(cec->adap, &pdev->dev);
--	if (ret) {
--		cec_delete_adapter(cec->adap);
+-	return -ENODEV;
++	return ERR_PTR(-ENODEV);
+ }
+ 
+ #else
+ 
+-static int cros_ec_cec_get_notifier(struct device *dev,
+-				    struct cec_notifier **notify)
++static struct device *cros_ec_cec_find_hdmi_dev(struct device *dev)
+ {
+-	return -ENODEV;
++	return ERR_PTR(-ENODEV);
+ }
+ 
+ #endif
+@@ -262,8 +260,14 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
+ 	struct cros_ec_dev *ec_dev = dev_get_drvdata(pdev->dev.parent);
+ 	struct cros_ec_device *cros_ec = ec_dev->ec_dev;
+ 	struct cros_ec_cec *cros_ec_cec;
++	struct device *hdmi_dev;
++	const char *conn = NULL;
+ 	int ret;
+ 
++	hdmi_dev = cros_ec_cec_find_hdmi_dev(&pdev->dev, &conn);
++	if (IS_ERR(hdmi_dev))
++		return PTR_ERR(hdmi_dev);
++
+ 	cros_ec_cec = devm_kzalloc(&pdev->dev, sizeof(*cros_ec_cec),
+ 				   GFP_KERNEL);
+ 	if (!cros_ec_cec)
+@@ -272,10 +276,6 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, cros_ec_cec);
+ 	cros_ec_cec->cros_ec = cros_ec;
+ 
+-	ret = cros_ec_cec_get_notifier(&pdev->dev, &cros_ec_cec->notify);
+-	if (ret)
 -		return ret;
-+	cec->notifier = cec_notifier_cec_adap_register(hdmi_dev, NULL,
-+						       cec->adap);
-+	if (!cec->notifier) {
-+		ret = -ENOMEM;
-+		goto err_delete_adapter;
+-
+ 	ret = device_init_wakeup(&pdev->dev, 1);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to initialize wakeup\n");
+@@ -283,29 +283,39 @@ static int cros_ec_cec_probe(struct platform_device *pdev)
  	}
  
--	cec_register_cec_notifier(cec->adap, cec->notifier);
-+	ret = cec_register_adapter(cec->adap, &pdev->dev);
-+	if (ret)
-+		goto err_notifier;
+ 	cros_ec_cec->adap = cec_allocate_adapter(&cros_ec_cec_ops, cros_ec_cec,
+-						 DRV_NAME, CEC_CAP_DEFAULTS, 1);
++						 DRV_NAME,
++						 CEC_CAP_DEFAULTS |
++						 CEC_CAP_CONNECTOR_INFO, 1);
+ 	if (IS_ERR(cros_ec_cec->adap))
+ 		return PTR_ERR(cros_ec_cec->adap);
  
- 	platform_set_drvdata(pdev, cec);
++	cros_ec_cec->notify = cec_notifier_cec_adap_register(hdmi_dev, conn,
++							     cros_ec_cec->adap);
++	if (!cros_ec_cec->notify) {
++		ret = -ENOMEM;
++		goto out_probe_adapter;
++	}
++
+ 	/* Get CEC events from the EC. */
+ 	cros_ec_cec->notifier.notifier_call = cros_ec_cec_event;
+ 	ret = blocking_notifier_chain_register(&cros_ec->event_notifier,
+ 					       &cros_ec_cec->notifier);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "failed to register notifier\n");
+-		cec_delete_adapter(cros_ec_cec->adap);
+-		return ret;
++		goto out_probe_notify;
+ 	}
+ 
+ 	ret = cec_register_adapter(cros_ec_cec->adap, &pdev->dev);
+-	if (ret < 0) {
+-		cec_delete_adapter(cros_ec_cec->adap);
+-		return ret;
+-	}
+-
+-	cec_register_cec_notifier(cros_ec_cec->adap, cros_ec_cec->notify);
++	if (ret < 0)
++		goto out_probe_notify;
+ 
  	return 0;
 +
-+err_notifier:
-+	cec_notifier_cec_adap_unregister(cec->notifier);
-+
-+err_delete_adapter:
-+	cec_delete_adapter(cec->adap);
++out_probe_notify:
++	cec_notifier_cec_adap_unregister(cros_ec_cec->notify);
++out_probe_adapter:
++	cec_delete_adapter(cros_ec_cec->adap);
 +	return ret;
  }
  
- static int stih_cec_remove(struct platform_device *pdev)
- {
- 	struct stih_cec *cec = platform_get_drvdata(pdev);
+ static int cros_ec_cec_remove(struct platform_device *pdev)
+@@ -323,11 +333,9 @@ static int cros_ec_cec_remove(struct platform_device *pdev)
+ 		return ret;
+ 	}
  
-+	cec_notifier_cec_adap_unregister(cec->notifier);
- 	cec_unregister_adapter(cec->adap);
--	cec_notifier_put(cec->notifier);
++	cec_notifier_cec_adap_unregister(cros_ec_cec->notify);
+ 	cec_unregister_adapter(cros_ec_cec->adap);
  
+-	if (cros_ec_cec->notify)
+-		cec_notifier_put(cros_ec_cec->notify);
+-
  	return 0;
  }
+ 
 -- 
 2.20.1
 
