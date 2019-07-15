@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F143C7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA01C7618F
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:59:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E7F12205ED
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:58:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F0A4205ED
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:59:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563202730;
-	bh=h5Hu998g97hcNXSmjTljqkWcR9/8vHHR6+g6JUfiGec=;
+	s=default; t=1563202770;
+	bh=ycwk6oC+x61BQ/IrIG0u0Xkz817gkuX+WzSCZEZXK54=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TJUBTF5j2qABFl3Z+nRWudLwfEFO7UzIENBmdSeUFKunJlhST1dCT3dxV5UwvddbB
-	 Xxg7NtT5z8ObtduC9Bup6VdveSBUltvvFgZzsuZ6pKvAKiOpXUjxGD7QQlpzi4TAxn
-	 OXRhNQnd3aX+Wfr04/JvKdKExIQqwLaUVJ/yx+Eo=
+	b=Bvjt+HhSAR/thFbwSPugDS/wuylHi5rWdF+P0kzi2pNFypR80gN5Ffv8H9O2iAg7m
+	 QwJHdqUYDwvFwwG+JZ/HCQgFVO9qRo7OLdnNvnV9iycSXXiu4xd1wvmtqbuv0de1rx
+	 y2XIWuY3LjVW4lkWS3U8u0JY6kibKficVU2N966M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390162AbfGOOTm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:19:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41910 "EHLO mail.kernel.org"
+        id S2390026AbfGOOTI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:19:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39410 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390154AbfGOOTl (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:19:41 -0400
+        id S2389666AbfGOOSz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:18:55 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC34521530;
-        Mon, 15 Jul 2019 14:19:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E2B2D206B8;
+        Mon, 15 Jul 2019 14:18:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200381;
-        bh=h5Hu998g97hcNXSmjTljqkWcR9/8vHHR6+g6JUfiGec=;
+        s=default; t=1563200334;
+        bh=ycwk6oC+x61BQ/IrIG0u0Xkz817gkuX+WzSCZEZXK54=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gAlnIPgGi6cLWtsAu7jdAGWjlxD3c8shETLlLzKOofIiVWx8yzqlHwKn+fJL5Whcn
-         PSPDItTyQRwBkXzPoBxsvX41iXQN8BPTcrLJqSJJOD2CRWrgQZQc9OWSR0oAyOkX42
-         RgEN/hiO5lLFlEA04wv7ArPWb9mmtevhPeG2AuVw=
+        b=pw6iD5MdjeJo6A0W6gzx3LsBg3hguBLrUGpVN71cvDMN8rxDmBdOXmpWJgUgM0j4F
+         vdlUWs5v4VoXjgYZw6GUrpCSqlrjhXZfqVXcMepe0xmkPzkxeiYtIvlvol7CV7bT+F
+         0d5ZFiPSxGcHA4Xh/5IbAH3hcB4Eecjeu8peakhc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Shailendra Verma <shailendra.v@samsung.com>,
+Cc:     Kangjie Lu <kjlu@umn.edu>, Mukesh Ojha <mojha@codeaurora.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 4.19 031/158] media: staging: media: davinci_vpfe: - Fix for memory leak if decoder initialization fails.
-Date:   Mon, 15 Jul 2019 10:16:02 -0400
-Message-Id: <20190715141809.8445-31-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 016/158] media: vpss: fix a potential NULL pointer dereference
+Date:   Mon, 15 Jul 2019 10:15:47 -0400
+Message-Id: <20190715141809.8445-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
 References: <20190715141809.8445-1-sashal@kernel.org>
@@ -59,35 +58,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Shailendra Verma <shailendra.v@samsung.com>
+From: Kangjie Lu <kjlu@umn.edu>
 
-[ Upstream commit 6995a659101bd4effa41cebb067f9dc18d77520d ]
+[ Upstream commit e08f0761234def47961d3252eac09ccedfe4c6a0 ]
 
-Fix to avoid possible memory leak if the decoder initialization
-got failed.Free the allocated memory for file handle object
-before return in case decoder initialization fails.
+In case ioremap fails, the fix returns -ENOMEM to avoid NULL
+pointer dereference.
 
-Signed-off-by: Shailendra Verma <shailendra.v@samsung.com>
+Signed-off-by: Kangjie Lu <kjlu@umn.edu>
+Reviewed-by: Mukesh Ojha <mojha@codeaurora.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/davinci_vpfe/vpfe_video.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/platform/davinci/vpss.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/staging/media/davinci_vpfe/vpfe_video.c b/drivers/staging/media/davinci_vpfe/vpfe_video.c
-index 1269a983455e..13b890b9ef18 100644
---- a/drivers/staging/media/davinci_vpfe/vpfe_video.c
-+++ b/drivers/staging/media/davinci_vpfe/vpfe_video.c
-@@ -422,6 +422,9 @@ static int vpfe_open(struct file *file)
- 	/* If decoder is not initialized. initialize it */
- 	if (!video->initialized && vpfe_update_pipe_state(video)) {
- 		mutex_unlock(&video->lock);
-+		v4l2_fh_del(&handle->vfh);
-+		v4l2_fh_exit(&handle->vfh);
-+		kfree(handle);
- 		return -ENODEV;
- 	}
- 	/* Increment device users counter */
+diff --git a/drivers/media/platform/davinci/vpss.c b/drivers/media/platform/davinci/vpss.c
+index 19cf6853411e..89a86c19579b 100644
+--- a/drivers/media/platform/davinci/vpss.c
++++ b/drivers/media/platform/davinci/vpss.c
+@@ -518,6 +518,11 @@ static int __init vpss_init(void)
+ 		return -EBUSY;
+ 
+ 	oper_cfg.vpss_regs_base2 = ioremap(VPSS_CLK_CTRL, 4);
++	if (unlikely(!oper_cfg.vpss_regs_base2)) {
++		release_mem_region(VPSS_CLK_CTRL, 4);
++		return -ENOMEM;
++	}
++
+ 	writel(VPSS_CLK_CTRL_VENCCLKEN |
+ 		     VPSS_CLK_CTRL_DACCLKEN, oper_cfg.vpss_regs_base2);
+ 
 -- 
 2.20.1
 
