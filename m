@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B733C76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:56:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78033C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:57:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 04670205ED
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:56:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48036205ED
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:57:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563202571;
-	bh=qo2IJ9hAA6ifUIf1VzlEPtdMaecSdMeCUOTPV2OFIPc=;
+	s=default; t=1563202621;
+	bh=qs7yIuOPi1+YiSsY/HnLBpY7XGQeHN1V7bnDKr98nwE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ksXYPZAtQLSGJarlAU43FBtHvzyNaKIpgC6RYWd1CS1IlruBKgY4z5B5LzYvLhtWk
-	 AK4WGh+FNj2DFNMH46HD8Y/r9J5WgNQ297fIw98NThVrQs4WDdc+8UPvfTskO3itLK
-	 iyhJwePlwwDxjVSh8zWURIQviMncrCXBeeoJGDpI=
+	b=sjjwxQBVVnLENqF7SAn92SZ2rTM2VGwI0+7SDlvUuA/bKp7QoSX/B/W3ST6OLr/fI
+	 sZZxeFm98wxC0kogBGaVf0ia82wRzO8BJTmd7PFPdSR2NHKQpxtFE92zx3l80+KNh4
+	 aJ/axVFPU4n/yJc93UenjoM7EoUueI3CzHIEzYYE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732942AbfGOO4G (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:56:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55238 "EHLO mail.kernel.org"
+        id S2390948AbfGOO47 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:56:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390759AbfGOOXd (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:23:33 -0400
+        id S2390486AbfGOOVE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:21:04 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D6F1E206B8;
-        Mon, 15 Jul 2019 14:23:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 613C7206B8;
+        Mon, 15 Jul 2019 14:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200613;
-        bh=qo2IJ9hAA6ifUIf1VzlEPtdMaecSdMeCUOTPV2OFIPc=;
+        s=default; t=1563200463;
+        bh=qs7yIuOPi1+YiSsY/HnLBpY7XGQeHN1V7bnDKr98nwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t3HZmh90BGudFJU1Q73P/GIswZHhJYDbiop2oII14Csat/AH935ys9HNCE9V2O5AV
-         ZtVP3poyxAlyd5Ozf0UdLRofykJV8sBaCpX69HoK5K1t/7DE20AKop+qjmuIPWc2Xm
-         oMbev1+d7WuEnKOcDUoYmtBOy0/kLMYfiAxUdz0k=
+        b=Qdbn9/CZutgIJGpcO5nv7ewC1H1a9VWIAkZoHSU8eCmutBJGFpafY17+qBgw2ITqb
+         GZBmg9n/qJcfBIiaTOgwlC0D23CZRr0D8xEhejvFdZzUxYeUy8oQsmCaStQTV7Px2l
+         melM2nxVkEo2uylttm7ovlV0IgHxyW3rEulcDSEs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        syzbot+2e1ef9188251d9cc7944@syzkaller.appspotmail.com,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 092/158] media: s5p-mfc: Make additional clocks optional
-Date:   Mon, 15 Jul 2019 10:17:03 -0400
-Message-Id: <20190715141809.8445-92-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 056/158] media: uvcvideo: Fix access to uninitialized fields on probe error
+Date:   Mon, 15 Jul 2019 10:16:27 -0400
+Message-Id: <20190715141809.8445-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
 References: <20190715141809.8445-1-sashal@kernel.org>
@@ -60,44 +60,37 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit e08efef8fe7db87206314c19b341612c719f891a ]
+[ Upstream commit 11a087f484bf15ff65f0a9f277aa5a61fd07ed2a ]
 
-Since the beginning the second clock ('special', 'sclk') was optional and
-it is not available on some variants of Exynos SoCs (i.e. Exynos5420 with
-v7 of MFC hardware).
+We need to check whether this work we are canceling actually is
+initialized.
 
-However commit 1bce6fb3edf1 ("[media] s5p-mfc: Rework clock handling")
-made handling of all specified clocks mandatory. This patch restores
-original behavior of the driver and fixes its operation on
-Exynos5420 SoCs.
-
-Fixes: 1bce6fb3edf1 ("[media] s5p-mfc: Rework clock handling")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: syzbot+2e1ef9188251d9cc7944@syzkaller.appspotmail.com
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/s5p-mfc/s5p_mfc_pm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/usb/uvc/uvc_ctrl.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c b/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-index eb85cedc5ef3..5e080f32b0e8 100644
---- a/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-+++ b/drivers/media/platform/s5p-mfc/s5p_mfc_pm.c
-@@ -38,6 +38,11 @@ int s5p_mfc_init_pm(struct s5p_mfc_dev *dev)
- 	for (i = 0; i < pm->num_clocks; i++) {
- 		pm->clocks[i] = devm_clk_get(pm->device, pm->clk_names[i]);
- 		if (IS_ERR(pm->clocks[i])) {
-+			/* additional clocks are optional */
-+			if (i && PTR_ERR(pm->clocks[i]) == -ENOENT) {
-+				pm->clocks[i] = NULL;
-+				continue;
-+			}
- 			mfc_err("Failed to get clock: %s\n",
- 				pm->clk_names[i]);
- 			return PTR_ERR(pm->clocks[i]);
+diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
+index 467b1ddaf4e7..f2854337cdca 100644
+--- a/drivers/media/usb/uvc/uvc_ctrl.c
++++ b/drivers/media/usb/uvc/uvc_ctrl.c
+@@ -2350,7 +2350,9 @@ void uvc_ctrl_cleanup_device(struct uvc_device *dev)
+ 	struct uvc_entity *entity;
+ 	unsigned int i;
+ 
+-	cancel_work_sync(&dev->async_ctrl.work);
++	/* Can be uninitialized if we are aborting on probe error. */
++	if (dev->async_ctrl.work.func)
++		cancel_work_sync(&dev->async_ctrl.work);
+ 
+ 	/* Free controls and control mappings for all entities. */
+ 	list_for_each_entry(entity, &dev->entities, list) {
 -- 
 2.20.1
 
