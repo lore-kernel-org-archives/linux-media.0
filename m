@@ -7,50 +7,50 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C865DC76191
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:44:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D27BC76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:46:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 934C320651
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:44:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4650A2067C
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:46:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563201844;
-	bh=UYwo621DI9NLlrTb7Ku5Fm0Q1ZvTUXbC+RpfFF13Y0k=;
+	s=default; t=1563201962;
+	bh=srTrjVb/NproGDBZrf7xjQbLlk9QFUoeK/lvEq8QG9k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GF2g0x04/PLjX510rYwnkT6zSkl4k3tU0TCb9Z4BsA6rovliEDP3XLW+yatYkbj3M
-	 G1ucYZUHp2jCri/P1x2xz2OD3J2qBzZ1DAvzpT16v5E0Gcw5Wjypcq7Hg1DoUKDSwb
-	 7Gu3uqKvXfjDqbhliJi4zJkhldshspGgp6YJ9Vj4=
+	b=mNfUBd2lAuQpBrBz8R15pwK0SkVtlRZb+WT+4RxRuxw8gS/WxT+KwZhzyI1Q4KQ7Y
+	 oCr1RGFNWQji+Efl12FtqFwFnDzvDqZ7croJXK3JNSLO1yVrkpG2x0C4Ev/PM3BLnl
+	 +qalYz+fAXXvXmdmzZjEsmMdxyGN1/B369+YG094=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404315AbfGOOoC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:44:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60006 "EHLO mail.kernel.org"
+        id S2404694AbfGOOqA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:46:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34348 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391938AbfGOOhn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:37:43 -0400
+        id S2391958AbfGOOp7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:45:59 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BB5D1204FD;
-        Mon, 15 Jul 2019 14:37:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 067D72067C;
+        Mon, 15 Jul 2019 14:45:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563201462;
-        bh=UYwo621DI9NLlrTb7Ku5Fm0Q1ZvTUXbC+RpfFF13Y0k=;
+        s=default; t=1563201958;
+        bh=srTrjVb/NproGDBZrf7xjQbLlk9QFUoeK/lvEq8QG9k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bCQc/lRuAid/Q2Kk04WTnc84k829fng3LidJIACyWgJnlEZKeJ+Ik9s4faLQ3vh+y
-         OIQxjXu7w7Y5oFJFR07DtE/5ZAUQZwBk0Dpq2atFx6RxB0Pad0Qooh7wehK2JgIlZ9
-         ZpN3mgxridYc0zK3Bb87OT4n9i5S2oiZig+Up2+Q=
+        b=np2FQ6MigVgReInjJ5374MSIA+XbA5l0llDNcDgjaJG0VZxXVok8JC/iYkctimQYL
+         fObFvoiHtwh7AzDUjkiA17n0HwTt+hwx0Bc52G7gHRPNHPH7W8rB5I41os7UiOc5J6
+         V8baNULCLaezAgdrzrUkAswiSDkBq9XMI0nheW5w=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 19/73] media: mc-device.c: don't memset __user pointer contents
-Date:   Mon, 15 Jul 2019 10:35:35 -0400
-Message-Id: <20190715143629.10893-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 06/53] media: dvb: usb: fix use after free in dvb_usb_device_exit
+Date:   Mon, 15 Jul 2019 10:44:48 -0400
+Message-Id: <20190715144535.11636-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715143629.10893-1-sashal@kernel.org>
-References: <20190715143629.10893-1-sashal@kernel.org>
+In-Reply-To: <20190715144535.11636-1-sashal@kernel.org>
+References: <20190715144535.11636-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,42 +60,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil@xs4all.nl>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 518fa4e0e0da97ea2e17c95ab57647ce748a96e2 ]
+[ Upstream commit 6cf97230cd5f36b7665099083272595c55d72be7 ]
 
-You can't memset the contents of a __user pointer. Instead, call copy_to_user to
-copy links.reserved (which is zeroed) to the user memory.
+dvb_usb_device_exit() frees and uses the device name in that order.
+Fix by storing the name in a buffer before freeing it.
 
-This fixes this sparse warning:
-
-SPARSE:drivers/media/mc/mc-device.c drivers/media/mc/mc-device.c:521:16:  warning: incorrect type in argument 1 (different address spaces)
-
-Fixes: f49308878d720 ("media: media_device_enum_links32: clean a reserved field")
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/media-device.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/media-device.c b/drivers/media/media-device.c
-index 6062c0cfa632..73a2dba475d0 100644
---- a/drivers/media/media-device.c
-+++ b/drivers/media/media-device.c
-@@ -490,8 +490,9 @@ static long media_device_enum_links32(struct media_device *mdev,
- 	if (ret)
- 		return ret;
+diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+index 1adf325012f7..97a89ef7e4c1 100644
+--- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
++++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
+@@ -286,12 +286,15 @@ EXPORT_SYMBOL(dvb_usb_device_init);
+ void dvb_usb_device_exit(struct usb_interface *intf)
+ {
+ 	struct dvb_usb_device *d = usb_get_intfdata(intf);
+-	const char *name = "generic DVB-USB module";
++	const char *default_name = "generic DVB-USB module";
++	char name[40];
  
--	memset(ulinks->reserved, 0, sizeof(ulinks->reserved));
--
-+	if (copy_to_user(ulinks->reserved, links.reserved,
-+			 sizeof(ulinks->reserved)))
-+		return -EFAULT;
- 	return 0;
- }
+ 	usb_set_intfdata(intf, NULL);
+ 	if (d != NULL && d->desc != NULL) {
+-		name = d->desc->name;
++		strscpy(name, d->desc->name, sizeof(name));
+ 		dvb_usb_exit(d);
++	} else {
++		strscpy(name, default_name, sizeof(name));
+ 	}
+ 	info("%s successfully deinitialized and disconnected.", name);
  
 -- 
 2.20.1
