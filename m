@@ -2,34 +2,34 @@ Return-Path: <SRS0=PKt4=VM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	UNPARSEABLE_RELAY,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B312DC7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 21:07:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FEC2C76195
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 21:07:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 877202171F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 21:07:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6039D20665
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 21:07:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732452AbfGOVHG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 17:07:06 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:52704 "EHLO
+        id S1732692AbfGOVHK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 17:07:10 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:52712 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731862AbfGOVHG (ORCPT
+        with ESMTP id S1730467AbfGOVHK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 17:07:06 -0400
+        Mon, 15 Jul 2019 17:07:10 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 6D97C28B696
+        with ESMTPSA id 067A828B6A6
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     Hans Verkuil <hans.verkuil@cisco.com>
 Cc:     kernel@collabora.com, linux-media@vger.kernel.org,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 3/6] media: v4l2-core: move spi helpers out of v4l2-common.c
-Date:   Mon, 15 Jul 2019 18:06:44 -0300
-Message-Id: <20190715210649.31681-4-ezequiel@collabora.com>
+Subject: [PATCH 5/6] media: v4l2-core: introduce a helper to unregister a SPI subdev
+Date:   Mon, 15 Jul 2019 18:06:46 -0300
+Message-Id: <20190715210649.31681-6-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190715210649.31681-1-ezequiel@collabora.com>
 References: <20190715210649.31681-1-ezequiel@collabora.com>
@@ -40,221 +40,91 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Separate the spi helpers to v4l2-spi.c, in order to get rid
-of the ifdefery. No functional changes intended, this is
-just a cosmetic change to organize the code better.
+Introduce a new video4linux2 SPI helper, to unregister a subdev.
+This allows to get rid of some more ifdefs.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/media/v4l2-core/Makefile      |  1 +
- drivers/media/v4l2-core/v4l2-common.c | 65 ---------------------------
- drivers/media/v4l2-core/v4l2-spi.c    | 65 +++++++++++++++++++++++++++
- include/media/v4l2-common.h           | 18 +++++++-
- 4 files changed, 82 insertions(+), 67 deletions(-)
- create mode 100644 drivers/media/v4l2-core/v4l2-spi.c
+ drivers/media/v4l2-core/v4l2-device.c | 14 ++------------
+ drivers/media/v4l2-core/v4l2-spi.c    |  8 ++++++++
+ include/media/v4l2-common.h           |  9 +++++++++
+ 3 files changed, 19 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/Makefile b/drivers/media/v4l2-core/Makefile
-index 8e2f52f7800b..2deeeac6ee76 100644
---- a/drivers/media/v4l2-core/Makefile
-+++ b/drivers/media/v4l2-core/Makefile
-@@ -11,6 +11,7 @@ videodev-objs	:=	v4l2-dev.o v4l2-ioctl.o v4l2-device.o v4l2-fh.o \
- videodev-$(CONFIG_COMPAT) += v4l2-compat-ioctl32.o
- videodev-$(CONFIG_TRACEPOINTS) += v4l2-trace.o
- videodev-$(CONFIG_MEDIA_CONTROLLER) += v4l2-mc.o
-+videodev-$(CONFIG_SPI) += v4l2-spi.o
- 
- obj-$(CONFIG_V4L2_FWNODE) += v4l2-fwnode.o
- obj-$(CONFIG_VIDEO_V4L2) += videodev.o
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index f8ad1c580a3e..2b87b51f5667 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -41,9 +41,6 @@
- #include <linux/string.h>
- #include <linux/errno.h>
+diff --git a/drivers/media/v4l2-core/v4l2-device.c b/drivers/media/v4l2-core/v4l2-device.c
+index aa277f5bc862..c2811238996f 100644
+--- a/drivers/media/v4l2-core/v4l2-device.c
++++ b/drivers/media/v4l2-core/v4l2-device.c
+@@ -11,9 +11,6 @@
+ #include <linux/module.h>
  #include <linux/i2c.h>
+ #include <linux/slab.h>
 -#if defined(CONFIG_SPI)
 -#include <linux/spi/spi.h>
 -#endif
- #include <linux/uaccess.h>
- #include <asm/pgtable.h>
- #include <asm/io.h>
-@@ -239,68 +236,6 @@ EXPORT_SYMBOL_GPL(v4l2_i2c_tuner_addrs);
- 
- #endif /* defined(CONFIG_I2C) */
- 
+ #include <linux/videodev2.h>
+ #include <media/v4l2-device.h>
+ #include <media/v4l2-ctrls.h>
+@@ -124,15 +121,8 @@ void v4l2_device_unregister(struct v4l2_device *v4l2_dev)
+ 			continue;
+ 		}
+ #endif
 -#if defined(CONFIG_SPI)
+-		if (sd->flags & V4L2_SUBDEV_FL_IS_SPI) {
+-			struct spi_device *spi = v4l2_get_subdevdata(sd);
 -
--/* Load an spi sub-device. */
--
--void v4l2_spi_subdev_init(struct v4l2_subdev *sd, struct spi_device *spi,
--		const struct v4l2_subdev_ops *ops)
--{
--	v4l2_subdev_init(sd, ops);
--	sd->flags |= V4L2_SUBDEV_FL_IS_SPI;
--	/* the owner is the same as the spi_device's driver owner */
--	sd->owner = spi->dev.driver->owner;
--	sd->dev = &spi->dev;
--	/* spi_device and v4l2_subdev point to one another */
--	v4l2_set_subdevdata(sd, spi);
--	spi_set_drvdata(spi, sd);
--	/* initialize name */
--	snprintf(sd->name, sizeof(sd->name), "%s %s",
--		spi->dev.driver->name, dev_name(&spi->dev));
--}
--EXPORT_SYMBOL_GPL(v4l2_spi_subdev_init);
--
--struct v4l2_subdev *v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
--		struct spi_master *master, struct spi_board_info *info)
--{
--	struct v4l2_subdev *sd = NULL;
--	struct spi_device *spi = NULL;
--
--	BUG_ON(!v4l2_dev);
--
--	if (info->modalias[0])
--		request_module(info->modalias);
--
--	spi = spi_new_device(master, info);
--
--	if (spi == NULL || spi->dev.driver == NULL)
--		goto error;
--
--	if (!try_module_get(spi->dev.driver->owner))
--		goto error;
--
--	sd = spi_get_drvdata(spi);
--
--	/* Register with the v4l2_device which increases the module's
--	   use count as well. */
--	if (v4l2_device_register_subdev(v4l2_dev, sd))
--		sd = NULL;
--
--	/* Decrease the module use count to match the first try_module_get. */
--	module_put(spi->dev.driver->owner);
--
--error:
--	/* If we have a client but no subdev, then something went wrong and
--	   we must unregister the client. */
--	if (!sd)
--		spi_unregister_device(spi);
--
--	return sd;
--}
--EXPORT_SYMBOL_GPL(v4l2_spi_new_subdev);
--
--#endif /* defined(CONFIG_SPI) */
--
- /* Clamp x to be between min and max, aligned to a multiple of 2^align.  min
-  * and max don't have to be aligned, but there must be at least one valid
-  * value.  E.g., min=17,max=31,align=4 is not allowed as there are no multiples
+-			if (spi && !spi->dev.of_node && !spi->dev.fwnode)
+-				spi_unregister_device(spi);
+-			continue;
+-		}
+-#endif
++		else if (sd->flags & V4L2_SUBDEV_FL_IS_SPI)
++			v4l2_spi_subdev_unregister(sd);
+ 	}
+ 	/* Mark as unregistered, thus preventing duplicate unregistrations */
+ 	v4l2_dev->name[0] = '\0';
 diff --git a/drivers/media/v4l2-core/v4l2-spi.c b/drivers/media/v4l2-core/v4l2-spi.c
-new file mode 100644
-index 000000000000..ab5a7eb4205d
---- /dev/null
+index ab5a7eb4205d..2a7e82e1412d 100644
+--- a/drivers/media/v4l2-core/v4l2-spi.c
 +++ b/drivers/media/v4l2-core/v4l2-spi.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * v4l2-spi - SPI helpers for Video4Linux2
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/spi/spi.h>
-+#include <media/v4l2-common.h>
-+#include <media/v4l2-device.h>
-+
-+void v4l2_spi_subdev_init(struct v4l2_subdev *sd, struct spi_device *spi,
-+		const struct v4l2_subdev_ops *ops)
+@@ -8,6 +8,14 @@
+ #include <media/v4l2-common.h>
+ #include <media/v4l2-device.h>
+ 
++void v4l2_spi_subdev_unregister(struct v4l2_subdev *sd)
 +{
-+	v4l2_subdev_init(sd, ops);
-+	sd->flags |= V4L2_SUBDEV_FL_IS_SPI;
-+	/* the owner is the same as the spi_device's driver owner */
-+	sd->owner = spi->dev.driver->owner;
-+	sd->dev = &spi->dev;
-+	/* spi_device and v4l2_subdev point to one another */
-+	v4l2_set_subdevdata(sd, spi);
-+	spi_set_drvdata(spi, sd);
-+	/* initialize name */
-+	snprintf(sd->name, sizeof(sd->name), "%s %s",
-+		spi->dev.driver->name, dev_name(&spi->dev));
-+}
-+EXPORT_SYMBOL_GPL(v4l2_spi_subdev_init);
++	struct spi_device *spi = v4l2_get_subdevdata(sd);
 +
-+struct v4l2_subdev *v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
-+		struct spi_master *master, struct spi_board_info *info)
-+{
-+	struct v4l2_subdev *sd = NULL;
-+	struct spi_device *spi = NULL;
-+
-+	BUG_ON(!v4l2_dev);
-+
-+	if (info->modalias[0])
-+		request_module(info->modalias);
-+
-+	spi = spi_new_device(master, info);
-+
-+	if (spi == NULL || spi->dev.driver == NULL)
-+		goto error;
-+
-+	if (!try_module_get(spi->dev.driver->owner))
-+		goto error;
-+
-+	sd = spi_get_drvdata(spi);
-+
-+	/* Register with the v4l2_device which increases the module's
-+	   use count as well. */
-+	if (v4l2_device_register_subdev(v4l2_dev, sd))
-+		sd = NULL;
-+
-+	/* Decrease the module use count to match the first try_module_get. */
-+	module_put(spi->dev.driver->owner);
-+
-+error:
-+	/* If we have a client but no subdev, then something went wrong and
-+	   we must unregister the client. */
-+	if (!sd)
++	if (spi && !spi->dev.of_node && !spi->dev.fwnode)
 +		spi_unregister_device(spi);
-+
-+	return sd;
 +}
-+EXPORT_SYMBOL_GPL(v4l2_spi_new_subdev);
++
+ void v4l2_spi_subdev_init(struct v4l2_subdev *sd, struct spi_device *spi,
+ 		const struct v4l2_subdev_ops *ops)
+ {
 diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
-index 6b319d0d73ad..a1c5288caa6a 100644
+index 8e66edddd37b..e2878654d043 100644
 --- a/include/media/v4l2-common.h
 +++ b/include/media/v4l2-common.h
-@@ -216,11 +216,10 @@ const unsigned short *v4l2_i2c_tuner_addrs(enum v4l2_i2c_tuner_type type);
- /* ------------------------------------------------------------------------- */
- 
- /* SPI Helper functions */
--#if defined(CONFIG_SPI)
- 
- #include <linux/spi/spi.h>
- 
--struct spi_device;
-+#if defined(CONFIG_SPI)
- 
- /**
-  *  v4l2_spi_new_subdev - Load an spi module and return an initialized
-@@ -246,6 +245,21 @@ struct v4l2_subdev *v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
-  */
+@@ -285,6 +285,13 @@ struct v4l2_subdev *v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
  void v4l2_spi_subdev_init(struct v4l2_subdev *sd, struct spi_device *spi,
  		const struct v4l2_subdev_ops *ops);
+ 
++/**
++ * v4l2_spi_subdev_unregister - Unregister a v4l2_subdev
++ *
++ * @sd: pointer to &struct v4l2_subdev
++ */
++void v4l2_spi_subdev_unregister(struct v4l2_subdev *sd);
 +
-+#else
-+
-+static inline struct v4l2_subdev *
-+v4l2_spi_new_subdev(struct v4l2_device *v4l2_dev,
-+		    struct spi_master *master, struct spi_board_info *info)
-+{
-+	return NULL;
-+}
-+
-+static inline void
-+v4l2_spi_subdev_init(struct v4l2_subdev *sd, struct spi_device *spi,
-+		     const struct v4l2_subdev_ops *ops)
+ #else
+ 
+ static inline struct v4l2_subdev *
+@@ -299,6 +306,8 @@ v4l2_spi_subdev_init(struct v4l2_subdev *sd, struct spi_device *spi,
+ 		     const struct v4l2_subdev_ops *ops)
+ {}
+ 
++static inline void v4l2_spi_subdev_unregister(struct v4l2_subdev *sd)
 +{}
-+
  #endif
  
  /* ------------------------------------------------------------------------- */
