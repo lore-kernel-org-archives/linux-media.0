@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C5DEC7618F
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 752E3C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:05:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D0A872081C
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:05:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E776212F5
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563199503;
-	bh=Fvb/B/ZkadAFgu13GC6Ecqxc7DWyO5rwggfJfhzi+m8=;
+	s=default; t=1563199511;
+	bh=qhF90JaRN9H/Mne/RCsZbQjhkZdpVTzKKYmO16uQJ0s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=14rN/E7ydbTTJ9Fy/16rYG4KXGmyYKb03uipdHMYCy1bnMJQdaMDWh6BifjZYfV+o
-	 NkBdUMuNJjluEbIC8ZIwYHSqwJhQErnOTJ0CLev8e9YFktWq0j7vh9PpIPefHW13wC
-	 WEhtG657MgdhbHhY6PV+5U/DAula+6Swg+2S53cU=
+	b=M1YWbFRbRoPSVzcjIVN298blixivtNOZdDvvtpERE0Z3JLFcn/x2NqeehmmfW12gQ
+	 nCniqUip8OP3jpSZw9p4DHgyvvHI80wTwER7tgn0yef+yJfzypoXgNMnibAUAdM5tV
+	 xhWnd6b2P8y18jCQlbZmv8WltjLb4Tojnw8X2y7M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388072AbfGOOFB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:05:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50924 "EHLO mail.kernel.org"
+        id S2387474AbfGOOFJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:05:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387979AbfGOOEu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:04:50 -0400
+        id S2388097AbfGOOFI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:05:08 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8ED062086C;
-        Mon, 15 Jul 2019 14:04:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4D1352081C;
+        Mon, 15 Jul 2019 14:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563199489;
-        bh=Fvb/B/ZkadAFgu13GC6Ecqxc7DWyO5rwggfJfhzi+m8=;
+        s=default; t=1563199508;
+        bh=qhF90JaRN9H/Mne/RCsZbQjhkZdpVTzKKYmO16uQJ0s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cStyN0snrHbqPeUTNqKZvTLmJOWWZnFGpAjeDM+6y0vR78HOxIHktv5NohIUg0nuf
-         +HztznsNT9u+phyUVsIBxPIXxpAdHOKT2CdkmuhApn4DYtQVGonjG78pZleq/AGxqi
-         1OVwxJCwYsN1NxiNbRQ/Hp/VuQENyjACGBc/WioU=
+        b=kukJPrLra4Z1yMxFlUEwL6GtGFFjW8i++vPXMH/LKFkdT/q/21Xa/un1FiBoELseb
+         /yVfoJwEcQIDWYBcI9yILudMtS6+MxJnmtn+/1ySUtTtGUoBkeEBai/FP6939bQ8oR
+         Sp8InhZhyAXo4rv7lfkpJiWsAAEVezd8TmnYP4TM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com,
-        Sean Young <sean@mess.org>,
+Cc:     Wen Yang <wen.yang99@zte.com.cn>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 019/219] media: dvb: usb: fix use after free in dvb_usb_device_exit
-Date:   Mon, 15 Jul 2019 10:00:20 -0400
-Message-Id: <20190715140341.6443-19-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 026/219] media: venus: firmware: fix leaked of_node references
+Date:   Mon, 15 Jul 2019 10:00:27 -0400
+Message-Id: <20190715140341.6443-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
 References: <20190715140341.6443-1-sashal@kernel.org>
@@ -60,43 +60,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Wen Yang <wen.yang99@zte.com.cn>
 
-[ Upstream commit 6cf97230cd5f36b7665099083272595c55d72be7 ]
+[ Upstream commit 2c41cc0be07b5ee2f1167f41cd8a86fc5b53d82c ]
 
-dvb_usb_device_exit() frees and uses the device name in that order.
-Fix by storing the name in a buffer before freeing it.
+The call to of_parse_phandle returns a node pointer with refcount
+incremented thus it must be explicitly decremented after the last
+usage.
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Reported-by: syzbot+26ec41e9f788b3eba396@syzkaller.appspotmail.com
-Signed-off-by: Sean Young <sean@mess.org>
+Detected by coccinelle with the following warnings:
+drivers/media/platform/qcom/venus/firmware.c:90:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 82, but without a corresponding object release within this function.
+drivers/media/platform/qcom/venus/firmware.c:94:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 82, but without a corresponding object release within this function.
+drivers/media/platform/qcom/venus/firmware.c:128:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 82, but without a corresponding object release within this function.
+
+Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/dvb-usb-init.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/platform/qcom/venus/firmware.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb/dvb-usb-init.c b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-index 99951e02a880..dd063a736df5 100644
---- a/drivers/media/usb/dvb-usb/dvb-usb-init.c
-+++ b/drivers/media/usb/dvb-usb/dvb-usb-init.c
-@@ -287,12 +287,15 @@ EXPORT_SYMBOL(dvb_usb_device_init);
- void dvb_usb_device_exit(struct usb_interface *intf)
- {
- 	struct dvb_usb_device *d = usb_get_intfdata(intf);
--	const char *name = "generic DVB-USB module";
-+	const char *default_name = "generic DVB-USB module";
-+	char name[40];
+diff --git a/drivers/media/platform/qcom/venus/firmware.c b/drivers/media/platform/qcom/venus/firmware.c
+index 6cfa8021721e..f81449b400c4 100644
+--- a/drivers/media/platform/qcom/venus/firmware.c
++++ b/drivers/media/platform/qcom/venus/firmware.c
+@@ -87,11 +87,11 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
  
- 	usb_set_intfdata(intf, NULL);
- 	if (d != NULL && d->desc != NULL) {
--		name = d->desc->name;
-+		strscpy(name, d->desc->name, sizeof(name));
- 		dvb_usb_exit(d);
-+	} else {
-+		strscpy(name, default_name, sizeof(name));
- 	}
- 	info("%s successfully deinitialized and disconnected.", name);
+ 	ret = of_address_to_resource(node, 0, &r);
+ 	if (ret)
+-		return ret;
++		goto err_put_node;
+ 
+ 	ret = request_firmware(&mdt, fwname, dev);
+ 	if (ret < 0)
+-		return ret;
++		goto err_put_node;
+ 
+ 	fw_size = qcom_mdt_get_size(mdt);
+ 	if (fw_size < 0) {
+@@ -125,6 +125,8 @@ static int venus_load_fw(struct venus_core *core, const char *fwname,
+ 	memunmap(mem_va);
+ err_release_fw:
+ 	release_firmware(mdt);
++err_put_node:
++	of_node_put(node);
+ 	return ret;
+ }
  
 -- 
 2.20.1
