@@ -4,52 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BC49C76195
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:30:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C6F9C76191
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:31:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA1E2205ED
-	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:30:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BC0421537
+	for <linux-media@archiver.kernel.org>; Mon, 15 Jul 2019 14:31:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563201038;
-	bh=qz9CsNsbFSu36BRWAWY19wOOtHKFI7s6n/OnAkkMq8M=;
+	s=default; t=1563201076;
+	bh=Ikp9Z7o6849kEBCtpfBb3J6wCZpMPCOBu9zCpU4cQ2g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=CWESUd4IYRxVDikIxhg9LX5I1PvhsTEhnEYdDEZk0fSZHTfl3bLoT8oSMljBCUIga
-	 2tUAirmetVVh+qoIq0SU3hGi1uiVzrUStUyvHZvbsgfieOrYEfwh4SanhXVN+UiUQU
-	 xi5W2dC+NmQZ/VlIuWLy0vdSrAy0shW4q2Xe8qs4=
+	b=SryhypzIy7yhefzIWpSPjVAMN4CeFuwUkmNAP9u0JCsy2sUHr9W5E3kB0sSwLsrow
+	 n5Zj1tj/7eCm8ygdZu1KpGclLdaHP098KCa5uZg4dU/pNX/qOLWx/eKLf240CO33hj
+	 WwkiyQrBgMpdeak/CmELRDlTEejsnDcnbE0sot2M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391690AbfGOOaY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 15 Jul 2019 10:30:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42920 "EHLO mail.kernel.org"
+        id S2403872AbfGOObP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 15 Jul 2019 10:31:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44646 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391682AbfGOOaV (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:30:21 -0400
+        id S1731947AbfGOObL (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:31:11 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 847DA205ED;
-        Mon, 15 Jul 2019 14:30:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B89220896;
+        Mon, 15 Jul 2019 14:31:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563201020;
-        bh=qz9CsNsbFSu36BRWAWY19wOOtHKFI7s6n/OnAkkMq8M=;
+        s=default; t=1563201070;
+        bh=Ikp9Z7o6849kEBCtpfBb3J6wCZpMPCOBu9zCpU4cQ2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C8cQvU/iBkETuKMln2ySbwEUJU4Ne6KjSLx8GVpLbPQVSW+yQumdcSv82LN8+Yvg3
-         0yMrH7JQ46CB7EkPSOlUy0jlh79vo7Yk+G/Qmi4jgJ6MMKnE/3AKL2kitv9MPmae9G
-         AFgzXN2fILXwY3N+LQYejFcr0QM4+upKBxfwoJ0I=
+        b=aLpiG4TWu3f77BmZDuFR29XrtrLhgvYCh17o08xtW7tNqUExifXo8/pzqHnUTeeWs
+         rQ0SRLh2C/HoD8/P69CuAWDuSJc4pRcL5N3W9TWwtp+GcQ/XIdeFt2IxjOuOOMv/eX
+         9B1AXE4w05dxWiVXjax3JxELAb+SfmgFKfd7VmKE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 029/105] tua6100: Avoid build warnings.
-Date:   Mon, 15 Jul 2019 10:27:23 -0400
-Message-Id: <20190715142839.9896-29-sashal@kernel.org>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 042/105] media: fdp1: Support M3N and E3 platforms
+Date:   Mon, 15 Jul 2019 10:27:36 -0400
+Message-Id: <20190715142839.9896-42-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190715142839.9896-1-sashal@kernel.org>
 References: <20190715142839.9896-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -58,91 +60,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: "David S. Miller" <davem@davemloft.net>
+From: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-[ Upstream commit 621ccc6cc5f8d6730b740d31d4818227866c93c9 ]
+[ Upstream commit 4e8c120de9268fc26f583268b9d22e7d37c4595f ]
 
-Rename _P to _P_VAL and _R to _R_VAL to avoid global
-namespace conflicts:
+New Gen3 R-Car platforms incorporate the FDP1 with an updated version
+register. No code change is required to support these targets, but they
+will currently report an error stating that the device can not be
+identified.
 
-drivers/media/dvb-frontends/tua6100.c: In function ‘tua6100_set_params’:
-drivers/media/dvb-frontends/tua6100.c:79: warning: "_P" redefined
- #define _P 32
+Update the driver to match against the new device types.
 
-In file included from ./include/acpi/platform/aclinux.h:54,
-                 from ./include/acpi/platform/acenv.h:152,
-                 from ./include/acpi/acpi.h:22,
-                 from ./include/linux/acpi.h:34,
-                 from ./include/linux/i2c.h:17,
-                 from drivers/media/dvb-frontends/tua6100.h:30,
-                 from drivers/media/dvb-frontends/tua6100.c:32:
-./include/linux/ctype.h:14: note: this is the location of the previous definition
- #define _P 0x10 /* punct */
-
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/tua6100.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/media/platform/rcar_fdp1.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/dvb-frontends/tua6100.c b/drivers/media/dvb-frontends/tua6100.c
-index 18e6d4c5be21..859fa14b319c 100644
---- a/drivers/media/dvb-frontends/tua6100.c
-+++ b/drivers/media/dvb-frontends/tua6100.c
-@@ -75,8 +75,8 @@ static int tua6100_set_params(struct dvb_frontend *fe)
- 	struct i2c_msg msg1 = { .addr = priv->i2c_address, .flags = 0, .buf = reg1, .len = 4 };
- 	struct i2c_msg msg2 = { .addr = priv->i2c_address, .flags = 0, .buf = reg2, .len = 3 };
+diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
+index 3245bc45f4a0..a889332d5d30 100644
+--- a/drivers/media/platform/rcar_fdp1.c
++++ b/drivers/media/platform/rcar_fdp1.c
+@@ -261,6 +261,8 @@ MODULE_PARM_DESC(debug, "activate debug info");
+ #define FD1_IP_H3_ES1			0x02010101
+ #define FD1_IP_M3W			0x02010202
+ #define FD1_IP_H3			0x02010203
++#define FD1_IP_M3N			0x02010204
++#define FD1_IP_E3			0x02010205
  
--#define _R 4
--#define _P 32
-+#define _R_VAL 4
-+#define _P_VAL 32
- #define _ri 4000000
- 
- 	// setup register 0
-@@ -91,14 +91,14 @@ static int tua6100_set_params(struct dvb_frontend *fe)
- 	else
- 		reg1[1] = 0x0c;
- 
--	if (_P == 64)
-+	if (_P_VAL == 64)
- 		reg1[1] |= 0x40;
- 	if (c->frequency >= 1525000)
- 		reg1[1] |= 0x80;
- 
- 	// register 2
--	reg2[1] = (_R >> 8) & 0x03;
--	reg2[2] = _R;
-+	reg2[1] = (_R_VAL >> 8) & 0x03;
-+	reg2[2] = _R_VAL;
- 	if (c->frequency < 1455000)
- 		reg2[1] |= 0x1c;
- 	else if (c->frequency < 1630000)
-@@ -110,18 +110,18 @@ static int tua6100_set_params(struct dvb_frontend *fe)
- 	 * The N divisor ratio (note: c->frequency is in kHz, but we
- 	 * need it in Hz)
- 	 */
--	prediv = (c->frequency * _R) / (_ri / 1000);
--	div = prediv / _P;
-+	prediv = (c->frequency * _R_VAL) / (_ri / 1000);
-+	div = prediv / _P_VAL;
- 	reg1[1] |= (div >> 9) & 0x03;
- 	reg1[2] = div >> 1;
- 	reg1[3] = (div << 7);
--	priv->frequency = ((div * _P) * (_ri / 1000)) / _R;
-+	priv->frequency = ((div * _P_VAL) * (_ri / 1000)) / _R_VAL;
- 
- 	// Finally, calculate and store the value for A
--	reg1[3] |= (prediv - (div*_P)) & 0x7f;
-+	reg1[3] |= (prediv - (div*_P_VAL)) & 0x7f;
- 
--#undef _R
--#undef _P
-+#undef _R_VAL
-+#undef _P_VAL
- #undef _ri
- 
- 	if (fe->ops.i2c_gate_ctrl)
+ /* LUTs */
+ #define FD1_LUT_DIF_ADJ			0x1000
+@@ -2369,6 +2371,12 @@ static int fdp1_probe(struct platform_device *pdev)
+ 	case FD1_IP_H3:
+ 		dprintk(fdp1, "FDP1 Version R-Car H3\n");
+ 		break;
++	case FD1_IP_M3N:
++		dprintk(fdp1, "FDP1 Version R-Car M3N\n");
++		break;
++	case FD1_IP_E3:
++		dprintk(fdp1, "FDP1 Version R-Car E3\n");
++		break;
+ 	default:
+ 		dev_err(fdp1->dev, "FDP1 Unidentifiable (0x%08x)\n",
+ 				hw_version);
 -- 
 2.20.1
 
