@@ -2,35 +2,36 @@ Return-Path: <SRS0=lr8S=VO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A3BCC76192
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 09:31:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B06CC76186
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 09:31:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BD6242173E
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 09:31:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 28F7D21841
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 09:31:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbfGQJa5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Jul 2019 05:30:57 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:19027 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725873AbfGQJa5 (ORCPT
+        id S1727079AbfGQJbd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Jul 2019 05:31:33 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:60347 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726461AbfGQJbc (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Jul 2019 05:30:57 -0400
-X-UUID: 879653135a6d47238adb09781978dd04-20190717
-X-UUID: 879653135a6d47238adb09781978dd04-20190717
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
+        Wed, 17 Jul 2019 05:31:32 -0400
+X-UUID: 587e664c91624b2ca8136e543a4f2557-20190717
+X-UUID: 587e664c91624b2ca8136e543a4f2557-20190717
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
         (envelope-from <xia.jiang@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 2112478367; Wed, 17 Jul 2019 17:30:41 +0800
+        with ESMTP id 1177096950; Wed, 17 Jul 2019 17:31:13 +0800
 Received: from mtkcas09.mediatek.inc (172.21.101.178) by
  mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 17 Jul 2019 17:30:40 +0800
+ 15.0.1395.4; Wed, 17 Jul 2019 17:31:05 +0800
 Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 17 Jul 2019 17:30:40 +0800
+ Transport; Wed, 17 Jul 2019 17:31:05 +0800
 From:   Xia Jiang <xia.jiang@mediatek.com>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Rob Herring <robh+dt@kernel.org>,
@@ -41,11 +42,14 @@ CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>, <srv_heupstream@mediatek.com>
-Subject: [PATCH v2 0/5]Add support for mt2701 JPEG ENC support
-Date:   Wed, 17 Jul 2019 17:30:29 +0800
-Message-ID: <20190717093034.22826-1-xia.jiang@mediatek.com>
+        Tomasz Figa <tfiga@chromium.org>,
+        <srv_heupstream@mediatek.com>, Xia Jiang <xia.jiang@mediatek.com>
+Subject: [PATCH 2/5] media: platform: Rename jpeg dec file name
+Date:   Wed, 17 Jul 2019 17:30:31 +0800
+Message-ID: <20190717093034.22826-3-xia.jiang@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20190717093034.22826-1-xia.jiang@mediatek.com>
+References: <20190717093034.22826-1-xia.jiang@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -54,236 +58,118 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patchset add support for mt2701 JPEG ENC support.
+Rename the files which are for decode feature. This is a preparing
+patch since the jpeg enc patch will be added later.
 
-This is the compliance test result for jpeg dec and enc.
+Change-Id: Ie037f3f62d07632e323e5beff7420759e4862516
+Signed-off-by: Xia Jiang <xia.jiang@mediatek.com>
+---
+ drivers/media/platform/mtk-jpeg/Makefile                      | 2 +-
+ drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c               | 4 ++--
+ .../platform/mtk-jpeg/{mtk_jpeg_hw.c => mtk_jpeg_dec_hw.c}    | 2 +-
+ .../platform/mtk-jpeg/{mtk_jpeg_hw.h => mtk_jpeg_dec_hw.h}    | 2 +-
+ .../mtk-jpeg/{mtk_jpeg_parse.c => mtk_jpeg_dec_parse.c}       | 2 +-
+ .../mtk-jpeg/{mtk_jpeg_parse.h => mtk_jpeg_dec_parse.h}       | 2 +-
+ .../platform/mtk-jpeg/{mtk_jpeg_reg.h => mtk_jpeg_dec_reg.h}  | 0
+ 7 files changed, 7 insertions(+), 7 deletions(-)
+ rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_hw.c => mtk_jpeg_dec_hw.c} (99%)
+ rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_hw.h => mtk_jpeg_dec_hw.h} (98%)
+ rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_parse.c => mtk_jpeg_dec_parse.c} (99%)
+ rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_parse.h => mtk_jpeg_dec_parse.h} (96%)
+ rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_reg.h => mtk_jpeg_dec_reg.h} (100%)
 
-The JPEG dec log:
-------------------------------------------------------------
-v4l2-compliance -d /dev/video0
-v4l2-compliance SHA: 1b961f5e82b0805faea0ba68bfa8037213a02351, 32 bits
-
-Compliance test for mtk-jpeg device /dev/video0:
-
-Driver Info:
-        Driver name      : mtk-jpeg
-        Card type        : mtk-jpeg decoder
-        Bus info         : platform:15004000.jpegdec
-        Driver version   : 5.2.0
-        Capabilities     : 0x84204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-                Device Capabilities
-        Device Caps      : 0x04204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-        Detected JPEG Decoder
-
-Required ioctls:
-        test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-        test second /dev/video0 open: OK
-        test VIDIOC_QUERYCAP: OK
-        test VIDIOC_G/S_PRIORITY: OK
-        test for unlimited opens: OK
-
-Debug ioctls:
-        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-        test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-        test VIDIOC_ENUMAUDIO: OK (Not Supported)
-        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDIO: OK (Not Supported)
-        Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-        Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-        test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-        test VIDIOC_QUERYCTRL: OK
-        test VIDIOC_G/S_CTRL: OK
-        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-        Standard Controls: 0 Private Controls: 0
-
-Format ioctls:
-        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-        test VIDIOC_G/S_PARM: OK (Not Supported)
-        test VIDIOC_G_FBUF: OK (Not Supported)
-        test VIDIOC_G_FMT: OK
-        test VIDIOC_TRY_FMT: OK
-        test VIDIOC_S_FMT: OK
-        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-        test Cropping: OK (Not Supported)
-        test Composing: OK
-        test Scaling: OK
-
-Codec ioctls:
-        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-        test VIDIOC_EXPBUF: OK
-        test Requests: OK (Not Supported)
-
-Total for mtk-jpeg device /dev/video0: 44, Succeeded: 44, Failed: 0, Warnings: 0
-------------------------------------------------------------
-
-The JPEG enc log:
-
-------------------------------------------------------------
-v4l2-compliance -d /dev/video1 
-v4l2-compliance SHA: 1b961f5e82b0805faea0ba68bfa8037213a02351, 32 bits
-
-Compliance test for mtk-jpeg device /dev/video1:
-
-Driver Info:
-        Driver name      : mtk-jpeg
-        Card type        : mtk-jpeg encoder
-        Bus info         : platform:1500a000.jpegenc
-        Driver version   : 5.2.0
-        Capabilities     : 0x84204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-                Device Capabilities
-        Device Caps      : 0x04204000
-                Video Memory-to-Memory Multiplanar
-                Streaming
-                Extended Pix Format
-        Detected JPEG Encoder
-
-Required ioctls:
-        test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-        test second /dev/video1 open: OK
-        test VIDIOC_QUERYCAP: OK
-        test VIDIOC_G/S_PRIORITY: OK
-        test for unlimited opens: OK
-
-Debug ioctls:
-        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-        test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-        test VIDIOC_ENUMAUDIO: OK (Not Supported)
-        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDIO: OK (Not Supported)
-        Inputs: 0 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-        Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-        test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls:
-        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-        test VIDIOC_QUERYCTRL: OK
-        test VIDIOC_G/S_CTRL: OK
-        test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-        Standard Controls: 4 Private Controls: 0
-
-Format ioctls:
-        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-        test VIDIOC_G/S_PARM: OK (Not Supported)
-        test VIDIOC_G_FBUF: OK (Not Supported)
-        test VIDIOC_G_FMT: OK
-        test VIDIOC_TRY_FMT: OK
-        test VIDIOC_S_FMT: OK
-        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-        test Cropping: OK (Not Supported)
-        test Composing: OK
-        test Scaling: OK
-
-Codec ioctls:
-        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls:
-        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-        test VIDIOC_EXPBUF: OK
-        test Requests: OK (Not Supported)
-
-Total for mtk-jpeg device /dev/video1: 44, Succeeded: 44, Failed: 0, Warnings: 0
-------------------------------------------------------------
-
-Change compared to v1:
--fix compliance test fail, check created buffer size in driver
-
-Xia Jiang (5):
-  media: dt-bindings: Add JPEG ENC device tree node document
-  media: platform: Rename jpeg dec file name
-  media: platform: Add jpeg enc feature
-  media: platform: change GPLv2 license to SPDX
-  arm: dts: add jpeg enc device tree node
-
- .../bindings/media/mediatek-jpeg-encoder.txt  |  33 +
- arch/arm/boot/dts/mt2701.dtsi                 |  12 +
- drivers/media/platform/mtk-jpeg/Makefile      |   5 +-
- .../media/platform/mtk-jpeg/mtk_jpeg_core.c   | 753 ++++++++++++++----
- .../media/platform/mtk-jpeg/mtk_jpeg_core.h   | 123 ++-
- .../{mtk_jpeg_hw.c => mtk_jpeg_dec_hw.c}      |  11 +-
- .../{mtk_jpeg_hw.h => mtk_jpeg_dec_hw.h}      |  18 +-
- ...{mtk_jpeg_parse.c => mtk_jpeg_dec_parse.c} |  11 +-
- .../platform/mtk-jpeg/mtk_jpeg_dec_parse.h    |  18 +
- .../{mtk_jpeg_reg.h => mtk_jpeg_dec_reg.h}    |   9 +-
- .../media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c | 175 ++++
- .../media/platform/mtk-jpeg/mtk_jpeg_enc_hw.h |  60 ++
- .../platform/mtk-jpeg/mtk_jpeg_enc_reg.h      |  49 ++
- .../media/platform/mtk-jpeg/mtk_jpeg_parse.h  |  25 -
- drivers/media/v4l2-core/v4l2-ctrls.c          |   1 +
- include/uapi/linux/v4l2-controls.h            |   2 +
- 16 files changed, 1060 insertions(+), 245 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt
- rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_hw.c => mtk_jpeg_dec_hw.c} (96%)
- rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_hw.h => mtk_jpeg_dec_hw.h} (76%)
- rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_parse.c => mtk_jpeg_dec_parse.c} (85%)
- create mode 100644 drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.h
- rename drivers/media/platform/mtk-jpeg/{mtk_jpeg_reg.h => mtk_jpeg_dec_reg.h} (78%)
- create mode 100644 drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.c
- create mode 100644 drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_hw.h
- create mode 100644 drivers/media/platform/mtk-jpeg/mtk_jpeg_enc_reg.h
- delete mode 100644 drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.h
-
+diff --git a/drivers/media/platform/mtk-jpeg/Makefile b/drivers/media/platform/mtk-jpeg/Makefile
+index b2e6069f3959..994fcd66069c 100644
+--- a/drivers/media/platform/mtk-jpeg/Makefile
++++ b/drivers/media/platform/mtk-jpeg/Makefile
+@@ -1,2 +1,2 @@
+-mtk_jpeg-objs := mtk_jpeg_core.o mtk_jpeg_hw.o mtk_jpeg_parse.o
++mtk_jpeg-objs := mtk_jpeg_core.o mtk_jpeg_dec_hw.o mtk_jpeg_dec_parse.o
+ obj-$(CONFIG_VIDEO_MEDIATEK_JPEG) += mtk_jpeg.o
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+index f761e4d8bf2a..49e3b5284006 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_core.c
+@@ -31,9 +31,9 @@
+ #include <media/videobuf2-dma-contig.h>
+ #include <soc/mediatek/smi.h>
+ 
+-#include "mtk_jpeg_hw.h"
++#include "mtk_jpeg_dec_hw.h"
+ #include "mtk_jpeg_core.h"
+-#include "mtk_jpeg_parse.h"
++#include "mtk_jpeg_dec_parse.h"
+ 
+ static struct mtk_jpeg_fmt mtk_jpeg_formats[] = {
+ 	{
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_hw.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c
+similarity index 99%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_hw.c
+rename to drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c
+index 77b4cc6a8873..aad834d98059 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_hw.c
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.c
+@@ -17,7 +17,7 @@
+ #include <linux/kernel.h>
+ #include <media/videobuf2-core.h>
+ 
+-#include "mtk_jpeg_hw.h"
++#include "mtk_jpeg_dec_hw.h"
+ 
+ #define MTK_JPEG_DUNUM_MASK(val)	(((val) - 1) & 0x3)
+ 
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_hw.h b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.h
+similarity index 98%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_hw.h
+rename to drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.h
+index 37152a630dea..bff6a4aab57a 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_hw.h
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_hw.h
+@@ -19,7 +19,7 @@
+ #include <media/videobuf2-core.h>
+ 
+ #include "mtk_jpeg_core.h"
+-#include "mtk_jpeg_reg.h"
++#include "mtk_jpeg_dec_reg.h"
+ 
+ enum {
+ 	MTK_JPEG_DEC_RESULT_EOF_DONE		= 0,
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.c
+similarity index 99%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c
+rename to drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.c
+index 38868547f5d4..c887f90c3a66 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.c
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.c
+@@ -16,7 +16,7 @@
+ #include <linux/kernel.h>
+ #include <linux/videodev2.h>
+ 
+-#include "mtk_jpeg_parse.h"
++#include "mtk_jpeg_dec_parse.h"
+ 
+ #define TEM	0x01
+ #define SOF0	0xc0
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.h b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.h
+similarity index 96%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.h
+rename to drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.h
+index 5d92340ea81b..fdad7f2da6be 100644
+--- a/drivers/media/platform/mtk-jpeg/mtk_jpeg_parse.h
++++ b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_parse.h
+@@ -16,7 +16,7 @@
+ #ifndef _MTK_JPEG_PARSE_H
+ #define _MTK_JPEG_PARSE_H
+ 
+-#include "mtk_jpeg_hw.h"
++#include "mtk_jpeg_dec_hw.h"
+ 
+ bool mtk_jpeg_parse(struct mtk_jpeg_dec_param *param, u8 *src_addr_va,
+ 		    u32 src_size);
+diff --git a/drivers/media/platform/mtk-jpeg/mtk_jpeg_reg.h b/drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_reg.h
+similarity index 100%
+rename from drivers/media/platform/mtk-jpeg/mtk_jpeg_reg.h
+rename to drivers/media/platform/mtk-jpeg/mtk_jpeg_dec_reg.h
 -- 
 2.18.0
-
 
