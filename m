@@ -2,165 +2,317 @@ Return-Path: <SRS0=lr8S=VO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3574FC76192
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 13:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61188C76186
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 13:43:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 10C3621851
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 13:36:56 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jU/Zat9i"
+	by mail.kernel.org (Postfix) with ESMTP id 3631B208C0
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 13:43:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728234AbfGQNgy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Jul 2019 09:36:54 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44256 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727954AbfGQNgu (ORCPT
+        id S1727201AbfGQNn6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Jul 2019 09:43:58 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:46273 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726081AbfGQNn6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 17 Jul 2019 09:36:50 -0400
-Received: by mail-pg1-f193.google.com with SMTP id i18so11184028pgl.11
-        for <linux-media@vger.kernel.org>; Wed, 17 Jul 2019 06:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=upJur9hX33jRa5ZDAABYWCcVNIU4OKrA323sUj0kiJ0=;
-        b=jU/Zat9i+mrs8cSnCYXrBiEONUz0WXxyKyOECIIPiTvG8WEhtGZGjK61290IX8o36U
-         OrHTHQ7Woyg/qn3+sukX8RWKFmT/Ab3vSFlM0FM2BRuiucJNWXV94DF4e2NhGQgdA44A
-         dT08TPfZUZgkz0of54cXYItyNEHlQbHBkArsYbqcDoUXDHAB+kz50O9ewS939NtAQV8u
-         N3pg+MG4dZM9J1oQTBELA9KEuGXZuE94dTh2nx4VJ6oW11nUXuKKdq/o5lVXbnas7dEB
-         7eGFT9GZTTNoP+bU6YviC4h7qnZidfElkMDjIpsDOMoPQb/nzifgWXLs7MlD24BgMlQq
-         Xslw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=upJur9hX33jRa5ZDAABYWCcVNIU4OKrA323sUj0kiJ0=;
-        b=GQ2YZSF0cweOtxWAtzSOhswmJEvHtyFt2x1VO/fTFcIUCEL6pYuh97pE477NAFcmiU
-         BhDhZL9TtKVQ/YaOD4NlcveeHilK4UH6J1+uNoZymJWThXbTL8EwXmPgQ7X1FuUXrreV
-         EtuUC3YxHHOMpajORw2iYM9HsL5mqUIDFzo+rhuwIlIAPsxmNq23y7y5bvCw+CKegtgw
-         JOzV5nc0O7Hb003Wl1PyDWkVLCtPIG6mj6laZXKU5Gz0Rs6N+Lbv+wvYvIRkzd3qe0Vp
-         prjZvvI4FcNwHoe9RkZ8xbPXWd24LlzqPKrQ576IWIXCEhStPNVMQJGCS5+tAcT8Nv3w
-         GCYQ==
-X-Gm-Message-State: APjAAAWvzMlS269IMA4NQaR3scfi0rjXRTCRLPl/PRtwUa8vciJZE7r8
-        MOOvBzzG4AVFCOhxTI8zlPdGP5j0H4kGUl1f01UylQ==
-X-Google-Smtp-Source: APXvYqz7m/UfmCxQEvGyEZmLKWfGDEQqrP2qzxF/oMVv3Ek5NDX+f4ncbRdtOgqzhkxO4Lp3vwbZe7MPyGJ1vZM4Wx0=
-X-Received: by 2002:a17:90a:2488:: with SMTP id i8mr43162554pje.123.1563370608796;
- Wed, 17 Jul 2019 06:36:48 -0700 (PDT)
+        Wed, 17 Jul 2019 09:43:58 -0400
+Received: from [192.168.2.10] ([46.9.252.75])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id nkDnhwVmO0SBqnkDrhaPl9; Wed, 17 Jul 2019 15:43:55 +0200
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] mx2_emmaprp: use struct v4l2_fh
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Message-ID: <53199fac-04b9-027d-e014-041f94565926@xs4all.nl>
+Date:   Wed, 17 Jul 2019 15:43:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <cover.1561386715.git.andreyknvl@google.com> <ea0ff94ef2b8af12ea6c222c5ebd970e0849b6dd.1561386715.git.andreyknvl@google.com>
- <20190624174015.GL29120@arrakis.emea.arm.com> <CAAeHK+y8vE=G_odK6KH=H064nSQcVgkQkNwb2zQD9swXxKSyUQ@mail.gmail.com>
- <20190715180510.GC4970@ziepe.ca> <CAAeHK+xPQqJP7p_JFxc4jrx9k7N0TpBWEuB8Px7XHvrfDU1_gw@mail.gmail.com>
- <20190716120624.GA29727@ziepe.ca> <CAAeHK+xPPQ9QjAksbfWG-Zmnawt-cdw9eO_6GVxjEYcaDGvaRA@mail.gmail.com>
- <20190717115828.GE12119@ziepe.ca>
-In-Reply-To: <20190717115828.GE12119@ziepe.ca>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 17 Jul 2019 15:36:37 +0200
-Message-ID: <CAAeHK+yyQpc6cxyVeUUWUwiQYy8iAgVXmOVO=EQYSNzy9G8Q0A@mail.gmail.com>
-Subject: Re: [PATCH v18 11/15] IB/mlx4: untag user pointers in mlx4_get_umem_mr
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfGACFihOl5vFV/Rm1tyFsg0Cp/7yEK6v6S3QTb1hBwEGoOH2WmM8jip9f2sIvkBTALhCAsfaQwPYZxsHrzECBLisv6Y6wxEsYHh1hw4sYVhcK9PDix2Z
+ 7Ql+yZdPS6wC3a/9OWIURTO9HnRYpfqkfkHWUAqmZnTn/kEOvxH2N/mP69NusbprAttHaIFBDQb1zQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Jul 17, 2019 at 1:58 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Wed, Jul 17, 2019 at 01:44:07PM +0200, Andrey Konovalov wrote:
-> > On Tue, Jul 16, 2019 at 2:06 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > >
-> > > On Tue, Jul 16, 2019 at 12:42:07PM +0200, Andrey Konovalov wrote:
-> > > > On Mon, Jul 15, 2019 at 8:05 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> > > > >
-> > > > > On Mon, Jul 15, 2019 at 06:01:29PM +0200, Andrey Konovalov wrote:
-> > > > > > On Mon, Jun 24, 2019 at 7:40 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > > > > >
-> > > > > > > On Mon, Jun 24, 2019 at 04:32:56PM +0200, Andrey Konovalov wrote:
-> > > > > > > > This patch is a part of a series that extends kernel ABI to allow to pass
-> > > > > > > > tagged user pointers (with the top byte set to something else other than
-> > > > > > > > 0x00) as syscall arguments.
-> > > > > > > >
-> > > > > > > > mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
-> > > > > > > > only by done with untagged pointers.
-> > > > > > > >
-> > > > > > > > Untag user pointers in this function.
-> > > > > > > >
-> > > > > > > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > > > > > > >  drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
-> > > > > > > >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > > > > > >
-> > > > > > > Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> > > > > > >
-> > > > > > > This patch also needs an ack from the infiniband maintainers (Jason).
-> > > > > >
-> > > > > > Hi Jason,
-> > > > > >
-> > > > > > Could you take a look and give your acked-by?
-> > > > >
-> > > > > Oh, I think I did this a long time ago. Still looks OK.
-> > > >
-> > > > Hm, maybe that was we who lost it. Thanks!
-> > > >
-> > > > > You will send it?
-> > > >
-> > > > I will resend the patchset once the merge window is closed, if that's
-> > > > what you mean.
-> > >
-> > > No.. I mean who send it to Linus's tree? ie do you want me to take
-> > > this patch into rdma?
-> >
-> > I think the plan was to merge the whole series through the mm tree.
-> > But I don't mind if you want to take this patch into your tree. It's
-> > just that this patch doesn't make much sense without the rest of the
-> > series.
->
-> Generally I prefer if subsystem changes stay in subsystem trees. If
-> the patch is good standalone, and the untag API has already been
-> merged, this is a better strategy.
+Convert this driver to use struct v4l2_fh and as a result switch to
+using vb2/v4l2_mem2mem helper functions as well.
 
-OK, feel free to take this into your tree, this works for me.
+Only compile-tested due to lack of hardware. This driver is however
+very similar to the m2m-deinterlace driver in this respect, and that
+v4l2_fh conversion has been properly tested.
 
->
-> Jason
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+diff --git a/drivers/media/platform/mx2_emmaprp.c b/drivers/media/platform/mx2_emmaprp.c
+index 333324c75027..b9a5c20d28aa 100644
+--- a/drivers/media/platform/mx2_emmaprp.c
++++ b/drivers/media/platform/mx2_emmaprp.c
+@@ -210,11 +210,11 @@ struct emmaprp_dev {
+ };
+
+ struct emmaprp_ctx {
++	struct v4l2_fh		fh;
+ 	struct emmaprp_dev	*dev;
+ 	/* Abort requested by m2m */
+ 	int			aborting;
+ 	struct emmaprp_q_data	q_data[2];
+-	struct v4l2_m2m_ctx	*m2m_ctx;
+ };
+
+ static struct emmaprp_q_data *get_q_data(struct emmaprp_ctx *ctx,
+@@ -243,7 +243,7 @@ static void emmaprp_job_abort(void *priv)
+
+ 	dprintk(pcdev, "Aborting task\n");
+
+-	v4l2_m2m_job_finish(pcdev->m2m_dev, ctx->m2m_ctx);
++	v4l2_m2m_job_finish(pcdev->m2m_dev, ctx->fh.m2m_ctx);
+ }
+
+ static inline void emmaprp_dump_regs(struct emmaprp_dev *pcdev)
+@@ -278,8 +278,8 @@ static void emmaprp_device_run(void *priv)
+ 	dma_addr_t p_in, p_out;
+ 	u32 tmp;
+
+-	src_buf = v4l2_m2m_next_src_buf(ctx->m2m_ctx);
+-	dst_buf = v4l2_m2m_next_dst_buf(ctx->m2m_ctx);
++	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
++	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
+
+ 	s_q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT);
+ 	s_width	= s_q_data->width;
+@@ -353,8 +353,8 @@ static irqreturn_t emmaprp_irq(int irq_emma, void *data)
+ 			pr_err("PrP bus error occurred, this transfer is probably corrupted\n");
+ 			writel(PRP_CNTL_SWRST, pcdev->base_emma + PRP_CNTL);
+ 		} else if (irqst & PRP_INTR_ST_CH2B1CI) { /* buffer ready */
+-			src_vb = v4l2_m2m_src_buf_remove(curr_ctx->m2m_ctx);
+-			dst_vb = v4l2_m2m_dst_buf_remove(curr_ctx->m2m_ctx);
++			src_vb = v4l2_m2m_src_buf_remove(curr_ctx->fh.m2m_ctx);
++			dst_vb = v4l2_m2m_dst_buf_remove(curr_ctx->fh.m2m_ctx);
+
+ 			dst_vb->vb2_buf.timestamp = src_vb->vb2_buf.timestamp;
+ 			dst_vb->flags &=
+@@ -371,7 +371,7 @@ static irqreturn_t emmaprp_irq(int irq_emma, void *data)
+ 		}
+ 	}
+
+-	v4l2_m2m_job_finish(pcdev->m2m_dev, curr_ctx->m2m_ctx);
++	v4l2_m2m_job_finish(pcdev->m2m_dev, curr_ctx->fh.m2m_ctx);
+ 	return IRQ_HANDLED;
+ }
+
+@@ -435,7 +435,7 @@ static int vidioc_g_fmt(struct emmaprp_ctx *ctx, struct v4l2_format *f)
+ 	struct vb2_queue *vq;
+ 	struct emmaprp_q_data *q_data;
+
+-	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, f->type);
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
+ 	if (!vq)
+ 		return -EINVAL;
+
+@@ -540,7 +540,7 @@ static int vidioc_s_fmt(struct emmaprp_ctx *ctx, struct v4l2_format *f)
+ 	struct vb2_queue *vq;
+ 	int ret;
+
+-	vq = v4l2_m2m_get_vq(ctx->m2m_ctx, f->type);
++	vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx, f->type);
+ 	if (!vq)
+ 		return -EINVAL;
+
+@@ -596,52 +596,6 @@ static int vidioc_s_fmt_vid_out(struct file *file, void *priv,
+ 	return vidioc_s_fmt(priv, f);
+ }
+
+-static int vidioc_reqbufs(struct file *file, void *priv,
+-			  struct v4l2_requestbuffers *reqbufs)
+-{
+-	struct emmaprp_ctx *ctx = priv;
+-
+-	return v4l2_m2m_reqbufs(file, ctx->m2m_ctx, reqbufs);
+-}
+-
+-static int vidioc_querybuf(struct file *file, void *priv,
+-			   struct v4l2_buffer *buf)
+-{
+-	struct emmaprp_ctx *ctx = priv;
+-
+-	return v4l2_m2m_querybuf(file, ctx->m2m_ctx, buf);
+-}
+-
+-static int vidioc_qbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
+-{
+-	struct emmaprp_ctx *ctx = priv;
+-
+-	return v4l2_m2m_qbuf(file, ctx->m2m_ctx, buf);
+-}
+-
+-static int vidioc_dqbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
+-{
+-	struct emmaprp_ctx *ctx = priv;
+-
+-	return v4l2_m2m_dqbuf(file, ctx->m2m_ctx, buf);
+-}
+-
+-static int vidioc_streamon(struct file *file, void *priv,
+-			   enum v4l2_buf_type type)
+-{
+-	struct emmaprp_ctx *ctx = priv;
+-
+-	return v4l2_m2m_streamon(file, ctx->m2m_ctx, type);
+-}
+-
+-static int vidioc_streamoff(struct file *file, void *priv,
+-			    enum v4l2_buf_type type)
+-{
+-	struct emmaprp_ctx *ctx = priv;
+-
+-	return v4l2_m2m_streamoff(file, ctx->m2m_ctx, type);
+-}
+-
+ static const struct v4l2_ioctl_ops emmaprp_ioctl_ops = {
+ 	.vidioc_querycap	= vidioc_querycap,
+
+@@ -655,14 +609,14 @@ static const struct v4l2_ioctl_ops emmaprp_ioctl_ops = {
+ 	.vidioc_try_fmt_vid_out	= vidioc_try_fmt_vid_out,
+ 	.vidioc_s_fmt_vid_out	= vidioc_s_fmt_vid_out,
+
+-	.vidioc_reqbufs		= vidioc_reqbufs,
+-	.vidioc_querybuf	= vidioc_querybuf,
+-
+-	.vidioc_qbuf		= vidioc_qbuf,
+-	.vidioc_dqbuf		= vidioc_dqbuf,
+-
+-	.vidioc_streamon	= vidioc_streamon,
+-	.vidioc_streamoff	= vidioc_streamoff,
++	.vidioc_reqbufs		= v4l2_m2m_ioctl_reqbufs,
++	.vidioc_querybuf	= v4l2_m2m_ioctl_querybuf,
++	.vidioc_qbuf		= v4l2_m2m_ioctl_qbuf,
++	.vidioc_dqbuf		= v4l2_m2m_ioctl_dqbuf,
++	.vidioc_prepare_buf	= v4l2_m2m_ioctl_prepare_buf,
++	.vidioc_expbuf		= v4l2_m2m_ioctl_expbuf,
++	.vidioc_streamon	= v4l2_m2m_ioctl_streamon,
++	.vidioc_streamoff	= v4l2_m2m_ioctl_streamoff,
+ };
+
+
+@@ -722,7 +676,7 @@ static void emmaprp_buf_queue(struct vb2_buffer *vb)
+ {
+ 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+ 	struct emmaprp_ctx *ctx = vb2_get_drv_priv(vb->vb2_queue);
+-	v4l2_m2m_buf_queue(ctx->m2m_ctx, vbuf);
++	v4l2_m2m_buf_queue(ctx->fh.m2m_ctx, vbuf);
+ }
+
+ static const struct vb2_ops emmaprp_qops = {
+@@ -740,7 +694,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 	int ret;
+
+ 	src_vq->type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
+-	src_vq->io_modes = VB2_MMAP | VB2_USERPTR;
++	src_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
+ 	src_vq->drv_priv = ctx;
+ 	src_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+ 	src_vq->ops = &emmaprp_qops;
+@@ -754,7 +708,7 @@ static int queue_init(void *priv, struct vb2_queue *src_vq,
+ 		return ret;
+
+ 	dst_vq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+-	dst_vq->io_modes = VB2_MMAP | VB2_USERPTR;
++	dst_vq->io_modes = VB2_MMAP | VB2_USERPTR | VB2_DMABUF;
+ 	dst_vq->drv_priv = ctx;
+ 	dst_vq->buf_struct_size = sizeof(struct v4l2_m2m_buffer);
+ 	dst_vq->ops = &emmaprp_qops;
+@@ -778,7 +732,8 @@ static int emmaprp_open(struct file *file)
+ 	if (!ctx)
+ 		return -ENOMEM;
+
+-	file->private_data = ctx;
++	v4l2_fh_init(&ctx->fh, video_devdata(file));
++	file->private_data = &ctx->fh;
+ 	ctx->dev = pcdev;
+
+ 	if (mutex_lock_interruptible(&pcdev->dev_mutex)) {
+@@ -786,10 +741,10 @@ static int emmaprp_open(struct file *file)
+ 		return -ERESTARTSYS;
+ 	}
+
+-	ctx->m2m_ctx = v4l2_m2m_ctx_init(pcdev->m2m_dev, ctx, &queue_init);
++	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(pcdev->m2m_dev, ctx, &queue_init);
+
+-	if (IS_ERR(ctx->m2m_ctx)) {
+-		int ret = PTR_ERR(ctx->m2m_ctx);
++	if (IS_ERR(ctx->fh.m2m_ctx)) {
++		int ret = PTR_ERR(ctx->fh.m2m_ctx);
+
+ 		mutex_unlock(&pcdev->dev_mutex);
+ 		kfree(ctx);
+@@ -800,9 +755,10 @@ static int emmaprp_open(struct file *file)
+ 	clk_prepare_enable(pcdev->clk_emma_ahb);
+ 	ctx->q_data[V4L2_M2M_SRC].fmt = &formats[1];
+ 	ctx->q_data[V4L2_M2M_DST].fmt = &formats[0];
++	v4l2_fh_add(&ctx->fh);
+ 	mutex_unlock(&pcdev->dev_mutex);
+
+-	dprintk(pcdev, "Created instance %p, m2m_ctx: %p\n", ctx, ctx->m2m_ctx);
++	dprintk(pcdev, "Created instance %p, m2m_ctx: %p\n", ctx, ctx->fh.m2m_ctx);
+
+ 	return 0;
+ }
+@@ -817,46 +773,22 @@ static int emmaprp_release(struct file *file)
+ 	mutex_lock(&pcdev->dev_mutex);
+ 	clk_disable_unprepare(pcdev->clk_emma_ahb);
+ 	clk_disable_unprepare(pcdev->clk_emma_ipg);
+-	v4l2_m2m_ctx_release(ctx->m2m_ctx);
++	v4l2_fh_del(&ctx->fh);
++	v4l2_fh_exit(&ctx->fh);
++	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+ 	mutex_unlock(&pcdev->dev_mutex);
+ 	kfree(ctx);
+
+ 	return 0;
+ }
+
+-static __poll_t emmaprp_poll(struct file *file,
+-				 struct poll_table_struct *wait)
+-{
+-	struct emmaprp_dev *pcdev = video_drvdata(file);
+-	struct emmaprp_ctx *ctx = file->private_data;
+-	__poll_t res;
+-
+-	mutex_lock(&pcdev->dev_mutex);
+-	res = v4l2_m2m_poll(file, ctx->m2m_ctx, wait);
+-	mutex_unlock(&pcdev->dev_mutex);
+-	return res;
+-}
+-
+-static int emmaprp_mmap(struct file *file, struct vm_area_struct *vma)
+-{
+-	struct emmaprp_dev *pcdev = video_drvdata(file);
+-	struct emmaprp_ctx *ctx = file->private_data;
+-	int ret;
+-
+-	if (mutex_lock_interruptible(&pcdev->dev_mutex))
+-		return -ERESTARTSYS;
+-	ret = v4l2_m2m_mmap(file, ctx->m2m_ctx, vma);
+-	mutex_unlock(&pcdev->dev_mutex);
+-	return ret;
+-}
+-
+ static const struct v4l2_file_operations emmaprp_fops = {
+ 	.owner		= THIS_MODULE,
+ 	.open		= emmaprp_open,
+ 	.release	= emmaprp_release,
+-	.poll		= emmaprp_poll,
++	.poll		= v4l2_m2m_fop_poll,
+ 	.unlocked_ioctl	= video_ioctl2,
+-	.mmap		= emmaprp_mmap,
++	.mmap		= v4l2_m2m_fop_mmap,
+ };
+
+ static const struct video_device emmaprp_videodev = {
