@@ -2,67 +2,84 @@ Return-Path: <SRS0=lr8S=VO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8B6CC76186
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 09:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAD35C76195
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 09:03:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A36BE2077C
-	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 09:03:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3DEB20880
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 09:03:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726273AbfGQJDv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 17 Jul 2019 05:03:51 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:60001 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725873AbfGQJDv (ORCPT
+        id S1726312AbfGQJDw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Jul 2019 05:03:52 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:39841 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726106AbfGQJDv (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 17 Jul 2019 05:03:51 -0400
 Received: from tschai.fritz.box ([46.9.252.75])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id nfqjhuob40SBqnfqmhZQVS; Wed, 17 Jul 2019 11:03:49 +0200
+        id nfqjhuob40SBqnfqnhZQVq; Wed, 17 Jul 2019 11:03:50 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH 0/4] via-camera/ov7670: various fixes/improvements
-Date:   Wed, 17 Jul 2019 11:03:41 +0200
-Message-Id: <20190717090345.26521-1-hverkuil-cisco@xs4all.nl>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 3/4] ov7670: don't return ENOTTY if SUBDEV_API is not set
+Date:   Wed, 17 Jul 2019 11:03:44 +0200
+Message-Id: <20190717090345.26521-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190717090345.26521-1-hverkuil-cisco@xs4all.nl>
+References: <20190717090345.26521-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfKYHYsr0K2oSeFvQJX37sysaUM/sAdPejtCXJIgQooqWWkvHcfaDowwz23KkX1mbF1eoj04dCgvOUsUEfhQ8yTYROPoZLpHbElzAyfagUA/HZUDxsGid
- 8ucihqE/6eX+IkkFRgGW7oyKe+Yx7v4rk+2Lm0NVja2VKpO+dCG9TawSCiuzuNv4LFUoPoP3wAaH0KS9bCalufChNjfJzuxddZE=
+X-CMAE-Envelope: MS4wfK4r2Y09IVqQUIu98/siE+sfNhBLRnTg9JWdEf/rzV/0IGuSyiGzdsOXtv0kojlf5QJu417UZIdNVrHBh0auOGJTpCI7EhpejY/vhHm86FekM6Q//xz4
+ luPBedxA6GT+mqQD7O4BmE4NCIwlwG9MqCZNPBH5nLqFHkDyQFQ0q1y7ASiSC1TO2FMqBijdgPaTC92HaNtTXcBc1bgdAmXig+UCY9MsuFEczLJTKwD5j/MJ
+ 1czN6KF1KVI/qKO1BN5Ciw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The main purpose of this series was to make via-camera use struct v4l2_fh,
-since it was one of the few drivers that didn't use that struct.
+If CONFIG_VIDEO_V4L2_SUBDEV_API is not set, then it is still possible
+to call set_fmt for V4L2_SUBDEV_FORMAT_TRY, the result is just not
+stored. So return 0 instead of -ENOTTY.
 
-While testing I found a bunch of other issues with this driver and the
-ov7670 driver, which are also fixed.
+Calling get_fmt with V4L2_SUBDEV_FORMAT_TRY should return -EINVAL
+instead of -ENOTTY, after all the get_fmt functionality is still
+present, just not supported for TRY.
 
-The next step will be to convert this driver to use vb2, but that's
-still work in progress.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/i2c/ov7670.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-This series has been tested on an OLPC 1.5 laptop.
-
-Regards,
-
-	Hans
-
-Hans Verkuil (4):
-  via-camera: call viafb_pm_unregister in remove()
-  via-camera: use struct v4l2_fh
-  ov7670: don't return ENOTTY if SUBDEV_API is not set
-  via-camera: fix v4l2-compliance fails
-
- drivers/media/i2c/ov7670.c          |  6 +-
- drivers/media/platform/via-camera.c | 94 +++++++++++++++++------------
- 2 files changed, 58 insertions(+), 42 deletions(-)
-
+diff --git a/drivers/media/i2c/ov7670.c b/drivers/media/i2c/ov7670.c
+index a70a6ff7b36e..53e238e98d11 100644
+--- a/drivers/media/i2c/ov7670.c
++++ b/drivers/media/i2c/ov7670.c
+@@ -1030,10 +1030,8 @@ static int ov7670_set_fmt(struct v4l2_subdev *sd,
+ #ifdef CONFIG_VIDEO_V4L2_SUBDEV_API
+ 		mbus_fmt = v4l2_subdev_get_try_format(sd, cfg, format->pad);
+ 		*mbus_fmt = format->format;
+-		return 0;
+-#else
+-		return -ENOTTY;
+ #endif
++		return 0;
+ 	}
+ 
+ 	ret = ov7670_try_fmt_internal(sd, &format->format, &ovfmt, &wsize);
+@@ -1116,7 +1114,7 @@ static int ov7670_get_fmt(struct v4l2_subdev *sd,
+ 		format->format = *mbus_fmt;
+ 		return 0;
+ #else
+-		return -ENOTTY;
++		return -EINVAL;
+ #endif
+ 	} else {
+ 		format->format = info->format;
 -- 
 2.20.1
 
