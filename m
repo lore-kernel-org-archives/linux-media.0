@@ -1,98 +1,140 @@
-Return-Path: <SRS0=nwdt=VN=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=lr8S=VO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B18D4C7618F
-	for <linux-media@archiver.kernel.org>; Tue, 16 Jul 2019 18:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FCFAC76186
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 07:44:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9C19A2173C
-	for <linux-media@archiver.kernel.org>; Tue, 16 Jul 2019 18:33:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E413C20818
+	for <linux-media@archiver.kernel.org>; Wed, 17 Jul 2019 07:44:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Ramaan20"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387773AbfGPSdd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 16 Jul 2019 14:33:33 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:40158 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725926AbfGPSdc (ORCPT
+        id S1725936AbfGQHop (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 17 Jul 2019 03:44:45 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:36595 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbfGQHop (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 16 Jul 2019 14:33:32 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 67A7A634C85;
-        Tue, 16 Jul 2019 21:31:59 +0300 (EEST)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1hnSGM-0000b1-5d; Tue, 16 Jul 2019 21:33:18 +0300
-Date:   Tue, 16 Jul 2019 21:33:18 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Vishal Sagar <vsagar@xilinx.com>
-Cc:     Vishal Sagar <vishal.sagar@xilinx.com>,
-        Hyun Kwon <hyunk@xilinx.com>,
-        "laurent.pinchart@ideasonboard.com" 
-        <laurent.pinchart@ideasonboard.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        Michal Simek <michals@xilinx.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dinesh Kumar <dineshk@xilinx.com>,
-        Sandip Kothari <sandipk@xilinx.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: Re: [PATCH v9 2/2] media: v4l: xilinx: Add Xilinx MIPI CSI-2 Rx
- Subsystem driver
-Message-ID: <20190716183318.GE850@valkosipuli.retiisi.org.uk>
-References: <1560247809-117978-1-git-send-email-vishal.sagar@xilinx.com>
- <1560247809-117978-3-git-send-email-vishal.sagar@xilinx.com>
- <20190618151933.zqepfqdjjjlhea7h@valkosipuli.retiisi.org.uk>
- <CH2PR02MB6088B5E97833233486C53E9BA7F30@CH2PR02MB6088.namprd02.prod.outlook.com>
+        Wed, 17 Jul 2019 03:44:45 -0400
+Received: by mail-ua1-f68.google.com with SMTP id v20so9282222uao.3
+        for <linux-media@vger.kernel.org>; Wed, 17 Jul 2019 00:44:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=yOzo3wne74UhkVxcx9Ez36aOQMVaqdSd7GIndeezzGs=;
+        b=Ramaan20IZ5XjnPD2cEijzAJecJAgw/YYpve0r+bG/cYS7tXbH9V807btIBixwMFH+
+         9kAtkaM5nSn55VzPx6BCBLmij/68CKJuetuv0yKthOgmneXmzZJUPGk9tYOesq5O/8Zf
+         xdinbVCDcFYGti/mDQqx0+KEwqc343FIrvNngfvLkSD17fL2DFTPEodLJMuYb7BIwD1D
+         KENqAWbHHnlTujThFs4JlMcamTWOZAhpYKC+P1w60yUKfwxjl8QKbHalmUA1iSlTgXnl
+         ar0BQ582woJyAmjA36jSUsoQ2zJln25Jfv1RnL/9Z2BsZvONtxbEGt3SHfM9HqKDvVMX
+         /rXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=yOzo3wne74UhkVxcx9Ez36aOQMVaqdSd7GIndeezzGs=;
+        b=R8RJ5poY/6w6DyvUg5efcHmOWvk/aC3LhUlVWxBcCwmBT6L81WzOW97Zqbqm7pzPnx
+         DhBO7i9bDgoYR3SI9axL5tWo3VajbSb+jV4ggwy0KG+RiIM+FfjpvNjllScGtqSAADAF
+         GSX+2YD0vVeCqT9OC+9kk/FQsGP9VSekETPHwQX/q0VKGLeiCYACJl+/VVK3VvX2YuOP
+         CZ7h7fbcsFk1phEia09CLGJbj6F6bCAD2svtULFl1MjiXH/52ZIPKK1Ajw8tZTuhIwnz
+         eoVdFWcD7EQovmud+3yR1e+XxsDrqbfXnCEXLEcSv2Ux4YyNs60G44hGQ2NPSjGsx/pw
+         fyMw==
+X-Gm-Message-State: APjAAAXPvthS7u1X0RkTOfOvsSmILa+9JCHxF6MPGaAQTATknkyq9dDg
+        fyIA95TmQb9EKYK3sNaYuvz99+tiMK8TxYZCSBxQN5+8HLw=
+X-Google-Smtp-Source: APXvYqy9O7BQDhR/1jxtuBu+0mMhw5hpCxoWmXxb+xnnnIDOmG3JzdLyGZXimVYB2C2XhM7rlybCfiznF10rA8eX1iU=
+X-Received: by 2002:ab0:e19:: with SMTP id g25mr9932945uak.71.1563349483664;
+ Wed, 17 Jul 2019 00:44:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CH2PR02MB6088B5E97833233486C53E9BA7F30@CH2PR02MB6088.namprd02.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   James Hutchinson <jahutchinson99@googlemail.com>
+Date:   Wed, 17 Jul 2019 08:44:33 +0100
+Message-ID: <CAD+OKUpCVHUO1=mEGCx8Mx7TJLc4rJZjV8+Rgd_fRFrwpBDExA@mail.gmail.com>
+Subject: MyGica T230 dvb-t2 data corruption since commit 5fa8815
+To:     linux-media@vger.kernel.org, crazycat69@narod.ru,
+        mchehab@s-opensource.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Vishal,
+(trying again in plain text)...
 
-On Thu, Jul 11, 2019 at 09:09:37AM +0000, Vishal Sagar wrote:
-...
-> > > +static int xcsi2rxss_subscribe_event(struct v4l2_subdev *sd,
-> > > +                                  struct v4l2_fh *fh,
-> > > +                                  struct v4l2_event_subscription *sub)
-> > > +{
-> > > +     struct xcsi2rxss_state *xcsi2rxss = to_xcsi2rxssstate(sd);
-> > > +     int ret;
-> > > +
-> > > +     mutex_lock(&xcsi2rxss->lock);
-> > > +
-> > > +     switch (sub->type) {
-> > > +     case V4L2_EVENT_XILINX_CSI2RX_SLBF:
-> > > +             ret = v4l2_event_subscribe(fh, sub, XCSI_MAX_EVENT, NULL);
-> > 
-> > Please either use dev_dbg() or propose an API for conveying this
-> > information downstream in the pipeline.
-> > 
-> 
-> I will use a dev_alert() in the irq handler for this for now and remove this event.
+I'm encountering invalid checksum errors randomly in tvheadend with my
+MyGica T230 DVB-T2 tuner, straight after upgrading from Debian Stretch
+(kernel 4.9.168) to Buster (kernel 4.19.37).
 
-dev_dbg(), please, as this is certainly not fatal. We should probably have
-an API to tell this to the downstream sub-device driver in the pipeline if
-the hardware has no way to detect this independently.
+For example
 
--- 
+2019-06-29 16:32:27.259 [   INFO]:subscription: 004B: "scan"
+subscribing to mux "618.167MHz", weight: 6, adapter: "Silicon Labs
+Si2168 #0 : DVB-T #0", network: "Freeview", service: "Raw PID
+Subscription"
+2019-06-29 16:32:27.769 [WARNING]:tbl-eit: uk_freeview: 618.167MHz in
+Freeview: invalid checksum (len 1558, errors 1)
+2019-06-29 16:32:27.770 [WARNING]:tbl-base: pat: 618.167MHz in
+Freeview: invalid checksum (len 136, errors 1)
+2019-06-29 16:32:27.967 [WARNING]:tbl-base: sdt: 618.167MHz in
+Freeview: invalid checksum (len 971, errors 1)
+2019-06-29 16:32:28.462 [WARNING]:tbl-base: pmt: 618.167MHz in
+Freeview: invalid checksum (len 60, errors 1)
+2019-06-29 16:32:28.463 [WARNING]:tbl-base: pmt: 618.167MHz in
+Freeview: invalid checksum (len 46, errors 1)
+2019-06-29 16:32:28.637 [WARNING]:tbl-base: pmt: 618.167MHz in
+Freeview: invalid checksum (len 38, errors 1)
+2019-06-29 16:32:32.258 [   INFO]:mpegts: 618.167MHz in Freeview scan complete
+2019-06-29 16:32:32.258 [   INFO]:subscription: 004B: "scan" unsubscribing
+2019-06-29 16:32:32.259 [   INFO]:mpegts: 642MHz in Freeview - tuning
+on Silicon Labs Si2168 #0 : DVB-T #0
+2019-06-29 16:32:32.259 [   INFO]:subscription: 004E: "scan"
+subscribing to mux "642MHz", weight: 6, adapter: "Silicon Labs Si2168
+#0 : DVB-T #0", network: "Freeview", service: "Raw PID Subscription"
+2019-06-29 16:32:41.179 [   INFO]:mpegts: 642MHz in Freeview scan complete
+2019-06-29 16:32:41.179 [   INFO]:subscription: 004E: "scan" unsubscribing
+2019-06-29 16:32:41.180 [   INFO]:mpegts: 602MHz in Freeview - tuning
+on Silicon Labs Si2168 #0 : DVB-T #0
+2019-06-29 16:32:41.180 [   INFO]:subscription: 0052: "scan"
+subscribing to mux "602MHz", weight: 6, adapter: "Silicon Labs Si2168
+#0 : DVB-T #0", network: "Freeview", service: "Raw PID Subscription"
+2019-06-29 16:32:41.835 [WARNING]:tbl-eit: uk_freeview: 602MHz in
+Freeview: invalid checksum (len 320, errors 1)
+2019-06-29 16:32:42.109 [WARNING]:tbl-base: sdt: 602MHz in Freeview:
+invalid checksum (len 322, errors 1)
+2019-06-29 16:32:42.314 [WARNING]:tbl-base: pmt: 602MHz in Freeview:
+invalid checksum (len 84, errors 1)
+2019-06-29 16:32:46.180 [   INFO]:mpegts: 602MHz in Freeview scan complete
+2019-06-29 16:32:46.180 [   INFO]:subscription: 0052: "scan" unsubscribing
+
+The issue is not specific to particular muxes, and happens entirely at
+random. If I retune then the same mux will scan without issue. It also
+causes data corruption when streaming with continuity counter errors
+in the tvh log; again retuning often resolves the problem, but i never
+had any such issues with kernel v4.9.x.
+
+Heres the output of lsusb to confirm my hardware id:
+0572:c688 Conexant Systems (Rockwell), Inc. Geniatech T230 DVB-T2 TV Stick
+
+I've been testing various kernel versions in-between 4.9->4.19 and
+quickly found that the issue was introduced somewhere between
+4.9->4.10.
+
+I therefore performed a (lengthy) git bisect to find out which of the
+14,248 commits during the v4.10 development cycle introduced this
+regression.
+
+I have tracked this regression down to the following commit:
+5fa8815: [media] dvb-usb-cxusb: Geniatech T230 - resync TS FIFO after lock
+
+Indeed, if I revert that commit on an upto-date kernel, I now have a
+stable MyGica T230 tuner once more.
+
+Please note that i've tried the latest media_build drivers and have
+also the 5.2 kernel; both of which have the issue, and both of which
+can be fixed by reverting 5fa8815.
+
 Regards,
-
-Sakari Ailus
+James
