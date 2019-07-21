@@ -3,37 +3,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-	autolearn=no autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E6EC76188
-	for <linux-media@archiver.kernel.org>; Sun, 21 Jul 2019 14:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90FAAC76188
+	for <linux-media@archiver.kernel.org>; Sun, 21 Jul 2019 14:32:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9B6B720823
-	for <linux-media@archiver.kernel.org>; Sun, 21 Jul 2019 14:32:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F93720823
+	for <linux-media@archiver.kernel.org>; Sun, 21 Jul 2019 14:32:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbfGUOcA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 21 Jul 2019 10:32:00 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:55726 "EHLO
+        id S1726618AbfGUOcR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 21 Jul 2019 10:32:17 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:55744 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726338AbfGUOcA (ORCPT
+        with ESMTP id S1726338AbfGUOcQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 21 Jul 2019 10:32:00 -0400
+        Sun, 21 Jul 2019 10:32:16 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 632BE281EBE
-Message-ID: <5e7147fbd1a342419f39b666e8806bd3f80cf986.camel@collabora.com>
-Subject: Re: [PATCH 5/6] omap_vout: use struct v4l2_fh
+        with ESMTPSA id C612A281EBE
+Message-ID: <6c32193cff92bed7de0a0c070b2325bc8af6611a.camel@collabora.com>
+Subject: Re: [PATCH] mx2_emmaprp: use struct v4l2_fh
 From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
         Linux Media Mailing List <linux-media@vger.kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>
-Date:   Sun, 21 Jul 2019 11:31:52 -0300
-In-Reply-To: <26e4e34d-c148-271d-be13-77fc8d15a646@xs4all.nl>
-References: <26e4e34d-c148-271d-be13-77fc8d15a646@xs4all.nl>
+Date:   Sun, 21 Jul 2019 11:32:09 -0300
+In-Reply-To: <53199fac-04b9-027d-e014-041f94565926@xs4all.nl>
+References: <53199fac-04b9-027d-e014-041f94565926@xs4all.nl>
 Organization: Collabora
-X-Priority: 1
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
@@ -43,11 +40,13 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, 2019-07-17 at 15:29 +0200, Hans Verkuil wrote:
-> This driver is one of the few that is still not using struct
-> v4l2_fh. Convert it.
+On Wed, 2019-07-17 at 15:43 +0200, Hans Verkuil wrote:
+> Convert this driver to use struct v4l2_fh and as a result switch to
+> using vb2/v4l2_mem2mem helper functions as well.
 > 
-> Tested on a Pandaboard.
+> Only compile-tested due to lack of hardware. This driver is however
+> very similar to the m2m-deinterlace driver in this respect, and that
+> v4l2_fh conversion has been properly tested.
 > 
 > Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
