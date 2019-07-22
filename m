@@ -4,34 +4,36 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4F63C7618F
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95045C7618F
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:29:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9098A217D4
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:27:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BD3D21955
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:29:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731654AbfGVR1e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Jul 2019 13:27:34 -0400
-Received: from sauhun.de ([88.99.104.3]:42428 "EHLO pokefinder.org"
+        id S1731341AbfGVR0M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Jul 2019 13:26:12 -0400
+Received: from sauhun.de ([88.99.104.3]:42116 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731492AbfGVR0e (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Jul 2019 13:26:34 -0400
+        id S1731327AbfGVR0K (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Jul 2019 13:26:10 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id 6D30C4A149A;
-        Mon, 22 Jul 2019 19:26:33 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id CE21F4A1491;
+        Mon, 22 Jul 2019 19:26:08 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] media: ir-kbd-i2c: prevent potential NULL pointer access
-Date:   Mon, 22 Jul 2019 19:26:31 +0200
-Message-Id: <20190722172632.4402-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 8/8] media: usb: go7007: s2250-board: convert to i2c_new_dummy_device
+Date:   Mon, 22 Jul 2019 19:26:02 +0200
+Message-Id: <20190722172604.3572-9-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190722172632.4402-1-wsa+renesas@sang-engineering.com>
-References: <20190722172632.4402-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
+References: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -39,55 +41,34 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-i2c_new_dummy() can fail returning a NULL pointer. The code does not
-bail out in this case and the returned pointer is blindly used. Convert
-to devm_i2c_new_dummy_device() which returns an ERR_PTR and also bail
-out when failing the validity check.
+Move from i2c_new_dummy() to i2c_new_dummy_device(), so we now get an
+ERRPTR which we use in error handling.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/media/i2c/ir-kbd-i2c.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/i2c/ir-kbd-i2c.c b/drivers/media/i2c/ir-kbd-i2c.c
-index 876d7587a1da..f46717052efc 100644
---- a/drivers/media/i2c/ir-kbd-i2c.c
-+++ b/drivers/media/i2c/ir-kbd-i2c.c
-@@ -885,9 +885,12 @@ static int ir_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	INIT_DELAYED_WORK(&ir->work, ir_work);
+Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
+
+ drivers/media/usb/go7007/s2250-board.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/usb/go7007/s2250-board.c b/drivers/media/usb/go7007/s2250-board.c
+index 179d4d642dae..49e75a1a1f3f 100644
+--- a/drivers/media/usb/go7007/s2250-board.c
++++ b/drivers/media/usb/go7007/s2250-board.c
+@@ -505,9 +505,9 @@ static int s2250_probe(struct i2c_client *client,
+ 	struct go7007 *go = i2c_get_adapdata(adapter);
+ 	struct go7007_usb *usb = go->hpi_context;
  
- 	if (probe_tx) {
--		ir->tx_c = i2c_new_dummy(client->adapter, 0x70);
--		if (!ir->tx_c) {
-+		ir->tx_c = devm_i2c_new_dummy_device(&client->dev,
-+						     client->adapter, 0x70);
-+		if (IS_ERR(ir->tx_c)) {
- 			dev_err(&client->dev, "failed to setup tx i2c address");
-+			err = PTR_ERR(ir->tx_c);
-+			goto err_out_free;
- 		} else if (!zilog_init(ir)) {
- 			ir->carrier = 38000;
- 			ir->duty_cycle = 40;
-@@ -904,9 +907,6 @@ static int ir_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	return 0;
+-	audio = i2c_new_dummy(adapter, TLV320_ADDRESS >> 1);
+-	if (audio == NULL)
+-		return -ENOMEM;
++	audio = i2c_new_dummy_device(adapter, TLV320_ADDRESS >> 1);
++	if (IS_ERR(audio))
++		return PTR_ERR(audio);
  
-  err_out_free:
--	if (ir->tx_c)
--		i2c_unregister_device(ir->tx_c);
--
- 	/* Only frees rc if it were allocated internally */
- 	rc_free_device(rc);
- 	return err;
-@@ -919,9 +919,6 @@ static int ir_remove(struct i2c_client *client)
- 	/* kill outstanding polls */
- 	cancel_delayed_work_sync(&ir->work);
- 
--	if (ir->tx_c)
--		i2c_unregister_device(ir->tx_c);
--
- 	/* unregister device */
- 	rc_unregister_device(ir->rc);
- 
+ 	state = kzalloc(sizeof(struct s2250), GFP_KERNEL);
+ 	if (state == NULL) {
 -- 
 2.20.1
 
