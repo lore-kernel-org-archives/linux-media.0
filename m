@@ -4,35 +4,35 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4D67C76190
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E105C76190
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:27:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 906072190F
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:26:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32B3A217D4
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:27:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731348AbfGVR0M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Jul 2019 13:26:12 -0400
-Received: from sauhun.de ([88.99.104.3]:42138 "EHLO pokefinder.org"
+        id S1731511AbfGVR0f (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Jul 2019 13:26:35 -0400
+Received: from sauhun.de ([88.99.104.3]:42398 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731319AbfGVR0K (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Jul 2019 13:26:10 -0400
+        id S1731494AbfGVR0f (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Jul 2019 13:26:35 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id 468A84A1490;
-        Mon, 22 Jul 2019 19:26:08 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id F2EFA4A148F;
+        Mon, 22 Jul 2019 19:26:33 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/8] media: i2c: adv7511-v4l2: convert to i2c_new_dummy_device
-Date:   Mon, 22 Jul 2019 19:26:01 +0200
-Message-Id: <20190722172604.3572-8-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 2/2] media: ir-kbd-i2c: remove outdated comments
+Date:   Mon, 22 Jul 2019 19:26:32 +0200
+Message-Id: <20190722172632.4402-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
-References: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20190722172632.4402-1-wsa+renesas@sang-engineering.com>
+References: <20190722172632.4402-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -40,64 +40,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Move from i2c_new_dummy() to i2c_new_dummy_device(), so we now get an
-ERRPTR which we use in error handling.
+The "free memory" comment is obsolete since 2013 and the other ones
+explain the obvious. Just remove the comments.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
+ drivers/media/i2c/ir-kbd-i2c.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
-
- drivers/media/i2c/adv7511-v4l2.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-index 2ad6bdf1a9fc..7db94267bcab 100644
---- a/drivers/media/i2c/adv7511-v4l2.c
-+++ b/drivers/media/i2c/adv7511-v4l2.c
-@@ -1872,11 +1872,11 @@ static int adv7511_probe(struct i2c_client *client, const struct i2c_device_id *
- 		goto err_entity;
- 	}
+diff --git a/drivers/media/i2c/ir-kbd-i2c.c b/drivers/media/i2c/ir-kbd-i2c.c
+index f46717052efc..30fde0e025c9 100644
+--- a/drivers/media/i2c/ir-kbd-i2c.c
++++ b/drivers/media/i2c/ir-kbd-i2c.c
+@@ -916,13 +916,9 @@ static int ir_remove(struct i2c_client *client)
+ {
+ 	struct IR_i2c *ir = i2c_get_clientdata(client);
  
--	state->i2c_edid = i2c_new_dummy(client->adapter,
-+	state->i2c_edid = i2c_new_dummy_device(client->adapter,
- 					state->i2c_edid_addr >> 1);
--	if (state->i2c_edid == NULL) {
-+	if (IS_ERR(state->i2c_edid)) {
- 		v4l2_err(sd, "failed to register edid i2c client\n");
--		err = -ENOMEM;
-+		err = PTR_ERR(state->i2c_edid);
- 		goto err_entity;
- 	}
+-	/* kill outstanding polls */
+ 	cancel_delayed_work_sync(&ir->work);
+-
+-	/* unregister device */
+ 	rc_unregister_device(ir->rc);
  
-@@ -1889,11 +1889,11 @@ static int adv7511_probe(struct i2c_client *client, const struct i2c_device_id *
- 	}
- 
- 	if (state->pdata.cec_clk) {
--		state->i2c_cec = i2c_new_dummy(client->adapter,
-+		state->i2c_cec = i2c_new_dummy_device(client->adapter,
- 					       state->i2c_cec_addr >> 1);
--		if (state->i2c_cec == NULL) {
-+		if (IS_ERR(state->i2c_cec)) {
- 			v4l2_err(sd, "failed to register cec i2c client\n");
--			err = -ENOMEM;
-+			err = PTR_ERR(state->i2c_cec);
- 			goto err_unreg_edid;
- 		}
- 		adv7511_wr(sd, 0xe2, 0x00); /* power up cec section */
-@@ -1901,10 +1901,10 @@ static int adv7511_probe(struct i2c_client *client, const struct i2c_device_id *
- 		adv7511_wr(sd, 0xe2, 0x01); /* power down cec section */
- 	}
- 
--	state->i2c_pktmem = i2c_new_dummy(client->adapter, state->i2c_pktmem_addr >> 1);
--	if (state->i2c_pktmem == NULL) {
-+	state->i2c_pktmem = i2c_new_dummy_device(client->adapter, state->i2c_pktmem_addr >> 1);
-+	if (IS_ERR(state->i2c_pktmem)) {
- 		v4l2_err(sd, "failed to register pktmem i2c client\n");
--		err = -ENOMEM;
-+		err = PTR_ERR(state->i2c_pktmem);
- 		goto err_unreg_cec;
- 	}
+-	/* free memory */
+ 	return 0;
+ }
  
 -- 
 2.20.1
