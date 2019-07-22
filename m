@@ -2,146 +2,170 @@ Return-Path: <SRS0=6VSJ=VT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87767C76188
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 13:07:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88F5CC76190
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 13:17:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5A37D218EA
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 13:07:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lAWCb3x+"
+	by mail.kernel.org (Postfix) with ESMTP id 690F721993
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 13:17:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729430AbfGVNHa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Jul 2019 09:07:30 -0400
-Received: from mail-lj1-f174.google.com ([209.85.208.174]:36237 "EHLO
-        mail-lj1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727360AbfGVNHa (ORCPT
+        id S1728728AbfGVNRj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Jul 2019 09:17:39 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:44887 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727903AbfGVNRj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Jul 2019 09:07:30 -0400
-Received: by mail-lj1-f174.google.com with SMTP id i21so37555620ljj.3
-        for <linux-media@vger.kernel.org>; Mon, 22 Jul 2019 06:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:references:from:openpgp:autocrypt:cc:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=81PFJRegZoIUE/QxUE+xDddONniv3UoJCZAdRqDgRmA=;
-        b=lAWCb3x+t81vvH/cL1qMsL2UUjI9gqhvik620jvQHU0YK8SWk8qb7SV7vpgHA5/d3C
-         VLqlaBrOP6RT8frN0E4HbNdBdGXlF03NI+uNZjFUnzHhwjHJfGK35Ewm5DP0/G5DjPub
-         6jnhxXtdmLNhwTBOKyazR1utolshqswoLwET7Z58Dnth69lzMvaZ2uR0pMONAvqq0Agt
-         NiXI7a/JMZNwsAIPc3nAlhEclST14DT3gBeJliQYC3NXsfti5m4rTB9DIPMg3Ni50TyK
-         LFLRPWMsq4Nvy743D6dTWI75QecTVq4crQD1JD+NtXfZM/saBPpHDq6RYzxu8DMtXXP/
-         m0PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt:cc
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=81PFJRegZoIUE/QxUE+xDddONniv3UoJCZAdRqDgRmA=;
-        b=gYMJd1SbjLOzTneqNoNrAXpbncHO46dhIRDwxKNPHwbGWw3RFLmJ2kTcK9mXSyFXJQ
-         Vw2571sp8hyhJ9je937AOGHg76j7flwh3wwn1s+pu186cW/r1qA3FVUzINHnHE+KOeZq
-         8/LGuWBbYSiO+RGswFJak1WWjjl/msU2tum7pwLo200VMXM5pHAtUUyouvjhHZjCPxuj
-         d4nC56lqoqh5P6iy3NVuQZ+kbdXURI7EA3jo3NtapTpo7W47HhIp/BlVtTl6hRc6kkyb
-         KB/MDNxTElXgXnMsSaeP01idc0wpShQMNo6/nVJmSqXsUWnB/gMWmbRQ27pPoEsC1EPB
-         94Gg==
-X-Gm-Message-State: APjAAAWLHBDdjcKUBqGv6BYPGIlCYUQ8YQZdaqPaYaqQ9N6zIKaq+oMG
-        m8ls5UnP8VneVy+zeiKZBTeffTFThdo=
-X-Google-Smtp-Source: APXvYqw6oV6xwIeJA/kPev7f4gmkID3PpYf1Ex5Z1a4Q4srbh46TeE8T9yRMYHUXG870+EXWdqsPJA==
-X-Received: by 2002:a2e:988b:: with SMTP id b11mr35844599ljj.110.1563800847268;
-        Mon, 22 Jul 2019 06:07:27 -0700 (PDT)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id q1sm7504067ljb.87.2019.07.22.06.07.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Jul 2019 06:07:26 -0700 (PDT)
-Subject: Re: [git:media_tree/master] docs: interconnect.rst: add it to the
- driver-api guide
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-References: <E1hpWim-0008Ff-Q7@www.linuxtv.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Cc:     linux-media@vger.kernel.org
-Message-ID: <19f6ec1c-9ae9-db94-6080-37d751dd5d22@linaro.org>
-Date:   Mon, 22 Jul 2019 16:07:23 +0300
+        Mon, 22 Jul 2019 09:17:39 -0400
+Received: from aptenodytes (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 85055100009;
+        Mon, 22 Jul 2019 13:17:35 +0000 (UTC)
+Date:   Mon, 22 Jul 2019 15:17:34 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@googlegroups.com
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Jonas Karlman <jonas@kwiboo.se>
+Subject: Re: [PATCH v6 0/5] HEVC/H.265 stateless support for V4L2 and Cedrus
+Message-ID: <20190722131734.GD1908@aptenodytes>
+References: <20190614143837.15605-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-In-Reply-To: <E1hpWim-0008Ff-Q7@www.linuxtv.org>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20190614143837.15605-1-paul.kocialkowski@bootlin.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 7/15/19 15:20, Mauro Carvalho Chehab wrote:
-> This is an automatic generated email to let you know that the following patch were queued:
-> 
-> Subject: docs: interconnect.rst: add it to the driver-api guide
-> Author:  Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> Date:    Tue Jun 18 17:15:10 2019 -0300
-> 
-> This is intended for Kernel hackers audience.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> Reviewed-by: Georgi Djakov <georgi.djakov@linaro.org>
-> 
->  Documentation/driver-api/index.rst          |  1 +
->  Documentation/driver-api/interconnect.rst   | 93 ++++++++++++++++++++++++++++
->  Documentation/interconnect/interconnect.rst | 95 -----------------------------
->  MAINTAINERS                                 |  2 +-
->  4 files changed, 95 insertions(+), 96 deletions(-)
+Hi,
 
-Hi Mauro,
+Any feedback on this series? I think it was pretty much ready for merge
+regarding the comments received so far.
 
-Maybe the script that generated this email can be improved a bit, as it does not
-show the renames. So the diffstat here looks a bit different compared with the
-original git commit:
-https://git.linuxtv.org/media_tree.git/commit/?id=9b1f44028ff2e051816517781153e10a2d748dc3
+I could craft a rebased v7, with or without additional changes, if needed.
 
-Thanks,
-Georgi
+What do you think?
+
+Cheers,
+
+Paul
+
+On Fri 14 Jun 19, 16:38, Paul Kocialkowski wrote:
+> This is early support for HEVC/H.265 stateless decoding in V4L2,
+> including both definitions and driver support for the Cedrus VPU
+> driver, which concerns Allwinner devices.
+> 
+> A specific pixel format is introduced for the HEVC slice format and
+> controls are provided to pass the bitstream metadata to the decoder.
+> Some bitstream extensions are intentionally not supported at this point.
+> 
+> Since this is the first proposal for stateless HEVC/H.265 support in
+> V4L2, reviews and comments about the controls definitions are
+> particularly welcome.
+> 
+> On the Cedrus side, the H.265 implementation covers frame pictures
+> with both uni-directional and bi-direction prediction modes (P/B
+> slices). Field pictures (interleaved), scaling lists and 10-bit output
+> are not supported at this point.
+> 
+> This series is based upon the following series:
+> * media: cedrus: Add H264 decoding support
+> 
+> Changes since v5:
+> * Rebased atop latest next media tree;
+> * Moved to flags instead of u8 fields;
+> * Added padding to ensure 64-bit alignment
+>   (tested with GDB on 32 and 64-bit architectures);
+> * Reworked cedrus H.265 driver support a bit for flags;
+> * Split off codec-specific control validation and init;
+> * Added HEVC controls fields cleanup at std_validate to allow reliable
+>   control comparison with memcmp;
+> * Fixed various misc reported mistakes.
+> 
+> Changes since v4:
+> * Rebased atop latest H.254 series.
+> 
+> Changes since v3:
+> * Updated commit messages;
+> * Updated CID base to avoid conflicts;
+> * Used cpu_to_le32 for packed le32 data;
+> * Fixed misc minor issues in the drive code;
+> * Made it clear in the docs that the API will evolve;
+> * Made the pixfmt private and split commits about it.
+> 
+> Changes since v2:
+> * Moved headers to non-public API;
+> * Added H265 capability for A64 and H5;
+> * Moved docs to ext-ctrls-codec.rst;
+> * Mentionned sections of the spec in the docs;
+> * Added padding to control structures for 32-bit alignment;
+> * Made write function use void/size in bytes;
+> * Reduced the number of arguments to helpers when possible;
+> * Removed PHYS_OFFSET since we already set PFN_OFFSET;
+> * Added comments where suggested;
+> * Moved to timestamp for references instead of index;
+> * Fixed some style issues reported by checkpatch.
+> 
+> Changes since v1:
+> * Added a H.265 capability to whitelist relevant platforms;
+> * Switched over to tags instead of buffer indices in the DPB
+> * Declared variable in their reduced scope as suggested;
+> * Added the H.265/HEVC spec to the biblio;
+> * Used in-doc references to the spec and the required APIs;
+> * Removed debugging leftovers.
+> 
+> Cheers!
+> 
+> Paul Kocialkowski (5):
+>   media: v4l2-ctrls: Split off MPEG-2 controls validation
+>   media: v4l2-ctrls: Split off MPEG-2 controls initialization
+>   media: v4l: Add definitions for the HEVC slice controls
+>   media: pixfmt: Document the HEVC slice pixel format
+>   media: cedrus: Add HEVC/H.265 decoding support
+> 
+>  Documentation/media/uapi/v4l/biblio.rst       |   9 +
+>  .../media/uapi/v4l/ext-ctrls-codec.rst        | 474 +++++++++++++-
+>  .../media/uapi/v4l/pixfmt-compressed.rst      |  21 +
+>  .../media/uapi/v4l/vidioc-queryctrl.rst       |  18 +
+>  .../media/videodev2.h.rst.exceptions          |   3 +
+>  drivers/media/v4l2-core/v4l2-ctrls.c          | 231 +++++--
+>  drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
+>  drivers/staging/media/sunxi/cedrus/Makefile   |   2 +-
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   |  31 +-
+>  drivers/staging/media/sunxi/cedrus/cedrus.h   |  18 +
+>  .../staging/media/sunxi/cedrus/cedrus_dec.c   |   9 +
+>  .../staging/media/sunxi/cedrus/cedrus_h265.c  | 616 ++++++++++++++++++
+>  .../staging/media/sunxi/cedrus/cedrus_hw.c    |   4 +
+>  .../staging/media/sunxi/cedrus/cedrus_regs.h  | 271 ++++++++
+>  .../staging/media/sunxi/cedrus/cedrus_video.c |  10 +
+>  include/media/hevc-ctrls.h                    | 197 ++++++
+>  include/media/v4l2-ctrls.h                    |   7 +
+>  17 files changed, 1860 insertions(+), 62 deletions(-)
+>  create mode 100644 drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+>  create mode 100644 include/media/hevc-ctrls.h
+> 
+> -- 
+> 2.21.0
+> 
+
+-- 
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
