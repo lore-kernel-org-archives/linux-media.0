@@ -4,32 +4,33 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C17ABC7618F
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87E9CC7618F
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:29:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9DE04218B8
-	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:29:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6CF5F218B8
+	for <linux-media@archiver.kernel.org>; Mon, 22 Jul 2019 17:29:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726835AbfGVR3e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 22 Jul 2019 13:29:34 -0400
-Received: from sauhun.de ([88.99.104.3]:42128 "EHLO pokefinder.org"
+        id S1731314AbfGVR0H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 22 Jul 2019 13:26:07 -0400
+Received: from sauhun.de ([88.99.104.3]:42124 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731317AbfGVR0I (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 22 Jul 2019 13:26:08 -0400
+        id S1731301AbfGVR0G (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 22 Jul 2019 13:26:06 -0400
 Received: from localhost (p54B33E22.dip0.t-ipconnect.de [84.179.62.34])
-        by pokefinder.org (Postfix) with ESMTPSA id B2BAD4A148F;
-        Mon, 22 Jul 2019 19:26:07 +0200 (CEST)
+        by pokefinder.org (Postfix) with ESMTPSA id E3F034A148F;
+        Mon, 22 Jul 2019 19:26:04 +0200 (CEST)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+        Antti Palosaari <crope@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/8] media: i2c: adv7180: convert to i2c_new_dummy_device
-Date:   Mon, 22 Jul 2019 19:26:00 +0200
-Message-Id: <20190722172604.3572-7-wsa+renesas@sang-engineering.com>
+Subject: [PATCH 1/8] media: dvb-frontends: cxd2820r_core: convert to i2c_new_dummy_device
+Date:   Mon, 22 Jul 2019 19:25:55 +0200
+Message-Id: <20190722172604.3572-2-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
 References: <20190722172604.3572-1-wsa+renesas@sang-engineering.com>
@@ -48,37 +49,26 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 Generated with coccinelle. Build tested by me and buildbot. Not tested on HW.
 
- drivers/media/i2c/adv7180.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/media/dvb-frontends/cxd2820r_core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/adv7180.c b/drivers/media/i2c/adv7180.c
-index 6f3dc8862622..e780969cc2f2 100644
---- a/drivers/media/i2c/adv7180.c
-+++ b/drivers/media/i2c/adv7180.c
-@@ -1329,17 +1329,17 @@ static int adv7180_probe(struct i2c_client *client,
- 	}
- 
- 	if (state->chip_info->flags & ADV7180_FLAG_MIPI_CSI2) {
--		state->csi_client = i2c_new_dummy(client->adapter,
-+		state->csi_client = i2c_new_dummy_device(client->adapter,
- 				ADV7180_DEFAULT_CSI_I2C_ADDR);
--		if (!state->csi_client)
--			return -ENOMEM;
-+		if (IS_ERR(state->csi_client))
-+			return PTR_ERR(state->csi_client);
- 	}
- 
- 	if (state->chip_info->flags & ADV7180_FLAG_I2P) {
--		state->vpp_client = i2c_new_dummy(client->adapter,
-+		state->vpp_client = i2c_new_dummy_device(client->adapter,
- 				ADV7180_DEFAULT_VPP_I2C_ADDR);
--		if (!state->vpp_client) {
--			ret = -ENOMEM;
-+		if (IS_ERR(state->vpp_client)) {
-+			ret = PTR_ERR(state->vpp_client);
- 			goto err_unregister_csi_client;
- 		}
- 	}
+diff --git a/drivers/media/dvb-frontends/cxd2820r_core.c b/drivers/media/dvb-frontends/cxd2820r_core.c
+index 1f006f8e8cc2..5280ba4085e4 100644
+--- a/drivers/media/dvb-frontends/cxd2820r_core.c
++++ b/drivers/media/dvb-frontends/cxd2820r_core.c
+@@ -632,9 +632,9 @@ static int cxd2820r_probe(struct i2c_client *client,
+ 	 * one dummy I2C client in in order to get own I2C client for each
+ 	 * register bank.
+ 	 */
+-	priv->client[1] = i2c_new_dummy(client->adapter, client->addr | (1 << 1));
+-	if (!priv->client[1]) {
+-		ret = -ENODEV;
++	priv->client[1] = i2c_new_dummy_device(client->adapter, client->addr | (1 << 1));
++	if (IS_ERR(priv->client[1])) {
++		ret = PTR_ERR(priv->client[1]);
+ 		dev_err(&client->dev, "I2C registration failed\n");
+ 		if (ret)
+ 			goto err_regmap_0_regmap_exit;
 -- 
 2.20.1
 
