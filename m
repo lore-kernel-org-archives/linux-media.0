@@ -8,57 +8,58 @@ X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00D36C76186
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jul 2019 17:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C72BC76190
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jul 2019 17:59:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CCE622239E
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jul 2019 17:59:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1520821926
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jul 2019 17:59:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ce/6WmN6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h3Kq7We2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391405AbfGWR7s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Jul 2019 13:59:48 -0400
-Received: from mail-yb1-f202.google.com ([209.85.219.202]:35297 "EHLO
-        mail-yb1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391398AbfGWR7q (ORCPT
+        id S2391442AbfGWR75 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Jul 2019 13:59:57 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:48254 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391433AbfGWR74 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Jul 2019 13:59:46 -0400
-Received: by mail-yb1-f202.google.com with SMTP id w6so34010746ybo.2
-        for <linux-media@vger.kernel.org>; Tue, 23 Jul 2019 10:59:46 -0700 (PDT)
+        Tue, 23 Jul 2019 13:59:56 -0400
+Received: by mail-pg1-f202.google.com with SMTP id k20so26438843pgg.15
+        for <linux-media@vger.kernel.org>; Tue, 23 Jul 2019 10:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=HpinGwuxMTqrT/lGIW6pacs7O2cDdG9/5Ty+RZAfASg=;
-        b=ce/6WmN6TyK+cE8ZhsNWx985tcmb8TsBUG67QVHPvfluZ/ESLePB0+Iu2kpzcDEd4Q
-         YbgyS6kgeVvVFCMr/LAOnm0UHsRKQhmlp8Muf9Haj3921fIO1R3W8RTR8Ay/3UNeJg77
-         3oj3IZF7aFzplHspAYys2RygkkcmZ5oyq8CPcTBqzS7rp1MfCHQ9R/Uyt21zik3yW2ex
-         viSYi5ZHeqKSa6InOONOnbkuTpjEw9pZIBEPGTBapLOkb92OQ042RHOMLo5PTXbS7p7j
-         huNarTmfeFDbiHSfiNnedUTa6Tx9rh0fc8dZU+mkH0hxVq24fx81n5unKjL7cIn91yBU
-         G6/Q==
+        bh=jOShWl3tVsknYDB/YoUvrUIV3eQMt6LYV5d/jQUs6fk=;
+        b=h3Kq7We2lcnT64/ZTs7I4tdBthajlqrQq0s3uG0rcdUUGUvc4KeWtl8Lap+IaEU0xC
+         yYJQXzHFT7D2Jqscee4HDCwPCbx8Wu4vGwr8iHjoxORK9KGqLusafVkNZ/vi+rdiyHeG
+         jdIKwPH4OSoAMEvF/wL6dPzkou8jWXYcRntfsmvla/c6SEeJlZfF2ghZPEbGkeY9ptz1
+         cvZXKirYuxY3KSRTfpbbshoiYk3G2vA59VITNzPxXSGn8hhh7sloFpM7Eqe6wa8z0eYK
+         HPQ0vNQ1FWKABTpWUeLw9Zvt3IMDsn825fB13HkZ/3l6+zJgRTNpYSRvvg1VGXgpvW9L
+         /8xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=HpinGwuxMTqrT/lGIW6pacs7O2cDdG9/5Ty+RZAfASg=;
-        b=NsR57aJK/MrhnxS2R4NFmS6M6/UUo8gC4ot1BuzGVmczQUq2egdIFSYhuG7SHHo2jl
-         mHhQXd8BMAbwBhkBbTUCfY56klyXOHsgyk9EDjd4nOt4gYuWLL/EihBsBnaXb2SDmGr7
-         lSIvOwsOJRd8btM/i0x/Z5TFSSW5rdNWg9eL80OdBsQk9j3vy1Mn3vrIOfveTBu+Vozr
-         cW5UJtL2Z9iXyl/ukCx8UYEBXjxF1BcbB62iK15Pt3LtZqftfK8nRBnvkhgvgA2VMlTV
-         /OBVeEHUyMvjRIqOFpYlZQt2Rw1brltB/bS0hI/TFMjyVatiA9OGgy1Gx5fvaVbk9l2d
-         uvOA==
-X-Gm-Message-State: APjAAAX6Q8vEcuDsajaRzD2kg1xrHmLQ6ekNBAun6rErrvxdEzJdTYoS
-        Wq2YP/mu0BWg59ukJJgi5Djm/WR+T5WBzDSE
-X-Google-Smtp-Source: APXvYqzHKD7+vuBXgJcq/Tk4Un/3kb/bP9xO8IxzyxfANBAOcEtBJXWYvzpx9hfbGP7jrgSdMTzC7LW89o7yIBsc
-X-Received: by 2002:a81:7854:: with SMTP id t81mr13003915ywc.2.1563904785456;
- Tue, 23 Jul 2019 10:59:45 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 19:58:49 +0200
+        bh=jOShWl3tVsknYDB/YoUvrUIV3eQMt6LYV5d/jQUs6fk=;
+        b=fG8FLdbg3XDNwbTdzzyCHg09XkMZU6h9lYXxgg2cU0zCsSU4FASv/1nuKC5Cp358N+
+         aIoPEz1XCN84G79pXHbmOEFBA2Qd8rwgWzO6/G65GtahZrfU7f6QKO+/75LZSul2AXM1
+         T0UViMoBJu51Cm/g+2mhfbjJRZLCqRZBUV5+TBZN9C4Fuz7ofryBN+aV4qo+13fLm/IP
+         hB29R7nxE2I4x5fzOlLp/w+ovyARIvSq5MzIw0r9c4NxIXdsUms9AXUCJw+RchGCzeHc
+         4Ua4dC127VVS+03DSAVLXDQt7XfcUVzkGxrWtEo8h2DBHXXTfvB3thX+pVrL9mue9U/H
+         Z/4A==
+X-Gm-Message-State: APjAAAVj5SEhGvPhtxZx9UQ8sN4PlcZOhmhdTCsMqQ1FUnXkeUdKFTbG
+        2bUYRCytARPyK6Lk/tPG/pqo31uZBMNr+Hnb
+X-Google-Smtp-Source: APXvYqxAti31RDws7lqydpjpU2QNSIYIBexpp6X7xTgogP1B1IYuH3vnzKrv44nIChFaGEFwrbMkdTHOIZSmLzhz
+X-Received: by 2002:a65:5a44:: with SMTP id z4mr77715645pgs.41.1563904795339;
+ Tue, 23 Jul 2019 10:59:55 -0700 (PDT)
+Date:   Tue, 23 Jul 2019 19:58:52 +0200
 In-Reply-To: <cover.1563904656.git.andreyknvl@google.com>
-Message-Id: <100436d5f8e4349a78f27b0bbb27e4801fcb946b.1563904656.git.andreyknvl@google.com>
+Message-Id: <c1e6aad230658bc175b42d92daeff2e30050302a.1563904656.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1563904656.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
-Subject: [PATCH v19 12/15] media/v4l2-core: untag user pointers in videobuf_dma_contig_user_get
+Subject: [PATCH v19 15/15] selftests, arm64: add a selftest for passing tagged
+ pointers to kernel
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -95,8 +96,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+        Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -107,58 +107,101 @@ This patch is a part of a series that extends kernel ABI to allow to pass
 tagged user pointers (with the top byte set to something else other than
 0x00) as syscall arguments.
 
-videobuf_dma_contig_user_get() uses provided user pointers for vma
-lookups, which can only by done with untagged pointers.
+This patch adds a simple test, that calls the uname syscall with a
+tagged user pointer as an argument. Without the kernel accepting tagged
+user pointers the test fails with EFAULT.
 
-Untag the pointers in this function.
-
-Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Acked-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/media/v4l2-core/videobuf-dma-contig.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ tools/testing/selftests/arm64/.gitignore      |  1 +
+ tools/testing/selftests/arm64/Makefile        | 11 +++++++
+ .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++
+ tools/testing/selftests/arm64/tags_test.c     | 29 +++++++++++++++++++
+ 4 files changed, 53 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/Makefile
+ create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
+ create mode 100644 tools/testing/selftests/arm64/tags_test.c
 
-diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
-index 76b4ac7b1678..aeb2f497c683 100644
---- a/drivers/media/v4l2-core/videobuf-dma-contig.c
-+++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
-@@ -157,6 +157,7 @@ static void videobuf_dma_contig_user_put(struct videobuf_dma_contig_memory *mem)
- static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
- 					struct videobuf_buffer *vb)
- {
-+	unsigned long untagged_baddr = untagged_addr(vb->baddr);
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
- 	unsigned long prev_pfn, this_pfn;
-@@ -164,22 +165,22 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
- 	unsigned int offset;
- 	int ret;
- 
--	offset = vb->baddr & ~PAGE_MASK;
-+	offset = untagged_baddr & ~PAGE_MASK;
- 	mem->size = PAGE_ALIGN(vb->size + offset);
- 	ret = -EINVAL;
- 
- 	down_read(&mm->mmap_sem);
- 
--	vma = find_vma(mm, vb->baddr);
-+	vma = find_vma(mm, untagged_baddr);
- 	if (!vma)
- 		goto out_up;
- 
--	if ((vb->baddr + mem->size) > vma->vm_end)
-+	if ((untagged_baddr + mem->size) > vma->vm_end)
- 		goto out_up;
- 
- 	pages_done = 0;
- 	prev_pfn = 0; /* kill warning */
--	user_address = vb->baddr;
-+	user_address = untagged_baddr;
- 
- 	while (pages_done < (mem->size >> PAGE_SHIFT)) {
- 		ret = follow_pfn(vma, user_address, &this_pfn);
+diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
+new file mode 100644
+index 000000000000..e8fae8d61ed6
+--- /dev/null
++++ b/tools/testing/selftests/arm64/.gitignore
+@@ -0,0 +1 @@
++tags_test
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+new file mode 100644
+index 000000000000..a61b2e743e99
+--- /dev/null
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0
++
++# ARCH can be overridden by the user for cross compiling
++ARCH ?= $(shell uname -m 2>/dev/null || echo not)
++
++ifneq (,$(filter $(ARCH),aarch64 arm64))
++TEST_GEN_PROGS := tags_test
++TEST_PROGS := run_tags_test.sh
++endif
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/run_tags_test.sh
+new file mode 100755
+index 000000000000..745f11379930
+--- /dev/null
++++ b/tools/testing/selftests/arm64/run_tags_test.sh
+@@ -0,0 +1,12 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++echo "--------------------"
++echo "running tags test"
++echo "--------------------"
++./tags_test
++if [ $? -ne 0 ]; then
++	echo "[FAIL]"
++else
++	echo "[PASS]"
++fi
+diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
+new file mode 100644
+index 000000000000..22a1b266e373
+--- /dev/null
++++ b/tools/testing/selftests/arm64/tags_test.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <stdint.h>
++#include <sys/prctl.h>
++#include <sys/utsname.h>
++
++#define SHIFT_TAG(tag)		((uint64_t)(tag) << 56)
++#define SET_TAG(ptr, tag)	(((uint64_t)(ptr) & ~SHIFT_TAG(0xff)) | \
++					SHIFT_TAG(tag))
++
++int main(void)
++{
++	static int tbi_enabled = 0;
++	struct utsname *ptr, *tagged_ptr;
++	int err;
++
++	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
++		tbi_enabled = 1;
++	ptr = (struct utsname *)malloc(sizeof(*ptr));
++	if (tbi_enabled)
++		tagged_ptr = (struct utsname *)SET_TAG(ptr, 0x42);
++	err = uname(tagged_ptr);
++	free(ptr);
++
++	return err;
++}
 -- 
 2.22.0.709.g102302147b-goog
 
