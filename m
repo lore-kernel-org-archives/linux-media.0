@@ -2,150 +2,93 @@ Return-Path: <SRS0=Vslh=VU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.2 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29A41C7618B
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jul 2019 07:52:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 962A3C7618B
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jul 2019 08:21:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 090A622512
-	for <linux-media@archiver.kernel.org>; Tue, 23 Jul 2019 07:52:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 743D0223A0
+	for <linux-media@archiver.kernel.org>; Tue, 23 Jul 2019 08:21:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388384AbfGWHwH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 23 Jul 2019 03:52:07 -0400
-Received: from mga03.intel.com ([134.134.136.65]:38231 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727170AbfGWHwH (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 23 Jul 2019 03:52:07 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jul 2019 00:41:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,298,1559545200"; 
-   d="scan'208";a="169481701"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Jul 2019 00:41:54 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 981F4206FC; Tue, 23 Jul 2019 10:41:54 +0300 (EEST)
-Date:   Tue, 23 Jul 2019 10:41:54 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     dongchun.zhu@mediatek.com
-Cc:     mchehab@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        --to=drinkcat@chromium.org, tfiga@chromium.org,
-        matthias.bgg@gmail.com, bingbu.cao@intel.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        louis.kuo@mediatek.com, shengnan.wang@mediatek.com
-Subject: Re: [RFC,V2,1/2] media: dt-bindings: media: i2c: Add bindings for
- OV02A10
-Message-ID: <20190723074153.GA4606@paasikivi.fi.intel.com>
-References: <20190704084651.3105-1-dongchun.zhu@mediatek.com>
- <20190704084651.3105-2-dongchun.zhu@mediatek.com>
+        id S1733030AbfGWIVb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 23 Jul 2019 04:21:31 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:45223 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731172AbfGWIVb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 23 Jul 2019 04:21:31 -0400
+Received: from [192.168.2.10] ([46.9.252.75])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id pq33httueLqASpq36hI2wE; Tue, 23 Jul 2019 10:21:30 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH] v4l2-dev/ioctl: require non-zero device_caps, verify sane
+ querycap results
+Message-ID: <1025a223-5625-2776-4524-473590a664eb@xs4all.nl>
+Date:   Tue, 23 Jul 2019 10:21:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190704084651.3105-2-dongchun.zhu@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfHeTBaT2B74qdS7bG+b9odQJB9qlw2Q0cd1ns8tFv0CVRXf2AT6HtoGKlohR/vB98RCThjUjPlRJib/1As9yFmJ4oF7Yj792u3oXAOw4l7qAe7xLhZqv
+ t/a1GriiZsER3QSfc/UpS0rAQQBTNlVfjUgnMvn2PPiyTxolPT8/cyqIzAZMJBqB3hciCyINpdD5Cw==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Dongchun,
+Now that all V4L2 drivers set device_caps in struct video_device, we can add
+a check for this to ensure all future drivers fill this in.
 
-On Thu, Jul 04, 2019 at 04:46:50PM +0800, dongchun.zhu@mediatek.com wrote:
-> From: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> 
-> Add device tree binding documentation for the OV02A10 camera sensor.
-> 
-> Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> ---
->  .../devicetree/bindings/media/i2c/ov02a10.txt      | 43 ++++++++++++++++++++++
->  MAINTAINERS                                        |  7 ++++
->  2 files changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ov02a10.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/media/i2c/ov02a10.txt b/Documentation/devicetree/bindings/media/i2c/ov02a10.txt
-> new file mode 100644
-> index 0000000..d40aa87
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/media/i2c/ov02a10.txt
-> @@ -0,0 +1,43 @@
-> +* Omnivision OV02A10 MIPI CSI-2 sensor
-> +
-> +Required Properties:
-> +- compatible: shall be "ovti,ov02a10"
-> +- clocks: reference to the xvclk input clock
-> +- clock-names: shall be "xvclk"
-> +- avdd-supply: Analog voltage supply, 2.8 volts
-> +- dovdd-supply: Digital I/O voltage supply, 1.8 volts
-> +- dvdd-supply: Digital core voltage supply, 1.8 volts
-> +- reset-gpios: Low active reset gpio
-> +
-> +The device node shall contain one 'port' child node with an
-> +'endpoint' subnode for its digital output video port,
-> +in accordance with the video interface bindings defined in
-> +Documentation/devicetree/bindings/media/video-interfaces.txt.
-> +The endpoint optional property 'data-lanes' shall be "<1>".
+Also verify that when the querycap ioctl is called the driver didn't mess
+with the device_caps value and that capabilities is a superset of device_caps.
 
-How many lanes does the module (or the sensor) have?
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index cbb74f748555..3af72e3bbd65 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -859,6 +859,9 @@ int __video_register_device(struct video_device *vdev,
+ 	/* the v4l2_dev pointer MUST be present */
+ 	if (WARN_ON(!vdev->v4l2_dev))
+ 		return -EINVAL;
++	/* the device_caps field MUST be set */
++	if (WARN_ON(!vdev->device_caps))
++		return -EINVAL;
 
-> +
-> +Example:
-> +&i2c4 {
-> +	ov02a10: camera-sensor@3d {
-> +		compatible = "ovti,ov02a10";
-> +		reg = <0x3d>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&camera_pins_cam1_mclk_on>;
-> +
-> +		clocks = <&topckgen CLK_TOP_MUX_CAMTG2>,
-> +			<&topckgen CLK_TOP_UNIVP_192M_D8>;
-> +		clock-names = "xvclk", "freq_mux";
-> +
-> +		avdd-supply = <&mt6358_vcama1_reg>;
-> +		dvdd-supply = <&mt6358_vcn18_reg>;
-> +		dovdd-supply = <&mt6358_vcamio_reg>;
-> +		pwdn-gpios = <&pio 107 1>;
-> +		reset-gpios = <&pio 109 1>;
-> +
-> +		port {
-> +		   ov02a10_core: endpoint {
-> +		       remote-endpoint = <&ov02a10_0>;
+ 	/* v4l2_fh support */
+ 	spin_lock_init(&vdev->fh_lock);
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index e36629ae2203..61846c355627 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1057,14 +1057,18 @@ static int v4l_querycap(const struct v4l2_ioctl_ops *ops,
 
-Indentation is still wrong. :-(
+ 	ret = ops->vidioc_querycap(file, fh, cap);
 
-> +			   data-lanes = <1>;
-> +			};
-> +		};
-> +	};
-> +};
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5cfbea4..62b81ff 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11571,6 +11571,13 @@ T:	git git://linuxtv.org/media_tree.git
->  S:	Maintained
->  F:	drivers/media/i2c/ov13858.c
->  
-> +OMNIVISION OV02A10 SENSOR DRIVER
-> +M:	Dongchun Zhu <dongchun.zhu@mediatek.com>
-> +L:	linux-media@vger.kernel.org
-> +T:	git git://linuxtv.org/media_tree.git
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/media/i2c/ov02a10.txt
-> +
->  OMNIVISION OV2680 SENSOR DRIVER
->  M:	Rui Miguel Silva <rmfrfs@gmail.com>
->  L:	linux-media@vger.kernel.org
+-	cap->capabilities |= V4L2_CAP_EXT_PIX_FORMAT;
+ 	/*
+-	 * Drivers MUST fill in device_caps, so check for this and
+-	 * warn if it was forgotten.
++	 * Drivers must not change device_caps, so check for this and
++	 * warn if this happened.
++	 */
++	WARN_ON(cap->device_caps != vfd->device_caps);
++	/*
++	 * Check that capabilities is a superset of
++	 * vfd->device_caps | V4L2_CAP_DEVICE_CAPS
+ 	 */
+-	WARN(!(cap->capabilities & V4L2_CAP_DEVICE_CAPS) ||
+-		!cap->device_caps, "Bad caps for driver %s, %x %x",
+-		cap->driver, cap->capabilities, cap->device_caps);
++	WARN_ON((cap->capabilities & (vfd->device_caps | V4L2_CAP_DEVICE_CAPS)) !=
++	        (vfd->device_caps | V4L2_CAP_DEVICE_CAPS));
++	cap->capabilities |= V4L2_CAP_EXT_PIX_FORMAT;
+ 	cap->device_caps |= V4L2_CAP_EXT_PIX_FORMAT;
 
--- 
-Kind regards,
-
-Sakari Ailus
-sakari.ailus@linux.intel.com
+ 	return ret;
