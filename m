@@ -4,24 +4,24 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17D81C7618B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BFDEC76191
 	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 11:05:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED953229FA
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 11:05:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7432E229ED
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 11:05:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727391AbfGXLFe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Jul 2019 07:05:34 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:58897 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727384AbfGXLFd (ORCPT
+        id S1727395AbfGXLFf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Jul 2019 07:05:35 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:38053 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726981AbfGXLFd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 24 Jul 2019 07:05:33 -0400
 Received: from tschai.fritz.box ([46.9.232.237])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id qF5Hh3g5kLqASqF5PhNE1d; Wed, 24 Jul 2019 13:05:32 +0200
+        id qF5Hh3g5kLqASqF5PhNE12; Wed, 24 Jul 2019 13:05:31 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
@@ -36,114 +36,53 @@ Cc:     Maxime Jourdan <mjourdan@baylibre.com>,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 05/14] media: venus: vdec: flag OUTPUT formats with V4L2_FMT_FLAG_DYN_RESOLUTION
-Date:   Wed, 24 Jul 2019 13:05:14 +0200
-Message-Id: <20190724110523.29248-6-hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 04/14] videodev2.h.rst.exceptions: tymecode -> timecode
+Date:   Wed, 24 Jul 2019 13:05:13 +0200
+Message-Id: <20190724110523.29248-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190724110523.29248-1-hverkuil-cisco@xs4all.nl>
 References: <20190724110523.29248-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfMSf2wi/tLWAmyGQbqJEWh5+CNk3LG2ra76h3lUlnAPi8B4gotiYKVSLShy9Bl6l1/mq73ju6ftt2MlWk4NasrQp9ww1T8eZkZ1rU8m9z+LpwXBFVQxT
- Yb2n7a+115bDdBn77i5dzVetXJPM8Qzk8Rsda2XSInh8VPklMZw5rTukdyciThQFDxb4gKK5chqPGqQ6Fi//wn+c9Q+MUqANVrW7/k3mZzAsN5fFWUOh+HBf
- bcDQ9LB47QjvsA+nc+JBrlfrHmmIR3DTNrrJKXk2OLIHOdfn/9Ax6clhfi1ZLXSd0uZeRob57h2QLbgLz1VxMEI+gI5KeZ1WrY6XMXP/E1BS0koI1V5nyO40
- vf/ChgaRVDH0hUh1zT1rJVXFpI7En2hZiYqMkRqBDbvkUumana8LlM8KfmijD1AhEJCPLlB8vRxnudBHIr66Wuc91aEAzGwU00/SejrTAPuXtdTNnHDHEaZz
- 9VeS0qnVzVShLOYpPZXnRYzwGA7hia0s30QGgVWxyuHU51n3flLaHi9E3hH1FP3paADfEeYui9jaVMTzv/jZkbu+4y0RK9+341tLpIgCQ0l6M1IuVMfF+EVW
- OyBlkAuIfZwx6i9weA41XMG5b0QBbtkdycsCtmOXHFmjBg==
+X-CMAE-Envelope: MS4wfDWNqzozb7735fkXzFIeUf2gXRZ4mwIu3+HpjdRxnIgHHeTN7TK+uGlzxWe2baeL5wNlQJey/1HLsJb9hMfd4iCtiUehuy5btcaLmdzmRld/R1CMLCtX
+ ElomWhoZ7YtP3NJODJpVAXSo/0QqtAGsH+i8wH+3XMQ7aig+GE4+LM6dR8tCX+Q7k9a4xVNAXhHS92eqnu+Gx5tp/2XEd7yzpnc+OV4nXJZT2cJ43JU28CeX
+ IFM2sHN1wbfuiIK3szk/JlX16pmsgXEVVCdSnMgtOM9DR6mjx7wFTkr5kmLPc7W5SJcpCRrQ7rHiSRMEJyju55vR1cZruWYYJB+HB7z8tOEzj2bq8vKlffnR
+ 0k63f34YzhWHVtKMtsFJ1ctCEKBfvG+083N+ukwXnU8X4VtLofw543fytta0LzJgDQV83lahHP8nogjPkm2Vfk2vFHLA1WP9g6G+8nGyjV91W4yPioY14fEV
+ BA3C65zptOaLYxo6//5diW4K/8hNpLJpjOcS++gz8CI8K3E9z1xQyI+3B1z7RaoLF0KG7gMTcuj+ZVKaEN5cwpg8ROBzZt+eMdwRU30wm7ZLVdmZjyI1lPbM
+ 5RaaLuxTfOzQgR9kjTG+nzoFmGMhPtMRM0hU1h/WGdGeUA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Maxime Jourdan <mjourdan@baylibre.com>
+Fix typo.
 
-Tag all the coded formats where the venus vdec supports dynamic
-resolution switching.
-
-Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/platform/qcom/venus/core.h |  1 +
- drivers/media/platform/qcom/venus/vdec.c | 11 +++++++++++
- 2 files changed, 12 insertions(+)
+ Documentation/media/videodev2.h.rst.exceptions | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 9ab95fd57760..6c243309df4b 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -46,6 +46,7 @@ struct venus_format {
- 	u32 pixfmt;
- 	unsigned int num_planes;
- 	u32 type;
-+	u32 flags;
- };
+diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentation/media/videodev2.h.rst.exceptions
+index 0a9a1b386443..b6cb9fa6c8a8 100644
+--- a/Documentation/media/videodev2.h.rst.exceptions
++++ b/Documentation/media/videodev2.h.rst.exceptions
+@@ -183,14 +183,14 @@ replace define V4L2_FMT_FLAG_EMULATED fmtdesc-flags
+ replace define V4L2_FMT_FLAG_HAS_BITSTREAM_PARSER fmtdesc-flags
+ replace define V4L2_FMT_FLAG_DYN_RESOLUTION fmtdesc-flags
  
- #define MAX_PLANES		4
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index e1f998656c07..380e8d1682e2 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -37,42 +37,52 @@ static const struct venus_format vdec_formats[] = {
- 		.pixfmt = V4L2_PIX_FMT_MPEG4,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_MPEG2,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_H263,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_H264,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_VP8,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_VP9,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_XVID,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	}, {
- 		.pixfmt = V4L2_PIX_FMT_HEVC,
- 		.num_planes = 1,
- 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
-+		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
- 	},
- };
+-# V4L2 tymecode types
++# V4L2 timecode types
+ replace define V4L2_TC_TYPE_24FPS timecode-type
+ replace define V4L2_TC_TYPE_25FPS timecode-type
+ replace define V4L2_TC_TYPE_30FPS timecode-type
+ replace define V4L2_TC_TYPE_50FPS timecode-type
+ replace define V4L2_TC_TYPE_60FPS timecode-type
  
-@@ -351,6 +361,7 @@ static int vdec_enum_fmt(struct file *file, void *fh, struct v4l2_fmtdesc *f)
- 		return -EINVAL;
- 
- 	f->pixelformat = fmt->pixfmt;
-+	f->flags = fmt->flags;
- 
- 	return 0;
- }
+-# V4L2 tymecode flags
++# V4L2 timecode flags
+ replace define V4L2_TC_FLAG_DROPFRAME timecode-flags
+ replace define V4L2_TC_FLAG_COLORFRAME timecode-flags
+ replace define V4L2_TC_USERBITS_field timecode-flags
 -- 
 2.20.1
 
