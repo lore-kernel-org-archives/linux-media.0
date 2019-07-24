@@ -2,99 +2,79 @@ Return-Path: <SRS0=s/rb=VV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A9C4C76186
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 16:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 403AAC76186
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 17:09:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FB0F2189F
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 16:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1563986982;
-	bh=577mpoW4jZW4JftDIs+27Px1t5iplmAV34sLMO6Y2nI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=J12dUPAsMpTtlg9nKCKWnn8cLB/jA4Ul9FNVVQOQVsSpmScTOgz53ZwWk/fynmGvx
-	 zJRAzaurJG7t/cv4H0Hv4O4Wc4b9S8/qGVV+qkdgdAsS1pf+TyhWHBeLr/aZy3iDiz
-	 jBF1z4mktlHems6swqLDkXL9Iy5XWIA2t/oXGVqs=
+	by mail.kernel.org (Postfix) with ESMTP id 21A6F21873
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 17:09:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387714AbfGXQtl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Jul 2019 12:49:41 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:37744 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387618AbfGXQtl (ORCPT
+        id S1727506AbfGXRJt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Jul 2019 13:09:49 -0400
+Received: from smtprelay0228.hostedemail.com ([216.40.44.228]:44087 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726031AbfGXRJt (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Jul 2019 12:49:41 -0400
-Received: by mail-io1-f66.google.com with SMTP id q22so91003354iog.4;
-        Wed, 24 Jul 2019 09:49:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lzLxr/ZHFALs7HXjKuWkfuLA5VhCZtI1OXBLZOHTWp8=;
-        b=lXPQIo7VDuTijjGWIXFk94xGmnz3m2bjtYUjX0sWcb+LVYkt3mbBTfHIRnlYtn2MiJ
-         0Nn0mHMGHjYWe9YeODPqOM9hGaa4l1FK/Yli8VOTKiKygdKnO7rhuBT38MH0IbHq4xnj
-         x9bzJMMwXT2nbbkecjpVdsgx+OzR83lNzk8GESKCXOV9/WQrFtVsErcxariFY16zUW05
-         0PPqxJqmlpL+f/QOD3RI0O3giiIzsN03TmJpKg6+zMHwzHZabIk2CElv3cFpqT/YerKY
-         zraYkmyUUR8a2QspEkPZMboHrr2nXZ7bj/yqH96dYVaJcof1CrkGUK1oY8XWrZ201ziP
-         9o3w==
-X-Gm-Message-State: APjAAAXRkMjRwJl7lmzGDkZvR3VgJ7V7w/pfTDLaECTQXBCAd+owKDWQ
-        1WJSM66RwZKzXVKYPuKz1g==
-X-Google-Smtp-Source: APXvYqycVXE/3Diq36JRVdilGAeFPoocp/x5uykh8vdo3CPw1BlwOUJzQuvKMNLrDaaaN0Mc+FiZ+Q==
-X-Received: by 2002:a5e:c70c:: with SMTP id f12mr1401889iop.293.1563986979919;
-        Wed, 24 Jul 2019 09:49:39 -0700 (PDT)
-Received: from localhost ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id j23sm37899229ioo.6.2019.07.24.09.49.38
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 24 Jul 2019 09:49:39 -0700 (PDT)
-Date:   Wed, 24 Jul 2019 10:49:38 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     frederic.chen@mediatek.com
-Cc:     hans.verkuil@cisco.com, laurent.pinchart+renesas@ideasonboard.com,
-        tfiga@chromium.org, matthias.bgg@gmail.com, mchehab@kernel.org,
-        yuzhao@chromium.org, zwisler@chromium.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, Sean.Cheng@mediatek.com,
-        sj.huang@mediatek.com, christie.yu@mediatek.com,
-        holmes.chiou@mediatek.com, frederic.chen@mediatek.com,
-        Jerry-ch.Chen@mediatek.com, jungo.lin@mediatek.com,
-        Rynn.Wu@mediatek.com, linux-media@vger.kernel.org,
-        srv_heupstream@mediatek.com, devicetree@vger.kernel.org,
-        shik@chromium.org, suleiman@chromium.org, Allan.Yang@mediatek.com
-Subject: Re: [RFC PATCH V2 1/6] dt-bindings: mt8183: Added DIP dt-bindings
-Message-ID: <20190724164938.GA25542@bogus>
-References: <20190708110500.7242-1-frederic.chen@mediatek.com>
- <20190708110500.7242-2-frederic.chen@mediatek.com>
+        Wed, 24 Jul 2019 13:09:49 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 96310182251B2;
+        Wed, 24 Jul 2019 17:09:47 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: stop29_1b0e5232f4617
+X-Filterd-Recvd-Size: 2157
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf16.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 24 Jul 2019 17:09:45 +0000 (UTC)
+Message-ID: <be536d37a3b58557cdacd33943915d397bcb5037.camel@perches.com>
+Subject: Re: [PATCH 11/12] staging: media: cedrus: Fix misuse of GENMASK
+ macro
+From:   Joe Perches <joe@perches.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Wed, 24 Jul 2019 10:09:44 -0700
+In-Reply-To: <cd543a5f26b031a0bbd3baa55e1f15813f59f107.1562734889.git.joe@perches.com>
+References: <cover.1562734889.git.joe@perches.com>
+         <cd543a5f26b031a0bbd3baa55e1f15813f59f107.1562734889.git.joe@perches.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190708110500.7242-2-frederic.chen@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 8 Jul 2019 19:04:55 +0800, <frederic.chen@mediatek.com> wrote:
-> From: Frederic Chen <frederic.chen@mediatek.com>
+On Tue, 2019-07-09 at 22:04 -0700, Joe Perches wrote:
+> Arguments are supposed to be ordered high then low.
 > 
-> This patch adds DT binding documentation for the Digital Image
-> Processing (DIP) unit of camera ISP system on Mediatek's SoCs.
-> 
-> It depends on the SCP and MDP 3 patch as following:
-> 
-> 1. dt-bindings: Add a binding for Mediatek SCP
->    https://patchwork.kernel.org/patch/11027247/
-> 2. dt-binding: mt8183: Add Mediatek MDP3 dt-bindings
->    https://patchwork.kernel.org/patch/10945603/
-> 
-> Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
+> Signed-off-by: Joe Perches <joe@perches.com>
 > ---
->  .../bindings/media/mediatek,mt8183-dip.txt    | 40 +++++++++++++++++++
->  1 file changed, 40 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8183-dip.txt
+>  drivers/staging/media/sunxi/cedrus/cedrus_regs.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+> index 3e9931416e45..ddd29788d685 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+> @@ -110,7 +110,7 @@
+>  #define VE_DEC_MPEG_MBADDR			(VE_ENGINE_DEC_MPEG + 0x10)
+>  
+>  #define VE_DEC_MPEG_MBADDR_X(w)			(((w) << 8) & GENMASK(15, 8))
+> -#define VE_DEC_MPEG_MBADDR_Y(h)			(((h) << 0) & GENMASK(0, 7))
+> +#define VE_DEC_MPEG_MBADDR_Y(h)			(((h) << 0) & GENMASK(7, 0))
+>  
+>  #define VE_DEC_MPEG_CTRL			(VE_ENGINE_DEC_MPEG + 0x14)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Greg?  ping?
+ 
+
