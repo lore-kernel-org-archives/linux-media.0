@@ -2,156 +2,109 @@ Return-Path: <SRS0=s/rb=VV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CDD59C7618F
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 11:27:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAADC761A8
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 11:27:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B0CEB2190F
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 11:27:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4DDF32190F
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 11:27:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727569AbfGXL1W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727570AbfGXL1W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 24 Jul 2019 07:27:22 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:33201 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726300AbfGXL1V (ORCPT
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:44657 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727560AbfGXL1V (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Wed, 24 Jul 2019 07:27:21 -0400
 Received: from tschai.fritz.box ([46.9.232.237])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id qFQSh3s6JLqASqFQVhNKzA; Wed, 24 Jul 2019 13:27:19 +0200
+        id qFQSh3s6JLqASqFQVhNKzF; Wed, 24 Jul 2019 13:27:20 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 00/14] Stateful/stateless codec core support (resend)
-Date:   Wed, 24 Jul 2019 13:27:02 +0200
-Message-Id: <20190724112716.30288-1-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 02/14] videodev2.h: add V4L2_FMT_FLAG_HAS_BITSTREAM_PARSER
+Date:   Wed, 24 Jul 2019 13:27:04 +0200
+Message-Id: <20190724112716.30288-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190724112716.30288-1-hverkuil-cisco@xs4all.nl>
+References: <20190724112716.30288-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfDQrmu0wN0i89gUYIxlcH+2uzmvQrLzJ406BxzG2GisP/f+GtoM+UfN1PNKKIum/qZ4z/k9WPoYlLQ6KQ3Ss+ATINCqYL4PFKcSKLGj/Dqn0h49MdJIY
- qthESU5LXlxr0stabaOmbpw8H4FjnR5eQ/fDEIGj7abN3QiM3SD+rVu19nYR84jCgbEgokyz/aybCQ==
+X-CMAE-Envelope: MS4wfBjt76FtKGUO5uZBVzNSx6GHPXxJpZJiO5jFVmbhI66AAsd3bjuB3m7yyUSlyuNY3mWquAscXT8o65IPb9S8p9cYKRxN16rMvB5hbSu9bPgI7YAkcDWO
+ iRRmo6OmXVTNBtKaM52Aif03/fH0YUWxcxl4WIVEjmHeB522/v3FYOlsdoErC+lGLq9qAMxF+DIF8v0+0DxrzMOPTrRExD7SSI0GyxL9tHg9l/2Kd82BtJ4I
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-(There were too many recipients for my provider, so resending
-again without the zillion CCs, and in batches of 5 patches. Stupid
-spammer detection...)
+Add an enum_fmt format flag to specifically tag coded formats where
+full bitstream parsing is supported by the device.
 
-This series consolidates various patches/patch series that add
-features or document memory-to-memory video codec interfaces.
+Some stateful decoders are capable of fully parsing a bitstream,
+but others require that userspace pre-parses the bitstream into
+frames or fields (see the corresponding pixelformat descriptions
+for details).
 
-This includes patches adding V4L2_FMT_FLAG_DYN_RESOLUTION,
-new code adding V4L2_FMT_FLAG_HAS_BITSTREAM_PARSER, new code
-adding V4L2_DEC_CMD_FLUSH, patches adding V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF
-(now with documentation) and patches documenting the stateful
-encoder/decoder and stateless decoder.
+If this flag is set, then this pre-parsing step is not required
+(but still possible, of course).
 
-The stateful encoder documentation is still RFC quality (there are
-open TODOs, see https://patchwork.kernel.org/cover/10972783/).
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ Documentation/media/uapi/v4l/vidioc-enum-fmt.rst | 8 ++++++++
+ Documentation/media/videodev2.h.rst.exceptions   | 1 +
+ include/uapi/linux/videodev2.h                   | 5 +++--
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-The stateless decoder documentation is the same as the v5 posted
-by Alexandre, but with my comments incorporated.
-
-Also added are updated pixelformat descriptions. Please review this!
-I didn't update the MPEG4 format since I'm not sure what to put there.
-
-If anyone has access to recent codec standards, then I would really
-like to have the right references to 'MPEG Picture' and 'Access Unit'.
-It would be good to just refer to the definition of what a Picture
-or Access Unit is in the right standards.
-
-Changes for the stateful decoder documentation since v4:
-
-- In the Decoding section change "multiple ``OUTPUT`` buffers generate
-  one ``CAPTURE`` buffer: timestamp of the ``OUTPUT`` buffer queued last
-  will be copied." to "queued first" since this corresponds to
-  existing implementations.
-
-- Document that width and height are required fields in step 4 of the
-  Capture Setup.
-
-- Mention the new ENUM_FMT flags.
-
-Changes for the stateless decoder documentation since v5:
-
-- Document that width and height are required fields in step 4 of the
-  Capture Setup.
-
-- Mention the new V4L2_DEC_CMD_FLUSH command to flush the last held
-  capture buffer. This replaces the 'queue an empty buffer' solution.
-
-In my view this series is ready to go in, except for the last patch
-(stateful encoder).
-
-Maxime, I didn't add the proposed V4L2_FMT_FLAG_MANUAL_RESOLUTION
-flag since I think that can go in separately. I also am not 100%
-happy with that name, although I can't think of a better one.
-
-Regards,
-
-	Hans
-
-Alexandre Courbot (1):
-  media: docs-rst: Document m2m stateless video decoder interface
-
-Hans Verkuil (6):
-  v4l2-ioctl.c: OR flags in v4l_fill_fmtdesc(), not don't overwrite
-  videodev2.h: add V4L2_FMT_FLAG_HAS_BITSTREAM_PARSER
-  videodev2.h.rst.exceptions: tymecode -> timecode
-  vb2: add V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF
-  videodev2.h: add V4L2_DEC_CMD_FLUSH
-  pixfmt-compressed.rst: improve H264/HEVC/MPEG1+2/VP8+9 documentation
-
-Maxime Jourdan (5):
-  videodev2.h: add V4L2_FMT_FLAG_DYN_RESOLUTION
-  media: venus: vdec: flag OUTPUT formats with
-    V4L2_FMT_FLAG_DYN_RESOLUTION
-  media: s5p_mfc_dec: set flags for OUTPUT coded formats
-  media: mtk-vcodec: flag OUTPUT formats with
-    V4L2_FMT_FLAG_DYN_RESOLUTION
-  media: vicodec: set flags for vdec/stateful OUTPUT coded formats
-
-Tomasz Figa (2):
-  media: docs-rst: Document memory-to-memory video decoder interface
-  media: docs-rst: Document memory-to-memory video encoder interface
-
- Documentation/media/uapi/v4l/buffer.rst       |   13 +
- Documentation/media/uapi/v4l/dev-decoder.rst  | 1101 +++++++++++++++++
- Documentation/media/uapi/v4l/dev-encoder.rst  |  608 +++++++++
- Documentation/media/uapi/v4l/dev-mem2mem.rst  |   10 +-
- .../media/uapi/v4l/dev-stateless-decoder.rst  |  424 +++++++
- .../media/uapi/v4l/pixfmt-compressed.rst      |   36 +-
- Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |   10 +
- Documentation/media/uapi/v4l/v4l2.rst         |   12 +-
- .../media/uapi/v4l/vidioc-decoder-cmd.rst     |   52 +-
- .../media/uapi/v4l/vidioc-dqevent.rst         |   11 +-
- .../media/uapi/v4l/vidioc-encoder-cmd.rst     |   51 +-
- .../media/uapi/v4l/vidioc-enum-fmt.rst        |   16 +
- .../media/uapi/v4l/vidioc-reqbufs.rst         |    6 +
- .../media/videodev2.h.rst.exceptions          |    7 +-
- .../media/common/videobuf2/videobuf2-v4l2.c   |    8 +-
- .../platform/mtk-vcodec/mtk_vcodec_dec.c      |    4 +
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |    1 +
- drivers/media/platform/qcom/venus/core.h      |    1 +
- drivers/media/platform/qcom/venus/vdec.c      |   11 +
- .../media/platform/s5p-mfc/s5p_mfc_common.h   |    1 +
- drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  |   18 +
- drivers/media/platform/vicodec/vicodec-core.c |    3 +
- drivers/media/v4l2-core/v4l2-ioctl.c          |    2 +-
- include/media/v4l2-mem2mem.h                  |   42 +
- include/media/videobuf2-core.h                |    3 +
- include/media/videobuf2-v4l2.h                |    5 +
- include/uapi/linux/videodev2.h                |   20 +-
- 27 files changed, 2419 insertions(+), 57 deletions(-)
- create mode 100644 Documentation/media/uapi/v4l/dev-decoder.rst
- create mode 100644 Documentation/media/uapi/v4l/dev-encoder.rst
- create mode 100644 Documentation/media/uapi/v4l/dev-stateless-decoder.rst
-
+diff --git a/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst b/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
+index 822d6730e7d2..4e24e671f32e 100644
+--- a/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
++++ b/Documentation/media/uapi/v4l/vidioc-enum-fmt.rst
+@@ -127,6 +127,14 @@ one until ``EINVAL`` is returned.
+       - This format is not native to the device but emulated through
+ 	software (usually libv4l2), where possible try to use a native
+ 	format instead for better performance.
++    * - ``V4L2_FMT_FLAG_HAS_BITSTREAM_PARSER``
++      - 0x0004
++      - The hardware decoder for this compressed bitstream format (aka coded
++	format) is capable of parsing the bitstream. Applications do not
++	need to parse the bitstream themselves to find the boundaries between
++	frames/fields. This flag can only be used in combination with the
++	``V4L2_FMT_FLAG_COMPRESSED`` flag, since this applies to compressed
++	formats only.
+ 
+ 
+ Return Value
+diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentation/media/videodev2.h.rst.exceptions
+index 55cbe324b9fc..74fb9f00c12d 100644
+--- a/Documentation/media/videodev2.h.rst.exceptions
++++ b/Documentation/media/videodev2.h.rst.exceptions
+@@ -180,6 +180,7 @@ replace define V4L2_PIX_FMT_FLAG_PREMUL_ALPHA reserved-formats
+ # V4L2 format flags
+ replace define V4L2_FMT_FLAG_COMPRESSED fmtdesc-flags
+ replace define V4L2_FMT_FLAG_EMULATED fmtdesc-flags
++replace define V4L2_FMT_FLAG_HAS_BITSTREAM_PARSER fmtdesc-flags
+ 
+ # V4L2 tymecode types
+ replace define V4L2_TC_TYPE_24FPS timecode-type
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index 2427bc4d8eba..8c5a28666b16 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -774,8 +774,9 @@ struct v4l2_fmtdesc {
+ 	__u32		    reserved[4];
+ };
+ 
+-#define V4L2_FMT_FLAG_COMPRESSED 0x0001
+-#define V4L2_FMT_FLAG_EMULATED   0x0002
++#define V4L2_FMT_FLAG_COMPRESSED		0x0001
++#define V4L2_FMT_FLAG_EMULATED			0x0002
++#define V4L2_FMT_FLAG_HAS_BITSTREAM_PARSER	0x0004
+ 
+ 	/* Frame Size and frame rate enumeration */
+ /*
 -- 
 2.20.1
 
