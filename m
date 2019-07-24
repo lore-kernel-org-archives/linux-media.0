@@ -2,148 +2,95 @@ Return-Path: <SRS0=s/rb=VV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C5EAC76186
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 17:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BB26C76186
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 18:35:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 554B322387
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 17:26:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63E492173B
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 18:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1563993330;
+	bh=ivb462RCAqYcM+CEIUHWvMX1gixFhHbVEh8bvKnsZwU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=tWj7SoEMjVAloirE1ABnWGddKcqLcg1Y3hrWcCWZ2dgxEz4Lm/O/Qx+5Z7p+3gDAv
+	 J/+6HkJAYrCUncUGAVbZqZFiTQJmHEbrXxYt+3DNNJBBXMwUaDgHQ05DE2fq8rvLn4
+	 BA4CE40OqPqWEQ0Dar11OXgv+5uSbAIkd0Kszp8I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbfGXRZx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Jul 2019 13:25:53 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34662 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726766AbfGXRZw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Jul 2019 13:25:52 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 2DB4028B60E
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>
-Cc:     kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
+        id S1728469AbfGXSf0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Jul 2019 14:35:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38094 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727756AbfGXSfZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 24 Jul 2019 14:35:25 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5BFC52173B;
+        Wed, 24 Jul 2019 18:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563993324;
+        bh=ivb462RCAqYcM+CEIUHWvMX1gixFhHbVEh8bvKnsZwU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vIJlFl/rmULIZQ5m5/dSx1f/4odnY2xiY17sxmMLAHbTLAg2CGU+fMtaFFEyrOt32
+         UXy/p7nETqJzvO43jL3MLOqhKsf5ytuU9JIwHFLuKXRr4hoNEqA0YbLqbjGbYXc+vL
+         c4ETvXEVDDkfJhV7iLt5wmejWcKdtkZiWHNOt3ko=
+Date:   Wed, 24 Jul 2019 20:35:22 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH 6/7] media: hantro: Move VP8 common code
-Date:   Wed, 24 Jul 2019 14:17:01 -0300
-Message-Id: <20190724171702.9449-7-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190724171702.9449-1-ezequiel@collabora.com>
-References: <20190724171702.9449-1-ezequiel@collabora.com>
+        Chen-Yu Tsai <wens@csie.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/12] staging: media: cedrus: Fix misuse of GENMASK macro
+Message-ID: <20190724183522.GA30299@kroah.com>
+References: <cover.1562734889.git.joe@perches.com>
+ <cd543a5f26b031a0bbd3baa55e1f15813f59f107.1562734889.git.joe@perches.com>
+ <be536d37a3b58557cdacd33943915d397bcb5037.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be536d37a3b58557cdacd33943915d397bcb5037.camel@perches.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to introduce support for RK3399 VP8 decoding,
-move some common VP8 code. This will be reused by
-the RK3399 implementation, reducing code duplication.
+On Wed, Jul 24, 2019 at 10:09:44AM -0700, Joe Perches wrote:
+> On Tue, 2019-07-09 at 22:04 -0700, Joe Perches wrote:
+> > Arguments are supposed to be ordered high then low.
+> > 
+> > Signed-off-by: Joe Perches <joe@perches.com>
+> > ---
+> >  drivers/staging/media/sunxi/cedrus/cedrus_regs.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+> > index 3e9931416e45..ddd29788d685 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+> > @@ -110,7 +110,7 @@
+> >  #define VE_DEC_MPEG_MBADDR			(VE_ENGINE_DEC_MPEG + 0x10)
+> >  
+> >  #define VE_DEC_MPEG_MBADDR_X(w)			(((w) << 8) & GENMASK(15, 8))
+> > -#define VE_DEC_MPEG_MBADDR_Y(h)			(((h) << 0) & GENMASK(0, 7))
+> > +#define VE_DEC_MPEG_MBADDR_Y(h)			(((h) << 0) & GENMASK(7, 0))
+> >  
+> >  #define VE_DEC_MPEG_CTRL			(VE_ENGINE_DEC_MPEG + 0x14)
+> 
+> Greg?  ping?
+>  
+> 
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
- .../staging/media/hantro/hantro_g1_vp8_dec.c    | 17 -----------------
- drivers/staging/media/hantro/hantro_hw.h        |  4 ++++
- drivers/staging/media/hantro/hantro_vp8.c       | 15 +++++++++++++++
- 3 files changed, 19 insertions(+), 17 deletions(-)
+I am not the maintainer of drivers/staging/media, that is Mauro.
 
-diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-index 21b132b2ed04..831223d43ee3 100644
---- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-@@ -16,8 +16,6 @@
- #include "hantro.h"
- #include "hantro_g1_regs.h"
- 
--#define DEC_8190_ALIGN_MASK	0x07U
--
- /* DCT partition base address regs */
- static const struct hantro_reg vp8_dec_dct_base[8] = {
- 	{ G1_REG_ADDR_STR, 0, 0xffffffff },
-@@ -131,21 +129,6 @@ static const struct hantro_reg vp8_dec_pred_bc_tap[8][4] = {
- 	},
- };
- 
--/*
-- * filter taps taken to 7-bit precision,
-- * reference RFC6386#Page-16, filters[8][6]
-- */
--static const u32 vp8_dec_mc_filter[8][6] = {
--	{ 0, 0, 128, 0, 0, 0 },
--	{ 0, -6, 123, 12, -1, 0 },
--	{ 2, -11, 108, 36, -8, 1 },
--	{ 0, -9, 93, 50, -6, 0 },
--	{ 3, -16, 77, 77, -16, 3 },
--	{ 0, -6, 50, 93, -9, 0 },
--	{ 1, -8, 36, 108, -11, 2 },
--	{ 0, -1, 12, 123, -6, 0 }
--};
--
- /*
-  * Set loop filters
-  */
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 34ef24e3a9ef..185e27d47e47 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -15,6 +15,8 @@
- #include <media/vp8-ctrls.h>
- #include <media/videobuf2-core.h>
- 
-+#define DEC_8190_ALIGN_MASK	0x07U
-+
- struct hantro_dev;
- struct hantro_ctx;
- struct hantro_buf;
-@@ -93,6 +95,8 @@ extern const struct hantro_variant rk3399_vpu_variant;
- extern const struct hantro_variant rk3328_vpu_variant;
- extern const struct hantro_variant rk3288_vpu_variant;
- 
-+extern const u32 vp8_dec_mc_filter[8][6];
-+
- void hantro_watchdog(struct work_struct *work);
- void hantro_run(struct hantro_ctx *ctx);
- void hantro_irq_done(struct hantro_dev *vpu, unsigned int bytesused,
-diff --git a/drivers/staging/media/hantro/hantro_vp8.c b/drivers/staging/media/hantro/hantro_vp8.c
-index 66c45335d871..be5cb01d1309 100644
---- a/drivers/staging/media/hantro/hantro_vp8.c
-+++ b/drivers/staging/media/hantro/hantro_vp8.c
-@@ -31,6 +31,21 @@ struct vp8_prob_tbl_packed {
- 	u8 padding3[96];
- };
- 
-+/*
-+ * filter taps taken to 7-bit precision,
-+ * reference RFC6386#Page-16, filters[8][6]
-+ */
-+const u32 vp8_dec_mc_filter[8][6] = {
-+	{ 0, 0, 128, 0, 0, 0 },
-+	{ 0, -6, 123, 12, -1, 0 },
-+	{ 2, -11, 108, 36, -8, 1 },
-+	{ 0, -9, 93, 50, -6, 0 },
-+	{ 3, -16, 77, 77, -16, 3 },
-+	{ 0, -6, 50, 93, -9, 0 },
-+	{ 1, -8, 36, 108, -11, 2 },
-+	{ 0, -1, 12, 123, -6, 0 }
-+};
-+
- void hantro_vp8_prob_update(struct hantro_ctx *ctx,
- 			    const struct v4l2_ctrl_vp8_frame_header *hdr)
- {
--- 
-2.22.0
+thanks,
 
+greg k-h
