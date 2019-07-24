@@ -2,66 +2,37 @@ Return-Path: <SRS0=s/rb=VV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0515CC7618F
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 15:10:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0D27C76191
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 15:20:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D0C69217D9
-	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 15:10:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jUzADZoz"
+	by mail.kernel.org (Postfix) with ESMTP id 78A0F21738
+	for <linux-media@archiver.kernel.org>; Wed, 24 Jul 2019 15:20:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387550AbfGXPKt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 24 Jul 2019 11:10:49 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:37347 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387546AbfGXPKt (ORCPT
+        id S2387597AbfGXPUH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 24 Jul 2019 11:20:07 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:33574 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbfGXPUG (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 24 Jul 2019 11:10:49 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n9so22325969wrr.4
-        for <linux-media@vger.kernel.org>; Wed, 24 Jul 2019 08:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1FgHhk+aX2idPhLloe6FEbpHfMCEX0I3YO0I/iVTXD8=;
-        b=jUzADZoz6HJojG9s94wa18TJbWbZDZzOdMR61D6gHbvbsoXahe5pm/nWqt7hRnVRRn
-         Jlf8b/o29aPQQlGizGJukQ8+dCBBc/zsXVXeX/XgPgh5mYk7UbWQZmnu+W3RoXv2+cBR
-         PYq2j7v4SCwk8sCG5xO1JM/HcIipvguCFs5iRArGEoBGo7hSLW+bOt+SC8hlUmQkaD0S
-         0gT6eFNdoDDSKMYxSWkl0+9d9yz8rums9xaGtH/CwtyNg3T07F591PuSBsc6MNARY+B5
-         7/qgc4aCnAiRgVp17TssmQHiwaaLKdF/j1YvQgrbxXxFRV/DmkS21aIiQ+ArbKiA4hI4
-         OMdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1FgHhk+aX2idPhLloe6FEbpHfMCEX0I3YO0I/iVTXD8=;
-        b=uO+F+HBxvYuw6JQF3sdohO6PyB/tGD/8nygk5ui+shZ/XLY3xYw23LvvxrOhfgwNhG
-         Z6loonx9qVhr7+gf8huXD9Q3zTNJB454ER1UuHOK1BW68oKIaOZyvVOTk5g6Cb9rE4Ry
-         HhYCQ/1gLZLsK8SjpB73djaWJgHkh5ANKN//LSCeUyiJ19rL2FWdXak/ga4CyHnUeLa1
-         ovyz+gD1/sSOFbeHHHc59BEkei8YzkSYxUdEqA03WN3hj2CLRu8VjjHfO36Ze4KlApQ2
-         9R8sEhJhdwm/y13ae72ff6hQIdT8thTW2VPCKVk0IaHEd0R7ldZPaMM+1RE5urX+ZkJg
-         CQfA==
-X-Gm-Message-State: APjAAAVENtwmk423xUxociFKl3eYN174tN5cOlDtgfKb7WmoSIZZtiHI
-        EdH6lCIV1JxtpD44NQzamMS4d2Vx
-X-Google-Smtp-Source: APXvYqwCFc4hoqe/JG/RM9wz+RyIe7Pe/doiOZ6GTGwSQDgMaqp/9NlJEhLPgjN5vR7Y/saeHiaIYw==
-X-Received: by 2002:a5d:50c2:: with SMTP id f2mr58597086wrt.106.1563981046904;
-        Wed, 24 Jul 2019 08:10:46 -0700 (PDT)
-Received: from speedcore.iliad.local (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id w67sm58341394wma.24.2019.07.24.08.10.45
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 24 Jul 2019 08:10:45 -0700 (PDT)
-From:   rawoul@gmail.com
-To:     linux-media@vger.kernel.org
-Subject: [PATCH v2] edid-decode: parse additional flags in the DD+ Short Audio Descriptor
-Date:   Wed, 24 Jul 2019 17:10:37 +0200
-Message-Id: <20190724151037.36095-1-rawoul@gmail.com>
+        Wed, 24 Jul 2019 11:20:06 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id AF18728B4E7
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Hans Verkuil <hans.verkuil@cisco.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] media: vivid: fix device init when no_error_inj=1 and fb disabled
+Date:   Wed, 24 Jul 2019 16:19:22 +0100
+Message-Id: <20190724151922.11124-1-guillaume.tucker@collabora.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,39 +41,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnaud Vrac <avrac@freebox.fr>
+Add an extra condition to add the video output control class when the
+device has some hdmi outputs defined.  This is required to then always
+be able to add the display present control, which is enabled when
+there are some hdmi outputs.
 
-In the Dolby Digital Plus Short Audio Descriptor, byte 3 is used to
-signal Joint Object Coding support, which can be useful to determine if
-the sink supports Dolby Atmos.
+This fixes the corner case where no_error_inj is enabled and the
+device has no frame buffer but some hdmi outputs, as otherwise the
+video output control class would be added anyway.  Without this fix,
+the sanity checks fail in v4l2_ctrl_new() as name is NULL.
 
-Parse these flags as described in the Dolby Audio and Dolby Atmos over
-HDMI specification v1.0. Other bits in byte 3 are marked as reserved and
-should be zero.
-
-Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
+Fixes: c533435ffb91 ("media: vivid: add display present control")
+Cc: stable@vger.kernel.org
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 ---
- edid-decode.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/platform/vivid/vivid-ctrls.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v1: mention the document describing the dd+ flags
-
-diff --git a/edid-decode.c b/edid-decode.c
-index 940bcb5..197b78d 100644
---- a/edid-decode.c
-+++ b/edid-decode.c
-@@ -1165,6 +1165,11 @@ static void cta_audio_block(const unsigned char *x, unsigned int length)
- 			       (x[i+2] & 0x01) ? " 16" : "");
- 		} else if (format <= 8) {
- 			printf("      Maximum bit rate: %d kb/s\n", x[i+2] * 8);
-+		} else if (format == 10) {
-+			if(x[i+2] & 1)
-+				printf("      Supports JOC\n");
-+			if(x[i+2] & 2)
-+				printf("      Supports JOC with ACMOD28\n");
- 		} else if (format == 14) {
- 			printf("      Profile: %d\n", x[i+2] & 7);
- 		} else if (ext_format == 11 && (x[i+2] & 1)) {
+diff --git a/drivers/media/platform/vivid/vivid-ctrls.c b/drivers/media/platform/vivid/vivid-ctrls.c
+index 3e916c8befb7..7a52f585cab7 100644
+--- a/drivers/media/platform/vivid/vivid-ctrls.c
++++ b/drivers/media/platform/vivid/vivid-ctrls.c
+@@ -1473,7 +1473,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
+ 	v4l2_ctrl_handler_init(hdl_vid_cap, 55);
+ 	v4l2_ctrl_new_custom(hdl_vid_cap, &vivid_ctrl_class, NULL);
+ 	v4l2_ctrl_handler_init(hdl_vid_out, 26);
+-	if (!no_error_inj || dev->has_fb)
++	if (!no_error_inj || dev->has_fb || dev->num_hdmi_outputs)
+ 		v4l2_ctrl_new_custom(hdl_vid_out, &vivid_ctrl_class, NULL);
+ 	v4l2_ctrl_handler_init(hdl_vbi_cap, 21);
+ 	v4l2_ctrl_new_custom(hdl_vbi_cap, &vivid_ctrl_class, NULL);
 -- 
 2.20.1
 
