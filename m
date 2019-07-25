@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3BB6C76191
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 14:18:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12C87C41514
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 14:18:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 976CA21901
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 14:18:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA0E422CD0
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 14:18:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727167AbfGYOSO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Jul 2019 10:18:14 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44670 "EHLO
+        id S1728017AbfGYOSX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Jul 2019 10:18:23 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44692 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726432AbfGYOSN (ORCPT
+        with ESMTP id S1727753AbfGYOSW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Jul 2019 10:18:13 -0400
+        Thu, 25 Jul 2019 10:18:22 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id DFBFE28B831
+        with ESMTPSA id D48D828B83D
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>
 Cc:     kernel@collabora.com,
@@ -36,10 +36,10 @@ Cc:     kernel@collabora.com,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Alexandre Courbot <acourbot@chromium.org>,
         fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v2 1/7] media: hantro: Set DMA max segment size
-Date:   Thu, 25 Jul 2019 11:17:50 -0300
-Message-Id: <20190725141756.2518-2-ezequiel@collabora.com>
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v2 3/7] media: hantro: Constify the control array
+Date:   Thu, 25 Jul 2019 11:17:52 -0300
+Message-Id: <20190725141756.2518-4-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190725141756.2518-1-ezequiel@collabora.com>
 References: <20190725141756.2518-1-ezequiel@collabora.com>
@@ -50,32 +50,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Francois Buergisser <fbuergisser@chromium.org>
+From: Boris Brezillon <boris.brezillon@collabora.com>
 
-The Hantro codec is typically used in platforms with an IOMMU,
-so we need to set a proper DMA segment size. Devices without an
-IOMMU will still fallback to default 64KiB segments.
+controls[] is not supposed to be modified at runtime, let's make it
+explicit by adding a const specifier.
 
-Cc: stable@vger.kernel.org
-Fixes: 775fec69008d3 ("media: add Rockchip VPU JPEG encoder driver")
-Signed-off-by: Francois Buergisser <fbuergisser@chromium.org>
+Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
- drivers/staging/media/hantro/hantro_drv.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/hantro/hantro_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index b71a06e9159e..4eae1dbb1ac8 100644
+index ff2dcbf43e81..398618b0d586 100644
 --- a/drivers/staging/media/hantro/hantro_drv.c
 +++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -731,6 +731,7 @@ static int hantro_probe(struct platform_device *pdev)
- 		dev_err(vpu->dev, "Could not set DMA coherent mask.\n");
- 		return ret;
- 	}
-+	vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+@@ -262,7 +262,7 @@ static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+ 	.s_ctrl = hantro_s_ctrl,
+ };
  
- 	for (i = 0; i < vpu->variant->num_irqs; i++) {
- 		const char *irq_name = vpu->variant->irqs[i].name;
+-static struct hantro_ctrl controls[] = {
++static const struct hantro_ctrl controls[] = {
+ 	{
+ 		.codec = HANTRO_JPEG_ENCODER,
+ 		.cfg = {
 -- 
 2.22.0
 
