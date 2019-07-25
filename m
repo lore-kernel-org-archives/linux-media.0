@@ -2,148 +2,355 @@ Return-Path: <SRS0=l7FL=VW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0C3BC7618B
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 14:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B546DC7618B
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 14:43:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C3A6A22CC0
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 14:18:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 841212173B
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 14:43:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728428AbfGYOSl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Jul 2019 10:18:41 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44764 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727983AbfGYOSk (ORCPT
+        id S2388497AbfGYOnf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Jul 2019 10:43:35 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:47785 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388188AbfGYOnf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Jul 2019 10:18:40 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id F2E4328B83D
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>
-Cc:     kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v2 6/7] media: hantro: Move VP8 common code
-Date:   Thu, 25 Jul 2019 11:17:55 -0300
-Message-Id: <20190725141756.2518-7-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190725141756.2518-1-ezequiel@collabora.com>
-References: <20190725141756.2518-1-ezequiel@collabora.com>
+        Thu, 25 Jul 2019 10:43:35 -0400
+Received: from [192.168.2.10] ([46.9.232.237])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id qexthB49geD5bqexwhiJsu; Thu, 25 Jul 2019 16:43:32 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH] uvc: don't set description in ENUM_FMT
+Message-ID: <6e8bde09-7b47-5dec-6f21-c5156fbc9b10@xs4all.nl>
+Date:   Thu, 25 Jul 2019 16:43:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfHvU8mQDYqr3DV0qgESAn1GvPzxvnxfj03c2CM9RhEXIQyW9y8mYwKIbvYh5UIeuz8Sqn07MHQzcD5WqMhqWhF6Bz3iyArb+Lm7DkZ+Frl6vHSbL++1B
+ BCD4gaG6zdgWJxJY6Pwc7fcz5N2WjiUXXa0W0gVuR0jC30cO+2GMjOm9XAPVPdtAnDGcCWyShN2sw89WqtW1/SnryY3qcei7r9LdEt0ncPBVbwQ2T1q2E19X
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to introduce support for RK3399 VP8 decoding,
-move some common VP8 code. This will be reused by
-the RK3399 implementation, reducing code duplication.
+Leave it to the V4L2 core to set the description. In fact, that was
+already the case for a long time since v4l_fill_fmtdesc() overwrites
+the description.
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+So remove all description strings from the driver.
+
+uvc_ioctl_enum_fmt() was also cleaned up a bit since zeroed the
+v4l2_fmtdesc struct, when all fields after 'type' are already zeroed
+by the V4L2 core.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- .../staging/media/hantro/hantro_g1_vp8_dec.c    | 17 -----------------
- drivers/staging/media/hantro/hantro_hw.h        |  4 ++++
- drivers/staging/media/hantro/hantro_vp8.c       | 15 +++++++++++++++
- 3 files changed, 19 insertions(+), 17 deletions(-)
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 66ee168ddc7e..88d75d90c5bf 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -40,177 +40,142 @@ unsigned int uvc_timeout_param = UVC_CTRL_STREAMING_TIMEOUT;
 
-diff --git a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-index cd1fbd3a0d5f..181e2f76d8cb 100644
---- a/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_vp8_dec.c
-@@ -16,8 +16,6 @@
- #include "hantro.h"
- #include "hantro_g1_regs.h"
- 
--#define DEC_8190_ALIGN_MASK	0x07U
--
- /* DCT partition base address regs */
- static const struct hantro_reg vp8_dec_dct_base[8] = {
- 	{ G1_REG_ADDR_STR, 0, 0xffffffff },
-@@ -131,21 +129,6 @@ static const struct hantro_reg vp8_dec_pred_bc_tap[8][4] = {
+ static struct uvc_format_desc uvc_fmts[] = {
+ 	{
+-		.name		= "YUV 4:2:2 (YUYV)",
+ 		.guid		= UVC_GUID_FORMAT_YUY2,
+ 		.fcc		= V4L2_PIX_FMT_YUYV,
  	},
- };
- 
--/*
-- * filter taps taken to 7-bit precision,
-- * reference RFC6386#Page-16, filters[8][6]
-- */
--static const u32 vp8_dec_mc_filter[8][6] = {
--	{ 0, 0, 128, 0, 0, 0 },
--	{ 0, -6, 123, 12, -1, 0 },
--	{ 2, -11, 108, 36, -8, 1 },
--	{ 0, -9, 93, 50, -6, 0 },
--	{ 3, -16, 77, 77, -16, 3 },
--	{ 0, -6, 50, 93, -9, 0 },
--	{ 1, -8, 36, 108, -11, 2 },
--	{ 0, -1, 12, 123, -6, 0 }
--};
--
- /*
-  * Set loop filters
-  */
-diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-index 34ef24e3a9ef..185e27d47e47 100644
---- a/drivers/staging/media/hantro/hantro_hw.h
-+++ b/drivers/staging/media/hantro/hantro_hw.h
-@@ -15,6 +15,8 @@
- #include <media/vp8-ctrls.h>
- #include <media/videobuf2-core.h>
- 
-+#define DEC_8190_ALIGN_MASK	0x07U
-+
- struct hantro_dev;
- struct hantro_ctx;
- struct hantro_buf;
-@@ -93,6 +95,8 @@ extern const struct hantro_variant rk3399_vpu_variant;
- extern const struct hantro_variant rk3328_vpu_variant;
- extern const struct hantro_variant rk3288_vpu_variant;
- 
-+extern const u32 vp8_dec_mc_filter[8][6];
-+
- void hantro_watchdog(struct work_struct *work);
- void hantro_run(struct hantro_ctx *ctx);
- void hantro_irq_done(struct hantro_dev *vpu, unsigned int bytesused,
-diff --git a/drivers/staging/media/hantro/hantro_vp8.c b/drivers/staging/media/hantro/hantro_vp8.c
-index 66c45335d871..be5cb01d1309 100644
---- a/drivers/staging/media/hantro/hantro_vp8.c
-+++ b/drivers/staging/media/hantro/hantro_vp8.c
-@@ -31,6 +31,21 @@ struct vp8_prob_tbl_packed {
- 	u8 padding3[96];
- };
- 
-+/*
-+ * filter taps taken to 7-bit precision,
-+ * reference RFC6386#Page-16, filters[8][6]
-+ */
-+const u32 vp8_dec_mc_filter[8][6] = {
-+	{ 0, 0, 128, 0, 0, 0 },
-+	{ 0, -6, 123, 12, -1, 0 },
-+	{ 2, -11, 108, 36, -8, 1 },
-+	{ 0, -9, 93, 50, -6, 0 },
-+	{ 3, -16, 77, 77, -16, 3 },
-+	{ 0, -6, 50, 93, -9, 0 },
-+	{ 1, -8, 36, 108, -11, 2 },
-+	{ 0, -1, 12, 123, -6, 0 }
-+};
-+
- void hantro_vp8_prob_update(struct hantro_ctx *ctx,
- 			    const struct v4l2_ctrl_vp8_frame_header *hdr)
- {
--- 
-2.22.0
+ 	{
+-		.name		= "YUV 4:2:2 (YUYV)",
+ 		.guid		= UVC_GUID_FORMAT_YUY2_ISIGHT,
+ 		.fcc		= V4L2_PIX_FMT_YUYV,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (NV12)",
+ 		.guid		= UVC_GUID_FORMAT_NV12,
+ 		.fcc		= V4L2_PIX_FMT_NV12,
+ 	},
+ 	{
+-		.name		= "MJPEG",
+ 		.guid		= UVC_GUID_FORMAT_MJPEG,
+ 		.fcc		= V4L2_PIX_FMT_MJPEG,
+ 	},
+ 	{
+-		.name		= "YVU 4:2:0 (YV12)",
+ 		.guid		= UVC_GUID_FORMAT_YV12,
+ 		.fcc		= V4L2_PIX_FMT_YVU420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (I420)",
+ 		.guid		= UVC_GUID_FORMAT_I420,
+ 		.fcc		= V4L2_PIX_FMT_YUV420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:0 (M420)",
+ 		.guid		= UVC_GUID_FORMAT_M420,
+ 		.fcc		= V4L2_PIX_FMT_M420,
+ 	},
+ 	{
+-		.name		= "YUV 4:2:2 (UYVY)",
+ 		.guid		= UVC_GUID_FORMAT_UYVY,
+ 		.fcc		= V4L2_PIX_FMT_UYVY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (Y800)",
+ 		.guid		= UVC_GUID_FORMAT_Y800,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (Y8  )",
+ 		.guid		= UVC_GUID_FORMAT_Y8,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 8-bit (D3DFMT_L8)",
+ 		.guid		= UVC_GUID_FORMAT_D3DFMT_L8,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "IR 8-bit (L8_IR)",
+ 		.guid		= UVC_GUID_FORMAT_KSMEDIA_L8_IR,
+ 		.fcc		= V4L2_PIX_FMT_GREY,
+ 	},
+ 	{
+-		.name		= "Greyscale 10-bit (Y10 )",
+ 		.guid		= UVC_GUID_FORMAT_Y10,
+ 		.fcc		= V4L2_PIX_FMT_Y10,
+ 	},
+ 	{
+-		.name		= "Greyscale 12-bit (Y12 )",
+ 		.guid		= UVC_GUID_FORMAT_Y12,
+ 		.fcc		= V4L2_PIX_FMT_Y12,
+ 	},
+ 	{
+-		.name		= "Greyscale 16-bit (Y16 )",
+ 		.guid		= UVC_GUID_FORMAT_Y16,
+ 		.fcc		= V4L2_PIX_FMT_Y16,
+ 	},
+ 	{
+-		.name		= "BGGR Bayer (BY8 )",
+ 		.guid		= UVC_GUID_FORMAT_BY8,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR8,
+ 	},
+ 	{
+-		.name		= "BGGR Bayer (BA81)",
+ 		.guid		= UVC_GUID_FORMAT_BA81,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR8,
+ 	},
+ 	{
+-		.name		= "GBRG Bayer (GBRG)",
+ 		.guid		= UVC_GUID_FORMAT_GBRG,
+ 		.fcc		= V4L2_PIX_FMT_SGBRG8,
+ 	},
+ 	{
+-		.name		= "GRBG Bayer (GRBG)",
+ 		.guid		= UVC_GUID_FORMAT_GRBG,
+ 		.fcc		= V4L2_PIX_FMT_SGRBG8,
+ 	},
+ 	{
+-		.name		= "RGGB Bayer (RGGB)",
+ 		.guid		= UVC_GUID_FORMAT_RGGB,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB8,
+ 	},
+ 	{
+-		.name		= "RGB565",
+ 		.guid		= UVC_GUID_FORMAT_RGBP,
+ 		.fcc		= V4L2_PIX_FMT_RGB565,
+ 	},
+ 	{
+-		.name		= "BGR 8:8:8 (BGR3)",
+ 		.guid		= UVC_GUID_FORMAT_BGR3,
+ 		.fcc		= V4L2_PIX_FMT_BGR24,
+ 	},
+ 	{
+-		.name		= "H.264",
+ 		.guid		= UVC_GUID_FORMAT_H264,
+ 		.fcc		= V4L2_PIX_FMT_H264,
+ 	},
+ 	{
+-		.name		= "Greyscale 8 L/R (Y8I)",
+ 		.guid		= UVC_GUID_FORMAT_Y8I,
+ 		.fcc		= V4L2_PIX_FMT_Y8I,
+ 	},
+ 	{
+-		.name		= "Greyscale 12 L/R (Y12I)",
+ 		.guid		= UVC_GUID_FORMAT_Y12I,
+ 		.fcc		= V4L2_PIX_FMT_Y12I,
+ 	},
+ 	{
+-		.name		= "Depth data 16-bit (Z16)",
+ 		.guid		= UVC_GUID_FORMAT_Z16,
+ 		.fcc		= V4L2_PIX_FMT_Z16,
+ 	},
+ 	{
+-		.name		= "Bayer 10-bit (SRGGB10P)",
+ 		.guid		= UVC_GUID_FORMAT_RW10,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB10P,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SBGGR16)",
+ 		.guid		= UVC_GUID_FORMAT_BG16,
+ 		.fcc		= V4L2_PIX_FMT_SBGGR16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SGBRG16)",
+ 		.guid		= UVC_GUID_FORMAT_GB16,
+ 		.fcc		= V4L2_PIX_FMT_SGBRG16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SRGGB16)",
+ 		.guid		= UVC_GUID_FORMAT_RG16,
+ 		.fcc		= V4L2_PIX_FMT_SRGGB16,
+ 	},
+ 	{
+-		.name		= "Bayer 16-bit (SGRBG16)",
+ 		.guid		= UVC_GUID_FORMAT_GR16,
+ 		.fcc		= V4L2_PIX_FMT_SGRBG16,
+ 	},
+ 	{
+-		.name		= "Depth data 16-bit (Z16)",
+ 		.guid		= UVC_GUID_FORMAT_INVZ,
+ 		.fcc		= V4L2_PIX_FMT_Z16,
+ 	},
+ 	{
+-		.name		= "Greyscale 10-bit (Y10 )",
+ 		.guid		= UVC_GUID_FORMAT_INVI,
+ 		.fcc		= V4L2_PIX_FMT_Y10,
+ 	},
+ 	{
+-		.name		= "IR:Depth 26-bit (INZI)",
+ 		.guid		= UVC_GUID_FORMAT_INZI,
+ 		.fcc		= V4L2_PIX_FMT_INZI,
+ 	},
+ 	{
+-		.name		= "4-bit Depth Confidence (Packed)",
+ 		.guid		= UVC_GUID_FORMAT_CNF4,
+ 		.fcc		= V4L2_PIX_FMT_CNF4,
+ 	},
+@@ -471,14 +436,10 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 		fmtdesc = uvc_format_by_guid(&buffer[5]);
 
+ 		if (fmtdesc != NULL) {
+-			strscpy(format->name, fmtdesc->name,
+-				sizeof(format->name));
+ 			format->fcc = fmtdesc->fcc;
+ 		} else {
+ 			uvc_printk(KERN_INFO, "Unknown video format %pUl\n",
+ 				&buffer[5]);
+-			snprintf(format->name, sizeof(format->name), "%pUl\n",
+-				&buffer[5]);
+ 			format->fcc = 0;
+ 		}
+
+@@ -489,8 +450,6 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 		 */
+ 		if (dev->quirks & UVC_QUIRK_FORCE_Y8) {
+ 			if (format->fcc == V4L2_PIX_FMT_YUYV) {
+-				strscpy(format->name, "Greyscale 8-bit (Y8  )",
+-					sizeof(format->name));
+ 				format->fcc = V4L2_PIX_FMT_GREY;
+ 				format->bpp = 8;
+ 				width_multiplier = 2;
+@@ -515,7 +474,6 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 			return -EINVAL;
+ 		}
+
+-		strscpy(format->name, "MJPEG", sizeof(format->name));
+ 		format->fcc = V4L2_PIX_FMT_MJPEG;
+ 		format->flags = UVC_FMT_FLAG_COMPRESSED;
+ 		format->bpp = 0;
+@@ -533,13 +491,8 @@ static int uvc_parse_format(struct uvc_device *dev,
+
+ 		switch (buffer[8] & 0x7f) {
+ 		case 0:
+-			strscpy(format->name, "SD-DV", sizeof(format->name));
+-			break;
+ 		case 1:
+-			strscpy(format->name, "SDL-DV", sizeof(format->name));
+-			break;
+ 		case 2:
+-			strscpy(format->name, "HD-DV", sizeof(format->name));
+ 			break;
+ 		default:
+ 			uvc_trace(UVC_TRACE_DESCR, "device %d videostreaming "
+@@ -549,9 +502,6 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 			return -EINVAL;
+ 		}
+
+-		strlcat(format->name, buffer[8] & (1 << 7) ? " 60Hz" : " 50Hz",
+-			sizeof(format->name));
+-
+ 		format->fcc = V4L2_PIX_FMT_DV;
+ 		format->flags = UVC_FMT_FLAG_COMPRESSED | UVC_FMT_FLAG_STREAM;
+ 		format->bpp = 0;
+@@ -578,7 +528,13 @@ static int uvc_parse_format(struct uvc_device *dev,
+ 		return -EINVAL;
+ 	}
+
+-	uvc_trace(UVC_TRACE_DESCR, "Found format %s.\n", format->name);
++	uvc_trace(UVC_TRACE_DESCR, "Found format %pUl '%c%c%c%c%s'\n",
++		  &buffer[5],
++		  (char)(format->fcc & 0x7f),
++		  (char)((format->fcc >> 8) & 0x7f),
++		  (char)((format->fcc >> 16) & 0x7f),
++		  (char)((format->fcc >> 24) & 0x7f),
++		  (format->fcc & (1 << 31)) ? "-BE" : "");
+
+ 	buflen -= buffer[0];
+ 	buffer += buffer[0];
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 0335e69b70ab..6c466e3207bc 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -597,22 +597,13 @@ static int uvc_ioctl_enum_fmt(struct uvc_streaming *stream,
+ 			      struct v4l2_fmtdesc *fmt)
+ {
+ 	struct uvc_format *format;
+-	enum v4l2_buf_type type = fmt->type;
+-	u32 index = fmt->index;
+
+ 	if (fmt->type != stream->type || fmt->index >= stream->nformats)
+ 		return -EINVAL;
+
+-	memset(fmt, 0, sizeof(*fmt));
+-	fmt->index = index;
+-	fmt->type = type;
+-
+ 	format = &stream->format[fmt->index];
+-	fmt->flags = 0;
+ 	if (format->flags & UVC_FMT_FLAG_COMPRESSED)
+ 		fmt->flags |= V4L2_FMT_FLAG_COMPRESSED;
+-	strscpy(fmt->description, format->name, sizeof(fmt->description));
+-	fmt->description[sizeof(fmt->description) - 1] = 0;
+ 	fmt->pixelformat = format->fcc;
+ 	return 0;
+ }
+diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvcvideo.h
+index c7c1baa90dea..e21e782c7e29 100644
+--- a/drivers/media/usb/uvc/uvcvideo.h
++++ b/drivers/media/usb/uvc/uvcvideo.h
+@@ -268,7 +268,6 @@ struct uvc_control {
+ };
+
+ struct uvc_format_desc {
+-	char *name;
+ 	u8 guid[16];
+ 	u32 fcc;
+ };
+@@ -373,8 +372,6 @@ struct uvc_format {
+ 	u32 fcc;
+ 	u32 flags;
+
+-	char name[32];
+-
+ 	unsigned int nframes;
+ 	struct uvc_frame *frame;
+ };
