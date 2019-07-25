@@ -2,191 +2,84 @@ Return-Path: <SRS0=l7FL=VW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD132C76190
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 18:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53837C76194
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 18:56:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ADB4B2190F
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 18:41:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1564080078;
-	bh=uRY0U6ys3RkUz3wBqjzOtv/Ol7A8KxsfiaQLNBanTuA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=WzWMMB4xaeLDpAt5NoslP8zRHbnVq62yYww7KsCVNC1n3x1t7XQQq85ito1AiyJDQ
-	 W626hY1EQ7fz9kdkYWryy6y0awiww4mBJocQGcTUlM6o3NdjWSBERWTGOnQhoC1YxR
-	 fbk7e5Q1fcJX8kQP8Izv6hLS4N0o0yL86imnPjRs=
+	by mail.kernel.org (Postfix) with ESMTP id 30DAB2070D
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 18:56:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbfGYSlS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Jul 2019 14:41:18 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:40794 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726065AbfGYSlS (ORCPT
+        id S1726470AbfGYS4X (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Jul 2019 14:56:23 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:56819 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726416AbfGYS4V (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Jul 2019 14:41:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=gOoWWAILWsUeB/fTTx0X4mPr7xruAd67JyYtA863wg4=; b=RJ9RsE3nvl9iNP69ajNhTOUTf
-        z+7EbWnor/0Nk8disNFCoOYCPRuEok+4FdZeMUhh/51ZQB38aPmfkeT3NTq4Lit8JIyCmTy4fTfGe
-        A1OsbUsPAje0Dfd0BxyaG5XTTNt7qIEvG/jZkpECw9jI5we9oKNFUNvRQvVJgnbNOKMBXTWWCoUGM
-        Fu4zFupHBD7TCb+bcORHe3vDMkTauqJ5o4PZHNpIr3a/RU8ZhQRaFAQAMFQuPr4sto+snW0vP/uL6
-        eFrF4b/IM6UruJHgKDI0pi9ViW2xhImyjePCu38XexwdnLLys1D7csQe/Gz96cGVLYi+gQJ5ce00j
-        Znhn9W1dw==;
-Received: from [179.95.31.157] (helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hqifz-0000v5-SB; Thu, 25 Jul 2019 18:41:16 +0000
-Date:   Thu, 25 Jul 2019 15:41:11 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>, kernel@collabora.com,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Helen Koike <helen.koike@collabora.com>
-Subject: Re: [PATCH 2/2] media: Don't hide any menu if "ancillary drivers
- autoselect" is enabled
-Message-ID: <20190725154111.7fc7e335@coco.lan>
-In-Reply-To: <CAGb2v65wOz+nUi=Leb3FudU7K5S_AHtuCarXHcO0kMvvqEw8rQ@mail.gmail.com>
-References: <20190715212316.352-1-ezequiel@collabora.com>
-        <20190715212316.352-3-ezequiel@collabora.com>
-        <20190725125730.2218f0a8@coco.lan>
-        <f87fb2e6bd740de8c44df1f8ff3b48b7b04af481.camel@collabora.com>
-        <CAGb2v65wOz+nUi=Leb3FudU7K5S_AHtuCarXHcO0kMvvqEw8rQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Thu, 25 Jul 2019 14:56:21 -0400
+X-Originating-IP: 93.29.109.196
+Received: from localhost.localdomain (196.109.29.93.rev.sfr.net [93.29.109.196])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 0144940002;
+        Thu, 25 Jul 2019 18:56:18 +0000 (UTC)
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@googlegroups.com
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH v7 1/4] media: v4l2-ctrl: Add a comment on why we zero out compound controls fields
+Date:   Thu, 25 Jul 2019 20:55:59 +0200
+Message-Id: <20190725185602.22522-2-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190725185602.22522-1-paul.kocialkowski@bootlin.com>
+References: <20190725185602.22522-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Fri, 26 Jul 2019 01:29:58 +0800
-Chen-Yu Tsai <wens@kernel.org> escreveu:
+Since it's not necessarily very explicit why we need to zero some fields
+in std_validate_compound, add a comment before the function to explain
+why, which should help as a reminder.
 
-> On Fri, Jul 26, 2019 at 1:06 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
-> >
-> > On Thu, 2019-07-25 at 12:57 -0300, Mauro Carvalho Chehab wrote:  
-> > > Em Mon, 15 Jul 2019 18:23:16 -0300
-> > > Ezequiel Garcia <ezequiel@collabora.com> escreveu:
-> > >  
-> > > > Many users have been complaining about not being able to find
-> > > > certain menu options. One such example are camera sensor drivers
-> > > > (e.g IMX219, OV5645, etc) which are common on embedded platforms
-> > > > and not always ancillary devices.
-> > > >
-> > > > The problem with MEDIA_SUBDRV_AUTOSELECT seems to be related
-> > > > to the fact that it uses the "visible" kbuild syntax to hide
-> > > > entire group of drivers.
-> > > >
-> > > > This is not obvious and, as explained above, not always desired.
-> > > >
-> > > > To fix the problem, drop the "visible" and stop hiding any menu
-> > > > options. Users skilled enough to configure their kernel are expected
-> > > > to be skilled enough to know what (not) to configure anyway.
-> > > >
-> > > > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> > > > ---
-> > > >  drivers/media/dvb-frontends/Kconfig | 1 -
-> > > >  drivers/media/i2c/Kconfig           | 1 -
-> > > >  drivers/media/spi/Kconfig           | 1 -
-> > > >  drivers/media/tuners/Kconfig        | 1 -
-> > > >  4 files changed, 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/media/dvb-frontends/Kconfig b/drivers/media/dvb-frontends/Kconfig
-> > > > index dc43749177df..2d1fea3bf546 100644
-> > > > --- a/drivers/media/dvb-frontends/Kconfig
-> > > > +++ b/drivers/media/dvb-frontends/Kconfig
-> > > > @@ -1,5 +1,4 @@
-> > > >  menu "Customise DVB Frontends"
-> > > > -   visible if !MEDIA_SUBDRV_AUTOSELECT || COMPILE_TEST || EXPERT
-> > > >
-> > > >  comment "Multistandard (satellite) frontends"
-> > > >     depends on DVB_CORE
-> > > > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> > > > index 79ce9ec6fc1b..475072bb67d6 100644
-> > > > --- a/drivers/media/i2c/Kconfig
-> > > > +++ b/drivers/media/i2c/Kconfig
-> > > > @@ -23,7 +23,6 @@ config VIDEO_IR_I2C
-> > > >  #
-> > > >
-> > > >  menu "I2C Encoders, decoders, sensors and other helper chips"
-> > > > -   visible if !MEDIA_SUBDRV_AUTOSELECT || COMPILE_TEST || EXPERT  
-> > >
-> > > Hmm... Hans picked this patch, but IMO it doesn't make sense
-> > > for PC consumer people to see the hundreds of extra options
-> > > that making those menus visible will produce.
-> > >
-> > > This was added because in the past we had lots of issues with
-> > > people desktop/laptop settings with all those things enabled.
-> > >
-> > > In any case, if the desktop/laptop user is smart enough to
-> > > go though it, he can simply disable MEDIA_SUBDRV_AUTOSELECT and
-> > > manually select what he wants, so I really miss the point of
-> > > making those stuff always visible.
-> > >
-> > > Now, from this patch's comments, it seems that you want this
-> > > to be visible if CONFIG_EMBEDDED. So, I won't complain if you
-> > > replace the changes on this patch to:
-> > >
-> > >       menu "foo"
-> > >           visible if !MEDIA_SUBDRV_AUTOSELECT || !EMBEDDED || COMPILE_TEST || EXPERT
-> > >
-> > > In other words, for the normal guy that just wants to build the
-> > > latest media stuff for his PC camera or TV device to work, he won't
-> > > need to dig into hundreds of things that won't make any difference
-> > > if he enables, except for making the Kernel bigger.
-> > >  
-> >
-> > Well, I think the real value of MEDIA_SUBDRV_AUTOSELECT is the autoselection,
-> > not the hidden part. I'm really missing to see what hiding anything gives you.
-> >
-> > In other words, this option gets useful when driver authors select ancillary
-> > drivers such as:
-> >
-> > config VIDEO_USBVISION
-> >         tristate "USB video devices based on Nogatech NT1003/1004/1005"
-> >         depends on I2C && VIDEO_V4L2
-> >         select VIDEO_TUNER
-> >         select VIDEO_SAA711X if MEDIA_SUBDRV_AUTOSELECT
-> >
-> > What's so confusing about having these drivers visible? Compared to the
-> > rest of the zillion menu options, what's more confusing about seeing these?
-> >
-> > Now, while I would agree with EMBEDDED, the problem with that is that
-> > many "embedded" platforms don't enable EMBEDDED. So, it's not that useful.
-> >
-> > Finally, let me give an example of why hiding the menus is so bad.
-> > Normally, to enable a symbol, we use the search tool.
-> >
-> > Now, when MEDIA_SUBDRV_AUTOSELECT=y, the search tool will _not_ take you
-> > there and there's no indication why.  
-> 
-> As someone who has done so in the past year, I agree it's confusing.
-> I had to dig through the Kconfig files to figure out which knobs to
-> turn to get the OV5640 option out. The description says "auto-selecting",
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ drivers/media/v4l2-core/v4l2-ctrls.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Well, the text and/or the help message can be changed, if it is not
-clear enough, but this option was added because we had too many issues
-with users trying to build drivers for their devices without being
-able to do that, because selecting thousands of devices is something
-that an average PC user has troubles.
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 76fa2db0e8fb..cd1ae016706f 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -1645,6 +1645,10 @@ static void std_log(const struct v4l2_ctrl *ctrl)
+ #define zero_padding(s) \
+ 	memset(&(s).padding, 0, sizeof((s).padding))
+ 
++/*
++ * Compound controls validation requires setting unused fields/flags to zero
++ * in order to properly detect unchanged controls with std_equal's memcmp.
++ */
+ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+ 				 union v4l2_ctrl_ptr ptr)
+ {
+-- 
+2.22.0
 
-I'm all to improve it, provided that we don't make harder for non-devs
-to build the Kernel.
-
-> which does not equal hiding everything. You could still have drivers
-> auto-selected (or not) based on a Kconfig option without hiding things.
-> 
-> ChenYu
-
-
-
-Thanks,
-Mauro
