@@ -2,157 +2,89 @@ Return-Path: <SRS0=l7FL=VW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF16DC7618B
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:31:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A12DC7618B
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:34:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C275E21743
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:31:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10F492190F
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:34:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="WKwOxX6K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ugi8MkvX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387683AbfGYNbq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Jul 2019 09:31:46 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45660 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387657AbfGYNbp (ORCPT
+        id S1728180AbfGYNem (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Jul 2019 09:34:42 -0400
+Received: from mail-lj1-f175.google.com ([209.85.208.175]:44347 "EHLO
+        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728133AbfGYNem (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Jul 2019 09:31:45 -0400
-Received: by mail-lj1-f194.google.com with SMTP id m23so47933117lje.12
-        for <linux-media@vger.kernel.org>; Thu, 25 Jul 2019 06:31:44 -0700 (PDT)
+        Thu, 25 Jul 2019 09:34:42 -0400
+Received: by mail-lj1-f175.google.com with SMTP id k18so48000387ljc.11
+        for <linux-media@vger.kernel.org>; Thu, 25 Jul 2019 06:34:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lRofjpGVnPdkvHjT1abpzFvdhqRUdMtCwITS9XC9FqY=;
-        b=WKwOxX6KPDQIRmCgJAKTRU8nyTVTibB5C1TnIuihKcSV5lNt9QF4vT4B5iz0FMTva1
-         X+7McxEoaoHiZtop26NDtdsbRmzb/o4oqU+CfFw5lOJcRcmxL8HDtEfX54kpPakjiubz
-         MUTRw3XXFYfdTUeK+go0VcL/q1AxSnTaPZfY4=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uGrdbFmCkA0Jhq+iC+B32/63wD6iH3g/gNjQ6Yy5tL0=;
+        b=ugi8MkvXfdPoh+LtN3tf8UBwLPZhdDr+3+5tKtf3mBYMxmHmgAMGn0DHHv6IQxqkME
+         Z87YcP+lebo0hNsZ1wDi0ZyKmlEjQH3EcWzrS/c6CJSlsuF0dY7fOMZuczeQ0LvOixex
+         1klHk7XiCXFnZZtOlom5zDO1J6o7anihbGSRkDZqf8NLUNmXhfZfv9ARql6Bf1SPrcKG
+         wsM4IGY1Vml/lgPfdrBL/ntCFwO5GJVab+U0babbM0eD5CSvI5ueCxtp1M1jeEnzVzAD
+         8SCNhTOC6Xh9YK1h2wF4Z12gS0/cwYxf0Od27En2Jjvf141u3DjanUNjQhBywanEYZ6l
+         qN/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lRofjpGVnPdkvHjT1abpzFvdhqRUdMtCwITS9XC9FqY=;
-        b=EoKxMGDGCOnKGnH4jxjam+gFag+80ae6siO62Ujl5LIGoI8bGviS3N1SC9SdLt6mtn
-         p5isXi4hpedMc2emUFyHyokKRnmbQ+LBA/cuI56VoAkXX4Ktbc076VdOpQPUvr47Efr3
-         0VCzm1aiGbmtlEv1FCuZLwNY+0bENaniksWI+mCZKnc/kkproih5zN+TPfFnL9TBMDmc
-         zaQ4IBIyJKA/HNtjcF/McLbg8KUtoMgxHEJKkggjZ0GAhfbYeEw+iIZyqBvQosl0YFAh
-         6Cz7XgqpzcasH7gjO7qX/WTpxtmONVk2JeOS06+PlX0gy8aG6JjcASWP/EzFU/Rl9pdo
-         KCLA==
-X-Gm-Message-State: APjAAAUku00t2HKaP2AzqvEl65Y3Zg/XJmSuIRWwF+5tKsimMhcmWeJJ
-        +yTFQNEXYE7osopYLUYLAb0=
-X-Google-Smtp-Source: APXvYqz/F986DupauyPnWK3++D6Z9b8wSPFEQgtug6IFVchRI8stLut7ttlybhQferFVWVbypQXzzQ==
-X-Received: by 2002:a2e:3013:: with SMTP id w19mr46339678ljw.73.1564061503937;
-        Thu, 25 Jul 2019 06:31:43 -0700 (PDT)
-Received: from [172.16.11.28] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id l22sm9051754ljc.4.2019.07.25.06.31.42
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jul 2019 06:31:43 -0700 (PDT)
-Subject: Re: [PATCH 7/9] media: hantro: Add core bits to support H264 decoding
-To:     Boris Brezillon <boris.brezillon@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>, kernel@collabora.com,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hertz Wong <hertz.wong@rock-chips.com>
-References: <20190619121540.29320-1-boris.brezillon@collabora.com>
- <20190619121540.29320-8-boris.brezillon@collabora.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <25cc2826-fc8f-570a-07fa-8cbdb11830a7@rasmusvillemoes.dk>
-Date:   Thu, 25 Jul 2019 15:31:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uGrdbFmCkA0Jhq+iC+B32/63wD6iH3g/gNjQ6Yy5tL0=;
+        b=HzgyYXb1Kik+tTDYkUFPKsUbo3xqe62eC8zStIO8YMUAkCookFgJgv/9XiuFjZ8rob
+         NUlv+pGlqFdfXyQU4DubzO3NLNgafg8LQjRyt0a+cnQGo8VCpVxFC6Qhrdkj53G6JxDL
+         G+C9PsOWrUS73MohAV7Dsi3Aj84Wg0mqNrsjZCHOcSSe4ZZSg8f6IEE+bmHZv3xsC5aD
+         F2hEzzHkQxQ8cdAAvim5vD5rpkSzBzwkmiozGYtmBOG2HxsrK9UiTv3P1U1z9gQ8T87P
+         iPZQlE9z8NYkdFAqRTPDf9iQndh2C0KCjVH+/bWnRQcRtqny4ZpuFUAaf/M7dBrP71di
+         Rv4g==
+X-Gm-Message-State: APjAAAUv0Vjv2VgOyIfsI237ukh+h8O5lT7fKz+Db9S/Cx0TI6oPOt0i
+        +iVsF169hNQ5KBlwtPRMDq9QsQP+ZZHfCN5YItZi6nl+
+X-Google-Smtp-Source: APXvYqwgU4OavGY+VVs23V/hcuM19p+SCiouzMAHci9ExWqQ8jo3GBevsUvXlIe3vkwO5SXJ2YSlkE3a5OuGVWi/lsw=
+X-Received: by 2002:a2e:2c07:: with SMTP id s7mr8953909ljs.44.1564059754746;
+ Thu, 25 Jul 2019 06:02:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190619121540.29320-8-boris.brezillon@collabora.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190629121623.18069-1-festevam@gmail.com> <20190725074123.2864b148@coco.lan>
+In-Reply-To: <20190725074123.2864b148@coco.lan>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 25 Jul 2019 10:02:36 -0300
+Message-ID: <CAOMZO5CNN0Qu3dyMWN3=3U4Ooq8oxN=KSHJKgC7UYBoPq-NXJg@mail.gmail.com>
+Subject: Re: [PATCH] media: imx7.rst: Fix the references to the CSI multiplexer
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 19/06/2019 14.15, Boris Brezillon wrote:
-> From: Hertz Wong <hertz.wong@rock-chips.com>
-> 
-> Add helpers and patch hantro_{drv,v4l2}.c to prepare addition of H264
-> decoding support.
-> 
-> Signed-off-by: Hertz Wong <hertz.wong@rock-chips.com>
-> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-> ---
-> +
-> +	/*
-> +	 * Short term pics in descending pic num order, long term ones in
-> +	 * ascending order.
-> +	 */
-> +	if (!(a->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM))
-> +		return b->frame_num - a->frame_num;
-> +
-> +	return a->pic_num - b->pic_num;
-> +}
+Hi Mauro,
 
-Pet peeve: This works because ->frame_num and ->pic_num are u16, so
-their difference is guaranteed to fit in an int.
+On Thu, Jul 25, 2019 at 7:41 AM Mauro Carvalho Chehab
+<mchehab@kernel.org> wrote:
 
-> +static int b0_ref_list_cmp(const void *ptra, const void *ptrb, const void *data)
-> +{
-> +	const struct hantro_h264_reflist_builder *builder = data;
-> +	const struct v4l2_h264_dpb_entry *a, *b;
-> +	s32 poca, pocb;
-> +	u8 idxa, idxb;
-> +
-> +	idxa = *((u8 *)ptra);
-> +	idxb = *((u8 *)ptrb);
-> +	a = &builder->dpb[idxa];
-> +	b = &builder->dpb[idxb];
-> +
-> +	if ((a->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM) !=
-> +	    (b->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)) {
-> +		/* Short term pics firt. */
-> +		if (!(a->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM))
-> +			return -1;
-> +		else
-> +			return 1;
-> +	}
-> +
-> +	/* Long term pics in ascending pic num order. */
-> +	if (a->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
-> +		return a->pic_num - b->pic_num;
-> +
-> +	poca = builder->pocs[idxa];
-> +	pocb = builder->pocs[idxb];
-> +
-> +	/*
-> +	 * Short term pics with POC < cur POC first in POC descending order
-> +	 * followed by short term pics with POC > cur POC in POC ascending
-> +	 * order.
-> +	 */
-> +	if ((poca < builder->curpoc) != (pocb < builder->curpoc))
-> +		return poca - pocb;
-> +	else if (poca < builder->curpoc)
-> +		return pocb - poca;
-> +
-> +	return poca - pocb;
-> +}
+> Did you check the "make htmldocs" output after this change?
+>
+> This code-block is broken, as it starts from column 1.
+>
+> Please add a tab (or at least 2 spaces) before each line, in order
+> to make Sphinx process this code block.
 
-Here, however, poca and pocb are ints. What guarantees that their values
-are not more than 2^31 apart? I know absolutely nothing about this code
-or what these numbers represent, so it may be obvious that they are
-smallish.
+Sorry about this.
 
-Rasmus
+I will rework the patch and make sure it passes "make htmldocs".
+
+Thanks
