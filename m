@@ -2,89 +2,87 @@ Return-Path: <SRS0=l7FL=VW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A12DC7618B
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:34:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA128C7618B
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:39:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 10F492190F
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:34:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ugi8MkvX"
+	by mail.kernel.org (Postfix) with ESMTP id ACD042238C
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:39:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728180AbfGYNem (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Jul 2019 09:34:42 -0400
-Received: from mail-lj1-f175.google.com ([209.85.208.175]:44347 "EHLO
-        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728133AbfGYNem (ORCPT
+        id S2389726AbfGYNjP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Jul 2019 09:39:15 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:44170 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387959AbfGYNjO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Jul 2019 09:34:42 -0400
-Received: by mail-lj1-f175.google.com with SMTP id k18so48000387ljc.11
-        for <linux-media@vger.kernel.org>; Thu, 25 Jul 2019 06:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uGrdbFmCkA0Jhq+iC+B32/63wD6iH3g/gNjQ6Yy5tL0=;
-        b=ugi8MkvXfdPoh+LtN3tf8UBwLPZhdDr+3+5tKtf3mBYMxmHmgAMGn0DHHv6IQxqkME
-         Z87YcP+lebo0hNsZ1wDi0ZyKmlEjQH3EcWzrS/c6CJSlsuF0dY7fOMZuczeQ0LvOixex
-         1klHk7XiCXFnZZtOlom5zDO1J6o7anihbGSRkDZqf8NLUNmXhfZfv9ARql6Bf1SPrcKG
-         wsM4IGY1Vml/lgPfdrBL/ntCFwO5GJVab+U0babbM0eD5CSvI5ueCxtp1M1jeEnzVzAD
-         8SCNhTOC6Xh9YK1h2wF4Z12gS0/cwYxf0Od27En2Jjvf141u3DjanUNjQhBywanEYZ6l
-         qN/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uGrdbFmCkA0Jhq+iC+B32/63wD6iH3g/gNjQ6Yy5tL0=;
-        b=HzgyYXb1Kik+tTDYkUFPKsUbo3xqe62eC8zStIO8YMUAkCookFgJgv/9XiuFjZ8rob
-         NUlv+pGlqFdfXyQU4DubzO3NLNgafg8LQjRyt0a+cnQGo8VCpVxFC6Qhrdkj53G6JxDL
-         G+C9PsOWrUS73MohAV7Dsi3Aj84Wg0mqNrsjZCHOcSSe4ZZSg8f6IEE+bmHZv3xsC5aD
-         F2hEzzHkQxQ8cdAAvim5vD5rpkSzBzwkmiozGYtmBOG2HxsrK9UiTv3P1U1z9gQ8T87P
-         iPZQlE9z8NYkdFAqRTPDf9iQndh2C0KCjVH+/bWnRQcRtqny4ZpuFUAaf/M7dBrP71di
-         Rv4g==
-X-Gm-Message-State: APjAAAUv0Vjv2VgOyIfsI237ukh+h8O5lT7fKz+Db9S/Cx0TI6oPOt0i
-        +iVsF169hNQ5KBlwtPRMDq9QsQP+ZZHfCN5YItZi6nl+
-X-Google-Smtp-Source: APXvYqwgU4OavGY+VVs23V/hcuM19p+SCiouzMAHci9ExWqQ8jo3GBevsUvXlIe3vkwO5SXJ2YSlkE3a5OuGVWi/lsw=
-X-Received: by 2002:a2e:2c07:: with SMTP id s7mr8953909ljs.44.1564059754746;
- Thu, 25 Jul 2019 06:02:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190629121623.18069-1-festevam@gmail.com> <20190725074123.2864b148@coco.lan>
-In-Reply-To: <20190725074123.2864b148@coco.lan>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 25 Jul 2019 10:02:36 -0300
-Message-ID: <CAOMZO5CNN0Qu3dyMWN3=3U4Ooq8oxN=KSHJKgC7UYBoPq-NXJg@mail.gmail.com>
-Subject: Re: [PATCH] media: imx7.rst: Fix the references to the CSI multiplexer
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
+        Thu, 25 Jul 2019 09:39:14 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id F10C728B644
+Message-ID: <4f0d0390057195da326354da2343c98c93d86669.camel@collabora.com>
+Subject: Re: [PATCH 0/7] hantro: Add RK3399 VP8 decoding support
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Cc:     kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
+Date:   Thu, 25 Jul 2019 10:38:47 -0300
+In-Reply-To: <b0cd9a4f-4bf9-a48c-6d7c-7147b13fa0b2@xs4all.nl>
+References: <20190724171702.9449-1-ezequiel@collabora.com>
+         <b0cd9a4f-4bf9-a48c-6d7c-7147b13fa0b2@xs4all.nl>
+Organization: Collabora
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+On Thu, 2019-07-25 at 14:59 +0200, Hans Verkuil wrote:
+> On 7/24/19 7:16 PM, Ezequiel Garcia wrote:
+> > This series adds VP8 decoding support on RK3399 SoC.
+> > 
+> > I'm including a set of commits from Boris' recent H264 series [1].
+> > These commits add some helpers that are also useful for RK3399 VP8,
+> > and at the same time cleanup the driver nicely.
+> > 
+> > Finally, there's a fix by Francois Buergisser from Chromium team.
+> > 
+> > VP8 and MPEG-2 tested on RK3399 RockPi and RK3288 Rock2 boards.
+> 
+> I get this when compiling:
+> 
+> /home/hans/work/build/media-git/drivers/staging/media/hantro/hantro_g1_vp8_dec.c: In function 'hantro_g1_vp8_dec_run':
+> /home/hans/work/build/media-git/drivers/staging/media/hantro/hantro_g1_vp8_dec.c:435:26: warning: variable 'vb2_src' set but not used [-Wunused-but-
+> set-variable]
+>   struct vb2_v4l2_buffer *vb2_src;
+>                           ^~~~~~~
+>   CC      drivers/staging/media/omap4iss/iss_csiphy.o
+> /home/hans/work/build/media-git/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c: In function 'rk3399_vpu_vp8_dec_run':
+> /home/hans/work/build/media-git/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c:515:26: warning: variable 'vb2_src' set but not used [-Wunused-
+> but-set-variable]
+>   struct vb2_v4l2_buffer *vb2_src;
+>                           ^~~~~~~
+> 
+> Can you take a look?
+> 
 
-On Thu, Jul 25, 2019 at 7:41 AM Mauro Carvalho Chehab
-<mchehab@kernel.org> wrote:
+Oops, I missed these warnings. I'll fix them and post a new version.
 
-> Did you check the "make htmldocs" output after this change?
->
-> This code-block is broken, as it starts from column 1.
->
-> Please add a tab (or at least 2 spaces) before each line, in order
-> to make Sphinx process this code block.
+Thanks,
+Eze
 
-Sorry about this.
-
-I will rework the patch and make sure it passes "make htmldocs".
-
-Thanks
