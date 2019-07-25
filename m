@@ -2,123 +2,157 @@ Return-Path: <SRS0=l7FL=VW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=0.6 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A8D8C7618B
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 12:59:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF16DC7618B
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:31:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 59A0821951
-	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 12:59:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C275E21743
+	for <linux-media@archiver.kernel.org>; Thu, 25 Jul 2019 13:31:46 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="WKwOxX6K"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729226AbfGYM7e (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 25 Jul 2019 08:59:34 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:49199 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728897AbfGYM7e (ORCPT
+        id S2387683AbfGYNbq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 25 Jul 2019 09:31:46 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:45660 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387657AbfGYNbp (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 25 Jul 2019 08:59:34 -0400
-Received: from [IPv6:2001:420:44c1:2579:64cb:e917:d1ce:4f27] ([IPv6:2001:420:44c1:2579:64cb:e917:d1ce:4f27])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id qdLBhEcaaLqASqdLEhTpVV; Thu, 25 Jul 2019 14:59:31 +0200
-Subject: Re: [PATCH 0/7] hantro: Add RK3399 VP8 decoding support
-To:     Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-media@vger.kernel.org, Hans Verkuil <hans.verkuil@cisco.com>
-Cc:     kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
+        Thu, 25 Jul 2019 09:31:45 -0400
+Received: by mail-lj1-f194.google.com with SMTP id m23so47933117lje.12
+        for <linux-media@vger.kernel.org>; Thu, 25 Jul 2019 06:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lRofjpGVnPdkvHjT1abpzFvdhqRUdMtCwITS9XC9FqY=;
+        b=WKwOxX6KPDQIRmCgJAKTRU8nyTVTibB5C1TnIuihKcSV5lNt9QF4vT4B5iz0FMTva1
+         X+7McxEoaoHiZtop26NDtdsbRmzb/o4oqU+CfFw5lOJcRcmxL8HDtEfX54kpPakjiubz
+         MUTRw3XXFYfdTUeK+go0VcL/q1AxSnTaPZfY4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lRofjpGVnPdkvHjT1abpzFvdhqRUdMtCwITS9XC9FqY=;
+        b=EoKxMGDGCOnKGnH4jxjam+gFag+80ae6siO62Ujl5LIGoI8bGviS3N1SC9SdLt6mtn
+         p5isXi4hpedMc2emUFyHyokKRnmbQ+LBA/cuI56VoAkXX4Ktbc076VdOpQPUvr47Efr3
+         0VCzm1aiGbmtlEv1FCuZLwNY+0bENaniksWI+mCZKnc/kkproih5zN+TPfFnL9TBMDmc
+         zaQ4IBIyJKA/HNtjcF/McLbg8KUtoMgxHEJKkggjZ0GAhfbYeEw+iIZyqBvQosl0YFAh
+         6Cz7XgqpzcasH7gjO7qX/WTpxtmONVk2JeOS06+PlX0gy8aG6JjcASWP/EzFU/Rl9pdo
+         KCLA==
+X-Gm-Message-State: APjAAAUku00t2HKaP2AzqvEl65Y3Zg/XJmSuIRWwF+5tKsimMhcmWeJJ
+        +yTFQNEXYE7osopYLUYLAb0=
+X-Google-Smtp-Source: APXvYqz/F986DupauyPnWK3++D6Z9b8wSPFEQgtug6IFVchRI8stLut7ttlybhQferFVWVbypQXzzQ==
+X-Received: by 2002:a2e:3013:: with SMTP id w19mr46339678ljw.73.1564061503937;
+        Thu, 25 Jul 2019 06:31:43 -0700 (PDT)
+Received: from [172.16.11.28] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id l22sm9051754ljc.4.2019.07.25.06.31.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Jul 2019 06:31:43 -0700 (PDT)
+Subject: Re: [PATCH 7/9] media: hantro: Add core bits to support H264 decoding
+To:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>, linux-media@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>, kernel@collabora.com,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
         linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
-References: <20190724171702.9449-1-ezequiel@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <b0cd9a4f-4bf9-a48c-6d7c-7147b13fa0b2@xs4all.nl>
-Date:   Thu, 25 Jul 2019 14:59:25 +0200
+        Hertz Wong <hertz.wong@rock-chips.com>
+References: <20190619121540.29320-1-boris.brezillon@collabora.com>
+ <20190619121540.29320-8-boris.brezillon@collabora.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <25cc2826-fc8f-570a-07fa-8cbdb11830a7@rasmusvillemoes.dk>
+Date:   Thu, 25 Jul 2019 15:31:41 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190724171702.9449-1-ezequiel@collabora.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20190619121540.29320-8-boris.brezillon@collabora.com>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfH91+GSCR9/BQ6o5MVMi8O1vy+fYBT8pfW7voO0zSMsUL/0FoUIfCsRdCer6unCd3zmVDWduneqT8untxNKbfwUDD6zeR30I/mWIt+H5JH5JV6aFt3Ns
- mebj0wkIAzROiH99iss3dQxTRTr6M8q8jDR5mK5PhjPdMfgmsLT/weZJ/M64eB0YEPJozJdlg0rPFiA0UiYy0/KvPaJaTvZBnzhunjpHuCim0YhoHm7EKQWb
- 4lEyOEjzOZzRC6ADMMp1ncXoQALIFxtlIOg1ueb9RjvcuFZSF9SvFxMwdjO4jiL2qP7dva5mKzRNYtq8tcuORYZ5dGcoGRDol6NRK5BYFB1hCSy0QOuZ6E/u
- et6/0+bQuPcpTZeWzvPZ63UBC8um/HLQEIIM2RxvpVFO/RqORAMUjmuVKX6VOmlV0Brb3gEQV0+tr7/5NCp149iYNlLXi0P7I5zyj4UuCMTZGx5rVpCSkD3i
- 4Y/AoeWBbZ7T/5W4slLL0sLVLRxl+XfQFDNrQ3B6ay/2xODlw/+VPb6EsPPPgHz9IePfdSQyMTpsgRcvkTy0A3HiuMuvQ8o4oCPuDx+S7pk3mRRLvZmEhe16
- ZQFiIrzs2PhW5IC17EiAG1yhpLXU0eIHcg5dFhpvPSQr0aWwuUtQjj4zL7eSlXKvRmLHU7twDPiGPUQsF5l6mR3bGu2SZkR8bfsnt50RxiCCFUXwktXHvTdG
- T3IGCaNCHD0ynrqgpuETywVduNEEDsXUB4BIIb72u/zM65uPDZ3NKFzvPTcFPoRrdxsQ+Ur4gvNQY7nBRZA3cxtKKjSigmRk
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 7/24/19 7:16 PM, Ezequiel Garcia wrote:
-> This series adds VP8 decoding support on RK3399 SoC.
+On 19/06/2019 14.15, Boris Brezillon wrote:
+> From: Hertz Wong <hertz.wong@rock-chips.com>
 > 
-> I'm including a set of commits from Boris' recent H264 series [1].
-> These commits add some helpers that are also useful for RK3399 VP8,
-> and at the same time cleanup the driver nicely.
+> Add helpers and patch hantro_{drv,v4l2}.c to prepare addition of H264
+> decoding support.
 > 
-> Finally, there's a fix by Francois Buergisser from Chromium team.
-> 
-> VP8 and MPEG-2 tested on RK3399 RockPi and RK3288 Rock2 boards.
+> Signed-off-by: Hertz Wong <hertz.wong@rock-chips.com>
+> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+> ---
+> +
+> +	/*
+> +	 * Short term pics in descending pic num order, long term ones in
+> +	 * ascending order.
+> +	 */
+> +	if (!(a->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM))
+> +		return b->frame_num - a->frame_num;
+> +
+> +	return a->pic_num - b->pic_num;
+> +}
 
-I get this when compiling:
+Pet peeve: This works because ->frame_num and ->pic_num are u16, so
+their difference is guaranteed to fit in an int.
 
-/home/hans/work/build/media-git/drivers/staging/media/hantro/hantro_g1_vp8_dec.c: In function 'hantro_g1_vp8_dec_run':
-/home/hans/work/build/media-git/drivers/staging/media/hantro/hantro_g1_vp8_dec.c:435:26: warning: variable 'vb2_src' set but not used [-Wunused-but-set-variable]
-  struct vb2_v4l2_buffer *vb2_src;
-                          ^~~~~~~
-  CC      drivers/staging/media/omap4iss/iss_csiphy.o
-/home/hans/work/build/media-git/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c: In function 'rk3399_vpu_vp8_dec_run':
-/home/hans/work/build/media-git/drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c:515:26: warning: variable 'vb2_src' set but not used [-Wunused-but-set-variable]
-  struct vb2_v4l2_buffer *vb2_src;
-                          ^~~~~~~
+> +static int b0_ref_list_cmp(const void *ptra, const void *ptrb, const void *data)
+> +{
+> +	const struct hantro_h264_reflist_builder *builder = data;
+> +	const struct v4l2_h264_dpb_entry *a, *b;
+> +	s32 poca, pocb;
+> +	u8 idxa, idxb;
+> +
+> +	idxa = *((u8 *)ptra);
+> +	idxb = *((u8 *)ptrb);
+> +	a = &builder->dpb[idxa];
+> +	b = &builder->dpb[idxb];
+> +
+> +	if ((a->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM) !=
+> +	    (b->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)) {
+> +		/* Short term pics firt. */
+> +		if (!(a->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM))
+> +			return -1;
+> +		else
+> +			return 1;
+> +	}
+> +
+> +	/* Long term pics in ascending pic num order. */
+> +	if (a->flags & V4L2_H264_DPB_ENTRY_FLAG_LONG_TERM)
+> +		return a->pic_num - b->pic_num;
+> +
+> +	poca = builder->pocs[idxa];
+> +	pocb = builder->pocs[idxb];
+> +
+> +	/*
+> +	 * Short term pics with POC < cur POC first in POC descending order
+> +	 * followed by short term pics with POC > cur POC in POC ascending
+> +	 * order.
+> +	 */
+> +	if ((poca < builder->curpoc) != (pocb < builder->curpoc))
+> +		return poca - pocb;
+> +	else if (poca < builder->curpoc)
+> +		return pocb - poca;
+> +
+> +	return poca - pocb;
+> +}
 
-Can you take a look?
+Here, however, poca and pocb are ints. What guarantees that their values
+are not more than 2^31 apart? I know absolutely nothing about this code
+or what these numbers represent, so it may be obvious that they are
+smallish.
 
-Thanks,
-
-	Hans
-
-> 
-> [1] https://patchwork.kernel.org/cover/11003971/
-> 
-> Boris Brezillon (4):
->   media: hantro: Simplify the controls creation logic
->   media: hantro: Constify the control array
->   media: hantro: Add hantro_get_{src,dst}_buf() helpers
->   media: hantro: Add helpers to prepare/finish a run
-> 
-> Ezequiel Garcia (1):
->   media: hantro: Move VP8 common code
-> 
-> Francois Buergisser (1):
->   media: hantro: Set DMA max segment size
-> 
-> Jeffy Chen (1):
->   media: hantro: Support RK3399 VP8 decoding
-> 
->  drivers/staging/media/hantro/Makefile         |   1 +
->  drivers/staging/media/hantro/hantro.h         |  15 +-
->  drivers/staging/media/hantro/hantro_drv.c     |  53 +-
->  .../media/hantro/hantro_g1_mpeg2_dec.c        |  14 +-
->  .../staging/media/hantro/hantro_g1_vp8_dec.c  |  34 +-
->  .../staging/media/hantro/hantro_h1_jpeg_enc.c |  11 +-
->  drivers/staging/media/hantro/hantro_hw.h      |   7 +
->  drivers/staging/media/hantro/hantro_vp8.c     |  15 +
->  drivers/staging/media/hantro/rk3399_vpu_hw.c  |  22 +-
->  .../media/hantro/rk3399_vpu_hw_jpeg_enc.c     |  12 +-
->  .../media/hantro/rk3399_vpu_hw_mpeg2_dec.c    |  14 +-
->  .../media/hantro/rk3399_vpu_hw_vp8_dec.c      | 597 ++++++++++++++++++
->  12 files changed, 711 insertions(+), 84 deletions(-)
->  create mode 100644 drivers/staging/media/hantro/rk3399_vpu_hw_vp8_dec.c
-> 
-
+Rasmus
