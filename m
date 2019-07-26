@@ -2,60 +2,73 @@ Return-Path: <SRS0=wlKd=VX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 71A13C7618B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF94AC76190
 	for <linux-media@archiver.kernel.org>; Fri, 26 Jul 2019 12:08:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 52EA4229F9
+	by mail.kernel.org (Postfix) with ESMTP id B9711229F9
 	for <linux-media@archiver.kernel.org>; Fri, 26 Jul 2019 12:08:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbfGZMI2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 26 Jul 2019 08:08:28 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:54905 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726102AbfGZMI2 (ORCPT
+        id S1726443AbfGZMI3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 26 Jul 2019 08:08:29 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:50397 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726138AbfGZMI2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Fri, 26 Jul 2019 08:08:28 -0400
 Received: from tschai.fritz.box ([46.9.232.237])
         by smtp-cloud7.xs4all.net with ESMTPA
-        id qz1JhX1g2ur8Tqz1MhyBVu; Fri, 26 Jul 2019 14:08:26 +0200
+        id qz1JhX1g2ur8Tqz1PhyBWH; Fri, 26 Jul 2019 14:08:27 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 0/3] v4l2-tpg/vivid/v4l2_format_info: support new pixelformats
-Date:   Fri, 26 Jul 2019 14:08:18 +0200
-Message-Id: <20190726120821.12569-1-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH 2/3] v4l2-common: add support for new RGB32 pixelformats
+Date:   Fri, 26 Jul 2019 14:08:20 +0200
+Message-Id: <20190726120821.12569-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190726120821.12569-1-hverkuil-cisco@xs4all.nl>
+References: <20190726120821.12569-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfKHzXpq0VsCz7+M7zY0V1Bcd+SjzX7dJZAOvo+gOqSQ40QxuIaAX5R+4uYJf95HSXFbQ64ByN1QROqaVfN3qdLeTNI9Dw7ev7r8qwoI/SJ9mPM0U3S9Y
- +X5HyCJbd/VYgiRUnQNRBccVxYkdRpeqEAznmO8iePVJdqOooDXJFPmVwonKFPRyfaVmY/sOhNaoiw==
+X-CMAE-Envelope: MS4wfDCJvHOUgneMZiUnKG/Wt0MDiBaaBdulHy931OZx90S0u/UOEyMO7JvuOU/UgVkJOfHjVCYczaLT5OPPHKZgAafaRaDL+HSsPZGHB5tDrz342MOCUD83
+ lkQidgcwyM0QnNPpEnAoyFWAzqa8DqK20qyjoceVpi0bCRPIKswWuoRSNeaIJL+v1QjAQ+xp58Gxvt9LUIHhlCWgfYcec2D8x0C9DO2soRTZN9s6n0+vTsLA
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-New RGB444, RGB555 and RGB32 variants were recently added. Add
-support for them to the tpg, vivid and v4l2_format_info().
+Four new variants of RGB32 were added. Add support for them to
+the v4l2_format_info() function.
 
-Only the RGB32 variants were added to v4l2_format_info().
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/v4l2-core/v4l2-common.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Regards,
-
-	Hans
-
-Hans Verkuil (3):
-  v4l2-tpg: add support for new pixelformats
-  v4l2-common: add support for new RGB32 pixelformats
-  vivid: add support for new pixelformats
-
- drivers/media/common/v4l2-tpg/v4l2-tpg-core.c | 107 ++++++++++++++
- .../media/platform/vivid/vivid-vid-common.c   | 132 +++++++++++++++++-
- drivers/media/v4l2-core/v4l2-common.c         |   4 +
- 3 files changed, 240 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index f8ad1c580a3e..ab4a792a3bc1 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -455,11 +455,15 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ 		{ .format = V4L2_PIX_FMT_HSV24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_BGR32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_XBGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_BGRX32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_RGB32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_XRGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_RGBX32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_HSV32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_ARGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_RGBA32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_ABGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_BGRA32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 		{ .format = V4L2_PIX_FMT_GREY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 
+ 		/* YUV packed formats */
 -- 
 2.20.1
 
