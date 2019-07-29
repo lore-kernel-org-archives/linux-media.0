@@ -1,274 +1,563 @@
-Return-Path: <SRS0=RPzr=VZ=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=yEzF=V2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_2
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00E18C7618F
-	for <linux-media@archiver.kernel.org>; Sun, 28 Jul 2019 20:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C79C4C7618F
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jul 2019 01:18:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CA7ED2075B
-	for <linux-media@archiver.kernel.org>; Sun, 28 Jul 2019 20:54:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 765CF216B7
+	for <linux-media@archiver.kernel.org>; Mon, 29 Jul 2019 01:18:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbfG1UyB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 28 Jul 2019 16:54:01 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:46155 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726089AbfG1UyA (ORCPT
+        id S1726346AbfG2BST (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 28 Jul 2019 21:18:19 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:60505 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726248AbfG2BST (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 28 Jul 2019 16:54:00 -0400
-X-Originating-IP: 82.58.19.211
-Received: from uno.localdomain (host211-19-dynamic.58-82-r.retail.telecomitalia.it [82.58.19.211])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 7C9A11BF205;
-        Sun, 28 Jul 2019 20:53:56 +0000 (UTC)
-Date:   Sun, 28 Jul 2019 22:55:13 +0200
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Laura Nao <laura.nao@kynetics.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        loic.poulain@linaro.org, linux-media <linux-media@vger.kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        sam@elite-embedded.com
-Subject: Re: Issues with ov5640 camera on i.MX6Q
-Message-ID: <20190728205513.pd6w7j5wi7dc2yib@uno.localdomain>
-References: <890e6dbe-2d8e-d674-b17e-2421a38e7acd@kynetics.com>
- <CAOMZO5B3GV8fPLAdsxx2F+dyH68xPn6MN5rehEvwDvjJmirZrg@mail.gmail.com>
- <9785bc82-b741-b60c-ccd7-efdd2b507c6f@kynetics.com>
+        Sun, 28 Jul 2019 21:18:19 -0400
+X-UUID: 6e96c77651254e6b9194ce5e57e89824-20190729
+X-UUID: 6e96c77651254e6b9194ce5e57e89824-20190729
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        (envelope-from <jungo.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
+        with ESMTP id 306556790; Mon, 29 Jul 2019 09:18:10 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 29 Jul 2019 09:18:09 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 29 Jul 2019 09:18:09 +0800
+Message-ID: <1564363089.1212.636.camel@mtksdccf07>
+Subject: Re: [RFC,v3 6/9] media: platform: Add Mediatek ISP P1 V4L2 functions
+From:   Jungo Lin <jungo.lin@mediatek.com>
+To:     Tomasz Figa <tfiga@chromium.org>
+CC:     Hans Verkuil <hverkuil@xs4all.nl>, <devicetree@vger.kernel.org>,
+        "Sean Cheng =?UTF-8?Q?=28=E9=84=AD=E6=98=87=E5=BC=98=29?=" 
+        <sean.cheng@mediatek.com>,
+        Frederic Chen =?UTF-8?Q?=28=E9=99=B3=E4=BF=8A=E5=85=83=29?= 
+        <frederic.chen@mediatek.com>,
+        Rynn Wu =?UTF-8?Q?=28=E5=90=B3=E8=82=B2=E6=81=A9=29?= 
+        <rynn.wu@mediatek.com>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "Rob Herring" <robh@kernel.org>,
+        Ryan Yu =?UTF-8?Q?=28=E4=BD=99=E5=AD=9F=E4=BF=AE=29?= 
+        <ryan.yu@mediatek.com>,
+        Frankie Chiu =?UTF-8?Q?=28=E9=82=B1=E6=96=87=E5=87=B1=29?= 
+        <frankie.chiu@mediatek.com>, <ddavenport@chromium.org>,
+        Sj Huang <sj.huang@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        "Linux Media Mailing List" <linux-media@vger.kernel.org>
+Date:   Mon, 29 Jul 2019 09:18:09 +0800
+In-Reply-To: <CAAFQd5A8zW9s8cewmHnr9HFmrkxDnEqjrTiwLF2m8sKp0619hA@mail.gmail.com>
+References: <jungo.lin@mediatek.com>
+         <20190611035344.29814-1-jungo.lin@mediatek.com>
+         <20190611035344.29814-7-jungo.lin@mediatek.com>
+         <20190710095429.GA181405@chromium.org>
+         <1563424741.1212.212.camel@mtksdccf07>
+         <CAAFQd5CXeQv74RtqDxYYLVEpsnFbsm0m-kUBDpY_AFmCBO0PyA@mail.gmail.com>
+         <1563942689.1212.494.camel@mtksdccf07>
+         <CAAFQd5A8zW9s8cewmHnr9HFmrkxDnEqjrTiwLF2m8sKp0619hA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5574y5muicmj2ngy"
-Content-Disposition: inline
-In-Reply-To: <9785bc82-b741-b60c-ccd7-efdd2b507c6f@kynetics.com>
-User-Agent: NeoMutt/20180716
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi, Tomasz:
 
---5574y5muicmj2ngy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-Hi Laura,
-
-I went through your changes and tried to make a sense out of them. Good job
-finding them out!
-
-
-On Mon, Jul 22, 2019 at 05:50:35PM +0200, Laura Nao wrote:
-> Thanks Fabio!
->
-> I tried tweaking the PLL configuration in the driver and did some further
-> tests on 5.2 kernel.
->
-> I was finally able to capture RAW frames that match the test pattern for
-> 1280x720 and 1920x1080 resolutions. The 2592x1944 frame is still not
-> perfectly aligned, but it looks much closer to the test pattern.
->
-> I uploaded the images here:
->
-> https://imgur.com/a/ywHokMf
->
-> The changes I made in the driver are below. Not sure these changes make much
-> sense, but they seem to fix 1280x720 and 1920x1080 frames.
->
-
-As you have reported I have no good images for resolutions < 1280x720
-too.
-
-> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-> index 759d60c6..cfa678e 100644
-> --- a/drivers/media/i2c/ov5640.c
-> +++ b/drivers/media/i2c/ov5640.c
-> @@ -795,13 +795,13 @@ static int ov5640_mod_reg(struct ov5640_dev *sensor,
-> u16 reg,
->   * FIXME: to be re-calcualted for 1 data lanes setups
->   */
->  #define OV5640_MIPI_DIV_PCLK	2
-> -#define OV5640_MIPI_DIV_SCLK	1
-> +#define OV5640_MIPI_DIV_SCLK	2
->
-
-With this change we're now basically always setting MIPI DIV to 2, in
-both the cases marked in the driver as "scaler" or "non scaler"
-
-The best explanation I could give, based on what reported by Sam here
-and in the follow up email [1] is that when capturing in RAW mode
-we're always bypassing the ISP scaler, and we're thus acting always in
-"non-scaler" mode.
-
-Recalling the "non verified constraints" mentioned in the past emails:
-
-Non-ISP-scaler:
-MIPI_CLK = 4 ; PCLK = 2; SCLK = 1
-
-ISP-scaler:
-MIPI_CLK = 8 ; PCLK = 2; SCLK = 1
-
-Your above change makes the system work in Non-ISP-scaler mode for RAW
-formats. The fact we still have troubles capturing resolution <
-1280x720 (the ones described as going through the scaler) makes me
-suspect my explanation is only not totally correct though.
-
-I tried playing a bit around with the dividers in the clock tree
-without getting much at the moment... I'll keep working on this in the
-next days and i you have any idea to share I'm all hears...
-
-https://www.spinics.net/lists/linux-media/msg141854.html
-
->  /*
->   * This is supposed to be ranging from 1 to 2, but the value is always
->   * set to 2 in the vendor kernels.
->   */
-> -#define OV5640_PLL_ROOT_DIV			2
-> +#define OV5640_PLL_ROOT_DIV			1
-
-This is not relevant for MIPI, but only for DVP mode.
-
-If you want to bypass the PLL ROOT DIVIDER for MIPI you should change
-this line:
-
-	ret = ov5640_mod_reg(sensor, OV5640_REG_SC_PLL_CTRL3,
-			     0x1f, OV5640_PLL_CTRL3_PLL_ROOT_DIV_2 | prediv);
-
-and set bit 0x10 to 0 according to the manual.
-
-
->  #define OV5640_PLL_CTRL3_PLL_ROOT_DIV_2		BIT(4)
->
->  /*
-> @@ -836,8 +836,8 @@ static unsigned long ov5640_compute_sys_clk(struct
-> ov5640_dev *sensor,
->  	unsigned long sysclk = sensor->xclk_freq / pll_prediv * pll_mult;
->
->  	/* PLL1 output cannot exceed 1GHz. */
-> -	if (sysclk / 1000000 > 1000)
-> -		return 0;
-> +	// if (sysclk / 1000000 > 1000)
-> +	// 	return 0;
-
-This is weird :)
-
-I've seen it making a difference sometime, but most of the time it did
-not.
-
-I printed out the PLL1 output configuration at the end of
-"ov5640_calc_sys_clk()" with:
-
-@@ -899,6 +899,9 @@ static unsigned long ov5640_calc_sys_clk(struct ov5640_dev *sensor,
-        *sysdiv = best_sysdiv;
-        *pll_prediv = OV5640_PLL_PREDIV;
-        *pll_mult = best_mult;
-+       pr_err("%s:%d rate %ld - best %ld - PLL1 out %ld - prediv %u - mult %u - sysdiv %u \n",
-+               __func__, __LINE__, rate, best, (best * best_sysdiv), *pll_prediv, *pll_mult, best_sysdiv);
-+
-
-        return best;
- }
-
-and with this part commented out I get (for 1280x720)
-ov5640_calc_sys_clk:902 rate 336019200 - best 338666666 - PLL1 out 1015999998 - prediv 3 - mult 127 - sysdiv 3
-
-While if I keep the 1GHz limit in place I sometimes have half-crippled
-images and the PLL gets configured as:
-ov5640_calc_sys_clk:902 rate 336019200 - best 340000000 - PLL1 out 680000000 - prediv 3 - mult 85 - sysdiv 2
-
-Apparently the PLL gets configured with a too fast clock if we remove
-the limit. Ironic :) There might be some tolerance in the 1GHz limit,
-or we're hitting a corner case maybe... How often does capture fails
-for you without this change in and for which resolution...
-
-Sorry for not being able to go much further but resurrecting my testing
-setup took quite some time :)
-
-Thanks
-  j
-
-
->
->  	return sysclk / sysdiv;
->  }
-> @@ -1818,7 +1824,7 @@ static int ov5640_set_mode(struct ov5640_dev *sensor)
->  	 * All the formats we support have 16 bits per pixel, seems to require
->  	 * the same rate than YUV, so we can just use 16 bpp all the time.
->  	 */
-> -	rate = mode->vtot * mode->htot * 16;
-> +	rate = mode->vtot * mode->htot * 8;
->  	rate *= ov5640_framerates[sensor->current_fr];
->  	if (sensor->ep.bus_type == V4L2_MBUS_CSI2_DPHY) {
->  		rate = rate / sensor->ep.bus.mipi_csi2.num_data_lanes;
->
-> Thanks,
->
-> Best,
->
-> Laura
->
-> On 7/22/19 2:45 PM, Fabio Estevam wrote:
-> > [Adding Steve and Philipp]
+On Fri, 2019-07-26 at 14:49 +0900, Tomasz Figa wrote:
+> On Wed, Jul 24, 2019 at 1:31 PM Jungo Lin <jungo.lin@mediatek.com> wrote:
 > >
-> > On Thu, Jul 18, 2019 at 10:06 AM Laura Nao <laura.nao@kynetics.com> wrote:
+> > Hi, Tomasz:
+> >
+> > On Tue, 2019-07-23 at 19:21 +0900, Tomasz Figa wrote:
+> > > Hi Jungo,
 > > >
-> > > Hello Loic,
+> > > On Thu, Jul 18, 2019 at 1:39 PM Jungo Lin <jungo.lin@mediatek.com> wrote:
+> > > >
+> > > > Hi, Tomasz:
+> > > >
+> > > > On Wed, 2019-07-10 at 18:54 +0900, Tomasz Figa wrote:
+> > > > > Hi Jungo,
+> > > > >
+> > > > > On Tue, Jun 11, 2019 at 11:53:41AM +0800, Jungo Lin wrote:
+> > > [snip]
+> > > > > > +static void mtk_cam_req_try_isp_queue(struct mtk_cam_dev *cam_dev,
+> > > > > > +                                 struct media_request *new_req)
+> > > > > > +{
+> > > > > > +   struct mtk_cam_dev_request *req, *req_safe, *cam_dev_req;
+> > > > > > +   struct device *dev = &cam_dev->pdev->dev;
+> > > > > > +
+> > > > > > +   dev_dbg(dev, "%s new req:%d", __func__, !new_req);
+> > > > > > +
+> > > > > > +   if (!cam_dev->streaming) {
+> > > > > > +           cam_dev_req = mtk_cam_req_to_dev_req(new_req);
+> > > > > > +           spin_lock(&cam_dev->req_lock);
+> > > > > > +           list_add_tail(&cam_dev_req->list, &cam_dev->req_list);
+> > > > > > +           spin_unlock(&cam_dev->req_lock);
+> > > > > > +           dev_dbg(dev, "%s: stream off, no ISP enqueue\n", __func__);
+> > > > > > +           return;
+> > > > > > +   }
+> > > > > > +
+> > > > > > +   /* Normal enqueue flow */
+> > > > > > +   if (new_req) {
+> > > > > > +           mtk_isp_req_enqueue(dev, new_req);
+> > > > > > +           return;
+> > > > > > +   }
+> > > > > > +
+> > > > > > +   /* Flush all media requests wehen first stream on */
+> > > > > > +   list_for_each_entry_safe(req, req_safe, &cam_dev->req_list, list) {
+> > > > > > +           list_del(&req->list);
+> > > > > > +           mtk_isp_req_enqueue(dev, &req->req);
+> > > > > > +   }
+> > > > > > +}
+> > > > >
+> > > > > This will have to be redone, as per the other suggestions, but generally one
+> > > > > would have a function that tries to queue as much as possible from a list to
+> > > > > the hardware and another function that adds a request to the list and calls
+> > > > > the first function.
+> > > > >
+> > > >
+> > > > We revised this function as below.
+> > > > First to check the en-queue conditions:
+> > > > a. stream on
+> > > > b. The composer buffers in SCP are 3, so we only could has 3 jobs
+> > > > at the same time.
+> > > >
+> > > >
+> > > > Second, try to en-queue the frames in the pending job if possible and
+> > > > move them into running job list if possible.
+> > > >
+> > > > The request has been inserted into pending job in mtk_cam_req_validate
+> > > > which is used to validate media_request.
 > > >
-> > > I'm having some issues with RAW8 mode on the OV5640 camera and I'd like
-> > > to kindly ask for your advice, as I saw that you added support for RAW
-> > > mode in the mainline kernel driver.
+> > > Thanks for replying to each of the comments, that's very helpful.
+> > > Snipped out the parts that I agreed with.
 > > >
-> > > I'm trying to capture some raw images on a i.MX6Q based board. I
-> > > configured the pipeline as follows:
+> > > Please note that req_validate is not supposed to change any driver
+> > > state. It's only supposed to validate the request. req_queue is the
+> > > right callback to insert the request into some internal driver
+> > > bookkeeping structures.
 > > >
-> > > media-ctl -l "'ov5640 1-003c':0 -> 'imx6-mipi-csi2':0[1]"
-> > > media-ctl -l "'imx6-mipi-csi2':2 -> 'ipu1_csi1':0[1]"
-> > > media-ctl -l "'ipu1_csi1':2 -> 'ipu1_csi1 capture':0[1]"
-> > > media-ctl -V "'ov5640 1-003c':0 [fmt:SBGGR8_1X8/2592x1944 field:none]"
-> > > media-ctl -V "'imx6-mipi-csi2':2 [fmt:SBGGR8_1X8/2592x1944 field:none]"
-> > >
-> > > I'm capturing the frame using v4l-utils:
-> > >
-> > > v4l2-ctl -d /dev/video5 --verbose --set-fmt
-> > > video=width=2592,height=1944,pixelformat=BA81 --stream-mmap
-> > > --stream-count=1 --stream-to=bggr_2592x1944.raw
-> > >
-> > > The images I'm obtaining are completely garbled. I tried both 5.2
-> > > mainline and 5.1.18 kernels.
-> > >
-> > > I'm able to correctly capture YUV frames in all resolutions with the
-> > > same driver (with the pipeline configured to go through the
-> > > ipu1_ic_prpenc node first).
-> > >
-> > > Do you have any insight on what might be causing these issues? Is the
-> > > PLL configuration supposed to be changed when RAW8 format is selected?
-> > >
-> > > Thanks for your help,
-> > >
-> > > Best regards,
-> > >
-> > > Laura
+> >
+> > Yes, in req_validate function, we don't change any driver state.
+> > Below is the function's implementation.
+> >
+> > a. Call vb2_request_validate(req) to verify media request.
+> > b. Update the buffer internal structure buffer.
+> > c. Insert the request into pending_job_list to prepare en-queue.
+> >
+> 
+> Adding to a list is changing driver state. The callback must not
+> modify anything else than the request itself.
+> 
+> Queuing to driver's list should happen in req_queue instead.
+> 
+> [snip]
 
---5574y5muicmj2ngy
-Content-Type: application/pgp-signature; name="signature.asc"
+Ok, got your point. We will move these implementation to .req_queue.
 
------BEGIN PGP SIGNATURE-----
+static const struct media_device_ops mtk_cam_media_ops = {
+	.link_notify = v4l2_pipeline_link_notify,
+	.req_alloc = mtk_cam_req_alloc,
+	.req_free = mtk_cam_req_free,
+	.req_validate = vb2_request_validate,
+	.req_queue = mtk_cam_req_queue,
+};
 
-iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl0+C7EACgkQcjQGjxah
-VjxvUw/+Nh4gqVcB4ye1fDZNAPk/V0QTueAgdUUPqdbtBdpRGB6SrwrM8CDq8HWd
-Aha8AhHNvCUzumYNopo1r5VtE8Vu5jfiI2y25+5nUBN38jkFqp9Nlo8YvNyGlTmb
-+zVy5bFUQ+jit25Rl8pprLseGkCwY2lS92HqNwYPZInbJT7tia5Ke7pTiiBvOUei
-+//lCzY1MVYs1KqSuV3TYaNPF9xrc7VW6hF/sw4tbaTiLQCER8aivWVGm9BNA2zO
-MiBVryTdx0+7hHAdCKk3z2aJPqnzb5GQ80xnYCkOF9sB0Upr53XhNyIdEgbHYL33
-FboGbsh/3+J07K3s95d02r7Ns4UbBXU9266QwSZ7b+OTZc9+sMAqrremazHgNpqx
-XEEsUuUg1HWWWeb567zZnrNW5nmsxoiV4WAqBqATaFYtKALwOMhmU+3VsFIDkpa3
-WmsPQqMVunv0tp+MOX4XPOT4YuqPRWhTf1GcnsDSyK2Nd03DdvGgzwlFtsuymRqj
-UafaEMKgP/slH6lJsyDZME6pW+VWRVlrPfMzwc5Ii9PK6facnb7MzChRgwUD2LSp
-tYwGG8B5bLKHtxZaXtfHALhy0750H0HM1kSGGW+ELMTxtK700CnUqe8ILf4HuJyy
-DiL1VUhd2283KQr4nz3ZGYCnMywnd3IobL6GgkKwJaMflCRPT2o=
-=aTIU
------END PGP SIGNATURE-----
+static void mtk_cam_req_queue(struct media_request *req)
+{
+	struct mtk_cam_dev_request *cam_req = mtk_cam_req_to_dev_req(req);
+	struct mtk_cam_dev *cam = container_of(req->mdev, struct mtk_cam_dev,
+					       media_dev);
 
---5574y5muicmj2ngy--
+	atomic_set(&cam_req->buf_count, vb2_request_buffer_cnt(req));
+
+	/* add to pending job list */
+	spin_lock_irq(&cam->pending_job_lock);
+	list_add_tail(&cam_req->list, &cam->pending_job_list);
+	spin_unlock_irq(&cam->pending_job_lock);
+
+	vb2_request_queue(req);
+}
+
+> > > >
+> > > > void mtk_cam_dev_req_try_queue(struct mtk_cam_dev *cam_dev)
+> > > > {
+> > > >         struct mtk_cam_dev_request *req, *req_prev;
+> > > >         struct list_head enqueue_job_list;
+> > > >         int buffer_cnt = atomic_read(&cam_dev->running_job_count);
+> > > >         unsigned long flags;
+> > > >
+> > > >         if (!cam_dev->streaming ||
+> > > >             buffer_cnt >= MTK_ISP_MAX_RUNNING_JOBS) {
+> > >
+> > > Do we have a guarantee that cam_dev->running_job_count doesn't
+> > > decrement between the atomic_read() above and this line?
+> > >
+> >
+> > Ok, we will use cam->pending_job_lock to protect
+> > cam_dev->running_job_count access. Below is the revised version.
+> >
+> > void mtk_cam_dev_req_try_queue(struct mtk_cam_dev *cam)
+> > {
+> >         struct mtk_cam_dev_request *req, *req_prev;
+> >         unsigned long flags;
+> >
+> >         if (!cam->streaming) {
+> >                 dev_dbg(cam->dev, "stream is off\n");
+> >                 return;
+> >         }
+> >
+> >         spin_lock_irqsave(&cam->pending_job_lock, flags);
+> >         if (atomic_read(&cam->running_job_count) >= MTK_ISP_MAX_RUNNING_JOBS) {
+> 
+> If we use a spin_lock to protect the counter, perhaps we don't need
+> the atomic type anymore?
+> 
+
+Ok, we will remove atomic type usage.
+
+
+> >                 dev_dbg(cam->dev, "jobs are full\n");
+> >                 spin_unlock_irqrestore(&cam->pending_job_lock, flags);
+> >                 return;
+> >         }
+> >         list_for_each_entry_safe(req, req_prev, &cam->pending_job_list, list) {
+> 
+> Could we instead check the counter here and break if it's >=
+> MTK_ISP_MAX_RUNNING_JOBS?
+> Then we could increment it here too to simplify the code.
+> 
+
+Thanks for your advice.
+We simplified this function as below:
+
+void mtk_cam_dev_req_try_queue(struct mtk_cam_dev *cam)
+{
+	struct mtk_cam_dev_request *req, *req_prev;
+	unsigned long flags;
+
+	if (!cam->streaming) {
+		dev_dbg(cam->dev, "stream is off\n");
+		return;
+	}
+
+	spin_lock_irq(&cam->pending_job_lock);
+	spin_lock_irqsave(&cam->running_job_lock, flags);
+	list_for_each_entry_safe(req, req_prev, &cam->pending_job_list, list) {
+		if (cam->running_job_count >= MTK_ISP_MAX_RUNNING_JOBS) {
+			dev_dbg(cam->dev, "jobs are full\n");
+			break;
+		}
+		cam->running_job_count++;
+		list_del(&req->list);
+		list_add_tail(&req->list, &cam->running_job_list);
+		mtk_isp_req_enqueue(cam, req);
+	}
+	spin_unlock_irqrestore(&cam->running_job_lock, flags);
+	spin_unlock_irq(&cam->pending_job_lock);
+}
+
+> >                 list_del(&req->list);
+> >                 spin_lock_irqsave(&cam->running_job_lock, flags);
+> >                 list_add_tail(&req->list, &cam->running_job_list);
+> >                 mtk_isp_req_enqueue(cam, req);
+> >                 spin_unlock_irqrestore(&cam->running_job_lock, flags);
+> >                 if (atomic_inc_return(&cam->running_job_count) >=
+> >                         MTK_ISP_MAX_RUNNING_JOBS)
+> >                         break;
+> 
+> With the above suggestion, this if block would go away.
+> 
+> [snip]
+
+Ditto.
+
+> > > >                 mtk_isp_req_enqueue(cam_dev, req);
+> > > >         }
+> > > > }
+> > > >
+> > > [snip]
+> > > > > > +   stride = DIV_ROUND_UP(stride * pixel_byte, 8);
+> > > > > > +
+> > > > > > +   if (pix_fmt == V4L2_PIX_FMT_MTISP_F10)
+> > > > > > +           stride = ALIGN(stride, 4);
+> > > > >
+> > > > > Is it expected that only the F10 format needs this alignment?
+> > > > >
+> > > >
+> > > > yes, if the pixel bits of image format is 10, the byte alignment of bpl
+> > > > should be 4. Otherwise, it is 8. We will revise this and add more
+> > > > comments.
+> > >
+> > > That means that the B10 format also needs the extra alignment, as
+> > > opposed to what the original code did, right?
+> > >
+> >
+> > Sorry for short code snippet.
+> > This alignment checking is only applied to F10, no B10.
+> > If you like to check the full function, you could check this in this
+> > link[1].
+> >
+> > static void cal_image_pix_mp(struct mtk_cam_dev *cam, unsigned int
+> > node_id,
+> >                              struct v4l2_pix_format_mplane *mp)
+> > {
+> >         unsigned int bpl, ppl;
+> >         unsigned int pixel_bits = get_pixel_bits(mp->pixelformat);
+> >         unsigned int width = mp->width;
+> >
+> >         if (node_id == MTK_CAM_P1_MAIN_STREAM_OUT) {
+> >                 /* bayer encoding format & 2 bytes alignment */
+> >                 bpl = ALIGN(DIV_ROUND_UP(width * pixel_bits, 8), 2);
+> >         } else if (node_id == MTK_CAM_P1_PACKED_BIN_OUT) {
+> >                 /*
+> >                  * The FULL-G encoding format
+> >                  * 1 G component per pixel
+> >                  * 1 R component per 4 pixel
+> >                  * 1 B component per 4 pixel
+> >                  * Total 4G/1R/1B in 4 pixel (pixel per line:ppl)
+> >                  */
+> >                 ppl = DIV_ROUND_UP(width * 6, 4);
+> >                 bpl = DIV_ROUND_UP(ppl * pixel_bits, 8);
+> >
+> >                 /* 4 bytes alignment for 10 bit & others are 8 bytes */
+> >                 if (pixel_bits == 10)
+> >                         bpl = ALIGN(bpl, 4);
+> >                 else
+> >                         bpl = ALIGN(bpl, 8);
+> >         }
+> >
+> > [1]
+> > https://crrev.com/c/1712885/2/drivers/media/platform/mtk-isp/isp_50/cam/mtk_cam.c#303
+> >
+> 
+> Got it, thanks!
+> 
+> [snip]
+> > > > > > +
+> > > > > > +static struct v4l2_subdev *
+> > > > > > +mtk_cam_cio_get_active_sensor(struct mtk_cam_dev *cam_dev)
+> > > > > > +{
+> > > > > > +   struct media_device *mdev = cam_dev->seninf->entity.graph_obj.mdev;
+> > > > > > +   struct media_entity *entity;
+> > > > > > +   struct device *dev = &cam_dev->pdev->dev;
+> > > > > > +   struct v4l2_subdev *sensor;
+> > > > >
+> > > > > This variable would be unitialized if there is no streaming sensor. Was
+> > > > > there no compiler warning generated for this?
+> > > > >
+> > > >
+> > > > No, there is no compiler warning.
+> > > > But, we will assign sensor to NULL to avoid unnecessary compiler warning
+> > > > with different compiler options.
+> > > >
+> > >
+> > > Thanks. It would be useful if you could check why the compiler you're
+> > > using doesn't show a warning here. We might be missing other
+> > > uninitialized variables.
+> > >
+> >
+> > We will feedback to your project team to check the possible reason about
+> > compiler warning issue.
+> >
+> 
+> Do you mean that it was the Clang toolchain used on Chromium OS (e.g.
+> emerge chromeos-kernel-4_19)?
+
+> [snip]
+
+Yes, I checked this comment in the Chromium OS build environment.
+But, I think I have made the mistake here. I need to check the build
+status in the Mediatek's kernel upstream environment. I will pay
+attention in next path set upstream.
+
+> > > > > > +
+> > > > > > +   dev_dbg(dev, "%s: node:%d fd:%d idx:%d\n",
+> > > > > > +           __func__,
+> > > > > > +           node->id,
+> > > > > > +           buf->vbb.request_fd,
+> > > > > > +           buf->vbb.vb2_buf.index);
+> > > > > > +
+> > > > > > +   /* For request buffers en-queue, handled in mtk_cam_req_try_queue */
+> > > > > > +   if (vb->vb2_queue->uses_requests)
+> > > > > > +           return;
+> > > > >
+> > > > > I'd suggest removing non-request support from this driver. Even if we end up
+> > > > > with a need to provide compatibility for non-request mode, then it should be
+> > > > > built on top of the requests mode, so that the driver itself doesn't have to
+> > > > > deal with two modes.
+> > > > >
+> > > >
+> > > > The purpose of non-request function in this driver is needed by
+> > > > our camera middle-ware design. It needs 3A statistics buffers before
+> > > > image buffers en-queue. So we need to en-queue 3A statistics with
+> > > > non-request mode in this driver. After MW got the 3A statistics data, it
+> > > > will en-queue the images, tuning buffer and other meta buffers with
+> > > > request mode. Based on this requirement, do you have any suggestion?
+> > > > For upstream driver, should we only consider request mode?
+> > > >
+> > >
+> > > Where does that requirement come from? Why the timing of queuing of
+> > > the buffers to the driver is important?
+> > >
+> > > [snip]
+> >
+> > Basically, this requirement comes from our internal camera
+> > middle-ware/3A hal in user space. Since this is not generic requirement,
+> > we will follow your original suggestion to keep the request mode only
+> > and remove other non-request design in other files. For upstream driver,
+> > it should support request mode only.
+> >
+> 
+> Note that Chromium OS will use the "upstream driver" and we don't want
+> to diverge, so please make the userspace also use only requests. I
+> don't see a reason why there would be any need to submit any buffers
+> outside of a request.
+> 
+> [snip]
+
+Ok, I have raised your concern to our colleagues and let him to discuss
+with you in another communication channel. 
+
+> > > > > > +static void mtk_cam_vb2_buf_request_complete(struct vb2_buffer *vb)
+> > > > > > +{
+> > > > > > +   struct mtk_cam_dev *dev = vb2_get_drv_priv(vb->vb2_queue);
+> > > > > > +
+> > > > > > +   v4l2_ctrl_request_complete(vb->req_obj.req,
+> > > > > > +                              dev->v4l2_dev.ctrl_handler);
+> > > > >
+> > > > > This would end up being called multiple times, once for each video node.
+> > > > > Instead, this should be called explicitly by the driver when it completed
+> > > > > the request - perhaps in the frame completion handler?
+> > > > >
+> > > > > With that, we probably wouldn't even need this callback.
+> > > > >
+> > > >
+> > > > First, if we don't implement this callback function, we will receive
+> > > > kernel warning as below.
+> > > >
+> > > > https://elixir.bootlin.com/linux/latest/source/drivers/media/common/videobuf2/videobuf2-v4l2.c#L420
+> > > >
+> > > > Second, this function is only be called in __vb2_queue_cancel function.
+> > > > Moreover, we will remove cam_dev->v4l2_dev.ctrl_handler in next patch.
+> > > > So could we just implement dummy empty function?
+> > > >
+> > > >  * @buf_request_complete: a buffer that was never queued to the driver
+> > > > but is
+> > > >  *                      associated with a queued request was canceled.
+> > > >  *                      The driver will have to mark associated objects in the
+> > > >  *                      request as completed; required if requests are
+> > > >  *                      supported.
+> > > >
+> > >
+> > > Good catch, thanks.
+> > >
+> > > Sounds like we may indeed need to implement this callback. In
+> > > particular, we may need to remove the request that the buffer was
+> > > associated with from the driver queue and return the other buffers
+> > > associated to it with an error state. This should be similar to
+> > > handling a request failure.
+> > > [snip]
+> >
+> > Before calling this callback function, the VB2's stop_streaming has been
+> > called. Normally, we will return the buffers belonged to this vb2 queu
+> > with error state. On other hand, only if the state of request is
+> > MEDIA_REQUEST_STATE_QUEUED, the buf_request_complete will be called in
+> > __vb2_queue_cancel function. It hints this media request has been
+> > validated and inserted into our driver's pending_job_list or
+> > running_job_list. So we will call mtk_cam_dev_req_cleanup() remove these
+> > requests from driver's list when streaming is off. Since we have no
+> > v4l2_ctrl, do we need to do the above things which is already handled in
+> > mtk_cam_vb2_stop_streaming function? Maybe is this callback function
+> > only designed for v4l2_ctrl_request_complete usage?
+> 
+> Are you sure that this callback can be only called after
+> stop_streaming? Also wouldn't that be after stop_streaming only on 1
+> queue? The other queues could still remain streaming, but we still
+> have to return corresponding buffers I believe.
+> 
+> Hans, could you clarify what exactly this callback is supposed to do?
+> 
+
+Ok, we will look forward Hans' comments on this.
+
+> >
+> > static void mtk_cam_dev_req_cleanup(struct mtk_cam_dev *cam)
+> > {
+> >         struct mtk_cam_dev_request *req, *req_prev;
+> >         unsigned long flags;
+> >
+> >         dev_dbg(cam->dev, "%s\n", __func__);
+> >
+> >         spin_lock_irqsave(&cam->pending_job_lock, flags);
+> >         list_for_each_entry_safe(req, req_prev, &cam->pending_job_list, list)
+> >                 list_del(&req->list);
+> >         spin_unlock_irqrestore(&cam->pending_job_lock, flags);
+> >
+> >         spin_lock_irqsave(&cam->running_job_lock, flags);
+> >         list_for_each_entry_safe(req, req_prev, &cam->running_job_list, list)
+> >                 list_del(&req->list);
+> >         spin_unlock_irqrestore(&cam->running_job_lock, flags);
+> > }
+> >
+> > static void mtk_cam_vb2_stop_streaming(struct vb2_queue *vq)
+> > {
+> >         struct mtk_cam_dev *cam = vb2_get_drv_priv(vq);
+> >         struct mtk_cam_video_device *node = mtk_cam_vbq_to_vdev(vq);
+> >         struct device *dev = cam->dev;
+> >
+> >         dev_dbg(dev, "%s node:%d count info:%d", __func__,
+> >                 node->id, atomic_read(&cam->stream_count));
+> >
+> >         mutex_lock(&cam->op_lock);
+> >         if (atomic_read(&cam->stream_count) == cam->enabled_count)
+> >                 if (v4l2_subdev_call(&cam->subdev, video, s_stream, 0))
+> >                         dev_err(dev, "failed to stop streaming\n");
+> >
+> >         mtk_cam_vb2_return_all_buffers(cam, node, VB2_BUF_STATE_ERROR);
+> >
+> >         /* Check the first node to stream-off */
+> >         if (!atomic_dec_and_test(&cam->stream_count)) {
+> >                 mutex_unlock(&cam->op_lock);
+> >                 return;
+> >         }
+> >         mutex_unlock(&cam->op_lock);
+> >
+> >         mtk_cam_dev_req_cleanup(cam);
+> >         media_pipeline_stop(&node->vdev.entity);
+> > }
+> 
+> [keeping the context for Hans]
+> 
+> Best regards,
+> Tomasz
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+
+
+Best regards,
+
+
+Jungo
+
+
+
