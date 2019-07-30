@@ -2,33 +2,38 @@ Return-Path: <SRS0=JK+F=V3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.2 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31AFCC0650F
-	for <linux-media@archiver.kernel.org>; Tue, 30 Jul 2019 07:48:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A25B2C433FF
+	for <linux-media@archiver.kernel.org>; Tue, 30 Jul 2019 07:51:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0516A206E0
-	for <linux-media@archiver.kernel.org>; Tue, 30 Jul 2019 07:48:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8159B206E0
+	for <linux-media@archiver.kernel.org>; Tue, 30 Jul 2019 07:51:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730555AbfG3Hsh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Jul 2019 03:48:37 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58552 "EHLO mx1.suse.de"
+        id S1730674AbfG3Hve (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Jul 2019 03:51:34 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59346 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729016AbfG3Hsg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Jul 2019 03:48:36 -0400
+        id S1726953AbfG3Hve (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 30 Jul 2019 03:51:34 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BF915AD8B;
-        Tue, 30 Jul 2019 07:48:35 +0000 (UTC)
-Message-ID: <1564472907.25582.16.camel@suse.com>
-Subject: KASAN reporting: general protection fault in flexcop_usb_probe
+        by mx1.suse.de (Postfix) with ESMTP id 10778AE8B;
+        Tue, 30 Jul 2019 07:51:33 +0000 (UTC)
+Message-ID: <1564473085.25582.19.camel@suse.com>
+Subject: Re: general protection fault in flexcop_usb_probe
 From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
-Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Tue, 30 Jul 2019 09:48:27 +0200
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        syzbot <syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com>
+Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
+Date:   Tue, 30 Jul 2019 09:51:25 +0200
+In-Reply-To: <CAAeHK+yY3JWAj+EZ5wzqUOMbN+cdddCoRn7Nxn759-7zR-J7BQ@mail.gmail.com>
+References: <1564410374.25582.15.camel@suse.com>
+         <000000000000488c6d058ed337b2@google.com>
+         <CAAeHK+yY3JWAj+EZ5wzqUOMbN+cdddCoRn7Nxn759-7zR-J7BQ@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
@@ -38,54 +43,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Reacting to this:
+Am Montag, den 29.07.2019, 18:54 +0200 schrieb Andrey Konovalov:
 
-Title:              general protection fault in flexcop_usb_probe
-Last occurred:      0 days ago
-Reported:           102 days ago
-Branches:           Mainline (with usb-fuzzer patches)
-Dashboard link:     https://syzkaller.appspot.com/bug?id=c0203bd72037d0
-7493f4b7562411e4f5f4553a8f
-Original thread:    https://lkml.kernel.org/lkml/00000000000010fe260586
-536e86@google.com/T/#u
+Hi,
 
-This bug has a C reproducer.
+> Thanks a lot for fixing all of these USB bugs!
 
-No one replied to the original thread for this bug.
+I fear the day we get serious about MA USB.
+All these issues will turn into security issues.
 
-This looks like a bug in a media USB driver.
+> The usb-fuzzer branch is working again, so it should be possible to
+> use it for testing. But, I've actually just realized, that the proper
+> way to test fixes for USB bugs is to use the exact commit hash that is
+> provided in each bug report (the kernel interface for emulating USB
+> device is not stable yet, and has significantly changed at least
+> once). I've updated syzbot documentation to reflect this.
 
-If you fix this bug, please add the following tag to the commit:
-    Reported-by: syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
+Where is taht documentation?
 
-#syz test: https://github.com/google/kasan.git 9a33b369
+> Let's try to retest this one with the right kernel commit id:
+> 
+> #syz test: https://github.com/google/kasan.git 9a33b369
 
-From 5a34ecc6c75479a9f245a867e1ce37e6e28f58f8 Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Mon, 29 Jul 2019 16:21:11 +0200
-Subject: [PATCH] b2c2-flexcop-usb: add sanity checking
+Retesting.
 
-The driver needs an isochronous endpoint to be present. It will
-oops in its absence. Add checking for it.
-
-Reported-by: syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/media/usb/b2c2/flexcop-usb.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/media/usb/b2c2/flexcop-usb.c b/drivers/media/usb/b2c2/flexcop-usb.c
-index 1826ff825c2e..1a801dc286f8 100644
---- a/drivers/media/usb/b2c2/flexcop-usb.c
-+++ b/drivers/media/usb/b2c2/flexcop-usb.c
-@@ -538,6 +538,9 @@ static int flexcop_usb_probe(struct usb_interface *intf,
- 	struct flexcop_device *fc = NULL;
- 	int ret;
- 
-+	if (intf->cur_altsetting->desc.bNumEndpoints < 1)
-+		return -ENODEV;
-+
- 	if ((fc = flexcop_device_kmalloc(sizeof(struct flexcop_usb))) == NULL) {
- 		err("out of memory\n");
- 		return -ENOMEM;
+	Regards
+		Oliver
 
