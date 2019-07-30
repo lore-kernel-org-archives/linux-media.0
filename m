@@ -2,93 +2,62 @@ Return-Path: <SRS0=JK+F=V3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 400A5C0650F
-	for <linux-media@archiver.kernel.org>; Tue, 30 Jul 2019 16:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E2F5C433FF
+	for <linux-media@archiver.kernel.org>; Tue, 30 Jul 2019 17:56:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 06E08206E0
-	for <linux-media@archiver.kernel.org>; Tue, 30 Jul 2019 16:27:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1564504032;
-	bh=KOL9KkVnNsLLBFz+BEQo074Efzg1nURXPqVjQtzZdOU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=xW0382ZYUoadRc+zc3knnOeSTaKu9gMqKfbAktWJEzdXmuNaz/peQI5sfESZynfhj
-	 tK1hk8L22MFK2gvnSt1nvIdk+Lrjp0QEJjc+LzlUHqXVeTMjAZjNbICTpJs2dxzwb+
-	 xg945/Jlg63BHgIrwwVnopMlrFTqxNgyHDDfW/iU=
+	by mail.kernel.org (Postfix) with ESMTP id 4EFD1206A2
+	for <linux-media@archiver.kernel.org>; Tue, 30 Jul 2019 17:56:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727126AbfG3Q1L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 30 Jul 2019 12:27:11 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57852 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725889AbfG3Q1L (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 30 Jul 2019 12:27:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=hmNMNukj92TPOHTtrSR79k7T9j0aJJZcv8pQtCNjJ1Q=; b=CPHm3Sl0pmnzuRKt6JXYvDF9w
-        CBSHJs/ahfIPBXRSLtvCKfbrQcKj1iOQLeRc/xW1JA33rDhqQtbce2nKoFEFC3oX+b9t8q9Wm3fEJ
-        E78L2FUILK7gV5vPBXBn9Rhr0gi3DhO64czKO08xUuvfk25HsTBO7jI3OTAoGGZIhBj6BvcaaL51M
-        e9BO4GhgTn9NjTAxPah3L76d6d/7aMUxZSybO+w4RSP8Uq+JKxraQ7ew+oUbtOrDGp8kVN6y7C/WK
-        RjKKcFH8MpxX07THuR8n0I8nLe3bQ7cyhHqz9emTomBee+2P8wobkqJaj9vY6N7NonW2meUsTlfhu
-        +c/6MGVLg==;
-Received: from [177.157.101.143] (helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hsUxy-0007kA-NM; Tue, 30 Jul 2019 16:27:11 +0000
-Date:   Tue, 30 Jul 2019 13:27:07 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>
-Subject: Re: [GIT PULL FOR v5.4] Fixes, via-camera, vivid
-Message-ID: <20190730132707.797958b6@coco.lan>
-In-Reply-To: <61b8bd92-5bd5-754a-3a5e-7fbc9e87d9ab@xs4all.nl>
-References: <61b8bd92-5bd5-754a-3a5e-7fbc9e87d9ab@xs4all.nl>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2387502AbfG3R4L (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 30 Jul 2019 13:56:11 -0400
+Received: from sauhun.de ([88.99.104.3]:55972 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726167AbfG3R4L (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 30 Jul 2019 13:56:11 -0400
+Received: from localhost (p54B33338.dip0.t-ipconnect.de [84.179.51.56])
+        by pokefinder.org (Postfix) with ESMTPSA id 5642A2C7BD8;
+        Tue, 30 Jul 2019 19:56:09 +0200 (CEST)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Subject: [PATCH v2 0/2] media: ir-kbd-i2c: convert to devm_i2c_new_dummy_device & minor cleanup
+Date:   Tue, 30 Jul 2019 19:55:53 +0200
+Message-Id: <20190730175555.14098-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Tue, 30 Jul 2019 13:44:18 +0200
-Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+This series is part of a tree-wide movement to replace the I2C API call
+'i2c_new_dummy' which returns NULL with its new counterpart returning an
+ERRPTR.
 
-> Small fixes, via-camera vb2 conversion (yeah!) and extended pixelformat
-> support in v4l2-tpg/vivid. Patches for the corresponding v4l-utils support
-> for these pixelformats is ready as well.
-> 
-> Regards,
-> 
-> 	Hans
-> 
-> The following changes since commit a8f910ec66583bfb61558c3f333195b3960d832d:
-> 
->   media: v4l2-core: Cleanup Makefile (2019-07-25 12:28:28 -0400)
-> 
-> are available in the Git repository at:
-> 
->   git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.4g
-> 
-> for you to fetch changes up to 1de3c46bf602d9edb34d19259af719824b11b24a:
-> 
->   via-camera: convert to the vb2 framework (2019-07-30 13:10:33 +0200)
+It was manually converted and only build tested. A small cleanup was
+added while working on this driver. Looking for ack/rev/test for this
+series.
 
-...
+The series is based on v5.3-rc2.
 
-> gtk_ruiwang (1):
->       media: mtk-vcodec: Handle H264 error bitstreams
+Happy hacking,
 
-Applied all patches but this one. Author/SoB should have the author's
-name, and not a random string.
+   Wolfram
 
-Thanks,
-Mauro
+
+Wolfram Sang (2):
+  media: ir-kbd-i2c: convert to i2c_new_dummy_device()
+  media: ir-kbd-i2c: remove outdated comments
+
+ drivers/media/i2c/ir-kbd-i2c.c | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
+
+-- 
+2.20.1
+
