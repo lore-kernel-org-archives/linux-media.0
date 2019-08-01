@@ -2,92 +2,94 @@ Return-Path: <SRS0=PbWc=V5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F2CFC433FF
-	for <linux-media@archiver.kernel.org>; Thu,  1 Aug 2019 12:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0889C19759
+	for <linux-media@archiver.kernel.org>; Thu,  1 Aug 2019 12:33:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 21C9D204EC
-	for <linux-media@archiver.kernel.org>; Thu,  1 Aug 2019 12:31:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A42C20665
+	for <linux-media@archiver.kernel.org>; Thu,  1 Aug 2019 12:33:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="UfOYyYud"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729506AbfHAMbc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Aug 2019 08:31:32 -0400
-Received: from gofer.mess.org ([88.97.38.141]:41601 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728902AbfHAMbc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 1 Aug 2019 08:31:32 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 7D0586015D; Thu,  1 Aug 2019 13:31:31 +0100 (BST)
-Date:   Thu, 1 Aug 2019 13:31:31 +0100
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL FOR v5.4] dvb/rc fixes, take #2
-Message-ID: <20190801123131.azv6kldrr7gniqih@gofer.mess.org>
+        id S1731307AbfHAMdi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Aug 2019 08:33:38 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:47008 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbfHAMdh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Aug 2019 08:33:37 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x71CXa2N064413;
+        Thu, 1 Aug 2019 07:33:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1564662816;
+        bh=yhT9eES5F/NMsVEY5D3Fsl/rw0/dUbFlppEz+lgQ5FQ=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=UfOYyYudOMDXF0XaKl4dEi1jFXHwhFqRoTE8DSaiZpHkGXb0h9SoPImg0eS9F06Ff
+         MS6ZSIgUEn0iLWToTKf2R9Zye1lGoTrsNZG0Dli0nWNzaML652rRJjsS6NEYm9PpsX
+         ZUEMIeF7nsHIfLsgsTk9+plzdRFtVsHJYSYSSph0=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x71CXagW053160
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Aug 2019 07:33:36 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 1 Aug
+ 2019 07:33:35 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 1 Aug 2019 07:33:36 -0500
+Received: from ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with SMTP id x71CXZZR049514;
+        Thu, 1 Aug 2019 07:33:35 -0500
+Date:   Thu, 1 Aug 2019 07:35:06 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Prabhakar Lad <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH] am437x: remove unused struct vpfe_pixel_format
+Message-ID: <20190801123506.u6or63lylh36qjvb@ti.com>
+References: <b29844e0-4dee-a6a5-913c-59c40f8ab77a@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <b29844e0-4dee-a6a5-913c-59c40f8ab77a@xs4all.nl>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hans Verkuil <hverkuil@xs4all.nl> wrote on Tue [2019-Jul-23 14:59:47 +0200]:
+> struct vpfe_pixel_format was defined, but never used. Remove it.
+> 
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> ---
+> diff --git a/drivers/media/platform/am437x/am437x-vpfe.h b/drivers/media/platform/am437x/am437x-vpfe.h
+> index 17d7aa426788..4678285f34c6 100644
+> --- a/drivers/media/platform/am437x/am437x-vpfe.h
+> +++ b/drivers/media/platform/am437x/am437x-vpfe.h
+> @@ -65,12 +65,6 @@ struct vpfe_hw_if_param {
+>  #define VPFE_MAX_SUBDEV		1
+>  #define VPFE_MAX_INPUTS		1
+> 
+> -struct vpfe_pixel_format {
+> -	struct v4l2_fmtdesc fmtdesc;
+> -	/* bytes per pixel */
+> -	int bpp;
+> -};
+> -
 
-Here is another dvb/rc pull request. More to come.
+Looks fine to me.
 
-Thanks
-Sean
+Acked-by: Benoit Parrot <bparrot@ti.com>
 
-The following changes since commit 4590c07462fbff4ecbfe1deec44431c16191bd19:
 
-  media: via-camera: convert to the vb2 framework (2019-07-30 12:18:34 -0400)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/syoung/media_tree.git tags/v5.4b
-
-for you to fetch changes up to 6eedaba3f5a2c733c211b4fea91a348f058bc025:
-
-  dt-bindings: media: sunxi-ir: Add H6 compatible (2019-08-01 21:09:15 +0900)
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      media: don't drop front-end reference count for ->detach
-
-Clément Péron (6):
-      dt-bindings: media: sunxi-ir: Add A31 compatible
-      media: rc: Introduce sunxi_ir_quirks
-      media: rc: sunxi: Add A31 compatible
-      media: rc: sunxi: Add RXSTA bits definition
-      dt-bindings: media: sunxi-ir: Add A64 compatible
-      dt-bindings: media: sunxi-ir: Add H6 compatible
-
-Oliver Neukum (1):
-      media: iguanair: add sanity checks
-
-Sean Young (2):
-      media: lirc: document BPF IR decoding
-      media: rc: describe rc protocols and their scancodes
-
-Wolfram Sang (2):
-      media: ir-kbd-i2c: convert to i2c_new_dummy_device()
-      media: ir-kbd-i2c: remove outdated comments
-
- .../devicetree/bindings/media/sunxi-ir.txt         |  11 +-
- Documentation/media/uapi/rc/lirc-dev-intro.rst     |  57 ++-
- Documentation/media/uapi/rc/lirc-read.rst          |   3 +-
- Documentation/media/uapi/rc/lirc-write.rst         |   3 +-
- Documentation/media/uapi/rc/rc-protos.rst          | 456 +++++++++++++++++++++
- Documentation/media/uapi/rc/remote_controllers.rst |   1 +
- drivers/media/dvb-core/dvb_frontend.c              |   4 +-
- drivers/media/i2c/ir-kbd-i2c.c                     |  17 +-
- drivers/media/rc/iguanair.c                        |  15 +-
- drivers/media/rc/sunxi-cir.c                       |  88 +++-
- drivers/media/usb/dvb-usb/pctv452e.c               |   8 -
- 11 files changed, 597 insertions(+), 66 deletions(-)
- create mode 100644 Documentation/media/uapi/rc/rc-protos.rst
+>  struct vpfe_std_info {
+>  	int active_pixels;
+>  	int active_lines;
