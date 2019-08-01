@@ -2,118 +2,118 @@ Return-Path: <SRS0=PbWc=V5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A02C433FF
-	for <linux-media@archiver.kernel.org>; Thu,  1 Aug 2019 12:34:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB0A9C32753
+	for <linux-media@archiver.kernel.org>; Thu,  1 Aug 2019 12:38:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C9EE20665
-	for <linux-media@archiver.kernel.org>; Thu,  1 Aug 2019 12:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1564662846;
-	bh=eo3vZDsufeWebLCDMTHy/6MOjgUKlUXc7peQWbJqmFw=;
-	h=Date:From:To:Subject:In-Reply-To:References:List-ID:From;
-	b=zrou1v5mkEwxtrRk8CZeqF/aJHj0LQDNisIAPHY5xQjYjJFqUrj0Lj2MB7TuSey2u
-	 IFYkeV1OXl1IQGTvQ1gbhXyb28iGe0vt05fsIKt5+uTp3d5/575X0iY96yvPHJC9g+
-	 twUuWzaoDDZCmqIvn+u6K1Mgt3DcGRjRjpC81YTk=
+	by mail.kernel.org (Postfix) with ESMTP id CC3C320665
+	for <linux-media@archiver.kernel.org>; Thu,  1 Aug 2019 12:38:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729522AbfHAMeF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 1 Aug 2019 08:34:05 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:34466 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfHAMeF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 1 Aug 2019 08:34:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:To:From:
-        Date:Sender:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=zmJ1XI/WnwOcLA+zAfOPq1dliMPgkr8zXGj7S5gAdS8=; b=ksv0Kk5n9wCmiQMl2RhjNO8DC
-        JfAetHOwmbJmPPHsLKKLyBSBY9PEzREeM0SBGEDwgICjuxJ9UAHS02yXcP7QlUZURTpqv1RPh4Feq
-        jV7LdGZJazDhXU8C3yOASXUa7pRcJeHm3WLJImPhL7rKvtSKvD6flGidyllQXEnfAY9cMhQLu6OLQ
-        UTego6WxDdB3EEUE77S+VZFwNX7WH2ZxradhDSjW6AjBHJjCnyo9iFOiIeyEvgnju3UicRXLHcK1W
-        xzWnWBTy24d1GuCPuPPQEslKO7svb1l9959iBvAk4VDZMN6gBSyBBNQ4vvYStY65tkYKP7K3uvy9x
-        oWrb+UrzA==;
-Received: from [191.33.152.89] (helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1htAHU-0007J8-VY
-        for linux-media@vger.kernel.org; Thu, 01 Aug 2019 12:34:05 +0000
-Date:   Thu, 1 Aug 2019 09:34:00 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     linux-media@vger.kernel.org
-Subject: Re: [ANN] Media summit in Lisbon at September
-Message-ID: <20190801093400.5c351754@coco.lan>
-In-Reply-To: <20190630134404.7ba170f0@coco.lan>
-References: <20190630134404.7ba170f0@coco.lan>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1731331AbfHAMiO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 1 Aug 2019 08:38:14 -0400
+Received: from foss.arm.com ([217.140.110.172]:35274 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726422AbfHAMiN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 1 Aug 2019 08:38:13 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA8AC1570;
+        Thu,  1 Aug 2019 05:38:12 -0700 (PDT)
+Received: from [10.1.194.48] (e123572-lin.cambridge.arm.com [10.1.194.48])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E84103F575;
+        Thu,  1 Aug 2019 05:38:07 -0700 (PDT)
+Subject: Re: [PATCH v19 02/15] arm64: Introduce prctl() options to control the
+ tagged user addresses ABI
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+References: <cover.1563904656.git.andreyknvl@google.com>
+ <1c05651c53f90d07e98ee4973c2786ccf315db12.1563904656.git.andreyknvl@google.com>
+ <7a34470c-73f0-26ac-e63d-161191d4b1e4@intel.com>
+From:   Kevin Brodsky <kevin.brodsky@arm.com>
+Message-ID: <2b274c6f-6023-8eb8-5a86-507e6000e13d@arm.com>
+Date:   Thu, 1 Aug 2019 13:38:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <7a34470c-73f0-26ac-e63d-161191d4b1e4@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Sun, 30 Jun 2019 13:44:04 -0300
-Mauro Carvalho Chehab <mchehab+samsung@kernel.org> escreveu:
+On 31/07/2019 18:05, Dave Hansen wrote:
+> On 7/23/19 10:58 AM, Andrey Konovalov wrote:
+>> +long set_tagged_addr_ctrl(unsigned long arg)
+>> +{
+>> +	if (!tagged_addr_prctl_allowed)
+>> +		return -EINVAL;
+>> +	if (is_compat_task())
+>> +		return -EINVAL;
+>> +	if (arg & ~PR_TAGGED_ADDR_ENABLE)
+>> +		return -EINVAL;
+>> +
+>> +	update_thread_flag(TIF_TAGGED_ADDR, arg & PR_TAGGED_ADDR_ENABLE);
+>> +
+>> +	return 0;
+>> +}
+> Instead of a plain enable/disable, a more flexible ABI would be to have
+> the tag mask be passed in.  That way, an implementation that has a
+> flexible tag size can select it.  It also ensures that userspace
+> actually knows what the tag size is and isn't surprised if a hardware
+> implementation changes the tag size or position.
+>
+> Also, this whole set deals with tagging/untagging, but there's an
+> effective loss of address space when you do this.  Is that dealt with
+> anywhere?  How do we ensure that allocations don't get placed at a
+> tagged address before this gets turned on?  Where's that checking?
 
-> Hi all,
-> 
-> We are organizing a media mini-summit in Lisbon to happen in September,
-> at the same week as the Linux Plumber Conference and the Kernel Summit.
-> 
-> We're still discussing the details about that.
+This patch series only changes what is allowed or not at the syscall interface. It 
+does not change the address space size. On arm64, TBI (Top Byte Ignore) has always 
+been enabled for userspace, so it has never been possible to use the upper 8 bits of 
+user pointers for addressing.
 
-Gently reminder.
+If other architectures were to support a similar functionality, then I agree that a 
+common and more generic interface (if needed) would be helpful, but as it stands this 
+is an arm64-specific prctl, and on arm64 the address tag is defined by the 
+architecture as bits [63:56].
 
-Right now, we have just one extra theme proposal from Sean:
-
-	- possible dvb improvements.
-
-If we don't have more proposals, we may end skipping the Media
-Summit this year.
-
-Regards,
-Mauro
-
-
-> 
-> In principle, it will be a free event for the ones registered
-> to Linux Plumbers Conference, happening between Sept 9-11.
-> They have a room available that we could use for the meeting on that
-> period of time, but we need to adjust to avoid conflicts with other
-> interesting micro-conferences that will happen in parallel (or
-> eventually do it outside that period, but that would be harder to
-> organize).
-> 
-> I'll let you know more details once we got it.
-> 
-> If you plan to attend, please let me know. It is open for all, but
-> we'll have a limited number of seats. So, the earliest we get the
-> number of interested people, the best.
-> 
-> -
-> 
-> At the last summit, we were supposed to do a Key Signing Party, but
-> we end not doing it, due to lack of time. I suggest we add this again,
-> but doing it earlier, in order to avoid getting out of time for doing
-> it.
-> 
-> From my side, I'd like to discuss what criteria we should adopt for
-> the code that comes via /drivers/staging/media, in particular:
-> how much time should we keep a code there that doesn't receive any
-> patch addressing the drivers real issues (excluding codepatch,
-> cleanups and kAPI changes)?
-> 
-> What other themes should be discussed?
-> 
-> Thanks,
-> Mauro
-
-
-
-Thanks,
-Mauro
+Kevin
