@@ -2,115 +2,138 @@ Return-Path: <SRS0=pkzJ=WB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0F2FC0650F
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 16:41:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F945C0650F
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 16:53:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AC1CA2064A
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 16:41:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="Cyr53hdw"
+	by mail.kernel.org (Postfix) with ESMTP id 1A9992147A
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 16:53:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728865AbfHEQlu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Aug 2019 12:41:50 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:46183 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726559AbfHEQlu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 12:41:50 -0400
-Received: by mail-ed1-f66.google.com with SMTP id d4so79404013edr.13
-        for <linux-media@vger.kernel.org>; Mon, 05 Aug 2019 09:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=hf8FvBTAOyggpm2dvd4BtwrryCtsii7uz4O8VRrML7E=;
-        b=Cyr53hdwUMN5whYeNI4sQtK4949Kf9XdSQAuLtcirO+KLENd/SqV8BIzUQ4PQxBGHZ
-         jup80kW0eVZVml7QSMebZq7lVMVPh6I0FPLCTkSHYGUcvdOkng8Adf2FTUMEdIT3cyhb
-         nPSKmvUnMUU2+CSRzh1KtfXMBeTKvZCpraqzQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=hf8FvBTAOyggpm2dvd4BtwrryCtsii7uz4O8VRrML7E=;
-        b=PPEkMEktez5KM6wZuchDRj8F0LPehexBPvY4ofAgFuRa8H+UmqsJeNF6uedTzcb8Tp
-         ym6CbBDLROa4W5RHRuhj3L/1nzxCQprpYQGKU0Gulgyu7hPC+f31J2g/DBO1jM+lsbO6
-         Jr/KBC/Nv/xcUxzAX8YqnTDd7dQyf7Nqj63Aum4Okkg5HjigD5HW/+WIJhnA3OiYU2JH
-         dOcqim+p7l0V3GjRQWSm6MZ1CYigwvVVDojJmTJ8Bf8Uexc41gkBsRN28ukq4rD6IAk/
-         0hDsWKOW78q3+j+Ghu6LRPnw3nLQo5h30UjB6T9u1RcUEvk5CY5WySM5eZwxU2MaYsX+
-         qTUw==
-X-Gm-Message-State: APjAAAVXsZJ+29ZI+zE+VpjWBnaDDhzSiKSfWuUPbQidrJiwqYXe+Rgl
-        tm6040vwYDasMQWXOWfOAe0=
-X-Google-Smtp-Source: APXvYqzB+kkvE6XHVSaOiar91jcBLzv+PjeK8RERQ/cfP8IvIxj7oGLsBKvncel8k1kqD4HhJ2fKEQ==
-X-Received: by 2002:a17:906:c459:: with SMTP id ck25mr116923991ejb.32.1565023308629;
-        Mon, 05 Aug 2019 09:41:48 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
-        by smtp.gmail.com with ESMTPSA id b15sm7448204ejj.5.2019.08.05.09.41.47
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 09:41:47 -0700 (PDT)
-Date:   Mon, 5 Aug 2019 18:41:46 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Chris Wilson <chris@chris-wilson.co.uk>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH 5/5] dma-buf: nuke reservation_object seq
- number
-Message-ID: <20190805164145.GW7444@phenom.ffwll.local>
-References: <20190805154554.3476-1-christian.koenig@amd.com>
- <20190805154554.3476-5-christian.koenig@amd.com>
- <156502126144.28464.11399426968315988701@skylake-alporthouse-com>
+        id S1729438AbfHEQxO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Aug 2019 12:53:14 -0400
+Received: from mga12.intel.com ([192.55.52.136]:43074 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728760AbfHEQxN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 5 Aug 2019 12:53:13 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 09:53:12 -0700
+X-IronPort-AV: E=Sophos;i="5.64,350,1559545200"; 
+   d="scan'208";a="168030649"
+Received: from rdvivi-losangeles.jf.intel.com (HELO intel.com) ([10.7.196.65])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Aug 2019 09:53:12 -0700
+Date:   Mon, 5 Aug 2019 09:53:46 -0700
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     john.hubbard@gmail.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-fbdev@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        kvm@vger.kernel.org, David Airlie <airlied@linux.ie>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        sparclinux@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        ceph-devel@vger.kernel.org, devel@driverdev.osuosl.org,
+        rds-devel@oss.oracle.com, linux-rdma@vger.kernel.org,
+        x86@kernel.org, amd-gfx@lists.freedesktop.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, xen-devel@lists.xenproject.org,
+        devel@lists.orangefs.org, linux-media@vger.kernel.org,
+        John Hubbard <jhubbard@nvidia.com>,
+        intel-gfx@lists.freedesktop.org, linux-block@vger.kernel.org,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
+        netdev@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-xfs@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 06/34] drm/i915: convert put_page() to put_user_page*()
+Message-ID: <20190805165346.GB25953@intel.com>
+References: <20190804224915.28669-1-jhubbard@nvidia.com>
+ <20190804224915.28669-7-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <156502126144.28464.11399426968315988701@skylake-alporthouse-com>
-X-Operating-System: Linux phenom 4.19.0-5-amd64 
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190804224915.28669-7-jhubbard@nvidia.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Aug 05, 2019 at 05:07:41PM +0100, Chris Wilson wrote:
-> Quoting Christian König (2019-08-05 16:45:54)
-> > @@ -214,16 +214,16 @@ static __poll_t dma_buf_poll(struct file *file, poll_table *poll)
-> >                 return 0;
-> >  
-> >  retry:
-> > -       seq = read_seqcount_begin(&resv->seq);
-> >         rcu_read_lock();
-> >  
-> > +       fence_excl = rcu_dereference(resv->fence_excl);
-> >         fobj = rcu_dereference(resv->fence);
-> >         if (fobj)
-> >                 shared_count = fobj->shared_count;
-> >         else
-> >                 shared_count = 0;
-> > -       fence_excl = rcu_dereference(resv->fence_excl);
-> > -       if (read_seqcount_retry(&resv->seq, seq)) {
-> > +
-> > +       if (rcu_dereference(resv->fence_excl) != fence_excl) {
+On Sun, Aug 04, 2019 at 03:48:47PM -0700, john.hubbard@gmail.com wrote:
+> From: John Hubbard <jhubbard@nvidia.com>
 > 
-> If I remember my rules correctly, rcu_dereference is a
-> read-data-depends, which only means that a read through the pointer
-> returned by rcu_dereference() is after the retrieval of that pointer.
-> Nothing orders the retrieval of fence_excl vs shared_count (different
-> pointers), so I think the last line should be:
+> For pages that were retained via get_user_pages*(), release those pages
+> via the new put_user_page*() routines, instead of via put_page() or
+> release_pages().
 > 
-> smp_rmb();
-> if (rcu_access_pointer(resv->fence_excl) != fence_excl)
+> This is part a tree-wide conversion, as described in commit fc1d8e7cca2d
+> ("mm: introduce put_user_page*(), placeholder versions").
+> 
+> This is a merge-able version of the fix, because it restricts
+> itself to put_user_page() and put_user_pages(), both of which
+> have not changed their APIs. Later, i915_gem_userptr_put_pages()
+> can be simplified to use put_user_pages_dirty_lock().
 
-Also, barriers must have a comment, the comment must be on both barriers
-(if you don't have two, you're doing it wrong), and each barrier comment
-must reference its counterpart.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks for that.
+with this version we won't have any conflict.
+
+Ack for going through mm tree.
+
+> 
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: intel-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_userptr.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> index 2caa594322bc..76dda2923cf1 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_userptr.c
+> @@ -527,7 +527,7 @@ __i915_gem_userptr_get_pages_worker(struct work_struct *_work)
+>  	}
+>  	mutex_unlock(&obj->mm.lock);
+>  
+> -	release_pages(pvec, pinned);
+> +	put_user_pages(pvec, pinned);
+>  	kvfree(pvec);
+>  
+>  	i915_gem_object_put(obj);
+> @@ -640,7 +640,7 @@ static int i915_gem_userptr_get_pages(struct drm_i915_gem_object *obj)
+>  		__i915_gem_userptr_set_active(obj, true);
+>  
+>  	if (IS_ERR(pages))
+> -		release_pages(pvec, pinned);
+> +		put_user_pages(pvec, pinned);
+>  	kvfree(pvec);
+>  
+>  	return PTR_ERR_OR_ZERO(pages);
+> @@ -675,7 +675,7 @@ i915_gem_userptr_put_pages(struct drm_i915_gem_object *obj,
+>  			set_page_dirty_lock(page);
+>  
+>  		mark_page_accessed(page);
+> -		put_page(page);
+> +		put_user_page(page);
+>  	}
+>  	obj->mm.dirty = false;
+>  
+> -- 
+> 2.22.0
+> 
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
