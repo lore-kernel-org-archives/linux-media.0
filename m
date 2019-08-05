@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 355BFC0650F
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:35:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0B54C433FF
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:35:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 06E382070D
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:35:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C54BC216F4
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:35:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E8PFWAlE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YW2JbBhT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731267AbfHEXfk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Aug 2019 19:35:40 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:40762 "EHLO
+        id S1731292AbfHEXfn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Aug 2019 19:35:43 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36935 "EHLO
         mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731252AbfHEXfj (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:39 -0400
-Received: by mail-pl1-f195.google.com with SMTP id a93so36998057pla.7;
-        Mon, 05 Aug 2019 16:35:39 -0700 (PDT)
+        with ESMTP id S1731280AbfHEXfm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:42 -0400
+Received: by mail-pl1-f195.google.com with SMTP id b3so37084980plr.4;
+        Mon, 05 Aug 2019 16:35:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=zrm8LxDqKTEIfziOzXkM6e2flIMXktLlvnyDC/cWAXU=;
-        b=E8PFWAlEca7XGp/ypYPJskiPyA9K+7OS18DItOnG2Bfl6FCKtkimS9/DnRw/hE1zFu
-         OouSg6pW06IaMrrAq2zQYNzh3HlvYNDC7/+6Pd2pGb73nYxYAiOzuLNakyx/gs/0ne7M
-         tOiWcZ32wmqRG7rODw5zO3uH76Efd0ztx6BR2HX5j+4+nFvZGQKj+AqMcwtpxFdu2Jqn
-         D0zHlOtu7eB9PrDypfvevuW51VXdxNfXi2g+oXIyE+i8StDi8QWlJbqn41x/0jmmJhZn
-         Uka/xY8sq5AdPsUB/yIUOTcehc9mCEBwQG6nlixCt38ifTG1RaeP0DX+8kwp+yp8gMOv
-         Oc0w==
+        bh=2TmLGvTN3FaWVeRsZPV3e4KNsmV2AReP7cWUVSqpqFQ=;
+        b=YW2JbBhT1KOAfZKebBO9NM/G5Db95SUaRLnTey3pDLof4EeuR2oudZUxy8zi3ksHrp
+         n/rM4Ga7htyDE97Ns+wPj+3Z8PhgQ/mkooxrj+Oj+RLx4/nnq0bUD+aDUnVf1LBrq9xF
+         dY0j2ZVZAyPgtxwlAKR9qwP4wj/h48HGi4ffXdnH8gu8bIzxJ8uHY2W+u7NH0GnqxTD8
+         dRHgc922vuRBkdb5WRupFzWcgYSpGtu+hSoihVTRk9nHn6Zo5xvrqkBk6f2tAOvr6c0G
+         mFXWCA9xq+KMxQdYSaIZjMOJSVwdiGQuFvo1KeBfdkD79sC1CTS7ef5vvvfOPlyvigqS
+         IVNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=zrm8LxDqKTEIfziOzXkM6e2flIMXktLlvnyDC/cWAXU=;
-        b=DfbWyIK2OkV8YyCNosXYLucQn8E5zNTW7T5K92a7NP3P8J00cpuVyWT1rGl5fFrunI
-         t2x2g57tC1JEUAYn4WtY3a0O1Er6KYNq/W2zGGsPQtvR+JOa19JYS/fSeyWgKTuIULaR
-         +xr3oG39uZaTiXtE5hx6BfduDVd5EfZ2jNgBrjg2MAAhLo84+GoCD+ZgxhE8YeVsR7a8
-         Sgxu7nbMiD5xx9eM1g0PeZeCf1lSEHF//uc4gJ7/i0aZuFpUSxHd/2iXI0ztUfye1J+s
-         TgGplSrosiZ+TRrNItXPqj4nvSSgk64kXHShFZQXisEnD7C5mUHY+dz+NOvmQsm8OTfD
-         iypQ==
-X-Gm-Message-State: APjAAAXjIgPNl6VORf5fpyzG9Vk8MEBlr6HHfo45gogvWmCmYfQS7sFZ
-        sZD9Ht09CMun8AfHm5ItGLsHmtRw
-X-Google-Smtp-Source: APXvYqyH8CdkrHUQnPTNSLlBsJ0vtRNhSprKbx26bouPjx5BmsIKdhqcv08x/6Q/83cWW2HTKFyUEQ==
-X-Received: by 2002:a17:902:5a2:: with SMTP id f31mr277744plf.72.1565048138734;
-        Mon, 05 Aug 2019 16:35:38 -0700 (PDT)
+        bh=2TmLGvTN3FaWVeRsZPV3e4KNsmV2AReP7cWUVSqpqFQ=;
+        b=teNXJwM2nAyOGhatMv1pZrNVWswP76C7iQvGHwog712DchYdMjhi7mDy1woI8d8v0H
+         hGNfk9jk/Y0H5uOOU4a22AzzrcvmjT3Uk9T3wJb3YWrUnQfdjsoX95am9prX9GnAvu0S
+         Guuj/G0GeCMhBi4SYXa6CVjKtgghq01ycTzwXrw4wMkPa7ZggL/IBYStVeFVNGCuwAal
+         wLrJ7SySRsI+Eyoqf7NtgY2Zd3/PzRuhTjyHTahMRuBOTFCTMTz1ulBYpNzyXGyzvTrQ
+         BIi/2PIE/wLw8q+G4G6kiz8MhP3QeUx/xO9Nld9zcb4tfwfybhDCsE++Sa1j/vxvNOGw
+         w7GQ==
+X-Gm-Message-State: APjAAAXVBfW3rDE/IdYLv5oRoJCcpWuiMWgvpmjtRiCCghMU0zEEWWI3
+        LkAV5k9nP74M2oom8XlzUKWt1vPf
+X-Google-Smtp-Source: APXvYqzJbrsuJ3HwTZ98E/Apw4jZA8VmFc9SY7qiYBjg/8j77ZDblKl2/AqIbDwaFPx6pAGuizw+Iw==
+X-Received: by 2002:a17:902:6a87:: with SMTP id n7mr251709plk.336.1565048141256;
+        Mon, 05 Aug 2019 16:35:41 -0700 (PDT)
 Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.37
+        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.40
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 16:35:38 -0700 (PDT)
+        Mon, 05 Aug 2019 16:35:40 -0700 (PDT)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
@@ -68,9 +68,9 @@ Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
         linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
         / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 20/22] media: imx: Add is_ipu_internal_subdev()
-Date:   Mon,  5 Aug 2019 16:35:03 -0700
-Message-Id: <20190805233505.21167-21-slongerbeam@gmail.com>
+Subject: [PATCH 22/22] media: imx: TODO: Remove issues regarding media link creation
+Date:   Mon,  5 Aug 2019 16:35:05 -0700
+Message-Id: <20190805233505.21167-23-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190805233505.21167-1-slongerbeam@gmail.com>
 References: <20190805233505.21167-1-slongerbeam@gmail.com>
@@ -79,31 +79,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a convenience inline function that returns true if the given
-subdevice is one of the i.MX5/6 IPU-internal subdevices.
+Remove the TODO items regarding media link creation, these issues are
+resolved after exporting media link creation to individual entity bound
+callbacks and the use of media_create_fwnode_links(),
+media_create_fwnode_pad_links(), and media_entity_get_fwnode_pad().
 
 Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
- drivers/staging/media/imx/imx-media.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/staging/media/imx/TODO | 29 -----------------------------
+ 1 file changed, 29 deletions(-)
 
-diff --git a/drivers/staging/media/imx/imx-media.h b/drivers/staging/media/imx/imx-media.h
-index d75b3c80101a..c42a2cafb8fb 100644
---- a/drivers/staging/media/imx/imx-media.h
-+++ b/drivers/staging/media/imx/imx-media.h
-@@ -282,4 +282,12 @@ void imx_media_capture_device_error(struct imx_media_video_dev *vdev);
- #define IMX_MEDIA_GRP_ID_IPU_IC_PRPENC BIT(14)
- #define IMX_MEDIA_GRP_ID_IPU_IC_PRPVF  BIT(15)
+diff --git a/drivers/staging/media/imx/TODO b/drivers/staging/media/imx/TODO
+index 6f29b5ca5324..a371cdedcdb0 100644
+--- a/drivers/staging/media/imx/TODO
++++ b/drivers/staging/media/imx/TODO
+@@ -17,35 +17,6 @@
+   decided whether this feature is useful enough to make it generally
+   available by exporting to v4l2-core.
  
-+static inline bool is_ipu_internal_subdev(struct v4l2_subdev *sd)
-+{
-+	return sd->grp_id == IMX_MEDIA_GRP_ID_IPU_VDIC ||
-+		sd->grp_id == IMX_MEDIA_GRP_ID_IPU_IC_PRP ||
-+		sd->grp_id == IMX_MEDIA_GRP_ID_IPU_IC_PRPENC ||
-+		sd->grp_id == IMX_MEDIA_GRP_ID_IPU_IC_PRPVF;
-+}
-+
- #endif
+-- After all async subdevices have been bound, v4l2_fwnode_parse_link()
+-  is used to form the media links between the devices discovered in
+-  the OF graph.
+-
+-  While this approach allows support for arbitrary OF graphs, there
+-  are some assumptions for this to work:
+-
+-  1. If a port owned by a device in the graph has endpoint nodes, the
+-     port is treated as a media pad.
+-
+-     This presents problems for devices that don't make this port = pad
+-     assumption. Examples are SMIAPP compatible cameras which define only
+-     a single output port node, but which define multiple pads owned
+-     by multiple subdevices (pixel-array, binner, scaler). Or video
+-     decoders (entity function MEDIA_ENT_F_ATV_DECODER), which also define
+-     only a single output port node, but define multiple pads for video,
+-     VBI, and audio out.
+-
+-     A workaround at present is to set the port reg properties to
+-     correspond to the media pad index that the port represents. A
+-     possible long-term solution is to implement a subdev API that
+-     maps a port id to a media pad index.
+-
+-  2. Every endpoint of a port owned by a device in the graph is treated
+-     as a media link.
+-
+-     Which means a port must not contain mixed-use endpoints, they
+-     must all refer to media links between V4L2 subdevices.
+-
+ - i.MX7: all of the above, since it uses the imx media core
+ 
+ - i.MX7: use Frame Interval Monitor
 -- 
 2.17.1
 
