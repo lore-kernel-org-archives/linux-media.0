@@ -8,62 +8,61 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89395C433FF
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:35:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 317A3C0650F
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:35:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5340A21743
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:35:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 051BC21743
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:35:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rmd3ZzYT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e3xC1zSt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731058AbfHEXfQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Aug 2019 19:35:16 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34406 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728483AbfHEXfO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:14 -0400
-Received: by mail-pf1-f195.google.com with SMTP id b13so40420175pfo.1;
-        Mon, 05 Aug 2019 16:35:14 -0700 (PDT)
+        id S1731139AbfHEXfZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Aug 2019 19:35:25 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45676 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731128AbfHEXfY (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:24 -0400
+Received: by mail-pl1-f194.google.com with SMTP id y8so37069587plr.12;
+        Mon, 05 Aug 2019 16:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=u/PbVO0GF+3G1LmQDJT1XFH8AmJHxoqEkGwCBY/zSdU=;
-        b=Rmd3ZzYTRxOqchGIwYWUUpvkDRr5s2EsB6qEHX67RjuuYAkgUxfHqcpfewJ5S5O4eQ
-         k8DQmrLg75em+CJxBjHeBnEeALQ5SigD8WnXOQLEPs//SPHJw5zl76YW7Fl4K7L51ozW
-         3l4On5GCQL+29WIbp9xAsazY3623XLv/FjDk+dCHNz1vDewNvawXYzg2cZptdCMhJqwd
-         yeOec5NwL44JOspgc8abBqdBwLYIFd+xlv86dmjRUv4eUOzCQfiBzI5jPsKkPbbNRG+W
-         o1DPw3xYd9+iPnyLnHhJmlOa01gNx2Vs4CoeFGyNlf36x8qz0EbATkdgj+B28034OWJ8
-         wyCA==
+        bh=dAKOIEeoGKu9ksf9veB0nLPjInrgxCMs8JCeUaCJVi0=;
+        b=e3xC1zSth5xJ9t+xenegQIapzXe7iP2UT8tigtvLc/Gr33QnxqBOEBhtRWyDqeoM0l
+         sxbis/aNlfzP9WITSOp8XAymZZ2H/P8zBbWcZs8ofDRSIfunB1PaaczoIv7NfTyGgUbJ
+         z+crIVRh2y8O16DDwh+UWmN5hfz0vn+9+I46V0yPR41l22XDBW6ql95YzIb1x4gPlCkg
+         UV0cw01giVtIesB8Enr2F9YDVvxHjvbCXYoFc3RCIcKz2a1Fklm78Jue9Fzj/eWTRB2l
+         cSBCMjs0nSskqfF1AKmnm9NmtjGz2jcPLnzW/htot7YlQtsDec58kcEI0vYLvW9sGQBk
+         TBrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=u/PbVO0GF+3G1LmQDJT1XFH8AmJHxoqEkGwCBY/zSdU=;
-        b=ENI+HzFyvCJArc9TJw3EMspfNdbLiLf6uObnMnYxOGskSODjEjy3VYaDE25VRPauMp
-         Nw/h2OgFWmdBXwh/ukQ9nKqHUZ4aC8Af9TDxS1s5Kpc6wi5GbAk+ODvYcszcMwFmDaOr
-         lP5ZpGPYQbBCURucdSr0TgJpaJxjT6g0h3ehaUJQZvSSuRmTJUTUenujvI1l9iJ+wYWe
-         K/KzMZoi3UBue4ipihjWMZL3SFhXY+Xag+JMBPntEhv3L1R5hfX7A2/+Lnq7MWBvr+Oo
-         5kGj2+IPRTq7VygHk/j0YmjlQtz/Krd90Ue+eF0UyIrVd+OihbZnK+OLEX7KMwU0XNm0
-         hOWg==
-X-Gm-Message-State: APjAAAXzBAhn5GD5XVkhmREY3EEGiGcu0q20STKMNgzfE8Cvt2ipO4TY
-        /SH0VNSBnPdCnoW6uvK67dU+pkER
-X-Google-Smtp-Source: APXvYqx+LrojXALlauo335nICJL2fXUDtyIcilbnqjR4ImFHiwROCHxErqT525lwBXqgrgQe0UWy6g==
-X-Received: by 2002:a62:7a8a:: with SMTP id v132mr509377pfc.103.1565048113505;
-        Mon, 05 Aug 2019 16:35:13 -0700 (PDT)
+        bh=dAKOIEeoGKu9ksf9veB0nLPjInrgxCMs8JCeUaCJVi0=;
+        b=iKsqTNyyRlQwwcjk0GTHgglMVRnaM22PBKexMvhX1+7KJ+g0Wsh/vNpkKO2j6Nlmpj
+         jKcHfvXWOFrTQ+47qaNUrVBijWrZf3gTq/Foeoke6jDuYD+hGWspm/4FSTqFOUpz3rHh
+         qs4trMUNw+U3Ai1c2jhMKF321Bspbb77CbGCy898DwJZj/AhvyZrN0Gmj5pdHtDhLEKK
+         WjN3lP+7+2MlnCmA2VrmILy5E450B3q+XD62gbP9VSVMGOdoRn5rsueMySbt29zOhB5t
+         r18xl1/I2G3QHyAJDQ4HzKfOrBwAK/gRd5NDTjWetn7k97OUuu4S3wjCGSScUzFUmKM+
+         L+gg==
+X-Gm-Message-State: APjAAAU+lIX3Fhj/UYfZ9mLG3ks0HL5AscyQocGHapvE/RhGlGPTAqhT
+        PkfxknnqEIpP0E0X+3zU+Ji2EPqW
+X-Google-Smtp-Source: APXvYqzD2xGj9zA7t3v6eQic5J2mNV9AGfP/U50BBVRpjt4OK6trPgi1se6DWSe3zb4fWjPBj3Xm8Q==
+X-Received: by 2002:a17:902:4283:: with SMTP id h3mr243406pld.15.1565048123016;
+        Mon, 05 Aug 2019 16:35:23 -0700 (PDT)
 Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.12
+        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.22
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 16:35:12 -0700 (PDT)
+        Mon, 05 Aug 2019 16:35:22 -0700 (PDT)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 02/22] media: entity: Modify default behavior of media_entity_get_fwnode_pad
-Date:   Mon,  5 Aug 2019 16:34:45 -0700
-Message-Id: <20190805233505.21167-3-slongerbeam@gmail.com>
+Subject: [PATCH 08/22] media: cadence: csi2rx: Fix fwnode media link creation
+Date:   Mon,  5 Aug 2019 16:34:51 -0700
+Message-Id: <20190805233505.21167-9-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190805233505.21167-1-slongerbeam@gmail.com>
 References: <20190805233505.21167-1-slongerbeam@gmail.com>
@@ -72,124 +71,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Modify the default behavior of media_entity_get_fwnode_pad() (when the
-entity does not provide the get_fwnode_pad op) to first assume the entity
-implements a 1:1 mapping between fwnode port number and media pad index.
+csi2rx_async_bound() passes the bound subdev's sd->fwnode to
+media_entity_get_fwnode_pad(). This is likely not an endpoint
+fwnode as required by media_entity_get_fwnode_pad(), for most
+subdevices it is the port parent of endpoint fwnode(s). This has only
+worked before because no entities have implemented the .get_fwnode_pad()
+op yet, and the default behavior of media_entity_get_fwnode_pad()
+was to ignore the passed fwnode and return the first pad that matches
+the given direction flags.
 
-If the 1:1 mapping is not valid, e.g. the port number falls outside the
-entity's pad index range, or the pad at that port number doesn't match the
-given direction_flags, fall-back to the previous behavior that searches
-the entity for the first pad that matches the given direction_flags.
+Fix this by replacing the calls to media_entity_get_fwnode_pad() and
+media_create_pad_link() with a call to media_create_fwnode_pad_links().
 
-The previous default behavior can choose the wrong pad for entities with
-multiple sink or source pads. With this change the function will choose
-the correct pad index if the entity implements a 1:1 port to pad mapping
-at that port.
-
-Add some comments to the @get_fwnode_pad operation to make it more clear
-under what conditions entities must implement the operation.
+Fixes: 1fc3b37f34f69 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
 
 Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
- drivers/media/mc/mc-entity.c | 25 ++++++++++++++++++++-----
- include/media/media-entity.h | 21 +++++++++++++++------
- 2 files changed, 35 insertions(+), 11 deletions(-)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 27 ++++++++------------
+ 1 file changed, 10 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index c333320f790a..47a39d9383d8 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -370,22 +370,37 @@ int media_entity_get_fwnode_pad(struct media_entity *entity,
- 				unsigned long direction_flags)
- {
- 	struct fwnode_endpoint endpoint;
--	unsigned int i;
- 	int ret;
+diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
+index 31ace114eda1..d478800a3859 100644
+--- a/drivers/media/platform/cadence/cdns-csi2rx.c
++++ b/drivers/media/platform/cadence/cdns-csi2rx.c
+@@ -83,7 +83,6 @@ struct csi2rx_priv {
+ 	/* Remote source */
+ 	struct v4l2_async_subdev	asd;
+ 	struct v4l2_subdev		*source_subdev;
+-	int				source_pad;
+ };
  
-+	ret = fwnode_graph_parse_endpoint(fwnode, &endpoint);
+ static inline
+@@ -251,26 +250,20 @@ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
+ {
+ 	struct v4l2_subdev *subdev = notifier->sd;
+ 	struct csi2rx_priv *csi2rx = v4l2_subdev_to_csi2rx(subdev);
++	int ret;
+ 
+-	csi2rx->source_pad = media_entity_get_fwnode_pad(&s_subdev->entity,
+-							 s_subdev->fwnode,
+-							 MEDIA_PAD_FL_SOURCE);
+-	if (csi2rx->source_pad < 0) {
+-		dev_err(csi2rx->dev, "Couldn't find output pad for subdev %s\n",
+-			s_subdev->name);
+-		return csi2rx->source_pad;
+-	}
++	ret = media_create_fwnode_pad_links(&csi2rx->subdev.entity.pads[0],
++					    dev_fwnode(csi2rx->dev),
++					    &s_subdev->entity,
++					    dev_fwnode(s_subdev->dev),
++					    MEDIA_LNK_FL_ENABLED |
++					    MEDIA_LNK_FL_IMMUTABLE);
 +	if (ret)
 +		return ret;
-+
- 	if (!entity->ops || !entity->ops->get_fwnode_pad) {
-+		unsigned int i;
-+
-+		/*
-+		 * for the default case, first try a 1:1 mapping between
-+		 * fwnode port number and pad index.
-+		 */
-+		ret = endpoint.port;
-+		if (ret < entity->num_pads &&
-+		    (entity->pads[ret].flags & direction_flags))
-+			return ret;
-+
-+		/*
-+		 * if that didn't work search the entity for the first
-+		 * pad that matches the @direction_flags.
-+		 */
- 		for (i = 0; i < entity->num_pads; i++) {
- 			if (entity->pads[i].flags & direction_flags)
- 				return i;
- 		}
  
-+		/* else fail */
- 		return -ENXIO;
- 	}
+ 	csi2rx->source_subdev = s_subdev;
  
--	ret = fwnode_graph_parse_endpoint(fwnode, &endpoint);
--	if (ret)
--		return ret;
+-	dev_dbg(csi2rx->dev, "Bound %s pad: %d\n", s_subdev->name,
+-		csi2rx->source_pad);
 -
- 	ret = entity->ops->get_fwnode_pad(entity, &endpoint);
- 	if (ret < 0)
- 		return ret;
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index cde80ad029b7..ed00adb4313b 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -199,6 +199,12 @@ struct media_pad {
-  * @get_fwnode_pad:	Return the pad number based on a fwnode endpoint or
-  *			a negative value on error. This operation can be used
-  *			to map a fwnode to a media pad number. Optional.
-+ *			Entities do not need to implement this operation
-+ *			unless two conditions are met:
-+ *			- the entity has more than one sink and/or source
-+ *			  pad, _and_
-+ *			- the entity does not implement a 1:1 mapping of
-+ *			  fwnode port numbers to pad indexes.
-  * @link_setup:		Notify the entity of link changes. The operation can
-  *			return an error, in which case link setup will be
-  *			cancelled. Optional.
-@@ -858,21 +864,24 @@ struct media_link *media_entity_find_link(struct media_pad *source,
- struct media_pad *media_entity_remote_pad(const struct media_pad *pad);
+-	return media_create_pad_link(&csi2rx->source_subdev->entity,
+-				     csi2rx->source_pad,
+-				     &csi2rx->subdev.entity, 0,
+-				     MEDIA_LNK_FL_ENABLED |
+-				     MEDIA_LNK_FL_IMMUTABLE);
++	return 0;
+ }
  
- /**
-- * media_entity_get_fwnode_pad - Get pad number from fwnode
-+ * media_entity_get_fwnode_pad - Get pad number from an endpoint fwnode
-  *
-  * @entity: The entity
-- * @fwnode: Pointer to the fwnode_handle which should be used to find the pad
-+ * @fwnode: Pointer to the endpoint fwnode_handle which should be used to
-+ *          find the pad
-  * @direction_flags: Expected direction of the pad, as defined in
-  *		     :ref:`include/uapi/linux/media.h <media_header>`
-  *		     (seek for ``MEDIA_PAD_FL_*``)
-  *
-  * This function can be used to resolve the media pad number from
-- * a fwnode. This is useful for devices which use more complex
-- * mappings of media pads.
-+ * an endpoint fwnode. This is useful for devices which use more
-+ * complex mappings of media pads.
-  *
-  * If the entity does not implement the get_fwnode_pad() operation
-- * then this function searches the entity for the first pad that
-- * matches the @direction_flags.
-+ * then this function first assumes the entity implements a 1:1 mapping
-+ * between fwnode port number and media pad index. If the 1:1 mapping
-+ * is not valid, then the function searches the entity for the first pad
-+ * that matches the @direction_flags.
-  *
-  * Return: returns the pad number on success or a negative error code.
-  */
+ static const struct v4l2_async_notifier_operations csi2rx_notifier_ops = {
 -- 
 2.17.1
 
