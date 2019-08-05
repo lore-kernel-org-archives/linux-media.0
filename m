@@ -8,52 +8,52 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8609BC0650F
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B2E8C433FF
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 589A32070D
+	by mail.kernel.org (Postfix) with ESMTP id CFB892070D
 	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WK97h2Gx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UEBoLUE6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731126AbfHEXgt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Aug 2019 19:36:49 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35581 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731057AbfHEXfP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:15 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n4so5243000pgv.2;
-        Mon, 05 Aug 2019 16:35:15 -0700 (PDT)
+        id S1731037AbfHEXfN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Aug 2019 19:35:13 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:45535 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728483AbfHEXfN (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:13 -0400
+Received: by mail-pg1-f195.google.com with SMTP id o13so40498210pgp.12;
+        Mon, 05 Aug 2019 16:35:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=3hiXeQQV1KrdCEAIpSQAk9Ltt3Glhe3/FQmcNgwcF6I=;
-        b=WK97h2Gxi7lfr4FpaCZdEE6yb8tmSN60vE5Ahq7PYXjtBL+BVy/eniGtFtqRVhsrEw
-         JeB2t/F2D/kZBGLZlFw9LGtgtRGcAgsSrgYs6GFbxr6jD+AJ5RNSeyki1JGL8qok0aZN
-         AqJbeluAc086VbxCIzYAW6PoQOwdxGB5pqkbtNEfryP8R2feACWJaZIEQwivEY0vu0Oy
-         FiM84V4Zvsb3hY/+Arn06VLPRv5pEbnFPwAmUdEClTdIf6XoygSZ1AT6uhHmufCnFl4u
-         IaA7TldEVoa80dwl5ThE0gLdtwdQtrA2FPZ99dRTQ6ztgrcOPx3DeEt7T4u/xCiiHr+n
-         J6Nw==
+        bh=fpjseVSUss2LkAdgKt7/i93QGkQFGmCf+/5YmrX1uIQ=;
+        b=UEBoLUE6TOnktq0qwecZhcc58krHIy0NrLnA2JejGKdaPwA71LeRZgFPOgmSxAweHr
+         IoXl6dWBSi5zvPf3JJfkosVWfC/RgGOSnwomIBoCms6iyd+A5uBNMH0I9ldaECqQqjez
+         /TUqbAWemIc6vm8Or2nD481kCJKxUdGe8+4SQHJoveoJw301QfY19jbrvwDIUsWnS8jK
+         ddXOpeAWPMODrQoVhaKlRSCJWMcDRwUj3xKXvv08nOLNA7YT2tGN9K0fI0IgOofqVCO7
+         rX9TD79OC3MIc2djYfbPQ2UYYM8ugJU4NveAgNpOP19a04uJEo0F4dRmwYdiQac2qiVD
+         TWMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=3hiXeQQV1KrdCEAIpSQAk9Ltt3Glhe3/FQmcNgwcF6I=;
-        b=a0iadvFMRQptk7X83wUVTDmSJOpYLby2CG/8NDOGZy2NBjwW3pgVI4jf0y2DhCwClr
-         SXe+WlvY+M602+vS/tOXnQZdFB1MYrQ6Mw2y8OXlxsFzSvN1pvnag5yv3f8FJ6JZr9V3
-         o0skVlT51hoyJdYz2sKqcVGGVXeKptALlf9tznYhVTE+Sb+GLs/WWENhme9Gpg4DezuH
-         r5E/huu9nti/B1QHjcbD7aUgPeQGyYyUOEbptENMKjennC7Sr7FVOXKBe8VfKUH7sXiO
-         nHQdO9MMyIe4IT4bLZYLsUm0nWqCSbbYCLsuvx/Qh0PfWxHuEoQEynVF45dWw4bhL2Qi
-         d35g==
-X-Gm-Message-State: APjAAAW0jG2dV3wPVbr52zeHxDqRo7EGTK0iOOdwnOOI7qhpRuKrcfyA
-        B6iQDcAWGua7lF/9+5CAgQdXxQRY
-X-Google-Smtp-Source: APXvYqxKVm5fkj8NRo91yo6fTIS54zqYPfOuVt6pelKsqlZ5bMNtwElDmJJ7V6YR95YmOzs/98BxZw==
-X-Received: by 2002:aa7:8f2c:: with SMTP id y12mr588868pfr.38.1565048114461;
-        Mon, 05 Aug 2019 16:35:14 -0700 (PDT)
+        bh=fpjseVSUss2LkAdgKt7/i93QGkQFGmCf+/5YmrX1uIQ=;
+        b=eCpV0nOBBkG2/xIzB2KtLN/gP3EfbBNtnpJoixYmiBZWDdIRt0OCt9NHgDobdsUH6C
+         y7jCqqkTwr8AlkH60oCZ1k/ofpz0OVIg4yP3jbbgvDpVd1+VbpTjOO6L423NjpXlr8ze
+         3hpctnqERMogKZgjv/PCOlPksY1R07tgaSj9r3hjtpfVwgdW4OnHHMG1WaesqSZrY8hF
+         jvAL4XjcLomms0ol+cXgIYuJc6fUEJUNepVjEAn/Xi67rURhD0T+pwbxtwZWaV3ScjVj
+         +2qup5Dwmx4I4Tj9FZbcTRuq0uQ/3q1rs7cnRuhD7tbtLSR+rLv00OOr9FABc51wHYRE
+         jsXA==
+X-Gm-Message-State: APjAAAXO4Ushk9YJ+xtYrjbyWClylPvPyoLbTHxactgPUoV503I9Lv+h
+        p1H32+kPgMT0uoaql1f0B9PVMZAT
+X-Google-Smtp-Source: APXvYqzYukYrcOoU9GMSBqOK3gJWry7lChLl+XFcob2BVHpiHpWIpjdxmlmyLQONGs8F/7psO3EqJg==
+X-Received: by 2002:aa7:93bb:: with SMTP id x27mr587342pff.10.1565048112341;
+        Mon, 05 Aug 2019 16:35:12 -0700 (PDT)
 Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.13
+        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.11
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 16:35:14 -0700 (PDT)
+        Mon, 05 Aug 2019 16:35:11 -0700 (PDT)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
@@ -61,9 +61,9 @@ Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 03/22] media: entity: Convert media_entity_get_fwnode_pad() args to const
-Date:   Mon,  5 Aug 2019 16:34:46 -0700
-Message-Id: <20190805233505.21167-4-slongerbeam@gmail.com>
+Subject: [PATCH 01/22] media: entity: Pass entity to get_fwnode_pad operation
+Date:   Mon,  5 Aug 2019 16:34:44 -0700
+Message-Id: <20190805233505.21167-2-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190805233505.21167-1-slongerbeam@gmail.com>
 References: <20190805233505.21167-1-slongerbeam@gmail.com>
@@ -72,47 +72,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The function media_entity_get_fwnode_pad() can be passed the
-const local_fwnode member from a struct fwnode_endpoint, so
-the fwnode argument should be a const pointer. Change the
-direction_flags argument to const in the process.
+Add a missing pointer to the entity in the media_entity operation
+get_fwnode_pad.
+
+Fixes: ae45cd5efc120 ("[media] media: entity: Add get_fwnode_pad entity
+operation")
 
 Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
- drivers/media/mc/mc-entity.c | 4 ++--
- include/media/media-entity.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/mc/mc-entity.c | 2 +-
+ include/media/media-entity.h | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 47a39d9383d8..e9e090244fd4 100644
+index 7c429ce98bae..c333320f790a 100644
 --- a/drivers/media/mc/mc-entity.c
 +++ b/drivers/media/mc/mc-entity.c
-@@ -366,8 +366,8 @@ struct media_entity *media_graph_walk_next(struct media_graph *graph)
- EXPORT_SYMBOL_GPL(media_graph_walk_next);
+@@ -386,7 +386,7 @@ int media_entity_get_fwnode_pad(struct media_entity *entity,
+ 	if (ret)
+ 		return ret;
  
- int media_entity_get_fwnode_pad(struct media_entity *entity,
--				struct fwnode_handle *fwnode,
--				unsigned long direction_flags)
-+				const struct fwnode_handle *fwnode,
-+				const unsigned long direction_flags)
- {
- 	struct fwnode_endpoint endpoint;
- 	int ret;
+-	ret = entity->ops->get_fwnode_pad(&endpoint);
++	ret = entity->ops->get_fwnode_pad(entity, &endpoint);
+ 	if (ret < 0)
+ 		return ret;
+ 
 diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index ed00adb4313b..de7fc3676b5a 100644
+index 8cb2c504a05c..cde80ad029b7 100644
 --- a/include/media/media-entity.h
 +++ b/include/media/media-entity.h
-@@ -886,8 +886,8 @@ struct media_pad *media_entity_remote_pad(const struct media_pad *pad);
-  * Return: returns the pad number on success or a negative error code.
+@@ -212,7 +212,8 @@ struct media_pad {
+  *    mutex held.
   */
- int media_entity_get_fwnode_pad(struct media_entity *entity,
--				struct fwnode_handle *fwnode,
--				unsigned long direction_flags);
-+				const struct fwnode_handle *fwnode,
-+				const unsigned long direction_flags);
- 
- /**
-  * media_graph_walk_init - Allocate resources used by graph walk.
+ struct media_entity_operations {
+-	int (*get_fwnode_pad)(struct fwnode_endpoint *endpoint);
++	int (*get_fwnode_pad)(struct media_entity *entity,
++			      struct fwnode_endpoint *endpoint);
+ 	int (*link_setup)(struct media_entity *entity,
+ 			  const struct media_pad *local,
+ 			  const struct media_pad *remote, u32 flags);
 -- 
 2.17.1
 
