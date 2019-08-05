@@ -8,64 +8,61 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86DB8C0650F
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C10EEC0650F
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5669A20665
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9586520665
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ssmMvt5W"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NB75LqfP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731441AbfHEXge (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Aug 2019 19:36:34 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42480 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731097AbfHEXfZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:25 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q10so40406170pff.9;
-        Mon, 05 Aug 2019 16:35:24 -0700 (PDT)
+        id S1731112AbfHEXfW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Aug 2019 19:35:22 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:37627 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731097AbfHEXfW (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:22 -0400
+Received: by mail-pg1-f193.google.com with SMTP id d1so7698927pgp.4;
+        Mon, 05 Aug 2019 16:35:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=sLSukBr2Dr/fkgKqS432Drjpjtgmp1YtkMGvOGWg9/A=;
-        b=ssmMvt5WCl/uRVDnSNPt4nSuNoE1M3ZRy31D9o4qEeDpQBL314Lb5MhF1Y88I5QXwd
-         +76WDYgBLRNqZn+i0gu8M+NaYA6MGYuQmuGzkKDhOrQtN51oZcn9hIVzZacRJRdTVLY6
-         3Au6tNwHcx3LkgmIZJCqdTV2lCmGLjNNKfybzQgH7yoHFPKuo3lUhiOSSRgKrN0JngKn
-         xVviFCYLs1IopioWs6AX5zvksXZexNZsp1H03p/Wsytz5o6PJmDztvm1FcPBD/0EcUiY
-         n+Imbga638jsSiV8ZM4Z+qSDJ2MdYwK64CbIyPbDuBC/+gzfKTziJMwDLGcwc7hYTnKS
-         k7bg==
+        bh=0YKGrpYeoAEn9gUSXzC9FX/K5C81TuWUa0ZyQnxQgg4=;
+        b=NB75LqfP9iOlcrV9L++uSoIZ0A/Gz+fEqpArVizRSYxfGlY4jmd0leWG6WY360/YQi
+         bw+tqNPIL1+Ymnl4UWFR4iL0+h3Q8QYBFIl4k9cM/BB2nrKXrLqVkH3qj0TNQueFQTVi
+         SEtA4DJEjf/BnHrBUhYR69WMgY8fbjFkoHxmH/MI4PQsz2ZiRbnglV7eQMWiWy/knUDp
+         9qPT8XqvL53sXyD9POVVnYBz03r4b35jE1RdMn4T5BWJOp3iQFayFKsbxeDeVRXP5Xa+
+         XbqPvR3wbHhOaifv7ezUZB/XjXlHJJPnSLEnrgk9oK408Oz2cOuNj5s+VeudroacMz5L
+         suyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=sLSukBr2Dr/fkgKqS432Drjpjtgmp1YtkMGvOGWg9/A=;
-        b=Ah86oymqPNDhNyS1IdnX4xGj1JbnlopS2c8JDJtbuJkd8JTHBM1K43uNryHgO+c+Tg
-         NTVU8qYh3faACks1VRw9sL1s+fp5bWKFXU24rahbK45nYMWWK+A7J9B7zD236N15MK+E
-         6O9xo4nbIbuqjaYLb9oxF6Gw53nWPmYcEteef2t6E1IAJkU69QJFuq1LkvZBjv7BXHYZ
-         NFcwvarkYXoHli4RDbdhzM8Q/qa5wjQ5qxJyHNV8/8axgLCWPieDk2EqO9DcMCPsgnU3
-         DeDqSdYWsfm2Qc0KfRy5i2XWe2Xxd9pa9I/dxG/f9uKQx34Hmc/FgbIrII/tr2w3rOK/
-         xo7Q==
-X-Gm-Message-State: APjAAAWKGtd2CPPdlL3Wf14KQes7Uil7Unllrt89azlrU+uCykJDG7kj
-        9e/H012xgePK5yfZExk5QJMUeJEX
-X-Google-Smtp-Source: APXvYqxdrgMTw3ampNtYtP76n+DzZeeu18uPjTa9aAYoc3tHW8eoeyXU0JU2dmiZHiOit2WQTYQmlA==
-X-Received: by 2002:a63:4404:: with SMTP id r4mr311426pga.245.1565048124005;
-        Mon, 05 Aug 2019 16:35:24 -0700 (PDT)
+        bh=0YKGrpYeoAEn9gUSXzC9FX/K5C81TuWUa0ZyQnxQgg4=;
+        b=n05Tq5SUp8Rag54VAAG0rytCoev9qcDh98DQcE/Jidp5/FCQjxFHZaxXvlz1A864mK
+         dRGeboGyZkOdQdCG3LJfQq/rWKrXPDSDeMUy8BqUgMJJEXVaY/NvS3rxoWo+ts/Q9glb
+         s2tdLGgEye5uX+XAyyTEUBx70Y2xI9MRrA+/stAMNAypj/ZMQF76weI+QQtQZI8RmUFN
+         pQjJDz+ZBsGxwyoLsxU94ng5BlS32QQ6HkhBQiMq3SJnQFnTjdSbwK9TPja2ltOx6tnE
+         v7Ymgsb2EvGQIqVrjOAsdrdifXMIzvOTz2hkas62PqzBPplvxbq9XdFp0GuoOoAdN5sw
+         1dYw==
+X-Gm-Message-State: APjAAAWCu5+wrgKnxAvelC2IXDhvzSYw0bwO4aiLVyayhNjs2azhpU+D
+        sXBZrVezk7BQsDX9qUeTco7QMl4W
+X-Google-Smtp-Source: APXvYqwVy1vsx6X+g2YUpWBSfEcDbd7CqIq3nB6v1wnUaPlcwVjKtF8JMVayTWFyrgTanYpawdhhuw==
+X-Received: by 2002:a63:724b:: with SMTP id c11mr377260pgn.30.1565048120941;
+        Mon, 05 Aug 2019 16:35:20 -0700 (PDT)
 Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.23
+        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.20
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 16:35:23 -0700 (PDT)
+        Mon, 05 Aug 2019 16:35:20 -0700 (PDT)
 From:   Steve Longerbeam <slongerbeam@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Yong Deng <yong.deng@magewell.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Allwinner
-        sunXi SoC support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 09/22] media: sun6i: Fix fwnode media link creation
-Date:   Mon,  5 Aug 2019 16:34:52 -0700
-Message-Id: <20190805233505.21167-10-slongerbeam@gmail.com>
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 06/22] media: adv748x: csi2: Implement get_fwnode_pad
+Date:   Mon,  5 Aug 2019 16:34:49 -0700
+Message-Id: <20190805233505.21167-7-slongerbeam@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190805233505.21167-1-slongerbeam@gmail.com>
 References: <20190805233505.21167-1-slongerbeam@gmail.com>
@@ -74,72 +71,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-sun6i_csi_link_entity() passes the bound subdev's sd->fwnode to
-media_entity_get_fwnode_pad(). This is likely not an endpoint
-fwnode as required by media_entity_get_fwnode_pad(), for most
-subdevices it is the port parent of endpoint fwnode(s). This has only
-worked before because no entities have implemented the .get_fwnode_pad()
-op yet, and the default behavior of media_entity_get_fwnode_pad()
-was to ignore the passed fwnode and return the first pad that matches
-the given direction flags.
-
-Fix this by replacing the calls to media_entity_get_fwnode_pad() and
-media_create_pad_link() with a call to media_create_fwnode_pad_links().
-
-Fixes: 5cc7522d89655 ("media: sun6i: Add support for Allwinner CSI V3s")
+If the given endpoint fwnode passed to the .get_fwnode_pad() op is
+the adv748x-csi2 TXA/TXB source endpoint, return the associated media
+pad index ADV748X_CSI2_SOURCE. The adv748x-csi2 has no other media pads
+that are associated with fwnode endpoints.
 
 Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
 ---
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      | 36 +++----------------
- 1 file changed, 5 insertions(+), 31 deletions(-)
+ drivers/media/i2c/adv748x/adv748x-csi2.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-index 6e0e894154f4..9cf726b5c25a 100644
---- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-+++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
-@@ -630,37 +630,11 @@ static int sun6i_csi_link_entity(struct sun6i_csi *csi,
- 				 struct media_entity *entity,
- 				 struct fwnode_handle *fwnode)
- {
--	struct media_entity *sink;
--	struct media_pad *sink_pad;
--	int src_pad_index;
--	int ret;
--
--	ret = media_entity_get_fwnode_pad(entity, fwnode, MEDIA_PAD_FL_SOURCE);
--	if (ret < 0) {
--		dev_err(csi->dev, "%s: no source pad in external entity %s\n",
--			__func__, entity->name);
--		return -EINVAL;
--	}
--
--	src_pad_index = ret;
--
--	sink = &csi->video.vdev.entity;
--	sink_pad = &csi->video.pad;
--
--	dev_dbg(csi->dev, "creating %s:%u -> %s:%u link\n",
--		entity->name, src_pad_index, sink->name, sink_pad->index);
--	ret = media_create_pad_link(entity, src_pad_index, sink,
--				    sink_pad->index,
--				    MEDIA_LNK_FL_ENABLED |
--				    MEDIA_LNK_FL_IMMUTABLE);
--	if (ret < 0) {
--		dev_err(csi->dev, "failed to create %s:%u -> %s:%u link\n",
--			entity->name, src_pad_index,
--			sink->name, sink_pad->index);
--		return ret;
--	}
--
--	return 0;
-+	return media_create_fwnode_pad_links(&csi->video.pad,
-+					     dev_fwnode(csi->dev),
-+					     entity, fwnode,
-+					     MEDIA_LNK_FL_ENABLED |
-+					     MEDIA_LNK_FL_IMMUTABLE);
- }
+diff --git a/drivers/media/i2c/adv748x/adv748x-csi2.c b/drivers/media/i2c/adv748x/adv748x-csi2.c
+index 2091cda50935..810085a1f2f0 100644
+--- a/drivers/media/i2c/adv748x/adv748x-csi2.c
++++ b/drivers/media/i2c/adv748x/adv748x-csi2.c
+@@ -228,6 +228,24 @@ static const struct v4l2_subdev_ops adv748x_csi2_ops = {
+ 	.pad = &adv748x_csi2_pad_ops,
+ };
  
- static int sun6i_subdev_notify_complete(struct v4l2_async_notifier *notifier)
++/* -----------------------------------------------------------------------------
++ * media_entity_operations
++ */
++
++static int adv748x_csi2_get_fwnode_pad(struct media_entity *entity,
++				       struct fwnode_endpoint *endpoint)
++{
++	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
++	struct adv748x_csi2 *tx = adv748x_sd_to_csi2(sd);
++
++	return endpoint->local_fwnode == tx->sd.fwnode ?
++		ADV748X_CSI2_SOURCE : -ENXIO;
++}
++
++static const struct media_entity_operations adv748x_csi2_entity_ops = {
++	.get_fwnode_pad = adv748x_csi2_get_fwnode_pad,
++};
++
+ /* -----------------------------------------------------------------------------
+  * Subdev module and controls
+  */
+@@ -295,6 +313,9 @@ int adv748x_csi2_init(struct adv748x_state *state, struct adv748x_csi2 *tx)
+ 	/* Register internal ops for incremental subdev registration */
+ 	tx->sd.internal_ops = &adv748x_csi2_internal_ops;
+ 
++	/* Register media_entity ops */
++	tx->sd.entity.ops = &adv748x_csi2_entity_ops;
++
+ 	tx->pads[ADV748X_CSI2_SINK].flags = MEDIA_PAD_FL_SINK;
+ 	tx->pads[ADV748X_CSI2_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
+ 
 -- 
 2.17.1
 
