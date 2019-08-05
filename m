@@ -2,118 +2,52 @@ Return-Path: <SRS0=pkzJ=WB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C82AC0650F
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 08:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF85C433FF
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 08:57:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2006720B1F
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 08:34:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZUKuMCPn"
+	by mail.kernel.org (Postfix) with ESMTP id 68A0720B1F
+	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 08:57:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727233AbfHEIeo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Aug 2019 04:34:44 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42688 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726423AbfHEIeo (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 04:34:44 -0400
-Received: by mail-wr1-f65.google.com with SMTP id x1so33579234wrr.9
-        for <linux-media@vger.kernel.org>; Mon, 05 Aug 2019 01:34:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id;
-        bh=hIkYpiCXF6GopNuef0iCS8m/j5Ofmo2fnbuqG9ExZwE=;
-        b=ZUKuMCPnDqbYnDRIZhJwELoH1XHMpcoN4lqmnS2abzXOjDyeygvH3C6Zu0cC56LAMO
-         Szio27FKC46d/zOXorwT0wWaWDXGafPValRMcVko3ep6dWVj/kXpgiXjK5Y//JhtzpVH
-         DaImXRn5tLAiqcwx7/ZoxFpG6LJ4zCQTQgKNTMPiT85V2+rzaElvCvJnkYayU8GeKAip
-         Uw1Rww95otF+Uu42eA2sGitx/XaJ0EznN4uw9rp+Kneaw4EquQVXTZQDiHWGtIdxV8Fa
-         rkWPRqJabhlPPpZ7j0gtGbcUkdsoszWC5C/uz4cGVIAukRuD5dwOpSVNGwpyiy2tf1CX
-         TEdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=hIkYpiCXF6GopNuef0iCS8m/j5Ofmo2fnbuqG9ExZwE=;
-        b=EyhYPBmPs+PS2jN4K3VlqSiVd3s/eo+p52DbxPY3bAJuiy/p5tIC8AAuCwkPNFB1k4
-         n0FIrfGOx5jnxn+KBN/cqNt0Ad010P2GxaeegVWGKnprNcKkvl0MWtiVf9HpD9lO4ZML
-         Mt4JqDqIF4ilk/+uJrhMtCvVbSMLwlFDa4I3Ie4Wsw9XYwruOi/Ae/6XCTZIkgbIDuf6
-         lirAGVZS7jnjsIBzDmlD6E05CYKOQxI4yx3cvPSR88qSMYWMXJXDFsHFY+IedjA86eaQ
-         d9lp8IsIwLQI1FZsIQSQLH1eyOMzhZPRwSaAJlQjRfXazRXAWMUhjHOK5VJo2ExnxSfl
-         DE6Q==
-X-Gm-Message-State: APjAAAUh40SepQ8d0oyYgCETL0u2MwiRXSgmDwo4+h5gca6AEgbkktv2
-        md/Ai76hQSj94xxTq4BvU5to3eI0Ti8=
-X-Google-Smtp-Source: APXvYqz0i6Z+HsMvyRzBJQuQPIbyHBlL9+c5I7MJPr6vkGo/H9mUsDXiw/lR6TcLj/H83jOZ7j9OYw==
-X-Received: by 2002:adf:e941:: with SMTP id m1mr10589020wrn.279.1564994082011;
-        Mon, 05 Aug 2019 01:34:42 -0700 (PDT)
-Received: from mms-0440.ent.mm-sol.com ([37.157.136.206])
-        by smtp.gmail.com with ESMTPSA id v124sm89643765wmf.23.2019.08.05.01.34.40
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 01:34:41 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for v5.4] Venus updates - stateful decoder, take 2
-Date:   Mon,  5 Aug 2019 11:34:36 +0300
-Message-Id: <20190805083436.30921-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1726656AbfHEI5z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Aug 2019 04:57:55 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:57168 "EHLO www.linuxtv.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726423AbfHEI5z (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 5 Aug 2019 04:57:55 -0400
+X-Greylist: delayed 1045 seconds by postgrey-1.27 at vger.kernel.org; Mon, 05 Aug 2019 04:57:55 EDT
+Received: from 140-211-167-10-openstack.osuosl.org ([140.211.167.10] helo=builder.linuxtv.org)
+        by www.linuxtv.org with esmtp (Exim 4.84_2)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1huYXV-0003eV-UY; Mon, 05 Aug 2019 08:40:22 +0000
+Received: from [127.0.0.1] (helo=builder.linuxtv.org)
+        by builder.linuxdvb.org with esmtp (Exim 4.92)
+        (envelope-from <jenkins@linuxtv.org>)
+        id 1huYXW-0007Ld-Rq; Mon, 05 Aug 2019 08:40:22 +0000
+From:   Jenkins <jenkins@linuxtv.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        mchehab+samsung@kernel.org, linux-media@vger.kernel.org
+Cc:     builder@linuxtv.org
+Subject: Re: [GIT PULL for v5.4] Venus updates - stateful decoder, take 2
+Date:   Mon,  5 Aug 2019 08:40:22 +0000
+Message-Id: <20190805084022.28203-1-jenkins@linuxtv.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190805083436.30921-1-stanimir.varbanov@linaro.org>
+References: 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: builder@linuxtv.org
 
-Here is a set of patches to make Venus decoder driver compliant with
-stateful decoder draft documentation.
+Pull request: https://patchwork.linuxtv.org/patch/57908/
+Build log: https://builder.linuxtv.org/job/patchwork/2194/
+Build time: 00:05:12
 
-Please pull.
-
-Changes in take 2:
-Fixed checkpatch Error/warnings.
-
-regards,
-Stan
-
-The following changes since commit d3dd552da3eb16e369d2459e3fa927542f11d17c:
-
-  media: dt-bindings: media: sunxi-ir: Add H6 compatible (2019-08-04 06:36:11 -0300)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.4
-
-for you to fetch changes up to bf86c65719f2ff6a592e543479b4f1dc4c5ec0c7:
-
-  venus: dec: populate properly timestamps and flags for capture buffers (2019-08-05 10:00:07 +0300)
-
-----------------------------------------------------------------
-Venus updates for v5.4
-
-----------------------------------------------------------------
-Malathi Gottam (1):
-      venus: venc: amend buffer size for bitstream plane
-
-Stanimir Varbanov (10):
-      venus: helpers: export few helper functions
-      venus: hfi: add type argument to hfi flush function
-      venus: hfi: export few HFI functions
-      venus: hfi: return an error if session_init is already called
-      venus: helpers: add three more helper functions
-      venus: vdec_ctrls: get real minimum buffers for capture
-      venus: vdec: allow bigger sizeimage set by clients
-      venus: make decoder compliant with stateful codec API
-      venus: helpers: handle correctly vbuf field
-      venus: dec: populate properly timestamps and flags for capture buffers
-
- drivers/media/platform/qcom/venus/core.h       |  32 +-
- drivers/media/platform/qcom/venus/helpers.c    | 199 +++++++--
- drivers/media/platform/qcom/venus/helpers.h    |  11 +
- drivers/media/platform/qcom/venus/hfi.c        |  11 +-
- drivers/media/platform/qcom/venus/hfi.h        |   2 +-
- drivers/media/platform/qcom/venus/vdec.c       | 537 +++++++++++++++++++------
- drivers/media/platform/qcom/venus/vdec_ctrls.c |   7 +-
- drivers/media/platform/qcom/venus/venc.c       |  13 +-
- 8 files changed, 655 insertions(+), 157 deletions(-)
+Summary: 0 issues, being 0 build regressions
