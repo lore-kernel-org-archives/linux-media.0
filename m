@@ -1,116 +1,161 @@
-Return-Path: <SRS0=pkzJ=WB=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=jHMN=WC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B2E8C433FF
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DB6CC31E40
+	for <linux-media@archiver.kernel.org>; Tue,  6 Aug 2019 03:42:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CFB892070D
-	for <linux-media@archiver.kernel.org>; Mon,  5 Aug 2019 23:36:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UEBoLUE6"
+	by mail.kernel.org (Postfix) with ESMTP id 4B75F20657
+	for <linux-media@archiver.kernel.org>; Tue,  6 Aug 2019 03:42:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731037AbfHEXfN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 5 Aug 2019 19:35:13 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45535 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728483AbfHEXfN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 5 Aug 2019 19:35:13 -0400
-Received: by mail-pg1-f195.google.com with SMTP id o13so40498210pgp.12;
-        Mon, 05 Aug 2019 16:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=fpjseVSUss2LkAdgKt7/i93QGkQFGmCf+/5YmrX1uIQ=;
-        b=UEBoLUE6TOnktq0qwecZhcc58krHIy0NrLnA2JejGKdaPwA71LeRZgFPOgmSxAweHr
-         IoXl6dWBSi5zvPf3JJfkosVWfC/RgGOSnwomIBoCms6iyd+A5uBNMH0I9ldaECqQqjez
-         /TUqbAWemIc6vm8Or2nD481kCJKxUdGe8+4SQHJoveoJw301QfY19jbrvwDIUsWnS8jK
-         ddXOpeAWPMODrQoVhaKlRSCJWMcDRwUj3xKXvv08nOLNA7YT2tGN9K0fI0IgOofqVCO7
-         rX9TD79OC3MIc2djYfbPQ2UYYM8ugJU4NveAgNpOP19a04uJEo0F4dRmwYdiQac2qiVD
-         TWMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=fpjseVSUss2LkAdgKt7/i93QGkQFGmCf+/5YmrX1uIQ=;
-        b=eCpV0nOBBkG2/xIzB2KtLN/gP3EfbBNtnpJoixYmiBZWDdIRt0OCt9NHgDobdsUH6C
-         y7jCqqkTwr8AlkH60oCZ1k/ofpz0OVIg4yP3jbbgvDpVd1+VbpTjOO6L423NjpXlr8ze
-         3hpctnqERMogKZgjv/PCOlPksY1R07tgaSj9r3hjtpfVwgdW4OnHHMG1WaesqSZrY8hF
-         jvAL4XjcLomms0ol+cXgIYuJc6fUEJUNepVjEAn/Xi67rURhD0T+pwbxtwZWaV3ScjVj
-         +2qup5Dwmx4I4Tj9FZbcTRuq0uQ/3q1rs7cnRuhD7tbtLSR+rLv00OOr9FABc51wHYRE
-         jsXA==
-X-Gm-Message-State: APjAAAXO4Ushk9YJ+xtYrjbyWClylPvPyoLbTHxactgPUoV503I9Lv+h
-        p1H32+kPgMT0uoaql1f0B9PVMZAT
-X-Google-Smtp-Source: APXvYqzYukYrcOoU9GMSBqOK3gJWry7lChLl+XFcob2BVHpiHpWIpjdxmlmyLQONGs8F/7psO3EqJg==
-X-Received: by 2002:aa7:93bb:: with SMTP id x27mr587342pff.10.1565048112341;
-        Mon, 05 Aug 2019 16:35:12 -0700 (PDT)
-Received: from majic.sklembedded.com (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
-        by smtp.googlemail.com with ESMTPSA id 30sm31296349pjk.17.2019.08.05.16.35.11
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 16:35:11 -0700 (PDT)
-From:   Steve Longerbeam <slongerbeam@gmail.com>
+        id S1729383AbfHFDmC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 5 Aug 2019 23:42:02 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:45207 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728892AbfHFDmC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 5 Aug 2019 23:42:02 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:1d34:926e:3086:e1e])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id uqMJhaewjAffAuqMKh2AU7; Tue, 06 Aug 2019 05:42:00 +0200
+Message-ID: <83aa84c941ae122e61f2de0060f9ecff@smtp-cloud9.xs4all.net>
+Date:   Tue, 06 Aug 2019 05:41:59 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 01/22] media: entity: Pass entity to get_fwnode_pad operation
-Date:   Mon,  5 Aug 2019 16:34:44 -0700
-Message-Id: <20190805233505.21167-2-slongerbeam@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190805233505.21167-1-slongerbeam@gmail.com>
-References: <20190805233505.21167-1-slongerbeam@gmail.com>
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfGSvqPJMoY6RbynDpDpoEpi6Xdug4pmPyK96+PgP9WB4d5rZlVpSALrIGJsWcWI5XRsY8ED4oMc9fT4Q9GtedVdm6WNCVc249mLSaDGLTeoZpaZSoV04
+ O18A6s/nh8oA5K28i54jN5nqApzDl8wVWnijGeziZP+V0YE3Qj8/tYTzANc0FxPME+ddYW8e9P35CX6NJWsA7ZkZzieTlP8Rjch04A576MBFZ+cySzqTf+9o
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a missing pointer to the entity in the media_entity operation
-get_fwnode_pad.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Fixes: ae45cd5efc120 ("[media] media: entity: Add get_fwnode_pad entity
-operation")
+Results of the daily build of media_tree:
 
-Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
----
- drivers/media/mc/mc-entity.c | 2 +-
- include/media/media-entity.h | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+date:			Tue Aug  6 05:00:11 CEST 2019
+media-tree git hash:	d42974e438feebda372fe4a39d7761cc596abc57
+media_build git hash:	f5f8e016b8243744bfb2cced2fed3a0772cbd168
+v4l-utils git hash:	28be49b4e9d72c5866188cf5ba408541c665c921
+edid-decode git hash:	0932deee88928f110b5a74851c173ad895f75863
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 67d626b059f807573d76221f4d2e8113e6c4339a
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
-diff --git a/drivers/media/mc/mc-entity.c b/drivers/media/mc/mc-entity.c
-index 7c429ce98bae..c333320f790a 100644
---- a/drivers/media/mc/mc-entity.c
-+++ b/drivers/media/mc/mc-entity.c
-@@ -386,7 +386,7 @@ int media_entity_get_fwnode_pad(struct media_entity *entity,
- 	if (ret)
- 		return ret;
- 
--	ret = entity->ops->get_fwnode_pad(&endpoint);
-+	ret = entity->ops->get_fwnode_pad(entity, &endpoint);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-index 8cb2c504a05c..cde80ad029b7 100644
---- a/include/media/media-entity.h
-+++ b/include/media/media-entity.h
-@@ -212,7 +212,8 @@ struct media_pad {
-  *    mutex held.
-  */
- struct media_entity_operations {
--	int (*get_fwnode_pad)(struct fwnode_endpoint *endpoint);
-+	int (*get_fwnode_pad)(struct media_entity *entity,
-+			      struct fwnode_endpoint *endpoint);
- 	int (*link_setup)(struct media_entity *entity,
- 			  const struct media_pad *local,
- 			  const struct media_pad *remote, u32 flags);
--- 
-2.17.1
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3-rc1-i686: OK
+linux-5.3-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS: Final Summary: 1, Succeeded: 0, Failed: 1, Warnings: 0
+sparse: OK
+smatch: OK
 
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
