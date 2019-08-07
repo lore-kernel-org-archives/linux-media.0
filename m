@@ -2,113 +2,156 @@ Return-Path: <SRS0=cr3f=WD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5C02C433FF
-	for <linux-media@archiver.kernel.org>; Wed,  7 Aug 2019 12:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48497C32751
+	for <linux-media@archiver.kernel.org>; Wed,  7 Aug 2019 12:48:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8FA6021BF2
-	for <linux-media@archiver.kernel.org>; Wed,  7 Aug 2019 12:12:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2850F21E6B
+	for <linux-media@archiver.kernel.org>; Wed,  7 Aug 2019 12:48:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729408AbfHGMM1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Aug 2019 08:12:27 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:33698 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727213AbfHGMM1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Aug 2019 08:12:27 -0400
-Received: by mail-ot1-f67.google.com with SMTP id q20so103172208otl.0
-        for <linux-media@vger.kernel.org>; Wed, 07 Aug 2019 05:12:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VDKGx4oXP5YGABfnjJntyMPwquiJIZRG5ZK7/Z07zhk=;
-        b=iiENl9YnWQTIXtIDS2emEzqfI94uMOB1NWSFSHXCWOo5bzfcpcgOEFnIwSvWLurHlk
-         41TkldKsvF0PyBgzPXP7Zg2EccHE3idlWOOJFNrgHjyhGGDesFyCXGHEtLLJl0Djl8NN
-         zDv7FEEuMcYdX9yxx4ah/RkE/xsn9yJmlc4aupnyN2vDZX+V9SS28jNJ/xRNqcFilhvW
-         LhPDV6xt1AbtADOsUFapv6E/V9dTJcPP+PXbaQeeYxAemX4lo55wd37qqZqEdwmRsf9R
-         lVsQV6naqJ8LU8kf5qs3fGTuhJ3dOzHnPiVTrdFHlpQNSRMhSl0sU3gulHLGn7265bz1
-         LHPg==
-X-Gm-Message-State: APjAAAWyXoIrxMo1iAiemVvovEwEC2T2x7k8cOZJFMGzLmi153S8Kr/x
-        Hd8p600P9ouTUZDJO4ox3r9DOmRq4BN9RDRaFY8=
-X-Google-Smtp-Source: APXvYqw3+uRG64xW3GTAeQVu5moSWLBqXNBPj/nzKWIOr0pnPeOk5WtbXvXKYDS69VglgyrTvY+GhMifiuhMIPjXDxo=
-X-Received: by 2002:aca:3bc6:: with SMTP id i189mr4608925oia.153.1565179945860;
- Wed, 07 Aug 2019 05:12:25 -0700 (PDT)
+        id S2387800AbfHGMsc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Aug 2019 08:48:32 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:25596 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729516AbfHGMsb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 7 Aug 2019 08:48:31 -0400
+X-UUID: b2be3ecc389c4c1691245d6b4873b33f-20190807
+X-UUID: b2be3ecc389c4c1691245d6b4873b33f-20190807
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <jungo.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
+        with ESMTP id 1051503270; Wed, 07 Aug 2019 20:48:22 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 7 Aug 2019 20:48:24 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 7 Aug 2019 20:48:24 +0800
+From:   Jungo Lin <jungo.lin@mediatek.com>
+To:     <tfiga@chromium.org>, <hverkuil-cisco@xs4all.nl>,
+        <laurent.pinchart@ideasonboard.com>, <matthias.bgg@gmail.com>,
+        <mchehab@kernel.org>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <ddavenport@chromium.org>, <robh@kernel.org>,
+        <Sean.Cheng@mediatek.com>, <sj.huang@mediatek.com>,
+        <frederic.chen@mediatek.com>, <Jerry-ch.Chen@mediatek.com>,
+        <frankie.chiu@mediatek.com>, <ryan.yu@mediatek.com>,
+        <Rynn.Wu@mediatek.com>, <yuzhao@chromium.org>,
+        <zwisler@chromium.org>, <shik@chromium.org>,
+        <suleiman@chromium.org>, <jungo.lin@mediatek.com>
+Subject: [RFC,v4,1/4] media: dt-bindings: mt8183: Added camera ISP Pass 1
+Date:   Wed, 7 Aug 2019 20:48:00 +0800
+Message-ID: <20190807124803.29884-2-jungo.lin@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20190807124803.29884-1-jungo.lin@mediatek.com>
+References: <Jungo Lin <jungo.lin@mediatek.com>
+ <20190807124803.29884-1-jungo.lin@mediatek.com>
+Reply-To: Jungo Lin <jungo.lin@mediatek.com>
 MIME-Version: 1.0
-References: <20190731134121.18473-1-geert+renesas@glider.be>
- <95aa9f00-a01e-09ab-3cc3-5f1246052093@iki.fi> <CAMuHMdWZW-=8sD2KYEGY0f++++ocMjwDVut1r2z3pJk9OL2wmw@mail.gmail.com>
- <1201f416-26fe-862c-27ee-346ca50ff998@xs4all.nl> <CAMuHMdUfm1p+91xBcjWO9Tm4BcmTr9R5p530ChMQC=0RKLuaDA@mail.gmail.com>
- <040b2c92-516b-58c6-940e-54fb58f7ddee@xs4all.nl>
-In-Reply-To: <040b2c92-516b-58c6-940e-54fb58f7ddee@xs4all.nl>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 7 Aug 2019 14:12:14 +0200
-Message-ID: <CAMuHMdW8SAgT+KR9yEwhjaxijL07FuvqyGXmAOMv3xrvPB=HJw@mail.gmail.com>
-Subject: Re: [PATCH] media: tm6000: Spelling s/diconencted/diconnected/
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Antti Palosaari <crope@iki.fi>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+This patch adds DT binding document for the Pass 1 (P1) unit
+in Mediatek's camera ISP system. The Pass 1 unit grabs the sensor
+data out from the sensor interface, applies ISP image effects
+from tuning data and outputs the image data or statistics data to DRAM.
 
-On Wed, Aug 7, 2019 at 1:05 PM Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> On 8/7/19 12:53 PM, Geert Uytterhoeven wrote:
-> > On Wed, Aug 7, 2019 at 11:33 AM Hans Verkuil <hverkuil@xs4all.nl> wrote:
-> >> On 7/31/19 8:43 PM, Geert Uytterhoeven wrote:
-> >>> On Wed, Jul 31, 2019 at 8:36 PM Antti Palosaari <crope@iki.fi> wrote:
-> >>>> On 7/31/19 4:41 PM, Geert Uytterhoeven wrote:
-> >>>>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> >>>>> ---
-> >>>>>   drivers/media/usb/tm6000/tm6000-cards.c | 2 +-
-> >>>>>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>>
-> >>>>> diff --git a/drivers/media/usb/tm6000/tm6000-cards.c b/drivers/media/usb/tm6000/tm6000-cards.c
-> >>>>> index 23df50aa0a4af6da..9a0ffe678524987c 100644
-> >>>>> --- a/drivers/media/usb/tm6000/tm6000-cards.c
-> >>>>> +++ b/drivers/media/usb/tm6000/tm6000-cards.c
-> >>>>> @@ -1328,7 +1328,7 @@ static int tm6000_usb_probe(struct usb_interface *interface,
-> >>>>>
-> >>>>>   /*
-> >>>>>    * tm6000_usb_disconnect()
-> >>>>> - * called when the device gets diconencted
-> >>>>> + * called when the device gets diconnected
-> >>>>
-> >>>> disconnected ?
-> >>>
-> >>> Thanks, will fix!
-> >>
-> >> Can you also add a commit message when you post v2? Currently that's
-> >> empty and Linus doesn't like empty commit messages :-)
-> >
-> > Even if everything to be said is in the one-line summary?
->
-> Yes. In fact, checkpatch warns if the commit description is empty.
+Signed-off-by: Jungo Lin <jungo.lin@mediatek.com>
+---
+ .../bindings/media/mediatek,camisp.txt        | 73 +++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,camisp.txt
 
-Quoting the checkpatch.pl maintainer:
-
-   "checkpatch is a stupid script and doesn't forbid anything.
-    It's just a suggestion guide."
-
-https://lore.kernel.org/lkml/20190801124037.11dcac71@gandalf.local.home/
-
-> In this case, just say 'Fix typo.', that's sufficient.
-
-If that makes you happy...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/Documentation/devicetree/bindings/media/mediatek,camisp.txt b/Documentation/devicetree/bindings/media/mediatek,camisp.txt
+new file mode 100644
+index 000000000000..fa2713acceca
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/mediatek,camisp.txt
+@@ -0,0 +1,73 @@
++* Mediatek Image Signal Processor Pass 1 (ISP P1)
++
++The Pass 1 unit of Mediatek's camera ISP system grabs the sensor data out
++from the sensor interface, applies ISP effects from tuning data and outputs
++the image data and statistics data to DRAM. Furthermore, Pass 1 unit has
++the ability to output two different resolutions frames at the same time to
++increase the performance of the camera application.
++
++Required properties:
++- compatible: Must be "mediatek,mt8183-camisp" for MT8183.
++- reg: Physical base address of the camera function block register and
++  length of memory mapped region. Must contain an entry for each entry
++  in reg-names.
++- reg-names: Must include the following entries:
++  "cam_sys": Camera base function block
++  "cam_uni": Camera UNI function block
++  "cam_a": Camera ISP P1 hardware unit A
++  "cam_b": Camera ISP P1 hardware unit B
++  "cam_c": Camera ISP P1 hardware unit C
++- interrupts: Must contain an entry for each entry in interrupt-names.
++- interrupt-names : Must include the following entries:
++  "cam_uni": Camera UNI interrupt
++  "cam_a": Camera unit A interrupt
++  "cam_b": Camera unit B interrupt
++  "cam_c": Camera unit C interrupt
++- iommus: Shall point to the respective IOMMU block with master port
++  as argument, see Documentation/devicetree/bindings/iommu/mediatek,iommu.txt
++  for details.
++- clocks: A list of phandle and clock specifier pairs as listed
++  in clock-names property, see
++  Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
++- clock-names: Must be "camsys_cam_cgpdn" and "camsys_camtg_cgpdn".
++- mediatek,larb: Must contain the local arbiters in the current SoCs, see
++  Documentation/devicetree/bindings/memory-controllers/mediatek,smi-larb.txt
++  for details.
++- power-domains: a phandle to the power domain, see
++  Documentation/devicetree/bindings/power/power_domain.txt for details.
++- mediatek,scp : The node of system control processor (SCP), see
++  Documentation/devicetree/bindings/remoteproc/mtk,scp.txt for details.
++
++Example:
++SoC specific DT entry:
++
++		camisp: camisp@1a000000 {
++			compatible = "mediatek,mt8183-camisp", "syscon";
++			reg = <0 0x1a000000 0 0x1000>,
++					<0 0x1a003000 0 0x1000>,
++					<0 0x1a004000 0 0x2000>,
++					<0 0x1a006000 0 0x2000>,
++					<0 0x1a008000 0 0x2000>;
++			reg-names = "cam_sys",
++					"cam_uni",
++					"cam_a",
++					"cam_b",
++					"cam_c";
++			interrupts = <GIC_SPI 253 IRQ_TYPE_LEVEL_LOW>,
++					<GIC_SPI 254 IRQ_TYPE_LEVEL_LOW>,
++					<GIC_SPI 255 IRQ_TYPE_LEVEL_LOW>,
++					<GIC_SPI 256 IRQ_TYPE_LEVEL_LOW>;
++			interrupt-names = "cam_uni",
++					"cam_a",
++					"cam_b",
++					"cam_c";
++			iommus = <&iommu M4U_PORT_CAM_IMGO>;
++			clocks = <&camsys CLK_CAM_CAM>,
++					<&camsys CLK_CAM_CAMTG>;
++			clock-names = "camsys_cam_cgpdn",
++					"camsys_camtg_cgpdn";
++			mediatek,larb = <&larb3>,
++					<&larb6>;
++			power-domains = <&scpsys MT8183_POWER_DOMAIN_CAM>;
++			mediatek,scp = <&scp>;
++		};
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.18.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
