@@ -2,77 +2,81 @@ Return-Path: <SRS0=cr3f=WD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61A60C433FF
-	for <linux-media@archiver.kernel.org>; Wed,  7 Aug 2019 08:55:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A52CAC32751
+	for <linux-media@archiver.kernel.org>; Wed,  7 Aug 2019 09:05:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3E504223CB
-	for <linux-media@archiver.kernel.org>; Wed,  7 Aug 2019 08:55:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80F7722305
+	for <linux-media@archiver.kernel.org>; Wed,  7 Aug 2019 09:05:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726902AbfHGIzn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 7 Aug 2019 04:55:43 -0400
-Received: from mga18.intel.com ([134.134.136.126]:25359 "EHLO mga18.intel.com"
+        id S1727733AbfHGJFF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 7 Aug 2019 05:05:05 -0400
+Received: from mga03.intel.com ([134.134.136.65]:65286 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726244AbfHGIzn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 7 Aug 2019 04:55:43 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1726244AbfHGJFE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 7 Aug 2019 05:05:04 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 01:55:42 -0700
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 01:56:10 -0700
 X-IronPort-AV: E=Sophos;i="5.64,357,1559545200"; 
-   d="scan'208";a="192866432"
+   d="scan'208";a="176128515"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 01:55:42 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 2795F201AF
-        for <linux-media@vger.kernel.org>; Wed,  7 Aug 2019 11:56:16 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1hvHjz-0002Fe-Do
-        for linux-media@vger.kernel.org; Wed, 07 Aug 2019 11:56:15 +0300
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 01:56:09 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 94F69202CC; Wed,  7 Aug 2019 11:56:43 +0300 (EEST)
+Date:   Wed, 7 Aug 2019 11:56:43 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH 1/1] ov8856: Check reading clock frequency succeeded
-Date:   Wed,  7 Aug 2019 11:56:15 +0300
-Message-Id: <20190807085615.8612-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
+To:     Shawnx Tu <shawnx.tu@intel.com>
+Cc:     linux-media@vger.kernel.org, andy.yeh@intel.com
+Subject: Re: [PATCH v1] ov5675: Add support for OV5675 sensor
+Message-ID: <20190807085643.GL21370@paasikivi.fi.intel.com>
+References: <1564570416-8329-1-git-send-email-shawnx.tu@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564570416-8329-1-git-send-email-shawnx.tu@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of blindly trusting getting the clock frequency succeeded end then
-testing it against a pre-defined value, verify reading the value
-succeeded.
+Hi Shawn,
 
-Fixes: 879347f0c258 ("media: ov8856: Add support for OV8856 sensor")
+Thanks for the patch. A few comments below.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/ov8856.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On Wed, Jul 31, 2019 at 06:53:36PM +0800, Shawnx Tu wrote:
 
-diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
-index cd347d6b7b9da..8655842af2755 100644
---- a/drivers/media/i2c/ov8856.c
-+++ b/drivers/media/i2c/ov8856.c
-@@ -1106,7 +1106,10 @@ static int ov8856_check_hwcfg(struct device *dev)
- 	if (!fwnode)
- 		return -ENXIO;
- 
--	fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
-+	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
-+	if (ret)
-+		return ret;
-+
- 	if (mclk != OV8856_MCLK) {
- 		dev_err(dev, "external clock %d is not supported", mclk);
- 		return -EINVAL;
+...
+
+> +static int ov5675_check_hwcfg(struct device *dev)
+> +{
+> +	struct fwnode_handle *ep;
+> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
+> +	struct v4l2_fwnode_endpoint bus_cfg = {
+> +		.bus_type = V4L2_MBUS_CSI2_DPHY
+> +	};
+> +	u32 mclk;
+> +	int ret;
+> +	unsigned int i, j;
+> +
+> +	if (!fwnode)
+> +		return -ENXIO;
+> +
+> +	fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
+
+Please check reading the property succeeded. Otherwise mclk will be
+uninitialised.
+
+Apart from that, this seems good.
+
 -- 
-2.20.1
+Kind regards,
 
+Sakari Ailus
+sakari.ailus@linux.intel.com
