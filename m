@@ -7,21 +7,21 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7F87C0650F
-	for <linux-media@archiver.kernel.org>; Thu,  8 Aug 2019 10:35:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BEE5C0650F
+	for <linux-media@archiver.kernel.org>; Thu,  8 Aug 2019 10:35:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8E24B21874
-	for <linux-media@archiver.kernel.org>; Thu,  8 Aug 2019 10:35:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3898E21874
+	for <linux-media@archiver.kernel.org>; Thu,  8 Aug 2019 10:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389951AbfHHKfV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Aug 2019 06:35:21 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36760 "EHLO
+        id S1732263AbfHHKfB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Aug 2019 06:35:01 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36694 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389923AbfHHKfU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Aug 2019 06:35:20 -0400
+        with ESMTP id S1731274AbfHHKfB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Aug 2019 06:35:01 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id F0E2528BD35
+        with ESMTPSA id 14DC728C96B
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@collabora.com,
@@ -36,9 +36,9 @@ Cc:     kernel@collabora.com,
         Alexandre Courbot <acourbot@chromium.org>,
         fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v4 07/11] media: cedrus: Specify the required H264 start code
-Date:   Thu,  8 Aug 2019 07:34:28 -0300
-Message-Id: <20190808103432.12062-8-ezequiel@collabora.com>
+Subject: [PATCH v4 02/11] media: uapi: h264: Rename pixel format
+Date:   Thu,  8 Aug 2019 07:34:23 -0300
+Message-Id: <20190808103432.12062-3-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190808103432.12062-1-ezequiel@collabora.com>
 References: <20190808103432.12062-1-ezequiel@collabora.com>
@@ -49,49 +49,112 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The cedrus VPU expects V4L2_PIX_FMT_H264_SLICE buffers to contain
-H264 slices with no start code. Expose this to userspace with
-the newly added menu control.
+The V4L2_PIX_FMT_H264_SLICE_RAW name was originally suggested
+because the pixel format would represent H264 slices without any
+start code.
+
+However, as we will now introduce a start code menu control,
+give the pixel format a more meaningful name, while it's
+still early enough to do so.
 
 Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
 Changes in v4:
 * New patch.
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ Documentation/media/uapi/v4l/pixfmt-compressed.rst | 4 ++--
+ drivers/media/v4l2-core/v4l2-ioctl.c               | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_dec.c    | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_video.c  | 6 +++---
+ include/media/h264-ctrls.h                         | 2 +-
+ 5 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index 7bdc413bf727..10be2bd9507e 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -77,6 +77,26 @@ static const struct cedrus_control cedrus_controls[] = {
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
-+	{
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE,
-+			.max	= V4L2_MPEG_VIDEO_H264_SLICE_BASED_DECODING,
-+			.def	= V4L2_MPEG_VIDEO_H264_SLICE_BASED_DECODING,
-+			.menu_skip_mask = BIT(V4L2_MPEG_VIDEO_H264_FRAME_BASED_DECODING),
-+		},
-+		.codec		= CEDRUS_CODEC_H264,
-+		.required	= false,
-+	},
-+	{
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_STARTCODE,
-+			.max	= V4L2_MPEG_VIDEO_H264_NO_STARTCODE,
-+			.def	= V4L2_MPEG_VIDEO_H264_NO_STARTCODE,
-+			.menu_skip_mask = BIT(V4L2_MPEG_VIDEO_H264_ANNEX_B_STARTCODE),
-+		},
-+		.codec		= CEDRUS_CODEC_H264,
-+		.required	= false,
-+	},
- };
+diff --git a/Documentation/media/uapi/v4l/pixfmt-compressed.rst b/Documentation/media/uapi/v4l/pixfmt-compressed.rst
+index f52a7b67023d..9b65473a2288 100644
+--- a/Documentation/media/uapi/v4l/pixfmt-compressed.rst
++++ b/Documentation/media/uapi/v4l/pixfmt-compressed.rst
+@@ -52,9 +52,9 @@ Compressed Formats
+       - ``V4L2_PIX_FMT_H264_MVC``
+       - 'M264'
+       - H264 MVC video elementary stream.
+-    * .. _V4L2-PIX-FMT-H264-SLICE-RAW:
++    * .. _V4L2-PIX-FMT-H264-SLICE:
  
- #define CEDRUS_CONTROLS_COUNT	ARRAY_SIZE(cedrus_controls)
+-      - ``V4L2_PIX_FMT_H264_SLICE_RAW``
++      - ``V4L2_PIX_FMT_H264_SLICE``
+       - 'S264'
+       - H264 parsed slice data, without the start code and as
+ 	extracted from the H264 bitstream.  This format is adapted for
+diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
+index bb5b4926538a..39f10621c91b 100644
+--- a/drivers/media/v4l2-core/v4l2-ioctl.c
++++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+@@ -1343,7 +1343,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *fmt)
+ 		case V4L2_PIX_FMT_H264:		descr = "H.264"; break;
+ 		case V4L2_PIX_FMT_H264_NO_SC:	descr = "H.264 (No Start Codes)"; break;
+ 		case V4L2_PIX_FMT_H264_MVC:	descr = "H.264 MVC"; break;
+-		case V4L2_PIX_FMT_H264_SLICE_RAW:	descr = "H.264 Parsed Slice Data"; break;
++		case V4L2_PIX_FMT_H264_SLICE:	descr = "H.264 Parsed Slice Data"; break;
+ 		case V4L2_PIX_FMT_H263:		descr = "H.263"; break;
+ 		case V4L2_PIX_FMT_MPEG1:	descr = "MPEG-1 ES"; break;
+ 		case V4L2_PIX_FMT_MPEG2:	descr = "MPEG-2 ES"; break;
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+index bdad87eb9d79..56ca4c9ad01c 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+@@ -46,7 +46,7 @@ void cedrus_device_run(void *priv)
+ 			V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION);
+ 		break;
+ 
+-	case V4L2_PIX_FMT_H264_SLICE_RAW:
++	case V4L2_PIX_FMT_H264_SLICE:
+ 		run.h264.decode_params = cedrus_find_control_data(ctx,
+ 			V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS);
+ 		run.h264.pps = cedrus_find_control_data(ctx,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+index e2b530b1a956..06c695615703 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+@@ -38,7 +38,7 @@ static struct cedrus_format cedrus_formats[] = {
+ 		.directions	= CEDRUS_DECODE_SRC,
+ 	},
+ 	{
+-		.pixelformat	= V4L2_PIX_FMT_H264_SLICE_RAW,
++		.pixelformat	= V4L2_PIX_FMT_H264_SLICE,
+ 		.directions	= CEDRUS_DECODE_SRC,
+ 	},
+ 	{
+@@ -104,7 +104,7 @@ static void cedrus_prepare_format(struct v4l2_pix_format *pix_fmt)
+ 
+ 	switch (pix_fmt->pixelformat) {
+ 	case V4L2_PIX_FMT_MPEG2_SLICE:
+-	case V4L2_PIX_FMT_H264_SLICE_RAW:
++	case V4L2_PIX_FMT_H264_SLICE:
+ 		/* Zero bytes per line for encoded source. */
+ 		bytesperline = 0;
+ 
+@@ -469,7 +469,7 @@ static int cedrus_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		ctx->current_codec = CEDRUS_CODEC_MPEG2;
+ 		break;
+ 
+-	case V4L2_PIX_FMT_H264_SLICE_RAW:
++	case V4L2_PIX_FMT_H264_SLICE:
+ 		ctx->current_codec = CEDRUS_CODEC_H264;
+ 		break;
+ 
+diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+index e1404d78d6ff..6160a69c0143 100644
+--- a/include/media/h264-ctrls.h
++++ b/include/media/h264-ctrls.h
+@@ -14,7 +14,7 @@
+ #include <linux/videodev2.h>
+ 
+ /* Our pixel format isn't stable at the moment */
+-#define V4L2_PIX_FMT_H264_SLICE_RAW v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
++#define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
+ 
+ /*
+  * This is put insanely high to avoid conflicting with controls that
 -- 
 2.22.0
 
