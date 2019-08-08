@@ -4,24 +4,24 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E271CC0650F
-	for <linux-media@archiver.kernel.org>; Thu,  8 Aug 2019 10:34:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47382C433FF
+	for <linux-media@archiver.kernel.org>; Thu,  8 Aug 2019 10:35:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B86012173E
-	for <linux-media@archiver.kernel.org>; Thu,  8 Aug 2019 10:34:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C1E62187F
+	for <linux-media@archiver.kernel.org>; Thu,  8 Aug 2019 10:35:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732159AbfHHKew (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 8 Aug 2019 06:34:52 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:36688 "EHLO
+        id S1732297AbfHHKfD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 8 Aug 2019 06:35:03 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:36708 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731274AbfHHKew (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Aug 2019 06:34:52 -0400
+        with ESMTP id S1732248AbfHHKfC (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 8 Aug 2019 06:35:02 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id 0DC3B28BD35
+        with ESMTPSA id C376128B682
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@collabora.com,
@@ -34,12 +34,10 @@ Cc:     kernel@collabora.com,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Alexandre Courbot <acourbot@chromium.org>,
-        fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v4 01/11] lib/sort.c: implement sort() variant taking context argument
-Date:   Thu,  8 Aug 2019 07:34:22 -0300
-Message-Id: <20190808103432.12062-2-ezequiel@collabora.com>
+        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 03/11] media: uapi: h264: Add the concept of decoding mode
+Date:   Thu,  8 Aug 2019 07:34:24 -0300
+Message-Id: <20190808103432.12062-4-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190808103432.12062-1-ezequiel@collabora.com>
 References: <20190808103432.12062-1-ezequiel@collabora.com>
@@ -50,137 +48,178 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+From: Boris Brezillon <boris.brezillon@collabora.com>
 
-Our list_sort() utility has always supported a context argument that
-is passed through to the comparison routine. Now there's a use case
-for the similar thing for sort().
+Some stateless decoders don't support per-slice decoding granularity
+(or at least not in a way that would make them efficient or easy to use).
 
-This implements sort_r by simply extending the existing sort function
-in the obvious way. To avoid code duplication, we want to implement
-sort() in terms of sort_r(). The naive way to do that is
+Expose a menu to control the supported decoding modes. Drivers are
+allowed to support only one decoding but they can support both too.
 
-static int cmp_wrapper(const void *a, const void *b, const void *ctx)
-{
-  int (*real_cmp)(const void*, const void*) = ctx;
-  return real_cmp(a, b);
-}
-
-sort(..., cmp) { sort_r(..., cmp_wrapper, cmp) }
-
-but this would do two indirect calls for each comparison. Instead, do
-as is done for the default swap functions - that only adds a cost of a
-single easily predicted branch to each comparison call.
-
-Aside from introducing support for the context argument, this also
-serves as preparation for patches that will eliminate the indirect
-comparison calls in common cases.
-
-Requested-by: Boris Brezillon <boris.brezillon@collabora.com>
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-Acked-by: Andrew Morton <akpm@linux-foundation.org>
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- include/linux/sort.h |  5 +++++
- lib/sort.c           | 34 ++++++++++++++++++++++++++++------
- 2 files changed, 33 insertions(+), 6 deletions(-)
+Changes in v4:
+* Typos/rewording fixes
 
-diff --git a/include/linux/sort.h b/include/linux/sort.h
-index 2b99a5dd073d..61b96d0ebc44 100644
---- a/include/linux/sort.h
-+++ b/include/linux/sort.h
-@@ -4,6 +4,11 @@
+Changes in v3:
+* s/per-{slice,frame} decoding/{slice,frame}-based decoding/
+* Add Paul's R-b
+
+Changes in v2:
+* Allow decoding multiple slices in per-slice decoding mode
+* Minor doc improvement/fixes
+---
+ .../media/uapi/v4l/ext-ctrls-codec.rst        | 43 ++++++++++++++++++-
+ drivers/media/v4l2-core/v4l2-ctrls.c          |  9 ++++
+ include/media/h264-ctrls.h                    | 11 +++++
+ 3 files changed, 62 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+index c5f39dd50043..ea0455957149 100644
+--- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
++++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+@@ -1747,6 +1747,11 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+     * - __u32
+       - ``size``
+       -
++    * - __u32
++      - ``start_byte_offset``
++      - Where the slice payload starts in the output buffer. Useful when the
++        OUTPUT buffer contains more than one slice (some codecs need to know
++        where each slice starts in this buffer).
+     * - __u32
+       - ``header_bit_size``
+       -
+@@ -1930,7 +1935,10 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+       -
+     * - __u16
+       - ``num_slices``
+-      - Number of slices needed to decode the current frame
++      - Number of slices needed to decode the current frame/field. When
++        operating in slice-based decoding mode (see
++        :c:type:`v4l2_mpeg_video_h264_decoding_mode`), this field
++        should always be set to one.
+     * - __u16
+       - ``nal_ref_idc``
+       - NAL reference ID value coming from the NAL Unit header
+@@ -2021,6 +2029,39 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+       - 0x00000004
+       - The DPB entry is a long term reference frame
  
- #include <linux/types.h>
- 
-+void sort_r(void *base, size_t num, size_t size,
-+	    int (*cmp)(const void *, const void *, const void *),
-+	    void (*swap)(void *, void *, int),
-+	    const void *priv);
++``V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE (enum)``
++    Specifies the decoding mode to use. Currently exposes slice-based and
++    frame-based decoding but new modes might be added later on.
++    Drivers may expose a single or multiple decoding modes,
++    depending on what they can support.
 +
- void sort(void *base, size_t num, size_t size,
- 	  int (*cmp)(const void *, const void *),
- 	  void (*swap)(void *, void *, int));
-diff --git a/lib/sort.c b/lib/sort.c
-index cf408aec3733..d54cf97e9548 100644
---- a/lib/sort.c
-+++ b/lib/sort.c
-@@ -144,6 +144,18 @@ static void do_swap(void *a, void *b, size_t size, swap_func_t swap_func)
- 		swap_func(a, b, (int)size);
- }
- 
-+typedef int (*cmp_func_t)(const void *, const void *);
-+typedef int (*cmp_r_func_t)(const void *, const void *, const void *);
-+#define _CMP_WRAPPER ((cmp_r_func_t)0L)
++    .. note::
 +
-+static int do_cmp(const void *a, const void *b,
-+		  cmp_r_func_t cmp, const void *priv)
-+{
-+	if (cmp == _CMP_WRAPPER)
-+		return ((cmp_func_t)(priv))(a, b);
-+	return cmp(a, b, priv);
-+}
++       This menu control is not yet part of the public kernel API and
++       it is expected to change.
 +
- /**
-  * parent - given the offset of the child, find the offset of the parent.
-  * @i: the offset of the heap element whose parent is sought.  Non-zero.
-@@ -171,12 +183,13 @@ static size_t parent(size_t i, unsigned int lsbit, size_t size)
- }
- 
- /**
-- * sort - sort an array of elements
-+ * sort_r - sort an array of elements
-  * @base: pointer to data to sort
-  * @num: number of elements
-  * @size: size of each element
-  * @cmp_func: pointer to comparison function
-  * @swap_func: pointer to swap function or NULL
-+ * @priv: third argument passed to comparison function
-  *
-  * This function does a heapsort on the given array.  You may provide
-  * a swap_func function if you need to do something more than a memory
-@@ -188,9 +201,10 @@ static size_t parent(size_t i, unsigned int lsbit, size_t size)
-  * O(n*n) worst-case behavior and extra memory requirements that make
-  * it less suitable for kernel use.
-  */
--void sort(void *base, size_t num, size_t size,
--	  int (*cmp_func)(const void *, const void *),
--	  void (*swap_func)(void *, void *, int size))
-+void sort_r(void *base, size_t num, size_t size,
-+	    int (*cmp_func)(const void *, const void *, const void *),
-+	    void (*swap_func)(void *, void *, int size),
-+	    const void *priv)
- {
- 	/* pre-scale counters for performance */
- 	size_t n = num * size, a = (num/2) * size;
-@@ -238,12 +252,12 @@ void sort(void *base, size_t num, size_t size,
- 		 * average, 3/4 worst-case.)
- 		 */
- 		for (b = a; c = 2*b + size, (d = c + size) < n;)
--			b = cmp_func(base + c, base + d) >= 0 ? c : d;
-+			b = do_cmp(base + c, base + d, cmp_func, priv) >= 0 ? c : d;
- 		if (d == n)	/* Special case last leaf with no sibling */
- 			b = c;
- 
- 		/* Now backtrack from "b" to the correct location for "a" */
--		while (b != a && cmp_func(base + a, base + b) >= 0)
-+		while (b != a && do_cmp(base + a, base + b, cmp_func, priv) >= 0)
- 			b = parent(b, lsbit, size);
- 		c = b;			/* Where "a" belongs */
- 		while (b != a) {	/* Shift it into place */
-@@ -252,4 +266,12 @@ void sort(void *base, size_t num, size_t size,
- 		}
- 	}
- }
-+EXPORT_SYMBOL(sort_r);
++.. c:type:: v4l2_mpeg_video_h264_decoding_mode
 +
-+void sort(void *base, size_t num, size_t size,
-+	  int (*cmp_func)(const void *, const void *),
-+	  void (*swap_func)(void *, void *, int size))
-+{
-+	return sort_r(base, num, size, _CMP_WRAPPER, swap_func, cmp_func);
-+}
- EXPORT_SYMBOL(sort);
++.. cssclass:: longtable
++
++.. flat-table::
++    :header-rows:  0
++    :stub-columns: 0
++    :widths:       1 1 2
++
++    * - ``V4L2_MPEG_VIDEO_H264_SLICE_BASED_DECODING``
++      - 0
++      - The decoding is done at the slice granularity.
++        v4l2_ctrl_h264_decode_params->num_slices should be set to 1.
++        The OUTPUT buffer must contain a single slice.
++    * - ``V4L2_MPEG_VIDEO_H264_FRAME_BASED_DECODING``
++      - 1
++      - The decoding is done at the frame granularity.
++        v4l2_ctrl_h264_decode_params->num_slices should be set to the number of
++        slices forming a frame.
++        The OUTPUT buffer should contain all slices needed to decode the
++        frame/field.
++
+ .. _v4l2-mpeg-mpeg2:
+ 
+ ``V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS (struct)``
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index cd1ae016706f..c3194299bfac 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -402,6 +402,11 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		"Explicit",
+ 		NULL,
+ 	};
++	static const char * const h264_decoding_mode[] = {
++		"Slice-Based",
++		"Frame-Based",
++		NULL,
++	};
+ 	static const char * const mpeg_mpeg2_level[] = {
+ 		"Low",
+ 		"Main",
+@@ -633,6 +638,8 @@ const char * const *v4l2_ctrl_get_menu(u32 id)
+ 		return h264_fp_arrangement_type;
+ 	case V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE:
+ 		return h264_fmo_map_type;
++	case V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE:
++		return h264_decoding_mode;
+ 	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
+ 		return mpeg_mpeg2_level;
+ 	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
+@@ -852,6 +859,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX:		return "H264 Scaling Matrix";
+ 	case V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS:		return "H264 Slice Parameters";
+ 	case V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS:		return "H264 Decode Parameters";
++	case V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE:		return "H264 Decoding Mode";
+ 	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:			return "MPEG2 Level";
+ 	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:			return "MPEG2 Profile";
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_I_FRAME_QP:		return "MPEG4 I-Frame QP Value";
+@@ -1220,6 +1228,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_MPEG_VIDEO_H264_VUI_SAR_IDC:
+ 	case V4L2_CID_MPEG_VIDEO_H264_SEI_FP_ARRANGEMENT_TYPE:
+ 	case V4L2_CID_MPEG_VIDEO_H264_FMO_MAP_TYPE:
++	case V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE:
+ 	case V4L2_CID_MPEG_VIDEO_MPEG2_LEVEL:
+ 	case V4L2_CID_MPEG_VIDEO_MPEG2_PROFILE:
+ 	case V4L2_CID_MPEG_VIDEO_MPEG4_LEVEL:
+diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+index 6160a69c0143..e6c510877f67 100644
+--- a/include/media/h264-ctrls.h
++++ b/include/media/h264-ctrls.h
+@@ -26,6 +26,7 @@
+ #define V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX	(V4L2_CID_MPEG_BASE+1002)
+ #define V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS	(V4L2_CID_MPEG_BASE+1003)
+ #define V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS	(V4L2_CID_MPEG_BASE+1004)
++#define V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE	(V4L2_CID_MPEG_BASE+1005)
+ 
+ /* enum v4l2_ctrl_type type values */
+ #define V4L2_CTRL_TYPE_H264_SPS			0x0110
+@@ -33,6 +34,12 @@
+ #define V4L2_CTRL_TYPE_H264_SCALING_MATRIX	0x0112
+ #define V4L2_CTRL_TYPE_H264_SLICE_PARAMS	0x0113
+ #define V4L2_CTRL_TYPE_H264_DECODE_PARAMS	0x0114
++#define V4L2_CTRL_TYPE_H264_DECODING_MODE	0x0115
++
++enum v4l2_mpeg_video_h264_decoding_mode {
++	V4L2_MPEG_VIDEO_H264_SLICE_BASED_DECODING,
++	V4L2_MPEG_VIDEO_H264_FRAME_BASED_DECODING,
++};
+ 
+ #define V4L2_H264_SPS_CONSTRAINT_SET0_FLAG			0x01
+ #define V4L2_H264_SPS_CONSTRAINT_SET1_FLAG			0x02
+@@ -125,6 +132,10 @@ struct v4l2_h264_pred_weight_table {
+ struct v4l2_ctrl_h264_slice_params {
+ 	/* Size in bytes, including header */
+ 	__u32 size;
++
++	/* Offset in bytes to the start of slice in the OUTPUT buffer. */
++	__u32 start_byte_offset;
++
+ 	/* Offset in bits to slice_data() from the beginning of this slice. */
+ 	__u32 header_bit_size;
+ 
 -- 
 2.22.0
 
