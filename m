@@ -2,68 +2,69 @@ Return-Path: <SRS0=A+9d=WF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9A14C433FF
-	for <linux-media@archiver.kernel.org>; Fri,  9 Aug 2019 21:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D45E9C32756
+	for <linux-media@archiver.kernel.org>; Fri,  9 Aug 2019 21:46:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A2EEB20B7C
-	for <linux-media@archiver.kernel.org>; Fri,  9 Aug 2019 21:45:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C94C208C4
+	for <linux-media@archiver.kernel.org>; Fri,  9 Aug 2019 21:46:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1565387158;
-	bh=sfTjuwi8pWUgoSihYRLC2rC3ps8LjdVj2oOl8OMRaf4=;
+	s=default; t=1565387161;
+	bh=QPdOzV0lwF1EuRHfUnXh6s7Ht0T4DDy5Ae9t1ccrm3c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kc2ZQBulQG/FSIH670Oty7uTsIveELVQ9MX6TLi4YllA/zNKP233dkPsYuyjhqBaD
-	 IyhSRkyCUMqqiPhAnLHRQgIjXWIAXK1rueorxCvuMO9bfZ6zVOVBnUvPMu1GQcUbbo
-	 qsLakwUmt2UNdtXOmzHPG2GdscRrhMe+Lt8pvh3k=
+	b=dBbs7MaiLaaDsF/JY5QNCFk+u6e7dwyBEWhqEaeb8k0ImtZCPlCIz701Ae+JQJ/JX
+	 AEDK4md/yrqHaEmkWUN6jO7qI7uAo61IxBgtVHqHUj8RDBde0Co5dMilYf2tz4f4Xx
+	 kX36RI71m14hiMWCXiSimyMGFD1yyiDvUvS/6sb4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728214AbfHIVpu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 9 Aug 2019 17:45:50 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:44364 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbfHIVpu (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Aug 2019 17:45:50 -0400
-Received: by mail-ot1-f67.google.com with SMTP id b7so87883186otl.11
-        for <linux-media@vger.kernel.org>; Fri, 09 Aug 2019 14:45:49 -0700 (PDT)
+        id S1728596AbfHIVp6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 9 Aug 2019 17:45:58 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39861 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728188AbfHIVpy (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 9 Aug 2019 17:45:54 -0400
+Received: by mail-ot1-f66.google.com with SMTP id r21so132180629otq.6
+        for <linux-media@vger.kernel.org>; Fri, 09 Aug 2019 14:45:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XVpKg76iNK8Q/96SWBmPErgH7+sWQHry8Kj0z1Q3E4s=;
-        b=VPG1KTp/U3INFqDj/Hn3VLHmSyuQMd3T6+O/C0Cmwq9AD5aPNiFJoLIbZ+qA5GiDCM
-         nDjwxr1VqTeaeCLG9s/7Pff8yI1GJ4X7k79SpE2tRv/jSayXwVf4jyH0Z4wIloNYDZZc
-         JvRKBhAnChodTNPzUrdwsq8CT+xfNzKB4Ukf8=
+        bh=Q8bv0VJFvcUca4dNFjkReaJ6w8K5woMhiQ/onkgnpeg=;
+        b=coaW+EFbAMuceCGUBT8pJ/YDD+TnpNU0zyfWayKUPOymm32egeIGxjcQDzd/Tcs/zn
+         lY/ewx0Sqd/l2YR0gIlQh5Kjfzf5EpyKc78HGQ+YXYWW+uKzVk06cTisXHX0JoAEG4kZ
+         ukQJbmoVvy4sfaOcfM0OU0LGSpjOD6+JPp3Oo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XVpKg76iNK8Q/96SWBmPErgH7+sWQHry8Kj0z1Q3E4s=;
-        b=YWHhDVh89VJYctpQz7693bEvOL8LxWrVIdZRtIyAENin7RScPdOWJosqOAOCn9q22p
-         wcR5apElsF/GbTizAPx1dD0B8O/NTV2rHKq59wKQEpBnf30TnrFiITkbmQZ6niodBA0r
-         H56dnhkW/lbLd5dK//U0vQQ4kt8dZo6WVhdwCRwOS+71Z9+LuFoRcwouH+0N2pkWaZm8
-         TnX4DUxK5a83Z65960/m6PlGlYdtWJQIHgz3u9hPGXRtTDQdL32oYwurY1TEFbkxP4Bq
-         gs1iOwBuBPcArqYbfDg6fK/mBQtFtTg8XZ5rgtk8/XwTNvTzz9CPO6zVSBgKZrPPZnnV
-         7NJQ==
-X-Gm-Message-State: APjAAAXV/9HqKmcGnErMAYCxSpSI1I7A1g+pcKpMrpkqQQ7bVOGOTPuv
-        h89AEhWz+q95CRF+Hv/R0AkAvw==
-X-Google-Smtp-Source: APXvYqym8uiYgHJ73R3fcQFikPHmj9xtcamzMx0wWGxeIp2gzZe9jI3kGz/pr3OE7haDJQqFvoVgsw==
-X-Received: by 2002:a6b:8f82:: with SMTP id r124mr12222862iod.6.1565387149231;
-        Fri, 09 Aug 2019 14:45:49 -0700 (PDT)
+        bh=Q8bv0VJFvcUca4dNFjkReaJ6w8K5woMhiQ/onkgnpeg=;
+        b=nVU6S9VsvFs8Fhm6QVtcxhrVbFLEne/bO1HKeajKCEa3V0lZCv65HPPYdKxI3V88Ec
+         1DlHs34HrKUJ6BwbQw12ZQJZN2GH5f2QWT/X9nMpCzzsbOuAs9Y53y33mvQPxUxK7fb6
+         WI/yIk0liclGrZtuSbVZqD9l3ic3Uyn7uG2SYw2lNZ6znmGaKM6SYLdOR0VvaBz0ZbfA
+         LIHBuLs188Lkt05ljSsetk0j9A2ezXkmyx/OSrTaVvw3c1FlhWvxxyVQ/syYyuLOOEdc
+         W2vzmKF/CjaeF5RO7ird/C7dZOUqlLvglHYiRK28mCr0l1TG6gXho5mjVadLNfAIc4hz
+         HJ3w==
+X-Gm-Message-State: APjAAAXIuyiYH+ClokZHebmbqz+ZcHQQdrjprnnBCsQ6O0WOYOoLSxj9
+        No+AMNWXVgqTPWIXrgvi1YKRDg==
+X-Google-Smtp-Source: APXvYqxaftLcNmxLkz2YDb7ubn2cO8ZuF5CD6gIUlXfbvU4C91kVGJRxpuMwXPDTJDhWtthGZuh4Uw==
+X-Received: by 2002:a05:6602:8e:: with SMTP id h14mr9560463iob.305.1565387153481;
+        Fri, 09 Aug 2019 14:45:53 -0700 (PDT)
 Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id n17sm75861623iog.63.2019.08.09.14.45.48
+        by smtp.gmail.com with ESMTPSA id n17sm75861623iog.63.2019.08.09.14.45.52
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 09 Aug 2019 14:45:48 -0700 (PDT)
+        Fri, 09 Aug 2019 14:45:53 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
 To:     mchehab@kernel.org, helen.koike@collabora.com, hverkuil@xs4all.nl,
         laurent.pinchart@ideasonboard.com
 Cc:     Shuah Khan <skhan@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 1/3] media: vimc: move private defines to a common header
-Date:   Fri,  9 Aug 2019 15:45:41 -0600
-Message-Id: <142cc5a6a10f75ed97de8b2d9b1e73b034a88b2f.1565386363.git.skhan@linuxfoundation.org>
+Subject: [PATCH 3/3] media: vimc: Fix gpf in rmmod path when stream is active
+Date:   Fri,  9 Aug 2019 15:45:43 -0600
+Message-Id: <1ec378f927ed2462258d0657c6355bf916618a0e.1565386364.git.skhan@linuxfoundation.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.1565386363.git.skhan@linuxfoundation.org>
 References: <cover.1565386363.git.skhan@linuxfoundation.org>
@@ -74,299 +75,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In preparation for collapsing the component driver structure into
-a monolith, move private device structure defines to a new common
-header file.
+If vimc module is removed while streaming is in progress, sensor
+subdev unregister runs into general protection fault when it tries
+to unregister media entities.
 
+vimc_ent_sd_unregister() is fixed to call vimc_pads_cleanup() to
+release media pads after v4l2_device_unregister_subdev() is done
+unregistering the subdev and stop accessing media objects.
+
+kernel: [ 4136.715839] general protection fault: 0000 [#1] SMP PTI
+kernel: [ 4136.715847] CPU: 2 PID: 1972 Comm: bash Not tainted 5.3.0-rc2+ #4
+kernel: [ 4136.715850] Hardware name: Dell Inc. OptiPlex 790/0HY9JP, BIOS A18 09/24/2013
+kernel: [ 4136.715858] RIP: 0010:media_gobj_destroy.part.16+0x1f/0x60
+kernel: [ 4136.715863] Code: ff 66 2e 0f 1f 84 00 00 00 00 00 66 66 66 66 90 55 48 89 fe 48 89 e5 53 48 89 fb 48 c7 c7 00 7f cf b0 e8 24 fa ff ff 48 8b 03 <48> 83 80 a0 00 00 00 01 48 8b 43 18 48 8b 53 10 48 89 42 08 48 89
+kernel: [ 4136.715866] RSP: 0018:ffff9b2248fe3cb0 EFLAGS: 00010246
+kernel: [ 4136.715870] RAX: bcf2bfbfa0d63c2f RBX: ffff88c3eb37e9c0 RCX: 00000000802a0018
+kernel: [ 4136.715873] RDX: ffff88c3e4f6a078 RSI: ffff88c3eb37e9c0 RDI: ffffffffb0cf7f00
+kernel: [ 4136.715876] RBP: ffff9b2248fe3cb8 R08: 0000000001000002 R09: ffffffffb0492b00
+kernel: [ 4136.715879] R10: ffff9b2248fe3c28 R11: 0000000000000001 R12: 0000000000000038
+kernel: [ 4136.715881] R13: ffffffffc09a1628 R14: ffff88c3e4f6a028 R15: fffffffffffffff2
+kernel: [ 4136.715885] FS:  00007f8389647740(0000) GS:ffff88c465500000(0000) knlGS:0000000000000000
+kernel: [ 4136.715888] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+kernel: [ 4136.715891] CR2: 000055d008f80fd8 CR3: 00000001996ec005 CR4: 00000000000606e0
+kernel: [ 4136.715894] Call Trace:
+kernel: [ 4136.715903]  media_gobj_destroy+0x14/0x20
+kernel: [ 4136.715908]  __media_device_unregister_entity+0xb3/0xe0
+kernel: [ 4136.715915]  media_device_unregister_entity+0x30/0x40
+kernel: [ 4136.715920]  v4l2_device_unregister_subdev+0xa8/0xe0
+kernel: [ 4136.715928]  vimc_ent_sd_unregister+0x1e/0x30 [vimc]
+kernel: [ 4136.715933]  vimc_sen_rm+0x16/0x20 [vimc]
+kernel: [ 4136.715938]  vimc_remove+0x3e/0xa0 [vimc]
+kernel: [ 4136.715945]  platform_drv_remove+0x25/0x50
+kernel: [ 4136.715951]  device_release_driver_internal+0xe0/0x1b0
+kernel: [ 4136.715956]  device_driver_detach+0x14/0x20
+kernel: [ 4136.715960]  unbind_store+0xd1/0x130
+kernel: [ 4136.715965]  drv_attr_store+0x27/0x40
+kernel: [ 4136.715971]  sysfs_kf_write+0x48/0x60
+kernel: [ 4136.715976]  kernfs_fop_write+0x128/0x1b0
+kernel: [ 4136.715982]  __vfs_write+0x1b/0x40
+kernel: [ 4136.715987]  vfs_write+0xc3/0x1d0
+kernel: [ 4136.715993]  ksys_write+0xaa/0xe0
+kernel: [ 4136.715999]  __x64_sys_write+0x1a/0x20
+kernel: [ 4136.716005]  do_syscall_64+0x5a/0x130
+kernel: [ 4136.716010]  entry_SYSCALL_64_after_hwframe+0x4
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- drivers/media/platform/vimc/vimc-capture.c |  21 +----
- drivers/media/platform/vimc/vimc-core.c    |  18 +---
- drivers/media/platform/vimc/vimc-debayer.c |  16 +---
- drivers/media/platform/vimc/vimc-scaler.c  |  15 +--
- drivers/media/platform/vimc/vimc-sensor.c  |  13 +--
- drivers/media/platform/vimc/vimc.h         | 102 +++++++++++++++++++++
- 6 files changed, 107 insertions(+), 78 deletions(-)
- create mode 100644 drivers/media/platform/vimc/vimc.h
+ drivers/media/platform/vimc/vimc-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
-index 664855708fdf..c52fc5d97c2d 100644
---- a/drivers/media/platform/vimc/vimc-capture.c
-+++ b/drivers/media/platform/vimc/vimc-capture.c
-@@ -13,6 +13,7 @@
- #include <media/videobuf2-core.h>
- #include <media/videobuf2-vmalloc.h>
- 
-+#include "vimc.h"
- #include "vimc-common.h"
- #include "vimc-streamer.h"
- 
-@@ -44,26 +45,6 @@ static const u32 vimc_cap_supported_pixfmt[] = {
- 	V4L2_PIX_FMT_SRGGB12,
- };
- 
--struct vimc_cap_device {
--	struct vimc_ent_device ved;
--	struct video_device vdev;
--	struct device *dev;
--	struct v4l2_pix_format format;
--	struct vb2_queue queue;
--	struct list_head buf_list;
--	/*
--	 * NOTE: in a real driver, a spin lock must be used to access the
--	 * queue because the frames are generated from a hardware interruption
--	 * and the isr is not allowed to sleep.
--	 * Even if it is not necessary a spinlock in the vimc driver, we
--	 * use it here as a code reference
--	 */
--	spinlock_t qlock;
--	struct mutex lock;
--	u32 sequence;
--	struct vimc_stream stream;
--};
--
- static const struct v4l2_pix_format fmt_default = {
- 	.width = 640,
- 	.height = 480,
-diff --git a/drivers/media/platform/vimc/vimc-core.c b/drivers/media/platform/vimc/vimc-core.c
-index 571c55aa0e16..c9b351472272 100644
---- a/drivers/media/platform/vimc/vimc-core.c
-+++ b/drivers/media/platform/vimc/vimc-core.c
-@@ -12,6 +12,7 @@
- #include <media/media-device.h>
- #include <media/v4l2-device.h>
- 
-+#include "vimc.h"
- #include "vimc-common.h"
- 
- #define VIMC_MDEV_MODEL_NAME "VIMC MDEV"
-@@ -24,23 +25,6 @@
- 	.flags = link_flags,					\
+diff --git a/drivers/media/platform/vimc/vimc-common.c b/drivers/media/platform/vimc/vimc-common.c
+index 03016f204d05..abace5e0b4d3 100644
+--- a/drivers/media/platform/vimc/vimc-common.c
++++ b/drivers/media/platform/vimc/vimc-common.c
+@@ -373,7 +373,7 @@ EXPORT_SYMBOL_GPL(vimc_ent_sd_register);
+ void vimc_ent_sd_unregister(struct vimc_ent_device *ved, struct v4l2_subdev *sd)
+ {
+ 	media_entity_cleanup(ved->ent);
+-	vimc_pads_cleanup(ved->pads);
+ 	v4l2_device_unregister_subdev(sd);
++	vimc_pads_cleanup(ved->pads);
  }
- 
--struct vimc_device {
--	/* The platform device */
--	struct platform_device pdev;
--
--	/* The pipeline configuration */
--	const struct vimc_pipeline_config *pipe_cfg;
--
--	/* The Associated media_device parent */
--	struct media_device mdev;
--
--	/* Internal v4l2 parent device*/
--	struct v4l2_device v4l2_dev;
--
--	/* Subdevices */
--	struct platform_device **subdevs;
--};
--
- /* Structure which describes individual configuration for each entity */
- struct vimc_ent_config {
- 	const char *name;
-diff --git a/drivers/media/platform/vimc/vimc-debayer.c b/drivers/media/platform/vimc/vimc-debayer.c
-index 00598fbf3cba..750752bb173c 100644
---- a/drivers/media/platform/vimc/vimc-debayer.c
-+++ b/drivers/media/platform/vimc/vimc-debayer.c
-@@ -13,6 +13,7 @@
- #include <linux/v4l2-mediabus.h>
- #include <media/v4l2-subdev.h>
- 
-+#include "vimc.h"
- #include "vimc-common.h"
- 
- #define VIMC_DEB_DRV_NAME "vimc-debayer"
-@@ -44,21 +45,6 @@ struct vimc_deb_pix_map {
- 	enum vimc_deb_rgb_colors order[2][2];
- };
- 
--struct vimc_deb_device {
--	struct vimc_ent_device ved;
--	struct v4l2_subdev sd;
--	struct device *dev;
--	/* The active format */
--	struct v4l2_mbus_framefmt sink_fmt;
--	u32 src_code;
--	void (*set_rgb_src)(struct vimc_deb_device *vdeb, unsigned int lin,
--			    unsigned int col, unsigned int rgb[3]);
--	/* Values calculated when the stream starts */
--	u8 *src_frame;
--	const struct vimc_deb_pix_map *sink_pix_map;
--	unsigned int sink_bpp;
--};
--
- static const struct v4l2_mbus_framefmt sink_fmt_default = {
- 	.width = 640,
- 	.height = 480,
-diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
-index c7123a45c55b..fe99b9102ada 100644
---- a/drivers/media/platform/vimc/vimc-scaler.c
-+++ b/drivers/media/platform/vimc/vimc-scaler.c
-@@ -13,6 +13,7 @@
- #include <linux/v4l2-mediabus.h>
- #include <media/v4l2-subdev.h>
- 
-+#include "vimc.h"
- #include "vimc-common.h"
- 
- #define VIMC_SCA_DRV_NAME "vimc-scaler"
-@@ -31,20 +32,6 @@ static const u32 vimc_sca_supported_pixfmt[] = {
- 	V4L2_PIX_FMT_ARGB32,
- };
- 
--struct vimc_sca_device {
--	struct vimc_ent_device ved;
--	struct v4l2_subdev sd;
--	struct device *dev;
--	/* NOTE: the source fmt is the same as the sink
--	 * with the width and hight multiplied by mult
--	 */
--	struct v4l2_mbus_framefmt sink_fmt;
--	/* Values calculated when the stream starts */
--	u8 *src_frame;
--	unsigned int src_line_size;
--	unsigned int bpp;
--};
--
- static const struct v4l2_mbus_framefmt sink_fmt_default = {
- 	.width = 640,
- 	.height = 480,
-diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
-index 51359472eef2..6c57b1e262f9 100644
---- a/drivers/media/platform/vimc/vimc-sensor.c
-+++ b/drivers/media/platform/vimc/vimc-sensor.c
-@@ -16,22 +16,11 @@
- #include <media/v4l2-subdev.h>
- #include <media/tpg/v4l2-tpg.h>
- 
-+#include "vimc.h"
- #include "vimc-common.h"
- 
- #define VIMC_SEN_DRV_NAME "vimc-sensor"
- 
--struct vimc_sen_device {
--	struct vimc_ent_device ved;
--	struct v4l2_subdev sd;
--	struct device *dev;
--	struct tpg_data tpg;
--	struct task_struct *kthread_sen;
--	u8 *frame;
--	/* The active format */
--	struct v4l2_mbus_framefmt mbus_format;
--	struct v4l2_ctrl_handler hdl;
--};
--
- static const struct v4l2_mbus_framefmt fmt_default = {
- 	.width = 640,
- 	.height = 480,
-diff --git a/drivers/media/platform/vimc/vimc.h b/drivers/media/platform/vimc/vimc.h
-new file mode 100644
-index 000000000000..a5adebdda941
---- /dev/null
-+++ b/drivers/media/platform/vimc/vimc.h
-@@ -0,0 +1,102 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/*
-+ *
-+ * Copyright (C) 2019 Shuah Khan <skhan@linuxfoundation.org>
-+ *
-+ */
-+
-+/*
-+ * This file defines vimc driver device and sub-device structures.
-+ */
-+
-+#ifndef _VIMC_H_
-+#define _VIMC_H_
-+
-+#include <linux/platform_device.h>
-+#include <media/media-device.h>
-+#include <media/v4l2-device.h>
-+#include <media/videobuf2-core.h>
-+#include <media/tpg/v4l2-tpg.h>
-+#include <media/v4l2-ctrls.h>
-+
-+#include "vimc-common.h"
-+
-+struct vimc_cap_device {
-+	struct vimc_ent_device ved;
-+	struct video_device vdev;
-+	struct device *dev;
-+	struct v4l2_pix_format format;
-+	struct vb2_queue queue;
-+	struct list_head buf_list;
-+	/*
-+	 * NOTE: in a real driver, a spin lock must be used to access the
-+	 * queue because the frames are generated from a hardware interruption
-+	 * and the isr is not allowed to sleep.
-+	 * Even if it is not necessary a spinlock in the vimc driver, we
-+	 * use it here as a code reference
-+	 */
-+	spinlock_t qlock;
-+	struct mutex lock;
-+	u32 sequence;
-+	struct vimc_stream stream;
-+};
-+
-+struct vimc_sca_device {
-+	struct vimc_ent_device ved;
-+	struct v4l2_subdev sd;
-+	struct device *dev;
-+	/* NOTE: the source fmt is the same as the sink
-+	 * with the width and hight multiplied by mult
-+	 */
-+	struct v4l2_mbus_framefmt sink_fmt;
-+	/* Values calculated when the stream starts */
-+	u8 *src_frame;
-+	unsigned int src_line_size;
-+	unsigned int bpp;
-+};
-+
-+struct vimc_deb_device {
-+	struct vimc_ent_device ved;
-+	struct v4l2_subdev sd;
-+	struct device *dev;
-+	/* The active format */
-+	struct v4l2_mbus_framefmt sink_fmt;
-+	u32 src_code;
-+	void (*set_rgb_src)(struct vimc_deb_device *vdeb, unsigned int lin,
-+			    unsigned int col, unsigned int rgb[3]);
-+	/* Values calculated when the stream starts */
-+	u8 *src_frame;
-+	const struct vimc_deb_pix_map *sink_pix_map;
-+	unsigned int sink_bpp;
-+};
-+
-+struct vimc_sen_device {
-+	struct vimc_ent_device ved;
-+	struct v4l2_subdev sd;
-+	struct device *dev;
-+	struct tpg_data tpg;
-+	struct task_struct *kthread_sen;
-+	u8 *frame;
-+	/* The active format */
-+	struct v4l2_mbus_framefmt mbus_format;
-+	struct v4l2_ctrl_handler hdl;
-+};
-+
-+struct vimc_device {
-+	/* The platform device */
-+	struct platform_device pdev;
-+
-+	/* The pipeline configuration */
-+	const struct vimc_pipeline_config *pipe_cfg;
-+
-+	/* The Associated media_device parent */
-+	struct media_device mdev;
-+
-+	/* Internal v4l2 parent device*/
-+	struct v4l2_device v4l2_dev;
-+
-+	/* Subdevices */
-+	struct platform_device **subdevs;
-+};
-+
-+#endif
+ EXPORT_SYMBOL_GPL(vimc_ent_sd_unregister);
 -- 
 2.17.1
 
