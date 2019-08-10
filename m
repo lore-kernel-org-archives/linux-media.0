@@ -2,78 +2,336 @@ Return-Path: <SRS0=TH5q=WG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6372BC32751
-	for <linux-media@archiver.kernel.org>; Sat, 10 Aug 2019 12:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C581C32751
+	for <linux-media@archiver.kernel.org>; Sat, 10 Aug 2019 13:09:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3F7812166E
-	for <linux-media@archiver.kernel.org>; Sat, 10 Aug 2019 12:17:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CCF4C21882
+	for <linux-media@archiver.kernel.org>; Sat, 10 Aug 2019 13:09:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sLHpz8ky"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726221AbfHJMR0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 10 Aug 2019 08:17:26 -0400
-Received: from gofer.mess.org ([88.97.38.141]:39923 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726162AbfHJMR0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 10 Aug 2019 08:17:26 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id E368E60A27; Sat, 10 Aug 2019 13:17:24 +0100 (BST)
-Date:   Sat, 10 Aug 2019 13:17:24 +0100
-From:   Sean Young <sean@mess.org>
-To:     A Sun <as1033x@comcast.net>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2 2/3] [media] mceusb: Reword messages referring to "urb"
-Message-ID: <20190810121724.7oo7uoggxg4hha6i@gofer.mess.org>
-References: <20190606095337.jfhmc6jqgyhmxn4q@gofer.mess.org>
- <2548e827-1d11-4ce2-013f-bf36c9f5436e@comcast.net>
- <20190608083729.bw47vkplpf3r4e4b@gofer.mess.org>
- <7e0c816d-c7bf-a3bf-a9f3-8c61605dbb17@comcast.net>
- <20190625105127.qw73fwt6dku5736m@gofer.mess.org>
- <3c452b74-dc5b-f1d4-3c66-8acdb69da5da@comcast.net>
- <20190625161241.u5v7fiegokwrzvey@gofer.mess.org>
- <44516839-3c00-1f1e-30c6-3638e45e8d2d@comcast.net>
- <20190715122827.picgfztheuklfl64@gofer.mess.org>
- <49527290-a5b0-4b4f-c93a-ac54ff52edc8@comcast.net>
+        id S1726266AbfHJNJd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 10 Aug 2019 09:09:33 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:38921 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbfHJNJd (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 10 Aug 2019 09:09:33 -0400
+Received: by mail-pf1-f196.google.com with SMTP id f17so43479074pfn.6;
+        Sat, 10 Aug 2019 06:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nbp33dhtEClMZJfYmdVFpechLLFXlx7/6GRzJF8BUsQ=;
+        b=sLHpz8kylvDXRLZFNKnk+XfEE+9bI+XO05/0nYrgqwg890FMLxcSh3dLEYHLCMEuaZ
+         4460ZpV0AHUG7benYX/T+GmjLX6cYpoZCJiNPytDVlx8ky7s0JQ4pcNREVrOHApQA3x1
+         VENsW0/nsQx9l8IqBdg/ZGyrIyp1IDB3wrqk7pVsxSPIx7TFJh1VPGf22R+xkS4MO/6e
+         sJ+r60UgrQOZGuU6b0XEi7EPy7VGvVe0kDqHwlvY/hrFH+R5R7gGUY2bPm+oYb5TKVno
+         eHHTpOrqbdcU/bm6ZWocgXt/k2gk7J1pJeFtP0AaJDgJe3xn8wAosprsBtK3SU4ixDYl
+         LZsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nbp33dhtEClMZJfYmdVFpechLLFXlx7/6GRzJF8BUsQ=;
+        b=GnaSlvPwUUSpFbg4Elfw5Kx5jL3xahiOzKPXQ08AZa1jCzBOQxEKmxHMsVsjmrYJ/e
+         aFoJqta9JFiWaDZj2+1krIOwz96BomyiT174QbHyHjb0O064u/5U51wiUiVOmucDLiuV
+         qof/FK5g8hNVRoJJT/OXYp2I7dnn/tDhczkEUWoCw19RPhFtaimt69C1sNjLCwH4trWc
+         vaCesA92cI7bQaOe7wj9mTGor0zlBJTs41poRzBILcSyG8HuvlanOWi2kdW6iY54yz7s
+         6TayuseugjQ8+HCjUAvZoxvy+jFsROCLlIt6EYA0V10NMW194FGZiy8v5dRPDgj48dH2
+         0KGQ==
+X-Gm-Message-State: APjAAAUAvJQq5ivq287v91WyU33pT8NsUeDXdP4g+Fk+3WVQHTAfv/qE
+        Rx0t4RyTIn/P+tVT+1QDeX/MPLYZwjnKqG3ME2A=
+X-Google-Smtp-Source: APXvYqyE+ULqZVrF1p9wQKabJ2ELBRkepsfar6pZIykSfU9M+fAS92ifxACCYFnuH4uBVfAR8Xu+1d7JNGtHnnaJcrU=
+X-Received: by 2002:a63:e54f:: with SMTP id z15mr21886228pgj.4.1565442572461;
+ Sat, 10 Aug 2019 06:09:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49527290-a5b0-4b4f-c93a-ac54ff52edc8@comcast.net>
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <1560280855-18085-1-git-send-email-luis.oliveira@synopsys.com>
+ <1560280855-18085-3-git-send-email-luis.oliveira@synopsys.com> <20190809141000.GB864@valkosipuli.retiisi.org.uk>
+In-Reply-To: <20190809141000.GB864@valkosipuli.retiisi.org.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 10 Aug 2019 16:09:21 +0300
+Message-ID: <CAHp75VeutP=W43GHtY+FKvVGjBnQrF+nKbdaq_QXy8ZCoS=k1g@mail.gmail.com>
+Subject: Re: [v4 2/6] media: platform: dwc: Add MIPI CSI-2 controller driver
+To:     Sakari Ailus <sakari.ailus@iki.fi>
+Cc:     Luis Oliveira <Luis.Oliveira@synopsys.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Rob Herring <robh@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        paulmck@linux.ibm.com, Mark Rutland <mark.rutland@arm.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Joao Pinto <Joao.Pinto@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi,
+On Fri, Aug 9, 2019 at 5:38 PM Sakari Ailus <sakari.ailus@iki.fi> wrote:
+> On Tue, Jun 11, 2019 at 09:20:51PM +0200, Luis Oliveira wrote:
+> > Add the Synopsys MIPI CSI-2 controller driver. This
+> > controller driver is divided in platform functions and core functions.
+> > This way it serves as platform for future DesignWare drivers.
 
-On Sun, Jul 21, 2019 at 05:31:55PM -0400, A Sun wrote:
-> FYI, I'm in progress on another mceusb patch to fix, and eliminate, the driver's
-> TX IR length limits. Limit causes -EINVAL errors for > ~300 pulse/space samples and
-> I've seen reports (and patches for) of appliances with IR over 400 pulse/spaces.
+> > +const struct mipi_dt csi_dt[] = {
+>
+> Make this static or use a common prefix that somehow resembles the name
+> name of the driver.
+>
+> > +     {
+> > +             .hex = CSI_2_YUV420_8,
+> > +             .name = "YUV420_8bits",
+> > +     }, {
+> > +             .hex = CSI_2_YUV420_10,
+> > +             .name = "YUV420_10bits",
+> > +     }, {
+> > +             .hex = CSI_2_YUV420_8_LEG,
+> > +             .name = "YUV420_8bits_LEGACY",
+> > +     }, {
+> > +             .hex = CSI_2_YUV420_8_SHIFT,
+> > +             .name = "YUV420_8bits_SHIFT",
+> > +     }, {
+> > +             .hex = CSI_2_YUV420_10_SHIFT,
+> > +             .name = "YUV420_10bits_SHIFT",
+> > +     }, {
+> > +             .hex = CSI_2_YUV422_8,
+> > +             .name = "YUV442_8bits",
+> > +     }, {
+> > +             .hex = CSI_2_YUV422_10,
+> > +             .name = "YUV442_10bits",
+> > +     }, {
+> > +             .hex = CSI_2_RGB444,
+> > +             .name = "RGB444",
+> > +     }, {
+> > +             .hex = CSI_2_RGB555,
+> > +             .name = "RGB555",
+> > +     }, {
+> > +             .hex = CSI_2_RGB565,
+> > +             .name = "RGB565",
+> > +     }, {
+> > +             .hex = CSI_2_RGB666,
+> > +             .name = "RGB666",
+> > +     }, {
+> > +             .hex = CSI_2_RGB888,
+> > +             .name = "RGB888",
+> > +     }, {
+> > +             .hex = CSI_2_RAW6,
+> > +             .name = "RAW6",
+> > +     }, {
+> > +             .hex = CSI_2_RAW7,
+> > +             .name = "RAW7",
+> > +     }, {
+> > +             .hex = CSI_2_RAW8,
+> > +             .name = "RAW8",
+> > +     }, {
+> > +             .hex = CSI_2_RAW10,
+> > +             .name = "RAW10",
+> > +     }, {
+> > +             .hex = CSI_2_RAW12,
+> > +             .name = "RAW12",
+> > +     }, {
+> > +             .hex = CSI_2_RAW14,
+> > +             .name = "RAW14",
+> > +     }, {
+> > +             .hex = CSI_2_RAW16,
+> > +             .name = "RAW16",
+> > +     },
+> > +};
 
-This always looked like it needed improvement. Thank you!
+One may utilize __stringify() macro and do somelike
 
-> 
-> The future patch rewrites:
->   mceusb_tx_ir()
-> And revises "write/tx" async I/O to sync I/O to do unlimited multipart TX IR.
-> These functions will need rewrite and rename:
->   mce_async_callback() -> mce_tx_callback()
->   mce_request_packet() -> mce_tx()
-> The present mce_async_out() name will become misleading. mce_command_out()
-> or mce_request_out() (which calls mce_tx()), are probably better names.
-> 
-> I'm still mulling over whether the more generic "read/write" term
-> (e.g. mce_write() and mce_write_callback()) may be a better migration path,
-> for future work.
+#define CSI_FMT_DESC(fmt) \
+ { .hex = CSI_2_##fmt, .name = __stringify(fmt), }
 
-Thanks.
+And do
 
-Another thing the mceusb driver could do with is usb wakeup. I've hadn't
-had the time to look at that.
+ CSI_FMT_DESC(RAW16),
+
+etc.
+
+> > +             return cfg ? v4l2_subdev_get_try_format(&dev->sd,
+> > +                                                     cfg,
+> > +                                                     0) : NULL;
+
+This indentation looks ugly.
+I would rather put this on one line.
+
+> > +     dev_dbg(dev->dev,
+> > +             "%s got v4l2_mbus_pixelcode. 0x%x\n", __func__,
+> > +             dev->format.code);
+> > +     dev_dbg(dev->dev,
+> > +             "%s got width. 0x%x\n", __func__,
+> > +             dev->format.width);
+> > +     dev_dbg(dev->dev,
+> > +             "%s got height. 0x%x\n", __func__,
+> > +             dev->format.height);
+
+__func__ is usually redundant (if Dynamic Debug in use it can be
+switched at run-time).
+
+> I'd just omit these debug prints in a driver. But adding them to the
+> framework might make sense. We don't have a lot of debug prints dealing
+> with user parameters in there. OTOH the common test programs largely do the
+> same already.
+
+I would rather see tracepoints instead of debug prints if we are
+talking about generic solution for entire framework.
+
+>
+> > +     return &dev->format;
+> > +}
+
+> > +     struct mipi_fmt *dev_fmt;
+
+This is simple bad name. We have dev_fmt() macro. I would rather avoid
+potential collisions.
+
+> > +     struct v4l2_mbus_framefmt *mf;
+> > +
+> > +     mf = dw_mipi_csi_get_format(dev, cfg, fmt->which);
+> > +     if (!mf)
+> > +             return -EINVAL;
+
+Can't you rather return an error pointer in this and similar cases?
+
+> > +     dev_vdbg(dev->dev, "%s: on=%d\n", __func__, on);
+
+This is noise. If you would like to debug Function Tracer is a good start.
+
+> > +     of_id = of_match_node(dw_mipi_csi_of_match, dev->of_node);
+> > +     if (!of_id)
+> > +             return -EINVAL;
+
+Is it possible to have this asserted?
 
 
-Sean
+> > +     res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+
+> > +     if (!res)
+> > +             return -ENXIO;
+
+Redundant. Below does the check for you.
+
+> > +
+> > +     csi->base_address = devm_ioremap_resource(dev, res);
+> > +     if (IS_ERR(csi->base_address)) {
+
+> > +             dev_err(dev, "Base address not set.\n");
+
+Redundant. Above does print an error message for you.
+
+> > +             return PTR_ERR(csi->base_address);
+> > +     }
+
+Moreover, use devm_platform_ioremap_resource() instead of both.
+
+> > +     csi->ctrl_irq_number = platform_get_irq(pdev, 0);
+> > +     if (csi->ctrl_irq_number < 0) {
+
+> > +             dev_err(dev, "irq number %d not set.\n", csi->ctrl_irq_number);
+
+Redundant since this cycle (v5.4).
+
+> > +             ret = csi->ctrl_irq_number;
+
+Better to do the opposite
+
+ret = platform_get_irq();
+if (ret)
+ goto end;
+... = ret;
+
+> > +             goto end;
+> > +     }
+
+> > +     ret = devm_request_irq(dev, csi->ctrl_irq_number,
+> > +                            dw_mipi_csi_irq1, IRQF_SHARED,
+> > +                            dev_name(dev), csi);
+> > +     if (ret) {
+> > +             dev_err(dev, "irq csi %s failed\n", of_id->name);
+> > +
+> > +             goto end;
+> > +     }
+
+devm_*irq() might be a bad idea. Is it race free in your driver?
+
+> > +static const struct of_device_id dw_mipi_csi_of_match[] = {
+> > +     { .compatible = "snps,dw-csi" },
+
+> > +     {},
+
+Better without comma. Terminator may terminate even at compile time.
+
+> > +};
+
+> > +static ssize_t core_version_show(struct device *dev,
+> > +                              struct device_attribute *attr,
+> > +                              char *buf)
+> > +{
+> > +     struct platform_device *pdev = to_platform_device(dev);
+> > +     struct v4l2_subdev *sd = platform_get_drvdata(pdev);
+> > +     struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
+
+> > +
+> > +     char buffer[10];
+> > +
+> > +     snprintf(buffer, 10, "v.%d.%d*\n", csi_dev->hw_version_major,
+> > +              csi_dev->hw_version_minor);
+> > +
+> > +     return strlcpy(buf, buffer, PAGE_SIZE);
+
+Oh, can't you simple without any temprorary useless buffers?
+ sprintf(buf, ...)?
+(Yes, note _absence_ of *n* there)
+
+> > +}
+
+> > +static ssize_t n_lanes_store(struct device *dev, struct device_attribute *attr,
+> > +                          const char *buf, size_t count)
+> > +{
+> > +     int ret;
+> > +     unsigned long lanes;
+
+> > +
+
+More blank lines! We need them!
+
+> > +     struct platform_device *pdev = to_platform_device(dev);
+> > +     struct v4l2_subdev *sd = platform_get_drvdata(pdev);
+> > +     struct dw_csi *csi_dev = sd_to_mipi_csi_dev(sd);
+> > +
+> > +     ret = kstrtoul(buf, 10, &lanes);
+> > +     if (ret < 0)
+> > +             return ret;
+
+Can it return positive number?
+
+> > +     dev_info(dev, "Lanes %lu\n", lanes);
+
+Noise.
+The user gets it, why to spam kernel log???
+
+> > +     csi_dev->hw.num_lanes = lanes;
+> > +
+> > +     return count;
+> > +}
+
+I told once, can repeat again. Synopsys perhaps needs better reviews
+inside company. Each time I see the code, it repeats same mistakes
+over and over. Have you, guys, do something about it?
+
+-- 
+With Best Regards,
+Andy Shevchenko
