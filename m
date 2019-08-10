@@ -2,62 +2,78 @@ Return-Path: <SRS0=TH5q=WG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C832FC32751
-	for <linux-media@archiver.kernel.org>; Sat, 10 Aug 2019 11:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6372BC32751
+	for <linux-media@archiver.kernel.org>; Sat, 10 Aug 2019 12:17:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A81A2217F5
-	for <linux-media@archiver.kernel.org>; Sat, 10 Aug 2019 11:45:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F7812166E
+	for <linux-media@archiver.kernel.org>; Sat, 10 Aug 2019 12:17:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726132AbfHJLpA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 10 Aug 2019 07:45:00 -0400
-Received: from gofer.mess.org ([88.97.38.141]:36489 "EHLO gofer.mess.org"
+        id S1726221AbfHJMR0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 10 Aug 2019 08:17:26 -0400
+Received: from gofer.mess.org ([88.97.38.141]:39923 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726094AbfHJLpA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 10 Aug 2019 07:45:00 -0400
+        id S1726162AbfHJMR0 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 10 Aug 2019 08:17:26 -0400
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 9584F600AF; Sat, 10 Aug 2019 12:44:58 +0100 (BST)
+        id E368E60A27; Sat, 10 Aug 2019 13:17:24 +0100 (BST)
+Date:   Sat, 10 Aug 2019 13:17:24 +0100
 From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH 2/3] media: imon_raw: prevent "nonsensical timing event of duration 0"
-Date:   Sat, 10 Aug 2019 12:44:57 +0100
-Message-Id: <20190810114458.8883-2-sean@mess.org>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190810114458.8883-1-sean@mess.org>
-References: <20190810114458.8883-1-sean@mess.org>
+To:     A Sun <as1033x@comcast.net>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v2 2/3] [media] mceusb: Reword messages referring to "urb"
+Message-ID: <20190810121724.7oo7uoggxg4hha6i@gofer.mess.org>
+References: <20190606095337.jfhmc6jqgyhmxn4q@gofer.mess.org>
+ <2548e827-1d11-4ce2-013f-bf36c9f5436e@comcast.net>
+ <20190608083729.bw47vkplpf3r4e4b@gofer.mess.org>
+ <7e0c816d-c7bf-a3bf-a9f3-8c61605dbb17@comcast.net>
+ <20190625105127.qw73fwt6dku5736m@gofer.mess.org>
+ <3c452b74-dc5b-f1d4-3c66-8acdb69da5da@comcast.net>
+ <20190625161241.u5v7fiegokwrzvey@gofer.mess.org>
+ <44516839-3c00-1f1e-30c6-3638e45e8d2d@comcast.net>
+ <20190715122827.picgfztheuklfl64@gofer.mess.org>
+ <49527290-a5b0-4b4f-c93a-ac54ff52edc8@comcast.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <49527290-a5b0-4b4f-c93a-ac54ff52edc8@comcast.net>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Sometimes the device sends IR data which is all space, no pulses whatsoever.
-Add the end of this the driver will put the rc device into idle mode when
-it already is in idle mode. The following will be logged:
+Hi,
 
-rc rc0: nonsensical timing event of duration 0
-rc rc0: two consecutive events of type space
+On Sun, Jul 21, 2019 at 05:31:55PM -0400, A Sun wrote:
+> FYI, I'm in progress on another mceusb patch to fix, and eliminate, the driver's
+> TX IR length limits. Limit causes -EINVAL errors for > ~300 pulse/space samples and
+> I've seen reports (and patches for) of appliances with IR over 400 pulse/spaces.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/rc/imon_raw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This always looked like it needed improvement. Thank you!
 
-diff --git a/drivers/media/rc/imon_raw.c b/drivers/media/rc/imon_raw.c
-index e6723993b466..d4aedcf76418 100644
---- a/drivers/media/rc/imon_raw.c
-+++ b/drivers/media/rc/imon_raw.c
-@@ -85,7 +85,7 @@ static void imon_ir_data(struct imon *imon)
- 		offset = bit;
- 	} while (offset > 0);
- 
--	if (packet_no == 0x0a) {
-+	if (packet_no == 0x0a && !imon->rcdev->idle) {
- 		ir_raw_event_set_idle(imon->rcdev, true);
- 		ir_raw_event_handle(imon->rcdev);
- 	}
--- 
-2.21.0
+> 
+> The future patch rewrites:
+>   mceusb_tx_ir()
+> And revises "write/tx" async I/O to sync I/O to do unlimited multipart TX IR.
+> These functions will need rewrite and rename:
+>   mce_async_callback() -> mce_tx_callback()
+>   mce_request_packet() -> mce_tx()
+> The present mce_async_out() name will become misleading. mce_command_out()
+> or mce_request_out() (which calls mce_tx()), are probably better names.
+> 
+> I'm still mulling over whether the more generic "read/write" term
+> (e.g. mce_write() and mce_write_callback()) may be a better migration path,
+> for future work.
 
+Thanks.
+
+Another thing the mceusb driver could do with is usb wakeup. I've hadn't
+had the time to look at that.
+
+
+Sean
