@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46D50C433FF
-	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 19:36:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7CDFC433FF
+	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 19:36:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 21EF42075B
-	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 19:36:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9310D20820
+	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 19:36:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727019AbfHLTgD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Aug 2019 15:36:03 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60110 "EHLO
+        id S1727081AbfHLTgL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Aug 2019 15:36:11 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60142 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726681AbfHLTgC (ORCPT
+        with ESMTP id S1727068AbfHLTgL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Aug 2019 15:36:02 -0400
+        Mon, 12 Aug 2019 15:36:11 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id BF806285296
+        with ESMTPSA id CDB222854FE
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@collabora.com,
@@ -37,9 +37,9 @@ Cc:     kernel@collabora.com,
         Alexandre Courbot <acourbot@chromium.org>,
         fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
         Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5 05/11] media: uapi: h264: Get rid of the p0/b0/b1 ref-lists
-Date:   Mon, 12 Aug 2019 16:35:16 -0300
-Message-Id: <20190812193522.10911-6-ezequiel@collabora.com>
+Subject: [PATCH v5 07/11] media: cedrus: Specify H264 startcode and decoding mode
+Date:   Mon, 12 Aug 2019 16:35:18 -0300
+Message-Id: <20190812193522.10911-8-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190812193522.10911-1-ezequiel@collabora.com>
 References: <20190812193522.10911-1-ezequiel@collabora.com>
@@ -50,66 +50,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Boris Brezillon <boris.brezillon@collabora.com>
+The cedrus VPU is slice-based and expects V4L2_PIX_FMT_H264_SLICE
+buffers to contain H264 slices with no start code.
 
-Those lists can be extracted from the dpb, let's simplify userspace
-life and build that list kernel-side (generic helpers will be provided
-for drivers that need this list).
+Expose this to userspace with the newly added menu control.
 
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@collabora.com>
-Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Tested-by: Philipp Zabel <p.zabel@pengutronix.de>
+These two controls are specified as mandatory for applications,
+but we mark them as non-required on the driver side for
+backwards compatibility.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
 Changes in v5:
-* New patch.
+* Clarify commit log.
 Changes in v4:
-* Add R-b
-* Remove the reflist from the struct
-Changes in v3:
-* None
-Changes in v2:
-* None
+* New patch.
 ---
- Documentation/media/uapi/v4l/ext-ctrls-codec.rst | 9 ---------
- include/media/h264-ctrls.h                       | 3 ---
- 2 files changed, 12 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-index ec0078e299a5..63796b39da43 100644
---- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-+++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-@@ -1942,15 +1942,6 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-     * - __u16
-       - ``nal_ref_idc``
-       - NAL reference ID value coming from the NAL Unit header
--    * - __u8
--      - ``ref_pic_list_p0[32]``
--      - Backward reference list used by P-frames in the original bitstream order
--    * - __u8
--      - ``ref_pic_list_b0[32]``
--      - Backward reference list used by B-frames in the original bitstream order
--    * - __u8
--      - ``ref_pic_list_b1[32]``
--      - Forward reference list used by B-frames in the original bitstream order
-     * - __s32
-       - ``top_field_order_cnt``
-       - Picture Order Count for the coded top field
-diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
-index 31555c99f64a..2de438393025 100644
---- a/include/media/h264-ctrls.h
-+++ b/include/media/h264-ctrls.h
-@@ -203,9 +203,6 @@ struct v4l2_ctrl_h264_decode_params {
- 	struct v4l2_h264_dpb_entry dpb[16];
- 	__u16 num_slices;
- 	__u16 nal_ref_idc;
--	__u8 ref_pic_list_p0[32];
--	__u8 ref_pic_list_b0[32];
--	__u8 ref_pic_list_b1[32];
- 	__s32 top_field_order_cnt;
- 	__s32 bottom_field_order_cnt;
- 	__u32 flags; /* V4L2_H264_DECODE_PARAM_FLAG_* */
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index 7bdc413bf727..10be2bd9507e 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -77,6 +77,26 @@ static const struct cedrus_control cedrus_controls[] = {
+ 		.codec		= CEDRUS_CODEC_H264,
+ 		.required	= true,
+ 	},
++	{
++		.cfg = {
++			.id	= V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE,
++			.max	= V4L2_MPEG_VIDEO_H264_SLICE_BASED_DECODING,
++			.def	= V4L2_MPEG_VIDEO_H264_SLICE_BASED_DECODING,
++			.menu_skip_mask = BIT(V4L2_MPEG_VIDEO_H264_FRAME_BASED_DECODING),
++		},
++		.codec		= CEDRUS_CODEC_H264,
++		.required	= false,
++	},
++	{
++		.cfg = {
++			.id	= V4L2_CID_MPEG_VIDEO_H264_STARTCODE,
++			.max	= V4L2_MPEG_VIDEO_H264_NO_STARTCODE,
++			.def	= V4L2_MPEG_VIDEO_H264_NO_STARTCODE,
++			.menu_skip_mask = BIT(V4L2_MPEG_VIDEO_H264_ANNEX_B_STARTCODE),
++		},
++		.codec		= CEDRUS_CODEC_H264,
++		.required	= false,
++	},
+ };
+ 
+ #define CEDRUS_CONTROLS_COUNT	ARRAY_SIZE(cedrus_controls)
 -- 
 2.22.0
 
