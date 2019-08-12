@@ -2,175 +2,91 @@ Return-Path: <SRS0=7F4W=WI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07E9FC31E40
-	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 11:59:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBDA4C31E40
+	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 12:12:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CFB97206DF
-	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 11:59:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AEFD20651
+	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 12:12:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728245AbfHLL7P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Aug 2019 07:59:15 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:56380 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728216AbfHLL7O (ORCPT
+        id S1728360AbfHLMMb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Aug 2019 08:12:31 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:56975 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726200AbfHLMMb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Aug 2019 07:59:14 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 8F78728AC52
-Message-ID: <1d1ff6c5943c462f38235e4b003eff5ab65dbbd0.camel@collabora.com>
-Subject: Re: [PATCH v4 03/11] media: uapi: h264: Add the concept of decoding
- mode
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
-Cc:     kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
-Date:   Mon, 12 Aug 2019 08:59:02 -0300
-In-Reply-To: <e8895d5f-af65-5ee8-665b-b9d4abd681bc@xs4all.nl>
-References: <20190808103432.12062-1-ezequiel@collabora.com>
-         <20190808103432.12062-4-ezequiel@collabora.com>
-         <e8895d5f-af65-5ee8-665b-b9d4abd681bc@xs4all.nl>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
+        Mon, 12 Aug 2019 08:12:31 -0400
+Received: from [192.168.2.10] ([46.9.232.237])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id x9BVhQe5dur8Tx9BYhiGAM; Mon, 12 Aug 2019 14:12:29 +0200
+Subject: Re: [PATCH 0/7] media: cedrus: Improvements/cleanup
+To:     Jernej Skrabec <jernej.skrabec@siol.net>,
+        paul.kocialkowski@bootlin.com, maxime.ripard@bootlin.com
+Cc:     wens@csie.org, mchehab@kernel.org, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20190530211516.1891-1-jernej.skrabec@siol.net>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <274221f1-b2d2-83aa-d84b-e1c572a1b832@xs4all.nl>
+Date:   Mon, 12 Aug 2019 14:12:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
+In-Reply-To: <20190530211516.1891-1-jernej.skrabec@siol.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfAFWVdV0JuxSwgL/k0OdJ/hvoW5zZZWMBGhCaQMUPuAYTfosQIyoA4MERBpQBFRKsudj+6sf32UIuymx2PzdO5yuRrH1TFwLkOyZO/Jia4K+L6oFojCb
+ IIe7VxjGIqmR8mYrzfFwErnbwyITZAN0wTNOcQvAcL9vpCAMTo8SaOqdRDk+vQHW1m21nzhxt5VoS9wrv3e0yrnJvGYNzpcMZmeeomvpKU4H2DWnBVt2X6ml
+ R9paVRT1QEKGDTpR8lizWT3XfkF5Isu+67yb99S1rzew7UBWHbCdFhDi7ZW5WMsFSYifZwshD2cfYiW1oNMNda2ToBW1HHkX7WSuHsPqC2Uvk0DlXaVODubC
+ JzMzvRXTU6+i3qrVT7DkigTNVvKKt/vUrippGWoSGA0rOjImrWxNiWibhVpDSDWBS3vN6Q1NYRI9Lut+KrnP1jl6BjWObynPHn3xVqANmpiiiEIvgFnAea4m
+ gGWSASJtf+wp6Qwd0DZNd/487v2g5kPOBY/wRxsTDYVdbVCQYg3ysW9VANo=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, 2019-08-12 at 12:19 +0200, Hans Verkuil wrote:
-> On 8/8/19 12:34 PM, Ezequiel Garcia wrote:
-> > From: Boris Brezillon <boris.brezillon@collabora.com>
-> > 
-> > Some stateless decoders don't support per-slice decoding granularity
-> > (or at least not in a way that would make them efficient or easy to use).
-> > 
-> > Expose a menu to control the supported decoding modes. Drivers are
-> > allowed to support only one decoding but they can support both too.
-> > 
-> > Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-> > Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > ---
-> > Changes in v4:
-> > * Typos/rewording fixes
-> > 
-> > Changes in v3:
-> > * s/per-{slice,frame} decoding/{slice,frame}-based decoding/
-> > * Add Paul's R-b
-> > 
-> > Changes in v2:
-> > * Allow decoding multiple slices in per-slice decoding mode
-> > * Minor doc improvement/fixes
-> > ---
-> >  .../media/uapi/v4l/ext-ctrls-codec.rst        | 43 ++++++++++++++++++-
-> >  drivers/media/v4l2-core/v4l2-ctrls.c          |  9 ++++
-> >  include/media/h264-ctrls.h                    | 11 +++++
-> >  3 files changed, 62 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> > index c5f39dd50043..ea0455957149 100644
-> > --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> > +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> > @@ -1747,6 +1747,11 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-> >      * - __u32
-> >        - ``size``
-> >        -
-> > +    * - __u32
-> > +      - ``start_byte_offset``
-> > +      - Where the slice payload starts in the output buffer. Useful when the
-> > +        OUTPUT buffer contains more than one slice (some codecs need to know
-> > +        where each slice starts in this buffer).
-> >      * - __u32
-> >        - ``header_bit_size``
-> >        -
-> > @@ -1930,7 +1935,10 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-> >        -
-> >      * - __u16
-> >        - ``num_slices``
-> > -      - Number of slices needed to decode the current frame
-> > +      - Number of slices needed to decode the current frame/field. When
-> > +        operating in slice-based decoding mode (see
-> > +        :c:type:`v4l2_mpeg_video_h264_decoding_mode`), this field
-> > +        should always be set to one.
-> >      * - __u16
-> >        - ``nal_ref_idc``
-> >        - NAL reference ID value coming from the NAL Unit header
-> > @@ -2021,6 +2029,39 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
-> >        - 0x00000004
-> >        - The DPB entry is a long term reference frame
-> >  
-> > +``V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE (enum)``
-> > +    Specifies the decoding mode to use. Currently exposes slice-based and
-> > +    frame-based decoding but new modes might be added later on.
-> > +    Drivers may expose a single or multiple decoding modes,
-> > +    depending on what they can support.
+On 5/30/19 11:15 PM, Jernej Skrabec wrote:
+> Here is first batch of random Cedrus improvements/cleanups. Only patch 2
+> has a change which raises a question about H264 controls.
 > 
-> This should mention that this is valid for V4L2_PIX_FMT_H264_SLICE pixelformat
-> only. And it is a required control (i.e. it must always be present for that
-> pixelformat). Ditto for the start code control.
+> Changes were tested on H3 SoC using modified ffmpeg and Kodi.
 > 
-> Also, the V4L2_PIX_FMT_H264_SLICE should refer to this control and the start
-> code control as well since these controls effectively are modifiers for the
-> pixelformat.
-> 
+> Please take a look.
 
-Right, this makes perfect sense.
+This has been sitting in patchwork for quite some time. I've updated the
+status of the various patches and most needed extra work.
 
-> > +
-> > +    .. note::
-> > +
-> > +       This menu control is not yet part of the public kernel API and
-> > +       it is expected to change.
-> > +
-> > +.. c:type:: v4l2_mpeg_video_h264_decoding_mode
-> > +
-> > +.. cssclass:: longtable
-> > +
-> > +.. flat-table::
-> > +    :header-rows:  0
-> > +    :stub-columns: 0
-> > +    :widths:       1 1 2
-> > +
-> > +    * - ``V4L2_MPEG_VIDEO_H264_SLICE_BASED_DECODING``
-> > +      - 0
-> > +      - The decoding is done at the slice granularity.
-> > +        v4l2_ctrl_h264_decode_params->num_slices should be set to 1.
-> > +        The OUTPUT buffer must contain a single slice.
-> > +    * - ``V4L2_MPEG_VIDEO_H264_FRAME_BASED_DECODING``
-> > +      - 1
-> > +      - The decoding is done at the frame granularity.
-> > +        v4l2_ctrl_h264_decode_params->num_slices should be set to the number of
-> > +        slices forming a frame.
-> 
-> Actually, I wonder if there shouldn't be a third option: FIELD_BASED_DECODING
-> to indicate that the hardware expects the slices of a single field in a buffer
-> instead of both fields.
-> 
-> Or just stick to FRAME_BASED_DECODING for now but explicitly mention that
-> in the case of interlaced decoding both fields must be present in the buffer.
-> 
+It seems that patches 4/7 and 5/7 are OK. Maxime, can you please confirm
+that these two are still valid? They apply cleanly on the latest master
+at least, but since they are a bit old I prefer to have confirmation that
+it's OK to merge them.
 
-OK.
+Regards,
 
-> A FIELD_BASED_DECODING option can always be added later if necessary.
+	Hans
+
 > 
-
-Thanks,
-Ezequiel
+> Best regards,
+> Jernej
+> 
+> Jernej Skrabec (7):
+>   media: cedrus: Disable engine after each slice decoding
+>   media: cedrus: Fix H264 default reference index count
+>   media: cedrus: Fix decoding for some H264 videos
+>   media: cedrus: Remove dst_bufs from context
+>   media: cedrus: Don't set chroma size for scale & rotation
+>   media: cedrus: Add infra for extra buffers connected to capture
+>     buffers
+>   media: cedrus: Improve H264 memory efficiency
+> 
+>  drivers/staging/media/sunxi/cedrus/cedrus.h   |  12 +-
+>  .../staging/media/sunxi/cedrus/cedrus_h264.c  | 115 ++++++++----------
+>  .../staging/media/sunxi/cedrus/cedrus_hw.c    |   4 +-
+>  .../staging/media/sunxi/cedrus/cedrus_video.c |  25 ++--
+>  4 files changed, 68 insertions(+), 88 deletions(-)
+> 
 
