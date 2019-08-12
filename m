@@ -2,292 +2,146 @@ Return-Path: <SRS0=7F4W=WI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C0CEC32750
-	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 11:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB64CC31E40
+	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 11:56:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 46FC9208C2
-	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 11:27:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="FsFt9ayz"
+	by mail.kernel.org (Postfix) with ESMTP id 8AABF206DF
+	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 11:56:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728291AbfHLL1M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Aug 2019 07:27:12 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:56300 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728310AbfHLL1K (ORCPT
+        id S1728196AbfHLL4y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Aug 2019 07:56:54 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:56360 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728063AbfHLL4y (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Aug 2019 07:27:10 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7CBQsKG009671;
-        Mon, 12 Aug 2019 13:26:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=17uDe87c50tKQgdxVxYmeWeDXo+AdHkkYcqYlgcRwu4=;
- b=FsFt9ayzo3JkxHFJSm3tB5JaGRu7O0AgxIfU5qQSboiDeJbbO08brT0ODsWno1xM/g1a
- 0Y3XfPt0eskh5wiid0B9sRjSnZXunwry/K0F+614ComfdcYSlV5/Sqb6jukEev7w+Hhx
- cpxP5kMMXvebYISnFSOEtcLQn8vsA5f11Mn7DTJ5ZuSRZmqbhJFlyhwFC2pEyOshyCpM
- RhOFclGAgH0sw9EmMt3b3hpd96zrTJC7s3BJKauUg/pPV7x+DV+UraPigy1kfu4pMoVl
- f4GRA6UvFOpC2KvftfFa67APKvYzxh/YeAJsyXDmhNYVmBMJwh+6l0nauxH83EAkU93i UA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2u9mtktbfq-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 12 Aug 2019 13:26:55 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9C77E3A;
-        Mon, 12 Aug 2019 11:26:54 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas23.st.com [10.75.90.46])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 64A242F56E6;
-        Mon, 12 Aug 2019 13:26:54 +0200 (CEST)
-Received: from SAFEX1HUBCAS24.st.com (10.75.90.95) by SAFEX1HUBCAS23.st.com
- (10.75.90.46) with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 12 Aug
- 2019 13:26:54 +0200
-Received: from localhost (10.201.23.19) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 12 Aug 2019 13:26:53
- +0200
-From:   Hugues Fruchet <hugues.fruchet@st.com>
-To:     Alexandre Torgue <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>,
-        "Hugues Fruchet" <hugues.fruchet@st.com>,
-        Mickael GUENE <mickael.guene@st.com>
-Subject: [PATCH v5 1/3] media: stm32-dcmi: improve sensor subdev naming
-Date:   Mon, 12 Aug 2019 13:26:44 +0200
-Message-ID: <1565609206-27101-2-git-send-email-hugues.fruchet@st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1565609206-27101-1-git-send-email-hugues.fruchet@st.com>
-References: <1565609206-27101-1-git-send-email-hugues.fruchet@st.com>
+        Mon, 12 Aug 2019 07:56:54 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id 5DB3628AC52
+Message-ID: <95b8f8f8d5d4f6394cfd5858a29d507b7e77be2f.camel@collabora.com>
+Subject: Re: [PATCH v4 04/11] media: uapi: h264: Add the concept of start
+ code
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org
+Cc:     kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
+Date:   Mon, 12 Aug 2019 08:56:32 -0300
+In-Reply-To: <a729d241-6550-c23a-4f75-f106ab1c7ff9@xs4all.nl>
+References: <20190808103432.12062-1-ezequiel@collabora.com>
+         <20190808103432.12062-5-ezequiel@collabora.com>
+         <a729d241-6550-c23a-4f75-f106ab1c7ff9@xs4all.nl>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.19]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-12_05:,,
- signatures=0
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rename "subdev" entity struct field to "source"
-to prepare for several subdev support.
-Move asd field on top of entity struct.
+On Mon, 2019-08-12 at 12:11 +0200, Hans Verkuil wrote:
+> On 8/8/19 12:34 PM, Ezequiel Garcia wrote:
+> > Stateless decoders have different expectations about the
+> > start code that is prepended on H264 slices. Add a
+> > menu control to express the supported start code types
+> > (including no start code).
+> > 
+> > Drivers are allowed to support only one start code type,
+> > but they can support both too.
+> > 
+> > Note that this is independent of the H264 decoding mode,
+> > which specifies the granularity of the decoding operations.
+> > Either in frame-based or slice-based mode, this new control
+> > will allow to define the start code expected on H264 slices.
+> > 
+> > Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> > ---
+> > Changes in v4:
+> > * New patch.
+> > ---
+> >  .../media/uapi/v4l/ext-ctrls-codec.rst        | 31 +++++++++++++++++++
+> >  drivers/media/v4l2-core/v4l2-ctrls.c          |  9 ++++++
+> >  include/media/h264-ctrls.h                    |  6 ++++
+> >  3 files changed, 46 insertions(+)
+> > 
+> > diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> > index ea0455957149..94fd3a9b8b9e 100644
+> > --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> > +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
+> > @@ -2062,6 +2062,37 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_type -
+> >          The OUTPUT buffer should contain all slices needed to decode the
+> >          frame/field.
+> >  
+> > +``V4L2_CID_MPEG_VIDEO_H264_STARTCODE (enum)``
+> > +    Specifies the H264 slice start code expected for each slice.
+> > +    This control shall e used to complement V4L2_PIX_FMT_H264_SLICE
+> 
+> e -> be
+> 
+> > +    pixel format. Drivers may expose a single or multiple
+> > +    start codes, depending on what they can support.
+> > +
+> > +    .. note::
+> > +
+> > +       This menu control is not yet part of the public kernel API and
+> > +       it is expected to change.
+> > +
+> > +.. c:type:: v4l2_mpeg_video_h264_startcode
+> > +
+> > +.. cssclass:: longtable
+> > +
+> > +.. flat-table::
+> > +    :header-rows:  0
+> > +    :stub-columns: 0
+> > +    :widths:       1 1 2
+> > +
+> > +    * - ``V4L2_MPEG_VIDEO_H264_NO_STARTCODE``
+> > +      - 0
+> > +      - Selecting this value specifies that H264 slices are passed
+> > +        to the driver without any start code.
+> > +        Bla.
+> 
+> Bla?
+> 
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
----
- drivers/media/platform/stm32/stm32-dcmi.c | 46 +++++++++++++++----------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+Well, despite how many times I reviewed this doc, it seems
+this slipped through :-(
 
-diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
-index b9dad0a..b462f71 100644
---- a/drivers/media/platform/stm32/stm32-dcmi.c
-+++ b/drivers/media/platform/stm32/stm32-dcmi.c
-@@ -100,10 +100,10 @@ enum state {
- #define OVERRUN_ERROR_THRESHOLD	3
- 
- struct dcmi_graph_entity {
--	struct device_node *node;
--
- 	struct v4l2_async_subdev asd;
--	struct v4l2_subdev *subdev;
-+
-+	struct device_node *remote_node;
-+	struct v4l2_subdev *source;
- };
- 
- struct dcmi_format {
-@@ -595,7 +595,7 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	}
- 
- 	/* Enable stream on the sub device */
--	ret = v4l2_subdev_call(dcmi->entity.subdev, video, s_stream, 1);
-+	ret = v4l2_subdev_call(dcmi->entity.source, video, s_stream, 1);
- 	if (ret && ret != -ENOIOCTLCMD) {
- 		dev_err(dcmi->dev, "%s: Failed to start streaming, subdev streamon error",
- 			__func__);
-@@ -685,7 +685,7 @@ static int dcmi_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	return 0;
- 
- err_subdev_streamoff:
--	v4l2_subdev_call(dcmi->entity.subdev, video, s_stream, 0);
-+	v4l2_subdev_call(dcmi->entity.source, video, s_stream, 0);
- 
- err_pm_put:
- 	pm_runtime_put(dcmi->dev);
-@@ -713,7 +713,7 @@ static void dcmi_stop_streaming(struct vb2_queue *vq)
- 	int ret;
- 
- 	/* Disable stream on the sub device */
--	ret = v4l2_subdev_call(dcmi->entity.subdev, video, s_stream, 0);
-+	ret = v4l2_subdev_call(dcmi->entity.source, video, s_stream, 0);
- 	if (ret && ret != -ENOIOCTLCMD)
- 		dev_err(dcmi->dev, "%s: Failed to stop streaming, subdev streamoff error (%d)\n",
- 			__func__, ret);
-@@ -857,7 +857,7 @@ static int dcmi_try_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f,
- 	}
- 
- 	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, set_fmt,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, set_fmt,
- 			       &pad_cfg, &format);
- 	if (ret < 0)
- 		return ret;
-@@ -934,7 +934,7 @@ static int dcmi_set_fmt(struct stm32_dcmi *dcmi, struct v4l2_format *f)
- 	mf->width = sd_framesize.width;
- 	mf->height = sd_framesize.height;
- 
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad,
- 			       set_fmt, NULL, &format);
- 	if (ret < 0)
- 		return ret;
-@@ -991,7 +991,7 @@ static int dcmi_get_sensor_format(struct stm32_dcmi *dcmi,
- 	};
- 	int ret;
- 
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, get_fmt, NULL, &fmt);
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, get_fmt, NULL, &fmt);
- 	if (ret)
- 		return ret;
- 
-@@ -1020,7 +1020,7 @@ static int dcmi_set_sensor_format(struct stm32_dcmi *dcmi,
- 	}
- 
- 	v4l2_fill_mbus_format(&format.format, pix, sd_fmt->mbus_code);
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, set_fmt,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, set_fmt,
- 			       &pad_cfg, &format);
- 	if (ret < 0)
- 		return ret;
-@@ -1043,7 +1043,7 @@ static int dcmi_get_sensor_bounds(struct stm32_dcmi *dcmi,
- 	/*
- 	 * Get sensor bounds first
- 	 */
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, get_selection,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, get_selection,
- 			       NULL, &bounds);
- 	if (!ret)
- 		*r = bounds.r;
-@@ -1224,7 +1224,7 @@ static int dcmi_enum_framesizes(struct file *file, void *fh,
- 
- 	fse.code = sd_fmt->mbus_code;
- 
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad, enum_frame_size,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad, enum_frame_size,
- 			       NULL, &fse);
- 	if (ret)
- 		return ret;
-@@ -1241,7 +1241,7 @@ static int dcmi_g_parm(struct file *file, void *priv,
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
- 
--	return v4l2_g_parm_cap(video_devdata(file), dcmi->entity.subdev, p);
-+	return v4l2_g_parm_cap(video_devdata(file), dcmi->entity.source, p);
- }
- 
- static int dcmi_s_parm(struct file *file, void *priv,
-@@ -1249,7 +1249,7 @@ static int dcmi_s_parm(struct file *file, void *priv,
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
- 
--	return v4l2_s_parm_cap(video_devdata(file), dcmi->entity.subdev, p);
-+	return v4l2_s_parm_cap(video_devdata(file), dcmi->entity.source, p);
- }
- 
- static int dcmi_enum_frameintervals(struct file *file, void *fh,
-@@ -1271,7 +1271,7 @@ static int dcmi_enum_frameintervals(struct file *file, void *fh,
- 
- 	fie.code = sd_fmt->mbus_code;
- 
--	ret = v4l2_subdev_call(dcmi->entity.subdev, pad,
-+	ret = v4l2_subdev_call(dcmi->entity.source, pad,
- 			       enum_frame_interval, NULL, &fie);
- 	if (ret)
- 		return ret;
-@@ -1291,7 +1291,7 @@ MODULE_DEVICE_TABLE(of, stm32_dcmi_of_match);
- static int dcmi_open(struct file *file)
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
--	struct v4l2_subdev *sd = dcmi->entity.subdev;
-+	struct v4l2_subdev *sd = dcmi->entity.source;
- 	int ret;
- 
- 	if (mutex_lock_interruptible(&dcmi->lock))
-@@ -1322,7 +1322,7 @@ static int dcmi_open(struct file *file)
- static int dcmi_release(struct file *file)
- {
- 	struct stm32_dcmi *dcmi = video_drvdata(file);
--	struct v4l2_subdev *sd = dcmi->entity.subdev;
-+	struct v4l2_subdev *sd = dcmi->entity.source;
- 	bool fh_singular;
- 	int ret;
- 
-@@ -1433,7 +1433,7 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
- {
- 	const struct dcmi_format *sd_fmts[ARRAY_SIZE(dcmi_formats)];
- 	unsigned int num_fmts = 0, i, j;
--	struct v4l2_subdev *subdev = dcmi->entity.subdev;
-+	struct v4l2_subdev *subdev = dcmi->entity.source;
- 	struct v4l2_subdev_mbus_code_enum mbus_code = {
- 		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
- 	};
-@@ -1479,7 +1479,7 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
- static int dcmi_framesizes_init(struct stm32_dcmi *dcmi)
- {
- 	unsigned int num_fsize = 0;
--	struct v4l2_subdev *subdev = dcmi->entity.subdev;
-+	struct v4l2_subdev *subdev = dcmi->entity.source;
- 	struct v4l2_subdev_frame_size_enum fse = {
- 		.which = V4L2_SUBDEV_FORMAT_ACTIVE,
- 		.code = dcmi->sd_format->mbus_code,
-@@ -1526,7 +1526,7 @@ static int dcmi_graph_notify_complete(struct v4l2_async_notifier *notifier)
- 	struct stm32_dcmi *dcmi = notifier_to_dcmi(notifier);
- 	int ret;
- 
--	dcmi->vdev->ctrl_handler = dcmi->entity.subdev->ctrl_handler;
-+	dcmi->vdev->ctrl_handler = dcmi->entity.source->ctrl_handler;
- 	ret = dcmi_formats_init(dcmi);
- 	if (ret) {
- 		dev_err(dcmi->dev, "No supported mediabus format found\n");
-@@ -1582,7 +1582,7 @@ static int dcmi_graph_notify_bound(struct v4l2_async_notifier *notifier,
- 
- 	dev_dbg(dcmi->dev, "Subdev %s bound\n", subdev->name);
- 
--	dcmi->entity.subdev = subdev;
-+	dcmi->entity.source = subdev;
- 
- 	return 0;
- }
-@@ -1608,7 +1608,7 @@ static int dcmi_graph_parse(struct stm32_dcmi *dcmi, struct device_node *node)
- 		return -EINVAL;
- 
- 	/* Remote node to connect */
--	dcmi->entity.node = remote;
-+	dcmi->entity.remote_node = remote;
- 	dcmi->entity.asd.match_type = V4L2_ASYNC_MATCH_FWNODE;
- 	dcmi->entity.asd.match.fwnode = of_fwnode_handle(remote);
- 	return 0;
-@@ -1631,7 +1631,7 @@ static int dcmi_graph_init(struct stm32_dcmi *dcmi)
- 					     &dcmi->entity.asd);
- 	if (ret) {
- 		dev_err(dcmi->dev, "Failed to add subdev notifier\n");
--		of_node_put(dcmi->entity.node);
-+		of_node_put(dcmi->entity.remote_node);
- 		return ret;
- 	}
- 
--- 
-2.7.4
+> > +    * - ``V4L2_MPEG_VIDEO_H264_ANNEX_B_STARTCODE``
+> > +      - 1
+> > +      - Selecting this value specifies that H264 slices are expected
+> > +        to be prefixed by Annex B start codes. According to :ref:`h264`
+> > +        valid start codes can be 3-bytes 0x000001, or 4-bytes 0x00000001.
+> > +
+> 
+> I had the impression that it is more common to require startcodes. If that's
+> indeed the case, shouldn't this have value 0 instead of 1?
+> 1?
+> 
+
+I'm not sure this is indeed the case.
+
+For instance, VA-API accelerators work on H264 slices that are not
+prepended by the NALU start code.
+
+I'm fine flipping the values, but at this point, with only cedrus and hantro,
+there's doesn't seem to be a "natural" choice.
+
+Thanks,
+Ezequiel
 
