@@ -2,179 +2,128 @@ Return-Path: <SRS0=7F4W=WI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-8.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB87CC31E40
-	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 19:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC282C433FF
+	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 21:39:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C6563208C2
-	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 19:36:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE29A206C1
+	for <linux-media@archiver.kernel.org>; Mon, 12 Aug 2019 21:39:56 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/twmb6N"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbfHLTgH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 12 Aug 2019 15:36:07 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60124 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726681AbfHLTgH (ORCPT
+        id S1726925AbfHLVjw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 12 Aug 2019 17:39:52 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:50693 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726903AbfHLVjw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 12 Aug 2019 15:36:07 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 34D9D2852AF
-From:   Ezequiel Garcia <ezequiel@collabora.com>
-To:     linux-media@vger.kernel.org
-Cc:     kernel@collabora.com,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v5 06/11] media: cedrus: Cleanup control initialization
-Date:   Mon, 12 Aug 2019 16:35:17 -0300
-Message-Id: <20190812193522.10911-7-ezequiel@collabora.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190812193522.10911-1-ezequiel@collabora.com>
-References: <20190812193522.10911-1-ezequiel@collabora.com>
+        Mon, 12 Aug 2019 17:39:52 -0400
+Received: by mail-wm1-f67.google.com with SMTP id v15so935802wml.0;
+        Mon, 12 Aug 2019 14:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=0Y60wYJikPFoyVE8po0R5xiNA7aHqFFqyU6s39ynbR4=;
+        b=T/twmb6NbU+JyRmU+IjpUg7OUgarruldoKpvAJBRy+01o6M/4Q3t8OBcPypDnxaZEO
+         0+61UIBOVzv8V0SwktWxNNky379+O5dEkRu/V8D7clbUnsAoGLi5UbOAZMz0lNGUaLWw
+         S9Wcc6ocvjRrTfOIvpJdV61wjRVhCh3vdLw6Hg44t43xjiXq8ST4cocY9Zd6zMeMHW69
+         WZzrQkmLRFZRer+DvZkBIgV2ec3V+T04soi3hXllC87N/SkZVTiyTglw5nOEjB5/2dby
+         jOpHInCMb8YBv4q8s+UkfNGnVgysah7ZvECjWE8DpsX/N4bXUAl1EI4pEuedK+GomOsd
+         1mEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=0Y60wYJikPFoyVE8po0R5xiNA7aHqFFqyU6s39ynbR4=;
+        b=dBXfHg4uLfq73ob6D1ecjdPZ/xP6OeHgal/JLeChM+wqlkQgQpDBqs1R80OmQdBKZi
+         HYI4rYroqmZknKd9Fbs7b1MIKtzkYdEvqNxqZGfgFlqD8Ficg72d/dxBtVloGpdAaDZe
+         h7/EzogjpdsZzMKeZ+5jcAAcge3qzSo/p9SlUnLXxezI71STsyKDZgJfwzO5UiiQuzTJ
+         sQZdiX25soX/DVyDSEU3wWzXi2unQGUbgOee6qP0iBFBsN0gUx/cH9Vi9O3L/NptQdDx
+         1ihYDnidsiXhU2SuANNSQtsvuQ+ky+HpNzqgCTbPNhsH48hFtLkfEZeIjIq0hTBk+05c
+         Nveg==
+X-Gm-Message-State: APjAAAVF3zTKKaR/DUGMsSw9wvPulgB/D4Tgqb/5QNLYWkgbTWsqCL6S
+        O7dWmNhXTJfLhWInCcLMRYyZGlLQ
+X-Google-Smtp-Source: APXvYqzrlbXXDcWBccC/EfD9cUS7Vm50tycRKcl/Sy7qnHvkJmCIIkd8H4EFatBTGVXJPnD5vHwl2A==
+X-Received: by 2002:a05:600c:254c:: with SMTP id e12mr1079932wma.168.1565645989596;
+        Mon, 12 Aug 2019 14:39:49 -0700 (PDT)
+Received: from [172.30.88.160] (sjewanfw1-nat.mentorg.com. [139.181.7.34])
+        by smtp.gmail.com with ESMTPSA id j20sm15557792wre.65.2019.08.12.14.39.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Aug 2019 14:39:48 -0700 (PDT)
+Subject: Re: [PATCH] media: docs-rst: Clarify duration of LP-11 mode
+To:     Ian Arkver <ian.arkver.dev@gmail.com>, linux-media@vger.kernel.org
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20190811173621.20454-1-slongerbeam@gmail.com>
+ <3f31cde6-8faf-f9a0-626e-dc995260a640@gmail.com>
+From:   Steve Longerbeam <slongerbeam@gmail.com>
+Message-ID: <2a84063e-b66f-bef2-1277-3514566aa236@gmail.com>
+Date:   Mon, 12 Aug 2019 14:39:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <3f31cde6-8faf-f9a0-626e-dc995260a640@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to introduce other controls, the control initialization
-needs to support an initial struct v4l2_ctrl_control.
+Hi Ian,
 
-While here, let's cleanup the control initialization,
-removing unneeded fields.
+On 8/12/19 1:53 AM, Ian Arkver wrote:
+> Hi Steve,
+>
+> On 11/08/2019 18:36, Steve Longerbeam wrote:
+>> Add a sentence that makes it more clear when the CSI-2 transmitter
+>> must, if possible, exit LP-11 mode. That is, maintain LP-11 mode
+>> until stream on, at which point the transmitter activates the clock
+>> lane and transition to HS mode.
+>>
+>> Signed-off-by: Steve Longerbeam <slongerbeam@gmail.com>
+>> ---
+>>   Documentation/media/kapi/csi2.rst | 10 +++++++---
+>>   1 file changed, 7 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/media/kapi/csi2.rst 
+>> b/Documentation/media/kapi/csi2.rst
+>> index a7e75e2eba85..6cd1d4b0df17 100644
+>> --- a/Documentation/media/kapi/csi2.rst
+>> +++ b/Documentation/media/kapi/csi2.rst
+>> @@ -49,9 +49,13 @@ where
+>>     The transmitter drivers must, if possible, configure the CSI-2
+>>   transmitter to *LP-11 mode* whenever the transmitter is powered on but
+>> -not active. Some transmitters do this automatically but some have to
+>> -be explicitly programmed to do so, and some are unable to do so
+>> -altogether due to hardware constraints.
+>> +not active, and maintain *LP-11 mode* until stream on. Only until
+>
+> s/until/at/ perhaps?
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
----
-Changes in v5:
-* None.
-Changes in v4:
-* New patch.
----
- drivers/staging/media/sunxi/cedrus/cedrus.c | 45 +++++++++++----------
- drivers/staging/media/sunxi/cedrus/cedrus.h |  3 +-
- 2 files changed, 25 insertions(+), 23 deletions(-)
+Sure, that's a bit better language.
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index 370937edfc14..7bdc413bf727 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -29,44 +29,51 @@
- 
- static const struct cedrus_control cedrus_controls[] = {
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS,
--		.elem_size	= sizeof(struct v4l2_ctrl_mpeg2_slice_params),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS,
-+		},
- 		.codec		= CEDRUS_CODEC_MPEG2,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION,
--		.elem_size	= sizeof(struct v4l2_ctrl_mpeg2_quantization),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION,
-+		},
- 		.codec		= CEDRUS_CODEC_MPEG2,
- 		.required	= false,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_decode_params),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_slice_params),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_SPS,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_sps),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_SPS,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_PPS,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_pps),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_PPS,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_scaling_matrix),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
-@@ -106,12 +113,8 @@ static int cedrus_init_ctrls(struct cedrus_dev *dev, struct cedrus_ctx *ctx)
- 		return -ENOMEM;
- 
- 	for (i = 0; i < CEDRUS_CONTROLS_COUNT; i++) {
--		struct v4l2_ctrl_config cfg = {};
--
--		cfg.elem_size = cedrus_controls[i].elem_size;
--		cfg.id = cedrus_controls[i].id;
--
--		ctrl = v4l2_ctrl_new_custom(hdl, &cfg, NULL);
-+		ctrl = v4l2_ctrl_new_custom(hdl, &cedrus_controls[i].cfg,
-+					    NULL);
- 		if (hdl->error) {
- 			v4l2_err(&dev->v4l2_dev,
- 				 "Failed to create new custom control\n");
-@@ -178,7 +181,7 @@ static int cedrus_request_validate(struct media_request *req)
- 			continue;
- 
- 		ctrl_test = v4l2_ctrl_request_hdl_ctrl_find(hdl,
--							    cedrus_controls[i].id);
-+							    cedrus_controls[i].cfg.id);
- 		if (!ctrl_test) {
- 			v4l2_info(&ctx->dev->v4l2_dev,
- 				  "Missing required codec control\n");
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
-index 3f476d0fd981..283827656872 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-@@ -49,8 +49,7 @@ enum cedrus_h264_pic_type {
- };
- 
- struct cedrus_control {
--	u32			id;
--	u32			elem_size;
-+	struct v4l2_ctrl_config cfg;
- 	enum cedrus_codec	codec;
- 	unsigned char		required:1;
- };
--- 
-2.22.0
+Steve
+
+>
+> Regards,
+> Ian
+>> +stream on should the transmitter activate the clock on the clock lane
+>> +and transition to *HS mode*.
+>> +
+>> +Some transmitters do this automatically but some have to be explicitly
+>> +programmed to do so, and some are unable to do so altogether due to
+>> +hardware constraints.
+>>     Stopping the transmitter
+>>   ^^^^^^^^^^^^^^^^^^^^^^^^
+>>
 
