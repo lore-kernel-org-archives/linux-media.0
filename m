@@ -2,40 +2,58 @@ Return-Path: <SRS0=Feq1=WJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E181CC433FF
-	for <linux-media@archiver.kernel.org>; Tue, 13 Aug 2019 12:37:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCED4C32750
+	for <linux-media@archiver.kernel.org>; Tue, 13 Aug 2019 12:45:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BB3E820578
-	for <linux-media@archiver.kernel.org>; Tue, 13 Aug 2019 12:37:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A24D52085A
+	for <linux-media@archiver.kernel.org>; Tue, 13 Aug 2019 12:45:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1565700325;
+	bh=IQ2ZvwcrHev5R9TGavDHeGoLR3ZmmBztsimoK5G+UW0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=EyaObhSCml4DgsOVHmssDD4xqaThDqJDf+nib/7HeZM1YKENxXiBkKX/UKVmR1GyM
+	 x5x6FLq99BMcixcK098KSGuCAzhNSrqoPtrxBoPMNALKjksx9P9/40B+AKsiwHTf9v
+	 TCEjnsX+IDUz4iRQPx2yhX8kBly8XLBD3MQIPPqc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728256AbfHMMhg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Aug 2019 08:37:36 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:51065 "EHLO www.linuxtv.org"
+        id S1728527AbfHMMpW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Aug 2019 08:45:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727763AbfHMMhg (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Aug 2019 08:37:36 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtp (Exim 4.84_2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1hxW3M-0005NM-Dm; Tue, 13 Aug 2019 12:37:28 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1hxW3M-0004Az-6L; Tue, 13 Aug 2019 12:37:28 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.4] Fixes and i2c conversions
-Date:   Tue, 13 Aug 2019 12:37:27 +0000
-Message-Id: <20190813123727.16011-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <0ce80e1f-46c1-6184-b0c1-fc99d0908725@xs4all.nl>
-References: 
+        id S1727837AbfHMMpV (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 13 Aug 2019 08:45:21 -0400
+Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 031CB2085A;
+        Tue, 13 Aug 2019 12:45:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565700320;
+        bh=IQ2ZvwcrHev5R9TGavDHeGoLR3ZmmBztsimoK5G+UW0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=F6qOHgWniQ9trNvM5vundial+AQplk5yhZSBV/Viqc9iNGf3sh+NBtkTrlSu9dt1Q
+         70NW2r6EwkzR4XdcyxAYl3D1OhMCl7Wog6Nt7qXfFu2bSRpZZ2wzZISfXjRq+0NBXM
+         TdwZ836cZhGHL6zeb15qt251K6snqkRBan376aqg=
+From:   Maxime Ripard <mripard@kernel.org>
+To:     mchehab@kernel.org, sean@mess.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Maxime Ripard <maxime.ripard@bootlin.com>
+Subject: [PATCH 2/2] dt-bindings: media: Convert Allwinner A10 IR to a schema
+Date:   Tue, 13 Aug 2019 14:45:13 +0200
+Message-Id: <20190813124513.31413-2-mripard@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190813124513.31413-1-mripard@kernel.org>
+References: <20190813124513.31413-1-mripard@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -43,58 +61,149 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+From: Maxime Ripard <maxime.ripard@bootlin.com>
 
-Pull request: https://patchwork.linuxtv.org/patch/58111/
-Build log: https://builder.linuxtv.org/job/patchwork/7830/
-Build time: 00:13:54
-Link: https://lore.kernel.org/linux-media/0ce80e1f-46c1-6184-b0c1-fc99d0908725@xs4all.nl
-Summary: 12 issues, being 0 build regressions
+The older Allwinner SoCs have a IR receiver supported in Linux, with a
+matching Device Tree binding.
 
-Error/warnings:
+Now that we have the DT validation in place, let's convert the device tree
+bindings for that controller over to a YAML schemas.
 
-patches/0004-media-dvb-frontends-cxd2820r_core-convert-to-i2c_new.patch:26: WARNING: line over 80 characters
+Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+---
+ .../media/allwinner,sun4i-a10-ir.yaml         | 80 +++++++++++++++++++
+ .../devicetree/bindings/media/sunxi-ir.txt    | 35 --------
+ 2 files changed, 80 insertions(+), 35 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/sunxi-ir.txt
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0004-media-dvb-frontends-cxd2820r_core-convert-to-i2c_new.patch
-patches/0005-media-dvb-frontends-mn88443x-convert-to-i2c_new_dumm.patch:26: WARNING: line over 80 characters
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-media-dvb-frontends-mn88443x-convert-to-i2c_new_dumm.patch
-patches/0008-media-i2c-ad9389b-convert-to-i2c_new_dummy_device.patch:25: WARNING: line over 80 characters
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0008-media-i2c-ad9389b-convert-to-i2c_new_dummy_device.patch
-patches/0009-media-i2c-adv7180-convert-to-i2c_new_dummy_device.patch:25: CHECK: Alignment should match open parenthesis
-patches/0009-media-i2c-adv7180-convert-to-i2c_new_dummy_device.patch:35: CHECK: Alignment should match open parenthesis
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0009-media-i2c-adv7180-convert-to-i2c_new_dummy_device.patch
-patches/0010-media-i2c-adv7511-v4l2-convert-to-i2c_new_dummy_devi.patch:25: CHECK: Alignment should match open parenthesis
-patches/0010-media-i2c-adv7511-v4l2-convert-to-i2c_new_dummy_devi.patch:40: CHECK: Alignment should match open parenthesis
-patches/0010-media-i2c-adv7511-v4l2-convert-to-i2c_new_dummy_devi.patch:55: WARNING: line over 80 characters
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0010-media-i2c-adv7511-v4l2-convert-to-i2c_new_dummy_devi.patch
-patches/0022-media-i2c-adv748x-Convert-to-new-i2c-device-probe.patch:10: ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type")'
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0022-media-i2c-adv748x-Convert-to-new-i2c-device-probe.patch
-patches/0023-media-radio-si4713-Convert-to-new-i2c-device-probe.patch:7: ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type")'
-patches/0023-media-radio-si4713-Convert-to-new-i2c-device-probe.patch:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0023-media-radio-si4713-Convert-to-new-i2c-device-probe.patch
-patches/0024-media-radio-si470x-Convert-to-new-i2c-device-probe.patch:7: ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type")'
-patches/0024-media-radio-si470x-Convert-to-new-i2c-device-probe.patch:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0024-media-radio-si470x-Convert-to-new-i2c-device-probe.patch
-patches/0025-media-i2c-smiapp-Convert-to-new-i2c-device-probe.patch:7: ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type")'
-patches/0025-media-i2c-smiapp-Convert-to-new-i2c-device-probe.patch:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0025-media-i2c-smiapp-Convert-to-new-i2c-device-probe.patch
-patches/0026-media-i2c-s5c73m3-Convert-to-new-i2c-device-probe.patch:7: ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type")'
-patches/0026-media-i2c-s5c73m3-Convert-to-new-i2c-device-probe.patch:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0026-media-i2c-s5c73m3-Convert-to-new-i2c-device-probe.patch
-patches/0027-media-i2c-et8ek8-Convert-to-new-i2c-device-probe.patch:7: ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type")'
-patches/0027-media-i2c-et8ek8-Convert-to-new-i2c-device-probe.patch:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0027-media-i2c-et8ek8-Convert-to-new-i2c-device-probe.patch
-patches/0028-media-i2c-Convert-to-new-i2c-device-probe.patch:7: ERROR: Please use git commit description style 'commit <12+ chars of sha1> ("<title line>")' - ie: 'commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new() call-back type")'
-
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0028-media-i2c-Convert-to-new-i2c-device-probe.patch
+diff --git a/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+new file mode 100644
+index 000000000000..98c1bdde9a86
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-ir.yaml
+@@ -0,0 +1,80 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/allwinner,sun4i-a10-ir.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A10 Infrared Controller Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <maxime.ripard@bootlin.com>
++
++allOf:
++  - $ref: "rc.yaml#"
++
++properties:
++  compatible:
++    oneOf:
++      - const: allwinner,sun4i-a10-ir
++      - const: allwinner,sun5i-a13-ir
++      - items:
++          - const: allwinner,sun8i-a83t-ir
++          - const: allwinner,sun6i-a31-ir
++      - const: allwinner,sun6i-a31-ir
++      - items:
++          - const: allwinner,sun50i-a64-ir
++          - const: allwinner,sun6i-a31-ir
++      - items:
++          - const: allwinner,sun50i-h6-ir
++          - const: allwinner,sun6i-a31-ir
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Module Clock
++
++  clock-names:
++    items:
++      - const: apb
++      - const: ir
++
++  resets:
++    maxItems: 1
++
++  clock-frequency:
++    default: 8000000
++    description:
++      IR Receiver clock frequency, in Hertz.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++
++# FIXME: We should set it, but it would report all the generic
++# properties as additional properties.
++# additionalProperties: false
++
++examples:
++  - |
++      ir0: ir@1c21800 {
++          compatible = "allwinner,sun4i-a10-ir";
++          clocks = <&apb0_gates 6>, <&ir0_clk>;
++          clock-names = "apb", "ir";
++          clock-frequency = <3000000>;
++          resets = <&apb0_rst 1>;
++          interrupts = <0 5 1>;
++          reg = <0x01C21800 0x40>;
++          linux,rc-map-name = "rc-rc6-mce";
++      };
++
++...
+diff --git a/Documentation/devicetree/bindings/media/sunxi-ir.txt b/Documentation/devicetree/bindings/media/sunxi-ir.txt
+deleted file mode 100644
+index 81eaf95fb764..000000000000
+--- a/Documentation/devicetree/bindings/media/sunxi-ir.txt
++++ /dev/null
+@@ -1,35 +0,0 @@
+-Device-Tree bindings for SUNXI IR controller found in sunXi SoC family
+-
+-Required properties:
+-- compatible	    :
+-	"allwinner,sun4i-a10-ir"
+-	"allwinner,sun5i-a13-ir"
+-	"allwinner,sun6i-a31-ir"
+-	"allwinner,sun50i-a64-ir", "allwinner,sun6i-a31-ir"
+-	"allwinner,sun50i-h6-ir", "allwinner,sun6i-a31-ir"
+-- clocks	    : list of clock specifiers, corresponding to
+-		      entries in clock-names property;
+-- clock-names	    : should contain "apb" and "ir" entries;
+-- interrupts	    : should contain IR IRQ number;
+-- reg		    : should contain IO map address for IR.
+-
+-Required properties since A31:
+-- resets	    : phandle + reset specifier pair
+-
+-Optional properties:
+-- linux,rc-map-name: see rc.txt file in the same directory.
+-- clock-frequency  : IR Receiver clock frequency, in Hertz. Defaults to 8 MHz
+-		     if missing.
+-
+-Example:
+-
+-ir0: ir@1c21800 {
+-	compatible = "allwinner,sun4i-a10-ir";
+-	clocks = <&apb0_gates 6>, <&ir0_clk>;
+-	clock-names = "apb", "ir";
+-	clock-frequency = <3000000>;
+-	resets = <&apb0_rst 1>;
+-	interrupts = <0 5 1>;
+-	reg = <0x01C21800 0x40>;
+-	linux,rc-map-name = "rc-rc6-mce";
+-};
+-- 
+2.21.0
 
