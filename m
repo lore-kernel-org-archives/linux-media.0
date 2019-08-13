@@ -2,75 +2,101 @@ Return-Path: <SRS0=Feq1=WJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BAC6C433FF
-	for <linux-media@archiver.kernel.org>; Tue, 13 Aug 2019 13:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C33EC32750
+	for <linux-media@archiver.kernel.org>; Tue, 13 Aug 2019 13:23:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 24CD720840
-	for <linux-media@archiver.kernel.org>; Tue, 13 Aug 2019 13:16:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 41FA62085A
+	for <linux-media@archiver.kernel.org>; Tue, 13 Aug 2019 13:23:06 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jl3oAbI8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728719AbfHMNQp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 13 Aug 2019 09:16:45 -0400
-Received: from gofer.mess.org ([88.97.38.141]:38037 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727311AbfHMNQp (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 13 Aug 2019 09:16:45 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 7F130603E8; Tue, 13 Aug 2019 14:16:44 +0100 (BST)
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [PATCH] media: rc: imon-rsc keymap has incorrect mappings
-Date:   Tue, 13 Aug 2019 14:16:44 +0100
-Message-Id: <20190813131644.15984-1-sean@mess.org>
-X-Mailer: git-send-email 2.11.0
+        id S1729029AbfHMNXC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 13 Aug 2019 09:23:02 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43794 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728933AbfHMNXB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 13 Aug 2019 09:23:01 -0400
+Received: by mail-pf1-f194.google.com with SMTP id v12so3824662pfn.10
+        for <linux-media@vger.kernel.org>; Tue, 13 Aug 2019 06:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5OimHuLZ+hHOhfUejEMlGFM0cbw0bW0viYw6V8eRjvg=;
+        b=jl3oAbI8nXaJN8u9zrckaYcQN83teECbAHKgeFCY7YXAbWo5QSGAmC7AX83Kg81jrR
+         wHIfECyD17DuOQN1q+8WpBA0Y7Azud+nPsri/AfhlU88cVcwXD0i8Lv6x8UFbF/l/ro4
+         jIcYE6GK8r0fh6Du7FtRXatWz0q5hIF91UiKU6t+CQOI0AjDBqmWZgDB+/wH8LmmU1Rn
+         LJ0z2UW5KbZrsxYA0r/Ujs4nyuUB9h4MLLYGZecGHgF4443X9mNo0fvVPaYLZuSOQPKd
+         RRRHtjIdfKwqBDwiOeS9PtHuw1eYRhIgU2u8dFfFYg7ZmCq+FQnO1XAX+mrZJIUHS8H6
+         cSQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5OimHuLZ+hHOhfUejEMlGFM0cbw0bW0viYw6V8eRjvg=;
+        b=NYTrAfAK9jeedzY01kCICzlCJMQGPo1KgXj1uRdNMveHOMYEqOkpEp1CWi0IfBDXQT
+         UbFNFSBc5SnrFVjqePpfPb/dqBdrhSPipgC102aj59He2/ngcDgCgqctkVj4QTg7VEk6
+         CNkg4pZYHkB0cAMqDVIngwlsTGJT3xt/aoqgJTL7yB37Q1sviaKuAHikQ7QlohIPIIxt
+         1bYAxPs9VMIHQk7+oPxlXxe/7gW0gPsLckN91bT8enu6dKbm52QwvSfS6ftMswI9wxwv
+         hyxj4cfNmxJftEFhyYEu5uoyeFkYtcqCKDlXrW9fRb2aine9P7bvrWoIcV46JTla9E3G
+         TwDw==
+X-Gm-Message-State: APjAAAXXoCiHA4NBp4LMsPL9o8nZIHRAtIK1D4Efhrb8xJvFzL6TGYaH
+        FQg/C3ruggYpf8xOQWznyPr9kwDtyWPlWbRfXXFyWg==
+X-Google-Smtp-Source: APXvYqwpT7K5eeL/AsaPFi5DSDv8bbucf1KzbZhnGHmNuw6OMjnJDLCL+9deXz0+3L8EuMYCkEMcejLnCOAp6T2m+zs=
+X-Received: by 2002:a63:c442:: with SMTP id m2mr35234947pgg.286.1565702580714;
+ Tue, 13 Aug 2019 06:23:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAAeHK+zPDgvDr_Bao9dz_7hGEg+Ud6-tj7pZaihKeYHJ8M386Q@mail.gmail.com>
+ <00000000000054f8bd058ddfa341@google.com>
+In-Reply-To: <00000000000054f8bd058ddfa341@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 13 Aug 2019 15:22:49 +0200
+Message-ID: <CAAeHK+xZRH9-ue0QyEdiWmbFJF6P3RXMud+tE6t3x6Orcxnbkg@mail.gmail.com>
+Subject: Re: KASAN: global-out-of-bounds Read in dvb_pll_attach
+To:     syzbot <syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com>,
+        bnvandana@gmail.com
+Cc:     allison@lohutok.net, hverkuil-cisco@xs4all.nl,
+        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        rfontana@redhat.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>, tskd08@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-KEY_MAX is not a key but designates the highest value a linux keycode
-can ever have.
+On Wed, Jul 17, 2019 at 2:29 PM syzbot
+<syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot has tested the proposed patch and the reproducer did not trigger
+> crash:
+>
+> Reported-and-tested-by:
+> syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com
+>
+> Tested on:
+>
+> commit:         6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d90745bdf884fc0a
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=1454f4d0600000
+>
+> Note: testing is done by a robot and is best-effort only.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/rc/keymaps/rc-imon-rsc.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Hi bnvandana,
 
-diff --git a/drivers/media/rc/keymaps/rc-imon-rsc.c b/drivers/media/rc/keymaps/rc-imon-rsc.c
-index 6f7ee4859682..38787dd0e4a0 100644
---- a/drivers/media/rc/keymaps/rc-imon-rsc.c
-+++ b/drivers/media/rc/keymaps/rc-imon-rsc.c
-@@ -7,7 +7,8 @@
- 
- //
- // Note that this remote has a stick which its own IR protocol,
--// with 16 directions. This is not supported yet.
-+// with 16 directions. This is supported by the imon_rsc BPF decoder
-+// in v4l-utils.
- //
- static struct rc_map_table imon_rsc[] = {
- 	{ 0x801010, KEY_EXIT },
-@@ -25,7 +26,7 @@ static struct rc_map_table imon_rsc[] = {
- 	{ 0x80105c, KEY_NUMERIC_9 },
- 	{ 0x801081, KEY_SCREEN },	/* Desktop */
- 	{ 0x80105d, KEY_NUMERIC_0 },
--	{ 0x801082, KEY_MAX },
-+	{ 0x801082, KEY_ZOOM },		/* Maximise */
- 	{ 0x801048, KEY_ESC },
- 	{ 0x80104b, KEY_MEDIA },	/* Windows key */
- 	{ 0x801083, KEY_MENU },
-@@ -52,7 +53,7 @@ static struct rc_map_table imon_rsc[] = {
- 	{ 0x80104e, KEY_STOP },
- 	{ 0x801052, KEY_REWIND },
- 	{ 0x801053, KEY_FASTFORWARD },
--	{ 0x801089, KEY_ZOOM }		/* full screen */
-+	{ 0x801089, KEY_FULL_SCREEN }	/* full screen */
- };
- 
- static struct rc_map_list imon_rsc_map = {
--- 
-2.21.0
+Could you submit this patch? Syzbot testing shows that is fixes the issue.
 
+Thanks!
