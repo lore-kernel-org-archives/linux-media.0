@@ -2,28 +2,29 @@ Return-Path: <SRS0=fuZj=WK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1AB2C433FF
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F166C433FF
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:27:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BFC942133F
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:27:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 094C52133F
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:27:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728320AbfHNU1H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Aug 2019 16:27:07 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:56447 "EHLO
+        id S1729643AbfHNU1W (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Aug 2019 16:27:22 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:35937 "EHLO
         relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726490AbfHNU1H (ORCPT
+        with ESMTP id S1729625AbfHNU1V (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Aug 2019 16:27:07 -0400
+        Wed, 14 Aug 2019 16:27:21 -0400
 X-Originating-IP: 87.5.130.64
 Received: from uno.homenet.telecomitalia.it (host64-130-dynamic.5-87-r.retail.telecomitalia.it [87.5.130.64])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 51F40FF808;
-        Wed, 14 Aug 2019 20:27:03 +0000 (UTC)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id D59F3FF807;
+        Wed, 14 Aug 2019 20:27:18 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -32,10 +33,12 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
         (V4L/DVB)), linux-kernel@vger.kernel.org (open list)
-Subject: [RFC 0/5] media: v4l2-ctrls: Add camera 'location' support
-Date:   Wed, 14 Aug 2019 22:28:10 +0200
-Message-Id: <20190814202815.32491-1-jacopo@jmondi.org>
+Subject: [RFC 5/5] media: i2c: ov13858: Report the camera location
+Date:   Wed, 14 Aug 2019 22:28:15 +0200
+Message-Id: <20190814202815.32491-6-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190814202815.32491-1-jacopo@jmondi.org>
+References: <20190814202815.32491-1-jacopo@jmondi.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -43,59 +46,44 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
-  as anticipared on #v4l, this is a proposal to add a way for camera devices
-to report their mounting location to user-space. The information on the camera
-location is particularly meaningful for mobile devices, and in the process of
-integrating libcamera with the Android camera stack, we found the need to report
-this information to applications and there's currently no way to retrieve it
-from the V4L2 API
+The camera location is retrieved from the firmware interface parsing
+the "location" device property and reported through the read-only
+V4L2_CID_LOCATION control.
 
-The idea is to provide a camera class read-only control, named 'Location',
-that is used to report the camera mounting position, which is retrieved from
-the firmware interface. Hans mentioned v4l2-properties as a better mechanism to
-report such static informations, but since they're not here I think a control
-would do for now...
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ drivers/media/i2c/ov13858.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-The RFC adds a DT standard property to video-interfaces.txt to express the
-location in DTS (I actually tested it on ACPI, but..), and then adds a new
-control in the camera class to expose it. Finally, two example sensor drivers I
-used for testing have been modified to expose the read-only control.
-
-Why an RFC: mostly because of the nature and definition of the property. It's
-tricky to define the "location" semantic clearly as it really depends
-on the device the camera it is installed on. To begin with, I only defined
-FRONT and BACK locations, and documented them the best I could.
-
-Also the control itself it's probably more appropriate expressed as an integer
-menu control. However, given the few supported values, and the fact they are
-standard, I went for a standard integer control and defined a few macros for the
-possible values as setting up a menu control requires a bit more effort in
-drivers which I'm not sure it is worth it.
-
-I tried out a few different names for the property as well, such as
-"orientation", "position", "mounting-position" but none of them really satisfied
-me, so I picked the most simple one. Feedbacks are welcome here too.
-
-Thanks
-  j
-
-
-Jacopo Mondi (5):
-  media: dt-bindings: Document 'location' property
-  media: v4l2-ctrl: Document V4L2_CID_LOCATION
-  media: v4l2-ctrls: Add support for V4L2_CID_LOCATION
-  media: i2c: ov5670: Report the camera location
-  media: i2c: ov13858: Report the camera location
-
- .../bindings/media/video-interfaces.txt       |  4 ++++
- .../media/uapi/v4l/ext-ctrls-camera.rst       | 23 +++++++++++++++++++
- drivers/media/i2c/ov13858.c                   | 11 +++++++++
- drivers/media/i2c/ov5670.c                    | 11 +++++++++
- drivers/media/v4l2-core/v4l2-ctrls.c          |  7 ++++++
- include/uapi/linux/v4l2-controls.h            |  4 ++++
- 6 files changed, 60 insertions(+)
-
---
+diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
+index 45bb872db3c5..6baefc3083e1 100644
+--- a/drivers/media/i2c/ov13858.c
++++ b/drivers/media/i2c/ov13858.c
+@@ -1591,6 +1591,7 @@ static int ov13858_init_controls(struct ov13858 *ov13858)
+ 	struct i2c_client *client = v4l2_get_subdevdata(&ov13858->sd);
+ 	struct v4l2_ctrl_handler *ctrl_hdlr;
+ 	s64 exposure_max;
++	u32 location;
+ 	s64 vblank_def;
+ 	s64 vblank_min;
+ 	s64 hblank;
+@@ -1659,6 +1660,16 @@ static int ov13858_init_controls(struct ov13858 *ov13858)
+ 				     V4L2_CID_TEST_PATTERN,
+ 				     ARRAY_SIZE(ov13858_test_pattern_menu) - 1,
+ 				     0, 0, ov13858_test_pattern_menu);
++
++	ret = device_property_read_u32(&client->dev, "location", &location);
++	if (!ret) {
++		v4l2_ctrl_new_std(ctrl_hdlr, &ov13858_ctrl_ops,
++				  V4L2_CID_LOCATION, V4L2_LOCATION_FRONT,
++				  V4L2_LOCATION_BACK, 1,
++				  location == V4L2_LOCATION_FRONT ?
++				  V4L2_LOCATION_FRONT : V4L2_LOCATION_BACK);
++	}
++
+ 	if (ctrl_hdlr->error) {
+ 		ret = ctrl_hdlr->error;
+ 		dev_err(&client->dev, "%s control init failed (%d)\n",
+-- 
 2.22.0
 
