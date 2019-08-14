@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFEBAC433FF
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:04:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2FA9C433FF
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:04:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AD3302084D
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:04:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 900A92084D
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:04:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729342AbfHNUE1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Aug 2019 16:04:27 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57592 "EHLO
+        id S1729411AbfHNUEe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Aug 2019 16:04:34 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57616 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728128AbfHNUE0 (ORCPT
+        with ESMTP id S1729366AbfHNUEe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Aug 2019 16:04:26 -0400
+        Wed, 14 Aug 2019 16:04:34 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id E82D328CB72
+        with ESMTPSA id E620F28CB9F
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@collabora.com,
@@ -35,11 +35,10 @@ Cc:     kernel@collabora.com,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Alexandre Courbot <acourbot@chromium.org>,
-        fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v6 06/11] media: cedrus: Cleanup control initialization
-Date:   Wed, 14 Aug 2019 16:59:26 -0300
-Message-Id: <20190814195931.6587-7-ezequiel@collabora.com>
+        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 08/11] media: hantro: Move copy_metadata() before doing a decode operation
+Date:   Wed, 14 Aug 2019 16:59:28 -0300
+Message-Id: <20190814195931.6587-9-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190814195931.6587-1-ezequiel@collabora.com>
 References: <20190814195931.6587-1-ezequiel@collabora.com>
@@ -50,133 +49,64 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In order to introduce other controls, the control initialization
-needs to support an initial struct v4l2_ctrl_control.
+From: Boris Brezillon <boris.brezillon@collabora.com>
 
-While here, let's cleanup the control initialization,
-removing unneeded fields.
+Some decoders use intra slice/frame references. The capture buffer
+pointed by these references might be new and thus have invalid
+timestamp which prevents the decoder logic from retrieving the
+vb2_buffer object based on the output buf timestamp.
+Copy all metadata (including the timestamp) before starting the decode
+operation.
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Suggested-by: Jonas Karlman <jonas@kwiboo.se>
+Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+Tested-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
 Changes in v6:
 * None.
 Changes in v5:
 * None.
 Changes in v4:
-* New patch.
+* None.
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c | 45 +++++++++++----------
- drivers/staging/media/sunxi/cedrus/cedrus.h |  3 +-
- 2 files changed, 25 insertions(+), 23 deletions(-)
+ drivers/staging/media/hantro/hantro_drv.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index 370937edfc14..7bdc413bf727 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -29,44 +29,51 @@
+diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+index 4af6ee80229e..6e2351e46750 100644
+--- a/drivers/staging/media/hantro/hantro_drv.c
++++ b/drivers/staging/media/hantro/hantro_drv.c
+@@ -111,8 +111,6 @@ static void hantro_job_finish(struct hantro_dev *vpu,
+ 	src->sequence = ctx->sequence_out++;
+ 	dst->sequence = ctx->sequence_cap++;
  
- static const struct cedrus_control cedrus_controls[] = {
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS,
--		.elem_size	= sizeof(struct v4l2_ctrl_mpeg2_slice_params),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS,
-+		},
- 		.codec		= CEDRUS_CODEC_MPEG2,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION,
--		.elem_size	= sizeof(struct v4l2_ctrl_mpeg2_quantization),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION,
-+		},
- 		.codec		= CEDRUS_CODEC_MPEG2,
- 		.required	= false,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_decode_params),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_slice_params),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_SPS,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_sps),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_SPS,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_PPS,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_pps),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_PPS,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
- 	{
--		.id		= V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
--		.elem_size	= sizeof(struct v4l2_ctrl_h264_scaling_matrix),
-+		.cfg = {
-+			.id	= V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
-+		},
- 		.codec		= CEDRUS_CODEC_H264,
- 		.required	= true,
- 	},
-@@ -106,12 +113,8 @@ static int cedrus_init_ctrls(struct cedrus_dev *dev, struct cedrus_ctx *ctx)
- 		return -ENOMEM;
- 
- 	for (i = 0; i < CEDRUS_CONTROLS_COUNT; i++) {
--		struct v4l2_ctrl_config cfg = {};
+-	v4l2_m2m_buf_copy_metadata(src, dst, true);
 -
--		cfg.elem_size = cedrus_controls[i].elem_size;
--		cfg.id = cedrus_controls[i].id;
--
--		ctrl = v4l2_ctrl_new_custom(hdl, &cfg, NULL);
-+		ctrl = v4l2_ctrl_new_custom(hdl, &cedrus_controls[i].cfg,
-+					    NULL);
- 		if (hdl->error) {
- 			v4l2_err(&dev->v4l2_dev,
- 				 "Failed to create new custom control\n");
-@@ -178,7 +181,7 @@ static int cedrus_request_validate(struct media_request *req)
- 			continue;
+ 	ret = ctx->buf_finish(ctx, &dst->vb2_buf, bytesused);
+ 	if (ret)
+ 		result = VB2_BUF_STATE_ERROR;
+@@ -178,8 +176,12 @@ void hantro_finish_run(struct hantro_ctx *ctx)
+ static void device_run(void *priv)
+ {
+ 	struct hantro_ctx *ctx = priv;
++	struct vb2_v4l2_buffer *src, *dst;
+ 	int ret;
  
- 		ctrl_test = v4l2_ctrl_request_hdl_ctrl_find(hdl,
--							    cedrus_controls[i].id);
-+							    cedrus_controls[i].cfg.id);
- 		if (!ctrl_test) {
- 			v4l2_info(&ctx->dev->v4l2_dev,
- 				  "Missing required codec control\n");
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
-index 3f476d0fd981..283827656872 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-@@ -49,8 +49,7 @@ enum cedrus_h264_pic_type {
- };
++	src = hantro_get_src_buf(ctx);
++	dst = hantro_get_dst_buf(ctx);
++
+ 	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
+ 	if (ret)
+ 		goto err_cancel_job;
+@@ -187,6 +189,8 @@ static void device_run(void *priv)
+ 	if (ret < 0)
+ 		goto err_cancel_job;
  
- struct cedrus_control {
--	u32			id;
--	u32			elem_size;
-+	struct v4l2_ctrl_config cfg;
- 	enum cedrus_codec	codec;
- 	unsigned char		required:1;
- };
++	v4l2_m2m_buf_copy_metadata(src, dst, true);
++
+ 	ctx->codec_ops->run(ctx);
+ 	return;
+ 
 -- 
 2.22.0
 
