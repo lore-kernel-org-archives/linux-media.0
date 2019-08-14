@@ -2,143 +2,61 @@ Return-Path: <SRS0=fuZj=WK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88ED4C433FF
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 13:49:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD8D5C32753
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 14:07:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 606572083B
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 13:49:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="tObPM2iI"
+	by mail.kernel.org (Postfix) with ESMTP id BBD6D2084F
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 14:07:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727671AbfHNNtM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Aug 2019 09:49:12 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:27946 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726525AbfHNNtM (ORCPT
+        id S1728035AbfHNOHL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Aug 2019 10:07:11 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:38447 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727110AbfHNOHL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Aug 2019 09:49:12 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7EDkpET005599;
-        Wed, 14 Aug 2019 15:48:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=02fgRcS3o94dkivorsS1cbke+inlHjELAELbDohhyj8=;
- b=tObPM2iI7760MF5HfbWryB8sIj0wOoiBwiT9labl+sxd3wkT99PKLhApFxGYrohWHeE3
- Hgkn+NSAHxucxOmIajmY8660hm+TR+dr41ZCvEZ0Gw3U2jiLxQFXiEuymLBsiVdHvGgs
- Y8XCudgUQnHwOvHRIrAanuCDCBe3wMPoVnUxVsxpJNDv9ksKc/BfLl5sPvb1OC+pr05d
- koNw0VT9QhCLYGgqSs0P3On/inBOX7/djb/X48FjLdRfCQM8Uhx9oGoMPcn1pGT6++oz
- LRIEGQPdAX/sd9AyKYQqaI8YA1DuFXbjTo9DuZnHXdtHWexZqv2IBsc2k5odIVY7ZL+/ vg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2u9k2a64rj-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Wed, 14 Aug 2019 15:48:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4E79831;
-        Wed, 14 Aug 2019 13:48:57 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3E06F2FFE88;
-        Wed, 14 Aug 2019 15:48:57 +0200 (CEST)
-Received: from SAFEX1HUBCAS24.st.com (10.75.90.95) by SAFEX1HUBCAS21.st.com
- (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Wed, 14 Aug
- 2019 15:48:57 +0200
-Received: from localhost (10.201.23.19) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Wed, 14 Aug 2019 15:48:56
- +0200
-From:   Hugues Fruchet <hugues.fruchet@st.com>
-To:     Alexandre Torgue <alexandre.torgue@st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
-        Yannick Fertre <yannick.fertre@st.com>,
-        Philippe CORNU <philippe.cornu@st.com>,
-        "Hugues Fruchet" <hugues.fruchet@st.com>,
-        Mickael GUENE <mickael.guene@st.com>
-Subject: [PATCH v6 0/4] DCMI bridge support
-Date:   Wed, 14 Aug 2019 15:48:49 +0200
-Message-ID: <1565790533-10043-1-git-send-email-hugues.fruchet@st.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 14 Aug 2019 10:07:11 -0400
+Received: from [IPv6:2001:420:44c1:2579:6c2e:a3d:2bd:ee96] ([IPv6:2001:420:44c1:2579:6c2e:a3d:2bd:ee96])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id xtvehhgOrur8TxtvhhoWhi; Wed, 14 Aug 2019 16:07:09 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCH] vidioc-queryctrl.rst: fix broken c:type references
+Message-ID: <1e475aa3-cd9d-579d-14c8-28e7ee816175@xs4all.nl>
+Date:   Wed, 14 Aug 2019 16:07:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.19]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-14_05:,,
- signatures=0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfGPxev/JN+7oeMov94rrvqSuUdE3gDqTiFGsgK8eVNnUtOhVM8DGy+yK3N4kZKcwAGEYAnbu50UMyyqy0jCVk/nPmaYxSIuPBih5hTc+syqfqfKSje7B
+ RoJDNxaCiQjMoQ6AlNQtdMMYbFaxc302BK5OYy/7MqZk0MICMg77vB8r65kcYi8Km9EoGu9LWbhJHkyY6RWAt6EpBjvKbXfsAZ6fk66MOwOj9SVsyUZUy52g
+ Aq80U0z1opnNAtsI6lrkDJfA8aL2aD3mMS0ieO1cSUa74WJQrKgoQDPBCi5JFUwQ
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch serie allows to connect non-parallel camera sensor to
-DCMI thanks to a bridge connected in between such as STMIPID02 [1].
+One typo in the function name, one missing : after :c:type.
 
-Media controller support is introduced first, then support of
-several sub-devices within pipeline with dynamic linking
-between them.
-In order to keep backward compatibility with applications
-relying on V4L2 interface only, format set on video node
-is propagated to all sub-devices connected to camera interface.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+diff --git a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
+index dc500632095d..a3d56ffbf4cc 100644
+--- a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
++++ b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
+@@ -39,8 +39,8 @@ Arguments
+     File descriptor returned by :ref:`open() <func-open>`.
 
-[1] https://www.spinics.net/lists/devicetree/msg278002.html
-
-===========
-= history =
-===========
-version 6:
-  - As per Sakari remark: add a FIXME explaining that this
-    version only supports subdevices which expose RGB & YUV
-    "parallel form" mbus code (_2X8)
-  - Add some trace around subdev_call(s_fmt) error & format
-    changes to debug subdev which only expose serial mbus code
-  - Conform to "<name>":<pad index> when tracing subdev infos
-
-version 5:
-  - Remove remaining Change-Id
-  - Add Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-version 4:
-  - Also drop subdev nodes registry as suggested by Hans:
-    https://www.spinics.net/lists/arm-kernel/msg743375.html
-
-version 3:
-  - Drop media device registry to not expose media controller
-    interface to userspace as per Laurent' suggestion:
-    https://www.spinics.net/lists/linux-media/msg153417.html
-  - Prefer "source" instead of "sensor" and keep it in 
-    dcmi_graph_entity struct, move asd as first member
-    of struct as per Sakari' suggestion:
-    https://www.spinics.net/lists/linux-media/msg153119.html
-  - Drop dcmi_graph_deinit() as per Sakari' suggestion:
-    https://www.spinics.net/lists/linux-media/msg153417.html
-
-version 2:
-  - Fix bus_info not consistent between media and V4L:
-    https://www.spinics.net/lists/arm-kernel/msg717676.html
-  - Propagation of format set on video node to the sub-devices
-    chain connected on camera interface
-
-version 1:
-  - Initial submission
+ ``argp``
+-    Pointer to struct :c:type:`v4l2_queryctl`, :c:type:`v4l2_query_ext_ctrl`
+-    or :c:type`v4l2_querymenu` (depending on the ioctl).
++    Pointer to struct :c:type:`v4l2_queryctrl`, :c:type:`v4l2_query_ext_ctrl`
++    or :c:type:`v4l2_querymenu` (depending on the ioctl).
 
 
-Hugues Fruchet (4):
-  media: stm32-dcmi: improve sensor subdev naming
-  media: stm32-dcmi: trace the supported fourcc/mbus_code
-  media: stm32-dcmi: add media controller support
-  media: stm32-dcmi: add support of several sub-devices
-
- drivers/media/platform/Kconfig            |   2 +-
- drivers/media/platform/stm32/stm32-dcmi.c | 317 +++++++++++++++++++++++++-----
- 2 files changed, 267 insertions(+), 52 deletions(-)
-
--- 
-2.7.4
-
+ Description
