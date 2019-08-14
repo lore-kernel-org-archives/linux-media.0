@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2FA9C433FF
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:04:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75028C32753
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:04:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 900A92084D
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:04:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5102F2084D
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 20:04:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729411AbfHNUEe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Aug 2019 16:04:34 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:57616 "EHLO
+        id S1729375AbfHNUEb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Aug 2019 16:04:31 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:57602 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729366AbfHNUEe (ORCPT
+        with ESMTP id S1729366AbfHNUEa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Aug 2019 16:04:34 -0400
+        Wed, 14 Aug 2019 16:04:30 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: ezequiel)
-        with ESMTPSA id E620F28CB9F
+        with ESMTPSA id 7165C28CB6B
 From:   Ezequiel Garcia <ezequiel@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     kernel@collabora.com,
@@ -35,10 +35,11 @@ Cc:     kernel@collabora.com,
         Boris Brezillon <boris.brezillon@collabora.com>,
         Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Alexandre Courbot <acourbot@chromium.org>,
-        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 08/11] media: hantro: Move copy_metadata() before doing a decode operation
-Date:   Wed, 14 Aug 2019 16:59:28 -0300
-Message-Id: <20190814195931.6587-9-ezequiel@collabora.com>
+        fbuergisser@chromium.org, linux-kernel@vger.kernel.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v6 07/11] media: cedrus: Specify H264 startcode and decoding mode
+Date:   Wed, 14 Aug 2019 16:59:27 -0300
+Message-Id: <20190814195931.6587-8-ezequiel@collabora.com>
 X-Mailer: git-send-email 2.22.0
 In-Reply-To: <20190814195931.6587-1-ezequiel@collabora.com>
 References: <20190814195931.6587-1-ezequiel@collabora.com>
@@ -49,64 +50,58 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Boris Brezillon <boris.brezillon@collabora.com>
+The cedrus VPU is slice-based and expects V4L2_PIX_FMT_H264_SLICE
+buffers to contain H264 slices with no start code.
 
-Some decoders use intra slice/frame references. The capture buffer
-pointed by these references might be new and thus have invalid
-timestamp which prevents the decoder logic from retrieving the
-vb2_buffer object based on the output buf timestamp.
-Copy all metadata (including the timestamp) before starting the decode
-operation.
+Expose this to userspace with the newly added menu control.
 
-Suggested-by: Jonas Karlman <jonas@kwiboo.se>
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
-Tested-by: Philipp Zabel <p.zabel@pengutronix.de>
+These two controls are specified as mandatory for applications,
+but we mark them as non-required on the driver side for
+backwards compatibility.
+
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 ---
 Changes in v6:
-* None.
+* Adjust to control renames.
 Changes in v5:
-* None.
+* Clarify commit log.
 Changes in v4:
-* None.
+* New patch.
 ---
- drivers/staging/media/hantro/hantro_drv.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-index 4af6ee80229e..6e2351e46750 100644
---- a/drivers/staging/media/hantro/hantro_drv.c
-+++ b/drivers/staging/media/hantro/hantro_drv.c
-@@ -111,8 +111,6 @@ static void hantro_job_finish(struct hantro_dev *vpu,
- 	src->sequence = ctx->sequence_out++;
- 	dst->sequence = ctx->sequence_cap++;
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index 7bdc413bf727..69a836aa11ef 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -77,6 +77,26 @@ static const struct cedrus_control cedrus_controls[] = {
+ 		.codec		= CEDRUS_CODEC_H264,
+ 		.required	= true,
+ 	},
++	{
++		.cfg = {
++			.id	= V4L2_CID_MPEG_VIDEO_H264_DECODE_MODE,
++			.max	= V4L2_MPEG_VIDEO_H264_DECODE_MODE_SLICE_BASED,
++			.def	= V4L2_MPEG_VIDEO_H264_DECODE_MODE_SLICE_BASED,
++			.menu_skip_mask = BIT(V4L2_MPEG_VIDEO_H264_DECODE_MODE_FRAME_BASED),
++		},
++		.codec		= CEDRUS_CODEC_H264,
++		.required	= false,
++	},
++	{
++		.cfg = {
++			.id	= V4L2_CID_MPEG_VIDEO_H264_START_CODE,
++			.max	= V4L2_MPEG_VIDEO_H264_START_CODE_NONE,
++			.def	= V4L2_MPEG_VIDEO_H264_START_CODE_NONE,
++			.menu_skip_mask = BIT(V4L2_MPEG_VIDEO_H264_START_CODE_ANNEX_B),
++		},
++		.codec		= CEDRUS_CODEC_H264,
++		.required	= false,
++	},
+ };
  
--	v4l2_m2m_buf_copy_metadata(src, dst, true);
--
- 	ret = ctx->buf_finish(ctx, &dst->vb2_buf, bytesused);
- 	if (ret)
- 		result = VB2_BUF_STATE_ERROR;
-@@ -178,8 +176,12 @@ void hantro_finish_run(struct hantro_ctx *ctx)
- static void device_run(void *priv)
- {
- 	struct hantro_ctx *ctx = priv;
-+	struct vb2_v4l2_buffer *src, *dst;
- 	int ret;
- 
-+	src = hantro_get_src_buf(ctx);
-+	dst = hantro_get_dst_buf(ctx);
-+
- 	ret = clk_bulk_enable(ctx->dev->variant->num_clocks, ctx->dev->clocks);
- 	if (ret)
- 		goto err_cancel_job;
-@@ -187,6 +189,8 @@ static void device_run(void *priv)
- 	if (ret < 0)
- 		goto err_cancel_job;
- 
-+	v4l2_m2m_buf_copy_metadata(src, dst, true);
-+
- 	ctx->codec_ops->run(ctx);
- 	return;
- 
+ #define CEDRUS_CONTROLS_COUNT	ARRAY_SIZE(cedrus_controls)
 -- 
 2.22.0
 
