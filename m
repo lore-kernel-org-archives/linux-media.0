@@ -2,57 +2,126 @@ Return-Path: <SRS0=fuZj=WK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96DACC433FF
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 07:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E86EC0650F
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 08:11:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 70DE420843
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 07:47:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F4095205C9
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 08:11:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbfHNHrv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Aug 2019 03:47:51 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:45021 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725280AbfHNHru (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Aug 2019 03:47:50 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtp (Exim 4.84_2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1hxo0U-0008Im-G3; Wed, 14 Aug 2019 07:47:42 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1hxo0V-000174-1E; Wed, 14 Aug 2019 07:47:43 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     Sean Young <sean@mess.org>, mchehab+samsung@kernel.org,
+        id S1726465AbfHNILl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Aug 2019 04:11:41 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:32803 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725306AbfHNILl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 14 Aug 2019 04:11:41 -0400
+Received: from [IPv6:2001:420:44c1:2579:6c2e:a3d:2bd:ee96] ([IPv6:2001:420:44c1:2579:6c2e:a3d:2bd:ee96])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id xoN6hRmGlqTdhxoNAhCccS; Wed, 14 Aug 2019 10:11:37 +0200
+Subject: Re: [PATCH v5 04/11] media: uapi: h264: Add the concept of start code
+To:     Ezequiel Garcia <ezequiel@collabora.com>,
         linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL FOR v5.4] RC & DVB
-Date:   Wed, 14 Aug 2019 07:47:42 +0000
-Message-Id: <20190814074742.4235-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190814073135.avafdlmfjml3cqqs@gofer.mess.org>
-References: 
+Cc:     kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
+References: <20190812193522.10911-1-ezequiel@collabora.com>
+ <20190812193522.10911-5-ezequiel@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <f88d144f-e0fe-6974-efe5-77b5ed5c6e09@xs4all.nl>
+Date:   Wed, 14 Aug 2019 10:11:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190812193522.10911-5-ezequiel@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfG8Jzg4iwcPYhjaE3e0D1MzS/fTJ/eDl4AEQI2qX+XOCPw8tnWB5Y+HXAymMpC8EyabKscl/GIMDy/RJARU23MJZNq76ZSSM/xEECsPalo31ZWSBNCQe
+ OiVJ1xF4NFcmHOVZa9JLq/xylYBGiJZLhwKx6OEJ29QQLrY5H3YWgXdHMLYd+L+bjMVzzdMXXmUevf0w2cwmjB+eAmLcrkxPsXJ4Zh2V0WYULRIMVzE1a0Ze
+ ta8b89PWo00P5NlPW/aeg2BDTGaJzXFuUnjWrhu37Pf+NtrYt917QYI1HD2LIpUwOhVzCX2FTyYBakPMz/jcIJbJ+4c4RVQQdmuO3923M7tS1kWNzTu2leBn
+ HoC6MDyCFUrT9aLlVhta7saGxI5nJnqYGKNJkDmavufWEhoRp4eUV9lwf682O5YerUzuScE++kne0/gOuD7fLY4CH6ZrAsZwPS317wIUhJ/HIUAx8MZjCfIo
+ SeucqXmdwOPDQ6eNUBpXsyvfKrwQRk4zXrCRlmTXRA58Xb94D+bbRvixzBtwlSrbeSbp8jlluguU6CIfKnq+TXRarsR+mKMvzP+tueYbunp00BqTpR1Gua7w
+ 479IGDcBjLac8AOsAMZVJ0zODF6y4kODYqZxBS/pFCcPiUJIBoYpiM5PSzIGlz6LXkoedT5fx4Pc9u15HRjD7j0EP0wu0bBXm5rqUfiNpwreDvPdIFEHjhhJ
+ CixfdwKkLAt+KwA5kr3da35dbZPC/sATPI2z5zMIrsnmDN34sRdJoA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+On 8/12/19 9:35 PM, Ezequiel Garcia wrote:
+> Stateless decoders have different expectations about the
+> start code that is prepended on H264 slices. Add a
+> menu control to express the supported start code types
+> (including no start code).
+> 
+> Drivers are allowed to support only one start code type,
+> but they can support both too.
+> 
+> Note that this is independent of the H264 decoding mode,
+> which specifies the granularity of the decoding operations.
+> Either in frame-based or slice-based mode, this new control
+> will allow to define the start code expected on H264 slices.
+> 
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Tested-by: Philipp Zabel <p.zabel@pengutronix.de>
+> ---
+> Changes in v5:
+> * Improve specification as suggested by Hans.
+> Changes in v4:
+> * New patch.
+> ---
+>  .../media/uapi/v4l/ext-ctrls-codec.rst        | 33 +++++++++++++++++++
+>  .../media/uapi/v4l/pixfmt-compressed.rst      |  3 +-
+>  drivers/media/v4l2-core/v4l2-ctrls.c          |  9 +++++
+>  include/media/h264-ctrls.h                    |  6 ++++
+>  4 files changed, 50 insertions(+), 1 deletion(-)
+> 
 
-Pull request: https://patchwork.linuxtv.org/patch/58121/
-Build log: https://builder.linuxtv.org/job/patchwork/8398/
-Build time: 00:14:29
-Link: https://lore.kernel.org/linux-media/20190814073135.avafdlmfjml3cqqs@gofer.mess.orgSummary: 1 issues, being 0 at build time
+<snip>
 
-Error/warnings:
+> diff --git a/include/media/h264-ctrls.h b/include/media/h264-ctrls.h
+> index e6c510877f67..31555c99f64a 100644
+> --- a/include/media/h264-ctrls.h
+> +++ b/include/media/h264-ctrls.h
+> @@ -27,6 +27,7 @@
+>  #define V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS	(V4L2_CID_MPEG_BASE+1003)
+>  #define V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS	(V4L2_CID_MPEG_BASE+1004)
+>  #define V4L2_CID_MPEG_VIDEO_H264_DECODING_MODE	(V4L2_CID_MPEG_BASE+1005)
+> +#define V4L2_CID_MPEG_VIDEO_H264_STARTCODE	(V4L2_CID_MPEG_BASE+1006)
 
-patches/0013-media-tm6000-double-free-if-usb-disconnect-while-str.patch:30: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+I almost forgot: can you change this to _START_CODE? Since it is two words?
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0013-media-tm6000-double-free-if-usb-disconnect-while-str.patch
+Thanks!
+
+	Hans
+
+>  
+>  /* enum v4l2_ctrl_type type values */
+>  #define V4L2_CTRL_TYPE_H264_SPS			0x0110
+> @@ -41,6 +42,11 @@ enum v4l2_mpeg_video_h264_decoding_mode {
+>  	V4L2_MPEG_VIDEO_H264_FRAME_BASED_DECODING,
+>  };
+>  
+> +enum v4l2_mpeg_video_h264_start_code {
+> +	V4L2_MPEG_VIDEO_H264_NO_STARTCODE,
+> +	V4L2_MPEG_VIDEO_H264_ANNEX_B_STARTCODE,
+> +};
+> +
+>  #define V4L2_H264_SPS_CONSTRAINT_SET0_FLAG			0x01
+>  #define V4L2_H264_SPS_CONSTRAINT_SET1_FLAG			0x02
+>  #define V4L2_H264_SPS_CONSTRAINT_SET2_FLAG			0x04
+> 
 
