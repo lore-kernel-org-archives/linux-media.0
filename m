@@ -4,67 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D627C32757
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 10:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D33ACC32753
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 10:46:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 554EB214C6
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 10:46:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7E13214C6
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 10:46:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O7+xZW9b"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qHDnRpQM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727856AbfHNKqD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Aug 2019 06:46:03 -0400
-Received: from mail-qk1-f202.google.com ([209.85.222.202]:54332 "EHLO
-        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbfHNKqD (ORCPT
+        id S1727910AbfHNKqN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Aug 2019 06:46:13 -0400
+Received: from mail-vk1-f202.google.com ([209.85.221.202]:43908 "EHLO
+        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727558AbfHNKqL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Aug 2019 06:46:03 -0400
-Received: by mail-qk1-f202.google.com with SMTP id x28so22519192qki.21
-        for <linux-media@vger.kernel.org>; Wed, 14 Aug 2019 03:46:02 -0700 (PDT)
+        Wed, 14 Aug 2019 06:46:11 -0400
+Received: by mail-vk1-f202.google.com with SMTP id s17so218238vkm.10
+        for <linux-media@vger.kernel.org>; Wed, 14 Aug 2019 03:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=oqxTqOJ6wCf7PGIZgAVYYI7HoO4jjy5hivlKoMqmAi8=;
-        b=O7+xZW9bVaxSWLElxmDAgFZSh2+lPWcqmgSViEd8bkRDj0bp4mgJ3aKj3/JJReW7M6
-         8W8L4XAfcY2PE/zXAxS2HQ6+seXxNiEQ0uDRM6mocKWiWwTtUN74Dpf+YJXhJ0Xz0xW8
-         UpsEzUith0hcInJf/ShGRE4oqG8QWIdbiNAUjVFAk3TyU9U6m62E3fwx83wmmjGudsno
-         0DmGq9PspzDOZFKaK+30voK1ou3xLzWx4HKHvwIngGUSEmmkZ67xQNLD/ex+PxU25Lr9
-         w30JZzYLpxT5+gh/lXRWhqew3KtFUSydGxrEtLswNpHpEQv8o5DRYcyEEXqaHHr4lSOf
-         c6hw==
+        bh=saq5XDceOIgoGr9TXKhDgKirX3SqKoE0qoHBi968/xk=;
+        b=qHDnRpQM4FQsTdQ5gtW17elm8fjJAy+ftuSFwl3seP2A/RZCy3vUgZqi1oZvyDumPB
+         0Ywwj7FkrvBNiaRh79/tLI+OvZ1GEIZxWGGGS11bToRsPclnktx5ydUOPcoV/ceGedU5
+         j1ZohdoTULS7l4DG4E0oJIA8PGiv25MlfXgEXGINrCSWlIDU/utNRX87TiyQNzVxcfB0
+         QITWLROiiBxsMYizA0WIK++f+g8MnJYRvv3JfrZGDFxRKujJdFUCdsBLjO+lvxPnlrbw
+         oO2mtZwBbqa7HcAUnZBC8eE/ortohmS+Ysn//uZpJx0oFLxoJTSC4l28xIFknZMupCVu
+         2tBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=oqxTqOJ6wCf7PGIZgAVYYI7HoO4jjy5hivlKoMqmAi8=;
-        b=mqSg0PbK0U72Nv+VAwTblUJ5pkHbTcTViu6zvXIh7UnOy0S/mi98M9fnmxWuq2+YX2
-         vAfRxYWIXa5JNk7E+RvOwDqR/xNjYLrI/wH00svSDRDrQdMmnQS4yStoNYULEAYvX1mi
-         czyUP9UBkKotHJd8S8vvuyfLhUeBRZ2Lkq5UDeVCTGDZXP6ioL6SPTtCgsIX7qIzsLrX
-         YK/IYFRftW5PJR5k08np+vWwxR7v2xzbuQ5/jF0/HaT5voJ7NX5fpQZ2grhM8afI0JoD
-         O9ecIgx5qCiDhJrHLPgiARZk/Y67RqchjseaKmQPw5BOQ+X4vWFaThVsdk5HHco2zCgM
-         W4bg==
-X-Gm-Message-State: APjAAAWlvGnWVgh6OClECW7sMT2D/rXCrCuDsdJOl0VIdukKBOaetwLy
-        LpGwGUwi6xfgRZm5qnzvj19AooFV4lU=
-X-Google-Smtp-Source: APXvYqxndkg4Q+ED4/lezsuSHat0LDTAfINlPw7TAr+Ihx0C8cuCGXv8RYvMevn8UpDiFGyUQnXhsJKUyCk=
-X-Received: by 2002:ae9:efc6:: with SMTP id d189mr36226585qkg.323.1565779561325;
- Wed, 14 Aug 2019 03:46:01 -0700 (PDT)
-Date:   Wed, 14 Aug 2019 12:45:03 +0200
+        bh=saq5XDceOIgoGr9TXKhDgKirX3SqKoE0qoHBi968/xk=;
+        b=WRGH9ekUE7ntqB164d9ZMo9m13VuBEUOwXH0kSShGiyn/Hq58gUjhXWscs5h3uDyM0
+         QPdcEfhT+hL0ODALaZutYXjmaOKouwwuTV2Vfc0lcG+EUuFRc0/u38e++HJ9j/Uid2tj
+         sS2XcPCryjZjTRUsfHr0lN7kgr9T74OpqRVvHex2/QSm2EiDtdEwaVJf53eO9JZ7DDXH
+         O8Bq+AW9TyTnrIh21UUN7VPiEJE4tqKY0Bq2n+YbJuDBAvTeiZ+nnNo0abwBfLb3kuCY
+         MRfnssC5+7iY+I2dsEKKNYy1jZlSii+iRki0In3rv0E6iglJCV8PlUMDwbvoVf3LcPHg
+         Vfag==
+X-Gm-Message-State: APjAAAUtRCfaCImLXyJ65oyDTKfIUrqNWO3rkUxJMXYQ6H6yyR/7utkx
+        CvR50cfam6CMZ9L5t8c+QTqExptai+Q=
+X-Google-Smtp-Source: APXvYqyoT5pUd+WeFrXBYZxNE0G3jZZLgp89mH7NfYSTWCCaTY8Y54tIFMMw/d4PPiauoCVTHqxHY+kI17c=
+X-Received: by 2002:ac5:cdad:: with SMTP id l13mr9148123vka.30.1565779570656;
+ Wed, 14 Aug 2019 03:46:10 -0700 (PDT)
+Date:   Wed, 14 Aug 2019 12:45:05 +0200
 In-Reply-To: <20190814104520.6001-1-darekm@google.com>
-Message-Id: <20190814104520.6001-6-darekm@google.com>
+Message-Id: <20190814104520.6001-8-darekm@google.com>
 Mime-Version: 1.0
 References: <20190814104520.6001-1-darekm@google.com>
 X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
-Subject: [PATCH v7 5/9] drm: tda998x: use cec_notifier_conn_(un)register
+Subject: [PATCH v7 7/9] drm: tegra: use cec_notifier_conn_(un)register
 From:   Dariusz Marcinkiewicz <darekm@google.com>
 To:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         hverkuil-cisco@xs4all.nl
 Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
-        Russell King <linux@armlinux.org.uk>,
+        Thierry Reding <thierry.reding@gmail.com>,
         David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -72,122 +75,83 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Use the new cec_notifier_conn_(un)register() functions to
-(un)register the notifier for the HDMI connector, and fill
-in the cec_connector_info.
+(un)register the notifier for the HDMI connector, and fill in
+the cec_connector_info.
 
-Changes since v6:
-        - move cec_notifier_conn_unregister to tda998x_bridge_detach,
-	- add a mutex protecting accesses to a CEC notifier.
-Changes since v2:
-	- cec_notifier_phys_addr_invalidate where appropriate,
-	- don't check for NULL notifier before calling
-	cec_notifier_conn_unregister.
-Changes since v1:
-	Add memory barrier to make sure that the notifier
-	becomes visible to the irq thread once it is
-	fully constructed.
+Changes since v4:
+	- only create a CEC notifier for HDMI connectors
 
 Signed-off-by: Dariusz Marcinkiewicz <darekm@google.com>
+Tested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/gpu/drm/i2c/tda998x_drv.c | 36 +++++++++++++++++++++----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+ drivers/gpu/drm/tegra/output.c | 28 +++++++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/i2c/tda998x_drv.c b/drivers/gpu/drm/i2c/tda998x_drv.c
-index 61e042918a7fc..643480415473f 100644
---- a/drivers/gpu/drm/i2c/tda998x_drv.c
-+++ b/drivers/gpu/drm/i2c/tda998x_drv.c
-@@ -82,6 +82,8 @@ struct tda998x_priv {
- 	u8 audio_port_enable[AUDIO_ROUTE_NUM];
- 	struct tda9950_glue cec_glue;
- 	struct gpio_desc *calib;
-+
-+	struct mutex cec_notifiy_mutex;
- 	struct cec_notifier *cec_notify;
- };
+diff --git a/drivers/gpu/drm/tegra/output.c b/drivers/gpu/drm/tegra/output.c
+index bdcaa4c7168cf..34373734ff689 100644
+--- a/drivers/gpu/drm/tegra/output.c
++++ b/drivers/gpu/drm/tegra/output.c
+@@ -70,6 +70,11 @@ tegra_output_connector_detect(struct drm_connector *connector, bool force)
  
-@@ -805,8 +807,11 @@ static irqreturn_t tda998x_irq_thread(int irq, void *data)
- 				tda998x_edid_delay_start(priv);
- 			} else {
- 				schedule_work(&priv->detect_work);
--				cec_notifier_set_phys_addr(priv->cec_notify,
--						   CEC_PHYS_ADDR_INVALID);
-+
-+				mutex_lock(&priv->cec_notifiy_mutex);
-+				cec_notifier_phys_addr_invalidate(
-+						priv->cec_notify);
-+				mutex_unlock(&priv->cec_notifiy_mutex);
- 			}
- 
- 			handled = true;
-@@ -1331,6 +1336,8 @@ static int tda998x_connector_init(struct tda998x_priv *priv,
- 				  struct drm_device *drm)
+ void tegra_output_connector_destroy(struct drm_connector *connector)
  {
- 	struct drm_connector *connector = &priv->connector;
-+	struct cec_connector_info conn_info;
-+	struct cec_notifier *notifier;
- 	int ret;
- 
- 	connector->interlace_allowed = 1;
-@@ -1347,6 +1354,16 @@ static int tda998x_connector_init(struct tda998x_priv *priv,
- 	if (ret)
- 		return ret;
- 
-+	cec_fill_conn_info_from_drm(&conn_info, connector);
++	struct tegra_output *output = connector_to_output(connector);
 +
-+	notifier = cec_notifier_conn_register(priv->cec_glue.parent,
-+					      NULL, &conn_info);
-+		return -ENOMEM;
++	if (output->cec)
++		cec_notifier_conn_unregister(output->cec);
 +
-+	mutex_lock(&priv->cec_notifiy_mutex);
-+	priv->cec_notify = notifier;
-+	mutex_unlock(&priv->cec_notifiy_mutex);
-+
- 	drm_connector_attach_encoder(&priv->connector,
- 				     priv->bridge.encoder);
- 
-@@ -1366,6 +1383,11 @@ static void tda998x_bridge_detach(struct drm_bridge *bridge)
- {
- 	struct tda998x_priv *priv = bridge_to_tda998x_priv(bridge);
- 
-+	mutex_lock(&priv->cec_notifiy_mutex);
-+	cec_notifier_conn_unregister(priv->cec_notify);
-+	priv->cec_notify = NULL;
-+	mutex_unlock(&priv->cec_notifiy_mutex);
-+
- 	drm_connector_cleanup(&priv->connector);
+ 	drm_connector_unregister(connector);
+ 	drm_connector_cleanup(connector);
  }
- 
-@@ -1789,9 +1811,6 @@ static void tda998x_destroy(struct device *dev)
- 	cancel_work_sync(&priv->detect_work);
- 
- 	i2c_unregister_device(priv->cec);
--
--	if (priv->cec_notify)
--		cec_notifier_put(priv->cec_notify);
- }
- 
- static int tda998x_create(struct device *dev)
-@@ -1812,6 +1831,7 @@ static int tda998x_create(struct device *dev)
- 	mutex_init(&priv->mutex);	/* protect the page access */
- 	mutex_init(&priv->audio_mutex); /* protect access from audio thread */
- 	mutex_init(&priv->edid_mutex);
-+	mutex_init(&priv->cec_notifiy_mutex);
- 	INIT_LIST_HEAD(&priv->bridge.list);
- 	init_waitqueue_head(&priv->edid_delay_waitq);
- 	timer_setup(&priv->edid_delay_timer, tda998x_edid_delay_done, 0);
-@@ -1916,12 +1936,6 @@ static int tda998x_create(struct device *dev)
- 		cec_write(priv, REG_CEC_RXSHPDINTENA, CEC_RXSHPDLEV_HPD);
+@@ -163,18 +168,11 @@ int tegra_output_probe(struct tegra_output *output)
+ 		disable_irq(output->hpd_irq);
  	}
  
--	priv->cec_notify = cec_notifier_get(dev);
--	if (!priv->cec_notify) {
--		ret = -ENOMEM;
--		goto fail;
--	}
+-	output->cec = cec_notifier_get(output->dev);
+-	if (!output->cec)
+-		return -ENOMEM;
 -
- 	priv->cec_glue.parent = dev;
- 	priv->cec_glue.data = priv;
- 	priv->cec_glue.init = tda998x_cec_hook_init;
+ 	return 0;
+ }
+ 
+ void tegra_output_remove(struct tegra_output *output)
+ {
+-	if (output->cec)
+-		cec_notifier_put(output->cec);
+-
+ 	if (output->hpd_gpio)
+ 		free_irq(output->hpd_irq, output);
+ 
+@@ -184,6 +182,7 @@ void tegra_output_remove(struct tegra_output *output)
+ 
+ int tegra_output_init(struct drm_device *drm, struct tegra_output *output)
+ {
++	int connector_type;
+ 	int err;
+ 
+ 	if (output->panel) {
+@@ -199,6 +198,21 @@ int tegra_output_init(struct drm_device *drm, struct tegra_output *output)
+ 	if (output->hpd_gpio)
+ 		enable_irq(output->hpd_irq);
+ 
++	connector_type = output->connector.connector_type;
++	/*
++	 * Create a CEC notifier for HDMI connector.
++	 */
++	if (connector_type == DRM_MODE_CONNECTOR_HDMIA ||
++	    connector_type == DRM_MODE_CONNECTOR_HDMIB) {
++		struct cec_connector_info conn_info;
++
++		cec_fill_conn_info_from_drm(&conn_info, &output->connector);
++		output->cec = cec_notifier_conn_register(output->dev, NULL,
++							 &conn_info);
++		if (!output->cec)
++			return -ENOMEM;
++	}
++
+ 	return 0;
+ }
+ 
 -- 
 2.23.0.rc1.153.gdeed80330f-goog
 
