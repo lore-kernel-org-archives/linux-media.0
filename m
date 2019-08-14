@@ -2,173 +2,119 @@ Return-Path: <SRS0=fuZj=WK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56CF6C433FF
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 13:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3049FC433FF
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 13:49:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 34F06206C2
-	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 13:15:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 008EA2084D
+	for <linux-media@archiver.kernel.org>; Wed, 14 Aug 2019 13:49:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="sKoioVNI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbfHNNPS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 14 Aug 2019 09:15:18 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:60541 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726263AbfHNNPS (ORCPT
+        id S1728096AbfHNNtS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 14 Aug 2019 09:49:18 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:50694 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726575AbfHNNtO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 14 Aug 2019 09:15:18 -0400
-Received: from [IPv6:2001:420:44c1:2579:6c2e:a3d:2bd:ee96] ([IPv6:2001:420:44c1:2579:6c2e:a3d:2bd:ee96])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id xt7OhhLT3ur8Txt7ShoHAF; Wed, 14 Aug 2019 15:15:15 +0200
-Subject: Re: [PATCHv2 08/12] pixfmt-compressed.rst: improve
- H264/HEVC/MPEG1+2/VP8+9 documentation
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>
-References: <20190812110513.23774-1-hverkuil-cisco@xs4all.nl>
- <20190812110513.23774-9-hverkuil-cisco@xs4all.nl>
- <20190814130958.GG11714@aptenodytes>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <be012461-2e44-948c-8334-c4f18ba8966e@xs4all.nl>
-Date:   Wed, 14 Aug 2019 15:15:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        Wed, 14 Aug 2019 09:49:14 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7EDkcHo006975;
+        Wed, 14 Aug 2019 15:49:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=STMicroelectronics;
+ bh=slMLXdPQoz50nbYXXEAIS+qRi2WwHJGTB8Kau2ylpuA=;
+ b=sKoioVNIJcFY7eIQaZMla6zyN/Zfw4zwH23x5OhAJLLmz4TkrEV/AeaUT+VVHVGKET/I
+ 1JD+/GcQULhZCrbqSpXHrSAT/FXjRYrUiiv2Xx2DMdl+z2c0wQd9kFI6lH3VYcoEFyiy
+ HCxeaWvwyfX/DYGT3IPysatJXu6Tfhuckl/tkOKSTHBKcY/w/KzmWPIN/8dHDFBxX0Qr
+ z9XG6oI05OMcxPkiFpheeCbkhtRPgej1ZoF+WZSa1c5D8IepmfAhvbBemDg3qdkLQhqH
+ YDCMJRjuxMPYvgf1HzgPJwb/kTZpIziFLEQ4DxB9crEhjym8TvwALrf3mqHE5hX6L1jN fQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2ub679ue8m-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 14 Aug 2019 15:48:59 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 69A2434;
+        Wed, 14 Aug 2019 13:48:59 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas22.st.com [10.75.90.92])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5A90F2FFE88;
+        Wed, 14 Aug 2019 15:48:59 +0200 (CEST)
+Received: from SAFEX1HUBCAS24.st.com (10.75.90.95) by Safex1hubcas22.st.com
+ (10.75.90.92) with Microsoft SMTP Server (TLS) id 14.3.439.0; Wed, 14 Aug
+ 2019 15:48:59 +0200
+Received: from localhost (10.201.23.19) by webmail-ga.st.com (10.75.90.48)
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Wed, 14 Aug 2019 15:48:58
+ +0200
+From:   Hugues Fruchet <hugues.fruchet@st.com>
+To:     Alexandre Torgue <alexandre.torgue@st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+CC:     <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Benjamin Gaignard <benjamin.gaignard@linaro.org>,
+        Yannick Fertre <yannick.fertre@st.com>,
+        Philippe CORNU <philippe.cornu@st.com>,
+        "Hugues Fruchet" <hugues.fruchet@st.com>,
+        Mickael GUENE <mickael.guene@st.com>
+Subject: [PATCH v6 2/4] media: stm32-dcmi: trace the supported fourcc/mbus_code
+Date:   Wed, 14 Aug 2019 15:48:51 +0200
+Message-ID: <1565790533-10043-3-git-send-email-hugues.fruchet@st.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1565790533-10043-1-git-send-email-hugues.fruchet@st.com>
+References: <1565790533-10043-1-git-send-email-hugues.fruchet@st.com>
 MIME-Version: 1.0
-In-Reply-To: <20190814130958.GG11714@aptenodytes>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfLN3LALD4puGMs5YqK/ID/L4iqFy7sTsRzDLz/B7y7HHZT+2EVY9+fGdKGUZVjrYcGSsbbVIELutztzChM+5Qz78TlFkmDR6HyNRsPSsLN/gRx/PGLK7
- F89FMRTehMkTcTlnlZZMz0cAiYtRzV11izXUlidCF4/p4ZmbR7PkfEQzgJTjjecObBUmjf4jDKsvDtLnsTN7uU3PB0PzHhgFE2dQIimoAlmWPbuA+K8xrLo8
- 84K5+VzI3qZbUVueEW09cGSNIBRT2l0LGXMolGuZdRr72w6/EpYcMq66BLaxXzs0SpXwAYMuvGa33dVJYVqfcHdkRiKJ9NNbvmsfAcX2O/0kElnKPmkuNBux
- hToOTduJ
+Content-Type: text/plain
+X-Originating-IP: [10.201.23.19]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-14_05:,,
+ signatures=0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 8/14/19 3:09 PM, Paul Kocialkowski wrote:
-> Hi,
-> 
-> On Mon 12 Aug 19, 13:05, Hans Verkuil wrote:
->> The existing documentation was incorrect and did not correspond
->> to how actual codec drivers implemented this.
->>
->> Update the documentation to explicitly specify what is actually
->> expected.
->>
->> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->> ---
->>  .../media/uapi/v4l/pixfmt-compressed.rst      | 36 +++++++++++++++----
->>  1 file changed, 30 insertions(+), 6 deletions(-)
->>
->> diff --git a/Documentation/media/uapi/v4l/pixfmt-compressed.rst b/Documentation/media/uapi/v4l/pixfmt-compressed.rst
->> index f52a7b67023d..9bb4a172a660 100644
->> --- a/Documentation/media/uapi/v4l/pixfmt-compressed.rst
->> +++ b/Documentation/media/uapi/v4l/pixfmt-compressed.rst
->> @@ -41,7 +41,12 @@ Compressed Formats
->>  
->>        - ``V4L2_PIX_FMT_H264``
->>        - 'H264'
->> -      - H264 video elementary stream with start codes.
->> +      - H264 Access Unit.
->> +	The decoder expects one Access Unit per buffer.
->> +	The encoder generates one Access Unit per buffer.
->> +	If :ref:`VIDIOC_ENUM_FMT` reports ``V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM``
->> +	then the decoder has no requirements since it can parse all the
->> +	information from the raw bytestream.
-> 
-> Maybe it would be clearer to mention that "no requirements" concerns the
-> lack of frame/field boundary requirement? Otherwise it feels a bit unclear
-> what userspace is expected to do or not do depending on the flag.
+Add a trace of the set of supported fourcc/mbus_code which
+intersect between DCMI and source sub-device.
 
-Hmm, how about:
+Signed-off-by: Hugues Fruchet <hugues.fruchet@st.com>
+---
+ drivers/media/platform/stm32/stm32-dcmi.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-If :ref:`VIDIOC_ENUM_FMT` reports ``V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM``
-then the decoder can start streaming at any point in the bytestream and
-it can parse the Access Units by itself.
-
-What do you think?
-
-	Hans
-
-
-> 
-> Cheers,
-> 
-> Paul
-> 
->>      * .. _V4L2-PIX-FMT-H264-NO-SC:
->>  
->>        - ``V4L2_PIX_FMT_H264_NO_SC``
->> @@ -86,12 +91,20 @@ Compressed Formats
->>  
->>        - ``V4L2_PIX_FMT_MPEG1``
->>        - 'MPG1'
->> -      - MPEG1 video elementary stream.
->> +      - MPEG1 Picture. Each buffer starts with a Picture header, followed
->> +	by other headers as needed and ending with the Picture data.
->> +	If :ref:`VIDIOC_ENUM_FMT` reports ``V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM``
->> +	then the decoder has no requirements since it can parse all the
->> +	information from the raw bytestream.
->>      * .. _V4L2-PIX-FMT-MPEG2:
->>  
->>        - ``V4L2_PIX_FMT_MPEG2``
->>        - 'MPG2'
->> -      - MPEG2 video elementary stream.
->> +      - MPEG2 Picture. Each buffer starts with a Picture header, followed
->> +	by other headers as needed and ending with the Picture data.
->> +	If :ref:`VIDIOC_ENUM_FMT` reports ``V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM``
->> +	then the decoder has no requirements since it can parse all the
->> +	information from the raw bytestream.
->>      * .. _V4L2-PIX-FMT-MPEG2-SLICE:
->>  
->>        - ``V4L2_PIX_FMT_MPEG2_SLICE``
->> @@ -132,7 +145,9 @@ Compressed Formats
->>  
->>        - ``V4L2_PIX_FMT_VP8``
->>        - 'VP80'
->> -      - VP8 video elementary stream.
->> +      - VP8 compressed video frame. The encoder generates one
->> +	compressed frame per buffer, and the decoder requires one
->> +	compressed frame per buffer.
->>      * .. _V4L2-PIX-FMT-VP8-FRAME:
->>  
->>        - ``V4L2_PIX_FMT_VP8_FRAME``
->> @@ -157,12 +172,19 @@ Compressed Formats
->>  
->>        - ``V4L2_PIX_FMT_VP9``
->>        - 'VP90'
->> -      - VP9 video elementary stream.
->> +      - VP9 compressed video frame. The encoder generates one
->> +	compressed frame per buffer, and the decoder requires one
->> +	compressed frame per buffer.
->>      * .. _V4L2-PIX-FMT-HEVC:
->>  
->>        - ``V4L2_PIX_FMT_HEVC``
->>        - 'HEVC'
->> -      - HEVC/H.265 video elementary stream.
->> +      - HEVC/H.265 Access Unit.
->> +	The decoder expects one Access Unit per buffer.
->> +	The encoder generates one Access Unit per buffer.
->> +	If :ref:`VIDIOC_ENUM_FMT` reports ``V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM``
->> +	then the decoder has no	requirements since it can parse all the
->> +	information from the raw bytestream.
->>      * .. _V4L2-PIX-FMT-FWHT:
->>  
->>        - ``V4L2_PIX_FMT_FWHT``
->> @@ -170,6 +192,8 @@ Compressed Formats
->>        - Video elementary stream using a codec based on the Fast Walsh Hadamard
->>          Transform. This codec is implemented by the vicodec ('Virtual Codec')
->>  	driver. See the codec-fwht.h header for more details.
->> +	:ref:`VIDIOC_ENUM_FMT` reports ``V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM``
->> +	since the decoder can parse all the information from the raw bytestream.
->>      * .. _V4L2-PIX-FMT-FWHT-STATELESS:
->>  
->>        - ``V4L2_PIX_FMT_FWHT_STATELESS``
->> -- 
->> 2.20.1
->>
-> 
+diff --git a/drivers/media/platform/stm32/stm32-dcmi.c b/drivers/media/platform/stm32/stm32-dcmi.c
+index b462f71..18acecf 100644
+--- a/drivers/media/platform/stm32/stm32-dcmi.c
++++ b/drivers/media/platform/stm32/stm32-dcmi.c
+@@ -1447,12 +1447,20 @@ static int dcmi_formats_init(struct stm32_dcmi *dcmi)
+ 			/* Code supported, have we got this fourcc yet? */
+ 			for (j = 0; j < num_fmts; j++)
+ 				if (sd_fmts[j]->fourcc ==
+-						dcmi_formats[i].fourcc)
++						dcmi_formats[i].fourcc) {
+ 					/* Already available */
++					dev_dbg(dcmi->dev, "Skipping fourcc/code: %4.4s/0x%x\n",
++						(char *)&sd_fmts[j]->fourcc,
++						mbus_code.code);
+ 					break;
+-			if (j == num_fmts)
++				}
++			if (j == num_fmts) {
+ 				/* New */
+ 				sd_fmts[num_fmts++] = dcmi_formats + i;
++				dev_dbg(dcmi->dev, "Supported fourcc/code: %4.4s/0x%x\n",
++					(char *)&sd_fmts[num_fmts - 1]->fourcc,
++					sd_fmts[num_fmts - 1]->mbus_code);
++			}
+ 		}
+ 		mbus_code.index++;
+ 	}
+-- 
+2.7.4
 
