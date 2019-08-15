@@ -2,148 +2,151 @@ Return-Path: <SRS0=Aqrg=WL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B1ECC3A589
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 13:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07417C3A589
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 13:03:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4840E2133F
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 13:02:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD8BC206C1
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 13:03:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="R799dJ+J"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732042AbfHONCe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 09:02:34 -0400
-Received: from gofer.mess.org ([88.97.38.141]:40135 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726109AbfHONCd (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 09:02:33 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id AED2B6078C; Thu, 15 Aug 2019 14:02:30 +0100 (BST)
-Date:   Thu, 15 Aug 2019 14:02:30 +0100
-From:   Sean Young <sean@mess.org>
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Brad Love <brad@nextdimension.cc>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH v3] media: dvb: Provide 4 devm variants
-Message-ID: <20190815130230.nhetv5zj4pqjxqj7@gofer.mess.org>
-References: <068836c7-a116-7e6f-cbb2-f2176fbb9a38@free.fr>
- <c7a7798b65e38355230d9ee235a3f8aa331123ca.camel@collabora.com>
- <64344008-4077-9948-4482-0878279b50e8@free.fr>
+        id S1732080AbfHONDQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 09:03:16 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:45322 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732076AbfHONDP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 15 Aug 2019 09:03:15 -0400
+Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 55AA12AF;
+        Thu, 15 Aug 2019 15:03:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1565874193;
+        bh=5kdzof/vbFVXEsZX5go+Xlos33NleJK7CfeEo53EzTU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R799dJ+JqQmmT5akgmFfM05oqvVBT6ic2faHRm4xg/RgLGr6n+aWwJIqfqRYD/0MB
+         SQ8ZyWWjSFOuY8GwthRlxhQDC9OZdw0L285J7mdPl4Z/mKACojXjjKIGNzjxAcbj2h
+         yZjOedFP4E1omxAjchSpCuhIm2v++3AFenMIo3xw=
+Date:   Thu, 15 Aug 2019 16:03:10 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC 3/5] media: v4l2-ctrls: Add support for V4L2_CID_LOCATION
+Message-ID: <20190815130310.GK13823@pendragon.ideasonboard.com>
+References: <20190814202815.32491-1-jacopo@jmondi.org>
+ <20190814202815.32491-4-jacopo@jmondi.org>
+ <20190814225353.GE5015@pendragon.ideasonboard.com>
+ <20190815130245.usat55oqffe4abvi@uno.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <64344008-4077-9948-4482-0878279b50e8@free.fr>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190815130245.usat55oqffe4abvi@uno.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Jul 22, 2019 at 10:13:56AM +0200, Marc Gonzalez wrote:
-> On 21/07/2019 17:02, Ezequiel Garcia wrote:
+On Thu, Aug 15, 2019 at 03:02:45PM +0200, Jacopo Mondi wrote:
+> Hi Laurent,
 > 
-> > On Thu, 2019-07-18 at 15:03 +0200, Marc Gonzalez wrote:
+> On Thu, Aug 15, 2019 at 01:53:53AM +0300, Laurent Pinchart wrote:
+> > Hi Jacopo,
 > >
-> >> Provide devm variants for automatic resource release on device removal.
-> >> Makes error-handling in probe() simpler, thus less error-prone.
-> >> Once all resources are devmanaged, remove() is no longer needed.
-> > 
-> > I think it would be better to add this API as part of a series
-> > that also uses it.
+> > Thank you for the patch.
+> >
+> > On Wed, Aug 14, 2019 at 10:28:13PM +0200, Jacopo Mondi wrote:
+> > > Add support for the newly defined V4L2_CID_LOCATION read-only control
+> > > used to report the camera device mounting position.
+> > >
+> > > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> > > ---
+> > >  drivers/media/v4l2-core/v4l2-ctrls.c | 7 +++++++
+> > >  include/uapi/linux/v4l2-controls.h   | 4 ++++
+> > >  2 files changed, 11 insertions(+)
+> > >
+> > > diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+> > > index 7d3a33258748..8ab0857df59a 100644
+> > > --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+> > > +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+> > > @@ -943,6 +943,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+> > >  	case V4L2_CID_AUTO_FOCUS_RANGE:		return "Auto Focus, Range";
+> > >  	case V4L2_CID_PAN_SPEED:		return "Pan, Speed";
+> > >  	case V4L2_CID_TILT_SPEED:		return "Tilt, Speed";
+> > > +	case V4L2_CID_LOCATION:			return "Location";
+> >
+> > Depending on what we decide to name the control (see review of 2/5), you
+> > should adjust the description accordingly.
+> >
+> > >
+> > >  	/* FM Radio Modulator controls */
+> > >  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+> > > @@ -1300,6 +1301,12 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+> > >  		break;
+> > >  	case V4L2_CID_MPEG_VIDEO_FWHT_PARAMS:
+> > >  		*type = V4L2_CTRL_TYPE_FWHT_PARAMS;
+> > > +	case V4L2_CID_LOCATION:
+> > > +		*type = V4L2_CTRL_TYPE_INTEGER;
+> > > +		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> > > +		*min = V4L2_LOCATION_FRONT;
+> > > +		*max = V4L2_LOCATION_BACK;
+> >
+> > I don't think the control should have a min and a max different than the
+> > current value, as it's a fully static control. I'd drop those two lines
+> > here, and drivers will have to set value = min = max = V4L2_LOCATION_xxx
+> > when creating the control. That why you should be able to collapse this
+> > with V4L2_CID_MIN_BUFFERS_FOR_OUTPUT.
+> >
 > 
-> I have an outstanding RFC for a new driver:
+> Ah, I thought min/max should report the actual control values limits.
+> Anyway, if we move this to be an integer menu control with an helper
+> to parse the DT property and register the control on behalf of
+> drivers, this will change.
 > 
-> 	https://patchwork.kernel.org/patch/11040435/
+> > > +		*step = 1;
+> > >  		break;
+> > >  	default:
+> > >  		*type = V4L2_CTRL_TYPE_INTEGER;
+> > > diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+> > > index 37807f23231e..5c4c7b245921 100644
+> > > --- a/include/uapi/linux/v4l2-controls.h
+> > > +++ b/include/uapi/linux/v4l2-controls.h
+> > > @@ -889,6 +889,10 @@ enum v4l2_auto_focus_range {
+> > >  #define V4L2_CID_PAN_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+32)
+> > >  #define V4L2_CID_TILT_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+33)
+> > >
+> > > +#define V4L2_CID_LOCATION			(V4L2_CID_CAMERA_CLASS_BASE+34)
+> > > +#define V4L2_LOCATION_FRONT			(0 << 0)
+> > > +#define V4L2_LOCATION_BACK			(1 << 0)
+> >
+> > Why not just 0 and 1 ?
 > 
-> Locally, I've updated the probe function to use the proposed devm functions.
-> 
-> I was mainly hoping to get initial feedback from the maintainers.
-> 1) See if they're OK with devm APIs
+> Or why not BIT().
 
-devm_ has some lifetime issues, wrt to disconnect. However, for a platform
-device it is fine.
+No, BIT(0) == (0 << 0) but BIT(1) != (1 << 0).
 
-> 2) See if they're OK with the way I implemented devm APIs
+> I saw that the (1 << x) style is the mostly used one in this header
+> file when defining macros like this one so I went for consistency with
+> the existing code.
 
-Looks good to me.
+That's when you need a bitmask, which isn't the case here.
 
-> 3) See what's missing to get an Ack
+> > > +
+> > >  /* FM Modulator class control IDs */
+> > >
+> > >  #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
 
-Please submit both this patch and a the driver as a series.
+-- 
+Regards,
 
-Thanks,
-
-Sean
-
-> 
-> static int tsif_probe(struct platform_device *pdev)
-> {
-> 	int err, virq;
-> 	struct tsif *tsif;
-> 	struct resource *res;
-> 	struct dvb_frontend *fe;
-> 	struct dvb_adapter *adap;
-> 	struct device *dev = &pdev->dev;
-> 	short num = DVB_UNSET;
-> 
-> 	fe = dvb_get_demod_fe(dev->of_node);
-> 	if (!fe)
-> 		return -ENXIO;
-> 
-> 	tsif = devm_kzalloc(dev, sizeof(*tsif), GFP_KERNEL);
-> 	if (!tsif)
-> 		return -ENOMEM;
-> 
-> 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "tsif0");
-> 	tsif->base = devm_ioremap_resource(dev, res);
-> 	if (IS_ERR(tsif->base))
-> 		return PTR_ERR(tsif->base);
-> 
-> 	virq = platform_get_irq_byname(pdev, "tsif0");
-> 	err = devm_request_irq(dev, virq, tsif_isr, IRQF_SHARED, "tsif", tsif);
-> 	if (err)
-> 		return err;
-> 
-> 	tsif->clk = devm_clk_get(dev, "iface");
-> 	if (IS_ERR(tsif->clk))
-> 		return PTR_ERR(tsif->clk);
-> 
-> 	err = devm_clk_prepare_enable(dev, tsif->clk);
-> 	if (err)
-> 		return err;
-> 
-> 	adap = &tsif->adapter;
-> 	err = devm_dvb_register_adapter(dev, adap, "tsif", THIS_MODULE, &num);
-> 	if (err) return err;
-> 
-> 	/* Not sure the diff between filter and feed? */
-> 	tsif->demux.filternum = 16; /*** Dunno what to put here ***/
-> 	tsif->demux.feednum = 16;	/*** Dunno what to put here ***/
-> 	tsif->demux.start_feed = noop;
-> 	tsif->demux.stop_feed = noop;
-> 	err = devm_dvb_dmx_init(dev, &tsif->demux);
-> 	if (err) return err;
-> 
-> 	/* What relation to dvb_demux.filternum??? */
-> 	/* Do I need this object?? */
-> 	tsif->dmxdev.filternum = 16;
-> 	tsif->dmxdev.demux = &tsif->demux.dmx;
-> 	err = devm_dvb_dmxdev_init(dev, &tsif->dmxdev, adap);
-> 	if (err) return err;
-> 
-> 	err = devm_dvb_register_frontend(dev, adap, fe);
-> 	if (err) return err;
-> 
-> 	writel_relaxed(TSIF_START + ENABLE_IRQ, tsif->base + TSIF_STS_CTL);
-> 	devm_add_action(dev, stop_tsif, tsif);
-> 	INIT_WORK(&tsif->work, handle_pkt);
-> 
-> 	return 0;
-> }
+Laurent Pinchart
