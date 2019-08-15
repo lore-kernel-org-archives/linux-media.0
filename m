@@ -2,109 +2,127 @@ Return-Path: <SRS0=Aqrg=WL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE91FC3A589
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 15:00:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B6E1C3A589
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 15:15:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B3E3920656
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 15:00:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ApNJyRL/"
+	by mail.kernel.org (Postfix) with ESMTP id 7A660206C1
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 15:15:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732132AbfHOPAK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 11:00:10 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:35723 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728500AbfHOPAJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 11:00:09 -0400
-Received: by mail-wm1-f66.google.com with SMTP id l2so1515973wmg.0;
-        Thu, 15 Aug 2019 08:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=AT6SBdTWCfB14GGqz8HhPxiAnTof/RZXopdQCtNlMj0=;
-        b=ApNJyRL/CtWMWEcvsfuxy75j5hDH3+3l3U/kUEtfatsU2jCDnFU0JrjJhQqztHEyVX
-         ZBf+AF8sureX3Rn0e6llWGEb5Nd6DZ1S5rN3LdSFztPdlulQkx0Lvr4xt/On6LZN60g/
-         tiBWi6Vs3fymYZyyA76bcOH1RIdfjS+S0VceNFjXR0FIMDgOeqH5SBRuedUGtxsYFdmI
-         lZqn5nWsMkiBDsaz072rwM1j3ceP7ouFgT6SuUwUEWhLSFwaeUtxW2E/lUuVTkk1TD27
-         OAJuq6bM5OmdSyfB94TnVHqniYn3/IcSH9tUobrC7q/G6555+iHmDszSluR5cddEmtpa
-         Pg+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=AT6SBdTWCfB14GGqz8HhPxiAnTof/RZXopdQCtNlMj0=;
-        b=TU2cVBghejT3dqzWFQ/ZqYFumypDked6DXqbj6sIhui3ErewqQEejGFiml18h4AFob
-         1DNXXHBhgCiftOTFiz1cRRwVAEey77si0gNkVdRg7OAlJtp32klXjldcvt9utuZva43W
-         JFwMYa4d4mq2R0Yevfa/oc8GLlMruPHC8moOYbLi4n2Vi711jMkjCGnNfwn5mRNVkT6u
-         SvI3/2q2WO9tUzWKtkdQKdENaZ0csFd9+pcMr1n4g6/grJbu6lXJ/iUKdW3x7t4o/tU9
-         H9HtMrajsBV8Od3TDZeUWDgyRoVLrhx0hfP9iZBzSg9cp47d2b3b6/0ol/vB5zCmQSnQ
-         cdXg==
-X-Gm-Message-State: APjAAAXo0cGdeVAidiAT7kqBtygL6LadVSlHmeHhRu4jv4wR6t8mqJyT
-        FuhyRfrqMFMbIKwFeG2voYc=
-X-Google-Smtp-Source: APXvYqwpWvZ1WlKqFH37YuDJYaoQiQ/o/sdZdjkNO2n8K67kXq9JE4ht1IQu4MKhy1WxTgZ5nbaVRw==
-X-Received: by 2002:a1c:ed06:: with SMTP id l6mr3077053wmh.128.1565881206601;
-        Thu, 15 Aug 2019 08:00:06 -0700 (PDT)
-Received: from localhost.localdomain ([94.204.252.234])
-        by smtp.gmail.com with ESMTPSA id e4sm5041054wrh.39.2019.08.15.08.00.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 15 Aug 2019 08:00:05 -0700 (PDT)
-From:   Christian Hewitt <christianshewitt@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Benjamin Valentin <benpicco@googlemail.com>,
-        Sean Young <sean@mess.org>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: [PATCH 0/7] media: rc: Add keymaps for common STB/SBC devices
-Date:   Thu, 15 Aug 2019 18:59:10 +0400
-Message-Id: <1565881157-14644-1-git-send-email-christianshewitt@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1732585AbfHOPP3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 11:15:29 -0400
+Received: from mga17.intel.com ([192.55.52.151]:23633 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732578AbfHOPP2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 15 Aug 2019 11:15:28 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Aug 2019 08:15:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,389,1559545200"; 
+   d="scan'208";a="201239857"
+Received: from mschitte-mobl.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.252.37.7])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Aug 2019 08:15:26 -0700
+Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
+        id A3E3A21E6F; Thu, 15 Aug 2019 18:12:31 +0300 (EEST)
+Date:   Thu, 15 Aug 2019 18:12:31 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC 2/5] media: v4l2-ctrl: Document V4L2_CID_LOCATION
+Message-ID: <20190815151231.GA6012@kekkonen.localdomain>
+References: <20190814202815.32491-1-jacopo@jmondi.org>
+ <20190814202815.32491-3-jacopo@jmondi.org>
+ <20190814224340.GD5015@pendragon.ideasonboard.com>
+ <664fe7b3-9051-30da-736e-710a4e9cecde@xs4all.nl>
+ <d60e4664-3a3f-1723-6c96-4fc822b6a7bb@xs4all.nl>
+ <20190815143423.vaoswb4jvzd2blxp@uno.localdomain>
+ <cb36e8a0-b941-ff37-e58c-0f9b7f62116a@xs4all.nl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cb36e8a0-b941-ff37-e58c-0f9b7f62116a@xs4all.nl>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series submits keymaps for a number of Android STB/SBC devices that
-are regularly used with the Kodi mediacentre distro LibreELEC.
+Hi Hans,
 
-Keymaps list buttons in rows, top-down, to aid visual comparison against
-devices. It's common for users of other no-name Android boxes to try a
-number of keymaps trying to find one that works and this reduces some of
-the guesswork. If the assigned key differs from the marked key, e.g.
-where Android 'mouse' buttons have been given a more useful purpose, the
-keymap has been commented.
+On Thu, Aug 15, 2019 at 04:40:03PM +0200, Hans Verkuil wrote:
+> On 8/15/19 4:34 PM, Jacopo Mondi wrote:
+> > Hi Hans,
+> > 
+> > On Thu, Aug 15, 2019 at 04:14:38PM +0200, Hans Verkuil wrote:
+> >> On 8/15/19 4:10 PM, Hans Verkuil wrote:
+> >>> On 8/15/19 12:43 AM, Laurent Pinchart wrote:
+> >>>> Hi Jacopo,
+> >>>>
+> >>>> Thank you for the patch.
+> >>>>
+> >>>> On Wed, Aug 14, 2019 at 10:28:12PM +0200, Jacopo Mondi wrote:
+> >>>>> Add documentation for the V4L2_CID_LOCATION camera control. The newly
+> >>>>> added read-only control reports the camera device mounting position.
+> >>>>>
+> >>>>> Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> >>>>> ---
+> >>>>>  .../media/uapi/v4l/ext-ctrls-camera.rst       | 23 +++++++++++++++++++
+> >>>>>  1 file changed, 23 insertions(+)
+> >>>>>
+> >>>>> diff --git a/Documentation/media/uapi/v4l/ext-ctrls-camera.rst b/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
+> >>>>> index 51c1d5c9eb00..fc0a02eee6d4 100644
+> >>>>> --- a/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
+> >>>>> +++ b/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
+> >>>>> @@ -510,6 +510,29 @@ enum v4l2_scene_mode -
+> >>>>>      value down. A value of zero stops the motion if one is in progress
+> >>>>>      and has no effect otherwise.
+> >>>>>
+> >>>>> +``V4L2_CID_LOCATION (integer)``
+> >>>>
+> >>>> Maybe V4L2_CID_CAMERA_SENSOR_LOCATION ? Same for the values below.
+> >>>
+> >>> Probably a better name, if a bit long. But we might need other location
+> >>> controls in the future (e.g. flash location), so CID_LOCATION is just too
+> >>> generic.
+> >>
+> > 
+> > Thanks for the feedback.
+> > 
+> >> Note that the location defines themselves can most likely be used with any
+> >> LOCATION control, so V4L2_LOCATION_FRONT would be fine with any control.
+> >>
+> > 
+> > What do you think instead of the control type? Would a single integer
+> > control do or an integer menu one would be better? I see merit in both
+> > proposals actually...
+> 
+> Single integer. It's read-only, so it just reports the location.
+> 
+> It would be different if this was a writable control: then you need to
+> know which locations are possible to set, and that requires a menu type.
+> 
+> But it doesn't make sense to set the location from software. However, the
+> location might change as a result of other changes: e.g. if the camera
+> has motor control of the tilt and the tilt changes from forward facing to
+> downward facing, then the driver might change the location from FRONT
+> to DOWN. A convoluted example perhaps, but this is just brainstorming.
 
-Christian Hewitt (7):
-  media: rc: add keymap for Amediatech X96-MAX remote
-  media: rc: add keymap for Khadas VIM/EDGE remote
-  media: rc: add keymap for Tanix TX3 mini remote
-  media: rc: add keymap for Tanix TX5 max remote
-  media: rc: add keymap for WeTek Hub remote
-  media: rc: add keymap for WeTeK Play 2 remote
-  media: rc: add keymap for HardKernel ODROID remote
-
- drivers/media/rc/keymaps/Makefile           |  7 +++
- drivers/media/rc/keymaps/rc-khadas.c        | 56 +++++++++++++++++
- drivers/media/rc/keymaps/rc-odroid.c        | 51 ++++++++++++++++
- drivers/media/rc/keymaps/rc-tanix-tx3mini.c | 79 ++++++++++++++++++++++++
- drivers/media/rc/keymaps/rc-tanix-tx5max.c  | 71 +++++++++++++++++++++
- drivers/media/rc/keymaps/rc-wetek-hub.c     | 55 +++++++++++++++++
- drivers/media/rc/keymaps/rc-wetek-play2.c   | 95 +++++++++++++++++++++++++++++
- drivers/media/rc/keymaps/rc-x96max.c        | 85 ++++++++++++++++++++++++++
- include/media/rc-map.h                      |  7 +++
- 9 files changed, 506 insertions(+)
- create mode 100644 drivers/media/rc/keymaps/rc-khadas.c
- create mode 100644 drivers/media/rc/keymaps/rc-odroid.c
- create mode 100644 drivers/media/rc/keymaps/rc-tanix-tx3mini.c
- create mode 100644 drivers/media/rc/keymaps/rc-tanix-tx5max.c
- create mode 100644 drivers/media/rc/keymaps/rc-wetek-hub.c
- create mode 100644 drivers/media/rc/keymaps/rc-wetek-play2.c
- create mode 100644 drivers/media/rc/keymaps/rc-x96max.c
+When the camera points to another direction than directly away from the
+surface, then we need another property to describe that. Location tells
+where the camera is... well, located. :-)
 
 -- 
-2.7.4
-
+Sakari Ailus
+sakari.ailus@linux.intel.com
