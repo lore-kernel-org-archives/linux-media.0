@@ -2,146 +2,141 @@ Return-Path: <SRS0=Aqrg=WL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72266C3A589
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFDDDC3A59B
 	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 14:45:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4E88020644
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 14:45:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90AFF20644
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 14:45:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733108AbfHOOpC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 10:45:02 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:40417 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726098AbfHOOpC (ORCPT
+        id S1733117AbfHOOpD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 10:45:03 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:41275 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731970AbfHOOpD (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 10:45:02 -0400
+        Thu, 15 Aug 2019 10:45:03 -0400
 Received: from cobaltpc1.rd.cisco.com ([IPv6:2001:420:44c1:2579:f038:4b04:f67a:276f])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id yGzohwQmCDqPeyGzshYZNo; Thu, 15 Aug 2019 16:45:00 +0200
+        id yGzohwQmCDqPeyGzthYZOG; Thu, 15 Aug 2019 16:45:01 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Cc:     Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCHv3 00/12] Stateful/stateless codec core support
-Date:   Thu, 15 Aug 2019 16:44:44 +0200
-Message-Id: <20190815144456.54583-1-hverkuil-cisco@xs4all.nl>
+Cc:     Tomasz Figa <tfiga@chromium.org>,
+        Maxime Jourdan <mjourdan@baylibre.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 03/12] media: venus: vdec: flag OUTPUT formats with V4L2_FMT_FLAG_DYN_RESOLUTION
+Date:   Thu, 15 Aug 2019 16:44:47 +0200
+Message-Id: <20190815144456.54583-4-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190815144456.54583-1-hverkuil-cisco@xs4all.nl>
+References: <20190815144456.54583-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfOajmO4q3wgtw9t0QgB5QXsGXI70VVbVGSdSxzj86oBITZhiebp1TAGgCUXVUkmcPPM/7Ia1fkHOy+u8QAPfky4X4Bpb9hbx2AcFztodO45PdTk604Pf
- 07SUGa4nWuX9aPB81/l1ya86sPTavOyJVCagf1+VO4wbB4OWggA6VFofW6GWLPIUJCqydLTLwrY+bTuJaqmAwG7nhkX/1hXcJnLVn+uL6q8UuA5ra/Cdr3Kn
- tlXbvBhyebN0HtFtoCx+SIy7WrztQFAi/93QZB0+jqmNlACCJdcDrLw8QA1SGIOQ
+X-CMAE-Envelope: MS4wfFme2n57nAKbPhAyrj7hQg0HSZEodKdCQ9T7onUMIgK2Iln5OZAksLz2HRZ0gIq0/fixp2yLuIqFbDirsCL7E5a9jwlvPaHIRmOCHmZQudYhVbJcepuH
+ CRZ4whejOJQg6egcDun9ni9ycewgXgb7F0pKt9U1hQjcQGf7tT60IFJw4BKP4l6i2hT45+dViFUsgIAUBOTZpSMmLqRIypJiSJ202hdULTh1B9+7m1UtOYZO
+ gxGXms6dBRQn2bUjBOaWm3OKDjjI58n89XRdAJt2kmARE2lFH+nF+0OOGSitzQjBWekkC38Ma6NIi9vsQN8/txr498uhyE587ujM/Gkb0z2Z+1R+edR737GT
+ sy3iWouqNUnFXJC9Dqm8qn9zBGv6/BcYYnggRqIVO8cOMhjM4SyR/1H3e06BWm9Zf0nRXwVgrMyeFgVdSN0KQL11L7LILJkDHBZVO46C6CR6xUEEeGM=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series consolidates various patches/patch series that add
-features or document memory-to-memory video codec interfaces.
+From: Maxime Jourdan <mjourdan@baylibre.com>
 
-This includes patches adding V4L2_FMT_FLAG_DYN_RESOLUTION,
-new code adding V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM, new code
-adding V4L2_DEC_CMD_FLUSH, patches adding V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF
-(now with documentation) and patches documenting the stateful
-encoder/decoder and stateless decoder.
+Tag all the coded formats where the venus vdec supports dynamic
+resolution switching.
 
-The stateful encoder documentation is still RFC quality (there are
-open TODOs, see https://patchwork.kernel.org/cover/10972783/).
+Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/platform/qcom/venus/core.h |  1 +
+ drivers/media/platform/qcom/venus/vdec.c | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
-The stateless decoder documentation is the same as the v5 posted
-by Alexandre, but with my comments incorporated.
-
-Also added are updated pixelformat descriptions. Please review this!
-I didn't update the MPEG4 format since I'm not sure what to put there.
-
-If anyone has access to recent codec standards, then I would really
-like to have the right references to 'MPEG Picture' and 'Access Unit'.
-It would be good to just refer to the definition of what a Picture
-or Access Unit is in the right standards. (I now have access to
-most of the standards, will use that to improve the pixfmt description
-in the near future).
-
-If there are no more comments, then I want to merge patches 1-7 and
-probably 8 as well (even though I think that one needs more work).
-
-Patches 9-11 require that a stateless decoder driver is also
-updated to use V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF and V4L2_DEC_CMD_FLUSH.
-
-Changes since v2:
-
-- Fixed typo (CMD_STOP -> CMD_FLUSH)
-- Updated text to make CMD_FLUSH required for stateless codecs (will
-  need another patch adding helper functions for this DEC_CMD).
-- Added "It is also only applies to stateful codecs." to the
-  DYN_RESOLUTION description.
-
-Changes since v1:
-
-- Replace bitstream by bytestream as per comment from Nicolas.
-- V4L2_FMT_FLAG_HAS_BITSTREAM_PARSER was renamed to
-  V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM.
-
-Regards,
-
-        Hans
-
-Alexandre Courbot (1):
-  media: docs-rst: Document m2m stateless video decoder interface
-
-Hans Verkuil (4):
-  videodev2.h: add V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM
-  pixfmt-compressed.rst: improve H264/HEVC/MPEG1+2/VP8+9 documentation
-  vb2: add V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF
-  videodev2.h: add V4L2_DEC_CMD_FLUSH
-
-Maxime Jourdan (5):
-  videodev2.h: add V4L2_FMT_FLAG_DYN_RESOLUTION
-  media: venus: vdec: flag OUTPUT formats with
-    V4L2_FMT_FLAG_DYN_RESOLUTION
-  media: s5p_mfc_dec: set flags for OUTPUT coded formats
-  media: mtk-vcodec: flag OUTPUT formats with
-    V4L2_FMT_FLAG_DYN_RESOLUTION
-  media: vicodec: set flags for vdec/stateful OUTPUT coded formats
-
-Tomasz Figa (2):
-  media: docs-rst: Document memory-to-memory video decoder interface
-  media: docs-rst: Document memory-to-memory video encoder interface
-
- Documentation/media/uapi/v4l/buffer.rst       |   13 +
- Documentation/media/uapi/v4l/dev-decoder.rst  | 1101 +++++++++++++++++
- Documentation/media/uapi/v4l/dev-encoder.rst  |  608 +++++++++
- Documentation/media/uapi/v4l/dev-mem2mem.rst  |   10 +-
- .../media/uapi/v4l/dev-stateless-decoder.rst  |  424 +++++++
- .../media/uapi/v4l/pixfmt-compressed.rst      |   36 +-
- Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |   10 +
- Documentation/media/uapi/v4l/v4l2.rst         |   12 +-
- .../media/uapi/v4l/vidioc-decoder-cmd.rst     |   52 +-
- .../media/uapi/v4l/vidioc-dqevent.rst         |   11 +-
- .../media/uapi/v4l/vidioc-encoder-cmd.rst     |   51 +-
- .../media/uapi/v4l/vidioc-enum-fmt.rst        |   16 +
- .../media/uapi/v4l/vidioc-reqbufs.rst         |    6 +
- .../media/videodev2.h.rst.exceptions          |    3 +
- .../media/common/videobuf2/videobuf2-v4l2.c   |    8 +-
- .../platform/mtk-vcodec/mtk_vcodec_dec.c      |    4 +
- .../platform/mtk-vcodec/mtk_vcodec_drv.h      |    1 +
- drivers/media/platform/qcom/venus/core.h      |    1 +
- drivers/media/platform/qcom/venus/vdec.c      |   11 +
- .../media/platform/s5p-mfc/s5p_mfc_common.h   |    1 +
- drivers/media/platform/s5p-mfc/s5p_mfc_dec.c  |   18 +
- drivers/media/platform/vicodec/vicodec-core.c |    3 +
- include/media/v4l2-mem2mem.h                  |   42 +
- include/media/videobuf2-core.h                |    3 +
- include/media/videobuf2-v4l2.h                |    5 +
- include/uapi/linux/videodev2.h                |   20 +-
- 26 files changed, 2416 insertions(+), 54 deletions(-)
- create mode 100644 Documentation/media/uapi/v4l/dev-decoder.rst
- create mode 100644 Documentation/media/uapi/v4l/dev-encoder.rst
- create mode 100644 Documentation/media/uapi/v4l/dev-stateless-decoder.rst
-
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 959eaa550f4e..922cb7e64bfa 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -46,6 +46,7 @@ struct venus_format {
+ 	u32 pixfmt;
+ 	unsigned int num_planes;
+ 	u32 type;
++	u32 flags;
+ };
+ 
+ #define MAX_PLANES		4
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index 0b7d65db5cdc..7f4660555ddb 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -37,42 +37,52 @@ static const struct venus_format vdec_formats[] = {
+ 		.pixfmt = V4L2_PIX_FMT_MPEG4,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_MPEG2,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_H263,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_H264,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_VP8,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_VP9,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_XVID,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	}, {
+ 		.pixfmt = V4L2_PIX_FMT_HEVC,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
++		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	},
+ };
+ 
+@@ -379,6 +389,7 @@ static int vdec_enum_fmt(struct file *file, void *fh, struct v4l2_fmtdesc *f)
+ 		return -EINVAL;
+ 
+ 	f->pixelformat = fmt->pixfmt;
++	f->flags = fmt->flags;
+ 
+ 	return 0;
+ }
 -- 
 2.20.1
 
