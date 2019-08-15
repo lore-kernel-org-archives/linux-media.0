@@ -2,248 +2,141 @@ Return-Path: <SRS0=Aqrg=WL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAA56C3A589
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 12:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DA34C3A589
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 12:54:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A4BCA208C2
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 12:53:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="DYzIzU50"
+	by mail.kernel.org (Postfix) with ESMTP id E3161208C2
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 12:54:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730087AbfHOMxo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 08:53:44 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:45172 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729627AbfHOMxo (ORCPT
+        id S1731665AbfHOMyZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 08:54:25 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:42443 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729627AbfHOMyZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 08:53:44 -0400
-Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 006942AF;
-        Thu, 15 Aug 2019 14:53:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1565873621;
-        bh=3eeh01FfnWKDNkp7YjFQjs9BE30Ft//YI8wNS5yz36c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DYzIzU50E5KJ8ZeOiL6ihYOusFZN3xhR3MZbyl9KCKlJxMBGHo1UkZhzxaLolV/Xf
-         oymVVwHqZ7I86eqsli7kxr54DmJMGNFhLNg1iSGkP6KxOo7eAkS8KQSWOWxk8da/gt
-         zA1p7MZtE3wkCBwGilItTo9VAMHies3WD0HlHvsY=
-Date:   Thu, 15 Aug 2019 15:53:29 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
-        robh+dt@kernel.org, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH v6 12/13] media: tvp5150: add support to limit tv norms
- on connector
-Message-ID: <20190815125329.GF13823@pendragon.ideasonboard.com>
-References: <20190415124413.18456-1-m.felsch@pengutronix.de>
- <20190415124413.18456-13-m.felsch@pengutronix.de>
- <20190516180753.GS14820@pendragon.ideasonboard.com>
- <20190813091030.wyjjd2heoh5pk7rj@pengutronix.de>
+        Thu, 15 Aug 2019 08:54:25 -0400
+Received: from uno.localdomain (host64-130-dynamic.5-87-r.retail.telecomitalia.it [87.5.130.64])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id 9640A200002;
+        Thu, 15 Aug 2019 12:54:21 +0000 (UTC)
+Date:   Thu, 15 Aug 2019 14:55:48 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [RFC 1/5] media: dt-bindings: Document 'location' property
+Message-ID: <20190815125548.kh2pdxzysafltswc@uno.localdomain>
+References: <20190814202815.32491-1-jacopo@jmondi.org>
+ <20190814202815.32491-2-jacopo@jmondi.org>
+ <20190815065635.GJ6133@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="guiyz7n4y2542mup"
 Content-Disposition: inline
-In-Reply-To: <20190813091030.wyjjd2heoh5pk7rj@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190815065635.GJ6133@paasikivi.fi.intel.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Marco,
 
-On Tue, Aug 13, 2019 at 11:10:30AM +0200, Marco Felsch wrote:
-> On 19-05-16 21:07, Laurent Pinchart wrote:
-> > On Mon, Apr 15, 2019 at 02:44:12PM +0200, Marco Felsch wrote:
-> > > The tvp5150 accepts NTSC(M,J,4.43), PAL (B,D,G,H,I,M,N) and SECAM video
-> > > data and is able to auto-detect the input signal. The auto-detection
-> > > does not work if the connector does not receive an input signal and the
-> > > tvp5150 might not be configured correctly. This misconfiguration leads
-> > > into wrong decoded video streams if the tvp5150 gets powered on before
-> > > the video signal is present.
-> > > 
-> > > Limit the supported tv norms according to the actual selected connector
-> > > to avoid a misconfiguration.
-> > 
-> > This seems a bit of a hack to me. In particular, on what grounds would
-> > you specify a particular configuration in DT ? Also, this issue affects
-> > non-DT systems, and should be solved globally.
-> 
-> Why is this a hack? Imagine a hardware which supports PAL signals only.
-> Then it should be forbidden for the user space to configure it to SECAM
-> or any NTSC. Since the hardware makes the limitation it should be
-> abstracted on DT level.
+--guiyz7n4y2542mup
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-What part of the hardware would be the limiting factor here ? Clearly
-not the TVP5150 as it supports all TV norms, and also not the connector,
-as the connector hardware doesn't care about TV norms.
+Hi Sakari,
 
-> > > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> > > ---
-> > > [1] https://patchwork.kernel.org/cover/10794703/
-> > > 
-> > > v5:
-> > > - probe() initialize supported tv-norms according the given connectors
-> > >   if they are available.
-> > > - check if media-controller is used. Don't limit the norm if it isn't
-> > >   used.
-> > > - add more logic to be smarter during connector changing so it is
-> > >   intuitiver for the user space.
-> > > 
-> > > v2-v4:
-> > > - nothing since the patch was squashed from series [1] into this
-> > >   series.
-> > > 
-> > >  drivers/media/i2c/tvp5150.c | 69 +++++++++++++++++++++++++++++++++++--
-> > >  1 file changed, 67 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-> > > index cd54715eb641..c0ee08546643 100644
-> > > --- a/drivers/media/i2c/tvp5150.c
-> > > +++ b/drivers/media/i2c/tvp5150.c
-> > > @@ -32,6 +32,13 @@
-> > >  #define TVP5150_MBUS_FMT	MEDIA_BUS_FMT_UYVY8_2X8
-> > >  #define TVP5150_FIELD		V4L2_FIELD_ALTERNATE
-> > >  #define TVP5150_COLORSPACE	V4L2_COLORSPACE_SMPTE170M
-> > > +#define TVP5150_STD_MASK	(V4L2_STD_NTSC     | \
-> > > +				 V4L2_STD_NTSC_443 | \
-> > > +				 V4L2_STD_PAL      | \
-> > > +				 V4L2_STD_PAL_M    | \
-> > > +				 V4L2_STD_PAL_N    | \
-> > > +				 V4L2_STD_PAL_Nc   | \
-> > > +				 V4L2_STD_SECAM)
-> > >  
-> > >  MODULE_DESCRIPTION("Texas Instruments TVP5150A/TVP5150AM1/TVP5151 video decoder driver");
-> > >  MODULE_AUTHOR("Mauro Carvalho Chehab");
-> > > @@ -66,6 +73,7 @@ struct tvp5150 {
-> > >  	/* media-ctl properties */
-> > >  	struct media_pad pads[TVP5150_NUM_PADS];
-> > >  	struct tvp5150_connector *connectors;
-> > > +	struct tvp5150_connector *cur_connector;
-> > >  	int connectors_num;
-> > >  
-> > >  	struct v4l2_ctrl_handler hdl;
-> > > @@ -785,17 +793,28 @@ static int tvp5150_g_std(struct v4l2_subdev *sd, v4l2_std_id *std)
-> > >  static int tvp5150_s_std(struct v4l2_subdev *sd, v4l2_std_id std)
-> > >  {
-> > >  	struct tvp5150 *decoder = to_tvp5150(sd);
-> > > +	struct tvp5150_connector *cur_con = decoder->cur_connector;
-> > > +	v4l2_std_id supported_norms = cur_con ?
-> > > +		cur_con->base.connector.analog.supported_tvnorms : V4L2_STD_ALL;
-> > >  
-> > >  	if (decoder->norm == std)
-> > >  		return 0;
-> > >  
-> > > +	/*
-> > > +	 * check if requested std or group of std's is/are supported by the
-> > > +	 * connector
-> > > +	 */
-> > > +	if ((supported_norms & std) == 0)
-> > > +		return -EINVAL;
-> > > +
-> > >  	/* Change cropping height limits */
-> > >  	if (std & V4L2_STD_525_60)
-> > >  		decoder->rect.height = TVP5150_V_MAX_525_60;
-> > >  	else
-> > >  		decoder->rect.height = TVP5150_V_MAX_OTHERS;
-> > >  
-> > > -	decoder->norm = std;
-> > > +	/* set only the specific supported std in case of group of std's */
-> > > +	decoder->norm = supported_norms & std;
-> > >  
-> > >  	return tvp5150_set_std(sd, std);
-> > >  }
-> > > @@ -1347,6 +1366,8 @@ static int tvp5150_link_setup(struct media_entity *entity,
-> > >  			  TVP5150_BLACK_SCREEN, 0);
-> > >  
-> > >  	if (flags & MEDIA_LNK_FL_ENABLED) {
-> > > +		u32 new_norm;
-> > > +
-> > >  		/*
-> > >  		 * S-Video connector is conneted to both ports AIP1A and AIP1B.
-> > >  		 * Both links must be enabled in one-shot regardless which link
-> > > @@ -1358,6 +1379,26 @@ static int tvp5150_link_setup(struct media_entity *entity,
-> > >  			if (err)
-> > >  				return err;
-> > >  		}
-> > > +
-> > > +		/* Update the current connector */
-> > > +		decoder->cur_connector =
-> > > +			container_of(remote, struct tvp5150_connector, pad);
-> > > +
-> > > +		/*
-> > > +		 * Do nothing if the new connector supports the same tv-norms as
-> > > +		 * the old one.
-> > > +		 */
-> > > +		new_norm = decoder->norm &
-> > > +			decoder->cur_connector->base.connector.analog.supported_tvnorms;
-> > > +		if (decoder->norm == new_norm)
-> > > +			return 0;
-> > > +
-> > > +		/*
-> > > +		 * Fallback to the new connector tv-norms if we can't find any
-> > > +		 * common between the current tv-norm and the new one.
-> > > +		 */
-> > > +		tvp5150_s_std(sd, new_norm ? new_norm :
-> > > +			decoder->cur_connector->base.connector.analog.supported_tvnorms);
-> > >  	}
-> > >  
-> > >  	return 0;
-> > > @@ -1576,6 +1617,9 @@ static int tvp5150_registered(struct v4l2_subdev *sd)
-> > >  				TVP5150_COMPOSITE1;
-> > >  
-> > >  			tvp5150_selmux(sd);
-> > > +			decoder->cur_connector = &decoder->connectors[i];
-> > > +			tvp5150_s_std(sd,
-> > > +				decoder->connectors[i].base.connector.analog.supported_tvnorms);
-> > >  		}
-> > >  	}
-> > >  #endif
-> > > @@ -1903,6 +1947,11 @@ static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
-> > >  				ret = -EINVAL;
-> > >  				goto err;
-> > >  			}
-> > > +			if (!(c.connector.analog.supported_tvnorms &
-> > > +			    TVP5150_STD_MASK))
-> > > +				dev_warn(dev,
-> > > +					"Unsupported tv-norm on connector %s.\n",
-> > > +					c.label);
-> > >  			in++;
-> > >  			break;
-> > >  		case TVP5150_PAD_VID_OUT:
-> > > @@ -2011,7 +2060,23 @@ static int tvp5150_probe(struct i2c_client *c,
-> > >  	if (res < 0)
-> > >  		goto err_cleanup_dt;
-> > >  
-> > > -	core->norm = V4L2_STD_ALL;	/* Default is autodetect */
-> > > +	/*
-> > > +	 * Iterate over all available connectors in case they are supported and
-> > > +	 * successfully parsed. Fallback to default autodetect in case they
-> > > +	 * aren't supported.
-> > > +	 */
-> > > +	if (core->connectors) {
-> > > +		struct v4l2_fwnode_connector *con;
-> > > +		int i;
-> > > +
-> > > +		for (i = 0; i < core->connectors_num; i++) {
-> > > +			con = &core->connectors[i].base;
-> > > +			core->norm |= con->connector.analog.supported_tvnorms;
-> > > +		}
-> > > +	} else {
-> > > +		core->norm = V4L2_STD_ALL;
-> > > +	}
-> > > +
-> > >  	core->detected_norm = V4L2_STD_UNKNOWN;
-> > >  	core->input = TVP5150_COMPOSITE1;
-> > >  	core->enable = true;
+On Thu, Aug 15, 2019 at 09:56:35AM +0300, Sakari Ailus wrote:
+> Hi Jacopo,
+>
+> On Wed, Aug 14, 2019 at 10:28:11PM +0200, Jacopo Mondi wrote:
+> > Add the 'location' device property, used to specify the camera device
+> > mounting position. The property is particularly meaningful for mobile
+> > devices with a well defined usage orientation.
+> >
+> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+> > ---
+> >  Documentation/devicetree/bindings/media/video-interfaces.txt | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/video-interfaces.txt b/Documentation/devicetree/bindings/media/video-interfaces.txt
+> > index f884ada0bffc..819077b2649c 100644
+> > --- a/Documentation/devicetree/bindings/media/video-interfaces.txt
+> > +++ b/Documentation/devicetree/bindings/media/video-interfaces.txt
+> > @@ -89,6 +89,10 @@ Optional properties
+> >    but a number of degrees counter clockwise. Typical values are 0 and 180
+> >    (upside down).
+> >
+> > +- location: The camera device mounting position, relative to the device
+> > +  usage orientation. Possible values are:
+> > +  0 - Front camera. The image sensor is mounted on the front side of the device.
+> > +  1 - Back camera. The image sensor is mounted on the back side of the device.
+>
+> Would it make sense to make this a little more generic? Such as s/image
+> sensor/ device/, for instance?
 
--- 
-Regards,
+Laurent seems to be of the opposite opinion, but i think staying as
+generic as possible might be a good idea. Now I have a linguistic
+problem though.
 
-Laurent Pinchart
+ +- location: The device mounting position, relative to the device
+ +  usage orientation. Possible values are:
+ +  0 - Front. The device is mounted on the front side of the device.
+ +  1 - Back. The device is mounted on the back side of the device.
+
+So I need one "device" to indicate the lens/flash/image sensor and one
+to indicate the device they're installed on :) Any idea?
+
+>
+> Is this also relevant for flash or lens devices?
+>
+> Flash (torch) devices could be present, at least principle, without a
+> camera. There once was even such a Nokia phone, 1100 unless I'm mistaken.
+> :-)
+
+Not to mention that lenses are indeed installed in the same package as
+the camera sensor, but they're described as separate device nodes as
+flash leds are, so the mounting location might need to be specified in their
+device node properties too, even if it would be the same as the image
+sensor one.
+
+>
+> --
+> Regards,
+>
+> Sakari Ailus
+> sakari.ailus@linux.intel.com
+
+--guiyz7n4y2542mup
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl1VVlMACgkQcjQGjxah
+Vjzusg//X9PG4Cmjuk3pVya27qa6x9ghMPj/jf4z/DUsywmOUgyZ5iVpmOzJBCL0
+FwHslnBZ03WbUjBVIvqnYNbLzd6yIbSE1EyTnjBDfhmeJ8iqTjN+qetPc1hM804S
+5dKlthkP7UFG3PShJbFJoU+26eGfQi3rt94jtpX4I4WawodSCLf6neueow56V/O7
+CBjH5d2oqkk0+gyXNwn8YZyeaUPaFlN7wKuGQqg/O7OgbuV0LZJCoFFEaKZNhJcJ
+gzDXFk7I9ywmlySZ340gLNH3GUiCSqUQYTVkv0vUxihagAtA1HpYEeRde75DOe/4
+1bCrHrb75K0AYOjza0sKoMo6qI6yulSkGepWU9QNwjinWV/3Z/g7GkTABVwCSBNH
+wVOiwxqj834941oqb5vxCAKWrg4i3pA6YWgCJ5oMFuxrCE4FjjQm7V0kCyErSFUL
+QFlt+KhM8AhQETJ/uS5u/nwh70WFpVpcI0A4yAbgbCIZLl7Ta4SaOJOiqDZs1XQU
+c1nTGXbXOjo2bHqGRabHupNF876E38CHUYB+ubvjkzJEzczvk94gTFNfqeaEdiOq
+XB17wFZT7UHTKaKrIEOnKvPdJd5hMp0fTkNoDM6g0is8m1vqXixf+aHQcJEpIA7S
+i4IiRb6s4ipRLI9ymsmNBysjXJZ9z1SsHhUFbaJy6WbbhBKA668=
+=+0WF
+-----END PGP SIGNATURE-----
+
+--guiyz7n4y2542mup--
