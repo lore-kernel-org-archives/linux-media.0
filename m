@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B57C41514
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D839AC31E40
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 370C6217F4
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B87792184D
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730330AbfHOL57 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 07:57:59 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:58857 "EHLO
+        id S1730944AbfHOL6A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 07:58:00 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:38675 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728128AbfHOL56 (ORCPT
+        with ESMTP id S1728922AbfHOL57 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 07:57:58 -0400
+        Thu, 15 Aug 2019 07:57:59 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hyEO7-00042s-5A; Thu, 15 Aug 2019 13:57:51 +0200
+        id 1hyEO7-00042i-58; Thu, 15 Aug 2019 13:57:51 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hyEO5-0006IW-16; Thu, 15 Aug 2019 13:57:49 +0200
+        id 1hyEO4-0006I3-T1; Thu, 15 Aug 2019 13:57:48 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         kernel@pengutronix.de, Rob Herring <robh@kernel.org>
-Subject: [PATCH v7 11/13] media: dt-bindings: tvp5150: add optional tvnorms documentation
-Date:   Thu, 15 Aug 2019 13:57:45 +0200
-Message-Id: <20190815115747.24018-12-m.felsch@pengutronix.de>
+Subject: [PATCH v7 01/13] dt-bindings: connector: analog: add tv norms property
+Date:   Thu, 15 Aug 2019 13:57:35 +0200
+Message-Id: <20190815115747.24018-2-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190815115747.24018-1-m.felsch@pengutronix.de>
 References: <20190815115747.24018-1-m.felsch@pengutronix.de>
@@ -50,49 +50,142 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the optional binding to limit the possible tv-norms on the
-input connectors.
+Some connectors no matter if in- or output supports only a limited
+range of tv norms. It doesn't matter if the hardware behind that
+connector supports more than the listed formats since the users are
+restriced by a label e.g. to plug only a camera into this connector
+which uses the PAL format.
+
+This patch adds the capability to describe such limitation within the
+firmware. There are no format restrictions if the property isn't
+present, so it's completely backward compatible.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/media/i2c/tvp5150.txt | 9 +++++++++
- 1 file changed, 9 insertions(+)
+[1] https://patchwork.kernel.org/cover/10794703/
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-index cc98b38c7e73..93731638b509 100644
---- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-@@ -49,6 +49,13 @@ Required Endpoint Properties for parallel synchronization on output port:
- Note: Do not specify any of these properties if you want to use the embedded
-       BT.656 synchronization.
+v7:
+I kept Robs r b tag because I only changed the example and extended
+TVNORM_* macros.
+
+- fix some style issues
+- add TVNORM_NTSC, TVNORM_525_60 and TVNORM_625_50
+
+v6:
+- tvnorms.h: use tabs instead of spaces
+- tvnorms.h: add TVNORM_PAL and TVNORM_SECAM
+- tvnorms.h: drop rarely used TVNORM_ATSC_* norms
+
+v2-v4:
+- nothing since the patch was squashed from series [1] into this
+  series.
+---
+ .../display/connector/analog-tv-connector.txt |  4 ++
+ include/dt-bindings/media/tvnorms.h           | 72 +++++++++++++++++++
+ 2 files changed, 76 insertions(+)
+ create mode 100644 include/dt-bindings/media/tvnorms.h
+
+diff --git a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
+index 0c0970c210ab..434e8aa0398b 100644
+--- a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
++++ b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
+@@ -6,6 +6,9 @@ Required properties:
  
-+Optional Connector Properties:
-+==============================
-+
-+- tvnorms: Set the possible signals to which the hardware tries to lock instead
-+	   of using the autodetection mechnism. Please look at [1] for more
-+	   information.
-+
- [1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
+ Optional properties:
+ - label: a symbolic name for the connector
++- tvnorms: limit the supported tv norms on a connector to the given ones else
++           all tv norms are allowed. Possible video standards are defined in
++           include/dt-bindings/media/tvnorms.h.
  
- Example - three input sources:
-@@ -56,6 +63,7 @@ Example - three input sources:
- comp_connector_0 {
+ Required nodes:
+ - Video port for TV input
+@@ -16,6 +19,7 @@ Example
+ tv: connector {
  	compatible = "composite-video-connector";
- 	label = "Composite0";
-+	tvnorms = <TVNORM_PAL_M>; /* limit to pal-m signals */
+ 	label = "tv";
++	tvnorms = <(TVNORM_PAL | TVNORM_NTSC)>;
  
  	port {
- 		composite0_to_tvp5150: endpoint {
-@@ -67,6 +75,7 @@ comp_connector_0 {
- comp_connector_1 {
- 	compatible = "composite-video-connector";
- 	label = "Composite1";
-+	tvnorms = <TVNORM_NTSC_M>; /* limit to ntsc-m signals */
- 
- 	port {
- 		composite1_to_tvp5150: endpoint {
+ 		tv_connector_in: endpoint {
+diff --git a/include/dt-bindings/media/tvnorms.h b/include/dt-bindings/media/tvnorms.h
+new file mode 100644
+index 000000000000..e1275673c4d6
+--- /dev/null
++++ b/include/dt-bindings/media/tvnorms.h
+@@ -0,0 +1,72 @@
++/* SPDX-License-Identifier: GPL-2.0-only or X11 */
++/*
++ * Copyright 2019 Pengutronix, Marco Felsch <kernel@pengutronix.de>
++ */
++
++#ifndef _DT_BINDINGS_MEDIA_TVNORMS_H
++#define _DT_BINDINGS_MEDIA_TVNORMS_H
++
++/* One bit for each standard */
++#define TVNORM_PAL_B		0x00000001
++#define TVNORM_PAL_B1		0x00000002
++#define TVNORM_PAL_G		0x00000004
++#define TVNORM_PAL_H		0x00000008
++#define TVNORM_PAL_I		0x00000010
++#define TVNORM_PAL_D		0x00000020
++#define TVNORM_PAL_D1		0x00000040
++#define TVNORM_PAL_K		0x00000080
++
++#define TVNORM_PAL		(TVNORM_PAL_B		| \
++				 TVNORM_PAL_B1		| \
++				 TVNORM_PAL_G		| \
++				 TVNORM_PAL_H		| \
++				 TVNORM_PAL_I		| \
++				 TVNORM_PAL_D		| \
++				 TVNORM_PAL_D1		| \
++				 TVNORM_PAL_K)
++
++#define TVNORM_PAL_M		0x00000100
++#define TVNORM_PAL_N		0x00000200
++#define TVNORM_PAL_Nc		0x00000400
++#define TVNORM_PAL_60		0x00000800
++
++#define TVNORM_NTSC_M		0x00001000	/* BTSC */
++#define TVNORM_NTSC_M_JP	0x00002000	/* EIA-J */
++#define TVNORM_NTSC_443		0x00004000
++#define TVNORM_NTSC_M_KR	0x00008000	/* FM A2 */
++
++#define TVNORM_NTSC		(TVNORM_NTSC_M		|\
++				 TVNORM_NTSC_M_JP	|\
++				 TVNORM_NTSC_M_KR)
++
++#define TVNORM_SECAM_B		0x00010000
++#define TVNORM_SECAM_D		0x00020000
++#define TVNORM_SECAM_G		0x00040000
++#define TVNORM_SECAM_H		0x00080000
++#define TVNORM_SECAM_K		0x00100000
++#define TVNORM_SECAM_K1		0x00200000
++#define TVNORM_SECAM_L		0x00400000
++#define TVNORM_SECAM_LC		0x00800000
++
++#define TVNORM_SECAM		(TVNORM_SECAM_B		| \
++				 TVNORM_SECAM_D		| \
++				 TVNORM_SECAM_G		| \
++				 TVNORM_SECAM_H		| \
++				 TVNORM_SECAM_K		| \
++				 TVNORM_SECAM_K1	| \
++				 TVNORM_SECAM_L		| \
++				 TVNORM_SECAM_LC)
++
++/* Standards for Countries with 60Hz Line frequency */
++#define TVNORM_525_60		(TVNORM_PAL_M		| \
++				 TVNORM_PAL_60		| \
++				 TVNORM_NTSC		| \
++				 TVNORM_NTSC_443)
++
++/* Standards for Countries with 50Hz Line frequency */
++#define TVNORM_625_50		(TVNORM_PAL		|\
++				 TVNORM_PAL_N		|\
++				 TVNORM_PAL_Nc		|\
++				 TVNORM_SECAM)
++
++#endif /* _DT_BINDINGS_MEDIA_TVNORMS_H */
 -- 
 2.20.1
 
