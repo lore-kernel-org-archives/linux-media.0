@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DA927C433FF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2687FC433FF
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B4A3C21783
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 018D1206C2
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731253AbfHOL6K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 07:58:10 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:46097 "EHLO
+        id S1731206AbfHOL6M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 07:58:12 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37101 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730442AbfHOL6B (ORCPT
+        with ESMTP id S1728128AbfHOL6A (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 07:58:01 -0400
+        Thu, 15 Aug 2019 07:58:00 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hyEOA-00042q-KJ; Thu, 15 Aug 2019 13:57:54 +0200
+        id 1hyEO7-00042j-4x; Thu, 15 Aug 2019 13:57:51 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hyEO5-0006IR-0O; Thu, 15 Aug 2019 13:57:49 +0200
+        id 1hyEO4-0006I5-TP; Thu, 15 Aug 2019 13:57:48 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH v7 09/13] media: tvp5150: add s_power callback
-Date:   Thu, 15 Aug 2019 13:57:43 +0200
-Message-Id: <20190815115747.24018-10-m.felsch@pengutronix.de>
+Subject: [PATCH v7 02/13] media: v4l2-fwnode: add v4l2_fwnode_connector
+Date:   Thu, 15 Aug 2019 13:57:36 +0200
+Message-Id: <20190815115747.24018-3-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190815115747.24018-1-m.felsch@pengutronix.de>
 References: <20190815115747.24018-1-m.felsch@pengutronix.de>
@@ -50,72 +50,101 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Don't en-/disable the interrupts during s_stream because someone can
-disable the stream but wants to get informed if the stream is locked
-again. So keep the interrupts enabled the whole time the pipeline is
-opened.
+Currently every driver needs to parse the connector endpoints by it self.
+This is the initial work to make this generic. A generic connector has
+common members and connector specific members. The common members are:
+  - type
+  - label (optional)
+  - links
+  - nr_of_links
+
+The specific members are stored within a union, since only one of them
+can be available at the time. Since this is the initial support the
+patch adds only the analog-connector specific ones.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
- drivers/media/i2c/tvp5150.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+[1] https://patchwork.kernel.org/cover/10794703/
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index 26a156da3ab4..9a812d5f45d7 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -1354,11 +1354,26 @@ static const struct media_entity_operations tvp5150_sd_media_ops = {
- /****************************************************************************
- 			I2C Command
-  ****************************************************************************/
-+static int tvp5150_s_power(struct  v4l2_subdev *sd, int on)
-+{
-+	struct tvp5150 *decoder = to_tvp5150(sd);
-+	unsigned int val = 0;
-+
-+	if (on)
-+		val = TVP5150_INT_A_LOCK;
-+
-+	if (decoder->irq)
-+		/* Enable / Disable lock interrupt */
-+		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
-+				   TVP5150_INT_A_LOCK, val);
-+
-+	return 0;
-+}
- 
- static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
- {
- 	struct tvp5150 *decoder = to_tvp5150(sd);
--	unsigned int mask, val = 0, int_val = 0;
-+	unsigned int mask, val = 0;
- 
- 	mask = TVP5150_MISC_CTL_YCBCR_OE | TVP5150_MISC_CTL_SYNC_OE |
- 	       TVP5150_MISC_CTL_CLOCK_OE;
-@@ -1371,15 +1386,10 @@ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
- 			val = decoder->lock ? decoder->oe : 0;
- 		else
- 			val = decoder->oe;
--		int_val = TVP5150_INT_A_LOCK;
- 		v4l2_subdev_notify_event(&decoder->sd, &tvp5150_ev_fmt);
- 	}
- 
- 	regmap_update_bits(decoder->regmap, TVP5150_MISC_CTL, mask, val);
--	if (decoder->irq)
--		/* Enable / Disable lock interrupt */
--		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
--				   TVP5150_INT_A_LOCK, int_val);
- 
- 	return 0;
- }
-@@ -1575,6 +1585,7 @@ static const struct v4l2_subdev_core_ops tvp5150_core_ops = {
- 	.g_register = tvp5150_g_register,
- 	.s_register = tvp5150_s_register,
- #endif
-+	.s_power = tvp5150_s_power,
+v7:
+- fix spelling issues
+- constify label
+- support variable label size
+- replace single remote_port/id members by links member of variable
+  size
+- squash v4l2-connector into v4l2-fwnode
+
+@Jacopo: I dropped your r b tag because I changed the port/id logic.
+
+v6:
+- fix some spelling and style issues
+- rm unnecessary comments
+- drop vga and dvi connector
+- fix misspelt connector
+
+v2-v4:
+- nothing since the patch was squashed from series [1] into this
+  series.
+---
+ include/media/v4l2-fwnode.h | 45 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+
+diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+index f6a7bcd13197..e39c198882fc 100644
+--- a/include/media/v4l2-fwnode.h
++++ b/include/media/v4l2-fwnode.h
+@@ -123,6 +123,51 @@ struct v4l2_fwnode_link {
+ 	unsigned int remote_port;
  };
  
- static const struct v4l2_subdev_tuner_ops tvp5150_tuner_ops = {
++/**
++ * enum v4l2_connector_type - connector type
++ * @V4L2_CON_UNKNOWN:   unknown connector type, no V4L2 connector configuration
++ * @V4L2_CON_COMPOSITE: analog composite connector
++ * @V4L2_CON_SVIDEO:    analog svideo connector
++ * @V4L2_CON_HDMI:      digital hdmi connector
++ */
++enum v4l2_connector_type {
++	V4L2_CON_UNKNOWN,
++	V4L2_CON_COMPOSITE,
++	V4L2_CON_SVIDEO,
++	V4L2_CON_HDMI,
++};
++
++/**
++ * struct v4l2_fwnode_connector_analog - analog connector data structure
++ * @supported_tvnorms: tv norms this connector supports, set to V4L2_STD_ALL
++ *                     if no restrictions are specified.
++ */
++struct v4l2_fwnode_connector_analog {
++	v4l2_std_id supported_tvnorms;
++};
++
++/**
++ * struct v4l2_fwnode_connector - the connector data structure
++ * @label: optional connector label
++ * @type: connector type
++ * @links: list of &struct v4l2_fwnode_link links the connector is connected to
++ * @nr_of_links: total number of links
++ * @connector: connector configuration
++ * @connector.analog: analog connector configuration
++ *                    &struct v4l2_fwnode_connector_analog
++ */
++struct v4l2_fwnode_connector {
++	const char *label;
++	enum v4l2_connector_type type;
++	struct v4l2_fwnode_link *links;
++	unsigned int nr_of_links;
++
++	union {
++		struct v4l2_fwnode_connector_analog analog;
++		/* future connectors */
++	} connector;
++};
++
+ /**
+  * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
+  * @fwnode: pointer to the endpoint's fwnode handle
 -- 
 2.20.1
 
