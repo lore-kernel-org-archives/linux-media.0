@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C27AFC433FF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA927C433FF
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9405E208C2
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4A3C21783
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731213AbfHOL6E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 07:58:04 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37309 "EHLO
+        id S1731253AbfHOL6K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 07:58:10 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:46097 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731136AbfHOL6D (ORCPT
+        with ESMTP id S1730442AbfHOL6B (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 07:58:03 -0400
+        Thu, 15 Aug 2019 07:58:01 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hyEO7-00042k-4x; Thu, 15 Aug 2019 13:57:51 +0200
+        id 1hyEOA-00042q-KJ; Thu, 15 Aug 2019 13:57:54 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hyEO4-0006I8-Tq; Thu, 15 Aug 2019 13:57:48 +0200
+        id 1hyEO5-0006IR-0O; Thu, 15 Aug 2019 13:57:49 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         kernel@pengutronix.de
-Subject: [PATCH v7 03/13] media: v4l2-fwnode: add initial connector parsing support
-Date:   Thu, 15 Aug 2019 13:57:37 +0200
-Message-Id: <20190815115747.24018-4-m.felsch@pengutronix.de>
+Subject: [PATCH v7 09/13] media: tvp5150: add s_power callback
+Date:   Thu, 15 Aug 2019 13:57:43 +0200
+Message-Id: <20190815115747.24018-10-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190815115747.24018-1-m.felsch@pengutronix.de>
 References: <20190815115747.24018-1-m.felsch@pengutronix.de>
@@ -50,248 +50,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The patch adds the initial connector parsing code, so we can move from a
-driver specific parsing code to a generic one. Currently only the
-generic fields and the analog-connector specific fields are parsed. Parsing
-the other connector specific fields can be added by a simple callbacks.
+Don't en-/disable the interrupts during s_stream because someone can
+disable the stream but wants to get informed if the stream is locked
+again. So keep the interrupts enabled the whole time the pipeline is
+opened.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
-[1] https://patchwork.kernel.org/cover/10794703/
+ drivers/media/i2c/tvp5150.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-v7:
-@Jacopo: I dropped your r b tag becuase of the amount of changes I
-made..
-
-- drop unnecessary comments
-- fix commet style
-- s/v4l2_fwnode_connector_conv.name/v4l2_fwnode_connector_conv.compatible/
-- make label size variable and drop V4L2_CONNECTOR_MAX_LABEL usage
-- do not assign a default label in case of no label was specified
-- remove useless /* fall through */ comments
-- add support for N connector links
-- rename local variables to be more meaningful
-- adjust kernedoc
-- add v4l2_fwnode_connector_free()
-- improve error handling (use different error values)
-- make use of pr_warn_once()
-
-v6:
-- use unsigned count var
-- fix comment and style issues
-- place '/* fall through */' to correct places
-- fix error handling and cleanup by releasing fwnode
-- drop vga and dvi parsing support as those connectors are rarely used
-  these days
-
-v5:
-- s/strlcpy/strscpy/
-
-v2-v4:
-- nothing since the patch was squashed from series [1] into this
-  series.
----
- drivers/media/v4l2-core/v4l2-fwnode.c | 137 ++++++++++++++++++++++++++
- include/media/v4l2-fwnode.h           |  38 +++++++
- 2 files changed, 175 insertions(+)
-
-diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
-index 3bd1888787eb..c6eb8a8105cc 100644
---- a/drivers/media/v4l2-core/v4l2-fwnode.c
-+++ b/drivers/media/v4l2-core/v4l2-fwnode.c
-@@ -595,6 +595,143 @@ void v4l2_fwnode_put_link(struct v4l2_fwnode_link *link)
- }
- EXPORT_SYMBOL_GPL(v4l2_fwnode_put_link);
- 
-+static const struct v4l2_fwnode_connector_conv {
-+	enum v4l2_connector_type type;
-+	const char *compatible;
-+} connectors[] = {
-+	{
-+		.type = V4L2_CON_COMPOSITE,
-+		.compatible = "composite-video-connector",
-+	}, {
-+		.type = V4L2_CON_SVIDEO,
-+		.compatible = "svideo-connector",
-+	}, {
-+		.type = V4L2_CON_HDMI,
-+		.compatible = "hdmi-connector",
-+	},
-+};
-+
-+static enum v4l2_connector_type
-+v4l2_fwnode_string_to_connector_type(const char *con_str)
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index 26a156da3ab4..9a812d5f45d7 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -1354,11 +1354,26 @@ static const struct media_entity_operations tvp5150_sd_media_ops = {
+ /****************************************************************************
+ 			I2C Command
+  ****************************************************************************/
++static int tvp5150_s_power(struct  v4l2_subdev *sd, int on)
 +{
-+	unsigned int i;
++	struct tvp5150 *decoder = to_tvp5150(sd);
++	unsigned int val = 0;
 +
-+	for (i = 0; i < ARRAY_SIZE(connectors); i++)
-+		if (!strcmp(con_str, connectors[i].compatible))
-+			return connectors[i].type;
++	if (on)
++		val = TVP5150_INT_A_LOCK;
 +
-+	return V4L2_CON_UNKNOWN;
-+}
-+
-+static int
-+v4l2_fwnode_connector_parse_analog(struct fwnode_handle *fwnode,
-+				   struct v4l2_fwnode_connector *vc)
-+{
-+	u32 tvnorms;
-+	int ret;
-+
-+	ret = fwnode_property_read_u32(fwnode, "tvnorms", &tvnorms);
-+
-+	/* The tvnorms property is optional. */
-+	vc->connector.analog.supported_tvnorms = ret ? V4L2_STD_ALL : tvnorms;
++	if (decoder->irq)
++		/* Enable / Disable lock interrupt */
++		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
++				   TVP5150_INT_A_LOCK, val);
 +
 +	return 0;
 +}
-+
-+void v4l2_fwnode_connector_free(struct v4l2_fwnode_connector *connector)
-+{
-+	unsigned int i;
-+
-+	if (IS_ERR_OR_NULL(connector))
-+		return;
-+
-+	for (i = 0; i < connector->nr_of_links; i++)
-+		v4l2_fwnode_put_link(&connector->links[i]);
-+	kfree(connector->links);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_free);
-+
-+int v4l2_fwnode_connector_alloc_parse(struct fwnode_handle *fwnode,
-+				      struct v4l2_fwnode_connector *connector)
-+{
-+	struct fwnode_handle *remote_pp, *remote_ep;
-+	const char *type_name;
-+	unsigned int i = 0, ep_num = 0;
-+	int err;
-+
-+	memset(connector, 0, sizeof(*connector));
-+
-+	remote_pp = fwnode_graph_get_remote_port_parent(fwnode);
-+	if (!remote_pp)
-+		return -ENOLINK;
-+
-+	/* Parse all common properties first. */
-+	fwnode_graph_for_each_endpoint(remote_pp, remote_ep)
-+		ep_num++;
-+
-+	connector->nr_of_links = ep_num;
-+	connector->links = kmalloc_array(ep_num, sizeof(*connector->links),
-+					 GFP_KERNEL);
-+	if (!connector->links) {
-+		err = -ENOMEM;
-+		goto err_put_fwnode;
-+	}
-+
-+	fwnode_graph_for_each_endpoint(remote_pp, remote_ep) {
-+		err = v4l2_fwnode_parse_link(remote_ep, &connector->links[i]);
-+		if (err) {
-+			fwnode_handle_put(remote_ep);
-+			goto err_free_links;
-+		}
-+		i++;
-+	}
-+
-+	/*
-+	 * Links reference counting guarantees access -> no duplication needed
-+	 */
-+	fwnode_property_read_string(remote_pp, "label", &connector->label);
-+
-+	/* The connector-type is stored within the compatible string. */
-+	err = fwnode_property_read_string(remote_pp, "compatible", &type_name);
-+	if (err) {
-+		err = -EINVAL;
-+		goto err_free_links;
-+	}
-+	connector->type = v4l2_fwnode_string_to_connector_type(type_name);
-+
-+	/* Now parse the connector specific properties. */
-+	switch (connector->type) {
-+	case V4L2_CON_COMPOSITE:
-+	case V4L2_CON_SVIDEO:
-+		err = v4l2_fwnode_connector_parse_analog(remote_pp, connector);
-+		break;
-+	case V4L2_CON_HDMI:
-+		pr_warn_once("Connector specific parsing is currently not supported for %s\n",
-+			     type_name);
-+		err = 0;
-+		break;
-+	case V4L2_CON_UNKNOWN:
-+	default:
-+		pr_err("Unknown connector type\n");
-+		err = -EINVAL;
-+		goto err_free_links;
-+	};
-+
-+	fwnode_handle_put(remote_pp);
-+
-+	return err;
-+
-+err_free_links:
-+	for (i = 0; i < ep_num; i++)
-+		v4l2_fwnode_put_link(&connector->links[i]);
-+	kfree(connector->links);
-+err_put_fwnode:
-+	fwnode_handle_put(remote_pp);
-+
-+	return err;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_alloc_parse);
-+
- static int
- v4l2_async_notifier_fwnode_parse_endpoint(struct device *dev,
- 					  struct v4l2_async_notifier *notifier,
-diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-index e39c198882fc..235c7214be3c 100644
---- a/include/media/v4l2-fwnode.h
-+++ b/include/media/v4l2-fwnode.h
-@@ -278,6 +278,44 @@ int v4l2_fwnode_parse_link(struct fwnode_handle *fwnode,
-  */
- void v4l2_fwnode_put_link(struct v4l2_fwnode_link *link);
  
-+/**
-+ * v4l2_fwnode_connector_free() - free the V4L2 connector acquired by
-+ * v4l2_fwnode_parse_connector()
-+ * @connector: the V4L2 connector the resources of which are to be released
-+ *
-+ * Drop references to the connection link partners and free the memory allocated
-+ * by v4l2_fwnode_parse_connector() call.
-+ *
-+ * It is safe to call this function with NULL argument or on a V4L2 connector
-+ * the parsing of which failed.
-+ */
-+void v4l2_fwnode_connector_free(struct v4l2_fwnode_connector *connector);
-+
-+/**
-+ * v4l2_fwnode_parse_connector() - parse the connector on endpoint
-+ * @fwnode: pointer to the endpoint's fwnode handle where the connector is
-+ *          connected to
-+ * @connector: pointer to the V4L2 fwnode connector data structure
-+ *
-+ * Fill the connector data structure with the connector type, label, all found
-+ * links between the host and the connector as well as connector specific data.
-+ * Since the label is optional it can be %NULL if no one was found.
-+ *
-+ * A reference is taken to both the connector and the connector destination
-+ * where the connector belongs to. This must be dropped when no longer needed.
-+ * Also the memory it has allocated to store the variable size data must be
-+ * freed. Both dropping the references and freeing the memory is done by
-+ * v4l2_fwnode_connector_free().
-+ *
-+ * Return:
-+ * * %0 on success or a negative error code on failure:
-+ * * %-ENOMEM if memory allocation failed
-+ * * %-ENOLINK if the connector can't be found
-+ * * %-EINVAL on parsing failure
-+ */
-+int v4l2_fwnode_connector_alloc_parse(struct fwnode_handle *fwnode,
-+				      struct v4l2_fwnode_connector *connector);
-+
- /**
-  * typedef parse_endpoint_func - Driver's callback function to be called on
-  *	each V4L2 fwnode endpoint.
+ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
+ {
+ 	struct tvp5150 *decoder = to_tvp5150(sd);
+-	unsigned int mask, val = 0, int_val = 0;
++	unsigned int mask, val = 0;
+ 
+ 	mask = TVP5150_MISC_CTL_YCBCR_OE | TVP5150_MISC_CTL_SYNC_OE |
+ 	       TVP5150_MISC_CTL_CLOCK_OE;
+@@ -1371,15 +1386,10 @@ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
+ 			val = decoder->lock ? decoder->oe : 0;
+ 		else
+ 			val = decoder->oe;
+-		int_val = TVP5150_INT_A_LOCK;
+ 		v4l2_subdev_notify_event(&decoder->sd, &tvp5150_ev_fmt);
+ 	}
+ 
+ 	regmap_update_bits(decoder->regmap, TVP5150_MISC_CTL, mask, val);
+-	if (decoder->irq)
+-		/* Enable / Disable lock interrupt */
+-		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
+-				   TVP5150_INT_A_LOCK, int_val);
+ 
+ 	return 0;
+ }
+@@ -1575,6 +1585,7 @@ static const struct v4l2_subdev_core_ops tvp5150_core_ops = {
+ 	.g_register = tvp5150_g_register,
+ 	.s_register = tvp5150_s_register,
+ #endif
++	.s_power = tvp5150_s_power,
+ };
+ 
+ static const struct v4l2_subdev_tuner_ops tvp5150_tuner_ops = {
 -- 
 2.20.1
 
