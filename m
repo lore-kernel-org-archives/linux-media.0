@@ -2,123 +2,124 @@ Return-Path: <SRS0=Aqrg=WL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F645C433FF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:53:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37DC0C31E40
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0DBF0208C2
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:53:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1529421721
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731136AbfHOLxv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 07:53:51 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:42771 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728922AbfHOLxv (ORCPT
+        id S1730304AbfHOL57 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 07:57:59 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:42393 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729838AbfHOL56 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 07:53:51 -0400
-Received: from [IPv6:2001:420:44c1:2579:f038:4b04:f67a:276f] ([IPv6:2001:420:44c1:2579:f038:4b04:f67a:276f])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id yEK9hvNNyDqPeyEKChXwPI; Thu, 15 Aug 2019 13:53:49 +0200
-Subject: Re: [PATCHv2 10/12] videodev2.h: add V4L2_DEC_CMD_FLUSH
-To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>
-References: <20190812110513.23774-1-hverkuil-cisco@xs4all.nl>
- <20190812110513.23774-11-hverkuil-cisco@xs4all.nl>
- <CAPBb6MVTGJJH_rFjvQy37NDLzT1b_=dBRF6UkFb2hWMwD6EC=A@mail.gmail.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <ba4402b1-eca5-893e-7ad6-fe6650c316ff@xs4all.nl>
-Date:   Thu, 15 Aug 2019 13:53:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.1
+        Thu, 15 Aug 2019 07:57:58 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1hyEOA-00042r-Ke; Thu, 15 Aug 2019 13:57:54 +0200
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1hyEO5-0006IU-0l; Thu, 15 Aug 2019 13:57:49 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        kernel@pengutronix.de, Rob Herring <robh@kernel.org>
+Subject: [PATCH v7 10/13] media: dt-bindings: tvp5150: cleanup bindings stlye
+Date:   Thu, 15 Aug 2019 13:57:44 +0200
+Message-Id: <20190815115747.24018-11-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190815115747.24018-1-m.felsch@pengutronix.de>
+References: <20190815115747.24018-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <CAPBb6MVTGJJH_rFjvQy37NDLzT1b_=dBRF6UkFb2hWMwD6EC=A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfPflCPH0I5Lu3LUzAjEuHYscxJynpEO/oAkRPx8yy28wCHABFaWVhiWc3wYcalHM5+2ljqh+ftSMXtm2XK/a/85kneV4snmIzdJtbY3Iua/5z4l1pr08
- X5WstDSnw5Lb0p7kk37ZXA6gVkhVPnjCmEzwy2ZccHrx2pp1RZ7rfeIanlEHIE+wismewyl1j/Al9bJ05RlzVsDYcQnsWELyHhiDOY5zvGim8bs/JQkS1nTg
- 58Wdbnsm5RCtY5d5OWL9+0j8a3F13VuWpMFB5ECfHoHVmUe0NYoMcBO7JhTr22k9rJ5a1znEHtP049LaNutS00cR4CpTWPprMRPGo5B6Wb0e15peTJ2lwuxE
- fjIuK9pf
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 8/15/19 10:12 AM, Alexandre Courbot wrote:
-> On Mon, Aug 12, 2019 at 8:07 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->>
->> Add this new V4L2_DEC_CMD_FLUSH decoder command and document it.
->>
->> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->> ---
->>  Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst | 11 ++++++++++-
->>  Documentation/media/videodev2.h.rst.exceptions      |  1 +
->>  include/uapi/linux/videodev2.h                      |  1 +
->>  3 files changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst b/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst
->> index 57f0066f4cff..0bffef6058f7 100644
->> --- a/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst
->> +++ b/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst
->> @@ -208,7 +208,16 @@ introduced in Linux 3.3. They are, however, mandatory for stateful mem2mem decod
->>         been started yet, the driver will return an ``EPERM`` error code. When
->>         the decoder is already running, this command does nothing. No
->>         flags are defined for this command.
->> -
->> +    * - ``V4L2_DEC_CMD_FLUSH``
->> +      - 4
->> +      - Flush any held capture buffers. Only valid for stateless decoders,
->> +        and only if ``V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF`` was set.
->> +       This command is typically used when the application reached the
->> +       end of the stream and the last output buffer had the
->> +       ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` flag set. This would prevent
->> +       dequeueing the last capture buffer containing the last decoded frame.
->> +       So this command can be used to explicitly flush that last decoded
->> +       frame.
-> 
-> I'm a bit confused here, isn't this command referred to as
-> V4L2_DEC_CMD_STOP in the previous patch?
+Use underlines to highlight optional and required properties. This is
+quite common for all bindings. Align descriptions and start sentence
+with uppercase letter. Also reword the usage of the required
+endpoint properties for the output port in case BT.656 should be used.
 
-That was a typo in the previous patch. It really is FLUSH.
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/media/i2c/tvp5150.txt | 30 +++++++++++--------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
-Regards,
-
-	Hans
-
-> 
-> 
->>
->>  Return Value
->>  ============
->> diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentation/media/videodev2.h.rst.exceptions
->> index adeb6b7a15cb..a79028e4d929 100644
->> --- a/Documentation/media/videodev2.h.rst.exceptions
->> +++ b/Documentation/media/videodev2.h.rst.exceptions
->> @@ -434,6 +434,7 @@ replace define V4L2_DEC_CMD_START decoder-cmds
->>  replace define V4L2_DEC_CMD_STOP decoder-cmds
->>  replace define V4L2_DEC_CMD_PAUSE decoder-cmds
->>  replace define V4L2_DEC_CMD_RESUME decoder-cmds
->> +replace define V4L2_DEC_CMD_FLUSH decoder-cmds
->>
->>  replace define V4L2_DEC_CMD_START_MUTE_AUDIO decoder-cmds
->>  replace define V4L2_DEC_CMD_PAUSE_TO_BLACK decoder-cmds
->> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->> index 4fa9f543742d..91a79e16089c 100644
->> --- a/include/uapi/linux/videodev2.h
->> +++ b/include/uapi/linux/videodev2.h
->> @@ -1978,6 +1978,7 @@ struct v4l2_encoder_cmd {
->>  #define V4L2_DEC_CMD_STOP        (1)
->>  #define V4L2_DEC_CMD_PAUSE       (2)
->>  #define V4L2_DEC_CMD_RESUME      (3)
->> +#define V4L2_DEC_CMD_FLUSH       (4)
->>
->>  /* Flags for V4L2_DEC_CMD_START */
->>  #define V4L2_DEC_CMD_START_MUTE_AUDIO  (1 << 0)
->> --
->> 2.20.1
->>
+diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+index 28b64ad149ef..cc98b38c7e73 100644
+--- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
++++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+@@ -5,12 +5,14 @@ The TVP5150 and TVP5151 are video decoders that convert baseband NTSC and PAL
+ with discrete syncs or 8-bit ITU-R BT.656 with embedded syncs output formats.
+ 
+ Required Properties:
+-- compatible: value must be "ti,tvp5150"
+-- reg: I2C slave address
++====================
++- compatible:	Value must be "ti,tvp5150".
++- reg:		I2C slave address.
+ 
+ Optional Properties:
+-- pdn-gpios: phandle for the GPIO connected to the PDN pin, if any.
+-- reset-gpios: phandle for the GPIO connected to the RESETB pin, if any.
++====================
++- pdn-gpios:	Phandle for the GPIO connected to the PDN pin, if any.
++- reset-gpios:	Phandle for the GPIO connected to the RESETB pin, if any.
+ 
+ The device node must contain one 'port' child node per device physical input
+ and output port, in accordance with the video interface bindings defined in
+@@ -24,9 +26,8 @@ are numbered as follows
+ 	  Y-OUT		src		2
+ 
+ The device node must contain at least one sink port and the src port. Each input
+-port must be linked to an endpoint defined in
+-Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt. The
+-port/connector layout is as follows
++port must be linked to an endpoint defined in [1]. The port/connector layout is
++as follows
+ 
+ tvp-5150 port@0 (AIP1A)
+ 	endpoint@0 -----------> Comp0-Con  port
+@@ -38,14 +39,17 @@ tvp-5150 port@2
+ 	endpoint (video bitstream output at YOUT[0-7] parallel bus)
+ 
+ Required Endpoint Properties for parallel synchronization on output port:
++=========================================================================
+ 
+-- hsync-active: active state of the HSYNC signal. Must be <1> (HIGH).
+-- vsync-active: active state of the VSYNC signal. Must be <1> (HIGH).
+-- field-even-active: field signal level during the even field data
+-  transmission. Must be <0>.
++- hsync-active:		Active state of the HSYNC signal. Must be <1> (HIGH).
++- vsync-active:		Active state of the VSYNC signal. Must be <1> (HIGH).
++- field-even-active:	Field signal level during the even field data
++			transmission. Must be <0>.
+ 
+-If none of hsync-active, vsync-active and field-even-active is specified,
+-the endpoint is assumed to use embedded BT.656 synchronization.
++Note: Do not specify any of these properties if you want to use the embedded
++      BT.656 synchronization.
++
++[1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
+ 
+ Example - three input sources:
+ 
+-- 
+2.20.1
 
