@@ -8,62 +8,62 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEE5FC3A589
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 15:00:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CB6FC3A59C
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 15:00:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 499ED20656
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 15:00:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 55FE1217F4
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 15:00:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tF/RvXrR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Opvs2mJy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733209AbfHOPAL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 11:00:11 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39376 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730788AbfHOPAK (ORCPT
+        id S1733263AbfHOPAW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 11:00:22 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:35417 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733253AbfHOPAV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 11:00:10 -0400
-Received: by mail-wr1-f67.google.com with SMTP id t16so2485933wra.6;
-        Thu, 15 Aug 2019 08:00:09 -0700 (PDT)
+        Thu, 15 Aug 2019 11:00:21 -0400
+Received: by mail-wr1-f65.google.com with SMTP id k2so2499811wrq.2;
+        Thu, 15 Aug 2019 08:00:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=udYciyXbqm5Zne+hkQd3wevHbOZso+c2f+w2KUkviok=;
-        b=tF/RvXrRGyZVXFhyXBViXUyPZifX4vI2qn4i/TvKWRBMAdcJCExWMgR1OaBGojbN9i
-         wXFVr9QLa/hGagYdgKSrN2xmTctv09D6Mya/rQe4997mFhAlS/o8kvI11i+0iNCv8eOZ
-         SUaQ+UrwzL+ORo0NANbYJpy1Tgf2w34vfhmkpyd7+fnZky2aT20ymdWLVkTH8iX+tgvl
-         chK2ilTSznAUICxtVzo3Lx1pwI2G2yej3TZeJIpFAAAvBzzFRB4yvPvo/FehXJSWr6s5
-         bTttKl6xqxlKW3QbyngM2Tt72xP6/3J0iWMmniyOZ6xlHhgx/JwofCueWgjeEvAjVNHK
-         2q2A==
+        bh=UHkUgTVsY8cz+zOWGK7293CzmWQflIsAm9CwwafsuFM=;
+        b=Opvs2mJyoL5Woi8Q1kUrH5crbP9W28g2uJZsnyGtcDaGtIozv96Neq39NbzV7P5mnE
+         IZ0uLqBpK/IR/IXh27C3AJh3bPn2BUuMCCSxl+Zuxf+vnmDpLaQT4nM+sYWLJ1pN0xog
+         ZbpEBAnDcZ4tXlwWBuQpfXDka/FpnuaIBQ3cY6G9yTU0plIhGNPo6F2F35VNxk0LO15r
+         C8w5sNQ9IDw2kbZJmsEbsZokMSWeBCct81YyDv63A1llegxnvBTkakj8bMRoIPIJROG0
+         4IUXnVaecfIFXTgARDoj1qM8MwmrFBPX8xZapf5IuHKDsbSHpSGu/c0Gx6L35RSaEIed
+         bLpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=udYciyXbqm5Zne+hkQd3wevHbOZso+c2f+w2KUkviok=;
-        b=ASny+ZhAjqFBkyUkmV+md+wnFYfKOymz2ZvSfdYmQPWpnGRwS3L5hV5XGl2DpKAANW
-         gQErzazAkcaklc5gjESnmxc3fmxhyjFk9j0HnIf2kNe554vmc7M2GAT4h0DLy8b22prj
-         tdzAzijygZ9R+5kOk5BGI1Gtf54TYQcvNFOWJXNb9858Gy6SvfPmMDhjTUSvUHxW/318
-         6owfH3dfJ6394Drc0HwTJ5dgSNtRbrJxc/8yGz5CbEwYgusQVwrzndRt52rTI1rMrsmb
-         77iSnkCPsp0z6DOCeQQx85oSV/Q8OyrsH2G9ysoS6WsNtJzO0+fSGSpV+cXPbSvktPe8
-         fJVQ==
-X-Gm-Message-State: APjAAAVR5K4hqnVfIoqk8nfTSyTLiM0cXCr0dYFR4Q9aj2onBp971HCT
-        5yn9aiM0fZnfdkVl0Fo+V/Y=
-X-Google-Smtp-Source: APXvYqxruAOlO5/y1WGq3s4qRP6NlewaY1UXLrG2M+b7keWLT53iyPJucJS1AT3PXkyFMHMdr92sTQ==
-X-Received: by 2002:a5d:470c:: with SMTP id y12mr5933559wrq.136.1565881208899;
-        Thu, 15 Aug 2019 08:00:08 -0700 (PDT)
+        bh=UHkUgTVsY8cz+zOWGK7293CzmWQflIsAm9CwwafsuFM=;
+        b=lhChZ2oOi2sj5S7wyb2+Rx2FLuFz/XdFpQF8wGcZXm4eIUB+6lnbl9xsW6NcYOtgwx
+         qM0dpPsbYeVKvrjnBOgQayiwkJKC/5x+9NPgbB/S42/AD+qfJ8pHKliXPrloKIEkis0m
+         IilR+rGpvk3MJFUWP5dfM+VgbeYg/x8QWTse9MlR9fi2aaf5N4XUrNmSiiM218dwagI2
+         a+FxgpR8MYsBHifLLCW/xQGjUeUcfjg7lf10TRDa66S+422+/rxSViFQsWN1GNjDVn3c
+         cWiiFWzuMZF8xOe5i/Fs1yYGPhNpL7lBm1rt10KjLI6JyHVn/PbFFbZ2LR/dmorPQpv9
+         cEHw==
+X-Gm-Message-State: APjAAAVKd9df+HmYevmIeEyd3QmTegLJSy599GmZxKXHM5qCMU5uEfxW
+        DJFgoltSpmOnGYUmUlmmT8lpvvjBTdx3bg==
+X-Google-Smtp-Source: APXvYqzN6gSfm3zXWjnvZMJyrBJmo05tVe5qv2MsT+XK+eHaRNltiURJAJYDGKlckRSyO88q5M4TLw==
+X-Received: by 2002:adf:f641:: with SMTP id x1mr6105400wrp.179.1565881219095;
+        Thu, 15 Aug 2019 08:00:19 -0700 (PDT)
 Received: from localhost.localdomain ([94.204.252.234])
-        by smtp.gmail.com with ESMTPSA id e4sm5041054wrh.39.2019.08.15.08.00.06
+        by smtp.gmail.com with ESMTPSA id e4sm5041054wrh.39.2019.08.15.08.00.17
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 15 Aug 2019 08:00:08 -0700 (PDT)
+        Thu, 15 Aug 2019 08:00:18 -0700 (PDT)
 From:   Christian Hewitt <christianshewitt@gmail.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Benjamin Valentin <benpicco@googlemail.com>,
         Sean Young <sean@mess.org>, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org
 Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: [PATCH 1/7] media: rc: add keymap for Amediatech X96-MAX remote
-Date:   Thu, 15 Aug 2019 18:59:11 +0400
-Message-Id: <1565881157-14644-2-git-send-email-christianshewitt@gmail.com>
+Subject: [PATCH 6/7] media: rc: add keymap for WeTeK Play 2 remote
+Date:   Thu, 15 Aug 2019 18:59:16 +0400
+Message-Id: <1565881157-14644-7-git-send-email-christianshewitt@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1565881157-14644-1-git-send-email-christianshewitt@gmail.com>
 References: <1565881157-14644-1-git-send-email-christianshewitt@gmail.com>
@@ -72,34 +72,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The X96-Max Android STB ships with a simple NEC remote. It includes
-a TV section with preset buttons for controlling a TV. These are not
-configurable, but are noted to aid visual recognition of the device.
+The WeTek Play 2 Android STB ships with an unusual remote where the
+main up/down/left/right/enter controls are surrounded with an outer
+ring of additional keys which are listed in clockwise order.
 
 Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
 ---
- drivers/media/rc/keymaps/Makefile    |  1 +
- drivers/media/rc/keymaps/rc-x96max.c | 85 ++++++++++++++++++++++++++++++++++++
- include/media/rc-map.h               |  1 +
- 3 files changed, 87 insertions(+)
- create mode 100644 drivers/media/rc/keymaps/rc-x96max.c
+ drivers/media/rc/keymaps/Makefile         |  1 +
+ drivers/media/rc/keymaps/rc-wetek-play2.c | 95 +++++++++++++++++++++++++++++++
+ include/media/rc-map.h                    |  1 +
+ 3 files changed, 97 insertions(+)
+ create mode 100644 drivers/media/rc/keymaps/rc-wetek-play2.c
 
 diff --git a/drivers/media/rc/keymaps/Makefile b/drivers/media/rc/keymaps/Makefile
-index 5b1399a..b88c4e7 100644
+index 6d744ac..d316a99 100644
 --- a/drivers/media/rc/keymaps/Makefile
 +++ b/drivers/media/rc/keymaps/Makefile
-@@ -117,4 +117,5 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
+@@ -117,6 +117,7 @@ obj-$(CONFIG_RC_MAP) += rc-adstech-dvb-t-pci.o \
+ 			rc-videomate-s350.o \
+ 			rc-videomate-tv-pvr.o \
+ 			rc-wetek-hub.o \
++			rc-wetek-play2.o \
+ 			rc-winfast.o \
  			rc-winfast-usbii-deluxe.o \
  			rc-su3000.o \
- 			rc-xbox-dvd.o \
-+			rc-x96max.o \
- 			rc-zx-irdec.o
-diff --git a/drivers/media/rc/keymaps/rc-x96max.c b/drivers/media/rc/keymaps/rc-x96max.c
+diff --git a/drivers/media/rc/keymaps/rc-wetek-play2.c b/drivers/media/rc/keymaps/rc-wetek-play2.c
 new file mode 100644
-index 0000000..d947e46
+index 0000000..77504f2
 --- /dev/null
-+++ b/drivers/media/rc/keymaps/rc-x96max.c
-@@ -0,0 +1,85 @@
++++ b/drivers/media/rc/keymaps/rc-wetek-play2.c
+@@ -0,0 +1,95 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +//
 +// Copyright (C) 2019 Christian Hewitt <christianshewitt@gmail.com>
@@ -108,95 +110,105 @@ index 0000000..d947e46
 +#include <linux/module.h>
 +
 +//
-+// Keytable for the X96-max STB remote control
++// Keytable for the WeTek Play 2 STB remote control
 +//
 +
-+static struct rc_map_table x96max[] = {
++static struct rc_map_table wetek_play2[] = {
 +
-+	{ 0x140, KEY_POWER },
++	{ 0x5e5f02, KEY_POWER },
++	{ 0x5e5f46, KEY_SLEEP }, // tv
++	{ 0x5e5f10, KEY_MUTE },
 +
-+	// ** TV CONTROL **
-+	// SET
-+	// AV/TV
-+	// POWER
-+	// VOLUME UP
-+	// VOLUME DOWN
++	{ 0x5e5f22, KEY_1 },
++	{ 0x5e5f23, KEY_2 },
++	{ 0x5e5f24, KEY_3 },
 +
-+	{ 0x118, KEY_VOLUMEUP },
-+	{ 0x110, KEY_VOLUMEDOWN },
++	{ 0x5e5f25, KEY_4 },
++	{ 0x5e5f26, KEY_5 },
++	{ 0x5e5f27, KEY_6 },
 +
-+	{ 0x143, KEY_MUTE }, // config
++	{ 0x5e5f28, KEY_7 },
++	{ 0x5e5f29, KEY_8 },
++	{ 0x5e5f30, KEY_9 },
 +
-+	{ 0x100, KEY_EPG }, // mouse
-+	{ 0x119, KEY_BACK },
++	{ 0x5e5f71, KEY_BACK },
++	{ 0x5e5f21, KEY_0 },
++	{ 0x5e5f72, KEY_CAPSLOCK },
 +
-+	{ 0x116, KEY_UP },
-+	{ 0x151, KEY_LEFT },
-+	{ 0x150, KEY_RIGHT },
-+	{ 0x11a, KEY_DOWN },
-+	{ 0x113, KEY_OK },
++	// outer ring clockwide from top
++	{ 0x5e5f03, KEY_HOME },
++	{ 0x5e5f61, KEY_BACK },
++	{ 0x5e5f77, KEY_CONFIG }, // mouse
++	{ 0x5e5f83, KEY_EPG },
++	{ 0x5e5f84, KEY_SCREEN }, // square
++	{ 0x5e5f48, KEY_MENU },
 +
-+	{ 0x111, KEY_HOME },
-+	{ 0x14c, KEY_CONTEXT_MENU },
++	// inner ring
++	{ 0x5e5f50, KEY_UP },
++	{ 0x5e5f4b, KEY_DOWN },
++	{ 0x5e5f4c, KEY_LEFT },
++	{ 0x5e5f4d, KEY_RIGHT },
++	{ 0x5e5f47, KEY_OK },
 +
-+	{ 0x159, KEY_PREVIOUS },
-+	{ 0x15a, KEY_PLAYPAUSE },
-+	{ 0x158, KEY_NEXT },
++	{ 0x5e5f44, KEY_VOLUMEUP },
++	{ 0x5e5f43, KEY_VOLUMEDOWN },
++	{ 0x5e5f4f, KEY_FAVORITES },
++	{ 0x5e5f82, KEY_SUBTITLE }, // txt
++	{ 0x5e5f41, KEY_PAGEUP },
++	{ 0x5e5f42, KEY_PAGEDOWN },
 +
-+	{ 0x147, KEY_MENU }, // @ key
-+	{ 0x101, KEY_NUMERIC_0 },
-+	{ 0x142, KEY_BACKSPACE },
++	{ 0x5e5f73, KEY_RED },
++	{ 0x5e5f74, KEY_GREEN },
++	{ 0x5e5f75, KEY_YELLOW },
++	{ 0x5e5f76, KEY_BLUE },
 +
-+	{ 0x14e, KEY_NUMERIC_1 },
-+	{ 0x10d, KEY_NUMERIC_2 },
-+	{ 0x10c, KEY_NUMERIC_3 },
++	{ 0x5e5f67, KEY_PREVIOUSSONG },
++	{ 0x5e5f79, KEY_REWIND },
++	{ 0x5e5f80, KEY_FASTFORWARD },
++	{ 0x5e5f81, KEY_NEXTSONG },
 +
-+	{ 0x14a, KEY_NUMERIC_4 },
-+	{ 0x109, KEY_NUMERIC_5 },
-+	{ 0x108, KEY_NUMERIC_6 },
-+
-+	{ 0x146, KEY_NUMERIC_7 },
-+	{ 0x105, KEY_NUMERIC_8 },
-+	{ 0x104, KEY_NUMERIC_9 },
++	{ 0x5e5f04, KEY_RECORD },
++	{ 0x5e5f2c, KEY_PLAYPAUSE },
++	{ 0x5e5f2b, KEY_STOP },
 +
 +};
 +
-+static struct rc_map_list x96max_map = {
++static struct rc_map_list wetek_play2_map = {
 +	.map = {
-+		.scan     = x96max,
-+		.size     = ARRAY_SIZE(x96max),
++		.scan     = wetek_play2,
++		.size     = ARRAY_SIZE(wetek_play2),
 +		.rc_proto = RC_PROTO_NEC,
-+		.name     = RC_MAP_X96MAX,
++		.name     = RC_MAP_WETEK_PLAY2,
 +	}
 +};
 +
-+static int __init init_rc_map_x96max(void)
++static int __init init_rc_map_wetek_play2(void)
 +{
-+	return rc_map_register(&x96max_map);
++	return rc_map_register(&wetek_play2_map);
 +}
 +
-+static void __exit exit_rc_map_x96max(void)
++static void __exit exit_rc_map_wetek_play2(void)
 +{
-+	rc_map_unregister(&x96max_map);
++	rc_map_unregister(&wetek_play2_map);
 +}
 +
-+module_init(init_rc_map_x96max)
-+module_exit(exit_rc_map_x96max)
++module_init(init_rc_map_wetek_play2)
++module_exit(exit_rc_map_wetek_play2)
 +
 +MODULE_LICENSE("GPL");
 +MODULE_AUTHOR("Christian Hewitt <christianshewitt@gmail.com");
 diff --git a/include/media/rc-map.h b/include/media/rc-map.h
-index bebd3c4..1f61cb07 100644
+index e7fee29..1a357fb 100644
 --- a/include/media/rc-map.h
 +++ b/include/media/rc-map.h
 @@ -284,6 +284,7 @@ struct rc_map *rc_map_get(const char *name);
+ #define RC_MAP_VIDEOMATE_S350            "rc-videomate-s350"
+ #define RC_MAP_VIDEOMATE_TV_PVR          "rc-videomate-tv-pvr"
+ #define RC_MAP_WETEK_HUB                 "rc-wetek-hub"
++#define RC_MAP_WETEK_PLAY2               "rc-wetek-play2"
+ #define RC_MAP_WINFAST                   "rc-winfast"
  #define RC_MAP_WINFAST_USBII_DELUXE      "rc-winfast-usbii-deluxe"
  #define RC_MAP_SU3000                    "rc-su3000"
- #define RC_MAP_XBOX_DVD                  "rc-xbox-dvd"
-+#define RC_MAP_X96MAX                    "rc-x96max"
- #define RC_MAP_ZX_IRDEC                  "rc-zx-irdec"
- 
- /*
 -- 
 2.7.4
 
