@@ -2,120 +2,132 @@ Return-Path: <SRS0=Aqrg=WL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99753C433FF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 10:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F016EC433FF
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 10:14:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 69585208C2
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 10:10:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="f7AlEHVf"
+	by mail.kernel.org (Postfix) with ESMTP id C361D21744
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 10:14:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731301AbfHOKKJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 06:10:09 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:34416 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbfHOKKI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 06:10:08 -0400
-Received: by mail-ed1-f66.google.com with SMTP id s49so1710496edb.1
-        for <linux-media@vger.kernel.org>; Thu, 15 Aug 2019 03:10:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z+cqg8eS5vjd3qaqaySDrdCTkO9DCN1xv8OvuOzwED0=;
-        b=f7AlEHVfC2jT3v7PdW0mUtkNmD+/AgnONEdWWNr+74V3mrq4RjZq9gHRhQ6BknGDzJ
-         1BGm9f07rmMJUVu4/rYnciXIoe8pV65My0tjSUYGTpND0uPdegjOqhAfLbBIZa93zDAe
-         Z3xX1Myojzv/lmaFuoWfT1PdMyQkmY6LU6br4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z+cqg8eS5vjd3qaqaySDrdCTkO9DCN1xv8OvuOzwED0=;
-        b=fFmapPm60ASzTJ6WKMJslsY0aUdGJ0gXwPEASJAW8zhrokMm+LFTVfvNAXM2XFChBY
-         2YW6+2c4Rj2wt4S0vPv6wsMqqeQWPhgTT3o/iQTfuMzCyUyAcu4ua+UMd6fx/sjpuTn4
-         a+wQOpXvVW4ghpBYmPT1zxzNL0qWtFqmSNlxgewOsTnPZV+RbOEKfx0BOkvR3sgHWWlp
-         kkhvSWdoQX+s8URHV10/FZ+0Ch8aR0MX2LiGgaiO2AkwzbE0ODVfGuxLnyeJD/dN0FuC
-         uzBm7Syhst3hh0lv2CSSXPetevpcDXuR8ZmIl6a0yiEkgfLqnP0KgIEYo1h6BD/wZqZj
-         zqUg==
-X-Gm-Message-State: APjAAAVFMZ2lZaM2JbMV/SmkMLchDIRP75IcNPVrW/LBM+Nt4KJ+ArlN
-        KkcKMqanPS7BgR2UIoVaSXGdIB0TSb1/cQ==
-X-Google-Smtp-Source: APXvYqznU2nmQrNFxHKMskeXEbiopRi7CX5WHK/heZUm2u6u6UU0UZP+oTo/iQK0ESPVbnci/5UNRQ==
-X-Received: by 2002:a17:906:1499:: with SMTP id x25mr3639934ejc.42.1565863806825;
-        Thu, 15 Aug 2019 03:10:06 -0700 (PDT)
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com. [209.85.221.44])
-        by smtp.gmail.com with ESMTPSA id v8sm470961edy.14.2019.08.15.03.10.05
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Aug 2019 03:10:05 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id z11so1757588wrt.4
-        for <linux-media@vger.kernel.org>; Thu, 15 Aug 2019 03:10:05 -0700 (PDT)
-X-Received: by 2002:adf:f851:: with SMTP id d17mr4604321wrq.77.1565863805226;
- Thu, 15 Aug 2019 03:10:05 -0700 (PDT)
+        id S1730533AbfHOKOj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 06:14:39 -0400
+Received: from gofer.mess.org ([88.97.38.141]:48615 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725875AbfHOKOj (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 15 Aug 2019 06:14:39 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 6E1206078C; Thu, 15 Aug 2019 11:14:36 +0100 (BST)
+Date:   Thu, 15 Aug 2019 11:14:36 +0100
+From:   Sean Young <sean@mess.org>
+To:     JP <jp@jpvw.nl>
+Cc:     James Hutchinson <jahutchinson99@googlemail.com>,
+        Antti Palosaari <crope@iki.fi>, linux-media@vger.kernel.org,
+        Thomas Hollstegge <thomas.hollstegge@gmail.com>
+Subject: Re: MyGica T230 dvb-t2 data corruption since commit 5fa8815
+Message-ID: <20190815101436.m73vlybkei7ij4oz@gofer.mess.org>
+References: <CAD+OKUpCVHUO1=mEGCx8Mx7TJLc4rJZjV8+Rgd_fRFrwpBDExA@mail.gmail.com>
+ <20190719183542.GA25609@jpvw.nl>
+ <CAD+OKUoCXV1LLM40Frm8VGoFDzhKmO__ALdsnttmfr=nueBFAg@mail.gmail.com>
+ <2dcec967-35b0-315c-4cdf-0bcfe8e71cbc@jpvw.nl>
 MIME-Version: 1.0
-References: <20190812110513.23774-1-hverkuil-cisco@xs4all.nl>
- <20190812110513.23774-3-hverkuil-cisco@xs4all.nl> <20190814125336.GB11714@aptenodytes>
- <CAPBb6MWj_03kz1pVr5ap7iwr0Li0RVuTH9rKqqh5JqX5R+83-w@mail.gmail.com>
-In-Reply-To: <CAPBb6MWj_03kz1pVr5ap7iwr0Li0RVuTH9rKqqh5JqX5R+83-w@mail.gmail.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 15 Aug 2019 19:09:53 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5BqjrNDtkjZar6i8gCrxXvSgndOL7-0ERes4-WOSTqg5Q@mail.gmail.com>
-Message-ID: <CAAFQd5BqjrNDtkjZar6i8gCrxXvSgndOL7-0ERes4-WOSTqg5Q@mail.gmail.com>
-Subject: Re: [PATCHv2 02/12] videodev2.h: add V4L2_FMT_FLAG_DYN_RESOLUTION
-To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Maxime Jourdan <mjourdan@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2dcec967-35b0-315c-4cdf-0bcfe8e71cbc@jpvw.nl>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 5:12 PM Alexandre Courbot <acourbot@chromium.org> wrote:
->
-> On Wed, Aug 14, 2019 at 9:53 PM Paul Kocialkowski
-> <paul.kocialkowski@bootlin.com> wrote:
-> >
-> > Hi,
-> >
-> > On Mon 12 Aug 19, 13:05, Hans Verkuil wrote:
-> > > From: Maxime Jourdan <mjourdan@baylibre.com>
-> > >
-> > > Add an enum_fmt format flag to specifically tag coded formats where
-> > > dynamic resolution switching is supported by the device.
-> > >
-> > > This is useful for some codec drivers that can support dynamic
-> > > resolution switching for one or more of their listed coded formats. It
-> > > allows userspace to know whether it should extract the video parameters
-> > > itself, or if it can rely on the device to send V4L2_EVENT_SOURCE_CHANGE
-> > > when such changes are detected.
-> >
-> > Makes sense and looks good to me:
-> > Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> >
-> > The docs aren't saying that this only applies to stateful decoders, but I think
-> > it is quite clear that this can't apply to stateless decoders.
->
-> Even though this can be inferred from reading the specs, I think it
-> would be reasonable to explicitly mention it though.
->
-> I also wonder, since this flag does not make sense for encoders, maybe
-> we can use more precise vocabulary in the patch description and doc?
-> I.e. s/codec/decoder.
->
-> With that,
-> Reviewed-by: Alexandre Courbot <acourbot@chromium.org>
+Hi JP,
 
-There is no reason why it couldn't apply to an encoder. I think the
-idea is to actually have the encoder advertise the same flag once we
-figure out how to implement encoding with resolution changes.
+On Tue, Aug 13, 2019 at 03:46:37PM +0200, JP wrote:
+> Thanks James, my tests on both DVB-T and DVB-C all went OK.
+> 
+> So, with the t230 driver in cxusb broken for one hw version of
+> the device and both hw versions now working fine in dvbsky &
+> the driver in cxusb does not crash itself anymore (did you test
+> that, James?) & everybody agrees I think this move to dvbsky
+> should be done.
+> 
+> Sean: some hunks from the 'remove from cxusb' patch won't
+> apply to linux-5.3 , because of the recent addition of the analogue
+> driver code to cxusb. So I now have 2 different 'remove from
+> cxusb'  patches. How do I proceed with that?
 
-Best regards,
-Tomasz
+Would it be possible to submit new patches which apply? The testing
+is great (thanks James!) so should be good for v5.4 if we have
+patches on time.
+
+Thanks,
+
+Sean
+
+> 
+> [one more remark below]
+> 
+> On 8/2/19 2:00 PM, James Hutchinson wrote:
+> > Hi Jan,
+> > 
+> > I've been running for a couple of weeks now with your two patches applied:
+> > 
+> > 1) dvbsky: add MyGica T230
+> > 2) remove t230 from cxusb
+> > 
+> > Everything has been working perfectly - the checksum errors when
+> > scanning muxes have gone, and streaming has been working nicely.
+> > 
+> > Tested-by: James Hutchinson <jahutchinson99@googlemail.com>
+> > 
+> > Regards,
+> > James
+> > 
+> > On Fri, 19 Jul 2019 at 19:35, Jan Pieter van Woerkom <jp@jpvw.nl> wrote:
+> > > dvbsky: add MyGica T230.
+> > > Moved from cxusb driver as that driver can't handle FX2 FIFO issue.
+> > > 
+> > > Signed-off-by: Jan Pieter van Woerkom <jp@jpvw.nl>
+> > > ---
+> > > diff -ru a/drivers/media/usb/dvb-usb-v2/dvbsky.c b/drivers/media/usb/dvb-usb-v2/dvbsky.c
+> > > --- a/drivers/media/usb/dvb-usb-v2/dvbsky.c     2019-07-08 00:41:56.000000000 +0200
+> > > +++ b/drivers/media/usb/dvb-usb-v2/dvbsky.c     2019-07-19 17:50:54.671341146 +0200
+> > > @@ -561,11 +561,18 @@
+> > > 
+> > >          /* attach tuner */
+> > >          si2157_config.fe = adap->fe[0];
+> > > -       si2157_config.if_port = 0;
+> > > -
+> > > -       state->i2c_client_tuner = dvb_module_probe("si2157", "si2141",
+> > > +       if (le16_to_cpu(d->udev->descriptor.idProduct) == USB_PID_MYGICA_T230) {
+> > > +               si2157_config.if_port = 1;
+> > > +               state->i2c_client_tuner = dvb_module_probe("si2157", NULL,
+> > > +                                                  i2c_adapter,
+> > > +                                                  0x60, &si2157_config);
+> > > +       }
+> > > +       else {
+> Coding style: those last 2 lines should be:
+>         } else {
+> > > +               si2157_config.if_port = 0;
+> > > +               state->i2c_client_tuner = dvb_module_probe("si2157", "si2141",
+> > >                                                     i2c_adapter,
+> > >                                                     0x60, &si2157_config);
+> > > +       }
+> > >          if (!state->i2c_client_tuner) {
+> > >                  dvb_module_release(state->i2c_client_demod);
+> > >                  return -ENODEV;
+> > > @@ -787,6 +794,9 @@
+> > >          { DVB_USB_DEVICE(USB_VID_TERRATEC, USB_PID_TERRATEC_CINERGY_S2_R4,
+> > >                  &dvbsky_s960_props, "Terratec Cinergy S2 Rev.4",
+> > >                  RC_MAP_DVBSKY) },
+> > > +       { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230,
+> > > +               &mygica_t230c_props, "MyGica Mini DVB-T2 USB Stick T230",
+> > > +               RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+> > >          { DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C,
+> > >                  &mygica_t230c_props, "MyGica Mini DVB-T2 USB Stick T230C",
+> > >                  RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
+> Cheers,
+> Jan Pieter.
