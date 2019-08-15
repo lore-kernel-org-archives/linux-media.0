@@ -2,224 +2,182 @@ Return-Path: <SRS0=Aqrg=WL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB08EC433FF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 10:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7850EC31E40
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 10:30:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 938A321744
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 10:14:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4FA8C21773
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 10:30:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SMng4Bj9"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IKj4fHPm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730768AbfHOKOl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 15 Aug 2019 06:14:41 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:33855 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbfHOKOl (ORCPT
+        id S1730852AbfHOKaR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 15 Aug 2019 06:30:17 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:42101 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730524AbfHOKaR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 15 Aug 2019 06:14:41 -0400
-Received: by mail-ed1-f66.google.com with SMTP id s49so1719340edb.1
-        for <linux-media@vger.kernel.org>; Thu, 15 Aug 2019 03:14:39 -0700 (PDT)
+        Thu, 15 Aug 2019 06:30:17 -0400
+Received: by mail-ed1-f65.google.com with SMTP id m44so1705301edd.9
+        for <linux-media@vger.kernel.org>; Thu, 15 Aug 2019 03:30:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AmKNhcBcz+A981onr4gAty4gwBrKdQXwD5SM/0QOmm0=;
-        b=SMng4Bj9S+A+bwKn7CeyiOSh0aehioYNyAjqmGBExy2DMOPRse/0yMHnWiFwXcVS0W
-         HqswZ9AP4zOmki8LswKDlfuQ5i6+WGxaspV0L3In/UjZ55zaDTe/5zG4M8GREDq+DA66
-         9PMk7TyS1GWp+IqdF9ikMwK2Jnm/5NXZNYVwA=
+        bh=gehrfSX/wYrGDiK8IqXnoPhYbim32JFwF8t1ONu8CwY=;
+        b=IKj4fHPmdhELeh90ShgbJmumqDoKz4HjY9PfX+7XdlHjTTZy8VBZMWV8V0jgtKigwJ
+         RqABRgkm9B8EAn+pmeIpfze0Tyfh2OmUTy9FzVzVkYUiACFB6c0YcnrGGDeZX/qyDe0P
+         N3pdQMX0iGWiIsb1N8JDM8yyCWEvtLttRdL/Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AmKNhcBcz+A981onr4gAty4gwBrKdQXwD5SM/0QOmm0=;
-        b=tHlB9SCQ3YaijhyWhow4G9ZcxwOcM9O4xZep7QqQ8yVFfutCr3V2t7kQ13kwNnFwWB
-         8601mLk5LB18yBwhXaLu77J5SGO5JWnzZdREPLFVm30DQvgNq2ifqozlbm6uG0M8N200
-         iUzDTJXlph8h4Xd3mp7VWL/s++JcROuURiaOJdmSRmorDntqZ+9vPQ/2rDxx1e4ORBfk
-         NWCZ/y4LmOYzSPHOabPDLTsYPxhxuD50Q9NnLyPLUtDMbmhlp/gF+YrM0GYgyr67nJqH
-         vWelAT7g9V/wWuW64CLRbgZirh411io3ScU88QxVwLhYjISDVyrmSXSZZzS6jvNDsUmq
-         T6cw==
-X-Gm-Message-State: APjAAAVt+l+8AsmPsFLkdmzxw1mOMA168/szwRusp3AW1zVONN3p1W5F
-        Q/1FfUNL9vBgjM43po1KlAoJWLrFoxys1Q==
-X-Google-Smtp-Source: APXvYqzYPSNpWNssJAoybwIEfgX2l+BLkJat97hXI+pFu9IPU4eet+7MML1mRtgv8TYmKI/d/Mr9kA==
-X-Received: by 2002:a50:b825:: with SMTP id j34mr4625958ede.58.1565864078191;
-        Thu, 15 Aug 2019 03:14:38 -0700 (PDT)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id h9sm477600edv.75.2019.08.15.03.14.37
+        bh=gehrfSX/wYrGDiK8IqXnoPhYbim32JFwF8t1ONu8CwY=;
+        b=Rnq1F7ygNy5ZGErDfPJ+nk5Xxyz01YCGm2EwK9NXnMAPbP2BojL/V3yIRYb6MYJMg7
+         J+4kR+/U5cccS3t2fABninJnwVZ7v9EBjLepPr9jlbTlNA4RHJFyDleIzIl1N7RYRG2e
+         TzVe0d2NYN6YSWYawVEjrgYJsONxRSJHDgj6kufcJ2ZWjrJeHgYZOOwDH/ZhMeg/jNge
+         3FXZ5EfGvh6hg7zraDESxTWtlneLdgo3AQ1n7VxHbcSiBfI9cjHQ+wkkTUApnyhCmPDj
+         zPsnxflGa4u4AnukQulQIwSms6LL3C7tLQ39kagyjo4AWb7hEYsoWk7dgzszZe1NscV2
+         I6HQ==
+X-Gm-Message-State: APjAAAUlnH04GJd0rXiESTsY5LM73Jrhb3hPDTBV6Ak1HysSfxMIrUrN
+        OGb8Qq3CWJ1R89tWGJXM8VRZ9byKvP5gcQ==
+X-Google-Smtp-Source: APXvYqwxTq3apmXVShfBvhIpb49vgmJx8KM3BlivVJFTX7XteaBHbGyWEjhmO6RaiqfBkcDLXjcwmQ==
+X-Received: by 2002:a50:982a:: with SMTP id g39mr4568762edb.88.1565865015084;
+        Thu, 15 Aug 2019 03:30:15 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id e4sm481685edy.74.2019.08.15.03.30.11
         for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Aug 2019 03:14:37 -0700 (PDT)
-Received: by mail-wr1-f54.google.com with SMTP id b16so1740363wrq.9
-        for <linux-media@vger.kernel.org>; Thu, 15 Aug 2019 03:14:37 -0700 (PDT)
-X-Received: by 2002:a05:6000:110f:: with SMTP id z15mr4382671wrw.162.1565864076682;
- Thu, 15 Aug 2019 03:14:36 -0700 (PDT)
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Aug 2019 03:30:12 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id q12so1757309wrj.12
+        for <linux-media@vger.kernel.org>; Thu, 15 Aug 2019 03:30:11 -0700 (PDT)
+X-Received: by 2002:adf:f851:: with SMTP id d17mr4704460wrq.77.1565865011444;
+ Thu, 15 Aug 2019 03:30:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190812110513.23774-1-hverkuil-cisco@xs4all.nl> <20190812110513.23774-5-hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20190812110513.23774-5-hverkuil-cisco@xs4all.nl>
+References: <20190730184256.30338-1-helen.koike@collabora.com>
+ <20190730184256.30338-6-helen.koike@collabora.com> <20190808091406.GQ21370@paasikivi.fi.intel.com>
+ <da6c1d01-e3f6-ad73-db55-145d7832a665@collabora.com> <20190815082422.GM6133@paasikivi.fi.intel.com>
+In-Reply-To: <20190815082422.GM6133@paasikivi.fi.intel.com>
 From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 15 Aug 2019 19:14:25 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DQ_oAmsqBWVDWrCiTNxGH5PJ0OdX5Qk_=M+RKnbr=-_g@mail.gmail.com>
-Message-ID: <CAAFQd5DQ_oAmsqBWVDWrCiTNxGH5PJ0OdX5Qk_=M+RKnbr=-_g@mail.gmail.com>
-Subject: Re: [PATCHv2 04/12] media: s5p_mfc_dec: set flags for OUTPUT coded formats
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kamil Debski <kamil@wypas.org>,
-        Jeongtae Park <jtp.park@samsung.com>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Maxime Jourdan <mjourdan@baylibre.com>
+Date:   Thu, 15 Aug 2019 19:29:59 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5Cd2k5ZCDfu=a281NLOa88vpm-P7ZPWF4Nnx==iyEkn7A@mail.gmail.com>
+Message-ID: <CAAFQd5Cd2k5ZCDfu=a281NLOa88vpm-P7ZPWF4Nnx==iyEkn7A@mail.gmail.com>
+Subject: Re: [PATCH v8 05/14] media: rkisp1: add Rockchip ISP1 subdev driver
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Helen Koike <helen.koike@collabora.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        devicetree@vger.kernel.org, Eddie Cai <eddie.cai.linux@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Chen Jacob <jacob2.chen@rock-chips.com>,
+        Jeffy <jeffy.chen@rock-chips.com>,
+        =?UTF-8?B?6ZKf5Lul5bSH?= <zyc@rock-chips.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        kernel@collabora.com, Ezequiel Garcia <ezequiel@collabora.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "list@263.net:IOMMU DRIVERS <iommu@lists.linux-foundation.org>, Joerg
+        Roedel <joro@8bytes.org>," <linux-arm-kernel@lists.infradead.org>,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        Jacob Chen <cc@rock-chips.com>,
+        Allon Huang <allon.huang@rock-chips.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Hans,
+On Thu, Aug 15, 2019 at 5:25 PM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Helen,
+>
+> On Wed, Aug 14, 2019 at 09:58:05PM -0300, Helen Koike wrote:
+>
+> ...
+>
+> > >> +static int rkisp1_isp_sd_set_fmt(struct v4l2_subdev *sd,
+> > >> +                           struct v4l2_subdev_pad_config *cfg,
+> > >> +                           struct v4l2_subdev_format *fmt)
+> > >> +{
+> > >> +  struct rkisp1_device *isp_dev = sd_to_isp_dev(sd);
+> > >> +  struct rkisp1_isp_subdev *isp_sd = &isp_dev->isp_sdev;
+> > >> +  struct v4l2_mbus_framefmt *mf = &fmt->format;
+> > >> +
+> > >
+> > > Note that for sub-device nodes, the driver is itself responsible for
+> > > serialising the access to its data structures.
+> >
+> > But looking at subdev_do_ioctl_lock(), it seems that it serializes the
+> > ioctl calls for subdevs, no? Or I'm misunderstanding something (which is
+> > most probably) ?
+>
+> Good question. I had missed this change --- subdev_do_ioctl_lock() is
+> relatively new. But setting that lock is still not possible as the struct
+> is allocated in the framework and the device is registered before the
+> driver gets hold of it. It's a good idea to provide the same serialisation
+> for subdevs as well.
+>
+> I'll get back to this later.
+>
+> ...
+>
+> > >> +static int rkisp1_isp_sd_s_power(struct v4l2_subdev *sd, int on)
+> > >
+> > > If you support runtime PM, you shouldn't implement the s_power op.
+> >
+> > Is is ok to completly remove the usage of runtime PM then?
+> > Like this http://ix.io/1RJb ?
+>
+> Please use runtime PM instead. In the long run we should get rid of the
+> s_power op. Drivers themselves know better when the hardware they control
+> should be powered on or off.
+>
 
-On Mon, Aug 12, 2019 at 8:05 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
+One also needs to use runtime PM to handle power domains and power
+dependencies on auxiliary devices, e.g. IOMMU.
+
+> >
+> > tbh I'm not that familar with runtime PM and I'm not sure what is the
+> > difference of it and using s_power op (and Documentation/power/runtime_pm.rst
+> > is not being that helpful tbh).
 >
-> From: Maxime Jourdan <mjourdan@baylibre.com>
+> You can find a simple example e.g. in
+> drivers/media/platform/atmel/atmel-isi.c .
 >
-> Tag all the coded formats where the s5p_mfc decoder supports dynamic
-> resolution switching or has a bytestream parser.
+> >
+> > >
+> > > You'll still need to call s_power on external subdevs though.
+> > >
+> > >> +{
+> > >> +  struct rkisp1_device *isp_dev = sd_to_isp_dev(sd);
+> > >> +  int ret;
+> > >> +
+> > >> +  v4l2_dbg(1, rkisp1_debug, &isp_dev->v4l2_dev, "s_power: %d\n", on);
+> > >> +
+> > >> +  if (on) {
+> > >> +          ret = pm_runtime_get_sync(isp_dev->dev);
+> >
+> > If this is not ok to remove suport for runtime PM, then where should I put
+> > the call to pm_runtime_get_sync() if not in this s_power op ?
+>
+> Basically the runtime_resume and runtime_suspend callbacks are where the
+> device power state changes are implemented, and pm_runtime_get_sync and
+> pm_runtime_put are how the driver controls the power state.
+>
+> So you no longer need the s_power() op at all. The op needs to be called on
+> the pipeline however, as there are drivers that still use it.
 >
 
-I believe it depends on the MFC hardware version. v5 might have some
-additional restrictions.
+For this driver, I suppose we would _get_sync() when we start
+streaming (in the hardware, i.e. we want the ISP to start capturing
+frames) and _put() when we stop and the driver shouldn't perform any
+access to the hardware when the streaming is not active.
 
-Let me add some more folks to figure out.
-
-> Signed-off-by: Maxime Jourdan <mjourdan@baylibre.com>
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> [hverkuil-cisco@xs4all.nl: added CONTINUOUS_BYTESTREAM]
-> ---
->  .../media/platform/s5p-mfc/s5p_mfc_common.h    |  1 +
->  drivers/media/platform/s5p-mfc/s5p_mfc_dec.c   | 18 ++++++++++++++++++
->  2 files changed, 19 insertions(+)
->
-> diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_common.h b/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
-> index 96d1ecd1521b..31b133af91eb 100644
-> --- a/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
-> +++ b/drivers/media/platform/s5p-mfc/s5p_mfc_common.h
-> @@ -723,6 +723,7 @@ struct s5p_mfc_fmt {
->         enum s5p_mfc_fmt_type type;
->         u32 num_planes;
->         u32 versions;
-> +       u32 flags;
->  };
->
->  /**
-> diff --git a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c b/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-> index 61e144a35201..1423c33c70cb 100644
-> --- a/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-> +++ b/drivers/media/platform/s5p-mfc/s5p_mfc_dec.c
-> @@ -62,6 +62,8 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V5PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION |
-> +                                 V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_H264_MVC,
-> @@ -69,6 +71,8 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V6PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION |
-> +                                 V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_H263,
-> @@ -76,6 +80,7 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V5PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_MPEG1,
-> @@ -83,6 +88,8 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V5PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION |
-> +                                 V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_MPEG2,
-> @@ -90,6 +97,8 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V5PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION |
-> +                                 V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_MPEG4,
-> @@ -97,6 +106,8 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V5PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION |
-> +                                 V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_XVID,
-> @@ -104,6 +115,7 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V5PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_VC1_ANNEX_G,
-> @@ -111,6 +123,7 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V5PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_VC1_ANNEX_L,
-> @@ -118,6 +131,7 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V5PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_VP8,
-> @@ -125,6 +139,7 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V6PLUS_BITS,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_HEVC,
-> @@ -132,6 +147,8 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V10_BIT,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION |
-> +                                 V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM,
->         },
->         {
->                 .fourcc         = V4L2_PIX_FMT_VP9,
-> @@ -139,6 +156,7 @@ static struct s5p_mfc_fmt formats[] = {
->                 .type           = MFC_FMT_DEC,
->                 .num_planes     = 1,
->                 .versions       = MFC_V10_BIT,
-> +               .flags          = V4L2_FMT_FLAG_DYN_RESOLUTION,
->         },
->  };
->
-> --
-> 2.20.1
->
+Best regards,
+Tomasz
