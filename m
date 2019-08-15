@@ -2,43 +2,41 @@ Return-Path: <SRS0=Aqrg=WL=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C37A5C433FF
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 587F5C31E40
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A028B206C2
-	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3000E206C2
+	for <linux-media@archiver.kernel.org>; Thu, 15 Aug 2019 11:58:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731259AbfHOL6O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1731284AbfHOL6O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 15 Aug 2019 07:58:14 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59963 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44823 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730453AbfHOL6A (ORCPT
+        with ESMTP id S1730360AbfHOL6A (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 15 Aug 2019 07:58:00 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hyEO7-00042p-4v; Thu, 15 Aug 2019 13:57:51 +0200
+        id 1hyEO7-00042h-4u; Thu, 15 Aug 2019 13:57:51 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1hyEO4-0006IN-W3; Thu, 15 Aug 2019 13:57:48 +0200
+        id 1hyEO4-0006I1-SZ; Thu, 15 Aug 2019 13:57:48 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@pengutronix.de, Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v7 08/13] media: tvp5150: initialize subdev before parsing device tree
-Date:   Thu, 15 Aug 2019 13:57:42 +0200
-Message-Id: <20190815115747.24018-9-m.felsch@pengutronix.de>
+        kernel@pengutronix.de
+Subject: [PATCH v7 00/13] Add TVP5150 features
+Date:   Thu, 15 Aug 2019 13:57:34 +0200
+Message-Id: <20190815115747.24018-1-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190815115747.24018-1-m.felsch@pengutronix.de>
-References: <20190815115747.24018-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
@@ -50,45 +48,54 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Michael Tretter <m.tretter@pengutronix.de>
+Hi,
 
-There are several debug prints in the tvp5150_parse_dt() function, which
-do not print the prefix, because the v4l2_subdev is not initialized, yet.
+many thanks to Mauro, Hans, Jacopo and Laurent for the
+feedack :)
+Hopefully I got all the comments and concerns and fixed those
+with this v7.
 
-Initialize the v4l2_subdev before parsing the device tree to fix the
-debug messages.
+In short:
+ - v4l2-connector label isn't set anymore if not specified
+ - tvp5150 connectors are now static
+   -> reduces code and is easier to review and maintain
 
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- drivers/media/i2c/tvp5150.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Each changed patch contains a more detailed changelog.
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index ad59e65e6771..26a156da3ab4 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -1959,6 +1959,9 @@ static int tvp5150_probe(struct i2c_client *c)
- 
- 	core->regmap = map;
- 	sd = &core->sd;
-+	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
-+	sd->internal_ops = &tvp5150_internal_ops;
-+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 
- 	if (IS_ENABLED(CONFIG_OF) && np) {
- 		res = tvp5150_parse_dt(core, np);
-@@ -1971,10 +1974,6 @@ static int tvp5150_probe(struct i2c_client *c)
- 		core->mbus_type = V4L2_MBUS_BT656;
- 	}
- 
--	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
--	sd->internal_ops = &tvp5150_internal_ops;
--	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
--
- 	res = tvp5150_mc_init(core);
- 	if (res)
- 		return res;
+Hopefully we get this series done :)
+
+Regards,
+  Marco
+
+Javier Martinez Canillas (1):
+  partial revert of "[media] tvp5150: add HW input connectors support"
+
+Marco Felsch (11):
+  dt-bindings: connector: analog: add tv norms property
+  media: v4l2-fwnode: add v4l2_fwnode_connector
+  media: v4l2-fwnode: add initial connector parsing support
+  media: tvp5150: add input source selection of_graph support
+  media: dt-bindings: tvp5150: Add input port connectors DT bindings
+  media: tvp5150: add FORMAT_TRY support for get/set selection handlers
+  media: tvp5150: add s_power callback
+  media: dt-bindings: tvp5150: cleanup bindings stlye
+  media: dt-bindings: tvp5150: add optional tvnorms documentation
+  media: tvp5150: add support to limit tv norms on connector
+  media: tvp5150: make debug output more readable
+
+Michael Tretter (1):
+  media: tvp5150: initialize subdev before parsing device tree
+
+ .../display/connector/analog-tv-connector.txt |   4 +
+ .../devicetree/bindings/media/i2c/tvp5150.txt | 145 +++-
+ drivers/media/i2c/tvp5150.c                   | 644 +++++++++++++-----
+ drivers/media/v4l2-core/v4l2-fwnode.c         | 137 ++++
+ include/dt-bindings/media/tvnorms.h           |  72 ++
+ include/dt-bindings/media/tvp5150.h           |   2 -
+ include/media/v4l2-fwnode.h                   |  83 +++
+ 7 files changed, 895 insertions(+), 192 deletions(-)
+ create mode 100644 include/dt-bindings/media/tvnorms.h
+
 -- 
 2.20.1
 
