@@ -2,140 +2,207 @@ Return-Path: <SRS0=dofk=WM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E8AEC3A59C
-	for <linux-media@archiver.kernel.org>; Fri, 16 Aug 2019 06:59:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DAEDC3A59C
+	for <linux-media@archiver.kernel.org>; Fri, 16 Aug 2019 07:03:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 34488206C1
-	for <linux-media@archiver.kernel.org>; Fri, 16 Aug 2019 06:59:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 044E3206C1
+	for <linux-media@archiver.kernel.org>; Fri, 16 Aug 2019 07:03:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725971AbfHPG7V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Aug 2019 02:59:21 -0400
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:45973 "EHLO
+        id S1727024AbfHPHD4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Aug 2019 03:03:56 -0400
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:40487 "EHLO
         lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725945AbfHPG7V (ORCPT
+        by vger.kernel.org with ESMTP id S1725945AbfHPHDz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Aug 2019 02:59:21 -0400
+        Fri, 16 Aug 2019 03:03:55 -0400
 Received: from [192.168.2.10] ([46.9.232.237])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id yWCfh0dBGzaKOyWCkhl85p; Fri, 16 Aug 2019 08:59:19 +0200
-Subject: Re: [PATCHv2 11/12] media: docs-rst: Document m2m stateless video
- decoder interface
-To:     Alexandre Courbot <acourbot@chromium.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Francois Buergisser <fbuergisser@google.com>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-References: <20190812110513.23774-1-hverkuil-cisco@xs4all.nl>
- <20190812110513.23774-12-hverkuil-cisco@xs4all.nl>
- <CAPBb6MWMeepMw=f=4DL5Qgx-H+cpsyCehyNuV5PVimEAN6nJZg@mail.gmail.com>
+        id yWH8h0eULzaKOyWHBhl8jR; Fri, 16 Aug 2019 09:03:53 +0200
+Subject: Re: [PATCH] videobuf2-core: avoid buffer operations while in
+ stop_streaming
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <0b947ac2-6d2e-cdc9-4c0b-6eb3d5a45fbe@xs4all.nl>
-Date:   Fri, 16 Aug 2019 08:59:13 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+References: <475fff8b-9a11-0511-2226-a1767016746e@xs4all.nl>
+Message-ID: <a0a894e6-9ef1-bf6f-c9b2-83b1642e9305@xs4all.nl>
+Date:   Fri, 16 Aug 2019 09:03:50 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <CAPBb6MWMeepMw=f=4DL5Qgx-H+cpsyCehyNuV5PVimEAN6nJZg@mail.gmail.com>
+In-Reply-To: <475fff8b-9a11-0511-2226-a1767016746e@xs4all.nl>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfExVNYMhbEYby91DTWXXU2/IU9VaZQNoiZTWDg/izklZo7k5DXhTzB7/LBMtJnocIOPJ8mLFsDT0kQ5WYX8tNtE1WXSgn1ye3/f/mvljrISRhR/lxa9Z
- JjXIGecOMHZxTdqMRDcUsG2kAkEG41b8dOlZmXE4guh+Qlou0JOR0an/IkZHGc7X7/1vYQixbz3E0jPD3BUrLkCxoV+zXb+vVHJPm8gKKvqAGoAKIi0Tu0re
- yFZMYy42Wo/NEAlc6sf42XbeTZu9Xh1moj4SJL8Fa4LhDLcyZhWDWXfYCZtvPRBdtTigd4LE0jwA7n/hwxEjEjGpHUH9oE2zd76DfIktcJb5wwVYKBNrLMvK
- iDjU3yY4
+X-CMAE-Envelope: MS4wfL7WRfPOZaaZmHkLlfHHHTmnV9pg2SkVHnCtHq96WSjLsCNDj4jcub+vF71IDSdZzv8cuKZN/ZohU9y5R3PkdSzeYsTVBX9vcjL9TveQ2ML6+HhpZbg4
+ UB01Z7WUNQq+VD9Q9dYs0tL9qfDfNmmLvl5xLgmofz5O6zaRkS0j++wvMDKGQBHg3/Am6nLJZkka0w==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 8/16/19 7:49 AM, Alexandre Courbot wrote:
-> On Mon, Aug 12, 2019 at 8:07 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->>
->> From: Alexandre Courbot <acourbot@chromium.org>
->>
->> Documents the protocol that user-space should follow when
->> communicating with stateless video decoders.
->>
->> The stateless video decoding API makes use of the new request and tags
->> APIs. While it has been implemented with the Cedrus driver so far, it
->> should probably still be considered staging for a short while.
->>
->> Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
->> ---
->>  Documentation/media/uapi/v4l/dev-mem2mem.rst  |   1 +
->>  .../media/uapi/v4l/dev-stateless-decoder.rst  | 424 ++++++++++++++++++
->>  2 files changed, 425 insertions(+)
->>  create mode 100644 Documentation/media/uapi/v4l/dev-stateless-decoder.rst
->>
-
-<snip>
-
->> +Dynamic resolution change
->> +=========================
->> +
->> +If the client detects a resolution change in the stream, it will need to perform
->> +the initialization sequence again with the new resolution:
->> +
->> +1. If the last submitted request resulted in a ``CAPTURE`` buffer being
->> +   held by the use of the ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` flag, then the
->> +   last frame is not available on the ``CAPTURE`` queue. In this case, a
->> +   ``V4L2_DEC_CMD_FLUSH`` command shall be sent. This will make the driver
->> +   dequeue the held ``CAPTURE`` buffer.
->> +
->> +2. Wait until all submitted requests have completed and dequeue the
->> +   corresponding output buffers.
->> +
->> +3. Call :c:func:`VIDIOC_STREAMOFF` on both the ``OUTPUT`` and ``CAPTURE``
->> +   queues.
->> +
->> +4. Free all ``CAPTURE`` buffers by calling :c:func:`VIDIOC_REQBUFS` on the
->> +   ``CAPTURE`` queue with a buffer count of zero.
->> +
->> +5. Perform the initialization sequence again (minus the allocation of
->> +   ``OUTPUT`` buffers),
+On 8/15/19 2:28 PM, Hans Verkuil wrote:
+> The stop_streaming callback is called with the queue lock held.
 > 
-> We have just hit an issue on the Hantro driver related to this. At the
-> moment, Hantro will reject calls to VIDIOC_S_FMT on the OUTPUT queue
-> if buffers are allocated. And indeed, the documentation for
-> VIDIOC_S_FMT mentions this behavior:
+> But some drivers (vivid being one of them) need to stop a kernel thread
+> in stop_streaming, and if that kernel thread takes the same queue lock,
+> then stop_streaming may have to unlock the queue lock, stop the thread,
+> and lock it again.
 > 
->     EBUSY
->       The device is busy and cannot change the format. This could be
-> because or the device is streaming or buffers are allocated or queued
-> to the driver.
+> However, if you do that, then you must ensure that no other operations
+> can take place that can change the list of buffers queued to the driver,
+> specifically: QBUF, STREAMON/OFF, REQBUFS, CREATE_BUFS.
 > 
-> However in our case it does not make much sense to force reallocating
-> the OUTPUT buffers if user-space knows that the current ones are still
-> large enough for the new resolution. Should Hantro be adapted to allow
-> this, or shall we reword the specification?
+> __vb2_wait_for_done_vb() also checks for this and won't try to wait for
+> new buffers if in_stop_streaming is true.
 > 
-> Note that if we allow this, we may also allow OUTPUT buffers to be
-> allocated before the CAPTURE format is set during the initialization
-> sequence (i.e. move step 6. somewhere after step 2.).
+> This issue caused this syzbot report:
 > 
-> Thoughts?
+> https://syzkaller.appspot.com/bug?extid=736c3aae4af7b50d9683
 
-Drivers can allow S_FMT while buffers are allocated. But it needs to be
-done carefully: for MMAP streaming mode the driver will have to check
-that the allocated buffers are large enough for the new format (you
-probably want to make a helper function for this check), for USERPTR and
-DMABUF this needs to be checked in the buf_prepare vb2 callback. This
-probably happens already.
+And also this syzbot report:
 
-Calling S_FMT while streaming is probably not a good idea and should
-still result in a EBUSY. Mostly because it is not clear whether a S_FMT
-should take immediate effect (thus affecting all already queued buffers)
-or only with newly queued buffers. Let's just avoid this situation for
-now.
+https://syzkaller.appspot.com/bug?extid=06283a66a648cd073885
 
-It was always the intention to relax the rules of when you can call S_FMT,
-but in most cases it is easier to just prohibit calling S_FMT when buffers
-are allocated.
+> 
+> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> Reported-by: syzbot+736c3aae4af7b50d9683@syzkaller.appspotmail.com
+
+Reported-and-tested-by: syzbot+06283a66a648cd073885@syzkaller.appspotmail.com
 
 Regards,
 
 	Hans
+
+> ---
+> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+> index 4489744fbbd9..7c70bb9f6cb8 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> @@ -677,6 +677,11 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
+>  		return -EBUSY;
+>  	}
+> 
+> +	if (q->in_stop_streaming) {
+> +		dprintk(1, "reqbufs while the stream is being stopped\n");
+> +		return -EBUSY;
+> +	}
+> +
+>  	if (q->waiting_in_dqbuf && *count) {
+>  		dprintk(1, "another dup()ped fd is waiting for a buffer\n");
+>  		return -EBUSY;
+> @@ -811,6 +816,11 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
+>  	unsigned plane_sizes[VB2_MAX_PLANES] = { };
+>  	int ret;
+> 
+> +	if (q->in_stop_streaming) {
+> +		dprintk(1, "create_bufs while the stream is being stopped\n");
+> +		return -EBUSY;
+> +	}
+> +
+>  	if (q->num_buffers == VB2_MAX_FRAME) {
+>  		dprintk(1, "maximum number of buffers already allocated\n");
+>  		return -ENOBUFS;
+> @@ -1514,6 +1524,11 @@ int vb2_core_qbuf(struct vb2_queue *q, unsigned int index, void *pb,
+>  	struct vb2_buffer *vb;
+>  	int ret;
+> 
+> +	if (q->in_stop_streaming) {
+> +		dprintk(1, "qbuf while the stream is being stopped\n");
+> +		return -EBUSY;
+> +	}
+> +
+>  	if (q->error) {
+>  		dprintk(1, "fatal error occurred on queue\n");
+>  		return -EIO;
+> @@ -1675,6 +1690,11 @@ static int __vb2_wait_for_done_vb(struct vb2_queue *q, int nonblocking)
+>  			return -EBUSY;
+>  		}
+> 
+> +		if (q->in_stop_streaming) {
+> +			dprintk(1, "the stream is being stopped, will not wait for buffers\n");
+> +			return -EINVAL;
+> +		}
+> +
+>  		if (!q->streaming) {
+>  			dprintk(1, "streaming off, will not wait for buffers\n");
+>  			return -EINVAL;
+> @@ -1716,7 +1736,7 @@ static int __vb2_wait_for_done_vb(struct vb2_queue *q, int nonblocking)
+>  		dprintk(3, "will sleep waiting for buffers\n");
+>  		ret = wait_event_interruptible(q->done_wq,
+>  				!list_empty(&q->done_list) || !q->streaming ||
+> -				q->error);
+> +				q->in_stop_streaming || q->error);
+> 
+>  		/*
+>  		 * We need to reevaluate both conditions again after reacquiring
+> @@ -1866,12 +1886,18 @@ static void __vb2_queue_cancel(struct vb2_queue *q)
+>  {
+>  	unsigned int i;
+> 
+> +	if (WARN_ON(q->in_stop_streaming))
+> +		return;
+> +
+>  	/*
+>  	 * Tell driver to stop all transactions and release all queued
+>  	 * buffers.
+>  	 */
+> -	if (q->start_streaming_called)
+> +	if (q->start_streaming_called) {
+> +		q->in_stop_streaming = 1;
+>  		call_void_qop(q, stop_streaming, q);
+> +		q->in_stop_streaming = 0;
+> +	}
+> 
+>  	/*
+>  	 * If you see this warning, then the driver isn't cleaning up properly
+> @@ -1975,6 +2001,11 @@ int vb2_core_streamon(struct vb2_queue *q, unsigned int type)
+>  		return -EINVAL;
+>  	}
+> 
+> +	if (q->in_stop_streaming) {
+> +		dprintk(1, "streamon while the stream is being stopped\n");
+> +		return -EBUSY;
+> +	}
+> +
+>  	if (q->streaming) {
+>  		dprintk(3, "already streaming\n");
+>  		return 0;
+> @@ -2026,6 +2057,11 @@ int vb2_core_streamoff(struct vb2_queue *q, unsigned int type)
+>  		return -EINVAL;
+>  	}
+> 
+> +	if (q->in_stop_streaming) {
+> +		dprintk(1, "streamoff while the stream is being stopped\n");
+> +		return -EBUSY;
+> +	}
+> +
+>  	/*
+>  	 * Cancel will pause streaming and remove all buffers from the driver
+>  	 * and videobuf, effectively returning control over them to userspace.
+> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+> index 640aabe69450..c4b7edd25e13 100644
+> --- a/include/media/videobuf2-core.h
+> +++ b/include/media/videobuf2-core.h
+> @@ -535,6 +535,9 @@ struct vb2_buf_ops {
+>   * @streaming:	current streaming state
+>   * @start_streaming_called: @start_streaming was called successfully and we
+>   *		started streaming.
+> + * @in_stop_streaming: set when calling @stop_streaming. While 1, no new buffers
+> + * 		can be queued or created, and neither is it possible to start or
+> + * 		stop streaming.
+>   * @error:	a fatal error occurred on the queue
+>   * @waiting_for_buffers: used in poll() to check if vb2 is still waiting for
+>   *		buffers. Only set for capture queues if qbuf has not yet been
+> @@ -595,6 +598,7 @@ struct vb2_queue {
+> 
+>  	unsigned int			streaming:1;
+>  	unsigned int			start_streaming_called:1;
+> +	unsigned int			in_stop_streaming:1;
+>  	unsigned int			error:1;
+>  	unsigned int			waiting_for_buffers:1;
+>  	unsigned int			waiting_in_dqbuf:1;
+> 
+
