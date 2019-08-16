@@ -2,107 +2,81 @@ Return-Path: <SRS0=dofk=WM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BFB8C3A59C
-	for <linux-media@archiver.kernel.org>; Fri, 16 Aug 2019 13:47:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34C8EC3A59C
+	for <linux-media@archiver.kernel.org>; Fri, 16 Aug 2019 14:17:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DA4A2064A
-	for <linux-media@archiver.kernel.org>; Fri, 16 Aug 2019 13:47:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 168E32086C
+	for <linux-media@archiver.kernel.org>; Fri, 16 Aug 2019 14:17:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727272AbfHPNrc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 16 Aug 2019 09:47:32 -0400
-Received: from mga14.intel.com ([192.55.52.115]:29774 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727203AbfHPNrc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 16 Aug 2019 09:47:32 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Aug 2019 06:47:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,393,1559545200"; 
-   d="scan'208";a="194994660"
-Received: from jnikula-mobl3.fi.intel.com (HELO localhost) ([10.237.66.150])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Aug 2019 06:47:30 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Nathaniel Russell <naterussell83@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        intel-gfx@lists.freedesktop.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [Intel-gfx] Linux Kernel 5.2.8 (uvc or i915?)
-In-Reply-To: <abcae5c9-b3dc-7403-d628-5d7543d19702@infradead.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <CAONH+Jm-O6=DQ+K2n5pNTNMg2Sq1KcVNFLuweVh6W82OPEFJoQ@mail.gmail.com> <abcae5c9-b3dc-7403-d628-5d7543d19702@infradead.org>
-Date:   Fri, 16 Aug 2019 16:47:29 +0300
-Message-ID: <87wofddxxq.fsf@intel.com>
+        id S1727371AbfHPORG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 16 Aug 2019 10:17:06 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:50745 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727291AbfHPORF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 16 Aug 2019 10:17:05 -0400
+X-Originating-IP: 87.5.130.64
+Received: from uno.homenet.telecomitalia.it (host64-130-dynamic.5-87-r.retail.telecomitalia.it [87.5.130.64])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id AFFDCFF80B;
+        Fri, 16 Aug 2019 14:17:01 +0000 (UTC)
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Jacopo Mondi <jacopo@jmondi.org>,
+        linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
+        (V4L/DVB)), linux-kernel@vger.kernel.org (open list),
+        devicetree@vger.kernel.org
+Subject: [PATCH 1/6] media: dt-bindings: Document 'location' property
+Date:   Fri, 16 Aug 2019 16:18:17 +0200
+Message-Id: <20190816141822.7582-2-jacopo@jmondi.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190816141822.7582-1-jacopo@jmondi.org>
+References: <20190816141822.7582-1-jacopo@jmondi.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 15 Aug 2019, Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 8/15/19 6:15 PM, Nathaniel Russell wrote:
->> I would really like help with the kernel error with my uvcvideo driver.
->> 
->
-> Hi again.
->
-> What makes you think that the problem is related to the uvcvideo driver?
-> Does some previous kernel version work correctly?  If so, what version(s)?
->
->
-> Does this warning message only happen when the uvcvideo driver is being loaded?
-> Can you suppress loading of the uvcvideo driver to find out?
->
-> Most of the problems/errors/warnings that I see are related to the i915 driver:
->
-> [   13.032341] timed out waiting for port C ready: got 0x20, expected 0xe0
-> [   13.032872] WARNING: CPU: 1 PID: 239 at drivers/gpu/drm/i915/intel_display.c:1597 vlv_wait_port_ready+0x99/0xe0 [i915]
-> [   13.033632] RIP: 0010:vlv_wait_port_ready+0x99/0xe0 [i915]
->
-> although there are a few uvcvideo warnings:
-> [   13.039305] uvcvideo 1-5:1.0: Entity type for entity Extension 4 was not initialized!
-> [   13.039318] uvcvideo 1-5:1.0: Entity type for entity Extension 3 was not initialized!
-> [   13.039330] uvcvideo 1-5:1.0: Entity type for entity Processing 2 was not initialized!
-> [   13.039339] uvcvideo 1-5:1.0: Entity type for entity Camera 1 was not initialized!
->
->
-> Laurent, do you see any uvc issues here?  Any ideas/suggestions?
->
->
-> @intel-gfx:  any ideas about what is going on here with the i915 driver?
+Add the 'location' device property, used to specify the camera device
+mounting position. The property is particularly meaningful for mobile
+devices with a well defined usage orientation.
 
-Please file a bug over at [1], add drm.debug=14 module parameter, attach
-dmesg to the bug, all the way from boot to reproducing the issue.
+Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ .../devicetree/bindings/media/video-interfaces.txt     | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
+diff --git a/Documentation/devicetree/bindings/media/video-interfaces.txt b/Documentation/devicetree/bindings/media/video-interfaces.txt
+index f884ada0bffc..865f4142f432 100644
+--- a/Documentation/devicetree/bindings/media/video-interfaces.txt
++++ b/Documentation/devicetree/bindings/media/video-interfaces.txt
+@@ -89,6 +89,16 @@ Optional properties
+   but a number of degrees counter clockwise. Typical values are 0 and 180
+   (upside down).
 
-BR,
-Jani.
++- location: The camera sensor mounting location, expressed as a position
++  relative to the usage orientation of the device the sensor is installed on.
++  Possible values are:
++  0 - Front. The image sensor is mounted on the front facing side of the device.
++  For mobile devices such as smartphones, tablets and laptops the front side is
++  the user facing side of the device.
++  1 - Back. The image sensor is mounted on the back side of the device, which is
++  defined as the opposite side of the front facing one.
++  2 - External. The image sensor is connected to the device by extension cables,
++  and can be freely moved, regardless of the device position.
 
-[1] https://bugs.freedesktop.org/enter_bug.cgi?product=DRI&component=DRM/Intel
+ Optional endpoint properties
+ ----------------------------
+--
+2.22.0
 
-
-
-
->
->
->
-> Original message to lkml:
-> https://lore.kernel.org/lkml/CAONH+Jm-O6=DQ+K2n5pNTNMg2Sq1KcVNFLuweVh6W82OPEFJoQ@mail.gmail.com/T/#u
->
-> Previous message for 5.1.21 kernel:
-> https://lore.kernel.org/lkml/CAONH+JkTFujY9vEyNNuem+9rJ2qBKkf-PbKk9=DBSVEp6kW=yw@mail.gmail.com/
->
->
-> thanks.
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
