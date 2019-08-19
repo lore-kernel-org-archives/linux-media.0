@@ -6,28 +6,28 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28C55C3A5A0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE4D7C41514
 	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 12:50:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 060992086C
+	by mail.kernel.org (Postfix) with ESMTP id 8EFCD2085A
 	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 12:50:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727639AbfHSMuU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Aug 2019 08:50:20 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:47456 "EHLO
+        id S1727640AbfHSMuV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Aug 2019 08:50:21 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:47464 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727529AbfHSMuT (ORCPT
+        by vger.kernel.org with ESMTP id S1727512AbfHSMuU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Aug 2019 08:50:19 -0400
+        Mon, 19 Aug 2019 08:50:20 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 03BB0634C8A;
-        Mon, 19 Aug 2019 15:49:45 +0300 (EEST)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 4852B634C8C;
+        Mon, 19 Aug 2019 15:49:46 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     hverkuil@xs4all.nl
-Subject: [PATCH 3/6] smiapp: Error handling cleanups and fixes
-Date:   Mon, 19 Aug 2019 15:47:25 +0300
-Message-Id: <20190819124728.10511-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH 5/6] smiapp: Remove the active field from sensor's struct
+Date:   Mon, 19 Aug 2019 15:47:27 +0300
+Message-Id: <20190819124728.10511-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190819124728.10511-1-sakari.ailus@linux.intel.com>
 References: <20190819124728.10511-1-sakari.ailus@linux.intel.com>
@@ -38,152 +38,65 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Probe error handling cleanups and fixes:
-
-- Move mutex initialisation at a later time for easier error handling.
-
-- Issue destroy_mutex on the sensor mutex on probe failure and driver
-  remove,
-
-- Remove smiapp_cleanup and add its contents in probe / remove on right
-  locations.
+The active field was used to track whether the sensor was powered when
+settings its controls. This is no longer needed as runtime PM is used to
+determine this instead.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 48 ++++++++++++++------------
- 1 file changed, 26 insertions(+), 22 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 4 ----
+ drivers/media/i2c/smiapp/smiapp-regs.c | 3 ---
+ drivers/media/i2c/smiapp/smiapp.h      | 1 -
+ 3 files changed, 8 deletions(-)
 
 diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index 9adf8e034e7d..c9d0416f9b03 100644
+index 79330ec41392..76d7d204ec17 100644
 --- a/drivers/media/i2c/smiapp/smiapp-core.c
 +++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -2579,16 +2579,6 @@ static int smiapp_registered(struct v4l2_subdev *subdev)
- 	return rval;
- }
+@@ -1228,8 +1228,6 @@ static int smiapp_power_on(struct device *dev)
+ 	sleep = SMIAPP_RESET_DELAY(sensor->hwcfg->ext_clk);
+ 	usleep_range(sleep, sleep);
  
--static void smiapp_cleanup(struct smiapp_sensor *sensor)
--{
--	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+-	sensor->active = true;
 -
--	device_remove_file(&client->dev, &dev_attr_nvm);
--	device_remove_file(&client->dev, &dev_attr_ident);
+ 	/*
+ 	 * Failures to respond to the address change command have been noticed.
+ 	 * Those failures seem to be caused by the sensor requiring a longer
+@@ -1360,8 +1358,6 @@ static int smiapp_power_off(struct device *dev)
+ 			     SMIAPP_REG_U8_SOFTWARE_RESET,
+ 			     SMIAPP_SOFTWARE_RESET);
+ 
+-	sensor->active = false;
 -
--	smiapp_free_controls(sensor);
--}
+ 	gpiod_set_value(sensor->xshutdown, 0);
+ 	clk_disable_unprepare(sensor->ext_clk);
+ 	usleep_range(5000, 5000);
+diff --git a/drivers/media/i2c/smiapp/smiapp-regs.c b/drivers/media/i2c/smiapp/smiapp-regs.c
+index 0470e47c2f7a..ce8c1d47fbf0 100644
+--- a/drivers/media/i2c/smiapp/smiapp-regs.c
++++ b/drivers/media/i2c/smiapp/smiapp-regs.c
+@@ -223,9 +223,6 @@ int smiapp_write_no_quirk(struct smiapp_sensor *sensor, u32 reg, u32 val)
+ 	     len != SMIAPP_REG_32BIT) || flags)
+ 		return -EINVAL;
+ 
+-	if (!sensor->active)
+-		return 0;
 -
- static void smiapp_create_subdev(struct smiapp_sensor *sensor,
- 				 struct smiapp_subdev *ssd, const char *name,
- 				 unsigned short num_pads)
-@@ -2862,7 +2852,6 @@ static int smiapp_probe(struct i2c_client *client)
- 		return -ENOMEM;
+ 	msg.addr = client->addr;
+ 	msg.flags = 0; /* Write */
+ 	msg.len = 2 + len;
+diff --git a/drivers/media/i2c/smiapp/smiapp.h b/drivers/media/i2c/smiapp/smiapp.h
+index ecf8a17dbe37..75e151e78617 100644
+--- a/drivers/media/i2c/smiapp/smiapp.h
++++ b/drivers/media/i2c/smiapp/smiapp.h
+@@ -198,7 +198,6 @@ struct smiapp_sensor {
  
- 	sensor->hwcfg = hwcfg;
--	mutex_init(&sensor->mutex);
- 	sensor->src = &sensor->ssds[sensor->ssds_used];
- 
- 	v4l2_i2c_subdev_init(&sensor->src->sd, client, &smiapp_ops);
-@@ -2922,9 +2911,11 @@ static int smiapp_probe(struct i2c_client *client)
- 	if (IS_ERR(sensor->xshutdown))
- 		return PTR_ERR(sensor->xshutdown);
- 
-+	mutex_init(&sensor->mutex);
-+
- 	rval = smiapp_power_on(&client->dev);
- 	if (rval < 0)
--		return rval;
-+		goto out_mutex_destroy;
- 
- 	rval = smiapp_identify_module(sensor);
- 	if (rval) {
-@@ -3011,13 +3002,13 @@ static int smiapp_probe(struct i2c_client *client)
- 				sensor->hwcfg->nvm_size, GFP_KERNEL);
- 		if (sensor->nvm == NULL) {
- 			rval = -ENOMEM;
--			goto out_cleanup;
-+			goto out_remove_ident_attr;
- 		}
- 
- 		if (device_create_file(&client->dev, &dev_attr_nvm) != 0) {
- 			dev_err(&client->dev, "sysfs nvm entry failed\n");
- 			rval = -EBUSY;
--			goto out_cleanup;
-+			goto out_remove_ident_attr;
- 		}
- 	}
- 
-@@ -3067,22 +3058,22 @@ static int smiapp_probe(struct i2c_client *client)
- 
- 	rval = smiapp_init_controls(sensor);
- 	if (rval < 0)
--		goto out_cleanup;
-+		goto out_free_controls;
- 
- 	rval = smiapp_call_quirk(sensor, init);
- 	if (rval)
--		goto out_cleanup;
-+		goto out_free_controls;
- 
- 	rval = smiapp_get_mbus_formats(sensor);
- 	if (rval) {
- 		rval = -ENODEV;
--		goto out_cleanup;
-+		goto out_free_controls;
- 	}
- 
- 	rval = smiapp_init_late_controls(sensor);
- 	if (rval) {
- 		rval = -ENODEV;
--		goto out_cleanup;
-+		goto out_free_controls;
- 	}
- 
- 	mutex_lock(&sensor->mutex);
-@@ -3090,7 +3081,7 @@ static int smiapp_probe(struct i2c_client *client)
- 	mutex_unlock(&sensor->mutex);
- 	if (rval) {
- 		dev_err(&client->dev, "update mode failed\n");
--		goto out_cleanup;
-+		goto out_free_controls;
- 	}
- 
- 	sensor->streaming = false;
-@@ -3117,12 +3108,19 @@ static int smiapp_probe(struct i2c_client *client)
- out_media_entity_cleanup:
- 	media_entity_cleanup(&sensor->src->sd.entity);
- 
--out_cleanup:
--	smiapp_cleanup(sensor);
-+out_remove_ident_attr:
-+	device_remove_file(&client->dev, &dev_attr_ident);
-+
-+out_free_controls:
-+	device_remove_file(&client->dev, &dev_attr_nvm);
-+	smiapp_free_controls(sensor);
- 
- out_power_off:
- 	smiapp_power_off(&client->dev);
- 
-+out_mutex_destroy:
-+	mutex_destroy(&sensor->mutex);
-+
- 	return rval;
- }
- 
-@@ -3143,7 +3141,13 @@ static int smiapp_remove(struct i2c_client *client)
- 		v4l2_device_unregister_subdev(&sensor->ssds[i].sd);
- 		media_entity_cleanup(&sensor->ssds[i].sd.entity);
- 	}
--	smiapp_cleanup(sensor);
-+
-+	device_remove_file(&client->dev, &dev_attr_ident);
-+	device_remove_file(&client->dev, &dev_attr_nvm);
-+
-+	smiapp_free_controls(sensor);
-+
-+	mutex_destroy(&sensor->mutex);
- 
- 	return 0;
- }
+ 	u8 hvflip_inv_mask; /* H/VFLIP inversion due to sensor orientation */
+ 	u8 frame_skip;
+-	bool active; /* is the sensor powered on? */
+ 	u16 embedded_start; /* embedded data start line */
+ 	u16 embedded_end;
+ 	u16 image_start; /* image data start line */
 -- 
 2.20.1
 
