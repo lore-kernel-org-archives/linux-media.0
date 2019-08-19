@@ -2,145 +2,150 @@ Return-Path: <SRS0=OySw=WP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04546C3A589
-	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 01:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA2CC3A59F
+	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 03:44:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF1842184E
-	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 01:45:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9AE472184E
+	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 03:44:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbfHSBpK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 18 Aug 2019 21:45:10 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4727 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726028AbfHSBpK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 18 Aug 2019 21:45:10 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 0DA083501E5C5DAA8C76;
-        Mon, 19 Aug 2019 09:45:08 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.439.0; Mon, 19 Aug 2019
- 09:45:02 +0800
-From:   zhengbin <zhengbin13@huawei.com>
-To:     <sakari.ailus@linux.intel.com>,
-        <laurent.pinchart@ideasonboard.com>, <mchehab@kernel.org>,
-        <linux-media@vger.kernel.org>
-CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH v2] media: mc-device.c: fix memleak in media_device_register_entity
-Date:   Mon, 19 Aug 2019 09:51:30 +0800
-Message-ID: <1566179490-15413-1-git-send-email-zhengbin13@huawei.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726366AbfHSDoD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 18 Aug 2019 23:44:03 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:24488 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726261AbfHSDoD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 18 Aug 2019 23:44:03 -0400
+X-UUID: fefb369dcd814c24bbb041673ae99ed2-20190819
+X-UUID: fefb369dcd814c24bbb041673ae99ed2-20190819
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
+        (envelope-from <dongchun.zhu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0707 with TLS)
+        with ESMTP id 2038314548; Mon, 19 Aug 2019 11:43:57 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 19 Aug 2019 11:43:56 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 19 Aug 2019 11:43:54 +0800
+From:   <dongchun.zhu@mediatek.com>
+To:     <mchehab@kernel.org>, <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <sakari.ailus@linux.intel.com>, <drinkcat@chromium.org>,
+        <tfiga@chromium.org>, <matthias.bgg@gmail.com>,
+        <bingbu.cao@intel.com>
+CC:     <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <sj.huang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <louis.kuo@mediatek.com>, <shengnan.wang@mediatek.com>,
+        <dongchun.zhu@mediatek.com>
+Subject: [V3, 1/2] media: dt-bindings: media: i2c: Add bindings for OV02A10
+Date:   Mon, 19 Aug 2019 11:43:30 +0800
+Message-ID: <20190819034331.13098-2-dongchun.zhu@mediatek.com>
+X-Mailer: git-send-email 2.9.2
+In-Reply-To: <20190819034331.13098-1-dongchun.zhu@mediatek.com>
+References: <20190819034331.13098-1-dongchun.zhu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.90.53.225]
-X-CFilter-Loop: Reflected
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In media_device_register_entity, if media_graph_walk_init fails,
-need to free the previously memory.
+From: Dongchun Zhu <dongchun.zhu@mediatek.com>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: zhengbin <zhengbin13@huawei.com>
+Add device tree binding documentation for the OV02A10 camera sensor.
+
+Signed-off-by: Dongchun Zhu <dongchun.zhu@mediatek.com>
 ---
- drivers/media/mc/mc-device.c | 65 ++++++++++++++++++++++----------------------
- 1 file changed, 33 insertions(+), 32 deletions(-)
+ .../devicetree/bindings/media/i2c/ov02a10.txt      | 54 ++++++++++++++++++++++
+ MAINTAINERS                                        |  7 +++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ov02a10.txt
 
-diff --git a/drivers/media/mc/mc-device.c b/drivers/media/mc/mc-device.c
-index e19df51..da80883 100644
---- a/drivers/media/mc/mc-device.c
-+++ b/drivers/media/mc/mc-device.c
-@@ -575,6 +575,38 @@ static void media_device_release(struct media_devnode *devnode)
- 	dev_dbg(devnode->parent, "Media device released\n");
- }
-
-+static void __media_device_unregister_entity(struct media_entity *entity)
-+{
-+	struct media_device *mdev = entity->graph_obj.mdev;
-+	struct media_link *link, *tmp;
-+	struct media_interface *intf;
-+	unsigned int i;
+diff --git a/Documentation/devicetree/bindings/media/i2c/ov02a10.txt b/Documentation/devicetree/bindings/media/i2c/ov02a10.txt
+new file mode 100644
+index 0000000..4a83a38
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/i2c/ov02a10.txt
+@@ -0,0 +1,54 @@
++* Omnivision OV02A10 MIPI CSI-2 sensor
 +
-+	ida_free(&mdev->entity_internal_idx, entity->internal_idx);
++Required Properties:
++- compatible: shall be "ovti,ov02a10"
++- clocks: reference to the xvclk input clock
++- clock-names: shall be "xvclk"
++- avdd-supply: Analog voltage supply, 2.8 volts
++- dovdd-supply: Digital I/O voltage supply, 1.8 volts
++- dvdd-supply: Digital core voltage supply, 1.8 volts
++- reset-gpios: reference to the GPIO connected to the reset pin, if any.
++	       This is an active high signal to the OV02A10.
++- powerdown-gpios: reference to the GPIO connected to the powerdown pin,
++		   if any. This is an active low signal to the OV02A10.
 +
-+	/* Remove all interface links pointing to this entity */
-+	list_for_each_entry(intf, &mdev->interfaces, graph_obj.list) {
-+		list_for_each_entry_safe(link, tmp, &intf->links, list) {
-+			if (link->entity == entity)
-+				__media_remove_intf_link(link);
-+		}
-+	}
++Optional Properties:
++- rotation: as defined in
++	    Documentation/devicetree/bindings/media/video-interfaces.txt,
++	    valid values are 0 (sensor mounted upright) and 180 (sensor
++	    mounted upside down).
 +
-+	/* Remove all data links that belong to this entity */
-+	__media_entity_remove_links(entity);
++The device node shall contain one 'port' child node with an
++'endpoint' subnode for its digital output video port,
++in accordance with the video interface bindings defined in
++Documentation/devicetree/bindings/media/video-interfaces.txt.
++The endpoint optional property 'data-lanes' shall be "<1>".
 +
-+	/* Remove all pads that belong to this entity */
-+	for (i = 0; i < entity->num_pads; i++)
-+		media_gobj_destroy(&entity->pads[i].graph_obj);
++Example:
++&i2c4 {
++	ov02a10: camera-sensor@3d {
++		compatible = "ovti,ov02a10";
++		reg = <0x3d>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&camera_pins_cam1_mclk_on>;
 +
-+	/* Remove the entity */
-+	media_gobj_destroy(&entity->graph_obj);
++		clocks = <&topckgen CLK_TOP_MUX_CAMTG2>,
++			<&topckgen CLK_TOP_UNIVP_192M_D8>;
++		clock-names = "xvclk", "freq_mux";
 +
-+	/* invoke entity_notify callbacks to handle entity removal?? */
++		avdd-supply = <&mt6358_vcama1_reg>;
++		dvdd-supply = <&mt6358_vcn18_reg>;
++		dovdd-supply = <&mt6358_vcamio_reg>;
++		reset-gpios = <&pio 109 1>;
++		powerdown-gpios = <&pio 107 1>;
++		rotation = <180>;
 +
-+	entity->graph_obj.mdev = NULL;
-+}
++		port {
++			/* MIPI CSI-2 bus endpoint */
++			ov02a10_core: endpoint {
++				remote-endpoint = <&ov02a10_0>;
++				data-lanes = <1>;
++			};
++		};
++	};
++};
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 783569e..41734fb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11816,6 +11816,13 @@ T:	git git://linuxtv.org/media_tree.git
+ S:	Maintained
+ F:	drivers/media/i2c/ov13858.c
+ 
++OMNIVISION OV02A10 SENSOR DRIVER
++M:	Dongchun Zhu <dongchun.zhu@mediatek.com>
++L:	linux-media@vger.kernel.org
++T:	git git://linuxtv.org/media_tree.git
++S:	Maintained
++F:	Documentation/devicetree/bindings/media/i2c/ov02a10.txt
 +
- /**
-  * media_device_register_entity - Register an entity with a media device
-  * @mdev:	The media device
-@@ -632,6 +664,7 @@ int __must_check media_device_register_entity(struct media_device *mdev,
- 		 */
- 		ret = media_graph_walk_init(&new, mdev);
- 		if (ret) {
-+			__media_device_unregister_entity(entity);
- 			mutex_unlock(&mdev->graph_mutex);
- 			return ret;
- 		}
-@@ -644,38 +677,6 @@ int __must_check media_device_register_entity(struct media_device *mdev,
- }
- EXPORT_SYMBOL_GPL(media_device_register_entity);
-
--static void __media_device_unregister_entity(struct media_entity *entity)
--{
--	struct media_device *mdev = entity->graph_obj.mdev;
--	struct media_link *link, *tmp;
--	struct media_interface *intf;
--	unsigned int i;
--
--	ida_free(&mdev->entity_internal_idx, entity->internal_idx);
--
--	/* Remove all interface links pointing to this entity */
--	list_for_each_entry(intf, &mdev->interfaces, graph_obj.list) {
--		list_for_each_entry_safe(link, tmp, &intf->links, list) {
--			if (link->entity == entity)
--				__media_remove_intf_link(link);
--		}
--	}
--
--	/* Remove all data links that belong to this entity */
--	__media_entity_remove_links(entity);
--
--	/* Remove all pads that belong to this entity */
--	for (i = 0; i < entity->num_pads; i++)
--		media_gobj_destroy(&entity->pads[i].graph_obj);
--
--	/* Remove the entity */
--	media_gobj_destroy(&entity->graph_obj);
--
--	/* invoke entity_notify callbacks to handle entity removal?? */
--
--	entity->graph_obj.mdev = NULL;
--}
--
- void media_device_unregister_entity(struct media_entity *entity)
- {
- 	struct media_device *mdev = entity->graph_obj.mdev;
---
-2.7.4
+ OMNIVISION OV2680 SENSOR DRIVER
+ M:	Rui Miguel Silva <rmfrfs@gmail.com>
+ L:	linux-media@vger.kernel.org
+-- 
+2.9.2
 
