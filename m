@@ -2,449 +2,134 @@ Return-Path: <SRS0=OySw=WP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4DE9C3A5A2
-	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 12:50:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3105EC3A5A0
+	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 13:14:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 70B9B2085A
-	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 12:50:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01D702086C
+	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 13:14:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ouW48h7H"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727637AbfHSMuU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Aug 2019 08:50:20 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:47460 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727628AbfHSMuT (ORCPT
+        id S1727640AbfHSNOw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Aug 2019 09:14:52 -0400
+Received: from mail-yw1-f74.google.com ([209.85.161.74]:36731 "EHLO
+        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727618AbfHSNOw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Aug 2019 08:50:19 -0400
-Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 20304634C8B;
-        Mon, 19 Aug 2019 15:49:46 +0300 (EEST)
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     hverkuil@xs4all.nl
-Subject: [PATCH 4/6] smiapp: Rely on V4L2 sub-device framework to do the locking
-Date:   Mon, 19 Aug 2019 15:47:26 +0300
-Message-Id: <20190819124728.10511-5-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190819124728.10511-1-sakari.ailus@linux.intel.com>
-References: <20190819124728.10511-1-sakari.ailus@linux.intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 19 Aug 2019 09:14:52 -0400
+Received: by mail-yw1-f74.google.com with SMTP id q7so3046189ywg.3
+        for <linux-media@vger.kernel.org>; Mon, 19 Aug 2019 06:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=oNoDUi1hsmNzzodU0R6ojKZvjIC3JQAmU+NA/+7Uaps=;
+        b=ouW48h7HGbpdNdCReL1nk2+dvRXfxgklc1nbCP+Q9JJOIGCVyS3fqahBo1S2d8316M
+         OZxTJFVIgB1yHxwjdFezXxDGLz9wKstEmjea5fp8x0waRP2D4PtWy/8cEd94ITbDy+AB
+         ohMM7RCZVEao1hTKwgkNZsuSnXQ52npfKzrCB8hagDJHWUZyqV94tepmovte0/cp0h4L
+         SvPXvaVH6Kvmqsu415sDgkqDdnh0pnuy5EbzAZl/JGrx9UiwjWAucl5+kBCOYUeFDUvr
+         0QJUC5x7f/83eUXVQvxdzpHaeshvsSjN84YEl5sN0EdVOxlMEIgfFzUzZo6IFB3/q633
+         zoEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=oNoDUi1hsmNzzodU0R6ojKZvjIC3JQAmU+NA/+7Uaps=;
+        b=IKe65GhnJohwDdqBk+Hs8wgmpqI2rx6buOEibA/QNURaRC0/U/d3OTu/Jzy54hgefp
+         nsVVjhOeQZUuaDXtm6PG9ZRHd3iHg6/x6sHKj52cageDxyBNuBal+2aW3I9eRjxomXu7
+         NbdyrJ7ds27hh6jjG6GkF5wtBgZrmIShHoiBZFVfs7Za41DFLLFSjTkhcAQJqOcBQIdy
+         NNylHiQ6apK3DimqSWYvFMvS/oKiqPw+iRQStQ+O/QMmBvb1lmqqf3JnzdfRlAjQOQbZ
+         mZ/aiqUyDDkesRt5HmZoazJP17ky9FRqKepCRRPpzXRjpIP4uDxcwFSXvUhL9drhakVO
+         YbpA==
+X-Gm-Message-State: APjAAAWy2RfBa0E/7rgxbS7bID15uEZhcPOyfstIdNBNrpjtwLqkXIP/
+        3MJeiq6nF4AbX14mAkSRoCHrOpTzLyLQpauy
+X-Google-Smtp-Source: APXvYqwFX5U5jD7RsGf0G3vM/9ehnT3AiWsZaEFsyMkoc/hovIoyUTjRlHyWf2f4E//56cQouSUIEdq8hx31clIz
+X-Received: by 2002:a81:6c85:: with SMTP id h127mr16796224ywc.111.1566220491100;
+ Mon, 19 Aug 2019 06:14:51 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 15:14:42 +0200
+Message-Id: <00eb8ba84205c59cac01b1b47615116a461c302c.1566220355.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+Subject: [PATCH ARM] selftests, arm64: fix uninitialized symbol in tags_test.c
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Will Deacon <will.deacon@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Rely on the V4L2 sub-device framework to perform the locking for this
-driver.
+Fix tagged_ptr not being initialized when TBI is not enabled.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 140 +++++++------------------
- 1 file changed, 36 insertions(+), 104 deletions(-)
+ tools/testing/selftests/arm64/tags_test.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index c9d0416f9b03..79330ec41392 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -1228,8 +1228,6 @@ static int smiapp_power_on(struct device *dev)
- 	sleep = SMIAPP_RESET_DELAY(sensor->hwcfg->ext_clk);
- 	usleep_range(sleep, sleep);
- 
--	mutex_lock(&sensor->mutex);
--
- 	sensor->active = true;
- 
- 	/*
-@@ -1330,12 +1328,9 @@ static int smiapp_power_on(struct device *dev)
- 			goto out_cci_addr_fail;
- 	}
- 
--	mutex_unlock(&sensor->mutex);
--
- 	return 0;
- 
- out_cci_addr_fail:
--	mutex_unlock(&sensor->mutex);
- 	gpiod_set_value(sensor->xshutdown, 0);
- 	clk_disable_unprepare(sensor->ext_clk);
- 
-@@ -1353,8 +1348,6 @@ static int smiapp_power_off(struct device *dev)
- 	struct smiapp_sensor *sensor =
- 		container_of(ssd, struct smiapp_sensor, ssds[0]);
- 
--	mutex_lock(&sensor->mutex);
--
- 	/*
- 	 * Currently power/clock to lens are enable/disabled separately
- 	 * but they are essentially the same signals. So if the sensor is
-@@ -1369,8 +1362,6 @@ static int smiapp_power_off(struct device *dev)
- 
- 	sensor->active = false;
- 
--	mutex_unlock(&sensor->mutex);
--
- 	gpiod_set_value(sensor->xshutdown, 0);
- 	clk_disable_unprepare(sensor->ext_clk);
- 	usleep_range(5000, 5000);
-@@ -1389,28 +1380,26 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	int rval;
- 
--	mutex_lock(&sensor->mutex);
--
- 	rval = smiapp_write(sensor, SMIAPP_REG_U16_CSI_DATA_FORMAT,
- 			    (sensor->csi_format->width << 8) |
- 			    sensor->csi_format->compressed);
- 	if (rval)
--		goto out;
-+		return rval;
- 
- 	rval = smiapp_pll_configure(sensor);
- 	if (rval)
--		goto out;
-+		return rval;
- 
- 	/* Analog crop start coordinates */
- 	rval = smiapp_write(sensor, SMIAPP_REG_U16_X_ADDR_START,
- 			    sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].left);
- 	if (rval < 0)
--		goto out;
-+		return rval;
- 
- 	rval = smiapp_write(sensor, SMIAPP_REG_U16_Y_ADDR_START,
- 			    sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].top);
- 	if (rval < 0)
--		goto out;
-+		return rval;
- 
- 	/* Analog crop end coordinates */
- 	rval = smiapp_write(
-@@ -1418,14 +1407,14 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 		sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].left
- 		+ sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].width - 1);
- 	if (rval < 0)
--		goto out;
-+		return rval;
- 
- 	rval = smiapp_write(
- 		sensor, SMIAPP_REG_U16_Y_ADDR_END,
- 		sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].top
- 		+ sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height - 1);
- 	if (rval < 0)
--		goto out;
-+		return rval;
- 
- 	/*
- 	 * Output from pixel array, including blanking, is set using
-@@ -1439,25 +1428,25 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 			sensor, SMIAPP_REG_U16_DIGITAL_CROP_X_OFFSET,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].left);
- 		if (rval < 0)
--			goto out;
-+			return rval;
- 
- 		rval = smiapp_write(
- 			sensor, SMIAPP_REG_U16_DIGITAL_CROP_Y_OFFSET,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].top);
- 		if (rval < 0)
--			goto out;
-+			return rval;
- 
- 		rval = smiapp_write(
- 			sensor, SMIAPP_REG_U16_DIGITAL_CROP_IMAGE_WIDTH,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].width);
- 		if (rval < 0)
--			goto out;
-+			return rval;
- 
- 		rval = smiapp_write(
- 			sensor, SMIAPP_REG_U16_DIGITAL_CROP_IMAGE_HEIGHT,
- 			sensor->scaler->crop[SMIAPP_PAD_SINK].height);
- 		if (rval < 0)
--			goto out;
-+			return rval;
- 	}
- 
- 	/* Scaling */
-@@ -1466,23 +1455,23 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 		rval = smiapp_write(sensor, SMIAPP_REG_U16_SCALING_MODE,
- 				    sensor->scaling_mode);
- 		if (rval < 0)
--			goto out;
-+			return rval;
- 
- 		rval = smiapp_write(sensor, SMIAPP_REG_U16_SCALE_M,
- 				    sensor->scale_m);
- 		if (rval < 0)
--			goto out;
-+			return rval;
- 	}
- 
- 	/* Output size from sensor */
- 	rval = smiapp_write(sensor, SMIAPP_REG_U16_X_OUTPUT_SIZE,
- 			    sensor->src->crop[SMIAPP_PAD_SRC].width);
- 	if (rval < 0)
--		goto out;
-+		return rval;
- 	rval = smiapp_write(sensor, SMIAPP_REG_U16_Y_OUTPUT_SIZE,
- 			    sensor->src->crop[SMIAPP_PAD_SRC].height);
- 	if (rval < 0)
--		goto out;
-+		return rval;
- 
- 	if ((sensor->limits[SMIAPP_LIMIT_FLASH_MODE_CAPABILITY] &
- 	     (SMIAPP_FLASH_MODE_CAPABILITY_SINGLE_STROBE |
-@@ -1491,21 +1480,18 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 	    sensor->hwcfg->strobe_setup->trigger != 0) {
- 		rval = smiapp_setup_flash_strobe(sensor);
- 		if (rval)
--			goto out;
-+			return rval;
- 	}
- 
- 	rval = smiapp_call_quirk(sensor, pre_streamon);
- 	if (rval) {
- 		dev_err(&client->dev, "pre_streamon quirks failed\n");
--		goto out;
-+		return rval;
- 	}
- 
- 	rval = smiapp_write(sensor, SMIAPP_REG_U8_MODE_SELECT,
- 			    SMIAPP_MODE_SELECT_STREAMING);
- 
--out:
--	mutex_unlock(&sensor->mutex);
--
- 	return rval;
- }
- 
-@@ -1514,18 +1500,15 @@ static int smiapp_stop_streaming(struct smiapp_sensor *sensor)
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
- 	int rval;
- 
--	mutex_lock(&sensor->mutex);
- 	rval = smiapp_write(sensor, SMIAPP_REG_U8_MODE_SELECT,
- 			    SMIAPP_MODE_SELECT_SOFTWARE_STANDBY);
- 	if (rval)
--		goto out;
-+		return rval;
- 
- 	rval = smiapp_call_quirk(sensor, post_streamoff);
- 	if (rval)
- 		dev_err(&client->dev, "post_streamoff quirks failed\n");
- 
--out:
--	mutex_unlock(&sensor->mutex);
- 	return rval;
- }
- 
-@@ -1574,20 +1557,17 @@ static int smiapp_enum_mbus_code(struct v4l2_subdev *subdev,
- 	struct smiapp_sensor *sensor = to_smiapp_sensor(subdev);
- 	unsigned int i;
- 	int idx = -1;
--	int rval = -EINVAL;
--
--	mutex_lock(&sensor->mutex);
-+	int rval = 0;
- 
- 	dev_err(&client->dev, "subdev %s, pad %d, index %d\n",
- 		subdev->name, code->pad, code->index);
- 
- 	if (subdev != &sensor->src->sd || code->pad != SMIAPP_PAD_SRC) {
- 		if (code->index)
--			goto out;
-+			return -EINVAL;
- 
- 		code->code = sensor->internal_csi_format->code;
--		rval = 0;
--		goto out;
-+		return 0;
- 	}
- 
- 	for (i = 0; i < ARRAY_SIZE(smiapp_csi_data_formats); i++) {
-@@ -1598,14 +1578,10 @@ static int smiapp_enum_mbus_code(struct v4l2_subdev *subdev,
- 			code->code = smiapp_csi_data_formats[i].code;
- 			dev_err(&client->dev, "found index %d, i %d, code %x\n",
- 				code->index, i, code->code);
--			rval = 0;
--			break;
-+			return 0;
- 		}
- 	}
- 
--out:
--	mutex_unlock(&sensor->mutex);
--
- 	return rval;
- }
- 
-@@ -1620,9 +1596,9 @@ static u32 __smiapp_get_mbus_code(struct v4l2_subdev *subdev,
- 		return sensor->internal_csi_format->code;
- }
- 
--static int __smiapp_get_format(struct v4l2_subdev *subdev,
--			       struct v4l2_subdev_pad_config *cfg,
--			       struct v4l2_subdev_format *fmt)
-+static int smiapp_get_format(struct v4l2_subdev *subdev,
-+			     struct v4l2_subdev_pad_config *cfg,
-+			     struct v4l2_subdev_format *fmt)
+diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
+index 22a1b266e373..5701163460ef 100644
+--- a/tools/testing/selftests/arm64/tags_test.c
++++ b/tools/testing/selftests/arm64/tags_test.c
+@@ -14,15 +14,17 @@
+ int main(void)
  {
- 	struct smiapp_subdev *ssd = to_smiapp_subdev(subdev);
+ 	static int tbi_enabled = 0;
+-	struct utsname *ptr, *tagged_ptr;
++	unsigned long tag = 0;
++	struct utsname *ptr;
+ 	int err;
  
-@@ -1646,20 +1622,6 @@ static int __smiapp_get_format(struct v4l2_subdev *subdev,
- 	return 0;
- }
+ 	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
+ 		tbi_enabled = 1;
+ 	ptr = (struct utsname *)malloc(sizeof(*ptr));
+ 	if (tbi_enabled)
+-		tagged_ptr = (struct utsname *)SET_TAG(ptr, 0x42);
+-	err = uname(tagged_ptr);
++		tag = 0x42;
++	ptr = (struct utsname *)SET_TAG(ptr, tag);
++	err = uname(ptr);
+ 	free(ptr);
  
--static int smiapp_get_format(struct v4l2_subdev *subdev,
--			     struct v4l2_subdev_pad_config *cfg,
--			     struct v4l2_subdev_format *fmt)
--{
--	struct smiapp_sensor *sensor = to_smiapp_sensor(subdev);
--	int rval;
--
--	mutex_lock(&sensor->mutex);
--	rval = __smiapp_get_format(subdev, cfg, fmt);
--	mutex_unlock(&sensor->mutex);
--
--	return rval;
--}
--
- static void smiapp_get_crop_compose(struct v4l2_subdev *subdev,
- 				    struct v4l2_subdev_pad_config *cfg,
- 				    struct v4l2_rect **crops,
-@@ -1751,7 +1713,7 @@ static int smiapp_set_format_source(struct v4l2_subdev *subdev,
- 	unsigned int i;
- 	int rval;
- 
--	rval = __smiapp_get_format(subdev, cfg, fmt);
-+	rval = smiapp_get_format(subdev, cfg, fmt);
- 	if (rval)
- 		return rval;
- 
-@@ -1800,17 +1762,8 @@ static int smiapp_set_format(struct v4l2_subdev *subdev,
- 	struct smiapp_subdev *ssd = to_smiapp_subdev(subdev);
- 	struct v4l2_rect *crops[SMIAPP_PADS];
- 
--	mutex_lock(&sensor->mutex);
--
--	if (fmt->pad == ssd->source_pad) {
--		int rval;
--
--		rval = smiapp_set_format_source(subdev, cfg, fmt);
--
--		mutex_unlock(&sensor->mutex);
--
--		return rval;
--	}
-+	if (fmt->pad == ssd->source_pad)
-+		return smiapp_set_format_source(subdev, cfg, fmt);
- 
- 	/* Sink pad. Width and height are changeable here. */
- 	fmt->format.code = __smiapp_get_mbus_code(subdev, fmt->pad);
-@@ -1838,8 +1791,6 @@ static int smiapp_set_format(struct v4l2_subdev *subdev,
- 	smiapp_propagate(subdev, cfg, fmt->which,
- 			 V4L2_SEL_TGT_CROP);
- 
--	mutex_unlock(&sensor->mutex);
--
- 	return 0;
- }
- 
-@@ -2181,9 +2132,9 @@ static void smiapp_get_native_size(struct smiapp_subdev *ssd,
- 	r->height = ssd->sensor->limits[SMIAPP_LIMIT_Y_ADDR_MAX] + 1;
- }
- 
--static int __smiapp_get_selection(struct v4l2_subdev *subdev,
--				  struct v4l2_subdev_pad_config *cfg,
--				  struct v4l2_subdev_selection *sel)
-+static int smiapp_get_selection(struct v4l2_subdev *subdev,
-+				struct v4l2_subdev_pad_config *cfg,
-+				struct v4l2_subdev_selection *sel)
- {
- 	struct smiapp_sensor *sensor = to_smiapp_sensor(subdev);
- 	struct smiapp_subdev *ssd = to_smiapp_subdev(subdev);
-@@ -2231,19 +2182,6 @@ static int __smiapp_get_selection(struct v4l2_subdev *subdev,
- 	return 0;
- }
- 
--static int smiapp_get_selection(struct v4l2_subdev *subdev,
--				struct v4l2_subdev_pad_config *cfg,
--				struct v4l2_subdev_selection *sel)
--{
--	struct smiapp_sensor *sensor = to_smiapp_sensor(subdev);
--	int rval;
--
--	mutex_lock(&sensor->mutex);
--	rval = __smiapp_get_selection(subdev, cfg, sel);
--	mutex_unlock(&sensor->mutex);
--
--	return rval;
--}
- static int smiapp_set_selection(struct v4l2_subdev *subdev,
- 				struct v4l2_subdev_pad_config *cfg,
- 				struct v4l2_subdev_selection *sel)
-@@ -2255,8 +2193,6 @@ static int smiapp_set_selection(struct v4l2_subdev *subdev,
- 	if (ret)
- 		return ret;
- 
--	mutex_lock(&sensor->mutex);
--
- 	sel->r.left = max(0, sel->r.left & ~1);
- 	sel->r.top = max(0, sel->r.top & ~1);
- 	sel->r.width = SMIAPP_ALIGN_DIM(sel->r.width, sel->flags);
-@@ -2271,17 +2207,14 @@ static int smiapp_set_selection(struct v4l2_subdev *subdev,
- 
- 	switch (sel->target) {
- 	case V4L2_SEL_TGT_CROP:
--		ret = smiapp_set_crop(subdev, cfg, sel);
-+		return smiapp_set_crop(subdev, cfg, sel);
- 		break;
- 	case V4L2_SEL_TGT_COMPOSE:
--		ret = smiapp_set_compose(subdev, cfg, sel);
-+		return smiapp_set_compose(subdev, cfg, sel);
- 		break;
- 	default:
--		ret = -EINVAL;
-+		return -EINVAL;
- 	}
--
--	mutex_unlock(&sensor->mutex);
--	return ret;
- }
- 
- static int smiapp_get_skip_frames(struct v4l2_subdev *subdev, u32 *frames)
-@@ -2627,8 +2560,6 @@ static int smiapp_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 	struct smiapp_sensor *sensor = ssd->sensor;
- 	unsigned int i;
- 
--	mutex_lock(&sensor->mutex);
--
- 	for (i = 0; i < ssd->npads; i++) {
- 		struct v4l2_mbus_framefmt *try_fmt =
- 			v4l2_subdev_get_try_format(sd, fh->pad, i);
-@@ -2650,8 +2581,6 @@ static int smiapp_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
- 		*try_comp = *try_crop;
- 	}
- 
--	mutex_unlock(&sensor->mutex);
--
- 	return 0;
- }
- 
-@@ -2913,6 +2842,9 @@ static int smiapp_probe(struct i2c_client *client)
- 
- 	mutex_init(&sensor->mutex);
- 
-+	for (i = 0; i < SMIAPP_SUBDEVS; i++)
-+		sensor->ssds[i].sd.lock = &sensor->mutex;
-+
- 	rval = smiapp_power_on(&client->dev);
- 	if (rval < 0)
- 		goto out_mutex_destroy;
+ 	return err;
 -- 
-2.20.1
+2.23.0.rc1.153.gdeed80330f-goog
 
