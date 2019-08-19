@@ -2,196 +2,228 @@ Return-Path: <SRS0=OySw=WP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A572C3A59D
-	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 12:17:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 429A4C3A5A0
+	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 12:31:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E65FA20851
-	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 12:17:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566217060;
-	bh=OArwXQNMVU5YYvqbDMi9djcW5It9wTJ0e4FYHuWAIxk=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=Sc++3LAgc5fODC5CjUtv7kGpFXwv5QsZFz5Tov1f9pvr6AdULITiLwnrh064Em9mr
-	 o+XSgFzQS2sjzVtZtyKNrn4kx7gQO0nuj4sAxdYcWEQ9VYq1DzMklJZiJQ5Lsp8jYj
-	 ome8+Uye02UmM08BPvLgxclBfUkNtfABLfI87QMI=
+	by mail.kernel.org (Postfix) with ESMTP id 1827020843
+	for <linux-media@archiver.kernel.org>; Mon, 19 Aug 2019 12:31:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727445AbfHSMR1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 19 Aug 2019 08:17:27 -0400
-Received: from mail-ed1-f49.google.com ([209.85.208.49]:37581 "EHLO
-        mail-ed1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727259AbfHSMR1 (ORCPT
+        id S1726755AbfHSMbk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 19 Aug 2019 08:31:40 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:46477 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726594AbfHSMbj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 19 Aug 2019 08:17:27 -0400
-Received: by mail-ed1-f49.google.com with SMTP id f22so1465966edt.4;
-        Mon, 19 Aug 2019 05:17:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9HJOjJNc72EsAZqvVA1iMykBVheTMlViqU0Dls5uHTA=;
-        b=Hkw8bnvN5/t2PjcLRhvmEftZE2He1Sax3SQmB0eOVUQCNiJPymZdrIlhFJd0xXebgJ
-         2vebuvIfH9D6gk52HtZWN1khZr+eOr1saWSG5q746lOgOzwIHl/v2Z1dY3/QCBVgMhen
-         rG5dCvHhVmmXP9ghg8S91PnMjY90ba2udICRk0B66x/4dO23kJH7FjDBtS/lUYZchltI
-         f0W/ZUYRB7la9TOjee9LgZ7SHKVcZX9JIl4blIjxdp8xO0SBnV9q1XuMxsP+18nhUsiW
-         6UjbOFEJJhnzCCc7R1Z1mlnC+en0LfhBTI3VDbMChHY/rYQ/dQ733n2qUZHF/tHG1R55
-         rR8A==
-X-Gm-Message-State: APjAAAVGjNhNXFuydOP64War11VrK34rSZ7kf0K70R809VCowqAHg+IB
-        Ek1bGJGPyoqJcNH6ufWPK6E=
-X-Google-Smtp-Source: APXvYqysIg9wn42RUSFN/zCY4ej2oMd+LFZE9Uw3GoqmOE6gMVBiyToZTnB0EaVuo9oAT2zyh55yVA==
-X-Received: by 2002:a50:8858:: with SMTP id c24mr24503654edc.253.1566217045039;
-        Mon, 19 Aug 2019 05:17:25 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id b31sm2753639edf.33.2019.08.19.05.17.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2019 05:17:24 -0700 (PDT)
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH 1/3] media: add pixel_size control
-Date:   Mon, 19 Aug 2019 14:17:18 +0200
-Message-Id: <20190819121720.31345-1-ribalda@kernel.org>
-X-Mailer: git-send-email 2.23.0.rc1
+        Mon, 19 Aug 2019 08:31:39 -0400
+X-Originating-IP: 86.250.200.211
+Received: from aptenodytes (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
+        (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id D8119240008;
+        Mon, 19 Aug 2019 12:31:31 +0000 (UTC)
+Date:   Mon, 19 Aug 2019 14:31:31 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Ezequiel Garcia <ezequiel@collabora.com>
+Cc:     linux-media@vger.kernel.org, kernel@collabora.com,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        fbuergisser@chromium.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 06/11] media: cedrus: Cleanup control initialization
+Message-ID: <20190819123131.GA32182@aptenodytes>
+References: <20190816160132.7352-1-ezequiel@collabora.com>
+ <20190816160132.7352-7-ezequiel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="k1lZvvs/B4yU6o8G"
+Content-Disposition: inline
+In-Reply-To: <20190816160132.7352-7-ezequiel@collabora.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This control returns the pixel size in nanometres. The struct provides
-the width and the height in separated fields to take into consideration
-asymmetric pixels and/or hardware binning.
-This control is required for automatic calibration of the sensor.
 
-Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
----
- drivers/media/v4l2-core/v4l2-ctrls.c | 11 +++++++++++
- include/media/v4l2-ctrls.h           |  2 ++
- include/uapi/linux/v4l2-controls.h   |  3 +++
- include/uapi/linux/videodev2.h       | 11 +++++++++++
- 4 files changed, 27 insertions(+)
+--k1lZvvs/B4yU6o8G
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index cd1ae016706f..a3a0086c96ff 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -978,6 +978,7 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_AUTO_FOCUS_RANGE:		return "Auto Focus, Range";
- 	case V4L2_CID_PAN_SPEED:		return "Pan, Speed";
- 	case V4L2_CID_TILT_SPEED:		return "Tilt, Speed";
-+	case V4L2_CID_PIXEL_SIZE:		return "Pixel Size";
- 
- 	/* FM Radio Modulator controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-@@ -1357,6 +1358,9 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_MPEG_VIDEO_VP8_FRAME_HEADER:
- 		*type = V4L2_CTRL_TYPE_VP8_FRAME_HEADER;
- 		break;
-+	case V4L2_CID_PIXEL_SIZE:
-+		*type = V4L2_CTRL_TYPE_PIXEL_SIZE;
-+		break;
- 	default:
- 		*type = V4L2_CTRL_TYPE_INTEGER;
- 		break;
-@@ -1423,6 +1427,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
- 	case V4L2_CID_RDS_RX_TRAFFIC_ANNOUNCEMENT:
- 	case V4L2_CID_RDS_RX_TRAFFIC_PROGRAM:
- 	case V4L2_CID_RDS_RX_MUSIC_SPEECH:
-+	case V4L2_CID_PIXEL_SIZE:
- 		*flags |= V4L2_CTRL_FLAG_READ_ONLY;
- 		break;
- 	case V4L2_CID_RF_TUNER_PLL_LOCK:
-@@ -1705,6 +1710,9 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	case V4L2_CTRL_TYPE_FWHT_PARAMS:
- 		break;
- 
-+	case V4L2_CTRL_TYPE_PIXEL_SIZE:
-+		break;
-+
- 	case V4L2_CTRL_TYPE_H264_SPS:
- 	case V4L2_CTRL_TYPE_H264_PPS:
- 	case V4L2_CTRL_TYPE_H264_SCALING_MATRIX:
-@@ -2403,6 +2411,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	case V4L2_CTRL_TYPE_VP8_FRAME_HEADER:
- 		elem_size = sizeof(struct v4l2_ctrl_vp8_frame_header);
- 		break;
-+	case V4L2_CTRL_TYPE_PIXEL_SIZE:
-+		elem_size = sizeof(struct v4l2_pixel_size);
-+		break;
- 	default:
- 		if (type < V4L2_CTRL_COMPOUND_TYPES)
- 			elem_size = sizeof(s32);
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 570ff4b0205a..63de780398b8 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -50,6 +50,7 @@ struct poll_table_struct;
-  * @p_h264_slice_params:	Pointer to a struct v4l2_ctrl_h264_slice_params.
-  * @p_h264_decode_params:	Pointer to a struct v4l2_ctrl_h264_decode_params.
-  * @p_vp8_frame_header:		Pointer to a VP8 frame header structure.
-+ * @p_pixel_size:		Pointer to a pixel_size value.
-  * @p:				Pointer to a compound value.
-  */
- union v4l2_ctrl_ptr {
-@@ -68,6 +69,7 @@ union v4l2_ctrl_ptr {
- 	struct v4l2_ctrl_h264_slice_params *p_h264_slice_params;
- 	struct v4l2_ctrl_h264_decode_params *p_h264_decode_params;
- 	struct v4l2_ctrl_vp8_frame_header *p_vp8_frame_header;
-+	struct v4l2_pixel_size *p_pixel_size;
- 	void *p;
- };
- 
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index a2669b79b294..13f0410df4c6 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -912,6 +912,9 @@ enum v4l2_auto_focus_range {
- #define V4L2_CID_PAN_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+32)
- #define V4L2_CID_TILT_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+33)
- 
-+#define V4L2_CID_PIXEL_SIZE			(V4L2_CID_CAMERA_CLASS_BASE+34)
-+
-+
- /* FM Modulator class control IDs */
- 
- #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 2427bc4d8eba..21f4846dca0b 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -422,6 +422,11 @@ struct v4l2_fract {
- 	__u32   denominator;
- };
- 
-+struct v4l2_pixel_size {
-+	__u32   width;
-+	__u32   height;
-+};
-+
- /**
-   * struct v4l2_capability - Describes V4L2 device caps returned by VIDIOC_QUERYCAP
-   *
-@@ -1718,6 +1723,12 @@ enum v4l2_ctrl_type {
- 	V4L2_CTRL_TYPE_U8	     = 0x0100,
- 	V4L2_CTRL_TYPE_U16	     = 0x0101,
- 	V4L2_CTRL_TYPE_U32	     = 0x0102,
-+	/*
-+	 * V4L2_CTRL_TYPE_MPEG2_SLICE_PARAMS = 0x0103,
-+	 * V4L2_CTRL_TYPE_MPEG2_QUANTIZATION = 0x0104,
-+	 * V4L2_CTRL_TYPE_FWHT_PARAMS = 0x0105,
-+	 */
-+	V4L2_CTRL_TYPE_PIXEL_SIZE    = 0x0106,
- };
- 
- /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
--- 
-2.23.0.rc1
+Hi,
 
+On Fri 16 Aug 19, 13:01, Ezequiel Garcia wrote:
+> In order to introduce other controls, the control initialization
+> needs to support an initial struct v4l2_ctrl_control.
+>=20
+> While here, let's cleanup the control initialization,
+> removing unneeded fields.
+
+Thanks for the change!
+
+Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+
+Cheers,
+
+Paul
+
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> ---
+> Changes in v7:
+> * None.
+> Changes in v6:
+> * None.
+> Changes in v5:
+> * None.
+> Changes in v4:
+> * New patch.
+> ---
+>  drivers/staging/media/sunxi/cedrus/cedrus.c | 45 +++++++++++----------
+>  drivers/staging/media/sunxi/cedrus/cedrus.h |  3 +-
+>  2 files changed, 25 insertions(+), 23 deletions(-)
+>=20
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/stagin=
+g/media/sunxi/cedrus/cedrus.c
+> index 370937edfc14..7bdc413bf727 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+> @@ -29,44 +29,51 @@
+> =20
+>  static const struct cedrus_control cedrus_controls[] =3D {
+>  	{
+> -		.id		=3D V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS,
+> -		.elem_size	=3D sizeof(struct v4l2_ctrl_mpeg2_slice_params),
+> +		.cfg =3D {
+> +			.id	=3D V4L2_CID_MPEG_VIDEO_MPEG2_SLICE_PARAMS,
+> +		},
+>  		.codec		=3D CEDRUS_CODEC_MPEG2,
+>  		.required	=3D true,
+>  	},
+>  	{
+> -		.id		=3D V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION,
+> -		.elem_size	=3D sizeof(struct v4l2_ctrl_mpeg2_quantization),
+> +		.cfg =3D {
+> +			.id	=3D V4L2_CID_MPEG_VIDEO_MPEG2_QUANTIZATION,
+> +		},
+>  		.codec		=3D CEDRUS_CODEC_MPEG2,
+>  		.required	=3D false,
+>  	},
+>  	{
+> -		.id		=3D V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS,
+> -		.elem_size	=3D sizeof(struct v4l2_ctrl_h264_decode_params),
+> +		.cfg =3D {
+> +			.id	=3D V4L2_CID_MPEG_VIDEO_H264_DECODE_PARAMS,
+> +		},
+>  		.codec		=3D CEDRUS_CODEC_H264,
+>  		.required	=3D true,
+>  	},
+>  	{
+> -		.id		=3D V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS,
+> -		.elem_size	=3D sizeof(struct v4l2_ctrl_h264_slice_params),
+> +		.cfg =3D {
+> +			.id	=3D V4L2_CID_MPEG_VIDEO_H264_SLICE_PARAMS,
+> +		},
+>  		.codec		=3D CEDRUS_CODEC_H264,
+>  		.required	=3D true,
+>  	},
+>  	{
+> -		.id		=3D V4L2_CID_MPEG_VIDEO_H264_SPS,
+> -		.elem_size	=3D sizeof(struct v4l2_ctrl_h264_sps),
+> +		.cfg =3D {
+> +			.id	=3D V4L2_CID_MPEG_VIDEO_H264_SPS,
+> +		},
+>  		.codec		=3D CEDRUS_CODEC_H264,
+>  		.required	=3D true,
+>  	},
+>  	{
+> -		.id		=3D V4L2_CID_MPEG_VIDEO_H264_PPS,
+> -		.elem_size	=3D sizeof(struct v4l2_ctrl_h264_pps),
+> +		.cfg =3D {
+> +			.id	=3D V4L2_CID_MPEG_VIDEO_H264_PPS,
+> +		},
+>  		.codec		=3D CEDRUS_CODEC_H264,
+>  		.required	=3D true,
+>  	},
+>  	{
+> -		.id		=3D V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
+> -		.elem_size	=3D sizeof(struct v4l2_ctrl_h264_scaling_matrix),
+> +		.cfg =3D {
+> +			.id	=3D V4L2_CID_MPEG_VIDEO_H264_SCALING_MATRIX,
+> +		},
+>  		.codec		=3D CEDRUS_CODEC_H264,
+>  		.required	=3D true,
+>  	},
+> @@ -106,12 +113,8 @@ static int cedrus_init_ctrls(struct cedrus_dev *dev,=
+ struct cedrus_ctx *ctx)
+>  		return -ENOMEM;
+> =20
+>  	for (i =3D 0; i < CEDRUS_CONTROLS_COUNT; i++) {
+> -		struct v4l2_ctrl_config cfg =3D {};
+> -
+> -		cfg.elem_size =3D cedrus_controls[i].elem_size;
+> -		cfg.id =3D cedrus_controls[i].id;
+> -
+> -		ctrl =3D v4l2_ctrl_new_custom(hdl, &cfg, NULL);
+> +		ctrl =3D v4l2_ctrl_new_custom(hdl, &cedrus_controls[i].cfg,
+> +					    NULL);
+>  		if (hdl->error) {
+>  			v4l2_err(&dev->v4l2_dev,
+>  				 "Failed to create new custom control\n");
+> @@ -178,7 +181,7 @@ static int cedrus_request_validate(struct media_reque=
+st *req)
+>  			continue;
+> =20
+>  		ctrl_test =3D v4l2_ctrl_request_hdl_ctrl_find(hdl,
+> -							    cedrus_controls[i].id);
+> +							    cedrus_controls[i].cfg.id);
+>  		if (!ctrl_test) {
+>  			v4l2_info(&ctx->dev->v4l2_dev,
+>  				  "Missing required codec control\n");
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/stagin=
+g/media/sunxi/cedrus/cedrus.h
+> index d8e6777e5e27..2f017a651848 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus.h
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
+> @@ -49,8 +49,7 @@ enum cedrus_h264_pic_type {
+>  };
+> =20
+>  struct cedrus_control {
+> -	u32			id;
+> -	u32			elem_size;
+> +	struct v4l2_ctrl_config cfg;
+>  	enum cedrus_codec	codec;
+>  	unsigned char		required:1;
+>  };
+> --=20
+> 2.22.0
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--k1lZvvs/B4yU6o8G
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAl1alqMACgkQ3cLmz3+f
+v9FHGgf9GLCQ3HMQRLLRzQ23YG4MhNKPyvS67MXgy+nC7SUk4wllp+NwI9uTGkXZ
+my2QXgKSmJZOZL5D6SMa2IRMbfebAUfRcosZSjsu9HBheoMnXnRst06mSaQd+Q0H
+KoaHiAL65KKGaiWPgkMqVpr1mpJv6qaJ5BpFa+IRqKKPXxfn70CG7A7odiyEzAVN
+oFe0Ai8iiHlhw7dCL3vxcotf4radt8PivRBp8jRwXtTv54XV1TrYDjRysMCwzmZl
+pTSS8ioM8QwSyxjDzH45kDFXQH3Hxh4iIUTh1SYAfxUNSWRieaWhN3BGIJ63It1h
+3Lgr7cpxBlH/5+y4H35NpZmqgSPLNQ==
+=C07M
+-----END PGP SIGNATURE-----
+
+--k1lZvvs/B4yU6o8G--
