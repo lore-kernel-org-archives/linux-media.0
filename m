@@ -2,318 +2,171 @@ Return-Path: <SRS0=J81J=WQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FB10C3A589
-	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 11:25:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27C38C3A589
+	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 11:37:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF0E82082F
-	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 11:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566300318;
-	bh=be/ximFWqGpHFeIhSuv7lOPq2RW6biddbx32xfqGjTg=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=tK31Tj8qrZP6wc0FODA1B0zqnwOqTyGTX8KCMmzng+FRoiun/0aUozFjJlJQ/ZmTS
-	 IRzokTD/tSHjy1f3Ot9POnzHmaO3wqEmMBQ4iiE571iK0GVDGxC3fzssH33cOVhoi+
-	 5ojn+IZiQ/pwGq6IQ+QdLddgB3Ccmr3B9YzTtIfU=
+	by mail.kernel.org (Postfix) with ESMTP id E477A214DA
+	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 11:37:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=microchiptechnology.onmicrosoft.com header.i=@microchiptechnology.onmicrosoft.com header.b="SJ1JHjXT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729621AbfHTLYn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Aug 2019 07:24:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40624 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729421AbfHTLYm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Aug 2019 07:24:42 -0400
-Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1270B2082F;
-        Tue, 20 Aug 2019 11:24:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566300281;
-        bh=be/ximFWqGpHFeIhSuv7lOPq2RW6biddbx32xfqGjTg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=EIosSN9/gCEu73RgRFC5bNtLKAGiOp2MJH/zpmmJ+IwCEDWXMMuDHnRcY4rqViwfn
-         OsVi9SP0+Twfo7A+dsrTh1p4gqQJTlfANsbiLDxrc/fxv7GMKMfznpKnjIjzfD5gDG
-         MVE71XYuNv001QwKg2yYnclHesY06maqi7a2sqgg=
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Hans Verkuil <hans.verkuil@cisco.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>
-Subject: [PATCH v7 0/5] media: Allwinner A10 CSI support
-Date:   Tue, 20 Aug 2019 13:24:31 +0200
-Message-Id: <cover.b695c63cf668192aff5574a3005d483c601e77f6.1566300265.git-series.maxime.ripard@bootlin.com>
-X-Mailer: git-send-email 2.21.0
+        id S1729574AbfHTLhu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Aug 2019 07:37:50 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:11421 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729421AbfHTLht (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Aug 2019 07:37:49 -0400
+Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
+  Eugen.Hristev@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="Eugen.Hristev@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa3.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
+  envelope-from="Eugen.Hristev@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa3.microchip.iphmx.com; spf=Pass smtp.mailfrom=Eugen.Hristev@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: 8sKL/FGgKzumXMl0jW1v8uel1LeQUtZSXTnLEYAi8fAWvJYVdPz2iV4TGdFN52jEolQW/V7sW6
+ Q4JyKP+GZvx1joUvp0ZyasoyrXM7IAKiU7vwOnH0j9pVKKG4g5dL02cHjpb0xQF65ufi9K84n7
+ YOX5rSPdp4u9KU+6z+PS9vgHjX9UZgin90NLuT0LMJWQ/VTfaMjajHfOJp3QPkPG+T2Gf/U1eP
+ Slgqhvnf9fznx1JfOwG8i+/KHVyntBxiIr+nmnLaa9mC7wn//TZFy24eBIvxCWbsDI5nW8SWUh
+ br8=
+X-IronPort-AV: E=Sophos;i="5.64,408,1559545200"; 
+   d="scan'208";a="45902954"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Aug 2019 04:37:47 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 20 Aug 2019 04:37:47 -0700
+Received: from NAM03-BY2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Tue, 20 Aug 2019 04:37:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GLqld7jTuREuMIULK7pNc8WfxPDE6LwP80dJEKkEFtQeNxLSiZEAZffC/l+cef5RxAy/ngZykaD5cdvHNq9n8fu4BvYOxo5ztrogPyYk0qYayBsyjSSuNY/BO3c/dmZWO5iOadtI5Th9AES0gQ6huUg0YOlYGCis5IVjEOiiJndcdP+i1ICvNkLsrmzw6jqbr1voYnV5y753hcFJmBgvWqeH1oy/jhZZJw/lwVu/ZB0pCZTAeUSdn6RvOdvgcy/MB4F1WLW/DTx4xVA9fm6+9Ry7p7sTw7PQitF4saVQBvd8uAFhw4E+MWviPHDzS5GWNbbTsEcoGz4mjEx4aFjNvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TaOrdYzh7WtX0uWCmQc+CzyIWLxq6H3d91Vrj6tveQk=;
+ b=U4Pd4J1f2mSdi/pSOxkQGnLwjPVfl1k/9nGfG0gv0aApAt9pptY8bQp1YzczhYa1B0U0T19Z6NrDwacgxBgYFCCTbPhP69V1+03QUIZbiImAkeYOLJY0VKRbsWwmb0UFLuiipzKcdnkoopHGgWLrgNhXH7yTxqHD2eQpqBxCTNl2NAStgzUD8CnM40qFyKrs5MZOjNiow3CJ6IVrUm5VvHrnynK8SCFCMJv2nUvNH/ylJlUrDxLnBpsGcTOg+zP5gRCfqxfnTUJ8AyGaEZFzUY8RvjAaDOh77QvL9JBF8eTIz9ltqFvkzvSzykc7HMYD6r1LUDhXN2l9/wMRu7DLkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TaOrdYzh7WtX0uWCmQc+CzyIWLxq6H3d91Vrj6tveQk=;
+ b=SJ1JHjXTLIQfsvGogBThSlYZrGfhDpOYsI4i5P7APAGD5KCUAu/Qe1ygVHQ3aEQbSi4Mp3RsZQdUA4mTsPfzJt9FEqKFbwmbdxDkmDSrcHRNwPfIAHeW+lwRZXLcKM4M/n382vBZ/MimP++9snXpLcXS5Xcgz9A2P2Cu7qBTG0s=
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com (10.168.108.8) by
+ DM5PR11MB1258.namprd11.prod.outlook.com (10.168.108.12) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2178.16; Tue, 20 Aug 2019 11:37:46 +0000
+Received: from DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::c457:dc57:6e6f:f4f3]) by DM5PR11MB1242.namprd11.prod.outlook.com
+ ([fe80::c457:dc57:6e6f:f4f3%10]) with mapi id 15.20.2178.018; Tue, 20 Aug
+ 2019 11:37:46 +0000
+From:   <Eugen.Hristev@microchip.com>
+To:     <linux-media@vger.kernel.org>, <hverkuil@xs4all.nl>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <Nicolas.Ferre@microchip.com>, <Eugen.Hristev@microchip.com>,
+        <alexandre.kroupski@ingenico.com>
+Subject: [PATCH] media: atmel: atmel-isi: fix timeout value for stop streaming
+Thread-Topic: [PATCH] media: atmel: atmel-isi: fix timeout value for stop
+ streaming
+Thread-Index: AQHVV0uvEFgDMaOaUkG282eNQvL4aQ==
+Date:   Tue, 20 Aug 2019 11:37:45 +0000
+Message-ID: <1566300739-3351-1-git-send-email-eugen.hristev@microchip.com>
+Accept-Language: en-US, ro-RO
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: VI1P194CA0053.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:803:3c::42) To DM5PR11MB1242.namprd11.prod.outlook.com
+ (2603:10b6:3:14::8)
+x-mailer: git-send-email 2.7.4
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [94.177.32.156]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1a67e29a-2e21-4603-92d5-08d72562d1fe
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DM5PR11MB1258;
+x-ms-traffictypediagnostic: DM5PR11MB1258:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR11MB125815AF017BCAA6E66ED88DE8AB0@DM5PR11MB1258.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-forefront-prvs: 013568035E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(376002)(346002)(39860400002)(396003)(199004)(189003)(2501003)(486006)(26005)(25786009)(6436002)(305945005)(186003)(86362001)(7736002)(2201001)(256004)(6486002)(2616005)(53936002)(14444005)(3846002)(6116002)(478600001)(81156014)(476003)(316002)(52116002)(8676002)(81166006)(99286004)(54906003)(2906002)(6512007)(71190400001)(110136005)(71200400001)(4326008)(102836004)(8936002)(66556008)(66476007)(66446008)(14454004)(66946007)(50226002)(36756003)(66066001)(5660300002)(64756008)(6506007)(386003);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR11MB1258;H:DM5PR11MB1242.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microchip.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: kHSEubVE6o5P1IlGzWYl7nk/SUwY0hJ/mZ3KDhg/2p7xr33cCAnVu064vmkdedhDqegaUZlWEKtVcc4GwUZkDPYlO/CUZxl7E13Tsf6miG/60KapH6hyoOCT02kVfBp7jfTHKX4ceA4WSBQj0QGGE2IdUjZpXp/l74NThPKoMO7RyPbSDbvXfworrKiSWf8PeNIykNVc6Bao6PUB/DYpO0ziTinCkyAOK6RYacuVZ83HUEPcKUa+cI7q5QSOsFeleed/xsSSkRP6y7MMajetEr00Oljc8kLVhQlmS3mqwjbbx1R6JDXQYIqBrO1VlU/bn/2N5ZRXqykBdk6Ojsa+YZ49vSmp2/HxgkPzd+Z/Q5y1vElhNynTwjh44H1tZN6KiJqrAfADska8eVo11OhEilfKjUulmdyV2+L8jE+6FKk=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a67e29a-2e21-4603-92d5-08d72562d1fe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2019 11:37:45.9877
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: P8olKa8mpzPJbOo0qfcmUJWmGSI1UoR5XgVLIdlFQQVpks9AJR7qCzEKbWp2f59Yf5X0rb1QuCvsqMGsvg/13hyMsj4zG2RgmvgcLyvEC6U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1258
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Maxime Ripard <maxime.ripard@bootlin.com>
+From: Alexandre Kroupski <alexandre.kroupski@ingenico.com>
 
-Hi,
+In case of sensor malfunction, stop streaming timeout takes much longer
+than expected.
+This is due to conversion of time to jiffies: milliseconds multiplied
+with HZ (ticks/second) gives out a value of jiffies with 10^3 greater.
+We need to also divide by 10^3 to obtain the right jiffies value.
+In other words FRAME_INTERVAL_MILLI_SEC must be in seconds in order to mult=
+iply
+by HZ and get the right jiffies value to add to the current jiffies for the
+timeout expire time.
 
-Here is a series introducing the support for the A10 (and SoCs of the same
-generation) CMOS Sensor Interface (called CSI, not to be confused with
-MIPI-CSI, which isn't support by that IP).
+Fixes: 195ebc43bf76 ("[media] V4L: at91: add Atmel Image Sensor Interface (=
+ISI) support")
+Signed-off-by: Alexandre Kroupski <alexandre.kroupski@ingenico.com>
+Reviewed-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ drivers/media/platform/atmel/atmel-isi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That interface is pretty straightforward, but the driver has a few issues
-that I wanted to bring up:
+diff --git a/drivers/media/platform/atmel/atmel-isi.c b/drivers/media/platf=
+orm/atmel/atmel-isi.c
+index d7d94c1..428f117 100644
+--- a/drivers/media/platform/atmel/atmel-isi.c
++++ b/drivers/media/platform/atmel/atmel-isi.c
+@@ -493,7 +493,7 @@ static void stop_streaming(struct vb2_queue *vq)
+ 	spin_unlock_irq(&isi->irqlock);
+=20
+ 	if (!isi->enable_preview_path) {
+-		timeout =3D jiffies + FRAME_INTERVAL_MILLI_SEC * HZ;
++		timeout =3D jiffies + (FRAME_INTERVAL_MILLI_SEC * HZ) / 1000;
+ 		/* Wait until the end of the current frame. */
+ 		while ((isi_readl(isi, ISI_STATUS) & ISI_CTRL_CDC) &&
+ 				time_before(jiffies, timeout))
+--=20
+2.7.4
 
-  * The only board I've been testing this with has an ov5640 sensor
-    attached, which doesn't work with the upstream driver. Copying the
-    Allwinner init sequence works though, and this is how it has been
-    tested. Testing with a second sensor would allow to see if it's an
-    issue on the CSI side or the sensor side.
-  * We don't have support for the ISP at the moment, but this can be added
-    eventually.
-
-Here is the v4l2-compliance output (commit f61132e81d79 of v4l-utils)
-v4l2-compliance SHA: not available, 32 bits
-
-Compliance test for device /dev/video1:
-
-Driver Info:
-	Driver name      : sun4i_csi
-	Card type        : sun4i-csi
-	Bus info         : platform:1c09000.csi
-	Driver version   : 5.3.0
-	Capabilities     : 0x84201000
-		Video Capture Multiplanar
-		Streaming
-		Extended Pix Format
-		Device Capabilities
-	Device Caps      : 0x04201000
-		Video Capture Multiplanar
-		Streaming
-		Extended Pix Format
-Media Driver Info:
-	Driver name      : sun4i-csi
-	Model            : Allwinner Video Capture Device
-	Serial           :
-	Bus info         :
-	Media version    : 5.3.0
-	Hardware revision: 0x00000000 (0)
-	Driver version   : 5.3.0
-Interface Info:
-	ID               : 0x03000008
-	Type             : V4L Video
-Entity Info:
-	ID               : 0x00000006 (6)
-	Name             : sun4i_csi
-	Function         : V4L2 I/O
-	Pad 0x01000007   : 0: Sink, Must Connect
-	  Link 0x0200000a: from remote pad 0x1000005 of entity 'sun4i-csi-0': Data, Enabled, Immutable
-
-Required ioctls:
-	test MC information (see 'Media Driver Info' above): OK
-	test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-	test second /dev/video1 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK (Not Supported)
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 1 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls (Input 0):
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
-	test VIDIOC_QUERYCTRL: OK (Not Supported)
-	test VIDIOC_G/S_CTRL: OK (Not Supported)
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 0 Private Controls: 0
-
-Format ioctls (Input 0):
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK (Not Supported)
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-	test Cropping: OK (Not Supported)
-	test Composing: OK (Not Supported)
-	test Scaling: OK
-
-Codec ioctls (Input 0):
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls (Input 0):
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-
-Test input 0:
-
-Streaming ioctls:
-	test read/write: OK (Not Supported)
-	test blocking wait: OK
-	test MMAP: OK
-	test USERPTR: OK (Not Supported)
-	test DMABUF: OK (Not Supported)
-
-Total: 49, Succeeded: 49, Failed: 0, Warnings: 0
-
-media-ctl -p -d /dev/media1 output after boot:
-Media controller API version 5.3.0
-
-Media device information
-------------------------
-driver          sun4i-csi
-model           Allwinner Video Capture Device
-serial
-bus info
-hw revision     0x0
-driver version  5.3.0
-
-Device topology
-- entity 1: ov5640 1-0021 (1 pad, 1 link)
-            type V4L2 subdev subtype Sensor flags 0
-            device node name /dev/v4l-subdev0
-	pad0: Source
-		[fmt:YUYV8_2X8/640x480@1/30 field:none colorspace:srgb xfer:srgb ycbcr:601 quantization:full-range]
-		-> "sun4i-csi-0":0 [ENABLED,IMMUTABLE]
-
-- entity 3: sun4i-csi-0 (2 pads, 2 links)
-            type V4L2 subdev subtype Unknown flags 0
-            device node name /dev/v4l-subdev1
-	pad0: Sink
-		[fmt:YUYV8_2X8/640x480 field:none colorspace:raw]
-		<- "ov5640 1-0021":0 [ENABLED,IMMUTABLE]
-	pad1: Source
-		[fmt:YUYV8_2X8/640x480 field:none colorspace:raw]
-		-> "sun4i_csi":0 [ENABLED,IMMUTABLE]
-
-- entity 6: sun4i_csi (1 pad, 1 link)
-            type Node subtype V4L flags 0
-            device node name /dev/video1
-	pad0: Sink
-		<- "sun4i-csi-0":1 [ENABLED,IMMUTABLE]
-
-Let me know what you think,
-Maxime
-
-Changes from v6:
-  - Add init_cfg callback on the pads
-  - Use v4l2_subdev_link_validate instead of hand-rolled link validate
-  - Make sun4i_csi_qops const
-  - Add MODULE_DESCRIPTION, MODULE_AUTHOR and MODULE_LICENSE
-  - Remove the mod clock handling from the CSI driver
-  - Remove the A10 compatible fallback
-  - Rework the CSI pinctrl groups
-  - Add an example to the binding
-
-Changes from v5:
-  - Add link_validate/get_fmt/set_fmt/enum_mbus_code to the subdevice
-  - Create a device file for the subdevice
-  - Add link_validate to the video device
-  - Remove the storage of both the v4l2_pix_format_mplane structure and the
-    sun4i_csi_format structure, since the latter can be retrieved easily
-    from the former, and this is actually needed in a single place.
-  - Fix the copyright year notice
-
-Changes from v4:
-  - Created an intermediate sub-device
-
-Changes from v3:
-  - Rebased on v5.1-rc
-  - Fixed the YAML binding according to Rob's review
-
-Changes from v2:
-  - Address a few minors comments on the error path, the return type of
-    some functions, the type of some variables
-  - Disable the device if the subdev call fails in start_streaming
-  - Use __maybe_unused and SET_RUNTIME_PM_OPS for the runtime PM hooks
-  - Call media_device_cleanup in the remove function
-  - Add a dependency on the subdev API and the common clock framework
-  - Fix the MAINTAINERS entry to point to the yaml file
-  - Add the of graph bindings to the YAML schemas
-  - Rebase on next
-
-Changes from v1:
-  - Make sure it's compliant with a much newer v4l2-compliance
-  - Conversion of the DT bindings to a JSON schema
-  - Drop the vendor properties and use a separate compatible instead
-  - Fix an issue on the last frame where we would not have any buffer
-    queued and would report an error by using a scratch buffer
-  - Fix the warnings reported by v4l2-compliance
-  - Rebase on top of 5.0-rc1
-  - Added a MAINTAINERS entry
-  - Switched to strscpy
-  - Fixed SPDX header
-
-Maxime Ripard (5):
-  dt-bindings: media: Add Allwinner A10 CSI binding
-  media: sunxi: Refactor the Makefile and Kconfig
-  media: sunxi: Add A10 CSI driver
-  ARM: dts: sun7i: Add CSI0 controller
-  DO NOT MERGE: ARM: dts: bananapi: Add Camera support
-
- Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml | 107 +++++++++++++++++-
- MAINTAINERS                                                          |   8 +-
- arch/arm/boot/dts/sun7i-a20-bananapi.dts                             |  87 ++++++++++++++-
- arch/arm/boot/dts/sun7i-a20.dtsi                                     |  25 ++++-
- drivers/media/platform/Kconfig                                       |   2 +-
- drivers/media/platform/Makefile                                      |   2 +-
- drivers/media/platform/sunxi/Kconfig                                 |   2 +-
- drivers/media/platform/sunxi/Makefile                                |   2 +-
- drivers/media/platform/sunxi/sun4i-csi/Kconfig                       |  11 ++-
- drivers/media/platform/sunxi/sun4i-csi/Makefile                      |   5 +-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c                   | 305 +++++++++++++++++++++++++++++++++++++++++++++++++-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h                   | 159 ++++++++++++++++++++++++++-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c                   | 444 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c                  | 383 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
- 14 files changed, 1540 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml
- create mode 100644 drivers/media/platform/sunxi/Kconfig
- create mode 100644 drivers/media/platform/sunxi/Makefile
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/Kconfig
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/Makefile
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.c
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/sun4i_csi.h
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/sun4i_dma.c
- create mode 100644 drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-
-base-commit: 85b8819be27eab140d280bbee4f01385beb11e7d
--- 
-git-series 0.9.1
