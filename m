@@ -2,62 +2,49 @@ Return-Path: <SRS0=J81J=WQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD333C3A589
-	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 09:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4AA0C3A59E
+	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 09:50:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9F03422DA7
-	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 09:50:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566294640;
-	bh=xAjbNh3jm1ba4AhcLUZNLmJZ2TdxmfxVs39tcWlM78Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=jsKEjCuISO85rfksHAC5FeNJ1lZl41wRA3g+/8lDYQ3uF6xj/WD8Zyd9qIYTnZCK/
-	 oPq1NuWRWqzPE71KuYizDPd8MhJk9ER7tPd+r1X8SQ/bc5W2PXFVbi7/3uACbG/Ei7
-	 w3omWr/oka8sFwE+EhONObHVscCK7vFtoBnnEZZc=
+	by mail.kernel.org (Postfix) with ESMTP id 92FB222DA7
+	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 09:50:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729862AbfHTJud (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Aug 2019 05:50:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728842AbfHTJuc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Aug 2019 05:50:32 -0400
-Received: from localhost (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E705222DA7;
-        Tue, 20 Aug 2019 09:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566294631;
-        bh=xAjbNh3jm1ba4AhcLUZNLmJZ2TdxmfxVs39tcWlM78Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0EXoISDTEiqwhkhpbtk5VfIHEy45qg61TQnHaT/HD1JvT418X54lFE5BvAiCLQjFC
-         hNgJfLXMKpVSrkA43VEjSiKgypNwWRv+jpE4uJtcFp2vTNwqlBK819bLRG4DNN2VW6
-         vQRVyIzXd4QqfZD2CDtD49H91AWPFlXzS5YQXxIA=
-Date:   Tue, 20 Aug 2019 11:50:28 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Sean Young <sean@mess.org>
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1729879AbfHTJum (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Aug 2019 05:50:42 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:41713 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728842AbfHTJul (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Aug 2019 05:50:41 -0400
+X-Originating-IP: 87.18.63.98
+Received: from uno.localdomain (unknown [87.18.63.98])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id BF83D1C0014;
+        Tue, 20 Aug 2019 09:50:36 +0000 (UTC)
+Date:   Tue, 20 Aug 2019 11:52:05 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Simon Horman <horms+renesas@verge.net.au>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: media: Add YAML schemas for the
- generic RC bindings
-Message-ID: <20190820095028.l74sfvipwjjla6kq@flea>
-References: <20190819182619.29065-1-mripard@kernel.org>
- <20190820081525.celdosrgcvwoq6e7@gofer.mess.org>
+        Mark Rutland <mark.rutland@arm.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: sh-mobile-ceu: Rename bindings
+ documentation file
+Message-ID: <20190820095205.xnthl7d7cpy7myq2@uno.localdomain>
+References: <20190819140544.19294-1-horms+renesas@verge.net.au>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ftcnfstprcqph37g"
+        protocol="application/pgp-signature"; boundary="s545u3qgtcd2uv4a"
 Content-Disposition: inline
-In-Reply-To: <20190820081525.celdosrgcvwoq6e7@gofer.mess.org>
+In-Reply-To: <20190819140544.19294-1-horms+renesas@verge.net.au>
 User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
@@ -65,46 +52,61 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 
---ftcnfstprcqph37g
-Content-Type: text/plain; charset=us-ascii
+--s545u3qgtcd2uv4a
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 
-Hi Sean,
+Hi Simon,
 
-On Tue, Aug 20, 2019 at 09:15:26AM +0100, Sean Young wrote:
-> On Mon, Aug 19, 2019 at 08:26:18PM +0200, Maxime Ripard wrote:
-> > From: Maxime Ripard <maxime.ripard@bootlin.com>
-> >
-> > The RC controllers have a bunch of generic properties that are needed in a
-> > device tree. Add a YAML schemas for those.
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Maxime Ripard <maxime.ripard@bootlin.com>
+On Mon, Aug 19, 2019 at 04:05:44PM +0200, Simon Horman wrote:
+> Renesas media binding documentation files uses a naming schema of
+> 'renesas,<module>.txt'. Rename the SH Mobile CEU file to match this pattern.
 >
-> For the series (both 1/2 and 2.2):
+
+The old soc-camera based sh-mobile-ceu driver has been removed one
+year ago and replaced by driver/media/platform/renesas-ceu.c whose
+bindings are described at
+Documentation/devicetree/bindings/media/renesas,ceu.txt
+
+Should this file be removed instead of renamed?
+
+Thanks
+  j
+
+> Signed-off-by: Simon Horman <horms+renesas@verge.net.au>
+> ---
+> Based on v5.3-rc1
+> ---
+>  .../bindings/media/{sh_mobile_ceu.txt => renesas,sh-mobile-ceu.txt}       | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename Documentation/devicetree/bindings/media/{sh_mobile_ceu.txt => renesas,sh-mobile-ceu.txt} (100%)
 >
-> Reviewed-by: Sean Young <sean@mess.org>
+> diff --git a/Documentation/devicetree/bindings/media/sh_mobile_ceu.txt b/Documentation/devicetree/bindings/media/renesas,sh-mobile-ceu.txt
+> similarity index 100%
+> rename from Documentation/devicetree/bindings/media/sh_mobile_ceu.txt
+> rename to Documentation/devicetree/bindings/media/renesas,sh-mobile-ceu.txt
+> --
+> 2.11.0
 >
-> How's tree should this go through?
 
-Either yours or Rob's, I guess?
-
-Maxime
-
---
-Maxime Ripard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---ftcnfstprcqph37g
+--s545u3qgtcd2uv4a
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXVvCZAAKCRDj7w1vZxhR
-xTFAAQDl8xXvQIXa8WbCZaFxnwrmvUt5UqA7/9ObYafNNiYcpQEAt15seL7rf1IE
-lBtjtxdyX5TG4nk1wDwD7edVTHVeaQ4=
-=TAb7
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl1bwsUACgkQcjQGjxah
+VjyPUg//ThVI0x+SJ7Y34qsLEZs0SgzopAtZefvap9z9/MAUuTbIV6qBA5/BaLqT
+O1VQOg//KN/apqfVVcIPI83X1rn1IzIEEznGCKHmKxmehuL4iry+VTWPrJw3EH4y
+FPxeKrOZ76GMPsQFX7xBrSGwdfZgNWzmkccFjWM2RtdYC0tDC8fgh6/uKi9XYmRe
+lyy8zU4OxVLj1G0Uoqp1o5MX57jgKJ5NWs48FhgCkT+R0Yf01d9b3vwjRZF5C6tO
+FTvOSJfSnoP+xaao/GyH5zudiv6LOa5cTohxfUYdEXjiQg9JjNEbWRw35Cmel92U
+h/qVboanowTIBPiAlLqMtK0esWe4moGbDlKpsoivae2n53hx47UJElvo3Hu2LhHC
+4bAFhpT3MRZB3i8Oqw94yl9JuCwVMc0kzzdG7xcuMQimzuijhmdgNxesxDJJk2gn
+FiTt6UrTek4r8E9595/66AT9nN2UB4FnkY79dT1oxT2QJF/FKEh6sFEf6uVgUJDv
+f9km+Mnw2JnssBPf+VZI06yyr24aVfhWnt5vxKi0EqIEr9c5g3NYXk15VFRM/Rqb
+EG8uGkIpifriE1Ccu1G+A0pb9wPdDqQIuReZjEA0JS7K1YaaZ36ebCaudC5hjZJ2
+n7wdqkhOGHzgDQ+vF127kr+ukdEjlkeTC62raHmrU+0pjPH7v64=
+=lZjl
 -----END PGP SIGNATURE-----
 
---ftcnfstprcqph37g--
+--s545u3qgtcd2uv4a--
