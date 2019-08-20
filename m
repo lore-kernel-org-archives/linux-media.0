@@ -2,79 +2,87 @@ Return-Path: <SRS0=J81J=WQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4480BC3A589
-	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 15:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F514C3A59E
+	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 15:42:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 225362054F
-	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 15:35:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25B0922CE3
+	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 15:42:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730531AbfHTPeq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Aug 2019 11:34:46 -0400
-Received: from sauhun.de ([88.99.104.3]:37424 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730204AbfHTPeo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Aug 2019 11:34:44 -0400
-Received: from localhost (p54B333DC.dip0.t-ipconnect.de [84.179.51.220])
-        by pokefinder.org (Postfix) with ESMTPSA id 28ADF2E3540;
-        Tue, 20 Aug 2019 17:34:42 +0200 (CEST)
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        id S1730229AbfHTPm4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Aug 2019 11:42:56 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:59193 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729810AbfHTPmz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Aug 2019 11:42:55 -0400
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1i06HZ-0002QY-82; Tue, 20 Aug 2019 17:42:49 +0200
+Message-ID: <1566315769.3030.20.camel@pengutronix.de>
+Subject: Re: [PATCH v2 2/3] Documentation: media: Describe
+ V4L2_CID_UNIT_CELL_SIZE
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Ricardo Ribalda Delgado <ribalda@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] media: i2c: adv7511-v4l2: drop check because i2c_unregister_device() is NULL safe
-Date:   Tue, 20 Aug 2019 17:34:40 +0200
-Message-Id: <20190820153441.7748-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Tue, 20 Aug 2019 17:42:49 +0200
+In-Reply-To: <20190820094027.4144-2-ribalda@kernel.org>
+References: <20190820094027.4144-1-ribalda@kernel.org>
+         <20190820094027.4144-2-ribalda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-No need to check the argument of i2c_unregister_device() because the
-function itself does it.
+On Tue, 2019-08-20 at 11:40 +0200, Ricardo Ribalda Delgado wrote:
+> New control to pass to userspace the width/height of a pixel. Which is
+> needed for calibration and lens selection.
+> 
+> Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+> ---
+>  Documentation/media/uapi/v4l/ext-ctrls-camera.rst | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/Documentation/media/uapi/v4l/ext-ctrls-camera.rst b/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
+> index 51c1d5c9eb00..b43047d4e7a1 100644
+> --- a/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
+> +++ b/Documentation/media/uapi/v4l/ext-ctrls-camera.rst
+> @@ -510,6 +510,14 @@ enum v4l2_scene_mode -
+>      value down. A value of zero stops the motion if one is in progress
+>      and has no effect otherwise.
+>  
+> +``V4L2_CID_UNIT_CELL_SIZE (struct)``
+> +    This control returns the unit cell size in nanometres. The struct provides
+> +    the width and the height in separated fields to take into consideration
+> +    asymmetric pixels and/or hardware binning.
+> +    The unit cell consist on the whole area of the pixel, sensitive and
+> +    non-sensitive.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
-Build tested only, buildbot is happy, too.
+"consists of", otherwise this looks unambiguous to me.
 
-Please apply to your tree.
+I'm not sure if it is required to add a table for struct v4l2_area,
+similarly to the other compound controls.
 
- drivers/media/i2c/adv7511-v4l2.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+> +    This control is required for automatic calibration sensors/cameras.
+> +
+>  .. [#f1]
+>     This control may be changed to a menu control in the future, if more
+>     options are required.
 
-diff --git a/drivers/media/i2c/adv7511-v4l2.c b/drivers/media/i2c/adv7511-v4l2.c
-index 7db94267bcab..55b3a9c12e43 100644
---- a/drivers/media/i2c/adv7511-v4l2.c
-+++ b/drivers/media/i2c/adv7511-v4l2.c
-@@ -1940,8 +1940,7 @@ static int adv7511_probe(struct i2c_client *client, const struct i2c_device_id *
- err_unreg_pktmem:
- 	i2c_unregister_device(state->i2c_pktmem);
- err_unreg_cec:
--	if (state->i2c_cec)
--		i2c_unregister_device(state->i2c_cec);
-+	i2c_unregister_device(state->i2c_cec);
- err_unreg_edid:
- 	i2c_unregister_device(state->i2c_edid);
- err_entity:
-@@ -1967,8 +1966,7 @@ static int adv7511_remove(struct i2c_client *client)
- 	adv7511_init_setup(sd);
- 	cancel_delayed_work(&state->edid_handler);
- 	i2c_unregister_device(state->i2c_edid);
--	if (state->i2c_cec)
--		i2c_unregister_device(state->i2c_cec);
-+	i2c_unregister_device(state->i2c_cec);
- 	i2c_unregister_device(state->i2c_pktmem);
- 	destroy_workqueue(state->work_queue);
- 	v4l2_device_unregister_subdev(sd);
--- 
-2.20.1
-
+regards
+Philipp
