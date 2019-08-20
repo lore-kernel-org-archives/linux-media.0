@@ -2,201 +2,137 @@ Return-Path: <SRS0=J81J=WQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB090C3A589
-	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 21:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 978E2C3A589
+	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 21:43:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AA1A62332A
-	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 21:19:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566335946;
-	bh=Kqoqwxrq+1muVecFpCWsOPew7hKoo5kiadttXFtVjkI=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=EpCij5qajPK6XSO0HszDQUG5BjyCm3+Q4lEbY3utKsKALZbsG9MpylsU0YG1gU/ro
-	 lz1XVldqHzOShJxL8tTO4LIYuBrnSI51SV32Ysb7y5vmL0tijgUZBTgwSeCqzeGO6C
-	 6XgXxa5fX8/TLHqNIKYT9IMKYo/prnrCUTR0u9Vg=
+	by mail.kernel.org (Postfix) with ESMTP id 6A55F22DA7
+	for <linux-media@archiver.kernel.org>; Tue, 20 Aug 2019 21:43:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730846AbfHTVSr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 20 Aug 2019 17:18:47 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:45770 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730825AbfHTVSr (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 20 Aug 2019 17:18:47 -0400
-Received: by mail-io1-f68.google.com with SMTP id t3so229026ioj.12
-        for <linux-media@vger.kernel.org>; Tue, 20 Aug 2019 14:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LWCAvFiK/1D9LnaUfXje6ZOCpsw5IK5RjyWqJ1Odmco=;
-        b=QLuPyPJ9EANXkJA/nvF9jai5ojDekcl8q9PgY92nBvkiE8X8MJSTpsYMeSc1mLGFBn
-         jj6TnfK8Xa9NE/CXE4Xbk4TKsej8eX/J0rIfvRDZ0tXwdqPkqBAVnZ6VD7aRpVdfL5S1
-         4pNGo5qomRF9VthpS2wPHzKS+TLYx7o2H6qfU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LWCAvFiK/1D9LnaUfXje6ZOCpsw5IK5RjyWqJ1Odmco=;
-        b=L9p8MdgbjKsQkRiiUdJfAKOf7jOm/XNlDWiBCCEkaFvLq5450tcg+pMRKSO6Xslvtw
-         hOM0IQ3BlB+AYz4Uq8e0QaJDHioUB3HWdYR3kMV8vZTd9LX2NI3yM0YlSHaR2JYTcP8R
-         GhyfC4sfLOWygMzyCkJjpiUyviN0OH2TDxonAs4nC+UhxapnNSsSP+luPU8PKGuQChQ7
-         RN84w2HHBMEu0zY4fXmOAIUQFGpQYXUJv7U4h1qceZizEpzG7jcfQ/GqQfe183KYXL+y
-         /teC5xVSzHDv6JwbmHZQ59D1lrj2gBl2mOL4433xJbxFrRz1dqJOOfRp4x6dAFvMpppj
-         UGYg==
-X-Gm-Message-State: APjAAAUYC4WYzUv8HMNFSHItXsjfmrEvXQuGvQirowr720HF0c8k7Iq+
-        ougfmnHjJbWyzhFCiwPIZIJscbbHiVQ=
-X-Google-Smtp-Source: APXvYqwDygA003E/SV+QYp4iIutR3r8tEjL6vfzEneuXiXAio7oX3BneR2W1jchO48wfbLGyUOIoqg==
-X-Received: by 2002:a6b:90c3:: with SMTP id s186mr9509456iod.114.1566335925862;
-        Tue, 20 Aug 2019 14:18:45 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id e12sm38441135iob.66.2019.08.20.14.18.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 14:18:44 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     mchehab@kernel.org, helen.koike@collabora.com, hverkuil@xs4all.nl,
-        laurent.pinchart@ideasonboard.com, andrealmeid@collabora.com
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v3 0/2] Collapse vimc into single monolithic driver
-Date:   Tue, 20 Aug 2019 15:18:40 -0600
-Message-Id: <cover.1566334362.git.skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+        id S1730942AbfHTVnX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 20 Aug 2019 17:43:23 -0400
+Received: from vps-vb.mhejs.net ([37.28.154.113]:56552 "EHLO vps-vb.mhejs.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730927AbfHTVnX (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 20 Aug 2019 17:43:23 -0400
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1i0BuS-00072S-68; Tue, 20 Aug 2019 23:43:20 +0200
+Subject: Re: [PATCH] media: saa7134: keep demod i2c gate open on Medion 7134
+To:     Matthias Schwarzott <zzam@gentoo.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190818225538.302738-1-mail@maciej.szmigiero.name>
+ <0594fd6f-7037-1ca9-ba90-cacff96e23bf@gentoo.org>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mail@maciej.szmigiero.name; prefer-encrypt=mutual; keydata=
+ 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 PA==
+Message-ID: <6b772828-dd74-6d8e-3062-2c9438acfb89@maciej.szmigiero.name>
+Date:   Tue, 20 Aug 2019 23:43:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <0594fd6f-7037-1ca9-ba90-cacff96e23bf@gentoo.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-vimc uses Component API to split the driver into functional components.
-The real hardware resembles a monolith structure than component and
-component structure added a level of complexity making it hard to
-maintain without adding any real benefit.
+Hi Matthias,
 
-The sensor is one vimc component that would makes sense to be a separate
-module to closely align with the real hardware. It would be easier to
-collapse vimc into single monolithic driver first and then split the
-sensor off as a separate module.
+On 20.08.2019 21:54, Matthias Schwarzott wrote:
+> Hi Maciej,
+> 
+> some comment about wording in commit message and code-comment.
+> 
+> As far as I know the terms are defined like this:
+> * gate open = i2c-clients behind gate can be reached
+> * gate closed = i2c-clients behind gate are not reachable
 
-This patch series removes the component API and makes minimal changes to
-the code base preserving the functional division of the code structure.
-Preserving the functional structure allows us to split the sensor off
-as a separate module in the future.
+I always thought that this terminology is like the one used for a switch:
+if it is closed then the signal can pass, if open then it blocks the
+signal but apparently it is literally like a physical gate, so you are
+obviously right here - thanks for pointing this out.
 
-Major design elements in this change are:
-    - Use existing struct vimc_ent_config and struct vimc_pipeline_config
-      to drive the initialization of the functional components.
-    - Make vimc_device and vimc_ent_config global by moving them to
-      vimc-common.h
-    - Add two new hooks add and rm to initialize and register, unregister
-      and free subdevs.
-    - All component API is now gone and bind and unbind hooks are modified
-      to do "add" and "rm" with minimal changes to just add and rm subdevs.
-    - vimc-core's bind and unbind are now register and unregister.
-    - vimc-core invokes "add" hooks from its vimc_register_devices().
-      The "add" hooks remain the same and register subdevs. They don't
-      create platform devices of their own and use vimc's pdev.dev as
-      their reference device. The "add" hooks save their vimc_ent_device(s)
-      in the corresponding vimc_ent_config.
-    - vimc-core invokes "rm" hooks from its unregister to unregister
-      subdevs and cleanup.
-    - vimc-core invokes "add" and "rm" hooks with pointer to struct
-      vimc_device and the corresponding struct vimc_ent_config pointer.
+Will respin this patch and also add a second one fixing the terminology
+already present in saa7134_i2c_eeprom_md7134_gate().
 
-The following configure and stream test works on all devices.
+> Regards
+> Matthias
 
-    media-ctl -d platform:vimc -V '"Sensor A":0[fmt:SBGGR8_1X8/640x480]'
-    media-ctl -d platform:vimc -V '"Debayer A":0[fmt:SBGGR8_1X8/640x480]'
-    media-ctl -d platform:vimc -V '"Sensor B":0[fmt:SBGGR8_1X8/640x480]'
-    media-ctl -d platform:vimc -V '"Debayer B":0[fmt:SBGGR8_1X8/640x480]'
-
-    v4l2-ctl -z platform:vimc -d "RGB/YUV Capture" -v width=1920,height=1440
-    v4l2-ctl -z platform:vimc -d "Raw Capture 0" -v pixelformat=BA81
-    v4l2-ctl -z platform:vimc -d "Raw Capture 1" -v pixelformat=BA81
-
-    v4l2-ctl --stream-mmap --stream-count=100 -d /dev/video1
-    v4l2-ctl --stream-mmap --stream-count=100 -d /dev/video2
-    v4l2-ctl --stream-mmap --stream-count=100 -d /dev/video3
-
-The second patch in the series fixes a general protection fault found
-when rmmod is done while stream is active.
-
-- rmmod while streaming returns vimc is in use
-- rmmod without active stream works correctly
-
-Changes since v2:
-- Rebase to media master on top of vimc reverts. No merge conflicts.
-- Rename "vent" variable to "vcfg" to reflect config and standout
-  from "ved"
-- Error handling when adding subdevs fails to remove already added
-  subdevs, do other clean-up and bail out.
-- No changes to patch 2/2
-
-Changes since v1:
-Patch 1 & 2: (patch 1 in this series)
-- Collapsed the two patches into one
-- Added common defines (vimc_device and vimc_ent_config) to vimc-common.h
-  based on our discussion.
-- Addressed review comments from Helen and Laurent
-- Use vimc-common.h instead of creating a new file.
-- Other minor comments from Helen on int vs. unsigned int and
-  not needing to initialize ret in vimc_add_subdevs()
-Patch 3 (patch 2 in this series):
-- The second patch is the fix for gpf. Updated the patch after looking
-  at the test results from Andre and Helen. This problem is in a common
-  code and impacts all subdevs. The fix addresses the core problem and
-  fixes it. Fix removes pads release from v4l2_device_unregister_subdev()
-  and pads are now released from the sd release handler with all other
-  resources.
-
-Outstanding:
-- Update documentation with the correct topology.
-- There is one outstanding gpf remaining in the unbind path. I will
-  fix that in a separate patch. This is an existing problem and will
-  be easier to fix on top of this patch series.
-
-vimc_print_dot (--print-dot) topology after this change: (no change
-compared to media master)
-digraph board {
-        rankdir=TB
-        n00000001 [label="{{} | Sensor A\n/dev/v4l-subdev0 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
-        n00000001:port0 -> n00000005:port0 [style=bold]
-        n00000001:port0 -> n0000000b [style=bold]
-        n00000003 [label="{{} | Sensor B\n/dev/v4l-subdev1 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
-        n00000003:port0 -> n00000008:port0 [style=bold]
-        n00000003:port0 -> n0000000f [style=bold]
-        n00000005 [label="{{<port0> 0} | Debayer A\n/dev/v4l-subdev2 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-        n00000005:port1 -> n00000015:port0
-        n00000008 [label="{{<port0> 0} | Debayer B\n/dev/v4l-subdev3 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-        n00000008:port1 -> n00000015:port0 [style=dashed]
-        n0000000b [label="Raw Capture 0\n/dev/video1", shape=box, style=filled, fillcolor=yellow]
-        n0000000f [label="Raw Capture 1\n/dev/video2", shape=box, style=filled, fillcolor=yellow]
-        n00000013 [label="{{} | RGB/YUV Input\n/dev/v4l-subdev4 | {<port0> 0}}", shape=Mrecord, style=filled, fillcolor=green]
-        n00000013:port0 -> n00000015:port0 [style=dashed]
-        n00000015 [label="{{<port0> 0} | Scaler\n/dev/v4l-subdev5 | {<port1> 1}}", shape=Mrecord, style=filled, fillcolor=green]
-        n00000015:port1 -> n00000018 [style=bold]
-        n00000018 [label="RGB/YUV Capture\n/dev/video3", shape=box, style=filled, fillcolor=yellow]
-
-Shuah Khan (2):
-  media: vimc: Collapse component structure into a single monolithic
-    driver
-  media: vimc: Fix gpf in rmmod path when stream is active
-
- drivers/media/platform/vimc/Makefile       |   7 +-
- drivers/media/platform/vimc/vimc-capture.c |  79 ++------
- drivers/media/platform/vimc/vimc-common.c  |   3 +-
- drivers/media/platform/vimc/vimc-common.h  |  48 +++++
- drivers/media/platform/vimc/vimc-core.c    | 199 ++++++++-------------
- drivers/media/platform/vimc/vimc-debayer.c |  68 ++-----
- drivers/media/platform/vimc/vimc-scaler.c  |  72 ++------
- drivers/media/platform/vimc/vimc-sensor.c  |  72 ++------
- 8 files changed, 180 insertions(+), 368 deletions(-)
-
--- 
-2.20.1
-
+Regards,
+Maciej
