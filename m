@@ -4,226 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6223CC3A5A0
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:31:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2EE6C3A59E
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:50:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4005F233A0
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:31:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E4AD233A0
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:50:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728348AbfHUHb2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Aug 2019 03:31:28 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:40361 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728306AbfHUHbT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Aug 2019 03:31:19 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1i0L5J-0003as-9C; Wed, 21 Aug 2019 09:31:09 +0200
-Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1i0L5H-0005Mo-AV; Wed, 21 Aug 2019 09:31:07 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
-        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
-Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org
-Subject: [PATCH v8 01/13] dt-bindings: connector: analog: add sdtv standards property
-Date:   Wed, 21 Aug 2019 09:30:51 +0200
-Message-Id: <20190821073103.19634-2-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190821073103.19634-1-m.felsch@pengutronix.de>
-References: <20190821073103.19634-1-m.felsch@pengutronix.de>
+        id S1726397AbfHUHuE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Aug 2019 03:50:04 -0400
+Received: from mail.ispras.ru ([83.149.199.45]:50720 "EHLO mail.ispras.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726028AbfHUHuE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 21 Aug 2019 03:50:04 -0400
+X-Greylist: delayed 459 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Aug 2019 03:50:03 EDT
+Received: from localhost.localdomain (broadband-188-32-48-208.ip.moscow.rt.ru [188.32.48.208])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 1679B540081;
+        Wed, 21 Aug 2019 10:42:23 +0300 (MSK)
+From:   Denis Efremov <efremov@ispras.ru>
+To:     akpm@linux-foundation.org
+Cc:     Denis Efremov <efremov@ispras.ru>,
+        Akinobu Mita <akinobu.mita@gmail.com>, Jan Kara <jack@suse.cz>,
+        Matthew Wilcox <matthew@wil.cx>, linux-kernel@vger.kernel.org,
+        dm-devel@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-media@vger.kernel.org, Erdem Tumurov <erdemus@gmail.com>,
+        Vladimir Shelekhov <vshel@iis.nsk.su>
+Subject: [PATCH] lib/memweight.c: optimize by inlining bitmap_weight()
+Date:   Wed, 21 Aug 2019 10:42:00 +0300
+Message-Id: <20190821074200.2203-1-efremov@ispras.ru>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some connectors no matter if in- or output supports only a limited
-range of sdtv standards. It doesn't matter if the hardware behind that
-connector supports more than the listed formats since the users are
-restriced by a label e.g. to plug only a camera into this connector
-which uses the PAL format.
+This patch inlines bitmap_weight() call. Thus, removing the BUG_ON,
+and 'longs to bits -> bits to longs' conversion by directly calling
+hweight_long().
 
-This patch adds the capability to describe such limitation within the
-firmware. There are no format restrictions if the property isn't
-present, so it's completely backward compatible.
+./scripts/bloat-o-meter lib/memweight.o.old lib/memweight.o.new
+add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-10 (-10)
+Function                                     old     new   delta
+memweight                                    162     152     -10
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Co-developed-by: Erdem Tumurov <erdemus@gmail.com>
+Co-developed-by: Vladimir Shelekhov <vshel@iis.nsk.su>
+Signed-off-by: Erdem Tumurov <erdemus@gmail.com>
+Signed-off-by: Vladimir Shelekhov <vshel@iis.nsk.su>
+Signed-off-by: Denis Efremov <efremov@ispras.ru>
 ---
-[1] https://patchwork.kernel.org/cover/10794703/
+ lib/memweight.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-v8:
-Hi Rob,
-
-I dropped your r b tag becuase of the changes I made in this version.
-Please can you have look on it again? Luckily this would be the last
-time ;-)
-
-- move definition to include/dt-bindings/display
-- rename tvnorms.h to sdtv-standards.h
-- TVORMS_* -> SDTV_STD_*
-- add sync comments
-- adapt commit message
-- fix bindings documentation
-
-v7:
-I kept Robs r b tag because I only changed the example and extended
-TVNORM_* macros.
-
-- fix some style issues
-- add TVNORM_NTSC, TVNORM_525_60 and TVNORM_625_50
-
-v6:
-- tvnorms.h: use tabs instead of spaces
-- tvnorms.h: add TVNORM_PAL and TVNORM_SECAM
-- tvnorms.h: drop rarely used TVNORM_ATSC_* norms
-
-v2-v4:
-- nothing since the patch was squashed from series [1] into this
-  series.
-
- .../display/connector/analog-tv-connector.txt |  6 ++
- include/dt-bindings/display/sdtv-standards.h  | 76 +++++++++++++++++++
- include/uapi/linux/videodev2.h                |  4 +
- 3 files changed, 86 insertions(+)
- create mode 100644 include/dt-bindings/display/sdtv-standards.h
-
-diff --git a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-index 0c0970c210ab..883bcb2604c7 100644
---- a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-+++ b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-@@ -6,16 +6,22 @@ Required properties:
+diff --git a/lib/memweight.c b/lib/memweight.c
+index 94dd72ccaa7f..f050b2b4c5e2 100644
+--- a/lib/memweight.c
++++ b/lib/memweight.c
+@@ -20,11 +20,13 @@ size_t memweight(const void *ptr, size_t bytes)
  
- Optional properties:
- - label: a symbolic name for the connector
-+- sdtv-standards: limit the supported TV standards on a connector to the given
-+                  ones. If not specified all TV standards are allowed.
-+                  Possible TV standards are defined in
-+                  include/dt-bindings/display/sdtv-standards.h.
- 
- Required nodes:
- - Video port for TV input
- 
- Example
- -------
-+#include <dt-bindings/display/sdtv-standards.h>
- 
- tv: connector {
- 	compatible = "composite-video-connector";
- 	label = "tv";
-+	sdtv-standards = <(SDTV_STD_PAL | SDTV_STD_NTSC)>;
- 
- 	port {
- 		tv_connector_in: endpoint {
-diff --git a/include/dt-bindings/display/sdtv-standards.h b/include/dt-bindings/display/sdtv-standards.h
-new file mode 100644
-index 000000000000..bb6966505a6c
---- /dev/null
-+++ b/include/dt-bindings/display/sdtv-standards.h
-@@ -0,0 +1,76 @@
-+/* SPDX-License-Identifier: GPL-2.0-only or X11 */
-+/*
-+ * Copyright 2019 Pengutronix, Marco Felsch <kernel@pengutronix.de>
-+ */
+ 	longs = bytes / sizeof(long);
+ 	if (longs) {
+-		BUG_ON(longs >= INT_MAX / BITS_PER_LONG);
+-		ret += bitmap_weight((unsigned long *)bitmap,
+-				longs * BITS_PER_LONG);
++		const unsigned long *bitmap_long =
++			(const unsigned long *)bitmap;
 +
-+#ifndef _DT_BINDINGS_DISPLAY_SDTV_STDS_H
-+#define _DT_BINDINGS_DISPLAY_SDTV_STDS_H
-+
-+/*
-+ * Attention: Keep the TV_STD_* bit definitions in sync with
-+ * include/uapi/linux/videodev2.h V4L2_STD_* bit definitions.
-+ */
-+/* One bit for each standard */
-+#define SDTV_STD_PAL_B		0x00000001
-+#define SDTV_STD_PAL_B1		0x00000002
-+#define SDTV_STD_PAL_G		0x00000004
-+#define SDTV_STD_PAL_H		0x00000008
-+#define SDTV_STD_PAL_I		0x00000010
-+#define SDTV_STD_PAL_D		0x00000020
-+#define SDTV_STD_PAL_D1		0x00000040
-+#define SDTV_STD_PAL_K		0x00000080
-+
-+#define SDTV_STD_PAL		(SDTV_STD_PAL_B		| \
-+				 SDTV_STD_PAL_B1	| \
-+				 SDTV_STD_PAL_G		| \
-+				 SDTV_STD_PAL_H		| \
-+				 SDTV_STD_PAL_I		| \
-+				 SDTV_STD_PAL_D		| \
-+				 SDTV_STD_PAL_D1	| \
-+				 SDTV_STD_PAL_K)
-+
-+#define SDTV_STD_PAL_M		0x00000100
-+#define SDTV_STD_PAL_N		0x00000200
-+#define SDTV_STD_PAL_Nc		0x00000400
-+#define SDTV_STD_PAL_60		0x00000800
-+
-+#define SDTV_STD_NTSC_M		0x00001000	/* BTSC */
-+#define SDTV_STD_NTSC_M_JP	0x00002000	/* EIA-J */
-+#define SDTV_STD_NTSC_443	0x00004000
-+#define SDTV_STD_NTSC_M_KR	0x00008000	/* FM A2 */
-+
-+#define SDTV_STD_NTSC		(SDTV_STD_NTSC_M	| \
-+				 SDTV_STD_NTSC_M_JP	| \
-+				 SDTV_STD_NTSC_M_KR)
-+
-+#define SDTV_STD_SECAM_B	0x00010000
-+#define SDTV_STD_SECAM_D	0x00020000
-+#define SDTV_STD_SECAM_G	0x00040000
-+#define SDTV_STD_SECAM_H	0x00080000
-+#define SDTV_STD_SECAM_K	0x00100000
-+#define SDTV_STD_SECAM_K1	0x00200000
-+#define SDTV_STD_SECAM_L	0x00400000
-+#define SDTV_STD_SECAM_LC	0x00800000
-+
-+#define SDTV_STD_SECAM		(SDTV_STD_SECAM_B	| \
-+				 SDTV_STD_SECAM_D	| \
-+				 SDTV_STD_SECAM_G	| \
-+				 SDTV_STD_SECAM_H	| \
-+				 SDTV_STD_SECAM_K	| \
-+				 SDTV_STD_SECAM_K1	| \
-+				 SDTV_STD_SECAM_L	| \
-+				 SDTV_STD_SECAM_LC)
-+
-+/* Standards for Countries with 60Hz Line frequency */
-+#define SDTV_STD_525_60		(SDTV_STD_PAL_M		| \
-+				 SDTV_STD_PAL_60	| \
-+				 SDTV_STD_NTSC		| \
-+				 SDTV_STD_NTSC_443)
-+
-+/* Standards for Countries with 50Hz Line frequency */
-+#define SDTV_STD_625_50		(SDTV_STD_PAL		| \
-+				 SDTV_STD_PAL_N		| \
-+				 SDTV_STD_PAL_Nc	| \
-+				 SDTV_STD_SECAM)
-+
-+#endif /* _DT_BINDINGS_DISPLAY_SDTV_STDS_H */
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 530638dffd93..c358cc34fc34 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1208,6 +1208,10 @@ struct v4l2_selection {
- 
- typedef __u64 v4l2_std_id;
- 
-+/*
-+ * Attention: Keep the V4L2_STD_* bit definitions in sync with
-+ * include/dt-bindings/display/sdtv-standards.h TV_STD_* bit definitions.
-+ */
- /* one bit for each */
- #define V4L2_STD_PAL_B          ((v4l2_std_id)0x00000001)
- #define V4L2_STD_PAL_B1         ((v4l2_std_id)0x00000002)
+ 		bytes -= longs * sizeof(long);
+-		bitmap += longs * sizeof(long);
++		for (; longs > 0; longs--, bitmap_long++)
++			ret += hweight_long(*bitmap_long);
++		bitmap = (const unsigned char *)bitmap_long;
+ 	}
+ 	/*
+ 	 * The reason that this last loop is distinct from the preceding
 -- 
-2.20.1
+2.21.0
 
