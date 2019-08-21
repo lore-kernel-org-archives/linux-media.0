@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51C52C3A5A2
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:31:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2976EC3A59E
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:31:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 278E3233A0
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:31:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 06CA9233A0
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:31:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728327AbfHUHbT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Aug 2019 03:31:19 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53021 "EHLO
+        id S1728304AbfHUHbR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Aug 2019 03:31:17 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:47773 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728312AbfHUHbS (ORCPT
+        with ESMTP id S1728284AbfHUHbR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Aug 2019 03:31:18 -0400
+        Wed, 21 Aug 2019 03:31:17 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1i0L5J-0003at-9A; Wed, 21 Aug 2019 09:31:09 +0200
+        id 1i0L5J-0003ax-9L; Wed, 21 Aug 2019 09:31:09 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1i0L5H-0005Mr-At; Wed, 21 Aug 2019 09:31:07 +0200
+        id 1i0L5H-0005N2-DE; Wed, 21 Aug 2019 09:31:07 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org
-Subject: [PATCH v8 02/13] media: v4l2-fwnode: add v4l2_fwnode_connector
-Date:   Wed, 21 Aug 2019 09:30:52 +0200
-Message-Id: <20190821073103.19634-3-m.felsch@pengutronix.de>
+        linux-media@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v8 06/13] media: dt-bindings: tvp5150: Add input port connectors DT bindings
+Date:   Wed, 21 Aug 2019 09:30:56 +0200
+Message-Id: <20190821073103.19634-7-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190821073103.19634-1-m.felsch@pengutronix.de>
 References: <20190821073103.19634-1-m.felsch@pengutronix.de>
@@ -50,105 +50,181 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Currently every driver needs to parse the connector endpoints by it self.
-This is the initial work to make this generic. A generic connector has
-common members and connector specific members. The common members are:
-  - type
-  - label (optional)
-  - links
-  - nr_of_links
+The TVP5150/1 decoders support different video input sources to their
+AIP1A/B pins.
 
-The specific members are stored within a union, since only one of them
-can be available at the time. Since this is the initial support the
-patch adds only the analog-connector specific ones.
+Possible configurations are as follows:
+  - Analog Composite signal connected to AIP1A.
+  - Analog Composite signal connected to AIP1B.
+  - Analog S-Video Y (luminance) and C (chrominance)
+    signals connected to AIP1A and AIP1B respectively.
+
+This patch extends the device tree bindings documentation to describe
+how the input connectors for these devices should be defined in a DT.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
-[1] https://patchwork.kernel.org/cover/10794703/
-
-v8:
-- rename CON -> CONN
-- supported_tvnorms_stds -> sdtv_stds and adapt description
+Changelog:
 
 v7:
-- fix spelling issues
-- constify label
-- support variable label size
-- replace single remote_port/id members by links member of variable
-  size
-- squash v4l2-connector into v4l2-fwnode
+Hi Rob,
+I droped your r b tag because I changed the bindings in this
+patch version. Please can you have a look on it again?
 
-@Jacopo: I dropped your r b tag because I changed the port/id logic.
+- fix missing AIP1B svideo connection (description and examples)
 
-v6:
-- fix some spelling and style issues
-- rm unnecessary comments
-- drop vga and dvi connector
-- fix misspelt connector
+v3:
+- remove examples for one and two inputs
+- replace space by tabs
 
-v2-v4:
-- nothing since the patch was squashed from series [1] into this
-  series.
+v2:
+- adapt port layout in accordance with
+  https://www.spinics.net/lists/linux-media/msg138546.html with the
+  svideo-connector deviation (use only one endpoint)
 
- include/media/v4l2-fwnode.h | 45 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ .../devicetree/bindings/media/i2c/tvp5150.txt | 112 ++++++++++++++++--
+ 1 file changed, 105 insertions(+), 7 deletions(-)
 
-diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
-index f6a7bcd13197..7ca5669ef6fa 100644
---- a/include/media/v4l2-fwnode.h
-+++ b/include/media/v4l2-fwnode.h
-@@ -123,6 +123,51 @@ struct v4l2_fwnode_link {
- 	unsigned int remote_port;
- };
+diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+index 8c0fc1a26bf0..28b64ad149ef 100644
+--- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
++++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+@@ -12,11 +12,32 @@ Optional Properties:
+ - pdn-gpios: phandle for the GPIO connected to the PDN pin, if any.
+ - reset-gpios: phandle for the GPIO connected to the RESETB pin, if any.
  
-+/**
-+ * enum v4l2_connector_type - connector type
-+ * @V4L2_CONN_UNKNOWN:   unknown connector type, no V4L2 connector configuration
-+ * @V4L2_CONN_COMPOSITE: analog composite connector
-+ * @V4L2_CONN_SVIDEO:    analog svideo connector
-+ * @V4L2_CONN_HDMI:      digital hdmi connector
-+ */
-+enum v4l2_connector_type {
-+	V4L2_CONN_UNKNOWN,
-+	V4L2_CONN_COMPOSITE,
-+	V4L2_CONN_SVIDEO,
-+	V4L2_CONN_HDMI,
+-The device node must contain one 'port' child node for its digital output
+-video port, in accordance with the video interface bindings defined in
+-Documentation/devicetree/bindings/media/video-interfaces.txt.
++The device node must contain one 'port' child node per device physical input
++and output port, in accordance with the video interface bindings defined in
++Documentation/devicetree/bindings/media/video-interfaces.txt. The port nodes
++are numbered as follows
+ 
+-Required Endpoint Properties for parallel synchronization:
++	  Name		Type		Port
++	--------------------------------------
++	  AIP1A		sink		0
++	  AIP1B		sink		1
++	  Y-OUT		src		2
++
++The device node must contain at least one sink port and the src port. Each input
++port must be linked to an endpoint defined in
++Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt. The
++port/connector layout is as follows
++
++tvp-5150 port@0 (AIP1A)
++	endpoint@0 -----------> Comp0-Con  port
++	endpoint@1 ------+----> Svideo-Con port
++tvp-5150 port@1 (AIP1B)  |
++	endpoint@1 ------+
++	endpoint@0 -----------> Comp1-Con  port
++tvp-5150 port@2
++	endpoint (video bitstream output at YOUT[0-7] parallel bus)
++
++Required Endpoint Properties for parallel synchronization on output port:
+ 
+ - hsync-active: active state of the HSYNC signal. Must be <1> (HIGH).
+ - vsync-active: active state of the VSYNC signal. Must be <1> (HIGH).
+@@ -26,17 +47,94 @@ Required Endpoint Properties for parallel synchronization:
+ If none of hsync-active, vsync-active and field-even-active is specified,
+ the endpoint is assumed to use embedded BT.656 synchronization.
+ 
+-Example:
++Example - three input sources:
++
++comp_connector_0 {
++	compatible = "composite-video-connector";
++	label = "Composite0";
++
++	port {
++		composite0_to_tvp5150: endpoint {
++			remote-endpoint = <&tvp5150_to_composite0>;
++		};
++	};
 +};
 +
-+/**
-+ * struct v4l2_fwnode_connector_analog - analog connector data structure
-+ * @sdtv_stds: sdtv standards this connector supports, set to V4L2_STD_ALL
-+ *             if no restrictions are specified.
-+ */
-+struct v4l2_fwnode_connector_analog {
-+	v4l2_std_id sdtv_stds;
++comp_connector_1 {
++	compatible = "composite-video-connector";
++	label = "Composite1";
++
++	port {
++		composite1_to_tvp5150: endpoint {
++			remote-endpoint = <&tvp5150_to_composite1>;
++		};
++	};
 +};
 +
-+/**
-+ * struct v4l2_fwnode_connector - the connector data structure
-+ * @label: optional connector label
-+ * @type: connector type
-+ * @links: list of &struct v4l2_fwnode_link links the connector is connected to
-+ * @nr_of_links: total number of links
-+ * @connector: connector configuration
-+ * @connector.analog: analog connector configuration
-+ *                    &struct v4l2_fwnode_connector_analog
-+ */
-+struct v4l2_fwnode_connector {
-+	const char *label;
-+	enum v4l2_connector_type type;
-+	struct v4l2_fwnode_link *links;
-+	unsigned int nr_of_links;
++svideo_connector {
++	compatible = "svideo-connector";
++	label = "S-Video";
 +
-+	union {
-+		struct v4l2_fwnode_connector_analog analog;
-+		/* future connectors */
-+	} connector;
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		svideo_luma_to_tvp5150: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&tvp5150_to_svideo_luma>;
++		};
++
++		svideo_chroma_to_tvp5150: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&tvp5150_to_svideo_chroma>;
++		};
++	};
 +};
+ 
+ &i2c2 {
+-	...
+ 	tvp5150@5c {
+ 		compatible = "ti,tvp5150";
+ 		reg = <0x5c>;
+ 		pdn-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>;
+ 		reset-gpios = <&gpio6 7 GPIO_ACTIVE_LOW>;
++		#address-cells = <1>;
++		#size-cells = <0>;
 +
- /**
-  * v4l2_fwnode_endpoint_parse() - parse all fwnode node properties
-  * @fwnode: pointer to the endpoint's fwnode handle
++		port@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++
++			tvp5150_to_composite0: endpoint@0 {
++				reg = <0>;
++				remote-endpoint = <&composite0_to_tvp5150>;
++			};
++
++			tvp5150_to_svideo_luma: endpoint@1 {
++				reg = <1>;
++				remote-endpoint = <&svideo_luma_to_tvp5150>;
++			};
++		};
++
++		port@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++
++			tvp5150_to_composite1: endpoint@0 {
++				reg = <0>;
++                                remote-endpoint = <&composite1_to_tvp5150>;
++			};
++
++			tvp5150_to_svideo_chroma: endpoint@1 {
++				reg = <1>;
++				remote-endpoint = <&svideo_chroma_to_tvp5150>;
++			};
++		};
++
++		port@2 {
++			reg = <2>;
+ 
+-		port {
+ 			tvp5150_1: endpoint {
+ 				remote-endpoint = <&ccdc_ep>;
+ 			};
 -- 
 2.20.1
 
