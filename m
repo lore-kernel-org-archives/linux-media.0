@@ -2,61 +2,124 @@ Return-Path: <SRS0=4cU9=WR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.5 required=3.0 tests=FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93A4CC3A59E
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:27:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5C62C3A59E
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:31:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6AE1C2332A
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:27:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C2F5C233FE
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 07:31:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727549AbfHUH1J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Aug 2019 03:27:09 -0400
-Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:43152 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727063AbfHUH1J (ORCPT
+        id S1728288AbfHUHbR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Aug 2019 03:31:17 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:34583 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728282AbfHUHbQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Aug 2019 03:27:09 -0400
-Received: from belgarion ([90.76.53.202])
-        by mwinf5d09 with ME
-        id rjSz200044MlyVm03jT47v; Wed, 21 Aug 2019 09:27:05 +0200
-X-ME-Helo: belgarion
-X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
-X-ME-Date: Wed, 21 Aug 2019 09:27:05 +0200
-X-ME-IP: 90.76.53.202
-From:   Robert Jarzmik <robert.jarzmik@free.fr>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-media@vger.kernel.org, akinobu.mita@gmail.com,
-        hverkuil@xs4all.nl, bparrot@ti.com
-Subject: Re: [PATCH 3/4] pxa-camera: Match with device node, not the port node
-References: <20190305135602.24199-1-sakari.ailus@linux.intel.com>
-        <20190305135602.24199-4-sakari.ailus@linux.intel.com>
-X-URL:  http://belgarath.falguerolles.org/
-Date:   Wed, 21 Aug 2019 09:26:59 +0200
-In-Reply-To: <20190305135602.24199-4-sakari.ailus@linux.intel.com> (Sakari
-        Ailus's message of "Tue, 5 Mar 2019 15:56:01 +0200")
-Message-ID: <87d0gzj7wc.fsf@belgarion.home>
-User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
+        Wed, 21 Aug 2019 03:31:16 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1i0L5J-0003b1-9J; Wed, 21 Aug 2019 09:31:09 +0200
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1i0L5H-0005NF-F4; Wed, 21 Aug 2019 09:31:07 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
+        linux-media@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v8 10/13] media: dt-bindings: tvp5150: cleanup bindings stlye
+Date:   Wed, 21 Aug 2019 09:31:00 +0200
+Message-Id: <20190821073103.19634-11-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190821073103.19634-1-m.felsch@pengutronix.de>
+References: <20190821073103.19634-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Sakari Ailus <sakari.ailus@linux.intel.com> writes:
+Use underlines to highlight optional and required properties. This is
+quite common for all bindings. Align descriptions and start sentence
+with uppercase letter. Also reword the usage of the required
+endpoint properties for the output port in case BT.656 should be used.
 
-> V4L2 fwnode matching right now still works based on device nodes, not port
-> nodes. Fix this.
-Mmmh why does it need a fix, and what's wrong on device node matching ? This
-commit message is a bit too brief for me to understand why a fix is needed.
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/media/i2c/tvp5150.txt | 30 +++++++++++--------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
-Moreover, does it have an impact on
-Documentation/devicetree/bindings/media/pxa-camera.txt ?
+diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+index 28b64ad149ef..cc98b38c7e73 100644
+--- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
++++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+@@ -5,12 +5,14 @@ The TVP5150 and TVP5151 are video decoders that convert baseband NTSC and PAL
+ with discrete syncs or 8-bit ITU-R BT.656 with embedded syncs output formats.
+ 
+ Required Properties:
+-- compatible: value must be "ti,tvp5150"
+-- reg: I2C slave address
++====================
++- compatible:	Value must be "ti,tvp5150".
++- reg:		I2C slave address.
+ 
+ Optional Properties:
+-- pdn-gpios: phandle for the GPIO connected to the PDN pin, if any.
+-- reset-gpios: phandle for the GPIO connected to the RESETB pin, if any.
++====================
++- pdn-gpios:	Phandle for the GPIO connected to the PDN pin, if any.
++- reset-gpios:	Phandle for the GPIO connected to the RESETB pin, if any.
+ 
+ The device node must contain one 'port' child node per device physical input
+ and output port, in accordance with the video interface bindings defined in
+@@ -24,9 +26,8 @@ are numbered as follows
+ 	  Y-OUT		src		2
+ 
+ The device node must contain at least one sink port and the src port. Each input
+-port must be linked to an endpoint defined in
+-Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt. The
+-port/connector layout is as follows
++port must be linked to an endpoint defined in [1]. The port/connector layout is
++as follows
+ 
+ tvp-5150 port@0 (AIP1A)
+ 	endpoint@0 -----------> Comp0-Con  port
+@@ -38,14 +39,17 @@ tvp-5150 port@2
+ 	endpoint (video bitstream output at YOUT[0-7] parallel bus)
+ 
+ Required Endpoint Properties for parallel synchronization on output port:
++=========================================================================
+ 
+-- hsync-active: active state of the HSYNC signal. Must be <1> (HIGH).
+-- vsync-active: active state of the VSYNC signal. Must be <1> (HIGH).
+-- field-even-active: field signal level during the even field data
+-  transmission. Must be <0>.
++- hsync-active:		Active state of the HSYNC signal. Must be <1> (HIGH).
++- vsync-active:		Active state of the VSYNC signal. Must be <1> (HIGH).
++- field-even-active:	Field signal level during the even field data
++			transmission. Must be <0>.
+ 
+-If none of hsync-active, vsync-active and field-even-active is specified,
+-the endpoint is assumed to use embedded BT.656 synchronization.
++Note: Do not specify any of these properties if you want to use the embedded
++      BT.656 synchronization.
++
++[1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
+ 
+ Example - three input sources:
+ 
+-- 
+2.20.1
 
-Cheers.
-
---
-Robert
