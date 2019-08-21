@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0881BC3A59E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FD4CC3A5A0
 	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CFFEC233A0
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 340AC22D6D
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AT2N1Av2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GLfbiDkf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbfHUMb4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728280AbfHUMb4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Wed, 21 Aug 2019 08:31:56 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52154 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728239AbfHUMbz (ORCPT
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:43702 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbfHUMb4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Aug 2019 08:31:55 -0400
-Received: by mail-wm1-f66.google.com with SMTP id k1so1947703wmi.1
-        for <linux-media@vger.kernel.org>; Wed, 21 Aug 2019 05:31:53 -0700 (PDT)
+        Wed, 21 Aug 2019 08:31:56 -0400
+Received: by mail-wr1-f67.google.com with SMTP id y8so1848590wrn.10
+        for <linux-media@vger.kernel.org>; Wed, 21 Aug 2019 05:31:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=aBOdo7ngpKvLwB2R8F0YqDeLvUKQK/TUC/pYnwwKah8=;
-        b=AT2N1Av231M7+QMYsNQRMtThUPT37JcPbuDiN+n/sf4fodmTNsAnQtRnffYDXw4r+E
-         yQcR+oJ4JsOuUxnpTBES197pmFrFncSMBPm0t5qBayyPUaN+NbySpIMmEfcEBykfvt0p
-         7Q10n4R//r4hoytphNEjuIW+5IUMQz28kGHx7sLy5MM/A4sDQ23C0r7Hzpz2gsO/h/EN
-         lHR+MrsHM6Gwy4pSjXIsK7w0H+TdjjvrNoMZKnEzLwUB0h+sRZy2Mufo9F+l4tyRpIbP
-         sI9ZoQELUh8IkUedSed+3/3D/Tklx4KX9IJVn2SaytD3pjm+9ZT4TQZ/vUhdcNH7Lm0T
-         b91Q==
+        bh=byMlpBQbF3xVofh0lp2jF4TITt+perQZbz2APhqasSc=;
+        b=GLfbiDkfSe/jJ4+8lnG4Ss4t3NH78q/f0NgMoBe3PR6g2vyVF6LPqmkOg5dLwMzq22
+         7/rZaqj3bAEH6E+7/qBjb9hc7Ot8yTbAO0pA6BXFFZqwdX81uDvi8MDHAmOtLcRUUlqx
+         T8D+U75/EYIgD54eIHMzfKAIf/uRvo4mjR5FzbYYFdT+kQXsOX/qbEo1nNLT1FkHvGAE
+         S9NsHh26tpU1LuH49GJV+OBfb+EiVL24WnzgSDiuG6CA1f6aeNLk9G/M82S76i335D7w
+         juO5WLd+XTHS8VJbtU8LxsbiUnK7nsKQpCsnzDlFeNFsfbXyWfuPa3tjO2aCBMqVsVkE
+         ZMQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aBOdo7ngpKvLwB2R8F0YqDeLvUKQK/TUC/pYnwwKah8=;
-        b=FFFShMKGiYv/yVkzNny8+xZmUi84r57zEcWWakZSJkT85lwwoSMOQ7oXu2VRTu2Vnn
-         G1lEb1AB3BaLskzsOUYpTrvrg0gqceE8nJyYgLQtzZrX9PDzRycJ6myd+F5uTI1bl7CZ
-         80EramK1H1vFMkwGaEL28crVLW0hz6BwrZywNUXRSzCyJk10JCnNZbhci7ViRFekhHYR
-         BgiZWatNUkFPQQnfMHwbd92N2OcwNIq9UTldqavIjBr4iF1JtnRQzel+JifoUPP8wY0z
-         des9p3v1zFUayAaANYoEFCMuY/EF4PQf31NUjgn0q912x/8KwzwgiHMdwseuERK6EMdr
-         Nwgw==
-X-Gm-Message-State: APjAAAV9zL84N4YVioyQ+62Kmt1B2JiycXnWPq0dnRr7EyiRu9ceYrC/
-        xyCKvI4BjkcaaPdzL2KHUIopeKCC
-X-Google-Smtp-Source: APXvYqwEuIEXphvxpxYjDhq20FOa/v6eaOdT1hVDgfkrSbpNzJBD+iwrLeB+e+ZWQMlBkQWb+tOyIA==
-X-Received: by 2002:a1c:f106:: with SMTP id p6mr5432870wmh.148.1566390712855;
-        Wed, 21 Aug 2019 05:31:52 -0700 (PDT)
+        bh=byMlpBQbF3xVofh0lp2jF4TITt+perQZbz2APhqasSc=;
+        b=H1d3E6YTXT8nBj8Fzy/T1tC0MVq7otZSgnaQUiEwSCron1X+9wY9kYb99C6lkNkJIp
+         cbxZ5CPaO7cJT2YgIXBc8rV9odAOVDd0fcmS0ULGqlPRHmN3NFHAz/rLa22S0y2Nf7zG
+         xm5y6aQKQjO978ZISMp0D2ZxM5wT83QAze6lji0odbjB5XHsWZstI35wqElwwcdZnRHD
+         seg0XMyi3b/hso0DcuRhRI+6mEHX7hEcoDLEjqvE3B1AXRV5zHoi6DM1z19y4FGpdK+a
+         xe4ZDBTmrKYg1boFPvgBpFsz7SGBgjHppWrS5jai/8V5mTjceviLKpolLO9li1U6kdue
+         AKYg==
+X-Gm-Message-State: APjAAAXxbxlYFQngJDVqPe1tYmR/lAMSr9gfp+8OH5uhWF7tBXRNlqz6
+        6PTb3GC+8lBEXBKxzR40OuI=
+X-Google-Smtp-Source: APXvYqwNErrT3VpJ56IEwwDi6ZOxVcfM0i0WoOtcvyeOpdiiTb+T1UcsF4wj8z/pUdF2Mx6eA42Eog==
+X-Received: by 2002:a5d:4448:: with SMTP id x8mr993728wrr.119.1566390714544;
+        Wed, 21 Aug 2019 05:31:54 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:8189:dd33:a934:c4fa])
-        by smtp.gmail.com with ESMTPSA id v3sm23084571wrq.34.2019.08.21.05.31.51
+        by smtp.gmail.com with ESMTPSA id v3sm23084571wrq.34.2019.08.21.05.31.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 05:31:52 -0700 (PDT)
+        Wed, 21 Aug 2019 05:31:54 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     dri-devel@lists.freedesktop.org, chris@chris-wilson.co.uk,
         daniel.vetter@ffwll.ch, sumit.semwal@linaro.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 04/10] dma-buf: add dma_fence_array_for_each
-Date:   Wed, 21 Aug 2019 14:31:41 +0200
-Message-Id: <20190821123147.110736-5-christian.koenig@amd.com>
+Subject: [PATCH 06/10] dma-buf/resv: stop pruning shared fences when exclusive is added
+Date:   Wed, 21 Aug 2019 14:31:43 +0200
+Message-Id: <20190821123147.110736-7-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190821123147.110736-1-christian.koenig@amd.com>
 References: <20190821123147.110736-1-christian.koenig@amd.com>
@@ -76,97 +76,91 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Makes it easier to extract the fences in a dma_fence_array.
+First step towards new shared fence container implementation.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-fence-array.c | 42 +++++++++++++++++++++++++++++++
- include/linux/dma-fence-array.h   | 24 ++++++++++++++++++
- 2 files changed, 66 insertions(+)
+ drivers/dma-buf/dma-resv.c              | 16 +---------------
+ drivers/gpu/drm/msm/msm_gem.c           | 14 ++++++--------
+ drivers/gpu/drm/nouveau/nouveau_fence.c |  2 +-
+ 3 files changed, 8 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-fence-array.c b/drivers/dma-buf/dma-fence-array.c
-index 314cf0e881d9..887e32e89269 100644
---- a/drivers/dma-buf/dma-fence-array.c
-+++ b/drivers/dma-buf/dma-fence-array.c
-@@ -265,3 +265,45 @@ bool dma_fence_match_context(struct dma_fence *fence, u64 context)
- 	return true;
+diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
+index 24adc32d36d4..d3a9a3bb15f0 100644
+--- a/drivers/dma-buf/dma-resv.c
++++ b/drivers/dma-buf/dma-resv.c
+@@ -271,32 +271,18 @@ EXPORT_SYMBOL(dma_resv_add_shared_fence);
+ void dma_resv_add_excl_fence(struct dma_resv *obj, struct dma_fence *fence)
+ {
+ 	struct dma_fence *old_fence = dma_resv_get_excl(obj);
+-	struct dma_resv_list *old;
+-	u32 i = 0;
+ 
+ 	dma_resv_assert_held(obj);
+ 
+-	old = dma_resv_get_list(obj);
+-	if (old)
+-		i = old->shared_count;
+-
+-	if (fence)
+-		dma_fence_get(fence);
++	dma_fence_get(fence);
+ 
+ 	preempt_disable();
+ 	write_seqcount_begin(&obj->seq);
+ 	/* write_seqcount_begin provides the necessary memory barrier */
+ 	RCU_INIT_POINTER(obj->fence_excl, fence);
+-	if (old)
+-		old->shared_count = 0;
+ 	write_seqcount_end(&obj->seq);
+ 	preempt_enable();
+ 
+-	/* inplace update, no shared fences */
+-	while (i--)
+-		dma_fence_put(rcu_dereference_protected(old->shared[i],
+-						dma_resv_held(obj)));
+-
+ 	dma_fence_put(old_fence);
  }
- EXPORT_SYMBOL(dma_fence_match_context);
-+
-+/**
-+ * dma_fence_array_first - return the first fence in an array
-+ * @cursor: cursor for the current position
-+ * @array: array with the fences
-+ *
-+ * Returns the first fence in the array or NULL if the array is empty.
-+ * If the array parameter isn't a dma_fence_array return it unmodified.
-+ */
-+struct dma_fence *dma_fence_array_first(struct dma_fence_array_cursor *cursor,
-+					struct dma_fence *array)
-+{
-+	cursor->array = to_dma_fence_array(array);
-+	if (!cursor->array)
-+		return array;
-+
-+	if (!cursor->array->num_fences)
-+		return NULL;
-+
-+	cursor->index = 0;
-+	return cursor->array->fences[cursor->index++];
-+
-+}
-+EXPORT_SYMBOL(dma_fence_array_first);
-+
-+/**
-+ * dma_fence_array_next - return the next fence in the array
-+ * @cursor: cursor for the current position
-+ *
-+ * Returns the next fence from the array or NULL if we don't have any more
-+ */
-+struct dma_fence *dma_fence_array_next(struct dma_fence_array_cursor *cursor)
-+{
-+	if (!cursor->array)
-+		return NULL;
-+
-+	if (cursor->index >= cursor->array->num_fences)
-+		return NULL;
-+
-+	return cursor->array->fences[cursor->index++];
-+}
-+EXPORT_SYMBOL(dma_fence_array_next);
-diff --git a/include/linux/dma-fence-array.h b/include/linux/dma-fence-array.h
-index 35d1d1e7c93b..2a71fd003dfa 100644
---- a/include/linux/dma-fence-array.h
-+++ b/include/linux/dma-fence-array.h
-@@ -124,4 +124,28 @@ dma_fence_array_create(int num_fences, struct dma_fence **fences, u64 context,
+ EXPORT_SYMBOL(dma_resv_add_excl_fence);
+diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
+index 348a7ad2c044..90e3dc3b927a 100644
+--- a/drivers/gpu/drm/msm/msm_gem.c
++++ b/drivers/gpu/drm/msm/msm_gem.c
+@@ -668,14 +668,12 @@ int msm_gem_sync_object(struct drm_gem_object *obj,
+ 	int i, ret;
  
- bool dma_fence_match_context(struct dma_fence *fence, u64 context);
+ 	fobj = dma_resv_get_list(obj->resv);
+-	if (!fobj || (fobj->shared_count == 0)) {
+-		fence = dma_resv_get_excl(obj->resv);
+-		/* don't need to wait on our own fences, since ring is fifo */
+-		if (fence && (fence->context != fctx->context)) {
+-			ret = dma_fence_wait(fence, true);
+-			if (ret)
+-				return ret;
+-		}
++	fence = dma_resv_get_excl(obj->resv);
++	/* don't need to wait on our own fences, since ring is fifo */
++	if (fence && (fence->context != fctx->context)) {
++		ret = dma_fence_wait(fence, true);
++		if (ret)
++			return ret;
+ 	}
  
-+/**
-+ * struct dma_fence_array_cursor - cursor for the fences in an array
-+ */
-+struct dma_fence_array_cursor {
-+	struct dma_fence_array *array;
-+	unsigned int index;
-+};
-+
-+struct dma_fence *dma_fence_array_first(struct dma_fence_array_cursor *cursor,
-+					struct dma_fence *array);
-+struct dma_fence *dma_fence_array_next(struct dma_fence_array_cursor *cursor);
-+
-+/**
-+ * dma_fence_array_for_each - walk over all fences in a fence array
-+ * @fence: the current fence
-+ * @cursor: cursor for the walk
-+ * @array: potentitally fence array
-+ *
-+ * Walk over all the fences in the array.
-+ */
-+#define dma_fence_array_for_each(fence, cursor, array)		\
-+	for (fence = dma_fence_array_first(&(cursor), array);	\
-+	     fence; fence = dma_fence_array_next(&(cursor)))
-+
- #endif /* __LINUX_DMA_FENCE_ARRAY_H */
+ 	if (!exclusive || !fobj)
+diff --git a/drivers/gpu/drm/nouveau/nouveau_fence.c b/drivers/gpu/drm/nouveau/nouveau_fence.c
+index 8df390078c85..42ddddbb49e4 100644
+--- a/drivers/gpu/drm/nouveau/nouveau_fence.c
++++ b/drivers/gpu/drm/nouveau/nouveau_fence.c
+@@ -350,7 +350,7 @@ nouveau_fence_sync(struct nouveau_bo *nvbo, struct nouveau_channel *chan, bool e
+ 	fobj = dma_resv_get_list(resv);
+ 	fence = dma_resv_get_excl(resv);
+ 
+-	if (fence && (!exclusive || !fobj || !fobj->shared_count)) {
++	if (fence) {
+ 		struct nouveau_channel *prev = NULL;
+ 		bool must_wait = true;
+ 
 -- 
 2.17.1
 
