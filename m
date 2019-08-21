@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 038B5C3A5A1
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0881BC3A59E
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C14CF206BA
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFFEC233A0
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RjrukGGV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AT2N1Av2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728276AbfHUMby (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Aug 2019 08:31:54 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39899 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfHUMby (ORCPT
+        id S1728278AbfHUMb4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Aug 2019 08:31:56 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:52154 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728239AbfHUMbz (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Aug 2019 08:31:54 -0400
-Received: by mail-wr1-f67.google.com with SMTP id t16so1866810wra.6
-        for <linux-media@vger.kernel.org>; Wed, 21 Aug 2019 05:31:51 -0700 (PDT)
+        Wed, 21 Aug 2019 08:31:55 -0400
+Received: by mail-wm1-f66.google.com with SMTP id k1so1947703wmi.1
+        for <linux-media@vger.kernel.org>; Wed, 21 Aug 2019 05:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=IKXeghREIlw2nXZsF/w4Ui2MmIQJccTUTiN0IZYNlow=;
-        b=RjrukGGV1uUl7C7Ym/xRQbb8SNZ87pZh1l8+eJnm11HobWkCS14kxa30nkaeXrKnId
-         8lGxiuK3preO7BbZgkmN3lzGXr7LrPSvp+gSyBDfRR+uEWPNHo31kJip1/CuvITgg2k8
-         AoI4UqoXQvPcZp2NqxuR0fnhv7+CH5Xs0xv0VPFcl+X1iIzJ98gmzM5YkNqyfZGjLAeW
-         L3HuhDDldhrFIbu54zLO3SuOTgStS2NNBBmb9hgOOvKix5gZRn6Io5e8kwU+uhaD/caU
-         S/+qYPhIcjrgJuhsuBziLtElOGPeVeUqljDeG3LHslQgYII1XEEsZeIdvwWneKRMKPm5
-         2dwA==
+        bh=aBOdo7ngpKvLwB2R8F0YqDeLvUKQK/TUC/pYnwwKah8=;
+        b=AT2N1Av231M7+QMYsNQRMtThUPT37JcPbuDiN+n/sf4fodmTNsAnQtRnffYDXw4r+E
+         yQcR+oJ4JsOuUxnpTBES197pmFrFncSMBPm0t5qBayyPUaN+NbySpIMmEfcEBykfvt0p
+         7Q10n4R//r4hoytphNEjuIW+5IUMQz28kGHx7sLy5MM/A4sDQ23C0r7Hzpz2gsO/h/EN
+         lHR+MrsHM6Gwy4pSjXIsK7w0H+TdjjvrNoMZKnEzLwUB0h+sRZy2Mufo9F+l4tyRpIbP
+         sI9ZoQELUh8IkUedSed+3/3D/Tklx4KX9IJVn2SaytD3pjm+9ZT4TQZ/vUhdcNH7Lm0T
+         b91Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IKXeghREIlw2nXZsF/w4Ui2MmIQJccTUTiN0IZYNlow=;
-        b=hW7ke87zsuRDLlGrOpKfEGlzebWwOQfw0FI9I8t1MQgIora/B6+NZduDtjihtowDKM
-         B1793XYqf3z3A9CzUP/6ev2sNfxABqBd0KaaRHn5CMgOfcOqJQOOS5p4M5D0HBAnQ2RQ
-         4VCaKosOjfjDHmuL9RVSnRmXRCClGcwvcgX3gz1ecarVz73yza4mEVD1e5ecQVw0V0LF
-         U3UvsOZbWGsAxUCPOKhedSZTiI55Y1R774T9eu+x6ntpgz/fDA4wVmqiRNKdK3iA7GhC
-         8/U7f/bZwYN22EpAz7iPSJ8ZB+fXs/LImd477/70xfjyG9hYnLQuMXtGf6BIEOv1wWpd
-         RIqw==
-X-Gm-Message-State: APjAAAXKfBFJbuxfaX3vdDVdGc6UwYvPMZQfb49u5wjq+R26crj7E2kj
-        9vKu6cVO4mOeBfybPCCGkrc=
-X-Google-Smtp-Source: APXvYqwB6S7+uyNiQC1xc08h1ULK3H6Qbb6KN+KRWHgyK0sB6UnhFwUy8RbIjC8fLfsXI00YLo0+Xw==
-X-Received: by 2002:adf:d08e:: with SMTP id y14mr39815380wrh.309.1566390711145;
-        Wed, 21 Aug 2019 05:31:51 -0700 (PDT)
+        bh=aBOdo7ngpKvLwB2R8F0YqDeLvUKQK/TUC/pYnwwKah8=;
+        b=FFFShMKGiYv/yVkzNny8+xZmUi84r57zEcWWakZSJkT85lwwoSMOQ7oXu2VRTu2Vnn
+         G1lEb1AB3BaLskzsOUYpTrvrg0gqceE8nJyYgLQtzZrX9PDzRycJ6myd+F5uTI1bl7CZ
+         80EramK1H1vFMkwGaEL28crVLW0hz6BwrZywNUXRSzCyJk10JCnNZbhci7ViRFekhHYR
+         BgiZWatNUkFPQQnfMHwbd92N2OcwNIq9UTldqavIjBr4iF1JtnRQzel+JifoUPP8wY0z
+         des9p3v1zFUayAaANYoEFCMuY/EF4PQf31NUjgn0q912x/8KwzwgiHMdwseuERK6EMdr
+         Nwgw==
+X-Gm-Message-State: APjAAAV9zL84N4YVioyQ+62Kmt1B2JiycXnWPq0dnRr7EyiRu9ceYrC/
+        xyCKvI4BjkcaaPdzL2KHUIopeKCC
+X-Google-Smtp-Source: APXvYqwEuIEXphvxpxYjDhq20FOa/v6eaOdT1hVDgfkrSbpNzJBD+iwrLeB+e+ZWQMlBkQWb+tOyIA==
+X-Received: by 2002:a1c:f106:: with SMTP id p6mr5432870wmh.148.1566390712855;
+        Wed, 21 Aug 2019 05:31:52 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:8189:dd33:a934:c4fa])
-        by smtp.gmail.com with ESMTPSA id v3sm23084571wrq.34.2019.08.21.05.31.50
+        by smtp.gmail.com with ESMTPSA id v3sm23084571wrq.34.2019.08.21.05.31.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 05:31:50 -0700 (PDT)
+        Wed, 21 Aug 2019 05:31:52 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     dri-devel@lists.freedesktop.org, chris@chris-wilson.co.uk,
         daniel.vetter@ffwll.ch, sumit.semwal@linaro.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 02/10] dma-buf: add dma_fence_array_alloc/free
-Date:   Wed, 21 Aug 2019 14:31:39 +0200
-Message-Id: <20190821123147.110736-3-christian.koenig@amd.com>
+Subject: [PATCH 04/10] dma-buf: add dma_fence_array_for_each
+Date:   Wed, 21 Aug 2019 14:31:41 +0200
+Message-Id: <20190821123147.110736-5-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190821123147.110736-1-christian.koenig@amd.com>
 References: <20190821123147.110736-1-christian.koenig@amd.com>
@@ -76,224 +76,97 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This seperates allocation and initialization of the dma_fence_array object
-and allows allocating the fence array together with the dma_fence_array.
+Makes it easier to extract the fences in a dma_fence_array.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-fence-array.c | 101 ++++++++++++++++++++----------
- include/linux/dma-fence-array.h   |  50 +++++++++++++--
- 2 files changed, 115 insertions(+), 36 deletions(-)
+ drivers/dma-buf/dma-fence-array.c | 42 +++++++++++++++++++++++++++++++
+ include/linux/dma-fence-array.h   | 24 ++++++++++++++++++
+ 2 files changed, 66 insertions(+)
 
 diff --git a/drivers/dma-buf/dma-fence-array.c b/drivers/dma-buf/dma-fence-array.c
-index d3fbd950be94..e82f30551aa1 100644
+index 314cf0e881d9..887e32e89269 100644
 --- a/drivers/dma-buf/dma-fence-array.c
 +++ b/drivers/dma-buf/dma-fence-array.c
-@@ -109,14 +109,7 @@ static bool dma_fence_array_signaled(struct dma_fence *fence)
- 
- static void dma_fence_array_release(struct dma_fence *fence)
- {
--	struct dma_fence_array *array = to_dma_fence_array(fence);
--	unsigned i;
--
--	for (i = 0; i < array->num_fences; ++i)
--		dma_fence_put(array->fences[i]);
--
--	kfree(array->fences);
--	dma_fence_free(fence);
-+	dma_fence_array_free(container_of(fence, struct dma_fence_array, base));
+@@ -265,3 +265,45 @@ bool dma_fence_match_context(struct dma_fence *fence, u64 context)
+ 	return true;
  }
- 
- const struct dma_fence_ops dma_fence_array_ops = {
-@@ -129,52 +122,96 @@ const struct dma_fence_ops dma_fence_array_ops = {
- EXPORT_SYMBOL(dma_fence_array_ops);
- 
- /**
-- * dma_fence_array_create - Create a custom fence array
-+ * dma_fence_array_alloc - Allocate a custom fence array
-  * @num_fences:		[in]	number of fences to add in the array
-- * @fences:		[in]	array containing the fences
-- * @context:		[in]	fence context to use
-- * @seqno:		[in]	sequence number to use
-- * @signal_on_any:	[in]	signal on any fence in the array
-+ * @fences:		[in]	optional array containing the fences
-  *
-- * Allocate a dma_fence_array object and initialize the base fence with
-- * dma_fence_init().
-- * In case of error it returns NULL.
-+ * Allocate a dma_fence_array object, in case of error it returns NULL.
-  *
-- * The caller should allocate the fences array with num_fences size
-- * and fill it with the fences it wants to add to the object. Ownership of this
-- * array is taken and dma_fence_put() is used on each fence on release.
-- *
-- * If @signal_on_any is true the fence array signals if any fence in the array
-- * signals, otherwise it signals when all fences in the array signal.
-+ * The fences array is optional and if NULL allocated together with the
-+ * dma_fence_array object.
-  */
--struct dma_fence_array *dma_fence_array_create(int num_fences,
--					       struct dma_fence **fences,
--					       u64 context, unsigned seqno,
--					       bool signal_on_any)
-+struct dma_fence_array *dma_fence_array_alloc(int num_fences,
-+					      struct dma_fence **fences)
- {
- 	struct dma_fence_array *array;
- 	size_t size = sizeof(*array);
- 
- 	/* Allocate the callback structures behind the array. */
- 	size += num_fences * sizeof(struct dma_fence_array_cb);
-+
-+	/* Allocate the fences structures behind the callbacks */
-+	if (!fences)
-+		size += num_fences * sizeof(struct dma_fence *);
-+
- 	array = kzalloc(size, GFP_KERNEL);
- 	if (!array)
- 		return NULL;
- 
-+	if (!fences) {
-+		struct dma_fence_array_cb *cb = (void *)(&array[1]);
-+
-+		num_fences = dma_fence_array_max_fences(array);
-+		fences = (void *)(&cb[num_fences]);
-+	}
-+	array->fences = fences;
-+	return array;
-+}
-+EXPORT_SYMBOL(dma_fence_array_alloc);
+ EXPORT_SYMBOL(dma_fence_match_context);
 +
 +/**
-+ * dma_fence_array_init - init a custom fence array
-+ * @array:		[in]	the pre-allocated array to init
-+ * @context:		[in]	fence context to use
-+ * @seqno:		[in]	sequence number to use
-+ * @signal_on_any:	[in]	signal on any fence in the array
++ * dma_fence_array_first - return the first fence in an array
++ * @cursor: cursor for the current position
++ * @array: array with the fences
 + *
-+ * Initialize the base fence with dma_fence_init().
-+ *
-+ * The caller should allocate the fences array with num_fences size
-+ * and fill it with the fences it wants to add to the object. Ownership of this
-+ * array is taken and dma_fence_put() is used on each fence on release.
-+ *
-+ * If @signal_on_any is true the fence array signals if any fence in the array
-+ * signals, otherwise it signals when all fences in the array signal.
++ * Returns the first fence in the array or NULL if the array is empty.
++ * If the array parameter isn't a dma_fence_array return it unmodified.
 + */
-+void dma_fence_array_init(struct dma_fence_array *array, u64 context,
-+			  unsigned int seqno, bool signal_on_any)
++struct dma_fence *dma_fence_array_first(struct dma_fence_array_cursor *cursor,
++					struct dma_fence *array)
 +{
- 	spin_lock_init(&array->lock);
- 	dma_fence_init(&array->base, &dma_fence_array_ops, &array->lock,
- 		       context, seqno);
- 	init_irq_work(&array->work, irq_dma_fence_array_work);
- 
--	array->num_fences = num_fences;
--	atomic_set(&array->num_pending, signal_on_any ? 1 : num_fences);
--	array->fences = fences;
--
-+	atomic_set(&array->num_pending, signal_on_any ? 1 : array->num_fences);
- 	array->base.error = PENDING_ERROR;
-+}
-+EXPORT_SYMBOL(dma_fence_array_init);
- 
--	return array;
-+/**
-+ * dma_fence_array_free - free a dma_fence_array object
-+ * @array: the object to free
-+ *
-+ * The a dma_fence_array and drop all references to the fences it contains.
-+ */
-+void dma_fence_array_free(struct dma_fence_array *array)
-+{
-+	unsigned i;
++	cursor->array = to_dma_fence_array(array);
++	if (!cursor->array)
++		return array;
 +
-+	if (!array)
-+		return;
-+
-+	for (i = 0; i < array->num_fences; ++i)
-+		dma_fence_put(array->fences[i]);
-+
-+	/* Check if fences are part of the array */
-+	if ((u8 *)array->fences < (u8 *)array ||
-+	    (u8 *)array->fences > ((u8 *)array) + ksize(array))
-+		kfree(array->fences);
-+
-+	dma_fence_free(&array->base);
- }
--EXPORT_SYMBOL(dma_fence_array_create);
-+EXPORT_SYMBOL(dma_fence_array_free);
- 
- /**
-  * dma_fence_match_context - Check if all fences are from the given context
-diff --git a/include/linux/dma-fence-array.h b/include/linux/dma-fence-array.h
-index f99cd7eb24e0..be85c06b524d 100644
---- a/include/linux/dma-fence-array.h
-+++ b/include/linux/dma-fence-array.h
-@@ -14,6 +14,7 @@
- 
- #include <linux/dma-fence.h>
- #include <linux/irq_work.h>
-+#include <linux/slab.h>
- 
- /**
-  * struct dma_fence_array_cb - callback helper for fence array
-@@ -74,10 +75,51 @@ to_dma_fence_array(struct dma_fence *fence)
- 	return container_of(fence, struct dma_fence_array, base);
- }
- 
--struct dma_fence_array *dma_fence_array_create(int num_fences,
--					       struct dma_fence **fences,
--					       u64 context, unsigned seqno,
--					       bool signal_on_any);
-+/**
-+ * dma_fence_array_max_fences - calculate maximum number of fences
-+ * @array:	[in]	the dma_fence_array to use
-+ *
-+ * Returns the maximum number of fences a dma_fence_array can store.
-+ */
-+static inline unsigned int
-+dma_fence_array_max_fences(struct dma_fence_array *array)
-+{
-+	return (ksize(array) - sizeof(*array)) /
-+		(sizeof(struct dma_fence_array_cb) +
-+		 sizeof(struct dma_fence *));
-+}
-+
-+struct dma_fence_array *dma_fence_array_alloc(int num_fences,
-+					      struct dma_fence **fences);
-+void dma_fence_array_init(struct dma_fence_array *array, u64 context,
-+			  unsigned int seqno, bool signal_on_any);
-+void dma_fence_array_free(struct dma_fence_array *array);
-+
-+/**
-+ * dma_fence_array_create - Create a custom fence array
-+ * @num_fences:		[in]	number of fences to add in the array
-+ * @fences:		[in]	array containing the fences
-+ * @context:		[in]	fence context to use
-+ * @seqno:		[in]	sequence number to use
-+ * @signal_on_any:	[in]	signal on any fence in the array
-+ *
-+ * Wrapper around dma_fence_array_alloc and dma_fence_array_init. Returns NULL
-+ * on allocation failure.
-+ */
-+static inline struct dma_fence_array *
-+dma_fence_array_create(int num_fences, struct dma_fence **fences, u64 context,
-+		       unsigned seqno, bool signal_on_any)
-+{
-+	struct dma_fence_array *array;
-+
-+	array = dma_fence_array_alloc(num_fences, fences);
-+	if (!array)
++	if (!cursor->array->num_fences)
 +		return NULL;
 +
-+	array->num_fences = num_fences;
-+	dma_fence_array_init(array, context, seqno, signal_on_any);
-+	return array;
++	cursor->index = 0;
++	return cursor->array->fences[cursor->index++];
++
 +}
++EXPORT_SYMBOL(dma_fence_array_first);
++
++/**
++ * dma_fence_array_next - return the next fence in the array
++ * @cursor: cursor for the current position
++ *
++ * Returns the next fence from the array or NULL if we don't have any more
++ */
++struct dma_fence *dma_fence_array_next(struct dma_fence_array_cursor *cursor)
++{
++	if (!cursor->array)
++		return NULL;
++
++	if (cursor->index >= cursor->array->num_fences)
++		return NULL;
++
++	return cursor->array->fences[cursor->index++];
++}
++EXPORT_SYMBOL(dma_fence_array_next);
+diff --git a/include/linux/dma-fence-array.h b/include/linux/dma-fence-array.h
+index 35d1d1e7c93b..2a71fd003dfa 100644
+--- a/include/linux/dma-fence-array.h
++++ b/include/linux/dma-fence-array.h
+@@ -124,4 +124,28 @@ dma_fence_array_create(int num_fences, struct dma_fence **fences, u64 context,
  
  bool dma_fence_match_context(struct dma_fence *fence, u64 context);
  
++/**
++ * struct dma_fence_array_cursor - cursor for the fences in an array
++ */
++struct dma_fence_array_cursor {
++	struct dma_fence_array *array;
++	unsigned int index;
++};
++
++struct dma_fence *dma_fence_array_first(struct dma_fence_array_cursor *cursor,
++					struct dma_fence *array);
++struct dma_fence *dma_fence_array_next(struct dma_fence_array_cursor *cursor);
++
++/**
++ * dma_fence_array_for_each - walk over all fences in a fence array
++ * @fence: the current fence
++ * @cursor: cursor for the walk
++ * @array: potentitally fence array
++ *
++ * Walk over all the fences in the array.
++ */
++#define dma_fence_array_for_each(fence, cursor, array)		\
++	for (fence = dma_fence_array_first(&(cursor), array);	\
++	     fence; fence = dma_fence_array_next(&(cursor)))
++
+ #endif /* __LINUX_DMA_FENCE_ARRAY_H */
 -- 
 2.17.1
 
