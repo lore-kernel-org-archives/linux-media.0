@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7F7BC3A5A1
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22C82C3A59E
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A4390233A0
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E43A822D6D
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NJrL3Xmr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DJUlo0KY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbfHUMbw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Aug 2019 08:31:52 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52565 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728007AbfHUMbw (ORCPT
+        id S1728275AbfHUMby (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Aug 2019 08:31:54 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:33204 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728007AbfHUMby (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Aug 2019 08:31:52 -0400
-Received: by mail-wm1-f68.google.com with SMTP id o4so1940841wmh.2
-        for <linux-media@vger.kernel.org>; Wed, 21 Aug 2019 05:31:50 -0700 (PDT)
+        Wed, 21 Aug 2019 08:31:54 -0400
+Received: by mail-wm1-f67.google.com with SMTP id p77so4680261wme.0
+        for <linux-media@vger.kernel.org>; Wed, 21 Aug 2019 05:31:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=vRxenyuPXTsYnahqRGyH5Yj5fC/fTi1KqSFOQ4JZ9Gw=;
-        b=NJrL3XmrnUWfBNkl8aiq8ei98CkVERx3HcNoujZ4cEQs+IfvAc53siSy0b2/FIwMJ6
-         sJR/dmHEFSrwKbWVa1LEHcebpLkgdbesPcWukPLAaUqqOf7gOMlPgyk3go0qkg9bppx5
-         qz17wLSdHAUgIj3c9Ve6dKIr4MhlLUMI2SgP8eIo+fSAObImyakpvmGE9bUikGfJJVTA
-         BB5syatvbCcXs6ND2fhlK8NEPsLH8tfSa7Nan3DkVATJu11abImtVpLqGvLgGJBTb4o9
-         xgIkChloADsd/scie8iJbbR0bT2o9PMlU4OZYTyQzILStwMPKCYTKiR5jWG1DCOQmpYn
-         /zVw==
+        bh=gEP1Eqz1ufX2Zh9MidlHV8n+9w6C1Ut7DiH3LFU9MtI=;
+        b=DJUlo0KYyigUgu1cb+IKQJvlF6QOYqZRpUesSagcWxBp1taRWMilO/sBy9nxmsInwk
+         ZwQbMqGGIMLB1GmdlMG27EiLtmBT2fbxIUQs/t5/8t9Zo3vnkvyzb/g+RgfCmBB04Uha
+         bti2qtG25M1Hc35obkEIgSLV2dIf6rxXGLbz3+VT9L0Y9axTGNU3BdR4PtqA+mn0unuI
+         JiZOPjeys2y6iccUpEjiWMTKYKC2OJq/MyofaQtH85tsI4tjBBsXAkzxnXDvdLQ1iuRG
+         oaUfqx+qtE2F6jMZZoiLkLZERx0UeikX3sLO7z+uRlN1LctciD3PnTjkakGtUzI3yJC1
+         X1Zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vRxenyuPXTsYnahqRGyH5Yj5fC/fTi1KqSFOQ4JZ9Gw=;
-        b=Gl1t2dhevlJ4hcU8DUHBpNGKad1cy1fjkbyi63isG0DN747aqmBpubbY0hGlX+DN5s
-         CLBUEjMaQ6r5RqcUug/0w4uG3fr//B6eg8bglqP3dvtY/k9nbhLiLEcOD9irq4oTeMc5
-         TTGjVNAjgjx2e0yEbTq55wXJJYEAPclsTcSR6BLjmbdnpirHnZWtKP87Y2X1gxCM7CL+
-         3/NlVcNByYgrg+YxgBOmE02L8zHINTTSG2El0MSZPl764PaNq/Qb1wdNUKAIQd1ryrob
-         HytKfw7v+9w4vWgQCH+zycp4Nag7jqIDGbjwtfPBKn9NEypCTTDFkSNSMm+0U1BrbAE1
-         AddA==
-X-Gm-Message-State: APjAAAX7wHOyzCNS6DT3kw9aXaYwGgorLFZTJ0i5bmz4VGm/GYe8YEtW
-        zaQ2hzn5CJhe5fs91EPqA2U=
-X-Google-Smtp-Source: APXvYqytx4jIhEs5N7wdzTIPC5/5YonglEmhFRoN8cVyNZfDM3u68wy5ntVWhBf7ISyXWk0v2rofoQ==
-X-Received: by 2002:a1c:1d4f:: with SMTP id d76mr6199693wmd.127.1566390710289;
-        Wed, 21 Aug 2019 05:31:50 -0700 (PDT)
+        bh=gEP1Eqz1ufX2Zh9MidlHV8n+9w6C1Ut7DiH3LFU9MtI=;
+        b=UMTzDYtOcvtAI/DWNaOB4q2n0qexUG7p8SW1WsmGfu0e4+YGLxBY3bzGmlElWXGPDj
+         ZMCgaIE7AQn22b8b86cMDl2qDVaDI5RWCZXwmgK8sD6CulediUQw3/nFLTUa1irJ6U79
+         QPXpqFK6ejVtHAWUVtyNrE0FCGBbESnEgBA3VQ0OhX6fY39+1oUVXQq7SvZ2h/+utzoW
+         qQwupnNpdSoIpurHXnz5r4Rfdd7pn4tQDmgNp52bwMeca4VNPZ4/co61CXYH/wmZo69G
+         +RBPB4lnyZpvGr2Lw5omG9zgcgDWme7sG7FV51VgYwLmKFItqsjCbJo0xvGA0lRr0zZF
+         o9ww==
+X-Gm-Message-State: APjAAAV7Dp9+edyjfacbumepgwczUOORC9GRybc7hU+5z/9mfr6pRPCH
+        INC/AN8TkSG7U6ynyBysZJ8=
+X-Google-Smtp-Source: APXvYqwx9pX44R+PFq43qthQnp/yMbCW+JvAOSh2ZSqYDCJ44j5cH765sJSCBDbSneJzpLWvbFGy1Q==
+X-Received: by 2002:a05:600c:145:: with SMTP id w5mr5821281wmm.75.1566390711937;
+        Wed, 21 Aug 2019 05:31:51 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:8189:dd33:a934:c4fa])
-        by smtp.gmail.com with ESMTPSA id v3sm23084571wrq.34.2019.08.21.05.31.49
+        by smtp.gmail.com with ESMTPSA id v3sm23084571wrq.34.2019.08.21.05.31.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 05:31:49 -0700 (PDT)
+        Wed, 21 Aug 2019 05:31:51 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     dri-devel@lists.freedesktop.org, chris@chris-wilson.co.uk,
         daniel.vetter@ffwll.ch, sumit.semwal@linaro.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 01/10] dma-buf: make to_dma_fence_array NULL safe
-Date:   Wed, 21 Aug 2019 14:31:38 +0200
-Message-Id: <20190821123147.110736-2-christian.koenig@amd.com>
+Subject: [PATCH 03/10] dma-buf: add dma_fence_array_recycle
+Date:   Wed, 21 Aug 2019 14:31:40 +0200
+Message-Id: <20190821123147.110736-4-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190821123147.110736-1-christian.koenig@amd.com>
 References: <20190821123147.110736-1-christian.koenig@amd.com>
@@ -76,26 +76,65 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A bit surprising that this wasn't already the case.
+Try to recycle an dma_fence_array object by dropping the last
+reference to it without freeing it.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- include/linux/dma-fence-array.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma-buf/dma-fence-array.c | 27 +++++++++++++++++++++++++++
+ include/linux/dma-fence-array.h   |  1 +
+ 2 files changed, 28 insertions(+)
 
+diff --git a/drivers/dma-buf/dma-fence-array.c b/drivers/dma-buf/dma-fence-array.c
+index e82f30551aa1..314cf0e881d9 100644
+--- a/drivers/dma-buf/dma-fence-array.c
++++ b/drivers/dma-buf/dma-fence-array.c
+@@ -188,6 +188,33 @@ void dma_fence_array_init(struct dma_fence_array *array, u64 context,
+ }
+ EXPORT_SYMBOL(dma_fence_array_init);
+ 
++/**
++ * dma_fence_array_reuse - dummy for dma_fence_array_recycle
++ */
++static void dma_fence_array_reuse(struct kref *kref)
++{
++	struct dma_fence_array *array = container_of(kref, typeof(*array),
++						     base.refcount);
++
++	WARN_ON_ONCE(!list_empty(&array->base.cb_list));
++}
++
++/**
++ * dma_fence_array_try_reuse - try to reuse a dma_fence_array object
++ * @array: array which we should try to reuse
++ *
++ * Try to drop the last reference to an dma_fence_array and so allow it to be
++ * reused.
++ *
++ * Returns true if this was the last reference then caller can reuse the array.
++ * In this case the array is reset into a state where it can be used with
++ * dma_fence_array_init again.
++ */
++bool dma_fence_array_recycle(struct dma_fence_array *array)
++{
++	return kref_put(&array->base.refcount, dma_fence_array_reuse);
++}
++
+ /**
+  * dma_fence_array_free - free a dma_fence_array object
+  * @array: the object to free
 diff --git a/include/linux/dma-fence-array.h b/include/linux/dma-fence-array.h
-index 303dd712220f..f99cd7eb24e0 100644
+index be85c06b524d..35d1d1e7c93b 100644
 --- a/include/linux/dma-fence-array.h
 +++ b/include/linux/dma-fence-array.h
-@@ -68,7 +68,7 @@ static inline bool dma_fence_is_array(struct dma_fence *fence)
- static inline struct dma_fence_array *
- to_dma_fence_array(struct dma_fence *fence)
- {
--	if (fence->ops != &dma_fence_array_ops)
-+	if (!fence || fence->ops != &dma_fence_array_ops)
- 		return NULL;
+@@ -93,6 +93,7 @@ struct dma_fence_array *dma_fence_array_alloc(int num_fences,
+ 					      struct dma_fence **fences);
+ void dma_fence_array_init(struct dma_fence_array *array, u64 context,
+ 			  unsigned int seqno, bool signal_on_any);
++bool dma_fence_array_recycle(struct dma_fence_array *array);
+ void dma_fence_array_free(struct dma_fence_array *array);
  
- 	return container_of(fence, struct dma_fence_array, base);
+ /**
 -- 
 2.17.1
 
