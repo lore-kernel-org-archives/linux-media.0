@@ -8,63 +8,63 @@ X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9270C3A5A2
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 009A3C3A59E
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:32:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A1E97233A0
-	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C0EB822D6D
+	for <linux-media@archiver.kernel.org>; Wed, 21 Aug 2019 12:31:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rYoioTgG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C6avVw5s"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728284AbfHUMb4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 21 Aug 2019 08:31:56 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:41072 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728267AbfHUMb4 (ORCPT
+        id S1728267AbfHUMb7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 21 Aug 2019 08:31:59 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:43704 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728279AbfHUMb6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 21 Aug 2019 08:31:56 -0400
-Received: by mail-wr1-f65.google.com with SMTP id j16so1858133wrr.8
-        for <linux-media@vger.kernel.org>; Wed, 21 Aug 2019 05:31:54 -0700 (PDT)
+        Wed, 21 Aug 2019 08:31:58 -0400
+Received: by mail-wr1-f68.google.com with SMTP id y8so1848646wrn.10
+        for <linux-media@vger.kernel.org>; Wed, 21 Aug 2019 05:31:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=Ni/csKYEDyOv/GI6Uu6YVFIStPM3qd3+Rn6zbLv7UUM=;
-        b=rYoioTgGNdJPTEsCmhjUF1HZX9gcEpjaHfX4q0zA+y0r2/iQMVtuDahOaLCGbLxbzm
-         ytAht059xFcw3KyV5Lc9xrn35bWcY5Fgs3twscL4TSdDdnv3WmiaCPZsau0ApeQVzW8z
-         F1RkXtpUTWQwRJ/KSO+u/bRX7SzKCgKbchepGlwDfuDXANndCWB5kDZMoDw0qqM/u4Lf
-         EXvri2vke4YiZROmzcnVU/BuYq1S8Nd5UD2C1ygsx2t2TpfhPoUVsbzwAJWd0muTmoaf
-         Irt2Iz5lqF7y53cHC+J8xX8IVNart9/UdcYQA+jGuOpkgUsNMr4XWR02cbJHkVcwPyEz
-         K2hw==
+        bh=aRXsJmbmtfPxPUN8vKc2ijDmbdxfggBJHwv1ymZT7tU=;
+        b=C6avVw5s+Madbo3fCVkLSXse+ieMoqWibO2MBnIklPeM7GNILrlT4uSMLyqQ/UctNz
+         hgFVDsBB/ij8pU43oinM9JVa/MIysUAMIx7yswR9kN8yf4dYIFg5b/kfbmaHT/ELsBN0
+         PKQxjnIhy9avvJVioQ69szQ50wkhbYmVDwL12x+dL9gfDi9uQGdQCGSkvGTac0je8pCS
+         qStOOU8gAkkvRF4hSpfQ8aviFUR7nF8p3lgRwsHynFHoICvmIUwcJFit57U3jMoH4tN1
+         4f3ZMQkLGfCCEdUBxb3wHuwChyeQNf97cKSwFmU+p3d9mQzdszwq8FGoHNYzfZhdSCZN
+         FGyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ni/csKYEDyOv/GI6Uu6YVFIStPM3qd3+Rn6zbLv7UUM=;
-        b=FPO39aHpxXgt0avYZd+UNmy22/tzp+9+TBtsHrbPqAp/avwbjlPIXM1gw7NfpuWyHW
-         07hCCY/TiT31t4P9Uz9J7mM5qCFOPAHBuccdwbk+l4AWmh3wqs1CWQzn+IlxZwf9lfYq
-         3Go45EQ4EsdEvAC1GLWFxgJvqOdXsXrKXepoiQ1cLomx92+dlTnfivs9HXza2A7H6OTo
-         hEjvNOiwrXT5y4naRmCz/KfgzxnQIukLW1Er2nzuBUR6CPX8R7CntMlEZpMrk27y8wL+
-         vKFgDkk7ad5mU+uZz1f2y7emn/QxAJc+zr9q1m/i3BxNKfHz7HenGOO0KNrH3Un840mp
-         rgPA==
-X-Gm-Message-State: APjAAAX4fZLNsR9CLMGLkKQsAvt3w0xrkU7+cxrnweFX+xcu6CLto9D5
-        Hgh47RhqFtp2AbBJAEE3/RM=
-X-Google-Smtp-Source: APXvYqynWHiNIzC4shkDTUZTBtVbuOpu7CcIRalVRJfof4Zw588JseDXLH/DpOXIFmxsKWDuM5O1oQ==
-X-Received: by 2002:adf:fc03:: with SMTP id i3mr37946824wrr.48.1566390713679;
-        Wed, 21 Aug 2019 05:31:53 -0700 (PDT)
+        bh=aRXsJmbmtfPxPUN8vKc2ijDmbdxfggBJHwv1ymZT7tU=;
+        b=JCm/ayuXn4qrRFHUFWoz9XZbz3006UQ9eTu+rDMlmB+ld5bJlMl9uB9pb1X3Gw4+aU
+         Ud33m5RxEb2P2+L3xXhRoTNiH4Mxb03gz0IhPasqAjCSsFDW+iMAD+Ak4BZCmjbkSIGK
+         YZ77fmFWDGQAPX25YAuItejjvCbRyWkhA1yu0nmQQMRD1vHcc7xITueEW2/HTDk+TYxz
+         52Y3d4i3KF5i7IA/IYHuF8RRzvyJyEqVK6XDWghr1L92QHcACMtkB830XISYrhdATNFG
+         BY57sdx2vnjN8tnwkWqnV21ezjPXNHZTSpEUylI4mKcwNVn23oGAGD47WYMyv10GxjcV
+         D9bA==
+X-Gm-Message-State: APjAAAW+NL6Hj48MouZv47wawYvKVdDC675lzaFXK4E1pg6y7+J+ywhm
+        ZAZwHjpo7KKd13hhNXWe5hxO3Ejv
+X-Google-Smtp-Source: APXvYqyBNotk8B8aMjwkVU5PjZ14VCximu9p4qoWqEdX3ZKXwTSeKwyq8A3a0zKymAwNIBHgkTA3Rw==
+X-Received: by 2002:a5d:6ccd:: with SMTP id c13mr34422352wrc.4.1566390715621;
+        Wed, 21 Aug 2019 05:31:55 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:8189:dd33:a934:c4fa])
-        by smtp.gmail.com with ESMTPSA id v3sm23084571wrq.34.2019.08.21.05.31.52
+        by smtp.gmail.com with ESMTPSA id v3sm23084571wrq.34.2019.08.21.05.31.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 05:31:53 -0700 (PDT)
+        Wed, 21 Aug 2019 05:31:55 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     dri-devel@lists.freedesktop.org, chris@chris-wilson.co.uk,
         daniel.vetter@ffwll.ch, sumit.semwal@linaro.org,
         linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 05/10] dma-buf/resv: add dma_resv_prune_fences
-Date:   Wed, 21 Aug 2019 14:31:42 +0200
-Message-Id: <20190821123147.110736-6-christian.koenig@amd.com>
+Subject: [PATCH 07/10] dma-buf/resv: add new fences container implementation
+Date:   Wed, 21 Aug 2019 14:31:44 +0200
+Message-Id: <20190821123147.110736-8-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190821123147.110736-1-christian.koenig@amd.com>
 References: <20190821123147.110736-1-christian.koenig@amd.com>
@@ -76,132 +76,325 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add a new dma_resv_prune_fences() function to improve memory management.
+Add a new container for fences which internally uses
+dma_fence_array's to store the fences.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-resv.c                 | 37 ++++++++++++++++++++++
- drivers/gpu/drm/i915/gem/i915_gem_wait.c   |  3 +-
- drivers/gpu/drm/i915/i915_gem_batch_pool.c |  2 +-
- drivers/gpu/drm/i915/i915_vma.c            |  3 +-
- drivers/gpu/drm/ttm/ttm_bo.c               |  2 +-
- include/linux/dma-resv.h                   |  1 +
- 6 files changed, 42 insertions(+), 6 deletions(-)
+ drivers/dma-buf/dma-resv.c | 221 +++++++++++++++++++++++++++++++++++++
+ include/linux/dma-resv.h   |  49 ++++++++
+ 2 files changed, 270 insertions(+)
 
 diff --git a/drivers/dma-buf/dma-resv.c b/drivers/dma-buf/dma-resv.c
-index 42a8f3f11681..24adc32d36d4 100644
+index d3a9a3bb15f0..83033b3e8521 100644
 --- a/drivers/dma-buf/dma-resv.c
 +++ b/drivers/dma-buf/dma-resv.c
-@@ -301,6 +301,43 @@ void dma_resv_add_excl_fence(struct dma_resv *obj, struct dma_fence *fence)
- }
- EXPORT_SYMBOL(dma_resv_add_excl_fence);
+@@ -33,6 +33,7 @@
+  */
  
-+/**
-+ * dma_resv_prune_fences - prune signaled fences from the resv object
-+ * @obj: the reservation object to prune
-+ *
-+ * Prune all signaled fences from the reservation object.
-+ */
-+void dma_resv_prune_fences(struct dma_resv *obj)
+ #include <linux/dma-resv.h>
++#include <linux/dma-fence-array.h>
+ #include <linux/export.h>
+ 
+ /**
+@@ -55,6 +56,226 @@ EXPORT_SYMBOL(reservation_seqcount_class);
+ const char reservation_seqcount_string[] = "reservation_seqcount";
+ EXPORT_SYMBOL(reservation_seqcount_string);
+ 
++static void dma_resv_fences_init(struct dma_resv_fences *fences)
 +{
-+	struct dma_resv_list *list;
-+	struct dma_fence *fence;
++	RCU_INIT_POINTER(fences->fence, NULL);
++	fences->staged = NULL;
++}
++
++static void dma_resv_fences_fini(struct dma_resv_fences *fences)
++{
++	/*
++	 * This object should be dead and all references must have
++	 * been released to it, so no need to be protected with rcu.
++	 */
++	dma_fence_put(rcu_dereference_protected(fences->fence, true));
++	dma_fence_array_free(fences->staged);
++}
++
++/**
++ * dma_resv_fences_reserve - allocate fence slots
++ * @fences: fences object where we need slots
++ * @num_fences: number of fence slots we need
++ *
++ * Make sure that we have at least @num_fences + all the existing ones free
++ * slots in the staged dma_fence_array.
++ *
++ * Returns -ENOMEM on allocation failure, 0 otherwise.
++ */
++int dma_resv_fences_reserve(struct dma_resv *obj,
++			    struct dma_resv_fences *fences,
++			    unsigned int num_fences)
++{
++	struct dma_fence *fence = dma_resv_fences_deref(obj, fences);
++	struct dma_fence_array *staged, *array;
 +	unsigned int i;
 +
-+	dma_resv_assert_held(obj);
++	array = fences->staged;
++	if (!array)
++		array = to_dma_fence_array(fence);
 +
-+	fence = dma_resv_get_excl(obj);
-+	if (dma_fence_is_signaled(fence)) {
-+		RCU_INIT_POINTER(obj->fence_excl, NULL);
-+		dma_fence_put(fence);
++	if (array)
++		num_fences += array->num_fences;
++	else if (fence)
++		num_fences += 1;
++
++	staged = fences->staged;
++	if (staged && dma_fence_array_max_fences(staged) >= num_fences)
++		return 0;
++
++	staged = dma_fence_array_alloc(num_fences, NULL);
++	if (!staged)
++		return -ENOMEM;
++
++	/* Copy over all fences from the old object */
++	if (array) {
++		for (i = 0; i < array->num_fences; ++i) {
++			struct dma_fence *f = array->fences[i];
++
++			staged->fences[i] = dma_fence_get(f);
++		}
++		staged->num_fences = array->num_fences;
++
++	} else if (fence) {
++		staged->fences[0] = dma_fence_get(fence);
++		staged->num_fences = 1;
++
++	} else {
++		staged->num_fences = 0;
 +	}
 +
-+	list = dma_resv_get_list(obj);
-+	if (!list)
++	dma_fence_array_free(fences->staged);
++	fences->staged = staged;
++
++	return 0;
++}
++EXPORT_SYMBOL(dma_resv_fences_reserve);
++
++/**
++ * dma_resv_fences_assign - set the singleton fence
++ * @fences: fences object where to set the fence
++ * @fence: singleton fence for the object
++ *
++ * Internal helper to assign the signleton fence without grapping a reference.
++ * If the old fence is a dma_fence_array try to recycle it.
++ */
++static void dma_resv_fences_assign(struct dma_resv *obj,
++				   struct dma_resv_fences *fences,
++				   struct dma_fence *fence)
++{
++	struct dma_fence_array *array, *staged;
++	unsigned int num_fences, i;
++	struct dma_fence *old;
++
++	old = dma_resv_fences_deref(obj, fences);
++	rcu_assign_pointer(fences->fence, fence);
++
++	dma_fence_array_free(fences->staged);
++	fences->staged = NULL;
++
++	/* Try to recycle the old fence array */
++	staged = to_dma_fence_array(old);
++	if (!staged)
++		goto drop_old;
++
++	array = to_dma_fence_array(fence);
++	if (array)
++		num_fences = array->num_fences;
++	else
++		num_fences = fence ? 1 : 0;
++
++	if (dma_fence_array_max_fences(staged) < num_fences)
++		goto drop_old;
++
++	/* Try to drop the last reference */
++	if (!dma_fence_array_recycle(staged))
 +		return;
 +
-+	for (i = 0; i < list->shared_count; ++i) {
-+		fence = rcu_dereference_protected(list->shared[i],
-+						  dma_resv_held(obj));
++	/* Make sure the staged array has the latest fences */
++	if (array) {
++		for (i = 0; i < array->num_fences; ++i) {
++			struct dma_fence *f = array->fences[i];
 +
-+		if (!dma_fence_is_signaled(fence))
-+			continue;
++			if (f == staged->fences[i])
++				continue;
 +
-+		RCU_INIT_POINTER(list->shared[i], dma_fence_get_stub());
-+		dma_fence_put(fence);
++			dma_fence_put(staged->fences[i]);
++			staged->fences[i] = dma_fence_get(f);
++		}
++		for (;i < staged->num_fences; ++i)
++			dma_fence_put(staged->fences[i]);
++		staged->num_fences = array->num_fences;
++
++	} else if (fence) {
++		for (i = 0; i < staged->num_fences; ++i)
++			dma_fence_put(staged->fences[i]);
++		staged->fences[0] = dma_fence_get(fence);
++		staged->num_fences = 1;
++	} else {
++		for (i = 0; i < staged->num_fences; ++i)
++			dma_fence_put(staged->fences[i]);
++		staged->num_fences = 0;
 +	}
++
++	fences->staged = staged;
++	return;
++
++drop_old:
++	dma_fence_put(old);
 +}
-+EXPORT_SYMBOL(dma_resv_prune_fences);
++
++/**
++ * dma_resv_fences_set - set the singleton fence
++ * @fences: fences object where to set the fence
++ * @fence: singleton fence for the object
++ *
++ * Grabs a reference to the new fence and replaces the current singleton fence
++ * with a new one. If the old fence is a dma_fence_array try to recycle it.
++ */
++void dma_resv_fences_set(struct dma_resv *obj,
++			 struct dma_resv_fences *fences,
++			 struct dma_fence *fence)
++{
++	dma_fence_get(fence);
++	dma_resv_fences_assign(obj, fences, fence);
++}
++EXPORT_SYMBOL(dma_resv_fences_set);
++
++/**
++ * dma_resv_fences_add - add a fence to the staged fence_array
++ * @fences: fences object where to add the fence to
++ * @fence: fence to add
++ *
++ * Add a new fence to the staged fence_array.
++ */
++void dma_resv_fences_add(struct dma_resv_fences *fences,
++			 struct dma_fence *fence)
++{
++	struct dma_fence_array *staged = fences->staged;
++	struct dma_fence *old;
++	unsigned int i;
++
++#ifndef CONFIG_DEBUG_MUTEXES
++	for (i = 0; i < staged->num_fences; ++i) {
++		old = staged->fences[i];
++
++		if (old->context == fence->context ||
++		    dma_fence_is_signaled(old)) {
++			dma_fence_put(old);
++			goto replace;
++		}
++	}
++#endif
++
++	BUG_ON(staged->num_fences >= dma_fence_array_max_fences(staged));
++	i = staged->num_fences++;
++
++replace:
++	staged->fences[i] = dma_fence_get(fence);
++}
++EXPORT_SYMBOL(dma_resv_fences_add);
++
++/**
++ * dma_resv_fences_commit - commit the staged dma_fence_array
++ * @fences: fences object where the commit should happen
++ *
++ * Commit the fences staged in the dma_fence_array and make them visible to
++ * other threads.
++ */
++void dma_resv_fences_commit(struct dma_resv *obj,
++			    struct dma_resv_fences *fences)
++{
++	struct dma_fence_array *staged = fences->staged;
++
++	if (!staged || !staged->num_fences)
++		return;
++
++	fences->staged = NULL;
++	dma_fence_array_init(staged, dma_fence_context_alloc(1), 1, false);
++	dma_resv_fences_assign(obj, fences, &staged->base);
++}
++EXPORT_SYMBOL(dma_resv_fences_commit);
 +
  /**
- * dma_resv_copy_fences - Copy all fences from src to dst.
- * @dst: the destination reservation object
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_wait.c b/drivers/gpu/drm/i915/gem/i915_gem_wait.c
-index 8af55cd3e690..a76d36f8fb77 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_wait.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_wait.c
-@@ -85,8 +85,7 @@ i915_gem_object_wait_reservation(struct dma_resv *resv,
- 	 * signaled.
- 	 */
- 	if (prune_fences && dma_resv_trylock(resv)) {
--		if (dma_resv_test_signaled_rcu(resv, true))
--			dma_resv_add_excl_fence(resv, NULL);
-+		dma_resv_prune_fences(resv);
- 		dma_resv_unlock(resv);
- 	}
- 
-diff --git a/drivers/gpu/drm/i915/i915_gem_batch_pool.c b/drivers/gpu/drm/i915/i915_gem_batch_pool.c
-index 5f82a763e64c..274cf5b19fc9 100644
---- a/drivers/gpu/drm/i915/i915_gem_batch_pool.c
-+++ b/drivers/gpu/drm/i915/i915_gem_batch_pool.c
-@@ -114,7 +114,7 @@ i915_gem_batch_pool_get(struct i915_gem_batch_pool *pool,
- 			 */
- 			if (rcu_access_pointer(resv->fence)) {
- 				dma_resv_lock(resv, NULL);
--				dma_resv_add_excl_fence(resv, NULL);
-+				dma_resv_prune_fences(resv);
- 				dma_resv_unlock(resv);
- 			}
- 		}
-diff --git a/drivers/gpu/drm/i915/i915_vma.c b/drivers/gpu/drm/i915/i915_vma.c
-index ebfd03d117cd..fcbe433a968c 100644
---- a/drivers/gpu/drm/i915/i915_vma.c
-+++ b/drivers/gpu/drm/i915/i915_vma.c
-@@ -100,8 +100,7 @@ static void __i915_vma_retire(struct i915_active *ref)
- 
- 	/* Prune the shared fence arrays iff completely idle (inc. external) */
- 	if (dma_resv_trylock(obj->base.resv)) {
--		if (dma_resv_test_signaled_rcu(obj->base.resv, true))
--			dma_resv_add_excl_fence(obj->base.resv, NULL);
-+		dma_resv_prune_fences(obj->base.resv);
- 		dma_resv_unlock(obj->base.resv);
- 	}
- 
-diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-index 58d1f2b28132..f78f52cc2e6d 100644
---- a/drivers/gpu/drm/ttm/ttm_bo.c
-+++ b/drivers/gpu/drm/ttm/ttm_bo.c
-@@ -1818,7 +1818,7 @@ int ttm_bo_wait(struct ttm_buffer_object *bo,
- 	if (timeout == 0)
- 		return -EBUSY;
- 
--	dma_resv_add_excl_fence(bo->base.resv, NULL);
-+	dma_resv_prune_fences(bo->base.resv);
- 	return 0;
- }
- EXPORT_SYMBOL(ttm_bo_wait);
+  * dma_resv_list_alloc - allocate fence list
+  * @shared_max: number of fences we need space for
 diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
-index ee50d10f052b..03b0f95682b0 100644
+index 03b0f95682b0..c70f13fa6789 100644
 --- a/include/linux/dma-resv.h
 +++ b/include/linux/dma-resv.h
-@@ -279,6 +279,7 @@ int dma_resv_reserve_shared(struct dma_resv *obj, unsigned int num_fences);
- void dma_resv_add_shared_fence(struct dma_resv *obj, struct dma_fence *fence);
+@@ -45,10 +45,33 @@
+ #include <linux/seqlock.h>
+ #include <linux/rcupdate.h>
  
- void dma_resv_add_excl_fence(struct dma_resv *obj, struct dma_fence *fence);
-+void dma_resv_prune_fences(struct dma_resv *obj);
++struct dma_resv;
++
+ extern struct ww_class reservation_ww_class;
+ extern struct lock_class_key reservation_seqcount_class;
+ extern const char reservation_seqcount_string[];
  
- int dma_resv_get_fences_rcu(struct dma_resv *obj,
- 			    struct dma_fence **pfence_excl,
++/**
++ * struct dma_resv_fences - fences inside a reservation object
++ * @fence: the current RCU protected singleton fence
++ * @staged: optional staged dma_fence_array to replace @fence
++ */
++struct dma_resv_fences {
++	struct dma_fence __rcu *fence;
++	struct dma_fence_array *staged;
++};
++
++int dma_resv_fences_reserve(struct dma_resv *obj,
++			    struct dma_resv_fences *fences,
++			    unsigned int num_fences);
++void dma_resv_fences_set(struct dma_resv *obj,
++			 struct dma_resv_fences *fences,
++			 struct dma_fence *fence);
++void dma_resv_fences_add(struct dma_resv_fences *fences,
++			 struct dma_fence *fence);
++void dma_resv_fences_commit(struct dma_resv *obj,
++			    struct dma_resv_fences *fences);
++
+ /**
+  * struct dma_resv_list - a list of shared fences
+  * @rcu: for internal use
+@@ -80,6 +103,32 @@ struct dma_resv {
+ #define dma_resv_held(obj) lockdep_is_held(&(obj)->lock.base)
+ #define dma_resv_assert_held(obj) lockdep_assert_held(&(obj)->lock.base)
+ 
++/**
++ * dma_resv_fences_deref - get singleton fence
++ * @obj: the reservation object
++ * @fences: the fences object
++ *
++ * Returns the singleton fence from a resv_fences object.
++ */
++static inline struct dma_fence *
++dma_resv_fences_deref(struct dma_resv *obj, struct dma_resv_fences *fences)
++{
++	return rcu_dereference_protected(fences->fence,
++					 dma_resv_held(obj));
++}
++
++/**
++ * dma_resv_fences_get_rcu - RCU get single fence
++ * @fences: fences structure where we need to get a reference for
++ *
++ * Get a reference to the single fence representing the synchronization.
++ */
++static inline struct dma_fence *
++dma_resv_fences_get_rcu(struct dma_resv_fences *fences)
++{
++	return dma_fence_get_rcu_safe(&fences->fence);
++}
++
+ /**
+  * dma_resv_get_list - get the reservation object's
+  * shared fence list, with update-side lock held
 -- 
 2.17.1
 
