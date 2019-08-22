@@ -2,44 +2,41 @@ Return-Path: <SRS0=WnEk=WS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67985C3A59D
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0291EC3A5A2
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3701223406
+	by mail.kernel.org (Postfix) with ESMTP id C860E23400
 	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732004AbfHVIGO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1732009AbfHVIGO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 22 Aug 2019 04:06:14 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:52323 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:32925 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731564AbfHVIGN (ORCPT
+        with ESMTP id S1732003AbfHVIGN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 22 Aug 2019 04:06:13 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1i0i6Z-0005Y2-WD; Thu, 22 Aug 2019 10:06:00 +0200
+        id 1i0i6a-0005Xs-05; Thu, 22 Aug 2019 10:06:00 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1i0i6X-0005X4-SC; Thu, 22 Aug 2019 10:05:57 +0200
+        id 1i0i6X-0005WU-MR; Thu, 22 Aug 2019 10:05:57 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org,
-        Michael Tretter <m.tretter@pengutronix.de>
-Subject: [PATCH v9 08/13] media: tvp5150: initialize subdev before parsing device tree
-Date:   Thu, 22 Aug 2019 10:05:51 +0200
-Message-Id: <20190822080556.17109-9-m.felsch@pengutronix.de>
+        linux-media@vger.kernel.org
+Subject: [PATCH v9 00/13] Add TVP5150 features
+Date:   Thu, 22 Aug 2019 10:05:43 +0200
+Message-Id: <20190822080556.17109-1-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190822080556.17109-1-m.felsch@pengutronix.de>
-References: <20190822080556.17109-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
@@ -51,45 +48,47 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Michael Tretter <m.tretter@pengutronix.de>
+Hi,
 
-There are several debug prints in the tvp5150_parse_dt() function, which
-do not print the prefix, because the v4l2_subdev is not initialized, yet.
+this version is exactly the same as my v8 [1]. I fixed only a leading semicolon
+issue in patch ("media: v4l2-fwnode: add initial connector parsing support")
+found by the kbuild test robot.
 
-Initialize the v4l2_subdev before parsing the device tree to fix the
-debug messages.
+Regards,
+  Marco
 
-Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- drivers/media/i2c/tvp5150.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+[1] https://www.spinics.net/lists/linux-media/msg156159.html
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index 62a1c7c3a7c0..c74410684675 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -1953,6 +1953,9 @@ static int tvp5150_probe(struct i2c_client *c)
- 
- 	core->regmap = map;
- 	sd = &core->sd;
-+	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
-+	sd->internal_ops = &tvp5150_internal_ops;
-+	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
- 
- 	if (IS_ENABLED(CONFIG_OF) && np) {
- 		res = tvp5150_parse_dt(core, np);
-@@ -1965,10 +1968,6 @@ static int tvp5150_probe(struct i2c_client *c)
- 		core->mbus_type = V4L2_MBUS_BT656;
- 	}
- 
--	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
--	sd->internal_ops = &tvp5150_internal_ops;
--	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
--
- 	res = tvp5150_mc_init(core);
- 	if (res)
- 		return res;
+Javier Martinez Canillas (1):
+  partial revert of "[media] tvp5150: add HW input connectors support"
+
+Marco Felsch (11):
+  dt-bindings: connector: analog: add sdtv standards property
+  media: v4l2-fwnode: add v4l2_fwnode_connector
+  media: v4l2-fwnode: add initial connector parsing support
+  media: tvp5150: add input source selection of_graph support
+  media: dt-bindings: tvp5150: Add input port connectors DT bindings
+  media: tvp5150: add FORMAT_TRY support for get/set selection handlers
+  media: tvp5150: add s_power callback
+  media: dt-bindings: tvp5150: cleanup bindings stlye
+  media: dt-bindings: tvp5150: add optional sdtv standards documentation
+  media: tvp5150: add support to limit sdtv standards
+  media: tvp5150: make debug output more readable
+
+Michael Tretter (1):
+  media: tvp5150: initialize subdev before parsing device tree
+
+ .../display/connector/analog-tv-connector.txt |   6 +
+ .../devicetree/bindings/media/i2c/tvp5150.txt | 146 +++-
+ drivers/media/i2c/tvp5150.c                   | 649 +++++++++++++-----
+ drivers/media/v4l2-core/v4l2-fwnode.c         | 133 ++++
+ include/dt-bindings/display/sdtv-standards.h  |  76 ++
+ include/dt-bindings/media/tvp5150.h           |   2 -
+ include/media/v4l2-fwnode.h                   |  83 +++
+ include/uapi/linux/videodev2.h                |   4 +
+ 8 files changed, 909 insertions(+), 190 deletions(-)
+ create mode 100644 include/dt-bindings/display/sdtv-standards.h
+
 -- 
 2.20.1
 
