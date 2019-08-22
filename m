@@ -2,38 +2,36 @@ Return-Path: <SRS0=WnEk=WS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16920C3A5A1
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 19:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49601C3A5A2
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 19:45:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E5E5023401
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 19:45:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 28DCD23401
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 19:45:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392085AbfHVTpN convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Aug 2019 15:45:13 -0400
-Received: from mailoutvs34.siol.net ([185.57.226.225]:56048 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1732015AbfHVTpN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Aug 2019 15:45:13 -0400
+        id S2392172AbfHVTpT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Aug 2019 15:45:19 -0400
+Received: from mailoutvs4.siol.net ([185.57.226.195]:56104 "EHLO mail.siol.net"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2392134AbfHVTpS (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 22 Aug 2019 15:45:18 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 588C4524922;
-        Thu, 22 Aug 2019 21:45:09 +0200 (CEST)
+        by mail.siol.net (Postfix) with ESMTP id AD1685249F0;
+        Thu, 22 Aug 2019 21:45:14 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at psrvmta11.zcs-production.pri
 Received: from mail.siol.net ([127.0.0.1])
         by localhost (psrvmta11.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 3YxjoKs4nn6j; Thu, 22 Aug 2019 21:45:09 +0200 (CEST)
+        with ESMTP id FoNyg35v9do7; Thu, 22 Aug 2019 21:45:14 +0200 (CEST)
 Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id B8DC452481F;
-        Thu, 22 Aug 2019 21:45:08 +0200 (CEST)
+        by mail.siol.net (Postfix) with ESMTPS id 39C155249EB;
+        Thu, 22 Aug 2019 21:45:14 +0200 (CEST)
 Received: from localhost.localdomain (cpe-86-58-59-25.static.triera.net [86.58.59.25])
         (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id BAB68524922;
-        Thu, 22 Aug 2019 21:45:05 +0200 (CEST)
+        by mail.siol.net (Postfix) with ESMTPSA id B87B25249F0;
+        Thu, 22 Aug 2019 21:45:11 +0200 (CEST)
 From:   Jernej Skrabec <jernej.skrabec@siol.net>
 To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         paul.kocialkowski@bootlin.com, mripard@kernel.org
@@ -44,91 +42,83 @@ Cc:     pawel@osciak.com, m.szyprowski@samsung.com,
         linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-arm-kernel@lists.infradead.org, ezequiel@collabora.com,
         jonas@kwiboo.se
-Subject: [PATCH 0/8] media: cedrus: h264: Support multi-slice frames
-Date:   Thu, 22 Aug 2019 21:44:52 +0200
-Message-Id: <20190822194500.2071-1-jernej.skrabec@siol.net>
+Subject: [PATCH 2/8] videodev2.h: add V4L2_DEC_CMD_FLUSH
+Date:   Thu, 22 Aug 2019 21:44:54 +0200
+Message-Id: <20190822194500.2071-3-jernej.skrabec@siol.net>
 X-Mailer: git-send-email 2.22.1
+In-Reply-To: <20190822194500.2071-1-jernej.skrabec@siol.net>
+References: <20190822194500.2071-1-jernej.skrabec@siol.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This series is continuation of work from
-https://patchwork.linuxtv.org/cover/58186/
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-It picks up unmerged patches (9-12) from aforementioned series and
-adds support for decoding multi-slice H264 frames along with support
-for V4L2_DEC_CMD_FLUSH and V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF in
-Cedrus driver.
+Add this new V4L2_DEC_CMD_FLUSH decoder command and document it.
 
-Code was tested by modified ffmpeg, which can be found here:
-https://github.com/jernejsk/FFmpeg, branch mainline-test
-It has to be configured with at least following options:
---enable-v4l2-request --enable-libudev --enable-libdrm
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+---
+ Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst | 11 ++++++++++-
+ Documentation/media/videodev2.h.rst.exceptions      |  1 +
+ include/uapi/linux/videodev2.h                      |  1 +
+ 3 files changed, 12 insertions(+), 1 deletion(-)
 
-Samples used for testing:
-http://jernej.libreelec.tv/videos/h264/BA1_FT_C.mp4
-http://jernej.libreelec.tv/videos/h264/h264.mp4
-
-Command line used for testing:
-ffmpeg -hwaccel drm -hwaccel_device /dev/dri/card0 -i h264.mp4 -pix_fmt bgra -f fbdev /dev/fb0
-
-Please note that V4L2_DEC_CMD_FLUSH was not tested because I'm
-not sure how. ffmpeg follows exactly which slice is last in frame
-and sets hold flag accordingly. Improper usage of hold flag would
-corrupt ffmpeg assumptions and it would probably crash. Any ideas
-how to test this are welcome!
-
-Thanks to Jonas for adjusting ffmpeg.
-
-Please let me know what you think.
-
-Best regards,
-Jernej
-
-Alexandre Courbot (1):
-  media: docs-rst: Document m2m stateless video decoder interface
-
-Hans Verkuil (2):
-  vb2: add V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF
-  videodev2.h: add V4L2_DEC_CMD_FLUSH
-
-Jernej Skrabec (4):
-  media: cedrus: Detect first slice of a frame
-  media: cedrus: h264: Support multiple slices per frame
-  media: cedrus: Add support for holding capture buffer
-  media: cedrus: Add support for V4L2_DEC_CMD_FLUSH
-
-Tomasz Figa (1):
-  media: docs-rst: Document memory-to-memory video encoder interface
-
- Documentation/media/uapi/v4l/buffer.rst       |  13 +
- Documentation/media/uapi/v4l/dev-encoder.rst  | 608 ++++++++++++++++++
- Documentation/media/uapi/v4l/dev-mem2mem.rst  |   2 +
- .../media/uapi/v4l/dev-stateless-decoder.rst  | 424 ++++++++++++
- Documentation/media/uapi/v4l/pixfmt-v4l2.rst  |   5 +
- Documentation/media/uapi/v4l/v4l2.rst         |   2 +
- .../media/uapi/v4l/vidioc-decoder-cmd.rst     |  11 +-
- .../media/uapi/v4l/vidioc-encoder-cmd.rst     |  51 +-
- .../media/uapi/v4l/vidioc-reqbufs.rst         |   6 +
- .../media/videodev2.h.rst.exceptions          |   1 +
- .../media/common/videobuf2/videobuf2-v4l2.c   |   8 +-
- drivers/staging/media/sunxi/cedrus/cedrus.h   |   1 +
- .../staging/media/sunxi/cedrus/cedrus_dec.c   |  11 +
- .../staging/media/sunxi/cedrus/cedrus_h264.c  |  11 +-
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |   8 +-
- .../staging/media/sunxi/cedrus/cedrus_video.c |  35 +
- include/media/v4l2-mem2mem.h                  |  42 ++
- include/media/videobuf2-core.h                |   3 +
- include/media/videobuf2-v4l2.h                |   5 +
- include/uapi/linux/videodev2.h                |  14 +-
- 20 files changed, 1230 insertions(+), 31 deletions(-)
- create mode 100644 Documentation/media/uapi/v4l/dev-encoder.rst
- create mode 100644 Documentation/media/uapi/v4l/dev-stateless-decoder.rst
-
--- 
+diff --git a/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst b/Docume=
+ntation/media/uapi/v4l/vidioc-decoder-cmd.rst
+index 57f0066f4cff..0bffef6058f7 100644
+--- a/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst
++++ b/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst
+@@ -208,7 +208,16 @@ introduced in Linux 3.3. They are, however, mandator=
+y for stateful mem2mem decod
+ 	been started yet, the driver will return an ``EPERM`` error code. When
+ 	the decoder is already running, this command does nothing. No
+ 	flags are defined for this command.
+-
++    * - ``V4L2_DEC_CMD_FLUSH``
++      - 4
++      - Flush any held capture buffers. Only valid for stateless decoder=
+s,
++        and only if ``V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF`` was s=
+et.
++	This command is typically used when the application reached the
++	end of the stream and the last output buffer had the
++	``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` flag set. This would prevent
++	dequeueing the last capture buffer containing the last decoded frame.
++	So this command can be used to explicitly flush that last decoded
++	frame.
+=20
+ Return Value
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentati=
+on/media/videodev2.h.rst.exceptions
+index adeb6b7a15cb..a79028e4d929 100644
+--- a/Documentation/media/videodev2.h.rst.exceptions
++++ b/Documentation/media/videodev2.h.rst.exceptions
+@@ -434,6 +434,7 @@ replace define V4L2_DEC_CMD_START decoder-cmds
+ replace define V4L2_DEC_CMD_STOP decoder-cmds
+ replace define V4L2_DEC_CMD_PAUSE decoder-cmds
+ replace define V4L2_DEC_CMD_RESUME decoder-cmds
++replace define V4L2_DEC_CMD_FLUSH decoder-cmds
+=20
+ replace define V4L2_DEC_CMD_START_MUTE_AUDIO decoder-cmds
+ replace define V4L2_DEC_CMD_PAUSE_TO_BLACK decoder-cmds
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
+2.h
+index 4fa9f543742d..91a79e16089c 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1978,6 +1978,7 @@ struct v4l2_encoder_cmd {
+ #define V4L2_DEC_CMD_STOP        (1)
+ #define V4L2_DEC_CMD_PAUSE       (2)
+ #define V4L2_DEC_CMD_RESUME      (3)
++#define V4L2_DEC_CMD_FLUSH       (4)
+=20
+ /* Flags for V4L2_DEC_CMD_START */
+ #define V4L2_DEC_CMD_START_MUTE_AUDIO	(1 << 0)
+--=20
 2.22.1
 
