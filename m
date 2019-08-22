@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D401C3A5A2
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 19:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B908C3A5A4
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 19:39:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6DA1D23404
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 19:39:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 050D12341A
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 19:39:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566502782;
-	bh=ibOoijE3uXR3QBVkwdfzOzxJFiE8eQBl0OTFYmzWYIo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=hcSV61p6/AZ3r0x/oNcbscgvcHbTcOnQ6fH3rZ+iBT+jnZHIN2kIlmBibNzG/ajWz
-	 lOcB4hLe41hCzRCjRD5ik9sWvj42Q+HP4bBGNBQ6h8GjK47ikv9V9oUfAclVpaVYx4
-	 aLpsUeah81o0hD7yE+dPuMukuts07cujNvl6Rf7U=
+	s=default; t=1566502783;
+	bh=/8lAKisSOAhfS9w5JIGu141P5GHZVFD85sZJIo3YhNg=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=w2/3YWUiQ9rjiVc5vNROUdUJ1cBmZ9rJpnRXTJWR5KwWYn59pVu1fgXhCleeZ8l8D
+	 5LeRaah347lECtjZLfMCHDX1NeeBaSP149T2fDfDMKHHJZ7eAtESd1KSPIhOCe8G9P
+	 qeGspHP5/vCDbPKxI1vYMc8QSQyujeaOHV8RQQ/M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391686AbfHVTjl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2391555AbfHVTjl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 22 Aug 2019 15:39:41 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:59206 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:59198 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389332AbfHVTjl (ORCPT
+        with ESMTP id S2389145AbfHVTjl (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 22 Aug 2019 15:39:41 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=RSitoDJz4cp7sECCKIxCe+i7CBRQ0J6tJd1l3i9ahjw=; b=ryisBR1755MQF2JA8y7uWhGt7N
-        qVp4VOrktmGNz11oGS1R5/levY1FvXHSPs2DTwuO6q6SdXg5DVdTY+nSw1+NiD49G/U/TnZ3i9WZi
-        Q6QYOIXLvPhBl4LmaQB9jjvdivL8xUFFTFl2+IOcpWOOB2sj3MAeCiZ1XriXimu85FpEja+Cvgqn9
-        xs9AfehXdxRNYsUI/our+3ct/UV2R7mDh7TmRws25xWGg7KomSZDhi2pPmEZNpypX5IYdzCCGN0at
-        TkfX6Nrt8DSTbGN6owvB9mZdq79//VZVMRH+xFv60BIzOKEZiUXqSrdGPmlQXYypJYWimzhH7Ow//
-        ZS99B7qQ==;
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=T4K2EiaGiC4nPZhSIzEC3FFCY5njAchyWMaSF9OQOAM=; b=IQhiSwn9G7F85uMVOyh0zLuv4
+        MhusuBKW/jPxLDaeBs2Xzz7uV0NdXFgxGAT/zNDf7hrOjRPh0ExRyMK2a7Jd4TUt59E9yDusvdY/3
+        GyPKJFLF1BVUCIJRx1xvi/FA7rUkrhaGyvcHwO6g+JZ70b2VK2gGJ3UpXJ7nxWYYMJ0xxbAgFfRqO
+        JoWl0HGQ40jEShV72CsbrtsndVEPmLOAx4YZRsKgXxTxZQalIoU+3dIktgwwrOVXLPvuS+SNGcZ+E
+        d7mDUUnaDVU5+8Crnn0qo/BSgwbW3xtVjjIYrOj26wA0SF7iqPk2KjJfjpLZqO5rFpQ5Bw+XVlx6r
+        uXSt5PvEg==;
 Received: from [177.133.63.56] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i0svr-0002lT-KY; Thu, 22 Aug 2019 19:39:39 +0000
+        id 1i0svr-0002lU-Q4; Thu, 22 Aug 2019 19:39:40 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1i0svo-0007IN-Em; Thu, 22 Aug 2019 16:39:36 -0300
+        id 1i0svo-0007IG-D1; Thu, 22 Aug 2019 16:39:36 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
-Subject: [PATCH 3/7] media: aspeed-video: address a protential usage of an unit var
-Date:   Thu, 22 Aug 2019 16:39:30 -0300
-Message-Id: <7c85f7dc159927a7316dc13f52697f157fb6e2bd.1566502743.git.mchehab+samsung@kernel.org>
+        Andy Walls <awalls@md.metrocast.net>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 1/7] media: remove include stdarg.h from some drivers
+Date:   Thu, 22 Aug 2019 16:39:28 -0300
+Message-Id: <4a411ba155eb062b6575aba0824123c840806c0b.1566502743.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <4a411ba155eb062b6575aba0824123c840806c0b.1566502743.git.mchehab+samsung@kernel.org>
-References: <4a411ba155eb062b6575aba0824123c840806c0b.1566502743.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -66,49 +65,69 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While this might not occur in practice, if the device is doing
-the right thing, it would be teoretically be possible to have
-both hsync_counter and vsync_counter negatives.
+It doesn't make any sense to have gcc's stdarg.h included
+inside the Linux Kernel.
 
-If this ever happen, ctrl will be undefined, but the driver
-will still call:
-
-	aspeed_video_update(video, VE_CTRL, 0, ctrl);
-
-Change the code to prevent this to happen.
-
-This was warned by cppcheck:
-
-	[drivers/media/platform/aspeed-video.c:653]: (error) Uninitialized variable: ctrl
+Get rid of those includes.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- drivers/media/platform/aspeed-video.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/pci/cx18/cx18-mailbox.c | 2 +-
+ drivers/media/pci/ivtv/ivtv-mailbox.c | 2 --
+ drivers/media/pci/ttpci/av7110_hw.c   | 1 -
+ drivers/media/radio/radio-trust.c     | 1 -
+ 4 files changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index f899ac3b4a61..4ef37cfc8446 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -630,7 +630,7 @@ static void aspeed_video_check_and_set_polarity(struct aspeed_video *video)
- 	}
+diff --git a/drivers/media/pci/cx18/cx18-mailbox.c b/drivers/media/pci/cx18/cx18-mailbox.c
+index 967ae2939099..162480ec68ca 100644
+--- a/drivers/media/pci/cx18/cx18-mailbox.c
++++ b/drivers/media/pci/cx18/cx18-mailbox.c
+@@ -6,7 +6,7 @@
+  *  Copyright (C) 2008  Andy Walls <awalls@md.metrocast.net>
+  */
  
- 	if (hsync_counter < 0 || vsync_counter < 0) {
--		u32 ctrl;
-+		u32 ctrl = 0;
+-#include <stdarg.h>
++#include <linux/bitops.h>
  
- 		if (hsync_counter < 0) {
- 			ctrl = VE_CTRL_HSYNC_POL;
-@@ -650,7 +650,8 @@ static void aspeed_video_check_and_set_polarity(struct aspeed_video *video)
- 				V4L2_DV_VSYNC_POS_POL;
- 		}
+ #include "cx18-driver.h"
+ #include "cx18-io.h"
+diff --git a/drivers/media/pci/ivtv/ivtv-mailbox.c b/drivers/media/pci/ivtv/ivtv-mailbox.c
+index 8393675c3f46..d3fdaaa903f1 100644
+--- a/drivers/media/pci/ivtv/ivtv-mailbox.c
++++ b/drivers/media/pci/ivtv/ivtv-mailbox.c
+@@ -10,8 +10,6 @@
+ #include "ivtv-driver.h"
+ #include "ivtv-mailbox.h"
  
--		aspeed_video_update(video, VE_CTRL, 0, ctrl);
-+		if (ctrl)
-+			aspeed_video_update(video, VE_CTRL, 0, ctrl);
- 	}
- }
+-#include <stdarg.h>
+-
+ /* Firmware mailbox flags*/
+ #define IVTV_MBOX_FIRMWARE_DONE 0x00000004
+ #define IVTV_MBOX_DRIVER_DONE   0x00000002
+diff --git a/drivers/media/pci/ttpci/av7110_hw.c b/drivers/media/pci/ttpci/av7110_hw.c
+index 8c2442a11f07..e8a8ec5405e2 100644
+--- a/drivers/media/pci/ttpci/av7110_hw.c
++++ b/drivers/media/pci/ttpci/av7110_hw.c
+@@ -14,7 +14,6 @@
+ /* for debugging ARM communication: */
+ //#define COM_DEBUG
  
+-#include <stdarg.h>
+ #include <linux/types.h>
+ #include <linux/kernel.h>
+ #include <linux/string.h>
+diff --git a/drivers/media/radio/radio-trust.c b/drivers/media/radio/radio-trust.c
+index 2fc009509c7c..dfb8b62f0e2b 100644
+--- a/drivers/media/radio/radio-trust.c
++++ b/drivers/media/radio/radio-trust.c
+@@ -16,7 +16,6 @@
+  * Converted to V4L2 API by Mauro Carvalho Chehab <mchehab@kernel.org>
+  */
+ 
+-#include <stdarg.h>
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/ioport.h>
 -- 
 2.21.0
 
