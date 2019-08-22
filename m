@@ -2,115 +2,229 @@ Return-Path: <SRS0=WnEk=WS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BD60C3A59D
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:04:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14EB6C3A59D
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5B0D42070B
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:04:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E564C2173E
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729667AbfHVIEG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 22 Aug 2019 04:04:06 -0400
-Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:40753 "EHLO
-        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725856AbfHVIEG (ORCPT
+        id S1731367AbfHVIGI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 22 Aug 2019 04:06:08 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:40237 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731364AbfHVIGH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 22 Aug 2019 04:04:06 -0400
-Received: from [192.168.2.10] ([46.9.232.237])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 0i4diaYaNThuu0i4hij7Mt; Thu, 22 Aug 2019 10:04:04 +0200
-Subject: Re: [PATCH v7 2/9] drm/i915/intel_hdmi: use
- cec_notifier_conn_(un)register
-To:     Dariusz Marcinkiewicz <darekm@google.com>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-References: <20190814104520.6001-1-darekm@google.com>
- <20190814104520.6001-3-darekm@google.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <8d0c6d9b-d321-7e4b-8c06-92b9b816d029@xs4all.nl>
-Date:   Thu, 22 Aug 2019 10:03:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Thu, 22 Aug 2019 04:06:07 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1i0i6a-0005Y0-0D; Thu, 22 Aug 2019 10:06:00 +0200
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1i0i6X-0005Wx-Qs; Thu, 22 Aug 2019 10:05:57 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
+        linux-media@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v9 06/13] media: dt-bindings: tvp5150: Add input port connectors DT bindings
+Date:   Thu, 22 Aug 2019 10:05:49 +0200
+Message-Id: <20190822080556.17109-7-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190822080556.17109-1-m.felsch@pengutronix.de>
+References: <20190822080556.17109-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20190814104520.6001-3-darekm@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfFS6JYJ0+q2LAIYGCuj6fLd3vPJORYjU0ME/5k7e+ByKAWdY7DwySnd1VrwDnra4h8Liaj9h6QVz2CkpJPjMBXo/3g493dn33GbRBDTqxc7SkLG0XiEs
- aBKLf9xZZV6Wi9Nx1llBJUoktu1pAR3UfKootbfsbcmnM2wadZF3tWvKfQUCQl/YOxE74kQSZS+TI4XeEB12wp7vRFL4nPMnrmV3CN/GLbothgeVWXH+VqBJ
- p7/N3t/Ygq7nmyFKW0rf+TG225kLl+WcWMbettDkA+r1j94Yy+K0/EZRSUeyrQYncx9kRyGyAe+X8YB9xEQxmgoHuoXdzrJl3TouvBlhv4L8DrgKBBjJI/iM
- 3V2sI548xb1YuHm/4IHB//h8YBfk17LaWcA0HSgTtQxZnQGWxcTNzg9x/btYbaUVl2XxLM9ph99szDuHgiH/Qthtx0Z6dQHLK7kSpKx4MqynPS1Xr+0=
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Ville or Rodrigo,
+The TVP5150/1 decoders support different video input sources to their
+AIP1A/B pins.
 
-Can one of you either merge this patch or Ack it so that I can merge this?
+Possible configurations are as follows:
+  - Analog Composite signal connected to AIP1A.
+  - Analog Composite signal connected to AIP1B.
+  - Analog S-Video Y (luminance) and C (chrominance)
+    signals connected to AIP1A and AIP1B respectively.
 
-Thank you!
+This patch extends the device tree bindings documentation to describe
+how the input connectors for these devices should be defined in a DT.
 
-Regards,
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+Changelog:
 
-	Hans
+v7:
+Hi Rob,
+I droped your r b tag because I changed the bindings in this
+patch version. Please can you have a look on it again?
 
-On 8/14/19 12:45 PM, Dariusz Marcinkiewicz wrote:
-> Use the new cec_notifier_conn_(un)register() functions to
-> (un)register the notifier for the HDMI connector, and fill in
-> the cec_connector_info.
-> 
-> Signed-off-by: Dariusz Marcinkiewicz <darekm@google.com>
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> Tested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> ---
->  drivers/gpu/drm/i915/display/intel_hdmi.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/display/intel_hdmi.c b/drivers/gpu/drm/i915/display/intel_hdmi.c
-> index b1ca8e5bdb56d..9fcf2c58c29c5 100644
-> --- a/drivers/gpu/drm/i915/display/intel_hdmi.c
-> +++ b/drivers/gpu/drm/i915/display/intel_hdmi.c
-> @@ -2752,8 +2752,9 @@ intel_hdmi_connector_register(struct drm_connector *connector)
->  
->  static void intel_hdmi_destroy(struct drm_connector *connector)
->  {
-> -	if (intel_attached_hdmi(connector)->cec_notifier)
-> -		cec_notifier_put(intel_attached_hdmi(connector)->cec_notifier);
-> +	struct cec_notifier *n = intel_attached_hdmi(connector)->cec_notifier;
-> +
-> +	cec_notifier_conn_unregister(n);
->  
->  	intel_connector_destroy(connector);
->  }
-> @@ -3068,6 +3069,7 @@ void intel_hdmi_init_connector(struct intel_digital_port *intel_dig_port,
->  	struct drm_device *dev = intel_encoder->base.dev;
->  	struct drm_i915_private *dev_priv = to_i915(dev);
->  	enum port port = intel_encoder->port;
-> +	struct cec_connector_info conn_info;
->  
->  	DRM_DEBUG_KMS("Adding HDMI connector on port %c\n",
->  		      port_name(port));
-> @@ -3120,8 +3122,11 @@ void intel_hdmi_init_connector(struct intel_digital_port *intel_dig_port,
->  		I915_WRITE(PEG_BAND_GAP_DATA, (temp & ~0xf) | 0xd);
->  	}
->  
-> -	intel_hdmi->cec_notifier = cec_notifier_get_conn(dev->dev,
-> -							 port_identifier(port));
-> +	cec_fill_conn_info_from_drm(&conn_info, connector);
-> +
-> +	intel_hdmi->cec_notifier =
-> +		cec_notifier_conn_register(dev->dev, port_identifier(port),
-> +					   &conn_info);
->  	if (!intel_hdmi->cec_notifier)
->  		DRM_DEBUG_KMS("CEC notifier get failed\n");
->  }
-> 
+- fix missing AIP1B svideo connection (description and examples)
+
+v3:
+- remove examples for one and two inputs
+- replace space by tabs
+
+v2:
+- adapt port layout in accordance with
+  https://www.spinics.net/lists/linux-media/msg138546.html with the
+  svideo-connector deviation (use only one endpoint)
+---
+ .../devicetree/bindings/media/i2c/tvp5150.txt | 112 ++++++++++++++++--
+ 1 file changed, 105 insertions(+), 7 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+index 8c0fc1a26bf0..28b64ad149ef 100644
+--- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
++++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
+@@ -12,11 +12,32 @@ Optional Properties:
+ - pdn-gpios: phandle for the GPIO connected to the PDN pin, if any.
+ - reset-gpios: phandle for the GPIO connected to the RESETB pin, if any.
+ 
+-The device node must contain one 'port' child node for its digital output
+-video port, in accordance with the video interface bindings defined in
+-Documentation/devicetree/bindings/media/video-interfaces.txt.
++The device node must contain one 'port' child node per device physical input
++and output port, in accordance with the video interface bindings defined in
++Documentation/devicetree/bindings/media/video-interfaces.txt. The port nodes
++are numbered as follows
+ 
+-Required Endpoint Properties for parallel synchronization:
++	  Name		Type		Port
++	--------------------------------------
++	  AIP1A		sink		0
++	  AIP1B		sink		1
++	  Y-OUT		src		2
++
++The device node must contain at least one sink port and the src port. Each input
++port must be linked to an endpoint defined in
++Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt. The
++port/connector layout is as follows
++
++tvp-5150 port@0 (AIP1A)
++	endpoint@0 -----------> Comp0-Con  port
++	endpoint@1 ------+----> Svideo-Con port
++tvp-5150 port@1 (AIP1B)  |
++	endpoint@1 ------+
++	endpoint@0 -----------> Comp1-Con  port
++tvp-5150 port@2
++	endpoint (video bitstream output at YOUT[0-7] parallel bus)
++
++Required Endpoint Properties for parallel synchronization on output port:
+ 
+ - hsync-active: active state of the HSYNC signal. Must be <1> (HIGH).
+ - vsync-active: active state of the VSYNC signal. Must be <1> (HIGH).
+@@ -26,17 +47,94 @@ Required Endpoint Properties for parallel synchronization:
+ If none of hsync-active, vsync-active and field-even-active is specified,
+ the endpoint is assumed to use embedded BT.656 synchronization.
+ 
+-Example:
++Example - three input sources:
++
++comp_connector_0 {
++	compatible = "composite-video-connector";
++	label = "Composite0";
++
++	port {
++		composite0_to_tvp5150: endpoint {
++			remote-endpoint = <&tvp5150_to_composite0>;
++		};
++	};
++};
++
++comp_connector_1 {
++	compatible = "composite-video-connector";
++	label = "Composite1";
++
++	port {
++		composite1_to_tvp5150: endpoint {
++			remote-endpoint = <&tvp5150_to_composite1>;
++		};
++	};
++};
++
++svideo_connector {
++	compatible = "svideo-connector";
++	label = "S-Video";
++
++	port {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		svideo_luma_to_tvp5150: endpoint@0 {
++			reg = <0>;
++			remote-endpoint = <&tvp5150_to_svideo_luma>;
++		};
++
++		svideo_chroma_to_tvp5150: endpoint@1 {
++			reg = <1>;
++			remote-endpoint = <&tvp5150_to_svideo_chroma>;
++		};
++	};
++};
+ 
+ &i2c2 {
+-	...
+ 	tvp5150@5c {
+ 		compatible = "ti,tvp5150";
+ 		reg = <0x5c>;
+ 		pdn-gpios = <&gpio4 30 GPIO_ACTIVE_LOW>;
+ 		reset-gpios = <&gpio6 7 GPIO_ACTIVE_LOW>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <0>;
++
++			tvp5150_to_composite0: endpoint@0 {
++				reg = <0>;
++				remote-endpoint = <&composite0_to_tvp5150>;
++			};
++
++			tvp5150_to_svideo_luma: endpoint@1 {
++				reg = <1>;
++				remote-endpoint = <&svideo_luma_to_tvp5150>;
++			};
++		};
++
++		port@1 {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			reg = <1>;
++
++			tvp5150_to_composite1: endpoint@0 {
++				reg = <0>;
++                                remote-endpoint = <&composite1_to_tvp5150>;
++			};
++
++			tvp5150_to_svideo_chroma: endpoint@1 {
++				reg = <1>;
++				remote-endpoint = <&svideo_chroma_to_tvp5150>;
++			};
++		};
++
++		port@2 {
++			reg = <2>;
+ 
+-		port {
+ 			tvp5150_1: endpoint {
+ 				remote-endpoint = <&ccdc_ep>;
+ 			};
+-- 
+2.20.1
 
