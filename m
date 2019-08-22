@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E23DCC3A59D
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B8D6C3A5A2
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B7FD5233A2
-	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B87A2173E
+	for <linux-media@archiver.kernel.org>; Thu, 22 Aug 2019 08:06:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731987AbfHVIGL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1731958AbfHVIGL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 22 Aug 2019 04:06:11 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:46001 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:59899 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731389AbfHVIGK (ORCPT
+        with ESMTP id S1729731AbfHVIGK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 22 Aug 2019 04:06:10 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1i0i6d-0005Y7-Il; Thu, 22 Aug 2019 10:06:03 +0200
+        id 1i0i6a-0005Y3-09; Thu, 22 Aug 2019 10:06:00 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.89)
         (envelope-from <mfe@pengutronix.de>)
-        id 1i0i6Y-0005XO-05; Thu, 22 Aug 2019 10:05:58 +0200
+        id 1i0i6X-0005X7-T8; Thu, 22 Aug 2019 10:05:57 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org, Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v9 13/13] media: tvp5150: make debug output more readable
-Date:   Thu, 22 Aug 2019 10:05:56 +0200
-Message-Id: <20190822080556.17109-14-m.felsch@pengutronix.de>
+        linux-media@vger.kernel.org
+Subject: [PATCH v9 09/13] media: tvp5150: add s_power callback
+Date:   Thu, 22 Aug 2019 10:05:52 +0200
+Message-Id: <20190822080556.17109-10-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190822080556.17109-1-m.felsch@pengutronix.de>
 References: <20190822080556.17109-1-m.felsch@pengutronix.de>
@@ -50,40 +50,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The debug output for tvp5150_selmux() isn't really intuitive. Register
-values are printed decimal formatted and the input/output driver states
-are printed as enum. Even more the "normal" output enum mapps to zero so
-a active output will printing output=0 and a inactive output=1.
-
-Change this by brinting the register values hex formatted and the states
-as more readable string.
+Don't en-/disable the interrupts during s_stream because someone can
+disable the stream but wants to get informed if the stream is locked
+again. So keep the interrupts enabled the whole time the pipeline is
+opened.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 ---
- drivers/media/i2c/tvp5150.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/media/i2c/tvp5150.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index b48b08421993..240df920b521 100644
+index c74410684675..c2fe14fc643e 100644
 --- a/drivers/media/i2c/tvp5150.c
 +++ b/drivers/media/i2c/tvp5150.c
-@@ -300,9 +300,12 @@ static void tvp5150_selmux(struct v4l2_subdev *sd)
- 		break;
+@@ -1352,11 +1352,26 @@ static const struct media_entity_operations tvp5150_sd_media_ops = {
+ /****************************************************************************
+ 			I2C Command
+  ****************************************************************************/
++static int tvp5150_s_power(struct  v4l2_subdev *sd, int on)
++{
++	struct tvp5150 *decoder = to_tvp5150(sd);
++	unsigned int val = 0;
++
++	if (on)
++		val = TVP5150_INT_A_LOCK;
++
++	if (decoder->irq)
++		/* Enable / Disable lock interrupt */
++		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
++				   TVP5150_INT_A_LOCK, val);
++
++	return 0;
++}
+ 
+ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
+ {
+ 	struct tvp5150 *decoder = to_tvp5150(sd);
+-	unsigned int mask, val = 0, int_val = 0;
++	unsigned int mask, val = 0;
+ 
+ 	mask = TVP5150_MISC_CTL_YCBCR_OE | TVP5150_MISC_CTL_SYNC_OE |
+ 	       TVP5150_MISC_CTL_CLOCK_OE;
+@@ -1369,15 +1384,10 @@ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
+ 			val = decoder->lock ? decoder->oe : 0;
+ 		else
+ 			val = decoder->oe;
+-		int_val = TVP5150_INT_A_LOCK;
+ 		v4l2_subdev_notify_event(&decoder->sd, &tvp5150_ev_fmt);
  	}
  
--	dev_dbg_lvl(sd->dev, 1, debug, "Selecting video route: route input=%i, output=%i => tvp5150 input=%i, opmode=%i\n",
--			decoder->input, decoder->output,
--			input, opmode);
-+	dev_dbg_lvl(sd->dev, 1, debug,
-+		    "Selecting video route: route input=%s, output=%s => tvp5150 input=0x%02x, opmode=0x%02x\n",
-+		    decoder->input == 0 ? "aip1a" :
-+		    decoder->input == 2 ? "aip1b" : "svideo",
-+		    decoder->output == 0 ? "normal" : "black-frame-gen",
-+		    input, opmode);
+ 	regmap_update_bits(decoder->regmap, TVP5150_MISC_CTL, mask, val);
+-	if (decoder->irq)
+-		/* Enable / Disable lock interrupt */
+-		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
+-				   TVP5150_INT_A_LOCK, int_val);
  
- 	regmap_write(decoder->regmap, TVP5150_OP_MODE_CTL, opmode);
- 	regmap_write(decoder->regmap, TVP5150_VD_IN_SRC_SEL_1, input);
+ 	return 0;
+ }
+@@ -1574,6 +1584,7 @@ static const struct v4l2_subdev_core_ops tvp5150_core_ops = {
+ 	.g_register = tvp5150_g_register,
+ 	.s_register = tvp5150_s_register,
+ #endif
++	.s_power = tvp5150_s_power,
+ };
+ 
+ static const struct v4l2_subdev_tuner_ops tvp5150_tuner_ops = {
 -- 
 2.20.1
 
