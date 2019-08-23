@@ -2,100 +2,113 @@ Return-Path: <SRS0=1/ZG=WT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1C35C3A5A2
-	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 12:38:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A8971C3A5A4
+	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 12:56:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 854442173E
-	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 12:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566563900;
-	bh=M6s7Kh+FCW1xFY18pObgGWDhfbn3Y4+TQL2ToNtjFWQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=rshSV2KBQ8firrqh+vJQU8GZCDgCPI1pWeZACjJbd7h7DzNhCxlufngtkQPch5yXe
-	 95Y14HADDZlfJPxSk0/71j1o4llh7pOxCeUA4sBR6j0MW3YP4JyAogO4YjuGvGhfvr
-	 bulL4pJalzsUgUzKZ3wf9AdwuHC7PVwU+B3iC/CQ=
+	by mail.kernel.org (Postfix) with ESMTP id 8916123401
+	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 12:56:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394826AbfHWMiQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Aug 2019 08:38:16 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:37123 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393115AbfHWMhp (ORCPT
+        id S1733140AbfHWM4r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Aug 2019 08:56:47 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45931 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730839AbfHWM4q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Aug 2019 08:37:45 -0400
-Received: by mail-ed1-f65.google.com with SMTP id f22so13261381edt.4;
-        Fri, 23 Aug 2019 05:37:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=TQDKuRwKWXsE4cqCDj1O7R1+PybASpMYa+6ozs2PYn0=;
-        b=e+ek23PECyqBD1bW7FHYyiLQQAQiYSuSfQ/lqQ9dCi72Wq7HpSVW85ePNxr8ReQCkY
-         OPpwxIH+ojCwmIIZOKp3KoP+kn9NN9EflNOKN8e4B0DiNoQGby+k4HRnKX/pRJPejwaC
-         qkTnl31qbgkPH851H5TB04VQ75T2/p7SYZIH6xvzP4XAwHYye1tUxKzO2vzCEK6wCOkb
-         mc5kyq4oQLUYVahrEWrerYyL+hwOSGVVEmsNLMfuzoVIXJ7lLhGwZLiRyn6ngm96bH8N
-         ypw2hxFF/wNfHhVcJR1RSi6mMfqsRRIE/BVWioWyjvWCKMzt7rD5CVWhBJMysz7TP2Ly
-         ZkcA==
-X-Gm-Message-State: APjAAAV8RGuc8m8LE4dxboVpQKEKERkr9m9Vnr8qPPN3fEZKCFzFM79y
-        f6kwZGoybeMZFS6QI62m2CM=
-X-Google-Smtp-Source: APXvYqyhg+pbF2r8JVvzlfziGDuaIUOwdnhvJneGPjM77WmKPH/8Unv6pAwYfE123Sfva7Jm0QuqSA==
-X-Received: by 2002:aa7:d397:: with SMTP id x23mr4100673edq.11.1566563863837;
-        Fri, 23 Aug 2019 05:37:43 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id 9sm389687ejw.63.2019.08.23.05.37.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2019 05:37:42 -0700 (PDT)
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Fri, 23 Aug 2019 08:56:46 -0400
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1i197P-0006TS-5v; Fri, 23 Aug 2019 14:56:39 +0200
+Message-ID: <1566564998.3023.13.camel@pengutronix.de>
+Subject: Re: [PATCH v3 5/7] media: v4l2-core: Add new helper for area
+ controls
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Ricardo Ribalda Delgado <ribalda@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v3 3/7] Documentation: media: Document V4L2_CTRL_TYPE_AREA
-Date:   Fri, 23 Aug 2019 14:37:33 +0200
-Message-Id: <20190823123737.7774-3-ribalda@kernel.org>
-X-Mailer: git-send-email 2.23.0.rc1
-In-Reply-To: <20190823123737.7774-1-ribalda@kernel.org>
+Date:   Fri, 23 Aug 2019 14:56:38 +0200
+In-Reply-To: <20190823123737.7774-5-ribalda@kernel.org>
 References: <20190823123737.7774-1-ribalda@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+         <20190823123737.7774-5-ribalda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A struct v4l2_area containing the width and the height of a rectangular
-area.
+On Fri, 2019-08-23 at 14:37 +0200, Ricardo Ribalda Delgado wrote:
+> Adding a V4L2_CID_UNIT_CELL_SIZE control requires a lot of boilerplate,
+> try to minimize it by adding a new helper.
+> 
+> Suggested-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+> ---
+>  drivers/media/v4l2-core/v4l2-ctrls.c | 25 ++++++++++++++++++++++++-
+>  include/media/v4l2-ctrls.h           | 16 ++++++++++++++++
+>  2 files changed, 40 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+> index b3bf458df7f7..33e48f0aec1a 100644
+> --- a/drivers/media/v4l2-core/v4l2-ctrls.c
+> +++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+> @@ -2660,7 +2660,6 @@ struct v4l2_ctrl *v4l2_ctrl_new_std_menu_items(struct v4l2_ctrl_handler *hdl,
+>  }
+>  EXPORT_SYMBOL(v4l2_ctrl_new_std_menu_items);
+>  
+> -/* Helper function for standard integer menu controls */
 
-Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
-Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- Documentation/media/uapi/v4l/vidioc-queryctrl.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+Why move this ...
 
-diff --git a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-index a3d56ffbf4cc..c09d06ef2b08 100644
---- a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-@@ -443,6 +443,12 @@ See also the examples in :ref:`control`.
-       - n/a
-       - A struct :c:type:`v4l2_ctrl_mpeg2_quantization`, containing MPEG-2
- 	quantization matrices for stateless video decoders.
-+    * - ``V4L2_CTRL_TYPE_AREA``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_area`, containing the width and the height
-+        of a rectangular area.
-     * - ``V4L2_CTRL_TYPE_H264_SPS``
-       - n/a
-       - n/a
--- 
-2.23.0.rc1
+>  struct v4l2_ctrl *v4l2_ctrl_new_int_menu(struct v4l2_ctrl_handler *hdl,
+>  			const struct v4l2_ctrl_ops *ops,
+>  			u32 id, u8 _max, u8 _def, const s64 *qmenu_int)
+> @@ -2684,6 +2683,30 @@ struct v4l2_ctrl *v4l2_ctrl_new_int_menu(struct v4l2_ctrl_handler *hdl,
+>  }
+>  EXPORT_SYMBOL(v4l2_ctrl_new_int_menu);
+>  
+> +static void area_init(const struct v4l2_ctrl *ctrl, u32 idx,
+> +		union v4l2_ctrl_ptr ptr)
+> +{
+> +	memcpy(ptr.p_area, ctrl->priv, sizeof(*ptr.p_area));
+> +}
+> +
+> +static const struct v4l2_ctrl_type_ops area_ops = {
+> +	.init = area_init,
+> +};
+> +
+> +struct v4l2_ctrl *v4l2_ctrl_new_area(struct v4l2_ctrl_handler *hdl,
+> +				     const struct v4l2_ctrl_ops *ops,
+> +				     u32 id, const struct v4l2_area *area)
+> +{
+> +	static struct v4l2_ctrl_config ctrl = {
+> +		.id = V4L2_CID_UNIT_CELL_SIZE,
+> +		.type_ops = &area_ops,
+> +	};
+> +
+> +	return v4l2_ctrl_new_custom(hdl, &ctrl, (void *)area);
+> +}
+> +EXPORT_SYMBOL(v4l2_ctrl_new_area);
+> +
+> +/* Helper function for standard integer menu controls */
 
+... here?
+
+Looks to me like this comment should stay attached to
+v4l2_ctrl_new_int_menu.
+
+regards
+Philipp
