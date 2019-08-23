@@ -4,51 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D3BC3A5A2
-	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 12:37:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FC6AC3A5A2
+	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 12:38:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 533F821848
-	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 12:37:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0CD802173E
+	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 12:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1566563879;
-	bh=+u+nxbkI9gC1Xu+dl2ELI9Ve8tzdgvQjE0Rx5IUcP1w=;
+	s=default; t=1566563890;
+	bh=8F1t8oqfj5gxhAo6yR6MvajYWf9rB2vs+sJzzlrxfZM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=pK3QLHjIIukKao5Br8XiSOOjvqmuxhkMXk2l0AzBfSKAjYLH4zsoawSZjGbG+sxSI
-	 uXY8N2bcxk7xUUPnfwOfVZYPxk2E678xx7EWdxCf05WFgnE2wGwsclfiq1uUrazzB1
-	 pQjZBWnDPHsB/GUw3+n+Ewnptc7wHMh4fEgaZjwU=
+	b=blfYBEpU9VxVVOWT+lGnB6RF1QsILMzhw+YzJHviFA5T0PsWu995ULXa8ui6kg4K7
+	 xBMW0d0kPNKGx2ae78W0Ai0uTBK5LdOD4NeHaS8/DkP72WnEIiGGgMZXAVd5rriTdP
+	 ipyOb+99aPYoisg5bLe421SpJGzy6f9I6r41LUUU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394796AbfHWMhx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Aug 2019 08:37:53 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:45061 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394781AbfHWMhu (ORCPT
+        id S2394786AbfHWMht (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Aug 2019 08:37:49 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:43530 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394773AbfHWMhr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Aug 2019 08:37:50 -0400
-Received: by mail-ed1-f65.google.com with SMTP id x19so13207378eda.12;
-        Fri, 23 Aug 2019 05:37:49 -0700 (PDT)
+        Fri, 23 Aug 2019 08:37:47 -0400
+Received: by mail-ed1-f68.google.com with SMTP id h13so13220923edq.10;
+        Fri, 23 Aug 2019 05:37:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=y8r+eWz5qGFdQwglnaA6qcRMWI4/EQdR6uEwrrJmWAw=;
-        b=e2iVUzBrbD9sy43NjXtSAobf5oGbPlneBZCuR004OSDfnKCYF8uLhUXi9qbVf1VX5G
-         oKWrNeW3WzjmQvTB5A6KMtkr799v/mHjZaf/HLtS06JJoxaAEQSrULHWKoe8MqCLTTrx
-         2QAFQSmJ+XvXHJLSyYXX76KhdgEbSnRzhQY2oi+rvxLtT1ZN6WOMt3Uie0E/Y3tQhC3F
-         9xr0BemQoidWVAad4jnGg7iPF3Wfm3H5H6uOMUrmnTPXuzvCJfuTxWLhIpa8pfMJR7rS
-         3q3/3VugfA80bT6wxGI40U0RSk1fuxa2n8OeDQgB4NzC9rNZaSh/m4t6PydnHtnyHtFZ
-         EcNA==
-X-Gm-Message-State: APjAAAW82vijAybontW6tl6499qkMhuUMCPkIq0Tin3Vq5249+kbxCu1
-        6iq6EU9xjupMofCjKceh48HpB8LLel0=
-X-Google-Smtp-Source: APXvYqxx5IN+ml83ka93/qGxNp8Om+mK7ycCRdrY6L9j4x6/UdpYjbgAmMheycYvYWbdXvk5ggMacQ==
-X-Received: by 2002:a50:f4c3:: with SMTP id v3mr4155153edm.115.1566563868453;
-        Fri, 23 Aug 2019 05:37:48 -0700 (PDT)
+        bh=F4LOpR2+qDGG/nyT8CDQzwfIkNx8dPONyLIfkWrwXb0=;
+        b=VZolX3HOVaZtnd8rm0lG/PVVSirbjHDNSa+wtQmYvbCMhiDFdOPWFMUvs4xoocHBGA
+         3ZPHMhtwa486dNQnSdJXlFlgll8OT61AjH0eJ8DijNF8OiUUxaYpnaZwAem1j7gEN7Ca
+         waRk7eCYp7Ea03g4lQcVgeym0fEj6XFs3MFV8j3nf0Tt5EFfPRia33ErPqpv+2tMZuk5
+         +BBu34377+LwiQI785oMCN8ZLgAvwZ0a3VkXunvwjfEHh9JkZ4Tg0FYeFBljxT4CZ9y9
+         Ei15HgWYz1lnts8ODveP1WSJ62cb0uymD9felMikweZSe9zRblzWYxSssElKgXZQKaKW
+         iKHQ==
+X-Gm-Message-State: APjAAAUT9O1MFt0IzFgBGmsiJQ+s78sr0r4X3zPDuLmSTvZQkupaXa3F
+        3/2KhLDeWjWc/ENV1b+e4qs=
+X-Google-Smtp-Source: APXvYqyQcg0tQkqTfgr4NABXJXIB9EaBGO/TqQaLu/B1uyEWgDHoR+PkcD+hocVgEafBcowrUGQBSg==
+X-Received: by 2002:a17:906:161b:: with SMTP id m27mr3925225ejd.203.1566563865377;
+        Fri, 23 Aug 2019 05:37:45 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id 9sm389687ejw.63.2019.08.23.05.37.47
+        by smtp.gmail.com with ESMTPSA id 9sm389687ejw.63.2019.08.23.05.37.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2019 05:37:47 -0700 (PDT)
+        Fri, 23 Aug 2019 05:37:44 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Philipp Zabel <p.zabel@pengutronix.de>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -57,9 +57,9 @@ To:     Philipp Zabel <p.zabel@pengutronix.de>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jacopo Mondi <jacopo@jmondi.org>
 Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v3 6/7] Documentation: Document v4l2_ctrl_new area
-Date:   Fri, 23 Aug 2019 14:37:36 +0200
-Message-Id: <20190823123737.7774-6-ribalda@kernel.org>
+Subject: [PATCH v3 4/7] media: imx214: Add new control with V4L2_CID_UNIT_CELL_SIZE
+Date:   Fri, 23 Aug 2019 14:37:34 +0200
+Message-Id: <20190823123737.7774-4-ribalda@kernel.org>
 X-Mailer: git-send-email 2.23.0.rc1
 In-Reply-To: <20190823123737.7774-1-ribalda@kernel.org>
 References: <20190823123737.7774-1-ribalda@kernel.org>
@@ -70,33 +70,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Helper for creating area controls.
+According to the product brief, the unit cell size is 1120 nanometers^2.
+
+https://www.sony-semicon.co.jp/products_en/IS/sensor1/img/products/ProductBrief_IMX214_20150428.pdf
 
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 ---
- Documentation/media/kapi/v4l2-controls.rst | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/media/i2c/imx214.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/Documentation/media/kapi/v4l2-controls.rst b/Documentation/media/kapi/v4l2-controls.rst
-index ebe2a55908be..656e9428f6a6 100644
---- a/Documentation/media/kapi/v4l2-controls.rst
-+++ b/Documentation/media/kapi/v4l2-controls.rst
-@@ -149,6 +149,15 @@ Integer menu controls with a driver specific menu can be added by calling
- 			const struct v4l2_ctrl_ops *ops,
- 			u32 id, s32 max, s32 def, const s64 *qmenu_int);
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index 159a3a604f0e..cc0a013ba7da 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -47,6 +47,7 @@ struct imx214 {
+ 	struct v4l2_ctrl *pixel_rate;
+ 	struct v4l2_ctrl *link_freq;
+ 	struct v4l2_ctrl *exposure;
++	struct v4l2_ctrl *unit_size;
  
-+Area controls can be added by calling
-+:c:func:`v4l2_ctrl_new_area`:
-+
-+.. code-block:: c
-+
-+	struct v4l2_ctrl *v4l2_ctrl_new_area(struct v4l2_ctrl_handler *hdl,
-+			const struct v4l2_ctrl_ops *ops,
-+			u32 id, const struct v4l2_area *area);
-+
- These functions are typically called right after the
- :c:func:`v4l2_ctrl_handler_init`:
+ 	struct regulator_bulk_data	supplies[IMX214_NUM_SUPPLIES];
  
+@@ -941,6 +942,26 @@ static int __maybe_unused imx214_resume(struct device *dev)
+ 	return ret;
+ }
+ 
++static void unit_size_init(const struct v4l2_ctrl *ctrl, u32 idx,
++		     union v4l2_ctrl_ptr ptr)
++{
++	ptr.p_area->width = 1120;
++	ptr.p_area->height = 1120;
++}
++
++static const struct v4l2_ctrl_type_ops unit_size_ops = {
++	.init = unit_size_init,
++};
++
++static struct v4l2_ctrl *new_unit_size_ctrl(struct v4l2_ctrl_handler *handler)
++{
++	static struct v4l2_ctrl_config ctrl = {
++		.id = V4L2_CID_UNIT_CELL_SIZE,
++		.type_ops = &unit_size_ops,
++	};
++
++	return v4l2_ctrl_new_custom(handler, &ctrl, NULL);
++}
+ static int imx214_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+@@ -1029,6 +1050,8 @@ static int imx214_probe(struct i2c_client *client)
+ 					     V4L2_CID_EXPOSURE,
+ 					     0, 3184, 1, 0x0c70);
+ 
++	imx214->unit_size = new_unit_size_ctrl(&imx214->ctrls);
++
+ 	ret = imx214->ctrls.error;
+ 	if (ret) {
+ 		dev_err(&client->dev, "%s control init failed (%d)\n",
 -- 
 2.23.0.rc1
 
