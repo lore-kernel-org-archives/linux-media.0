@@ -2,169 +2,76 @@ Return-Path: <SRS0=1/ZG=WT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A36CC3A5A5
-	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 11:24:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A1C4C3A5A2
+	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 11:28:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3BD75233A2
-	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 11:24:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EBD65233FD
+	for <linux-media@archiver.kernel.org>; Fri, 23 Aug 2019 11:28:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733238AbfHWLYf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 23 Aug 2019 07:24:35 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:57621 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732503AbfHWLYf (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Fri, 23 Aug 2019 07:24:35 -0400
-Received: from tschai.fritz.box ([46.9.232.237])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id 17gBikVExThuu17gGiolr1; Fri, 23 Aug 2019 13:24:32 +0200
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+        id S2388824AbfHWL2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 23 Aug 2019 07:28:04 -0400
+Received: from gofer.mess.org ([88.97.38.141]:52133 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388570AbfHWL2E (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 23 Aug 2019 07:28:04 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id CEBEB61632; Fri, 23 Aug 2019 12:28:02 +0100 (BST)
+From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
-Cc:     Maling list - DRI developers <dri-devel@lists.freedesktop.org>,
-        Dariusz Marcinkiewicz <darekm@google.com>,
-        Archit Taneja <architt@codeaurora.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Eric Anholt <eric@anholt.net>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCH 3/3] drm/bridge/adv7511: enable CEC connector info
-Date:   Fri, 23 Aug 2019 13:24:27 +0200
-Message-Id: <20190823112427.42394-4-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190823112427.42394-1-hverkuil-cisco@xs4all.nl>
-References: <20190823112427.42394-1-hverkuil-cisco@xs4all.nl>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfGFE4NH+mS+hq0jRHj36UTNmU2gUS9qgz/Zv1ssR/aVMa28g+KX37hJzsioRxyHt8cEQkJqR3qQh1lNbVV9tOxb2Au9FsG2kPqdWTym8oD4X8g+dh8ts
- ln5rZ72YV6saavbgYlGUQvtHyTUJkflvXjT3BmHR65XXlIxXbPtedf3YN7sLBUEfuz8CC6FTUSevvNvexNhjQ15wxxBiw47W5QUeRMf7zD4VgezlydfMAOaF
- yXBp5bw2wHsjSAhYaSlGFr+MCR2UmmGb0bfxEp1M8DicDLB4gTN04uUC8t25zOhRJxuhbb527b3/IHvmI2qXjlCRCK3s5oIRV0pr9Lq8ZODN6HtuMyasXp9m
- n80GWpkI8Ou5lZcutrZitM9wRMuco2aH4eXXvN5AvGnJS4z3/QYQuuuZAhuRb/mwLpInhTwIHOkhvJFLIQwDC9t6bKjuFg==
+Cc:     Patrick Lerda <patrick9876@free.fr>
+Subject: [PATCH] media: rc: increase rc-mm tolerance and add debug message
+Date:   Fri, 23 Aug 2019 12:28:02 +0100
+Message-Id: <20190823112802.18341-1-sean@mess.org>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Set the connector info to help userspace associate the CEC adapter
-with the HDMI connector.
+Decoding often fails on e.g. redrat3 devices. The dev_dbg() helps
+with debugging when decoding does fail.
 
-This required that the cec initialization and unregistering the
-CEC adapter takes place in the bridge attach and detach ops.
-
-Tested on an R-Car Koelsch board.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Tested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Patrick Lerda <patrick9876@free.fr>
+Signed-off-by: Sean Young <sean@mess.org>
 ---
- drivers/gpu/drm/bridge/adv7511/adv7511_cec.c |  7 ++++++-
- drivers/gpu/drm/bridge/adv7511/adv7511_drv.c | 22 ++++++++++----------
- 2 files changed, 17 insertions(+), 12 deletions(-)
+ drivers/media/rc/ir-rcmm-decoder.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-index a20a45c0b353..accf5e232396 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-@@ -302,6 +302,7 @@ static int adv7511_cec_parse_dt(struct device *dev, struct adv7511 *adv7511)
+diff --git a/drivers/media/rc/ir-rcmm-decoder.c b/drivers/media/rc/ir-rcmm-decoder.c
+index 64fb65a9a19f..028df5cb1828 100644
+--- a/drivers/media/rc/ir-rcmm-decoder.c
++++ b/drivers/media/rc/ir-rcmm-decoder.c
+@@ -79,7 +79,7 @@ static int ir_rcmm_decode(struct rc_dev *dev, struct ir_raw_event ev)
+ 		if (!ev.pulse)
+ 			break;
  
- int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- {
-+	struct cec_connector_info conn_info;
- 	unsigned int offset = adv7511->type == ADV7533 ?
- 						ADV7533_REG_CEC_OFFSET : 0;
- 	int ret = adv7511_cec_parse_dt(dev, adv7511);
-@@ -310,7 +311,8 @@ int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- 		goto err_cec_parse_dt;
+-		if (!eq_margin(ev.duration, RCMM_PREFIX_PULSE, RCMM_UNIT / 2))
++		if (!eq_margin(ev.duration, RCMM_PREFIX_PULSE, RCMM_UNIT))
+ 			break;
  
- 	adv7511->cec_adap = cec_allocate_adapter(&adv7511_cec_adap_ops,
--		adv7511, dev_name(dev), CEC_CAP_DEFAULTS, ADV7511_MAX_ADDRS);
-+		adv7511, dev_name(dev),
-+		CEC_CAP_DEFAULTS | CEC_CAP_CONNECTOR_INFO, ADV7511_MAX_ADDRS);
- 	if (IS_ERR(adv7511->cec_adap)) {
- 		ret = PTR_ERR(adv7511->cec_adap);
- 		goto err_cec_alloc;
-@@ -331,6 +333,9 @@ int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- 		     ADV7511_REG_CEC_CLK_DIV + offset,
- 		     ((adv7511->cec_clk_freq / 750000) - 1) << 2);
+ 		data->state = STATE_LOW;
+@@ -91,7 +91,7 @@ static int ir_rcmm_decode(struct rc_dev *dev, struct ir_raw_event ev)
+ 		if (ev.pulse)
+ 			break;
  
-+	cec_fill_conn_info_from_drm(&conn_info, &adv7511->connector);
-+	cec_s_conn_info(adv7511->cec_adap, &conn_info);
-+
- 	ret = cec_register_adapter(adv7511->cec_adap, dev);
- 	if (ret)
- 		goto err_cec_register;
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-index f6d2681f6927..bbcb996c4d4f 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_drv.c
-@@ -881,14 +881,24 @@ static int adv7511_bridge_attach(struct drm_bridge *bridge)
- 		regmap_write(adv->regmap, ADV7511_REG_INT_ENABLE(0),
- 			     ADV7511_INT0_HPD);
+-		if (!eq_margin(ev.duration, RCMM_PULSE_0, RCMM_UNIT / 2))
++		if (!eq_margin(ev.duration, RCMM_PULSE_0, RCMM_UNIT))
+ 			break;
  
-+	if (!ret)
-+		ret = adv7511_cec_init(&adv->i2c_main->dev, adv);
- 	return ret;
- }
- 
-+static void adv7511_bridge_detach(struct drm_bridge *bridge)
-+{
-+	struct adv7511 *adv = bridge_to_adv7511(bridge);
-+
-+	cec_unregister_adapter(adv->cec_adap);
-+}
-+
- static const struct drm_bridge_funcs adv7511_bridge_funcs = {
- 	.enable = adv7511_bridge_enable,
- 	.disable = adv7511_bridge_disable,
- 	.mode_set = adv7511_bridge_mode_set,
- 	.attach = adv7511_bridge_attach,
-+	.detach = adv7511_bridge_detach,
- };
- 
- /* -----------------------------------------------------------------------------
-@@ -1202,7 +1212,7 @@ static int adv7511_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
- 						IRQF_ONESHOT, dev_name(dev),
- 						adv7511);
- 		if (ret)
--			goto err_unregister_cec;
-+			goto err_i2c_unregister_packet;
+ 		data->state = STATE_BUMP;
+@@ -164,6 +164,8 @@ static int ir_rcmm_decode(struct rc_dev *dev, struct ir_raw_event ev)
+ 		break;
  	}
  
- 	adv7511_power_off(adv7511);
-@@ -1212,10 +1222,6 @@ static int adv7511_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
- 	if (adv7511->type == ADV7511)
- 		adv7511_set_link_config(adv7511, &link_config);
- 
--	ret = adv7511_cec_init(dev, adv7511);
--	if (ret)
--		goto err_unregister_cec;
--
- 	adv7511->bridge.funcs = &adv7511_bridge_funcs;
- 	adv7511->bridge.of_node = dev->of_node;
- 
-@@ -1224,10 +1230,6 @@ static int adv7511_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
- 	adv7511_audio_init(dev, adv7511);
- 	return 0;
- 
--err_unregister_cec:
--	i2c_unregister_device(adv7511->i2c_cec);
--	if (adv7511->cec_clk)
--		clk_disable_unprepare(adv7511->cec_clk);
- err_i2c_unregister_packet:
- 	i2c_unregister_device(adv7511->i2c_packet);
- err_i2c_unregister_edid:
-@@ -1254,8 +1256,6 @@ static int adv7511_remove(struct i2c_client *i2c)
- 
- 	adv7511_audio_exit(adv7511);
- 
--	cec_unregister_adapter(adv7511->cec_adap);
--
- 	i2c_unregister_device(adv7511->i2c_packet);
- 	i2c_unregister_device(adv7511->i2c_edid);
- 
++	dev_dbg(&dev->dev, "RC-MM decode failed at count %d state %d (%uus %s)\n",
++		data->count, data->state, TO_US(ev.duration), TO_STR(ev.pulse));
+ 	data->state = STATE_INACTIVE;
+ 	return -EINVAL;
+ }
 -- 
-2.20.1
+2.21.0
 
