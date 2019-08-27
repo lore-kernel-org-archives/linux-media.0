@@ -6,24 +6,24 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D0CB9C3A5A3
-	for <linux-media@archiver.kernel.org>; Tue, 27 Aug 2019 09:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6282FC3A5A3
+	for <linux-media@archiver.kernel.org>; Tue, 27 Aug 2019 09:22:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A407921872
-	for <linux-media@archiver.kernel.org>; Tue, 27 Aug 2019 09:22:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35737206BB
+	for <linux-media@archiver.kernel.org>; Tue, 27 Aug 2019 09:22:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729277AbfH0JWf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Aug 2019 05:22:35 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:52563 "EHLO
+        id S1729289AbfH0JWh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Aug 2019 05:22:37 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:46449 "EHLO
         relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbfH0JWf (ORCPT
+        with ESMTP id S1725912AbfH0JWh (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Aug 2019 05:22:35 -0400
+        Tue, 27 Aug 2019 05:22:37 -0400
 X-Originating-IP: 87.18.63.98
 Received: from uno.homenet.telecomitalia.it (unknown [87.18.63.98])
         (Authenticated sender: jacopo@jmondi.org)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 695431C000B;
-        Tue, 27 Aug 2019 09:22:32 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 26D331C0005;
+        Tue, 27 Aug 2019 09:22:33 +0000 (UTC)
 From:   Jacopo Mondi <jacopo@jmondi.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -33,9 +33,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
 Cc:     Jacopo Mondi <jacopo@jmondi.org>,
         linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
         (V4L/DVB))
-Subject: [PATCH v2 04/10] media: v4l2-ctrl: Add V4L2_CID_CAMERA_SENSOR_LOCATION
-Date:   Tue, 27 Aug 2019 11:23:30 +0200
-Message-Id: <20190827092339.8858-5-jacopo@jmondi.org>
+Subject: [PATCH v2 04/10] media: v4l2-ctrls: Add V4L2_CID_CAMERA_SENSOR_LOCATION
+Date:   Tue, 27 Aug 2019 11:23:31 +0200
+Message-Id: <20190827092339.8858-6-jacopo@jmondi.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190827092339.8858-1-jacopo@jmondi.org>
 References: <20190827092339.8858-1-jacopo@jmondi.org>
