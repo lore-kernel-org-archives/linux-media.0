@@ -2,72 +2,68 @@ Return-Path: <SRS0=pW3C=WX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D306C41514
-	for <linux-media@archiver.kernel.org>; Tue, 27 Aug 2019 07:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D427C3A5A3
+	for <linux-media@archiver.kernel.org>; Tue, 27 Aug 2019 07:20:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D53D20828
-	for <linux-media@archiver.kernel.org>; Tue, 27 Aug 2019 07:08:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 33F01206BF
+	for <linux-media@archiver.kernel.org>; Tue, 27 Aug 2019 07:20:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727999AbfH0HH3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 27 Aug 2019 03:07:29 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:46918 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725943AbfH0HH3 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 27 Aug 2019 03:07:29 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 25C7EF52D139BD0B3CB4;
-        Tue, 27 Aug 2019 15:07:27 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Tue, 27 Aug 2019
- 15:07:20 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <mripard@kernel.org>, <mchehab@kernel.org>, <wens@csie.org>,
-        <maxime.ripard@bootlin.com>, <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] media: sun6i: Make sun4i_csi_formats static
-Date:   Tue, 27 Aug 2019 15:06:23 +0800
-Message-ID: <20190827070623.15776-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1726078AbfH0HUt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 27 Aug 2019 03:20:49 -0400
+Received: from mga09.intel.com ([134.134.136.24]:45050 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725890AbfH0HUt (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 27 Aug 2019 03:20:49 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Aug 2019 00:20:48 -0700
+X-IronPort-AV: E=Sophos;i="5.64,436,1559545200"; 
+   d="scan'208";a="197245079"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Aug 2019 00:20:46 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id 8BAA92095B; Tue, 27 Aug 2019 10:20:43 +0300 (EEST)
+Date:   Tue, 27 Aug 2019 10:20:43 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     mripard@kernel.org, mchehab@kernel.org, wens@csie.org,
+        maxime.ripard@bootlin.com, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] media: sun6i: Make sun4i_csi_formats static
+Message-ID: <20190827072043.GA7657@paasikivi.fi.intel.com>
+References: <20190827070623.15776-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190827070623.15776-1-yuehaibing@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Fix sparse warning:
+Hi Yue,
 
-drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c:21:31:
- warning: symbol 'sun4i_csi_formats' was not declared. Should it be static?
+On Tue, Aug 27, 2019 at 03:06:23PM +0800, YueHaibing wrote:
+> Fix sparse warning:
+> 
+> drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c:21:31:
+>  warning: symbol 'sun4i_csi_formats' was not declared. Should it be static?
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks for the patch.
 
-diff --git a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-index 772b0fc..83a3a02 100644
---- a/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-+++ b/drivers/media/platform/sunxi/sun4i-csi/sun4i_v4l2.c
-@@ -18,7 +18,7 @@
- #define CSI_DEFAULT_WIDTH	640
- #define CSI_DEFAULT_HEIGHT	480
- 
--const struct sun4i_csi_format sun4i_csi_formats[] = {
-+static const struct sun4i_csi_format sun4i_csi_formats[] = {
- 	/* YUV422 inputs */
- 	{
- 		.mbus		= MEDIA_BUS_FMT_YUYV8_2X8,
+This has been already addressed by another patch:
+
+<URL:https://patchwork.linuxtv.org/patch/58395/>
+
 -- 
-2.7.4
-
-
+Sakari Ailus
+sakari.ailus@linux.intel.com
