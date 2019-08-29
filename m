@@ -6,261 +6,261 @@ X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95EAAC3A59F
-	for <linux-media@archiver.kernel.org>; Thu, 29 Aug 2019 12:54:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D656C3A5A3
+	for <linux-media@archiver.kernel.org>; Thu, 29 Aug 2019 12:54:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6990623403
-	for <linux-media@archiver.kernel.org>; Thu, 29 Aug 2019 12:54:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4444323403
+	for <linux-media@archiver.kernel.org>; Thu, 29 Aug 2019 12:54:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727235AbfH2MyT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 29 Aug 2019 08:54:19 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:33501 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727012AbfH2MyT (ORCPT
+        id S1727242AbfH2MyU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 29 Aug 2019 08:54:20 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:55477 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727061AbfH2MyU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 29 Aug 2019 08:54:19 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1i3JwJ-0000iA-7h; Thu, 29 Aug 2019 14:54:11 +0200
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1i3JwI-0001Vn-Rx; Thu, 29 Aug 2019 14:54:10 +0200
-Date:   Thu, 29 Aug 2019 14:54:10 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
-        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
-        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com,
-        devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v9 01/13] dt-bindings: connector: analog: add sdtv
- standards property
-Message-ID: <20190829125410.zjiebcf4cjdlyocl@pengutronix.de>
-References: <20190822080556.17109-1-m.felsch@pengutronix.de>
- <20190822080556.17109-2-m.felsch@pengutronix.de>
- <23fa2569-970e-ebf9-2116-90027123566e@xs4all.nl>
+        Thu, 29 Aug 2019 08:54:20 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id DB382E0016;
+        Thu, 29 Aug 2019 12:54:16 +0000 (UTC)
+Date:   Thu, 29 Aug 2019 14:55:48 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>, tfiga@google.com,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v2 06/10] media: v4l2-fwnode: Add helper to register
+ controls from fw
+Message-ID: <20190829125548.npqgit4guqunxyuu@uno.localdomain>
+References: <20190827092339.8858-1-jacopo@jmondi.org>
+ <20190827092339.8858-9-jacopo@jmondi.org>
+ <20190827131620.GX5054@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="z5gqvpubktw44elr"
 Content-Disposition: inline
-In-Reply-To: <23fa2569-970e-ebf9-2116-90027123566e@xs4all.nl>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:52:36 up 103 days, 19:10, 63 users,  load average: 0.07, 0.09,
- 0.05
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-media@vger.kernel.org
+In-Reply-To: <20190827131620.GX5054@pendragon.ideasonboard.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 19-08-29 12:02, Hans Verkuil wrote:
-> On 8/22/19 10:05 AM, Marco Felsch wrote:
-> > Some connectors no matter if in- or output supports only a limited
-> > range of sdtv standards. It doesn't matter if the hardware behind that
-> > connector supports more than the listed formats since the users are
-> > restriced by a label e.g. to plug only a camera into this connector
-> > which uses the PAL format.
-> > 
-> > This patch adds the capability to describe such limitation within the
-> > firmware. There are no format restrictions if the property isn't
-> > present, so it's completely backward compatible.
-> > 
-> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+
+--z5gqvpubktw44elr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+Hi Laurent,
+
+On Tue, Aug 27, 2019 at 04:16:20PM +0300, Laurent Pinchart wrote:
+> Hi Jacopo,
+>
+> Thank you for the patch.
+>
+> On Tue, Aug 27, 2019 at 11:23:34AM +0200, Jacopo Mondi wrote:
+> > Add the 'v4l2_fwnode_register_controls()' helper to v4l2-fwnode. The
+> > function parses the device node and endpoint firmware properties to
+> > which a v4l2 control is associated to and registers the control with the
+> > provided handler.
+> >
+> > Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
 > > ---
-> > [1] https://patchwork.kernel.org/cover/10794703/
-> > 
-> > v8:
-> > Hi Rob,
-> > 
-> > I dropped your r b tag becuase of the changes I made in this version.
-> > Please can you have look on it again? Luckily this would be the last
-> > time ;-)
-> > 
-> > - move definition to include/dt-bindings/display
-> > - rename tvnorms.h to sdtv-standards.h
-> > - TVORMS_* -> SDTV_STD_*
-> > - add sync comments
-> > - adapt commit message
-> > - fix bindings documentation
-> > 
-> > v7:
-> > I kept Robs r b tag because I only changed the example and extended
-> > TVNORM_* macros.
-> > 
-> > - fix some style issues
-> > - add TVNORM_NTSC, TVNORM_525_60 and TVNORM_625_50
-> > 
-> > v6:
-> > - tvnorms.h: use tabs instead of spaces
-> > - tvnorms.h: add TVNORM_PAL and TVNORM_SECAM
-> > - tvnorms.h: drop rarely used TVNORM_ATSC_* norms
-> > 
-> > v2-v4:
-> > - nothing since the patch was squashed from series [1] into this
-> >   series.
-> > ---
-> >  .../display/connector/analog-tv-connector.txt |  6 ++
-> >  include/dt-bindings/display/sdtv-standards.h  | 76 +++++++++++++++++++
-> >  include/uapi/linux/videodev2.h                |  4 +
-> >  3 files changed, 86 insertions(+)
-> >  create mode 100644 include/dt-bindings/display/sdtv-standards.h
-> > 
-> > diff --git a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-> > index 0c0970c210ab..883bcb2604c7 100644
-> > --- a/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-> > +++ b/Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt
-> > @@ -6,16 +6,22 @@ Required properties:
-> >  
-> >  Optional properties:
-> >  - label: a symbolic name for the connector
-> > +- sdtv-standards: limit the supported TV standards on a connector to the given
-> > +                  ones. If not specified all TV standards are allowed.
-> > +                  Possible TV standards are defined in
-> > +                  include/dt-bindings/display/sdtv-standards.h.
-> >  
-> >  Required nodes:
-> >  - Video port for TV input
-> >  
-> >  Example
-> >  -------
-> > +#include <dt-bindings/display/sdtv-standards.h>
-> >  
-> >  tv: connector {
-> >  	compatible = "composite-video-connector";
-> >  	label = "tv";
-> > +	sdtv-standards = <(SDTV_STD_PAL | SDTV_STD_NTSC)>;
-> >  
-> >  	port {
-> >  		tv_connector_in: endpoint {
-> > diff --git a/include/dt-bindings/display/sdtv-standards.h b/include/dt-bindings/display/sdtv-standards.h
-> > new file mode 100644
-> > index 000000000000..bb6966505a6c
-> > --- /dev/null
-> > +++ b/include/dt-bindings/display/sdtv-standards.h
-> > @@ -0,0 +1,76 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only or X11 */
-> > +/*
-> > + * Copyright 2019 Pengutronix, Marco Felsch <kernel@pengutronix.de>
-> > + */
-> > +
-> > +#ifndef _DT_BINDINGS_DISPLAY_SDTV_STDS_H
-> > +#define _DT_BINDINGS_DISPLAY_SDTV_STDS_H
-> > +
-> > +/*
-> > + * Attention: Keep the TV_STD_* bit definitions in sync with
-> 
-> TV_STD -> SDTV_STD
-> 
-> > + * include/uapi/linux/videodev2.h V4L2_STD_* bit definitions.
-> > + */
-> > +/* One bit for each standard */
-> > +#define SDTV_STD_PAL_B		0x00000001
-> > +#define SDTV_STD_PAL_B1		0x00000002
-> > +#define SDTV_STD_PAL_G		0x00000004
-> > +#define SDTV_STD_PAL_H		0x00000008
-> > +#define SDTV_STD_PAL_I		0x00000010
-> > +#define SDTV_STD_PAL_D		0x00000020
-> > +#define SDTV_STD_PAL_D1		0x00000040
-> > +#define SDTV_STD_PAL_K		0x00000080
-> > +
-> > +#define SDTV_STD_PAL		(SDTV_STD_PAL_B		| \
-> > +				 SDTV_STD_PAL_B1	| \
-> > +				 SDTV_STD_PAL_G		| \
-> > +				 SDTV_STD_PAL_H		| \
-> > +				 SDTV_STD_PAL_I		| \
-> > +				 SDTV_STD_PAL_D		| \
-> > +				 SDTV_STD_PAL_D1	| \
-> > +				 SDTV_STD_PAL_K)
-> > +
-> > +#define SDTV_STD_PAL_M		0x00000100
-> > +#define SDTV_STD_PAL_N		0x00000200
-> > +#define SDTV_STD_PAL_Nc		0x00000400
-> > +#define SDTV_STD_PAL_60		0x00000800
-> > +
-> > +#define SDTV_STD_NTSC_M		0x00001000	/* BTSC */
-> > +#define SDTV_STD_NTSC_M_JP	0x00002000	/* EIA-J */
-> > +#define SDTV_STD_NTSC_443	0x00004000
-> > +#define SDTV_STD_NTSC_M_KR	0x00008000	/* FM A2 */
-> > +
-> > +#define SDTV_STD_NTSC		(SDTV_STD_NTSC_M	| \
-> > +				 SDTV_STD_NTSC_M_JP	| \
-> > +				 SDTV_STD_NTSC_M_KR)
-> > +
-> > +#define SDTV_STD_SECAM_B	0x00010000
-> > +#define SDTV_STD_SECAM_D	0x00020000
-> > +#define SDTV_STD_SECAM_G	0x00040000
-> > +#define SDTV_STD_SECAM_H	0x00080000
-> > +#define SDTV_STD_SECAM_K	0x00100000
-> > +#define SDTV_STD_SECAM_K1	0x00200000
-> > +#define SDTV_STD_SECAM_L	0x00400000
-> > +#define SDTV_STD_SECAM_LC	0x00800000
-> > +
-> > +#define SDTV_STD_SECAM		(SDTV_STD_SECAM_B	| \
-> > +				 SDTV_STD_SECAM_D	| \
-> > +				 SDTV_STD_SECAM_G	| \
-> > +				 SDTV_STD_SECAM_H	| \
-> > +				 SDTV_STD_SECAM_K	| \
-> > +				 SDTV_STD_SECAM_K1	| \
-> > +				 SDTV_STD_SECAM_L	| \
-> > +				 SDTV_STD_SECAM_LC)
-> > +
-> > +/* Standards for Countries with 60Hz Line frequency */
-> > +#define SDTV_STD_525_60		(SDTV_STD_PAL_M		| \
-> > +				 SDTV_STD_PAL_60	| \
-> > +				 SDTV_STD_NTSC		| \
-> > +				 SDTV_STD_NTSC_443)
-> > +
-> > +/* Standards for Countries with 50Hz Line frequency */
-> > +#define SDTV_STD_625_50		(SDTV_STD_PAL		| \
-> > +				 SDTV_STD_PAL_N		| \
-> > +				 SDTV_STD_PAL_Nc	| \
-> > +				 SDTV_STD_SECAM)
-> > +
-> > +#endif /* _DT_BINDINGS_DISPLAY_SDTV_STDS_H */
-> > diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> > index 530638dffd93..c358cc34fc34 100644
-> > --- a/include/uapi/linux/videodev2.h
-> > +++ b/include/uapi/linux/videodev2.h
-> > @@ -1208,6 +1208,10 @@ struct v4l2_selection {
-> >  
-> >  typedef __u64 v4l2_std_id;
-> >  
-> > +/*
-> > + * Attention: Keep the V4L2_STD_* bit definitions in sync with
-> > + * include/dt-bindings/display/sdtv-standards.h TV_STD_* bit definitions.
-> 
-> TV_STD -> SDTV_STD
+> >  drivers/media/v4l2-core/v4l2-fwnode.c | 57 +++++++++++++++++++++++++++
+> >  include/media/v4l2-fwnode.h           | 30 ++++++++++++++
+> >  2 files changed, 87 insertions(+)
+> >
+> > diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+> > index 3bd1888787eb..669801fceb64 100644
+> > --- a/drivers/media/v4l2-core/v4l2-fwnode.c
+> > +++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+> > @@ -25,6 +25,7 @@
+> >  #include <linux/types.h>
+> >
+> >  #include <media/v4l2-async.h>
+> > +#include <media/v4l2-ctrls.h>
+> >  #include <media/v4l2-fwnode.h>
+> >  #include <media/v4l2-subdev.h>
+> >
+> > @@ -595,6 +596,62 @@ void v4l2_fwnode_put_link(struct v4l2_fwnode_link *link)
+> >  }
+> >  EXPORT_SYMBOL_GPL(v4l2_fwnode_put_link);
+> >
+> > +int v4l2_fwnode_register_controls(struct fwnode_handle *fwnode,
+> > +				  struct v4l2_ctrl_handler *hdl,
+> > +				  const struct v4l2_ctrl_ops *ctrl_ops)
+>
+> Passing the ctrl_ops is a bit annoying. Would there be a way to get the
+> V4L2 control framework to accept NULL ops for read-only controls ?
+>
 
-Thanks for covering that. I tought I got all of them.
+That would require a core change that is imho outside the scope of
+this patch
 
-Regards,
-  Marco
+> > +{
+> > +	u32 val;
+> > +	int ret;
+> > +
+> > +	ret = fwnode_property_read_u32(fwnode, "location", &val);
+> > +	if (!ret) {
+> > +		switch (val) {
+> > +		case V4L2_LOCATION_FRONT:
+> > +		case V4L2_LOCATION_BACK:
+> > +		case V4L2_LOCATION_EXTERNAL:
+> > +			break;
+> > +		default:
+> > +			pr_warn("Unsupported location: %u\n", val);
+>
+> dev_warn() would be nicer. Is there a way we could either pass the
+> struct device pointer, or maybe a subdev that would be populated with
+> the device, fwnode and hdl pointers ?
+>
 
-> 
+I went for pr_ as in all other functions of this file it is used when
+a fwnode_handle is passed as parameter. I could pass the device node,
+but I'm not sure passing an already populated subdevice is a good
+idea, as the subdevice ctrl_handler is usually populated after having
+made sure all controls have been registered without errors.
+
+> > +			return -EINVAL;
+> > +		}
+> > +
+> > +		if (v4l2_ctrl_find(hdl, V4L2_CID_CAMERA_SENSOR_LOCATION))
+> > +			pr_debug("Skip control '%s': already registered",
+> > +				 v4l2_ctrl_get_name(
+> > +					 V4L2_CID_CAMERA_SENSOR_LOCATION));
+> > +		else
+> > +			v4l2_ctrl_new_std(hdl, ctrl_ops,
+> > +					  V4L2_CID_CAMERA_SENSOR_LOCATION,
+> > +					  val, val, 1, val);
+> > +	}
+> > +
+> > +	ret = fwnode_property_read_u32(fwnode, "rotation", &val);
+> > +	if (!ret) {
+> > +		if (val > 360) {
+> > +			pr_warn("Unsupported rotation: %u\n", val);
+> > +			return -EINVAL;
+> > +		}
+>
+> We need to define the range of allowed values in the control
+> documentation. 360 doesn't seem very useful as it's equivalent to 0.
+> A few possible options are [0, 360[, [-180, +180[ or ]-180, +180].
+>
+
+As asked to Hans, why should we restrict this? I don't see a use case
+for a 73 degrees rotated camera, but why prevent it?
+
+> > +
+> > +		if (v4l2_ctrl_find(hdl, V4L2_CID_CAMERA_SENSOR_ROTATION))
+> > +			pr_debug("Skip control '%s': already registered",
+> > +				 v4l2_ctrl_get_name(
+> > +					 V4L2_CID_CAMERA_SENSOR_ROTATION));
+> > +		else
+> > +			v4l2_ctrl_new_std(hdl, ctrl_ops,
+> > +					  V4L2_CID_CAMERA_SENSOR_ROTATION,
+> > +					  val, val, 1, val);
+> > +	}
+> > +
+> > +	if (hdl->error) {
+> > +		pr_warn("Failed to register controls from firmware: %d\n",
+> > +			hdl->error);
+> > +		return hdl->error;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(v4l2_fwnode_register_controls);
+> > +
+> >  static int
+> >  v4l2_async_notifier_fwnode_parse_endpoint(struct device *dev,
+> >  					  struct v4l2_async_notifier *notifier,
+> > diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+> > index f6a7bcd13197..0dad6968bde9 100644
+> > --- a/include/media/v4l2-fwnode.h
+> > +++ b/include/media/v4l2-fwnode.h
+> > @@ -25,6 +25,8 @@
+> >  struct fwnode_handle;
+> >  struct v4l2_async_notifier;
+> >  struct v4l2_async_subdev;
+> > +struct v4l2_ctrl_handler;
+> > +struct v4l2_ctrl_ops;
+> >
+> >  #define V4L2_FWNODE_CSI2_MAX_DATA_LANES	4
+> >
+> > @@ -233,6 +235,34 @@ int v4l2_fwnode_parse_link(struct fwnode_handle *fwnode,
+> >   */
+> >  void v4l2_fwnode_put_link(struct v4l2_fwnode_link *link);
+> >
+> > +/**
+> > + * v4l2_fwnode_register_controls() - parse device and endpoint fwnode
+> > + *				     properties and register a v4l2 control
+> > + *				     for each of them
+>
+> I don't think that description is accurate.
+>
+
+How so? The function parses the device (not yet endpoint, right)
+properties and register a control for each of them.
+
+How would you phrase this?
+
+Thanks
+  j
+
+> > + * @fwnode: pointer to the device fwnode handle
+> > + * @hdl: pointer to the v4l2 control handler to register controls with
+> > + * @ctrl_ops: pointer to the v4l2 control operations to register with the handler
+> > + *
+> > + * Parse the @fwnode device and endpoint properties to which a v4l2 control
+> > + * is associated and register them with the provided handler @hdl.
+> > + * Currently the following v4l2 controls are parsed and registered:
+> > + * - V4L2_CID_CAMERA_SENSOR_LOCATION;
+> > + * - V4L2_CID_CAMERA_SENSOR_ROTATION;
+> > + *
+> > + * Controls already registered by the caller with the @hdl control handler are
+> > + * not overwritten. Callers should register the controls they want to handle
+> > + * themselves before calling this function.
+> > + *
+> > + * NOTE: This function locks the @hdl control handler mutex, the caller shall
+> > + * not hold the lock when calling this function.
+> > + *
+> > + * Return: 0 on success, -EINVAL if the fwnode properties are not correctly
+> > + * specified.
 > > + */
-> >  /* one bit for each */
-> >  #define V4L2_STD_PAL_B          ((v4l2_std_id)0x00000001)
-> >  #define V4L2_STD_PAL_B1         ((v4l2_std_id)0x00000002)
-> > 
-> 
-> I really like this. Nice.
-> 
+> > +int v4l2_fwnode_register_controls(struct fwnode_handle *fwnode,
+> > +				  struct v4l2_ctrl_handler *hdl,
+> > +				  const struct v4l2_ctrl_ops *ctrl_ops);
+> > +
+> >  /**
+> >   * typedef parse_endpoint_func - Driver's callback function to be called on
+> >   *	each V4L2 fwnode endpoint.
+>
+> --
 > Regards,
-> 
-> 	Hans
-> 
+>
+> Laurent Pinchart
 
--- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+--z5gqvpubktw44elr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl1ny1QACgkQcjQGjxah
+VjxsYw/8DOkSahukB3RXl75l7HrdDooo2IplDOETbm6Zn3eYbGHT5agQWQoxGQpy
+oec8Vg9rnAg8uakk3uDXKEFRYiSO0sW+i3axu0amgISoMDDwXfATdAgcUFQh38Do
+YkW+I9B4VhmBN7XFX9oexKK9ZSQmqF7V4HBmHHConRBzQ6KJl8zhRZ/Mb5UHcPdi
+iV+5NdPN8hyiiqN2Pvm6WNMAxYfUB0RNo6z6BOzj84NyOwBYdjba3mn6FVC0V4wc
+SLPJVzNUPL8s94dUjtxnhoacIzftJ88HyWOCURKJML3FOy9HEkyYv5AL6yIXfZY4
+S5h30brdzbDOuhg76lwjp7YF/s2cjGLicexHZ3jsOSltQR4lkRu9fU8MS/DGTQZL
+HLev+MdKco+Z8WeZi26h2Jw+MjuCispD+z9SD1PhJlkCSaE90I4hOT2urF69fGrE
+PV3W/Ou39TSOtPkR1cuZeBeIpRuRwTSolAR264P9cAsIGzOXNtVPA3kI0X9oJCal
+Cuhy//pRdYsx9D1bs8yNcJsppvpP/aohD0lWhUXs9pVRWalmrfRHT9TWVACnffzS
+maf920c/PMXzzFF4pk2JHLjkkWo7VEUU5/4hPj1rIT0jpghARK3hlYwUa8gQcVKx
+S2c2UL/wTpU2TaHrKm1g+RTl2fpsJ+EBQH3eCuLQZF3n1k5w120=
+=X0gy
+-----END PGP SIGNATURE-----
+
+--z5gqvpubktw44elr--
