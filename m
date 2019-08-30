@@ -6,36 +6,36 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DEBCC3A5A6
-	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 10:17:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B640C3A5A4
+	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 10:17:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 504182342C
-	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 10:17:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17B1322CE9
+	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 10:17:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728031AbfH3KRB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Aug 2019 06:17:01 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:46031 "EHLO
+        id S1728135AbfH3KRC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Aug 2019 06:17:02 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:45677 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728072AbfH3KRB (ORCPT
+        with ESMTP id S1728086AbfH3KRC (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Aug 2019 06:17:01 -0400
+        Fri, 30 Aug 2019 06:17:02 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1i3dxe-00031o-2p; Fri, 30 Aug 2019 12:16:54 +0200
+        id 1i3dxe-00031l-21; Fri, 30 Aug 2019 12:16:54 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1i3dxY-0003oj-DJ; Fri, 30 Aug 2019 12:16:48 +0200
+        id 1i3dxY-0003oa-C9; Fri, 30 Aug 2019 12:16:48 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
         linux-media@vger.kernel.org
-Subject: [PATCH v10 13/14] media: tvp5150: add support to limit sdtv standards
-Date:   Fri, 30 Aug 2019 12:16:45 +0200
-Message-Id: <20190830101646.6530-14-m.felsch@pengutronix.de>
+Subject: [PATCH v10 10/14] media: tvp5150: add s_power callback
+Date:   Fri, 30 Aug 2019 12:16:42 +0200
+Message-Id: <20190830101646.6530-11-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190830101646.6530-1-m.felsch@pengutronix.de>
 References: <20190830101646.6530-1-m.felsch@pengutronix.de>
@@ -50,199 +50,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The tvp5150 accepts NTSC(M,J,4.43), PAL (B,D,G,H,I,M,N) and SECAM video
-data and is able to auto-detect the input signal. The auto-detection
-does not work if the connector does not receive an input signal and the
-tvp5150 might not be configured correctly. This misconfiguration leads
-into wrong decoded video streams if the tvp5150 gets powered on before
-the video signal is present.
-
-Limit the supported sdtv standards according to the actual selected
-connector to avoid a misconfiguration.
+Don't en-/disable the interrupts during s_stream because someone can
+disable the stream but wants to get informed if the stream is locked
+again. So keep the interrupts enabled the whole time the pipeline is
+opened.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
-[1] https://patchwork.kernel.org/cover/10794703/
-
-v8:
-- adapt commit message
-- fix rebasing issue
-- apdapt to new v4l2_fwnode_connector_analog naming
-- fix cur_connector update during tvp5150_link_setup()
-  -> Only update if we have of-connectors.
-- fix supported_stds detection during tvp5150_s_std()
-  -> use connectors_num to detect of-connectors presence
-
-v5:
-- probe() initialize supported tv-norms according the given connectors
-  if they are available.
-- check if media-controller is used. Don't limit the norm if it isn't
-  used.
-- add more logic to be smarter during connector changing so it is
-  intuitiver for the user space.
-
-v2-v4:
-- nothing since the patch was squashed from series [1] into this
-  series.
-
- drivers/media/i2c/tvp5150.c | 78 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 76 insertions(+), 2 deletions(-)
+ drivers/media/i2c/tvp5150.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index d7079809f33f..da7e7fe16f89 100644
+index dc8272d3a445..d7079809f33f 100644
 --- a/drivers/media/i2c/tvp5150.c
 +++ b/drivers/media/i2c/tvp5150.c
-@@ -32,6 +32,13 @@
- #define TVP5150_MBUS_FMT	MEDIA_BUS_FMT_UYVY8_2X8
- #define TVP5150_FIELD		V4L2_FIELD_ALTERNATE
- #define TVP5150_COLORSPACE	V4L2_COLORSPACE_SMPTE170M
-+#define TVP5150_STD_MASK	(V4L2_STD_NTSC     | \
-+				 V4L2_STD_NTSC_443 | \
-+				 V4L2_STD_PAL      | \
-+				 V4L2_STD_PAL_M    | \
-+				 V4L2_STD_PAL_N    | \
-+				 V4L2_STD_PAL_Nc   | \
-+				 V4L2_STD_SECAM)
+@@ -1354,11 +1354,26 @@ static const struct media_entity_operations tvp5150_sd_media_ops = {
+ /****************************************************************************
+ 			I2C Command
+  ****************************************************************************/
++static int tvp5150_s_power(struct  v4l2_subdev *sd, int on)
++{
++	struct tvp5150 *decoder = to_tvp5150(sd);
++	unsigned int val = 0;
++
++	if (on)
++		val = TVP5150_INT_A_LOCK;
++
++	if (decoder->irq)
++		/* Enable / Disable lock interrupt */
++		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
++				   TVP5150_INT_A_LOCK, val);
++
++	return 0;
++}
  
- #define TVP5150_MAX_CONNECTORS	3 /* Check dt-bindings for more information */
- 
-@@ -64,6 +71,7 @@ struct tvp5150 {
- 
- 	struct media_pad pads[TVP5150_NUM_PADS];
- 	struct tvp5150_connector connectors[TVP5150_MAX_CONNECTORS];
-+	struct tvp5150_connector *cur_connector;
- 	unsigned int connectors_num;
- 
- 	struct v4l2_ctrl_handler hdl;
-@@ -783,17 +791,33 @@ static int tvp5150_g_std(struct v4l2_subdev *sd, v4l2_std_id *std)
- static int tvp5150_s_std(struct v4l2_subdev *sd, v4l2_std_id std)
+ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
  {
  	struct tvp5150 *decoder = to_tvp5150(sd);
-+	struct tvp5150_connector *cur_con = decoder->cur_connector;
-+	v4l2_std_id supported_stds;
+-	unsigned int mask, val = 0, int_val = 0;
++	unsigned int mask, val = 0;
  
- 	if (decoder->norm == std)
- 		return 0;
- 
-+	/* In case of no of-connectors are available no limitations are made */
-+	if (!decoder->connectors_num)
-+		supported_stds = V4L2_STD_ALL;
-+	else
-+		supported_stds = cur_con->base.connector.analog.sdtv_stds;
-+
-+	/*
-+	 * Check if requested std or group of std's is/are supported by the
-+	 * connector.
-+	 */
-+	if ((supported_stds & std) == 0)
-+		return -EINVAL;
-+
- 	/* Change cropping height limits */
- 	if (std & V4L2_STD_525_60)
- 		decoder->rect.height = TVP5150_V_MAX_525_60;
- 	else
- 		decoder->rect.height = TVP5150_V_MAX_OTHERS;
- 
--	decoder->norm = std;
-+	/* Set only the specific supported std in case of group of std's. */
-+	decoder->norm = supported_stds & std;
- 
- 	return tvp5150_set_std(sd, std);
- }
-@@ -1331,6 +1355,8 @@ static int tvp5150_link_setup(struct media_entity *entity,
- 			  TVP5150_BLACK_SCREEN, 0);
- 
- 	if (flags & MEDIA_LNK_FL_ENABLED) {
-+		u32 new_norm;
-+
- 		/*
- 		 * S-Video connector is conneted to both ports AIP1A and AIP1B.
- 		 * Both links must be enabled in one-shot regardless which link
-@@ -1342,6 +1368,29 @@ static int tvp5150_link_setup(struct media_entity *entity,
- 			if (err)
- 				return err;
- 		}
-+
-+		if (!decoder->connectors_num)
-+			return 0;
-+
-+		/* Update the current connector */
-+		decoder->cur_connector =
-+			container_of(remote, struct tvp5150_connector, pad);
-+
-+		/*
-+		 * Do nothing if the new connector supports the same tv-norms as
-+		 * the old one.
-+		 */
-+		new_norm = decoder->norm &
-+			decoder->cur_connector->base.connector.analog.sdtv_stds;
-+		if (decoder->norm == new_norm)
-+			return 0;
-+
-+		/*
-+		 * Fallback to the new connector tv-norms if we can't find any
-+		 * common between the current tv-norm and the new one.
-+		 */
-+		tvp5150_s_std(sd, new_norm ? new_norm :
-+			decoder->cur_connector->base.connector.analog.sdtv_stds);
+ 	mask = TVP5150_MISC_CTL_YCBCR_OE | TVP5150_MISC_CTL_SYNC_OE |
+ 	       TVP5150_MISC_CTL_CLOCK_OE;
+@@ -1371,15 +1386,10 @@ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
+ 			val = decoder->lock ? decoder->oe : 0;
+ 		else
+ 			val = decoder->oe;
+-		int_val = TVP5150_INT_A_LOCK;
+ 		v4l2_subdev_notify_event(&decoder->sd, &tvp5150_ev_fmt);
  	}
+ 
+ 	regmap_update_bits(decoder->regmap, TVP5150_MISC_CTL, mask, val);
+-	if (decoder->irq)
+-		/* Enable / Disable lock interrupt */
+-		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
+-				   TVP5150_INT_A_LOCK, int_val);
  
  	return 0;
-@@ -1559,6 +1608,9 @@ static int tvp5150_registered(struct v4l2_subdev *sd)
- 				TVP5150_COMPOSITE1;
+ }
+@@ -1576,6 +1586,7 @@ static const struct v4l2_subdev_core_ops tvp5150_core_ops = {
+ 	.g_register = tvp5150_g_register,
+ 	.s_register = tvp5150_s_register,
+ #endif
++	.s_power = tvp5150_s_power,
+ };
  
- 			tvp5150_selmux(sd);
-+			decoder->cur_connector = &decoder->connectors[i];
-+			tvp5150_s_std(sd,
-+				decoder->connectors[i].base.connector.analog.sdtv_stds);
- 		}
- 	}
- 
-@@ -1848,6 +1900,13 @@ tvp5150_add_connector(struct tvp5150 *decoder, struct device_node *np,
- 		goto err;
- 	}
- 
-+	if (!(vc->connector.analog.sdtv_stds & TVP5150_STD_MASK)) {
-+		dev_err(dev, "Unsupported tv-norm on connector %s\n",
-+			remote_np->name);
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+
- 	c->ent.flags = MEDIA_ENT_FL_CONNECTOR;
- 	c->ent.name = vc->label;
- 	c->ent.name = kasprintf(GFP_KERNEL, "%s %s", remote_np->name,
-@@ -1945,6 +2004,7 @@ static int tvp5150_probe(struct i2c_client *c)
- 	struct v4l2_subdev *sd;
- 	struct device_node *np = c->dev.of_node;
- 	struct regmap *map;
-+	unsigned int i;
- 	int res;
- 
- 	/* Check if the adapter supports the needed features */
-@@ -1989,7 +2049,21 @@ static int tvp5150_probe(struct i2c_client *c)
- 	if (res < 0)
- 		return res;
- 
--	core->norm = V4L2_STD_ALL;	/* Default is autodetect */
-+	/*
-+	 * Iterate over all available connectors in case they are supported and
-+	 * successfully parsed. Fallback to default autodetect in case they
-+	 * aren't supported.
-+	 */
-+	for (i = 0; i < core->connectors_num; i++) {
-+		struct v4l2_fwnode_connector *vc;
-+
-+		vc = &core->connectors[i].base;
-+		core->norm |= vc->connector.analog.sdtv_stds;
-+	}
-+
-+	if (!core->connectors_num)
-+		core->norm = V4L2_STD_ALL;
-+
- 	core->detected_norm = V4L2_STD_UNKNOWN;
- 	core->input = TVP5150_COMPOSITE1;
- 	core->enable = true;
+ static const struct v4l2_subdev_tuner_ops tvp5150_tuner_ops = {
 -- 
 2.20.1
 
