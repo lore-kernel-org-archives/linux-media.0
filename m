@@ -2,185 +2,302 @@ Return-Path: <SRS0=bMJ1=W2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C844C3A5A4
-	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 09:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4037C3A5A4
+	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 10:16:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E9E2721670
-	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 09:48:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="EoqZX1Vs"
+	by mail.kernel.org (Postfix) with ESMTP id A204C23431
+	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 10:16:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727961AbfH3Jsx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Aug 2019 05:48:53 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:46247 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727884AbfH3Jsx (ORCPT
+        id S1727754AbfH3KQ6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Aug 2019 06:16:58 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33689 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727464AbfH3KQ5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Aug 2019 05:48:53 -0400
-Received: by mail-oi1-f195.google.com with SMTP id t24so4848713oij.13
-        for <linux-media@vger.kernel.org>; Fri, 30 Aug 2019 02:48:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=opPJo7Zv4ht/hnWpVSpz0d5Vp3/hOswmpsE3zretzJE=;
-        b=EoqZX1Vsy9Szxp+b2Sg//tUs6kcL4ZoTGUwdLa+NeVeQfQf7IVynklZrNliG7NbW3c
-         BqTTvlkqs6KgPDc2/MsnL7jzP3HCSBgEPj3iAcwf3MaoLg8C9MgHhZhnJloMTNHx7gHf
-         ehsnc475CaxsOCW2n9iAALHDplUCtX23vexks=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=opPJo7Zv4ht/hnWpVSpz0d5Vp3/hOswmpsE3zretzJE=;
-        b=tNmsn1QxI/jF3IK/ZEJxEbHllUkgQv0XJwideySSFHle4bWcuujNNqxsielJGwb6jh
-         5sWuaAZmaAhunvKI6WTZ04AXCIqXQ63Q/ICxjnwyNuTLFFbmYUyS2KIHZ3++vJ3/+B63
-         VRegwgvQFngp736aQuxPP14ucaSzHuSGCrHRzXRJrJivdgIDoivqDWbBCQLcFtMPFFGO
-         NxW/t/rVzyWLP9eULdkg0GOchMk0Vjq5uKPOZPs7XtLArdPyL3pSiKKeor97nkTmcJvx
-         ZcnhuU1l6kLmxfjU0QJ7WVND2s50D1w2SpVs2r2YeWu4CdlEWCQGCW4aS/vmlFc9PwBS
-         E9MA==
-X-Gm-Message-State: APjAAAXkQV8Xm3rS7EqoWCaA7lEcZgstXhyuthlZwouJZZK8pbOpnQrh
-        nzn5Abysb5WDTHoXQ2njsZKRGaySrtU=
-X-Google-Smtp-Source: APXvYqzh+pIAh606p4We5wkbUEPYg9Q25VWQKHQzIGJTmWsMdAsHt48VBexstn3i1b1/FoDc+Bhthw==
-X-Received: by 2002:aca:6707:: with SMTP id z7mr1272204oix.155.1567158531079;
-        Fri, 30 Aug 2019 02:48:51 -0700 (PDT)
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com. [209.85.210.45])
-        by smtp.gmail.com with ESMTPSA id 63sm1827389otr.75.2019.08.30.02.48.49
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Aug 2019 02:48:50 -0700 (PDT)
-Received: by mail-ot1-f45.google.com with SMTP id o101so6330957ota.8
-        for <linux-media@vger.kernel.org>; Fri, 30 Aug 2019 02:48:49 -0700 (PDT)
-X-Received: by 2002:a9d:4817:: with SMTP id c23mr10736054otf.97.1567158529318;
- Fri, 30 Aug 2019 02:48:49 -0700 (PDT)
+        Fri, 30 Aug 2019 06:16:57 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1i3dxa-00031f-RZ; Fri, 30 Aug 2019 12:16:50 +0200
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1i3dxY-0003oI-9k; Fri, 30 Aug 2019 12:16:48 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
+        linux-media@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v10 04/14] partial revert of "[media] tvp5150: add HW input connectors support"
+Date:   Fri, 30 Aug 2019 12:16:36 +0200
+Message-Id: <20190830101646.6530-5-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190830101646.6530-1-m.felsch@pengutronix.de>
+References: <20190830101646.6530-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-References: <20190822194500.2071-1-jernej.skrabec@siol.net>
- <20190822194500.2071-3-jernej.skrabec@siol.net> <CAPBb6MUChtZcNSTa2uT50k6uPU9T68wofLYGUFRJntDhjH8+iw@mail.gmail.com>
- <907f3c43-b994-f1c7-a15b-116566e19003@xs4all.nl>
-In-Reply-To: <907f3c43-b994-f1c7-a15b-116566e19003@xs4all.nl>
-From:   Alexandre Courbot <acourbot@chromium.org>
-Date:   Fri, 30 Aug 2019 18:48:36 +0900
-X-Gmail-Original-Message-ID: <CAPBb6MV979V4BpOyYRGr4oAJOeqSmn-w1V3TRRhWePtqpzzWeQ@mail.gmail.com>
-Message-ID: <CAPBb6MV979V4BpOyYRGr4oAJOeqSmn-w1V3TRRhWePtqpzzWeQ@mail.gmail.com>
-Subject: Re: [PATCH 2/8] videodev2.h: add V4L2_DEC_CMD_FLUSH
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Jernej Skrabec <jernej.skrabec@siol.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        mripard@kernel.org, Pawel Osciak <pawel@osciak.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>, Chen-Yu Tsai <wens@csie.org>,
-        gregkh@linuxfoundation.org,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, devel@driverdev.osuosl.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>, jonas@kwiboo.se
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Fri, Aug 30, 2019 at 6:45 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrote:
->
-> On 8/30/19 11:38 AM, Alexandre Courbot wrote:
-> > On Fri, Aug 23, 2019 at 4:45 AM Jernej Skrabec <jernej.skrabec@siol.net> wrote:
-> >>
-> >> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> >>
-> >> Add this new V4L2_DEC_CMD_FLUSH decoder command and document it.
-> >>
-> >> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> >> Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-> >> ---
-> >>  Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst | 11 ++++++++++-
-> >>  Documentation/media/videodev2.h.rst.exceptions      |  1 +
-> >>  include/uapi/linux/videodev2.h                      |  1 +
-> >>  3 files changed, 12 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst b/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst
-> >> index 57f0066f4cff..0bffef6058f7 100644
-> >> --- a/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst
-> >> +++ b/Documentation/media/uapi/v4l/vidioc-decoder-cmd.rst
-> >> @@ -208,7 +208,16 @@ introduced in Linux 3.3. They are, however, mandatory for stateful mem2mem decod
-> >>         been started yet, the driver will return an ``EPERM`` error code. When
-> >>         the decoder is already running, this command does nothing. No
-> >>         flags are defined for this command.
-> >> -
-> >> +    * - ``V4L2_DEC_CMD_FLUSH``
-> >> +      - 4
-> >> +      - Flush any held capture buffers. Only valid for stateless decoders,
-> >> +        and only if ``V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF`` was set.
-> >> +       This command is typically used when the application reached the
-> >> +       end of the stream and the last output buffer had the
-> >> +       ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` flag set. This would prevent
-> >> +       dequeueing the last capture buffer containing the last decoded frame.
-> >> +       So this command can be used to explicitly flush that last decoded
-> >> +       frame.
-> >
-> > Just for safety, can we also specify that it is valid to call this
-> > command even if no buffer was held (in which case it is a no-op), as
-> > this can help make user-space code simpler?
->
-> Ah yes, thanks for the reminder.
->
-> Jernej, when you post the next version of this series, can you change the text
-> above to:
->
-> - Flush any held capture buffers. Only valid for stateless decoders.
->   This command is typically used when the application reached the
->   end of the stream and the last output buffer had the
->   ``V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF`` flag set. This would prevent
->   dequeueing the capture buffer containing the last decoded frame.
->   So this command can be used to explicitly flush that final decoded
->   frame. This command does nothing if there are no held capture buffers.
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-With the above,
+Commit f7b4b54e6364 ("[media] tvp5150: add HW input connectors support")
+added input signals support for the tvp5150, but the approach was found
+to be incorrect so the corresponding DT binding commit 82c2ffeb217a
+("[media] tvp5150: document input connectors DT bindings") was reverted.
 
-Reviewed-by: Alexandre Courbot <acourbot@chromium.org>
+This left the driver with an undocumented (and wrong) DT parsing logic,
+so lets get rid of this code as well until the input connectors support
+is implemented properly.
 
-Thanks!
+It's a partial revert due other patches added on top of mentioned commit
+not allowing the commit to be reverted cleanly anymore. But all the code
+related to the DT parsing logic and input entities creation are removed.
 
->
-> Regards,
->
->         Hans
->
-> >
-> >>
-> >>  Return Value
-> >>  ============
-> >> diff --git a/Documentation/media/videodev2.h.rst.exceptions b/Documentation/media/videodev2.h.rst.exceptions
-> >> index adeb6b7a15cb..a79028e4d929 100644
-> >> --- a/Documentation/media/videodev2.h.rst.exceptions
-> >> +++ b/Documentation/media/videodev2.h.rst.exceptions
-> >> @@ -434,6 +434,7 @@ replace define V4L2_DEC_CMD_START decoder-cmds
-> >>  replace define V4L2_DEC_CMD_STOP decoder-cmds
-> >>  replace define V4L2_DEC_CMD_PAUSE decoder-cmds
-> >>  replace define V4L2_DEC_CMD_RESUME decoder-cmds
-> >> +replace define V4L2_DEC_CMD_FLUSH decoder-cmds
-> >>
-> >>  replace define V4L2_DEC_CMD_START_MUTE_AUDIO decoder-cmds
-> >>  replace define V4L2_DEC_CMD_PAUSE_TO_BLACK decoder-cmds
-> >> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> >> index 4fa9f543742d..91a79e16089c 100644
-> >> --- a/include/uapi/linux/videodev2.h
-> >> +++ b/include/uapi/linux/videodev2.h
-> >> @@ -1978,6 +1978,7 @@ struct v4l2_encoder_cmd {
-> >>  #define V4L2_DEC_CMD_STOP        (1)
-> >>  #define V4L2_DEC_CMD_PAUSE       (2)
-> >>  #define V4L2_DEC_CMD_RESUME      (3)
-> >> +#define V4L2_DEC_CMD_FLUSH       (4)
-> >>
-> >>  /* Flags for V4L2_DEC_CMD_START */
-> >>  #define V4L2_DEC_CMD_START_MUTE_AUDIO  (1 << 0)
-> >> --
-> >> 2.22.1
-> >>
->
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Acked-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+[m.felsch@pengutronix.de: rm TVP5150_INPUT_NUM define]
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ drivers/media/i2c/tvp5150.c         | 145 ----------------------------
+ include/dt-bindings/media/tvp5150.h |   2 -
+ 2 files changed, 147 deletions(-)
+
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index edad49cebcdf..11a5fd7e2f58 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -53,8 +53,6 @@ struct tvp5150 {
+ 	struct v4l2_subdev sd;
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ 	struct media_pad pads[TVP5150_NUM_PADS];
+-	struct media_entity input_ent[TVP5150_INPUT_NUM];
+-	struct media_pad input_pad[TVP5150_INPUT_NUM];
+ #endif
+ 	struct v4l2_ctrl_handler hdl;
+ 	struct v4l2_rect rect;
+@@ -1169,40 +1167,6 @@ static int tvp5150_enum_frame_size(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
+-/****************************************************************************
+-			Media entity ops
+- ****************************************************************************/
+-
+-#ifdef CONFIG_MEDIA_CONTROLLER
+-static int tvp5150_link_setup(struct media_entity *entity,
+-			      const struct media_pad *local,
+-			      const struct media_pad *remote, u32 flags)
+-{
+-	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
+-	struct tvp5150 *decoder = to_tvp5150(sd);
+-	int i;
+-
+-	for (i = 0; i < TVP5150_INPUT_NUM; i++) {
+-		if (remote->entity == &decoder->input_ent[i])
+-			break;
+-	}
+-
+-	/* Do nothing for entities that are not input connectors */
+-	if (i == TVP5150_INPUT_NUM)
+-		return 0;
+-
+-	decoder->input = i;
+-
+-	tvp5150_selmux(sd);
+-
+-	return 0;
+-}
+-
+-static const struct media_entity_operations tvp5150_sd_media_ops = {
+-	.link_setup = tvp5150_link_setup,
+-};
+-#endif
+-
+ /****************************************************************************
+ 			I2C Command
+  ****************************************************************************/
+@@ -1350,42 +1314,6 @@ static int tvp5150_g_tuner(struct v4l2_subdev *sd, struct v4l2_tuner *vt)
+ 	return 0;
+ }
+ 
+-static int tvp5150_registered(struct v4l2_subdev *sd)
+-{
+-#ifdef CONFIG_MEDIA_CONTROLLER
+-	struct tvp5150 *decoder = to_tvp5150(sd);
+-	int ret = 0;
+-	int i;
+-
+-	for (i = 0; i < TVP5150_INPUT_NUM; i++) {
+-		struct media_entity *input = &decoder->input_ent[i];
+-		struct media_pad *pad = &decoder->input_pad[i];
+-
+-		if (!input->name)
+-			continue;
+-
+-		decoder->input_pad[i].flags = MEDIA_PAD_FL_SOURCE;
+-
+-		ret = media_entity_pads_init(input, 1, pad);
+-		if (ret < 0)
+-			return ret;
+-
+-		ret = media_device_register_entity(sd->v4l2_dev->mdev, input);
+-		if (ret < 0)
+-			return ret;
+-
+-		ret = media_create_pad_link(input, 0, &sd->entity,
+-					    TVP5150_PAD_IF_INPUT, 0);
+-		if (ret < 0) {
+-			media_device_unregister_entity(input);
+-			return ret;
+-		}
+-	}
+-#endif
+-
+-	return 0;
+-}
+-
+ /* ----------------------------------------------------------------------- */
+ 
+ static const struct v4l2_ctrl_ops tvp5150_ctrl_ops = {
+@@ -1439,10 +1367,6 @@ static const struct v4l2_subdev_ops tvp5150_ops = {
+ 	.pad = &tvp5150_pad_ops,
+ };
+ 
+-static const struct v4l2_subdev_internal_ops tvp5150_internal_ops = {
+-	.registered = tvp5150_registered,
+-};
+-
+ /****************************************************************************
+ 			I2C Client & Driver
+  ****************************************************************************/
+@@ -1595,12 +1519,6 @@ static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
+ {
+ 	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
+ 	struct device_node *ep;
+-#ifdef CONFIG_MEDIA_CONTROLLER
+-	struct device_node *connectors, *child;
+-	struct media_entity *input;
+-	const char *name;
+-	u32 input_type;
+-#endif
+ 	unsigned int flags;
+ 	int ret = 0;
+ 
+@@ -1624,67 +1542,6 @@ static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
+ 
+ 	decoder->mbus_type = bus_cfg.bus_type;
+ 
+-#ifdef CONFIG_MEDIA_CONTROLLER
+-	connectors = of_get_child_by_name(np, "connectors");
+-
+-	if (!connectors)
+-		goto err;
+-
+-	for_each_available_child_of_node(connectors, child) {
+-		ret = of_property_read_u32(child, "input", &input_type);
+-		if (ret) {
+-			dev_err(decoder->sd.dev,
+-				 "missing type property in node %pOFn\n",
+-				 child);
+-			of_node_put(child);
+-			goto err_connector;
+-		}
+-
+-		if (input_type >= TVP5150_INPUT_NUM) {
+-			ret = -EINVAL;
+-			of_node_put(child);
+-			goto err_connector;
+-		}
+-
+-		input = &decoder->input_ent[input_type];
+-
+-		/* Each input connector can only be defined once */
+-		if (input->name) {
+-			dev_err(decoder->sd.dev,
+-				 "input %s with same type already exists\n",
+-				 input->name);
+-			of_node_put(child);
+-			ret = -EINVAL;
+-			goto err_connector;
+-		}
+-
+-		switch (input_type) {
+-		case TVP5150_COMPOSITE0:
+-		case TVP5150_COMPOSITE1:
+-			input->function = MEDIA_ENT_F_CONN_COMPOSITE;
+-			break;
+-		case TVP5150_SVIDEO:
+-			input->function = MEDIA_ENT_F_CONN_SVIDEO;
+-			break;
+-		}
+-
+-		input->flags = MEDIA_ENT_FL_CONNECTOR;
+-
+-		ret = of_property_read_string(child, "label", &name);
+-		if (ret < 0) {
+-			dev_err(decoder->sd.dev,
+-				 "missing label property in node %pOFn\n",
+-				 child);
+-			of_node_put(child);
+-			goto err_connector;
+-		}
+-
+-		input->name = name;
+-	}
+-
+-err_connector:
+-	of_node_put(connectors);
+-#endif
+ err:
+ 	of_node_put(ep);
+ 	return ret;
+@@ -1735,7 +1592,6 @@ static int tvp5150_probe(struct i2c_client *c)
+ 	}
+ 
+ 	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
+-	sd->internal_ops = &tvp5150_internal_ops;
+ 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 
+ #if defined(CONFIG_MEDIA_CONTROLLER)
+@@ -1750,7 +1606,6 @@ static int tvp5150_probe(struct i2c_client *c)
+ 	if (res < 0)
+ 		return res;
+ 
+-	sd->entity.ops = &tvp5150_sd_media_ops;
+ #endif
+ 
+ 	res = tvp5150_detect_version(core);
+diff --git a/include/dt-bindings/media/tvp5150.h b/include/dt-bindings/media/tvp5150.h
+index 01eedf4985b8..dda00c038530 100644
+--- a/include/dt-bindings/media/tvp5150.h
++++ b/include/dt-bindings/media/tvp5150.h
+@@ -14,8 +14,6 @@
+ #define TVP5150_COMPOSITE1 1
+ #define TVP5150_SVIDEO     2
+ 
+-#define TVP5150_INPUT_NUM  3
+-
+ /* TVP5150 HW outputs */
+ #define TVP5150_NORMAL       0
+ #define TVP5150_BLACK_SCREEN 1
+-- 
+2.20.1
+
