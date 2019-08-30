@@ -2,67 +2,68 @@ Return-Path: <SRS0=bMJ1=W2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-12.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9820C3A5A4
-	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 09:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B687C3A5A9
+	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 09:20:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FDD62342A
-	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 09:20:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F99B2342C
+	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 09:20:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ux+jFtwd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vEEMZErj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727994AbfH3JUD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Aug 2019 05:20:03 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:46095 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726461AbfH3JUC (ORCPT
+        id S1728162AbfH3JUL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Aug 2019 05:20:11 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37866 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728153AbfH3JUJ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Aug 2019 05:20:02 -0400
-Received: by mail-pl1-f194.google.com with SMTP id o3so3074227plb.13
-        for <linux-media@vger.kernel.org>; Fri, 30 Aug 2019 02:20:02 -0700 (PDT)
+        Fri, 30 Aug 2019 05:20:09 -0400
+Received: by mail-pf1-f195.google.com with SMTP id y9so4260601pfl.4
+        for <linux-media@vger.kernel.org>; Fri, 30 Aug 2019 02:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=mF/OnrJ00SbahU15HvzXY+I7DAqSAdHto9JRdxhPxic=;
-        b=Ux+jFtwdTk9Ronis0odb2Ycgp0S8vbePlVivVxngSn0nWhes+7VjYfxqI7v38XNJAq
-         z+L5xNuAA2giKtmAcBW78A7RMcdyvoy57MuKHKukH36N/z4WPVhWysQdDAkW9LuCdz2T
-         XUxGYTUK0VAhAHj20aNla4/UKJDnBUqLk0xWFFI5oSDzx48wqtTtk0xJtMvqvpkgurNM
-         eHqQVSWE9gqvLdAJh4mZvqpqiEoYLVJGLLtBLQKuwy0g0U9crR/G+hqVjqQNXO9K+0Wh
-         uWonQsDM7nfyk96SON7K1ri2/YJhyEOSS5yQNm2NVphighYDB8AvbP6A2BJdlAaKfjtY
-         XIXQ==
+        bh=iZqgNQFAGZFiAL+MaQauEs39+uIHNVqT3urPZ1OfwvY=;
+        b=vEEMZErjrqbkE0Yt2O0M3pSZapLdQhKFR6Jz5LV86q7cH0uJZmqmSn4UxyeR201COp
+         t3B6qRntiLYgA+1MM5JpQpQnA4+WGVyFeGb+b1QgOLONuEoeviEyzTo4mIlQU93a1cyP
+         U7NKYVgViyjNKl6VAWDhM6ToSI2koxMxpXeC1NY4mItJl2YHEEHp0tTJrYrbsgtD6JEE
+         2pzRxpKMONBU8+8Vp5/uO59LhyHzyL1cVOIb6hUmdqwFxrrzMUpe0jXUjvi/rel9OMRy
+         RLuNThpYJNgLmIKuZd5POYNg07J5G0fODzVn5Oj4u/8XsYVAoYbIStDGTV+la2PeUpD6
+         BUxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=mF/OnrJ00SbahU15HvzXY+I7DAqSAdHto9JRdxhPxic=;
-        b=Ip/ICEi/MQ/oLZUxGyffKavJR7lEQfLk1vP2TxAq7FQdFX0RvBi7s6IAud3lirmclT
-         rsRKS07rPWJ5PE5RmF/zuoD/6kowwFRS+WO9oYb8sHLoUcVSLbloY13fkmUif/xRDndr
-         Yc1rbGrGLHlERXvjyLs4PzQJHAiNugRagEG3ALg2HddKN3WMUpqZM4XJ+K061oWpy+hw
-         m47MVqhRIk+BoN6JDYWl/nPJ1ME7Y5C5/Jr8QMY+lBwaYOMK9VEeeLEAn8QMql6VpRKz
-         rcVJahlH4QM+HyzaH/rFhMQW43FDVz/kK/OMU6jYHEddWp7bOPsat6HtBWk8cIZ2Spv7
-         xX1g==
-X-Gm-Message-State: APjAAAW46WtIoPDMLe53LLpTiMcJ5oe5AVY5DlgbldHebJaO2LlS3vAz
-        pypteyqoOlXPloVnW4aAruQy
-X-Google-Smtp-Source: APXvYqz5A+CcX7gq9fWKGI9UWFItRu3q1idaB7iqtUj4bbysDpItsyNSNqG0GqxsFoPU+L2K5PUflw==
-X-Received: by 2002:a17:902:e506:: with SMTP id ck6mr14969628plb.132.1567156801843;
-        Fri, 30 Aug 2019 02:20:01 -0700 (PDT)
+        bh=iZqgNQFAGZFiAL+MaQauEs39+uIHNVqT3urPZ1OfwvY=;
+        b=BSbauVAqJq6aUpVpd/Y4Tn5aTMunm0qgZ5tZvUNTth7fPPLp3auMHSGR2saYrC/bmA
+         due1+dw23ErQO25yoQVv8JCrJfWM6ZHGAgJHxQ+X9o0aSUtei3c0N6G+vU+yia7pm3mV
+         qOBXn4P3W0cTcAFezGCpWQrvD1bsflXAJZOeuy0SZqbcET8AM8ZBFXkYqnnVID5P63nK
+         zSMW6AvKPUklCuUHq/97s/9bGHIijcgiEV0yXVMClPsgi0U9Xmtek4HtV5X1rN4EwWHX
+         +fVK8fvkZhEVS2q4W5s6MTSQAP1oc8+Vg6wI8w5rqeB1JjJEP9CPTZB+PmPs3ZSyGW4S
+         M9dQ==
+X-Gm-Message-State: APjAAAUjmVpEIlxOseiOJ/ol2DF8onONb6eaDsGJZZkqS4soW0VkM2wb
+        2EAfiAFXwX3GvXuVPHgiFIkS/34UEDPp
+X-Google-Smtp-Source: APXvYqzRFHNDr9oad7voBnS6/n543GjlV3A1iB44aDSh9qfP+WzcmpPz9MGSnjRwedesjP+mvAADmQ==
+X-Received: by 2002:a17:90a:ad84:: with SMTP id s4mr15052314pjq.32.1567156808627;
+        Fri, 30 Aug 2019 02:20:08 -0700 (PDT)
 Received: from localhost.localdomain ([103.59.132.163])
-        by smtp.googlemail.com with ESMTPSA id g202sm3142676pfb.155.2019.08.30.02.19.58
+        by smtp.googlemail.com with ESMTPSA id g202sm3142676pfb.155.2019.08.30.02.20.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2019 02:20:01 -0700 (PDT)
+        Fri, 30 Aug 2019 02:20:08 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     mchehab@kernel.org, robh+dt@kernel.org, sakari.ailus@iki.fi
 Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         c.barrett@framos.com, a.brela@framos.com,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 1/3] dt-bindings: media: i2c: Add IMX290 CMOS sensor binding
-Date:   Fri, 30 Aug 2019 14:49:41 +0530
-Message-Id: <20190830091943.22646-2-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 3/3] MAINTAINERS: Add entry for IMX290 CMOS image sensor driver
+Date:   Fri, 30 Aug 2019 14:49:43 +0530
+Message-Id: <20190830091943.22646-4-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190830091943.22646-1-manivannan.sadhasivam@linaro.org>
 References: <20190830091943.22646-1-manivannan.sadhasivam@linaro.org>
@@ -71,78 +72,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add devicetree binding for IMX290 CMOS image sensor.
+Add MAINTAINERS entry for Sony IMX290 CMOS image sensor driver.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../devicetree/bindings/media/i2c/imx290.txt  | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/i2c/imx290.txt
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/imx290.txt b/Documentation/devicetree/bindings/media/i2c/imx290.txt
-new file mode 100644
-index 000000000000..a3cc21410f7c
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/i2c/imx290.txt
-@@ -0,0 +1,57 @@
-+* Sony IMX290 1/2.8-Inch CMOS Image Sensor
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f7c84004187d..0ee261fca602 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14962,6 +14962,14 @@ S:	Maintained
+ F:	drivers/media/i2c/imx274.c
+ F:	Documentation/devicetree/bindings/media/i2c/imx274.txt
+ 
++SONY IMX290 SENSOR DRIVER
++M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++L:	linux-media@vger.kernel.org
++T:	git git://linuxtv.org/media_tree.git
++S:	Maintained
++F:	drivers/media/i2c/imx290.c
++F:	Documentation/devicetree/bindings/media/i2c/imx290.txt
 +
-+The Sony IMX290 is a 1/2.8-Inch CMOS Solid-state image sensor with
-+Square Pixel for Color Cameras. It is programmable through I2C and 4-wire
-+interfaces. The sensor output is available via CMOS logic parallel SDR output,
-+Low voltage LVDS DDR output and CSI-2 serial data output. The CSI-2 bus is the
-+default. No bindings have been defined for the other busses.
-+
-+Required Properties:
-+- compatible: Should be "sony,imx290"
-+- reg: I2C bus address of the device
-+- clocks: Reference to the xclk clock.
-+- clock-names: Should be "xclk".
-+- clock-frequency: Frequency of the xclk clock in Hz.
-+- vdddo-supply: Sensor digital IO regulator.
-+- vdda-supply: Sensor analog regulator.
-+- vddd-supply: Sensor digital core regulator.
-+
-+Optional Properties:
-+- reset-gpios: Sensor reset GPIO
-+
-+The imx290 device node should contain one 'port' child node with
-+an 'endpoint' subnode. For further reading on port node refer to
-+Documentation/devicetree/bindings/media/video-interfaces.txt.
-+
-+Required Properties on endpoint:
-+- data-lanes: check ../video-interfaces.txt
-+- link-frequencies: check ../video-interfaces.txt
-+- remote-endpoint: check ../video-interfaces.txt
-+
-+Example:
-+	&i2c1 {
-+		...
-+		imx290: camera-sensor@1a {
-+			compatible = "sony,imx290";
-+			reg = <0x1a>;
-+
-+			reset-gpios = <&msmgpio 35 GPIO_ACTIVE_LOW>;
-+			pinctrl-names = "default";
-+			pinctrl-0 = <&camera_rear_default>;
-+
-+			clocks = <&gcc GCC_CAMSS_MCLK0_CLK>;
-+			clock-names = "xclk";
-+			clock-frequency = <37125000>;
-+
-+			vdddo-supply = <&camera_vdddo_1v8>;
-+			vdda-supply = <&camera_vdda_2v8>;
-+			vddd-supply = <&camera_vddd_1v5>;
-+
-+			port {
-+				imx290_ep: endpoint {
-+					data-lanes = <1 2 3 4>;
-+					link-frequencies = /bits/ 64 <445500000>;
-+					remote-endpoint = <&csiphy0_ep>;
-+				};
-+			};
-+		};
+ SONY IMX319 SENSOR DRIVER
+ M:	Bingbu Cao <bingbu.cao@intel.com>
+ L:	linux-media@vger.kernel.org
 -- 
 2.17.1
 
