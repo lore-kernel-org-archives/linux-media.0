@@ -1,221 +1,161 @@
-Return-Path: <SRS0=bMJ1=W2=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=pTzm=W3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CEC9DC3A59B
-	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 21:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72F7FC3A59F
+	for <linux-media@archiver.kernel.org>; Sat, 31 Aug 2019 03:52:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8DAA223697
-	for <linux-media@archiver.kernel.org>; Fri, 30 Aug 2019 21:06:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RmAAzFzg"
+	by mail.kernel.org (Postfix) with ESMTP id 49CCC23697
+	for <linux-media@archiver.kernel.org>; Sat, 31 Aug 2019 03:52:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728079AbfH3VGB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 30 Aug 2019 17:06:01 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:55056 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727991AbfH3VGB (ORCPT
+        id S1728423AbfHaDwV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 30 Aug 2019 23:52:21 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:56767 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728420AbfHaDwV (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 30 Aug 2019 17:06:01 -0400
-Received: by mail-wm1-f68.google.com with SMTP id k2so7266361wmj.4
-        for <linux-media@vger.kernel.org>; Fri, 30 Aug 2019 14:05:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:cc:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=6JHAQ1Uk5UbFFdHI8qcQxJDUgbiHOpf5yDrxgceM8cE=;
-        b=RmAAzFzgzyHH+7MRtvug7hXtAn7O455M2R41w+93MbvwMtqRFs5SaO6pa57Eb085I6
-         W09BYE9SsFA43ZDQq4+8MM/6D8yyKQc41ZEoj6Ds1Y1X0RFhzesZHHGGNd6M0qzFuj+Y
-         hr0ceZ3oVwvpeLIYDef+ew2MqyjRLUn/woGQu5JyWZ6y/ziMwJSnHu3C/2VdHz0r1I1J
-         2vMjveFm+dRi6PF7Ul+y0R7OAAEG5ubvjQRQLz/+/FNHQNNkxmET0w5eKACaaZqQ24vA
-         /7gaqxvmA5RNW6EUDpp9eEFgT0VAFz5bXVTK4MXrtFCinKrnPDTC9cquukiVKAqpDqQh
-         PFjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=6JHAQ1Uk5UbFFdHI8qcQxJDUgbiHOpf5yDrxgceM8cE=;
-        b=uoRyPWT2/R3/5k+H/ceTYWJ3CvZ82ExdxV7u+21lK9EznzZ2qC1cy73H7GY8+AtzT6
-         OMicIl2iBHtNpytnIfonO04mOPY6aF6UdRpZA7rrf1R8iZ6ht9oZJ3Bjv7jh8VVCV3NZ
-         kya43PoRxWGm1Czjz8bUDMiEtVIWUv5JA7kjDwpMxOc5MvI0zKRdzktpQv2Sf2j7H4Mv
-         PhmuGP0oXINc0H6Q5kYhzUYXHdBFDh7iXYmlGKfLy7npsfUGG/oawRpZey5wXZIJ7hMf
-         oD6eJexb+i6Z/3M6t/C39bzbPEE/mxCdqIphcwQ9QtvfvzfOSEPlqPhvckCdRn2m2Fck
-         MhYg==
-X-Gm-Message-State: APjAAAXe1NP8NWFjGLvJArH+DjXt2ic+vP5ojd1Pit5b8bqQJZGI0qcH
-        8RDqIV8f0WxAel+xLXICYy4gSbSE
-X-Google-Smtp-Source: APXvYqw0mXXeVA2Csiq68HEyOPiS9WNYs1r3k7k7OwKstOo7XK7XI2556ToLDQNu1RJhz7WNJPlsZQ==
-X-Received: by 2002:a1c:6c0d:: with SMTP id h13mr19007613wmc.74.1567199158215;
-        Fri, 30 Aug 2019 14:05:58 -0700 (PDT)
-Received: from [172.30.88.166] (sjewanfw1-nat.mentorg.com. [139.181.7.34])
-        by smtp.gmail.com with ESMTPSA id z10sm3376990wrg.12.2019.08.30.14.05.55
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 30 Aug 2019 14:05:57 -0700 (PDT)
-Subject: Re: [PATCH 00/22] media: imx: Create media links in bound notifiers
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-References: <20190805233505.21167-1-slongerbeam@gmail.com>
-Cc:     linux-media <linux-media@vger.kernel.org>
-From:   Steve Longerbeam <slongerbeam@gmail.com>
-Message-ID: <b22199c2-c769-df1f-7ca2-335edc0869d2@gmail.com>
-Date:   Fri, 30 Aug 2019 14:05:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190805233505.21167-1-slongerbeam@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        Fri, 30 Aug 2019 23:52:21 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:91d7:8651:e038:28fd])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id 3uR0ie8TuDqPe3uR1iVLFG; Sat, 31 Aug 2019 05:52:19 +0200
+Message-ID: <f4b9b7c04bceefdf8c8990d425e29efd@smtp-cloud8.xs4all.net>
+Date:   Sat, 31 Aug 2019 05:52:18 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: OK
+X-CMAE-Envelope: MS4wfMHkaxpxbxZOMNBnedZ+YEa+eL/dLdDS54bT+E3C9x/jsimsOOtyYBjhERsK9YEj0uklxA+3NqHtzBn4C8yqqZQ+u/ODIj2AR4+VwYBUZY9NyO8rrKLt
+ ua+RZcjrCdTgnJ1uMm9oKHXETv09EHuhnpoEnT3+ZoRXYAVJYNHYMhNYHTd3oegId6t2kcetLJonHPB9hAojyqdvxxw+SwV9MDr3KjJHFvK8KCIrqawayR/e
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Sakari, Hans, etc.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Can you take a look at this series at some point? I think there's some 
-good stuff in here.
+Results of the daily build of media_tree:
 
-Thanks,
-Steve
+date:			Sat Aug 31 05:00:11 CEST 2019
+media-tree git hash:	20a438d53fd9d12a894161bc56cbeab7a9993c39
+media_build git hash:	d75b29db1297d2475227cc8bada843542271e40d
+v4l-utils git hash:	b393a5408383b7341883857dfda78537f2f85ef6
+edid-decode git hash:	0932deee88928f110b5a74851c173ad895f75863
+gcc version:		i686-linux-gcc (GCC) 8.3.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 6f55e31dfb87970608ee0a47ba8df34869f14140
+host hardware:		x86_64
+host os:		4.19.0-4-amd64
 
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3-rc1-i686: OK
+linux-5.3-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2327, Succeeded: 2327, Failed: 0, Warnings: 0
+sparse: OK
+smatch: OK
 
-On 8/5/19 4:34 PM, Steve Longerbeam wrote:
-> This series moves media link creation into the notifier bound callbacks
-> in the subdevices required by imx.
->
-> But to support the media graph on imx, a few improvements first needed
-> to be made to media core.
->
-> The default behavior of media_entity_get_fwnode_pad() fails when
-> the entity has multiple sink and/or source pads. Wrt imx, there are
-> three such entities: the imx6/7 csi-2 receivers, and the video mux.
-> All of those however have a 1:1 mapping from port numbers to pad
-> indeces.
->
-> So instead of implementing .get_fwnode_pad op for those entities,
-> or any other entities now or in the future that have multiple
-> source/sink pads, it is better to modify the default behavior
-> of media_entity_get_fwnode_pad() to first determine if the port
-> number at the provided endpoint firmware node corresponds to a
-> valid pad for the provided entity. That way the default behavior
-> will work for such entities that implement 1:1 mappings, without
-> requiring they implement the .get_fwnode_pad op. In other words,
-> the old behavior of media_entity_get_fwnode_pad() required entities
-> implement .get_fwnode_pad if they have multiple sink or source pads.
-> The new behavior requires entities implement .get_fwnode_pad _only_
-> if they have multiple sink or source pads, _and_ do not have 1:1
-> port:pad mappings.
->
-> Also, as part of the above work, it was discovered that all of the
-> current callers of media_entity_get_fwnode_pad() are not using that
-> function correctly. In all but one case the driver passes the firmware
-> node of the subdevice itself to the function, not one of its endpoint
-> nodes as the function expects. In more detail:
->
->    - Cadence MIPI-CSI2 Receiver: Calls media_entity_get_fwnode_pad()
->      in the subdev bound notifier callback, but passes sd->fwnode to
->      the function. This is usually the fwnode of the subdevice itself,
->      not one of its endpoint nodes. This only works now because there
->      are no implementations of the .get_fwnode_pad op. This will break
->      as soon as the bound subdevice implements the .get_fwnode_pad op.
->
->    - ST Micro MIPID02 CSI-2: Calls media_entity_get_fwnode_pad() in the
->      subdev bound notifier callback. Same issue as cadence driver, passes
->      sd->fwnode.
->
->    - Allwinner V3s CSI: Calls media_entity_get_fwnode_pad() in the
->      completion notifier callback. Same issue as cadence driver, passes
->      sd->fwnode.
->
->    - Renesas R-Car MIPI CSI-2 Receiver: Calls media_entity_get_fwnode_pad()
->      in the subdev bound notifier callback. In this case the driver passes
->      the async subdev descriptor match fwnode. Again for most subdevices,
->      this is the fwnode of the subdevice itself, not one of its endpoint
->      nodes. However on the Salvator-X platform, the bound subdevice happens
->      to be the ADV748x CSI-2 transmitter, which does indeed place the
->      endpoint node in the asd match fwnode. But the problem is that the
->      driver is now making assumptions about what subdevices it is binding
->      to.
->
-> To resolve the above issues, this series adds a new function
-> media_create_fwnode_pad_links(), which creates the media links from/to
-> all pads on a remote entity, to/from a single specific local entity pad,
-> using the remote's endpoint fwnodes. It's API makes it convenient to call
-> from subdev bound notifier callbacks.
->
-> Another function media_create_fwnode_links() is added that will create
-> links from/to all pads on a remote entity, to/from all pads on a local
-> entity. It's API also makes it convenient to call from subdev bound
-> notifier callbacks, and can be called for entities that link to remote
-> entities via multiple pads (for example the video-mux which has multiple
-> sink pads that link to multiple bound subdevices).
->
-> This series has been tested on i.MX6 SabreSD, SabreLite, and SabreAuto
-> platforms, and the Renesas Salvator-X platform.
->
-> The series needs testing on i.MX7, Cadence, ST Micro MIPID02, and
-> Allwinner V3s platforms. Testing only needs to verify that the media
-> graph is unchanged, no stream testing is required. If the media graph
-> is broken, it means the subdevice(s) that bind to the drivers listed
-> above need to implement the .get_fwnode_pad op.
->
->
-> Steve Longerbeam (22):
->    media: entity: Pass entity to get_fwnode_pad operation
->    media: entity: Modify default behavior of media_entity_get_fwnode_pad
->    media: entity: Convert media_entity_get_fwnode_pad() args to const
->    media: Move v4l2_fwnode_parse_link from v4l2 to driver base
->    media: entity: Add functions to convert fwnode endpoints to media
->      links
->    media: adv748x: csi2: Implement get_fwnode_pad
->    media: rcar-csi2: Fix fwnode media link creation
->    media: cadence: csi2rx: Fix fwnode media link creation
->    media: sun6i: Fix fwnode media link creation
->    media: st-mipid02: Fix fwnode media link creation
->    media: v4l2-fwnode: Pass notifier to
->      v4l2_async_register_fwnode_subdev()
->    media: video-mux: Create media links in bound notifier
->    media: imx: mipi csi-2: Create media links in bound notifier
->    media: imx7-mipi-csis: Create media links in bound notifier
->    media: imx7-media-csi: Create media links in bound notifier
->    media: imx: csi: Implement get_fwnode_pad
->    media: imx: csi: Embed notifier in struct csi_priv
->    media: imx: csi: Create media links in bound notifier
->    media: imx: csi: Lookup endpoint fwnode with
->      media_entity_get_fwnode_pad
->    media: imx: Add is_ipu_internal_subdev()
->    media: imx: Use media_create_fwnode_links for external links
->    media: imx: TODO: Remove issues regarding media link creation
->
->   drivers/base/property.c                       |  63 ++++++
->   drivers/media/i2c/adv748x/adv748x-csi2.c      |  21 ++
->   drivers/media/i2c/st-mipid02.c                |  20 +-
->   drivers/media/mc/mc-entity.c                  | 209 +++++++++++++++++-
->   drivers/media/platform/cadence/cdns-csi2rx.c  |  27 +--
->   drivers/media/platform/rcar-vin/rcar-csi2.c   |  23 +-
->   .../platform/sunxi/sun6i-csi/sun6i_csi.c      |  36 +--
->   drivers/media/platform/video-mux.c            |  30 ++-
->   drivers/media/platform/xilinx/xilinx-vipp.c   |  69 +++---
->   drivers/media/v4l2-core/v4l2-fwnode.c         |  50 +----
->   drivers/staging/media/imx/TODO                |  29 ---
->   drivers/staging/media/imx/imx-media-csi.c     |  92 +++++---
->   .../staging/media/imx/imx-media-dev-common.c  |  49 ++--
->   drivers/staging/media/imx/imx-media-of.c      | 114 ----------
->   drivers/staging/media/imx/imx-media-utils.c   |  33 +++
->   drivers/staging/media/imx/imx-media.h         |  13 +-
->   drivers/staging/media/imx/imx6-mipi-csi2.c    |  29 ++-
->   drivers/staging/media/imx/imx7-media-csi.c    |  54 +++--
->   drivers/staging/media/imx/imx7-mipi-csis.c    |  30 ++-
->   include/linux/fwnode.h                        |  14 ++
->   include/linux/property.h                      |   5 +
->   include/media/media-entity.h                  |  99 ++++++++-
->   include/media/v4l2-fwnode.h                   |  56 +----
->   23 files changed, 721 insertions(+), 444 deletions(-)
->
+Detailed results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Saturday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Saturday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Saturday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
