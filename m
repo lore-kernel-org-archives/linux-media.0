@@ -2,50 +2,52 @@ Return-Path: <SRS0=mWeH=W6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC61DC3A5A2
-	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 16:26:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12EC5C3A5A5
+	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 16:34:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C5D3D23952
-	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 16:26:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D61ED23400
+	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 16:34:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567527976;
-	bh=LOhnvssldB+jjHmYLqfAek4Xv6M+UEmtM+XiHk1p7yU=;
+	s=default; t=1567528460;
+	bh=Q3J76ibsb9b/yijBhYCVKKVj1TBh9pMTt7rn8oqua04=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OuPiRpiZ2/b+2xBX0BoRtkVNsCeBrJJF7+6wXBFbWzqqaDqZjvnXGP3voQFP3FD46
-	 NIHpqCTzRPQMOC5JyO9UdmQ0KaZiSKFk9w9K+l/KsXZUs1iY6/kn0jbte43gsD/psp
-	 u3B10SQkbKt72z4q44tFPMOtvEjAU4BldPB1b4+4=
+	b=SGsfdzdddpEHdgJNgVrKJX5r/vD+Ej/6jbzjintuyjpxHRShxv/MniNCXcqw2VN6w
+	 RkJsPx3diy3IcV6ESZvLmwPjdZJshkO9FBKq7y1mCrghRcuCqY3k2A4wF9s3QsyBdt
+	 ENmEdD1Qe1KfmLR4O9mSz+CdEH7JGEzl0CX5CU+I=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730513AbfICQ0P (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Sep 2019 12:26:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46938 "EHLO mail.kernel.org"
+        id S1730305AbfICQeU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Sep 2019 12:34:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49802 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730126AbfICQ0O (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 3 Sep 2019 12:26:14 -0400
+        id S1730119AbfICQ2G (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 3 Sep 2019 12:28:06 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0F5E9238CF;
-        Tue,  3 Sep 2019 16:26:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D81123431;
+        Tue,  3 Sep 2019 16:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567527973;
-        bh=LOhnvssldB+jjHmYLqfAek4Xv6M+UEmtM+XiHk1p7yU=;
+        s=default; t=1567528085;
+        bh=Q3J76ibsb9b/yijBhYCVKKVj1TBh9pMTt7rn8oqua04=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h5Pb/MSsUjueO7CGgqik0poqUYdP400JDL9NtZxlENu4RfRjqDJ8MPcTA9eRC+6HI
-         lWCDXUHujXDp3Z8+OjxpYPCKb+qnNKM8lc6qLrH4ppEuuEFOp0BwU8dnga2m0RTeJJ
-         DUPSqGn4Manesdam5KU+C5t/XToleVBlX0fuOgM4=
+        b=qL0dcpD8nQAk6jixd3PbLBcF4L43SFHqaIncT5CP1oQ8Eem8HnJwfOmDLEL6Jsqmd
+         1a2QuW+yZYNUBGogeGdC5fE7CfHiETdTT+Uu2njyVAQ9DwaiF8LpwIvKi5yKr40ngY
+         UMKruQ0+pT8N8r0Xsw4CY32LDSXMDONVz+f5FQtQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hans.verkuil@cisco.com>,
+Cc:     Koen Vandeputte <koen.vandeputte@ncentric.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 031/167] media: vim2m: use workqueue
-Date:   Tue,  3 Sep 2019 12:23:03 -0400
-Message-Id: <20190903162519.7136-31-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 096/167] media: i2c: tda1997x: select V4L2_FWNODE
+Date:   Tue,  3 Sep 2019 12:24:08 -0400
+Message-Id: <20190903162519.7136-96-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190903162519.7136-1-sashal@kernel.org>
 References: <20190903162519.7136-1-sashal@kernel.org>
@@ -58,115 +60,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hans.verkuil@cisco.com>
+From: Koen Vandeputte <koen.vandeputte@ncentric.com>
 
-[ Upstream commit 144bd0ee304c7d0690eec285aee93019d3f30fc8 ]
+[ Upstream commit 5f2efda71c09b12012053f457fac7692f268b72c ]
 
-v4l2_ctrl uses mutexes, so we can't setup a ctrl_handler in
-interrupt context. Switch to a workqueue instead and drop the timer.
+Building tda1997x fails now unless V4L2_FWNODE is selected:
 
-Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
-Reviewed-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+drivers/media/i2c/tda1997x.o: in function `tda1997x_parse_dt'
+undefined reference to `v4l2_fwnode_endpoint_parse'
+
+While at it, also sort the selections alphabetically
+
+Fixes: 9ac0038db9a7 ("media: i2c: Add TDA1997x HDMI receiver driver")
+
+Signed-off-by: Koen Vandeputte <koen.vandeputte@ncentric.com>
+Cc: stable@vger.kernel.org # v4.17+
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/vim2m.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+ drivers/media/i2c/Kconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/vim2m.c b/drivers/media/platform/vim2m.c
-index 462099a141e4a..6f87ef025ff19 100644
---- a/drivers/media/platform/vim2m.c
-+++ b/drivers/media/platform/vim2m.c
-@@ -3,7 +3,8 @@
-  *
-  * This is a virtual device driver for testing mem-to-mem videobuf framework.
-  * It simulates a device that uses memory buffers for both source and
-- * destination, processes the data and issues an "irq" (simulated by a timer).
-+ * destination, processes the data and issues an "irq" (simulated by a delayed
-+ * workqueue).
-  * The device is capable of multi-instance, multi-buffer-per-transaction
-  * operation (via the mem2mem framework).
-  *
-@@ -19,7 +20,6 @@
- #include <linux/module.h>
- #include <linux/delay.h>
- #include <linux/fs.h>
--#include <linux/timer.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- 
-@@ -148,7 +148,7 @@ struct vim2m_dev {
- 	struct mutex		dev_mutex;
- 	spinlock_t		irqlock;
- 
--	struct timer_list	timer;
-+	struct delayed_work	work_run;
- 
- 	struct v4l2_m2m_dev	*m2m_dev;
- };
-@@ -336,12 +336,6 @@ static int device_process(struct vim2m_ctx *ctx,
- 	return 0;
- }
- 
--static void schedule_irq(struct vim2m_dev *dev, int msec_timeout)
--{
--	dprintk(dev, "Scheduling a simulated irq\n");
--	mod_timer(&dev->timer, jiffies + msecs_to_jiffies(msec_timeout));
--}
--
- /*
-  * mem2mem callbacks
-  */
-@@ -387,13 +381,14 @@ static void device_run(void *priv)
- 
- 	device_process(ctx, src_buf, dst_buf);
- 
--	/* Run a timer, which simulates a hardware irq  */
--	schedule_irq(dev, ctx->transtime);
-+	/* Run delayed work, which simulates a hardware irq  */
-+	schedule_delayed_work(&dev->work_run, msecs_to_jiffies(ctx->transtime));
- }
- 
--static void device_isr(struct timer_list *t)
-+static void device_work(struct work_struct *w)
- {
--	struct vim2m_dev *vim2m_dev = from_timer(vim2m_dev, t, timer);
-+	struct vim2m_dev *vim2m_dev =
-+		container_of(w, struct vim2m_dev, work_run.work);
- 	struct vim2m_ctx *curr_ctx;
- 	struct vb2_v4l2_buffer *src_vb, *dst_vb;
- 	unsigned long flags;
-@@ -805,6 +800,7 @@ static void vim2m_stop_streaming(struct vb2_queue *q)
- 	struct vb2_v4l2_buffer *vbuf;
- 	unsigned long flags;
- 
-+	flush_scheduled_work();
- 	for (;;) {
- 		if (V4L2_TYPE_IS_OUTPUT(q->type))
- 			vbuf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
-@@ -1015,6 +1011,7 @@ static int vim2m_probe(struct platform_device *pdev)
- 	vfd = &dev->vfd;
- 	vfd->lock = &dev->dev_mutex;
- 	vfd->v4l2_dev = &dev->v4l2_dev;
-+	INIT_DELAYED_WORK(&dev->work_run, device_work);
- 
- 	ret = video_register_device(vfd, VFL_TYPE_GRABBER, 0);
- 	if (ret) {
-@@ -1026,7 +1023,6 @@ static int vim2m_probe(struct platform_device *pdev)
- 	v4l2_info(&dev->v4l2_dev,
- 			"Device registered as /dev/video%d\n", vfd->num);
- 
--	timer_setup(&dev->timer, device_isr, 0);
- 	platform_set_drvdata(pdev, dev);
- 
- 	dev->m2m_dev = v4l2_m2m_init(&m2m_ops);
-@@ -1083,7 +1079,6 @@ static int vim2m_remove(struct platform_device *pdev)
- 	media_device_cleanup(&dev->mdev);
- #endif
- 	v4l2_m2m_release(dev->m2m_dev);
--	del_timer_sync(&dev->timer);
- 	video_unregister_device(&dev->vfd);
- 	v4l2_device_unregister(&dev->v4l2_dev);
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index 63c9ac2c6a5ff..8b1ae1d6680b7 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -60,8 +60,9 @@ config VIDEO_TDA1997X
+ 	tristate "NXP TDA1997x HDMI receiver"
+ 	depends on VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API
+ 	depends on SND_SOC
+-	select SND_PCM
+ 	select HDMI
++	select SND_PCM
++	select V4L2_FWNODE
+ 	---help---
+ 	  V4L2 subdevice driver for the NXP TDA1997x HDMI receivers.
  
 -- 
 2.20.1
