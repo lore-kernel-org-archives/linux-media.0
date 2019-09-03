@@ -6,64 +6,64 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4CE2C3A5A2
-	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C098DC3A5A2
+	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9A66B22CED
-	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92A7B22CED
+	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UBpua2ds"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="umuOCnMl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727381AbfICUN2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Sep 2019 16:13:28 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:37291 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727018AbfICUNI (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Sep 2019 16:13:08 -0400
-Received: by mail-lf1-f66.google.com with SMTP id w67so13940978lff.4;
-        Tue, 03 Sep 2019 13:13:06 -0700 (PDT)
+        id S1726976AbfICUNG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Sep 2019 16:13:06 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44695 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726935AbfICUNF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Sep 2019 16:13:05 -0400
+Received: by mail-lj1-f194.google.com with SMTP id u14so10780239ljj.11;
+        Tue, 03 Sep 2019 13:13:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Nit08PqZRdOCZG6pI6hGmpbHfDHgVaB9FLstBMxcWsE=;
-        b=UBpua2dsaeCTkowGWUzhbotSf4EFHYmqAUMUyTw5jk0QMXUyy+hS1GsYaJVkjKLNS8
-         5tU4BsHpo+NRc1waBD6mOA8ytcOjF0gYv5tFIbJrS62A5MaovDd4mod/uMBPFeyyWbwQ
-         Sqd/UyqO68RWv/XbBvAtjJ5vHk/EI2YWJKM2HSnpgab1ocjLKRPBacVyYeK5D/Rata8w
-         VnJXJRyl80bJBYpSWpsFO0TcDAFIqAo5jxhPf+D4Jd4tGCWEkQFOOTzqrZ94Titbg0sG
-         0Kb40lZrmmUkkmpSOGAHNtolERwor8jKPsLjRFah05dhe+x9W7xyYpBa/mi3r1n+VuEq
-         SO4Q==
+        bh=O5/bkw5TmSKSwUpx+OzbBVv/K0PHXiHAe7Oql4bTfH0=;
+        b=umuOCnMl3ytygV0zn0WRsCvCPVb8lrFutX6lXn7PqyvPQxPq0tXw4qhZ2h+HvjqRPT
+         eYYBESH8Yj/tu7YM8Uoc0ab+Ef+t9X5aFoPAas0gZia4tR2gJ+9ERPeN9FLSN6aCvxTM
+         Rfh35B5tfC6K4KIb+McxeqPirMny6wUJYiFhYOv7l4eoTc1NmvxLZPpcCgnzjQ/4cN3I
+         ftWtYpeiFJGtj6mPdx+hfMyZ8PhriHf8iPQQ3cnmYcRHdT8m2kd22OcMrC7kKerPDXX5
+         XoWl6FTPy3BKTL6KjPFdkouNlc3nhhFMQGdj4WC2CC2m/6ZwS759RsMJKBlCiZtkPghZ
+         0SSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Nit08PqZRdOCZG6pI6hGmpbHfDHgVaB9FLstBMxcWsE=;
-        b=Jgm+omVEp2Lo+23dC0m3soHym2mhe4DP7tev7mOvK1GdRzTqPlt1nRB+wdjQrESlS+
-         rSn2AjNVFAouOwDo1keuXihq9+GlfS+XvKDchDpCAADUouWvpP5yGEaAaeb9HMLnCYH0
-         H048eyBbPLlFryuMsU8Xnr5xkm9YW6Sc4grS4BpF52KUBpQpiYiqFkjrd0sz9Q4S1USJ
-         lcMnOWbWR4zwVb15EVXQhnY0zCU9miNtoMaDRPpQ8Mj5JDE7uWcKAgW7y5RAbzzwbwxF
-         10INqNbDbsIPLlIxPtbIVZXljbwKHBzrxp9wybB08feJPn4S8mmPcTBk8D+aY7b2F8Z6
-         cvBQ==
-X-Gm-Message-State: APjAAAVtc0EtqsZXee9JbYBZEOP7m642i9iRgUu715ZTrxoT4BmD+Mrf
-        ZHEsf1QtoKlaZxdWaNS9NXE=
-X-Google-Smtp-Source: APXvYqyo0mbyM1XvJjVusOgSygXXjQdnWYW4jE8D0PEY5WIIf1kS+iNzjeK+ZhUVyCCTBvnk97MRVw==
-X-Received: by 2002:ac2:43c5:: with SMTP id u5mr3839738lfl.47.1567541586184;
-        Tue, 03 Sep 2019 13:13:06 -0700 (PDT)
+        bh=O5/bkw5TmSKSwUpx+OzbBVv/K0PHXiHAe7Oql4bTfH0=;
+        b=RFSpoDKBW80h8y55x2l/GbAXOo4wv/Eeprb2hiM/WXuL4qUTZUWZ6XGbnxQYMR7Hv6
+         ab3ssOPhqgHP1o+J3AKOK3VU0B/sZOAOlsxxoJCyDUFA/BuKtdltwG2fm9kWlBPhqV5d
+         a6cO/J2GN5ItbIxKT1Ogl3t/AoDWS6S203z9cM5baJXkr3BxbYNIyD7naFdP5lyFMz8a
+         4gcILkdy7ApJKu5KynZ1goHMsfbtPp6StZjngCqNERRwuaRvGjK0fM3LuxfaRhTtqTAx
+         +xgChbJ+8tnQWynGxUkkuRaBaoflc8mQsYCCo49ijD3nUF2NCTfEakDpaDYhy3IR3r8j
+         oBnA==
+X-Gm-Message-State: APjAAAWM1FtD6/CUyMrLWyv701vp2c4KwsWoZoNTO3xt8NLEDnc/bLAb
+        XeXunIoyUyD/Hc+Oza4STb8=
+X-Google-Smtp-Source: APXvYqzazWgg+TgBeqCSgVkhqVt98Qmfe0gLc3unFkvgTfQr5xW/2KkBLQLzNWL+FyLqiJWZX+/5KA==
+X-Received: by 2002:a2e:412:: with SMTP id 18mr11478720lje.96.1567541583411;
+        Tue, 03 Sep 2019 13:13:03 -0700 (PDT)
 Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
-        by smtp.gmail.com with ESMTPSA id u14sm2960884ljd.14.2019.09.03.13.13.05
+        by smtp.gmail.com with ESMTPSA id u14sm2960884ljd.14.2019.09.03.13.13.02
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 13:13:05 -0700 (PDT)
+        Tue, 03 Sep 2019 13:13:02 -0700 (PDT)
 From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hans.verkuil@cisco.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: [PATCH v3 6/9] media: ov6650: Fix .get_fmt() V4L2_SUBDEV_FORMAT_TRY support
-Date:   Tue,  3 Sep 2019 22:11:41 +0200
-Message-Id: <20190903201144.13219-7-jmkrzyszt@gmail.com>
+Subject: [PATCH v3 4/9] media: ov6650: Fix incorrect use of JPEG colorspace
+Date:   Tue,  3 Sep 2019 22:11:39 +0200
+Message-Id: <20190903201144.13219-5-jmkrzyszt@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190903201144.13219-1-jmkrzyszt@gmail.com>
 References: <20190903201144.13219-1-jmkrzyszt@gmail.com>
@@ -74,46 +74,88 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit da298c6d98d5 ("[media] v4l2: replace video op g_mbus_fmt by pad
-op get_fmt") converted a former ov6650_g_fmt() video operation callback
-to an ov6650_get_fmt() pad operation callback.  However, the converted
-function disregards a format->which flag that pad operations should
-obey and always returns active frame format settings.
+Since its initial submission, the driver selects V4L2_COLORSPACE_JPEG
+for supported formats other than V4L2_MBUS_FMT_SBGGR8_1X8.  According
+to v4l2-compliance test program, V4L2_COLORSPACE_JPEG applies
+exclusively to V4L2_PIX_FMT_JPEG.  Since the sensor does not support
+JPEG format, fix it to always select V4L2_COLORSPACE_SRGB.
 
-That can be fixed by always responding to V4L2_SUBDEV_FORMAT_TRY with
--EINVAL, or providing the response from a pad config argument, likely
-updated by a former user call to V4L2_SUBDEV_FORMAT_TRY .set_fmt().
-Since implementation of the latter is trivial, go for it.
-
-Fixes: da298c6d98d5 ("[media] v4l2: replace video op g_mbus_fmt by pad op get_fmt")
+Fixes: 2f6e2404799a ("[media] SoC Camera: add driver for OV6650 sensor")
 Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 ---
- drivers/media/i2c/ov6650.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/media/i2c/ov6650.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index fd608aebb68d..b62a238a83d0 100644
+index 983b72f33930..a7930ace3744 100644
 --- a/drivers/media/i2c/ov6650.c
 +++ b/drivers/media/i2c/ov6650.c
-@@ -525,10 +525,16 @@ static int ov6650_get_fmt(struct v4l2_subdev *sd,
- 	*mf = ov6650_def_fmt;
+@@ -200,7 +200,6 @@ struct ov6650 {
+ 	unsigned long		pclk_max;	/* from resolution and format */
+ 	struct v4l2_fract	tpf;		/* as requested with s_frame_interval */
+ 	u32 code;
+-	enum v4l2_colorspace	colorspace;
+ };
  
- 	/* update media bus format code and frame size */
--	mf->width	= priv->rect.width >> priv->half_scale;
--	mf->height	= priv->rect.height >> priv->half_scale;
--	mf->code	= priv->code;
-+	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
-+		mf->width = cfg->try_fmt.width;
-+		mf->height = cfg->try_fmt.height;
-+		mf->code = cfg->try_fmt.code;
  
-+	} else {
-+		mf->width = priv->rect.width >> priv->half_scale;
-+		mf->height = priv->rect.height >> priv->half_scale;
-+		mf->code = priv->code;
-+	}
+@@ -514,7 +513,7 @@ static int ov6650_get_fmt(struct v4l2_subdev *sd,
+ 	mf->width	= priv->rect.width >> priv->half_scale;
+ 	mf->height	= priv->rect.height >> priv->half_scale;
+ 	mf->code	= priv->code;
+-	mf->colorspace	= priv->colorspace;
++	mf->colorspace	= V4L2_COLORSPACE_SRGB;
+ 	mf->field	= V4L2_FIELD_NONE;
+ 
  	return 0;
- }
+@@ -622,11 +621,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
+ 		priv->pclk_max = 8000000;
+ 	}
+ 
+-	if (code == MEDIA_BUS_FMT_SBGGR8_1X8)
+-		priv->colorspace = V4L2_COLORSPACE_SRGB;
+-	else if (code != 0)
+-		priv->colorspace = V4L2_COLORSPACE_JPEG;
+-
+ 	if (half_scale) {
+ 		dev_dbg(&client->dev, "max resolution: QCIF\n");
+ 		coma_set |= COMA_QCIF;
+@@ -657,7 +651,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
+ 		ret = ov6650_reg_rmw(client, REG_COML, coml_set, coml_mask);
+ 
+ 	if (!ret) {
+-		mf->colorspace	= priv->colorspace;
+ 		mf->width = priv->rect.width >> half_scale;
+ 		mf->height = priv->rect.height >> half_scale;
+ 	}
+@@ -680,6 +673,7 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
+ 				&mf->height, 2, H_CIF, 1, 0);
+ 
+ 	mf->field = V4L2_FIELD_NONE;
++	mf->colorspace = V4L2_COLORSPACE_SRGB;
+ 
+ 	switch (mf->code) {
+ 	case MEDIA_BUS_FMT_Y10_1X10:
+@@ -690,13 +684,11 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
+ 	case MEDIA_BUS_FMT_YUYV8_2X8:
+ 	case MEDIA_BUS_FMT_VYUY8_2X8:
+ 	case MEDIA_BUS_FMT_UYVY8_2X8:
+-		mf->colorspace = V4L2_COLORSPACE_JPEG;
+ 		break;
+ 	default:
+ 		mf->code = MEDIA_BUS_FMT_SBGGR8_1X8;
+ 		/* fall through */
+ 	case MEDIA_BUS_FMT_SBGGR8_1X8:
+-		mf->colorspace = V4L2_COLORSPACE_SRGB;
+ 		break;
+ 	}
+ 
+@@ -1004,7 +996,6 @@ static int ov6650_probe(struct i2c_client *client,
+ 	priv->rect.height = H_CIF;
+ 	priv->half_scale  = false;
+ 	priv->code	  = MEDIA_BUS_FMT_YUYV8_2X8;
+-	priv->colorspace  = V4L2_COLORSPACE_JPEG;
+ 
+ 	priv->subdev.internal_ops = &ov6650_internal_ops;
  
 -- 
 2.21.0
