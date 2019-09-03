@@ -5,65 +5,65 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51E6AC3A5A2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9A50C3A5A7
 	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2502022CED
+	by mail.kernel.org (Postfix) with ESMTP id 9876222CED
 	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vh/OUISB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CNWUdGO7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726375AbfICUND (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Sep 2019 16:13:03 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:38883 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726079AbfICUNB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Sep 2019 16:13:01 -0400
-Received: by mail-lj1-f195.google.com with SMTP id h3so10514136ljb.5;
-        Tue, 03 Sep 2019 13:13:00 -0700 (PDT)
+        id S1726179AbfICUNe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Sep 2019 16:13:34 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:46780 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbfICUNE (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Sep 2019 16:13:04 -0400
+Received: by mail-lf1-f67.google.com with SMTP id t8so1485148lfc.13;
+        Tue, 03 Sep 2019 13:13:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bEcAPc5QA3wF+/4wLcZWH7jU+CdtRX6IAxGP+R1Ah10=;
-        b=Vh/OUISBTVP0NkGSkNqB95kQyQUBjvw3lj23q2dEfU1UsgTSSmXDJZP6GZt/WrScl1
-         e5E58pVLrAIJ84qhSlcbai1PwuCLOBLEiGH4tPD8eOYsa/RolQS0Ic1YFxgNnZKFn9Nh
-         I7/DDvsSOtSD65bdoPJfDcVEyEvgZ/BNMMkzQHUhWxK7PXKgF4XJA8k0/2aZXl5tZvie
-         QMV5SkobgGkcNmz28fe2DpLuGiDPxZowqEE14LL3qMLquDCRhee98kVnJ+JBF1/eWLBC
-         XbGQN0tlktJpHdeGaFU740QAQ5RH4qMIPI56zrYWsvYCvLuuDqC3G3ior9lBqXc/6vFC
-         iI/g==
+        bh=Q5KotmXfTnoMjmOgmgzzUJPt9WlkNFv2bSSb35yjqRk=;
+        b=CNWUdGO7uuMPHYOgYW6iDsqxHyNy9BsD762YI1yn2WOED6HCz5fseybmpfLm2VybDp
+         93fSFjmNitS0DnGX9lm16h6I1TjwU4L23csUf6V/jF4j0GtNAxxEWFXiAd6R1g+04mTQ
+         3g0k/71RcZtpUwblCpL/Dl9NQce7vrltsrbQbrL/kbbC16J96jSktGcrmEHX4eAsxv3h
+         43mguN94H5f4UfnmeeMrnZJzRG1MxDiVr4GNJMrfueM03FGI7XpzIoAIZWH80HQjgMpW
+         mBxZS3KBTRuy0sqxS513VQPfwrZZNSvsbevN1HB7icFf7U2AsKGmJpHO9mYdXaTY1RJ0
+         3HQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bEcAPc5QA3wF+/4wLcZWH7jU+CdtRX6IAxGP+R1Ah10=;
-        b=H6w2NRV728kDY9qbzDd8DlR+j9+C18/gmiZMHKox9w9GFaJDn+5QB25I5Q+hD8uao5
-         JvdupwP46YwJTPsRFi3qePCivN81DmjqmIAhFbq5dnfJ5ECt/toteHq2/8RwwgH9eVmc
-         Ajba94wb4vUuRdW2IHhZh4sjEBo1+8bQ36cqHQ/sbM/2fyMJTcdSWYCcpjNsf/Vpe8Zm
-         +6l8ptlLjrRcB389B93HbRf1Tu7FK4P9Q57cA3qdGcLDiL4Nju7k00XnRZgVX/mndD9d
-         naivYmGoe1v35fxS4YbYZwIm3WYCxDHrTZiMy1EXfZnBLxgWHCrYu02An6PuNEgMfICr
-         Z23A==
-X-Gm-Message-State: APjAAAXH1RpqZqJ5/xJyTPbHSDpy3mgpJwqy9Quucc8gmsxl6gz7B2OQ
-        L9VyZSm74LApITlydstFjpc=
-X-Google-Smtp-Source: APXvYqwsNdbQFWygN50xYCTgNU+i01y5RV/csJGkJf33FA3Jkcf56+4t0thjpVPRQ3Z2nqAGXUFVXA==
-X-Received: by 2002:a2e:5c43:: with SMTP id q64mr21009365ljb.14.1567541579705;
-        Tue, 03 Sep 2019 13:12:59 -0700 (PDT)
+        bh=Q5KotmXfTnoMjmOgmgzzUJPt9WlkNFv2bSSb35yjqRk=;
+        b=NsSB5TDW+mtQHvoh1vZyQWPnTn79xe4xBkbDRHFr9dqN6hXwNn4LmPs3gcYeq97dnI
+         hrdZF6EBppQ8JwCAtxvhbCihmp9y3+YX2ydRt21/eyCnpvNIsuzWotqxg1+kd1R2ajvG
+         sc0sx21lS1zvXtVCfgL7/OW1Dngut9ES4KH1MQsjgBEzZsJssc2fRMdrXwgoMhpGp6Ex
+         xf6TiDgNZiQMh9MM8g2t+GuioS7QOP7D+rlN6qKQC/LYvo8/sGsmPogwXMYZYGNycefI
+         YmjDHPB4afHdWo9sRPWkNQNWHmRi1eE79KOjrPBqqMgR9myojRGGFw2pBIf5pbbBEyam
+         +W3Q==
+X-Gm-Message-State: APjAAAUhZ16ZpUG46APQuXwFnPua6/s32eAmbwQ6nd6hcvdZsjecM49r
+        1cpNuJL8AE34pBu6Z5pU/qs=
+X-Google-Smtp-Source: APXvYqw7nj5yFdTfTa//BtM9y29LRoHdCR68OzikYhUGFy3Zu/29vQCe1aWKhxqJUexxaM3JrWSnhg==
+X-Received: by 2002:ac2:4201:: with SMTP id y1mr13035055lfh.127.1567541582228;
+        Tue, 03 Sep 2019 13:13:02 -0700 (PDT)
 Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
-        by smtp.gmail.com with ESMTPSA id u14sm2960884ljd.14.2019.09.03.13.12.58
+        by smtp.gmail.com with ESMTPSA id u14sm2960884ljd.14.2019.09.03.13.13.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 13:12:59 -0700 (PDT)
+        Tue, 03 Sep 2019 13:13:01 -0700 (PDT)
 From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hans.verkuil@cisco.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: [PATCH v3 1/9] media: ov6650: Fix MODULE_DESCRIPTION
-Date:   Tue,  3 Sep 2019 22:11:36 +0200
-Message-Id: <20190903201144.13219-2-jmkrzyszt@gmail.com>
+Subject: [PATCH v3 3/9] media: ov6650: Fix crop rectangle alignment not passed back
+Date:   Tue,  3 Sep 2019 22:11:38 +0200
+Message-Id: <20190903201144.13219-4-jmkrzyszt@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190903201144.13219-1-jmkrzyszt@gmail.com>
 References: <20190903201144.13219-1-jmkrzyszt@gmail.com>
@@ -74,32 +74,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Commit 23a52386fabe ("media: ov6650: convert to standalone v4l2
-subdevice") converted the driver from a soc_camera sensor to a
-standalone V4L subdevice driver.  Unfortunately, module description was
-not updated to reflect the change.  Fix it.
+Commit 4f996594ceaf ("[media] v4l2: make vidioc_s_crop const")
+introduced a writable copy of constified user requested crop rectangle
+in order to be able to perform hardware alignments on it.  Later
+on, commit 10d5509c8d50 ("[media] v4l2: remove g/s_crop from video
+ops") replaced s_crop() video operation using that const argument with
+set_selection() pad operation which had a corresponding argument not
+constified, however the original behavior of the driver was not
+restored.  Since that time, any hardware alignment applied on a user
+requested crop rectangle is not passed back to the user calling
+.set_selection() as it should be.
 
-While being at it, update email address of the module author.
+Fix the issue by dropping the copy and replacing all references to it
+with references to the crop rectangle embedded in the user argument.
 
-Fixes: 23a52386fabe ("media: ov6650: convert to standalone v4l2 subdevice")
+Fixes: 10d5509c8d50 ("[media] v4l2: remove g/s_crop from video ops")
 Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 ---
- drivers/media/i2c/ov6650.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov6650.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index 5b9af5e5b7f1..53550cae2353 100644
+index cb2aa76cd6cc..983b72f33930 100644
 --- a/drivers/media/i2c/ov6650.c
 +++ b/drivers/media/i2c/ov6650.c
-@@ -1041,6 +1041,6 @@ static struct i2c_driver ov6650_i2c_driver = {
+@@ -465,38 +465,37 @@ static int ov6650_set_selection(struct v4l2_subdev *sd,
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(sd);
+ 	struct ov6650 *priv = to_ov6650(client);
+-	struct v4l2_rect rect = sel->r;
+ 	int ret;
  
- module_i2c_driver(ov6650_i2c_driver);
+ 	if (sel->which != V4L2_SUBDEV_FORMAT_ACTIVE ||
+ 	    sel->target != V4L2_SEL_TGT_CROP)
+ 		return -EINVAL;
  
--MODULE_DESCRIPTION("SoC Camera driver for OmniVision OV6650");
--MODULE_AUTHOR("Janusz Krzysztofik <jkrzyszt@tis.icnet.pl>");
-+MODULE_DESCRIPTION("V4L2 subdevice driver for OmniVision OV6650 camera sensor");
-+MODULE_AUTHOR("Janusz Krzysztofik <jmkrzyszt@gmail.com");
- MODULE_LICENSE("GPL v2");
+-	v4l_bound_align_image(&rect.width, 2, W_CIF, 1,
+-			      &rect.height, 2, H_CIF, 1, 0);
+-	v4l_bound_align_image(&rect.left, DEF_HSTRT << 1,
+-			      (DEF_HSTRT << 1) + W_CIF - (__s32)rect.width, 1,
+-			      &rect.top, DEF_VSTRT << 1,
+-			      (DEF_VSTRT << 1) + H_CIF - (__s32)rect.height, 1,
+-			      0);
++	v4l_bound_align_image(&sel->r.width, 2, W_CIF, 1,
++			      &sel->r.height, 2, H_CIF, 1, 0);
++	v4l_bound_align_image(&sel->r.left, DEF_HSTRT << 1,
++			      (DEF_HSTRT << 1) + W_CIF - (__s32)sel->r.width, 1,
++			      &sel->r.top, DEF_VSTRT << 1,
++			      (DEF_VSTRT << 1) + H_CIF - (__s32)sel->r.height,
++			      1, 0);
+ 
+-	ret = ov6650_reg_write(client, REG_HSTRT, rect.left >> 1);
++	ret = ov6650_reg_write(client, REG_HSTRT, sel->r.left >> 1);
+ 	if (!ret) {
+-		priv->rect.left = rect.left;
++		priv->rect.left = sel->r.left;
+ 		ret = ov6650_reg_write(client, REG_HSTOP,
+-				(rect.left + rect.width) >> 1);
++				       (sel->r.left + sel->r.width) >> 1);
+ 	}
+ 	if (!ret) {
+-		priv->rect.width = rect.width;
+-		ret = ov6650_reg_write(client, REG_VSTRT, rect.top >> 1);
++		priv->rect.width = sel->r.width;
++		ret = ov6650_reg_write(client, REG_VSTRT, sel->r.top >> 1);
+ 	}
+ 	if (!ret) {
+-		priv->rect.top = rect.top;
++		priv->rect.top = sel->r.top;
+ 		ret = ov6650_reg_write(client, REG_VSTOP,
+-				(rect.top + rect.height) >> 1);
++				       (sel->r.top + sel->r.height) >> 1);
+ 	}
+ 	if (!ret)
+-		priv->rect.height = rect.height;
++		priv->rect.height = sel->r.height;
+ 
+ 	return ret;
+ }
 -- 
 2.21.0
 
