@@ -2,133 +2,195 @@ Return-Path: <SRS0=mWeH=W6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 077D2C3A5A5
-	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 19:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F347C3A5A2
+	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D32A322CF7
-	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 19:47:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C45F22CF8
+	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZ2Zhacq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbfICTrZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Sep 2019 15:47:25 -0400
-Received: from mail-oln040092068043.outbound.protection.outlook.com ([40.92.68.43]:3531
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725994AbfICTrZ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 3 Sep 2019 15:47:25 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h9+dZxpAw8V2ttg8idaWBKcM2L30pPBM6Y/aaNqZoNm+beC/iXKOflNAfu36csPFJQV1uUu2dzP+YeE9w+qM22y8eHPLWqkdP/+pb0Azps3ocuzEOXRH8a9qWn1EwYhwnn/CsUi3F1kZXNv2I+kL8F9XBkSis+ReJmjuKg0u5viUerC8vQQMOUinAEKP/6gm6z+oLJuq80x9xn05Zjp2KpJbAID2PRIb/0YwCrvG0vQGmGybiHjFbzFbR1AFnsR4eo9B5v9Daap62FIH8LumFyexjMGw0o2lDAzE2aYvcDmG3A0wLatUIPh5GaHqf4tc/9jpruWMOFD2bllwLTwD+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cl1OXlmmrsJ2YDkl5Z0ssofFqBYMWQdd8Lkby8mKeMA=;
- b=B/SOMva7aMKQhh381QL/FUrf5kaxgY5Gc3OpxMSNmmX+a3nRDSDJUW/VkX9772mb6C1fhecTdR4fsZa9rDDJMEMx8sxO2V85W7vY0ay/SlXliJ7pbckU7sveehE8tS5u5jnvz7sFM8AcPLVEOFXHlpvCiojmKDP/yV1ckSWqr1EWXCGqZoTQwNvXh4VQE4zjUO2fpjM1Ax1IJmOXYKE91Z0jViEse2KZGYin+7xoQxx2RB8duP9kddRg0JC97IfVT73qt4BNRJU9/zXFqrO/UOHUq8UEFA2WuhcFEERWbPsIZJarYBiJP0yFs4k6aWSiOJCbB3DMseT7L5aOaXe/aQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from VE1EUR02FT042.eop-EUR02.prod.protection.outlook.com
- (10.152.12.59) by VE1EUR02HT179.eop-EUR02.prod.protection.outlook.com
- (10.152.13.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.2220.16; Tue, 3 Sep
- 2019 19:47:20 +0000
-Received: from HE1PR06MB4011.eurprd06.prod.outlook.com (10.152.12.60) by
- VE1EUR02FT042.mail.protection.outlook.com (10.152.13.70) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.2220.16 via Frontend Transport; Tue, 3 Sep 2019 19:47:20 +0000
-Received: from HE1PR06MB4011.eurprd06.prod.outlook.com
- ([fe80::59e6:329d:5fc7:5181]) by HE1PR06MB4011.eurprd06.prod.outlook.com
- ([fe80::59e6:329d:5fc7:5181%5]) with mapi id 15.20.2241.014; Tue, 3 Sep 2019
- 19:47:20 +0000
-From:   Jonas Karlman <jonas@kwiboo.se>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-CC:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC 08/12] media: hantro: Fix H264 decoding of field encoded
- content
-Thread-Topic: [RFC 08/12] media: hantro: Fix H264 decoding of field encoded
- content
-Thread-Index: AQHVYMMtmxM+aDjHykiwJVJ++y1ATacZ840AgAALdwCAABCDAIAAT7qA
-Date:   Tue, 3 Sep 2019 19:47:20 +0000
-Message-ID: <HE1PR06MB4011B532327D629753FDDAC1ACB90@HE1PR06MB4011.eurprd06.prod.outlook.com>
-References: <HE1PR06MB40117D0EE96E6FA638A04B78ACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com>
- <20190901124531.23645-1-jonas@kwiboo.se>
- <HE1PR06MB4011EA39133818A85768B91FACBF0@HE1PR06MB4011.eurprd06.prod.outlook.com>
- <1567516908.5229.7.camel@pengutronix.de>
- <DB6PR06MB4007C0F89BAEC6F9F1F2AA18ACB90@DB6PR06MB4007.eurprd06.prod.outlook.com>
- <1567522916.5229.11.camel@pengutronix.de>
-In-Reply-To: <1567522916.5229.11.camel@pengutronix.de>
-Accept-Language: sv-SE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR0701CA0076.eurprd07.prod.outlook.com
- (2603:10a6:3:64::20) To HE1PR06MB4011.eurprd06.prod.outlook.com
- (2603:10a6:7:9c::32)
-x-incomingtopheadermarker: OriginalChecksum:D53387E6826E5AF0FA56790C2CBA3BACE09CE5526C135CD1E4C55E3AA1665949;UpperCasedChecksum:AB48C5586087F8077F1CEC97158477431274A375D420079B40355BEDBF107EED;SizeAsReceived:8134;Count:49
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [2gyRvBEhlEh4hznG3I6TgOsrpeZcnVXD]
-x-microsoft-original-message-id: <b009afbc-a744-91de-831e-05f564169977@kwiboo.se>
-x-ms-publictraffictype: Email
-x-incomingheadercount: 49
-x-eopattributedmessage: 0
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(5050001)(7020095)(20181119110)(201702061078)(5061506573)(5061507331)(1603103135)(2017031320274)(2017031322404)(2017031323274)(2017031324274)(1601125500)(1603101475)(1701031045);SRVR:VE1EUR02HT179;
-x-ms-traffictypediagnostic: VE1EUR02HT179:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-message-info: GG6H0U3iXZf21heWY7qLMoYZAR3PZFI+XKs8rQh/W35f5huy4jR/o306pwYFqwOohVZ4buvwxi8LPfI/It7b2p9/VBsAieyOgfAxiFBn0q8qESKbvlj1q4pqIPQRzJQ8xRu7vnwwOzsf6sQpYlE+CmR9m1DnXboZ5O+ytSQoKDaA+rvgoiz7BLmD5eMzFhK/
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8B9B4FC940397F45B2963825C07C19B1@eurprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727043AbfICUNI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Sep 2019 16:13:08 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:42600 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfICUNI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Sep 2019 16:13:08 -0400
+Received: by mail-lj1-f194.google.com with SMTP id y23so6251691lje.9;
+        Tue, 03 Sep 2019 13:13:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=u4M8z8ECmeACr3s3aRSkLkxoiDnREOEztNYDP4Gz67c=;
+        b=CZ2Zhacqw3CZt3hXWkGJcsV8T8g+BAhVmBziXWiiZC+uqv7ivOAAgtFrj7ucQhGriI
+         xWaHCCCMtnasetRuOTVziokBNwYPI1YFQ8F/SkLvIIp/eqobGDAZPxjyPZkQm6RkflaU
+         o1GAyHl/RyzfHNk5qgn4aHngpmE35xr1HcTa1GQ2Uy1/3wrmuI3gWiFPLBzMwNagKBH/
+         Km+bEq7kwj0FndOui3fArnVKoBTC/X53ZrvyyE66qotA94IYxBSdF6TqHuaeYSiLjB0W
+         GVO8T2YOrwLRGlVT668EDlYgtlikeQNQ77f07PoCGIScFijekYYjoEzawqo5IoOtFx47
+         8AkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=u4M8z8ECmeACr3s3aRSkLkxoiDnREOEztNYDP4Gz67c=;
+        b=ijV4OchcmaaRFs0D5sbkpJYSE4RSeLx3lVUfR/ZWdAa5PZQ7mV+79Str1trJPM5uCz
+         RnWHu0F4SyLy4KjZM4B9JOTQWVT9hIIWuCOw7vO7xH9dGtpl9ogesN9f6LdVG6g2nqmJ
+         z/62k8UhLK/fyBkMKi7ACi/vjrgEbx6vlqOkv0nbBIvwA4w7RnE5CTln6M8jb39E4Jv+
+         KKXsQKeVxra3BtXzeMP5ci7caw2+rbtoFMi5DaSZZYjRo7hUzKKhBvvFu2iSnNADwiOl
+         a5NQVTEG2beiFUIgJdpeXi0Cqnew9mXdds4DqkU4apgUD7IJeCmOvRHn03BeKK/jntVv
+         olHQ==
+X-Gm-Message-State: APjAAAUHLmSV0qJjxeehrCB5mW2hI9E7UMvYjMiQiAiwcdxrJ6Es75Se
+        8eYx1xwWzrOjXkrszwXjABs=
+X-Google-Smtp-Source: APXvYqw9u9fUh6uzUxZac95gSEdPzY+hGA9grGMvnv+Zsb0Byitn7GBWoVq8/jbrh0M2NuQfrj6ACg==
+X-Received: by 2002:a2e:80c2:: with SMTP id r2mr21121267ljg.44.1567541585007;
+        Tue, 03 Sep 2019 13:13:05 -0700 (PDT)
+Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
+        by smtp.gmail.com with ESMTPSA id u14sm2960884ljd.14.2019.09.03.13.13.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Sep 2019 13:13:04 -0700 (PDT)
+From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Subject: [PATCH v3 5/9] media: ov6650: Fix some format attributes not under control
+Date:   Tue,  3 Sep 2019 22:11:40 +0200
+Message-Id: <20190903201144.13219-6-jmkrzyszt@gmail.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190903201144.13219-1-jmkrzyszt@gmail.com>
+References: <20190903201144.13219-1-jmkrzyszt@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae754e25-ee48-46b0-493e-08d730a7881a
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2019 19:47:20.1437
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Internet
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1EUR02HT179
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-T24gMjAxOS0wOS0wMyAxNzowMSwgUGhpbGlwcCBaYWJlbCB3cm90ZToNCj4gT24gVHVlLCAyMDE5
-LTA5LTAzIGF0IDE0OjAyICswMDAwLCBKb25hcyBLYXJsbWFuIHdyb3RlOg0KPj4gT24gMjAxOS0w
-OS0wMyAxNToyMSwgUGhpbGlwcCBaYWJlbCB3cm90ZToNCj4+PiBPbiBTdW4sIDIwMTktMDktMDEg
-YXQgMTI6NDUgKzAwMDAsIEpvbmFzIEthcmxtYW4gd3JvdGU6DQo+Pj4+IFRoaXMgbmVlZCBjb2Rl
-IGNsZWFudXAgYW5kIGZvcm1hdHRpbmcNCj4+Pj4NCj4+Pj4gU2lnbmVkLW9mZi1ieTogSm9uYXMg
-S2FybG1hbiA8am9uYXNAa3dpYm9vLnNlPg0KPj4+IFRoZSBwcmV2aW91cyBwYXRjaGVzIGFsbCB3
-b3JrLCBidXQgdGhpcyBwYXRjaCBicmVha3MgZGVjb2Rpbmcgb2YNCj4+PiBwcm9ncmVzc2l2ZSBj
-b250ZW50IGZvciBtZSAoaS5NWDhNUSB3aXRoIEZGbXBlZyBiYXNlZCBvbiBFemVxdWllbCdzDQo+
-Pj4gYnJhbmNoKS4NCj4+IFBsZWFzZSB0cnkgd2l0aCBmZm1wZWcgYmFzZWQgb24gbXkgdjRsMi1y
-ZXF1ZXN0LWh3YWNjZWwtNC4wLjQtaGFudHJvIGJyYW5jaCBhdCBbMV0sDQo+PiB1cCB0byBhbmQg
-aW5jbHVkaW5nIHRoZSBjb21taXQgIkhBQ0s6IGFkZCBkcGIgZmxhZ3MgZm9yIHJlZmVyZW5jZSB1
-c2FnZSBhbmQgZmllbGQgcGljdHVyZSIuDQo+PiBUaGF0IGNvbW1pdCBhZGRzIGNvZGUgdG8gc2V0
-IHJlZmVyZW5jZSBmbGFncyBuZWVkZWQgYnkgdGhlIGNoYW5nZXMgaW4gdGhpcyBwYXRjaC4NCj4+
-DQo+PiBUaGVyZSBpcyBwcm9iYWJseSBhbHNvIHNvbWUgb3RoZXIgbWlub3IgZGlmZmVyZW5jZSBi
-ZXR3ZWVuIG91ciB0d28gZmZtcGVnIGJyYW5jaGVzLg0KPj4gSSBoYXZlIG5vdCBvYnNlcnZlZCBh
-bnkgaXNzdWVzIHdpdGggcHJvZ3Jlc3NpdmUgY29udGVudCB3aXRoIHRoaXMgcGF0Y2ggYW5kIG15
-IGZmbXBlZyBicmFuY2ggKG9uIGEgUkszMjg4IGRldmljZSkuDQo+PiBTb21lIEgyNjQgcmVmZXJl
-bmNlIHNhbXBsZXMgZG8gaGF2ZSB2aXN1YWwgaXNzdWVzIGFmdGVyIHRoaXMgcGF0Y2gsIGhvd2V2
-ZXIgYWxsIG15IHJlYWwgd29ybGQgc2FtcGxlcyBkb2VzIHNlZW0gdG8gd29yay4NCj4+DQo+PiBN
-eSBicmFuY2ggdXNlIGxpYnVkZXYgdG8gcHJvYmUgbWVkaWEvdmlkZW8gZGV2aWNlcyBhbmQgbmVl
-ZHMgdG8gYmUgY29uZmlndXJlZCB3aXRoOg0KPj4gLS1lbmFibGUtdjRsMi1yZXF1ZXN0IC0tZW5h
-YmxlLWxpYnVkZXYgLS1lbmFibGUtbGliZHJtDQo+Pg0KPj4gWzFdIGh0dHBzOi8vZ2l0aHViLmNv
-bS9Ld2lib28vRkZtcGVnL2NvbW1pdHMvdjRsMi1yZXF1ZXN0LWh3YWNjZWwtNC4wLjQtaGFudHJv
-DQo+IEkgaGFkbid0IHJlYWxpemVkIHRoYXQgdGhpcyBpcyBhIGJhY2t3YXJkcyBpbmNvbXBhdGli
-bGUgY2hhbmdlLiBXaXRoDQo+IHlvdXIgYnJhbmNoIHJlYmFzZWQgb250byBuNC4yLCBhbmQgdGhp
-cyBwYXRjaCBhcHBsaWVkLCBkZWNvZGluZyBzZWVtcyB0bw0KPiB3b3JrLg0KDQpOb3IgZGlkIEks
-IHRoYW5rcyBmb3IgdGVzdGluZyBhbmQgdmVyaWZ5aW5nLCBJIHdpbGwgdHJ5IHRvIHJlZHVjZSBi
-cmVha2luZyBjaGFuZ2VzIGluIGEgdjIuDQoNClJlZ2FyZHMsDQpKb25hcw0KDQo+DQo+IHJlZ2Fy
-ZHMNCj4gUGhpbGlwcA0KDQo=
+User arguments passed to .get/set_fmt() pad operation callbacks may
+contain unsupported values.  The driver takes control over frame size
+and pixel code as well as colorspace and field attributes but has never
+cared for remainig format attributes, i.e., ycbcr_enc, quantization
+and xfer_func, introduced by commit 11ff030c7365 ("[media]
+v4l2-mediabus: improve colorspace support").  Fix it.
+
+Set up a static v4l2_mbus_framefmt structure with attributes
+initialized to reasonable defaults and use it for updating content of
+user provided arguments.  In case of V4L2_SUBDEV_FORMAT_ACTIVE,
+postpone frame size update, now performed from inside ov6650_s_fmt()
+helper, util the user argument is first updated in ov6650_set_fmt() with
+default frame format content.  For V4L2_SUBDEV_FORMAT_TRY, don't copy
+all attributes to pad config, only those handled by the driver, then
+fill the response with the default frame format updated with resulting
+pad config format code and frame size.
+
+Fixes: 11ff030c7365 ("[media] v4l2-mediabus: improve colorspace support")
+Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+---
+ drivers/media/i2c/ov6650.c | 51 +++++++++++++++++++++++++++++---------
+ 1 file changed, 39 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
+index a7930ace3744..fd608aebb68d 100644
+--- a/drivers/media/i2c/ov6650.c
++++ b/drivers/media/i2c/ov6650.c
+@@ -212,6 +212,17 @@ static u32 ov6650_codes[] = {
+ 	MEDIA_BUS_FMT_Y8_1X8,
+ };
+ 
++static const struct v4l2_mbus_framefmt ov6650_def_fmt = {
++	.width		= W_CIF,
++	.height		= H_CIF,
++	.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
++	.colorspace	= V4L2_COLORSPACE_SRGB,
++	.field		= V4L2_FIELD_NONE,
++	.ycbcr_enc	= V4L2_YCBCR_ENC_DEFAULT,
++	.quantization	= V4L2_QUANTIZATION_DEFAULT,
++	.xfer_func	= V4L2_XFER_FUNC_DEFAULT,
++};
++
+ /* read a register */
+ static int ov6650_reg_read(struct i2c_client *client, u8 reg, u8 *val)
+ {
+@@ -510,11 +521,13 @@ static int ov6650_get_fmt(struct v4l2_subdev *sd,
+ 	if (format->pad)
+ 		return -EINVAL;
+ 
++	/* initialize response with default media bus frame format */
++	*mf = ov6650_def_fmt;
++
++	/* update media bus format code and frame size */
+ 	mf->width	= priv->rect.width >> priv->half_scale;
+ 	mf->height	= priv->rect.height >> priv->half_scale;
+ 	mf->code	= priv->code;
+-	mf->colorspace	= V4L2_COLORSPACE_SRGB;
+-	mf->field	= V4L2_FIELD_NONE;
+ 
+ 	return 0;
+ }
+@@ -650,10 +663,6 @@ static int ov6650_s_fmt(struct v4l2_subdev *sd, struct v4l2_mbus_framefmt *mf)
+ 	if (!ret)
+ 		ret = ov6650_reg_rmw(client, REG_COML, coml_set, coml_mask);
+ 
+-	if (!ret) {
+-		mf->width = priv->rect.width >> half_scale;
+-		mf->height = priv->rect.height >> half_scale;
+-	}
+ 	return ret;
+ }
+ 
+@@ -672,9 +681,6 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
+ 		v4l_bound_align_image(&mf->width, 2, W_CIF, 1,
+ 				&mf->height, 2, H_CIF, 1, 0);
+ 
+-	mf->field = V4L2_FIELD_NONE;
+-	mf->colorspace = V4L2_COLORSPACE_SRGB;
+-
+ 	switch (mf->code) {
+ 	case MEDIA_BUS_FMT_Y10_1X10:
+ 		mf->code = MEDIA_BUS_FMT_Y8_1X8;
+@@ -692,10 +698,31 @@ static int ov6650_set_fmt(struct v4l2_subdev *sd,
+ 		break;
+ 	}
+ 
+-	if (format->which == V4L2_SUBDEV_FORMAT_ACTIVE)
+-		return ov6650_s_fmt(sd, mf);
+-	cfg->try_fmt = *mf;
++	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
++		/* store media bus format code and frame size in pad config */
++		cfg->try_fmt.width = mf->width;
++		cfg->try_fmt.height = mf->height;
++		cfg->try_fmt.code = mf->code;
+ 
++		/* return default mbus frame format updated with pad config */
++		*mf = ov6650_def_fmt;
++		mf->width = cfg->try_fmt.width;
++		mf->height = cfg->try_fmt.height;
++		mf->code = cfg->try_fmt.code;
++
++	} else {
++		/* apply new media bus format code and frame size */
++		int ret = ov6650_s_fmt(sd, mf);
++
++		if (ret)
++			return ret;
++
++		/* return default format updated with active size and code */
++		*mf = ov6650_def_fmt;
++		mf->width = priv->rect.width >> priv->half_scale;
++		mf->height = priv->rect.height >> priv->half_scale;
++		mf->code = priv->code;
++	}
+ 	return 0;
+ }
+ 
+-- 
+2.21.0
+
