@@ -6,64 +6,64 @@ X-Spam-Status: No, score=-8.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_FROM,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22BEBC3A5A5
-	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4CE2C3A5A2
+	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC26B22CF8
-	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A66B22CED
+	for <linux-media@archiver.kernel.org>; Tue,  3 Sep 2019 20:13:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KC6b25HR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UBpua2ds"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbfICUNL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 3 Sep 2019 16:13:11 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:36613 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726935AbfICUNJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Sep 2019 16:13:09 -0400
-Received: by mail-lf1-f67.google.com with SMTP id x80so2842064lff.3;
-        Tue, 03 Sep 2019 13:13:08 -0700 (PDT)
+        id S1727381AbfICUN2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 3 Sep 2019 16:13:28 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:37291 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727018AbfICUNI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 3 Sep 2019 16:13:08 -0400
+Received: by mail-lf1-f66.google.com with SMTP id w67so13940978lff.4;
+        Tue, 03 Sep 2019 13:13:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Bh968WKzvOHUV69AW7moq22N2w8QalvqKBJ2DHbuK8s=;
-        b=KC6b25HRW5azF/IKLGdHId4dmVFA1YCHZiaC1ZYftVAh+ibv+BbzZQE30HiR5izHsn
-         ILIbhYKbzw6UM04XBAybmkkFickeZzVut8tLR/ROteJOs69WW3PzYhC/DoX9fzo9/t6b
-         OEt67JEW9vFBJEHrRJkU84dPeVsnjJ/3KIpHNU/jHjGkB0IQGD+1NAsInboRxhsAGCia
-         orPyRoM8CKDap/qSXSSPEWKcxwl3kLdjMk2IZgNPowYtRrHqPxUVKgSwlijmt5VjWzpi
-         faqCb21fso44HXhOgOje/Fu9tEFTn/fDdg1sVsMnuEDCb8R7s3B0s6Q+sNjk2qYYJzTz
-         dyPA==
+        bh=Nit08PqZRdOCZG6pI6hGmpbHfDHgVaB9FLstBMxcWsE=;
+        b=UBpua2dsaeCTkowGWUzhbotSf4EFHYmqAUMUyTw5jk0QMXUyy+hS1GsYaJVkjKLNS8
+         5tU4BsHpo+NRc1waBD6mOA8ytcOjF0gYv5tFIbJrS62A5MaovDd4mod/uMBPFeyyWbwQ
+         Sqd/UyqO68RWv/XbBvAtjJ5vHk/EI2YWJKM2HSnpgab1ocjLKRPBacVyYeK5D/Rata8w
+         VnJXJRyl80bJBYpSWpsFO0TcDAFIqAo5jxhPf+D4Jd4tGCWEkQFOOTzqrZ94Titbg0sG
+         0Kb40lZrmmUkkmpSOGAHNtolERwor8jKPsLjRFah05dhe+x9W7xyYpBa/mi3r1n+VuEq
+         SO4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Bh968WKzvOHUV69AW7moq22N2w8QalvqKBJ2DHbuK8s=;
-        b=RUKaDPQ3DGeTUL2r/sN+xMs8Ep//ErDLYTTDV8N+qsZqT2tcxHHiVhFQYiNvilv+d2
-         ivORf27kAF/Xlv3eexii/pUnuGg//6oXqGEMpWaZ8Jot+VodHCyKfO4dFo42lptY7KoG
-         //ewPqaOXGeJBjErumuTnhhJmhNxvLkcNvxWf5oL6zd0Eh+37YIyDwcZoOg++Qy/7ZDC
-         XBSpYU4GtSDp1DTzHg4h8pz6Pwg/NT5jH0dRK0MWwW0eS1gj1KwqZ1jFHXztGVTueiQL
-         Ngo1DIXe2ys35MEHu/jPWQ8mNoH3o+OXJShyUKXh4QvXpDLPrCV7tMj6vEh7TGf6cVtr
-         2yMQ==
-X-Gm-Message-State: APjAAAXLrOrHveX90cMZQa0nhmqFxCg7XlvQ5MyNUAedIlxSzbfBondL
-        wOinKd/eKtN09X2igVpmutI=
-X-Google-Smtp-Source: APXvYqwuB8kjOVtfMK+e2kzyfbEgyUdFvzqDVSa7iYNs1FYee9HRA9v5XJjr4xo+yM3UWokmXAHEeg==
-X-Received: by 2002:a19:e204:: with SMTP id z4mr21572361lfg.157.1567541587445;
-        Tue, 03 Sep 2019 13:13:07 -0700 (PDT)
-Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
-        by smtp.gmail.com with ESMTPSA id u14sm2960884ljd.14.2019.09.03.13.13.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        bh=Nit08PqZRdOCZG6pI6hGmpbHfDHgVaB9FLstBMxcWsE=;
+        b=Jgm+omVEp2Lo+23dC0m3soHym2mhe4DP7tev7mOvK1GdRzTqPlt1nRB+wdjQrESlS+
+         rSn2AjNVFAouOwDo1keuXihq9+GlfS+XvKDchDpCAADUouWvpP5yGEaAaeb9HMLnCYH0
+         H048eyBbPLlFryuMsU8Xnr5xkm9YW6Sc4grS4BpF52KUBpQpiYiqFkjrd0sz9Q4S1USJ
+         lcMnOWbWR4zwVb15EVXQhnY0zCU9miNtoMaDRPpQ8Mj5JDE7uWcKAgW7y5RAbzzwbwxF
+         10INqNbDbsIPLlIxPtbIVZXljbwKHBzrxp9wybB08feJPn4S8mmPcTBk8D+aY7b2F8Z6
+         cvBQ==
+X-Gm-Message-State: APjAAAVtc0EtqsZXee9JbYBZEOP7m642i9iRgUu715ZTrxoT4BmD+Mrf
+        ZHEsf1QtoKlaZxdWaNS9NXE=
+X-Google-Smtp-Source: APXvYqyo0mbyM1XvJjVusOgSygXXjQdnWYW4jE8D0PEY5WIIf1kS+iNzjeK+ZhUVyCCTBvnk97MRVw==
+X-Received: by 2002:ac2:43c5:: with SMTP id u5mr3839738lfl.47.1567541586184;
         Tue, 03 Sep 2019 13:13:06 -0700 (PDT)
+Received: from z50.gdansk-morena.vectranet.pl (109241207190.gdansk.vectranet.pl. [109.241.207.190])
+        by smtp.gmail.com with ESMTPSA id u14sm2960884ljd.14.2019.09.03.13.13.05
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Sep 2019 13:13:05 -0700 (PDT)
 From:   Janusz Krzysztofik <jmkrzyszt@gmail.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
         Hans Verkuil <hans.verkuil@cisco.com>
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         Janusz Krzysztofik <jmkrzyszt@gmail.com>
-Subject: [PATCH v3 7/9] media: ov6650: Fix default format not applied on device probe
-Date:   Tue,  3 Sep 2019 22:11:42 +0200
-Message-Id: <20190903201144.13219-8-jmkrzyszt@gmail.com>
+Subject: [PATCH v3 6/9] media: ov6650: Fix .get_fmt() V4L2_SUBDEV_FORMAT_TRY support
+Date:   Tue,  3 Sep 2019 22:11:41 +0200
+Message-Id: <20190903201144.13219-7-jmkrzyszt@gmail.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20190903201144.13219-1-jmkrzyszt@gmail.com>
 References: <20190903201144.13219-1-jmkrzyszt@gmail.com>
@@ -74,43 +74,46 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It is not clear what pixel format is actually configured in hardware on
-reset.  MEDIA_BUS_FMT_YUYV8_2X8, assumed on device probe since the
-driver was intiially submitted, is for sure not the one.
+Commit da298c6d98d5 ("[media] v4l2: replace video op g_mbus_fmt by pad
+op get_fmt") converted a former ov6650_g_fmt() video operation callback
+to an ov6650_get_fmt() pad operation callback.  However, the converted
+function disregards a format->which flag that pad operations should
+obey and always returns active frame format settings.
 
-Fix it by explicitly applying a known, driver default frame format just
-after initial device reset.
+That can be fixed by always responding to V4L2_SUBDEV_FORMAT_TRY with
+-EINVAL, or providing the response from a pad config argument, likely
+updated by a former user call to V4L2_SUBDEV_FORMAT_TRY .set_fmt().
+Since implementation of the latter is trivial, go for it.
 
-Fixes: 2f6e2404799a ("[media] SoC Camera: add driver for OV6650 sensor")
+Fixes: da298c6d98d5 ("[media] v4l2: replace video op g_mbus_fmt by pad op get_fmt")
 Signed-off-by: Janusz Krzysztofik <jmkrzyszt@gmail.com>
 ---
- drivers/media/i2c/ov6650.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov6650.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/media/i2c/ov6650.c b/drivers/media/i2c/ov6650.c
-index b62a238a83d0..4fd8ac8e3994 100644
+index fd608aebb68d..b62a238a83d0 100644
 --- a/drivers/media/i2c/ov6650.c
 +++ b/drivers/media/i2c/ov6650.c
-@@ -873,6 +873,11 @@ static int ov6650_video_probe(struct v4l2_subdev *sd)
- 	ret = ov6650_reset(client);
- 	if (!ret)
- 		ret = ov6650_prog_dflt(client);
-+	if (!ret) {
-+		struct v4l2_mbus_framefmt mf = ov6650_def_fmt;
-+
-+		ret = ov6650_s_fmt(sd, &mf);
+@@ -525,10 +525,16 @@ static int ov6650_get_fmt(struct v4l2_subdev *sd,
+ 	*mf = ov6650_def_fmt;
+ 
+ 	/* update media bus format code and frame size */
+-	mf->width	= priv->rect.width >> priv->half_scale;
+-	mf->height	= priv->rect.height >> priv->half_scale;
+-	mf->code	= priv->code;
++	if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
++		mf->width = cfg->try_fmt.width;
++		mf->height = cfg->try_fmt.height;
++		mf->code = cfg->try_fmt.code;
+ 
++	} else {
++		mf->width = priv->rect.width >> priv->half_scale;
++		mf->height = priv->rect.height >> priv->half_scale;
++		mf->code = priv->code;
 +	}
- 	if (!ret)
- 		ret = v4l2_ctrl_handler_setup(&priv->hdl);
- 
-@@ -1027,8 +1032,6 @@ static int ov6650_probe(struct i2c_client *client,
- 	priv->rect.top	  = DEF_VSTRT << 1;
- 	priv->rect.width  = W_CIF;
- 	priv->rect.height = H_CIF;
--	priv->half_scale  = false;
--	priv->code	  = MEDIA_BUS_FMT_YUYV8_2X8;
- 
- 	priv->subdev.internal_ops = &ov6650_internal_ops;
+ 	return 0;
+ }
  
 -- 
 2.21.0
