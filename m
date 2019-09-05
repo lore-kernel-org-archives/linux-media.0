@@ -2,47 +2,48 @@ Return-Path: <SRS0=7WK4=XA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F093BC43331
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB8F6C43331
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4B84D20692
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4614620692
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567713496;
-	bh=vNEvZ0vxGBZrnmSnM6oAAmu5Mfyk9lxU7ZynnnQ3GRg=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=lk+I31zLRjFqxp3WQxXG0GZmIWRLPqfd3Q/4g13KAmw/psCBL0lajdL5ZYXacwE/L
-	 lT9xyVcbZLL1bgdGB2g0UguZ9EWJT1W8KyWlfKoLpnskc40qDMomoQZmC7iaByzLjX
-	 Zo0pSwrNL3fILVJHKXIwcvQSq8fbItU5dvS15Mj8=
+	s=default; t=1567713498;
+	bh=kmwjHPFU1JbSFrNJzH99A3LUKqJd2p+4I7VkSc68g0M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=kLCdAsCf5MqVLHk259zRivSsvHCtevJMO+GxePuMFOBZ9BVXAAiCIM/V84XmeKKpC
+	 fJp/2+dFmOiR2gIaB+lUWPmiTdjtSxj3+cug7RiSk2sJaMuSmcGPavKhpovwvKgSPV
+	 lM1qzq6ioh6hv2+PYLe18/puZwCqUksSWKK4Qe2Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388596AbfIET6K (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Sep 2019 15:58:10 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:58484 "EHLO
+        id S2391580AbfIET56 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Sep 2019 15:57:58 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:58454 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391578AbfIET56 (ORCPT
+        with ESMTP id S2388357AbfIET56 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 5 Sep 2019 15:57:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=s3bnuLPie8tvQfkLbByEq3DCPFD82JjDHl5b4Zu8iF4=; b=plaVHZbHUd55P5ecQIdhVR0Dd
-        b647jC3qkNMHeQvR6S8LXLmPQyjJMxC+UVYMMowrtdyPSFLYcsPNwsaNk1GNEFSQnPYjdaE2yydhg
-        mXc6VYjfer9P+z2VSHqaBFiQSTtO/8kzvcYX/sZfGAwWRAh3oowVLpZcsao0GpvqJpl5aOp4Wluap
-        ksI7yBAPdp5kUPrTAn32B/uuvi2PMsJsHTxCUgT01aTEBYclaB+dXT4oCH/tb8tWrzeLAkL9SmlSH
-        a+s4RP7cWcuPv/mXYD6bMdjkjx3Hep3/sXyJPpPiZ0DxwyFmtwK4WmsyaZsCYqgH+vZ3nb+s10KP9
-        EnA0bL/Bw==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Es/zISrtwllZAcTDfnj7OAQJAy+Bnf95m2mw7+BsncA=; b=cRUQgJXyebsUtHonyp0KxzifBH
+        WglPXPcpQ/tfLzvGpVcV8nitEA4RYBci9KhrGdaTMBQuneXeGyrnRlpEpTOncpRDfrdZ+xQgdDaUG
+        IEj53CSxz0Q7OmCTXdW1YlexxFQQzsFLCj6gHmxBIWo7Uglgt/ipRI0JSwesg9s2ATpAd9R547Gwa
+        eLPNjxXk2XEt/GCA5PP430YL2f+mUGJsG17K/tRohChOHwTgggbb6dbPwmKvUOEPvrzQJ6as2QlfM
+        jb0yhBWgB1+RumQLT8g/yLeXKx5GMt2EdNyq8V+NPU41Ab8WWH1IISteSEv9wQ/Y46uwaNILtNRO7
+        BLPrG5KQ==;
 Received: from [177.159.253.249] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i5xtG-0000IH-DH; Thu, 05 Sep 2019 19:57:58 +0000
+        id 1i5xtF-0000IE-CY; Thu, 05 Sep 2019 19:57:57 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.1)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1i5xtC-0005m1-K3; Thu, 05 Sep 2019 16:57:54 -0300
+        id 1i5xtC-0005mC-Mj; Thu, 05 Sep 2019 16:57:54 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -50,29 +51,16 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Sven Eckelmann <sven@narfation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
         Doug Smythies <doug.smythies@gmail.com>,
-        =?UTF-8?q?Aur=C3=A9lien=20Cedeyn?= <aurelien.cedeyn@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-doc@vger.kernel.org,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Armijn Hemel <armijn@tjaldur.nl>, Jiri Olsa <jolsa@redhat.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
         Allison Randal <allison@lohutok.net>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Subject: [PATCH 0/6] Address issues with SPDX requirements and PEP-263
-Date:   Thu,  5 Sep 2019 16:57:47 -0300
-Message-Id: <cover.1567712829.git.mchehab+samsung@kernel.org>
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 3/6] tools: intel_pstate_tracer.py: fix SPDX header in the light of PEP-263
+Date:   Thu,  5 Sep 2019 16:57:50 -0300
+Message-Id: <51e941b6b028ed619dfa93e29ab0c2930050af5b.1567712829.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1567712829.git.mchehab+samsung@kernel.org>
+References: <cover.1567712829.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -80,60 +68,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The  description at Documentation/process/license-rules.rst is very strict
-with regards to the position where the SPDX tags should be.
+As stated at PEP-263, the coding tag should be at the first or
+second line. On those two scripts, the tag is at the wrong line.
 
-In the past several developers and maintainers interpreted it on a
-more permissive way, placing the SPDX header between lines 1 to 15, 
-with are the ones which the  scripts/spdxcheck.py script verifies.
+Place it at the right place and use the same kind of line that we're
+using on other python scripts that also work fine with emacs.
 
-However, recently, devs are becoming more strict about such
-requirement and want it to strictly follow the rule, with states that
-the SPDX rule should be at the first line ever on most files, and
-at the second line for scripts.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Well, for Python script, such requirement causes violation to PEP-263, 
-making regressions on scripts that contain encoding lines, as PEP-263
-also states about the same.
-
-This series addresses it.
-
-Patches 1 to 3 fix some Python scripts that violates PEP-263;
-
-Patch 4 mentions PEP-263 for Python scripts, allowing to go up to
-line 3, when both "#!" and the encoding line is found;
-
-Patch 5 changes the scripts/spdxcheck.py for it to identify on what
-line each SPDX header is found, optinally allowing to print an histogram
-about that;
-
-Patch 6 adds a pedantic^Wstrict mode to scripts/spdxcheck.py,
-making it to also check for violations at the line with contains the
-SPDX header.
-
-PS.: I sent already a RFC version for those patches along with this
-thread:
-
-    https://lore.kernel.org/lkml/b32c2e46b91e7bcda2a9bd140673f06d71b2487a.camel@perches.com/
-
-Mauro Carvalho Chehab (6):
-  docs: sphinx: add SPDX header for some sphinx extensions
-  tools: perf: fix SPDX header in the light of PEP-263
-  tools: intel_pstate_tracer.py: fix SPDX header in the light of PEP-263
-  docs: license-rules.txt: cover SPDX headers on Python scripts
-  scripts/spdxcheck.py: keep track on what line SPDX header was found
-  scripts/spdxcheck.py: check if the line number follows the strict rule
-
- Documentation/process/license-rules.rst       |  7 ++-
- Documentation/sphinx/kernel_include.py        |  1 +
- Documentation/sphinx/rstFlatTable.py          |  1 +
- scripts/spdxcheck.py                          | 55 +++++++++++++++----
- tools/perf/python/tracepoint.py               |  3 +-
- tools/perf/python/twatch.py                   |  3 +-
- .../intel_pstate_tracer.py                    |  2 +-
- 7 files changed, 55 insertions(+), 17 deletions(-)
-
+diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+index 2d6d342b148f..1009be489f9a 100755
+--- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
++++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/python
++# -*- coding: utf-8; mode: python -*-
+ # SPDX-License-Identifier: GPL-2.0-only
+-# -*- coding: utf-8 -*-
+ #
+ """ This utility can be used to debug and tune the performance of the
+ intel_pstate driver. This utility can be used in two ways:
 -- 
 2.21.0
-
 
