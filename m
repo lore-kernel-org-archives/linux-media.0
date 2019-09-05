@@ -2,110 +2,77 @@ Return-Path: <SRS0=7WK4=XA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FBC0C43331
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 17:10:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63FA9C43331
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 17:45:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D62192053B
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 17:10:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567703453;
-	bh=cE3KZFvDaAholPh5xAVpoiqc6UG1iMmZeCae/IiaoPo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=URAUgE3qoHioI6woLNJNG7PNdMjR+gihLZZhzW0m3Xu7JrX8tzTkypUR2ZYKEamlM
-	 ico6uHpsy2LISMSvUEpFYShGfTywEwk9tQpRouJSCItNCwVFXUIcbLD5NAEx/eUi3J
-	 0ynxNUf7JgFOtKjwb28MbsufnSmYhxkRSkKayZJI=
+	by mail.kernel.org (Postfix) with ESMTP id 600CF2082E
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 17:45:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390949AbfIERKw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Sep 2019 13:10:52 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:38202 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389559AbfIERKw (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Sep 2019 13:10:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=MjKdVNiFjOdZvdwokVehwJ0c/QLPeMEzqUmQ6koohg0=; b=TP+HPDqbKM126/TJ1UiGl4y8r
-        GpMofqJxAwlaV7rYqLqTqswSp0aCoyLge2iul1chQJTRNXmGlJfx/FV+9cNyV//XEELyYh/fZxki4
-        BLR0FKBg8SAZkcbR6Sp/wBCHCLEWzUQXX+IBGlaEGm9QYPAu5oZgW+AkmZD16wyeYsnOyN2nvud0Q
-        F7X3jrdIEsqNwvK/aTeBvWNJ7DyNjsgNJ1XpkD9+Z3hvwobjk2igzTXMvtHJ1kx+cDDI1V6kvW4h2
-        bnmCVuO2YVn6ST/HzlSnGmOFhUMyWwTFzLXUmbJyQOW+PW/sunv2QxzN0ilG5yx2kxeLGg+htCZ4Z
-        4b73YB87w==;
-Received: from [177.159.253.249] (helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i5vHW-0008Gt-I4; Thu, 05 Sep 2019 17:10:51 +0000
-Date:   Thu, 5 Sep 2019 14:10:44 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        Jessica Yu <jeyu@kernel.org>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs: license-rules.txt: cover SPDX headers on Python
- scripts
-Message-ID: <20190905141044.4eb3a622@coco.lan>
-In-Reply-To: <20190905141723.GB25790@kroah.com>
-References: <20190905055614.7958918b@coco.lan>
-        <88e638eb959095ab6657d295f9f8c27169569bf2.1567675272.git.mchehab+samsung@kernel.org>
-        <20190905065701.4744e66a@lwn.net>
-        <20190905141723.GB25790@kroah.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1731199AbfIERpQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Sep 2019 13:45:16 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:42035 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729101AbfIERpQ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Sep 2019 13:45:16 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <colin.king@canonical.com>)
+        id 1i5von-0001jx-4Z; Thu, 05 Sep 2019 17:45:13 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: cxd2820r: make array tab static const, makes object smaller
+Date:   Thu,  5 Sep 2019 18:45:12 +0100
+Message-Id: <20190905174512.8126-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Em Thu, 5 Sep 2019 16:17:23 +0200
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
+From: Colin Ian King <colin.king@canonical.com>
 
-> On Thu, Sep 05, 2019 at 06:57:01AM -0600, Jonathan Corbet wrote:
-> > On Thu,  5 Sep 2019 06:23:13 -0300
-> > Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
-> >   
-> > > Python's PEP-263 [1] dictates that an script that needs to default to
-> > > UTF-8 encoding has to follow this rule:
-> > > 
-> > > 	'Python will default to ASCII as standard encoding if no other
-> > > 	 encoding hints are given.
-> > > 
-> > > 	 To define a source code encoding, a magic comment must be placed
-> > > 	 into the source files either as first or second line in the file'  
-> > 
-> > So this is only Python 2, right? 
+Don't populate the array tab on the stack but instead make it
+static const. Makes the object code smaller by 53 bytes.
 
-Well, Debian 10 (buster) was launched this year, and still comes with python2
-(with is the default):
+Before:
+   text	   data	    bss	    dec	    hex	filename
+   7045	   1736	      0	   8781	   224d	media/dvb-frontends/cxd2820r_c.o
 
-	$ ls -la /usr/bin/python
-	lrwxrwxrwx 1 root root 7 Mar  4  2019 /usr/bin/python -> python2
+After:
+   text	   data	    bss	    dec	    hex	filename
+   6896	   1832	      0	   8728	   2218	media/dvb-frontends/cxd2820r_c.o
 
-I think Debian devs will keep it maintained for a while, as this is a LTS
-distro.
+(gcc version 9.2.1, amd64)
 
-> > Python 3 is UTF8 by default.  Given that
-> > Python 2 is EOL in January, is this something we should be concerned
-> > about?  Or should we instead be making sure that all the Python we have
-> > in-tree works properly with Python 3 and be done with it?  
-> 
-> I recommend just using python 3 everywhere and be done with it as there
-> are already many distros that default to that already.
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/media/dvb-frontends/cxd2820r_c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Then we need to change the scripts, as they're currently pointing to
-/usr/bin/python instead of /usr/bin/python3. At least on the distros I
-use myself, this doesn't point to /etc/alternates. Instead, it is just
-an alias to python2.
+diff --git a/drivers/media/dvb-frontends/cxd2820r_c.c b/drivers/media/dvb-frontends/cxd2820r_c.c
+index 6f7eedb4c00e..0ba382948c51 100644
+--- a/drivers/media/dvb-frontends/cxd2820r_c.c
++++ b/drivers/media/dvb-frontends/cxd2820r_c.c
+@@ -298,7 +298,7 @@ int cxd2820r_sleep_c(struct dvb_frontend *fe)
+ 	struct cxd2820r_priv *priv = fe->demodulator_priv;
+ 	struct i2c_client *client = priv->client[0];
+ 	int ret;
+-	struct reg_val_mask tab[] = {
++	static const struct reg_val_mask tab[] = {
+ 		{ 0x000ff, 0x1f, 0xff },
+ 		{ 0x00085, 0x00, 0xff },
+ 		{ 0x00088, 0x01, 0xff },
+-- 
+2.20.1
 
-Thanks,
-Mauro
