@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB8F6C43331
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 697FAC00306
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4614620692
+	by mail.kernel.org (Postfix) with ESMTP id B641C20692
 	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1567713498;
-	bh=kmwjHPFU1JbSFrNJzH99A3LUKqJd2p+4I7VkSc68g0M=;
+	bh=4tD/3m4+ACwtWwJ5nq8/462PLH5hGfV1UFx4WLgnz6I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kLCdAsCf5MqVLHk259zRivSsvHCtevJMO+GxePuMFOBZ9BVXAAiCIM/V84XmeKKpC
-	 fJp/2+dFmOiR2gIaB+lUWPmiTdjtSxj3+cug7RiSk2sJaMuSmcGPavKhpovwvKgSPV
-	 lM1qzq6ioh6hv2+PYLe18/puZwCqUksSWKK4Qe2Q=
+	b=FyKkHfK2S/gmzLY0cFmnh7/CJCo89Ng0IP2KW6jg4H2PavBXu1eCRR3Ja50ONHalO
+	 d9EXWIT9YMt52WjtHCei0J+9aUkrPkm9vmMXUrf4YesaHCC2E9mMu5coGJ7mRGEJqp
+	 MzpI7Y2W+CV9ikmmJoFQqivgCXVctRT2vOSWAoOA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391580AbfIET56 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Sep 2019 15:57:58 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:58454 "EHLO
+        id S2391620AbfIET6R (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Sep 2019 15:58:17 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:58474 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388357AbfIET56 (ORCPT
+        with ESMTP id S2389054AbfIET56 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 5 Sep 2019 15:57:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
@@ -32,18 +32,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Es/zISrtwllZAcTDfnj7OAQJAy+Bnf95m2mw7+BsncA=; b=cRUQgJXyebsUtHonyp0KxzifBH
-        WglPXPcpQ/tfLzvGpVcV8nitEA4RYBci9KhrGdaTMBQuneXeGyrnRlpEpTOncpRDfrdZ+xQgdDaUG
-        IEj53CSxz0Q7OmCTXdW1YlexxFQQzsFLCj6gHmxBIWo7Uglgt/ipRI0JSwesg9s2ATpAd9R547Gwa
-        eLPNjxXk2XEt/GCA5PP430YL2f+mUGJsG17K/tRohChOHwTgggbb6dbPwmKvUOEPvrzQJ6as2QlfM
-        jb0yhBWgB1+RumQLT8g/yLeXKx5GMt2EdNyq8V+NPU41Ab8WWH1IISteSEv9wQ/Y46uwaNILtNRO7
-        BLPrG5KQ==;
+        bh=hjTNA3WcjVQ1uVRvCaEO2GNT0hn8OZTUbCOvEeEU8T0=; b=PeK9oXTeWZIh4q39Lc0Fzifyff
+        Vomz2Nj7gjmbp+rqmEckZ6W1mQRiPm1kkimuh3rjPZK7SU2tGXFXdqSxVuvrsw637KDqx/FjlMxOk
+        ABurgBaVqeALu7Wu0T7wdxNx0IDngBYOtL4rN1C9KsPN1b6ScKcTMdcspMsuOwrLbtLFi8wj1TRnA
+        p0SY9njUWHuFDtU5HA13uK+FzMchk4sLgG4IhZIOop+yUWpYF5ra7K2y/4byTDv4YKS7NB5FovOyN
+        K0TWcyk20eMsVZtmvhQMtiAfcHRfBgEpXzlkIe8Rv6aNkUQpUBJL1VO0NXb0RQMoIX84PQ2L3MxCu
+        31tEXKiw==;
 Received: from [177.159.253.249] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i5xtF-0000IE-CY; Thu, 05 Sep 2019 19:57:57 +0000
+        id 1i5xtF-0000ID-Bg; Thu, 05 Sep 2019 19:57:57 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.1)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1i5xtC-0005mC-Mj; Thu, 05 Sep 2019 16:57:54 -0300
+        id 1i5xtC-0005mK-OO; Thu, 05 Sep 2019 16:57:54 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
@@ -51,13 +51,16 @@ Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
         Jonathan Corbet <corbet@lwn.net>,
-        Doug Smythies <doug.smythies@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 3/6] tools: intel_pstate_tracer.py: fix SPDX header in the light of PEP-263
-Date:   Thu,  5 Sep 2019 16:57:50 -0300
-Message-Id: <51e941b6b028ed619dfa93e29ab0c2930050af5b.1567712829.git.mchehab+samsung@kernel.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sven Eckelmann <sven@narfation.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thierry Reding <treding@nvidia.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Subject: [PATCH 5/6] scripts/spdxcheck.py: keep track on what line SPDX header was found
+Date:   Thu,  5 Sep 2019 16:57:52 -0300
+Message-Id: <8d73ce62170345f748f990861bf5352c4423281b.1567712829.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1567712829.git.mchehab+samsung@kernel.org>
 References: <cover.1567712829.git.mchehab+samsung@kernel.org>
@@ -68,29 +71,119 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-As stated at PEP-263, the coding tag should be at the first or
-second line. On those two scripts, the tag is at the wrong line.
+According with Documentation/process/license-rules.rst, SPDX headers
+can be found only at the first lines.
 
-Place it at the right place and use the same kind of line that we're
-using on other python scripts that also work fine with emacs.
+However, this script doesn't enforce it, and several files violate
+that. It could be useful to be able to show a histogram with the
+number of files that have the SPDX header on each line number.
+
+This feature is optional, enabled with -H or --histogram.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/spdxcheck.py | 37 ++++++++++++++++++++++++++++---------
+ 1 file changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-index 2d6d342b148f..1009be489f9a 100755
---- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-+++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-@@ -1,6 +1,6 @@
- #!/usr/bin/python
-+# -*- coding: utf-8; mode: python -*-
- # SPDX-License-Identifier: GPL-2.0-only
--# -*- coding: utf-8 -*-
- #
- """ This utility can be used to debug and tune the performance of the
- intel_pstate driver. This utility can be used in two ways:
+diff --git a/scripts/spdxcheck.py b/scripts/spdxcheck.py
+index 6374e078a5f2..c969b050366f 100755
+--- a/scripts/spdxcheck.py
++++ b/scripts/spdxcheck.py
+@@ -189,7 +189,9 @@ class id_parser(object):
+                 # Should we check for more SPDX ids in the same file and
+                 # complain if there are any?
+                 #
+-                break
++                return self.curline - 1
++
++            return -1
+ 
+         except ParserException as pe:
+             if pe.tok:
+@@ -200,7 +202,7 @@ class id_parser(object):
+                 sys.stdout.write('%s: %d:0 %s\n' %(fname, self.curline, col, pe.txt))
+             self.spdx_errors += 1
+ 
+-def scan_git_tree(tree):
++def scan_git_tree(ln_count, tree):
+     for el in tree.traverse():
+         # Exclude stuff which would make pointless noise
+         # FIXME: Put this somewhere more sensible
+@@ -211,12 +213,15 @@ def scan_git_tree(tree):
+         if not os.path.isfile(el.path):
+             continue
+         with open(el.path, 'rb') as fd:
+-            parser.parse_lines(fd, args.maxlines, el.path)
++            ln = parser.parse_lines(fd, args.maxlines, el.path)
++            if ln >= 0:
++                ln_count[ln] += 1;
++    return ln_count
+ 
+-def scan_git_subtree(tree, path):
++def scan_git_subtree(ln_count, tree, path):
+     for p in path.strip('/').split('/'):
+         tree = tree[p]
+-    scan_git_tree(tree)
++    scan_git_tree(ln_count, tree)
+ 
+ if __name__ == '__main__':
+ 
+@@ -225,6 +230,7 @@ if __name__ == '__main__':
+     ap.add_argument('-m', '--maxlines', type=int, default=15,
+                     help='Maximum number of lines to scan in a file. Default 15')
+     ap.add_argument('-v', '--verbose', action='store_true', help='Verbose statistics output')
++    ap.add_argument('-H', '--histogram', action='store_true', help='Verbose histogram about SPDX header position')
+     args = ap.parse_args()
+ 
+     # Sanity check path arguments
+@@ -255,23 +261,31 @@ if __name__ == '__main__':
+         sys.stderr.write('%s\n' %traceback.format_exc())
+         sys.exit(1)
+ 
++    ln_count= [0] * args.maxlines
++
+     try:
+         if len(args.path) and args.path[0] == '-':
+             stdin = os.fdopen(sys.stdin.fileno(), 'rb')
+-            parser.parse_lines(stdin, args.maxlines, '-')
++            ln = parser.parse_lines(stdin, args.maxlines, '-')
++            if ln >= 0:
++                ln_count[ln] += 1;
++
+         else:
+             if args.path:
+                 for p in args.path:
+                     if os.path.isfile(p):
+-                        parser.parse_lines(open(p, 'rb'), args.maxlines, p)
++                        ln = parser.parse_lines(open(p, 'rb'), args.maxlines, p)
++                        if ln >= 0:
++                            ln_count[ln] += 1;
++
+                     elif os.path.isdir(p):
+-                        scan_git_subtree(repo.head.reference.commit.tree, p)
++                        scan_git_subtree(ln_count, repo.head.reference.commit.tree, p)
+                     else:
+                         sys.stderr.write('path %s does not exist\n' %p)
+                         sys.exit(1)
+             else:
+                 # Full git tree scan
+-                scan_git_tree(repo.head.commit.tree)
++                scan_git_tree(ln_count, repo.head.commit.tree)
+ 
+             if args.verbose:
+                 sys.stderr.write('\n')
+@@ -284,6 +298,11 @@ if __name__ == '__main__':
+                 sys.stderr.write('Lines checked:     %12d\n' %parser.lines_checked)
+                 sys.stderr.write('Files with SPDX:   %12d\n' %parser.spdx_valid)
+                 sys.stderr.write('Files with errors: %12d\n' %parser.spdx_errors)
++                sys.stderr.write('\n')
++            if args.histogram:
++                for i in range(0, len(ln_count)):
++                    if ln_count[i] > 0:
++                        sys.stderr.write('Files with SPDX at line #%-5d:   %12d\n' % (i + 1, ln_count[i]))
+ 
+             sys.exit(0)
+ 
 -- 
 2.21.0
 
