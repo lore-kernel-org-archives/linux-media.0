@@ -3,80 +3,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42E7DC3A5A5
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 10:40:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C5D6C3A5AA
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 10:45:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1A57722CF5
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 10:40:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5641D22CF6
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 10:45:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387987AbfIEKkJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Sep 2019 06:40:09 -0400
-Received: from mga14.intel.com ([192.55.52.115]:21688 "EHLO mga14.intel.com"
+        id S2388068AbfIEKpx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Sep 2019 06:45:53 -0400
+Received: from mga06.intel.com ([134.134.136.31]:61875 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731981AbfIEKkI (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 5 Sep 2019 06:40:08 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1727900AbfIEKpx (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 5 Sep 2019 06:45:53 -0400
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Sep 2019 03:40:08 -0700
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Sep 2019 03:45:52 -0700
 X-IronPort-AV: E=Sophos;i="5.64,470,1559545200"; 
-   d="scan'208";a="173900646"
+   d="scan'208";a="334516783"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Sep 2019 03:40:03 -0700
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Sep 2019 03:45:48 -0700
 Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 8A12D20584; Thu,  5 Sep 2019 13:40:01 +0300 (EEST)
-Date:   Thu, 5 Sep 2019 13:40:01 +0300
+        id 9A6A620584; Thu,  5 Sep 2019 13:45:46 +0300 (EEST)
+Date:   Thu, 5 Sep 2019 13:45:46 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        dongchun.zhu@mediatek.com, mchehab@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, drinkcat@chromium.org, tfiga@chromium.org,
-        matthias.bgg@gmail.com, bingbu.cao@intel.com,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+To:     Dongchun Zhu <dongchun.zhu@mediatek.com>
+Cc:     mchehab@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
+        drinkcat@chromium.org, tfiga@chromium.org, matthias.bgg@gmail.com,
+        bingbu.cao@intel.com, srv_heupstream@mediatek.com,
+        linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, sj.huang@mediatek.com,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        sam.hung@mediatek.com, shengnan.wang@mediatek.com
-Subject: Re: [V2, 2/2] media: i2c: Add DW9768 VCM driver
-Message-ID: <20190905104001.GZ5475@paasikivi.fi.intel.com>
-References: <20190905072142.14606-1-dongchun.zhu@mediatek.com>
- <20190905072142.14606-3-dongchun.zhu@mediatek.com>
- <20190905082134.GY5475@paasikivi.fi.intel.com>
- <20190905101908.GB2680@smile.fi.intel.com>
+        louis.kuo@mediatek.com, shengnan.wang@mediatek.com
+Subject: Re: [V3, 2/2] media: i2c: Add Omnivision OV02A10 camera sensor driver
+Message-ID: <20190905104546.GA5475@paasikivi.fi.intel.com>
+References: <20190819034331.13098-1-dongchun.zhu@mediatek.com>
+ <20190819034331.13098-3-dongchun.zhu@mediatek.com>
+ <20190819083009.GC6133@paasikivi.fi.intel.com>
+ <1567676465.21623.100.camel@mhfsdcap03>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190905101908.GB2680@smile.fi.intel.com>
+In-Reply-To: <1567676465.21623.100.camel@mhfsdcap03>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 01:19:08PM +0300, Andy Shevchenko wrote:
-> On Thu, Sep 05, 2019 at 11:21:34AM +0300, Sakari Ailus wrote:
-> > On Thu, Sep 05, 2019 at 03:21:42PM +0800, dongchun.zhu@mediatek.com wrote:
-> > > From: Dongchun Zhu <dongchun.zhu@mediatek.com>
-> 
-> > > +static const struct i2c_device_id dw9768_id_table[] = {
-> > > +	{ DW9768_NAME, 0 },
-> > > +	{ },
+Hi Dongchun,
+
+On Thu, Sep 05, 2019 at 05:41:05PM +0800, Dongchun Zhu wrote:
+
+...
+
+> > > +	ret = regulator_bulk_enable(OV02A10_NUM_SUPPLIES, ov02a10->supplies);
+> > > +	if (ret < 0) {
+> > > +		dev_err(dev, "Failed to enable regulators\n");
+> > > +		goto disable_clk;
+> > > +	}
+> > > +	msleep_range(7);
 > > 
-> > Could you drop the I²C ID table?
+> > This has some potential of clashing with more generic functions in the
+> > future. Please use usleep_range directly, or msleep.
+> > 
 > 
-> But why?
-> It will allow you to instanciate the device from user space.
+> Did you mean using usleep_range(7*1000, 8*1000), as used in patch v1?
+> https://patchwork.kernel.org/patch/10957225/
 
-The device is supposed to be present in DT (or ACPI tables) already.
-
-> 
-> +Cc: Javier.
-> 
-> Javier, is it needed in new code?
+Yes, please.
 
 -- 
 Sakari Ailus
