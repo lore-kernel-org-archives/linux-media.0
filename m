@@ -2,75 +2,116 @@ Return-Path: <SRS0=7WK4=XA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4608C43331
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:40:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4C03C43331
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 24B1F2082C
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:40:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFB932082C
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 19:58:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1567713489;
+	bh=mJJv7bKaAYOsFT1lvu/Ibyo80Mbk4EazeWj8qD3RaDw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=z6nId1ggJ77zZN6pdot5Y7B+lBA6veIqItNdEAHAfEd0PQ5e/ZqRfjXLjaiW3gTbj
+	 5zjpVEFTRpBdFl0w2GWqrg4wuaxVS+kriifcJq8yFJSPx2bIrfwFXcEmyI6v2Umto9
+	 7HTerH3jjNt8wNL9lSN9u9N26NQmSvoCWiJ7K2qQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390837AbfIETkL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Sep 2019 15:40:11 -0400
-Received: from ms.lwn.net ([45.79.88.28]:58484 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388174AbfIETkK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 5 Sep 2019 15:40:10 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id CF9407DA;
-        Thu,  5 Sep 2019 19:40:09 +0000 (UTC)
-Date:   Thu, 5 Sep 2019 13:40:08 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        id S2391588AbfIET57 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Sep 2019 15:57:59 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:58456 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388596AbfIET56 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Sep 2019 15:57:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=btp8OApGG/3UFKYYTxwfb9hcf8w0H2Q+kH4+OloUAmQ=; b=Mo0egFykTZYm3jAW18Ny4uIu0/
+        os3uteHN//gSLMFWyQTtMjcyZ5rPrlhFwny4sc0p/KOc5OKVK5cpC/FcLnfh4Qj0SvCoeITdie5or
+        Kg7Hn7oKL4brXaLz8lZ1wKnTmD2tz0+LrKhJ7FxYw/0ZEcA71LbQMKKzithJbdTEDS2QYorlA2txU
+        dRtRNtkEYQ8jCsSdQMyzDeLq1qBEMf/ZtIYgJyq3rapo8xbxGDjabroWkeoe7MFz4F0AXxEF4r/A3
+        wVao44R7iYYkrP/Ho6FHoRu/0A0yC7Qqn/f8QFheY3WEJaBmI+1zogti22c2a5R3tYnRwYcuwXkak
+        sGLtS4Nw==;
+Received: from [177.159.253.249] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i5xtF-0000IF-Ce; Thu, 05 Sep 2019 19:57:57 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.1)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1i5xtC-0005m8-Lu; Thu, 05 Sep 2019 16:57:54 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        Jessica Yu <jeyu@kernel.org>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] docs: license-rules.txt: cover SPDX headers on Python
- scripts
-Message-ID: <20190905134008.57cd3e89@lwn.net>
-In-Reply-To: <20190905162810.2388d532@coco.lan>
-References: <20190905055614.7958918b@coco.lan>
-        <88e638eb959095ab6657d295f9f8c27169569bf2.1567675272.git.mchehab+samsung@kernel.org>
-        <20190905065701.4744e66a@lwn.net>
-        <20190905162810.2388d532@coco.lan>
-Organization: LWN.net
+        Jonathan Corbet <corbet@lwn.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Armijn Hemel <armijn@tjaldur.nl>,
+        Allison Randal <allison@lohutok.net>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 2/6] tools: perf: fix SPDX header in the light of PEP-263
+Date:   Thu,  5 Sep 2019 16:57:49 -0300
+Message-Id: <bd67fb319dcc2e7aabe853de5b37e97eda11c450.1567712829.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1567712829.git.mchehab+samsung@kernel.org>
+References: <cover.1567712829.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Thu, 5 Sep 2019 16:28:10 -0300
-Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
+As stated at PEP-263, the coding tag should be at the first or
+second line. On those two scripts, the tag is at the wrong line.
 
-> I don't think we can count that python 3 uses utf-8 per default.
-> 
-> I strongly suspect that, if one uses a Python3 version < 3.7, it will
-> still default to ASCII.
-> 
-> On a quick look, the new UTF-8 mode was added on PEP-540:
-> 
-> 	https://www.python.org/dev/peps/pep-0540/
-> 
-> Such change happened at Python 3.7. 
+It also contains a separate e-macs line to tell it to consider
+the file as a python one. Merge this with the encoding tag,
+using the same coding line that we're using on other python files.
 
-That PEP is to override the locale and use utf8 unconditionally.  It
-says, with regard to the pre-PEP state:
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ tools/perf/python/tracepoint.py | 3 +--
+ tools/perf/python/twatch.py     | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-	UTF-8 is also the default encoding of Python scripts, XML and JSON
-	file formats.
+diff --git a/tools/perf/python/tracepoint.py b/tools/perf/python/tracepoint.py
+index eb76f6516247..b7717b501fd8 100755
+--- a/tools/perf/python/tracepoint.py
++++ b/tools/perf/python/tracepoint.py
+@@ -1,7 +1,6 @@
+ #! /usr/bin/python
++# -*- coding: utf-8; mode: python -*-
+ # SPDX-License-Identifier: GPL-2.0
+-# -*- python -*-
+-# -*- coding: utf-8 -*-
+ 
+ import perf
+ 
+diff --git a/tools/perf/python/twatch.py b/tools/perf/python/twatch.py
+index ff87ccf5b708..a95e59373ebd 100755
+--- a/tools/perf/python/twatch.py
++++ b/tools/perf/python/twatch.py
+@@ -1,7 +1,6 @@
+ #! /usr/bin/python
++# -*- coding: utf-8; mode: python -*-
+ # SPDX-License-Identifier: GPL-2.0-only
+-# -*- python -*-
+-# -*- coding: utf-8 -*-
+ #   twatch - Experimental use of the perf python interface
+ #   Copyright (C) 2011 Arnaldo Carvalho de Melo <acme@redhat.com>
+ #
+-- 
+2.21.0
 
-Unicode was the reason for much of the Python 3 pain; it seems unlikely
-that many installations are defaulting to ASCII anyway...?
-
-jon
