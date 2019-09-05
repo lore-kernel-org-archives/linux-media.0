@@ -4,27 +4,27 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A40F1C3A5AA
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 11:01:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49F13C3A5A5
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 11:01:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 74C0F21883
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 11:01:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C79D2173B
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 11:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1567681302;
-	bh=eGJBkaPf3i/03H75Ui1ZA3fc5FWUK4xk+D6etZpFnr0=;
+	s=default; t=1567681306;
+	bh=kmwjHPFU1JbSFrNJzH99A3LUKqJd2p+4I7VkSc68g0M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DkfTunOVg4rNDl8vFrgHYxmogH12aQBVtLH4G0H1qYwxT5SiOUw3hylM+wYBeRw7M
-	 xhjDAa+1uXq99lEgajQpCqs9cYPTR+GxC3jnf7t8Ou4xJFOyjRpDqHQqWHkYsX+ffT
-	 YY5+XBtWn03fT1v6Symkcp2UfKme8m4A1zDQ4juE=
+	b=QUGXV1q7Nz0rd9KNVvhobg9Z0oEwQ8fAbZPhymcGyVFufGHqfdjVqfy5IZ1t4qRya
+	 /m3s3AtJcYxI2/OwEoFlgg6AgKVDMocHkux2NgyuPJgDpHAyrrjOvbQd5QrBFolxlc
+	 F8g3w6VuKgQkaJnpFZ8guWeXkq+ZMNvSNJOvNU6E=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388023AbfIELBe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1733182AbfIELBe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 5 Sep 2019 07:01:34 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:48310 "EHLO
+Received: from bombadil.infradead.org ([198.137.202.133]:48324 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726137AbfIELBd (ORCPT
+        with ESMTP id S1731666AbfIELBd (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Thu, 5 Sep 2019 07:01:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
@@ -32,31 +32,36 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
         Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
         List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Gd5Si23CQTkjXHrd1kfDMwHId0XN7lelZ5t8iFh3FtY=; b=siCmQcbRBU1+a6LPDnLeI+LN/p
-        uF+ApHOVakeqBxbCBMBZwDoLmgufJ81HdrUihZtcPe5S6KEWqVNV3oc5UOileqPOfagquF2TlEiMN
-        +pQz2Ixl5/yy4+HIc/SDNs0XofIZM1HwJsmoliA35trjpswlq17SCovLc10tjyzz+5gkEqZKbp5Hp
-        huh0bEpWI7NQOe2hg6Mv9EPS1DyYZbLvnng53LZfbS3z6X2pMxvjM+COAgUw6UVhUtLxh8i4S2Kyz
-        yvOZo+4U51vnVQRLBmwX2D0rjXGblveF8ARgij8vSj5QIPwcabhjLVZtG9leHpulrZFNucttxnAS6
-        9+TclA9A==;
+        bh=Es/zISrtwllZAcTDfnj7OAQJAy+Bnf95m2mw7+BsncA=; b=d5bEaDa3VutuNsrUO1pWw6Bd8q
+        utxDqk1SomwhtO3mKhSkGFfXWtNfsUfasMJAn40C1oxmRQzLmDFdPfThT21htY+tDVECIsRhbyauR
+        lWDWrYYbzVnhvWWvEe7KSsju/20qQ+eAqWKoirezRb/0/lfocNMKr9Uid+8uGiAfdQa5lfUmASV6w
+        h5l/Yf4W+CTipGXvxael20TpzjZ8MST9bUzXMtiVdB6xuEG668WKZDt+Wq7lQX+cqfb6f3+TNRcuo
+        R8OL5+dnvX6lV1M7AVApC8lbLo3peVhl0X+9IUTkC7VZ9czlhn6aJSDeQgRS7sOfdupAIFprtTpU+
+        6QyPeDNA==;
 Received: from 177.17.137.173.dynamic.adsl.gvt.net.br ([177.17.137.173] helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i5pW8-0003ac-Uc; Thu, 05 Sep 2019 11:01:32 +0000
+        id 1i5pW8-0003ab-Ux; Thu, 05 Sep 2019 11:01:32 +0000
 Received: from mchehab by bombadil.infradead.org with local (Exim 4.92.1)
         (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1i5pW6-00030x-Jb; Thu, 05 Sep 2019 08:01:30 -0300
+        id 1i5pW6-000314-LJ; Thu, 05 Sep 2019 08:01:30 -0300
 From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 To:     Linux Media Mailing List <linux-media@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Mauro Carvalho Chehab <mchehab@infradead.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH 1/3] docs: sphinx: add SPDX header for some sphinx extensions
-Date:   Thu,  5 Sep 2019 08:01:27 -0300
-Message-Id: <d1331081c206afb4ba71e07d5b11a67896cbd99f.1567681249.git.mchehab+samsung@kernel.org>
+        Jonathan Corbet <corbet@lwn.net>,
+        Allison Randal <allison@lohutok.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Enrico Weigelt <info@metux.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Doug Smythies <doug.smythies@gmail.com>
+Subject: [PATCH 3/3] tools: intel_pstate_tracer.py: fix SPDX header in the light of PEP-263
+Date:   Thu,  5 Sep 2019 08:01:29 -0300
+Message-Id: <4c6c3a5a5c3f9ccc5409511f0372008af0706e53.1567681249.git.mchehab+samsung@kernel.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190905075028.643f4b9d@coco.lan>
-References: <20190905075028.643f4b9d@coco.lan>
+In-Reply-To: <d1331081c206afb4ba71e07d5b11a67896cbd99f.1567681249.git.mchehab+samsung@kernel.org>
+References: <d1331081c206afb4ba71e07d5b11a67896cbd99f.1567681249.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -64,39 +69,29 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Those extensions are released under GPLv2, as stated at the
-:license: markup tag.
+As stated at PEP-263, the coding tag should be at the first or
+second line. On those two scripts, the tag is at the wrong line.
 
-Add the corresponding SPDX tags for such license.
+Place it at the right place and use the same kind of line that we're
+using on other python scripts that also work fine with emacs.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- Documentation/sphinx/kernel_include.py | 1 +
- Documentation/sphinx/rstFlatTable.py   | 1 +
- 2 files changed, 2 insertions(+)
+ tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/sphinx/kernel_include.py b/Documentation/sphinx/kernel_include.py
-index f523aa68a36b..7aaea4e31f78 100755
---- a/Documentation/sphinx/kernel_include.py
-+++ b/Documentation/sphinx/kernel_include.py
-@@ -1,5 +1,6 @@
- #!/usr/bin/env python3
- # -*- coding: utf-8; mode: python -*-
-+# SPDX-License-Identifier: GPL-2.0
- # pylint: disable=R0903, C0330, R0914, R0912, E0401
- 
- u"""
-diff --git a/Documentation/sphinx/rstFlatTable.py b/Documentation/sphinx/rstFlatTable.py
-index 2019a55f6b18..15769d01831b 100755
---- a/Documentation/sphinx/rstFlatTable.py
-+++ b/Documentation/sphinx/rstFlatTable.py
-@@ -1,5 +1,6 @@
- #!/usr/bin/env python3
- # -*- coding: utf-8; mode: python -*-
-+# SPDX-License-Identifier: GPL-2.0
- # pylint: disable=C0330, R0903, R0912
- 
- u"""
+diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+index 2d6d342b148f..1009be489f9a 100755
+--- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
++++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+@@ -1,6 +1,6 @@
+ #!/usr/bin/python
++# -*- coding: utf-8; mode: python -*-
+ # SPDX-License-Identifier: GPL-2.0-only
+-# -*- coding: utf-8 -*-
+ #
+ """ This utility can be used to debug and tune the performance of the
+ intel_pstate driver. This utility can be used in two ways:
 -- 
 2.21.0
 
