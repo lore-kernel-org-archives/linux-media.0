@@ -2,120 +2,180 @@ Return-Path: <SRS0=7WK4=XA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
+	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F393C43140
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 14:17:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC23CC388C1
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 14:20:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A0669206A5
-	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 14:17:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 70C3A222C0
+	for <linux-media@archiver.kernel.org>; Thu,  5 Sep 2019 14:14:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732487AbfIEORy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 5 Sep 2019 10:17:54 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37506 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727009AbfIEORx (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Sep 2019 10:17:53 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id CA45328DC0F
-Message-ID: <cb118783713af210b3ac8a87d00b62dc83cc9c08.camel@collabora.com>
-Subject: Re: [PATCH 1/2] media: uapi: h264: Add
- num_ref_idx_active_override_flag
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reply-To: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Tomasz Figa <tfiga@chromium.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Sasha Hauer <kernel@pengutronix.de>
-Date:   Thu, 05 Sep 2019 10:17:48 -0400
-In-Reply-To: <1567679973.3958.1.camel@pengutronix.de>
-References: <20190905101533.525-1-p.zabel@pengutronix.de>
-         <CAHD77H=q48Zx=dWMOMT527au8FzKZdQ9SrRr4sos8oNfCeCzQw@mail.gmail.com>
-         <1567679973.3958.1.camel@pengutronix.de>
-Organization: Collabora Ltd.
-Content-Type: multipart/signed; micalg="pgp-sha1"; protocol="application/pgp-signature";
-        boundary="=-7Xp+djquZaKrFdQPURBI"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1730477AbfIEOOT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 5 Sep 2019 10:14:19 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:31898 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726048AbfIEOOT (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 5 Sep 2019 10:14:19 -0400
+X-UUID: 2f11ff7d98724b569e3e90e98073f37c-20190905
+X-UUID: 2f11ff7d98724b569e3e90e98073f37c-20190905
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <jerry-ch.chen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 742702825; Thu, 05 Sep 2019 22:14:14 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 5 Sep 2019 22:14:10 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 5 Sep 2019 22:14:10 +0800
+Message-ID: <1567692852.22453.55.camel@mtksdccf07>
+Subject: Re: [RFC PATCH V2 3/4] media: platform: Add Mediatek FD driver
+ KConfig
+From:   Jerry-ch Chen <Jerry-ch.Chen@mediatek.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+CC:     "hans.verkuil@cisco.com" <hans.verkuil@cisco.com>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "tfiga@chromium.org" <tfiga@chromium.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "yuzhao@chromium.org" <yuzhao@chromium.org>,
+        "zwisler@chromium.org" <zwisler@chromium.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Sean Cheng =?UTF-8?Q?=28=E9=84=AD=E6=98=87=E5=BC=98=29?= 
+        <Sean.Cheng@mediatek.com>,
+        "Sj Huang =?UTF-8?Q?=28=E9=BB=83=E4=BF=A1=E7=92=8B=29?=" 
+        <sj.huang@mediatek.com>,
+        Christie Yu =?UTF-8?Q?=28=E6=B8=B8=E9=9B=85=E6=83=A0=29?= 
+        <christie.yu@mediatek.com>,
+        Frederic Chen =?UTF-8?Q?=28=E9=99=B3=E4=BF=8A=E5=85=83=29?= 
+        <Frederic.Chen@mediatek.com>,
+        Jungo Lin =?UTF-8?Q?=28=E6=9E=97=E6=98=8E=E4=BF=8A=29?= 
+        <jungo.lin@mediatek.com>,
+        Rynn Wu =?UTF-8?Q?=28=E5=90=B3=E8=82=B2=E6=81=A9=29?= 
+        <Rynn.Wu@mediatek.com>,
+        Po-Yang Huang =?UTF-8?Q?=28=E9=BB=83=E6=9F=8F=E9=99=BD=29?= 
+        <po-yang.huang@mediatek.com>,
+        "shik@chromium.org" <shik@chromium.org>,
+        "suleiman@chromium.org" <suleiman@chromium.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        srv_heupstream <srv_heupstream@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Date:   Thu, 5 Sep 2019 22:14:12 +0800
+In-Reply-To: <20190905123054.GL5035@pendragon.ideasonboard.com>
+References: <1562661672-22439-1-git-send-email-Jerry-Ch.chen@mediatek.com>
+         <1562661672-22439-4-git-send-email-Jerry-Ch.chen@mediatek.com>
+         <20190905123054.GL5035@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Hi Laurent,
 
---=-7Xp+djquZaKrFdQPURBI
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2019-09-05 at 20:30 +0800, Laurent Pinchart wrote:
+> Hi Jerry,
+> 
+> Thank you for the patch.
+> 
+> On Tue, Jul 09, 2019 at 04:41:11PM +0800, Jerry-ch Chen wrote:
+> > From: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
+> > 
+> > This patch adds KConfig for Mediatek Face Detection driver (FD).
+> > FD is embedded in Mediatek SoCs. It can provide hardware
+> > accelerated face detection function.
+> > 
+> > Signed-off-by: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
+> 
+> You can squash this patch with 4/4, there's no need to keep it separate.
+> 
 
-Le jeudi 05 septembre 2019 =C3=A0 12:39 +0200, Philipp Zabel a =C3=A9crit :
-> On Thu, 2019-09-05 at 19:31 +0900, Tomasz Figa wrote:
-> > On Thu, Sep 5, 2019 at 7:15 PM Philipp Zabel <p.zabel@pengutronix.de> w=
-rote:
-> > > This flag tells the kernel whether the slice header contained the
-> > > num_ref_idx_l[01]_active_minus1 syntax elements, or whether the
-> > > num_ref_idx_l[01]_default_active_minus1 from PPS should be used
-> > > instead.
-> > >=20
-> > > Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-> > > ---
-> > >  Documentation/media/uapi/v4l/ext-ctrls-codec.rst | 3 +++
-> > >  include/media/h264-ctrls.h                       | 1 +
-> > >  2 files changed, 4 insertions(+)
-> > >=20
-> > > diff --git a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst b/Docum=
-entation/media/uapi/v4l/ext-ctrls-codec.rst
-> > > index bc5dd8e76567..451a5b0f2a35 100644
-> > > --- a/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> > > +++ b/Documentation/media/uapi/v4l/ext-ctrls-codec.rst
-> > > @@ -1860,6 +1860,9 @@ enum v4l2_mpeg_video_h264_hierarchical_coding_t=
-ype -
-> > >      * - ``V4L2_H264_SLICE_FLAG_SP_FOR_SWITCH``
-> > >        - 0x00000008
-> > >        -
-> > > +    * - ``V4L2_H264_SLICE_FLAG_NUM_REF_IDX_ACTIVE_OVERRIDE
-> > > +      - 0x00000010
-> > > +      - Corresponds to the num_ref_idx_active_override_flag syntax e=
-lement.
-> > >=20
-> >=20
-> > As far as I remember, the idea was for the userspace to always put the
-> > right num_ref_idx in the slice_params and the drivers always use that.
-> > Was there any problem with that?
->=20
-> I don't think so, at least for currently known hardware.
->=20
-> In that case we should drop the unused
-> num_ref_idx_l[01]_default_active_minus1 fields from struct
-> v4l2_ctrl_h264_pps and document that userspace should fill
-> the defaults into v4l2_ctrl_h264_slice_params themselves if
-> num_ref_idx_active_override_flag wasn't set.
+I appreciate your comments,
 
-It might have been added in a previous effort to allow reconstructing
-the bitstream from the structures.
+Ok, I will squash it.
 
->=20
-> regards
-> Philipp
+> > ---
+> >  drivers/media/platform/Kconfig            |  2 ++
+> >  drivers/media/platform/mtk-isp/fd/Kconfig | 17 +++++++++++++++++
+> >  2 files changed, 19 insertions(+)
+> >  create mode 100644 drivers/media/platform/mtk-isp/fd/Kconfig
+> > 
+> > diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+> > index a505e9f..ae99258e 100644
+> > --- a/drivers/media/platform/Kconfig
+> > +++ b/drivers/media/platform/Kconfig
+> > @@ -32,6 +32,8 @@ source "drivers/media/platform/davinci/Kconfig"
+> >  
+> >  source "drivers/media/platform/omap/Kconfig"
+> >  
+> > +source "drivers/media/platform/mtk-isp/fd/Kconfig"
+> > +
+> >  config VIDEO_ASPEED
+> >  	tristate "Aspeed AST2400 and AST2500 Video Engine driver"
+> >  	depends on VIDEO_V4L2
+> > diff --git a/drivers/media/platform/mtk-isp/fd/Kconfig b/drivers/media/platform/mtk-isp/fd/Kconfig
+> > new file mode 100644
+> > index 0000000..0c5eaf0
+> > --- /dev/null
+> > +++ b/drivers/media/platform/mtk-isp/fd/Kconfig
+> > @@ -0,0 +1,17 @@
+> > +config VIDEO_MEDIATEK_FD
+> > +	bool "Mediatek face detection processing function"
+> > +	select DMA_SHARED_BUFFER
+> > +	select VIDEOBUF2_DMA_CONTIG
+> > +	select VIDEOBUF2_CORE
+> > +	select VIDEOBUF2_V4L2
+> > +	select VIDEOBUF2_MEMOPS
+> > +	select VIDEOBUF2_VMALLOC
+> 
+> Do you need both VIDEOBUF2_DMA_CONTIG and VIDEOBUF2_VMALLOC ? The driver
+> doesn't seem to make use of VIDEOBUF2_VMALLOC.
+> 
 
---=-7Xp+djquZaKrFdQPURBI
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+No, I should remove it. and also would like to update as following:
 
------BEGIN PGP SIGNATURE-----
+        depends on VIDEO_V4L2
+        depends on ARCH_MEDIATEK || COMPILE_TEST
+        select VIDEOBUF2_DMA_CONTIG
+        select VIDEOBUF2_CORE
+        select VIDEOBUF2_V4L2
+        select VIDEOBUF2_MEMOPS
+        select MEDIA_CONTROLLER
+        select MTK_SCP
 
-iF0EABECAB0WIQSScpfJiL+hb5vvd45xUwItrAaoHAUCXXEZDAAKCRBxUwItrAao
-HKvPAJ411GfhOiTwyBuYY8wkstYseV8pwACgkg7q+ktTacePhTuBlqa5mo8b+hc=
-=KD4i
------END PGP SIGNATURE-----
+> > +	select MEDIA_CONTROLLER
+> > +
+> > +	default n
+> > +	help
+> > +		Support the Face Detectioin (FD) feature.
+> 
+> s/Detectioin/Detection/
+> 
+Typo fixed.
 
---=-7Xp+djquZaKrFdQPURBI--
+> Maybe "... feature found in the Mediatek <list of SoCs> SoCs." ?
+
+I will refine as:
+Support the Face Detection (FD) feature in the Mediatek mt8183 Soc.
+
+Thanks and best regards,
+Jerry
+> 
+> > +
+> > +		FD driver is a V4L2 memory-to-memory device driver which
+> > +		provides hardware accelerated face detection function,
+> > +		it can detect different sizes of faces in a raw image.
+> 
+
 
