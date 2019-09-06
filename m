@@ -2,101 +2,90 @@ Return-Path: <SRS0=gXbs=XB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06FE6C00307
-	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 16:44:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26F64C43331
+	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 17:33:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D55DB20578
-	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 16:44:46 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ndKpvonN"
+	by mail.kernel.org (Postfix) with ESMTP id 0A04220842
+	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 17:33:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390380AbfIFQoq (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Sep 2019 12:44:46 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:44360 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732628AbfIFQop (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Sep 2019 12:44:45 -0400
-Received: by mail-ot1-f65.google.com with SMTP id 21so6281392otj.11
-        for <linux-media@vger.kernel.org>; Fri, 06 Sep 2019 09:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sH/nf7b0xT/zcBUDh24Ti75jyT9uA7hNFoqylHBp74w=;
-        b=ndKpvonN1EwLH0jfXqhFQsui4S8I4c6wDxf33xidW4w+m85g0OQ/0/4KB8kj+k3Q9u
-         pcxufPirbGcjtHL7vg3ZcbdD4hMH6uX+XaiQ6yOOZYepc7/NMH6EtSwghphhZ+gynetd
-         oW69DzJ7Lh6BzkDrTCy0OVtBlw7/rLi3KL1HZ81ptXYV1/5nIuGEUya9ZNKsJ8Tw4ygs
-         BffMMl5Ui92VQhaDvKKgM47jhVKawU3WCoetBRixdl85KqufHzJuu8MitSfsVcZC5G97
-         82jUG00xOcU/kgNsB4QSVQSaCC3BMp94dE/mNafngvH/361t5UokyeOuKs8a7NH4vg8d
-         GOhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sH/nf7b0xT/zcBUDh24Ti75jyT9uA7hNFoqylHBp74w=;
-        b=nFLEKdKC10zJ9CcqTNKns6HL6VFqT1ujMUS2HLGEWv/BPZFwpmPfnd3hTMFtVj9O2G
-         PV8el8n6wujQqONnUhgymhgGIhJDVvqO27tEiqiz5ud9cPCQVSh65mXY1bwnAAy6UeCN
-         gEZtAr2zsRAUykdH4RGiUNQpOv3IgBhyRt33k3AJHndoM+GorOQGctLjNVn/+84nCUTZ
-         VP8ussMObAnsUbPCw81nVnHgFaTaUxhqUlywk4gRrHoVVWbphRGw1f9UkFIDypaWwFuh
-         iRBbo7VC7ggwHuQ76z3Z1eR1avCqCXdYKkHrJvm38mGRomZ6NQ2lDGd4xdFBsk4XW7C1
-         qm9g==
-X-Gm-Message-State: APjAAAVC4cwQ+Y8/C2PwxavISyuOHgraad5orD118Sp8bAqpTAnfpDXZ
-        nrHCGrHcQJDMrfZtAF1T4tSqrJHq
-X-Google-Smtp-Source: APXvYqxh5YsEhFdqCBH4hwM+uv8RithWc+hwMarPNLWlIfVBEETBdDdKamOxJOyuirMPEY2u0xsNLw==
-X-Received: by 2002:a05:6830:44b:: with SMTP id d11mr7932989otc.109.1567788284606;
-        Fri, 06 Sep 2019 09:44:44 -0700 (PDT)
-Received: from rYz3n.attlocal.net ([2600:1700:210:3790::40])
-        by smtp.googlemail.com with ESMTPSA id c24sm2210165otd.57.2019.09.06.09.44.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Sep 2019 09:44:43 -0700 (PDT)
-From:   Jiunn Chang <c0d1n61at3@gmail.com>
-To:     linux-media@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Cc:     hverkuil@xs4all.nl
-Subject: [PATCH] cec-compliance: system information give features
-Date:   Fri,  6 Sep 2019 11:44:43 -0500
-Message-Id: <20190906164443.1748-1-c0d1n61at3@gmail.com>
-X-Mailer: git-send-email 2.23.0
+        id S2391341AbfIFRdr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Sep 2019 13:33:47 -0400
+Received: from smtprelay0102.hostedemail.com ([216.40.44.102]:41097 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727381AbfIFRdq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 6 Sep 2019 13:33:46 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 11459100E86C4;
+        Fri,  6 Sep 2019 17:33:45 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-HE-Tag: shape57_207efb1258f13
+X-Filterd-Recvd-Size: 2276
+Received: from XPS-9350.home (unknown [47.151.152.152])
+        (Authenticated sender: joe@perches.com)
+        by omf09.hostedemail.com (Postfix) with ESMTPA;
+        Fri,  6 Sep 2019 17:33:43 +0000 (UTC)
+Message-ID: <9d30210a2d024aae4c36c8995019cdeab29e1e19.camel@perches.com>
+Subject: Re: [PATCH] docs: license-rules.txt: cover SPDX headers on Python
+ scripts
+From:   Joe Perches <joe@perches.com>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Jessica Yu <jeyu@kernel.org>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Thomas Gleixner <tglx@linutronix.de>, linux-doc@vger.kernel.org
+Date:   Fri, 06 Sep 2019 10:33:42 -0700
+In-Reply-To: <20190906083457.7e7934ec@coco.lan>
+References: <20190905055614.7958918b@coco.lan>
+         <88e638eb959095ab6657d295f9f8c27169569bf2.1567675272.git.mchehab+samsung@kernel.org>
+         <20190905092703.GA30899@kroah.com> <20190905090701.37dcf75e@coco.lan>
+         <b32c2e46b91e7bcda2a9bd140673f06d71b2487a.camel@perches.com>
+         <20190906083457.7e7934ec@coco.lan>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.32.1-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-For devices on a HDMI ARC link, sinks can only support transmitter
-devices and sources can only support receiver devices.
+On Fri, 2019-09-06 at 08:34 -0300, Mauro Carvalho Chehab wrote:
+> I did some changes on it, plus one change at the pedantic mode of
+> scripts/spdxcheck.py, and placed the corresponding patches at:
+> 
+> 	https://git.linuxtv.org/mchehab/experimental.git/log/?h=spdx_pedantic
 
-Add two checks:
- - Playback devices can only have has_arc_rx
- - TVs can only have has_arc_tx
+Your script needs a modification of this line:
 
-Signed-off-by: Jiunn Chang <c0d1n61at3@gmail.com>
+    $spdx = $1 if m/(SPDX-License-Identifier:.*)/;
+
+This is on $_ and not $spdx.
+
+This line needs to be:
+
+    $spdx = $1 if $spdx =~ m/(SPDX-License-Identifier:.*)/;
+
+Otherwise the script produces:
 ---
- utils/cec-compliance/cec-test.cpp | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/utils/cec-compliance/cec-test.cpp b/utils/cec-compliance/cec-test.cpp
-index bbd13989..839c0fb9 100644
---- a/utils/cec-compliance/cec-test.cpp
-+++ b/utils/cec-compliance/cec-test.cpp
-@@ -172,6 +172,10 @@ int system_info_give_features(struct node *node, unsigned me, unsigned la, bool
- 		return fail("Only Playback and Recording devices shall set the Supports Deck Control bit\n");
- 	if (!cec_has_tv(1 << la) && node->remote[la].has_rec_tv)
- 		return fail("Only TVs shall set the Record TV Screen bit\n");
-+	if (!cec_has_playback(1 << la) && node->remote[la].has_arc_rx)
-+		return fail("Only Playback devices shall set the Source Supports ARC Rx bit\n");
-+	if (!cec_has_tv(1 << la) && node->remote[la].has_arc_tx)
-+		return fail("Only TVs shall set the Sink Supports ARC Tx bit\n");
+diff --git a/tools/perf/util/rlimit.h b/tools/perf/util/rlimit.h
+index 9f59d8e..5d975b9 100644
+--- a/tools/perf/util/rlimit.h
++++ b/tools/perf/util/rlimit.h
+@@ -1,6 +1,6 @@
++/* SPDX-License-Identifier: LGPL-2.1 */ */
+ #ifndef __PERF_RLIMIT_H_
+ #define __PERF_RLIMIT_H_
+-/* SPDX-License-Identifier: LGPL-2.1 */
  
- 	fail_on_test(node->remote[la].rc_profile != *rc_profile);
- 	fail_on_test(node->remote[la].dev_features != *dev_features);
--- 
-2.23.0
+ void rlimit__bump_memlock(void);
+ #endif // __PERF_RLIMIT_H_
+
 
