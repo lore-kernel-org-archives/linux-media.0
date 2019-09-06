@@ -2,113 +2,92 @@ Return-Path: <SRS0=gXbs=XB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC666C43331
-	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 10:12:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D62C00307
+	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 10:24:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE4672084F
-	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 10:12:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E050A2084F
+	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 10:23:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=cogentembedded-com.20150623.gappssmtp.com header.i=@cogentembedded-com.20150623.gappssmtp.com header.b="vOks+y2m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390889AbfIFKM1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Sep 2019 06:12:27 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:1479 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2390594AbfIFKM0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Sep 2019 06:12:26 -0400
-X-UUID: a6ddb811795342f8b516dde5150b2329-20190906
-X-UUID: a6ddb811795342f8b516dde5150b2329-20190906
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <jerry-ch.chen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1994393036; Fri, 06 Sep 2019 18:12:20 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 6 Sep 2019 18:11:57 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 6 Sep 2019 18:11:54 +0800
-From:   Jerry-ch Chen <Jerry-Ch.chen@mediatek.com>
-To:     <hans.verkuil@cisco.com>,
-        <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
-        <matthias.bgg@gmail.com>, <mchehab@kernel.org>, <lkml@metux.net>
-CC:     <ck.hu@mediatek.com>, <yuzhao@chromium.org>,
-        <zwisler@chromium.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <Sean.Cheng@mediatek.com>,
-        <sj.huang@mediatek.com>, <christie.yu@mediatek.com>,
-        <frederic.chen@mediatek.com>, <Jerry-ch.Chen@mediatek.com>,
-        <jungo.lin@mediatek.com>, <po-yang.huang@mediatek.com>,
-        <Rynn.Wu@mediatek.com>, <linux-media@vger.kernel.org>,
-        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
-        Jerry-ch Chen <jerry-ch.chen@mediatek.com>
-Subject: [RFC PATCH V3 1/3] dt-bindings: mt8183: Added FD dt-bindings
-Date:   Fri, 6 Sep 2019 18:11:23 +0800
-Message-ID: <20190906101125.3784-2-Jerry-Ch.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20190906101125.3784-1-Jerry-Ch.chen@mediatek.com>
-References: <20190906101125.3784-1-Jerry-Ch.chen@mediatek.com>
+        id S2387862AbfIFKX7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Sep 2019 06:23:59 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:34582 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728628AbfIFKX7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Sep 2019 06:23:59 -0400
+Received: by mail-lf1-f68.google.com with SMTP id z21so4592714lfe.1
+        for <linux-media@vger.kernel.org>; Fri, 06 Sep 2019 03:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=f8H5bIBdKoS1HrUh2drI7VlolibnVhaDOfnjnsW1YW0=;
+        b=vOks+y2m8igch8MnJvoqaEzNWPHFZVdoyWn47m6oGTq4rIXHPGpkJmSaXTh6HH9+I7
+         2ckYdkglCXXw3MK+ZyJYVYgtcV4ZpCmVzBWz4HCFhXCmVsmbo7mrVTSiRzNthXFtlOp1
+         sIYkBtKvrcK2gkkU/vfW3/0p6S4UItFXVsjXr2pG3OWiT1nuV7yi9+zku4LuwAt0TjBr
+         vscUyc4jsaSXoLvDWBkED3O1hkSdurZkw36E+5HnrhZ2KttxSTTGABKeQdAlYPXGZ6Ot
+         1M6JlLvCnPK57y0zdvdOmsw/bxHX0MbNAS7+HgzhPf7wptgIcJgzeezIzRIvIvNG1bRf
+         XzGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=f8H5bIBdKoS1HrUh2drI7VlolibnVhaDOfnjnsW1YW0=;
+        b=kAvB4N/qDoTnYejMhaEwmZPR5zGOuZg1s6JNShYVYqXSqeng/mW+zhemWFTKysbgVv
+         tRPsJp01kBs/yG6kGTMmrJ3MT5foMGIjnB946qsNlbReElAgSMNuXs+hdmn35jQH7iXP
+         K9Gr7SNjc3Z+D79y1FIHtWihp8sm5LXemRaHvPjVYDfidd37tCSbqUl35uZf7yGVcsvF
+         v72Dizdk960RpCw12wzuaoYHSGThAwTd/UYEUark0bxYoq7ZNcnmNcyr0OF1JWH388jI
+         Mqza+os06gbVI8WI4cANWEKx8hOUY325Wt1OyUw2LEa5nNATBcl4d6AGmOolNtvsXnHh
+         O9kA==
+X-Gm-Message-State: APjAAAUw199mKFLTmpOjHThVPq7EWD3y57AL7QQ35Jc9eq2ikvb7YjWC
+        GJOHthJioQVuIr4lToSno0AHvwHrKco/Zw==
+X-Google-Smtp-Source: APXvYqxOyKnZcINnzuSv7Y7eZ+8vhh7r6vOzEbyIgjQQLS8a7Ndo2BaJ+llUi4e0/FOkOhNLFKOxtA==
+X-Received: by 2002:ac2:5101:: with SMTP id q1mr5681233lfb.13.1567765436772;
+        Fri, 06 Sep 2019 03:23:56 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:467:6174:2510:8c9c:d80b:bedb? ([2a00:1fa0:467:6174:2510:8c9c:d80b:bedb])
+        by smtp.gmail.com with ESMTPSA id t82sm1038256lff.58.2019.09.06.03.23.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 06 Sep 2019 03:23:56 -0700 (PDT)
+Subject: Re: [PATCH 2/2] rcar-vin: Add support for V4L2_FIELD_SEQ_{TB,BT}
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org
+References: <20190905214915.13919-1-niklas.soderlund+renesas@ragnatech.se>
+ <20190905214915.13919-3-niklas.soderlund+renesas@ragnatech.se>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <daa66ff1-1130-c8b6-5f42-bc9449a3642b@cogentembedded.com>
+Date:   Fri, 6 Sep 2019 13:23:43 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20190905214915.13919-3-niklas.soderlund+renesas@ragnatech.se>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
+On 06.09.2019 0:49, Niklas Söderlund wrote:
 
-This patch adds DT binding documentation for the Face Detection (FD)
-unit of the Mediatek's mt8183 SoC.
+> The hardware do not support capturing the field types V4L2_FIELD_SEQ_TB
 
-Signed-off-by: Jerry-ch Chen <jerry-ch.chen@mediatek.com>
----
- .../bindings/media/mediatek,mt8183-fd.txt     | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8183-fd.txt
+    s/do/does/. Just one typo. :-)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8183-fd.txt b/Documentation/devicetree/bindings/media/mediatek,mt8183-fd.txt
-new file mode 100644
-index 000000000000..46464175b95a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/mediatek,mt8183-fd.txt
-@@ -0,0 +1,34 @@
-+* Mediatek Face Detection Unit (FD)
-+
-+Face Detection (FD) unit is a typical memory-to-memory HW device.
-+It provides hardware accelerated face detection function, and it
-+is able to detect different poses of faces. FD will writre result
-+of detected face into memory as output.
-+
-+Required properties:
-+- compatible: "mediatek,mt8183-fd"
-+- mediatek,scp : the node of system control processor (SCP), see
-+  Documentation/devicetree/bindings/remoteproc/mtk,scp.txt for details.
-+- iommus: should point to the 3 entries:  M4U_PORT_CAM_FDVT_RP,
-+  M4U_PORT_CAM_FDVT_WR and M4U_PORT_CAM_FDVT_RB.  (Please see
-+  Documentation/devicetree/bindings/iommu/mediatek,iommu.txt for details.)
-+- reg: Physical base address and length of the register space.
-+- interrupts: interrupt number to the cpu.
-+- clocks : must contain the FDVT clock, see
-+  Documentation/devicetree/bindings/clock/clock-bindings.txt for details.
-+- clock-names: must be "fd".
-+- power-domain: must be "MT8183_POWER_DOMAIN_ISP".
-+
-+Example:
-+	fd: fd@1502b000 {
-+		compatible = "mediatek,mt8183-fd";
-+		mediatek,scp = <&scp>;
-+		iommus = <&iommu M4U_PORT_CAM_FDVT_RP>,
-+			 <&iommu M4U_PORT_CAM_FDVT_WR>,
-+			 <&iommu M4U_PORT_CAM_FDVT_RB>;
-+		reg = <0 0x1502b000 0 0x1000>;
-+		interrupts = <GIC_SPI 269 IRQ_TYPE_LEVEL_LOW>;
-+		clocks = <&imgsys CLK_IMG_FDVT>;
-+		clock-names = "fd";
-+		power-domains = <&scpsys MT8183_POWER_DOMAIN_ISP>;
-+	};
--- 
-2.18.0
+> and V4L2_FIELD_SEQ_BT. To capture in these formats the driver needs to
+> adjust the offset of the capture buffer and capture twice to each vb2
+> buffer.
+> 
+> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+[...]
 
+MBR, Sergei
