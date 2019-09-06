@@ -5,52 +5,52 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BF6DC43331
-	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 11:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59553C43331
+	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 11:55:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 76E09206CD
-	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 11:55:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 35B252178F
+	for <linux-media@archiver.kernel.org>; Fri,  6 Sep 2019 11:55:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="j0fpr0SZ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lD7C87Vc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391334AbfIFLzd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 6 Sep 2019 07:55:33 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41019 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390223AbfIFLzd (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Sep 2019 07:55:33 -0400
-Received: by mail-pg1-f193.google.com with SMTP id x15so3369900pgg.8
-        for <linux-media@vger.kernel.org>; Fri, 06 Sep 2019 04:55:33 -0700 (PDT)
+        id S2403887AbfIFLzj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 6 Sep 2019 07:55:39 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:38562 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391385AbfIFLzi (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 6 Sep 2019 07:55:38 -0400
+Received: by mail-pl1-f196.google.com with SMTP id w11so3053481plp.5
+        for <linux-media@vger.kernel.org>; Fri, 06 Sep 2019 04:55:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=+OhbUrYZqce0AMoF+F11Glo98JJ+mfowWQPDmtjNy0c=;
-        b=j0fpr0SZSekbxfXZ1FC/pKVVDJOVri+GMbhaUUg0GN7iFcJUJbsxYR2ufhju7H4jFa
-         Jv5dNhGX1Oqtv4RcGth4eaQdF8yVq5LeliVMFrfqFwvuiRhpX30n+RWuTHUTalX6WKus
-         REzcBschvcwWBSNcVBdtu2HD0ERIb/mvo+mT8=
+        bh=rmvBNkTdsDRsEM61NjMf/X0IeoL67srtswcL/KipeCU=;
+        b=lD7C87VcCfCC73o5yfmt2mC/BIZKrEeMM/aT6dR4o+mCr1k4uiXbUBCGjdmwVCK7f+
+         xuR8XlsTWg3PNQMzw6MlyoZnkB09W7iSSH2oWnJ8xLBnFXifM9yzmQCi0zibzW0c1/Ge
+         RlScRApeYLC5DHYB1nXWL5UsmHcTspdONkYsI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=+OhbUrYZqce0AMoF+F11Glo98JJ+mfowWQPDmtjNy0c=;
-        b=VNGy39WbtCtmZcq3B63qU56csl4AyBW3gARLulYWUe/qq18Bi7smOgKBYbiHbBLGy1
-         Bl2DR+J3DrvWjPh3kNPwi/21/xEa9feMpuAKXb+O03xcVM3zAmAsMpa5kVGwNUuaHkxR
-         M4nHVpDEWTn9kpO1Bz45Eb/FZTftzDPGqD3gU8Nye4KEIssylYijBbtgCPC6SqLdaUtB
-         i+loLvIO08WHrEa1xVWrsfZyNIIGc7Z/UrzeFe/9tghkzP7JOko+88nri7X7rBql2tf7
-         c0ef46biimq4+XB64dj5F/WuE25+1yDFFZymExy9pG6ID/vl51dTqqz2EkTCEmvExFR1
-         HKog==
-X-Gm-Message-State: APjAAAUOyBRwy6lX2m7XuL/kFxDbE+idIoV9UeffqWMvYu0vhFp68wYr
-        Xv5VQPSMnFANOwcXgMRampj0zg==
-X-Google-Smtp-Source: APXvYqy4WC4joqsKUtL19abRcSKOqjJJ+pZZ5uFtnSaqIUEDo7bsKgApsUMm4LCY1XtDNk4LXigH1g==
-X-Received: by 2002:a17:90a:264a:: with SMTP id l68mr9420784pje.74.1567770932661;
-        Fri, 06 Sep 2019 04:55:32 -0700 (PDT)
+        bh=rmvBNkTdsDRsEM61NjMf/X0IeoL67srtswcL/KipeCU=;
+        b=YagIkx+dXt613x5QZWKvHU0bxTTrQJzFAZslc0TiLy4BIUO36sNcRNnbbpXNgyoyoA
+         cpTRmbWmnTrGqyIsKHLj6pUM9rgkI+VBXdz6moMPohoniBDlOnpb36YbpsxRcmKYcI/q
+         MsHkjBRxpxcxGnpy78xYgkynpvGRNSNGfn6u10Pc0Q/mFITiMNdao+2FPT4lK2Nd2Lhc
+         wrsNrltVgNxSpBycpnANiXKWuMrfVoZCmTXcOcHJXnHQlaDkAxrKgJ+m5CUpxBiuAYpc
+         2Xf+qycMZ/7SkAOamlPLm4IrAdwWTWa3LuGTx9zhpXM/TO7egHoHQRCKhOdDfYqngR2d
+         sq+g==
+X-Gm-Message-State: APjAAAXU3QtVnWQXK8AzOQM8XJwA/rgMqngJpgT8VhTOqhA4BJMGrn4v
+        tqVbS65TxYopl64xKwnPpMlpvw==
+X-Google-Smtp-Source: APXvYqyUCSBsPgZieu0kGLJ172xmNCEYZ4dQ2c7hwk8o5f0gKm/e7v15Sxpv0rgcqXV8P/Q5bi7y3A==
+X-Received: by 2002:a17:902:8690:: with SMTP id g16mr9003555plo.282.1567770937975;
+        Fri, 06 Sep 2019 04:55:37 -0700 (PDT)
 Received: from acourbot.tok.corp.google.com ([2401:fa00:4:4:9712:8cf1:d0f:7d33])
-        by smtp.gmail.com with ESMTPSA id o22sm3667394pjq.21.2019.09.06.04.55.30
+        by smtp.gmail.com with ESMTPSA id o22sm3667394pjq.21.2019.09.06.04.55.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Sep 2019 04:55:32 -0700 (PDT)
+        Fri, 06 Sep 2019 04:55:37 -0700 (PDT)
 From:   Alexandre Courbot <acourbot@chromium.org>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
@@ -60,9 +60,9 @@ To:     Yunfei Dong <yunfei.dong@mediatek.com>,
 Cc:     linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         Alexandre Courbot <acourbot@chromium.org>
-Subject: [RFC PATCH v2 01/13] media: mtk-vcodec: vdec: fix incorrect pointer dereference
-Date:   Fri,  6 Sep 2019 20:55:01 +0900
-Message-Id: <20190906115513.159705-2-acourbot@chromium.org>
+Subject: [RFC PATCH v2 03/13] media: mtk-vcodec: vdec: clean up vidioc_vdec_s_fmt a bit
+Date:   Fri,  6 Sep 2019 20:55:03 +0900
+Message-Id: <20190906115513.159705-4-acourbot@chromium.org>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
 In-Reply-To: <20190906115513.159705-1-acourbot@chromium.org>
 References: <20190906115513.159705-1-acourbot@chromium.org>
@@ -73,32 +73,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Yunfei Dong <yunfei.dong@mediatek.com>
+Check for a potentially NULL pointer that was overlooked and use shorter
+accessors to the same data. While we are at it, sprinkle a few comments.
 
-mtk_q_data::fmt is actually a pointer and must be dereferenced as such.
-This went under the radar because mtk_v4l2_debug() evaluates to nothing
-unless DEBUG is defined.
-
-Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-[acourbot: split into its own commit]
 Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
 ---
- drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../media/platform/mtk-vcodec/mtk_vcodec_dec.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-index 26a55c3e807e..653f111532ab 100644
+index 653f111532ab..858727824889 100644
 --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
 +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec.c
-@@ -284,7 +284,7 @@ static void mtk_vdec_update_fmt(struct mtk_vcodec_ctx *ctx,
- 		fmt = &mtk_video_formats[k];
- 		if (fmt->fourcc == pixelformat) {
- 			mtk_v4l2_debug(1, "Update cap fourcc(%d -> %d)",
--				dst_q_data->fmt.fourcc, pixelformat);
-+				dst_q_data->fmt->fourcc, pixelformat);
- 			dst_q_data->fmt = fmt;
- 			return;
+@@ -841,12 +841,20 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 		return -EINVAL;
+ 
+ 	pix_mp = &f->fmt.pix_mp;
++	/*
++	 * Setting OUTPUT format after OUTPUT buffers are allocated is invalid
++	 * if using the stateful API.
++	 */
+ 	if ((f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) &&
+ 	    vb2_is_busy(&ctx->m2m_ctx->out_q_ctx.q)) {
+ 		mtk_v4l2_err("out_q_ctx buffers already requested");
+ 		ret = -EBUSY;
+ 	}
+ 
++	/*
++	 * Setting CAPTURE format after CAPTURE buffers are allocated is
++	 * invalid.
++	 */
+ 	if ((f->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE) &&
+ 	    vb2_is_busy(&ctx->m2m_ctx->cap_q_ctx.q)) {
+ 		mtk_v4l2_err("cap_q_ctx buffers already requested");
+@@ -865,6 +873,8 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 			fmt = mtk_vdec_find_format(f);
  		}
+ 	}
++	if (fmt == NULL)
++		return -EINVAL;
+ 
+ 	q_data->fmt = fmt;
+ 	vidioc_try_fmt(f, q_data->fmt);
+@@ -873,10 +883,10 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
+ 		q_data->coded_width = pix_mp->width;
+ 		q_data->coded_height = pix_mp->height;
+ 
+-		ctx->colorspace = f->fmt.pix_mp.colorspace;
+-		ctx->ycbcr_enc = f->fmt.pix_mp.ycbcr_enc;
+-		ctx->quantization = f->fmt.pix_mp.quantization;
+-		ctx->xfer_func = f->fmt.pix_mp.xfer_func;
++		ctx->colorspace = pix_mp->colorspace;
++		ctx->ycbcr_enc = pix_mp->ycbcr_enc;
++		ctx->quantization = pix_mp->quantization;
++		ctx->xfer_func = pix_mp->xfer_func;
+ 
+ 		if (ctx->state == MTK_STATE_FREE) {
+ 			ret = vdec_if_init(ctx, q_data->fmt->fourcc);
 -- 
 2.23.0.187.g17f5b7556c-goog
 
