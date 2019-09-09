@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74566C4740A
-	for <linux-media@archiver.kernel.org>; Mon,  9 Sep 2019 16:26:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 608D9C4740A
+	for <linux-media@archiver.kernel.org>; Mon,  9 Sep 2019 16:26:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 47A0D218DE
-	for <linux-media@archiver.kernel.org>; Mon,  9 Sep 2019 16:26:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2BD4621D7D
+	for <linux-media@archiver.kernel.org>; Mon,  9 Sep 2019 16:26:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="uQqSJMs4"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="EAkruQVL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390482AbfIIQ0u (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Sep 2019 12:26:50 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:54470 "EHLO
+        id S2389693AbfIIQ0E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Sep 2019 12:26:04 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:54458 "EHLO
         fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389706AbfIIQ0F (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Sep 2019 12:26:05 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x89GQ4dQ034918;
-        Mon, 9 Sep 2019 11:26:04 -0500
+        with ESMTP id S2389660AbfIIQ0E (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Sep 2019 12:26:04 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x89GQ3ck034853;
+        Mon, 9 Sep 2019 11:26:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568046364;
-        bh=bOGVnBJIvQUxSEqD3gF2J/p86KFbfTC5UBF/IOoiDHY=;
+        s=ti-com-17Q1; t=1568046363;
+        bh=xbPucjBg76/F+AfikeBA08kKETiUuJMtVgneCx3l9YM=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=uQqSJMs4k+VlmHr097FvVGEzOwl4jc+BRNjSpN2mULGZvm9o1E9C6ES/r9IxpR6p7
-         rcSijd8q5DCwOlWzvLmA2lJlkXNtPKePntNJ8EvgOVPTGcb5dIKSZR4Wx837BnT1Qa
-         +04TP/zG8WiQEiDqQ0KYbCL8kIjIjvKMB3rT3mrc=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x89GQ4hQ090616
+        b=EAkruQVLDdthmMU2NBD1cl4OMP/4a002KwQllw4sptfJAok+kmEyp1wOGM/sMSDDN
+         Xa0E5BRgeQL3ONkdbZtKXMWROhvesp3SyPSJs4R6+tCEjVHZrRxma/nbg7RZ/9+WUO
+         gC3cswnAxnuga1bzLGrshcSTVaxBHP7nbY8xt1V0=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x89GQ2fe090030
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 9 Sep 2019 11:26:04 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 9 Sep 2019 11:26:02 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 9 Sep
- 2019 11:26:04 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 11:26:02 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 9 Sep 2019 11:26:04 -0500
+ Frontend Transport; Mon, 9 Sep 2019 11:26:02 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x89GPnoT056522;
-        Mon, 9 Sep 2019 11:26:04 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x89GPnoR056522;
+        Mon, 9 Sep 2019 11:26:02 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch 05/13] media: am437x-vpfe: Streamlined vb2 buffer cleanup
-Date:   Mon, 9 Sep 2019 11:27:35 -0500
-Message-ID: <20190909162743.30114-6-bparrot@ti.com>
+Subject: [Patch 03/13] media: am437x-vpfe: Rework ISR routine for clarity
+Date:   Mon, 9 Sep 2019 11:27:33 -0500
+Message-ID: <20190909162743.30114-4-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190909162743.30114-1-bparrot@ti.com>
 References: <20190909162743.30114-1-bparrot@ti.com>
@@ -65,107 +65,191 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Returning queued vb2 buffers back to user space is a common
-task best handled by a helper function.
+Make the ISR code simpler to follow by removing goto and
+relocating/eliminating duplicate spinlock accesses.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 54 ++++++++++-----------
- 1 file changed, 26 insertions(+), 28 deletions(-)
+ drivers/media/platform/am437x/am437x-vpfe.c | 128 ++++++++++----------
+ 1 file changed, 66 insertions(+), 62 deletions(-)
 
 diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 3a8ad9bdf283..52f7fc6e11dd 100644
+index 0ecb75bf5abd..7c5b734f7143 100644
 --- a/drivers/media/platform/am437x/am437x-vpfe.c
 +++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -1949,6 +1949,29 @@ static void vpfe_buffer_queue(struct vb2_buffer *vb)
- 	spin_unlock_irqrestore(&vpfe->dma_queue_lock, flags);
- }
- 
-+static void vpfe_return_all_buffers(struct vpfe_device *vpfe,
-+				    enum vb2_buffer_state state)
-+{
-+	struct vpfe_cap_buffer *buf, *node;
-+	unsigned long flags;
+@@ -1233,22 +1233,29 @@ static int vpfe_open(struct file *file)
+  * This function will get next buffer from the dma queue and
+  * set the buffer address in the vpfe register for capture.
+  * the buffer is marked active
+- *
+- * Assumes caller is holding vpfe->dma_queue_lock already
+  */
+-static inline void vpfe_schedule_next_buffer(struct vpfe_device *vpfe)
++static void vpfe_schedule_next_buffer(struct vpfe_device *vpfe)
+ {
++	dma_addr_t addr;
 +
-+	spin_lock_irqsave(&vpfe->dma_queue_lock, flags);
-+	list_for_each_entry_safe(buf, node, &vpfe->dma_queue, list) {
-+		vb2_buffer_done(&buf->vb.vb2_buf, state);
-+		list_del(&buf->list);
++	spin_lock(&vpfe->dma_queue_lock);
++	if (list_empty(&vpfe->dma_queue)) {
++		spin_unlock(&vpfe->dma_queue_lock);
++		return;
 +	}
 +
-+	if (vpfe->cur_frm)
-+		vb2_buffer_done(&vpfe->cur_frm->vb.vb2_buf, state);
+ 	vpfe->next_frm = list_entry(vpfe->dma_queue.next,
+ 				    struct vpfe_cap_buffer, list);
+ 	list_del(&vpfe->next_frm->list);
++	spin_unlock(&vpfe->dma_queue_lock);
+ 
+-	vpfe_set_sdr_addr(&vpfe->ccdc,
+-	       vb2_dma_contig_plane_dma_addr(&vpfe->next_frm->vb.vb2_buf, 0));
++	addr = vb2_dma_contig_plane_dma_addr(&vpfe->next_frm->vb.vb2_buf, 0);
++	vpfe_set_sdr_addr(&vpfe->ccdc, addr);
+ }
+ 
+ static inline void vpfe_schedule_bottom_field(struct vpfe_device *vpfe)
+ {
+-	unsigned long addr;
++	dma_addr_t addr;
+ 
+ 	addr = vb2_dma_contig_plane_dma_addr(&vpfe->next_frm->vb.vb2_buf, 0) +
+ 					vpfe->field_off;
+@@ -1273,6 +1280,55 @@ static inline void vpfe_process_buffer_complete(struct vpfe_device *vpfe)
+ 	vpfe->cur_frm = vpfe->next_frm;
+ }
+ 
++static void vpfe_handle_interlaced_irq(struct vpfe_device *vpfe,
++				       enum v4l2_field field)
++{
++	int fid;
 +
-+	if (vpfe->next_frm && vpfe->next_frm != vpfe->cur_frm)
-+		vb2_buffer_done(&vpfe->next_frm->vb.vb2_buf, state);
++	/* interlaced or TB capture check which field
++	 * we are in hardware
++	 */
++	fid = vpfe_ccdc_getfid(&vpfe->ccdc);
 +
-+	vpfe->cur_frm = NULL;
-+	vpfe->next_frm = NULL;
-+	spin_unlock_irqrestore(&vpfe->dma_queue_lock, flags);
++	/* switch the software maintained field id */
++	vpfe->field ^= 1;
++	if (fid == vpfe->field) {
++		/* we are in-sync here,continue */
++		if (fid == 0) {
++			/*
++			 * One frame is just being captured. If the
++			 * next frame is available, release the
++			 * current frame and move on
++			 */
++			if (vpfe->cur_frm != vpfe->next_frm)
++				vpfe_process_buffer_complete(vpfe);
++
++			/*
++			 * based on whether the two fields are stored
++			 * interleave or separately in memory,
++			 * reconfigure the CCDC memory address
++			 */
++			if (field == V4L2_FIELD_SEQ_TB)
++				vpfe_schedule_bottom_field(vpfe);
++		} else {
++			/*
++			 * if one field is just being captured configure
++			 * the next frame get the next frame from the empty
++			 * queue if no frame is available hold on to the
++			 * current buffer
++			 */
++			if (vpfe->cur_frm == vpfe->next_frm)
++				vpfe_schedule_next_buffer(vpfe);
++		}
++	} else if (fid == 0) {
++		/*
++		 * out of sync. Recover from any hardware out-of-sync.
++		 * May loose one frame
++		 */
++		vpfe->field = fid;
++	}
 +}
 +
  /*
-  * vpfe_start_streaming : Starts the DMA engine for streaming
-  * @vb: ptr to vb2_buffer
-@@ -1957,7 +1980,6 @@ static void vpfe_buffer_queue(struct vb2_buffer *vb)
- static int vpfe_start_streaming(struct vb2_queue *vq, unsigned int count)
+  * vpfe_isr : ISR handler for vpfe capture (VINT0)
+  * @irq: irq number
+@@ -1284,76 +1340,24 @@ static inline void vpfe_process_buffer_complete(struct vpfe_device *vpfe)
+ static irqreturn_t vpfe_isr(int irq, void *dev)
  {
- 	struct vpfe_device *vpfe = vb2_get_drv_priv(vq);
--	struct vpfe_cap_buffer *buf, *tmp;
- 	struct vpfe_subdev_info *sdinfo;
- 	unsigned long flags;
- 	unsigned long addr;
-@@ -2003,11 +2025,8 @@ static int vpfe_start_streaming(struct vb2_queue *vq, unsigned int count)
- 	return 0;
+ 	struct vpfe_device *vpfe = (struct vpfe_device *)dev;
+-	enum v4l2_field field;
++	enum v4l2_field field = vpfe->fmt.fmt.pix.field;
+ 	int intr_status;
+-	int fid;
  
- err:
--	list_for_each_entry_safe(buf, tmp, &vpfe->dma_queue, list) {
--		list_del(&buf->list);
--		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_QUEUED);
--	}
+ 	intr_status = vpfe_reg_read(&vpfe->ccdc, VPFE_IRQ_STS);
+ 
+ 	if (intr_status & VPFE_VDINT0) {
+-		field = vpfe->fmt.fmt.pix.field;
 -
-+	vpfe_return_all_buffers(vpfe, VB2_BUF_STATE_QUEUED);
-+	vpfe_pcr_enable(&vpfe->ccdc, 0);
- 	return ret;
- }
- 
-@@ -2022,7 +2041,6 @@ static void vpfe_stop_streaming(struct vb2_queue *vq)
- {
- 	struct vpfe_device *vpfe = vb2_get_drv_priv(vq);
- 	struct vpfe_subdev_info *sdinfo;
--	unsigned long flags;
- 	int ret;
- 
- 	vpfe_pcr_enable(&vpfe->ccdc, 0);
-@@ -2040,27 +2058,7 @@ static void vpfe_stop_streaming(struct vb2_queue *vq)
- 		vpfe_dbg(1, vpfe, "stream off failed in subdev\n");
- 
- 	/* release all active buffers */
--	spin_lock_irqsave(&vpfe->dma_queue_lock, flags);
--	if (vpfe->cur_frm == vpfe->next_frm) {
--		vb2_buffer_done(&vpfe->cur_frm->vb.vb2_buf,
--				VB2_BUF_STATE_ERROR);
--	} else {
--		if (vpfe->cur_frm != NULL)
--			vb2_buffer_done(&vpfe->cur_frm->vb.vb2_buf,
--					VB2_BUF_STATE_ERROR);
--		if (vpfe->next_frm != NULL)
--			vb2_buffer_done(&vpfe->next_frm->vb.vb2_buf,
--					VB2_BUF_STATE_ERROR);
--	}
+ 		if (field == V4L2_FIELD_NONE) {
+-			/* handle progressive frame capture */
+ 			if (vpfe->cur_frm != vpfe->next_frm)
+ 				vpfe_process_buffer_complete(vpfe);
+-			goto next_intr;
+-		}
 -
--	while (!list_empty(&vpfe->dma_queue)) {
--		vpfe->next_frm = list_entry(vpfe->dma_queue.next,
--						struct vpfe_cap_buffer, list);
--		list_del(&vpfe->next_frm->list);
--		vb2_buffer_done(&vpfe->next_frm->vb.vb2_buf,
--				VB2_BUF_STATE_ERROR);
--	}
--	spin_unlock_irqrestore(&vpfe->dma_queue_lock, flags);
-+	vpfe_return_all_buffers(vpfe, VB2_BUF_STATE_ERROR);
- }
+-		/* interlaced or TB capture check which field
+-		   we are in hardware */
+-		fid = vpfe_ccdc_getfid(&vpfe->ccdc);
+-
+-		/* switch the software maintained field id */
+-		vpfe->field ^= 1;
+-		if (fid == vpfe->field) {
+-			/* we are in-sync here,continue */
+-			if (fid == 0) {
+-				/*
+-				 * One frame is just being captured. If the
+-				 * next frame is available, release the
+-				 * current frame and move on
+-				 */
+-				if (vpfe->cur_frm != vpfe->next_frm)
+-					vpfe_process_buffer_complete(vpfe);
+-				/*
+-				 * based on whether the two fields are stored
+-				 * interleave or separately in memory,
+-				 * reconfigure the CCDC memory address
+-				 */
+-				if (field == V4L2_FIELD_SEQ_TB)
+-					vpfe_schedule_bottom_field(vpfe);
+-
+-				goto next_intr;
+-			}
+-			/*
+-			 * if one field is just being captured configure
+-			 * the next frame get the next frame from the empty
+-			 * queue if no frame is available hold on to the
+-			 * current buffer
+-			 */
+-			spin_lock(&vpfe->dma_queue_lock);
+-			if (!list_empty(&vpfe->dma_queue) &&
+-			    vpfe->cur_frm == vpfe->next_frm)
+-				vpfe_schedule_next_buffer(vpfe);
+-			spin_unlock(&vpfe->dma_queue_lock);
+-		} else if (fid == 0) {
+-			/*
+-			 * out of sync. Recover from any hardware out-of-sync.
+-			 * May loose one frame
+-			 */
+-			vpfe->field = fid;
++		} else {
++			vpfe_handle_interlaced_irq(vpfe, field);
+ 		}
+ 	}
  
- static int vpfe_g_pixelaspect(struct file *file, void *priv,
+-next_intr:
+ 	if (intr_status & VPFE_VDINT1) {
+-		spin_lock(&vpfe->dma_queue_lock);
+-		if (vpfe->fmt.fmt.pix.field == V4L2_FIELD_NONE &&
+-		    !list_empty(&vpfe->dma_queue) &&
++		if (field == V4L2_FIELD_NONE &&
+ 		    vpfe->cur_frm == vpfe->next_frm)
+ 			vpfe_schedule_next_buffer(vpfe);
+-		spin_unlock(&vpfe->dma_queue_lock);
+ 	}
+ 
+ 	vpfe_clear_intr(&vpfe->ccdc, intr_status);
 -- 
 2.17.1
 
