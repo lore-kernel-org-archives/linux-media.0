@@ -2,186 +2,103 @@ Return-Path: <SRS0=VkPd=XE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39308C4740C
-	for <linux-media@archiver.kernel.org>; Mon,  9 Sep 2019 17:49:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EC5AC4740A
+	for <linux-media@archiver.kernel.org>; Mon,  9 Sep 2019 19:23:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 14827218AF
-	for <linux-media@archiver.kernel.org>; Mon,  9 Sep 2019 17:49:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6B8FC21D7B
+	for <linux-media@archiver.kernel.org>; Mon,  9 Sep 2019 19:23:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391415AbfIIRtD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 9 Sep 2019 13:49:03 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:37195 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727514AbfIIRtC (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 9 Sep 2019 13:49:02 -0400
-Received: from [148.69.85.38] (port=24775 helo=[192.168.5.132])
-        by hostingweb31.netsons.net with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1i7Nmb-006VAY-QJ; Mon, 09 Sep 2019 19:48:57 +0200
-Subject: Re: [RFC,v2 2/6] i2c: add I2C Address Translator (ATR) support
-To:     Vladimir Zapolskiy <vz@mleia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        jacopo mondi <jacopo@jmondi.org>, Peter Rosin <peda@axentia.se>
-Cc:     linux-media@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-References: <20190723203723.11730-1-luca@lucaceresoli.net>
- <20190723203723.11730-3-luca@lucaceresoli.net>
- <20190901143101.humomdehy5ee73sk@vino>
- <aedad45b-16d6-d189-b045-329727440ca5@mleia.com> <20190909072232.GA990@kunai>
- <8af9a049-06b9-dbe8-827b-5134d20e9435@mleia.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <152384b8-c0a8-e6fe-9a1f-52caf00533de@lucaceresoli.net>
-Date:   Mon, 9 Sep 2019 18:48:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729060AbfIITXK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 9 Sep 2019 15:23:10 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:2915 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729699AbfIITXK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 9 Sep 2019 15:23:10 -0400
+X-UUID: 218fb4bb7715431da6901bac912eeea9-20190910
+X-UUID: 218fb4bb7715431da6901bac912eeea9-20190910
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <frederic.chen@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1239685103; Tue, 10 Sep 2019 03:23:03 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 10 Sep 2019 03:23:01 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 10 Sep 2019 03:23:01 +0800
+From:   <frederic.chen@mediatek.com>
+To:     <hans.verkuil@cisco.com>,
+        <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
+        <matthias.bgg@gmail.com>, <mchehab@kernel.org>
+CC:     <yuzhao@chromium.org>, <zwisler@chromium.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <Sean.Cheng@mediatek.com>,
+        <sj.huang@mediatek.com>, <christie.yu@mediatek.com>,
+        <holmes.chiou@mediatek.com>, <frederic.chen@mediatek.com>,
+        <Jerry-ch.Chen@mediatek.com>, <jungo.lin@mediatek.com>,
+        <Rynn.Wu@mediatek.com>, <linux-media@vger.kernel.org>,
+        <srv_heupstream@mediatek.com>, <devicetree@vger.kernel.org>,
+        <shik@chromium.org>, <suleiman@chromium.org>,
+        <Allan.Yang@mediatek.com>
+Subject: [RFC PATCH V3 2/5] dts: arm64: mt8183: Add DIP nodes
+Date:   Tue, 10 Sep 2019 03:22:41 +0800
+Message-ID: <20190909192244.9367-3-frederic.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20190909192244.9367-1-frederic.chen@mediatek.com>
+References: <20190909192244.9367-1-frederic.chen@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <8af9a049-06b9-dbe8-827b-5134d20e9435@mleia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Vladimir,
+From: Frederic Chen <frederic.chen@mediatek.com>
 
-On 09/09/19 16:10, Vladimir Zapolskiy wrote:
-> Hi Wolfram,
-> 
-> On 09/09/2019 10:22 AM, Wolfram Sang wrote:
->> Hi Vladimir,
->>
->>> I won't attend the LPC, however I would appreciate if you book some
->>
->> A pity. I would have liked to have you in the room. Let's see if we can
->> get enough input from you via mail here.
->>
-> 
-> if it might help, I'll attend the Embedded Recipes and ELCE conferences
-> this year.
-> 
->>> time to review my original / alternative implementation of the TI
->>> DS90Ux9xx I2C bridge device driver.
->>
->> We have only 45 minutes, this will not allow to review specific
->> implementations. I want to give an overview of existing implementations
->> with pros/cons...
->>
-> 
-> Sure! Any shared summary/opinions are greatly welcome.
-> 
->>> The reasons why my driver is better/more flexible/more functional are
->>> discussed earlier, please let me know, if you expect anything else
->>> from me to add, also I would be happy to get a summary of your offline
->>> discussion.
->>
->> ... and I'd appreciate support here from you, like your summary of the
->> back then discussion (from where I can dive deeper if needed).
->>
->> Also, with Luca's new series we discussed some scenarios which can
->> happen WRT to I2C address conflicts. Maybe you could comment on them,
->> too?
-> 
-> I do remember I've commented on the Luca's suggestion of using dynamic
-> I2C addresses from a pool (the introduced "i2c-alias-pool" property).
-> 
-> I have to scrutinize it in Luca's v2, but then it might happen that the
-> userspace won't know to which IC on the remote side it communicates to.
+This patch adds nodes for Digital Image Processing (DIP). DIP is
+embedded in Mediatek SoCs and works with the co-processor to
+adjust image content according to tuning input data. It also
+provides image format conversion, resizing, and rotation
+features.
 
-I think you suspect this because the assigned alias is
-non-deterministic, so you might end up in writing to the wrong alias.
-Well, this is not possible because the user is not supposed to know the
-alias at all. Let's say you have two identical eeproms on remote port 0,
-with physical addresses 0x50 and 0x51. Then, with my RFCv2 code, you'll
-access them with physical numbers, not the alias:
+Signed-off-by: Frederic Chen <frederic.chen@mediatek.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-# i2cdetect -l
-i2c-0	i2c   	amba:camera-i2c@0      I2C adapter
-i2c-4	i2c   	i2c-0-atr-0            I2C adapter
-i2c-5	i2c   	i2c-0-atr-1            I2C adapter
-# hexdump /sys/bus/i2c/devices/4-0050/eeprom
-0000000 ffff ffff ffff ffff ffff ffff ffff ffff
-*
-0000100
-# hexdump /sys/bus/i2c/devices/4-0051/eeprom
-0000000 0001 0203 0405 0607 0809 0a0b 0c0d 0e0f
-*
-0000100
-#
-
-Here i2c-0 is the "local" bus, i2c-4 and i2c-5 are the remote busses on
-ports 0 and 1. As you can see the eeproms are accessed using a name like
-"4-0050", meaning physical slave address 0x50 on bus 4. No alias is needed.
-
-Should you want to know the alias, perhaps for debugging (it's the
-address you'll see on your logic analyzer), they are shown in the kernel
-log.
-
-Does this reply to your concern?
-
->> As I read the old thread, you have a hardcoded aliases using
->> "ti,i2c-bridge-maps". This means you can't have own DTSI files for e.g.
->> add-on modules, do I get this correctly?
->>
-> 
-> Basically hardcoding of aliases completely resolves the highlighted
-> above problem. Still it is possible to have own DTSI files for the FPD
-> link detachable PCBs, and this is an exceptionally important scenario,
-> however some limitations shall be applied:
-> * dt overlays for "local" derializer/deserializer ICs, it's a generic
->   and universal solution, it is successfully used in the field,
-> * only "compatible" PCBs are supposed to be connected (same set of I2C
->   devices/addresses on every such PCB), this is imperfect for sure,
-> * "ti,i2c-bridge-maps" list is excessive to cover "almost compatible"
->   (in the sense from above) PCBs, some of the missed alias matches
->   just won't instantiate a driver, this is of course also imperfect.
-> 
-> In general nothing critical should happen, if some I2C device on the
-> remote side is simply not probed in runtime, in opposite you can imagine
-> that writing for instance to another EEPROM of two on the remote side
-> could be harmful.
-> 
-> Any technically better solution to the two given approaches (from Luca
-> and from me) is more than appreciated. For non-dynamic/fixed local and
-> remote PCBs the fixed mapping is better, the dynamic case is covered
-> by the dt overlays, why not?
-> 
-> As a side note please do remember that the I2C bridging on Maxim GMSL
-> and TI DS90Ux9xx are different, the former one is a real mux, and the
-> latter one is not, I'm uncertain if it's reasonable to think of a
-> generalized solution which covers both IC series, so likely we
-> have to review the developed solutions for them separately instead
-> of trying to work out a combined one.
-> 
-> --
-> Best wishes,
-> Vladimir
-> 
-
-
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index 0f2646c9eb65..d7b0fb8230f0 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -513,6 +513,22 @@
+ 			#clock-cells = <1>;
+ 		};
+ 
++		dip: dip@15022000 {
++			compatible = "mediatek,mt8183-dip";
++			mediatek,larb = <&larb5>;
++			mediatek,mdp3 = <&mdp_rdma0>;
++			mediatek,scp = <&scp>;
++			iommus = <&iommu M4U_PORT_CAM_IMGI>;
++			reg = <0 0x15022000 0 0x6000>;
++			interrupts = <GIC_SPI 268 IRQ_TYPE_LEVEL_LOW>;
++			clocks =
++					<&imgsys CLK_IMG_LARB5>,
++					<&imgsys CLK_IMG_DIP>;
++			clock-names =
++					"larb5",
++					"dip";
++		};
++
+ 		vdecsys: syscon@16000000 {
+ 			compatible = "mediatek,mt8183-vdecsys", "syscon";
+ 			reg = <0 0x16000000 0 0x1000>;
 -- 
-Luca
+2.18.0
+
