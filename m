@@ -2,74 +2,56 @@ Return-Path: <SRS0=/yKV=XG=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4C60ECDE20
-	for <linux-media@archiver.kernel.org>; Wed, 11 Sep 2019 22:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A26BECDE20
+	for <linux-media@archiver.kernel.org>; Wed, 11 Sep 2019 23:43:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 90C3A2089F
-	for <linux-media@archiver.kernel.org>; Wed, 11 Sep 2019 22:41:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1568241714;
-	bh=S7k9+7deU42jLNS2H9i2XlXGswPeZvkhOLSvHN9qtfM=;
-	h=Subject:To:Cc:References:From:Date:In-Reply-To:List-ID:From;
-	b=DS/16kXoJrbXd16t4j8dfTy3J1wutKPX3b9pa8MqsDfVkfEPVs0Xl2DRsr4qoQ3fy
-	 VoNa+py254/PT4benXGeORbJqpTIm9ZBXJMxH5nelA3knpQHGpyZUR+nIa+g4bRIBC
-	 wddIqH1oMpJZpE0eix/ujxxs67Z2oLJDXRgZ+Ylo=
+	by mail.kernel.org (Postfix) with ESMTP id 0052120863
+	for <linux-media@archiver.kernel.org>; Wed, 11 Sep 2019 23:43:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727926AbfIKWly (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 11 Sep 2019 18:41:54 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:42784 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727664AbfIKWlx (ORCPT
+        id S1727873AbfIKXna (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 11 Sep 2019 19:43:30 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34576 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727432AbfIKXna (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 11 Sep 2019 18:41:53 -0400
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E01D133A;
-        Thu, 12 Sep 2019 00:41:51 +0200 (CEST)
+        Wed, 11 Sep 2019 19:43:30 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: ezequiel)
+        with ESMTPSA id AFB3B28A178
+Message-ID: <598bc8159ae05b640608964628103018c8ce090b.camel@collabora.com>
 Subject: Re: [PATCH] rcar-vin: Use bytes per line instead of width for UV
  offset
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+From:   Ezequiel Garcia <ezequiel@collabora.com>
+To:     Niklas =?ISO-8859-1?Q?S=F6derlund?= 
         <niklas.soderlund+renesas@ragnatech.se>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org
-References: <20190905212517.7872-1-niklas.soderlund+renesas@ragnatech.se>
-From:   Kieran Bingham <kbingham@kernel.org>
-Message-ID: <08a28d4c-e975-91a6-8830-51f96ec371c6@kernel.org>
-Date:   Wed, 11 Sep 2019 23:41:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date:   Thu, 12 Sep 2019 00:43:25 +0100
 In-Reply-To: <20190905212517.7872-1-niklas.soderlund+renesas@ragnatech.se>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+References: <20190905212517.7872-1-niklas.soderlund+renesas@ragnatech.se>
+Organization: Collabora
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Niklas,
+Hello Niklas,
 
-On 05/09/2019 22:25, Niklas Söderlund wrote:
+On Thu, 2019-09-05 at 23:25 +0200, Niklas Söderlund wrote:
 > The image size is doubled for NV16 and is calculated as bytesperline *
 > height * 2 to accommodate the split of UV data. When writing the offset
 > to hardware width is used instead of bytesperline, fix this.
-
-s/hardware width/hardware, the width/ ?
-
-
 > 
-
-Eeep, Subtle bug :)
-
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-
 > Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 > ---
 >  drivers/media/platform/rcar-vin/rcar-dma.c | 4 ++--
@@ -87,8 +69,11 @@ Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 > -			   VNUVAOF_REG);
 > +			   ALIGN(vin->format.bytesperline * vin->format.height,
 > +				 0x80), VNUVAOF_REG);
->  		dmr = VNDMR_DTMD_YCSEP;
->  		output_is_yuv = true;
->  		break;
-> 
+
+You can make your life easier by simply pulling the pixel format helper
+and let someone figure out the math. See v4l2_fill_pixfmt and friends.
+
+Avoiding these type of subtle issues is why we have them.
+
+Eze
 
