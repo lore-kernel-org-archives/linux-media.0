@@ -4,45 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.0 required=3.0
 	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96DDCC4CEC9
-	for <linux-media@archiver.kernel.org>; Thu, 12 Sep 2019 17:52:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A0D1C4CEC7
+	for <linux-media@archiver.kernel.org>; Thu, 12 Sep 2019 17:52:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7BF20214AE
-	for <linux-media@archiver.kernel.org>; Thu, 12 Sep 2019 17:52:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0865F2084F
+	for <linux-media@archiver.kernel.org>; Thu, 12 Sep 2019 17:52:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730971AbfILRwF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Sep 2019 13:52:05 -0400
-Received: from mailoutvs37.siol.net ([185.57.226.228]:33527 "EHLO
+        id S1726740AbfILRwM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Sep 2019 13:52:12 -0400
+Received: from mailoutvs57.siol.net ([185.57.226.248]:33585 "EHLO
         mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726509AbfILRwE (ORCPT
+        with ESMTP id S1731181AbfILRwM (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Sep 2019 13:52:04 -0400
+        Thu, 12 Sep 2019 13:52:12 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id E6F31522719;
-        Thu, 12 Sep 2019 19:52:01 +0200 (CEST)
+        by mail.siol.net (Postfix) with ESMTP id 0EF6D522719;
+        Thu, 12 Sep 2019 19:52:09 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at psrvmta10.zcs-production.pri
 Received: from mail.siol.net ([127.0.0.1])
         by localhost (psrvmta10.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id GaShxSuL456P; Thu, 12 Sep 2019 19:52:01 +0200 (CEST)
+        with ESMTP id Cn9XC3Ed3qBl; Thu, 12 Sep 2019 19:52:08 +0200 (CEST)
 Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id 871C5521395;
-        Thu, 12 Sep 2019 19:52:01 +0200 (CEST)
+        by mail.siol.net (Postfix) with ESMTPS id C5397521395;
+        Thu, 12 Sep 2019 19:52:08 +0200 (CEST)
 Received: from localhost.localdomain (cpe-86-58-59-25.static.triera.net [86.58.59.25])
         (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id 34F9B522719;
-        Thu, 12 Sep 2019 19:51:59 +0200 (CEST)
+        by mail.siol.net (Postfix) with ESMTPSA id 6A7535227D7;
+        Thu, 12 Sep 2019 19:52:06 +0200 (CEST)
 From:   Jernej Skrabec <jernej.skrabec@siol.net>
 To:     mripard@kernel.org, wens@csie.org
 Cc:     robh+dt@kernel.org, mark.rutland@arm.com, mchehab@kernel.org,
         hverkuil@xs4all.nl, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-sunxi@googlegroups.com
-Subject: [PATCH 3/6] ARM: dts: sunxi: h3/h5: Add MBUS controller node
-Date:   Thu, 12 Sep 2019 19:51:29 +0200
-Message-Id: <20190912175132.411-4-jernej.skrabec@siol.net>
+Subject: [PATCH 6/6] dts: arm: sun8i: h3: Enable deinterlace unit
+Date:   Thu, 12 Sep 2019 19:51:32 +0200
+Message-Id: <20190912175132.411-7-jernej.skrabec@siol.net>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190912175132.411-1-jernej.skrabec@siol.net>
 References: <20190912175132.411-1-jernej.skrabec@siol.net>
@@ -53,46 +53,41 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Both, H3 and H5, contain MBUS, which is the bus used by DMA devices to
-access system memory.
+Allwinner H3 SoC contains deinterlace unit, which can be used in
+combination with VPU unit to decode and process interlaced videos.
 
-MBUS controller is responsible for arbitration between channels based
-on set priority and can do some other things as well, like report
-bandwidth used. It also maps RAM region to different address than CPU.
+Add a node for it.
 
 Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
 ---
- arch/arm/boot/dts/sunxi-h3-h5.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ arch/arm/boot/dts/sun8i-h3.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/arm/boot/dts/sunxi-h3-h5.dtsi b/arch/arm/boot/dts/sunxi=
--h3-h5.dtsi
-index eba190b3f9de..ef1d03812636 100644
---- a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-+++ b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
-@@ -109,6 +109,7 @@
- 		compatible =3D "simple-bus";
- 		#address-cells =3D <1>;
- 		#size-cells =3D <1>;
-+		dma-ranges;
- 		ranges;
+diff --git a/arch/arm/boot/dts/sun8i-h3.dtsi b/arch/arm/boot/dts/sun8i-h3=
+.dtsi
+index e37c30e811d3..7a59c57d2114 100644
+--- a/arch/arm/boot/dts/sun8i-h3.dtsi
++++ b/arch/arm/boot/dts/sun8i-h3.dtsi
+@@ -120,6 +120,19 @@
+ 	};
 =20
- 		display_clocks: clock@1000000 {
-@@ -538,6 +539,14 @@
- 			};
- 		};
-=20
-+		mbus: dram-controller@1c62000 {
-+			compatible =3D "allwinner,sun8i-h3-mbus";
-+			reg =3D <0x01c62000 0x1000>;
-+			clocks =3D <&ccu 113>;
-+			dma-ranges =3D <0x00000000 0x40000000 0xc0000000>;
-+			#interconnect-cells =3D <1>;
+ 	soc {
++		deinterlace: deinterlace@1400000 {
++			compatible =3D "allwinner,sun8i-h3-deinterlace";
++			reg =3D <0x01400000 0x20000>;
++			clocks =3D <&ccu CLK_BUS_DEINTERLACE>,
++				 <&ccu CLK_DEINTERLACE>,
++				 <&ccu CLK_DRAM_DEINTERLACE>;
++			clock-names =3D "bus", "mod", "ram";
++			resets =3D <&ccu RST_BUS_DEINTERLACE>;
++			interrupts =3D <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>;
++			interconnects =3D <&mbus 9>;
++			interconnect-names =3D "dma-mem";
 +		};
 +
- 		spi0: spi@1c68000 {
- 			compatible =3D "allwinner,sun8i-h3-spi";
- 			reg =3D <0x01c68000 0x1000>;
+ 		syscon: system-control@1c00000 {
+ 			compatible =3D "allwinner,sun8i-h3-system-control";
+ 			reg =3D <0x01c00000 0x1000>;
 --=20
 2.23.0
 
