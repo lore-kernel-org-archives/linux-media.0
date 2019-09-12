@@ -2,98 +2,139 @@ Return-Path: <SRS0=hgCd=XH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B548AC47404
-	for <linux-media@archiver.kernel.org>; Thu, 12 Sep 2019 12:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5306DC47404
+	for <linux-media@archiver.kernel.org>; Thu, 12 Sep 2019 13:11:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 800CD217D6
-	for <linux-media@archiver.kernel.org>; Thu, 12 Sep 2019 12:58:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="yaQBiuQK"
+	by mail.kernel.org (Postfix) with ESMTP id 2FF4F2084D
+	for <linux-media@archiver.kernel.org>; Thu, 12 Sep 2019 13:11:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731862AbfILM6I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 12 Sep 2019 08:58:08 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:38556 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731743AbfILM6I (ORCPT
+        id S1731760AbfILNLd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 12 Sep 2019 09:11:33 -0400
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:44421 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731687AbfILNLd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 12 Sep 2019 08:58:08 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8CCw50v042538;
-        Thu, 12 Sep 2019 07:58:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568293085;
-        bh=Md8M6C/5fcIIHW4WyL1FaD2la3jOpxa5UdVyo/9GuZU=;
-        h=From:To:CC:Subject:Date;
-        b=yaQBiuQK+/wZ78f3u+ORC7XIhy2mQE1hfSgOSlNORO+hSrRwXRJ+xD0lgaclgA/SR
-         wsa8Q/9f0vGyxEivb/bSa+igY5KjTTl8ztoudKhP8JcqDhh8Cts0aFaF/tJclliXJ3
-         vVqjwW9qGnEhTLrVALwX/mCS/G4IXZGUQUmiKgC4=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8CCw58a105803
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 Sep 2019 07:58:05 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 12
- Sep 2019 07:58:04 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 12 Sep 2019 07:58:04 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8CCw4Ze095654;
-        Thu, 12 Sep 2019 07:58:04 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch 0/6] media: i2c: ov2659: maintenance series
-Date:   Thu, 12 Sep 2019 08:00:01 -0500
-Message-ID: <20190912130007.4469-1-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 12 Sep 2019 09:11:33 -0400
+Received: from [IPv6:2001:420:44c1:2577:24f7:5447:c5bf:b985] ([IPv6:2001:420:44c1:2577:24f7:5447:c5bf:b985])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id 8OshiPxuRV17O8Osliynaa; Thu, 12 Sep 2019 15:11:31 +0200
+Subject: Re: [PATCH 2/6] v4l: subdev: Provide a locking scheme for subdev
+ operations
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org
+References: <20190819124728.10511-1-sakari.ailus@linux.intel.com>
+ <20190819124728.10511-3-sakari.ailus@linux.intel.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <cec240cb-daf7-fc68-6578-44be011720ba@xs4all.nl>
+Date:   Thu, 12 Sep 2019 15:11:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20190819124728.10511-3-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfFxj/ANGi67tSyEL/xpX1h5eByInALIFLJJsxmuqC93pDsJBk0/abyQWXeJ/lNTYDa0o+1mzAdkuJdeKmd2ScSjIwEmmfy0DB7pDTAoGlsEQyVPmXay4
+ 2aIgJ688NzMfeIi98HvGf8Z6039+oSahqrPUeeXdjiZwHLp2h2tlVwlUFKM77jZDwSQI39OHihOcGrY3ENJ7ebxSNMIkPjSty++4Hr5M39abSpGU76H7LXba
+ ddpGQp4RXlagnrlLtUfnXzzXfsh3e/KAiAktM/7vz/1dQx9VnQdkPC5rq7k9JO0ghZZtNdgRh8Aoq4Fu5qKHCdtEGjaFiFByHvxdS/hnOY4=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series is a collection of patches we have been carrying for a
-while.
+On 8/19/19 2:47 PM, Sakari Ailus wrote:
+> The V4L2 sub-device's operations are called both from other drivers as
+> well as through the IOCTL uAPI. Previously the sub-device drivers were
+> responsible for managing their own serialisation. This patch adds an
+> optional mutex the drivers may set, and it will be used to serialise
+> access to driver's data related to a device across the driver's ops.
+> 
+> Access to the driver's controls through the control framework works as
+> usual, i.e. using a different mutex.
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  include/media/v4l2-subdev.h | 25 +++++++++++++++++--------
+>  1 file changed, 17 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/media/v4l2-subdev.h b/include/media/v4l2-subdev.h
+> index 71f1f2f0da53..dc6e11019df6 100644
+> --- a/include/media/v4l2-subdev.h
+> +++ b/include/media/v4l2-subdev.h
+> @@ -9,6 +9,7 @@
+>  #define _V4L2_SUBDEV_H
+>  
+>  #include <linux/types.h>
+> +#include <linux/mutex.h>
+>  #include <linux/v4l2-subdev.h>
+>  #include <media/media-entity.h>
+>  #include <media/v4l2-async.h>
+> @@ -828,6 +829,7 @@ struct v4l2_subdev_platform_data {
+>   * @host_priv: pointer to private data used by the device where the subdev
+>   *	is attached.
+>   * @devnode: subdev device node
+> + * @lock: A mutex for serialising access to the subdev's operations. Optional.
 
-It includes a few sensor register fixes which would cause visual
-artifacts at lower resolution and also at 720p.
+A pointer to a mutex...
 
-Also on some board the 'powerdown' is not tied to always on so we add
-support for an optional powerdown gpio.
+>   * @dev: pointer to the physical device, if any
+>   * @fwnode: The fwnode_handle of the subdev, usually the same as
+>   *	    either dev->of_node->fwnode or dev->fwnode (whichever is non-NULL).
+> @@ -862,6 +864,7 @@ struct v4l2_subdev {
+>  	void *dev_priv;
+>  	void *host_priv;
+>  	struct video_device *devnode;
+> +	struct mutex *lock;
+>  	struct device *dev;
+>  	struct fwnode_handle *fwnode;
+>  	struct list_head async_list;
+> @@ -1101,16 +1104,22 @@ extern const struct v4l2_subdev_ops v4l2_subdev_call_wrappers;
+>  	({								\
+>  		struct v4l2_subdev *__sd = (sd);			\
+>  		int __result;						\
+> -		if (!__sd)						\
+> +		if (!__sd) {						\
+>  			__result = -ENODEV;				\
+> -		else if (!(__sd->ops->o && __sd->ops->o->f))		\
+> +		} else if (!(__sd->ops->o && __sd->ops->o->f)) {	\
+>  			__result = -ENOIOCTLCMD;			\
+> -		else if (v4l2_subdev_call_wrappers.o &&			\
+> -			 v4l2_subdev_call_wrappers.o->f)		\
+> -			__result = v4l2_subdev_call_wrappers.o->f(	\
+> -							__sd, ##args);	\
+> -		else							\
+> -			__result = __sd->ops->o->f(__sd, ##args);	\
+> +		} else {						\
+> +			if (__sd->lock)					\
+> +				mutex_lock(__sd->lock);			\
+> +			if (v4l2_subdev_call_wrappers.o &&		\
+> +				 v4l2_subdev_call_wrappers.o->f)	\
+> +				__result = v4l2_subdev_call_wrappers.o->f( \
+> +					__sd, ##args);			\
+> +			else						\
+> +				__result = __sd->ops->o->f(__sd, ##args); \
+> +			if (__sd->lock)					\
+> +				mutex_unlock(__sd->lock);			\
+> +		}							\
+>  		__result;						\
+>  	})
+>  
+> 
 
-Since these camera are removable on some board we alos need the driver
-to actually fail when there is no hardware present so the driver is
-actually removed.
+I'm not sure this is the right place to lock. Locking is only needed if the
+subdev device can be called directly from userspace. So I would put the
+locking in subdev_do_ioctl() and use mutex_lock_interruptible.
 
-Finally, we update the licensing statement to use SPDX licensing.
+If there are subdev ops that in this scenario (i.e. userspace is responsible
+for configuring the subdev) are still called from another driver, then I would
+create a v4l2_subdev_call_lock() function that takes the lock.
 
-Benoit Parrot (6):
-  media: i2c: ov2659: Fix for image wrap-around in lower resolution
-  media: i2c: ov2659: Fix sensor detection to actually fail when device
-    is not present
-  media: dt-bindings: ov2659: add powerdown-gpios optional property
-  media: i2c: ov2659: Add optional powerdown gpio handling
-  media: i2c: ov2659: Fix missing 720p register config
-  media: i2c: ov2659: Switch to SPDX Licensing
+Adding a lock in the v4l2_subdev_call macro feels too invasive.
 
- .../devicetree/bindings/media/i2c/ov2659.txt  |  6 +++
- drivers/media/i2c/Kconfig                     |  2 +-
- drivers/media/i2c/ov2659.c                    | 40 +++++++++++--------
- 3 files changed, 30 insertions(+), 18 deletions(-)
+Regards,
 
--- 
-2.17.1
-
+	Hans
