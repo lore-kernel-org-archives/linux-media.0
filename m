@@ -2,101 +2,119 @@ Return-Path: <SRS0=xE+E=XI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D47B2C4CEC7
-	for <linux-media@archiver.kernel.org>; Fri, 13 Sep 2019 13:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C75ABC49ED7
+	for <linux-media@archiver.kernel.org>; Fri, 13 Sep 2019 13:23:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A2830206A5
-	for <linux-media@archiver.kernel.org>; Fri, 13 Sep 2019 13:22:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 98C8820CC7
+	for <linux-media@archiver.kernel.org>; Fri, 13 Sep 2019 13:23:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="rmH3liTh"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Y9dbMQc0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391077AbfIMNWj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Sep 2019 09:22:39 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:44712 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390973AbfIMNWP (ORCPT
+        id S2391069AbfIMNXC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Sep 2019 09:23:02 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:55284 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390909AbfIMNXB (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Sep 2019 09:22:15 -0400
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4300B33A;
-        Fri, 13 Sep 2019 15:22:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1568380933;
-        bh=9gUwoysnC3sI56b/+7CXuRddFhVU5l43f19uyNV6ulM=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=rmH3liThfXkD1hQ5EmPoL29pRPHwRWip0TQ9ZnbF1YUoYhec7PHDtE2EXrUegYGF+
-         8oIkeDwmvnZqrVq1E+7PsycDtyWBSHiGu8EvO4ovBUn6nTtU9sy9GpAGHkXo0kUaj5
-         LBKUd1Q96y57LXSVI+Jd7MQDxpwGT5ecVI7s3HjA=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH v3 2/6] rcar-vin: Make use of V4L2_FIELD_IS_INTERLACED()
- macro
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org
-References: <20190904215409.30136-1-niklas.soderlund+renesas@ragnatech.se>
- <20190904215409.30136-3-niklas.soderlund+renesas@ragnatech.se>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <e931fb13-5c37-6b63-11a6-2d4bf60ccbc2@ideasonboard.com>
-Date:   Fri, 13 Sep 2019 14:22:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 13 Sep 2019 09:23:01 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8DDMxhg074712;
+        Fri, 13 Sep 2019 08:22:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1568380980;
+        bh=vnhD3PZ0mNE2hDulxxExCWGhochou6IDX6JVjee4zZo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Y9dbMQc0aE9/gKp7o4aKT4yxFvuv2bv5RTsbZG6T4voAXupV97yHdiktLJMPeHnCS
+         u5W5jOcO2C3h8b44NbwSPPTu+dAkEvtzrFtoCCbfhtuWojinwtmbkehD+/w2QkIol1
+         6J1Sc7IRV3IiYzDV7D6vH0U90p69qO9Y4xOrAvpA=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8DDMxnS116313
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 13 Sep 2019 08:22:59 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 13
+ Sep 2019 08:22:59 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 13 Sep 2019 08:22:59 -0500
+Received: from ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with SMTP id x8DDMxCB116905;
+        Fri, 13 Sep 2019 08:22:59 -0500
+Date:   Fri, 13 Sep 2019 08:25:04 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [Patch 02/13] media: am437x-vpfe: Fix missing first line
+Message-ID: <20190913132504.sh5fpb4hrv5wqorp@ti.com>
+References: <20190909162743.30114-1-bparrot@ti.com>
+ <20190909162743.30114-3-bparrot@ti.com>
+ <018a5f55-a750-c86d-da82-2b7c586cb33e@xs4all.nl>
 MIME-Version: 1.0
-In-Reply-To: <20190904215409.30136-3-niklas.soderlund+renesas@ragnatech.se>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <018a5f55-a750-c86d-da82-2b7c586cb33e@xs4all.nl>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 04/09/2019 22:54, Niklas Söderlund wrote:
-> The V4L2_FIELD_IS_INTERLACED() can be used to make the code more
-> readable, use it.
+Hans Verkuil <hverkuil@xs4all.nl> wrote on Fri [2019-Sep-13 15:00:08 +0200]:
+> On 9/9/19 6:27 PM, Benoit Parrot wrote:
+> > Previous generation of this driver were hard coded to handle
+> > encoder/decoder were the first line never contains any data and
+> 
+> were -> where
+> 
+> > was therefore always skipped, however when dealing with actual
+> > camera sensor the first line is always present.
+> 
+> sensor -> sensors
 
-Definitely!
+I'll fix those.
+
+Thanks
+
+Benoit
 
 > 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-
-> ---
->  drivers/media/platform/rcar-vin/rcar-dma.c | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
+> Regards,
 > 
-> diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-> index 3cb29b2e0b2b18a9..7d40d71c863265c9 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-dma.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-> @@ -557,16 +557,11 @@ static void rvin_crop_scale_comp_gen2(struct rvin_dev *vin)
->  	rvin_write(vin, 0, VNSPPOC_REG);
->  	rvin_write(vin, 0, VNSLPOC_REG);
->  	rvin_write(vin, vin->format.width - 1, VNEPPOC_REG);
-> -	switch (vin->format.field) {
-> -	case V4L2_FIELD_INTERLACED:
-> -	case V4L2_FIELD_INTERLACED_TB:
-> -	case V4L2_FIELD_INTERLACED_BT:
-> +
-> +	if (V4L2_FIELD_IS_INTERLACED(vin->format.field))
->  		rvin_write(vin, vin->format.height / 2 - 1, VNELPOC_REG);
-> -		break;
-> -	default:
-> +	else
->  		rvin_write(vin, vin->format.height - 1, VNELPOC_REG);
-> -		break;
-> -	}
->  
->  	vin_dbg(vin,
->  		"Pre-Clip: %ux%u@%u:%u YS: %d XS: %d Post-Clip: %ux%u@%u:%u\n",
+> 	Hans
 > 
-
+> > 
+> > Signed-off-by: Benoit Parrot <bparrot@ti.com>
+> > ---
+> >  drivers/media/platform/am437x/am437x-vpfe.c | 4 ----
+> >  1 file changed, 4 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
+> > index ab959d61f9c9..0ecb75bf5abd 100644
+> > --- a/drivers/media/platform/am437x/am437x-vpfe.c
+> > +++ b/drivers/media/platform/am437x/am437x-vpfe.c
+> > @@ -345,13 +345,9 @@ static void vpfe_ccdc_setwin(struct vpfe_ccdc *ccdc,
+> >  	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
+> >  		vert_nr_lines = (image_win->height >> 1) - 1;
+> >  		vert_start >>= 1;
+> > -		/* Since first line doesn't have any data */
+> > -		vert_start += 1;
+> >  		/* configure VDINT0 */
+> >  		val = (vert_start << VPFE_VDINT_VDINT0_SHIFT);
+> >  	} else {
+> > -		/* Since first line doesn't have any data */
+> > -		vert_start += 1;
+> >  		vert_nr_lines = image_win->height - 1;
+> >  		/*
+> >  		 * configure VDINT0 and VDINT1. VDINT1 will be at half
+> > 
+> 
