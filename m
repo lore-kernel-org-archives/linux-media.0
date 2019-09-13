@@ -2,242 +2,117 @@ Return-Path: <SRS0=xE+E=XI=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0CCFC4CEC7
-	for <linux-media@archiver.kernel.org>; Fri, 13 Sep 2019 13:35:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BAEBC4CEC5
+	for <linux-media@archiver.kernel.org>; Fri, 13 Sep 2019 13:41:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 89D8E20640
-	for <linux-media@archiver.kernel.org>; Fri, 13 Sep 2019 13:35:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 149FF206BB
+	for <linux-media@archiver.kernel.org>; Fri, 13 Sep 2019 13:41:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="vRlaGWJR"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ykropRZ7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389334AbfIMNfH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 13 Sep 2019 09:35:07 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:44780 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388524AbfIMNfG (ORCPT
+        id S2389202AbfIMNlN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 13 Sep 2019 09:41:13 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:39778 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388927AbfIMNlN (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 13 Sep 2019 09:35:06 -0400
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D9BEE33A;
-        Fri, 13 Sep 2019 15:35:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1568381703;
-        bh=c/DAu/9ejvbLN+ifE60METToH39xCkPgvfOhCF6zG5k=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=vRlaGWJRFnapzzZRdY1xiNIO04+538y0Q1bUaksxLUj/SQUnYgA8QLUemLlJsNRng
-         is3gfY6yXB5xtcW/mhOiHzC4wGrtsCu58Kiu7/YaHkx44/UQGJzsO+fuiLwsq8N5ay
-         nLVdq28H4Zp82DjJsxNAq7jHpTSvEOI7DNaA8pzo=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH v3 5/6] rcar-vin: Add support for V4L2_FIELD_ALTERNATE
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org
-References: <20190904215409.30136-1-niklas.soderlund+renesas@ragnatech.se>
- <20190904215409.30136-6-niklas.soderlund+renesas@ragnatech.se>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <61fd1036-2d11-4761-6cab-93b70a44baf6@ideasonboard.com>
-Date:   Fri, 13 Sep 2019 14:34:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 13 Sep 2019 09:41:13 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8DDfC2S094105;
+        Fri, 13 Sep 2019 08:41:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1568382072;
+        bh=CmbLJ7PpeDku490Wh6BDSiCQHPLlezHiiaAQg2qYXnM=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ykropRZ7yh9+HQIZLNa/QCkM2+GpbxSbalY1PmG3fVmd7eUs8o4RKcb/iLoCDRomv
+         3NSwYybEJKvT31v+qM4Lv/iNDy3Flh6T7Cum0lMY3V6PAwkDtUC5CwzrICmGsHHo1Q
+         E/nBVNc3iwXqOn/8EPCh6FzuoljdW0yj0XmKvUm0=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8DDfCF1054907
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 13 Sep 2019 08:41:12 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 13
+ Sep 2019 08:41:11 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 13 Sep 2019 08:41:11 -0500
+Received: from ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with SMTP id x8DDfBKY013552;
+        Fri, 13 Sep 2019 08:41:11 -0500
+Date:   Fri, 13 Sep 2019 08:43:17 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [Patch 08/13] media: am437x-vpfe: Maintain a reference to the
+ current vpfe_fmt
+Message-ID: <20190913134317.afnflvebna3xv35o@ti.com>
+References: <20190909162743.30114-1-bparrot@ti.com>
+ <20190909162743.30114-9-bparrot@ti.com>
+ <8b3d5c23-6784-fb1c-5e14-f3759b10aa0b@xs4all.nl>
+ <20190913133245.6rvajfhlghbocuf4@ti.com>
+ <693c483f-5342-ab0a-7023-222f06bd011e@xs4all.nl>
 MIME-Version: 1.0
-In-Reply-To: <20190904215409.30136-6-niklas.soderlund+renesas@ragnatech.se>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <693c483f-5342-ab0a-7023-222f06bd011e@xs4all.nl>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 04/09/2019 22:54, Niklas Söderlund wrote:
-> The hardware is capable to passing V4L2_FIELD_ALTERNATE to user-space.
-
-s/to/of/
-
-> Allow users to request this field format but still default to using the
-> hardware interlacer if alternating is not explicitly requested.
+Hans Verkuil <hverkuil@xs4all.nl> wrote on Fri [2019-Sep-13 15:34:28 +0200]:
+> On 9/13/19 3:32 PM, Benoit Parrot wrote:
+> > Hans Verkuil <hverkuil@xs4all.nl> wrote on Fri [2019-Sep-13 15:14:45 +0200]:
+> >> On 9/9/19 6:27 PM, Benoit Parrot wrote:
+> >>> Keep a reference to the currently selected struct vpfe_fmt * object.
+> >>> By doing so we rename the current struct v4l2_format * member from
+> >>> fmt to v_fmt.
+> >>> The added struct vpfe_fmt * reference is set to "const" so we also
+> >>> constify all accesses and related helper functions.
+> >>
+> >> This explains what you do, but not why you do it.
+> > 
+> > Hmm ok I'll rework this a bit.
+> > 
+> >>
+> >> And I think fmt vs v_fmt is *very* confusing naming.
+> > 
+> > Well in this case v_fmt stands for "v4l2_fmt" and depending on the function
+> > I was using fmt to either mean a vpfe_fmt pointer or a v4l2_format pointer
+> > so tried (and apparently failed) to make it clearer which was which.
 > 
-> Before this change a sensor providing data using alternate would be
-> always combined to an interlaced frame. After this change the user can
-
-s/would be always/would always be/
-
-> request to receive frames as alternate if the sensor provides it.
+> Well, v_fmt could refer to either v4l2_format or vpfe_fmt, so that prefix
+> doesn't help me :-)
 > 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> Since 'fmt' was already defined in struct vpfe_device as v4l2_format, I'd
+> just keep that rather than causing code churn by changing it. And come up
+> with a better name for when you refer to a vpfe_fmt struct.
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Fair enough.
 
-
-> ---
->  drivers/media/platform/rcar-vin/rcar-dma.c  | 43 +++++++++++++--------
->  drivers/media/platform/rcar-vin/rcar-v4l2.c | 31 +++++++--------
->  2 files changed, 39 insertions(+), 35 deletions(-)
 > 
-> diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
-> index 7d40d71c863265c9..c7859b329dd4f02a 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-dma.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-dma.c
-> @@ -529,12 +529,17 @@ static void rvin_set_coeff(struct rvin_dev *vin, unsigned short xs)
->  
->  static void rvin_crop_scale_comp_gen2(struct rvin_dev *vin)
->  {
-> +	unsigned int crop_height;
->  	u32 xs, ys;
->  
->  	/* Set scaling coefficient */
-> +	crop_height = vin->crop.height;
-> +	if (V4L2_FIELD_IS_INTERLACED(vin->format.field))
-> +		crop_height *= 2;
-> +
->  	ys = 0;
-> -	if (vin->crop.height != vin->compose.height)
-> -		ys = (4096 * vin->crop.height) / vin->compose.height;
-> +	if (crop_height != vin->compose.height)
-> +		ys = (4096 * crop_height) / vin->compose.height;
->  	rvin_write(vin, ys, VNYS_REG);
->  
->  	xs = 0;
-> @@ -578,21 +583,9 @@ void rvin_crop_scale_comp(struct rvin_dev *vin)
->  	/* Set Start/End Pixel/Line Pre-Clip */
->  	rvin_write(vin, vin->crop.left, VNSPPRC_REG);
->  	rvin_write(vin, vin->crop.left + vin->crop.width - 1, VNEPPRC_REG);
-> +	rvin_write(vin, vin->crop.top, VNSLPRC_REG);
-> +	rvin_write(vin, vin->crop.top + vin->crop.height - 1, VNELPRC_REG);
->  
-> -	switch (vin->format.field) {
-> -	case V4L2_FIELD_INTERLACED:
-> -	case V4L2_FIELD_INTERLACED_TB:
-> -	case V4L2_FIELD_INTERLACED_BT:
-> -		rvin_write(vin, vin->crop.top / 2, VNSLPRC_REG);
-> -		rvin_write(vin, (vin->crop.top + vin->crop.height) / 2 - 1,
-> -			   VNELPRC_REG);
-> -		break;
-> -	default:
-> -		rvin_write(vin, vin->crop.top, VNSLPRC_REG);
-> -		rvin_write(vin, vin->crop.top + vin->crop.height - 1,
-> -			   VNELPRC_REG);
-> -		break;
-> -	}
->  
->  	/* TODO: Add support for the UDS scaler. */
->  	if (vin->info->model != RCAR_GEN3)
-> @@ -636,6 +629,9 @@ static int rvin_setup(struct rvin_dev *vin)
->  		vnmc = VNMC_IM_ODD_EVEN;
->  		progressive = true;
->  		break;
-> +	case V4L2_FIELD_ALTERNATE:
-> +		vnmc = VNMC_IM_ODD_EVEN;
-> +		break;
->  	default:
->  		vnmc = VNMC_IM_ODD;
->  		break;
-> @@ -794,6 +790,18 @@ static bool rvin_capture_active(struct rvin_dev *vin)
->  	return rvin_read(vin, VNMS_REG) & VNMS_CA;
->  }
->  
-> +static enum v4l2_field rvin_get_active_field(struct rvin_dev *vin, u32 vnms)
-> +{
-> +	if (vin->format.field == V4L2_FIELD_ALTERNATE) {
-> +		/* If FS is set it is an Even field. */
-> +		if (vnms & VNMS_FS)
-> +			return V4L2_FIELD_BOTTOM;
-> +		return V4L2_FIELD_TOP;
-> +	}
-> +
-> +	return vin->format.field;
-> +}
-> +
->  static void rvin_set_slot_addr(struct rvin_dev *vin, int slot, dma_addr_t addr)
->  {
->  	const struct rvin_video_format *fmt;
-> @@ -943,7 +951,7 @@ static irqreturn_t rvin_irq(int irq, void *data)
->  
->  	/* Capture frame */
->  	if (vin->queue_buf[slot]) {
-> -		vin->queue_buf[slot]->field = vin->format.field;
-> +		vin->queue_buf[slot]->field = rvin_get_active_field(vin, vnms);
->  		vin->queue_buf[slot]->sequence = vin->sequence;
->  		vin->queue_buf[slot]->vb2_buf.timestamp = ktime_get_ns();
->  		vb2_buffer_done(&vin->queue_buf[slot]->vb2_buf,
-> @@ -1070,6 +1078,7 @@ static int rvin_mc_validate_format(struct rvin_dev *vin, struct v4l2_subdev *sd,
->  		case V4L2_FIELD_TOP:
->  		case V4L2_FIELD_BOTTOM:
->  		case V4L2_FIELD_NONE:
-> +		case V4L2_FIELD_ALTERNATE:
->  			break;
->  		case V4L2_FIELD_INTERLACED_TB:
->  		case V4L2_FIELD_INTERLACED_BT:
-> diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> index 3f175e2e0a9a1389..a7ee44dd248ea0a1 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
-> @@ -117,15 +117,7 @@ static void rvin_format_align(struct rvin_dev *vin, struct v4l2_pix_format *pix)
->  	case V4L2_FIELD_INTERLACED_TB:
->  	case V4L2_FIELD_INTERLACED_BT:
->  	case V4L2_FIELD_INTERLACED:
-> -		break;
->  	case V4L2_FIELD_ALTERNATE:
-> -		/*
-> -		 * Driver does not (yet) support outputting ALTERNATE to a
-> -		 * userspace. It does support outputting INTERLACED so use
-> -		 * the VIN hardware to combine the two fields.
-> -		 */
-> -		pix->field = V4L2_FIELD_INTERLACED;
-> -		pix->height *= 2;
->  		break;
->  	default:
->  		pix->field = RVIN_DEFAULT_FIELD;
-> @@ -164,15 +156,25 @@ static int rvin_reset_format(struct rvin_dev *vin)
->  
->  	v4l2_fill_pix_format(&vin->format, &fmt.format);
->  
-> -	rvin_format_align(vin, &vin->format);
-> -
->  	vin->src_rect.top = 0;
->  	vin->src_rect.left = 0;
->  	vin->src_rect.width = vin->format.width;
->  	vin->src_rect.height = vin->format.height;
->  
-> +	/*  Make use of the hardware interlacer by default. */
-> +	if (vin->format.field == V4L2_FIELD_ALTERNATE) {
-> +		vin->format.field = V4L2_FIELD_INTERLACED;
-> +		vin->format.height *= 2;
-> +	}
-> +
-> +	rvin_format_align(vin, &vin->format);
-> +
->  	vin->crop = vin->src_rect;
-> -	vin->compose = vin->src_rect;
-> +
-> +	vin->compose.top = 0;
-> +	vin->compose.left = 0;
-> +	vin->compose.width = vin->format.width;
-> +	vin->compose.height = vin->format.height;
->  
->  	return 0;
->  }
-> @@ -217,13 +219,6 @@ static int rvin_try_format(struct rvin_dev *vin, u32 which,
->  		crop->left = 0;
->  		crop->width = pix->width;
->  		crop->height = pix->height;
-> -
-> -		/*
-> -		 * If source is ALTERNATE the driver will use the VIN hardware
-> -		 * to INTERLACE it. The crop height then needs to be doubled.
-> -		 */
-> -		if (pix->field == V4L2_FIELD_ALTERNATE)
-> -			crop->height *= 2;
->  	}
->  
->  	if (field != V4L2_FIELD_ANY)
+> Regards,
 > 
-
+> 	Hans
+> 
+> > 
+> >>
+> >> I'd keep fmt as-is, and come up with a different name for the vpfe_fmt
+> >> pointer. ref_vpfe_fmt?
+> >>
+> >> Regards,
+> >>
+> >> 	Hans
+> >>
