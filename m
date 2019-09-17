@@ -2,144 +2,120 @@ Return-Path: <SRS0=qP1p=XM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81D3BC4CEC9
-	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 16:33:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6303BC4CECE
+	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 16:35:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 42F3820665
-	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 16:33:16 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FkMj/GJY"
+	by mail.kernel.org (Postfix) with ESMTP id 38B112189D
+	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 16:35:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1568738124;
+	bh=N1zCtYdfz6IPFrdGpdXh9jUSgmObjnjYMcgU90vUt1w=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=r5TZJ4lTmKZO/J229ksF6kq7dX8Z4CbA0Act0z6WK7msmuJWoKXgLwsQKBCoDBTf8
+	 6q5y2Y6o2GKVSlspk7Snxrhs99uaTmZ5zQ4uwBltpXKirb7QISYebCvDJ64TzNegpb
+	 Mpxalcdds/tBm2QzC9z1P6jgJoaQeeBIFBfqC7kE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730363AbfIQQdP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Sep 2019 12:33:15 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34344 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727788AbfIQQdP (ORCPT
+        id S1730506AbfIQQfW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Sep 2019 12:35:22 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:35681 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730498AbfIQQfW (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Sep 2019 12:33:15 -0400
-Received: by mail-pf1-f196.google.com with SMTP id b128so2496049pfa.1
-        for <linux-media@vger.kernel.org>; Tue, 17 Sep 2019 09:33:14 -0700 (PDT)
+        Tue, 17 Sep 2019 12:35:22 -0400
+Received: by mail-io1-f67.google.com with SMTP id q10so9204864iop.2
+        for <linux-media@vger.kernel.org>; Tue, 17 Sep 2019 09:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=c+PTSCzGjCSex5vMxl5qRR8PkMLygl/K8peAQu3SOZM=;
-        b=FkMj/GJY5ixm4XxNsnmw9paiRJ2ZNgelNLfWZix1SH0rxaC5o+aLi2Tfe5SwOzb+Jz
-         FOwDqA1m05sNWGWpuPcukBlhWb1N3t/TvgcQzjFdAtvfARAWJkxaJnbTK764SKzk4Z5v
-         c4+5X8oPZlCWBPbbQtbVA5zdN4XLPXK/kFL0w=
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VVJL//iLgewkEoRfC7CxEoEman5r0AHZTTZchJ8JH74=;
+        b=OubrW9S48K1g7uFLUI7/zdWhbZmzku0sG+Nhd8AwOW7CSGHvs/Z9b6+gZyg+sqsdF6
+         Q6zJZMOJSHVeqyT1TsznCMpK2XWpajqZAMVVDOy9cIXTDMv6oIlo2VUQwB6GgUkyhNxG
+         fw1N9WrsgavfRe6U5Loa41EJOuzhUnE7RemXg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=c+PTSCzGjCSex5vMxl5qRR8PkMLygl/K8peAQu3SOZM=;
-        b=SmHllCreXjAVD331KFjYtCyv0G/zzhIk0jmXca+BC+ILf5oIQAybCedZbgvgHS7OxM
-         ihZRB5D9m2xXS2qGvj7+nXZ/NWYmLf8xgXnqykBxq8VaCjXqTBBvoIGMxuw5plzFBsBu
-         k2B70i50pPdIDBPK5UrdG9/KKIe0lxZfureSqcHaXrCLeZmjvHhYnttPBhOso8Vw47TM
-         zfkvNE6pQdv8CWH7Qe++9Ld9pJ4P+0/fsxEX4cYY4ZNLN2uW/C+m7oNHqZhQEAgNFdkE
-         Ui6ZzXAIk4jH6AYLugTRR2QaSwTiZDcSdJsI7EOG5d22ziKkHCCK4AuZ7lCpFNiQGNhK
-         gBsg==
-X-Gm-Message-State: APjAAAUWmHGkFPrc2l6Ods7ehm0IhWIOjOr9dEGGZ9HKmqgKqpZAYaQm
-        uqeeRgPLX0Q064Yd4KUs9sO3zw==
-X-Google-Smtp-Source: APXvYqwtuaUAgzzoeQraSuZ738yvmojRxlIIqMFc1O8f5z8cANqLJaYQmv8KDst/GutoMAHmzKt91A==
-X-Received: by 2002:a63:1d52:: with SMTP id d18mr4244378pgm.315.1568737993373;
-        Tue, 17 Sep 2019 09:33:13 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c128sm3219182pfc.166.2019.09.17.09.33.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VVJL//iLgewkEoRfC7CxEoEman5r0AHZTTZchJ8JH74=;
+        b=tao/k8W9JQQWB2fkeM8nj7O5TDbv8tLOJxh+HDBEc2IOsZC/KP0TV+mH3u6N3V3nqR
+         BjLX92w8tt2O1LOezWCzXlQsIh/bGFOdJ/7u5LVy/LYVQOkrd6xFuOAVhPSZczc4DvYd
+         3oLOq9XdBOTe+EDhHSpUw7zZAxy98Ruy44ErkqM7psdFsAaH7mEJ6mkcZ7zRSYcq/KNE
+         +CC6bK2rlZOX2X2Qiq22+DprEdbnYb5GroFNb7/0bgzU5lrJKrjEwAR+/InzuMFossKD
+         AiwpM8Y4sQNmsrpFd4DePsQl/N1dERI8vYMWnQmWpuTgrOw311BmtiNPAsQkpJGh92+0
+         N7WQ==
+X-Gm-Message-State: APjAAAWqpjVV5MHCqiNpEwZ+WBFuKef4QBVdzUu0Sg/atoqUNShtnUFp
+        i+9k6XBG5OzjxcG9TKM08tS/Vg==
+X-Google-Smtp-Source: APXvYqxfbzWoJgWSpGE8if7ltPy0aR4ZcyEh3dO0n7WdjWUwwfzIKTeQ9T1Ymv3OWkH26HL19qL+wg==
+X-Received: by 2002:a05:6638:3a5:: with SMTP id z5mr2781140jap.95.1568738121535;
+        Tue, 17 Sep 2019 09:35:21 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id v3sm2593781ioh.51.2019.09.17.09.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2019 09:33:12 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 09:33:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        ksummit-discuss@lists.linuxfoundation.org,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: single maintainer profile directory (was Re: [Ksummit-discuss]
- [PATCH] media: add a subsystem profile documentation)
-Message-ID: <201909170930.B8AD840@keescook>
-References: <156821693963.2951081.11214256396118531359.stgit@dwillia2-desk3.amr.corp.intel.com>
- <434c05bddd2b364e607e565227487910a8dd9793.1568391461.git.mchehab+samsung@kernel.org>
- <201909162032.F4462D3@keescook>
- <20190917102817.263517b5@coco.lan>
+        Tue, 17 Sep 2019 09:35:21 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     mchehab@kernel.org, helen.koike@collabora.com,
+        skhan@linuxfoundation.org, andrealmeid@collabora.com,
+        dafna.hirschfeld@collabora.com, hverkuil-cisco@xs4all.nl
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 4/5] doc: media: vimc: Update module parameter usage information
+Date:   Tue, 17 Sep 2019 10:35:11 -0600
+Message-Id: <f21e40f304507dffe2de240fdaeb881305c270ca.1568689325.git.skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cover.1568689325.git.skhan@linuxfoundation.org>
+References: <cover.1568689325.git.skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190917102817.263517b5@coco.lan>
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 10:28:17AM -0300, Mauro Carvalho Chehab wrote:
-> No matter where the profiles will physically be stored, its contents belong 
-> to subsystem-specific documentation, and should be visible at the same index 
-> file as the kAPI docs is located, as anyone interested on submitting patches
-> for a subsystem should be aware about the subsystem specific policies and
-> details.
+vimc driver is now a monolithic driver. Update the module parameter
+usage information to reflect that.
 
-That's a good point. I think your other suggestions below address my
-"find them all" case...
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ Documentation/media/v4l-drivers/vimc.rst | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-> So, my vote is to store them at Documentation/*/<subsystem> (together
-> with the kAPI book).
-> 
-> > since there are
-> > two ways someone would want to read profiles:
-> > 
-> > 1) a single profile, based on a MAINTAINERS entry which includes the path
-> 
-> That is the common case. The problem is that the MAINTAINERS file
-> currently doesn't generate html output. This is not a problem for
-> "old school" devs, but a newbie wanting to collaborate to a single
-> specific subsystem may not notice - or understand - the importance
-> of the MAINTAINERS file[1].
-> 
-> [1] btw, that's why I submitted a RFC, several years ago, a patch
-> converting it to ReST - and later - another patch that would be parsing
-> its contents and producing a ReST output.
-> 
-> That's, by far, the most relevant usecase for the profiles, as the
-> audience is the ~4k Kernel developers.
-
-Oh yes, having a .rst of the MAINTAINERS file would be pretty great.
-Seems like it could just be a build target (and then dependency) for the
-sphinx targets?
-
-> > 2) all of them, to study for various reasons
-> 
-> I suspect that only core people will have interest on study them.
-> 
-> Those people are more skilled, and can easily find all those files with
-> a simple grep:
-> 
-> 	$ grep  "^P:\s" MAINTAINERS|cut -d':' -f2-
-> 
-> or
-> 
-> 	$ git grep "^P:\s" MAINTAINERS|cut -d: -f3-
-> 
-> If, for whatever reason, he would prefer an HTML output [1], he could even
-> create an index file with all of those with something like:
-> 
-> 	$ for i in $(grep  "^P:\s" MAINTAINERS|cut -d':' -f2-); do j=${i/rst/html}; echo "<a href=\"$j\">$j</a><br/>"; done >Documentation/output/index_profiles.html
-> 
-> We might, instead, teach the Documentation/Makefile to create something
-> like the above, but, IMHO, that would just add more complexity to the
-> build without a good reason.
-> 
-> [1] I doubt that core devs would prefer seeing this in html form, but some
-> variant of the above could be used, for example, to create symlinks for
-> all profile docs into a "study" directory.
-> 
-> > The #2 case is helped by having them all in one directory with a single
-> > index.rst, etc. Then similar profiles are able to merge, etc.
-
-Whatever the case, please don't let me distract from the actual content
-of these profiles: I think it's awesome to capture these details and
-makes my life so much easier. :)
-
+diff --git a/Documentation/media/v4l-drivers/vimc.rst b/Documentation/media/v4l-drivers/vimc.rst
+index 406417680db5..a582af0509ee 100644
+--- a/Documentation/media/v4l-drivers/vimc.rst
++++ b/Documentation/media/v4l-drivers/vimc.rst
+@@ -76,22 +76,22 @@ vimc-capture:
+ 	* 1 Pad sink
+ 	* 1 Pad source
+ 
+-Module options
++
++        Module options
+ ---------------
+ 
+-Vimc has a few module parameters to configure the driver. You should pass
+-those arguments to each subdevice, not to the vimc module. For example::
++Vimc has a few module parameters to configure the driver.
+ 
+-        vimc_subdevice.param=value
++        param=value
+ 
+-* ``vimc_scaler.sca_mult=<unsigned int>``
++* ``sca_mult=<unsigned int>``
+ 
+         Image size multiplier factor to be used to multiply both width and
+         height, so the image size will be ``sca_mult^2`` bigger than the
+         original one. Currently, only supports scaling up (the default value
+         is 3).
+ 
+-* ``vimc_debayer.deb_mean_win_size=<unsigned int>``
++* ``deb_mean_win_size=<unsigned int>``
+ 
+         Window size to calculate the mean. Note: the window size needs to be an
+         odd number, as the main pixel stays in the center of the window,
 -- 
-Kees Cook
+2.20.1
+
