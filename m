@@ -2,160 +2,138 @@ Return-Path: <SRS0=qP1p=XM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79CD6C4CECD
-	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 03:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDF55C4CEC9
+	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 07:06:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4C091214D9
-	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 03:58:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B27A420644
+	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 07:06:33 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="k3tUrERo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729867AbfIQD6O (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 16 Sep 2019 23:58:14 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:40961 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729747AbfIQD6O (ORCPT
+        id S2387893AbfIQHGa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 17 Sep 2019 03:06:30 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:42342 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729435AbfIQHGa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 16 Sep 2019 23:58:14 -0400
-Received: from localhost ([IPv6:2001:983:e9a7:1:4561:5751:6822:aafd])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id A4d0iucOaV17OA4d2iJGr4; Tue, 17 Sep 2019 05:58:12 +0200
-Message-ID: <f90a1310e06e375eb03d85b725c81261@smtp-cloud9.xs4all.net>
-Date:   Tue, 17 Sep 2019 05:58:10 +0200
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: OK
-X-CMAE-Envelope: MS4wfEvJ/CW4E7ncMLuuSdF9xq1YU3EhUOQv2MnWLvOCwzNgqQX3rXf+Q+8OAYC/eB0jNn8v/8l9jLlx5yIZNbLqlGcmJt5OHHbf1bSmT0GKxSB1gtdwI5se
- dbr6iKfMi50QD8PigXtgLNmP3re920N9GfPEMxcCaMBAJkW7mQmfc/cM+8Neda5swWltt7Ac0fXKHNncJbBTnqUjZh/7CcdYbl+Cu/PdyU3DmKMPQTByFvUg
+        Tue, 17 Sep 2019 03:06:30 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8H73aOt035717;
+        Tue, 17 Sep 2019 07:06:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=corp-2019-08-05;
+ bh=7QhAkMI4cl6/WKzcvw9yI0WzPjEboA+uQ/aBhBvqx74=;
+ b=k3tUrERoWFBT7q1Z0EVM7kLDCi2XWumayWbg3bDHA1YCdwaDWiMgp+iRHH6qBp0sM8TB
+ rhC5do/CzgSkcdMvu0tZGOkkgY/Zej8q/L6QK1npHem5YQaaX1dabfeL9kI2lGCZqFZC
+ 9j1CGS9WmJw/zCF1wOV+eIj4mIdOZEMhkg6pTk6Wt7ZG3GbjCshcICVNh6/RGipA0Or0
+ RSiLFvArosDc3Cqafd/2TDaSBkc9ttM0GgyLZjDVITDgzYXyFWMYthNj/U1Ys134HYIv
+ we/eV5AJBIakccAxyJmNiJzZKGC1hJd3oai8YaseaS4blAi4jSfKlKMzUKW6DUMs3/GV Pg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2v0r5pc5pd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Sep 2019 07:06:25 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8H734qo125154;
+        Tue, 17 Sep 2019 07:06:25 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2v2tms8kta-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Sep 2019 07:06:25 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x8H76Nas016426;
+        Tue, 17 Sep 2019 07:06:23 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 17 Sep 2019 00:06:22 -0700
+Date:   Tue, 17 Sep 2019 10:06:13 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Maxime Ripard <mripard@kernel.org>, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] media: v4l: cadence: Fix how unsued lanes are handled in
+ 'csi2rx_start()'
+Message-ID: <20190917070613.GA2959@kadam>
+References: <20190912204450.17625-1-christophe.jaillet@wanadoo.fr>
+ <20190913075709.t35ggip624tybd6l@localhost.localdomain>
+ <20190916062846.GD18977@kadam>
+ <f67787da-dc1c-3e05-c1e2-e8737641dfd0@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f67787da-dc1c-3e05-c1e2-e8737641dfd0@wanadoo.fr>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9382 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=872
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1909170077
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9382 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=942 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1909170077
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On Mon, Sep 16, 2019 at 09:24:26PM +0200, Christophe JAILLET wrote:
+> Le 16/09/2019 à 08:28, Dan Carpenter a écrit :
+> > On Fri, Sep 13, 2019 at 09:57:09AM +0200, Maxime Ripard wrote:
+> > > Hi Christophe,
+> > > 
+> > > On Thu, Sep 12, 2019 at 10:44:50PM +0200, Christophe JAILLET wrote:
+> > > > The 2nd parameter of 'find_first_zero_bit()' is a number of bits, not of
+> > > > bytes. So use 'BITS_PER_LONG' instead of 'sizeof(lanes_used)'.
+> > > > 
+> > > > Fixes: 1fc3b37f34f6 ("media: v4l: cadence: Add Cadence MIPI-CSI2 RX driver")
+> > > > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> > > > ---
+> > > > This patch is purely speculative. Using BITS_PER_LONG looks logical to me,
+> > > > but I'm not 100% sure that it is what is expected here. 'csi2rx->max_lanes'
+> > > > could also be a good candidate.
+> > > Yeah, csi2rx->max_lanes would make more sense in that context. Could
+> > > you resend a new version?
+> > This is sort of unrelated, but for Smatch purposes the csi2rx->max_lanes
+> > comes from the firmware in csi2rx_parse_dt() and it could be any u8
+> > value.
+> 
+> Hi Dan,
+> 
+> not sure to follow you.
+> 
+> csi2rx_probe()
+>   --> csi2rx_get_resources()
+>      -->  ...
+>           dev_cfg = readl(csi2rx->base + CSI2RX_DEVICE_CFG_REG);
+>           ...
+>           csi2rx->max_lanes = dev_cfg & 7;
+>           if (csi2rx->max_lanes > CSI2RX_LANES_MAX) {
+>              dev_err(&pdev->dev, "Invalid number of lanes: %u\n",
+>                      csi2rx->max_lanes);
+>              return -EINVAL;
+>           }
+> 
+> So I guess, that we can trust max_lanes because of the 'if (... >
+> CSI2RX_LANES_MAX)' check.
+> 
+> Did I miss something?
 
-Results of the daily build of media_tree:
+Ugh...  I was looking at ->num_lanes and I was also just totally wrong.
+Smatch parses that badly.  Smatch actually parses ->max_lanes correctly
+though so that's ok.
 
-date:			Tue Sep 17 05:00:15 CEST 2019
-media-tree git hash:	6f51fdfd8229d5358c2d6e272cf73478866e8ddc
-media_build git hash:	d75b29db1297d2475227cc8bada843542271e40d
-v4l-utils git hash:	a32b00d715f48c6aa8c889a1aabd3fcdcee22b0f
-edid-decode git hash:	7696439db703eeca7248af6c3a17d2e19a9292ea
-gcc version:		i686-linux-gcc (GCC) 9.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1-rc1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.5.1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 8634894b41454ef4215a3d4fd503305c720e761a
-host hardware:		x86_64
-host os:		4.19.0-4-amd64
+Sorry for the noise on this.
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3-rc1-i686: OK
-linux-5.3-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2331, Succeeded: 2331, Failed: 0, Warnings: 0
-sparse: OK
-smatch: OK
+regards,
+dan carpenter
 
-Detailed results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
