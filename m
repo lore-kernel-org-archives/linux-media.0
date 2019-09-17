@@ -2,74 +2,94 @@ Return-Path: <SRS0=qP1p=XM=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0860C4CEC9
-	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 13:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F2D2C4CECD
+	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 13:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CA66C2171F
+	by mail.kernel.org (Postfix) with ESMTP id F1DB321852
 	for <linux-media@archiver.kernel.org>; Tue, 17 Sep 2019 13:36:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728303AbfIQNgx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1728320AbfIQNgx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 17 Sep 2019 09:36:53 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:55613 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728290AbfIQNgw (ORCPT
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:56487 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728292AbfIQNgw (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 17 Sep 2019 09:36:52 -0400
 Received: from test-nl.fritz.box ([80.101.105.217])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id ADexixpvVV17OADeziLHkO; Tue, 17 Sep 2019 15:36:51 +0200
+        id ADexixpvVV17OADf1iLHks; Tue, 17 Sep 2019 15:36:51 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Vandana BN <bnvandana@gmail.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: [PATCHv4 0/3] v4l2-core: Add metadata type to vfl_devnode_type
-Date:   Tue, 17 Sep 2019 15:36:44 +0200
-Message-Id: <20190917133647.17533-1-hverkuil-cisco@xs4all.nl>
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv4 2/3] v4l2-dev: simplify the SDR checks
+Date:   Tue, 17 Sep 2019 15:36:46 +0200
+Message-Id: <20190917133647.17533-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190917133647.17533-1-hverkuil-cisco@xs4all.nl>
+References: <20190917133647.17533-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-CMAE-Envelope: MS4wfLFjHL/S3/dDsbzzbdvSIj6EpMuVP+Cvx1Mprec3OGrqLkTRiInL6Vf9WxQms4SW8rleTTrx/IbnCN8s7svlqPy123KEmJU7noyeQOuyrXNEqrG8iw3+
- AHEdDHg+nHheZLGLyR+TWi1ndXJvgxMKhh4+TVx8oZJmxA69xQgkJvBzhl576ITGm1tku31N8G1hSD/UkHcosVREVCh7saWxAEGWGcf80CsqzlgMB9I1eubF
- paNbOFk1VPJVoPHxtV7FYnHGqX8LmJ05MGg8LawVGyQ+h5+8KGpoci7R7+/Bm1gsUNBq2Y1NxTXqU1WUNM9IIw==
+ AHEdDHg+nHheZBB5XiExIfTJzBo8UyHNIjvjd2IWDhuyYn7mr+4Z2oJJtIE63sO8hMsQbS537e8I7F+OUmsE1vvH+D2aae3W0l4J/lI/tyCQtjGdgBu2+KCH
+ 3jcPFjunr9g3ilkNXHy/xSIF4Q+egyibNrMGeaDJDza6g+jNExdckao/mWPD5c4SswDvwLbNMpQ+Gjx7bWAKUoYWPjEPJdBwuFQC//lr33txec+WOgB/jtXO
+ /18qFi7O
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is a follow-up series from Vandana's "[v3] v4l2-core: Add metadata type to
-vfl_devnode_type" patch: https://patchwork.linuxtv.org/patch/58755/
+In determine_valid_ioctls() we can use SET_VALID_IOCTL to enable
+ioctls for SDR, simplifying the code.
 
-While testing that v3 patch with a patched version of vivid that has metadata
-capture support, I realized that metadata should be treated the same way as
-vbi in determine_valid_ioctls(). That makes sense since vbi *is* effectively
-metadata. So I changed Vandana's patch (hence my Co-Developed-by tag) to
-correctly validate the ioctls for metadata.
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+---
+ drivers/media/v4l2-core/v4l2-dev.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
 
-I also added two follow-up patches to simplify the SDR code in that function,
-and to fix the code for v4l-touch devices (too many ioctls were enabled for
-such devices). I think the final code is easier to read as well.
-
-Regards,
-
-	Hans
-
-Hans Verkuil (2):
-  v4l2-dev: simplify the SDR checks
-  v4l2-dev: fix is_tch checks
-
-Vandana BN (1):
-  v4l2-core: Add metadata type to vfl_devnode_type
-
- drivers/media/v4l2-core/v4l2-dev.c   | 97 ++++++++++++++++------------
- drivers/media/v4l2-core/v4l2-ioctl.c |  5 +-
- include/media/v4l2-dev.h             |  2 +
- 3 files changed, 61 insertions(+), 43 deletions(-)
-
+diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
+index 27b93280d342..c7132eb72071 100644
+--- a/drivers/media/v4l2-core/v4l2-dev.c
++++ b/drivers/media/v4l2-core/v4l2-dev.c
+@@ -657,24 +657,16 @@ static void determine_valid_ioctls(struct video_device *vdev)
+ 		SET_VALID_IOCTL(ops, VIDIOC_G_SLICED_VBI_CAP, vidioc_g_sliced_vbi_cap);
+ 	} else if (is_sdr && is_rx) {
+ 		/* SDR receiver specific ioctls */
+-		if (ops->vidioc_enum_fmt_sdr_cap)
+-			set_bit(_IOC_NR(VIDIOC_ENUM_FMT), valid_ioctls);
+-		if (ops->vidioc_g_fmt_sdr_cap)
+-			set_bit(_IOC_NR(VIDIOC_G_FMT), valid_ioctls);
+-		if (ops->vidioc_s_fmt_sdr_cap)
+-			set_bit(_IOC_NR(VIDIOC_S_FMT), valid_ioctls);
+-		if (ops->vidioc_try_fmt_sdr_cap)
+-			set_bit(_IOC_NR(VIDIOC_TRY_FMT), valid_ioctls);
++		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_sdr_cap);
++		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_sdr_cap);
++		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_sdr_cap);
++		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_sdr_cap);
+ 	} else if (is_sdr && is_tx) {
+ 		/* SDR transmitter specific ioctls */
+-		if (ops->vidioc_enum_fmt_sdr_out)
+-			set_bit(_IOC_NR(VIDIOC_ENUM_FMT), valid_ioctls);
+-		if (ops->vidioc_g_fmt_sdr_out)
+-			set_bit(_IOC_NR(VIDIOC_G_FMT), valid_ioctls);
+-		if (ops->vidioc_s_fmt_sdr_out)
+-			set_bit(_IOC_NR(VIDIOC_S_FMT), valid_ioctls);
+-		if (ops->vidioc_try_fmt_sdr_out)
+-			set_bit(_IOC_NR(VIDIOC_TRY_FMT), valid_ioctls);
++		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_sdr_out);
++		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_sdr_out);
++		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_sdr_out);
++		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_sdr_out);
+ 	} else if (is_meta && is_rx) {
+ 		/* metadata capture specific ioctls */
+ 		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_meta_cap);
 -- 
 2.20.1
 
