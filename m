@@ -8,63 +8,65 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9F82C4CEC4
-	for <linux-media@archiver.kernel.org>; Wed, 18 Sep 2019 17:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E461C4CEC9
+	for <linux-media@archiver.kernel.org>; Wed, 18 Sep 2019 17:55:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 79B2E207FC
-	for <linux-media@archiver.kernel.org>; Wed, 18 Sep 2019 17:55:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4620D207FC
+	for <linux-media@archiver.kernel.org>; Wed, 18 Sep 2019 17:55:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W32YcAxZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q4REcxlT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbfIRRz3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 18 Sep 2019 13:55:29 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33462 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726369AbfIRRz3 (ORCPT
+        id S1727397AbfIRRza (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Sep 2019 13:55:30 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39460 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726983AbfIRRza (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 18 Sep 2019 13:55:29 -0400
-Received: by mail-wr1-f65.google.com with SMTP id b9so393344wrs.0
-        for <linux-media@vger.kernel.org>; Wed, 18 Sep 2019 10:55:27 -0700 (PDT)
+        Wed, 18 Sep 2019 13:55:30 -0400
+Received: by mail-wr1-f66.google.com with SMTP id r3so348897wrj.6
+        for <linux-media@vger.kernel.org>; Wed, 18 Sep 2019 10:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=cnfgUXOSYJoNrbqhoykUBse7iwxXL6NxI0NEtGgJqVY=;
-        b=W32YcAxZQgAkQmD3LY6uY1f4K2HB+VN5PTlosXvvtBlCZezf2yvojAcB1IAfKBihsI
-         S6XaCb7k7Sz+TWbyexgNdFV/e4VNg3DLfbxWnQcREEkZ3Nak4z/h2HiO0k+RoEQzDHG6
-         YetF8F2cpwTmK+skNIo4sDM5HwVKTw6Nmr5FokggEiI62q82wj3CoF9BZHD8P1rVK8cK
-         cafny9u+Z8nPc5v0XE2hGVu2fRLT8JXqOLYBpdu5m0ip9CI4sFNwWoOEfdH0oUGblzNA
-         bVx8TheM4BS04TVbZw+CUzUMbjTDgqHZkTW5pKyukXFt4pDOuYc69P9WHBO1n5TY3osS
-         kcQw==
+        bh=rsp933T4bclNOh5WQSR/JAsXxgUbsieI1rwAApL1kOY=;
+        b=q4REcxlThKfapbc0wRjfc1rbbya5nTk5rLcnYRk/a8IgmOTE0zzK1MuQiQOheEXZHs
+         rAs6nIYBgql0QbfgDhw1lw2BMS/znJ6feLVuctSnOGAp5XUKASFShJrw/sf9kvRWrRM/
+         gagndFh9TuX2PB3OHBlEaf1gGGroWKljMDRK+xaFADpAk3wV34HXbIbr/wAjf/0nWRvL
+         5mqswFitafI4T2atxsnZUmWUEWxukwPDHbleN9mggEKEZmaHIeZhLwiW18dtXn9Bq0GR
+         0guUOqF2q/QECvKK5atvO8oFnMUUbQeT9yAMqON+xC0WZ/vZlcGBjz4eNbMoNm0NK6CD
+         2ocw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=cnfgUXOSYJoNrbqhoykUBse7iwxXL6NxI0NEtGgJqVY=;
-        b=GHLCG3aiKT0BpNC9OJZN/29HpY0nEjuarfKWACXlU73g4Kid5HtTh85fgQDSB7Ubat
-         MnOt+eyk85lT+to6QCF4r3j+Z5/0f7+cdHhfeqV+E2NTev0T8bGvoU+xEBmsES/k91Wh
-         hwGKF3My4mbIRAWJLwf/4Fb3pr7M+3uiT6xAQo6+wjDHiooCyE60hhaO+weJKLWYCAoG
-         UxGVC7nlLyRb0wbYFLufWBb4xyrbWh3DqT3+0iXcaJ0/MIfLh8nYVgWKJwZAry1aseUN
-         2Jk3qAy5b2IG1lJebmqcKc6tW8JtTmBz/qX4BlJncbuj0y3n8f7U4pfOUdbRI6byaXcO
-         wSBg==
-X-Gm-Message-State: APjAAAU63I1PmLWcpxmbNPJ5MZ4YbLVFhVJtDBCnt0PNdrKmaiY9rQmJ
-        sTEfVH6dLF+H/dEyFaSee30=
-X-Google-Smtp-Source: APXvYqx3MCUPldqva5/DncZ6EVIsWZTF7igxX5q/3C+6umWoXnSgY5zAxgN4TrbW8Fm8DMKZ/oZDKw==
-X-Received: by 2002:adf:fa90:: with SMTP id h16mr3951810wrr.52.1568829326284;
-        Wed, 18 Sep 2019 10:55:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rsp933T4bclNOh5WQSR/JAsXxgUbsieI1rwAApL1kOY=;
+        b=BXUpOnYeLrE093mfGhpSeFk82EwThwZLgY5qdkNw6Uv9CdglNhPHBosAUplHC+RL8y
+         zCPLdv4P7EZuy9/yTXlvCspL0OcFkcwJPtrdTzv3PEe84undJVx82wdPmhiuvtTNGJig
+         FIFEy/pZcKIMdhHMLd0X2ms1C1fMtqjwOvRiIpDDVJAGMLWYulVL0cNm3RU2Ijrkhx2V
+         q71VZOjLUSPbzV+GpIZh9Z/czP9zdXctpTTcUEFw6gCQG/rU+20d6epXXKsRJjsXBGn+
+         UHH60TskkXaaR06azlyHXEn7FcH7mLQ0bK9BvBer/krQUUAFo8dqRgqfsNQEcVQziJst
+         LmhQ==
+X-Gm-Message-State: APjAAAUCjbcltAdKJIH5v8HYjJIVN1vvpyiPVqt6OsSoRqSXNk8TekIF
+        05J6xtiF7cSLfcTyHx0/J7AykwxB
+X-Google-Smtp-Source: APXvYqzvsBJyXCxevf8+N4gWZ6qAdG50HFdz2f+4KNTDRfDSgqjHuZ35F+Pgc1L+cTaDY2BVzD5IZQ==
+X-Received: by 2002:adf:e546:: with SMTP id z6mr3966449wrm.113.1568829327811;
+        Wed, 18 Sep 2019 10:55:27 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:f002:ffad:c852:eff6])
-        by smtp.gmail.com with ESMTPSA id q3sm4074027wru.33.2019.09.18.10.55.25
+        by smtp.gmail.com with ESMTPSA id q3sm4074027wru.33.2019.09.18.10.55.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Sep 2019 10:55:25 -0700 (PDT)
+        Wed, 18 Sep 2019 10:55:27 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
         chris@chris-wilson.co.uk, daniel@ffwll.ch, sumit.semwal@linaro.org
-Subject: [PATCH 1/3] dma-buf: add dma_resv_ctx for deadlock handling
-Date:   Wed, 18 Sep 2019 19:55:23 +0200
-Message-Id: <20190918175525.49441-1-christian.koenig@amd.com>
+Subject: [PATCH 3/3] drm/gem: use new dma_resv_ctx
+Date:   Wed, 18 Sep 2019 19:55:25 +0200
+Message-Id: <20190918175525.49441-3-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190918175525.49441-1-christian.koenig@amd.com>
+References: <20190918175525.49441-1-christian.koenig@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -73,244 +75,205 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The ww_mutex framework allows for detecting deadlocks when multiple
-threads try to acquire the same set of locks in different order.
-
-The problem is that handling those deadlocks was the burden of the user of
-the ww_mutex implementation and at least some users didn't got that right
-on the first try.
-
-So introduce a new dma_resv_ctx object which can be used to
-simplify the deadlock handling. This is done by tracking all locked
-dma_resv objects in the context as well as the last contended object.
-
-When a deadlock occurse we now unlock all previously locked objects and
-acquire the contended lock in the slow path. After this is done -EDEADLK
-is still returned to signal that all other locks now need to be
-re-acquired again.
+Use the new dma_resv_ctx object instead of implementing
+deadlock handling on our own.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/Makefile       |   2 +-
- drivers/dma-buf/dma-resv-ctx.c | 108 +++++++++++++++++++++++++++++++++
- include/linux/dma-resv-ctx.h   |  68 +++++++++++++++++++++
- include/linux/dma-resv.h       |   1 +
- 4 files changed, 178 insertions(+), 1 deletion(-)
- create mode 100644 drivers/dma-buf/dma-resv-ctx.c
- create mode 100644 include/linux/dma-resv-ctx.h
+ drivers/gpu/drm/drm_gem.c               | 62 +++++++------------------
+ drivers/gpu/drm/panfrost/panfrost_job.c |  2 +-
+ drivers/gpu/drm/v3d/v3d_gem.c           | 10 ++--
+ drivers/gpu/drm/virtio/virtgpu_drv.h    |  2 +-
+ include/drm/drm_gem.h                   |  5 +-
+ 5 files changed, 27 insertions(+), 54 deletions(-)
 
-diff --git a/drivers/dma-buf/Makefile b/drivers/dma-buf/Makefile
-index 03479da06422..da7701c85de2 100644
---- a/drivers/dma-buf/Makefile
-+++ b/drivers/dma-buf/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-y := dma-buf.o dma-fence.o dma-fence-array.o dma-fence-chain.o \
--	 dma-resv.o seqno-fence.o
-+	 dma-resv.o dma-resv-ctx.o seqno-fence.o
- obj-$(CONFIG_SYNC_FILE)		+= sync_file.o
- obj-$(CONFIG_SW_SYNC)		+= sw_sync.o sync_debug.o
- obj-$(CONFIG_UDMABUF)		+= udmabuf.o
-diff --git a/drivers/dma-buf/dma-resv-ctx.c b/drivers/dma-buf/dma-resv-ctx.c
-new file mode 100644
-index 000000000000..cad10fa6f80b
---- /dev/null
-+++ b/drivers/dma-buf/dma-resv-ctx.c
-@@ -0,0 +1,108 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright 2019 Advanced Micro Devices, Inc.
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a
-+ * copy of this software and associated documentation files (the "Software"),
-+ * to deal in the Software without restriction, including without limitation
-+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-+ * and/or sell copies of the Software, and to permit persons to whom the
-+ * Software is furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-+ * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
-+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ * OTHER DEALINGS IN THE SOFTWARE.
-+ *
-+ * Authors:
-+ *	Christian König <christian.koenig@amd.com>
-+ */
-+
-+#include <linux/dma-resv-ctx.h>
-+
-+/**
-+ * dma_resv_ctx_init - initialize a reservation context
-+ * @ctx: the context to initialize
-+ *
-+ * Start using this reservation context to lock reservation objects for update.
-+ */
-+void dma_resv_ctx_init(struct dma_resv_ctx *ctx)
-+{
-+	ww_acquire_init(&ctx->base, &reservation_ww_class);
-+	init_llist_head(&ctx->locked);
-+	ctx->contended = NULL;
-+}
-+EXPORT_SYMBOL(dma_resv_ctx_init);
-+
-+/**
-+ * dma_resv_ctx_unlock_all - unlock all reservation objects
-+ * @ctx: the context which holds the reservation objects
-+ *
-+ * Unlocks all reservation objects locked with this context.
-+ */
-+void dma_resv_ctx_unlock_all(struct dma_resv_ctx *ctx)
-+{
-+	struct dma_resv *obj, *next;
-+
-+	if (ctx->contended)
-+		dma_resv_unlock(ctx->contended);
-+	ctx->contended = NULL;
-+
-+	llist_for_each_entry_safe(obj, next, ctx->locked.first, locked)
-+		ww_mutex_unlock(&obj->lock);
-+	init_llist_head(&ctx->locked);
-+}
-+EXPORT_SYMBOL(dma_resv_ctx_unlock_all);
-+
-+/**
-+ * dma_resv_ctx_lock - lock a reservation object with deadlock handling
-+ * @ctx: the context which should be used to lock the object
-+ * @obj: the object which needs to be locked
-+ * @interruptible: if we should wait interruptible
-+ *
-+ * Use @ctx to lock the reservation object. If a deadlock is detected we backoff
-+ * by releasing all locked objects and use the slow path to lock the reservation
-+ * object. After successfully locking in the slow path -EDEADLK is returned to
-+ * signal that all other locks must be re-taken as well.
-+ */
-+int dma_resv_ctx_lock(struct dma_resv_ctx *ctx, struct dma_resv *obj,
-+		      bool interruptible)
-+{
-+	int ret = 0;
-+
-+	if (unlikely(ctx->contended == obj))
-+		ctx->contended = NULL;
-+	else if (interruptible)
-+		ret = dma_resv_lock_interruptible(obj, &ctx->base);
-+	else
-+		ret = dma_resv_lock(obj, &ctx->base);
-+
-+	if (likely(!ret)) {
-+		/* don't use llist_add here, we have separate locking */
-+		obj->locked.next = ctx->locked.first;
-+		ctx->locked.first = &obj->locked;
-+		return 0;
-+	}
-+	if (unlikely(ret != -EDEADLK))
-+		return ret;
-+
-+	dma_resv_ctx_unlock_all(ctx);
-+
-+	if (interruptible) {
-+		ret = dma_resv_lock_slow_interruptible(obj, &ctx->base);
-+		if (unlikely(ret))
-+			return ret;
-+	} else {
-+		dma_resv_lock_slow(obj, &ctx->base);
-+	}
-+
-+	ctx->contended = obj;
-+	return -EDEADLK;
-+}
-+EXPORT_SYMBOL(dma_resv_ctx_lock);
-diff --git a/include/linux/dma-resv-ctx.h b/include/linux/dma-resv-ctx.h
-new file mode 100644
-index 000000000000..86473de65167
---- /dev/null
-+++ b/include/linux/dma-resv-ctx.h
-@@ -0,0 +1,68 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright 2019 Advanced Micro Devices, Inc.
-+ *
-+ * Permission is hereby granted, free of charge, to any person obtaining a
-+ * copy of this software and associated documentation files (the "Software"),
-+ * to deal in the Software without restriction, including without limitation
-+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-+ * and/or sell copies of the Software, and to permit persons to whom the
-+ * Software is furnished to do so, subject to the following conditions:
-+ *
-+ * The above copyright notice and this permission notice shall be included in
-+ * all copies or substantial portions of the Software.
-+ *
-+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-+ * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
-+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-+ * OTHER DEALINGS IN THE SOFTWARE.
-+ *
-+ * Authors:
-+ *	Christian König <christian.koenig@amd.com>
-+ */
-+
-+#ifndef _LINUX_DMA_RESV_CTX_H
-+#define _LINUX_DMA_RESV_CTX_H
-+
-+#include <linux/llist.h>
-+#include <linux/dma-resv.h>
-+
-+/**
-+ * struct dma_resv_ctx - context to lock reservation objects
-+ * @base: ww_acquire_ctx used for deadlock detection
-+ * @locked: list of dma_resv objects locked in this context
-+ * @contended: contended dma_resv object
-+ */
-+struct dma_resv_ctx {
-+	struct ww_acquire_ctx base;
-+	struct llist_head locked;
-+	struct dma_resv *contended;
-+};
-+
-+/**
-+ * dma_resv_ctx_done - wrapper for ww_acquire_done
-+ * @ctx: the reservation context which is done with locking
-+ */
-+static inline void dma_resv_ctx_done(struct dma_resv_ctx *ctx)
-+{
-+	ww_acquire_done(&ctx->base);
-+}
-+
-+/**
-+ * dma_resv_ctx_fini - wrapper for ww_acquire_fini
-+ * @ctx: the reservation context which is finished
-+ */
-+static inline void dma_resv_ctx_fini(struct dma_resv_ctx *ctx)
-+{
-+	ww_acquire_fini(&ctx->base);
-+}
-+
-+void dma_resv_ctx_init(struct dma_resv_ctx *ctx);
-+void dma_resv_ctx_unlock_all(struct dma_resv_ctx *ctx);
-+int dma_resv_ctx_lock(struct dma_resv_ctx *ctx, struct dma_resv *obj,
-+		      bool interruptible);
-+
-+#endif /* _LINUX_DMA_RESV_CTX_H */
-diff --git a/include/linux/dma-resv.h b/include/linux/dma-resv.h
-index ee50d10f052b..1267822c2669 100644
---- a/include/linux/dma-resv.h
-+++ b/include/linux/dma-resv.h
-@@ -71,6 +71,7 @@ struct dma_resv_list {
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index 6854f5867d51..b3b684cf1e1b 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1280,66 +1280,38 @@ void drm_gem_vunmap(struct drm_gem_object *obj, void *vaddr)
   */
- struct dma_resv {
- 	struct ww_mutex lock;
-+	struct llist_node locked;
- 	seqcount_t seq;
+ int
+ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+-			  struct ww_acquire_ctx *acquire_ctx)
++			  struct dma_resv_ctx *acquire_ctx)
+ {
+-	int contended = -1;
+ 	int i, ret;
  
- 	struct dma_fence __rcu *fence_excl;
+-	ww_acquire_init(acquire_ctx, &reservation_ww_class);
++	dma_resv_ctx_init(acquire_ctx);
+ 
+ retry:
+-	if (contended != -1) {
+-		struct drm_gem_object *obj = objs[contended];
+-
+-		ret = dma_resv_lock_slow_interruptible(obj->resv,
+-								 acquire_ctx);
+-		if (ret) {
+-			ww_acquire_done(acquire_ctx);
+-			return ret;
+-		}
+-	}
+-
+ 	for (i = 0; i < count; i++) {
+-		if (i == contended)
+-			continue;
+-
+-		ret = dma_resv_lock_interruptible(objs[i]->resv,
+-							    acquire_ctx);
+-		if (ret) {
+-			int j;
+-
+-			for (j = 0; j < i; j++)
+-				dma_resv_unlock(objs[j]->resv);
+-
+-			if (contended != -1 && contended >= i)
+-				dma_resv_unlock(objs[contended]->resv);
+-
+-			if (ret == -EDEADLK) {
+-				contended = i;
+-				goto retry;
+-			}
+-
+-			ww_acquire_done(acquire_ctx);
+-			return ret;
+-		}
++		ret = dma_resv_ctx_lock(acquire_ctx, objs[i]->resv, true);
++		if (ret)
++			goto error;
+ 	}
+ 
+-	ww_acquire_done(acquire_ctx);
+-
++	dma_resv_ctx_done(acquire_ctx);
+ 	return 0;
++
++error:
++	if (ret == -EDEADLK)
++		goto retry;
++
++	dma_resv_ctx_unlock_all(acquire_ctx);
++	dma_resv_ctx_done(acquire_ctx);
++	return ret;
+ }
+ EXPORT_SYMBOL(drm_gem_lock_reservations);
+ 
+ void
+ drm_gem_unlock_reservations(struct drm_gem_object **objs, int count,
+-			    struct ww_acquire_ctx *acquire_ctx)
++			    struct dma_resv_ctx *acquire_ctx)
+ {
+-	int i;
+-
+-	for (i = 0; i < count; i++)
+-		dma_resv_unlock(objs[i]->resv);
+-
+-	ww_acquire_fini(acquire_ctx);
++	dma_resv_ctx_unlock_all(acquire_ctx);
++	dma_resv_ctx_fini(acquire_ctx);
+ }
+ EXPORT_SYMBOL(drm_gem_unlock_reservations);
+ 
+diff --git a/drivers/gpu/drm/panfrost/panfrost_job.c b/drivers/gpu/drm/panfrost/panfrost_job.c
+index 05c85f45a0de..b73079173c57 100644
+--- a/drivers/gpu/drm/panfrost/panfrost_job.c
++++ b/drivers/gpu/drm/panfrost/panfrost_job.c
+@@ -218,7 +218,7 @@ int panfrost_job_push(struct panfrost_job *job)
+ 	struct panfrost_device *pfdev = job->pfdev;
+ 	int slot = panfrost_job_get_slot(job);
+ 	struct drm_sched_entity *entity = &job->file_priv->sched_entity[slot];
+-	struct ww_acquire_ctx acquire_ctx;
++	struct dma_resv_ctx acquire_ctx;
+ 	int ret = 0;
+ 
+ 	mutex_lock(&pfdev->sched_lock);
+diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
+index 5d80507b539b..745570fccad9 100644
+--- a/drivers/gpu/drm/v3d/v3d_gem.c
++++ b/drivers/gpu/drm/v3d/v3d_gem.c
+@@ -248,7 +248,7 @@ v3d_invalidate_caches(struct v3d_dev *v3d)
+  */
+ static int
+ v3d_lock_bo_reservations(struct v3d_job *job,
+-			 struct ww_acquire_ctx *acquire_ctx)
++			 struct dma_resv_ctx *acquire_ctx)
+ {
+ 	int i, ret;
+ 
+@@ -486,7 +486,7 @@ v3d_push_job(struct v3d_file_priv *v3d_priv,
+ static void
+ v3d_attach_fences_and_unlock_reservation(struct drm_file *file_priv,
+ 					 struct v3d_job *job,
+-					 struct ww_acquire_ctx *acquire_ctx,
++					 struct dma_resv_ctx *acquire_ctx,
+ 					 u32 out_sync,
+ 					 struct dma_fence *done_fence)
+ {
+@@ -530,7 +530,7 @@ v3d_submit_cl_ioctl(struct drm_device *dev, void *data,
+ 	struct drm_v3d_submit_cl *args = data;
+ 	struct v3d_bin_job *bin = NULL;
+ 	struct v3d_render_job *render;
+-	struct ww_acquire_ctx acquire_ctx;
++	struct dma_resv_ctx acquire_ctx;
+ 	int ret = 0;
+ 
+ 	trace_v3d_submit_cl_ioctl(&v3d->drm, args->rcl_start, args->rcl_end);
+@@ -642,7 +642,7 @@ v3d_submit_tfu_ioctl(struct drm_device *dev, void *data,
+ 	struct v3d_file_priv *v3d_priv = file_priv->driver_priv;
+ 	struct drm_v3d_submit_tfu *args = data;
+ 	struct v3d_tfu_job *job;
+-	struct ww_acquire_ctx acquire_ctx;
++	struct dma_resv_ctx acquire_ctx;
+ 	int ret = 0;
+ 
+ 	trace_v3d_submit_tfu_ioctl(&v3d->drm, args->iia);
+@@ -738,7 +738,7 @@ v3d_submit_csd_ioctl(struct drm_device *dev, void *data,
+ 	struct drm_v3d_submit_csd *args = data;
+ 	struct v3d_csd_job *job;
+ 	struct v3d_job *clean_job;
+-	struct ww_acquire_ctx acquire_ctx;
++	struct dma_resv_ctx acquire_ctx;
+ 	int ret;
+ 
+ 	trace_v3d_submit_csd_ioctl(&v3d->drm, args->cfg[5], args->cfg[6]);
+diff --git a/drivers/gpu/drm/virtio/virtgpu_drv.h b/drivers/gpu/drm/virtio/virtgpu_drv.h
+index 314e02f94d9c..02b4ee1deeb4 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_drv.h
++++ b/drivers/gpu/drm/virtio/virtgpu_drv.h
+@@ -77,7 +77,7 @@ struct virtio_gpu_object {
+ 	container_of((gobj), struct virtio_gpu_object, base.base)
+ 
+ struct virtio_gpu_object_array {
+-	struct ww_acquire_ctx ticket;
++	struct dma_resv_ctx ticket;
+ 	struct list_head next;
+ 	u32 nents, total;
+ 	struct drm_gem_object *objs[];
+diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+index 6aaba14f5972..dff4d45a2c41 100644
+--- a/include/drm/drm_gem.h
++++ b/include/drm/drm_gem.h
+@@ -36,6 +36,7 @@
+ 
+ #include <linux/kref.h>
+ #include <linux/dma-resv.h>
++#include <linux/dma-resv-ctx.h>
+ 
+ #include <drm/drm_vma_manager.h>
+ 
+@@ -393,9 +394,9 @@ struct drm_gem_object *drm_gem_object_lookup(struct drm_file *filp, u32 handle);
+ long drm_gem_dma_resv_wait(struct drm_file *filep, u32 handle,
+ 				    bool wait_all, unsigned long timeout);
+ int drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+-			      struct ww_acquire_ctx *acquire_ctx);
++			      struct dma_resv_ctx *acquire_ctx);
+ void drm_gem_unlock_reservations(struct drm_gem_object **objs, int count,
+-				 struct ww_acquire_ctx *acquire_ctx);
++				 struct dma_resv_ctx *acquire_ctx);
+ int drm_gem_fence_array_add(struct xarray *fence_array,
+ 			    struct dma_fence *fence);
+ int drm_gem_fence_array_add_implicit(struct xarray *fence_array,
 -- 
 2.17.1
 
