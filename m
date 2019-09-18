@@ -2,70 +2,83 @@ Return-Path: <SRS0=QCpt=XN=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=DKIMWL_WL_MED,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26923C4CECD
-	for <linux-media@archiver.kernel.org>; Wed, 18 Sep 2019 02:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E10C4CEC4
+	for <linux-media@archiver.kernel.org>; Wed, 18 Sep 2019 05:03:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F105321897
-	for <linux-media@archiver.kernel.org>; Wed, 18 Sep 2019 02:15:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1568772908;
-	bh=KOeaZnHk60Ok30bIWubl2BcYdu5uR5JKYioFhYbhzeM=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:List-ID:From;
-	b=e9EQwgDVTgjqysbuLrvpzVbks8y7hsodxA+N+HtWOxMNU6Ogn5GNhLvh0i1R3Zpx4
-	 bdfeBf246ZBV00+q4AFtEOUu01sYhSZTharVcrYsY7ZCusaEO7xFv18jM3OyzgTTtM
-	 zlp2bQCFsa1U/Y8FCsdARo9nabS9FKfHtXsBXfdw=
+	by mail.kernel.org (Postfix) with ESMTP id 8C191214AF
+	for <linux-media@archiver.kernel.org>; Wed, 18 Sep 2019 05:03:26 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ItjY6m3M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbfIRCPD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 17 Sep 2019 22:15:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60232 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727774AbfIRCPC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 17 Sep 2019 22:15:02 -0400
-Subject: Re: [GIT PULL for v5.4-rc1] media updates
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568772902;
-        bh=KOeaZnHk60Ok30bIWubl2BcYdu5uR5JKYioFhYbhzeM=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Ygb1dAV7A+J0gBDj+L5b0ANla7A+4XNsM4m2mrrz4wjrJyBw3dz/bEv3oOiroOGcE
-         6R+PTANKN7tIsB98mhz5HJZ5KTc7vVmtZlhAiBGFztxnMIKuyOg7JCP/kjaAtq8X8A
-         tn2RRDeTyNj85VdivP7+W/guRUjrgiYJKtjB2NJg=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190916092515.66549c3b@coco.lan>
-References: <20190916092515.66549c3b@coco.lan>
-X-PR-Tracked-List-Id: <linux-media.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190916092515.66549c3b@coco.lan>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media
- media/v5.4-1
-X-PR-Tracked-Commit-Id: 6f51fdfd8229d5358c2d6e272cf73478866e8ddc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e7345f92c27af003f219ad026d0e629a50b41e5c
-Message-Id: <156877290227.2898.11068539201149651331.pr-tracker-bot@kernel.org>
-Date:   Wed, 18 Sep 2019 02:15:02 +0000
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1727075AbfIRFD0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 18 Sep 2019 01:03:26 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:41613 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726930AbfIRFDZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 18 Sep 2019 01:03:25 -0400
+Received: by mail-ed1-f65.google.com with SMTP id f20so2933413edv.8
+        for <linux-media@vger.kernel.org>; Tue, 17 Sep 2019 22:03:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o6Yu5aLgFr4xlN3BdFA/n9HFrfFS0OabwkHg9ZOTitM=;
+        b=ItjY6m3MusiWRpAUhexsCn2x7kWW7VXP29efW/3uz4qPiXQfzG03vD4JkXRQ2D7skf
+         JFZwUHN2MGp1Ct1Rgx8g0J3N/PYfEc9y+aBVN5tK6t3sAeJFVjYSq9pe5OCZlIowgiWH
+         37j9TytWf9mwsqHPC0m/pNFJrl1RRnF9pgB/sbUn6V0yRRrkzB6bTeckc3csZQ3WLpg5
+         xvvB7McYTqhmS4V3IO/gpgrpInApVa6eBEYCmIdB+Cic87G2YHZaDI9J8KaeGAVoltW1
+         1S1/Rh4Xr5s70ajpyKIUwy8jpc09U4hmmUW+OjDcW0bqhQcqFoLyZgLWkcnVtDFTuntS
+         EF4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o6Yu5aLgFr4xlN3BdFA/n9HFrfFS0OabwkHg9ZOTitM=;
+        b=gsrUT7soa218QLBn7AZa7M1JWgEhw5N5ch7jtLD7bIfMti4P1NTTC9qAXEKyvc4tKg
+         F/l50fkR22I/PDq+LWV0FP6YZCCbhxo0w/0uB78i+JCXLU4fCM8jB6YTxH0gn+7aorvI
+         OH9Z5gdwdXsklOHqS4zReaeu0d5lbIn3eO2NH+naMdyiA1zxl3g3Mxt8aLgj4ECVgi13
+         /smqwUueHhC2tR8aqka9/iIZXaoqyNlMFs0SN7meKXrk4oxGVcOt7hW+wU9dwIiw38Mf
+         Dsb8vBcZmbcdq7sxaOYpp1v7IQTTpsRypxtofX9rInM5KW5HyS3IA4wZ3bidfjWF6IT1
+         qtUw==
+X-Gm-Message-State: APjAAAWZkUfwLo26hTkijp67Mn2SS+Alnqlx5jnpYvh8fg/zIW9J0zLI
+        aJR9wQZN2OiN40rX02+8jmdPIxgQy4Kqxmfm6hUFpPFbXgXNsQ==
+X-Google-Smtp-Source: APXvYqyRColqHKOhn4iMIgeNXOivEgz2mu4ZEduWaPxQI1c56QurLgQdtjB6eorbWwrymHzWI/0PZ5LTSM1ZdQJQrIo=
+X-Received: by 2002:a50:9b58:: with SMTP id a24mr1007726edj.29.1568783003621;
+ Tue, 17 Sep 2019 22:03:23 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190909072815.23981-1-boris.brezillon@collabora.com>
+In-Reply-To: <20190909072815.23981-1-boris.brezillon@collabora.com>
+From:   Francois Buergisser <fbuergisser@google.com>
+Date:   Wed, 18 Sep 2019 14:03:12 +0900
+Message-ID: <CABK_QF10zXzkYaLgmkoDLcOYZHj4Es0ZuLWxM+mY=A3H-JBfQA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] media: hantro: h264: Fix a comment in b1_ref_list_cmp()
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        linux-media@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Jonas Karlman <jonas@kwiboo.se>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The pull request you sent on Mon, 16 Sep 2019 09:25:15 -0300:
-
-> git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media media/v5.4-1
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e7345f92c27af003f219ad026d0e629a50b41e5c
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+On Mon, Sep 9, 2019 at 4:28 PM Boris Brezillon
+<boris.brezillon@collabora.com> wrote:
+>
+> So it matches the code and the spec.
+>
+> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+Tested-by: Francois Buergisser <fbuergisser@chromium.org>
