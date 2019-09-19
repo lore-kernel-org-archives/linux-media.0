@@ -2,215 +2,209 @@ Return-Path: <SRS0=XAE8=XO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-6.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90129C49ED7
-	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:40:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4FEFC49ED7
+	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 22:39:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6015A21907
-	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:40:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE24621920
+	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 22:39:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="bs/93Jwt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nvIPEjO1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392548AbfISUjW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Sep 2019 16:39:22 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:42632 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388901AbfISUjV (ORCPT
+        id S2404466AbfISWjt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Sep 2019 18:39:49 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:33853 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393525AbfISWjs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Sep 2019 16:39:21 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdKnq116993;
-        Thu, 19 Sep 2019 15:39:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568925560;
-        bh=RL8A9dz6TwS35t2dubytM8Akx1mLkbACo91LdijmYp0=;
-        h=From:To:CC:Subject:Date;
-        b=bs/93JwtMNTVDae9Pfo8yTABfpGHo+svWMQweZmB0dfUr89FkxGhjubDbxx2zVK8G
-         8UXI89l4s8L7/BlYLs72OIcWLIcf280fFzIafRxqKO2iz8qFpZ3o76IA9vpdRfMcQG
-         SLvMJilpf0oW5sKFa6ZapXfHrmfbLWYaKuLFM+/U=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8JKdKiv002947
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 19 Sep 2019 15:39:20 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 19
- Sep 2019 15:39:16 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 19 Sep 2019 15:39:20 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdKIT014276;
-        Thu, 19 Sep 2019 15:39:20 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch 00/13] media: am437x-vpfe: overdue maintenance
-Date:   Thu, 19 Sep 2019 15:41:12 -0500
-Message-ID: <20190919204125.15254-1-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 19 Sep 2019 18:39:48 -0400
+Received: by mail-ed1-f67.google.com with SMTP id p10so4643649edq.1
+        for <linux-media@vger.kernel.org>; Thu, 19 Sep 2019 15:39:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MMUjJCwIl0O1q1PtvFRwqlu/rYQ+tpcv/qKGn4UhdgA=;
+        b=nvIPEjO1WeoDUWrnWwCmiI8mGeM+jGArxJPGVfCfHiRyhLSci3YlZ4rIIZBwTNGz5Q
+         AGX76maDriHa97Ub2/b0xqOUax0ZFAWObJ9QSiVKkLB6nol8PW/sQrK15ar2cb1Sp5gb
+         f9nW7TG1IZYJq60jyyKy/quLssWhQqNarivPMMmn8bydY3iDJDeuMiPoMUsjdBk2o+DW
+         f54bB2d6oEB2BJNmQP4RvFoqLKhZWSfB+6f7CbkqDOTJiTiGisnibmawv6OO2wCwxKvH
+         eTy1K6mhUVfYLvtEmbeBZ8+nrHkzE8OYvqZFjOapaH9xN1zF1oN4bEY5BJa+Z+kJOcTg
+         fHaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MMUjJCwIl0O1q1PtvFRwqlu/rYQ+tpcv/qKGn4UhdgA=;
+        b=iviMtPgZT5bHwwKL7bqBokbmgql4ZAptcxRldJ8wW2XpRGWMcmnV5NfFCc0ALk0/kl
+         4HZImxEeFiA/RjSIpHhtfidxbgEhXhApEZLQGCsSh/eXjeoR/SfjRUUGictGUDaHs0jq
+         o3TPKw3X2B+I8Cjs7we6LDd0i/dxDpHM+yfnbD+vo5b/LsZi0aXssD5e1O1mTvS3uBZk
+         BvdJrp8mLCAYPLEyRY8W9+1WcjlTp9kGXgkqLzT5LWh3686Tf48YXSakgx8bThT9qYWC
+         qtypwayMd3XbFxJdl059RO2Y53lEmO/CJQPS0o+JXxNzjQ8VZxZqizwirqeprL1QBnGq
+         OMFA==
+X-Gm-Message-State: APjAAAXLyLUpAKLjwXysfRPp3MUJo4FGKc/AfPmvrK9XkoTBRM9aR1ov
+        pTTnR/JGAReOGrGigjkgTHOw0aBiEQ8YRwjZeBw=
+X-Google-Smtp-Source: APXvYqxzmrmmAO7X+jj/6MZ10sKVva39TYFo83SPWoEMk9iIqCCsW5xeMm8zxuGbeez8n+hi5znolBdbXH8CQy6qZZ0=
+X-Received: by 2002:a50:bb22:: with SMTP id y31mr19327451ede.58.1568932785955;
+ Thu, 19 Sep 2019 15:39:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20190919151358.7030-1-pretoriano.mp@gmail.com> <20190919154016.l32myqh5zzccbggf@gofer.mess.org>
+In-Reply-To: <20190919154016.l32myqh5zzccbggf@gofer.mess.org>
+From:   Flavius Adrian <pretoriano.mp@gmail.com>
+Date:   Fri, 20 Sep 2019 01:39:35 +0300
+Message-ID: <CAOLSq=CPHeYpJ_j+0ZRjO0LtSC8qy4p9rfXP6d4_cPT0d8C9fA@mail.gmail.com>
+Subject: Re: [PATCH] media: rc: Add support for another iMON 0xffdc device
+To:     Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org, mchehab@kernel.org,
+        Chris Vandomelen <chris@sightworks.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series is a collection of patches we have been carrying for a
-while.
+On Thu, Sep 19, 2019 at 6:40 PM Sean Young <sean@mess.org> wrote:
+>
+> Hi Flavius,
+>
+> Please make sure you label your patch with sequentially increasing versions.
+> I think the last one was v3 and there is no v4.
+>
+Hi Sean,
+thanks for taking the time to review this patch.
+I decided to re-send the patch because the previous one was a bit messy,
+mostly because some mistakes i did,so that's why there's no version on
+this one.Please ignore the previous ones.
 
-A few patches do fix actual bug and v4l2-compliance errors/warnings.
-Other are drivers re-work to simplify/clarify the code for easier
-maintenance.
+> On Thu, Sep 19, 2019 at 06:13:58PM +0300, Flavius Georgescu wrote:
+> > The device it's an iMON UltraBay (0x98 in config byte) with LCD,
+> > IR and dual-knobs front panel.
+> >
+> > To work properly the device also require its own key table,
+> > and repeat suppression for all buttons.
+> >
+> > Signed-off-by: Flavius Georgescu <pretoriano.mp@gmail.com>
+> > Co-developed-by: Chris Vandomelen <chris@sightworks.com>
+> > Signed-off-by: Chris Vandomelen <chris@sightworks.com>
+> > ---
+> >  drivers/media/rc/imon.c | 46 +++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 46 insertions(+)
+> >
+> > diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+> > index 37a850421fbb..17141d57e311 100644
+> > --- a/drivers/media/rc/imon.c
+> > +++ b/drivers/media/rc/imon.c
+> > @@ -83,6 +83,7 @@ struct imon_usb_dev_descr {
+> >       __u16 flags;
+> >  #define IMON_NO_FLAGS 0
+> >  #define IMON_NEED_20MS_PKT_DELAY 1
+> > +#define IMON_SUPPRESS_REPEATED_KEYS 2
+> >       struct imon_panel_key_table key_table[];
+> >  };
+> >
+> > @@ -315,6 +316,32 @@ static const struct imon_usb_dev_descr imon_DH102 = {
+> >       }
+> >  };
+> >
+> > +/* imon ultrabay front panel key table */
+> > +static const struct imon_usb_dev_descr ultrabay_table = {
+> > +     .flags = IMON_SUPPRESS_REPEATED_KEYS,
+> > +     .key_table = {
+> > +             { 0x0000000f0000ffeell, KEY_MEDIA },      /* Go */
+> > +             { 0x000000000100ffeell, KEY_UP },
+> > +             { 0x000000000001ffeell, KEY_DOWN },
+> > +             { 0x000000160000ffeell, KEY_ENTER },
+> > +             { 0x0000001f0000ffeell, KEY_AUDIO },    /* Music */
+> > +             { 0x000000200000ffeell, KEY_VIDEO },    /* Movie */
+> > +             { 0x000000210000ffeell, KEY_CAMERA },   /* Photo */
+> > +             { 0x000000270000ffeell, KEY_DVD },
+> > +             { 0x000000230000ffeell, KEY_TV },
+> > +             { 0x000000050000ffeell, KEY_PREVIOUS },
+> > +             { 0x000000070000ffeell, KEY_REWIND },
+> > +             { 0x000000040000ffeell, KEY_STOP },
+> > +             { 0x000000020000ffeell, KEY_PLAYPAUSE },
+> > +             { 0x000000080000ffeell, KEY_FASTFORWARD },
+> > +             { 0x000000060000ffeell, KEY_NEXT },
+> > +             { 0x000100000000ffeell, KEY_VOLUMEUP },
+> > +             { 0x010000000000ffeell, KEY_VOLUMEDOWN },
+> > +             { 0x000000010000ffeell, KEY_MUTE },
+> > +             { 0, KEY_RESERVED },
+> > +     }
+> > +};
+> > +
+> >  /*
+> >   * USB Device ID for iMON USB Control Boards
+> >   *
+> > @@ -1661,6 +1688,17 @@ static void imon_incoming_packet(struct imon_context *ictx,
+> >                       return;
+> >               }
+> >       }
+> > +     /* KEY repeats from knob need to be suppressed */
+> > +     if (ictx->dev_descr->flags & IMON_SUPPRESS_REPEATED_KEYS) {
+> > +             if (ictx->kc == ictx->last_keycode) {
+> > +                     msec = ktime_ms_delta(t, prev_time);
+> > +                     if (msec < ictx->idev->rep[REP_DELAY]) {
+> > +                             spin_unlock_irqrestore(&ictx->kc_lock, flags);
+> > +                             return;
+> > +                     }
+> > +             }
+> > +     }
+>
+> This can probably be merged with previous statement. Also, the nested ifs
+> can be shorted with &&.
+>
+>         if (itc->kc == KEY_MUTE ||
+>             ictx->dev_descr->flags & IMON_SUPPRESS_REPEATED_KEYS) {
+>                 if (ictx->kc == ictx->last_keycode &&
+>                     ktime_ms_delta(t, prev_time) < ictx->idev->rep[REP_DELAY]) {
+>                         spin_unlock_irqrestore(&ictx->kc_lock, flags);
+>                         return;
+>                 }
+>         }
+>
+>
+> Something like that a least. No need for the msec variable.
+>
+Thanks for the advice,already tested your solution and it's working.I
+will send a new revision which will include your changes.
 
-We also include the SPDX Licensing update which seemed to have been
-missed by the global script thus far.
+> > +
+> >       prev_time = t;
+> >       kc = ictx->kc;
+> >
+> > @@ -1848,6 +1886,14 @@ static void imon_get_ffdc_type(struct imon_context *ictx)
+> >               dev_info(ictx->dev, "0xffdc iMON Inside, iMON IR");
+> >               ictx->display_supported = false;
+> >               break;
+> > +     /* Soundgraph iMON UltraBay */
+> > +     case 0x98:
+> > +             dev_info(ictx->dev, "0xffdc iMON UltraBay, LCD + IR");
+> > +             detected_display_type = IMON_DISPLAY_TYPE_LCD;
+> > +             allowed_protos = RC_PROTO_BIT_IMON | RC_PROTO_BIT_RC6_MCE;
+> > +             ictx->dev_descr = (struct imon_usb_dev_descr *) &ultrabay_table;
+>
+> No cast needed here (I think).
+>
+Sadly,i couldn't figure a way around that and i know that probably
+isn't the best solution.
+If you have a better solution to set the key table,please let me know
+and i will be glad to
+test it.
 
-Changes since v1:
-- Address review comment from Joe, Hans and Prabhakar
-- Cleaned-up the function entry debug log
-- Split off the pcr change into its own patch
-- Rework/combine two patches but remove code churn
-- fix miscellaneous typos
+> > +             break;
+> > +
+> >       default:
+> >               dev_info(ictx->dev, "Unknown 0xffdc device, defaulting to VFD and iMON IR");
+> >               detected_display_type = IMON_DISPLAY_TYPE_VFD;
+> > --
+> > 2.20.1
 
-=============================
 
-v4l2-compliance SHA: 5b168dc8473911227890526bad26553d9e8ff81b, 32 bits
-
-Compliance test for vpfe device /dev/video0:
-
-Driver Info:
-	Driver name      : vpfe
-	Card type        : TI AM437x VPFE
-	Bus info         : platform:vpfe 48326000.vpfe
-	Driver version   : 5.3.0
-	Capabilities     : 0x85200001
-		Vide o Capture
-		Read/Write
-		Streaming
-		Extended Pix Format
-		D evice Capabilities
-	Device Caps      : 0x05200001
-		Video Capt ure
-		Read/Write
-		Streaming
-		Extended Pix Format
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-	test second /dev/video0 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 1 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls (Input 0):
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 3 Private Controls: 0
-
-Format ioctls (Input 0):
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-		fail: v4l2-test-formats.cpp(1419): node->frmsizes_count[pixfmt] > 1
-	test Cropping: FAIL
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls (Input 0):
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls (Input 0):
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Test input 0:
-
-Streaming ioctls:
-	test read/write: OK
-	test blocking wait: OK
-	test MMAP (no poll): OK                           
-	test MMAP (select): OK                            
-	test MMAP (epoll): OK                             
-	test USERPTR (no poll): OK (Not Supported)
-	test USERPTR (select): OK (Not Supported)
-	test DMABUF: Cannot test, specify --expbuf-device
-
-Total for vpfe device /dev/video0: 51, Succeeded: 50, Failed: 1, Warnings: 0
-dd
-============================
-
-Benoit Parrot (12):
-  media: am437x-vpfe: Fix missing first line
-  media: am437x-vpfe: Rework ISR routine for clarity
-  media: am437x-vpfe: Wait for end of frame before tear-down
-  media: am437x-vpfe: fix start streaming error path
-  media: am437x-vpfe: Streamlined vb2 buffer cleanup
-  media: am437x-vpfe: Setting STD to current value is not an error
-  media: am437x-vpfe: Use a per instance format array instead of a
-    static one
-  media: am437x-vpfe: fix function trace debug log
-  media: am437x-vpfe: Remove print_fourcc helper
-  media: am437x-vpfe: TRY_FMT ioctl is not really trying anything
-  media: am437x-vpfe: Remove per bus width static data
-  media: am437x-vpfe: Switch to SPDX Licensing
-
-Dave Gerlach (1):
-  media: am437x-vpfe: Fix suspend path to always handle pinctrl config
-
- drivers/media/platform/am437x/am437x-vpfe.c   | 878 ++++++++----------
- drivers/media/platform/am437x/am437x-vpfe.h   |  45 +-
- .../media/platform/am437x/am437x-vpfe_regs.h  |  10 +-
- 3 files changed, 406 insertions(+), 527 deletions(-)
 
 -- 
-2.17.1
-
+Flavius
