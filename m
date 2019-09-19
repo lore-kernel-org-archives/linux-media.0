@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D66C3A5A6
-	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E214C4CEC4
+	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:39:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5C1A5207FC
-	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:39:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62E63207FC
+	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:39:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="fNxhihCq"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="y08qj9xF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392660AbfISUj0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Sep 2019 16:39:26 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:54252 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392664AbfISUj0 (ORCPT
+        id S2404587AbfISUje (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Sep 2019 16:39:34 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:42674 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392703AbfISUjd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Sep 2019 16:39:26 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdOcm073288;
-        Thu, 19 Sep 2019 15:39:24 -0500
+        Thu, 19 Sep 2019 16:39:33 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdW0j117057;
+        Thu, 19 Sep 2019 15:39:32 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568925564;
-        bh=0S3XWkeoKQY64i4zH0hGmMh3PZ2jhiw8o3Vh/+6Z4rk=;
+        s=ti-com-17Q1; t=1568925572;
+        bh=BsJNAa9n7sZi49Q5hXovb2D/EEx3oMvJ1snAAQRmMRM=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=fNxhihCqfGEmDo7ZjBXYl1/se/PWcR4JA00XK9u2dAn6Vajfvr9li5nOHAsYqex/0
-         N3xFC9wEi8agHvSQV6MAtUSjpDAUIJtX+f/MaCgf7F9vGffMTsox47j+uJI7+RB3rF
-         CGMXJiD/NSgqiBE4YZfV1huFgcECzzgKfZG0HKoU=
+        b=y08qj9xFVAh+Ja6rIgxUiI5znKkrqZDNYH5K7HE5Wa3O25b7bSMwQjZMMYTsPP0Im
+         lClnsl58/zURu/CUJn76cW5z+U14ecFkZ4Jbu1xc3Zn+Q0rndA2p+SA3+x+z2zK7Au
+         9LscpTaupUfrb0Z8MlPkr9Iu7pcvdfyzfKkVX6fU=
 Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8JKdOH6002209
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8JKdWru001893
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 19 Sep 2019 15:39:24 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE115.ent.ti.com
+        Thu, 19 Sep 2019 15:39:32 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE115.ent.ti.com
  (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 19
- Sep 2019 15:39:20 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2019 15:39:28 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 19 Sep 2019 15:39:20 -0500
+ Frontend Transport; Thu, 19 Sep 2019 15:39:28 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdKIX014276;
-        Thu, 19 Sep 2019 15:39:24 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdKIf014276;
+        Thu, 19 Sep 2019 15:39:32 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 04/13] media: am437x-vpfe: Wait for end of frame before tear-down
-Date:   Thu, 19 Sep 2019 15:41:16 -0500
-Message-ID: <20190919204125.15254-5-bparrot@ti.com>
+Subject: [Patch v2 12/13] media: am437x-vpfe: Remove per bus width static data
+Date:   Thu, 19 Sep 2019 15:41:24 -0500
+Message-ID: <20190919204125.15254-13-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190919204125.15254-1-bparrot@ti.com>
 References: <20190919204125.15254-1-bparrot@ti.com>
@@ -66,157 +66,157 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-We were originally attempting to stop all processing as soon
-as possible, but the in-progress DMA operation cannot be canceled.
-This led to the module being in a busy state and prevented proper
-power management functionality.
+The bus related static data included in the vpfe_fmt
+static table can be derived dynamically instead.
+This simplify the table and it's use.
 
-The existing implementation would attempt to clean things up by waiting
-up to 50ms. However when receiving video frame at 15fps or lower,
-it meant an inter frame arrival rate of 66.6 ms or higher.
-In such cases upon tear down the following message could be seen:
-omap_hwmod: vpfe0: _wait_target_disable failed
-
-This patch fixes this issue by adding a stopping state where
-we would wait for the next Vsync before disabling the hardware.
+We instead replace the per bus data info with just
+the usual bit per pixel value for each supported
+pixel format.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 52 ++++++++++-----------
- drivers/media/platform/am437x/am437x-vpfe.h |  3 ++
- 2 files changed, 29 insertions(+), 26 deletions(-)
+ drivers/media/platform/am437x/am437x-vpfe.c | 56 ++++++---------------
+ drivers/media/platform/am437x/am437x-vpfe.h | 16 +-----
+ 2 files changed, 16 insertions(+), 56 deletions(-)
 
 diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 13bf4b32b40b..66df87d310a2 100644
+index 47404d799029..6416b7955fb7 100644
 --- a/drivers/media/platform/am437x/am437x-vpfe.c
 +++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -441,40 +441,25 @@ static void vpfe_ccdc_restore_defaults(struct vpfe_ccdc *ccdc)
- 
- static int vpfe_ccdc_close(struct vpfe_ccdc *ccdc, struct device *dev)
- {
--	int dma_cntl, i, pcr;
-+	struct vpfe_device *vpfe = container_of(ccdc, struct vpfe_device, ccdc);
-+	u32 dma_cntl, pcr;
- 
--	/* If the CCDC module is still busy wait for it to be done */
--	for (i = 0; i < 10; i++) {
--		usleep_range(5000, 6000);
--		pcr = vpfe_reg_read(ccdc, VPFE_PCR);
--		if (!pcr)
--			break;
-+	pcr = vpfe_reg_read(ccdc, VPFE_PCR);
-+	if (pcr)
-+		vpfe_dbg(1, vpfe, "VPFE_PCR is still set (%x)", pcr);
- 
--		/* make sure it it is disabled */
--		vpfe_pcr_enable(ccdc, 0);
--	}
-+	dma_cntl = vpfe_reg_read(ccdc, VPFE_DMA_CNTL);
-+	if ((dma_cntl & VPFE_DMA_CNTL_OVERFLOW))
-+		vpfe_dbg(1, vpfe, "VPFE_DMA_CNTL_OVERFLOW is still set (%x)",
-+			 dma_cntl);
- 
- 	/* Disable CCDC by resetting all register to default POR values */
- 	vpfe_ccdc_restore_defaults(ccdc);
- 
--	/* if DMA_CNTL overflow bit is set. Clear it
--	 *  It appears to take a while for this to become quiescent ~20ms
--	 */
--	for (i = 0; i < 10; i++) {
--		dma_cntl = vpfe_reg_read(ccdc, VPFE_DMA_CNTL);
--		if (!(dma_cntl & VPFE_DMA_CNTL_OVERFLOW))
--			break;
--
--		/* Clear the overflow bit */
--		vpfe_reg_write(ccdc, dma_cntl, VPFE_DMA_CNTL);
--		usleep_range(5000, 6000);
--	}
--
- 	/* Disabled the module at the CONFIG level */
- 	vpfe_config_enable(ccdc, 0);
- 
- 	pm_runtime_put_sync(dev);
--
- 	return 0;
- }
- 
-@@ -1303,6 +1288,9 @@ static void vpfe_handle_interlaced_irq(struct vpfe_device *vpfe,
- 			if (vpfe->cur_frm != vpfe->next_frm)
- 				vpfe_process_buffer_complete(vpfe);
- 
-+			if (vpfe->stopping)
-+				return;
-+
- 			/*
- 			 * based on whether the two fields are stored
- 			 * interleave or separately in memory,
-@@ -1341,7 +1329,7 @@ static irqreturn_t vpfe_isr(int irq, void *dev)
- {
- 	struct vpfe_device *vpfe = (struct vpfe_device *)dev;
- 	enum v4l2_field field = vpfe->fmt.fmt.pix.field;
--	int intr_status;
-+	int intr_status, stopping = vpfe->stopping;
- 
- 	intr_status = vpfe_reg_read(&vpfe->ccdc, VPFE_IRQ_STS);
- 
-@@ -1352,9 +1340,13 @@ static irqreturn_t vpfe_isr(int irq, void *dev)
- 		} else {
- 			vpfe_handle_interlaced_irq(vpfe, field);
- 		}
-+		if (stopping) {
-+			vpfe->stopping = false;
-+			complete(&vpfe->capture_stop);
-+		}
- 	}
- 
--	if (intr_status & VPFE_VDINT1) {
-+	if (intr_status & VPFE_VDINT1 && !stopping) {
- 		if (field == V4L2_FIELD_NONE &&
- 		    vpfe->cur_frm == vpfe->next_frm)
- 			vpfe_schedule_next_buffer(vpfe);
-@@ -1980,6 +1972,9 @@ static int vpfe_start_streaming(struct vb2_queue *vq, unsigned int count)
- 
- 	vpfe_attach_irq(vpfe);
- 
-+	vpfe->stopping = false;
-+	init_completion(&vpfe->capture_stop);
-+
- 	if (vpfe->ccdc.ccdc_cfg.if_type == VPFE_RAW_BAYER)
- 		vpfe_ccdc_config_raw(&vpfe->ccdc);
- 	else
-@@ -2032,6 +2027,11 @@ static void vpfe_stop_streaming(struct vb2_queue *vq)
- 
- 	vpfe_pcr_enable(&vpfe->ccdc, 0);
- 
-+	/* Wait for the last frame to be captured */
-+	vpfe->stopping = true;
-+	wait_for_completion_timeout(&vpfe->capture_stop,
-+				    msecs_to_jiffies(250));
-+
- 	vpfe_detach_irq(vpfe);
- 
- 	sdinfo = vpfe->current_subdev;
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.h b/drivers/media/platform/am437x/am437x-vpfe.h
-index 4678285f34c6..2dde09780215 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.h
-+++ b/drivers/media/platform/am437x/am437x-vpfe.h
-@@ -23,6 +23,7 @@
- 
- #include <linux/am437x-vpfe.h>
- #include <linux/clk.h>
-+#include <linux/completion.h>
- #include <linux/device.h>
- #include <linux/io.h>
- #include <linux/i2c.h>
-@@ -270,6 +271,8 @@ struct vpfe_device {
- 	 */
- 	u32 field_off;
- 	struct vpfe_ccdc ccdc;
-+	int stopping;
-+	struct completion capture_stop;
+@@ -73,73 +73,43 @@ static struct vpfe_fmt formats[VPFE_MAX_ACTIVE_FMT] = {
+ 	{
+ 		.fourcc		= V4L2_PIX_FMT_YUYV,
+ 		.code		= MEDIA_BUS_FMT_YUYV8_2X8,
+-		.l.width	= 10,
+-		.l.bpp		= 4,
+-		.s.width	= 8,
+-		.s.bpp		= 2,
++		.bitsperpixel	= 16,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_UYVY,
+ 		.code		= MEDIA_BUS_FMT_UYVY8_2X8,
+-		.l.width	= 10,
+-		.l.bpp		= 4,
+-		.s.width	= 8,
+-		.s.bpp		= 2,
++		.bitsperpixel	= 16,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_YVYU,
+ 		.code		= MEDIA_BUS_FMT_YVYU8_2X8,
+-		.l.width	= 10,
+-		.l.bpp		= 4,
+-		.s.width	= 8,
+-		.s.bpp		= 2,
++		.bitsperpixel	= 16,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_VYUY,
+ 		.code		= MEDIA_BUS_FMT_VYUY8_2X8,
+-		.l.width	= 10,
+-		.l.bpp		= 4,
+-		.s.width	= 8,
+-		.s.bpp		= 2,
++		.bitsperpixel	= 16,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SBGGR8,
+ 		.code		= MEDIA_BUS_FMT_SBGGR8_1X8,
+-		.l.width	= 10,
+-		.l.bpp		= 2,
+-		.s.width	= 8,
+-		.s.bpp		= 1,
++		.bitsperpixel	= 8,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGBRG8,
+ 		.code		= MEDIA_BUS_FMT_SGBRG8_1X8,
+-		.l.width	= 10,
+-		.l.bpp		= 2,
+-		.s.width	= 8,
+-		.s.bpp		= 1,
++		.bitsperpixel	= 8,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SGRBG8,
+ 		.code		= MEDIA_BUS_FMT_SGRBG8_1X8,
+-		.l.width	= 10,
+-		.l.bpp		= 2,
+-		.s.width	= 8,
+-		.s.bpp		= 1,
++		.bitsperpixel	= 8,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_SRGGB8,
+ 		.code		= MEDIA_BUS_FMT_SRGGB8_1X8,
+-		.l.width	= 10,
+-		.l.bpp		= 2,
+-		.s.width	= 8,
+-		.s.bpp		= 1,
++		.bitsperpixel	= 8,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_RGB565,
+ 		.code		= MEDIA_BUS_FMT_RGB565_2X8_LE,
+-		.l.width	= 10,
+-		.l.bpp		= 4,
+-		.s.width	= 8,
+-		.s.bpp		= 2,
++		.bitsperpixel	= 16,
+ 	}, {
+ 		.fourcc		= V4L2_PIX_FMT_RGB565X,
+ 		.code		= MEDIA_BUS_FMT_RGB565_2X8_BE,
+-		.l.width	= 10,
+-		.l.bpp		= 4,
+-		.s.width	= 8,
+-		.s.bpp		= 2,
++		.bitsperpixel	= 16,
+ 	},
  };
  
- #endif	/* AM437X_VPFE_H */
+@@ -184,9 +154,11 @@ static unsigned int __get_bytesperpixel(struct vpfe_device *vpfe,
+ {
+ 	struct vpfe_subdev_info *sdinfo = vpfe->current_subdev;
+ 	unsigned int bus_width = sdinfo->vpfe_param.bus_width;
+-	u32 bpp;
++	u32 bpp, bus_width_bytes, clocksperpixel;
+ 
+-	bpp = (bus_width == 10) ? fmt->l.bpp : fmt->s.bpp;
++	bus_width_bytes = ALIGN(bus_width, 8) >> 3;
++	clocksperpixel = DIV_ROUND_UP(fmt->bitsperpixel, bus_width);
++	bpp = clocksperpixel * bus_width_bytes;
+ 
+ 	return bpp;
+ }
+diff --git a/drivers/media/platform/am437x/am437x-vpfe.h b/drivers/media/platform/am437x/am437x-vpfe.h
+index aa5ddaec774c..7556cca308c2 100644
+--- a/drivers/media/platform/am437x/am437x-vpfe.h
++++ b/drivers/media/platform/am437x/am437x-vpfe.h
+@@ -215,28 +215,16 @@ struct vpfe_ccdc {
+ 	u32 ccdc_ctx[VPFE_REG_END / sizeof(u32)];
+ };
+ 
+-/*
+- * struct bus_format - VPFE bus format information
+- * width: Bits per pixel (when transferred over a bus)
+- * bpp: Bytes per pixel (when stored in memory)
+- */
+-struct bus_format {
+-	unsigned int width;
+-	unsigned int bpp;
+-};
+-
+ /*
+  * struct vpfe_fmt - VPFE media bus format information
+  * fourcc: V4L2 pixel format code
+  * code: V4L2 media bus format code
+- * l: 10 bit bus format info
+- * s: 8 bit bus format info
++ * bitsperpixel: Bits per pixel over the bus
+  */
+ struct vpfe_fmt {
+ 	u32 fourcc;
+ 	u32 code;
+-	struct bus_format l;
+-	struct bus_format s;
++	u32 bitsperpixel;
+ };
+ 
+ /*
 -- 
 2.17.1
 
