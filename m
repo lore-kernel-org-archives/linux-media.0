@@ -5,56 +5,57 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 275BDC4CEC4
-	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:40:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A206C3A5A6
+	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:40:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ED71621907
-	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:40:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 363E8207FC
+	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 20:40:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="k5qQD7Pb"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="SwS/QbAf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388991AbfISUkN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Sep 2019 16:40:13 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:35058 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392685AbfISUj0 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S2392689AbfISUj0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 19 Sep 2019 16:39:26 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:47438 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390164AbfISUjX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 19 Sep 2019 16:39:23 -0400
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdPnJ011697;
-        Thu, 19 Sep 2019 15:39:25 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdLBc117311;
+        Thu, 19 Sep 2019 15:39:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568925565;
-        bh=I+xPy3xNOHEoo8tC6L9GoL1DnBDGS+nM7VEaBsreGCU=;
+        s=ti-com-17Q1; t=1568925561;
+        bh=9FamtOVE0t1E3ct7dOeSf1tjCva2GwFUhC+rviJoN10=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=k5qQD7Pbsi0ndIlXHCWRcpunlhfu7qZHQ+QPMChlSB1uAh/0L6RusHkfhhz359Uik
-         XttRm/Xa0yjMir2xm5959Cvlyazh3N9mrRo3WpaOMMIpl3EXmBXuGF8RK2DM0iZxex
-         GTUxD2M5TT5189Wg4Kn8W9xta/LSXZ7cuqSEiWiM=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8JKdPCW002213
+        b=SwS/QbAf8xThKhR+i42c6Lq7gU29I6OlbZQ1vjQQtrH/361a9isCwt7I7gjIFhLLF
+         nA7bDReC5oYS231rDf6v1dq5djiOApgPjo/UBD2/CCtv5WhRIXvhc+fPo+v7NSDKZN
+         AOl+7m/J4//8WddINKBDVcoFr3/d2u7WkvnvpUNE=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8JKdLRv002131
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 19 Sep 2019 15:39:25 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 19 Sep 2019 15:39:21 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 19
- Sep 2019 15:39:22 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2019 15:39:17 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 19 Sep 2019 15:39:25 -0500
+ Frontend Transport; Thu, 19 Sep 2019 15:39:17 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdKIY014276;
-        Thu, 19 Sep 2019 15:39:25 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8JKdKIU014276;
+        Thu, 19 Sep 2019 15:39:21 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 05/13] media: am437x-vpfe: fix start streaming error path
-Date:   Thu, 19 Sep 2019 15:41:17 -0500
-Message-ID: <20190919204125.15254-6-bparrot@ti.com>
+        <linux-kernel@vger.kernel.org>, Dave Gerlach <d-gerlach@ti.com>,
+        Jyri Sarha <jsarha@ti.com>, Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v2 01/13] media: am437x-vpfe: Fix suspend path to always handle pinctrl config
+Date:   Thu, 19 Sep 2019 15:41:13 -0500
+Message-ID: <20190919204125.15254-2-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190919204125.15254-1-bparrot@ti.com>
 References: <20190919204125.15254-1-bparrot@ti.com>
@@ -66,26 +67,90 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-When start_streaming fails the h/w module might be left enabled
-inadvertently. Make sure it is disabled in the error path.
+From: Dave Gerlach <d-gerlach@ti.com>
 
+Currently if vpfe is not active then it returns immediately in the
+suspend and resume handlers. Change this so that it always performs the
+pinctrl config so that we can still get proper sleep state configuration
+on the pins even if we do not need to worry about fully saving and
+restoring context.
+
+Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+Signed-off-by: Jyri Sarha <jsarha@ti.com>
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/am437x/am437x-vpfe.c | 46 ++++++++++-----------
+ 1 file changed, 22 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 66df87d310a2..e0a4c8920df8 100644
+index 2b42ba1f5949..a3d22f90e64c 100644
 --- a/drivers/media/platform/am437x/am437x-vpfe.c
 +++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -2008,6 +2008,7 @@ static int vpfe_start_streaming(struct vb2_queue *vq, unsigned int count)
- 		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_QUEUED);
- 	}
+@@ -2653,22 +2653,21 @@ static int vpfe_suspend(struct device *dev)
+ 	struct vpfe_device *vpfe = dev_get_drvdata(dev);
+ 	struct vpfe_ccdc *ccdc = &vpfe->ccdc;
  
-+	vpfe_pcr_enable(&vpfe->ccdc, 0);
- 	return ret;
- }
+-	/* if streaming has not started we don't care */
+-	if (!vb2_start_streaming_called(&vpfe->buffer_queue))
+-		return 0;
+-
+-	pm_runtime_get_sync(dev);
+-	vpfe_config_enable(ccdc, 1);
++	/* only do full suspend if streaming has started */
++	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
++		pm_runtime_get_sync(dev);
++		vpfe_config_enable(ccdc, 1);
  
+-	/* Save VPFE context */
+-	vpfe_save_context(ccdc);
++		/* Save VPFE context */
++		vpfe_save_context(ccdc);
+ 
+-	/* Disable CCDC */
+-	vpfe_pcr_enable(ccdc, 0);
+-	vpfe_config_enable(ccdc, 0);
++		/* Disable CCDC */
++		vpfe_pcr_enable(ccdc, 0);
++		vpfe_config_enable(ccdc, 0);
+ 
+-	/* Disable both master and slave clock */
+-	pm_runtime_put_sync(dev);
++		/* Disable both master and slave clock */
++		pm_runtime_put_sync(dev);
++	}
+ 
+ 	/* Select sleep pin state */
+ 	pinctrl_pm_select_sleep_state(dev);
+@@ -2710,19 +2709,18 @@ static int vpfe_resume(struct device *dev)
+ 	struct vpfe_device *vpfe = dev_get_drvdata(dev);
+ 	struct vpfe_ccdc *ccdc = &vpfe->ccdc;
+ 
+-	/* if streaming has not started we don't care */
+-	if (!vb2_start_streaming_called(&vpfe->buffer_queue))
+-		return 0;
+-
+-	/* Enable both master and slave clock */
+-	pm_runtime_get_sync(dev);
+-	vpfe_config_enable(ccdc, 1);
++	/* only do full resume if streaming has started */
++	if (vb2_start_streaming_called(&vpfe->buffer_queue)) {
++		/* Enable both master and slave clock */
++		pm_runtime_get_sync(dev);
++		vpfe_config_enable(ccdc, 1);
+ 
+-	/* Restore VPFE context */
+-	vpfe_restore_context(ccdc);
++		/* Restore VPFE context */
++		vpfe_restore_context(ccdc);
+ 
+-	vpfe_config_enable(ccdc, 0);
+-	pm_runtime_put_sync(dev);
++		vpfe_config_enable(ccdc, 0);
++		pm_runtime_put_sync(dev);
++	}
+ 
+ 	/* Select default pin state */
+ 	pinctrl_pm_select_default_state(dev);
 -- 
 2.17.1
 
