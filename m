@@ -2,89 +2,166 @@ Return-Path: <SRS0=XAE8=XO=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1B0EC4CEC4
-	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 13:28:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00706C49ED7
+	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 15:16:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C89D521D7C
-	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 13:28:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB98420665
+	for <linux-media@archiver.kernel.org>; Thu, 19 Sep 2019 15:16:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="djU8Jdg7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389822AbfISN27 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 19 Sep 2019 09:28:59 -0400
-Received: from mga05.intel.com ([192.55.52.43]:28045 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388551AbfISN27 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 19 Sep 2019 09:28:59 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Sep 2019 06:28:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,523,1559545200"; 
-   d="scan'208";a="199392042"
-Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.174])
-  by orsmga002.jf.intel.com with SMTP; 19 Sep 2019 06:28:54 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Thu, 19 Sep 2019 16:28:53 +0300
-From:   Ville Syrjala <ville.syrjala@linux.intel.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     intel-gfx@lists.freedesktop.org, stable@vger.kernel.org,
-        linux-media@vger.kernel.org, Martin Bugge <marbugge@cisco.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@osg.samsung.com>
-Subject: [PATCH] video/hdmi: Fix AVI bar unpack
-Date:   Thu, 19 Sep 2019 16:28:53 +0300
-Message-Id: <20190919132853.30954-1-ville.syrjala@linux.intel.com>
-X-Mailer: git-send-email 2.21.0
+        id S2390295AbfISPQ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 19 Sep 2019 11:16:28 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:50410 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388706AbfISPQ1 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 19 Sep 2019 11:16:27 -0400
+Received: by mail-wm1-f66.google.com with SMTP id 5so5068420wmg.0
+        for <linux-media@vger.kernel.org>; Thu, 19 Sep 2019 08:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EYffEbdThy0LWps82pOkqzBQMyP44H3OtQQzT0sqDxE=;
+        b=djU8Jdg7nr6kNCq4HfUMGTBmdElMzxjg8cALZ76pnQlj0JPe91egZzsXZ51qSxDagi
+         kq2PhYVfOTp+JOkfXwoFiV9tdlq/ShndLAOZ96ZaTS2oboX1dHB7Gm3wLuI1ymU45+A7
+         EIKvd31YvbvEM+fFx798k4SELpw7Y/UtJbJDb7sF6h4CdMJsnAEncyb8bvpLmhX2/xo4
+         KGpcX5pxcoaaZpMB8bcqkxhNat04InSVFxUS9jfKpJ3yjlt2V2xxMZiU380rK7lgYqrB
+         HKmwRfYKeCsLWqvVptf86C3vGUWsWERAlnYVYkYNwPaWW5jcnpSaKQUaAKJ/yKa4ezA4
+         aZSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EYffEbdThy0LWps82pOkqzBQMyP44H3OtQQzT0sqDxE=;
+        b=Z1d6nChF0cUwlim2FlBzgOkTOCTzTsFaf2UA6q7ohFIfnLStEfRSTsEgIVzWDIh3tw
+         RqfElMkBvGCi/Am9mkrpebjN4no9tdKv81ME83EWdNz4z2cz5Tz0M5zmVvvm6IpzZk/g
+         Ni6xY0c2e/IX925zhcp3APu3F9B8FzZxW4Tuo9F+ObDVq5JFXEWk1V4lru4o96FfBIa2
+         AhXaXsyPtnmYcGTC/HfzmclW765DvfGDpEQmW1YThY/V0pzhjoDXQx0KtEWZ1EbUnu32
+         3UK8+FtlsYlyAOItlVDf28NFvOjyOeyWthRER51jbbDry5BJFgv3qxqTEBnmP+EMfESO
+         mcpQ==
+X-Gm-Message-State: APjAAAV8cGIELFpxJ0KVBoywAzqVTWb05EICO65owVYYkb1cRecagvZl
+        r726CDVTP0P7DT9FawMehF4=
+X-Google-Smtp-Source: APXvYqzNR2lzBDaOjJNN0RSc3ZWGOOBZ1TZcJnL+s771iK5ZPLOhw3egskBzCUq+Kly9OengEMKhlg==
+X-Received: by 2002:a7b:c182:: with SMTP id y2mr3344411wmi.156.1568906185786;
+        Thu, 19 Sep 2019 08:16:25 -0700 (PDT)
+Received: from pretoriano-kubuntu.fritz.box ([79.114.202.215])
+        by smtp.googlemail.com with ESMTPSA id b194sm10160991wmg.46.2019.09.19.08.16.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2019 08:16:25 -0700 (PDT)
+From:   Flavius Georgescu <pretoriano.mp@gmail.com>
+To:     sean@mess.org
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        Flavius Georgescu <pretoriano.mp@gmail.com>,
+        Chris Vandomelen <chris@sightworks.com>
+Subject: [PATCH] media: rc: Add support for another iMON 0xffdc device
+Date:   Thu, 19 Sep 2019 18:13:58 +0300
+Message-Id: <20190919151358.7030-1-pretoriano.mp@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+The device it's an iMON UltraBay (0x98 in config byte) with LCD,
+IR and dual-knobs front panel.
 
-The bar values are little endian, not big endian. The pack
-function did it right but the unpack got it wrong. Fix it.
+To work properly the device also require its own key table,
+and repeat suppression for all buttons.
 
-Cc: stable@vger.kernel.org
-Cc: linux-media@vger.kernel.org
-Cc: Martin Bugge <marbugge@cisco.com>
-Cc: Hans Verkuil <hans.verkuil@cisco.com>
-Cc: Thierry Reding <treding@nvidia.com>
-Cc: Mauro Carvalho Chehab <mchehab@osg.samsung.com>
-Fixes: 2c676f378edb ("[media] hdmi: added unpack and logging functions for InfoFrames")
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Signed-off-by: Flavius Georgescu <pretoriano.mp@gmail.com>
+Co-developed-by: Chris Vandomelen <chris@sightworks.com>
+Signed-off-by: Chris Vandomelen <chris@sightworks.com>
 ---
- drivers/video/hdmi.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/rc/imon.c | 46 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/drivers/video/hdmi.c b/drivers/video/hdmi.c
-index b939bc28d886..9c82e2a0a411 100644
---- a/drivers/video/hdmi.c
-+++ b/drivers/video/hdmi.c
-@@ -1576,12 +1576,12 @@ static int hdmi_avi_infoframe_unpack(struct hdmi_avi_infoframe *frame,
- 	if (ptr[0] & 0x10)
- 		frame->active_aspect = ptr[1] & 0xf;
- 	if (ptr[0] & 0x8) {
--		frame->top_bar = (ptr[5] << 8) + ptr[6];
--		frame->bottom_bar = (ptr[7] << 8) + ptr[8];
-+		frame->top_bar = (ptr[6] << 8) | ptr[5];
-+		frame->bottom_bar = (ptr[8] << 8) | ptr[7];
- 	}
- 	if (ptr[0] & 0x4) {
--		frame->left_bar = (ptr[9] << 8) + ptr[10];
--		frame->right_bar = (ptr[11] << 8) + ptr[12];
-+		frame->left_bar = (ptr[10] << 8) | ptr[9];
-+		frame->right_bar = (ptr[12] << 8) | ptr[11];
- 	}
- 	frame->scan_mode = ptr[0] & 0x3;
- 
--- 
-2.21.0
+diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+index 37a850421fbb..17141d57e311 100644
+--- a/drivers/media/rc/imon.c
++++ b/drivers/media/rc/imon.c
+@@ -83,6 +83,7 @@ struct imon_usb_dev_descr {
+ 	__u16 flags;
+ #define IMON_NO_FLAGS 0
+ #define IMON_NEED_20MS_PKT_DELAY 1
++#define IMON_SUPPRESS_REPEATED_KEYS 2
+ 	struct imon_panel_key_table key_table[];
+ };
 
+@@ -315,6 +316,32 @@ static const struct imon_usb_dev_descr imon_DH102 = {
+ 	}
+ };
+
++/* imon ultrabay front panel key table */
++static const struct imon_usb_dev_descr ultrabay_table = {
++	.flags = IMON_SUPPRESS_REPEATED_KEYS,
++	.key_table = {
++		{ 0x0000000f0000ffeell, KEY_MEDIA },      /* Go */
++		{ 0x000000000100ffeell, KEY_UP },
++		{ 0x000000000001ffeell, KEY_DOWN },
++		{ 0x000000160000ffeell, KEY_ENTER },
++		{ 0x0000001f0000ffeell, KEY_AUDIO },	/* Music */
++		{ 0x000000200000ffeell, KEY_VIDEO },	/* Movie */
++		{ 0x000000210000ffeell, KEY_CAMERA },	/* Photo */
++		{ 0x000000270000ffeell, KEY_DVD },
++		{ 0x000000230000ffeell, KEY_TV },
++		{ 0x000000050000ffeell, KEY_PREVIOUS },
++		{ 0x000000070000ffeell, KEY_REWIND },
++		{ 0x000000040000ffeell, KEY_STOP },
++		{ 0x000000020000ffeell, KEY_PLAYPAUSE },
++		{ 0x000000080000ffeell, KEY_FASTFORWARD },
++		{ 0x000000060000ffeell, KEY_NEXT },
++		{ 0x000100000000ffeell, KEY_VOLUMEUP },
++		{ 0x010000000000ffeell, KEY_VOLUMEDOWN },
++		{ 0x000000010000ffeell, KEY_MUTE },
++		{ 0, KEY_RESERVED },
++	}
++};
++
+ /*
+  * USB Device ID for iMON USB Control Boards
+  *
+@@ -1661,6 +1688,17 @@ static void imon_incoming_packet(struct imon_context *ictx,
+ 			return;
+ 		}
+ 	}
++	/* KEY repeats from knob need to be suppressed */
++	if (ictx->dev_descr->flags & IMON_SUPPRESS_REPEATED_KEYS) {
++		if (ictx->kc == ictx->last_keycode) {
++			msec = ktime_ms_delta(t, prev_time);
++			if (msec < ictx->idev->rep[REP_DELAY]) {
++				spin_unlock_irqrestore(&ictx->kc_lock, flags);
++				return;
++			}
++		}
++	}
++
+ 	prev_time = t;
+ 	kc = ictx->kc;
+
+@@ -1848,6 +1886,14 @@ static void imon_get_ffdc_type(struct imon_context *ictx)
+ 		dev_info(ictx->dev, "0xffdc iMON Inside, iMON IR");
+ 		ictx->display_supported = false;
+ 		break;
++	/* Soundgraph iMON UltraBay */
++	case 0x98:
++		dev_info(ictx->dev, "0xffdc iMON UltraBay, LCD + IR");
++		detected_display_type = IMON_DISPLAY_TYPE_LCD;
++		allowed_protos = RC_PROTO_BIT_IMON | RC_PROTO_BIT_RC6_MCE;
++		ictx->dev_descr = (struct imon_usb_dev_descr *) &ultrabay_table;
++		break;
++
+ 	default:
+ 		dev_info(ictx->dev, "Unknown 0xffdc device, defaulting to VFD and iMON IR");
+ 		detected_display_type = IMON_DISPLAY_TYPE_VFD;
+--
+2.20.1
