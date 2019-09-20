@@ -2,220 +2,255 @@ Return-Path: <SRS0=sOwM=XP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3808DC3A5A2
-	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:05:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44737C3A5A2
+	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 19:32:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EC843208C3
-	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:05:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DA00208C0
+	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 19:32:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="zO2P626n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OTNpO+2t"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405704AbfITRD4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Sep 2019 13:03:56 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:44068 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403929AbfITRDz (ORCPT
+        id S1726977AbfITTcj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Sep 2019 15:32:39 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:42154 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726869AbfITTcj (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Sep 2019 13:03:55 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8KH3rB3034497;
-        Fri, 20 Sep 2019 12:03:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568999033;
-        bh=TKIYvFFc8jP8BIIrXBcATu4ILnSrfAHWB7sD1Jm8JTY=;
-        h=From:To:CC:Subject:Date;
-        b=zO2P626nk/Lmr3z0CrIVgG+OtZVqOFjWrfLMak29NZEju7bmkRWyvvY+9QhoueiT/
-         VOx7CkzfdbmrOip2KDmpqKx8b3hewonpiP/IXcZEwViGzLvHvt/Ry3dClFf8YR4hiq
-         vCtg3enO/UMDYSm0pKS2NEE9v/aPuYyFRiKRsHnc=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8KH3rGn094876
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Sep 2019 12:03:53 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 20
- Sep 2019 12:03:53 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 20 Sep 2019 12:03:48 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8KH3r6s054719;
-        Fri, 20 Sep 2019 12:03:53 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v3 00/13]  media: am437x-vpfe: overdue maintenance
-Date:   Fri, 20 Sep 2019 12:05:41 -0500
-Message-ID: <20190920170554.29666-1-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 20 Sep 2019 15:32:39 -0400
+Received: by mail-ot1-f45.google.com with SMTP id c10so7128940otd.9
+        for <linux-media@vger.kernel.org>; Fri, 20 Sep 2019 12:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kqF6r4PcCXIAFFLERjMq4nSk7STkrTW4l7SPVhRXkzU=;
+        b=OTNpO+2tgGTHR0Y2kAGFVwjNyK0D8D7dkcL//VgoTDB1OyJf0QDHL8Ivt9UxF4tSnT
+         ooaxPzcONcJkrwKdmPfeWfYeKt+XK2tGlMUKStbC1H1QMsty9o/gIgdx5C6B+Mrm7N6K
+         EKz27nJ3vilV7uihCUuxi8FDDz2Ku5zgxZMXaJ7FNtC9ZAG4W9Yw75iigmx+nNrFEjyv
+         FhcoVAuQpFkYDPso4DDwj+6y8+yNjAUbxwMA6myXFnEz4GhQfXzvRONbEG7iUX3GWCF1
+         U0wiBtSogILBrHM+4qRoB8jvGEYz6a6kB0tPRVQu8WrnLGX7YVORegUg3qlAnxCdawLE
+         hiDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kqF6r4PcCXIAFFLERjMq4nSk7STkrTW4l7SPVhRXkzU=;
+        b=G0iJOnpaz0wh4NiQZPIu2a+xAhGRc4W7JNEM0EW0SMpSEtyi2fSvA3kCCcCS+IKKXL
+         g973MftulXQOGQYaVKE2XzKrPC2CdxVesaD8g9YVKdtJ9xhkg6e/5lzwe1jqD3p9crKj
+         GZ3n/7LJROTYAeaMfruxU/8XBGmMXMYYFzZcY/oHnj1xqPpf6jYdNSczqSZLdwd7MqEd
+         kcvXplk4oALafX3VoJg+IKwZqRou9PmHDKMDleCc7i4EX5Bv1AWZSerTQFlJPdBH5Xus
+         HrjvNZJ8QSO6CFTMkd+Kr3v3VgbhfHbTgjU3C7KmqK2n8XSZazet2uZ2o7IrOJP5QMx4
+         jJ8A==
+X-Gm-Message-State: APjAAAWbL4GlXrRt3kYFYqYWcfD3RBmS3EZ/H+opBQ1zeBNBdvVG+Iuq
+        JqerGX9RiGyjD5BuPhCuN+3095Cj
+X-Google-Smtp-Source: APXvYqyIr5mgRoLAOdgncbzX+RPq6BCyiIdeDfEL6SWY+PLpvp4ynzp8Ae0blO2l2JJOdYDliUnnxA==
+X-Received: by 2002:a05:6830:1090:: with SMTP id y16mr12941823oto.46.1569007957707;
+        Fri, 20 Sep 2019 12:32:37 -0700 (PDT)
+Received: from rYz3n.attlocal.net ([2600:1700:210:3790::40])
+        by smtp.googlemail.com with ESMTPSA id 2sm768390ois.43.2019.09.20.12.32.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Sep 2019 12:32:36 -0700 (PDT)
+From:   Jiunn Chang <c0d1n61at3@gmail.com>
+To:     linux-media@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Cc:     hverkuil@xs4all.nl
+Subject: [PATCH v6] cec-follower: add tuner analog service emulation
+Date:   Fri, 20 Sep 2019 14:32:36 -0500
+Message-Id: <20190920193236.217671-1-c0d1n61at3@gmail.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20190919174702.140335-3-c0d1n61at3@gmail.com>
+References: <20190919174702.140335-3-c0d1n61at3@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series is a collection of patches we have been carrying for a
-while.
+Implement the following tuner control features:
+  - <Select Analogue Service>
+  - <Give Tuner Device Status> and reply <Tuner Device Status>
 
-A few patches do fix actual bug and v4l2-compliance errors/warnings.
-Other are drivers re-work to simplify/clarify the code for easier
-maintenance.
+Signed-off-by: Jiunn Chang <c0d1n61at3@gmail.com>
+---
 
-We also include the SPDX Licensing update which seemed to have been
-missed by the global script thus far.
+Changes made since v1:
+  - Fix typos/bugs
+  - Import reply_feature_abort() from cec-processing.cpp
+  - Add functionality to choose nearest frequency
 
-Changes since v2:
-- Rename VPFE_MAX_ACTIVE_FMT to VPFE_NUM_FORMATS and corrected the
-  comments
-- Move the "Remove print_fourcc helper" patch to the end of the series
-  and rebase it on the pending v4l2_fourcc_conv macros patches
+Changes made since v2:
+  - Fix typos/bugs
+  - Use state from node in cec-follower.h
+  - Rename functions to analog_ prefix
 
-Changes since v1:
-- Address review comment from Joe, Hans and Prabhakar
-- Cleaned-up the function entry debug log
-- Split off the pcr change into its own patch
-- Rework/combine two patches but remove code churn
-- fix miscellaneous typos
+Changes made since v3:
+  - Refactor lines numbers since a fix patch was needed for cec-tuner.cpp
 
-=============================
+Changes made since v4:
+  - Remove int casting in abs()
+  - Add temp variables: info, freq to make code easier to read
+  - Use NUM_ANALOG_FREQS macro
 
-v4l2-compliance SHA: 5b168dc8473911227890526bad26553d9e8ff81b, 32 bits
+Changes made since v5:
+  - Add analog_tuner_init() to cec-tuner.cpp
+  - Change state_init() in cec-follower.cpp to use analog_tuner_init()
+  - Rename function to analog_get_nearest_freq()
+  - Change analog_get_nearest_freq() to only return freq in Khz
+  - Change analog_set_tuner_dev_info() to set analog freq too
 
-Compliance test for vpfe device /dev/video0:
+---
+ utils/cec-follower/cec-follower.cpp |  1 +
+ utils/cec-follower/cec-follower.h   |  2 +
+ utils/cec-follower/cec-tuner.cpp    | 73 ++++++++++++++++++++++++-----
+ 3 files changed, 64 insertions(+), 12 deletions(-)
 
-Driver Info:
-	Driver name      : vpfe
-	Card type        : TI AM437x VPFE
-	Bus info         : platform:vpfe 48326000.vpfe
-	Driver version   : 5.3.0
-	Capabilities     : 0x85200001
-		Vide o Capture
-		Read/Write
-		Streaming
-		Extended Pix Format
-		D evice Capabilities
-	Device Caps      : 0x05200001
-		Video Capt ure
-		Read/Write
-		Streaming
-		Extended Pix Format
-
-Required ioctls:
-	test VIDIOC_QUERYCAP: OK
-
-Allow for multiple opens:
-	test second /dev/video0 open: OK
-	test VIDIOC_QUERYCAP: OK
-	test VIDIOC_G/S_PRIORITY: OK
-	test for unlimited opens: OK
-
-Debug ioctls:
-	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
-	test VIDIOC_LOG_STATUS: OK
-
-Input ioctls:
-	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
-	test VIDIOC_ENUMAUDIO: OK (Not Supported)
-	test VIDIOC_G/S/ENUMINPUT: OK
-	test VIDIOC_G/S_AUDIO: OK (Not Supported)
-	Inputs: 1 Audio Inputs: 0 Tuners: 0
-
-Output ioctls:
-	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
-	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
-	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
-	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
-	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
-	Outputs: 0 Audio Outputs: 0 Modulators: 0
-
-Input/Output configuration ioctls:
-	test VIDIOC_ENUM/G/S/QUERY_STD: OK
-	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
-	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
-	test VIDIOC_G/S_EDID: OK (Not Supported)
-
-Control ioctls (Input 0):
-	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
-	test VIDIOC_QUERYCTRL: OK
-	test VIDIOC_G/S_CTRL: OK
-	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
-	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
-	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
-	Standard Controls: 3 Private Controls: 0
-
-Format ioctls (Input 0):
-	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
-	test VIDIOC_G/S_PARM: OK
-	test VIDIOC_G_FBUF: OK (Not Supported)
-	test VIDIOC_G_FMT: OK
-	test VIDIOC_TRY_FMT: OK
-	test VIDIOC_S_FMT: OK
-	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
-		fail: v4l2-test-formats.cpp(1419): node->frmsizes_count[pixfmt] > 1
-	test Cropping: FAIL
-	test Composing: OK (Not Supported)
-	test Scaling: OK (Not Supported)
-
-Codec ioctls (Input 0):
-	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
-	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
-	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
-
-Buffer ioctls (Input 0):
-	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
-	test VIDIOC_EXPBUF: OK
-	test Requests: OK (Not Supported)
-
-Test input 0:
-
-Streaming ioctls:
-	test read/write: OK
-	test blocking wait: OK
-	test MMAP (no poll): OK                           
-	test MMAP (select): OK                            
-	test MMAP (epoll): OK                             
-	test USERPTR (no poll): OK (Not Supported)
-	test USERPTR (select): OK (Not Supported)
-	test DMABUF: Cannot test, specify --expbuf-device
-
-Total for vpfe device /dev/video0: 51, Succeeded: 50, Failed: 1, Warnings: 0
-============================
-
-Benoit Parrot (12):
-  media: am437x-vpfe: Fix missing first line
-  media: am437x-vpfe: Rework ISR routine for clarity
-  media: am437x-vpfe: Wait for end of frame before tear-down
-  media: am437x-vpfe: fix start streaming error path
-  media: am437x-vpfe: Streamlined vb2 buffer cleanup
-  media: am437x-vpfe: Setting STD to current value is not an error
-  media: am437x-vpfe: Use a per instance format array instead of a
-    static one
-  media: am437x-vpfe: fix function trace debug log
-  media: am437x-vpfe: TRY_FMT ioctl is not really trying anything
-  media: am437x-vpfe: Remove per bus width static data
-  media: am437x-vpfe: Switch to SPDX Licensing
-  media: am437x-vpfe: Remove print_fourcc helper
-
-Dave Gerlach (1):
-  media: am437x-vpfe: Fix suspend path to always handle pinctrl config
-
- drivers/media/platform/am437x/am437x-vpfe.c   | 880 ++++++++----------
- drivers/media/platform/am437x/am437x-vpfe.h   |  43 +-
- .../media/platform/am437x/am437x-vpfe_regs.h  |  10 +-
- 3 files changed, 406 insertions(+), 527 deletions(-)
-
+diff --git a/utils/cec-follower/cec-follower.cpp b/utils/cec-follower/cec-follower.cpp
+index dca0f627..4243fdd9 100644
+--- a/utils/cec-follower/cec-follower.cpp
++++ b/utils/cec-follower/cec-follower.cpp
+@@ -298,6 +298,7 @@ void state_init(struct node &node)
+ 	node.state.sac_active = false;
+ 	node.state.volume = 50;
+ 	node.state.mute = false;
++	analog_tuner_init(&node.state.tuner_dev_info);
+ }
+ 
+ int main(int argc, char **argv)
+diff --git a/utils/cec-follower/cec-follower.h b/utils/cec-follower/cec-follower.h
+index 954e001f..a53c16fe 100644
+--- a/utils/cec-follower/cec-follower.h
++++ b/utils/cec-follower/cec-follower.h
+@@ -51,6 +51,7 @@ struct state {
+ 	__u64 rc_press_rx_ts;
+ 	unsigned rc_press_hold_count;
+ 	unsigned rc_duration_sum;
++	struct cec_op_tuner_device_info tuner_dev_info;
+ };
+ 
+ struct node {
+@@ -220,6 +221,7 @@ std::string opcode2s(const struct cec_msg *msg);
+ void sad_encode(const struct short_audio_desc *sad, __u32 *descriptor);
+ 
+ // cec-tuner.cpp
++void analog_tuner_init(struct cec_op_tuner_device_info *tuner_dev_info);
+ void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, unsigned me);
+ 
+ // CEC processing
+diff --git a/utils/cec-follower/cec-tuner.cpp b/utils/cec-follower/cec-tuner.cpp
+index bdeda342..68d945d5 100644
+--- a/utils/cec-follower/cec-tuner.cpp
++++ b/utils/cec-follower/cec-tuner.cpp
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <sys/ioctl.h>
++#include <stdlib.h>
+ 
+ #include "cec-follower.h"
+ 
+@@ -89,6 +90,51 @@ static unsigned int analog_freqs_khz[3][9][NUM_ANALOG_FREQS] =
+ 	}
+ };
+ 
++void analog_tuner_init(struct cec_op_tuner_device_info *info)
++{
++	info->rec_flag = CEC_OP_REC_FLAG_NOT_USED;
++	info->tuner_display_info = CEC_OP_TUNER_DISPLAY_INFO_ANALOGUE;
++	info->is_analog = true;
++	info->analog.ana_bcast_type = CEC_OP_ANA_BCAST_TYPE_CABLE;
++	info->analog.ana_freq =
++		analog_freqs_khz[CEC_OP_ANA_BCAST_TYPE_CABLE][CEC_OP_BCAST_SYSTEM_PAL_BG][0];
++	info->analog.bcast_system = CEC_OP_BCAST_SYSTEM_PAL_BG;
++}
++
++static unsigned int analog_get_nearest_freq(__u8 ana_bcast_type, __u8 ana_bcast_system,
++                                            int ana_freq_khz)
++{
++	int nearest = analog_freqs_khz[ana_bcast_type][ana_bcast_system][0];
++
++	for (int i = 0; i < NUM_ANALOG_FREQS; i++) {
++		int freq = analog_freqs_khz[ana_bcast_type][ana_bcast_system][i];
++
++		if (abs(ana_freq_khz - freq) < abs(ana_freq_khz - nearest))
++			nearest = freq;
++	}
++	return nearest;
++}
++
++static bool analog_set_tuner_dev_info(struct node *node, struct cec_msg *msg)
++{
++	struct cec_op_tuner_device_info *info = &node->state.tuner_dev_info;
++	__u8 type = 0;
++	__u16 freq = 0;
++	__u8 system = 0;
++
++	cec_ops_select_analogue_service(msg, &type, &freq, &system);
++	if (info->analog.ana_bcast_type < 3 && info->analog.bcast_system < 9) {
++		int freq_khz = (freq * 625) / 10;
++		unsigned int nearest = analog_get_nearest_freq(type, system,
++							       freq_khz);
++		info->analog.ana_bcast_type = type;
++		info->analog.ana_freq = (nearest * 10) / 625;
++		info->analog.bcast_system = system;
++		return true;
++	}
++	return false;
++}
++
+ void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, unsigned me)
+ {
+ 	bool is_bcast = cec_msg_is_broadcast(&msg);
+@@ -105,21 +151,11 @@ void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, uns
+ 		*/
+ 
+ 	case CEC_MSG_GIVE_TUNER_DEVICE_STATUS: {
+-		if (!cec_has_tuner(1 << me))
++		if (!cec_has_tuner(1 << me) && !cec_has_tv(1 << me))
+ 			break;
+ 
+-		struct cec_op_tuner_device_info tuner_dev_info = {};
+-
+ 		cec_msg_set_reply_to(&msg, &msg);
+-		tuner_dev_info.rec_flag = CEC_OP_REC_FLAG_NOT_USED;
+-		tuner_dev_info.tuner_display_info = CEC_OP_TUNER_DISPLAY_INFO_NONE;
+-		tuner_dev_info.is_analog = false;
+-		tuner_dev_info.digital.service_id_method = CEC_OP_SERVICE_ID_METHOD_BY_CHANNEL;
+-		tuner_dev_info.digital.dig_bcast_system = CEC_OP_DIG_SERVICE_BCAST_SYSTEM_DVB_C;
+-		tuner_dev_info.digital.channel.channel_number_fmt = CEC_OP_CHANNEL_NUMBER_FMT_1_PART;
+-		tuner_dev_info.digital.channel.minor = 1;
+-
+-		cec_msg_tuner_device_status(&msg, &tuner_dev_info);
++		cec_msg_tuner_device_status(&msg, &node->state.tuner_dev_info);
+ 		transmit(node, &msg);
+ 		return;
+ 	}
+@@ -128,6 +164,19 @@ void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, uns
+ 		return;
+ 
+ 	case CEC_MSG_SELECT_ANALOGUE_SERVICE:
++		if (!cec_has_tuner(1 << me) && !cec_has_tv(1 << me))
++			break;
++
++		if (node->state.tuner_dev_info.rec_flag == CEC_OP_REC_FLAG_USED) {
++			reply_feature_abort(node, &msg, CEC_OP_ABORT_REFUSED);
++			return;
++		}
++		if (!analog_set_tuner_dev_info(node, &msg)) {
++			reply_feature_abort(node, &msg, CEC_OP_ABORT_INVALID_OP);
++			return;
++		}
++		return;
++
+ 	case CEC_MSG_SELECT_DIGITAL_SERVICE:
+ 	case CEC_MSG_TUNER_STEP_DECREMENT:
+ 	case CEC_MSG_TUNER_STEP_INCREMENT:
 -- 
-2.17.1
+2.23.0
 
