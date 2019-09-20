@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.6 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8DA2C4CEC9
-	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 13:52:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF6F2C49ED7
+	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 13:52:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9BB682054F
-	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 13:52:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 882E02054F
+	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 13:52:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="skWvAAG3"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F+CrL95m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387606AbfITNv7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Sep 2019 09:51:59 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:43927 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387550AbfITNvv (ORCPT
+        id S2387551AbfITNvu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Sep 2019 09:51:50 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:45710 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387536AbfITNvs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Sep 2019 09:51:51 -0400
-Received: by mail-ed1-f68.google.com with SMTP id r9so6472342edl.10;
-        Fri, 20 Sep 2019 06:51:49 -0700 (PDT)
+        Fri, 20 Sep 2019 09:51:48 -0400
+Received: by mail-ed1-f65.google.com with SMTP id h33so6461023edh.12;
+        Fri, 20 Sep 2019 06:51:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zoO9ckVp6bHsGgArvJADN8syjSaSq361EX8PoKgrbQ8=;
-        b=skWvAAG3BOQRM5aNO1mUSVrRRNoiwV5Kp0qLU0Br++DdKD/YmO+tfpS/QdhQmFVMQi
-         cx91OpQ/3b4lXA1DFm1rFaCKpz9Yqpl6U3nabr3Q8GiikQLRzjSILfbGFEcD8lqdOqu1
-         N7+NUDUjngyBydMktHpwQSPYOnT8clj0Lt7ZRdQzA2illEY69eK7IdjXE/dk/geBtKPm
-         HxJmvrd6Ig2DXqRl5qN1QmodLXPOeJ0xJsz1JAG03wIvTsh2hT1s2w3scjBG66LFiGrq
-         a8KM53zALhlGsnOJihehOUGD2ddrfZXgIsBCOpv2zptLzqyo9N2ah8Ewa1DUR4bNqFV3
-         4E5w==
+        bh=fcQKN2FoAnIqh2MMcTmTGon9VYJKHZn6rQDUAoPW8gA=;
+        b=F+CrL95mFF5BVyHK13mH+G7Ix0G//l04t7gw+IZu6GOske+LEUnhEhQgLfflVwr+q7
+         8Z0v18jt/1IHsNL7ZiWd9iENRQIogMamlx2lh6hAEoEcDg63gZu7EuZyeP7ylR5Jp6ng
+         n7xSbiHj8TJCUnPffvBC5Bjow8O/tFVL5h5xImbQhZIQHZPDsHH8sgRhJcvmGn9Tt6YL
+         8tqZGaVEt1fpMWw1b/HOwxmOcdv6AsiABrqryWps2JXaRpC38Js4s4CrUEwtobEbyGz+
+         ZfWHj5z7lRM/FEYSmpV/BbTkByjb/Vwg0TSXAX4ptQ+hRjEzybY59XoWPPosqfNOjsb8
+         yvbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=zoO9ckVp6bHsGgArvJADN8syjSaSq361EX8PoKgrbQ8=;
-        b=ImUC8j9j7WRhTuFqrX2k3DNMjYZzAWWVbBylwjEFHZTOwxoUPorlTqEw0pXi/TRQCl
-         rml15pJX8C3EbNADmOW5LgORkvc11NaEvBCwLzI6JUP6KgbvpxVyWHRJ+0Fg97Ypva9v
-         LSWWxKIkleOGtD4yhIxQdOufL8fWFpGiFMik9pimnheRNeOphfL1LiowvjS+o7XrGnSD
-         QSupsXRXrmJTfmcHCS04KNlqaQVN3mQCym8DXGpTAtA/O/IwOaKY6NAx7L4WWuGftFyx
-         V9V2KOOPCMF+M0/YyUeQrFTttneiHvx6WlWaEg9z8P2CaX3dzAODZHOINuobNwDWG9sd
-         Nzcg==
-X-Gm-Message-State: APjAAAUtMyr1HwCGLYIKayc6VsPfq6vFwXsiVnLnTo23r2Sg0F+zo3oo
-        KMjNoR2N4n+bif7uoXQNvPw=
-X-Google-Smtp-Source: APXvYqy72sSGoO8AB/vtmTkGyiZJDlZHv/imCwCwJSHIWvRQAnnJnVUcX0egMVQsLk9nNekCfRDmEQ==
-X-Received: by 2002:aa7:dc55:: with SMTP id g21mr18237719edu.210.1568987509359;
-        Fri, 20 Sep 2019 06:51:49 -0700 (PDT)
+        bh=fcQKN2FoAnIqh2MMcTmTGon9VYJKHZn6rQDUAoPW8gA=;
+        b=OC9Sy5fJfu6im4fvEez1lQXGUeeCK4ZxJjRVcRaFK5acvW8rdjT9ycbkIblvbm2VA/
+         iDQogVrV1NQGtNUeBn8WB6RqjTckPA+uG1Z1PzZPU3oLMEFkXkYNMgzqmCrKW8JNgAEE
+         onyb6g/CrSMP+eTy22na74lHPSm2R677ZLEC7Z332M5lZ+NhgIdZxVJLIfFxjuxcZ/Tb
+         3LxMlEhL5K3MNFX4hdRu39F7F9sCWXVlmQIBkSegQ3Ex17PrCJWQijTlzUbtIFa9uDQy
+         I01LVAeHKh9GEJbJStkXDczNuyfDcMfIKfC/Eg2rtR5JzZjBNXnSGTFJZ2gMciENDk8Y
+         wdNg==
+X-Gm-Message-State: APjAAAVwDIegt4RnTJh1zrhsaqtytJObY26Kz6p2RlGimdLKQ4VtamUV
+        f/vFLmbCcCzcWMdmwQj7yDQ=
+X-Google-Smtp-Source: APXvYqxxoBOy/UG8BvrzxJ9tY2DrNK3pYbebxIwKwnjXKhrMIrfs3fGtQ914lFT+3FMYIhKd5KJ1dg==
+X-Received: by 2002:a50:d5c5:: with SMTP id g5mr22242130edj.57.1568987506574;
+        Fri, 20 Sep 2019 06:51:46 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id t30sm337673edt.91.2019.09.20.06.51.48
+        by smtp.gmail.com with ESMTPSA id t30sm337673edt.91.2019.09.20.06.51.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2019 06:51:48 -0700 (PDT)
+        Fri, 20 Sep 2019 06:51:45 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ricardo@ribalda.com>
 To:     Philipp Zabel <p.zabel@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v6 6/7] Documentation: media: Describe V4L2_CID_UNIT_CELL_SIZE
-Date:   Fri, 20 Sep 2019 15:51:36 +0200
-Message-Id: <20190920135137.10052-7-ricardo@ribalda.com>
+Subject: [PATCH v6 4/7] Documentation: media: Document V4L2_CTRL_TYPE_AREA
+Date:   Fri, 20 Sep 2019 15:51:34 +0200
+Message-Id: <20190920135137.10052-5-ricardo@ribalda.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190920135137.10052-1-ricardo@ribalda.com>
 References: <20190920135137.10052-1-ricardo@ribalda.com>
@@ -76,32 +76,32 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Ricardo Ribalda Delgado <ribalda@kernel.org>
 
-New control to pass to userspace the width/height of a pixel. Which is
-needed for calibration and lens selection.
+A struct v4l2_area containing the width and the height of a rectangular
+area.
 
 Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 ---
- Documentation/media/uapi/v4l/ext-ctrls-image-source.rst | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ Documentation/media/uapi/v4l/vidioc-queryctrl.rst | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/media/uapi/v4l/ext-ctrls-image-source.rst b/Documentation/media/uapi/v4l/ext-ctrls-image-source.rst
-index 2c3ab5796d76..033672dcb43d 100644
---- a/Documentation/media/uapi/v4l/ext-ctrls-image-source.rst
-+++ b/Documentation/media/uapi/v4l/ext-ctrls-image-source.rst
-@@ -55,3 +55,12 @@ Image Source Control IDs
- 
- ``V4L2_CID_TEST_PATTERN_GREENB (integer)``
-     Test pattern green (next to blue) colour component.
-+
-+``V4L2_CID_UNIT_CELL_SIZE (struct)``
-+    This control returns the unit cell size in nanometres. The struct
-+    :c:type:`v4l2_area` provides the width and the height in separated
-+    fields to take into consideration asymmetric pixels and/or hardware
-+    binning.
-+    The unit cell consists of the whole area of the pixel, sensitive and
-+    non-sensitive.
-+    This control is required for automatic calibration sensors/cameras.
+diff --git a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
+index a3d56ffbf4cc..33aff21b7d11 100644
+--- a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
++++ b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
+@@ -443,6 +443,12 @@ See also the examples in :ref:`control`.
+       - n/a
+       - A struct :c:type:`v4l2_ctrl_mpeg2_quantization`, containing MPEG-2
+ 	quantization matrices for stateless video decoders.
++    * - ``V4L2_CTRL_TYPE_AREA``
++      - n/a
++      - n/a
++      - n/a
++      - A struct :c:type:`v4l2_area`, containing the width and the height
++        of a rectangular area. Units depend on the use case.
+     * - ``V4L2_CTRL_TYPE_H264_SPS``
+       - n/a
+       - n/a
 -- 
 2.23.0
 
