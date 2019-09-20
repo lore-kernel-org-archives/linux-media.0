@@ -8,54 +8,54 @@ X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE2E0C49ED7
-	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D590C3A5A2
+	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:04:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B7B34208C0
-	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:04:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 222F0208C0
+	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:04:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="vJZe3oU7"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="lOSTGWap"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406020AbfITREO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Sep 2019 13:04:14 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:57796 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405970AbfITREI (ORCPT
+        id S2405921AbfITREF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 20 Sep 2019 13:04:05 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:51058 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405879AbfITRED (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 20 Sep 2019 13:04:08 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8KH47hj012353;
-        Fri, 20 Sep 2019 12:04:07 -0500
+        Fri, 20 Sep 2019 13:04:03 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8KH42vb009049;
+        Fri, 20 Sep 2019 12:04:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568999047;
-        bh=gyIsxxx4ZBo8ek35yKhb/ta0vNTwS1riHVKZyO1uT68=;
+        s=ti-com-17Q1; t=1568999042;
+        bh=MCTFlIFe67UPV/JV96GfHqTs41gXz1Z0qQsrgw/MY94=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=vJZe3oU7LSYeHNANgXfpCgtmmdZKj9UPyA0fL0w5uwrb0xLHb4K8mgUlHBlmZbRLG
-         rHsK5YQhf+K2ZuUItWA1tEStoPSIkd4vYZsSmrgKVuMjxIPabqX8Crik+rqM68e84Y
-         Xca7lFNVrT9YNAJo9oDYVU+SeP7E6qWyIfojjVuk=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8KH47P5102749
+        b=lOSTGWapykoVk2icgBOFE0r6hlSQxp2ne85N9EbtwKDPVQOfUZKxUcnJojC46F64W
+         7hFadIRp0LOUWjLvGEft+wZnvw7jebQD54kG5iNIsC4/Nf9NZzpUVGeg6DXSJJbGCw
+         1gVxC/4EJvIzt0ppIUc6rIebk66Oq62T0etV9+bE=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8KH42rc103343
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Sep 2019 12:04:07 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 20 Sep 2019 12:04:02 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 20
- Sep 2019 12:04:02 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2019 12:03:57 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
  Frontend Transport; Fri, 20 Sep 2019 12:04:01 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8KH3r77054719;
-        Fri, 20 Sep 2019 12:04:06 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8KH3r73054719;
+        Fri, 20 Sep 2019 12:04:01 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v3 13/13] media: am437x-vpfe: Remove print_fourcc helper
-Date:   Fri, 20 Sep 2019 12:05:54 -0500
-Message-ID: <20190920170554.29666-14-bparrot@ti.com>
+Subject: [Patch v3 09/13] media: am437x-vpfe: fix function trace debug log
+Date:   Fri, 20 Sep 2019 12:05:50 -0500
+Message-ID: <20190920170554.29666-10-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190920170554.29666-1-bparrot@ti.com>
 References: <20190920170554.29666-1-bparrot@ti.com>
@@ -67,117 +67,292 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-print_fourcc helper function was used for debug log to convert a pixel
-format code into its readable form for display purposes. But since it
-used a single static buffer to perform the conversion this might lead to
-display format issue when more than one instance was invoked
-simultaneously.
+checkpatch.pl nows reports several:
+WARNING: Prefer using '"%s...", __func__' to using '<function name>',
+this function's name, in a string.
 
-Instead we make use of the new standard macros to log the fourcc value
-in a human readable format.
-
-This patch is dependent on the following series:
-
-Link: https://patchwork.kernel.org/project/linux-media/list/?series=174497
+So fix these for the whole driver.
+At the same time remove the function entry trace log as those can be
+enabled using ftrace instead.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/am437x/am437x-vpfe.c | 40 ++++++++-------------
- 1 file changed, 14 insertions(+), 26 deletions(-)
+ drivers/media/platform/am437x/am437x-vpfe.c | 72 ++++-----------------
+ 1 file changed, 13 insertions(+), 59 deletions(-)
 
 diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index 447610b67db4..fea30d701af5 100644
+index b213348fd1c4..9b781ab21893 100644
 --- a/drivers/media/platform/am437x/am437x-vpfe.c
 +++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -151,20 +151,6 @@ static unsigned int __get_bytesperpixel(struct vpfe_device *vpfe,
- 	return bpp;
- }
+@@ -443,8 +443,8 @@ static int vpfe_ccdc_set_params(struct vpfe_ccdc *ccdc, void __user *params)
+ 	x = copy_from_user(&raw_params, params, sizeof(raw_params));
+ 	if (x) {
+ 		vpfe_dbg(1, vpfe,
+-			"vpfe_ccdc_set_params: error in copying ccdc params, %d\n",
+-			x);
++			 "%s: error in copying ccdc params, %d\n",
++			 __func__, x);
+ 		return -EFAULT;
+ 	}
  
--/*  Print Four-character-code (FOURCC) */
--static char *print_fourcc(u32 fmt)
--{
--	static char code[5];
--
--	code[0] = (unsigned char)(fmt & 0xff);
--	code[1] = (unsigned char)((fmt >> 8) & 0xff);
--	code[2] = (unsigned char)((fmt >> 16) & 0xff);
--	code[3] = (unsigned char)((fmt >> 24) & 0xff);
--	code[4] = '\0';
--
--	return code;
--}
--
- static inline u32 vpfe_reg_read(struct vpfe_ccdc *ccdc, u32 offset)
+@@ -462,11 +462,9 @@ static int vpfe_ccdc_set_params(struct vpfe_ccdc *ccdc, void __user *params)
+  */
+ static void vpfe_ccdc_config_ycbcr(struct vpfe_ccdc *ccdc)
  {
- 	return ioread32(ccdc->ccdc_cfg.base_addr + offset);
-@@ -612,8 +598,8 @@ static int vpfe_ccdc_set_pixel_format(struct vpfe_ccdc *ccdc, u32 pixfmt)
+-	struct vpfe_device *vpfe = container_of(ccdc, struct vpfe_device, ccdc);
+ 	struct ccdc_params_ycbcr *params = &ccdc->ccdc_cfg.ycbcr;
+ 	u32 syn_mode;
+ 
+-	vpfe_dbg(3, vpfe, "vpfe_ccdc_config_ycbcr:\n");
+ 	/*
+ 	 * first restore the CCDC registers to default values
+ 	 * This is important since we assume default values to be set in
+@@ -598,8 +596,6 @@ static void vpfe_ccdc_config_raw(struct vpfe_ccdc *ccdc)
+ 	unsigned int syn_mode;
+ 	unsigned int val;
+ 
+-	vpfe_dbg(3, vpfe, "vpfe_ccdc_config_raw:\n");
+-
+ 	/* Reset CCDC */
+ 	vpfe_ccdc_restore_defaults(ccdc);
+ 
+@@ -700,8 +696,8 @@ static int vpfe_ccdc_set_pixel_format(struct vpfe_ccdc *ccdc, u32 pixfmt)
  {
  	struct vpfe_device *vpfe = container_of(ccdc, struct vpfe_device, ccdc);
  
--	vpfe_dbg(1, vpfe, "%s: if_type: %d, pixfmt:%s\n",
--		 __func__, ccdc->ccdc_cfg.if_type, print_fourcc(pixfmt));
-+	vpfe_dbg(1, vpfe, "%s: if_type: %d, pixfmt:" v4l2_fourcc_conv "\n",
-+		 __func__, ccdc->ccdc_cfg.if_type, v4l2_fourcc_args(pixfmt));
+-	vpfe_dbg(1, vpfe, "vpfe_ccdc_set_pixel_format: if_type: %d, pixfmt:%s\n",
+-		 ccdc->ccdc_cfg.if_type, print_fourcc(pixfmt));
++	vpfe_dbg(1, vpfe, "%s: if_type: %d, pixfmt:%s\n",
++		 __func__, ccdc->ccdc_cfg.if_type, print_fourcc(pixfmt));
  
  	if (ccdc->ccdc_cfg.if_type == VPFE_RAW_BAYER) {
  		ccdc->ccdc_cfg.bayer.pix_fmt = CCDC_PIXFMT_RAW;
-@@ -900,8 +886,8 @@ static int vpfe_config_ccdc_image_format(struct vpfe_device *vpfe)
- 	u32 bpp;
+@@ -987,8 +983,6 @@ static int vpfe_config_ccdc_image_format(struct vpfe_device *vpfe)
+ 	enum ccdc_frmfmt frm_fmt = CCDC_FRMFMT_INTERLACED;
  	int ret = 0;
  
--	vpfe_dbg(1, vpfe, "pixelformat: %s\n",
--		print_fourcc(vpfe->fmt.fmt.pix.pixelformat));
-+	vpfe_dbg(1, vpfe, "pixelformat: " v4l2_fourcc_conv "\n",
-+		 v4l2_fourcc_args(vpfe->fmt.fmt.pix.pixelformat));
+-	vpfe_dbg(2, vpfe, "vpfe_config_ccdc_image_format\n");
+-
+ 	vpfe_dbg(1, vpfe, "pixelformat: %s\n",
+ 		print_fourcc(vpfe->fmt.fmt.pix.pixelformat));
  
- 	if (vpfe_ccdc_set_pixel_format(&vpfe->ccdc,
- 			vpfe->fmt.fmt.pix.pixelformat) < 0) {
-@@ -1342,8 +1328,9 @@ static int vpfe_calc_format_size(struct vpfe_device *vpfe,
- 	f->fmt.pix.sizeimage = f->fmt.pix.bytesperline *
- 			       f->fmt.pix.height;
+@@ -1354,8 +1348,6 @@ static int vpfe_querycap(struct file *file, void  *priv,
+ {
+ 	struct vpfe_device *vpfe = video_drvdata(file);
  
--	vpfe_dbg(3, vpfe, "%s: fourcc: %s size: %dx%d bpl:%d img_size:%d\n",
--		 __func__, print_fourcc(f->fmt.pix.pixelformat),
-+	vpfe_dbg(3, vpfe,
-+		 "%s: fourcc: " v4l2_fourcc_conv " size: %dx%d bpl:%d img_size:%d\n",
-+		 __func__,  v4l2_fourcc_args(f->fmt.pix.pixelformat),
- 		 f->fmt.pix.width, f->fmt.pix.height,
- 		 f->fmt.pix.bytesperline, f->fmt.pix.sizeimage);
+-	vpfe_dbg(2, vpfe, "vpfe_querycap\n");
+-
+ 	strscpy(cap->driver, VPFE_MODULE_NAME, sizeof(cap->driver));
+ 	strscpy(cap->card, "TI AM437x VPFE", sizeof(cap->card));
+ 	snprintf(cap->bus_info, sizeof(cap->bus_info),
+@@ -1400,7 +1392,7 @@ static int __vpfe_get_format(struct vpfe_device *vpfe,
+ 	format->type = vpfe->fmt.type;
  
-@@ -1378,8 +1365,8 @@ static int vpfe_enum_fmt(struct file *file, void  *priv,
+ 	vpfe_dbg(1, vpfe,
+-		 "%s size %dx%d (%s) bytesperline = %d, size = %d, bpp = %d\n",
++		 "%s: size %dx%d (%s) bytesperline = %d, size = %d, bpp = %d\n",
+ 		 __func__, format->fmt.pix.width, format->fmt.pix.height,
+ 		 print_fourcc(format->fmt.pix.pixelformat),
+ 		 format->fmt.pix.bytesperline, format->fmt.pix.sizeimage, *bpp);
+@@ -1416,8 +1408,6 @@ static int __vpfe_set_format(struct vpfe_device *vpfe,
+ 	struct v4l2_subdev_format fmt;
+ 	int ret;
+ 
+-	vpfe_dbg(2, vpfe, "__vpfe_set_format\n");
+-
+ 	sdinfo = vpfe->current_subdev;
+ 	if (!sdinfo->sd)
+ 		return -EINVAL;
+@@ -1450,8 +1440,6 @@ static int vpfe_g_fmt(struct file *file, void *priv,
+ {
+ 	struct vpfe_device *vpfe = video_drvdata(file);
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_g_fmt\n");
+-
+ 	*fmt = vpfe->fmt;
+ 
+ 	return 0;
+@@ -1464,9 +1452,6 @@ static int vpfe_enum_fmt(struct file *file, void  *priv,
+ 	struct vpfe_subdev_info *sdinfo;
+ 	struct vpfe_fmt *fmt;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_enum_format index:%d\n",
+-		f->index);
+-
+ 	sdinfo = vpfe->current_subdev;
+ 	if (!sdinfo->sd)
+ 		return -EINVAL;
+@@ -1478,8 +1463,8 @@ static int vpfe_enum_fmt(struct file *file, void  *priv,
  
  	f->pixelformat = fmt->fourcc;
  
--	vpfe_dbg(1, vpfe, "%s: mbus index: %d code: %x pixelformat: %s\n",
--		 __func__, f->index, fmt->code, print_fourcc(fmt->fourcc));
-+	vpfe_dbg(1, vpfe, "%s: mbus index: %d code: %x pixelformat: " v4l2_fourcc_conv "\n",
-+		 __func__, f->index, fmt->code, v4l2_fourcc_args(fmt->fourcc));
+-	vpfe_dbg(1, vpfe, "vpfe_enum_format: mbus index: %d code: %x pixelformat: %s\n",
+-		 f->index, fmt->code, print_fourcc(fmt->fourcc));
++	vpfe_dbg(1, vpfe, "%s: mbus index: %d code: %x pixelformat: %s\n",
++		 __func__, f->index, fmt->code, print_fourcc(fmt->fourcc));
  
  	return 0;
  }
-@@ -1528,8 +1515,8 @@ static int vpfe_enum_size(struct file *file, void  *priv,
+@@ -1490,8 +1475,6 @@ static int vpfe_try_fmt(struct file *file, void *priv,
+ 	struct vpfe_device *vpfe = video_drvdata(file);
+ 	unsigned int bpp;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_try_fmt\n");
+-
+ 	return __vpfe_get_format(vpfe, fmt, &bpp);
+ }
+ 
+@@ -1503,8 +1486,6 @@ static int vpfe_s_fmt(struct file *file, void *priv,
+ 	unsigned int bpp;
+ 	int ret;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_s_fmt\n");
+-
+ 	/* If streaming is started, return error */
+ 	if (vb2_is_busy(&vpfe->buffer_queue)) {
+ 		vpfe_err(vpfe, "%s device busy\n", __func__);
+@@ -1550,8 +1531,6 @@ static int vpfe_enum_size(struct file *file, void  *priv,
+ 	struct vpfe_fmt *fmt;
+ 	int ret;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_enum_size\n");
+-
+ 	/* check for valid format */
+ 	fmt = find_format_by_pix(vpfe, fsize->pixel_format);
+ 	if (!fmt) {
+@@ -1584,17 +1563,17 @@ static int vpfe_enum_size(struct file *file, void  *priv,
+ 	if (ret)
+ 		return -EINVAL;
+ 
+-	vpfe_dbg(1, vpfe, "vpfe_enum_size: index: %d code: %x W:[%d,%d] H:[%d,%d]\n",
+-		fse.index, fse.code, fse.min_width, fse.max_width,
+-		fse.min_height, fse.max_height);
++	vpfe_dbg(1, vpfe, "%s: index: %d code: %x W:[%d,%d] H:[%d,%d]\n",
++		 __func__, fse.index, fse.code, fse.min_width, fse.max_width,
++		 fse.min_height, fse.max_height);
+ 
+ 	fsize->type = V4L2_FRMSIZE_TYPE_DISCRETE;
  	fsize->discrete.width = fse.max_width;
  	fsize->discrete.height = fse.max_height;
  
--	vpfe_dbg(1, vpfe, "%s: index: %d pixformat: %s size: %dx%d\n",
--		 __func__, fsize->index, print_fourcc(fsize->pixel_format),
-+	vpfe_dbg(1, vpfe, "%s: index: %d pixformat: " v4l2_fourcc_conv " size: %dx%d\n",
-+		 __func__, fsize->index, v4l2_fourcc_args(fsize->pixel_format),
- 		 fsize->discrete.width, fsize->discrete.height);
+-	vpfe_dbg(1, vpfe, "vpfe_enum_size: index: %d pixformat: %s size: %dx%d\n",
+-		fsize->index, print_fourcc(fsize->pixel_format),
+-		fsize->discrete.width, fsize->discrete.height);
++	vpfe_dbg(1, vpfe, "%s: index: %d pixformat: %s size: %dx%d\n",
++		 __func__, fsize->index, print_fourcc(fsize->pixel_format),
++		 fsize->discrete.width, fsize->discrete.height);
  
  	return 0;
-@@ -2202,8 +2189,9 @@ vpfe_async_bound(struct v4l2_async_notifier *notifier,
- 				continue;
- 			vpfe->active_fmt[i] = fmt;
- 			vpfe_dbg(3, vpfe,
--				 "matched fourcc: %s code: %04x idx: %d\n",
--				 print_fourcc(fmt->fourcc), mbus_code.code, i);
-+				 "matched fourcc: " v4l2_fourcc_conv " code: %04x idx: %d\n",
-+				 v4l2_fourcc_args(fmt->fourcc),
-+				 mbus_code.code, i);
- 			vpfe->num_active_fmt = ++i;
- 		}
- 	}
+ }
+@@ -1659,8 +1638,6 @@ static int vpfe_enum_input(struct file *file, void *priv,
+ 	struct vpfe_subdev_info *sdinfo;
+ 	int subdev, index;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_enum_input\n");
+-
+ 	if (vpfe_get_subdev_input_index(vpfe, &subdev, &index,
+ 					inp->index) < 0) {
+ 		vpfe_dbg(1, vpfe,
+@@ -1677,8 +1654,6 @@ static int vpfe_g_input(struct file *file, void *priv, unsigned int *index)
+ {
+ 	struct vpfe_device *vpfe = video_drvdata(file);
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_g_input\n");
+-
+ 	return vpfe_get_app_input_index(vpfe, index);
+ }
+ 
+@@ -1691,8 +1666,6 @@ static int vpfe_set_input(struct vpfe_device *vpfe, unsigned int index)
+ 	u32 input, output;
+ 	int ret;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_set_input: index: %d\n", index);
+-
+ 	/* If streaming is started, return error */
+ 	if (vb2_is_busy(&vpfe->buffer_queue)) {
+ 		vpfe_err(vpfe, "%s device busy\n", __func__);
+@@ -1748,9 +1721,6 @@ static int vpfe_s_input(struct file *file, void *priv, unsigned int index)
+ {
+ 	struct vpfe_device *vpfe = video_drvdata(file);
+ 
+-	vpfe_dbg(2, vpfe,
+-		"vpfe_s_input: index: %d\n", index);
+-
+ 	return vpfe_set_input(vpfe, index);
+ }
+ 
+@@ -1759,8 +1729,6 @@ static int vpfe_querystd(struct file *file, void *priv, v4l2_std_id *std_id)
+ 	struct vpfe_device *vpfe = video_drvdata(file);
+ 	struct vpfe_subdev_info *sdinfo;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_querystd\n");
+-
+ 	sdinfo = vpfe->current_subdev;
+ 	if (!(sdinfo->inputs[0].capabilities & V4L2_IN_CAP_STD))
+ 		return -ENODATA;
+@@ -1776,8 +1744,6 @@ static int vpfe_s_std(struct file *file, void *priv, v4l2_std_id std_id)
+ 	struct vpfe_subdev_info *sdinfo;
+ 	int ret;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_s_std\n");
+-
+ 	sdinfo = vpfe->current_subdev;
+ 	if (!(sdinfo->inputs[0].capabilities & V4L2_IN_CAP_STD))
+ 		return -ENODATA;
+@@ -1809,8 +1775,6 @@ static int vpfe_g_std(struct file *file, void *priv, v4l2_std_id *std_id)
+ 	struct vpfe_device *vpfe = video_drvdata(file);
+ 	struct vpfe_subdev_info *sdinfo;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_g_std\n");
+-
+ 	sdinfo = vpfe->current_subdev;
+ 	if (sdinfo->inputs[0].capabilities != V4L2_IN_CAP_STD)
+ 		return -ENODATA;
+@@ -1828,8 +1792,6 @@ static void vpfe_calculate_offsets(struct vpfe_device *vpfe)
+ {
+ 	struct v4l2_rect image_win;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_calculate_offsets\n");
+-
+ 	vpfe_ccdc_get_image_window(&vpfe->ccdc, &image_win);
+ 	vpfe->field_off = image_win.height * image_win.width;
+ }
+@@ -2030,8 +1992,6 @@ static int vpfe_g_pixelaspect(struct file *file, void *priv,
+ {
+ 	struct vpfe_device *vpfe = video_drvdata(file);
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_g_pixelaspect\n");
+-
+ 	if (type != V4L2_BUF_TYPE_VIDEO_CAPTURE ||
+ 	    vpfe->std_index >= ARRAY_SIZE(vpfe_standards))
+ 		return -EINVAL;
+@@ -2134,8 +2094,6 @@ static long vpfe_ioctl_default(struct file *file, void *priv,
+ 	struct vpfe_device *vpfe = video_drvdata(file);
+ 	int ret;
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_ioctl_default\n");
+-
+ 	if (!valid_prio) {
+ 		vpfe_err(vpfe, "%s device busy\n", __func__);
+ 		return -EBUSY;
+@@ -2246,8 +2204,6 @@ vpfe_async_bound(struct v4l2_async_notifier *notifier,
+ 	bool found = false;
+ 	int i, j, k;
+ 
+-	vpfe_dbg(1, vpfe, "vpfe_async_bound\n");
+-
+ 	for (i = 0; i < ARRAY_SIZE(vpfe->cfg->asd); i++) {
+ 		if (vpfe->cfg->asd[i]->match.fwnode ==
+ 		    asd[i].match.fwnode) {
+@@ -2579,8 +2535,6 @@ static int vpfe_remove(struct platform_device *pdev)
+ {
+ 	struct vpfe_device *vpfe = platform_get_drvdata(pdev);
+ 
+-	vpfe_dbg(2, vpfe, "vpfe_remove\n");
+-
+ 	pm_runtime_disable(&pdev->dev);
+ 
+ 	v4l2_async_notifier_unregister(&vpfe->notifier);
 -- 
 2.17.1
 
