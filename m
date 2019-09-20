@@ -2,63 +2,60 @@ Return-Path: <SRS0=sOwM=XP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F27CDC49ED7
-	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:04:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3808DC3A5A2
+	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:05:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C9F69208C3
-	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:04:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC843208C3
+	for <linux-media@archiver.kernel.org>; Fri, 20 Sep 2019 17:05:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FZzWDaGs"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="zO2P626n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391508AbfITREx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 20 Sep 2019 13:04:53 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:39312 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405588AbfITRD4 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
+        id S2405704AbfITRD4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Fri, 20 Sep 2019 13:03:56 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8KH3t4s101456;
-        Fri, 20 Sep 2019 12:03:55 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:44068 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403929AbfITRDz (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 20 Sep 2019 13:03:55 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8KH3rB3034497;
+        Fri, 20 Sep 2019 12:03:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1568999035;
-        bh=L+sPKUKH06o+2bCBaoKbYjJxrNj69PQvI6LssiKHDZw=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=FZzWDaGsTQM3Dydlqk05fxQWm5Q7C1npzM2sqtp3dhQeR3BesszXZaHEtK9Wg3wUE
-         CQF4hiOHVE4903XK+GwftMYA72fdSutlpdlAgkmaIFgxHSORCFpLOl4zVA5iBWQin6
-         oG3RywrxoNw+uAln/fD5afad9IRLYtviBvAS+9TU=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8KH3txI102382
+        s=ti-com-17Q1; t=1568999033;
+        bh=TKIYvFFc8jP8BIIrXBcATu4ILnSrfAHWB7sD1Jm8JTY=;
+        h=From:To:CC:Subject:Date;
+        b=zO2P626nk/Lmr3z0CrIVgG+OtZVqOFjWrfLMak29NZEju7bmkRWyvvY+9QhoueiT/
+         VOx7CkzfdbmrOip2KDmpqKx8b3hewonpiP/IXcZEwViGzLvHvt/Ry3dClFf8YR4hiq
+         vCtg3enO/UMDYSm0pKS2NEE9v/aPuYyFRiKRsHnc=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8KH3rGn094876
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 20 Sep 2019 12:03:55 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 20 Sep 2019 12:03:53 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 20
- Sep 2019 12:03:51 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2019 12:03:53 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 20 Sep 2019 12:03:55 -0500
+ Frontend Transport; Fri, 20 Sep 2019 12:03:48 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8KH3r6u054719;
-        Fri, 20 Sep 2019 12:03:55 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8KH3r6s054719;
+        Fri, 20 Sep 2019 12:03:53 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
         <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>,
-        Jyri Sarha <jsarha@ti.com>
-Subject: [Patch v3 02/13] media: am437x-vpfe: Fix missing first line
-Date:   Fri, 20 Sep 2019 12:05:43 -0500
-Message-ID: <20190920170554.29666-3-bparrot@ti.com>
+        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v3 00/13]  media: am437x-vpfe: overdue maintenance
+Date:   Fri, 20 Sep 2019 12:05:41 -0500
+Message-ID: <20190920170554.29666-1-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190920170554.29666-1-bparrot@ti.com>
-References: <20190920170554.29666-1-bparrot@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -67,35 +64,158 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Previous generation of this driver were hard coded to handle
-encoder/decoder where the first line never contains any data and
-was therefore always skipped, however when dealing with actual
-camera sensors the first line is always present.
+This patch series is a collection of patches we have been carrying for a
+while.
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Signed-off-by: Jyri Sarha <jsarha@ti.com>
----
- drivers/media/platform/am437x/am437x-vpfe.c | 4 ----
- 1 file changed, 4 deletions(-)
+A few patches do fix actual bug and v4l2-compliance errors/warnings.
+Other are drivers re-work to simplify/clarify the code for easier
+maintenance.
 
-diff --git a/drivers/media/platform/am437x/am437x-vpfe.c b/drivers/media/platform/am437x/am437x-vpfe.c
-index a3d22f90e64c..1521c072f3e3 100644
---- a/drivers/media/platform/am437x/am437x-vpfe.c
-+++ b/drivers/media/platform/am437x/am437x-vpfe.c
-@@ -345,13 +345,9 @@ static void vpfe_ccdc_setwin(struct vpfe_ccdc *ccdc,
- 	if (frm_fmt == CCDC_FRMFMT_INTERLACED) {
- 		vert_nr_lines = (image_win->height >> 1) - 1;
- 		vert_start >>= 1;
--		/* Since first line doesn't have any data */
--		vert_start += 1;
- 		/* configure VDINT0 */
- 		val = (vert_start << VPFE_VDINT_VDINT0_SHIFT);
- 	} else {
--		/* Since first line doesn't have any data */
--		vert_start += 1;
- 		vert_nr_lines = image_win->height - 1;
- 		/*
- 		 * configure VDINT0 and VDINT1. VDINT1 will be at half
+We also include the SPDX Licensing update which seemed to have been
+missed by the global script thus far.
+
+Changes since v2:
+- Rename VPFE_MAX_ACTIVE_FMT to VPFE_NUM_FORMATS and corrected the
+  comments
+- Move the "Remove print_fourcc helper" patch to the end of the series
+  and rebase it on the pending v4l2_fourcc_conv macros patches
+
+Changes since v1:
+- Address review comment from Joe, Hans and Prabhakar
+- Cleaned-up the function entry debug log
+- Split off the pcr change into its own patch
+- Rework/combine two patches but remove code churn
+- fix miscellaneous typos
+
+=============================
+
+v4l2-compliance SHA: 5b168dc8473911227890526bad26553d9e8ff81b, 32 bits
+
+Compliance test for vpfe device /dev/video0:
+
+Driver Info:
+	Driver name      : vpfe
+	Card type        : TI AM437x VPFE
+	Bus info         : platform:vpfe 48326000.vpfe
+	Driver version   : 5.3.0
+	Capabilities     : 0x85200001
+		Vide o Capture
+		Read/Write
+		Streaming
+		Extended Pix Format
+		D evice Capabilities
+	Device Caps      : 0x05200001
+		Video Capt ure
+		Read/Write
+		Streaming
+		Extended Pix Format
+
+Required ioctls:
+	test VIDIOC_QUERYCAP: OK
+
+Allow for multiple opens:
+	test second /dev/video0 open: OK
+	test VIDIOC_QUERYCAP: OK
+	test VIDIOC_G/S_PRIORITY: OK
+	test for unlimited opens: OK
+
+Debug ioctls:
+	test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+	test VIDIOC_LOG_STATUS: OK
+
+Input ioctls:
+	test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+	test VIDIOC_ENUMAUDIO: OK (Not Supported)
+	test VIDIOC_G/S/ENUMINPUT: OK
+	test VIDIOC_G/S_AUDIO: OK (Not Supported)
+	Inputs: 1 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+	test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+	test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+	test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+	test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+	test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+	Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+	test VIDIOC_ENUM/G/S/QUERY_STD: OK
+	test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+	test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+	test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls (Input 0):
+	test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK
+	test VIDIOC_QUERYCTRL: OK
+	test VIDIOC_G/S_CTRL: OK
+	test VIDIOC_G/S/TRY_EXT_CTRLS: OK
+	test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK
+	test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+	Standard Controls: 3 Private Controls: 0
+
+Format ioctls (Input 0):
+	test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+	test VIDIOC_G/S_PARM: OK
+	test VIDIOC_G_FBUF: OK (Not Supported)
+	test VIDIOC_G_FMT: OK
+	test VIDIOC_TRY_FMT: OK
+	test VIDIOC_S_FMT: OK
+	test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+		fail: v4l2-test-formats.cpp(1419): node->frmsizes_count[pixfmt] > 1
+	test Cropping: FAIL
+	test Composing: OK (Not Supported)
+	test Scaling: OK (Not Supported)
+
+Codec ioctls (Input 0):
+	test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+	test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+	test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls (Input 0):
+	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+	test VIDIOC_EXPBUF: OK
+	test Requests: OK (Not Supported)
+
+Test input 0:
+
+Streaming ioctls:
+	test read/write: OK
+	test blocking wait: OK
+	test MMAP (no poll): OK                           
+	test MMAP (select): OK                            
+	test MMAP (epoll): OK                             
+	test USERPTR (no poll): OK (Not Supported)
+	test USERPTR (select): OK (Not Supported)
+	test DMABUF: Cannot test, specify --expbuf-device
+
+Total for vpfe device /dev/video0: 51, Succeeded: 50, Failed: 1, Warnings: 0
+============================
+
+Benoit Parrot (12):
+  media: am437x-vpfe: Fix missing first line
+  media: am437x-vpfe: Rework ISR routine for clarity
+  media: am437x-vpfe: Wait for end of frame before tear-down
+  media: am437x-vpfe: fix start streaming error path
+  media: am437x-vpfe: Streamlined vb2 buffer cleanup
+  media: am437x-vpfe: Setting STD to current value is not an error
+  media: am437x-vpfe: Use a per instance format array instead of a
+    static one
+  media: am437x-vpfe: fix function trace debug log
+  media: am437x-vpfe: TRY_FMT ioctl is not really trying anything
+  media: am437x-vpfe: Remove per bus width static data
+  media: am437x-vpfe: Switch to SPDX Licensing
+  media: am437x-vpfe: Remove print_fourcc helper
+
+Dave Gerlach (1):
+  media: am437x-vpfe: Fix suspend path to always handle pinctrl config
+
+ drivers/media/platform/am437x/am437x-vpfe.c   | 880 ++++++++----------
+ drivers/media/platform/am437x/am437x-vpfe.h   |  43 +-
+ .../media/platform/am437x/am437x-vpfe_regs.h  |  10 +-
+ 3 files changed, 406 insertions(+), 527 deletions(-)
+
 -- 
 2.17.1
 
