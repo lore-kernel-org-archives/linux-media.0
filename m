@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EEA3C3A5A2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:29:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9106C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:29:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6CA2C2054F
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:29:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AEDD32054F
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:29:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569180569;
-	bh=DTKvO66v163p+va+SeGgFiOwP3tsFY04aRiTV0shENc=;
+	s=default; t=1569180570;
+	bh=48xQrCMOZWQY0GMUtiT7ORhyY7JKh36Uou8DfkPsZ14=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zjpZllTAEVM+XF6B4V/F658VivZuTu1Ydn1sfXp21/qnoeO4+BXG+AkSD8DGbVgjZ
-	 D4mZWZz+jRUFm1qsX3J5CQK1z4bsC4vnXNB6ZzjrxQv1my7CV1z++12yDhvVycMe6B
-	 /vBio2N0tlpL05DGZScOvSDitEm2XjlDULVObiJ0=
+	b=QnAIFFHM2ytk6nU8Ot1RLGubD3SF1VbVLORK9L8rT1Q50o5MLa+iddNbH14U+BXNB
+	 I990+WFA7HOmzBdYT5g9pVJ71YWBDqgX5LBqFKe7pzO0Dq+kiwqvEGe97AHMqbt0e8
+	 FHYU656aKCLTYwlDmMtSjCt/q4tv3EiR/7ya8aAk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392551AbfIVSto (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:49:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46752 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392534AbfIVStn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S2392535AbfIVStn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Sun, 22 Sep 2019 14:49:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46734 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2392526AbfIVStm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:49:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7BF31208C2;
-        Sun, 22 Sep 2019 18:49:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 54C2B21A4A;
+        Sun, 22 Sep 2019 18:49:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178183;
-        bh=DTKvO66v163p+va+SeGgFiOwP3tsFY04aRiTV0shENc=;
+        s=default; t=1569178182;
+        bh=48xQrCMOZWQY0GMUtiT7ORhyY7JKh36Uou8DfkPsZ14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OxO28WpHkzg+T2FAJxo1HvdfA9LUIe+GB51LEW3oYCZg12a/uZLTGMNrU55lpCIed
-         I+AG3O+arT9l4T/ZqyfSHhVsJbBAp27XFs4Wj9LDvImqCKOSI1zxiu++In1BsZfPKI
-         oYTKo3gJ16dRqi6O9TAkmbvcCAdrW8PsZlc/7taU=
+        b=fViB+HfiPw3aCaxHDxThe1RBiU+UO42WHbMKtkJREmbC23ZSEiu0hI8JiUsSV3bg0
+         1U60J3FMXneuVYkrX5Qgy/z8uifOEeqOtZax1KZ0CFrY4mc+1ukMSHZ55VBLGs271G
+         i1SY+Ce/8rkfYKXABEj3O8JuvDSHfSD6kzDpXYoE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>, Sean Wang <sean.wang@kernel.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 013/185] media: mtk-cir: lower de-glitch counter for rc-mm protocol
-Date:   Sun, 22 Sep 2019 14:46:31 -0400
-Message-Id: <20190922184924.32534-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 012/185] media: dib0700: fix link error for dibx000_i2c_set_speed
+Date:   Sun, 22 Sep 2019 14:46:30 -0400
+Message-Id: <20190922184924.32534-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
 References: <20190922184924.32534-1-sashal@kernel.org>
@@ -58,49 +58,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 5dd4b89dc098bf22cd13e82a308f42a02c102b2b ]
+[ Upstream commit 765bb8610d305ee488b35d07e2a04ae52fb2df9c ]
 
-The rc-mm protocol can't be decoded by the mtk-cir since the de-glitch
-filter removes pulses/spaces shorter than 294 microseconds.
+When CONFIG_DVB_DIB9000 is disabled, we can still compile code that
+now fails to link against dibx000_i2c_set_speed:
 
-Tested on a BananaPi R2.
+drivers/media/usb/dvb-usb/dib0700_devices.o: In function `dib01x0_pmu_update.constprop.7':
+dib0700_devices.c:(.text.unlikely+0x1c9c): undefined reference to `dibx000_i2c_set_speed'
 
+The call sites are both through dib01x0_pmu_update(), which gets passed
+an 'i2c' pointer from dib9000_get_i2c_master(), which has returned
+NULL. Checking this pointer seems to be a good idea anyway, and it avoids
+the link failure in most cases.
+
+Sean Young found another case that is not fixed by that, where certain
+gcc versions leave an unused function in place that causes the link error,
+but adding an explict IS_ENABLED() check also solves this.
+
+Fixes: b7f54910ce01 ("V4L/DVB (4647): Added module for DiB0700 based devices")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sean Young <sean@mess.org>
-Acked-by: Sean Wang <sean.wang@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/mtk-cir.c | 8 ++++++++
+ drivers/media/usb/dvb-usb/dib0700_devices.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/rc/mtk-cir.c b/drivers/media/rc/mtk-cir.c
-index 46101efe017be..da457bf851303 100644
---- a/drivers/media/rc/mtk-cir.c
-+++ b/drivers/media/rc/mtk-cir.c
-@@ -35,6 +35,11 @@
- /* Fields containing pulse width data */
- #define MTK_WIDTH_MASK		  (GENMASK(7, 0))
+diff --git a/drivers/media/usb/dvb-usb/dib0700_devices.c b/drivers/media/usb/dvb-usb/dib0700_devices.c
+index 66d685065e065..ab7a100ec84fe 100644
+--- a/drivers/media/usb/dvb-usb/dib0700_devices.c
++++ b/drivers/media/usb/dvb-usb/dib0700_devices.c
+@@ -2439,9 +2439,13 @@ static int dib9090_tuner_attach(struct dvb_usb_adapter *adap)
+ 		8, 0x0486,
+ 	};
  
-+/* IR threshold */
-+#define MTK_IRTHD		 0x14
-+#define MTK_DG_CNT_MASK		 (GENMASK(12, 8))
-+#define MTK_DG_CNT(x)		 ((x) << 8)
-+
- /* Bit to enable interrupt */
- #define MTK_IRINT_EN		  BIT(0)
++	if (!IS_ENABLED(CONFIG_DVB_DIB9000))
++		return -ENODEV;
+ 	if (dvb_attach(dib0090_fw_register, adap->fe_adap[0].fe, i2c, &dib9090_dib0090_config) == NULL)
+ 		return -ENODEV;
+ 	i2c = dib9000_get_i2c_master(adap->fe_adap[0].fe, DIBX000_I2C_INTERFACE_GPIO_1_2, 0);
++	if (!i2c)
++		return -ENODEV;
+ 	if (dib01x0_pmu_update(i2c, data_dib190, 10) != 0)
+ 		return -ENODEV;
+ 	dib0700_set_i2c_speed(adap->dev, 1500);
+@@ -2517,10 +2521,14 @@ static int nim9090md_tuner_attach(struct dvb_usb_adapter *adap)
+ 		0, 0x00ef,
+ 		8, 0x0406,
+ 	};
++	if (!IS_ENABLED(CONFIG_DVB_DIB9000))
++		return -ENODEV;
+ 	i2c = dib9000_get_tuner_interface(adap->fe_adap[0].fe);
+ 	if (dvb_attach(dib0090_fw_register, adap->fe_adap[0].fe, i2c, &nim9090md_dib0090_config[0]) == NULL)
+ 		return -ENODEV;
+ 	i2c = dib9000_get_i2c_master(adap->fe_adap[0].fe, DIBX000_I2C_INTERFACE_GPIO_1_2, 0);
++	if (!i2c)
++		return -ENODEV;
+ 	if (dib01x0_pmu_update(i2c, data_dib190, 10) < 0)
+ 		return -ENODEV;
  
-@@ -400,6 +405,9 @@ static int mtk_ir_probe(struct platform_device *pdev)
- 	mtk_w32_mask(ir, val, ir->data->fields[MTK_HW_PERIOD].mask,
- 		     ir->data->fields[MTK_HW_PERIOD].reg);
- 
-+	/* Set de-glitch counter */
-+	mtk_w32_mask(ir, MTK_DG_CNT(1), MTK_DG_CNT_MASK, MTK_IRTHD);
-+
- 	/* Enable IR and PWM */
- 	val = mtk_r32(ir, MTK_CONFIG_HIGH_REG);
- 	val |= MTK_OK_COUNT(ir->data->ok_count) |  MTK_PWM_EN | MTK_IR_EN;
 -- 
 2.20.1
 
