@@ -7,45 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56181C49ED7
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:33:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5182C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:34:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 20BBD20640
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:33:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BDE2206B6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:34:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569180819;
-	bh=kmV+YHG6BmNnd6KqVNhoq9PwNagd3wWpcvAWi409cOs=;
+	s=default; t=1569180840;
+	bh=wxlemXqcQli902QZT0OQcLMn5GX/KD1gd3Ig9+iAhYs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=awkVywAfUCDRNzu8XvgRTH3oHslC5mmHirm97osepQlp/yGIRdlTtSQRyXsBc2s79
-	 UwQs8hv6dDbo6e9m/CiJ2sY+Gd7sk6ElpiioM07WEQRED1EWAgBNRdLphQO7dEu0ZP
-	 i2nfG6U/yfPRwwdrIzmIEPG1aag4R8RiXNfhmNvU=
+	b=KRLMe+2baK4LU/nGO5Wji5nRxxAJ4a3/pXj37pDX8wvJkXdP4k/aV2bXlgc/w6wG4
+	 ag41WD96tuwO3UFQ0SGiq+P4/XYQFiI+EbtvkFXlyHwKTFmpai/nzdYfGOYiqw1W32
+	 5bSMRD8uEC4F9ACRC5eqgXuzlvX+Us5aqIE3rY24=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391004AbfIVSre (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:47:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44002 "EHLO mail.kernel.org"
+        id S2438433AbfIVTd4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:33:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43884 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390929AbfIVSre (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:47:34 -0400
+        id S2390861AbfIVSr2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:47:28 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DBD2521907;
-        Sun, 22 Sep 2019 18:47:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0203B214D9;
+        Sun, 22 Sep 2019 18:47:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178053;
-        bh=kmV+YHG6BmNnd6KqVNhoq9PwNagd3wWpcvAWi409cOs=;
+        s=default; t=1569178047;
+        bh=wxlemXqcQli902QZT0OQcLMn5GX/KD1gd3Ig9+iAhYs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rakboH4xAAebeB+eUET4rrt7MiczD/0rI5Dri+cDN7p2PWWDn2kO3sGc8TCxPH1/c
-         QAyvgh2nsEffCm6scggyG2gcuN/9A4opknwALzveihkfiiqK84wJaqwXN7nEH5AWuv
-         ZtVOOXWnkpdMP1emlHXmcZPSkO3hq8SPgAfFhfWU=
+        b=mwdsWB0A6FLrilEx+Yx4cWKgtwkaIMsHnLmT3N0iJfAdCiQSV9UrZ+B5WZj5bahKD
+         8/fPS9JLHtHU016GsGIA0QzSygTwDOlSymVUa5zIfi5mX8gPEwRZFA9pRXNPMzZzL5
+         e1PmEOv7wpwSbFuvOswiROHPDHsDa7oORTt6zwbg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Eddie James <eajames@linux.ibm.com>,
+Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 130/203] media: aspeed-video: address a protential usage of an unitialized var
-Date:   Sun, 22 Sep 2019 14:42:36 -0400
-Message-Id: <20190922184350.30563-130-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 126/203] media: saa7134: fix terminology around saa7134_i2c_eeprom_md7134_gate()
+Date:   Sun, 22 Sep 2019 14:42:32 -0400
+Message-Id: <20190922184350.30563-126-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184350.30563-1-sashal@kernel.org>
 References: <20190922184350.30563-1-sashal@kernel.org>
@@ -58,52 +59,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
 
-[ Upstream commit 31b8b0bd6e55c3ea5a08bb8141fa5d3c90600e3b ]
+[ Upstream commit 9d802222a3405599d6e1984d9324cddf592ea1f4 ]
 
-While this might not occur in practice, if the device is doing
-the right thing, it would be teoretically be possible to have
-both hsync_counter and vsync_counter negatives.
+saa7134_i2c_eeprom_md7134_gate() function and the associated comment uses
+an inverted i2c gate open / closed terminology.
+Let's fix this.
 
-If this ever happen, ctrl will be undefined, but the driver
-will still call:
-
-	aspeed_video_update(video, VE_CTRL, 0, ctrl);
-
-Change the code to prevent this to happen.
-
-This was warned by cppcheck:
-
-	[drivers/media/platform/aspeed-video.c:653]: (error) Uninitialized variable: ctrl
-
-Reviewed-by: Eddie James <eajames@linux.ibm.com>
+Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+[hverkuil-cisco@xs4all.nl: fix alignment checkpatch warning]
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/aspeed-video.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/media/pci/saa7134/saa7134-i2c.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/aspeed-video.c b/drivers/media/platform/aspeed-video.c
-index f899ac3b4a613..4ef37cfc84467 100644
---- a/drivers/media/platform/aspeed-video.c
-+++ b/drivers/media/platform/aspeed-video.c
-@@ -630,7 +630,7 @@ static void aspeed_video_check_and_set_polarity(struct aspeed_video *video)
- 	}
+diff --git a/drivers/media/pci/saa7134/saa7134-i2c.c b/drivers/media/pci/saa7134/saa7134-i2c.c
+index 493b1858815fb..04e85765373ec 100644
+--- a/drivers/media/pci/saa7134/saa7134-i2c.c
++++ b/drivers/media/pci/saa7134/saa7134-i2c.c
+@@ -342,7 +342,11 @@ static const struct i2c_client saa7134_client_template = {
  
- 	if (hsync_counter < 0 || vsync_counter < 0) {
--		u32 ctrl;
-+		u32 ctrl = 0;
+ /* ----------------------------------------------------------- */
  
- 		if (hsync_counter < 0) {
- 			ctrl = VE_CTRL_HSYNC_POL;
-@@ -650,7 +650,8 @@ static void aspeed_video_check_and_set_polarity(struct aspeed_video *video)
- 				V4L2_DV_VSYNC_POS_POL;
- 		}
+-/* On Medion 7134 reading EEPROM needs DVB-T demod i2c gate open */
++/*
++ * On Medion 7134 reading the SAA7134 chip config EEPROM needs DVB-T
++ * demod i2c gate closed due to an address clash between this EEPROM
++ * and the demod one.
++ */
+ static void saa7134_i2c_eeprom_md7134_gate(struct saa7134_dev *dev)
+ {
+ 	u8 subaddr = 0x7, dmdregval;
+@@ -359,14 +363,14 @@ static void saa7134_i2c_eeprom_md7134_gate(struct saa7134_dev *dev)
  
--		aspeed_video_update(video, VE_CTRL, 0, ctrl);
-+		if (ctrl)
-+			aspeed_video_update(video, VE_CTRL, 0, ctrl);
+ 	ret = i2c_transfer(&dev->i2c_adap, i2cgatemsg_r, 2);
+ 	if ((ret == 2) && (dmdregval & 0x2)) {
+-		pr_debug("%s: DVB-T demod i2c gate was left closed\n",
++		pr_debug("%s: DVB-T demod i2c gate was left open\n",
+ 			 dev->name);
+ 
+ 		data[0] = subaddr;
+ 		data[1] = (dmdregval & ~0x2);
+ 		if (i2c_transfer(&dev->i2c_adap, i2cgatemsg_w, 1) != 1)
+-			pr_err("%s: EEPROM i2c gate open failure\n",
+-			  dev->name);
++			pr_err("%s: EEPROM i2c gate close failure\n",
++			       dev->name);
  	}
  }
  
