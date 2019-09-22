@@ -4,51 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D34B1C3A5A2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C805C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:36:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A043A20644
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:36:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6EF820644
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:36:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569180992;
-	bh=bFLCTGyYohymiALd+WKgy6NVhCk0aLlPxI6AHXlCS/0=;
+	s=default; t=1569181008;
+	bh=fKDOifOsBYF0DMQPzAQ/DZmDI8+D34sivsnDb+H7i50=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=lWkrnfOTQfnbkPw/4OLzopMiKc9rB5Qpquh+v2gB0AmnXF5yrSPEROvCzxylCBVv4
-	 9331amja4/XU0z1nDDrav+lWhGsKQo+EofCQY4F5QVhr8/Q4nGU2Mei2MEMLsStH6W
-	 xB/6G2dnen30sQedUa7J1xDQmhzzPKmvGhARWuqs=
+	b=VIZu7qp7t/nYjMj2rAga60qmz11/H6qr03BFIvrUJVPFJeMO76iMg6tJCnWfIV2eg
+	 VsVHn6Coy3CWTNDsj25aIJXbw0UchIgNb+npFYkjJPfGZ5OCDZiYC9rbVICQTovv2I
+	 8U5atd3xz1gPnpcrPtuGyG0e8RWSroPW76qlttF4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439224AbfIVTgb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:36:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42320 "EHLO mail.kernel.org"
+        id S2406768AbfIVTgh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:36:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42310 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729102AbfIVSqO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:46:14 -0400
+        id S1729100AbfIVSqN (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:46:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3D3CE214AF;
-        Sun, 22 Sep 2019 18:46:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2411121928;
+        Sun, 22 Sep 2019 18:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569177974;
-        bh=bFLCTGyYohymiALd+WKgy6NVhCk0aLlPxI6AHXlCS/0=;
+        s=default; t=1569177972;
+        bh=fKDOifOsBYF0DMQPzAQ/DZmDI8+D34sivsnDb+H7i50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CKEo38GSr62s1pTt9rk0r5Oy5Dihgx5Fth8TEEgVdHVVoxc/7Fl+1wFYePsboLwBp
-         Z/psa0dwln2LJMU4yoFG4fCoxVsltZZrdyzGKMW1mtL8cYt9LqFFTkgO6O2euYHMJO
-         DBI2xbR/QDE8elC9a+Wf8oAM0//jPU8Q6MOAVM48=
+        b=KgHxkp8rr9ZfcwfKJ+7lPmXd0hq9WhAX96prJZYdBkPQjnrDKC3Nt3Z9LCR1U00eg
+         R4yt7skiJJ0ZigbFq/TLiNCXx6aqKxuPsa2nWfBIdv0FjzkfETzp3EVVuNNspPhMW5
+         YgFhie8BnaoPuNot7NiHHnpwJmwsYnFLonZZkeN0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 072/203] media: fdp1: Reduce FCP not found message level to debug
-Date:   Sun, 22 Sep 2019 14:41:38 -0400
-Message-Id: <20190922184350.30563-72-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.3 071/203] media: i2c: tda1997x: prevent potential NULL pointer access
+Date:   Sun, 22 Sep 2019 14:41:37 -0400
+Message-Id: <20190922184350.30563-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184350.30563-1-sashal@kernel.org>
 References: <20190922184350.30563-1-sashal@kernel.org>
@@ -61,43 +59,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[ Upstream commit 4fd22938569c14f6092c05880ca387409d78355f ]
+[ Upstream commit 2f822f1da08ac5c93e351e79d22920f08fa51baf ]
 
-When support for the IPMMU is not enabled, the FDP driver may be
-probe-deferred multiple times, causing several messages to be printed
-like:
+i2c_new_dummy() can fail returning a NULL pointer. This is not checked
+and the returned pointer is blindly used. Convert to
+devm_i2c_new_dummy_client() which returns an ERR_PTR and also add a
+validity check. Using devm_* here also fixes a leak because the dummy
+client was not released in the probe error path.
 
-    rcar_fdp1 fe940000.fdp1: FCP not found (-517)
-    rcar_fdp1 fe944000.fdp1: FCP not found (-517)
-
-Fix this by reducing the message level to debug level, as is done in the
-VSP1 driver.
-
-Fixes: 4710b752e029f3f8 ("[media] v4l: Add Renesas R-Car FDP1 Driver")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rcar_fdp1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/i2c/tda1997x.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
-index 43aae9b6bb20e..c23ec127c2776 100644
---- a/drivers/media/platform/rcar_fdp1.c
-+++ b/drivers/media/platform/rcar_fdp1.c
-@@ -2306,7 +2306,7 @@ static int fdp1_probe(struct platform_device *pdev)
- 		fdp1->fcp = rcar_fcp_get(fcp_node);
- 		of_node_put(fcp_node);
- 		if (IS_ERR(fdp1->fcp)) {
--			dev_err(&pdev->dev, "FCP not found (%ld)\n",
-+			dev_dbg(&pdev->dev, "FCP not found (%ld)\n",
- 				PTR_ERR(fdp1->fcp));
- 			return PTR_ERR(fdp1->fcp);
- 		}
+diff --git a/drivers/media/i2c/tda1997x.c b/drivers/media/i2c/tda1997x.c
+index a62ede0966361..5e68182001ecc 100644
+--- a/drivers/media/i2c/tda1997x.c
++++ b/drivers/media/i2c/tda1997x.c
+@@ -2691,7 +2691,13 @@ static int tda1997x_probe(struct i2c_client *client,
+ 	}
+ 
+ 	ret = 0x34 + ((io_read(sd, REG_SLAVE_ADDR)>>4) & 0x03);
+-	state->client_cec = i2c_new_dummy(client->adapter, ret);
++	state->client_cec = devm_i2c_new_dummy_device(&client->dev,
++						      client->adapter, ret);
++	if (IS_ERR(state->client_cec)) {
++		ret = PTR_ERR(state->client_cec);
++		goto err_free_mutex;
++	}
++
+ 	v4l_info(client, "CEC slave address 0x%02x\n", ret);
+ 
+ 	ret = tda1997x_core_init(sd);
+@@ -2798,7 +2804,6 @@ static int tda1997x_remove(struct i2c_client *client)
+ 	media_entity_cleanup(&sd->entity);
+ 	v4l2_ctrl_handler_free(&state->hdl);
+ 	regulator_bulk_disable(TDA1997X_NUM_SUPPLIES, state->supplies);
+-	i2c_unregister_device(state->client_cec);
+ 	cancel_delayed_work(&state->delayed_work_enable_hpd);
+ 	mutex_destroy(&state->page_lock);
+ 	mutex_destroy(&state->lock);
 -- 
 2.20.1
 
