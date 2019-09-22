@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A49A9C4740C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:10:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D04C3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:10:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7DC9A20882
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:10:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6403920882
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:10:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179437;
-	bh=TzclzCnOtcFLt11UKdi3KK8wVXtcXIil06141Ycp/Kk=;
+	s=default; t=1569179454;
+	bh=+kaR1zmgN9/ZjOajslj+EK8Owr5UV0N8gNh6ajQirMo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=0lApgUt8RXElGi8ogZDjMe33UOu09RnZ/GsHlh4x53ShyUbTDpg5oiDwpE1LRt6H/
-	 KWGTSVwyPjCKBWtEWS8ASEY/LKn3LUuZvKPkI3kEINhYm4F4HjOjQFj0Jb5jGRYfEo
-	 tRPcUds61DsmRV8Jepr0QRTLAUqBeLpdWEBQuDBY=
+	b=x3B9LsfXa3/7HBy29GOp5wH7gjRs8JnfPd1qSiadEbk27K9GUk74fRk+UWXVOwqyw
+	 geeyDvK9xdVaE8hKBUqg3qpqe9wGJC9AZKXgyHcyhRP1J58yIQx1qxIf/u04YsR5r3
+	 i9LzhF6G6qpRGM0fVvpiKyZSCOZT3iNHnzaFvQf8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394035AbfIVTKX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:10:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33594 "EHLO mail.kernel.org"
+        id S2395453AbfIVTKj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:10:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33482 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438810AbfIVS6r (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:58:47 -0400
+        id S2394922AbfIVS6n (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:58:43 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1CDE2186A;
-        Sun, 22 Sep 2019 18:58:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0D2F921479;
+        Sun, 22 Sep 2019 18:58:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178726;
-        bh=TzclzCnOtcFLt11UKdi3KK8wVXtcXIil06141Ycp/Kk=;
+        s=default; t=1569178722;
+        bh=+kaR1zmgN9/ZjOajslj+EK8Owr5UV0N8gNh6ajQirMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FPIHSTkAshfwvbWXluz8oYz/PtQ3wsenfEMa7w8y6f0Jx8HM5O4IZXRUSdBIqB5rk
-         iCSlwpNsbIL5UM3vW9587NbjEIv8VPzPFDqTI+Ytu8flHb13NxPsKWan9WF7I9zhRv
-         3M6jSn+zMznWgtJ8MPBgVK03w7u08I44aH2Xkk/I=
+        b=eD57q4u6FepZA57LZzsGRqG5LG5LZ0/VHdBFI9JowuByEWX7YvmD6lkxKMSKxi/wC
+         5+R2mm3/y/cfvKJoQypMxDUh/XL/nY0bNdKXdB8oR+W4i6FacP4ekEBBukGB3kMEgP
+         ip/U9PbqTZ1CZHbrhMnreC8RslLlFK8Z9ARbGYsU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 57/89] media: saa7134: fix terminology around saa7134_i2c_eeprom_md7134_gate()
-Date:   Sun, 22 Sep 2019 14:56:45 -0400
-Message-Id: <20190922185717.3412-57-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 54/89] media: cec-notifier: clear cec_adap in cec_notifier_unregister
+Date:   Sun, 22 Sep 2019 14:56:42 -0400
+Message-Id: <20190922185717.3412-54-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185717.3412-1-sashal@kernel.org>
 References: <20190922185717.3412-1-sashal@kernel.org>
@@ -59,58 +58,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 9d802222a3405599d6e1984d9324cddf592ea1f4 ]
+[ Upstream commit 14d5511691e5290103bc480998bc322e68f139d4 ]
 
-saa7134_i2c_eeprom_md7134_gate() function and the associated comment uses
-an inverted i2c gate open / closed terminology.
-Let's fix this.
+If cec_notifier_cec_adap_unregister() is called before
+cec_unregister_adapter() then everything is OK (and this is the
+case today). But if it is the other way around, then
+cec_notifier_unregister() is called first, and that doesn't
+set n->cec_adap to NULL.
 
-Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+So if e.g. cec_notifier_set_phys_addr() is called after
+cec_notifier_unregister() but before cec_unregister_adapter()
+then n->cec_adap points to an unregistered and likely deleted
+cec adapter. So just set n->cec_adap->notifier and n->cec_adap
+to NULL for rubustness.
+
+Eventually cec_notifier_unregister will disappear and this will
+be simplified substantially.
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-[hverkuil-cisco@xs4all.nl: fix alignment checkpatch warning]
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7134/saa7134-i2c.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ drivers/media/cec/cec-notifier.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/pci/saa7134/saa7134-i2c.c b/drivers/media/pci/saa7134/saa7134-i2c.c
-index 8f2ed632840f7..f70a799836840 100644
---- a/drivers/media/pci/saa7134/saa7134-i2c.c
-+++ b/drivers/media/pci/saa7134/saa7134-i2c.c
-@@ -351,7 +351,11 @@ static struct i2c_client saa7134_client_template = {
- 
- /* ----------------------------------------------------------- */
- 
--/* On Medion 7134 reading EEPROM needs DVB-T demod i2c gate open */
-+/*
-+ * On Medion 7134 reading the SAA7134 chip config EEPROM needs DVB-T
-+ * demod i2c gate closed due to an address clash between this EEPROM
-+ * and the demod one.
-+ */
- static void saa7134_i2c_eeprom_md7134_gate(struct saa7134_dev *dev)
+diff --git a/drivers/media/cec/cec-notifier.c b/drivers/media/cec/cec-notifier.c
+index 08b619d0ea1ef..cd04499df4892 100644
+--- a/drivers/media/cec/cec-notifier.c
++++ b/drivers/media/cec/cec-notifier.c
+@@ -130,6 +130,8 @@ void cec_notifier_unregister(struct cec_notifier *n)
  {
- 	u8 subaddr = 0x7, dmdregval;
-@@ -368,14 +372,14 @@ static void saa7134_i2c_eeprom_md7134_gate(struct saa7134_dev *dev)
- 
- 	ret = i2c_transfer(&dev->i2c_adap, i2cgatemsg_r, 2);
- 	if ((ret == 2) && (dmdregval & 0x2)) {
--		pr_debug("%s: DVB-T demod i2c gate was left closed\n",
-+		pr_debug("%s: DVB-T demod i2c gate was left open\n",
- 			 dev->name);
- 
- 		data[0] = subaddr;
- 		data[1] = (dmdregval & ~0x2);
- 		if (i2c_transfer(&dev->i2c_adap, i2cgatemsg_w, 1) != 1)
--			pr_err("%s: EEPROM i2c gate open failure\n",
--			  dev->name);
-+			pr_err("%s: EEPROM i2c gate close failure\n",
-+			       dev->name);
- 	}
+ 	mutex_lock(&n->lock);
+ 	n->callback = NULL;
++	n->cec_adap->notifier = NULL;
++	n->cec_adap = NULL;
+ 	mutex_unlock(&n->lock);
+ 	cec_notifier_put(n);
  }
- 
 -- 
 2.20.1
 
