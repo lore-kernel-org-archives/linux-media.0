@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F62C3A5A6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:19:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FCD4C4740C
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C02D2184D
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:19:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1876220882
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179979;
-	bh=A7bB2lRTeqg19DskxmH6x0oHCi3rj0FsE/t+ZNh3yVU=;
+	s=default; t=1569180023;
+	bh=v/u1Iz8T80+S4fVd/NZlnqqp6RZbt6F/93nimMQN/fQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Rht6w7eUL44dr0eVwYnthEcKOLvvUqKLQm0ZTNPmQ4Mt34NgxjvDf+seqdI7+nXFO
-	 Cn29ib7FWVL2FsIlo6dASYYneP+frwaLt5oDCBzQjf4yRp+GDw82mu9VjKn0NhFcmw
-	 sNf1VaEUZz0ddNtI8DKHBxOhxZa24hAeqXExhez4=
+	b=fsazND08EqpFKfKqwkA6DVLdyjvvrZs2AVGOB2ka2e0mZrV5AKxPJA5lIpz6e2YnB
+	 1iYsoEtgvKSc4NJmGBQS9EZwXQZH2J9OJ73v1yWGO7/RmiZmkMkO1Vk60C9upOB+ot
+	 2xRsQGZoNqKVp0KFMatOWioixdUU8EtPUwgwensA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394176AbfIVTTf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:19:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55592 "EHLO mail.kernel.org"
+        id S2437493AbfIVTUP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:20:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55144 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729201AbfIVSyu (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:54:50 -0400
+        id S2407997AbfIVSye (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:54:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B708F21D7B;
-        Sun, 22 Sep 2019 18:54:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 08758208C2;
+        Sun, 22 Sep 2019 18:54:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178489;
-        bh=A7bB2lRTeqg19DskxmH6x0oHCi3rj0FsE/t+ZNh3yVU=;
+        s=default; t=1569178473;
+        bh=v/u1Iz8T80+S4fVd/NZlnqqp6RZbt6F/93nimMQN/fQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JYrF/De/gOmhL1YcHpncN594O1oQwzLyaQ56bu0j/01wY0m+vck+5IHZOw7X2aoPv
-         D39S1a2MtH2YmqgoI28F9DPFK3W9XMs3f2yfTYL2Lq8Ny/0NvJXHuMvw2hwa6/CPEe
-         xhVvYptUw+GBU034r4SObXEqLGeflAHzP38Si56Y=
+        b=encYF3cy/yZXVW+VcFvwvIWSl8Z2xOeXcN5xcNuKmSz+VqyLQj7Y8mkFtlYkXcS6O
+         MSM/Q9xOYffYmRLopaqTAXVXE6u2oswMEOGoi71mmGWWtDp/rzX4YY5B3ahECdlqjk
+         H0V9ldckbt84hpNYz3XO2voGJWvj+kScrhS8EFhc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com,
-        Sean Young <sean@mess.org>,
+Cc:     Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>,
+        syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 024/128] media: iguanair: add sanity checks
-Date:   Sun, 22 Sep 2019 14:52:34 -0400
-Message-Id: <20190922185418.2158-24-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 012/128] media: hdpvr: Add device num check and handling
+Date:   Sun, 22 Sep 2019 14:52:22 -0400
+Message-Id: <20190922185418.2158-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -60,59 +60,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>
 
-[ Upstream commit ab1cbdf159beba7395a13ab70bc71180929ca064 ]
+[ Upstream commit d4a6a9537bc32811486282206ecfb7c53754b74d ]
 
-The driver needs to check the endpoint types, too, as opposed
-to the number of endpoints. This also requires moving the check earlier.
+Add hdpvr device num check and error handling
 
-Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Sean Young <sean@mess.org>
+We need to increment the device count atomically before we checkout a
+device to make sure that we do not reach the max count, otherwise we get
+out-of-bounds errors as reported by syzbot.
+
+Reported-and-tested-by: syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com
+
+Signed-off-by: Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/iguanair.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/media/usb/hdpvr/hdpvr-core.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
-index 7daac8bab83b0..6f3030b2054d0 100644
---- a/drivers/media/rc/iguanair.c
-+++ b/drivers/media/rc/iguanair.c
-@@ -424,6 +424,10 @@ static int iguanair_probe(struct usb_interface *intf,
- 	int ret, pipein, pipeout;
- 	struct usb_host_interface *idesc;
+diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
+index 29ac7fc5b039f..46adee95f89d5 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-core.c
++++ b/drivers/media/usb/hdpvr/hdpvr-core.c
+@@ -275,6 +275,7 @@ static int hdpvr_probe(struct usb_interface *interface,
+ #endif
+ 	size_t buffer_size;
+ 	int i;
++	int dev_num;
+ 	int retval = -ENOMEM;
  
-+	idesc = intf->altsetting;
-+	if (idesc->desc.bNumEndpoints < 2)
-+		return -ENODEV;
-+
- 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
- 	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
- 	if (!ir || !rc) {
-@@ -438,18 +442,13 @@ static int iguanair_probe(struct usb_interface *intf,
- 	ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
- 	ir->urb_out = usb_alloc_urb(0, GFP_KERNEL);
- 
--	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out) {
-+	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out ||
-+	    !usb_endpoint_is_int_in(&idesc->endpoint[0].desc) ||
-+	    !usb_endpoint_is_int_out(&idesc->endpoint[1].desc)) {
- 		ret = -ENOMEM;
- 		goto out;
+ 	/* allocate memory for our device state and initialize it */
+@@ -372,8 +373,17 @@ static int hdpvr_probe(struct usb_interface *interface,
  	}
+ #endif
  
--	idesc = intf->altsetting;
--
--	if (idesc->desc.bNumEndpoints < 2) {
--		ret = -ENODEV;
--		goto out;
--	}
--
- 	ir->rc = rc;
- 	ir->dev = &intf->dev;
- 	ir->udev = udev;
++	dev_num = atomic_inc_return(&dev_nr);
++	if (dev_num >= HDPVR_MAX) {
++		v4l2_err(&dev->v4l2_dev,
++			 "max device number reached, device register failed\n");
++		atomic_dec(&dev_nr);
++		retval = -ENODEV;
++		goto reg_fail;
++	}
++
+ 	retval = hdpvr_register_videodev(dev, &interface->dev,
+-				    video_nr[atomic_inc_return(&dev_nr)]);
++				    video_nr[dev_num]);
+ 	if (retval < 0) {
+ 		v4l2_err(&dev->v4l2_dev, "registering videodev failed\n");
+ 		goto reg_fail;
 -- 
 2.20.1
 
