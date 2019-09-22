@@ -4,48 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFFD0C3A5A2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3637DC4740C
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C913B2070C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0730C206C2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179078;
-	bh=R1bNk2/hCaKw1ytY+Ws4ld/IUdVpxotA409O+wn8ryo=;
+	s=default; t=1569179085;
+	bh=cuZo9s602fDcrRD5mupxhsazaMcvhkTI6YHA7sdWTV4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=wZQlsJF+vpjcZuewtn+DIN5lWYGiHg/SCEkR3Bue2qPE7wpbHBTbUsfaU2Z8O4tpN
-	 +uGoaX7L6wD5Wl/Nynm0Z+yEg6k3/tQVr1dXAbScga/uqmimrgNxI0L0rYWI1N+Dib
-	 XyVNFRQAQj0FngWvdiVD8T2Xak764KAWXLe8DU+U=
+	b=mzdFq48i5gRrMvtIN9jjpxsn/fDpKZEeCgdfV936LrR5PEgGAQ8GlePVRkA+zXx6z
+	 CgkhoDGZNAGIsOmMvV5ek8zGOv7DJJDW9NY8jznK/FWWybnF2NtHiP/Sg4o7U0d81O
+	 3TDxFySrmR9WNPGD+73Ogl2MeabsALJXJYtZW4PM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395276AbfIVTBM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:01:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37244 "EHLO mail.kernel.org"
+        id S1729883AbfIVTEn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:04:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37296 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395266AbfIVTBK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 15:01:10 -0400
+        id S1725820AbfIVTBM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 15:01:12 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6684121907;
-        Sun, 22 Sep 2019 19:01:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 04BAE214D9;
+        Sun, 22 Sep 2019 19:01:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178870;
-        bh=R1bNk2/hCaKw1ytY+Ws4ld/IUdVpxotA409O+wn8ryo=;
+        s=default; t=1569178871;
+        bh=cuZo9s602fDcrRD5mupxhsazaMcvhkTI6YHA7sdWTV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jebqU+EhiowMKxBTElQRGz32RJMmJNjTBp9SJ2c2nDDpYrWyyFydEwP+awzzLSO84
-         TUzA2WSrViJlmFOknvdhs4Pd1V6OdX6ytxO3SY9BdPRJiaXn54TjdNMopwvqShHirM
-         mBTyz2DQYUOIQX9xuQvn5MmN9GUf+W5jTihu0ELE=
+        b=1w4N9ctZPXmo4J7WgJwqEVW73Da7az6l2rGD9eTJQOCcfQdDHh0SrzHgBM56cIP5O
+         IB+Qd9NXlure/DvSxsoZqLDgbYCY9VhhX2jZVQ6edY8COXRPd9lNUD2VwRNzDOYhdC
+         NxnNGNQgCYHeFVG54wOhF95zLEHKrv4ItgQPHEYI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Sean Young <sean@mess.org>,
+Cc:     Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>,
+        syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 05/44] media: dib0700: fix link error for dibx000_i2c_set_speed
-Date:   Sun, 22 Sep 2019 15:00:23 -0400
-Message-Id: <20190922190103.4906-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 06/44] media: hdpvr: Add device num check and handling
+Date:   Sun, 22 Sep 2019 15:00:24 -0400
+Message-Id: <20190922190103.4906-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922190103.4906-1-sashal@kernel.org>
 References: <20190922190103.4906-1-sashal@kernel.org>
@@ -58,67 +60,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+From: Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>
 
-[ Upstream commit 765bb8610d305ee488b35d07e2a04ae52fb2df9c ]
+[ Upstream commit d4a6a9537bc32811486282206ecfb7c53754b74d ]
 
-When CONFIG_DVB_DIB9000 is disabled, we can still compile code that
-now fails to link against dibx000_i2c_set_speed:
+Add hdpvr device num check and error handling
 
-drivers/media/usb/dvb-usb/dib0700_devices.o: In function `dib01x0_pmu_update.constprop.7':
-dib0700_devices.c:(.text.unlikely+0x1c9c): undefined reference to `dibx000_i2c_set_speed'
+We need to increment the device count atomically before we checkout a
+device to make sure that we do not reach the max count, otherwise we get
+out-of-bounds errors as reported by syzbot.
 
-The call sites are both through dib01x0_pmu_update(), which gets passed
-an 'i2c' pointer from dib9000_get_i2c_master(), which has returned
-NULL. Checking this pointer seems to be a good idea anyway, and it avoids
-the link failure in most cases.
+Reported-and-tested-by: syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com
 
-Sean Young found another case that is not fixed by that, where certain
-gcc versions leave an unused function in place that causes the link error,
-but adding an explict IS_ENABLED() check also solves this.
-
-Fixes: b7f54910ce01 ("V4L/DVB (4647): Added module for DiB0700 based devices")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/dib0700_devices.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/usb/hdpvr/hdpvr-core.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/dvb-usb/dib0700_devices.c b/drivers/media/usb/dvb-usb/dib0700_devices.c
-index 38c03283a4417..e1316c7b7c2e5 100644
---- a/drivers/media/usb/dvb-usb/dib0700_devices.c
-+++ b/drivers/media/usb/dvb-usb/dib0700_devices.c
-@@ -2418,9 +2418,13 @@ static int dib9090_tuner_attach(struct dvb_usb_adapter *adap)
- 		8, 0x0486,
- 	};
+diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
+index 08f0ca7aa012e..924517b09fc9f 100644
+--- a/drivers/media/usb/hdpvr/hdpvr-core.c
++++ b/drivers/media/usb/hdpvr/hdpvr-core.c
+@@ -278,6 +278,7 @@ static int hdpvr_probe(struct usb_interface *interface,
+ #endif
+ 	size_t buffer_size;
+ 	int i;
++	int dev_num;
+ 	int retval = -ENOMEM;
  
-+	if (!IS_ENABLED(CONFIG_DVB_DIB9000))
-+		return -ENODEV;
- 	if (dvb_attach(dib0090_fw_register, adap->fe_adap[0].fe, i2c, &dib9090_dib0090_config) == NULL)
- 		return -ENODEV;
- 	i2c = dib9000_get_i2c_master(adap->fe_adap[0].fe, DIBX000_I2C_INTERFACE_GPIO_1_2, 0);
-+	if (!i2c)
-+		return -ENODEV;
- 	if (dib01x0_pmu_update(i2c, data_dib190, 10) != 0)
- 		return -ENODEV;
- 	dib0700_set_i2c_speed(adap->dev, 1500);
-@@ -2496,10 +2500,14 @@ static int nim9090md_tuner_attach(struct dvb_usb_adapter *adap)
- 		0, 0x00ef,
- 		8, 0x0406,
- 	};
-+	if (!IS_ENABLED(CONFIG_DVB_DIB9000))
-+		return -ENODEV;
- 	i2c = dib9000_get_tuner_interface(adap->fe_adap[0].fe);
- 	if (dvb_attach(dib0090_fw_register, adap->fe_adap[0].fe, i2c, &nim9090md_dib0090_config[0]) == NULL)
- 		return -ENODEV;
- 	i2c = dib9000_get_i2c_master(adap->fe_adap[0].fe, DIBX000_I2C_INTERFACE_GPIO_1_2, 0);
-+	if (!i2c)
-+		return -ENODEV;
- 	if (dib01x0_pmu_update(i2c, data_dib190, 10) < 0)
- 		return -ENODEV;
+ 	/* allocate memory for our device state and initialize it */
+@@ -386,8 +387,17 @@ static int hdpvr_probe(struct usb_interface *interface,
+ 	}
+ #endif
  
++	dev_num = atomic_inc_return(&dev_nr);
++	if (dev_num >= HDPVR_MAX) {
++		v4l2_err(&dev->v4l2_dev,
++			 "max device number reached, device register failed\n");
++		atomic_dec(&dev_nr);
++		retval = -ENODEV;
++		goto reg_fail;
++	}
++
+ 	retval = hdpvr_register_videodev(dev, &interface->dev,
+-				    video_nr[atomic_inc_return(&dev_nr)]);
++				    video_nr[dev_num]);
+ 	if (retval < 0) {
+ 		v4l2_err(&dev->v4l2_dev, "registering videodev failed\n");
+ 		goto reg_fail;
 -- 
 2.20.1
 
