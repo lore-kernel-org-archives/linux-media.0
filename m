@@ -4,52 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D73C3A5A2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:11:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE911C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:11:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 61FEF20882
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:11:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEDFF208C2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:11:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179497;
-	bh=j67NKNp1md3REwfcpHfBf9dbvu5Cj75dKsr8XcqXwBo=;
+	s=default; t=1569179498;
+	bh=e0OsJVXdRup6T509mAuK/fbZ1RieDXJfxSYWGYLNNhw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jKfyiwCWXEijKTgSfRljbcVUmpvXHsXWezGT/UJjchenxInTfWw6dzEjY/EBo0vOV
-	 7mkTa4ITX/QrWl4+PZKKS4mNCXhCpZ7BgTcdBOuxF+JNQDbkK3GXXXGdwfGhFiT3zW
-	 fbY5WUSQPug5gLkHaNy+XF0sQpcVWcq2tGr7GqJ8=
+	b=kpLfjIFetB6cs9cTH8Uf8RCR3wyccAt6W3Hj1Y2vjz2oS8C5x70nnnJVrxjQAZhkv
+	 sAE4pOBRDqLay5lSooqQyk7MRwOWdkvVXlQVAtGGp+c5d1raZ8KShzi4sh3mrwj0rA
+	 U23DcBrtHFuF3/KmCVznU868I5MX82TREIzDn/YA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389039AbfIVS6Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:58:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32950 "EHLO mail.kernel.org"
+        id S2395557AbfIVTLh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:11:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406370AbfIVS6Y (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:58:24 -0400
+        id S2405384AbfIVS6Z (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:58:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4814021A4A;
-        Sun, 22 Sep 2019 18:58:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C69A5214D9;
+        Sun, 22 Sep 2019 18:58:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178703;
-        bh=j67NKNp1md3REwfcpHfBf9dbvu5Cj75dKsr8XcqXwBo=;
+        s=default; t=1569178704;
+        bh=e0OsJVXdRup6T509mAuK/fbZ1RieDXJfxSYWGYLNNhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1ZCYyu++8VDE7z40WM2N6Pw3SpDGxW2ELQibLAECi4N9Vm0bHHVNZseGsU8nE20br
-         /poBLjNxhY9Gdbu5hWAmQqLpXcHEvMkO+SrDXqoBd51njxoFOkjo+JeB59gdx6CyHh
-         1GM14cEsfJbF3wRC6DrMHEshNSwOwCgWe/pgyuw8=
+        b=demiMWVPDGRTmIK+BV/5+F9+utXXhko6Zs811kmTnZT8U8EU0ic69E9Vt/p58E62v
+         imD7BjlHzElxS7lZFC0D3wXEanRq+eIPFeV+06YX/eCnjJMt2N/ohCOVd1gEHs7Azl
+         jchGCDgEf5rspWlf48iayAoQIMMPNLuYGWfijEL8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 40/89] media: i2c: ov5645: Fix power sequence
-Date:   Sun, 22 Sep 2019 14:56:28 -0400
-Message-Id: <20190922185717.3412-40-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 41/89] media: omap3isp: Don't set streaming state on random subdevs
+Date:   Sun, 22 Sep 2019 14:56:29 -0400
+Message-Id: <20190922185717.3412-41-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185717.3412-1-sashal@kernel.org>
 References: <20190922185717.3412-1-sashal@kernel.org>
@@ -62,120 +59,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ezequiel Garcia <ezequiel@collabora.com>
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-[ Upstream commit 092e8eb90a7dc7dd210cd4e2ea36075d0a7f96af ]
+[ Upstream commit 7ef57be07ac146e70535747797ef4aee0f06e9f9 ]
 
-This is mostly a port of Jacopo's fix:
+The streaming state should be set to the first upstream sub-device only,
+not everywhere, for a sub-device driver itself knows how to best control
+the streaming state of its own upstream sub-devices.
 
-  commit aa4bb8b8838ffcc776a79f49a4d7476b82405349
-  Author: Jacopo Mondi <jacopo@jmondi.org>
-  Date:   Fri Jul 6 05:51:52 2018 -0400
-
-  media: ov5640: Re-work MIPI startup sequence
-
-In the OV5645 case, the changes are:
-
-- At set_power(1) time power up MIPI Tx/Rx and set data and clock lanes in
-  LP11 during 'sleep' and 'idle' with MIPI clock in non-continuous mode.
-- At set_power(0) time power down MIPI Tx/Rx (in addition to the current
-  power down of regulators and clock gating).
-- At s_stream time enable/disable the MIPI interface output.
-
-With this commit the sensor is able to enter LP-11 mode during power up,
-as expected by some CSI-2 controllers.
-
-Many thanks to Fabio Estevam for his help debugging this issue.
-
-Tested-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov5645.c | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+ drivers/media/platform/omap3isp/isp.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index 2d96c18497593..de15a13443e47 100644
---- a/drivers/media/i2c/ov5645.c
-+++ b/drivers/media/i2c/ov5645.c
-@@ -53,6 +53,8 @@
- #define		OV5645_CHIP_ID_HIGH_BYTE	0x56
- #define OV5645_CHIP_ID_LOW		0x300b
- #define		OV5645_CHIP_ID_LOW_BYTE		0x45
-+#define OV5645_IO_MIPI_CTRL00		0x300e
-+#define OV5645_PAD_OUTPUT00		0x3019
- #define OV5645_AWB_MANUAL_CONTROL	0x3406
- #define		OV5645_AWB_MANUAL_ENABLE	BIT(0)
- #define OV5645_AEC_PK_MANUAL		0x3503
-@@ -63,6 +65,7 @@
- #define		OV5645_ISP_VFLIP		BIT(2)
- #define OV5645_TIMING_TC_REG21		0x3821
- #define		OV5645_SENSOR_MIRROR		BIT(1)
-+#define OV5645_MIPI_CTRL00		0x4800
- #define OV5645_PRE_ISP_TEST_SETTING_1	0x503d
- #define		OV5645_TEST_PATTERN_MASK	0x3
- #define		OV5645_SET_TEST_PATTERN(x)	((x) & OV5645_TEST_PATTERN_MASK)
-@@ -129,7 +132,6 @@ static const struct reg_value ov5645_global_init_setting[] = {
- 	{ 0x3503, 0x07 },
- 	{ 0x3002, 0x1c },
- 	{ 0x3006, 0xc3 },
--	{ 0x300e, 0x45 },
- 	{ 0x3017, 0x00 },
- 	{ 0x3018, 0x00 },
- 	{ 0x302e, 0x0b },
-@@ -358,7 +360,10 @@ static const struct reg_value ov5645_global_init_setting[] = {
- 	{ 0x3a1f, 0x14 },
- 	{ 0x0601, 0x02 },
- 	{ 0x3008, 0x42 },
--	{ 0x3008, 0x02 }
-+	{ 0x3008, 0x02 },
-+	{ OV5645_IO_MIPI_CTRL00, 0x40 },
-+	{ OV5645_MIPI_CTRL00, 0x24 },
-+	{ OV5645_PAD_OUTPUT00, 0x70 }
- };
- 
- static const struct reg_value ov5645_setting_sxga[] = {
-@@ -743,13 +748,9 @@ static int ov5645_s_power(struct v4l2_subdev *sd, int on)
- 				goto exit;
- 			}
- 
--			ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
--					       OV5645_SYSTEM_CTRL0_STOP);
--			if (ret < 0) {
--				ov5645_set_power_off(ov5645);
--				goto exit;
--			}
-+			usleep_range(500, 1000);
- 		} else {
-+			ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x58);
- 			ov5645_set_power_off(ov5645);
+diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
+index c834fea5f9b00..b34b6a604f92f 100644
+--- a/drivers/media/platform/omap3isp/isp.c
++++ b/drivers/media/platform/omap3isp/isp.c
+@@ -727,6 +727,10 @@ static int isp_pipeline_enable(struct isp_pipeline *pipe,
+ 					s_stream, mode);
+ 			pipe->do_propagation = true;
  		}
++
++		/* Stop at the first external sub-device. */
++		if (subdev->dev != isp->dev)
++			break;
  	}
-@@ -1069,11 +1070,20 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
- 			dev_err(ov5645->dev, "could not sync v4l2 controls\n");
- 			return ret;
+ 
+ 	return 0;
+@@ -841,6 +845,10 @@ static int isp_pipeline_disable(struct isp_pipeline *pipe)
+ 						      &subdev->entity);
+ 			failure = -ETIMEDOUT;
  		}
 +
-+		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x45);
-+		if (ret < 0)
-+			return ret;
-+
- 		ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
- 				       OV5645_SYSTEM_CTRL0_START);
- 		if (ret < 0)
- 			return ret;
- 	} else {
-+		ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
-+		if (ret < 0)
-+			return ret;
-+
- 		ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
- 				       OV5645_SYSTEM_CTRL0_STOP);
- 		if (ret < 0)
++		/* Stop at the first external sub-device. */
++		if (subdev->dev != isp->dev)
++			break;
+ 	}
+ 
+ 	return failure;
 -- 
 2.20.1
 
