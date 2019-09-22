@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3C98C3A5A2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A455C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:38:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BC6220882
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:37:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EC24420644
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:38:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569181048;
-	bh=BhJwqG++4J9wEY2L8CXnAV4u3Z2d3St1190j766FZvE=;
+	s=default; t=1569181105;
+	bh=F4rztFgCqKKRmbrrJxmKuN9khu59p00GQ5J9kN3Bezw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=W8zgQBLtepA9hIR3K28WcXOMw2WurcQoYjjZeLlAg9+TjA0p+ZAwNef0DvFkySNMR
-	 JQPZY8tOQ6tdrynFsFKSZBJJyAtkWUwzA4deHJU1E7tBB6SDJC784hNphWVz3yMfsh
-	 6Al2PneSjRj/38hNeRAy9T5tRDeQ3+1XqPm+xz0M=
+	b=mldP63W/xDHHuemKUyxdi0qBWZC13DSe3dMlU4EjJVkj7LMTcCM8CCdtA1cGIWOXj
+	 6sMh5HOVh9MFz+HYiu5xuOPmIIoLtf18MIm35V+7F4ZUwKwIL61hHc49rX9IpmbyHJ
+	 GeN3w/dF+5RKAhGsbzeMHGOYRwMuhZoY9nGINyCg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439257AbfIVTh1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:37:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41544 "EHLO mail.kernel.org"
+        id S2389283AbfIVSp2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 14:45:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41092 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389588AbfIVSpr (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:45:47 -0400
+        id S2389252AbfIVSp1 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:45:27 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B961D20830;
-        Sun, 22 Sep 2019 18:45:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29AE52186A;
+        Sun, 22 Sep 2019 18:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569177946;
-        bh=BhJwqG++4J9wEY2L8CXnAV4u3Z2d3St1190j766FZvE=;
+        s=default; t=1569177927;
+        bh=F4rztFgCqKKRmbrrJxmKuN9khu59p00GQ5J9kN3Bezw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1lMdRP75UG5V9xtGKJQ9mWYBgtgvzgZibQ8BMh27FB72G4g1v2FS84iuu7wCsvLGD
-         xopA+W4/t87gbqUAI7Xctq0kHmSEt+bVfphJs6foYZB6XgPXfdBhIf80V979Kyxi4q
-         LUyN1wnLB3Vz5CwYyCT+4EspieEFIwS1us9u2wrY=
+        b=ZEdASvfcrTFbYQ8S+D3lwtfUamdhL02Nd9C/oh0VTlAFk5sCDGikkEHxPAQiAFUxM
+         ssTvsc2H9JourIERMXaXLKNWlLPnk2+hfKRa+W5tZFeCqXz0CfKQCCg20jOGTXmGtw
+         v8rynk/h0d/zLiwQfecuxKglAOEqBoeCMigDpvoQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     YueHaibing <yuehaibing@huawei.com>, Hulk Robot <hulkci@huawei.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-tegra@vger.kernel.org, devel@driverdev.osuosl.org
-Subject: [PATCH AUTOSEL 5.3 054/203] media: staging: tegra-vde: Fix build error
-Date:   Sun, 22 Sep 2019 14:41:20 -0400
-Message-Id: <20190922184350.30563-54-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.3 038/203] media: iguanair: add sanity checks
+Date:   Sun, 22 Sep 2019 14:41:04 -0400
+Message-Id: <20190922184350.30563-38-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184350.30563-1-sashal@kernel.org>
 References: <20190922184350.30563-1-sashal@kernel.org>
@@ -61,44 +60,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: YueHaibing <yuehaibing@huawei.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 6b2265975239ab655069d796b822835a593e1cc7 ]
+[ Upstream commit ab1cbdf159beba7395a13ab70bc71180929ca064 ]
 
-If IOMMU_SUPPORT is not set, and COMPILE_TEST is y,
-IOMMU_IOVA may be set to m. So building will fails:
+The driver needs to check the endpoint types, too, as opposed
+to the number of endpoints. This also requires moving the check earlier.
 
-drivers/staging/media/tegra-vde/iommu.o: In function `tegra_vde_iommu_map':
-iommu.c:(.text+0x41): undefined reference to `alloc_iova'
-iommu.c:(.text+0x56): undefined reference to `__free_iova'
-
-Select IOMMU_IOVA while COMPILE_TEST is set to fix this.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Suggested-by: Dmitry Osipenko <digetx@gmail.com>
-Fixes: b301f8de1925 ("media: staging: media: tegra-vde: Add IOMMU support")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-Acked-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/tegra-vde/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/rc/iguanair.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/media/tegra-vde/Kconfig b/drivers/staging/media/tegra-vde/Kconfig
-index 2e7f644ae5911..ba49ea50b8c0b 100644
---- a/drivers/staging/media/tegra-vde/Kconfig
-+++ b/drivers/staging/media/tegra-vde/Kconfig
-@@ -3,7 +3,7 @@ config TEGRA_VDE
- 	tristate "NVIDIA Tegra Video Decoder Engine driver"
- 	depends on ARCH_TEGRA || COMPILE_TEST
- 	select DMA_SHARED_BUFFER
--	select IOMMU_IOVA if IOMMU_SUPPORT
-+	select IOMMU_IOVA if (IOMMU_SUPPORT || COMPILE_TEST)
- 	select SRAM
- 	help
- 	    Say Y here to enable support for the NVIDIA Tegra video decoder
+diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
+index ea05e125016a7..872d6441e512c 100644
+--- a/drivers/media/rc/iguanair.c
++++ b/drivers/media/rc/iguanair.c
+@@ -413,6 +413,10 @@ static int iguanair_probe(struct usb_interface *intf,
+ 	int ret, pipein, pipeout;
+ 	struct usb_host_interface *idesc;
+ 
++	idesc = intf->altsetting;
++	if (idesc->desc.bNumEndpoints < 2)
++		return -ENODEV;
++
+ 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
+ 	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
+ 	if (!ir || !rc) {
+@@ -427,18 +431,13 @@ static int iguanair_probe(struct usb_interface *intf,
+ 	ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
+ 	ir->urb_out = usb_alloc_urb(0, GFP_KERNEL);
+ 
+-	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out) {
++	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out ||
++	    !usb_endpoint_is_int_in(&idesc->endpoint[0].desc) ||
++	    !usb_endpoint_is_int_out(&idesc->endpoint[1].desc)) {
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+ 
+-	idesc = intf->altsetting;
+-
+-	if (idesc->desc.bNumEndpoints < 2) {
+-		ret = -ENODEV;
+-		goto out;
+-	}
+-
+ 	ir->rc = rc;
+ 	ir->dev = &intf->dev;
+ 	ir->udev = udev;
 -- 
 2.20.1
 
