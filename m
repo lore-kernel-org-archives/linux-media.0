@@ -4,53 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A269C3A5A2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 18:49:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC7D4C3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 18:50:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 25DC021A4C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 18:49:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA4B421A4A
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 18:50:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569178141;
-	bh=kEqj6OLGPamqmRohSMQQqEmFs4DfR7akg0YU+5Kzct8=;
+	s=default; t=1569178207;
+	bh=hur19vWkAiOq3yd3smTM1bKIGxosmEdosTs5oL2XyEc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WuVWnO85W8TbBbjQ13zv0LK4/1YqrK/VwIA32L1z7f4KUCNutTF71w/ayA5NltHRJ
-	 C8YrB+8/CfohIEaeHp1W3LIwnOqB/ei0Pgxnh5PEO7ezy/zv2PsD/eZnBrmR2Ooxlv
-	 JKLDVmnWjg6uzrWyqkqPdpf9NoHeDIYgoTWrn+TY=
+	b=aG7MXD2c9Q6FmTCIvoT7FyW9PKE6CNsBSvtU7kdhu8ajOQNce2zzNo3CGscrRMP22
+	 wf6D7wrr17NfJ3jMsIZw9AmyBOZ9K3oX7AjYn8Kk8J5VT8k5k9hSZtcH2PtRz68GnP
+	 zcJpmNZIRTZkTWYrw/RafKdIoyWCG/dNAn+fVloo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391911AbfIVSs7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:48:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45938 "EHLO mail.kernel.org"
+        id S2392611AbfIVSts (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 14:49:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391897AbfIVSs6 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:48:58 -0400
+        id S2392587AbfIVStr (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:49:47 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D004D21A4C;
-        Sun, 22 Sep 2019 18:48:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 41491208C2;
+        Sun, 22 Sep 2019 18:49:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178137;
-        bh=kEqj6OLGPamqmRohSMQQqEmFs4DfR7akg0YU+5Kzct8=;
+        s=default; t=1569178186;
+        bh=hur19vWkAiOq3yd3smTM1bKIGxosmEdosTs5oL2XyEc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dYo53l8vXPjtuAayysOj9u/Q3Bh5Qxp+sxq+HVrbaVXULQ5eMzRfb0rcVnXi18+gR
-         XiO1JetI00sCOXhsTRjbodLL4GyI/heCcnEpFt0ucg0elgu9NAuJtM/gdXeju8Bt3L
-         4HFpzODfMhSHAZW9m4LQgH1IghY/r7pXbk8k36RU=
+        b=tq7X2dUbvocKJY5JmnjJAu5qVunSrOWNDdiJPsmpaOJAW4zMsZlCyrCr11zaoyM6c
+         fGPo2w16wnlVYPDY6TeqzC7NwOP06l5eKj1c8qDirK7qkk0h4HrwVosaJ0pBcp+BEX
+         UKZy8tbDVED//qGevEdROtgjXIHwXRabZaw7PdlM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>,
-        syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com,
-        Kees Cook <keescook@chromium.org>,
+Cc:     Wen Yang <wen.yang99@zte.com.cn>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 188/203] media: technisat-usb2: break out of loop at end of buffer
-Date:   Sun, 22 Sep 2019 14:43:34 -0400
-Message-Id: <20190922184350.30563-188-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 015/185] media: exynos4-is: fix leaked of_node references
+Date:   Sun, 22 Sep 2019 14:46:33 -0400
+Message-Id: <20190922184924.32534-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190922184350.30563-1-sashal@kernel.org>
-References: <20190922184350.30563-1-sashal@kernel.org>
+In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
+References: <20190922184924.32534-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,74 +59,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Wen Yang <wen.yang99@zte.com.cn>
 
-[ Upstream commit 0c4df39e504bf925ab666132ac3c98d6cbbe380b ]
+[ Upstream commit da79bf41a4d170ca93cc8f3881a70d734a071c37 ]
 
-Ensure we do not access the buffer beyond the end if no 0xff byte
-is encountered.
+The call to of_get_child_by_name returns a node pointer with refcount
+incremented thus it must be explicitly decremented after the last
+usage.
 
-Reported-by: syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com
-Signed-off-by: Sean Young <sean@mess.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Detected by coccinelle with the following warnings:
+drivers/media/platform/exynos4-is/fimc-is.c:813:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/fimc-is.c:870:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/fimc-is.c:885:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:545:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 541, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:528:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 499, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:534:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 499, but without a corresponding object release within this function.
+
+Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/dvb-usb/technisat-usb2.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-is.c   | 1 +
+ drivers/media/platform/exynos4-is/media-dev.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/media/usb/dvb-usb/technisat-usb2.c b/drivers/media/usb/dvb-usb/technisat-usb2.c
-index c659e18b358b8..676d233d46d53 100644
---- a/drivers/media/usb/dvb-usb/technisat-usb2.c
-+++ b/drivers/media/usb/dvb-usb/technisat-usb2.c
-@@ -608,10 +608,9 @@ static int technisat_usb2_frontend_attach(struct dvb_usb_adapter *a)
- static int technisat_usb2_get_ir(struct dvb_usb_device *d)
- {
- 	struct technisat_usb2_state *state = d->priv;
--	u8 *buf = state->buf;
--	u8 *b;
--	int ret;
- 	struct ir_raw_event ev;
-+	u8 *buf = state->buf;
-+	int i, ret;
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+index e043d55133a31..b7cc8e651e327 100644
+--- a/drivers/media/platform/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/exynos4-is/fimc-is.c
+@@ -806,6 +806,7 @@ static int fimc_is_probe(struct platform_device *pdev)
+ 		return -ENODEV;
  
- 	buf[0] = GET_IR_DATA_VENDOR_REQUEST;
- 	buf[1] = 0x08;
-@@ -647,26 +646,25 @@ static int technisat_usb2_get_ir(struct dvb_usb_device *d)
- 		return 0; /* no key pressed */
+ 	is->pmu_regs = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!is->pmu_regs)
+ 		return -ENOMEM;
  
- 	/* decoding */
--	b = buf+1;
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index 1b83a6ec745fb..3cece7cd73e28 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -499,6 +499,7 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
+ 			continue;
  
- #if 0
- 	deb_rc("RC: %d ", ret);
--	debug_dump(b, ret, deb_rc);
-+	debug_dump(buf + 1, ret, deb_rc);
- #endif
+ 		ret = fimc_md_parse_port_node(fmd, port, index);
++		of_node_put(port);
+ 		if (ret < 0) {
+ 			of_node_put(node);
+ 			goto cleanup;
+@@ -538,6 +539,7 @@ static int __of_get_csis_id(struct device_node *np)
+ 	if (!np)
+ 		return -EINVAL;
+ 	of_property_read_u32(np, "reg", &reg);
++	of_node_put(np);
+ 	return reg - FIMC_INPUT_MIPI_CSI2_0;
+ }
  
- 	ev.pulse = 0;
--	while (1) {
--		ev.pulse = !ev.pulse;
--		ev.duration = (*b * FIRMWARE_CLOCK_DIVISOR * FIRMWARE_CLOCK_TICK) / 1000;
--		ir_raw_event_store(d->rc_dev, &ev);
--
--		b++;
--		if (*b == 0xff) {
-+	for (i = 1; i < ARRAY_SIZE(state->buf); i++) {
-+		if (buf[i] == 0xff) {
- 			ev.pulse = 0;
- 			ev.duration = 888888*2;
- 			ir_raw_event_store(d->rc_dev, &ev);
- 			break;
- 		}
-+
-+		ev.pulse = !ev.pulse;
-+		ev.duration = (buf[i] * FIRMWARE_CLOCK_DIVISOR *
-+			       FIRMWARE_CLOCK_TICK) / 1000;
-+		ir_raw_event_store(d->rc_dev, &ev);
- 	}
- 
- 	ir_raw_event_handle(d->rc_dev);
 -- 
 2.20.1
 
