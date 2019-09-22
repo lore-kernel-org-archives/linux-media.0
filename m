@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6949BC3A5A6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E92B5C3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 40E5C20869
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C011420869
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569180038;
-	bh=u7H7ztHchobE3ZGof1DEGjbx8GRy0u3r0WIDuLbnQ48=;
+	s=default; t=1569180041;
+	bh=IdPVXuf60uazzp9fR+CWv/TnPQCSTaI5VKp7xvYvocI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=R9631sD+bLvTIdvUxbikYHMkigwQsjZT0HK7UAAph2sp9ddyilocSxe8fhDhNmiuW
-	 pEYVteq9le0kr3duyijHFf5XA0Mi7Xp/7kcx6pBZ3EY/xQlVDGZlVdafVVo7qFqoYr
-	 LUaIl2dk8nB5C4PBaEGBqtoyaIMGIFwdKL107QwM=
+	b=Sl7dwurY+9nBsdtLvcycR9xFa90QPo8nAsMlqZQvEEij7UgMQUCZscKKHksAwDwLj
+	 2+vJRDUt1sumxwV2KXHqPztwNHzAx/I2B0H9a5XTHvnhTj+Yr/Jvj2iPvFdz0Gh/FZ
+	 l1V324zDyDZT9y/3AIkjqTvmrEsRCs426INkvCos=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbfIVTUc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:20:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55106 "EHLO mail.kernel.org"
+        id S1730206AbfIVTUl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:20:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55082 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394517AbfIVSyc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:54:32 -0400
+        id S2394507AbfIVSya (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:54:30 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 893762190F;
-        Sun, 22 Sep 2019 18:54:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6B151208C2;
+        Sun, 22 Sep 2019 18:54:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178471;
-        bh=u7H7ztHchobE3ZGof1DEGjbx8GRy0u3r0WIDuLbnQ48=;
+        s=default; t=1569178470;
+        bh=IdPVXuf60uazzp9fR+CWv/TnPQCSTaI5VKp7xvYvocI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MMYSjbDWG/Ur403bjiYrpFQzwgUs7a3/lmxYpahVcsv5rgtdfOl44za/+QYaoiMNp
-         rOGBLbVGMnox5CXR0Hzq3Gg+2QhD8A/+mmRY1mpyXeAXTbq5mZ/V1F9KCVHQmwtWfP
-         +bULO81WrWXGgDDYLuugWLpNJcv6foXvBhU+ZMYY=
+        b=PDidnxaw/GAzfo175uquIRnHCBKjhFcLCuRZPc4Jx9ybtBgPrCoyN6GDHGdqJcc9h
+         lkdeMbY1aduveJLVmiZ8jmFWSOwMzqNOURc7GX5Qy6DILnkW6+EQZ49cR4h8nrMW+6
+         k2jlkFayICAt2Qq+JnC06ZgcAtsxUgvBhzURBbnc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>, Sean Wang <sean.wang@kernel.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 010/128] media: mtk-cir: lower de-glitch counter for rc-mm protocol
-Date:   Sun, 22 Sep 2019 14:52:20 -0400
-Message-Id: <20190922185418.2158-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 009/128] media: dib0700: fix link error for dibx000_i2c_set_speed
+Date:   Sun, 22 Sep 2019 14:52:19 -0400
+Message-Id: <20190922185418.2158-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -58,49 +58,67 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 5dd4b89dc098bf22cd13e82a308f42a02c102b2b ]
+[ Upstream commit 765bb8610d305ee488b35d07e2a04ae52fb2df9c ]
 
-The rc-mm protocol can't be decoded by the mtk-cir since the de-glitch
-filter removes pulses/spaces shorter than 294 microseconds.
+When CONFIG_DVB_DIB9000 is disabled, we can still compile code that
+now fails to link against dibx000_i2c_set_speed:
 
-Tested on a BananaPi R2.
+drivers/media/usb/dvb-usb/dib0700_devices.o: In function `dib01x0_pmu_update.constprop.7':
+dib0700_devices.c:(.text.unlikely+0x1c9c): undefined reference to `dibx000_i2c_set_speed'
 
+The call sites are both through dib01x0_pmu_update(), which gets passed
+an 'i2c' pointer from dib9000_get_i2c_master(), which has returned
+NULL. Checking this pointer seems to be a good idea anyway, and it avoids
+the link failure in most cases.
+
+Sean Young found another case that is not fixed by that, where certain
+gcc versions leave an unused function in place that causes the link error,
+but adding an explict IS_ENABLED() check also solves this.
+
+Fixes: b7f54910ce01 ("V4L/DVB (4647): Added module for DiB0700 based devices")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sean Young <sean@mess.org>
-Acked-by: Sean Wang <sean.wang@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/mtk-cir.c | 8 ++++++++
+ drivers/media/usb/dvb-usb/dib0700_devices.c | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/drivers/media/rc/mtk-cir.c b/drivers/media/rc/mtk-cir.c
-index e42efd9d382ec..d37b85d2bc750 100644
---- a/drivers/media/rc/mtk-cir.c
-+++ b/drivers/media/rc/mtk-cir.c
-@@ -44,6 +44,11 @@
- /* Fields containing pulse width data */
- #define MTK_WIDTH_MASK		  (GENMASK(7, 0))
+diff --git a/drivers/media/usb/dvb-usb/dib0700_devices.c b/drivers/media/usb/dvb-usb/dib0700_devices.c
+index 091389fdf89ee..c8d79502827b7 100644
+--- a/drivers/media/usb/dvb-usb/dib0700_devices.c
++++ b/drivers/media/usb/dvb-usb/dib0700_devices.c
+@@ -2442,9 +2442,13 @@ static int dib9090_tuner_attach(struct dvb_usb_adapter *adap)
+ 		8, 0x0486,
+ 	};
  
-+/* IR threshold */
-+#define MTK_IRTHD		 0x14
-+#define MTK_DG_CNT_MASK		 (GENMASK(12, 8))
-+#define MTK_DG_CNT(x)		 ((x) << 8)
-+
- /* Bit to enable interrupt */
- #define MTK_IRINT_EN		  BIT(0)
++	if (!IS_ENABLED(CONFIG_DVB_DIB9000))
++		return -ENODEV;
+ 	if (dvb_attach(dib0090_fw_register, adap->fe_adap[0].fe, i2c, &dib9090_dib0090_config) == NULL)
+ 		return -ENODEV;
+ 	i2c = dib9000_get_i2c_master(adap->fe_adap[0].fe, DIBX000_I2C_INTERFACE_GPIO_1_2, 0);
++	if (!i2c)
++		return -ENODEV;
+ 	if (dib01x0_pmu_update(i2c, data_dib190, 10) != 0)
+ 		return -ENODEV;
+ 	dib0700_set_i2c_speed(adap->dev, 1500);
+@@ -2520,10 +2524,14 @@ static int nim9090md_tuner_attach(struct dvb_usb_adapter *adap)
+ 		0, 0x00ef,
+ 		8, 0x0406,
+ 	};
++	if (!IS_ENABLED(CONFIG_DVB_DIB9000))
++		return -ENODEV;
+ 	i2c = dib9000_get_tuner_interface(adap->fe_adap[0].fe);
+ 	if (dvb_attach(dib0090_fw_register, adap->fe_adap[0].fe, i2c, &nim9090md_dib0090_config[0]) == NULL)
+ 		return -ENODEV;
+ 	i2c = dib9000_get_i2c_master(adap->fe_adap[0].fe, DIBX000_I2C_INTERFACE_GPIO_1_2, 0);
++	if (!i2c)
++		return -ENODEV;
+ 	if (dib01x0_pmu_update(i2c, data_dib190, 10) < 0)
+ 		return -ENODEV;
  
-@@ -409,6 +414,9 @@ static int mtk_ir_probe(struct platform_device *pdev)
- 	mtk_w32_mask(ir, val, ir->data->fields[MTK_HW_PERIOD].mask,
- 		     ir->data->fields[MTK_HW_PERIOD].reg);
- 
-+	/* Set de-glitch counter */
-+	mtk_w32_mask(ir, MTK_DG_CNT(1), MTK_DG_CNT_MASK, MTK_IRTHD);
-+
- 	/* Enable IR and PWM */
- 	val = mtk_r32(ir, MTK_CONFIG_HIGH_REG);
- 	val |= MTK_OK_COUNT(ir->data->ok_count) |  MTK_PWM_EN | MTK_IR_EN;
 -- 
 2.20.1
 
