@@ -4,53 +4,53 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3637DC4740C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E796CC3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0730C206C2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B93A82070C
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179085;
-	bh=cuZo9s602fDcrRD5mupxhsazaMcvhkTI6YHA7sdWTV4=;
+	s=default; t=1569179098;
+	bh=2EVpGNgzS4Menm3jZXMbpAUVlM0C6zIBuCzxtNPlBjM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=mzdFq48i5gRrMvtIN9jjpxsn/fDpKZEeCgdfV936LrR5PEgGAQ8GlePVRkA+zXx6z
-	 CgkhoDGZNAGIsOmMvV5ek8zGOv7DJJDW9NY8jznK/FWWybnF2NtHiP/Sg4o7U0d81O
-	 3TDxFySrmR9WNPGD+73Ogl2MeabsALJXJYtZW4PM=
+	b=VvKUISWCyVwzqOrJu0RFkYB3ZeazbxstVOyY16+VmtCRFvjLFkxSE+YbnC8b4W6u7
+	 Fj/aBi3i+Q/EIiWql9nHhe7z7W/XYjBeN8sCPYkUjHD+vLkFVk28I76d5xUcmEgoG4
+	 2tcckv+oxvJL0JXGe4W25IGHDTIyWFLTy+OamMEo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729883AbfIVTEn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:04:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37296 "EHLO mail.kernel.org"
+        id S2436576AbfIVTA6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:00:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbfIVTBM (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 15:01:12 -0400
+        id S2405945AbfIVTA5 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 15:00:57 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 04BAE214D9;
-        Sun, 22 Sep 2019 19:01:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8A5EA21907;
+        Sun, 22 Sep 2019 19:00:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178871;
-        bh=cuZo9s602fDcrRD5mupxhsazaMcvhkTI6YHA7sdWTV4=;
+        s=default; t=1569178856;
+        bh=2EVpGNgzS4Menm3jZXMbpAUVlM0C6zIBuCzxtNPlBjM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1w4N9ctZPXmo4J7WgJwqEVW73Da7az6l2rGD9eTJQOCcfQdDHh0SrzHgBM56cIP5O
-         IB+Qd9NXlure/DvSxsoZqLDgbYCY9VhhX2jZVQ6edY8COXRPd9lNUD2VwRNzDOYhdC
-         NxnNGNQgCYHeFVG54wOhF95zLEHKrv4ItgQPHEYI=
+        b=bsUvttmB40Ncy90Tow8uYaIndwAaa0ya98RPrqSuW3H3NFeA39BnMsVVuINBJlEvQ
+         OKBEH5YEeZfqQpDdi82tdXKm/4ggMdgRPmCgRT/IUN257bVpssQRGyee6749DivQN/
+         V5tZxfRFlyIXRaoLeB1Vj/2xC9rKHNc/9r+5Liho=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>,
-        syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Tomas Bortoli <tomasbortoli@gmail.com>,
+        syzbot+0522702e9d67142379f1@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 06/44] media: hdpvr: Add device num check and handling
-Date:   Sun, 22 Sep 2019 15:00:24 -0400
-Message-Id: <20190922190103.4906-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 58/60] media: ttusb-dec: Fix info-leak in ttusb_dec_send_command()
+Date:   Sun, 22 Sep 2019 14:59:31 -0400
+Message-Id: <20190922185934.4305-58-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190922190103.4906-1-sashal@kernel.org>
-References: <20190922190103.4906-1-sashal@kernel.org>
+In-Reply-To: <20190922185934.4305-1-sashal@kernel.org>
+References: <20190922185934.4305-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,57 +60,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>
+From: Tomas Bortoli <tomasbortoli@gmail.com>
 
-[ Upstream commit d4a6a9537bc32811486282206ecfb7c53754b74d ]
+[ Upstream commit a10feaf8c464c3f9cfdd3a8a7ce17e1c0d498da1 ]
 
-Add hdpvr device num check and error handling
+The function at issue does not always initialize each byte allocated
+for 'b' and can therefore leak uninitialized memory to a USB device in
+the call to usb_bulk_msg()
 
-We need to increment the device count atomically before we checkout a
-device to make sure that we do not reach the max count, otherwise we get
-out-of-bounds errors as reported by syzbot.
+Use kzalloc() instead of kmalloc()
 
-Reported-and-tested-by: syzbot+aac8d0d7205f112045d2@syzkaller.appspotmail.com
-
-Signed-off-by: Luke Nowakowski-Krijger <lnowakow@eng.ucsd.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Tomas Bortoli <tomasbortoli@gmail.com>
+Reported-by: syzbot+0522702e9d67142379f1@syzkaller.appspotmail.com
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-core.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/media/usb/ttusb-dec/ttusb_dec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
-index 08f0ca7aa012e..924517b09fc9f 100644
---- a/drivers/media/usb/hdpvr/hdpvr-core.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-core.c
-@@ -278,6 +278,7 @@ static int hdpvr_probe(struct usb_interface *interface,
- #endif
- 	size_t buffer_size;
- 	int i;
-+	int dev_num;
- 	int retval = -ENOMEM;
+diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+index 4e7671a3a1e4a..d7397c0d7f869 100644
+--- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
++++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
+@@ -278,7 +278,7 @@ static int ttusb_dec_send_command(struct ttusb_dec *dec, const u8 command,
  
- 	/* allocate memory for our device state and initialize it */
-@@ -386,8 +387,17 @@ static int hdpvr_probe(struct usb_interface *interface,
- 	}
- #endif
+ 	dprintk("%s\n", __func__);
  
-+	dev_num = atomic_inc_return(&dev_nr);
-+	if (dev_num >= HDPVR_MAX) {
-+		v4l2_err(&dev->v4l2_dev,
-+			 "max device number reached, device register failed\n");
-+		atomic_dec(&dev_nr);
-+		retval = -ENODEV;
-+		goto reg_fail;
-+	}
-+
- 	retval = hdpvr_register_videodev(dev, &interface->dev,
--				    video_nr[atomic_inc_return(&dev_nr)]);
-+				    video_nr[dev_num]);
- 	if (retval < 0) {
- 		v4l2_err(&dev->v4l2_dev, "registering videodev failed\n");
- 		goto reg_fail;
+-	b = kmalloc(COMMAND_PACKET_SIZE + 4, GFP_KERNEL);
++	b = kzalloc(COMMAND_PACKET_SIZE + 4, GFP_KERNEL);
+ 	if (!b)
+ 		return -ENOMEM;
+ 
 -- 
 2.20.1
 
