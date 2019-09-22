@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FE53C4740C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BC16C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:17:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F12A6206C2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C03A2186A
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179797;
-	bh=mMpkkxyADmRE+S4kl3stEwDC1qfXOMgTeOHsTq9W7RI=;
+	s=default; t=1569179823;
+	bh=R1MMQt5GaSLuun9OUwmJWG6Nko4NwIeTmHNgmXuUyM0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=etTZULaXmp4nse7izFtiX14EV+2ylgn+o8jHvDbR8vcAlUADmmgx2N6zOMEdMEEaJ
-	 obXi6vfedkA8r+x4hey9+TG2NhtkqaAWg/DJ2ql1pc6tQMe78JHZI2mAy+YXYRiYPt
-	 l0Y68xnKwGaB/W4Md4E4ePxatpSXae2DtV4XQV2A=
+	b=z8KR3jKIDnd4Tl9qvT9bQPReUUTGeelZ2G5nk/2vmD7afYBO2OSMB4m1QZQz/2ulE
+	 rFdKQT6tijkeud6/BjDvHmGN3RdCt7c74x1uRdipoiSniFQ8UhZWga4Si2hzJfwM2H
+	 i8TWEdlY8biW6G0IksMkQQ4jkBsWg7jszL4ZYArw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389533AbfIVTQ2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:16:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57892 "EHLO mail.kernel.org"
+        id S2408113AbfIVSz4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 14:55:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57622 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408163AbfIVS4F (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:56:05 -0400
+        id S2405716AbfIVSzz (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:55:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D08662186A;
-        Sun, 22 Sep 2019 18:56:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 99688208C2;
+        Sun, 22 Sep 2019 18:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178564;
-        bh=mMpkkxyADmRE+S4kl3stEwDC1qfXOMgTeOHsTq9W7RI=;
+        s=default; t=1569178555;
+        bh=R1MMQt5GaSLuun9OUwmJWG6Nko4NwIeTmHNgmXuUyM0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eyAB8tPggu8fnCtI0HV+VWfOrD51EMkLnCNUWXtljbxjlEox8iBGHZv66sYgSY+U4
-         EXcQN8QEEfukw9efJWHBu8MWDqoxx4QLhD/Im/K3Ry63TtEbMuvF/axTqGlMf7cNyT
-         6z2fyuJdBTNOR4rVPWL+yjEiLiLYb2fk5YOH5fas=
+        b=TjdS4MfEO/XbXVpVb5vD8D0ur1PQ/+2v0sjohc/kL4pDX5Lj8Rx37dGkV6NQx0dpJ
+         AiBXmm4kAE6cYqilj+l+bfhvLUl4rKGCjhM1ofWyJLJbJ6GdSu9hoUDXKNCRjw3OLy
+         ISbN1f+zSgQjbCRchC1imxQ76caKnkfKfNTTBehE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wenwen Wang <wenwen@cs.uga.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Wenwen Wang <wenwen@cs.uga.edu>, Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 078/128] media: saa7146: add cleanup in hexium_attach()
-Date:   Sun, 22 Sep 2019 14:53:28 -0400
-Message-Id: <20190922185418.2158-78-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 071/128] media: dvb-core: fix a memory leak bug
+Date:   Sun, 22 Sep 2019 14:53:21 -0400
+Message-Id: <20190922185418.2158-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -61,34 +60,38 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Wenwen Wang <wenwen@cs.uga.edu>
 
-[ Upstream commit 42e64117d3b4a759013f77bbcf25ab6700e55de7 ]
+[ Upstream commit fcd5ce4b3936242e6679875a4d3c3acfc8743e15 ]
 
-If saa7146_register_device() fails, no cleanup is executed, leading to
-memory/resource leaks. To fix this issue, perform necessary cleanup work
-before returning the error.
+In dvb_create_media_entity(), 'dvbdev->entity' is allocated through
+kzalloc(). Then, 'dvbdev->pads' is allocated through kcalloc(). However, if
+kcalloc() fails, the allocated 'dvbdev->entity' is not deallocated, leading
+to a memory leak bug. To fix this issue, free 'dvbdev->entity' before
+returning -ENOMEM.
 
 Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/saa7146/hexium_gemini.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/dvb-core/dvbdev.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index 6d8e4afe9673a..8c56d4c37a525 100644
---- a/drivers/media/pci/saa7146/hexium_gemini.c
-+++ b/drivers/media/pci/saa7146/hexium_gemini.c
-@@ -304,6 +304,9 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
- 	ret = saa7146_register_device(&hexium->video_dev, dev, "hexium gemini", VFL_TYPE_GRABBER);
- 	if (ret < 0) {
- 		pr_err("cannot register capture v4l2 device. skipping.\n");
-+		saa7146_vv_release(dev);
-+		i2c_del_adapter(&hexium->i2c_adapter);
-+		kfree(hexium);
- 		return ret;
+diff --git a/drivers/media/dvb-core/dvbdev.c b/drivers/media/dvb-core/dvbdev.c
+index 3c87785703310..04dc2f4bc7aaf 100644
+--- a/drivers/media/dvb-core/dvbdev.c
++++ b/drivers/media/dvb-core/dvbdev.c
+@@ -339,8 +339,10 @@ static int dvb_create_media_entity(struct dvb_device *dvbdev,
+ 	if (npads) {
+ 		dvbdev->pads = kcalloc(npads, sizeof(*dvbdev->pads),
+ 				       GFP_KERNEL);
+-		if (!dvbdev->pads)
++		if (!dvbdev->pads) {
++			kfree(dvbdev->entity);
+ 			return -ENOMEM;
++		}
  	}
  
+ 	switch (type) {
 -- 
 2.20.1
 
