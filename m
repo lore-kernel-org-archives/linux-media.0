@@ -4,48 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74758C3A5A2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 18:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76269C3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 18:45:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 48AA2208C0
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 18:44:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D59921971
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 18:45:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569177892;
-	bh=lZGEvVKT7P6VlhMVE3btjG8+YRwhHKeruH72i+PVMm4=;
+	s=default; t=1569177906;
+	bh=CKOJhoQWKwRHugdFdAlJKtgD9dw0sIWNrDvnzJWLrKE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=sbi/cAJwNbg7cBrbbqLkl3ueCjikbp1FoB1H2I3eCEssiXK4GchkhPaDbcJ2cbv95
-	 kYCHwASPx75np6jnP6NWevq2R4EnZc2Chfo8TgsV8n6iNr61h4kSAoy12SW3yDkpYp
-	 iLewgN253x6aBzKEmD+28yHJvx6hc5r2spFdnVKY=
+	b=jMhfyNc4551bmV0B9zfTXfnsXy49cCWjJtzmoN33VYKtg43XIqRrWt8tvvVQr0BYU
+	 uYVaTm/+gi8N80ZIZ73hjViidCmq/jxu0aT4TDqytIsWksYzE8EzsY+PnQgzSD3Ks9
+	 NIwbEizirRVxLrmyLwdyIhlNrGVXHpIGcpyBuBk4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388840AbfIVSon (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:44:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39894 "EHLO mail.kernel.org"
+        id S2388970AbfIVSpF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 14:45:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388677AbfIVSoL (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:44:11 -0400
+        id S2388952AbfIVSpE (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:45:04 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D7C3F206C2;
-        Sun, 22 Sep 2019 18:44:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3434A208C0;
+        Sun, 22 Sep 2019 18:45:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569177850;
-        bh=lZGEvVKT7P6VlhMVE3btjG8+YRwhHKeruH72i+PVMm4=;
+        s=default; t=1569177904;
+        bh=CKOJhoQWKwRHugdFdAlJKtgD9dw0sIWNrDvnzJWLrKE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yy0I9hxIHNZ2wP4cGb9xnGOA94YxMy0X21/FkqqpeT6a7xV38myVQU/v3DIP0LRTB
-         SG/Bri4/DJv+aE7AvHQ8iVGxjTuyCogOCkIu8FZZDpTuO2I14VT1iOwP/mLXEHBenH
-         6r6LujTpAXRP92rogMiNnnyvS61IfnGWYvwbgmI0=
+        b=M2f4PfAF4CoPa3w4OKxTJwxMorEuU+qimBzZbV0G1NpdDeQGAqTijDSNO6RCeK826
+         MyyaiMsDobEyeKK8+6t5t/5SnVgXPSYaGmbQRhhdfEBpd1do1iXNBjeJ8BESjS58e9
+         YQm4VrEkLH6EpfmiDIztItxwAQSyyZ8NWQJ+wmlA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>, Sean Wang <sean.wang@kernel.org>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 016/203] media: mtk-cir: lower de-glitch counter for rc-mm protocol
-Date:   Sun, 22 Sep 2019 14:40:42 -0400
-Message-Id: <20190922184350.30563-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 021/203] media: vivid: work around high stack usage with clang
+Date:   Sun, 22 Sep 2019 14:40:47 -0400
+Message-Id: <20190922184350.30563-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184350.30563-1-sashal@kernel.org>
 References: <20190922184350.30563-1-sashal@kernel.org>
@@ -58,49 +60,56 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 5dd4b89dc098bf22cd13e82a308f42a02c102b2b ]
+[ Upstream commit 1a03f91c2c2419c3709c4554952c66695575e91c ]
 
-The rc-mm protocol can't be decoded by the mtk-cir since the de-glitch
-filter removes pulses/spaces shorter than 294 microseconds.
+Building a KASAN-enabled kernel with clang ends up in a case where too
+much is inlined into vivid_thread_vid_cap() and the stack usage grows
+a lot, possibly when the register allocation fails to produce efficient
+code and spills a lot of temporaries to the stack. This uses more
+than twice the amount of stack than the sum of the individual functions
+when they are not inlined:
 
-Tested on a BananaPi R2.
+drivers/media/platform/vivid/vivid-kthread-cap.c:766:12: error: stack frame size of 2208 bytes in function 'vivid_thread_vid_cap' [-Werror,-Wframe-larger-than=]
 
-Signed-off-by: Sean Young <sean@mess.org>
-Acked-by: Sean Wang <sean.wang@kernel.org>
+Marking two of the key functions in here as 'noinline_for_stack' avoids
+the pathological case in clang without any apparent downside for gcc.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/mtk-cir.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/platform/vivid/vivid-kthread-cap.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/rc/mtk-cir.c b/drivers/media/rc/mtk-cir.c
-index 50fb0aebb8d40..f2259082e3d82 100644
---- a/drivers/media/rc/mtk-cir.c
-+++ b/drivers/media/rc/mtk-cir.c
-@@ -35,6 +35,11 @@
- /* Fields containing pulse width data */
- #define MTK_WIDTH_MASK		  (GENMASK(7, 0))
+diff --git a/drivers/media/platform/vivid/vivid-kthread-cap.c b/drivers/media/platform/vivid/vivid-kthread-cap.c
+index ed466d737a90d..003319d7816d7 100644
+--- a/drivers/media/platform/vivid/vivid-kthread-cap.c
++++ b/drivers/media/platform/vivid/vivid-kthread-cap.c
+@@ -232,8 +232,8 @@ static void *plane_vaddr(struct tpg_data *tpg, struct vivid_buffer *buf,
+ 	return vbuf;
+ }
  
-+/* IR threshold */
-+#define MTK_IRTHD		 0x14
-+#define MTK_DG_CNT_MASK		 (GENMASK(12, 8))
-+#define MTK_DG_CNT(x)		 ((x) << 8)
-+
- /* Bit to enable interrupt */
- #define MTK_IRINT_EN		  BIT(0)
+-static int vivid_copy_buffer(struct vivid_dev *dev, unsigned p, u8 *vcapbuf,
+-		struct vivid_buffer *vid_cap_buf)
++static noinline_for_stack int vivid_copy_buffer(struct vivid_dev *dev, unsigned p,
++		u8 *vcapbuf, struct vivid_buffer *vid_cap_buf)
+ {
+ 	bool blank = dev->must_blank[vid_cap_buf->vb.vb2_buf.index];
+ 	struct tpg_data *tpg = &dev->tpg;
+@@ -672,7 +672,8 @@ static void vivid_cap_update_frame_period(struct vivid_dev *dev)
+ 	dev->cap_frame_period = f_period;
+ }
  
-@@ -398,6 +403,9 @@ static int mtk_ir_probe(struct platform_device *pdev)
- 	mtk_w32_mask(ir, val, ir->data->fields[MTK_HW_PERIOD].mask,
- 		     ir->data->fields[MTK_HW_PERIOD].reg);
- 
-+	/* Set de-glitch counter */
-+	mtk_w32_mask(ir, MTK_DG_CNT(1), MTK_DG_CNT_MASK, MTK_IRTHD);
-+
- 	/* Enable IR and PWM */
- 	val = mtk_r32(ir, MTK_CONFIG_HIGH_REG);
- 	val |= MTK_OK_COUNT(ir->data->ok_count) |  MTK_PWM_EN | MTK_IR_EN;
+-static void vivid_thread_vid_cap_tick(struct vivid_dev *dev, int dropped_bufs)
++static noinline_for_stack void vivid_thread_vid_cap_tick(struct vivid_dev *dev,
++							 int dropped_bufs)
+ {
+ 	struct vivid_buffer *vid_cap_buf = NULL;
+ 	struct vivid_buffer *vbi_cap_buf = NULL;
 -- 
 2.20.1
 
