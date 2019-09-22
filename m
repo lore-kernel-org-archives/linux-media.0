@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B5D6C3A5A6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 477ECC4740C
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA1C4208C2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:03:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 173D02070C
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179031;
-	bh=hitQ1mfnHXHFIbbLDqW+Nr4SjYwep00BuZcM0jTnrT4=;
+	s=default; t=1569179060;
+	bh=cEno2wrjPI9YrH8bPe4reOWiOUsn/oHZHDpE5clJ76o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=eAjzVT2lBPPsOZ9sYDAKtkXhAPLTsOhZqzkA/vZBatLDBEt2dz+54Bta9oBeSU2S4
-	 QykGYyBdeUnmWri+/vA+KswyECOU86bJg9REaIDf5EGSftOhNP/23bhc3+sy3W0tBk
-	 QAa6xFTTDKZ9xilUdVzmbg4xMltJrs+Dq0WgQwDY=
+	b=MYZYq2ZSE6Y2You72Es19jzzpKzcYPFwIab1E+NZOZjiQJUAnB+Q+xD+Zi42d57PZ
+	 DKdlxmyHVD82pkmDxWZ7uNMwZSyFNjwsFQjSKjMVOrBgbcNXhpsaWw/ANVzvgdniEM
+	 +rY6qLDfzAV0eHYfhR/5GTze627wsFYEBXUoyhVo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729001AbfIVTDt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:03:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37922 "EHLO mail.kernel.org"
+        id S1729843AbfIVTET (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:04:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2439050AbfIVTBk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 15:01:40 -0400
+        id S2395326AbfIVTBW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 15:01:22 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 618D02184D;
-        Sun, 22 Sep 2019 19:01:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F15022070C;
+        Sun, 22 Sep 2019 19:01:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178900;
-        bh=hitQ1mfnHXHFIbbLDqW+Nr4SjYwep00BuZcM0jTnrT4=;
+        s=default; t=1569178881;
+        bh=cEno2wrjPI9YrH8bPe4reOWiOUsn/oHZHDpE5clJ76o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j0m5UdX3e84PbtCfDtqa4ixBX6p7baqDse7qPv3U/xQKdR5DmikFE8+z4zQSVY44r
-         +XbdDeiGl3fZhh3h8k+oqT7NzEohVVQM/q3sYaUWLXqw3vUbUrkDLicMBBJ4XOJGM7
-         WpNRkm+Sxt1ZRKd7kKdvEvFzs5jgTSHyVdBVr7XE=
+        b=rHgTM6z5YQEd2uMAtuhRAVwO0w9rNdITAh02kx0plL/Dz+01FhUkkgxC5mHJMy/Qs
+         xSBbYzJx5oHpBJkquPuf6E25taRO7Eve8FIUSGrsp+HHxn6n0WVr40VbtqU547tSje
+         XZGJ0vzw4FvHmM6SVwEVm6onyVtJPPkTuwVBwkII=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 22/44] media: omap3isp: Don't set streaming state on random subdevs
-Date:   Sun, 22 Sep 2019 15:00:40 -0400
-Message-Id: <20190922190103.4906-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 13/44] media: iguanair: add sanity checks
+Date:   Sun, 22 Sep 2019 15:00:31 -0400
+Message-Id: <20190922190103.4906-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922190103.4906-1-sashal@kernel.org>
 References: <20190922190103.4906-1-sashal@kernel.org>
@@ -59,48 +60,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 7ef57be07ac146e70535747797ef4aee0f06e9f9 ]
+[ Upstream commit ab1cbdf159beba7395a13ab70bc71180929ca064 ]
 
-The streaming state should be set to the first upstream sub-device only,
-not everywhere, for a sub-device driver itself knows how to best control
-the streaming state of its own upstream sub-devices.
+The driver needs to check the endpoint types, too, as opposed
+to the number of endpoints. This also requires moving the check earlier.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/omap3isp/isp.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/rc/iguanair.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index 136ea1848701d..f41e0d08de93e 100644
---- a/drivers/media/platform/omap3isp/isp.c
-+++ b/drivers/media/platform/omap3isp/isp.c
-@@ -917,6 +917,10 @@ static int isp_pipeline_enable(struct isp_pipeline *pipe,
- 					s_stream, mode);
- 			pipe->do_propagation = true;
- 		}
+diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
+index ee60e17fba05d..cda4ce612dcf5 100644
+--- a/drivers/media/rc/iguanair.c
++++ b/drivers/media/rc/iguanair.c
+@@ -430,6 +430,10 @@ static int iguanair_probe(struct usb_interface *intf,
+ 	int ret, pipein, pipeout;
+ 	struct usb_host_interface *idesc;
+ 
++	idesc = intf->altsetting;
++	if (idesc->desc.bNumEndpoints < 2)
++		return -ENODEV;
 +
-+		/* Stop at the first external sub-device. */
-+		if (subdev->dev != isp->dev)
-+			break;
+ 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
+ 	rc = rc_allocate_device();
+ 	if (!ir || !rc) {
+@@ -444,18 +448,13 @@ static int iguanair_probe(struct usb_interface *intf,
+ 	ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
+ 	ir->urb_out = usb_alloc_urb(0, GFP_KERNEL);
+ 
+-	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out) {
++	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out ||
++	    !usb_endpoint_is_int_in(&idesc->endpoint[0].desc) ||
++	    !usb_endpoint_is_int_out(&idesc->endpoint[1].desc)) {
+ 		ret = -ENOMEM;
+ 		goto out;
  	}
  
- 	return 0;
-@@ -1031,6 +1035,10 @@ static int isp_pipeline_disable(struct isp_pipeline *pipe)
- 				isp->crashed |= 1U << subdev->entity.id;
- 			failure = -ETIMEDOUT;
- 		}
-+
-+		/* Stop at the first external sub-device. */
-+		if (subdev->dev != isp->dev)
-+			break;
- 	}
- 
- 	return failure;
+-	idesc = intf->altsetting;
+-
+-	if (idesc->desc.bNumEndpoints < 2) {
+-		ret = -ENODEV;
+-		goto out;
+-	}
+-
+ 	ir->rc = rc;
+ 	ir->dev = &intf->dev;
+ 	ir->udev = udev;
 -- 
 2.20.1
 
