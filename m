@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C43F9C3A5A6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA859C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9387720869
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8241320869
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:20:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569180023;
-	bh=vJKFOdMHhMYIRmfZn3Kky3KbozDQMjZPWqMyn6/4Bbg=;
+	s=default; t=1569180028;
+	bh=9WlLpdEMTjmBcZOqESYZTnBii0ZagJO0QmItdcIX0is=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=MCQ2yo9RT1oPFroyHDAt5ABe6q/Qw+o/7ClEvRnFQrQeqdki/gqxvZtFTH+owoPWd
-	 +RAmdLO4RMIesdUGomwTJ2HojZmUAi16UY/hS6WIFQiEr366qipXySp2D4FvAMgAeH
-	 8MAGGX6cWFzYayuqp98B7eET4J0TVSXAlUT+k2Vo=
+	b=pf3Jh/NZXMzMFOzdad7pMIkpTehsx5luGiauTcwWgI/h/M1fRu6hKSlkQTid4s4fx
+	 p+G3q4uDF0N+uwVgeRzvB+TpPXwb6AQjGfjpmvLmEPwL2ryZ5Wg1SLfCUdNWpT8rKW
+	 BfzByImVL6HEZcdludpEl8y+43aiQLjyQuA3csC4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392611AbfIVTUO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:20:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55188 "EHLO mail.kernel.org"
+        id S1730926AbfIVTU1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:20:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55112 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394523AbfIVSyf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:54:35 -0400
+        id S2407951AbfIVSyd (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:54:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 37F302190F;
-        Sun, 22 Sep 2019 18:54:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AE71021D7A;
+        Sun, 22 Sep 2019 18:54:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178475;
-        bh=vJKFOdMHhMYIRmfZn3Kky3KbozDQMjZPWqMyn6/4Bbg=;
+        s=default; t=1569178472;
+        bh=9WlLpdEMTjmBcZOqESYZTnBii0ZagJO0QmItdcIX0is=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S8vDGg+QyRPFBpMxiC3aFxJyz7zHaQlkeElaPg7c0Wgr9Y5+LqKQdQuSaQVq8OAFd
-         TqacpDupGQ0aWKRQSPZqzuPYCZLoojov+b6Wk8JZYxkZPDolKtlH2WwuA3F0PbO70+
-         KGti7dwgJCCWNaUJrcLSntkme81lTKPXJDnkxnAA=
+        b=YAYro0u2O+Telx8EIdBzyHbC972/SYlTayOYj0LnFbxY8xobaJhfR4gN7F78tuZEk
+         vCEMBA5igcrf7g7Fn2sWRk4eZRv7pvdDMEAjRisda9qTmidjLsCzok6ZmVFEZNWuAE
+         NTxdcRm3H4t4H27OpmADaNk0xtgjWn/sHfgMziAE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Wen Yang <wen.yang99@zte.com.cn>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 013/128] media: i2c: ov5640: Check for devm_gpiod_get_optional() error
-Date:   Sun, 22 Sep 2019 14:52:23 -0400
-Message-Id: <20190922185418.2158-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 011/128] media: exynos4-is: fix leaked of_node references
+Date:   Sun, 22 Sep 2019 14:52:21 -0400
+Message-Id: <20190922185418.2158-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -59,40 +59,62 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Fabio Estevam <festevam@gmail.com>
+From: Wen Yang <wen.yang99@zte.com.cn>
 
-[ Upstream commit 8791a102ce579346cea9d2f911afef1c1985213c ]
+[ Upstream commit da79bf41a4d170ca93cc8f3881a70d734a071c37 ]
 
-The power down and reset GPIO are optional, but the return value
-from devm_gpiod_get_optional() needs to be checked and propagated
-in the case of error, so that probe deferral can work.
+The call to of_get_child_by_name returns a node pointer with refcount
+incremented thus it must be explicitly decremented after the last
+usage.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Detected by coccinelle with the following warnings:
+drivers/media/platform/exynos4-is/fimc-is.c:813:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/fimc-is.c:870:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/fimc-is.c:885:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:545:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 541, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:528:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 499, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:534:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 499, but without a corresponding object release within this function.
+
+Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov5640.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/platform/exynos4-is/fimc-is.c   | 1 +
+ drivers/media/platform/exynos4-is/media-dev.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index d5c0ffc55d46a..a3bbef682fb8e 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -2787,9 +2787,14 @@ static int ov5640_probe(struct i2c_client *client,
- 	/* request optional power down pin */
- 	sensor->pwdn_gpio = devm_gpiod_get_optional(dev, "powerdown",
- 						    GPIOD_OUT_HIGH);
-+	if (IS_ERR(sensor->pwdn_gpio))
-+		return PTR_ERR(sensor->pwdn_gpio);
-+
- 	/* request optional reset pin */
- 	sensor->reset_gpio = devm_gpiod_get_optional(dev, "reset",
- 						     GPIOD_OUT_HIGH);
-+	if (IS_ERR(sensor->reset_gpio))
-+		return PTR_ERR(sensor->reset_gpio);
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+index 5ddb2321e9e48..0fe9be93fabe2 100644
+--- a/drivers/media/platform/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/exynos4-is/fimc-is.c
+@@ -819,6 +819,7 @@ static int fimc_is_probe(struct platform_device *pdev)
+ 		return -ENODEV;
  
- 	v4l2_i2c_subdev_init(&sensor->sd, client, &ov5640_subdev_ops);
+ 	is->pmu_regs = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!is->pmu_regs)
+ 		return -ENOMEM;
+ 
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index deb499f76412a..b5993532831da 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -498,6 +498,7 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
+ 			continue;
+ 
+ 		ret = fimc_md_parse_port_node(fmd, port, index);
++		of_node_put(port);
+ 		if (ret < 0) {
+ 			of_node_put(node);
+ 			goto rpm_put;
+@@ -531,6 +532,7 @@ static int __of_get_csis_id(struct device_node *np)
+ 	if (!np)
+ 		return -EINVAL;
+ 	of_property_read_u32(np, "reg", &reg);
++	of_node_put(np);
+ 	return reg - FIMC_INPUT_MIPI_CSI2_0;
+ }
  
 -- 
 2.20.1
