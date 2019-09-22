@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DC99C49ED7
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:13:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 607D1C4740C
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:13:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DAD121BE5
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:13:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A02420882
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:13:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179591;
-	bh=KxMX0AHppmq/QMFSl9xidCMoTWkoL9DltKhFR7xZW48=;
+	s=default; t=1569179615;
+	bh=VI40FhFAfw1ko5hRgrNOZflOsfqYo09dM5rBjVrmxnw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=xn6Rreqqtcp7HDU77+2HLscMihv2HoW/h9wOhc9jkMMoqqevb8AjrPMmqCNaTqacd
-	 XrcvaQ0lIcEYueXty+ao0ooNH6oKo0XIX5NzcLxe0id8dEGjAij/ZbBce2CSVSKexL
-	 XkLFzqI6KHoZAabXkLt2uaMXXU/Rd9Y3xgfvwZyI=
+	b=vXTRcn/psKLvUOMnUheugSX3ZCWPJKo/5hAj8ndTR8dZeo+ewXpMzNRkQjy3mrcYd
+	 3HBDKO9IFPEvLgzkYGgdeyJqp6gzQ/8BpASKySNtbIogkcjHi44IRqcc7DfsnJfFz0
+	 8N1b5XSoaZFP9KnC81x8qzTPVQq3ggS+b8m/dmA4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438656AbfIVS5s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:57:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60386 "EHLO mail.kernel.org"
+        id S2438596AbfIVS5g (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 14:57:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60128 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438651AbfIVS5r (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:57:47 -0400
+        id S2438499AbfIVS5e (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:57:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 91448208C2;
-        Sun, 22 Sep 2019 18:57:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6E321206C2;
+        Sun, 22 Sep 2019 18:57:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178666;
-        bh=KxMX0AHppmq/QMFSl9xidCMoTWkoL9DltKhFR7xZW48=;
+        s=default; t=1569178653;
+        bh=VI40FhFAfw1ko5hRgrNOZflOsfqYo09dM5rBjVrmxnw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H6/UTSGaSJb0HS2+A1n4jC7wZJQXiOr2GXbfjd4OsQ6BGrBiNQOeJVoVqPFWbnL0g
-         IKDSdsFowGvXBmn6JqNA2XmkZZ1pXsia1GqMFfi1qkp8/jGcGXqyOEu+mh2us4VTdG
-         kSU6XgzxqpMVlIyL4+tw+jncUELG2BXBghwCmXjo=
+        b=FW79a+ZYKYJmRq6zZfT70DWr4P5bx+3LvkwTRiGqJM6ohnO9cbLOLh/Jh2AIZrPPB
+         iBmTBwTsXbWhY7dbn8KmcGoEJZfzv0GnloPJrO4XJcZ0PceBfp/COZVH3o8pPgAymf
+         Vz6/pgaqVli4age09G4WSME2qAZCeh+vEHh0Bj1Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com,
-        Sean Young <sean@mess.org>,
+Cc:     Wen Yang <wen.yang99@zte.com.cn>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 18/89] media: iguanair: add sanity checks
-Date:   Sun, 22 Sep 2019 14:56:06 -0400
-Message-Id: <20190922185717.3412-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 08/89] media: exynos4-is: fix leaked of_node references
+Date:   Sun, 22 Sep 2019 14:55:56 -0400
+Message-Id: <20190922185717.3412-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185717.3412-1-sashal@kernel.org>
 References: <20190922185717.3412-1-sashal@kernel.org>
@@ -60,59 +59,63 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Oliver Neukum <oneukum@suse.com>
+From: Wen Yang <wen.yang99@zte.com.cn>
 
-[ Upstream commit ab1cbdf159beba7395a13ab70bc71180929ca064 ]
+[ Upstream commit da79bf41a4d170ca93cc8f3881a70d734a071c37 ]
 
-The driver needs to check the endpoint types, too, as opposed
-to the number of endpoints. This also requires moving the check earlier.
+The call to of_get_child_by_name returns a node pointer with refcount
+incremented thus it must be explicitly decremented after the last
+usage.
 
-Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Signed-off-by: Sean Young <sean@mess.org>
+Detected by coccinelle with the following warnings:
+drivers/media/platform/exynos4-is/fimc-is.c:813:2-8: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/fimc-is.c:870:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/fimc-is.c:885:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 807, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:545:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 541, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:528:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 499, but without a corresponding object release within this function.
+drivers/media/platform/exynos4-is/media-dev.c:534:1-7: ERROR: missing of_node_put; acquired a node pointer with refcount incremented on line 499, but without a corresponding object release within this function.
+
+Signed-off-by: Wen Yang <wen.yang99@zte.com.cn>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/iguanair.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-is.c   | 1 +
+ drivers/media/platform/exynos4-is/media-dev.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
-index 30e24da672268..3c2e248ceca87 100644
---- a/drivers/media/rc/iguanair.c
-+++ b/drivers/media/rc/iguanair.c
-@@ -427,6 +427,10 @@ static int iguanair_probe(struct usb_interface *intf,
- 	int ret, pipein, pipeout;
- 	struct usb_host_interface *idesc;
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+index 5ddb2321e9e48..0fe9be93fabe2 100644
+--- a/drivers/media/platform/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/exynos4-is/fimc-is.c
+@@ -819,6 +819,7 @@ static int fimc_is_probe(struct platform_device *pdev)
+ 		return -ENODEV;
  
-+	idesc = intf->altsetting;
-+	if (idesc->desc.bNumEndpoints < 2)
-+		return -ENODEV;
-+
- 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
- 	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
- 	if (!ir || !rc) {
-@@ -441,18 +445,13 @@ static int iguanair_probe(struct usb_interface *intf,
- 	ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
- 	ir->urb_out = usb_alloc_urb(0, GFP_KERNEL);
+ 	is->pmu_regs = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!is->pmu_regs)
+ 		return -ENOMEM;
  
--	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out) {
-+	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out ||
-+	    !usb_endpoint_is_int_in(&idesc->endpoint[0].desc) ||
-+	    !usb_endpoint_is_int_out(&idesc->endpoint[1].desc)) {
- 		ret = -ENOMEM;
- 		goto out;
- 	}
+diff --git a/drivers/media/platform/exynos4-is/media-dev.c b/drivers/media/platform/exynos4-is/media-dev.c
+index d4656d5175d7e..b2eb830c0360a 100644
+--- a/drivers/media/platform/exynos4-is/media-dev.c
++++ b/drivers/media/platform/exynos4-is/media-dev.c
+@@ -496,6 +496,7 @@ static int fimc_md_register_sensor_entities(struct fimc_md *fmd)
+ 			continue;
  
--	idesc = intf->altsetting;
--
--	if (idesc->desc.bNumEndpoints < 2) {
--		ret = -ENODEV;
--		goto out;
--	}
--
- 	ir->rc = rc;
- 	ir->dev = &intf->dev;
- 	ir->udev = udev;
+ 		ret = fimc_md_parse_port_node(fmd, port, index);
++		of_node_put(port);
+ 		if (ret < 0) {
+ 			of_node_put(node);
+ 			goto rpm_put;
+@@ -529,6 +530,7 @@ static int __of_get_csis_id(struct device_node *np)
+ 	if (!np)
+ 		return -EINVAL;
+ 	of_property_read_u32(np, "reg", &reg);
++	of_node_put(np);
+ 	return reg - FIMC_INPUT_MIPI_CSI2_0;
+ }
+ 
 -- 
 2.20.1
 
