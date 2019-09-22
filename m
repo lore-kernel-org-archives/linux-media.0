@@ -4,49 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13198C49ED7
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:26:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60DEBC3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:26:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D4F7E206C2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:26:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2ACAE206B6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:26:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569180405;
-	bh=zrNOOP3J9vQJ0oNkHaXT6/45OGq4tm1el6rjh/+uPUo=;
+	s=default; t=1569180408;
+	bh=vXDkuYne+Hy4F82vAvYwB/USPCaWPvacv5O9Bg8gQqY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=g5mg6PhleSww+eqJRZ5uRw7wO/58sLA+BfI9dXlyjm6bxRo/57sGcARq2l80NSWWG
-	 O88EgZyql+MB742je2G9VTgpet5sOmk6E1C5DAjLpisO3nBrgJBF2Rb9ITSoHJgWcN
-	 5Kp6i6m4CIOHP6DxDFPmdtvzu6xEHsasWWwzUmhY=
+	b=mcCrBfS8VZ/wZ9AB6tMje2FnBSS47K74IZAEj+T1U5nJ5Q05y2ma//yPMbeb5R47i
+	 ZOYSLymjTV0leev2PHXNHlcgtKSZdnmj3WUe3b7n+Oy/g63ElZ/XF6VnvJOSSjw9Q6
+	 oqzIJOiaRvXJasmxKz+gJGjVHkjUr+o6vQ775arE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406112AbfIVSvo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:51:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49818 "EHLO mail.kernel.org"
+        id S1728511AbfIVT0q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:26:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49658 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2406084AbfIVSvo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:51:44 -0400
+        id S2405900AbfIVSvk (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:51:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3967A21A4A;
-        Sun, 22 Sep 2019 18:51:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 35E2721A4A;
+        Sun, 22 Sep 2019 18:51:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178303;
-        bh=zrNOOP3J9vQJ0oNkHaXT6/45OGq4tm1el6rjh/+uPUo=;
+        s=default; t=1569178299;
+        bh=vXDkuYne+Hy4F82vAvYwB/USPCaWPvacv5O9Bg8gQqY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B4VAjBwPDZycAKfzMpjaxyBi0+fufgni6R6piyZP4H3jk+dr0sldb/Z9jqzOkXoBo
-         PemzswK2wD2LMG/3vaywNhcM1YnsMN9cQEVwzHDOiG1UELG+ym8qlAhu7eUaWli2JC
-         fXRModpADNSAvt+9dmSDPl2jxWFXDhu6wRMl9JtU=
+        b=i0+ogpOWdDp+Ksp+/KgMQBzEA+LzODEuwYoO45A7+mxRndd6Bk8YVh5d2RUC21QiG
+         ZMuecKxGoLq0ibBKhXH/BaHd2IMrkvHB7zBdddtsVx4TwnuxAg+IR9jlcSrpVGhX+B
+         iMkV+O7BsyO1ugUoUmKv/zEiWAMqE6kbgqGjoqg4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 075/185] media: omap3isp: Don't set streaming state on random subdevs
-Date:   Sun, 22 Sep 2019 14:47:33 -0400
-Message-Id: <20190922184924.32534-75-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 073/185] media: vsp1: fix memory leak of dl on error return path
+Date:   Sun, 22 Sep 2019 14:47:31 -0400
+Message-Id: <20190922184924.32534-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922184924.32534-1-sashal@kernel.org>
 References: <20190922184924.32534-1-sashal@kernel.org>
@@ -59,48 +61,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit 7ef57be07ac146e70535747797ef4aee0f06e9f9 ]
+[ Upstream commit 70c55c1ad1a76e804ee5330e134674f5d2741cb7 ]
 
-The streaming state should be set to the first upstream sub-device only,
-not everywhere, for a sub-device driver itself knows how to best control
-the streaming state of its own upstream sub-devices.
+Currently when the call vsp1_dl_body_get fails and returns null the
+error return path leaks the allocation of dl. Fix this by kfree'ing
+dl before returning.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Addresses-Coverity: ("Resource leak")
+
+Fixes: 5d7936b8e27d ("media: vsp1: Convert display lists to use new body pool")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/omap3isp/isp.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/media/platform/vsp1/vsp1_dl.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index 38849f0ba09d3..8a87f427c056e 100644
---- a/drivers/media/platform/omap3isp/isp.c
-+++ b/drivers/media/platform/omap3isp/isp.c
-@@ -719,6 +719,10 @@ static int isp_pipeline_enable(struct isp_pipeline *pipe,
- 					s_stream, mode);
- 			pipe->do_propagation = true;
- 		}
-+
-+		/* Stop at the first external sub-device. */
-+		if (subdev->dev != isp->dev)
-+			break;
- 	}
+diff --git a/drivers/media/platform/vsp1/vsp1_dl.c b/drivers/media/platform/vsp1/vsp1_dl.c
+index 104b6f5145364..d7b43037e500a 100644
+--- a/drivers/media/platform/vsp1/vsp1_dl.c
++++ b/drivers/media/platform/vsp1/vsp1_dl.c
+@@ -557,8 +557,10 @@ static struct vsp1_dl_list *vsp1_dl_list_alloc(struct vsp1_dl_manager *dlm)
  
- 	return 0;
-@@ -833,6 +837,10 @@ static int isp_pipeline_disable(struct isp_pipeline *pipe)
- 						      &subdev->entity);
- 			failure = -ETIMEDOUT;
- 		}
-+
-+		/* Stop at the first external sub-device. */
-+		if (subdev->dev != isp->dev)
-+			break;
- 	}
+ 	/* Get a default body for our list. */
+ 	dl->body0 = vsp1_dl_body_get(dlm->pool);
+-	if (!dl->body0)
++	if (!dl->body0) {
++		kfree(dl);
+ 		return NULL;
++	}
  
- 	return failure;
+ 	header_offset = dl->body0->max_entries * sizeof(*dl->body0->entries);
+ 
 -- 
 2.20.1
 
