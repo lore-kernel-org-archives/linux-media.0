@@ -7,46 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A885AC3A5A6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01333C3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:00:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 762B8208C2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:00:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CFCC621BE5
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569178818;
-	bh=ErDtY2kpllQvvj4z6lp/isxmwDgPqnbmLsd+yvJXw78=;
+	s=default; t=1569178851;
+	bh=sCsFckFVCqL+qQKUz9mnHfKFAnTqOnubVn8UM/fs9t8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=mwpXTWW9Iccz76bIj7EoNTWS1Nsmw2nUKJUXmpwupWMvg8KhNmWToWPjj0xFw0iJo
-	 Z2ej9R34jtbP3K0WZQjB0MjeJgN+y1MBU9vi9auk8VSiI52glWLWv9P1Z04eLFCfuB
-	 ZF806lntF+076SSs0if2bjhZSZgz6TTtMdKMhWeQ=
+	b=fT3dBDHnkDB1L7pffLdi4rVQ8WCfICBFPqaIa2HMNwbTKnG9wUm/fIu+uqH/IIN4J
+	 EAIrZMkoFmFdqtR0eYfXs/TTQUJOdSWT1FdJzJg4XI10nGJdrug3QeNCGyer1VZFBr
+	 TMFKlh2lPRLRsFJZH9fKtuowxf6i6c6jy5Z6xAMk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395118AbfIVTAR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:00:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35878 "EHLO mail.kernel.org"
+        id S2395236AbfIVTAu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:00:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36776 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2395109AbfIVTAQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 15:00:16 -0400
+        id S2395230AbfIVTAu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 15:00:50 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 617E7206C2;
-        Sun, 22 Sep 2019 19:00:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1B11208C2;
+        Sun, 22 Sep 2019 19:00:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178816;
-        bh=ErDtY2kpllQvvj4z6lp/isxmwDgPqnbmLsd+yvJXw78=;
+        s=default; t=1569178849;
+        bh=sCsFckFVCqL+qQKUz9mnHfKFAnTqOnubVn8UM/fs9t8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rJb0B5/wZ3qcIa2c7flh9OTg4oupcstvvVmSN8carhhBwOB7UwnLnXWIc1DJvKTNf
-         JKena2JH1QncpKclpYn5qXKra70VM2s09zZOypWy4PaVVEGg8SkQLwggvDuN5cnmfP
-         FvR3M8Ccyz9SSYmDpwLXixxHZ4G4Gw6XBlvaLFIQ=
+        b=MuoXaeZj0+6B8iyt1GbhqzOFucK3UUs591NxNMnmwFW+N1o5NuF9B3/n0SEzfFIYP
+         ekImEjDO95WO5qpIkhC+lHtWMKf4s0beyCxd4UNNYqfmeph/J90U6BKapitohwX3X2
+         KoqNBpXWp49Zy1rg9B/oUaUbpe9ijZjUYZxHkph8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        syzbot+79d18aac4bf1770dd050@syzkaller.appspotmail.com,
+Cc:     Sean Young <sean@mess.org>,
+        syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com,
+        Kees Cook <keescook@chromium.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 29/60] media: hdpvr: add terminating 0 at end of string
-Date:   Sun, 22 Sep 2019 14:59:02 -0400
-Message-Id: <20190922185934.4305-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 54/60] media: technisat-usb2: break out of loop at end of buffer
+Date:   Sun, 22 Sep 2019 14:59:27 -0400
+Message-Id: <20190922185934.4305-54-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185934.4305-1-sashal@kernel.org>
 References: <20190922185934.4305-1-sashal@kernel.org>
@@ -59,38 +60,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Sean Young <sean@mess.org>
 
-[ Upstream commit 8b8900b729e4f31f12ac1127bde137c775c327e6 ]
+[ Upstream commit 0c4df39e504bf925ab666132ac3c98d6cbbe380b ]
 
-dev->usbc_buf was passed as argument for %s, but it was not safeguarded
-by a terminating 0.
+Ensure we do not access the buffer beyond the end if no 0xff byte
+is encountered.
 
-This caused this syzbot issue:
-
-https://syzkaller.appspot.com/bug?extid=79d18aac4bf1770dd050
-
-Reported-and-tested-by: syzbot+79d18aac4bf1770dd050@syzkaller.appspotmail.com
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+eaaaf38a95427be88f4b@syzkaller.appspotmail.com
+Signed-off-by: Sean Young <sean@mess.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/hdpvr/hdpvr-core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/usb/dvb-usb/technisat-usb2.c | 22 ++++++++++------------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/media/usb/hdpvr/hdpvr-core.c b/drivers/media/usb/hdpvr/hdpvr-core.c
-index 7b34108f6587e..99171b912a2d8 100644
---- a/drivers/media/usb/hdpvr/hdpvr-core.c
-+++ b/drivers/media/usb/hdpvr/hdpvr-core.c
-@@ -143,6 +143,7 @@ static int device_authorization(struct hdpvr_device *dev)
+diff --git a/drivers/media/usb/dvb-usb/technisat-usb2.c b/drivers/media/usb/dvb-usb/technisat-usb2.c
+index 4706628a3ed5e..10bccce22858a 100644
+--- a/drivers/media/usb/dvb-usb/technisat-usb2.c
++++ b/drivers/media/usb/dvb-usb/technisat-usb2.c
+@@ -612,10 +612,9 @@ static int technisat_usb2_frontend_attach(struct dvb_usb_adapter *a)
+ static int technisat_usb2_get_ir(struct dvb_usb_device *d)
+ {
+ 	struct technisat_usb2_state *state = d->priv;
+-	u8 *buf = state->buf;
+-	u8 *b;
+-	int ret;
+ 	struct ir_raw_event ev;
++	u8 *buf = state->buf;
++	int i, ret;
  
- 	dev->fw_ver = dev->usbc_buf[1];
+ 	buf[0] = GET_IR_DATA_VENDOR_REQUEST;
+ 	buf[1] = 0x08;
+@@ -651,26 +650,25 @@ static int technisat_usb2_get_ir(struct dvb_usb_device *d)
+ 		return 0; /* no key pressed */
  
-+	dev->usbc_buf[46] = '\0';
- 	v4l2_info(&dev->v4l2_dev, "firmware version 0x%x dated %s\n",
- 			  dev->fw_ver, &dev->usbc_buf[2]);
+ 	/* decoding */
+-	b = buf+1;
  
+ #if 0
+ 	deb_rc("RC: %d ", ret);
+-	debug_dump(b, ret, deb_rc);
++	debug_dump(buf + 1, ret, deb_rc);
+ #endif
+ 
+ 	ev.pulse = 0;
+-	while (1) {
+-		ev.pulse = !ev.pulse;
+-		ev.duration = (*b * FIRMWARE_CLOCK_DIVISOR * FIRMWARE_CLOCK_TICK) / 1000;
+-		ir_raw_event_store(d->rc_dev, &ev);
+-
+-		b++;
+-		if (*b == 0xff) {
++	for (i = 1; i < ARRAY_SIZE(state->buf); i++) {
++		if (buf[i] == 0xff) {
+ 			ev.pulse = 0;
+ 			ev.duration = 888888*2;
+ 			ir_raw_event_store(d->rc_dev, &ev);
+ 			break;
+ 		}
++
++		ev.pulse = !ev.pulse;
++		ev.duration = (buf[i] * FIRMWARE_CLOCK_DIVISOR *
++			       FIRMWARE_CLOCK_TICK) / 1000;
++		ir_raw_event_store(d->rc_dev, &ev);
+ 	}
+ 
+ 	ir_raw_event_handle(d->rc_dev);
 -- 
 2.20.1
 
