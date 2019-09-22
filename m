@@ -7,46 +7,45 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 717F9C3A5A6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6CD8C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3BF3220869
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F5F520869
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179787;
-	bh=IlEu+QND5GqugmZVtRKtyvAk+exItV+okO2D3Dg7m6U=;
+	s=default; t=1569179796;
+	bh=mn1239LQ4bPELmDLxiZL6N61urwswicdb7wLJtJNYuI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=y+7/U8C1uTOmDN081wRiRLW4xQ90tvS5ZAAxAK19tikO3P3L3DVQyhsyPAWjLMKFh
-	 JYgusF8wjAy2jE+r75JEdM0U0zLo+E/tatXYkXRm91dgYN3wrlPFqrMJvnWEF3wrCp
-	 7GHt+I7la/6uzUWQl6BUoiVJ3jvSB1Ay31ngi3Nc=
+	b=tkeQhZB2auSD0bGTGo9X/BFBdqxsfP4idKvgW3Fo3UzsouyN36B8DUmBX2EL7YuAs
+	 JjIbBEqq4HgrsmyWG7V1CIs6LUpnaHfmXGC0k7ycCA7EFyru+uER734Y31M/jl7qrU
+	 HCnQhIdrmA1TPUH419BsCCfj4ubzOO9VE61wdi8o=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438473AbfIVS4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:56:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57946 "EHLO mail.kernel.org"
+        id S2436941AbfIVTQ3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:16:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57842 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438471AbfIVS4G (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:56:06 -0400
+        id S2408154AbfIVS4E (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:56:04 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E9252184D;
-        Sun, 22 Sep 2019 18:56:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1F51206C2;
+        Sun, 22 Sep 2019 18:56:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178566;
-        bh=IlEu+QND5GqugmZVtRKtyvAk+exItV+okO2D3Dg7m6U=;
+        s=default; t=1569178563;
+        bh=mn1239LQ4bPELmDLxiZL6N61urwswicdb7wLJtJNYuI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r1oyu0j14ZIa9xNIRj/EVHo0E7tAs4vS3+JmO7UiEZmYVYM5bImXoQj7nX8Rtb42l
-         pPJiqtpc2IvrryaIlGN9bm29O4z/793f1hY73xEM4Ry3j7sOFY9DIO1eeO8yeQRKUP
-         p2g/ES0izHtrwdUHGDbhnVNymB7B2xT2NBxi2Qvg=
+        b=bImn4mqnloTmeJJiblteliyJhd4hP83Ce0ezuyrCMvAvcuytHIvV3DmWQtbwFY/GN
+         2EmdFEWBB+FIBorEPTTYbBQAz/ygw/SkER6hcYEM9PNRD5k3HW3IkJGcPh0d0weO3L
+         5BH0Ppfwf/xwRi4i+4HEBoGPtOOPy55PojDEZ9gc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wenwen Wang <wenwen@cs.uga.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 079/128] media: cpia2_usb: fix memory leaks
-Date:   Sun, 22 Sep 2019 14:53:29 -0400
-Message-Id: <20190922185418.2158-79-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 077/128] media: cec-notifier: clear cec_adap in cec_notifier_unregister
+Date:   Sun, 22 Sep 2019 14:53:27 -0400
+Message-Id: <20190922185418.2158-77-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -59,37 +58,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Wenwen Wang <wenwen@cs.uga.edu>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 1c770f0f52dca1a2323c594f01f5ec6f1dddc97f ]
+[ Upstream commit 14d5511691e5290103bc480998bc322e68f139d4 ]
 
-In submit_urbs(), 'cam->sbuf[i].data' is allocated through kmalloc_array().
-However, it is not deallocated if the following allocation for urbs fails.
-To fix this issue, free 'cam->sbuf[i].data' if usb_alloc_urb() fails.
+If cec_notifier_cec_adap_unregister() is called before
+cec_unregister_adapter() then everything is OK (and this is the
+case today). But if it is the other way around, then
+cec_notifier_unregister() is called first, and that doesn't
+set n->cec_adap to NULL.
 
-Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
+So if e.g. cec_notifier_set_phys_addr() is called after
+cec_notifier_unregister() but before cec_unregister_adapter()
+then n->cec_adap points to an unregistered and likely deleted
+cec adapter. So just set n->cec_adap->notifier and n->cec_adap
+to NULL for rubustness.
+
+Eventually cec_notifier_unregister will disappear and this will
+be simplified substantially.
+
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/cpia2/cpia2_usb.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/media/cec/cec-notifier.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/media/usb/cpia2/cpia2_usb.c b/drivers/media/usb/cpia2/cpia2_usb.c
-index f5b04594e2094..4c191fcd3a7f5 100644
---- a/drivers/media/usb/cpia2/cpia2_usb.c
-+++ b/drivers/media/usb/cpia2/cpia2_usb.c
-@@ -685,6 +685,10 @@ static int submit_urbs(struct camera_data *cam)
- 		if (!urb) {
- 			for (j = 0; j < i; j++)
- 				usb_free_urb(cam->sbuf[j].urb);
-+			for (j = 0; j < NUM_SBUF; j++) {
-+				kfree(cam->sbuf[j].data);
-+				cam->sbuf[j].data = NULL;
-+			}
- 			return -ENOMEM;
- 		}
- 
+diff --git a/drivers/media/cec/cec-notifier.c b/drivers/media/cec/cec-notifier.c
+index dd2078b27a419..2424680f71c3d 100644
+--- a/drivers/media/cec/cec-notifier.c
++++ b/drivers/media/cec/cec-notifier.c
+@@ -123,6 +123,8 @@ void cec_notifier_unregister(struct cec_notifier *n)
+ {
+ 	mutex_lock(&n->lock);
+ 	n->callback = NULL;
++	n->cec_adap->notifier = NULL;
++	n->cec_adap = NULL;
+ 	mutex_unlock(&n->lock);
+ 	cec_notifier_put(n);
+ }
 -- 
 2.20.1
 
