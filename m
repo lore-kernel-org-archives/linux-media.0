@@ -7,48 +7,47 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E19ACC4740C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAD13C3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AEB2520869
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93B6120869
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179889;
-	bh=btn0rffe8Z/PwnT6eyxhGR75HhWAf/0nvsrDLZM3g+k=;
+	s=default; t=1569179895;
+	bh=4TiQxJJfR3qDJTi4w87i1jLrhWKWJHCVRA0qnfV3P2g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GgPb3wBswLCbUU8HS4/QbrGdRse7sIv0l6qg+G3ldOuZAOiVb+b4uew7m9sif+ozt
-	 nz2OqNhQY++562LKlZl9Qxj4040PZBEEOmxfDi1t6ZpZUH4j3RU/+fbHY1EF938qZi
-	 m+rGFGGRHK6Ya589wfrkYpHJPHjxpaOq5x4fE+os=
+	b=pdLK8BHjiu8gpkc9u0t8A+nayaVOb2oAh/l/D0qInmg1PHKdAs3uQ/iX42VbhpXeD
+	 xfAQOJCtnhjBv8XwsCiPSFareWqdwqYAvw/hwIlRDoBArJBj52qzW+E5ZDSr1S8mZJ
+	 mxkPmQ+6Z02EW5Z5CRTYsiWMgRhRQSfDZul6FyXQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404820AbfIVSzX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:55:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56478 "EHLO mail.kernel.org"
+        id S2393524AbfIVTSL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:18:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408097AbfIVSzW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:55:22 -0400
+        id S2390514AbfIVSzU (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:55:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 71AB321479;
-        Sun, 22 Sep 2019 18:55:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 40568208C2;
+        Sun, 22 Sep 2019 18:55:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178521;
-        bh=btn0rffe8Z/PwnT6eyxhGR75HhWAf/0nvsrDLZM3g+k=;
+        s=default; t=1569178520;
+        bh=4TiQxJJfR3qDJTi4w87i1jLrhWKWJHCVRA0qnfV3P2g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oPAgeW0ukGTrhIRcsfhyD0RIZdpI8c1I6A/x9cbWbHHH5unww36W+qnPlsJQQZVoa
-         4N177p9wyBXzq9NtRHaiJ0auz2qe0CGfYoK2WcBvEDAljsajaGJngb9MHjxtsl9mzC
-         Ee7dcKEvX9ZXpcH5v9nj3jiTRrviaN6qewf+motk=
+        b=Wjj4huQV2bVCiI2YDEoyfLW/jDqGVFPmJBmtoK743U23zD5+MNWmfB55aJcTn2Gbj
+         oY9hXR5+MekOWSKuqN55A6mi65RpzBTvAjaoUrdqJxtu6bRGYeNZye5dCAewySV5Tw
+         GK3y5K0az/2yMXuPjf6FaXUX0BxjNWOkMa7uYuHg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 047/128] media: fdp1: Reduce FCP not found message level to debug
-Date:   Sun, 22 Sep 2019 14:52:57 -0400
-Message-Id: <20190922185418.2158-47-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 046/128] media: mtk-mdp: fix reference count on old device tree
+Date:   Sun, 22 Sep 2019 14:52:56 -0400
+Message-Id: <20190922185418.2158-46-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -61,43 +60,40 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Matthias Brugger <matthias.bgg@gmail.com>
 
-[ Upstream commit 4fd22938569c14f6092c05880ca387409d78355f ]
+[ Upstream commit 864919ea0380e62adb2503b89825fe358acb8216 ]
 
-When support for the IPMMU is not enabled, the FDP driver may be
-probe-deferred multiple times, causing several messages to be printed
-like:
+of_get_next_child() increments the reference count of the returning
+device_node. Decrement it in the check if we are using the old or the
+new DTB.
 
-    rcar_fdp1 fe940000.fdp1: FCP not found (-517)
-    rcar_fdp1 fe944000.fdp1: FCP not found (-517)
-
-Fix this by reducing the message level to debug level, as is done in the
-VSP1 driver.
-
-Fixes: 4710b752e029f3f8 ("[media] v4l: Add Renesas R-Car FDP1 Driver")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Fixes: ba1f1f70c2c0 ("[media] media: mtk-mdp: Fix mdp device tree")
+Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+Acked-by: Houlong Wei <houlong.wei@mediatek.com>
+[hverkuil-cisco@xs4all.nl: use node instead of parent as temp variable]
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/rcar_fdp1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/mtk-mdp/mtk_mdp_core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
-index 0d14670288113..5a30f1d84fe17 100644
---- a/drivers/media/platform/rcar_fdp1.c
-+++ b/drivers/media/platform/rcar_fdp1.c
-@@ -2306,7 +2306,7 @@ static int fdp1_probe(struct platform_device *pdev)
- 		fdp1->fcp = rcar_fcp_get(fcp_node);
- 		of_node_put(fcp_node);
- 		if (IS_ERR(fdp1->fcp)) {
--			dev_err(&pdev->dev, "FCP not found (%ld)\n",
-+			dev_dbg(&pdev->dev, "FCP not found (%ld)\n",
- 				PTR_ERR(fdp1->fcp));
- 			return PTR_ERR(fdp1->fcp);
- 		}
+diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
+index bbb24fb95b951..3deb0549b1a13 100644
+--- a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
++++ b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
+@@ -118,7 +118,9 @@ static int mtk_mdp_probe(struct platform_device *pdev)
+ 	mutex_init(&mdp->vpulock);
+ 
+ 	/* Old dts had the components as child nodes */
+-	if (of_get_next_child(dev->of_node, NULL)) {
++	node = of_get_next_child(dev->of_node, NULL);
++	if (node) {
++		of_node_put(node);
+ 		parent = dev->of_node;
+ 		dev_warn(dev, "device tree is out of date\n");
+ 	} else {
 -- 
 2.20.1
 
