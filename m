@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B72CC4740C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 717F9C3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E76A020869
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3BF3220869
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:16:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179783;
-	bh=lAXoCvK9UQCg0kKCfkhoaIjzPBFySSpdewTqTsr5tNk=;
+	s=default; t=1569179787;
+	bh=IlEu+QND5GqugmZVtRKtyvAk+exItV+okO2D3Dg7m6U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DXWg1Dzeqes9qrd+ZiGooI+qTIbjVsCo6vfBvpoDTaUfTPeniBee9tB1E3V/h5hvf
-	 6+XPOSH7FQggY6lGLREiFwwgJSaIURkbRRojKN923K0OttY/Rny6RQWOjiP7Yeac6l
-	 cOwHKLRhOe8fL3nvnr1YFl8BgNVZmBm84yFWBWN0=
+	b=y+7/U8C1uTOmDN081wRiRLW4xQ90tvS5ZAAxAK19tikO3P3L3DVQyhsyPAWjLMKFh
+	 JYgusF8wjAy2jE+r75JEdM0U0zLo+E/tatXYkXRm91dgYN3wrlPFqrMJvnWEF3wrCp
+	 7GHt+I7la/6uzUWQl6BUoiVJ3jvSB1Ay31ngi3Nc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395548AbfIVTQP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:16:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58094 "EHLO mail.kernel.org"
+        id S2438473AbfIVS4I (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 14:56:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57946 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389533AbfIVS4K (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:56:10 -0400
+        id S2438471AbfIVS4G (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:56:06 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8DAE921907;
-        Sun, 22 Sep 2019 18:56:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5E9252184D;
+        Sun, 22 Sep 2019 18:56:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178570;
-        bh=lAXoCvK9UQCg0kKCfkhoaIjzPBFySSpdewTqTsr5tNk=;
+        s=default; t=1569178566;
+        bh=IlEu+QND5GqugmZVtRKtyvAk+exItV+okO2D3Dg7m6U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fo9renCPJtrB0dV/9djV+G/Jyh/6oN8XLwZaH6inEc5UnUxsarAmzC4ZV2xaLvMsp
-         ZVMPWPfdn9n8Pa3H1A7AJ1ZB78CKiKQ0q0MUBAEKEoWCFytEGZNjbaBaB0znfJS2/w
-         VHf8mHuvqnJmLQqCy2Ezie8EABa+rxogRKGBnlqc=
+        b=r1oyu0j14ZIa9xNIRj/EVHo0E7tAs4vS3+JmO7UiEZmYVYM5bImXoQj7nX8Rtb42l
+         pPJiqtpc2IvrryaIlGN9bm29O4z/793f1hY73xEM4Ry3j7sOFY9DIO1eeO8yeQRKUP
+         p2g/ES0izHtrwdUHGDbhnVNymB7B2xT2NBxi2Qvg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+Cc:     Wenwen Wang <wenwen@cs.uga.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 082/128] media: ov9650: add a sanity check
-Date:   Sun, 22 Sep 2019 14:53:32 -0400
-Message-Id: <20190922185418.2158-82-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 079/128] media: cpia2_usb: fix memory leaks
+Date:   Sun, 22 Sep 2019 14:53:29 -0400
+Message-Id: <20190922185418.2158-79-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -58,46 +59,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+From: Wenwen Wang <wenwen@cs.uga.edu>
 
-[ Upstream commit 093347abc7a4e0490e3c962ecbde2dc272a8f708 ]
+[ Upstream commit 1c770f0f52dca1a2323c594f01f5ec6f1dddc97f ]
 
-As pointed by cppcheck:
+In submit_urbs(), 'cam->sbuf[i].data' is allocated through kmalloc_array().
+However, it is not deallocated if the following allocation for urbs fails.
+To fix this issue, free 'cam->sbuf[i].data' if usb_alloc_urb() fails.
 
-	[drivers/media/i2c/ov9650.c:706]: (error) Shifting by a negative value is undefined behaviour
-	[drivers/media/i2c/ov9650.c:707]: (error) Shifting by a negative value is undefined behaviour
-	[drivers/media/i2c/ov9650.c:721]: (error) Shifting by a negative value is undefined behaviour
-
-Prevent mangling with gains with invalid values.
-
-As pointed by Sylvester, this should never happen in practice,
-as min value of V4L2_CID_GAIN control is 16 (gain is always >= 16
-and m is always >= 0), but it is too hard for a static analyzer
-to get this, as the logic with validates control min/max is
-elsewhere inside V4L2 core.
-
-Reviewed-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov9650.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/usb/cpia2/cpia2_usb.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/i2c/ov9650.c b/drivers/media/i2c/ov9650.c
-index 5bea31cd41aa1..33a21d585dc9c 100644
---- a/drivers/media/i2c/ov9650.c
-+++ b/drivers/media/i2c/ov9650.c
-@@ -716,6 +716,11 @@ static int ov965x_set_gain(struct ov965x *ov965x, int auto_gain)
- 		for (m = 6; m >= 0; m--)
- 			if (gain >= (1 << m) * 16)
- 				break;
-+
-+		/* Sanity check: don't adjust the gain with a negative value */
-+		if (m < 0)
-+			return -EINVAL;
-+
- 		rgain = (gain - ((1 << m) * 16)) / (1 << m);
- 		rgain |= (((1 << m) - 1) << 4);
+diff --git a/drivers/media/usb/cpia2/cpia2_usb.c b/drivers/media/usb/cpia2/cpia2_usb.c
+index f5b04594e2094..4c191fcd3a7f5 100644
+--- a/drivers/media/usb/cpia2/cpia2_usb.c
++++ b/drivers/media/usb/cpia2/cpia2_usb.c
+@@ -685,6 +685,10 @@ static int submit_urbs(struct camera_data *cam)
+ 		if (!urb) {
+ 			for (j = 0; j < i; j++)
+ 				usb_free_urb(cam->sbuf[j].urb);
++			for (j = 0; j < NUM_SBUF; j++) {
++				kfree(cam->sbuf[j].data);
++				cam->sbuf[j].data = NULL;
++			}
+ 			return -ENOMEM;
+ 		}
  
 -- 
 2.20.1
