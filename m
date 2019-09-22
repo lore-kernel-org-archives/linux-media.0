@@ -4,51 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18973C3A5A2
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED8FC3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CEF7820869
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 782BC2053B
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179904;
-	bh=y3oK5sd44kw9hUTqZ2mEExDtnP5Ij6BKs401hcRk3Uc=;
+	s=default; t=1569179934;
+	bh=DM6CKKGHX4IgKpzSLPPrNa7vM4k4yCQtzVToryn8A5Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=EMjAseIltYjcs4bjcAXNt32GIEomp0ywr09y1JHD2UXBnmijZ/640k4V/oD1Fek6m
-	 yzE1Gaiw1+F1WwGaGp9CQLSkPYiDtmnsHLvZgmpt1uglAqRt7+1VqmIb7xP+o9g6EY
-	 NyLBFGVlyxOwK9nGjwX4MqEQhUxy5gFSihHO827g=
+	b=YIZFem1KkfdnW63RH6yqLw6yAaDoK85l0wnF8NxwjZEfVvQ6yOv3UpZ8ZE3vHtMHQ
+	 1toym/ELjUHHzNUQYXufsgpxuh/rwvk92Crjiu1SGnh3+oI+TF9OQOJNh6/xx2l47B
+	 uCN6RLrT4xhZ+oXx473d6c9UOnr9WrlSiJfvvxdY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437722AbfIVSzS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:55:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56344 "EHLO mail.kernel.org"
+        id S2394161AbfIVTSw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:18:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437375AbfIVSzR (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:55:17 -0400
+        id S2436852AbfIVSzC (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:55:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 188FE21479;
-        Sun, 22 Sep 2019 18:55:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 16D7C208C2;
+        Sun, 22 Sep 2019 18:55:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178516;
-        bh=y3oK5sd44kw9hUTqZ2mEExDtnP5Ij6BKs401hcRk3Uc=;
+        s=default; t=1569178501;
+        bh=DM6CKKGHX4IgKpzSLPPrNa7vM4k4yCQtzVToryn8A5Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dZzMzvSL/F6UwhBEjndWYXVP+Ea/ginc49RcfAmbD5Cg4JAEseIM1rRhaEHCaax7e
-         fvKj35T0tqCSs3F7nM9ssUFR8QI6ZMmNwBrDID+Uw+yc+2qSdnXz4OJF7uGNbdG2Np
-         IOSYBHtx5hdDJTZ9VtDuqPeRMlbidT6mZD2tga7Q=
+        b=ofPyH09IqC1+a8Bb5wyuAq7PgBtmvjjHFBWyNdbvhCH6KTH46cZPo1Ilhn4LfdcVs
+         HL1KQEe50tFkfgnzGU9kF8cY2q3Ps0T99mAEV01Zd6kf/uKk6k0eE9KQOKhp7Q9L+1
+         VBp3PS+UnN74qM/MWicD7wD7bqLZ3QDGeC/PNF5Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        syzbot+1a35278dd0ebfb3a038a@syzkaller.appspotmail.com,
-        syzbot+397fd082ce5143e2f67d@syzkaller.appspotmail.com,
-        syzbot+06ddf1788cfd048c5e82@syzkaller.appspotmail.com,
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 043/128] media: gspca: zero usb_buf on error
-Date:   Sun, 22 Sep 2019 14:52:53 -0400
-Message-Id: <20190922185418.2158-43-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 034/128] media: media/platform: fsl-viu.c: fix build for MICROBLAZE
+Date:   Sun, 22 Sep 2019 14:52:44 -0400
+Message-Id: <20190922185418.2158-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -61,277 +59,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 4843a543fad3bf8221cf14e5d5f32d15cee89e84 ]
+[ Upstream commit 6898dd580a045341f844862ceb775144156ec1af ]
 
-If reg_r() fails, then gspca_dev->usb_buf was left uninitialized,
-and some drivers used the contents of that buffer in logic.
+arch/microblaze/ defines out_be32() and in_be32(), so don't do that
+again in the driver source.
 
-This caused several syzbot errors:
+Fixes these build warnings:
 
-https://syzkaller.appspot.com/bug?extid=397fd082ce5143e2f67d
-https://syzkaller.appspot.com/bug?extid=1a35278dd0ebfb3a038a
-https://syzkaller.appspot.com/bug?extid=06ddf1788cfd048c5e82
+../drivers/media/platform/fsl-viu.c:36: warning: "out_be32" redefined
+../arch/microblaze/include/asm/io.h:50: note: this is the location of the previous definition
+../drivers/media/platform/fsl-viu.c:37: warning: "in_be32" redefined
+../arch/microblaze/include/asm/io.h:53: note: this is the location of the previous definition
 
-I analyzed the gspca drivers and zeroed the buffer where needed.
-
-Reported-and-tested-by: syzbot+1a35278dd0ebfb3a038a@syzkaller.appspotmail.com
-Reported-and-tested-by: syzbot+397fd082ce5143e2f67d@syzkaller.appspotmail.com
-Reported-and-tested-by: syzbot+06ddf1788cfd048c5e82@syzkaller.appspotmail.com
-
+Fixes: 29d750686331 ("media: fsl-viu: allow building it with COMPILE_TEST")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/gspca/konica.c   |  5 +++++
- drivers/media/usb/gspca/nw80x.c    |  5 +++++
- drivers/media/usb/gspca/ov519.c    | 10 ++++++++++
- drivers/media/usb/gspca/ov534.c    |  5 +++++
- drivers/media/usb/gspca/ov534_9.c  |  1 +
- drivers/media/usb/gspca/se401.c    |  5 +++++
- drivers/media/usb/gspca/sn9c20x.c  |  5 +++++
- drivers/media/usb/gspca/sonixb.c   |  5 +++++
- drivers/media/usb/gspca/sonixj.c   |  5 +++++
- drivers/media/usb/gspca/spca1528.c |  5 +++++
- drivers/media/usb/gspca/sq930x.c   |  5 +++++
- drivers/media/usb/gspca/sunplus.c  |  5 +++++
- drivers/media/usb/gspca/vc032x.c   |  5 +++++
- drivers/media/usb/gspca/w996Xcf.c  |  5 +++++
- 14 files changed, 71 insertions(+)
+ drivers/media/platform/fsl-viu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/gspca/konica.c b/drivers/media/usb/gspca/konica.c
-index 989ae997f66de..89b9293b31bef 100644
---- a/drivers/media/usb/gspca/konica.c
-+++ b/drivers/media/usb/gspca/konica.c
-@@ -123,6 +123,11 @@ static void reg_r(struct gspca_dev *gspca_dev, u16 value, u16 index)
- 	if (ret < 0) {
- 		pr_err("reg_r err %d\n", ret);
- 		gspca_dev->usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, 2);
- 	}
- }
+diff --git a/drivers/media/platform/fsl-viu.c b/drivers/media/platform/fsl-viu.c
+index 0273302aa7412..83086eea14500 100644
+--- a/drivers/media/platform/fsl-viu.c
++++ b/drivers/media/platform/fsl-viu.c
+@@ -37,7 +37,7 @@
+ #define VIU_VERSION		"0.5.1"
  
-diff --git a/drivers/media/usb/gspca/nw80x.c b/drivers/media/usb/gspca/nw80x.c
-index bedc04a72e97e..bde4441f935e7 100644
---- a/drivers/media/usb/gspca/nw80x.c
-+++ b/drivers/media/usb/gspca/nw80x.c
-@@ -1581,6 +1581,11 @@ static void reg_r(struct gspca_dev *gspca_dev,
- 	if (ret < 0) {
- 		pr_err("reg_r err %d\n", ret);
- 		gspca_dev->usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, USB_BUF_SZ);
- 		return;
- 	}
- 	if (len == 1)
-diff --git a/drivers/media/usb/gspca/ov519.c b/drivers/media/usb/gspca/ov519.c
-index 10fcbe9e8614b..cb41e61d50dd3 100644
---- a/drivers/media/usb/gspca/ov519.c
-+++ b/drivers/media/usb/gspca/ov519.c
-@@ -2083,6 +2083,11 @@ static int reg_r(struct sd *sd, u16 index)
- 	} else {
- 		gspca_err(gspca_dev, "reg_r %02x failed %d\n", index, ret);
- 		sd->gspca_dev.usb_err = ret;
-+		/*
-+		 * Make sure the result is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		gspca_dev->usb_buf[0] = 0;
- 	}
- 
- 	return ret;
-@@ -2111,6 +2116,11 @@ static int reg_r8(struct sd *sd,
- 	} else {
- 		gspca_err(gspca_dev, "reg_r8 %02x failed %d\n", index, ret);
- 		sd->gspca_dev.usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, 8);
- 	}
- 
- 	return ret;
-diff --git a/drivers/media/usb/gspca/ov534.c b/drivers/media/usb/gspca/ov534.c
-index d06dc0755b9a5..9e3326b66c792 100644
---- a/drivers/media/usb/gspca/ov534.c
-+++ b/drivers/media/usb/gspca/ov534.c
-@@ -642,6 +642,11 @@ static u8 ov534_reg_read(struct gspca_dev *gspca_dev, u16 reg)
- 	if (ret < 0) {
- 		pr_err("read failed %d\n", ret);
- 		gspca_dev->usb_err = ret;
-+		/*
-+		 * Make sure the result is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		gspca_dev->usb_buf[0] = 0;
- 	}
- 	return gspca_dev->usb_buf[0];
- }
-diff --git a/drivers/media/usb/gspca/ov534_9.c b/drivers/media/usb/gspca/ov534_9.c
-index 3d1364d2f83e6..4d4ae22e96406 100644
---- a/drivers/media/usb/gspca/ov534_9.c
-+++ b/drivers/media/usb/gspca/ov534_9.c
-@@ -1154,6 +1154,7 @@ static u8 reg_r(struct gspca_dev *gspca_dev, u16 reg)
- 	if (ret < 0) {
- 		pr_err("reg_r err %d\n", ret);
- 		gspca_dev->usb_err = ret;
-+		return 0;
- 	}
- 	return gspca_dev->usb_buf[0];
- }
-diff --git a/drivers/media/usb/gspca/se401.c b/drivers/media/usb/gspca/se401.c
-index 477da0664b7da..40b87717bb5c5 100644
---- a/drivers/media/usb/gspca/se401.c
-+++ b/drivers/media/usb/gspca/se401.c
-@@ -111,6 +111,11 @@ static void se401_read_req(struct gspca_dev *gspca_dev, u16 req, int silent)
- 			pr_err("read req failed req %#04x error %d\n",
- 			       req, err);
- 		gspca_dev->usb_err = err;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, READ_REQ_SIZE);
- 	}
- }
- 
-diff --git a/drivers/media/usb/gspca/sn9c20x.c b/drivers/media/usb/gspca/sn9c20x.c
-index cfa2a04d9f3f6..a4ae029818586 100644
---- a/drivers/media/usb/gspca/sn9c20x.c
-+++ b/drivers/media/usb/gspca/sn9c20x.c
-@@ -918,6 +918,11 @@ static void reg_r(struct gspca_dev *gspca_dev, u16 reg, u16 length)
- 	if (unlikely(result < 0 || result != length)) {
- 		pr_err("Read register %02x failed %d\n", reg, result);
- 		gspca_dev->usb_err = result;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, USB_BUF_SZ);
- 	}
- }
- 
-diff --git a/drivers/media/usb/gspca/sonixb.c b/drivers/media/usb/gspca/sonixb.c
-index 5f3f2979540a6..22de65d840dd3 100644
---- a/drivers/media/usb/gspca/sonixb.c
-+++ b/drivers/media/usb/gspca/sonixb.c
-@@ -462,6 +462,11 @@ static void reg_r(struct gspca_dev *gspca_dev,
- 		dev_err(gspca_dev->v4l2_dev.dev,
- 			"Error reading register %02x: %d\n", value, res);
- 		gspca_dev->usb_err = res;
-+		/*
-+		 * Make sure the result is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		gspca_dev->usb_buf[0] = 0;
- 	}
- }
- 
-diff --git a/drivers/media/usb/gspca/sonixj.c b/drivers/media/usb/gspca/sonixj.c
-index df8d8482b7959..fa108ce000ad6 100644
---- a/drivers/media/usb/gspca/sonixj.c
-+++ b/drivers/media/usb/gspca/sonixj.c
-@@ -1171,6 +1171,11 @@ static void reg_r(struct gspca_dev *gspca_dev,
- 	if (ret < 0) {
- 		pr_err("reg_r err %d\n", ret);
- 		gspca_dev->usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, USB_BUF_SZ);
- 	}
- }
- 
-diff --git a/drivers/media/usb/gspca/spca1528.c b/drivers/media/usb/gspca/spca1528.c
-index d25924e430f37..a20eb8580db2e 100644
---- a/drivers/media/usb/gspca/spca1528.c
-+++ b/drivers/media/usb/gspca/spca1528.c
-@@ -80,6 +80,11 @@ static void reg_r(struct gspca_dev *gspca_dev,
- 	if (ret < 0) {
- 		pr_err("reg_r err %d\n", ret);
- 		gspca_dev->usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, USB_BUF_SZ);
- 	}
- }
- 
-diff --git a/drivers/media/usb/gspca/sq930x.c b/drivers/media/usb/gspca/sq930x.c
-index d7cbcf2b39479..3521f5ff428e9 100644
---- a/drivers/media/usb/gspca/sq930x.c
-+++ b/drivers/media/usb/gspca/sq930x.c
-@@ -434,6 +434,11 @@ static void reg_r(struct gspca_dev *gspca_dev,
- 	if (ret < 0) {
- 		pr_err("reg_r %04x failed %d\n", value, ret);
- 		gspca_dev->usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, USB_BUF_SZ);
- 	}
- }
- 
-diff --git a/drivers/media/usb/gspca/sunplus.c b/drivers/media/usb/gspca/sunplus.c
-index 437a3367ab974..26eae69a2562f 100644
---- a/drivers/media/usb/gspca/sunplus.c
-+++ b/drivers/media/usb/gspca/sunplus.c
-@@ -264,6 +264,11 @@ static void reg_r(struct gspca_dev *gspca_dev,
- 	if (ret < 0) {
- 		pr_err("reg_r err %d\n", ret);
- 		gspca_dev->usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, USB_BUF_SZ);
- 	}
- }
- 
-diff --git a/drivers/media/usb/gspca/vc032x.c b/drivers/media/usb/gspca/vc032x.c
-index 52d0716596343..6e32264d3825a 100644
---- a/drivers/media/usb/gspca/vc032x.c
-+++ b/drivers/media/usb/gspca/vc032x.c
-@@ -2915,6 +2915,11 @@ static void reg_r_i(struct gspca_dev *gspca_dev,
- 	if (ret < 0) {
- 		pr_err("reg_r err %d\n", ret);
- 		gspca_dev->usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(gspca_dev->usb_buf, 0, USB_BUF_SZ);
- 	}
- }
- static void reg_r(struct gspca_dev *gspca_dev,
-diff --git a/drivers/media/usb/gspca/w996Xcf.c b/drivers/media/usb/gspca/w996Xcf.c
-index abfab3de18662..ef0a839f9b8ae 100644
---- a/drivers/media/usb/gspca/w996Xcf.c
-+++ b/drivers/media/usb/gspca/w996Xcf.c
-@@ -143,6 +143,11 @@ static int w9968cf_read_sb(struct sd *sd)
- 	} else {
- 		pr_err("Read SB reg [01] failed\n");
- 		sd->gspca_dev.usb_err = ret;
-+		/*
-+		 * Make sure the buffer is zeroed to avoid uninitialized
-+		 * values.
-+		 */
-+		memset(sd->gspca_dev.usb_buf, 0, 2);
- 	}
- 
- 	udelay(W9968CF_I2C_BUS_DELAY);
+ /* Allow building this driver with COMPILE_TEST */
+-#ifndef CONFIG_PPC
++#if !defined(CONFIG_PPC) && !defined(CONFIG_MICROBLAZE)
+ #define out_be32(v, a)	iowrite32be(a, (void __iomem *)v)
+ #define in_be32(a)	ioread32be((void __iomem *)a)
+ #endif
 -- 
 2.20.1
 
