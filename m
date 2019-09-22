@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9ED8FC3A5A6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60F62C3A5A6
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:19:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 782BC2053B
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C02D2184D
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:19:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179934;
-	bh=DM6CKKGHX4IgKpzSLPPrNa7vM4k4yCQtzVToryn8A5Q=;
+	s=default; t=1569179979;
+	bh=A7bB2lRTeqg19DskxmH6x0oHCi3rj0FsE/t+ZNh3yVU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=YIZFem1KkfdnW63RH6yqLw6yAaDoK85l0wnF8NxwjZEfVvQ6yOv3UpZ8ZE3vHtMHQ
-	 1toym/ELjUHHzNUQYXufsgpxuh/rwvk92Crjiu1SGnh3+oI+TF9OQOJNh6/xx2l47B
-	 uCN6RLrT4xhZ+oXx473d6c9UOnr9WrlSiJfvvxdY=
+	b=Rht6w7eUL44dr0eVwYnthEcKOLvvUqKLQm0ZTNPmQ4Mt34NgxjvDf+seqdI7+nXFO
+	 Cn29ib7FWVL2FsIlo6dASYYneP+frwaLt5oDCBzQjf4yRp+GDw82mu9VjKn0NhFcmw
+	 sNf1VaEUZz0ddNtI8DKHBxOhxZa24hAeqXExhez4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394161AbfIVTSw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:18:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55944 "EHLO mail.kernel.org"
+        id S2394176AbfIVTTf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:19:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55592 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436852AbfIVSzC (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:55:02 -0400
+        id S1729201AbfIVSyu (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:54:50 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 16D7C208C2;
-        Sun, 22 Sep 2019 18:55:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B708F21D7B;
+        Sun, 22 Sep 2019 18:54:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178501;
-        bh=DM6CKKGHX4IgKpzSLPPrNa7vM4k4yCQtzVToryn8A5Q=;
+        s=default; t=1569178489;
+        bh=A7bB2lRTeqg19DskxmH6x0oHCi3rj0FsE/t+ZNh3yVU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ofPyH09IqC1+a8Bb5wyuAq7PgBtmvjjHFBWyNdbvhCH6KTH46cZPo1Ilhn4LfdcVs
-         HL1KQEe50tFkfgnzGU9kF8cY2q3Ps0T99mAEV01Zd6kf/uKk6k0eE9KQOKhp7Q9L+1
-         VBp3PS+UnN74qM/MWicD7wD7bqLZ3QDGeC/PNF5Y=
+        b=JYrF/De/gOmhL1YcHpncN594O1oQwzLyaQ56bu0j/01wY0m+vck+5IHZOw7X2aoPv
+         D39S1a2MtH2YmqgoI28F9DPFK3W9XMs3f2yfTYL2Lq8Ny/0NvJXHuMvw2hwa6/CPEe
+         xhVvYptUw+GBU034r4SObXEqLGeflAHzP38Si56Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 034/128] media: media/platform: fsl-viu.c: fix build for MICROBLAZE
-Date:   Sun, 22 Sep 2019 14:52:44 -0400
-Message-Id: <20190922185418.2158-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 024/128] media: iguanair: add sanity checks
+Date:   Sun, 22 Sep 2019 14:52:34 -0400
+Message-Id: <20190922185418.2158-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -59,42 +60,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 6898dd580a045341f844862ceb775144156ec1af ]
+[ Upstream commit ab1cbdf159beba7395a13ab70bc71180929ca064 ]
 
-arch/microblaze/ defines out_be32() and in_be32(), so don't do that
-again in the driver source.
+The driver needs to check the endpoint types, too, as opposed
+to the number of endpoints. This also requires moving the check earlier.
 
-Fixes these build warnings:
-
-../drivers/media/platform/fsl-viu.c:36: warning: "out_be32" redefined
-../arch/microblaze/include/asm/io.h:50: note: this is the location of the previous definition
-../drivers/media/platform/fsl-viu.c:37: warning: "in_be32" redefined
-../arch/microblaze/include/asm/io.h:53: note: this is the location of the previous definition
-
-Fixes: 29d750686331 ("media: fsl-viu: allow building it with COMPILE_TEST")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+01a77b82edaa374068e1@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Sean Young <sean@mess.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/fsl-viu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/rc/iguanair.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/platform/fsl-viu.c b/drivers/media/platform/fsl-viu.c
-index 0273302aa7412..83086eea14500 100644
---- a/drivers/media/platform/fsl-viu.c
-+++ b/drivers/media/platform/fsl-viu.c
-@@ -37,7 +37,7 @@
- #define VIU_VERSION		"0.5.1"
+diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
+index 7daac8bab83b0..6f3030b2054d0 100644
+--- a/drivers/media/rc/iguanair.c
++++ b/drivers/media/rc/iguanair.c
+@@ -424,6 +424,10 @@ static int iguanair_probe(struct usb_interface *intf,
+ 	int ret, pipein, pipeout;
+ 	struct usb_host_interface *idesc;
  
- /* Allow building this driver with COMPILE_TEST */
--#ifndef CONFIG_PPC
-+#if !defined(CONFIG_PPC) && !defined(CONFIG_MICROBLAZE)
- #define out_be32(v, a)	iowrite32be(a, (void __iomem *)v)
- #define in_be32(a)	ioread32be((void __iomem *)a)
- #endif
++	idesc = intf->altsetting;
++	if (idesc->desc.bNumEndpoints < 2)
++		return -ENODEV;
++
+ 	ir = kzalloc(sizeof(*ir), GFP_KERNEL);
+ 	rc = rc_allocate_device(RC_DRIVER_IR_RAW);
+ 	if (!ir || !rc) {
+@@ -438,18 +442,13 @@ static int iguanair_probe(struct usb_interface *intf,
+ 	ir->urb_in = usb_alloc_urb(0, GFP_KERNEL);
+ 	ir->urb_out = usb_alloc_urb(0, GFP_KERNEL);
+ 
+-	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out) {
++	if (!ir->buf_in || !ir->packet || !ir->urb_in || !ir->urb_out ||
++	    !usb_endpoint_is_int_in(&idesc->endpoint[0].desc) ||
++	    !usb_endpoint_is_int_out(&idesc->endpoint[1].desc)) {
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+ 
+-	idesc = intf->altsetting;
+-
+-	if (idesc->desc.bNumEndpoints < 2) {
+-		ret = -ENODEV;
+-		goto out;
+-	}
+-
+ 	ir->rc = rc;
+ 	ir->dev = &intf->dev;
+ 	ir->udev = udev;
 -- 
 2.20.1
 
