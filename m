@@ -4,48 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DD1CFC3A5A6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E19ACC4740C
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AD22B214D9
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AEB2520869
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:18:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179888;
-	bh=AsUcjl7bU3ZIWQ/tixJ4jOBHiqJuChzvSZje7Wuze/8=;
+	s=default; t=1569179889;
+	bh=btn0rffe8Z/PwnT6eyxhGR75HhWAf/0nvsrDLZM3g+k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=eSRiQsrQnafmCRxYdXmgOl+JUU7sKY1jXIPqrE4bOfQcebjJAg+n+yQobl+sB8tdW
-	 uwQ0yr25GnKJFi3C5RbPReVYa3v4tIcq1S6R/SZhR4NlJDXcyzQjfNCkMYuOEVke1p
-	 /NmxiPODxZEvW+2vcbPkVTCpqDwELmSsPXC7xp6k=
+	b=GgPb3wBswLCbUU8HS4/QbrGdRse7sIv0l6qg+G3ldOuZAOiVb+b4uew7m9sif+ozt
+	 nz2OqNhQY++562LKlZl9Qxj4040PZBEEOmxfDi1t6ZpZUH4j3RU/+fbHY1EF938qZi
+	 m+rGFGGRHK6Ya589wfrkYpHJPHjxpaOq5x4fE+os=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437067AbfIVTSA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 15:18:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56560 "EHLO mail.kernel.org"
+        id S2404820AbfIVSzX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 14:55:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56478 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2438085AbfIVSzY (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:55:24 -0400
+        id S2408097AbfIVSzW (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:55:22 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0B79221D7B;
-        Sun, 22 Sep 2019 18:55:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 71AB321479;
+        Sun, 22 Sep 2019 18:55:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178523;
-        bh=AsUcjl7bU3ZIWQ/tixJ4jOBHiqJuChzvSZje7Wuze/8=;
+        s=default; t=1569178521;
+        bh=btn0rffe8Z/PwnT6eyxhGR75HhWAf/0nvsrDLZM3g+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fd+u95NKlI+913oMvvpDtbaIzz/hGOQidOpmXUoLZp2YQtckrThBHn/CaV5Ee0H5t
-         F3LolCUrBG4+iAUXiHZVOAIBMyeTwbkKqZrJRktcZMmngF94VlxRxzA3UmIBKWyEU6
-         AQCzbIivnnJbby7rv7PMUSlwbcnQARL9T/tklPJY=
+        b=oPAgeW0ukGTrhIRcsfhyD0RIZdpI8c1I6A/x9cbWbHHH5unww36W+qnPlsJQQZVoa
+         4N177p9wyBXzq9NtRHaiJ0auz2qe0CGfYoK2WcBvEDAljsajaGJngb9MHjxtsl9mzC
+         Ee7dcKEvX9ZXpcH5v9nj3jiTRrviaN6qewf+motk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Darius Rad <alpha@area49.net>, Sean Young <sean@mess.org>,
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 049/128] media: rc: imon: Allow iMON RC protocol for ffdc 7e device
-Date:   Sun, 22 Sep 2019 14:52:59 -0400
-Message-Id: <20190922185418.2158-49-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 047/128] media: fdp1: Reduce FCP not found message level to debug
+Date:   Sun, 22 Sep 2019 14:52:57 -0400
+Message-Id: <20190922185418.2158-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -58,51 +61,43 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Darius Rad <alpha@area49.net>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit b20a6e298bcb8cb8ae18de26baaf462a6418515b ]
+[ Upstream commit 4fd22938569c14f6092c05880ca387409d78355f ]
 
-Allow selecting the IR protocol, MCE or iMON, for a device that
-identifies as follows (with config id 0x7e):
+When support for the IPMMU is not enabled, the FDP driver may be
+probe-deferred multiple times, causing several messages to be printed
+like:
 
-15c2:ffdc SoundGraph Inc. iMON PAD Remote Controller
+    rcar_fdp1 fe940000.fdp1: FCP not found (-517)
+    rcar_fdp1 fe944000.fdp1: FCP not found (-517)
 
-As the driver is structured to default to iMON when both RC
-protocols are supported, existing users of this device (using MCE
-protocol) will need to manually switch to MCE (RC-6) protocol from
-userspace (with ir-keytable, sysfs).
+Fix this by reducing the message level to debug level, as is done in the
+VSP1 driver.
 
-Signed-off-by: Darius Rad <alpha@area49.net>
-Signed-off-by: Sean Young <sean@mess.org>
+Fixes: 4710b752e029f3f8 ("[media] v4l: Add Renesas R-Car FDP1 Driver")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/rc/imon.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/media/platform/rcar_fdp1.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
-index 1041c056854d5..f23a220352f7f 100644
---- a/drivers/media/rc/imon.c
-+++ b/drivers/media/rc/imon.c
-@@ -1835,12 +1835,17 @@ static void imon_get_ffdc_type(struct imon_context *ictx)
- 		break;
- 	/* iMON VFD, MCE IR */
- 	case 0x46:
--	case 0x7e:
- 	case 0x9e:
- 		dev_info(ictx->dev, "0xffdc iMON VFD, MCE IR");
- 		detected_display_type = IMON_DISPLAY_TYPE_VFD;
- 		allowed_protos = RC_PROTO_BIT_RC6_MCE;
- 		break;
-+	/* iMON VFD, iMON or MCE IR */
-+	case 0x7e:
-+		dev_info(ictx->dev, "0xffdc iMON VFD, iMON or MCE IR");
-+		detected_display_type = IMON_DISPLAY_TYPE_VFD;
-+		allowed_protos |= RC_PROTO_BIT_RC6_MCE;
-+		break;
- 	/* iMON LCD, MCE IR */
- 	case 0x9f:
- 		dev_info(ictx->dev, "0xffdc iMON LCD, MCE IR");
+diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
+index 0d14670288113..5a30f1d84fe17 100644
+--- a/drivers/media/platform/rcar_fdp1.c
++++ b/drivers/media/platform/rcar_fdp1.c
+@@ -2306,7 +2306,7 @@ static int fdp1_probe(struct platform_device *pdev)
+ 		fdp1->fcp = rcar_fcp_get(fcp_node);
+ 		of_node_put(fcp_node);
+ 		if (IS_ERR(fdp1->fcp)) {
+-			dev_err(&pdev->dev, "FCP not found (%ld)\n",
++			dev_dbg(&pdev->dev, "FCP not found (%ld)\n",
+ 				PTR_ERR(fdp1->fcp));
+ 			return PTR_ERR(fdp1->fcp);
+ 		}
 -- 
 2.20.1
 
