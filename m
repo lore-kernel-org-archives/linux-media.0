@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09F0CC4740C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A06BAC3A5A2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:17:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CDC252053B
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:17:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 79B44206C2
+	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:17:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569179824;
-	bh=06yTpw5L3yxHHbkzrBL/O9Pyp9ibvAP5y0E2ZisKh+Y=;
+	s=default; t=1569179853;
+	bh=pClu90STKLB18oeln6ktnsGd79j8DaMmJ6BX0IqDGQM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Has8Ugz1Dcaol5MPgOymnzhueCuYTNpxht/ODAewUb+eFTXfvRSEONWvDJeKtRSoO
-	 9+ANaEoItkORuiSvCooohVC0MO3ocJ9sX0XDgwvyUapkh31Ww7CQrvH+aoiErSyvZJ
-	 cOX1+ZGzoa3unNiv6jKM4Yl1zbJJAAGaA9DmwlgA=
+	b=L/N3p0oaTUMYDBazKULSVhapGWV4ymjxYPixRhh4+NA2KoNDxftletQJrxIP09eas
+	 NOhFt6TqF7zk3Daz2XVF3rwdaPuueSMVh4A+ZWVoldWmyq7SWATYZ3tMepkPTATgIj
+	 FImLrVtYQIT2QMFRX4TzAB8Fmehd6/qahovj0R4M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404055AbfIVSzz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:55:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57498 "EHLO mail.kernel.org"
+        id S1730866AbfIVTR3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 15:17:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57080 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729424AbfIVSzy (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:55:54 -0400
+        id S2392190AbfIVSzl (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 14:55:41 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B4CAC21D7A;
-        Sun, 22 Sep 2019 18:55:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9C3E521D7A;
+        Sun, 22 Sep 2019 18:55:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569178553;
-        bh=06yTpw5L3yxHHbkzrBL/O9Pyp9ibvAP5y0E2ZisKh+Y=;
+        s=default; t=1569178541;
+        bh=pClu90STKLB18oeln6ktnsGd79j8DaMmJ6BX0IqDGQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sst6LMc35nBuQLWwhLsmvNXdvbcMp/1tHzFOmIC80vDg2d4fU7utKr1mBNc4RaceR
-         SmMU0W3iVmWWwB81U2D+teTsYx7IMrISR2QCj2M9ZKhSPPc3rtxlp6UxtjEpMrI6W6
-         ao4su9ew7S1NgtlWsr/k8jGmC4Ul6WyleLoLLaiY=
+        b=n/UJcOEXLi5WMKgHEbRQCNA+y1zoCODfVnWuTKjGYujl3Nr2SLHF5QFxPl9g6yguy
+         +p/PIuX7ICbFn95mmYMy3bzSb8HK2eCdrjknq3CoIIa+zMmMUzw7oZCVTfho6M3i+i
+         6O9h5vYrI6KPt2h7ZRktUQC6JeYpmrg7/wmWrPTU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sean Young <sean@mess.org>,
-        syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        syzbot+2d4fc2a0c45ad8da7e99@syzkaller.appspotmail.com,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 069/128] media: dvb-frontends: use ida for pll number
-Date:   Sun, 22 Sep 2019 14:53:19 -0400
-Message-Id: <20190922185418.2158-69-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 061/128] media: radio/si470x: kill urb on error
+Date:   Sun, 22 Sep 2019 14:53:11 -0400
+Message-Id: <20190922185418.2158-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190922185418.2158-1-sashal@kernel.org>
 References: <20190922185418.2158-1-sashal@kernel.org>
@@ -59,219 +59,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Sean Young <sean@mess.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit c268e7adea52be0093de1164c425f3c8d8927770 ]
+[ Upstream commit 0d616f2a3fdbf1304db44d451d9f07008556923b ]
 
-KASAN: global-out-of-bounds Read in dvb_pll_attach
+In the probe() function radio->int_in_urb was not killed if an
+error occurred in the probe sequence. It was also missing in
+the disconnect.
 
-Syzbot reported global-out-of-bounds Read in dvb_pll_attach, while
-accessing id[dvb_pll_devcount], because dvb_pll_devcount was 65,
-that is more than size of 'id' which is DVB_PLL_MAX(64).
+This caused this syzbot issue:
 
-Rather than increasing dvb_pll_devcount every time, use ida so that
-numbers are allocated correctly. This does mean that no more than
-64 devices can be attached at the same time, but this is more than
-sufficient.
+https://syzkaller.appspot.com/bug?extid=2d4fc2a0c45ad8da7e99
 
-usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the
-software demuxer
-dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
-usb 1-1: media controller created
-dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
-tc90522 0-0018: Toshiba TC90522 attached.
-usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T
-module)...
-dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T
-module' registered.
-==================================================================
-BUG: KASAN: global-out-of-bounds in dvb_pll_attach+0x6c5/0x830
-drivers/media/dvb-frontends/dvb-pll.c:798
-Read of size 4 at addr ffffffff89c9e5e0 by task kworker/0:1/12
+Reported-and-tested-by: syzbot+2d4fc2a0c45ad8da7e99@syzkaller.appspotmail.com
 
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.2.0-rc6+ #13
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description+0x67/0x231 mm/kasan/report.c:188
-  __kasan_report.cold+0x1a/0x32 mm/kasan/report.c:317
-  kasan_report+0xe/0x20 mm/kasan/common.c:614
-  dvb_pll_attach+0x6c5/0x830 drivers/media/dvb-frontends/dvb-pll.c:798
-  dvb_pll_probe+0xfe/0x174 drivers/media/dvb-frontends/dvb-pll.c:877
-  i2c_device_probe+0x790/0xaa0 drivers/i2c/i2c-core-base.c:389
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  i2c_new_client_device+0x5b3/0xc40 drivers/i2c/i2c-core-base.c:778
-  i2c_new_device+0x19/0x50 drivers/i2c/i2c-core-base.c:821
-  dvb_module_probe+0xf9/0x220 drivers/media/dvb-core/dvbdev.c:985
-  friio_tuner_attach+0x125/0x1d0 drivers/media/usb/dvb-usb-v2/gl861.c:536
-  dvb_usbv2_adapter_frontend_init
-drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:675 [inline]
-  dvb_usbv2_adapter_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:804
-[inline]
-  dvb_usbv2_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:865 [inline]
-  dvb_usbv2_probe.cold+0x24dc/0x255d
-drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:980
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x660 drivers/base/dd.c:509
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:670
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
-  bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:843
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2111
-  usb_new_device.cold+0x8c1/0x1016 drivers/usb/core/hub.c:2534
-  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
-  port_event drivers/usb/core/hub.c:5350 [inline]
-  hub_event+0x1ada/0x3590 drivers/usb/core/hub.c:5432
-  process_one_work+0x905/0x1570 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
-  kthread+0x30b/0x410 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the variable:
-  id+0x100/0x120
-
-Memory state around the buggy address:
-  ffffffff89c9e480: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 00 00
-  ffffffff89c9e500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> ffffffff89c9e580: 00 00 00 00 00 00 00 00 00 00 00 00 fa fa fa fa
-                                                        ^
-  ffffffff89c9e600: 04 fa fa fa fa fa fa fa 04 fa fa fa fa fa fa fa
-  ffffffff89c9e680: 04 fa fa fa fa fa fa fa 04 fa fa fa fa fa fa fa
-==================================================================
-
-Reported-by: syzbot+8a8f48672560c8ca59dd@syzkaller.appspotmail.com
-Signed-off-by: Sean Young <sean@mess.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/dvb-frontends/dvb-pll.c | 40 ++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 16 deletions(-)
+ drivers/media/radio/si470x/radio-si470x-usb.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/dvb-frontends/dvb-pll.c b/drivers/media/dvb-frontends/dvb-pll.c
-index 29836c1a40e98..ee830c76e4b30 100644
---- a/drivers/media/dvb-frontends/dvb-pll.c
-+++ b/drivers/media/dvb-frontends/dvb-pll.c
-@@ -18,6 +18,7 @@
+diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
+index 313a95f195a27..19e381dd58089 100644
+--- a/drivers/media/radio/si470x/radio-si470x-usb.c
++++ b/drivers/media/radio/si470x/radio-si470x-usb.c
+@@ -743,7 +743,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+ 	/* start radio */
+ 	retval = si470x_start_usb(radio);
+ 	if (retval < 0)
+-		goto err_all;
++		goto err_buf;
  
- #include <linux/slab.h>
- #include <linux/module.h>
-+#include <linux/idr.h>
- #include <linux/dvb/frontend.h>
- #include <asm/types.h>
+ 	/* set initial frequency */
+ 	si470x_set_freq(radio, 87.5 * FREQ_MUL); /* available in all regions */
+@@ -758,6 +758,8 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
  
-@@ -43,8 +44,7 @@ struct dvb_pll_priv {
- };
- 
- #define DVB_PLL_MAX 64
--
--static unsigned int dvb_pll_devcount;
-+static DEFINE_IDA(pll_ida);
- 
- static int debug;
- module_param(debug, int, 0644);
-@@ -796,6 +796,7 @@ struct dvb_frontend *dvb_pll_attach(struct dvb_frontend *fe, int pll_addr,
- 	struct dvb_pll_priv *priv = NULL;
- 	int ret;
- 	const struct dvb_pll_desc *desc;
-+	int nr;
- 
- 	b1 = kmalloc(1, GFP_KERNEL);
- 	if (!b1)
-@@ -804,9 +805,14 @@ struct dvb_frontend *dvb_pll_attach(struct dvb_frontend *fe, int pll_addr,
- 	b1[0] = 0;
- 	msg.buf = b1;
- 
--	if ((id[dvb_pll_devcount] > DVB_PLL_UNDEFINED) &&
--	    (id[dvb_pll_devcount] < ARRAY_SIZE(pll_list)))
--		pll_desc_id = id[dvb_pll_devcount];
-+	nr = ida_simple_get(&pll_ida, 0, DVB_PLL_MAX, GFP_KERNEL);
-+	if (nr < 0) {
-+		kfree(b1);
-+		return NULL;
-+	}
-+
-+	if (id[nr] > DVB_PLL_UNDEFINED && id[nr] < ARRAY_SIZE(pll_list))
-+		pll_desc_id = id[nr];
- 
- 	BUG_ON(pll_desc_id < 1 || pll_desc_id >= ARRAY_SIZE(pll_list));
- 
-@@ -817,24 +823,20 @@ struct dvb_frontend *dvb_pll_attach(struct dvb_frontend *fe, int pll_addr,
- 			fe->ops.i2c_gate_ctrl(fe, 1);
- 
- 		ret = i2c_transfer (i2c, &msg, 1);
--		if (ret != 1) {
--			kfree(b1);
--			return NULL;
--		}
-+		if (ret != 1)
-+			goto out;
- 		if (fe->ops.i2c_gate_ctrl)
- 			     fe->ops.i2c_gate_ctrl(fe, 0);
- 	}
- 
- 	priv = kzalloc(sizeof(struct dvb_pll_priv), GFP_KERNEL);
--	if (!priv) {
--		kfree(b1);
--		return NULL;
--	}
-+	if (!priv)
-+		goto out;
- 
- 	priv->pll_i2c_address = pll_addr;
- 	priv->i2c = i2c;
- 	priv->pll_desc = desc;
--	priv->nr = dvb_pll_devcount++;
-+	priv->nr = nr;
- 
- 	memcpy(&fe->ops.tuner_ops, &dvb_pll_tuner_ops,
- 	       sizeof(struct dvb_tuner_ops));
-@@ -867,6 +869,11 @@ struct dvb_frontend *dvb_pll_attach(struct dvb_frontend *fe, int pll_addr,
- 	kfree(b1);
- 
- 	return fe;
-+out:
-+	kfree(b1);
-+	ida_simple_remove(&pll_ida, nr);
-+
-+	return NULL;
- }
- EXPORT_SYMBOL(dvb_pll_attach);
- 
-@@ -903,9 +910,10 @@ dvb_pll_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 
- static int dvb_pll_remove(struct i2c_client *client)
- {
--	struct dvb_frontend *fe;
-+	struct dvb_frontend *fe = i2c_get_clientdata(client);
-+	struct dvb_pll_priv *priv = fe->tuner_priv;
- 
--	fe = i2c_get_clientdata(client);
-+	ida_simple_remove(&pll_ida, priv->nr);
- 	dvb_pll_release(fe);
  	return 0;
- }
+ err_all:
++	usb_kill_urb(radio->int_in_urb);
++err_buf:
+ 	kfree(radio->buffer);
+ err_ctrl:
+ 	v4l2_ctrl_handler_free(&radio->hdl);
+@@ -831,6 +833,7 @@ static void si470x_usb_driver_disconnect(struct usb_interface *intf)
+ 	mutex_lock(&radio->lock);
+ 	v4l2_device_disconnect(&radio->v4l2_dev);
+ 	video_unregister_device(&radio->videodev);
++	usb_kill_urb(radio->int_in_urb);
+ 	usb_set_intfdata(intf, NULL);
+ 	mutex_unlock(&radio->lock);
+ 	v4l2_device_put(&radio->v4l2_dev);
 -- 
 2.20.1
 
