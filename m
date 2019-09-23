@@ -1,170 +1,275 @@
-Return-Path: <SRS0=gF/f=XR=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=741g=XS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A3CEC4740C
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:39:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1234CC3A5A6
+	for <linux-media@archiver.kernel.org>; Mon, 23 Sep 2019 01:58:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 52B85206B6
-	for <linux-media@archiver.kernel.org>; Sun, 22 Sep 2019 19:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569181163;
-	bh=Nxw5aOhWfTdOiyaoeE7XsDYMnNJhhdM1ju1U9Tc3byo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=IBxQaVxZa5Bsatj6NUVVgqjZ8TFaLXnMYTb7wBOj5tbVa6waQWyymOKL3HKvg3TQr
-	 efTUdSqgRi9/GHVUs5ET6ppuL8yN2Tix1yvPkRrrZJ/tmch7hqFOSJd3/v9ZwMOTry
-	 F0MVtA0RlrQ7MmrXIkxlRtTwZda61sdwwJrLgWMc=
+	by mail.kernel.org (Postfix) with ESMTP id D6E6B206C2
+	for <linux-media@archiver.kernel.org>; Mon, 23 Sep 2019 01:58:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388928AbfIVSpD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 22 Sep 2019 14:45:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40532 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388689AbfIVSpD (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sun, 22 Sep 2019 14:45:03 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B472C20882;
-        Sun, 22 Sep 2019 18:45:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569177901;
-        bh=Nxw5aOhWfTdOiyaoeE7XsDYMnNJhhdM1ju1U9Tc3byo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=elv/uXWK3lC0byJegVJfHJgv2JZW5LnZi6EQjJ7nkUE36Um7tqWpAsz1C79wUtlK6
-         eqZKiCknJOdOKyRoazj1VnyaB7rqw/VAqmH2Kcle9cpYNPWpaPGXQ5zZDa/dDe0LIU
-         p9BNlP0ZAXxxvvaNPQAm2CMu05ne2t8qYtn99yew=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vandana BN <bnvandana@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 019/203] media: vivid:add sanity check to avoid divide error and set value to 1 if 0.
-Date:   Sun, 22 Sep 2019 14:40:45 -0400
-Message-Id: <20190922184350.30563-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190922184350.30563-1-sashal@kernel.org>
-References: <20190922184350.30563-1-sashal@kernel.org>
+        id S2403909AbfIWB6s (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 22 Sep 2019 21:58:48 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:51443 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2391419AbfIWB6s (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sun, 22 Sep 2019 21:58:48 -0400
+X-UUID: 9df3d1a65e8d4ed89f1ae385a2a4f21d-20190923
+X-UUID: 9df3d1a65e8d4ed89f1ae385a2a4f21d-20190923
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 915901570; Mon, 23 Sep 2019 09:58:41 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 23 Sep 2019 09:58:40 +0800
+Received: from [172.21.77.4] (172.21.77.4) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 23 Sep 2019 09:58:39 +0800
+Message-ID: <1569203920.25491.9.camel@mtksdaap41>
+Subject: Re: [RFC, v3, 4/4] media: platform: mtk-mdp3: Add Mediatek MDP3
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bibby Hsieh <bibby.hsieh@mediatek.com>
+CC:     <hans.verkuil@cisco.com>,
+        <laurent.pinchart+renesas@ideasonboard.com>, <tfiga@chromium.org>,
+        <matthias.bgg@gmail.com>, <mchehab@kernel.org>,
+        <devicetree@vger.kernel.org>, <Sean.Cheng@mediatek.com>,
+        <Rynn.Wu@mediatek.com>, <srv_heupstream@mediatek.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        <holmes.chiou@mediatek.com>, <Jerry-ch.Chen@mediatek.com>,
+        <jungo.lin@mediatek.com>, <sj.huang@mediatek.com>,
+        <yuzhao@chromium.org>, <linux-mediatek@lists.infradead.org>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        <zwisler@chromium.org>, <christie.yu@mediatek.com>,
+        <frederic.chen@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>
+Date:   Mon, 23 Sep 2019 09:58:40 +0800
+In-Reply-To: <20190911094013.5892-1-bibby.hsieh@mediatek.com>
+References: <20190911094013.5892-1-bibby.hsieh@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Vandana BN <bnvandana@gmail.com>
+Hi, Bibby:
 
-[ Upstream commit aa9c2182c45421d54ed27c2a1765f7adedce291b ]
+On Wed, 2019-09-11 at 17:40 +0800, Bibby Hsieh wrote:
+> From: daoyuan huang <daoyuan.huang@mediatek.com>
+> 
+> This patch adds driver for Media Data Path 3 (MDP3).
+> Each modules' related operation control is sited in mtk-mdp3-comp.c
+> Each modules' register table is defined in file with "mdp_reg_"
+> and "mmsys_" prefix
+> GCE related API, operation control  sited in mtk-mdp3-cmdq.c
+> V4L2 m2m device functions are implemented in mtk-mdp3-m2m.c
+> Probe, power, suspend/resume, system level functions are defined in
+> mtk-mdp3-core.c
+> 
+> Signed-off-by: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+> Signed-off-by: daoyuan huang <daoyuan.huang@mediatek.com>
+> ---
 
-Syzbot reported divide error in vivid_thread_vid_cap, which has been
-seen only once and does not have a reproducer.
-This patch adds sanity checks for the
-denominator value with WARN_ON if it is 0 and replaces it with 1.
+[snip]
 
-divide error: 0000 [#1] PREEMPT SMP KASAN
-kobject: 'tx-0' (0000000017161f7f): kobject_uevent_env
-CPU: 0 PID: 23689 Comm: vivid-003-vid-c Not tainted 5.0.0-rc4+ #58
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-Google 01/01/2011
-RIP: 0010:vivid_cap_update_frame_period
-drivers/media/platform/vivid/vivid-kthread-cap.c:661 [inline]
-RIP: 0010:vivid_thread_vid_cap+0x221/0x284
-drivers/media/platform/vivid/vivid-kthread-cap.c:789
-Code: 48 c1 e9 03 0f b6 0c 11 48 89 f2 48 69 c0 00 ca 9a 3b 83 c2 03 38
-ca
-7c 08 84 c9 0f 85 f0 1e 00 00 41 8b 8f 24 64 00 00 31 d2 <48> f7 f1 49
-89
-c4 48 89 c3 49 8d 87 28 64 00 00 48 89 c2 48 89 45
-RSP: 0018:ffff88808b4afd68 EFLAGS: 00010246
-kobject: 'tx-0' (0000000017161f7f): fill_kobj_path: path
-= '/devices/virtual/net/gre0/queues/tx-0'
-RAX: 000000de5a6f8e00 RBX: 0000000100047b22 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000004
-RBP: ffff88808b4aff00 R08: ffff88804862e1c0 R09: ffffffff89997008
-R10: ffffffff89997010 R11: 0000000000000001 R12: 00000000fffffffc
-R13: ffff8880a17e0500 R14: ffff88803e40f760 R15: ffff8882182b0140
-FS:  0000000000000000(0000) GS:ffff8880ae800000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000004cdc90 CR3: 000000005d827000 CR4: 00000000001426f0
-Call Trace:
-kobject: 'gretap0' (00000000d7549098): kobject_add_internal: parent:
-'net',
-set: 'devices'
-kobject: 'loop2' (0000000094ed4ee4): kobject_uevent_env
-kobject: 'loop2' (0000000094ed4ee4): fill_kobj_path: path
-= '/devices/virtual/block/loop2'
-  kthread+0x357/0x430 kernel/kthread.c:246
-kobject: 'gretap0' (00000000d7549098): kobject_uevent_env
-  ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
-Modules linked in:
-kobject: 'gretap0' (00000000d7549098): fill_kobj_path: path
-= '/devices/virtual/net/gretap0'
----[ end trace bc5c8b25b64d768f ]---
-kobject: 'loop1' (0000000032036b86): kobject_uevent_env
-RIP: 0010:vivid_cap_update_frame_period
-drivers/media/platform/vivid/vivid-kthread-cap.c:661 [inline]
-RIP: 0010:vivid_thread_vid_cap+0x221/0x2840
-drivers/media/platform/vivid/vivid-kthread-cap.c:789
-kobject: 'loop1' (0000000032036b86): fill_kobj_path: path
-= '/devices/virtual/block/loop1'
-Code: 48 c1 e9 03 0f b6 0c 11 48 89 f2 48 69 c0 00 ca 9a 3b 83 c2 03 38
-ca
-7c 08 84 c9 0f 85 f0 1e 00 00 41 8b 8f 24 64 00 00 31 d2 <48> f7 f1 49
-89
-c4 48 89 c3 49 8d 87 28 64 00 00 48 89 c2 48 89 45
-kobject: 'loop0' (00000000dd9927c3): kobject_uevent_env
-RSP: 0018:ffff88808b4afd68 EFLAGS: 00010246
-RAX: 000000de5a6f8e00 RBX: 0000000100047b22 RCX: 0000000000000000
-kobject: 'queues' (000000007ed20666): kobject_add_internal:
-parent: 'gretap0', set: '<NULL>'
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000004
-RBP: ffff88808b4aff00 R08: ffff88804862e1c0 R09: ffffffff89997008
-kobject: 'loop0' (00000000dd9927c3): fill_kobj_path: path
-= '/devices/virtual/block/loop0'
-R10: ffffffff89997010 R11: 0000000000000001 R12: 00000000fffffffc
-kobject: 'queues' (000000007ed20666): kobject_uevent_env
-R13: ffff8880a17e0500 R14: ffff88803e40f760 R15: ffff8882182b0140
-FS:  0000000000000000(0000) GS:ffff8880ae800000(0000)
-knlGS:0000000000000000
-kobject: 'loop5' (00000000a41f9e79): kobject_uevent_env
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-kobject: 'queues' (000000007ed20666): kobject_uevent_env: filter
-function
-caused the event to drop!
-CR2: 00000000004cdc90 CR3: 000000005d827000 CR4: 00000000001426f0
-kobject: 'loop5' (00000000a41f9e79): fill_kobj_path: path
-= '/devices/virtual/block/loop5'
+> +
+> diff --git a/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
+> new file mode 100644
+> index 000000000000..bd8f274fcaa9
+> --- /dev/null
+> +++ b/drivers/media/platform/mtk-mdp3/mtk-mdp3-cmdq.c
+> @@ -0,0 +1,504 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2018 MediaTek Inc.
+> + * Author: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
+> + */
+> +
+> +#include <linux/platform_device.h>
+> +#include "mtk-mdp3-cmdq.h"
+> +#include "mtk-mdp3-comp.h"
+> +#include "mtk-mdp3-core.h"
+> +#include "mtk-mdp3-m2m.h"
+> +
+> +#include "mdp-platform.h"
+> +#include "mmsys_mutex.h"
+> +
+> +#define DISP_MUTEX_MDP_FIRST	(5)
+> +#define DISP_MUTEX_MDP_COUNT	(5)
+> +
+> +#define MDP_PATH_MAX_COMPS	IMG_MAX_COMPONENTS
+> +
+> +struct mdp_path {
+> +	struct mdp_dev		*mdp_dev;
+> +	struct mdp_comp_ctx	comps[MDP_PATH_MAX_COMPS];
+> +	u32			num_comps;
+> +	const struct img_config	*config;
+> +	const struct img_ipi_frameparam *param;
+> +	const struct v4l2_rect	*composes[IMG_MAX_HW_OUTPUTS];
+> +	struct v4l2_rect	bounds[IMG_MAX_HW_OUTPUTS];
+> +};
+> +
+> +#define has_op(ctx, op) \
+> +	(ctx->comp->ops && ctx->comp->ops->op)
+> +#define call_op(ctx, op, ...) \
+> +	(has_op(ctx, op) ? ctx->comp->ops->op(ctx, ##__VA_ARGS__) : 0)
+> +
+> +struct mdp_path_subfrm {
+> +	s32	mutex_id;
+> +	u32	mutex_mod;
+> +	s32	sofs[MDP_PATH_MAX_COMPS];
+> +	u32	num_sofs;
+> +};
+> +
+> +static bool is_output_disable(const struct img_compparam *param, u32 count)
+> +{
+> +	return (count < param->num_subfrms) ?
+> +		(param->frame.output_disable ||
+> +		param->subfrms[count].tile_disable) :
+> +		true;
+> +}
+> +
+> +static int mdp_path_subfrm_require(struct mdp_path_subfrm *subfrm,
+> +				   const struct mdp_path *path,
+> +				   struct mdp_cmd *cmd, u32 count)
+> +{
+> +	const struct img_config *config = path->config;
+> +	const struct mdp_comp_ctx *ctx;
+> +	phys_addr_t mm_mutex = path->mdp_dev->mm_mutex.reg_base;
+> +	s32 mutex_id = -1;
+> +	u32 mutex_sof = 0;
+> +	int mdp_color = 0;
+> +	int index;
+> +	u8 subsys_id = path->mdp_dev->mm_mutex.subsys_id;
+> +
+> +	/* Default value */
+> +	memset(subfrm, 0, sizeof(*subfrm));
+> +
+> +	for (index = 0; index < config->num_components; index++) {
+> +		ctx = &path->comps[index];
+> +		if (is_output_disable(ctx->param, count))
+> +			continue;
+> +		switch (ctx->comp->id) {
+> +		/**********************************************
+> +		 * Name            MSB LSB
+> +		 * DISP_MUTEX_MOD   23   0
+> +		 *
+> +		 * Specifies which modules are in this mutex.
+> +		 * Every bit denotes a module. Bit definition:
+> +		 *  2 mdp_rdma0
+> +		 *  4 mdp_rsz0
+> +		 *  5 mdp_rsz1
+> +		 *  6 mdp_tdshp
+> +		 *  7 mdp_wrot0
+> +		 *  8 mdp_wdma
+> +		 *  13 mdp_color
+> +		 *  23 mdp_aal
+> +		 *  24 mdp_ccorr
+> +		 **********************************************/
+> +		case MDP_AAL0:
+> +			subfrm->mutex_mod |= 1 << 23;
+> +			break;
+> +		case MDP_CCORR0:
+> +			subfrm->mutex_mod |= 1 << 24;
+> +			break;
+> +		case MDP_COLOR0:
+> +			if (mdp_color)
+> +				subfrm->mutex_mod |= 1 << 13;
+> +			break;
+> +		case MDP_WDMA:
+> +			subfrm->mutex_mod |= 1 << 8;
+> +			subfrm->sofs[subfrm->num_sofs++] = MDP_WDMA;
+> +			break;
+> +		case MDP_WROT0:
+> +			subfrm->mutex_mod |= 1 << 7;
+> +			subfrm->sofs[subfrm->num_sofs++] = MDP_WROT0;
+> +			break;
+> +		case MDP_TDSHP0:
+> +			subfrm->mutex_mod |= 1 << 6;
+> +			subfrm->sofs[subfrm->num_sofs++] = MDP_TDSHP0;
+> +			break;
+> +		case MDP_SCL1:
+> +			subfrm->mutex_mod |= 1 << 5;
+> +			subfrm->sofs[subfrm->num_sofs++] = MDP_SCL1;
+> +			break;
+> +		case MDP_SCL0:
+> +			subfrm->mutex_mod |= 1 << 4;
+> +			subfrm->sofs[subfrm->num_sofs++] = MDP_SCL0;
+> +			break;
+> +		case MDP_RDMA0:
+> +			mutex_id = DISP_MUTEX_MDP_FIRST + 1;
+> +			subfrm->mutex_mod |= 1 << 2;
+> +			subfrm->sofs[subfrm->num_sofs++] = MDP_RDMA0;
+> +			break;
+> +		case MDP_IMGI:
+> +			mutex_id = DISP_MUTEX_MDP_FIRST;
+> +			break;
+> +		case MDP_WPEI:
+> +			mutex_id = DISP_MUTEX_MDP_FIRST + 3;
+> +			break;
+> +		case MDP_WPEI2:
+> +			mutex_id = DISP_MUTEX_MDP_FIRST + 4;
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +	}
+> +
+> +	subfrm->mutex_id = mutex_id;
+> +	if (-1 == mutex_id) {
+> +		mdp_err("No mutex assigned");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (subfrm->mutex_mod) {
+> +		/* Set mutex modules */
+> +		MM_REG_WRITE(cmd, subsys_id, mm_mutex, MM_MUTEX_MOD,
+> +			     subfrm->mutex_mod, 0x07FFFFFF);
+> +		MM_REG_WRITE(cmd, subsys_id, mm_mutex, MM_MUTEX_SOF,
+> +			     mutex_sof, 0x00000007);
+> +	}
 
-Reported-by: syz...@syzkaller.appspotmail.com
-Signed-off-by: Vandana BN <bnvandana@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/platform/vivid/vivid-kthread-cap.c | 2 ++
- 1 file changed, 2 insertions(+)
+In [1], mdp3 device has a pointer to mutex device, and you directly
+write mutex register in mdp3 driver.
 
-diff --git a/drivers/media/platform/vivid/vivid-kthread-cap.c b/drivers/media/platform/vivid/vivid-kthread-cap.c
-index 6cf495a7d5cc1..ed466d737a90d 100644
---- a/drivers/media/platform/vivid/vivid-kthread-cap.c
-+++ b/drivers/media/platform/vivid/vivid-kthread-cap.c
-@@ -658,6 +658,8 @@ static void vivid_cap_update_frame_period(struct vivid_dev *dev)
- 	u64 f_period;
- 
- 	f_period = (u64)dev->timeperframe_vid_cap.numerator * 1000000000;
-+	if (WARN_ON(dev->timeperframe_vid_cap.denominator == 0))
-+		dev->timeperframe_vid_cap.denominator = 1;
- 	do_div(f_period, dev->timeperframe_vid_cap.denominator);
- 	if (dev->field_cap == V4L2_FIELD_ALTERNATE)
- 		f_period >>= 1;
--- 
-2.20.1
+		mdp_rdma0: mdp_rdma0@14001000 {
+			compatible = "mediatek,mt8183-mdp-rdma",
+				     "mediatek,mt8183-mdp3";
+
+			mediatek,mm-mutex = <&mutex>;
+		};
+
+
+ 		mutex: mutex@14016000 {
+ 			compatible = "mediatek,mt8183-disp-mutex";
+ 			reg = <0 0x14016000 0 0x1000>;
+ 		};
+
+But mutex already has its own driver in mediatek drm driver [2]. This is
+not a good design. I would like all mutex device register is controlled
+in single driver. 
+
+[1] https://patchwork.kernel.org/patch/11140747/
+[2]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/gpu/drm/mediatek/mtk_drm_ddp.c?h=v5.3#n429
+
+Regards,
+CK
+
+> +	return 0;
+> +}
+
+
 
