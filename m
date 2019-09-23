@@ -2,140 +2,92 @@ Return-Path: <SRS0=741g=XS=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26121C3A5A6
-	for <linux-media@archiver.kernel.org>; Mon, 23 Sep 2019 08:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7D8CC3A5A6
+	for <linux-media@archiver.kernel.org>; Mon, 23 Sep 2019 08:56:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EAA7520820
-	for <linux-media@archiver.kernel.org>; Mon, 23 Sep 2019 08:54:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Vs8SDsg6"
+	by mail.kernel.org (Postfix) with ESMTP id 899D320820
+	for <linux-media@archiver.kernel.org>; Mon, 23 Sep 2019 08:56:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390539AbfIWIyz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 23 Sep 2019 04:54:55 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:40056 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731941AbfIWIyz (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Mon, 23 Sep 2019 04:54:55 -0400
-Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 1AC5C53B;
-        Mon, 23 Sep 2019 10:54:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1569228893;
-        bh=zkPXkeY7G9/M6fZKlqBx/0dwIG0ZHHZpQeUCeh/CrmY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vs8SDsg6Smte7LsDHjNH3yW5U5RPBnysuf4aWHcXxTfpAT/TXKcIYCpr1yrHWRDeQ
-         IQKygUId7QgeNGdKcj2BhAthZHAhHloD3JkkhcIQaimZzTg5Hz7bntcNt+Q8tCS9dk
-         uE4zTTKsGXsNnMg3LgeUkTEqE20UL/4OQJuvs6qY=
-Date:   Mon, 23 Sep 2019 11:54:44 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, Vandana BN <bnvandana@gmail.com>
-Subject: Re: [PATCHv4 0/3] v4l2-core: Add metadata type to vfl_devnode_type
-Message-ID: <20190923085444.GB5056@pendragon.ideasonboard.com>
-References: <20190917133647.17533-1-hverkuil-cisco@xs4all.nl>
- <20190920234857.GM12672@pendragon.ideasonboard.com>
- <9ae7713a-c76c-cecd-165d-77dfe8eb0be0@xs4all.nl>
- <20190923081735.GA9467@paasikivi.fi.intel.com>
- <e3103d71-48ed-1966-3bd3-c81d642098c5@xs4all.nl>
+        id S1731941AbfIWI4j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 23 Sep 2019 04:56:39 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:49574 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731860AbfIWI4j (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 23 Sep 2019 04:56:39 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id A2498883C2;
+        Mon, 23 Sep 2019 08:56:38 +0000 (UTC)
+Received: from sirius.home.kraxel.org (ovpn-116-47.ams2.redhat.com [10.36.116.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E21E5D9CA;
+        Mon, 23 Sep 2019 08:56:38 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 91AFA9D69; Mon, 23 Sep 2019 10:56:37 +0200 (CEST)
+Date:   Mon, 23 Sep 2019 10:56:37 +0200
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Keiichi Watanabe <keiichiw@chromium.org>
+Cc:     virtio-dev@lists.oasis-open.org, acourbot@chromium.org,
+        alexlau@chromium.org, dgreid@chromium.org, marcheu@chromium.org,
+        posciak@chromium.org, stevensd@chromium.org, tfiga@chromium.org,
+        hverkuil@xs4all.nl, linux-media@vger.kernel.org
+Subject: Re: [virtio-dev] [PATCH] [RFC RESEND] vdec: Add virtio video decode
+ device specification
+Message-ID: <20190923085637.bsaevedklweijgya@sirius.home.kraxel.org>
+References: <20190919093404.182015-1-keiichiw@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e3103d71-48ed-1966-3bd3-c81d642098c5@xs4all.nl>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190919093404.182015-1-keiichiw@chromium.org>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Mon, 23 Sep 2019 08:56:38 +0000 (UTC)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 10:47:56AM +0200, Hans Verkuil wrote:
-> On 9/23/19 10:17 AM, Sakari Ailus wrote:
-> > On Mon, Sep 23, 2019 at 10:11:09AM +0200, Hans Verkuil wrote:
-> >> On 9/21/19 1:48 AM, Laurent Pinchart wrote:
-> >>> On Tue, Sep 17, 2019 at 03:36:44PM +0200, Hans Verkuil wrote:
-> >>>> This is a follow-up series from Vandana's "[v3] v4l2-core: Add metadata type to
-> >>>> vfl_devnode_type" patch: https://patchwork.linuxtv.org/patch/58755/
-> >>>>
-> >>>> While testing that v3 patch with a patched version of vivid that has metadata
-> >>>> capture support, I realized that metadata should be treated the same way as
-> >>>> vbi in determine_valid_ioctls(). That makes sense since vbi *is* effectively
-> >>>> metadata. So I changed Vandana's patch (hence my Co-Developed-by tag) to
-> >>>> correctly validate the ioctls for metadata.
-> >>>>
-> >>>> I also added two follow-up patches to simplify the SDR code in that function,
-> >>>> and to fix the code for v4l-touch devices (too many ioctls were enabled for
-> >>>> such devices). I think the final code is easier to read as well.
-> >>>
-> >>> Quoting my reply to "[RFC] V4L2 & Metadata: switch to /dev/v4l-metaX
-> >>> instead of /dev/videoX]" as it may have fell through the cracks, and I
-> >>> don't want this series to be merged without addressing the issue,
-> >>>
-> >>> One of the reason [we didn't introduce a metadata video node type] is
-> >>> CSI-2 sensors and CSI-2 receivers. A CSI-2 link often carries both video
-> >>> and metadata using two different datatypes. From the point of view of
-> >>> the CSI-2 receiver or the DMA engines, video and metadata are not
-> >>> distinguishable, the CSI-2 receiver receives one stream with two data
-> >>> types, demultiplexes them, and passes them to different DMA engines. A
-> >>> sensor could send two video datatypes, or even conceptually two metadata
-> >>> data types, and this would work the exact same way, with each of the two
-> >>> DMA engines capturing data to buffers without caring about the contents.
-> >>> Given that the datatype selection happens at runtime, a given DMA engine
-> >>
-> >> 'happens at runtime': what decides this? The user-specified topology?
-> >> Something else?
-> >>
-> >> Is this documented somewhere?
-> > 
-> > Yes. This ultimately depends on the formats configured by the user. Some of
-> > the formats are metadata, and with sub-stream support, these will be
-> > routable by different video nodes.
-> > 
-> > I we designate video nodes either "metadata" or "pixel data" nodes, then
-> > this would need to be changed dynamically based on the format selected. I
-> > don't think it's really worth it, as the user space also doesn't expect the
-> > node type to change.
-> 
-> So these video device nodes will need to have both VIDEO_CAPTURE and METADATA_CAPTURE
-> set in the device_caps field as returned by VIDIOC_QUERYCAP. Both are needed,
-> otherwise userspace wouldn't know that it can call ENUM_FMT with both buf types.
-> 
-> When the format is changed from video to metadata or vice versa, then the driver
-> will have to change the type field in the vb2_queue struct to correspond with the
-> chosen format.
-> 
-> This also means that in determine_valid_ioctls() in v4l2-dev.c I will have to
-> check vdev->device_caps if this is a video node that can switch between video
-> and metadata mode dynamically.
-> 
-> Is this correct?
+  Hi,
 
-There's a bit of a chicken-and-egg problem though, as the queue type
-would need to be changed in response to a VIDIO_S_FMT call...
+> Our prototype implementation uses [4], which allows the virtio-vdec
+> device to use buffers allocated by virtio-gpu device.
 
-> >> To my knowledge there are no drivers that can do this in mainline code,
-> >> right? The current drivers all create dedicated metadata devices.
-> > 
-> > Not right now, no. But it's just a question of when, not if.
-> 
-> This should be emulated by vivid or possibly vimc. That way we can ensure that
-> the API is correct and that v4l2-compliance can check this properly.
-> 
-> Next time we MUST have proper emulation and tests in place before we add
-> such features.
-> 
-> >> Also, this specific use-case is for capture only. Do you think this
-> >> might be needed for metadata output as well?
-> > 
-> > As Laurent noted, the DMA engines don't know the data they handle, so in
-> > principle it's possible that this could be relevant for output, too.
+> [4] https://lkml.org/lkml/2019/9/12/157
 
--- 
-Regards,
+Well.  I think before even discussing the protocol details we need a
+reasonable plan for buffer handling.  I think using virtio-gpu buffers
+should be an optional optimization and not a requirement.  Also the
+motivation for that should be clear (Let the host decoder write directly
+to virtio-gpu resources, to display video without copying around the
+decoded framebuffers from one device to another).
 
-Laurent Pinchart
+Referencing virtio-gpu buffers needs a better plan than just re-using
+virtio-gpu resource handles.  The handles are device-specific.  What if
+there are multiple virtio-gpu devices present in the guest?
+
+I think we need a framework for cross-device buffer sharing.  One
+possible option would be to have some kind of buffer registry, where
+buffers can be registered for cross-device sharing and get a unique
+id (a uuid maybe?).  Drivers would typically register buffers on
+dma-buf export.
+
+Another option would be to pass around both buffer handle and buffer
+owner, i.e. instead of "u32 handle" have something like this:
+
+struct buffer_reference {
+	enum device_type; /* pci, virtio-mmio, ... */
+	union device_address {
+		struct pci_address pci_addr;
+		u64 virtio_mmio_addr;
+		[ ... ]
+	};
+	u64 device_buffer_handle; /* device-specific, virtio-gpu could use resource ids here */
+};
+
+cheers,
+  Gerd
+
