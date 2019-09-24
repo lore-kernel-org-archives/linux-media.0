@@ -2,106 +2,124 @@ Return-Path: <SRS0=xNSo=XT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E56EC432C1
-	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 17:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 258FBC4360C
+	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 18:12:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 54730217D7
-	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 17:03:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="NYPkL4TF"
+	by mail.kernel.org (Postfix) with ESMTP id 0F36E21783
+	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 18:12:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730212AbfIXRDl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Sep 2019 13:03:41 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:58740 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403997AbfIXQmR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:42:17 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8OGgFLK054408;
-        Tue, 24 Sep 2019 11:42:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1569343335;
-        bh=iTVrMjr1jpW2jGLDHpDluWhwBeMusQS6Cqz8cCy6Yzo=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=NYPkL4TFtfvQV/nq+u2xYW7vD8wU2Az7LWpDw1hvnIk/f61qnLDYlraLvOwsm8OQS
-         tsNlA6bwHQT5g2OfKtpMy7I85/H0v2EYiO9bjP/m+rdtJqFUkQVI1b3V43BjpltJBW
-         l3AvgtA2oUYT/RULR5hwMD4aZ2Frx5RSDHGOSa3g=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8OGgFLk079041
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Sep 2019 11:42:15 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 24
- Sep 2019 11:42:08 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 24 Sep 2019 11:42:14 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8OGgCQT073229;
-        Tue, 24 Sep 2019 11:42:14 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     Prabhakar Lad <prabhakar.csengg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>,
-        Jyri Sarha <jsarha@ti.com>
-Subject: [Patch v3 1/8] media: i2c: ov2659: Fix for image wrap-around in lower resolution
-Date:   Tue, 24 Sep 2019 11:44:07 -0500
-Message-ID: <20190924164414.21897-2-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190924164414.21897-1-bparrot@ti.com>
-References: <20190924164414.21897-1-bparrot@ti.com>
+        id S2439592AbfIXSMz (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Sep 2019 14:12:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43946 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2393874AbfIXSMy (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Sep 2019 14:12:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 22E57AC93;
+        Tue, 24 Sep 2019 18:12:51 +0000 (UTC)
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        frowand.list@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        xen-devel@lists.xenproject.org, linux-tegra@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org
+Cc:     mbrugger@suse.com, robin.murphy@arm.com, f.fainelli@gmail.com,
+        james.quinlan@broadcom.com, wahrenst@gmx.net,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        freedreno@lists.freedesktop.org
+Subject: [PATCH 00/11] of: Fix DMA configuration for non-DT masters
+Date:   Tue, 24 Sep 2019 20:12:31 +0200
+Message-Id: <20190924181244.7159-1-nsaenzjulienne@suse.de>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Based on recently found sensor configuration examples, it was
-discovered that when scaling and binning are used for the lower
-resolutions (i.e. 640x480, 320x240) the read offset has to be
-increased otherwise the image appears to be wrapped around.
+Hi All,
+this series tries to address one of the issues blocking us from
+upstreaming Broadcom's STB PCIe controller[1]. Namely, the fact that
+devices not represented in DT which sit behind a PCI bus fail to get the
+bus' DMA addressing constraints.
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Signed-off-by: Jyri Sarha <jsarha@ti.com>
+This is due to the fact that of_dma_configure() assumes it's receiving a
+DT node representing the device being configured, as opposed to the PCIe
+bridge node we currently pass. This causes the code to directly jump
+into PCI's parent node when checking for 'dma-ranges' and misses
+whatever was set there.
+
+To address this I create a new API in OF - inspired from Robin Murphys
+original proposal[2] - which accepts a bus DT node as it's input in
+order to configure a device's DMA constraints. The changes go deep into
+of/address.c's implementation, as a device being having a DT node
+assumption was pretty strong.
+
+On top of this work, I also cleaned up of_dma_configure() removing its
+redundant arguments and creating an alternative function for the special cases
+not applicable to either the above case or the default usage.
+
+IMO the resulting functions are more explicit. They will probably
+surface some hacky usages that can be properly fixed as I show with the
+DT fixes on the Layerscape platform.
+
+This was also tested on a Raspberry Pi 4 with a custom PCIe driver and
+on a Seattle AMD board.
+
+Regards,
+Nicolas
+
+[1] https://patchwork.kernel.org/patch/9650345/#20294961
+[2] https://patchwork.kernel.org/patch/9650345/
+
 ---
- drivers/media/i2c/ov2659.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
-index f4ded0669ff9..17573257097d 100644
---- a/drivers/media/i2c/ov2659.c
-+++ b/drivers/media/i2c/ov2659.c
-@@ -661,7 +661,7 @@ static struct sensor_register ov2659_vga[] = {
- 	{ REG_TIMING_HORIZ_FORMAT, 0x01 },
- 	{ 0x370a, 0x52 },
- 	{ REG_VFIFO_READ_START_H, 0x00 },
--	{ REG_VFIFO_READ_START_L, 0x80 },
-+	{ REG_VFIFO_READ_START_L, 0xa0 },
- 	{ REG_ISP_CTRL02, 0x10 },
- 	{ REG_NULL, 0x00 },
- };
-@@ -709,7 +709,7 @@ static  struct sensor_register ov2659_qvga[] = {
- 	{ REG_TIMING_HORIZ_FORMAT, 0x01 },
- 	{ 0x370a, 0x52 },
- 	{ REG_VFIFO_READ_START_H, 0x00 },
--	{ REG_VFIFO_READ_START_L, 0x80 },
-+	{ REG_VFIFO_READ_START_L, 0xa0 },
- 	{ REG_ISP_CTRL02, 0x10 },
- 	{ REG_NULL, 0x00 },
- };
+Nicolas Saenz Julienne (11):
+  of: address: clean-up unused variable in of_dma_get_range()
+  of: base: introduce __of_n_*_cells_parent()
+  of: address: use parent DT node in bus->count_cells()
+  of: address: introduce of_translate_dma_address_parent()
+  of: expose __of_get_dma_parent() to OF subsystem
+  of: address: use parent OF node in of_dma_get_range()
+  dts: arm64: layerscape: add dma-ranges property to qoric-mc node
+  dts: arm64: layerscape: add dma-ranges property to pcie nodes
+  of: device: remove comment in of_dma_configure()
+  of: device: introduce of_dma_configure_parent()
+  of: simplify of_dma_config()'s arguments
+
+ .../arm64/boot/dts/freescale/fsl-ls1088a.dtsi |   1 +
+ .../arm64/boot/dts/freescale/fsl-ls208xa.dtsi |   5 +
+ .../arm64/boot/dts/freescale/fsl-lx2160a.dtsi |   1 +
+ drivers/base/platform.c                       |   2 +-
+ drivers/bcma/main.c                           |   2 +-
+ drivers/bus/fsl-mc/fsl-mc-bus.c               |   2 +-
+ drivers/dma/qcom/hidma_mgmt.c                 |   2 +-
+ drivers/gpu/drm/etnaviv/etnaviv_drv.c         |   2 +-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c         |   2 +-
+ drivers/gpu/drm/sun4i/sun4i_backend.c         |   2 +-
+ drivers/gpu/drm/xen/xen_drm_front.c           |   2 +-
+ drivers/gpu/host1x/bus.c                      |   4 +-
+ drivers/media/platform/qcom/venus/firmware.c  |   2 +-
+ drivers/media/platform/s5p-mfc/s5p_mfc.c      |   2 +-
+ drivers/of/address.c                          | 136 +++++++++---------
+ drivers/of/base.c                             |  69 +++++++--
+ drivers/of/device.c                           |  59 +++++++-
+ drivers/of/of_private.h                       |   5 +
+ drivers/pci/pci-driver.c                      |   3 +-
+ drivers/xen/gntdev.c                          |   2 +-
+ include/linux/of_address.h                    |   8 +-
+ include/linux/of_device.h                     |  23 ++-
+ 22 files changed, 223 insertions(+), 113 deletions(-)
+
 -- 
-2.17.1
+2.23.0
 
