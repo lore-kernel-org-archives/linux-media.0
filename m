@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23E88C432C2
-	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 16:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F958C4320D
+	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 17:00:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EF75A21BE5
-	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 16:55:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA0262054F
+	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 17:00:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569344142;
-	bh=Y7O/CJ4GQZDpiGBV9ktsPOEKJRsFVUj6tMUvdMunxdU=;
+	s=default; t=1569344430;
+	bh=9JDnUe+bzR1K2h89N2eGq+vFz+UQRtG1DOZSfGbpTE0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vL37zQA7A53A4ShpjQ+GGTBc06xda1Y+9kkWRtK7wSk3QzVAbRaNFGnaL6bujFLqC
-	 8iqyQLulg9UslhuLoFNJvIxYEjPxWwkgZB0prj0EJZ1sPV7Jl6trueTae1wfKK79AS
-	 68wXNkZ/0//qNBpe9HM7GZPW/fc/mzDIx0mqBNe8=
+	b=efSjZ5iiBjLLDkFxCmIeNfBrvoRIZ8JqTExWYPI8J9/58dRd43zTzcRoLlPzCJOsp
+	 IwXARimflGfyZC44Jqcg7NuVwODIFGivWCMRv547jMH9lQ1MdtFzU7lsllnio0XJ/P
+	 FyuwPoypqNiqKHlrlh000WG1nRplVJTsdjmpQtxc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410780AbfIXQub (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Sep 2019 12:50:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43324 "EHLO mail.kernel.org"
+        id S1732158AbfIXRAV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Sep 2019 13:00:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35656 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410763AbfIXQub (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:50:31 -0400
+        id S2410016AbfIXQpm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Sep 2019 12:45:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D144222C7;
-        Tue, 24 Sep 2019 16:50:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D074A217F4;
+        Tue, 24 Sep 2019 16:45:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343829;
-        bh=Y7O/CJ4GQZDpiGBV9ktsPOEKJRsFVUj6tMUvdMunxdU=;
+        s=default; t=1569343540;
+        bh=9JDnUe+bzR1K2h89N2eGq+vFz+UQRtG1DOZSfGbpTE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2p06diMS7gR4UNc/MnL8LDYV+S+yCp6mpTunC1RqID8X2/seLCzmLPpBd12yhTqCL
-         fH5mh4UkmZ0Vl2sHygJOC9fjQuzXvlP2ACWAAslW+JFnM+UnbdUTlBrMVOWSJ+3sX7
-         cTM5Ei8xWRlHk2c0/xqVxibebm6mN3hFRfK5dyRA=
+        b=IWaWsbweW9XrsJD5KsMPChVpQ027+CIV+2olw4Cvamhe7HMnBLwUL0E5zk3ikZ8D0
+         COb0sUd9jqjmHaz/po8z1Kde5R71vwkiKBNgCsvSELdqeEL7mB7Gwrdymtza3+fhrl
+         M9W6Nhl0mM4z2xD7YpAcQ2AxbDc+fPJJsOMjrnoA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chris Wilson <chris@chris-wilson.co.uk>,
@@ -47,12 +47,12 @@ Cc:     Chris Wilson <chris@chris-wilson.co.uk>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
         dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 4.19 49/50] dma-buf/sw_sync: Synchronize signal vs syncpt free
-Date:   Tue, 24 Sep 2019 12:48:46 -0400
-Message-Id: <20190924164847.27780-49-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 84/87] dma-buf/sw_sync: Synchronize signal vs syncpt free
+Date:   Tue, 24 Sep 2019 12:41:40 -0400
+Message-Id: <20190924164144.25591-84-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924164847.27780-1-sashal@kernel.org>
-References: <20190924164847.27780-1-sashal@kernel.org>
+In-Reply-To: <20190924164144.25591-1-sashal@kernel.org>
+References: <20190924164144.25591-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -97,10 +97,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/dma-buf/sw_sync.c b/drivers/dma-buf/sw_sync.c
-index 53c1d6d36a642..81ba4eb348909 100644
+index 051f6c2873c7a..6713cfb1995c6 100644
 --- a/drivers/dma-buf/sw_sync.c
 +++ b/drivers/dma-buf/sw_sync.c
-@@ -141,17 +141,14 @@ static void timeline_fence_release(struct dma_fence *fence)
+@@ -132,17 +132,14 @@ static void timeline_fence_release(struct dma_fence *fence)
  {
  	struct sync_pt *pt = dma_fence_to_sync_pt(fence);
  	struct sync_timeline *parent = dma_fence_parent(fence);
@@ -123,7 +123,7 @@ index 53c1d6d36a642..81ba4eb348909 100644
  
  	sync_timeline_put(parent);
  	dma_fence_free(fence);
-@@ -274,7 +271,8 @@ static struct sync_pt *sync_pt_create(struct sync_timeline *obj,
+@@ -265,7 +262,8 @@ static struct sync_pt *sync_pt_create(struct sync_timeline *obj,
  				p = &parent->rb_left;
  			} else {
  				if (dma_fence_get_rcu(&other->base)) {
