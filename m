@@ -2,66 +2,67 @@ Return-Path: <SRS0=xNSo=XT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 624A1C4320D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0BAAC432C1
 	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 19:24:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3BFC1207FD
+	by mail.kernel.org (Postfix) with ESMTP id 940D3207FD
 	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 19:24:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="geBObsqF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X2bBRc/C"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407827AbfIXTYu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Sep 2019 15:24:50 -0400
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:42574 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407326AbfIXTYu (ORCPT
+        id S2408150AbfIXTYv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Sep 2019 15:24:51 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:37837 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407673AbfIXTYu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 24 Sep 2019 15:24:50 -0400
-Received: by mail-oi1-f179.google.com with SMTP id i185so2691560oif.9
-        for <linux-media@vger.kernel.org>; Tue, 24 Sep 2019 12:24:48 -0700 (PDT)
+Received: by mail-oi1-f196.google.com with SMTP id i16so2715820oie.4
+        for <linux-media@vger.kernel.org>; Tue, 24 Sep 2019 12:24:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AsSs5mUDM1DiMT6UHJiVmAELsiRF5vH0pjFATrh7BGQ=;
-        b=geBObsqFeMjvnGyA5CuqYpEZgC7lYIXVqXWEPhgjnsshZYgiKQeMGRaCuid/u8nMpm
-         bJuZI/O9lJIMPlOZhJqay4LNGYVPQH3tDqe7V5i5kQBLQJ0p86Gw65jm7DBtPb0A2NRS
-         OAekh5qrtIGfNqeXl5Rj6fhldQ+0A4n6HUa/YpiYhNJqE69+VqdymZacs76w6olYa7P/
-         1F0kpOegdkjGJ3D5hqpcOhdXkhHMWnpBrnqemQz2RFfqeriT0pqsY7AbIK73MIFdbubk
-         K4iojzkOp/UeGA2vcMGqiv+X4NJ9tT+BwV2UwvsKCgn7/fZVtUV3Lw8nbNRsuLWpVW7F
-         0tLA==
+        bh=nXyOBqTnjNNNs/kVlXPvyFwjglSVqhwqxGnE850B05g=;
+        b=X2bBRc/CY/vMO421cLkFf7IjkPz+7uHVvmmkOOzoTYBJqjGnJo7ZKX8EydWJUrJ0Sm
+         B+5DydsiVC4Ey/QYfoJFZVY6AFW6zIKpisuV1zoQI+xAPNKIh44w0hkoiY3a5SCioa1a
+         qVs5jgW+AUxdNcsDSmXj0Z01zT3eowNV69eWR/BBqFidQmn3YXrvm9Cb8+MkHU3kt3e5
+         SkI3bBI8buHxFfxLWrr7b64/b5NA5Y7LoxqAo0N4mxVlO0NZzubYo5Y1J7edhbtMysp9
+         faBKs5LdlGdPGhSiaEnk/wGQhAIDG266HGpqjpK5yFifz4pKQHdCQZY5mksTpPzTRP6u
+         999w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AsSs5mUDM1DiMT6UHJiVmAELsiRF5vH0pjFATrh7BGQ=;
-        b=Id+XAw/A7oziJ0YJHvTjTYqRAUlSICeOUSyC5gYFXR6xstfCTQF5MoHKwuPc0ZpPDr
-         s0MPZp46hicENRbFmpo1rqeB4z6aLv61F63n3CZGbMzI7GNpDgHy2ddxCetm1Llmf6ST
-         pg5LM9UMmarrnLHfSP+NmY+aV70ZJCtOVLnEE/mNyMGpSIgyIPpvP2Q1fPZGBJnm9Mq0
-         jNb2G0aNrPThjQK+SDDixfhlSfD1G5vVZ5YE1qbaIdVBTJ4WaWu+QY6ZOBx28bH2cfjl
-         RAUTC02pyYgkHxtpjcs4GUeKszHezSQPSeR+pba6sY+qTxuigGpV+zZiL+V0I5JjFBDi
-         99kw==
-X-Gm-Message-State: APjAAAXxYESYg3uy6/bPrpXxZAe8x4Y5xr41Gnyj7GtKRX+/d2y85G28
-        Q+bzoUhOV9ho8pCa+wpen7MQx58N
-X-Google-Smtp-Source: APXvYqwLpUoGbuH6xUH/goXfGRBlbEClMCTJZJjeqxI9HHCdi/LtOHFNzg1HFseOcAADi6APcVVJLg==
-X-Received: by 2002:aca:d694:: with SMTP id n142mr1594844oig.69.1569353087696;
-        Tue, 24 Sep 2019 12:24:47 -0700 (PDT)
+        bh=nXyOBqTnjNNNs/kVlXPvyFwjglSVqhwqxGnE850B05g=;
+        b=bozH1ScZ3I3n0zHp9Q8jfb02cyek7yiasc9oVCbwPK+w9D9oA5jv1qgPyS9+34Jwng
+         8b9WGad3CyoAPjr3RmrSWJbds6Uz2WdJHV4XTMIzVO5hREYII0Xqq4BW5gL5sUYh380C
+         Kk9jTOz69fM/X3N+EyCiNOKoMmz0gSSr+ITTu9KjpoRCz/kGqW56m9NJMpTGDswx03Ji
+         Tqbr1tnQHg13ARO7jOZRQBFSti5ptGJFC5hCck9N0oHGJrdZXIHvMkEBSeWDICBcBIFJ
+         EVekHOYyw5+3D8RTf2vrpJ0NEK33u+jCP67RZH4HXYNfR8oJlS2UDEB+pABw/PzFtKeY
+         5EQg==
+X-Gm-Message-State: APjAAAVxeuH1TDLR6lY0TDnNeHtckLt/mrxg9vLP1u45EQu+0qM6ee05
+        vwK+RTHnhbZRBPrbEoOHYWg4jkv3
+X-Google-Smtp-Source: APXvYqxzYo13PhTGk7aMg0aCEveUaGElh+KTj9BoxHRLN51Xa1bBJlPDN+RMGS16xwW67ZXXHEt9XA==
+X-Received: by 2002:aca:d581:: with SMTP id m123mr1640505oig.26.1569353089527;
+        Tue, 24 Sep 2019 12:24:49 -0700 (PDT)
 Received: from rYz3n.attlocal.net ([2600:1700:210:3790::40])
-        by smtp.googlemail.com with ESMTPSA id v75sm833503oia.6.2019.09.24.12.24.46
+        by smtp.googlemail.com with ESMTPSA id v75sm833503oia.6.2019.09.24.12.24.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Sep 2019 12:24:46 -0700 (PDT)
+        Tue, 24 Sep 2019 12:24:48 -0700 (PDT)
 From:   Jiunn Chang <c0d1n61at3@gmail.com>
 To:     linux-media@vger.kernel.org,
         linux-kernel-mentees@lists.linuxfoundation.org
 Cc:     hverkuil@xs4all.nl
-Subject: [PATCH v2 0/2] cec-compliance: tuner control
-Date:   Tue, 24 Sep 2019 14:24:43 -0500
-Message-Id: <20190924192445.93575-1-c0d1n61at3@gmail.com>
+Subject: [PATCH v2 2/2] cec-compliance: add/refactor tuner control tests
+Date:   Tue, 24 Sep 2019 14:24:45 -0500
+Message-Id: <20190924192445.93575-3-c0d1n61at3@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190924141752.5508-1-c0d1n61at3@gmail.com>
 References: <20190924141752.5508-1-c0d1n61at3@gmail.com>
@@ -72,25 +73,248 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series implements analog tuner step increment/decrement as well as performs
-cec-compliance tests for: select analog service, give tuner device status, and analog
-step increment/decrement.  New tests where added for tuner step increment/decrement and
-existing tests where refactored for select analog service and give tuner device status.
+Tests added/refactored for new features added to the cec-follower.
 
-Changes made since v1:
-  - Remove redundant error checking
-  - Add circular wrap logic to tuner step increment/decrement
+Analog tuner control tests added/refactored:
+  - give analog tuner status
+  - select tuner analog service
+  - analog tuner step decrement
+  - analog tuner step increment
 
+Signed-off-by: Jiunn Chang <c0d1n61at3@gmail.com>
 ---
-
-Jiunn Chang (2):
-  cec-follower: add tuner step increment/decrement
-  cec-compliance: add/refactor tuner control tests
-
  utils/cec-compliance/cec-test.cpp | 181 +++++++++++++++++++++++-------
- utils/cec-follower/cec-tuner.cpp  |  47 +++++++-
- 2 files changed, 184 insertions(+), 44 deletions(-)
+ 1 file changed, 140 insertions(+), 41 deletions(-)
 
+diff --git a/utils/cec-compliance/cec-test.cpp b/utils/cec-compliance/cec-test.cpp
+index aece546c..91600d39 100644
+--- a/utils/cec-compliance/cec-test.cpp
++++ b/utils/cec-compliance/cec-test.cpp
+@@ -722,9 +722,19 @@ static struct remote_subtest deck_ctl_subtests[] = {
+   TODO: These are very rudimentary tests which should be expanded.
+  */
+ 
+-static int tuner_ctl_give_status(struct node *node, unsigned me, unsigned la, bool interactive)
++static int tuner_ctl_analog_give_status(struct node *node, unsigned me, unsigned la, bool interactive)
+ {
+ 	struct cec_msg msg = {};
++	struct cec_op_tuner_device_info info = {};
++
++	cec_msg_init(&msg, me, la);
++	cec_msg_select_analogue_service(&msg, CEC_OP_ANA_BCAST_TYPE_CABLE,
++			                7668, CEC_OP_BCAST_SYSTEM_PAL_BG); // 479.25 MHz analog frequency
++	fail_on_test(!transmit_timeout(node, &msg));
++	if (unrecognized_op(&msg))
++		return NOTSUPPORTED;
++	if (refused(&msg))
++		return REFUSED;
+ 
+ 	cec_msg_init(&msg, me, la);
+ 	cec_msg_give_tuner_device_status(&msg, true, CEC_OP_STATUS_REQ_ONCE);
+@@ -737,6 +747,14 @@ static int tuner_ctl_give_status(struct node *node, unsigned me, unsigned la, bo
+ 	if (cec_msg_status_is_abort(&msg))
+ 		return PRESUMED_OK;
+ 
++	cec_ops_tuner_device_status(&msg, &info);
++	if (info.analog.ana_bcast_type != CEC_OP_ANA_BCAST_TYPE_CABLE)
++		return FAIL;
++	if (info.analog.ana_freq != 7668)
++		return FAIL;
++	if (info.analog.bcast_system != CEC_OP_BCAST_SYSTEM_PAL_BG)
++		return FAIL;
++
+ 	return 0;
+ }
+ 
+@@ -745,23 +763,24 @@ static int tuner_ctl_sel_analog_service(struct node *node, unsigned me, unsigned
+ 	struct cec_msg msg = {};
+ 
+ 	node->remote[la].bcast_sys = ~0;
+-	for (unsigned sys = 0; sys <= 8; sys++) {
+-		cec_msg_init(&msg, me, la);
+-		cec_msg_select_analogue_service(&msg, CEC_OP_ANA_BCAST_TYPE_CABLE,
+-						7668, sys); // 479.25 MHz analog frequency
+-		fail_on_test(!transmit_timeout(node, &msg));
+-		if (unrecognized_op(&msg))
+-			return NOTSUPPORTED;
+-		if (abort_reason(&msg) == CEC_OP_ABORT_INVALID_OP) {
+-			info("Tuner supports %s, but cannot select that service.\n",
+-			     bcast_system2s(sys));
++	for (unsigned type = 0; type < 3; type++) {
++		for (unsigned sys = 0; sys < 9; sys++) {
++			cec_msg_init(&msg, me, la);
++			cec_msg_select_analogue_service(&msg, type, 7668, sys); // 479.25 MHz analog frequency
++			fail_on_test(!transmit_timeout(node, &msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (abort_reason(&msg) == CEC_OP_ABORT_INVALID_OP) {
++				info("Tuner supports %s, but cannot select that service.\n",
++				bcast_system2s(sys));
++				node->remote[la].bcast_sys = sys;
++				continue;
++			}
++			if (cec_msg_status_is_abort(&msg))
++				continue;
++			info("Tuner supports %s\n", bcast_system2s(sys));
+ 			node->remote[la].bcast_sys = sys;
+-			continue;
+ 		}
+-		if (cec_msg_status_is_abort(&msg))
+-			continue;
+-		info("Tuner supports %s\n", bcast_system2s(sys));
+-		node->remote[la].bcast_sys = sys;
+ 	}
+ 
+ 	if (node->remote[la].bcast_sys == (__u8)~0)
+@@ -854,43 +873,123 @@ static int tuner_ctl_tuner_dev_status(struct node *node, unsigned me, unsigned l
+ 	return 0;
+ }
+ 
+-static int tuner_ctl_step_dec(struct node *node, unsigned me, unsigned la, bool interactive)
++static int tuner_ctl_analog_step_dec(struct node *node, unsigned me, unsigned la, bool interactive)
+ {
+ 	struct cec_msg msg = {};
++	struct cec_op_tuner_device_info info = {};
++	__u16 freq = 0;
++
++	info.is_analog = true;
++	for (unsigned type = 0; type < 3; type++) {
++		for (unsigned sys = 0; sys < 9; sys++) {
++			cec_msg_init(&msg, me, la);
++			cec_msg_select_analogue_service(&msg, type, 16000, sys); // 1000 MHz analog frequency
++			fail_on_test(!transmit_timeout(node, &msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (refused(&msg))
++				return REFUSED;
++
++			cec_msg_init(&msg, me, la);
++			cec_msg_give_tuner_device_status(&msg, true, CEC_OP_STATUS_REQ_ONCE);
++			fail_on_test(!transmit_timeout(node, &msg));
++			fail_on_test(timed_out(&msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (refused(&msg))
++				return REFUSED;
++			cec_ops_tuner_device_status(&msg, &info);
++			freq = info.analog.ana_freq;
++
++			cec_msg_init(&msg, me, la);
++			cec_msg_tuner_step_decrement(&msg);
++			fail_on_test(!transmit_timeout(node, &msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (refused(&msg))
++				return REFUSED;
++			if (cec_msg_status_is_abort(&msg))
++				return PRESUMED_OK;
++
++			cec_msg_init(&msg, me, la);
++			cec_msg_give_tuner_device_status(&msg, true, CEC_OP_STATUS_REQ_ONCE);
++			fail_on_test(!transmit_timeout(node, &msg));
++			fail_on_test(timed_out(&msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (refused(&msg))
++				return REFUSED;
++			cec_ops_tuner_device_status(&msg, &info);
++			if (!(info.analog.ana_freq < freq))
++				return FAIL;
++		}
++	}
+ 
+-	cec_msg_init(&msg, me, la);
+-	cec_msg_tuner_step_decrement(&msg);
+-	fail_on_test(!transmit_timeout(node, &msg));
+-	if (unrecognized_op(&msg))
+-		return NOTSUPPORTED;
+-	if (refused(&msg))
+-		return REFUSED;
+-
+-	return PRESUMED_OK;
++	return 0;
+ }
+ 
+-static int tuner_ctl_step_inc(struct node *node, unsigned me, unsigned la, bool interactive)
++static int tuner_ctl_analog_step_inc(struct node *node, unsigned me, unsigned la, bool interactive)
+ {
+ 	struct cec_msg msg = {};
++	struct cec_op_tuner_device_info info = {};
++	__u16 freq = 0;
++
++	info.is_analog = true;
++	for (unsigned type = 0; type < 3; type++) {
++		for (unsigned sys = 0; sys < 9; sys++) {
++			cec_msg_init(&msg, me, la);
++			cec_msg_select_analogue_service(&msg, type, 0, sys); // 0 MHz analog frequency
++			fail_on_test(!transmit_timeout(node, &msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (refused(&msg))
++				return REFUSED;
++
++			cec_msg_init(&msg, me, la);
++			cec_msg_give_tuner_device_status(&msg, true, CEC_OP_STATUS_REQ_ONCE);
++			fail_on_test(!transmit_timeout(node, &msg));
++			fail_on_test(timed_out(&msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (refused(&msg))
++				return REFUSED;
++			cec_ops_tuner_device_status(&msg, &info);
++			freq = info.analog.ana_freq;
++
++			cec_msg_init(&msg, me, la);
++			cec_msg_tuner_step_increment(&msg);
++			fail_on_test(!transmit_timeout(node, &msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (refused(&msg))
++				return REFUSED;
++			if (cec_msg_status_is_abort(&msg))
++				return PRESUMED_OK;
++
++			cec_msg_init(&msg, me, la);
++			cec_msg_give_tuner_device_status(&msg, true, CEC_OP_STATUS_REQ_ONCE);
++			fail_on_test(!transmit_timeout(node, &msg));
++			fail_on_test(timed_out(&msg));
++			if (unrecognized_op(&msg))
++				return NOTSUPPORTED;
++			if (refused(&msg))
++				return REFUSED;
++			cec_ops_tuner_device_status(&msg, &info);
++			if (!(info.analog.ana_freq > freq))
++				return FAIL;
++		}
++	}
+ 
+-	cec_msg_init(&msg, me, la);
+-	cec_msg_tuner_step_increment(&msg);
+-	fail_on_test(!transmit_timeout(node, &msg));
+-	if (unrecognized_op(&msg))
+-		return NOTSUPPORTED;
+-	if (refused(&msg))
+-		return REFUSED;
+-
+-	return PRESUMED_OK;
++	return 0;
+ }
+ 
+ static struct remote_subtest tuner_ctl_subtests[] = {
+-	{ "Give Tuner Device Status", CEC_LOG_ADDR_MASK_TUNER, tuner_ctl_give_status },
+-	{ "Select Analogue Service", CEC_LOG_ADDR_MASK_TUNER, tuner_ctl_sel_analog_service },
+-	{ "Select Digital Service", CEC_LOG_ADDR_MASK_TUNER, tuner_ctl_sel_digital_service },
++	{ "Give Tuner Device Status", CEC_LOG_ADDR_MASK_TUNER | CEC_LOG_ADDR_MASK_TV, tuner_ctl_analog_give_status },
++	{ "Select Analogue Service", CEC_LOG_ADDR_MASK_TUNER | CEC_LOG_ADDR_MASK_TV, tuner_ctl_sel_analog_service },
++	{ "Select Digital Service", CEC_LOG_ADDR_MASK_TUNER | CEC_LOG_ADDR_MASK_TV, tuner_ctl_sel_digital_service },
+ 	{ "Tuner Device Status", CEC_LOG_ADDR_MASK_ALL, tuner_ctl_tuner_dev_status },
+-	{ "Tuner Step Decrement", CEC_LOG_ADDR_MASK_TUNER, tuner_ctl_step_dec },
+-	{ "Tuner Step Increment", CEC_LOG_ADDR_MASK_TUNER, tuner_ctl_step_inc },
++	{ "Tuner Analog Step Decrement", CEC_LOG_ADDR_MASK_TUNER | CEC_LOG_ADDR_MASK_TV, tuner_ctl_analog_step_dec },
++	{ "Tuner Analog Step Increment", CEC_LOG_ADDR_MASK_TUNER | CEC_LOG_ADDR_MASK_TV, tuner_ctl_analog_step_inc },
+ };
+ 
+ 
 -- 
 2.23.0
 
