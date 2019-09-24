@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35B3AC4320D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2360C432C2
 	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 11:23:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 05A2D20872
+	by mail.kernel.org (Postfix) with ESMTP id 7452B214D9
 	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 11:23:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504649AbfIXLXM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2504654AbfIXLXM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 24 Sep 2019 07:23:12 -0400
-Received: from mga02.intel.com ([134.134.136.20]:47926 "EHLO mga02.intel.com"
+Received: from mga12.intel.com ([192.55.52.136]:38145 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2504642AbfIXLXM (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        id S2504517AbfIXLXM (ORCPT <rfc822;linux-media@vger.kernel.org>);
         Tue, 24 Sep 2019 07:23:12 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Sep 2019 04:23:10 -0700
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Sep 2019 04:23:09 -0700
 X-IronPort-AV: E=Sophos;i="5.64,543,1559545200"; 
-   d="scan'208";a="190992785"
+   d="scan'208";a="213654954"
 Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Sep 2019 04:23:09 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Sep 2019 04:23:09 -0700
 Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id 1EE2B21329;
+        by paasikivi.fi.intel.com (Postfix) with ESMTP id 0F16920E80;
         Tue, 24 Sep 2019 14:23:04 +0300 (EEST)
 Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
         (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1iCiuw-00075Y-F2; Tue, 24 Sep 2019 14:23:38 +0300
+        id 1iCiuw-00075S-Cv; Tue, 24 Sep 2019 14:23:38 +0300
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
 Cc:     devicetree@vger.kernel.org
-Subject: [PATCH 7/7] dt-bindings: smia: Remove documentation of nokia,nvm-size
-Date:   Tue, 24 Sep 2019 14:23:38 +0300
-Message-Id: <20190924112338.27180-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH 5/7] smiapp: Don't poll for NVM ready on devices that don't need it
+Date:   Tue, 24 Sep 2019 14:23:36 +0300
+Message-Id: <20190924112338.27180-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190924112338.27180-1-sakari.ailus@linux.intel.com>
 References: <20190924112338.27180-1-sakari.ailus@linux.intel.com>
@@ -48,32 +48,57 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The nokia,nvm-size property was used to tell the size of the NVM memory
-accessible through the sensor's register interface. However, while the
-size isn't directly readable through the sensor's register interface, it
-can be detected reading the NVM memory until the selected page is no
-longer available.
-
-Thus remove this property.
+Only some devices require polling for NVM ready. Do the polling only on
+devices that need it.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- Documentation/devicetree/bindings/media/i2c/nokia,smia.txt | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 28 ++++++++++++++++----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt b/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
-index 8ee7c7972ac79..f9eacf1205ac4 100644
---- a/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/nokia,smia.txt
-@@ -24,8 +24,6 @@ Mandatory properties
- Optional properties
- -------------------
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index 5a136068f4d60..5a04ae2544aa0 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -986,21 +986,27 @@ static int smiapp_read_nvm_page(struct smiapp_sensor *sensor, u32 p, u8 *nvm)
+ 	if (rval)
+ 		return rval;
  
--- nokia,nvm-size: The size of the NVM, in bytes. If the size is not given,
--  the NVM contents will not be read.
- - reset-gpios: XSHUTDOWN GPIO
- - flash-leds: See ../video-interfaces.txt
- - lens-focus: See ../video-interfaces.txt
+-	for (i = 1000; i > 0; i--) {
+-		u32 s;
++	if (sensor->limits[SMIAPP_LIMIT_DATA_TRANSFER_IF_CAPABILITY] &
++	    SMIAPP_DATA_TRANSFER_IF_CAPABILITY_POLL) {
++		for (i = 1000; i > 0; i--) {
++			u32 s;
+ 
+-		rval = smiapp_read(
+-			sensor,
+-			SMIAPP_REG_U8_DATA_TRANSFER_IF_1_STATUS, &s);
++			rval = smiapp_read(
++				sensor,
++				SMIAPP_REG_U8_DATA_TRANSFER_IF_1_STATUS,
++				&s);
+ 
+-		if (rval)
+-			return rval;
++			if (rval)
++				return rval;
+ 
+-		if (s & SMIAPP_DATA_TRANSFER_IF_1_STATUS_RD_READY)
+-			break;
++			if (s & SMIAPP_DATA_TRANSFER_IF_1_STATUS_RD_READY)
++				break;
++
++		}
++
++		if (!i)
++			return -ETIMEDOUT;
+ 	}
+-	if (!i)
+-		return -ETIMEDOUT;
+ 
+ 	for (i = 0; i < SMIAPP_NVM_PAGE_SIZE; i++) {
+ 		u32 v;
 -- 
 2.20.1
 
