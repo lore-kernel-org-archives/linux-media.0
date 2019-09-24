@@ -6,66 +6,67 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A05DEC432C1
-	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 11:23:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11AD8C432C1
+	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 11:50:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D10120872
-	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 11:23:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0EF92146E
+	for <linux-media@archiver.kernel.org>; Tue, 24 Sep 2019 11:50:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504679AbfIXLXh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 24 Sep 2019 07:23:37 -0400
-Received: from mga03.intel.com ([134.134.136.65]:20229 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2504665AbfIXLXh (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 24 Sep 2019 07:23:37 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Sep 2019 04:23:36 -0700
-X-IronPort-AV: E=Sophos;i="5.64,543,1559545200"; 
-   d="scan'208";a="182884359"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Sep 2019 04:23:35 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by paasikivi.fi.intel.com (Postfix) with ESMTP id E7BC9202F9;
-        Tue, 24 Sep 2019 14:23:03 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1iCiuw-00075E-79; Tue, 24 Sep 2019 14:23:38 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+        id S2438940AbfIXLuI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 24 Sep 2019 07:50:08 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:40161 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2395140AbfIXLuI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 24 Sep 2019 07:50:08 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1iCjKY-0002f6-C6; Tue, 24 Sep 2019 13:50:06 +0200
+From:   Philipp Zabel <p.zabel@pengutronix.de>
 To:     linux-media@vger.kernel.org
-Cc:     devicetree@vger.kernel.org
-Subject: [PATCH 0/7] SMIA NVM handling improvements
-Date:   Tue, 24 Sep 2019 14:23:31 +0300
-Message-Id: <20190924112338.27180-1-sakari.ailus@linux.intel.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mats Randgaard <matrandg@cisco.com>,
+        Steve Longerbeam <slongerbeam@gmail.com>, kernel@pengutronix.de
+Subject: [PATCH v4 0/3] Add g_csi_active_lanes for dynamic active lanes
+Date:   Tue, 24 Sep 2019 13:49:52 +0200
+Message-Id: <20190924114955.13132-1-p.zabel@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Some MIPI CSI-2 transmitters, such as TC358743 can dynamically change
+the number of active data lanes depending on the bandwidth needs for the
+selected video format. This patchset adds a subdevice video operation
+g_csi_active_lanes() to let the MIPI CSI-2 receiver query the number of
+active lanes and change its configuration accordingly.
 
-This set removes the need for the nokia,nvm-size property, and contains
-small fixes and improvements as well.
+Changes since v3 [1]:
+- Add g_csi_active_lanes() subdevice video operation,
+  implement it in tc358743, and use it in imx6-mipi-csi2.
 
-Sakari Ailus (7):
-  smiapp: Use the BIT macro where appropriate, remove useless definition
-  smiapp: Fix error handling at NVM reading
-  smiapp: Refactor reading NVM page
-  smiapp: Add definitions for data transfer if capability bits
-  smiapp: Don't poll for NVM ready on devices that don't need it
-  smiapp: Support probing NVM size
-  dt-bindings: smia: Remove documentation of nokia,nvm-size
+[1] https://patchwork.linuxtv.org/patch/53331/
 
- .../bindings/media/i2c/nokia,smia.txt         |   2 -
- drivers/media/i2c/smiapp/smiapp-core.c        | 164 ++++++++++--------
- drivers/media/i2c/smiapp/smiapp-reg.h         |  36 ++--
- drivers/media/i2c/smiapp/smiapp.h             |   3 -
- include/media/i2c/smiapp.h                    |   1 -
- 5 files changed, 108 insertions(+), 98 deletions(-)
+regards
+Philipp
+
+Philipp Zabel (3):
+  media: v4l2-subdev: add g_csi_active_lanes() op
+  media: tc358743: fix connected/active CSI-2 lane reporting
+  media: imx: ask source subdevice for number of active data lanes
+
+ drivers/media/i2c/tc358743.c               | 44 ++++++++++++++++------
+ drivers/staging/media/imx/imx6-mipi-csi2.c |  8 ++--
+ include/media/v4l2-subdev.h                |  3 ++
+ 3 files changed, 39 insertions(+), 16 deletions(-)
 
 -- 
 2.20.1
