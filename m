@@ -2,118 +2,98 @@ Return-Path: <SRS0=KvWk=XU=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E36CC432C2
-	for <linux-media@archiver.kernel.org>; Wed, 25 Sep 2019 15:17:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE113C432C2
+	for <linux-media@archiver.kernel.org>; Wed, 25 Sep 2019 15:21:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6BDE62054F
-	for <linux-media@archiver.kernel.org>; Wed, 25 Sep 2019 15:17:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9337221E6F
+	for <linux-media@archiver.kernel.org>; Wed, 25 Sep 2019 15:21:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="GhE+k4yL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439184AbfIYPR0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 25 Sep 2019 11:17:26 -0400
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:39071 "EHLO
-        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726496AbfIYPR0 (ORCPT
+        id S2439511AbfIYPVD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 25 Sep 2019 11:21:03 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:46942 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439435AbfIYPU6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 25 Sep 2019 11:17:26 -0400
-Received: from [192.168.2.10] ([46.9.232.237])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id D92eiLFFSz6EAD92hiBWC5; Wed, 25 Sep 2019 17:17:24 +0200
-Subject: Re: [PATCH] media: vidioc-queryctrl.rst: clarify combining READ_ONLY
- with WRITE_ONLY
-To:     Helen Koike <helen.koike@collabora.com>, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20190925150945.27706-1-helen.koike@collabora.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <211b3d26-ffbc-3245-6613-7fd42c65cc80@xs4all.nl>
-Date:   Wed, 25 Sep 2019 17:17:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 25 Sep 2019 11:20:58 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8PFKu7J126045;
+        Wed, 25 Sep 2019 10:20:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1569424856;
+        bh=WtqmEi9DS9vToPu+lMcovAc3Qiw/sm8n37sRiCL1Reo=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=GhE+k4yLKVftnr211aRAI30SMleEij1Al+lHg2XGWgc+5qedXnqRlXbunJ17tMok9
+         dlg3eg3e72A/zk6/dLiK72hR9REeu5+UlFIsCTtIT+dqYghhH5INHFLI9kPu6SQYr7
+         7QjpCpXgHJWc2GjtYXmmYAaDj5ensDHfqewIB7DI=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8PFKu86101613;
+        Wed, 25 Sep 2019 10:20:56 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 25
+ Sep 2019 10:20:49 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 25 Sep 2019 10:20:56 -0500
+Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8PFKssp047659;
+        Wed, 25 Sep 2019 10:20:56 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
+Subject: [Patch 2/3] media: ov5640: Fix 1920x1080 mode to remove extra enable/disable
+Date:   Wed, 25 Sep 2019 10:23:00 -0500
+Message-ID: <20190925152301.21645-3-bparrot@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190925152301.21645-1-bparrot@ti.com>
+References: <20190925152301.21645-1-bparrot@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <20190925150945.27706-1-helen.koike@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfO+ibsMf9ShsmwQnFbBeOlb0AhnOcX4lBpawYBQHV+RFyXgynEUjzDZ67k5FScg4zIKunKlSsjGNaRBoJmxicNR7W3WiznZZpvE2fjPUBitpvlneleGK
- YVKz4zxeOHOzWpbHkeEl37M41gSsqbg08wvhvSghwM4bXONmAUkIlk0IZ0GT8nd7H/ylhDWvJUfEmahCW59UPUZitKR/TftOViXyLhGlZGT7Kr0t8NW/x57n
- Wnxtn9Z+nkyMyHbnkJTYNb+1I57CFqayEghVK2pncaruN0FzpHfkLS07jFG2HPz7pmQ3JOjCrcLhIRexw0aULqcXpvKTWAfgmLuxww+Y3PE=
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 9/25/19 5:09 PM, Helen Koike wrote:
-> Make it clear in the documentation that V4L2_CTRL_FLAG_READ_ONLY doesn't
-> conflict with V4L2_CTRL_FLAG_WRITE_ONLY. Also make it clear that
-> if both are combined then the control has read and write permissions.
+In the 1920x1080 register array an extra pair of reset ctrl disable
+re-enable was causing unwanted init delays.
 
-That doesn't look right.
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+---
+ drivers/media/i2c/ov5640.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-This is the test in v4l2-compliance:
-
-__u32 rw_mask = V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_WRITE_ONLY;
-
-if ((fl & rw_mask) == rw_mask)
-	return fail("can't read nor write this control\n");
-
-If both flags are set, then a fail is reported.
-
-Did you mis-read?
-
-Setting both flags makes no sense.
-
-Regards,
-
-	Hans
-
-> 
-> Signed-off-by: Helen Koike <helen.koike@collabora.com>
-> 
-> ---
-> Hi,
-> 
-> v4l2-compliance expects both flags for read and write permissions, so I
-> would like to make it clear in the docs.
-> Please let me know if this is not the case.
-> 
-> Thanks
-> Helen
-> ---
->  Documentation/media/uapi/v4l/vidioc-queryctrl.rst | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-> index a3d56ffbf4cc..1d3aecdf679f 100644
-> --- a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-> +++ b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-> @@ -500,6 +500,11 @@ See also the examples in :ref:`control`.
->        - 0x0004
->        - This control is permanently readable only. Any attempt to change
->  	the control will result in an ``EINVAL`` error code.
-> +
-> +	.. note::
-> +
-> +	   If combined with ``V4L2_CTRL_FLAG_WRITE_ONLY``, then both, read
-> +	   and write are allowed.
->      * - ``V4L2_CTRL_FLAG_UPDATE``
->        - 0x0008
->        - A hint that changing this control may affect the value of other
-> @@ -523,6 +528,11 @@ See also the examples in :ref:`control`.
->  	where writing a value will cause the device to carry out a given
->  	action (e. g. motor control) but no meaningful value can be
->  	returned.
-> +
-> +	.. note::
-> +
-> +	   If combined with ``V4L2_CTRL_FLAG_READ_ONLY``, then both, read
-> +	   and write are allowed.
->      * - ``V4L2_CTRL_FLAG_VOLATILE``
->        - 0x0080
->        - This control is volatile, which means that the value of the
-> 
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index c2a44f30d56e..aa56a5a93283 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -493,7 +493,6 @@ static const struct reg_value ov5640_setting_720P_1280_720[] = {
+ };
+ 
+ static const struct reg_value ov5640_setting_1080P_1920_1080[] = {
+-	{0x3008, 0x42, 0, 0},
+ 	{0x3c07, 0x08, 0, 0},
+ 	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
+ 	{0x3814, 0x11, 0, 0},
+@@ -521,7 +520,7 @@ static const struct reg_value ov5640_setting_1080P_1920_1080[] = {
+ 	{0x3a0e, 0x03, 0, 0}, {0x3a0d, 0x04, 0, 0}, {0x3a14, 0x04, 0, 0},
+ 	{0x3a15, 0x60, 0, 0}, {0x4407, 0x04, 0, 0},
+ 	{0x460b, 0x37, 0, 0}, {0x460c, 0x20, 0, 0}, {0x3824, 0x04, 0, 0},
+-	{0x4005, 0x1a, 0, 0}, {0x3008, 0x02, 0, 0},
++	{0x4005, 0x1a, 0, 0},
+ };
+ 
+ static const struct reg_value ov5640_setting_QSXGA_2592_1944[] = {
+-- 
+2.17.1
 
