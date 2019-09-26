@@ -2,274 +2,190 @@ Return-Path: <SRS0=2jbk=XV=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 955C6C47E48
-	for <linux-media@archiver.kernel.org>; Thu, 26 Sep 2019 08:48:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48A13C432C2
+	for <linux-media@archiver.kernel.org>; Thu, 26 Sep 2019 09:00:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 76221222BE
-	for <linux-media@archiver.kernel.org>; Thu, 26 Sep 2019 08:48:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10889222C3
+	for <linux-media@archiver.kernel.org>; Thu, 26 Sep 2019 09:00:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jzBID5Ft"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727487AbfIZIsg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 26 Sep 2019 04:48:36 -0400
-Received: from gofer.mess.org ([88.97.38.141]:48137 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727243AbfIZIsf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 26 Sep 2019 04:48:35 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 07F86C6352; Thu, 26 Sep 2019 09:48:33 +0100 (BST)
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org, Richard Fontana <rfontana@redhat.com>
-Subject: [PATCH v2 1/2] media: saa7164: use debugfs rather than procfs for debugging file
-Date:   Thu, 26 Sep 2019 09:48:32 +0100
-Message-Id: <20190926084833.19197-1-sean@mess.org>
-X-Mailer: git-send-email 2.11.0
+        id S1729896AbfIZJAO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 26 Sep 2019 05:00:14 -0400
+Received: from mail-ed1-f46.google.com ([209.85.208.46]:34752 "EHLO
+        mail-ed1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727897AbfIZJAO (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 26 Sep 2019 05:00:14 -0400
+Received: by mail-ed1-f46.google.com with SMTP id p10so1277153edq.1
+        for <linux-media@vger.kernel.org>; Thu, 26 Sep 2019 02:00:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vAXI7crSD4Wq2qHZaksoeYKvWaFQqBOk51szFqvEsNc=;
+        b=jzBID5Ft0UOnJ7PQSElqWftSDjH+jp7MVVmCxmFJFEVP8vXABNEmVRO+oj4lgQGq5Z
+         XTjB1FIfgncgbyyfe1ZIE1NAIZyL1lzRAK0BB/YSpW0NiU9STF3+AMPW0KZncVVvR3/q
+         1jMsvmjxfEiVwPI6phlXlj2DFGoQTblUCWUUo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vAXI7crSD4Wq2qHZaksoeYKvWaFQqBOk51szFqvEsNc=;
+        b=EhwDOwOgBC+guM/LPKjgfC6xG/kib+COXKHHkDtVHUe1dF5M/t7liBqp4eYV+Q9ULA
+         7mSwpx1pB4Z1no8vKrQyJs7vS5yRYSiEhx5+DsrLepc9Jsc92IsL7WHBhx8tjYfdwW8W
+         s8UUvP1BA3qF+X3lgivHWspCse75YWsXqeb2fJb/KjrgHChcKUCCtkyXHbqdkeHFMBtU
+         fjOFSRAuRl1Ux8ymOQedAJaMgoQQ7909yNm0uDSCRuxqmhqzeEmsfwuB4zLV1fnVux5y
+         umDdp3vLEd0h6HSJz7QLwXx7fD31gB13tXqbLSkn8yXKmk1u+kSTjKxErpnxcf1U+VzR
+         sOng==
+X-Gm-Message-State: APjAAAUaXpFvJmFgqBnxfHBlBOTogBMjWGBsQ7yYKCiBc+wWjpLRbecA
+        WCdNcfxIplVYyYc2Yhp5pkgDt1PsS7sKOw==
+X-Google-Smtp-Source: APXvYqy4xYU0gBDTA9wO/4WrqBi1r9ln2Wo2zQ96PTA7M4azAvrgh0O1VolwXvg6TWpVpqqtTNXB9A==
+X-Received: by 2002:a17:906:11c3:: with SMTP id o3mr2067357eja.297.1569488411972;
+        Thu, 26 Sep 2019 02:00:11 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id oy2sm154899ejb.2.2019.09.26.02.00.10
+        for <linux-media@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Sep 2019 02:00:10 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id v8so1784857wrt.2
+        for <linux-media@vger.kernel.org>; Thu, 26 Sep 2019 02:00:10 -0700 (PDT)
+X-Received: by 2002:a5d:66d2:: with SMTP id k18mr1944375wrw.7.1569488409921;
+ Thu, 26 Sep 2019 02:00:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <07f46758-66e3-5ac1-cc41-807a30f93359@xs4all.nl>
+ <7f154b1ce154b75b352945cf05f6359393e9cc3b.camel@ndufresne.ca>
+ <cd309f07-16c7-94bc-2de6-e0baa22080ff@ideasonboard.com> <20190923155709.GC5056@pendragon.ideasonboard.com>
+ <336f155e-9f1c-1df8-2761-8136cf8d201e@linuxfoundation.org>
+ <CAH1Ww+TS55RwJZVebvZnHtNXe7ECe7DARDiPtg_f4w+7a7z3FA@mail.gmail.com>
+ <20190923184437.GH5056@pendragon.ideasonboard.com> <CAPBb6MXRd8VLu=Wy9zLEOrN1NghW-XmDwYU2nkXLS1LRub-sAA@mail.gmail.com>
+In-Reply-To: <CAPBb6MXRd8VLu=Wy9zLEOrN1NghW-XmDwYU2nkXLS1LRub-sAA@mail.gmail.com>
+From:   Tomasz Figa <tfiga@chromium.org>
+Date:   Thu, 26 Sep 2019 17:59:57 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5B8iHOG+R8OO_v_HmGNptGgjhMeTVQY43dsFMkG4b=8ZA@mail.gmail.com>
+Message-ID: <CAAFQd5B8iHOG+R8OO_v_HmGNptGgjhMeTVQY43dsFMkG4b=8ZA@mail.gmail.com>
+Subject: Re: [ANN] Media sessions in Lyon in October: libcamera
+To:     Alexandre Courbot <acourbot@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Gomez <daniel@qtec.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Ezequiel Garcia <ezequiel@collabora.com>,
+        Eugen Hristev <Eugen.Hristev@microchip.com>,
+        Dafna Hirschfeld <dafna3@gmail.com>,
+        Helen Koike <helen.koike@collabora.com>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This moves /proc/saa7164 to /sys/kernel/debug/saa7164.
+On Thu, Sep 26, 2019 at 2:40 PM Alexandre Courbot <acourbot@chromium.org> w=
+rote:
+>
+> On Tue, Sep 24, 2019 at 3:44 AM Laurent Pinchart
+> <laurent.pinchart@ideasonboard.com> wrote:
+> >
+> > Hi Shuah and Daniel,
+> >
+> > On Mon, Sep 23, 2019 at 08:21:58PM +0200, Daniel Gomez wrote:
+> > > On Mon, 23 Sep 2019 at 20:16, Shuah Khan wrote:
+> > > > On 9/23/19 9:57 AM, Laurent Pinchart wrote:
+> > > >> On Mon, Sep 23, 2019 at 04:03:54PM +0100, Kieran Bingham wrote:
+> > > >>> On 23/09/2019 15:47, Nicolas Dufresne wrote:
+> > > >>>> Le lundi 23 septembre 2019 =C3=A0 16:21 +0200, Hans Verkuil a =
+=C3=A9crit :
+> > > >>>>> Hi all,
+> > > >>>>>
+> > > >>>>> Since we have three separate half-day sessions for different to=
+pics I decided
+> > > >>>>> to split the announcement for this in three emails as well, so =
+these things
+> > > >>>>> can be discussed in separate threads.
+> > > >>>>>
+> > > >>>>> All sessions are in room Terreaux VIP Lounge - Level 0.
+> > > >>>>> There is a maximum of 15 people.
+> > > >>>>>
+> > > >>>>> The second session deals with libcamera and is on Wednesday mor=
+ning
+> > > >>>>> from 9:00 to 13:00.
+> > > >>>>>
+> > > >>>>> Attendees for this session:
+> > > >>>>>
+> > > >>>>> Kieran Bingham <kieran.bingham@ideasonboard.com>
+> > > >>>
+> > > >>> Unfortunately I can no longer attend ELCE.
+> > > >>>
+> > > >>> (My second baby will be a bit too new for an extended stay away f=
+rom home)
+> > > >>>
+> > > >>>>> Boris Brezillon <boris.brezillon@collabora.com>
+> > > >>>>> Alexandre Courbot <acourbot@chromium.org>
+> > > >>>>> Tomasz Figa <tfiga@chromium.org>
+> > > >>>>> Ezequiel Garcia <ezequiel@collabora.com>
+> > > >>>>> Daniel Gomez <daniel@qtec.com>
+> > > >>>>> Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+> > > >>>>> Eugen Hristev <Eugen.Hristev@microchip.com>
+> > > >>>>> Shuah Khan <skhan@linuxfoundation.org>
+> > > >>>>> Helen Koike <helen.koike@collabora.com>
+> > > >>>>> Jacopo Mondi <jacopo@jmondi.org>
+> > > >>>>> Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > > >>>>> Niklas S=C3=B6derlund <niklas.soderlund@ragnatech.se>
+> > > >>>>> Hans Verkuil <hverkuil@xs4all.nl>
+> > > >>>>>
+> > > >>>>> If I missed someone, or you are on the list but won't attend af=
+ter all, then
+> > > >>>>> please let me know.
+> > > >>>>
+> > > >>>> I would like to join this one to, as after ELCE I should have so=
+me time
+> > > >>>> to spend on this. I understand thought hat this would make use r=
+each
+> > > >>>> the limit, let me know if there is any issues, I can spare my se=
+at if
+> > > >>>> needed.
+> > > >>>
+> > > >>> You now have my seat, and I've just made you a required attendee =
+to go
+> > > >>> in my place :-D
+> > > >>
+> > > >> Thank you for the offer Kieran.
+> > > >>
+> > > >> We're reaching the room capacity, and I know of several people who=
+ may
+> > > >> attend ELCE and would be beneficial for the discussions. If anyone=
+ in
+> > > >> the above list only has a general curiosity about libcamera but do=
+esn't
+> > > >> expect to really contribute to the discussions, and would consider
+> > > >> giving their seat if required, could you please let me know ?
+> > >
+> > > I would like to attend if possible since we are going to work with li=
+bcamera
+> > > but not sure how much I can contribute so, no problem to give my seat
+> > > if necessary.
+> >
+> > Thank you for the offers. My goal is to secure a seat for everybody who
+> > is interested in attending, and I will make sure to let all parties kno=
+w
+> > of the success (or lack thereof) of that initiative as we get closer to
+> > the event.
+>
+> I won't be active on libcamera, so please feel free to assign my seat
+> to someone who will be.
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/media/pci/saa7164/saa7164-core.c | 166 ++++++++++++++---------
- 1 file changed, 105 insertions(+), 61 deletions(-)
+I'll risk saying that I have to join the meeting. ;)
 
-diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
-index 9ae04e18e6c6..126d085be9a7 100644
---- a/drivers/media/pci/saa7164/saa7164-core.c
-+++ b/drivers/media/pci/saa7164/saa7164-core.c
-@@ -13,12 +13,10 @@
- #include <linux/kernel.h>
- #include <linux/slab.h>
- #include <linux/interrupt.h>
-+#include <linux/debugfs.h>
- #include <linux/delay.h>
- #include <asm/div64.h>
- 
--#ifdef CONFIG_PROC_FS
--#include <linux/proc_fs.h>
--#endif
- #include "saa7164.h"
- 
- MODULE_DESCRIPTION("Driver for NXP SAA7164 based TV cards");
-@@ -1045,92 +1043,138 @@ static void saa7164_dev_unregister(struct saa7164_dev *dev)
- 	return;
- }
- 
--#ifdef CONFIG_PROC_FS
--static int saa7164_proc_show(struct seq_file *m, void *v)
-+#ifdef CONFIG_DEBUG_FS
-+static void *saa7164_seq_start(struct seq_file *s, loff_t *pos)
- {
- 	struct saa7164_dev *dev;
--	struct tmComResBusInfo *b;
--	struct list_head *list;
--	int i, c;
-+	loff_t index = *pos;
- 
--	if (saa7164_devcount == 0)
--		return 0;
-+	mutex_lock(&devlist);
-+	list_for_each_entry(dev, &saa7164_devlist, devlist) {
-+		if (index-- == 0) {
-+			mutex_unlock(&devlist);
-+			return dev;
-+		}
-+	}
-+	mutex_unlock(&devlist);
- 
--	list_for_each(list, &saa7164_devlist) {
--		dev = list_entry(list, struct saa7164_dev, devlist);
--		seq_printf(m, "%s = %p\n", dev->name, dev);
-+	return NULL;
-+}
- 
--		/* Lock the bus from any other access */
--		b = &dev->bus;
--		mutex_lock(&b->lock);
-+static void *saa7164_seq_next(struct seq_file *s, void *v, loff_t *pos)
-+{
-+	struct saa7164_dev *dev = v;
-+	void *ret;
- 
--		seq_printf(m, " .m_pdwSetWritePos = 0x%x (0x%08x)\n",
--			b->m_dwSetReadPos, saa7164_readl(b->m_dwSetReadPos));
-+	mutex_lock(&devlist);
-+	if (list_is_last(&dev->devlist, &saa7164_devlist))
-+		ret = NULL;
-+	else
-+		ret = list_next_entry(dev, devlist);
-+	mutex_unlock(&devlist);
- 
--		seq_printf(m, " .m_pdwSetReadPos  = 0x%x (0x%08x)\n",
--			b->m_dwSetWritePos, saa7164_readl(b->m_dwSetWritePos));
-+	++*pos;
- 
--		seq_printf(m, " .m_pdwGetWritePos = 0x%x (0x%08x)\n",
--			b->m_dwGetReadPos, saa7164_readl(b->m_dwGetReadPos));
-+	return ret;
-+}
- 
--		seq_printf(m, " .m_pdwGetReadPos  = 0x%x (0x%08x)\n",
--			b->m_dwGetWritePos, saa7164_readl(b->m_dwGetWritePos));
--		c = 0;
--		seq_printf(m, "\n  Set Ring:\n");
--		seq_printf(m, "\n addr  00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\n");
--		for (i = 0; i < b->m_dwSizeSetRing; i++) {
--			if (c == 0)
--				seq_printf(m, " %04x:", i);
-+static void saa7164_seq_stop(struct seq_file *s, void *v)
-+{
-+}
- 
--			seq_printf(m, " %02x", readb(b->m_pdwSetRing + i));
-+static int saa7164_seq_show(struct seq_file *m, void *v)
-+{
-+	struct saa7164_dev *dev = v;
-+	struct tmComResBusInfo *b;
-+	int i, c;
- 
--			if (++c == 16) {
--				seq_printf(m, "\n");
--				c = 0;
--			}
--		}
-+	seq_printf(m, "%s = %p\n", dev->name, dev);
- 
--		c = 0;
--		seq_printf(m, "\n  Get Ring:\n");
--		seq_printf(m, "\n addr  00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\n");
--		for (i = 0; i < b->m_dwSizeGetRing; i++) {
--			if (c == 0)
--				seq_printf(m, " %04x:", i);
-+	/* Lock the bus from any other access */
-+	b = &dev->bus;
-+	mutex_lock(&b->lock);
- 
--			seq_printf(m, " %02x", readb(b->m_pdwGetRing + i));
-+	seq_printf(m, " .m_pdwSetWritePos = 0x%x (0x%08x)\n",
-+		   b->m_dwSetReadPos, saa7164_readl(b->m_dwSetReadPos));
- 
--			if (++c == 16) {
--				seq_printf(m, "\n");
--				c = 0;
--			}
-+	seq_printf(m, " .m_pdwSetReadPos  = 0x%x (0x%08x)\n",
-+		   b->m_dwSetWritePos, saa7164_readl(b->m_dwSetWritePos));
-+
-+	seq_printf(m, " .m_pdwGetWritePos = 0x%x (0x%08x)\n",
-+		   b->m_dwGetReadPos, saa7164_readl(b->m_dwGetReadPos));
-+
-+	seq_printf(m, " .m_pdwGetReadPos  = 0x%x (0x%08x)\n",
-+		   b->m_dwGetWritePos, saa7164_readl(b->m_dwGetWritePos));
-+	c = 0;
-+	seq_puts(m, "\n  Set Ring:\n");
-+	seq_puts(m, "\n addr  00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\n");
-+	for (i = 0; i < b->m_dwSizeSetRing; i++) {
-+		if (c == 0)
-+			seq_printf(m, " %04x:", i);
-+
-+		seq_printf(m, " %02x", readb(b->m_pdwSetRing + i));
-+
-+		if (++c == 16) {
-+			seq_puts(m, "\n");
-+			c = 0;
- 		}
-+	}
- 
--		mutex_unlock(&b->lock);
-+	c = 0;
-+	seq_puts(m, "\n  Get Ring:\n");
-+	seq_puts(m, "\n addr  00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f\n");
-+	for (i = 0; i < b->m_dwSizeGetRing; i++) {
-+		if (c == 0)
-+			seq_printf(m, " %04x:", i);
- 
-+		seq_printf(m, " %02x", readb(b->m_pdwGetRing + i));
-+
-+		if (++c == 16) {
-+			seq_puts(m, "\n");
-+			c = 0;
-+		}
- 	}
- 
-+	mutex_unlock(&b->lock);
-+
- 	return 0;
- }
- 
--static struct proc_dir_entry *saa7164_pe;
-+static const struct seq_operations saa7164_seq_ops = {
-+	.start = saa7164_seq_start,
-+	.next = saa7164_seq_next,
-+	.stop = saa7164_seq_stop,
-+	.show = saa7164_seq_show,
-+};
- 
--static int saa7164_proc_create(void)
-+static int saa7164_open(struct inode *inode, struct file *file)
- {
--	saa7164_pe = proc_create_single("saa7164", 0444, NULL, saa7164_proc_show);
--	if (!saa7164_pe)
--		return -ENOMEM;
-+	return seq_open(file, &saa7164_seq_ops);
-+}
- 
--	return 0;
-+static const struct file_operations saa7164_operations = {
-+	.owner          = THIS_MODULE,
-+	.open           = saa7164_open,
-+	.read           = seq_read,
-+	.llseek         = seq_lseek,
-+	.release        = seq_release,
-+};
-+
-+static struct dentry *saa7614_dentry;
-+
-+static void __init saa7164_debugfs_create(void)
-+{
-+	saa7614_dentry = debugfs_create_file("saa7164", 0444, NULL, NULL,
-+					     &saa7164_operations);
- }
- 
--static void saa7164_proc_destroy(void)
-+static void __exit saa7164_debugfs_remove(void)
- {
--	if (saa7164_pe)
--		remove_proc_entry("saa7164", NULL);
-+	debugfs_remove(saa7614_dentry);
- }
- #else
--static int saa7164_proc_create(void) { return 0; }
--static void saa7164_proc_destroy(void) {}
-+static void saa7164_debugfs_create(void) { }
-+static void saa7164_debugfs_remove(void) { }
- #endif
- 
- static int saa7164_thread_function(void *data)
-@@ -1507,7 +1551,7 @@ static int __init saa7164_init(void)
- 	if (ret)
- 		return ret;
- 
--	saa7164_proc_create();
-+	saa7164_debugfs_create();
- 
- 	pr_info("saa7164 driver loaded\n");
- 
-@@ -1516,7 +1560,7 @@ static int __init saa7164_init(void)
- 
- static void __exit saa7164_fini(void)
- {
--	saa7164_proc_destroy();
-+	saa7164_debugfs_remove();
- 	pci_unregister_driver(&saa7164_pci_driver);
- }
- 
--- 
-2.21.0
-
+Best regards,
+Tomasz
