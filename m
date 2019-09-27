@@ -2,57 +2,59 @@ Return-Path: <SRS0=mTxV=XW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30633C4360C
-	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:34:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10601C4360C
+	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:35:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 023F321841
-	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:34:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D6C7521655
+	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:34:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ukwRBNMa"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="zWtjVzed"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728274AbfI0Ses (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Sep 2019 14:34:48 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:50488 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728241AbfI0Seq (ORCPT
+        id S1728405AbfI0Se6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Sep 2019 14:34:58 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:57798 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728382AbfI0Se6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Sep 2019 14:34:46 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8RIYjw0077506;
-        Fri, 27 Sep 2019 13:34:45 -0500
+        Fri, 27 Sep 2019 14:34:58 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8RIYvGL091605;
+        Fri, 27 Sep 2019 13:34:57 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1569609285;
-        bh=VmitdgajHHJkSVwVVJXNsT523zGlYCY363KbSQpWfJQ=;
+        s=ti-com-17Q1; t=1569609297;
+        bh=qR2u/2vBhjFJBnrGn7xWPTWwDi9+4SxHSJh+/UG2w0o=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ukwRBNMatufZA/NuPc4QiACys/2tobLbHA3eFyDW1zoHoZz9tKx97S+LDmGACZk/W
-         YMoTCe9kSDAjE7Ui5bfyyIctk9NG9zpyBSbI+265YyfBIS9V3IfWUJkZZdwUUYMQ2L
-         1Pj3JqqcVA3PxieKuoq0FXGcmrLw0tsjy4jyN8Ho=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8RIYjOD108646;
-        Fri, 27 Sep 2019 13:34:45 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+        b=zWtjVzedURuY6DqlllNhPXuXt1K8lb/nPzwkms8S62J46KgLV4dR0U07l83qQENuy
+         1XlpE9jYsktPWAd8b5kMBSokCBUf3HRh6pNK4AJk5TuRi2tbm6VtyaQsqzjTFXcCGm
+         HA49IU3TGQGl6XOg3Z5dPJC1Lcvmn3TAONBseJD4=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8RIYvbm061285
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 27 Sep 2019 13:34:57 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 27
- Sep 2019 13:34:37 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ Sep 2019 13:34:49 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 27 Sep 2019 13:34:36 -0500
+ Frontend Transport; Fri, 27 Sep 2019 13:34:49 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8RIYgbq073031;
-        Fri, 27 Sep 2019 13:34:44 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8RIYgc4073031;
+        Fri, 27 Sep 2019 13:34:57 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch 03/16] media: ti-vpe: vpe: Remove unnecessary use of container_of
-Date:   Fri, 27 Sep 2019 13:36:37 -0500
-Message-ID: <20190927183650.31345-4-bparrot@ti.com>
+Subject: [Patch 15/16] media: ti-vpe: vpe: fix v4l2_compliance issue related to xfer_func
+Date:   Fri, 27 Sep 2019 13:36:49 -0500
+Message-ID: <20190927183650.31345-16-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190927183650.31345-1-bparrot@ti.com>
 References: <20190927183650.31345-1-bparrot@ti.com>
@@ -64,98 +66,59 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Instead of saving a pointer to the 'fh' member of struct vpe_ctx to
-later have to use container_of to retrieve the actual pointer to the
-context structure, which seems to confuse static code analysis tool
-anyways, just save the pointer to the actual structure and then retrieve
-it directly.
+All 4 of the "colorspace" components were not originally handled.
+Causing issue related to xfer_func not being initialized properly.
+
+This was found with v4l2-compliance test.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 22 +++++++---------------
- 1 file changed, 7 insertions(+), 15 deletions(-)
+ drivers/media/platform/ti-vpe/vpe.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 56f60dbea15c..0e9cb0319a92 100644
+index d7f8eb901475..e30981cd3e8f 100644
 --- a/drivers/media/platform/ti-vpe/vpe.c
 +++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -900,14 +900,6 @@ static int set_srcdst_params(struct vpe_ctx *ctx)
- 	return 0;
- }
+@@ -324,6 +324,9 @@ struct vpe_q_data {
+ 	unsigned int		nplanes;			/* Current number of planes */
+ 	unsigned int		bytesperline[VPE_MAX_PLANES];	/* bytes per line in memory */
+ 	enum v4l2_colorspace	colorspace;
++	enum v4l2_ycbcr_encoding ycbcr_enc;
++	enum v4l2_xfer_func	xfer_func;
++	enum v4l2_quantization	quant;
+ 	enum v4l2_field		field;				/* supported field value */
+ 	unsigned int		flags;
+ 	unsigned int		sizeimage[VPE_MAX_PLANES];	/* image size in memory */
+@@ -1576,6 +1579,9 @@ static int vpe_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
  
--/*
-- * Return the vpe_ctx structure for a given struct file
-- */
--static struct vpe_ctx *file2ctx(struct file *file)
--{
--	return container_of(file->private_data, struct vpe_ctx, fh);
--}
--
- /*
-  * mem2mem callbacks
-  */
-@@ -1527,7 +1519,7 @@ static int vpe_enum_fmt(struct file *file, void *priv,
- static int vpe_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	struct v4l2_pix_format_mplane *pix = &f->fmt.pix_mp;
--	struct vpe_ctx *ctx = file2ctx(file);
-+	struct vpe_ctx *ctx = file->private_data;
- 	struct vb2_queue *vq;
- 	struct vpe_q_data *q_data;
- 	int i;
-@@ -1689,7 +1681,7 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 	if (V4L2_TYPE_IS_OUTPUT(f->type)) {
+ 		pix->colorspace = q_data->colorspace;
++		pix->xfer_func = q_data->xfer_func;
++		pix->ycbcr_enc = q_data->ycbcr_enc;
++		pix->quantization = q_data->quant;
+ 	} else {
+ 		struct vpe_q_data *s_q_data;
  
- static int vpe_try_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
--	struct vpe_ctx *ctx = file2ctx(file);
-+	struct vpe_ctx *ctx = file->private_data;
- 	struct vpe_fmt *fmt = find_format(f);
+@@ -1583,6 +1589,9 @@ static int vpe_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
+ 		s_q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
  
- 	if (V4L2_TYPE_IS_OUTPUT(f->type))
-@@ -1762,7 +1754,7 @@ static int __vpe_s_fmt(struct vpe_ctx *ctx, struct v4l2_format *f)
- static int vpe_s_fmt(struct file *file, void *priv, struct v4l2_format *f)
- {
- 	int ret;
--	struct vpe_ctx *ctx = file2ctx(file);
-+	struct vpe_ctx *ctx = file->private_data;
+ 		pix->colorspace = s_q_data->colorspace;
++		pix->xfer_func = s_q_data->xfer_func;
++		pix->ycbcr_enc = s_q_data->ycbcr_enc;
++		pix->quantization = s_q_data->quant;
+ 	}
  
- 	ret = vpe_try_fmt(file, priv, f);
- 	if (ret)
-@@ -1847,7 +1839,7 @@ static int __vpe_try_selection(struct vpe_ctx *ctx, struct v4l2_selection *s)
- static int vpe_g_selection(struct file *file, void *fh,
- 		struct v4l2_selection *s)
- {
--	struct vpe_ctx *ctx = file2ctx(file);
-+	struct vpe_ctx *ctx = file->private_data;
- 	struct vpe_q_data *q_data;
- 	bool use_c_rect = false;
- 
-@@ -1908,7 +1900,7 @@ static int vpe_g_selection(struct file *file, void *fh,
- static int vpe_s_selection(struct file *file, void *fh,
- 		struct v4l2_selection *s)
- {
--	struct vpe_ctx *ctx = file2ctx(file);
-+	struct vpe_ctx *ctx = file->private_data;
- 	struct vpe_q_data *q_data;
- 	struct v4l2_selection sel = *s;
- 	int ret;
-@@ -2275,7 +2267,7 @@ static int vpe_open(struct file *file)
- 	init_adb_hdrs(ctx);
- 
- 	v4l2_fh_init(&ctx->fh, video_devdata(file));
--	file->private_data = &ctx->fh;
-+	file->private_data = ctx;
- 
- 	hdl = &ctx->hdl;
- 	v4l2_ctrl_handler_init(hdl, 1);
-@@ -2360,7 +2352,7 @@ static int vpe_open(struct file *file)
- static int vpe_release(struct file *file)
- {
- 	struct vpe_dev *dev = video_drvdata(file);
--	struct vpe_ctx *ctx = file2ctx(file);
-+	struct vpe_ctx *ctx = file->private_data;
- 
- 	vpe_dbg(dev, "releasing instance %p\n", ctx);
+ 	pix->num_planes = q_data->nplanes;
+@@ -1758,6 +1767,9 @@ static int __vpe_s_fmt(struct vpe_ctx *ctx, struct v4l2_format *f)
+ 	q_data->width		= pix->width;
+ 	q_data->height		= pix->height;
+ 	q_data->colorspace	= pix->colorspace;
++	q_data->xfer_func	= pix->xfer_func;
++	q_data->ycbcr_enc	= pix->ycbcr_enc;
++	q_data->quant		= pix->quantization;
+ 	q_data->field		= pix->field;
+ 	q_data->nplanes		= pix->num_planes;
  
 -- 
 2.17.1
