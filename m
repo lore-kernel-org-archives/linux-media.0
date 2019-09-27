@@ -2,120 +2,107 @@ Return-Path: <SRS0=mTxV=XW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43A89C4360C
-	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33D45C4360C
+	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 19:01:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1455A2054F
-	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:46:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03A28217D7
+	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 19:01:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="b/LdKpUH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BSeKoZyH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbfI0SpR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Sep 2019 14:45:17 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:48166 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbfI0SpR (ORCPT
+        id S1726740AbfI0TBe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Sep 2019 15:01:34 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46225 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbfI0TBe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Sep 2019 14:45:17 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8RIjEVD068668;
-        Fri, 27 Sep 2019 13:45:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1569609914;
-        bh=rA7FtL2+Qf+WIRNaxJA48Ma8rhf/5zjYgvZGEIMyaH0=;
-        h=From:To:CC:Subject:Date;
-        b=b/LdKpUHTy01PCJazGkorNpAfgS7uX1Xsnhw9QuX5jOAjMd7kSt6rbFbnJpTbzvIp
-         ab8Jq3cDAc6MaszFJt2zilddSj2bmjyKz0UvEXH1We2qgPIhDJbHghuW11mgDHhHMU
-         JOCc7rreKZpUAPDEFstzdBMhloiR0XeAct9QzWY4=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8RIjEvX074913
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 27 Sep 2019 13:45:14 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 27
- Sep 2019 13:45:06 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 27 Sep 2019 13:45:14 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8RIjEVV122194;
-        Fri, 27 Sep 2019 13:45:14 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v4 0/8] media: i2c: ov2659: maintenance series
-Date:   Fri, 27 Sep 2019 13:47:14 -0500
-Message-ID: <20190927184722.31989-1-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 27 Sep 2019 15:01:34 -0400
+Received: by mail-pg1-f196.google.com with SMTP id a3so3931833pgm.13
+        for <linux-media@vger.kernel.org>; Fri, 27 Sep 2019 12:01:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=/lgDO+Y1jJdPj/deaXJ4mCd50LAHh/sOjupewGydhNw=;
+        b=BSeKoZyHeWszSz8d9GJQoetlEEWxtSX/DQxjtZQZCPutp/ASYKdo7QX9W+5hcdtT5u
+         IsTCAtqpPzF6rRuFlskgXXlIYQWBymh+IBTPOK6gobPQPjRYfssClKQOrKm84kVgADAp
+         JPkZzxLd7pD3AA8kyzXzcWeZEWP91BG7soJrSVJXYam0FCDGs1XIY8+rzhoDv8ZZOBt4
+         n6yNZF2KHIVivIjmJ86q/Cl6B9Sg+sBW5ordNF31aQQlmOSF1AwME2Q9uLEr6sQLeX/o
+         sTS0aWDLV2VJUeeTH/bOx0heAvsmuY3bqMbblui59ea8Y+3BpAerRkbCFqeK2ExunAyK
+         /kAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=/lgDO+Y1jJdPj/deaXJ4mCd50LAHh/sOjupewGydhNw=;
+        b=pkPiatzh56yiT4J7Ocb5qGUeSQEeJ3KJmg91eSLW3wlXjDX/vgJ2j9v2Bws59QupWw
+         Ra0qVpKixIW8yUBxtkU6UDCDTg56VV1qZDsktgnBG1Xs5eQGDXQ8vcA1gRxJs5QDnwRC
+         CfDzolMK+KsKEQ0VoIRU5iRlhrwltmffnjRcjTyMLj3zJY1WClV1apWHKF44T46FaStU
+         3Fa//i56rIaXllLuRETgb6/VHsEXNyvYxO7u7bCVQKGnD+RI0/C2lyJewHvqd3Yg20fF
+         5EeSK1OVi+Lqx1Q+eGaEmcI791BKPQBbsONCdshdnz4q7soD6AmnwsbJigZFOobSf/tU
+         jVBg==
+X-Gm-Message-State: APjAAAXSsa0TlR/nUxPyfnZ4JzMnl4nh6hojk4FRMLklnk+KULSWVwck
+        y9nXZLwxWSvSiCsGWLHBT8Q=
+X-Google-Smtp-Source: APXvYqzalhKaI5HAmahul3baUn6K536kQt7skR5fAFOvjP4/Aj2xBHMhTLrFfeolrKV3mNn4oNTmZw==
+X-Received: by 2002:a63:f14c:: with SMTP id o12mr3657459pgk.386.1569610893249;
+        Fri, 27 Sep 2019 12:01:33 -0700 (PDT)
+Received: from madhuparna-HP-Notebook ([2402:3a80:501:4d94:7181:5c70:92e1:7c7a])
+        by smtp.gmail.com with ESMTPSA id v9sm3262403pfe.1.2019.09.27.12.01.31
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 27 Sep 2019 12:01:32 -0700 (PDT)
+Date:   Sat, 28 Sep 2019 00:31:27 +0530
+From:   Madhuparna Bhowmik <madhuparnabhowmik04@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH] Staging: media: ipu3: Changed unsigned long int to unsigned
+ long
+Message-ID: <20190927190123.GA9230@madhuparna-HP-Notebook>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series is a collection of patches we have been carrying for a
-while.
+This patch fixes the following warning:
+WARNING: Prefer 'unsigned long' over 'unsigned long int' as the int is unnecessary
 
-It includes a few sensor register fixes which would cause visual
-artifacts at lower resolution and also at 720p.
+Signed-off-by: Madhuparna Bhowmik <madhuparnabhowmik04@gmail.com>
+---
+ drivers/staging/media/ipu3/ipu3-mmu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Also on some board the 'powerdown' and /or 'reset' pins are not tied so
-we need to add support for optional gpios to handle these.
+diff --git a/drivers/staging/media/ipu3/ipu3-mmu.c b/drivers/staging/media/ipu3/ipu3-mmu.c
+index 3d969b0522ab..5f3ff964f3e7 100644
+--- a/drivers/staging/media/ipu3/ipu3-mmu.c
++++ b/drivers/staging/media/ipu3/ipu3-mmu.c
+@@ -130,7 +130,7 @@ static u32 *imgu_mmu_alloc_page_table(u32 pteval)
+ 	for (pte = 0; pte < IPU3_PT_PTES; pte++)
+ 		pt[pte] = pteval;
 
-Since these camera are removable on some board we also need the driver
-to actually fail when there is no hardware present so the driver is
-actually removed.
+-	set_memory_uc((unsigned long int)pt, IPU3_PT_ORDER);
++	set_memory_uc((unsigned long)pt, IPU3_PT_ORDER);
 
-Also added a patch to check and propagate errors on s_stream invocation.
+ 	return pt;
+ }
+@@ -141,7 +141,7 @@ static u32 *imgu_mmu_alloc_page_table(u32 pteval)
+  */
+ static void imgu_mmu_free_page_table(u32 *pt)
+ {
+-	set_memory_wb((unsigned long int)pt, IPU3_PT_ORDER);
++	set_memory_wb((unsigned long)pt, IPU3_PT_ORDER);
+ 	free_page((unsigned long)pt);
+ }
 
-Finally, we update the licensing statement to use SPDX licensing.
-
-Changes since v3:
-- Addressed review comment from Sakari about s_ctrl i2c access whne
-  powered off
-
-Changes since v2:
-- Addressed review comment from Sakari
-- Reworked the "media: i2c: ov2659: Add powerdown/reset gpio handling"
-  to use pm_runtime if it is available but not to make it depend on it.
-- Cleaned up the gpio related calls to remove the unnecessary NULL check
-
-Changes since v1:
-- Addressed review comment from Prabhakar
-- Added support for reset-gpios
-- Rework the power setting to use pm_runtime instead of s_power
-  as based on discussion with Sakari it would be the prefered method
-- Added a patch to reduce the number explicit include files to the
-  minimum necessary instead of the previous kitchen sink approach
-
-Benoit Parrot (8):
-  media: i2c: ov2659: Fix for image wrap-around in lower resolution
-  media: i2c: ov2659: Fix sensor detection to actually fail when device
-    is not present
-  media: i2c: ov2659: Cleanup include file list
-  media: i2c: ov2659: fix s_stream return value
-  media: dt-bindings: ov2659: add powerdown/reset-gpios optional
-    property
-  media: i2c: ov2659: Add powerdown/reset gpio handling
-  media: i2c: ov2659: Fix missing 720p register config
-  media: i2c: ov2659: Switch to SPDX Licensing
-
- .../devicetree/bindings/media/i2c/ov2659.txt  |   9 ++
- drivers/media/i2c/Kconfig                     |   2 +-
- drivers/media/i2c/ov2659.c                    | 138 +++++++++++++-----
- 3 files changed, 112 insertions(+), 37 deletions(-)
-
--- 
+--
 2.17.1
 
