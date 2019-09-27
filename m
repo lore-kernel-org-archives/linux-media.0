@@ -2,85 +2,100 @@ Return-Path: <SRS0=mTxV=XW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1166C4360C
-	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF854C388F3
+	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:45:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id ACFBA20872
-	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:40:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569609645;
-	bh=ALvsvkqxcntzL+KtmcV/BdcQ20zwSrxdoWVfPgSBudk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=UTx8iDUiqGRmBbXGu/XQ6W+ZQKkfnGP2ElYgjYjJBBA+AAizrlt+HJyo8DM2uSDCZ
-	 SKImukhuRQIp4+iBE5+QiEGsTgkbWnrkii49xtsC3XGR/q9YIMpm97b2EsS+yVaspa
-	 fgWymQi0tVxXih1YZtXYVQLYgeqIvl02uj2KtB6g=
+	by mail.kernel.org (Postfix) with ESMTP id 85CA9217D9
+	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:45:21 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="touNx2n6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728449AbfI0Skm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Sep 2019 14:40:42 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:39827 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727447AbfI0Skm (ORCPT
+        id S1728501AbfI0SpU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Sep 2019 14:45:20 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:46746 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728477AbfI0SpU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Sep 2019 14:40:42 -0400
-Received: by mail-ot1-f45.google.com with SMTP id s22so3104906otr.6;
-        Fri, 27 Sep 2019 11:40:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=An2P5iT1CBNCYQlfPrMZjr85dNdpAyD/YwKV5l1E+LA=;
-        b=Q1CcFu89TRctOd9NXvP3wRSRR/TqMwNsRp//cD2g4ddCJogdGimdupmkSyTwyrmt54
-         3dfRFjIn9hXOJvJxi/es5SFVsMCJRuoR03Ll7TgXL1Nyh77fPYXeeUktu/T0XZF3vch9
-         zJUTZMGaxy9DJV2NJuNgXVgA69eEKuBMAhVUGoUp4nx5iIskPUSKs5A2Nhtimvyj20PS
-         Mrnlvhd0JWkAKb9+cEZwzs0D6lWN062JdvCGSCtZNaUeUBEZdlQMYCuHI3GNMFReOY0o
-         K/GQoFz1pU2Zc9BFEYXO6zjchK3N76YM6EdP9XpwdICZTbYlr25FvQZWvMauwQkAk8C2
-         jLDA==
-X-Gm-Message-State: APjAAAUng7nDQM1vmaR4iSJyQS/xLzKRP6LzyU33YOi+ecBktJ4kTA+2
-        q3RcP0sgrVRakrA1b5PGTQ==
-X-Google-Smtp-Source: APXvYqyDkN0I5DtMNFKpwzJlP0MrRg6dekOrLcLzXUk2JBbZWwsURxPDPXJkHhbQiq904JlUnD3Tyw==
-X-Received: by 2002:a9d:760d:: with SMTP id k13mr4145699otl.96.1569609640923;
-        Fri, 27 Sep 2019 11:40:40 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id e61sm1138052ote.24.2019.09.27.11.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2019 11:40:40 -0700 (PDT)
-Date:   Fri, 27 Sep 2019 13:40:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Benoit Parrot <bparrot@ti.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Prabhakar Lad <prabhakar.csengg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benoit Parrot <bparrot@ti.com>
-Subject: Re: [Patch v3 5/8] media: dt-bindings: ov2659: add
- powerdown/reset-gpios optional property
-Message-ID: <20190927184039.GA825@bogus>
-References: <20190924164414.21897-1-bparrot@ti.com>
- <20190924164414.21897-6-bparrot@ti.com>
+        Fri, 27 Sep 2019 14:45:20 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8RIjJHu094639;
+        Fri, 27 Sep 2019 13:45:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1569609919;
+        bh=ZkL2CWEO79hER3mS3ff0HKdkey2wqW3jLAeLx0uw2eg=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=touNx2n6L+JwLcT6CdOQugO8JuR8HZ5dReSQdWFmQjbYFf48XCpgi+fWVZc7hsdcm
+         Fg6l+5PiWRTImK57nRQ58Sly/NlogWQagTjdLKxBvmrUozZNgYooLhp7WJRWhCuRKK
+         OufN4rmRCEjmwMkoYhHDXCCiFGXeaUy5JT6oZkHQ=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8RIjJPX005512
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 27 Sep 2019 13:45:19 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 27
+ Sep 2019 13:45:19 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 27 Sep 2019 13:45:11 -0500
+Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8RIjEVZ122194;
+        Fri, 27 Sep 2019 13:45:18 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v4 4/8] media: i2c: ov2659: fix s_stream return value
+Date:   Fri, 27 Sep 2019 13:47:18 -0500
+Message-ID: <20190927184722.31989-5-bparrot@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190927184722.31989-1-bparrot@ti.com>
+References: <20190927184722.31989-1-bparrot@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190924164414.21897-6-bparrot@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 24 Sep 2019 11:44:11 -0500, Benoit Parrot wrote:
-> Add powerdown-gpios and reset-gpios to the list of optional properties
-> for the OV2659 camera sensor.
-> 
-> Signed-off-by: Benoit Parrot <bparrot@ti.com>
-> ---
->  Documentation/devicetree/bindings/media/i2c/ov2659.txt | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
+In ov2659_s_stream() return value for invoked function should be checked
+and propagated.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+---
+ drivers/media/i2c/ov2659.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
+index f77320e8a60d..cd4625432264 100644
+--- a/drivers/media/i2c/ov2659.c
++++ b/drivers/media/i2c/ov2659.c
+@@ -1187,10 +1187,13 @@ static int ov2659_s_stream(struct v4l2_subdev *sd, int on)
+ 		goto unlock;
+ 	}
+ 
+-	ov2659_set_pixel_clock(ov2659);
+-	ov2659_set_frame_size(ov2659);
+-	ov2659_set_format(ov2659);
+-	ov2659_set_streaming(ov2659, 1);
++	ret = ov2659_set_pixel_clock(ov2659);
++	if (!ret)
++		ret = ov2659_set_frame_size(ov2659);
++	if (!ret)
++		ret = ov2659_set_format(ov2659);
++	if (!ret)
++		ov2659_set_streaming(ov2659, 1);
+ 	ov2659->streaming = on;
+ 
+ unlock:
+-- 
+2.17.1
+
