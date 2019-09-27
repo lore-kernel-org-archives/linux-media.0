@@ -2,93 +2,236 @@ Return-Path: <SRS0=mTxV=XW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40731C388F3
-	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD7C0C388F3
+	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:34:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0F7DF21906
-	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:31:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569609074;
-	bh=NfneATTrHWtuTT4osw6+EBrQHF3tYHnn4S5I7u1q/+M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=tqJfwmYS3Q1JafwqOVz4pstNCDovlb9wPVToK5ARuHQR+XOCezWCGMCxA5GN1ERIY
-	 PWSgOJsisx96trksAfZ74xLS/xcHCScb5SZuQnec+fqqOEuxageY2nWnN6ZAp10nCJ
-	 KvPbdrKW1EmyD2s+30GQLD73cVftesyvBW0EXSvQ=
+	by mail.kernel.org (Postfix) with ESMTP id 8B0EE217D7
+	for <linux-media@archiver.kernel.org>; Fri, 27 Sep 2019 18:34:49 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="M0CbMbzv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727205AbfI0SbK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 27 Sep 2019 14:31:10 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:36966 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726321AbfI0SbJ (ORCPT
+        id S1728265AbfI0Ses (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 27 Sep 2019 14:34:48 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:47060 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728244AbfI0Ser (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 27 Sep 2019 14:31:09 -0400
-Received: by mail-oi1-f193.google.com with SMTP id i16so6030136oie.4;
-        Fri, 27 Sep 2019 11:31:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6Dwlt6dTGHs+BuziwsOZqU0wxeCKDgQXfVKRH/TdFRQ=;
-        b=EELc4+q1M89Og+XVareDgv88cyvFuwhgs8GyMGn5d0lse99qFqUogsdmTp8afKr8VN
-         9tl8yBh+ezHejThi9N83SLIcroDqFwsvvG0UAuxibFvdqybdQtVe+UAiGTA9V7ls0zuW
-         W7Gn55YJ6WHPitMvzg8sYiQq0sdAqygcf8nGfdSxIdZI1H9j7zwcD0M2pDWq2+OgNnOv
-         n88zDVgyxp8HDguGCVz4Wk++rs0YSOMj/sfUNNi4ZvqY/1tycJByUU8tpPhDGGt/ZU42
-         5ed+PiS7aJLWoGt9YME8GA6YgcUBIG02LsvbL/pRYKuzkagrZQjzRYb0ef2HV8b8iuij
-         P1Vg==
-X-Gm-Message-State: APjAAAWG1N/GblYndroO4CSi/G2OKX/8gaGzXAJwbof0Hzm+3Eqb3nOx
-        WSP+Vd9rIS/bG/oIlXlZsg==
-X-Google-Smtp-Source: APXvYqxfTPOjoXw0r3K9xDZ396c+xBKOc4sDJsePcujHV58jUBs+kpOM2YeJOMmqzYt+9QKgSrRfXg==
-X-Received: by 2002:a05:6808:9b6:: with SMTP id e22mr7980788oig.51.1569609068628;
-        Fri, 27 Sep 2019 11:31:08 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 21sm1806756oin.26.2019.09.27.11.31.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2019 11:31:08 -0700 (PDT)
-Date:   Fri, 27 Sep 2019 13:31:07 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Xia Jiang <xia.jiang@mediatek.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rick Chang <rick.chang@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tfiga@chromium.org>, srv_heupstream@mediatek.com,
-        Xia Jiang <xia.jiang@mediatek.com>
-Subject: Re: [PATCH v3 1/5] media: dt-bindings: Add jpeg enc device tree node
- document
-Message-ID: <20190927183107.GA16235@bogus>
-References: <20190924074303.22713-1-xia.jiang@mediatek.com>
- <20190924074303.22713-2-xia.jiang@mediatek.com>
+        Fri, 27 Sep 2019 14:34:47 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8RIYkjQ066331;
+        Fri, 27 Sep 2019 13:34:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1569609286;
+        bh=U+40G8RP769IGoztZIVs1oL82vYi9RvZaUh9qX9X+H0=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=M0CbMbzvwtgRgyjR3foFBNe0fYMk5XvciZwjyB7IbRHHrmGIXRHX5qB7z8YVtnJJE
+         YgsPfY3NfD3N45CGQnfKYouK5Tt1MjTdHVSVj7R1yiM84qrv1IIXqMsuHkcBWpBSSb
+         IQ4unBQEip7hMFEg/3WhmRvxKn4pnHmXEuUevH2E=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8RIYkin054053
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 27 Sep 2019 13:34:46 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 27
+ Sep 2019 13:34:37 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 27 Sep 2019 13:34:45 -0500
+Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8RIYgbr073031;
+        Fri, 27 Sep 2019 13:34:45 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Benoit Parrot <bparrot@ti.com>
+Subject: [Patch 04/16] media: ti-vpe: Add support for SEQ_BT
+Date:   Fri, 27 Sep 2019 13:36:38 -0500
+Message-ID: <20190927183650.31345-5-bparrot@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190927183650.31345-1-bparrot@ti.com>
+References: <20190927183650.31345-1-bparrot@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190924074303.22713-2-xia.jiang@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 24 Sep 2019 15:43:00 +0800, Xia Jiang wrote:
-> Add jpeg enc device tree node document.
-> 
-> Signed-off-by: Xia Jiang <xia.jiang@mediatek.com>
-> ---
-> v3: change compatible to SoC specific compatible
-> 
-> v2: no changes
-> ---
->  .../bindings/media/mediatek-jpeg-encoder.txt  | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.txt
-> 
+From: Nikhil Devshatwar <nikhil.nd@ti.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+SEQ_BT indicates the buffer for bottom field needs to be processed
+before the top field.
+
+Simplify the field selection logic to support SEQ_BT as well.
+
+Modify the interlace flags to include any of alternate, SEQ_TB, SEQ_BT.
+Update other format error checking to consider SEQ_BT.
+Replace SEQ_TB with SEQ_XX wherever applicable.
+
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+---
+ drivers/media/platform/ti-vpe/vpe.c | 73 ++++++++++++++++++-----------
+ 1 file changed, 46 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+index 0e9cb0319a92..5d0ec5f7ca25 100644
+--- a/drivers/media/platform/ti-vpe/vpe.c
++++ b/drivers/media/platform/ti-vpe/vpe.c
+@@ -328,9 +328,14 @@ struct vpe_q_data {
+ #define	Q_DATA_MODE_TILED		BIT(1)
+ #define	Q_DATA_INTERLACED_ALTERNATE	BIT(2)
+ #define	Q_DATA_INTERLACED_SEQ_TB	BIT(3)
++#define	Q_DATA_INTERLACED_SEQ_BT	BIT(4)
++
++#define Q_IS_SEQ_XX		(Q_DATA_INTERLACED_SEQ_TB | \
++				Q_DATA_INTERLACED_SEQ_BT)
+ 
+ #define Q_IS_INTERLACED		(Q_DATA_INTERLACED_ALTERNATE | \
+-				Q_DATA_INTERLACED_SEQ_TB)
++				Q_DATA_INTERLACED_SEQ_TB | \
++				Q_DATA_INTERLACED_SEQ_BT)
+ 
+ enum {
+ 	Q_DATA_SRC = 0,
+@@ -1105,24 +1110,31 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
+ 		dma_addr += offset;
+ 		stride = q_data->bytesperline[VPE_LUMA];
+ 
+-		if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB) {
+-			/*
+-			 * Use top or bottom field from same vb alternately
+-			 * f,f-1,f-2 = TBT when seq is even
+-			 * f,f-1,f-2 = BTB when seq is odd
+-			 */
+-			field = (p_data->vb_index + (ctx->sequence % 2)) % 2;
++		/*
++		 * field used in VPDMA desc  = 0 (top) / 1 (bottom)
++		 * Use top or bottom field from same vb alternately
++		 * For each de-interlacing operation, f,f-1,f-2 should be one
++		 * of TBT or BTB
++		 */
++		if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB ||
++		    q_data->flags & Q_DATA_INTERLACED_SEQ_BT) {
++			/* Select initial value based on format */
++			if (q_data->flags & Q_DATA_INTERLACED_SEQ_BT)
++				field = 1;
++			else
++				field = 0;
++
++			/* Toggle for each vb_index and each operation */
++			field = (field + p_data->vb_index + ctx->sequence) % 2;
+ 
+ 			if (field) {
+-				/*
+-				 * bottom field of a SEQ_TB buffer
+-				 * Skip the top field data by
+-				 */
+ 				int height = q_data->height / 2;
+ 				int bpp = fmt->fourcc == V4L2_PIX_FMT_NV12 ?
+ 						1 : (vpdma_fmt->depth >> 3);
++
+ 				if (plane)
+ 					height /= 2;
++
+ 				dma_addr += q_data->width * height * bpp;
+ 			}
+ 		}
+@@ -1177,12 +1189,14 @@ static void device_run(void *priv)
+ 	struct vpe_q_data *d_q_data = &ctx->q_data[Q_DATA_DST];
+ 	struct vpe_q_data *s_q_data = &ctx->q_data[Q_DATA_SRC];
+ 
+-	if (ctx->deinterlacing && s_q_data->flags & Q_DATA_INTERLACED_SEQ_TB &&
+-		ctx->sequence % 2 == 0) {
+-		/* When using SEQ_TB buffers, When using it first time,
+-		 * No need to remove the buffer as the next field is present
+-		 * in the same buffer. (so that job_ready won't fail)
+-		 * It will be removed when using bottom field
++	if (ctx->deinterlacing && s_q_data->flags & Q_IS_SEQ_XX &&
++	    ctx->sequence % 2 == 0) {
++		/* When using SEQ_XX type buffers, each buffer has two fields
++		 * each buffer has two fields (top & bottom)
++		 * Removing one buffer is actually getting two fields
++		 * Alternate between two operations:-
++		 * Even : consume one field but DO NOT REMOVE from queue
++		 * Odd : consume other field and REMOVE from queue
+ 		 */
+ 		ctx->src_vbs[0] = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
+ 		WARN_ON(ctx->src_vbs[0] == NULL);
+@@ -1573,8 +1587,10 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (pix->field != V4L2_FIELD_NONE && pix->field != V4L2_FIELD_ALTERNATE
+-			&& pix->field != V4L2_FIELD_SEQ_TB)
++	if (pix->field != V4L2_FIELD_NONE &&
++	    pix->field != V4L2_FIELD_ALTERNATE &&
++	    pix->field != V4L2_FIELD_SEQ_TB &&
++	    pix->field != V4L2_FIELD_SEQ_BT)
+ 		pix->field = V4L2_FIELD_NONE;
+ 
+ 	depth = fmt->vpdma_fmt[VPE_LUMA]->depth;
+@@ -1626,9 +1642,9 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 
+ 	/*
+ 	 * For the actual image parameters, we need to consider the field
+-	 * height of the image for SEQ_TB buffers.
++	 * height of the image for SEQ_XX buffers.
+ 	 */
+-	if (pix->field == V4L2_FIELD_SEQ_TB)
++	if (pix->field == V4L2_FIELD_SEQ_TB || pix->field == V4L2_FIELD_SEQ_BT)
+ 		height = pix->height / 2;
+ 	else
+ 		height = pix->height;
+@@ -1734,11 +1750,13 @@ static int __vpe_s_fmt(struct vpe_ctx *ctx, struct v4l2_format *f)
+ 		q_data->flags |= Q_DATA_INTERLACED_ALTERNATE;
+ 	else if (q_data->field == V4L2_FIELD_SEQ_TB)
+ 		q_data->flags |= Q_DATA_INTERLACED_SEQ_TB;
++	else if (q_data->field == V4L2_FIELD_SEQ_BT)
++		q_data->flags |= Q_DATA_INTERLACED_SEQ_BT;
+ 	else
+ 		q_data->flags &= ~Q_IS_INTERLACED;
+ 
+-	/* the crop height is halved for the case of SEQ_TB buffers */
+-	if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB)
++	/* the crop height is halved for the case of SEQ_XX buffers */
++	if (q_data->flags & Q_IS_SEQ_XX)
+ 		q_data->c_rect.height /= 2;
+ 
+ 	vpe_dbg(ctx->dev, "Setting format for type %d, wxh: %dx%d, fmt: %d bpl_y %d",
+@@ -1811,10 +1829,10 @@ static int __vpe_try_selection(struct vpe_ctx *ctx, struct v4l2_selection *s)
+ 	}
+ 
+ 	/*
+-	 * For SEQ_TB buffers, crop height should be less than the height of
++	 * For SEQ_XX buffers, crop height should be less than the height of
+ 	 * the field height, not the buffer height
+ 	 */
+-	if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB)
++	if (q_data->flags & Q_IS_SEQ_XX)
+ 		height = q_data->height / 2;
+ 	else
+ 		height = q_data->height;
+@@ -2031,7 +2049,8 @@ static int vpe_buf_prepare(struct vb2_buffer *vb)
+ 		} else {
+ 			if (vbuf->field != V4L2_FIELD_TOP &&
+ 			    vbuf->field != V4L2_FIELD_BOTTOM &&
+-			    vbuf->field != V4L2_FIELD_SEQ_TB)
++			    vbuf->field != V4L2_FIELD_SEQ_TB &&
++			    vbuf->field != V4L2_FIELD_SEQ_BT)
+ 				return -EINVAL;
+ 		}
+ 	}
+-- 
+2.17.1
+
