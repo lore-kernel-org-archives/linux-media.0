@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1B3DC4360C
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDF68C388F3
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B220321D7D
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EE3221D7D
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730355AbfI3JjP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1730568AbfI3JjP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Mon, 30 Sep 2019 05:39:15 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:60731 "EHLO
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:43167 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730564AbfI3JjO (ORCPT
+        with ESMTP id S1729870AbfI3JjO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 30 Sep 2019 05:39:14 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1iEs96-0002Rd-7c; Mon, 30 Sep 2019 11:39:08 +0200
+        id 1iEs92-0002RT-7t; Mon, 30 Sep 2019 11:39:04 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1iEs90-0005un-Md; Mon, 30 Sep 2019 11:39:02 +0200
+        id 1iEs90-0005uE-Ed; Mon, 30 Sep 2019 11:39:02 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
         linux-media@vger.kernel.org
-Subject: [PATCH v11 14/15] media: tvp5150: add support to limit sdtv standards
-Date:   Mon, 30 Sep 2019 11:38:59 +0200
-Message-Id: <20190930093900.16524-15-m.felsch@pengutronix.de>
+Subject: [PATCH v11 04/15] media: v4l2-fwnode: add initial connector parsing support
+Date:   Mon, 30 Sep 2019 11:38:49 +0200
+Message-Id: <20190930093900.16524-5-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190930093900.16524-1-m.felsch@pengutronix.de>
 References: <20190930093900.16524-1-m.felsch@pengutronix.de>
@@ -51,203 +51,253 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The tvp5150 accepts NTSC(M,J,4.43), PAL (B,D,G,H,I,M,N) and SECAM video
-data and is able to auto-detect the input signal. The auto-detection
-does not work if the connector does not receive an input signal and the
-tvp5150 might not be configured correctly. This misconfiguration leads
-into wrong decoded video streams if the tvp5150 gets powered on before
-the video signal is present.
-
-Limit the supported sdtv standards according to the actual selected
-connector to avoid a misconfiguration.
+The patch adds the initial connector parsing code, so we can move from a
+driver specific parsing code to a generic one. Currently only the
+generic fields and the analog-connector specific fields are parsed. Parsing
+the other connector specific fields can be added by a simple callbacks.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
 [1] https://patchwork.kernel.org/cover/10794703/
 
-v11:
-- address 80 character warnings by:
-  - use struct v4l2_fwnode_connector *v4lc
-  - add truct v4l2_fwnode_connector_analog *v4lca
+v10:
+- drop V4L2_CONN_HDMI support
+- adapt pr_err msg to reflect new state (-> connector is unkown)
+
+v9:
+- Fix leading semicolon found by kbuild semicolon.cocci
 
 v8:
-- adapt commit message
-- fix rebasing issue
-- apdapt to new v4l2_fwnode_connector_analog naming
-- fix cur_connector update during tvp5150_link_setup()
-  -> Only update if we have of-connectors.
-- fix supported_stds detection during tvp5150_s_std()
-  -> use connectors_num to detect of-connectors presence
+- V4L2_CON_* -> V4L2_CONN_*
+- tvnorms -> sdtv-standards
+- adapt to new v4l2_fwnode_connector_analog member
+- return error in case of V4L2_CONN_HDMI
+
+v7:
+@Jacopo: I dropped your r b tag becuase of the amount of changes I
+made..
+
+- drop unnecessary comments
+- fix commet style
+- s/v4l2_fwnode_connector_conv.name/v4l2_fwnode_connector_conv.compatible/
+- make label size variable and drop V4L2_CONNECTOR_MAX_LABEL usage
+- do not assign a default label in case of no label was specified
+- remove useless /* fall through */ comments
+- add support for N connector links
+- rename local variables to be more meaningful
+- adjust kernedoc
+- add v4l2_fwnode_connector_free()
+- improve error handling (use different error values)
+- make use of pr_warn_once()
+
+v6:
+- use unsigned count var
+- fix comment and style issues
+- place '/* fall through */' to correct places
+- fix error handling and cleanup by releasing fwnode
+- drop vga and dvi parsing support as those connectors are rarely used
+  these days
 
 v5:
-- probe() initialize supported tv-norms according the given connectors
-  if they are available.
-- check if media-controller is used. Don't limit the norm if it isn't
-  used.
-- add more logic to be smarter during connector changing so it is
-  intuitiver for the user space.
+- s/strlcpy/strscpy/
 
 v2-v4:
 - nothing since the patch was squashed from series [1] into this
   series.
 ---
- drivers/media/i2c/tvp5150.c | 77 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 75 insertions(+), 2 deletions(-)
+ drivers/media/v4l2-core/v4l2-fwnode.c | 129 ++++++++++++++++++++++++++
+ include/media/v4l2-fwnode.h           |  38 ++++++++
+ 2 files changed, 167 insertions(+)
 
-diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
-index 4afe2093b950..94eabfadf9fa 100644
---- a/drivers/media/i2c/tvp5150.c
-+++ b/drivers/media/i2c/tvp5150.c
-@@ -32,6 +32,13 @@
- #define TVP5150_MBUS_FMT	MEDIA_BUS_FMT_UYVY8_2X8
- #define TVP5150_FIELD		V4L2_FIELD_ALTERNATE
- #define TVP5150_COLORSPACE	V4L2_COLORSPACE_SMPTE170M
-+#define TVP5150_STD_MASK	(V4L2_STD_NTSC     | \
-+				 V4L2_STD_NTSC_443 | \
-+				 V4L2_STD_PAL      | \
-+				 V4L2_STD_PAL_M    | \
-+				 V4L2_STD_PAL_N    | \
-+				 V4L2_STD_PAL_Nc   | \
-+				 V4L2_STD_SECAM)
- 
- #define TVP5150_MAX_CONNECTORS	3 /* Check dt-bindings for more information */
- 
-@@ -64,6 +71,7 @@ struct tvp5150 {
- 
- 	struct media_pad pads[TVP5150_NUM_PADS];
- 	struct tvp5150_connector connectors[TVP5150_MAX_CONNECTORS];
-+	struct tvp5150_connector *cur_connector;
- 	unsigned int connectors_num;
- 
- 	struct v4l2_ctrl_handler hdl;
-@@ -783,17 +791,33 @@ static int tvp5150_g_std(struct v4l2_subdev *sd, v4l2_std_id *std)
- static int tvp5150_s_std(struct v4l2_subdev *sd, v4l2_std_id std)
- {
- 	struct tvp5150 *decoder = to_tvp5150(sd);
-+	struct tvp5150_connector *cur_con = decoder->cur_connector;
-+	v4l2_std_id supported_stds;
- 
- 	if (decoder->norm == std)
- 		return 0;
- 
-+	/* In case of no of-connectors are available no limitations are made */
-+	if (!decoder->connectors_num)
-+		supported_stds = V4L2_STD_ALL;
-+	else
-+		supported_stds = cur_con->base.connector.analog.sdtv_stds;
-+
-+	/*
-+	 * Check if requested std or group of std's is/are supported by the
-+	 * connector.
-+	 */
-+	if ((supported_stds & std) == 0)
-+		return -EINVAL;
-+
- 	/* Change cropping height limits */
- 	if (std & V4L2_STD_525_60)
- 		decoder->rect.height = TVP5150_V_MAX_525_60;
- 	else
- 		decoder->rect.height = TVP5150_V_MAX_OTHERS;
- 
--	decoder->norm = std;
-+	/* Set only the specific supported std in case of group of std's. */
-+	decoder->norm = supported_stds & std;
- 
- 	return tvp5150_set_std(sd, std);
+diff --git a/drivers/media/v4l2-core/v4l2-fwnode.c b/drivers/media/v4l2-core/v4l2-fwnode.c
+index 3bd1888787eb..0bfa7cbf78df 100644
+--- a/drivers/media/v4l2-core/v4l2-fwnode.c
++++ b/drivers/media/v4l2-core/v4l2-fwnode.c
+@@ -595,6 +595,135 @@ void v4l2_fwnode_put_link(struct v4l2_fwnode_link *link)
  }
-@@ -1333,6 +1357,10 @@ static int tvp5150_link_setup(struct media_entity *entity,
- 			  TVP5150_BLACK_SCREEN, 0);
+ EXPORT_SYMBOL_GPL(v4l2_fwnode_put_link);
  
- 	if (flags & MEDIA_LNK_FL_ENABLED) {
-+		u32 new_norm;
-+		struct v4l2_fwnode_connector_analog *v4lca =
-+			&decoder->cur_connector->base.connector.analog;
++static const struct v4l2_fwnode_connector_conv {
++	enum v4l2_connector_type type;
++	const char *compatible;
++} connectors[] = {
++	{
++		.type = V4L2_CONN_COMPOSITE,
++		.compatible = "composite-video-connector",
++	}, {
++		.type = V4L2_CONN_SVIDEO,
++		.compatible = "svideo-connector",
++	},
++};
 +
- 		/*
- 		 * S-Video connector is conneted to both ports AIP1A and AIP1B.
- 		 * Both links must be enabled in one-shot regardless which link
-@@ -1344,6 +1372,27 @@ static int tvp5150_link_setup(struct media_entity *entity,
- 			if (err)
- 				return err;
- 		}
-+
-+		if (!decoder->connectors_num)
-+			return 0;
-+
-+		/* Update the current connector */
-+		decoder->cur_connector =
-+			container_of(remote, struct tvp5150_connector, pad);
-+
-+		/*
-+		 * Do nothing if the new connector supports the same tv-norms as
-+		 * the old one.
-+		 */
-+		new_norm = decoder->norm & v4lca->sdtv_stds;
-+		if (decoder->norm == new_norm)
-+			return 0;
-+
-+		/*
-+		 * Fallback to the new connector tv-norms if we can't find any
-+		 * common between the current tv-norm and the new one.
-+		 */
-+		tvp5150_s_std(sd, new_norm ? new_norm : v4lca->sdtv_stds);
- 	}
- 
- 	return 0;
-@@ -1563,6 +1612,8 @@ static int tvp5150_registered(struct v4l2_subdev *sd)
- 				TVP5150_COMPOSITE1;
- 
- 			tvp5150_selmux(sd);
-+			decoder->cur_connector = &decoder->connectors[i];
-+			tvp5150_s_std(sd, v4lc->connector.analog.sdtv_stds);
- 		}
- 	}
- 
-@@ -1852,6 +1903,13 @@ tvp5150_add_connector(struct tvp5150 *decoder, struct device_node *np,
- 		goto err;
- 	}
- 
-+	if (!(vc->connector.analog.sdtv_stds & TVP5150_STD_MASK)) {
-+		dev_err(dev, "Unsupported tv-norm on connector %s\n",
-+			remote_np->name);
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+
- 	c->ent.flags = MEDIA_ENT_FL_CONNECTOR;
- 	c->ent.name = vc->label;
- 	c->ent.name = kasprintf(GFP_KERNEL, "%s %s", remote_np->name,
-@@ -1949,6 +2007,7 @@ static int tvp5150_probe(struct i2c_client *c)
- 	struct v4l2_subdev *sd;
- 	struct device_node *np = c->dev.of_node;
- 	struct regmap *map;
++static enum v4l2_connector_type
++v4l2_fwnode_string_to_connector_type(const char *con_str)
++{
 +	unsigned int i;
- 	int res;
- 
- 	/* Check if the adapter supports the needed features */
-@@ -1993,7 +2052,21 @@ static int tvp5150_probe(struct i2c_client *c)
- 	if (res < 0)
- 		return res;
- 
--	core->norm = V4L2_STD_ALL;	/* Default is autodetect */
-+	/*
-+	 * Iterate over all available connectors in case they are supported and
-+	 * successfully parsed. Fallback to default autodetect in case they
-+	 * aren't supported.
-+	 */
-+	for (i = 0; i < core->connectors_num; i++) {
-+		struct v4l2_fwnode_connector *vc;
 +
-+		vc = &core->connectors[i].base;
-+		core->norm |= vc->connector.analog.sdtv_stds;
++	for (i = 0; i < ARRAY_SIZE(connectors); i++)
++		if (!strcmp(con_str, connectors[i].compatible))
++			return connectors[i].type;
++
++	return V4L2_CONN_UNKNOWN;
++}
++
++static int
++v4l2_fwnode_connector_parse_analog(struct fwnode_handle *fwnode,
++				   struct v4l2_fwnode_connector *vc)
++{
++	u32 stds;
++	int ret;
++
++	ret = fwnode_property_read_u32(fwnode, "sdtv-standards", &stds);
++
++	/* The property is optional. */
++	vc->connector.analog.sdtv_stds = ret ? V4L2_STD_ALL : stds;
++
++	return 0;
++}
++
++void v4l2_fwnode_connector_free(struct v4l2_fwnode_connector *connector)
++{
++	unsigned int i;
++
++	if (IS_ERR_OR_NULL(connector))
++		return;
++
++	for (i = 0; i < connector->nr_of_links; i++)
++		v4l2_fwnode_put_link(&connector->links[i]);
++	kfree(connector->links);
++}
++EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_free);
++
++int v4l2_fwnode_connector_alloc_parse(struct fwnode_handle *fwnode,
++				      struct v4l2_fwnode_connector *connector)
++{
++	struct fwnode_handle *remote_pp, *remote_ep;
++	const char *type_name;
++	unsigned int i = 0, ep_num = 0;
++	int err;
++
++	memset(connector, 0, sizeof(*connector));
++
++	remote_pp = fwnode_graph_get_remote_port_parent(fwnode);
++	if (!remote_pp)
++		return -ENOLINK;
++
++	/* Parse all common properties first. */
++	fwnode_graph_for_each_endpoint(remote_pp, remote_ep)
++		ep_num++;
++
++	connector->nr_of_links = ep_num;
++	connector->links = kmalloc_array(ep_num, sizeof(*connector->links),
++					 GFP_KERNEL);
++	if (!connector->links) {
++		err = -ENOMEM;
++		goto err_put_fwnode;
 +	}
 +
-+	if (!core->connectors_num)
-+		core->norm = V4L2_STD_ALL;
++	fwnode_graph_for_each_endpoint(remote_pp, remote_ep) {
++		err = v4l2_fwnode_parse_link(remote_ep, &connector->links[i]);
++		if (err) {
++			fwnode_handle_put(remote_ep);
++			goto err_free_links;
++		}
++		i++;
++	}
 +
- 	core->detected_norm = V4L2_STD_UNKNOWN;
- 	core->input = TVP5150_COMPOSITE1;
- 	core->enable = true;
++	/*
++	 * Links reference counting guarantees access -> no duplication needed
++	 */
++	fwnode_property_read_string(remote_pp, "label", &connector->label);
++
++	/* The connector-type is stored within the compatible string. */
++	err = fwnode_property_read_string(remote_pp, "compatible", &type_name);
++	if (err) {
++		err = -EINVAL;
++		goto err_free_links;
++	}
++	connector->type = v4l2_fwnode_string_to_connector_type(type_name);
++
++	/* Now parse the connector specific properties. */
++	switch (connector->type) {
++	case V4L2_CONN_COMPOSITE:
++	case V4L2_CONN_SVIDEO:
++		err = v4l2_fwnode_connector_parse_analog(remote_pp, connector);
++		break;
++	case V4L2_CONN_UNKNOWN:
++	default:
++		pr_err("Unknown connector type\n");
++		err = -EINVAL;
++		goto err_free_links;
++	}
++
++	fwnode_handle_put(remote_pp);
++
++	return err;
++
++err_free_links:
++	for (i = 0; i < ep_num; i++)
++		v4l2_fwnode_put_link(&connector->links[i]);
++	kfree(connector->links);
++err_put_fwnode:
++	fwnode_handle_put(remote_pp);
++
++	return err;
++}
++EXPORT_SYMBOL_GPL(v4l2_fwnode_connector_alloc_parse);
++
+ static int
+ v4l2_async_notifier_fwnode_parse_endpoint(struct device *dev,
+ 					  struct v4l2_async_notifier *notifier,
+diff --git a/include/media/v4l2-fwnode.h b/include/media/v4l2-fwnode.h
+index 65da646b579e..800302aa84d8 100644
+--- a/include/media/v4l2-fwnode.h
++++ b/include/media/v4l2-fwnode.h
+@@ -276,6 +276,44 @@ int v4l2_fwnode_parse_link(struct fwnode_handle *fwnode,
+  */
+ void v4l2_fwnode_put_link(struct v4l2_fwnode_link *link);
+ 
++/**
++ * v4l2_fwnode_connector_free() - free the V4L2 connector acquired by
++ * v4l2_fwnode_parse_connector()
++ * @connector: the V4L2 connector the resources of which are to be released
++ *
++ * Drop references to the connection link partners and free the memory allocated
++ * by v4l2_fwnode_parse_connector() call.
++ *
++ * It is safe to call this function with NULL argument or on a V4L2 connector
++ * the parsing of which failed.
++ */
++void v4l2_fwnode_connector_free(struct v4l2_fwnode_connector *connector);
++
++/**
++ * v4l2_fwnode_parse_connector() - parse the connector on endpoint
++ * @fwnode: pointer to the endpoint's fwnode handle where the connector is
++ *          connected to
++ * @connector: pointer to the V4L2 fwnode connector data structure
++ *
++ * Fill the connector data structure with the connector type, label, all found
++ * links between the host and the connector as well as connector specific data.
++ * Since the label is optional it can be %NULL if no one was found.
++ *
++ * A reference is taken to both the connector and the connector destination
++ * where the connector belongs to. This must be dropped when no longer needed.
++ * Also the memory it has allocated to store the variable size data must be
++ * freed. Both dropping the references and freeing the memory is done by
++ * v4l2_fwnode_connector_free().
++ *
++ * Return:
++ * * %0 on success or a negative error code on failure:
++ * * %-ENOMEM if memory allocation failed
++ * * %-ENOLINK if the connector can't be found
++ * * %-EINVAL on parsing failure
++ */
++int v4l2_fwnode_connector_alloc_parse(struct fwnode_handle *fwnode,
++				      struct v4l2_fwnode_connector *connector);
++
+ /**
+  * typedef parse_endpoint_func - Driver's callback function to be called on
+  *	each V4L2 fwnode endpoint.
 -- 
 2.20.1
 
