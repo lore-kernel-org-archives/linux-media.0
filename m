@@ -7,36 +7,37 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 580B0C47404
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9138C4360C
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3003D2196E
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA8F721D7E
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730593AbfI3JjW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 05:39:22 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:48611 "EHLO
+        id S1730594AbfI3JjZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 05:39:25 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:54385 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730569AbfI3JjO (ORCPT
+        with ESMTP id S1730556AbfI3JjO (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 30 Sep 2019 05:39:14 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1iEs96-0002Rc-9T; Mon, 30 Sep 2019 11:39:08 +0200
+        id 1iEs92-0002RZ-7x; Mon, 30 Sep 2019 11:39:04 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1iEs90-0005uj-LF; Mon, 30 Sep 2019 11:39:02 +0200
+        id 1iEs90-0005ua-Ie; Mon, 30 Sep 2019 11:39:02 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
-        linux-media@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v11 13/15] media: dt-bindings: tvp5150: add optional sdtv standards documentation
-Date:   Mon, 30 Sep 2019 11:38:58 +0200
-Message-Id: <20190930093900.16524-14-m.felsch@pengutronix.de>
+        linux-media@vger.kernel.org,
+        Michael Tretter <m.tretter@pengutronix.de>
+Subject: [PATCH v11 10/15] media: tvp5150: initialize subdev before parsing device tree
+Date:   Mon, 30 Sep 2019 11:38:55 +0200
+Message-Id: <20190930093900.16524-11-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190930093900.16524-1-m.felsch@pengutronix.de>
 References: <20190930093900.16524-1-m.felsch@pengutronix.de>
@@ -51,55 +52,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the optional binding to limit the possible sdtv standards on the
-input connectors.
+From: Michael Tretter <m.tretter@pengutronix.de>
 
+There are several debug prints in the tvp5150_parse_dt() function, which
+do not print the prefix, because the v4l2_subdev is not initialized, yet.
+
+Initialize the v4l2_subdev before parsing the device tree to fix the
+debug messages.
+
+Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-Reviewed-by: Rob Herring <robh@kernel.org>
-
-v8:
-- adapt to new sdtv-standards
-- adapt commit message
-- fix missing include within example code
 ---
- .../devicetree/bindings/media/i2c/tvp5150.txt          | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/media/i2c/tvp5150.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-index cc98b38c7e73..f876b79c335f 100644
---- a/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/tvp5150.txt
-@@ -49,13 +49,22 @@ Required Endpoint Properties for parallel synchronization on output port:
- Note: Do not specify any of these properties if you want to use the embedded
-       BT.656 synchronization.
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index 69697c00dbd7..dda9f0a2995f 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -1959,6 +1959,9 @@ static int tvp5150_probe(struct i2c_client *c)
  
-+Optional Connector Properties:
-+==============================
-+
-+- sdtv-standards: Set the possible signals to which the hardware tries to lock
-+                  instead of using the autodetection mechnism. Please look at
-+                  [1] for more information.
-+
- [1] Documentation/devicetree/bindings/display/connector/analog-tv-connector.txt.
+ 	core->regmap = map;
+ 	sd = &core->sd;
++	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
++	sd->internal_ops = &tvp5150_internal_ops;
++	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
  
- Example - three input sources:
-+#include <dt-bindings/display/sdtv-standards.h>
+ 	if (IS_ENABLED(CONFIG_OF) && np) {
+ 		res = tvp5150_parse_dt(core, np);
+@@ -1971,10 +1974,6 @@ static int tvp5150_probe(struct i2c_client *c)
+ 		core->mbus_type = V4L2_MBUS_BT656;
+ 	}
  
- comp_connector_0 {
- 	compatible = "composite-video-connector";
- 	label = "Composite0";
-+	sdtv-standards = <TVNORM_PAL_M>; /* limit to pal-m signals */
- 
- 	port {
- 		composite0_to_tvp5150: endpoint {
-@@ -67,6 +76,7 @@ comp_connector_0 {
- comp_connector_1 {
- 	compatible = "composite-video-connector";
- 	label = "Composite1";
-+	sdtv-standards = <TVNORM_NTSC_M>; /* limit to ntsc-m signals */
- 
- 	port {
- 		composite1_to_tvp5150: endpoint {
+-	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
+-	sd->internal_ops = &tvp5150_internal_ops;
+-	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+-
+ 	res = tvp5150_mc_init(core);
+ 	if (res)
+ 		return res;
 -- 
 2.20.1
 
