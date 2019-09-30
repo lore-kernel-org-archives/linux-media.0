@@ -7,36 +7,36 @@ X-Spam-Status: No, score=-10.0 required=3.0
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 183C4C4360C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BAB72C388F3
 	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E211821D71
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A6F321D71
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730585AbfI3JjS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 05:39:18 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:50137 "EHLO
+        id S1730584AbfI3JjR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 05:39:17 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:33645 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730562AbfI3JjP (ORCPT
+        with ESMTP id S1730571AbfI3JjP (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Mon, 30 Sep 2019 05:39:15 -0400
 Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1iEs92-0002RR-7t; Mon, 30 Sep 2019 11:39:04 +0200
+        id 1iEs96-0002Ra-7m; Mon, 30 Sep 2019 11:39:08 +0200
 Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
         (envelope-from <mfe@pengutronix.de>)
-        id 1iEs90-0005u7-DC; Mon, 30 Sep 2019 11:39:02 +0200
+        id 1iEs90-0005ud-Jg; Mon, 30 Sep 2019 11:39:02 +0200
 From:   Marco Felsch <m.felsch@pengutronix.de>
 To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
         hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
         robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
 Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
         linux-media@vger.kernel.org
-Subject: [PATCH v11 02/15] media: v4l: link dt-bindings and uapi
-Date:   Mon, 30 Sep 2019 11:38:47 +0200
-Message-Id: <20190930093900.16524-3-m.felsch@pengutronix.de>
+Subject: [PATCH v11 11/15] media: tvp5150: add s_power callback
+Date:   Mon, 30 Sep 2019 11:38:56 +0200
+Message-Id: <20190930093900.16524-12-m.felsch@pengutronix.de>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190930093900.16524-1-m.felsch@pengutronix.de>
 References: <20190930093900.16524-1-m.felsch@pengutronix.de>
@@ -51,38 +51,72 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Since we expose the definition to the dt-bindings we need to keep those
-definitions in sync. To address this the patch adds a simple cross
-reference to the dt-bindings.
+Don't en-/disable the interrupts during s_stream because someone can
+disable the stream but wants to get informed if the stream is locked
+again. So keep the interrupts enabled the whole time the pipeline is
+opened.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
-Changelog:
+ drivers/media/i2c/tvp5150.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-v11:
-- new patch since the split https://patchwork.linuxtv.org/patch/58491/
-
-v2-v10:
-- nothing
----
- include/uapi/linux/videodev2.h | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 530638dffd93..bc7acade02a0 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1208,6 +1208,10 @@ struct v4l2_selection {
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index dda9f0a2995f..4afe2093b950 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -1356,11 +1356,26 @@ static const struct media_entity_operations tvp5150_sd_media_ops = {
+ /****************************************************************************
+ 			I2C Command
+  ****************************************************************************/
++static int tvp5150_s_power(struct  v4l2_subdev *sd, int on)
++{
++	struct tvp5150 *decoder = to_tvp5150(sd);
++	unsigned int val = 0;
++
++	if (on)
++		val = TVP5150_INT_A_LOCK;
++
++	if (decoder->irq)
++		/* Enable / Disable lock interrupt */
++		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
++				   TVP5150_INT_A_LOCK, val);
++
++	return 0;
++}
  
- typedef __u64 v4l2_std_id;
+ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
+ {
+ 	struct tvp5150 *decoder = to_tvp5150(sd);
+-	unsigned int mask, val = 0, int_val = 0;
++	unsigned int mask, val = 0;
  
-+/*
-+ * Attention: Keep the V4L2_STD_* bit definitions in sync with
-+ * include/dt-bindings/display/sdtv-standards.h SDTV_STD_* bit definitions.
-+ */
- /* one bit for each */
- #define V4L2_STD_PAL_B          ((v4l2_std_id)0x00000001)
- #define V4L2_STD_PAL_B1         ((v4l2_std_id)0x00000002)
+ 	mask = TVP5150_MISC_CTL_YCBCR_OE | TVP5150_MISC_CTL_SYNC_OE |
+ 	       TVP5150_MISC_CTL_CLOCK_OE;
+@@ -1373,15 +1388,10 @@ static int tvp5150_s_stream(struct v4l2_subdev *sd, int enable)
+ 			val = decoder->lock ? decoder->oe : 0;
+ 		else
+ 			val = decoder->oe;
+-		int_val = TVP5150_INT_A_LOCK;
+ 		v4l2_subdev_notify_event(&decoder->sd, &tvp5150_ev_fmt);
+ 	}
+ 
+ 	regmap_update_bits(decoder->regmap, TVP5150_MISC_CTL, mask, val);
+-	if (decoder->irq)
+-		/* Enable / Disable lock interrupt */
+-		regmap_update_bits(decoder->regmap, TVP5150_INT_ENABLE_REG_A,
+-				   TVP5150_INT_A_LOCK, int_val);
+ 
+ 	return 0;
+ }
+@@ -1580,6 +1590,7 @@ static const struct v4l2_subdev_core_ops tvp5150_core_ops = {
+ 	.g_register = tvp5150_g_register,
+ 	.s_register = tvp5150_s_register,
+ #endif
++	.s_power = tvp5150_s_power,
+ };
+ 
+ static const struct v4l2_subdev_tuner_ops tvp5150_tuner_ops = {
 -- 
 2.20.1
 
