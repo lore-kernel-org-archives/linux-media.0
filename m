@@ -7,57 +7,59 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE7C2C35280
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:07:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD29AC388F3
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:07:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C4A2621920
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:07:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 894662190F
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569838040;
-	bh=qNrcMr/8SbxkQYJjYnj/mVx36Bmtf1e3S6sEoTqgqMQ=;
+	s=default; t=1569838041;
+	bh=PeppCgHLwlt7g0XaxiQaOikDA7Ffj7hltJB4xHtjfmI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=udddVKm9xAxTaPEupft7+DbP0dRPVuznonRyF7kL967tLj9EAXCzNMmUlqEVNNv+O
-	 d35eRjJ626maIlgOLGNzX0YB2i8rxzeX7+RgsmW5eXObup9NoAZeuDKaIjZTn3qOR3
-	 9Z19iTO6q6DgOvMKUiXmq2RIuPkX73a4d5EW11u8=
+	b=x/uNap+XtynxDhvBLYe85tSQxlJ7/ESJjb1x1AxtUPrAhEko9V4yaQ1IyRVdUXj8/
+	 jKooN/H2z39YiSZflt61+7p58JJgN1BQXQjH/R93vu2T8hyLqJm2ym6pAREgIvDkBf
+	 qY8iBIrkTgBnfglcSM6YuQSZB3Z/Zg8y/1O5pTYY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730716AbfI3KHQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 06:07:16 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37601 "EHLO
+        id S1730541AbfI3KGr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 06:06:47 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:46255 "EHLO
         mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730487AbfI3KGs (ORCPT
+        with ESMTP id S1726329AbfI3KGr (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Sep 2019 06:06:48 -0400
-Received: by mail-lj1-f196.google.com with SMTP id l21so8803160lje.4;
-        Mon, 30 Sep 2019 03:06:47 -0700 (PDT)
+        Mon, 30 Sep 2019 06:06:47 -0400
+Received: by mail-lj1-f196.google.com with SMTP id d1so8758851ljl.13;
+        Mon, 30 Sep 2019 03:06:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KOQK/iTDEM2OOwuKD12eKM8a+YD1YCYg9jIBY8YMxOA=;
-        b=spHvLnMMnX0VkxN40/72gF9rW+YRioRaS1PVsyszTLHuGLHFMP0IlRIECcWxvyKBMg
-         m+pV4T29WXUMzgfVqChut14+TY/qhDk94XErHxf7Yu3fWzNTCT3Jmib5A/L+ruVLwJ4x
-         DCeXk97GoxI0XaUE4wHJNvGfK46YSeqaOlevWqaJke97brSs39C0/YLY5RhvP2XKsRIx
-         +NRt7Wp9Un1LWwOCYAMuEFmu7dwEpNtHe/kVORYKZ0JZp81QCQzFr/6bHcgWtM1IT9rX
-         Y8+Zseyh3fJ7iY95NtAKmshJ+MrhokWpqTJAgwGP+wPgoeyc/j0xc8eyGeVDKPiiG5ob
-         Xo1w==
-X-Gm-Message-State: APjAAAXTbipKQ3POzu7VA8iucoFQ82X56S1Xxu3xO4oD+o7cNjksO58f
-        hMp5n81a9Zq5J2TYINJ2UnU=
-X-Google-Smtp-Source: APXvYqybt31i8zFAslAiL2G4nrSBLQqDRC8Mselga5NNQP7J6ahsWpWA0p4qWgfrbTNJ6Oo3Yn9TdA==
-X-Received: by 2002:a2e:63da:: with SMTP id s87mr11231250lje.79.1569838006572;
-        Mon, 30 Sep 2019 03:06:46 -0700 (PDT)
+        bh=mdjrew/YOfxvbSjo9g2n1pZ81Dy63rnFiLTfk2eLY1c=;
+        b=GBPDmpH8bl0E5tf48EyQIMns1mab6COK8lk1xX7XluxXYL3Lapc1La1o097b/Hkk0y
+         j3dalXuPBOJaxBD7+oxn9uDNIP9ECXuqMgtruHL7gWbuUn3/Hp69qJ2Z2jl8wUN+FPPu
+         vlLsX5f0NzlswQkNF06IWKWuOmTc8lUjrYeWyiP7Hte4chTr3Ik/jr2vLv1SPpSjLc8V
+         RVvfEtT7K/NB6BninV1LkyBBefa5VaAB+WLCoqzQpBTx7ruh5+fbKBZZDw+WQVcqzSQG
+         OzjL++RsflU2mXaMgz1MeUW6PQv13pKsoROOHR+G6L7ArN4mGo4GiFol5L7qcYlCVe6x
+         wS2w==
+X-Gm-Message-State: APjAAAVrnAm8dfrhnIt/uR7gq/ofn0lVb+qRSZ7iC6qVRu554LSA3oP3
+        lA/IK1NZNhjl6uYQNyisyDg=
+X-Google-Smtp-Source: APXvYqwdYeGQjM5yrogvELofjq2hhb0iAHvPKMpdPG2ZqOG1d19qx5J0xuLYa2Cc422nuy4kqwEWhw==
+X-Received: by 2002:a2e:8054:: with SMTP id p20mr11727512ljg.36.1569838002654;
+        Mon, 30 Sep 2019 03:06:42 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id z72sm3091580ljb.98.2019.09.30.03.06.45
+        by smtp.gmail.com with ESMTPSA id z72sm3091580ljb.98.2019.09.30.03.06.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 03:06:45 -0700 (PDT)
+        Mon, 30 Sep 2019 03:06:41 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Philipp Zabel <p.zabel@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v7 4/8] Documentation: media: Document V4L2_CTRL_TYPE_AREA
-Date:   Mon, 30 Sep 2019 12:06:32 +0200
-Message-Id: <20190930100636.18318-5-ribalda@kernel.org>
+Cc:     Ricardo Ribalda Delgado <ricardo@ribalda.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Ricardo Ribalda Delgado <ricardo@kernel.org>
+Subject: [PATCH v7 1/8] media: v4l2-core: Implement v4l2_ctrl_new_std_compound
+Date:   Mon, 30 Sep 2019 12:06:29 +0200
+Message-Id: <20190930100636.18318-2-ribalda@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190930100636.18318-1-ribalda@kernel.org>
 References: <20190930100636.18318-1-ribalda@kernel.org>
@@ -68,33 +70,196 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A struct v4l2_area containing the width and the height of a rectangular
-area.
+From: Ricardo Ribalda Delgado <ricardo@ribalda.com>
 
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+Currently compound controls do not have a simple way of initializing its
+values. This results in ofuscated code with type_ops init.
+
+This patch introduces a new field on the control with the default value
+for the compound control that can be set with the brand new
+v4l2_ctrl_new_std_compound function
+
+Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
+Signed-off-by: Ricardo Ribalda Delgado <ricardo@kernel.org>
 ---
- Documentation/media/uapi/v4l/vidioc-queryctrl.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/media/v4l2-core/v4l2-ctrls.c | 50 ++++++++++++++++++++++++----
+ include/media/v4l2-ctrls.h           | 21 ++++++++++++
+ 2 files changed, 64 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-index a3d56ffbf4cc..33aff21b7d11 100644
---- a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-@@ -443,6 +443,12 @@ See also the examples in :ref:`control`.
-       - n/a
-       - A struct :c:type:`v4l2_ctrl_mpeg2_quantization`, containing MPEG-2
- 	quantization matrices for stateless video decoders.
-+    * - ``V4L2_CTRL_TYPE_AREA``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_area`, containing the width and the height
-+        of a rectangular area. Units depend on the use case.
-     * - ``V4L2_CTRL_TYPE_H264_SPS``
-       - n/a
-       - n/a
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index 1d8f38824631..219d8aeefa20 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -29,6 +29,8 @@
+ #define call_op(master, op) \
+ 	(has_op(master, op) ? master->ops->op(master) : 0)
+ 
++static const union v4l2_ctrl_ptr ptr_null;
++
+ /* Internal temporary helper struct, one for each v4l2_ext_control */
+ struct v4l2_ctrl_helper {
+ 	/* Pointer to the control reference of the master control */
+@@ -1530,7 +1532,10 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+ 	struct v4l2_ctrl_mpeg2_slice_params *p_mpeg2_slice_params;
+ 	void *p = ptr.p + idx * ctrl->elem_size;
+ 
+-	memset(p, 0, ctrl->elem_size);
++	if (ctrl->p_def.p)
++		memcpy(p, ctrl->p_def.p, ctrl->elem_size);
++	else
++		memset(p, 0, ctrl->elem_size);
+ 
+ 	/*
+ 	 * The cast is needed to get rid of a gcc warning complaining that
+@@ -2354,7 +2359,8 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+ 			s64 min, s64 max, u64 step, s64 def,
+ 			const u32 dims[V4L2_CTRL_MAX_DIMS], u32 elem_size,
+ 			u32 flags, const char * const *qmenu,
+-			const s64 *qmenu_int, void *priv)
++			const s64 *qmenu_int, const union v4l2_ctrl_ptr p_def,
++			void *priv)
+ {
+ 	struct v4l2_ctrl *ctrl;
+ 	unsigned sz_extra;
+@@ -2460,6 +2466,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+ 		 is_array)
+ 		sz_extra += 2 * tot_ctrl_size;
+ 
++	if (type >= V4L2_CTRL_COMPOUND_TYPES && p_def.p)
++		sz_extra += elem_size;
++
+ 	ctrl = kvzalloc(sizeof(*ctrl) + sz_extra, GFP_KERNEL);
+ 	if (ctrl == NULL) {
+ 		handler_set_err(hdl, -ENOMEM);
+@@ -2503,6 +2512,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
+ 		ctrl->p_new.p = &ctrl->val;
+ 		ctrl->p_cur.p = &ctrl->cur.val;
+ 	}
++
++	if (type >= V4L2_CTRL_COMPOUND_TYPES && p_def.p) {
++		ctrl->p_def.p = ctrl->p_cur.p + tot_ctrl_size;
++		memcpy(ctrl->p_def.p, p_def.p, elem_size);
++	}
++
+ 	for (idx = 0; idx < elems; idx++) {
+ 		ctrl->type_ops->init(ctrl, idx, ctrl->p_cur);
+ 		ctrl->type_ops->init(ctrl, idx, ctrl->p_new);
+@@ -2554,7 +2569,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_custom(struct v4l2_ctrl_handler *hdl,
+ 			type, min, max,
+ 			is_menu ? cfg->menu_skip_mask : step, def,
+ 			cfg->dims, cfg->elem_size,
+-			flags, qmenu, qmenu_int, priv);
++			flags, qmenu, qmenu_int, ptr_null, priv);
+ 	if (ctrl)
+ 		ctrl->is_private = cfg->is_private;
+ 	return ctrl;
+@@ -2579,7 +2594,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_std(struct v4l2_ctrl_handler *hdl,
+ 	}
+ 	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
+ 			     min, max, step, def, NULL, 0,
+-			     flags, NULL, NULL, NULL);
++			     flags, NULL, NULL, ptr_null, NULL);
+ }
+ EXPORT_SYMBOL(v4l2_ctrl_new_std);
+ 
+@@ -2612,7 +2627,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_std_menu(struct v4l2_ctrl_handler *hdl,
+ 	}
+ 	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
+ 			     0, max, mask, def, NULL, 0,
+-			     flags, qmenu, qmenu_int, NULL);
++			     flags, qmenu, qmenu_int, ptr_null, NULL);
+ }
+ EXPORT_SYMBOL(v4l2_ctrl_new_std_menu);
+ 
+@@ -2644,11 +2659,32 @@ struct v4l2_ctrl *v4l2_ctrl_new_std_menu_items(struct v4l2_ctrl_handler *hdl,
+ 	}
+ 	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
+ 			     0, max, mask, def, NULL, 0,
+-			     flags, qmenu, NULL, NULL);
++			     flags, qmenu, NULL, ptr_null, NULL);
+ 
+ }
+ EXPORT_SYMBOL(v4l2_ctrl_new_std_menu_items);
+ 
++/* Helper function for standard compound controls */
++struct v4l2_ctrl *v4l2_ctrl_new_std_compound(struct v4l2_ctrl_handler *hdl,
++				const struct v4l2_ctrl_ops *ops, u32 id,
++				const union v4l2_ctrl_ptr p_def)
++{
++	const char *name;
++	enum v4l2_ctrl_type type;
++	u32 flags;
++	s64 min, max, step, def;
++
++	v4l2_ctrl_fill(id, &name, &type, &min, &max, &step, &def, &flags);
++	if (type < V4L2_CTRL_COMPOUND_TYPES) {
++		handler_set_err(hdl, -EINVAL);
++		return NULL;
++	}
++	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
++			     min, max, step, def, NULL, 0,
++			     flags, NULL, NULL, p_def, NULL);
++}
++EXPORT_SYMBOL(v4l2_ctrl_new_std_compound);
++
+ /* Helper function for standard integer menu controls */
+ struct v4l2_ctrl *v4l2_ctrl_new_int_menu(struct v4l2_ctrl_handler *hdl,
+ 			const struct v4l2_ctrl_ops *ops,
+@@ -2669,7 +2705,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_int_menu(struct v4l2_ctrl_handler *hdl,
+ 	}
+ 	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
+ 			     0, max, 0, def, NULL, 0,
+-			     flags, NULL, qmenu_int, NULL);
++			     flags, NULL, qmenu_int, ptr_null, NULL);
+ }
+ EXPORT_SYMBOL(v4l2_ctrl_new_int_menu);
+ 
+diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+index 570ff4b0205a..90a8ee48c2f3 100644
+--- a/include/media/v4l2-ctrls.h
++++ b/include/media/v4l2-ctrls.h
+@@ -200,6 +200,9 @@ typedef void (*v4l2_ctrl_notify_fnc)(struct v4l2_ctrl *ctrl, void *priv);
+  *		not freed when the control is deleted. Should this be needed
+  *		then a new internal bitfield can be added to tell the framework
+  *		to free this pointer.
++ * @p_def:	The control's default value represented via a union which
++ *		provides a standard way of accessing control types
++ *		through a pointer (for compound controls only).
+  * @p_cur:	The control's current value represented via a union which
+  *		provides a standard way of accessing control types
+  *		through a pointer.
+@@ -254,6 +257,7 @@ struct v4l2_ctrl {
+ 		s32 val;
+ 	} cur;
+ 
++	union v4l2_ctrl_ptr p_def;
+ 	union v4l2_ctrl_ptr p_new;
+ 	union v4l2_ctrl_ptr p_cur;
+ };
+@@ -646,6 +650,23 @@ struct v4l2_ctrl *v4l2_ctrl_new_std_menu_items(struct v4l2_ctrl_handler *hdl,
+ 					       u64 mask, u8 def,
+ 					       const char * const *qmenu);
+ 
++/**
++ * v4l2_ctrl_new_std_compound() - Allocate and initialize a new standard V4L2
++ *      compound control.
++ *
++ * @hdl:       The control handler.
++ * @ops:       The control ops.
++ * @id:        The control ID.
++ * @p_def:     The control's default value.
++ *
++ * Sames as v4l2_ctrl_new_std(), but with support to compound controls, thanks
++ * to the @p_def field.
++ *
++ */
++struct v4l2_ctrl *v4l2_ctrl_new_std_compound(struct v4l2_ctrl_handler *hdl,
++				const struct v4l2_ctrl_ops *ops, u32 id,
++				const union v4l2_ctrl_ptr p_def);
++
+ /**
+  * v4l2_ctrl_new_int_menu() - Create a new standard V4L2 integer menu control.
+  *
 -- 
 2.23.0
 
