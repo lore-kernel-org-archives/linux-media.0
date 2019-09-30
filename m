@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 94370C32792
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03141C388F3
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:19:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 63F7E2190F
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:18:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD9AF21927
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569838734;
-	bh=gYx5qO7De33HryEb5Q/vL4u7pggJWB0T3CFMj3AqQQ4=;
+	s=default; t=1569838742;
+	bh=SdcLzt1NMV5HtC9jlXslHJgHvj8quEha2dL9Fzs+U+0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=z28Hwxn7Z4LWuvhYRyHulj5m3yU5Vpl83L3N9m8qLpVVcW9EiEPhO/cFdhcfmYt55
-	 tnAgAvfVFNltXKTnOeVNaLuU0ZYgeCIuQ2oBhdDHpeSCVdEvtJa68/xV7X9ugpl+hj
-	 Ovn1KyqUW+lgXeZLwwRqZP96tqR2w25hi3fCpTQs=
+	b=VKLw4dmuKLjQdwsaHBJ4b2pVEmuoHtzRac3Q+KO8/cZoXA9Er6/HsCPiIfV4IdhJ/
+	 N/ZAxbzcKmS/KmI2rIRE9UkrI/D7Yiryw7uLgiB9JYlnRXKvLvBacnKG+JZQcKzN3/
+	 cwr62UdOmjekFgNDr8LYSqff7bhrfSp/p6Y8+fcc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730677AbfI3KSx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 06:18:53 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:34189 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727497AbfI3KSv (ORCPT
+        id S1730723AbfI3KS7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 06:18:59 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:40888 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730708AbfI3KS7 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Sep 2019 06:18:51 -0400
-Received: by mail-lf1-f67.google.com with SMTP id r22so6599050lfm.1;
-        Mon, 30 Sep 2019 03:18:49 -0700 (PDT)
+        Mon, 30 Sep 2019 06:18:59 -0400
+Received: by mail-lj1-f195.google.com with SMTP id 7so8822796ljw.7;
+        Mon, 30 Sep 2019 03:18:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=oitGYrLz+M7x37417nx+E0ZUEysZsMYgL9DwRrCYv3c=;
-        b=KwZIZR/1lZXJxAoiWBpL/3xdUpGveEY5K7jJJRlks1Cv3TBhcPhYsa3E5ABxP5esYJ
-         H43WD103uEhUF+pOoKTTJIzGa85KzoCjoofEu8Q7XsTTvQ6dEQUAqRWUEXtBxj4DNr/o
-         i8lkTgQVvyvQTJZU1/eQ+a4jYbZjPQI4VIcVqAXGU6kU5GIQyAwdcp/TghP7guSkzraE
-         lzOw3C0sapXsgRvJByCtmgEJkkzZMPVhKSnchcc/1QTn1N0ilXku5HlPIVbB9LzjqFb9
-         sTc5XvFLKzdlgZ0Z6MVHoS9BEScJF0fFdKiIXWz3DqfhQESz45WAuzcjGXit91PUtXE+
-         +pfA==
-X-Gm-Message-State: APjAAAVi6FQvifGMPXjx7U87l0j802fFASaRhJufsli4v0l8BmRNmT9J
-        CBNypcoAhWwVQQtFKivZHSE=
-X-Google-Smtp-Source: APXvYqwnkGg+sTmxTeI40nrqcXxb5XrY6dAjGUikrqBtozoB5kiE9WfKgTFQdnAOOMxMXcbzWnxf4A==
-X-Received: by 2002:ac2:495e:: with SMTP id o30mr10706122lfi.82.1569838728794;
-        Mon, 30 Sep 2019 03:18:48 -0700 (PDT)
+        bh=b2dEZ5VveeCRyXH+CovRffyZBiPh0RcTQuJCALACFyo=;
+        b=KTyKHSWrrlMe+pJZAstb/2g9DIdKJ2SElSnnOL4ZmF8KvrXVrCO91z2zA4WtYrrOs2
+         TNKqmqXzV4koMJKLPpKDmTr8ZimNx4ikbgadHfLdkwWJqAQunQfoD/zNN9gXlukQ39p5
+         TmpRC2DeWzlCC7LMPPtdqiQYpzmtxu9GkDNzhtOWs3CJOJpekoealrzSZlkvjD2qKdJ/
+         JrdAy1Z34iC/rz1KTZ8y97tp4WMK8erW6d8TbqOJy2NzWOpa0/nXoGObXYh886x4sG7Y
+         gVxJw3pltbPjc6UIKROq5h908M9/28LQVesDKwmQ5sG+q1aYo3Y2CYaN2O++tVQnMHeU
+         4ghQ==
+X-Gm-Message-State: APjAAAUO5DzzIUNQOVROlJdXQ0j11eOfBC5R5xhUbW75oDMQjgQIARla
+        qw3UQyM9ng8TnQdN4bRbEPdbsDH0yLw=
+X-Google-Smtp-Source: APXvYqw+wTlt7ZcKy04xZEFUiYRT+L2HdloGEnfYj5G76OV5ksfPvsv0WZY9b0/mrDQNHG7s8oPTuA==
+X-Received: by 2002:a2e:42c9:: with SMTP id h70mr11258722ljf.88.1569838735490;
+        Mon, 30 Sep 2019 03:18:55 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id z8sm3805970lfg.18.2019.09.30.03.18.47
+        by smtp.gmail.com with ESMTPSA id z8sm3805970lfg.18.2019.09.30.03.18.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 03:18:47 -0700 (PDT)
+        Mon, 30 Sep 2019 03:18:54 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Philipp Zabel <p.zabel@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ricardo@ribalda.com>,
-        Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v8 3/8] media: add V4L2_CTRL_TYPE_AREA control type
-Date:   Mon, 30 Sep 2019 12:18:36 +0200
-Message-Id: <20190930101841.19630-4-ribalda@kernel.org>
+Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
+Subject: [PATCH v8 8/8] media: imx214: Add new control with V4L2_CID_UNIT_CELL_SIZE
+Date:   Mon, 30 Sep 2019 12:18:41 +0200
+Message-Id: <20190930101841.19630-9-ribalda@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190930101841.19630-1-ribalda@kernel.org>
 References: <20190930101841.19630-1-ribalda@kernel.org>
@@ -69,162 +68,49 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ricardo Ribalda Delgado <ricardo@ribalda.com>
+According to the product brief, the unit cell size is 1120 nanometers^2.
 
-This type contains the width and the height of a rectangular area.
+https://www.sony-semicon.co.jp/products_en/IS/sensor1/img/products/ProductBrief_IMX214_20150428.pdf
 
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 21 ++++++++++++++
- include/media/v4l2-ctrls.h           | 42 ++++++++++++++++++++++++++++
- include/uapi/linux/videodev2.h       |  6 ++++
- 3 files changed, 69 insertions(+)
+ drivers/media/i2c/imx214.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 219d8aeefa20..b9a46f536406 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -1678,6 +1678,7 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_mpeg2_slice_params *p_mpeg2_slice_params;
- 	struct v4l2_ctrl_vp8_frame_header *p_vp8_frame_header;
- 	void *p = ptr.p + idx * ctrl->elem_size;
-+	struct v4l2_area *area;
+diff --git a/drivers/media/i2c/imx214.c b/drivers/media/i2c/imx214.c
+index 159a3a604f0e..4d9879f60dfb 100644
+--- a/drivers/media/i2c/imx214.c
++++ b/drivers/media/i2c/imx214.c
+@@ -47,6 +47,7 @@ struct imx214 {
+ 	struct v4l2_ctrl *pixel_rate;
+ 	struct v4l2_ctrl *link_freq;
+ 	struct v4l2_ctrl *exposure;
++	struct v4l2_ctrl *unit_size;
  
- 	switch ((u32)ctrl->type) {
- 	case V4L2_CTRL_TYPE_MPEG2_SLICE_PARAMS:
-@@ -1753,6 +1754,11 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 		zero_padding(p_vp8_frame_header->entropy_header);
- 		zero_padding(p_vp8_frame_header->coder_state);
- 		break;
-+	case V4L2_CTRL_TYPE_AREA:
-+		area = p;
-+		if (!area->width || !area->height)
-+			return -EINVAL;
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -2427,6 +2433,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 	case V4L2_CTRL_TYPE_VP8_FRAME_HEADER:
- 		elem_size = sizeof(struct v4l2_ctrl_vp8_frame_header);
- 		break;
-+	case V4L2_CTRL_TYPE_AREA:
-+		elem_size = sizeof(struct v4l2_area);
-+		break;
- 	default:
- 		if (type < V4L2_CTRL_COMPOUND_TYPES)
- 			elem_size = sizeof(s32);
-@@ -4116,6 +4125,18 @@ int __v4l2_ctrl_s_ctrl_string(struct v4l2_ctrl *ctrl, const char *s)
- }
- EXPORT_SYMBOL(__v4l2_ctrl_s_ctrl_string);
+ 	struct regulator_bulk_data	supplies[IMX214_NUM_SUPPLIES];
  
-+int __v4l2_ctrl_s_ctrl_area(struct v4l2_ctrl *ctrl,
-+			    const struct v4l2_area *area)
-+{
-+	lockdep_assert_held(ctrl->handler->lock);
-+
-+	/* It's a driver bug if this happens. */
-+	WARN_ON(ctrl->type != V4L2_CTRL_TYPE_AREA);
-+	memcpy(ctrl->p_new.p_area, area, sizeof(*area));
-+	return set_ctrl(NULL, ctrl, 0);
-+}
-+EXPORT_SYMBOL(__v4l2_ctrl_s_ctrl_area);
-+
- void v4l2_ctrl_request_complete(struct media_request *req,
- 				struct v4l2_ctrl_handler *main_hdl)
- {
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 90a8ee48c2f3..c42f164e2c9e 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -50,6 +50,7 @@ struct poll_table_struct;
-  * @p_h264_slice_params:	Pointer to a struct v4l2_ctrl_h264_slice_params.
-  * @p_h264_decode_params:	Pointer to a struct v4l2_ctrl_h264_decode_params.
-  * @p_vp8_frame_header:		Pointer to a VP8 frame header structure.
-+ * @p_area:			Pointer to an area.
-  * @p:				Pointer to a compound value.
-  */
- union v4l2_ctrl_ptr {
-@@ -68,6 +69,7 @@ union v4l2_ctrl_ptr {
- 	struct v4l2_ctrl_h264_slice_params *p_h264_slice_params;
- 	struct v4l2_ctrl_h264_decode_params *p_h264_decode_params;
- 	struct v4l2_ctrl_vp8_frame_header *p_vp8_frame_header;
-+	struct v4l2_area *p_area;
- 	void *p;
- };
+@@ -948,6 +949,10 @@ static int imx214_probe(struct i2c_client *client)
+ 	static const s64 link_freq[] = {
+ 		IMX214_DEFAULT_LINK_FREQ,
+ 	};
++	static const struct v4l2_area unit_size = {
++		.width = 1120,
++		.height = 1120,
++	};
+ 	int ret;
  
-@@ -1086,6 +1088,46 @@ static inline int v4l2_ctrl_s_ctrl_string(struct v4l2_ctrl *ctrl, const char *s)
- 	return rval;
- }
+ 	ret = imx214_parse_fwnode(dev);
+@@ -1029,6 +1034,10 @@ static int imx214_probe(struct i2c_client *client)
+ 					     V4L2_CID_EXPOSURE,
+ 					     0, 3184, 1, 0x0c70);
  
-+/**
-+ * __v4l2_ctrl_s_ctrl_area() - Unlocked variant of v4l2_ctrl_s_ctrl_area().
-+ *
-+ * @ctrl:	The control.
-+ * @area:	The new area.
-+ *
-+ * This sets the control's new area safely by going through the control
-+ * framework. This function assumes the control's handler is already locked,
-+ * allowing it to be used from within the &v4l2_ctrl_ops functions.
-+ *
-+ * This function is for area type controls only.
-+ */
-+int __v4l2_ctrl_s_ctrl_area(struct v4l2_ctrl *ctrl,
-+			    const struct v4l2_area *area);
-+
-+/**
-+ * v4l2_ctrl_s_ctrl_area() - Helper function to set a control's area value
-+ *	 from within a driver.
-+ *
-+ * @ctrl:	The control.
-+ * @s:		The new area.
-+ *
-+ * This sets the control's new area safely by going through the control
-+ * framework. This function will lock the control's handler, so it cannot be
-+ * used from within the &v4l2_ctrl_ops functions.
-+ *
-+ * This function is for area type controls only.
-+ */
-+static inline int v4l2_ctrl_s_ctrl_area(struct v4l2_ctrl *ctrl,
-+					const struct v4l2_area *area)
-+{
-+	int rval;
-+
-+	v4l2_ctrl_lock(ctrl);
-+	rval = __v4l2_ctrl_s_ctrl_area(ctrl, area);
-+	v4l2_ctrl_unlock(ctrl);
-+
-+	return rval;
-+}
-+
- /* Internal helper functions that deal with control events. */
- extern const struct v4l2_subscribed_event_ops v4l2_ctrl_sub_ev_ops;
- 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 530638dffd93..b3c0961b62a0 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -422,6 +422,11 @@ struct v4l2_fract {
- 	__u32   denominator;
- };
- 
-+struct v4l2_area {
-+	__u32   width;
-+	__u32   height;
-+};
-+
- /**
-   * struct v4l2_capability - Describes V4L2 device caps returned by VIDIOC_QUERYCAP
-   *
-@@ -1720,6 +1725,7 @@ enum v4l2_ctrl_type {
- 	V4L2_CTRL_TYPE_U8	     = 0x0100,
- 	V4L2_CTRL_TYPE_U16	     = 0x0101,
- 	V4L2_CTRL_TYPE_U32	     = 0x0102,
-+	V4L2_CTRL_TYPE_AREA          = 0x0106,
- };
- 
- /*  Used in the VIDIOC_QUERYCTRL ioctl for querying controls */
++	imx214->unit_size = v4l2_ctrl_new_std_compound(&imx214->ctrls,
++				NULL,
++				V4L2_CID_UNIT_CELL_SIZE,
++				v4l2_ctrl_ptr_from_void((void *)&unit_size));
+ 	ret = imx214->ctrls.error;
+ 	if (ret) {
+ 		dev_err(&client->dev, "%s control init failed (%d)\n",
 -- 
 2.23.0
 
