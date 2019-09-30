@@ -2,108 +2,250 @@ Return-Path: <SRS0=0FwG=X2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11103C388F3
-	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 11:25:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2213CC388F3
+	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 12:00:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D9F2921906
-	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 11:25:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569929106;
-	bh=Frz8qPKvvEBlv46YsbYUQlsXXKOfMBSRk3FpsgnCx34=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=n5h3lmpW7xegSQfzj78FtiygRiB+CRMPSdxrnwA73+ymIMDTT/+iEtK+94mo64Km6
-	 gm/pT2AfBQwjwLXy4ZF62RX1k+kOob7+qVVED5IPpcY0VZ1V+iTrAZyBjxORJxHoNK
-	 X65qOZFZ9GqJkpkCkgJPHaXBdWolKl0t36mZztSE=
+	by mail.kernel.org (Postfix) with ESMTP id D95C220640
+	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 12:00:45 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="jURCmzfy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731290AbfJALY3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Oct 2019 07:24:29 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:39023 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726847AbfJALY2 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Oct 2019 07:24:28 -0400
-Received: by mail-lf1-f66.google.com with SMTP id 72so9554563lfh.6;
-        Tue, 01 Oct 2019 04:24:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bJlmEo9iub6gJcCMPackNCrhwDWuJREIy8LLjVw+0kU=;
-        b=YqYZ1fdsgUNEo1R9a5uX7Ji2iML+iJt8eDyAsmBQxxBr2Ti+y0QiZtTBslxhv4mzlS
-         +hUhW5MZQDWtlWewsMLrgNbx8kkzNVsJ/c7imciTUxEC4GOu/RySm2j6Rjx7a/IzBtn8
-         PRv4V6hYC75q6PRmDWySLfKWLc0wFyxBWNDdU3hRsuXfGr/GWvUn8v79VtAH1Z+dcsYj
-         dZ0iuJECo8P34WxjNMuIvM9ATfFO7d5jxZ9XXJMua+EhuoLofJwqQ9Qk1OC3ZAMH2Bir
-         wTqOl9tk0crkXXmjnuEtTHI4crgZkJLjbMg5vPHWyDtQGNVb8jMoS3zK695l1hPUmKU1
-         +AKQ==
-X-Gm-Message-State: APjAAAVMOzilQykMNCiYkJEbNnW5PvhKnrvnoxhEVmClqi7P15DCdThw
-        xh7NiodeB1Jtx9FHDZmyWLUz/znk5gc=
-X-Google-Smtp-Source: APXvYqy4+xGC6JXuul1nT6uPpEBybkfSopWGqgt+ZIllXgMTSJOMX9DnyDL5uoWl6xmK3RV3Ux9YXQ==
-X-Received: by 2002:ac2:48af:: with SMTP id u15mr15019232lfg.75.1569929065439;
-        Tue, 01 Oct 2019 04:24:25 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id 3sm3853894ljs.20.2019.10.01.04.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2019 04:24:24 -0700 (PDT)
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v9 0/8] Implement UNIT_CELL_SIZE control
-Date:   Tue,  1 Oct 2019 13:24:13 +0200
-Message-Id: <20191001112421.2778-1-ribalda@kernel.org>
-X-Mailer: git-send-email 2.23.0
+        id S1726399AbfJAMAp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Oct 2019 08:00:45 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:50692 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfJAMAp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Oct 2019 08:00:45 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8UKMWaj121399;
+        Mon, 30 Sep 2019 15:22:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1569874952;
+        bh=/ubZdApPBnsXOwica/+pxmLmIFznLxE+d34pdI5c1JY=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=jURCmzfyYxoJwybgfhe2AQ8cgH2bRRhMutFF1AeKG8pW8kURB5xlVa4Mai1gWRbJW
+         O39iVxJrgLITaQskttlECqj2ONDqprRUOKcUj5EN8CyGII2oQQTDVhe6+N+/P+7aEN
+         SMKnEoC6z6HCVqSPahuPOJ3ssXAKZ2H12rexWnCU=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8UKMWDM001356
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 30 Sep 2019 15:22:32 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 30
+ Sep 2019 15:22:22 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Mon, 30 Sep 2019 15:22:32 -0500
+Received: from ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with SMTP id x8UKMWe8020400;
+        Mon, 30 Sep 2019 15:22:32 -0500
+Date:   Mon, 30 Sep 2019 15:24:43 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [Patch 16/16] media: ti-vpe: vpe: don't rely on colorspace
+ member for conversion
+Message-ID: <20190930202443.tvu4htu7w5sv33ee@ti.com>
+References: <20190927183650.31345-1-bparrot@ti.com>
+ <20190927183650.31345-17-bparrot@ti.com>
+ <263b7b22-b867-3f73-bcaf-8978f9e3b415@xs4all.nl>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <263b7b22-b867-3f73-bcaf-8978f9e3b415@xs4all.nl>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-UNIT_CELL_SIZE is a control that represents the size of a cell (pixel).
-We required a bit of boilerplate to add this control :)
-- New way to init compount controls
-- New control type
+Hans Verkuil <hverkuil@xs4all.nl> wrote on Mon [2019-Sep-30 11:05:13 +0200]:
+> On 9/27/19 8:36 PM, Benoit Parrot wrote:
+> > Up to now VPE was relying on the colorspace value of struct v4l2_format
+> > as an indication to perform color space conversion from YUV to RGB or
+> > not.
+> > 
+> > Instead we should used the source/destination fourcc codes as a more
+> > reliable indication to perform color space conversion or not.
+> > 
+> > Signed-off-by: Benoit Parrot <bparrot@ti.com>
+> > ---
+> >  drivers/media/platform/ti-vpe/vpe.c | 41 ++++++++++++++++++++++-------
+> >  1 file changed, 32 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+> > index e30981cd3e8f..d002adc6263f 100644
+> > --- a/drivers/media/platform/ti-vpe/vpe.c
+> > +++ b/drivers/media/platform/ti-vpe/vpe.c
+> > @@ -353,6 +353,32 @@ enum {
+> >  	Q_DATA_DST = 1,
+> >  };
+> >  
+> > +static bool is_fmt_rgb(u32 fourcc)
+> > +{
+> > +	if (fourcc == V4L2_PIX_FMT_RGB24 ||
+> > +	    fourcc == V4L2_PIX_FMT_BGR24 ||
+> > +	    fourcc == V4L2_PIX_FMT_RGB32 ||
+> > +	    fourcc == V4L2_PIX_FMT_BGR32 ||
+> > +	    fourcc == V4L2_PIX_FMT_RGB565 ||
+> > +	    fourcc == V4L2_PIX_FMT_RGB555)
+> > +		return true;
+> > +
+> > +	return false;
+> > +}
+> 
+> Why not add a 'bool is_rgb' to struct vpe_fmt?
+> 
+> It is all too easy to forget to update this function if a new RGB format is
+> added to the vpe_formats array in the future.
 
-Thanks to Hans, Jacopo and Philipp for your help.
+Yeah I debate going that route also.
+I can change it easily enough.
 
-You might want to see the series at my github repository if needed.
+Although, depending on the further changes required below this may be moot.
+We'll see.
 
-https://github.com/ribalda/linux/tree/unit-size-v9
+> 
+> > +
+> > +/*
+> > + * This helper is only used to setup the color space converter
+> > + * the actual value returned is only to broadly differentiate between
+> > + * RGB and YUV
+> > + */
+> > +static enum  v4l2_colorspace fourcc_to_colorspace(u32 fourcc)
+> 
+> double space after enum.
 
-v9: Rename helper to v4l2_ctrl_ptr_create
+Arrg, I'll fix that.
 
-v8: Fix my email on some patches (sorry for the mess)
+> 
+> > +{
+> > +	if (is_fmt_rgb(fourcc))
+> > +		return V4L2_COLORSPACE_SRGB;
+> > +
+> > +	return V4L2_COLORSPACE_SMPTE170M;
+> > +}
+> 
+> This is highly confusing. RGB or YUV conversion does not change the colorspace
+> at all.
+> 
 
-v7: Add new helper v4l2_ctrl_ptr_from_void
+Well I see here that I am missing some understanding.
+But as you saw all I am trying to get to is this: do we need to setup YUV
+to RGB conversion or not.
 
-v4, v5 of this patchset never reached the mailing list.
+Regarding csc_set_coeff() I was not trying to re-write it but use the
+pixel_formats as hint. I understand that this might not be as flexible as
+it needs to be (meaning handling colorspace, xfer_func, ycbr_encoding or
+quantization in a sane way) but to at least get the correct direction of the
+conversion. At the moment VPE driver only handles YUV to RGB conversion.
 
-Ricardo Ribalda Delgado (8):
-  media: v4l2-core: Implement v4l2_ctrl_new_std_compound
-  Documentation: v4l2_ctrl_new_std_compound
-  media: add V4L2_CTRL_TYPE_AREA control type
-  Documentation: media: Document V4L2_CTRL_TYPE_AREA
-  media: add V4L2_CID_UNIT_CELL_SIZE control
-  Documentation: media: Describe V4L2_CID_UNIT_CELL_SIZE
-  media: v4l2-ctrl: Add new helper v4l2_ctrl_ptr_create
-  media: imx214: Add new control with V4L2_CID_UNIT_CELL_SIZE
 
- Documentation/media/kapi/v4l2-controls.rst    |  9 +++
- .../media/uapi/v4l/ext-ctrls-image-source.rst |  9 +++
- .../media/uapi/v4l/vidioc-queryctrl.rst       |  6 ++
- drivers/media/i2c/imx214.c                    |  9 +++
- drivers/media/v4l2-core/v4l2-ctrls.c          | 76 +++++++++++++++++--
- include/media/v4l2-ctrls.h                    | 75 ++++++++++++++++++
- include/uapi/linux/v4l2-controls.h            |  1 +
- include/uapi/linux/videodev2.h                |  6 ++
- 8 files changed, 184 insertions(+), 7 deletions(-)
+> There are four colorimetry related fields: colorspace, xfer_func, ycbcr_enc and
+> quantization. Most hardware (including this one AFAICT) have a 3x3 matrix + a
+> vector to do the conversion. This only allows you to convert between different
+> ycbcr encodings and quantization ranges. The colorspace and xfer_func parameters
+> stay unchanged (you need gamma tables and two other 3x3 matrices for that).
+> 
+> So if you want to set up the 3x3 matrix + vector correctly, then you need to
+> provide the ycbcr_enc value + quantization value of the source to your function.
+> ycbcr_enc is only valid of YUV pixelformats, of course, and you can use
+> V4L2_MAP_COLORSPACE_DEFAULT, V4L2_MAP_YCBCR_ENC_DEFAULT and V4L2_MAP_QUANTIZATION_DEFAULT
+> if one or more of these values as set by userspace are 0.
+> 
+> Since the V4L2 API does not (yet) support setting ycbcr_enc and quantization for the
+> capture queue you have to provide that information yourself:
+> 
+> For RGB ycbcr_enc is of course ignored, and quantization should be full range.
+> For YUV it depends: the quantization is always limited range, but for the ycbcr_enc
+> you have a choice: if the source was YUV, then you can decide to just copy the
+> ycbcr_enc value. Alternatively, you can convert to 601 for SDTV and 709 for anything
+> else. The latter is also the recommended choice if the source was RGB.
+> 
+> In any case, please do not use enum v4l2_colorspace in the csc_set_coeff function:
+> it's misleading.
 
--- 
-2.23.0
+But I guess I can rewrite the csc_set_coeff() module API to use at least
+pixel_format instead of enum_colorspace at least as a first step.
 
+Full color space parameters support (meaning all 4 of them) would probably
+be better done as its own future patch series.
+
+Benoit
+
+> 
+> https://hverkuil.home.xs4all.nl/spec/uapi/v4l/colorspaces.html and the following two
+> sections contain a lot of information about how colorspaces work.
+> 
+> Regards,
+> 
+> 	Hans
+> 
+> > +
+> >  /* find our format description corresponding to the passed v4l2_format */
+> >  static struct vpe_fmt *__find_format(u32 fourcc)
+> >  {
+> > @@ -764,11 +790,10 @@ static void set_src_registers(struct vpe_ctx *ctx)
+> >  static void set_dst_registers(struct vpe_ctx *ctx)
+> >  {
+> >  	struct vpe_mmr_adb *mmr_adb = ctx->mmr_adb.addr;
+> > -	enum v4l2_colorspace clrspc = ctx->q_data[Q_DATA_DST].colorspace;
+> >  	struct vpe_fmt *fmt = ctx->q_data[Q_DATA_DST].fmt;
+> >  	u32 val = 0;
+> >  
+> > -	if (clrspc == V4L2_COLORSPACE_SRGB) {
+> > +	if (is_fmt_rgb(fmt->fourcc)) {
+> >  		val |= VPE_RGB_OUT_SELECT;
+> >  		vpdma_set_bg_color(ctx->dev->vpdma,
+> >  			(struct vpdma_data_format *)fmt->vpdma_fmt[0], 0xff);
+> > @@ -912,7 +937,8 @@ static int set_srcdst_params(struct vpe_ctx *ctx)
+> >  	set_dei_regs(ctx);
+> >  
+> >  	csc_set_coeff(ctx->dev->csc, &mmr_adb->csc_regs[0],
+> > -		s_q_data->colorspace, d_q_data->colorspace);
+> > +		      fourcc_to_colorspace(s_q_data->fmt->fourcc),
+> > +		      fourcc_to_colorspace(d_q_data->fmt->fourcc));
+> >  
+> >  	sc_set_hs_coeffs(ctx->dev->sc, ctx->sc_coeff_h.addr, src_w, dst_w);
+> >  	sc_set_vs_coeffs(ctx->dev->sc, ctx->sc_coeff_v.addr, src_h, dst_h);
+> > @@ -1285,7 +1311,7 @@ static void device_run(void *priv)
+> >  	if (ctx->deinterlacing)
+> >  		add_out_dtd(ctx, VPE_PORT_MV_OUT);
+> >  
+> > -	if (d_q_data->colorspace == V4L2_COLORSPACE_SRGB) {
+> > +	if (is_fmt_rgb(d_q_data->fmt->fourcc)) {
+> >  		add_out_dtd(ctx, VPE_PORT_RGB_OUT);
+> >  	} else {
+> >  		add_out_dtd(ctx, VPE_PORT_LUMA_OUT);
+> > @@ -1327,7 +1353,7 @@ static void device_run(void *priv)
+> >  	}
+> >  
+> >  	/* sync on channel control descriptors for output ports */
+> > -	if (d_q_data->colorspace == V4L2_COLORSPACE_SRGB) {
+> > +	if (is_fmt_rgb(d_q_data->fmt->fourcc)) {
+> >  		vpdma_add_sync_on_channel_ctd(&ctx->desc_list,
+> >  			VPE_CHAN_RGB_OUT);
+> >  	} else {
+> > @@ -1682,10 +1708,7 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+> >  		height = pix->height;
+> >  
+> >  	if (!pix->colorspace) {
+> > -		if (fmt->fourcc == V4L2_PIX_FMT_RGB24 ||
+> > -				fmt->fourcc == V4L2_PIX_FMT_BGR24 ||
+> > -				fmt->fourcc == V4L2_PIX_FMT_RGB32 ||
+> > -				fmt->fourcc == V4L2_PIX_FMT_BGR32) {
+> > +		if (is_fmt_rgb(fmt->fourcc)) {
+> >  			pix->colorspace = V4L2_COLORSPACE_SRGB;
+> >  		} else {
+> >  			if (height > 1280)	/* HD */
+> > 
+> 
