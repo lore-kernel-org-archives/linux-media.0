@@ -4,60 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1AC2C32792
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:19:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DED6BC388F3
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:19:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8CE342190F
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:19:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9AF121927
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:19:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569838744;
-	bh=qNrcMr/8SbxkQYJjYnj/mVx36Bmtf1e3S6sEoTqgqMQ=;
+	s=default; t=1569838745;
+	bh=F7PU0XTzulJyYozp4p3TKjIBYzu0jmLbK1kiwEtvVSs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=XVrer9rcAQ427FtnIDsmBOK22oBU44BQa2AO8lhOrC0Jl1gOu/4qaWN/VQOweU2dv
-	 ydc+5T14ufMe8N9DUJdMX0m9owM6Rt39MTVlfKsoOqX+4psascnfQtiYYomAPdfx1j
-	 ftmrfs0knUv2NtOqk93N2E/Juz6XgalDdjzOYDz8=
+	b=G67Mlz0ZjkayHzS5U5TNYXrKzfcpT4Me3quVg8CmNw8nLz9gHr9l1YrIyDCPb1Udx
+	 B5alQ98iM3khEKgj/aTaGbhf+NU7cCnr92rbRNUiqZZDjjG4mop/o4C4j4PeGlIwrs
+	 p3nmY0v6XrFyBDgKBgdSSF2cFSQioluhK72OmMoU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730702AbfI3KS4 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 06:18:56 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:44075 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727025AbfI3KSy (ORCPT
+        id S1730739AbfI3KTE (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 06:19:04 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:35468 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730694AbfI3KS4 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Sep 2019 06:18:54 -0400
-Received: by mail-lf1-f66.google.com with SMTP id q11so6562889lfc.11;
-        Mon, 30 Sep 2019 03:18:50 -0700 (PDT)
+        Mon, 30 Sep 2019 06:18:56 -0400
+Received: by mail-lj1-f196.google.com with SMTP id m7so8852414lji.2;
+        Mon, 30 Sep 2019 03:18:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KOQK/iTDEM2OOwuKD12eKM8a+YD1YCYg9jIBY8YMxOA=;
-        b=nIlwUNtEuWG+RdUQES82jJzhCa7g/O2j6BFQ4cBlPni43csXpb5G52QOEa4ArbR0n8
-         SHGJLVDBR2rSxnuqjv4skxxJnDyiJEzRmbMclOuVLok9urT+s42DKeQl6Ttvlf7scKjK
-         H9hy9m2x/PSKmhEvzu3l4+moUTz5hhwVj43kuo/y/qEz6nOsTKD8sLSAzdAzThRT6PKS
-         4Zp4aKkeucl9Kr7Rnlup3V0rqCUj6TnLonWFLoQAymtDD0sGEr3n0B9/OjK0IUAdnzbQ
-         PYDGt85rWOPvm2t7MhBXMg3LZqoxbgeIMsWvD3N2WixpaTqXPMT2Dje9eIz470Dx4u1+
-         fiQw==
-X-Gm-Message-State: APjAAAXYVMP2bULjwCeyXjR3qykSFRmz+txC5kbQejkjWdq3FLnTDHss
-        8zuFDGXYGIZUn/2igH8fBFs=
-X-Google-Smtp-Source: APXvYqyaiVS3IKGD7skOoN07t6poEXXEA3lO6aR943IBpXNW0to+kmiQktPNpyeJpzzfvb2DSQJzmQ==
-X-Received: by 2002:a19:7605:: with SMTP id c5mr11512283lff.114.1569838730105;
-        Mon, 30 Sep 2019 03:18:50 -0700 (PDT)
+        bh=u6PH07eWhP9yLzHtDWmI6SB0uTSpZSpElPRT+7mhohA=;
+        b=CFDdOBG9XbQ5nZvmw0GinZmQD/aOP56uIdRhkb0d5rht1mwl4hchAhNUPrEr/YyTBi
+         fP+OhQUhUagTxp0VHvkTE1VQD0Qovo/9Ay9bLvj1coNzkmRzwm0Qv+gYaX9cPGk270RW
+         WtaJSiE4ZZbDSB15qIoJpm+bJCDFyNNXGuQMN/UU7gVtP4LFc2wZr0XgV4gQ23r9yJR2
+         ztXUCzasth4GaQmlaj+tM+6bt49NChPDmQ5QtcOOG5IrH+U4ndQZ0M4yqQE9fo4wp5a4
+         o3l6gzfehmcQY46M3ETuwCAAjoFrqQxUjiYAy/CbbTnA4Uju4OLlO9lj8LiOBrBeExnV
+         TkTQ==
+X-Gm-Message-State: APjAAAUYkS+VeMaX3T5hXrwltv7CxIF3VsDN1RFc1IsdcS5/tRRq6SM1
+        PxiUf+0so9SXHcKRWpMYZU8=
+X-Google-Smtp-Source: APXvYqy/J8Nltz74xeY945qkmg7xT8cKGfK1+u/0Y07eu0Zo3jTlJVYLUuRSJdb3JMWVBKuUEQ9feQ==
+X-Received: by 2002:a2e:90d9:: with SMTP id o25mr7903132ljg.94.1569838733873;
+        Mon, 30 Sep 2019 03:18:53 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id z8sm3805970lfg.18.2019.09.30.03.18.48
+        by smtp.gmail.com with ESMTPSA id z8sm3805970lfg.18.2019.09.30.03.18.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 03:18:49 -0700 (PDT)
+        Mon, 30 Sep 2019 03:18:52 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Philipp Zabel <p.zabel@pengutronix.de>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v8 4/8] Documentation: media: Document V4L2_CTRL_TYPE_AREA
-Date:   Mon, 30 Sep 2019 12:18:37 +0200
-Message-Id: <20190930101841.19630-5-ribalda@kernel.org>
+Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [PATCH v8 7/8] media: v4l2-ctrl: Add new helper v4l2_ctrl_ptr_from_void
+Date:   Mon, 30 Sep 2019 12:18:40 +0200
+Message-Id: <20190930101841.19630-8-ribalda@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190930101841.19630-1-ribalda@kernel.org>
 References: <20190930101841.19630-1-ribalda@kernel.org>
@@ -68,33 +69,38 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-A struct v4l2_area containing the width and the height of a rectangular
-area.
+This helper function simplifies the code by not needing a union
+v4l2_ctrl_ptr and an assignment every time we need to use
+a ctrl_ptr.
 
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 ---
- Documentation/media/uapi/v4l/vidioc-queryctrl.rst | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/media/v4l2-ctrls.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-index a3d56ffbf4cc..33aff21b7d11 100644
---- a/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-+++ b/Documentation/media/uapi/v4l/vidioc-queryctrl.rst
-@@ -443,6 +443,12 @@ See also the examples in :ref:`control`.
-       - n/a
-       - A struct :c:type:`v4l2_ctrl_mpeg2_quantization`, containing MPEG-2
- 	quantization matrices for stateless video decoders.
-+    * - ``V4L2_CTRL_TYPE_AREA``
-+      - n/a
-+      - n/a
-+      - n/a
-+      - A struct :c:type:`v4l2_area`, containing the width and the height
-+        of a rectangular area. Units depend on the use case.
-     * - ``V4L2_CTRL_TYPE_H264_SPS``
-       - n/a
-       - n/a
+diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+index c42f164e2c9e..d69cfdffd41d 100644
+--- a/include/media/v4l2-ctrls.h
++++ b/include/media/v4l2-ctrls.h
+@@ -73,6 +73,17 @@ union v4l2_ctrl_ptr {
+ 	void *p;
+ };
+ 
++/**
++ * v4l2_ctrl_ptr() - Helper function to return a v4l2_ctrl_ptr from a
++ * void pointer
++ * @ptr:	The void pointer
++ */
++static inline union v4l2_ctrl_ptr v4l2_ctrl_ptr_from_void(void *ptr)
++{
++	BUILD_BUG_ON(sizeof(union v4l2_ctrl_ptr) != sizeof(void *));
++	return (union v4l2_ctrl_ptr) ptr;
++}
++
+ /**
+  * struct v4l2_ctrl_ops - The control operations that the driver has to provide.
+  *
 -- 
 2.23.0
 
