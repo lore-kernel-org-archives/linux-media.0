@@ -2,107 +2,122 @@ Return-Path: <SRS0=DdSm=XZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AA291C35280
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:19:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D078C32792
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 12:06:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7CB5E21855
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 10:19:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1569838763;
-	bh=zKd5vnknYvbfxeRmjOk0i0Y0k5lemESSf4QRcP96kHI=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=lreJGJoFVJM993sSGUaZLLMglsY50E7H5tvIAu0VBZOrW7LXDrXHh7xSJO0LTMGh+
-	 90VNkRPr5TmUQrdROXC1WoT7GzolWyAEY2V+PwMNchm6o4ndlBdaXQMcsXQyTxLbuO
-	 hq1cziDoyN7JMUOWbzQ5tW5cTTSN898+3dzFVza0=
+	by mail.kernel.org (Postfix) with ESMTP id 62CB321855
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 12:06:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="eiGf6nnC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729415AbfI3KSr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 06:18:47 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:46749 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727025AbfI3KSr (ORCPT
+        id S1730352AbfI3MGb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 08:06:31 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:39970 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728214AbfI3MGa (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Sep 2019 06:18:47 -0400
-Received: by mail-lj1-f194.google.com with SMTP id d1so8797635ljl.13;
-        Mon, 30 Sep 2019 03:18:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bZNzr1dgkucQCVVEkgGqjf+3w/3xGUMtlMptL7wciSc=;
-        b=S6CUmYDtIdl1ZHkF7wE8ThyH+wHmq+adXR20XvdewNaExW+uvUrj6QE1MSG1I4WDhG
-         HK1+PuSrQnd3aZPSal7uy/CrkNrBbSwp9kkjk7I3vKlJdSfVmEA2V9gdT26/8R6fxb1L
-         nH7Mxkk6E0oiLYmyAL15n9kSXC6K//EDQFzKP6iI0VFu39b9qoF2GKKIjyxaIb5K7Udf
-         UJIwkVxtqEVCh7rOOWK7OMnvv+RSdPuScOPFYdolV0fDfeAbrjmjS79qJUCM81astZvr
-         rguOZrfgYithfDTDx2+kxI7GgZAWqKkperREHX76MYp/BkMzswAP9eQzfko+nTXYbF16
-         SvuA==
-X-Gm-Message-State: APjAAAVquJNAOt8IFQ5YsqN0GNWBueRDS3Wl13NW/YsZy94C+9DxqNqr
-        q6nKVGgbvk/PPpW4H6jB8r0=
-X-Google-Smtp-Source: APXvYqwGKjGXxQeVz7Vo7k0Tt1BJVEtXcP5VyWfhr+EsgqlHXPpdkmjRK7DcZgYvU/BBPEDLDOFMVA==
-X-Received: by 2002:a2e:918c:: with SMTP id f12mr11882442ljg.121.1569838724768;
-        Mon, 30 Sep 2019 03:18:44 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id z8sm3805970lfg.18.2019.09.30.03.18.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 03:18:43 -0700 (PDT)
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v8 0/8] Implement UNIT_CELL_SIZE control
-Date:   Mon, 30 Sep 2019 12:18:33 +0200
-Message-Id: <20190930101841.19630-1-ribalda@kernel.org>
-X-Mailer: git-send-email 2.23.0
+        Mon, 30 Sep 2019 08:06:30 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8UC6R0p096091;
+        Mon, 30 Sep 2019 07:06:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1569845188;
+        bh=zfTEs4ijJTUqGGuCuLCj2ZRBbvInnJColLZXtXR91xc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=eiGf6nnC/e6TuIhw9868LrR/8FIVxqvLagovzrJt4K9BXszIvTjvvVH9zL4aLzPu0
+         DDCOylveIYEIVgi99HT51YnvuYDaeTFh1AMvvopJgpju46YA9WMVQL5nc7poYkAc54
+         5EXu7W8oxM6NqfzXZwDZJGQY8CV7SdP6OaPApuuQ=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x8UC6R0L052716
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 30 Sep 2019 07:06:27 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 30
+ Sep 2019 07:06:18 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Mon, 30 Sep 2019 07:06:18 -0500
+Received: from ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with SMTP id x8UC6R1P026246;
+        Mon, 30 Sep 2019 07:06:27 -0500
+Date:   Mon, 30 Sep 2019 07:08:38 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+CC:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [Patch v4 4/8] media: i2c: ov2659: fix s_stream return value
+Message-ID: <20190930120838.vdmmglkbp226hhfq@ti.com>
+References: <20190927184722.31989-1-bparrot@ti.com>
+ <20190927184722.31989-5-bparrot@ti.com>
+ <CA+V-a8t3h6+2a8QWKWNwROJRz546rGbUyXs5ez9wtH6AQ-euPA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CA+V-a8t3h6+2a8QWKWNwROJRz546rGbUyXs5ez9wtH6AQ-euPA@mail.gmail.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-UNIT_CELL_SIZE is a control that represents the size of a cell (pixel).
-We required a bit of boilerplate to add this control :)
-- New way to init compount controls
-- New control type
+Lad, Prabhakar <prabhakar.csengg@gmail.com> wrote on Fri [2019-Sep-27 21:33:28 +0100]:
+> Hi Benoit,
+> 
+> thank you for the patch.
+> 
+> On Fri, Sep 27, 2019 at 7:46 PM Benoit Parrot <bparrot@ti.com> wrote:
+> >
+> > In ov2659_s_stream() return value for invoked function should be checked
+> > and propagated.
+> >
+> > Signed-off-by: Benoit Parrot <bparrot@ti.com>
+> > ---
+> >  drivers/media/i2c/ov2659.c | 11 +++++++----
+> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
+> > index f77320e8a60d..cd4625432264 100644
+> > --- a/drivers/media/i2c/ov2659.c
+> > +++ b/drivers/media/i2c/ov2659.c
+> > @@ -1187,10 +1187,13 @@ static int ov2659_s_stream(struct v4l2_subdev *sd, int on)
+> >                 goto unlock;
+> >         }
+> >
+> > -       ov2659_set_pixel_clock(ov2659);
+> > -       ov2659_set_frame_size(ov2659);
+> > -       ov2659_set_format(ov2659);
+> > -       ov2659_set_streaming(ov2659, 1);
+> > +       ret = ov2659_set_pixel_clock(ov2659);
+> > +       if (!ret)
+> > +               ret = ov2659_set_frame_size(ov2659);
+> > +       if (!ret)
+> > +               ret = ov2659_set_format(ov2659);
+> > +       if (!ret)
+> > +               ov2659_set_streaming(ov2659, 1);
+> >         ov2659->streaming = on;
+> >
+> the "ov2659->streaming = on;" should only be set if above calls
+> succeed, otherwise we might hit -EBUSY during set_fmt.
 
-Thanks to Hans, Jacopo and Philipp for your help.
+Thanks, good catch.
 
-You might want to see the series at my github repository if needed.
+Benoit
 
-https://github.com/ribalda/linux/tree/unit-size-v6
-
-v8: Fix my email on some patches (sorry for the mess)
-
-v7: Add new helper v4l2_ctrl_ptr_from_void
-
-v4, v5 of this patchset never reached the mailing list.
-
-Ricardo Ribalda Delgado (8):
-  media: v4l2-core: Implement v4l2_ctrl_new_std_compound
-  Documentation: v4l2_ctrl_new_std_compound
-  media: add V4L2_CTRL_TYPE_AREA control type
-  Documentation: media: Document V4L2_CTRL_TYPE_AREA
-  media: add V4L2_CID_UNIT_CELL_SIZE control
-  Documentation: media: Describe V4L2_CID_UNIT_CELL_SIZE
-  media: v4l2-ctrl: Add new helper v4l2_ctrl_ptr_from_void
-  media: imx214: Add new control with V4L2_CID_UNIT_CELL_SIZE
-
- Documentation/media/kapi/v4l2-controls.rst    |  9 +++
- .../media/uapi/v4l/ext-ctrls-image-source.rst |  9 +++
- .../media/uapi/v4l/vidioc-queryctrl.rst       |  6 ++
- drivers/media/i2c/imx214.c                    |  9 +++
- drivers/media/v4l2-core/v4l2-ctrls.c          | 76 +++++++++++++++++--
- include/media/v4l2-ctrls.h                    | 74 ++++++++++++++++++
- include/uapi/linux/v4l2-controls.h            |  1 +
- include/uapi/linux/videodev2.h                |  6 ++
- 8 files changed, 183 insertions(+), 7 deletions(-)
-
--- 
-2.23.0
-
+> 
+> Cheers,
+> --Prabhakar Lad
+> 
+> >  unlock:
+> > --
+> > 2.17.1
+> >
