@@ -2,280 +2,303 @@ Return-Path: <SRS0=DdSm=XZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA8CC4360C
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:35:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDD37C4360C
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B53A421928
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:35:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D0D021D71
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 09:39:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730510AbfI3JfP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 05:35:15 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:46351 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727884AbfI3JfO (ORCPT
+        id S1730422AbfI3JjM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 05:39:12 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37745 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729856AbfI3JjL (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Sep 2019 05:35:14 -0400
-Received: from [192.168.2.10] ([46.9.232.237])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id Es5Eid9l89D4hEs5HiLFjC; Mon, 30 Sep 2019 11:35:11 +0200
-Subject: Re: [PATCH v3 2/3] cec-follower: add tuner step increment/decrement
-To:     Jiunn Chang <c0d1n61at3@gmail.com>, linux-media@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20190924192445.93575-1-c0d1n61at3@gmail.com>
- <20190930043017.474025-3-c0d1n61at3@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <fe38781f-fd08-3721-d8e6-b01dc00dd22d@xs4all.nl>
-Date:   Mon, 30 Sep 2019 11:35:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 30 Sep 2019 05:39:11 -0400
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1iEs92-0002RU-Ai; Mon, 30 Sep 2019 11:39:04 +0200
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1iEs90-0005uI-F5; Mon, 30 Sep 2019 11:39:02 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     mchehab@kernel.org, sakari.ailus@linux.intel.com,
+        hans.verkuil@cisco.com, jacopo+renesas@jmondi.org,
+        robh+dt@kernel.org, laurent.pinchart@ideasonboard.com
+Cc:     devicetree@vger.kernel.org, kernel@pengutronix.de,
+        linux-media@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v11 05/15] partial revert of "[media] tvp5150: add HW input connectors support"
+Date:   Mon, 30 Sep 2019 11:38:50 +0200
+Message-Id: <20190930093900.16524-6-m.felsch@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190930093900.16524-1-m.felsch@pengutronix.de>
+References: <20190930093900.16524-1-m.felsch@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <20190930043017.474025-3-c0d1n61at3@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfD4RdoCQuN1u4HVuZeo11uWUSiDhKxDCslJPKA6/A2kHNuACldhqmXVRPvfdgeZg3jcL4TBR9xy1+Wgn94A5ju/H27amyXiBWe5btLfKRX0CtFIq9/Uu
- 9JawAMkOjsicxYXuGcAbKe8V0XAdfEvpsSTXcUImBggImD6yS9XrjlqioxEizyBg1w6W99vqJsidyKHxGyYmv6iLoXiZN0N1deiSDVUCU0FmhlX89GoMQ/l8
- 7rKh8VgSsFYzfFuVcrF6qfI4h6i9EysirZNbrybkZfE=
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 9/30/19 6:30 AM, Jiunn Chang wrote:
-> Tuner step increment/decrement will select the next highest or next
-> lowest service frequency.  There are a total of three possible
-> frequencies given a broadcast type and system for a total of 81 analog
-> channels.
-> 
-> Opcodes implemented:
->   - <Tuner Step Increment>
->   - <Tuner Step Decrement>
-> 
-> Signed-off-by: Jiunn Chang <c0d1n61at3@gmail.com>
-> ---
->  utils/cec-follower/cec-follower.cpp |  2 +-
->  utils/cec-follower/cec-follower.h   |  3 +-
->  utils/cec-follower/cec-tuner.cpp    | 85 +++++++++++++++++++++++++----
->  3 files changed, 76 insertions(+), 14 deletions(-)
-> 
-> diff --git a/utils/cec-follower/cec-follower.cpp b/utils/cec-follower/cec-follower.cpp
-> index 4243fdd9..8375404e 100644
-> --- a/utils/cec-follower/cec-follower.cpp
-> +++ b/utils/cec-follower/cec-follower.cpp
-> @@ -298,7 +298,7 @@ void state_init(struct node &node)
->  	node.state.sac_active = false;
->  	node.state.volume = 50;
->  	node.state.mute = false;
-> -	analog_tuner_init(&node.state.tuner_dev_info);
-> +	analog_tuner_init(&node.state);
->  }
->  
->  int main(int argc, char **argv)
-> diff --git a/utils/cec-follower/cec-follower.h b/utils/cec-follower/cec-follower.h
-> index a53c16fe..d8ac4e77 100644
-> --- a/utils/cec-follower/cec-follower.h
-> +++ b/utils/cec-follower/cec-follower.h
-> @@ -52,6 +52,7 @@ struct state {
->  	unsigned rc_press_hold_count;
->  	unsigned rc_duration_sum;
->  	struct cec_op_tuner_device_info tuner_dev_info;
-> +	unsigned int freq_idx;
->  };
->  
->  struct node {
-> @@ -221,7 +222,7 @@ std::string opcode2s(const struct cec_msg *msg);
->  void sad_encode(const struct short_audio_desc *sad, __u32 *descriptor);
->  
->  // cec-tuner.cpp
-> -void analog_tuner_init(struct cec_op_tuner_device_info *tuner_dev_info);
-> +void analog_tuner_init(struct state *state);
->  void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, unsigned me);
->  
->  // CEC processing
-> diff --git a/utils/cec-follower/cec-tuner.cpp b/utils/cec-follower/cec-tuner.cpp
-> index 2f6e3425..d3c6f9e8 100644
-> --- a/utils/cec-follower/cec-tuner.cpp
-> +++ b/utils/cec-follower/cec-tuner.cpp
-> @@ -90,8 +90,9 @@ static unsigned int analog_freqs_khz[3][9][NUM_ANALOG_FREQS] =
->  	}
->  };
->  
-> -void analog_tuner_init(struct cec_op_tuner_device_info *info)
-> +void analog_tuner_init(struct state *state)
->  {
-> +	struct cec_op_tuner_device_info *info = &state->tuner_dev_info;
->  	unsigned int freq_khz =
->  		analog_freqs_khz[info->analog.ana_bcast_type][info->analog.bcast_system][0];
->  
-> @@ -101,20 +102,24 @@ void analog_tuner_init(struct cec_op_tuner_device_info *info)
->  	info->analog.ana_bcast_type = CEC_OP_ANA_BCAST_TYPE_CABLE;
->  	info->analog.bcast_system = CEC_OP_BCAST_SYSTEM_PAL_BG;
->  	info->analog.ana_freq = (freq_khz * 10) / 625;
-> +	state->freq_idx = 18;
+From: Javier Martinez Canillas <javierm@redhat.com>
 
-Hmm, see below.
+Commit f7b4b54e6364 ("[media] tvp5150: add HW input connectors support")
+added input signals support for the tvp5150, but the approach was found
+to be incorrect so the corresponding DT binding commit 82c2ffeb217a
+("[media] tvp5150: document input connectors DT bindings") was reverted.
 
->  }
->  
-> -static unsigned int analog_get_nearest_freq(__u8 ana_bcast_type, __u8 ana_bcast_system,
-> -                                            int ana_freq_khz)
-> +static void analog_get_nearest_freq_idx(__u8 ana_bcast_type, __u8 ana_bcast_system,
-> +					int ana_freq_khz, int *nearest, int *idx)
+This left the driver with an undocumented (and wrong) DT parsing logic,
+so lets get rid of this code as well until the input connectors support
+is implemented properly.
 
-Why not have this function return 'unsigned int' containing the index?
+It's a partial revert due other patches added on top of mentioned commit
+not allowing the commit to be reverted cleanly anymore. But all the code
+related to the DT parsing logic and input entities creation are removed.
 
-And I see no reason why 'nearest' is in the argument list. AFAICT this can
-be entirely local to this function.
+Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+Acked-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+[m.felsch@pengutronix.de: rm TVP5150_INPUT_NUM define]
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ drivers/media/i2c/tvp5150.c         | 145 ----------------------------
+ include/dt-bindings/media/tvp5150.h |   2 -
+ 2 files changed, 147 deletions(-)
 
->  {
-> -	int nearest = analog_freqs_khz[ana_bcast_type][ana_bcast_system][0];
-> +	*nearest = analog_freqs_khz[ana_bcast_type][ana_bcast_system][0];
-> +	int offset = 0;
->  
->  	for (int i = 0; i < NUM_ANALOG_FREQS; i++) {
->  		int freq = analog_freqs_khz[ana_bcast_type][ana_bcast_system][i];
->  
-> -		if (abs(ana_freq_khz - freq) < abs(ana_freq_khz - nearest))
-> -			nearest = freq;
-> +		if (abs(ana_freq_khz - freq) < abs(ana_freq_khz - *nearest)) {
-> +			*nearest = freq;
-> +			offset++;
-> +		}
->  	}
-> -	return nearest;
-> +	*idx = 18 + (NUM_ANALOG_FREQS * ((ana_bcast_type * 9) + ana_bcast_system)) + offset;
+diff --git a/drivers/media/i2c/tvp5150.c b/drivers/media/i2c/tvp5150.c
+index edad49cebcdf..11a5fd7e2f58 100644
+--- a/drivers/media/i2c/tvp5150.c
++++ b/drivers/media/i2c/tvp5150.c
+@@ -53,8 +53,6 @@ struct tvp5150 {
+ 	struct v4l2_subdev sd;
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ 	struct media_pad pads[TVP5150_NUM_PADS];
+-	struct media_entity input_ent[TVP5150_INPUT_NUM];
+-	struct media_pad input_pad[TVP5150_INPUT_NUM];
+ #endif
+ 	struct v4l2_ctrl_handler hdl;
+ 	struct v4l2_rect rect;
+@@ -1169,40 +1167,6 @@ static int tvp5150_enum_frame_size(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
+-/****************************************************************************
+-			Media entity ops
+- ****************************************************************************/
+-
+-#ifdef CONFIG_MEDIA_CONTROLLER
+-static int tvp5150_link_setup(struct media_entity *entity,
+-			      const struct media_pad *local,
+-			      const struct media_pad *remote, u32 flags)
+-{
+-	struct v4l2_subdev *sd = media_entity_to_v4l2_subdev(entity);
+-	struct tvp5150 *decoder = to_tvp5150(sd);
+-	int i;
+-
+-	for (i = 0; i < TVP5150_INPUT_NUM; i++) {
+-		if (remote->entity == &decoder->input_ent[i])
+-			break;
+-	}
+-
+-	/* Do nothing for entities that are not input connectors */
+-	if (i == TVP5150_INPUT_NUM)
+-		return 0;
+-
+-	decoder->input = i;
+-
+-	tvp5150_selmux(sd);
+-
+-	return 0;
+-}
+-
+-static const struct media_entity_operations tvp5150_sd_media_ops = {
+-	.link_setup = tvp5150_link_setup,
+-};
+-#endif
+-
+ /****************************************************************************
+ 			I2C Command
+  ****************************************************************************/
+@@ -1350,42 +1314,6 @@ static int tvp5150_g_tuner(struct v4l2_subdev *sd, struct v4l2_tuner *vt)
+ 	return 0;
+ }
+ 
+-static int tvp5150_registered(struct v4l2_subdev *sd)
+-{
+-#ifdef CONFIG_MEDIA_CONTROLLER
+-	struct tvp5150 *decoder = to_tvp5150(sd);
+-	int ret = 0;
+-	int i;
+-
+-	for (i = 0; i < TVP5150_INPUT_NUM; i++) {
+-		struct media_entity *input = &decoder->input_ent[i];
+-		struct media_pad *pad = &decoder->input_pad[i];
+-
+-		if (!input->name)
+-			continue;
+-
+-		decoder->input_pad[i].flags = MEDIA_PAD_FL_SOURCE;
+-
+-		ret = media_entity_pads_init(input, 1, pad);
+-		if (ret < 0)
+-			return ret;
+-
+-		ret = media_device_register_entity(sd->v4l2_dev->mdev, input);
+-		if (ret < 0)
+-			return ret;
+-
+-		ret = media_create_pad_link(input, 0, &sd->entity,
+-					    TVP5150_PAD_IF_INPUT, 0);
+-		if (ret < 0) {
+-			media_device_unregister_entity(input);
+-			return ret;
+-		}
+-	}
+-#endif
+-
+-	return 0;
+-}
+-
+ /* ----------------------------------------------------------------------- */
+ 
+ static const struct v4l2_ctrl_ops tvp5150_ctrl_ops = {
+@@ -1439,10 +1367,6 @@ static const struct v4l2_subdev_ops tvp5150_ops = {
+ 	.pad = &tvp5150_pad_ops,
+ };
+ 
+-static const struct v4l2_subdev_internal_ops tvp5150_internal_ops = {
+-	.registered = tvp5150_registered,
+-};
+-
+ /****************************************************************************
+ 			I2C Client & Driver
+  ****************************************************************************/
+@@ -1595,12 +1519,6 @@ static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
+ {
+ 	struct v4l2_fwnode_endpoint bus_cfg = { .bus_type = 0 };
+ 	struct device_node *ep;
+-#ifdef CONFIG_MEDIA_CONTROLLER
+-	struct device_node *connectors, *child;
+-	struct media_entity *input;
+-	const char *name;
+-	u32 input_type;
+-#endif
+ 	unsigned int flags;
+ 	int ret = 0;
+ 
+@@ -1624,67 +1542,6 @@ static int tvp5150_parse_dt(struct tvp5150 *decoder, struct device_node *np)
+ 
+ 	decoder->mbus_type = bus_cfg.bus_type;
+ 
+-#ifdef CONFIG_MEDIA_CONTROLLER
+-	connectors = of_get_child_by_name(np, "connectors");
+-
+-	if (!connectors)
+-		goto err;
+-
+-	for_each_available_child_of_node(connectors, child) {
+-		ret = of_property_read_u32(child, "input", &input_type);
+-		if (ret) {
+-			dev_err(decoder->sd.dev,
+-				 "missing type property in node %pOFn\n",
+-				 child);
+-			of_node_put(child);
+-			goto err_connector;
+-		}
+-
+-		if (input_type >= TVP5150_INPUT_NUM) {
+-			ret = -EINVAL;
+-			of_node_put(child);
+-			goto err_connector;
+-		}
+-
+-		input = &decoder->input_ent[input_type];
+-
+-		/* Each input connector can only be defined once */
+-		if (input->name) {
+-			dev_err(decoder->sd.dev,
+-				 "input %s with same type already exists\n",
+-				 input->name);
+-			of_node_put(child);
+-			ret = -EINVAL;
+-			goto err_connector;
+-		}
+-
+-		switch (input_type) {
+-		case TVP5150_COMPOSITE0:
+-		case TVP5150_COMPOSITE1:
+-			input->function = MEDIA_ENT_F_CONN_COMPOSITE;
+-			break;
+-		case TVP5150_SVIDEO:
+-			input->function = MEDIA_ENT_F_CONN_SVIDEO;
+-			break;
+-		}
+-
+-		input->flags = MEDIA_ENT_FL_CONNECTOR;
+-
+-		ret = of_property_read_string(child, "label", &name);
+-		if (ret < 0) {
+-			dev_err(decoder->sd.dev,
+-				 "missing label property in node %pOFn\n",
+-				 child);
+-			of_node_put(child);
+-			goto err_connector;
+-		}
+-
+-		input->name = name;
+-	}
+-
+-err_connector:
+-	of_node_put(connectors);
+-#endif
+ err:
+ 	of_node_put(ep);
+ 	return ret;
+@@ -1735,7 +1592,6 @@ static int tvp5150_probe(struct i2c_client *c)
+ 	}
+ 
+ 	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
+-	sd->internal_ops = &tvp5150_internal_ops;
+ 	sd->flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 
+ #if defined(CONFIG_MEDIA_CONTROLLER)
+@@ -1750,7 +1606,6 @@ static int tvp5150_probe(struct i2c_client *c)
+ 	if (res < 0)
+ 		return res;
+ 
+-	sd->entity.ops = &tvp5150_sd_media_ops;
+ #endif
+ 
+ 	res = tvp5150_detect_version(core);
+diff --git a/include/dt-bindings/media/tvp5150.h b/include/dt-bindings/media/tvp5150.h
+index 01eedf4985b8..dda00c038530 100644
+--- a/include/dt-bindings/media/tvp5150.h
++++ b/include/dt-bindings/media/tvp5150.h
+@@ -14,8 +14,6 @@
+ #define TVP5150_COMPOSITE1 1
+ #define TVP5150_SVIDEO     2
+ 
+-#define TVP5150_INPUT_NUM  3
+-
+ /* TVP5150 HW outputs */
+ #define TVP5150_NORMAL       0
+ #define TVP5150_BLACK_SCREEN 1
+-- 
+2.20.1
 
-The value 18 is probably the offset for future digital channels. But since those are
-not added yet in this patch series, this value is completely magical. Just start at
-0, and make this change when support for digital channels is added.
-
->  }
->  
->  static bool analog_set_tuner_dev_info(struct node *node, struct cec_msg *msg)
-> @@ -127,8 +132,11 @@ static bool analog_set_tuner_dev_info(struct node *node, struct cec_msg *msg)
->  	cec_ops_select_analogue_service(msg, &type, &freq, &system);
->  	if (type < 3 && system < 9) {
->  		int freq_khz = (freq * 625) / 10;
-> -		unsigned int nearest = analog_get_nearest_freq(type, system,
-> -							       freq_khz);
-> +		int idx;
-
-unsigned int.
-
-> +		int nearest;
-> +
-> +		analog_get_nearest_freq_idx(type, system, freq_khz, &nearest, &idx);
-> +		node->state.freq_idx = idx;
->  		info->analog.ana_bcast_type = type;
->  		info->analog.ana_freq = (nearest * 10) / 625;
->  		info->analog.bcast_system = system;
-
-Use analog_get_type_system_idx() to fill in these fields (see below for more info).
-
-> @@ -137,6 +145,42 @@ static bool analog_set_tuner_dev_info(struct node *node, struct cec_msg *msg)
->  	return false;
->  }
->  
-> +static void analog_get_type_system_idx(unsigned int freq_idx, int *type, int *system, int *idx)
-> +{
-> +	int num_freqs = NUM_ANALOG_FREQS * 9;
-
-Add empty line between variable declarations and code.
-
-> +	*type = (freq_idx - 18) / num_freqs;
-> +	*system = (freq_idx - (18 + num_freqs * *type)) / NUM_ANALOG_FREQS;
-> +	*idx = freq_idx % NUM_ANALOG_FREQS;
-
-The idx value is really not that interesting. Why not return the ana_freq value instead?
-
-So this function would fill in the ana_bcast_type, ana_freq and bcast_system fields
-based on the freq_idx.
-
-> +}
-> +
-> +static void reset_tuner_dev_info(struct node *node)
-> +{
-> +	/*
-> +	  There are a total of 18 digital and 81 analog indexes with digital
-> +	  occurring before analog.  0-17 are digital and 18-98 are analog.
-> +	 */
-
-Just postpone mentioning digital until this is actually added.
-
-Multiline comment blocks in the kernel coding style use:
-
-/*
- *
- *
- */
-
-> +
-> +	struct cec_op_tuner_device_info *info = &node->state.tuner_dev_info;
-> +
-> +	if (node->state.freq_idx < 18) {
-> +		// digital
-> +		info->is_analog = false;
-> +	} else {
-> +		// analog
-> +		int type;
-> +		int system;
-> +		int idx;
-> +		int freq_khz;
-> +
-> +		analog_get_type_system_idx(node->state.freq_idx, &type, &system, &idx);
-> +		info->is_analog = true;
-> +		info->analog.ana_bcast_type = type;
-> +		info->analog.bcast_system = system;
-> +		freq_khz = analog_freqs_khz[info->analog.ana_bcast_type][info->analog.bcast_system][idx];
-> +		info->analog.ana_freq = (freq_khz * 10) / 625;
-> +	}
-> +}
-> +
->  void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, unsigned me)
->  {
->  	bool is_bcast = cec_msg_is_broadcast(&msg);
-> @@ -180,12 +224,29 @@ void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, uns
->  		return;
->  
->  	case CEC_MSG_SELECT_DIGITAL_SERVICE:
-> -	case CEC_MSG_TUNER_STEP_DECREMENT:
-> -	case CEC_MSG_TUNER_STEP_INCREMENT:
-> -		if (!cec_has_tuner(1 << me))
-> +	case CEC_MSG_TUNER_STEP_DECREMENT: {
-> +		if (!cec_has_tuner(1 << me) && !cec_has_tv(1 << me))
->  			break;
-> +
-> +		if (node->state.freq_idx == 18)
-> +			node->state.freq_idx = 98;
-
-'98' is a magic number: this should be a define instead using ARRAY_SIZE(analog_freqs_khz).
-
-> +		else
-> +			node->state.freq_idx--;
-> +		reset_tuner_dev_info(node);
->  		return;
-> +	}
->  
-> +	case CEC_MSG_TUNER_STEP_INCREMENT: {
-> +		if (!cec_has_tuner(1 << me) && !cec_has_tv(1 << me))
-> +			break;
-> +
-> +		if (node->state.freq_idx == 98)
-> +			node->state.freq_idx = 18;
-> +		else
-> +			node->state.freq_idx++;
-> +		reset_tuner_dev_info(node);
-> +		return;
-> +	}
->  
->  		/*
->  		  One Touch Record
-> 
-
-Regards,
-
-	Hans
