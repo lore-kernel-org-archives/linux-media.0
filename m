@@ -2,104 +2,99 @@ Return-Path: <SRS0=DdSm=XZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C7CC35280
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 13:05:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 372D4C32792
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 13:07:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id A9FC52086A
-	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 13:05:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="x6Pjc23c"
+	by mail.kernel.org (Postfix) with ESMTP id 17D2A2086A
+	for <linux-media@archiver.kernel.org>; Mon, 30 Sep 2019 13:07:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731210AbfI3NEl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 09:04:41 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:43420 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730929AbfI3NEk (ORCPT
+        id S1730411AbfI3NHf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 09:07:35 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:59311 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726314AbfI3NHf (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Sep 2019 09:04:40 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x8UD4bOH003771;
-        Mon, 30 Sep 2019 08:04:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1569848677;
-        bh=6eJVirsFiqTwdMuIYCCTbpbN4VdfqWDO+ZLJ0ZgDJQ8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=x6Pjc23c3k+auPDuYzOClk5zDeTwu06PRXU1WBPtQ549yS0+YDpm2+WvB6HEgUxm6
-         RUPiT6yGXj6dOXt31tSGI2HNW+2dGcoWYvgilTyoXNmqRjXeY54K1t2h9xkv5kE5nU
-         tG+esKFq6Ama5V52tdqM92jQZ3ITWufDGapaQXrA=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8UD4bJk057362;
-        Mon, 30 Sep 2019 08:04:37 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 30
- Sep 2019 08:04:27 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 30 Sep 2019 08:04:36 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x8UD4Zig115624;
-        Mon, 30 Sep 2019 08:04:36 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>,
-        Jyri Sarha <jsarha@ti.com>
-Subject: [Patch v5 1/8] media: i2c: ov2659: Fix for image wrap-around in lower resolution
-Date:   Mon, 30 Sep 2019 08:06:37 -0500
-Message-ID: <20190930130644.8704-2-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190930130644.8704-1-bparrot@ti.com>
-References: <20190930130644.8704-1-bparrot@ti.com>
+        Mon, 30 Sep 2019 09:07:35 -0400
+Received: from [192.168.2.10] ([46.9.232.237])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id EvOjilaOfz6EAEvOniNh6y; Mon, 30 Sep 2019 15:07:33 +0200
+Subject: Re: [PATCH v8 7/8] media: v4l2-ctrl: Add new helper
+ v4l2_ctrl_ptr_from_void
+To:     Ricardo Ribalda Delgado <ribalda@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>
+References: <20190930101841.19630-1-ribalda@kernel.org>
+ <20190930101841.19630-8-ribalda@kernel.org>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <aa6ace11-9697-d3d9-907c-83b3398d8f5e@xs4all.nl>
+Date:   Mon, 30 Sep 2019 15:07:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20190930101841.19630-8-ribalda@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfKQ8x4ojUnlXF2/Q+sXcJYMxCA+/yK479ijRvP8Qwq/cIEvO6xGdSfj1I3K7LnmRTlBDZ8rjaQdIHjI8k2v6XXupI0RkeHRROFWnFOUI37zEOWiI1fDT
+ l8409lsY1Rno+7mnnSyl2xaefoqmeVfVPBFYxO6tYbWdH48eZNjAdJKk6x+9iWkxT9aEMrm/DPdU0Tf0Z1cGKyzoM7Q8D0w2h87B12tedTm4YDdEws6Zn7Z6
+ KjK/BhRc7vJwha3Uj9p6mELYURhxESvw8AWbOyFj1v5xPlVAIfzz50S6sImuI/8L8tQdc1aQE54NUGu43twL/s814Y2An/OyxEbztZB+lKdePSBwJa72lKsx
+ ciIbSFbE
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Based on recently found sensor configuration examples, it was
-discovered that when scaling and binning are used for the lower
-resolutions (i.e. 640x480, 320x240) the read offset has to be
-increased otherwise the image appears to be wrapped around.
+On 9/30/19 12:18 PM, Ricardo Ribalda Delgado wrote:
+> This helper function simplifies the code by not needing a union
+> v4l2_ctrl_ptr and an assignment every time we need to use
+> a ctrl_ptr.
+> 
+> Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
+> Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+> ---
+>  include/media/v4l2-ctrls.h | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+> index c42f164e2c9e..d69cfdffd41d 100644
+> --- a/include/media/v4l2-ctrls.h
+> +++ b/include/media/v4l2-ctrls.h
+> @@ -73,6 +73,17 @@ union v4l2_ctrl_ptr {
+>  	void *p;
+>  };
+>  
+> +/**
+> + * v4l2_ctrl_ptr() - Helper function to return a v4l2_ctrl_ptr from a
+> + * void pointer
+> + * @ptr:	The void pointer
+> + */
+> +static inline union v4l2_ctrl_ptr v4l2_ctrl_ptr_from_void(void *ptr)
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Signed-off-by: Jyri Sarha <jsarha@ti.com>
-Acked-by: Lad, Prabhakar <prabhakar.csengg@gmail.com>
----
- drivers/media/i2c/ov2659.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Mismatch between function name and the comment above.
 
-diff --git a/drivers/media/i2c/ov2659.c b/drivers/media/i2c/ov2659.c
-index f4ded0669ff9..17573257097d 100644
---- a/drivers/media/i2c/ov2659.c
-+++ b/drivers/media/i2c/ov2659.c
-@@ -661,7 +661,7 @@ static struct sensor_register ov2659_vga[] = {
- 	{ REG_TIMING_HORIZ_FORMAT, 0x01 },
- 	{ 0x370a, 0x52 },
- 	{ REG_VFIFO_READ_START_H, 0x00 },
--	{ REG_VFIFO_READ_START_L, 0x80 },
-+	{ REG_VFIFO_READ_START_L, 0xa0 },
- 	{ REG_ISP_CTRL02, 0x10 },
- 	{ REG_NULL, 0x00 },
- };
-@@ -709,7 +709,7 @@ static  struct sensor_register ov2659_qvga[] = {
- 	{ REG_TIMING_HORIZ_FORMAT, 0x01 },
- 	{ 0x370a, 0x52 },
- 	{ REG_VFIFO_READ_START_H, 0x00 },
--	{ REG_VFIFO_READ_START_L, 0x80 },
-+	{ REG_VFIFO_READ_START_L, 0xa0 },
- 	{ REG_ISP_CTRL02, 0x10 },
- 	{ REG_NULL, 0x00 },
- };
--- 
-2.17.1
+But _from_void is not a good name, since it's from a void pointer.
+
+How about: v4l2_ctrl_ptr_create(void *ptr)
+
+since you create a v4l2_ctrl_ptr.
+
+Regards,
+
+	Hans
+
+> +{
+> +	BUILD_BUG_ON(sizeof(union v4l2_ctrl_ptr) != sizeof(void *));
+> +	return (union v4l2_ctrl_ptr) ptr;
+> +}
+> +
+>  /**
+>   * struct v4l2_ctrl_ops - The control operations that the driver has to provide.
+>   *
+> 
 
