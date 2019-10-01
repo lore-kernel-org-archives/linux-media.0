@@ -6,68 +6,100 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7EC91ECE587
-	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 16:45:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDBA7C352AA
+	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 16:50:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 538DB21783
-	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 16:45:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A0DAC20659
+	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 16:50:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390412AbfJAQpt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Oct 2019 12:45:49 -0400
-Received: from er-systems.de ([148.251.68.21]:34683 "EHLO er-systems.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388218AbfJAQpt (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:45:49 -0400
-X-Greylist: delayed 438 seconds by postgrey-1.27 at vger.kernel.org; Tue, 01 Oct 2019 12:45:48 EDT
-Received: by er-systems.de (Postfix, from userid 1006)
-        id 42593D6006D; Tue,  1 Oct 2019 18:38:29 +0200 (CEST)
-From:   Thomas Voegtle <tv@lio96.de>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org
-Subject: [PATCH] media: dvbsky: add support for eyeTV Geniatech T2 lite
-Date:   Tue,  1 Oct 2019 18:38:29 +0200
-Message-Id: <20191001163829.15701-1-tv@lio96.de>
-X-Mailer: git-send-email 2.16.4
+        id S2389046AbfJAQug (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Oct 2019 12:50:36 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:43468 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727322AbfJAQuf (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Oct 2019 12:50:35 -0400
+Received: from localhost.localdomain (unknown [IPv6:2a02:810a:113f:a6c2::a6f9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: dafna)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 46B0628ECDC;
+        Tue,  1 Oct 2019 17:50:33 +0100 (BST)
+From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+To:     linux-media@vger.kernel.org
+Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
+        ezequiel@collabora.com, andre.almeida@collabora.com,
+        skhan@linuxfoundation.org, hverkuil@xs4all.nl,
+        kernel@collabora.com, dafna3@gmail.com
+Subject: [PATCH 2/3] media: vimc: sensor: register subdevice only after initialization
+Date:   Tue,  1 Oct 2019 18:50:21 +0200
+Message-Id: <20191001165022.16263-3-dafna.hirschfeld@collabora.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191001165022.16263-1-dafna.hirschfeld@collabora.com>
+References: <20191001165022.16263-1-dafna.hirschfeld@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds USB ID for the eyeTV Geniatech T2 lite to the dvbsky driver.
-This is a Geniatech T230C based stick without IR and a different USB ID.
+vimc_sen_add function first registers the subdevice and then
+calls tpg_alloc. If tpg_alloc fails it unregisters the subdevice
+and then frees vsen, this cause double free since the release
+callback that follows subdevice unregistration also frees vsen.
 
-Signed-off-by: Thomas Voegtle <tv@lio96.de>
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/media/usb/dvb-usb-v2/dvbsky.c | 3 +++
- include/media/dvb-usb-ids.h           | 1 +
- 2 files changed, 4 insertions(+)
+ drivers/media/platform/vimc/vimc-sensor.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/usb/dvb-usb-v2/dvbsky.c b/drivers/media/usb/dvb-usb-v2/dvbsky.c
-index 617a306f6815..578b1d0aae70 100644
---- a/drivers/media/usb/dvb-usb-v2/dvbsky.c
-+++ b/drivers/media/usb/dvb-usb-v2/dvbsky.c
-@@ -792,6 +792,9 @@ static const struct usb_device_id dvbsky_id_table[] = {
- 	{ DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C,
- 		&mygica_t230c_props, "MyGica Mini DVB-T2 USB Stick T230C",
- 		RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
-+	{ DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C_LITE,
-+		&mygica_t230c_props, "MyGica Mini DVB-T2 USB Stick T230 Lite",
-+		NULL) },
- 	{ DVB_USB_DEVICE(USB_VID_CONEXANT, USB_PID_MYGICA_T230C2,
- 		&mygica_t230c_props, "MyGica Mini DVB-T2 USB Stick T230C v2",
- 		RC_MAP_TOTAL_MEDIA_IN_HAND_02) },
-diff --git a/include/media/dvb-usb-ids.h b/include/media/dvb-usb-ids.h
-index 7ce4e8332421..61af054a34a1 100644
---- a/include/media/dvb-usb-ids.h
-+++ b/include/media/dvb-usb-ids.h
-@@ -388,6 +388,7 @@
- #define USB_PID_MYGICA_D689				0xd811
- #define USB_PID_MYGICA_T230				0xc688
- #define USB_PID_MYGICA_T230C				0xc689
-+#define USB_PID_MYGICA_T230C_LITE			0xc699
- #define USB_PID_MYGICA_T230C2				0xc68a
- #define USB_PID_ELGATO_EYETV_DIVERSITY			0x0011
- #define USB_PID_ELGATO_EYETV_DTT			0x0021
+diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
+index 46dc6a535abe..ee2306c08569 100644
+--- a/drivers/media/platform/vimc/vimc-sensor.c
++++ b/drivers/media/platform/vimc/vimc-sensor.c
+@@ -358,6 +358,13 @@ struct vimc_ent_device *vimc_sen_add(struct vimc_device *vimc,
+ 		goto err_free_vsen;
+ 	}
+ 
++	/* Initialize the test pattern generator */
++	tpg_init(&vsen->tpg, vsen->mbus_format.width,
++		 vsen->mbus_format.height);
++	ret = tpg_alloc(&vsen->tpg, VIMC_FRAME_MAX_WIDTH);
++	if (ret)
++		goto err_free_hdl;
++
+ 	/* Initialize ved and sd */
+ 	ret = vimc_ent_sd_register(&vsen->ved, &vsen->sd, v4l2_dev,
+ 				   vcfg_name,
+@@ -365,7 +372,7 @@ struct vimc_ent_device *vimc_sen_add(struct vimc_device *vimc,
+ 				   (const unsigned long[1]) {MEDIA_PAD_FL_SOURCE},
+ 				   &vimc_sen_int_ops, &vimc_sen_ops);
+ 	if (ret)
+-		goto err_free_hdl;
++		goto err_free_tpg;
+ 
+ 	vsen->ved.process_frame = vimc_sen_process_frame;
+ 	vsen->dev = &vimc->pdev.dev;
+@@ -373,17 +380,10 @@ struct vimc_ent_device *vimc_sen_add(struct vimc_device *vimc,
+ 	/* Initialize the frame format */
+ 	vsen->mbus_format = fmt_default;
+ 
+-	/* Initialize the test pattern generator */
+-	tpg_init(&vsen->tpg, vsen->mbus_format.width,
+-		 vsen->mbus_format.height);
+-	ret = tpg_alloc(&vsen->tpg, VIMC_FRAME_MAX_WIDTH);
+-	if (ret)
+-		goto err_unregister_ent_sd;
+-
+ 	return &vsen->ved;
+ 
+-err_unregister_ent_sd:
+-	vimc_ent_sd_unregister(&vsen->ved,  &vsen->sd);
++err_free_tpg:
++	tpg_free(&vsen->tpg);
+ err_free_hdl:
+ 	v4l2_ctrl_handler_free(&vsen->hdl);
+ err_free_vsen:
 -- 
-2.16.4
+2.20.1
 
