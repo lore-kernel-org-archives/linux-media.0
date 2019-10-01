@@ -2,249 +2,151 @@ Return-Path: <SRS0=0FwG=X2=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F190C388F3
-	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 03:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE81DC32793
+	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 03:47:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F0D52217F4
-	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 03:18:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="o8nMrEwD"
+	by mail.kernel.org (Postfix) with ESMTP id 8135520815
+	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 03:47:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732528AbfJADS3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 30 Sep 2019 23:18:29 -0400
-Received: from mail-io1-f53.google.com ([209.85.166.53]:35754 "EHLO
-        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732449AbfJADS3 (ORCPT
+        id S1727645AbfJADro (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 30 Sep 2019 23:47:44 -0400
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:50045 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726590AbfJADrn (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 30 Sep 2019 23:18:29 -0400
-Received: by mail-io1-f53.google.com with SMTP id q10so44179370iop.2
-        for <linux-media@vger.kernel.org>; Mon, 30 Sep 2019 20:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/5J3tdrfD+9V9z88r4ZFJeFQmWpclVcWOfL7ch0msJA=;
-        b=o8nMrEwDx0S9No4vMIVvR9bfFPYqYQOTK0maHuOL1WmGDc7MGfq2cKR1UzIj8bBzus
-         270G8OPCPsb9/E9IMCYuopgz5v4gd7/gj63iau6r3Nl7EfxHptbWYp1l3kHtAybM616b
-         BvCYCUB0HG5AdZyzd5DiV0ntdf/CHYDhj9iMbb1OmbfWfaTCzGAB4CnJPpU4rRaDlLhf
-         w4FpxpQqPEbjWdoAMbvoKme2QF3MSNto6KP+7s5hl2qwcMxQYRCr1MBQXJZUhR/6S7Bf
-         JITS4uhNjggO8VmUUE5KswNOOWKsS9LuVaoOUGwlN5Fyl/Vq5dG3gb1atPOBP6ZatGS4
-         ShUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/5J3tdrfD+9V9z88r4ZFJeFQmWpclVcWOfL7ch0msJA=;
-        b=XRUnr6GM1feH075Ib0iDOUkkimjcBi3puHYQ457+HR4dkaN8GAtQlEhmUoo7D5st/q
-         G6oNNyRQxG6xtbZmVCFaZhQatd5Nqb9O4Drp6uHgnHt/t+cpcy1I0fBJyiMw+qStgKIu
-         A3eqE1lyUr81fr4R5tLg7QsIGs+09Xugj1XOLlRTDo9jEf0+LJgPbXThx6JV/Z+Oi7cg
-         IhTAPqiMzD+CdA1OtRAsy0UEZvOyh/P0m2rNJ1JPYfDV2HekuT4lBhOIN2o8ImfsN4ZT
-         w411I3gV+KqdJ2PZfTPga8hc0lng3JRwvOOVw/07XVosOS64HIhdh8ZowKWi3eLmngWW
-         VkZA==
-X-Gm-Message-State: APjAAAWvtlA1ih81TUTMV1jFWygkrMOE2M8FhXKySJ2gQ1YveUceLjf6
-        hcwfNWkPs5EqTkpjV+fBapg5MF/y
-X-Google-Smtp-Source: APXvYqwrL6CJGlGslHwZfQfjEGGb+s1UOKIczCzmopX/x6HmIknqtQneT6qVSg6JK4BjeDMXYZ0kuQ==
-X-Received: by 2002:a02:6616:: with SMTP id k22mr21823913jac.129.1569899906454;
-        Mon, 30 Sep 2019 20:18:26 -0700 (PDT)
-Received: from rYz3n.attlocal.net ([2600:1700:210:3790::40])
-        by smtp.googlemail.com with ESMTPSA id l82sm8719452ilh.23.2019.09.30.20.18.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 20:18:26 -0700 (PDT)
-From:   Jiunn Chang <c0d1n61at3@gmail.com>
-To:     linux-media@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Cc:     hverkuil@xs4all.nl
-Subject: [PATCH v4 2/3] cec-follower: add tuner step increment/decrement
-Date:   Mon, 30 Sep 2019 22:18:22 -0500
-Message-Id: <20191001031823.312020-3-c0d1n61at3@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190930043017.474025-1-c0d1n61at3@gmail.com>
-References: <20190930043017.474025-1-c0d1n61at3@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 30 Sep 2019 23:47:43 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:ece7:a680:ba1b:aa21])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id F98WipMjTz6EAF98XiPSBo; Tue, 01 Oct 2019 05:47:41 +0200
+Message-ID: <b19034627b927e2e4fe5abe771076018@smtp-cloud9.xs4all.net>
+Date:   Tue, 01 Oct 2019 05:47:40 +0200
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfAp0a3olQ891QTbRTu5oacOc1k81VwtlmPOcmNgIGrA3kG4yNIoYQhn25rLGDQaBlFKMVH3Ot/rYbLaZEw5Smwo1Jf7tG62YCNX1ma1le7g6kmuuM4RD
+ zkFhXgpGWPgqjFzeVxCiE6lm5bdslFZ459JL1a+C0GWk+gGbV6QSjp7yTTXQf7nNy3yyf+1vkifSQgePq8Ip4SsG+KOvG/1qjBGspEut48CcqbSLxC3jo/Is
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Tuner step increment/decrement will select the next highest or next
-lowest service frequency.  There are a total of three possible
-frequencies given a broadcast type and system for a total of 81 analog
-channels.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Opcodes implemented:
-  - <Tuner Step Increment>
-  - <Tuner Step Decrement>
+Results of the daily build of media_tree:
 
-Signed-off-by: Jiunn Chang <c0d1n61at3@gmail.com>
----
- utils/cec-follower/cec-follower.cpp |  2 +-
- utils/cec-follower/cec-follower.h   |  3 +-
- utils/cec-follower/cec-tuner.cpp    | 65 ++++++++++++++++++++++-------
- 3 files changed, 54 insertions(+), 16 deletions(-)
+date:			Tue Oct  1 05:00:11 CEST 2019
+media-tree git hash:	54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c
+media_build git hash:	d75b29db1297d2475227cc8bada843542271e40d
+v4l-utils git hash:	6c9c63d98d60a4478d0e2a2f45fe0e54793f5582
+edid-decode git hash:	7696439db703eeca7248af6c3a17d2e19a9292ea
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1-rc1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.5.1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 300d85fb65a4cba461ce002ac40bb9fad4152087
+host hardware:		x86_64
+host os:		5.2.0-2-amd64
 
-diff --git a/utils/cec-follower/cec-follower.cpp b/utils/cec-follower/cec-follower.cpp
-index 4243fdd9..8375404e 100644
---- a/utils/cec-follower/cec-follower.cpp
-+++ b/utils/cec-follower/cec-follower.cpp
-@@ -298,7 +298,7 @@ void state_init(struct node &node)
- 	node.state.sac_active = false;
- 	node.state.volume = 50;
- 	node.state.mute = false;
--	analog_tuner_init(&node.state.tuner_dev_info);
-+	analog_tuner_init(&node.state);
- }
- 
- int main(int argc, char **argv)
-diff --git a/utils/cec-follower/cec-follower.h b/utils/cec-follower/cec-follower.h
-index a53c16fe..d8ac4e77 100644
---- a/utils/cec-follower/cec-follower.h
-+++ b/utils/cec-follower/cec-follower.h
-@@ -52,6 +52,7 @@ struct state {
- 	unsigned rc_press_hold_count;
- 	unsigned rc_duration_sum;
- 	struct cec_op_tuner_device_info tuner_dev_info;
-+	unsigned int freq_idx;
- };
- 
- struct node {
-@@ -221,7 +222,7 @@ std::string opcode2s(const struct cec_msg *msg);
- void sad_encode(const struct short_audio_desc *sad, __u32 *descriptor);
- 
- // cec-tuner.cpp
--void analog_tuner_init(struct cec_op_tuner_device_info *tuner_dev_info);
-+void analog_tuner_init(struct state *state);
- void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, unsigned me);
- 
- // CEC processing
-diff --git a/utils/cec-follower/cec-tuner.cpp b/utils/cec-follower/cec-tuner.cpp
-index d74981b2..6f14b059 100644
---- a/utils/cec-follower/cec-tuner.cpp
-+++ b/utils/cec-follower/cec-tuner.cpp
-@@ -9,6 +9,8 @@
- #include "cec-follower.h"
- 
- #define NUM_ANALOG_FREQS	3
-+#define ARRAY_SIZE_ANA_FREQS(x) \
-+	ARRAY_SIZE(x) * ARRAY_SIZE(*x) * ARRAY_SIZE(**x)
- 
- /*
-  * This table contains analog television channel frequencies in KHz.  There are
-@@ -90,10 +92,12 @@ static unsigned int analog_freqs_khz[3][9][NUM_ANALOG_FREQS] =
- 	}
- };
- 
--void analog_tuner_init(struct cec_op_tuner_device_info *info)
-+void analog_tuner_init(struct state *state)
- {
-+	struct cec_op_tuner_device_info *info = &state->tuner_dev_info;
- 	unsigned int freq_khz;
- 
-+	state->freq_idx = 0;
- 	info->rec_flag = CEC_OP_REC_FLAG_NOT_USED;
- 	info->tuner_display_info = CEC_OP_TUNER_DISPLAY_INFO_ANALOGUE;
- 	info->is_analog = true;
-@@ -103,23 +107,41 @@ void analog_tuner_init(struct cec_op_tuner_device_info *info)
- 	info->analog.ana_freq = (freq_khz * 10) / 625;
- }
- 
--static unsigned int analog_get_nearest_freq(__u8 ana_bcast_type, __u8 ana_bcast_system,
--                                            int ana_freq_khz)
-+static unsigned int analog_get_nearest_freq_idx(__u8 ana_bcast_type, __u8 ana_bcast_system,
-+						int ana_freq_khz)
- {
- 	int nearest = analog_freqs_khz[ana_bcast_type][ana_bcast_system][0];
-+	unsigned int offset = 0;
- 
- 	for (int i = 0; i < NUM_ANALOG_FREQS; i++) {
- 		int freq = analog_freqs_khz[ana_bcast_type][ana_bcast_system][i];
- 
--		if (abs(ana_freq_khz - freq) < abs(ana_freq_khz - nearest))
-+		if (abs(ana_freq_khz - freq) < abs(ana_freq_khz - nearest)) {
- 			nearest = freq;
-+			offset++;
-+		}
- 	}
--	return nearest;
-+	return NUM_ANALOG_FREQS * ((ana_bcast_type * 9) + ana_bcast_system) + offset;
- }
- 
--static bool analog_set_tuner_dev_info(struct node *node, struct cec_msg *msg)
-+static void analog_get_type_system_idx(struct node *node)
- {
- 	struct cec_op_tuner_device_info *info = &node->state.tuner_dev_info;
-+	unsigned int tot_freqs = NUM_ANALOG_FREQS * 9;
-+	unsigned int freq_idx = node->state.freq_idx;
-+	unsigned int freq_khz;
-+	unsigned int idx;
-+
-+	info->analog.ana_bcast_type = freq_idx / tot_freqs;
-+	info->analog.bcast_system =
-+		(freq_idx - (tot_freqs * info->analog.ana_bcast_type)) / NUM_ANALOG_FREQS;
-+	idx = freq_idx % NUM_ANALOG_FREQS;
-+	freq_khz = analog_freqs_khz[info->analog.ana_bcast_type][info->analog.bcast_system][idx];
-+	info->analog.ana_freq = (freq_khz * 10) / 625;
-+}
-+
-+static bool analog_set_tuner_dev_info(struct node *node, struct cec_msg *msg)
-+{
- 	__u8 type;
- 	__u16 freq;
- 	__u8 system;
-@@ -127,11 +149,9 @@ static bool analog_set_tuner_dev_info(struct node *node, struct cec_msg *msg)
- 	cec_ops_select_analogue_service(msg, &type, &freq, &system);
- 	if (type < 3 && system < 9) {
- 		int freq_khz = (freq * 625) / 10;
--		unsigned int nearest = analog_get_nearest_freq(type, system,
--							       freq_khz);
--		info->analog.ana_bcast_type = type;
--		info->analog.ana_freq = (nearest * 10) / 625;
--		info->analog.bcast_system = system;
-+
-+		node->state.freq_idx = analog_get_nearest_freq_idx(type, system, freq_khz);
-+		analog_get_type_system_idx(node);
- 		return true;
- 	}
- 	return false;
-@@ -180,12 +200,29 @@ void process_tuner_record_timer_msgs(struct node *node, struct cec_msg &msg, uns
- 		return;
- 
- 	case CEC_MSG_SELECT_DIGITAL_SERVICE:
--	case CEC_MSG_TUNER_STEP_DECREMENT:
--	case CEC_MSG_TUNER_STEP_INCREMENT:
--		if (!cec_has_tuner(1 << me))
-+	case CEC_MSG_TUNER_STEP_DECREMENT: {
-+		if (!cec_has_tuner(1 << me) && !cec_has_tv(1 << me))
- 			break;
-+
-+		if (node->state.freq_idx == 0)
-+			node->state.freq_idx = ARRAY_SIZE_ANA_FREQS(analog_freqs_khz) - 1;
-+		else
-+			node->state.freq_idx--;
-+		analog_get_type_system_idx(node);
- 		return;
-+	}
- 
-+	case CEC_MSG_TUNER_STEP_INCREMENT: {
-+		if (!cec_has_tuner(1 << me) && !cec_has_tv(1 << me))
-+			break;
-+
-+		if (node->state.freq_idx == ARRAY_SIZE_ANA_FREQS(analog_freqs_khz) - 1)
-+			node->state.freq_idx = 0;
-+		else
-+			node->state.freq_idx++;
-+		analog_get_type_system_idx(node);
-+		return;
-+	}
- 
- 		/*
- 		  One Touch Record
--- 
-2.23.0
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: ERRORS
+linux-3.10.108-x86_64: ERRORS
+linux-3.11.10-i686: ERRORS
+linux-3.11.10-x86_64: ERRORS
+linux-3.12.74-i686: ERRORS
+linux-3.12.74-x86_64: ERRORS
+linux-3.13.11-i686: ERRORS
+linux-3.13.11-x86_64: ERRORS
+linux-3.14.79-i686: ERRORS
+linux-3.14.79-x86_64: ERRORS
+linux-3.15.10-i686: ERRORS
+linux-3.15.10-x86_64: ERRORS
+linux-3.16.63-i686: ERRORS
+linux-3.16.63-x86_64: ERRORS
+linux-3.17.8-i686: ERRORS
+linux-3.17.8-x86_64: ERRORS
+linux-3.18.136-i686: ERRORS
+linux-3.18.136-x86_64: ERRORS
+linux-3.19.8-i686: ERRORS
+linux-3.19.8-x86_64: ERRORS
+linux-4.0.9-i686: ERRORS
+linux-4.0.9-x86_64: ERRORS
+linux-4.1.52-i686: ERRORS
+linux-4.1.52-x86_64: ERRORS
+linux-4.2.8-i686: ERRORS
+linux-4.2.8-x86_64: ERRORS
+linux-4.3.6-i686: ERRORS
+linux-4.3.6-x86_64: ERRORS
+linux-4.4.167-i686: ERRORS
+linux-4.4.167-x86_64: ERRORS
+linux-4.5.7-i686: ERRORS
+linux-4.5.7-x86_64: ERRORS
+linux-4.6.7-i686: ERRORS
+linux-4.6.7-x86_64: ERRORS
+linux-4.7.10-i686: ERRORS
+linux-4.7.10-x86_64: ERRORS
+linux-4.8.17-i686: ERRORS
+linux-4.8.17-x86_64: ERRORS
+linux-4.9.162-i686: ERRORS
+linux-4.9.162-x86_64: ERRORS
+linux-4.10.17-i686: ERRORS
+linux-4.10.17-x86_64: ERRORS
+linux-4.11.12-i686: ERRORS
+linux-4.11.12-x86_64: ERRORS
+linux-4.12.14-i686: ERRORS
+linux-4.12.14-x86_64: ERRORS
+linux-4.13.16-i686: ERRORS
+linux-4.13.16-x86_64: ERRORS
+linux-4.14.105-i686: ERRORS
+linux-4.14.105-x86_64: ERRORS
+linux-4.15.18-i686: ERRORS
+linux-4.15.18-x86_64: ERRORS
+linux-4.16.18-i686: ERRORS
+linux-4.16.18-x86_64: ERRORS
+linux-4.17.19-i686: ERRORS
+linux-4.17.19-x86_64: ERRORS
+linux-4.18.20-i686: ERRORS
+linux-4.18.20-x86_64: ERRORS
+linux-4.19.28-i686: ERRORS
+linux-4.19.28-x86_64: ERRORS
+linux-4.20.15-i686: ERRORS
+linux-4.20.15-x86_64: ERRORS
+linux-5.0.15-i686: ERRORS
+linux-5.0.15-x86_64: ERRORS
+linux-5.1.1-i686: ERRORS
+linux-5.1.1-x86_64: ERRORS
+linux-5.2.1-i686: ERRORS
+linux-5.2.1-x86_64: ERRORS
+linux-5.3.1-i686: ERRORS
+linux-5.3.1-x86_64: ERRORS
+linux-5.4-rc1-i686: OK
+linux-5.4-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: WARNINGS: Final Summary: 2329, Succeeded: 2329, Failed: 0, Warnings: 1
+sparse: OK
+smatch: ERRORS
 
+Logs weren't copied as they are too large (12900 kB)
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
