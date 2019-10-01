@@ -6,33 +6,33 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5167AECE587
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4ACBECE58A
 	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 16:50:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2FED120659
+	by mail.kernel.org (Postfix) with ESMTP id 984FB20659
 	for <linux-media@archiver.kernel.org>; Tue,  1 Oct 2019 16:50:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388153AbfJAQuj (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 1 Oct 2019 12:50:39 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:43476 "EHLO
+        id S2389025AbfJAQuf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 1 Oct 2019 12:50:35 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:43460 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729716AbfJAQug (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Oct 2019 12:50:36 -0400
+        with ESMTP id S1726860AbfJAQue (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 1 Oct 2019 12:50:34 -0400
 Received: from localhost.localdomain (unknown [IPv6:2a02:810a:113f:a6c2::a6f9])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id BA17428ECDF;
-        Tue,  1 Oct 2019 17:50:33 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id CBBD128EC32;
+        Tue,  1 Oct 2019 17:50:32 +0100 (BST)
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         ezequiel@collabora.com, andre.almeida@collabora.com,
         skhan@linuxfoundation.org, hverkuil@xs4all.nl,
         kernel@collabora.com, dafna3@gmail.com
-Subject: [PATCH 3/3] media: vimc: move media_entity_cleanup to release callbacks
-Date:   Tue,  1 Oct 2019 18:50:22 +0200
-Message-Id: <20191001165022.16263-4-dafna.hirschfeld@collabora.com>
+Subject: [PATCH 1/3] media: vimc: initialize vim entity pointers to NULL
+Date:   Tue,  1 Oct 2019 18:50:20 +0200
+Message-Id: <20191001165022.16263-2-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191001165022.16263-1-dafna.hirschfeld@collabora.com>
 References: <20191001165022.16263-1-dafna.hirschfeld@collabora.com>
@@ -43,86 +43,50 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-according to the docs, this function must be called during
-the cleanup phase after unregistering the entity.
+since NULL value for vimc entity pointer indicates
+that entity creation failed and this is tested, the
+pointers should be initialized to NULL.
 
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- drivers/media/platform/vimc/vimc-capture.c | 2 +-
- drivers/media/platform/vimc/vimc-common.c  | 1 -
- drivers/media/platform/vimc/vimc-debayer.c | 1 +
- drivers/media/platform/vimc/vimc-scaler.c  | 1 +
- drivers/media/platform/vimc/vimc-sensor.c  | 1 +
- 5 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/platform/vimc/vimc-core.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
-index 602f80323031..5f353c20e605 100644
---- a/drivers/media/platform/vimc/vimc-capture.c
-+++ b/drivers/media/platform/vimc/vimc-capture.c
-@@ -330,6 +330,7 @@ static void vimc_cap_release(struct video_device *vdev)
- 	struct vimc_cap_device *vcap =
- 		container_of(vdev, struct vimc_cap_device, vdev);
- 
-+	media_entity_cleanup(vcap->ved.ent);
- 	vimc_pads_cleanup(vcap->ved.pads);
- 	kfree(vcap);
- }
-@@ -340,7 +341,6 @@ void vimc_cap_rm(struct vimc_device *vimc, struct vimc_ent_device *ved)
- 
- 	vcap = container_of(ved, struct vimc_cap_device, ved);
- 	vb2_queue_release(&vcap->queue);
--	media_entity_cleanup(ved->ent);
- 	video_unregister_device(&vcap->vdev);
- }
- 
-diff --git a/drivers/media/platform/vimc/vimc-common.c b/drivers/media/platform/vimc/vimc-common.c
-index a3120f4f7a90..999bc353fb10 100644
---- a/drivers/media/platform/vimc/vimc-common.c
-+++ b/drivers/media/platform/vimc/vimc-common.c
-@@ -423,7 +423,6 @@ EXPORT_SYMBOL_GPL(vimc_ent_sd_register);
- 
- void vimc_ent_sd_unregister(struct vimc_ent_device *ved, struct v4l2_subdev *sd)
+diff --git a/drivers/media/platform/vimc/vimc-core.c b/drivers/media/platform/vimc/vimc-core.c
+index 6e3e5c91ae39..32a79e578b78 100644
+--- a/drivers/media/platform/vimc/vimc-core.c
++++ b/drivers/media/platform/vimc/vimc-core.c
+@@ -160,19 +160,17 @@ static int vimc_create_links(struct vimc_device *vimc)
+ static int vimc_add_subdevs(struct vimc_device *vimc)
  {
--	media_entity_cleanup(ved->ent);
- 	v4l2_device_unregister_subdev(sd);
- }
- EXPORT_SYMBOL_GPL(vimc_ent_sd_unregister);
-diff --git a/drivers/media/platform/vimc/vimc-debayer.c b/drivers/media/platform/vimc/vimc-debayer.c
-index feac47d79449..e1bad6713cde 100644
---- a/drivers/media/platform/vimc/vimc-debayer.c
-+++ b/drivers/media/platform/vimc/vimc-debayer.c
-@@ -477,6 +477,7 @@ static void vimc_deb_release(struct v4l2_subdev *sd)
- 	struct vimc_deb_device *vdeb =
- 				container_of(sd, struct vimc_deb_device, sd);
+ 	unsigned int i;
+-	struct vimc_ent_device *ved;
  
-+	media_entity_cleanup(vdeb->ved.ent);
- 	vimc_pads_cleanup(vdeb->ved.pads);
- 	kfree(vdeb);
+ 	for (i = 0; i < vimc->pipe_cfg->num_ents; i++) {
+ 		dev_dbg(&vimc->pdev.dev, "new entity for %s\n",
+ 			vimc->pipe_cfg->ents[i].name);
+-		ved = vimc->pipe_cfg->ents[i].add(vimc,
++		vimc->ent_devs[i] = vimc->pipe_cfg->ents[i].add(vimc,
+ 					vimc->pipe_cfg->ents[i].name);
+-		if (!ved) {
++		if (!vimc->ent_devs[i]) {
+ 			dev_err(&vimc->pdev.dev, "add new entity for %s\n",
+ 				vimc->pipe_cfg->ents[i].name);
+ 			return -EINVAL;
+ 		}
+-		vimc->ent_devs[i] = ved;
+ 	}
+ 	return 0;
  }
-diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
-index a6a3cc5be872..1982bc089af5 100644
---- a/drivers/media/platform/vimc/vimc-scaler.c
-+++ b/drivers/media/platform/vimc/vimc-scaler.c
-@@ -336,6 +336,7 @@ static void vimc_sca_release(struct v4l2_subdev *sd)
- 	struct vimc_sca_device *vsca =
- 				container_of(sd, struct vimc_sca_device, sd);
+@@ -199,7 +197,7 @@ static int vimc_register_devices(struct vimc_device *vimc)
+ 	}
  
-+	media_entity_cleanup(vsca->ved.ent);
- 	vimc_pads_cleanup(vsca->ved.pads);
- 	kfree(vsca);
- }
-diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
-index ee2306c08569..63fe024ccea5 100644
---- a/drivers/media/platform/vimc/vimc-sensor.c
-+++ b/drivers/media/platform/vimc/vimc-sensor.c
-@@ -291,6 +291,7 @@ static void vimc_sen_release(struct v4l2_subdev *sd)
- 
- 	v4l2_ctrl_handler_free(&vsen->hdl);
- 	tpg_free(&vsen->tpg);
-+	media_entity_cleanup(vsen->ved.ent);
- 	vimc_pads_cleanup(vsen->ved.pads);
- 	kfree(vsen);
- }
+ 	/* allocate ent_devs */
+-	vimc->ent_devs = kmalloc_array(vimc->pipe_cfg->num_ents,
++	vimc->ent_devs = kcalloc(vimc->pipe_cfg->num_ents,
+ 				       sizeof(*vimc->ent_devs),
+ 				       GFP_KERNEL);
+ 	if (!vimc->ent_devs)
 -- 
 2.20.1
 
