@@ -2,92 +2,116 @@ Return-Path: <SRS0=5SUv=X3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BC081C35280
-	for <linux-media@archiver.kernel.org>; Wed,  2 Oct 2019 13:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 646D4C35280
+	for <linux-media@archiver.kernel.org>; Wed,  2 Oct 2019 14:02:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 89E1921920
-	for <linux-media@archiver.kernel.org>; Wed,  2 Oct 2019 13:49:45 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="JKTt5Ovj"
+	by mail.kernel.org (Postfix) with ESMTP id 3760F21A4C
+	for <linux-media@archiver.kernel.org>; Wed,  2 Oct 2019 14:02:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570024924;
+	bh=gXgrdPKaL+1jKd36hjH43OM0tDitGrgBHl10G4g7Sis=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=lk6fOtgUyYSKs0e7zAE/8FR9izBNKE2/j5k6lJTLJBjEokR1MaUA3VdeLjTnQPqGI
+	 ayZYRizPrMnGkdf/hEv7uoWCO7qibQauOoTSmckawrsbNl+/f1YMXdjCKSC2ajBVGJ
+	 St2p0ebqZgO7zHyIkm+QliJu9eMK81uwz1IhUkhI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727264AbfJBNt2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Oct 2019 09:49:28 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:32874 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbfJBNt1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Oct 2019 09:49:27 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x92DnPaO033215;
-        Wed, 2 Oct 2019 08:49:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570024165;
-        bh=m0eTUP8n14qmADnaaZUKpxX5BDyr0r+BD0dj4+lLke8=;
-        h=From:To:CC:Subject:Date;
-        b=JKTt5Ovj8gUBV5ttFNHCY+271Y/ryyXUusikacAsAahxc9rrYUkMy+t7ykfbUFlpa
-         TQyG5cIZ5oLxvkJ5fGCCOtGddqmkV+rrNCTMX5xZ4ymLwcWDelxLJHdRFUjvZuR6dt
-         RbnAySfhhmdc92O516vq8FHQLDOX2x4vYJR8cXfk=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x92DnPob082388
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Oct 2019 08:49:25 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 2 Oct
- 2019 08:49:14 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 2 Oct 2019 08:49:14 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x92DnOm8035733;
-        Wed, 2 Oct 2019 08:49:24 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 0/3] media: ov5640: updates
-Date:   Wed, 2 Oct 2019 08:51:31 -0500
-Message-ID: <20191002135134.12273-1-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727264AbfJBOCD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Oct 2019 10:02:03 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55474 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726200AbfJBOCD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Oct 2019 10:02:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=LSTJEae0r4HCV1UMS0Q90a+iWwcMpTqsJ2UWDqYjtcw=; b=tq+ejJHe2MZUsANJPVpaiT6Q0
+        Izfji4iK7tyKCJaZU1cxR23XIP5K020Fbw5oIcjhTMY6CXK+ltSUKREgJnc24vqj/6FHtKrjAVjHa
+        0bI+v1rd/vujsbIEo1RZX2SF5E86QM7TunlvYBiT5G+IfhFXINRg7ZnujdxXKA1hGOkidIspjl1OZ
+        C+WTiuDhh4GkVPlc/WNcpdcNlynK6iEJEOA+9OncZmjBIl0eJrftzHU8D9CKTmbiwhryb1DALAvYW
+        Ip01ij+a3QvSFuVnNQFVZOAaPkAViaRsnQgNFcjPCohJoes1K14MgAmDIn13Qxed7fJjaXCX7uk0x
+        11/f9LpUA==;
+Received: from 177.157.127.95.dynamic.adsl.gvt.net.br ([177.157.127.95] helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iFfCc-00048p-Vm; Wed, 02 Oct 2019 14:02:03 +0000
+Date:   Wed, 2 Oct 2019 11:01:59 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Cc:     linux-media@vger.kernel.org
+Subject: Re: [GIT PULL for v5.5] Venus updates, take 2
+Message-ID: <20191002110150.1c6336a3@coco.lan>
+In-Reply-To: <20191002112953.16642-1-stanimir.varbanov@linaro.org>
+References: <20191002112953.16642-1-stanimir.varbanov@linaro.org>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series is a collection of patches we have been carrying for a
-while.
+Em Wed,  2 Oct 2019 14:29:53 +0300
+Stanimir Varbanov <stanimir.varbanov@linaro.org> escreveu:
 
-First, it adds support for PIXEL_RATE control which is used by some
-CSI2 receiver driver to properly set-up their DPHY.
+> Hi Mauro,
+> 
+> The Venus driver updates include:
+> 
+> * three fixes: fail to suspend, enum frameinterval issue with encoder
+> and frequency table modifications for v3 to handle performance issues.
+> * two new features: interconnect bandwidth support on v4 and more precise
+> clock-scaling on v4.
+> 
+> Please pull.
+> 
+> Changes since v1:
+> Fixed checkpatch error/warn in 0003-venus-venc-Fix-enum-frameintervals.patch
+> 
+> regards,
+> Stan
+> 
+> The following changes since commit 503e59365dd134b2c63864f14e2de0476284b003:
+> 
+>   media: i2c: ov2659: Switch to SPDX Licensing (2019-10-01 17:39:16 -0300)
+> 
+> are available in the Git repository at:
+> 
+>   git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.5
+> 
+> for you to fetch changes up to e8938a0b5beb6f0fafc921010375cda64a5a4592:
+> 
+>   venus: Update clock scaling (2019-10-02 14:17:23 +0300)
+> 
+> ----------------------------------------------------------------
+> Venus updates for v5.5
+> 
+> ----------------------------------------------------------------
+> Aniket Masule (2):
+>       venus: Add codec data table
+>       venus: Update clock scaling
+> 
+> Loic Poulain (1):
+>       venus: core: Fix msm8996 frequency table
+> 
+> Stanimir Varbanov (3):
+>       venus: Use on-chip interconnect API
+>       venus: venc: Fix enum frameintervals
+>       venus: Fix occasionally failures to suspend
 
-Then we fix an issue related to having extra sensor enable/disable in
-the register array for the 1920x1080 mode.
+Hmm... I'm not seeing the patches at the ML. Please always send them
+to the ML, in order for them to be properly reviewed.
 
-Finally we restrict the largest resolution which should only be
-available at the lowest FPS.
+Btw, I have some issues related to this patch:
 
-Changes since v1:
-- Addressed comment from Sakari.
-  added a function to calculate the pixel rate and remove the need to
-  cache its value
+	venus: venc: Fix enum frameintervals
 
-Benoit Parrot (3):
-  media: ov5640: add PIXEL_RATE control
-  media: ov5640: Fix 1920x1080 mode to remove extra enable/disable
-  media: ov5640: Make 2592x1944 mode only available at 15 fps
-
- drivers/media/i2c/ov5640.c | 33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
-
--- 
-2.17.1
-
+Thanks,
+Mauro
