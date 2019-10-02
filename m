@@ -2,116 +2,110 @@ Return-Path: <SRS0=5SUv=X3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFFACC352AA
-	for <linux-media@archiver.kernel.org>; Wed,  2 Oct 2019 09:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D1F0BC35280
+	for <linux-media@archiver.kernel.org>; Wed,  2 Oct 2019 09:49:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AE5EB21783
-	for <linux-media@archiver.kernel.org>; Wed,  2 Oct 2019 09:48:16 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yA+z2vS+"
+	by mail.kernel.org (Postfix) with ESMTP id AD75821783
+	for <linux-media@archiver.kernel.org>; Wed,  2 Oct 2019 09:49:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbfJBJsP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 2 Oct 2019 05:48:15 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:43817 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbfJBJsP (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 2 Oct 2019 05:48:15 -0400
-Received: by mail-wr1-f65.google.com with SMTP id q17so18853544wrx.10
-        for <linux-media@vger.kernel.org>; Wed, 02 Oct 2019 02:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:subject:date:message-id;
-        bh=rFUo0wL7r9rOV0bdfOWH9wO7Z+8/KHqte+nYimGmjnA=;
-        b=yA+z2vS+DAyEINXIQoI9hvtVrmYzhxJSf/+pi6KcZ/spJtDxzKpqOaDs+CsI9KO6ce
-         jL1Rw3bt/WE2vWrfRpPQ7xujn5smKXw+HDnefWwr4fZ9SeH5NIO1xovlIFVXFzGnGf1w
-         Q64tH9LYiG88TCZPC9U7KwN2dxJbDWEbK60dRpdxpBXsn8ybmZIALBGj5IwvKq2BVl/B
-         XoZdjuFngcgOBMxZCddKAGlkwYAEFbLbUVRjs4RxhvGN1J7v+RwgZO3EYTDMSb4jn5E9
-         YVhUAKTKMcHvrpUaBHmntfOSKWnj1paHkpeqgR3sr7qtwP2vxaB8yepYeXWldB63bFF1
-         iIsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=rFUo0wL7r9rOV0bdfOWH9wO7Z+8/KHqte+nYimGmjnA=;
-        b=NMA4A0/Mxx0k5xFGjl9PexwL1qkbT0UD63V5ZD49lNjabRhnlPsxEw0qNCbfUHZQmJ
-         rDD15zBMvruEZt+NIvxELrsF4/1HDCnsgahcXDcGazSi/lOlvRpjq+AUMdl1oxWiFO0a
-         T+B6CA34nhL50qulf82MA2UXX7iQ9qiQJiBlGOfS37Nhkg5d6l4rhUSTH7AQLnje3sGS
-         8jYhsN2XyuMzfpV4gXo0k30v08ELLPwDdAKNsXOi4WXLrWC2fvArhxDTwXl0HbvRoJar
-         EgAWigwLLRe07wBxylkHbAiAZCfEVZ4BxRkYaFP1Y8wwU8m8Y5ZBjADA2Qs/f5jICwF8
-         At2g==
-X-Gm-Message-State: APjAAAUPGa2cmZqyKK1e6LWOFrvZpkjZ5YlUIeIYPCtG6wyVmc8ZNLrI
-        DAd8UtzAzV1uD9W7fnWpR8lVkYZr7gY=
-X-Google-Smtp-Source: APXvYqyLYwnZHoc47rojVOzkTC+eyYZgWoSVQsdr2ayOFbFYZYKpPiLHmmhyTNsy2CNT9V2INK1dXQ==
-X-Received: by 2002:adf:b3d2:: with SMTP id x18mr2072713wrd.264.1570009693343;
-        Wed, 02 Oct 2019 02:48:13 -0700 (PDT)
-Received: from mms-0440.qualcomm.mm-sol.com ([37.157.136.206])
-        by smtp.gmail.com with ESMTPSA id g24sm17118865wrb.35.2019.10.02.02.48.12
-        for <linux-media@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 02:48:12 -0700 (PDT)
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for v5.5] Venus updates
-Date:   Wed,  2 Oct 2019 12:47:43 +0300
-Message-Id: <20191002094743.28589-1-stanimir.varbanov@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1727244AbfJBJt0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 2 Oct 2019 05:49:26 -0400
+Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:47451 "EHLO
+        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726772AbfJBJtZ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 2 Oct 2019 05:49:25 -0400
+Received: from [IPv6:2001:420:44c1:2577:9d1d:ff1f:dc58:e8af] ([IPv6:2001:420:44c1:2577:9d1d:ff1f:dc58:e8af])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id FbG4icU6njZ8vFbG7ih8uC; Wed, 02 Oct 2019 11:49:24 +0200
+Subject: Re: Build failed in Jenkins: v4l-utils #43
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org
+References: <1586568084.1.1570004204603.JavaMail.jenkins@builder.linuxtv.org>
+ <6a1df171-bd07-5eef-1917-4171fb3bc359@xs4all.nl>
+ <20191002063658.3771c1fa@coco.lan>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <90907ad0-6fe3-5293-aeeb-44ecdfb840da@xs4all.nl>
+Date:   Wed, 2 Oct 2019 11:49:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20191002063658.3771c1fa@coco.lan>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfKMTsjkVu7uK/lw2mq+WxDda/WVuG6rEF9Roh6ofvoia1MtiwNyPUxZDQhAOaqoRqvGuA55r3JJ0GAGJ3nID9egsXwj7njIdC9RTXHbBeyFuVCLpkYYa
+ kN8UtABwgvthVf5U84WTMRen9nDz8vcE1691Su72ik962v5i45u5dzOKk+Iu0BZMJDoDowpsVj1Hogr/sG9U38nlw9AGuST8NbC0+raclS0aUpBFNgthy9rZ
+ Tecd+icBsm+4RBA86BJQ9gtM2NsDzdCHGy9k33nEvPm2hqBr1VQXfmIaXrjWUr0KKyoYlToT8uBYdI6ekUwCMA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+On 10/2/19 11:36 AM, Mauro Carvalho Chehab wrote:
+> Em Wed, 2 Oct 2019 10:25:02 +0200
+> Hans Verkuil <hverkuil@xs4all.nl> escreveu:
+> 
+>> Hi Mauro,
+>>
+>> On 10/2/19 10:16 AM, Jenkins Builder Robot wrote:
+>>> See <https://builder.linuxtv.org/job/v4l-utils/43/display/redirect?page=changes>
+>>>
+>>> Changes:
+>>>
+>>> [hverkuil-cisco] keytable: add new generated keymaps
+>>>
+>>> [hverkuil-cisco] msg2ctl.pl: add newline after log_msg
+>>>
+>>> [hverkuil-cisco] cec-follower: drop the hardcoded UI commands list
+>>>
+>>> [hverkuil-cisco] cec-ctl/cec-log: use new CEC_OP_UI_CMD defines  
+>>
+>> You need to remove utils/cec-follower/cec-log.h.
+>>
+>> This file was generated but the generated file is now called cec-log-gen.h.
+>> A new cec-log.h was also added to utils/common as a companion to cec-log.cpp.
+>>
+>> Unfortunately, the old cec-log.h clashes with the new cec-log.h. And since
+>> the old cec-log.h was generated and so is not part of the git repo it is
+>> not removed as part of a 'git pull'.
+>>
+>> Anyway, just remove utils/cec-follower/cec-log.h and it compiles again.
+> 
+> I manually removed the file at the builder and at the slave machines and
+> asked for a new build. The build now succeeded.
+> 
+> That's said, we should really avoid disruptive changes like that, fixing
+> the building system for it to do the right thing, as users of the v4l-utils 
+> will also face the same issue if they update their git trees.
+> 
+> At any time, a clean git update with something similar to:
+> 
+> 	git remote update
+> 	git fetch origin
+> 	git reset --hard origin/master
+> 	./bootstrap.sh
+> 	./configure
+> 	make
+> 
+> should work.
+> 
+> Regards,
+> Mauro
+> 
 
-The Venus driver updates include:
+Yes, I discovered it too late. That said, I'm not sure what to do about
+it since the old generated file is not under the control of git.
 
-* three fixes: fail to suspend, enum frameinterval issue with encoder
-and frequency table modifications for v3 to handle performance issues.
-* two new features: interconnect bandwidth support on v4 and more precise
-clock-scaling on v4.
+A 'make distclean' before the 'git fetch' would remove it, but after the
+update it is just an orphaned file.
 
-Please pull.
+I've actually added a 'make distclean' in my daily build scripts.
 
-regards,
-Stan
+Regards,
 
-The following changes since commit 503e59365dd134b2c63864f14e2de0476284b003:
-
-  media: i2c: ov2659: Switch to SPDX Licensing (2019-10-01 17:39:16 -0300)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/svarbanov/media_tree.git tags/venus-for-v5.5
-
-for you to fetch changes up to 122742a5edf5a5dff7526ff064ccddf627c27dcd:
-
-  venus: Update clock scaling (2019-10-02 11:24:41 +0300)
-
-----------------------------------------------------------------
-Venus updates for v5.5
-
-----------------------------------------------------------------
-Aniket Masule (2):
-      venus: Add codec data table
-      venus: Update clock scaling
-
-Loic Poulain (1):
-      venus: core: Fix msm8996 frequency table
-
-Stanimir Varbanov (3):
-      venus: Use on-chip interconnect API
-      venus: venc: Fix enum frameintervals
-      venus: Fix occasionally failures to suspend
-
- drivers/media/platform/Kconfig                |   1 +
- drivers/media/platform/qcom/venus/core.c      |  56 +++++-
- drivers/media/platform/qcom/venus/core.h      |  30 ++++
- drivers/media/platform/qcom/venus/helpers.c   | 246 ++++++++++++++++++++++++--
- drivers/media/platform/qcom/venus/helpers.h   |   3 +-
- drivers/media/platform/qcom/venus/hfi_venus.c |   6 +
- drivers/media/platform/qcom/venus/vdec.c      |   8 +-
- drivers/media/platform/qcom/venus/venc.c      |  27 ++-
- 8 files changed, 346 insertions(+), 31 deletions(-)
+	Hans
