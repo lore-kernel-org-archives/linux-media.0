@@ -2,79 +2,115 @@ Return-Path: <SRS0=lLmD=X4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DE6BC10F14
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 12:38:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED1EEECE589
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 12:45:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 446BA217D7
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 12:38:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C429120700
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 12:45:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g7UzHIjg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y2CNPgMh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729080AbfJCMiF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Oct 2019 08:38:05 -0400
-Received: from mail-io1-f44.google.com ([209.85.166.44]:36129 "EHLO
-        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727242AbfJCMiE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Oct 2019 08:38:04 -0400
-Received: by mail-io1-f44.google.com with SMTP id b136so5109234iof.3;
-        Thu, 03 Oct 2019 05:38:04 -0700 (PDT)
+        id S1729170AbfJCMpr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Oct 2019 08:45:47 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:42288 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726780AbfJCMpq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Oct 2019 08:45:46 -0400
+Received: by mail-wr1-f67.google.com with SMTP id n14so2736054wrw.9;
+        Thu, 03 Oct 2019 05:45:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mzsUcDM2g0UBcqHEb2Rfu7NDxj07u1Rq4/MBSlHUokY=;
-        b=g7UzHIjgle7y8OGY2qo0VPIApT742hZARLNz/+tsG3DkuomZbQtwQ4HxJMKI3T8XHo
-         dKKi8HtnHOuCqyDRZJPTf5e2bQuOoDXo5yKAOw3B/eYyZswY8e/Z7/LstUjQI7z54JeM
-         5fr+hK4Doch0MM/Hxb1glHALTuWqR+NhrCcL5UDved/tRiwlZAyj2VmktjH4K8COzmiX
-         9J7vuksDshk2fr+iY88TP1AcIEqmHkMjv4xU0JxOkAsqD3lbSXXnfwofCmny9hpxfvJ4
-         LsvtbBBzgl0dPpxjO1W9Rd5wNi5Whkj0W753DCci+tNy7kFN48xMZ04t4vOdtS0uTUTb
-         2E4A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Hm/3KLPMiFgYLhw0cNyU9JiizTQ6GNbshHm6KlyE1Ew=;
+        b=Y2CNPgMhbSKh6xdzlYgVApEYlbJWcgbWywt9jI5epA1Pnex7HPauTZEb6KoabPovqw
+         OWEVt21EQ2q/iNwi64ssy9o8N7MvcyFWUUHrsjtAwmE0MAWlfvOuXmYzv80K6b85EqS2
+         7VS5Z8h6R6UuECf9uXyJ8XRo+rGkAAapGonoEViP/sZgJgkB0/Km2fu8aqX2o8p7UPlM
+         i4+pPuqU73+rWacPG5zeiXH+ZMrdZMWb1/kMMQ9LNs2R8pjuRTwWPCDGIHxnCeYbE7ud
+         uvwmAbywbd921yPKab5m6og+DXXRvmTawZ0e/6d7uG1E+wvwCpv5fviORaiQVrkha7tR
+         ZvLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mzsUcDM2g0UBcqHEb2Rfu7NDxj07u1Rq4/MBSlHUokY=;
-        b=lHLz8QbyFi9FDxqC2f0+W+E6njxA3qo+O+/ksNWAxryxwO43qa6gUK8AIRPE71+7D3
-         UTyZ1hWbi696noq7l4Fevp1uOTXF//yzyo06Ce1GOKPokX+pMoTqqCZlzoLO7FIPDo1x
-         flfwcEeCkWZwRWU/1Hr9y15Vwpciq0l4d2cBeUwYyQymeSBY8ZQ0RipC9s7Y+y+LNOFo
-         Fv5gy9GmnRAfyCykGnP+al46LUUQVAbJhdvK5uFHbX6PIEbEZ8WePfAR73wp1daREquc
-         BZrwLGWy7AwIM7tcHBNnQDcJgSCTpxPtJXT60/+o2/W1+KDMPHUb3siI9TAxwXu7NhuD
-         KnSQ==
-X-Gm-Message-State: APjAAAWBB03PU1WvxalZZYkiFDnPtwKnlyxmEywHoyKslJPxYtBV5lPB
-        QbIkBP8c7iTRobyEyPIo/wHBEw3neURZNmNExQ8=
-X-Google-Smtp-Source: APXvYqw2SmTkJ4rLwrJ7E70hGT/CJf8JbebQxH9MeQYWV9rrtC7G56aX/0FWguTOiTaVhpxyQur4pEG//R1O2qBsCVw=
-X-Received: by 2002:a5d:8ac4:: with SMTP id e4mr3159232iot.185.1570106284036;
- Thu, 03 Oct 2019 05:38:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Hm/3KLPMiFgYLhw0cNyU9JiizTQ6GNbshHm6KlyE1Ew=;
+        b=uglYywBs5x6wnXGmWw3hx7W6L+JJZwAsYBp5V8qOkyCtAxH99KmwT30b5Ou77eW00z
+         Z9YNaags10JxhPgptUQlAvT190lOWMVQm1Kd6lzs7tate8j6ixTYZsGMZixwWZJdbJP9
+         kwFl8vTocHJ9muAJF5aRuzXYN66NCVLHobxbvFyum1UquR1kzYQ5JeZpB6qyih/q/S5y
+         722YiewznitHn2mUVxwfPJyPmmmydfgSvB0i2/RpgSfVtrLG6ePdYVsr5z8V/cmR4XaT
+         2DxRNPkG/IfzSbPozsvPp9BRpfGDIiKZqEGDXvl/xhOgfzbEzZYoWgVct+jk0ZgA2F5j
+         9JpQ==
+X-Gm-Message-State: APjAAAXdPmYPGhl7NfkMSi+Tl3R1ijbMPMxbWqrr5U+WLz2uHcY3RKLV
+        X5HpgWvOeTDSbhldAgpBLwU=
+X-Google-Smtp-Source: APXvYqzv+O1eJ8dRkgQ6D+NIV3h7oe2bTquP92YlVVNkQaEFFLfDYdtLlqa2ewbA7Ba0tWb5nX4IkA==
+X-Received: by 2002:adf:f689:: with SMTP id v9mr7544605wrp.82.1570106745008;
+        Thu, 03 Oct 2019 05:45:45 -0700 (PDT)
+Received: from localhost.localdomain ([46.114.33.103])
+        by smtp.googlemail.com with ESMTPSA id y3sm12880507wmg.2.2019.10.03.05.45.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Oct 2019 05:45:44 -0700 (PDT)
+From:   Gon Solo <gonsolo@gmail.com>
+To:     mchehab+samsung@kernel.org
+Cc:     sean@mess.org, crope@iki.fi, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Gon Solo <gonsolo@gmail.com>
+Subject: [PATCH 1/3] [PATCH] af9035: Better explain how i2c bus speed is computed.
+Date:   Thu,  3 Oct 2019 14:45:30 +0200
+Message-Id: <20191003124532.10945-2-gonsolo@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191003122027.GA2674@Limone>
+References: <20191003122027.GA2674@Limone>
 MIME-Version: 1.0
-References: <20190927183650.31345-1-bparrot@ti.com> <20190927183650.31345-3-bparrot@ti.com>
- <CAOoBcBUd7reG=-WOq+Vq9SynZMJ81CWFZPN35MkmaQvquZ9xyg@mail.gmail.com> <20190930155826.pimkap75k67mji3e@ti.com>
-In-Reply-To: <20190930155826.pimkap75k67mji3e@ti.com>
-From:   Austin Kim <austinkernel.kim@gmail.com>
-Date:   Thu, 3 Oct 2019 21:37:53 +0900
-Message-ID: <CAOoBcBV=4GYVXdhhyNcpi97RzO3qR_NG6TfYxk=niwn5=RWzbw@mail.gmail.com>
-Subject: Re: [Patch 02/16] media: ti-vpe: vpe: Add missing null pointer checks
-To:     Benoit Parrot <bparrot@ti.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-2019=EB=85=84 10=EC=9B=94 1=EC=9D=BC (=ED=99=94) =EC=98=A4=EC=A0=84 12:56, =
-Benoit Parrot <bparrot@ti.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> Hi Austin,
->
-> Thanks for the review,
+Original patch from Mauro Carvalho Chehab.
 
-It's my pleasure.
-Hope to see this patch will arrive the destination(linux-next) safely.  :)
+Signed-off-by: Gon Solo <gonsolo@gmail.com>
+---
+ drivers/media/usb/dvb-usb-v2/af9035.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/media/usb/dvb-usb-v2/af9035.c b/drivers/media/usb/dvb-usb-v2/af9035.c
+index 3afd18733614..7828f8567da0 100644
+--- a/drivers/media/usb/dvb-usb-v2/af9035.c
++++ b/drivers/media/usb/dvb-usb-v2/af9035.c
+@@ -1197,6 +1197,9 @@ static int af9035_frontend_attach(struct dvb_usb_adapter *adap)
+ 	return ret;
+ }
+ 
++/* I2C speed register = (1000000000 / (24.4 * 16 * I2C_speed)) */
++#define I2C_SPEED_REGISTER 7
++
+ static int it930x_frontend_attach(struct dvb_usb_adapter *adap)
+ {
+ 	struct state *state = adap_to_priv(adap);
+@@ -1208,13 +1211,13 @@ static int it930x_frontend_attach(struct dvb_usb_adapter *adap)
+ 
+ 	dev_dbg(&intf->dev, "adap->id=%d\n", adap->id);
+ 
+-	/* I2C master bus 2 clock speed 300k */
+-	ret = af9035_wr_reg(d, 0x00f6a7, 0x07);
++	/* I2C master bus 2 clock speed ~300k */
++	ret = af9035_wr_reg(d, 0x00f6a7, I2C_SPEED_REGISTER);
+ 	if (ret < 0)
+ 		goto err;
+ 
+-	/* I2C master bus 1,3 clock speed 300k */
+-	ret = af9035_wr_reg(d, 0x00f103, 0x07);
++	/* I2C master bus 1,3 clock speed ~300k */
++	ret = af9035_wr_reg(d, 0x00f103, I2C_SPEED_REGISTER);
+ 	if (ret < 0)
+ 		goto err;
+ 
+-- 
+2.20.1
+
