@@ -2,241 +2,176 @@ Return-Path: <SRS0=lLmD=X4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C70BC32792
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 07:06:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0E27C32792
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 07:15:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA89E21848
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 07:06:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JF77Gnkw"
+	by mail.kernel.org (Postfix) with ESMTP id 91B0B21848
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 07:15:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727995AbfJCHGZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Oct 2019 03:06:25 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33123 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726798AbfJCHGZ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Oct 2019 03:06:25 -0400
-Received: by mail-pl1-f195.google.com with SMTP id d22so1061968pls.0
-        for <linux-media@vger.kernel.org>; Thu, 03 Oct 2019 00:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=4fAvJZtJgqr8hMwah8YcN0Kx1gXWz7873MNaER35VLs=;
-        b=JF77Gnkwe48fNC5WRhYSk52NCurDTHhZ7KFPgBD8QyOWIuI6MkGsOrTH+7PllqqW/K
-         xn4JIZM7JxS0Lt6tNlykpXrU9GsPOFRwkDc7ryzjBJBahdzCGbAMNsCh1uKtObFdQ53/
-         bfBcOZQnzjl9DCjPrIlwVhfdMmk/AECr8VqPjfklEM+DYyoD/Zoqv2vObrjV1Q4PfVJk
-         vOXy9vRSKO+pwd5trLi12ZdMuVtMT4XhYKkuSc1YgTi2RrZIydjO11tlIzQMYwuvs1Mb
-         hG5CCwLIrnzBX1NBxB3RfM15vcbRJ2wN0jrdcW5NlfJv9cFToxoc1h0tzOax1evmnVHI
-         vhSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=4fAvJZtJgqr8hMwah8YcN0Kx1gXWz7873MNaER35VLs=;
-        b=kdcMb/Nakcei2JhG9QtMdyLp4Z/Wj6lDuXjItSISQbjrvtQEa/y1QHP9zdmPr0LzV3
-         fRKFsD9Xr1xn+r1ijz5ZGR+trtlwSiksF6DdV6nOjsqOFhuzaS1QP6cFdM0hwLYb3y68
-         nRp9at7Ou/8XoTFsa8oNV1a7Qjmbxa66K9wVuYp8gSR8U+LTdd+mB3YKscRBifQVW9Ud
-         bitKLnJXwINhzmbmpGExUbRiQgg70ircMTkOsrC7KbgWFu/qR+2M852wMcD5Io5br8Vb
-         DL4psGVmsXr/9HeU5CMqybYN6VWojY0C+xqTjX1mv9v4MkeUWz9hdS3aQEMg3FUwKTYQ
-         Ftlg==
-X-Gm-Message-State: APjAAAVTwafjR0cvkgypj+SKA2lWJ2yd+zhfYm4FiiBhK+17dIe+jFah
-        C8fpvLoMgupDl47GM/Q4gt9RerbY
-X-Google-Smtp-Source: APXvYqy+neZk60aJw/4yGtEbd1gTotmW/fdxi3J1NETwRMZ5OCNQgHBH7Qa/IOPNDOhTa/KoXuOgQg==
-X-Received: by 2002:a17:902:a413:: with SMTP id p19mr8198112plq.210.1570086383850;
-        Thu, 03 Oct 2019 00:06:23 -0700 (PDT)
-Received: from bnva-HP-Pavilion-g6-Notebook-PC.domain.name ([117.241.207.214])
-        by smtp.gmail.com with ESMTPSA id r24sm1780367pfh.69.2019.10.03.00.06.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Oct 2019 00:06:23 -0700 (PDT)
-From:   Vandana BN <bnvandana@gmail.com>
-To:     linux-media@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Cc:     hverkuil@xs4all.nl, Vandana BN <bnvandana@gmail.com>
-Subject: [PATCH] v4l2-ctl: support for metadata output
-Date:   Thu,  3 Oct 2019 12:36:15 +0530
-Message-Id: <20191003070615.23129-1-bnvandana@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726780AbfJCHPe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Oct 2019 03:15:34 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:54089 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725879AbfJCHPe (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Oct 2019 03:15:34 -0400
+X-Originating-IP: 2.224.242.101
+Received: from uno.localdomain (2-224-242-101.ip172.fastwebnet.it [2.224.242.101])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 343D260007;
+        Thu,  3 Oct 2019 07:15:30 +0000 (UTC)
+Date:   Thu, 3 Oct 2019 09:17:14 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Benoit Parrot <bparrot@ti.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v2 1/3] media: ov5640: add PIXEL_RATE control
+Message-ID: <20191003071714.zyldxfoollm26o4u@uno.localdomain>
+References: <20191002135134.12273-1-bparrot@ti.com>
+ <20191002135134.12273-2-bparrot@ti.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="s2rbs3roz2jmtvxv"
+Content-Disposition: inline
+In-Reply-To: <20191002135134.12273-2-bparrot@ti.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Adds support to test metadata output format V4L2_META_FMT_VIVID.
 
-Signed-off-by: Vandana BN <bnvandana@gmail.com>
----
- contrib/freebsd/include/linux/videodev2.h |  1 +
- include/linux/videodev2.h                 |  1 +
- utils/v4l2-ctl/v4l2-ctl-meta.cpp          | 31 +++++++++++++++++++++++
- utils/v4l2-ctl/v4l2-ctl-streaming.cpp     | 12 ++++++---
- utils/v4l2-ctl/v4l2-ctl.h                 |  1 +
- 5 files changed, 43 insertions(+), 3 deletions(-)
+--s2rbs3roz2jmtvxv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-diff --git a/contrib/freebsd/include/linux/videodev2.h b/contrib/freebsd/include/linux/videodev2.h
-index 0c12d27f..d14ca0aa 100644
---- a/contrib/freebsd/include/linux/videodev2.h
-+++ b/contrib/freebsd/include/linux/videodev2.h
-@@ -783,6 +783,7 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_VSP1_HGT    v4l2_fourcc('V', 'S', 'P', 'T') /* R-Car VSP1 2-D Histogram */
- #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC Payload Header metadata */
- #define V4L2_META_FMT_D4XX        v4l2_fourcc('D', '4', 'X', 'X') /* D4XX Payload Header metadata */
-+#define V4L2_META_FMT_VIVID       v4l2_fourcc('V', 'I', 'V', 'D') /* Vivid Output Metadata */
- 
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
-diff --git a/include/linux/videodev2.h b/include/linux/videodev2.h
-index e2847759..be4727da 100644
---- a/include/linux/videodev2.h
-+++ b/include/linux/videodev2.h
-@@ -749,6 +749,7 @@ struct v4l2_pix_format {
- #define V4L2_META_FMT_VSP1_HGT    v4l2_fourcc('V', 'S', 'P', 'T') /* R-Car VSP1 2-D Histogram */
- #define V4L2_META_FMT_UVC         v4l2_fourcc('U', 'V', 'C', 'H') /* UVC Payload Header metadata */
- #define V4L2_META_FMT_D4XX        v4l2_fourcc('D', '4', 'X', 'X') /* D4XX Payload Header metadata */
-+#define V4L2_META_FMT_VIVID       v4l2_fourcc('V', 'I', 'V', 'D') /* Vivid Output Metadata */
- 
- /* priv field value to indicates that subsequent fields are valid. */
- #define V4L2_PIX_FMT_PRIV_MAGIC		0xfeedcafe
-diff --git a/utils/v4l2-ctl/v4l2-ctl-meta.cpp b/utils/v4l2-ctl/v4l2-ctl-meta.cpp
-index eae7438f..2b5781a7 100644
---- a/utils/v4l2-ctl/v4l2-ctl-meta.cpp
-+++ b/utils/v4l2-ctl/v4l2-ctl-meta.cpp
-@@ -139,10 +139,18 @@ struct vivid_uvc_meta_buf {
- #define UVC_STREAM_SCR	(1 << 3)
- #define UVC_STREAM_PTS	(1 << 2)
- 
-+struct vivid_meta_out_buf {
-+        __u8      brightness;
-+        __u8      contrast;
-+        __u8      saturation;
-+        __s16     hue;
-+};
-+
- void print_meta_buffer(FILE *f, cv4l_buffer &buf, cv4l_fmt &fmt, cv4l_queue &q)
- {
- 	struct vivid_uvc_meta_buf *vbuf;
- 	int buf_off = 0;
-+	struct vivid_meta_out_buf *vbuf_out;
- 
- 	switch (fmt.g_pixelformat()) {
- 	case V4L2_META_FMT_UVC:
-@@ -164,5 +172,28 @@ void print_meta_buffer(FILE *f, cv4l_buffer &buf, cv4l_fmt &fmt, cv4l_queue &q)
- 				le16toh(*(__u16*)(vbuf->buf + buf_off + 4)));
- 		fprintf(f, "\n");
- 		break;
-+	case V4L2_META_FMT_VIVID:
-+		fprintf(f, "VIVID:");
-+		vbuf_out = (vivid_meta_out_buf *)q.g_dataptr(buf.g_index(), 0);
-+
-+		fprintf(f, " brightness: %u", vbuf_out->brightness);
-+		fprintf(f, " contrast: %u", vbuf_out->contrast);
-+		fprintf(f, " saturation: %u", vbuf_out->saturation);
-+		fprintf(f, " hue: %d\n", vbuf_out->hue);
-+		break;
-+	}
-+}
-+
-+void meta_fillbuffer(int idx, cv4l_fmt &fmt, cv4l_queue &q)
-+{
-+	struct vivid_meta_out_buf *vbuf;
-+	switch (fmt.g_pixelformat()) {
-+		case V4L2_META_FMT_VIVID:
-+			vbuf = (vivid_meta_out_buf *)q.g_dataptr(idx, 0);
-+			vbuf->brightness = 228;
-+			vbuf->contrast = 228;
-+			vbuf->saturation = 228;
-+			vbuf->hue = 100;
-+			break;
- 	}
- }
-diff --git a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-index 47b7d3f8..fc82d483 100644
---- a/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-+++ b/utils/v4l2-ctl/v4l2-ctl-streaming.cpp
-@@ -1146,6 +1146,7 @@ static int do_setup_out_buffers(cv4l_fd &fd, cv4l_queue &q, FILE *fin, bool qbuf
- 	bool can_fill = false;
- 	bool is_video = q.g_type() == V4L2_BUF_TYPE_VIDEO_OUTPUT ||
- 			q.g_type() == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
-+	bool is_meta = q.g_type() == V4L2_BUF_TYPE_META_OUTPUT;
- 
- 	if (q.obtain_bufs(&fd))
- 		return QUEUE_ERROR;
-@@ -1177,7 +1178,6 @@ static int do_setup_out_buffers(cv4l_fd &fd, cv4l_queue &q, FILE *fin, bool qbuf
- 	if (V4L2_FIELD_HAS_T_OR_B(field))
- 		output_field = (stream_out_std & V4L2_STD_525_60) ?
- 			V4L2_FIELD_BOTTOM : V4L2_FIELD_TOP;
--
- 	if (is_video) {
- 		tpg_init(&tpg, 640, 360);
- 		tpg_alloc(&tpg, fmt.g_width());
-@@ -1244,6 +1244,9 @@ static int do_setup_out_buffers(cv4l_fd &fd, cv4l_queue &q, FILE *fin, bool qbuf
- 		if (fin && !fill_buffer_from_file(fd, q, buf, fmt, fin))
- 			return QUEUE_STOPPED;
- 
-+		if (is_meta)
-+			meta_fillbuffer(i, fmt, q);
-+
- 		if (fmt.g_pixelformat() == V4L2_PIX_FMT_FWHT_STATELESS) {
- 			int media_fd = mi_get_media_fd(fd.g_fd());
- 
-@@ -1266,7 +1269,6 @@ static int do_setup_out_buffers(cv4l_fd &fd, cv4l_queue &q, FILE *fin, bool qbuf
- 		}
- 		if (qbuf) {
- 			fps_timestamps fps_ts;
--
- 			set_time_stamp(buf);
- 			if (fd.qbuf(buf))
- 				return QUEUE_ERROR;
-@@ -1480,6 +1482,7 @@ static int do_handle_out(cv4l_fd &fd, cv4l_queue &q, FILE *fin, cv4l_buffer *cap
- 			 bool stopped, bool ignore_count_skip)
- {
- 	cv4l_buffer buf(q);
-+	bool is_meta = q.g_type() == V4L2_BUF_TYPE_META_OUTPUT;
- 	int ret = 0;
- 
- 	if (cap) {
-@@ -1522,6 +1525,7 @@ static int do_handle_out(cv4l_fd &fd, cv4l_queue &q, FILE *fin, cv4l_buffer *cap
- 			fprintf(stderr, ", dropped buffers: %u", dropped);
- 		fprintf(stderr, "\n");
- 	}
-+
- 	if (stopped)
- 		return 0;
- 
-@@ -1542,6 +1546,8 @@ static int do_handle_out(cv4l_fd &fd, cv4l_queue &q, FILE *fin, cv4l_buffer *cap
- 			tpg_fillbuffer(&tpg, stream_out_std, j,
- 				       (u8 *)q.g_dataptr(buf.g_index(), j));
- 	}
-+	if (is_meta)
-+		meta_fillbuffer(buf.g_index(), fmt, q);
- 
- 	if (fmt.g_pixelformat() == V4L2_PIX_FMT_FWHT_STATELESS) {
- 		if (ioctl(buf.g_request_fd(), MEDIA_REQUEST_IOC_REINIT, NULL)) {
-@@ -2039,7 +2045,7 @@ static void streaming_set_out(cv4l_fd &fd, cv4l_fd &exp_fd)
- 
- 	if (!(capabilities & (V4L2_CAP_VIDEO_OUTPUT | V4L2_CAP_VIDEO_OUTPUT_MPLANE |
- 			      V4L2_CAP_VBI_OUTPUT | V4L2_CAP_SLICED_VBI_OUTPUT |
--			      V4L2_CAP_SDR_OUTPUT |
-+			      V4L2_CAP_SDR_OUTPUT | V4L2_CAP_META_OUTPUT |
- 			      V4L2_CAP_VIDEO_M2M | V4L2_CAP_VIDEO_M2M_MPLANE))) {
- 		fprintf(stderr, "unsupported stream type\n");
- 		return;
-diff --git a/utils/v4l2-ctl/v4l2-ctl.h b/utils/v4l2-ctl/v4l2-ctl.h
-index 2c861d82..a12a2ba7 100644
---- a/utils/v4l2-ctl/v4l2-ctl.h
-+++ b/utils/v4l2-ctl/v4l2-ctl.h
-@@ -409,6 +409,7 @@ void meta_set(cv4l_fd &fd);
- void meta_get(cv4l_fd &fd);
- void meta_list(cv4l_fd &fd);
- void print_meta_buffer(FILE *f, cv4l_buffer &buf, cv4l_fmt &fmt, cv4l_queue &q);
-+void meta_fillbuffer(int idx, cv4l_fmt &fmt, cv4l_queue &q);
- 
- // v4l2-ctl-subdev.cpp
- void subdev_usage(void);
--- 
-2.17.1
+Hi Benoit,
 
+On Wed, Oct 02, 2019 at 08:51:32AM -0500, Benoit Parrot wrote:
+> Add v4l2 controls to report the pixel rates of each mode. This is
+> needed by some CSI2 receiver in order to perform proper DPHY
+> configuration.
+>
+> Signed-off-by: Benoit Parrot <bparrot@ti.com>
+> ---
+>  drivers/media/i2c/ov5640.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> index 500d9bbff10b..5198dc887400 100644
+> --- a/drivers/media/i2c/ov5640.c
+> +++ b/drivers/media/i2c/ov5640.c
+> @@ -193,6 +193,9 @@ struct ov5640_mode_info {
+>
+>  struct ov5640_ctrls {
+>  	struct v4l2_ctrl_handler handler;
+> +	struct {
+> +		struct v4l2_ctrl *pixel_rate;
+> +	};
+
+Do you need to wrap this v4l2_ctrl in it's own unnamed struct? Other
+controls here declared in this way are clustered and, if I'm not
+mistaken, using unnamed struct to wrap them is just a typographically
+nice way to convey that. I think your new control could be declared
+without a wrapping struct { }.
+
+>  	struct {
+>  		struct v4l2_ctrl *auto_exp;
+>  		struct v4l2_ctrl *exposure;
+> @@ -2194,6 +2197,16 @@ static int ov5640_try_fmt_internal(struct v4l2_subdev *sd,
+>  	return 0;
+>  }
+>
+> +static u64 ov5640_calc_pixel_rate(struct ov5640_dev *sensor)
+> +{
+> +	u64 rate;
+> +
+> +	rate = sensor->current_mode->vtot * sensor->current_mode->htot;
+> +	rate *= ov5640_framerates[sensor->current_fr];
+> +
+> +	return rate;
+> +}
+> +
+
+Just to point out this is the -theoretical- pixel rate, and might be
+quite different from the one calculated by the clock tree tuning
+procedure (which should be updated to match Hugues' latest findings).
+
+>  static int ov5640_set_fmt(struct v4l2_subdev *sd,
+>  			  struct v4l2_subdev_pad_config *cfg,
+>  			  struct v4l2_subdev_format *format)
+> @@ -2233,6 +2246,8 @@ static int ov5640_set_fmt(struct v4l2_subdev *sd,
+>  	if (mbus_fmt->code != sensor->fmt.code)
+>  		sensor->pending_fmt_change = true;
+>
+> +	__v4l2_ctrl_s_ctrl_int64(sensor->ctrls.pixel_rate,
+> +				 ov5640_calc_pixel_rate(sensor));
+>  out:
+>  	mutex_unlock(&sensor->lock);
+>  	return ret;
+> @@ -2657,6 +2672,13 @@ static int ov5640_init_controls(struct ov5640_dev *sensor)
+>  	/* we can use our own mutex for the ctrl lock */
+>  	hdl->lock = &sensor->lock;
+>
+> +	/* Clock related controls */
+> +	ctrls->pixel_rate =
+> +		v4l2_ctrl_new_std(hdl, ops,
+
+If you like it better, this could fit in 1 line
+
+	ctrls->pixel_rate = v4l2_ctrl_new_std(hdl, ops, V4L2_CID_PIXEL_RATE,
+					      0, INT_MAX, 1,
+					      ov5640_calc_pixel_rate(sensor)
+
+Thanks
+   j
+
+> +				  V4L2_CID_PIXEL_RATE, 0, INT_MAX, 1,
+> +				  ov5640_calc_pixel_rate(sensor));
+
+
+> +	ctrls->pixel_rate->flags |= V4L2_CTRL_FLAG_READ_ONLY;
+> +
+>  	/* Auto/manual white balance */
+>  	ctrls->auto_wb = v4l2_ctrl_new_std(hdl, ops,
+>  					   V4L2_CID_AUTO_WHITE_BALANCE,
+> @@ -2816,6 +2838,9 @@ static int ov5640_s_frame_interval(struct v4l2_subdev *sd,
+>  		sensor->frame_interval = fi->interval;
+>  		sensor->current_mode = mode;
+>  		sensor->pending_mode_change = true;
+> +
+> +		__v4l2_ctrl_s_ctrl_int64(sensor->ctrls.pixel_rate,
+> +					 ov5640_calc_pixel_rate(sensor));
+>  	}
+>  out:
+>  	mutex_unlock(&sensor->lock);
+> --
+> 2.17.1
+>
+
+--s2rbs3roz2jmtvxv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl2VoHoACgkQcjQGjxah
+VjyTdRAAvTt33YTnWgAxWHNBQtJFu8kvS++x7KcOpwVIPtyOlQZoGapfE41HI4Gp
+mNvbOfqlaxwo1y0KGiEPMtaTyBKf+3nGS8t19k4eSrrVDvQT2s2JZfgdl5YYJYYo
+QocfelRqCXE3K7RIrznh79aQWH+GF9S3Bhv1nbL4kKAEqgX99cqv0kp/lIJV6fhk
+rDfMAOGhwd4VJJzyvgRn1ndR5EU3XTfsgiCGqgka/0bt2wr6RvHgZayFFfWvZ4N8
+Ku6T6bMOOk9B/qb1R55VpcRlAGIJzgIMvwGNO25tUKcGcy3bnTLN4ysCaAGbRc5u
+IA5V80D6T4yRF9T5J4vmPu3sE/trPLY+lxNr9Fruzsl7aA4DSG2Rm0QVxEY5BlsV
+o8wKTZF7ua62MsvN1XG2KhE42aWcDoMamzC13mU6MHWOWsOYMIlDkGi4uJ8Byzp7
+4x4qsqnHme6/MXGFkobNc3gBeIp+BjSt3CVh/Tbik85YyeFb9OuONElIypDE00np
+VppLSrNv0Y6RDALW8vUyh5QNS79fVtgHwAsB86sxb63D6KFmKVs0XjvqS9kTwaZt
+MW64rk37SyG5j1HCjCTO9Q3PwMxx7UMdHpuMHFFBSsaaDhYedNWqNpATrbGzi2q9
+M1FyLvbDWrNSS9Jg4CjEMlufTd4jRMRsoK0h9w1Yxpg6yv/w+H4=
+=3Wwj
+-----END PGP SIGNATURE-----
+
+--s2rbs3roz2jmtvxv--
