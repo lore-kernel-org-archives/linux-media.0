@@ -2,88 +2,121 @@ Return-Path: <SRS0=lLmD=X4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A40E2C10F14
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 12:46:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E941C10F14
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 12:49:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 773D321783
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 12:46:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QLU9n8bB"
+	by mail.kernel.org (Postfix) with ESMTP id 5429A20700
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 12:49:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570106955;
+	bh=3I16dtKMV/ywKVSjTPwklsWAsz9K/b2UODMZF56SWZg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=tJIToWMXR+9zIvINdPLkwI4AN+FDEo0F/HzaFWgs8ho5JQJt6Zn5xvFwIESuJLd17
+	 1OFAG3MnB8kMohWDw4ojGhK3fb34q2Q21xvhhssl2OyrngtXXzGAKn6/dWiPdCzqha
+	 nwd/lyvYScJa5qDVCKn67tYLICcLO77z7euG3vuk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbfJCMpp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Oct 2019 08:45:45 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:55849 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbfJCMpp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Oct 2019 08:45:45 -0400
-Received: by mail-wm1-f66.google.com with SMTP id a6so2153104wma.5;
-        Thu, 03 Oct 2019 05:45:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JwNDq6/SadVRzUHCqVoOmovQ7PK6KJzhM3n6l1+VwQw=;
-        b=QLU9n8bBhqXmt8lGv7af64X51iGtqGBHhT0fkxfwZ8AAKxnLLqMws4iyMnkXs9cYTu
-         mG04JBsDBVYAF0JFcKa2cXiKAH4R7nbS8s7tq5H6sV2P/YVzcphEHB8K/0s69tyJ0Q+N
-         t5pTB8dSpXjhmB5A6cBp4IGHacuXTK4IIF6C9HqD5mUXoxG7V0A28WxmuUHZVDAnAL0m
-         ZPhVj/o/8rk3GPHkShYLLYGksuaRUGa/JaQbja7qe69AkkxmIhtabIRKPYsHheYWpG45
-         a1ec5v5s7aariSunAqS53SGjzTfT0XLm8LWmyFIitoFO8Uwafxl4cIDmgeKqUOu9zleA
-         TWBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JwNDq6/SadVRzUHCqVoOmovQ7PK6KJzhM3n6l1+VwQw=;
-        b=DLI7PTURMtobGDZDvU5C2/CGiUlACut4QL4NDLtTf+ijw65tCWJBkQOn16Yiav5FMk
-         xFDylpX16Xqdhskw5X6B7VYeWNr6aLldk/OT3qjNEjEp1EavJubYlfkwNj6akMKGjgQ1
-         rziUBak1ptdOD50OO1MDzgRxIDOKr5pXTdnJjzoaqq6gegzbvmfWu+gdgsBLaHcfbElX
-         6y5Q2rhV6L0mp/EHcX+TWGPz+myMhSWvAQKvq91tWR0PaY2O4SluKbcll3k5v+rv0gi4
-         cFfbyFAuC3DPDHc4DV9pOZ/VeDHRjnFJM/uNGQ/lH5W3vOGnrciZi9GtLyOqQpgjGB8E
-         PFqg==
-X-Gm-Message-State: APjAAAXAyKoY98st0686ZRpbhPkLEUbZpYLYTossoiADxUq1Yy3rsnf8
-        kh1vxxk6E/ucvRPA/MBSi0Y=
-X-Google-Smtp-Source: APXvYqzFVdDRYehCTkSXgwbUMPcJUvaLQ/qFVs0OlFYGCy22gnleF6yu+1qt/f9/WtiFnxJc6ATTEQ==
-X-Received: by 2002:a1c:3904:: with SMTP id g4mr7134014wma.116.1570106743615;
-        Thu, 03 Oct 2019 05:45:43 -0700 (PDT)
-Received: from localhost.localdomain ([46.114.33.103])
-        by smtp.googlemail.com with ESMTPSA id y3sm12880507wmg.2.2019.10.03.05.45.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Oct 2019 05:45:42 -0700 (PDT)
-From:   Gon Solo <gonsolo@gmail.com>
-To:     mchehab+samsung@kernel.org
-Cc:     sean@mess.org, crope@iki.fi, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Gon Solo <gonsolo@gmail.com>
-Subject: [PATCH 0/3] Add support for Logilink VG0022A
-Date:   Thu,  3 Oct 2019 14:45:29 +0200
-Message-Id: <20191003124532.10945-1-gonsolo@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191003122027.GA2674@Limone>
-References: <20191003122027.GA2674@Limone>
+        id S1728212AbfJCMtM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Oct 2019 08:49:12 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:36670 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727331AbfJCMtL (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Oct 2019 08:49:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
+        From:Date:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=+3A0RVi/eynu6cHrvlnzbDBBXa/7l6DXVZbYu9LkAQI=; b=ShUzobsjuDPIifsb0K9SQmZn+
+        xIPryyo6TVO6d1PgEwfo+n3ogNYeXAgoDzeZ8GfSlXO3aPywkEawRyvTYsSltg99TmrfQJA2UAu6F
+        vxhThdlNmA4rZ8miSRAHF2nIORFM8zR4e2/zDi9+qLYfhfKkBMGmIyhGO8EOEWV4+WUuUQSYAK83H
+        zjIOWM8DCFDL6VA6168FgeyFCbcOfowWCdJTVxImlPiT5Qldw6MTmA06NPS+zkR1RyhuXt4LkRjZs
+        KCJKIVZ03hyt/DQ8KQ478mGhEQ5DEnKs7amDKXT44eaXW6mY9qu0ulY343nrU9whomtFEar/3kW8I
+        klGGE4xMA==;
+Received: from 177.133.68.49.dynamic.adsl.gvt.net.br ([177.133.68.49] helo=coco.lan)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iG0Xd-0003Rg-8Z; Thu, 03 Oct 2019 12:49:09 +0000
+Date:   Thu, 3 Oct 2019 09:49:04 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Gonsolo <gonsolo@gmail.com>
+Cc:     JP <jp@jpvw.nl>, crope@iki.fi, Sean Young <sean@mess.org>,
+        linux-media@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] si2157: Add support for Logilink VG0022A.
+Message-ID: <20191003094904.3aa5fdc7@coco.lan>
+In-Reply-To: <CANL0fFTtHn4ocL4BD4cVKhVzjLhnQ0a45yq5x4MxWAVu-tD8sw@mail.gmail.com>
+References: <20191001205203.4b1a5fb6@coco.lan>
+        <20191002141359.30166-1-gonsolo@gmail.com>
+        <20191002141359.30166-2-gonsolo@gmail.com>
+        <20191002142744.GA3475@gofer.mess.org>
+        <CANL0fFS9TGKJH2rfkXzak78BaLazTNO7GoZhSb4vLBsDrmz3FQ@mail.gmail.com>
+        <20191002150650.GA4227@gofer.mess.org>
+        <CANL0fFRoL6NxOCbNC=XjQ6LDkeeqAayaLUbm9xARWX9ttqfPFg@mail.gmail.com>
+        <29ab2e43-4374-a3ea-6ae1-a4267867eaa4@jpvw.nl>
+        <20191002154922.7f1cfc76@coco.lan>
+        <CANL0fFRJZBfEDWK_c2w1TomvB5-i4g09LopyJUbO5NtOwKdDTg@mail.gmail.com>
+        <CANL0fFTwJ4yRO+5q6WkL0+DtwdrRti6r_WY1intisYJhs5En8w@mail.gmail.com>
+        <20191003081742.0933264b@coco.lan>
+        <CANL0fFTtHn4ocL4BD4cVKhVzjLhnQ0a45yq5x4MxWAVu-tD8sw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-These three patches make the Logilink VG0022A work.
-Being cheap hardware a bogus chip version is returned but this is catched in
-the driver.
+Em Thu, 3 Oct 2019 13:41:23 +0200
+Gonsolo <gonsolo@gmail.com> escreveu:
 
-Gon Solo (3):
-  af9035: Better explain how i2c bus speed is computed.
-  s2157: Handle bogus chip version.
-  af9035: Add Logilink VG0022A id.
+> Hi!
+> 
+> > It means that there's a firmware stored at the device's eeprom
+> > (version 4.0.2). When the driver starts, it downloads a newer firmware
+> > from the file dvb-demod-si2168-b40-01.fw.  
+> 
+> Thanks for the explanation.
+> 
+> > Btw, could you please try the enclosed hack and post the results?  
+> 
+> Will do in a second.
+> 
+> FWIW, this hack worked:
+> 
+> diff --git a/drivers/media/tuners/si2157.c b/drivers/media/tuners/si2157.c
+> index e87040d6eca7..28a3a4f1640e 100644
+> --- a/drivers/media/tuners/si2157.c
+> +++ b/drivers/media/tuners/si2157.c
+> @@ -136,6 +136,7 @@ static int si2157_init(struct dvb_frontend *fe)
+>         #define SI2147_A30 ('A' << 24 | 47 << 16 | '3' << 8 | '0' << 0)
+>         #define SI2146_A10 ('A' << 24 | 46 << 16 | '1' << 8 | '0' << 0)
+>         #define SI2141_A10 ('A' << 24 | 41 << 16 | '1' << 8 | '0' << 0)
+> +       #define GONZO     (255 << 24 | 255 << 16 | 255 << 8 | 255 << 0)
+> 
+>         switch (chip_id) {
+>         case SI2158_A20:
+> @@ -148,6 +149,10 @@ static int si2157_init(struct dvb_frontend *fe)
+>         case SI2177_A30:
+>                 fw_name = SI2157_A30_FIRMWARE;
+>                 break;
+> +       case GONZO:
+> +               dev_info(&client->dev, "trying null\n");
+> +               fw_name = NULL;
+> +               break;
+>         case SI2157_A30:
+>         case SI2147_A30:
+>         case SI2146_A10:
 
- drivers/media/tuners/si2157.c         | 19 ++++++++++++-------
- drivers/media/usb/dvb-usb-v2/af9035.c | 13 +++++++++----
- 2 files changed, 21 insertions(+), 11 deletions(-)
+What does it print with this hack?
 
--- 
-2.20.1
+Also, could you get the SI version after the reset code at
+skip_fw_download, just after retrieving si2157 firmware version?
 
+Thanks,
+Mauro
