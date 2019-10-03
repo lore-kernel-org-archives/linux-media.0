@@ -2,48 +2,69 @@ Return-Path: <SRS0=lLmD=X4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.3 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF24DC32792
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 11:31:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D62C0C10F14
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 11:39:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BFB812086A
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 11:31:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B3CE12086A
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 11:39:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730074AbfJCLbQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Oct 2019 07:31:16 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:55592 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729912AbfJCLbQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Oct 2019 07:31:16 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtp (Exim 4.84_2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1iFzKE-00044S-HD; Thu, 03 Oct 2019 11:31:14 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1iFzKb-0000RA-EA; Thu, 03 Oct 2019 11:31:37 +0000
-Date:   Thu, 3 Oct 2019 11:31:37 +0000 (UTC)
-From:   Jenkins Builder Robot <jenkins@linuxtv.org>
-To:     mchehab@kernel.org, linux-media@vger.kernel.org
-Message-ID: <1905774064.2.1570102297427.JavaMail.jenkins@builder.linuxtv.org>
-In-Reply-To: <313765717.1.1570095997647.JavaMail.jenkins@builder.linuxtv.org>
-References: <313765717.1.1570095997647.JavaMail.jenkins@builder.linuxtv.org>
-Subject: Jenkins build is back to normal : v4l-utils #52
+        id S1730112AbfJCLjb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Oct 2019 07:39:31 -0400
+Received: from lb1-smtp-cloud7.xs4all.net ([194.109.24.24]:39155 "EHLO
+        lb1-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725827AbfJCLjb (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Thu, 3 Oct 2019 07:39:31 -0400
+Received: from [IPv6:2001:420:44c1:2577:6d0e:6b32:a8b6:66d9] ([IPv6:2001:420:44c1:2577:6d0e:6b32:a8b6:66d9])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id FzSAinS0sjZ8vFzSDio1xt; Thu, 03 Oct 2019 13:39:29 +0200
+To:     Linux Media Mailing List <linux-media@vger.kernel.org>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Subject: [GIT PULL FOR v5.5] [v2] Two cec fixes
+Message-ID: <e19af1d9-8a06-cedf-4982-29a72d1d13fc@xs4all.nl>
+Date:   Thu, 3 Oct 2019 13:39:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Instance-Identity: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApAf928QubrKEjMQ0IZR0WWXn8zG7uTdH33F2Idx4Xmlp6Z138NdNMQYNG71OKzmvn3/E1G4rpd9JsMls16nRZ2NAPgOWX0qfFr6HyOoQklLGZt+vkOFb0BvmBFfdI+00J5B1SPupxv4pT3bDLSiwbBNCOLY4sdB0gG1ng14mzu47G8zmH6l2ZE/9urEd6OLFhzrb6ym4vlkCE8uvNJAdAWbeafd1plHSLdU/TVqHMZELuM0wt9khqhUOkfE+dHr7h6DNrkFpvm/8j/5wTuy98ZwwWimP+pfjSQMgKrhXjwHcJJa2N9v1HdwrwlUaRYuA6o8fwUHNC9vLj7cCXM3qiwIDAQAB
-X-Jenkins-Job: v4l-utils
-X-Jenkins-Result: SUCCESS
-Auto-submitted: auto-generated
+X-CMAE-Envelope: MS4wfAkpvkJbBsuavlU7cS8SHqRsDqEo6zjeCoeTX/LcvNGNo6spagLRpNL8yNmxfXRWn0LBPsiwb0CgWwDpKn5A32x3peZIXuUpg0Zeh8h2IVGGUatNhFK0
+ 4I3hvrpmZBQvU+PpUtnAA+D683O52o0V7appj9XDN7BjzfQ0e6jHN8f2N1hll1T5W3DMd9tMTNexMQ6IzzzMYSvwYlGwzv0R4+rWE2grtMgdc4+DxZy54Dmh
+ 97ufvebe4I4JEsLFveaYI65tQCDFazJCokQB16zf169zP0/T/wBxaFLgmqu5xckQ
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-See <https://builder.linuxtv.org/job/v4l-utils/52/display/redirect?page=changes>
+Changes since v1:
 
+- Fixes too-long lines in commit logs.
+
+The following changes since commit 503e59365dd134b2c63864f14e2de0476284b003:
+
+  media: i2c: ov2659: Switch to SPDX Licensing (2019-10-01 17:39:16 -0300)
+
+are available in the Git repository at:
+
+  git://linuxtv.org/hverkuil/media_tree.git tags/br-v5.5e
+
+for you to fetch changes up to 285daad9a5279968eca136a661435cce3c5a94cf:
+
+  cec-funcs.h: use new CEC_OP_UI_CMD defines (2019-10-03 13:36:22 +0200)
+
+----------------------------------------------------------------
+Tag branch
+
+----------------------------------------------------------------
+Hans Verkuil (2):
+      cec-funcs.h: add status_req checks
+      cec-funcs.h: use new CEC_OP_UI_CMD defines
+
+ include/uapi/linux/cec-funcs.h | 34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
