@@ -2,94 +2,86 @@ Return-Path: <SRS0=lLmD=X4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CC5AC10F14
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 15:00:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B719AC32792
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 15:00:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F363D21848
-	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 15:00:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7FDB421783
+	for <linux-media@archiver.kernel.org>; Thu,  3 Oct 2019 15:00:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bI03SsN7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727326AbfJCPAG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 3 Oct 2019 11:00:06 -0400
-Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:34675 "EHLO
-        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726393AbfJCPAG (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 3 Oct 2019 11:00:06 -0400
-Received: from [192.168.2.10] ([46.9.232.237])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id G2aEi3TBOop0AG2aHi8jEM; Thu, 03 Oct 2019 17:00:04 +0200
-Subject: Re: [PATCH] drivers: video: hdmi: log ext colorimetry applicability
-To:     Johan Korsnes <jkorsnes@cisco.com>, dri-devel@lists.freedesktop.org
-Cc:     linux-media@vger.kernel.org
-References: <20191003071549.31272-1-jkorsnes@cisco.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <3d11335d-8e5c-f062-91f5-fb3bf87c77b9@xs4all.nl>
-Date:   Thu, 3 Oct 2019 16:59:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728322AbfJCPAW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 3 Oct 2019 11:00:22 -0400
+Received: from mail-lf1-f53.google.com ([209.85.167.53]:42834 "EHLO
+        mail-lf1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726393AbfJCPAV (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 3 Oct 2019 11:00:21 -0400
+Received: by mail-lf1-f53.google.com with SMTP id c195so2088641lfg.9;
+        Thu, 03 Oct 2019 08:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yB5LF7A305R8PQxrkpeVFlJLp/mPklNVDD54WJQ3Ii0=;
+        b=bI03SsN7PbRsIdC5K5W66wuY8OExs4aeA+s+J7CaHtb6wph3WYeZK1EJScZTY4gIME
+         X0ZUyq7PJBAI92QmtAidpMjwrvBisIRKPgpxjUCiMeiyoSoHmPYEAjnMAKpdbpVK3nxS
+         FLM7oQH7EMslWVCJVLpfZ+pwsWdvOa3mcw6DWgaTex5NtbeI+5HvgpH6jVHG6V95nIT1
+         o4XBQr3/q9x/nDv2XoNk0kABZZ5CdzkKOShuFjX52apaDR0T71qCkJygTm4PCSWoGxno
+         YzdURWV+htIoar7PqkPAa3xa/m2VzdZWe0e0AcpiXYotRBLXEMGjkCrNqwTWAYDhgLol
+         f6jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yB5LF7A305R8PQxrkpeVFlJLp/mPklNVDD54WJQ3Ii0=;
+        b=r/x7IvSl4VIz+oLA10tiUa1/Q7TD+nTgJT8TU0OWnpM+WDaW2QV0QYLUgsqdAfaIv6
+         FxAOs9eSK6gE693EcpYXccxZCB387ItuTwK6Nw8qtzSVP0+Yi6VZFyCJzn6P0hq/TNo6
+         309E9YVc19bv5hZFJsAYb5lGAzs0YZNAl11XGD1SNhB2EuuE8mKXdLOhWPKRFR+1SUwH
+         NJaqpbX1+YauQ2cC7QTQB14y/FqLLjZlNZKsmeSEa5qZeYnXJOecEGHmR1Ne+Jbg59zJ
+         6dTGzY0Ma4v40sCjoB+zs0RW7KerLjsx6DfxYfyf7/zmseJqNaZ2gimZfhFUVHnzls6O
+         v01A==
+X-Gm-Message-State: APjAAAWFZiKBZ7MY8EXHfI4140igQPxMOSVGc3+G2g5sIC7cTMVG5POB
+        PPY43GutOvLxNtKqfByF0HGHNTtruhU5kaiZlSzXaNlsvCk=
+X-Google-Smtp-Source: APXvYqx5FRbSXns4apVBZQ+nkUILPeLrJUJeCZ+6rysm8ehC/28YFz+PSJywZXySb63DzBQT057IH95zcLV6PBS/ErE=
+X-Received: by 2002:a19:431e:: with SMTP id q30mr5984033lfa.171.1570114819456;
+ Thu, 03 Oct 2019 08:00:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191003071549.31272-1-jkorsnes@cisco.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKDkvMUeIn38ureWIwWMm33yN0MHYKU+4LnlBRDGrKBrH1fZG3iyKkvzqtMn7rEGttWC1u9qg42KbH6iL607wPofKbpFlq9kB8bgA421spce97zTBRN0
- HEFZR4vldaCjqMIcnEEw9WT02eRZ5YRp9YLFFZHtTilZ5yC12fX4UjHhDOEmWXzPg2Gdy1EtVhFhSsA53gbuYoATRm6B8fVtN75ZdIIO9cLEZjtNcB9QOdHE
- 2TKA2onWe16C9aJUs+LB3Q==
+References: <20191001205203.4b1a5fb6@coco.lan> <20191002141359.30166-1-gonsolo@gmail.com>
+ <20191002141359.30166-2-gonsolo@gmail.com> <20191002142744.GA3475@gofer.mess.org>
+ <CANL0fFS9TGKJH2rfkXzak78BaLazTNO7GoZhSb4vLBsDrmz3FQ@mail.gmail.com>
+ <20191002150650.GA4227@gofer.mess.org> <CANL0fFRoL6NxOCbNC=XjQ6LDkeeqAayaLUbm9xARWX9ttqfPFg@mail.gmail.com>
+ <29ab2e43-4374-a3ea-6ae1-a4267867eaa4@jpvw.nl> <20191002154922.7f1cfc76@coco.lan>
+ <CANL0fFRJZBfEDWK_c2w1TomvB5-i4g09LopyJUbO5NtOwKdDTg@mail.gmail.com> <20191003080539.2b13c03b@coco.lan>
+In-Reply-To: <20191003080539.2b13c03b@coco.lan>
+From:   Gonsolo <gonsolo@gmail.com>
+Date:   Thu, 3 Oct 2019 17:00:08 +0200
+Message-ID: <CANL0fFSmvEEJhnA=qjTuEPr4N8q8eWLeYC5du+OoTMxe1Gnh5Q@mail.gmail.com>
+Subject: Re: [PATCH] si2157: Add support for Logilink VG0022A.
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     JP <jp@jpvw.nl>, crope@iki.fi, Sean Young <sean@mess.org>,
+        linux-media@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/3/19 9:15 AM, Johan Korsnes wrote:
-> When logging the AVI InfoFrame, clearly indicate whether or not the
-> extended colorimetry attribute is active. This is only the case when
-> the AVI InfoFrame colorimetry attribute is set to extended. [0]
-> 
-> [0] CTA-861-G section 6.4 page 57
-> 
-> Signed-off-by: Johan Korsnes <jkorsnes@cisco.com>
-> ---
->  drivers/video/hdmi.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/video/hdmi.c b/drivers/video/hdmi.c
-> index f29db728ff29..a709e38a53ca 100644
-> --- a/drivers/video/hdmi.c
-> +++ b/drivers/video/hdmi.c
-> @@ -682,8 +682,14 @@ static void hdmi_avi_infoframe_log(const char *level,
->  	hdmi_log("    active aspect: %s\n",
->  			hdmi_active_aspect_get_name(frame->active_aspect));
->  	hdmi_log("    itc: %s\n", frame->itc ? "IT Content" : "No Data");
-> -	hdmi_log("    extended colorimetry: %s\n",
-> +
-> +	if (frame->colorimetry == HDMI_COLORIMETRY_EXTENDED)
-> +		hdmi_log("    extended colorimetry: %s\n",
->  			hdmi_extended_colorimetry_get_name(frame->extended_colorimetry));
-> +	else
-> +		hdmi_log("    extended colorimetry: N/A (0x%x)\n",
-> +			frame->extended_colorimetry);
-> +
->  	hdmi_log("    quantization range: %s\n",
->  			hdmi_quantization_range_get_name(frame->quantization_range));
->  	hdmi_log("    nups: %s\n", hdmi_nups_get_name(frame->nups));
-> 
+> So, I would add a msleep() somewhere after the firmware update.
 
-I just realized that there are more fields like that:
+I tried that to no avail:
 
-content_type is only valid if itc == true
+        release_firmware(fw);
++       msleep(1000);
 
-quantization_range is only valid if colorspace is RGB
+[  107.903918] si2157 2-0063: firmware version: \xff.\xff.255
+[  107.903920] si2157 2-0063: querying chip revision...
+[  107.906970] si2157 2-0063: chip revision: 255.255.255.255
 
-ycc_quantization_range is only valid if colorspace is YCC
-
-Can you make a v2 where these fields are handled in the same way?
-That would really help reduce the confusion when logging the
-AVI InfoFrame.
-
-Regards,
-
-	Hans
+-- 
+g
