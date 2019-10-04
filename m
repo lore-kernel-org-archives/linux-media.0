@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7161C4360C
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8690CC47404
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9F6CA222BE
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54A1C2133F
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="dbpeh7V/"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="KbX3jyDA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731376AbfJDQ2U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Oct 2019 12:28:20 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:40564 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731354AbfJDQ2L (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:28:11 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GSAF7076974;
-        Fri, 4 Oct 2019 11:28:10 -0500
+        id S1731315AbfJDQ2J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Oct 2019 12:28:09 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:35310 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731287AbfJDQ2I (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:28:08 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GS7f3008126;
+        Fri, 4 Oct 2019 11:28:07 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570206490;
-        bh=dWmmpnR2Nn+tG3vKwEwgCtq5RDg+AVUy2OFbD3Weqm8=;
+        s=ti-com-17Q1; t=1570206487;
+        bh=4b3B5a5oc4XXjmr0bMQla53asdaAKBggEzeGeja5WMw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=dbpeh7V/xQKkhA6HWIptP/sLd/Rc8uqkfGD5O24qZ51uM1a9hLuP7XmtYP9IXrWRK
-         5Tfi01p9Gdb0SEMlpVfgOoI9hvIJ00DtH8snQ0t9bplEUt2VuZfg4G7SlQpSEnFVWI
-         zmnFq0vSsyl6hvTs/5Z22YV+OxS7T/3W3MbGdRXE=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GSA1J056454
+        b=KbX3jyDA9QDRRrnv5oYJSSjRpBryxsoSEWo73PCjNo9p08IFBEIElcacrcCxHwy2l
+         1addOl++CtBhhTU5BBiEkrSO2eqrIXpBHOklMrKFaMTsoeI/odm7M/aG5ZgzIzTzL+
+         p9Dqqad81uJ/4xBSaFIO/t/Ihuss2oje68vZ+8Ow=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GS7EL051016
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Oct 2019 11:28:10 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 4 Oct 2019 11:28:07 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 4 Oct
- 2019 11:28:10 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 11:28:07 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 4 Oct 2019 11:28:09 -0500
+ Frontend Transport; Fri, 4 Oct 2019 11:28:06 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAM028904;
-        Fri, 4 Oct 2019 11:28:10 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAK028904;
+        Fri, 4 Oct 2019 11:28:07 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 20/21] media: v4l2-common: add RGB565 and RGB55 to v4l2_format_info
-Date:   Fri, 4 Oct 2019 11:29:51 -0500
-Message-ID: <20191004162952.4963-21-bparrot@ti.com>
+Subject: [Patch v2 18/21] media: ti-vpe: csc: rgb-to-yuv HD full range coeff are wrong
+Date:   Fri, 4 Oct 2019 11:29:49 -0500
+Message-ID: <20191004162952.4963-19-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191004162952.4963-1-bparrot@ti.com>
 References: <20191004162952.4963-1-bparrot@ti.com>
@@ -64,26 +64,31 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add RGB565 and RGB555 to the v4l2_format_info table.
+The RGB to YUV HD full range coefficients did not match the TRM values
+and appeared to be a cut-n-paste from the YUV to RGB section.
+
+Replace the entries with the values from the TRM.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/v4l2-core/v4l2-common.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/ti-vpe/csc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
-index 474cdb5863f4..e6bbd28db075 100644
---- a/drivers/media/v4l2-core/v4l2-common.c
-+++ b/drivers/media/v4l2-core/v4l2-common.c
-@@ -251,6 +251,8 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
- 		{ .format = V4L2_PIX_FMT_ABGR32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_BGRA32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
- 		{ .format = V4L2_PIX_FMT_GREY,    .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_RGB565,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
-+		{ .format = V4L2_PIX_FMT_RGB555,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
- 
- 		/* YUV packed formats */
- 		{ .format = V4L2_PIX_FMT_YUYV,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti-vpe/csc.c
+index eda2a5985da7..f0c45d187b5f 100644
+--- a/drivers/media/platform/ti-vpe/csc.c
++++ b/drivers/media/platform/ti-vpe/csc.c
+@@ -81,8 +81,8 @@ static struct colorspace_coeffs colorspace_coeffs[4] = {
+ 		},
+ 		{
+ 			/* HDTV */
+-			0x04A8, 0x0000, 0x072C, 0x04A8, 0x1F26, 0x1DDE,
+-			0x04A8, 0x0873, 0x0000, 0x0C20, 0x0134, 0x0B7C,
++			0x00bb, 0x0275, 0x003f, 0x1f99, 0x1ea5, 0x01c2,
++			0x01c2, 0x1e67, 0x1fd7, 0x0040, 0x0200, 0x0200,
+ 		},
+ 	},
+ };
 -- 
 2.17.1
 
