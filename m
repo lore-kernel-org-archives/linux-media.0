@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8690CC47404
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8701C4360C
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 54A1C2133F
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 871E42133F
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="KbX3jyDA"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tJynx9+4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731315AbfJDQ2J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Oct 2019 12:28:09 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:35310 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731287AbfJDQ2I (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:28:08 -0400
+        id S1731283AbfJDQ2H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Oct 2019 12:28:07 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:37168 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731265AbfJDQ2G (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:28:06 -0400
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GS7f3008126;
-        Fri, 4 Oct 2019 11:28:07 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GS6BA059543;
+        Fri, 4 Oct 2019 11:28:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570206487;
-        bh=4b3B5a5oc4XXjmr0bMQla53asdaAKBggEzeGeja5WMw=;
+        s=ti-com-17Q1; t=1570206486;
+        bh=oN8I5LkR4+QW/F4pAxU4LHL68tbhO04WPOjOJ+FTBMc=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=KbX3jyDA9QDRRrnv5oYJSSjRpBryxsoSEWo73PCjNo9p08IFBEIElcacrcCxHwy2l
-         1addOl++CtBhhTU5BBiEkrSO2eqrIXpBHOklMrKFaMTsoeI/odm7M/aG5ZgzIzTzL+
-         p9Dqqad81uJ/4xBSaFIO/t/Ihuss2oje68vZ+8Ow=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GS7EL051016
+        b=tJynx9+4yzAnsK2551nPSSVGnUUGC2ih2L3i92RoADrYVGmNCAzYL9bGuYbtEiHhm
+         I5j1eH3jj2IdR03nVarEgekR10LyNhRzSJr0Xa0lwrXJqaqdPgAHwKPSTU96HwwsEJ
+         f7IRO7VHwgHYIznJd5QzpPJ8UH4du1RyH+s/jexM=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GS6U7050988
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Oct 2019 11:28:07 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 4 Oct 2019 11:28:06 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 4 Oct
- 2019 11:28:07 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 11:28:05 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 4 Oct 2019 11:28:06 -0500
+ Frontend Transport; Fri, 4 Oct 2019 11:28:05 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAK028904;
-        Fri, 4 Oct 2019 11:28:07 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAJ028904;
+        Fri, 4 Oct 2019 11:28:05 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 18/21] media: ti-vpe: csc: rgb-to-yuv HD full range coeff are wrong
-Date:   Fri, 4 Oct 2019 11:29:49 -0500
-Message-ID: <20191004162952.4963-19-bparrot@ti.com>
+Subject: [Patch v2 17/21] media: ti-vpe: vpe: fix v4l2_compliance issue related to xfer_func
+Date:   Fri, 4 Oct 2019 11:29:48 -0500
+Message-ID: <20191004162952.4963-18-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191004162952.4963-1-bparrot@ti.com>
 References: <20191004162952.4963-1-bparrot@ti.com>
@@ -64,31 +64,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The RGB to YUV HD full range coefficients did not match the TRM values
-and appeared to be a cut-n-paste from the YUV to RGB section.
+All 4 of the "colorspace" components were not originally handled.
+Causing issue related to xfer_func not being initialized properly.
 
-Replace the entries with the values from the TRM.
+This was found with v4l2-compliance test.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/csc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti-vpe/vpe.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti-vpe/csc.c
-index eda2a5985da7..f0c45d187b5f 100644
---- a/drivers/media/platform/ti-vpe/csc.c
-+++ b/drivers/media/platform/ti-vpe/csc.c
-@@ -81,8 +81,8 @@ static struct colorspace_coeffs colorspace_coeffs[4] = {
- 		},
- 		{
- 			/* HDTV */
--			0x04A8, 0x0000, 0x072C, 0x04A8, 0x1F26, 0x1DDE,
--			0x04A8, 0x0873, 0x0000, 0x0C20, 0x0134, 0x0B7C,
-+			0x00bb, 0x0275, 0x003f, 0x1f99, 0x1ea5, 0x01c2,
-+			0x01c2, 0x1e67, 0x1fd7, 0x0040, 0x0200, 0x0200,
- 		},
- 	},
- };
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+index 5b1e9908fff2..19b027c5478a 100644
+--- a/drivers/media/platform/ti-vpe/vpe.c
++++ b/drivers/media/platform/ti-vpe/vpe.c
+@@ -1578,10 +1578,13 @@ static int vpe_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
+ 	if (!V4L2_TYPE_IS_OUTPUT(f->type)) {
+ 		struct vpe_q_data *s_q_data;
+ 
+-		/* get colorspace from the source queue */
++		/* get colorimetry from the source queue */
+ 		s_q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+ 
+ 		pix->colorspace = s_q_data->format.fmt.pix_mp.colorspace;
++		pix->xfer_func = s_q_data->format.fmt.pix_mp.xfer_func;
++		pix->ycbcr_enc = s_q_data->format.fmt.pix_mp.ycbcr_enc;
++		pix->quantization = s_q_data->format.fmt.pix_mp.quantization;
+ 	}
+ 
+ 	return 0;
 -- 
 2.17.1
 
