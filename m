@@ -2,59 +2,89 @@ Return-Path: <SRS0=ViiU=X5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4B79C47404
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 08:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FF2AC47404
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 08:48:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9281B222CE
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 08:03:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6C9FC2084D
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 08:48:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730410AbfJDIDg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Oct 2019 04:03:36 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:53207 "EHLO www.linuxtv.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729752AbfJDIDf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 4 Oct 2019 04:03:35 -0400
-Received: from builder.linuxtv.org ([140.211.167.10])
-        by www.linuxtv.org with esmtp (Exim 4.84_2)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1iGIYh-0004WC-6L; Fri, 04 Oct 2019 08:03:27 +0000
-Received: from [127.0.0.1] (helo=builder.linuxtv.org)
-        by builder.linuxtv.org with esmtp (Exim 4.92)
-        (envelope-from <jenkins@linuxtv.org>)
-        id 1iGIZ4-0000ou-5o; Fri, 04 Oct 2019 08:03:50 +0000
-From:   Jenkins <jenkins@linuxtv.org>
-To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
-Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for v5.5] Venus updates, take 3
-Date:   Fri,  4 Oct 2019 08:03:49 +0000
-Message-Id: <20191004080349.3110-1-jenkins@linuxtv.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191004075617.17328-1-stanimir.varbanov@linaro.org>
-References: 
+        id S1728767AbfJDIsu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Oct 2019 04:48:50 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:48721 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725730AbfJDIsu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Fri, 4 Oct 2019 04:48:50 -0400
+Received: from [192.168.2.10] ([46.9.232.237])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id GJGWivNPfjZ8vGJGZisjho; Fri, 04 Oct 2019 10:48:48 +0200
+Subject: Re: [PATCH v7 7/9] drm: tegra: use cec_notifier_conn_(un)register
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190814104520.6001-1-darekm@google.com>
+ <20190814104520.6001-8-darekm@google.com>
+ <f0e99db8-3329-f272-e139-a7c713f200ea@xs4all.nl> <20190828093820.GE2917@ulmo>
+ <2eed5ed3-85f3-4c19-4dd2-3d8432829c2a@xs4all.nl>
+ <20190828115400.GA30919@ulmo>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <3f7fe51a-8958-a425-f5fd-01df5301d6b2@xs4all.nl>
+Date:   Fri, 4 Oct 2019 10:48:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190828115400.GA30919@ulmo>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfIxtuyQfDELsyaEhapLOQeAHB7QAyJDRd8x05tHFxVJYMlGGvg5VX//j//cdR+KvdtarwKYhD4NRQrssc7yvwEN+yiyuBiFa1CRULA1iQjqwTHvN9hvg
+ I3h+Lc4e/ODHchCGAjVhlQiBPgmXfPjyrxWPVPkSccYG25LXhbEas0Absg1gU4QIMKA1fToOk/oIBRS9HNPQEZGQdVoCO8h4pm2Xlz46TM5lW+FGDYiz/gtD
+ Ik86LXISf6CXkM3zrizPiGxwMptBjrwicNmd0Z3bMYwDMA/En4sAM5C9qrf8xlPOgYyql4jDscGeIEd7tm4xZZmeoe2wOd8UOod3rpaxRP7/Z0ijvbz7a9zL
+ 07DbcgRhu0f2J2Kt07CcgmLOZsCoErFmfK8UiqUCD9mVagvcegJYrdC8Xq4mhjrff1Gi+yt/brLuGMC54uNBvPLP55UHVBLM4NT2BmxTy6356tuWvPM=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: builder@linuxtv.org
+Hi Thierry,
 
-Pull request: https://patchwork.linuxtv.org/patch/59184/
-Build log: https://builder.linuxtv.org/job/patchwork/18922/
-Build time: 00:03:40
-Link: https://lore.kernel.org/linux-media/20191004075617.17328-1-stanimir.varbanov@linaro.org
+Just a reminder: this patch hasn't been merged yet for v5.5.
 
-gpg: Signature made Fri 04 Oct 2019 07:45:14 AM UTC
-gpg:                using RSA key E1558C2497CE3CCC2B5AA30F25B55FC81B7035F2
-gpg: Good signature from "Stanimir Varbanov <stanimir.varbanov@linaro.org>" [unknown]
-gpg: WARNING: This key is not certified with a trusted signature!
-gpg:          There is no indication that the signature belongs to the owner.
-Primary key fingerprint: 34CF E039 8A16 AD93 18FD  D5E8 A6D0 26D8 E358 14D4
-     Subkey fingerprint: E155 8C24 97CE 3CCC 2B5A  A30F 25B5 5FC8 1B70 35F2
+Thanks!
 
-Summary: no issues
+	Hans
+
+On 8/28/19 1:54 PM, Thierry Reding wrote:
+> On Wed, Aug 28, 2019 at 12:06:34PM +0200, Hans Verkuil wrote:
+>> On 8/28/19 11:38 AM, Thierry Reding wrote:
+>>> On Wed, Aug 28, 2019 at 10:09:30AM +0200, Hans Verkuil wrote:
+>>>> Thierry,
+>>>>
+>>>> Can you review this patch?
+>>>>
+>>>> Thanks!
+>>>>
+>>>> 	Hans
+>>>
+>>> Did you want me to pick this up into the drm/tegra tree? Or do you want
+>>> to pick it up into your tree?
+>>
+>> Can you pick it up for the next cycle? As you mentioned, we missed the
+>> deadline for 5.4, so this feature won't be enabled in the public CEC API
+>> until 5.5.
+>>
+>> Thanks!
+> 
+> Sure, will do.
+> 
+> Thierry
+> 
+
