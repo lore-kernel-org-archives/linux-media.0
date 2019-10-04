@@ -2,60 +2,62 @@ Return-Path: <SRS0=ViiU=X5=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72448C4360C
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 17:22:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63BA9C47404
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 17:22:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 43AAD222C2
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 17:22:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3EAD0222C4
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 17:22:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="G/qHf1b0"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Viu1+a06"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388076AbfJDRWN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Oct 2019 13:22:13 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:38046 "EHLO
+        id S2388199AbfJDRW3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Oct 2019 13:22:29 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:38110 "EHLO
         fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbfJDRWN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 13:22:13 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94HM86k095361;
-        Fri, 4 Oct 2019 12:22:08 -0500
+        with ESMTP id S2388186AbfJDRW2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 13:22:28 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94HMA9O095384;
+        Fri, 4 Oct 2019 12:22:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570209728;
-        bh=AobMfyABZdhKXxitkOoKghAR25XU6nfrNWqRGUcxS8w=;
-        h=From:To:CC:Subject:Date;
-        b=G/qHf1b0NlXv+RXXmzYgKyMh7UigZN7NdqQ1XFma5BhPprOvhirGD2Yr0+rmXRzsW
-         cOPmL3Jy4jR6wWUMbWZt3pZfqQLh/J+hCWldtRivyU3x7GHzKs6vkG+h/QytNaY4V0
-         mXR4zHZYVpxuHCOrLAR8Qtf5CxkoYqFaP4oCKhII=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94HM8DB006897
+        s=ti-com-17Q1; t=1570209730;
+        bh=adoGa42wyTh6UCk6Hc+yZbQylsk1AFp8cCXvuR0ONyI=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=Viu1+a06CZHelhUb6jQubigo5UHEMOsnt9BlCBW4z8b1GvmY3MMAL+Ech8AU4Is8i
+         lvfZS/cEfWDONGkpmApmOdbmo39PhFGsrGIUJXH0SuJsOuFRQgyWh5JqCGse5yHOC3
+         e9OEarca208DGmUqai28I45sl7aclkOsTWAQsMtY=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94HMADe127778
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Oct 2019 12:22:08 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 4 Oct 2019 12:22:10 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 4 Oct
- 2019 12:22:07 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 12:22:09 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 4 Oct 2019 12:22:07 -0500
+ Frontend Transport; Fri, 4 Oct 2019 12:22:09 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94HM7Va041112;
-        Fri, 4 Oct 2019 12:22:07 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94HM7Vd041112;
+        Fri, 4 Oct 2019 12:22:10 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
         Jacopo Mondi <jacopo@jmondi.org>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v3 0/3] media: ov5640: updates
-Date:   Fri, 4 Oct 2019 12:24:15 -0500
-Message-ID: <20191004172418.2339-1-bparrot@ti.com>
+Subject: [Patch v3 3/3] media: ov5640: Make 2592x1944 mode only available at 15 fps
+Date:   Fri, 4 Oct 2019 12:24:18 -0500
+Message-ID: <20191004172418.2339-4-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191004172418.2339-1-bparrot@ti.com>
+References: <20191004172418.2339-1-bparrot@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -64,37 +66,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch series is a collection of patches we have been carrying for a
-while.
+The sensor data sheet clearly state that 2592x1944 only works at 15 fps
+make sure we don't try to miss configure the pll out of acceptable
+range.
 
-First, it adds support for PIXEL_RATE control which is used by some
-CSI2 receiver driver to properly set-up their DPHY.
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+---
+ drivers/media/i2c/ov5640.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Then we fix an issue related to having extra sensor enable/disable in
-the register array for the 1920x1080 mode.
-
-Finally we restrict the largest resolution which should only be
-available at the lowest FPS.
-
-Changes since v2:
-- Addressed comment from Sakari and Jacopo.
-- Make use of the calc_pixel_rate in set_mode also
-- Cleaned up the pixel_rate ctrl struct
-- Fix the fps condition checking for the max resolution case
-
-Changes since v1:
-- Addressed comment from Sakari.
-  added a function to calculate the pixel rate and remove the need to
-  cache its value
-
-Benoit Parrot (3):
-  media: ov5640: add PIXEL_RATE control
-  media: ov5640: Fix 1920x1080 mode to remove extra enable/disable
-  media: ov5640: Make 2592x1944 mode only available at 15 fps
-
- drivers/media/i2c/ov5640.c | 33 +++++++++++++++++++++++++++++----
- 1 file changed, 29 insertions(+), 4 deletions(-)
-
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 5cebad151546..8ffb3a55ca27 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -1611,6 +1611,11 @@ ov5640_find_mode(struct ov5640_dev *sensor, enum ov5640_frame_rate fr,
+ 	    !(mode->hact == 640 && mode->vact == 480))
+ 		return NULL;
+ 
++	/* 2592x1944 only works at 15fps max */
++	if ((mode->hact == 2592 && mode->vact == 1944) &&
++	    fr > OV5640_15_FPS)
++		return NULL;
++
+ 	return mode;
+ }
+ 
 -- 
 2.17.1
 
