@@ -5,54 +5,54 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05752C4CED1
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4965EC47404
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9EDB222C5
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D6D2222C0
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ILnca9qI"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="XjazLtwj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731388AbfJDQ2N (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Oct 2019 12:28:13 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:60642 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731376AbfJDQ2M (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:28:12 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GSBvT081615;
-        Fri, 4 Oct 2019 11:28:11 -0500
+        id S1731424AbfJDQ2U (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Oct 2019 12:28:20 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40562 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731320AbfJDQ2K (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:28:10 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GS8Gn076969;
+        Fri, 4 Oct 2019 11:28:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570206491;
-        bh=b5cigKhoIzSoUXIJLSanGGIh+FR/Ks6qV++YdaAFNZs=;
+        s=ti-com-17Q1; t=1570206488;
+        bh=Bmbbi3OWJca0Yj0sYhVVnSP9F6LHhyEQQZabDOTZnBg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ILnca9qIqtluqiM+VD0nLNvCnWZigjQxDEMtrHjUyJWBYVW2S1WJy7xMY44BwWDbc
-         vMFPHGIwTiN3mp4dCUX4nhSfjGKG/BtcLfEKvjILjUvD26V7kfsz9V5LnRu6eI86lh
-         Ldk6JRhi30xc5EtV2Zwk4bTDagrClSsDSo7WuS2w=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GSBpX056482
+        b=XjazLtwjGndcKs69Fx51QULcLMvaQ9cSrItkS6RAdEEkjpC6BvdzcrtImyckGkUmx
+         K8OuoyQNOK8BvZEClhxXpfYSuO9ESxJBpK3kYPV7MvHPFkFsBiNpDOQ3kkSdZx4bX8
+         mYcofQzUfC03p4eebkMKfFOYT7PtneIvurxqo4ks=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GS8Xo065369
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Oct 2019 11:28:11 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 4 Oct 2019 11:28:08 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 4 Oct
- 2019 11:28:11 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 11:28:08 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 4 Oct 2019 11:28:11 -0500
+ Frontend Transport; Fri, 4 Oct 2019 11:28:08 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAN028904;
-        Fri, 4 Oct 2019 11:28:11 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAL028904;
+        Fri, 4 Oct 2019 11:28:08 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 21/21] media: ti-vpe: vpe: don't rely on colorspace member for conversion
-Date:   Fri, 4 Oct 2019 11:29:52 -0500
-Message-ID: <20191004162952.4963-22-bparrot@ti.com>
+Subject: [Patch v2 19/21] media: v4l2-common: add pixel encoding support
+Date:   Fri, 4 Oct 2019 11:29:50 -0500
+Message-ID: <20191004162952.4963-20-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191004162952.4963-1-bparrot@ti.com>
 References: <20191004162952.4963-1-bparrot@ti.com>
@@ -64,376 +64,259 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Up to now VPE was relying on the colorspace value of struct v4l2_format
-as an indication to perform color space conversion from YUV to RGB or
-not.
+It is often useful to figure out if a pixel_format is either YUV or RGB
+especially for driver who can perform the pixel encoding conversion.
 
-Instead we should used the source/destination fourcc codes as a more
-reliable indication to perform color space conversion or not.
+Instead of having each driver implement its own "is_this_yuv/rgb"
+function based on a restricted set of pixel value, it is better to do
+this in centralized manner.
 
-To do so, we rework the csc module to use "struct v4l2_format *" as
-parameters, and reorganize the coefficients tables in a more logical
-way.
+We therefore add a pix_enc member to the v4l2_format_info structure to
+quickly identify the related pixel encoding.
+And add helper function to find/check pixel encoding.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/csc.c | 220 +++++++++++++++++-----------
- drivers/media/platform/ti-vpe/csc.h |   4 +-
- drivers/media/platform/ti-vpe/vpe.c |  17 +--
- 3 files changed, 144 insertions(+), 97 deletions(-)
+ drivers/media/v4l2-core/v4l2-common.c | 162 ++++++++++++++++----------
+ include/media/v4l2-common.h           |  20 ++++
+ 2 files changed, 119 insertions(+), 63 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti-vpe/csc.c
-index f0c45d187b5f..e2b5bee5e206 100644
---- a/drivers/media/platform/ti-vpe/csc.c
-+++ b/drivers/media/platform/ti-vpe/csc.c
-@@ -15,76 +15,96 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/videodev2.h>
-+#include <media/v4l2-common.h>
+diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2-core/v4l2-common.c
+index 62f7aa92ac29..474cdb5863f4 100644
+--- a/drivers/media/v4l2-core/v4l2-common.c
++++ b/drivers/media/v4l2-core/v4l2-common.c
+@@ -236,77 +236,77 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ {
+ 	static const struct v4l2_format_info formats[] = {
+ 		/* RGB formats */
+-		{ .format = V4L2_PIX_FMT_BGR24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_RGB24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_HSV24,   .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_BGR32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_XBGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_BGRX32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_RGB32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_XRGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_RGBX32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_HSV32,   .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_ARGB32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_RGBA32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_ABGR32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_BGRA32,  .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_GREY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_BGR24,   .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_RGB24,   .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_HSV24,   .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 3, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_BGR32,   .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_XBGR32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_BGRX32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_RGB32,   .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_XRGB32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_RGBX32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_HSV32,   .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_ARGB32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_RGBA32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_ABGR32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_BGRA32,  .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 4, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_GREY,    .pix_enc = V4L2_ENC_RGB, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
  
- #include "csc.h"
+ 		/* YUV packed formats */
+-		{ .format = V4L2_PIX_FMT_YUYV,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_YVYU,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_UYVY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_VYUY,    .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_YUYV,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_YVYU,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_UYVY,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_VYUY,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 2, .vdiv = 1 },
  
- /*
-- * 16 coefficients in the order:
-+ * 12 coefficients in the order:
-  * a0, b0, c0, a1, b1, c1, a2, b2, c2, d0, d1, d2
-- * (we may need to pass non-default values from user space later on, we might
-- * need to make the coefficient struct more easy to populate)
+ 		/* YUV planar formats */
+-		{ .format = V4L2_PIX_FMT_NV12,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+-		{ .format = V4L2_PIX_FMT_NV21,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+-		{ .format = V4L2_PIX_FMT_NV16,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_NV61,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_NV24,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_NV42,    .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-
+-		{ .format = V4L2_PIX_FMT_YUV410,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+-		{ .format = V4L2_PIX_FMT_YVU410,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
+-		{ .format = V4L2_PIX_FMT_YUV411P, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_YUV420,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
+-		{ .format = V4L2_PIX_FMT_YVU420,  .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
+-		{ .format = V4L2_PIX_FMT_YUV422P, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_NV12,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_NV21,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_NV16,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_NV61,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_NV24,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_NV42,    .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++
++		{ .format = V4L2_PIX_FMT_YUV410,  .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
++		{ .format = V4L2_PIX_FMT_YVU410,  .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 4 },
++		{ .format = V4L2_PIX_FMT_YUV411P, .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 4, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_YUV420,  .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_YVU420,  .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_YUV422P, .pix_enc = V4L2_ENC_YUV, .mem_planes = 1, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
+ 
+ 		/* YUV planar formats, non contiguous variant */
+-		{ .format = V4L2_PIX_FMT_YUV420M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
+-		{ .format = V4L2_PIX_FMT_YVU420M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
+-		{ .format = V4L2_PIX_FMT_YUV422M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_YVU422M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_YUV444M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_YVU444M, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
+-
+-		{ .format = V4L2_PIX_FMT_NV12M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+-		{ .format = V4L2_PIX_FMT_NV21M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
+-		{ .format = V4L2_PIX_FMT_NV16M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_NV61M,   .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_YUV420M, .pix_enc = V4L2_ENC_YUV, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_YVU420M, .pix_enc = V4L2_ENC_YUV, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_YUV422M, .pix_enc = V4L2_ENC_YUV, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_YVU422M, .pix_enc = V4L2_ENC_YUV, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_YUV444M, .pix_enc = V4L2_ENC_YUV, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_YVU444M, .pix_enc = V4L2_ENC_YUV, .mem_planes = 3, .comp_planes = 3, .bpp = { 1, 1, 1, 0 }, .hdiv = 1, .vdiv = 1 },
++
++		{ .format = V4L2_PIX_FMT_NV12M,   .pix_enc = V4L2_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_NV21M,   .pix_enc = V4L2_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 2 },
++		{ .format = V4L2_PIX_FMT_NV16M,   .pix_enc = V4L2_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_NV61M,   .pix_enc = V4L2_ENC_YUV, .mem_planes = 2, .comp_planes = 2, .bpp = { 1, 2, 0, 0 }, .hdiv = 2, .vdiv = 1 },
+ 
+ 		/* Bayer RGB formats */
+-		{ .format = V4L2_PIX_FMT_SBGGR8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGBRG8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGRBG8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SRGGB8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SBGGR10,	.mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGBRG10,	.mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGRBG10,	.mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SRGGB10,	.mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SBGGR10ALAW8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGBRG10ALAW8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGRBG10ALAW8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SRGGB10ALAW8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SBGGR10DPCM8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGBRG10DPCM8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGRBG10DPCM8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SRGGB10DPCM8,	.mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SBGGR12,	.mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGBRG12,	.mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SGRBG12,	.mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+-		{ .format = V4L2_PIX_FMT_SRGGB12,	.mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SBGGR8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGBRG8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGRBG8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SRGGB8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SBGGR10,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGBRG10,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGRBG10,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SRGGB10,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SBGGR10ALAW8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGBRG10ALAW8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGRBG10ALAW8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SRGGB10ALAW8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SBGGR10DPCM8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGBRG10DPCM8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGRBG10DPCM8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SRGGB10DPCM8,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 1, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SBGGR12,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGBRG12,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SGRBG12,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
++		{ .format = V4L2_PIX_FMT_SRGGB12,	.pix_enc = V4L2_ENC_BAYER, .mem_planes = 1, .comp_planes = 1, .bpp = { 2, 0, 0, 0 }, .hdiv = 1, .vdiv = 1 },
+ 	};
+ 	unsigned int i;
+ 
+@@ -317,6 +317,42 @@ const struct v4l2_format_info *v4l2_format_info(u32 format)
+ }
+ EXPORT_SYMBOL(v4l2_format_info);
+ 
++bool v4l2_is_format_rgb(u32 format)
++{
++	const struct v4l2_format_info *f;
++
++	f = v4l2_format_info(format);
++	if (f && f->pix_enc == V4L2_ENC_RGB)
++		return true;
++
++	return false;
++}
++EXPORT_SYMBOL(v4l2_is_format_rgb);
++
++bool v4l2_is_format_yuv(u32 format)
++{
++	const struct v4l2_format_info *f;
++
++	f = v4l2_format_info(format);
++	if (f && f->pix_enc == V4L2_ENC_YUV)
++		return true;
++
++	return false;
++}
++EXPORT_SYMBOL(v4l2_is_format_yuv);
++
++bool v4l2_is_format_bayer(u32 format)
++{
++	const struct v4l2_format_info *f;
++
++	f = v4l2_format_info(format);
++	if (f && f->pix_enc == V4L2_ENC_BAYER)
++		return true;
++
++	return false;
++}
++EXPORT_SYMBOL(v4l2_is_format_bayer);
++
+ static inline unsigned int v4l2_format_block_width(const struct v4l2_format_info *info, int plane)
+ {
+ 	if (!info->block_w[plane])
+diff --git a/include/media/v4l2-common.h b/include/media/v4l2-common.h
+index c070d8ae11e5..27041cf2b818 100644
+--- a/include/media/v4l2-common.h
++++ b/include/media/v4l2-common.h
+@@ -456,9 +456,25 @@ int v4l2_s_parm_cap(struct video_device *vdev,
+ 
+ /* Pixel format and FourCC helpers */
+ 
++/**
++ * enum v4l2_pixel_encoding - specifies the pixel encoding value
++ *
++ * @V4L2_ENC_UNKNOWN:	Pixel encoding is unknown/un-initialized
++ * @V4L2_ENC_YUV:	Pixel encoding is YUV
++ * @V4L2_ENC_RGB:	Pixel encoding is RGB
++ * @V4L2_ENC_BAYER:	Pixel encoding is Bayer
++ */
++enum v4l2_pixel_encoding {
++	@V4L2_ENC_UNKNOWN = 0,
++	V4L2_ENC_YUV = 1,
++	V4L2_ENC_RGB = 2,
++	V4L2_ENC_BAYER = 3,
++};
++
+ /**
+  * struct v4l2_format_info - information about a V4L2 format
+  * @format: 4CC format identifier (V4L2_PIX_FMT_*)
++ * @pix_enc: Pixel format encoding (see enum v4l2_pixel_encoding above)
+  * @mem_planes: Number of memory planes, which includes the alpha plane (1 to 4).
+  * @comp_planes: Number of component planes, which includes the alpha plane (1 to 4).
+  * @bpp: Array of per-plane bytes per pixel
+@@ -469,6 +485,7 @@ int v4l2_s_parm_cap(struct video_device *vdev,
   */
--struct colorspace_coeffs {
--	u16	sd[12];
--	u16	hd[12];
-+struct quantization {
-+	u16	coeff[12];
+ struct v4l2_format_info {
+ 	u32 format;
++	u8 pix_enc;
+ 	u8 mem_planes;
+ 	u8 comp_planes;
+ 	u8 bpp[4];
+@@ -479,6 +496,9 @@ struct v4l2_format_info {
  };
  
--/* VIDEO_RANGE: limited range, GRAPHICS_RANGE: full range */
--#define	CSC_COEFFS_VIDEO_RANGE_Y2R	0
--#define	CSC_COEFFS_GRAPHICS_RANGE_Y2R	1
--#define	CSC_COEFFS_VIDEO_RANGE_R2Y	2
--#define	CSC_COEFFS_GRAPHICS_RANGE_R2Y	3
-+struct colorspace {
-+	struct quantization limited;
-+	struct quantization full;
-+};
-+
-+struct encoding_direction {
-+	struct colorspace r601;
-+	struct colorspace r709;
-+};
-+
-+struct csc_coeffs {
-+	struct encoding_direction y2r;
-+	struct encoding_direction r2y;
-+};
+ const struct v4l2_format_info *v4l2_format_info(u32 format);
++bool v4l2_is_format_rgb(u32 format);
++bool v4l2_is_format_yuv(u32 format);
++bool v4l2_is_format_bayer(u32 format);
  
- /* default colorspace coefficients */
--static struct colorspace_coeffs colorspace_coeffs[4] = {
--	[CSC_COEFFS_VIDEO_RANGE_Y2R] = {
--		{
--			/* SDTV */
--			0x0400, 0x0000, 0x057D, 0x0400, 0x1EA7, 0x1D35,
--			0x0400, 0x06EF, 0x1FFE, 0x0D40, 0x0210, 0x0C88,
--		},
--		{
--			/* HDTV */
--			0x0400, 0x0000, 0x0629, 0x0400, 0x1F45, 0x1E2B,
--			0x0400, 0x0742, 0x0000, 0x0CEC, 0x0148, 0x0C60,
--		},
--	},
--	[CSC_COEFFS_GRAPHICS_RANGE_Y2R] = {
--		{
--			/* SDTV */
--			0x04A8, 0x1FFE, 0x0662, 0x04A8, 0x1E6F, 0x1CBF,
--			0x04A8, 0x0812, 0x1FFF, 0x0C84, 0x0220, 0x0BAC,
-+static struct csc_coeffs csc_coeffs = {
-+	.y2r = {
-+		.r601 = {
-+			.limited = {
-+				{	/* SDTV */
-+				0x0400, 0x0000, 0x057D, 0x0400, 0x1EA7, 0x1D35,
-+				0x0400, 0x06EF, 0x1FFE, 0x0D40, 0x0210, 0x0C88,
-+				}
-+			},
-+			.full = {
-+				{	/* SDTV */
-+				0x04A8, 0x1FFE, 0x0662, 0x04A8, 0x1E6F, 0x1CBF,
-+				0x04A8, 0x0812, 0x1FFF, 0x0C84, 0x0220, 0x0BAC,
-+				}
-+			},
- 		},
--		{
--			/* HDTV */
--			0x04A8, 0x0000, 0x072C, 0x04A8, 0x1F26, 0x1DDE,
--			0x04A8, 0x0873, 0x0000, 0x0C20, 0x0134, 0x0B7C,
-+		.r709 = {
-+			.limited = {
-+				{	/* HDTV */
-+				0x0400, 0x0000, 0x0629, 0x0400, 0x1F45, 0x1E2B,
-+				0x0400, 0x0742, 0x0000, 0x0CEC, 0x0148, 0x0C60,
-+				}
-+			},
-+			.full = {
-+				{	/* HDTV */
-+				0x04A8, 0x0000, 0x072C, 0x04A8, 0x1F26, 0x1DDE,
-+				0x04A8, 0x0873, 0x0000, 0x0C20, 0x0134, 0x0B7C,
-+				}
-+			},
- 		},
- 	},
--	[CSC_COEFFS_VIDEO_RANGE_R2Y] = {
--		{
--			/* SDTV */
--			0x0132, 0x0259, 0x0075, 0x1F50, 0x1EA5, 0x020B,
--			0x020B, 0x1E4A, 0x1FAB, 0x0000, 0x0200, 0x0200,
-+	.r2y = {
-+		.r601 = {
-+			.limited = {
-+				{	/* SDTV */
-+				0x0132, 0x0259, 0x0075, 0x1F50, 0x1EA5, 0x020B,
-+				0x020B, 0x1E4A, 0x1FAB, 0x0000, 0x0200, 0x0200,
-+				}
-+			},
-+			.full = {
-+				{	/* SDTV */
-+				0x0107, 0x0204, 0x0064, 0x1F68, 0x1ED6, 0x01C2,
-+				0x01C2, 0x1E87, 0x1FB7, 0x0040, 0x0200, 0x0200,
-+				}
-+			},
- 		},
--		{
--			/* HDTV */
--			0x00DA, 0x02DC, 0x004A, 0x1F88, 0x1E6C, 0x020C,
--			0x020C, 0x1E24, 0x1FD0, 0x0000, 0x0200, 0x0200,
--		},
--	},
--	[CSC_COEFFS_GRAPHICS_RANGE_R2Y] = {
--		{
--			/* SDTV */
--			0x0107, 0x0204, 0x0064, 0x1F68, 0x1ED6, 0x01C2,
--			0x01C2, 0x1E87, 0x1FB7, 0x0040, 0x0200, 0x0200,
--		},
--		{
--			/* HDTV */
--			0x00bb, 0x0275, 0x003f, 0x1f99, 0x1ea5, 0x01c2,
--			0x01c2, 0x1e67, 0x1fd7, 0x0040, 0x0200, 0x0200,
-+		.r709 = {
-+			.limited = {
-+				{	/* HDTV */
-+				0x00DA, 0x02DC, 0x004A, 0x1F88, 0x1E6C, 0x020C,
-+				0x020C, 0x1E24, 0x1FD0, 0x0000, 0x0200, 0x0200,
-+				}
-+			},
-+			.full = {
-+				{	/* HDTV */
-+				0x00bb, 0x0275, 0x003f, 0x1f99, 0x1ea5, 0x01c2,
-+				0x01c2, 0x1e67, 0x1fd7, 0x0040, 0x0200, 0x0200,
-+				}
-+			},
- 		},
- 	},
-+
- };
- 
- void csc_dump_regs(struct csc_data *csc)
-@@ -117,46 +137,80 @@ EXPORT_SYMBOL(csc_set_coeff_bypass);
-  * set the color space converter coefficient shadow register values
-  */
- void csc_set_coeff(struct csc_data *csc, u32 *csc_reg0,
--		enum v4l2_colorspace src_colorspace,
--		enum v4l2_colorspace dst_colorspace)
-+		   struct v4l2_format *src_fmt, struct v4l2_format *dst_fmt)
- {
- 	u32 *csc_reg5 = csc_reg0 + 5;
- 	u32 *shadow_csc = csc_reg0;
--	struct colorspace_coeffs *sd_hd_coeffs;
- 	u16 *coeff, *end_coeff;
--	enum v4l2_colorspace yuv_colorspace;
--	int sel = 0;
--
--	/*
--	 * support only graphics data range(full range) for now, a control ioctl
--	 * would be nice here
--	 */
--	/* Y2R */
--	if (dst_colorspace == V4L2_COLORSPACE_SRGB &&
--			(src_colorspace == V4L2_COLORSPACE_SMPTE170M ||
--			src_colorspace == V4L2_COLORSPACE_REC709)) {
-+	enum v4l2_ycbcr_encoding ycbcr_enc;
-+	enum v4l2_quantization quantization;
-+
-+	if (v4l2_is_format_yuv(src_fmt->fmt.pix_mp.pixelformat) &&
-+	    v4l2_is_format_rgb(dst_fmt->fmt.pix_mp.pixelformat)) {
-+
- 		/* Y2R */
--		sel = 1;
--		yuv_colorspace = src_colorspace;
--	} else if ((dst_colorspace == V4L2_COLORSPACE_SMPTE170M ||
--			dst_colorspace == V4L2_COLORSPACE_REC709) &&
--			src_colorspace == V4L2_COLORSPACE_SRGB) {
-+		ycbcr_enc = src_fmt->fmt.pix_mp.ycbcr_enc;
-+		quantization = src_fmt->fmt.pix_mp.quantization;
-+
-+		/*
-+		 * These are not the standard default values but are
-+		 * set this way for historical compatibility
-+		 */
-+		if (ycbcr_enc == V4L2_YCBCR_ENC_DEFAULT)
-+			ycbcr_enc = V4L2_YCBCR_ENC_601;
-+
-+		if (quantization == V4L2_QUANTIZATION_DEFAULT)
-+			quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+
-+		if (ycbcr_enc == V4L2_YCBCR_ENC_601) {
-+			if (quantization == V4L2_QUANTIZATION_FULL_RANGE)
-+				coeff = csc_coeffs.y2r.r601.full.coeff;
-+			else
-+				coeff = csc_coeffs.y2r.r601.limited.coeff;
-+		} else if (ycbcr_enc == V4L2_YCBCR_ENC_709) {
-+			if (quantization == V4L2_QUANTIZATION_FULL_RANGE)
-+				coeff = csc_coeffs.y2r.r709.full.coeff;
-+			else
-+				coeff = csc_coeffs.y2r.r709.limited.coeff;
-+		} else {
-+			/* Should never reach this, but it keeps gcc happy */
-+			coeff = csc_coeffs.y2r.r601.full.coeff;
-+		}
-+	} else if (v4l2_is_format_rgb(src_fmt->fmt.pix_mp.pixelformat) &&
-+		   v4l2_is_format_yuv(dst_fmt->fmt.pix_mp.pixelformat)) {
- 		/* R2Y */
--		sel = 3;
--		yuv_colorspace = dst_colorspace;
-+		ycbcr_enc = dst_fmt->fmt.pix_mp.ycbcr_enc;
-+		quantization = dst_fmt->fmt.pix_mp.quantization;
-+
-+		/*
-+		 * These are not the standard default values but are
-+		 * set this way for historical compatibility
-+		 */
-+		if (ycbcr_enc == V4L2_YCBCR_ENC_DEFAULT)
-+			ycbcr_enc = V4L2_YCBCR_ENC_601;
-+
-+		if (quantization == V4L2_QUANTIZATION_DEFAULT)
-+			quantization = V4L2_QUANTIZATION_FULL_RANGE;
-+
-+		if (ycbcr_enc == V4L2_YCBCR_ENC_601) {
-+			if (quantization == V4L2_QUANTIZATION_FULL_RANGE)
-+				coeff = csc_coeffs.r2y.r601.full.coeff;
-+			else
-+				coeff = csc_coeffs.r2y.r601.limited.coeff;
-+		} else if (ycbcr_enc == V4L2_YCBCR_ENC_709) {
-+			if (quantization == V4L2_QUANTIZATION_FULL_RANGE)
-+				coeff = csc_coeffs.r2y.r709.full.coeff;
-+			else
-+				coeff = csc_coeffs.r2y.r709.limited.coeff;
-+		} else {
-+			/* Should never reach this, but it keeps gcc happy */
-+			coeff = csc_coeffs.y2r.r601.full.coeff;
-+		}
- 	} else {
- 		*csc_reg5 |= CSC_BYPASS;
- 		return;
- 	}
- 
--	sd_hd_coeffs = &colorspace_coeffs[sel];
--
--	/* select between SD or HD coefficients */
--	if (yuv_colorspace == V4L2_COLORSPACE_SMPTE170M)
--		coeff = sd_hd_coeffs->sd;
--	else
--		coeff = sd_hd_coeffs->hd;
--
- 	end_coeff = coeff + 12;
- 
- 	for (; coeff < end_coeff; coeff += 2)
-diff --git a/drivers/media/platform/ti-vpe/csc.h b/drivers/media/platform/ti-vpe/csc.h
-index de9a58af2ca8..af2e86bccf57 100644
---- a/drivers/media/platform/ti-vpe/csc.h
-+++ b/drivers/media/platform/ti-vpe/csc.h
-@@ -58,8 +58,8 @@ struct csc_data {
- void csc_dump_regs(struct csc_data *csc);
- void csc_set_coeff_bypass(struct csc_data *csc, u32 *csc_reg5);
- void csc_set_coeff(struct csc_data *csc, u32 *csc_reg0,
--		enum v4l2_colorspace src_colorspace,
--		enum v4l2_colorspace dst_colorspace);
-+		   struct v4l2_format *src_fmt, struct v4l2_format *dst_fmt);
-+
- struct csc_data *csc_create(struct platform_device *pdev, const char *res_name);
- 
- #endif
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 19b027c5478a..003db923c8a4 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -756,12 +756,10 @@ static void set_src_registers(struct vpe_ctx *ctx)
- static void set_dst_registers(struct vpe_ctx *ctx)
- {
- 	struct vpe_mmr_adb *mmr_adb = ctx->mmr_adb.addr;
--	enum v4l2_colorspace clrspc =
--			ctx->q_data[Q_DATA_DST].format.fmt.pix_mp.colorspace;
- 	struct vpe_fmt *fmt = ctx->q_data[Q_DATA_DST].fmt;
- 	u32 val = 0;
- 
--	if (clrspc == V4L2_COLORSPACE_SRGB) {
-+	if (v4l2_is_format_rgb(fmt->fourcc)) {
- 		val |= VPE_RGB_OUT_SELECT;
- 		vpdma_set_bg_color(ctx->dev->vpdma,
- 			(struct vpdma_data_format *)fmt->vpdma_fmt[0], 0xff);
-@@ -865,14 +863,12 @@ static int set_srcdst_params(struct vpe_ctx *ctx)
- 	unsigned int dst_w = d_q_data->c_rect.width;
- 	unsigned int dst_h = d_q_data->c_rect.height;
- 	struct v4l2_pix_format_mplane *spix;
--	struct v4l2_pix_format_mplane *dpix;
- 	size_t mv_buf_size;
- 	int ret;
- 
- 	ctx->sequence = 0;
- 	ctx->field = V4L2_FIELD_TOP;
- 	spix = &s_q_data->format.fmt.pix_mp;
--	dpix = &d_q_data->format.fmt.pix_mp;
- 
- 	if ((s_q_data->flags & Q_IS_INTERLACED) &&
- 			!(d_q_data->flags & Q_IS_INTERLACED)) {
-@@ -909,7 +905,7 @@ static int set_srcdst_params(struct vpe_ctx *ctx)
- 	set_dei_regs(ctx);
- 
- 	csc_set_coeff(ctx->dev->csc, &mmr_adb->csc_regs[0],
--		      spix->colorspace, dpix->colorspace);
-+		      &s_q_data->format, &d_q_data->format);
- 
- 	sc_set_hs_coeffs(ctx->dev->sc, ctx->sc_coeff_h.addr, src_w, dst_w);
- 	sc_set_vs_coeffs(ctx->dev->sc, ctx->sc_coeff_v.addr, src_h, dst_h);
-@@ -1287,7 +1283,7 @@ static void device_run(void *priv)
- 	if (ctx->deinterlacing)
- 		add_out_dtd(ctx, VPE_PORT_MV_OUT);
- 
--	if (d_q_data->format.fmt.pix_mp.colorspace == V4L2_COLORSPACE_SRGB) {
-+	if (v4l2_is_format_rgb(d_q_data->fmt->fourcc)) {
- 		add_out_dtd(ctx, VPE_PORT_RGB_OUT);
- 	} else {
- 		add_out_dtd(ctx, VPE_PORT_LUMA_OUT);
-@@ -1329,7 +1325,7 @@ static void device_run(void *priv)
- 	}
- 
- 	/* sync on channel control descriptors for output ports */
--	if (d_q_data->format.fmt.pix_mp.colorspace == V4L2_COLORSPACE_SRGB) {
-+	if (v4l2_is_format_rgb(d_q_data->fmt->fourcc)) {
- 		vpdma_add_sync_on_channel_ctd(&ctx->desc_list,
- 			VPE_CHAN_RGB_OUT);
- 	} else {
-@@ -1668,10 +1664,7 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
- 		height = pix->height;
- 
- 	if (!pix->colorspace) {
--		if (fmt->fourcc == V4L2_PIX_FMT_RGB24 ||
--				fmt->fourcc == V4L2_PIX_FMT_BGR24 ||
--				fmt->fourcc == V4L2_PIX_FMT_RGB32 ||
--				fmt->fourcc == V4L2_PIX_FMT_BGR32) {
-+		if (v4l2_is_format_rgb(fmt->fourcc)) {
- 			pix->colorspace = V4L2_COLORSPACE_SRGB;
- 		} else {
- 			if (height > 1280)	/* HD */
+ void v4l2_apply_frmsize_constraints(u32 *width, u32 *height,
+ 				    const struct v4l2_frmsize_stepwise *frmsize);
 -- 
 2.17.1
 
