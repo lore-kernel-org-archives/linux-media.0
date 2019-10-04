@@ -7,53 +7,52 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E545C47404
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0128AC4CED1
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CF7582133F
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:27:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C84E72133F
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="zPBxYO0d"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="iL02COIE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730836AbfJDQ1y (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Oct 2019 12:27:54 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:60602 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730787AbfJDQ1x (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:27:53 -0400
+        id S1731160AbfJDQ2A (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Oct 2019 12:28:00 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40526 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731021AbfJDQ16 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:27:58 -0400
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GRqBt081551;
-        Fri, 4 Oct 2019 11:27:52 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GRwpF076903;
+        Fri, 4 Oct 2019 11:27:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570206472;
-        bh=sTsSEmn5cWa+cgT3qecweduiY1OYBm5Hf9RAoJ207OA=;
+        s=ti-com-17Q1; t=1570206478;
+        bh=aBu0PqWOIhGTbZg+fIEAWe5OpA13KW5g5d1hdo8Rvow=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=zPBxYO0dWojex5ltAIWwl2xc8K8hqNSElJBubDwD1CS+Og3l0v2Oi1UNrDQWoZDdL
-         xUC8CgsSUcac7VvFYww3TxtfET4C1ZucO+fOKNFYmd/vdw/h5y6PQTqoXvgwjr2fIh
-         Z2xB4MgW217qg935o8wt9MowbbDsCMWPi+NjkuAY=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GRq5X055952
+        b=iL02COIEKg00UNntYRGnF4f26UlTrlQqcRaBWd9ZgWHkW+4SjY1geO5y/dg2xsl3N
+         JATeg4RWTb04i8TlcYBbVYjrLjltasmefAEcDIkNh8XOIT4DfWi6ifBkMKDLxZEQ+q
+         QcHcTj9C+s5U65xPZDNQfb13w8R+1E/pLZ2Sn698=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GRvJO055999
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Oct 2019 11:27:52 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 4 Oct 2019 11:27:58 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 4 Oct
- 2019 11:27:52 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 11:27:57 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 4 Oct 2019 11:27:51 -0500
+ Frontend Transport; Fri, 4 Oct 2019 11:27:57 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgA9028904;
-        Fri, 4 Oct 2019 11:27:52 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAD028904;
+        Fri, 4 Oct 2019 11:27:57 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Ram Prasad <x0038811@ti.com>,
-        Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 07/21] media: ti-vpe: Set MAX height supported to 2048 pixels
-Date:   Fri, 4 Oct 2019 11:29:38 -0500
-Message-ID: <20191004162952.4963-8-bparrot@ti.com>
+        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v2 11/21] media: ti-vpe: vpe: fix a v4l2-compliance failure about invalid sizeimage
+Date:   Fri, 4 Oct 2019 11:29:42 -0500
+Message-ID: <20191004162952.4963-12-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191004162952.4963-1-bparrot@ti.com>
 References: <20191004162952.4963-1-bparrot@ti.com>
@@ -65,34 +64,55 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ram Prasad <x0038811@ti.com>
+v4l2-compliance fails with this message:
 
-VPE's max height supported MAX_H is set to 1184 which is the
-padded height from VC1 decoder output.
+   fail: v4l2-test-formats.cpp(463): !pfmt.sizeimage
+   fail: v4l2-test-formats.cpp(736): \
+	Video Capture Multiplanar is valid, \
+	but TRY_FMT failed to return a format
+   test VIDIOC_TRY_FMT: FAIL
 
-In case of 90, 270 degree rotated video processing, input to
-VPE will be 1080x1920, 720x1280 etc and MAX_H needs to be set
-correct value. Setting MAX_H to 2048 as worst case height.
+This failure is causd by the driver failing to handle out range
+'bytesperline' values from user space applications.
 
-Signed-off-by: Ram Prasad <x0038811@ti.com>
+VPDMA hardware is limited to 64k line stride (16 bytes aligned, so 65520
+bytes). So make sure the provided or calculated 'bytesperline' is
+smaller than the maximum value.
+
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/ti-vpe/vpdma.h | 1 +
+ drivers/media/platform/ti-vpe/vpe.c   | 4 ++++
+ 2 files changed, 5 insertions(+)
 
+diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti-vpe/vpdma.h
+index bce17329c4c9..393fcbb3cb40 100644
+--- a/drivers/media/platform/ti-vpe/vpdma.h
++++ b/drivers/media/platform/ti-vpe/vpdma.h
+@@ -57,6 +57,7 @@ struct vpdma_data_format {
+ 						 * line stride of source and dest
+ 						 * buffers should be 16 byte aligned
+ 						 */
++#define VPDMA_MAX_STRIDE		65520	/* Max line stride 16 byte aligned */
+ #define VPDMA_DTD_DESC_SIZE		32	/* 8 words */
+ #define VPDMA_CFD_CTD_DESC_SIZE		16	/* 4 words */
+ 
 diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index f3ee9ff87927..bbbf11174e16 100644
+index 7aa83026fb6c..0a7cf9c820c6 100644
 --- a/drivers/media/platform/ti-vpe/vpe.c
 +++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -52,7 +52,7 @@
- #define MIN_W		32
- #define MIN_H		32
- #define MAX_W		2048
--#define MAX_H		1184
-+#define MAX_H		2048
+@@ -1694,6 +1694,10 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 		if (stride > plane_fmt->bytesperline)
+ 			plane_fmt->bytesperline = stride;
  
- /* required alignments */
- #define S_ALIGN		0	/* multiple of 1 */
++		plane_fmt->bytesperline = clamp_t(u32, plane_fmt->bytesperline,
++						  stride,
++						  VPDMA_MAX_STRIDE);
++
+ 		plane_fmt->bytesperline = ALIGN(plane_fmt->bytesperline,
+ 						VPDMA_STRIDE_ALIGN);
+ 
 -- 
 2.17.1
 
