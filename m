@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8701C4360C
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D67F9C47404
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 871E42133F
-	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AEFC12133F
+	for <linux-media@archiver.kernel.org>; Fri,  4 Oct 2019 16:28:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tJynx9+4"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="ew4MTbwQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731283AbfJDQ2H (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 4 Oct 2019 12:28:07 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:37168 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731265AbfJDQ2G (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:28:06 -0400
+        id S1731238AbfJDQ2E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 4 Oct 2019 12:28:04 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40540 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731200AbfJDQ2C (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 4 Oct 2019 12:28:02 -0400
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GS6BA059543;
-        Fri, 4 Oct 2019 11:28:06 -0500
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x94GS2sZ076919;
+        Fri, 4 Oct 2019 11:28:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570206486;
-        bh=oN8I5LkR4+QW/F4pAxU4LHL68tbhO04WPOjOJ+FTBMc=;
+        s=ti-com-17Q1; t=1570206482;
+        bh=PU8cOk4sbUjypaoxvrI4OhIdWem2VYqd9AB7zyslLUU=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=tJynx9+4yzAnsK2551nPSSVGnUUGC2ih2L3i92RoADrYVGmNCAzYL9bGuYbtEiHhm
-         I5j1eH3jj2IdR03nVarEgekR10LyNhRzSJr0Xa0lwrXJqaqdPgAHwKPSTU96HwwsEJ
-         f7IRO7VHwgHYIznJd5QzpPJ8UH4du1RyH+s/jexM=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GS6U7050988
+        b=ew4MTbwQMO4uLnCcvXzLQuT1zdnnuI7X7EMaUkH2PqNF9LREorimGwq2+nmt2W4IH
+         3Juk5uDpTfHoLoSf2omXOm8J7xId5oBkcWvr723FO6WCxnc36TOpALcUPXLQ377uXx
+         eO68UHZ2HyBZrSZO2oWG4JyVMFIF/686xBu/XdP8=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x94GS2ca050776
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Oct 2019 11:28:06 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 4 Oct 2019 11:28:02 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 4 Oct
- 2019 11:28:05 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 11:28:01 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 4 Oct 2019 11:28:05 -0500
+ Frontend Transport; Fri, 4 Oct 2019 11:28:01 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAJ028904;
-        Fri, 4 Oct 2019 11:28:05 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x94GRgAG028904;
+        Fri, 4 Oct 2019 11:28:01 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 17/21] media: ti-vpe: vpe: fix v4l2_compliance issue related to xfer_func
-Date:   Fri, 4 Oct 2019 11:29:48 -0500
-Message-ID: <20191004162952.4963-18-bparrot@ti.com>
+Subject: [Patch v2 14/21] media: ti-vpe: vpdma: Use fixed type for address in descriptor
+Date:   Fri, 4 Oct 2019 11:29:45 -0500
+Message-ID: <20191004162952.4963-15-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191004162952.4963-1-bparrot@ti.com>
 References: <20191004162952.4963-1-bparrot@ti.com>
@@ -64,35 +64,35 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-All 4 of the "colorspace" components were not originally handled.
-Causing issue related to xfer_func not being initialized properly.
-
-This was found with v4l2-compliance test.
+Using dma_addr_t as the type to hold address inside of a fix sized
+descriptor used by the vpdma firmware is prone to fail when the expected
+width is 32 bits and suddenly when CONFIG_LPAE is enabled the data size
+is now 64 bits shifted the remaining members of the descriptor in memory
+which confuses the firmware.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/media/platform/ti-vpe/vpdma_priv.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 5b1e9908fff2..19b027c5478a 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1578,10 +1578,13 @@ static int vpe_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
- 	if (!V4L2_TYPE_IS_OUTPUT(f->type)) {
- 		struct vpe_q_data *s_q_data;
- 
--		/* get colorspace from the source queue */
-+		/* get colorimetry from the source queue */
- 		s_q_data = get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
- 
- 		pix->colorspace = s_q_data->format.fmt.pix_mp.colorspace;
-+		pix->xfer_func = s_q_data->format.fmt.pix_mp.xfer_func;
-+		pix->ycbcr_enc = s_q_data->format.fmt.pix_mp.ycbcr_enc;
-+		pix->quantization = s_q_data->format.fmt.pix_mp.quantization;
- 	}
- 
- 	return 0;
+diff --git a/drivers/media/platform/ti-vpe/vpdma_priv.h b/drivers/media/platform/ti-vpe/vpdma_priv.h
+index d8ae3e1cd54d..0bbee45338bd 100644
+--- a/drivers/media/platform/ti-vpe/vpdma_priv.h
++++ b/drivers/media/platform/ti-vpe/vpdma_priv.h
+@@ -166,11 +166,11 @@ struct vpdma_dtd {
+ 		u32		xfer_length_height;
+ 		u32		w1;
+ 	};
+-	dma_addr_t		start_addr;
++	u32			start_addr;
+ 	u32			pkt_ctl;
+ 	union {
+ 		u32		frame_width_height;	/* inbound */
+-		dma_addr_t	desc_write_addr;	/* outbound */
++		u32		desc_write_addr;	/* outbound */
+ 	};
+ 	union {
+ 		u32		start_h_v;		/* inbound */
 -- 
 2.17.1
 
