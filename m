@@ -2,394 +2,684 @@ Return-Path: <SRS0=Dsme=X6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B88AC4740A
-	for <linux-media@archiver.kernel.org>; Sat,  5 Oct 2019 18:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95921ECE58B
+	for <linux-media@archiver.kernel.org>; Sat,  5 Oct 2019 21:11:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3C5DA222CA
-	for <linux-media@archiver.kernel.org>; Sat,  5 Oct 2019 18:31:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62821222CA
+	for <linux-media@archiver.kernel.org>; Sat,  5 Oct 2019 21:11:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JZlHOlxw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387990AbfJESbV (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 5 Oct 2019 14:31:21 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:40077 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387486AbfJESbU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Oct 2019 14:31:20 -0400
-Received: by mail-qk1-f196.google.com with SMTP id y144so8935660qkb.7;
-        Sat, 05 Oct 2019 11:31:19 -0700 (PDT)
+        id S1725917AbfJEVLo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 5 Oct 2019 17:11:44 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:36147 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725789AbfJEVLn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sat, 5 Oct 2019 17:11:43 -0400
+Received: by mail-qt1-f196.google.com with SMTP id o12so13758546qtf.3;
+        Sat, 05 Oct 2019 14:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Sc0BKkAHyaJQi1cI/oLAeFC5Q4ApMqyK4Mh+C0apVyc=;
+        b=JZlHOlxwY7vblQHwjDqipbzXxnWPgaprueGQrM+besZ6ULJFY/+sW1NnZ1ZaUyaTof
+         QCHSA56STn8TnFGbmkmxKnnAMOdC6VXCP9A1W1jBscT5XsmUOarBGrLkdchOnhIz/BmZ
+         K3mYgB6qxxySgYhDsUAydhP3RhHoiUTNwEROCBkH/N1kbc86MbsB9Hal9LxDEVHWy9E4
+         wUagT1usNnG2bWTi2o4dPYH/8xGmcv0gq0eMKhxiBsE3XlCHs3COVzFKd22YSOiRTARZ
+         PGkRSFzg1u1eldTJ9KMBypmG0c3sqPFy3eFjYbo/stKjufqy1FiTUcX61fu5I5iqMMK8
+         mSqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=UqlZc/J7WTaej7Rap29JknxjoHIS0JTCIJZsHjEmgus=;
-        b=hlIzv+CI6hZUuNBJOf6E9rkacHbu8trpA3Ti/bN6Mb9yCAKdvIkvQrWQHLYkmzTTTd
-         bNDU9zmsY86uM/gVFRJx5sp0jxF8kF3qNUCN49Abqs4VKKXAmJKKJUjFE+57Vuqd8j91
-         EziwXoUCCqVWKrojrGcIBg8LYBVkk75Gf3MJCJUPC7gvJw1Yw0bw2beAvEwAGyBKYU9N
-         EdXt51uKuBNxb5K3kDMoOrWnVX/NlDu/QcTpYkS7fduXWLDJPTFVy10dScY+xLhjFXU6
-         ak+PxfIkhtEOdeo1jI5ZqEydlkS3yy4pyzO+pzXLIuhl4hVpd4+BVDdDiu6/7WB5jGfr
-         6/Aw==
-X-Gm-Message-State: APjAAAXlV+VMl9pKW4nSgY4j1wJ+UkBxP8NCv4ujci9oHFKqMpug2LpE
-        D/V7ekCdJsosw/iomrDnxq8Xxh6ZLx8=
-X-Google-Smtp-Source: APXvYqzK9ZI0qsjOv3BlgYAE2QPGySjScJV7JsNrlFAtSTRg+LUSG39oSEQ3hnCoPLOuaTKwzAVGug==
-X-Received: by 2002:ae9:e210:: with SMTP id c16mr8167608qkc.164.1570300278848;
-        Sat, 05 Oct 2019 11:31:18 -0700 (PDT)
-Received: from [172.16.0.213] ([177.103.155.130])
-        by smtp.gmail.com with ESMTPSA id p199sm4944522qke.18.2019.10.05.11.31.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Oct 2019 11:31:18 -0700 (PDT)
-Subject: Re: [Lkcamp] [PATCH v4] media: vimc: Implement debayer control for
- mean window size
-To:     Arthur Moraes do Lago <arthurmoraeslago@gmail.com>,
-        lkcamp@lists.libreplanetbr.org, mchehab@kernel.org,
-        skhan@linuxfoundation.org, hverkuil-cisco@xs4all.nl,
-        andrealmeid@collabora.com, laispc19@gmail.com,
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Sc0BKkAHyaJQi1cI/oLAeFC5Q4ApMqyK4Mh+C0apVyc=;
+        b=NPKDVm2rYECoPQuK5LCV7eyp0l/eBkDX2HU32QvCUeKEjXt5mWYWwhuJGYXKMIu0h0
+         YpT7HW9h8/00RBiLJBu6rQC3Vws4IycJGjIGpW6k0jXjhvL38WNxugQczO4k9TdAzBsj
+         hollxNyRe/C43o/OZmL2kb8w6Yd/TLngkjvqBnedWSrgiAouDWMGgEl4QjNh4bZFjbuK
+         oe9e+8iZIhxKzFkytpZ7WcnGoxVlKKcLgOIosFc8NL43s/9ED6/WgDrgCb6Z99/iJIAE
+         sKN1Nm7Emkxs8HTYWQ9Lq+TsWtm8k1qPPQA1yujPEwLQzyCiMe+PZyGZom5WtON8rlT9
+         cr1A==
+X-Gm-Message-State: APjAAAVewzGZEi4FWBITNXEZmM/tpMYa2ggUuabB5019wQHTMX8PDIJL
+        MDhfdf8XEi5db8f9i9XuAWwU39j+4GE=
+X-Google-Smtp-Source: APXvYqyy1pBZTq4Uyp/e0bygJyDEipLYw3TJ6BSNVPuhrMaw/CUqb2OcuG2bOrAQB0dudz1KCPci2g==
+X-Received: by 2002:ac8:2e94:: with SMTP id h20mr23329627qta.234.1570309902194;
+        Sat, 05 Oct 2019 14:11:42 -0700 (PDT)
+Received: from archlinux.terracota.local ([177.103.155.130])
+        by smtp.gmail.com with ESMTPSA id o28sm4431419qkk.106.2019.10.05.14.11.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 05 Oct 2019 14:11:41 -0700 (PDT)
+From:   "Carlos E. C. Barbosa" <climacobarbosacee@gmail.com>
+X-Google-Original-From: "Carlos E. C. Barbosa" <carlosecb@tutanota.com>
+To:     lkcamp@lists.libreplanetbr.org,
+        Helen Koike <helen.koike@collabora.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191002004633.21490-1-arthurmoraeslago@gmail.com>
-From:   Helen Koike <helen@koikeco.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=helen@koikeco.de; keydata=
- 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
-Message-ID: <e0376186-1083-7f6e-0d57-748fab8a6182@koikeco.de>
-Date:   Sat, 5 Oct 2019 15:31:14 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+Subject: [PATCH] media: vimc: get pixformat info from v4l2_format_info to avoid code repetition
+Date:   Sat,  5 Oct 2019 18:11:36 -0300
+Message-Id: <20191005211136.552305-1-carlosecb@tutanota.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191002004633.21490-1-arthurmoraeslago@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+From: "Carlos E.C. Barbosa" <carlosecb@tutanota.com>
 
+As the info found in vim_pix_map members are already available in
+v4l2_format_info those were removed and their calls remapped to it.
 
-On 10/1/19 9:46 PM, Arthur Moraes do Lago wrote:
-> Add mean window size parameter for debayer filter as a control in
-> vimc-debayer.
-> 
-> vimc-debayer was patched to allow changing mean window parameter
-> of the filter without needing to reload the driver. The parameter
-> can now be set using a v4l2-ctl control(mean_window_size).
-> 
-> Co-developed-by: Laís Pessine do Carmo <laispc19@gmail.com>
-> Signed-off-by: Laís Pessine do Carmo <laispc19@gmail.com>
-> Signed-off-by: Arthur Moraes do Lago <arthurmoraeslago@gmail.com>
+Signed-off-by: Carlos E. C. Barbosa <carlosecb@tutanota.com>
+---
+ drivers/media/platform/vimc/vimc-capture.c |  20 ++--
+ drivers/media/platform/vimc/vimc-common.c  | 107 +++++++++------------
+ drivers/media/platform/vimc/vimc-common.h  |  27 ++++--
+ drivers/media/platform/vimc/vimc-debayer.c |   6 +-
+ drivers/media/platform/vimc/vimc-scaler.c  |  26 +++--
+ drivers/media/platform/vimc/vimc-sensor.c  |  25 ++---
+ 6 files changed, 105 insertions(+), 106 deletions(-)
 
-Now the right one.
-lgtm
+diff --git a/drivers/media/platform/vimc/vimc-capture.c b/drivers/media/platform/vimc/vimc-capture.c
+index 602f80323031..8be2f81d5da3 100644
+--- a/drivers/media/platform/vimc/vimc-capture.c
++++ b/drivers/media/platform/vimc/vimc-capture.c
+@@ -85,7 +85,7 @@ static int vimc_cap_try_fmt_vid_cap(struct file *file, void *priv,
+ 				    struct v4l2_format *f)
+ {
+ 	struct v4l2_pix_format *format = &f->fmt.pix;
+-	const struct vimc_pix_map *vpix;
++	struct vimc_pix_map vpix;
+ 
+ 	format->width = clamp_t(u32, format->width, VIMC_FRAME_MIN_WIDTH,
+ 				VIMC_FRAME_MAX_WIDTH) & ~1;
+@@ -94,12 +94,12 @@ static int vimc_cap_try_fmt_vid_cap(struct file *file, void *priv,
+ 
+ 	/* Don't accept a pixelformat that is not on the table */
+ 	vpix = vimc_pix_map_by_pixelformat(format->pixelformat);
+-	if (!vpix) {
++	if (!vpix.info) {
+ 		format->pixelformat = fmt_default.pixelformat;
+ 		vpix = vimc_pix_map_by_pixelformat(format->pixelformat);
+ 	}
+ 	/* TODO: Add support for custom bytesperline values */
+-	format->bytesperline = format->width * vpix->bpp;
++	format->bytesperline = format->width * vpix.info->bpp[0];
+ 	format->sizeimage = format->bytesperline * format->height;
+ 
+ 	if (format->field == V4L2_FIELD_ANY)
+@@ -146,12 +146,12 @@ static int vimc_cap_s_fmt_vid_cap(struct file *file, void *priv,
+ static int vimc_cap_enum_fmt_vid_cap(struct file *file, void *priv,
+ 				     struct v4l2_fmtdesc *f)
+ {
+-	const struct vimc_pix_map *vpix = vimc_pix_map_by_index(f->index);
++	const struct vimc_pix_map vpix = vimc_pix_map_by_index(f->index);
+ 
+-	if (!vpix)
++	if (!vpix.info)
+ 		return -EINVAL;
+ 
+-	f->pixelformat = vpix->pixelformat;
++	f->pixelformat = vpix.info->format;
+ 
+ 	return 0;
+ }
+@@ -159,14 +159,14 @@ static int vimc_cap_enum_fmt_vid_cap(struct file *file, void *priv,
+ static int vimc_cap_enum_framesizes(struct file *file, void *fh,
+ 				    struct v4l2_frmsizeenum *fsize)
+ {
+-	const struct vimc_pix_map *vpix;
++	struct vimc_pix_map vpix;
+ 
+ 	if (fsize->index)
+ 		return -EINVAL;
+ 
+ 	/* Only accept code in the pix map table */
+ 	vpix = vimc_pix_map_by_code(fsize->pixel_format);
+-	if (!vpix)
++	if (!vpix.info)
+ 		return -EINVAL;
+ 
+ 	fsize->type = V4L2_FRMSIZE_TYPE_CONTINUOUS;
+@@ -387,7 +387,7 @@ struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
+ 				     const char *vcfg_name)
+ {
+ 	struct v4l2_device *v4l2_dev = &vimc->v4l2_dev;
+-	const struct vimc_pix_map *vpix;
++	struct vimc_pix_map vpix;
+ 	struct vimc_cap_device *vcap;
+ 	struct video_device *vdev;
+ 	struct vb2_queue *q;
+@@ -443,7 +443,7 @@ struct vimc_ent_device *vimc_cap_add(struct vimc_device *vimc,
+ 	/* Set default frame format */
+ 	vcap->format = fmt_default;
+ 	vpix = vimc_pix_map_by_pixelformat(vcap->format.pixelformat);
+-	vcap->format.bytesperline = vcap->format.width * vpix->bpp;
++	vcap->format.bytesperline = vcap->format.width * vpix.info->bpp[0];
+ 	vcap->format.sizeimage = vcap->format.bytesperline *
+ 				 vcap->format.height;
+ 
+diff --git a/drivers/media/platform/vimc/vimc-common.c b/drivers/media/platform/vimc/vimc-common.c
+index a3120f4f7a90..9ea698810e1a 100644
+--- a/drivers/media/platform/vimc/vimc-common.c
++++ b/drivers/media/platform/vimc/vimc-common.c
+@@ -14,186 +14,167 @@
+  * NOTE: non-bayer formats need to come first (necessary for enum_mbus_code
+  * in the scaler)
+  */
+-static const struct vimc_pix_map vimc_pix_map_list[] = {
++static struct vimc_pix_map_fmt vimc_pix_map_fmt_list[] = {
+ 	/* TODO: add all missing formats */
+ 
+ 	/* RGB formats */
+ 	{
+ 		.code = MEDIA_BUS_FMT_BGR888_1X24,
+ 		.pixelformat = V4L2_PIX_FMT_BGR24,
+-		.bpp = 3,
+-		.bayer = false,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_RGB888_1X24,
+ 		.pixelformat = V4L2_PIX_FMT_RGB24,
+-		.bpp = 3,
+-		.bayer = false,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_ARGB8888_1X32,
+ 		.pixelformat = V4L2_PIX_FMT_ARGB32,
+-		.bpp = 4,
+-		.bayer = false,
+ 	},
+ 
+ 	/* Bayer formats */
+ 	{
+ 		.code = MEDIA_BUS_FMT_SBGGR8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SBGGR8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGBRG8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SGBRG8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGRBG8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SGRBG8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SRGGB8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SRGGB8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SBGGR10_1X10,
+ 		.pixelformat = V4L2_PIX_FMT_SBGGR10,
+-		.bpp = 2,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGBRG10_1X10,
+ 		.pixelformat = V4L2_PIX_FMT_SGBRG10,
+-		.bpp = 2,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGRBG10_1X10,
+ 		.pixelformat = V4L2_PIX_FMT_SGRBG10,
+-		.bpp = 2,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SRGGB10_1X10,
+ 		.pixelformat = V4L2_PIX_FMT_SRGGB10,
+-		.bpp = 2,
+-		.bayer = true,
+ 	},
+ 
+ 	/* 10bit raw bayer a-law compressed to 8 bits */
+ 	{
+ 		.code = MEDIA_BUS_FMT_SBGGR10_ALAW8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SBGGR10ALAW8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGBRG10_ALAW8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SGBRG10ALAW8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGRBG10_ALAW8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SGRBG10ALAW8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SRGGB10_ALAW8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SRGGB10ALAW8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 
+ 	/* 10bit raw bayer DPCM compressed to 8 bits */
+ 	{
+ 		.code = MEDIA_BUS_FMT_SBGGR10_DPCM8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SBGGR10DPCM8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGBRG10_DPCM8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SGBRG10DPCM8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGRBG10_DPCM8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SGRBG10DPCM8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SRGGB10_DPCM8_1X8,
+ 		.pixelformat = V4L2_PIX_FMT_SRGGB10DPCM8,
+-		.bpp = 1,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SBGGR12_1X12,
+ 		.pixelformat = V4L2_PIX_FMT_SBGGR12,
+-		.bpp = 2,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGBRG12_1X12,
+ 		.pixelformat = V4L2_PIX_FMT_SGBRG12,
+-		.bpp = 2,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SGRBG12_1X12,
+ 		.pixelformat = V4L2_PIX_FMT_SGRBG12,
+-		.bpp = 2,
+-		.bayer = true,
+ 	},
+ 	{
+ 		.code = MEDIA_BUS_FMT_SRGGB12_1X12,
+ 		.pixelformat = V4L2_PIX_FMT_SRGGB12,
+-		.bpp = 2,
+-		.bayer = true,
+ 	},
+ };
+ 
+-const struct vimc_pix_map *vimc_pix_map_by_index(unsigned int i)
++struct vimc_pix_map vimc_pix_map_fmt_info(struct vimc_pix_map_fmt *vfmt)
+ {
+-	if (i >= ARRAY_SIZE(vimc_pix_map_list))
+-		return NULL;
+ 
+-	return &vimc_pix_map_list[i];
++	struct vimc_pix_map vpix = {
++		.code = vfmt->code,
++		.info = v4l2_format_info(vfmt->pixelformat),
++	};
++	return vpix;
++}
++
++struct vimc_pix_map vimc_pix_map_by_index(unsigned int i)
++{
++	struct vimc_pix_map vpix;
++	struct vimc_pix_map_fmt *vfmt;
++
++	if (i >= ARRAY_SIZE(vimc_pix_map_fmt_list))
++		return (struct vimc_pix_map) {};
++
++	vfmt = &vimc_pix_map_fmt_list[i];
++	vpix = vimc_pix_map_fmt_info(vfmt);
++
++	return vpix;
+ }
+ EXPORT_SYMBOL_GPL(vimc_pix_map_by_index);
+ 
+-const struct vimc_pix_map *vimc_pix_map_by_code(u32 code)
++struct vimc_pix_map vimc_pix_map_by_code(u32 code)
+ {
++	struct vimc_pix_map vpix;
++	struct vimc_pix_map_fmt *vfmt;
+ 	unsigned int i;
+ 
+-	for (i = 0; i < ARRAY_SIZE(vimc_pix_map_list); i++) {
+-		if (vimc_pix_map_list[i].code == code)
+-			return &vimc_pix_map_list[i];
++	for (i = 0; i < ARRAY_SIZE(vimc_pix_map_fmt_list); i++) {
++		if (vimc_pix_map_fmt_list[i].code == code) {
++			vfmt = &vimc_pix_map_fmt_list[i];
++			vpix = vimc_pix_map_fmt_info(vfmt);
++			return vpix;
++		}
+ 	}
+-	return NULL;
++	return (struct vimc_pix_map) {};
+ }
+ EXPORT_SYMBOL_GPL(vimc_pix_map_by_code);
+ 
+-const struct vimc_pix_map *vimc_pix_map_by_pixelformat(u32 pixelformat)
++struct vimc_pix_map vimc_pix_map_by_pixelformat(u32 pixelformat)
+ {
++	struct vimc_pix_map vpix;
++	struct vimc_pix_map_fmt *vfmt;
+ 	unsigned int i;
+ 
+-	for (i = 0; i < ARRAY_SIZE(vimc_pix_map_list); i++) {
+-		if (vimc_pix_map_list[i].pixelformat == pixelformat)
+-			return &vimc_pix_map_list[i];
++	for (i = 0; i < ARRAY_SIZE(vimc_pix_map_fmt_list); i++) {
++		if (vimc_pix_map_fmt_list[i].pixelformat == pixelformat) {
++			vfmt = &vimc_pix_map_fmt_list[i];
++			vpix = vimc_pix_map_fmt_info(vfmt);
++
++			return vpix;
++		}
+ 	}
+-	return NULL;
++	return (struct vimc_pix_map) {};
+ }
+ EXPORT_SYMBOL_GPL(vimc_pix_map_by_pixelformat);
+ 
+@@ -267,7 +248,7 @@ static int vimc_get_mbus_format(struct media_pad *pad,
+ 							 struct video_device,
+ 							 entity);
+ 		struct vimc_ent_device *ved = video_get_drvdata(vdev);
+-		const struct vimc_pix_map *vpix;
++		struct vimc_pix_map vpix;
+ 		struct v4l2_pix_format vdev_fmt;
+ 
+ 		if (!ved->vdev_get_format)
+@@ -275,7 +256,7 @@ static int vimc_get_mbus_format(struct media_pad *pad,
+ 
+ 		ved->vdev_get_format(ved, &vdev_fmt);
+ 		vpix = vimc_pix_map_by_pixelformat(vdev_fmt.pixelformat);
+-		v4l2_fill_mbus_format(&fmt->format, &vdev_fmt, vpix->code);
++		v4l2_fill_mbus_format(&fmt->format, &vdev_fmt, vpix.code);
+ 	} else {
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/media/platform/vimc/vimc-common.h b/drivers/media/platform/vimc/vimc-common.h
+index 698db7c07645..ab847e6a739f 100644
+--- a/drivers/media/platform/vimc/vimc-common.h
++++ b/drivers/media/platform/vimc/vimc-common.h
+@@ -73,20 +73,31 @@ struct vimc_platform_data {
+ };
+ 
+ /**
+- * struct vimc_pix_map - maps media bus code with v4l2 pixel format
++ * struct vimc_pix_map_fmt - maps media bus code with v4l2 pixel format
+  *
+  * @code:		media bus format code defined by MEDIA_BUS_FMT_* macros
+- * @bbp:		number of bytes each pixel occupies
+  * @pixelformat:	pixel format devined by V4L2_PIX_FMT_* macros
+  *
+  * Struct which matches the MEDIA_BUS_FMT_* codes with the corresponding
+  * V4L2_PIX_FMT_* fourcc pixelformat and its bytes per pixel (bpp)
+  */
+-struct vimc_pix_map {
++struct vimc_pix_map_fmt {
+ 	unsigned int code;
+-	unsigned int bpp;
+ 	u32 pixelformat;
+-	bool bayer;
++};
++
++/**
++ * struct vimc_pix_map - maps media bus code with v4l2 pixel info
++ *
++ * @code:		media bus format code defined by MEDIA_BUS_FMT_* macros
++ * @info:		pixel info defined by v4l2_format_info function
++ *
++ * Struct which matches the MEDIA_BUS_FMT_* codes with the corresponding
++ * V4L2_PIX_FMT_* fourcc pixelformat and its information
++ */
++struct vimc_pix_map {
++	unsigned int code;
++	const struct v4l2_format_info *info;
+ };
+ 
+ /**
+@@ -208,21 +219,21 @@ int vimc_pipeline_s_stream(struct media_entity *ent, int enable);
+  *
+  * @i:			index of the vimc_pix_map struct in vimc_pix_map_list
+  */
+-const struct vimc_pix_map *vimc_pix_map_by_index(unsigned int i);
++struct vimc_pix_map vimc_pix_map_by_index(unsigned int i);
+ 
+ /**
+  * vimc_pix_map_by_code - get vimc_pix_map struct by media bus code
+  *
+  * @code:		media bus format code defined by MEDIA_BUS_FMT_* macros
+  */
+-const struct vimc_pix_map *vimc_pix_map_by_code(u32 code);
++struct vimc_pix_map vimc_pix_map_by_code(u32 code);
+ 
+ /**
+  * vimc_pix_map_by_pixelformat - get vimc_pix_map struct by v4l2 pixel format
+  *
+  * @pixelformat:	pixel format devined by V4L2_PIX_FMT_* macros
+  */
+-const struct vimc_pix_map *vimc_pix_map_by_pixelformat(u32 pixelformat);
++struct vimc_pix_map vimc_pix_map_by_pixelformat(u32 pixelformat);
+ 
+ /**
+  * vimc_ent_sd_register - initialize and register a subdev node
+diff --git a/drivers/media/platform/vimc/vimc-debayer.c b/drivers/media/platform/vimc/vimc-debayer.c
+index feac47d79449..4d658d65af9c 100644
+--- a/drivers/media/platform/vimc/vimc-debayer.c
++++ b/drivers/media/platform/vimc/vimc-debayer.c
+@@ -306,7 +306,7 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
+ 	struct vimc_deb_device *vdeb = v4l2_get_subdevdata(sd);
+ 
+ 	if (enable) {
+-		const struct vimc_pix_map *vpix;
++		struct vimc_pix_map vpix;
+ 		unsigned int frame_size;
+ 
+ 		if (vdeb->src_frame)
+@@ -315,11 +315,11 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
+ 		/* Calculate the frame size of the source pad */
+ 		vpix = vimc_pix_map_by_code(vdeb->src_code);
+ 		frame_size = vdeb->sink_fmt.width * vdeb->sink_fmt.height *
+-				vpix->bpp;
++				vpix.info->bpp[0];
+ 
+ 		/* Save the bytes per pixel of the sink */
+ 		vpix = vimc_pix_map_by_code(vdeb->sink_fmt.code);
+-		vdeb->sink_bpp = vpix->bpp;
++		vdeb->sink_bpp = vpix.info->bpp[0];
+ 
+ 		/* Get the corresponding pixel map from the table */
+ 		vdeb->sink_pix_map =
+diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
+index a6a3cc5be872..dd330ccbb88b 100644
+--- a/drivers/media/platform/vimc/vimc-scaler.c
++++ b/drivers/media/platform/vimc/vimc-scaler.c
+@@ -59,17 +59,23 @@ static int vimc_sca_init_cfg(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
++static int vimc_is_bayer(const struct vimc_pix_map vpix)
++{
++	const u8 *bpp = vpix.info->bpp;
++
++	return bpp[0] == 1 && !bpp[1] && !bpp[2] && !bpp[3];
++}
++
+ static int vimc_sca_enum_mbus_code(struct v4l2_subdev *sd,
+ 				   struct v4l2_subdev_pad_config *cfg,
+ 				   struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	const struct vimc_pix_map *vpix = vimc_pix_map_by_index(code->index);
+-
++	const struct vimc_pix_map vpix = vimc_pix_map_by_index(code->index);
+ 	/* We don't support bayer format */
+-	if (!vpix || vpix->bayer)
++	if (!vpix.info || vimc_is_bayer(vpix))
+ 		return -EINVAL;
+ 
+-	code->code = vpix->code;
++	code->code = vpix.code;
+ 
+ 	return 0;
+ }
+@@ -78,14 +84,14 @@ static int vimc_sca_enum_frame_size(struct v4l2_subdev *sd,
+ 				    struct v4l2_subdev_pad_config *cfg,
+ 				    struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	const struct vimc_pix_map *vpix;
++	struct vimc_pix_map vpix;
+ 
+ 	if (fse->index)
+ 		return -EINVAL;
+ 
+ 	/* Only accept code in the pix map table in non bayer format */
+ 	vpix = vimc_pix_map_by_code(fse->code);
+-	if (!vpix || vpix->bayer)
++	if (!vpix.info || vimc_is_bayer(vpix))
+ 		return -EINVAL;
+ 
+ 	fse->min_width = VIMC_FRAME_MIN_WIDTH;
+@@ -124,11 +130,11 @@ static int vimc_sca_get_fmt(struct v4l2_subdev *sd,
+ 
+ static void vimc_sca_adjust_sink_fmt(struct v4l2_mbus_framefmt *fmt)
+ {
+-	const struct vimc_pix_map *vpix;
++	struct vimc_pix_map vpix;
+ 
+ 	/* Only accept code in the pix map table in non bayer format */
+ 	vpix = vimc_pix_map_by_code(fmt->code);
+-	if (!vpix || vpix->bayer)
++	if (!vpix.info || vimc_is_bayer(vpix))
+ 		fmt->code = sink_fmt_default.code;
+ 
+ 	fmt->width = clamp_t(u32, fmt->width, VIMC_FRAME_MIN_WIDTH,
+@@ -202,7 +208,7 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
+ 	struct vimc_sca_device *vsca = v4l2_get_subdevdata(sd);
+ 
+ 	if (enable) {
+-		const struct vimc_pix_map *vpix;
++		struct vimc_pix_map vpix;
+ 		unsigned int frame_size;
+ 
+ 		if (vsca->src_frame)
+@@ -210,7 +216,7 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ 		/* Save the bytes per pixel of the sink */
+ 		vpix = vimc_pix_map_by_code(vsca->sink_fmt.code);
+-		vsca->bpp = vpix->bpp;
++		vsca->bpp = vpix.info->bpp[0];
+ 
+ 		/* Calculate the width in bytes of the src frame */
+ 		vsca->src_line_size = vsca->sink_fmt.width *
+diff --git a/drivers/media/platform/vimc/vimc-sensor.c b/drivers/media/platform/vimc/vimc-sensor.c
+index 46dc6a535abe..a7c422983d45 100644
+--- a/drivers/media/platform/vimc/vimc-sensor.c
++++ b/drivers/media/platform/vimc/vimc-sensor.c
+@@ -53,12 +53,12 @@ static int vimc_sen_enum_mbus_code(struct v4l2_subdev *sd,
+ 				   struct v4l2_subdev_pad_config *cfg,
+ 				   struct v4l2_subdev_mbus_code_enum *code)
+ {
+-	const struct vimc_pix_map *vpix = vimc_pix_map_by_index(code->index);
++	struct vimc_pix_map vpix = vimc_pix_map_by_index(code->index);
+ 
+-	if (!vpix)
++	if (!vpix.info)
+ 		return -EINVAL;
+ 
+-	code->code = vpix->code;
++	code->code = vpix.code;
+ 
+ 	return 0;
+ }
+@@ -67,14 +67,14 @@ static int vimc_sen_enum_frame_size(struct v4l2_subdev *sd,
+ 				    struct v4l2_subdev_pad_config *cfg,
+ 				    struct v4l2_subdev_frame_size_enum *fse)
+ {
+-	const struct vimc_pix_map *vpix;
++	struct vimc_pix_map vpix;
+ 
+ 	if (fse->index)
+ 		return -EINVAL;
+ 
+ 	/* Only accept code in the pix map table */
+ 	vpix = vimc_pix_map_by_code(fse->code);
+-	if (!vpix)
++	if (!vpix.info)
+ 		return -EINVAL;
+ 
+ 	fse->min_width = VIMC_FRAME_MIN_WIDTH;
+@@ -101,14 +101,15 @@ static int vimc_sen_get_fmt(struct v4l2_subdev *sd,
+ 
+ static void vimc_sen_tpg_s_format(struct vimc_sen_device *vsen)
+ {
+-	const struct vimc_pix_map *vpix =
++	const struct vimc_pix_map vpix =
+ 				vimc_pix_map_by_code(vsen->mbus_format.code);
+ 
+ 	tpg_reset_source(&vsen->tpg, vsen->mbus_format.width,
+ 			 vsen->mbus_format.height, vsen->mbus_format.field);
+-	tpg_s_bytesperline(&vsen->tpg, 0, vsen->mbus_format.width * vpix->bpp);
++	tpg_s_bytesperline(&vsen->tpg, 0, vsen->mbus_format.width
++							* vpix.info->bpp[0]);
+ 	tpg_s_buf_height(&vsen->tpg, vsen->mbus_format.height);
+-	tpg_s_fourcc(&vsen->tpg, vpix->pixelformat);
++	tpg_s_fourcc(&vsen->tpg, vpix.info->format);
+ 	/* TODO: add support for V4L2_FIELD_ALTERNATE */
+ 	tpg_s_field(&vsen->tpg, vsen->mbus_format.field, false);
+ 	tpg_s_colorspace(&vsen->tpg, vsen->mbus_format.colorspace);
+@@ -119,11 +120,11 @@ static void vimc_sen_tpg_s_format(struct vimc_sen_device *vsen)
+ 
+ static void vimc_sen_adjust_fmt(struct v4l2_mbus_framefmt *fmt)
+ {
+-	const struct vimc_pix_map *vpix;
++	struct vimc_pix_map vpix;
+ 
+ 	/* Only accept code in the pix map table */
+ 	vpix = vimc_pix_map_by_code(fmt->code);
+-	if (!vpix)
++	if (!vpix.info)
+ 		fmt->code = fmt_default.code;
+ 
+ 	fmt->width = clamp_t(u32, fmt->width, VIMC_FRAME_MIN_WIDTH,
+@@ -199,7 +200,7 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
+ 				container_of(sd, struct vimc_sen_device, sd);
+ 
+ 	if (enable) {
+-		const struct vimc_pix_map *vpix;
++		struct vimc_pix_map vpix;
+ 		unsigned int frame_size;
+ 
+ 		if (vsen->kthread_sen)
+@@ -208,7 +209,7 @@ static int vimc_sen_s_stream(struct v4l2_subdev *sd, int enable)
+ 
+ 		/* Calculate the frame size */
+ 		vpix = vimc_pix_map_by_code(vsen->mbus_format.code);
+-		frame_size = vsen->mbus_format.width * vpix->bpp *
++		frame_size = vsen->mbus_format.width * vpix.info->bpp[0] *
+ 			     vsen->mbus_format.height;
+ 
+ 		/*
+-- 
+2.23.0
 
-Acked-by: Helen Koike <helen.koike@collabora.com>
-
-> ---
-> Changes in V2:
->  - Updated documentation
->  - Added v4l2_subev_core_ops to solve errors in v4l2-ctl compliance test
->  - Changed control naming to follow English capitalization rules
->  - Rebased to Shuah Khan's newest patch series 171283
->     ("Collapse vimc single monolithic driver")
->  - Change maximum value for mean window size
-> Changes in V3:
->  - Renamed debayer control
->  - Fixed typo in documentation
->  - Freed control handler in vimc_deb_release
-> Changes in V4:
->  - Removed unecessary function and checking for setting the control
-> 
-> We had originally intended to leave that bit of code checking if the
-> value is being set to make it similar to what's done in vimc-sensor,
-> and in case some extra caution is needed when chaging control in the
-> future. But I guess they really were not necessary.
-> 
-> Thanks!
-> 
-> ---
->  Documentation/media/v4l-drivers/vimc.rst   | 10 +--
->  drivers/media/platform/vimc/vimc-common.h  |  1 +
->  drivers/media/platform/vimc/vimc-debayer.c | 81 ++++++++++++++++++----
->  3 files changed, 71 insertions(+), 21 deletions(-)
-> 
-> diff --git a/Documentation/media/v4l-drivers/vimc.rst b/Documentation/media/v4l-drivers/vimc.rst
-> index a582af0509ee..28646c76dad5 100644
-> --- a/Documentation/media/v4l-drivers/vimc.rst
-> +++ b/Documentation/media/v4l-drivers/vimc.rst
-> @@ -80,9 +80,7 @@ vimc-capture:
->          Module options
->  ---------------
->  
-> -Vimc has a few module parameters to configure the driver.
-> -
-> -        param=value
-> +Vimc has a module parameter to configure the driver.
->  
->  * ``sca_mult=<unsigned int>``
->  
-> @@ -91,12 +89,6 @@ Vimc has a few module parameters to configure the driver.
->          original one. Currently, only supports scaling up (the default value
->          is 3).
->  
-> -* ``deb_mean_win_size=<unsigned int>``
-> -
-> -        Window size to calculate the mean. Note: the window size needs to be an
-> -        odd number, as the main pixel stays in the center of the window,
-> -        otherwise the next odd number is considered (the default value is 3).
-> -
->  Source code documentation
->  -------------------------
->  
-> diff --git a/drivers/media/platform/vimc/vimc-common.h b/drivers/media/platform/vimc/vimc-common.h
-> index 236412ad7548..3a5102ddf794 100644
-> --- a/drivers/media/platform/vimc/vimc-common.h
-> +++ b/drivers/media/platform/vimc/vimc-common.h
-> @@ -19,6 +19,7 @@
->  #define VIMC_CID_VIMC_BASE		(0x00f00000 | 0xf000)
->  #define VIMC_CID_VIMC_CLASS		(0x00f00000 | 1)
->  #define VIMC_CID_TEST_PATTERN		(VIMC_CID_VIMC_BASE + 0)
-> +#define VIMC_CID_MEAN_WIN_SIZE		(VIMC_CID_VIMC_BASE + 1)
->  
->  #define VIMC_FRAME_MAX_WIDTH 4096
->  #define VIMC_FRAME_MAX_HEIGHT 2160
-> diff --git a/drivers/media/platform/vimc/vimc-debayer.c b/drivers/media/platform/vimc/vimc-debayer.c
-> index 37f3767db469..ba0af4b2fb9b 100644
-> --- a/drivers/media/platform/vimc/vimc-debayer.c
-> +++ b/drivers/media/platform/vimc/vimc-debayer.c
-> @@ -11,17 +11,12 @@
->  #include <linux/platform_device.h>
->  #include <linux/vmalloc.h>
->  #include <linux/v4l2-mediabus.h>
-> +#include <media/v4l2-ctrls.h>
-> +#include <media/v4l2-event.h>
->  #include <media/v4l2-subdev.h>
->  
->  #include "vimc-common.h"
->  
-> -static unsigned int deb_mean_win_size = 3;
-> -module_param(deb_mean_win_size, uint, 0000);
-> -MODULE_PARM_DESC(deb_mean_win_size, " the window size to calculate the mean.\n"
-> -	"NOTE: the window size needs to be an odd number, as the main pixel "
-> -	"stays in the center of the window, otherwise the next odd number "
-> -	"is considered");
-> -
->  enum vimc_deb_rgb_colors {
->  	VIMC_DEB_RED = 0,
->  	VIMC_DEB_GREEN = 1,
-> @@ -46,6 +41,8 @@ struct vimc_deb_device {
->  	u8 *src_frame;
->  	const struct vimc_deb_pix_map *sink_pix_map;
->  	unsigned int sink_bpp;
-> +	unsigned int mean_win_size;
-> +	struct v4l2_ctrl_handler hdl;
->  };
->  
->  static const struct v4l2_mbus_framefmt sink_fmt_default = {
-> @@ -346,11 +343,18 @@ static int vimc_deb_s_stream(struct v4l2_subdev *sd, int enable)
->  	return 0;
->  }
->  
-> +static const struct v4l2_subdev_core_ops vimc_deb_core_ops = {
-> +	.log_status = v4l2_ctrl_subdev_log_status,
-> +	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
-> +	.unsubscribe_event = v4l2_event_subdev_unsubscribe,
-> +};
-> +
->  static const struct v4l2_subdev_video_ops vimc_deb_video_ops = {
->  	.s_stream = vimc_deb_s_stream,
->  };
->  
->  static const struct v4l2_subdev_ops vimc_deb_ops = {
-> +	.core = &vimc_deb_core_ops,
->  	.pad = &vimc_deb_pad_ops,
->  	.video = &vimc_deb_video_ops,
->  };
-> @@ -384,7 +388,7 @@ static void vimc_deb_calc_rgb_sink(struct vimc_deb_device *vdeb,
->  	 * the top left corner of the mean window (considering the current
->  	 * pixel as the center)
->  	 */
-> -	seek = deb_mean_win_size / 2;
-> +	seek = vdeb->mean_win_size / 2;
->  
->  	/* Sum the values of the colors in the mean window */
->  
-> @@ -471,14 +475,33 @@ static void *vimc_deb_process_frame(struct vimc_ent_device *ved,
->  		}
->  
->  	return vdeb->src_frame;
-> +}
-> +
-> +static int vimc_deb_s_ctrl(struct v4l2_ctrl *ctrl)
-> +{
-> +	struct vimc_deb_device *vdeb =
-> +		container_of(ctrl->handler, struct vimc_deb_device, hdl);
->  
-> +	switch (ctrl->id) {
-> +	case VIMC_CID_MEAN_WIN_SIZE:
-> +		vdeb->mean_win_size = ctrl->val;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	return 0;
->  }
->  
-> +static const struct v4l2_ctrl_ops vimc_deb_ctrl_ops = {
-> +	.s_ctrl = vimc_deb_s_ctrl,
-> +};
-> +
->  static void vimc_deb_release(struct v4l2_subdev *sd)
->  {
->  	struct vimc_deb_device *vdeb =
->  				container_of(sd, struct vimc_deb_device, sd);
->  
-> +	v4l2_ctrl_handler_free(&vdeb->hdl);
->  	vimc_pads_cleanup(vdeb->ved.pads);
->  	kfree(vdeb);
->  }
-> @@ -495,6 +518,24 @@ void vimc_deb_rm(struct vimc_device *vimc, struct vimc_ent_device *ved)
->  	vimc_ent_sd_unregister(ved, &vdeb->sd);
->  }
->  
-> +static const struct v4l2_ctrl_config vimc_deb_ctrl_class = {
-> +	.flags = V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_WRITE_ONLY,
-> +	.id = VIMC_CID_VIMC_CLASS,
-> +	.name = "VIMC Controls",
-> +	.type = V4L2_CTRL_TYPE_CTRL_CLASS,
-> +};
-> +
-> +static const struct v4l2_ctrl_config vimc_deb_ctrl_mean_win_size = {
-> +	.ops = &vimc_deb_ctrl_ops,
-> +	.id = VIMC_CID_MEAN_WIN_SIZE,
-> +	.name = "Debayer Mean Window Size",
-> +	.type = V4L2_CTRL_TYPE_INTEGER,
-> +	.min = 1,
-> +	.max = 25,
-> +	.step = 2,
-> +	.def = 3,
-> +};
-> +
->  struct vimc_ent_device *vimc_deb_add(struct vimc_device *vimc,
->  				     const char *vcfg_name)
->  {
-> @@ -507,6 +548,16 @@ struct vimc_ent_device *vimc_deb_add(struct vimc_device *vimc,
->  	if (!vdeb)
->  		return NULL;
->  
-> +	/* Create controls: */
-> +	v4l2_ctrl_handler_init(&vdeb->hdl, 2);
-> +	v4l2_ctrl_new_custom(&vdeb->hdl, &vimc_deb_ctrl_class, NULL);
-> +	v4l2_ctrl_new_custom(&vdeb->hdl, &vimc_deb_ctrl_mean_win_size, NULL);
-> +	vdeb->sd.ctrl_handler = &vdeb->hdl;
-> +	if (vdeb->hdl.error) {
-> +		ret = vdeb->hdl.error;
-> +		goto err_free_vdeb;
-> +	}
-> +
->  	/* Initialize ved and sd */
->  	ret = vimc_ent_sd_register(&vdeb->ved, &vdeb->sd, v4l2_dev,
->  				   vcfg_name,
-> @@ -514,13 +565,12 @@ struct vimc_ent_device *vimc_deb_add(struct vimc_device *vimc,
->  				   (const unsigned long[2]) {MEDIA_PAD_FL_SINK,
->  				   MEDIA_PAD_FL_SOURCE},
->  				   &vimc_deb_int_ops, &vimc_deb_ops);
-> -	if (ret) {
-> -		kfree(vdeb);
-> -		return NULL;
-> -	}
-> +	if (ret)
-> +		goto err_free_hdl;
->  
->  	vdeb->ved.process_frame = vimc_deb_process_frame;
->  	vdeb->dev = &vimc->pdev.dev;
-> +	vdeb->mean_win_size = vimc_deb_ctrl_mean_win_size.def;
->  
->  	/* Initialize the frame format */
->  	vdeb->sink_fmt = sink_fmt_default;
-> @@ -534,4 +584,11 @@ struct vimc_ent_device *vimc_deb_add(struct vimc_device *vimc,
->  	vdeb->set_rgb_src = vimc_deb_set_rgb_mbus_fmt_rgb888_1x24;
->  
->  	return &vdeb->ved;
-> +
-> +err_free_hdl:
-> +	v4l2_ctrl_handler_free(&vdeb->hdl);
-> +err_free_vdeb:
-> +	kfree(vdeb);
-> +
-> +	return NULL;
->  }
-> 
