@@ -7,52 +7,52 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8437FECE58C
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B17EFECE58E
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5B87C2070B
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 886182070B
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="bX3ol4qm"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="x0XPmGMu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729239AbfJGPI5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 11:08:57 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:56212 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728837AbfJGPHq (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:07:46 -0400
+        id S1728828AbfJGPHp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 11:07:45 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:35866 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728815AbfJGPHp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:07:45 -0400
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97F7khw067931;
-        Mon, 7 Oct 2019 10:07:46 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97F7idm047022;
+        Mon, 7 Oct 2019 10:07:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570460866;
-        bh=Wl9WKWiVjz3COoBDC8m081M/+rt6QZlNL6nsfzMtwNE=;
+        s=ti-com-17Q1; t=1570460864;
+        bh=XM3esUYtpgFCwHmCE1jUC/Gm3u55IUoVUnytr7Gb40s=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=bX3ol4qmS+t1Hm+BOuyZirkfwBSgi69tDVe0f7T7IoedZO4w8Pa83sdG/YawphNgD
-         gIB78kNkOD1QZmhLdpA1RnWH9PuBE/om+GII0cSlrEj4XkrWco5V3HbEtKLYSfuvd6
-         5zfexLFuGgnWYpKlvwHr3SEChegZE5tIW1XRqSDg=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x97F7kiB025596
+        b=x0XPmGMuLdIIW8HajZEGmOz9iRjaYlOQXuFZHL3TF2RZIlHFoCWhrgLks1RjzhmcN
+         N2lNuLrDBBtG3+mIfogP9gB/0Nx3vqm1UjuZ3+zZHN+h++cdr9f6RUmrPVyxBNAfmG
+         IGQKnvLDA0aM6JtVbFkDxEW8Na/SgI4SWXmh4/SY=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x97F7iK0025571
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 7 Oct 2019 10:07:46 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 7 Oct 2019 10:07:44 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 7 Oct
- 2019 10:07:43 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 10:07:41 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 7 Oct 2019 10:07:45 -0500
+ Frontend Transport; Mon, 7 Oct 2019 10:07:41 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7aFG055156;
-        Mon, 7 Oct 2019 10:07:45 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7aFE055156;
+        Mon, 7 Oct 2019 10:07:44 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v3 10/21] media: ti-vpe: vpe: Make sure YUYV is set as default format
-Date:   Mon, 7 Oct 2019 10:09:58 -0500
-Message-ID: <20191007151009.22095-11-bparrot@ti.com>
+Subject: [Patch v3 08/21] media: ti-vpe: vpe: fix a v4l2-compliance failure causing a kernel panic
+Date:   Mon, 7 Oct 2019 10:09:56 -0500
+Message-ID: <20191007151009.22095-9-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191007151009.22095-1-bparrot@ti.com>
 References: <20191007151009.22095-1-bparrot@ti.com>
@@ -66,23 +66,30 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 v4l2-compliance fails with this message:
 
-   fail: v4l2-test-formats.cpp(672): \
-	Video Capture Multiplanar: TRY_FMT(G_FMT) != G_FMT
-   fail: v4l2-test-formats.cpp(672): \
-	Video Output Multiplanar: TRY_FMT(G_FMT) != G_FMT
-	...
+   warn: v4l2-test-formats.cpp(717): \
+   	TRY_FMT cannot handle an invalid pixelformat.
    test VIDIOC_TRY_FMT: FAIL
 
-Fixes: 94ed726e8e01 ("media: ti-vpe: Add support for NV21 format")
+This causes the following kernel panic:
 
-The default pixel format was setup as pointing to a specific offset in
-the vpe_formats table assuming it was pointing to the V4L2_PIX_FMT_YUYV
-entry. This became false after the addition on the NV21 format (see
-above commid-id)
+Unable to handle kernel paging request at virtual address 56595561
+pgd = ecd80e00
+*pgd=00000000
+Internal error: Oops: 205 [#1] PREEMPT SMP ARM
+...
+CPU: 0 PID: 930 Comm: v4l2-compliance Not tainted \
+	4.14.62-01715-gc8cd67f49a19 #1
+Hardware name: Generic DRA72X (Flattened Device Tree)
+task: ece44d80 task.stack: ecc6e000
+PC is at __vpe_try_fmt+0x18c/0x2a8 [ti_vpe]
+LR is at 0x8
 
-So instead of hard-coding an offset which might change over time we need
-to use a lookup helper instead so we know the default will always be what
-we intended.
+Because the driver fails to properly check the 'num_planes' values for
+proper ranges it ends up accessing out of bound data causing the kernel
+panic.
+
+Since this driver only handle single or dual plane pixel format, make
+sure the provided value does not exceed 2 planes.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
@@ -91,18 +98,18 @@ Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index d3f1ae8b72fa..7aa83026fb6c 100644
+index bbbf11174e16..1278d457f753 100644
 --- a/drivers/media/platform/ti-vpe/vpe.c
 +++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -2321,7 +2321,7 @@ static int vpe_open(struct file *file)
- 	v4l2_ctrl_handler_setup(hdl);
+@@ -1650,7 +1650,7 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 			      &pix->height, MIN_H, MAX_H, H_ALIGN,
+ 			      S_ALIGN);
  
- 	s_q_data = &ctx->q_data[Q_DATA_SRC];
--	s_q_data->fmt = &vpe_formats[2];
-+	s_q_data->fmt = __find_format(V4L2_PIX_FMT_YUYV);
- 	s_q_data->width = 1920;
- 	s_q_data->height = 1080;
- 	s_q_data->nplanes = 1;
+-	if (!pix->num_planes)
++	if (!pix->num_planes || pix->num_planes > 2)
+ 		pix->num_planes = fmt->coplanar ? 2 : 1;
+ 	else if (pix->num_planes > 1 && !fmt->coplanar)
+ 		pix->num_planes = 1;
 -- 
 2.17.1
 
