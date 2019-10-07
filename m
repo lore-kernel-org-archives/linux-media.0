@@ -2,77 +2,124 @@ Return-Path: <SRS0=+Pgr=YA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CCBDC352AA
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 10:18:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 308CBECE58C
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 10:26:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1D24921D7A
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 10:18:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 07CC721871
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 10:26:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=st.com header.i=@st.com header.b="LqwFvsFe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727617AbfJGKSw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 06:18:52 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:42756 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727262AbfJGKSv (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 06:18:51 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1iHQ6K-0001Gu-8G; Mon, 07 Oct 2019 10:18:48 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        id S1727518AbfJGK0S (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 06:26:18 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:41413 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727262AbfJGK0R (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Mon, 7 Oct 2019 06:26:17 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x97AKml6026153;
+        Mon, 7 Oct 2019 12:25:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=STMicroelectronics;
+ bh=cIh/B+QlT5Ufq0muAI8MFIZVmvtKiiVeIQjxYFeHv4U=;
+ b=LqwFvsFeAgqwBt7UYWHD+Wuf+stCjxWldXnL+ZqqyTjv9PukoK6gjeJKuhHN9HtbFVk/
+ qINdmJ8SJp4VZEqHmX8HX/OR77VCCUuep5iwlHbpCQWiz6LmXWlQaz8SRLbONPSU5q7f
+ u5QLwVf799PJGBZoVV6fPP6+SEP+pv9mUyv98wqICqgKGn2A94yONlyyI7KdQFyNqdG8
+ 9zLr5o5ct1m4k2jtoSx/F0kDFB2tW9EcrQESlnfGgWY3iqekCks4uvtZvOsjgzpa0Zb9
+ cyZF3E7mbm2nk9Ev6T7CqfrdURgjwdJhs5igOpnTtDmBAgj0UPQO5hiatsex1g1i1Gjl /g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2vegxvhrn6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Oct 2019 12:25:57 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EB15210002A;
+        Mon,  7 Oct 2019 12:25:56 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DC7722BFE0A;
+        Mon,  7 Oct 2019 12:25:56 +0200 (CEST)
+Received: from localhost (10.75.127.50) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 7 Oct 2019 12:25:56
+ +0200
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+To:     Maxime Ripard <mripard@kernel.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: gspca: make array st6422_bridge_init static, makes object smaller
-Date:   Mon,  7 Oct 2019 11:18:48 +0100
-Message-Id: <20191007101848.30540-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.20.1
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Alexandru Ardelean <alexaundru.ardelean@analog.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        <linux-media@vger.kernel.org>, <netdev@vger.kernel.org>
+Subject: [PATCH 3/3] dt-bindings: regulator: Fix yaml verification for fixed-regulator schema
+Date:   Mon, 7 Oct 2019 12:25:52 +0200
+Message-ID: <20191007102552.19808-4-alexandre.torgue@st.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191007102552.19808-1-alexandre.torgue@st.com>
+References: <20191007102552.19808-1-alexandre.torgue@st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG6NODE1.st.com (10.75.127.16) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-07_02:2019-10-07,2019-10-07 signatures=0
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+This commit fixes an issue seen during yaml check ("make dt_binding_check").
+Compatible didn't seem to be seen as a string.
 
-Don't populate the array st6422_bridge_init on the stack but instead
-make it static. Makes the object code smaller by 231 bytes.
+Reported issue:
+"properties:compatible:enum:0: {'const': 'regulator-fixed'}
+is not of type 'string'"
+And
+"properties:compatible:enum:1: {'const': 'regulator-fixed-clock'}
+is not of type 'string'"
 
-Before:
-   text	   data	    bss	    dec	    hex	filename
-   3419	    752	     64	   4235	   108b	gspca/stv06xx/stv06xx_st6422.o
+Fixes: 9c86d003d620 ("dt-bindings: regulator: add regulator-fixed-clock binding")
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 
-After:
-   text	   data	    bss	    dec	    hex	filename
-   3124	    816	     64	   4004	    fa4	gspca/stv06xx/stv06xx_st6422.o
-
-(gcc version 9.2.1, amd64)
-
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c b/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
-index 7104a88b1e43..aac19d449be2 100644
---- a/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
-+++ b/drivers/media/usb/gspca/stv06xx/stv06xx_st6422.c
-@@ -117,7 +117,7 @@ static int st6422_init(struct sd *sd)
- {
- 	int err = 0, i;
+diff --git a/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml b/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+index a78150c47aa2..7725cedf1538 100644
+--- a/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/fixed-regulator.yaml
+@@ -22,16 +22,20 @@ allOf:
+ if:
+   properties:
+     compatible:
++      allOf:
++        - $ref: "/schemas/types.yaml#/definitions/string"
+       contains:
+-        const: regulator-fixed-clock
++        const: "regulator-fixed-clock"
+   required:
+     - clocks
  
--	const u16 st6422_bridge_init[][2] = {
-+	static const u16 st6422_bridge_init[][2] = {
- 		{ STV_ISO_ENABLE, 0x00 }, /* disable capture */
- 		{ 0x1436, 0x00 },
- 		{ 0x1432, 0x03 },	/* 0x00-0x1F brightness */
+ properties:
+   compatible:
++    allOf:
++      - $ref: "/schemas/types.yaml#/definitions/string"
+     enum:
+-      - const: regulator-fixed
+-      - const: regulator-fixed-clock
++      - "regulator-fixed"
++      - "regulator-fixed-clock"
+ 
+   regulator-name: true
+ 
 -- 
-2.20.1
+2.17.1
 
