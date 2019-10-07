@@ -2,60 +2,64 @@ Return-Path: <SRS0=+Pgr=YA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 970D6C47404
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F086ECE58C
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:29:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 614AB21721
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:22:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 567312190F
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:29:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570454522;
-	bh=fX/u86+bvuRiXlpsk2NaQ/ud94x5f8aFsdzklFH8u0c=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=ZK1A/N4Bk54pmybZ6Vy8J+p3rKj3gBbBPHh6K8D7iHSXpyLFzAUC06I1J8vc0Ti8Z
-	 sNLGlY7xywmvBq7f8RxWBBdDV9c9OwoxRhBOp7VN5UESQxMCFRNV3J1HiTCk8RutbR
-	 gEscaCutOi2geSJxw/up4AQ23Sxru0qK3grNpxC0=
+	s=default; t=1570454953;
+	bh=bVuSLpTvdW4BifGY1uYuDsq1DfGbsMyMvoeNSs5oiYI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=Bl6ppD0xYpgonPGJly8yO2mF5ueh94uf2bJ5u1Z1OSt5rhVyg+EF+0OUz9MeZ4mX2
+	 bDMLty21OElUKZ6DTK8A3i7jejpUVBG+M0fv2KJTXiTA6hKjnslxFlw3u+iqb+rB4n
+	 G4tLjgXDDCFdArFd9vvaG1TMJQJMrMlUdfqC7tXM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbfJGNVA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 09:21:00 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42472 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727010AbfJGNU7 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 09:20:59 -0400
-Received: by mail-lj1-f193.google.com with SMTP id y23so13598979lje.9;
-        Mon, 07 Oct 2019 06:20:57 -0700 (PDT)
+        id S1728726AbfJGN3M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 09:29:12 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40059 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728676AbfJGN3K (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 09:29:10 -0400
+Received: by mail-lj1-f196.google.com with SMTP id 7so13657579ljw.7;
+        Mon, 07 Oct 2019 06:29:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xBIWesDB/dHziUlCwEIGcihlRl2e0iqR/vgLz4iM0gA=;
-        b=UEfJIDx+S84ZqS3QRTU+EZl7OoGdW05XHD+cGFcGnN4VB/9EFzI4U90d8/Vpn+dgoA
-         wvGSdC2EPvEHZJVswIGz1Jrf66vAqZs3VJrmke7Zqe44NbfTTcty8276JlQHGFKTUifr
-         LtHfyI+FYltauTXHOUPV1IE1beUfV69MWOkgxs6WAavkY7W8/iYqoInWQmnvEgnZQKAd
-         flChV3zQNF4UMHsIZ4YoImObQyPIuMifrFf9YKkFopdpn5vOuOwbVwkV+dM0JMqHBxH9
-         53zRId4x6LVgmaDPM64MlaAe3o6/SaEx4QxS3QR8xNGeOi9c2CsPzaTSWgl59T9fVtOq
-         yZKw==
-X-Gm-Message-State: APjAAAWqxthk4S4/wN3330Xg+9AO/S1xSTuYUEwjX4sfUbqeQ0T2NM9m
-        il9RHnHJ9dTzT0CsiOVoxFQ=
-X-Google-Smtp-Source: APXvYqy+1Vouvr0nCGZCYtloldzcM9zGlB30DFlleqe5rp/Y0T1KMISyN5/hmC8NdtNVveFz/accrg==
-X-Received: by 2002:a2e:8507:: with SMTP id j7mr17858276lji.151.1570454456289;
-        Mon, 07 Oct 2019 06:20:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=85dVJxc5Go/ZeDNecXfIZl1Or+Zhk6XQDSwO01sY1ps=;
+        b=gzNNeeBszqp3/KV+na3cTXka/kkqVPVugqBXLgWKMFoCoXTBSHjHHko9SwborGKmro
+         i3FOMrRfuAr6eNVgbbb+STpckXS9/1u07qLcHEDcUdktf28+PGsEg4k7i33rf6+KrclB
+         MdhvzaV5dXo+P7ECoAeCtiSR45lJhpXOLUsCGLnrVz5n2RuKZcC6+9La7sxCqEKvoSBC
+         PYxzMsBbyC4W7BmPArWDiN8CiA/WdhMV7FgYkij8D+7W+ysd9qWcAoygLZuT+T5dJ/ur
+         ThoZ5lG9RtdKOWLdqy06dX0BtqdZ3w+gzsfARcx41q3qDKz9OqVF4H4QIaApr/feYFDV
+         9yHg==
+X-Gm-Message-State: APjAAAWXvLxNY05aRBsPf5PO4+Ohoojzd2CibXZ4zeGIRwnmj5UqHuHQ
+        M+IbXCUzzDy7J8yWANfxUN8=
+X-Google-Smtp-Source: APXvYqwvWME0xvLnEG+UUjHxN+U6aEntTPN2I+EsnnNToVC4+03YuG+aEVvV70wTSxZ0eO6UvOobTw==
+X-Received: by 2002:a2e:84ce:: with SMTP id q14mr11639389ljh.250.1570454948315;
+        Mon, 07 Oct 2019 06:29:08 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id z14sm2687360lfh.30.2019.10.07.06.20.53
+        by smtp.gmail.com with ESMTPSA id f22sm2702245lfk.56.2019.10.07.06.29.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2019 06:20:54 -0700 (PDT)
+        Mon, 07 Oct 2019 06:29:07 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Pavel Machek <pavel@ucw.cz>, Sakari Ailus <sakari.ailus@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v7 0/6]  ad5820: Multiple fixes
-Date:   Mon,  7 Oct 2019 15:20:38 +0200
-Message-Id: <20191007132050.27298-1-ribalda@kernel.org>
+Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: [PATCH v8 5/6] media: ad5820: DT new compatible devices
+Date:   Mon,  7 Oct 2019 15:28:55 +0200
+Message-Id: <20191007132856.27948-6-ribalda@kernel.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191007132856.27948-1-ribalda@kernel.org>
+References: <20191007132856.27948-1-ribalda@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -63,26 +67,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
--Support for enable-pin, of-autoload, enable-gpios and ad5821 and ad5823
+Document new compatible devices.
 
-For some reason these patchset was lost in translation for a year ;)
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Pavel Machek <pavel@ucw.cz>
+---
+ Documentation/devicetree/bindings/media/i2c/ad5820.txt | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-v7: Rebase on current media/master
-
-
-Ricardo Ribalda Delgado (6):
-  media: ad5820: Define entity function
-  media: ad5820: DT new optional field enable-gpios
-  media: ad5820: Add support for enable pin
-  media: ad5820: Add support for of-autoload
-  media: ad5820: DT new compatible devices
-  media: ad5820: Add support for ad5821 and ad5823
-
- .../devicetree/bindings/media/i2c/ad5820.txt  | 11 +++++-
- drivers/media/i2c/Kconfig                     |  2 +-
- drivers/media/i2c/ad5820.c                    | 35 ++++++++++++++++---
- 3 files changed, 42 insertions(+), 6 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/media/i2c/ad5820.txt b/Documentation/devicetree/bindings/media/i2c/ad5820.txt
+index db596e8eb0ba..5764cbedf9b7 100644
+--- a/Documentation/devicetree/bindings/media/i2c/ad5820.txt
++++ b/Documentation/devicetree/bindings/media/i2c/ad5820.txt
+@@ -2,7 +2,10 @@
+ 
+ Required Properties:
+ 
+-  - compatible: Must contain "adi,ad5820"
++  - compatible: Must contain one of:
++		- "adi,ad5820"
++		- "adi,ad5821"
++		- "adi,ad5823"
+ 
+   - reg: I2C slave address
+ 
 -- 
 2.23.0
 
