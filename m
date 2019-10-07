@@ -7,55 +7,55 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05FF8ECE58C
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:29:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55935ECE58C
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:29:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CFA8321BE5
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:29:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 26A42206C2
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:29:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570454960;
-	bh=lh3E0CIAISDQ/3lKJtaW1VDx9XXZjg2jlkVnofxlIYw=;
+	s=default; t=1570454967;
+	bh=/ew1iTFSPFJl1GZ94sCBI0f4pcTvUs1Ne8ccMb1v1Pw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=yA/nm6GPq2y8QbddXe7qndC1bPj4h+esjB2a6tyojHCLydUPyH5qAaVP7a7lelU7L
-	 ZSE9U4QEuQtFgC/aRq9qRk85R/YywHG5km1LBeluxWm6shYf2VjVKlJJpKjubKH4ai
-	 HDCdLhGWfeiS5cDWAaXk6G9GaAqV2TJECvIYVkNA=
+	b=gIN/LCQUOzshfG6wRnKA5168KMpqH7UTMPZsYHsLJrg3OHdoxSrCdMnfSTI+diZ7n
+	 yK4JUsuJunNK7fuQhAQ/ERHlxFOOYdVFejyvQBrOLdqbY8BpnVtJFRrkR1CraHXr2T
+	 34yJ5wQqORS960IP4/2BspwIbkXYCv3DgAvETGDw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728720AbfJGN3M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 09:29:12 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45172 "EHLO
+        id S1728695AbfJGN3J (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 09:29:09 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:41439 "EHLO
         mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728111AbfJGN3L (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 09:29:11 -0400
-Received: by mail-lj1-f194.google.com with SMTP id q64so13642604ljb.12;
-        Mon, 07 Oct 2019 06:29:10 -0700 (PDT)
+        with ESMTP id S1728111AbfJGN3I (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 09:29:08 -0400
+Received: by mail-lj1-f194.google.com with SMTP id f5so13652672ljg.8;
+        Mon, 07 Oct 2019 06:29:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HJet7u3XjH5uyIC1W6N08PyBebZ0PR2V3K260AlKy+o=;
-        b=BxkAgyWk61HnglB1x2ClXh89SsqovFauzNZXW5WxP3j2MksB+CfRB8tkBRRtQdj+cP
-         /juGrFzMj6Z1OvxdtmmLZDeufGcAkuj8U1yEtOQO8r6M9mGOhhBVsrHhJy109UaqNIpV
-         +nVKmQJYxDJJW6Zi83p+vv7rmsn95GZsTo/wZ1/9SuKhhdJYLYVoxm/Eten9tj6pTse3
-         R281fUQiOYCk1/f/HbIf6mKY0kUCEaDo94g/isZXmjn5a1YG53x4oNcFIvl5fnIUl3a6
-         iMiMNW8VrPvTv1BbUJSQCKxP2h3MpK3yeH+EZ94YS5AHkov3qEVSt+oLZrEY6I6y/xa6
-         UAWw==
-X-Gm-Message-State: APjAAAVEMk2sO3fapLbXOjJpmWlT8AvdTHXp6NiGYDvQ1VmS/Sux4PcV
-        zKmovlnot11Y6Pz9YaaGlfbPRv3xH0OAbg==
-X-Google-Smtp-Source: APXvYqxdwg5MA2DqBA8x+1g7LAL/F6hUg47f+KLMirBf2IIgIM7uUDeO/r2dzlSBMJHa130Ydkc6dw==
-X-Received: by 2002:a2e:8ec6:: with SMTP id e6mr18199965ljl.231.1570454949599;
-        Mon, 07 Oct 2019 06:29:09 -0700 (PDT)
+        bh=GX+ni17mNRYs8d+zDraCFt5XjyO8QrKC7e0GjBCgxpI=;
+        b=GYD0iOccoMKwNvKs+vEGDYBXRrLp+SB1FXAc/ZYsuKjQ2i0ZwjaXuT8CoUYFznKI4D
+         T54I0D3SzXKD6uDs+fjJAMNkrs6buEszxwtdTGFkfgTo0Z1OnKPieCcClOmqdgDTkl5w
+         YCpTPh7GhUgaqG0SIFMTjHM8trLXLZC4Hms1hjr9Q/lIJ9O4Z3RdOXAJF/9jasFU9miV
+         a9kXYixouTDUHk6JEpcnAFcYFmCJyhjk3zjMCKdQZNLJlqiVHps9FWx7LdkPzuENK4aO
+         ZVOFC1LsJckAuJmNytBLWSrVbOb75IIhCS9abJ2/EHQMbiQzuKRQDc/tsBq7L87HSqkA
+         1rQA==
+X-Gm-Message-State: APjAAAXh8Di/GeHuHhKJIXr5aLDS3owF8O94FVo8Fk5/qGMUmcyys/g3
+        qCLzziAGvaAzipfS8+Otmn8=
+X-Google-Smtp-Source: APXvYqynuA5BGpbWsgvP1hes+JeGDkBXIl1Dy9tUzl9gPBMvAHVKebDueiFRLgJ0ybXNfKAMNKastg==
+X-Received: by 2002:a2e:9f4f:: with SMTP id v15mr18952799ljk.222.1570454945399;
+        Mon, 07 Oct 2019 06:29:05 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id f22sm2702245lfk.56.2019.10.07.06.29.08
+        by smtp.gmail.com with ESMTPSA id f22sm2702245lfk.56.2019.10.07.06.29.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2019 06:29:08 -0700 (PDT)
+        Mon, 07 Oct 2019 06:29:04 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Pavel Machek <pavel@ucw.cz>, Sakari Ailus <sakari.ailus@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v8 6/6] media: ad5820: Add support for ad5821 and ad5823
-Date:   Mon,  7 Oct 2019 15:28:56 +0200
-Message-Id: <20191007132856.27948-7-ribalda@kernel.org>
+Subject: [PATCH v8 3/6] media: ad5820: Add support for enable pin
+Date:   Mon,  7 Oct 2019 15:28:53 +0200
+Message-Id: <20191007132856.27948-4-ribalda@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191007132856.27948-1-ribalda@kernel.org>
 References: <20191007132856.27948-1-ribalda@kernel.org>
@@ -66,61 +66,95 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-According to the datasheet, both AD5821 and AD5820 share a compatible
-register-set:
-http://www.analog.com/media/en/technical-documentation/data-sheets/AD5821.pdf
+This patch adds support for a programmable enable pin. It can be used in
+situations where the ANA-vcc is not configurable (dummy-regulator), or
+just to have a more fine control of the power saving.
 
-Some camera modules also refer that AD5823 is a replacement of AD5820:
-https://download.kamami.com/p564094-OV8865_DS.pdf
+The use of the enable pin is optional.
 
-Suggested-by: Pavel Machek <pavel@ucw.cz>
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 Acked-by: Pavel Machek <pavel@ucw.cz>
 ---
- drivers/media/i2c/ad5820.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/media/i2c/Kconfig  |  2 +-
+ drivers/media/i2c/ad5820.c | 17 +++++++++++++++++
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+index 78dc64d7b0e7..30d460844dff 100644
+--- a/drivers/media/i2c/Kconfig
++++ b/drivers/media/i2c/Kconfig
+@@ -975,7 +975,7 @@ if MEDIA_CAMERA_SUPPORT
+ 
+ config VIDEO_AD5820
+ 	tristate "AD5820 lens voice coil support"
+-	depends on I2C && VIDEO_V4L2 && MEDIA_CONTROLLER
++	depends on GPIOLIB && I2C && VIDEO_V4L2 && MEDIA_CONTROLLER
+ 	help
+ 	  This is a driver for the AD5820 camera lens voice coil.
+ 	  It is used for example in Nokia N900 (RX-51).
 diff --git a/drivers/media/i2c/ad5820.c b/drivers/media/i2c/ad5820.c
-index 5651609e5095..19c74db0649f 100644
+index 7a49651f4d1f..76aab651f217 100644
 --- a/drivers/media/i2c/ad5820.c
 +++ b/drivers/media/i2c/ad5820.c
-@@ -25,8 +25,6 @@
+@@ -19,6 +19,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/regulator/consumer.h>
++#include <linux/gpio/consumer.h>
+ 
+ #include <media/v4l2-ctrls.h>
  #include <media/v4l2-device.h>
- #include <media/v4l2-subdev.h>
+@@ -47,6 +48,8 @@ struct ad5820_device {
+ 	u32 focus_ramp_time;
+ 	u32 focus_ramp_mode;
  
--#define AD5820_NAME		"ad5820"
--
- /* Register definitions */
- #define AD5820_POWER_DOWN		(1 << 15)
- #define AD5820_DAC_SHIFT		4
-@@ -359,13 +357,17 @@ static int ad5820_remove(struct i2c_client *client)
- }
++	struct gpio_desc *enable_gpio;
++
+ 	struct mutex power_lock;
+ 	int power_count;
  
- static const struct i2c_device_id ad5820_id_table[] = {
--	{ AD5820_NAME, 0 },
-+	{ "ad5820", 0 },
-+	{ "ad5821", 0 },
-+	{ "ad5823", 0 },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, ad5820_id_table);
+@@ -114,6 +117,8 @@ static int ad5820_power_off(struct ad5820_device *coil, bool standby)
+ 		ret = ad5820_update_hw(coil);
+ 	}
  
- static const struct of_device_id ad5820_of_table[] = {
- 	{ .compatible = "adi,ad5820" },
-+	{ .compatible = "adi,ad5821" },
-+	{ .compatible = "adi,ad5823" },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, ad5820_of_table);
-@@ -374,7 +376,7 @@ static SIMPLE_DEV_PM_OPS(ad5820_pm, ad5820_suspend, ad5820_resume);
++	gpiod_set_value_cansleep(coil->enable_gpio, 0);
++
+ 	ret2 = regulator_disable(coil->vana);
+ 	if (ret)
+ 		return ret;
+@@ -128,6 +133,8 @@ static int ad5820_power_on(struct ad5820_device *coil, bool restore)
+ 	if (ret < 0)
+ 		return ret;
  
- static struct i2c_driver ad5820_i2c_driver = {
- 	.driver		= {
--		.name	= AD5820_NAME,
-+		.name	= "ad5820",
- 		.pm	= &ad5820_pm,
- 		.of_match_table = ad5820_of_table,
- 	},
++	gpiod_set_value_cansleep(coil->enable_gpio, 1);
++
+ 	if (restore) {
+ 		/* Restore the hardware settings. */
+ 		coil->standby = false;
+@@ -138,6 +145,7 @@ static int ad5820_power_on(struct ad5820_device *coil, bool restore)
+ 	return 0;
+ 
+ fail:
++	gpiod_set_value_cansleep(coil->enable_gpio, 0);
+ 	coil->standby = true;
+ 	regulator_disable(coil->vana);
+ 
+@@ -304,6 +312,15 @@ static int ad5820_probe(struct i2c_client *client,
+ 		return ret;
+ 	}
+ 
++	coil->enable_gpio = devm_gpiod_get_optional(&client->dev, "enable",
++						    GPIOD_OUT_LOW);
++	if (IS_ERR(coil->enable_gpio)) {
++		ret = PTR_ERR(coil->enable_gpio);
++		if (ret != -EPROBE_DEFER)
++			dev_err(&client->dev, "could not get enable gpio\n");
++		return ret;
++	}
++
+ 	mutex_init(&coil->power_lock);
+ 
+ 	v4l2_i2c_subdev_init(&coil->subdev, client, &ad5820_ops);
 -- 
 2.23.0
 
