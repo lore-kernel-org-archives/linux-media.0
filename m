@@ -2,157 +2,276 @@ Return-Path: <SRS0=+Pgr=YA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D1C9C47404
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 50396ECE58C
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 749312070B
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="kj31jL14"
+	by mail.kernel.org (Postfix) with ESMTP id 23B372070B
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728729AbfJGPHk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 11:07:40 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:35850 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728059AbfJGPHk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:07:40 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97F7dZI047006;
-        Mon, 7 Oct 2019 10:07:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570460859;
-        bh=PJbcQkGUyLQUkdIltaZ+oCCPly62Nq7aKQ+5h4XsBMo=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=kj31jL14QukpYaXBBO8yc2hIKY+d/uvx5x6y4MV8vxmCbGW/0t5tDR9vf+OeqK1K1
-         Qrr+Z8k5pYN381g+ZqLlZe2xFLBOSbOjL6tz4Loj+w0jUWHqlhD7GRm1WI5wR6hqfM
-         JabEAiDNnQ+WJFXIN/SC27hmpk22HDagrp8mv3B0=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7dZb060585;
-        Mon, 7 Oct 2019 10:07:39 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 7 Oct
- 2019 10:07:36 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 7 Oct 2019 10:07:36 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7aF8055156;
-        Mon, 7 Oct 2019 10:07:38 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v3 02/21] media: ti-vpe: vpe: Fix Motion Vector vpdma stride
-Date:   Mon, 7 Oct 2019 10:09:50 -0500
-Message-ID: <20191007151009.22095-3-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191007151009.22095-1-bparrot@ti.com>
-References: <20191007151009.22095-1-bparrot@ti.com>
+        id S1728511AbfJGPJh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 11:09:37 -0400
+Received: from plasma31.jpberlin.de ([80.241.56.82]:31685 "EHLO
+        plasma31.jpberlin.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728059AbfJGPJg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:09:36 -0400
+Received: from spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122])
+        by plasma.jpberlin.de (Postfix) with ESMTP id 5DF8D100F19;
+        Mon,  7 Oct 2019 17:09:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from plasma.jpberlin.de ([80.241.56.76])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id p9hzL830Ikjt; Mon,  7 Oct 2019 17:09:28 +0200 (CEST)
+Received: from webmail.opensynergy.com (unknown [217.66.60.5])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "webmail.opensynergy.com", Issuer "GeoTrust EV RSA CA 2018" (not verified))
+        (Authenticated sender: opensynergy@jpberlin.de)
+        by plasma.jpberlin.de (Postfix) with ESMTPSA id 55D66100F0F;
+        Mon,  7 Oct 2019 17:09:28 +0200 (CEST)
+Received: from os-lin-dmo.localnet (10.25.255.1) by MXS02.open-synergy.com
+ (10.25.10.18) with Microsoft SMTP Server (TLS) id 14.3.468.0; Mon, 7 Oct 2019
+ 17:09:27 +0200
+From:   Dmitry Morozov <dmitry.morozov@opensynergy.com>
+To:     Tomasz Figa <tfiga@chromium.org>
+CC:     <virtio-dev@lists.oasis-open.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Keiichi Watanabe <keiichiw@chromium.org>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        <alexlau@chromium.org>, <dgreid@chromium.org>,
+        =?ISO-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
+        Pawel Osciak <posciak@chromium.org>, <stevensd@chromium.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [virtio-dev] [PATCH] [RFC RESEND] vdec: Add virtio video decode device specification
+Date:   Mon, 7 Oct 2019 17:09:27 +0200
+Message-ID: <4037801.MZecyecTDs@os-lin-dmo>
+Organization: OpenSynergy
+In-Reply-To: <CAAFQd5DZbJfEZco_fXj+jPusmj1WaMQnai2kvbuv=ZSXAz93hw@mail.gmail.com>
+References: <20190919093404.182015-1-keiichiw@chromium.org> <2489202.SRFmCUqmCE@os-lin-dmo> <CAAFQd5DZbJfEZco_fXj+jPusmj1WaMQnai2kvbuv=ZSXAz93hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Originating-IP: [10.25.255.1]
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-commit 52831a418fa6 ("[media] media: ti-vpe: vpe: allow use of user
-specified stride") and commit 8c1e4fa17e92 ("[media] media: ti-vpe: vpdma:
-add support for user specified stride") resulted in the Motion Vector
-stride to be the same as the image stride.
+Hi Tomasz,
 
-This caused memory corruption in the output image as mentionned in
-commit 44f98adf71a8 ("[media] media: ti-vpe: vpe: Fix line stride
-for output motion vector").
+On Montag, 7. Oktober 2019 16:14:13 CEST Tomasz Figa wrote:
+> Hi Dmitry,
+> 
+> On Mon, Oct 7, 2019 at 11:01 PM Dmitry Morozov
+> 
+> <dmitry.morozov@opensynergy.com> wrote:
+> > Hello,
+> > 
+> > We at OpenSynergy are also working on an abstract paravirtualized video
+> > streaming device that operates input and/or output data buffers and can be
+> > used as a generic video decoder/encoder/input/output device.
+> > 
+> > We would be glad to share our thoughts and contribute to the discussion.
+> > Please see some comments regarding buffer allocation inline.
+> > 
+> > Best regards,
+> > Dmitry.
+> > 
+> > On Samstag, 5. Oktober 2019 08:08:12 CEST Tomasz Figa wrote:
+> > > Hi Gerd,
+> > > 
+> > > On Mon, Sep 23, 2019 at 5:56 PM Gerd Hoffmann <kraxel@redhat.com> wrote:
+> > > >   Hi,
+> > > >   
+> > > > > Our prototype implementation uses [4], which allows the virtio-vdec
+> > > > > device to use buffers allocated by virtio-gpu device.
+> > > > > 
+> > > > > [4] https://lkml.org/lkml/2019/9/12/157
+> > > 
+> > > First of all, thanks for taking a look at this RFC and for valuable
+> > > feedback. Sorry for the late reply.
+> > > 
+> > > For reference, Keiichi is working with me and David Stevens on
+> > > accelerated video support for virtual machines and integration with
+> > > other virtual devices, like virtio-gpu for rendering or our
+> > > currently-downstream virtio-wayland for display (I believe there is
+> > > ongoing work to solve this problem in upstream too).
+> > > 
+> > > > Well.  I think before even discussing the protocol details we need a
+> > > > reasonable plan for buffer handling.  I think using virtio-gpu buffers
+> > > > should be an optional optimization and not a requirement.  Also the
+> > > > motivation for that should be clear (Let the host decoder write
+> > > > directly
+> > > > to virtio-gpu resources, to display video without copying around the
+> > > > decoded framebuffers from one device to another).
+> > > 
+> > > Just to make sure we're on the same page, what would the buffers come
+> > > from if we don't use this optimization?
+> > > 
+> > > I can imagine a setup like this;
+> > > 
+> > >  1) host device allocates host memory appropriate for usage with host
+> > > 
+> > > video decoder,
+> > > 
+> > >  2) guest driver allocates arbitrary guest pages for storage
+> > > 
+> > > accessible to the guest software,
+> > > 
+> > >  3) guest userspace writes input for the decoder to guest pages,
+> > >  4) guest driver passes the list of pages for the input and output
+> > > 
+> > > buffers to the host device
+> > > 
+> > >  5) host device copies data from input guest pages to host buffer
+> > >  6) host device runs the decoding
+> > >  7) host device copies decoded frame to output guest pages
+> > >  8) guest userspace can access decoded frame from those pages; back to 3
+> > > 
+> > > Is that something you have in mind?
+> > 
+> > While GPU side allocations can be useful (especially in case of decoder),
+> > it could be more practical to stick to driver side allocations. This is
+> > also due to the fact that paravirtualized encoders and cameras are not
+> > necessarily require a GPU device.
+> > 
+> > Also, the v4l2 framework already features convenient helpers for CMA and
+> > SG
+> > allocations. The buffers can be used in the same manner as in virtio-gpu:
+> > buffers are first attached to an already allocated buffer/resource
+> > descriptor and then are made available for processing by the device using
+> > a dedicated command from the driver.
+> 
+> First of all, thanks a lot for your input. This is a relatively new
+> area of virtualization and we definitely need to collect various
+> possible perspectives in the discussion.
+> 
+> From Chrome OS point of view, there are several aspects for which the
+> guest side allocation doesn't really work well:
+> 1) host-side hardware has a lot of specific low level allocation
+> requirements, like alignments, paddings, address space limitations and
+> so on, which is not something that can be (easily) taught to the guest
+> OS,
+I couldn't agree more. There are some changes by Greg to add support for 
+querying GPU buffer metadata. Probably those changes could be integrated with 
+'a framework for cross-device buffer sharing' (something that Greg mentioned 
+earlier in the thread and that would totally make sense).
 
-Fixes: 52831a418fa6 ("[media] media: ti-vpe: vpe: allow use of user specified stride")
-Fixes: 8c1e4fa17e92 ("[media] media: ti-vpe: vpdma: add support for user specified stride")
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Acked-by: Nikhil Devshatwar <nikhil.nd@ti.com>
----
- drivers/media/platform/ti-vpe/vpe.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+> 2) allocation system is designed to be centralized, like Android
+> gralloc, because there is almost never a case when a buffer is to be
+> used only with 1 specific device. 99% of the cases are pipelines like
+> decoder -> GPU/display, camera -> encoder + GPU/display, GPU ->
+> encoder and so on, which means that allocations need to take into
+> account multiple hardware constraints.
+> 3) protected content decoding: the memory for decoded video frames
+> must not be accessible to the guest at all
+This looks like a valid use case. Would it also be possible for instance to 
+allocate mem from a secure ION heap on the guest and then to provide the sgt 
+to the device? We don't necessarily need to map that sgt for guest access.
 
-diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index 60b575bb44c4..5ba72445584d 100644
---- a/drivers/media/platform/ti-vpe/vpe.c
-+++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1013,11 +1013,14 @@ static void add_out_dtd(struct vpe_ctx *ctx, int port)
- 	dma_addr_t dma_addr;
- 	u32 flags = 0;
- 	u32 offset = 0;
-+	u32 stride;
- 
- 	if (port == VPE_PORT_MV_OUT) {
- 		vpdma_fmt = &vpdma_misc_fmts[VPDMA_DATA_FMT_MV];
- 		dma_addr = ctx->mv_buf_dma[mv_buf_selector];
- 		q_data = &ctx->q_data[Q_DATA_SRC];
-+		stride = ALIGN((q_data->width * vpdma_fmt->depth) >> 3,
-+			       VPDMA_STRIDE_ALIGN);
- 	} else {
- 		/* to incorporate interleaved formats */
- 		int plane = fmt->coplanar ? p_data->vb_part : 0;
-@@ -1044,6 +1047,7 @@ static void add_out_dtd(struct vpe_ctx *ctx, int port)
- 		}
- 		/* Apply the offset */
- 		dma_addr += offset;
-+		stride = q_data->bytesperline[VPE_LUMA];
- 	}
- 
- 	if (q_data->flags & Q_DATA_FRAME_1D)
-@@ -1055,7 +1059,7 @@ static void add_out_dtd(struct vpe_ctx *ctx, int port)
- 			   MAX_W, MAX_H);
- 
- 	vpdma_add_out_dtd(&ctx->desc_list, q_data->width,
--			  q_data->bytesperline[VPE_LUMA], &q_data->c_rect,
-+			  stride, &q_data->c_rect,
- 			  vpdma_fmt, dma_addr, MAX_OUT_WIDTH_REG1,
- 			  MAX_OUT_HEIGHT_REG1, p_data->channel, flags);
- }
-@@ -1074,10 +1078,13 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
- 	dma_addr_t dma_addr;
- 	u32 flags = 0;
- 	u32 offset = 0;
-+	u32 stride;
- 
- 	if (port == VPE_PORT_MV_IN) {
- 		vpdma_fmt = &vpdma_misc_fmts[VPDMA_DATA_FMT_MV];
- 		dma_addr = ctx->mv_buf_dma[mv_buf_selector];
-+		stride = ALIGN((q_data->width * vpdma_fmt->depth) >> 3,
-+			       VPDMA_STRIDE_ALIGN);
- 	} else {
- 		/* to incorporate interleaved formats */
- 		int plane = fmt->coplanar ? p_data->vb_part : 0;
-@@ -1104,6 +1111,7 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
- 		}
- 		/* Apply the offset */
- 		dma_addr += offset;
-+		stride = q_data->bytesperline[VPE_LUMA];
- 
- 		if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB) {
- 			/*
-@@ -1139,10 +1147,10 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
- 	if (p_data->vb_part && fmt->fourcc == V4L2_PIX_FMT_NV12)
- 		frame_height /= 2;
- 
--	vpdma_add_in_dtd(&ctx->desc_list, q_data->width,
--			 q_data->bytesperline[VPE_LUMA], &q_data->c_rect,
--		vpdma_fmt, dma_addr, p_data->channel, field, flags, frame_width,
--		frame_height, 0, 0);
-+	vpdma_add_in_dtd(&ctx->desc_list, q_data->width, stride,
-+			 &q_data->c_rect, vpdma_fmt, dma_addr,
-+			 p_data->channel, field, flags, frame_width,
-+			 frame_height, 0, 0);
- }
- 
- /*
+Best regards,
+Dmitry.
+
+> 
+> That said, the common desktop Linux model bases on allocating from the
+> producer device (which is why videobuf2 has allocation capability) and
+> we definitely need to consider this model, even if we just think about
+> Linux V4L2 compliance. That's why I'm suggesting the unified memory
+> handling based on guest physical addresses, which would handle both
+> guest-allocated and host-allocated memory.
+> 
+> Best regards,
+> Tomasz
+> 
+> > > > Referencing virtio-gpu buffers needs a better plan than just re-using
+> > > > virtio-gpu resource handles.  The handles are device-specific.  What
+> > > > if
+> > > > there are multiple virtio-gpu devices present in the guest?
+> > > > 
+> > > > I think we need a framework for cross-device buffer sharing.  One
+> > > > possible option would be to have some kind of buffer registry, where
+> > > > buffers can be registered for cross-device sharing and get a unique
+> > > > id (a uuid maybe?).  Drivers would typically register buffers on
+> > > > dma-buf export.
+> > > 
+> > > This approach could possibly let us handle this transparently to
+> > > importers, which would work for guest kernel subsystems that rely on
+> > > the ability to handle buffers like native memory (e.g. having a
+> > > sgtable or DMA address) for them.
+> > > 
+> > > How about allocating guest physical addresses for memory corresponding
+> > > to those buffers? On the virtio-gpu example, that could work like
+> > > 
+> > > this:
+> > >  - by default a virtio-gpu buffer has only a resource handle,
+> > >  - VIRTIO_GPU_RESOURCE_EXPORT command could be called to have the
+> > > 
+> > > virtio-gpu device export the buffer to a host framework (inside the
+> > > VMM) that would allocate guest page addresses for it, which the
+> > > command would return in a response to the guest,
+> > > 
+> > >  - virtio-gpu driver could then create a regular DMA-buf object for
+> > > 
+> > > such memory, because it's just backed by pages (even though they may
+> > > not be accessible to the guest; just like in the case of TrustZone
+> > > memory protection on bare metal systems),
+> > > 
+> > >  - any consumer would be able to handle such buffer like a regular
+> > > 
+> > > guest memory, passing low-level scatter-gather tables to the host as
+> > > buffer descriptors - this would nicely integrate with the basic case
+> > > without buffer sharing, as described above.
+> > > 
+> > > Another interesting side effect of the above approach would be the
+> > > ease of integration with virtio-iommu. If the virtio master device is
+> > > put behind a virtio-iommu, the guest page addresses become the input
+> > > to iommu page tables and IOVA addresses go to the host via the virtio
+> > > master device protocol, inside the low-level scatter-gather tables.
+> > > 
+> > > What do you think?
+> > > 
+> > > Best regards,
+> > > Tomasz
+> > > 
+> > > > Another option would be to pass around both buffer handle and buffer
+> > > > owner, i.e. instead of "u32 handle" have something like this:
+> > > > 
+> > > > struct buffer_reference {
+> > > > 
+> > > >         enum device_type; /* pci, virtio-mmio, ... */
+> > > >         union device_address {
+> > > >         
+> > > >                 struct pci_address pci_addr;
+> > > >                 u64 virtio_mmio_addr;
+> > > >                 [ ... ]
+> > > >         
+> > > >         };
+> > > >         u64 device_buffer_handle; /* device-specific, virtio-gpu could
+> > > >         use
+> > > >         resource ids here */>
+> > > > 
+> > > > };
+> > > > 
+> > > > cheers,
+> > > > 
+> > > >   Gerd
+> > > 
+> > > ---------------------------------------------------------------------
+> > > To unsubscribe, e-mail: virtio-dev-unsubscribe@lists.oasis-open.org
+> > > For additional commands, e-mail: virtio-dev-help@lists.oasis-open.org
 -- 
-2.17.1
+
+Dmitry Morozov
+Senior Software Engineer
+
+OpenSynergy GmbH
+Rotherstr. 20, 10245 Berlin
+
+Phone:    +49 30 60 98 54 0 - 910
+Fax:      +49 30 60 98 54 0 - 99
+
 
