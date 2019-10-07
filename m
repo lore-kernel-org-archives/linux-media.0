@@ -2,263 +2,228 @@ Return-Path: <SRS0=+Pgr=YA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 863EDECE58E
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D945C47404
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:07:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4DFF321479
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:07:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570460836;
-	bh=E9NmJKhv42+mB1ZMBt8iKwzh9l6hyWMUl5rZ2Ywgwl8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=wUgJVgnQ8lsDXo+PbcIBOyFPKQlbR4+H3rN5ZKo0vOTB/zWjKyrmSXIw3Mfl0cWbe
-	 zxrjtku1L8qWz43Kvj2mu1XIPMkuEyA8Ro3jdqpulVyF8/7idr+zGesxREWJo1SLXK
-	 zusTZTgUwVp6oeOdF2AN/0Y+3kD4GXjGeXQUcEJU=
+	by mail.kernel.org (Postfix) with ESMTP id 6A5A121479
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:07:44 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="U6Y98BGv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728189AbfJGPGo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 11:06:44 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:44729 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728081AbfJGPGn (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:06:43 -0400
-Received: by mail-lj1-f196.google.com with SMTP id m13so14018534ljj.11;
-        Mon, 07 Oct 2019 08:06:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=xHNPcA4Js+ERaMLNDY6RAwwdozVmuU2ADKCjFEFxwwM=;
-        b=XeVQPdl4PXTIk8/DiZNrx9rpsLWWdeCcm+CpQy6BjKy4vhjn5bxTnED8U+9gMBmBfV
-         OAKxKWEd6uPM9ynWKvU2xNrF5Qa9r3yegriXelb2svbJJIjbCbrz70zMvf4Q91kj0dYy
-         umpw0Zhew+rXMEoPGILfPX7ySzzupnJvimQmgolfdbbT0W906oxRJenTodr232kf6QTR
-         W0+bN9kgnhFzuNtcsK5XS6qCTfyUyOn70soBYUSlK5kZxpgMeXJCaMcnhMWp42FudiyM
-         HaZ/N/wD6tlM8Oc0V98FZTNzfXFGR66Qg1MXb3w96LD/zUVf6Iis1rWIfgOaZeHNn1LH
-         NiTA==
-X-Gm-Message-State: APjAAAXgPuMopSVEItXZRRPsblDsUxgE0sjqeU9g7Hg3ce4ORtuJtF4R
-        SpphxUpaewH7ZqLa++hy30c=
-X-Google-Smtp-Source: APXvYqw7OFp6EeY875YNbDZPWRb0A0wYcpaLpm3U7ySVZRxw/RdTpVf9oz5e/34VQJSrTfsOmYk7fA==
-X-Received: by 2002:a2e:9014:: with SMTP id h20mr18657179ljg.154.1570460801163;
-        Mon, 07 Oct 2019 08:06:41 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id n2sm3145517ljj.30.2019.10.07.08.06.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2019 08:06:39 -0700 (PDT)
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ricardo@ribalda.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v12 1/8] media: v4l2-core: Implement v4l2_ctrl_new_std_compound
-Date:   Mon,  7 Oct 2019 17:06:29 +0200
-Message-Id: <20191007150636.16458-2-ribalda@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191007150636.16458-1-ribalda@kernel.org>
-References: <20191007150636.16458-1-ribalda@kernel.org>
+        id S1728797AbfJGPHn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 11:07:43 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:56206 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728786AbfJGPHn (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:07:43 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97F7giD067923;
+        Mon, 7 Oct 2019 10:07:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1570460862;
+        bh=HuKfbtAS6502L4aeFWxqTkMVjLR2uSz+eszYj8624Hc=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=U6Y98BGvJA3pUoZMs6gtfcY5HtI90D3t9cBovNoCcTxRfJwCI2te6cM0z/16/SEev
+         KMT4H620WMZyKLCMNnzv21f4Odz/kc3pGQ6QfIvpco3b/YoK+tdgKdpp6l88eHJasI
+         SM1xSTS7475HnshdVzuoFRPPXB9wBkpOqk9QpZ4o=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x97F7g3F025544
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 7 Oct 2019 10:07:42 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 7 Oct
+ 2019 10:07:42 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Mon, 7 Oct 2019 10:07:40 -0500
+Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7aFC055156;
+        Mon, 7 Oct 2019 10:07:42 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v3 06/21] media: ti-vpe: Add support for NV21 format
+Date:   Mon, 7 Oct 2019 10:09:54 -0500
+Message-ID: <20191007151009.22095-7-bparrot@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191007151009.22095-1-bparrot@ti.com>
+References: <20191007151009.22095-1-bparrot@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Ricardo Ribalda Delgado <ricardo@ribalda.com>
+From: Nikhil Devshatwar <nikhil.nd@ti.com>
 
-Currently compound controls do not have a simple way of initializing its
-values. This results in ofuscated code with type_ops init.
+In NV21 format, the chroma plane is written to memory such that the U
+and V components are swapped for NV12.
 
-This patch introduces a new field on the control with the default value
-for the compound control that can be set with the brand new
-v4l2_ctrl_new_std_compound function
+Create a new entry in the VPDMA formats to describe the correct data
+types used in the data descriptors.
 
-Suggested-by: Hans Verkuil <hverkuil@xs4all.nl>
-Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+Update all checks for NV12 and add NV21 there as well.
+
+Add support for V4L2_PIX_FMT_NV21 format for both capture and output
+streams.
+
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 50 ++++++++++++++++++++++++----
- include/media/v4l2-ctrls.h           | 21 ++++++++++++
- 2 files changed, 64 insertions(+), 7 deletions(-)
+ drivers/media/platform/ti-vpe/vpdma.c      | 11 ++++++--
+ drivers/media/platform/ti-vpe/vpdma.h      |  1 +
+ drivers/media/platform/ti-vpe/vpdma_priv.h |  1 +
+ drivers/media/platform/ti-vpe/vpe.c        | 29 +++++++++++++++++-----
+ 4 files changed, 34 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index 1d8f38824631..219d8aeefa20 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -29,6 +29,8 @@
- #define call_op(master, op) \
- 	(has_op(master, op) ? master->ops->op(master) : 0)
+diff --git a/drivers/media/platform/ti-vpe/vpdma.c b/drivers/media/platform/ti-vpe/vpdma.c
+index 53d27cd6e10a..817d287c8138 100644
+--- a/drivers/media/platform/ti-vpe/vpdma.c
++++ b/drivers/media/platform/ti-vpe/vpdma.c
+@@ -56,6 +56,11 @@ const struct vpdma_data_format vpdma_yuv_fmts[] = {
+ 		.data_type	= DATA_TYPE_C420,
+ 		.depth		= 4,
+ 	},
++	[VPDMA_DATA_FMT_CB420] = {
++		.type		= VPDMA_DATA_FMT_TYPE_YUV,
++		.data_type	= DATA_TYPE_CB420,
++		.depth		= 4,
++	},
+ 	[VPDMA_DATA_FMT_YCR422] = {
+ 		.type		= VPDMA_DATA_FMT_TYPE_YUV,
+ 		.data_type	= DATA_TYPE_YCR422,
+@@ -825,7 +830,8 @@ void vpdma_rawchan_add_out_dtd(struct vpdma_desc_list *list, int width,
+ 	channel = next_chan = raw_vpdma_chan;
  
-+static const union v4l2_ctrl_ptr ptr_null;
+ 	if (fmt->type == VPDMA_DATA_FMT_TYPE_YUV &&
+-			fmt->data_type == DATA_TYPE_C420) {
++	    (fmt->data_type == DATA_TYPE_C420 ||
++	     fmt->data_type == DATA_TYPE_CB420)) {
+ 		rect.height >>= 1;
+ 		rect.top >>= 1;
+ 		depth = 8;
+@@ -893,7 +899,8 @@ void vpdma_add_in_dtd(struct vpdma_desc_list *list, int width,
+ 	channel = next_chan = chan_info[chan].num;
+ 
+ 	if (fmt->type == VPDMA_DATA_FMT_TYPE_YUV &&
+-			fmt->data_type == DATA_TYPE_C420) {
++	    (fmt->data_type == DATA_TYPE_C420 ||
++	     fmt->data_type == DATA_TYPE_CB420)) {
+ 		rect.height >>= 1;
+ 		rect.top >>= 1;
+ 		depth = 8;
+diff --git a/drivers/media/platform/ti-vpe/vpdma.h b/drivers/media/platform/ti-vpe/vpdma.h
+index 28bc94129348..bce17329c4c9 100644
+--- a/drivers/media/platform/ti-vpe/vpdma.h
++++ b/drivers/media/platform/ti-vpe/vpdma.h
+@@ -71,6 +71,7 @@ enum vpdma_yuv_formats {
+ 	VPDMA_DATA_FMT_C444,
+ 	VPDMA_DATA_FMT_C422,
+ 	VPDMA_DATA_FMT_C420,
++	VPDMA_DATA_FMT_CB420,
+ 	VPDMA_DATA_FMT_YCR422,
+ 	VPDMA_DATA_FMT_YC444,
+ 	VPDMA_DATA_FMT_CRY422,
+diff --git a/drivers/media/platform/ti-vpe/vpdma_priv.h b/drivers/media/platform/ti-vpe/vpdma_priv.h
+index c488609bc162..d8ae3e1cd54d 100644
+--- a/drivers/media/platform/ti-vpe/vpdma_priv.h
++++ b/drivers/media/platform/ti-vpe/vpdma_priv.h
+@@ -92,6 +92,7 @@
+ #define DATA_TYPE_C444				0x4
+ #define DATA_TYPE_C422				0x5
+ #define DATA_TYPE_C420				0x6
++#define DATA_TYPE_CB420				0x16
+ #define DATA_TYPE_YC444				0x8
+ #define DATA_TYPE_YCB422			0x7
+ #define DATA_TYPE_YCR422			0x17
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+index 5d0ec5f7ca25..f3ee9ff87927 100644
+--- a/drivers/media/platform/ti-vpe/vpe.c
++++ b/drivers/media/platform/ti-vpe/vpe.c
+@@ -248,6 +248,14 @@ static struct vpe_fmt vpe_formats[] = {
+ 				    &vpdma_yuv_fmts[VPDMA_DATA_FMT_C420],
+ 				  },
+ 	},
++	{
++		.fourcc		= V4L2_PIX_FMT_NV21,
++		.types		= VPE_FMT_TYPE_CAPTURE | VPE_FMT_TYPE_OUTPUT,
++		.coplanar	= 1,
++		.vpdma_fmt	= { &vpdma_yuv_fmts[VPDMA_DATA_FMT_Y420],
++				    &vpdma_yuv_fmts[VPDMA_DATA_FMT_CB420],
++				  },
++	},
+ 	{
+ 		.fourcc		= V4L2_PIX_FMT_YUYV,
+ 		.types		= VPE_FMT_TYPE_CAPTURE | VPE_FMT_TYPE_OUTPUT,
+@@ -686,7 +694,8 @@ static void set_cfg_modes(struct vpe_ctx *ctx)
+ 	 * Cfg Mode 1: YUV422 source, disable upsampler, DEI is de-interlacing.
+ 	 */
+ 
+-	if (fmt->fourcc == V4L2_PIX_FMT_NV12)
++	if (fmt->fourcc == V4L2_PIX_FMT_NV12 ||
++	    fmt->fourcc == V4L2_PIX_FMT_NV21)
+ 		cfg_mode = 0;
+ 
+ 	write_field(us1_reg0, cfg_mode, VPE_US_MODE_MASK, VPE_US_MODE_SHIFT);
+@@ -701,7 +710,8 @@ static void set_line_modes(struct vpe_ctx *ctx)
+ 	struct vpe_fmt *fmt = ctx->q_data[Q_DATA_SRC].fmt;
+ 	int line_mode = 1;
+ 
+-	if (fmt->fourcc == V4L2_PIX_FMT_NV12)
++	if (fmt->fourcc == V4L2_PIX_FMT_NV12 ||
++	    fmt->fourcc == V4L2_PIX_FMT_NV21)
+ 		line_mode = 0;		/* double lines to line buffer */
+ 
+ 	/* regs for now */
+@@ -763,7 +773,8 @@ static void set_dst_registers(struct vpe_ctx *ctx)
+ 	 */
+ 	val |= VPE_DS_SRC_DEI_SCALER | VPE_CSC_SRC_DEI_SCALER;
+ 
+-	if (fmt->fourcc != V4L2_PIX_FMT_NV12)
++	if (fmt->fourcc != V4L2_PIX_FMT_NV12 &&
++	    fmt->fourcc != V4L2_PIX_FMT_NV21)
+ 		val |= VPE_DS_BYPASS;
+ 
+ 	mmr_adb->out_fmt_reg[0] = val;
+@@ -1129,8 +1140,13 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
+ 
+ 			if (field) {
+ 				int height = q_data->height / 2;
+-				int bpp = fmt->fourcc == V4L2_PIX_FMT_NV12 ?
+-						1 : (vpdma_fmt->depth >> 3);
++				int bpp;
 +
- /* Internal temporary helper struct, one for each v4l2_ext_control */
- struct v4l2_ctrl_helper {
- 	/* Pointer to the control reference of the master control */
-@@ -1530,7 +1532,10 @@ static void std_init_compound(const struct v4l2_ctrl *ctrl, u32 idx,
- 	struct v4l2_ctrl_mpeg2_slice_params *p_mpeg2_slice_params;
- 	void *p = ptr.p + idx * ctrl->elem_size;
++				if (fmt->fourcc == V4L2_PIX_FMT_NV12 ||
++				    fmt->fourcc == V4L2_PIX_FMT_NV21)
++					bpp = 1;
++				else
++					bpp = vpdma_fmt->depth >> 3;
  
--	memset(p, 0, ctrl->elem_size);
-+	if (ctrl->p_def.p)
-+		memcpy(p, ctrl->p_def.p, ctrl->elem_size);
-+	else
-+		memset(p, 0, ctrl->elem_size);
+ 				if (plane)
+ 					height /= 2;
+@@ -1148,7 +1164,8 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
+ 	frame_width = q_data->c_rect.width;
+ 	frame_height = q_data->c_rect.height;
  
- 	/*
- 	 * The cast is needed to get rid of a gcc warning complaining that
-@@ -2354,7 +2359,8 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 			s64 min, s64 max, u64 step, s64 def,
- 			const u32 dims[V4L2_CTRL_MAX_DIMS], u32 elem_size,
- 			u32 flags, const char * const *qmenu,
--			const s64 *qmenu_int, void *priv)
-+			const s64 *qmenu_int, const union v4l2_ctrl_ptr p_def,
-+			void *priv)
- {
- 	struct v4l2_ctrl *ctrl;
- 	unsigned sz_extra;
-@@ -2460,6 +2466,9 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 		 is_array)
- 		sz_extra += 2 * tot_ctrl_size;
+-	if (p_data->vb_part && fmt->fourcc == V4L2_PIX_FMT_NV12)
++	if (p_data->vb_part && (fmt->fourcc == V4L2_PIX_FMT_NV12 ||
++				fmt->fourcc == V4L2_PIX_FMT_NV21))
+ 		frame_height /= 2;
  
-+	if (type >= V4L2_CTRL_COMPOUND_TYPES && p_def.p)
-+		sz_extra += elem_size;
-+
- 	ctrl = kvzalloc(sizeof(*ctrl) + sz_extra, GFP_KERNEL);
- 	if (ctrl == NULL) {
- 		handler_set_err(hdl, -ENOMEM);
-@@ -2503,6 +2512,12 @@ static struct v4l2_ctrl *v4l2_ctrl_new(struct v4l2_ctrl_handler *hdl,
- 		ctrl->p_new.p = &ctrl->val;
- 		ctrl->p_cur.p = &ctrl->cur.val;
- 	}
-+
-+	if (type >= V4L2_CTRL_COMPOUND_TYPES && p_def.p) {
-+		ctrl->p_def.p = ctrl->p_cur.p + tot_ctrl_size;
-+		memcpy(ctrl->p_def.p, p_def.p, elem_size);
-+	}
-+
- 	for (idx = 0; idx < elems; idx++) {
- 		ctrl->type_ops->init(ctrl, idx, ctrl->p_cur);
- 		ctrl->type_ops->init(ctrl, idx, ctrl->p_new);
-@@ -2554,7 +2569,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_custom(struct v4l2_ctrl_handler *hdl,
- 			type, min, max,
- 			is_menu ? cfg->menu_skip_mask : step, def,
- 			cfg->dims, cfg->elem_size,
--			flags, qmenu, qmenu_int, priv);
-+			flags, qmenu, qmenu_int, ptr_null, priv);
- 	if (ctrl)
- 		ctrl->is_private = cfg->is_private;
- 	return ctrl;
-@@ -2579,7 +2594,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_std(struct v4l2_ctrl_handler *hdl,
- 	}
- 	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
- 			     min, max, step, def, NULL, 0,
--			     flags, NULL, NULL, NULL);
-+			     flags, NULL, NULL, ptr_null, NULL);
- }
- EXPORT_SYMBOL(v4l2_ctrl_new_std);
- 
-@@ -2612,7 +2627,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_std_menu(struct v4l2_ctrl_handler *hdl,
- 	}
- 	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
- 			     0, max, mask, def, NULL, 0,
--			     flags, qmenu, qmenu_int, NULL);
-+			     flags, qmenu, qmenu_int, ptr_null, NULL);
- }
- EXPORT_SYMBOL(v4l2_ctrl_new_std_menu);
- 
-@@ -2644,11 +2659,32 @@ struct v4l2_ctrl *v4l2_ctrl_new_std_menu_items(struct v4l2_ctrl_handler *hdl,
- 	}
- 	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
- 			     0, max, mask, def, NULL, 0,
--			     flags, qmenu, NULL, NULL);
-+			     flags, qmenu, NULL, ptr_null, NULL);
- 
- }
- EXPORT_SYMBOL(v4l2_ctrl_new_std_menu_items);
- 
-+/* Helper function for standard compound controls */
-+struct v4l2_ctrl *v4l2_ctrl_new_std_compound(struct v4l2_ctrl_handler *hdl,
-+				const struct v4l2_ctrl_ops *ops, u32 id,
-+				const union v4l2_ctrl_ptr p_def)
-+{
-+	const char *name;
-+	enum v4l2_ctrl_type type;
-+	u32 flags;
-+	s64 min, max, step, def;
-+
-+	v4l2_ctrl_fill(id, &name, &type, &min, &max, &step, &def, &flags);
-+	if (type < V4L2_CTRL_COMPOUND_TYPES) {
-+		handler_set_err(hdl, -EINVAL);
-+		return NULL;
-+	}
-+	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
-+			     min, max, step, def, NULL, 0,
-+			     flags, NULL, NULL, p_def, NULL);
-+}
-+EXPORT_SYMBOL(v4l2_ctrl_new_std_compound);
-+
- /* Helper function for standard integer menu controls */
- struct v4l2_ctrl *v4l2_ctrl_new_int_menu(struct v4l2_ctrl_handler *hdl,
- 			const struct v4l2_ctrl_ops *ops,
-@@ -2669,7 +2705,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_int_menu(struct v4l2_ctrl_handler *hdl,
- 	}
- 	return v4l2_ctrl_new(hdl, ops, NULL, id, name, type,
- 			     0, max, 0, def, NULL, 0,
--			     flags, NULL, qmenu_int, NULL);
-+			     flags, NULL, qmenu_int, ptr_null, NULL);
- }
- EXPORT_SYMBOL(v4l2_ctrl_new_int_menu);
- 
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 570ff4b0205a..90a8ee48c2f3 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -200,6 +200,9 @@ typedef void (*v4l2_ctrl_notify_fnc)(struct v4l2_ctrl *ctrl, void *priv);
-  *		not freed when the control is deleted. Should this be needed
-  *		then a new internal bitfield can be added to tell the framework
-  *		to free this pointer.
-+ * @p_def:	The control's default value represented via a union which
-+ *		provides a standard way of accessing control types
-+ *		through a pointer (for compound controls only).
-  * @p_cur:	The control's current value represented via a union which
-  *		provides a standard way of accessing control types
-  *		through a pointer.
-@@ -254,6 +257,7 @@ struct v4l2_ctrl {
- 		s32 val;
- 	} cur;
- 
-+	union v4l2_ctrl_ptr p_def;
- 	union v4l2_ctrl_ptr p_new;
- 	union v4l2_ctrl_ptr p_cur;
- };
-@@ -646,6 +650,23 @@ struct v4l2_ctrl *v4l2_ctrl_new_std_menu_items(struct v4l2_ctrl_handler *hdl,
- 					       u64 mask, u8 def,
- 					       const char * const *qmenu);
- 
-+/**
-+ * v4l2_ctrl_new_std_compound() - Allocate and initialize a new standard V4L2
-+ *      compound control.
-+ *
-+ * @hdl:       The control handler.
-+ * @ops:       The control ops.
-+ * @id:        The control ID.
-+ * @p_def:     The control's default value.
-+ *
-+ * Sames as v4l2_ctrl_new_std(), but with support to compound controls, thanks
-+ * to the @p_def field.
-+ *
-+ */
-+struct v4l2_ctrl *v4l2_ctrl_new_std_compound(struct v4l2_ctrl_handler *hdl,
-+				const struct v4l2_ctrl_ops *ops, u32 id,
-+				const union v4l2_ctrl_ptr p_def);
-+
- /**
-  * v4l2_ctrl_new_int_menu() - Create a new standard V4L2 integer menu control.
-  *
+ 	vpdma_add_in_dtd(&ctx->desc_list, q_data->width, stride,
 -- 
-2.23.0
+2.17.1
 
