@@ -7,52 +7,54 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B17EFECE58E
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95142ECE58E
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 886182070B
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 619252070B
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="x0XPmGMu"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="uS8J88Ve"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728828AbfJGPHp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 11:07:45 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:35866 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728815AbfJGPHp (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:07:45 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97F7idm047022;
-        Mon, 7 Oct 2019 10:07:44 -0500
+        id S1729264AbfJGPJG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 11:09:06 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:40522 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728772AbfJGPHm (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:07:42 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97F7fJX004161;
+        Mon, 7 Oct 2019 10:07:41 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570460864;
-        bh=XM3esUYtpgFCwHmCE1jUC/Gm3u55IUoVUnytr7Gb40s=;
+        s=ti-com-17Q1; t=1570460861;
+        bh=U+40G8RP769IGoztZIVs1oL82vYi9RvZaUh9qX9X+H0=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=x0XPmGMuLdIIW8HajZEGmOz9iRjaYlOQXuFZHL3TF2RZIlHFoCWhrgLks1RjzhmcN
-         N2lNuLrDBBtG3+mIfogP9gB/0Nx3vqm1UjuZ3+zZHN+h++cdr9f6RUmrPVyxBNAfmG
-         IGQKnvLDA0aM6JtVbFkDxEW8Na/SgI4SWXmh4/SY=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x97F7iK0025571
+        b=uS8J88VerbL2B0ndK6LWpXtZixeXUNckVdVh31mAZBWE/quru1LMRTmKOwQvzdsXm
+         ltQWQHWhFJbUHVbcvFGa+tYwNAfyIlTYXTl2LaLAnhsnIyJ5KUIsIvzLvMZkO7Ncrq
+         cGCOelO9tkMKFp6CZLnTM/wlXvzjNHARveZ95YTo=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x97F7fx8023685
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 7 Oct 2019 10:07:44 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 7 Oct 2019 10:07:41 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 7 Oct
- 2019 10:07:41 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 10:07:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
  Frontend Transport; Mon, 7 Oct 2019 10:07:41 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7aFE055156;
-        Mon, 7 Oct 2019 10:07:44 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7aFB055156;
+        Mon, 7 Oct 2019 10:07:41 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v3 08/21] media: ti-vpe: vpe: fix a v4l2-compliance failure causing a kernel panic
-Date:   Mon, 7 Oct 2019 10:09:56 -0500
-Message-ID: <20191007151009.22095-9-bparrot@ti.com>
+        <linux-kernel@vger.kernel.org>,
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v3 05/21] media: ti-vpe: Add support for SEQ_BT
+Date:   Mon, 7 Oct 2019 10:09:53 -0500
+Message-ID: <20191007151009.22095-6-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191007151009.22095-1-bparrot@ti.com>
 References: <20191007151009.22095-1-bparrot@ti.com>
@@ -64,52 +66,171 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-v4l2-compliance fails with this message:
+From: Nikhil Devshatwar <nikhil.nd@ti.com>
 
-   warn: v4l2-test-formats.cpp(717): \
-   	TRY_FMT cannot handle an invalid pixelformat.
-   test VIDIOC_TRY_FMT: FAIL
+SEQ_BT indicates the buffer for bottom field needs to be processed
+before the top field.
 
-This causes the following kernel panic:
+Simplify the field selection logic to support SEQ_BT as well.
 
-Unable to handle kernel paging request at virtual address 56595561
-pgd = ecd80e00
-*pgd=00000000
-Internal error: Oops: 205 [#1] PREEMPT SMP ARM
-...
-CPU: 0 PID: 930 Comm: v4l2-compliance Not tainted \
-	4.14.62-01715-gc8cd67f49a19 #1
-Hardware name: Generic DRA72X (Flattened Device Tree)
-task: ece44d80 task.stack: ecc6e000
-PC is at __vpe_try_fmt+0x18c/0x2a8 [ti_vpe]
-LR is at 0x8
+Modify the interlace flags to include any of alternate, SEQ_TB, SEQ_BT.
+Update other format error checking to consider SEQ_BT.
+Replace SEQ_TB with SEQ_XX wherever applicable.
 
-Because the driver fails to properly check the 'num_planes' values for
-proper ranges it ends up accessing out of bound data causing the kernel
-panic.
-
-Since this driver only handle single or dual plane pixel format, make
-sure the provided value does not exceed 2 planes.
-
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 ---
- drivers/media/platform/ti-vpe/vpe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/ti-vpe/vpe.c | 73 ++++++++++++++++++-----------
+ 1 file changed, 46 insertions(+), 27 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
-index bbbf11174e16..1278d457f753 100644
+index 0e9cb0319a92..5d0ec5f7ca25 100644
 --- a/drivers/media/platform/ti-vpe/vpe.c
 +++ b/drivers/media/platform/ti-vpe/vpe.c
-@@ -1650,7 +1650,7 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
- 			      &pix->height, MIN_H, MAX_H, H_ALIGN,
- 			      S_ALIGN);
+@@ -328,9 +328,14 @@ struct vpe_q_data {
+ #define	Q_DATA_MODE_TILED		BIT(1)
+ #define	Q_DATA_INTERLACED_ALTERNATE	BIT(2)
+ #define	Q_DATA_INTERLACED_SEQ_TB	BIT(3)
++#define	Q_DATA_INTERLACED_SEQ_BT	BIT(4)
++
++#define Q_IS_SEQ_XX		(Q_DATA_INTERLACED_SEQ_TB | \
++				Q_DATA_INTERLACED_SEQ_BT)
  
--	if (!pix->num_planes)
-+	if (!pix->num_planes || pix->num_planes > 2)
- 		pix->num_planes = fmt->coplanar ? 2 : 1;
- 	else if (pix->num_planes > 1 && !fmt->coplanar)
- 		pix->num_planes = 1;
+ #define Q_IS_INTERLACED		(Q_DATA_INTERLACED_ALTERNATE | \
+-				Q_DATA_INTERLACED_SEQ_TB)
++				Q_DATA_INTERLACED_SEQ_TB | \
++				Q_DATA_INTERLACED_SEQ_BT)
+ 
+ enum {
+ 	Q_DATA_SRC = 0,
+@@ -1105,24 +1110,31 @@ static void add_in_dtd(struct vpe_ctx *ctx, int port)
+ 		dma_addr += offset;
+ 		stride = q_data->bytesperline[VPE_LUMA];
+ 
+-		if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB) {
+-			/*
+-			 * Use top or bottom field from same vb alternately
+-			 * f,f-1,f-2 = TBT when seq is even
+-			 * f,f-1,f-2 = BTB when seq is odd
+-			 */
+-			field = (p_data->vb_index + (ctx->sequence % 2)) % 2;
++		/*
++		 * field used in VPDMA desc  = 0 (top) / 1 (bottom)
++		 * Use top or bottom field from same vb alternately
++		 * For each de-interlacing operation, f,f-1,f-2 should be one
++		 * of TBT or BTB
++		 */
++		if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB ||
++		    q_data->flags & Q_DATA_INTERLACED_SEQ_BT) {
++			/* Select initial value based on format */
++			if (q_data->flags & Q_DATA_INTERLACED_SEQ_BT)
++				field = 1;
++			else
++				field = 0;
++
++			/* Toggle for each vb_index and each operation */
++			field = (field + p_data->vb_index + ctx->sequence) % 2;
+ 
+ 			if (field) {
+-				/*
+-				 * bottom field of a SEQ_TB buffer
+-				 * Skip the top field data by
+-				 */
+ 				int height = q_data->height / 2;
+ 				int bpp = fmt->fourcc == V4L2_PIX_FMT_NV12 ?
+ 						1 : (vpdma_fmt->depth >> 3);
++
+ 				if (plane)
+ 					height /= 2;
++
+ 				dma_addr += q_data->width * height * bpp;
+ 			}
+ 		}
+@@ -1177,12 +1189,14 @@ static void device_run(void *priv)
+ 	struct vpe_q_data *d_q_data = &ctx->q_data[Q_DATA_DST];
+ 	struct vpe_q_data *s_q_data = &ctx->q_data[Q_DATA_SRC];
+ 
+-	if (ctx->deinterlacing && s_q_data->flags & Q_DATA_INTERLACED_SEQ_TB &&
+-		ctx->sequence % 2 == 0) {
+-		/* When using SEQ_TB buffers, When using it first time,
+-		 * No need to remove the buffer as the next field is present
+-		 * in the same buffer. (so that job_ready won't fail)
+-		 * It will be removed when using bottom field
++	if (ctx->deinterlacing && s_q_data->flags & Q_IS_SEQ_XX &&
++	    ctx->sequence % 2 == 0) {
++		/* When using SEQ_XX type buffers, each buffer has two fields
++		 * each buffer has two fields (top & bottom)
++		 * Removing one buffer is actually getting two fields
++		 * Alternate between two operations:-
++		 * Even : consume one field but DO NOT REMOVE from queue
++		 * Odd : consume other field and REMOVE from queue
+ 		 */
+ 		ctx->src_vbs[0] = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
+ 		WARN_ON(ctx->src_vbs[0] == NULL);
+@@ -1573,8 +1587,10 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 		return -EINVAL;
+ 	}
+ 
+-	if (pix->field != V4L2_FIELD_NONE && pix->field != V4L2_FIELD_ALTERNATE
+-			&& pix->field != V4L2_FIELD_SEQ_TB)
++	if (pix->field != V4L2_FIELD_NONE &&
++	    pix->field != V4L2_FIELD_ALTERNATE &&
++	    pix->field != V4L2_FIELD_SEQ_TB &&
++	    pix->field != V4L2_FIELD_SEQ_BT)
+ 		pix->field = V4L2_FIELD_NONE;
+ 
+ 	depth = fmt->vpdma_fmt[VPE_LUMA]->depth;
+@@ -1626,9 +1642,9 @@ static int __vpe_try_fmt(struct vpe_ctx *ctx, struct v4l2_format *f,
+ 
+ 	/*
+ 	 * For the actual image parameters, we need to consider the field
+-	 * height of the image for SEQ_TB buffers.
++	 * height of the image for SEQ_XX buffers.
+ 	 */
+-	if (pix->field == V4L2_FIELD_SEQ_TB)
++	if (pix->field == V4L2_FIELD_SEQ_TB || pix->field == V4L2_FIELD_SEQ_BT)
+ 		height = pix->height / 2;
+ 	else
+ 		height = pix->height;
+@@ -1734,11 +1750,13 @@ static int __vpe_s_fmt(struct vpe_ctx *ctx, struct v4l2_format *f)
+ 		q_data->flags |= Q_DATA_INTERLACED_ALTERNATE;
+ 	else if (q_data->field == V4L2_FIELD_SEQ_TB)
+ 		q_data->flags |= Q_DATA_INTERLACED_SEQ_TB;
++	else if (q_data->field == V4L2_FIELD_SEQ_BT)
++		q_data->flags |= Q_DATA_INTERLACED_SEQ_BT;
+ 	else
+ 		q_data->flags &= ~Q_IS_INTERLACED;
+ 
+-	/* the crop height is halved for the case of SEQ_TB buffers */
+-	if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB)
++	/* the crop height is halved for the case of SEQ_XX buffers */
++	if (q_data->flags & Q_IS_SEQ_XX)
+ 		q_data->c_rect.height /= 2;
+ 
+ 	vpe_dbg(ctx->dev, "Setting format for type %d, wxh: %dx%d, fmt: %d bpl_y %d",
+@@ -1811,10 +1829,10 @@ static int __vpe_try_selection(struct vpe_ctx *ctx, struct v4l2_selection *s)
+ 	}
+ 
+ 	/*
+-	 * For SEQ_TB buffers, crop height should be less than the height of
++	 * For SEQ_XX buffers, crop height should be less than the height of
+ 	 * the field height, not the buffer height
+ 	 */
+-	if (q_data->flags & Q_DATA_INTERLACED_SEQ_TB)
++	if (q_data->flags & Q_IS_SEQ_XX)
+ 		height = q_data->height / 2;
+ 	else
+ 		height = q_data->height;
+@@ -2031,7 +2049,8 @@ static int vpe_buf_prepare(struct vb2_buffer *vb)
+ 		} else {
+ 			if (vbuf->field != V4L2_FIELD_TOP &&
+ 			    vbuf->field != V4L2_FIELD_BOTTOM &&
+-			    vbuf->field != V4L2_FIELD_SEQ_TB)
++			    vbuf->field != V4L2_FIELD_SEQ_TB &&
++			    vbuf->field != V4L2_FIELD_SEQ_BT)
+ 				return -EINVAL;
+ 		}
+ 	}
 -- 
 2.17.1
 
