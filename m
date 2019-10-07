@@ -2,34 +2,35 @@ Return-Path: <SRS0=+Pgr=YA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A082DECE58C
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:49:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A361AC47404
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:50:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D6A720867
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:49:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E5FB21721
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:50:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbfJGNtT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 09:49:19 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:58364 "EHLO
+        id S1727685AbfJGNuK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 09:50:10 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:58390 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727324AbfJGNtT (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 09:49:19 -0400
+        with ESMTP id S1726334AbfJGNuJ (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 09:50:09 -0400
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dafna)
-        with ESMTPSA id 634D928D580
+        with ESMTPSA id E1B5A28D6F4
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     dafna.hirschfeld@collabora.com, helen.koike@collabora.com,
         ezequiel@collabora.com, andre.almeida@collabora.com,
         skhan@linuxfoundation.org, hverkuil@xs4all.nl,
         kernel@collabora.com, dafna3@gmail.com
-Subject: [PATCH v3 0/5] media: vimc: bug fixes related to memory management
-Date:   Mon,  7 Oct 2019 15:49:07 +0200
-Message-Id: <20191007134912.28181-1-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v3 1/5] media: vimc: initialize vim entity pointers to NULL
+Date:   Mon,  7 Oct 2019 15:49:59 +0200
+Message-Id: <20191007135003.28287-1-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -38,27 +39,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-cleanup and buf fixing patches for vimc
+since NULL value for vimc entity pointer indicates
+that entity creation failed and this is tested, the
+pointers should be initialized to NULL.
 
-Changes from v2:
-The head of the thirds patch is chaned to start with "media vimc: sen:"
+Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+Acked-by: Helen Koike <helen.koike@collabora.com>
+---
+ drivers/media/platform/vimc/vimc-core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Dafna Hirschfeld (5):
-  media: vimc: initialize vim entity pointers to NULL
-  media: vimc: cleanup code that assigns entity in entities array
-  media: vimc: sen: register subdevice only after initialization
-  media: vimc: move media_entity_cleanup to release callbacks
-  media: vimc: remove the helper function vimc_ent_sd_unregister
-
- drivers/media/platform/vimc/vimc-capture.c |  2 +-
- drivers/media/platform/vimc/vimc-common.c  |  6 ------
- drivers/media/platform/vimc/vimc-common.h  | 12 -----------
- drivers/media/platform/vimc/vimc-core.c    | 11 ++++-------
- drivers/media/platform/vimc/vimc-debayer.c |  3 ++-
- drivers/media/platform/vimc/vimc-scaler.c  |  3 ++-
- drivers/media/platform/vimc/vimc-sensor.c  | 23 +++++++++++-----------
- 7 files changed, 21 insertions(+), 39 deletions(-)
-
+diff --git a/drivers/media/platform/vimc/vimc-core.c b/drivers/media/platform/vimc/vimc-core.c
+index 6e3e5c91ae39..b8add4087652 100644
+--- a/drivers/media/platform/vimc/vimc-core.c
++++ b/drivers/media/platform/vimc/vimc-core.c
+@@ -199,9 +199,8 @@ static int vimc_register_devices(struct vimc_device *vimc)
+ 	}
+ 
+ 	/* allocate ent_devs */
+-	vimc->ent_devs = kmalloc_array(vimc->pipe_cfg->num_ents,
+-				       sizeof(*vimc->ent_devs),
+-				       GFP_KERNEL);
++	vimc->ent_devs = kcalloc(vimc->pipe_cfg->num_ents,
++				 sizeof(*vimc->ent_devs), GFP_KERNEL);
+ 	if (!vimc->ent_devs)
+ 		goto err_v4l2_unregister;
+ 
 -- 
 2.20.1
 
