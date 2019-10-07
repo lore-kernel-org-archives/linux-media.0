@@ -2,92 +2,120 @@ Return-Path: <SRS0=+Pgr=YA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A09D1C47404
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB4DAECE58E
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 77A5A2070B
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A190F21655
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 15:09:28 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="xoKUrcEd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729259AbfJGPJF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 11:09:05 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:60244 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728138AbfJGPJF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:09:05 -0400
-Received: (qmail 4331 invoked by uid 2102); 7 Oct 2019 11:09:04 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 7 Oct 2019 11:09:04 -0400
-Date:   Mon, 7 Oct 2019 11:09:04 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-cc:     linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: [PATCH 1/2 RESEND] media: usbvision: Fix invalid accesses after
- device disconnect
-Message-ID: <Pine.LNX.4.44L0.1910071100170.1513-100000@iolanthe.rowland.org>
+        id S1728763AbfJGPHl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 11:07:41 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:56194 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728743AbfJGPHl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 11:07:41 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97F7dqE067900;
+        Mon, 7 Oct 2019 10:07:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1570460859;
+        bh=OKhdMxSgs6BN/L1NKmWbLiSeixvj42ucz1234m6E0RQ=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=xoKUrcEd6MkFjrQ3Xzjzk5mvOa/bQm8tMilArSbue84/q29cz8ScNliadHg2jWFxO
+         IzFo1EXKgv0o7kdrkHmosXsLEeHgRUALEhae2aCaeHH9iWbXWfiMaNK0k+kyf591q8
+         4doAjcjOCcn+yt+gtl5jkLMviP0+U9Lv/sfem/UE=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7dwi060607;
+        Mon, 7 Oct 2019 10:07:39 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 7 Oct
+ 2019 10:07:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Mon, 7 Oct 2019 10:07:39 -0500
+Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97F7aF9055156;
+        Mon, 7 Oct 2019 10:07:39 -0500
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>
+CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v3 03/21] media: ti-vpe: vpe: Add missing null pointer checks
+Date:   Mon, 7 Oct 2019 10:09:51 -0500
+Message-ID: <20191007151009.22095-4-bparrot@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191007151009.22095-1-bparrot@ti.com>
+References: <20191007151009.22095-1-bparrot@ti.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The syzbot fuzzer found two invalid-access bugs in the usbvision
-driver.  These bugs occur when userspace keeps the device file open
-after the device has been disconnected and usbvision_disconnect() has
-set usbvision->dev to NULL:
+A few NULL pointer checks were missing.
+Add check with appropriate return code.
 
-	When the device file is closed, usbvision_radio_close() tries
-	to issue a usb_set_interface() call, passing the NULL pointer
-	as its first argument.
-
-	If userspace performs a querycap ioctl call, vidioc_querycap()
-	calls usb_make_path() with the same NULL pointer.
-
-This patch fixes the problems by making the appropriate tests
-beforehand.  Note that vidioc_querycap() is protected by
-usbvision->v4l2_lock, acquired in a higher layer of the V4L2
-subsystem.
-
-Reported-and-tested-by: syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: <stable@vger.kernel.org>
-
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
+ drivers/media/platform/ti-vpe/vpe.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-[as1919]
-
- drivers/media/usb/usbvision/usbvision-video.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
-===================================================================
---- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
-+++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
-@@ -453,6 +453,9 @@ static int vidioc_querycap(struct file *
- {
- 	struct usb_usbvision *usbvision = video_drvdata(file);
+diff --git a/drivers/media/platform/ti-vpe/vpe.c b/drivers/media/platform/ti-vpe/vpe.c
+index 5ba72445584d..56f60dbea15c 100644
+--- a/drivers/media/platform/ti-vpe/vpe.c
++++ b/drivers/media/platform/ti-vpe/vpe.c
+@@ -1537,6 +1537,8 @@ static int vpe_g_fmt(struct file *file, void *priv, struct v4l2_format *f)
+ 		return -EINVAL;
  
-+	if (!usbvision->dev)
+ 	q_data = get_q_data(ctx, f->type);
++	if (!q_data)
++		return -EINVAL;
+ 
+ 	pix->width = q_data->width;
+ 	pix->height = q_data->height;
+@@ -2001,6 +2003,8 @@ static int vpe_queue_setup(struct vb2_queue *vq,
+ 	struct vpe_q_data *q_data;
+ 
+ 	q_data = get_q_data(ctx, vq->type);
++	if (!q_data)
++		return -EINVAL;
+ 
+ 	*nplanes = q_data->nplanes;
+ 
+@@ -2025,6 +2029,8 @@ static int vpe_buf_prepare(struct vb2_buffer *vb)
+ 	vpe_dbg(ctx->dev, "type: %d\n", vb->vb2_queue->type);
+ 
+ 	q_data = get_q_data(ctx, vb->vb2_queue->type);
++	if (!q_data)
++		return -EINVAL;
+ 	num_planes = q_data->nplanes;
+ 
+ 	if (vb->vb2_queue->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
+@@ -2481,7 +2487,12 @@ static int vpe_probe(struct platform_device *pdev)
+ 	mutex_init(&dev->dev_mutex);
+ 
+ 	dev->res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+-			"vpe_top");
++						"vpe_top");
++	if (!dev->res) {
++		dev_err(&pdev->dev, "missing 'vpe_top' resources data\n");
 +		return -ENODEV;
++	}
 +
- 	strscpy(vc->driver, "USBVision", sizeof(vc->driver));
- 	strscpy(vc->card,
- 		usbvision_device_data[usbvision->dev_model].model_string,
-@@ -1111,7 +1114,8 @@ static int usbvision_radio_close(struct
- 	mutex_lock(&usbvision->v4l2_lock);
- 	/* Set packet size to 0 */
- 	usbvision->iface_alt = 0;
--	usb_set_interface(usbvision->dev, usbvision->iface,
-+	if (usbvision->dev)
-+		usb_set_interface(usbvision->dev, usbvision->iface,
- 				    usbvision->iface_alt);
- 
- 	usbvision_audio_off(usbvision);
+ 	/*
+ 	 * HACK: we get resource info from device tree in the form of a list of
+ 	 * VPE sub blocks, the driver currently uses only the base of vpe_top
+-- 
+2.17.1
 
