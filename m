@@ -2,91 +2,96 @@ Return-Path: <SRS0=+Pgr=YA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5842ECE58D
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:08:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D7EECE58C
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:21:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 810D721655
-	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:08:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C944121871
+	for <linux-media@archiver.kernel.org>; Mon,  7 Oct 2019 13:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570453717;
-	bh=vxO/s54dTSEzl5R7GT884moYyXRk4GkYf/RtZPNdPqM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=MAHDR0C3k8p5RLEa8RQfaSTJacCMWw3AGxAplIvmsUVxjHggS0M2vsHdbbwH5Zrpb
-	 vpQIQUlf2/fhhnhxTlSmmASRoZ2Rk4KTxCOZcYDQocZPcRksLNtXWWn26TDMs0bBUM
-	 khwFLIDxA3DIDrwTOC4DsuBO1rlpXKFxByHDOtzI=
+	s=default; t=1570454465;
+	bh=vdbVNKK2cjLjt0uI5e0Df8suBVPHqSbN68ZVOy8d0WA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ehn23iH7z/P+fNguLjcLQ0ldOK+ODszJHpePJ1+taAcnJvaCqiKSaxjY0brQ41w/E
+	 6DJ/GUOR6HELstIGKfrcrpih3wTEBSEOeNGJa2Xbl870ARd1P0e5/3+ekBeNHOPhaA
+	 kIofaPiPvsyqnEm/O4W99RwvZdIpdQ1xNM5QQ2VI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728001AbfJGNIc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 7 Oct 2019 09:08:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51290 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727847AbfJGNIc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 7 Oct 2019 09:08:32 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2E61B21655;
-        Mon,  7 Oct 2019 13:08:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570453711;
-        bh=vxO/s54dTSEzl5R7GT884moYyXRk4GkYf/RtZPNdPqM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=E24C54eS5QstHHB+h3eQVSYk65KL+h5v4BqBRUMw7SxYY+pIuIpbwYFaEImNXipDy
-         SA+nl++VUFDCuNX/xtbtrfM6UohU5jGE32dgwZ4bQ/Vvi/aYvVNnDKzBWR20jCFiLj
-         BEJh7BCjEdlmWmsOF8XS1LALokCjjlxmb3RQXVV0=
-Received: by mail-qt1-f178.google.com with SMTP id u22so18942524qtq.13;
-        Mon, 07 Oct 2019 06:08:31 -0700 (PDT)
-X-Gm-Message-State: APjAAAWNos+PVt72+dHMdk9l+n+ANUjFYkKAQ9eckzFXMz9QRovl2PEa
-        GzaYC3XTeYD/SN6CZWWPljZU7Vji5XbaaD6dvg==
-X-Google-Smtp-Source: APXvYqyB1UEckrXSNhW8ewZ0xc0k0Qus+VSf2iK+Ax2D9HPzusjNm4QHm8QWK0UP3BYJ4kDT5C8PYG3hvZjHRXzJiL8=
-X-Received: by 2002:a05:6214:1590:: with SMTP id m16mr26758627qvw.20.1570453710240;
- Mon, 07 Oct 2019 06:08:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191007102552.19808-1-alexandre.torgue@st.com> <20191007102552.19808-4-alexandre.torgue@st.com>
-In-Reply-To: <20191007102552.19808-4-alexandre.torgue@st.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 7 Oct 2019 08:08:18 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqL3sAwjKAJPZbbqg8k_R80kE9d9nbBaxWGt76RCMVMZFQ@mail.gmail.com>
-Message-ID: <CAL_JsqL3sAwjKAJPZbbqg8k_R80kE9d9nbBaxWGt76RCMVMZFQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] dt-bindings: regulator: Fix yaml verification for
- fixed-regulator schema
-To:     Alexandre Torgue <alexandre.torgue@st.com>
-Cc:     Maxime Ripard <mripard@kernel.org>,
+        id S1727957AbfJGNVB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 7 Oct 2019 09:21:01 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42480 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727324AbfJGNVB (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 7 Oct 2019 09:21:01 -0400
+Received: by mail-lj1-f196.google.com with SMTP id y23so13599129lje.9;
+        Mon, 07 Oct 2019 06:20:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=B0ycQG3+LMWmEUo25NF7us/Cn/ZyGvcKYuOKAcoY2Nw=;
+        b=LU66QDFKpb3kbaZeRzxxpeLNRPF93nH5WIe/X90mwNtclauejuLg8z/ib63g+x+gvx
+         GxhrfbvUEuTkO2a3a4Zk6vVkhfe3SSA4SRfcQRHWe9pEA+szzUHk5SuVqqhiP+leGkVH
+         0LSWVX/Ijuo86DtHepBlc2pW84aAFLh2PPLeg4mLSdGp+LGqACZ2VgtNL9ewGLtDvB52
+         0bh7Hj0MlZts6VZJHLSplp0oeitu9I+5woCOic/SZQFeVg48X/+lBwtZL+HedewUIJSi
+         Pfj9E3s9QA+SsO+7H8FB47F/siv5SNB2H4UNBbVm6dqwhKpBdoZmhNpMxaSWgcYg1/AX
+         duqw==
+X-Gm-Message-State: APjAAAUIZSgo98zZqaweNuVi8WkX9EkyVeemOvhMIawsgyrJnAJWqKhk
+        ldfaAJeq69Ik6xPlYsEr1H4=
+X-Google-Smtp-Source: APXvYqyAgDiVoPygX9FC5R8yba0eh0Im6+tqrhDhqTUSjsix/NO8TsyVRSyRbNcPP2LxnR7RNH9fKg==
+X-Received: by 2002:a2e:9094:: with SMTP id l20mr18976621ljg.35.1570454458909;
+        Mon, 07 Oct 2019 06:20:58 -0700 (PDT)
+Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
+        by smtp.gmail.com with ESMTPSA id z14sm2687360lfh.30.2019.10.07.06.20.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2019 06:20:57 -0700 (PDT)
+From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
+To:     Pavel Machek <pavel@ucw.cz>, Sakari Ailus <sakari.ailus@iki.fi>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Alexandru Ardelean <alexaundru.ardelean@analog.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: [PATCH v7 1/6] ad5820: Define entity function
+Date:   Mon,  7 Oct 2019 15:20:39 +0200
+Message-Id: <20191007132050.27298-2-ribalda@kernel.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191007132050.27298-1-ribalda@kernel.org>
+References: <20191007132050.27298-1-ribalda@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Oct 7, 2019 at 5:26 AM Alexandre Torgue <alexandre.torgue@st.com> wrote:
->
-> This commit fixes an issue seen during yaml check ("make dt_binding_check").
-> Compatible didn't seem to be seen as a string.
->
-> Reported issue:
-> "properties:compatible:enum:0: {'const': 'regulator-fixed'}
-> is not of type 'string'"
-> And
-> "properties:compatible:enum:1: {'const': 'regulator-fixed-clock'}
-> is not of type 'string'"
->
-> Fixes: 9c86d003d620 ("dt-bindings: regulator: add regulator-fixed-clock binding")
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+Without this patch, media_device_register_entity throws a warning:
 
-There's already a fix queued up.
+dev_warn(mdev->dev,
+	 "Entity type for entity %s was not initialized!\n",
+	 entity->name);
 
-Rob
+Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+Acked-by: Pavel Machek <pavel@ucw.cz>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+---
+ drivers/media/i2c/ad5820.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/i2c/ad5820.c b/drivers/media/i2c/ad5820.c
+index 925c171e7797..7a49651f4d1f 100644
+--- a/drivers/media/i2c/ad5820.c
++++ b/drivers/media/i2c/ad5820.c
+@@ -309,6 +309,7 @@ static int ad5820_probe(struct i2c_client *client,
+ 	v4l2_i2c_subdev_init(&coil->subdev, client, &ad5820_ops);
+ 	coil->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	coil->subdev.internal_ops = &ad5820_internal_ops;
++	coil->subdev.entity.function = MEDIA_ENT_F_LENS;
+ 	strscpy(coil->subdev.name, "ad5820 focus", sizeof(coil->subdev.name));
+ 
+ 	ret = media_entity_pads_init(&coil->subdev.entity, 0, NULL);
+-- 
+2.23.0
+
