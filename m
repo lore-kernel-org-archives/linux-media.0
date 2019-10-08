@@ -6,24 +6,24 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74D04ECE596
-	for <linux-media@archiver.kernel.org>; Tue,  8 Oct 2019 09:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8349EECE58E
+	for <linux-media@archiver.kernel.org>; Tue,  8 Oct 2019 09:11:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4C5AB21871
-	for <linux-media@archiver.kernel.org>; Tue,  8 Oct 2019 09:11:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4022321721
+	for <linux-media@archiver.kernel.org>; Tue,  8 Oct 2019 09:11:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729935AbfJHJL3 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Oct 2019 05:11:29 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42874 "EHLO
+        id S1730013AbfJHJLa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Oct 2019 05:11:30 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:42896 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729767AbfJHJL3 (ORCPT
+        with ESMTP id S1729879AbfJHJL3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>); Tue, 8 Oct 2019 05:11:29 -0400
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 280A528F7FC;
-        Tue,  8 Oct 2019 10:11:26 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 0E05628F7FF;
+        Tue,  8 Oct 2019 10:11:27 +0100 (BST)
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
@@ -34,9 +34,9 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Brian Starkey <Brian.Starkey@arm.com>, kernel@collabora.com,
         Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [RFC PATCH v3 3/6] media: videobuf2: Expose helpers to implement the _ext_fmt and _ext_buf hooks
-Date:   Tue,  8 Oct 2019 11:11:16 +0200
-Message-Id: <20191008091119.7294-4-boris.brezillon@collabora.com>
+Subject: [RFC PATCH v3 5/6] media: vivid: Convert the capture and output drivers to EXT_FMT/EXT_BUF
+Date:   Tue,  8 Oct 2019 11:11:18 +0200
+Message-Id: <20191008091119.7294-6-boris.brezillon@collabora.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20191008091119.7294-1-boris.brezillon@collabora.com>
 References: <20191008091119.7294-1-boris.brezillon@collabora.com>
@@ -47,12 +47,8 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The VB2 layer is used by a lot of drivers. Patch it to support the
-_EXT_FMT and _EXT_BUF ioctls in order to ease conversion of existing
-drivers to these new APIs.
-
-Note that internally, the VB2 core is now only using ext structs and old
-APIs are supported through conversion wrappers.
+This should simplify things a bit as we now have a single
+implementation instead of the MPLANE and !MPLANE versions.
 
 Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
 ---
@@ -62,931 +58,743 @@ Changes in v3:
 Changes in v2:
 - New patch
 ---
- .../media/common/videobuf2/videobuf2-core.c   |   2 +
- .../media/common/videobuf2/videobuf2-v4l2.c   | 534 +++++++++++-------
- include/media/videobuf2-core.h                |   6 +-
- include/media/videobuf2-v4l2.h                |  26 +-
- 4 files changed, 352 insertions(+), 216 deletions(-)
+ drivers/media/platform/vivid/vivid-core.c    |  30 ++-
+ drivers/media/platform/vivid/vivid-vid-cap.c | 171 +++++-----------
+ drivers/media/platform/vivid/vivid-vid-cap.h |  15 +-
+ drivers/media/platform/vivid/vivid-vid-out.c | 195 +++++++------------
+ drivers/media/platform/vivid/vivid-vid-out.h |  15 +-
+ 5 files changed, 142 insertions(+), 284 deletions(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index 4489744fbbd9..898d01b4dcb4 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -1181,6 +1181,7 @@ static int __prepare_dmabuf(struct vb2_buffer *vb)
- 		vb->planes[plane].length = 0;
- 		vb->planes[plane].m.fd = 0;
- 		vb->planes[plane].data_offset = 0;
-+		vb->planes[plane].dbuf_offset = 0;
+diff --git a/drivers/media/platform/vivid/vivid-core.c b/drivers/media/platform/vivid/vivid-core.c
+index 53315c8dd2bb..502c1bf6f272 100644
+--- a/drivers/media/platform/vivid/vivid-core.c
++++ b/drivers/media/platform/vivid/vivid-core.c
+@@ -501,20 +501,14 @@ static const struct v4l2_ioctl_ops vivid_ioctl_ops = {
+ 	.vidioc_querycap		= vidioc_querycap,
  
- 		/* Acquire each plane's memory */
- 		mem_priv = call_ptr_memop(vb, attach_dmabuf,
-@@ -1224,6 +1225,7 @@ static int __prepare_dmabuf(struct vb2_buffer *vb)
- 		vb->planes[plane].length = planes[plane].length;
- 		vb->planes[plane].m.fd = planes[plane].m.fd;
- 		vb->planes[plane].data_offset = planes[plane].data_offset;
-+		vb->planes[plane].dbuf_offset = planes[plane].dbuf_offset;
- 	}
+ 	.vidioc_enum_fmt_vid_cap	= vivid_enum_fmt_vid,
+-	.vidioc_g_fmt_vid_cap		= vidioc_g_fmt_vid_cap,
+-	.vidioc_try_fmt_vid_cap		= vidioc_try_fmt_vid_cap,
+-	.vidioc_s_fmt_vid_cap		= vidioc_s_fmt_vid_cap,
+-	.vidioc_g_fmt_vid_cap_mplane	= vidioc_g_fmt_vid_cap_mplane,
+-	.vidioc_try_fmt_vid_cap_mplane	= vidioc_try_fmt_vid_cap_mplane,
+-	.vidioc_s_fmt_vid_cap_mplane	= vidioc_s_fmt_vid_cap_mplane,
++	.vidioc_g_ext_fmt_vid_cap	= vivid_g_fmt_vid_cap,
++	.vidioc_try_ext_fmt_vid_cap	= vivid_try_fmt_vid_cap,
++	.vidioc_s_ext_fmt_vid_cap	= vivid_s_fmt_vid_cap,
  
- 	if (reacquired) {
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index 5a9ba3846f0a..ac5ba5f0a254 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -29,6 +29,7 @@
- #include <media/v4l2-fh.h>
- #include <media/v4l2-event.h>
- #include <media/v4l2-common.h>
-+#include <media/v4l2-ioctl.h>
+ 	.vidioc_enum_fmt_vid_out	= vivid_enum_fmt_vid,
+-	.vidioc_g_fmt_vid_out		= vidioc_g_fmt_vid_out,
+-	.vidioc_try_fmt_vid_out		= vidioc_try_fmt_vid_out,
+-	.vidioc_s_fmt_vid_out		= vidioc_s_fmt_vid_out,
+-	.vidioc_g_fmt_vid_out_mplane	= vidioc_g_fmt_vid_out_mplane,
+-	.vidioc_try_fmt_vid_out_mplane	= vidioc_try_fmt_vid_out_mplane,
+-	.vidioc_s_fmt_vid_out_mplane	= vidioc_s_fmt_vid_out_mplane,
++	.vidioc_g_ext_fmt_vid_out	= vivid_g_fmt_vid_out,
++	.vidioc_try_ext_fmt_vid_out	= vivid_try_fmt_vid_out,
++	.vidioc_s_ext_fmt_vid_out	= vivid_s_fmt_vid_out,
  
- #include <media/videobuf2-v4l2.h>
+ 	.vidioc_g_selection		= vidioc_g_selection,
+ 	.vidioc_s_selection		= vidioc_s_selection,
+@@ -559,12 +553,12 @@ static const struct v4l2_ioctl_ops vivid_ioctl_ops = {
+ 	.vidioc_s_fbuf			= vidioc_s_fbuf,
  
-@@ -54,22 +55,14 @@ module_param(debug, int, 0644);
+ 	.vidioc_reqbufs			= vb2_ioctl_reqbufs,
+-	.vidioc_create_bufs		= vb2_ioctl_create_bufs,
+-	.vidioc_prepare_buf		= vb2_ioctl_prepare_buf,
+-	.vidioc_querybuf		= vb2_ioctl_querybuf,
+-	.vidioc_qbuf			= vb2_ioctl_qbuf,
+-	.vidioc_dqbuf			= vb2_ioctl_dqbuf,
+-	.vidioc_expbuf			= vb2_ioctl_expbuf,
++	.vidioc_ext_create_bufs		= vb2_ioctl_ext_create_bufs,
++	.vidioc_ext_prepare_buf		= vb2_ioctl_ext_prepare_buf,
++	.vidioc_ext_querybuf		= vb2_ioctl_ext_querybuf,
++	.vidioc_ext_qbuf		= vb2_ioctl_ext_qbuf,
++	.vidioc_ext_dqbuf		= vb2_ioctl_ext_dqbuf,
++	.vidioc_ext_expbuf		= vb2_ioctl_ext_expbuf,
+ 	.vidioc_streamon		= vb2_ioctl_streamon,
+ 	.vidioc_streamoff		= vb2_ioctl_streamoff,
  
- /*
-  * __verify_planes_array() - verify that the planes array passed in struct
-- * v4l2_buffer from userspace can be safely used
-+ * v4l2_ext_buffer from userspace can be safely used
-  */
--static int __verify_planes_array(struct vb2_buffer *vb, const struct v4l2_buffer *b)
-+static int __verify_planes_array(struct vb2_buffer *vb,
-+				 const struct v4l2_ext_buffer *b)
- {
--	if (!V4L2_TYPE_IS_MULTIPLANAR(b->type))
--		return 0;
--
--	/* Is memory for copying plane information present? */
--	if (b->m.planes == NULL) {
--		dprintk(1, "multi-planar buffer passed but planes array not provided\n");
--		return -EINVAL;
--	}
--
--	if (b->length < vb->num_planes || b->length > VB2_MAX_PLANES) {
-+	if (b->num_planes < vb->num_planes || b->num_planes > VB2_MAX_PLANES) {
- 		dprintk(1, "incorrect planes array length, expected %d, got %d\n",
--			vb->num_planes, b->length);
-+			vb->num_planes, b->num_planes);
- 		return -EINVAL;
- 	}
- 
-@@ -85,7 +78,8 @@ static int __verify_planes_array_core(struct vb2_buffer *vb, const void *pb)
-  * __verify_length() - Verify that the bytesused value for each plane fits in
-  * the plane length and that the data offset doesn't exceed the bytesused value.
-  */
--static int __verify_length(struct vb2_buffer *vb, const struct v4l2_buffer *b)
-+static int __verify_length(struct vb2_buffer *vb,
-+			   const struct v4l2_ext_buffer *b)
- {
- 	unsigned int length;
- 	unsigned int bytesused;
-@@ -94,27 +88,19 @@ static int __verify_length(struct vb2_buffer *vb, const struct v4l2_buffer *b)
- 	if (!V4L2_TYPE_IS_OUTPUT(b->type))
- 		return 0;
- 
--	if (V4L2_TYPE_IS_MULTIPLANAR(b->type)) {
--		for (plane = 0; plane < vb->num_planes; ++plane) {
--			length = (b->memory == VB2_MEMORY_USERPTR ||
--				  b->memory == VB2_MEMORY_DMABUF)
--			       ? b->m.planes[plane].length
--				: vb->planes[plane].length;
--			bytesused = b->m.planes[plane].bytesused
--				  ? b->m.planes[plane].bytesused : length;
-+	for (plane = 0; plane < vb->num_planes; ++plane) {
-+		length = (b->memory == VB2_MEMORY_USERPTR ||
-+			  b->memory == VB2_MEMORY_DMABUF) ?
-+			 b->planes[plane].length :
-+			 vb->planes[plane].length;
-+		bytesused = b->planes[plane].bytesused ?
-+			    b->planes[plane].bytesused : length;
- 
--			if (b->m.planes[plane].bytesused > length)
--				return -EINVAL;
-+		if (b->planes[plane].bytesused > length)
-+			return -EINVAL;
- 
--			if (b->m.planes[plane].data_offset > 0 &&
--			    b->m.planes[plane].data_offset >= bytesused)
--				return -EINVAL;
--		}
--	} else {
--		length = (b->memory == VB2_MEMORY_USERPTR)
--			? b->length : vb->planes[0].length;
--
--		if (b->bytesused > length)
-+		if (b->planes[plane].data_offset > 0 &&
-+		    b->planes[plane].data_offset >= bytesused)
- 			return -EINVAL;
- 	}
- 
-@@ -133,21 +119,12 @@ static void __init_vb2_v4l2_buffer(struct vb2_buffer *vb)
- 
- static void __copy_timestamp(struct vb2_buffer *vb, const void *pb)
- {
--	const struct v4l2_buffer *b = pb;
--	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-+	const struct v4l2_ext_buffer *b = pb;
- 	struct vb2_queue *q = vb->vb2_queue;
- 
--	if (q->is_output) {
--		/*
--		 * For output buffers copy the timestamp if needed,
--		 * and the timecode field and flag if needed.
--		 */
--		if (q->copy_timestamp)
--			vb->timestamp = v4l2_timeval_to_ns(&b->timestamp);
--		vbuf->flags |= b->flags & V4L2_BUF_FLAG_TIMECODE;
--		if (b->flags & V4L2_BUF_FLAG_TIMECODE)
--			vbuf->timecode = b->timecode;
--	}
-+	/* For output buffers copy the timestamp if needed. */
-+	if (q->is_output && q->copy_timestamp)
-+		vb->timestamp = b->timestamp;
- };
- 
- static void vb2_warn_zero_bytesused(struct vb2_buffer *vb)
-@@ -166,7 +143,8 @@ static void vb2_warn_zero_bytesused(struct vb2_buffer *vb)
- 		pr_warn("use the actual size instead.\n");
+diff --git a/drivers/media/platform/vivid/vivid-vid-cap.c b/drivers/media/platform/vivid/vivid-vid-cap.c
+index 2d030732feac..980ec26a512b 100644
+--- a/drivers/media/platform/vivid/vivid-vid-cap.c
++++ b/drivers/media/platform/vivid/vivid-vid-cap.c
+@@ -521,28 +521,27 @@ static unsigned vivid_quantization_cap(struct vivid_dev *dev)
  }
  
--static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b)
-+static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb,
-+				    struct v4l2_ext_buffer *b)
+ int vivid_g_fmt_vid_cap(struct file *file, void *priv,
+-					struct v4l2_format *f)
++			struct v4l2_ext_pix_format *f)
  {
- 	struct vb2_queue *q = vb->vb2_queue;
- 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
-@@ -195,110 +173,61 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
- 	vbuf->sequence = 0;
- 	vbuf->request_fd = -1;
+ 	struct vivid_dev *dev = video_drvdata(file);
+-	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
+ 	unsigned p;
  
--	if (V4L2_TYPE_IS_MULTIPLANAR(b->type)) {
--		switch (b->memory) {
--		case VB2_MEMORY_USERPTR:
--			for (plane = 0; plane < vb->num_planes; ++plane) {
--				planes[plane].m.userptr =
--					b->m.planes[plane].m.userptr;
--				planes[plane].length =
--					b->m.planes[plane].length;
--			}
--			break;
--		case VB2_MEMORY_DMABUF:
--			for (plane = 0; plane < vb->num_planes; ++plane) {
--				planes[plane].m.fd =
--					b->m.planes[plane].m.fd;
--				planes[plane].length =
--					b->m.planes[plane].length;
--			}
--			break;
--		default:
--			for (plane = 0; plane < vb->num_planes; ++plane) {
--				planes[plane].m.offset =
--					vb->planes[plane].m.offset;
--				planes[plane].length =
--					vb->planes[plane].length;
--			}
--			break;
-+	switch (b->memory) {
-+	case VB2_MEMORY_USERPTR:
-+		for (plane = 0; plane < vb->num_planes; ++plane) {
-+			planes[plane].m.userptr = b->planes[plane].m.userptr;
-+			planes[plane].length = b->planes[plane].length;
- 		}
--
--		/* Fill in driver-provided information for OUTPUT types */
--		if (V4L2_TYPE_IS_OUTPUT(b->type)) {
--			/*
--			 * Will have to go up to b->length when API starts
--			 * accepting variable number of planes.
--			 *
--			 * If bytesused == 0 for the output buffer, then fall
--			 * back to the full buffer size. In that case
--			 * userspace clearly never bothered to set it and
--			 * it's a safe assumption that they really meant to
--			 * use the full plane sizes.
--			 *
--			 * Some drivers, e.g. old codec drivers, use bytesused == 0
--			 * as a way to indicate that streaming is finished.
--			 * In that case, the driver should use the
--			 * allow_zero_bytesused flag to keep old userspace
--			 * applications working.
--			 */
--			for (plane = 0; plane < vb->num_planes; ++plane) {
--				struct vb2_plane *pdst = &planes[plane];
--				struct v4l2_plane *psrc = &b->m.planes[plane];
--
--				if (psrc->bytesused == 0)
--					vb2_warn_zero_bytesused(vb);
--
--				if (vb->vb2_queue->allow_zero_bytesused)
--					pdst->bytesused = psrc->bytesused;
--				else
--					pdst->bytesused = psrc->bytesused ?
--						psrc->bytesused : pdst->length;
--				pdst->data_offset = psrc->data_offset;
--			}
-+		break;
-+	case VB2_MEMORY_DMABUF:
-+		for (plane = 0; plane < vb->num_planes; ++plane) {
-+			planes[plane].m.fd = b->planes[plane].m.dmabuf.fd;
-+			planes[plane].dbuf_offset = b->planes[plane].m.dmabuf.offset;
-+			planes[plane].length = b->planes[plane].length;
- 		}
--	} else {
-+		break;
-+	default:
-+		for (plane = 0; plane < vb->num_planes; ++plane) {
-+			planes[plane].m.offset = vb->planes[plane].m.offset;
-+			planes[plane].length = vb->planes[plane].length;
-+		}
-+		break;
-+	}
-+
-+	/* Fill in driver-provided information for OUTPUT types */
-+	if (V4L2_TYPE_IS_OUTPUT(b->type)) {
- 		/*
--		 * Single-planar buffers do not use planes array,
--		 * so fill in relevant v4l2_buffer struct fields instead.
--		 * In videobuf we use our internal V4l2_planes struct for
--		 * single-planar buffers as well, for simplicity.
-+		 * Will have to go up to b->length when API starts
-+		 * accepting variable number of planes.
- 		 *
--		 * If bytesused == 0 for the output buffer, then fall back
--		 * to the full buffer size as that's a sensible default.
-+		 * If bytesused == 0 for the output buffer, then fall
-+		 * back to the full buffer size. In that case
-+		 * userspace clearly never bothered to set it and
-+		 * it's a safe assumption that they really meant to
-+		 * use the full plane sizes.
- 		 *
--		 * Some drivers, e.g. old codec drivers, use bytesused == 0 as
--		 * a way to indicate that streaming is finished. In that case,
--		 * the driver should use the allow_zero_bytesused flag to keep
--		 * old userspace applications working.
-+		 * Some drivers, e.g. old codec drivers, use bytesused == 0
-+		 * as a way to indicate that streaming is finished.
-+		 * In that case, the driver should use the
-+		 * allow_zero_bytesused flag to keep old userspace
-+		 * applications working.
- 		 */
--		switch (b->memory) {
--		case VB2_MEMORY_USERPTR:
--			planes[0].m.userptr = b->m.userptr;
--			planes[0].length = b->length;
--			break;
--		case VB2_MEMORY_DMABUF:
--			planes[0].m.fd = b->m.fd;
--			planes[0].length = b->length;
--			break;
--		default:
--			planes[0].m.offset = vb->planes[0].m.offset;
--			planes[0].length = vb->planes[0].length;
--			break;
--		}
-+		for (plane = 0; plane < vb->num_planes; ++plane) {
-+			struct vb2_plane *pdst = &planes[plane];
-+			struct v4l2_ext_plane *psrc = &b->planes[plane];
+-	mp->width        = dev->fmt_cap_rect.width;
+-	mp->height       = dev->fmt_cap_rect.height;
+-	mp->field        = dev->field_cap;
+-	mp->pixelformat  = dev->fmt_cap->fourcc;
+-	mp->colorspace   = vivid_colorspace_cap(dev);
+-	mp->xfer_func    = vivid_xfer_func_cap(dev);
++	f->width = dev->fmt_cap_rect.width;
++	f->height = dev->fmt_cap_rect.height;
++	f->field = dev->field_cap;
++	f->pixelformat = dev->fmt_cap->fourcc;
++	f->colorspace = vivid_colorspace_cap(dev);
++	f->xfer_func = vivid_xfer_func_cap(dev);
+ 	if (dev->fmt_cap->color_enc == TGP_COLOR_ENC_HSV)
+-		mp->hsv_enc    = vivid_hsv_enc_cap(dev);
++		f->hsv_enc = vivid_hsv_enc_cap(dev);
+ 	else
+-		mp->ycbcr_enc    = vivid_ycbcr_enc_cap(dev);
+-	mp->quantization = vivid_quantization_cap(dev);
+-	mp->num_planes = dev->fmt_cap->buffers;
+-	for (p = 0; p < mp->num_planes; p++) {
+-		mp->plane_fmt[p].bytesperline = tpg_g_bytesperline(&dev->tpg, p);
+-		mp->plane_fmt[p].sizeimage =
+-			(tpg_g_line_width(&dev->tpg, p) * mp->height) /
++		f->ycbcr_enc    = vivid_ycbcr_enc_cap(dev);
++	f->quantization = vivid_quantization_cap(dev);
++	f->num_planes = dev->fmt_cap->buffers;
++	for (p = 0; p < f->num_planes; p++) {
++		f->plane_fmt[p].bytesperline = tpg_g_bytesperline(&dev->tpg, p);
++		f->plane_fmt[p].sizeimage =
++			(tpg_g_line_width(&dev->tpg, p) * f->height) /
+ 			dev->fmt_cap->vdownsampling[p] +
+ 			dev->fmt_cap->data_offset[p];
+ 	}
+@@ -550,31 +549,30 @@ int vivid_g_fmt_vid_cap(struct file *file, void *priv,
+ }
  
--		planes[0].data_offset = 0;
--		if (V4L2_TYPE_IS_OUTPUT(b->type)) {
--			if (b->bytesused == 0)
-+			if (psrc->bytesused == 0)
- 				vb2_warn_zero_bytesused(vb);
+ int vivid_try_fmt_vid_cap(struct file *file, void *priv,
+-			struct v4l2_format *f)
++			  struct v4l2_ext_pix_format *f)
+ {
+-	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
+-	struct v4l2_plane_pix_format *pfmt = mp->plane_fmt;
+ 	struct vivid_dev *dev = video_drvdata(file);
++	struct v4l2_plane_ext_pix_format *pfmt = f->plane_fmt;
+ 	const struct vivid_fmt *fmt;
+ 	unsigned bytesperline, max_bpl;
+ 	unsigned factor = 1;
+ 	unsigned w, h;
+ 	unsigned p;
  
- 			if (vb->vb2_queue->allow_zero_bytesused)
--				planes[0].bytesused = b->bytesused;
-+				pdst->bytesused = psrc->bytesused;
- 			else
--				planes[0].bytesused = b->bytesused ?
--					b->bytesused : planes[0].length;
--		} else
--			planes[0].bytesused = 0;
--
-+				pdst->bytesused = psrc->bytesused ?
-+						  psrc->bytesused :
-+						  pdst->length;
-+			pdst->data_offset = psrc->data_offset;
-+		}
+-	fmt = vivid_get_format(dev, mp->pixelformat);
++	fmt = vivid_get_format(dev, f->pixelformat);
+ 	if (!fmt) {
+ 		dprintk(dev, 1, "Fourcc format (0x%08x) unknown.\n",
+-			mp->pixelformat);
+-		mp->pixelformat = V4L2_PIX_FMT_YUYV;
+-		fmt = vivid_get_format(dev, mp->pixelformat);
++			f->pixelformat);
++		f->pixelformat = V4L2_PIX_FMT_YUYV;
++		fmt = vivid_get_format(dev, f->pixelformat);
  	}
  
- 	/* Zero flags that we handle */
-@@ -331,8 +260,21 @@ static int vb2_fill_vb2_v4l2_buffer(struct vb2_buffer *vb, struct v4l2_buffer *b
+-	mp->field = vivid_field_cap(dev, mp->field);
++	f->field = vivid_field_cap(dev, f->field);
+ 	if (vivid_is_webcam(dev)) {
+ 		const struct v4l2_frmsize_discrete *sz =
+ 			v4l2_find_nearest_size(webcam_sizes,
+ 					       VIVID_WEBCAM_SIZES, width,
+-					       height, mp->width, mp->height);
++					       height, f->width, f->height);
+ 
+ 		w = sz->width;
+ 		h = sz->height;
+@@ -585,14 +583,14 @@ int vivid_try_fmt_vid_cap(struct file *file, void *priv,
+ 		w = dev->src_rect.width;
+ 		h = dev->src_rect.height;
+ 	}
+-	if (V4L2_FIELD_HAS_T_OR_B(mp->field))
++	if (V4L2_FIELD_HAS_T_OR_B(f->field))
+ 		factor = 2;
+ 	if (vivid_is_webcam(dev) ||
+ 	    (!dev->has_scaler_cap && !dev->has_crop_cap && !dev->has_compose_cap)) {
+-		mp->width = w;
+-		mp->height = h / factor;
++		f->width = w;
++		f->height = h / factor;
+ 	} else {
+-		struct v4l2_rect r = { 0, 0, mp->width, mp->height * factor };
++		struct v4l2_rect r = { 0, 0, f->width, f->height * factor };
+ 
+ 		v4l2_rect_set_min_size(&r, &vivid_min_rect);
+ 		v4l2_rect_set_max_size(&r, &vivid_max_rect);
+@@ -605,16 +603,16 @@ int vivid_try_fmt_vid_cap(struct file *file, void *priv,
+ 		} else if (!dev->has_scaler_cap && !dev->has_crop_cap) {
+ 			v4l2_rect_set_min_size(&r, &dev->src_rect);
+ 		}
+-		mp->width = r.width;
+-		mp->height = r.height / factor;
++		f->width = r.width;
++		f->height = r.height / factor;
+ 	}
+ 
+ 	/* This driver supports custom bytesperline values */
+ 
+-	mp->num_planes = fmt->buffers;
++	f->num_planes = fmt->buffers;
+ 	for (p = 0; p < fmt->buffers; p++) {
+ 		/* Calculate the minimum supported bytesperline value */
+-		bytesperline = (mp->width * fmt->bit_depth[p]) >> 3;
++		bytesperline = (f->width * fmt->bit_depth[p]) >> 3;
+ 		/* Calculate the maximum supported bytesperline value */
+ 		max_bpl = (MAX_ZOOM * MAX_WIDTH * fmt->bit_depth[p]) >> 3;
+ 
+@@ -623,31 +621,27 @@ int vivid_try_fmt_vid_cap(struct file *file, void *priv,
+ 		if (pfmt[p].bytesperline < bytesperline)
+ 			pfmt[p].bytesperline = bytesperline;
+ 
+-		pfmt[p].sizeimage = (pfmt[p].bytesperline * mp->height) /
++		pfmt[p].sizeimage = (pfmt[p].bytesperline * f->height) /
+ 				fmt->vdownsampling[p] + fmt->data_offset[p];
+-
+-		memset(pfmt[p].reserved, 0, sizeof(pfmt[p].reserved));
+ 	}
+ 	for (p = fmt->buffers; p < fmt->planes; p++)
+-		pfmt[0].sizeimage += (pfmt[0].bytesperline * mp->height *
++		pfmt[0].sizeimage += (pfmt[0].bytesperline * f->height *
+ 			(fmt->bit_depth[p] / fmt->vdownsampling[p])) /
+ 			(fmt->bit_depth[0] / fmt->vdownsampling[0]);
+ 
+-	mp->colorspace = vivid_colorspace_cap(dev);
++	f->colorspace = vivid_colorspace_cap(dev);
+ 	if (fmt->color_enc == TGP_COLOR_ENC_HSV)
+-		mp->hsv_enc = vivid_hsv_enc_cap(dev);
++		f->hsv_enc = vivid_hsv_enc_cap(dev);
+ 	else
+-		mp->ycbcr_enc = vivid_ycbcr_enc_cap(dev);
+-	mp->xfer_func = vivid_xfer_func_cap(dev);
+-	mp->quantization = vivid_quantization_cap(dev);
+-	memset(mp->reserved, 0, sizeof(mp->reserved));
++		f->ycbcr_enc = vivid_ycbcr_enc_cap(dev);
++	f->xfer_func = vivid_xfer_func_cap(dev);
++	f->quantization = vivid_quantization_cap(dev);
  	return 0;
  }
  
-+enum v4l2_buf_type vb2_ext_qtype(struct vb2_queue *q)
-+{
-+	if (!q->is_multiplanar)
-+		return q->type;
-+
-+	if (q->type == V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE)
-+		return V4L2_BUF_TYPE_VIDEO_CAPTURE;
-+	else if (q->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE)
-+		return V4L2_BUF_TYPE_VIDEO_OUTPUT;
-+
-+	return q->type;
-+}
-+
- static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
--				    struct v4l2_buffer *b, bool is_prepare,
-+				    struct v4l2_ext_buffer *b, bool is_prepare,
- 				    struct media_request **p_req)
+ int vivid_s_fmt_vid_cap(struct file *file, void *priv,
+-					struct v4l2_format *f)
++			struct v4l2_ext_pix_format *f)
  {
- 	const char *opname = is_prepare ? "prepare_buf" : "qbuf";
-@@ -341,7 +283,7 @@ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *md
- 	struct vb2_buffer *vb;
- 	int ret;
- 
--	if (b->type != q->type) {
-+	if (b->type != vb2_ext_qtype(q)) {
- 		dprintk(1, "%s: invalid buffer type\n", opname);
- 		return -EINVAL;
- 	}
-@@ -458,12 +400,12 @@ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *md
- }
- 
- /*
-- * __fill_v4l2_buffer() - fill in a struct v4l2_buffer with information to be
-- * returned to userspace
-+ * __fill_v4l2_buffer() - fill in a struct v4l2_ext_buffer with information to
-+ * be returned to userspace
-  */
- static void __fill_v4l2_buffer(struct vb2_buffer *vb, void *pb)
- {
--	struct v4l2_buffer *b = pb;
-+	struct v4l2_ext_buffer *b = pb;
- 	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
- 	struct vb2_queue *q = vb->vb2_queue;
- 	unsigned int plane;
-@@ -472,50 +414,35 @@ static void __fill_v4l2_buffer(struct vb2_buffer *vb, void *pb)
- 	b->index = vb->index;
- 	b->type = vb->type;
- 	b->memory = vb->memory;
--	b->bytesused = 0;
- 
- 	b->flags = vbuf->flags;
- 	b->field = vbuf->field;
--	b->timestamp = ns_to_timeval(vb->timestamp);
--	b->timecode = vbuf->timecode;
-+	b->timestamp = vb->timestamp;
- 	b->sequence = vbuf->sequence;
--	b->reserved2 = 0;
- 	b->request_fd = 0;
-+	memset(b->reserved, 0, sizeof(b->reserved));
- 
--	if (q->is_multiplanar) {
--		/*
--		 * Fill in plane-related data if userspace provided an array
--		 * for it. The caller has already verified memory and size.
--		 */
--		b->length = vb->num_planes;
--		for (plane = 0; plane < vb->num_planes; ++plane) {
--			struct v4l2_plane *pdst = &b->m.planes[plane];
--			struct vb2_plane *psrc = &vb->planes[plane];
-+	/*
-+	 * Fill in plane-related data if userspace provided an array
-+	 * for it. The caller has already verified memory and size.
-+	 */
-+	b->num_planes = vb->num_planes;
-+	for (plane = 0; plane < vb->num_planes; ++plane) {
-+		struct v4l2_ext_plane *pdst = &b->planes[plane];
-+		struct vb2_plane *psrc = &vb->planes[plane];
- 
--			pdst->bytesused = psrc->bytesused;
--			pdst->length = psrc->length;
--			if (q->memory == VB2_MEMORY_MMAP)
--				pdst->m.mem_offset = psrc->m.offset;
--			else if (q->memory == VB2_MEMORY_USERPTR)
--				pdst->m.userptr = psrc->m.userptr;
--			else if (q->memory == VB2_MEMORY_DMABUF)
--				pdst->m.fd = psrc->m.fd;
--			pdst->data_offset = psrc->data_offset;
--			memset(pdst->reserved, 0, sizeof(pdst->reserved));
-+		pdst->bytesused = psrc->bytesused;
-+		pdst->length = psrc->length;
-+		if (q->memory == VB2_MEMORY_MMAP) {
-+			pdst->m.mem_offset = psrc->m.offset;
-+		} else if (q->memory == VB2_MEMORY_USERPTR) {
-+			pdst->m.userptr = psrc->m.userptr;
-+		} else if (q->memory == VB2_MEMORY_DMABUF) {
-+			pdst->m.dmabuf.fd = psrc->m.fd;
-+			pdst->m.dmabuf.offset = psrc->dbuf_offset;
- 		}
--	} else {
--		/*
--		 * We use length and offset in v4l2_planes array even for
--		 * single-planar buffers, but userspace does not.
--		 */
--		b->length = vb->planes[0].length;
--		b->bytesused = vb->planes[0].bytesused;
--		if (q->memory == VB2_MEMORY_MMAP)
--			b->m.offset = vb->planes[0].m.offset;
--		else if (q->memory == VB2_MEMORY_USERPTR)
--			b->m.userptr = vb->planes[0].m.userptr;
--		else if (q->memory == VB2_MEMORY_DMABUF)
--			b->m.fd = vb->planes[0].m.fd;
-+		pdst->data_offset = psrc->data_offset;
-+		memset(pdst->reserved, 0, sizeof(pdst->reserved));
- 	}
- 
- 	/*
-@@ -610,6 +537,40 @@ int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
- }
- EXPORT_SYMBOL_GPL(vb2_find_timestamp);
- 
-+#define vb2_buf_to_ext_buf_op(_name, ...)				\
-+({									\
-+	int ret;							\
-+									\
-+	ret = v4l2_buffer_to_ext_buffer(b, &eb);			\
-+	if (!ret)							\
-+		ret = _name(__VA_ARGS__);				\
-+	if (!ret)							\
-+		v4l2_ext_buffer_to_buffer(&eb, b, q->is_multiplanar);	\
-+	ret;								\
-+})
-+
-+int vb2_ext_querybuf(struct vb2_queue *q, struct v4l2_ext_buffer *b)
-+{
-+	struct vb2_buffer *vb;
-+	int ret;
-+
-+	if (b->type != vb2_ext_qtype(q)) {
-+		dprintk(1, "wrong buffer type\n");
-+		return -EINVAL;
-+	}
-+
-+	if (b->index >= q->num_buffers) {
-+		dprintk(1, "buffer index out of range\n");
-+		return -EINVAL;
-+	}
-+	vb = q->bufs[b->index];
-+	ret = __verify_planes_array(vb, b);
-+	if (!ret)
-+		vb2_core_querybuf(q, b->index, b);
-+	return ret;
-+}
-+EXPORT_SYMBOL(vb2_ext_querybuf);
-+
- /*
-  * vb2_querybuf() - query video buffer information
-  * @q:		videobuf queue
-@@ -625,23 +586,9 @@ EXPORT_SYMBOL_GPL(vb2_find_timestamp);
-  */
- int vb2_querybuf(struct vb2_queue *q, struct v4l2_buffer *b)
- {
--	struct vb2_buffer *vb;
--	int ret;
-+	struct v4l2_ext_buffer eb;
- 
--	if (b->type != q->type) {
--		dprintk(1, "wrong buffer type\n");
--		return -EINVAL;
--	}
--
--	if (b->index >= q->num_buffers) {
--		dprintk(1, "buffer index out of range\n");
--		return -EINVAL;
--	}
--	vb = q->bufs[b->index];
--	ret = __verify_planes_array(vb, b);
--	if (!ret)
--		vb2_core_querybuf(q, b->index, b);
--	return ret;
-+	return vb2_buf_to_ext_buf_op(vb2_ext_querybuf, q, &eb);
- }
- EXPORT_SYMBOL(vb2_querybuf);
- 
-@@ -669,8 +616,8 @@ int vb2_reqbufs(struct vb2_queue *q, struct v4l2_requestbuffers *req)
- }
- EXPORT_SYMBOL_GPL(vb2_reqbufs);
- 
--int vb2_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
--		    struct v4l2_buffer *b)
-+int vb2_ext_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
-+			struct v4l2_ext_buffer *b)
- {
- 	int ret;
- 
-@@ -686,13 +633,23 @@ int vb2_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
- 
- 	return ret ? ret : vb2_core_prepare_buf(q, b->index, b);
- }
-+EXPORT_SYMBOL_GPL(vb2_ext_prepare_buf);
-+
-+int vb2_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
-+		    struct v4l2_buffer *b)
-+{
-+	struct v4l2_ext_buffer eb;
-+
-+	return vb2_buf_to_ext_buf_op(vb2_ext_prepare_buf, q, mdev, &eb);
-+}
- EXPORT_SYMBOL_GPL(vb2_prepare_buf);
- 
--int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
-+int vb2_ext_create_bufs(struct vb2_queue *q,
-+			struct v4l2_ext_create_buffers *create)
- {
- 	unsigned requested_planes = 1;
- 	unsigned requested_sizes[VIDEO_MAX_PLANES];
--	struct v4l2_format *f = &create->format;
-+	struct v4l2_ext_format *f = &create->format;
- 	int ret = vb2_verify_memory_type(q, create->memory, f->type);
- 	unsigned i;
- 
-@@ -702,19 +659,15 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
- 		return ret != -EBUSY ? ret : 0;
- 
- 	switch (f->type) {
--	case V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE:
--	case V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE:
--		requested_planes = f->fmt.pix_mp.num_planes;
-+	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
-+	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
-+		requested_planes = f->fmt.pix.num_planes;
- 		if (requested_planes == 0 ||
- 		    requested_planes > VIDEO_MAX_PLANES)
- 			return -EINVAL;
- 		for (i = 0; i < requested_planes; i++)
- 			requested_sizes[i] =
--				f->fmt.pix_mp.plane_fmt[i].sizeimage;
--		break;
--	case V4L2_BUF_TYPE_VIDEO_CAPTURE:
--	case V4L2_BUF_TYPE_VIDEO_OUTPUT:
--		requested_sizes[0] = f->fmt.pix.sizeimage;
-+				f->fmt.pix.plane_fmt[i].sizeimage;
- 		break;
- 	case V4L2_BUF_TYPE_VBI_CAPTURE:
- 	case V4L2_BUF_TYPE_VBI_OUTPUT:
-@@ -742,10 +695,34 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
- 	return ret ? ret : vb2_core_create_bufs(q, create->memory,
- 		&create->count, requested_planes, requested_sizes);
- }
-+EXPORT_SYMBOL_GPL(vb2_ext_create_bufs);
-+
-+int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
-+{
-+	struct v4l2_ext_create_buffers ecreate = {
-+		.count = create->count,
-+		.memory = create->memory,
-+	};
-+	int ret;
-+
-+	ret = v4l2_format_to_ext_format(&create->format,
-+					&ecreate.format, true);
-+	if (ret)
-+		return ret;
-+
-+	ret = vb2_ext_create_bufs(q, &ecreate);
-+	if (ret)
-+		return ret;
-+
-+	create->index = ecreate.index;
-+	create->count = ecreate.count;
-+	create->capabilities = ecreate.capabilities;
-+	return 0;
-+}
- EXPORT_SYMBOL_GPL(vb2_create_bufs);
- 
--int vb2_qbuf(struct vb2_queue *q, struct media_device *mdev,
--	     struct v4l2_buffer *b)
-+int vb2_ext_qbuf(struct vb2_queue *q, struct media_device *mdev,
-+		 struct v4l2_ext_buffer *b)
- {
- 	struct media_request *req = NULL;
- 	int ret;
-@@ -763,9 +740,19 @@ int vb2_qbuf(struct vb2_queue *q, struct media_device *mdev,
- 		media_request_put(req);
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(vb2_ext_qbuf);
-+
-+int vb2_qbuf(struct vb2_queue *q, struct media_device *mdev,
-+	     struct v4l2_buffer *b)
-+{
-+	struct v4l2_ext_buffer eb;
-+
-+	return vb2_buf_to_ext_buf_op(vb2_ext_qbuf, q, mdev, &eb);
-+}
- EXPORT_SYMBOL_GPL(vb2_qbuf);
- 
--int vb2_dqbuf(struct vb2_queue *q, struct v4l2_buffer *b, bool nonblocking)
-+int vb2_ext_dqbuf(struct vb2_queue *q, struct v4l2_ext_buffer *b,
-+		  bool nonblocking)
- {
- 	int ret;
- 
-@@ -774,7 +761,7 @@ int vb2_dqbuf(struct vb2_queue *q, struct v4l2_buffer *b, bool nonblocking)
+-	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
+ 	struct vivid_dev *dev = video_drvdata(file);
+ 	struct v4l2_rect *crop = &dev->crop_cap;
+ 	struct v4l2_rect *compose = &dev->compose_cap;
+@@ -665,20 +659,21 @@ int vivid_s_fmt_vid_cap(struct file *file, void *priv,
  		return -EBUSY;
  	}
  
--	if (b->type != q->type) {
-+	if (b->type != vb2_ext_qtype(q)) {
- 		dprintk(1, "invalid buffer type\n");
- 		return -EINVAL;
+-	if (dev->overlay_cap_owner && dev->fb_cap.fmt.pixelformat != mp->pixelformat) {
++	if (dev->overlay_cap_owner &&
++	    dev->fb_cap.fmt.pixelformat != f->pixelformat) {
+ 		dprintk(dev, 1, "overlay is active, can't change pixelformat\n");
+ 		return -EBUSY;
  	}
-@@ -794,8 +781,17 @@ int vb2_dqbuf(struct vb2_queue *q, struct v4l2_buffer *b, bool nonblocking)
  
- 	return ret;
+-	dev->fmt_cap = vivid_get_format(dev, mp->pixelformat);
+-	if (V4L2_FIELD_HAS_T_OR_B(mp->field))
++	dev->fmt_cap = vivid_get_format(dev, f->pixelformat);
++	if (V4L2_FIELD_HAS_T_OR_B(f->field))
+ 		factor = 2;
+ 
+ 	/* Note: the webcam input doesn't support scaling, cropping or composing */
+ 
+ 	if (!vivid_is_webcam(dev) &&
+ 	    (dev->has_scaler_cap || dev->has_crop_cap || dev->has_compose_cap)) {
+-		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
++		struct v4l2_rect r = { 0, 0, f->width, f->height };
+ 
+ 		if (dev->has_scaler_cap) {
+ 			if (dev->has_compose_cap)
+@@ -739,99 +734,39 @@ int vivid_s_fmt_vid_cap(struct file *file, void *priv,
+ 	} else if (vivid_is_webcam(dev)) {
+ 		/* Guaranteed to be a match */
+ 		for (i = 0; i < ARRAY_SIZE(webcam_sizes); i++)
+-			if (webcam_sizes[i].width == mp->width &&
+-					webcam_sizes[i].height == mp->height)
++			if (webcam_sizes[i].width == f->width &&
++			    webcam_sizes[i].height == f->height)
+ 				break;
+ 		dev->webcam_size_idx = i;
+ 		if (dev->webcam_ival_idx >= 2 * (VIVID_WEBCAM_SIZES - i))
+ 			dev->webcam_ival_idx = 2 * (VIVID_WEBCAM_SIZES - i) - 1;
+ 		vivid_update_format_cap(dev, false);
+ 	} else {
+-		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
++		struct v4l2_rect r = { 0, 0, f->width, f->height };
+ 
+ 		v4l2_rect_set_size_to(compose, &r);
+ 		r.height *= factor;
+ 		v4l2_rect_set_size_to(crop, &r);
+ 	}
+ 
+-	dev->fmt_cap_rect.width = mp->width;
+-	dev->fmt_cap_rect.height = mp->height;
+-	tpg_s_buf_height(&dev->tpg, mp->height);
++	dev->fmt_cap_rect.width = f->width;
++	dev->fmt_cap_rect.height = f->height;
++	tpg_s_buf_height(&dev->tpg, f->height);
+ 	tpg_s_fourcc(&dev->tpg, dev->fmt_cap->fourcc);
+ 	for (p = 0; p < tpg_g_buffers(&dev->tpg); p++)
+-		tpg_s_bytesperline(&dev->tpg, p, mp->plane_fmt[p].bytesperline);
+-	dev->field_cap = mp->field;
++		tpg_s_bytesperline(&dev->tpg, p, f->plane_fmt[p].bytesperline);
++	dev->field_cap = f->field;
+ 	if (dev->field_cap == V4L2_FIELD_ALTERNATE)
+ 		tpg_s_field(&dev->tpg, V4L2_FIELD_TOP, true);
+ 	else
+ 		tpg_s_field(&dev->tpg, dev->field_cap, false);
+ 	tpg_s_crop_compose(&dev->tpg, &dev->crop_cap, &dev->compose_cap);
+ 	if (vivid_is_sdtv_cap(dev))
+-		dev->tv_field_cap = mp->field;
++		dev->tv_field_cap = f->field;
+ 	tpg_update_mv_step(&dev->tpg);
+ 	return 0;
  }
-+EXPORT_SYMBOL_GPL(vb2_ext_dqbuf);
-+
-+int vb2_dqbuf(struct vb2_queue *q, struct v4l2_buffer *b, bool nonblocking)
-+{
-+	struct v4l2_ext_buffer eb;
-+
-+	return vb2_buf_to_ext_buf_op(vb2_ext_dqbuf, q, &eb, nonblocking);
-+}
- EXPORT_SYMBOL_GPL(vb2_dqbuf);
  
-+
- int vb2_streamon(struct vb2_queue *q, enum v4l2_buf_type type)
+-int vidioc_g_fmt_vid_cap_mplane(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (!dev->multiplanar)
+-		return -ENOTTY;
+-	return vivid_g_fmt_vid_cap(file, priv, f);
+-}
+-
+-int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv,
+-			struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (!dev->multiplanar)
+-		return -ENOTTY;
+-	return vivid_try_fmt_vid_cap(file, priv, f);
+-}
+-
+-int vidioc_s_fmt_vid_cap_mplane(struct file *file, void *priv,
+-			struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (!dev->multiplanar)
+-		return -ENOTTY;
+-	return vivid_s_fmt_vid_cap(file, priv, f);
+-}
+-
+-int vidioc_g_fmt_vid_cap(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (dev->multiplanar)
+-		return -ENOTTY;
+-	return fmt_sp2mp_func(file, priv, f, vivid_g_fmt_vid_cap);
+-}
+-
+-int vidioc_try_fmt_vid_cap(struct file *file, void *priv,
+-			struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (dev->multiplanar)
+-		return -ENOTTY;
+-	return fmt_sp2mp_func(file, priv, f, vivid_try_fmt_vid_cap);
+-}
+-
+-int vidioc_s_fmt_vid_cap(struct file *file, void *priv,
+-			struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (dev->multiplanar)
+-		return -ENOTTY;
+-	return fmt_sp2mp_func(file, priv, f, vivid_s_fmt_vid_cap);
+-}
+-
+ int vivid_vid_cap_g_selection(struct file *file, void *priv,
+ 			      struct v4l2_selection *sel)
  {
- 	if (vb2_fileio_is_active(q)) {
-@@ -823,6 +819,37 @@ int vb2_expbuf(struct vb2_queue *q, struct v4l2_exportbuffer *eb)
- }
- EXPORT_SYMBOL_GPL(vb2_expbuf);
+diff --git a/drivers/media/platform/vivid/vivid-vid-cap.h b/drivers/media/platform/vivid/vivid-vid-cap.h
+index 1e422a59eeab..7c9fc5c787b5 100644
+--- a/drivers/media/platform/vivid/vivid-vid-cap.h
++++ b/drivers/media/platform/vivid/vivid-vid-cap.h
+@@ -17,15 +17,12 @@ extern const char * const vivid_ctrl_standard_strings[];
  
-+int vb2_ext_expbuf(struct vb2_queue *q, struct v4l2_ext_exportbuffer *eb)
-+{
-+	unsigned int i;
-+	int ret;
-+
-+	for (i = eb->first_plane; i < eb->first_plane + eb->num_planes; i++) {
-+		ret = vb2_core_expbuf(q, &eb->fds[i], eb->type, eb->index,
-+				      i, eb->flags);
-+		if (ret)
-+			goto err_put_dmabufs;
-+	}
-+
-+	return 0;
-+
-+err_put_dmabufs:
-+	for (; i > eb->first_plane; i--) {
-+	        struct dma_buf *dmabuf;
-+
-+		/*
-+		 * FIXME: Find a better way to close the FD returned by
-+		 * dma_buf_fb().
-+		 */
-+		dmabuf = dma_buf_get(eb->fds[i - 1]);
-+		dma_buf_put(dmabuf);
-+		dma_buf_put(dmabuf);
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(vb2_ext_expbuf);
-+
- int vb2_queue_init(struct vb2_queue *q)
+ extern const struct vb2_ops vivid_vid_cap_qops;
+ 
+-int vivid_g_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
+-int vivid_try_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
+-int vivid_s_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_g_fmt_vid_cap_mplane(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_s_fmt_vid_cap_mplane(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_g_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_try_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_s_fmt_vid_cap(struct file *file, void *priv, struct v4l2_format *f);
++int vivid_g_fmt_vid_cap(struct file *file, void *priv,
++			struct v4l2_ext_pix_format *f);
++int vivid_try_fmt_vid_cap(struct file *file, void *priv,
++			  struct v4l2_ext_pix_format *f);
++int vivid_s_fmt_vid_cap(struct file *file, void *priv,
++			struct v4l2_ext_pix_format *f);
+ int vivid_vid_cap_g_selection(struct file *file, void *priv, struct v4l2_selection *sel);
+ int vivid_vid_cap_s_selection(struct file *file, void *fh, struct v4l2_selection *s);
+ int vivid_vid_cap_g_pixelaspect(struct file *file, void *priv, int type, struct v4l2_fract *f);
+diff --git a/drivers/media/platform/vivid/vivid-vid-out.c b/drivers/media/platform/vivid/vivid-vid-out.c
+index a0364ac497f9..792f3949870a 100644
+--- a/drivers/media/platform/vivid/vivid-vid-out.c
++++ b/drivers/media/platform/vivid/vivid-vid-out.c
+@@ -315,59 +315,57 @@ static enum tpg_pixel_aspect vivid_get_pixel_aspect(const struct vivid_dev *dev)
+ }
+ 
+ int vivid_g_fmt_vid_out(struct file *file, void *priv,
+-					struct v4l2_format *f)
++			struct v4l2_ext_pix_format *f)
  {
- 	/*
-@@ -951,6 +978,33 @@ int vb2_ioctl_create_bufs(struct file *file, void *priv,
- }
- EXPORT_SYMBOL_GPL(vb2_ioctl_create_bufs);
+ 	struct vivid_dev *dev = video_drvdata(file);
+-	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
+ 	const struct vivid_fmt *fmt = dev->fmt_out;
+ 	unsigned p;
  
-+int vb2_ioctl_ext_create_bufs(struct file *file, void *priv,
-+			      struct v4l2_ext_create_buffers *p)
-+{
-+	struct video_device *vdev = video_devdata(file);
-+	int res = vb2_verify_memory_type(vdev->queue, p->memory,
-+			p->format.type);
-+
-+	p->index = vdev->queue->num_buffers;
-+	fill_buf_caps(vdev->queue, &p->capabilities);
-+	/*
-+	 * If count == 0, then just check if memory and type are valid.
-+	 * Any -EBUSY result from vb2_verify_memory_type can be mapped to 0.
-+	 */
-+	if (p->count == 0)
-+		return res != -EBUSY ? res : 0;
-+	if (res)
-+		return res;
-+	if (vb2_queue_is_busy(vdev, file))
-+		return -EBUSY;
-+
-+	res = vb2_ext_create_bufs(vdev->queue, p);
-+	if (res == 0)
-+		vdev->queue->owner = file->private_data;
-+	return res;
-+}
-+EXPORT_SYMBOL_GPL(vb2_ioctl_ext_create_bufs);
-+
- int vb2_ioctl_prepare_buf(struct file *file, void *priv,
- 			  struct v4l2_buffer *p)
+-	mp->width        = dev->fmt_out_rect.width;
+-	mp->height       = dev->fmt_out_rect.height;
+-	mp->field        = dev->field_out;
+-	mp->pixelformat  = fmt->fourcc;
+-	mp->colorspace   = dev->colorspace_out;
+-	mp->xfer_func    = dev->xfer_func_out;
+-	mp->ycbcr_enc    = dev->ycbcr_enc_out;
+-	mp->quantization = dev->quantization_out;
+-	mp->num_planes = fmt->buffers;
+-	for (p = 0; p < mp->num_planes; p++) {
+-		mp->plane_fmt[p].bytesperline = dev->bytesperline_out[p];
+-		mp->plane_fmt[p].sizeimage =
+-			mp->plane_fmt[p].bytesperline * mp->height +
++	f->width        = dev->fmt_out_rect.width;
++	f->height       = dev->fmt_out_rect.height;
++	f->field        = dev->field_out;
++	f->pixelformat  = fmt->fourcc;
++	f->colorspace   = dev->colorspace_out;
++	f->xfer_func    = dev->xfer_func_out;
++	f->ycbcr_enc    = dev->ycbcr_enc_out;
++	f->quantization = dev->quantization_out;
++	f->num_planes = fmt->buffers;
++	for (p = 0; p < f->num_planes; p++) {
++		f->plane_fmt[p].bytesperline = dev->bytesperline_out[p];
++		f->plane_fmt[p].sizeimage =
++			f->plane_fmt[p].bytesperline * f->height +
+ 			fmt->data_offset[p];
+ 	}
+ 	for (p = fmt->buffers; p < fmt->planes; p++) {
+ 		unsigned stride = dev->bytesperline_out[p];
+ 
+-		mp->plane_fmt[0].sizeimage +=
+-			(stride * mp->height) / fmt->vdownsampling[p];
++		f->plane_fmt[0].sizeimage +=
++			(stride * f->height) / fmt->vdownsampling[p];
+ 	}
+ 	return 0;
+ }
+ 
+ int vivid_try_fmt_vid_out(struct file *file, void *priv,
+-			struct v4l2_format *f)
++			  struct v4l2_ext_pix_format *f)
  {
-@@ -962,6 +1016,17 @@ int vb2_ioctl_prepare_buf(struct file *file, void *priv,
- }
- EXPORT_SYMBOL_GPL(vb2_ioctl_prepare_buf);
+ 	struct vivid_dev *dev = video_drvdata(file);
++	struct v4l2_plane_ext_pix_format *pfmt = f->plane_fmt;
+ 	struct v4l2_bt_timings *bt = &dev->dv_timings_out.bt;
+-	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
+-	struct v4l2_plane_pix_format *pfmt = mp->plane_fmt;
+ 	const struct vivid_fmt *fmt;
+ 	unsigned bytesperline, max_bpl;
+ 	unsigned factor = 1;
+ 	unsigned w, h;
+ 	unsigned p;
  
-+int vb2_ioctl_ext_prepare_buf(struct file *file, void *priv,
-+			      struct v4l2_ext_buffer *p)
-+{
-+	struct video_device *vdev = video_devdata(file);
-+
-+	if (vb2_queue_is_busy(vdev, file))
-+		return -EBUSY;
-+	return vb2_ext_prepare_buf(vdev->queue, vdev->v4l2_dev->mdev, p);
-+}
-+EXPORT_SYMBOL_GPL(vb2_ioctl_ext_prepare_buf);
-+
- int vb2_ioctl_querybuf(struct file *file, void *priv, struct v4l2_buffer *p)
+-	fmt = vivid_get_format(dev, mp->pixelformat);
++	fmt = vivid_get_format(dev, f->pixelformat);
+ 	if (!fmt) {
+ 		dprintk(dev, 1, "Fourcc format (0x%08x) unknown.\n",
+-			mp->pixelformat);
+-		mp->pixelformat = V4L2_PIX_FMT_YUYV;
+-		fmt = vivid_get_format(dev, mp->pixelformat);
++			f->pixelformat);
++		f->pixelformat = V4L2_PIX_FMT_YUYV;
++		fmt = vivid_get_format(dev, f->pixelformat);
+ 	}
+ 
+-	mp->field = vivid_field_out(dev, mp->field);
++	f->field = vivid_field_out(dev, f->field);
+ 	if (vivid_is_svid_out(dev)) {
+ 		w = 720;
+ 		h = (dev->std_out & V4L2_STD_525_60) ? 480 : 576;
+@@ -375,13 +373,13 @@ int vivid_try_fmt_vid_out(struct file *file, void *priv,
+ 		w = dev->sink_rect.width;
+ 		h = dev->sink_rect.height;
+ 	}
+-	if (V4L2_FIELD_HAS_T_OR_B(mp->field))
++	if (V4L2_FIELD_HAS_T_OR_B(f->field))
+ 		factor = 2;
+ 	if (!dev->has_scaler_out && !dev->has_crop_out && !dev->has_compose_out) {
+-		mp->width = w;
+-		mp->height = h / factor;
++		f->width = w;
++		f->height = h / factor;
+ 	} else {
+-		struct v4l2_rect r = { 0, 0, mp->width, mp->height * factor };
++		struct v4l2_rect r = { 0, 0, f->width, f->height * factor };
+ 
+ 		v4l2_rect_set_min_size(&r, &vivid_min_rect);
+ 		v4l2_rect_set_max_size(&r, &vivid_max_rect);
+@@ -394,16 +392,16 @@ int vivid_try_fmt_vid_out(struct file *file, void *priv,
+ 		} else if (!dev->has_scaler_out && !dev->has_compose_out) {
+ 			v4l2_rect_set_min_size(&r, &dev->sink_rect);
+ 		}
+-		mp->width = r.width;
+-		mp->height = r.height / factor;
++		f->width = r.width;
++		f->height = r.height / factor;
+ 	}
+ 
+ 	/* This driver supports custom bytesperline values */
+ 
+-	mp->num_planes = fmt->buffers;
++	f->num_planes = fmt->buffers;
+ 	for (p = 0; p < fmt->buffers; p++) {
+ 		/* Calculate the minimum supported bytesperline value */
+-		bytesperline = (mp->width * fmt->bit_depth[p]) >> 3;
++		bytesperline = (f->width * fmt->bit_depth[p]) >> 3;
+ 		/* Calculate the maximum supported bytesperline value */
+ 		max_bpl = (MAX_ZOOM * MAX_WIDTH * fmt->bit_depth[p]) >> 3;
+ 
+@@ -412,42 +410,39 @@ int vivid_try_fmt_vid_out(struct file *file, void *priv,
+ 		if (pfmt[p].bytesperline < bytesperline)
+ 			pfmt[p].bytesperline = bytesperline;
+ 
+-		pfmt[p].sizeimage = (pfmt[p].bytesperline * mp->height) /
++		pfmt[p].sizeimage = (pfmt[p].bytesperline * f->height) /
+ 				fmt->vdownsampling[p] + fmt->data_offset[p];
+ 
+-		memset(pfmt[p].reserved, 0, sizeof(pfmt[p].reserved));
+ 	}
+ 	for (p = fmt->buffers; p < fmt->planes; p++)
+-		pfmt[0].sizeimage += (pfmt[0].bytesperline * mp->height *
++		pfmt[0].sizeimage += (pfmt[0].bytesperline * f->height *
+ 			(fmt->bit_depth[p] / fmt->vdownsampling[p])) /
+ 			(fmt->bit_depth[0] / fmt->vdownsampling[0]);
+ 
+-	mp->xfer_func = V4L2_XFER_FUNC_DEFAULT;
+-	mp->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
+-	mp->quantization = V4L2_QUANTIZATION_DEFAULT;
++	f->xfer_func = V4L2_XFER_FUNC_DEFAULT;
++	f->ycbcr_enc = V4L2_YCBCR_ENC_DEFAULT;
++	f->quantization = V4L2_QUANTIZATION_DEFAULT;
+ 	if (vivid_is_svid_out(dev)) {
+-		mp->colorspace = V4L2_COLORSPACE_SMPTE170M;
++		f->colorspace = V4L2_COLORSPACE_SMPTE170M;
+ 	} else if (dev->dvi_d_out || !(bt->flags & V4L2_DV_FL_IS_CE_VIDEO)) {
+-		mp->colorspace = V4L2_COLORSPACE_SRGB;
++		f->colorspace = V4L2_COLORSPACE_SRGB;
+ 		if (dev->dvi_d_out)
+-			mp->quantization = V4L2_QUANTIZATION_LIM_RANGE;
++			f->quantization = V4L2_QUANTIZATION_LIM_RANGE;
+ 	} else if (bt->width == 720 && bt->height <= 576) {
+-		mp->colorspace = V4L2_COLORSPACE_SMPTE170M;
+-	} else if (mp->colorspace != V4L2_COLORSPACE_SMPTE170M &&
+-		   mp->colorspace != V4L2_COLORSPACE_REC709 &&
+-		   mp->colorspace != V4L2_COLORSPACE_OPRGB &&
+-		   mp->colorspace != V4L2_COLORSPACE_BT2020 &&
+-		   mp->colorspace != V4L2_COLORSPACE_SRGB) {
+-		mp->colorspace = V4L2_COLORSPACE_REC709;
++		f->colorspace = V4L2_COLORSPACE_SMPTE170M;
++	} else if (f->colorspace != V4L2_COLORSPACE_SMPTE170M &&
++		   f->colorspace != V4L2_COLORSPACE_REC709 &&
++		   f->colorspace != V4L2_COLORSPACE_OPRGB &&
++		   f->colorspace != V4L2_COLORSPACE_BT2020 &&
++		   f->colorspace != V4L2_COLORSPACE_SRGB) {
++		f->colorspace = V4L2_COLORSPACE_REC709;
+ 	}
+-	memset(mp->reserved, 0, sizeof(mp->reserved));
+ 	return 0;
+ }
+ 
+ int vivid_s_fmt_vid_out(struct file *file, void *priv,
+-					struct v4l2_format *f)
++			struct v4l2_ext_pix_format *f)
  {
- 	struct video_device *vdev = video_devdata(file);
-@@ -971,6 +1036,16 @@ int vb2_ioctl_querybuf(struct file *file, void *priv, struct v4l2_buffer *p)
- }
- EXPORT_SYMBOL_GPL(vb2_ioctl_querybuf);
+-	struct v4l2_pix_format_mplane *mp = &f->fmt.pix_mp;
+ 	struct vivid_dev *dev = video_drvdata(file);
+ 	struct v4l2_rect *crop = &dev->crop_out;
+ 	struct v4l2_rect *compose = &dev->compose_out;
+@@ -461,10 +456,10 @@ int vivid_s_fmt_vid_out(struct file *file, void *priv,
  
-+int vb2_ioctl_ext_querybuf(struct file *file, void *priv,
-+			   struct v4l2_ext_buffer *p)
-+{
-+	struct video_device *vdev = video_devdata(file);
-+
-+	/* No need to call vb2_queue_is_busy(), anyone can query buffers. */
-+	return vb2_ext_querybuf(vdev->queue, p);
-+}
-+EXPORT_SYMBOL_GPL(vb2_ioctl_ext_querybuf);
-+
- int vb2_ioctl_qbuf(struct file *file, void *priv, struct v4l2_buffer *p)
+ 	if (vb2_is_busy(q) &&
+ 	    (vivid_is_svid_out(dev) ||
+-	     mp->width != dev->fmt_out_rect.width ||
+-	     mp->height != dev->fmt_out_rect.height ||
+-	     mp->pixelformat != dev->fmt_out->fourcc ||
+-	     mp->field != dev->field_out)) {
++	     f->width != dev->fmt_out_rect.width ||
++	     f->height != dev->fmt_out_rect.height ||
++	     f->pixelformat != dev->fmt_out->fourcc ||
++	     f->field != dev->field_out)) {
+ 		dprintk(dev, 1, "%s device busy\n", __func__);
+ 		return -EBUSY;
+ 	}
+@@ -477,12 +472,12 @@ int vivid_s_fmt_vid_out(struct file *file, void *priv,
+ 	if (vb2_is_busy(q))
+ 		goto set_colorspace;
+ 
+-	dev->fmt_out = vivid_get_format(dev, mp->pixelformat);
+-	if (V4L2_FIELD_HAS_T_OR_B(mp->field))
++	dev->fmt_out = vivid_get_format(dev, f->pixelformat);
++	if (V4L2_FIELD_HAS_T_OR_B(f->field))
+ 		factor = 2;
+ 
+ 	if (dev->has_scaler_out || dev->has_crop_out || dev->has_compose_out) {
+-		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
++		struct v4l2_rect r = { 0, 0, f->width, f->height };
+ 
+ 		if (dev->has_scaler_out) {
+ 			if (dev->has_crop_out)
+@@ -541,30 +536,30 @@ int vivid_s_fmt_vid_out(struct file *file, void *priv,
+ 			crop->height /= factor;
+ 		}
+ 	} else {
+-		struct v4l2_rect r = { 0, 0, mp->width, mp->height };
++		struct v4l2_rect r = { 0, 0, f->width, f->height };
+ 
+ 		v4l2_rect_set_size_to(crop, &r);
+ 		r.height /= factor;
+ 		v4l2_rect_set_size_to(compose, &r);
+ 	}
+ 
+-	dev->fmt_out_rect.width = mp->width;
+-	dev->fmt_out_rect.height = mp->height;
+-	for (p = 0; p < mp->num_planes; p++)
+-		dev->bytesperline_out[p] = mp->plane_fmt[p].bytesperline;
++	dev->fmt_out_rect.width = f->width;
++	dev->fmt_out_rect.height = f->height;
++	for (p = 0; p < f->num_planes; p++)
++		dev->bytesperline_out[p] = f->plane_fmt[p].bytesperline;
+ 	for (p = dev->fmt_out->buffers; p < dev->fmt_out->planes; p++)
+ 		dev->bytesperline_out[p] =
+ 			(dev->bytesperline_out[0] * dev->fmt_out->bit_depth[p]) /
+ 			dev->fmt_out->bit_depth[0];
+-	dev->field_out = mp->field;
++	dev->field_out = f->field;
+ 	if (vivid_is_svid_out(dev))
+-		dev->tv_field_out = mp->field;
++		dev->tv_field_out = f->field;
+ 
+ set_colorspace:
+-	dev->colorspace_out = mp->colorspace;
+-	dev->xfer_func_out = mp->xfer_func;
+-	dev->ycbcr_enc_out = mp->ycbcr_enc;
+-	dev->quantization_out = mp->quantization;
++	dev->colorspace_out = f->colorspace;
++	dev->xfer_func_out = f->xfer_func;
++	dev->ycbcr_enc_out = f->ycbcr_enc;
++	dev->quantization_out = f->quantization;
+ 	if (dev->loop_video) {
+ 		vivid_send_source_change(dev, SVID);
+ 		vivid_send_source_change(dev, HDMI);
+@@ -572,66 +567,6 @@ int vivid_s_fmt_vid_out(struct file *file, void *priv,
+ 	return 0;
+ }
+ 
+-int vidioc_g_fmt_vid_out_mplane(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (!dev->multiplanar)
+-		return -ENOTTY;
+-	return vivid_g_fmt_vid_out(file, priv, f);
+-}
+-
+-int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
+-			struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (!dev->multiplanar)
+-		return -ENOTTY;
+-	return vivid_try_fmt_vid_out(file, priv, f);
+-}
+-
+-int vidioc_s_fmt_vid_out_mplane(struct file *file, void *priv,
+-			struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (!dev->multiplanar)
+-		return -ENOTTY;
+-	return vivid_s_fmt_vid_out(file, priv, f);
+-}
+-
+-int vidioc_g_fmt_vid_out(struct file *file, void *priv,
+-					struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (dev->multiplanar)
+-		return -ENOTTY;
+-	return fmt_sp2mp_func(file, priv, f, vivid_g_fmt_vid_out);
+-}
+-
+-int vidioc_try_fmt_vid_out(struct file *file, void *priv,
+-			struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (dev->multiplanar)
+-		return -ENOTTY;
+-	return fmt_sp2mp_func(file, priv, f, vivid_try_fmt_vid_out);
+-}
+-
+-int vidioc_s_fmt_vid_out(struct file *file, void *priv,
+-			struct v4l2_format *f)
+-{
+-	struct vivid_dev *dev = video_drvdata(file);
+-
+-	if (dev->multiplanar)
+-		return -ENOTTY;
+-	return fmt_sp2mp_func(file, priv, f, vivid_s_fmt_vid_out);
+-}
+-
+ int vivid_vid_out_g_selection(struct file *file, void *priv,
+ 			      struct v4l2_selection *sel)
  {
- 	struct video_device *vdev = video_devdata(file);
-@@ -981,6 +1056,17 @@ int vb2_ioctl_qbuf(struct file *file, void *priv, struct v4l2_buffer *p)
- }
- EXPORT_SYMBOL_GPL(vb2_ioctl_qbuf);
+diff --git a/drivers/media/platform/vivid/vivid-vid-out.h b/drivers/media/platform/vivid/vivid-vid-out.h
+index 8d56314f4ea1..b84dc578af36 100644
+--- a/drivers/media/platform/vivid/vivid-vid-out.h
++++ b/drivers/media/platform/vivid/vivid-vid-out.h
+@@ -12,15 +12,12 @@ extern const struct vb2_ops vivid_vid_out_qops;
  
-+int vb2_ioctl_ext_qbuf(struct file *file, void *priv,
-+		       struct v4l2_ext_buffer *p)
-+{
-+	struct video_device *vdev = video_devdata(file);
-+
-+	if (vb2_queue_is_busy(vdev, file))
-+		return -EBUSY;
-+	return vb2_ext_qbuf(vdev->queue, vdev->v4l2_dev->mdev, p);
-+}
-+EXPORT_SYMBOL_GPL(vb2_ioctl_ext_qbuf);
-+
- int vb2_ioctl_dqbuf(struct file *file, void *priv, struct v4l2_buffer *p)
- {
- 	struct video_device *vdev = video_devdata(file);
-@@ -991,6 +1077,17 @@ int vb2_ioctl_dqbuf(struct file *file, void *priv, struct v4l2_buffer *p)
- }
- EXPORT_SYMBOL_GPL(vb2_ioctl_dqbuf);
+ void vivid_update_format_out(struct vivid_dev *dev);
  
-+int vb2_ioctl_ext_dqbuf(struct file *file, void *priv,
-+			struct v4l2_ext_buffer *p)
-+{
-+	struct video_device *vdev = video_devdata(file);
-+
-+	if (vb2_queue_is_busy(vdev, file))
-+		return -EBUSY;
-+	return vb2_ext_dqbuf(vdev->queue, p, file->f_flags & O_NONBLOCK);
-+}
-+EXPORT_SYMBOL_GPL(vb2_ioctl_ext_dqbuf);
-+
- int vb2_ioctl_streamon(struct file *file, void *priv, enum v4l2_buf_type i)
- {
- 	struct video_device *vdev = video_devdata(file);
-@@ -1021,6 +1118,17 @@ int vb2_ioctl_expbuf(struct file *file, void *priv, struct v4l2_exportbuffer *p)
- }
- EXPORT_SYMBOL_GPL(vb2_ioctl_expbuf);
- 
-+int vb2_ioctl_ext_expbuf(struct file *file, void *priv,
-+			 struct v4l2_ext_exportbuffer *p)
-+{
-+	struct video_device *vdev = video_devdata(file);
-+
-+	if (vb2_queue_is_busy(vdev, file))
-+		return -EBUSY;
-+	return vb2_ext_expbuf(vdev->queue, p);
-+}
-+EXPORT_SYMBOL_GPL(vb2_ioctl_ext_expbuf);
-+
- /* v4l2_file_operations helpers */
- 
- int vb2_fop_mmap(struct file *file, struct vm_area_struct *vma)
-diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-index 640aabe69450..6411fb2c89fe 100644
---- a/include/media/videobuf2-core.h
-+++ b/include/media/videobuf2-core.h
-@@ -152,6 +152,8 @@ struct vb2_mem_ops {
-  * @mem_priv:	private data with this plane.
-  * @dbuf:	dma_buf - shared buffer object.
-  * @dbuf_mapped:	flag to show whether dbuf is mapped or not
-+ * @dbuf_offset: offset where the plane starts. Usually 0, unless the buffer
-+ *		 is shared by all planes of a multi-planar format.
-  * @bytesused:	number of bytes occupied by data in the plane (payload).
-  * @length:	size of this plane (NOT the payload) in bytes.
-  * @min_length:	minimum required size of this plane (NOT the payload) in bytes.
-@@ -175,6 +177,7 @@ struct vb2_plane {
- 	void			*mem_priv;
- 	struct dma_buf		*dbuf;
- 	unsigned int		dbuf_mapped;
-+	unsigned int		dbuf_offset;
- 	unsigned int		bytesused;
- 	unsigned int		length;
- 	unsigned int		min_length;
-@@ -440,7 +443,8 @@ struct vb2_ops {
-  *			struct vb2_buffer.
-  *			For V4L2 this is a &struct vb2_v4l2_buffer.
-  * @fill_user_buffer:	given a &vb2_buffer fill in the userspace structure.
-- *			For V4L2 this is a &struct v4l2_buffer.
-+ *			For V4L2 this is a &struct v4l2_buffer or
-+ *			&struct v4l2_ext_buffer.
-  * @fill_vb2_buffer:	given a userspace structure, fill in the &vb2_buffer.
-  *			If the userspace structure is invalid, then this op
-  *			will return an error.
-diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
-index 8a10889dc2fd..99eff4639dc5 100644
---- a/include/media/videobuf2-v4l2.h
-+++ b/include/media/videobuf2-v4l2.h
-@@ -36,7 +36,7 @@
-  * @planes:	plane information (userptr/fd, length, bytesused, data_offset).
-  *
-  * Should contain enough information to be able to cover all the fields
-- * of &struct v4l2_buffer at ``videodev2.h``.
-+ * of &struct v4l2_buffer and &struct v4l2_ext_buffer at ``videodev2.h``.
-  */
- struct vb2_v4l2_buffer {
- 	struct vb2_buffer	vb2_buf;
-@@ -72,6 +72,7 @@ int vb2_find_timestamp(const struct vb2_queue *q, u64 timestamp,
- 		       unsigned int start_idx);
- 
- int vb2_querybuf(struct vb2_queue *q, struct v4l2_buffer *b);
-+int vb2_ext_querybuf(struct vb2_queue *q, struct v4l2_ext_buffer *b);
- 
- /**
-  * vb2_reqbufs() - Wrapper for vb2_core_reqbufs() that also verifies
-@@ -92,6 +93,8 @@ int vb2_reqbufs(struct vb2_queue *q, struct v4l2_requestbuffers *req);
-  *		&v4l2_ioctl_ops->vidioc_create_bufs handler in driver
-  */
- int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create);
-+int vb2_ext_create_bufs(struct vb2_queue *q,
-+			struct v4l2_ext_create_buffers *create);
- 
- /**
-  * vb2_prepare_buf() - Pass ownership of a buffer from userspace to the kernel
-@@ -117,6 +120,8 @@ int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create);
-  */
- int vb2_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
- 		    struct v4l2_buffer *b);
-+int vb2_ext_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
-+			struct v4l2_ext_buffer *b);
- 
- /**
-  * vb2_qbuf() - Queue a buffer from userspace
-@@ -143,6 +148,8 @@ int vb2_prepare_buf(struct vb2_queue *q, struct media_device *mdev,
-  */
- int vb2_qbuf(struct vb2_queue *q, struct media_device *mdev,
- 	     struct v4l2_buffer *b);
-+int vb2_ext_qbuf(struct vb2_queue *q, struct media_device *mdev,
-+		 struct v4l2_ext_buffer *b);
- 
- /**
-  * vb2_expbuf() - Export a buffer as a file descriptor
-@@ -154,6 +161,7 @@ int vb2_qbuf(struct vb2_queue *q, struct media_device *mdev,
-  * from &v4l2_ioctl_ops->vidioc_expbuf handler in driver.
-  */
- int vb2_expbuf(struct vb2_queue *q, struct v4l2_exportbuffer *eb);
-+int vb2_ext_expbuf(struct vb2_queue *q, struct v4l2_ext_exportbuffer *eb);
- 
- /**
-  * vb2_dqbuf() - Dequeue a buffer to the userspace
-@@ -180,6 +188,8 @@ int vb2_expbuf(struct vb2_queue *q, struct v4l2_exportbuffer *eb);
-  * from &v4l2_ioctl_ops->vidioc_dqbuf handler in driver.
-  */
- int vb2_dqbuf(struct vb2_queue *q, struct v4l2_buffer *b, bool nonblocking);
-+int vb2_ext_dqbuf(struct vb2_queue *q, struct v4l2_ext_buffer *b,
-+		  bool nonblocking);
- 
- /**
-  * vb2_streamon - start streaming
-@@ -276,15 +286,27 @@ int vb2_ioctl_reqbufs(struct file *file, void *priv,
- 			  struct v4l2_requestbuffers *p);
- int vb2_ioctl_create_bufs(struct file *file, void *priv,
- 			  struct v4l2_create_buffers *p);
-+int vb2_ioctl_ext_create_bufs(struct file *file, void *priv,
-+			      struct v4l2_ext_create_buffers *p);
- int vb2_ioctl_prepare_buf(struct file *file, void *priv,
- 			  struct v4l2_buffer *p);
-+int vb2_ioctl_ext_prepare_buf(struct file *file, void *priv,
-+			      struct v4l2_ext_buffer *p);
- int vb2_ioctl_querybuf(struct file *file, void *priv, struct v4l2_buffer *p);
-+int vb2_ioctl_ext_querybuf(struct file *file, void *priv,
-+			   struct v4l2_ext_buffer *p);
- int vb2_ioctl_qbuf(struct file *file, void *priv, struct v4l2_buffer *p);
-+int vb2_ioctl_ext_qbuf(struct file *file, void *priv,
-+		       struct v4l2_ext_buffer *p);
- int vb2_ioctl_dqbuf(struct file *file, void *priv, struct v4l2_buffer *p);
-+int vb2_ioctl_ext_dqbuf(struct file *file, void *priv,
-+			struct v4l2_ext_buffer *p);
- int vb2_ioctl_streamon(struct file *file, void *priv, enum v4l2_buf_type i);
- int vb2_ioctl_streamoff(struct file *file, void *priv, enum v4l2_buf_type i);
- int vb2_ioctl_expbuf(struct file *file, void *priv,
--	struct v4l2_exportbuffer *p);
-+		     struct v4l2_exportbuffer *p);
-+int vb2_ioctl_ext_expbuf(struct file *file, void *priv,
-+			 struct v4l2_ext_exportbuffer *p);
- 
- /* struct v4l2_file_operations helpers */
- 
+-int vivid_g_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
+-int vivid_try_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
+-int vivid_s_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_g_fmt_vid_out_mplane(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_s_fmt_vid_out_mplane(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_g_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_try_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
+-int vidioc_s_fmt_vid_out(struct file *file, void *priv, struct v4l2_format *f);
++int vivid_g_fmt_vid_out(struct file *file, void *priv,
++			struct v4l2_ext_pix_format *f);
++int vivid_try_fmt_vid_out(struct file *file, void *priv,
++			  struct v4l2_ext_pix_format *f);
++int vivid_s_fmt_vid_out(struct file *file, void *priv,
++			struct v4l2_ext_pix_format *f);
+ int vivid_vid_out_g_selection(struct file *file, void *priv, struct v4l2_selection *sel);
+ int vivid_vid_out_s_selection(struct file *file, void *fh, struct v4l2_selection *s);
+ int vivid_vid_out_g_pixelaspect(struct file *file, void *priv, int type, struct v4l2_fract *f);
 -- 
 2.21.0
 
