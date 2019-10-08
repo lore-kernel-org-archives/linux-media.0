@@ -2,28 +2,28 @@ Return-Path: <SRS0=ZXs6=YB=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16E07C4360C
-	for <linux-media@archiver.kernel.org>; Tue,  8 Oct 2019 09:11:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70D87ECE58E
+	for <linux-media@archiver.kernel.org>; Tue,  8 Oct 2019 09:11:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EB12620867
-	for <linux-media@archiver.kernel.org>; Tue,  8 Oct 2019 09:11:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 494E821871
+	for <linux-media@archiver.kernel.org>; Tue,  8 Oct 2019 09:11:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729876AbfJHJL1 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 8 Oct 2019 05:11:27 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:42822 "EHLO
+        id S1729915AbfJHJL2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 8 Oct 2019 05:11:28 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:42890 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728866AbfJHJL1 (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Oct 2019 05:11:27 -0400
+        with ESMTP id S1728866AbfJHJL2 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Tue, 8 Oct 2019 05:11:28 -0400
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id DC48328F7F5;
-        Tue,  8 Oct 2019 10:11:22 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 9A57428F7F8;
+        Tue,  8 Oct 2019 10:11:26 +0100 (BST)
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
@@ -34,10 +34,12 @@ Cc:     Tomasz Figa <tfiga@chromium.org>,
         Nicolas Dufresne <nicolas@ndufresne.ca>,
         Brian Starkey <Brian.Starkey@arm.com>, kernel@collabora.com,
         Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [RFC PATCH v2 0/7] media: v4l2: Add extended fmt and buffer ioctls
-Date:   Tue,  8 Oct 2019 11:11:13 +0200
-Message-Id: <20191008091119.7294-1-boris.brezillon@collabora.com>
+Subject: [RFC PATCH v3 4/6] media: mediabus: Add an helper to convert a ext_pix format to an mbus_fmt
+Date:   Tue,  8 Oct 2019 11:11:17 +0200
+Message-Id: <20191008091119.7294-5-boris.brezillon@collabora.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20191008091119.7294-1-boris.brezillon@collabora.com>
+References: <20191008091119.7294-1-boris.brezillon@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -45,104 +47,52 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+Just a new version of v4l2_fill_mbus_format() to deal with the new
+v4l2_ext_pix_format struct.
+This is needed to convert the VIMC driver to the EXT_FMT/EXT_BUF iocts.
 
-This RFC follows the discussion started by Hans [1] a few months back.
-It does not try to address all the problem reported in this thread but
-instead focuses on the FMT and BUF(S) ioctls.
+Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+---
+Changes in v3:
+- Rebased on top of media/master (post 5.4-rc1)
 
-Note that my primary goal is to unify handling for multiplanar and
-singleplanar formats and extend things to support the "single dmabuf
-storing all pixel planes" issue.
+Changes in v2:
+- New patch
+---
+ include/media/v4l2-mediabus.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-This version received a bit more testing than the previous one (added
-new tests to v4l2-compliance [2] to make sure EXT ioctls work as
-expected and also checked that !ext -> ext wrappers work correctly by
-running the old tests). Note that I'm not planning to post those
-v4l-utils patches on the ML until we've settled down on the userspace
-API, unless I'm explicitly asked to do so.
-
-Right now I'm focusing on the case I was primarily interested in:
-single dmabuf storing all pixel planes (each being at a different
-offset), and it seems that patching the VB2 core to support that is
-not a trivial task.
-
-So here are a few questions for V4L/DMABUF experts:
-- Can the same dmabuf be mapped several times. I think it's okay apart
-  from the extra/needless time spent doing cache maintenance
-  operations, but there might be issues if an IOMMU is involved
-  (duplicate mappings?). If it's not okay, then we need to find a
-  solution to only attach/map the DMABUF once when it's used for
-  several planes (this is what I tried to do here [3], but I'm not
-  entirely happy with the implementation and started to investigate
-  another approach here [4]).
-- How should we pass the offset to drivers that were previously using
-  the get_cookie() (or the dma_sg wrapper) to retrieve an sg table.
-  Adding the offset to the dma_addr or vaddr for vmalloc or dma-contig
-  case can be done in the core, but for an sg-table it's a bit more
-  complicated. Should drivers access this piece of information
-  directly from vb2_plane->dbuf_offset? And in that case, how do we
-  make sure drivers don't simply ignore the offset and assume it's
-  always zero? 
-
-Few words about the feedback I got from Brian and Nicolas on my v1:
-
-- modifier field has been moved to v4l2_ext_format as suggested
-- v4l2_timecode is still not present in v4l2_ext_buffer, but can be
-  added back thanks to the extra reserved space
-- the ENUMFMT is left as is for now, because I think we want Maxime's
-  work on DRM/V4L format unification to land before reworking the
-  ioctl (exposing extra info about the format and not only the 4CC
-  code?). That also means that there's currently no way to know which
-  modifiers are supported
-- EXT_FMT/EXT_BUF capability flags to detect whether new ioctls are
-  supported or not have not been added yet
-
-Nothing has changed in v3, just rebased patches on top of media/master
-so we can discuss it during the Media Summit.
-
-Regards,
-
-Boris
-
-[1]https://www.mail-archive.com/linux-media@vger.kernel.org/msg135729.html
-[2]https://github.com/bbrezillon/v4l-utils/commits/master
-[3]https://github.com/bbrezillon/linux/commit/4882435f80b05a61827649d55cc0f0cee79680a7
-[4]https://github.com/bbrezillon/linux/commit/a415216c6aaab2d51f0bd62270b994c8196ddd90
-
-Boris Brezillon (5):
-  media: v4l2: Extend pixel formats to unify single/multi-planar
-    handling (and more)
-  media: videobuf2: Expose helpers to implement the _ext_fmt and
-    _ext_buf hooks
-  media: mediabus: Add an helper to convert a ext_pix format to an
-    mbus_fmt
-  media: vivid: Convert the capture and output drivers to
-    EXT_FMT/EXT_BUF
-  media: vimc: Implement the ext_fmt and ext_buf hooks
-
-Hans Verkuil (1):
-  media: v4l2: Add extended buffer operations
-
- .../media/common/videobuf2/videobuf2-core.c   |    2 +
- .../media/common/videobuf2/videobuf2-v4l2.c   |  534 ++++----
- drivers/media/platform/vimc/vimc-capture.c    |   65 +-
- drivers/media/platform/vimc/vimc-common.c     |    4 +-
- drivers/media/platform/vimc/vimc-common.h     |    2 +-
- drivers/media/platform/vivid/vivid-core.c     |   30 +-
- drivers/media/platform/vivid/vivid-vid-cap.c  |  171 +--
- drivers/media/platform/vivid/vivid-vid-cap.h  |   15 +-
- drivers/media/platform/vivid/vivid-vid-out.c  |  195 +--
- drivers/media/platform/vivid/vivid-vid-out.h  |   15 +-
- drivers/media/v4l2-core/v4l2-dev.c            |   54 +-
- drivers/media/v4l2-core/v4l2-ioctl.c          | 1127 +++++++++++++++--
- include/media/v4l2-ioctl.h                    |   63 +
- include/media/v4l2-mediabus.h                 |   22 +
- include/media/videobuf2-core.h                |    6 +-
- include/media/videobuf2-v4l2.h                |   26 +-
- include/uapi/linux/videodev2.h                |  211 +++
- 17 files changed, 1897 insertions(+), 645 deletions(-)
-
+diff --git a/include/media/v4l2-mediabus.h b/include/media/v4l2-mediabus.h
+index 45f88f0248c4..00de5ae05e84 100644
+--- a/include/media/v4l2-mediabus.h
++++ b/include/media/v4l2-mediabus.h
+@@ -182,4 +182,26 @@ v4l2_fill_mbus_format_mplane(struct v4l2_mbus_framefmt *mbus_fmt,
+ 	mbus_fmt->xfer_func = pix_mp_fmt->xfer_func;
+ }
+ 
++/**
++ * v4l2_fill_mbus_format_ext - Ancillary routine that fills a &struct
++ *	v4l2_mbus_framefmt from a &struct v4l2_ext_pix_format.
++ *
++ * @mbus_fmt:	pointer to &struct v4l2_mbus_framefmt to be filled
++ * @pix_fmt:	pointer to &struct v4l2_ext_pix_format to be used as model
++ * @code:	data format code (from &enum v4l2_mbus_pixelcode)
++ */
++static inline void
++v4l2_fill_mbus_format_ext(struct v4l2_mbus_framefmt *mbus_fmt,
++			  const struct v4l2_ext_pix_format *pix_fmt, u32 code)
++{
++	mbus_fmt->width = pix_fmt->width;
++	mbus_fmt->height = pix_fmt->height;
++	mbus_fmt->field = pix_fmt->field;
++	mbus_fmt->colorspace = pix_fmt->colorspace;
++	mbus_fmt->ycbcr_enc = pix_fmt->ycbcr_enc;
++	mbus_fmt->quantization = pix_fmt->quantization;
++	mbus_fmt->xfer_func = pix_fmt->xfer_func;
++	mbus_fmt->code = code;
++}
++
+ #endif
 -- 
 2.21.0
 
