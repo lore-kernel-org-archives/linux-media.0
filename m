@@ -2,100 +2,101 @@ Return-Path: <SRS0=1xwk=YC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F07C6ECE58D
-	for <linux-media@archiver.kernel.org>; Wed,  9 Oct 2019 12:33:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D612ECE58D
+	for <linux-media@archiver.kernel.org>; Wed,  9 Oct 2019 12:42:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C8D0F21848
-	for <linux-media@archiver.kernel.org>; Wed,  9 Oct 2019 12:33:15 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="lG7epsJZ"
+	by mail.kernel.org (Postfix) with ESMTP id 1130221848
+	for <linux-media@archiver.kernel.org>; Wed,  9 Oct 2019 12:42:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731212AbfJIMdN (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 9 Oct 2019 08:33:13 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:43882 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727029AbfJIMdN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 9 Oct 2019 08:33:13 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x99CWdd4083942;
-        Wed, 9 Oct 2019 07:32:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570624359;
-        bh=HZi+rs8ENuxYEE6OvcFdO/MHKKRliGPvQQJaNf0P2po=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=lG7epsJZ7VnxXSzC9rXBqAj1i7IwdGidpmrbCmcq6gh+e6CBpJisVwkMxcp8tIGLU
-         TjwEAvSJMYhd6JU2uIMAIboOGnVAh6wR+DvleYxxbH2vcvqeqmxivLnB16BjH1JUGF
-         CEz0oBTylFjAecKHEtFqBy1e6mZF3xEO8TZ0SAPg=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x99CWdsI068779
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 9 Oct 2019 07:32:39 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 9 Oct
- 2019 07:32:36 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 9 Oct 2019 07:32:36 -0500
-Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x99CWbNR081004;
-        Wed, 9 Oct 2019 07:32:39 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-CC:     Jacopo Mondi <jacopo@jmondi.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v4 2/3] media: ov5640: Fix 1920x1080 mode to remove extra enable/disable
-Date:   Wed, 9 Oct 2019 07:35:09 -0500
-Message-ID: <20191009123510.19106-3-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191009123510.19106-1-bparrot@ti.com>
-References: <20191009123510.19106-1-bparrot@ti.com>
+        id S1730662AbfJIMmI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 9 Oct 2019 08:42:08 -0400
+Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:40335 "EHLO
+        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727878AbfJIMmI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 9 Oct 2019 08:42:08 -0400
+Received: from [IPv6:2001:983:e9a7:1:2801:e038:f2c3:e060] ([IPv6:2001:983:e9a7:1:2801:e038:f2c3:e060])
+        by smtp-cloud7.xs4all.net with ESMTPA
+        id IBI4igcHMjZ8vIBI5iHvcM; Wed, 09 Oct 2019 14:42:06 +0200
+Subject: Re: [PATCH] media: usb: fix memory leak in af9005_identify_state
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>
+Cc:     emamd001@umn.edu, smccaman@umn.edu, kjlu@umn.edu,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Richard Fontana <rfontana@redhat.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190913235505.9164-1-navid.emamdoost@gmail.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <6de2396d-eaa4-5cb4-9a1d-f253503bcf48@xs4all.nl>
+Date:   Wed, 9 Oct 2019 14:42:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20190913235505.9164-1-navid.emamdoost@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfLR4WciaWbeoS3Yos5GxYJIYmG+CkYSY8MFAZMNwyIwy02S+lvjZoCiLqmMKLJ2sRxGrxxUf3YlVIh9spOObjW6Mkn5GfPcOMxFjS1Zgsf0cE27gHNQ4
+ DLUUwKKFKlE8HLFtAoNyittqEOj3kUymYF3smqo/zy7tlaYXz0yjRNlbTmM01Dpz4ePxCDOUyDIFxBBhgHzaJCsztqz5R4nbfBbW0lwqljj1H6FhSIKDhr0q
+ zQsM3v03AJ8zgOzt7Ggv5brZeMSN3sgVcGxe9rVnuKRjB0fIji/GZfa1IrSdlCl8gWf2pf+80vwctq/Mx4RcGrcPQCFtR3UnWg2yZ0H/nyooiWjcTIdiq8hh
+ 9Ms+LrJj1CREbX5wQvZnqre4qWPnLsGBNfib6P0BnaXegoOloH7hZDJp+7Vo9b9Ab5Zj1X4OD8ogxvJRgJfJxX8fuaiGxLgJECMz1hJ3TVPulzrJjB8tlttJ
+ +ooedRqTkwoiAsA1MA1+uC18DWVG0oRIle8bnZiCtbWVYBYMQELB9gUVmRqqVXZ5Ymj0nT/yxuSClLWoa/2sXQpjaKOa7eY9yebZs35ADAnwcqvP9cCL87El
+ e1eSKTu7aYWpIzXDOIsi28Y7
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In the 1920x1080 register array an extra pair of reset ctrl disable
-re-enable was causing unwanted init delays.
+On 9/14/19 1:55 AM, Navid Emamdoost wrote:
+> In af9005_identify_state when returning -EIO the allocated buffer should
+> be released.
+> 
+> Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
+> ---
+>  drivers/media/usb/dvb-usb/af9005.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/usb/dvb-usb/af9005.c b/drivers/media/usb/dvb-usb/af9005.c
+> index 02697d86e8c1..aee500beaab6 100644
+> --- a/drivers/media/usb/dvb-usb/af9005.c
+> +++ b/drivers/media/usb/dvb-usb/af9005.c
+> @@ -975,8 +975,10 @@ static int af9005_identify_state(struct usb_device *udev,
+>  		*cold = 1;
+>  	else if (reply == 0x02)
+>  		*cold = 0;
+> -	else
+> +	else {
+> +		kfree(buf);
+>  		return -EIO;
+> +	}
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
----
- drivers/media/i2c/ov5640.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Why not just set ret = -EIO; here?
 
-diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
-index b93b61baace5..065c9b61ecbd 100644
---- a/drivers/media/i2c/ov5640.c
-+++ b/drivers/media/i2c/ov5640.c
-@@ -490,7 +490,6 @@ static const struct reg_value ov5640_setting_720P_1280_720[] = {
- };
- 
- static const struct reg_value ov5640_setting_1080P_1920_1080[] = {
--	{0x3008, 0x42, 0, 0},
- 	{0x3c07, 0x08, 0, 0},
- 	{0x3c09, 0x1c, 0, 0}, {0x3c0a, 0x9c, 0, 0}, {0x3c0b, 0x40, 0, 0},
- 	{0x3814, 0x11, 0, 0},
-@@ -518,7 +517,7 @@ static const struct reg_value ov5640_setting_1080P_1920_1080[] = {
- 	{0x3a0e, 0x03, 0, 0}, {0x3a0d, 0x04, 0, 0}, {0x3a14, 0x04, 0, 0},
- 	{0x3a15, 0x60, 0, 0}, {0x4407, 0x04, 0, 0},
- 	{0x460b, 0x37, 0, 0}, {0x460c, 0x20, 0, 0}, {0x3824, 0x04, 0, 0},
--	{0x4005, 0x1a, 0, 0}, {0x3008, 0x02, 0, 0},
-+	{0x4005, 0x1a, 0, 0},
- };
- 
- static const struct reg_value ov5640_setting_QSXGA_2592_1944[] = {
--- 
-2.17.1
+You only need to add a
+
+	if (!ret)
+>  	deb_info("Identify state cold = %d\n", *cold);
+
+before this line.
+
+So this becomes:
+
+        else
+                ret = -EIO;
+        if (!ret)
+                deb_info("Identify state cold = %d\n", *cold);
+
+Regards,
+
+	Hans
+
+>  
+>  err:
+> 
 
