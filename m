@@ -6,22 +6,22 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9421FECE598
-	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 042DAECE596
+	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:12:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7622E206A1
+	by mail.kernel.org (Postfix) with ESMTP id DBAD7208C3
 	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:11:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388062AbfJJNL6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Oct 2019 09:11:58 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:53711 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388012AbfJJNL5 (ORCPT
+        id S2388061AbfJJNL5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Oct 2019 09:11:57 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:39657 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388046AbfJJNL5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 10 Oct 2019 09:11:57 -0400
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:bc04:8998:8ec1:1871])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id IYESijV5zop0AIYEViU37H; Thu, 10 Oct 2019 15:11:55 +0200
+        id IYESijV5zop0AIYEViU38C; Thu, 10 Oct 2019 15:11:55 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     =?UTF-8?q?Jernej=20=C5=A0krabec?= <jernej.skrabec@siol.net>,
@@ -29,9 +29,9 @@ Cc:     =?UTF-8?q?Jernej=20=C5=A0krabec?= <jernej.skrabec@siol.net>,
         mripard@kernel.org, tfiga@chromium.org, jonas@kwiboo.se,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv3 4/8] media: v4l2-mem2mem: add stateless_(try_)decoder_cmd ioctl helpers
-Date:   Thu, 10 Oct 2019 15:11:48 +0200
-Message-Id: <20191010131152.68984-5-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 8/8] media: cedrus: Add support for holding capture buffer
+Date:   Thu, 10 Oct 2019 15:11:52 +0200
+Message-Id: <20191010131152.68984-9-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191010131152.68984-1-hverkuil-cisco@xs4all.nl>
 References: <20191010131152.68984-1-hverkuil-cisco@xs4all.nl>
@@ -49,97 +49,92 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jernej Skrabec <jernej.skrabec@siol.net>
 
-These helpers are used by stateless codecs when they support multiple
-slices per frame and hold capture buffer flag is set. It's expected that
-all such codecs will use this code.
+When frame contains multiple slices and driver works in slice mode, it's
+more efficient to hold capture buffer in queue until all slices of a
+same frame are decoded.
+
+Add support for that to Cedrus driver by exposing and implementing
+V4L2_BUF_CAP_SUPPORTS_M2M_HOLD_CAPTURE_BUF capability.
 
 Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
-Co-developed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+[hverkuil-cisco@xs4all.nl: rewritten to use v4l2_m2m_buf_done_and_job_finish]
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/media/v4l2-core/v4l2-mem2mem.c | 53 ++++++++++++++++++++++++++
- include/media/v4l2-mem2mem.h           |  4 ++
- 2 files changed, 57 insertions(+)
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c   | 16 ++--------------
+ .../staging/media/sunxi/cedrus/cedrus_video.c    | 14 ++++++++++++++
+ 2 files changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index 3a8a2ebaf5e3..5cad205eed08 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -1218,6 +1218,59 @@ int v4l2_m2m_ioctl_try_decoder_cmd(struct file *file, void *fh,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+index a942cd9bed57..e7e18424bab1 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+@@ -103,7 +103,6 @@ static irqreturn_t cedrus_irq(int irq, void *data)
+ {
+ 	struct cedrus_dev *dev = data;
+ 	struct cedrus_ctx *ctx;
+-	struct vb2_v4l2_buffer *src_buf, *dst_buf;
+ 	enum vb2_buffer_state state;
+ 	enum cedrus_irq_status status;
+ 
+@@ -121,24 +120,13 @@ static irqreturn_t cedrus_irq(int irq, void *data)
+ 	dev->dec_ops[ctx->current_codec]->irq_disable(ctx);
+ 	dev->dec_ops[ctx->current_codec]->irq_clear(ctx);
+ 
+-	src_buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+-	dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+-
+-	if (!src_buf || !dst_buf) {
+-		v4l2_err(&dev->v4l2_dev,
+-			 "Missing source and/or destination buffers\n");
+-		return IRQ_HANDLED;
+-	}
+-
+ 	if (status == CEDRUS_IRQ_ERROR)
+ 		state = VB2_BUF_STATE_ERROR;
+ 	else
+ 		state = VB2_BUF_STATE_DONE;
+ 
+-	v4l2_m2m_buf_done(src_buf, state);
+-	v4l2_m2m_buf_done(dst_buf, state);
+-
+-	v4l2_m2m_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx);
++	v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev, ctx->fh.m2m_ctx,
++					 state);
+ 
+ 	return IRQ_HANDLED;
  }
- EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_try_decoder_cmd);
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+index 3ec3a2db790c..82198b2bb081 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+@@ -303,6 +303,17 @@ static int cedrus_s_fmt_vid_out(struct file *file, void *priv,
  
-+int v4l2_m2m_ioctl_stateless_try_decoder_cmd(struct file *file, void *fh,
-+					     struct v4l2_decoder_cmd *dc)
-+{
-+	if (dc->cmd != V4L2_DEC_CMD_FLUSH)
-+		return -EINVAL;
-+
-+	dc->flags = 0;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_stateless_try_decoder_cmd);
-+
-+int v4l2_m2m_ioctl_stateless_decoder_cmd(struct file *file, void *priv,
-+					 struct v4l2_decoder_cmd *dc)
-+{
-+	struct v4l2_fh *fh = file->private_data;
-+	struct vb2_v4l2_buffer *out_vb, *cap_vb;
-+	struct v4l2_m2m_dev *m2m_dev = fh->m2m_ctx->m2m_dev;
-+	unsigned long flags;
-+	int ret;
-+
-+	ret = v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv, dc);
-+	if (ret < 0)
-+		return ret;
-+
-+	spin_lock_irqsave(&m2m_dev->job_spinlock, flags);
-+	out_vb = v4l2_m2m_last_src_buf(fh->m2m_ctx);
-+	cap_vb = v4l2_m2m_last_dst_buf(fh->m2m_ctx);
-+
-+	/*
-+	 * If there is an out buffer pending, then clear any HOLD flag.
-+	 *
-+	 * By clearing this flag we ensure that when this output
-+	 * buffer is processed any held capture buffer will be released.
-+	 */
-+	if (out_vb) {
-+		out_vb->flags &= ~V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF;
-+	} else if (cap_vb && cap_vb->is_held) {
-+		/*
-+		 * If there were no output buffers, but there is a
-+		 * capture buffer that is held, then release that
-+		 * buffer.
-+		 */
-+		cap_vb->is_held = false;
-+		v4l2_m2m_dst_buf_remove(fh->m2m_ctx);
-+		v4l2_m2m_buf_done(cap_vb, VB2_BUF_STATE_DONE);
+ 	ctx->src_fmt = f->fmt.pix;
+ 
++	switch (ctx->src_fmt.pixelformat) {
++	case V4L2_PIX_FMT_H264_SLICE:
++		vq->subsystem_flags |=
++			VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
++		break;
++	default:
++		vq->subsystem_flags &=
++			(u32)~VB2_V4L2_FL_SUPPORTS_M2M_HOLD_CAPTURE_BUF;
++		break;
 +	}
-+	spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags);
 +
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_stateless_decoder_cmd);
-+
- /*
-  * v4l2_file_operations helpers. It is assumed here same lock is used
-  * for the output and the capture buffer queue.
-diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index 229d9f5d4370..3d9e48ed8817 100644
---- a/include/media/v4l2-mem2mem.h
-+++ b/include/media/v4l2-mem2mem.h
-@@ -701,6 +701,10 @@ int v4l2_m2m_ioctl_try_encoder_cmd(struct file *file, void *fh,
- 				   struct v4l2_encoder_cmd *ec);
- int v4l2_m2m_ioctl_try_decoder_cmd(struct file *file, void *fh,
- 				   struct v4l2_decoder_cmd *dc);
-+int v4l2_m2m_ioctl_stateless_try_decoder_cmd(struct file *file, void *fh,
-+					     struct v4l2_decoder_cmd *dc);
-+int v4l2_m2m_ioctl_stateless_decoder_cmd(struct file *file, void *priv,
-+					 struct v4l2_decoder_cmd *dc);
- int v4l2_m2m_fop_mmap(struct file *file, struct vm_area_struct *vma);
- __poll_t v4l2_m2m_fop_poll(struct file *file, poll_table *wait);
+ 	/* Propagate colorspace information to capture. */
+ 	ctx->dst_fmt.colorspace = f->fmt.pix.colorspace;
+ 	ctx->dst_fmt.xfer_func = f->fmt.pix.xfer_func;
+@@ -336,6 +347,9 @@ const struct v4l2_ioctl_ops cedrus_ioctl_ops = {
+ 	.vidioc_streamon		= v4l2_m2m_ioctl_streamon,
+ 	.vidioc_streamoff		= v4l2_m2m_ioctl_streamoff,
  
++	.vidioc_try_decoder_cmd		= v4l2_m2m_ioctl_stateless_try_decoder_cmd,
++	.vidioc_decoder_cmd		= v4l2_m2m_ioctl_stateless_decoder_cmd,
++
+ 	.vidioc_subscribe_event		= v4l2_ctrl_subscribe_event,
+ 	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
+ };
 -- 
 2.23.0
 
