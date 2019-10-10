@@ -6,22 +6,22 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40B82ECE58E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9421FECE598
 	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:11:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2495C214E0
+	by mail.kernel.org (Postfix) with ESMTP id 7622E206A1
 	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:11:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388064AbfJJNL6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2388062AbfJJNL6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 10 Oct 2019 09:11:58 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:38285 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388051AbfJJNL5 (ORCPT
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:53711 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388012AbfJJNL5 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Thu, 10 Oct 2019 09:11:57 -0400
 Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:bc04:8998:8ec1:1871])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id IYESijV5zop0AIYEViU37u; Thu, 10 Oct 2019 15:11:55 +0200
+        id IYESijV5zop0AIYEViU37H; Thu, 10 Oct 2019 15:11:55 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     =?UTF-8?q?Jernej=20=C5=A0krabec?= <jernej.skrabec@siol.net>,
@@ -29,9 +29,9 @@ Cc:     =?UTF-8?q?Jernej=20=C5=A0krabec?= <jernej.skrabec@siol.net>,
         mripard@kernel.org, tfiga@chromium.org, jonas@kwiboo.se,
         Ezequiel Garcia <ezequiel@collabora.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv3 7/8] media: cedrus: h264: Support multiple slices per frame
-Date:   Thu, 10 Oct 2019 15:11:51 +0200
-Message-Id: <20191010131152.68984-8-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv3 4/8] media: v4l2-mem2mem: add stateless_(try_)decoder_cmd ioctl helpers
+Date:   Thu, 10 Oct 2019 15:11:48 +0200
+Message-Id: <20191010131152.68984-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191010131152.68984-1-hverkuil-cisco@xs4all.nl>
 References: <20191010131152.68984-1-hverkuil-cisco@xs4all.nl>
@@ -49,53 +49,97 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Jernej Skrabec <jernej.skrabec@siol.net>
 
-With recent changes, support for decoding multi-slice frames can be
-easily added now.
-
-Signal VPU if current slice is first in frame or not and add information
-about first macroblock coordinates.
+These helpers are used by stateless codecs when they support multiple
+slices per frame and hold capture buffer flag is set. It's expected that
+all such codecs will use this code.
 
 Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+Co-developed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/media/v4l2-core/v4l2-mem2mem.c | 53 ++++++++++++++++++++++++++
+ include/media/v4l2-mem2mem.h           |  4 ++
+ 2 files changed, 57 insertions(+)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-index d6a782703c9b..3ffb5494cff6 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -301,6 +301,8 @@ static void cedrus_set_params(struct cedrus_ctx *ctx,
- 	dma_addr_t src_buf_addr;
- 	u32 offset = slice->header_bit_size;
- 	u32 len = (slice->size * 8) - offset;
-+	unsigned int pic_width_in_mbs;
-+	bool mbaff_pic;
- 	u32 reg;
+diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+index 3a8a2ebaf5e3..5cad205eed08 100644
+--- a/drivers/media/v4l2-core/v4l2-mem2mem.c
++++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+@@ -1218,6 +1218,59 @@ int v4l2_m2m_ioctl_try_decoder_cmd(struct file *file, void *fh,
+ }
+ EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_try_decoder_cmd);
  
- 	cedrus_write(dev, VE_H264_VLD_LEN, len);
-@@ -370,12 +372,20 @@ static void cedrus_set_params(struct cedrus_ctx *ctx,
- 		reg |= VE_H264_SPS_DIRECT_8X8_INFERENCE;
- 	cedrus_write(dev, VE_H264_SPS, reg);
- 
-+	mbaff_pic = !(slice->flags & V4L2_H264_SLICE_FLAG_FIELD_PIC) &&
-+		    (sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD);
-+	pic_width_in_mbs = sps->pic_width_in_mbs_minus1 + 1;
++int v4l2_m2m_ioctl_stateless_try_decoder_cmd(struct file *file, void *fh,
++					     struct v4l2_decoder_cmd *dc)
++{
++	if (dc->cmd != V4L2_DEC_CMD_FLUSH)
++		return -EINVAL;
 +
- 	// slice parameters
- 	reg = 0;
-+	reg |= ((slice->first_mb_in_slice % pic_width_in_mbs) & 0xff) << 24;
-+	reg |= (((slice->first_mb_in_slice / pic_width_in_mbs) *
-+		 (mbaff_pic + 1)) & 0xff) << 16;
- 	reg |= decode->nal_ref_idc ? BIT(12) : 0;
- 	reg |= (slice->slice_type & 0xf) << 8;
- 	reg |= slice->cabac_init_idc & 0x3;
--	reg |= VE_H264_SHS_FIRST_SLICE_IN_PIC;
-+	if (run->first_slice)
-+		reg |= VE_H264_SHS_FIRST_SLICE_IN_PIC;
- 	if (slice->flags & V4L2_H264_SLICE_FLAG_FIELD_PIC)
- 		reg |= VE_H264_SHS_FIELD_PIC;
- 	if (slice->flags & V4L2_H264_SLICE_FLAG_BOTTOM_FIELD)
++	dc->flags = 0;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_stateless_try_decoder_cmd);
++
++int v4l2_m2m_ioctl_stateless_decoder_cmd(struct file *file, void *priv,
++					 struct v4l2_decoder_cmd *dc)
++{
++	struct v4l2_fh *fh = file->private_data;
++	struct vb2_v4l2_buffer *out_vb, *cap_vb;
++	struct v4l2_m2m_dev *m2m_dev = fh->m2m_ctx->m2m_dev;
++	unsigned long flags;
++	int ret;
++
++	ret = v4l2_m2m_ioctl_stateless_try_decoder_cmd(file, priv, dc);
++	if (ret < 0)
++		return ret;
++
++	spin_lock_irqsave(&m2m_dev->job_spinlock, flags);
++	out_vb = v4l2_m2m_last_src_buf(fh->m2m_ctx);
++	cap_vb = v4l2_m2m_last_dst_buf(fh->m2m_ctx);
++
++	/*
++	 * If there is an out buffer pending, then clear any HOLD flag.
++	 *
++	 * By clearing this flag we ensure that when this output
++	 * buffer is processed any held capture buffer will be released.
++	 */
++	if (out_vb) {
++		out_vb->flags &= ~V4L2_BUF_FLAG_M2M_HOLD_CAPTURE_BUF;
++	} else if (cap_vb && cap_vb->is_held) {
++		/*
++		 * If there were no output buffers, but there is a
++		 * capture buffer that is held, then release that
++		 * buffer.
++		 */
++		cap_vb->is_held = false;
++		v4l2_m2m_dst_buf_remove(fh->m2m_ctx);
++		v4l2_m2m_buf_done(cap_vb, VB2_BUF_STATE_DONE);
++	}
++	spin_unlock_irqrestore(&m2m_dev->job_spinlock, flags);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_stateless_decoder_cmd);
++
+ /*
+  * v4l2_file_operations helpers. It is assumed here same lock is used
+  * for the output and the capture buffer queue.
+diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+index 229d9f5d4370..3d9e48ed8817 100644
+--- a/include/media/v4l2-mem2mem.h
++++ b/include/media/v4l2-mem2mem.h
+@@ -701,6 +701,10 @@ int v4l2_m2m_ioctl_try_encoder_cmd(struct file *file, void *fh,
+ 				   struct v4l2_encoder_cmd *ec);
+ int v4l2_m2m_ioctl_try_decoder_cmd(struct file *file, void *fh,
+ 				   struct v4l2_decoder_cmd *dc);
++int v4l2_m2m_ioctl_stateless_try_decoder_cmd(struct file *file, void *fh,
++					     struct v4l2_decoder_cmd *dc);
++int v4l2_m2m_ioctl_stateless_decoder_cmd(struct file *file, void *priv,
++					 struct v4l2_decoder_cmd *dc);
+ int v4l2_m2m_fop_mmap(struct file *file, struct vm_area_struct *vma);
+ __poll_t v4l2_m2m_fop_poll(struct file *file, poll_table *wait);
+ 
 -- 
 2.23.0
 
