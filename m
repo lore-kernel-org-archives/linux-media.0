@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 451B5C10F14
-	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:14:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EF14ECE596
+	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:14:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1E629208C3
-	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:14:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EA47A206B6
+	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:14:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570713295;
-	bh=hM0EHiZ+lbdsBaz/exs9ZfPI8jQI0gHEeaPxLpf9EPs=;
+	s=default; t=1570713298;
+	bh=FQX0xMB6lROMcqP/mnVeH32i9L3hg21Y95t5o1X1K6g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=tbTkX0oi/l5ApzESIy6+dxD+4VTBIhKu7j+WUnNeEEJbag2Dh+MlRaz1iqTPQTrM7
-	 EYjomlwpFC93oqIHjZhduGlQqVCODhSnWZCTv2IYtnFsCseOZYoZQHHOR8H5mZr7Tv
-	 9QXQjqeYpMggm5JKfdPsR78fIEJc0c7IK/wTLQkw=
+	b=puBb2dwQw629J+dT8i6KyPG7LybHfB06AjzXhllaWA01h0gZw/etuOmltkOTH5XOR
+	 wcQ/qE6BkowoSmw0AgwbmRNOyZ/IpAzMWnSQzvXh+Y9IXOlYCaMbT6NzAa+bYw46LO
+	 uRB/UbyfvNdvsirvqpF8zpSoU0ZNc5OGCsfiMrgM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388175AbfJJNOw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Oct 2019 09:14:52 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37325 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388023AbfJJNOj (ORCPT
+        id S2387992AbfJJNOi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Oct 2019 09:14:38 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:39234 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727788AbfJJNOi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Oct 2019 09:14:39 -0400
-Received: by mail-lj1-f193.google.com with SMTP id l21so6170980lje.4;
-        Thu, 10 Oct 2019 06:14:38 -0700 (PDT)
+        Thu, 10 Oct 2019 09:14:38 -0400
+Received: by mail-lj1-f195.google.com with SMTP id y3so6161668ljj.6;
+        Thu, 10 Oct 2019 06:14:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=s1+YBubYAy3yg+TIRBWGGXrMgcLsTM12YLsh849J2aI=;
-        b=GCr/BKYneZjSwP7jPBlb57caufJrp63/BJh+AMpnpy3T46QUyd0PB7z3TKPlz/5xmb
-         06BLf9DqaTSxVW8HGBv20bhkTfNZtZR8/ZFTA+hUJqYmog6w1FhiDCwNc/ii/kuTYizt
-         1PimM7DuCLDTY9YmidqlhDQOOybJdU1GeeR33idUDRiXvaMlSOKfq0EIeC1TwP16Me15
-         q2nHXRk+ucRL+MPVhmEf09UHJgASZSWpxvghJdOUq6UtFXOkeOCPOueXG/DAAzLx1jWq
-         FeDivUhIp5k7UaF5IxOBuak3Jn5g9oZu8YpgU99zIpEjau4XONmzvEjZHwmUhSQIxaFu
-         nzvQ==
-X-Gm-Message-State: APjAAAW4L0Rk+//uheyRhWs5FNdUMoD+vuhWF+tdQSOr3/HjgH7YDwb2
-        eQpkFOFJ9yupSGtwkUw8Ewxs4Y4v
-X-Google-Smtp-Source: APXvYqyGy/J5HJ8vBpZO6LgQKgo1ma21ffDHecTu24LtFMjl2KdmKbxfJ1wNcSxoN50D6wfsye9EWA==
-X-Received: by 2002:a2e:964c:: with SMTP id z12mr6158807ljh.79.1570713277523;
-        Thu, 10 Oct 2019 06:14:37 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id h3sm1238457lfc.26.2019.10.10.06.14.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        bh=7uV6DWb+5d+72lobYH9RlUHuo93UKxieqoJDmd2AkLE=;
+        b=oXQr5K5AknmV7WOzIin2s0bc0UXSpL0sEbz5ZC7mWHK/Bna1bF0mswJNeGG1izrqEk
+         HglDUe5pmeQk75c8IwkKyig/ND+fh+zwNHC1twqSJuHX4cvleN+woZqaMPzW1MIG3L7a
+         bCEeIWmT+CuCv/I3uxDoiq9/NHRPo2uZQi9wWwnZk+W71el3Bl0C4Bh3E116gT49eZgr
+         YCZrwzJFxS0DOju8ct9fGhAGby2z+Y4cnCN5GO34He4NKhcAgD1BCjFAOw84RE1OUX/u
+         POxbm/sRphFQ+PJqP3RcneVkT3b+MVOHx/wx2H7ljYLexVweplYDx3jyNDhJWnh7Knrf
+         +jnA==
+X-Gm-Message-State: APjAAAWzC/PNl+MBM3Z6U+4v3lAPhG2whTyBVZ+VMo8aM9O7I36g5CUj
+        0Hvq9Ffa025jCOkbtoVUpeI=
+X-Google-Smtp-Source: APXvYqzFKhC+O0enYQEtd6+xCyXriydLhbwo0jiMAK6X/4MJHrEhzIRCF056ErjC0uEfoKkbTLxJHw==
+X-Received: by 2002:a2e:8ec2:: with SMTP id e2mr5820909ljl.126.1570713275165;
         Thu, 10 Oct 2019 06:14:35 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id k7sm1184634lja.19.2019.10.10.06.14.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 10 Oct 2019 06:14:34 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92.2)
         (envelope-from <johan@xi.terra>)
-        id 1iIYHF-0006Az-Mh; Thu, 10 Oct 2019 15:14:45 +0200
+        id 1iIYHF-0006Ak-Dh; Thu, 10 Oct 2019 15:14:45 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
         Fabien Dessenne <fabien.dessenne@st.com>,
@@ -67,10 +67,10 @@ Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Johan Hovold <johan@kernel.org>,
         stable <stable@vger.kernel.org>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>
-Subject: [PATCH 4/4] s390/zcrypt: fix memleak at release
-Date:   Thu, 10 Oct 2019 15:13:33 +0200
-Message-Id: <20191010131333.23635-5-johan@kernel.org>
+        Jordan Crouse <jcrouse@codeaurora.org>
+Subject: [PATCH 1/4] drm/msm: fix memleak on release
+Date:   Thu, 10 Oct 2019 15:13:30 +0200
+Message-Id: <20191010131333.23635-2-johan@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191010131333.23635-1-johan@kernel.org>
 References: <20191010131333.23635-1-johan@kernel.org>
@@ -81,33 +81,39 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If a process is interrupted while accessing the crypto device and the
-global ap_perms_mutex is contented, release() could return early and
-fail to free related resources.
+If a process is interrupted while accessing the "gpu" debugfs file and
+the drm device struct_mutex is contended, release() could return early
+and fail to free related resources.
 
-Fixes: 00fab2350e6b ("s390/zcrypt: multiple zcrypt device nodes support")
-Cc: stable <stable@vger.kernel.org>     # 4.19
-Cc: Harald Freudenberger <freude@linux.ibm.com>
-Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+Note that the return value from release() is ignored.
+
+Fixes: 4f776f4511c7 ("drm/msm/gpu: Convert the GPU show function to use the GPU state")
+Cc: stable <stable@vger.kernel.org>     # 4.18
+Cc: Jordan Crouse <jcrouse@codeaurora.org>
+Cc: Rob Clark <robdclark@gmail.com>
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/s390/crypto/zcrypt_api.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/msm/msm_debugfs.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/s390/crypto/zcrypt_api.c b/drivers/s390/crypto/zcrypt_api.c
-index 45bdb47f84c1..9157e728a362 100644
---- a/drivers/s390/crypto/zcrypt_api.c
-+++ b/drivers/s390/crypto/zcrypt_api.c
-@@ -522,8 +522,7 @@ static int zcrypt_release(struct inode *inode, struct file *filp)
- 	if (filp->f_inode->i_cdev == &zcrypt_cdev) {
- 		struct zcdn_device *zcdndev;
+diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
+index 6be879578140..1c74381a4fc9 100644
+--- a/drivers/gpu/drm/msm/msm_debugfs.c
++++ b/drivers/gpu/drm/msm/msm_debugfs.c
+@@ -47,12 +47,8 @@ static int msm_gpu_release(struct inode *inode, struct file *file)
+ 	struct msm_gpu_show_priv *show_priv = m->private;
+ 	struct msm_drm_private *priv = show_priv->dev->dev_private;
+ 	struct msm_gpu *gpu = priv->gpu;
+-	int ret;
+-
+-	ret = mutex_lock_interruptible(&show_priv->dev->struct_mutex);
+-	if (ret)
+-		return ret;
  
--		if (mutex_lock_interruptible(&ap_perms_mutex))
--			return -ERESTARTSYS;
-+		mutex_lock(&ap_perms_mutex);
- 		zcdndev = find_zcdndev_by_devt(filp->f_inode->i_rdev);
- 		mutex_unlock(&ap_perms_mutex);
- 		if (zcdndev) {
++	mutex_lock(&show_priv->dev->struct_mutex);
+ 	gpu->funcs->gpu_state_put(show_priv->state);
+ 	mutex_unlock(&show_priv->dev->struct_mutex);
+ 
 -- 
 2.23.0
 
