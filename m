@@ -2,118 +2,140 @@ Return-Path: <SRS0=hXqB=YD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EF14ECE596
-	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:14:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5DB8ECE58E
+	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:50:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id EA47A206B6
-	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1570713298;
-	bh=FQX0xMB6lROMcqP/mnVeH32i9L3hg21Y95t5o1X1K6g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=puBb2dwQw629J+dT8i6KyPG7LybHfB06AjzXhllaWA01h0gZw/etuOmltkOTH5XOR
-	 wcQ/qE6BkowoSmw0AgwbmRNOyZ/IpAzMWnSQzvXh+Y9IXOlYCaMbT6NzAa+bYw46LO
-	 uRB/UbyfvNdvsirvqpF8zpSoU0ZNc5OGCsfiMrgM=
+	by mail.kernel.org (Postfix) with ESMTP id 9CE9C206A1
+	for <linux-media@archiver.kernel.org>; Thu, 10 Oct 2019 13:50:49 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="TQZ07FMv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387992AbfJJNOi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 10 Oct 2019 09:14:38 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39234 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727788AbfJJNOi (ORCPT
+        id S1725971AbfJJNus (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 10 Oct 2019 09:50:48 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:43600 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfJJNus (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 10 Oct 2019 09:14:38 -0400
-Received: by mail-lj1-f195.google.com with SMTP id y3so6161668ljj.6;
-        Thu, 10 Oct 2019 06:14:35 -0700 (PDT)
+        Thu, 10 Oct 2019 09:50:48 -0400
+Received: by mail-ed1-f65.google.com with SMTP id r9so5514537edl.10
+        for <linux-media@vger.kernel.org>; Thu, 10 Oct 2019 06:50:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=o898Z3trs0jH/OlBQbiOm8e/1sEfrvM2Vk3WyyK56M4=;
+        b=TQZ07FMvCXrWciJ7O9lR+yonpxUCVIcHnhmodCVsy5Dh/Y5im2arlnqViBllsFZMoz
+         FX1zMJwHMqtbjlVh/VFK76TKJ5qMTJkhvErbbOvUl3k+Ss1ZPSUdmEOoFoKO4bV2Iigr
+         iZ9kCTkHefQMk+aqix6L1jZn0EltF9d/5eWS4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7uV6DWb+5d+72lobYH9RlUHuo93UKxieqoJDmd2AkLE=;
-        b=oXQr5K5AknmV7WOzIin2s0bc0UXSpL0sEbz5ZC7mWHK/Bna1bF0mswJNeGG1izrqEk
-         HglDUe5pmeQk75c8IwkKyig/ND+fh+zwNHC1twqSJuHX4cvleN+woZqaMPzW1MIG3L7a
-         bCEeIWmT+CuCv/I3uxDoiq9/NHRPo2uZQi9wWwnZk+W71el3Bl0C4Bh3E116gT49eZgr
-         YCZrwzJFxS0DOju8ct9fGhAGby2z+Y4cnCN5GO34He4NKhcAgD1BCjFAOw84RE1OUX/u
-         POxbm/sRphFQ+PJqP3RcneVkT3b+MVOHx/wx2H7ljYLexVweplYDx3jyNDhJWnh7Knrf
-         +jnA==
-X-Gm-Message-State: APjAAAWzC/PNl+MBM3Z6U+4v3lAPhG2whTyBVZ+VMo8aM9O7I36g5CUj
-        0Hvq9Ffa025jCOkbtoVUpeI=
-X-Google-Smtp-Source: APXvYqzFKhC+O0enYQEtd6+xCyXriydLhbwo0jiMAK6X/4MJHrEhzIRCF056ErjC0uEfoKkbTLxJHw==
-X-Received: by 2002:a2e:8ec2:: with SMTP id e2mr5820909ljl.126.1570713275165;
-        Thu, 10 Oct 2019 06:14:35 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id k7sm1184634lja.19.2019.10.10.06.14.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Oct 2019 06:14:34 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iIYHF-0006Ak-Dh; Thu, 10 Oct 2019 15:14:45 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=o898Z3trs0jH/OlBQbiOm8e/1sEfrvM2Vk3WyyK56M4=;
+        b=XKjlqKWKk2fL1UIByWTX7aM9jVRupC6A4+zYDzqGhSLvWPDdWwwOWvMxSCJsgP/Z4B
+         tOsKrLoup4ph193FmBUZTOHOXb70KeH1x23DmwQimO//fzSD+eGZRZSll05Jvre+v+U/
+         zaZJ7ogwnnf9YPMTIdBH3bfMjQORnE/pB2MJ/Tr99oJvJM/1yQ2J9n1eVrsAHFOWJwlu
+         2d+hJ0yexslZzxtyfgtwDkkql0AgbDUlQWrrcYk2OLWqCIO4wQskcohEDxx6Q/yRG63l
+         c18vNGb/Y9G1Yg3pH591qUnCNEQ2vo5aCJohT/LxtVYbcYVir/Px2gCdfKNR8wtTeieL
+         uMPQ==
+X-Gm-Message-State: APjAAAVCbVCIsMGir+sjklqqbq7oy1GPajtVT5sn9vVb2CrWBC/oIsj1
+        DPBHCuGIuuRR0Rr1V12C65Gd0A==
+X-Google-Smtp-Source: APXvYqwDTtGo4w8HEdRUZir73TR7uahsebmS6NjOfoevZfEYTOWdmz2kjDkxMdcPaAEi5/omDEtt/g==
+X-Received: by 2002:a17:906:7e17:: with SMTP id e23mr374597ejr.205.1570715446752;
+        Thu, 10 Oct 2019 06:50:46 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-96.fiber7.init7.net. [212.51.149.96])
+        by smtp.gmail.com with ESMTPSA id 36sm988776edz.92.2019.10.10.06.50.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2019 06:50:45 -0700 (PDT)
+Date:   Thu, 10 Oct 2019 15:50:43 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
         Fabien Dessenne <fabien.dessenne@st.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Harald Freudenberger <freude@linux.ibm.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         linux-media@vger.kernel.org, linux-s390@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>
-Subject: [PATCH 1/4] drm/msm: fix memleak on release
-Date:   Thu, 10 Oct 2019 15:13:30 +0200
-Message-Id: <20191010131333.23635-2-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191010131333.23635-1-johan@kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 0/4] treewide: fix interrupted release
+Message-ID: <20191010135043.GA16989@phenom.ffwll.local>
+Mail-Followup-To: Johan Hovold <johan@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        David Airlie <airlied@linux.ie>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-s390@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 References: <20191010131333.23635-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191010131333.23635-1-johan@kernel.org>
+X-Operating-System: Linux phenom 5.2.0-2-amd64 
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-If a process is interrupted while accessing the "gpu" debugfs file and
-the drm device struct_mutex is contended, release() could return early
-and fail to free related resources.
+On Thu, Oct 10, 2019 at 03:13:29PM +0200, Johan Hovold wrote:
+> Two old USB drivers had a bug in them which could lead to memory leaks
+> if an interrupted process raced with a disconnect event.
+> 
+> Turns out we had a few more driver in other subsystems with the same
+> kind of bug in them.
+> 
+> Note that all but the s390 patch have only been compile tested, while
+> the s390 one has not even been built.
 
-Note that the return value from release() is ignored.
+Random funny idea: Could we do some debug annotations (akin to
+might_sleep) that splats when you might_sleep_interruptible somewhere
+where interruptible sleeps are generally a bad idea? Like in
+fops->release?
 
-Fixes: 4f776f4511c7 ("drm/msm/gpu: Convert the GPU show function to use the GPU state")
-Cc: stable <stable@vger.kernel.org>     # 4.18
-Cc: Jordan Crouse <jcrouse@codeaurora.org>
-Cc: Rob Clark <robdclark@gmail.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/gpu/drm/msm/msm_debugfs.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Something like non_block_start/end that I've recently done, but for
+interruptible sleeps only? Would need might_sleep_interruptibly()
+annotations and non_interruptly_sleep_start/end annotations.
+-Daniel
 
-diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
-index 6be879578140..1c74381a4fc9 100644
---- a/drivers/gpu/drm/msm/msm_debugfs.c
-+++ b/drivers/gpu/drm/msm/msm_debugfs.c
-@@ -47,12 +47,8 @@ static int msm_gpu_release(struct inode *inode, struct file *file)
- 	struct msm_gpu_show_priv *show_priv = m->private;
- 	struct msm_drm_private *priv = show_priv->dev->dev_private;
- 	struct msm_gpu *gpu = priv->gpu;
--	int ret;
--
--	ret = mutex_lock_interruptible(&show_priv->dev->struct_mutex);
--	if (ret)
--		return ret;
- 
-+	mutex_lock(&show_priv->dev->struct_mutex);
- 	gpu->funcs->gpu_state_put(show_priv->state);
- 	mutex_unlock(&show_priv->dev->struct_mutex);
- 
+> 
+> Johan
+> 
+> 
+> Johan Hovold (4):
+>   drm/msm: fix memleak on release
+>   media: bdisp: fix memleak on release
+>   media: radio: wl1273: fix interrupt masking on release
+>   s390/zcrypt: fix memleak at release
+> 
+>  drivers/gpu/drm/msm/msm_debugfs.c             | 6 +-----
+>  drivers/media/platform/sti/bdisp/bdisp-v4l2.c | 3 +--
+>  drivers/media/radio/radio-wl1273.c            | 3 +--
+>  drivers/s390/crypto/zcrypt_api.c              | 3 +--
+>  4 files changed, 4 insertions(+), 11 deletions(-)
+> 
+> -- 
+> 2.23.0
+> 
+
 -- 
-2.23.0
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
