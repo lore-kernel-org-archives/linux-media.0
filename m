@@ -2,103 +2,177 @@ Return-Path: <SRS0=0Khp=YE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16A60ECE58C
-	for <linux-media@archiver.kernel.org>; Fri, 11 Oct 2019 14:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D89CC47404
+	for <linux-media@archiver.kernel.org>; Fri, 11 Oct 2019 14:41:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E49CD218AC
-	for <linux-media@archiver.kernel.org>; Fri, 11 Oct 2019 14:15:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="l6CJwqg6"
+	by mail.kernel.org (Postfix) with ESMTP id 77CD9222D0
+	for <linux-media@archiver.kernel.org>; Fri, 11 Oct 2019 14:41:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1570804894;
+	bh=870GE/oXs6wFY8rbNxBOfhPOtbZPvy6zZ9Ia8hRPZQY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=tzQ0zX4ytsCqZ3OTM+kk3q23stUSUvURCMLt9W1CYG+dOqaVKl5FQUrYCmxLyxS1j
+	 cbGIlOmGb4EyFTtTwHtVfOUj95sTmEPauF6g1KgJjh3Ab7F8P0JqmvJmz92EzHZFF6
+	 8VRjUgl6YwydaBLOLkq6W3sr9RKekL50ZJYO1N9c=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728414AbfJKOPv (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Oct 2019 10:15:51 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:44798 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728149AbfJKOPv (ORCPT
+        id S1726781AbfJKOlb (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Oct 2019 10:41:31 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:36364 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726174AbfJKOlb (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Oct 2019 10:15:51 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9BEFmYP096153;
-        Fri, 11 Oct 2019 09:15:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570803348;
-        bh=I7dmdvdBlPphNfATj/muSzDDbXFjLuTMgHnQzMfBLp8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=l6CJwqg679RNJl0FUVfo3oadknuvU8IJbRG0ebFSmgkqfMg5tr3YOMUUiYap2Pfsi
-         9eK2uBb7YW+yQirefJRTxo1QzN/ze4nHN7bNJv8Gs4InfEpjHt1V15HfLJ6JcZofjd
-         qaEnz7eugmgjmKcsWboGXirqYYS3Z97+qyQS4ztc=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9BEFm9Y066706;
-        Fri, 11 Oct 2019 09:15:48 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 11
- Oct 2019 09:15:43 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 11 Oct 2019 09:15:43 -0500
-Received: from ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with SMTP id x9BEFlkk101141;
-        Fri, 11 Oct 2019 09:15:47 -0500
-Date:   Fri, 11 Oct 2019 09:18:23 -0500
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Colin King <colin.king@canonical.com>
-CC:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        <linux-media@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH][next] media: ti-vpe: vpe: use r2y instead of y2r,
- copy-paste error
-Message-ID: <20191011141823.kyxz32c2p24rr3d3@ti.com>
-References: <20191011132940.8995-1-colin.king@canonical.com>
+        Fri, 11 Oct 2019 10:41:31 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 67so8154508oto.3;
+        Fri, 11 Oct 2019 07:41:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TKLBwidlY8Z3JTq5wxCnvHpvRsZmPGpUIR8JC3vLZ08=;
+        b=ies2Yx2W/892O54NitJ4+cR2BxIN68x+85zj/qhFdFRj+Suz0iydCR63zrhtJf8g9R
+         KUQO3b9HmK4O0FWBUrBT/BkJ4E71cs0sbmVchQTv9fTWS3kZyAT39mUtP9pKRPbfBYdN
+         PnTEm94PdNA3FEDfI9UFKJkMedmLXgfcsHRAqU/TEOdeMpz20G5pDkmherJvfGblTBxR
+         CQYt3h/e74X1fBhotLVUY+Ch0+6vLfm4EN/igXSnsbq2rcMsv3lk5fTT8e8BkO9tZ25C
+         L9i0ESS95PntkR1DJfpGCvYL0p3DcWGfiPA2HK402/KJ+n0ID6w2Lt+dyIY/+axnlgzc
+         RMTQ==
+X-Gm-Message-State: APjAAAUSNfYtGc0jE4jOoTsiR66J/+j1Nzwg2KCCRrgSRbZLk4UiIpZ8
+        Vef/1mk7drWeacmi7yPv6Q==
+X-Google-Smtp-Source: APXvYqzPDmMOHoPxKw0K4wdBgFxJQJ0ExuW4XED8tlQ8I9P4txCzqKFc3qva5tX8kT2AJFqdUPh2mQ==
+X-Received: by 2002:a9d:6d11:: with SMTP id o17mr9430840otp.333.1570804889780;
+        Fri, 11 Oct 2019 07:41:29 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id r3sm2642930otk.31.2019.10.11.07.41.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Oct 2019 07:41:29 -0700 (PDT)
+Date:   Fri, 11 Oct 2019 09:41:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Jernej Skrabec <jernej.skrabec@siol.net>
+Cc:     mripard@kernel.org, wens@csie.org, mark.rutland@arm.com,
+        mchehab@kernel.org, hverkuil@xs4all.nl, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-sunxi@googlegroups.com
+Subject: Re: [PATCH v2 4/6] dt-bindings: media: Add Allwinner H3 Deinterlace
+ binding
+Message-ID: <20191011144128.GA24245@bogus>
+References: <20190929161653.160158-1-jernej.skrabec@siol.net>
+ <20190929161653.160158-5-jernej.skrabec@siol.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191011132940.8995-1-colin.king@canonical.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <20190929161653.160158-5-jernej.skrabec@siol.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Colin King <colin.king@canonical.com> wrote on Fri [2019-Oct-11 14:29:40 +0100]:
-> From: Colin Ian King <colin.king@canonical.com>
+On Sun, Sep 29, 2019 at 06:16:51PM +0200, Jernej Skrabec wrote:
+> Allwinner H3 Deinterlace core is used for deinterlacing interlaced video
+> content. Core can also be found on some later SoCs, like H5 and R40.
 > 
-> There appears to be a copy-paste error on the access of
-> csc_coeffs.y2r.r601.full.coeff, I believe csc_coeffs.2yr.r601.full.coeff
-> should be used instead. This is a moot point as the code is never
-> reached, but at least use the correct structure element.
-> 
-> Addresses-Coverity: ("Copy-paste error")
-> Fixes: 3ff3a712a9ea ("media: ti-vpe: vpe: don't rely on colorspace member for conversion")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
 > ---
->  drivers/media/platform/ti-vpe/csc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  .../media/allwinner,sun8i-h3-deinterlace.yaml | 75 +++++++++++++++++++
+>  1 file changed, 75 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.yaml
 > 
-> diff --git a/drivers/media/platform/ti-vpe/csc.c b/drivers/media/platform/ti-vpe/csc.c
-> index bd923bee4a31..834114a4eebe 100644
-> --- a/drivers/media/platform/ti-vpe/csc.c
-> +++ b/drivers/media/platform/ti-vpe/csc.c
-> @@ -238,7 +238,7 @@ void csc_set_coeff(struct csc_data *csc, u32 *csc_reg0,
->  				coeff = csc_coeffs.r2y.r709.limited.coeff;
->  		} else {
->  			/* Should never reach this, but it keeps gcc happy */
-> -			coeff = csc_coeffs.y2r.r601.full.coeff;
-> +			coeff = csc_coeffs.r2y.r601.full.coeff;
->  		}
->  	} else {
->  		*csc_reg5 |= CSC_BYPASS;
+> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.yaml b/Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.yaml
+> new file mode 100644
+> index 000000000000..55a5d4e4f0f9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.yaml
+> @@ -0,0 +1,75 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/allwinner,sun8i-h3-deinterlace.yaml#
 
-Reviewed-by: Benoit Parrot <bparrot.ti.com>
+Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.yaml: $id: path/filename 'arm/allwinner,sun8i-h3-deinterlace.yaml' doesn't match actual filename
+Documentation/devicetree/bindings/Makefile:12: recipe for target 'Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.example.dts' failed
+make[1]: *** [Documentation/devicetree/bindings/media/allwinner,sun8i-h3-deinterlace.example.dts] Error 1
+Makefile:1282: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
 
+With that fixed,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner H3 Deinterlace Device Tree Bindings
+> +
+> +maintainers:
+> +  - Chen-Yu Tsai <wens@csie.org>
+> +  - Maxime Ripard <mripard@kernel.org>
+> +
+> +description: |-
+> +  The Allwinner H3 and later has a deinterlace core used for
+> +  deinterlacing interlaced video content.
+> +
+> +properties:
+> +  compatible:
+> +    const: allwinner,sun8i-h3-deinterlace
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Deinterlace interface clock
+> +      - description: Deinterlace module clock
+> +      - description: Deinterlace DRAM clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bus
+> +      - const: mod
+> +      - const: ram
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  interconnects:
+> +    maxItems: 1
+> +
+> +  interconnect-names:
+> +    const: dma-mem
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/sun8i-h3-ccu.h>
+> +    #include <dt-bindings/reset/sun8i-h3-ccu.h>
+> +
+> +    deinterlace: deinterlace@1400000 {
+> +        compatible = "allwinner,sun8i-h3-deinterlace";
+> +        reg = <0x01400000 0x20000>;
+> +        clocks = <&ccu CLK_BUS_DEINTERLACE>,
+> +                 <&ccu CLK_DEINTERLACE>,
+> +                 <&ccu CLK_DRAM_DEINTERLACE>;
+> +        clock-names = "bus", "mod", "ram";
+> +        resets = <&ccu RST_BUS_DEINTERLACE>;
+> +        interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>;
+> +        interconnects = <&mbus 9>;
+> +        interconnect-names = "dma-mem";
+> +    };
+> +
+> +...
 > -- 
-> 2.20.1
+> 2.23.0
 > 
