@@ -2,29 +2,29 @@ Return-Path: <SRS0=0Khp=YE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 271A3ECE58C
-	for <linux-media@archiver.kernel.org>; Fri, 11 Oct 2019 09:33:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4257EECE596
+	for <linux-media@archiver.kernel.org>; Fri, 11 Oct 2019 09:33:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0896C21A4A
-	for <linux-media@archiver.kernel.org>; Fri, 11 Oct 2019 09:33:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1D758222D3
+	for <linux-media@archiver.kernel.org>; Fri, 11 Oct 2019 09:33:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727700AbfJKJdt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 11 Oct 2019 05:33:49 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:32964 "EHLO
+        id S1727653AbfJKJds (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 11 Oct 2019 05:33:48 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:32912 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727387AbfJKJdt (ORCPT
+        with ESMTP id S1726743AbfJKJds (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 11 Oct 2019 05:33:49 -0400
+        Fri, 11 Oct 2019 05:33:48 -0400
 Received: from localhost.localdomain (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 46E3D290D6B;
-        Fri, 11 Oct 2019 10:33:47 +0100 (BST)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 18E3F290D69;
+        Fri, 11 Oct 2019 10:33:46 +0100 (BST)
 From:   Boris Brezillon <boris.brezillon@collabora.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Hans Verkuil <hans.verkuil@cisco.com>,
@@ -40,12 +40,10 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-rockchip@lists.infradead.org,
         Heiko Stuebner <heiko@sntech.de>,
         Boris Brezillon <boris.brezillon@collabora.com>
-Subject: [RESEND PATCH v2 2/4] media: dt-bindings: rockchip: Document RK3399 Video Decoder bindings
-Date:   Fri, 11 Oct 2019 11:33:40 +0200
-Message-Id: <20191011093342.3471-3-boris.brezillon@collabora.com>
+Subject: [RESEND PATCH v2 0/4] media: rockchip: Add the rkvdec driver
+Date:   Fri, 11 Oct 2019 11:33:38 +0200
+Message-Id: <20191011093342.3471-1-boris.brezillon@collabora.com>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20191011093342.3471-1-boris.brezillon@collabora.com>
-References: <20191011093342.3471-1-boris.brezillon@collabora.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -53,91 +51,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Document the Rockchip RK3399 Video Decoder bindings.
+Hello,
 
-Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
----
- .../bindings/media/rockchip,vdec.yaml         | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
+Sorry for the noise, I forgot to Cc the DT maintainers/ML on my last
+attempt.
+
+This is v2 of the rkvdec driver which was initially posted as part of
+my RFC adding codec helpers.
+For this version, I decided to get rid of the helper stuff which is
+likely to take some more time to settle. The patchset now contains a
+proper DT binding doc.
+
+Note that this implementation is likely to be adjusted based on the
+outcome of the 'scaling matrix order' [1] and 'dynamic resolution
+changes' [2] discussions, but I thought it'd be worth posting this
+version to start getting feeback.
+
+Regards,
+
+Boris
+
+[1]https://patchwork.kernel.org/cover/11125207/
+[2]https://lkml.org/lkml/2019/9/3/1033
+
+Boris Brezillon (4):
+  media: vb2: Add a helper to get the vb2 buffer attached to a request
+  media: dt-bindings: rockchip: Document RK3399 Video Decoder bindings
+  media: rockchip: Add the rkvdec driver
+  arm64: dts: rockchip: rk3399: Define the rockchip Video Decoder node
+
+ .../bindings/media/rockchip,vdec.yaml         |   71 ++
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   14 +-
+ .../media/common/videobuf2/videobuf2-core.c   |   23 +
+ drivers/staging/media/Kconfig                 |    2 +
+ drivers/staging/media/Makefile                |    1 +
+ drivers/staging/media/rockchip/Kconfig        |   16 +
+ drivers/staging/media/rockchip/Makefile       |    2 +
+ drivers/staging/media/rockchip/vdec/Kconfig   |   14 +
+ drivers/staging/media/rockchip/vdec/Makefile  |    3 +
+ .../staging/media/rockchip/vdec/rkvdec-h264.c |  960 +++++++++++++++
+ .../staging/media/rockchip/vdec/rkvdec-regs.h |  306 +++++
+ drivers/staging/media/rockchip/vdec/rkvdec.c  | 1089 +++++++++++++++++
+ drivers/staging/media/rockchip/vdec/rkvdec.h  |  131 ++
+ include/media/videobuf2-core.h                |   11 +
+ 14 files changed, 2642 insertions(+), 1 deletion(-)
  create mode 100644 Documentation/devicetree/bindings/media/rockchip,vdec.yaml
+ create mode 100644 drivers/staging/media/rockchip/Kconfig
+ create mode 100644 drivers/staging/media/rockchip/Makefile
+ create mode 100644 drivers/staging/media/rockchip/vdec/Kconfig
+ create mode 100644 drivers/staging/media/rockchip/vdec/Makefile
+ create mode 100644 drivers/staging/media/rockchip/vdec/rkvdec-h264.c
+ create mode 100644 drivers/staging/media/rockchip/vdec/rkvdec-regs.h
+ create mode 100644 drivers/staging/media/rockchip/vdec/rkvdec.c
+ create mode 100644 drivers/staging/media/rockchip/vdec/rkvdec.h
 
-diff --git a/Documentation/devicetree/bindings/media/rockchip,vdec.yaml b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
-new file mode 100644
-index 000000000000..7167c3d6a389
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/rockchip,vdec.yaml
-@@ -0,0 +1,71 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/rockchip,vdec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Rockchip Video Decoder (VDec) Device Tree Bindings
-+
-+maintainers:
-+  - Heiko Stuebner <heiko@sntech.de>
-+
-+description: |-
-+  The Rockchip rk3399 has a stateless Video Decoder that can decodes H.264,
-+  HEVC an VP9 streams.
-+
-+properties:
-+  compatible:
-+    const: rockchip,rk3399-vdec
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: The Video Decoder AXI interface clock
-+      - description: The Video Decoder AHB interface clock
-+      - description: The Video Decoded CABAC clock
-+      - description: The Video Decoder core clock
-+
-+  clock-names:
-+    items:
-+      - const: aclk
-+      - const: iface
-+      - const: cabac
-+      - const: core
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  iommus:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - power-domains
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    vdec: video-codec@ff660000 {
-+        compatible = "rockchip,rk3399-vdec";
-+        reg = <0x0 0xff660000 0x0 0x400>;
-+        interrupts = <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH 0>;
-+        clocks = <&cru ACLK_VDU>, <&cru HCLK_VDU>,
-+                 <&cru SCLK_VDU_CA>, <&cru SCLK_VDU_CORE>;
-+        clock-names = "aclk", "iface", "cabac", "core";
-+        power-domains = <&power RK3399_PD_VDU>;
-+        iommus = <&vdec_mmu>;
-+    };
-+
-+...
 -- 
 2.21.0
 
