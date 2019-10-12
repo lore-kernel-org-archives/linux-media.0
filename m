@@ -2,137 +2,172 @@ Return-Path: <SRS0=l2Ma=YF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BD38C10F14
-	for <linux-media@archiver.kernel.org>; Sat, 12 Oct 2019 18:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65924C4360C
+	for <linux-media@archiver.kernel.org>; Sat, 12 Oct 2019 20:14:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2172B20700
-	for <linux-media@archiver.kernel.org>; Sat, 12 Oct 2019 18:47:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F1F0205F4
+	for <linux-media@archiver.kernel.org>; Sat, 12 Oct 2019 20:14:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iTeX0/oD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729280AbfJLSrz convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 12 Oct 2019 14:47:55 -0400
-Received: from smtp-out-mk-2.talktalk.net ([212.74.114.22]:58035 "EHLO
-        mk-outbound-2.mail.uk.tiscali.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728111AbfJLSrz (ORCPT
+        id S1729413AbfJLUO0 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 12 Oct 2019 16:14:26 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:32990 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728338AbfJLUO0 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 12 Oct 2019 14:47:55 -0400
-Received: from [192.168.1.89] ([82.22.16.195])
-        by smtp.talktalk.net with SMTP
-        id JLz9ifeYZ574lJLz9ilBGt; Sat, 12 Oct 2019 19:19:23 +0100
-X-Originating-IP: [82.22.16.195]
-X-Spam: 0
-X-OAuthority: v=2.3 cv=cuTlbGwi c=1 sm=1 tr=0 a=P8GiAPQqIUPV+hjRTWZ0OA==:117
- a=P8GiAPQqIUPV+hjRTWZ0OA==:17 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19
- a=IkcTkHD0fZMA:10 a=VwQbUJbxAAAA:8 a=yZ8chm76AAAA:8 a=tMpp-0aFcUxKEtd6i1cA:9
- a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=d_f39n0F5IwZPrvwsx53:22
-Content-Type: text/plain; charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 9.3 \(3124\))
-Subject: Re: v4l-utils  undefined symbol: dvb_dev_alloc
-From:   _ _ _ _ _ <clangers@toucansurf.com>
-In-Reply-To: <20191012150220.1bff18ed@coco.lan>
-Date:   Sat, 12 Oct 2019 19:47:52 +0100
-Cc:     linux-media@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <5FF0093D-1AAE-4683-A290-F875CE32300D@toucansurf.com>
-References: <35A2C1D4-DE40-490C-AFE6-E426EC1EC0AC@toucansurf.com> <20191012150220.1bff18ed@coco.lan>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-X-Mailer: Apple Mail (2.3124)
-X-CMAE-Envelope: MS4wfFBr56f2fS7SxX4ri09l9BKjM278I3vhXuRs4DAq/CIdJxHtZ+UMtXpTcdY3uQjx4pyPi6UQslK+wZ/ugRv7qRKfYwro+Lh56DE6QwHrgFl4eEfo3N1N
- CfbfGDV+BOnzpy06DHN8YW0wCxibvt90QVzMdDAXKkWi3iggaw/Xi06Hw8QwQC7sAjn1PQGjSHEoWuPL4Bu1Td8/a5rWCVS7xiPo33knLanhfh57X0rfmk6l
+        Sat, 12 Oct 2019 16:14:26 -0400
+Received: by mail-pl1-f193.google.com with SMTP id d22so6110193pls.0
+        for <linux-media@vger.kernel.org>; Sat, 12 Oct 2019 13:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=bLxUcLUmIywB/2iIpWppK9HzZle8K+J909c/bjbR4GM=;
+        b=iTeX0/oDfMANM+XN51W09si9xYdtGklE/axeY0WoGHhWT1yYrUyeKa6LV19GsnUdEr
+         vgieqXnBVPreUcq6XDBZt1InVYx+Nh2tp27nJFMwbjshjXClIYne7XrdzOcPoe5yLHA8
+         aLAx2AxOOmwdRPp6JcMqKTlwkzRa/KdXCGrM2zzlQHHFkTdrxe1lcf2Nv48Dow9LPK09
+         LgUYcsseZ7ayJQpnaeGV+FY5EMTW+lGaVy0NfjbYyz/VdkpNdyfjpWt0YlRc59ijWAm4
+         1cnbhXbJ26NRoryikxYcyq4dqKSy5EgdZ3XhT7jwp/cJKrGCmpQMpvoqjdpGtZ/H1bh5
+         0k2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=bLxUcLUmIywB/2iIpWppK9HzZle8K+J909c/bjbR4GM=;
+        b=TB4xY2CkI9gwY52mkvWgdFTXJm3f8kD7ggxIXrIRXAf4Q3QQRbMV1wmeh5luOyx0R6
+         +wpM4S37vYMSD0hQrPKDdDP7T/Afckf8u+YFbvnwvpG9aDGG0NUiSfUnIrYNAXtN42W3
+         h3hf5b6Wkw0KPaXBCevaVQcugkS1ngeI6jzMtsdNKYpuy0EVId5Mbh9FNQ+KQlszCTYM
+         ahXXJ2Oz3gncBDa3Y/UkaeM++YKm1fUTwsxl9WB97uXcaLPG4lkV6mS7K6UXP8ZPdZhw
+         XRumtNiSk0snZoyWi4T4NOGIJqhn3iSIg+mPi6iYHDmd1frI0N6Oi/31KdJxkaFj7nw6
+         73GA==
+X-Gm-Message-State: APjAAAXWM57ign64iRABvYFAy6U3zvrH/P5gHADqm4hxvt7wHIVaSjjs
+        v0xxyTJfsEA8lsVchI0U9mo=
+X-Google-Smtp-Source: APXvYqxQNvg30m93gkld90gygurv1G18SSeuZbJGzCSez8ZJN3aDtUsvEeEAtJkrzBgRnxTQWE2sHw==
+X-Received: by 2002:a17:902:8c92:: with SMTP id t18mr20874175plo.76.1570911264990;
+        Sat, 12 Oct 2019 13:14:24 -0700 (PDT)
+Received: from [192.168.1.59] (c-73-202-231-77.hsd1.ca.comcast.net. [73.202.231.77])
+        by smtp.gmail.com with ESMTPSA id w10sm10947266pjq.3.2019.10.12.13.14.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 12 Oct 2019 13:14:24 -0700 (PDT)
+Subject: Re: [PATCH] media: imx.rst: Update the imx6-sabreauto ADV7180
+ instructions
+To:     Fabio Estevam <festevam@gmail.com>, hverkuil-cisco@xs4all.nl
+Cc:     mchehab@kernel.org, p.zabel@pengutronix.de,
+        linux-media@vger.kernel.org, tharvey@gateworks.com
+References: <20191010154417.9437-1-festevam@gmail.com>
+From:   Steve Longerbeam <slongerbeam@gmail.com>
+Message-ID: <0f7a7910-8652-7a95-1f04-e25278ec05aa@gmail.com>
+Date:   Sat, 12 Oct 2019 13:14:22 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191010154417.9437-1-festevam@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Great, I'll try what you suggest.
-Regards
-Carl
+Hi Fabio,
 
-> On 12 Oct 2019, at 19:02, Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
-> 
-> Em Sat, 12 Oct 2019 18:28:41 +0100
-> _ _ _ _ _ <clangers@toucansurf.com> escreveu:
-> 
->> I've been waiting for a working version of DVB-S2 capable tools and utilities to appear in a stable release of Mint, but  it hasn't happened yet, so I decided to build the latest stable v4l-utils from source.
->> 
->> I built v4l-utils version 1.18.0 on Linux Mint 18.3
->> 
->> the compilation process appeared to run through OK with only 9 warnings (see below), but the resulting executables fail due to a lib ref issue.
->> configure: WARNING: doxygen not found - will not generate any doxygen documentation
->> configure: WARNING: libelf library not available
->> configure: WARNING: Qt5 or higher is not available
->> configure: WARNING: ALSA library not available
->>  CC       control/libv4lconvert_la-libv4lcontrol.lo
->> control/libv4lcontrol.c: In function ‘v4lcontrol_create’:
->> control/libv4lcontrol.c:728:3: warning: ignoring return value of ‘ftruncate’, declared with attribute warn_unused_result [-Wunused-result]
->>   ftruncate(shm_fd, V4LCONTROL_SHM_SIZE);
->>   ^
->> libtool: warning: relinking 'libv4l2.la'
->> libtool: warning: relinking 'v4l2convert.la'
->> libtool: warning: relinking 'libv4l1.la'
->> libtool: warning: relinking 'v4l1compat.la'
->> 
->> Most of these look insignificant but the fifth one looks a bit worrying.
-> 
-> Shouldn't have any real consequence. it is just because there's nothing
-> like:
-> 
-> 	ret = ftruncate(...)
-> 	if (ret) {
-> 		/* some error handling logic */
-> 	}
-> 
->> 
->> End result :-
->> 
->> stupiduser@somehost ~ $ gcc --version
->> gcc (Ubuntu 5.4.0-6ubuntu1~16.04.11) 5.4.0 2016060
->> 
->> stupiduser@somehost ~ $ dvbv5-scan -V
->> dvbv5-scan version 1.18.0
->> 
->> stupiduser@somehost ~ $ dvbv5-scan /usr/share/dvb/dvb-s/Astra-28.2E
->> dvbv5-scan: symbol lookup error: dvbv5-scan: undefined symbol: dvb_dev_alloc
->> 
->> stupiduser@somehost ~ $ dvb-fe-tool -m -a0 
->> dvb-fe-tool: symbol lookup error: dvb-fe-tool: undefined symbol: dvb_dev_alloc
-> 
-> Probably you have an older version of DVB libraries installed on
-> your machine. It is trying to use the older library when you try
-> to run it.
-> 
-> There are some ways of solving it:
-> 
-> 1) Make configure to override the old library with:
-> 
-> 	./configure --prefix=/usr
-> 
-> (the default is to install it at /usr/local)
-> 
-> 2) Ensure that the dynamic linker will use the libraries from
-> /usr/local
-> 
-> Depending on how your distro is set, you could need to add a
-> new file at /etc/ld.so.conf.d/, in order to teach the dynamic
-> linker to use the /usr/local/lib directory to seek for libraries.
-> 
-> For example, create a "/etc/ld.so.conf.d/local.conf" file, and make the
-> system use it by running, as root:
-> 
-> 	# echo "/usr/local/lib" > /etc/ld.so.conf.d/local.conf
-> 	# ldconfig 
-> 
-> PS.: You may need to remove a previous install of the V4L and DVB
-> libs, in order to avoid any conflicts.
-> 
-> 3) use the environment var LD_LIBRARY_PATH in order to add 
-> /usr/local/lib to the list of directories it will seek for a 
-> library.
-> 
-> Thanks,
-> Mauro
+On 10/10/19 8:44 AM, Fabio Estevam wrote:
+> In kernel 5.3.x the I2C bus that the adv7180 is under has changed from
+> bus 3 to 4 and the ipu_csi0_mux numbers has also changed as shown by
+> the kernel log below:
+>
+> [    5.159423] imx-media: ipu1_csi0_mux:5 -> ipu1_csi0:0
+> [    5.164618] imx-media: ipu1_csi1_mux:5 -> ipu1_csi1:0
+> [    5.169953] imx-media: adv7180 4-0021:0 -> ipu1_csi0_mux:4
+>
+> Update the instructions accordingly.
+
+I just booted the imx6q SabreAuto with 5.4.0-rc1 (and media-tree HEAD 
+3ff3a712a9ea), I am getting:
+
+arm:~ % uname -r
+5.4.0-rc1-13672-g3ff3a712a9ea
+arm:~ % dmesg | grep 'ipu[12]_csi[01]_mux'
+[   13.042519] imx-media: ipu1_csi0_mux:2 -> ipu1_csi0:0
+[   13.042590] imx-media: ipu2_csi1_mux:2 -> ipu2_csi1:0
+[   13.042656] imx-media: adv7180 3-0021:0 -> ipu1_csi0_mux:1
+arm:~ % dmesg | grep adv7180
+[   12.905157] adv7180 3-0021: chip found @ 0x21 (i2c-2-mux (chan_id 1))
+[   13.042656] imx-media: adv7180 3-0021:0 -> ipu1_csi0_mux:1
+
+
+So the adv7180 i2c-bus and pad numbers have not changed. The adv7180 is 
+still on bus 3, and the output pad from the IPU-CSI video muxes are 
+still pad 2. The video muxes have no such pad 5 in fact. I'd be curious 
+in learning how you came about that pad number.
+
+> Also, in the last line pass the fmt field explicitly as done in the
+> previous lines.
+
+Thanks for catching that, it was left over from a pipeline configuration 
+script of mine.
+
+Steve
+
+>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>   Documentation/media/v4l-drivers/imx.rst | 18 +++++++++---------
+>   1 file changed, 9 insertions(+), 9 deletions(-)
+>
+> diff --git a/Documentation/media/v4l-drivers/imx.rst b/Documentation/media/v4l-drivers/imx.rst
+> index 1d7eb8c7bd5c..75430cd2f222 100644
+> --- a/Documentation/media/v4l-drivers/imx.rst
+> +++ b/Documentation/media/v4l-drivers/imx.rst
+> @@ -530,12 +530,12 @@ NTSC, or 'alternate'):
+>   .. code-block:: none
+>   
+>      # Setup links
+> -   media-ctl -l "'adv7180 3-0021':0 -> 'ipu1_csi0_mux':1[1]"
+> -   media-ctl -l "'ipu1_csi0_mux':2 -> 'ipu1_csi0':0[1]"
+> +   media-ctl -l "'adv7180 4-0021':0 -> 'ipu1_csi0_mux':4[1]"
+> +   media-ctl -l "'ipu1_csi0_mux':5 -> 'ipu1_csi0':0[1]"
+>      media-ctl -l "'ipu1_csi0':2 -> 'ipu1_csi0 capture':0[1]"
+>      # Configure pads
+> -   media-ctl -V "'adv7180 3-0021':0 [fmt:UYVY2X8/720x480 field:seq-bt]"
+> -   media-ctl -V "'ipu1_csi0_mux':2 [fmt:UYVY2X8/720x480]"
+> +   media-ctl -V "'adv7180 4-0021':0 [fmt:UYVY2X8/720x480 field:seq-bt]"
+> +   media-ctl -V "'ipu1_csi0_mux':5 [fmt:UYVY2X8/720x480]"
+>      media-ctl -V "'ipu1_csi0':2 [fmt:AYUV32/720x480]"
+>      # Configure "ipu1_csi0 capture" interface (assumed at /dev/video4)
+>      v4l2-ctl -d4 --set-fmt-video=field=interlaced_bt
+> @@ -553,19 +553,19 @@ at its output pad:
+>   .. code-block:: none
+>   
+>      # Setup links
+> -   media-ctl -l "'adv7180 3-0021':0 -> 'ipu1_csi0_mux':1[1]"
+> -   media-ctl -l "'ipu1_csi0_mux':2 -> 'ipu1_csi0':0[1]"
+> +   media-ctl -l "'adv7180 4-0021':0 -> 'ipu1_csi0_mux':4[1]"
+> +   media-ctl -l "'ipu1_csi0_mux':5 -> 'ipu1_csi0':0[1]"
+>      media-ctl -l "'ipu1_csi0':1 -> 'ipu1_vdic':0[1]"
+>      media-ctl -l "'ipu1_vdic':2 -> 'ipu1_ic_prp':0[1]"
+>      media-ctl -l "'ipu1_ic_prp':2 -> 'ipu1_ic_prpvf':0[1]"
+>      media-ctl -l "'ipu1_ic_prpvf':1 -> 'ipu1_ic_prpvf capture':0[1]"
+>      # Configure pads
+> -   media-ctl -V "'adv7180 3-0021':0 [fmt:UYVY2X8/720x576 field:seq-tb]"
+> -   media-ctl -V "'ipu1_csi0_mux':2 [fmt:UYVY2X8/720x576]"
+> +   media-ctl -V "'adv7180 4-0021':0 [fmt:UYVY2X8/720x576 field:seq-tb]"
+> +   media-ctl -V "'ipu1_csi0_mux':5 [fmt:UYVY2X8/720x576]"
+>      media-ctl -V "'ipu1_csi0':1 [fmt:AYUV32/720x576]"
+>      media-ctl -V "'ipu1_vdic':2 [fmt:AYUV32/720x576 field:none]"
+>      media-ctl -V "'ipu1_ic_prp':2 [fmt:AYUV32/720x576 field:none]"
+> -   media-ctl -V "'ipu1_ic_prpvf':1 [fmt:$outputfmt field:none]"
+> +   media-ctl -V "'ipu1_ic_prpvf':1 [fmt:AYUV32/720x576 field:none]"
+>   
+>   Streaming can then begin on the capture device node at
+>   "ipu1_ic_prpvf capture". The v4l2-ctl tool can be used to select any
 
