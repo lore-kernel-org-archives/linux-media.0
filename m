@@ -2,235 +2,135 @@ Return-Path: <SRS0=P/UY=YH=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.0 required=3.0 tests=DKIM_INVALID,DKIM_SIGNED,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E56E4ECE596
-	for <linux-media@archiver.kernel.org>; Mon, 14 Oct 2019 08:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A8A5C4CECE
+	for <linux-media@archiver.kernel.org>; Mon, 14 Oct 2019 08:48:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BFBF420673
-	for <linux-media@archiver.kernel.org>; Mon, 14 Oct 2019 08:40:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14DF120673
+	for <linux-media@archiver.kernel.org>; Mon, 14 Oct 2019 08:48:55 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="HrE4MoWh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730505AbfJNIkZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 14 Oct 2019 04:40:25 -0400
-Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:40917 "EHLO
-        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729234AbfJNIkZ (ORCPT
+        id S1730602AbfJNIsy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 14 Oct 2019 04:48:54 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:39793 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730464AbfJNIsx (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 14 Oct 2019 04:40:25 -0400
-Received: from marune.fritz.box ([IPv6:2001:983:e9a7:1:9cd4:edb1:3831:f13d])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id JvttiFYwLop0AJvtvidA9n; Mon, 14 Oct 2019 10:40:23 +0200
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Cc:     Vandana BN <bnvandana@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv6 1/3] v4l2-core: correctly validate video and metadata ioctls
-Date:   Mon, 14 Oct 2019 10:40:19 +0200
-Message-Id: <20191014084021.54191-2-hverkuil-cisco@xs4all.nl>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191014084021.54191-1-hverkuil-cisco@xs4all.nl>
-References: <20191014084021.54191-1-hverkuil-cisco@xs4all.nl>
+        Mon, 14 Oct 2019 04:48:53 -0400
+Received: by mail-ed1-f65.google.com with SMTP id a15so14079544edt.6
+        for <linux-media@vger.kernel.org>; Mon, 14 Oct 2019 01:48:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xtv8eDUo7LGL8wXNVViezHRuz1eIYtvj8JrfIGcZVug=;
+        b=HrE4MoWhmtc/2ksDE63nOcfdOtX17WLrOzhRQ9QxIpfLhDYJ37xkcRCjeilpHPQbY/
+         a9VXf8/BQDX+xVYBdbQxwqJg/4C0nxCllPh4PXFjE6krWeWUAUVaKgU8hoVw1CcGNRUj
+         havuz7CsORrPqD7MmaYvGtD/MPGCN3gWB5HRo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=xtv8eDUo7LGL8wXNVViezHRuz1eIYtvj8JrfIGcZVug=;
+        b=l8PTE+3bbn7amjnwh18d7GddFv4N4jAl4Zgm3JLfIxk9mX2hSYa12eXI3Es7rZr9Mw
+         FsVR759CcjYrtKylPCUVRHNCJTG02fJpbKMOKm35QbunlSuzS+ifdKhrSR8wkRvvJyfi
+         AXv8XzyvTsnVZHPlOwAfSeRdGqwnnTZCFLBndkKm3KkFZl9vnW9gO4J/IB3lHKQScaTo
+         2TJWV16qJ2nVEDpUdXfVsn4UzvXOGXyLaQMOyMcULWUDP/dEY5GP+toNDcDOgtoF+/iu
+         XcbAn9ROQ+8OCSSWiBj6UMYGnAw4egVm7UNUFl/fat95Qpi5wG9vjNZ36U2iUx/vGhwg
+         9WyQ==
+X-Gm-Message-State: APjAAAW4nN+tyFdatZF7T5QRls1hJBmnKirWn8gTG6A2zrU/RmGpwmIp
+        qpBnsV07UGl6rTGxsWUh9NE6jg==
+X-Google-Smtp-Source: APXvYqy/ZEwWAWWWTFpXjJ6+8zSYCyYSv2xT+RJWq3EenfofAI17t+WveIWMFS5L/0g7YiaoBEcqkg==
+X-Received: by 2002:a17:906:309b:: with SMTP id 27mr27115276ejv.243.1571042930920;
+        Mon, 14 Oct 2019 01:48:50 -0700 (PDT)
+Received: from phenom.ffwll.local (212-51-149-96.fiber7.init7.net. [212.51.149.96])
+        by smtp.gmail.com with ESMTPSA id bq13sm2215123ejb.25.2019.10.14.01.48.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2019 01:48:50 -0700 (PDT)
+Date:   Mon, 14 Oct 2019 10:48:47 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        David Airlie <airlied@linux.ie>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-s390@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH 0/4] treewide: fix interrupted release
+Message-ID: <20191014084847.GD11828@phenom.ffwll.local>
+Mail-Followup-To: Johan Hovold <johan@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        David Airlie <airlied@linux.ie>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-s390@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+References: <20191010131333.23635-1-johan@kernel.org>
+ <20191010135043.GA16989@phenom.ffwll.local>
+ <20191011093633.GD27819@localhost>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfOnlyq0tdyyrSuYq9vwWwT4k7/AVO6IDySEVaLcV39siTm/bJYQm/bza7AUVwOFfFTASJbOkOjZgC9oIp1QA+szmM4FV9zkQ3e3GAUHHgC/WeHBTZaTy
- Th1pbYomE9XBps1WyF1xHxU/cLZalEn8BVWBoyXaSrwD2FeJSaZED7h8lQN0C222pZcz4p/Lc7QV0bjAUW3iHFXRNyTkBmPoVVUc0N2eSJBlMAZfdAI1NWXB
- /h/Vaw094sy9aOMFTUG63V85FZ7NkxH8/m3vVevgQNW/881uz0aUScgPqMbZI14jDAFIooNtzfzuqmHMJ07km4o8fjyc+GWtv0mISfihAPGgXmcq+rNMBa8c
- 4ojFk7fffKo785Q1dSgOQGlVGOoV9XM2gDNG0oxQGq2PkKEpc/2+R0HnCPqns/6M/JEYPviI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191011093633.GD27819@localhost>
+X-Operating-System: Linux phenom 5.2.0-2-amd64 
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Vandana BN <bnvandana@gmail.com>
+On Fri, Oct 11, 2019 at 11:36:33AM +0200, Johan Hovold wrote:
+> On Thu, Oct 10, 2019 at 03:50:43PM +0200, Daniel Vetter wrote:
+> > On Thu, Oct 10, 2019 at 03:13:29PM +0200, Johan Hovold wrote:
+> > > Two old USB drivers had a bug in them which could lead to memory leaks
+> > > if an interrupted process raced with a disconnect event.
+> > > 
+> > > Turns out we had a few more driver in other subsystems with the same
+> > > kind of bug in them.
+> 
+> > Random funny idea: Could we do some debug annotations (akin to
+> > might_sleep) that splats when you might_sleep_interruptible somewhere
+> > where interruptible sleeps are generally a bad idea? Like in
+> > fops->release?
+> 
+> There's nothing wrong with interruptible sleep in fops->release per se,
+> it's just that drivers cannot return -ERESTARTSYS and friends and expect
+> to be called again later.
 
-If the type is VFL_TYPE_GRABBER, then also check device_caps
-to see if the video device supports video and/or metadata and
-disable unneeded ioctls.
+Do you have a legit usecase for interruptible sleeps in fops->release?
 
-Without this change, format ioctls for both video and metadata devices
-could be called on both device nodes. This is true for other ioctls as
-well, even if the device supports only video or metadata.
+I'm not even sure killable is legit in there, since it's an fd, not a
+process context ...
 
-Metadata devices act similar to VBI devices w.r.t. which ioctls should
-be enabled. This makes sense since VBI *is* metadata.
+> The return value from release() is ignored by vfs, and adding a splat in
+> __fput() to catch these buggy drivers might be overkill.
 
-Signed-off-by: Vandana BN <bnvandana@gmail.com>
-Co-Developed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
----
- drivers/media/v4l2-core/v4l2-dev.c   | 62 +++++++++++++++++-----------
- drivers/media/v4l2-core/v4l2-ioctl.c | 16 +++++--
- 2 files changed, 52 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/media/v4l2-core/v4l2-dev.c b/drivers/media/v4l2-core/v4l2-dev.c
-index 4037689a945a..1bf543932e4f 100644
---- a/drivers/media/v4l2-core/v4l2-dev.c
-+++ b/drivers/media/v4l2-core/v4l2-dev.c
-@@ -533,13 +533,23 @@ static int get_index(struct video_device *vdev)
-  */
- static void determine_valid_ioctls(struct video_device *vdev)
- {
-+	const u32 vid_caps = V4L2_CAP_VIDEO_CAPTURE |
-+			     V4L2_CAP_VIDEO_CAPTURE_MPLANE |
-+			     V4L2_CAP_VIDEO_OUTPUT |
-+			     V4L2_CAP_VIDEO_OUTPUT_MPLANE |
-+			     V4L2_CAP_VIDEO_M2M | V4L2_CAP_VIDEO_M2M_MPLANE;
-+	const u32 meta_caps = V4L2_CAP_META_CAPTURE |
-+			      V4L2_CAP_META_OUTPUT;
- 	DECLARE_BITMAP(valid_ioctls, BASE_VIDIOC_PRIVATE);
- 	const struct v4l2_ioctl_ops *ops = vdev->ioctl_ops;
--	bool is_vid = vdev->vfl_type == VFL_TYPE_GRABBER;
-+	bool is_vid = vdev->vfl_type == VFL_TYPE_GRABBER &&
-+		      (vdev->device_caps & vid_caps);
- 	bool is_vbi = vdev->vfl_type == VFL_TYPE_VBI;
- 	bool is_radio = vdev->vfl_type == VFL_TYPE_RADIO;
- 	bool is_sdr = vdev->vfl_type == VFL_TYPE_SDR;
- 	bool is_tch = vdev->vfl_type == VFL_TYPE_TOUCH;
-+	bool is_meta = vdev->vfl_type == VFL_TYPE_GRABBER &&
-+		       (vdev->device_caps & meta_caps);
- 	bool is_rx = vdev->vfl_dir != VFL_DIR_TX;
- 	bool is_tx = vdev->vfl_dir != VFL_DIR_RX;
- 
-@@ -587,39 +597,31 @@ static void determine_valid_ioctls(struct video_device *vdev)
- 		set_bit(_IOC_NR(VIDIOC_ENUM_FREQ_BANDS), valid_ioctls);
- 
- 	if (is_vid || is_tch) {
--		/* video and metadata specific ioctls */
-+		/* video and touch specific ioctls */
- 		if ((is_rx && (ops->vidioc_enum_fmt_vid_cap ||
--			       ops->vidioc_enum_fmt_vid_overlay ||
--			       ops->vidioc_enum_fmt_meta_cap)) ||
--		    (is_tx && (ops->vidioc_enum_fmt_vid_out ||
--			       ops->vidioc_enum_fmt_meta_out)))
-+			       ops->vidioc_enum_fmt_vid_overlay)) ||
-+		    (is_tx && ops->vidioc_enum_fmt_vid_out))
- 			set_bit(_IOC_NR(VIDIOC_ENUM_FMT), valid_ioctls);
- 		if ((is_rx && (ops->vidioc_g_fmt_vid_cap ||
- 			       ops->vidioc_g_fmt_vid_cap_mplane ||
--			       ops->vidioc_g_fmt_vid_overlay ||
--			       ops->vidioc_g_fmt_meta_cap)) ||
-+			       ops->vidioc_g_fmt_vid_overlay)) ||
- 		    (is_tx && (ops->vidioc_g_fmt_vid_out ||
- 			       ops->vidioc_g_fmt_vid_out_mplane ||
--			       ops->vidioc_g_fmt_vid_out_overlay ||
--			       ops->vidioc_g_fmt_meta_out)))
-+			       ops->vidioc_g_fmt_vid_out_overlay)))
- 			 set_bit(_IOC_NR(VIDIOC_G_FMT), valid_ioctls);
- 		if ((is_rx && (ops->vidioc_s_fmt_vid_cap ||
- 			       ops->vidioc_s_fmt_vid_cap_mplane ||
--			       ops->vidioc_s_fmt_vid_overlay ||
--			       ops->vidioc_s_fmt_meta_cap)) ||
-+			       ops->vidioc_s_fmt_vid_overlay)) ||
- 		    (is_tx && (ops->vidioc_s_fmt_vid_out ||
- 			       ops->vidioc_s_fmt_vid_out_mplane ||
--			       ops->vidioc_s_fmt_vid_out_overlay ||
--			       ops->vidioc_s_fmt_meta_out)))
-+			       ops->vidioc_s_fmt_vid_out_overlay)))
- 			 set_bit(_IOC_NR(VIDIOC_S_FMT), valid_ioctls);
- 		if ((is_rx && (ops->vidioc_try_fmt_vid_cap ||
- 			       ops->vidioc_try_fmt_vid_cap_mplane ||
--			       ops->vidioc_try_fmt_vid_overlay ||
--			       ops->vidioc_try_fmt_meta_cap)) ||
-+			       ops->vidioc_try_fmt_vid_overlay)) ||
- 		    (is_tx && (ops->vidioc_try_fmt_vid_out ||
- 			       ops->vidioc_try_fmt_vid_out_mplane ||
--			       ops->vidioc_try_fmt_vid_out_overlay ||
--			       ops->vidioc_try_fmt_meta_out)))
-+			       ops->vidioc_try_fmt_vid_out_overlay)))
- 			 set_bit(_IOC_NR(VIDIOC_TRY_FMT), valid_ioctls);
- 		SET_VALID_IOCTL(ops, VIDIOC_OVERLAY, vidioc_overlay);
- 		SET_VALID_IOCTL(ops, VIDIOC_G_FBUF, vidioc_g_fbuf);
-@@ -641,7 +643,21 @@ static void determine_valid_ioctls(struct video_device *vdev)
- 			set_bit(_IOC_NR(VIDIOC_S_CROP), valid_ioctls);
- 		SET_VALID_IOCTL(ops, VIDIOC_G_SELECTION, vidioc_g_selection);
- 		SET_VALID_IOCTL(ops, VIDIOC_S_SELECTION, vidioc_s_selection);
--	} else if (is_vbi) {
-+	}
-+	if (is_meta && is_rx) {
-+		/* metadata capture specific ioctls */
-+		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_meta_cap);
-+		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_meta_cap);
-+		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_cap);
-+		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_meta_cap);
-+	} else if (is_meta && is_tx) {
-+		/* metadata output specific ioctls */
-+		SET_VALID_IOCTL(ops, VIDIOC_ENUM_FMT, vidioc_enum_fmt_meta_out);
-+		SET_VALID_IOCTL(ops, VIDIOC_G_FMT, vidioc_g_fmt_meta_out);
-+		SET_VALID_IOCTL(ops, VIDIOC_S_FMT, vidioc_s_fmt_meta_out);
-+		SET_VALID_IOCTL(ops, VIDIOC_TRY_FMT, vidioc_try_fmt_meta_out);
-+	}
-+	if (is_vbi) {
- 		/* vbi specific ioctls */
- 		if ((is_rx && (ops->vidioc_g_fmt_vbi_cap ||
- 			       ops->vidioc_g_fmt_sliced_vbi_cap)) ||
-@@ -681,8 +697,8 @@ static void determine_valid_ioctls(struct video_device *vdev)
- 			set_bit(_IOC_NR(VIDIOC_TRY_FMT), valid_ioctls);
- 	}
- 
--	if (is_vid || is_vbi || is_sdr || is_tch) {
--		/* ioctls valid for video, metadata, vbi or sdr */
-+	if (is_vid || is_vbi || is_sdr || is_tch || is_meta) {
-+		/* ioctls valid for video, vbi, sdr, touch and metadata */
- 		SET_VALID_IOCTL(ops, VIDIOC_REQBUFS, vidioc_reqbufs);
- 		SET_VALID_IOCTL(ops, VIDIOC_QUERYBUF, vidioc_querybuf);
- 		SET_VALID_IOCTL(ops, VIDIOC_QBUF, vidioc_qbuf);
-@@ -694,8 +710,8 @@ static void determine_valid_ioctls(struct video_device *vdev)
- 		SET_VALID_IOCTL(ops, VIDIOC_STREAMOFF, vidioc_streamoff);
- 	}
- 
--	if (is_vid || is_vbi || is_tch) {
--		/* ioctls valid for video or vbi */
-+	if (is_vid || is_vbi || is_tch || is_meta) {
-+		/* ioctls valid for video, vbi, touch and metadata */
- 		if (ops->vidioc_s_std)
- 			set_bit(_IOC_NR(VIDIOC_ENUMSTD), valid_ioctls);
- 		SET_VALID_IOCTL(ops, VIDIOC_S_STD, vidioc_s_std);
-diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-core/v4l2-ioctl.c
-index 51b912743f0f..20b3107dd4e8 100644
---- a/drivers/media/v4l2-core/v4l2-ioctl.c
-+++ b/drivers/media/v4l2-core/v4l2-ioctl.c
-@@ -932,12 +932,22 @@ static int check_ext_ctrls(struct v4l2_ext_controls *c, int allow_priv)
- 
- static int check_fmt(struct file *file, enum v4l2_buf_type type)
- {
-+	const u32 vid_caps = V4L2_CAP_VIDEO_CAPTURE |
-+			     V4L2_CAP_VIDEO_CAPTURE_MPLANE |
-+			     V4L2_CAP_VIDEO_OUTPUT |
-+			     V4L2_CAP_VIDEO_OUTPUT_MPLANE |
-+			     V4L2_CAP_VIDEO_M2M | V4L2_CAP_VIDEO_M2M_MPLANE;
-+	const u32 meta_caps = V4L2_CAP_META_CAPTURE |
-+			      V4L2_CAP_META_OUTPUT;
- 	struct video_device *vfd = video_devdata(file);
- 	const struct v4l2_ioctl_ops *ops = vfd->ioctl_ops;
--	bool is_vid = vfd->vfl_type == VFL_TYPE_GRABBER;
-+	bool is_vid = vfd->vfl_type == VFL_TYPE_GRABBER &&
-+		      (vfd->device_caps & vid_caps);
- 	bool is_vbi = vfd->vfl_type == VFL_TYPE_VBI;
- 	bool is_sdr = vfd->vfl_type == VFL_TYPE_SDR;
- 	bool is_tch = vfd->vfl_type == VFL_TYPE_TOUCH;
-+	bool is_meta = vfd->vfl_type == VFL_TYPE_GRABBER &&
-+		       (vfd->device_caps & meta_caps);
- 	bool is_rx = vfd->vfl_dir != VFL_DIR_TX;
- 	bool is_tx = vfd->vfl_dir != VFL_DIR_RX;
- 
-@@ -996,11 +1006,11 @@ static int check_fmt(struct file *file, enum v4l2_buf_type type)
- 			return 0;
- 		break;
- 	case V4L2_BUF_TYPE_META_CAPTURE:
--		if (is_vid && is_rx && ops->vidioc_g_fmt_meta_cap)
-+		if (is_meta && is_rx && ops->vidioc_g_fmt_meta_cap)
- 			return 0;
- 		break;
- 	case V4L2_BUF_TYPE_META_OUTPUT:
--		if (is_vid && is_tx && ops->vidioc_g_fmt_meta_out)
-+		if (is_meta && is_tx && ops->vidioc_g_fmt_meta_out)
- 			return 0;
- 		break;
- 	default:
+Ime once you have a handful of instances of a broken pattern, creating a
+check for it (under a debug option only ofc) is very much justified.
+Otherwise they just come back to life like the undead, all the time. And
+there's a _lot_ of fops->release callbacks in the kernel.
+-Daniel
 -- 
-2.23.0
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
