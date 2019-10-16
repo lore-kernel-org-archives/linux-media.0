@@ -2,97 +2,103 @@ Return-Path: <SRS0=3WN/=YJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E42A4C4360C
-	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 09:52:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD591C4360C
+	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 09:54:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B9EAA218DE
-	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 09:52:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7E1A21848
+	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 09:54:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OyRfN2Aj"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="BjNRpsJl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392149AbfJPJwx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Oct 2019 05:52:53 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45309 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729546AbfJPJwx (ORCPT
+        id S2404339AbfJPJx6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Oct 2019 05:53:58 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:36338 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404266AbfJPJx6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Oct 2019 05:52:53 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y72so14363806pfb.12
-        for <linux-media@vger.kernel.org>; Wed, 16 Oct 2019 02:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QWF8mjNiT97Y4Yu34Asbv40t0M1Iiy1fzG350OTTfxo=;
-        b=OyRfN2AjU/zwDJtW2CPORsAfs4PwytUhC1ypdFgrGTCPuc9R0BBosbQYcKeQygIPKr
-         McZ+W/bCqe+m0bPl9mQgFre61jTN5Q1sn4X45qbx3++tLN5BT+XkQgBAIAPNMLXDVPbX
-         KmGPXIXdxE11LT3plJ2aMbVA7eU+XFKFeg3JA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QWF8mjNiT97Y4Yu34Asbv40t0M1Iiy1fzG350OTTfxo=;
-        b=BWylAgqs+jlC137DwQRnD1sARnT5JznGTSL2qBJzWh8VzrtwFIwFzcY0zLPZhCjtJo
-         JSZsGN4H7YAvoXZD0UdK+7Bl8/bo5IkgMtK+VwRW+sXZqCKg1ZuZ3BQ39mGN3aasFax4
-         0cgePfsKQVSpLJcaE/Bsawn560X+g/egOY4MUReWLZ5s2SwWsIKdi9SPaHXwJiU6XqJD
-         KZiE7QfPJ8l2j3SJm5lX9PngW+UPPgkHy+36abRmU1wGSSgt90HMICNvDeBH89mNipOx
-         XQMN27IQ3zqwV5GsRpwmLuOMWVGOsWu2RuKEAdwQdBuJlOd3YR8fZe7W8NDsq48jq4gD
-         8k6g==
-X-Gm-Message-State: APjAAAWi82ZXlkEoscy99qQp1RmOLZ08ViAk3x8tuYmBb+sTVvw7UAEm
-        pByV//L1rnl4R5fMLGPI5xH1qw==
-X-Google-Smtp-Source: APXvYqzMYt1/QR51QpPbDB/T2Np2kF1ttwoTTGshOFnZ92nrBInOM49017vQwrwHKqikCFhoRTKq+g==
-X-Received: by 2002:a62:3441:: with SMTP id b62mr42023107pfa.12.1571219570728;
-        Wed, 16 Oct 2019 02:52:50 -0700 (PDT)
-Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:93d9:de4d:e834:3086])
-        by smtp.gmail.com with ESMTPSA id g20sm24199694pfo.73.2019.10.16.02.52.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2019 02:52:49 -0700 (PDT)
-From:   Alexandre Courbot <acourbot@chromium.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Alexandre Courbot <gnurou@gmail.com>
-Subject: [PATCH] media: Documentation: v4l: fix section depth
-Date:   Wed, 16 Oct 2019 18:52:39 +0900
-Message-Id: <20191016095239.132921-1-acourbot@chromium.org>
-X-Mailer: git-send-email 2.23.0.700.g56cf767bdb-goog
+        Wed, 16 Oct 2019 05:53:58 -0400
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8361443E;
+        Wed, 16 Oct 2019 11:53:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1571219635;
+        bh=gjcnDXgTaHH8i0rQWIk9tmPvMqWjkUNsCfrg0iTzX/U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BjNRpsJlVWhEN2gh2yeS7XLz3wM+GhoW+gTtqVPxOvthF6gcJDbUAfd6owFXi7IBC
+         M+7+h31pY9s8i/nlfZWjSj92dvu1HLAOw+5QWPHnmHlrS1q1wmxsFBuIw33JDUOugs
+         o9CqGq9H5Oy1FnBCXb+66ZIBJfklmfTCCa8cK9ws=
+Date:   Wed, 16 Oct 2019 12:53:52 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: media: make use of
+ devm_platform_ioremap_resource
+Message-ID: <20191016095352.GA5175@pendragon.ideasonboard.com>
+References: <1570517752-30991-1-git-send-email-hariprasad.kelam@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1570517752-30991-1-git-send-email-hariprasad.kelam@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The request API documentation introduced a new section which should have
-been a subsection. Fix this.
+Hello Hariprasad,
 
-Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
-Signed-off-by: Alexandre Courbot <gnurou@gmail.com>
----
- Documentation/media/uapi/mediactl/request-api.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thank you for the patch.
 
-diff --git a/Documentation/media/uapi/mediactl/request-api.rst b/Documentation/media/uapi/mediactl/request-api.rst
-index a74c82d95609..01abe8103bdd 100644
---- a/Documentation/media/uapi/mediactl/request-api.rst
-+++ b/Documentation/media/uapi/mediactl/request-api.rst
-@@ -53,8 +53,8 @@ with different configurations in advance, knowing that the configuration will be
- applied when needed to get the expected result. Configuration values at the time
- of request completion are also available for reading.
- 
--Usage
--=====
-+General Usage
-+-------------
- 
- The Request API extends the Media Controller API and cooperates with
- subsystem-specific APIs to support request usage. At the Media Controller
+As the patch only touches the omap4iss driver, you could have made the
+subject line a bit more specific, for instance "staging: media:
+omap4iss: Use devm_platform_ioremap_resource". No big deal though.
+
+On Tue, Oct 08, 2019 at 12:25:51PM +0530, hariprasadKelamhariprasad.kelam@gmail.com wrote:
+> From: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+> 
+> fix below issue reported by coccicheck
+> drivers/staging//media/omap4iss/iss.c:915:1-15: WARNING: Use
+> devm_platform_ioremap_resource for iss -> regs [ res ]
+> 
+> Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+
+The change looks good to me.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+and applied to my tree for v5.5.
+
+> ---
+>  drivers/staging/media/omap4iss/iss.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/drivers/staging/media/omap4iss/iss.c b/drivers/staging/media/omap4iss/iss.c
+> index 1a966cb..6fb60b5 100644
+> --- a/drivers/staging/media/omap4iss/iss.c
+> +++ b/drivers/staging/media/omap4iss/iss.c
+> @@ -908,11 +908,7 @@ static int iss_map_mem_resource(struct platform_device *pdev,
+>  				struct iss_device *iss,
+>  				enum iss_mem_resources res)
+>  {
+> -	struct resource *mem;
+> -
+> -	mem = platform_get_resource(pdev, IORESOURCE_MEM, res);
+> -
+> -	iss->regs[res] = devm_ioremap_resource(iss->dev, mem);
+> +	iss->regs[res] = devm_platform_ioremap_resource(pdev, res);
+>  
+>  	return PTR_ERR_OR_ZERO(iss->regs[res]);
+>  }
+
 -- 
-2.23.0
+Regards,
 
+Laurent Pinchart
