@@ -2,84 +2,72 @@ Return-Path: <SRS0=3WN/=YJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D905FA3728
-	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 12:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B5A9DFA3728
+	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 12:24:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1578521928
-	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 12:21:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9529221925
+	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 12:24:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392943AbfJPMVd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Oct 2019 08:21:33 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:42377 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387581AbfJPMVd (ORCPT
+        id S2393004AbfJPMYo (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Oct 2019 08:24:44 -0400
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:53023 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2392997AbfJPMYo (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Oct 2019 08:21:33 -0400
+        Wed, 16 Oct 2019 08:24:44 -0400
 Received: from [192.168.2.10] ([46.9.232.237])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id KiIuiHSeVPduvKiIxiquC1; Wed, 16 Oct 2019 14:21:31 +0200
-Subject: Re: [PATCH] staging: meson: add space to fix check warning
-To:     Jules Irenge <jbi.octave@gmail.com>,
-        outreachy-kernel@googlegroups.com
-Cc:     mjourdan@baylibre.com, gregkh@linuxfoundation.org,
-        mchehab@kernel.org, khilman@baylibre.com,
-        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devel@driverdev.osuosl.org
-References: <20191015223433.18784-1-jbi.octave@gmail.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <f855f544-e546-eb3d-6346-242eb3435e35@xs4all.nl>
-Date:   Wed, 16 Oct 2019 14:21:24 +0200
+        id KiM3iHU2tPduvKiM6iqv2o; Wed, 16 Oct 2019 14:24:42 +0200
+Subject: Re: [PATCH 30/34] media: cec-gpio: Use CONFIG_PREEMPTION
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+References: <20191015191821.11479-1-bigeasy@linutronix.de>
+ <20191015191821.11479-31-bigeasy@linutronix.de>
+ <6897ccdb-e2b7-7739-e6b9-872306895a4f@xs4all.nl>
+ <23950aea-3972-64fd-9493-d7f9f81db9d2@xs4all.nl>
+ <20191016120225.bi6zyewpruvmxlnl@linutronix.de>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <da2b5eb1-18c7-f0ca-d236-6395b2683f50@xs4all.nl>
+Date:   Wed, 16 Oct 2019 14:24:39 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191015223433.18784-1-jbi.octave@gmail.com>
+In-Reply-To: <20191016120225.bi6zyewpruvmxlnl@linutronix.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfHsIZxW8/J7+DHm0y77EjQKA9TDKkipmz/iz2ou5vQkcABiVz0wD2N9hiUJUO5Qx9SjJqf18AoTsRI0bf0iJGgCmY6wDtzHNVBgUWcNqB6OL1/cbZbOP
- DcGNv3faNnW4Gs0IsWlHmeVwyzNThU2fpY4N6Tno5jU8R7clio/iJfTcV7LTojz1sYlUCTtj2MquZ805HHw5+UV2xeistkVER1JR/xWjYQi+KmQ6Xr7vElI5
- 7xtYGyBG0DrC9jb4mcLXDjHZ24GlAZXssVO7m+nBFiWzh/9AGGUvgGV/Gs4htWUjbaYqXUXzN+Sz7R8jUywUtD/wBgQjptycUy0ZxzK/7dwbBLFTbsIenyvq
- 7f+S9k/uBvl/Znh9Cy9icsI1A/bjqgDGdL4gN3xRlbcv1RKWDTFLxPbd+11BFJ8ddLjjz0T5JQM0rdUmirDgeXTyfunyBwIuze2Cf4VgMom1O4YGu8iW14uu
- ftTg44AK0vfCQvdp
+X-CMAE-Envelope: MS4wfGm1tmWiMRu/hHe3FaOJBNR1p5NaWpTb0zP3uhTPN3nXL5KKo63TJ9oBbRIPPsvEJ7MaaONixt/ae1A+bQx8DjwEX8SJ498ZLBqrKiL1RAWfAfW8k9ue
+ Hl9KmmsSuBffFBuXJDM7HSLix0t5qC2hBVd+RtzDAA+Z0ykvT0krhNljyVMNWyztgIV0d5hqLV/unxd9Oh9MizXKPSecq/b+z5kAjCMClOKmvvfu29Bd5He3
+ ge6fED6wesngcO0PK1GHr9OP9RkeQ1w5pTLmTdaO9N+9RJ+YVzBqTXRK7i2L5KGAqfK1BKbUQ9g4oyVqhY+o4w==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 10/16/19 12:34 AM, Jules Irenge wrote:
-> Fix "alignment should mactch open parenthesis" check.
-> Issue detected by checkpatch tool
+On 10/16/19 2:02 PM, Sebastian Andrzej Siewior wrote:
+> On 2019-10-16 13:51:14 [+0200], Hans Verkuil wrote:
+>> Do you want me to take this patch? Just checking.
 > 
-> Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
-> ---
->  drivers/staging/media/meson/vdec/codec_mpeg12.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/media/meson/vdec/codec_mpeg12.c b/drivers/staging/media/meson/vdec/codec_mpeg12.c
-> index 48869cc3d973..21e93a13356c 100644
-> --- a/drivers/staging/media/meson/vdec/codec_mpeg12.c
-> +++ b/drivers/staging/media/meson/vdec/codec_mpeg12.c
-> @@ -81,7 +81,7 @@ static int codec_mpeg12_start(struct amvdec_session *sess)
->  	}
->  
->  	ret = amvdec_set_canvases(sess, (u32[]){ AV_SCRATCH_0, 0 },
-> -					(u32[]){ 8, 0 });
+> It is up to you. You have all the dependencies so you can either add it
+> to your -next branch or leave it and we will pick it up for you.
 
-This is clearly intended to be aligned with the (u32[]) prefix for readability.
-
-So this is one checkpatch issue where I prefer to keep the original.
+I'll take it. I'm preparing a pull request anyway.
 
 Regards,
 
 	Hans
 
-> +				  (u32[]){ 8, 0 });
->  	if (ret)
->  		goto free_workspace;
->  
+> 
+>> Regards,
+>>
+>> 	Hans
+> 
+> Sebastian
 > 
 
