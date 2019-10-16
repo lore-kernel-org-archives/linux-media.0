@@ -2,26 +2,27 @@ Return-Path: <SRS0=3WN/=YJ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB636FA372B
-	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 13:39:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F21EFA372D
+	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 13:39:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id BD3132168B
-	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 13:39:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50A9A2168B
+	for <linux-media@archiver.kernel.org>; Wed, 16 Oct 2019 13:39:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391988AbfJPNjY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 16 Oct 2019 09:39:24 -0400
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:33555 "EHLO
+        id S2393630AbfJPNjZ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 16 Oct 2019 09:39:25 -0400
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:44691 "EHLO
         lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2391968AbfJPNjY (ORCPT
+        by vger.kernel.org with ESMTP id S2391969AbfJPNjZ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 16 Oct 2019 09:39:24 -0400
+        Wed, 16 Oct 2019 09:39:25 -0400
 Received: from tschai.fritz.box ([46.9.232.237])
         by smtp-cloud8.xs4all.net with ESMTPA
-        id KjWGiHz9CPduvKjWMirEna; Wed, 16 Oct 2019 15:39:23 +0200
+        id KjWGiHz9CPduvKjWNirEnk; Wed, 16 Oct 2019 15:39:23 +0200
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
 Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
@@ -29,9 +30,9 @@ Cc:     Dariusz Marcinkiewicz <darekm@google.com>,
         Russell King <linux@armlinux.org.uk>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: [PATCHv8 1/2] drm: tda998x: use cec_notifier_conn_(un)register
-Date:   Wed, 16 Oct 2019 15:39:15 +0200
-Message-Id: <20191016133916.21475-2-hverkuil-cisco@xs4all.nl>
+Subject: [PATCHv8 2/2] drm: tda998x: set the connector info
+Date:   Wed, 16 Oct 2019 15:39:16 +0200
+Message-Id: <20191016133916.21475-3-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191016133916.21475-1-hverkuil-cisco@xs4all.nl>
 References: <20191016133916.21475-1-hverkuil-cisco@xs4all.nl>
@@ -48,75 +49,85 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: Dariusz Marcinkiewicz <darekm@google.com>
 
-Use the new cec_notifier_conn_(un)register() functions to
-(un)register the notifier for the HDMI connector.
+Fill in the cec_connector_info when calling cec_notifier_conn_register().
 
 Signed-off-by: Dariusz Marcinkiewicz <darekm@google.com>
+Tested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 ---
- drivers/gpu/drm/i2c/tda998x_drv.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/i2c/tda998x_drv.c | 31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/gpu/drm/i2c/tda998x_drv.c b/drivers/gpu/drm/i2c/tda998x_drv.c
-index 84c6d4c91c65..8262b44b776e 100644
+index 8262b44b776e..b0620842fa3a 100644
 --- a/drivers/gpu/drm/i2c/tda998x_drv.c
 +++ b/drivers/gpu/drm/i2c/tda998x_drv.c
-@@ -82,6 +82,9 @@ struct tda998x_priv {
- 	u8 audio_port_enable[AUDIO_ROUTE_NUM];
- 	struct tda9950_glue cec_glue;
- 	struct gpio_desc *calib;
+@@ -1337,6 +1337,8 @@ static int tda998x_connector_init(struct tda998x_priv *priv,
+ 				  struct drm_device *drm)
+ {
+ 	struct drm_connector *connector = &priv->connector;
++	struct cec_connector_info conn_info;
++	struct cec_notifier *notifier;
+ 	int ret;
+ 
+ 	connector->interlace_allowed = 1;
+@@ -1353,6 +1355,17 @@ static int tda998x_connector_init(struct tda998x_priv *priv,
+ 	if (ret)
+ 		return ret;
+ 
++	cec_fill_conn_info_from_drm(&conn_info, connector);
 +
-+	/* protect cec_notify */
-+	struct mutex cec_notify_mutex;
- 	struct cec_notifier *cec_notify;
- };
- 
-@@ -805,8 +808,11 @@ static irqreturn_t tda998x_irq_thread(int irq, void *data)
- 				tda998x_edid_delay_start(priv);
- 			} else {
- 				schedule_work(&priv->detect_work);
--				cec_notifier_set_phys_addr(priv->cec_notify,
--						   CEC_PHYS_ADDR_INVALID);
++	notifier = cec_notifier_conn_register(priv->cec_glue.parent,
++					      NULL, &conn_info);
++	if (!notifier)
++		return -ENOMEM;
 +
-+				mutex_lock(&priv->cec_notify_mutex);
-+				cec_notifier_phys_addr_invalidate(
-+						priv->cec_notify);
-+				mutex_unlock(&priv->cec_notify_mutex);
- 			}
++	mutex_lock(&priv->cec_notify_mutex);
++	priv->cec_notify = notifier;
++	mutex_unlock(&priv->cec_notify_mutex);
++
+ 	drm_connector_attach_encoder(&priv->connector,
+ 				     priv->bridge.encoder);
  
- 			handled = true;
-@@ -1790,8 +1796,10 @@ static void tda998x_destroy(struct device *dev)
+@@ -1372,6 +1385,11 @@ static void tda998x_bridge_detach(struct drm_bridge *bridge)
+ {
+ 	struct tda998x_priv *priv = bridge_to_tda998x_priv(bridge);
  
- 	i2c_unregister_device(priv->cec);
- 
--	if (priv->cec_notify)
--		cec_notifier_put(priv->cec_notify);
 +	mutex_lock(&priv->cec_notify_mutex);
 +	cec_notifier_conn_unregister(priv->cec_notify);
 +	priv->cec_notify = NULL;
 +	mutex_unlock(&priv->cec_notify_mutex);
++
+ 	drm_connector_cleanup(&priv->connector);
+ }
+ 
+@@ -1795,11 +1813,6 @@ static void tda998x_destroy(struct device *dev)
+ 	cancel_work_sync(&priv->detect_work);
+ 
+ 	i2c_unregister_device(priv->cec);
+-
+-	mutex_lock(&priv->cec_notify_mutex);
+-	cec_notifier_conn_unregister(priv->cec_notify);
+-	priv->cec_notify = NULL;
+-	mutex_unlock(&priv->cec_notify_mutex);
  }
  
  static int tda998x_create(struct device *dev)
-@@ -1812,6 +1820,7 @@ static int tda998x_create(struct device *dev)
- 	mutex_init(&priv->mutex);	/* protect the page access */
- 	mutex_init(&priv->audio_mutex); /* protect access from audio thread */
- 	mutex_init(&priv->edid_mutex);
-+	mutex_init(&priv->cec_notify_mutex);
- 	INIT_LIST_HEAD(&priv->bridge.list);
- 	init_waitqueue_head(&priv->edid_delay_waitq);
- 	timer_setup(&priv->edid_delay_timer, tda998x_edid_delay_done, 0);
-@@ -1916,7 +1925,9 @@ static int tda998x_create(struct device *dev)
+@@ -1925,14 +1938,6 @@ static int tda998x_create(struct device *dev)
  		cec_write(priv, REG_CEC_RXSHPDINTENA, CEC_RXSHPDLEV_HPD);
  	}
  
--	priv->cec_notify = cec_notifier_get(dev);
-+	mutex_lock(&priv->cec_notify_mutex);
-+	priv->cec_notify = cec_notifier_conn_register(dev, NULL, NULL);
-+	mutex_unlock(&priv->cec_notify_mutex);
- 	if (!priv->cec_notify) {
- 		ret = -ENOMEM;
- 		goto fail;
+-	mutex_lock(&priv->cec_notify_mutex);
+-	priv->cec_notify = cec_notifier_conn_register(dev, NULL, NULL);
+-	mutex_unlock(&priv->cec_notify_mutex);
+-	if (!priv->cec_notify) {
+-		ret = -ENOMEM;
+-		goto fail;
+-	}
+-
+ 	priv->cec_glue.parent = dev;
+ 	priv->cec_glue.data = priv;
+ 	priv->cec_glue.init = tda998x_cec_hook_init;
 -- 
 2.23.0
 
