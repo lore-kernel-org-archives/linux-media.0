@@ -2,34 +2,32 @@ Return-Path: <SRS0=c9eX=YK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A075EECE58E
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1909FA3736
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 762D32089C
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A09872089C
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405757AbfJQLWQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Oct 2019 07:22:16 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:39726 "EHLO
+        id S2405868AbfJQLWR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Oct 2019 07:22:17 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:39722 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405529AbfJQLWQ (ORCPT
+        by vger.kernel.org with ESMTP id S1728143AbfJQLWR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Oct 2019 07:22:16 -0400
+        Thu, 17 Oct 2019 07:22:17 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 0A6C2634C8A
-        for <linux-media@vger.kernel.org>; Thu, 17 Oct 2019 14:21:47 +0300 (EEST)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id B8926634C87
+        for <linux-media@vger.kernel.org>; Thu, 17 Oct 2019 14:21:46 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 2/7] smiapp: Move binning configuration to streaming start
-Date:   Thu, 17 Oct 2019 14:18:51 +0300
-Message-Id: <20191017111856.10270-3-sakari.ailus@linux.intel.com>
+Subject: [PATCH 0/7] smiapp binning limit cleanups, runtime PM fix and a omap3isp fix
+Date:   Thu, 17 Oct 2019 14:18:49 +0300
+Message-Id: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
-References: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -37,84 +35,27 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Only write the binning configuration at stream start. It has no effect
-otherwise.
+Hi folks,
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/i2c/smiapp/smiapp-core.c | 43 +++++++++++++-------------
- 1 file changed, 22 insertions(+), 21 deletions(-)
+This set cleans up binning limit handling and fixes runtime PM use by
+enabling runtime PM *before* any functionality requiring runtime PM may be
+used.
 
-diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index bf054b2e8e8b..edaeebaada79 100644
---- a/drivers/media/i2c/smiapp/smiapp-core.c
-+++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -857,29 +857,8 @@ static void smiapp_update_blanking(struct smiapp_sensor *sensor)
- static int smiapp_update_mode(struct smiapp_sensor *sensor)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
--	unsigned int binning_mode;
- 	int rval;
- 
--	/* Binning has to be set up here; it affects limits */
--	if (sensor->binning_horizontal == 1 &&
--	    sensor->binning_vertical == 1) {
--		binning_mode = 0;
--	} else {
--		u8 binning_type =
--			(sensor->binning_horizontal << 4)
--			| sensor->binning_vertical;
--
--		rval = smiapp_write(
--			sensor, SMIAPP_REG_U8_BINNING_TYPE, binning_type);
--		if (rval < 0)
--			return rval;
--
--		binning_mode = 1;
--	}
--	rval = smiapp_write(sensor, SMIAPP_REG_U8_BINNING_MODE, binning_mode);
--	if (rval < 0)
--		return rval;
--
- 	rval = smiapp_pll_update(sensor);
- 	if (rval < 0)
- 		return rval;
-@@ -1351,6 +1330,7 @@ static int smiapp_power_off(struct device *dev)
- static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
-+	unsigned int binning_mode;
- 	int rval;
- 
- 	mutex_lock(&sensor->mutex);
-@@ -1361,6 +1341,27 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
- 	if (rval)
- 		goto out;
- 
-+	/* Binning configuration */
-+	if (sensor->binning_horizontal == 1 &&
-+	    sensor->binning_vertical == 1) {
-+		binning_mode = 0;
-+	} else {
-+		u8 binning_type =
-+			(sensor->binning_horizontal << 4)
-+			| sensor->binning_vertical;
-+
-+		rval = smiapp_write(
-+			sensor, SMIAPP_REG_U8_BINNING_TYPE, binning_type);
-+		if (rval < 0)
-+			return rval;
-+
-+		binning_mode = 1;
-+	}
-+	rval = smiapp_write(sensor, SMIAPP_REG_U8_BINNING_MODE, binning_mode);
-+	if (rval < 0)
-+		return rval;
-+
-+	/* Set up PLL */
- 	rval = smiapp_pll_configure(sensor);
- 	if (rval)
- 		goto out;
+Also a small omap3isp fix is included.
+
+Sakari Ailus (7):
+  smiapp: Don't get binning limits dynamically
+  smiapp: Move binning configuration to streaming start
+  smiapp: Don't update sensor configuration during power-on init
+  smiapp: Use non-binned and binned limits correctly
+  smiapp: Register sensor after enabling runtime PM on the device
+  smiapp: Rename update_mode as pll_blanking_update
+  omap3isp: Ignore failure of stopping streaming on external subdev
+
+ drivers/media/i2c/smiapp/smiapp-core.c | 157 +++++++++----------------
+ drivers/media/platform/omap3isp/isp.c  |   8 +-
+ 2 files changed, 57 insertions(+), 108 deletions(-)
+
 -- 
 2.20.1
 
