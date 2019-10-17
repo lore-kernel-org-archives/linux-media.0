@@ -2,127 +2,135 @@ Return-Path: <SRS0=c9eX=YK=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FAB3ECE58E
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:17:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44FF8FA372A
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 68CFB2089C
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:17:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 228E92089C
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439657AbfJQLRa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Oct 2019 07:17:30 -0400
-Received: from lb3-smtp-cloud7.xs4all.net ([194.109.24.31]:39475 "EHLO
-        lb3-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406044AbfJQLR3 (ORCPT
+        id S2405712AbfJQLWQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Oct 2019 07:22:16 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:39724 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405515AbfJQLWQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Oct 2019 07:17:29 -0400
-Received: from [IPv6:2001:420:44c1:2577:5195:3526:c85b:688a]
- ([IPv6:2001:420:44c1:2577:5195:3526:c85b:688a])
-        by smtp-cloud7.xs4all.net with ESMTPA
-        id L3mVi1k8no1ZhL3mYi6hdq; Thu, 17 Oct 2019 13:17:27 +0200
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Subject: [ANN v2] Media sessions in Lyon in October: future V4L2 work
-To:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Daniel Gomez <daniel@qtec.com>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Eugen Hristev <Eugen.Hristev@microchip.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Helen Koike <helen.koike@collabora.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <2ef17f32-5957-7b52-fea3-19913ec1c7b3@xs4all.nl>
-Date:   Thu, 17 Oct 2019 13:17:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 17 Oct 2019 07:22:16 -0400
+Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id E6F55634C89
+        for <linux-media@vger.kernel.org>; Thu, 17 Oct 2019 14:21:46 +0300 (EEST)
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     linux-media@vger.kernel.org
+Subject: [PATCH 1/7] smiapp: Don't get binning limits dynamically
+Date:   Thu, 17 Oct 2019 14:18:50 +0300
+Message-Id: <20191017111856.10270-2-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
+References: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfPqnq9+AMkc/1PuWm9/zFdQQXhAOdj0YtOpiJVlLeimaakcjAplYce8y18swfShuKAC0TxLPn3v6mzaw8BPe8D5boJKrWpraJvkhzta+GfdJ/2oEUxVZ
- wjcfDox9m+QeknP0wQNv8nm23OelEGI+OUQ7GY9v0BkW8jxBSJca1J4xxN7DtQDnZjLfKEjG7IIO17Y6A+d5IT1VL1/ZKH2qPVcr0xzipJyRkbsv7clS46gT
- VGrtsshHTN9fVfW1VyWGmPuo8RdlO0j4SwHLaRQnUwJykeSL0O+6sQ3OhBoDvoqXvPD3bCQ9a0/uZQn9+CK1DXnWOab2dfEprZPbsJlxOeqrEBr7BOhkpX74
- q6iIMuGX5tK6wZDVcphqJDlw1e9KxocTrbln8IeEXLkpzeW7Q7TMrmrC2xgMcF3colwWU7JAazc3+GIabr40qFMwqfcYyeI4pe4vgl637sQMgFur163cGxSK
- fbrQCN5zU+DwWTdy+X32wPhaJvZjYZ4TtCGXHBmdqEj9jbPLAGIVF5om5aoIdZb4DL1BSbmfKepn2911G8fjjprsaMy82IpYvqM5YLxnaOgP+7yad9mU9Mxi
- aVDVp/rPTapgG3CSuQzUqM/kU97RAUtOHQDLvurSiQ+UKFmHU+mzbkrTBaQakrAcU++xH8fKqlpBq8VTGdkgoauPxHbjex8CTX6bX4GQ3TrHq7uBGKraTr4l
- Sj8krO81vAmP93QVxGLqk2jgdaQCJhtLDPdm3K5VDtXQx/6lTzLNUDUepUurpF3sTvoQqqu/bYfV3LFMfw/B2pZWgn3qGvd7ZLaBXWpD4feH46t5yVI2CA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+The driver implementation assumed the binning limits could change
+dynamically based on the binning configuration. This is not actually the
+case; these limits are static and suitable to be used with all binning
+configurations but possibly not optimal limit for many of those
+configurations.
 
-Since we have three separate half-day sessions for different topics I decided
-to split the announcement for this in three emails as well, so these things
-can be discussed in separate threads.
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+---
+ drivers/media/i2c/smiapp/smiapp-core.c | 65 --------------------------
+ 1 file changed, 65 deletions(-)
 
-All sessions are in room Terreaux VIP Lounge - Level 0.
-There is a maximum of 15 people.
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index a274527987b8..bf054b2e8e8b 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -682,66 +682,6 @@ static int smiapp_get_all_limits(struct smiapp_sensor *sensor)
+ 	return 0;
+ }
+ 
+-static int smiapp_get_limits_binning(struct smiapp_sensor *sensor)
+-{
+-	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+-	static u32 const limits[] = {
+-		SMIAPP_LIMIT_MIN_FRAME_LENGTH_LINES_BIN,
+-		SMIAPP_LIMIT_MAX_FRAME_LENGTH_LINES_BIN,
+-		SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK_BIN,
+-		SMIAPP_LIMIT_MAX_LINE_LENGTH_PCK_BIN,
+-		SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK_BIN,
+-		SMIAPP_LIMIT_FINE_INTEGRATION_TIME_MIN_BIN,
+-		SMIAPP_LIMIT_FINE_INTEGRATION_TIME_MAX_MARGIN_BIN,
+-	};
+-	static u32 const limits_replace[] = {
+-		SMIAPP_LIMIT_MIN_FRAME_LENGTH_LINES,
+-		SMIAPP_LIMIT_MAX_FRAME_LENGTH_LINES,
+-		SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK,
+-		SMIAPP_LIMIT_MAX_LINE_LENGTH_PCK,
+-		SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK,
+-		SMIAPP_LIMIT_FINE_INTEGRATION_TIME_MIN,
+-		SMIAPP_LIMIT_FINE_INTEGRATION_TIME_MAX_MARGIN,
+-	};
+-	unsigned int i;
+-	int rval;
+-
+-	if (sensor->limits[SMIAPP_LIMIT_BINNING_CAPABILITY] ==
+-	    SMIAPP_BINNING_CAPABILITY_NO) {
+-		for (i = 0; i < ARRAY_SIZE(limits); i++)
+-			sensor->limits[limits[i]] =
+-				sensor->limits[limits_replace[i]];
+-
+-		return 0;
+-	}
+-
+-	rval = smiapp_get_limits(sensor, limits, ARRAY_SIZE(limits));
+-	if (rval < 0)
+-		return rval;
+-
+-	/*
+-	 * Sanity check whether the binning limits are valid. If not,
+-	 * use the non-binning ones.
+-	 */
+-	if (sensor->limits[SMIAPP_LIMIT_MIN_FRAME_LENGTH_LINES_BIN]
+-	    && sensor->limits[SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK_BIN]
+-	    && sensor->limits[SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK_BIN])
+-		return 0;
+-
+-	for (i = 0; i < ARRAY_SIZE(limits); i++) {
+-		dev_dbg(&client->dev,
+-			"replace limit 0x%8.8x \"%s\" = %d, 0x%x\n",
+-			smiapp_reg_limits[limits[i]].addr,
+-			smiapp_reg_limits[limits[i]].what,
+-			sensor->limits[limits_replace[i]],
+-			sensor->limits[limits_replace[i]]);
+-		sensor->limits[limits[i]] =
+-			sensor->limits[limits_replace[i]];
+-	}
+-
+-	return 0;
+-}
+-
+ static int smiapp_get_mbus_formats(struct smiapp_sensor *sensor)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+@@ -940,11 +880,6 @@ static int smiapp_update_mode(struct smiapp_sensor *sensor)
+ 	if (rval < 0)
+ 		return rval;
+ 
+-	/* Get updated limits due to binning */
+-	rval = smiapp_get_limits_binning(sensor);
+-	if (rval < 0)
+-		return rval;
+-
+ 	rval = smiapp_pll_update(sensor);
+ 	if (rval < 0)
+ 		return rval;
+-- 
+2.20.1
 
-The third session deals with future V4L2 API work and is on Wednesday afternoon
-from 14:00 to 18:00.
-
-Attendees for this session:
-
-Boris Brezillon <boris.brezillon@collabora.com>
-Alexandre Courbot <acourbot@chromium.org>
-Nicolas Dufresne <nicolas@ndufresne.ca>
-Tomasz Figa <tfiga@chromium.org>
-Ezequiel Garcia <ezequiel@collabora.com>
-Daniel Gomez <daniel@qtec.com>
-Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Eugen Hristev <Eugen.Hristev@microchip.com>
-Shuah Khan <skhan@linuxfoundation.org>
-Helen Koike <helen.koike@collabora.com>
-Jacopo Mondi <jacopo@jmondi.org>
-Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Niklas Söderlund <niklas.soderlund@ragnatech.se>
-Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Hans Verkuil <hverkuil@xs4all.nl>
-
-That's exactly 15 people, so the room is full.
-
-If I missed someone, or you are on the list but won't attend after all, then
-please let me know asap.
-
-Agenda:
-
-The main (only?) point of discussion is Boris' RFC v3 patch series:
-
-https://patchwork.linuxtv.org/cover/59345/
-
-Thank you, Boris, for preparing this v3. Much appreciated!
-
-Attendees: please review his series before the meeting!
-
-Tomasz also suggested talking about exiting V4L2 limitations, esp. for
-handling complex cameras:
-
-- combinatorial explosion of /dev/video nodes,
-- significant ioctl overhead,
-- huge amount of historical legacy making the driver and userspace
-  implementations overly difficult and prone to repetitive mistakes,
-- the above also limiting the flexibility of the API - formats, frame
-  rates, etc. set using distinct APIs, not covered by Request API, with
-  non-failure "negotiation hell", etc.
-- lack of fences, etc.
-
-I suspect we won't have time to discuss this. Would some of these topics
-be suitable for the libcamera session?
-
-If someone has other topics (but remember, we only have 4 hours!)
-then please reply to this announcement post.
-
-Regards,
-
-	Hans
