@@ -6,27 +6,27 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44140FA3738
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99067FA372A
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 24CBC2089C
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 77E022089C
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406044AbfJQLWS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Oct 2019 07:22:18 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:39736 "EHLO
+        id S2406226AbfJQLWU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Oct 2019 07:22:20 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:39728 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405859AbfJQLWS (ORCPT
+        by vger.kernel.org with ESMTP id S2405615AbfJQLWR (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Oct 2019 07:22:18 -0400
+        Thu, 17 Oct 2019 07:22:17 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 0B004634C8F
-        for <linux-media@vger.kernel.org>; Thu, 17 Oct 2019 14:21:48 +0300 (EEST)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 37236634C8B
+        for <linux-media@vger.kernel.org>; Thu, 17 Oct 2019 14:21:47 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 7/7] omap3isp: Ignore failure of stopping streaming on external subdev
-Date:   Thu, 17 Oct 2019 14:18:56 +0300
-Message-Id: <20191017111856.10270-8-sakari.ailus@linux.intel.com>
+Subject: [PATCH 3/7] smiapp: Don't update sensor configuration during power-on init
+Date:   Thu, 17 Oct 2019 14:18:52 +0300
+Message-Id: <20191017111856.10270-4-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
 References: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
@@ -37,42 +37,30 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The isp was marked to have failed to stop if stopping streaming on an
-external subdev failed. The return value from the external subdev should
-be ignored instead as it is not part of the ISP and thus the ISP does not
-need to be reset for that reason.
+The sensor configuration since it was previously powered off was not
+changed, so no need to update the PLL configuration etc. What is necessary
+though is to re-apply the configuration to the sensor's registers.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/platform/omap3isp/isp.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/media/platform/omap3isp/isp.c b/drivers/media/platform/omap3isp/isp.c
-index 327c5716922a..a4ee6b86663e 100644
---- a/drivers/media/platform/omap3isp/isp.c
-+++ b/drivers/media/platform/omap3isp/isp.c
-@@ -810,6 +810,10 @@ static int isp_pipeline_disable(struct isp_pipeline *pipe)
- 
- 		ret = v4l2_subdev_call(subdev, video, s_stream, 0);
- 
-+		/* Stop at the first external sub-device. */
-+		if (subdev->dev != isp->dev)
-+			break;
-+
- 		if (subdev == &isp->isp_res.subdev)
- 			ret |= isp_pipeline_wait(isp, isp_pipeline_wait_resizer);
- 		else if (subdev == &isp->isp_prev.subdev)
-@@ -837,10 +841,6 @@ static int isp_pipeline_disable(struct isp_pipeline *pipe)
- 						      &subdev->entity);
- 			failure = -ETIMEDOUT;
- 		}
+diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
+index edaeebaada79..5fc3bcc6def0 100644
+--- a/drivers/media/i2c/smiapp/smiapp-core.c
++++ b/drivers/media/i2c/smiapp/smiapp-core.c
+@@ -1267,10 +1267,6 @@ static int smiapp_power_on(struct device *dev)
+ 		rval = __v4l2_ctrl_handler_setup(&sensor->src->ctrl_handler);
+ 		if (rval)
+ 			goto out_cci_addr_fail;
 -
--		/* Stop at the first external sub-device. */
--		if (subdev->dev != isp->dev)
--			break;
+-		rval = smiapp_update_mode(sensor);
+-		if (rval < 0)
+-			goto out_cci_addr_fail;
  	}
  
- 	return failure;
+ 	mutex_unlock(&sensor->mutex);
 -- 
 2.20.1
 
