@@ -6,27 +6,27 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6214FFA3733
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A075EECE58E
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 37E892089C
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 762D32089C
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405872AbfJQLWR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 17 Oct 2019 07:22:17 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:39730 "EHLO
+        id S2405757AbfJQLWQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 17 Oct 2019 07:22:16 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:39726 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405680AbfJQLWR (ORCPT
+        by vger.kernel.org with ESMTP id S2405529AbfJQLWQ (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Oct 2019 07:22:17 -0400
+        Thu, 17 Oct 2019 07:22:16 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 7272D634C8C
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 0A6C2634C8A
         for <linux-media@vger.kernel.org>; Thu, 17 Oct 2019 14:21:47 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 4/7] smiapp: Use non-binned and binned limits correctly
-Date:   Thu, 17 Oct 2019 14:18:53 +0300
-Message-Id: <20191017111856.10270-5-sakari.ailus@linux.intel.com>
+Subject: [PATCH 2/7] smiapp: Move binning configuration to streaming start
+Date:   Thu, 17 Oct 2019 14:18:51 +0300
+Message-Id: <20191017111856.10270-3-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
 References: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
@@ -37,62 +37,84 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Use non-binned limits when binning is disabled and binned when they're
-enabled.
+Only write the binning configuration at stream start. It has no effect
+otherwise.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 27 +++++++++++++++++++-------
- 1 file changed, 20 insertions(+), 7 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 43 +++++++++++++-------------
+ 1 file changed, 22 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index 5fc3bcc6def0..30830878d069 100644
+index bf054b2e8e8b..edaeebaada79 100644
 --- a/drivers/media/i2c/smiapp/smiapp-core.c
 +++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -831,23 +831,36 @@ static void smiapp_update_blanking(struct smiapp_sensor *sensor)
+@@ -857,29 +857,8 @@ static void smiapp_update_blanking(struct smiapp_sensor *sensor)
+ static int smiapp_update_mode(struct smiapp_sensor *sensor)
  {
- 	struct v4l2_ctrl *vblank = sensor->vblank;
- 	struct v4l2_ctrl *hblank = sensor->hblank;
-+	uint16_t min_fll, max_fll, min_llp, max_llp, min_lbp;
- 	int min, max;
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
+-	unsigned int binning_mode;
+ 	int rval;
  
-+	if (sensor->binning_vertical > 1 || sensor->binning_horizontal > 1) {
-+		min_fll = sensor->limits[SMIAPP_LIMIT_MIN_FRAME_LENGTH_LINES_BIN];
-+		max_fll = sensor->limits[SMIAPP_LIMIT_MAX_FRAME_LENGTH_LINES_BIN];
-+		min_llp = sensor->limits[SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK_BIN];
-+		max_llp = sensor->limits[SMIAPP_LIMIT_MAX_LINE_LENGTH_PCK_BIN];
-+		min_lbp = sensor->limits[SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK_BIN];
+-	/* Binning has to be set up here; it affects limits */
+-	if (sensor->binning_horizontal == 1 &&
+-	    sensor->binning_vertical == 1) {
+-		binning_mode = 0;
+-	} else {
+-		u8 binning_type =
+-			(sensor->binning_horizontal << 4)
+-			| sensor->binning_vertical;
+-
+-		rval = smiapp_write(
+-			sensor, SMIAPP_REG_U8_BINNING_TYPE, binning_type);
+-		if (rval < 0)
+-			return rval;
+-
+-		binning_mode = 1;
+-	}
+-	rval = smiapp_write(sensor, SMIAPP_REG_U8_BINNING_MODE, binning_mode);
+-	if (rval < 0)
+-		return rval;
+-
+ 	rval = smiapp_pll_update(sensor);
+ 	if (rval < 0)
+ 		return rval;
+@@ -1351,6 +1330,7 @@ static int smiapp_power_off(struct device *dev)
+ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
+ {
+ 	struct i2c_client *client = v4l2_get_subdevdata(&sensor->src->sd);
++	unsigned int binning_mode;
+ 	int rval;
+ 
+ 	mutex_lock(&sensor->mutex);
+@@ -1361,6 +1341,27 @@ static int smiapp_start_streaming(struct smiapp_sensor *sensor)
+ 	if (rval)
+ 		goto out;
+ 
++	/* Binning configuration */
++	if (sensor->binning_horizontal == 1 &&
++	    sensor->binning_vertical == 1) {
++		binning_mode = 0;
 +	} else {
-+		min_fll = sensor->limits[SMIAPP_LIMIT_MIN_FRAME_LENGTH_LINES];
-+		max_fll = sensor->limits[SMIAPP_LIMIT_MAX_FRAME_LENGTH_LINES];
-+		min_llp = sensor->limits[SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK];
-+		max_llp = sensor->limits[SMIAPP_LIMIT_MAX_LINE_LENGTH_PCK];
-+		min_lbp = sensor->limits[SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK];
-+	}
++		u8 binning_type =
++			(sensor->binning_horizontal << 4)
++			| sensor->binning_vertical;
 +
- 	min = max_t(int,
- 		    sensor->limits[SMIAPP_LIMIT_MIN_FRAME_BLANKING_LINES],
--		    sensor->limits[SMIAPP_LIMIT_MIN_FRAME_LENGTH_LINES_BIN] -
-+		    min_fll -
- 		    sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height);
--	max = sensor->limits[SMIAPP_LIMIT_MAX_FRAME_LENGTH_LINES_BIN] -
--		sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height;
-+	max = max_fll -	sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].height;
- 
- 	__v4l2_ctrl_modify_range(vblank, min, max, vblank->step, min);
- 
- 	min = max_t(int,
--		    sensor->limits[SMIAPP_LIMIT_MIN_LINE_LENGTH_PCK_BIN] -
-+		    min_llp -
- 		    sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].width,
--		    sensor->limits[SMIAPP_LIMIT_MIN_LINE_BLANKING_PCK_BIN]);
--	max = sensor->limits[SMIAPP_LIMIT_MAX_LINE_LENGTH_PCK_BIN] -
--		sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].width;
-+		    min_lbp);
-+	max = max_llp - sensor->pixel_array->crop[SMIAPP_PA_PAD_SRC].width;
- 
- 	__v4l2_ctrl_modify_range(hblank, min, max, hblank->step, min);
- 
++		rval = smiapp_write(
++			sensor, SMIAPP_REG_U8_BINNING_TYPE, binning_type);
++		if (rval < 0)
++			return rval;
++
++		binning_mode = 1;
++	}
++	rval = smiapp_write(sensor, SMIAPP_REG_U8_BINNING_MODE, binning_mode);
++	if (rval < 0)
++		return rval;
++
++	/* Set up PLL */
+ 	rval = smiapp_pll_configure(sensor);
+ 	if (rval)
+ 		goto out;
 -- 
 2.20.1
 
