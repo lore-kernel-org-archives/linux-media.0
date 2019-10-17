@@ -6,27 +6,27 @@ X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99067FA372A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 240ECFA3737
 	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 77E022089C
-	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EF1CD2089C
+	for <linux-media@archiver.kernel.org>; Thu, 17 Oct 2019 11:22:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406226AbfJQLWU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S2406217AbfJQLWU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Thu, 17 Oct 2019 07:22:20 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:39728 "EHLO
+Received: from retiisi.org.uk ([95.216.213.190]:39732 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405615AbfJQLWR (ORCPT
+        by vger.kernel.org with ESMTP id S2405833AbfJQLWS (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 17 Oct 2019 07:22:17 -0400
+        Thu, 17 Oct 2019 07:22:18 -0400
 Received: from lanttu.localdomain (unknown [IPv6:2a01:4f9:c010:4572::e1:1002])
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 37236634C8B
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTP id 9BB8E634C8D
         for <linux-media@vger.kernel.org>; Thu, 17 Oct 2019 14:21:47 +0300 (EEST)
 From:   Sakari Ailus <sakari.ailus@linux.intel.com>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 3/7] smiapp: Don't update sensor configuration during power-on init
-Date:   Thu, 17 Oct 2019 14:18:52 +0300
-Message-Id: <20191017111856.10270-4-sakari.ailus@linux.intel.com>
+Subject: [PATCH 5/7] smiapp: Register sensor after enabling runtime PM on the device
+Date:   Thu, 17 Oct 2019 14:18:54 +0300
+Message-Id: <20191017111856.10270-6-sakari.ailus@linux.intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
 References: <20191017111856.10270-1-sakari.ailus@linux.intel.com>
@@ -37,30 +37,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The sensor configuration since it was previously powered off was not
-changed, so no need to update the PLL configuration etc. What is necessary
-though is to re-apply the configuration to the sensor's registers.
+Earlier it was possible that the parts of the driver that assumed runtime
+PM was enabled were being called before runtime PM was enabled in the
+driver's probe function. So enable runtime PM before registering the
+sub-device.
 
 Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 ---
- drivers/media/i2c/smiapp/smiapp-core.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/media/i2c/smiapp/smiapp-core.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/smiapp/smiapp-core.c b/drivers/media/i2c/smiapp/smiapp-core.c
-index edaeebaada79..5fc3bcc6def0 100644
+index 30830878d069..174a965c17b8 100644
 --- a/drivers/media/i2c/smiapp/smiapp-core.c
 +++ b/drivers/media/i2c/smiapp/smiapp-core.c
-@@ -1267,10 +1267,6 @@ static int smiapp_power_on(struct device *dev)
- 		rval = __v4l2_ctrl_handler_setup(&sensor->src->ctrl_handler);
- 		if (rval)
- 			goto out_cci_addr_fail;
--
--		rval = smiapp_update_mode(sensor);
--		if (rval < 0)
--			goto out_cci_addr_fail;
- 	}
+@@ -3058,19 +3058,23 @@ static int smiapp_probe(struct i2c_client *client)
+ 	if (rval < 0)
+ 		goto out_media_entity_cleanup;
  
- 	mutex_unlock(&sensor->mutex);
+-	rval = v4l2_async_register_subdev_sensor_common(&sensor->src->sd);
+-	if (rval < 0)
+-		goto out_media_entity_cleanup;
+-
+ 	pm_runtime_set_active(&client->dev);
+ 	pm_runtime_get_noresume(&client->dev);
+ 	pm_runtime_enable(&client->dev);
++
++	rval = v4l2_async_register_subdev_sensor_common(&sensor->src->sd);
++	if (rval < 0)
++		goto out_disable_runtime_pm;
++
+ 	pm_runtime_set_autosuspend_delay(&client->dev, 1000);
+ 	pm_runtime_use_autosuspend(&client->dev);
+ 	pm_runtime_put_autosuspend(&client->dev);
+ 
+ 	return 0;
+ 
++out_disable_runtime_pm:
++	pm_runtime_disable(&client->dev);
++
+ out_media_entity_cleanup:
+ 	media_entity_cleanup(&sensor->src->sd.entity);
+ 
 -- 
 2.20.1
 
