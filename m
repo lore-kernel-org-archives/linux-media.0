@@ -5,55 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 818EBCA9EA0
-	for <linux-media@archiver.kernel.org>; Fri, 18 Oct 2019 15:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BAEFCA9EA9
+	for <linux-media@archiver.kernel.org>; Fri, 18 Oct 2019 15:32:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 572A9222CD
-	for <linux-media@archiver.kernel.org>; Fri, 18 Oct 2019 15:32:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 605CB222C5
+	for <linux-media@archiver.kernel.org>; Fri, 18 Oct 2019 15:32:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="I2LPEQU1"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="H9ZkOQpl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505142AbfJRPch (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 18 Oct 2019 11:32:37 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:47732 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727211AbfJRPc1 (ORCPT
+        id S2404953AbfJRPcm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 18 Oct 2019 11:32:42 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:44842 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410688AbfJRPcY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Fri, 18 Oct 2019 11:32:27 -0400
+        Fri, 18 Oct 2019 11:32:24 -0400
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9IFWP6X013435;
-        Fri, 18 Oct 2019 10:32:26 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9IFWNju117124;
+        Fri, 18 Oct 2019 10:32:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1571412746;
-        bh=ADM1me0Put+VJ63c2ujPwgjbNLqYMOSh7Lbu/rGYcTk=;
+        s=ti-com-17Q1; t=1571412743;
+        bh=Gnev1/nUK6kia0qBTPA020FCXW4FagJcU0jgSzyPRRI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=I2LPEQU1bV7hd/Y2BmrBbXZUgz2+102padDSO4mPjDrrBI+GS50K/sLkSVpslCCrZ
-         m+m8fU1NW0z7WANwRs/aLsr1QGnY6PKOwzFtQ/BYKDqNZZDByscZDe4aSCVbbCXXvr
-         MmkXDvvLVYJwXMEVJ1tL+4Y+ZlThAQkaZhI11q6A=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9IFWPZY113363
+        b=H9ZkOQplb/ylnwjF8I86pA6AYkS/NmZQpgmt7+spwTP+RyjAm1LvThH+/pe64oAP2
+         JVAYrqMqvtt89zrGiZJ2Cxp9mHidrx0BkRvdi5rSSOsA9gGu1yhlhAcV0sN6QPrtSH
+         8so6iQls54noCLmh+jELH+igSZpUg+i1krk/2KHM=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9IFWNJ2113243
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Oct 2019 10:32:26 -0500
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+        Fri, 18 Oct 2019 10:32:23 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 18
- Oct 2019 10:32:17 -0500
+ Oct 2019 10:32:14 -0500
 Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
  (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 18 Oct 2019 10:32:17 -0500
+ Frontend Transport; Fri, 18 Oct 2019 10:32:14 -0500
 Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9IFW15W080266;
-        Fri, 18 Oct 2019 10:32:25 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9IFW15U080266;
+        Fri, 18 Oct 2019 10:32:22 -0500
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>, Rob Herring <robh+dt@kernel.org>
 CC:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Benoit Parrot <bparrot@ti.com>
-Subject: [Patch 18/19] media: ti-vpe: cal: fix enum_mbus_code/frame_size subdev arguments
-Date:   Fri, 18 Oct 2019 10:34:36 -0500
-Message-ID: <20191018153437.20614-19-bparrot@ti.com>
+Subject: [Patch 16/19] media: ti-vpe: cal: Properly calculate max resolution boundary
+Date:   Fri, 18 Oct 2019 10:34:34 -0500
+Message-ID: <20191018153437.20614-17-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191018153437.20614-1-bparrot@ti.com>
 References: <20191018153437.20614-1-bparrot@ti.com>
@@ -65,35 +65,60 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Make sure that both enum_mbus_code() and enum_framesize() properly
-populate the .which parameter member, otherwise -EINVAL is return
-causing the subdev asynchronous registration handshake to fail.
+Currently we were using an arbitrarily small maximum resolution mostly
+based on available sensor capabilities. However the hardware DMA limits
+are much higher than the statically define maximum resolution we were
+using.
+
+There we rework the boundary check code to handle the maximum width and
+height based on the maximum line width in bytes and re-calculating the
+pixel width based on the given pixel format.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/media/platform/ti-vpe/cal.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index b55987ee70dd..6a404350edb3 100644
+index e61d2f3fd1da..a0ff67412410 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -1500,6 +1500,7 @@ static int cal_enum_framesizes(struct file *file, void *fh,
- 	fse.index = fsize->index;
- 	fse.pad = 0;
- 	fse.code = fmt->code;
-+	fse.which = V4L2_SUBDEV_FORMAT_ACTIVE;
+@@ -34,8 +34,8 @@
  
- 	ret = v4l2_subdev_call(ctx->sensor, pad, enum_frame_size, NULL, &fse);
- 	if (ret)
-@@ -1840,6 +1841,7 @@ static int cal_async_bound(struct v4l2_async_notifier *notifier,
+ #define CAL_MODULE_NAME "cal"
  
- 		memset(&mbus_code, 0, sizeof(mbus_code));
- 		mbus_code.index = j;
-+		mbus_code.which = V4L2_SUBDEV_FORMAT_ACTIVE;
- 		ret = v4l2_subdev_call(subdev, pad, enum_mbus_code,
- 				       NULL, &mbus_code);
- 		if (ret)
+-#define MAX_WIDTH 1920
+-#define MAX_HEIGHT 1200
++#define MAX_WIDTH_BYTES (8192 * 8)
++#define MAX_HEIGHT_LINES 16383
+ 
+ #define CAL_VERSION "0.1.0"
+ 
+@@ -1337,15 +1337,21 @@ static int cal_calc_format_size(struct cal_ctx *ctx,
+ 				const struct cal_fmt *fmt,
+ 				struct v4l2_format *f)
+ {
+-	u32 bpl;
++	u32 bpl, max_width;
+ 
+ 	if (!fmt) {
+ 		ctx_dbg(3, ctx, "No cal_fmt provided!\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	v4l_bound_align_image(&f->fmt.pix.width, 48, MAX_WIDTH, 2,
+-			      &f->fmt.pix.height, 32, MAX_HEIGHT, 0, 0);
++	/*
++	 * Maximum width is bound by the DMA max width in bytes.
++	 * We need to recalculate the actual maxi width depending on the
++	 * number of bytes per pixels required.
++	 */
++	max_width = MAX_WIDTH_BYTES / (ALIGN(fmt->bpp, 8) >> 3);
++	v4l_bound_align_image(&f->fmt.pix.width, 48, max_width, 2,
++			      &f->fmt.pix.height, 32, MAX_HEIGHT_LINES, 0, 0);
+ 
+ 	bpl = (f->fmt.pix.width * ALIGN(fmt->bpp, 8)) >> 3;
+ 	f->fmt.pix.bytesperline = ALIGN(bpl, 16);
 -- 
 2.17.1
 
