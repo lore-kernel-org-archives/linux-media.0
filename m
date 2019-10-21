@@ -8,64 +8,66 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B68E2CA9EB0
-	for <linux-media@archiver.kernel.org>; Mon, 21 Oct 2019 11:15:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40D19CA9EB7
+	for <linux-media@archiver.kernel.org>; Mon, 21 Oct 2019 11:15:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7816F206C2
-	for <linux-media@archiver.kernel.org>; Mon, 21 Oct 2019 11:15:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DAE12173B
+	for <linux-media@archiver.kernel.org>; Mon, 21 Oct 2019 11:15:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pKCfjq9M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jy8nh4qH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728324AbfJULPc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Oct 2019 07:15:32 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33117 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726767AbfJULPb (ORCPT
+        id S1728325AbfJULPd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Oct 2019 07:15:33 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40110 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728119AbfJULPd (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Oct 2019 07:15:31 -0400
-Received: by mail-wr1-f65.google.com with SMTP id s1so4721740wro.0
-        for <linux-media@vger.kernel.org>; Mon, 21 Oct 2019 04:15:28 -0700 (PDT)
+        Mon, 21 Oct 2019 07:15:33 -0400
+Received: by mail-wr1-f66.google.com with SMTP id o28so13474520wro.7
+        for <linux-media@vger.kernel.org>; Mon, 21 Oct 2019 04:15:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:subject:date:message-id:mime-version
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=l5kZ6eJpVfLJBcQupT4Lazwgm6cKRgHlf0S9bM0ieRc=;
-        b=pKCfjq9Mt7EK/GAR1x7xlXQqEbq/gJCVmKZnowCqtJaXG7JS+c+DINqiLvath7brjp
-         gRRiuSjlKHFdrzyc2uUFV/bB0wWnP+Qedi7ss1Yp7GTXut4sPIwGKoY0K43gPcPcJt+A
-         cyZvEDBwDaNdf8X3Eifsqu4/7btnh1NJW56kw5CsCW99ob6cL+ZjVPztd1hIjjGk4DMZ
-         1LqYu3zW83JoKIAtlZG4rMx3+19i+uPO3SFXI47dp4E/M005pG+0CDL+c0U6g0HOlNBl
-         5PZRzka1rZdHdv0VDO8AcB0YLrOhIRG+i2Pm3xQWDkfzqGsUFOejRaYo/Z9g2rU+828S
-         bJug==
+        bh=R2338DozlAdMup+TC57MqJoEZ6+BquoNGXxiKwrH+70=;
+        b=jy8nh4qHLdIk+aq6S2YEGbPhUk6/hzJxMRd0FjroxEaxmAfXES/CtLkLlP40TsGGfP
+         zJ4DDSLWVXNW/q2FmyvMXGMaOHLaKu/ismUXK7a2bR14ofaGdxBj3fEojjjN+0Kycqbz
+         bZk88eVTH/tTGyoj1g5icRe69BQdDHMZnNtRgceAn1Mi3n217nWWTTmS2AmJdMlSULMj
+         VRUlZnxwdqkFee2MhKiGIzcIhZclYgNodmlH+P6KO9eJg8yzYsj4b/Nfk9yYbD545lus
+         fZI2cEKXBr/HtbR/hwdX/gQtNE4OCF6k/ogOcG6Cr8Ync7+kwd945Xx2O2EnaxHk1U5J
+         UoBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l5kZ6eJpVfLJBcQupT4Lazwgm6cKRgHlf0S9bM0ieRc=;
-        b=SyASK4xvP07u4jUZzgiWtbycZVV4tGDfkhxXSXGjmGOap1zY7WA9LWIgRrJchA8nzW
-         k6w0ESz4nMzp34mg42TCLI/1QPhymy7giEZN7bMApryQ2Jim6mUHrO8ZBRPk69Ht8WdS
-         4Cv3XNeB3YMeoInFtmoIZhSEMpKdKgkTNJCpkm2xZ88sMq3uCzTqY7USGks7SvRHRVJ9
-         cByFXyDyfnxXEWeeiEgjo78myAjC7p7X+AjD94sivyddMjUWiZz/GDr9iduoH+2C17a/
-         lzsA7F4cA7Ucns40XWzrbQ3IwaZ8owroHRHwzEb/7PreuAghIMAhJPGaiNFFq9SFEE0d
-         QZIA==
-X-Gm-Message-State: APjAAAUJHT6ZTSIVxWM5ZUyHPIhASIOGbeTzjNYewzIdRpzHey5WB8t0
-        UbKfrb5IcgNMU7AKWI8Hveo=
-X-Google-Smtp-Source: APXvYqxp/vYKCrkXKrowLtxNRDfzE3ys4U2Kyc5wYjGju0uwFNJlRxpV4IfhX88e08wQ77TlU3so+Q==
-X-Received: by 2002:adf:f342:: with SMTP id e2mr20538782wrp.61.1571656527798;
-        Mon, 21 Oct 2019 04:15:27 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R2338DozlAdMup+TC57MqJoEZ6+BquoNGXxiKwrH+70=;
+        b=Qeuw6PvqSxdlWzctw9eUR9ITugroULVm6n06gyfJUk1HcTgQQwsUQTA6dFbkypH82U
+         N9LwGhtebOn2wY9bq4nAq9Sz4a8Mi6W0Q2P9W8u3rL7CGXBO8xYSekCtY5E814webdoa
+         9hPbMXsZOSzr3UGKHZy7Rk9guQoZdvEIBCoI3VuInSSWVWfDQO3Y2gD0GbW5AKDAFdOg
+         aNlF1Zx7RpdnzDya1/byiIh+m1uAm6gJjmp+DsV+y94o3UOJmq4WLe3KPFlU4TDBO9cL
+         rTfvHL9Kh7ff5OjN0jn6VizPGGi/zn2YDQ2K0lSOKCcnoBBRhQIQQKlAyN2p/7/IkiKD
+         pZfQ==
+X-Gm-Message-State: APjAAAXg/DOy7RjBnrzORZWHtCF0XLE3b0hKrNuWwzj0+LNvpWxXD162
+        7Swtx14c6A2XWnCYvPe/oRU=
+X-Google-Smtp-Source: APXvYqyT5LxGSXsW1R7Ze9hnyXVce3VExqcFQh5YLbQX63dKYRj1QbqdsndSU+aQf11JHDMCEj7tig==
+X-Received: by 2002:adf:fa92:: with SMTP id h18mr19345547wrr.220.1571656530401;
+        Mon, 21 Oct 2019 04:15:30 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:c194:dd41:4bef:70cc])
-        by smtp.gmail.com with ESMTPSA id l9sm13152415wme.45.2019.10.21.04.15.25
+        by smtp.gmail.com with ESMTPSA id l9sm13152415wme.45.2019.10.21.04.15.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2019 04:15:25 -0700 (PDT)
+        Mon, 21 Oct 2019 04:15:29 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     dri-devel@lists.freedesktop.org, sumit.semwal@linaro.org,
         linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org,
         intel-gfx@lists.freedesktop.org, daniel@ffwll.ch
-Subject: [PATCH 1/4] dma-buf: change DMA-buf locking convention v2
-Date:   Mon, 21 Oct 2019 13:15:21 +0200
-Message-Id: <20191021111524.14793-1-christian.koenig@amd.com>
+Subject: [PATCH 4/4] drm/amdgpu: add independent DMA-buf import v8
+Date:   Mon, 21 Oct 2019 13:15:24 +0200
+Message-Id: <20191021111524.14793-4-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191021111524.14793-1-christian.koenig@amd.com>
+References: <20191021111524.14793-1-christian.koenig@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -74,376 +76,224 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This patch is a stripped down version of the locking changes
-necessary to support dynamic DMA-buf handling.
+Instead of relying on the DRM functions just implement our own import
+functions. This prepares support for taking care of unpinned DMA-buf.
 
-It adds a dynamic flag for both importers as well as exporters
-so that drivers can choose if they want the reservation object
-locked or unlocked during mapping of attachments.
-
-For compatibility between drivers we cache the DMA-buf mapping
-during attaching an importer as soon as exporter/importer
-disagree on the dynamic handling.
-
-This change has gone through a lengthy discussion on dri-devel
-and other mailing lists with at least 3-4 different attempts and
-dead-ends until we settled on this solution. Please refer to the
-mailing lists archives for full background on the history of
-this change.
-
-v2: cleanup set_name merge, improve kerneldoc
+v2: enable for all exporters, not just amdgpu, fix invalidation
+    handling, lock reservation object while setting callback
+v3: change to new dma_buf attach interface
+v4: split out from unpinned DMA-buf work
+v5: rebased and cleanup on new DMA-buf interface
+v6: squash with invalidation callback change,
+    stop using _(map|unmap)_locked
+v7: drop invalidations when the BO is already in system domain
+v8: rebase on new DMA-buf patch and drop move notification
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/dma-buf/dma-buf.c | 102 +++++++++++++++++++++++++++++++++-----
- include/linux/dma-buf.h   |  57 +++++++++++++++++++--
- 2 files changed, 143 insertions(+), 16 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c | 38 +++++++++++++--------
+ drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.h |  4 ---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c     |  1 -
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c     | 32 ++++++++++++++---
+ 4 files changed, 50 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-index 433d91d710e4..753be84b5fd6 100644
---- a/drivers/dma-buf/dma-buf.c
-+++ b/drivers/dma-buf/dma-buf.c
-@@ -45,10 +45,10 @@ static char *dmabuffs_dname(struct dentry *dentry, char *buffer, int buflen)
- 	size_t ret = 0;
- 
- 	dmabuf = dentry->d_fsdata;
--	mutex_lock(&dmabuf->lock);
-+	dma_resv_lock(dmabuf->resv, NULL);
- 	if (dmabuf->name)
- 		ret = strlcpy(name, dmabuf->name, DMA_BUF_NAME_LEN);
--	mutex_unlock(&dmabuf->lock);
-+	dma_resv_unlock(dmabuf->resv);
- 
- 	return dynamic_dname(dentry, buffer, buflen, "/%s:%s",
- 			     dentry->d_name.name, ret > 0 ? name : "");
-@@ -334,7 +334,7 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
- 	if (IS_ERR(name))
- 		return PTR_ERR(name);
- 
--	mutex_lock(&dmabuf->lock);
-+	dma_resv_lock(dmabuf->resv, NULL);
- 	if (!list_empty(&dmabuf->attachments)) {
- 		ret = -EBUSY;
- 		kfree(name);
-@@ -344,7 +344,7 @@ static long dma_buf_set_name(struct dma_buf *dmabuf, const char __user *buf)
- 	dmabuf->name = name;
- 
- out_unlock:
--	mutex_unlock(&dmabuf->lock);
-+	dma_resv_unlock(dmabuf->resv);
- 	return ret;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
+index f14b52cc7205..c22d11df013e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
+@@ -370,31 +370,28 @@ struct dma_buf *amdgpu_gem_prime_export(struct drm_gem_object *gobj,
  }
- 
-@@ -403,10 +403,10 @@ static void dma_buf_show_fdinfo(struct seq_file *m, struct file *file)
- 	/* Don't count the temporary reference taken inside procfs seq_show */
- 	seq_printf(m, "count:\t%ld\n", file_count(dmabuf->file) - 1);
- 	seq_printf(m, "exp_name:\t%s\n", dmabuf->exp_name);
--	mutex_lock(&dmabuf->lock);
-+	dma_resv_lock(dmabuf->resv, NULL);
- 	if (dmabuf->name)
- 		seq_printf(m, "name:\t%s\n", dmabuf->name);
--	mutex_unlock(&dmabuf->lock);
-+	dma_resv_unlock(dmabuf->resv);
- }
- 
- static const struct file_operations dma_buf_fops = {
-@@ -525,6 +525,10 @@ struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info)
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-+	if (WARN_ON(exp_info->ops->cache_sgt_mapping &&
-+		    exp_info->ops->dynamic_mapping))
-+		return ERR_PTR(-EINVAL);
-+
- 	if (!try_module_get(exp_info->owner))
- 		return ERR_PTR(-ENOENT);
- 
-@@ -645,10 +649,11 @@ void dma_buf_put(struct dma_buf *dmabuf)
- EXPORT_SYMBOL_GPL(dma_buf_put);
  
  /**
-- * dma_buf_attach - Add the device to dma_buf's attachments list; optionally,
-+ * dma_buf_dynamic_attach - Add the device to dma_buf's attachments list; optionally,
-  * calls attach() of dma_buf_ops to allow device-specific attach functionality
-- * @dmabuf:	[in]	buffer to attach device to.
-- * @dev:	[in]	device to be attached.
-+ * @dmabuf:		[in]	buffer to attach device to.
-+ * @dev:		[in]	device to be attached.
-+ * @dynamic_mapping:	[in]	calling convention for map/unmap
+- * amdgpu_gem_prime_import_sg_table - &drm_driver.gem_prime_import_sg_table
+- * implementation
++ * amdgpu_dma_buf_create_obj - create BO for DMA-buf import
++ *
+  * @dev: DRM device
+- * @attach: DMA-buf attachment
+- * @sg: Scatter/gather table
++ * @dma_buf: DMA-buf
   *
-  * Returns struct dma_buf_attachment pointer for this attachment. Attachments
-  * must be cleaned up by calling dma_buf_detach().
-@@ -662,8 +667,9 @@ EXPORT_SYMBOL_GPL(dma_buf_put);
-  * accessible to @dev, and cannot be moved to a more suitable place. This is
-  * indicated with the error code -EBUSY.
+- * Imports shared DMA buffer memory exported by another device.
++ * Creates an empty SG BO for DMA-buf import.
+  *
+  * Returns:
+  * A new GEM BO of the given DRM device, representing the memory
+  * described by the given DMA-buf attachment and scatter/gather table.
   */
--struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
--					  struct device *dev)
-+struct dma_buf_attachment *
-+dma_buf_dynamic_attach(struct dma_buf *dmabuf, struct device *dev,
-+		       bool dynamic_mapping)
+-struct drm_gem_object *
+-amdgpu_gem_prime_import_sg_table(struct drm_device *dev,
+-				 struct dma_buf_attachment *attach,
+-				 struct sg_table *sg)
++static struct drm_gem_object *
++amdgpu_dma_buf_create_obj(struct drm_device *dev, struct dma_buf *dma_buf)
  {
- 	struct dma_buf_attachment *attach;
+-	struct dma_resv *resv = attach->dmabuf->resv;
++	struct dma_resv *resv = dma_buf->resv;
+ 	struct amdgpu_device *adev = dev->dev_private;
+ 	struct amdgpu_bo *bo;
+ 	struct amdgpu_bo_param bp;
  	int ret;
-@@ -677,6 +683,7 @@ struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
  
- 	attach->dev = dev;
- 	attach->dmabuf = dmabuf;
-+	attach->dynamic_mapping = dynamic_mapping;
+ 	memset(&bp, 0, sizeof(bp));
+-	bp.size = attach->dmabuf->size;
++	bp.size = dma_buf->size;
+ 	bp.byte_align = PAGE_SIZE;
+ 	bp.domain = AMDGPU_GEM_DOMAIN_CPU;
+ 	bp.flags = 0;
+@@ -405,11 +402,9 @@ amdgpu_gem_prime_import_sg_table(struct drm_device *dev,
+ 	if (ret)
+ 		goto error;
  
- 	mutex_lock(&dmabuf->lock);
+-	bo->tbo.sg = sg;
+-	bo->tbo.ttm->sg = sg;
+ 	bo->allowed_domains = AMDGPU_GEM_DOMAIN_GTT;
+ 	bo->preferred_domains = AMDGPU_GEM_DOMAIN_GTT;
+-	if (attach->dmabuf->ops != &amdgpu_dmabuf_ops)
++	if (dma_buf->ops != &amdgpu_dmabuf_ops)
+ 		bo->prime_shared_count = 1;
  
-@@ -685,16 +692,64 @@ struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
- 		if (ret)
- 			goto err_attach;
- 	}
-+	dma_resv_lock(dmabuf->resv, NULL);
- 	list_add(&attach->node, &dmabuf->attachments);
-+	dma_resv_unlock(dmabuf->resv);
+ 	dma_resv_unlock(resv);
+@@ -434,6 +429,7 @@ amdgpu_gem_prime_import_sg_table(struct drm_device *dev,
+ struct drm_gem_object *amdgpu_gem_prime_import(struct drm_device *dev,
+ 					    struct dma_buf *dma_buf)
+ {
++	struct dma_buf_attachment *attach;
+ 	struct drm_gem_object *obj;
  
- 	mutex_unlock(&dmabuf->lock);
- 
-+	/* When either the importer or the exporter can't handle dynamic
-+	 * mappings we cache the mapping here to avoid issues with the
-+	 * reservation object lock.
-+	 */
-+	if (dma_buf_attachment_is_dynamic(attach) !=
-+	    dma_buf_is_dynamic(dmabuf)) {
-+		struct sg_table *sgt;
-+
-+		if (dma_buf_is_dynamic(attach->dmabuf))
-+			dma_resv_lock(attach->dmabuf->resv, NULL);
-+
-+		sgt = dmabuf->ops->map_dma_buf(attach, DMA_BIDIRECTIONAL);
-+		if (!sgt)
-+			sgt = ERR_PTR(-ENOMEM);
-+		if (IS_ERR(sgt)) {
-+			ret = PTR_ERR(sgt);
-+			goto err_unlock;
-+		}
-+		if (dma_buf_is_dynamic(attach->dmabuf))
-+			dma_resv_unlock(attach->dmabuf->resv);
-+		attach->sgt = sgt;
-+		attach->dir = DMA_BIDIRECTIONAL;
-+	}
-+
- 	return attach;
- 
- err_attach:
- 	kfree(attach);
- 	mutex_unlock(&dmabuf->lock);
- 	return ERR_PTR(ret);
-+
-+err_unlock:
-+	if (dma_buf_is_dynamic(attach->dmabuf))
-+		dma_resv_unlock(attach->dmabuf->resv);
-+
-+	dma_buf_detach(dmabuf, attach);
-+	return ERR_PTR(ret);
-+}
-+EXPORT_SYMBOL_GPL(dma_buf_dynamic_attach);
-+
-+/**
-+ * dma_buf_attach - Wrapper for dma_buf_dynamic_attach
-+ * @dmabuf:	[in]	buffer to attach device to.
-+ * @dev:	[in]	device to be attached.
-+ *
-+ * Wrapper to call dma_buf_dynamic_attach() for drivers which still use a static
-+ * mapping.
-+ */
-+struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
-+					  struct device *dev)
-+{
-+	return dma_buf_dynamic_attach(dmabuf, dev, false);
- }
- EXPORT_SYMBOL_GPL(dma_buf_attach);
- 
-@@ -711,11 +766,20 @@ void dma_buf_detach(struct dma_buf *dmabuf, struct dma_buf_attachment *attach)
- 	if (WARN_ON(!dmabuf || !attach))
- 		return;
- 
--	if (attach->sgt)
-+	if (attach->sgt) {
-+		if (dma_buf_is_dynamic(attach->dmabuf))
-+			dma_resv_lock(attach->dmabuf->resv, NULL);
-+
- 		dmabuf->ops->unmap_dma_buf(attach, attach->sgt, attach->dir);
- 
-+		if (dma_buf_is_dynamic(attach->dmabuf))
-+			dma_resv_unlock(attach->dmabuf->resv);
-+	}
-+
- 	mutex_lock(&dmabuf->lock);
-+	dma_resv_lock(dmabuf->resv, NULL);
- 	list_del(&attach->node);
-+	dma_resv_unlock(dmabuf->resv);
- 	if (dmabuf->ops->detach)
- 		dmabuf->ops->detach(dmabuf, attach);
- 
-@@ -749,6 +813,9 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
- 	if (WARN_ON(!attach || !attach->dmabuf))
- 		return ERR_PTR(-EINVAL);
- 
-+	if (dma_buf_attachment_is_dynamic(attach))
-+		dma_resv_assert_held(attach->dmabuf->resv);
-+
- 	if (attach->sgt) {
- 		/*
- 		 * Two mappings with different directions for the same
-@@ -761,6 +828,9 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *attach,
- 		return attach->sgt;
- 	}
- 
-+	if (dma_buf_is_dynamic(attach->dmabuf))
-+		dma_resv_assert_held(attach->dmabuf->resv);
-+
- 	sg_table = attach->dmabuf->ops->map_dma_buf(attach, direction);
- 	if (!sg_table)
- 		sg_table = ERR_PTR(-ENOMEM);
-@@ -793,9 +863,15 @@ void dma_buf_unmap_attachment(struct dma_buf_attachment *attach,
- 	if (WARN_ON(!attach || !attach->dmabuf || !sg_table))
- 		return;
- 
-+	if (dma_buf_attachment_is_dynamic(attach))
-+		dma_resv_assert_held(attach->dmabuf->resv);
-+
- 	if (attach->sgt == sg_table)
- 		return;
- 
-+	if (dma_buf_is_dynamic(attach->dmabuf))
-+		dma_resv_assert_held(attach->dmabuf->resv);
-+
- 	attach->dmabuf->ops->unmap_dma_buf(attach, sg_table, direction);
- }
- EXPORT_SYMBOL_GPL(dma_buf_unmap_attachment);
-@@ -1219,10 +1295,12 @@ static int dma_buf_debug_show(struct seq_file *s, void *unused)
- 		seq_puts(s, "\tAttached Devices:\n");
- 		attach_count = 0;
- 
-+		dma_resv_lock(buf_obj->resv, NULL);
- 		list_for_each_entry(attach_obj, &buf_obj->attachments, node) {
- 			seq_printf(s, "\t%s\n", dev_name(attach_obj->dev));
- 			attach_count++;
+ 	if (dma_buf->ops == &amdgpu_dmabuf_ops) {
+@@ -448,5 +444,17 @@ struct drm_gem_object *amdgpu_gem_prime_import(struct drm_device *dev,
  		}
-+		dma_resv_unlock(buf_obj->resv);
+ 	}
  
- 		seq_printf(s, "Total %d devices attached\n\n",
- 				attach_count);
-diff --git a/include/linux/dma-buf.h b/include/linux/dma-buf.h
-index ec212cb27fdc..bcc0f4d0b678 100644
---- a/include/linux/dma-buf.h
-+++ b/include/linux/dma-buf.h
-@@ -42,6 +42,18 @@ struct dma_buf_ops {
- 	  */
- 	bool cache_sgt_mapping;
- 
-+	/**
-+	 * @dynamic_mapping:
-+	 *
-+	 * If true the framework makes sure that the map/unmap_dma_buf
-+	 * callbacks are always called with the dma_resv object locked.
-+	 *
-+	 * If false the framework makes ure that the map/unmap_dma_buf
-+	 * callbacks are always called without the dma_resv object locked.
-+	 * Mutual exclusive with @cache_sgt_mapping.
-+	 */
-+	bool dynamic_mapping;
+-	return drm_gem_prime_import(dev, dma_buf);
++	obj = amdgpu_dma_buf_create_obj(dev, dma_buf);
++	if (IS_ERR(obj))
++		return obj;
 +
- 	/**
- 	 * @attach:
- 	 *
-@@ -109,6 +121,9 @@ struct dma_buf_ops {
- 	 * any other kind of sharing that the exporter might wish to make
- 	 * available to buffer-users.
- 	 *
-+	 * This is always called with the dmabuf->resv object locked when
-+	 * the dynamic_mapping flag is true.
-+	 *
- 	 * Returns:
- 	 *
- 	 * A &sg_table scatter list of or the backing storage of the DMA buffer,
-@@ -267,7 +282,8 @@ struct dma_buf_ops {
-  * struct dma_buf - shared buffer object
-  * @size: size of the buffer
-  * @file: file pointer used for sharing buffers across, and for refcounting.
-- * @attachments: list of dma_buf_attachment that denotes all devices attached.
-+ * @attachments: list of dma_buf_attachment that denotes all devices attached,
-+ *               protected by dma_resv lock.
-  * @ops: dma_buf_ops associated with this buffer object.
-  * @lock: used internally to serialize list manipulation, attach/detach and
-  *        vmap/unmap, and accesses to name
-@@ -323,10 +339,12 @@ struct dma_buf {
-  * struct dma_buf_attachment - holds device-buffer attachment data
-  * @dmabuf: buffer for this attachment.
-  * @dev: device attached to the buffer.
-- * @node: list of dma_buf_attachment.
-+ * @node: list of dma_buf_attachment, protected by dma_resv lock of the dmabuf.
-  * @sgt: cached mapping.
-  * @dir: direction of cached mapping.
-  * @priv: exporter specific attachment data.
-+ * @dynamic_mapping: true if dma_buf_map/unmap_attachment() is called with the
-+ * dma_resv lock held.
-  *
-  * This structure holds the attachment information between the dma_buf buffer
-  * and its user device(s). The list contains one attachment struct per device
-@@ -343,6 +361,7 @@ struct dma_buf_attachment {
- 	struct list_head node;
- 	struct sg_table *sgt;
- 	enum dma_data_direction dir;
-+	bool dynamic_mapping;
- 	void *priv;
- };
- 
-@@ -394,10 +413,39 @@ static inline void get_dma_buf(struct dma_buf *dmabuf)
- 	get_file(dmabuf->file);
++	attach = dma_buf_dynamic_attach(dma_buf, dev->dev, true);
++	if (IS_ERR(attach)) {
++		drm_gem_object_put(obj);
++		return ERR_CAST(attach);
++	}
++
++	get_dma_buf(dma_buf);
++	obj->import_attach = attach;
++	return obj;
  }
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.h
+index ce1b3f017451..ec447a7b6b28 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.h
+@@ -25,10 +25,6 @@
  
-+/**
-+ * dma_buf_is_dynamic - check if a DMA-buf uses dynamic mappings.
-+ * @dmabuf: the DMA-buf to check
-+ *
-+ * Returns true if a DMA-buf exporter wants to be called with the dma_resv
-+ * locked, false if it doesn't wants to be called with the lock held.
-+ */
-+static inline bool dma_buf_is_dynamic(struct dma_buf *dmabuf)
-+{
-+	return dmabuf->ops->dynamic_mapping;
-+}
+ #include <drm/drm_gem.h>
+ 
+-struct drm_gem_object *
+-amdgpu_gem_prime_import_sg_table(struct drm_device *dev,
+-				 struct dma_buf_attachment *attach,
+-				 struct sg_table *sg);
+ struct dma_buf *amdgpu_gem_prime_export(struct drm_gem_object *gobj,
+ 					int flags);
+ struct drm_gem_object *amdgpu_gem_prime_import(struct drm_device *dev,
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index bf5bf15b12e3..7acca058510c 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -1409,7 +1409,6 @@ static struct drm_driver kms_driver = {
+ 	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
+ 	.gem_prime_export = amdgpu_gem_prime_export,
+ 	.gem_prime_import = amdgpu_gem_prime_import,
+-	.gem_prime_import_sg_table = amdgpu_gem_prime_import_sg_table,
+ 	.gem_prime_vmap = amdgpu_gem_prime_vmap,
+ 	.gem_prime_vunmap = amdgpu_gem_prime_vunmap,
+ 	.gem_prime_mmap = amdgpu_gem_prime_mmap,
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index 8e867b8b432f..c19100ced040 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -39,6 +39,7 @@
+ #include <linux/slab.h>
+ #include <linux/swap.h>
+ #include <linux/swiotlb.h>
++#include <linux/dma-buf.h>
+ 
+ #include <drm/ttm/ttm_bo_api.h>
+ #include <drm/ttm/ttm_bo_driver.h>
+@@ -763,6 +764,7 @@ static unsigned long amdgpu_ttm_io_mem_pfn(struct ttm_buffer_object *bo,
+  */
+ struct amdgpu_ttm_tt {
+ 	struct ttm_dma_tt	ttm;
++	struct drm_gem_object	*gobj;
+ 	u64			offset;
+ 	uint64_t		userptr;
+ 	struct task_struct	*usertask;
+@@ -1227,6 +1229,7 @@ static struct ttm_tt *amdgpu_ttm_tt_create(struct ttm_buffer_object *bo,
+ 		return NULL;
+ 	}
+ 	gtt->ttm.ttm.func = &amdgpu_backend_func;
++	gtt->gobj = &bo->base;
+ 
+ 	/* allocate space for the uninitialized page entries */
+ 	if (ttm_sg_tt_init(&gtt->ttm, bo, page_flags)) {
+@@ -1247,7 +1250,6 @@ static int amdgpu_ttm_tt_populate(struct ttm_tt *ttm,
+ {
+ 	struct amdgpu_device *adev = amdgpu_ttm_adev(ttm->bdev);
+ 	struct amdgpu_ttm_tt *gtt = (void *)ttm;
+-	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
+ 
+ 	/* user pages are bound by amdgpu_ttm_tt_pin_userptr() */
+ 	if (gtt && gtt->userptr) {
+@@ -1260,7 +1262,19 @@ static int amdgpu_ttm_tt_populate(struct ttm_tt *ttm,
+ 		return 0;
+ 	}
+ 
+-	if (slave && ttm->sg) {
++	if (ttm->page_flags & TTM_PAGE_FLAG_SG) {
++		if (!ttm->sg) {
++			struct dma_buf_attachment *attach;
++			struct sg_table *sgt;
 +
-+/**
-+ * dma_buf_attachment_is_dynamic - check if a DMA-buf attachment uses dynamic
-+ * mappinsg
-+ * @attach: the DMA-buf attachment to check
-+ *
-+ * Returns true if a DMA-buf importer wants to call the map/unmap functions with
-+ * the dma_resv lock held.
-+ */
-+static inline bool
-+dma_buf_attachment_is_dynamic(struct dma_buf_attachment *attach)
-+{
-+	return attach->dynamic_mapping;
-+}
++			attach = gtt->gobj->import_attach;
++			sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
++			if (IS_ERR(sgt))
++				return PTR_ERR(sgt);
 +
- struct dma_buf_attachment *dma_buf_attach(struct dma_buf *dmabuf,
--							struct device *dev);
-+					  struct device *dev);
-+struct dma_buf_attachment *
-+dma_buf_dynamic_attach(struct dma_buf *dmabuf, struct device *dev,
-+		       bool dynamic_mapping);
- void dma_buf_detach(struct dma_buf *dmabuf,
--				struct dma_buf_attachment *dmabuf_attach);
-+		    struct dma_buf_attachment *attach);
++			ttm->sg = sgt;
++		}
++
+ 		drm_prime_sg_to_page_addr_arrays(ttm->sg, ttm->pages,
+ 						 gtt->ttm.dma_address,
+ 						 ttm->num_pages);
+@@ -1287,9 +1301,8 @@ static int amdgpu_ttm_tt_populate(struct ttm_tt *ttm,
+  */
+ static void amdgpu_ttm_tt_unpopulate(struct ttm_tt *ttm)
+ {
+-	struct amdgpu_device *adev;
+ 	struct amdgpu_ttm_tt *gtt = (void *)ttm;
+-	bool slave = !!(ttm->page_flags & TTM_PAGE_FLAG_SG);
++	struct amdgpu_device *adev;
  
- struct dma_buf *dma_buf_export(const struct dma_buf_export_info *exp_info);
+ 	if (gtt && gtt->userptr) {
+ 		amdgpu_ttm_tt_set_user_pages(ttm, NULL);
+@@ -1298,7 +1311,16 @@ static void amdgpu_ttm_tt_unpopulate(struct ttm_tt *ttm)
+ 		return;
+ 	}
  
-@@ -409,6 +457,7 @@ struct sg_table *dma_buf_map_attachment(struct dma_buf_attachment *,
- 					enum dma_data_direction);
- void dma_buf_unmap_attachment(struct dma_buf_attachment *, struct sg_table *,
- 				enum dma_data_direction);
-+void dma_buf_move_notify(struct dma_buf *dma_buf);
- int dma_buf_begin_cpu_access(struct dma_buf *dma_buf,
- 			     enum dma_data_direction dir);
- int dma_buf_end_cpu_access(struct dma_buf *dma_buf,
+-	if (slave)
++	if (ttm->sg && gtt->gobj->import_attach) {
++		struct dma_buf_attachment *attach;
++
++		attach = gtt->gobj->import_attach;
++		dma_buf_unmap_attachment(attach, ttm->sg, DMA_BIDIRECTIONAL);
++		ttm->sg = NULL;
++		return;
++	}
++
++	if (ttm->page_flags & TTM_PAGE_FLAG_SG)
+ 		return;
+ 
+ 	adev = amdgpu_ttm_adev(ttm->bdev);
 -- 
 2.17.1
 
