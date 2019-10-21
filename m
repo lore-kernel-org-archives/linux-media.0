@@ -6,34 +6,34 @@ X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AA57CA9EB5
-	for <linux-media@archiver.kernel.org>; Mon, 21 Oct 2019 07:35:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CB38CA9EB7
+	for <linux-media@archiver.kernel.org>; Mon, 21 Oct 2019 07:41:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3B7482086D
-	for <linux-media@archiver.kernel.org>; Mon, 21 Oct 2019 07:35:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0976D20B7C
+	for <linux-media@archiver.kernel.org>; Mon, 21 Oct 2019 07:41:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbfJUHfW (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 21 Oct 2019 03:35:22 -0400
-Received: from www.linuxtv.org ([130.149.80.248]:53537 "EHLO www.linuxtv.org"
+        id S1727516AbfJUHlA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 21 Oct 2019 03:41:00 -0400
+Received: from www.linuxtv.org ([130.149.80.248]:53773 "EHLO www.linuxtv.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726480AbfJUHfW (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 21 Oct 2019 03:35:22 -0400
+        id S1727478AbfJUHk7 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Mon, 21 Oct 2019 03:40:59 -0400
 Received: from builder.linuxtv.org ([140.211.167.10])
         by www.linuxtv.org with esmtp (Exim 4.84_2)
         (envelope-from <jenkins@linuxtv.org>)
-        id 1iMSDk-0001rW-P7; Mon, 21 Oct 2019 07:35:16 +0000
+        id 1iMSJE-0002B5-3l; Mon, 21 Oct 2019 07:40:56 +0000
 Received: from [127.0.0.1] (helo=builder.linuxtv.org)
         by builder.linuxtv.org with esmtp (Exim 4.92)
         (envelope-from <jenkins@linuxtv.org>)
-        id 1iMSEE-0001kL-Kd; Mon, 21 Oct 2019 07:35:46 +0000
+        id 1iMSJi-0003iZ-GR; Mon, 21 Oct 2019 07:41:26 +0000
 From:   Jenkins <jenkins@linuxtv.org>
 To:     mchehab+samsung@kernel.org, linux-media@vger.kernel.org
 Cc:     builder@linuxtv.org
-Subject: Re: [GIT PULL for 5.5] Sensor and lens driver patches
-Date:   Mon, 21 Oct 2019 07:35:46 +0000
-Message-Id: <20191021073546.6672-1-jenkins@linuxtv.org>
+Subject: Re: [GIT PULL for 5.5] SMIA patches for 5.5
+Date:   Mon, 21 Oct 2019 07:41:26 +0000
+Message-Id: <20191021074126.14250-1-jenkins@linuxtv.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191021071539.GB864@valkosipuli.retiisi.org.uk>
+In-Reply-To: <20191021072359.GC864@valkosipuli.retiisi.org.uk>
 References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -44,34 +44,38 @@ X-Mailing-List: linux-media@vger.kernel.org
 
 From: builder@linuxtv.org
 
-Pull request: https://patchwork.linuxtv.org/patch/59574/
-Build log: https://builder.linuxtv.org/job/patchwork/21362/
-Build time: 00:15:34
-Link: https://lore.kernel.org/linux-media/20191021071539.GB864@valkosipuli.retiisi.org.uk
+Pull request: https://patchwork.linuxtv.org/patch/59575/
+Build log: https://builder.linuxtv.org/job/patchwork/21363/
+Build time: 00:05:26
+Link: https://lore.kernel.org/linux-media/20191021072359.GC864@valkosipuli.retiisi.org.uk
 
-gpg: Signature made Mon 21 Oct 2019 07:04:11 AM UTC
+gpg: Signature made Mon 21 Oct 2019 07:18:55 AM UTC
 gpg:                using DSA key F0D0377A0D4F25A79238EFE56D40361B6E28C193
 gpg:                issuer "sakari.ailus@linux.intel.com"
 gpg: Good signature from "Sakari Ailus <sakari.ailus@linux.intel.com>" [full]
 
-Summary: 3 patches and/or PDF generation with issues, being 0 at build time
+Summary: 4 patches and/or PDF generation with issues, being 0 at build time
 
 Error/warnings:
 
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0016-media-ad5820-Add-support-for-ad5821-and-ad5823.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0016-media-ad5820-Add-support-for-ad5821-and-ad5823.patch
-patches/0016-media-ad5820-Add-support-for-ad5821-and-ad5823.patch:8: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-smiapp-Refactor-reading-NVM-page.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0003-smiapp-Refactor-reading-NVM-page.patch
+patches/0003-smiapp-Refactor-reading-NVM-page.patch:47: CHECK: Lines should not end with a '('
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0017-media-i2c-ov5695-Fix-randbuild-error.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0017-media-i2c-ov5695-Fix-randbuild-error.patch
-patches/0017-media-i2c-ov5695-Fix-randbuild-error.patch:9: WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-smiapp-Don-t-poll-for-NVM-ready-on-devices-that-don-.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0005-smiapp-Don-t-poll-for-NVM-ready-on-devices-that-don-.patch
+patches/0005-smiapp-Don-t-poll-for-NVM-ready-on-devices-that-don-.patch:32: CHECK: Lines should not end with a '('
+patches/0005-smiapp-Don-t-poll-for-NVM-ready-on-devices-that-don-.patch:47: CHECK: Blank lines aren't necessary before a close brace '}'
 
-Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0019-media-i2c-Add-IMX290-CMOS-image-sensor-driver.patch:
-$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0019-media-i2c-Add-IMX290-CMOS-image-sensor-driver.patch
-patches/0019-media-i2c-Add-IMX290-CMOS-image-sensor-driver.patch:54: WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-patches/0019-media-i2c-Add-IMX290-CMOS-image-sensor-driver.patch:131: CHECK: struct mutex definition without comment
-patches/0019-media-i2c-Add-IMX290-CMOS-image-sensor-driver.patch:377: WARNING: msleep < 20ms can sleep for up to 20ms; see Documentation/timers/timers-howto.rst
-patches/0019-media-i2c-Add-IMX290-CMOS-image-sensor-driver.patch:568: CHECK: Lines should not end with a '('
-patches/0019-media-i2c-Add-IMX290-CMOS-image-sensor-driver.patch:590: CHECK: Lines should not end with a '('
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0010-smiapp-Move-binning-configuration-to-streaming-start.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0010-smiapp-Move-binning-configuration-to-streaming-start.patch
+patches/0010-smiapp-Move-binning-configuration-to-streaming-start.patch:69: CHECK: Lines should not end with a '('
+
+Error #256 when running ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0012-smiapp-Use-non-binned-and-binned-limits-correctly.patch:
+$ ./scripts/checkpatch.pl --terse --mailback --no-summary --strict patches/0012-smiapp-Use-non-binned-and-binned-limits-correctly.patch
+patches/0012-smiapp-Use-non-binned-and-binned-limits-correctly.patch:22: CHECK: Prefer kernel type 'u16' over 'uint16_t'
+patches/0012-smiapp-Use-non-binned-and-binned-limits-correctly.patch:26: WARNING: line over 80 characters
+patches/0012-smiapp-Use-non-binned-and-binned-limits-correctly.patch:27: WARNING: line over 80 characters
+patches/0012-smiapp-Use-non-binned-and-binned-limits-correctly.patch:30: WARNING: line over 80 characters
 
