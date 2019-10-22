@@ -2,159 +2,116 @@ Return-Path: <SRS0=kHRc=YP=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECD74CA9EA0
-	for <linux-media@archiver.kernel.org>; Tue, 22 Oct 2019 15:27:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 508FECA9EA0
+	for <linux-media@archiver.kernel.org>; Tue, 22 Oct 2019 16:17:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C9C752086D
-	for <linux-media@archiver.kernel.org>; Tue, 22 Oct 2019 15:27:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 22790218AE
+	for <linux-media@archiver.kernel.org>; Tue, 22 Oct 2019 16:17:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1571761072;
+	bh=Gg/K4AWcAIZMUhsjSl+x6is8fvGE9nG7djqvjYD1rN0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=wX+8wmifyGkv3tUDFej9p70JBh9bZruFhKGjaO8m2ty6YKpBMxc+1dS9yMJ1j2Gvi
+	 i4Pqn5ystFPl+ZNJBmnNwHuOJcpfhfZz+uGNudUMJLEjqonR5e/59wjk6Kw1qMzTyC
+	 VlBR26OYkhWf8smxHuTwVnfFAXBl23Z2lzj6Bax8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732271AbfJVP1E (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 22 Oct 2019 11:27:04 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:49221 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726847AbfJVP1E (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Tue, 22 Oct 2019 11:27:04 -0400
-Received: from localhost.localdomain (lfbn-1-17395-211.w86-250.abo.wanadoo.fr [86.250.200.211])
-        (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id EFBE5240011;
-        Tue, 22 Oct 2019 15:26:59 +0000 (UTC)
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v9 0/5] HEVC/H.265 stateless support for V4L2 and Cedrus
-Date:   Tue, 22 Oct 2019 17:26:49 +0200
-Message-Id: <20191022152654.1999355-1-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.23.0
+        id S2389363AbfJVQRt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 22 Oct 2019 12:17:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55740 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388978AbfJVQRs (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 22 Oct 2019 12:17:48 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8512F21906;
+        Tue, 22 Oct 2019 16:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571761067;
+        bh=Gg/K4AWcAIZMUhsjSl+x6is8fvGE9nG7djqvjYD1rN0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FYsfHdPH1H18SJQUEaduUxml14PNKkhavCDSweG6QCDb9TlXsb7Agl9nu02nSKkcM
+         q7juO5StFsUg3HAtdqL2wqpuH49QpTNz0y9QxwvTdmqGKecqebUaLLlcaHzzyXmXXC
+         X5MsEjaTR41kYPyXJ7i1YPagvmmiBzhdqxHKputQ=
+Received: by mail-qt1-f173.google.com with SMTP id t20so27583756qtr.10;
+        Tue, 22 Oct 2019 09:17:47 -0700 (PDT)
+X-Gm-Message-State: APjAAAVGPvpteRmdj0PA9yJshcSWRYRAECebU+3N22xK01hPz6/r4Hq4
+        k+muJFtakjewkasBq/fAFSV1FGgYx2lmV4WT8g==
+X-Google-Smtp-Source: APXvYqwH0FQlbk2Qa04L/g3dKMJcwcPDR5Z3VqCtTDPrkq+GCUtoxYZ7KMCUXfKG7g9gqSoNyfVwPl9v1l7yqdmzqVU=
+X-Received: by 2002:ac8:4508:: with SMTP id q8mr4292602qtn.110.1571761066718;
+ Tue, 22 Oct 2019 09:17:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <b47ec7088aa4b07458519ab151de92df552a9302.1570101510.git.amit.kucheria@linaro.org>
+ <20191003115154.6f2jgj3dnqsved2y@gilmour> <CAHLCerNoLyQ-e70=1VMPO_J_amA+-2vtHwfoUabo4dhUWj-H0A@mail.gmail.com>
+ <20191007100535.6gp6b3h6ueyeln3b@gilmour> <CAP245DXT=HL+m-LqoC25EBnOaPmF1pUW0fEZp6EZB-MdgOJoWw@mail.gmail.com>
+ <20191007104835.v6iqpoolqtajryik@gilmour>
+In-Reply-To: <20191007104835.v6iqpoolqtajryik@gilmour>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 22 Oct 2019 11:17:35 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLVkikYVpjs1m+QqsOK2CfSm9+LfZWXbWEoszeSt3RGaA@mail.gmail.com>
+Message-ID: <CAL_JsqLVkikYVpjs1m+QqsOK2CfSm9+LfZWXbWEoszeSt3RGaA@mail.gmail.com>
+Subject: Re: [PATCH] media: dt-bindings: media: Fixup Allwinner A10 CSI binding
+To:     Maxime Ripard <mripard@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        lakml <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This is early support for HEVC/H.265 stateless decoding in V4L2,
-including both definitions and driver support for the Cedrus VPU
-driver, which concerns Allwinner devices.
+On Mon, Oct 7, 2019 at 5:48 AM Maxime Ripard <mripard@kernel.org> wrote:
+>
+> On Mon, Oct 07, 2019 at 03:45:29PM +0530, Amit Kucheria wrote:
+> > On Mon, Oct 7, 2019 at 3:35 PM Maxime Ripard <mripard@kernel.org> wrote:
+> > >
+> > > On Sat, Oct 05, 2019 at 04:15:57PM +0530, Amit Kucheria wrote:
+> > > > On Thu, Oct 3, 2019 at 5:22 PM Maxime Ripard <mripard@kernel.org> wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > On Thu, Oct 03, 2019 at 04:52:24PM +0530, Amit Kucheria wrote:
+> > > > > > This new binding fails dt_binding_check due to a typo. Fix it up.
+> > > > > >
+> > > > > > linux.git/Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.yaml: $id: path/filename 'arm/allwinner,sun4i-a10-csi.yaml' doesn't match actual filename
+> > > > > > linux.git/Documentation/devicetree/bindings/Makefile:12: recipe for target 'Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.example.dts' failed
+> > > > > > make[2]: *** [Documentation/devicetree/bindings/media/allwinner,sun4i-a10-csi.example.dts] Error 1
+> > > > > > make[2]: *** Waiting for unfinished jobs....
+> > > > > > linux.git/Makefile:1284: recipe for target 'dt_binding_check' failed
+> > > > > > make[1]: *** [dt_binding_check] Error 2
+> > > > > >
+> > > > > > Fixes: c5e8f4ccd7750 ("media: dt-bindings: media: Add Allwinner A10 CSI binding")
+> > > > > > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > > > >
+> > > > > Thanks for your patch.
+> > > > >
+> > > > > It has already been submitted though:
+> > > > > https://lore.kernel.org/linux-arm-kernel/1568808060-17516-1-git-send-email-pragnesh.patel@sifive.com/
+> > > > >
+> > > > > I'm not sure why it hasn't been applied yet though :/
+> > > >
+> > > > Perhaps a Fixes tag will allow more attention to it?
+> > >
+> > > I've added a fixes tag and merged it through the sunxi tree.
+> > >
+> > > Sorry for the time it took, and thanks for sending that fix!
+> >
+> > Will it get merged for -rc2?
+>
+> -rc2 was released yesterday, so we're a bit late for that, but it's
+>  going to be in next tomorrow.
 
-A specific pixel format is introduced for the HEVC slice format and
-controls are provided to pass the bitstream metadata to the decoder.
-Some bitstream extensions are intentionally not supported at this point.
+Is this going to Linus anytime soon? It is affecting anyone submitting
+bindings against current -rc's.
 
-Since this is the first proposal for stateless HEVC/H.265 support in
-V4L2, reviews and comments about the controls definitions are
-particularly welcome.
-
-On the Cedrus side, the H.265 implementation covers frame pictures
-with both uni-directional and bi-direction prediction modes (P/B
-slices). Field pictures (interleaved), scaling lists and 10-bit output
-are not supported at this point.
-
-Changes since v8:
-* Rebased on latest media tree;
-* Fixed possibly undefined bit shifts;
-* Added a minor cosmetic change to a macro;
-
-Changes since v7:
-* Rebased on latest media tree;
-* Fixed holes in structures for cacheline alignment;
-* Added decode mode and start code controls
-  (only per-slice and no start code is supported at this point).
-
-Changes since v6:
-* Rebased on latest media tree from Hans;
-* Reordered some fields to avoid holes and multi-padding;
-* Updated the documentation.
-
-Changes since v5:
-* Rebased atop latest next media tree;
-* Moved to flags instead of u8 fields;
-* Added padding to ensure 64-bit alignment
-  (tested with GDB on 32 and 64-bit architectures);
-* Reworked cedrus H.265 driver support a bit for flags;
-* Split off codec-specific control validation and init;
-* Added HEVC controls fields cleanup at std_validate to allow reliable
-  control comparison with memcmp;
-* Fixed various misc reported mistakes.
-
-Changes since v4:
-* Rebased atop latest H.254 series.
-
-Changes since v3:
-* Updated commit messages;
-* Updated CID base to avoid conflicts;
-* Used cpu_to_le32 for packed le32 data;
-* Fixed misc minor issues in the drive code;
-* Made it clear in the docs that the API will evolve;
-* Made the pixfmt private and split commits about it.
-
-Changes since v2:
-* Moved headers to non-public API;
-* Added H265 capability for A64 and H5;
-* Moved docs to ext-ctrls-codec.rst;
-* Mentionned sections of the spec in the docs;
-* Added padding to control structures for 32-bit alignment;
-* Made write function use void/size in bytes;
-* Reduced the number of arguments to helpers when possible;
-* Removed PHYS_OFFSET since we already set PFN_OFFSET;
-* Added comments where suggested;
-* Moved to timestamp for references instead of index;
-* Fixed some style issues reported by checkpatch.
-
-Changes since v1:
-* Added a H.265 capability to whitelist relevant platforms;
-* Switched over to tags instead of buffer indices in the DPB
-* Declared variable in their reduced scope as suggested;
-* Added the H.265/HEVC spec to the biblio;
-* Used in-doc references to the spec and the required APIs;
-* Removed debugging leftovers.
-
-Cheers!
-
-Paul Kocialkowski (5):
-  media: cedrus: Fix undefined shift with a SHIFT_AND_MASK_BITS macro
-  media: cedrus: Remove unnecessary parenthesis around DIV_ROUND_UP
-  media: v4l: Add definitions for HEVC stateless decoding
-  media: pixfmt: Document the HEVC slice pixel format
-  media: cedrus: Add HEVC/H.265 decoding support
-
- Documentation/media/uapi/v4l/biblio.rst       |   9 +
- .../media/uapi/v4l/ext-ctrls-codec.rst        | 553 +++++++++++++++-
- .../media/uapi/v4l/pixfmt-compressed.rst      |  23 +
- .../media/uapi/v4l/vidioc-queryctrl.rst       |  18 +
- .../media/videodev2.h.rst.exceptions          |   3 +
- drivers/media/v4l2-core/v4l2-ctrls.c          | 109 +++-
- drivers/media/v4l2-core/v4l2-ioctl.c          |   1 +
- drivers/staging/media/sunxi/cedrus/Makefile   |   2 +-
- drivers/staging/media/sunxi/cedrus/cedrus.c   |  52 +-
- drivers/staging/media/sunxi/cedrus/cedrus.h   |  18 +
- .../staging/media/sunxi/cedrus/cedrus_dec.c   |   9 +
- .../staging/media/sunxi/cedrus/cedrus_h265.c  | 616 ++++++++++++++++++
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |   4 +
- .../staging/media/sunxi/cedrus/cedrus_regs.h  | 302 ++++++++-
- .../staging/media/sunxi/cedrus/cedrus_video.c |  10 +
- include/media/hevc-ctrls.h                    | 212 ++++++
- include/media/v4l2-ctrls.h                    |   7 +
- 17 files changed, 1925 insertions(+), 23 deletions(-)
- create mode 100644 drivers/staging/media/sunxi/cedrus/cedrus_h265.c
- create mode 100644 include/media/hevc-ctrls.h
-
--- 
-2.23.0
-
+Rob
