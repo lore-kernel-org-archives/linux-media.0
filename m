@@ -2,64 +2,82 @@ Return-Path: <SRS0=yRRj=YQ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 320DECA9EB6
-	for <linux-media@archiver.kernel.org>; Wed, 23 Oct 2019 13:18:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D4DCA9EB6
+	for <linux-media@archiver.kernel.org>; Wed, 23 Oct 2019 14:20:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1040D21A4A
-	for <linux-media@archiver.kernel.org>; Wed, 23 Oct 2019 13:18:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D4DA921872
+	for <linux-media@archiver.kernel.org>; Wed, 23 Oct 2019 14:20:24 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Vd6gqdYn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391308AbfJWNSt (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Oct 2019 09:18:49 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37880 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726283AbfJWNSs (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Oct 2019 09:18:48 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5564EB59F;
-        Wed, 23 Oct 2019 13:18:47 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 15:18:59 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     linux-media@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        id S2406380AbfJWOUY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Oct 2019 10:20:24 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:38524 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725852AbfJWOUX (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 23 Oct 2019 10:20:23 -0400
+Received: from pendragon.ideasonboard.com (143.121.2.93.rev.sfr.net [93.2.121.143])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9248F71F;
+        Wed, 23 Oct 2019 16:20:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1571840421;
+        bh=ZN4esrfVTSXQCeDtJTnyp/5+MEwfIxLla+K4wvGg9Y0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vd6gqdYnjc3QUx+9Hm1cEGKJmOsckWahI7KPz4SLSVxEGo74ctV9ftQ80ogqxu16/
+         2JcV1EmHfSj63VX7av7VEhuhQz6ZxMSA+Jz91nBGpRLCQBzIQvoiy5XakXF5qGjE86
+         vUhZFnzdjAwYRhtVRxFNkhxV2XlSKC3K2IsuOjfQ=
+Date:   Wed, 23 Oct 2019 17:20:16 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-media@vger.kernel.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-usb@vger.kernel.org
-Subject: Logitech C270 webcam floods the log
-Message-ID: <20191023151859.30a8ce88@endymion>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+Subject: Re: Logitech C270 webcam floods the log
+Message-ID: <20191023142016.GA1904@pendragon.ideasonboard.com>
+References: <20191023151859.30a8ce88@endymion>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191023151859.30a8ce88@endymion>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi all,
+Hi Jean,
 
-When my Logitech C270 webcam is plugged in, my kernel log gets filled
-with this message:
+On Wed, Oct 23, 2019 at 03:18:59PM +0200, Jean Delvare wrote:
+> Hi all,
+> 
+> When my Logitech C270 webcam is plugged in, my kernel log gets filled
+> with this message:
+> 
+> usb 3-4.1: reset high-speed USB device number 4 using xhci_hcd
+> 
+> every 5 seconds. I have the same problem on 3 different Intel-based
+> computers (different generations), using 2 different webcams, same
+> brand "same model".
+>
+> Is Logitech doing crappy hardware these days, or are we doing something
+> wrong? Is there any way to know the reason that triggers the reset?
 
-usb 3-4.1: reset high-speed USB device number 4 using xhci_hcd
+Is this before or after the uvcvideo driver gets involved ? One easy way
+to check is to move the uvcvideo.ko module out of the way so that it
+doesn't get loaded automatically (or just blacklist it in
+/etc/modprobe.d/) and then plug the camera.
 
-every 5 seconds. I have the same problem on 3 different Intel-based
-computers (different generations), using 2 different webcams, same
-brand "same model".
+> I would be more than happy to provide any relevant debugging
+> information if anyone is able to make it stop. As it stands, I must
+> plug my webcam before using it and unplug it as soon as I'm done, which
+> isn't exactly convenient.
 
-Is Logitech doing crappy hardware these days, or are we doing something
-wrong? Is there any way to know the reason that triggers the reset?
-
-I would be more than happy to provide any relevant debugging
-information if anyone is able to make it stop. As it stands, I must
-plug my webcam before using it and unplug it as soon as I'm done, which
-isn't exactly convenient.
-
-Thanks,
 -- 
-Jean Delvare
-SUSE L3 Support
+Regards,
+
+Laurent Pinchart
