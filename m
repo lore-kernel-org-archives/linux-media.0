@@ -1,83 +1,78 @@
-Return-Path: <SRS0=yRRj=YQ=vger.kernel.org=linux-media-owner@kernel.org>
+Return-Path: <SRS0=mcaz=YR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3D8CCA9EBC
-	for <linux-media@archiver.kernel.org>; Wed, 23 Oct 2019 22:14:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22C38CA9EBC
+	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 00:42:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9852A2084C
-	for <linux-media@archiver.kernel.org>; Wed, 23 Oct 2019 22:14:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4A0D2084C
+	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 00:42:08 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bS4TIVJ4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436717AbfJWWNr (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Oct 2019 18:13:47 -0400
-Received: from mailoutvs11.siol.net ([185.57.226.202]:47567 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2436687AbfJWWNr (ORCPT
+        id S2392853AbfJXAmH (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Oct 2019 20:42:07 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:52428 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392851AbfJXAmH (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Oct 2019 18:13:47 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 06E455232C9;
-        Thu, 24 Oct 2019 00:13:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 3DyGi9cgtb2Q; Thu, 24 Oct 2019 00:13:44 +0200 (CEST)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id A7DF3523296;
-        Thu, 24 Oct 2019 00:13:44 +0200 (CEST)
-Received: from localhost.localdomain (cpe-86-58-59-25.static.triera.net [86.58.59.25])
-        (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id 3FFF25232C9;
-        Thu, 24 Oct 2019 00:13:42 +0200 (CEST)
-From:   Jernej Skrabec <jernej.skrabec@siol.net>
-To:     mripard@kernel.org, wens@csie.org
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com, mchehab@kernel.org,
-        hverkuil@xs4all.nl, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-sunxi@googlegroups.com,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v5 1/6] dt-bindings: bus: sunxi: Add H3 MBUS compatible
-Date:   Thu, 24 Oct 2019 00:13:27 +0200
-Message-Id: <20191023221332.3674175-2-jernej.skrabec@siol.net>
+        Wed, 23 Oct 2019 20:42:07 -0400
+Received: from pendragon.ideasonboard.com (143.121.2.93.rev.sfr.net [93.2.121.143])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 7F05397D;
+        Thu, 24 Oct 2019 02:42:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1571877725;
+        bh=fct2kCB0QuEcOtSb7DIkWbkqvBb8wKdLO4CaVvexYv0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bS4TIVJ479+zSDFbMgCp0xM4UJVRAr2hVKYNzH8/Ywe4f/AAOYLHdjYrvFIYGi1Ie
+         XKwyAPxmmFTD4pa4STcAGu8tQacIvguyLHGBE55hmCV7YDg47tfnT8IFkGHzJ3yl1X
+         fY71Y4r10feJw1TJuaLKnyAQWBvFSPIauEdFxKMI=
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     linux-media@vger.kernel.org
+Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rui Miguel Silva <rmfrfs@gmail.com>
+Subject: [PATCH 1/7] media: imx: imx7_mipi_csis: Power off the source when stopping streaming
+Date:   Thu, 24 Oct 2019 03:41:49 +0300
+Message-Id: <20191024004155.32068-2-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191023221332.3674175-1-jernej.skrabec@siol.net>
-References: <20191023221332.3674175-1-jernej.skrabec@siol.net>
+In-Reply-To: <20191024004155.32068-1-laurent.pinchart@ideasonboard.com>
+References: <20191024004155.32068-1-laurent.pinchart@ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allwinner H3 SoC also contains MBUS controller.
+The .s_stream() implementation incorrectly powers on the source when
+stopping the stream. Power it off instead.
 
-Add compatible for it.
-
-Acked-by: Maxime Ripard <mripard@kernel.org>
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/imx/imx7-mipi-csis.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt b=
-/Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt
-index 1464a4713553..2005bb486705 100644
---- a/Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt
-+++ b/Documentation/devicetree/bindings/arm/sunxi/sunxi-mbus.txt
-@@ -8,6 +8,7 @@ bus.
- Required properties:
-  - compatible: Must be one of:
- 	- allwinner,sun5i-a13-mbus
-+	- allwinner,sun8i-h3-mbus
-  - reg: Offset and length of the register set for the controller
-  - clocks: phandle to the clock driving the controller
-  - dma-ranges: See section 2.3.9 of the DeviceTree Specification
---=20
-2.23.0
+diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
+index 73d8354e618c..66407b228f8e 100644
+--- a/drivers/staging/media/imx/imx7-mipi-csis.c
++++ b/drivers/staging/media/imx/imx7-mipi-csis.c
+@@ -577,7 +577,7 @@ static int mipi_csis_s_stream(struct v4l2_subdev *mipi_sd, int enable)
+ 		state->flags |= ST_STREAMING;
+ 	} else {
+ 		v4l2_subdev_call(state->src_sd, video, s_stream, 0);
+-		ret = v4l2_subdev_call(state->src_sd, core, s_power, 1);
++		ret = v4l2_subdev_call(state->src_sd, core, s_power, 0);
+ 		mipi_csis_stop_stream(state);
+ 		state->flags &= ~ST_STREAMING;
+ 		if (state->debug)
+-- 
+Regards,
+
+Laurent Pinchart
 
