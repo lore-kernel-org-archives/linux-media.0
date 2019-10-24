@@ -2,109 +2,53 @@ Return-Path: <SRS0=mcaz=YR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E47D7CA9EBB
-	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 12:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AADAECA9EAF
+	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 12:43:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B4A5A20650
-	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 12:35:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1571920540;
-	bh=Nz2HRI93d3xUNlhh4NkuUpsXf5nj0LlgJvSDvmzxDO4=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=GTDUfUzeUBaSgIKScF71EmVCzrU9F1Uj9yza2v4d7QrrtU1NCykYDYsJ0vc9iqXCo
-	 jIsJZ9/a36x+HW+ksmuqQ4HLHXaW5Jq2ruI26oSZM3paqMgZpAjXSQfP82ak+QOE7/
-	 JsEaPs8QNa+Yk7EB8Dm3wQ2IxQ6mh/t50NDZhIA8=
+	by mail.kernel.org (Postfix) with ESMTP id 8B8D121872
+	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 12:43:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439547AbfJXMfc (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Oct 2019 08:35:32 -0400
-Received: from mail-lj1-f179.google.com ([209.85.208.179]:35461 "EHLO
-        mail-lj1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439084AbfJXMfc (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Oct 2019 08:35:32 -0400
-Received: by mail-lj1-f179.google.com with SMTP id m7so24859651lji.2;
-        Thu, 24 Oct 2019 05:35:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aw4ZEBa48VacAEFN9y8TaPTpBh5oP27JZDCSOArBGuM=;
-        b=EXNJOUaXQNeSs+lM3BY9/GJbwMJGSJ/W9Ul5uVqd3069zcB6a0HdIaXEH+Q3PC0z2I
-         n+Z0tGAo+g++yAfQEEmPHnSzV4rmRQGpYm8UDHcb+B1It+IN0GyHREKu0S1hwRyHT16H
-         dHDkndb3LFPR/k6Huj23pjVab13uSuFH8poWpt0VfH42m5vxoqtM4JrqhKiMZrewPw/k
-         nKTX8gnTsZWPXSYyrfz3SNbedOs3Y9ejAySr4Pr3oS1hrqMXzENupA1aSNxFXcs+9uZ1
-         2UUsf7a9a07Q5hlTQByHCe4qLbSsZTVM4Bkgm1GGzvWjLUnKPrXOLxX23qu25IgvKRoM
-         kfVw==
-X-Gm-Message-State: APjAAAX6r9MaQYMTUth1hKChm2hfB/2ZFOrJL7LqaEkN6fCVfTnDw5py
-        T5QQg17EDHX15OokAo24LB8Bx3ha/2g=
-X-Google-Smtp-Source: APXvYqz6rjQaTekYYaj30WYjhK/X1fIpjVJeXwvVhuTn0AWh1CyIhcwpGIrvjx0Wmp4Orba1LDrXvg==
-X-Received: by 2002:a2e:9d8d:: with SMTP id c13mr1274355ljj.220.1571920529803;
-        Thu, 24 Oct 2019 05:35:29 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id 30sm3063545lju.52.2019.10.24.05.35.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Oct 2019 05:35:28 -0700 (PDT)
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-To:     hverkuil-cisco@xs4all.nl, sakari.ailus@linux.intel.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v2] Documentation: media: *_DEFAULT targets for subdevs
-Date:   Thu, 24 Oct 2019 14:35:25 +0200
-Message-Id: <20191024123526.4778-1-ribalda@kernel.org>
-X-Mailer: git-send-email 2.23.0
+        id S2502057AbfJXMnD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Oct 2019 08:43:03 -0400
+Received: from gofer.mess.org ([88.97.38.141]:52675 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729411AbfJXMnD (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 24 Oct 2019 08:43:03 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 98DE511A001; Thu, 24 Oct 2019 13:43:01 +0100 (BST)
+Date:   Thu, 24 Oct 2019 13:43:01 +0100
+From:   Sean Young <sean@mess.org>
+To:     Gregor Jasny <gjasny@googlemail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     linux-media@vger.kernel.org
+Subject: v4l-utils.spec.in out of date?
+Message-ID: <20191024124301.GA18559@gofer.mess.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Some sensors have optical blanking areas, this is, pixels that are
-painted and do not account for light, only noise.
+Hi Gregor, Mauro,
 
-These special pixels are very useful for calibrating the sensor, but
-should not be displayed on a DEFAULT target.
+The v4l-utils.spec.in file in the v4l-utils git repo looks like an out of
+date version of this file:
 
-Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
----
+https://src.fedoraproject.org/rpms/v4l-utils/blob/master/f/v4l-utils.spec
 
-v2: Changes by Sakari Ailus <sakari.ailus@linux.intel.com>
+Now I have some changes to go into this file. However patching an old
+version does not seem to make sense.
 
-Only change CROP_DEFAULT
+https://patchwork.linuxtv.org/patch/59602/
 
- Documentation/media/uapi/v4l/v4l2-selection-targets.rst | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+How should I proceed from here?
 
-diff --git a/Documentation/media/uapi/v4l/v4l2-selection-targets.rst b/Documentation/media/uapi/v4l/v4l2-selection-targets.rst
-index f74f239b0510..41c6674ec283 100644
---- a/Documentation/media/uapi/v4l/v4l2-selection-targets.rst
-+++ b/Documentation/media/uapi/v4l/v4l2-selection-targets.rst
-@@ -38,8 +38,10 @@ of the two interfaces they are used.
-     * - ``V4L2_SEL_TGT_CROP_DEFAULT``
-       - 0x0001
-       - Suggested cropping rectangle that covers the "whole picture".
-+        This includes only active pixels and excludes other non-active
-+        pixels such as black pixels.
-+      - Yes
-       - Yes
--      - No
-     * - ``V4L2_SEL_TGT_CROP_BOUNDS``
-       - 0x0002
-       - Bounds of the crop rectangle. All valid crop rectangles fit inside
-@@ -61,7 +63,7 @@ of the two interfaces they are used.
-       - 0x0101
-       - Suggested composition rectangle that covers the "whole picture".
-       - Yes
--      - No
-+      - Yes
-     * - ``V4L2_SEL_TGT_COMPOSE_BOUNDS``
-       - 0x0102
-       - Bounds of the compose rectangle. All valid compose rectangles fit
--- 
-2.23.0
-
+Thanks,
+Sean
