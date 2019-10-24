@@ -2,90 +2,64 @@ Return-Path: <SRS0=mcaz=YR=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4B7CA9EAF
-	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 16:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B07F5CA9EAF
+	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 16:50:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B2BED21872
-	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 16:08:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="nK/l8OmN"
+	by mail.kernel.org (Postfix) with ESMTP id 8AB4A20659
+	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 16:50:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407767AbfJXQIC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 24 Oct 2019 12:08:02 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:60810 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407736AbfJXQIC (ORCPT
+        id S2409917AbfJXQuK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 24 Oct 2019 12:50:10 -0400
+Received: from mailhost.congresssummit.com ([202.65.131.225]:34716 "EHLO
+        mailhost.congresssummit.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405516AbfJXQuK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 24 Oct 2019 12:08:02 -0400
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2799F97D;
-        Thu, 24 Oct 2019 18:07:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1571933279;
-        bh=E0u5EGQJgZFUyiN+Ew4wg2qtOTUGASZhDXrztK1WyO0=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=nK/l8OmNlr+RjJ4eWy01G5S9BFuLZsObwsMCONjJKC/kaZkBY8z7jPRQm0BBcch4U
-         bbWW+D0tQbS7hYJZWZ8vClhZJltzm7iIcHofp0suThr/cj5SjPy5nxjZW+W+rIKSyI
-         //QU+xHQ3S03d+JQsooZ7EbvQynLp3yL1mITvn6M=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH] media: fdp1: Fix R-Car M3-N naming in debug message
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20191024130916.16444-1-geert+renesas@glider.be>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <05a62983-5132-0fcb-2e8e-70b95d44730f@ideasonboard.com>
-Date:   Thu, 24 Oct 2019 17:07:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 24 Oct 2019 12:50:10 -0400
+X-Greylist: delayed 515 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Oct 2019 12:50:09 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mailhost.congresssummit.com (Postfix) with ESMTP id C6D4D24AC76;
+        Thu, 24 Oct 2019 22:11:32 +0530 (IST)
+Received: from mailhost.congresssummit.com ([127.0.0.1])
+        by localhost (mailhost.congresssummit.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ZF7aHY211S3e; Thu, 24 Oct 2019 22:11:32 +0530 (IST)
+Received: from localhost (localhost [127.0.0.1])
+        by mailhost.congresssummit.com (Postfix) with ESMTP id 48E0224AC66;
+        Thu, 24 Oct 2019 22:11:32 +0530 (IST)
+X-Virus-Scanned: amavisd-new at mailhost.congresssummit.com
+Received: from mailhost.congresssummit.com ([127.0.0.1])
+        by localhost (mailhost.congresssummit.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id BN9uUn_7hQon; Thu, 24 Oct 2019 22:11:32 +0530 (IST)
+Received: from mail.alliedinternational.org (unknown [213.154.14.114])
+        by mailhost.congresssummit.com (Postfix) with ESMTPSA id 304B124AC63;
+        Thu, 24 Oct 2019 22:11:29 +0530 (IST)
+To:     "pcc list" <pcc-list@ludd.ltu.se>, "masjhd" <masjhd@bath.ac.uk>,
+        "j h davenport" <j.h.davenport@bath.ac.uk>,
+        "a l humphries" <a.l.humphries@bath.ac.uk>,
+        "linux media" <linux-media@vger.kernel.org>
+From:   marco caminati <nutrition@alliedinternational.org>
+Subject: =?UTF-8?Q?Fw=3AMi_sto_augurando_che_la_tua_?= =?UTF-8?Q?giornata_sia_fantastica?=
+Message-ID: <95cf3bb9-306e-43ee-bf55-bb9a8cf1126d@alliedinternational.org>
+Date:   Thu, 24 Oct 2019 07:43:10 -0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.1
 MIME-Version: 1.0
-In-Reply-To: <20191024130916.16444-1-geert+renesas@glider.be>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Geert,
+Non avrei mai pensato che potesse essere possibile! https://biharbama1976.blogspot.co.uk/
 
-On 24/10/2019 14:09, Geert Uytterhoeven wrote:
-> The official name is "R-Car M3-N", not "R-Car M3N".
-> 
-> Fixes: 4e8c120de9268fc2 ("media: fdp1: Support M3N and E3 platforms")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  drivers/media/platform/rcar_fdp1.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/rcar_fdp1.c b/drivers/media/platform/rcar_fdp1.c
-> index cb93a13e1777a53e..97bed45360f088d0 100644
-> --- a/drivers/media/platform/rcar_fdp1.c
-> +++ b/drivers/media/platform/rcar_fdp1.c
-> @@ -2369,7 +2369,7 @@ static int fdp1_probe(struct platform_device *pdev)
->  		dprintk(fdp1, "FDP1 Version R-Car H3\n");
->  		break;
->  	case FD1_IP_M3N:
 
-Should the FD1_IP_M3N naming also be updated accordingly?
-I guess that's not so important.
 
-Either way, up to you.
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-> -		dprintk(fdp1, "FDP1 Version R-Car M3N\n");
-> +		dprintk(fdp1, "FDP1 Version R-Car M3-N\n");
->  		break;
->  	case FD1_IP_E3:
->  		dprintk(fdp1, "FDP1 Version R-Car E3\n");
-> 
 
+Benedizioni a tutti,marco caminati
