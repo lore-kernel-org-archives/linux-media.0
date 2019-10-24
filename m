@@ -7,39 +7,39 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6341ECA9EBD
-	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 00:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 018AACA9EB9
+	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 00:42:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3A9EE2084B
-	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 00:42:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC84D2084C
+	for <linux-media@archiver.kernel.org>; Thu, 24 Oct 2019 00:42:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="AQcJ9SgP"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="kuF6Gp+n"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408085AbfJXAmJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 23 Oct 2019 20:42:09 -0400
+        id S2392854AbfJXAmK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 23 Oct 2019 20:42:10 -0400
 Received: from perceval.ideasonboard.com ([213.167.242.64]:52444 "EHLO
         perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392854AbfJXAmJ (ORCPT
+        with ESMTP id S2408087AbfJXAmK (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 23 Oct 2019 20:42:09 -0400
+        Wed, 23 Oct 2019 20:42:10 -0400
 Received: from pendragon.ideasonboard.com (143.121.2.93.rev.sfr.net [93.2.121.143])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BDEE19A1;
-        Thu, 24 Oct 2019 02:42:05 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 948931186;
+        Thu, 24 Oct 2019 02:42:06 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1571877725;
-        bh=cFuZyCc1/MzaKEBr8N7p0S5PpSbBxxJnL5r26LSKeaM=;
+        s=mail; t=1571877726;
+        bh=uAeuS9jc6J3VFrylbnZJ3NgcPlteRMvyATsU//KqJ2c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AQcJ9SgPuin+P8nR2OzvPU0X2oHvziedwLNKguPGzIiqIIrpFNDyrVL6ruW+sbmEv
-         1uVTPcph14pzitnPz9WOjr7VYgs9vhVJeCpnE4KdgLIZLsPWArPIJQfNJHl8C/LvIN
-         Jqbzmc5LEDyFKpw1pq2wWbBXWsl93E40GNwQ4sNE=
+        b=kuF6Gp+nUec4qmAlJB0q+qC8CXJTJ4lCCOJnjmOfD0vkO8hHdCzr9w+knkhNpAmb4
+         nanpiQsYR36BfHScim7pklKCzT/Cu80aOqkL6zGkwHQsbJO7EijPdQEw1h1tEgLOs/
+         nbFUxFQFk7jWGrj3Yer6fMdqknbYhfVj2lMttnuM=
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     linux-media@vger.kernel.org
 Cc:     Steve Longerbeam <slongerbeam@gmail.com>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Rui Miguel Silva <rmfrfs@gmail.com>
-Subject: [PATCH 2/7] media: imx: imx7_mipi_csis: Print the RESOL_CH0 register
-Date:   Thu, 24 Oct 2019 03:41:50 +0300
-Message-Id: <20191024004155.32068-3-laurent.pinchart@ideasonboard.com>
+Subject: [PATCH 5/7] media: imx: imx7-media-csi: Add Y10 and Y12 formats support
+Date:   Thu, 24 Oct 2019 03:41:53 +0300
+Message-Id: <20191024004155.32068-6-laurent.pinchart@ideasonboard.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191024004155.32068-1-laurent.pinchart@ideasonboard.com>
 References: <20191024004155.32068-1-laurent.pinchart@ideasonboard.com>
@@ -50,27 +50,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the RESOL_CH0 register to the list of registers printed through the
-debugfs debug infrastructure for the driver, as it can be useful to
-verify proper configuration of the CSI-2 receiver.
+Support capturing the 10- and 12-bit greyscale formats.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
- drivers/staging/media/imx/imx7-mipi-csis.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/staging/media/imx/imx7-media-csi.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/staging/media/imx/imx7-mipi-csis.c b/drivers/staging/media/imx/imx7-mipi-csis.c
-index 66407b228f8e..a0ba3ed00cd8 100644
---- a/drivers/staging/media/imx/imx7-mipi-csis.c
-+++ b/drivers/staging/media/imx/imx7-mipi-csis.c
-@@ -303,6 +303,7 @@ static int mipi_csis_dump_regs(struct csi_state *state)
- 		{ 0x20, "DPHYSTS" },
- 		{ 0x10, "INTMSK" },
- 		{ 0x40, "CONFIG_CH0" },
-+		{ 0x44, "RESOL_CH0" },
- 		{ 0xC0, "DBG_CONFIG" },
- 		{ 0x38, "DPHYSLAVE_L" },
- 		{ 0x3C, "DPHYSLAVE_H" },
+diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
+index bfd6b5fbf484..e4c9bcc045f7 100644
+--- a/drivers/staging/media/imx/imx7-media-csi.c
++++ b/drivers/staging/media/imx/imx7-media-csi.c
+@@ -804,6 +804,14 @@ static int imx7_csi_configure(struct imx7_csi *csi)
+ 	case V4L2_PIX_FMT_YUYV:
+ 		cr18 |= BIT_MIPI_DATA_FORMAT_YUV422_8B;
+ 		break;
++	case V4L2_PIX_FMT_Y10:
++		cr18 |= BIT_MIPI_DATA_FORMAT_RAW10;
++		cr1 |= BIT_PIXEL_BIT;
++		break;
++	case V4L2_PIX_FMT_Y12:
++		cr18 |= BIT_MIPI_DATA_FORMAT_RAW12;
++		cr1 |= BIT_PIXEL_BIT;
++		break;
+ 	case V4L2_PIX_FMT_SBGGR8:
+ 		cr18 |= BIT_MIPI_DATA_FORMAT_RAW8;
+ 		break;
 -- 
 Regards,
 
