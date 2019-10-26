@@ -2,37 +2,37 @@ Return-Path: <SRS0=GlIg=YT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BB4ACA9EB9
-	for <linux-media@archiver.kernel.org>; Sat, 26 Oct 2019 07:29:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 221B0CA9EBC
+	for <linux-media@archiver.kernel.org>; Sat, 26 Oct 2019 07:50:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 25A1821D81
-	for <linux-media@archiver.kernel.org>; Sat, 26 Oct 2019 07:29:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 027872084C
+	for <linux-media@archiver.kernel.org>; Sat, 26 Oct 2019 07:50:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbfJZH24 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Oct 2019 03:28:56 -0400
-Received: from mailoutvs25.siol.net ([185.57.226.216]:47072 "EHLO
+        id S1726155AbfJZHuU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Oct 2019 03:50:20 -0400
+Received: from mailoutvs22.siol.net ([185.57.226.213]:60155 "EHLO
         mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726120AbfJZH24 (ORCPT
+        with ESMTP id S1725966AbfJZHuU (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Oct 2019 03:28:56 -0400
+        Sat, 26 Oct 2019 03:50:20 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 32D19523640;
-        Sat, 26 Oct 2019 09:28:53 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta11.zcs-production.pri
+        by mail.siol.net (Postfix) with ESMTP id 3165A521C51;
+        Sat, 26 Oct 2019 09:50:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
 Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta11.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id b3kdWy_p_ya4; Sat, 26 Oct 2019 09:28:52 +0200 (CEST)
+        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id GGY99NcpPuBy; Sat, 26 Oct 2019 09:50:16 +0200 (CEST)
 Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id C23E852363D;
-        Sat, 26 Oct 2019 09:28:52 +0200 (CEST)
+        by mail.siol.net (Postfix) with ESMTPS id D4D8D521CAF;
+        Sat, 26 Oct 2019 09:50:16 +0200 (CEST)
 Received: from localhost.localdomain (cpe-86-58-59-25.static.triera.net [86.58.59.25])
         (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id 623C5523640;
-        Sat, 26 Oct 2019 09:28:50 +0200 (CEST)
+        by mail.siol.net (Postfix) with ESMTPSA id 6928B521C52;
+        Sat, 26 Oct 2019 09:50:16 +0200 (CEST)
 From:   Jernej Skrabec <jernej.skrabec@siol.net>
 To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
 Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
@@ -40,12 +40,10 @@ Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
         linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@googlegroups.com
-Subject: [PATCH v3 1/2] media: cedrus: Fix decoding for some H264 videos
-Date:   Sat, 26 Oct 2019 09:27:51 +0200
-Message-Id: <20191026072752.1072711-2-jernej.skrabec@siol.net>
+Subject: [PATCH 0/3] media: cedrus: Add support for 4k videos
+Date:   Sat, 26 Oct 2019 09:49:56 +0200
+Message-Id: <20191026074959.1073512-1-jernej.skrabec@siol.net>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191026072752.1072711-1-jernej.skrabec@siol.net>
-References: <20191026072752.1072711-1-jernej.skrabec@siol.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
@@ -53,114 +51,45 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-It seems that for some H264 videos at least one bitstream parsing
-trigger must be called in order to be decoded correctly. There is no
-explanation why this helps, but it was observed that two sample videos
-with this fix are now decoded correctly and there is no regression with
-others.
+While cedrus driver accepts videos up to 3840x2160, they are not decoded
+correctly. Driver doesn't correctly set mode register for widths greater
+than 2048 (patch 1). H264 engine also needs additional buffers which are
+not provided currently (patch 2). Finally, there are several different
+resolutions which can be considered 4k. Biggest is 4096x2304 which is
+also supported by HW. Set that new maximum size (patch 3).
 
-Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
----
- .../staging/media/sunxi/cedrus/cedrus_h264.c  | 30 +++++++++++++++++--
- .../staging/media/sunxi/cedrus/cedrus_regs.h  |  3 ++
- 2 files changed, 30 insertions(+), 3 deletions(-)
+HEVC engine was not yet tested with 4k video, but as far as I know, it
+doesn't need any special setting besides patch 1.
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_h264.c
-index cd85668f9c80..db336449c4f2 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -6,6 +6,7 @@
-  * Copyright (c) 2018 Bootlin
-  */
-=20
-+#include <linux/delay.h>
- #include <linux/types.h>
-=20
- #include <media/videobuf2-dma-contig.h>
-@@ -289,6 +290,28 @@ static void cedrus_write_pred_weight_table(struct ce=
-drus_ctx *ctx,
- 	}
- }
-=20
-+/*
-+ * It turns out that using VE_H264_VLD_OFFSET to skip bits is not reliab=
-le. In
-+ * rare cases frame is not decoded correctly. However, setting offset to=
- 0 and
-+ * skipping appropriate amount of bits with flush bits trigger always wo=
-rks.
-+ */
-+static void cedrus_skip_bits(struct cedrus_dev *dev, int num)
-+{
-+	int count =3D 0;
-+
-+	while (count < num) {
-+		int tmp =3D min(num - count, 32);
-+
-+		cedrus_write(dev, VE_H264_TRIGGER_TYPE,
-+			     VE_H264_TRIGGER_TYPE_FLUSH_BITS |
-+			     VE_H264_TRIGGER_TYPE_N_BITS(tmp));
-+		while (cedrus_read(dev, VE_H264_STATUS) & VE_H264_STATUS_VLD_BUSY)
-+			udelay(1);
-+
-+		count +=3D tmp;
-+	}
-+}
-+
- static void cedrus_set_params(struct cedrus_ctx *ctx,
- 			      struct cedrus_run *run)
- {
-@@ -299,14 +322,13 @@ static void cedrus_set_params(struct cedrus_ctx *ct=
-x,
- 	struct vb2_buffer *src_buf =3D &run->src->vb2_buf;
- 	struct cedrus_dev *dev =3D ctx->dev;
- 	dma_addr_t src_buf_addr;
--	u32 offset =3D slice->header_bit_size;
--	u32 len =3D (slice->size * 8) - offset;
-+	u32 len =3D slice->size * 8;
- 	unsigned int pic_width_in_mbs;
- 	bool mbaff_pic;
- 	u32 reg;
-=20
- 	cedrus_write(dev, VE_H264_VLD_LEN, len);
--	cedrus_write(dev, VE_H264_VLD_OFFSET, offset);
-+	cedrus_write(dev, VE_H264_VLD_OFFSET, 0);
-=20
- 	src_buf_addr =3D vb2_dma_contig_plane_dma_addr(src_buf, 0);
- 	cedrus_write(dev, VE_H264_VLD_END,
-@@ -325,6 +347,8 @@ static void cedrus_set_params(struct cedrus_ctx *ctx,
- 	cedrus_write(dev, VE_H264_TRIGGER_TYPE,
- 		     VE_H264_TRIGGER_TYPE_INIT_SWDEC);
-=20
-+	cedrus_skip_bits(dev, slice->header_bit_size);
-+
- 	if (((pps->flags & V4L2_H264_PPS_FLAG_WEIGHTED_PRED) &&
- 	     (slice->slice_type =3D=3D V4L2_H264_SLICE_TYPE_P ||
- 	      slice->slice_type =3D=3D V4L2_H264_SLICE_TYPE_SP)) ||
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_regs.h
-index 6fc28d21a6c7..4275a307d282 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-@@ -541,13 +541,16 @@
- 					 VE_H264_CTRL_SLICE_DECODE_INT)
-=20
- #define VE_H264_TRIGGER_TYPE		0x224
-+#define VE_H264_TRIGGER_TYPE_N_BITS(x)		(((x) & 0x3f) << 8)
- #define VE_H264_TRIGGER_TYPE_AVC_SLICE_DECODE	(8 << 0)
- #define VE_H264_TRIGGER_TYPE_INIT_SWDEC		(7 << 0)
-+#define VE_H264_TRIGGER_TYPE_FLUSH_BITS		(3 << 0)
-=20
- #define VE_H264_STATUS			0x228
- #define VE_H264_STATUS_VLD_DATA_REQ_INT		VE_H264_CTRL_VLD_DATA_REQ_INT
- #define VE_H264_STATUS_DECODE_ERR_INT		VE_H264_CTRL_DECODE_ERR_INT
- #define VE_H264_STATUS_SLICE_DECODE_INT		VE_H264_CTRL_SLICE_DECODE_INT
-+#define VE_H264_STATUS_VLD_BUSY			BIT(8)
-=20
- #define VE_H264_STATUS_INT_MASK			VE_H264_CTRL_INT_MASK
-=20
+Following video was used for H264 video testing:
+http://jernej.libreelec.tv/videos/h264/PUPPIES%20BATH%20IN%204K%20(ULTRA%=
+20HD)(Original_H.264-AAC)%20(4ksamples.com).mp4
+
+Note that at this point memory allocation is suboptimal and H264 engine
+allocates far more memory that it is really needed. For above video to
+work, I had to set CMA size to 512 MiB and add "vmalloc=3D512M" to kernel
+arguments. Memory optimizations will be done later.
+
+This series is based on top of https://patchwork.linuxtv.org/cover/59653/
+
+Best regards,
+Jernej
+
+Jernej Skrabec (3):
+  media: cedrus: Properly signal size in mode register
+  media: cedrus: Fix H264 4k support
+  media: cedrus: Increase maximum supported size
+
+ drivers/staging/media/sunxi/cedrus/cedrus.h   |  7 ++
+ .../staging/media/sunxi/cedrus/cedrus_h264.c  | 85 +++++++++++++++++--
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  2 +-
+ .../staging/media/sunxi/cedrus/cedrus_hw.c    |  9 +-
+ .../staging/media/sunxi/cedrus/cedrus_hw.h    |  2 +-
+ .../staging/media/sunxi/cedrus/cedrus_mpeg2.c |  2 +-
+ .../staging/media/sunxi/cedrus/cedrus_regs.h  | 13 +++
+ .../staging/media/sunxi/cedrus/cedrus_video.c |  4 +-
+ 8 files changed, 108 insertions(+), 16 deletions(-)
+
 --=20
 2.23.0
 
