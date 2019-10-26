@@ -2,176 +2,126 @@ Return-Path: <SRS0=GlIg=YT=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E93BCA9EB9
-	for <linux-media@archiver.kernel.org>; Sat, 26 Oct 2019 07:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 503A5CA9EB9
+	for <linux-media@archiver.kernel.org>; Sat, 26 Oct 2019 11:21:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 5CE2021E6F
-	for <linux-media@archiver.kernel.org>; Sat, 26 Oct 2019 07:50:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B9B220867
+	for <linux-media@archiver.kernel.org>; Sat, 26 Oct 2019 11:21:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726203AbfJZHuX (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 26 Oct 2019 03:50:23 -0400
-Received: from mailoutvs35.siol.net ([185.57.226.226]:60171 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726171AbfJZHuX (ORCPT
+        id S1726246AbfJZLVi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 26 Oct 2019 07:21:38 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:43513 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726237AbfJZLVi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 26 Oct 2019 03:50:23 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id A32E6521CE2;
-        Sat, 26 Oct 2019 09:50:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at psrvmta09.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta09.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Ifw5_Als-dSp; Sat, 26 Oct 2019 09:50:19 +0200 (CEST)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id 30F70521C52;
-        Sat, 26 Oct 2019 09:50:19 +0200 (CEST)
-Received: from localhost.localdomain (cpe-86-58-59-25.static.triera.net [86.58.59.25])
-        (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id D959C521CE2;
-        Sat, 26 Oct 2019 09:50:16 +0200 (CEST)
-From:   Jernej Skrabec <jernej.skrabec@siol.net>
-To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
-        gregkh@linuxfoundation.org, wens@csie.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com
-Subject: [PATCH 1/3] media: cedrus: Properly signal size in mode register
-Date:   Sat, 26 Oct 2019 09:49:57 +0200
-Message-Id: <20191026074959.1073512-2-jernej.skrabec@siol.net>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191026074959.1073512-1-jernej.skrabec@siol.net>
-References: <20191026074959.1073512-1-jernej.skrabec@siol.net>
+        Sat, 26 Oct 2019 07:21:38 -0400
+Received: from uno.localdomain (143.121.2.93.rev.sfr.net [93.2.121.143])
+        (Authenticated sender: jacopo@jmondi.org)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 04EC9100004;
+        Sat, 26 Oct 2019 11:21:33 +0000 (UTC)
+Date:   Sat, 26 Oct 2019 13:23:22 +0200
+From:   Jacopo Mondi <jacopo@jmondi.org>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        tfiga@google.com,
+        "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
+        <linux-media@vger.kernel.org>
+Subject: Re: [PATCH v4 01/11] dt-bindings: video-interfaces: Document
+ 'location' property
+Message-ID: <20191026112322.3e5kyik3p7o22fdq@uno.localdomain>
+References: <20191007162913.250743-1-jacopo@jmondi.org>
+ <20191007162913.250743-2-jacopo@jmondi.org>
+ <20191008074052.GA633@amd>
+ <20191008075828.phxf2m7237ryl6yf@uno.localdomain>
+ <20191008080634.GC633@amd>
+ <20191008082041.476a2soclry6qn3v@uno.localdomain>
+ <9788aa13-1bc0-02c3-33f5-a875940f2dc3@xs4all.nl>
+ <20191023142717.GA22854@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="sarsiihztdivrdua"
+Content-Disposition: inline
+In-Reply-To: <20191023142717.GA22854@duo.ucw.cz>
+User-Agent: NeoMutt/20180716
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Mode register also holds information if video width is bigger than 2048
-and if it is equal to 4096.
 
-Rework cedrus_engine_enable() to properly signal this properties.
+--sarsiihztdivrdua
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
----
- drivers/staging/media/sunxi/cedrus/cedrus_h264.c  | 2 +-
- drivers/staging/media/sunxi/cedrus/cedrus_h265.c  | 2 +-
- drivers/staging/media/sunxi/cedrus/cedrus_hw.c    | 9 +++++++--
- drivers/staging/media/sunxi/cedrus/cedrus_hw.h    | 2 +-
- drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c | 2 +-
- drivers/staging/media/sunxi/cedrus/cedrus_regs.h  | 2 ++
- 6 files changed, 13 insertions(+), 6 deletions(-)
+Hi Pavel,
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_h264.c
-index 7487f6ab7576..d2c854ecdf15 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
-@@ -485,7 +485,7 @@ static void cedrus_h264_setup(struct cedrus_ctx *ctx,
- {
- 	struct cedrus_dev *dev =3D ctx->dev;
-=20
--	cedrus_engine_enable(dev, CEDRUS_CODEC_H264);
-+	cedrus_engine_enable(ctx, CEDRUS_CODEC_H264);
-=20
- 	cedrus_write(dev, VE_H264_SDROT_CTRL, 0);
- 	cedrus_write(dev, VE_H264_EXTRA_BUFFER1,
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_h265.c
-index 9bc921866f70..6945dc74e1d7 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-@@ -276,7 +276,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
- 	}
-=20
- 	/* Activate H265 engine. */
--	cedrus_engine_enable(dev, CEDRUS_CODEC_H265);
-+	cedrus_engine_enable(ctx, CEDRUS_CODEC_H265);
-=20
- 	/* Source offset and length in bits. */
-=20
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/sta=
-ging/media/sunxi/cedrus/cedrus_hw.c
-index 570a9165dd5d..3acfa21bc124 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
-@@ -30,7 +30,7 @@
- #include "cedrus_hw.h"
- #include "cedrus_regs.h"
-=20
--int cedrus_engine_enable(struct cedrus_dev *dev, enum cedrus_codec codec=
-)
-+int cedrus_engine_enable(struct cedrus_ctx *ctx, enum cedrus_codec codec=
-)
- {
- 	u32 reg =3D 0;
-=20
-@@ -58,7 +58,12 @@ int cedrus_engine_enable(struct cedrus_dev *dev, enum =
-cedrus_codec codec)
- 		return -EINVAL;
- 	}
-=20
--	cedrus_write(dev, VE_MODE, reg);
-+	if (ctx->src_fmt.width =3D=3D 4096)
-+		reg |=3D VE_MODE_PIC_WIDTH_IS_4096;
-+	if (ctx->src_fmt.width > 2048)
-+		reg |=3D VE_MODE_PIC_WIDTH_MORE_2048;
-+
-+	cedrus_write(ctx->dev, VE_MODE, reg);
-=20
- 	return 0;
- }
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h b/drivers/sta=
-ging/media/sunxi/cedrus/cedrus_hw.h
-index 27d0882397aa..604ff932fbf5 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
-@@ -16,7 +16,7 @@
- #ifndef _CEDRUS_HW_H_
- #define _CEDRUS_HW_H_
-=20
--int cedrus_engine_enable(struct cedrus_dev *dev, enum cedrus_codec codec=
-);
-+int cedrus_engine_enable(struct cedrus_ctx *ctx, enum cedrus_codec codec=
-);
- void cedrus_engine_disable(struct cedrus_dev *dev);
-=20
- void cedrus_dst_format_set(struct cedrus_dev *dev,
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c b/drivers/=
-staging/media/sunxi/cedrus/cedrus_mpeg2.c
-index 13c34927bad5..8bcd6b8f9e2d 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
-@@ -96,7 +96,7 @@ static void cedrus_mpeg2_setup(struct cedrus_ctx *ctx, =
-struct cedrus_run *run)
- 	quantization =3D run->mpeg2.quantization;
-=20
- 	/* Activate MPEG engine. */
--	cedrus_engine_enable(dev, CEDRUS_CODEC_MPEG2);
-+	cedrus_engine_enable(ctx, CEDRUS_CODEC_MPEG2);
-=20
- 	/* Set intra quantization matrix. */
-=20
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/s=
-taging/media/sunxi/cedrus/cedrus_regs.h
-index 4275a307d282..ace3d49fcd82 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-@@ -35,6 +35,8 @@
-=20
- #define VE_MODE					0x00
-=20
-+#define VE_MODE_PIC_WIDTH_IS_4096		BIT(22)
-+#define VE_MODE_PIC_WIDTH_MORE_2048		BIT(21)
- #define VE_MODE_REC_WR_MODE_2MB			(0x01 << 20)
- #define VE_MODE_REC_WR_MODE_1MB			(0x00 << 20)
- #define VE_MODE_DDR_MODE_BW_128			(0x03 << 16)
---=20
-2.23.0
+On Wed, Oct 23, 2019 at 04:27:17PM +0200, Pavel Machek wrote:
+> Hi!
+>
+> > > I'm skeptical about adding now a property for a device that we don't
+> > > support, because we -now- think it's a good idea. I might be wrong,
+> > > but my assumption is that when someone will want to support an
+> > > 'advanced' device, it's easy to add "movable" or whatever else to the
+> > > list of accepted properties values. Am I wrong in assuming this? As
+> > > long as "front" "back" and "external" will stay supported for backward
+> > > DTB compatibility it should be fine, right ?
+> >
+> > The basic rule is that you should not define things unless you KNOW that
+> > they will be needed. So when we actually see new devices for which
+> > "front", "back" or "external" does not fit, then new names can be
+> > created.
+>
+> > It's impossible to cover all situations since we can't predict the future.
+> > The best we can do is to allow for future extensions.
+>
+> Those devices are already being sold, and yes, they are running linux
+> (with some patches probably).
+>
+> I believe it would be better to specify "this camera is selfie --
+> takes pictures of the user" vs. "this is main camera -- takes pictures
+> of what user is looking at".
 
+The intended usage of a component is something that really does not
+belong to DT. The install location is a physical property of the
+device, what the user is supposed to do with it is not. I would be
+very uncomfortable to have anything like "selfie" in DT bindings.
+
+
+>
+> Best regards,
+>
+> 								Pavel
+> --
+> (english) http://www.livejournal.com/~pavelmachek
+> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+
+
+
+--sarsiihztdivrdua
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEtcQ9SICaIIqPWDjAcjQGjxahVjwFAl20LKMACgkQcjQGjxah
+Vjw3qBAAwQuiXpq+GDjMXIQiTZlOMDOAco0rVeu6k5UmbzfuI3Ph/cICUtGDcrbG
+KAQXH4hnoAPfSf97kCYXSfMgXDWbqb2m6Z+yHyAMkk7Sr5dBl6DC4J02/XJZulqp
+DiYrJm0k6PAGjXM8259clYAVCh5Zx7X68/qLPgrgFO9svOjpIjIlmSqW9DAuxFIy
+7tYeNpeggsfbfYBX0/R22aZVZyOuvvpUAHy3zkf3xjIX0CvlzH20GL0qnULcqWg4
+LdOE8Jq4klQUOiqDZgO53UOCmYEv20XhBR1oZ9OG8z0+r+KjLqpnGVEsC2Xaj2bz
+tpvCCobldrvA0ZOQzDEgBY+azEkaJm0qyKOTEE29uQxVN+dZBurQmpTYpVBMz5xB
+K31nFnOs/kC7xg7mAmjHHFAfETZtInlJjD1pSgk5GkU1dfy4q6zJGfw0TR1UYFXd
+axeeEg0A1QA7qbKif0tp85shntmaQvDi5P5esoCFAshuS8xd3n7CJfByQCfVOoRa
+9uYkbf0UuaCrz/to2XyQOj0Ai0i8+sAuqxFMacARHKcH54ziIzV9/c1QJEyl3RCB
+eJEgI6LEKKVXx54Y8crF9eaW1BqGUI34winC71dPN+mmidrUuSf82KpxShM0KdnY
+Vi9mHihj4MItT//x+zdsBWCYHMqgCWPsI6E9c3w7pBALOUEdOVY=
+=jX4R
+-----END PGP SIGNATURE-----
+
+--sarsiihztdivrdua--
