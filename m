@@ -5,66 +5,66 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
 	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F6C0CA9EAE
-	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 10:40:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AE13CA9EAE
+	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 10:41:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 337B421479
-	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 10:40:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CAA5F21479
+	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 10:40:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BtX3Y2bI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fIA1+My0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbfJ2Kk5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Oct 2019 06:40:57 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37987 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727387AbfJ2Kk4 (ORCPT
+        id S1728242AbfJ2Kk7 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Oct 2019 06:40:59 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:36377 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725791AbfJ2Kk6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Oct 2019 06:40:56 -0400
-Received: by mail-wm1-f67.google.com with SMTP id 22so1830277wms.3
-        for <linux-media@vger.kernel.org>; Tue, 29 Oct 2019 03:40:54 -0700 (PDT)
+        Tue, 29 Oct 2019 06:40:58 -0400
+Received: by mail-wm1-f65.google.com with SMTP id c22so1837030wmd.1
+        for <linux-media@vger.kernel.org>; Tue, 29 Oct 2019 03:40:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=jIrSwkySu99IZFShnoHMSIHDhs88OfSpxWdYrboWutY=;
-        b=BtX3Y2bIICvPkckdzlsjd+uP9spMfVI2GiBjvE5xcnYFfqHZqV75n3SFsD3mTeUMZx
-         tBqL/6LB35aez2rquIBgLFHFiF4Fx1sB/7wk62XuHlQeRPws8AQVqFnBLgFwhoKnVCUj
-         T9CB6kc7VisfS16gCmMD1scdrT7n/J6MldlSQeLFQst+8E+Dak/WzrYcdYR5RtJ5cjKY
-         ngnEAdPeKzPk+pKSquzKkU0hMZ3NlEz3//1gPO+b5RqhGAkIejSZlbDeBVsucd31jOaj
-         GI58UxgMahyAWIx+20awa2oOqJGwyOQHIOHl8JvFV+aPYkTTX2Qvz7lG8Z7ibItpLPU4
-         Suaw==
+        bh=afa9t+VsqFHDuya8zvtChwbhfZZ4SJZY0fGLtCU45oo=;
+        b=fIA1+My0RIXojVmVd/x+zsHMj4MphMCNNeaxqu8WdwaQpUxfIDEgYmsNrBvCwaVpGv
+         TZfhpUUpzWWexWRkxVYud8Do+qkms/0E4LTgByHaStZdnk9dn2FCQINOiEE6S7+Whmql
+         1p5Mwlq/7Yo/JhZJHgdUS1D0F8kJKOjjQri96iceY+cq8q2u9Nsr9SeAIxgQJTvvFyH/
+         2u+WSniSdzdQm9ozc+v5Rf3TWvdXW0r5ISsMgKQgoLU/mt4nGjAd6/C7f11Wg81R0t15
+         0zZ332FuZLf/5fLMWl2p+1NzqVlDmQrZkf97i4Y68gQyxfy197FDrGgo/oDM6qKx+CSz
+         ncTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=jIrSwkySu99IZFShnoHMSIHDhs88OfSpxWdYrboWutY=;
-        b=iB938ZEWP5AoDns4/G5Hucm2xwyYo9kO2aCRjojRMmTUAxC/jPfTBE2wtcC72ssk1T
-         CKiMT4Z7o6R50+8+D6Z74GTzKD2Y1jvHrVbsF/bikVB70BHCf6hJWZVxsViMgGxtARIS
-         G8ekJuemvIbwVXDfJP3Wvh/sT7swJU6eSVaTeinMM1PW026ZmYyvqbWAumNQgF0dFvwh
-         XCdCDQvEISa0fvrHn5czhvt/om7Ds6cyUGXmZPYLNZejvvQlnOIWJEJxnwyNfnrotK/+
-         DhDD5qvWVUPlgqfPvGgbkQOexrwCiJgI3PG2PvzZX5SYQE+vtRfmJ1Wm5OvH+lTFLCqE
-         abYg==
-X-Gm-Message-State: APjAAAXa7NfFVcnQkUbuUmx8WCbviBaE2ukkGXmQXHQ4HZy6MJ9PUHwh
-        3drm+iYNYjdSA1XHUT/RjeG2Op6u
-X-Google-Smtp-Source: APXvYqyqMO+qdPSkT30UFlfsb1zNCp0MH2Q3Lb3eFI/S2EA4a60/VXHXUuIFLdM1mRmiOcbSfvB7pA==
-X-Received: by 2002:a7b:c444:: with SMTP id l4mr3330229wmi.21.1572345653806;
-        Tue, 29 Oct 2019 03:40:53 -0700 (PDT)
+        bh=afa9t+VsqFHDuya8zvtChwbhfZZ4SJZY0fGLtCU45oo=;
+        b=mIEZfMLukwUHR+nMQn1aKqpYfXR3QmOZxJL4zhFQ8IuXDneyhm8Cp0j0azLZV+YIdj
+         CWV6dHKJ3RdpFUVn/SIgvK9rchKMGdmoqbnLmvmXr3YB/G8j3i+ODdPH1q3xaWyogw8s
+         602o+MuKUDZxetxFaqbUZteQHvUXFDuQ1MqFDJ4xdsXkE92H+oMtaWUylFQSKLCz2Aod
+         TDD7/AudslyT+10T1zmGpmcqkQRm9nikK3FbKZvX7yWS1KDbWKGMKAYT0EdhbwURzwUR
+         VLMtqbPrZ2gnlP5gRSbDPfU2xV2ZPSAb23DYo2jsnoOBqOtT9XqEgSr0dAkwyCAn0Q9o
+         qL9w==
+X-Gm-Message-State: APjAAAVGhZzGbsk+HPMgG82y+8TDFtPS2Oe5hKstOXVTgB39IfsxDXi/
+        ukpcMW0bSwEWad4xo76fHHM=
+X-Google-Smtp-Source: APXvYqxfQYoOJ87HtigJtrvgBEC3c0qj7kFOVbYr4kAAazHcLZwlVHbEYqOuR9qoVhuBoaj/orONRQ==
+X-Received: by 2002:a1c:c912:: with SMTP id f18mr3649733wmb.168.1572345655483;
+        Tue, 29 Oct 2019 03:40:55 -0700 (PDT)
 Received: from abel.fritz.box ([2a02:908:1252:fb60:c5d9:7998:9ca6:452])
-        by smtp.gmail.com with ESMTPSA id v10sm2910210wmg.48.2019.10.29.03.40.53
+        by smtp.gmail.com with ESMTPSA id v10sm2910210wmg.48.2019.10.29.03.40.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 03:40:53 -0700 (PDT)
+        Tue, 29 Oct 2019 03:40:55 -0700 (PDT)
 From:   "=?UTF-8?q?Christian=20K=C3=B6nig?=" 
         <ckoenig.leichtzumerken@gmail.com>
 X-Google-Original-From: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
 To:     dri-devel@lists.freedesktop.org, sumit.semwal@linaro.org,
         linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org,
         intel-gfx@lists.freedesktop.org
-Subject: [PATCH 2/5] drm/ttm: remove the backing store if no placement is given
-Date:   Tue, 29 Oct 2019 11:40:46 +0100
-Message-Id: <20191029104049.9011-3-christian.koenig@amd.com>
+Subject: [PATCH 4/5] drm/amdgpu: add amdgpu_dma_buf_pin/unpin
+Date:   Tue, 29 Oct 2019 11:40:48 +0100
+Message-Id: <20191029104049.9011-5-christian.koenig@amd.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191029104049.9011-1-christian.koenig@amd.com>
 References: <20191029104049.9011-1-christian.koenig@amd.com>
@@ -76,37 +76,127 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Pipeline removal of the BOs backing store when no placement is given
-during validation.
+This implements the exporter side of unpinned DMA-buf handling.
 
 Signed-off-by: Christian König <christian.koenig@amd.com>
 ---
- drivers/gpu/drm/ttm/ttm_bo.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c | 55 ++++++++++++++++++---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_object.c  |  5 ++
+ 2 files changed, 53 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-index d52fc16266ce..2d1488271d63 100644
---- a/drivers/gpu/drm/ttm/ttm_bo.c
-+++ b/drivers/gpu/drm/ttm/ttm_bo.c
-@@ -1219,6 +1219,18 @@ int ttm_bo_validate(struct ttm_buffer_object *bo,
- 	uint32_t new_flags;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
+index 8e5a68107556..3629cfe53aad 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c
+@@ -222,6 +222,37 @@ static void amdgpu_dma_buf_detach(struct dma_buf *dmabuf,
+ 		bo->prime_shared_count--;
+ }
  
- 	dma_resv_assert_held(bo->base.resv);
++/**
++ * amdgpu_dma_buf_pin - &dma_buf_ops.pin implementation
++ *
++ * @attach: attachment to pin down
++ *
++ * Pin the BO which is backing the DMA-buf so that it can't move any more.
++ */
++static int amdgpu_dma_buf_pin(struct dma_buf_attachment *attach)
++{
++	struct drm_gem_object *obj = attach->dmabuf->priv;
++	struct amdgpu_bo *bo = gem_to_amdgpu_bo(obj);
 +
-+	/*
-+	 * Remove the backing store if no placement is given.
-+	 */
-+	if (!placement->num_placement && !placement->num_busy_placement) {
-+		ret = ttm_bo_pipeline_gutting(bo);
-+		if (ret)
-+			return ret;
++	/* pin buffer into GTT */
++	return amdgpu_bo_pin(bo, AMDGPU_GEM_DOMAIN_GTT);
++}
 +
-+		return ttm_tt_create(bo, false);
++/**
++ * amdgpu_dma_buf_unpin - &dma_buf_ops.unpin implementation
++ *
++ * @attach: attachment to unpin
++ *
++ * Unpin a previously pinned BO to make it movable again.
++ */
++static void amdgpu_dma_buf_unpin(struct dma_buf_attachment *attach)
++{
++	struct drm_gem_object *obj = attach->dmabuf->priv;
++	struct amdgpu_bo *bo = gem_to_amdgpu_bo(obj);
++
++	amdgpu_bo_unpin(bo);
++}
++
+ /**
+  * amdgpu_dma_buf_map - &dma_buf_ops.map_dma_buf implementation
+  * @attach: DMA-buf attachment
+@@ -244,9 +275,21 @@ static struct sg_table *amdgpu_dma_buf_map(struct dma_buf_attachment *attach,
+ 	struct sg_table *sgt;
+ 	long r;
+ 
+-	r = amdgpu_bo_pin(bo, AMDGPU_GEM_DOMAIN_GTT);
+-	if (r)
+-		return ERR_PTR(r);
++	if (!bo->pin_count) {
++		/* move buffer into GTT */
++		struct ttm_operation_ctx ctx = { false, false };
++
++		amdgpu_bo_placement_from_domain(bo, AMDGPU_GEM_DOMAIN_GTT);
++		r = ttm_bo_validate(&bo->tbo, &bo->placement, &ctx);
++		if (r)
++			return ERR_PTR(r);
++
++	} else if (!(amdgpu_mem_type_to_domain(bo->tbo.mem.mem_type) &
++		     AMDGPU_GEM_DOMAIN_GTT)) {
++			return ERR_PTR(-EBUSY);
 +	}
 +
- 	/*
- 	 * Check whether we need to move buffer.
- 	 */
++
+ 
+ 	sgt = drm_prime_pages_to_sg(bo->tbo.ttm->pages, bo->tbo.num_pages);
+ 	if (IS_ERR(sgt))
+@@ -277,13 +320,9 @@ static void amdgpu_dma_buf_unmap(struct dma_buf_attachment *attach,
+ 				 struct sg_table *sgt,
+ 				 enum dma_data_direction dir)
+ {
+-	struct drm_gem_object *obj = attach->dmabuf->priv;
+-	struct amdgpu_bo *bo = gem_to_amdgpu_bo(obj);
+-
+ 	dma_unmap_sg(attach->dev, sgt->sgl, sgt->nents, dir);
+ 	sg_free_table(sgt);
+ 	kfree(sgt);
+-	amdgpu_bo_unpin(bo);
+ }
+ 
+ /**
+@@ -330,6 +369,8 @@ const struct dma_buf_ops amdgpu_dmabuf_ops = {
+ 	.dynamic_mapping = true,
+ 	.attach = amdgpu_dma_buf_attach,
+ 	.detach = amdgpu_dma_buf_detach,
++	.pin = amdgpu_dma_buf_pin,
++	.unpin = amdgpu_dma_buf_unpin,
+ 	.map_dma_buf = amdgpu_dma_buf_map,
+ 	.unmap_dma_buf = amdgpu_dma_buf_unmap,
+ 	.release = drm_gem_dmabuf_release,
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
+index 6f0b789a0b49..ac776d2620eb 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
+@@ -31,6 +31,7 @@
+  */
+ #include <linux/list.h>
+ #include <linux/slab.h>
++#include <linux/dma-buf.h>
+ 
+ #include <drm/amdgpu_drm.h>
+ #include <drm/drm_cache.h>
+@@ -1209,6 +1210,10 @@ void amdgpu_bo_move_notify(struct ttm_buffer_object *bo,
+ 
+ 	amdgpu_bo_kunmap(abo);
+ 
++	if (abo->tbo.base.dma_buf && !abo->tbo.base.import_attach &&
++	    bo->mem.mem_type != TTM_PL_SYSTEM)
++		dma_buf_move_notify(abo->tbo.base.dma_buf);
++
+ 	/* remember the eviction */
+ 	if (evict)
+ 		atomic64_inc(&adev->num_evictions);
 -- 
 2.17.1
 
