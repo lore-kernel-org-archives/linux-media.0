@@ -2,126 +2,162 @@ Return-Path: <SRS0=ROaq=YW=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0216CA9EC0
-	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 01:26:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB2DACA9EC2
+	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 04:54:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CBB52217D6
-	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 01:26:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8682120873
+	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 04:54:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728998AbfJ2B0D convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 28 Oct 2019 21:26:03 -0400
-Received: from mail-oln040092066055.outbound.protection.outlook.com ([40.92.66.55]:3138
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728978AbfJ2B0D (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 28 Oct 2019 21:26:03 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F7MXrH4qGIzMzoZTinbu+ITxc6Zyf/HZO3PrqUPb3BZzmA7GuPMmOfJ5/zJjSSM6xTILWXHxBXstDPKYi+4ooNDaV8iRYdwH1YbQDspt0plzp2T8igLkxPUZSCdgjlD2KLCnwW38wj63t+ruJz7ReG+9MngAndsoCQ8iZiamDrpAfFkxHneR6UQoWJ3JFaMK4po0T8vEi7C9UelomwO+6Sxa8/ybd4S0hnAenRbXpZ8UqBFyId4TqegXNaSCmvbp3NutcZuzfDs0zPDmpkG7/ILd/jPcOk5+Mg+SDt2NSyh8tnhfdS5Z/UdYWAUzizWXIGfDbnZQgB7fyrBkq0Ba9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fUXWKGJjsKsF53zm9MGKy1D9n1aFly1AT9vrIQSgEvc=;
- b=EJsT+cHwtez19zPO5SDiVgV0YdSroLp/w7mxiKWR+ggV4TBFlKmtF4NQyu9uP2pS7UngQ4hGY0wwiUAboEqCjzSkl6/nd3CFCGMebH4LZODZDdzkEkLEgLYZegHWdqLGzMZFsruBgF5rILcR0cfTjENE5RyzCBwfoKIOWrT3Co4B4/9xqLoSPhfafo3qnQt69y/X19QhEuGru00GLwJ6+r3lykaLNoZenZo0gHbn/Cz1uLd1/Eje08ITednqm/gQ1LufavD1861RyVz2dDakFE8yhIf2q/1x1MJcm1N0zHIsQPzCGUElNdGhm+rYt66mcdvUzRv9dZNk6CfPLySx5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from VE1EUR01FT039.eop-EUR01.prod.protection.outlook.com
- (10.152.2.60) by VE1EUR01HT188.eop-EUR01.prod.protection.outlook.com
- (10.152.3.211) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.2387.20; Tue, 29 Oct
- 2019 01:26:00 +0000
-Received: from HE1PR06MB4011.eurprd06.prod.outlook.com (10.152.2.56) by
- VE1EUR01FT039.mail.protection.outlook.com (10.152.3.35) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.20 via Frontend Transport; Tue, 29 Oct 2019 01:26:00 +0000
-Received: from HE1PR06MB4011.eurprd06.prod.outlook.com
- ([fe80::b1cf:db6f:95fc:84cc]) by HE1PR06MB4011.eurprd06.prod.outlook.com
- ([fe80::b1cf:db6f:95fc:84cc%7]) with mapi id 15.20.2387.025; Tue, 29 Oct 2019
- 01:26:00 +0000
-From:   Jonas Karlman <jonas@kwiboo.se>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>
-CC:     Jonas Karlman <jonas@kwiboo.se>, Hans Verkuil <hverkuil@xs4all.nl>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 08/10] media: hantro: Set H264 FIELDPIC_FLAG_E flag
- correctly
-Thread-Topic: [PATCH v2 08/10] media: hantro: Set H264 FIELDPIC_FLAG_E flag
- correctly
-Thread-Index: AQHVjffSvhTEZV4MtESzVZoKJ6SaYw==
-Date:   Tue, 29 Oct 2019 01:26:00 +0000
-Message-ID: <HE1PR06MB401120C5E10154E39D0C9865AC610@HE1PR06MB4011.eurprd06.prod.outlook.com>
-References: <HE1PR06MB401108289F09802C261374F8AC610@HE1PR06MB4011.eurprd06.prod.outlook.com>
-In-Reply-To: <HE1PR06MB401108289F09802C261374F8AC610@HE1PR06MB4011.eurprd06.prod.outlook.com>
-Accept-Language: sv-SE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: HE1PR05CA0354.eurprd05.prod.outlook.com
- (2603:10a6:7:92::49) To HE1PR06MB4011.eurprd06.prod.outlook.com
- (2603:10a6:7:9c::32)
-x-incomingtopheadermarker: OriginalChecksum:71609C14098BAD96D2C40504CBA11777430D3F58488070B2D133B90DF3C9E5C3;UpperCasedChecksum:2EEEC8F3F3969A35FC7792BF040722842D4D7774F87AB4D6F618D21B7C95FB72;SizeAsReceived:7614;Count:49
-x-ms-exchange-messagesentrepresentingtype: 1
-x-mailer: git-send-email 2.17.1
-x-tmn:  [YQd7JpoAtTmp6k7A6sfIt2aYZjgbHAyf]
-x-microsoft-original-message-id: <20191029012550.24628-1-jonas@kwiboo.se>
-x-ms-publictraffictype: Email
-x-incomingheadercount: 49
-x-eopattributedmessage: 0
-x-ms-traffictypediagnostic: VE1EUR01HT188:
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sJSlAQLo0ftQwHpiZM3IaeF6OdnlA343JREWLW2Xba06QlCLYgfTlFu2OMug8PD/jmdXOnuzSUthJX8J3EDGZdb6q3MHneqEGot7Ox/XWDI8CSEnV7LMbE00EQ/eg2fRKbn+rwRSyv9KV/zqrr82ilqUzdSLHwDzMEvXhfbqlJVvBd9co0r2XpAx4KcDTHhA
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0abe0bde-b04d-44f0-2a9a-08d75c0ef4ce
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2019 01:26:00.5942
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Internet
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1EUR01HT188
+        id S1731807AbfJ2Eyl (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Oct 2019 00:54:41 -0400
+Received: from lb1-smtp-cloud8.xs4all.net ([194.109.24.21]:34063 "EHLO
+        lb1-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727621AbfJ2Eyl (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 29 Oct 2019 00:54:41 -0400
+Received: from localhost ([IPv6:2001:983:e9a7:1:2147:c5cc:f602:944b])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id PJWgiH404frRWPJWhifgqd; Tue, 29 Oct 2019 05:54:39 +0100
+Message-ID: <3ce038a8c054c984c954979cb80cf778@smtp-cloud8.xs4all.net>
+Date:   Tue, 29 Oct 2019 05:54:38 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfJ7zXpoWaea/mZx07qQQfU5iDr9RMPgZvaohYvRCfp433igFsU3odTDMt3VMXNaSgaoojv49jPNEi+bZVS1sFXa/3g64gCrPMrFEeesKOH6W+QOM3y85
+ NGcloF77zeUWPlKWp35y+hbUzOHJ6zjjC8yE1SIVa6B3/v/Z8FoTweBeNYy+iwwXbnUVP6JH7Up9ThOFohIYfz6sA2lV14PAh2fdFlWeY/aFTTtJ3k/1Jp1P
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The FIELDPIC_FLAG_E bit should be set when field_pic_flag exists in stream,
-it is currently set based on field_pic_flag of current frame.
-The PIC_FIELDMODE_E bit is correctly set based on the field_pic_flag.
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-Fix this by setting the FIELDPIC_FLAG_E bit when frame_mbs_only is not set.
+Results of the daily build of media_tree:
 
-Fixes: dea0a82f3d22 ("media: hantro: Add support for H264 decoding on G1")
-Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
----
- drivers/staging/media/hantro/hantro_g1_h264_dec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+date:			Tue Oct 29 05:00:10 CET 2019
+media-tree git hash:	a4260ea49547aa0c84c353f9de5998a0315d89fe
+media_build git hash:	062d0d65a33aae80352df0b13ff2a458c0da977f
+v4l-utils git hash:	6c415a11fceb32067cdb5c2e33f90dbf018182a4
+edid-decode git hash:	3a6108a75be356a3dc53760d22782f1323248b6b
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: b9d1bee3709ed440e3fba64fedc2c3da80cc69b6
+host hardware:		x86_64
+host os:		5.2.0-3-amd64
 
-diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-index eeed11366135..c07da0ee4973 100644
---- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-@@ -63,7 +63,7 @@ static void set_params(struct hantro_ctx *ctx)
- 	/* always use the matrix sent from userspace */
- 	reg |= G1_REG_DEC_CTRL2_TYPE1_QUANT_E;
- 
--	if (slices[0].flags &  V4L2_H264_SLICE_FLAG_FIELD_PIC)
-+	if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY))
- 		reg |= G1_REG_DEC_CTRL2_FIELDPIC_FLAG_E;
- 	vdpu_write_relaxed(vpu, reg, G1_REG_DEC_CTRL2);
- 
--- 
-2.17.1
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4-rc1-i686: OK
+linux-5.4-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2784, Succeeded: 2784, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: ERRORS
 
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Tuesday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Tuesday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
