@@ -5,1379 +5,884 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.2 required=3.0
 	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B407CA9EAE
-	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 11:56:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E7C1CA9EC5
+	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 12:14:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2A7E221D56
-	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 11:56:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6092F214D9
+	for <linux-media@archiver.kernel.org>; Tue, 29 Oct 2019 12:14:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729947AbfJ2L4M (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 29 Oct 2019 07:56:12 -0400
-Received: from mga11.intel.com ([192.55.52.93]:15284 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728432AbfJ2L4M (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 29 Oct 2019 07:56:12 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 04:56:10 -0700
-X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
-   d="scan'208";a="283220989"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 04:56:08 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 3835E20A25; Tue, 29 Oct 2019 13:56:06 +0200 (EET)
-Date:   Tue, 29 Oct 2019 13:56:06 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Shawnx Tu <shawnx.tu@intel.com>
-Cc:     linux-media@vger.kernel.org, andy.yeh@intel.com
-Subject: Re: [PATCH v1] hi556: Add support for Hi-556 sensor
-Message-ID: <20191029115606.GB10211@paasikivi.fi.intel.com>
-References: <1572338943-1855-1-git-send-email-shawnx.tu@intel.com>
+        id S2387547AbfJ2MOI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 29 Oct 2019 08:14:08 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:44464 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727082AbfJ2MOH (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 29 Oct 2019 08:14:07 -0400
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id E9A6B634C87;
+        Tue, 29 Oct 2019 14:13:21 +0200 (EET)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1iPQNF-0001VR-04; Tue, 29 Oct 2019 14:13:21 +0200
+Date:   Tue, 29 Oct 2019 14:13:20 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     mchehab@kernel.org, robh+dt@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        c.barrett@framos.com, a.brela@framos.com, peter.griffin@linaro.org
+Subject: Re: [PATCH v3 2/2] media: i2c: Add IMX296 CMOS image sensor driver
+Message-ID: <20191029121320.GA5017@valkosipuli.retiisi.org.uk>
+References: <20191025175908.14260-1-manivannan.sadhasivam@linaro.org>
+ <20191025175908.14260-3-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1572338943-1855-1-git-send-email-shawnx.tu@intel.com>
+In-Reply-To: <20191025175908.14260-3-manivannan.sadhasivam@linaro.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Shawn,
+Hi Manivannan,
 
-Thanks for the patch. Please see my comments below.
-
-On Tue, Oct 29, 2019 at 04:49:03PM +0800, Shawnx Tu wrote:
-> From: Shawn Tu <shawnx.tu@intel.com>
+On Fri, Oct 25, 2019 at 11:29:08PM +0530, Manivannan Sadhasivam wrote:
+> Add driver for Sony IMX296 CMOS image sensor driver. The driver only
+> supports I2C interface for programming and MIPI CSI-2 for sensor output.
 > 
-> Add a V4L2 sub-device driver for Hynix Hi-556 image sensor.
-> This is a camera sensor using the I2C bus for control and the
-> CSI-2 bus for data.
-> 
-> This driver supports following features:
-> - manual exposure and analog/digital gain control support
-> - vblank/hblank control support
-> - test pattern support
-> - media controller support
-> - runtime PM support
-> - support following resolutions:
->   + 2592x1944 at 30FPS
->   + 1296x972  at 30FPS
-> 
-> Signed-off-by: Shawn Tu <shawnx.tu@intel.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  MAINTAINERS                |    7 +
->  drivers/media/i2c/Kconfig  |   13 +
->  drivers/media/i2c/Makefile |    1 +
->  drivers/media/i2c/hi556.c  | 1202 ++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 1223 insertions(+)
->  create mode 100644 drivers/media/i2c/hi556.c
+>  MAINTAINERS                |   8 +
+>  drivers/media/i2c/Kconfig  |  11 +
+>  drivers/media/i2c/Makefile |   1 +
+>  drivers/media/i2c/imx296.c | 733 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 753 insertions(+)
+>  create mode 100644 drivers/media/i2c/imx296.c
 > 
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8077b45..84f29c0 100644
+> index 55199ef7fa74..5b7332d121d8 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -7554,6 +7554,13 @@ L:	linux-kernel@vger.kernel.org
->  S:	Maintained
->  F:	arch/x86/kernel/cpu/hygon.c
+> @@ -15140,6 +15140,14 @@ S:	Maintained
+>  F:	drivers/media/i2c/imx274.c
+>  F:	Documentation/devicetree/bindings/media/i2c/imx274.txt
 >  
-> +HYNIX HI556 SENSOR DRIVER
-> +M:	Shawn Tu <shawnx.tu@intel.com>
+> +SONY IMX296 SENSOR DRIVER
+> +M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > +L:	linux-media@vger.kernel.org
 > +T:	git git://linuxtv.org/media_tree.git
 > +S:	Maintained
-> +F:	drivers/media/i2c/hi556.c
+> +F:	drivers/media/i2c/imx296.c
+> +F:	Documentation/devicetree/bindings/media/i2c/imx296.txt
+
+The new bindings are in YAML format, so txt -> yaml.
+
+Also the MAINTAINERS change needs to be done no later than adding the
+files.
+
 > +
->  Hyper-V CORE AND DRIVERS
->  M:	"K. Y. Srinivasan" <kys@microsoft.com>
->  M:	Haiyang Zhang <haiyangz@microsoft.com>
+>  SONY IMX319 SENSOR DRIVER
+>  M:	Bingbu Cao <bingbu.cao@intel.com>
+>  L:	linux-media@vger.kernel.org
 > diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
-> index 992f608..f38dbd5 100644
+> index 7eee1812bba3..930db46fa2b8 100644
 > --- a/drivers/media/i2c/Kconfig
 > +++ b/drivers/media/i2c/Kconfig
-> @@ -568,6 +568,19 @@ config VIDEO_SMIAPP_PLL
+> @@ -598,6 +598,17 @@ config VIDEO_IMX274
+>  	  This is a V4L2 sensor driver for the Sony IMX274
+>  	  CMOS image sensor.
 >  
->  if MEDIA_CAMERA_SUPPORT
->  
-> +config VIDEO_HI556
-> +	tristate "Hynix Hi-556 sensor support"
+> +config VIDEO_IMX296
+> +	tristate "Sony IMX296 sensor support"
 > +	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
-> +	depends on MEDIA_CAMERA_SUPPORT
-> +	depends on MEDIA_CONTROLLER
 > +	select V4L2_FWNODE
 > +	help
-> +	  This is a Video4Linux2 sensor driver for the Hynix
-> +	  Hi-556 camera.
+> +	  This is a Video4Linux2 sensor driver for the Sony
+> +	  IMX296 camera sensor.
 > +
-> +	To compile this driver as a module, choose M here: the
-> +	module will be called hi556.
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called imx296.
 > +
->  config VIDEO_IMX214
->  	tristate "Sony IMX214 sensor support"
->  	depends on GPIOLIB && I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
+>  config VIDEO_IMX319
+>  	tristate "Sony IMX319 sensor support"
+>  	depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
 > diff --git a/drivers/media/i2c/Makefile b/drivers/media/i2c/Makefile
-> index 6a80a35..c147bb9 100644
+> index beb170b002dc..ed0c02bda450 100644
 > --- a/drivers/media/i2c/Makefile
 > +++ b/drivers/media/i2c/Makefile
-> @@ -109,6 +109,7 @@ obj-$(CONFIG_VIDEO_I2C)		+= video-i2c.o
->  obj-$(CONFIG_VIDEO_ML86V7667)	+= ml86v7667.o
->  obj-$(CONFIG_VIDEO_OV2659)	+= ov2659.o
->  obj-$(CONFIG_VIDEO_TC358743)	+= tc358743.o
-> +obj-$(CONFIG_VIDEO_HI556)	+= hi556.o
+> @@ -112,6 +112,7 @@ obj-$(CONFIG_VIDEO_TC358743)	+= tc358743.o
 >  obj-$(CONFIG_VIDEO_IMX214)	+= imx214.o
 >  obj-$(CONFIG_VIDEO_IMX258)	+= imx258.o
 >  obj-$(CONFIG_VIDEO_IMX274)	+= imx274.o
-> diff --git a/drivers/media/i2c/hi556.c b/drivers/media/i2c/hi556.c
+> +obj-$(CONFIG_VIDEO_IMX296)	+= imx296.o
+>  obj-$(CONFIG_VIDEO_IMX319)	+= imx319.o
+>  obj-$(CONFIG_VIDEO_IMX355)	+= imx355.o
+>  obj-$(CONFIG_VIDEO_ST_MIPID02) += st-mipid02.o
+> diff --git a/drivers/media/i2c/imx296.c b/drivers/media/i2c/imx296.c
 > new file mode 100644
-> index 0000000..15e153f
+> index 000000000000..98fff0a93277
 > --- /dev/null
-> +++ b/drivers/media/i2c/hi556.c
-> @@ -0,0 +1,1202 @@
+> +++ b/drivers/media/i2c/imx296.c
+> @@ -0,0 +1,733 @@
 > +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2019 Intel Corporation.
+> +/*
+> + * Sony IMX296 CMOS Image Sensor Driver
+> + *
+> + * Copyright (C) 2019 FRAMOS GmbH.
+> + *
+> + * Copyright (C) 2019 Linaro Ltd.
+> + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> + */
 > +
-> +#include <asm/unaligned.h>
-> +#include <linux/acpi.h>
+> +#include <linux/clk.h>
 > +#include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
 > +#include <linux/i2c.h>
 > +#include <linux/module.h>
 > +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <media/media-entity.h>
 > +#include <media/v4l2-ctrls.h>
 > +#include <media/v4l2-device.h>
 > +#include <media/v4l2-fwnode.h>
+> +#include <media/v4l2-subdev.h>
 > +
-> +#define HI556_REG_VALUE_08BIT		1
-> +#define HI556_REG_VALUE_16BIT		2
-> +#define HI556_REG_VALUE_24BIT		3
+> +#define IMX296_STANDBY 0x3000
+> +#define IMX296_REGHOLD 0x3008
+> +#define IMX296_XMSTA 0x300a
+> +#define IMX296_GAIN_LOW 0x3204
+> +#define IMX296_GAIN_HIGH 0x3205
 > +
-> +#define HI556_LINK_FREQ_437MHZ		437000000ULL
-> +#define HI556_MCLK			19200000
-> +#define HI556_DATA_LANES		2
-> +#define HI556_RGB_DEPTH			10
+> +#define IMX296_DEFAULT_FORMAT MEDIA_BUS_FMT_SRGGB10_1X10
 > +
-> +#define HI556_REG_CHIP_ID		0x0f16
-> +#define HI556_CHIP_ID			0x0556
-> +
-> +#define HI556_REG_MODE_SELECT		0x0a00
-> +#define HI556_MODE_STANDBY		0x0000
-> +#define HI556_MODE_STREAMING		0x0100
-> +
-> +/* vertical-timings from sensor */
-> +#define HI556_REG_FLL			0x0006
-> +#define HI556_FLL_30FPS			0x0814
-> +#define HI556_FLL_30FPS_MIN		0x0814
-> +#define HI556_FLL_MAX			0x7fff
-> +
-> +/* horizontal-timings from sensor */
-> +#define HI556_REG_LLP			0x0008
-> +
-> +/* Exposure controls from sensor */
-> +#define HI556_REG_EXPOSURE		0x0074
-> +#define HI556_EXPOSURE_MIN		6
-> +#define HI556_EXPOSURE_MAX_MARGIN	2
-> +#define HI556_EXPOSURE_STEP		1
-> +
-> +/* Analog gain controls from sensor */
-> +#define HI556_REG_ANALOG_GAIN		0x0077
-> +#define HI556_ANAL_GAIN_MIN		0
-> +#define HI556_ANAL_GAIN_MAX		240
-> +#define HI556_ANAL_GAIN_STEP		1
-> +
-> +/* Digital gain controls from sensor */
-> +#define HI556_REG_MWB_GR_GAIN		0x0078
-> +#define HI556_REG_MWB_GB_GAIN		0x007a
-> +#define HI556_REG_MWB_R_GAIN		0x007c
-> +#define HI556_REG_MWB_B_GAIN		0x007e
-> +#define HI556_DGTL_GAIN_MIN		0
-> +#define HI556_DGTL_GAIN_MAX		2048
-> +#define HI556_DGTL_GAIN_STEP		1
-> +#define HI556_DGTL_GAIN_DEFAULT		256
-> +
-> +/* Test Pattern Control */
-> +#define HI556_REG_ISP			0X0A05
-
-Lower case hexadecimals.
-
-> +#define HI556_REG_ISP_TPG_EN		0x01
-> +#define HI556_REG_TEST_PATTERN		0x0201
-> +
-> +#define to_hi556(_sd)			container_of(_sd, struct hi556, sd)
-
-Try to fit this under or to 80 chars, please.
-
-> +
-> +enum {
-> +	HI556_LINK_FREQ_880MBPS,
-
-This appears to be bit rate which is not the same as the link frequency.
-Could you call it differently? It's a bit confusing as it is now.
-
+> +static const char * const imx296_supply_name[] = {
+> +	"vdda",
+> +	"vddd",
+> +	"vddo",
 > +};
 > +
-> +struct hi556_reg {
-> +	u16 address;
-> +	u16 val;
+> +#define IMX296_NUM_SUPPLIES ARRAY_SIZE(imx296_supply_name)
+> +
+> +struct imx296_regval {
+> +	u16 reg;
+> +	u8 val;
 > +};
 > +
-> +struct hi556_reg_list {
-> +	u32 num_of_regs;
-> +	const struct hi556_reg *regs;
-> +};
-> +
-> +struct hi556_link_freq_config {
-> +	const struct hi556_reg_list reg_list;
-> +};
-> +
-> +struct hi556_mode {
-> +	/* Frame width in pixels */
+> +struct imx296_mode {
 > +	u32 width;
-> +
-> +	/* Frame height in pixels */
 > +	u32 height;
+> +	u32 pixel_rate;
 > +
-> +	/* Horizontal timining size */
-> +	u32 llp;
-> +
-> +	/* Default vertical timining size */
-> +	u32 fll_def;
-> +
-> +	/* Min vertical timining size */
-> +	u32 fll_min;
-> +
-> +	/* Link frequency needed for this resolution */
-> +	u32 link_freq_index;
-> +
-> +	/* Sensor register settings for this resolution */
-> +	const struct hi556_reg_list reg_list;
+> +	const struct imx296_regval *data;
+> +	u32 data_size;
 > +};
 > +
-> +//SENSOR_INITIALIZATION
-> +static const struct hi556_reg mipi_data_rate_880mbps[] = {
-> +	{0x0e00, 0x0102},
-> +	{0x0e02, 0x0102},
-> +	{0x0e0c, 0x0100},
-> +	{0x2000, 0x7400},
-> +	{0x2002, 0x001c},
-> +	{0x2004, 0x0242},
-> +	{0x2006, 0x0942},
-> +	{0x2008, 0x7007},
-> +	{0x200a, 0x0fd9},
-> +	{0x200c, 0x0259},
-> +	{0x200e, 0x7008},
-> +	{0x2010, 0x160e},
-> +	{0x2012, 0x0047},
-> +	{0x2014, 0x2118},
-> +	{0x2016, 0x0041},
-> +	{0x2018, 0x00d8},
-> +	{0x201a, 0x0145},
-> +	{0x201c, 0x0006},
-> +	{0x201e, 0x0181},
-> +	{0x2020, 0x13cc},
-> +	{0x2022, 0x2057},
-> +	{0x2024, 0x7001},
-> +	{0x2026, 0x0fca},
-> +	{0x2028, 0x00cb},
-> +	{0x202a, 0x009f},
-> +	{0x202c, 0x7002},
-> +	{0x202e, 0x13cc},
-> +	{0x2030, 0x019b},
-> +	{0x2032, 0x014d},
-> +	{0x2034, 0x2987},
-> +	{0x2036, 0x2766},
-> +	{0x2038, 0x0020},
-> +	{0x203a, 0x2060},
-> +	{0x203c, 0x0e5d},
-> +	{0x203e, 0x181d},
-> +	{0x2040, 0x2066},
-> +	{0x2042, 0x20c4},
-> +	{0x2044, 0x5000},
-> +	{0x2046, 0x0005},
-> +	{0x2048, 0x0000},
-> +	{0x204a, 0x01db},
-> +	{0x204c, 0x025a},
-> +	{0x204e, 0x00c0},
-> +	{0x2050, 0x0005},
-> +	{0x2052, 0x0006},
-> +	{0x2054, 0x0ad9},
-> +	{0x2056, 0x0259},
-> +	{0x2058, 0x0618},
-> +	{0x205a, 0x0258},
-> +	{0x205c, 0x2266},
-> +	{0x205e, 0x20c8},
-> +	{0x2060, 0x2060},
-> +	{0x2062, 0x707b},
-> +	{0x2064, 0x0fdd},
-> +	{0x2066, 0x81b8},
-> +	{0x2068, 0x5040},
-> +	{0x206a, 0x0020},
-> +	{0x206c, 0x5060},
-> +	{0x206e, 0x3143},
-> +	{0x2070, 0x5081},
-> +	{0x2072, 0x025c},
-> +	{0x2074, 0x7800},
-> +	{0x2076, 0x7400},
-> +	{0x2078, 0x001c},
-> +	{0x207a, 0x0242},
-> +	{0x207c, 0x0942},
-> +	{0x207e, 0x0bd9},
-> +	{0x2080, 0x0259},
-> +	{0x2082, 0x7008},
-> +	{0x2084, 0x160e},
-> +	{0x2086, 0x0047},
-> +	{0x2088, 0x2118},
-> +	{0x208a, 0x0041},
-> +	{0x208c, 0x00d8},
-> +	{0x208e, 0x0145},
-> +	{0x2090, 0x0006},
-> +	{0x2092, 0x0181},
-> +	{0x2094, 0x13cc},
-> +	{0x2096, 0x2057},
-> +	{0x2098, 0x7001},
-> +	{0x209a, 0x0fca},
-> +	{0x209c, 0x00cb},
-> +	{0x209e, 0x009f},
-> +	{0x20a0, 0x7002},
-> +	{0x20a2, 0x13cc},
-> +	{0x20a4, 0x019b},
-> +	{0x20a6, 0x014d},
-> +	{0x20a8, 0x2987},
-> +	{0x20aa, 0x2766},
-> +	{0x20ac, 0x0020},
-> +	{0x20ae, 0x2060},
-> +	{0x20b0, 0x0e5d},
-> +	{0x20b2, 0x181d},
-> +	{0x20b4, 0x2066},
-> +	{0x20b6, 0x20c4},
-> +	{0x20b8, 0x50a0},
-> +	{0x20ba, 0x0005},
-> +	{0x20bc, 0x0000},
-> +	{0x20be, 0x01db},
-> +	{0x20c0, 0x025a},
-> +	{0x20c2, 0x00c0},
-> +	{0x20c4, 0x0005},
-> +	{0x20c6, 0x0006},
-> +	{0x20c8, 0x0ad9},
-> +	{0x20ca, 0x0259},
-> +	{0x20cc, 0x0618},
-> +	{0x20ce, 0x0258},
-> +	{0x20d0, 0x2266},
-> +	{0x20d2, 0x20c8},
-> +	{0x20d4, 0x2060},
-> +	{0x20d6, 0x707b},
-> +	{0x20d8, 0x0fdd},
-> +	{0x20da, 0x86b8},
-> +	{0x20dc, 0x50e0},
-> +	{0x20de, 0x0020},
-> +	{0x20e0, 0x5100},
-> +	{0x20e2, 0x3143},
-> +	{0x20e4, 0x5121},
-> +	{0x20e6, 0x7800},
-> +	{0x20e8, 0x3140},
-> +	{0x20ea, 0x01c4},
-> +	{0x20ec, 0x01c1},
-> +	{0x20ee, 0x01c0},
-> +	{0x20f0, 0x01c4},
-> +	{0x20f2, 0x2700},
-> +	{0x20f4, 0x3d40},
-> +	{0x20f6, 0x7800},
-> +	{0x20f8, 0xffff},
-> +	{0x27fe, 0xe000},
-> +	{0x3000, 0x60f8},
-> +	{0x3002, 0x187f},
-> +	{0x3004, 0x7060},
-> +	{0x3006, 0x0114},
-> +	{0x3008, 0x60b0},
-> +	{0x300a, 0x1473},
-> +	{0x300c, 0x0013},
-> +	{0x300e, 0x140f},
-> +	{0x3010, 0x0040},
-> +	{0x3012, 0x100f},
-> +	{0x3014, 0x60f8},
-> +	{0x3016, 0x187f},
-> +	{0x3018, 0x7060},
-> +	{0x301a, 0x0114},
-> +	{0x301c, 0x60b0},
-> +	{0x301e, 0x1473},
-> +	{0x3020, 0x0013},
-> +	{0x3022, 0x140f},
-> +	{0x3024, 0x0040},
-> +	{0x3026, 0x000f},
+> +struct imx296 {
+> +	struct device *dev;
+> +	struct clk *mclk;
+> +	struct regmap *regmap;
 > +
-> +	{0x0b00, 0x0000},
-> +	{0x0b02, 0x0045},
-> +	{0x0b04, 0xb405},
-> +	{0x0b06, 0xc403},
-> +	{0x0b08, 0x0081},
-> +	{0x0b0a, 0x8252},
-> +	{0x0b0c, 0xf814},
-> +	{0x0b0e, 0xc618},
-> +	{0x0b10, 0xa828},
-> +	{0x0b12, 0x004c},
-> +	{0x0b14, 0x4068},
-> +	{0x0b16, 0x0000},
-> +	{0x0f30, 0x5b15},
-> +	{0x0f32, 0x7067},
-> +	{0x0954, 0x0009},
-> +	{0x0956, 0x0000},
-> +	{0x0958, 0xbb80},
-> +	{0x095a, 0x5140},
-> +	{0x0c00, 0x1110},
-> +	{0x0c02, 0x0011},
-> +	{0x0c04, 0x0000},
-> +	{0x0c06, 0x0200},
-> +	{0x0c10, 0x0040},
-> +	{0x0c12, 0x0040},
-> +	{0x0c14, 0x0040},
-> +	{0x0c16, 0x0040},
-> +	{0x0a10, 0x4000},
-> +	{0x3068, 0xf800},
-> +	{0x306a, 0xf876},
-> +	{0x006c, 0x0000},
-> +	{0x005e, 0x0200},
-> +	{0x000e, 0x0100},
-> +	{0x0e0a, 0x0001},
-> +	{0x004a, 0x0100},
-> +	{0x004c, 0x0000},
-> +	{0x004e, 0x0100},
-> +	{0x000c, 0x0022},
-> +	{0x0008, 0x0b00},
-> +	{0x005a, 0x0202},
-> +	{0x0012, 0x000e},
-> +	{0x0018, 0x0a33},
-> +	{0x0022, 0x0008},
-> +	{0x0028, 0x0017},
-> +	{0x0024, 0x0028},
-> +	{0x002a, 0x002d},
-> +	{0x0026, 0x0030},
-> +	{0x002c, 0x07c9},
-> +	{0x002e, 0x1111},
-> +	{0x0030, 0x1111},
-> +	{0x0032, 0x1111},
-> +	{0x0006, 0x07bc},
-> +	{0x0a22, 0x0000},
-> +	{0x0a12, 0x0a20},
-> +	{0x0a14, 0x0798},
-> +	{0x003e, 0x0000},
-> +	{0x0074, 0x080e},
-> +	{0x0070, 0x0407},
-> +	{0x0002, 0x0000},
-> +	{0x0a02, 0x0100},
-> +	{0x0a24, 0x0100},
-> +	{0x0046, 0x0000},
-> +	{0x0076, 0x0000},
-> +	{0x0060, 0x0000},
-> +	{0x0062, 0x0530},
-> +	{0x0064, 0x0500},
-> +	{0x0066, 0x0530},
-> +	{0x0068, 0x0500},
-> +	{0x0122, 0x0300},
-> +	{0x015a, 0xff08},
-> +	{0x0804, 0x0300},
-> +	{0x0806, 0x0100},
-> +	{0x005c, 0x0102},
-> +	{0x0a1a, 0x0800},
-> +};
-> +
-> +static const struct hi556_reg mode_2592x1944_regs[] = {
-> +	{0x0a00, 0x0000},
-> +	{0x0b0a, 0x8252},
-> +	{0x0f30, 0x5b15},
-> +	{0x0f32, 0x7067},
-> +	{0x004a, 0x0100},
-> +	{0x004c, 0x0000},
-> +	{0x004e, 0x0100},
-> +	{0x000c, 0x0022},
-> +	{0x0008, 0x0b00},
-> +	{0x005a, 0x0202},
-> +	{0x0012, 0x000e},
-> +	{0x0018, 0x0a33},
-> +	{0x0022, 0x0008},
-> +	{0x0028, 0x0017},
-> +	{0x0024, 0x0028},
-> +	{0x002a, 0x002d},
-> +	{0x0026, 0x0030},
-> +	{0x002c, 0x07c9},
-> +	{0x002e, 0x1111},
-> +	{0x0030, 0x1111},
-> +	{0x0032, 0x1111},
-> +	{0x0006, 0x0814},
-> +	{0x0a22, 0x0000},
-> +	{0x0a12, 0x0a20},
-> +	{0x0a14, 0x0798},
-> +	{0x003e, 0x0000},
-> +	{0x0074, 0x0812},
-> +	{0x0070, 0x0409},
-> +	{0x0804, 0x0300},
-> +	{0x0806, 0x0100},
-> +	{0x0a04, 0x014a},
-> +	{0x090c, 0x0fdc},
-> +	{0x090e, 0x002d},
-> +
-> +	{0x0902, 0x4319},
-> +	{0x0914, 0xc10a},
-> +	{0x0916, 0x071f},
-> +	{0x0918, 0x0408},
-> +	{0x091a, 0x0c0d},
-> +	{0x091c, 0x0f09},
-> +	{0x091e, 0x0a00},
-> +	{0x0958, 0xbb80},
-> +};
-> +
-> +static const struct hi556_reg mode_1296x972_regs[] = {
-> +	{0x0a00, 0x0000},
-> +	{0x0b0a, 0x8259},
-> +	{0x0f30, 0x5b15},
-> +	{0x0f32, 0x7167},
-> +	{0x004a, 0x0100},
-> +	{0x004c, 0x0000},
-> +	{0x004e, 0x0100},
-> +	{0x000c, 0x0122},
-> +	{0x0008, 0x0b00},
-> +	{0x005a, 0x0404},
-> +	{0x0012, 0x000c},
-> +	{0x0018, 0x0a33},
-> +	{0x0022, 0x0008},
-> +	{0x0028, 0x0017},
-> +	{0x0024, 0x0022},
-> +	{0x002a, 0x002b},
-> +	{0x0026, 0x0030},
-> +	{0x002c, 0x07c9},
-> +	{0x002e, 0x3311},
-> +	{0x0030, 0x3311},
-> +	{0x0032, 0x3311},
-> +	{0x0006, 0x0814},
-> +	{0x0a22, 0x0000},
-> +	{0x0a12, 0x0510},
-> +	{0x0a14, 0x03cc},
-> +	{0x003e, 0x0000},
-> +	{0x0074, 0x0812},
-> +	{0x0070, 0x0409},
-> +	{0x0804, 0x0308},
-> +	{0x0806, 0x0100},
-> +	{0x0a04, 0x016a},
-> +	{0x090e, 0x0010},
-> +	{0x090c, 0x09c0},
-> +
-> +	{0x0902, 0x4319},
-> +	{0x0914, 0xc106},
-> +	{0x0916, 0x040e},
-> +	{0x0918, 0x0304},
-> +	{0x091a, 0x0708},
-> +	{0x091c, 0x0e06},
-> +	{0x091e, 0x0300},
-> +	{0x0958, 0xbb80},
-> +};
-> +
-> +static const char * const hi556_test_pattern_menu[] = {
-> +	"Disabled",
-> +	"Solid Colour",
-> +	"100% colour bars",
-> +	"Fade to grey’ colour bars",
-> +	"PN9",
-> +	"gradient horizontal",
-> +	"gradient vertical",
-> +	"check board",
-> +	"slant pattern",
-
-Please Capitalise the first letter of the word as in other controls.
-
-> +};
-> +
-> +static const s64 link_freq_menu_items[] = {
-> +	HI556_LINK_FREQ_437MHZ,
-> +};
-> +
-> +static const struct hi556_link_freq_config link_freq_configs[] = {
-> +	[HI556_LINK_FREQ_880MBPS] = {
-> +		.reg_list = {
-> +			.num_of_regs = ARRAY_SIZE(mipi_data_rate_880mbps),
-> +			.regs = mipi_data_rate_880mbps,
-> +		}
-> +	}
-> +};
-> +
-> +static const struct hi556_mode supported_modes[] = {
-> +	{
-> +		.width = 2592,
-> +		.height = 1944,
-> +		.fll_def = HI556_FLL_30FPS,
-> +		.fll_min = HI556_FLL_30FPS_MIN,
-> +		.llp = 0x0b00,
-> +		.reg_list = {
-> +			.num_of_regs = ARRAY_SIZE(mode_2592x1944_regs),
-> +			.regs = mode_2592x1944_regs,
-> +		},
-> +		.link_freq_index = HI556_LINK_FREQ_880MBPS,
-> +	},
-> +	{
-> +		.width = 1296,
-> +		.height = 972,
-> +		.fll_def = HI556_FLL_30FPS,
-> +		.fll_min = HI556_FLL_30FPS_MIN,
-> +		.llp = 0x0b00,
-> +		.reg_list = {
-> +			.num_of_regs = ARRAY_SIZE(mode_1296x972_regs),
-> +			.regs = mode_1296x972_regs,
-> +		},
-> +		.link_freq_index = HI556_LINK_FREQ_880MBPS,
-> +	}
-> +};
-> +
-> +struct hi556 {
 > +	struct v4l2_subdev sd;
+> +	struct v4l2_fwnode_endpoint ep;
 > +	struct media_pad pad;
-> +	struct v4l2_ctrl_handler ctrl_handler;
+> +	struct v4l2_mbus_framefmt current_format;
+> +	const struct imx296_mode *current_mode;
 > +
-> +	/* V4L2 Controls */
-> +	struct v4l2_ctrl *link_freq;
+> +	struct regulator_bulk_data supplies[IMX296_NUM_SUPPLIES];
+> +	struct gpio_desc *rst_gpio;
+> +
+> +	struct v4l2_ctrl_handler ctrls;
 > +	struct v4l2_ctrl *pixel_rate;
-> +	struct v4l2_ctrl *vblank;
-> +	struct v4l2_ctrl *hblank;
-> +	struct v4l2_ctrl *exposure;
 > +
-> +	/* Current mode */
-> +	const struct hi556_mode *cur_mode;
-> +
-> +	/* To serialize asynchronus callbacks */
-> +	struct mutex mutex;
-> +
-> +	/* Streaming on/off */
-> +	bool streaming;
+> +	struct mutex lock;
 > +};
 > +
-> +static u64 to_pixel_rate(u32 f_index)
+> +static const struct regmap_config imx296_regmap_config = {
+> +	.reg_bits = 16,
+> +	.val_bits = 8,
+> +	.cache_type = REGCACHE_RBTREE,
+> +};
+> +
+> +static const struct imx296_regval imx296_global_init_settings[] = {
+> +	{ 0x3a00, 0x80 },
+> +	{ 0x3005, 0xf0 },
+> +	{ 0x350b, 0x0f },
+> +	{ 0x300d, 0x00 },
+> +	{ 0x400e, 0x58 },
+> +	{ 0x3010, 0x5e },
+> +	{ 0x3011, 0x04 },
+> +	{ 0x3014, 0x4c },
+> +	{ 0x4014, 0x1c },
+> +	{ 0x3015, 0x04 },
+> +	{ 0x3516, 0x77 },
+> +	{ 0x321a, 0x00 },
+> +	{ 0x3226, 0x02 },
+> +	{ 0x3832, 0xf5 },
+> +	{ 0x3833, 0x00 },
+> +	{ 0x3541, 0x72 },
+> +	{ 0x4041, 0x2a },
+> +	{ 0x3d48, 0xa3 },
+> +	{ 0x3d49, 0x00 },
+> +	{ 0x3d4a, 0x85 },
+> +	{ 0x3d4b, 0x00 },
+> +	{ 0x3256, 0x01 },
+> +	{ 0x3758, 0xa3 },
+> +	{ 0x3759, 0x00 },
+> +	{ 0x375a, 0x85 },
+> +	{ 0x375b, 0x00 },
+> +	{ 0x3165, 0x00 },
+> +	{ 0x3169, 0x10 },
+> +	{ 0x316a, 0x02 },
+> +	{ 0x4174, 0x00 },
+> +	{ 0x3079, 0x08 },
+> +	{ 0x3090, 0x04 },
+> +	{ 0x3094, 0x04 },
+> +	{ 0x3098, 0x04 },
+> +	{ 0x309e, 0x04 },
+> +	{ 0x30a0, 0x04 },
+> +	{ 0x30a1, 0x3c },
+> +	{ 0x38a2, 0xf6 },
+> +	{ 0x40a2, 0x06 },
+> +	{ 0x38a3, 0x00 },
+> +	{ 0x30a4, 0x5f },
+> +	{ 0x30a8, 0x91 },
+> +	{ 0x30ac, 0x28 },
+> +	{ 0x30af, 0x09 },
+> +	{ 0x40c1, 0xf6 },
+> +	{ 0x40c7, 0x0f },
+> +	{ 0x31c8, 0xf3 },
+> +	{ 0x40c8, 0x00 },
+> +	{ 0x31d0, 0xf4 },
+> +	{ 0x30df, 0x00 },
+> +};
+> +
+> +static const struct imx296_regval imx296_1440_1088_settings[] = {
+> +	{ 0x300d, 0x00 },
+> +	{ 0x3010, 0xcb },
+> +	{ 0x3011, 0x08 },
+> +	{ 0x3014, 0x4c },
+> +	{ 0x3015, 0x04 },
+> +	{ 0x3300, 0x03 },
+> +	{ 0x3310, 0x08 },
+> +	{ 0x3311, 0x00 },
+> +	{ 0x3312, 0x00 },
+> +	{ 0x3313, 0x00 },
+> +	{ 0x3314, 0xa0 },
+> +	{ 0x3315, 0x05 },
+> +	{ 0x3316, 0x40 },
+> +	{ 0x3317, 0x04 },
+> +
+> +	{ 0x3204, 0x00 },
+> +	{ 0x3205, 0x00 },
+> +	{ 0x3212, 0x08 },
+> +	{ 0x3254, 0x3c },
+> +	{ 0x3255, 0x00 },
+> +	{ 0x3089, 0x80 },
+> +	{ 0x308a, 0x0b },
+> +	{ 0x308b, 0x80 },
+> +	{ 0x308c, 0x08 },
+> +	{ 0x418c, 0x74 },
+> +	{ 0x308d, 0x0e },
+> +	{ 0x308e, 0x00 },
+> +	{ 0x308f, 0x00 },
+> +};
+> +
+> +/* Mode configs */
+> +static const struct imx296_mode imx296_modes[] = {
+> +	{
+> +		.width = 1440,
+> +		.height = 1088,
+> +		.data = imx296_1440_1088_settings,
+> +		.data_size = ARRAY_SIZE(imx296_1440_1088_settings),
+> +		.pixel_rate = 80000000,
+> +	},
+> +};
+> +
+> +static inline struct imx296 *to_imx296(struct v4l2_subdev *_sd)
 > +{
-> +	u64 pixel_rate = link_freq_menu_items[f_index] * 2 * HI556_DATA_LANES;
-> +
-> +	do_div(pixel_rate, HI556_RGB_DEPTH);
-> +
-> +	return pixel_rate;
+> +	return container_of(_sd, struct imx296, sd);
 > +}
 > +
-> +static int hi556_read_reg(struct hi556 *hi556, u16 reg, u16 len, u32 *val)
+> +static inline int imx296_read_reg(struct imx296 *imx296, u16 addr, u8 *value)
 > +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
-> +	struct i2c_msg msgs[2];
-> +	u8 addr_buf[2];
-> +	u8 data_buf[4] = {0};
+> +	unsigned int regval;
 > +	int ret;
 > +
-> +	if (len > 4)
-> +		return -EINVAL;
+> +	ret = regmap_read(imx296->regmap, addr, &regval);
+> +	if (ret) {
+> +		dev_err(imx296->dev, "I2C read failed for addr: %x\n", addr);
+> +		return ret;
+> +	}
 > +
-> +	put_unaligned_be16(reg, addr_buf);
-> +	msgs[0].addr = client->addr;
-> +	msgs[0].flags = 0;
-> +	msgs[0].len = sizeof(addr_buf);
-> +	msgs[0].buf = addr_buf;
-> +	msgs[1].addr = client->addr;
-> +	msgs[1].flags = I2C_M_RD;
-> +	msgs[1].len = len;
-> +	msgs[1].buf = &data_buf[4 - len];
-> +
-> +	ret = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
-> +	if (ret != ARRAY_SIZE(msgs))
-> +		return -EIO;
-> +
-> +	*val = get_unaligned_be32(data_buf);
+> +	*value = regval & 0xff;
 > +
 > +	return 0;
 > +}
 > +
-> +static int hi556_write_reg(struct hi556 *hi556, u16 reg, u16 len, u32 val)
+> +static int imx296_write_reg(struct imx296 *imx296, u16 addr, u8 value)
 > +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
-> +	u8 buf[6];
+> +	int ret;
 > +
-> +	if (len > 4)
-> +		return -EINVAL;
+> +	ret = regmap_write(imx296->regmap, addr, value);
+> +	if (ret) {
+> +		dev_err(imx296->dev, "I2C write failed for addr: %x\n", addr);
+> +		return ret;
+> +	}
 > +
-> +	put_unaligned_be16(reg, buf);
-> +	put_unaligned_be32(val << 8 * (4 - len), buf + 2);
-> +	if (i2c_master_send(client, buf, len + 2) != len + 2)
-> +		return -EIO;
-> +
-> +	return 0;
+> +	return ret;
 > +}
 > +
-> +static int hi556_write_reg_list(struct hi556 *hi556,
-> +				 const struct hi556_reg_list *r_list)
+> +static int imx296_set_register_array(struct imx296 *imx296,
+> +				     const struct imx296_regval *settings,
+> +				     unsigned int num_settings)
 > +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
 > +	unsigned int i;
 > +	int ret;
 > +
-> +	for (i = 0; i < r_list->num_of_regs; i++) {
-> +		ret = hi556_write_reg(hi556, r_list->regs[i].address,
-> +			HI556_REG_VALUE_16BIT, r_list->regs[i].val);
-> +		if (ret) {
-> +			dev_err_ratelimited(&client->dev,
-> +				    "failed to write reg 0x%4.4x. error = %d",
-> +				    r_list->regs[i].address, ret);
+> +	for (i = 0; i < num_settings; ++i, ++settings) {
+> +		ret = imx296_write_reg(imx296, settings->reg, settings->val);
+> +		if (ret < 0)
 > +			return ret;
-> +		}
+> +
+> +		/* Settle time is 10ms for all registers */
+
+Is this really needed? It'll take very long...
+
+> +		msleep(10);
 > +	}
 > +
 > +	return 0;
 > +}
 > +
-> +static int hi556_update_digital_gain(struct hi556 *hi556, u32 d_gain)
+> +static int imx296_write_buffered_reg(struct imx296 *imx296, u16 address_low,
+> +				     u8 nr_regs, u32 value)
 > +{
+> +	unsigned int i;
 > +	int ret;
 > +
-> +	ret = hi556_write_reg(hi556, HI556_REG_MWB_GR_GAIN,
-> +			       HI556_REG_VALUE_16BIT, d_gain);
-> +	if (ret)
+> +	ret = imx296_write_reg(imx296, IMX296_REGHOLD, 0x01);
+> +	if (ret) {
+> +		dev_err(imx296->dev, "Error setting hold register\n");
 > +		return ret;
-> +
-> +	ret = hi556_write_reg(hi556, HI556_REG_MWB_GB_GAIN,
-> +			       HI556_REG_VALUE_16BIT, d_gain);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = hi556_write_reg(hi556, HI556_REG_MWB_R_GAIN,
-> +			       HI556_REG_VALUE_16BIT, d_gain);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return hi556_write_reg(hi556, HI556_REG_MWB_B_GAIN,
-> +				HI556_REG_VALUE_16BIT, d_gain);
-> +}
-> +
-> +static int hi556_test_pattern(struct hi556 *hi556, u32 pattern)
-> +{
-> +	int ret;
-> +	u32 val;
-> +
-> +	if (pattern) {
-> +		ret = hi556_read_reg(hi556, HI556_REG_ISP,
-> +					HI556_REG_VALUE_08BIT, &val);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = hi556_write_reg(hi556, HI556_REG_ISP,
-> +			HI556_REG_VALUE_08BIT, val | HI556_REG_ISP_TPG_EN);
-> +		if (ret)
-> +			return ret;
 > +	}
 > +
-> +	return hi556_write_reg(hi556, HI556_REG_TEST_PATTERN,
-> +				HI556_REG_VALUE_08BIT, pattern);
+> +	for (i = 0; i < nr_regs; i++) {
+> +		ret = imx296_write_reg(imx296, address_low + i,
+> +				       (u8)(value >> (i * 8)));
+> +		if (ret) {
+> +			dev_err(imx296->dev, "Error writing buffered registers\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	ret = imx296_write_reg(imx296, IMX296_REGHOLD, 0x00);
+> +	if (ret) {
+> +		dev_err(imx296->dev, "Error setting hold register\n");
+> +		return ret;
+> +	}
+> +
+> +	return ret;
 > +}
 > +
-> +static int hi556_set_ctrl(struct v4l2_ctrl *ctrl)
+> +static int imx296_set_gain(struct imx296 *imx296, u32 value)
 > +{
-> +	struct hi556 *hi556 = container_of(ctrl->handler,
-> +					     struct hi556, ctrl_handler);
-> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
-> +	s64 exposure_max;
+> +	int ret;
+> +
+> +	ret = imx296_write_buffered_reg(imx296, IMX296_GAIN_HIGH, 1,
+> +					(u8)((value >> 8) & 0xFF));
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = imx296_write_buffered_reg(imx296, IMX296_GAIN_HIGH, 1,
+
+return ...
+
+> +					(u8)((value) & 0xFF));
+
+You need neither casting nor and here as the value will be cast by
+imx296_write_buffered_reg() soon.
+
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +/* Stop streaming */
+> +static int imx296_stop_streaming(struct imx296 *imx296)
+> +{
+> +	int ret;
+> +
+> +	ret = imx296_write_reg(imx296, IMX296_STANDBY, 0x01);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	msleep(30);
+> +
+> +	return imx296_write_reg(imx296, IMX296_XMSTA, 0x01);
+> +}
+> +
+> +static int imx296_set_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct imx296 *imx296 = container_of(ctrl->handler,
+> +					     struct imx296, ctrls);
 > +	int ret = 0;
 > +
-> +	/* Propagate change of current control to all related controls */
-> +	if (ctrl->id == V4L2_CID_VBLANK) {
-> +		/* Update max exposure while meeting expected vblanking */
-> +		exposure_max = hi556->cur_mode->height + ctrl->val -
-> +			       HI556_EXPOSURE_MAX_MARGIN;
-> +		__v4l2_ctrl_modify_range(hi556->exposure,
-> +					 hi556->exposure->minimum,
-> +					 exposure_max, hi556->exposure->step,
-> +					 exposure_max);
-> +	}
-> +
 > +	/* V4L2 controls values will be applied only when power is already up */
-> +	if (!pm_runtime_get_if_in_use(&client->dev))
+> +	if (!pm_runtime_get_if_in_use(imx296->dev))
 > +		return 0;
 > +
 > +	switch (ctrl->id) {
-> +	case V4L2_CID_ANALOGUE_GAIN:
-> +		ret = hi556_write_reg(hi556, HI556_REG_ANALOG_GAIN,
-> +				       HI556_REG_VALUE_16BIT, ctrl->val);
+> +	case V4L2_CID_GAIN:
+> +		ret = imx296_set_gain(imx296, ctrl->val);
 > +		break;
-> +
-> +	case V4L2_CID_DIGITAL_GAIN:
-> +		ret = hi556_update_digital_gain(hi556, ctrl->val);
-> +		break;
-> +
-> +	case V4L2_CID_EXPOSURE:
-> +		ret = hi556_write_reg(hi556, HI556_REG_EXPOSURE,
-> +				       HI556_REG_VALUE_16BIT, ctrl->val);
-> +		break;
-> +
-> +	case V4L2_CID_VBLANK:
-> +		/* Update FLL that meets expected vertical blanking */
-> +		ret = hi556_write_reg(hi556, HI556_REG_FLL,
-> +				       HI556_REG_VALUE_16BIT,
-> +				       hi556->cur_mode->height + ctrl->val);
-> +		break;
-> +
-> +	case V4L2_CID_TEST_PATTERN:
-> +		ret = hi556_test_pattern(hi556, ctrl->val);
-> +		break;
-> +
 > +	default:
 > +		ret = -EINVAL;
 > +		break;
 > +	}
 > +
-> +	pm_runtime_put(&client->dev);
+> +	pm_runtime_put(imx296->dev);
 > +
 > +	return ret;
 > +}
 > +
-> +static const struct v4l2_ctrl_ops hi556_ctrl_ops = {
-> +	.s_ctrl = hi556_set_ctrl,
+> +static const struct v4l2_ctrl_ops imx296_ctrl_ops = {
+> +	.s_ctrl = imx296_set_ctrl,
 > +};
 > +
-> +static int hi556_init_controls(struct hi556 *hi556)
-> +{
-> +	struct v4l2_ctrl_handler *ctrl_hdlr;
-> +	s64 exposure_max, h_blank;
-> +	int ret;
-> +
-> +	ctrl_hdlr = &hi556->ctrl_handler;
-> +	ret = v4l2_ctrl_handler_init(ctrl_hdlr, 8);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ctrl_hdlr->lock = &hi556->mutex;
-> +	hi556->link_freq = v4l2_ctrl_new_int_menu(ctrl_hdlr, &hi556_ctrl_ops,
-> +					   V4L2_CID_LINK_FREQ,
-> +					   ARRAY_SIZE(link_freq_menu_items) - 1,
-> +					   0, link_freq_menu_items);
-> +	if (hi556->link_freq)
-> +		hi556->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +
-> +	hi556->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, &hi556_ctrl_ops,
-> +				       V4L2_CID_PIXEL_RATE, 0,
-> +				       to_pixel_rate(HI556_LINK_FREQ_880MBPS),
-> +				       1,
-> +				       to_pixel_rate(HI556_LINK_FREQ_880MBPS));
-> +	hi556->vblank = v4l2_ctrl_new_std(ctrl_hdlr, &hi556_ctrl_ops,
-> +			  V4L2_CID_VBLANK,
-> +			  hi556->cur_mode->fll_min - hi556->cur_mode->height,
-> +			  HI556_FLL_MAX - hi556->cur_mode->height, 1,
-> +			  hi556->cur_mode->fll_def - hi556->cur_mode->height);
-> +
-> +	h_blank = hi556->cur_mode->llp - hi556->cur_mode->width;
-> +
-> +	hi556->hblank = v4l2_ctrl_new_std(ctrl_hdlr, &hi556_ctrl_ops,
-> +					   V4L2_CID_HBLANK, h_blank, h_blank, 1,
-> +					   h_blank);
-> +	if (hi556->hblank)
-> +		hi556->hblank->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-> +
-> +	v4l2_ctrl_new_std(ctrl_hdlr, &hi556_ctrl_ops, V4L2_CID_ANALOGUE_GAIN,
-> +			  HI556_ANAL_GAIN_MIN, HI556_ANAL_GAIN_MAX,
-> +			  HI556_ANAL_GAIN_STEP, HI556_ANAL_GAIN_MIN);
-> +	v4l2_ctrl_new_std(ctrl_hdlr, &hi556_ctrl_ops, V4L2_CID_DIGITAL_GAIN,
-> +			  HI556_DGTL_GAIN_MIN, HI556_DGTL_GAIN_MAX,
-> +			  HI556_DGTL_GAIN_STEP, HI556_DGTL_GAIN_DEFAULT);
-> +	exposure_max = hi556->cur_mode->fll_def - HI556_EXPOSURE_MAX_MARGIN;
-> +	hi556->exposure = v4l2_ctrl_new_std(ctrl_hdlr, &hi556_ctrl_ops,
-> +					     V4L2_CID_EXPOSURE,
-> +					     HI556_EXPOSURE_MIN, exposure_max,
-> +					     HI556_EXPOSURE_STEP,
-> +					     exposure_max);
-> +	v4l2_ctrl_new_std_menu_items(ctrl_hdlr, &hi556_ctrl_ops,
-> +				     V4L2_CID_TEST_PATTERN,
-> +				     ARRAY_SIZE(hi556_test_pattern_menu) - 1,
-> +				     0, 0, hi556_test_pattern_menu);
-> +	if (ctrl_hdlr->error)
-> +		return ctrl_hdlr->error;
-> +
-> +	hi556->sd.ctrl_handler = ctrl_hdlr;
-> +
-> +	return 0;
-> +}
-> +
-> +static void hi556_update_pad_format(const struct hi556_mode *mode,
-> +				     struct v4l2_mbus_framefmt *fmt)
-> +{
-> +	fmt->width = mode->width;
-> +	fmt->height = mode->height;
-> +	fmt->code = MEDIA_BUS_FMT_SGRBG10_1X10;
-> +	fmt->field = V4L2_FIELD_NONE;
-> +}
-> +
-> +static int hi556_start_streaming(struct hi556 *hi556)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
-> +	const struct hi556_reg_list *reg_list;
-> +	int link_freq_index, ret;
-> +
-> +	link_freq_index = hi556->cur_mode->link_freq_index;
-> +	reg_list = &link_freq_configs[link_freq_index].reg_list;
-> +	ret = hi556_write_reg_list(hi556, reg_list);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to set plls");
-> +		return ret;
-> +	}
-> +
-> +	reg_list = &hi556->cur_mode->reg_list;
-> +	ret = hi556_write_reg_list(hi556, reg_list);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to set mode");
-> +		return ret;
-> +	}
-> +
-> +	ret = __v4l2_ctrl_handler_setup(hi556->sd.ctrl_handler);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = hi556_write_reg(hi556, HI556_REG_MODE_SELECT,
-> +			       HI556_REG_VALUE_16BIT, HI556_MODE_STREAMING);
-> +
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to set stream");
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void hi556_stop_streaming(struct hi556 *hi556)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
-> +
-> +	if (hi556_write_reg(hi556, HI556_REG_MODE_SELECT,
-> +			     HI556_REG_VALUE_16BIT, HI556_MODE_STANDBY))
-> +		dev_err(&client->dev, "failed to set stream");
-> +}
-> +
-> +static int hi556_set_stream(struct v4l2_subdev *sd, int enable)
-> +{
-> +	struct hi556 *hi556 = to_hi556(sd);
-> +	struct i2c_client *client = v4l2_get_subdevdata(sd);
-> +	int ret = 0;
-> +
-> +	if (hi556->streaming == enable)
-> +		return 0;
-> +
-> +	mutex_lock(&hi556->mutex);
-> +	if (enable) {
-> +		ret = pm_runtime_get_sync(&client->dev);
-> +		if (ret < 0) {
-> +			pm_runtime_put_noidle(&client->dev);
-> +			mutex_unlock(&hi556->mutex);
-> +			return ret;
-> +		}
-> +
-> +		ret = hi556_start_streaming(hi556);
-> +		if (ret) {
-> +			enable = 0;
-> +			hi556_stop_streaming(hi556);
-> +			pm_runtime_put(&client->dev);
-> +		}
-> +	} else {
-> +		hi556_stop_streaming(hi556);
-> +		pm_runtime_put(&client->dev);
-> +	}
-> +
-> +	hi556->streaming = enable;
-> +	mutex_unlock(&hi556->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static int __maybe_unused hi556_suspend(struct device *dev)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct hi556 *hi556 = to_hi556(sd);
-> +
-> +	mutex_lock(&hi556->mutex);
-> +	if (hi556->streaming)
-> +		hi556_stop_streaming(hi556);
-> +
-> +	mutex_unlock(&hi556->mutex);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused hi556_resume(struct device *dev)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct hi556 *hi556 = to_hi556(sd);
-> +	int ret;
-> +
-> +	mutex_lock(&hi556->mutex);
-> +	if (hi556->streaming) {
-
-You could declare ret here...
-
-> +		ret = hi556_start_streaming(hi556);
-> +		if (ret) {
-> +			hi556->streaming = false;
-> +			hi556_stop_streaming(hi556);
-> +			mutex_unlock(&hi556->mutex);
-> +			return ret;
-
-...or drop return and initialise ret to zero. Either would be better.
-
-> +		}
-> +	}
-> +
-> +	mutex_unlock(&hi556->mutex);
-> +
-> +	return 0;
-> +}
-> +
-> +static int hi556_set_format(struct v4l2_subdev *sd,
-> +			     struct v4l2_subdev_pad_config *cfg,
-> +			     struct v4l2_subdev_format *fmt)
-> +{
-> +	struct hi556 *hi556 = to_hi556(sd);
-> +	const struct hi556_mode *mode;
-> +	s32 vblank_def, h_blank;
-> +
-> +	mode = v4l2_find_nearest_size(supported_modes,
-> +				      ARRAY_SIZE(supported_modes), width,
-> +				      height, fmt->format.width,
-> +				      fmt->format.height);
-> +
-> +	mutex_lock(&hi556->mutex);
-> +	hi556_update_pad_format(mode, &fmt->format);
-> +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
-> +		*v4l2_subdev_get_try_format(sd, cfg, fmt->pad) = fmt->format;
-> +	} else {
-> +		hi556->cur_mode = mode;
-> +		__v4l2_ctrl_s_ctrl(hi556->link_freq, mode->link_freq_index);
-> +		__v4l2_ctrl_s_ctrl_int64(hi556->pixel_rate,
-> +					 to_pixel_rate(mode->link_freq_index));
-> +
-> +		/* Update limits and set FPS to default */
-> +		vblank_def = mode->fll_def - mode->height;
-> +		__v4l2_ctrl_modify_range(hi556->vblank,
-> +					 mode->fll_min - mode->height,
-> +					 HI556_FLL_MAX - mode->height, 1,
-> +					 vblank_def);
-> +		__v4l2_ctrl_s_ctrl(hi556->vblank, vblank_def);
-> +
-> +		h_blank = hi556->cur_mode->llp - hi556->cur_mode->width;
-> +
-> +		__v4l2_ctrl_modify_range(hi556->hblank, h_blank, h_blank, 1,
-> +					 h_blank);
-> +	}
-> +
-> +	mutex_unlock(&hi556->mutex);
-> +
-> +	return 0;
-> +}
-> +
-> +static int hi556_get_format(struct v4l2_subdev *sd,
-> +			     struct v4l2_subdev_pad_config *cfg,
-> +			     struct v4l2_subdev_format *fmt)
-> +{
-> +	struct hi556 *hi556 = to_hi556(sd);
-> +
-> +	mutex_lock(&hi556->mutex);
-> +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
-> +		fmt->format = *v4l2_subdev_get_try_format(&hi556->sd, cfg,
-> +							  fmt->pad);
-> +	else
-> +		hi556_update_pad_format(hi556->cur_mode, &fmt->format);
-> +
-> +	mutex_unlock(&hi556->mutex);
-> +
-> +	return 0;
-> +}
-> +
-> +static int hi556_enum_mbus_code(struct v4l2_subdev *sd,
+> +static int imx296_enum_mbus_code(struct v4l2_subdev *sd,
 > +				 struct v4l2_subdev_pad_config *cfg,
 > +				 struct v4l2_subdev_mbus_code_enum *code)
 > +{
-> +	if (code->index > 0)
-> +		return -EINVAL;
-> +
-> +	code->code = MEDIA_BUS_FMT_SGRBG10_1X10;
+> +	code->code = IMX296_DEFAULT_FORMAT;
 > +
 > +	return 0;
 > +}
 > +
-> +static int hi556_enum_frame_size(struct v4l2_subdev *sd,
-> +				  struct v4l2_subdev_pad_config *cfg,
-> +				  struct v4l2_subdev_frame_size_enum *fse)
+> +static int imx296_get_fmt(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_pad_config *cfg,
+> +			  struct v4l2_subdev_format *fmt)
 > +{
-> +	if (fse->index >= ARRAY_SIZE(supported_modes))
-> +		return -EINVAL;
+> +	struct imx296 *imx296 = to_imx296(sd);
+> +	struct v4l2_mbus_framefmt *framefmt;
 > +
-> +	if (fse->code != MEDIA_BUS_FMT_SGRBG10_1X10)
-> +		return -EINVAL;
+> +	mutex_lock(&imx296->lock);
 > +
-> +	fse->min_width = supported_modes[fse->index].width;
-> +	fse->max_width = fse->min_width;
-> +	fse->min_height = supported_modes[fse->index].height;
-> +	fse->max_height = fse->min_height;
+> +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY)
+> +		framefmt = v4l2_subdev_get_try_format(&imx296->sd, cfg,
+> +						      fmt->pad);
+> +	else
+> +		framefmt = &imx296->current_format;
+> +
+> +	fmt->format = *framefmt;
+> +
+> +	mutex_unlock(&imx296->lock);
 > +
 > +	return 0;
 > +}
 > +
-> +static int hi556_open(struct v4l2_subdev *sd, struct v4l2_subdev_fh *fh)
+> +static int imx296_set_fmt(struct v4l2_subdev *sd,
+> +			  struct v4l2_subdev_pad_config *cfg,
+> +			  struct v4l2_subdev_format *fmt)
 > +{
-> +	struct hi556 *hi556 = to_hi556(sd);
-> +
-> +	mutex_lock(&hi556->mutex);
-> +	hi556_update_pad_format(&supported_modes[0],
-> +				 v4l2_subdev_get_try_format(sd, fh->pad, 0));
-
-Could you use the init_cfg pad op instead, please?
-
-> +	mutex_unlock(&hi556->mutex);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct v4l2_subdev_video_ops hi556_video_ops = {
-> +	.s_stream = hi556_set_stream,
-> +};
-> +
-> +static const struct v4l2_subdev_pad_ops hi556_pad_ops = {
-> +	.set_fmt = hi556_set_format,
-> +	.get_fmt = hi556_get_format,
-> +	.enum_mbus_code = hi556_enum_mbus_code,
-> +	.enum_frame_size = hi556_enum_frame_size,
-> +};
-> +
-> +static const struct v4l2_subdev_ops hi556_subdev_ops = {
-> +	.video = &hi556_video_ops,
-> +	.pad = &hi556_pad_ops,
-> +};
-> +
-> +static const struct media_entity_operations hi556_subdev_entity_ops = {
-> +	.link_validate = v4l2_subdev_link_validate,
-> +};
-> +
-> +static const struct v4l2_subdev_internal_ops hi556_internal_ops = {
-> +	.open = hi556_open,
-> +};
-> +
-> +static int hi556_identify_module(struct hi556 *hi556)
-> +{
-> +	struct i2c_client *client = v4l2_get_subdevdata(&hi556->sd);
-> +	int ret;
-> +	u32 val;
-> +
-> +	ret = hi556_read_reg(hi556, HI556_REG_CHIP_ID,
-> +			      HI556_REG_VALUE_16BIT, &val);
-
-Alignment.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (val != HI556_CHIP_ID) {
-> +		dev_err(&client->dev, "chip id mismatch: %x!=%x",
-> +			HI556_CHIP_ID, val);
-> +		return -ENXIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int hi556_check_hwcfg(struct device *dev)
-> +{
-> +	struct fwnode_handle *ep;
-> +	struct fwnode_handle *fwnode = dev_fwnode(dev);
-> +	struct v4l2_fwnode_endpoint bus_cfg = {
-> +		.bus_type = V4L2_MBUS_CSI2_DPHY
-> +	};
-> +	u32 mclk;
+> +	struct imx296 *imx296 = to_imx296(sd);
+> +	const struct imx296_mode *mode;
+> +	struct v4l2_mbus_framefmt *format;
 > +	int ret = 0;
-> +	unsigned int i, j;
 > +
-> +	if (!fwnode)
-> +		return -ENXIO;
+> +	mutex_lock(&imx296->lock);
 > +
-> +	ret = fwnode_property_read_u32(fwnode, "clock-frequency", &mclk);
+> +	mode = v4l2_find_nearest_size(imx296_modes,
+> +				      ARRAY_SIZE(imx296_modes),
+> +				      width, height,
+> +				      fmt->format.width, fmt->format.height);
 > +
-
-No need for a newline.
-
-> +	if (ret) {
-> +		dev_err(dev, "can't get clock frequency");
-> +		return ret;
+> +	fmt->format.width = mode->width;
+> +	fmt->format.height = mode->height;
+> +
+> +	fmt->format.code = IMX296_DEFAULT_FORMAT;
+> +	fmt->format.field = V4L2_FIELD_NONE;
+> +
+> +	if (fmt->which == V4L2_SUBDEV_FORMAT_TRY) {
+> +		format = v4l2_subdev_get_try_format(sd, cfg, fmt->pad);
+> +	} else {
+> +		format = &imx296->current_format;
+> +		__v4l2_ctrl_s_ctrl_int64(imx296->pixel_rate, mode->pixel_rate);
+> +
+> +		imx296->current_mode = mode;
 > +	}
 > +
-> +	if (ret) {
-> +		dev_err(dev, "can't get clock frequency");
-> +		return ret;
-> +	}
-
-Oops. There's no harm from making it really, really sure it didn't fail
-but... :-)
-
+> +	*format = fmt->format;
 > +
-> +	if (mclk != HI556_MCLK) {
-> +		dev_err(dev, "external clock %d is not supported", mclk);
-> +		return -EINVAL;
-> +	}
-> +
-> +	ep = fwnode_graph_get_next_endpoint(fwnode, NULL);
-> +	if (!ep)
-> +		return -ENXIO;
-> +
-> +	ret = v4l2_fwnode_endpoint_alloc_parse(ep, &bus_cfg);
-> +	fwnode_handle_put(ep);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != HI556_DATA_LANES) {
-
-How many lanes does the sensor support?
-
-> +		dev_err(dev, "number of CSI2 data lanes %d is not supported",
-> +			bus_cfg.bus.mipi_csi2.num_data_lanes);
-> +		ret = -EINVAL;
-> +		goto check_hwcfg_error;
-> +	}
-> +
-> +	if (!bus_cfg.nr_of_link_frequencies) {
-> +		dev_err(dev, "no link frequencies defined");
-> +		ret = -EINVAL;
-> +		goto check_hwcfg_error;
-> +	}
-> +
-> +	for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); i++) {
-> +		for (j = 0; j < bus_cfg.nr_of_link_frequencies; j++) {
-> +			if (link_freq_menu_items[i] ==
-> +				bus_cfg.link_frequencies[j])
-> +				break;
-> +		}
-> +
-> +		if (j == bus_cfg.nr_of_link_frequencies) {
-> +			dev_err(dev, "no link frequency %lld supported",
-> +				link_freq_menu_items[i]);
-> +			ret = -EINVAL;
-> +			goto check_hwcfg_error;
-> +		}
-> +	}
-> +
-> +check_hwcfg_error:
-> +	v4l2_fwnode_endpoint_free(&bus_cfg);
+> +	mutex_unlock(&imx296->lock);
 > +
 > +	return ret;
 > +}
 > +
-> +static int hi556_remove(struct i2c_client *client)
+> +static int imx296_entity_init_cfg(struct v4l2_subdev *subdev,
+> +				  struct v4l2_subdev_pad_config *cfg)
+> +{
+> +	struct v4l2_subdev_format fmt = { 0 };
+> +
+> +	fmt.which = cfg ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
+> +	fmt.format.width = 1440;
+> +	fmt.format.height = 1088;
+> +
+> +	imx296_set_fmt(subdev, cfg, &fmt);
+> +
+> +	return 0;
+> +}
+> +
+> +/* Start streaming */
+> +static int imx296_start_streaming(struct imx296 *imx296)
+> +{
+> +	int ret;
+> +
+> +	/* Set init register settings */
+> +	ret = imx296_set_register_array(imx296, imx296_global_init_settings,
+> +				ARRAY_SIZE(imx296_global_init_settings));
+> +	if (ret < 0) {
+> +		dev_err(imx296->dev, "Could not set init registers\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Apply default values of current mode */
+> +	ret = imx296_set_register_array(imx296, imx296->current_mode->data,
+> +					imx296->current_mode->data_size);
+> +	if (ret < 0) {
+> +		dev_err(imx296->dev, "Could not set current mode\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Apply customized values from user */
+> +	ret = v4l2_ctrl_handler_setup(imx296->sd.ctrl_handler);
+> +	if (ret) {
+> +		dev_err(imx296->dev, "Could not sync v4l2 controls\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = imx296_write_reg(imx296, IMX296_STANDBY, 0x00);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	msleep(30);
+> +
+> +	/* Start streaming */
+> +	return imx296_write_reg(imx296, IMX296_XMSTA, 0x00);
+> +}
+> +
+> +static int imx296_set_stream(struct v4l2_subdev *sd, int enable)
+> +{
+> +	struct imx296 *imx296 = to_imx296(sd);
+> +	int ret;
+> +
+> +	if (enable) {
+> +		ret = pm_runtime_get_sync(imx296->dev);
+> +		if (ret < 0) {
+> +			pm_runtime_put_noidle(imx296->dev);
+> +			return ret;
+> +		}
+> +
+> +		ret = imx296_start_streaming(imx296);
+> +		if (ret) {
+> +			dev_err(imx296->dev, "Start stream failed\n");
+> +			pm_runtime_put(imx296->dev);
+> +			return ret;
+> +		}
+> +	} else {
+> +		imx296_stop_streaming(imx296);
+> +		pm_runtime_put(imx296->dev);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx296_get_regulators(struct device *dev, struct imx296 *imx296)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < IMX296_NUM_SUPPLIES; i++)
+> +		imx296->supplies[i].supply = imx296_supply_name[i];
+> +
+> +	return devm_regulator_bulk_get(dev, IMX296_NUM_SUPPLIES,
+> +				       imx296->supplies);
+> +}
+> +
+> +static int imx296_power_on(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct imx296 *imx296 = to_imx296(sd);
+> +	int ret;
+> +
+> +	ret = regulator_bulk_enable(IMX296_NUM_SUPPLIES, imx296->supplies);
+> +	if (ret) {
+> +		dev_err(imx296->dev, "Failed to enable regulators\n");
+> +		return ret;
+> +	}
+> +
+> +	usleep_range(1, 2);
+> +
+> +	gpiod_set_value_cansleep(imx296->rst_gpio, 1);
+> +
+> +	usleep_range(1, 2);
+> +
+> +	ret = clk_prepare_enable(imx296->mclk);
+> +	if (ret) {
+> +		dev_err(imx296->dev, "Failed to enable clock\n");
+> +		return ret;
+> +	}
+> +
+> +	usleep_range(30000, 31000);
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx296_power_off(struct device *dev)
+> +{
+> +	struct i2c_client *client = to_i2c_client(dev);
+> +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
+> +	struct imx296 *imx296 = to_imx296(sd);
+> +
+> +	clk_disable_unprepare(imx296->mclk);
+> +	gpiod_set_value_cansleep(imx296->rst_gpio, 0);
+> +	regulator_bulk_disable(IMX296_NUM_SUPPLIES, imx296->supplies);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops imx296_pm_ops = {
+> +	SET_RUNTIME_PM_OPS(imx296_power_on, imx296_power_off, NULL)
+> +};
+> +
+> +static const struct v4l2_subdev_video_ops imx296_video_ops = {
+> +	.s_stream = imx296_set_stream,
+> +};
+> +
+> +static const struct v4l2_subdev_pad_ops imx296_pad_ops = {
+> +	.init_cfg = imx296_entity_init_cfg,
+> +	.enum_mbus_code = imx296_enum_mbus_code,
+> +	.get_fmt = imx296_get_fmt,
+> +	.set_fmt = imx296_set_fmt,
+> +};
+> +
+> +static const struct v4l2_subdev_ops imx296_subdev_ops = {
+> +	.video = &imx296_video_ops,
+> +	.pad = &imx296_pad_ops,
+> +};
+> +
+> +static const struct media_entity_operations imx296_subdev_entity_ops = {
+> +	.link_validate = v4l2_subdev_link_validate,
+> +};
+> +
+> +static int imx296_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct fwnode_handle *endpoint;
+> +	struct imx296 *imx296;
+> +	u32 mclk_freq;
+> +	int ret;
+> +
+> +	imx296 = devm_kzalloc(dev, sizeof(*imx296), GFP_KERNEL);
+> +	if (!imx296)
+> +		return -ENOMEM;
+> +
+> +	imx296->dev = dev;
+> +	imx296->regmap = devm_regmap_init_i2c(client, &imx296_regmap_config);
+> +	if (IS_ERR(imx296->regmap)) {
+> +		dev_err(dev, "Unable to initialize I2C\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(dev), NULL);
+> +	if (!endpoint) {
+> +		dev_err(dev, "Endpoint node not found\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &imx296->ep);
+
+Please allocate ep in stack instead, there's no need to keep it around
+further as the driver doesn't use it. Also initialise the bus_type field;
+support for figuring it out is there just for old drivers.
+
+> +	fwnode_handle_put(endpoint);
+> +	if (ret) {
+> +		dev_err(dev, "Parsing endpoint node failed\n");
+> +		goto free_err;
+> +	}
+> +
+> +	/* Only CSI2 is supported for now */
+> +	if (imx296->ep.bus_type != V4L2_MBUS_CSI2_DPHY) {
+
+After setting the bus_type field, you can omit this check.
+
+> +		dev_err(dev, "Unsupported bus type, should be CSI2\n");
+> +		ret = -EINVAL;
+> +		goto free_err;
+> +	}
+> +
+> +	/* Set default mode to max resolution */
+> +	imx296->current_mode = &imx296_modes[0];
+> +
+> +	/* get system clock (mclk) */
+> +	imx296->mclk = devm_clk_get(dev, "mclk");
+> +	if (IS_ERR(imx296->mclk)) {
+> +		dev_err(dev, "Could not get mclk");
+> +		ret = PTR_ERR(imx296->mclk);
+> +		goto free_err;
+> +	}
+> +
+> +	ret = fwnode_property_read_u32(dev_fwnode(dev), "clock-frequency",
+> +				       &mclk_freq);
+> +	if (ret) {
+> +		dev_err(dev, "Could not get mclk frequency\n");
+> +		goto free_err;
+> +	}
+> +
+> +	/* external clock must be 37.125 MHz */
+> +	if (mclk_freq != 37125000) {
+> +		dev_err(dev, "External clock frequency %u is not supported\n",
+> +			mclk_freq);
+> +		ret = -EINVAL;
+> +		goto free_err;
+> +	}
+> +
+> +	ret = clk_set_rate(imx296->mclk, mclk_freq);
+> +	if (ret) {
+> +		dev_err(dev, "Could not set mclk frequency\n");
+> +		goto free_err;
+> +	}
+> +
+> +	ret = imx296_get_regulators(dev, imx296);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Cannot get regulators\n");
+> +		goto free_err;
+> +	}
+> +
+> +	imx296->rst_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_ASIS);
+> +	if (IS_ERR(imx296->rst_gpio)) {
+> +		dev_err(dev, "Cannot get reset gpio\n");
+> +		ret = PTR_ERR(imx296->rst_gpio);
+> +		goto free_err;
+> +	}
+> +
+> +	mutex_init(&imx296->lock);
+> +
+> +	v4l2_ctrl_handler_init(&imx296->ctrls, 3);
+> +
+> +	v4l2_ctrl_new_std(&imx296->ctrls, &imx296_ctrl_ops,
+> +			  V4L2_CID_GAIN, 0, 72, 1, 0);
+> +
+> +	imx296->pixel_rate = v4l2_ctrl_new_std(&imx296->ctrls, &imx296_ctrl_ops,
+> +					       V4L2_CID_PIXEL_RATE, 1,
+> +					       INT_MAX, 1,
+> +					       imx296_modes[0].pixel_rate);
+> +
+> +	imx296->sd.ctrl_handler = &imx296->ctrls;
+> +
+> +	if (imx296->ctrls.error) {
+> +		dev_err(dev, "Control initialization error %d\n",
+> +			imx296->ctrls.error);
+> +		ret = imx296->ctrls.error;
+> +		goto free_ctrl;
+> +	}
+> +
+> +	v4l2_i2c_subdev_init(&imx296->sd, client, &imx296_subdev_ops);
+> +	imx296->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+> +	imx296->sd.dev = &client->dev;
+> +	imx296->sd.entity.ops = &imx296_subdev_entity_ops;
+> +	imx296->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
+> +
+> +	imx296->pad.flags = MEDIA_PAD_FL_SOURCE;
+> +	ret = media_entity_pads_init(&imx296->sd.entity, 1, &imx296->pad);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Could not register media entity\n");
+> +		goto free_ctrl;
+> +	}
+> +
+> +	ret = v4l2_async_register_subdev(&imx296->sd);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Could not register v4l2 device\n");
+> +		goto free_entity;
+> +	}
+> +
+> +	/* Power on the device to match runtime PM state below */
+> +	ret = imx296_power_on(dev);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Could not power on the device\n");
+> +		goto free_entity;
+> +	}
+> +
+> +	pm_runtime_set_active(dev);
+> +	pm_runtime_enable(dev);
+> +	pm_runtime_idle(dev);
+> +
+> +	v4l2_fwnode_endpoint_free(&imx296->ep);
+> +
+> +	return 0;
+> +
+> +free_entity:
+> +	media_entity_cleanup(&imx296->sd.entity);
+> +free_ctrl:
+> +	v4l2_ctrl_handler_free(&imx296->ctrls);
+> +	mutex_destroy(&imx296->lock);
+> +free_err:
+> +	v4l2_fwnode_endpoint_free(&imx296->ep);
+> +
+> +	return ret;
+> +}
+> +
+> +static int imx296_remove(struct i2c_client *client)
 > +{
 > +	struct v4l2_subdev *sd = i2c_get_clientdata(client);
-> +	struct hi556 *hi556 = to_hi556(sd);
+> +	struct imx296 *imx296 = to_imx296(sd);
 > +
 > +	v4l2_async_unregister_subdev(sd);
 > +	media_entity_cleanup(&sd->entity);
 > +	v4l2_ctrl_handler_free(sd->ctrl_handler);
-> +	pm_runtime_disable(&client->dev);
-> +	mutex_destroy(&hi556->mutex);
+> +
+> +	mutex_destroy(&imx296->lock);
+> +
+> +	pm_runtime_disable(imx296->dev);
+> +	if (!pm_runtime_status_suspended(imx296->dev))
+> +		imx296_power_off(imx296->dev);
+> +	pm_runtime_set_suspended(imx296->dev);
 > +
 > +	return 0;
 > +}
 > +
-> +static int hi556_probe(struct i2c_client *client)
-> +{
-> +	struct hi556 *hi556;
-> +	int ret;
-> +
-> +	ret = hi556_check_hwcfg(&client->dev);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to check HW configuration: %d",
-> +			ret);
-> +		return ret;
-> +	}
-> +
-> +	hi556 = devm_kzalloc(&client->dev, sizeof(*hi556), GFP_KERNEL);
-> +	if (!hi556)
-> +		return -ENOMEM;
-> +
-> +	v4l2_i2c_subdev_init(&hi556->sd, client, &hi556_subdev_ops);
-> +	ret = hi556_identify_module(hi556);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to find sensor: %d", ret);
-> +		return ret;
-> +	}
-> +
-> +	mutex_init(&hi556->mutex);
-> +	hi556->cur_mode = &supported_modes[0];
-> +	ret = hi556_init_controls(hi556);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to init controls: %d", ret);
-> +		goto probe_error_v4l2_ctrl_handler_free;
-> +	}
-> +
-> +	hi556->sd.internal_ops = &hi556_internal_ops;
-> +	hi556->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
-> +	hi556->sd.entity.ops = &hi556_subdev_entity_ops;
-> +	hi556->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-> +	hi556->pad.flags = MEDIA_PAD_FL_SOURCE;
-> +	ret = media_entity_pads_init(&hi556->sd.entity, 1, &hi556->pad);
-> +	if (ret) {
-> +		dev_err(&client->dev, "failed to init entity pads: %d", ret);
-> +		goto probe_error_v4l2_ctrl_handler_free;
-> +	}
-> +
-> +	ret = v4l2_async_register_subdev_sensor_common(&hi556->sd);
-> +	if (ret < 0) {
-> +		dev_err(&client->dev, "failed to register V4L2 subdev: %d",
-> +			ret);
-> +		goto probe_error_media_entity_cleanup;
-> +	}
-> +
-> +	/*
-> +	 * Device is already turned on by i2c-core with ACPI domain PM.
-> +	 * Enable runtime PM and turn off the device.
-> +	 */
-
-This is generic for all I²C devices on ACPI. We don't need to document that
-here; please drop the comment.
-
-> +	pm_runtime_set_active(&client->dev);
-> +	pm_runtime_enable(&client->dev);
-> +	pm_runtime_idle(&client->dev);
-> +
-> +	return 0;
-> +
-> +probe_error_media_entity_cleanup:
-> +	media_entity_cleanup(&hi556->sd.entity);
-> +
-> +probe_error_v4l2_ctrl_handler_free:
-> +	v4l2_ctrl_handler_free(hi556->sd.ctrl_handler);
-> +	mutex_destroy(&hi556->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct dev_pm_ops hi556_pm_ops = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(hi556_suspend, hi556_resume)
+> +static const struct of_device_id imx296_of_match[] = {
+> +	{ .compatible = "sony,imx296" },
+> +	{ /* sentinel */ }
 > +};
+> +MODULE_DEVICE_TABLE(of, imx296_of_match);
 > +
-> +#ifdef CONFIG_ACPI
-> +static const struct acpi_device_id hi556_acpi_ids[] = {
-> +	{"INT3537"},
-> +	{}
-> +};
-> +
-> +MODULE_DEVICE_TABLE(acpi, hi556_acpi_ids);
-> +#endif
-> +
-> +static struct i2c_driver hi556_i2c_driver = {
+> +static struct i2c_driver imx296_i2c_driver = {
+> +	.probe_new  = imx296_probe,
+> +	.remove = imx296_remove,
 > +	.driver = {
-> +		.name = "hi556",
-> +		.pm = &hi556_pm_ops,
-> +		.acpi_match_table = ACPI_PTR(hi556_acpi_ids),
+> +		.name  = "imx296",
+> +		.pm = &imx296_pm_ops,
+> +		.of_match_table = of_match_ptr(imx296_of_match),
+
+No need for of_match_ptr here.
+
 > +	},
-> +	.probe_new = hi556_probe,
-> +	.remove = hi556_remove,
 > +};
 > +
-> +module_i2c_driver(hi556_i2c_driver);
+> +module_i2c_driver(imx296_i2c_driver);
 > +
-> +MODULE_AUTHOR("Shawn Tu <shawnx.tu@intel.com>");
-> +MODULE_DESCRIPTION("Hynix HI556 sensor driver");
+> +MODULE_DESCRIPTION("Sony IMX296 CMOS Image Sensor Driver");
+> +MODULE_AUTHOR("FRAMOS GmbH");
+> +MODULE_AUTHOR("Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>");
 > +MODULE_LICENSE("GPL v2");
 
 -- 
