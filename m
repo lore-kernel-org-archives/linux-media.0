@@ -2,89 +2,97 @@ Return-Path: <SRS0=2gNH=YX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_SANE_2
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EF72CA9EAF
-	for <linux-media@archiver.kernel.org>; Wed, 30 Oct 2019 08:36:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 237C7C47E49
+	for <linux-media@archiver.kernel.org>; Wed, 30 Oct 2019 09:00:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 6D8DC20856
-	for <linux-media@archiver.kernel.org>; Wed, 30 Oct 2019 08:36:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E9BE42087F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Oct 2019 09:00:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726084AbfJ3Igd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Oct 2019 04:36:33 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:51778 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726028AbfJ3Igd (ORCPT
+        id S1726065AbfJ3JAe (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Oct 2019 05:00:34 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:24213 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726028AbfJ3JAe (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Oct 2019 04:36:33 -0400
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 71E17634C87;
-        Wed, 30 Oct 2019 10:35:45 +0200 (EET)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1iPjSC-0001cI-Hz; Wed, 30 Oct 2019 10:35:44 +0200
-Date:   Wed, 30 Oct 2019 10:35:44 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     mchehab@kernel.org, robh+dt@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        c.barrett@framos.com, a.brela@framos.com, peter.griffin@linaro.org
-Subject: Re: [PATCH v3 2/2] media: i2c: Add IMX296 CMOS image sensor driver
-Message-ID: <20191030083544.GG5017@valkosipuli.retiisi.org.uk>
-References: <20191025175908.14260-1-manivannan.sadhasivam@linaro.org>
- <20191025175908.14260-3-manivannan.sadhasivam@linaro.org>
- <20191029121320.GA5017@valkosipuli.retiisi.org.uk>
- <20191030062634.GA11637@Mani-XPS-13-9360>
+        Wed, 30 Oct 2019 05:00:34 -0400
+X-UUID: bc5682e452c14115802eac09a742e131-20191030
+X-UUID: bc5682e452c14115802eac09a742e131-20191030
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <dongchun.zhu@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1767353363; Wed, 30 Oct 2019 17:00:24 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 30 Oct
+ 2019 17:00:22 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 30 Oct 2019 17:00:21 +0800
+Message-ID: <1572426023.21623.257.camel@mhfsdcap03>
+Subject: Re: [V2, 1/2] media: dt-bindings: media: i2c: Add bindings for
+ ov8856
+From:   Dongchun Zhu <dongchun.zhu@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        <mchehab@kernel.org>, <mark.rutland@arm.com>,
+        <drinkcat@chromium.org>, <tfiga@chromium.org>,
+        <matthias.bgg@gmail.com>, <bingbu.cao@intel.com>,
+        <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <sj.huang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <louis.kuo@mediatek.com>, <shengnan.wang@mediatek.com>
+Date:   Wed, 30 Oct 2019 17:00:23 +0800
+In-Reply-To: <20190917144412.GA23952@bogus>
+References: <20190910130446.26413-1-dongchun.zhu@mediatek.com>
+         <20190910130446.26413-2-dongchun.zhu@mediatek.com>
+         <20190910173743.GI2680@smile.fi.intel.com>
+         <20190917120205.GO5781@paasikivi.fi.intel.com>
+         <20190917144412.GA23952@bogus>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191030062634.GA11637@Mani-XPS-13-9360>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: EBDC59C3BCA94102C3AB13CA12A967D7417CB8D1D0988A04DF1CB39C3D08FD852000:8
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 11:56:34AM +0530, Manivannan Sadhasivam wrote:
-> Hi Sakari,
-> 
-> Thanks for the review!
+Hi Rob,
 
-You're welcome!
-
-> 
-> On Tue, Oct 29, 2019 at 02:13:20PM +0200, Sakari Ailus wrote:
-> > Hi Manivannan,
+On Tue, 2019-09-17 at 09:44 -0500, Rob Herring wrote:
+> On Tue, Sep 17, 2019 at 03:02:06PM +0300, Sakari Ailus wrote:
+> > On Tue, Sep 10, 2019 at 08:37:43PM +0300, Andy Shevchenko wrote:
+> > > On Tue, Sep 10, 2019 at 09:04:45PM +0800, dongchun.zhu@mediatek.com wrote:
+> > > > From: Dongchun Zhu <dongchun.zhu@mediatek.com>
+> > > > 
+> > > > This patch adds device tree bindings documentation for the ov8856 CMOS
+> > > > image sensor.
+> > > 
+> > > New bindings in YAML, please.
 > > 
-> > On Fri, Oct 25, 2019 at 11:29:08PM +0530, Manivannan Sadhasivam wrote:
-
-...
-
-> > > +static struct i2c_driver imx296_i2c_driver = {
-> > > +	.probe_new  = imx296_probe,
-> > > +	.remove = imx296_remove,
-> > > +	.driver = {
-> > > +		.name  = "imx296",
-> > > +		.pm = &imx296_pm_ops,
-> > > +		.of_match_table = of_match_ptr(imx296_of_match),
-> > 
-> > No need for of_match_ptr here.
-> > 
+> > My understanding is text documents are still fine.
 > 
-> AFAIK, of_match_ptr is needed for !OF case. Else we need to manually add
-> #ifdef clut to make it NULL. Does the situation changed now?
+> Schema are preferred, but still up to the subsystem for now.
+>  
 
-ACPI based systems can also make use of the compatible string for matching
-drivers with devices through of_match_table. This may sometimes be the most
-practical approach. I.e. you don't need ifdefs either.
+It seems that there are no bindings in YAML under the path:
+Documentation/devicetree/bindings/media/i2c.
+So we would keep the text documents for OV8856.
 
--- 
-Regards,
+> > We don't have things like graph.txt or video-interfaces.txt in YAML yet
+> > either.
+> 
+> That doesn't really matter too much. You can assume common properties 
+> will have a common schema and just define what's device specific. The 
+> device specific bindings have to define 'port' or 'port@N' nodes.
+> 
+> Rob
 
-Sakari Ailus
+
