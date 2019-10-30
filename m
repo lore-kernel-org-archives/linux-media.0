@@ -2,124 +2,125 @@ Return-Path: <SRS0=2gNH=YX=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 225B9CA9EC5
-	for <linux-media@archiver.kernel.org>; Wed, 30 Oct 2019 20:55:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2919CA9ECF
+	for <linux-media@archiver.kernel.org>; Wed, 30 Oct 2019 22:49:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 0024F2067D
-	for <linux-media@archiver.kernel.org>; Wed, 30 Oct 2019 20:55:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 870F52190F
+	for <linux-media@archiver.kernel.org>; Wed, 30 Oct 2019 22:49:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="kR+tPouB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726953AbfJ3UzK (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 30 Oct 2019 16:55:10 -0400
-Received: from mga02.intel.com ([134.134.136.20]:61904 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726384AbfJ3UzK (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 30 Oct 2019 16:55:10 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 13:55:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,248,1569308400"; 
-   d="scan'208";a="203310055"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 30 Oct 2019 13:55:00 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1iPuzb-0005r0-Me; Thu, 31 Oct 2019 04:54:59 +0800
-Date:   Thu, 31 Oct 2019 04:54:10 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Shawnx Tu <shawnx.tu@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
-        sakari.ailus@linux.intel.com, andy.yeh@intel.com,
-        shawnx.tu@intel.com
-Subject: Re: [PATCH v1] hi556: Add support for Hi-556 sensor
-Message-ID: <201910310426.KIEyC5Km%lkp@intel.com>
-References: <1572338943-1855-1-git-send-email-shawnx.tu@intel.com>
+        id S1727579AbfJ3Wtw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 30 Oct 2019 18:49:52 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:5281 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727695AbfJ3Wtu (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 30 Oct 2019 18:49:50 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dba13920001>; Wed, 30 Oct 2019 15:49:54 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 30 Oct 2019 15:49:47 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 30 Oct 2019 15:49:47 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 30 Oct
+ 2019 22:49:47 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 30 Oct 2019 22:49:45 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dba13880001>; Wed, 30 Oct 2019 15:49:45 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 10/19] fs/io_uring: set FOLL_PIN via pin_user_pages()
+Date:   Wed, 30 Oct 2019 15:49:21 -0700
+Message-ID: <20191030224930.3990755-11-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191030224930.3990755-1-jhubbard@nvidia.com>
+References: <20191030224930.3990755-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1572338943-1855-1-git-send-email-shawnx.tu@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1572475794; bh=bbL8FR4bzETk+x2+h29SWzIPj5uQjRkW4dL7+03upow=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=kR+tPouBYC0ki827JDMeuNTByE9oIS5IDkovYzuvxCfKraeRE1xhbD+GOuKjda4Em
+         wTplOT5bMiWa8BiaEHL3DKSpG8hqxFlrmCesFeMnbUYq9P1VfB5Aknw2LfXHZadx61
+         XIn5Hk9/d25I2iGTdlvgsBAJtZ42RCNbPATO9yzUrOBld+IU2VDQsYVK6KL9TsCU6a
+         YxhKY4Qm/Nq4yZ1x82Ms8dt1DPfBsg0RcS/BQFOIl5tkHUes2ShpUz9fJI0YZorwvG
+         K9BJvrNgryOUaUnfVnmo/oNPgkf3tG6AdeuQiOhCRbBpph8T9Ytab2k7nIUs3cE6Z5
+         zqKFG6B2aYtEA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Shawnx,
+Convert fs/io_uring to use the new pin_user_pages() call, which sets
+FOLL_PIN. Setting FOLL_PIN is now required for code that requires
+tracking of pinned pages, and therefore for any code that calls
+put_user_page().
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on linuxtv-media/master]
-[cannot apply to v5.4-rc5]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-
-url:    https://github.com/0day-ci/linux/commits/Shawnx-Tu/hi556-Add-support-for-Hi-556-sensor/20191031-033403
-base:   git://linuxtv.org/media_tree.git master
-reproduce: make htmldocs
-
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> drivers/media/i2c/Kconfig:582: syntax error
-   drivers/media/i2c/Kconfig:581:warning: ignoring unsupported character ','
-   drivers/media/i2c/Kconfig:581:warning: ignoring unsupported character ':'
->> drivers/media/i2c/Kconfig:581: unknown statement "To"
-   drivers/media/i2c/Kconfig:582:warning: ignoring unsupported character '.'
->> drivers/media/i2c/Kconfig:582: unknown statement "module"
-   make[2]: *** [allnoconfig] Error 1
-   make[1]: *** [allnoconfig] Error 2
-   make: *** [sub-make] Error 2
-   4 real  2 user  0 sys  54.06% cpu 	make allnoconfig
---
->> drivers/media/i2c/Kconfig:582: syntax error
-   drivers/media/i2c/Kconfig:581:warning: ignoring unsupported character ','
-   drivers/media/i2c/Kconfig:581:warning: ignoring unsupported character ':'
->> drivers/media/i2c/Kconfig:581: unknown statement "To"
-   drivers/media/i2c/Kconfig:582:warning: ignoring unsupported character '.'
->> drivers/media/i2c/Kconfig:582: unknown statement "module"
-   make[2]: *** [oldconfig] Error 1
-   make[1]: *** [oldconfig] Error 2
-   make: *** [sub-make] Error 2
-   4 real  2 user  0 sys  57.98% cpu 	make oldconfig
---
->> drivers/media/i2c/Kconfig:582: syntax error
-   drivers/media/i2c/Kconfig:581:warning: ignoring unsupported character ','
-   drivers/media/i2c/Kconfig:581:warning: ignoring unsupported character ':'
->> drivers/media/i2c/Kconfig:581: unknown statement "To"
-   drivers/media/i2c/Kconfig:582:warning: ignoring unsupported character '.'
->> drivers/media/i2c/Kconfig:582: unknown statement "module"
-   make[2]: *** [olddefconfig] Error 1
-   make[1]: *** [olddefconfig] Error 2
-   make: *** [sub-make] Error 2
-   3 real  1 user  0 sys  63.87% cpu 	make olddefconfig
-
-vim +582 drivers/media/i2c/Kconfig
-
-   570	
-   571	config VIDEO_HI556
-   572		tristate "Hynix Hi-556 sensor support"
-   573		depends on I2C && VIDEO_V4L2 && VIDEO_V4L2_SUBDEV_API
-   574		depends on MEDIA_CAMERA_SUPPORT
-   575		depends on MEDIA_CONTROLLER
-   576		select V4L2_FWNODE
-   577		help
-   578		  This is a Video4Linux2 sensor driver for the Hynix
-   579		  Hi-556 camera.
-   580	
- > 581		To compile this driver as a module, choose M here: the
- > 582		module will be called hi556.
-   583	
-
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+ fs/io_uring.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index a30c4f622cb3..d3924b1760eb 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -3431,9 +3431,8 @@ static int io_sqe_buffer_register(struct io_ring_ctx =
+*ctx, void __user *arg,
+=20
+ 		ret =3D 0;
+ 		down_read(&current->mm->mmap_sem);
+-		pret =3D get_user_pages(ubuf, nr_pages,
+-				      FOLL_WRITE | FOLL_LONGTERM,
+-				      pages, vmas);
++		pret =3D pin_longterm_pages(ubuf, nr_pages, FOLL_WRITE, pages,
++					  vmas);
+ 		if (pret =3D=3D nr_pages) {
+ 			/* don't support file backed memory */
+ 			for (j =3D 0; j < nr_pages; j++) {
+--=20
+2.23.0
+
