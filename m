@@ -2,111 +2,99 @@ Return-Path: <SRS0=Nxv7=YY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C950CA9EC3
-	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 08:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDB17CA9ECE
+	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 09:02:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 7D25A2083E
-	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 08:59:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD05F2087F
+	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 09:02:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727005AbfJaI7x (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Oct 2019 04:59:53 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:45008 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726897AbfJaI7x (ORCPT
+        id S1726897AbfJaJCa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Oct 2019 05:02:30 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:2792 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726776AbfJaJC3 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Oct 2019 04:59:53 -0400
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 6712128FC69;
-        Thu, 31 Oct 2019 08:59:52 +0000 (GMT)
-Date:   Thu, 31 Oct 2019 09:59:49 +0100
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Jonas Karlman <jonas@kwiboo.se>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        Francois Buergisser <fbuergisser@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 03/10] media: hantro: Fix picture order count table
- enable
-Message-ID: <20191031095949.6c748526@collabora.com>
-In-Reply-To: <HE1PR06MB4011525BAC0F0F1DC419EB7EAC610@HE1PR06MB4011.eurprd06.prod.outlook.com>
-References: <HE1PR06MB401108289F09802C261374F8AC610@HE1PR06MB4011.eurprd06.prod.outlook.com>
-        <20191029012430.24566-1-jonas@kwiboo.se>
-        <HE1PR06MB4011525BAC0F0F1DC419EB7EAC610@HE1PR06MB4011.eurprd06.prod.outlook.com>
-Organization: Collabora
-X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        Thu, 31 Oct 2019 05:02:29 -0400
+X-UUID: c6fa13f813ab4e2f9a6293d6b065807b-20191031
+X-UUID: c6fa13f813ab4e2f9a6293d6b065807b-20191031
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <dongchun.zhu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1913279059; Thu, 31 Oct 2019 17:02:23 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 31 Oct 2019 17:02:19 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 31 Oct 2019 17:02:19 +0800
+From:   Dongchun Zhu <dongchun.zhu@mediatek.com>
+To:     <mchehab@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <sakari.ailus@linux.intel.com>, <drinkcat@chromium.org>,
+        <tfiga@chromium.org>, <matthias.bgg@gmail.com>,
+        <bingbu.cao@intel.com>
+CC:     <srv_heupstream@mediatek.com>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <sj.huang@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <louis.kuo@mediatek.com>, <shengnan.wang@mediatek.com>,
+        <dongchun.zhu@mediatek.com>
+Subject: [V3, 0/2] media: ov8856: Add YAML binding and sensor mode support
+Date:   Thu, 31 Oct 2019 17:02:11 +0800
+Message-ID: <20191031090213.27727-1-dongchun.zhu@mediatek.com>
+X-Mailer: git-send-email 2.9.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Tue, 29 Oct 2019 01:24:48 +0000
-Jonas Karlman <jonas@kwiboo.se> wrote:
+Hello,
 
-> From: Francois Buergisser <fbuergisser@chromium.org>
-> 
-> The picture order count table only makes sense for profiles
-> higher than Baseline. This is confirmed by the H.264 specification
-> (See 8.2.1 Decoding process for picture order count), which
-> clarifies how POC are used for features not present in Baseline.
-> 
-> """
-> Picture order counts are used to determine initial picture orderings
-> for reference pictures in the decoding of B slices, to represent picture
-> order differences between frames or fields for motion vector derivation
-> in temporal direct mode, for implicit mode weighted prediction in B slices,
-> and for decoder conformance checking.
-> """
-> 
-> As a side note, this change matches various vendors downstream codebases,
-> including ChromiumOS and IMX VPU libraries.
-> 
-> Fixes: dea0a82f3d22 ("media: hantro: Add support for H264 decoding on G1")
-> Signed-off-by: Francois Buergisser <fbuergisser@chromium.org>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+This series adds new DT bindings in YAML and two more sensor modes for users to call.
 
-Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
-Tested-by: Boris Brezillon <boris.brezillon@collabora.com>
+From the latest ov8856 datasheet, it is proposed to adopt the resolution of 1632*1224 and 3264*2448,
+together with Bayer Order of BGGR. Here two more scenario settings are provided.
 
-Same as for patch 2, it would be great to have this fix queued for
-5.4-rc6 so we don't have to backport it manually.
+The hardware revision of ov8856 could be distinguished from one OTP SRAM register R700F.
+PLL register R3614 requires to be correspondingly updated.
+For instance, 0x20 is suggested for 1B camera module.
 
-> ---
->  drivers/staging/media/hantro/hantro_g1_h264_dec.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/media/hantro/hantro_g1_h264_dec.c b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-> index a1cb18680200..70a6b5b26477 100644
-> --- a/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-> +++ b/drivers/staging/media/hantro/hantro_g1_h264_dec.c
-> @@ -34,9 +34,11 @@ static void set_params(struct hantro_ctx *ctx)
->  	reg = G1_REG_DEC_CTRL0_DEC_AXI_WR_ID(0x0);
->  	if (sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD)
->  		reg |= G1_REG_DEC_CTRL0_SEQ_MBAFF_E;
-> -	reg |= G1_REG_DEC_CTRL0_PICORD_COUNT_E;
-> -	if (sps->profile_idc > 66 && dec_param->nal_ref_idc)
-> -		reg |= G1_REG_DEC_CTRL0_WRITE_MVS_E;
-> +	if (sps->profile_idc > 66) {
-> +		reg |= G1_REG_DEC_CTRL0_PICORD_COUNT_E;
-> +		if (dec_param->nal_ref_idc)
-> +			reg |= G1_REG_DEC_CTRL0_WRITE_MVS_E;
-> +	}
->  
->  	if (!(sps->flags & V4L2_H264_SPS_FLAG_FRAME_MBS_ONLY) &&
->  	    (sps->flags & V4L2_H264_SPS_FLAG_MB_ADAPTIVE_FRAME_FIELD ||
+Finally, The driver has been validated in camera features on CrOS application.
+
+Changes of V3 mainly address comments from Andy, Tomasz, Sakari, Rob.
+ - Convert text documentation to YAML schema.
+ - Enable VSYNC singal output
+ - Add ov8856_runtime_suspend() which would call __ov8856_power_off()
+ - Add ov8856_runtime_resume() which would call __ov8856_power_on()
+ - Fix other reviewed issues in V2
+
+Mainly changes of V2 are addressing the comments from Sakari, Tomasz,
+including,
+ - Add clock-frequency and link-frequencies in DT
+ - Re-define some macros like R3614, R3d84, n_shutdn
+ - Rename OV8856_MCLK to OV8856_XVCLK per datasheet
+ - Refine ov8856_update_otp_reg, ov8856_configure_regulators and ov8856_cal_delay
+ - Set the bayer order in the mode struct, and directly links to register R3808, R3809
+ - Remove or refine redundant log print
+ - Fix other reviewed issues in V1
+
+Dongchun Zhu (2):
+  media: dt-bindings: ov8856: Document YAML bindings
+  media: i2c: ov8856: Add support for more sensor modes
+
+ .../devicetree/bindings/media/i2c/ov8856.yaml      | 126 ++++
+ MAINTAINERS                                        |   1 +
+ drivers/media/i2c/ov8856.c                         | 661 ++++++++++++++++++++-
+ 3 files changed, 779 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ov8856.yaml
+
+-- 
+2.9.2
 
