@@ -2,90 +2,77 @@ Return-Path: <SRS0=Nxv7=YY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0FBECA9ECB
-	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 15:09:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3378CA9ECB
+	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 15:33:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id C81BE208E3
-	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 15:09:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572534576;
-	bh=9tBCz/fylc7VVVgD21eF7T6KAra9agC6ZKRM9LyDwgE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=JCkbWMniJedlVn1Arl92BDbR+1b0mbW6uZKgoxBRkee4FvZcedPnG7dfKupkUv7iM
-	 9KeflryMI8MjxNXd2JAqxY8bbd3nXY0y2Rc+Xa9IpWSw7FqrfACqlXVbRQyJss+o9t
-	 gQP2HyS+lh+7GRuOq7FhEABFxfSl3PuvYceqfphw=
+	by mail.kernel.org (Postfix) with ESMTP id B1C3D208C0
+	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 15:33:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727904AbfJaPJd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Oct 2019 11:09:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42580 "EHLO mail.kernel.org"
+        id S1728342AbfJaPdU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Oct 2019 11:33:20 -0400
+Received: from mga07.intel.com ([134.134.136.100]:59698 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbfJaPJc (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Oct 2019 11:09:32 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D36942083E;
-        Thu, 31 Oct 2019 15:09:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572534572;
-        bh=9tBCz/fylc7VVVgD21eF7T6KAra9agC6ZKRM9LyDwgE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=z8TnPqQT4tTuMQMa6dylinO6OKAdSfX2nsQZ4a3PLSgREOT+u/NMPEiozETqT21/8
-         W+Yilb9SMOyw49j8YNr7Y6JnaB7j+55vh6tc8+FqFlFwKC0zktIACa3WAaceFp4eeX
-         TzWO8rM1aqYeoI9oe5isljc5OgIsloqXzmcJBTOM=
-Date:   Thu, 31 Oct 2019 15:09:27 +0000
-From:   Will Deacon <will@kernel.org>
-To:     linux-media@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, andreyknvl@google.com,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>, stable@vger.kernel.org
-Subject: Re: [RESEND PATCH] media: uvc: Avoid cyclic entity chains due to
- malformed USB descriptors
-Message-ID: <20191031150925.GA27535@willie-the-truck>
-References: <20191016195800.22099-1-will@kernel.org>
+        id S1726566AbfJaPdT (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Thu, 31 Oct 2019 11:33:19 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Oct 2019 08:33:19 -0700
+X-IronPort-AV: E=Sophos;i="5.68,252,1569308400"; 
+   d="scan'208";a="199048068"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Oct 2019 08:33:17 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id E53C02075A; Thu, 31 Oct 2019 17:33:15 +0200 (EET)
+Date:   Thu, 31 Oct 2019 17:33:15 +0200
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     bingbu.cao@intel.com
+Cc:     linux-media@vger.kernel.org, tfiga@chromium.org,
+        bingbu.cao@linux.intel.com, laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH v2] doc-rst: add more info for resolution change blocks
+ in ipu3
+Message-ID: <20191031153315.GL10211@paasikivi.fi.intel.com>
+References: <1570508487-27325-1-git-send-email-bingbu.cao@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191016195800.22099-1-will@kernel.org>
+In-Reply-To: <1570508487-27325-1-git-send-email-bingbu.cao@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 08:58:00PM +0100, Will Deacon wrote:
-> Add a check before adding an entity to a chain list to ensure that the
-> entity is not already part of a chain.
-> 
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Kostya Serebryany <kcc@google.com>
-> Cc: <stable@vger.kernel.org>
-> Fixes: c0efd232929c ("V4L/DVB (8145a): USB Video Class driver")
-> Reported-by: Andrey Konovalov <andreyknvl@google.com>
-> Link: https://lore.kernel.org/linux-media/CAAeHK+z+Si69jUR+N-SjN9q4O+o5KFiNManqEa-PjUta7EOb7A@mail.gmail.com/
-> Signed-off-by: Will Deacon <will@kernel.org>
-> ---
-> 
-> Resending since I don't think any material changes are required to address
-> the comments on the previous posting:
-> 
-> http://lkml.kernel.org/r/20191002112753.21630-1-will@kernel.org
-> 
->  drivers/media/usb/uvc/uvc_driver.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
+Hi Bingbu,
 
-Gentle nudge on this patch, since I don't see it in -next and I've not
-received any comments on it for a while.
+On Tue, Oct 08, 2019 at 12:21:27PM +0800, bingbu.cao@intel.com wrote:
+> From: Bingbu Cao <bingbu.cao@intel.com>
+> 
+> This patch add more details for the resolution change blocks
+> It can help the developer to understand the main resolution
+> change blocks in ImgU.
+> 
+> Signed-off-by: Bingbu Cao <bingbu.cao@intel.com>
 
-Cheers,
+Applied with the following change:
 
-Will
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8077b453f2e9..8f46346b1516 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -8335,6 +8335,7 @@ S:	Maintained
+ F:	drivers/staging/media/ipu3/
+ F:	Documentation/media/uapi/v4l/pixfmt-meta-intel-ipu3.rst
+ F:	Documentation/media/v4l-drivers/ipu3.rst
++F:	Documentation/media/v4l-drivers/ipu3_rcb.svg
+ 
+ INTEL IXP4XX QMGR, NPE, ETHERNET and HSS SUPPORT
+ M:	Krzysztof Halasa <khalasa@piap.pl>
+
+-- 
+Sakari Ailus
