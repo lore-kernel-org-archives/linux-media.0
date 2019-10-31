@@ -2,88 +2,95 @@ Return-Path: <SRS0=Nxv7=YY=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F12DCA9ED0
-	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 15:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C630CA9ECB
+	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 15:49:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id F35D32086D
-	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 15:33:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DF182087F
+	for <linux-media@archiver.kernel.org>; Thu, 31 Oct 2019 15:49:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbfJaPdy (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 31 Oct 2019 11:33:54 -0400
-Received: from retiisi.org.uk ([95.216.213.190]:34880 "EHLO
+        id S1728469AbfJaPt2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 31 Oct 2019 11:49:28 -0400
+Received: from retiisi.org.uk ([95.216.213.190]:35032 "EHLO
         hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727860AbfJaPdy (ORCPT
+        by vger.kernel.org with ESMTP id S1726664AbfJaPt2 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Thu, 31 Oct 2019 11:33:54 -0400
+        Thu, 31 Oct 2019 11:49:28 -0400
 Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 12295634C87
-        for <linux-media@vger.kernel.org>; Thu, 31 Oct 2019 17:33:02 +0200 (EET)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id AE154634C87;
+        Thu, 31 Oct 2019 17:48:34 +0200 (EET)
 Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
         (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1iQCRZ-0001mb-3S
-        for linux-media@vger.kernel.org; Thu, 31 Oct 2019 17:33:01 +0200
-Date:   Thu, 31 Oct 2019 17:33:01 +0200
+        id 1iQCgb-0001mv-Nb; Thu, 31 Oct 2019 17:48:33 +0200
+Date:   Thu, 31 Oct 2019 17:48:33 +0200
 From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL for 5.5] Ipu3 and smiapp driver patches
-Message-ID: <20191031153300.GL6253@valkosipuli.retiisi.org.uk>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        mchehab@kernel.org, robh+dt@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        c.barrett@framos.com, a.brela@framos.com, peter.griffin@linaro.org
+Subject: Re: [PATCH v4 0/2] Add IMX296 CMOS image sensor support
+Message-ID: <20191031154833.GM6253@valkosipuli.retiisi.org.uk>
+References: <20191030094902.32582-1-manivannan.sadhasivam@linaro.org>
+ <20191031131644.GA8917@pendragon.ideasonboard.com>
+ <20191031132352.GA24273@mani>
+ <20191031132801.GC5018@pendragon.ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20191031132801.GC5018@pendragon.ideasonboard.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+Hi Mani, Laurent,
 
-Here's a small set of ipu3 and smiapp driver patches for 5.5.
+On Thu, Oct 31, 2019 at 03:28:01PM +0200, Laurent Pinchart wrote:
+> Hi Mani,
+> 
+> On Thu, Oct 31, 2019 at 06:53:52PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, Oct 31, 2019 at 03:16:44PM +0200, Laurent Pinchart wrote:
+> > > On Wed, Oct 30, 2019 at 03:19:00PM +0530, Manivannan Sadhasivam wrote:
+> > > > Hello,
+> > > > 
+> > > > This patchset adds support for IMX296 CMOS image sensor from Sony.
+> > > > Sensor can be programmed through I2C and 4-wire interface but the
+> > > > current driver only supports I2C interface. The sensor is
+> > > > capable of outputting frames in CSI2 format (1 Lane). In the case
+> > > > of sensor resolution, driver only supports 1440x1088 at 30 FPS.
+> > > > 
+> > > > The driver has been validated using Framos IMX296 module interfaced to
+> > > > 96Boards Dragonboard410c.
+> > > 
+> > > I've just been made aware of your work. I also worked on an IMX296
+> > > sensor driver in parallel, which I will post to the list. My driver
+> > > doesn't hardcode the resolution but computes register values at runtime,
+> > > so I wonder if it could be a better option. I'll post it now.
+> > 
+> > I'm fine with it. The reason the driver is simple in the first place is, that's
+> > how my usual workflow is. Start small and build it big ;-)
+> > 
+> > Anyway, I'm happy if your driver gets in.
+> 
+> My driver sometimes has trouble finding the sensor at probe time, so
+> I'll study and try your code too. It could be a problem specific to my
+> platform (I'm testing on a custom i.MX7 board).
 
-Please pull.
+Based on this discussion I'll mark the second patch of the set obsolete in
+Patchwork.
 
-
-The following changes since commit a4260ea49547aa0c84c353f9de5998a0315d89fe:
-
-  media: sun4i: Add H3 deinterlace driver (2019-10-24 19:07:59 -0300)
-
-are available in the Git repository at:
-
-  git://linuxtv.org/sailus/media_tree.git tags/for-5.5-7-signed
-
-for you to fetch changes up to ccf9b64233bde660c2a37e3a5a6990b1accca0a2:
-
-  media: smiapp: unlock on error in smiapp_start_streaming() (2019-10-31 17:25:56 +0200)
-
-----------------------------------------------------------------
-Imgu and smiapp patches for 5.5
-
-----------------------------------------------------------------
-Bingbu Cao (3):
-      doc-rst: add more info for resolution change blocks in ipu3
-      doc-rst: ipu3: clarification on data type conversion of IEFD CU
-      media: staging/intel-ipu3: remove the unnecessary compiler flags
-
-Dan Carpenter (1):
-      media: smiapp: unlock on error in smiapp_start_streaming()
-
- Documentation/media/v4l-drivers/ipu3.rst        |  53 +++-
- Documentation/media/v4l-drivers/ipu3_rcb.svg    | 331 ++++++++++++++++++++++++
- MAINTAINERS                                     |   1 +
- drivers/media/i2c/smiapp/smiapp-core.c          |   4 +-
- drivers/staging/media/ipu3/Makefile             |   6 -
- drivers/staging/media/ipu3/TODO                 |   5 -
- drivers/staging/media/ipu3/include/intel-ipu3.h |   5 +
- 7 files changed, 384 insertions(+), 21 deletions(-)
- create mode 100644 Documentation/media/v4l-drivers/ipu3_rcb.svg
+Laurent: please see my comments on the driver as well.
 
 -- 
+Kind regards,
+
 Sakari Ailus
