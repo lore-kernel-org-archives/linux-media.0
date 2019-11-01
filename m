@@ -4,57 +4,57 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 964C7CA9ED0
-	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C6D70CA9ED0
+	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 651BA217F9
-	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F64D21855
+	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572607452;
-	bh=dX6IpixzVBgSCMKI4SHYthEfbtWdSHK7QsJSPXjpaTM=;
+	s=default; t=1572607462;
+	bh=rHtyzlz7RmJV+4jExslvVPuWQL0E6SPGJaCim4JoBW4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=OIIdY4z5vU7bAzEfU5grjvuN+2OvRD7pQXsR7hwUX1fKJFMHql+z5Pi9mEwE8V3jx
-	 3rlkdQZpYiKOh4H0QRzXIBQqlYdi57yIfv8hvL04F/dBE3JqQtO5+fjmb9nOgVR6nQ
-	 LW2bzHINbI3xuy+o8aagbwEQCKAAs9fN52kiPQOE=
+	b=t7MJP5s6c0YeIgZja35xUTitMJGlSISMmcVsUEoze7YMFi1u0SnQjDE/C02lin5Fi
+	 AbD/o4L8i0FBY8BF/jHbwTsa2biY+QRJTJ0ZDyyFlsdUxwk65WJX+J5tC3oPKw0dd6
+	 neQeDdNtHsc60rrajz8jtNg+oUDDH88gwvm9ZODY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730421AbfKALYL (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Nov 2019 07:24:11 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:39246 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730404AbfKALYK (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Nov 2019 07:24:10 -0400
-Received: by mail-lf1-f68.google.com with SMTP id 195so6968485lfj.6;
-        Fri, 01 Nov 2019 04:24:08 -0700 (PDT)
+        id S1730408AbfKALYJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Nov 2019 07:24:09 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:45912 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730400AbfKALYI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Nov 2019 07:24:08 -0400
+Received: by mail-lf1-f67.google.com with SMTP id v8so6943483lfa.12;
+        Fri, 01 Nov 2019 04:24:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=sjj30/458E859XQbnjLj4WwTf4kInVK2hNYmrjy4KYE=;
-        b=tuB0+GaFjZfcMtnGWjCSbTydZU/U1TvshrEipNQUfIKJuxTMqWVaFYLyIo+hH9KFEY
-         9GCmUSkeCHUzZby+VumQEIoK3mLvLyKdZ6VZ2cY/8k8YkEY1ih1Bk5iSW1kc24ln5AOO
-         yNWpul2gVVbzavaRgQmeSNDypglglKiZTL/FAWHp0k/mBbMZfOv2VylHtcKYPX3IspoA
-         VvxICGIjlzmbNxsvntJOGjZkjUQ8Sa80K3bq3vog+P4l8TaTOH1hYI34lt6WX+5vEU2D
-         bdpRDZH2OYjvxQ3Vr0upCwr85Rcj2mF6ZXOQnZutacR41FTIEwdUSzi5m7LckK9cGIAC
-         nb+g==
-X-Gm-Message-State: APjAAAWSZe8f3muJTs7rZ6HO40skBTFaLA7K/YASGqnN3SXltZ4oFKD0
-        oof12myOO2js9s8sVe1Lfxw1vqLiNmk=
-X-Google-Smtp-Source: APXvYqy95GAojfhN2ezdIMYV6qxUyV9oWwH5cwwrCtchwmsFKvYc4W1fxxmM3P5LOKCyOjU6qxUDrg==
-X-Received: by 2002:ac2:46d7:: with SMTP id p23mr6959576lfo.104.1572607447848;
-        Fri, 01 Nov 2019 04:24:07 -0700 (PDT)
+        bh=GW+RiqAUvdeyf1VPnXKgJgDQjIa6mTVNLoSeIKSIaY4=;
+        b=RUt/Xjxi5gOUV0fyzwyPbDBXjrZ+0SQ5l3wO9qE67sD+6ajkni0rRl1QIeZi3RWtkq
+         H0TO2CJJSDwN0TfQL6ftgwQ9rpJh8Oxdba6DHgsmm5oSZ9rQwHku4YX3GCh2eL8g3Rgs
+         W5ArZT2Lkc9Bh6b2OARf/XaAMmM7B3+eRwm+/xYJS1gAF9vkFUGVsDKMbtpM0rUOUvtw
+         WOIACUbwjYrENY14eXri10NSNa9zls/Neh+IUcxQhhR5wF2FZABbbaq95RZQ740jpwAB
+         9u/PgdgCwZOG3/Nc8War1Q9q4H0nvJQU/mspL9i+3wFVOvWR92SC9z9r4cDY8jNRSPrO
+         buyQ==
+X-Gm-Message-State: APjAAAVzHo13LUGiMYVK9XiRCTduZBsWM7zWhk47/yMZE44i0/wnO3m2
+        heIcyneokDe3amhXxIUenTM=
+X-Google-Smtp-Source: APXvYqyNzeAy5m2UIQEMKuFs4p+MsN6n3/TdythcE1kEt315jXzGuKwONXyg2qlxU1U4PEcErYff7A==
+X-Received: by 2002:ac2:5144:: with SMTP id q4mr7215134lfd.36.1572607444411;
+        Fri, 01 Nov 2019 04:24:04 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id v1sm2313691lji.89.2019.11.01.04.24.06
+        by smtp.gmail.com with ESMTPSA id v1sm2313691lji.89.2019.11.01.04.24.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 04:24:06 -0700 (PDT)
+        Fri, 01 Nov 2019 04:24:03 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v3 5/5] Documentation: v42l_core: v4l2_ext_control
-Date:   Fri,  1 Nov 2019 12:23:58 +0100
-Message-Id: <20191101112358.29538-5-ribalda@kernel.org>
+Subject: [PATCH v3 3/5] media: vivid: Add an area control
+Date:   Fri,  1 Nov 2019 12:23:56 +0100
+Message-Id: <20191101112358.29538-3-ribalda@kernel.org>
 X-Mailer: git-send-email 2.24.0.rc1
 In-Reply-To: <20191101112358.29538-1-ribalda@kernel.org>
 References: <20191101112358.29538-1-ribalda@kernel.org>
@@ -65,29 +65,53 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Describe p_area field from v4l2_ext_ctrl
+This control represents a generic read/write area.
 
+Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 ---
- Documentation/media/uapi/v4l/vidioc-g-ext-ctrls.rst | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/media/platform/vivid/vivid-ctrls.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/Documentation/media/uapi/v4l/vidioc-g-ext-ctrls.rst b/Documentation/media/uapi/v4l/vidioc-g-ext-ctrls.rst
-index 13dc1a986249..271cac18afbb 100644
---- a/Documentation/media/uapi/v4l/vidioc-g-ext-ctrls.rst
-+++ b/Documentation/media/uapi/v4l/vidioc-g-ext-ctrls.rst
-@@ -198,6 +198,11 @@ still cause this situation.
-       - ``p_u32``
-       - A pointer to a matrix control of unsigned 32-bit values. Valid if
- 	this control is of type ``V4L2_CTRL_TYPE_U32``.
-+    * -
-+      - :c:type:`v4l2_area` *
-+      - ``p_area``
-+      - A pointer to a struct :c:type:`v4l2_area`. Valid if this control is
-+        of type ``V4L2_CTRL_TYPE_AREA``.
-     * -
-       - void *
-       - ``ptr``
+diff --git a/drivers/media/platform/vivid/vivid-ctrls.c b/drivers/media/platform/vivid/vivid-ctrls.c
+index b250fc3764e2..fd35863798a7 100644
+--- a/drivers/media/platform/vivid/vivid-ctrls.c
++++ b/drivers/media/platform/vivid/vivid-ctrls.c
+@@ -32,6 +32,7 @@
+ #define VIVID_CID_U32_ARRAY		(VIVID_CID_CUSTOM_BASE + 8)
+ #define VIVID_CID_U16_MATRIX		(VIVID_CID_CUSTOM_BASE + 9)
+ #define VIVID_CID_U8_4D_ARRAY		(VIVID_CID_CUSTOM_BASE + 10)
++#define VIVID_CID_AREA			(VIVID_CID_CUSTOM_BASE + 11)
+ 
+ #define VIVID_CID_VIVID_BASE		(0x00f00000 | 0xf000)
+ #define VIVID_CID_VIVID_CLASS		(0x00f00000 | 1)
+@@ -266,6 +267,18 @@ static const struct v4l2_ctrl_config vivid_ctrl_disconnect = {
+ 	.type = V4L2_CTRL_TYPE_BUTTON,
+ };
+ 
++static const struct v4l2_area area = {
++	.width = 0xcafe,
++	.height = 0xb1b1d,
++};
++
++static const struct v4l2_ctrl_config vivid_ctrl_area = {
++	.ops = &vivid_user_gen_ctrl_ops,
++	.id = VIVID_CID_AREA,
++	.name = "Area",
++	.type = V4L2_CTRL_TYPE_AREA,
++	.p_def.p_const = &area,
++};
+ 
+ /* Framebuffer Controls */
+ 
+@@ -1574,6 +1587,7 @@ int vivid_create_controls(struct vivid_dev *dev, bool show_ccs_cap,
+ 	dev->string = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_string, NULL);
+ 	dev->bitmask = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_bitmask, NULL);
+ 	dev->int_menu = v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_int_menu, NULL);
++	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_area, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u32_array, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u16_matrix, NULL);
+ 	v4l2_ctrl_new_custom(hdl_user_gen, &vivid_ctrl_u8_4d_array, NULL);
 -- 
 2.24.0.rc1
 
