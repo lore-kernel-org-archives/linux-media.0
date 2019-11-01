@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99944CA9ED0
-	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E6C6CA9ECF
+	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 73A7E218AC
-	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13E29217F9
+	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572607446;
-	bh=ZlvpnRLtbhTH6bL1jwzyKo1MZMsNDzVu4omY0MnxPvA=;
+	s=default; t=1572607451;
+	bh=bpLdGE8V/u9Pfk2EWnfMrE1PYLATaVTRs9lEUo93Jdc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=b2q0DqChcfI9wmi1EGYyN5uXOwk8jyueRx9oXz0e74s5LZnJngyF4oz4lUeDf3wZF
-	 3l2KXriF1n7l05Wx8zxYwVBbpQ2HYX1AAmYTxP8f1iwp8Q9+K9L7EXgECMY4NzgGiz
-	 RKpVg/zqIRhvsrKHOie05twzqbYaSknnnbkpMRzs=
+	b=ec/AwvErsAEQP8wIomXcVgI8fsxTndNvEioRE2Iprx2B6YRPI/zk5jmHSDKR36HAe
+	 Bx1+SgiQndI8qqR1lv6kyvDxRX5njJ4sB/Kb7p/IflWtUBO4EPaCkxtAnfXRR9wAUl
+	 peWMJWFqG3yhuKrwnM7P4YZEogS5xCR34RSKox2w=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730392AbfKALYF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Nov 2019 07:24:05 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:44435 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfKALYF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Nov 2019 07:24:05 -0400
-Received: by mail-lf1-f66.google.com with SMTP id v4so6971991lfd.11;
-        Fri, 01 Nov 2019 04:24:03 -0700 (PDT)
+        id S1730415AbfKALYJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Nov 2019 07:24:09 -0400
+Received: from mail-lf1-f51.google.com ([209.85.167.51]:39674 "EHLO
+        mail-lf1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726229AbfKALYI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Nov 2019 07:24:08 -0400
+Received: by mail-lf1-f51.google.com with SMTP id 195so6968432lfj.6;
+        Fri, 01 Nov 2019 04:24:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8kcIhL1Cm288cjerDWSwiT3z8kiQdheRmrevoTt/5WM=;
-        b=CQrbAAif+xOhKXmVgzNrOCoMQgNfR1e311Oqk2pfH3W0hGUQmuf0weqyZm0x587DvM
-         YmrFh2aJAaQYks/pej+dWegUo8qgNZgG0oDxkqoXxCg6wtuj3xqHnXCucLIilh381d1V
-         Z5n2pZTS4ahYGkjaJzIPf4lsxFpD65RNV2xwAajnTRc0H3kf2muTJPocT7ejJDA8+xiC
-         iOmY43R+wLmK2DrkSEAlAbRa4QivHaiKJjGJg1pCHgL7Z3iGKHdhC1GsFJ4db7eYUwQv
-         PROJr+04sV4HgLil30wyxZfZbZC2hCkCrRZvaETN4Fe1/0ONnQOmUNvYwYBNi7+WO6e4
-         NmGw==
-X-Gm-Message-State: APjAAAUQQnvAeQg5mhchWsP2Ar1XKvuvnXDbu762KlOXEDldchBY1LeP
-        NLqH93/6hJjQtn32u6YtOiI=
-X-Google-Smtp-Source: APXvYqxPQ5Jb3QDisDNgr2UvNEwFHT2uk3DP0OUCApwyymh3wt9rBZ0zQvgWcIafZ7l+tMzEDTIJyQ==
-X-Received: by 2002:a19:520b:: with SMTP id m11mr6898325lfb.77.1572607442877;
-        Fri, 01 Nov 2019 04:24:02 -0700 (PDT)
+        bh=0W10DXwaVM53AXBTDklaYFrwsbXNjvFaekrr8EZmqhM=;
+        b=ir2IAJbHG5dCb87e8fwkfXUeapMieg/ly+Yt90fgj9qjPT+2LyKC6/4akTi+p2fd92
+         4rItAGopNwa9OU4sL+SpvditJBxPMrnEqN6PyJIkkK1xM3zDjFyOK1zRrj6Rap/bRqMj
+         DtPcoLJqFrlrPpraXTiOv6QnM0l3ZZoCTZtEJk9cBEujtJfnMrj4fR+Bl23uakNkF6zA
+         YQyNHX5vx9RM7RMlTZXAvwgjHsv7E4JFRjiNo3yTE59AUi4CB0Z9wXJq8936i6d358LT
+         +fEiV3ZLJ58JX455bLE4/KFaiz71ifqjOO4PoqznrQ5P27jXt7f8oePI9g7WHrExBLU/
+         nFeA==
+X-Gm-Message-State: APjAAAUeMmx4PqVERloPuFmAPx9wQ1KUfRTv9odyifg3CEKNvNlbRu/b
+        7GB8r8K1TccTv5J6R+WD92dpvB2XZbE=
+X-Google-Smtp-Source: APXvYqygX5XyngPuBxzDc4P9f2Frjnsb0gejKHX4B5HZu0oaXWOOv03LT6tkeNvK0FpIU80TV5Sx9w==
+X-Received: by 2002:a19:6d19:: with SMTP id i25mr6989201lfc.178.1572607446088;
+        Fri, 01 Nov 2019 04:24:06 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id v1sm2313691lji.89.2019.11.01.04.24.01
+        by smtp.gmail.com with ESMTPSA id v1sm2313691lji.89.2019.11.01.04.24.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 04:24:01 -0700 (PDT)
+        Fri, 01 Nov 2019 04:24:04 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v3 2/5] media: v4l2_ctrl: Add const pointer to ctrl_ptr
-Date:   Fri,  1 Nov 2019 12:23:55 +0100
-Message-Id: <20191101112358.29538-2-ribalda@kernel.org>
+Subject: [PATCH v3 4/5] media: v4l2_core: Add p_area to struct v4l2_ext_control
+Date:   Fri,  1 Nov 2019 12:23:57 +0100
+Message-Id: <20191101112358.29538-4-ribalda@kernel.org>
 X-Mailer: git-send-email 2.24.0.rc1
 In-Reply-To: <20191101112358.29538-1-ribalda@kernel.org>
 References: <20191101112358.29538-1-ribalda@kernel.org>
@@ -65,36 +65,25 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This pointer is used to point to data that is constant. Thanks to this
-we can avoid a lot of casting and we make more clear when the data is
-constant or variable.
+Allow accessing V4L2_CTRL_TYPE_AREA controls without any casting.
 
-Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 ---
- include/media/v4l2-ctrls.h | 2 ++
- 1 file changed, 2 insertions(+)
+ include/uapi/linux/videodev2.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index 78a97b10c89e..7db9e719a583 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -56,6 +56,7 @@ struct poll_table_struct;
-  * @p_hevc_slice_params:	Pointer to an HEVC slice parameters structure.
-  * @p_area:			Pointer to an area.
-  * @p:				Pointer to a compound value.
-+ * @p_const:			Pointer to a constant compound value.
-  */
- union v4l2_ctrl_ptr {
- 	s32 *p_s32;
-@@ -78,6 +79,7 @@ union v4l2_ctrl_ptr {
- 	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
- 	struct v4l2_area *p_area;
- 	void *p;
-+	const void *p_const;
- };
- 
- /**
+diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
+index f98bbcced8ff..04481c717fee 100644
+--- a/include/uapi/linux/videodev2.h
++++ b/include/uapi/linux/videodev2.h
+@@ -1684,6 +1684,7 @@ struct v4l2_ext_control {
+ 		__u8 __user *p_u8;
+ 		__u16 __user *p_u16;
+ 		__u32 __user *p_u32;
++		struct v4l2_area __user *p_area;
+ 		void __user *ptr;
+ 	};
+ } __attribute__ ((packed));
 -- 
 2.24.0.rc1
 
