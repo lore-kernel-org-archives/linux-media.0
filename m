@@ -2,95 +2,114 @@ Return-Path: <SRS0=NVMb=YZ=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C57B8CA9ECF
-	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DBF39C47E49
+	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 14:49:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 93D9220656
-	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572607531;
-	bh=f7z50vaHptEB/IsdALtjYC+75XPYhMyFj3b0kyhw/kE=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=GLcXSBZzNU+5qtGiOm3sGcD5HpyBN/6ZrvEyfpscqUPhwI7+EkM9r1nu76dINdMga
-	 o+9pNRsLeyyfwr8+cO/XqD8xXCE7X9TCo5nC1XBStZ1vWsxf7ld4jPKSt1/qCec3ju
-	 bYYzeJI2cGErvUc/U9q7Tvpr/BBxa+54DomPTpTM=
+	by mail.kernel.org (Postfix) with ESMTP id B46C921924
+	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 14:49:49 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel-dk.20150623.gappssmtp.com header.i=@kernel-dk.20150623.gappssmtp.com header.b="I8fTjuu/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727769AbfKALZO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Nov 2019 07:25:14 -0400
-Received: from mail-lf1-f47.google.com ([209.85.167.47]:37674 "EHLO
-        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726663AbfKALZO (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Nov 2019 07:25:14 -0400
-Received: by mail-lf1-f47.google.com with SMTP id b20so6991737lfp.4;
-        Fri, 01 Nov 2019 04:25:12 -0700 (PDT)
+        id S1727575AbfKAOts (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Nov 2019 10:49:48 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:32773 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727558AbfKAOtq (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Nov 2019 10:49:46 -0400
+Received: by mail-il1-f196.google.com with SMTP id s6so8933861iln.0
+        for <linux-media@vger.kernel.org>; Fri, 01 Nov 2019 07:49:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OvG/qWeSbh1TxLgtmArlVNDYsoALFmkQsSm7UaGBE/U=;
+        b=I8fTjuu/6Ne32KB3TzlkLHNc34FVVQHy/sTVoKvVYeIrGIs/zEWpPkdT4X2FTYZjfJ
+         UM4GFAou96icNjK1AVI5vEOtitRVjbXgZfqaanuntVF/vhTirkZT/9E+CWJUq7E2TQj0
+         StXEuMWcR5zlKYK8R7EGKhYIJ+Gb4ciY1IEMBuLWPRJg6NDyeWhuiAg3JUaKBbPDkQbL
+         sElozNdk4t7DFMJr/2GTc4DXhCqAVsopLQpS5jb3DWebvxakkqFHF/FpNq1kpaMflaeM
+         i/d5Nr3Kf7lOCXzSXk2CZXk0I+pfGJSDm0die6SS7xUqTydNbrFVI18tKwuFsQOAi/MB
+         kf9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=vUQnbyGeROcbfx3shdHmEtVSfcZgw+KlZ0MXbPBb4sU=;
-        b=ho8lgjddR2BzrrljLsqjcmCNttQHQlUGepjQShW8k7o0pmsa6NpF1nauFGh4RdRtVP
-         osCjnqBBlImBSg/QbwhMHFw8/P+x1wVDh+i8H+nrDnBFr+HktNu5vhK3WeyyWX/suYFB
-         pAx2S6dkKE5K0LOI8uAfzJXEXan0EHZwWM3mCoRIcDHOp53FU4aW9pDMGT9McPMWr/7R
-         pM5X1CKlWnhHs/fFHbetfh0oEJaIKAsrJ/CXZkKOpSZzSj2dKHlzYet8KTsFZYSNJwNz
-         ZyPkIspsIUvVEXlZO16Q0FVg3MVz+dc+3hTNVQyJr3JAGsi/kaPItkgjsrYc9suajmAX
-         ya5A==
-X-Gm-Message-State: APjAAAUrMMFe4EQ1sBJl8ZN9NAVcG7J6hXWSXj5qikDxg3AiydC2Vb28
-        +Ti8UcHEEf9hh1CnUt9xIJV1QFrXy10=
-X-Google-Smtp-Source: APXvYqwFqJsvRt95nTuIgux0lgecAnc4aTglAav6UTMlfC+qmYRzbvc6khqU7ehvt8SJCfxN5gZpCA==
-X-Received: by 2002:a19:ac48:: with SMTP id r8mr7289820lfc.181.1572607511591;
-        Fri, 01 Nov 2019 04:25:11 -0700 (PDT)
-Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id u13sm1851775ljl.71.2019.11.01.04.25.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 04:25:10 -0700 (PDT)
-From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH 1/4] HEADERS, do not merge!!!!
-Date:   Fri,  1 Nov 2019 12:25:06 +0100
-Message-Id: <20191101112509.29723-1-ribalda@kernel.org>
-X-Mailer: git-send-email 2.24.0.rc1
+        bh=OvG/qWeSbh1TxLgtmArlVNDYsoALFmkQsSm7UaGBE/U=;
+        b=PDPJteQgTjOEQ5OMAUZjIqK3Xz/pGGosHRq9YASvwb5pSI+U64qW+EqfETXbarwWqe
+         moldp2BDJSoh7J4KfIzRVbcvoxLIY3OWdzRQTNaKpm1sd0iB9a8VOR55nv2YN41T2Z7Q
+         E8f/vF8rd9mELso7K6SaVH0BUM67n+xfEj4UiUtroF1RQWNyC2x6aqViyR00NhzDljU/
+         8+wHlUeNNHyGQRAZe5GbEV6ddfK85lrIaxLIkdYB+/WHqoCT/takphaDH4gT0S8GSPcG
+         grKcVhoeM7lZMAxBcfniCjQKXTcVXFzizKlJK42OM7z7nGRn3P2CpkQQkOAGzS+cft4b
+         6s5g==
+X-Gm-Message-State: APjAAAXoGnLXGc64bznLvyn2tosGHXComlgDxm0UvcwY3ICFUi351rH/
+        HKRB+t5nSu22EVAI8YOt98dLcw==
+X-Google-Smtp-Source: APXvYqxr+bs1ScRWYKeCxmeXCSlj6Q4Lr6KXKYyS2zYjKblHkVBUMc7IPKJ+YzvkERiHaP9xr0/5Lg==
+X-Received: by 2002:a92:5d8f:: with SMTP id e15mr13331860ilg.173.1572619783709;
+        Fri, 01 Nov 2019 07:49:43 -0700 (PDT)
+Received: from [192.168.1.159] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id f73sm1107827ild.59.2019.11.01.07.49.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 01 Nov 2019 07:49:42 -0700 (PDT)
+Subject: Re: [PATCH 10/19] fs/io_uring: set FOLL_PIN via pin_user_pages()
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+References: <20191030224930.3990755-1-jhubbard@nvidia.com>
+ <20191030224930.3990755-11-jhubbard@nvidia.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <979ba2a3-ee04-fb12-204d-1b68c7b6e141@kernel.dk>
+Date:   Fri, 1 Nov 2019 08:49:39 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191030224930.3990755-11-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
----
- contrib/freebsd/include/linux/videodev2.h | 1 +
- include/linux/videodev2.h                 | 1 +
- 2 files changed, 2 insertions(+)
+On 10/30/19 4:49 PM, John Hubbard wrote:
+> Convert fs/io_uring to use the new pin_user_pages() call, which sets
+> FOLL_PIN. Setting FOLL_PIN is now required for code that requires
+> tracking of pinned pages, and therefore for any code that calls
+> put_user_page().
 
-diff --git a/contrib/freebsd/include/linux/videodev2.h b/contrib/freebsd/include/linux/videodev2.h
-index 85fa80f7..e90c8912 100644
---- a/contrib/freebsd/include/linux/videodev2.h
-+++ b/contrib/freebsd/include/linux/videodev2.h
-@@ -1713,6 +1713,7 @@ struct v4l2_ext_control {
- 		uint16_t *p_u16;
- 		uint32_t *p_u32;
- 		void *ptr;
-+		struct v4l2_area *p_area;
- 	};
- } __attribute__ ((packed));
- 
-diff --git a/include/linux/videodev2.h b/include/linux/videodev2.h
-index 6d66a789..7bafe5cd 100644
---- a/include/linux/videodev2.h
-+++ b/include/linux/videodev2.h
-@@ -1678,6 +1678,7 @@ struct v4l2_ext_control {
- 		__u8 *p_u8;
- 		__u16 *p_u16;
- 		__u32 *p_u32;
-+		struct v4l2_area *p_area;
- 		void *ptr;
- 	};
- } __attribute__ ((packed));
+Reviewed-by: Jens Axboe <axboe@kernel.dk>
+
 -- 
-2.24.0.rc1
+Jens Axboe
 
