@@ -4,58 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59DF6CA9ECF
-	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0904FCA9ED0
+	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:25:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2F032217F9
-	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:24:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D573320656
+	for <linux-media@archiver.kernel.org>; Fri,  1 Nov 2019 11:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572607465;
-	bh=qET0go5fTgr+VAcDElsE61ngvrjcyMrCjUxKjlVEXPQ=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=FTXaFO7VnkkmzyfzhvoDp7aHZPcIOZoLKfXOEqVXGYbvRlPgU02qhIb/WWedvWPEp
-	 X5usufTqfitOc1joQB6cyW2GYAwWIquc2sRXQeAbLKUiEWGIC8IfU/QM6teqAe+zaY
-	 A+MNR4FE6UFlNmGWPfP0WAzMAA8U6K2A+/5FoRTQ=
+	s=default; t=1572607518;
+	bh=h8Z3AnF7vXRAjXwVMTjLA3c0ADxJJIgEzh9hlBOMfGM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=N2BowhwEND++D0gHsZz0teFirYeg3EfUfec8E3rZbsJ8dcxRAf7aJRQ1e1gWRhLYL
+	 F0GJjq4U54Bgusz6ygcPgj6n0RSkN+9ZBMN4Zo5IH9+Hn8rAtPS1TeBsu6AtTB4BlQ
+	 1OAKzBfYyIyRZkI4P68HSa/o/AZLAVLnI1EeUkZw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730361AbfKALYD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 1 Nov 2019 07:24:03 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:34978 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfKALYD (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Nov 2019 07:24:03 -0400
-Received: by mail-lf1-f65.google.com with SMTP id y6so6992562lfj.2;
-        Fri, 01 Nov 2019 04:24:02 -0700 (PDT)
+        id S1730465AbfKALZR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 1 Nov 2019 07:25:17 -0400
+Received: from mail-lf1-f49.google.com ([209.85.167.49]:36406 "EHLO
+        mail-lf1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726663AbfKALZR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Fri, 1 Nov 2019 07:25:17 -0400
+Received: by mail-lf1-f49.google.com with SMTP id a6so3582090lfo.3;
+        Fri, 01 Nov 2019 04:25:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9P8rBv8FlOAdd5Kdu3vWsUKtcKK3jMnnUl9eTBCRCiQ=;
-        b=i1xbJEe/QyVRm0WYAQMlPgQMmF9kwPRNJTpODcl3IpdrJ4u/TaNVYfOOLChGoDYuof
-         IXPpvJ7AXUCUm0mHMrEDoPFHVewOfbBR9oT1JtxVFAai3QqEnUwS1k6U1B6441O8XotW
-         G5tEmfQUxWv9kLZ0ZyJUwdOSIsVvnSefZcT9DxQBtWH4SzDpooA3/1sRKOBJ0y9q5aEC
-         zLuF17IOPnuae9vEeZ0Wql/qqvMsuz3HgYhjNVk5GY8Sx1fDk0El1CxwKgGvB/4BbE8X
-         U1pIJclSqvn+mHiZLsmytWh6XksmrPy9AhYUfZVbVuHNdeDpHuutKyc/tP8Ahbm2W/Kn
-         gXnw==
-X-Gm-Message-State: APjAAAW+NsazG5C4fpexXSecdnB2HX1IQddP5+NHFi1h66KaO7A54TLE
-        7h57y1fvkEKM5lKLwFm0gNA=
-X-Google-Smtp-Source: APXvYqwsKU+cT7wK/M+L48ozRCDKr1OG1PgfC7KWJwdfzSP/WTzGDxhH1938xJq/mEuIIBAmp3TMrA==
-X-Received: by 2002:a19:ac48:: with SMTP id r8mr7285986lfc.181.1572607441240;
-        Fri, 01 Nov 2019 04:24:01 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DaGUTMZTPvVQG7pcnt9rSBQcYcHWYKS+V0DM0nxl4Tk=;
+        b=Tjsuln41GeTOgFG04574mENjFrqY/q3z7YCR8BplyHC0vLZe99gRZwjydnO3QuSQRp
+         XarI/uxLc6+rsmY+w5+fkKBMAQjBDFtlpYS9df1TbcJpatrwDYg8r+Sjngss0tnn4yaU
+         7NfKa2StWHVkkNJ6yfRCN5I127X9pBCqkH0KXYWNeTJMawftDajWjwjJHIDxyUAMqTW1
+         leajHJ9uDTZwSjU0HaH6Dzcsek5VBh4nyjmG80o9+sLshs2ulal3kw4k9arCtlONh5jL
+         2BBt/u08uD2JUQqKCpa5g0keb9Qb0gIRZ2olzgE9xB9QFb7GiSKjHCSPkHeesESIgPPl
+         wiww==
+X-Gm-Message-State: APjAAAUXW6u8kKgwz0tpDkbzHUWfERyEZGB9XATDsRkEnu1BXFcPKMCn
+        CELYc6a/OZfmb+eJ28/Gb+JO/ZAm5YI=
+X-Google-Smtp-Source: APXvYqz+YjmninMzPqS69q3MgmriaCnuS7fq6E4ALGEiKcz8M9m2fNDZGYklmVmjEFrlCHMy9/C/+g==
+X-Received: by 2002:a19:f811:: with SMTP id a17mr6870785lff.132.1572607514427;
+        Fri, 01 Nov 2019 04:25:14 -0700 (PDT)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id v1sm2313691lji.89.2019.11.01.04.23.59
+        by smtp.gmail.com with ESMTPSA id u13sm1851775ljl.71.2019.11.01.04.25.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 04:23:59 -0700 (PDT)
+        Fri, 01 Nov 2019 04:25:13 -0700 (PDT)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v3 1/5] media: v4l2_ctrl: Add p_def to v4l2_ctrl_config
-Date:   Fri,  1 Nov 2019 12:23:54 +0100
-Message-Id: <20191101112358.29538-1-ribalda@kernel.org>
+Subject: [PATCH 3/4] v4l2-ctl: Support getting  V4L2_CTRL_TYPE_AREA controls
+Date:   Fri,  1 Nov 2019 12:25:08 +0100
+Message-Id: <20191101112509.29723-3-ribalda@kernel.org>
 X-Mailer: git-send-email 2.24.0.rc1
+In-Reply-To: <20191101112509.29723-1-ribalda@kernel.org>
+References: <20191101112509.29723-1-ribalda@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -63,48 +65,32 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This allows setting the default value on compound controls created via
-v4l2_ctrl_new_custom.
+Tested with vivid:
+
+v4l2-ctl -C area -d /dev/video1
+area: 51966x727837
 
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 ---
- drivers/media/v4l2-core/v4l2-ctrls.c | 2 +-
- include/media/v4l2-ctrls.h           | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ utils/v4l2-ctl/v4l2-ctl-common.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
-index b4caf2d4d076..73d99c3561ce 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls.c
-@@ -2690,7 +2690,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_custom(struct v4l2_ctrl_handler *hdl,
- 			type, min, max,
- 			is_menu ? cfg->menu_skip_mask : step, def,
- 			cfg->dims, cfg->elem_size,
--			flags, qmenu, qmenu_int, ptr_null, priv);
-+			flags, qmenu, qmenu_int, cfg->p_def, priv);
- 	if (ctrl)
- 		ctrl->is_private = cfg->is_private;
- 	return ctrl;
-diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
-index e719d56fc024..78a97b10c89e 100644
---- a/include/media/v4l2-ctrls.h
-+++ b/include/media/v4l2-ctrls.h
-@@ -382,6 +382,7 @@ struct v4l2_ctrl_handler {
-  * @max:	The control's maximum value.
-  * @step:	The control's step value for non-menu controls.
-  * @def:	The control's default value.
-+ * @p_def:	The control's default value for compound controls.
-  * @dims:	The size of each dimension.
-  * @elem_size:	The size in bytes of the control.
-  * @flags:	The control's flags.
-@@ -410,6 +411,7 @@ struct v4l2_ctrl_config {
- 	s64 max;
- 	u64 step;
- 	s64 def;
-+	union v4l2_ctrl_ptr p_def;
- 	u32 dims[V4L2_CTRL_MAX_DIMS];
- 	u32 elem_size;
- 	u32 flags;
+diff --git a/utils/v4l2-ctl/v4l2-ctl-common.cpp b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+index b1c12b35..95339561 100644
+--- a/utils/v4l2-ctl/v4l2-ctl-common.cpp
++++ b/utils/v4l2-ctl/v4l2-ctl-common.cpp
+@@ -1150,6 +1150,11 @@ void common_get(cv4l_fd &_fd)
+ 							printf("%s: '%s'\n", name.c_str(),
+ 								safename(ctrl.string).c_str());
+ 							break;
++						case V4L2_CTRL_TYPE_AREA:
++							printf("%s: %dx%d\n", name.c_str(),
++							       ctrl.p_area->width,
++							       ctrl.p_area->height);
++							break;
+ 						default:
+ 							fprintf(stderr, "%s: unsupported payload type\n",
+ 									qc.name);
 -- 
 2.24.0.rc1
 
