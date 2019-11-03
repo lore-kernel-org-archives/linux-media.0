@@ -2,147 +2,152 @@ Return-Path: <SRS0=tKnt=Y3=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3F67CA9EB0
-	for <linux-media@archiver.kernel.org>; Sun,  3 Nov 2019 21:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C0B5CA9EB0
+	for <linux-media@archiver.kernel.org>; Sun,  3 Nov 2019 21:49:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 98ECC2067D
-	for <linux-media@archiver.kernel.org>; Sun,  3 Nov 2019 21:21:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=nvidia.com header.i=@nvidia.com header.b="CrZf2JZ8"
+	by mail.kernel.org (Postfix) with ESMTP id 3C8A6214D9
+	for <linux-media@archiver.kernel.org>; Sun,  3 Nov 2019 21:49:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728276AbfKCVSR (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 3 Nov 2019 16:18:17 -0500
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:10547 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728237AbfKCVSR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Sun, 3 Nov 2019 16:18:17 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dbf441e0000>; Sun, 03 Nov 2019 13:18:22 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 03 Nov 2019 13:18:15 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 03 Nov 2019 13:18:15 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 3 Nov
- 2019 21:18:15 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Sun, 3 Nov 2019 21:18:15 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dbf44170000>; Sun, 03 Nov 2019 13:18:15 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 03/18] goldish_pipe: rename local pin_user_pages() routine
-Date:   Sun, 3 Nov 2019 13:17:58 -0800
-Message-ID: <20191103211813.213227-4-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191103211813.213227-1-jhubbard@nvidia.com>
-References: <20191103211813.213227-1-jhubbard@nvidia.com>
+        id S1728267AbfKCVto (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 3 Nov 2019 16:49:44 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:46679 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727380AbfKCVto (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Sun, 3 Nov 2019 16:49:44 -0500
+Received: by mail-lj1-f195.google.com with SMTP id e9so2163477ljp.13;
+        Sun, 03 Nov 2019 13:49:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:reply-to:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=yvffdycxNBwgpU3LU9SuxVJbqRvIU33ihFBNPv6gC7I=;
+        b=YC3q7hQx4Wdn9a7lvBf3sNRgYqSo7VuFt/qp739qXrfCWKTCIf7TMJoCIVwRjUoG/o
+         4bLT8+KRH6CiO8EBwWJPDP059P9ClkWcHcKvaaOlVbkl29j7yNiU0w27cb1vicc+zByT
+         nuCPV7BUVhegPXeKwYBRkWQXJ+Gefwvj58+dSsDwCljRtZBe0/zPIr5/lWFlxXHDCif9
+         qeeJJcBYbDzZQLcQOLDZpgXRJ41dZX9aOsOiYEp1eLK0NhpHqIZ6A04keK/0Ii/0NxYV
+         9lpO5Vrexmy8VJ5z5tKuYMp20TkQQ/2o224ALGTtYlOTMofft/Zu9VCnx99CiNe+KgOF
+         bsTw==
+X-Gm-Message-State: APjAAAUxq6YkG8pPgpGBGIKhda6hg7HYUb18S8Gvtxo9PTJs8h0Qr7vK
+        VpdpGxF37+ZpH5ZVB+T2Jf0=
+X-Google-Smtp-Source: APXvYqwszZFVzcpBYbF1AygeSMGbm2SLWC9bxHThW1tANhHWxm1XLP3O7uysmVsAlCa4EXsFFr6Eiw==
+X-Received: by 2002:a2e:8e27:: with SMTP id r7mr16590670ljk.101.1572817454047;
+        Sun, 03 Nov 2019 13:44:14 -0800 (PST)
+Received: from [192.168.1.183] (128-68-70-109.broadband.corbina.ru. [128.68.70.109])
+        by smtp.gmail.com with ESMTPSA id x5sm7505573lfg.71.2019.11.03.13.44.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 Nov 2019 13:44:13 -0800 (PST)
+Reply-To: alex.popov@linux.com
+Subject: Re: [PATCH v3 1/1] media: vivid: Fix wrong locking that causes race
+ conditions on streaming stop
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Security Officers <security@kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexander Popov <alex.popov@linux.com>
+References: <20191102190327.24903-1-alex.popov@linux.com>
+ <CAHk-=wgE-veRb7+mw9oMmsD97BLnL+q8Gxu0QRrK65S2yQfMdQ@mail.gmail.com>
+From:   Alexander Popov <alex.popov@linux.com>
+Autocrypt: addr=alex.popov@linux.com; prefer-encrypt=mutual; keydata=
+ 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
+ j3lCqPk=
+Message-ID: <7ec33848-67a6-069a-132c-f8550f6e090f@linux.com>
+Date:   Mon, 4 Nov 2019 00:44:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1572815902; bh=yxndnpa6bj0xuoqPqvRY6Qkte9w9GoWasaTzIgTLBt4=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=CrZf2JZ8Z1BYEcbLmYpFUD1ZNvhKRHAjpH0YXVbR2NxZF7sRz7rzdYCVUfbyeDKkX
-         2g2B6QpG23BEG3g/71RW3OuY9p0N3tXefMp1ZYbFTW1iz2PLwALdJ+mkuVyb1iqsZr
-         F8sWxJDJO54yzjEP4wU9YZdl8I/hsHy8pE37+OizFKv6wlKVuaPeh5mzoi0KCgmnBg
-         /Y00qBw+/btgnF7T7NnqeETOhIof/gF2HPnAs7yZ+7cxOlyZsmzW+pd420DMcmtwfZ
-         vgdXxoB17ve4yALSsXuszIbA5INhDD5JbZJUAmVEfJrKoaspcnukDpzoiq6VEYRf9+
-         tELlqsr98UjAA==
+In-Reply-To: <CAHk-=wgE-veRb7+mw9oMmsD97BLnL+q8Gxu0QRrK65S2yQfMdQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-1. Avoid naming conflicts: rename local static function from
-"pin_user_pages()" to "pin_goldfish_pages()".
+On 03.11.2019 19:45, Linus Torvalds wrote:
+> On Sat, Nov 2, 2019 at 12:03 PM Alexander Popov <alex.popov@linux.com> wrote:
+>>
+>> -               mutex_lock(&dev->mutex);
+>> +               if (!mutex_trylock(&dev->mutex)) {
+>> +                       schedule_timeout(1);
+>> +                       continue;
+>> +               }
+>> +
+> 
+> I just realized that this too is wrong. It _works_, but because it
+> doesn't actually set the task state to anything particular before
+> scheduling, it's basically pointless. It calls the scheduler, but it
+> won't delay anything, because the task stays runnable.
 
-An upcoming patch will introduce a global pin_user_pages()
-function.
+Linus, thanks for noticing that.
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- drivers/platform/goldfish/goldfish_pipe.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+I've double-checked: I didn't manage to get a deadlock with schedule_timeout(1)
+on the kernel with CONFIG_FREEZER disabled and CONFIG_PREEMPT_NONE=y.
+But setting a bigger timeout argument (e.g. 1000) doesn't change the behavior,
+which agrees with your statement.
 
-diff --git a/drivers/platform/goldfish/goldfish_pipe.c b/drivers/platform/g=
-oldfish/goldfish_pipe.c
-index cef0133aa47a..7ed2a21a0bac 100644
---- a/drivers/platform/goldfish/goldfish_pipe.c
-+++ b/drivers/platform/goldfish/goldfish_pipe.c
-@@ -257,12 +257,12 @@ static int goldfish_pipe_error_convert(int status)
- 	}
- }
-=20
--static int pin_user_pages(unsigned long first_page,
--			  unsigned long last_page,
--			  unsigned int last_page_size,
--			  int is_write,
--			  struct page *pages[MAX_BUFFERS_PER_COMMAND],
--			  unsigned int *iter_last_page_size)
-+static int pin_goldfish_pages(unsigned long first_page,
-+			      unsigned long last_page,
-+			      unsigned int last_page_size,
-+			      int is_write,
-+			      struct page *pages[MAX_BUFFERS_PER_COMMAND],
-+			      unsigned int *iter_last_page_size)
- {
- 	int ret;
- 	int requested_pages =3D ((last_page - first_page) >> PAGE_SHIFT) + 1;
-@@ -354,9 +354,9 @@ static int transfer_max_buffers(struct goldfish_pipe *p=
-ipe,
- 	if (mutex_lock_interruptible(&pipe->lock))
- 		return -ERESTARTSYS;
-=20
--	pages_count =3D pin_user_pages(first_page, last_page,
--				     last_page_size, is_write,
--				     pipe->pages, &iter_last_page_size);
-+	pages_count =3D pin_goldfish_pages(first_page, last_page,
-+					 last_page_size, is_write,
-+					 pipe->pages, &iter_last_page_size);
- 	if (pages_count < 0) {
- 		mutex_unlock(&pipe->lock);
- 		return pages_count;
---=20
-2.23.0
+> So what you presumably want to use is either "cond_resched()" (to make
+> sure others get to run with no delay) or
+> "schedule_timeout_uninterruptible(1)" which actually sets the process
+> state to TASK_UNINTERRUPTIBLE.
 
+I changed it to schedule_timeout_uninterruptible(1).
+
+I'll send the v4 shortly as a reply to this thread, because I refer to it in the
+oss-security mailing list.
+
+> The above works, but it's basically nonsensical. My bad for not
+> noticing earlier.
+
+Thank you, now I know.
+
+Best regards,
+Alexander
