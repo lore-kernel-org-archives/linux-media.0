@@ -2,59 +2,58 @@ Return-Path: <SRS0=7+ZA=Y4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B364CA9EB5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:32:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B939CA9ECF
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:32:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 052A421655
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:32:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2780F21655
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:32:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="weEO16ba"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="cHprvnmo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729240AbfKDTcx (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Nov 2019 14:32:53 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:48792 "EHLO
+        id S1729740AbfKDTcM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Nov 2019 14:32:12 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:48760 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729742AbfKDTcN (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 14:32:13 -0500
+        with ESMTP id S1729720AbfKDTcK (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 14:32:10 -0500
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA4JWCCL104218;
-        Mon, 4 Nov 2019 13:32:12 -0600
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA4JW7KI104184;
+        Mon, 4 Nov 2019 13:32:07 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1572895932;
-        bh=gakWC5j/zaO+BDPfXwOsF7lxIAuI+dHbk9ltuMT8WgI=;
+        s=ti-com-17Q1; t=1572895927;
+        bh=5fBPAr4dT8DHz7hkFZsjBYcxPaihD32gR6s5e7sFpGk=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=weEO16bal2SOKCtARr4Soh1ji8boIfb7/c8ra+Wva0gZbXhzgPY3Pk1Qb9fqc5O4A
-         KcC7TLgpSA6Ik4jT+zFb1fqG4zxCM+naLBLQks5f1D+2yNHW3mby1ktdf/KqVeW4Sn
-         ECOoSDqX/djFIvsnOIqsTlEP4LiOFiZrI4FUFYB8=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA4JWBrH021618
+        b=cHprvnmo2M4moyNsFTJMs/Xx04k32UtEVm3pVPF6KBqDvQE9UPUavBuQl1+mRiU/1
+         PMqe6kTtDmXNREMVC1/qpfrWM5Medz3UzWGjOametQZwAE4xYUM4G5HcFtAbZYfHdB
+         AmnFBXz353VL7JiSGqgKVj79qYa0HnpGfpfSFv7A=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA4JW7Xn021344
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 4 Nov 2019 13:32:11 -0600
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 4 Nov 2019 13:32:07 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 4 Nov
- 2019 13:32:11 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 13:31:52 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 4 Nov 2019 13:31:57 -0600
+ Frontend Transport; Mon, 4 Nov 2019 13:31:52 -0600
 Received: from ula0869644.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4JVmdB096934;
-        Mon, 4 Nov 2019 13:32:11 -0600
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4JVmd9096934;
+        Mon, 4 Nov 2019 13:32:07 -0600
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 12/20] media: ti-vpe: cal: Add DRA76x support
-Date:   Mon, 4 Nov 2019 13:31:32 -0600
-Message-ID: <20191104193140.31145-13-bparrot@ti.com>
+Subject: [Patch v2 10/20] media: ti-vpe: cal: Align DPHY init sequence with docs
+Date:   Mon, 4 Nov 2019 13:31:30 -0600
+Message-ID: <20191104193140.31145-11-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191104193140.31145-1-bparrot@ti.com>
 References: <20191104193140.31145-1-bparrot@ti.com>
@@ -66,68 +65,287 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add the needed control module register bit layout to support
-the DRA76x family of devices.
+The current CSI2 DPHY initialization sequence although
+functional does not match with the documented sequence
+in the Technical Reference Manual.
+
+This may affect capture re-startability in stop/start
+situations.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c | 36 +++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ drivers/media/platform/ti-vpe/cal.c | 199 ++++++++++++++++++++++++----
+ 1 file changed, 172 insertions(+), 27 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index b348d99d6166..72ed2348389d 100644
+index 1b7dcf9ba9e2..b348d99d6166 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -290,6 +290,38 @@ static struct cal_data dra72x_es1_cal_data = {
- 	.flags = DRA72_CAL_PRE_ES2_LDO_DISABLE,
- };
+@@ -689,29 +689,76 @@ static void disable_irqs(struct cal_ctx *ctx)
+ 	reg_write(ctx->dev, CAL_CSI2_VC_IRQENABLE(1), 0);
+ }
  
-+static struct reg_field dra76x_ctrl_core_csi0_reg_fields[F_MAX_FIELDS] = {
-+	[F_CTRLCLKEN] = REG_FIELD(0, 8, 8),
-+	[F_CAMMODE] = REG_FIELD(0, 9, 10),
-+	[F_CSI_MODE] = REG_FIELD(0, 11, 11),
-+	[F_LANEENABLE] = REG_FIELD(0, 27, 31),
-+};
+-static void csi2_init(struct cal_ctx *ctx)
++static void csi2_phy_config(struct cal_ctx *ctx);
 +
-+static struct reg_field dra76x_ctrl_core_csi1_reg_fields[F_MAX_FIELDS] = {
-+	[F_CTRLCLKEN] = REG_FIELD(0, 0, 0),
-+	[F_CAMMODE] = REG_FIELD(0, 1, 2),
-+	[F_CSI_MODE] = REG_FIELD(0, 3, 3),
-+	[F_LANEENABLE] = REG_FIELD(0, 24, 26),
-+};
++static void csi2_phy_init(struct cal_ctx *ctx)
+ {
+ 	int i;
+ 	u32 val;
+ 
++	/* Steps
++	 *  1. Configure D-PHY mode and enable required lanes
++	 *  2. Reset complex IO - Wait for completion of reset
++	 *          Note if the external sensor is not sending byte clock,
++	 *          the reset will timeout
++	 *  3 Program Stop States
++	 *      A. Program THS_TERM, THS_SETTLE, etc... Timings parameters
++	 *              in terms of DDR clock periods
++	 *      B. Enable stop state transition timeouts
++	 *  4.Force FORCERXMODE
++	 *      D. Enable pull down using pad control
++	 *      E. Power up PHY
++	 *      F. Wait for power up completion
++	 *      G. Wait for all enabled lane to reach stop state
++	 *      H. Disable pull down using pad control
++	 */
 +
-+static struct cal_csi2_phy dra76x_cal_csi_phy[] = {
-+	{
-+		.base_fields = dra76x_ctrl_core_csi0_reg_fields,
-+		.num_lanes = 5,
-+	},
-+	{
-+		.base_fields = dra76x_ctrl_core_csi1_reg_fields,
-+		.num_lanes = 3,
-+	},
-+};
++	/* 1. Configure D-PHY mode and enable required lanes */
++	camerarx_phy_enable(ctx);
 +
-+static struct cal_data dra76x_cal_data = {
-+	.csi2_phy_core = dra76x_cal_csi_phy,
-+	.num_csi2_phy = ARRAY_SIZE(dra76x_cal_csi_phy),
++	/* 2. Reset complex IO - Do not wait for reset completion */
++	val = reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port));
++	set_field(&val, CAL_CSI2_COMPLEXIO_CFG_RESET_CTRL_OPERATIONAL,
++		  CAL_CSI2_COMPLEXIO_CFG_RESET_CTRL_MASK);
++	reg_write(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port), val);
++	ctx_dbg(3, ctx, "CAL_CSI2_COMPLEXIO_CFG(%d) = 0x%08x De-assert Complex IO Reset\n",
++		ctx->csi2_port,
++		reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port)));
 +
-+	.flags = 0,
-+};
++	/* Dummy read to allow SCP to complete */
++	val = reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port));
 +
- /*
-  * there is one cal_dev structure in the driver, it is shared by
-  * all instances.
-@@ -2285,6 +2317,10 @@ static const struct of_device_id cal_of_match[] = {
- 		.compatible = "ti,dra72-pre-es2-cal",
- 		.data = (void *)&dra72x_es1_cal_data,
- 	},
-+	{
-+		.compatible = "ti,dra76-cal",
-+		.data = (void *)&dra76x_cal_data,
-+	},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, cal_of_match);
++	/* 3.A. Program Phy Timing Parameters */
++	csi2_phy_config(ctx);
++
++	/* 3.B. Program Stop States */
+ 	val = reg_read(ctx->dev, CAL_CSI2_TIMING(ctx->csi2_port));
+-	set_field(&val, CAL_GEN_ENABLE,
+-		  CAL_CSI2_TIMING_FORCE_RX_MODE_IO1_MASK);
+ 	set_field(&val, CAL_GEN_ENABLE,
+ 		  CAL_CSI2_TIMING_STOP_STATE_X16_IO1_MASK);
+ 	set_field(&val, CAL_GEN_DISABLE,
+ 		  CAL_CSI2_TIMING_STOP_STATE_X4_IO1_MASK);
+ 	set_field(&val, 407, CAL_CSI2_TIMING_STOP_STATE_COUNTER_IO1_MASK);
+ 	reg_write(ctx->dev, CAL_CSI2_TIMING(ctx->csi2_port), val);
+-	ctx_dbg(3, ctx, "CAL_CSI2_TIMING(%d) = 0x%08x\n", ctx->csi2_port,
++	ctx_dbg(3, ctx, "CAL_CSI2_TIMING(%d) = 0x%08x Stop States\n",
++		ctx->csi2_port,
++		reg_read(ctx->dev, CAL_CSI2_TIMING(ctx->csi2_port)));
++
++	/* 4. Force FORCERXMODE */
++	val = reg_read(ctx->dev, CAL_CSI2_TIMING(ctx->csi2_port));
++	set_field(&val, CAL_GEN_ENABLE,
++		  CAL_CSI2_TIMING_FORCE_RX_MODE_IO1_MASK);
++	reg_write(ctx->dev, CAL_CSI2_TIMING(ctx->csi2_port), val);
++	ctx_dbg(3, ctx, "CAL_CSI2_TIMING(%d) = 0x%08x Force RXMODE\n",
++		ctx->csi2_port,
+ 		reg_read(ctx->dev, CAL_CSI2_TIMING(ctx->csi2_port)));
+ 
++	/* E. Power up the PHY using the complex IO */
+ 	val = reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port));
+-	set_field(&val, CAL_CSI2_COMPLEXIO_CFG_RESET_CTRL_OPERATIONAL,
+-		  CAL_CSI2_COMPLEXIO_CFG_RESET_CTRL_MASK);
+ 	set_field(&val, CAL_CSI2_COMPLEXIO_CFG_PWR_CMD_STATE_ON,
+ 		  CAL_CSI2_COMPLEXIO_CFG_PWR_CMD_MASK);
+ 	reg_write(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port), val);
++
++	/* F. Wait for power up completion */
+ 	for (i = 0; i < 10; i++) {
+ 		if (reg_read_field(ctx->dev,
+ 				   CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port),
+@@ -720,18 +767,104 @@ static void csi2_init(struct cal_ctx *ctx)
+ 			break;
+ 		usleep_range(1000, 1100);
+ 	}
+-	ctx_dbg(3, ctx, "CAL_CSI2_COMPLEXIO_CFG(%d) = 0x%08x\n", ctx->csi2_port,
+-		reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port)));
++	ctx_dbg(3, ctx, "CAL_CSI2_COMPLEXIO_CFG(%d) = 0x%08x Powered UP %s\n",
++		ctx->csi2_port,
++		reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port)),
++		(i >= 10) ? "(timeout)" : "");
++}
+ 
+-	val = reg_read(ctx->dev, CAL_CTRL);
+-	set_field(&val, CAL_CTRL_BURSTSIZE_BURST128, CAL_CTRL_BURSTSIZE_MASK);
+-	set_field(&val, 0xF, CAL_CTRL_TAGCNT_MASK);
+-	set_field(&val, CAL_CTRL_POSTED_WRITES_NONPOSTED,
+-		  CAL_CTRL_POSTED_WRITES_MASK);
+-	set_field(&val, 0xFF, CAL_CTRL_MFLAGL_MASK);
+-	set_field(&val, 0xFF, CAL_CTRL_MFLAGH_MASK);
+-	reg_write(ctx->dev, CAL_CTRL, val);
+-	ctx_dbg(3, ctx, "CAL_CTRL = 0x%08x\n", reg_read(ctx->dev, CAL_CTRL));
++static void csi2_wait_for_phy(struct cal_ctx *ctx)
++{
++	int i;
++
++	/* Steps
++	 *  2. Wait for completion of reset
++	 *          Note if the external sensor is not sending byte clock,
++	 *          the reset will timeout
++	 *  4.Force FORCERXMODE
++	 *      G. Wait for all enabled lane to reach stop state
++	 *      H. Disable pull down using pad control
++	 */
++
++	/* 2. Wait for reset completion */
++	for (i = 0; i < 250; i++) {
++		if (reg_read_field(ctx->dev,
++				   CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port),
++				   CAL_CSI2_COMPLEXIO_CFG_RESET_DONE_MASK) ==
++		    CAL_CSI2_COMPLEXIO_CFG_RESET_DONE_RESETCOMPLETED)
++			break;
++		usleep_range(1000, 1100);
++	}
++	ctx_dbg(3, ctx, "CAL_CSI2_COMPLEXIO_CFG(%d) = 0x%08x Complex IO Reset Done (%d) %s\n",
++		ctx->csi2_port,
++		reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port)), i,
++		(i >= 250) ? "(timeout)" : "");
++
++	/* 4. G. Wait for all enabled lane to reach stop state */
++	for (i = 0; i < 10; i++) {
++		if (reg_read_field(ctx->dev,
++				   CAL_CSI2_TIMING(ctx->csi2_port),
++				   CAL_CSI2_TIMING_FORCE_RX_MODE_IO1_MASK) ==
++		    CAL_GEN_DISABLE)
++			break;
++		usleep_range(1000, 1100);
++	}
++	ctx_dbg(3, ctx, "CAL_CSI2_TIMING(%d) = 0x%08x Stop State Reached %s\n",
++		ctx->csi2_port,
++		reg_read(ctx->dev, CAL_CSI2_TIMING(ctx->csi2_port)),
++		(i >= 10) ? "(timeout)" : "");
++
++	ctx_dbg(1, ctx, "CSI2_%d_REG1 = 0x%08x (Bit(31,28) should be set!)\n",
++		(ctx->csi2_port - 1), reg_read(ctx->cc, CAL_CSI2_PHY_REG1));
++}
++
++static void csi2_phy_deinit(struct cal_ctx *ctx)
++{
++	int i;
++	u32 val;
++
++	/* Power down the PHY using the complex IO */
++	val = reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port));
++	set_field(&val, CAL_CSI2_COMPLEXIO_CFG_PWR_CMD_STATE_OFF,
++		  CAL_CSI2_COMPLEXIO_CFG_PWR_CMD_MASK);
++	reg_write(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port), val);
++
++	/* Wait for power down completion */
++	for (i = 0; i < 10; i++) {
++		if (reg_read_field(ctx->dev,
++				   CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port),
++				   CAL_CSI2_COMPLEXIO_CFG_PWR_STATUS_MASK) ==
++		    CAL_CSI2_COMPLEXIO_CFG_PWR_STATUS_STATE_OFF)
++			break;
++		usleep_range(1000, 1100);
++	}
++	ctx_dbg(3, ctx, "CAL_CSI2_COMPLEXIO_CFG(%d) = 0x%08x Powered Down %s\n",
++		ctx->csi2_port,
++		reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port)),
++		(i >= 10) ? "(timeout)" : "");
++
++	/* Assert Comple IO Reset */
++	val = reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port));
++	set_field(&val, CAL_CSI2_COMPLEXIO_CFG_RESET_CTRL,
++		  CAL_CSI2_COMPLEXIO_CFG_RESET_CTRL_MASK);
++	reg_write(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port), val);
++
++	/* Wait for power down completion */
++	for (i = 0; i < 10; i++) {
++		if (reg_read_field(ctx->dev,
++				   CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port),
++				   CAL_CSI2_COMPLEXIO_CFG_RESET_DONE_MASK) ==
++		    CAL_CSI2_COMPLEXIO_CFG_RESET_DONE_RESETONGOING)
++			break;
++		usleep_range(1000, 1100);
++	}
++	ctx_dbg(3, ctx, "CAL_CSI2_COMPLEXIO_CFG(%d) = 0x%08x Complex IO in Reset (%d) %s\n",
++		ctx->csi2_port,
++		reg_read(ctx->dev, CAL_CSI2_COMPLEXIO_CFG(ctx->csi2_port)), i,
++		(i >= 10) ? "(timeout)" : "");
++
++	/* Disable the phy */
++	camerarx_phy_disable(ctx);
+ }
+ 
+ static void csi2_lane_config(struct cal_ctx *ctx)
+@@ -894,6 +1027,16 @@ static void cal_wr_dma_config(struct cal_ctx *ctx,
+ 	reg_write(ctx->dev, CAL_WR_DMA_XSIZE(ctx->csi2_port), val);
+ 	ctx_dbg(3, ctx, "CAL_WR_DMA_XSIZE(%d) = 0x%08x\n", ctx->csi2_port,
+ 		reg_read(ctx->dev, CAL_WR_DMA_XSIZE(ctx->csi2_port)));
++
++	val = reg_read(ctx->dev, CAL_CTRL);
++	set_field(&val, CAL_CTRL_BURSTSIZE_BURST128, CAL_CTRL_BURSTSIZE_MASK);
++	set_field(&val, 0xF, CAL_CTRL_TAGCNT_MASK);
++	set_field(&val, CAL_CTRL_POSTED_WRITES_NONPOSTED,
++		  CAL_CTRL_POSTED_WRITES_MASK);
++	set_field(&val, 0xFF, CAL_CTRL_MFLAGL_MASK);
++	set_field(&val, 0xFF, CAL_CTRL_MFLAGH_MASK);
++	reg_write(ctx->dev, CAL_CTRL, val);
++	ctx_dbg(3, ctx, "CAL_CTRL = 0x%08x\n", reg_read(ctx->dev, CAL_CTRL));
+ }
+ 
+ static void cal_wr_dma_addr(struct cal_ctx *ctx, unsigned int dmaaddr)
+@@ -1466,17 +1609,14 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 
+ 	cal_runtime_get(ctx->dev);
+ 
+-	enable_irqs(ctx);
+-	camerarx_phy_enable(ctx);
+-	csi2_init(ctx);
+-	csi2_phy_config(ctx);
+-	csi2_lane_config(ctx);
+ 	csi2_ctx_config(ctx);
+ 	pix_proc_config(ctx);
+ 	cal_wr_dma_config(ctx, ctx->v_fmt.fmt.pix.bytesperline,
+ 			  ctx->v_fmt.fmt.pix.height);
+-	cal_wr_dma_addr(ctx, addr);
+-	csi2_ppi_enable(ctx);
++	csi2_lane_config(ctx);
++
++	enable_irqs(ctx);
++	csi2_phy_init(ctx);
+ 
+ 	ret = v4l2_subdev_call(ctx->sensor, video, s_stream, 1);
+ 	if (ret) {
+@@ -1485,6 +1625,10 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 		goto err;
+ 	}
+ 
++	csi2_wait_for_phy(ctx);
++	cal_wr_dma_addr(ctx, addr);
++	csi2_ppi_enable(ctx);
++
+ 	if (debug >= 4)
+ 		cal_quickdump_regs(ctx->dev);
+ 
+@@ -1505,11 +1649,12 @@ static void cal_stop_streaming(struct vb2_queue *vq)
+ 	struct cal_buffer *buf, *tmp;
+ 	unsigned long flags;
+ 
+-	if (v4l2_subdev_call(ctx->sensor, video, s_stream, 0))
+-		ctx_err(ctx, "stream off failed in subdev\n");
+-
+ 	csi2_ppi_disable(ctx);
+ 	disable_irqs(ctx);
++	csi2_phy_deinit(ctx);
++
++	if (v4l2_subdev_call(ctx->sensor, video, s_stream, 0))
++		ctx_err(ctx, "stream off failed in subdev\n");
+ 
+ 	/* Release all active buffers */
+ 	spin_lock_irqsave(&ctx->slock, flags);
 -- 
 2.17.1
 
