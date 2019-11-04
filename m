@@ -7,52 +7,53 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F06BCA9EB5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:32:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 128C3CA9ECF
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:32:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 58CB32080F
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:32:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E03122080F
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:32:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="PERuZg2F"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="KaLmBzOv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729663AbfKDTcC (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Nov 2019 14:32:02 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:48736 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729646AbfKDTcB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 14:32:01 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA4JW00M104149;
-        Mon, 4 Nov 2019 13:32:00 -0600
+        id S1729719AbfKDTcI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Nov 2019 14:32:08 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:47524 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729704AbfKDTcI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 14:32:08 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA4JW6Jq000758;
+        Mon, 4 Nov 2019 13:32:06 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1572895920;
-        bh=/uLv7JVb364YMJpDL21sew7lV3/imt2e+I/yD5VDeMY=;
+        s=ti-com-17Q1; t=1572895926;
+        bh=Z07YzElBjrHCm7soDpyKSRlehI1yRBoN2QBEWyWKCgA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=PERuZg2FnAOZL/vzv47S0TtBN8KePLX2EkSjFXswcdR1cTXVQI/J+rMVs3xJH5eGa
-         smC7nYeJ7zEVtMx4/sMOGUWaVXhIvJJKiOvsbRcgyW0H0Mj8EcVwd8VGXSX2FiDr20
-         BxubBD+dbo1uo6ZUqODjNw2i+eGzUIcaC1edmBeI=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4JW0Wl024529;
-        Mon, 4 Nov 2019 13:32:00 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        b=KaLmBzOvwe1j1uhldli9rGRW7tGBZQ7OCAEg8vp4smLaziU09e1I9AgrIfa01WSPE
+         ftF9nTU2yvyM4Zjpf9xbpkk8yPIvS78jZE8cQHtv+8Biflh07NiadNXAsKmhjikDxJ
+         FDTIbGnXLTBCMeQPWMKxIlz4il0twOjA8u7LadJI=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA4JW6dR126716
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 4 Nov 2019 13:32:06 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 4 Nov
- 2019 13:31:45 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 13:32:05 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 4 Nov 2019 13:31:45 -0600
+ Frontend Transport; Mon, 4 Nov 2019 13:31:51 -0600
 Received: from ula0869644.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4JVmd5096934;
-        Mon, 4 Nov 2019 13:31:59 -0600
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4JVmd8096934;
+        Mon, 4 Nov 2019 13:32:05 -0600
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Benoit Parrot <bparrot@ti.com>, Jyri Sarha <jsarha@ti.com>
-Subject: [Patch v2 06/20] dt-bindings: media: cal: update binding to add PHY LDO errata support
-Date:   Mon, 4 Nov 2019 13:31:26 -0600
-Message-ID: <20191104193140.31145-7-bparrot@ti.com>
+        Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v2 09/20] media: ti-vpe: cal: Fix pixel processing parameters
+Date:   Mon, 4 Nov 2019 13:31:29 -0600
+Message-ID: <20191104193140.31145-10-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191104193140.31145-1-bparrot@ti.com>
 References: <20191104193140.31145-1-bparrot@ti.com>
@@ -64,31 +65,74 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Update Device Tree bindings for the CAL driver to add support for
-the CSI2 PHY LDO errata workaround for pre-es2 devices.
+The pixel processing unit was hard coded to only handle 8 bits per pixel
+from input to output.
+
+We now add handling for 10, 12 and 16 bits per pixel at the source and
+setting the in-memory size (i.e. container size) to 16 bits for these 3
+cases.
 
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Signed-off-by: Jyri Sarha <jsarha@ti.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/media/ti-cal.txt | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/media/platform/ti-vpe/cal.c | 41 ++++++++++++++++++++++++++---
+ 1 file changed, 38 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/ti-cal.txt b/Documentation/devicetree/bindings/media/ti-cal.txt
-index 7e960cf26e23..cb2dc50a24fb 100644
---- a/Documentation/devicetree/bindings/media/ti-cal.txt
-+++ b/Documentation/devicetree/bindings/media/ti-cal.txt
-@@ -7,7 +7,9 @@ processing capability to connect CSI2 image-sensor modules to the
- DRA72x device.
+diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
+index 1abcdd98c33f..1b7dcf9ba9e2 100644
+--- a/drivers/media/platform/ti-vpe/cal.c
++++ b/drivers/media/platform/ti-vpe/cal.c
+@@ -803,13 +803,48 @@ static void csi2_ctx_config(struct cal_ctx *ctx)
  
- Required properties:
--- compatible: must be "ti,dra72-cal"
-+- compatible:
-+ Should be "ti,dra72-cal", for DRA72 controllers
-+ Should be "ti,dra72-pre-es2-cal", for DRA72 controllers pre ES2.0
- - reg:	CAL Top level, Receiver Core #0, Receiver Core #1 and Camera RX
- 	control address space
- - reg-names: cal_top, cal_rx_core0, cal_rx_core1 and camerrx_control
+ static void pix_proc_config(struct cal_ctx *ctx)
+ {
+-	u32 val;
++	u32 val, extract, pack;
++
++	switch (ctx->fmt->bpp) {
++	case 8:
++		extract = CAL_PIX_PROC_EXTRACT_B8;
++		pack = CAL_PIX_PROC_PACK_B8;
++		break;
++	case 10:
++		extract = CAL_PIX_PROC_EXTRACT_B10_MIPI;
++		pack = CAL_PIX_PROC_PACK_B16;
++		break;
++	case 12:
++		extract = CAL_PIX_PROC_EXTRACT_B12_MIPI;
++		pack = CAL_PIX_PROC_PACK_B16;
++		break;
++	case 16:
++		extract = CAL_PIX_PROC_EXTRACT_B16_LE;
++		pack = CAL_PIX_PROC_PACK_B16;
++		break;
++	default:
++		/*
++		 * If you see this warning then it means that you added
++		 * some new entry in the cal_formats[] array with a different
++		 * bit per pixel values then the one supported below.
++		 * Either add support for the new bpp value below or adjust
++		 * the new entry to use one of the value below.
++		 *
++		 * Instead of failing here just use 8 bpp as a default.
++		 */
++		dev_warn_once(&ctx->dev->pdev->dev,
++			      "%s:%d:%s: bpp:%d unsupported! Overwritten with 8.\n",
++			      __FILE__, __LINE__, __func__, ctx->fmt->bpp);
++		extract = CAL_PIX_PROC_EXTRACT_B8;
++		pack = CAL_PIX_PROC_PACK_B8;
++		break;
++	}
+ 
+ 	val = reg_read(ctx->dev, CAL_PIX_PROC(ctx->csi2_port));
+-	set_field(&val, CAL_PIX_PROC_EXTRACT_B8, CAL_PIX_PROC_EXTRACT_MASK);
++	set_field(&val, extract, CAL_PIX_PROC_EXTRACT_MASK);
+ 	set_field(&val, CAL_PIX_PROC_DPCMD_BYPASS, CAL_PIX_PROC_DPCMD_MASK);
+ 	set_field(&val, CAL_PIX_PROC_DPCME_BYPASS, CAL_PIX_PROC_DPCME_MASK);
+-	set_field(&val, CAL_PIX_PROC_PACK_B8, CAL_PIX_PROC_PACK_MASK);
++	set_field(&val, pack, CAL_PIX_PROC_PACK_MASK);
+ 	set_field(&val, ctx->csi2_port, CAL_PIX_PROC_CPORT_MASK);
+ 	set_field(&val, CAL_GEN_ENABLE, CAL_PIX_PROC_EN_MASK);
+ 	reg_write(ctx->dev, CAL_PIX_PROC(ctx->csi2_port), val);
 -- 
 2.17.1
 
