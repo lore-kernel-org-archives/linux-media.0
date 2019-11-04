@@ -2,103 +2,140 @@ Return-Path: <SRS0=7+ZA=Y4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 738E2CA9ECF
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 20:49:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 843DCCA9EB5
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 20:57:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 3FB9520B7C
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 20:49:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5659620717
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 20:57:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="d+hzKMBS"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="GqKdo8q3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729563AbfKDUt6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Nov 2019 15:49:58 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:58210 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728409AbfKDUtJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 15:49:09 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA4Kn4jC129043;
-        Mon, 4 Nov 2019 14:49:04 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1572900544;
-        bh=zWBhOOfeKxZLi5xztSZD4Ml4LW3AVvoUR5jhAapcIVA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=d+hzKMBSe7c172B9RrZF3EfurlJChMPwQaAIYhKQGlMzBVpaLyjpN0YuXFKTa3N3L
-         ALsk/vYQdLCzm5iQtjPYVWQetxFZ4/DdE15CbLKqLnxr5ltQQONTNlYw2WeTpbT9hx
-         viPq0bsLHxZ78k4nDuNkXHd7/aInPBle4hSxEzcU=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA4Kn4lT038228
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 4 Nov 2019 14:49:04 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 4 Nov
- 2019 14:48:49 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 4 Nov 2019 14:49:04 -0600
-Received: from ula0869644.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4Kmvxw038360;
-        Mon, 4 Nov 2019 14:49:03 -0600
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Tony Lindgren <tony@atomide.com>, Tero Kristo <t-kristo@ti.com>
-CC:     <linux-omap@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-media@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Benoit Parrot <bparrot@ti.com>
-Subject: [Patch v2 02/10] ARM: dts: dra7: add cam clkctrl node
-Date:   Mon, 4 Nov 2019 14:48:45 -0600
-Message-ID: <20191104204853.4355-3-bparrot@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191104204853.4355-1-bparrot@ti.com>
-References: <20191104204853.4355-1-bparrot@ti.com>
+        id S1729399AbfKDU5k (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Nov 2019 15:57:40 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:36845 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728778AbfKDU5k (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 15:57:40 -0500
+Received: by mail-qt1-f194.google.com with SMTP id y10so19299918qto.3
+        for <linux-media@vger.kernel.org>; Mon, 04 Nov 2019 12:57:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=DHyq0HiLvr2oRZ7fsWKuvfiy0KSCrmJQP2N7wxll3ck=;
+        b=GqKdo8q3EQ1hr6qek+daVbq7asYL8vgosOUNPq/TbaKVNw+fSwsVZvMXYAXCf0AJyJ
+         u82hnz0QILmabMP4l0QBspnNgDON3wCBCl2euZ2xUfz4wbz1CJOCkCDLlOnh4i58Oaj/
+         S3gq/Jh9sfa4MobfNbFXPlzU8wQ8qlAiWQ9QDx9r++NF1VyZNacvaIxbfl+Dz9q/YaK7
+         LJZ1bbR858MSdLa9WbMS13d/j0HGbePzEAUYRTf3vNGneWwIu7V1pWB8dhbOd6RohsWw
+         Lzscw767cSCt9xjt6Uiuin4I08CfE7g1YZRaK11NZ5fT7S0HH+Tq61iyMWJYbr4RPL29
+         XI3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=DHyq0HiLvr2oRZ7fsWKuvfiy0KSCrmJQP2N7wxll3ck=;
+        b=nCM3Y2uWz6DXuk/mpeU3gbttl1YBu1UaLBgVhH0x9yy8MSieGEFKjJ+qoKWdS6bLJF
+         McLWRt6Juc0n3ooeh2SwPXVv/Wo9NlI3d4017f2WDXe5+o15Yehsxpn/PslNZHFfsR+m
+         Fcsy3DYrTr34dmuRPIdAiHsb/WaEPbNhCt/lcC76r0RRkFJd8j81SgwR0g8Z/pvvOTMi
+         OXu05tFjkClNakjAPfQFfnV9+wN9uQFyxM26D+9kITj+MVEcVirrHprqNl9vg6cfHetb
+         Fa08wxHvRQWdXTAEfTI2IleHJkGUf6yjkwewjEULBqq78xXt9Lyhb47KYHew7cu9wlUy
+         o3Pg==
+X-Gm-Message-State: APjAAAW4mrikGwjQ2vFpCpUdfXunUMtnoJa9O8JsqYn0Mf0FnBuxVoa0
+        niPtzxIsg/KpqcLQ8esKKN53pQ==
+X-Google-Smtp-Source: APXvYqzcbzV98q5L3IoWgV1btJnfFj6kw4clhQUw4ORkigswFo+IphwlhQMZSa6Hl6m/W3Z9gLas4A==
+X-Received: by 2002:ad4:4092:: with SMTP id l18mr462915qvp.114.1572901059500;
+        Mon, 04 Nov 2019 12:57:39 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
+        by smtp.gmail.com with ESMTPSA id l20sm5226323qtq.78.2019.11.04.12.57.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 04 Nov 2019 12:57:38 -0800 (PST)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1iRjPu-0000Zj-4J; Mon, 04 Nov 2019 16:57:38 -0400
+Date:   Mon, 4 Nov 2019 16:57:38 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 07/18] infiniband: set FOLL_PIN, FOLL_LONGTERM via
+ pin_longterm_pages*()
+Message-ID: <20191104205738.GH30938@ziepe.ca>
+References: <20191103211813.213227-1-jhubbard@nvidia.com>
+ <20191103211813.213227-8-jhubbard@nvidia.com>
+ <20191104203346.GF30938@ziepe.ca>
+ <578c1760-7221-4961-9f7d-c07c22e5c259@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <578c1760-7221-4961-9f7d-c07c22e5c259@nvidia.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Add clkctrl nodes for CAM domain.
+On Mon, Nov 04, 2019 at 12:48:13PM -0800, John Hubbard wrote:
+> On 11/4/19 12:33 PM, Jason Gunthorpe wrote:
+> ...
+> >> diff --git a/drivers/infiniband/core/umem.c b/drivers/infiniband/core/umem.c
+> >> index 24244a2f68cc..c5a78d3e674b 100644
+> >> +++ b/drivers/infiniband/core/umem.c
+> >> @@ -272,11 +272,10 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
+> >>  
+> >>  	while (npages) {
+> >>  		down_read(&mm->mmap_sem);
+> >> -		ret = get_user_pages(cur_base,
+> >> +		ret = pin_longterm_pages(cur_base,
+> >>  				     min_t(unsigned long, npages,
+> >>  					   PAGE_SIZE / sizeof (struct page *)),
+> >> -				     gup_flags | FOLL_LONGTERM,
+> >> -				     page_list, NULL);
+> >> +				     gup_flags, page_list, NULL);
+> > 
+> > FWIW, this one should be converted to fast as well, I think we finally
+> > got rid of all the blockers for that?
+> > 
+> 
+> I'm not aware of any blockers on the gup.c end, anyway. The only broken thing we
+> have there is "gup remote + FOLL_LONGTERM". But we can do "gup fast + LONGTERM". 
 
-Signed-off-by: Benoit Parrot <bparrot@ti.com>
----
- arch/arm/boot/dts/dra7xx-clocks.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/arch/arm/boot/dts/dra7xx-clocks.dtsi b/arch/arm/boot/dts/dra7xx-clocks.dtsi
-index d1c2406ec71c..199f8d483f75 100644
---- a/arch/arm/boot/dts/dra7xx-clocks.dtsi
-+++ b/arch/arm/boot/dts/dra7xx-clocks.dtsi
-@@ -1734,6 +1734,20 @@
- 		};
- 	};
+I mean the use of the mmap_sem here is finally in a way where we can
+just delete the mmap_sem and use _fast
  
-+	cam_cm: cam-cm@1000 {
-+		compatible = "ti,omap4-cm";
-+		reg = <0x1000 0x100>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges = <0 0x1000 0x100>;
-+
-+		cam_clkctrl: cam-clkctrl@20 {
-+			compatible = "ti,clkctrl";
-+			reg = <0x20 0x2c>;
-+			#clock-cells = <2>;
-+		};
-+	};
-+
- 	dss_cm: dss-cm@1100 {
- 		compatible = "ti,omap4-cm";
- 		reg = <0x1100 0x100>;
--- 
-2.17.1
+ie, AFAIK there is no need for the mmap_sem to be held during
+ib_umem_add_sg_table()
 
+This should probably be a standalone patch however
+
+Jason
