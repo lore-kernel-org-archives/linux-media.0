@@ -2,160 +2,106 @@ Return-Path: <SRS0=7+ZA=Y4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CE23CA9EC9
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 21:34:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C54DACA9EC9
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 22:03:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2941720663
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 21:34:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96F57217F5
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 22:03:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="myTmnHU8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729670AbfKDVe2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Nov 2019 16:34:28 -0500
-Received: from mga06.intel.com ([134.134.136.31]:34054 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729636AbfKDVe2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Mon, 4 Nov 2019 16:34:28 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Nov 2019 13:34:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,268,1569308400"; 
-   d="scan'208";a="195593176"
-Received: from cshanno1-mobl3.ger.corp.intel.com (HELO kekkonen.fi.intel.com) ([10.252.41.86])
-  by orsmga008.jf.intel.com with ESMTP; 04 Nov 2019 13:34:25 -0800
-Received: by kekkonen.fi.intel.com (Postfix, from userid 1000)
-        id A3F4321FAF; Mon,  4 Nov 2019 23:30:56 +0200 (EET)
-Date:   Mon, 4 Nov 2019 23:30:56 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+        id S2389528AbfKDWDd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Nov 2019 17:03:33 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:34726 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389517AbfKDWDc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 17:03:32 -0500
+Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 8C5BB52C;
+        Mon,  4 Nov 2019 23:03:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1572905010;
+        bh=h3KXRmtDEIdlXTcsCYsoYkoTUu6/37PyFCoRR/oW8N0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=myTmnHU8Ci+cJErtmEM//B1xxSGcmLBdlo7ii6ugRS4UdrfuMqNT5eaWrXi3utiv2
+         9fJQj0qojfeyusRiS7CwSwliiSZu+j8Y8aaFLwWe6PgVzBYOyLJ8p2ochPbDLjfBx7
+         42o5A0PDGBBghHRtlpv9Ae52ZSr5BnjjWGBCGLZk=
+Date:   Tue, 5 Nov 2019 00:03:23 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
 Subject: Re: [PATCH] media: i2c: IMX296 camera sensor driver
-Message-ID: <20191104213056.GA13879@kekkonen.localdomain>
+Message-ID: <20191104220323.GH4913@pendragon.ideasonboard.com>
 References: <20191031132309.10965-1-laurent.pinchart@ideasonboard.com>
- <20191031142522.GK10211@paasikivi.fi.intel.com>
- <20191104133351.GB4913@pendragon.ideasonboard.com>
- <20191104185903.GE4913@pendragon.ideasonboard.com>
+ <20191101145246.GA13101@Mani-XPS-13-9360>
+ <20191104134206.GC4913@pendragon.ideasonboard.com>
+ <CAL_Jsq+R-ndA5s93uXam1F8Bjm=SPV6z1BQvdMGzfHkyYPd2Hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191104185903.GE4913@pendragon.ideasonboard.com>
+In-Reply-To: <CAL_Jsq+R-ndA5s93uXam1F8Bjm=SPV6z1BQvdMGzfHkyYPd2Hw@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+Hi Rob,
 
-On Mon, Nov 04, 2019 at 08:59:03PM +0200, Laurent Pinchart wrote:
-> Hi Sakari,
-> 
-> On Mon, Nov 04, 2019 at 03:33:51PM +0200, Laurent Pinchart wrote:
-> > On Thu, Oct 31, 2019 at 04:25:22PM +0200, Sakari Ailus wrote:
+On Mon, Nov 04, 2019 at 03:08:57PM -0600, Rob Herring wrote:
+> On Mon, Nov 4, 2019 at 7:42 AM Laurent Pinchart wrote:
+> > On Fri, Nov 01, 2019 at 08:22:46PM +0530, Manivannan Sadhasivam wrote:
+> > > Hi Laurent,
+> > >
+> > > Thanks for the improved version of the driver. I haven't tested it on
+> > > my setup yet. Once I do, I'll add a Tested-by tag.
+> > >
+> > > I just have few minor commments on top of Sakari's review. Overall it
+> > > looks good.
+> > >
 > > > On Thu, Oct 31, 2019 at 03:23:09PM +0200, Laurent Pinchart wrote:
 > > > > The IMX296LLR is a monochrome 1.60MP CMOS sensor from Sony. The driver
 > > > > supports cropping and binning (but not both at the same time due to
 > > > > hardware limitations) and exposure, gain, vertical blanking and test
 > > > > pattern controls.
-> > > > 
+> > > >
 > > > > Preliminary support is also included for the color IMX296LQR sensor.
-> > > > 
+> > > >
 > > > > Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > > > > ---
-> > > > This driver is a parallel implementation of IMX296 support, compatible
-> > > > with the DT bindings submitted by Mani in
-> > > > https://lore.kernel.org/linux-media/20191030094902.32582-1-manivannan.sadhasivam@linaro.org/.
-> > > > 
-> > > >  drivers/media/i2c/Kconfig  |   12 +
-> > > >  drivers/media/i2c/Makefile |    1 +
-> > > >  drivers/media/i2c/imx296.c | 1026 ++++++++++++++++++++++++++++++++++++
-> > > >  3 files changed, 1039 insertions(+)
-> > > >  create mode 100644 drivers/media/i2c/imx296.c
 > 
-> [snip]
+> > > > +   imx->reset = devm_gpiod_get_optional(&client->dev, "reset",
+> > > > +                                        GPIOD_OUT_HIGH);
+> > > > +   if (IS_ERR(imx->reset)) {
+> > > > +           if (PTR_ERR(imx->reset) != -EPROBE_DEFER)
+> > > > +                   dev_err(&client->dev, "failed to get xclr gpio (%ld)\n",
+> > >
+> > > If you want to keep device specific naming for resources, I'd suggest using
+> > > `xclr` instead of `reset` in DT itself.
+> >
+> > For GPIOs I think there's an overall consensus that standard names are
+> > preferred, while I don't think this applies to clocks. It's a bit of a
+> > grey area though, so I'm open to change on or the other.
+> >
+> > Rob, any preference ?
 > 
-> > > > diff --git a/drivers/media/i2c/imx296.c b/drivers/media/i2c/imx296.c
-> > > > new file mode 100644
-> > > > index 000000000000..4140637983fd
-> > > > --- /dev/null
-> > > > +++ b/drivers/media/i2c/imx296.c
-> 
-> [snip]
-> 
-> > > > +static int imx296_power_on(struct imx296 *imx)
-> > > > +{
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = regulator_enable(imx->supply);
-> > > > +	if (ret < 0)
-> > > > +		return ret;
-> > > > +
-> > > > +	udelay(1);
-> > > > +
-> > > > +	ret = gpiod_direction_output(imx->reset, 0);
-> > > > +	if (ret < 0)
-> > > > +		goto err_supply;
-> > > > +
-> > > > +	udelay(1);
-> > > > +
-> > > > +	ret = clk_prepare_enable(imx->clk);
-> > > > +	if (ret < 0)
-> > > > +		goto err_reset;
-> > > > +
-> > > > +	/*
-> > > > +	 * The documentation doesn't explicitly say how much time is required
-> > > > +	 * after providing a clock and before starting I2C communication. It
-> > > > +	 * mentions a delay of 20µs in 4-wire mode, but tests showed that a
-> > > > +	 * delay of 100µs resulted in I2C communication failures, while 500µs
-> > > > +	 * seems to be enough. Be conservative.
-> > > > +	 */
-> > > > +	usleep_range(1000, 2000);
-> > > > +
-> > > > +	return 0;
-> > > > +
-> > > > +err_reset:
-> > > > +	gpiod_direction_output(imx->reset, 1);
-> > > > +err_supply:
-> > > > +	regulator_disable(imx->supply);
-> > > > +	return ret;
-> > > 
-> > > Could you switch to runtime PM? It's not hard. See e.g.
-> > > drivers/media/i2c/ov5670.c for an example. Or, for a more complete example,
-> > > the smiapp driver. :-)
-> > 
-> > I'll give it a try.
-> 
-> I was expecting the MC and V4L2 core to deal with PM but they don't seem
-> to. Do I thus understand correctly that switching to runtime PM will
-> cause the full power on sequence to happen at stream on time ? This can
-> lead to a significant delay when starting the stream.
-> 
-> Furthermore, if nothing else than the driver deals with runtime PM,
-> what's the advantage of using the runtime PM API over calling the power
-> on/off at stream on/off time manually ?
+> If in fact that's a reset, then yes, use 'reset-gpios'. 'xclr' is an
+> unusual name though.
 
-Runtime PM abstracts power management for drivers, so drivers don't need,
-for instance, to know the system firmware type for its own sake. (On DT the
-driver still needs to implement runtime PM callbacks for device resume and
-suspend, for instance.)
+Vendors are always inventive :-)
 
-But on ACPI you effectively need runtime PM if you want some kind of
-dynamic power management to take place. Runtime PM also takes into account
-managing power for device's parents and other things there are no
-alternatives for.
-
-So there's really little excuse of not supporting runtime PM if the device
-isn't going to be always powered on.
+How about clock names ? Do you think they should be standardized too,
+should we decide on a name for the main functional clock, or should we
+use the pin name ?
 
 -- 
 Regards,
 
-Sakari Ailus
-sakari.ailus@linux.intel.com
+Laurent Pinchart
