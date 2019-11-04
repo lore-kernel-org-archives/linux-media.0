@@ -7,57 +7,55 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3D4FCA9EB5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 13:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20C39CA9EB5
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 13:09:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 9ACBF222C1
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 13:09:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E70B721E6F
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 13:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1572872993;
-	bh=bpLdGE8V/u9Pfk2EWnfMrE1PYLATaVTRs9lEUo93Jdc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=y7BOJu2u8JVud5GS3GIyc1Dx5sOQp/aAGDASjb4yeCMTMhUB+gBlbpXtyjLZYKX8n
-	 tCwaQTUpAv9Sp3YFEYTMHTkNcK87+ALCwussqNKsVN47vhBEnuv3XKnoxQVN7u5YXY
-	 caHnA8ljmjOsefLWsOqKry8n0RQmtnrLqrdi/jNQ=
+	s=default; t=1572872998;
+	bh=qET0go5fTgr+VAcDElsE61ngvrjcyMrCjUxKjlVEXPQ=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=g59vd4CSKcWuxxM27mTcGM+m7yIO4S2YhjP2F09qlgozgdcV5leCQulBadn84ZhXl
+	 bRgLuNn7tmMAeXafvIe/UoPiLB278O84M0gw9fsK8nVqCy3vyoKHr72xL2d5duH9gs
+	 hECrOjlwWFQWRHxbB72qayRq0IIiJLP7kT0RygFM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729153AbfKDNJh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Nov 2019 08:09:37 -0500
-Received: from mail-lf1-f54.google.com ([209.85.167.54]:38739 "EHLO
-        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729089AbfKDNJh (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 08:09:37 -0500
-Received: by mail-lf1-f54.google.com with SMTP id q28so12218831lfa.5;
-        Mon, 04 Nov 2019 05:09:35 -0800 (PST)
+        id S1729043AbfKDNJa (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Nov 2019 08:09:30 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:45082 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727430AbfKDNJa (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 08:09:30 -0500
+Received: by mail-lj1-f195.google.com with SMTP id n21so3890632ljg.12;
+        Mon, 04 Nov 2019 05:09:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0W10DXwaVM53AXBTDklaYFrwsbXNjvFaekrr8EZmqhM=;
-        b=m4uLtIf2x9AhuMG+EJSSmi1DEOVtsDoHZoyZ8KshqYcBN/mhwcz4c+UZyprpbhsJGx
-         EALb3coHk6D7WvIPaMEbSX9w70CWX5emG0cgrJklXMy0QOkhYfjVuuOEiCTPnOR6I3lz
-         JDuMndMtKelH9DDW3/uSeDJ0C51ioBud0VIii00ZWUJ58CA+zbLmZ9l8nDWJofEAMfwk
-         n9FFsjzpeW9wa8kk/svtFKhdcxzx2ZRJFoKri1XHdEQDC9vVAyRgqwBhyZhkHGv+8C4E
-         n3tP99tdKOKZu0cQn3doL1BJ3eCwSIu0M3oZ2NKgsBv3N6c05nAwjLPzLDGjzDAv6Ua1
-         ylbg==
-X-Gm-Message-State: APjAAAVxVmivd3mnfm5nF7njQf28hdzrcatmXwY6bX9wWLdreeCD9mP2
-        +OEGiYMlSrC3NVUclHN5bk0IVaf5tmo=
-X-Google-Smtp-Source: APXvYqzABbvpVcFveZMqWs77oGlOEEVOFLAADl5rdqZu2wU5Wpn7jV5M4TZsLbgOog5eDCaF1WZDmw==
-X-Received: by 2002:a19:ab11:: with SMTP id u17mr1923139lfe.78.1572872974415;
-        Mon, 04 Nov 2019 05:09:34 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9P8rBv8FlOAdd5Kdu3vWsUKtcKK3jMnnUl9eTBCRCiQ=;
+        b=RnTgQhOQ+YJWPEtNsSXE+8Rl3OSw/q1579PXm8Wt4uRGElZaQCa4T8fThPkXDozvau
+         e+ZGVy3jFUQXMUF5OjkfrOI5/4fIKtSdvscuhkybPuMCNeL3ezbhO1uFoVLULiWpy8DX
+         bVfE4nshiQJjp9TYhGn3rsTdiD3tNZRfIoOnvuoBB/Gouqqufat/Sm3ZejpLn7naGuoQ
+         gj50wt1XwwHD+YnfQSkGW6YJTEHQ0X7iDYO3gr3VrJzeeqsiYg9zuNdyFtLgtuXWBytT
+         sOWHqdWFIp0o0iAi+aXMRzl/5fgYhXYAIyc7VoSSsccUIBPu5H6KiAK4GpSzRT9FOEnt
+         /XEg==
+X-Gm-Message-State: APjAAAX1TpA/NoKZUohJL3UoFN0TU+at09vXAqk4FWtOSwRKU6yQ1j1O
+        BfbwzCoIjY1uNnr1Wkwbb4vtDJUn/qM=
+X-Google-Smtp-Source: APXvYqzcI44Lu+vcPgtgkIXtqYfzThKqoYRzsOByJ+efQrIZgoiFus2ESUgT0d0GIKWI+BjQT8VYbA==
+X-Received: by 2002:a2e:85c3:: with SMTP id h3mr5790400ljj.122.1572872968219;
+        Mon, 04 Nov 2019 05:09:28 -0800 (PST)
 Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
-        by smtp.gmail.com with ESMTPSA id q124sm985414ljq.93.2019.11.04.05.09.32
+        by smtp.gmail.com with ESMTPSA id q124sm985414ljq.93.2019.11.04.05.09.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 05:09:33 -0800 (PST)
+        Mon, 04 Nov 2019 05:09:27 -0800 (PST)
 From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
 To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
-Subject: [PATCH v4 4/6] media: v4l2_core: Add p_area to struct v4l2_ext_control
-Date:   Mon,  4 Nov 2019 14:09:21 +0100
-Message-Id: <20191104130923.22184-4-ribalda@kernel.org>
+Subject: [PATCH v4 1/6] media: v4l2_ctrl: Add p_def to v4l2_ctrl_config
+Date:   Mon,  4 Nov 2019 14:09:18 +0100
+Message-Id: <20191104130923.22184-1-ribalda@kernel.org>
 X-Mailer: git-send-email 2.24.0.rc1
-In-Reply-To: <20191104130923.22184-1-ribalda@kernel.org>
-References: <20191104130923.22184-1-ribalda@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
@@ -65,25 +63,48 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Allow accessing V4L2_CTRL_TYPE_AREA controls without any casting.
+This allows setting the default value on compound controls created via
+v4l2_ctrl_new_custom.
 
 Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
 ---
- include/uapi/linux/videodev2.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/v4l2-core/v4l2-ctrls.c | 2 +-
+ include/media/v4l2-ctrls.h           | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index f98bbcced8ff..04481c717fee 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -1684,6 +1684,7 @@ struct v4l2_ext_control {
- 		__u8 __user *p_u8;
- 		__u16 __user *p_u16;
- 		__u32 __user *p_u32;
-+		struct v4l2_area __user *p_area;
- 		void __user *ptr;
- 	};
- } __attribute__ ((packed));
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls.c b/drivers/media/v4l2-core/v4l2-ctrls.c
+index b4caf2d4d076..73d99c3561ce 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls.c
+@@ -2690,7 +2690,7 @@ struct v4l2_ctrl *v4l2_ctrl_new_custom(struct v4l2_ctrl_handler *hdl,
+ 			type, min, max,
+ 			is_menu ? cfg->menu_skip_mask : step, def,
+ 			cfg->dims, cfg->elem_size,
+-			flags, qmenu, qmenu_int, ptr_null, priv);
++			flags, qmenu, qmenu_int, cfg->p_def, priv);
+ 	if (ctrl)
+ 		ctrl->is_private = cfg->is_private;
+ 	return ctrl;
+diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+index e719d56fc024..78a97b10c89e 100644
+--- a/include/media/v4l2-ctrls.h
++++ b/include/media/v4l2-ctrls.h
+@@ -382,6 +382,7 @@ struct v4l2_ctrl_handler {
+  * @max:	The control's maximum value.
+  * @step:	The control's step value for non-menu controls.
+  * @def:	The control's default value.
++ * @p_def:	The control's default value for compound controls.
+  * @dims:	The size of each dimension.
+  * @elem_size:	The size in bytes of the control.
+  * @flags:	The control's flags.
+@@ -410,6 +411,7 @@ struct v4l2_ctrl_config {
+ 	s64 max;
+ 	u64 step;
+ 	s64 def;
++	union v4l2_ctrl_ptr p_def;
+ 	u32 dims[V4L2_CTRL_MAX_DIMS];
+ 	u32 elem_size;
+ 	u32 flags;
 -- 
 2.24.0.rc1
 
