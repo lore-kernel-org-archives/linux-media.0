@@ -2,153 +2,99 @@ Return-Path: <SRS0=7+ZA=Y4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFE30C47E49
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 12:58:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CD32CA9EB5
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 13:09:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 93A9121D81
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 12:58:40 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="laUfAuCJ"
+	by mail.kernel.org (Postfix) with ESMTP id 61068222C2
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 13:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1572872974;
+	bh=ZlvpnRLtbhTH6bL1jwzyKo1MZMsNDzVu4omY0MnxPvA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ZfF/OyTsJGc2H+HSGMV3qjczxlpiLREW0SOXiDerbV7AUhCxA7WTuzViLaVFRa//k
+	 PCrq9mXG2Bu0OaohO5WY/WcEcSoiKoPot1ftiEJ9GSyiv0fo69Stv2+wUQXvL8QTON
+	 u3NReT8kHgUgng03W4OnFcYZnhU/l4V0R/lKGMeU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728188AbfKDM6j (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Nov 2019 07:58:39 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:53314 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727236AbfKDM6j (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 07:58:39 -0500
-Received: from pendragon.ideasonboard.com (81-175-216-236.bb.dnainternet.fi [81.175.216.236])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C2D8B52C;
-        Mon,  4 Nov 2019 13:58:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1572872316;
-        bh=fmCV2UX8nWPcsCfJd6YC1Mg8Z0MLa3pWSVXfjonQNGU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=laUfAuCJravUPBu2KYDf1l4VBi2KpoWrU+VodG54MZ1wchXk0n0e/erqSFpKpdGyf
-         u5g/66GLwPpI//WGIycLsnEgWvzaaLfu0ssLHSCx64RqIN6tbEKld3cOdWwdtUc8AQ
-         jCfQdPTG1yNTzIT4Jdo1KV67Cor+YF0GX0wB8cUI=
-Date:   Mon, 4 Nov 2019 14:58:29 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Pekka Paalanen <ppaalanen@gmail.com>
-Cc:     Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
-        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org
-Subject: Re: Overlay support in the i.MX7 display
-Message-ID: <20191104125829.GA4913@pendragon.ideasonboard.com>
-References: <20191101084318.GA8428@pendragon.ideasonboard.com>
- <67057f1082886726268f346f49c23051@agner.ch>
- <20191104100947.4e198e72@eldfell.localdomain>
+        id S1729094AbfKDNJd (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Nov 2019 08:09:33 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:44992 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729089AbfKDNJc (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 08:09:32 -0500
+Received: by mail-lf1-f65.google.com with SMTP id v4so12190462lfd.11;
+        Mon, 04 Nov 2019 05:09:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8kcIhL1Cm288cjerDWSwiT3z8kiQdheRmrevoTt/5WM=;
+        b=NbT0jDzVjveQzXwDS1RpqYM/HFccFhB5BeRDnEXJSqEB+7Wm0UYdncTu3uxVZCZPJp
+         2L7Z4q8ye8yQlxyc1IhOmisqPyf2uJ+9wrH8zXxKotXFUcuvfAqFcHqfYxyynZGOmLjy
+         /HNIt7XehK5dJo4B0UBNIaO8GdEZH6ejn59n2SVn6BK2NGIYsa2YWDefEhfqF6AB8eUf
+         fySiXPTTRFPEWA1N7FqZ9TB3LIr6ihhCB20wTwHOD6d98APChPKkNLbBdOOOZegv47Ad
+         7zdK0GY2qHo6nUWGhtC0emAtQvh4q+1JZhchtxLG4ADhy6tW/UeqoDWYYcs8uRcTfGq2
+         jtMw==
+X-Gm-Message-State: APjAAAVt9k6aETOVmJwfAgX6XnmiJOmPbsv7SnERI4vF9Vk296ZLr9EG
+        Z6eZA8FJuNX0KEYP1ol/oKzOyTi9Bac=
+X-Google-Smtp-Source: APXvYqxcRtuVs0OtY+hHr9NyWwTPx/Wd/rlX4fmZBhyGDxQBbqyePvHf4yQD5AVEK8qMKhIA2RzmFw==
+X-Received: by 2002:a19:4848:: with SMTP id v69mr16651712lfa.6.1572872970364;
+        Mon, 04 Nov 2019 05:09:30 -0800 (PST)
+Received: from neopili.qtec.com (cpe.xe-3-0-1-778.vbrnqe10.dk.customer.tdc.net. [80.197.57.18])
+        by smtp.gmail.com with ESMTPSA id q124sm985414ljq.93.2019.11.04.05.09.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2019 05:09:29 -0800 (PST)
+From:   Ricardo Ribalda Delgado <ribalda@kernel.org>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ricardo Ribalda Delgado <ribalda@kernel.org>
+Subject: [PATCH v4 2/6] media: v4l2_ctrl: Add const pointer to ctrl_ptr
+Date:   Mon,  4 Nov 2019 14:09:19 +0100
+Message-Id: <20191104130923.22184-2-ribalda@kernel.org>
+X-Mailer: git-send-email 2.24.0.rc1
+In-Reply-To: <20191104130923.22184-1-ribalda@kernel.org>
+References: <20191104130923.22184-1-ribalda@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191104100947.4e198e72@eldfell.localdomain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hello,
+This pointer is used to point to data that is constant. Thanks to this
+we can avoid a lot of casting and we make more clear when the data is
+constant or variable.
 
-On Mon, Nov 04, 2019 at 10:09:47AM +0200, Pekka Paalanen wrote:
-> On Sun, 03 Nov 2019 19:15:49 +0100 Stefan Agner wrote:
-> > On 2019-11-01 09:43, Laurent Pinchart wrote:
-> > > Hello,
-> > > 
-> > > I'm looking at the available options to support overlays in the display
-> > > pipeline of the i.MX7. The LCDIF itself unfortunaltey doesn't support
-> > > overlays, the feature being implemented in the PXP. A driver for the PXP
-> > > is available but only supports older SoCs whose PXP doesn't support
-> > > overlays. This driver is implemented as a V4L2 mem2mem driver, which
-> > > makes support of additional input channels impossible.  
-> > 
-> > Thanks for bringing this up, it is a topic I have wondered too:
-> > Interaction between PXP and mxsfb.
-> > 
-> > I am not very familiar with the V4L2 subsystem so take my opinions with
-> > a grain of salt.
-> > 
-> > > Here are the options I can envision:
-> > > 
-> > > - Extend the existing PXP driver to support multiple channels. This is
-> > >   technically feasible, but will require moving away from the V4L2
-> > >   mem2mem framework, which would break userspace. I don't think this
-> > >   path could lead anywhere.
-> > > 
-> > > - Write a new PXP driver for the i.MX7, still using V4L2, but with
-> > >   multiple video nodes. This would allow blending multiple layers, but
-> > >   would require writing the output to memory, while the PXP has support
-> > >   for direct connections to the LCDIF (through small SRAM buffers).
-> > >   Performances would thus be suboptimal. The API would also be awkward,
-> > >   as using the PXP for display would require usage of V4L2 in
-> > >   applications.  
-> > 
-> > So the video nodes would be sinks? I would expect overlays to be usable
-> > through KMS, I guess that would then not work, correct?
+Suggested-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Ricardo Ribalda Delgado <ribalda@kernel.org>
+---
+ include/media/v4l2-ctrls.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-There would be sink video nodes for the PXP inputs, and one source video
-node for the PXP output. The PXP can be used stand-alone, in
-memory-to-memory mode, and V4L2 is a good fit for that.
-
-> > > 
-> > > - Extend the mxsfb driver with PXP support, and expose the PXP inputs as
-> > >   KMS planes. The PXP would only be used when available, and would be
-> > >   transparent to applications. This would however prevent using it
-> > >   separately from the display (to perform multi-pass alpha blending for
-> > >   instance).  
-> > 
-> > KMS planes are well defined and are well integrated with the KMS API, so
-> > I prefer this option. But is this compatible with the currently
-> > supported video use-case? E.g. could we make PXP available through V4L2
-> > and through DRM/mxsfb?
-
-That's the issue, it's not easily doable. I think we could do so, but
-how to ensure mutual exclusion between the two APIs needs to be
-researched. I fear it will result in an awkward solution with fuzzy
-semantics. A module parameter could be an option, but wouldn't be very
-flexible.
-
-> > Not sure what your use case is exactly, but when playing a video I
-> > wonder where is the higher value using PXP: Color conversion and scaling
-> > or compositing...? I would expect higher value in the former use case.
-
-I think it's highly use-case-dependent.
-
-> mind, with Wayland architecture, color conversion and scaling could be
-> at the same level/step as compositing, in the display server instead of
-> an application. Hence if the PXP capabilities were advertised as KMS
-> planes, there should be nothing to patch in Wayland-designed
-> applications to make use of them, assuming the applications did not
-> already rely on V4L2 M2M devices.
-> 
-> Would it not be possible to expose PXP through both uAPI interfaces? At
-> least KMS atomic's TEST_ONLY feature would make it easy to say "no" to
-> userspace if another bit of userspace already reserved the device via
-> e.g. V4L2.
-
-We would also need to figure out how to do it the other way around,
-reporting properly through V4L2 that the device is busy. I think it's
-feasible, but I doubt it would result in anything usable for userspace.
-If the KMS device exposes multiple planes unconditionally and fails the
-atomic commit if the PXP is used through V4L2, I think it would be hard
-for Wayland to use this consistently. Given that I expect the PXP to be
-mostly used for display purpose I'm tempted to allocate it for display
-unconditionally, or, possibly, decide how to expose it through a module
-parameter.
-
-We have a similar situation on Renesas R-Car Gen3 platforms, with a
-memory-to-memory compositor called VSP. Some VSP instances are connected
-to the display controller, and we allocate them for display
-unconditionally. Other VSP instances are exposed as V4L2 devices. We
-haven't heard of anyone who wanted to use the display VSP instances for
-unrelated purposes. If such a use case arose, exposing those instances
-through V4L2 would just be a matter of flipping one bit in the driver
-(all the infrastructure is in place), which we would likely expose as a
-module parameter.
-
+diff --git a/include/media/v4l2-ctrls.h b/include/media/v4l2-ctrls.h
+index 78a97b10c89e..7db9e719a583 100644
+--- a/include/media/v4l2-ctrls.h
++++ b/include/media/v4l2-ctrls.h
+@@ -56,6 +56,7 @@ struct poll_table_struct;
+  * @p_hevc_slice_params:	Pointer to an HEVC slice parameters structure.
+  * @p_area:			Pointer to an area.
+  * @p:				Pointer to a compound value.
++ * @p_const:			Pointer to a constant compound value.
+  */
+ union v4l2_ctrl_ptr {
+ 	s32 *p_s32;
+@@ -78,6 +79,7 @@ union v4l2_ctrl_ptr {
+ 	struct v4l2_ctrl_hevc_slice_params *p_hevc_slice_params;
+ 	struct v4l2_area *p_area;
+ 	void *p;
++	const void *p_const;
+ };
+ 
+ /**
 -- 
-Regards,
+2.24.0.rc1
 
-Laurent Pinchart
