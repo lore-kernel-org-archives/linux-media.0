@@ -7,52 +7,54 @@ X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A00FCA9EB5
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CA8ACA9EB5
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:33:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 33B8E2080F
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:33:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 65AED2080F
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 19:33:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="c1vUsCS3"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="qC7RH7+Q"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729687AbfKDTcF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Nov 2019 14:32:05 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:48752 "EHLO
+        id S1729651AbfKDTcB (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Nov 2019 14:32:01 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:48730 "EHLO
         fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729678AbfKDTcE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 14:32:04 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA4JW3J5104172;
-        Mon, 4 Nov 2019 13:32:03 -0600
+        with ESMTP id S1729632AbfKDTb7 (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 14:31:59 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA4JVvUT104143;
+        Mon, 4 Nov 2019 13:31:57 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1572895923;
-        bh=uuIGJmfG1LAVRpGW73Eb4S0CXWgGJx7lccrUL6WmRbk=;
+        s=ti-com-17Q1; t=1572895917;
+        bh=hkspqH83wgEPy5/qwu9lbvIhOuaEmsJ5tRfFg6TJ8EA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=c1vUsCS3YAd91zS7hBxk1ihQ3eBLewnolq2wq3sZYg1jNjnWcpbxbJ1NNoXEpbehH
-         nuwFKHfipzmhajcbMgaOjs27Pfb2MLWphZM2clFYIB1QEIjiSavUFtL4XdrKImPv84
-         FSDYaK3UEK//nBDiyYeFwfadswP0z690/dCLIxBo=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4JW27g024629;
-        Mon, 4 Nov 2019 13:32:03 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+        b=qC7RH7+QoLNvDol4osU+WBbqWt3k+iDYQhNQ86JBZCVB8mqgl+M6k7negjn7FpHFf
+         3CZ6NLQCcWkHgjDeD8LZuz3YXC6UgDRQ3pBD0BgKDkBdhKN/ycouFXgb26y/qgdwCh
+         yaZj0XtCQz+pwFPLVgoy26HCbEEHHkPqDNUXxCHk=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA4JVvnF059490
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 4 Nov 2019 13:31:57 -0600
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 4 Nov
- 2019 13:31:48 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 13:31:42 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 4 Nov 2019 13:31:48 -0600
+ Frontend Transport; Mon, 4 Nov 2019 13:31:42 -0600
 Received: from ula0869644.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4JVmd6096934;
-        Mon, 4 Nov 2019 13:32:02 -0600
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4JVmd4096934;
+        Mon, 4 Nov 2019 13:31:57 -0600
 From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>
 CC:     <linux-media@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Benoit Parrot <bparrot@ti.com>, Jyri Sarha <jsarha@ti.com>
-Subject: [Patch v2 07/20] media: ti-vpe: cal: add CSI2 PHY LDO errata support
-Date:   Mon, 4 Nov 2019 13:31:27 -0600
-Message-ID: <20191104193140.31145-8-bparrot@ti.com>
+        Nikhil Devshatwar <nikhil.nd@ti.com>,
+        Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v2 05/20] media: ti-vpe: cal: Restrict DMA to avoid memory corruption
+Date:   Mon, 4 Nov 2019 13:31:25 -0600
+Message-ID: <20191104193140.31145-6-bparrot@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191104193140.31145-1-bparrot@ti.com>
 References: <20191104193140.31145-1-bparrot@ti.com>
@@ -64,152 +66,51 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Apply Errata i913 every time the functional clock is enabled.
-This should take care of suspend/resume case as well.
+From: Nikhil Devshatwar <nikhil.nd@ti.com>
 
+When setting DMA for video capture from CSI channel, if the DMA size
+is not given, it ends up writing as much data as sent by the camera.
+
+This may lead to overwriting the buffers causing memory corruption.
+Observed green lines on the default framebuffer.
+
+Restrict the DMA to maximum height as specified in the S_FMT ioctl.
+
+Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
 Signed-off-by: Benoit Parrot <bparrot@ti.com>
-Signed-off-by: Jyri Sarha <jsarha@ti.com>
 ---
- drivers/media/platform/ti-vpe/cal.c      | 58 +++++++++++++++++++++++-
- drivers/media/platform/ti-vpe/cal_regs.h | 27 +++++++++++
- 2 files changed, 83 insertions(+), 2 deletions(-)
+ drivers/media/platform/ti-vpe/cal.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/platform/ti-vpe/cal.c b/drivers/media/platform/ti-vpe/cal.c
-index 04e84c4dc92a..75d114e675cf 100644
+index 7d25ad83ca1e..04e84c4dc92a 100644
 --- a/drivers/media/platform/ti-vpe/cal.c
 +++ b/drivers/media/platform/ti-vpe/cal.c
-@@ -284,6 +284,13 @@ static struct cal_data dra72x_cal_data = {
- 	.flags = 0,
- };
- 
-+static struct cal_data dra72x_es1_cal_data = {
-+	.csi2_phy_core = dra72x_cal_csi_phy,
-+	.num_csi2_phy = ARRAY_SIZE(dra72x_cal_csi_phy),
-+
-+	.flags = DRA72_CAL_PRE_ES2_LDO_DISABLE,
-+};
-+
- /*
-  * there is one cal_dev structure in the driver, it is shared by
-  * all instances.
-@@ -569,9 +576,52 @@ static void cal_get_hwinfo(struct cal_dev *dev)
- 		hwinfo);
+@@ -769,12 +769,13 @@ static void pix_proc_config(struct cal_ctx *ctx)
  }
  
--static inline int cal_runtime_get(struct cal_dev *dev)
-+/*
-+ *   Errata i913: CSI2 LDO Needs to be disabled when module is powered on
-+ *
-+ *   Enabling CSI2 LDO shorts it to core supply. It is crucial the 2 CSI2
-+ *   LDOs on the device are disabled if CSI-2 module is powered on
-+ *   (0x4845 B304 | 0x4845 B384 [28:27] = 0x1) or in ULPS (0x4845 B304
-+ *   | 0x4845 B384 [28:27] = 0x2) mode. Common concerns include: high
-+ *   current draw on the module supply in active mode.
-+ *
-+ *   Errata does not apply when CSI-2 module is powered off
-+ *   (0x4845 B304 | 0x4845 B384 [28:27] = 0x0).
-+ *
-+ * SW Workaround:
-+ *	Set the following register bits to disable the LDO,
-+ *	which is essentially CSI2 REG10 bit 6:
-+ *
-+ *		Core 0:  0x4845 B828 = 0x0000 0040
-+ *		Core 1:  0x4845 B928 = 0x0000 0040
-+ */
-+static void i913_errata(struct cal_dev *dev, unsigned int port)
-+{
-+	u32 reg10 = reg_read(dev->cc[port], CAL_CSI2_PHY_REG10);
-+
-+	set_field(&reg10, CAL_CSI2_PHY_REG0_HSCLOCKCONFIG_DISABLE,
-+		  CAL_CSI2_PHY_REG10_I933_LDO_DISABLE_MASK);
-+
-+	cal_dbg(1, dev, "CSI2_%d_REG10 = 0x%08x\n", port, reg10);
-+	reg_write(dev->cc[port], CAL_CSI2_PHY_REG10, reg10);
-+}
-+
-+static int cal_runtime_get(struct cal_dev *dev)
+ static void cal_wr_dma_config(struct cal_ctx *ctx,
+-			      unsigned int width)
++			      unsigned int width, unsigned int height)
  {
--	return pm_runtime_get_sync(&dev->pdev->dev);
-+	int r;
-+
-+	r = pm_runtime_get_sync(&dev->pdev->dev);
-+
-+	if (dev->flags & DRA72_CAL_PRE_ES2_LDO_DISABLE) {
-+		/*
-+		 * Apply errata on both port eveytime we (re-)enable
-+		 * the clock
-+		 */
-+		i913_errata(dev, 0);
-+		i913_errata(dev, 1);
-+	}
-+
-+	return r;
- }
+ 	u32 val;
  
- static inline void cal_runtime_put(struct cal_dev *dev)
-@@ -2061,6 +2111,10 @@ static const struct of_device_id cal_of_match[] = {
- 		.compatible = "ti,dra72-cal",
- 		.data = (void *)&dra72x_cal_data,
- 	},
-+	{
-+		.compatible = "ti,dra72-pre-es2-cal",
-+		.data = (void *)&dra72x_es1_cal_data,
-+	},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, cal_of_match);
-diff --git a/drivers/media/platform/ti-vpe/cal_regs.h b/drivers/media/platform/ti-vpe/cal_regs.h
-index 68cfc922b422..78d6f015c9ea 100644
---- a/drivers/media/platform/ti-vpe/cal_regs.h
-+++ b/drivers/media/platform/ti-vpe/cal_regs.h
-@@ -10,6 +10,30 @@
- #ifndef __TI_CAL_REGS_H
- #define __TI_CAL_REGS_H
+ 	val = reg_read(ctx->dev, CAL_WR_DMA_CTRL(ctx->csi2_port));
+ 	set_field(&val, ctx->csi2_port, CAL_WR_DMA_CTRL_CPORT_MASK);
++	set_field(&val, height, CAL_WR_DMA_CTRL_YSIZE_MASK);
+ 	set_field(&val, CAL_WR_DMA_CTRL_DTAG_PIX_DAT,
+ 		  CAL_WR_DMA_CTRL_DTAG_MASK);
+ 	set_field(&val, CAL_WR_DMA_CTRL_MODE_CONST,
+@@ -1397,7 +1398,8 @@ static int cal_start_streaming(struct vb2_queue *vq, unsigned int count)
+ 	csi2_lane_config(ctx);
+ 	csi2_ctx_config(ctx);
+ 	pix_proc_config(ctx);
+-	cal_wr_dma_config(ctx, ctx->v_fmt.fmt.pix.bytesperline);
++	cal_wr_dma_config(ctx, ctx->v_fmt.fmt.pix.bytesperline,
++			  ctx->v_fmt.fmt.pix.height);
+ 	cal_wr_dma_addr(ctx, addr);
+ 	csi2_ppi_enable(ctx);
  
-+/*
-+ * struct cal_dev.flags possibilities
-+ *
-+ * DRA72_CAL_PRE_ES2_LDO_DISABLE:
-+ *   Errata i913: CSI2 LDO Needs to be disabled when module is powered on
-+ *
-+ *   Enabling CSI2 LDO shorts it to core supply. It is crucial the 2 CSI2
-+ *   LDOs on the device are disabled if CSI-2 module is powered on
-+ *   (0x4845 B304 | 0x4845 B384 [28:27] = 0x1) or in ULPS (0x4845 B304
-+ *   | 0x4845 B384 [28:27] = 0x2) mode. Common concerns include: high
-+ *   current draw on the module supply in active mode.
-+ *
-+ *   Errata does not apply when CSI-2 module is powered off
-+ *   (0x4845 B304 | 0x4845 B384 [28:27] = 0x0).
-+ *
-+ * SW Workaround:
-+ *	Set the following register bits to disable the LDO,
-+ *	which is essentially CSI2 REG10 bit 6:
-+ *
-+ *		Core 0:  0x4845 B828 = 0x0000 0040
-+ *		Core 1:  0x4845 B928 = 0x0000 0040
-+ */
-+#define DRA72_CAL_PRE_ES2_LDO_DISABLE BIT(0)
-+
- #define CAL_NUM_CSI2_PORTS		2
- 
- /* CAL register offsets */
-@@ -71,6 +95,7 @@
- #define CAL_CSI2_PHY_REG0		0x000
- #define CAL_CSI2_PHY_REG1		0x004
- #define CAL_CSI2_PHY_REG2		0x008
-+#define CAL_CSI2_PHY_REG10		0x028
- 
- /* CAL Control Module Core Camerrx Control register offsets */
- #define CM_CTRL_CORE_CAMERRX_CONTROL	0x000
-@@ -458,6 +483,8 @@
- #define CAL_CSI2_PHY_REG1_CLOCK_MISS_DETECTOR_STATUS_SUCCESS		0
- #define CAL_CSI2_PHY_REG1_RESET_DONE_STATUS_MASK		GENMASK(29, 28)
- 
-+#define CAL_CSI2_PHY_REG10_I933_LDO_DISABLE_MASK		BIT_MASK(6)
-+
- #define CAL_CSI2_PHY_REG2_CCP2_SYNC_PATTERN_MASK		GENMASK(23, 0)
- #define CAL_CSI2_PHY_REG2_TRIGGER_CMD_RXTRIGESC3_MASK		GENMASK(25, 24)
- #define CAL_CSI2_PHY_REG2_TRIGGER_CMD_RXTRIGESC2_MASK		GENMASK(27, 26)
 -- 
 2.17.1
 
