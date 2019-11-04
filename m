@@ -2,139 +2,121 @@ Return-Path: <SRS0=7+ZA=Y4=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12731CA9ECF
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 20:37:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 291D6CA9ECF
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 20:39:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id DA09F2089C
-	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 20:37:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 00C5421744
+	for <linux-media@archiver.kernel.org>; Mon,  4 Nov 2019 20:39:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="TG8Hk1Ne"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="glWXObMH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729122AbfKDUhF (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 4 Nov 2019 15:37:05 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:39114 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726417AbfKDUhE (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 15:37:04 -0500
-Received: by mail-qk1-f196.google.com with SMTP id 15so18984751qkh.6
-        for <linux-media@vger.kernel.org>; Mon, 04 Nov 2019 12:37:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rGN1CMMcv27mrbyjqTfJtMw4/MfiXe8ZUNAjLnIfNc8=;
-        b=TG8Hk1NeRC++G6+F2yPv9zRlkB5zmpjIx9ZuDUNKab/C+J6d7xxfOxxIO7eKgvsTt+
-         p3r7qXvBb+Zz3r5NF9wt7yEiPQTVgxKnL+HEF2RNhT/2isit4pN3VfgQ2DIpr/R7/4Hw
-         u7TwLaFjyPwmRXIFAaBFi4fpQejOEyaDwRD+BmP4qgv0NQc4ENsX+0jMxqrPG0iCiCMO
-         7RWUYzK0XfILQOzslmYaqc8eKt7DtdAn4YRVb6r7EuXFpZ7WiuUUv4iKaUItPpl758jM
-         1rA117djJwEsfQGPp7Z0dJc7+OtMVamSH8lioe2hkB5VkJCtZKnaAY/7jmqeoI1EBbdB
-         D0lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rGN1CMMcv27mrbyjqTfJtMw4/MfiXe8ZUNAjLnIfNc8=;
-        b=KleqcOPxygNuczv9sO551bVO+qiRVdIspOKhO019I8YeHKWtSekPxod4OmQHv/DJvO
-         DX2qHU42rcJplJ6FdHeTuzTmHz52koNmE2MawG0yyCvnZFtntr0YLuIGS+mOBdyV2krm
-         LvM26I8FgTNsPm90I21+/5B0JjFeuatAESG2cMSgiZtHna+mWIAn9usWWU+x1ae69XWR
-         3yVNgtBgDzW3R0McjYaF1g7T8NDpDlJaV9lEgplzKFbDGoP75tD/RavDDEY3piFhi1oT
-         XrKZpJ2p430IS/M8GrPkJEXWHj2mmFA0Yco/djQFPw3svT7dRsevWke3qK0qsssY8Jh9
-         tvcw==
-X-Gm-Message-State: APjAAAUljxz1RNyv4FLObSFKfLKMTfpHAADR3L8w0C+zMWU4dvvTqMRu
-        4Un4GAmIIy8oor7hzqkYUubkeA==
-X-Google-Smtp-Source: APXvYqyT2XrB8OH9lK27HX22fLNbm8bipIFqvEED+1gyXtGC25AghyQahqXSG6rV31VKukiCJdMK8w==
-X-Received: by 2002:a05:620a:90a:: with SMTP id v10mr18785575qkv.195.1572899823664;
-        Mon, 04 Nov 2019 12:37:03 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
-        by smtp.gmail.com with ESMTPSA id u189sm9293005qkd.62.2019.11.04.12.37.03
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 04 Nov 2019 12:37:03 -0800 (PST)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1iRj5y-0005JK-NP; Mon, 04 Nov 2019 16:37:02 -0400
-Date:   Mon, 4 Nov 2019 16:37:02 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Jerome Glisse <jglisse@redhat.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 05/18] mm/gup: introduce pin_user_pages*() and FOLL_PIN
-Message-ID: <20191104203702.GG30938@ziepe.ca>
-References: <20191103211813.213227-1-jhubbard@nvidia.com>
- <20191103211813.213227-6-jhubbard@nvidia.com>
- <20191104173325.GD5134@redhat.com>
- <be9de35c-57e9-75c3-2e86-eae50904bbdf@nvidia.com>
- <20191104191811.GI5134@redhat.com>
- <e9656d47-b4a1-da8a-e8cc-ebcfb8cc06d6@nvidia.com>
- <20191104195248.GA7731@redhat.com>
- <25ec4bc0-caaa-2a01-2ae7-2d79663a40e1@nvidia.com>
- <20191104203153.GB7731@redhat.com>
+        id S1729668AbfKDUjD (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 4 Nov 2019 15:39:03 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:57072 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728377AbfKDUjD (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Mon, 4 Nov 2019 15:39:03 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA4KcubA126439;
+        Mon, 4 Nov 2019 14:38:56 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1572899936;
+        bh=tPqdhNixIKdQvbkA4FXOFaYElMurFZuh15DBk3awDgM=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=glWXObMHjf7uqkeyNc14Ohp25FLx8itPPWbYHOlFZSA7PMr/Gien7oG8scsEaTkAD
+         xocljDTXtkrPSU1bLutI80l9BbKWPD4UWPJPQ5V3IOnqUaYxraQlSURs+D787GhG6G
+         OfjM2E/kOI6OryVGROJpZ/i7dpma2GN/5UO4VOPg=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4KcuQM121361;
+        Mon, 4 Nov 2019 14:38:56 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 4 Nov
+ 2019 14:38:42 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Mon, 4 Nov 2019 14:38:41 -0600
+Received: from ula0869644.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA4Kcl4p020670;
+        Mon, 4 Nov 2019 14:38:55 -0600
+From:   Benoit Parrot <bparrot@ti.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Tony Lindgren <tony@atomide.com>, Tero Kristo <t-kristo@ti.com>
+CC:     <linux-omap@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v2 4/5] ARM: dts: dra7: Add ti-sysc node for VPE
+Date:   Mon, 4 Nov 2019 14:38:40 -0600
+Message-ID: <20191104203841.3628-5-bparrot@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191104203841.3628-1-bparrot@ti.com>
+References: <20191104203841.3628-1-bparrot@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191104203153.GB7731@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Nov 04, 2019 at 03:31:53PM -0500, Jerome Glisse wrote:
-> > Note for Jason: the (a) or (b) items are talking about the vfio case, which is
-> > one of the two call sites that now use pin_longterm_pages_remote(), and the
-> > other one is infiniband:
-> > 
-> > drivers/infiniband/core/umem_odp.c:646:         npages = pin_longterm_pages_remote(owning_process, owning_mm,
-> > drivers/vfio/vfio_iommu_type1.c:353:            ret = pin_longterm_pages_remote(NULL, mm, vaddr, 1,
-> 
-> vfio should be reverted until it can be properly implemented.
-> The issue is that when you fix the implementation you might
-> break vfio existing user and thus regress the kernel from user
-> point of view. So i rather have the change to vfio reverted,
-> i believe it was not well understood when it got upstream,
-> between in my 5.4 tree it is still gup_remote not longterm.
+Add VPE node as a child of l4 interconnect in order for it to probe
+using ti-sysc.
 
-It is clearly a bug, vfio must use LONGTERM, and does right above this
-remote call:
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+---
+ arch/arm/boot/dts/dra7-l4.dtsi | 28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-        if (mm == current->mm) {
-                ret = get_user_pages(vaddr, 1, flags | FOLL_LONGTERM, page,
-                                     vmas);
-        } else {
-                ret = get_user_pages_remote(NULL, mm, vaddr, 1, flags, page,
-                                            vmas, NULL);
+diff --git a/arch/arm/boot/dts/dra7-l4.dtsi b/arch/arm/boot/dts/dra7-l4.dtsi
+index ea0e7c19eb4e..0917231a20e2 100644
+--- a/arch/arm/boot/dts/dra7-l4.dtsi
++++ b/arch/arm/boot/dts/dra7-l4.dtsi
+@@ -4158,12 +4158,34 @@
+ 			ranges = <0x0 0x1b0000 0x10000>;
+ 		};
+ 
+-		target-module@1d0000 {			/* 0x489d0000, ap 27 30.0 */
+-			compatible = "ti,sysc";
+-			status = "disabled";
++		target-module@1d0010 {			/* 0x489d0000, ap 27 30.0 */
++			compatible = "ti,sysc-omap4", "ti,sysc";
++			reg = <0x1d0010 0x4>;
++			reg-names = "sysc";
++			ti,sysc-midle = <SYSC_IDLE_FORCE>,
++					<SYSC_IDLE_NO>,
++					<SYSC_IDLE_SMART>;
++			ti,sysc-sidle = <SYSC_IDLE_FORCE>,
++					<SYSC_IDLE_NO>,
++					<SYSC_IDLE_SMART>;
++			clocks = <&vpe_clkctrl DRA7_VPE_VPE_CLKCTRL 0>;
++			clock-names = "fck";
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+ 			ranges = <0x0 0x1d0000 0x10000>;
++
++			vpe: vpe@0 {
++				compatible = "ti,dra7-vpe";
++				reg = <0x0000 0x120>,
++				      <0x0700 0x80>,
++				      <0x5700 0x18>,
++				      <0xd000 0x400>;
++				reg-names = "vpe_top",
++					    "sc",
++					    "csc",
++					    "vpdma";
++				interrupts = <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH>;
++			};
+ 		};
+ 	};
+ };
+-- 
+2.17.1
 
-
-I'm not even sure that it really makes any sense to build a 'if' like
-that, surely just always call remote??
-
-Jason
