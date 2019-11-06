@@ -2,96 +2,176 @@ Return-Path: <SRS0=Kl5h=Y6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78426C5DF63
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 20:58:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89D51C5DF65
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 21:06:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4945720663
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 20:58:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="nd2xOzHS"
+	by mail.kernel.org (Postfix) with ESMTP id 58CAC21929
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 21:06:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732001AbfKFU6q (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Nov 2019 15:58:46 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:33746 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727351AbfKFU6q (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 15:58:46 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA6KwKmE060697;
-        Wed, 6 Nov 2019 14:58:20 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1573073900;
-        bh=mBC/+FLqkSpR985gckUOWIid1xyhiufPVnE2aHrC3aU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=nd2xOzHS15TaG3rE+XZcirJwdBZtcCi7yVlMIOxcxZeSts3P66J6v/1E/eDaKNvTs
-         FhIpNLM6kQCrtMtMKCqA3sg4VbuKXCFRiS1xIYvYuIy7aSQROHswRoru+yumoBS/LI
-         R6bNusPubsYE0Ttk0R00PfC3u7P0g6oOByaa65tw=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA6KwKQ6070907
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 6 Nov 2019 14:58:20 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 6 Nov
- 2019 14:58:05 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 6 Nov 2019 14:58:05 -0600
-Received: from ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with SMTP id xA6KwK8r007215;
-        Wed, 6 Nov 2019 14:58:20 -0600
-Date:   Wed, 6 Nov 2019 15:01:21 -0600
-From:   Benoit Parrot <bparrot@ti.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-CC:     Hans Verkuil <hverkuil@xs4all.nl>, <linux-media@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [Patch v2 20/20] MAINTAINERS: Add ti,cal.yaml
-Message-ID: <20191106210121.vznx7kzs34wp3iwz@ti.com>
-References: <20191104193140.31145-1-bparrot@ti.com>
- <20191104193140.31145-21-bparrot@ti.com>
- <20191106091022.GE6253@valkosipuli.retiisi.org.uk>
+        id S1732266AbfKFVGI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Nov 2019 16:06:08 -0500
+Received: from mailoutvs11.siol.net ([185.57.226.202]:38600 "EHLO
+        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727794AbfKFVGG (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 16:06:06 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTP id 9B324524D62;
+        Wed,  6 Nov 2019 22:06:04 +0100 (CET)
+X-Virus-Scanned: amavisd-new at psrvmta10.zcs-production.pri
+Received: from mail.siol.net ([127.0.0.1])
+        by localhost (psrvmta10.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id DSO8c53uem2K; Wed,  6 Nov 2019 22:06:04 +0100 (CET)
+Received: from mail.siol.net (localhost [127.0.0.1])
+        by mail.siol.net (Postfix) with ESMTPS id 140F75255FC;
+        Wed,  6 Nov 2019 22:06:04 +0100 (CET)
+Received: from localhost.localdomain (cpe-86-58-102-7.static.triera.net [86.58.102.7])
+        (Authenticated sender: 031275009)
+        by mail.siol.net (Postfix) with ESMTPSA id 93D6C524D62;
+        Wed,  6 Nov 2019 22:06:01 +0100 (CET)
+From:   Jernej Skrabec <jernej.skrabec@siol.net>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com,
+        hverkuil-cisco@xs4all.nl
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@googlegroups.com
+Subject: [PATCH v2 1/3] media: cedrus: Properly signal size in mode register
+Date:   Wed,  6 Nov 2019 22:05:36 +0100
+Message-Id: <20191106210538.3474-2-jernej.skrabec@siol.net>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191106210538.3474-1-jernej.skrabec@siol.net>
+References: <20191106210538.3474-1-jernej.skrabec@siol.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191106091022.GE6253@valkosipuli.retiisi.org.uk>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Sakari Ailus <sakari.ailus@iki.fi> wrote on Wed [2019-Nov-06 11:10:22 +0200]:
-> On Mon, Nov 04, 2019 at 01:31:40PM -0600, Benoit Parrot wrote:
-> > Add ti,cal.yaml to the MAINTAINERS file.
-> > 
-> > Signed-off-by: Benoit Parrot <bparrot@ti.com>
-> > ---
-> >  MAINTAINERS | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 8077b453f2e9..d360df48f9f2 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -16315,6 +16315,7 @@ W:	http://linuxtv.org/
-> >  Q:	http://patchwork.linuxtv.org/project/linux-media/list/
-> >  S:	Maintained
-> >  F:	drivers/media/platform/ti-vpe/
-> > +F:	Documentation/devicetree/bindings/media/ti,cal.yaml
-> 
-> This should be done no later than adding the file itself.
+Mode register also holds information if video width is bigger than 2048
+and if it is equal to 4096.
 
-Ah, but in v1 comment, Hans asked for a separate patch here.
-I can do it either way.
+Rework cedrus_engine_enable() to properly signal this properties.
 
-> 
-> -- 
-> Sakari Ailus
+Signed-off-by: Jernej Skrabec <jernej.skrabec@siol.net>
+Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ drivers/staging/media/sunxi/cedrus/cedrus_h264.c  | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c  | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.c    | 9 +++++++--
+ drivers/staging/media/sunxi/cedrus/cedrus_hw.h    | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c | 2 +-
+ drivers/staging/media/sunxi/cedrus/cedrus_regs.h  | 2 ++
+ 6 files changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c b/drivers/s=
+taging/media/sunxi/cedrus/cedrus_h264.c
+index 7487f6ab7576..d2c854ecdf15 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h264.c
+@@ -485,7 +485,7 @@ static void cedrus_h264_setup(struct cedrus_ctx *ctx,
+ {
+ 	struct cedrus_dev *dev =3D ctx->dev;
+=20
+-	cedrus_engine_enable(dev, CEDRUS_CODEC_H264);
++	cedrus_engine_enable(ctx, CEDRUS_CODEC_H264);
+=20
+ 	cedrus_write(dev, VE_H264_SDROT_CTRL, 0);
+ 	cedrus_write(dev, VE_H264_EXTRA_BUFFER1,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/s=
+taging/media/sunxi/cedrus/cedrus_h265.c
+index 9bc921866f70..6945dc74e1d7 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -276,7 +276,7 @@ static void cedrus_h265_setup(struct cedrus_ctx *ctx,
+ 	}
+=20
+ 	/* Activate H265 engine. */
+-	cedrus_engine_enable(dev, CEDRUS_CODEC_H265);
++	cedrus_engine_enable(ctx, CEDRUS_CODEC_H265);
+=20
+ 	/* Source offset and length in bits. */
+=20
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/sta=
+ging/media/sunxi/cedrus/cedrus_hw.c
+index 570a9165dd5d..3acfa21bc124 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+@@ -30,7 +30,7 @@
+ #include "cedrus_hw.h"
+ #include "cedrus_regs.h"
+=20
+-int cedrus_engine_enable(struct cedrus_dev *dev, enum cedrus_codec codec=
+)
++int cedrus_engine_enable(struct cedrus_ctx *ctx, enum cedrus_codec codec=
+)
+ {
+ 	u32 reg =3D 0;
+=20
+@@ -58,7 +58,12 @@ int cedrus_engine_enable(struct cedrus_dev *dev, enum =
+cedrus_codec codec)
+ 		return -EINVAL;
+ 	}
+=20
+-	cedrus_write(dev, VE_MODE, reg);
++	if (ctx->src_fmt.width =3D=3D 4096)
++		reg |=3D VE_MODE_PIC_WIDTH_IS_4096;
++	if (ctx->src_fmt.width > 2048)
++		reg |=3D VE_MODE_PIC_WIDTH_MORE_2048;
++
++	cedrus_write(ctx->dev, VE_MODE, reg);
+=20
+ 	return 0;
+ }
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h b/drivers/sta=
+ging/media/sunxi/cedrus/cedrus_hw.h
+index 27d0882397aa..604ff932fbf5 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+@@ -16,7 +16,7 @@
+ #ifndef _CEDRUS_HW_H_
+ #define _CEDRUS_HW_H_
+=20
+-int cedrus_engine_enable(struct cedrus_dev *dev, enum cedrus_codec codec=
+);
++int cedrus_engine_enable(struct cedrus_ctx *ctx, enum cedrus_codec codec=
+);
+ void cedrus_engine_disable(struct cedrus_dev *dev);
+=20
+ void cedrus_dst_format_set(struct cedrus_dev *dev,
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c b/drivers/=
+staging/media/sunxi/cedrus/cedrus_mpeg2.c
+index 13c34927bad5..8bcd6b8f9e2d 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_mpeg2.c
+@@ -96,7 +96,7 @@ static void cedrus_mpeg2_setup(struct cedrus_ctx *ctx, =
+struct cedrus_run *run)
+ 	quantization =3D run->mpeg2.quantization;
+=20
+ 	/* Activate MPEG engine. */
+-	cedrus_engine_enable(dev, CEDRUS_CODEC_MPEG2);
++	cedrus_engine_enable(ctx, CEDRUS_CODEC_MPEG2);
+=20
+ 	/* Set intra quantization matrix. */
+=20
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/s=
+taging/media/sunxi/cedrus/cedrus_regs.h
+index 4275a307d282..ace3d49fcd82 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
+@@ -35,6 +35,8 @@
+=20
+ #define VE_MODE					0x00
+=20
++#define VE_MODE_PIC_WIDTH_IS_4096		BIT(22)
++#define VE_MODE_PIC_WIDTH_MORE_2048		BIT(21)
+ #define VE_MODE_REC_WR_MODE_2MB			(0x01 << 20)
+ #define VE_MODE_REC_WR_MODE_1MB			(0x00 << 20)
+ #define VE_MODE_DDR_MODE_BW_128			(0x03 << 16)
+--=20
+2.24.0
+
