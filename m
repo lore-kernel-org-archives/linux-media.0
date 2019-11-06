@@ -2,84 +2,117 @@ Return-Path: <SRS0=Kl5h=Y6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4623C5DF63
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 20:19:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F85BC5DF63
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 20:24:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B046D21848
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 20:19:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 700C0217F5
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 20:24:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="SUagUyYt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732185AbfKFUTS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Nov 2019 15:19:18 -0500
-Received: from mout.kundenserver.de ([212.227.17.24]:53943 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbfKFUTR (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 15:19:17 -0500
-Received: from mail-qk1-f178.google.com ([209.85.222.178]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1M4rHF-1iSj1H09ah-001vXS; Wed, 06 Nov 2019 21:19:16 +0100
-Received: by mail-qk1-f178.google.com with SMTP id 205so24518838qkk.1;
-        Wed, 06 Nov 2019 12:19:15 -0800 (PST)
-X-Gm-Message-State: APjAAAUnMYsojh2aMFR+f6NI/jYW+cfqoygl/ne7hkfyNHoQ0qRxdEjN
-        0H59YANCknd/+5d5TN1RKDpFNeqVK8kNg8vcPDg=
-X-Google-Smtp-Source: APXvYqwMBzeoLnci1/w4kfeKogyBl0BHz0uvHYM2FQCfg8jFF6mF6fPo8f/AFfZmTyQ2tqpFwySZLrwcZlHSo4TLo9o=
-X-Received: by 2002:a37:9d8c:: with SMTP id g134mr3951247qke.352.1573071554758;
- Wed, 06 Nov 2019 12:19:14 -0800 (PST)
-MIME-Version: 1.0
-References: <20191106194715.2238044-1-arnd@arndb.de> <20191106194715.2238044-4-arnd@arndb.de>
-In-Reply-To: <20191106194715.2238044-4-arnd@arndb.de>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 6 Nov 2019 21:18:58 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a1t9kWcSVDyb-a3CWXgukLGVV9orRj58LbsGgCM3Z01JQ@mail.gmail.com>
-Message-ID: <CAK8P3a1t9kWcSVDyb-a3CWXgukLGVV9orRj58LbsGgCM3Z01JQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/8] media: v4l2-core: ignore native command codes
+        id S1732512AbfKFUYG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Nov 2019 15:24:06 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:41000 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732234AbfKFUYF (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 15:24:05 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA6KNxXC090423;
+        Wed, 6 Nov 2019 14:23:59 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573071839;
+        bh=Bb+RT8SQh95qU51XROkC4ETq9FqCfyxaupssY38UWcs=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=SUagUyYtUMicaoH4or86zRSleQXk7wNFF+Kw84WMxJu93G1yQrBbq0i1O6tOF4x5X
+         RKG/TlCg+XrtKi+7jQEHlcc+bs47xvlCbCstbS+YFjYLClDvof5O6Z2Gp+PiyuVoge
+         5OJeTA7nGmw/L1NdBErti2tgdpN17QyPdg9dbOLk=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA6KNxOo120467
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 Nov 2019 14:23:59 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 6 Nov
+ 2019 14:23:43 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 6 Nov 2019 14:23:43 -0600
+Received: from uda0869644b.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA6KNsiu119124;
+        Wed, 6 Nov 2019 14:23:58 -0600
+From:   Benoit Parrot <bparrot@ti.com>
 To:     Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        y2038 Mailman List <y2038@lists.linaro.org>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        "# 3.4.x" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:lDtT+hHflBMaITdOSRRJyP7jzOJ9e7HrjEIPo0EaotFjUOCKkCp
- QNSy3fAFp3pjksNTsik8PNChy+CRxmcBZOihep9+hcLHXGswTEVd4UgotWOW0RIjJa+uXEh
- sR5ZnwJHS0P3vKudOPhPyNLuj7ukXA+2BSYwP/OxsJ/EVi5lUhwIgCWg2FQvptBqKyMuYxl
- oWacEErta7yKqNkFGpqqw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JwY9fJHl80o=:GSKdnhSyvIrY2ndpNVoRWP
- bt1yU6O5vMDg28CR5+6DbcFHuB+Fmfv5xvQf3IEnFbSFhJfaLSeZ19AY5Hx2xBrIzYPKBtl9H
- qBDNECfV+WfkiYTYQ8LXZ5Ab7nJwtYlBNNVXT8GCDMGbIWRW5nVr+0pzSjvmBFYds5fFZWqJH
- sM9GVAvFg9rgNc3ipA+zCFC563/Y0qtejY+jDuHY1sp2AbLNIKZMoHdAEu7bVcgFGNzu16fpj
- oQKF/UGT93tuCRCk5zQHud0f1pxBmvqr6s3+zBj9UIMSDNy93ees7mkg0fF8DZE/kWS+5uw/z
- 52OawcCVlt8IcJoIXNXcK/ZBaUJLojXchlhGqqrOLuOSGSa7l8NJuStpoUv7kBgikVTAzdVrt
- /gJABE16dVyUSIidR35hsOSMtrnFgfOgMl3JzQjBEA9OwRlc66c3RwDf7OBVOEaApwfYWrnKT
- dFOvKYSE8WJQgvQKOlv5WjufKGBLUzwFqm6sNd1mfL9xc49U6huun97ETkvtum/Gl6o5vQ1PB
- kCKA/YJXnFrEWw0n/NVkCBq6aC1VJEhJN689LtOv4jbMMBC4oguAHDuBXsgNRoEwTt9/jHcEN
- eQ8UaiNMk5r3aeMRs2oD6bl4i95yyJqmOaMqwbcIeUhewuLrMH+HrU78ZghF9t+MW41yIhWaP
- hbgK5TXcvpo6bOBAUnNREbX+ntrNMXBT+YORdldP2AYjHY2L9ZjAK4HWlCTyIKmFJ54T098Z9
- YsBVTAvY/pqDfGNnWKVHUttVeqovTTrg7p/cE4yPF43PmpndTqUfHYRbJpri8rLgrujiKdXoo
- HMYhGHuDE9sCBiCaXTo1ZSNgWcHA1A4Uz1WsmII9QUZxa4G7x5mDyvlBV7yCWo0KYUOs7SAM8
- Le/IMvvUUy9pdmh1EeHQ==
+        Tony Lindgren <tony@atomide.com>, Tero Kristo <t-kristo@ti.com>
+CC:     <linux-omap@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-media@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Benoit Parrot <bparrot@ti.com>
+Subject: [Patch v3 3/5] ARM: dts: dra7: add vpe clkctrl node
+Date:   Wed, 6 Nov 2019 14:26:20 -0600
+Message-ID: <20191106202622.2648-4-bparrot@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191106202622.2648-1-bparrot@ti.com>
+References: <20191106202622.2648-1-bparrot@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 6, 2019 at 8:47 PM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> The do_video_ioctl() compat handler converts the compat command
-> codes into the native ones before processing further, but this
-> causes problems for 32-bit user applications that pass a command
-> code that matches a 64-bit native number, which will then be
-> handled the same way.
+Add clkctrl nodes for VPE module.
 
-I noticed that a change to the subject line made this one less
-obvious, I've changed it to "media: v4l2-core: compat: ignore native
-command codes" in my tree now.
+Signed-off-by: Benoit Parrot <bparrot@ti.com>
+---
+ arch/arm/boot/dts/dra7xx-clocks.dtsi | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-       Arnd
+diff --git a/arch/arm/boot/dts/dra7xx-clocks.dtsi b/arch/arm/boot/dts/dra7xx-clocks.dtsi
+index 93e1eb83bed9..d1c2406ec71c 100644
+--- a/arch/arm/boot/dts/dra7xx-clocks.dtsi
++++ b/arch/arm/boot/dts/dra7xx-clocks.dtsi
+@@ -1591,10 +1591,10 @@
+ 
+ 	rtc_cm: rtc-cm@700 {
+ 		compatible = "ti,omap4-cm";
+-		reg = <0x700 0x100>;
++		reg = <0x700 0x60>;
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+-		ranges = <0 0x700 0x100>;
++		ranges = <0 0x700 0x60>;
+ 
+ 		rtc_clkctrl: rtc-clkctrl@20 {
+ 			compatible = "ti,clkctrl";
+@@ -1603,6 +1603,20 @@
+ 		};
+ 	};
+ 
++	vpe_cm: vpe-cm@760 {
++		compatible = "ti,omap4-cm";
++		reg = <0x760 0xc>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0x760 0xc>;
++
++		vpe_clkctrl: vpe-clkctrl@0 {
++			compatible = "ti,clkctrl";
++			reg = <0x0 0xc>;
++			#clock-cells = <2>;
++		};
++	};
++
+ };
+ 
+ &cm_core {
+-- 
+2.17.1
+
