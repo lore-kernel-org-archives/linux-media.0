@@ -2,103 +2,84 @@ Return-Path: <SRS0=Kl5h=Y6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-0.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E180C5DF63
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 19:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4623C5DF63
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 20:19:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2A724217F5
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 19:48:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B046D21848
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 20:19:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731769AbfKFTrm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Nov 2019 14:47:42 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:52553 "EHLO
+        id S1732185AbfKFUTS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Nov 2019 15:19:18 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:53943 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728979AbfKFTrm (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 14:47:42 -0500
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1Mgek6-1i16o70uBI-00h84C; Wed, 06 Nov 2019 20:47:27 +0100
+        with ESMTP id S1726934AbfKFUTR (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 15:19:17 -0500
+Received: from mail-qk1-f178.google.com ([209.85.222.178]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1M4rHF-1iSj1H09ah-001vXS; Wed, 06 Nov 2019 21:19:16 +0100
+Received: by mail-qk1-f178.google.com with SMTP id 205so24518838qkk.1;
+        Wed, 06 Nov 2019 12:19:15 -0800 (PST)
+X-Gm-Message-State: APjAAAUnMYsojh2aMFR+f6NI/jYW+cfqoygl/ne7hkfyNHoQ0qRxdEjN
+        0H59YANCknd/+5d5TN1RKDpFNeqVK8kNg8vcPDg=
+X-Google-Smtp-Source: APXvYqwMBzeoLnci1/w4kfeKogyBl0BHz0uvHYM2FQCfg8jFF6mF6fPo8f/AFfZmTyQ2tqpFwySZLrwcZlHSo4TLo9o=
+X-Received: by 2002:a37:9d8c:: with SMTP id g134mr3951247qke.352.1573071554758;
+ Wed, 06 Nov 2019 12:19:14 -0800 (PST)
+MIME-Version: 1.0
+References: <20191106194715.2238044-1-arnd@arndb.de> <20191106194715.2238044-4-arnd@arndb.de>
+In-Reply-To: <20191106194715.2238044-4-arnd@arndb.de>
 From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 6 Nov 2019 21:18:58 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a1t9kWcSVDyb-a3CWXgukLGVV9orRj58LbsGgCM3Z01JQ@mail.gmail.com>
+Message-ID: <CAK8P3a1t9kWcSVDyb-a3CWXgukLGVV9orRj58LbsGgCM3Z01JQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/8] media: v4l2-core: ignore native command codes
 To:     Hans Verkuil <hverkuil@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        y2038@lists.linaro.org,
+Cc:     Linux Media Mailing List <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        y2038 Mailman List <y2038@lists.linaro.org>,
         Boris Brezillon <boris.brezillon@collabora.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
         Daniel Mentz <danielmentz@google.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v3 1/8] media: documentation: fix video_event description
-Date:   Wed,  6 Nov 2019 20:47:08 +0100
-Message-Id: <20191106194715.2238044-2-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20191106194715.2238044-1-arnd@arndb.de>
-References: <20191106194715.2238044-1-arnd@arndb.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:USd+zjGhsVQ171cwgzKSCGkCnuWKIcZHhQMm4T+G6SZpZ8lVk4K
- xKfhnhjlrTcXJZZz+0hJDMaKeeXqiIVlx8vdGH9QvhsT3LypB7Qruq89EEDFJro5KzjOG5+
- ayClBPWJi243PXXXZFuvRN9wsfO1n9koZ+57if+Terf9gd/MnXj5hs3w3K9vQlzUWJnVeAg
- 4TZfPpNcwzERd4mh4UsBQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/rV5c7aC60k=:4snmqiZwLZVgaVDcBqJwUq
- rLcl4nD9asyN0+982ZlyNVGj0Pa1Bp3fR5rzKUBEdPkFgIjMlUUZWI3cRO0leoIZmboya7L9+
- kOu9WCrXCG8Y6868sSQeyMZQ480CMj5jgE/j37mI1Vi2ReteUoDMVL25YQ8JI33klf0pCsjFK
- 3CJhfNc1JhrXLEH1sPFdJdd33DkujOv2ZgokGPqtPwKINrf49KGRgth1ItnH4/ZdKhk1d7E4C
- +oYcPCTDyKgy8+PU7n6iWeAlznSMj8H+GVatPMY3Cmyqmdtzk8nulI4ERTIehB+L9Gui0EBWk
- AaN97ZK0VczRMzj0PmYkxuLur5/CAZ6UFT/qaLCDPc8amNqeQ8oG0tGCEg9UI239aO+ZbmwCR
- ACShg2m7CWA7bYt1LeYF8XqJ01DORGwsprNfDk+PDOZvGPVaEGOy0Hg6eu68Ebpc04bi2TgWj
- O+OtLRWYpWcyN0pcU8s81wHnRZRDAJE8Nk/YXstD7s3FwZJM2OIqQLTvcGqCoR66ZmYc9vCX3
- s3uiSXGm1FIv1eJ6HpVTaBYTE6PKPM5DPwH6GTP2aa5adO93+ijVoCosXqgEt4NCQigZHy7Rp
- K35jo8gvcds0ZXEdjDbRm/YLjK9Jdg8zSq5gZsSQS0sTcpzNqpaUb+OhErG5Yjx840H/OfLrF
- YQ6Mk+R2vDhTedIfAqvv08q4JdkqcPOFyQR629EsdHNDVomAq4m8NGbJWCBRf+heH6a0bNVHS
- tIPOWRughb9KwmHht7OfOLwid8kKaMjCWZGl38of+rZ1wahbs9ZVB6t2A2qqcVBkKX4qDBI7H
- sxZJLbMKCOOHBGQAr5+lvm3WFh6vp7o56OHKAGdzyLmU38S499tb4O1v0a6GJqPiqrCEt4LJB
- d+S5cOD4NacuSfNL1+1g==
+        "# 3.4.x" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:lDtT+hHflBMaITdOSRRJyP7jzOJ9e7HrjEIPo0EaotFjUOCKkCp
+ QNSy3fAFp3pjksNTsik8PNChy+CRxmcBZOihep9+hcLHXGswTEVd4UgotWOW0RIjJa+uXEh
+ sR5ZnwJHS0P3vKudOPhPyNLuj7ukXA+2BSYwP/OxsJ/EVi5lUhwIgCWg2FQvptBqKyMuYxl
+ oWacEErta7yKqNkFGpqqw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JwY9fJHl80o=:GSKdnhSyvIrY2ndpNVoRWP
+ bt1yU6O5vMDg28CR5+6DbcFHuB+Fmfv5xvQf3IEnFbSFhJfaLSeZ19AY5Hx2xBrIzYPKBtl9H
+ qBDNECfV+WfkiYTYQ8LXZ5Ab7nJwtYlBNNVXT8GCDMGbIWRW5nVr+0pzSjvmBFYds5fFZWqJH
+ sM9GVAvFg9rgNc3ipA+zCFC563/Y0qtejY+jDuHY1sp2AbLNIKZMoHdAEu7bVcgFGNzu16fpj
+ oQKF/UGT93tuCRCk5zQHud0f1pxBmvqr6s3+zBj9UIMSDNy93ees7mkg0fF8DZE/kWS+5uw/z
+ 52OawcCVlt8IcJoIXNXcK/ZBaUJLojXchlhGqqrOLuOSGSa7l8NJuStpoUv7kBgikVTAzdVrt
+ /gJABE16dVyUSIidR35hsOSMtrnFgfOgMl3JzQjBEA9OwRlc66c3RwDf7OBVOEaApwfYWrnKT
+ dFOvKYSE8WJQgvQKOlv5WjufKGBLUzwFqm6sNd1mfL9xc49U6huun97ETkvtum/Gl6o5vQ1PB
+ kCKA/YJXnFrEWw0n/NVkCBq6aC1VJEhJN689LtOv4jbMMBC4oguAHDuBXsgNRoEwTt9/jHcEN
+ eQ8UaiNMk5r3aeMRs2oD6bl4i95yyJqmOaMqwbcIeUhewuLrMH+HrU78ZghF9t+MW41yIhWaP
+ hbgK5TXcvpo6bOBAUnNREbX+ntrNMXBT+YORdldP2AYjHY2L9ZjAK4HWlCTyIKmFJ54T098Z9
+ YsBVTAvY/pqDfGNnWKVHUttVeqovTTrg7p/cE4yPF43PmpndTqUfHYRbJpri8rLgrujiKdXoo
+ HMYhGHuDE9sCBiCaXTo1ZSNgWcHA1A4Uz1WsmII9QUZxa4G7x5mDyvlBV7yCWo0KYUOs7SAM8
+ Le/IMvvUUy9pdmh1EeHQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-The type for the timestamp in video_event was changed to
-'long' a long time ago, change the documentation to match.
+On Wed, Nov 6, 2019 at 8:47 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> The do_video_ioctl() compat handler converts the compat command
+> codes into the native ones before processing further, but this
+> causes problems for 32-bit user applications that pass a command
+> code that matches a 64-bit native number, which will then be
+> handled the same way.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- Documentation/media/uapi/dvb/video-get-event.rst | 2 +-
- Documentation/media/uapi/dvb/video_types.rst     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I noticed that a change to the subject line made this one less
+obvious, I've changed it to "media: v4l2-core: compat: ignore native
+command codes" in my tree now.
 
-diff --git a/Documentation/media/uapi/dvb/video-get-event.rst b/Documentation/media/uapi/dvb/video-get-event.rst
-index def6c40db601..7f03fbe3d3b0 100644
---- a/Documentation/media/uapi/dvb/video-get-event.rst
-+++ b/Documentation/media/uapi/dvb/video-get-event.rst
-@@ -81,7 +81,7 @@ for this ioctl call.
- 	#define VIDEO_EVENT_FRAME_RATE_CHANGED	2
- 	#define VIDEO_EVENT_DECODER_STOPPED 	3
- 	#define VIDEO_EVENT_VSYNC 		4
--		__kernel_time_t timestamp;
-+		long timestamp;
- 		union {
- 			video_size_t size;
- 			unsigned int frame_rate;	/* in frames per 1000sec */
-diff --git a/Documentation/media/uapi/dvb/video_types.rst b/Documentation/media/uapi/dvb/video_types.rst
-index 479942ce6fb8..2697400ccf62 100644
---- a/Documentation/media/uapi/dvb/video_types.rst
-+++ b/Documentation/media/uapi/dvb/video_types.rst
-@@ -170,7 +170,7 @@ VIDEO_GET_EVENT call.
-     #define VIDEO_EVENT_FRAME_RATE_CHANGED  2
-     #define VIDEO_EVENT_DECODER_STOPPED     3
-     #define VIDEO_EVENT_VSYNC       4
--	__kernel_time_t timestamp;
-+	long timestamp;
- 	union {
- 	    video_size_t size;
- 	    unsigned int frame_rate;    /* in frames per 1000sec */
--- 
-2.20.0
-
+       Arnd
