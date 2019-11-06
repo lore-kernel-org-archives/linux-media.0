@@ -2,549 +2,431 @@ Return-Path: <SRS0=Kl5h=Y6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 774FFC5DF64
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 19:02:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 252D7C5DF63
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 19:47:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 33431214D8
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 19:02:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DCF5D217D7
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 19:47:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732578AbfKFTCJ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Nov 2019 14:02:09 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38070 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732560AbfKFTCJ (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 14:02:09 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: koike)
-        with ESMTPSA id 9F99528A1B7
-Subject: Re: [Lkcamp] [PATCH v3] media: vimc: Implement get/set selection in
- sink
-To:     Guilherme Alcarde Gallo <gagallo7@gmail.com>
-Cc:     Danilo Figueiredo Rocha <drocha.figueiredo@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hverkuil-cisco@xs4all.nl, lkcamp@lists.libreplanetbr.org,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Gabriela Bittencourt <gabrielabittencourt00@gmail.com>,
-        pedro@terraco.de
-References: <20191106011200.1645-1-drocha.figueiredo@gmail.com>
- <41bf90e9-a229-e84e-4e1c-cd2cfae7ead7@collabora.com>
- <CAF2jNbitDhN32fYbOcPshSfqJ47F=xe4iMeHALavZ8PnCy8P2w@mail.gmail.com>
-From:   Helen Koike <helen.koike@collabora.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=helen.koike@collabora.com; keydata=
- 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
-Message-ID: <adbddfa0-5f1c-39e1-b887-042147b67caf@collabora.com>
-Date:   Wed, 6 Nov 2019 16:01:55 -0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1732329AbfKFTrp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Nov 2019 14:47:45 -0500
+Received: from mout.kundenserver.de ([212.227.17.24]:56765 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731975AbfKFTrp (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 14:47:45 -0500
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1MCsLu-1ibCiX3Fvk-008uFk; Wed, 06 Nov 2019 20:47:29 +0100
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        y2038@lists.linaro.org,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Daniel Mentz <danielmentz@google.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v3 8/8] media: v4l2-core: fix compat v4l2_buffer handling for time64 ABI
+Date:   Wed,  6 Nov 2019 20:47:15 +0100
+Message-Id: <20191106194715.2238044-9-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
+In-Reply-To: <20191106194715.2238044-1-arnd@arndb.de>
+References: <20191106194715.2238044-1-arnd@arndb.de>
 MIME-Version: 1.0
-In-Reply-To: <CAF2jNbitDhN32fYbOcPshSfqJ47F=xe4iMeHALavZ8PnCy8P2w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:WXfT7HDk5yJcp+dWiFeNFUSQgxVeRg+G8Csy1pwabm4B8q5WyiE
+ u4Cdk93vLXzjfxwmNg1DptChCJCIcLFMWCkAo4b+XCS/3TH6sHAMzAygshQzDQT4GUu7vuh
+ hU/Qfl6wcjvOL9Rjk87XqYgyCQ8F3DR5U+HdnOPx20YFiaCzmFp9CmMn5okDT/LAS8SLQgF
+ oekZfsFVUrdmIk38PO8Bw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LydvggMqVMs=:/PPm+o8WJ4qOXliqO0gG+w
+ egfBvtvHMVCszgeZuozOB5z7O2UBoL5QmqyEownm7stuOYY2yBr11VzefVRipEZWK1W/9njrV
+ 5BEfOGcJo5aFCnwAzWb5/VqLQpq1WVI4ZfB2VrinQJtV5tuZwrEm2wuaW8kesAeEaXT/Ox/Ae
+ dZ/lvCkykKT5XyKzC9rc5y7QLxDYnV3LiiBWiDoDT6VrX4I/QdcYTLUwvvUxgy5y4WRAn/Q/U
+ nxHXvBhkw2W4K6+1ebAoqyWALc4VCjM600EHgXeK5VVJIgK7wC1Q9wuBrJobU8NfK45YY54Zg
+ rTpLoG0Wv7T77CsCalS2bS+s06g53HXngREEaI+MUNPBSBtjhz2++QDSHG2ZR+kyzkvWG+NZp
+ 7aaIQShhZB12GOhiaAYPEF0SgbkLUJTrnTA64QD6vN67QzucqTUtbUFU5ebRNF58t1/5EZcXl
+ LWIzrxI6+RYJ5ejskANARV0h9TyAvqcC59NlQbvQi2izEZVDKJ5PVoQgpPH+nMvcupHeZ6JBY
+ 8uo3Ra6Fz20YZLL+yqvyvCsByIMtxuyHqiDhbDET5l3YY6z5b7t7RrR/AKD9li3x0279LaYy6
+ ParDm8kBMQIX2EeSpwh9m5DhQQrCwTeo5VHbsup6GNOxXfmzCm2jnuPwuq1U+YoZZbk01DCmr
+ dBix8CPexbu7+QmBUfaSdJTO1Eba3mXmoZNdLyqJx+4SoTc7A9XLvAZ4Onw14AIdBiU51DDHW
+ TTC/jLXNuPdmZw0WsHehJ/4Ai4xvOsPpyfgOnvp51FF8dO7cW7WxkHdSdtg3NuGTIbZQyuxB7
+ VvvptLuk9OMURd7u200OJ7dznwWDuV4X+8fUCn8kb/L2iah874ZOl0Zz0Rt/GeWBJV9UK/5nZ
+ zSWqrtgNDZLpALQdrxsA==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+Add support for the four new variants of ioctl commands for 64-bit time_t
+in v4l2_buffer.
 
+The existing v4l2_buffer32 structure for the traditional format gets
+changed to match the new v4l2_buffer format, and the old layout is
+now called v4l2_buffer32_time32. Neither of these matches the native
+64-bit architecture format of v4l2_buffer, so both require special
+handling in compat code.
 
-On 11/6/19 12:58 PM, Guilherme Alcarde Gallo wrote:
-> Hi Helen,
-> Thanks for the prompt review!
-> 
-> Just one comment below.
-> 
-> On Wed, Nov 6, 2019 at 11:01 AM Helen Koike <helen.koike@collabora.com> wrote:
->>
->> Hi Danilo and Guilherme,
->>
->> On 11/5/19 11:12 PM, Danilo Figueiredo Rocha wrote:
->>> From: Guilherme Alcarde Gallo <gagallo7@gmail.com>
->>>
->>> Add support for the sink pad of scaler subdevice to respond
->>> VIDIOC_G_SELECTION and VIDIOC_S_SELECTION ioctls with the following
->>> targets: V4L2_SEL_TGT_COMPOSE_BOUNDS and V4L2_SEL_TGT_CROP.
->>>
->>> * Add new const struct crop_rect_default to initialize subdev scaler
->>>   properly.
->>> * Make changes in sink pad format reflect to the crop rectangle. E.g.
->>>   changing the frame format to a smaller size one can make the former
->>>   crop rectangle selects a non existing frame area. To solve this
->>>   situation the crop rectangle is clamped to the frame boundaries.
->>> * Clamp crop rectangle respecting the sink bounds during set_selection
->>>   ioctl.
->>>
->>> Signed-off-by: Guilherme Alcarde Gallo <gagallo7@gmail.com>
->>> Co-developed-by: Danilo Figueiredo Rocha <drocha.figueiredo@gmail.com>
->>> Signed-off-by: Danilo Figueiredo Rocha <drocha.figueiredo@gmail.com>
->>
->> Thanks for the patch, lgtm, just minor nitpicking comments below.
->>
->> Also, I'm adding libcamera people in CC, as this might require updating it.
->>
->> And I'm also adding Gabriela and Pedro in CC, as this might require some
->> changes in patch "media: vimc: Enable set resolution at the scaler src pad",
->> which removes the hardcoded scaling factor.
->>
->>>
->>> ---
->>> Changes in V3:
->>> * Sort the headers in alphabetical order.
->>> * Change all functions prefix to 'vimc_sca_'.
->>> * Remove useless case.
->>> * Change commit message subject.
->>>
->>> Changes in V2:
->>> * Use v4l2_rect_map_inside to clamp the crop rectangle.
->>> * Do the crop rectangle clamping after changing sink format.
->>> * Implement try ioctls for selection with CROP* targets.
->>> * Treat tiny rectangles with area smaller than minimal dimensions of vimc
->>>   frames.
->>> * Allow user to get selection when the streaming is on.
->>> * Reuse bound rectangle generation in a static function.
->>> * Disable get_selection for Source pads as we did before with
->>>   set_selection.
->>> ---
->>>  drivers/media/platform/vimc/vimc-scaler.c | 170 ++++++++++++++++++++--
->>>  1 file changed, 154 insertions(+), 16 deletions(-)
->>>
->>> diff --git a/drivers/media/platform/vimc/vimc-scaler.c b/drivers/media/platform/vimc/vimc-scaler.c
->>> index 2f88a7d9d67b..935bb0e0d0ee 100644
->>> --- a/drivers/media/platform/vimc/vimc-scaler.c
->>> +++ b/drivers/media/platform/vimc/vimc-scaler.c
->>> @@ -6,8 +6,9 @@
->>>   */
->>>
->>>  #include <linux/moduleparam.h>
->>> -#include <linux/vmalloc.h>
->>>  #include <linux/v4l2-mediabus.h>
->>> +#include <linux/vmalloc.h>
->>
->> I think you moved this one by accident?
->> Please, send v4 fixing this.
-> Actually we sorted the include headers as you requested in the last review.
-> Is there any rule about how to sort the headers?
+Duplicating the existing handlers for the new types is a safe conversion
+for now, but unfortunately this may turn into a maintenance burden
+later. A larger-scale rework of the compat code might be a better
+alternative, but is out of scope of the y2038 work.
 
-Yes, but the order should be
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/media/v4l2-core/v4l2-compat-ioctl32.c | 263 ++++++++++++++++++
+ 1 file changed, 263 insertions(+)
 
-#include <linux/...>
-#include <media/v4l2-rect.h> 
-#include <media/v4l2-subdev.h>
+diff --git a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+index aa4bc63dc261..a13e4849df0c 100644
+--- a/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
++++ b/drivers/media/v4l2-core/v4l2-compat-ioctl32.c
+@@ -469,6 +469,32 @@ struct v4l2_plane32 {
+ };
+ 
+ struct v4l2_buffer32 {
++	__u32			index;
++	__u32			type;	/* enum v4l2_buf_type */
++	__u32			bytesused;
++	__u32			flags;
++	__u32			field;	/* enum v4l2_field */
++	struct {
++		long long	tv_sec;
++		long long	tv_usec;
++	}			timestamp;
++	struct v4l2_timecode	timecode;
++	__u32			sequence;
++
++	/* memory location */
++	__u32			memory;	/* enum v4l2_memory */
++	union {
++		__u32           offset;
++		compat_long_t   userptr;
++		compat_caddr_t  planes;
++		__s32		fd;
++	} m;
++	__u32			length;
++	__u32			reserved2;
++	__s32			request_fd;
++};
++
++struct v4l2_buffer32_time32 {
+ 	__u32			index;
+ 	__u32			type;	/* enum v4l2_buf_type */
+ 	__u32			bytesused;
+@@ -581,6 +607,31 @@ static int bufsize_v4l2_buffer(struct v4l2_buffer32 __user *p32, u32 *size)
+ 	return 0;
+ }
+ 
++static int bufsize_v4l2_buffer_time32(struct v4l2_buffer32_time32 __user *p32, u32 *size)
++{
++	u32 type;
++	u32 length;
++
++	if (!access_ok(p32, sizeof(*p32)) ||
++	    get_user(type, &p32->type) ||
++	    get_user(length, &p32->length))
++		return -EFAULT;
++
++	if (V4L2_TYPE_IS_MULTIPLANAR(type)) {
++		if (length > VIDEO_MAX_PLANES)
++			return -EINVAL;
++
++		/*
++		 * We don't really care if userspace decides to kill itself
++		 * by passing a very big length value
++		 */
++		*size = length * sizeof(struct v4l2_plane);
++	} else {
++		*size = 0;
++	}
++	return 0;
++}
++
+ static int get_v4l2_buffer32(struct v4l2_buffer __user *p64,
+ 			     struct v4l2_buffer32 __user *p32,
+ 			     void __user *aux_buf, u32 aux_space)
+@@ -681,6 +732,106 @@ static int get_v4l2_buffer32(struct v4l2_buffer __user *p64,
+ 	return 0;
+ }
+ 
++static int get_v4l2_buffer32_time32(struct v4l2_buffer_time32 __user *p64,
++				    struct v4l2_buffer32_time32 __user *p32,
++				    void __user *aux_buf, u32 aux_space)
++{
++	u32 type;
++	u32 length;
++	s32 request_fd;
++	enum v4l2_memory memory;
++	struct v4l2_plane32 __user *uplane32;
++	struct v4l2_plane __user *uplane;
++	compat_caddr_t p;
++	int ret;
++
++	if (!access_ok(p32, sizeof(*p32)) ||
++	    assign_in_user(&p64->index, &p32->index) ||
++	    get_user(type, &p32->type) ||
++	    put_user(type, &p64->type) ||
++	    assign_in_user(&p64->flags, &p32->flags) ||
++	    get_user(memory, &p32->memory) ||
++	    put_user(memory, &p64->memory) ||
++	    get_user(length, &p32->length) ||
++	    put_user(length, &p64->length) ||
++	    get_user(request_fd, &p32->request_fd) ||
++	    put_user(request_fd, &p64->request_fd))
++		return -EFAULT;
++
++	if (V4L2_TYPE_IS_OUTPUT(type))
++		if (assign_in_user(&p64->bytesused, &p32->bytesused) ||
++		    assign_in_user(&p64->field, &p32->field) ||
++		    assign_in_user(&p64->timestamp.tv_sec,
++				   &p32->timestamp.tv_sec) ||
++		    assign_in_user(&p64->timestamp.tv_usec,
++				   &p32->timestamp.tv_usec))
++			return -EFAULT;
++
++	if (V4L2_TYPE_IS_MULTIPLANAR(type)) {
++		u32 num_planes = length;
++
++		if (num_planes == 0) {
++			/*
++			 * num_planes == 0 is legal, e.g. when userspace doesn't
++			 * need planes array on DQBUF
++			 */
++			return put_user(NULL, &p64->m.planes);
++		}
++		if (num_planes > VIDEO_MAX_PLANES)
++			return -EINVAL;
++
++		if (get_user(p, &p32->m.planes))
++			return -EFAULT;
++
++		uplane32 = compat_ptr(p);
++		if (!access_ok(uplane32,
++			       num_planes * sizeof(*uplane32)))
++			return -EFAULT;
++
++		/*
++		 * We don't really care if userspace decides to kill itself
++		 * by passing a very big num_planes value
++		 */
++		if (aux_space < num_planes * sizeof(*uplane))
++			return -EFAULT;
++
++		uplane = aux_buf;
++		if (put_user_force(uplane, &p64->m.planes))
++			return -EFAULT;
++
++		while (num_planes--) {
++			ret = get_v4l2_plane32(uplane, uplane32, memory);
++			if (ret)
++				return ret;
++			uplane++;
++			uplane32++;
++		}
++	} else {
++		switch (memory) {
++		case V4L2_MEMORY_MMAP:
++		case V4L2_MEMORY_OVERLAY:
++			if (assign_in_user(&p64->m.offset, &p32->m.offset))
++				return -EFAULT;
++			break;
++		case V4L2_MEMORY_USERPTR: {
++			compat_ulong_t userptr;
++
++			if (get_user(userptr, &p32->m.userptr) ||
++			    put_user((unsigned long)compat_ptr(userptr),
++				     &p64->m.userptr))
++				return -EFAULT;
++			break;
++		}
++		case V4L2_MEMORY_DMABUF:
++			if (assign_in_user(&p64->m.fd, &p32->m.fd))
++				return -EFAULT;
++			break;
++		}
++	}
++
++	return 0;
++}
++
+ static int put_v4l2_buffer32(struct v4l2_buffer __user *p64,
+ 			     struct v4l2_buffer32 __user *p32)
+ {
+@@ -761,6 +912,87 @@ static int put_v4l2_buffer32(struct v4l2_buffer __user *p64,
+ 	return 0;
+ }
+ 
++
++static int put_v4l2_buffer32_time32(struct v4l2_buffer_time32 __user *p64,
++				    struct v4l2_buffer32_time32 __user *p32)
++{
++	u32 type;
++	u32 length;
++	enum v4l2_memory memory;
++	struct v4l2_plane32 __user *uplane32;
++	struct v4l2_plane *uplane;
++	compat_caddr_t p;
++	int ret;
++
++	if (!access_ok(p32, sizeof(*p32)) ||
++	    assign_in_user(&p32->index, &p64->index) ||
++	    get_user(type, &p64->type) ||
++	    put_user(type, &p32->type) ||
++	    assign_in_user(&p32->flags, &p64->flags) ||
++	    get_user(memory, &p64->memory) ||
++	    put_user(memory, &p32->memory))
++		return -EFAULT;
++
++	if (assign_in_user(&p32->bytesused, &p64->bytesused) ||
++	    assign_in_user(&p32->field, &p64->field) ||
++	    assign_in_user(&p32->timestamp.tv_sec, &p64->timestamp.tv_sec) ||
++	    assign_in_user(&p32->timestamp.tv_usec, &p64->timestamp.tv_usec) ||
++	    copy_in_user(&p32->timecode, &p64->timecode, sizeof(p64->timecode)) ||
++	    assign_in_user(&p32->sequence, &p64->sequence) ||
++	    assign_in_user(&p32->reserved2, &p64->reserved2) ||
++	    assign_in_user(&p32->request_fd, &p64->request_fd) ||
++	    get_user(length, &p64->length) ||
++	    put_user(length, &p32->length))
++		return -EFAULT;
++
++	if (V4L2_TYPE_IS_MULTIPLANAR(type)) {
++		u32 num_planes = length;
++
++		if (num_planes == 0)
++			return 0;
++		/* We need to define uplane without __user, even though
++		 * it does point to data in userspace here. The reason is
++		 * that v4l2-ioctl.c copies it from userspace to kernelspace,
++		 * so its definition in videodev2.h doesn't have a
++		 * __user markup. Defining uplane with __user causes
++		 * smatch warnings, so instead declare it without __user
++		 * and cast it as a userspace pointer to put_v4l2_plane32().
++		 */
++		if (get_user(uplane, &p64->m.planes))
++			return -EFAULT;
++		if (get_user(p, &p32->m.planes))
++			return -EFAULT;
++		uplane32 = compat_ptr(p);
++
++		while (num_planes--) {
++			ret = put_v4l2_plane32((void __user *)uplane,
++					       uplane32, memory);
++			if (ret)
++				return ret;
++			++uplane;
++			++uplane32;
++		}
++	} else {
++		switch (memory) {
++		case V4L2_MEMORY_MMAP:
++		case V4L2_MEMORY_OVERLAY:
++			if (assign_in_user(&p32->m.offset, &p64->m.offset))
++				return -EFAULT;
++			break;
++		case V4L2_MEMORY_USERPTR:
++			if (assign_in_user(&p32->m.userptr, &p64->m.userptr))
++				return -EFAULT;
++			break;
++		case V4L2_MEMORY_DMABUF:
++			if (assign_in_user(&p32->m.fd, &p64->m.fd))
++				return -EFAULT;
++			break;
++		}
++	}
++
++	return 0;
++}
++
+ struct v4l2_framebuffer32 {
+ 	__u32			capability;
+ 	__u32			flags;
+@@ -1147,10 +1379,13 @@ static int put_v4l2_edid32(struct v4l2_edid __user *p64,
+ #define VIDIOC_G_FMT32		_IOWR('V',  4, struct v4l2_format32)
+ #define VIDIOC_S_FMT32		_IOWR('V',  5, struct v4l2_format32)
+ #define VIDIOC_QUERYBUF32	_IOWR('V',  9, struct v4l2_buffer32)
++#define VIDIOC_QUERYBUF32_TIME32 _IOWR('V',  9, struct v4l2_buffer32_time32)
+ #define VIDIOC_G_FBUF32		_IOR ('V', 10, struct v4l2_framebuffer32)
+ #define VIDIOC_S_FBUF32		_IOW ('V', 11, struct v4l2_framebuffer32)
+ #define VIDIOC_QBUF32		_IOWR('V', 15, struct v4l2_buffer32)
++#define VIDIOC_QBUF32_TIME32	_IOWR('V', 15, struct v4l2_buffer32_time32)
+ #define VIDIOC_DQBUF32		_IOWR('V', 17, struct v4l2_buffer32)
++#define VIDIOC_DQBUF32_TIME32	_IOWR('V', 17, struct v4l2_buffer32_time32)
+ #define VIDIOC_ENUMSTD32	_IOWR('V', 25, struct v4l2_standard32)
+ #define VIDIOC_ENUMINPUT32	_IOWR('V', 26, struct v4l2_input32)
+ #define VIDIOC_G_EDID32		_IOWR('V', 40, struct v4l2_edid32)
+@@ -1163,6 +1398,7 @@ static int put_v4l2_edid32(struct v4l2_edid __user *p64,
+ #define	VIDIOC_DQEVENT32_TIME32	_IOR ('V', 89, struct v4l2_event32_time32)
+ #define VIDIOC_CREATE_BUFS32	_IOWR('V', 92, struct v4l2_create_buffers32)
+ #define VIDIOC_PREPARE_BUF32	_IOWR('V', 93, struct v4l2_buffer32)
++#define VIDIOC_PREPARE_BUF32_TIME32 _IOWR('V', 93, struct v4l2_buffer32_time32)
+ 
+ #define VIDIOC_OVERLAY32	_IOW ('V', 14, s32)
+ #define VIDIOC_STREAMON32	_IOW ('V', 18, s32)
+@@ -1232,10 +1468,13 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
+ 	case VIDIOC_G_FMT32: ncmd = VIDIOC_G_FMT; break;
+ 	case VIDIOC_S_FMT32: ncmd = VIDIOC_S_FMT; break;
+ 	case VIDIOC_QUERYBUF32: ncmd = VIDIOC_QUERYBUF; break;
++	case VIDIOC_QUERYBUF32_TIME32: ncmd = VIDIOC_QUERYBUF_TIME32; break;
+ 	case VIDIOC_G_FBUF32: ncmd = VIDIOC_G_FBUF; break;
+ 	case VIDIOC_S_FBUF32: ncmd = VIDIOC_S_FBUF; break;
+ 	case VIDIOC_QBUF32: ncmd = VIDIOC_QBUF; break;
++	case VIDIOC_QBUF32_TIME32: ncmd = VIDIOC_QBUF_TIME32; break;
+ 	case VIDIOC_DQBUF32: ncmd = VIDIOC_DQBUF; break;
++	case VIDIOC_DQBUF32_TIME32: ncmd = VIDIOC_DQBUF_TIME32; break;
+ 	case VIDIOC_ENUMSTD32: ncmd = VIDIOC_ENUMSTD; break;
+ 	case VIDIOC_ENUMINPUT32: ncmd = VIDIOC_ENUMINPUT; break;
+ 	case VIDIOC_TRY_FMT32: ncmd = VIDIOC_TRY_FMT; break;
+@@ -1255,6 +1494,7 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
+ 	case VIDIOC_S_OUTPUT32: ncmd = VIDIOC_S_OUTPUT; break;
+ 	case VIDIOC_CREATE_BUFS32: ncmd = VIDIOC_CREATE_BUFS; break;
+ 	case VIDIOC_PREPARE_BUF32: ncmd = VIDIOC_PREPARE_BUF; break;
++	case VIDIOC_PREPARE_BUF32_TIME32: ncmd = VIDIOC_PREPARE_BUF_TIME32; break;
+ 	case VIDIOC_G_EDID32: ncmd = VIDIOC_G_EDID; break;
+ 	case VIDIOC_S_EDID32: ncmd = VIDIOC_S_EDID; break;
+ 	default: ncmd = cmd; break;
+@@ -1336,6 +1576,22 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
+ 		compatible_arg = 0;
+ 		break;
+ 
++	case VIDIOC_PREPARE_BUF32_TIME32:
++	case VIDIOC_QUERYBUF32_TIME32:
++	case VIDIOC_QBUF32_TIME32:
++	case VIDIOC_DQBUF32_TIME32:
++		err = bufsize_v4l2_buffer_time32(p32, &aux_space);
++		if (!err)
++			err = alloc_userspace(sizeof(struct v4l2_buffer),
++					      aux_space, &new_p64);
++		if (!err) {
++			aux_buf = new_p64 + sizeof(struct v4l2_buffer);
++			err = get_v4l2_buffer32_time32(new_p64, p32,
++						       aux_buf, aux_space);
++		}
++		compatible_arg = 0;
++		break;
++
+ 	case VIDIOC_S_FBUF32:
+ 		err = alloc_userspace(sizeof(struct v4l2_framebuffer), 0,
+ 				      &new_p64);
+@@ -1484,6 +1740,13 @@ static long do_video_ioctl(struct file *file, unsigned int cmd, unsigned long ar
+ 		err = put_v4l2_buffer32(new_p64, p32);
+ 		break;
+ 
++	case VIDIOC_PREPARE_BUF32_TIME32:
++	case VIDIOC_QUERYBUF32_TIME32:
++	case VIDIOC_QBUF32_TIME32:
++	case VIDIOC_DQBUF32_TIME32:
++		err = put_v4l2_buffer32_time32(new_p64, p32);
++		break;
++
+ 	case VIDIOC_ENUMSTD32:
+ 		err = put_v4l2_standard32(new_p64, p32);
+ 		break;
+-- 
+2.20.0
 
-What I meant in previous review is that your patch should include media/v4l2-rect.h
-before media/v4l2-subdev.h.
-
-The order between linux/vmalloc.h and linux/v4l2-mediabus.h shouldn't matter for this patch,
-as you are not modifying those.
-
-Make sense?
-
-Thanks,
-Helen
-
->>
->>> +#include <media/v4l2-rect.h>
->>>  #include <media/v4l2-subdev.h>
->>>
->>>  #include "vimc-common.h"
->>> @@ -18,6 +19,9 @@ MODULE_PARM_DESC(sca_mult, " the image size multiplier");
->>>
->>>  #define MAX_ZOOM     8
->>>
->>> +#define VIMC_SCA_FMT_WIDTH_DEFAULT  640
->>> +#define VIMC_SCA_FMT_HEIGHT_DEFAULT  480
->>> +
->>>  struct vimc_sca_device {
->>>       struct vimc_ent_device ved;
->>>       struct v4l2_subdev sd;
->>> @@ -25,6 +29,7 @@ struct vimc_sca_device {
->>>        * with the width and hight multiplied by mult
->>>        */
->>>       struct v4l2_mbus_framefmt sink_fmt;
->>> +     struct v4l2_rect crop_rect;
->>>       /* Values calculated when the stream starts */
->>>       u8 *src_frame;
->>>       unsigned int src_line_size;
->>> @@ -33,22 +38,64 @@ struct vimc_sca_device {
->>>  };
->>>
->>>  static const struct v4l2_mbus_framefmt sink_fmt_default = {
->>> -     .width = 640,
->>> -     .height = 480,
->>> +     .width = VIMC_SCA_FMT_WIDTH_DEFAULT,
->>> +     .height = VIMC_SCA_FMT_HEIGHT_DEFAULT,
->>>       .code = MEDIA_BUS_FMT_RGB888_1X24,
->>>       .field = V4L2_FIELD_NONE,
->>>       .colorspace = V4L2_COLORSPACE_DEFAULT,
->>>  };
->>>
->>> +static const struct v4l2_rect crop_rect_default = {
->>> +     .width = VIMC_SCA_FMT_WIDTH_DEFAULT,
->>> +     .height = VIMC_SCA_FMT_HEIGHT_DEFAULT,
->>> +     .top = 0,
->>> +     .left = 0,
->>> +};
->>> +
->>> +static const struct v4l2_rect crop_rect_min = {
->>> +     .width = VIMC_FRAME_MIN_WIDTH,
->>> +     .height = VIMC_FRAME_MIN_HEIGHT,
->>> +     .top = 0,
->>> +     .left = 0,
->>> +};
->>> +
->>> +static struct v4l2_rect
->>> +vimc_sca_get_crop_bound_sink(const struct v4l2_mbus_framefmt *sink_fmt)
->>> +{
->>> +     /* Get the crop bounds to clamp the crop rectangle correctly */
->>> +     struct v4l2_rect r = {
->>> +             .left = 0,
->>> +             .top = 0,
->>> +             .width = sink_fmt->width,
->>> +             .height = sink_fmt->height,
->>> +     };
->>> +     return r;
->>> +}
->>> +
->>> +static void vimc_sca_adjust_sink_crop(struct v4l2_rect *r,
->>> +                              const struct v4l2_mbus_framefmt *sink_fmt)
->>> +{
->>> +     const struct v4l2_rect sink_rect =
->>> +             vimc_sca_get_crop_bound_sink(sink_fmt);
->>> +
->>> +     /* Disallow rectangles smaller than the minimal one. */
->>> +     v4l2_rect_set_min_size(r, &crop_rect_min);
->>> +     v4l2_rect_map_inside(r, &sink_rect);
->>> +}
->>> +
->>>  static int vimc_sca_init_cfg(struct v4l2_subdev *sd,
->>>                            struct v4l2_subdev_pad_config *cfg)
->>>  {
->>>       struct v4l2_mbus_framefmt *mf;
->>> +     struct v4l2_rect *r;
->>>       unsigned int i;
->>>
->>>       mf = v4l2_subdev_get_try_format(sd, cfg, 0);
->>>       *mf = sink_fmt_default;
->>>
->>> +     r = v4l2_subdev_get_try_crop(sd, cfg, 0);
->>> +     *r = crop_rect_default;
->>> +
->>>       for (i = 1; i < sd->entity.num_pads; i++) {
->>>               mf = v4l2_subdev_get_try_format(sd, cfg, i);
->>>               *mf = sink_fmt_default;
->>> @@ -107,16 +154,21 @@ static int vimc_sca_get_fmt(struct v4l2_subdev *sd,
->>>                           struct v4l2_subdev_format *format)
->>>  {
->>>       struct vimc_sca_device *vsca = v4l2_get_subdevdata(sd);
->>> +     struct v4l2_rect *crop_rect;
->>>
->>>       /* Get the current sink format */
->>> -     format->format = (format->which == V4L2_SUBDEV_FORMAT_TRY) ?
->>> -                      *v4l2_subdev_get_try_format(sd, cfg, 0) :
->>> -                      vsca->sink_fmt;
->>> +     if (format->which == V4L2_SUBDEV_FORMAT_TRY) {
->>> +             format->format = *v4l2_subdev_get_try_format(sd, cfg, 0);
->>> +             crop_rect = v4l2_subdev_get_try_crop(sd, cfg, 0);
->>> +     } else {
->>> +             format->format = vsca->sink_fmt;
->>> +             crop_rect = &vsca->crop_rect;
->>> +     }
->>>
->>>       /* Scale the frame size for the source pad */
->>>       if (VIMC_IS_SRC(format->pad)) {
->>> -             format->format.width = vsca->sink_fmt.width * sca_mult;
->>> -             format->format.height = vsca->sink_fmt.height * sca_mult;
->>> +             format->format.width = crop_rect->width * sca_mult;
->>> +             format->format.height = crop_rect->height * sca_mult;
->>>       }
->>>
->>>       return 0;
->>> @@ -148,6 +200,7 @@ static int vimc_sca_set_fmt(struct v4l2_subdev *sd,
->>>  {
->>>       struct vimc_sca_device *vsca = v4l2_get_subdevdata(sd);
->>>       struct v4l2_mbus_framefmt *sink_fmt;
->>> +     struct v4l2_rect *crop_rect;
->>>
->>>       if (fmt->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
->>>               /* Do not change the format while stream is on */
->>> @@ -155,8 +208,10 @@ static int vimc_sca_set_fmt(struct v4l2_subdev *sd,
->>>                       return -EBUSY;
->>>
->>>               sink_fmt = &vsca->sink_fmt;
->>> +             crop_rect = &vsca->crop_rect;
->>>       } else {
->>>               sink_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
->>> +             crop_rect = v4l2_subdev_get_try_crop(sd, cfg, 0);
->>>       }
->>>
->>>       /*
->>> @@ -165,8 +220,8 @@ static int vimc_sca_set_fmt(struct v4l2_subdev *sd,
->>>        */
->>>       if (VIMC_IS_SRC(fmt->pad)) {
->>>               fmt->format = *sink_fmt;
->>> -             fmt->format.width = sink_fmt->width * sca_mult;
->>> -             fmt->format.height = sink_fmt->height * sca_mult;
->>> +             fmt->format.width = crop_rect->width * sca_mult;
->>> +             fmt->format.height = crop_rect->height * sca_mult;
->>>       } else {
->>>               /* Set the new format in the sink pad */
->>>               vimc_sca_adjust_sink_fmt(&fmt->format);
->>> @@ -184,6 +239,80 @@ static int vimc_sca_set_fmt(struct v4l2_subdev *sd,
->>>                       fmt->format.xfer_func, fmt->format.ycbcr_enc);
->>>
->>>               *sink_fmt = fmt->format;
->>> +
->>> +             /* Do the crop, but respect the current bounds */
->>> +             vimc_sca_adjust_sink_crop(crop_rect, sink_fmt);
->>> +     }
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +static int vimc_sca_get_selection(struct v4l2_subdev *sd,
->>> +                               struct v4l2_subdev_pad_config *cfg,
->>> +                               struct v4l2_subdev_selection *sel)
->>> +{
->>> +     struct vimc_sca_device *vsca = v4l2_get_subdevdata(sd);
->>> +     struct v4l2_mbus_framefmt *sink_fmt;
->>> +     struct v4l2_rect *crop_rect;
->>> +
->>> +     if (VIMC_IS_SRC(sel->pad))
->>> +             return -EINVAL;
->>> +
->>> +     if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
->>> +             sink_fmt = &vsca->sink_fmt;
->>> +             crop_rect = &vsca->crop_rect;
->>> +     } else {
->>> +             sink_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
->>> +             crop_rect = v4l2_subdev_get_try_crop(sd, cfg, 0);
->>> +     }
->>> +
->>> +     switch (sel->target) {
->>> +     case V4L2_SEL_TGT_CROP:
->>> +             sel->r = *crop_rect;
->>> +             break;
->>> +     case V4L2_SEL_TGT_CROP_BOUNDS:
->>> +             sel->r = vimc_sca_get_crop_bound_sink(sink_fmt);
->>> +             break;
->>> +     default:
->>> +             return -EINVAL;
->>> +     }
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +static int vimc_sca_set_selection(struct v4l2_subdev *sd,
->>> +                               struct v4l2_subdev_pad_config *cfg,
->>> +                               struct v4l2_subdev_selection *sel)
->>> +{
->>> +     struct vimc_sca_device *vsca = v4l2_get_subdevdata(sd);
->>> +     struct v4l2_rect *crop_rect;
->>> +     struct v4l2_rect sink_rect;
->>> +     struct v4l2_mbus_framefmt *sink_fmt;
->>
->> Do you mind declaring this just after vsca? I was trying to put bigger lines first in the declaration order.
->>
->>> +
->>> +     if (VIMC_IS_SRC(sel->pad))
->>> +             return -EINVAL;
->>> +
->>> +     if (sel->which == V4L2_SUBDEV_FORMAT_ACTIVE) {
->>> +             /* Do not change the format while stream is on */
->>> +             if (vsca->src_frame)
->>> +                     return -EBUSY;
->>> +
->>> +             crop_rect = &vsca->crop_rect;
->>> +             sink_fmt = &vsca->sink_fmt;
->>> +     } else {
->>> +             crop_rect = v4l2_subdev_get_try_crop(sd, cfg, 0);
->>> +             sink_fmt = v4l2_subdev_get_try_format(sd, cfg, 0);
->>> +     }
->>> +
->>> +     switch (sel->target) {
->>> +     case V4L2_SEL_TGT_CROP:
->>> +             /* Do the crop, but respect the current bounds */
->>> +             sink_rect = vimc_sca_get_crop_bound_sink(sink_fmt);
->>> +             vimc_sca_adjust_sink_crop(&sel->r, sink_fmt);
->>> +             *crop_rect = sel->r;
->>> +             break;
->>> +     default:
->>> +             return -EINVAL;
->>>       }
->>>
->>>       return 0;
->>> @@ -195,6 +324,8 @@ static const struct v4l2_subdev_pad_ops vimc_sca_pad_ops = {
->>>       .enum_frame_size        = vimc_sca_enum_frame_size,
->>>       .get_fmt                = vimc_sca_get_fmt,
->>>       .set_fmt                = vimc_sca_set_fmt,
->>> +     .get_selection          = vimc_sca_get_selection,
->>> +     .set_selection          = vimc_sca_set_selection,
->>>  };
->>>
->>>  static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
->>> @@ -213,11 +344,11 @@ static int vimc_sca_s_stream(struct v4l2_subdev *sd, int enable)
->>>               vsca->bpp = vpix->bpp;
->>>
->>>               /* Calculate the width in bytes of the src frame */
->>> -             vsca->src_line_size = vsca->sink_fmt.width *
->>> +             vsca->src_line_size = vsca->crop_rect.width *
->>>                                     sca_mult * vsca->bpp;
->>>
->>>               /* Calculate the frame size of the source pad */
->>> -             frame_size = vsca->src_line_size * vsca->sink_fmt.height *
->>> +             frame_size = vsca->src_line_size * vsca->crop_rect.height *
->>>                            sca_mult;
->>>
->>>               /* Allocate the frame buffer. Use vmalloc to be able to
->>> @@ -259,11 +390,12 @@ static void vimc_sca_fill_pix(u8 *const ptr,
->>>  }
->>>
->>>  static void vimc_sca_scale_pix(const struct vimc_sca_device *const vsca,
->>> -                            const unsigned int lin, const unsigned int col,
->>> +                            unsigned int lin, unsigned int col,
->>>                              const u8 *const sink_frame)
->>>  {
->>>       unsigned int i, j, index;
->>>       const u8 *pixel;
->>> +     const struct v4l2_rect crop_rect = vsca->crop_rect;
->>
->> Same here.
->>
->>>
->>>       /* Point to the pixel value in position (lin, col) in the sink frame */
->>>       index = VIMC_FRAME_INDEX(lin, col,
->>> @@ -278,8 +410,10 @@ static void vimc_sca_scale_pix(const struct vimc_sca_device *const vsca,
->>>       /* point to the place we are going to put the first pixel
->>>        * in the scaled src frame
->>>        */
->>> +     lin -= crop_rect.top;
->>> +     col -= crop_rect.left;
->>>       index = VIMC_FRAME_INDEX(lin * sca_mult, col * sca_mult,
->>> -                              vsca->sink_fmt.width * sca_mult, vsca->bpp);
->>> +                              crop_rect.width * sca_mult, vsca->bpp);
->>>
->>>       dev_dbg(vsca->ved.dev, "sca: %s: scale_pix src pos %dx%d, index %d\n",
->>>               vsca->sd.name, lin * sca_mult, col * sca_mult, index);
->>> @@ -308,11 +442,12 @@ static void vimc_sca_fill_src_frame(const struct vimc_sca_device *const vsca,
->>>                                   const u8 *const sink_frame)
->>>  {
->>>       unsigned int i, j;
->>> +     const struct v4l2_rect r = vsca->crop_rect;
->>
->> Same here.
->>
->>>
->>>       /* Scale each pixel from the original sink frame */
->>>       /* TODO: implement scale down, only scale up is supported for now */
->>> -     for (i = 0; i < vsca->sink_fmt.height; i++)
->>> -             for (j = 0; j < vsca->sink_fmt.width; j++)
->>> +     for (i = r.top; i < r.top + r.height; i++)
->>> +             for (j = r.left; j < r.left + r.width; j++)
->>>                       vimc_sca_scale_pix(vsca, i, j, sink_frame);
->>>  }
->>>
->>> @@ -384,5 +519,8 @@ struct vimc_ent_device *vimc_sca_add(struct vimc_device *vimc,
->>>       /* Initialize the frame format */
->>>       vsca->sink_fmt = sink_fmt_default;
->>>
->>> +     /* Initialize the crop selection */
->>> +     vsca->crop_rect = crop_rect_default;
->>> +
->>>       return &vsca->ved;
->>>  }
->>>
->>
->> With these changes:
->>
->> Acked-by: Helen Koike <helen.koike@collabora.com>
->>
->> Thanks
->> Helen
->>
->> _______________________________________________
->> Lkcamp mailing list
->> Lkcamp@lists.libreplanetbr.org
->> https://lists.libreplanetbr.org/mailman/listinfo/lkcamp
