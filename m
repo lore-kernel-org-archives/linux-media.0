@@ -2,81 +2,88 @@ Return-Path: <SRS0=Kl5h=Y6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.9 required=3.0 tests=FROM_NO_USER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 709DAFC6194
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 22:37:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 983EAC5DF60
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 02:36:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4ACB821848
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 22:37:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 54991206BA
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 02:36:46 +0000 (UTC)
+Authentication-Results:mail.kernel.org; dkim=permerror (bad message/signature format)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732887AbfKFWhM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Nov 2019 17:37:12 -0500
-Received: from retiisi.org.uk ([95.216.213.190]:35292 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732841AbfKFWhB (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 6 Nov 2019 17:37:01 -0500
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 36B3A634C87;
-        Thu,  7 Nov 2019 00:35:42 +0200 (EET)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1iSTtt-0002Zq-8S; Thu, 07 Nov 2019 00:35:41 +0200
-Date:   Thu, 7 Nov 2019 00:35:41 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Benoit Parrot <bparrot@ti.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Patch v2 20/20] MAINTAINERS: Add ti,cal.yaml
-Message-ID: <20191106223541.GG6253@valkosipuli.retiisi.org.uk>
-References: <20191104193140.31145-1-bparrot@ti.com>
- <20191104193140.31145-21-bparrot@ti.com>
- <20191106091022.GE6253@valkosipuli.retiisi.org.uk>
- <20191106210121.vznx7kzs34wp3iwz@ti.com>
-MIME-Version: 1.0
+        id S1730988AbfKFCgm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 5 Nov 2019 21:36:42 -0500
+Received: from cnc.isely.net ([75.149.91.89]:40189 "EHLO cnc.isely.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730585AbfKFCgm (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Tue, 5 Nov 2019 21:36:42 -0500
+Received: from ts3-dock2.isely.net (ts3-dock2.isely.net [::ffff:192.168.23.14])
+  (AUTH: PLAIN isely, TLS: TLSv1/SSLv3,256bits,DHE-RSA-AES256-GCM-SHA384)
+  by cnc.isely.net with ESMTPSA; Tue, 05 Nov 2019 20:36:40 -0600
+  id 00000000001426E0.000000005DC231B8.00000351
+Date:   Tue, 5 Nov 2019 20:36:40 -0600 (CST)
+X-X-Sender: isely@sheridan.isely.net
+Reply-To: Mike Isely at pobox <isely@pobox.com>
+From:   <>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+cc:     Mike Isely at pobox <isely@pobox.com>
+Subject: [PATCH] pvrusb2: Fix oops on tear-down when radio support is not
+ present
+Message-ID: <alpine.DEB.2.21.1911052034300.31133@sheridan.isely.net>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191106210121.vznx7kzs34wp3iwz@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Nov 06, 2019 at 03:01:21PM -0600, Benoit Parrot wrote:
-> Sakari Ailus <sakari.ailus@iki.fi> wrote on Wed [2019-Nov-06 11:10:22 +0200]:
-> > On Mon, Nov 04, 2019 at 01:31:40PM -0600, Benoit Parrot wrote:
-> > > Add ti,cal.yaml to the MAINTAINERS file.
-> > > 
-> > > Signed-off-by: Benoit Parrot <bparrot@ti.com>
-> > > ---
-> > >  MAINTAINERS | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 8077b453f2e9..d360df48f9f2 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -16315,6 +16315,7 @@ W:	http://linuxtv.org/
-> > >  Q:	http://patchwork.linuxtv.org/project/linux-media/list/
-> > >  S:	Maintained
-> > >  F:	drivers/media/platform/ti-vpe/
-> > > +F:	Documentation/devicetree/bindings/media/ti,cal.yaml
-> > 
-> > This should be done no later than adding the file itself.
-> 
-> Ah, but in v1 comment, Hans asked for a separate patch here.
-> I can do it either way.
+In some device configurations there's no radio or radio support in the
+driver.  That's OK, as the driver sets itself up accordingly.  However
+on tear-down in these caes it's still trying to tear down radio
+related context when there isn't anything there, leading to
+dereferences through a null pointer and chaos follows.
 
-A separate patch is fine, but please arrange it before the added file.
+How this bug survived unfixed for 11 years in the pvrusb2 driver is a
+mystery to me.
 
+Signed-off-by: Mike Isely <isely@pobox.com>
+---
+ drivers/media/usb/pvrusb2/pvrusb2-v4l2.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+index aa4fbc3e88cc..339119f6cc23 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
+@@ -909,8 +909,12 @@ static void pvr2_v4l2_internal_check(struct pvr2_channel *chp)
+ 	pvr2_v4l2_dev_disassociate_parent(vp->dev_video);
+ 	pvr2_v4l2_dev_disassociate_parent(vp->dev_radio);
+ 	if (!list_empty(&vp->dev_video->devbase.fh_list) ||
+-	    !list_empty(&vp->dev_radio->devbase.fh_list))
++	    ((vp->dev_radio != NULL) &&
++	     !list_empty(&vp->dev_radio->devbase.fh_list))) {
++		pvr2_trace(PVR2_TRACE_STRUCT,
++			   "pvr2_v4l2 internal_check exit-empty id=%p", vp);
+ 		return;
++	}
+ 	pvr2_v4l2_destroy_no_lock(vp);
+ }
+ 
+@@ -946,7 +950,8 @@ static int pvr2_v4l2_release(struct file *file)
+ 	kfree(fhp);
+ 	if (vp->channel.mc_head->disconnect_flag &&
+ 	    list_empty(&vp->dev_video->devbase.fh_list) &&
+-	    list_empty(&vp->dev_radio->devbase.fh_list)) {
++	    ((vp->dev_radio == NULL) ||
++	     list_empty(&vp->dev_radio->devbase.fh_list))) {
+ 		pvr2_v4l2_destroy_no_lock(vp);
+ 	}
+ 	return 0;
 -- 
-Sakari Ailus
+2.20.1
