@@ -2,72 +2,91 @@ Return-Path: <SRS0=Kl5h=Y6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 67E68C5DF64
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 09:11:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56995C5DF62
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 09:50:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 4204A2053B
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 09:11:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F0DC21848
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 09:50:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727419AbfKFJLk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Nov 2019 04:11:40 -0500
-Received: from retiisi.org.uk ([95.216.213.190]:56104 "EHLO
-        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727041AbfKFJLk (ORCPT
-        <rfc822;linux-media@vger.kernel.org>);
-        Wed, 6 Nov 2019 04:11:40 -0500
-Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id 7E462634C87;
-        Wed,  6 Nov 2019 11:10:23 +0200 (EET)
-Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
-        (envelope-from <sakari.ailus@retiisi.org.uk>)
-        id 1iSHKY-0002Vn-Ih; Wed, 06 Nov 2019 11:10:22 +0200
-Date:   Wed, 6 Nov 2019 11:10:22 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Benoit Parrot <bparrot@ti.com>
-Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Patch v2 20/20] MAINTAINERS: Add ti,cal.yaml
-Message-ID: <20191106091022.GE6253@valkosipuli.retiisi.org.uk>
-References: <20191104193140.31145-1-bparrot@ti.com>
- <20191104193140.31145-21-bparrot@ti.com>
+        id S1731755AbfKFJuw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Nov 2019 04:50:52 -0500
+Received: from sauhun.de ([88.99.104.3]:50228 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731691AbfKFJul (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 6 Nov 2019 04:50:41 -0500
+Received: from localhost (p54B33505.dip0.t-ipconnect.de [84.179.53.5])
+        by pokefinder.org (Postfix) with ESMTPSA id 62C1E2C054E;
+        Wed,  6 Nov 2019 10:50:40 +0100 (CET)
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-i2c@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 12/12] media: v4l2-core: convert to i2c_new_scanned_device
+Date:   Wed,  6 Nov 2019 10:50:30 +0100
+Message-Id: <20191106095033.25182-13-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
+References: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191104193140.31145-21-bparrot@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Mon, Nov 04, 2019 at 01:31:40PM -0600, Benoit Parrot wrote:
-> Add ti,cal.yaml to the MAINTAINERS file.
-> 
-> Signed-off-by: Benoit Parrot <bparrot@ti.com>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8077b453f2e9..d360df48f9f2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16315,6 +16315,7 @@ W:	http://linuxtv.org/
->  Q:	http://patchwork.linuxtv.org/project/linux-media/list/
->  S:	Maintained
->  F:	drivers/media/platform/ti-vpe/
-> +F:	Documentation/devicetree/bindings/media/ti,cal.yaml
+Move from the deprecated i2c_new_probed_device() to the new
+i2c_new_scanned_device(). Make use of the new ERRPTR if suitable.
 
-This should be done no later than adding the file itself.
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
+Build tested only. RFC, please comment and/or ack, but don't apply yet.
+
+ drivers/media/v4l2-core/v4l2-i2c.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/media/v4l2-core/v4l2-i2c.c b/drivers/media/v4l2-core/v4l2-i2c.c
+index 5bf99e7c0c09..25ddda3b7ce6 100644
+--- a/drivers/media/v4l2-core/v4l2-i2c.c
++++ b/drivers/media/v4l2-core/v4l2-i2c.c
+@@ -74,10 +74,10 @@ struct v4l2_subdev
+ 
+ 	/* Create the i2c client */
+ 	if (info->addr == 0 && probe_addrs)
+-		client = i2c_new_probed_device(adapter, info, probe_addrs,
+-					       NULL);
++		client = i2c_new_scanned_device(adapter, info, probe_addrs,
++					        NULL);
+ 	else
+-		client = i2c_new_device(adapter, info);
++		client = i2c_new_client_device(adapter, info);
+ 
+ 	/*
+ 	 * Note: by loading the module first we are certain that c->driver
+@@ -88,7 +88,7 @@ struct v4l2_subdev
+ 	 * want to use the i2c device, so explicitly loading the module
+ 	 * is the best alternative.
+ 	 */
+-	if (!client || !client->dev.driver)
++	if (IS_ERR(client) || !client->dev.driver)
+ 		goto error;
+ 
+ 	/* Lock the module so we can safely get the v4l2_subdev pointer */
+@@ -110,7 +110,7 @@ struct v4l2_subdev
+ 	 * If we have a client but no subdev, then something went wrong and
+ 	 * we must unregister the client.
+ 	 */
+-	if (client && !sd)
++	if (!IS_ERR(client) && !sd)
+ 		i2c_unregister_device(client);
+ 	return sd;
+ }
 -- 
-Sakari Ailus
+2.20.1
+
