@@ -2,95 +2,83 @@ Return-Path: <SRS0=Kl5h=Y6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 519F4C5DF63
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 21:06:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3C24C5DF63
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 21:12:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2382C217F4
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 21:06:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8F3F5217D7
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 21:12:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732031AbfKFVGG (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Nov 2019 16:06:06 -0500
-Received: from mailoutvs42.siol.net ([185.57.226.233]:38574 "EHLO
-        mail.siol.net" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727351AbfKFVGF (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Wed, 6 Nov 2019 16:06:05 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTP id 0611F524D2C;
-        Wed,  6 Nov 2019 22:06:01 +0100 (CET)
-X-Virus-Scanned: amavisd-new at psrvmta10.zcs-production.pri
-Received: from mail.siol.net ([127.0.0.1])
-        by localhost (psrvmta10.zcs-production.pri [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 9kppblxXd2EZ; Wed,  6 Nov 2019 22:06:01 +0100 (CET)
-Received: from mail.siol.net (localhost [127.0.0.1])
-        by mail.siol.net (Postfix) with ESMTPS id 8B6D0524D2D;
-        Wed,  6 Nov 2019 22:06:01 +0100 (CET)
-Received: from localhost.localdomain (cpe-86-58-102-7.static.triera.net [86.58.102.7])
-        (Authenticated sender: 031275009)
-        by mail.siol.net (Postfix) with ESMTPSA id CEDF0524D2C;
-        Wed,  6 Nov 2019 22:06:00 +0100 (CET)
-From:   Jernej Skrabec <jernej.skrabec@siol.net>
-To:     mripard@kernel.org, paul.kocialkowski@bootlin.com,
-        hverkuil-cisco@xs4all.nl
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        linux-media@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@googlegroups.com
-Subject: [PATCH v2 0/3] media: cedrus: Add support for 4k videos
-Date:   Wed,  6 Nov 2019 22:05:35 +0100
-Message-Id: <20191106210538.3474-1-jernej.skrabec@siol.net>
-X-Mailer: git-send-email 2.24.0
+        id S1727903AbfKFVMA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Nov 2019 16:12:00 -0500
+Received: from retiisi.org.uk ([95.216.213.190]:34632 "EHLO
+        hillosipuli.retiisi.org.uk" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726798AbfKFVMA (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 6 Nov 2019 16:12:00 -0500
+Received: from valkosipuli.localdomain (valkosipuli.retiisi.org.uk [IPv6:2a01:4f9:c010:4572::80:2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.org.uk (Postfix) with ESMTPS id D5878634C87;
+        Wed,  6 Nov 2019 23:10:40 +0200 (EET)
+Received: from sailus by valkosipuli.localdomain with local (Exim 4.92)
+        (envelope-from <sakari.ailus@retiisi.org.uk>)
+        id 1iSSZb-0002ZF-R3; Wed, 06 Nov 2019 23:10:39 +0200
+Date:   Wed, 6 Nov 2019 23:10:39 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Benoit Parrot <bparrot@ti.com>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch v2 12/20] media: ti-vpe: cal: Add DRA76x support
+Message-ID: <20191106211039.GF6253@valkosipuli.retiisi.org.uk>
+References: <20191104193140.31145-1-bparrot@ti.com>
+ <20191104193140.31145-13-bparrot@ti.com>
+ <20191106085709.GB6253@valkosipuli.retiisi.org.uk>
+ <20191106205839.3zxqdttlqmrzghla@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191106205839.3zxqdttlqmrzghla@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-While cedrus driver accepts videos up to 3840x2160, they are not decoded
-correctly. Driver doesn't correctly set mode register for widths greater
-than 2048 (patch 1). H264 engine also needs additional buffers which are
-not provided currently (patch 2). Finally, there are several different
-resolutions which can be considered 4k. Biggest is 4096x2304 which is
-also supported by HW. Set that new maximum size (patch 3).
+On Wed, Nov 06, 2019 at 02:58:39PM -0600, Benoit Parrot wrote:
+> Sakari Ailus <sakari.ailus@iki.fi> wrote on Wed [2019-Nov-06 10:57:09 +0200]:
+> > Hi Benoit,
+> > 
+> > On Mon, Nov 04, 2019 at 01:31:32PM -0600, Benoit Parrot wrote:
+> > 
+> > ...
+> > 
+> > > +static struct cal_data dra76x_cal_data = {
+> > 
+> > const?
+> 
+> Hmm, most likely.
+> 
+> > 
+> > > +	.csi2_phy_core = dra76x_cal_csi_phy,
+> > > +	.num_csi2_phy = ARRAY_SIZE(dra76x_cal_csi_phy),
+> > > +
+> > 
+> > This newline seems extra.
+> > 
+> > > +	.flags = 0,
+> > 
+> > And flags will be zero in any case, as one more struct members are assigned
+> > to.
+> 
+> Is this guaranteed or compiler version dependent?
 
-HEVC engine was also tested with 4k video.
+C standard.
 
-Following video was used for H264 video testing:
-http://jernej.libreelec.tv/videos/h264/PUPPIES%20BATH%20IN%204K%20(ULTRA%=
-20HD)(Original_H.264-AAC)%20(4ksamples.com).mp4
-
-Note that at this point memory allocation is suboptimal and H264 engine
-allocates far more memory that it is really needed. For above video to
-work, I had to set CMA size to 512 MiB and add "vmalloc=3D512M" to kernel
-arguments. Memory optimizations will be done later.
-
-Best regards,
-Jernej
-
-Changes from v1:
-- added Paul's acked-by
-- added define for minimum pic info buf size
-- added comments that formulas come from CedarX source
-
-Jernej Skrabec (3):
-  media: cedrus: Properly signal size in mode register
-  media: cedrus: Fix H264 4k support
-  media: cedrus: Increase maximum supported size
-
- drivers/staging/media/sunxi/cedrus/cedrus.h   |  7 ++
- .../staging/media/sunxi/cedrus/cedrus_h264.c  | 93 +++++++++++++++++--
- .../staging/media/sunxi/cedrus/cedrus_h265.c  |  2 +-
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |  9 +-
- .../staging/media/sunxi/cedrus/cedrus_hw.h    |  2 +-
- .../staging/media/sunxi/cedrus/cedrus_mpeg2.c |  2 +-
- .../staging/media/sunxi/cedrus/cedrus_regs.h  | 13 +++
- .../staging/media/sunxi/cedrus/cedrus_video.c |  4 +-
- 8 files changed, 116 insertions(+), 16 deletions(-)
-
---=20
-2.24.0
-
+-- 
+Sakari Ailus
