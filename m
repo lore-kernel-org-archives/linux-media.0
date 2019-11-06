@@ -4,32 +4,32 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.7 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CEBFC5DF62
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78AC5C5DF63
 	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 09:50:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id E0BDB21848
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 09:50:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48CBD217F5
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 09:50:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731695AbfKFJuk (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Wed, 6 Nov 2019 04:50:40 -0500
-Received: from sauhun.de ([88.99.104.3]:50202 "EHLO pokefinder.org"
+        id S1731772AbfKFJu5 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Nov 2019 04:50:57 -0500
+Received: from sauhun.de ([88.99.104.3]:50224 "EHLO pokefinder.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731677AbfKFJuk (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Wed, 6 Nov 2019 04:50:40 -0500
+        id S1731685AbfKFJul (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Wed, 6 Nov 2019 04:50:41 -0500
 Received: from localhost (p54B33505.dip0.t-ipconnect.de [84.179.53.5])
-        by pokefinder.org (Postfix) with ESMTPSA id A35402C0554;
-        Wed,  6 Nov 2019 10:50:38 +0100 (CET)
+        by pokefinder.org (Postfix) with ESMTPSA id CFD0B2C0548;
+        Wed,  6 Nov 2019 10:50:39 +0100 (CET)
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-i2c@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Andy Walls <awalls@md.metrocast.net>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 09/12] media: pci: bt8xx: convert to i2c_new_scanned_device
-Date:   Wed,  6 Nov 2019 10:50:27 +0100
-Message-Id: <20191106095033.25182-10-wsa+renesas@sang-engineering.com>
+Subject: [RFC PATCH 11/12] media: pci: ivtv: convert to i2c_new_scanned_device
+Date:   Wed,  6 Nov 2019 10:50:29 +0100
+Message-Id: <20191106095033.25182-12-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
 References: <20191106095033.25182-1-wsa+renesas@sang-engineering.com>
@@ -41,41 +41,60 @@ List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 Move from the deprecated i2c_new_probed_device() to the new
-i2c_new_scanned_device(). Make use of the new ERRPTR if suitable.
+i2c_new_scanned_device(). Make use of the new ERRPTR if suitable. Change
+the legacy function to simply return void because the retval was never
+used anywhere.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
 
 Build tested only. RFC, please comment and/or ack, but don't apply yet.
 
- drivers/media/pci/bt8xx/bttv-input.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/media/pci/ivtv/ivtv-i2c.c | 6 +++---
+ drivers/media/pci/ivtv/ivtv-i2c.h | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/pci/bt8xx/bttv-input.c b/drivers/media/pci/bt8xx/bttv-input.c
-index 492bc85c2700..41226f1d0e5b 100644
---- a/drivers/media/pci/bt8xx/bttv-input.c
-+++ b/drivers/media/pci/bt8xx/bttv-input.c
-@@ -386,7 +386,7 @@ void init_bttv_i2c_ir(struct bttv *btv)
+diff --git a/drivers/media/pci/ivtv/ivtv-i2c.c b/drivers/media/pci/ivtv/ivtv-i2c.c
+index 0772d757a389..982045c4eea8 100644
+--- a/drivers/media/pci/ivtv/ivtv-i2c.c
++++ b/drivers/media/pci/ivtv/ivtv-i2c.c
+@@ -208,12 +208,12 @@ static int ivtv_i2c_new_ir(struct ivtv *itv, u32 hw, const char *type, u8 addr)
+ 	info.platform_data = init_data;
+ 	strscpy(info.type, type, I2C_NAME_SIZE);
  
- 	if (btv->init_data.name) {
- 		info.platform_data = &btv->init_data;
--		i2c_dev = i2c_new_device(&btv->c.i2c_adap, &info);
-+		i2c_dev = i2c_new_client_device(&btv->c.i2c_adap, &info);
- 	} else {
- 		/*
- 		 * The external IR receiver is at i2c address 0x34 (0x35 for
-@@ -396,9 +396,9 @@ void init_bttv_i2c_ir(struct bttv *btv)
- 		 * internal.
- 		 * That's why we probe 0x1a (~0x34) first. CB
- 		 */
--		i2c_dev = i2c_new_probed_device(&btv->c.i2c_adap, &info, addr_list, NULL);
-+		i2c_dev = i2c_new_scanned_device(&btv->c.i2c_adap, &info, addr_list, NULL);
- 	}
--	if (NULL == i2c_dev)
-+	if (IS_ERR(i2c_dev))
- 		return;
+-	return i2c_new_probed_device(adap, &info, addr_list, NULL) == NULL ?
++	return IS_ERR(i2c_new_scanned_device(adap, &info, addr_list, NULL)) ?
+ 	       -1 : 0;
+ }
  
- #if defined(CONFIG_MODULES) && defined(MODULE)
+ /* Instantiate the IR receiver device using probing -- undesirable */
+-struct i2c_client *ivtv_i2c_new_ir_legacy(struct ivtv *itv)
++void ivtv_i2c_new_ir_legacy(struct ivtv *itv)
+ {
+ 	struct i2c_board_info info;
+ 	/*
+@@ -235,7 +235,7 @@ struct i2c_client *ivtv_i2c_new_ir_legacy(struct ivtv *itv)
+ 
+ 	memset(&info, 0, sizeof(struct i2c_board_info));
+ 	strscpy(info.type, "ir_video", I2C_NAME_SIZE);
+-	return i2c_new_probed_device(&itv->i2c_adap, &info, addr_list, NULL);
++	i2c_new_scanned_device(&itv->i2c_adap, &info, addr_list, NULL);
+ }
+ 
+ int ivtv_i2c_register(struct ivtv *itv, unsigned idx)
+diff --git a/drivers/media/pci/ivtv/ivtv-i2c.h b/drivers/media/pci/ivtv/ivtv-i2c.h
+index 462f73449a6e..2d9cdaa682c5 100644
+--- a/drivers/media/pci/ivtv/ivtv-i2c.h
++++ b/drivers/media/pci/ivtv/ivtv-i2c.h
+@@ -9,7 +9,7 @@
+ #ifndef IVTV_I2C_H
+ #define IVTV_I2C_H
+ 
+-struct i2c_client *ivtv_i2c_new_ir_legacy(struct ivtv *itv);
++void ivtv_i2c_new_ir_legacy(struct ivtv *itv);
+ int ivtv_i2c_register(struct ivtv *itv, unsigned idx);
+ struct v4l2_subdev *ivtv_find_hw(struct ivtv *itv, u32 hw);
+ 
 -- 
 2.20.1
 
