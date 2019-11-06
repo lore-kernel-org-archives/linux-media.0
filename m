@@ -2,88 +2,75 @@ Return-Path: <SRS0=Kl5h=Y6=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=FROM_NO_USER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 983EAC5DF60
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 02:36:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7ABE8FC6196
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 23:24:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 54991206BA
-	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 02:36:46 +0000 (UTC)
-Authentication-Results:mail.kernel.org; dkim=permerror (bad message/signature format)
+	by mail.kernel.org (Postfix) with ESMTP id 559A7217F5
+	for <linux-media@archiver.kernel.org>; Wed,  6 Nov 2019 23:24:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730988AbfKFCgm (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 5 Nov 2019 21:36:42 -0500
-Received: from cnc.isely.net ([75.149.91.89]:40189 "EHLO cnc.isely.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730585AbfKFCgm (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 5 Nov 2019 21:36:42 -0500
-Received: from ts3-dock2.isely.net (ts3-dock2.isely.net [::ffff:192.168.23.14])
-  (AUTH: PLAIN isely, TLS: TLSv1/SSLv3,256bits,DHE-RSA-AES256-GCM-SHA384)
-  by cnc.isely.net with ESMTPSA; Tue, 05 Nov 2019 20:36:40 -0600
-  id 00000000001426E0.000000005DC231B8.00000351
-Date:   Tue, 5 Nov 2019 20:36:40 -0600 (CST)
-X-X-Sender: isely@sheridan.isely.net
-Reply-To: Mike Isely at pobox <isely@pobox.com>
-From:   <>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-cc:     Mike Isely at pobox <isely@pobox.com>
-Subject: [PATCH] pvrusb2: Fix oops on tear-down when radio support is not
- present
-Message-ID: <alpine.DEB.2.21.1911052034300.31133@sheridan.isely.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1728096AbfKFXYh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Wed, 6 Nov 2019 18:24:37 -0500
+Received: from bin-mail-out-06.binero.net ([195.74.38.229]:29232 "EHLO
+        bin-mail-out-06.binero.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727813AbfKFXYh (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Wed, 6 Nov 2019 18:24:37 -0500
+X-Halon-ID: 3eb7aa42-00ec-11ea-837a-0050569116f7
+Authorized-sender: niklas@soderlund.pp.se
+Received: from bismarck.berto.se (unknown [84.172.88.101])
+        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
+        id 3eb7aa42-00ec-11ea-837a-0050569116f7;
+        Thu, 07 Nov 2019 00:22:11 +0100 (CET)
+From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH] rcar-vin: Limit NV12 availability to supported VIN channels only
+Date:   Thu,  7 Nov 2019 00:23:04 +0100
+Message-Id: <20191106232304.2332121-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-In some device configurations there's no radio or radio support in the
-driver.  That's OK, as the driver sets itself up accordingly.  However
-on tear-down in these caes it's still trying to tear down radio
-related context when there isn't anything there, leading to
-dereferences through a null pointer and chaos follows.
+When adding support for NV12 it was overlooked that the pixel format is
+only supported on some VIN channels. Fix this by adding a check to only
+accept NV12 on the supported channels (0, 1, 4, 5, 8, 9, 12 and 13).
 
-How this bug survived unfixed for 11 years in the pvrusb2 driver is a
-mystery to me.
-
-Signed-off-by: Mike Isely <isely@pobox.com>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
- drivers/media/usb/pvrusb2/pvrusb2-v4l2.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/media/platform/rcar-vin/rcar-v4l2.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-index aa4fbc3e88cc..339119f6cc23 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-v4l2.c
-@@ -909,8 +909,12 @@ static void pvr2_v4l2_internal_check(struct pvr2_channel *chp)
- 	pvr2_v4l2_dev_disassociate_parent(vp->dev_video);
- 	pvr2_v4l2_dev_disassociate_parent(vp->dev_radio);
- 	if (!list_empty(&vp->dev_video->devbase.fh_list) ||
--	    !list_empty(&vp->dev_radio->devbase.fh_list))
-+	    ((vp->dev_radio != NULL) &&
-+	     !list_empty(&vp->dev_radio->devbase.fh_list))) {
-+		pvr2_trace(PVR2_TRACE_STRUCT,
-+			   "pvr2_v4l2 internal_check exit-empty id=%p", vp);
- 		return;
-+	}
- 	pvr2_v4l2_destroy_no_lock(vp);
- }
+diff --git a/drivers/media/platform/rcar-vin/rcar-v4l2.c b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+index 9e2e63ffcc47acad..62d308a4ddaee82e 100644
+--- a/drivers/media/platform/rcar-vin/rcar-v4l2.c
++++ b/drivers/media/platform/rcar-vin/rcar-v4l2.c
+@@ -76,7 +76,12 @@ const struct rvin_video_format *rvin_format_from_pixel(struct rvin_dev *vin,
+ 	if (vin->info->model == RCAR_M1 && pixelformat == V4L2_PIX_FMT_XBGR32)
+ 		return NULL;
  
-@@ -946,7 +950,8 @@ static int pvr2_v4l2_release(struct file *file)
- 	kfree(fhp);
- 	if (vp->channel.mc_head->disconnect_flag &&
- 	    list_empty(&vp->dev_video->devbase.fh_list) &&
--	    list_empty(&vp->dev_radio->devbase.fh_list)) {
-+	    ((vp->dev_radio == NULL) ||
-+	     list_empty(&vp->dev_radio->devbase.fh_list))) {
- 		pvr2_v4l2_destroy_no_lock(vp);
- 	}
- 	return 0;
+-	if (pixelformat == V4L2_PIX_FMT_NV12 && !vin->info->nv12)
++	/*
++	 * If NV12 is supported it's only supported on some channels (0, 1, 4,
++	 * 5, 8, 9, 12 and 13).
++	 */
++	if (pixelformat == V4L2_PIX_FMT_NV12 &&
++	    (!vin->info->nv12 || BIT(vin->id) & 0xcccc))
+ 		return NULL;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(rvin_formats); i++)
 -- 
-2.20.1
+2.23.0
+
