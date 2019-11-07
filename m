@@ -2,97 +2,69 @@ Return-Path: <SRS0=8rAi=Y7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.7 required=3.0 tests=DKIM_SIGNED,DKIM_VALID,
-	DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F5E9C5DF60
-	for <linux-media@archiver.kernel.org>; Thu,  7 Nov 2019 10:36:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40041C5DF60
+	for <linux-media@archiver.kernel.org>; Thu,  7 Nov 2019 10:40:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD9122085B
-	for <linux-media@archiver.kernel.org>; Thu,  7 Nov 2019 10:36:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iZcNRyt3"
+	by mail.kernel.org (Postfix) with ESMTP id 0E3912178F
+	for <linux-media@archiver.kernel.org>; Thu,  7 Nov 2019 10:40:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387890AbfKGKgU (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Nov 2019 05:36:20 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:37250 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387856AbfKGKgU (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Nov 2019 05:36:20 -0500
-Received: by mail-wr1-f66.google.com with SMTP id t1so2427627wrv.4
-        for <linux-media@vger.kernel.org>; Thu, 07 Nov 2019 02:36:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=teW38WXulAIrUKBNvuumxpbZRbtrGwotg8AiJU+tjw4=;
-        b=iZcNRyt3DP47SX6ynhkUyOQ+MvqqiG2DCpTPy4uEpdf/CGYqTGawcGA+YB86s2sDN/
-         k0rMrOm9ZIg+M7fkoeNQDzl+0qmlF+eFsGk958hdenhBGS3zOe0qZYHfRXbDvEjRegk6
-         LgqPiuri7VPm9HPDo7aePyxU6GwsIemjqNaAVmwStjTQr4WxXYcDcfp0S0iIYt2xb54r
-         d4TuFYeR/4Ixj9aShZlIDJPb/iM5Pj1W5kT4rwPadGmS8d8So8VyTq2k0cGrwYeHY35N
-         xXx9fQFXQXbNqUx+HChXT+IVTAUC1eW5oU7wOnOZ7sGekBg4vICoxfmU3HbYJzhKwlqA
-         asnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=teW38WXulAIrUKBNvuumxpbZRbtrGwotg8AiJU+tjw4=;
-        b=InSoIjDPLa2m82lYrUoKu3zkEU+3elM9v+dOkfe1IG9LCWVDhU/FtJIwmZwtRy80q2
-         ynnoTmGTu+QZYlUNZn5FxPcjRXaqhjdCzxzudufSfZvaR8gNw/P6BheBjbEMdX8bt0Ja
-         hwMUkIjFzBZM+is8397Ug9rSvGt0lAbrGpPO0HaTQ/b8PqTv1Fw8myMNTNqFicTZduOk
-         K84BP2KdTaxn49ySwNOQStUVkJ+AkGWKQ7hHHZRVhqkdCfadB8YTOVGKY+rmTarAk5kE
-         1SOT/BXbDm2hLsYZahGJiev6L1VhWoD3e8HaOlU1yV0DJSwYVWLlALzwOZesSgMHJple
-         iGOQ==
-X-Gm-Message-State: APjAAAWDE6TaAK5It7VBNv9qAXnRfll9zBQwcZwpuNuyf8QCdALdzLME
-        1ArLqLlnOw6c/D/xlpQuHayEmgG4eoqA
-X-Google-Smtp-Source: APXvYqymapv7J0ujPLALFJRUbP8bLm6eKLIIQ7g/IOqnU7Kf0+l9qECuyOxX6ZSih4OZVInSpIhaaw==
-X-Received: by 2002:a5d:4645:: with SMTP id j5mr2245480wrs.329.1573122978159;
-        Thu, 07 Nov 2019 02:36:18 -0800 (PST)
-Received: from ninjahub.lan (79-73-36-243.dynamic.dsl.as9105.com. [79.73.36.243])
-        by smtp.googlemail.com with ESMTPSA id k125sm2094922wmf.2.2019.11.07.02.36.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2019 02:36:17 -0800 (PST)
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     outreachy-kernel@googlegroups.com
-Cc:     sakari.ailus@linux.intel.com, gregkh@linuxfoundation.org,
-        julia.lawall@lip6.fr, mchehab@kernel.org,
-        linux-media@vger.kernel.org, Jules Irenge <jbi.octave@gmail.com>
-Subject: [PATCH] staging: ipu3: replace 0 with false
-Date:   Thu,  7 Nov 2019 10:36:08 +0000
-Message-Id: <20191107103608.26598-1-jbi.octave@gmail.com>
-X-Mailer: git-send-email 2.23.0
+        id S2388119AbfKGKkg (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Nov 2019 05:40:36 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:44015 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387629AbfKGKkg (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Nov 2019 05:40:36 -0500
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.pengutronix.de.)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1iSfDO-0002ga-Ng; Thu, 07 Nov 2019 11:40:34 +0100
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     linux-media@vger.kernel.org
+Cc:     kernel@pengutronix.de
+Subject: [PATCH] media: coda: disable encoder compose selections
+Date:   Thu,  7 Nov 2019 11:39:56 +0100
+Message-Id: <20191107103956.5801-1-p.zabel@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-media@vger.kernel.org
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Replace 0 with false to clear
-warning of assignment of 0/1 to bool variable.
-Issue detected by coccinelle tool.
+Disable capture side compose selections for the encoder.
+This fixes the following v4l2-compliance complaint:
 
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+		fail: v4l2-test-formats.cpp(1662): IS_ENCODER(node)
+	test Composing: FAIL
+
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
 ---
- drivers/staging/media/ipu3/ipu3-css.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/platform/coda/coda-common.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/media/ipu3/ipu3-css.c b/drivers/staging/media/ipu3/ipu3-css.c
-index fd1ed84c400c..f36de501edc6 100644
---- a/drivers/staging/media/ipu3/ipu3-css.c
-+++ b/drivers/staging/media/ipu3/ipu3-css.c
-@@ -1450,7 +1450,7 @@ bool imgu_css_pipe_queue_empty(struct imgu_css *css, unsigned int pipe)
- bool imgu_css_queue_empty(struct imgu_css *css)
- {
- 	unsigned int pipe;
--	bool ret = 0;
-+	bool ret = false;
- 
- 	for (pipe = 0; pipe < IMGU_MAX_PIPE_NUM; pipe++)
- 		ret &= imgu_css_pipe_queue_empty(css, pipe);
+diff --git a/drivers/media/platform/coda/coda-common.c b/drivers/media/platform/coda/coda-common.c
+index 287dc1692286..e648d4819a84 100644
+--- a/drivers/media/platform/coda/coda-common.c
++++ b/drivers/media/platform/coda/coda-common.c
+@@ -942,7 +942,8 @@ static int coda_g_selection(struct file *file, void *fh,
+ 		/* fallthrough */
+ 	case V4L2_SEL_TGT_COMPOSE:
+ 	case V4L2_SEL_TGT_COMPOSE_DEFAULT:
+-		if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE)
++		if (s->type != V4L2_BUF_TYPE_VIDEO_CAPTURE ||
++		    ctx->inst_type == CODA_INST_ENCODER)
+ 			return -EINVAL;
+ 		break;
+ 	default:
 -- 
-2.23.0
+2.20.1
 
