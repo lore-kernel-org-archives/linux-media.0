@@ -2,119 +2,82 @@ Return-Path: <SRS0=8rAi=Y7=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03630C5DF60
-	for <linux-media@archiver.kernel.org>; Thu,  7 Nov 2019 13:39:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA81EC5DF61
+	for <linux-media@archiver.kernel.org>; Thu,  7 Nov 2019 13:42:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CE9432075C
-	for <linux-media@archiver.kernel.org>; Thu,  7 Nov 2019 13:39:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B523F207FA
+	for <linux-media@archiver.kernel.org>; Thu,  7 Nov 2019 13:42:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388271AbfKGNjp (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Thu, 7 Nov 2019 08:39:45 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38508 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727858AbfKGNjo (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Thu, 7 Nov 2019 08:39:44 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E32DCAE12;
-        Thu,  7 Nov 2019 13:39:42 +0000 (UTC)
-Date:   Thu, 7 Nov 2019 14:39:41 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Logitech C270 webcam floods the log
-Message-ID: <20191107143941.1649db47@endymion>
-In-Reply-To: <20191023142016.GA1904@pendragon.ideasonboard.com>
-References: <20191023151859.30a8ce88@endymion>
-        <20191023142016.GA1904@pendragon.ideasonboard.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S2389140AbfKGNmI (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Thu, 7 Nov 2019 08:42:08 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:50361 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389105AbfKGNmI (ORCPT
+        <rfc822;linux-media@vger.kernel.org>); Thu, 7 Nov 2019 08:42:08 -0500
+Received: by mail-io1-f70.google.com with SMTP id t193so1842616iof.17
+        for <linux-media@vger.kernel.org>; Thu, 07 Nov 2019 05:42:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=+84sf74G2+LtOjaIUAIm5mQgUcZUIwnjbC/PvAs6V+Y=;
+        b=GHRTVsPu5u22ieoK73qR5ucjcTN2O3VXo+5k6apeDG+4pa6fg0p5PtP3xOKXeb9jDL
+         4U3h0ZfVWVtB4QjhQPqXAMqWQvipZYbiYB3D03ISDBvjsVciWh6YLgCgHOfZB/a0svar
+         xkuM+y0MQTY/LK0oDi37EcWhTFxEwr8pD3Oty28aU4SMjC7RyoYSlWeqvsprCdhEs8UN
+         FeNdDq/M7o05iUSaaVjrHY5MpsJ3a4nGwtxOzRcHbSIkBIhUHBIgOlGowLvUSWAsJ4ge
+         u31dKTRq8txQAllqQ4N8uJQl7uCWHpjONU/THEAeHXa3dvglZBlGJDItUBtu0XWZWZyc
+         YUZA==
+X-Gm-Message-State: APjAAAUFXdk0mjecM18iUBEk7iACEqrYOactLofevKPEX8UarXvR1EfV
+        vtk8d6Xg76aXT8gtx7Q5BvIr5Tl0sjOZnlrKBPh39jlAkxYA
+X-Google-Smtp-Source: APXvYqyDXVEYlUfk7geo3GgENWWqznzoIPNLvT/v/4WhhgkMFihALxGFrTFCqPjEvWIS25EzJfmt9/ngeJ+New1kGdinWyOcoDmF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a6b:14ca:: with SMTP id 193mr3506977iou.140.1573134126410;
+ Thu, 07 Nov 2019 05:42:06 -0800 (PST)
+Date:   Thu, 07 Nov 2019 05:42:06 -0800
+In-Reply-To: <00000000000080601805795ada2e@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c9f0a40596c1d46b@google.com>
+Subject: Re: INFO: task hung in vivid_stop_generating_vid_cap
+From:   syzbot <syzbot+06283a66a648cd073885@syzkaller.appspotmail.com>
+To:     andy@greyhouse.net, davem@davemloft.net, dvyukov@google.com,
+        hans.verkuil@cisco.com, helen.koike@collabora.com,
+        hverkuil-cisco@xs4all.nl, hverkuil@xs4all.nl, j.vosburgh@gmail.com,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, maheshb@google.com,
+        mchehab+samsung@kernel.org, mchehab@kernel.org,
+        mchehab@s-opensource.com, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tfiga@chromium.org,
+        vfalico@gmail.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Laurent,
+syzbot suspects this bug was fixed by commit:
 
-Thank you very much for your quick reply and sorry for getting back to
-you only today, your message got moved to a different folder by a
-filter rule I did not remember of.
+commit d65842f7126aa1a87fb44b7c9980c12630ed4f33
+Author: Hans Verkuil <hverkuil@xs4all.nl>
+Date:   Mon Nov 19 11:09:00 2018 +0000
 
-On Wed, 23 Oct 2019 17:20:16 +0300, Laurent Pinchart wrote:
-> On Wed, Oct 23, 2019 at 03:18:59PM +0200, Jean Delvare wrote:
-> > When my Logitech C270 webcam is plugged in, my kernel log gets filled
-> > with this message:
-> > 
-> > usb 3-4.1: reset high-speed USB device number 4 using xhci_hcd
-> > 
-> > every 5 seconds. I have the same problem on 3 different Intel-based
-> > computers (different generations), using 2 different webcams, same
-> > brand "same model".
-> >
-> > Is Logitech doing crappy hardware these days, or are we doing something
-> > wrong? Is there any way to know the reason that triggers the reset?  
-> 
-> Is this before or after the uvcvideo driver gets involved ? One easy way
-> to check is to move the uvcvideo.ko module out of the way so that it
-> doesn't get loaded automatically (or just blacklist it in
-> /etc/modprobe.d/) and then plug the camera.
+     media: vb2: add waiting_in_dqbuf flag
 
-I did as you suggested and it turns out that the "reset high-speed USB
-device" messages are not printed originally, they start being printed
-right after the uvcvideo kernel driver gets loaded. So that would be a
-problem with the uvcvideo driver?
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1417a04a600000
+start commit:   9f51ae62 Merge git://git.kernel.org/pub/scm/linux/kernel/g..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=62118286bb772a24
+dashboard link: https://syzkaller.appspot.com/bug?extid=06283a66a648cd073885
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15701a33400000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=154c8e4d400000
 
-When unloading the uvcvideo driver, there's one more "reset high-speed
-USB device" message and then no more.
+If the result looks correct, please mark the bug fixed by replying with:
 
-For what it's worth, 2 things worth noting in the kernel log when the
-device is being detected:
+#syz fix: media: vb2: add waiting_in_dqbuf flag
 
-usb 3-12: set resolution quirk: cval->res = 384
-(...)
-uvcvideo: Found UVC 1.00 device <unnamed> (046d:0825)
-
-"<unnamed>" seems weird. On the other hand lsusb properly lists it as:
-
-Bus 003 Device 004: ID 046d:0825 Logitech, Inc. Webcam C270
-
-I an older C270 webcam (3 year old, different package) connected to
-another machine, USB device ID is the same, I compared the verbose
-output of lsusb and one difference stands out:
-
-     Interface Descriptor:
-       bLength                 9
-       bDescriptorType         4
-       bInterfaceNumber        1
-       bAlternateSetting       0
-       bNumEndpoints           0
-       bInterfaceClass        14 Video
-       bInterfaceSubClass      2 Video Streaming
-       bInterfaceProtocol      0 
-       iInterface              0 
-       VideoStreaming Interface Descriptor:
-         (...)
--        bmaControls( 0)                    27
--        bmaControls( 1)                    27
--        bmaControls( 2)                    27
-+        bmaControls( 0)                     0
-+        bmaControls( 1)                     4
-+        bmaControls( 2)                     4
-
-(- is the new webcam, + is the old one)
-
-I don't know if this tells anything useful though.
-
-Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
