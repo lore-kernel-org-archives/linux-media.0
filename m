@@ -2,80 +2,91 @@ Return-Path: <SRS0=CsWU=ZA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.3 required=3.0
-	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4272AC5DF60
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 11:20:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79487FC6194
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 11:48:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1C878218AE
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 11:20:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 477C3222C5
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 11:48:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1573213693;
+	bh=7t+zd6ApZDLHyDBXxaHnsvqdU5V0/DfKsl898ThufDs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=QLwVEgYTJI9vlzIyYr6NKZiGxZs2unBFcoEptq9/Ib/yyU3llp219OmvQzF9Tboou
+	 z9r7riYIEgSdtsK0mPV/o8RWKozQ5wfvjuwUmqRgnQ0Y2BjB1DbVaBgCtdh+SMTFM0
+	 70F+G8siZjBSQ2R+anmspDzfs4vc7ForiXf6XQys=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730151AbfKHLUn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Nov 2019 06:20:43 -0500
-Received: from gofer.mess.org ([88.97.38.141]:32995 "EHLO gofer.mess.org"
+        id S2390886AbfKHLsM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Nov 2019 06:48:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37078 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730144AbfKHLUn (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Nov 2019 06:20:43 -0500
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 4B7E9C646D; Fri,  8 Nov 2019 11:20:42 +0000 (GMT)
-Date:   Fri, 8 Nov 2019 11:20:42 +0000
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org
-Subject: [GIT PULL FOR v5.5] DVB/RC fixes (3nd)
-Message-ID: <20191108112041.GA14408@gofer.mess.org>
+        id S2391713AbfKHLsI (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:48:08 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA86F22473;
+        Fri,  8 Nov 2019 11:48:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573213688;
+        bh=7t+zd6ApZDLHyDBXxaHnsvqdU5V0/DfKsl898ThufDs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AUWgHiHFCRWQ/9SyTG1TDjhbRStH8znvxM35f9ZZc443MGbZviFRs1CiHL5IaZXqw
+         9q3h3bwi71TbHH7eV5VtWUrqNeDTJdtn+1RSn2geAj4NJz0+YOM3kl+7TjeQD+qN0E
+         l8mg2d5RTiIUa8zJqdcTUDZFTq0fAy9BFCd8dpKk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Lao Wei <zrlw@qq.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 34/44] media: fix: media: pci: meye: validate offset to avoid arbitrary access
+Date:   Fri,  8 Nov 2019 06:47:10 -0500
+Message-Id: <20191108114721.15944-34-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191108114721.15944-1-sashal@kernel.org>
+References: <20191108114721.15944-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Hi Mauro,
+From: Lao Wei <zrlw@qq.com>
 
-This includes flexcop fixes which I had failed to pick up and the rc keymap
-for the Beelink GS1. This pull request is from signed tag.
+[ Upstream commit eac7230fdb4672c2cb56f6a01a1744f562c01f80 ]
 
-Thanks
-Sean
+Motion eye video4linux driver for Sony Vaio PictureBook desn't validate user-controlled parameter
+'vma->vm_pgoff', a malicious process might access all of kernel memory from user space by trying
+pass different arbitrary address.
+Discussion: http://www.openwall.com/lists/oss-security/2018/07/06/1
 
-The following changes since commit 25a55a70307da947c04b6b8d27a6bc51b0dc569a:
+Signed-off-by: Lao Wei <zrlw@qq.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/media/pci/meye/meye.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  media: v4l2-device.h: fix typo: putss -> puts (2019-11-08 07:44:17 +0100)
+diff --git a/drivers/media/pci/meye/meye.c b/drivers/media/pci/meye/meye.c
+index ba887e8e1b171..a85c5199ccd30 100644
+--- a/drivers/media/pci/meye/meye.c
++++ b/drivers/media/pci/meye/meye.c
+@@ -1469,7 +1469,7 @@ static int meye_mmap(struct file *file, struct vm_area_struct *vma)
+ 	unsigned long page, pos;
+ 
+ 	mutex_lock(&meye.lock);
+-	if (size > gbuffers * gbufsize) {
++	if (size > gbuffers * gbufsize || offset > gbuffers * gbufsize - size) {
+ 		mutex_unlock(&meye.lock);
+ 		return -EINVAL;
+ 	}
+-- 
+2.20.1
 
-are available in the Git repository at:
-
-  git://linuxtv.org/syoung/media_tree.git tags/v5.5iv
-
-for you to fetch changes up to 200cc4e2331a60e75bcb9cd2adeca41d2826a0c9:
-
-  arm64: dts: allwinner: beelink-gs1: Add rc-beelink-gs1 keymap (2019-11-08 08:57:44 +0000)
-
-----------------------------------------------------------------
-Clément Péron (2):
-      media: rc: add keymap for Beelink GS1 remote control
-      arm64: dts: allwinner: beelink-gs1: Add rc-beelink-gs1 keymap
-
-Colin Ian King (1):
-      media: flexcop-usb: ensure -EIO is returned on error condition
-
-Jan Pieter van Woerkom (1):
-      media: dvbsky: remove unused code
-
-Oliver Neukum (1):
-      media: b2c2-flexcop-usb: add sanity checking
-
- Documentation/devicetree/bindings/media/rc.yaml    |  1 +
- .../boot/dts/allwinner/sun50i-h6-beelink-gs1.dts   |  1 +
- drivers/media/rc/keymaps/Makefile                  |  1 +
- drivers/media/rc/keymaps/rc-beelink-gs1.c          | 84 ++++++++++++++++++++++
- drivers/media/usb/b2c2/flexcop-usb.c               |  5 +-
- drivers/media/usb/dvb-usb-v2/dvbsky.c              |  9 ---
- include/media/rc-map.h                             |  1 +
- 7 files changed, 92 insertions(+), 10 deletions(-)
- create mode 100644 drivers/media/rc/keymaps/rc-beelink-gs1.c
