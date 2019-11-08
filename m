@@ -2,34 +2,30 @@ Return-Path: <SRS0=CsWU=ZA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.2 required=3.0 tests=FAKE_REPLY_C,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
+X-Spam-Status: No, score=-12.3 required=3.0
+	tests=HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
 	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 015F7C5DF60
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 10:42:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4272AC5DF60
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 11:20:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CECB3218AE
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 10:42:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C878218AE
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 11:20:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729896AbfKHKmA (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Nov 2019 05:42:00 -0500
-Received: from gofer.mess.org ([88.97.38.141]:53237 "EHLO gofer.mess.org"
+        id S1730151AbfKHLUn (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Nov 2019 06:20:43 -0500
+Received: from gofer.mess.org ([88.97.38.141]:32995 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726149AbfKHKmA (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Nov 2019 05:42:00 -0500
+        id S1730144AbfKHLUn (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:20:43 -0500
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id B988CC64B1; Fri,  8 Nov 2019 10:41:58 +0000 (GMT)
-Date:   Fri, 8 Nov 2019 10:41:58 +0000
+        id 4B7E9C646D; Fri,  8 Nov 2019 11:20:42 +0000 (GMT)
+Date:   Fri, 8 Nov 2019 11:20:42 +0000
 From:   Sean Young <sean@mess.org>
 To:     linux-media@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Jan Pieter van Woerkom <jp@jpvw.nl>,
-        Colin Ian King <colin.king@canonical.com>,
-        =?iso-8859-1?Q?Cl=E9ment_P=E9ron?= <peron.clem@gmail.com>
-Subject: Re: [GIT PULL FOR v5.5] DVB/RC fixes (2nd)
-Message-ID: <20191108104158.GB14205@gofer.mess.org>
+Subject: [GIT PULL FOR v5.5] DVB/RC fixes (3nd)
+Message-ID: <20191108112041.GA14408@gofer.mess.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
