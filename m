@@ -2,92 +2,77 @@ Return-Path: <SRS0=CsWU=ZA=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD2BC5DF60
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 15:58:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C54EDFA372C
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 15:59:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AFA7821D7E
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 15:58:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 90BE8215EA
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 15:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1573228772;
+	bh=rqwT9BQ1DVff39lbNrzTZleYAcmxMaVgwzFVC5pLXV8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=dxby4/78mUBl/sz5ZBm44ynpckh+R5z3wx1XNHYa2XfVibgJEGTBUAdasUGEsuyQl
+	 d3JpvB6LJNqWOWM3YxQDD5MlIyYJAlPk8YQHBLh6jIgY/IB0nCk21vv8dJJy/Djmiz
+	 +ut90YcOg32KsBQqfJ7Pl7zkdNfXHLYFqSQl6GEs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727296AbfKHP6V (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Nov 2019 10:58:21 -0500
-Received: from relay11.mail.gandi.net ([217.70.178.231]:40929 "EHLO
-        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726900AbfKHP6V (ORCPT
-        <rfc822;linux-media@vger.kernel.org>); Fri, 8 Nov 2019 10:58:21 -0500
-Received: from uno.lan (93-34-114-233.ip49.fastwebnet.it [93.34.114.233])
-        (Authenticated sender: jacopo@jmondi.org)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 2684310000A;
-        Fri,  8 Nov 2019 15:58:17 +0000 (UTC)
-From:   Jacopo Mondi <jacopo@jmondi.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        tfiga@google.com, pavel@ucw.cz
-Cc:     Jacopo Mondi <jacopo@jmondi.org>,
-        linux-media@vger.kernel.org (open list:MEDIA INPUT INFRASTRUCTURE
-        (V4L/DVB))
-Subject: [PATCH v5 11/11] media: i2c: ov13858: Parse and register properties
-Date:   Fri,  8 Nov 2019 16:59:44 +0100
-Message-Id: <20191108155944.1040883-12-jacopo@jmondi.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191108155944.1040883-1-jacopo@jmondi.org>
-References: <20191108155944.1040883-1-jacopo@jmondi.org>
+        id S1727585AbfKHP7Z (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Nov 2019 10:59:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51352 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726121AbfKHP7Z (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Nov 2019 10:59:25 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DEB01215EA;
+        Fri,  8 Nov 2019 15:59:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573228764;
+        bh=rqwT9BQ1DVff39lbNrzTZleYAcmxMaVgwzFVC5pLXV8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QUaNgS0S9E70lxzjDwlRg72D9zNDhn+HbuG6roCKuNR2qLw2l77CZ81hdlDgm3qLy
+         ltqLwGb2t3Smh4hBsV9hG20C7aSgO6UCAEXhsvnWlO53fixj4o+L7k91e4RiRwLvLN
+         Tf7GeXaRllOD7It17rsQPVPaJmz/BpikCOoMcbvI=
+Date:   Fri, 8 Nov 2019 15:59:19 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andreyknvl@google.com, gregkh@linuxfoundation.org,
+        akpm@linux-foundation.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH RESEND RESEND] media: uvc: Avoid cyclic entity chains due
+ to malformed USB descriptors
+Message-ID: <20191108155918.GA20866@willie-the-truck>
+References: <20191108154838.21487-1-will@kernel.org>
+ <20191108155503.GB15731@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191108155503.GB15731@pendragon.ideasonboard.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-Parse device properties and register controls for them using the newly
-introduced helpers.
+Hi Laurent,
 
-Signed-off-by: Jacopo Mondi <jacopo@jmondi.org>
----
- drivers/media/i2c/ov13858.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+On Fri, Nov 08, 2019 at 05:55:03PM +0200, Laurent Pinchart wrote:
+> I'm sorry for the delay, and will have to ask you to be a bit more
+> patient I'm afraid. I will leave tomorrow for a week without computer
+> access and will only be able to go through my backlog when I will be
+> back on the 17th.
 
-diff --git a/drivers/media/i2c/ov13858.c b/drivers/media/i2c/ov13858.c
-index aac6f77afa0f..2ef5fb5cf519 100644
---- a/drivers/media/i2c/ov13858.c
-+++ b/drivers/media/i2c/ov13858.c
-@@ -7,6 +7,7 @@
- #include <linux/pm_runtime.h>
- #include <media/v4l2-ctrls.h>
- #include <media/v4l2-device.h>
-+#include <media/v4l2-fwnode.h>
- 
- #define OV13858_REG_VALUE_08BIT		1
- #define OV13858_REG_VALUE_16BIT		2
-@@ -1589,6 +1590,7 @@ static const struct v4l2_subdev_internal_ops ov13858_internal_ops = {
- static int ov13858_init_controls(struct ov13858 *ov13858)
- {
- 	struct i2c_client *client = v4l2_get_subdevdata(&ov13858->sd);
-+	struct v4l2_fwnode_device_properties props;
- 	struct v4l2_ctrl_handler *ctrl_hdlr;
- 	s64 exposure_max;
- 	s64 vblank_def;
-@@ -1666,6 +1668,15 @@ static int ov13858_init_controls(struct ov13858 *ov13858)
- 		goto error;
- 	}
- 
-+	ret = v4l2_fwnode_device_parse(&client->dev, &props);
-+	if (ret)
-+		return ret;
-+
-+	ret = v4l2_ctrl_new_fwnode_properties(ctrl_hdlr, &ov13858_ctrl_ops,
-+					      &props);
-+	if (ret)
-+		return ret;
-+
- 	ov13858->sd.ctrl_handler = ctrl_hdlr;
- 
- 	return 0;
--- 
-2.23.0
+Ok, thanks for letting me know. I'll poke you again when you're back if
+I don't hear anything -- I haven't actually changed the patch for ages,
+since I don't think it needs further work [1].
 
+Will
+
+[1] https://lore.kernel.org/linux-media/20191007162709.3vrtbcpoymmnqikl@willie-the-truck/
