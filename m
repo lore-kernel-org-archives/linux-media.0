@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2DCFA372C
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 12:11:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73ADEFA372C
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 12:11:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B8FCB21848
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 12:11:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D29D2085B
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 12:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573215075;
-	bh=T0NdGXpxX/JOdmUIDSeN9sirnn0R81CApny5woGcC0g=;
+	s=default; t=1573215083;
+	bh=z42NMZtRegQyAv3PPGmyHQ/taWk4UXkfZVgfVcUHReg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=zkdIhjbG5aJyFaxNRq9oEx7FEESJa3C5tYLYBUsOIxF/YF2Mb7stXaOTRlCwJTKhU
-	 A28thn5QJb8nKwBuZgSmkW/s3vyeFz5KKSaSZmjlZVjwNBB7f4tJTNZr4l6UVJRb+y
-	 MR9vEd9NQgFv1c1axoCWcXcAlIHuVJG7VTPAiKAE=
+	b=B43fO+BnnhKVRxT1dLzum/zE73S/sd5gac933yPiLvGeq/n8n2ZBP7rfVvZgCW4L5
+	 7I0Mpzg0D2FeV3ketQOcftA6k5tdHAc/79cmtOMsOhEabkgV8Ya6/D8G3nvGzJnbyE
+	 rzRpn2BmXMMIIY83v0sQWSghlyCrtvQI6fpVJkiM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389736AbfKHMLO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Nov 2019 07:11:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52198 "EHLO mail.kernel.org"
+        id S1733141AbfKHLjM (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Nov 2019 06:39:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733173AbfKHLjO (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Nov 2019 06:39:14 -0500
+        id S1733122AbfKHLjK (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:39:10 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4982C20869;
-        Fri,  8 Nov 2019 11:39:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 975EF222C2;
+        Fri,  8 Nov 2019 11:39:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573213154;
-        bh=T0NdGXpxX/JOdmUIDSeN9sirnn0R81CApny5woGcC0g=;
+        s=default; t=1573213150;
+        bh=z42NMZtRegQyAv3PPGmyHQ/taWk4UXkfZVgfVcUHReg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FbJ8+R5gI6wsjZcHxeQR0PxxS2GBLGSU3pLVxZUWMqw0Nu3uLFJhHUJqqPSgukp+a
-         f2sfD/g5DVyrgSu9cxvzRVwUa9+dpEkCeSH6ZYntiMw4jm+jjlozqX7xby2KscTwO1
-         DO1FkDWVtuT9MnG/DxyT7xjJShHAVVqqldJUCNRo=
+        b=Kd9yJOdOfSy+ANIfAmpfTV/vNHkFRbxToUGg8vL0ldej2shjAl2N57T4+l3wNp06g
+         BfF/wN4NTEf5DKAAivkU+VV0s6R2jSpyhZ9eTWWQdduYxEGzu69MPZwy1IiVtlvXfS
+         pU8onYvDpoeMcseFaA0nFsfm9G9uFEA4a0bYSxc4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 061/205] media: ov772x: Disable clk on error path
-Date:   Fri,  8 Nov 2019 06:35:28 -0500
-Message-Id: <20191108113752.12502-61-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 059/205] media: vicodec: fix out-of-range values when decoding
+Date:   Fri,  8 Nov 2019 06:35:26 -0500
+Message-Id: <20191108113752.12502-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191108113752.12502-1-sashal@kernel.org>
 References: <20191108113752.12502-1-sashal@kernel.org>
@@ -60,36 +59,42 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Alexey Khoroshilov <khoroshilov@ispras.ru>
+From: Hans Verkuil <hverkuil@xs4all.nl>
 
-[ Upstream commit 1d18c2cd9d38ad639b2e00546b9ee638f2cef4b0 ]
+[ Upstream commit be5a1509af8dd8a78fea24a35fe4a82d4cd0ae70 ]
 
-If ov772x_power_on() is unable to get GPIO rstb,
-the clock is left undisabled.
+While decoding you need to make sure you do not get values < 0
+or > 255. Note that since this code will also be used in userspace
+utilities the clamp macro isn't used since that is kernel-only.
 
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Acked-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/i2c/ov772x.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/vicodec/vicodec-codec.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
-index 7158c31d8403b..4eae5f2f7d318 100644
---- a/drivers/media/i2c/ov772x.c
-+++ b/drivers/media/i2c/ov772x.c
-@@ -896,6 +896,7 @@ static int ov772x_power_on(struct ov772x_priv *priv)
- 					     GPIOD_OUT_LOW);
- 	if (IS_ERR(priv->rstb_gpio)) {
- 		dev_info(&client->dev, "Unable to get GPIO \"reset\"");
-+		clk_disable_unprepare(priv->clk);
- 		return PTR_ERR(priv->rstb_gpio);
- 	}
+diff --git a/drivers/media/platform/vicodec/vicodec-codec.c b/drivers/media/platform/vicodec/vicodec-codec.c
+index 2d047646f6147..d854b2344f12b 100644
+--- a/drivers/media/platform/vicodec/vicodec-codec.c
++++ b/drivers/media/platform/vicodec/vicodec-codec.c
+@@ -588,8 +588,14 @@ static void fill_decoder_block(u8 *dst, const s16 *input, int stride)
+ 	int i, j;
  
+ 	for (i = 0; i < 8; i++) {
+-		for (j = 0; j < 8; j++)
+-			*dst++ = *input++;
++		for (j = 0; j < 8; j++, input++, dst++) {
++			if (*input < 0)
++				*dst = 0;
++			else if (*input > 255)
++				*dst = 255;
++			else
++				*dst = *input;
++		}
+ 		dst += stride - 8;
+ 	}
+ }
 -- 
 2.20.1
 
