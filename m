@@ -4,51 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 472EBC5DF60
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 12:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2DCFA372C
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 12:11:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 142122085B
-	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 12:05:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B8FCB21848
+	for <linux-media@archiver.kernel.org>; Fri,  8 Nov 2019 12:11:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573214712;
-	bh=hVTmL0FORV+KWz1VpzuweX8Ats/8839pboW72CRooBI=;
+	s=default; t=1573215075;
+	bh=T0NdGXpxX/JOdmUIDSeN9sirnn0R81CApny5woGcC0g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Rf9EEGX4CArf2p7TdauUu504DPmGqLILdXeSwPzKOSX6irb8ghMw9qVifjJMx1K44
-	 m7NLEuqADAtwEsvt1kiz7CgidaL5TaidQbL1UawfQoHw73hu7nPG4RN83t4GMVSQAj
-	 l9Oxg+ejsQHjyb6LOIjQIQPY9I8JzOHKdwG88NDE=
+	b=zkdIhjbG5aJyFaxNRq9oEx7FEESJa3C5tYLYBUsOIxF/YF2Mb7stXaOTRlCwJTKhU
+	 A28thn5QJb8nKwBuZgSmkW/s3vyeFz5KKSaSZmjlZVjwNBB7f4tJTNZr4l6UVJRb+y
+	 MR9vEd9NQgFv1c1axoCWcXcAlIHuVJG7VTPAiKAE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389684AbfKHLlw (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Fri, 8 Nov 2019 06:41:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55422 "EHLO mail.kernel.org"
+        id S2389736AbfKHMLO (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Fri, 8 Nov 2019 07:11:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389673AbfKHLlw (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Fri, 8 Nov 2019 06:41:52 -0500
+        id S1733173AbfKHLjO (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Fri, 8 Nov 2019 06:39:14 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BBFD621D7B;
-        Fri,  8 Nov 2019 11:41:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4982C20869;
+        Fri,  8 Nov 2019 11:39:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573213311;
-        bh=hVTmL0FORV+KWz1VpzuweX8Ats/8839pboW72CRooBI=;
+        s=default; t=1573213154;
+        bh=T0NdGXpxX/JOdmUIDSeN9sirnn0R81CApny5woGcC0g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SCT51chryrurGhdtaopz153rkWZEITV7g1WAdPJ5oKby6uyyErRAFr9am/df+6XpA
-         GdNvl8qkbQCYL+1yd77NMucZjekEahILR/dO0SEnahrQee6bN8OMAkaPRRWZbOIa3x
-         c8O/YsBOwvu9CcgIjzAbDhFV93Z05gUNw7JeIQWw=
+        b=FbJ8+R5gI6wsjZcHxeQR0PxxS2GBLGSU3pLVxZUWMqw0Nu3uLFJhHUJqqPSgukp+a
+         f2sfD/g5DVyrgSu9cxvzRVwUa9+dpEkCeSH6ZYntiMw4jm+jjlozqX7xby2KscTwO1
+         DO1FkDWVtuT9MnG/DxyT7xjJShHAVVqqldJUCNRo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh@kernel.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 158/205] media: dt-bindings: adv748x: Fix decimal unit addresses
-Date:   Fri,  8 Nov 2019 06:37:05 -0500
-Message-Id: <20191108113752.12502-158-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 061/205] media: ov772x: Disable clk on error path
+Date:   Fri,  8 Nov 2019 06:35:28 -0500
+Message-Id: <20191108113752.12502-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191108113752.12502-1-sashal@kernel.org>
 References: <20191108113752.12502-1-sashal@kernel.org>
@@ -61,51 +60,36 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Geert Uytterhoeven <geert+renesas@glider.be>
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-[ Upstream commit 27582f0ea97fe3e4a38beb98ab36cce4b6f029d5 ]
+[ Upstream commit 1d18c2cd9d38ad639b2e00546b9ee638f2cef4b0 ]
 
-With recent dtc and W=1:
+If ov772x_power_on() is unable to get GPIO rstb,
+the clock is left undisabled.
 
-    Warning (graph_port): video-receiver@70/port@10: graph node unit address error, expected "a"
-    Warning (graph_port): video-receiver@70/port@11: graph node unit address error, expected "b"
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Unit addresses are always hexadecimal (without prefix), while the bases
-of reg property values depend on their prefixes.
-
-Fixes: e69595170b1cad85 ("media: adv748x: Add adv7481, adv7482 bindings")
-
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Acked-by: Jacopo Mondi <jacopo+renesas@jmondi.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/media/i2c/adv748x.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov772x.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/media/i2c/adv748x.txt b/Documentation/devicetree/bindings/media/i2c/adv748x.txt
-index 21ffb5ed81830..54d1d3bc18694 100644
---- a/Documentation/devicetree/bindings/media/i2c/adv748x.txt
-+++ b/Documentation/devicetree/bindings/media/i2c/adv748x.txt
-@@ -73,7 +73,7 @@ Example:
- 			};
- 		};
+diff --git a/drivers/media/i2c/ov772x.c b/drivers/media/i2c/ov772x.c
+index 7158c31d8403b..4eae5f2f7d318 100644
+--- a/drivers/media/i2c/ov772x.c
++++ b/drivers/media/i2c/ov772x.c
+@@ -896,6 +896,7 @@ static int ov772x_power_on(struct ov772x_priv *priv)
+ 					     GPIOD_OUT_LOW);
+ 	if (IS_ERR(priv->rstb_gpio)) {
+ 		dev_info(&client->dev, "Unable to get GPIO \"reset\"");
++		clk_disable_unprepare(priv->clk);
+ 		return PTR_ERR(priv->rstb_gpio);
+ 	}
  
--		port@10 {
-+		port@a {
- 			reg = <10>;
- 
- 			adv7482_txa: endpoint {
-@@ -83,7 +83,7 @@ Example:
- 			};
- 		};
- 
--		port@11 {
-+		port@b {
- 			reg = <11>;
- 
- 			adv7482_txb: endpoint {
 -- 
 2.20.1
 
