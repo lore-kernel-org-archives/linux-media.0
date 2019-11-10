@@ -2,95 +2,79 @@ Return-Path: <SRS0=07u2=ZC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F941C17443
-	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 10:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5048C43331
+	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 10:05:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 63DFD2085B
-	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 10:04:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9F2DE21655
+	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 10:05:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbfKJKEu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 10 Nov 2019 05:04:50 -0500
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:46429 "EHLO
+        id S1726656AbfKJKF6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 Nov 2019 05:05:58 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:38009 "EHLO
         lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726604AbfKJKEu (ORCPT
+        by vger.kernel.org with ESMTP id S1726604AbfKJKF6 (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 10 Nov 2019 05:04:50 -0500
+        Sun, 10 Nov 2019 05:05:58 -0500
 Received: from [192.168.2.10] ([46.9.232.237])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id Tk58iN84yQBsYTk5Ci1QjD; Sun, 10 Nov 2019 11:04:45 +0100
-Subject: Re: [PATCH 1/2] media: solo6x10: Remove superfluous
- snd_dma_continuous_data()
+        id Tk6TiN8VSQBsYTk6Wi1R0E; Sun, 10 Nov 2019 11:05:57 +0100
+Subject: Re: [PATCH 0/2] media: ALSA memalloc cleanups
 To:     Takashi Iwai <tiwai@suse.de>, linux-media@vger.kernel.org
 Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>
 References: <20191108163649.32590-1-tiwai@suse.de>
- <20191108163649.32590-2-tiwai@suse.de>
 From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <84412d65-1042-4849-76bf-784fead59f4a@xs4all.nl>
-Date:   Sun, 10 Nov 2019 11:04:30 +0100
+Message-ID: <3e227447-d243-44d8-baa5-8a715b812ab8@xs4all.nl>
+Date:   Sun, 10 Nov 2019 11:05:53 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191108163649.32590-2-tiwai@suse.de>
+In-Reply-To: <20191108163649.32590-1-tiwai@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfFcTTRS02cdRpKNp+6tFfy7EAX92iryEkEZdeDW2cgLpRW0Tct89ddA4wGRe5F6iMbunIBaCzkeoURGb8Je7WkGDN/ZB6ZYda1oJt9jS43QPvLvI1pk7
- lPXgTU4wd51a+IZB0iOAEAA4yqyVLrYXDK1CMW/Y7I7gYGTy7PQdmGrZagv1ibsqf68eRnSfF7kXY2qxyGanvbndpnPiD+Hm86jW3S2/7V3b0oSS+CHT2gZ4
+X-CMAE-Envelope: MS4wfBZslb93LPxmaIqIMgy3oLzRgX98mPRt2glHMAepznh/+5CyOedcoNVn5rPeCPM/QbVMjGrRMqsItlhB8C+3Pqf4Zar90aHT2s/ZOYP7Lvn0ynmCmzQ3
+ e4qhO0QiaQwMoGzHtb689gdA0IcYw1v7JpepolsVv9+1kZpPPMFN45WxwAd7/qY34c0taak1jWeQw8jBAIrxAeI8YF924gRT8mdJVH/hwF97BMh8QQDvPuus
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
 On 11/8/19 5:36 PM, Takashi Iwai wrote:
-> The recent change (commit 08422d2c559d: "ALSA: memalloc: Allow NULL
-> device for SNDRV_DMA_TYPE_CONTINOUS type") made the PCM preallocation
-> helper accepting NULL as the device pointer for the default usage.
-> Drop the snd_dma_continuous_data() usage that became superfluous from
-> the callers.
+> Hi,
 > 
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> this is a couple of cleanups for media subsystem wrt ALSA memory
+> allocation API usages.  It's based on the recent API changes that are
+> found in for-next of my sound git tree for 5.5 kernel, hence these
+> patches need to be applied on top of it.
+> 
+> So, just give me ACK if they are OK, so that I can apply them.
 
-Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+I Acked them. Mauro is very busy so you'll have to do with my Ack,
+and anyway I maintain those drivers.
 
-Thanks!
+Regards,
 
 	Hans
 
-> ---
->  drivers/media/pci/solo6x10/solo6x10-g723.c | 2 +-
->  drivers/media/usb/usbtv/usbtv-audio.c      | 3 +--
->  2 files changed, 2 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/media/pci/solo6x10/solo6x10-g723.c b/drivers/media/pci/solo6x10/solo6x10-g723.c
-> index 30c8f2ec9c3c..eaa57d835ea8 100644
-> --- a/drivers/media/pci/solo6x10/solo6x10-g723.c
-> +++ b/drivers/media/pci/solo6x10/solo6x10-g723.c
-> @@ -353,7 +353,7 @@ static int solo_snd_pcm_init(struct solo_dev *solo_dev)
->  
->  	snd_pcm_lib_preallocate_pages_for_all(pcm,
->  					SNDRV_DMA_TYPE_CONTINUOUS,
-> -					snd_dma_continuous_data(GFP_KERNEL),
-> +					NULL,
->  					G723_PERIOD_BYTES * PERIODS,
->  					G723_PERIOD_BYTES * PERIODS);
->  
-> diff --git a/drivers/media/usb/usbtv/usbtv-audio.c b/drivers/media/usb/usbtv/usbtv-audio.c
-> index 6f108996142d..e746c8ddfc49 100644
-> --- a/drivers/media/usb/usbtv/usbtv-audio.c
-> +++ b/drivers/media/usb/usbtv/usbtv-audio.c
-> @@ -378,8 +378,7 @@ int usbtv_audio_init(struct usbtv *usbtv)
->  
->  	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &snd_usbtv_pcm_ops);
->  	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
-> -		snd_dma_continuous_data(GFP_KERNEL), USBTV_AUDIO_BUFFER,
-> -		USBTV_AUDIO_BUFFER);
-> +		NULL, USBTV_AUDIO_BUFFER, USBTV_AUDIO_BUFFER);
->  
->  	rv = snd_card_register(card);
->  	if (rv)
+> 
+> thanks,
+> 
+> Takashi
+> 
+> ===
+> 
+> Takashi Iwai (2):
+>   media: solo6x10: Remove superfluous snd_dma_continuous_data()
+>   media: tw686x: audio: Avoid non-standard macro usage
+> 
+>  drivers/media/pci/solo6x10/solo6x10-g723.c | 2 +-
+>  drivers/media/pci/tw686x/tw686x-audio.c    | 2 +-
+>  drivers/media/usb/usbtv/usbtv-audio.c      | 3 +--
+>  3 files changed, 3 insertions(+), 4 deletions(-)
 > 
 
