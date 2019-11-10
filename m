@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6033BC43331
-	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 02:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 287BBC43331
+	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 02:45:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 2C2B621848
-	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 02:43:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEA9321848
+	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 02:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573353798;
-	bh=gzEchfM7M9ylyt97dkh+RkFlfZBYYPbqX4JcKuUKC2g=;
+	s=default; t=1573353930;
+	bh=H7Djb+n3qjxbE2dVJgW6kUOuIo0sOoojYsnEGEwGFNE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=a6cViQDZU13WYj5VBwdbXDfZpqRPQPKEBO9USBhY/dulLUEX/95K2VOZq+wFqKckt
-	 SfwzzV9e4IzRqXYymDq/B+2q2YAn9IGDIL1O6+jjYFx4k46PiECBWlmeg3xS5X7q2G
-	 v2tQAndTH2vuAqI7f0xFe6/+srVjmd0kujTlRwRM=
+	b=Y0esMwFFLshwuqUFv7d/aZIJM9RE4hyVQHP03bSV+AkW5SS3RF2FQqlERYClmsqAE
+	 V/OKVI4WeR5sVkyhEEmSaY40x7/B+WovPO4AS/qzDA0FGnCQc5+8HoJ03IcxnoWoul
+	 NsEQCpUxwqk1Ql+L7h8AADHAlFQ5mNjIuJx99Vk4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728238AbfKJCnQ (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Nov 2019 21:43:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40890 "EHLO mail.kernel.org"
+        id S1728827AbfKJCp2 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Nov 2019 21:45:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728227AbfKJCnQ (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:43:16 -0500
+        id S1728822AbfKJCp2 (ORCPT <rfc822;linux-media@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:45:28 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7A7B021848;
-        Sun, 10 Nov 2019 02:43:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 923F8214E0;
+        Sun, 10 Nov 2019 02:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573353795;
-        bh=gzEchfM7M9ylyt97dkh+RkFlfZBYYPbqX4JcKuUKC2g=;
+        s=default; t=1573353927;
+        bh=H7Djb+n3qjxbE2dVJgW6kUOuIo0sOoojYsnEGEwGFNE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bGfnF+2z9yFd/nwjAnDj87XVajMAXltviGtPTbgOaD9tj93hlKpAHmZw5UJRugCIr
-         KfuzSuFGAKuBNaUehD0ngQ7nGjMi2V0mjPDdg7QemcbKQYrlOhaViYmWtty54j5SLK
-         bmB7Iv+ww428o8RAauUUsqTkoDl1+HT/XMmROEg4=
+        b=Grj27dbWIntNjgj74K+I5jR4G1ELH7heHYghfcgYPTMsIFncdACUEWGZBHQi/Ze3a
+         QU2OP9PWZEedD9UfOKPVkUlOo8UwlU3cwFMZgAqgljVUEY4yWJdw1bAH6qPm8lD60C
+         Z5OMvRlb/sytNVVgRzrT/X7m2jMvMtCclu7kHaLM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Brad Love <brad@nextdimension.cc>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
+Cc:     Rui Miguel Silva <rui.silva@linaro.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 094/191] media: au0828: Fix incorrect error messages
-Date:   Sat,  9 Nov 2019 21:38:36 -0500
-Message-Id: <20191110024013.29782-94-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 188/191] media: ov2680: fix null dereference at power on
+Date:   Sat,  9 Nov 2019 21:40:10 -0500
+Message-Id: <20191110024013.29782-188-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
 References: <20191110024013.29782-1-sashal@kernel.org>
@@ -59,46 +59,65 @@ Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Brad Love <brad@nextdimension.cc>
+From: Rui Miguel Silva <rui.silva@linaro.org>
 
-[ Upstream commit f347596f2bf114a3af3d80201c6e6bef538d884f ]
+[ Upstream commit c45fbdf24c61a7b7a37f1b3bbd46f054637a3627 ]
 
-Correcting red herring error messages.
+Swapping the order between v4l2 subdevice registration and checking chip
+id in b7a417628abf ("media: ov2680: don't register the v4l2 subdevice
+before checking chip ID") makes the mode restore to use the sensor
+controls before they are set, so move the mode restore call to s_power
+after the handler setup for controls is done.
 
-Where appropriate, replaces au0282_dev_register with:
-- au0828_analog_register
-- au0828_dvb_register
+This remove also the need for the error code path in power on function.
 
-Signed-off-by: Brad Love <brad@nextdimension.cc>
-Signed-off-by: Hans Verkuil <hans.verkuil@cisco.com>
+Fixes: b7a417628abf ("media: ov2680: don't register the v4l2 subdevice before checking chip ID")
+
+Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
+Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/au0828/au0828-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/i2c/ov2680.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/media/usb/au0828/au0828-core.c b/drivers/media/usb/au0828/au0828-core.c
-index e3f63299f85c0..07e3322bb1827 100644
---- a/drivers/media/usb/au0828/au0828-core.c
-+++ b/drivers/media/usb/au0828/au0828-core.c
-@@ -632,7 +632,7 @@ static int au0828_usb_probe(struct usb_interface *interface,
- 	/* Analog TV */
- 	retval = au0828_analog_register(dev, interface);
- 	if (retval) {
--		pr_err("%s() au0282_dev_register failed to register on V4L2\n",
-+		pr_err("%s() au0828_analog_register failed to register on V4L2\n",
- 			__func__);
- 		mutex_unlock(&dev->lock);
- 		goto done;
-@@ -641,7 +641,7 @@ static int au0828_usb_probe(struct usb_interface *interface,
- 	/* Digital TV */
- 	retval = au0828_dvb_register(dev);
- 	if (retval)
--		pr_err("%s() au0282_dev_register failed\n",
-+		pr_err("%s() au0828_dvb_register failed\n",
- 		       __func__);
+diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
+index 3ccd584568fb5..d8798fb714ba8 100644
+--- a/drivers/media/i2c/ov2680.c
++++ b/drivers/media/i2c/ov2680.c
+@@ -568,10 +568,6 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
+ 	if (ret < 0)
+ 		return ret;
  
- 	/* Remote controller */
+-	ret = ov2680_mode_restore(sensor);
+-	if (ret < 0)
+-		goto disable;
+-
+ 	sensor->is_enabled = true;
+ 
+ 	/* Set clock lane into LP-11 state */
+@@ -580,12 +576,6 @@ static int ov2680_power_on(struct ov2680_dev *sensor)
+ 	ov2680_stream_disable(sensor);
+ 
+ 	return 0;
+-
+-disable:
+-	dev_err(dev, "failed to enable sensor: %d\n", ret);
+-	ov2680_power_off(sensor);
+-
+-	return ret;
+ }
+ 
+ static int ov2680_s_power(struct v4l2_subdev *sd, int on)
+@@ -606,6 +596,8 @@ static int ov2680_s_power(struct v4l2_subdev *sd, int on)
+ 		ret = v4l2_ctrl_handler_setup(&sensor->ctrls.handler);
+ 		if (ret < 0)
+ 			return ret;
++
++		ret = ov2680_mode_restore(sensor);
+ 	}
+ 
+ 	return ret;
 -- 
 2.20.1
 
