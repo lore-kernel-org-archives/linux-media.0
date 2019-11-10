@@ -2,162 +2,76 @@ Return-Path: <SRS0=07u2=ZC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55F4DC43331
-	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 04:55:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 683FEC43331
+	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 10:04:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 28124214E0
-	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 04:55:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40F37207FA
+	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 10:04:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbfKJEzS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Nov 2019 23:55:18 -0500
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:50713 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726560AbfKJEzS (ORCPT
+        id S1726641AbfKJKEu (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 Nov 2019 05:04:50 -0500
+Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:54693 "EHLO
+        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726609AbfKJKEu (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sat, 9 Nov 2019 23:55:18 -0500
-Received: from localhost ([IPv6:2001:983:e9a7:1:ec88:d968:ff8f:8635])
+        Sun, 10 Nov 2019 05:04:50 -0500
+Received: from [192.168.2.10] ([46.9.232.237])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id TfFkiLs0iQBsYTfFmi0iP2; Sun, 10 Nov 2019 05:55:12 +0100
-Message-ID: <d1e75bffa9d7c5d18125fc8b636c674e@smtp-cloud9.xs4all.net>
-Date:   Sun, 10 Nov 2019 05:55:08 +0100
-From:   "Hans Verkuil" <hverkuil@xs4all.nl>
-To:     linux-media@vger.kernel.org
-Subject: cron job: media_tree daily build: WARNINGS
-X-CMAE-Envelope: MS4wfHF6rh1G8B4rWotyYrxtvjKyFyYsaCJbqLZ4Eg7uDpQW+FiyAqx1FxyUeICo280zjTjD/O+M6lufU7tdAkUbO4bzO1cLl6ZnGp66HEhwl6gkbdbjkUL7
- O5QRwF5GVdB/8q/2HYi31eFhwkmJRtfTav1DNg9mdwPaeJT0OHPnMQMnIe24KuAnwuwYVPMknrGk4FOHG9glDsvgfdazp67xKc2E5VmPF6oHp+msqal6Lvba
+        id Tk5HiN87oQBsYTk5Ki1QlF; Sun, 10 Nov 2019 11:04:45 +0100
+Subject: Re: [PATCH 2/2] media: tw686x: audio: Avoid non-standard macro usage
+To:     Takashi Iwai <tiwai@suse.de>, linux-media@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>
+References: <20191108163649.32590-1-tiwai@suse.de>
+ <20191108163649.32590-3-tiwai@suse.de>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <9469e53a-f360-64fb-117e-1e0dfc7394ec@xs4all.nl>
+Date:   Sun, 10 Nov 2019 11:04:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191108163649.32590-3-tiwai@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfFcTTRS02cdRpKNp+6tFfy7EAX92iryEkEZdeDW2cgLpRW0Tct89ddA4wGRe5F6iMbunIBaCzkeoURGb8Je7WkGDN/ZB6ZYda1oJt9jS43QPvLvI1pk7
+ lPXgTU4wd51a+IZB0iOAEAA4yqyVLrYXDK1CMW/Y7I7gYGTy7PQdmGrZagv1ibsqf68eRnSfF7kXY2qxyGanvbndpnPiD+Hm86jW3S2/7V3b0oSS+CHT2gZ4
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-This message is generated daily by a cron job that builds media_tree for
-the kernels and architectures in the list below.
+On 11/8/19 5:36 PM, Takashi Iwai wrote:
+> Pass the device pointer from the PCI pointer directly, instead of a
+> non-standard macro.  The macro didn't give any better readability.
+> 
+> Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
-Results of the daily build of media_tree:
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-date:			Sun Nov 10 05:00:10 CET 2019
-media-tree git hash:	b0b1c88f1c19aeedb260d1889a7d19838617c97c
-media_build git hash:	efba365ba11b958a6bf6fb4b397942f9461cefca
-v4l-utils git hash:	46fc849138722969d1a835d6cff589f5f0afc3e2
-edid-decode git hash:	3a6108a75be356a3dc53760d22782f1323248b6b
-gcc version:		i686-linux-gcc (GCC) 9.2.0
-sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
-sparse version:		0.6.1
-smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
-smatch version:		0.6.1-rc1
-build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
-build-scripts git hash: 6903fe8f5101fc43440b3259290c97d2dd51733d
-host hardware:		x86_64
-host os:		5.2.0-3-amd64
+Thanks!
 
-linux-git-arm-at91: OK
-linux-git-arm-davinci: OK
-linux-git-arm-multi: OK
-linux-git-arm-pxa: OK
-linux-git-arm-stm32: OK
-linux-git-arm64: OK
-linux-git-i686: OK
-linux-git-mips: OK
-linux-git-powerpc64: OK
-linux-git-sh: OK
-linux-git-x86_64: OK
-Check COMPILE_TEST: OK
-Check for strcpy/strncpy/strlcpy: OK
-linux-3.10.108-i686: OK
-linux-3.10.108-x86_64: OK
-linux-3.11.10-i686: OK
-linux-3.11.10-x86_64: OK
-linux-3.12.74-i686: OK
-linux-3.12.74-x86_64: OK
-linux-3.13.11-i686: OK
-linux-3.13.11-x86_64: OK
-linux-3.14.79-i686: OK
-linux-3.14.79-x86_64: OK
-linux-3.15.10-i686: OK
-linux-3.15.10-x86_64: OK
-linux-3.16.63-i686: OK
-linux-3.16.63-x86_64: OK
-linux-3.17.8-i686: OK
-linux-3.17.8-x86_64: OK
-linux-3.18.136-i686: OK
-linux-3.18.136-x86_64: OK
-linux-3.19.8-i686: OK
-linux-3.19.8-x86_64: OK
-linux-4.0.9-i686: OK
-linux-4.0.9-x86_64: OK
-linux-4.1.52-i686: OK
-linux-4.1.52-x86_64: OK
-linux-4.2.8-i686: OK
-linux-4.2.8-x86_64: OK
-linux-4.3.6-i686: OK
-linux-4.3.6-x86_64: OK
-linux-4.4.167-i686: OK
-linux-4.4.167-x86_64: OK
-linux-4.5.7-i686: OK
-linux-4.5.7-x86_64: OK
-linux-4.6.7-i686: OK
-linux-4.6.7-x86_64: OK
-linux-4.7.10-i686: OK
-linux-4.7.10-x86_64: OK
-linux-4.8.17-i686: OK
-linux-4.8.17-x86_64: OK
-linux-4.9.162-i686: OK
-linux-4.9.162-x86_64: OK
-linux-4.10.17-i686: OK
-linux-4.10.17-x86_64: OK
-linux-4.11.12-i686: OK
-linux-4.11.12-x86_64: OK
-linux-4.12.14-i686: OK
-linux-4.12.14-x86_64: OK
-linux-4.13.16-i686: OK
-linux-4.13.16-x86_64: OK
-linux-4.14.105-i686: OK
-linux-4.14.105-x86_64: OK
-linux-4.15.18-i686: OK
-linux-4.15.18-x86_64: OK
-linux-4.16.18-i686: OK
-linux-4.16.18-x86_64: OK
-linux-4.17.19-i686: OK
-linux-4.17.19-x86_64: OK
-linux-4.18.20-i686: OK
-linux-4.18.20-x86_64: OK
-linux-4.19.28-i686: OK
-linux-4.19.28-x86_64: OK
-linux-4.20.15-i686: OK
-linux-4.20.15-x86_64: OK
-linux-5.0.15-i686: OK
-linux-5.0.15-x86_64: OK
-linux-5.1.1-i686: OK
-linux-5.1.1-x86_64: OK
-linux-5.2.1-i686: OK
-linux-5.2.1-x86_64: OK
-linux-5.3.1-i686: OK
-linux-5.3.1-x86_64: OK
-linux-5.4-rc1-i686: OK
-linux-5.4-rc1-x86_64: OK
-apps: OK
-spec-git: OK
-virtme: OK: Final Summary: 2784, Succeeded: 2784, Failed: 0, Warnings: 0
-sparse: WARNINGS
-smatch: WARNINGS
+	Hans
 
-Detailed results are available here:
+> ---
+>  drivers/media/pci/tw686x/tw686x-audio.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/pci/tw686x/tw686x-audio.c b/drivers/media/pci/tw686x/tw686x-audio.c
+> index 40373bd23381..7786e51d19ae 100644
+> --- a/drivers/media/pci/tw686x/tw686x-audio.c
+> +++ b/drivers/media/pci/tw686x/tw686x-audio.c
+> @@ -300,7 +300,7 @@ static int tw686x_snd_pcm_init(struct tw686x_dev *dev)
+>  
+>  	snd_pcm_lib_preallocate_pages_for_all(pcm,
+>  				SNDRV_DMA_TYPE_DEV,
+> -				snd_dma_pci_data(dev->pci_dev),
+> +				&dev->pci_dev->dev,
+>  				TW686X_AUDIO_PAGE_MAX * AUDIO_DMA_SIZE_MAX,
+>  				TW686X_AUDIO_PAGE_MAX * AUDIO_DMA_SIZE_MAX);
+>  	return 0;
+> 
 
-http://www.xs4all.nl/~hverkuil/logs/Sunday.log
-
-Detailed regression test results are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
-http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
-
-Full logs are available here:
-
-http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
-
-The Media Infrastructure API from this daily build is here:
-
-http://www.xs4all.nl/~hverkuil/spec/index.html
