@@ -2,101 +2,162 @@ Return-Path: <SRS0=07u2=ZC=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E37F3C43331
-	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 03:17:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55F4DC43331
+	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 04:55:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id AF6D720854
-	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 03:17:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573355853;
-	bh=8SPFOrRoN/mrEuHoV96QktHoNh7jF4I73r9+t65ysAY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=tINW4TDpUe0pOK7E7lgzsKhSU2Hha+DqLWtNvR5Lhf6MyYreJFIQon9clwDKI0Au5
-	 thPutTHYwZTVxknnWAZGcyod/+q+RiC/3uSWSA/LAS0jYhoviQ87mdB0t0uduXhAwJ
-	 rWXyAhRzJ0Cjb18KGD494y1NLOy/qVOkwsRX8Le8=
+	by mail.kernel.org (Postfix) with ESMTP id 28124214E0
+	for <linux-media@archiver.kernel.org>; Sun, 10 Nov 2019 04:55:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbfKJCkT (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sat, 9 Nov 2019 21:40:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33182 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726622AbfKJCkS (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:40:18 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9BAD4214E0;
-        Sun, 10 Nov 2019 02:40:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573353617;
-        bh=8SPFOrRoN/mrEuHoV96QktHoNh7jF4I73r9+t65ysAY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ztXHEVJlPBwB7/JIeJANfxr+H39lG42mErRwa2pNa/TZ9Tz4aQjxqtCXGV1VyPrT2
-         /Z0iQpS6SqwsUAkP2oRiV+xRwUIaUYltDKB3FDv+IsKCRL2FJh5sw0sILEwNr6S02U
-         TFO0vXudeolXvUp7pluv573vmkO4qLV5Phz081ok=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 003/191] media: vsp1: Fix vsp1_regs.h license header
-Date:   Sat,  9 Nov 2019 21:37:05 -0500
-Message-Id: <20191110024013.29782-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
-References: <20191110024013.29782-1-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1726597AbfKJEzS (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sat, 9 Nov 2019 23:55:18 -0500
+Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:50713 "EHLO
+        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726560AbfKJEzS (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Sat, 9 Nov 2019 23:55:18 -0500
+Received: from localhost ([IPv6:2001:983:e9a7:1:ec88:d968:ff8f:8635])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id TfFkiLs0iQBsYTfFmi0iP2; Sun, 10 Nov 2019 05:55:12 +0100
+Message-ID: <d1e75bffa9d7c5d18125fc8b636c674e@smtp-cloud9.xs4all.net>
+Date:   Sun, 10 Nov 2019 05:55:08 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: WARNINGS
+X-CMAE-Envelope: MS4wfHF6rh1G8B4rWotyYrxtvjKyFyYsaCJbqLZ4Eg7uDpQW+FiyAqx1FxyUeICo280zjTjD/O+M6lufU7tdAkUbO4bzO1cLl6ZnGp66HEhwl6gkbdbjkUL7
+ O5QRwF5GVdB/8q/2HYi31eFhwkmJRtfTav1DNg9mdwPaeJT0OHPnMQMnIe24KuAnwuwYVPMknrGk4FOHG9glDsvgfdazp67xKc2E5VmPF6oHp+msqal6Lvba
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-[ Upstream commit 5eea860a6fec1e60709d19832015ee0991d3e80c ]
+Results of the daily build of media_tree:
 
-All source files of the vsp1 driver are licensed under the GPLv2+ except
-for vsp1_regs.h which is licensed under GPLv2. This is caused by a bad
-copy&paste that dates back from the initial version of the driver. Fix
-it.
+date:			Sun Nov 10 05:00:10 CET 2019
+media-tree git hash:	b0b1c88f1c19aeedb260d1889a7d19838617c97c
+media_build git hash:	efba365ba11b958a6bf6fb4b397942f9461cefca
+v4l-utils git hash:	46fc849138722969d1a835d6cff589f5f0afc3e2
+edid-decode git hash:	3a6108a75be356a3dc53760d22782f1323248b6b
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 6903fe8f5101fc43440b3259290c97d2dd51733d
+host hardware:		x86_64
+host os:		5.2.0-3-amd64
 
-Acked-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Acked-by: Sergei Shtylyov<sergei.shtylyov@cogentembedded.com>
-Acked-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Acked-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/platform/vsp1/vsp1_regs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4-rc1-i686: OK
+linux-5.4-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: OK: Final Summary: 2784, Succeeded: 2784, Failed: 0, Warnings: 0
+sparse: WARNINGS
+smatch: WARNINGS
 
-diff --git a/drivers/media/platform/vsp1/vsp1_regs.h b/drivers/media/platform/vsp1/vsp1_regs.h
-index 3738ff2f7b850..f6e4157095cc0 100644
---- a/drivers/media/platform/vsp1/vsp1_regs.h
-+++ b/drivers/media/platform/vsp1/vsp1_regs.h
-@@ -1,4 +1,4 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: GPL-2.0+ */
- /*
-  * vsp1_regs.h  --  R-Car VSP1 Registers Definitions
-  *
--- 
-2.20.1
+Detailed results are available here:
 
+http://www.xs4all.nl/~hverkuil/logs/Sunday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Sunday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Sunday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
