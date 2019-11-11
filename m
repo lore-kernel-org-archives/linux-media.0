@@ -2,94 +2,162 @@ Return-Path: <SRS0=OUaH=ZD=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.9 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 18450C43331
-	for <linux-media@archiver.kernel.org>; Mon, 11 Nov 2019 03:04:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7868C17441
+	for <linux-media@archiver.kernel.org>; Mon, 11 Nov 2019 04:57:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id D5E2F2075C
-	for <linux-media@archiver.kernel.org>; Mon, 11 Nov 2019 03:04:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lHIHI7p/"
+	by mail.kernel.org (Postfix) with ESMTP id B790C2086A
+	for <linux-media@archiver.kernel.org>; Mon, 11 Nov 2019 04:57:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726754AbfKKDEh (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Sun, 10 Nov 2019 22:04:37 -0500
-Received: from mail-qt1-f182.google.com ([209.85.160.182]:38767 "EHLO
-        mail-qt1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726742AbfKKDEh (ORCPT
+        id S1726785AbfKKE5r (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Sun, 10 Nov 2019 23:57:47 -0500
+Received: from lb3-smtp-cloud8.xs4all.net ([194.109.24.29]:33931 "EHLO
+        lb3-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726768AbfKKE5q (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Sun, 10 Nov 2019 22:04:37 -0500
-Received: by mail-qt1-f182.google.com with SMTP id p20so14165735qtq.5
-        for <linux-media@vger.kernel.org>; Sun, 10 Nov 2019 19:04:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=s21XsScROhu9BPmbzGcegcYHTdkPFhp5GNL2cd4PxbQ=;
-        b=lHIHI7p/r0giqXhBuGIZTt9zqLjVH/cm3hvX6R3JDUCmIvBCXP4RL/iU0REkYn+lJg
-         VBwHj5196iFxzjLkbOlRgKQXcgu2EnT1sM8txIrRx6rt+5ofNp8ntZm9xXoA0UlKAUmz
-         plhdmv76n5zJLHDJ+LnpkSGmmuBrxhE8jOyww=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=s21XsScROhu9BPmbzGcegcYHTdkPFhp5GNL2cd4PxbQ=;
-        b=cGIXK6OhSIA5uYiV9bmD2f+t0lZWLEB1T5vd/2FG+02JWxJ6jTu2XY8FW+VyVpNf3O
-         LAL2JuJlpIQG8HaB9ZLd8g/BYhcvrUwLKDhHlvVoCuuh+ifLBQvLJuwQNycDSe+8g0Ec
-         sQu5KWXNHjpVsEFMws+OzBFSawqS6unZxHa45qxN2Fegfh586PbmfBFrULV3kxQLSK5Q
-         PbNhbKrYlOAC8reJUEv/XtESWb/gZs167E4AVfAiXxEFlfCR6phfz5T5NsORFEruBid1
-         isDEKcfzCsVlwYnZlL9JICaY3h0gwoPmy8HtOODJOwnGGsO+yuIl/GxXk2MMlacxW103
-         sS3w==
-X-Gm-Message-State: APjAAAVubDNu+cl4Y2Er5C8L+MZIVaY1zadpSEx3CAtDm/daHpZ6kMxx
-        s6pUdlpn/t56TsmJ13amf/4wp5vrOGIzmyA1bPmaug==
-X-Google-Smtp-Source: APXvYqzEgRqM2b1k3cEN4mloUeEOhrf8cOZLFKV98ttWSKpDVQ51Q/jYgDxVozA4BQjDVb9G2TwgPcL03Ye994sE63s=
-X-Received: by 2002:ac8:7216:: with SMTP id a22mr23844828qtp.187.1573441476623;
- Sun, 10 Nov 2019 19:04:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20191105105456.7xbhtistnbp272lj@sirius.home.kraxel.org> <20191106084344.GB189998@stefanha-x1.localdomain>
-In-Reply-To: <20191106084344.GB189998@stefanha-x1.localdomain>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Mon, 11 Nov 2019 12:04:25 +0900
-Message-ID: <CAD=HUj41r8wHZ2-By8tLftkoqC5r_Bw=pr=zX2aZ7GTs1ESWhg@mail.gmail.com>
-Subject: Re: guest / host buffer sharing ...
-To:     Stefan Hajnoczi <stefanha@gmail.com>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>,
-        Keiichi Watanabe <keiichiw@chromium.org>,
-        geoff@hostfission.com, virtio-dev@lists.oasis-open.org,
-        Alex Lau <alexlau@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        qemu-devel@nongnu.org, Tomasz Figa <tfiga@chromium.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
-        Dylan Reid <dgreid@chromium.org>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Dmitry Morozov <dmitry.morozov@opensynergy.com>,
-        Pawel Osciak <posciak@chromium.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sun, 10 Nov 2019 23:57:46 -0500
+Received: from localhost ([IPv6:2001:983:e9a7:1:f435:744:d37e:eb51])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id U1lniSW3iXYiTU1loi5I5J; Mon, 11 Nov 2019 05:57:44 +0100
+Message-ID: <eb2cc8b88eec1a1602a802bebc975352@smtp-cloud8.xs4all.net>
+Date:   Mon, 11 Nov 2019 05:57:43 +0100
+From:   "Hans Verkuil" <hverkuil@xs4all.nl>
+To:     linux-media@vger.kernel.org
+Subject: cron job: media_tree daily build: ERRORS
+X-CMAE-Envelope: MS4wfHxS1dGda3/1yzUsjxobYpUrrISjB8JTJCoOYgJlbjXpF+XV932daWZx9uBXiD41C4d5BEaVjaBDpaUuBP7jhheDPagieFmC4O6G3UT3ft+Vbyba1icA
+ Y9A1MeB1U8i3zFPkTjJ1rn5fS9g8ZnJLpJYZhF+vlbqjCPo4B5k1+MFxaCAjjuCjPbMs1UvU4krpljVBTszvd71/3zXUqT1Yj7tUZYKP7wsDEo11cE0Zi9BZ
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-> My question would be "what is the actual problem you are trying to
-> solve?".
+This message is generated daily by a cron job that builds media_tree for
+the kernels and architectures in the list below.
 
-One problem that needs to be solved is sharing buffers between
-devices. With the out-of-tree Wayland device, to share virtio-gpu
-buffers we've been using the virtio resource id. However, that
-approach isn't necessarily the right approach, especially once there
-are more devices allocating/sharing buffers. Specifically, this issue
-came up in the recent RFC about adding a virtio video decoder device.
+Results of the daily build of media_tree:
 
-Having a centralized buffer allocator device is one way to deal with
-sharing buffers, since it gives a definitive buffer identifier that
-can be used by all drivers/devices to refer to the buffer. That being
-said, I think the device as proposed is insufficient, as such a
-centralized buffer allocator should probably be responsible for
-allocating all shared buffers, not just linear guest ram buffers.
+date:			Mon Nov 11 05:00:11 CET 2019
+media-tree git hash:	dca6b3733a4a46e63603496f544ece8ace541fde
+media_build git hash:	efba365ba11b958a6bf6fb4b397942f9461cefca
+v4l-utils git hash:	b9d56249d974296fd349a06563c8459d3b8ed645
+edid-decode git hash:	3a6108a75be356a3dc53760d22782f1323248b6b
+gcc version:		i686-linux-gcc (GCC) 9.2.0
+sparse repo:            https://git.linuxtv.org/mchehab/sparse.git
+sparse version:		0.6.1
+smatch repo:            https://git.linuxtv.org/mchehab/smatch.git
+smatch version:		0.6.1-rc1
+build-scripts repo:     https://git.linuxtv.org/hverkuil/build-scripts.git
+build-scripts git hash: 6903fe8f5101fc43440b3259290c97d2dd51733d
+host hardware:		x86_64
+host os:		5.2.0-3-amd64
 
--David
+linux-git-arm-at91: OK
+linux-git-arm-davinci: OK
+linux-git-arm-multi: OK
+linux-git-arm-pxa: OK
+linux-git-arm-stm32: OK
+linux-git-arm64: OK
+linux-git-i686: OK
+linux-git-mips: OK
+linux-git-powerpc64: OK
+linux-git-sh: OK
+linux-git-x86_64: OK
+Check COMPILE_TEST: OK
+Check for strcpy/strncpy/strlcpy: OK
+linux-3.10.108-i686: OK
+linux-3.10.108-x86_64: OK
+linux-3.11.10-i686: OK
+linux-3.11.10-x86_64: OK
+linux-3.12.74-i686: OK
+linux-3.12.74-x86_64: OK
+linux-3.13.11-i686: OK
+linux-3.13.11-x86_64: OK
+linux-3.14.79-i686: OK
+linux-3.14.79-x86_64: OK
+linux-3.15.10-i686: OK
+linux-3.15.10-x86_64: OK
+linux-3.16.63-i686: OK
+linux-3.16.63-x86_64: OK
+linux-3.17.8-i686: OK
+linux-3.17.8-x86_64: OK
+linux-3.18.136-i686: OK
+linux-3.18.136-x86_64: OK
+linux-3.19.8-i686: OK
+linux-3.19.8-x86_64: OK
+linux-4.0.9-i686: OK
+linux-4.0.9-x86_64: OK
+linux-4.1.52-i686: OK
+linux-4.1.52-x86_64: OK
+linux-4.2.8-i686: OK
+linux-4.2.8-x86_64: OK
+linux-4.3.6-i686: OK
+linux-4.3.6-x86_64: OK
+linux-4.4.167-i686: OK
+linux-4.4.167-x86_64: OK
+linux-4.5.7-i686: OK
+linux-4.5.7-x86_64: OK
+linux-4.6.7-i686: OK
+linux-4.6.7-x86_64: OK
+linux-4.7.10-i686: OK
+linux-4.7.10-x86_64: OK
+linux-4.8.17-i686: OK
+linux-4.8.17-x86_64: OK
+linux-4.9.162-i686: OK
+linux-4.9.162-x86_64: OK
+linux-4.10.17-i686: OK
+linux-4.10.17-x86_64: OK
+linux-4.11.12-i686: OK
+linux-4.11.12-x86_64: OK
+linux-4.12.14-i686: OK
+linux-4.12.14-x86_64: OK
+linux-4.13.16-i686: OK
+linux-4.13.16-x86_64: OK
+linux-4.14.105-i686: OK
+linux-4.14.105-x86_64: OK
+linux-4.15.18-i686: OK
+linux-4.15.18-x86_64: OK
+linux-4.16.18-i686: OK
+linux-4.16.18-x86_64: OK
+linux-4.17.19-i686: OK
+linux-4.17.19-x86_64: OK
+linux-4.18.20-i686: OK
+linux-4.18.20-x86_64: OK
+linux-4.19.28-i686: OK
+linux-4.19.28-x86_64: OK
+linux-4.20.15-i686: OK
+linux-4.20.15-x86_64: OK
+linux-5.0.15-i686: OK
+linux-5.0.15-x86_64: OK
+linux-5.1.1-i686: OK
+linux-5.1.1-x86_64: OK
+linux-5.2.1-i686: OK
+linux-5.2.1-x86_64: OK
+linux-5.3.1-i686: OK
+linux-5.3.1-x86_64: OK
+linux-5.4-rc1-i686: OK
+linux-5.4-rc1-x86_64: OK
+apps: OK
+spec-git: OK
+virtme: ERRORS: Final Summary: 2784, Succeeded: 2782, Failed: 2, Warnings: 1
+sparse: WARNINGS
+smatch: WARNINGS
+
+Detailed results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday.log
+
+Detailed regression test results are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media.log
+http://www.xs4all.nl/~hverkuil/logs/Monday-test-media-dmesg.log
+
+Full logs are available here:
+
+http://www.xs4all.nl/~hverkuil/logs/Monday.tar.bz2
+
+The Media Infrastructure API from this daily build is here:
+
+http://www.xs4all.nl/~hverkuil/spec/index.html
