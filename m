@@ -6,114 +6,58 @@ X-Spam-Status: No, score=-2.3 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40B72C43331
-	for <linux-media@archiver.kernel.org>; Mon, 11 Nov 2019 12:26:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F1DBC43331
+	for <linux-media@archiver.kernel.org>; Mon, 11 Nov 2019 13:55:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 1C4D32190F
-	for <linux-media@archiver.kernel.org>; Mon, 11 Nov 2019 12:26:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5EE2F222C5
+	for <linux-media@archiver.kernel.org>; Mon, 11 Nov 2019 13:55:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbfKKM05 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Mon, 11 Nov 2019 07:26:57 -0500
-Received: from lb1-smtp-cloud9.xs4all.net ([194.109.24.22]:46189 "EHLO
-        lb1-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726832AbfKKM05 (ORCPT
+        id S1727078AbfKKNzY (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Mon, 11 Nov 2019 08:55:24 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:38897 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726916AbfKKNzY (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Mon, 11 Nov 2019 07:26:57 -0500
+        Mon, 11 Nov 2019 08:55:24 -0500
 Received: from [192.168.2.10] ([46.9.232.237])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id U8m2iUcTIQBsYU8m5i67WH; Mon, 11 Nov 2019 13:26:54 +0100
-Subject: Re: Seeking help for getting rid of i2c_clients_command()
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     linux-media@vger.kernel.org, Michael Krufky <mkrufky@linuxtv.org>,
-        Brad Love <brad@nextdimension.cc>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sean Young <sean@mess.org>
-References: <20191110150553.GA8040@kunai>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <5209c59d-f0f6-c2c3-5f5a-eedef500eb39@xs4all.nl>
-Date:   Mon, 11 Nov 2019 13:26:26 +0100
+        id UA9fiVFfsQBsYUA9ki6cYM; Mon, 11 Nov 2019 14:55:18 +0100
+Subject: Re: WARNING in dma_buf_vunmap
+To:     syzbot <syzbot+a9317fe7ad261fc76b88@syzkaller.appspotmail.com>,
+        andy@greyhouse.net, davem@davemloft.net,
+        dri-devel@lists.freedesktop.org, gregkh@linuxfoundation.org,
+        j.vosburgh@gmail.com, kyungmin.park@samsung.com,
+        linaro-mm-sig-owner@lists.linaro.org,
+        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, m.szyprowski@samsung.com,
+        maheshb@google.com, mchehab+samsung@kernel.org, mchehab@kernel.org,
+        netdev@vger.kernel.org, pawel@osciak.com, sumit.semwal@linaro.org,
+        syzkaller-bugs@googlegroups.com, tfiga@chromium.org,
+        vfalico@gmail.com
+References: <000000000000d2c94e0596c1d47b@google.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Message-ID: <5ed667c7-36ee-466c-7f6d-cd52ccb71c28@xs4all.nl>
+Date:   Mon, 11 Nov 2019 14:54:55 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191110150553.GA8040@kunai>
-Content-Type: text/plain; charset=windows-1252
+In-Reply-To: <000000000000d2c94e0596c1d47b@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfODLNaZnOVBuxew/HtR3vzc/B3JSTHuJFEOOqugvRvY2I7lqN3fMtw4jB2ACjK0ogGQSdw/Pql+WnqIM28L0UdaYHf+c4fOnlRGBFRdPudn6Qyy/gHNk
- pTsHTQm4TF6Rtqc3XWnPQJukx0h1jjAGxfTNWSpFh+8RHazAKzOoOoFIG2sEtPykYZeAU7wBPg6TG4RDuWpcyBCquMyXWeFCshm6L8BOP04tdWzdQsoMR86v
- g9KyFu7y0eZHA7DUNEVwp49FkdtZ3itW33j8FL7f81qnrd1Knx0oz+cxle91/FY/xradj0SEFmYGTj3DD8EWhA==
+X-CMAE-Envelope: MS4wfOVyIXaOdZqyrZFAcLrvkaNOhPcmisjimCJz25F9XwmH9nD5lWqPr+Wf1+q27L8QJeRigdxxQPwscLrsW01Py/OJfmCjP6ls8p7ZDuOLtAyj6LtYfqLk
+ AGRud3HQKuid40ueqTwCHVZluw0DxJ4VCYZI5TOBG06jns6XG0xc4cCKVQeiZ5LW6sIY14VK9AUSjSSwPdwAYNrBVlU6u4UUhb7+vY1jcwy5zHGHGD62hHDX
+ 1aMHRhXeUCtUmVi6U/6rKqXY4/aOgyChPds2EMDB5CRUX9FmoAw9NKkwVF5Vl354yBFw2J/TF3mj1nOXFRApFc4tck43MoqHD3Vck0FekoeF4cqBjCOmAo+r
+ 1Hbxl0GcagIo0Rnsu0SKz8KvFBWY1f0V/XQpgk1Jd+zuzdDtECNNuD1EaOzqtXnnBzjCc6RWZaPoOVRuErgusCtdnLWvDpeN5H2YpoyMhvZoubK0Lj96TzZ7
+ MB7n5u6rCAzB/XbpaldT4dUTqj7eQBVElUCg71RpVuet68YMPNbvPaM9e2vB092mqgUQRG4ufzJ61GHsGKhQn54duhF/7Ve23frFlgwcxN5pdPEpeU+sT5ix
+ DzIunwN828xBm6v7P/W5A/PQa50xNq2hdKND0Qxxc/K/RgR9C11emf5X4FBn1gUWdvzAhuxYE9+adGq2wGUOC5+lUFqRXfTavXd6CBSPftfMf3LF9MngJOlI
+ xAK9gMhtdlJsJPZspCDsPfQVWn6U+Wn9mNEikBsXTBLDjbeGI0TTgtetuSNuahWHEl9LLGOHi2333/yekdP03Pysh23Mt7HCUE5/cDQHMUatEkqZNw3Ucc1K
+ iOV3ggiTx5oK46cuTRt1qg0FTx96jylWsG0PNnGhU2lDyMCElFc55pf/6MoChq8dKuAtWGED+fkTRREvoWLp+TvXMEhOwG9rPpXLK4XjoyrrJDIOdyX01o6m
+ 8MjInQ==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On 11/10/19 4:05 PM, Wolfram Sang wrote:
-> Hi Hans,
-> 
-> I know it is 13 years since you wrote that code:
-> 
-> ba8fc39954bf ("V4L/DVB (4270): Add tda9887-specific tuner configuration")
-> 
-> There, you added i2c_clients_command() which looks today like this:
-> 
-> 	i2c_clients_command(priv->i2c_props.adap, TUNER_SET_CONFIG,
-> 			    &tda9887_cfg);
-> 
-> Now, I would like to get rid of the i2c_clients_command() API, and this
-> is the one remaining user. While trying to convert it into a local
-> function, I started wondering why i2c_clients_command() is used at all.
-> Why do we need to try all devices on the bus? A few lines later we have:
-> 
-> 	tuner_i2c_xfer_send(&priv->i2c_props, buffer, 4);
-> 
-> so i2c_props.addr seems to have a valid address? Or are there multiple
-> tuners on that bus? Can you kindly shed some light on this?
+#syz fix: media: vb2: check memory model for VIDIOC_CREATE_BUFS
 
-Oh boy... The tuner code is awful for many reasons.
-
-One reason is that for a given video capture card there can be multiple
-tuner devices: Analog TV, Digital TV, Analog demodulator and/or radio.
-
-The TUNER_SET_CONFIG command is (AFAICT) only used to configure the
-tda9887 (demodulator), and the problem is that when this code was written
-the tuner instance that is calling TUNER_SET_CONFIG does not know on which
-i2c address the demod is.
-
-TUNER_SET_CONFIG is called whenever the TV or radio frequency is
-changed, and when that happens the demod needs to update its configuration
-as well. So the tuner_i2c_xfer_send(&priv->i2c_props, buffer, 4); is for the
-tuner itself (whose i2c address is known), but i2c_clients_command is
-basically broadcasting to anyone on the bus, and only the tda9987 will
-actually act on the TUNER_SET_CONFIG command.
-
-However, it looks like this code is only used by hybrid tuners (i.e.
-supporting both digital and analog TV), and that the available tuners
-are now added to a global list via hybrid_tuner_request_state().
-
-This should make it possible for tuner-simple.c to actually lookup the
-i2c address of the demod from that global list and use a direct call.
-
-I've CC-ed a bunch of people who know more about DVB than I do, so
-I hope they can double-check that I am on the right track.
-
-Wolfram, do you just want to get rid of i2c_clients_command or the i2c
-command() callback as well?
-
-Regardless, it would be nice if we can get rid of the command() callback
-in the media subsystem. If I read the code right, then you can get the
-tuner struct of an i2c_client using 'struct tuner *t = to_tuner(i2c_get_clientdata(c));'
-and from there you can get the analog_demod_ops that you need to
-configure the tda9887.
-
-So I think this would work:
-
-1) walk hybrid_tuner_instance_list to find a tuner with name "tda9887" for
-   the given i2c_adapter.
-2) get the i2c_client from the adapter with address state->i2c_props.addr.
-3) struct tuner *t = to_tuner(i2c_get_clientdata(c));
-4) if (t->fe.ops.analog_ops.set_config)
-	t->fe.ops.analog_ops.set_config(&t->fe, &config);
-
-Regards,
-
-	Hans
