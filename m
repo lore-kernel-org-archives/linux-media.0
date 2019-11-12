@@ -2,131 +2,82 @@ Return-Path: <SRS0=15sK=ZE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.2 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFC01C43331
-	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 10:40:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AF65C43331
+	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 10:53:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 8950820674
-	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 10:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573555200;
-	bh=b4WMMkvRkImRLDoMsQKNzUFF3wEIW6Af2ngHCdd2yRk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=yGdNTqP+Vuk7a4A/1ReCDEnPvLvidzMFMTqGUW1OPfxxSPBm7TxyrBcNTys/n95VN
-	 qOChuJnYdEpIbm9UDyRoiK+9ApPBd/pOFbsyaUiA/c+I6es+mqOHP8aQJE2XuwjehX
-	 s6JZXv79cyr0O6ea9uBuAJnd8GBcbDmzCFu7iAZA=
+	by mail.kernel.org (Postfix) with ESMTP id 1A662214E0
+	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 10:53:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfKLKj6 (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Nov 2019 05:39:58 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:34923 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbfKLKj5 (ORCPT
+        id S1725874AbfKLKxs (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Nov 2019 05:53:48 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:47808 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725887AbfKLKxs (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Nov 2019 05:39:57 -0500
-Received: by mail-lf1-f66.google.com with SMTP id i26so1356135lfl.2;
-        Tue, 12 Nov 2019 02:39:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XWXqgjsblbcyWM0h2meBDVZ+XPFRuLEW2MPm0S54S/s=;
-        b=CTVAyYnT5d6NFMoTSwruMSYLoQz31YwMh9f1b2imH4VEgUZqDunjh4OAZ0qiGkpMU4
-         2yyYvSmP/mCBvvzXw6+syV4fitEOKf6Xv29FqALV9M+3YnhzKPOTM5NjSPKaMvmlZJOl
-         H1OVAk3AggiVh8sNvwPUP5fcBb/SCxxC+L1AlFCYp1lMnLMJsa2fZ7HMIaodqMGq8x1R
-         d9mXNlWJXeWyv20bvSUJewbMbg1TnYDJCoo4oz1b21dfWaFvROuCVZF5wXZ5sZ8IQXbH
-         60XoAVLZoVF/zmJ6ohHK7uFPzhP4N5Cq88cl4vPaMVq3Iz31e3vyFdSosmFZz9UHKLM+
-         DFIA==
-X-Gm-Message-State: APjAAAXYPD1CN/dYvjmx9RDiixBwB8WCvp6aiseDojWCHXAgbc9lJZlu
-        4Sz7/vHAlzl8pCjcACPineI=
-X-Google-Smtp-Source: APXvYqxbw5J+tzBKcx+QigjOviaP1PWngnIR6FhtuOsFfYfySEHZWhgInymsNuVEPwxpwVY/mq8xpg==
-X-Received: by 2002:a05:6512:21e:: with SMTP id a30mr8849014lfo.76.1573555194825;
-        Tue, 12 Nov 2019 02:39:54 -0800 (PST)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id d24sm3344144ljg.73.2019.11.12.02.39.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2019 02:39:54 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1iUTab-0000IZ-1b; Tue, 12 Nov 2019 11:40:01 +0100
-Date:   Tue, 12 Nov 2019 11:40:01 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     David Airlie <airlied@linux.ie>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-s390@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Fabien Dessenne <fabien.dessenne@st.com>
-Subject: Re: [PATCH 1/4] drm/msm: fix memleak on release
-Message-ID: <20191112104001.GP11035@localhost>
-References: <20191010131333.23635-1-johan@kernel.org>
- <20191010131333.23635-2-johan@kernel.org>
- <20191030100146.GC4691@localhost>
+        Tue, 12 Nov 2019 05:53:48 -0500
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 56ECB290424;
+        Tue, 12 Nov 2019 10:53:46 +0000 (GMT)
+Date:   Tue, 12 Nov 2019 11:53:43 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Alexandre Courbot <acourbot@google.com>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>
+Subject: Re: H264 stateless reference frames ordering lists
+Message-ID: <20191112115343.1b1908ce@collabora.com>
+In-Reply-To: <CAPBb6MWXj+PNbJ0_m6O6wnYf6Z9NcYwr49qbSowG66NB-23k2g@mail.gmail.com>
+References: <CAPBb6MWXj+PNbJ0_m6O6wnYf6Z9NcYwr49qbSowG66NB-23k2g@mail.gmail.com>
+Organization: Collabora
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191030100146.GC4691@localhost>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 11:01:46AM +0100, Johan Hovold wrote:
-> On Thu, Oct 10, 2019 at 03:13:30PM +0200, Johan Hovold wrote:
-> > If a process is interrupted while accessing the "gpu" debugfs file and
-> > the drm device struct_mutex is contended, release() could return early
-> > and fail to free related resources.
-> > 
-> > Note that the return value from release() is ignored.
-> > 
-> > Fixes: 4f776f4511c7 ("drm/msm/gpu: Convert the GPU show function to use the GPU state")
-> > Cc: stable <stable@vger.kernel.org>     # 4.18
-> > Cc: Jordan Crouse <jcrouse@codeaurora.org>
-> > Cc: Rob Clark <robdclark@gmail.com>
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> 
-> Rob, Sean,
-> 
-> Sending a reminder about this one, which is not yet in linux-next.
-> 
-> Perhaps Daniel can pick it up otherwise?
+Hi Alexandre,
 
-Another two weeks, another reminder. This one is still not in -next.
+On Tue, 12 Nov 2019 19:14:22 +0900
+Alexandre Courbot <acourbot@google.com> wrote:
 
-Johan
+> Hi Boris and Ezequiel,
+> 
+> Patch c3adb85745ca6 has removed the ref_pic_list_* members from the
+> v4l2_ctrl_h264_decode_params struct. The MT8183 stateless decoder
+> driver I am working on still relies on these lists and I am trying (a
+> bit late to the game) to remove them from the Chromium OS kernel UAPI
+> in order to match upstream.
+> 
+> I have dug into the discussion that resulted in this removal and could
+> not really find how these are supposed to be reconstructed and on the
+> basis on which information. The commit log for the above-mentioned
+> patch mentions that "generic helpers will be provided for drivers that
+> need this list". I could not find any in the kernel so far, do you
+> have any code available at the moment? Or any idea on how these can be
+> reconstructed? The process seems to involve reading the DPB itself as
+> well as reordering information from the slice parameters, and seems to
+> be a bit involved to be done in the kernel, but maybe I am missing
+> something here.
 
-> >  drivers/gpu/drm/msm/msm_debugfs.c | 6 +-----
-> >  1 file changed, 1 insertion(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/msm_debugfs.c b/drivers/gpu/drm/msm/msm_debugfs.c
-> > index 6be879578140..1c74381a4fc9 100644
-> > --- a/drivers/gpu/drm/msm/msm_debugfs.c
-> > +++ b/drivers/gpu/drm/msm/msm_debugfs.c
-> > @@ -47,12 +47,8 @@ static int msm_gpu_release(struct inode *inode, struct file *file)
-> >  	struct msm_gpu_show_priv *show_priv = m->private;
-> >  	struct msm_drm_private *priv = show_priv->dev->dev_private;
-> >  	struct msm_gpu *gpu = priv->gpu;
-> > -	int ret;
-> > -
-> > -	ret = mutex_lock_interruptible(&show_priv->dev->struct_mutex);
-> > -	if (ret)
-> > -		return ret;
-> >  
-> > +	mutex_lock(&show_priv->dev->struct_mutex);
-> >  	gpu->funcs->gpu_state_put(show_priv->state);
-> >  	mutex_unlock(&show_priv->dev->struct_mutex);
+The code is here [1], and it should indeed be extracted and put in a
+generic v4l2_h264 lib at some point (should happen soon, since we need
+the same logic for the rkvdec driver).
+
+Let me know if you have any questions.
+
+Regards,
+
+Boris
+
+[1]https://elixir.bootlin.com/linux/v5.4-rc7/source/drivers/staging/media/hantro/hantro_h264.c#L270
