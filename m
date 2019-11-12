@@ -2,62 +2,73 @@ Return-Path: <SRS0=15sK=ZE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3732C43331
-	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 09:22:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40143C17440
+	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 09:22:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id 81E1620818
-	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 09:22:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1983420818
+	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 09:22:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727128AbfKLJWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        id S1727132AbfKLJWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
         Tue, 12 Nov 2019 04:22:38 -0500
-Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:47625 "EHLO
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:60411 "EHLO
         lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727089AbfKLJWi (ORCPT
+        by vger.kernel.org with ESMTP id S1725835AbfKLJWi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
         Tue, 12 Nov 2019 04:22:38 -0500
 Received: from tschai.fritz.box ([46.9.232.237])
         by smtp-cloud9.xs4all.net with ESMTPA
-        id USNYib7EmQBsYUSNbiAWsd; Tue, 12 Nov 2019 10:22:31 +0100
+        id USNYib7EmQBsYUSNciAWtC; Tue, 12 Nov 2019 10:22:32 +0100
 From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: [PATCH 0/5] Fix various syzbot errors
-Date:   Tue, 12 Nov 2019 10:22:23 +0100
-Message-Id: <20191112092228.15800-1-hverkuil-cisco@xs4all.nl>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        syzbot+6bf9606ee955b646c0e1@syzkaller.appspotmail.com,
+        Sean Young <sean@mess.org>
+Subject: [PATCH 4/5] dvb-usb/digitv: initialize key[]
+Date:   Tue, 12 Nov 2019 10:22:27 +0100
+Message-Id: <20191112092228.15800-5-hverkuil-cisco@xs4all.nl>
 X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191112092228.15800-1-hverkuil-cisco@xs4all.nl>
+References: <20191112092228.15800-1-hverkuil-cisco@xs4all.nl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfAp2Ur2fDuqphm8JVUep51Qv9YrmE410jqLEkJhAtuuVozpejR0H5p46yO2llTYD5gNidG6LHLCW+Tri7kAsdWGe3QkhJlenyp1cYKZrbrAYEJRZl1aL
- jLiijHCMaSWnV/nsL5ueH1of7bJc0XIM3alWND2LHMntT+NZ03+NBn669zjEnJ+IBqzeYsvQwMm2Ow==
+X-CMAE-Envelope: MS4wfIGRwVFPhhlSaPazOvOLyI7sT9uJvlk1BM1fdowXPTpGHmLm01J6oG8c0hexAllNJsMx4kL8Jvh4Pvs1dnzVxz3zkTJay7X6bX79ASPhmXsRbujGA7aK
+ xfmY8jpDuOWsqUzp/kfuZcAFtHCDVE2SVldcLbXfE/v7DP3SfbHkDZlrsa2RssYzMT9p0gS1lBReT/NI0Nwof/vLMpCDcCrFPhWIUReby8+JWMRqUDGrM6Kc
+ +HEbzYdQ2cTHg8XKVbonsYDb9B14DTd960/Dy7sjEtmx3KAkykF7K04jhjsg1HowsYkFnA4lV/r023k27Kl1lvLETVbohUZQkJWuSB8OV/g=
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-These patches fix a bunch of syzbot errors due to uninitialized
-memory.
+The key array was not initialized to 0, leading to a syzbot failure.
 
-Regards,
+Syzbot link:
 
-	Hans
+https://syzkaller.appspot.com/bug?extid=6bf9606ee955b646c0e1
 
-Hans Verkuil (5):
-  gspca: zero usb_buf
-  dvb-usb/af9005: initialize act_len
-  dvb-usb/vp7045: initialize br[]
-  dvb-usb/digitv: initialize key[]
-  dvb-usb/dvb-usb-urb.c: initialize actlen to 0
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reported-by: syzbot+6bf9606ee955b646c0e1@syzkaller.appspotmail.com
+CC: Sean Young <sean@mess.org>
+---
+ drivers/media/usb/dvb-usb/digitv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/media/usb/dvb-usb/af9005.c      | 2 +-
- drivers/media/usb/dvb-usb/digitv.c      | 2 +-
- drivers/media/usb/dvb-usb/dvb-usb-urb.c | 2 +-
- drivers/media/usb/dvb-usb/vp7045.c      | 2 +-
- drivers/media/usb/gspca/gspca.c         | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/media/usb/dvb-usb/digitv.c b/drivers/media/usb/dvb-usb/digitv.c
+index dd5bb230cec1..72b22409880a 100644
+--- a/drivers/media/usb/dvb-usb/digitv.c
++++ b/drivers/media/usb/dvb-usb/digitv.c
+@@ -231,7 +231,7 @@ static struct rc_map_table rc_map_digitv_table[] = {
+ static int digitv_rc_query(struct dvb_usb_device *d, u32 *event, int *state)
+ {
+ 	int i;
+-	u8 key[5];
++	u8 key[5] = { 0 };
+ 	u8 b[4] = { 0 };
+ 
+ 	*event = 0;
 -- 
 2.24.0
 
