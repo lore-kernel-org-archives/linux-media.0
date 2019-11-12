@@ -2,59 +2,62 @@ Return-Path: <SRS0=15sK=ZE=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.0 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_RED,URIBL_SBL,URIBL_SBL_A
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03822C43331
-	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 08:32:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3732C43331
+	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 09:22:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id CD383206A3
-	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 08:32:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81E1620818
+	for <linux-media@archiver.kernel.org>; Tue, 12 Nov 2019 09:22:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbfKLIca convert rfc822-to-8bit (ORCPT
-        <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Nov 2019 03:32:30 -0500
-Received: from host-213.158.188.226.tedata.net ([213.158.188.226]:56594 "EHLO
-        syakyo-niigatacity.or.jp" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727101AbfKLIca (ORCPT
+        id S1727128AbfKLJWi (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Nov 2019 04:22:38 -0500
+Received: from lb2-smtp-cloud9.xs4all.net ([194.109.24.26]:47625 "EHLO
+        lb2-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727089AbfKLJWi (ORCPT
         <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Nov 2019 03:32:30 -0500
-Reply-To: richard@free2312.com
-From:   "Richard" <kirakira3@syakyo-niigatacity.or.jp>
+        Tue, 12 Nov 2019 04:22:38 -0500
+Received: from tschai.fritz.box ([46.9.232.237])
+        by smtp-cloud9.xs4all.net with ESMTPA
+        id USNYib7EmQBsYUSNbiAWsd; Tue, 12 Nov 2019 10:22:31 +0100
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
 To:     linux-media@vger.kernel.org
-Subject: Please Help
-Date:   12 Nov 2019 10:32:49 +0200
-Message-ID: <20191112103249.5E1F9DECC2A6B03C@syakyo-niigatacity.or.jp>
+Subject: [PATCH 0/5] Fix various syzbot errors
+Date:   Tue, 12 Nov 2019 10:22:23 +0100
+Message-Id: <20191112092228.15800-1-hverkuil-cisco@xs4all.nl>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfAp2Ur2fDuqphm8JVUep51Qv9YrmE410jqLEkJhAtuuVozpejR0H5p46yO2llTYD5gNidG6LHLCW+Tri7kAsdWGe3QkhJlenyp1cYKZrbrAYEJRZl1aL
+ jLiijHCMaSWnV/nsL5ueH1of7bJc0XIM3alWND2LHMntT+NZ03+NBn669zjEnJ+IBqzeYsvQwMm2Ow==
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
+These patches fix a bunch of syzbot errors due to uninitialized
+memory.
 
-Hello,
+Regards,
 
-I hope this letter finds you in good health. I am writing this 
-letter to ask for assistance towards my tuition fees. 
-Unfortunately I have lost my job thorough redundancy, the income 
-from my job was needed to sustain my studies and pay my tuition 
-fees. I did not take out a student loan as I did not want to get 
-myself into debt, as it is too late to apply I was hoping you 
-would be able to provide some sort of assistance towards my 
-studies. I have contacted all my immediate family members and 
-friends and all the relevant government bodies for grant but have 
-been unsuccessful so far.
+	Hans
 
-I am determined to finish my studies and would be grateful for 
-any assistance you can provide.You can reach me via 
-richard@free2312.com
+Hans Verkuil (5):
+  gspca: zero usb_buf
+  dvb-usb/af9005: initialize act_len
+  dvb-usb/vp7045: initialize br[]
+  dvb-usb/digitv: initialize key[]
+  dvb-usb/dvb-usb-urb.c: initialize actlen to 0
 
-Please Help
+ drivers/media/usb/dvb-usb/af9005.c      | 2 +-
+ drivers/media/usb/dvb-usb/digitv.c      | 2 +-
+ drivers/media/usb/dvb-usb/dvb-usb-urb.c | 2 +-
+ drivers/media/usb/dvb-usb/vp7045.c      | 2 +-
+ drivers/media/usb/gspca/gspca.c         | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
 
-Thank You,
+-- 
+2.24.0
 
-Richard
