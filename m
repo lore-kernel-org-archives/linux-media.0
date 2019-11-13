@@ -2,112 +2,90 @@ Return-Path: <SRS0=zAWw=ZF=vger.kernel.org=linux-media-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8BFCC17448
-	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 02:23:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63731C43331
+	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 03:55:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.kernel.org (Postfix) with ESMTP id B8B1521D7F
-	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 02:23:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B204222C9
+	for <linux-media@archiver.kernel.org>; Wed, 13 Nov 2019 03:55:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1573611817;
-	bh=0Sjkf189679x4uXqj5BLH1BM4wR2jv51XnrwoMD8oH0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=DmHNXaH/QzJf1+SsoqbzszTUsBvGhlD4ILwifWuQgHnuKbndIcd28ZIl+BLffVUU6
-	 2dgWsQfojjS4CKCh4TUqyblZkXwPlq8yePSwFHABPG5BtZxOsq2fIWa7+PUBdQCZQS
-	 +YiSHcK5haeh3JU37Diyn3ZBpK/v2EA811RBLVHI=
+	s=default; t=1573617319;
+	bh=dEeyqTef9bzMNnRFc/NUygZc4JIxUTQqcePHmfbL81k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=mDA4DZgsna3tf0vOCulhfN+HkYQmstgEseS5Njrpi0r2Ev/x5IJBcpUrTgmSNAnih
+	 3Ozu6Lsoo8efrQurRSd+YdyzXXLVzGiuyVD7RmhaMbFEvwyQliGflGpHzGsxZg2B3z
+	 q3YqX/AH2/kTaMMVCUZEJXsXwEgy5LukmcWKBlKY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728334AbfKMBwf (ORCPT <rfc822;linux-media@archiver.kernel.org>);
-        Tue, 12 Nov 2019 20:52:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41548 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728327AbfKMBwf (ORCPT <rfc822;linux-media@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:52:35 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B8C28222CA;
-        Wed, 13 Nov 2019 01:52:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573609954;
-        bh=0Sjkf189679x4uXqj5BLH1BM4wR2jv51XnrwoMD8oH0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WNgJMfd2b8JwA1KlXQAZv6VJLbOQfrXwR2k5dGamy+1HnPq5UKxSqFm9ZGkrYqSmA
-         uLTlEGhol1XBr44KY6B2mxCbrnk+ROeWj7g3cyOhPQxQwBEgpd5GF0rFVLmta8R0K+
-         UDrXHdNA8YQ0AZOoxZIBUHznarajPVjE2w3Jxa+c=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Matthias Reichl <hias@horus.com>, Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 089/209] media: rc: ir-rc6-decoder: enable toggle bit for Kathrein RCU-676 remote
-Date:   Tue, 12 Nov 2019 20:48:25 -0500
-Message-Id: <20191113015025.9685-89-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
-References: <20191113015025.9685-1-sashal@kernel.org>
+        id S1727145AbfKMDzP (ORCPT <rfc822;linux-media@archiver.kernel.org>);
+        Tue, 12 Nov 2019 22:55:15 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45262 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726936AbfKMDzP (ORCPT
+        <rfc822;linux-media@vger.kernel.org>);
+        Tue, 12 Nov 2019 22:55:15 -0500
+Received: by mail-oi1-f196.google.com with SMTP id 14so498890oir.12;
+        Tue, 12 Nov 2019 19:55:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5kWuAnb+93D0REhXXytiBbTkzGvCtPsyT0rZx99YMZ4=;
+        b=ZUoD3ENKGIAuMDoaGYEPJVn3++GGVj+jKmiJQdd7A1/iLJ5nlg+cVXJRG1j+K3B5oC
+         5tWsRLt9h8OjEWnIiXM7eUWyTIuZwn0M8c58n9071ITCG1moKimwmzv42IdLDFQysPLK
+         Fwx2BCld02QuWb+6BdXpFPqom5b48ElgVwdVYwnHIWrN4eyOLG+XWceUvhKvXkHWgMW+
+         kXL60zhQHXbgmO3qkEETwx+qiKQVAFQOG2E7rCh7K3cDIQnSxRW+SGnJob+2ZpykVNuC
+         wVT34NbO81539dBlbojnass+ngMBs9S9sx6l90LCWnPse6/J+bF9RjIfC9sojNrn7DHj
+         Ljlw==
+X-Gm-Message-State: APjAAAVV/kDFdmZZSVnRA1PLcZHg+2pXTLhi6hEOjbitednm9S75e6I+
+        eiH4Hndmsbin+YJclrEhUw==
+X-Google-Smtp-Source: APXvYqyhJ1i62xhTcrOaW8+Kr9g2RTxmHxUPGU56kpS88cTpyKfeDTpdQD6oVX2chc9xP27sjFYMvA==
+X-Received: by 2002:aca:48cb:: with SMTP id v194mr534349oia.156.1573617313969;
+        Tue, 12 Nov 2019 19:55:13 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id l40sm349562ota.24.2019.11.12.19.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2019 19:55:13 -0800 (PST)
+Date:   Tue, 12 Nov 2019 21:55:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mirela Rabulea <mirela.rabulea@nxp.com>
+Cc:     mchehab@kernel.org, shawnguo@kernel.org, robh+dt@kernel.org,
+        hverkuil-cisco@xs4all.nl, paul.kocialkowski@bootlin.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, s.hauer@pengutronix.de, aisheng.dong@nxp.com,
+        daniel.baluta@nxp.com, leonard.crestez@nxp.com,
+        robert.chiras@nxp.com, laurentiu.palcu@nxp.com,
+        mark.rutland@arm.com, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de, laurent.pinchart+renesas@ideasonboard.com,
+        niklas.soderlund+renesas@ragnatech.se,
+        dafna.hirschfeld@collabora.com,
+        Mirela Rabulea <mirela.rabulea@nxp.com>
+Subject: Re: [PATCH 3/5] media: dt-bindings: Add bindings for i.MX8QXP/QM
+ JPEG driver
+Message-ID: <20191113035512.GA7965@bogus>
+References: <1573053633-21437-1-git-send-email-mirela.rabulea@nxp.com>
+ <1573053633-21437-4-git-send-email-mirela.rabulea@nxp.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1573053633-21437-4-git-send-email-mirela.rabulea@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-media-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-media.vger.kernel.org>
 X-Mailing-List: linux-media@vger.kernel.org
 
-From: Matthias Reichl <hias@horus.com>
+On Wed,  6 Nov 2019 17:20:31 +0200, Mirela Rabulea wrote:
+> Add bindings documentation for i.MX8QXP/QM JPEG decoder & encoder driver.
+> 
+> Signed-off-by: Mirela Rabulea <mirela.rabulea@nxp.com>
+> ---
+>  .../devicetree/bindings/media/imx8-jpeg.yaml       | 83 ++++++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/imx8-jpeg.yaml
+> 
 
-[ Upstream commit 85e4af0a7ae2f146769b7475ae531bf8a3f3afb4 ]
-
-The Kathrein RCU-676 remote uses the 32-bit rc6 protocol and toggles
-bit 15 (0x8000) on repeated button presses, like MCE remotes.
-
-Add it's customer code 0x80460000 to the 32-bit rc6 toggle
-handling code to get proper scancodes and toggle reports.
-
-Signed-off-by: Matthias Reichl <hias@horus.com>
-Signed-off-by: Sean Young <sean@mess.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/media/rc/ir-rc6-decoder.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/rc/ir-rc6-decoder.c b/drivers/media/rc/ir-rc6-decoder.c
-index 68487ce9f79b6..d96aed1343e42 100644
---- a/drivers/media/rc/ir-rc6-decoder.c
-+++ b/drivers/media/rc/ir-rc6-decoder.c
-@@ -40,6 +40,7 @@
- #define RC6_6A_MCE_TOGGLE_MASK	0x8000	/* for the body bits */
- #define RC6_6A_LCC_MASK		0xffff0000 /* RC6-6A-32 long customer code mask */
- #define RC6_6A_MCE_CC		0x800f0000 /* MCE customer code */
-+#define RC6_6A_KATHREIN_CC	0x80460000 /* Kathrein RCU-676 customer code */
- #ifndef CHAR_BIT
- #define CHAR_BIT 8	/* Normally in <limits.h> */
- #endif
-@@ -242,13 +243,17 @@ static int ir_rc6_decode(struct rc_dev *dev, struct ir_raw_event ev)
- 				toggle = 0;
- 				break;
- 			case 32:
--				if ((scancode & RC6_6A_LCC_MASK) == RC6_6A_MCE_CC) {
-+				switch (scancode & RC6_6A_LCC_MASK) {
-+				case RC6_6A_MCE_CC:
-+				case RC6_6A_KATHREIN_CC:
- 					protocol = RC_PROTO_RC6_MCE;
- 					toggle = !!(scancode & RC6_6A_MCE_TOGGLE_MASK);
- 					scancode &= ~RC6_6A_MCE_TOGGLE_MASK;
--				} else {
-+					break;
-+				default:
- 					protocol = RC_PROTO_RC6_6A_32;
- 					toggle = 0;
-+					break;
- 				}
- 				break;
- 			default:
--- 
-2.20.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
